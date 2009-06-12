@@ -32,42 +32,42 @@ class KOTEXT_EXPORT KoChangeTrackerElement
 {
 public:
 
-    KoChangeTrackerElement(QString title, KoGenChange::Type type);
+    KoChangeTrackerElement(const QString& title, KoGenChange::Type type);
 
     KoChangeTrackerElement();
 
     ~KoChangeTrackerElement();
 
     void setEnabled(bool enabled);
-    bool isEnabled();
+    bool isEnabled() const;
 
     void setChangeType(KoGenChange::Type type);
-    KoGenChange::Type getChangeType();
+    KoGenChange::Type getChangeType() const;
 
-    void setChangeTitle(QString title);
-    QString getChangeTitle();
+    void setChangeTitle(const QString& title);
+    QString getChangeTitle() const;
 
-    void setChangeFormat(QTextFormat &format);
-    QTextFormat getChangeFormat();
+    void setChangeFormat(const QTextFormat &format);
+    QTextFormat getChangeFormat() const;
 
-    void setPrevFormat(QTextFormat &prevFormat);
-    QTextFormat getPrevFormat();
+    void setPrevFormat(const QTextFormat &prevFormat);
+    QTextFormat getPrevFormat() const;
 
-    bool hasCreator();
-    void setCreator(QString creator);
-    QString getCreator();
+    bool hasCreator() const;
+    void setCreator(const QString& creator);
+    QString getCreator() const;
 
-    bool hasDate();
-    void setDate(QString date);
-    QString getDate();
+    bool hasDate() const;
+    void setDate(const QString& date);
+    QString getDate() const;
 
-    bool hasExtraMetaData();
-    void setExtraMetaData(QString metaData);
-    QString getExtraMetaData();
+    bool hasExtraMetaData()const;
+    void setExtraMetaData(const QString& metaData);
+    QString getExtraMetaData() const;
 
-    bool hasDeleteData();
-    void setDeleteData(QString data);
-    QString getDeleteData();
+    bool hasDeleteData() const;
+    void setDeleteData(const QString& data);
+    QString getDeleteData() const;
 
 private:
     class Private;

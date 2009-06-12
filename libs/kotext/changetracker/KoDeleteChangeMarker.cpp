@@ -74,7 +74,7 @@ int KoDeleteChangeMarker::changeId() const
 
 bool KoDeleteChangeMarker::loadOdf (const KoXmlElement& element)
 {
-
+    return false;
 }
 
 void KoDeleteChangeMarker::paint(QPainter& painter, QPaintDevice* pd, const QTextDocument* document, const QRectF& rect, QTextInlineObject object, int posInDocument, const QTextCharFormat& format)

@@ -93,6 +93,7 @@ KoTextWriter::KoTextWriter(KoShapeSavingContext &context)
 
 KoTextWriter::~KoTextWriter()
 {
+    delete d;
 }
 
 QString KoTextWriter::saveParagraphStyle(const QTextBlock &block)

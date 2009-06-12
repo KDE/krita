@@ -100,7 +100,7 @@ void KisPDFImportWidget::updateSelectionOfPages()
 void KisPDFImportWidget::updateMaxCanvasSize()
 {
     m_maxWidthInch = 0., m_maxHeightInch = 0.;
-    for (QList<int>::const_iterator it = m_pages.begin(); it != m_pages.end(); ++it) {
+    for (QList<int>::const_iterator it = m_pages.constBegin(); it != m_pages.constEnd(); ++it) {
         Poppler::Page *p = m_pdfDoc->page(*it);
         QSizeF size = p->pageSizeF();
         if (size.width() > m_maxWidthInch) {

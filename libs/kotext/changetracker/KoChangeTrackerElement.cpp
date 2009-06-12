@@ -50,11 +50,11 @@ KoChangeTrackerElement::KoChangeTrackerElement(const QString& title, KoGenChange
 KoChangeTrackerElement::KoChangeTrackerElement()
     :d(new Private())
 {
-    delete d;
 }
 
 KoChangeTrackerElement::~KoChangeTrackerElement()
 {
+    delete d;
 }
 
 void KoChangeTrackerElement::setEnabled(bool enabled)

@@ -76,6 +76,7 @@ void KisTile::lockForWrite()
 {
     /* We are doing COW here */
     if(lazyCopying()) {
+        /* FIXME: It won't work! I said. =) Need to throw away m_defaultTileData */
         globalTileDataStore.releaseTileData(m_tileData);
         m_tileData = globalTileDataStore.duplicateTileData(m_defaultTileData);
         globalTileDataStore.acquireTileData(m_tileData);

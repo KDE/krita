@@ -56,6 +56,9 @@ public:
     void setDefaultTileData(KisTileData *defaultTileData);
     KisTileData* defaultTileData();
 
+    void setMementoManager(KisMementoManager *mm);
+    KisMementoManager* mementoManager();
+
     void debugPrintInfo();
     void debugMaxListLength(qint32 &min, qint32 &max);
 private:
@@ -77,6 +80,7 @@ private:
     qint32 m_numTiles;
     
     KisTileData *m_defaultTileData;
+    KisMementoManager *m_mementoManager;
 
     QReadWriteLock m_lock;
 };

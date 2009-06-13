@@ -20,13 +20,12 @@
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 #include "kis_tile.h"
+#include "kis_memento_manager.h"
 
 
-#define lazyCopying() (m_tileData->m_usersCount>1)
-#define activateLazyCopying() do { m_tileData=m_defaultTileData; \
-                                   globalTileDataStore.acquireTileData(m_tileData);} while(0)
 
-void KisTile::init(qint32 col, qint32 row, KisTileData *defaultTileData)
+void KisTile::init(qint32 col, qint32 row,
+                   KisTileData *defaultTileData, KisMementoManager* mm)
 {
     m_col=col;
     m_row=row;
@@ -36,33 +35,34 @@ void KisTile::init(qint32 col, qint32 row, KisTileData *defaultTileData)
 
     m_nextTile=0;
 
-    globalTileDataStore.acquireTileData(defaultTileData);
-    m_defaultTileData = defaultTileData;
+    m_tileData = defaultTileData;
+    globalTileDataStore.acquireTileData(m_tileData);
 
-    activateLazyCopying();
+    m_mementoManager = mm;
 }
 
-KisTile::KisTile(qint32 col, qint32 row, KisTileData *defaultTileData)
+KisTile::KisTile(qint32 col, qint32 row,
+                 KisTileData *defaultTileData, KisMementoManager* mm)
 {
-    init(col, row, defaultTileData);
+    init(col, row, defaultTileData, mm);
 }
 
 KisTile::KisTile(qint32 col, qint32 row, const KisTile& rhs)
     : KisShared(rhs)
 {
-    init(col, row, rhs.tileData());
+    init(col, row, rhs.tileData(), rhs.m_mementoManager);
 }
 
 KisTile::KisTile(const KisTile& rhs)
     : KisShared(rhs)
 {
-    init(rhs.col(), rhs.row(), rhs.tileData());
+    init(rhs.col(), rhs.row(), rhs.tileData(), rhs.m_mementoManager);
 }
 
 KisTile::~KisTile()
 {
+    m_mementoManager->registerTileDeleted(this);
     globalTileDataStore.releaseTileData(m_tileData);
-    globalTileDataStore.releaseTileData(m_defaultTileData);
 }
 
 
@@ -72,14 +72,18 @@ void KisTile::lockForRead() const
     globalTileDataStore.ensureTileDataLoaded(m_tileData);
 }
 
+
+#define lazyCopying() (m_tileData->m_usersCount>1)
+
 void KisTile::lockForWrite()
 {
     /* We are doing COW here */
     if(lazyCopying()) {
-        /* FIXME: It won't work! I said. =) Need to throw away m_defaultTileData */
+        KisTileData *tileData = globalTileDataStore.duplicateTileData(m_tileData);
         globalTileDataStore.releaseTileData(m_tileData);
-        m_tileData = globalTileDataStore.duplicateTileData(m_defaultTileData);
+        m_tileData = tileData;
         globalTileDataStore.acquireTileData(m_tileData);
+        m_mementoManager->registerTileChange(this);
     }
     m_tileData->m_RWLock.lockForWrite();
     globalTileDataStore.ensureTileDataLoaded(m_tileData);
@@ -97,7 +101,6 @@ void KisTile::debugPrintInfo()
     printf("------\n");
     printf("Tile:\t\t\t0x%X\n", (quintptr) this);
     printf("   data:\t0x%X\n", (quintptr) m_tileData);
-    printf("   def. data:\t0x%X\n", (quintptr) m_defaultTileData);
     printf("   next:\t0x%X\n", (quintptr) m_nextTile.data());
 }
 

@@ -32,7 +32,8 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits()
         m_hashTable[i] = 0;
 
     m_numTiles = 0;
-    m_defaultTileData=0;
+    m_defaultTileData = 0;
+    m_mementoManager = 0;
 }
 
 template<class T>
@@ -137,7 +138,7 @@ KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
     newTile = false;
     TileTypeSP tile = getTile(col,row);
     if(!tile) {
-        tile = new TileType(col, row, m_defaultTileData);
+        tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
         linkTile(tile);
 	newTile = true;
     }
@@ -214,6 +215,17 @@ template<class T>
 KisTileData* KisTileHashTableTraits<T>::defaultTileData()
 {
     return m_defaultTileData;
+}
+
+template<class T>
+void KisTileHashTableTraits<T>::setMementoManager(KisMementoManager *mm)
+{
+    m_mementoManager = mm;
+}
+template<class T>
+KisMementoManager* KisTileHashTableTraits<T>::mementoManager()
+{
+    return m_mementoManager;
 }
 
 /*************** Debugging stuff ***************/

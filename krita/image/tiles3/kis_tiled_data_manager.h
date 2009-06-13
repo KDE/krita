@@ -30,9 +30,10 @@
 //#include "kis_tile.h"
 //#include "kis_memento.h"
 #include "krita_export.h"
-
-
 #include "kis_tile_hash_table.h"
+
+#include "kis_memento_manager.h"
+
 
 
 class KisTiledDataManager;
@@ -122,6 +123,19 @@ protected:
     void setDefaultPixel(const quint8 *defPixel);
     const quint8 *defaultPixel() const {
 	return m_defaultPixel;
+    }
+
+/* FIXME:*/
+public:
+
+    void commit() {
+        m_mementoManager->commit();
+    }
+    void rollback() {
+        m_mementoManager->rollback(m_hashTable);
+    }
+    void rollforward() {
+        m_mementoManager->rollforward(m_hashTable);
     }
 
 //    KisMementoSP getMemento();
@@ -219,7 +233,8 @@ public:
     qint32 rowStride(qint32 x, qint32 y) const;
 
 private:
-    KisTileHashTable m_hashTable;
+    KisTileHashTable *m_hashTable;
+    KisMementoManager *m_mementoManager;
     quint8* m_defaultPixel;
     qint32 m_pixelSize;
    
@@ -256,6 +271,11 @@ private:
     QVector<quint8*> readPlanarBytesBody(QVector<qint32> channelsizes,
 					 qint32 x, qint32 y,
 					 qint32 w, qint32 h);
+public:
+    void debugPrintInfo() {
+        m_mementoManager->debugPrintInfo();
+    }
+
 };
 
 inline qint32 KisTiledDataManager::divideRoundDown(qint32 x, const qint32 y) const

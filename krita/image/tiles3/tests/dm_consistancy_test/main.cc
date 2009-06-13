@@ -24,6 +24,9 @@ void dm_clear_part_test(KisTiledDataManager &dm, qint32 numPixels,
 void dm_extent_test(KisTiledDataManager &dm, qint32 numPixels, 
 		     QRect dataRect, quint8* data);
 
+void dm_memento_test(KisTiledDataManager &dm, qint32 numPixels, 
+		     QRect dataRect, quint8* data);
+
 int main()
 {
     memset(pixel, 8, PIXEL_SIZE);
@@ -44,15 +47,78 @@ int main()
 
     KisTiledDataManager dm(PIXEL_SIZE, pixel);
 
-    dm_rw_test(dm, numPixels, dataRect, data);
-    dm_clear_test(dm, numPixels, dataRect, data);
-    dm_clear_part_test(dm, numPixels, dataRect, data);
-    dm_extent_test(dm, numPixels, dataRect, data);
+//    dm_rw_test(dm, numPixels, dataRect, data);
+//    dm_clear_test(dm, numPixels, dataRect, data);
+//    dm_clear_part_test(dm, numPixels, dataRect, data);
+//    dm_extent_test(dm, numPixels, dataRect, data);
+
+    dm_memento_test(dm, numPixels, dataRect, data);
 
 
     delete[] data;
     return 0;
 }
+
+void dm_memento_test(KisTiledDataManager &dm, qint32 numPixels, 
+		     QRect dataRect, quint8* data)
+{
+    quint8 *newData = new quint8[numPixels*PIXEL_SIZE];;
+    quint8 *clonedData = new quint8[numPixels*PIXEL_SIZE];;
+    memset(clonedData, 8, numPixels*PIXEL_SIZE);
+
+//    dm.clear();
+
+//    dm.commit();
+
+    
+    dm.writeBytes(data, dataRect.left(), dataRect.top(),
+                  dataRect.width(), dataRect.height());
+    printf("**************** Written some bytes into (60,60)-(130,130) rect ****************\n");
+    dm.debugPrintInfo();
+
+    dm.commit();
+    printf("****************************** Commited it *************************************\n");
+    dm.debugPrintInfo();
+
+    dm.writeBytes(data, 68,68,2,2);
+    dm.commit();
+    printf("**************** Written some bytes ovet it (68,68)-(69,69)     ****************\n");
+    dm.debugPrintInfo();
+
+    dm.rollback();
+    dm.rollforward();
+    dm.rollback();
+    printf("****************************** Reverted back ***********************************\n");
+    dm.debugPrintInfo();
+
+    dm.setExtent(64,64,64,64);
+    dm.commit();
+    printf("**************** Set extent to (64,64)-(127,127). One tile left.****************\n");
+    dm.debugPrintInfo();
+
+    dm.rollback();
+    dm.rollforward();
+    dm.rollback();
+    printf("****************************** Reverted back ***********************************\n");
+    dm.debugPrintInfo();
+
+    dm.readBytes(newData, dataRect.left(), dataRect.top(),
+		 dataRect.width(), dataRect.height());
+    
+    dm.clear();
+
+
+    qint32 cmpResult = memcmp(data, newData, numPixels*PIXEL_SIZE);
+    printf("Memento test:\t\t");
+    if(!cmpResult)
+	printf("Ok\n");
+    else
+	printf("FAILED\n");
+
+    delete[] clonedData;
+    delete[] newData;
+}
+
 
 void dm_extent_test(KisTiledDataManager &dm, qint32 numPixels, 
 		     QRect dataRect, quint8* data)

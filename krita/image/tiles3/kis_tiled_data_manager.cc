@@ -24,7 +24,7 @@
 #include "kis_tile.h"
 #include "kis_tiled_data_manager.h"
 #include "kis_tiled_data_manager_p.h"
-
+#include "kis_memento_manager.h"
 
 //#include <KoStore.h>
 
@@ -33,7 +33,6 @@
 
 
 //#include "kis_memento.h"
-//#include "kis_tilemanager.h"
 
 /* The data area is divided into tiles each say 64x64 pixels (defined at compiletime)
  * The tiles are laid out in a matrix that can have negative indexes.
@@ -46,6 +45,11 @@
 KisTiledDataManager::KisTiledDataManager(quint32 pixelSize, 
                                          const quint8 *defaultPixel)
 {
+    /* See comment in destructor for details */
+    m_mementoManager = new KisMementoManager();
+    m_hashTable = new KisTileHashTable();
+    m_hashTable->setMementoManager(m_mementoManager);
+
     m_pixelSize = pixelSize;
     m_defaultPixel = new quint8[m_pixelSize];
     setDefaultPixel(defaultPixel);
@@ -57,14 +61,18 @@ KisTiledDataManager::KisTiledDataManager(quint32 pixelSize,
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm) 
-    : KisShared(dm),
-      m_hashTable(dm.m_hashTable)
+    : KisShared(dm)
 {
+    /* See comment in destructor for details */
+    m_mementoManager = new KisMementoManager(*dm.m_mementoManager);
+    m_hashTable = new KisTileHashTable(*dm.m_hashTable);
+    m_hashTable->setMementoManager(m_mementoManager);
+
     m_pixelSize = dm.m_pixelSize;
     m_defaultPixel = new quint8[m_pixelSize];
     /**
      * We don't call setDefaultTileData here, as defaultTileDatas 
-     * will be made shared in m_hashTable(dm.m_hashTable)
+     * will be made shared in m_hashTable(dm->m_hashTable)
      */
     memcpy(m_defaultPixel, dm.m_defaultPixel, m_pixelSize);
 
@@ -76,6 +84,17 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
 
 KisTiledDataManager::~KisTiledDataManager()
 {
+    /**
+     * Here is an  explanation why we use hash table  and The Memento Manager
+     * dynamically allocated We need to  destroy them in that very order. The
+     * reason is that when hash table destroying all her child tiles they all
+     * cry about it  to The Memento Manager using a  pointer.  So The Memento
+     * Manager sould  be alive during  that destruction. We could  use shared
+     * pointers instead, but they create too much overhead.
+     */
+    delete m_hashTable;
+    delete m_mementoManager;
+
     delete[] m_defaultPixel;
 }
 
@@ -83,7 +102,8 @@ void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
 {
     KisTileData *td = globalTileDataStore.createDefaultTileData(pixelSize(),
                                                                 defaultPixel);
-    m_hashTable.setDefaultTileData(td);    
+    m_hashTable->setDefaultTileData(td);    
+    m_mementoManager->setDefaultTileData(td);    
 
     memcpy(m_defaultPixel, defaultPixel, pixelSize());
 }
@@ -156,7 +176,7 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
 	     * FIXME: Theoretical race condition 
 	     *        if setDefaultPixel has been called first
 	     */
-	    td = m_hashTable.defaultTileData();
+	    td = m_hashTable->defaultTileData();
 	else
 	    td = globalTileDataStore.createDefaultTileData(pixelSize,
 							   clearPixel);
@@ -177,8 +197,8 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
 	    
 	    if (clearTileRect == tileRect) {
 		// Clear whole tile
-		m_hashTable.deleteTile(column, row);
-		m_hashTable.addTile(new KisTile(column,row,td));
+		m_hashTable->deleteTile(column, row);
+		m_hashTable->addTile(new KisTile(column,row,td, m_mementoManager));
 	    } 
 	    else {
 		const qint32 lineSize = clearTileRect.width() * pixelSize;
@@ -224,7 +244,7 @@ void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 c
 
 void KisTiledDataManager::clear()
 {
-    m_hashTable.clear();
+    m_hashTable->clear();
 
     m_extentMinX = qint32_MAX;
     m_extentMinY = qint32_MAX;
@@ -249,7 +269,7 @@ void KisTiledDataManager::setExtent(QRect newRect)
 
     KisTileSP tile;
     QRect tileRect;
-    KisTileHashTableIterator iter(&m_hashTable);
+    KisTileHashTableIterator iter(m_hashTable);
 
     while(!iter.isDone()) {
 	tile=iter.tile();
@@ -296,7 +316,7 @@ void KisTiledDataManager::recalculateExtent()
     m_extentMaxX = qint32_MIN;
     m_extentMaxY = qint32_MIN;
     
-    KisTileHashTableIterator iter(&m_hashTable);
+    KisTileHashTableIterator iter(m_hashTable);
     KisTileSP tile;
     
     while(! (tile = iter.tile()) ) {
@@ -349,7 +369,7 @@ KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y,
     const qint32 pixelIndex = xInTile + yInTile * KisTileData::WIDTH;
 
     bool newTile;
-    KisTileSP tile = m_hashTable.getTileLazy(col, row, newTile);
+    KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
     if(newTile)
 	updateExtent(tile->col(), tile->row());
 

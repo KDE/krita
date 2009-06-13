@@ -28,11 +28,15 @@
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 
+class KisTile;
+typedef KisSharedPtr<KisTile> KisTileSP;
+
+class KisMementoManager;
+
 //class KisTiledDataManager;
 //class KisTiledIterator;
 
-class KisTile;
-typedef KisSharedPtr<KisTile> KisTileSP;
+
 
 /**
  * Provides abstraction to a tile.  
@@ -45,7 +49,8 @@ typedef KisSharedPtr<KisTile> KisTileSP;
 class KisTile : public KisShared
 {
 public:
-    KisTile(qint32 col, qint32 row, KisTileData *defaultTileData);
+    KisTile(qint32 col, qint32 row, 
+            KisTileData *defaultTileData, KisMementoManager* mm);
     KisTile(qint32 col, qint32 row, const KisTile& rhs);
     KisTile(const KisTile& rhs);
     ~KisTile();
@@ -94,10 +99,6 @@ public:
         return m_tileData->pixelSize();
     }
 
-    inline KisTileData*  defaultTileData() const {
-        return m_defaultTileData;
-    }
-
     inline KisTileData*  tileData() const {
         return m_tileData;
     }
@@ -113,11 +114,11 @@ private:
 */
     /*Why it was present before? */
 /*  KisTile& operator=(const KisTile&);*/
-    void init(qint32 col, qint32 row, KisTileData *defaultTileData);
+    void init(qint32 col, qint32 row, 
+              KisTileData *defaultTileData, KisMementoManager* mm);
 
 private:
     KisTileData *m_tileData;
-    KisTileData *m_defaultTileData;
 
     qint32 m_col;
     qint32 m_row;
@@ -131,6 +132,8 @@ private:
      * For KisTiledDataManager's hash table
      */
     KisTileSP m_nextTile;
+
+    KisMementoManager *m_mementoManager;
 };
 
 #endif // KIS_TILE_H_

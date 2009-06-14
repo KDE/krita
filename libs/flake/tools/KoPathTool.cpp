@@ -34,8 +34,9 @@
 #include "commands/KoPathSegmentBreakCommand.h"
 #include "commands/KoParameterToPathCommand.h"
 #include "commands/KoSubpathJoinCommand.h"
+#include "commands/KoPathPointMergeCommand.h"
 #include "KoParameterShape.h"
-#include <KoPathPoint.h>
+#include "KoPathPoint.h"
 #include "KoPathPointRubberSelectStrategy.h"
 #include "KoPathSegmentChangeStrategy.h"
 #include "PathToolOptionWidget.h"
@@ -45,8 +46,8 @@
 
 #include <KAction>
 #include <KIcon>
-#include <kdebug.h>
-#include <klocale.h>
+#include <KDebug>
+#include <KLocale>
 #include <QtGui/QPainter>
 #include <QtGui/QBitmap>
 #include <QtGui/QTabWidget>
@@ -137,10 +138,10 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     addAction("pathpoint-join", m_actionJoinSegment);
     connect(m_actionJoinSegment, SIGNAL(triggered()), this, SLOT(joinPoints()));
 
-    // TODO: implement me
     m_actionMergePoints = new KAction(KIcon("pathpoint-merge"), i18n("Merge points"), this);
-    //addAction("pathpoint-merge", m_actionMergePoints);
-
+    addAction("pathpoint-merge", m_actionMergePoints);
+    connect(m_actionMergePoints, SIGNAL(triggered()), this, SLOT(mergePoints()));
+    
     m_actionConvertToPath = new KAction(KIcon("convert-to-path"), i18n("To Path"), this);
     m_actionConvertToPath->setShortcut(Qt::Key_P);
     addAction("convert-to-path", m_actionConvertToPath);
@@ -330,6 +331,35 @@ void KoPathTool::joinPoints()
         }
         updateActions();
     }
+}
+
+void KoPathTool::mergePoints()
+{
+    if (m_pointSelection.objectCount() != 1 || m_pointSelection.size() != 2)
+        return;
+    
+    QList<KoPathPointData> pointData = m_pointSelection.selectedPointsData();
+    const KoPathPointData & pd1 = pointData.at(0);
+    const KoPathPointData & pd2 = pointData.at(1);
+    const KoPathPointIndex & index1 = pd1.pointIndex;
+    const KoPathPointIndex & index2 = pd2.pointIndex;
+    
+    KoPathShape * path = pd1.pathShape;
+    
+    // check if subpaths are already closed
+    if (path->isClosedSubpath(index1.first) || path->isClosedSubpath(index2.first))
+        return;
+    // check if first point is an endpoint
+    if (index1.second != 0 && index1.second != path->pointCountSubpath(index1.first)-1)
+        return;
+    // check if second point is an endpoint
+    if (index2.second != 0 && index2.second != path->pointCountSubpath(index2.first)-1)
+        return;
+    
+    // now we can start merging the endpoints
+    KoPathPointMergeCommand *cmd = new KoPathPointMergeCommand(pd1, pd2);
+    m_canvas->addCommand(cmd);
+    updateActions();
 }
 
 void KoPathTool::breakAtPoint()
@@ -844,9 +874,12 @@ void KoPathTool::updateActions()
     m_actionAddPoint->setEnabled(hasSegmentsSelected);
     m_actionLineSegment->setEnabled(hasSegmentsSelected);
     m_actionCurveSegment->setEnabled(hasSegmentsSelected);
-    m_actionBreakSegment->setEnabled(hasPointsSelected && m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2);
-    m_actionJoinSegment->setEnabled(hasPointsSelected && m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2);
-    m_actionMergePoints->setEnabled(false);
+    
+    const uint objectCount = m_pointSelection.objectCount();
+    const uint pointCount = m_pointSelection.size();
+    m_actionBreakSegment->setEnabled(objectCount == 1 && pointCount == 2);
+    m_actionJoinSegment->setEnabled(objectCount == 1 && pointCount == 2);
+    m_actionMergePoints->setEnabled(objectCount == 1 && pointCount == 2);
 }
 
 void KoPathTool::deactivate()

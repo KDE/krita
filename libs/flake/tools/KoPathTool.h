@@ -103,6 +103,7 @@ private slots:
     void segmentToCurve();
     void convertToPath();
     void joinPoints();
+    void mergePoints();
     void breakAtPoint();
     void breakAtSegment();
     void resourceChanged(int key, const QVariant & res);

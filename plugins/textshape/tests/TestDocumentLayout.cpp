@@ -170,7 +170,7 @@ void TestDocumentLayout::testBasicLineSpacing()
         };
 
         QMainWindow mw;
-        mw.setCentralWidget(new Widget(layout));
+        mw.setCentralWidget(new Widget(m_layout));
         mw.show();
         m_app->exec(); */
 }

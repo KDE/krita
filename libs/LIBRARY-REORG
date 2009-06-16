@@ -28,6 +28,7 @@ Stages
    common tool/docker/canvas controller from the apps to KoView.
  * make flake as independent as possible
  * make guiutils a base library containing only gui functionality shared by widgets, not independent widgets themselves.
+ * All the classes we moved should be considered for rename so a class that is no longer in KOffice Libs no longer has the "Ko" prefix.
 
 Issues
 

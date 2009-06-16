@@ -1,9 +1,17 @@
-include_directories(${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES})
+include_directories( 
+    ${KOMAIN_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/widgets/documentsectionbox
+    ${CMAKE_SOURCE_DIR}/libs/widgets
+)
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the KOPAGEAPP_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
+
+if(NOT NO_PIGMENT)
+    include_directories(${PIGMENT_INCLUDES})
+endif(NOT NO_PIGMENT)
 
 
 add_subdirectory(tests)
@@ -40,8 +48,8 @@ set( kopageapp_LIB_SRCS
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
 
-target_link_libraries(kopageapp komain kostore ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} koguiutils kotext)
-target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES koguiutils )
+target_link_libraries(kopageapp koodf flake kodocumentsectionbox komain kostore ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} kozoomaction  kotext)
+target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES flake komain )
 
 set_target_properties(kopageapp PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

@@ -94,13 +94,6 @@ bool KoOdfReadStore::loadAndParse(QString & errorMessage)
     // Also load styles from content.xml
     d->stylesReader.createStyleMap(d->contentDoc, false);
 
-    // TODO post 1.4, pass manifestDoc to the apps so that they don't have to do it themselves
-    // (when calling KoDocumentChild::loadOasisDocument)
-    //QDomDocument manifestDoc;
-    //KoOdfReadStore oasisStore( store );
-    //if ( !oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", manifestDoc, d->lastErrorMessage ) )
-    //    return false;
-
     if (d->store->hasFile("settings.xml")) {
         loadAndParse("settings.xml", d->settingsDoc, errorMessage);
     }

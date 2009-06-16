@@ -52,8 +52,8 @@ public:
     void toXML(QDomDocument& doc, QDomElement& rootElt) const;
 
     KisPaintOpSettingsSP clone() const;
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image ) const;
-    virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const;
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode ) const;
+    virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
 public:
 

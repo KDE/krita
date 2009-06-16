@@ -78,7 +78,6 @@ protected slots:
     void setAssistant(bool assistant);
 
 private:
-
     /**
      * adjust a coordinates according to a KisPaintingAssitant, if available.
      */
@@ -110,6 +109,7 @@ protected:
 private:
 
     QPointF mousePos;
+    QRectF oldOutlineRect;
     bool m_paintedOutline;
     QRegion m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;

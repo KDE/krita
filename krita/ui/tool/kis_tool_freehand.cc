@@ -194,10 +194,19 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         m_previousPaintInformation = info;
     }
     KisConfig cfg;
+    KisPaintOpSettings::OutlineMode outlineMode;
     if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-        m_canvas->updateCanvas( currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage()) ); // erase the old guy
-        mousePos = e->point;
-        m_canvas->updateCanvas( currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage()) ); // paint the new one
+      outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
+    } else {
+      outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
+    }
+    if(!oldOutlineRect.isEmpty()) {
+        m_canvas->updateCanvas(oldOutlineRect); // erase the old guy
+    }
+    mousePos = e->point;
+    oldOutlineRect = currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage(), outlineMode);
+    if(!oldOutlineRect.isEmpty()) {
+        m_canvas->updateCanvas(oldOutlineRect); // erase the old guy
     }
 }
 
@@ -447,9 +456,13 @@ void KisToolFreehand::setAssistant(bool assistant)
 void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 {
     KisConfig cfg;
+    KisPaintOpSettings::OutlineMode outlineMode;
     if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-        currentPaintOpPreset()->settings()->paintOutline(mousePos, currentImage(), gc, converter);
+      outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
+    } else {
+      outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
     }
+    currentPaintOpPreset()->settings()->paintOutline(mousePos, currentImage(), gc, converter, outlineMode);
 }
 
 QPointF KisToolFreehand::adjustPosition(const QPointF& point)

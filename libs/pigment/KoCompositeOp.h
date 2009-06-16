@@ -77,7 +77,7 @@ public:
 
     /**
      * @param cs a pointer to the color space that can be used with this composite op
-     * @param id the identifiant for this composite op (not user visible)
+     * @param id the identifier for this composite op (not user visible)
      * @param description an user visible string describing this composite operation
      * @param category the name of the category where to put that composite op when displayed
      * @param userVisible define whether or not that composite op should be visible in an user
@@ -87,7 +87,7 @@ public:
     virtual ~KoCompositeOp();
 
     /**
-     * @return the identifiant of this composite op
+     * @return the identifier of this composite op
      */
     QString id() const;
     /**

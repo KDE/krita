@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_CONVERSIONS_H_
-#define _KIS_CONVERSIONS_H_
+#ifndef _KO_CONVERSIONS_H_
+#define _KO_CONVERSIONS_H_
 
 #include <qglobal.h>
 #include "pigment_export.h"
@@ -46,5 +46,5 @@
  PIGMENTCMS_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, int * h, int * l, int * s);
  PIGMENTCMS_EXPORT void hls_to_rgb(int h, int l, int s, quint8 * r, quint8 * g, quint8 * b);
 
-#endif // _KIS_CONVERSIONS_H_
+#endif // _KO_CONVERSIONS_H_
 

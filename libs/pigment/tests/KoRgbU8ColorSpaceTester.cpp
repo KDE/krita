@@ -41,58 +41,6 @@
 
 void KoRgbColorSpaceTester::testBasics()
 {
-#if 0
-    KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());  
-    KisRgbColorSpace *cs = new KisRgbColorSpace(defProfile);
-
-    quint8 pixel[NUM_CHANNELS];
-
-    pixel[PIXEL_RED] = 255;
-    pixel[PIXEL_GREEN] = 128;
-    pixel[PIXEL_BLUE] = 64;
-    pixel[PIXEL_ALPHA] = 0;
-
-    QString valueText = cs->channelValueText(pixel, RED_CHANNEL);
-    CHECK(valueText, QString("255"));
-
-    valueText = cs->channelValueText(pixel, GREEN_CHANNEL);
-    CHECK(valueText, QString("128"));
-
-    valueText = cs->channelValueText(pixel, BLUE_CHANNEL);
-    CHECK(valueText, QString("64"));
-
-    valueText = cs->channelValueText(pixel, ALPHA_CHANNEL);
-    CHECK(valueText, QString("0"));
-
-    valueText = cs->normalisedChannelValueText(pixel, RED_CHANNEL);
-    CHECK(valueText, QString().setNum(1.0));
-
-    valueText = cs->normalisedChannelValueText(pixel, GREEN_CHANNEL);
-    CHECK(valueText, QString().setNum(128.0 / 255.0));
-
-    valueText = cs->normalisedChannelValueText(pixel, BLUE_CHANNEL);
-    CHECK(valueText, QString().setNum(64.0 / 255.0));
-
-    valueText = cs->normalisedChannelValueText(pixel, ALPHA_CHANNEL);
-    CHECK(valueText, QString().setNum(0.0));
-
-    cs->setPixel(pixel, 128, 192, 64, 99);
-    CHECK((uint)pixel[PIXEL_RED], 128u);
-    CHECK((uint)pixel[PIXEL_GREEN], 192u);
-    CHECK((uint)pixel[PIXEL_BLUE], 64u);
-    CHECK((uint)pixel[PIXEL_ALPHA], 99u);
-
-    quint8 red;
-    quint8 green;
-    quint8 blue;
-    quint8 alpha;
-
-    cs->getPixel(pixel, &red, &green, &blue, &alpha);
-    CHECK((uint)red, 128u);
-    CHECK((uint)green, 192u);
-    CHECK((uint)blue, 64u);
-    CHECK((uint)alpha, 99u);
-#endif
 }
 
 #define PIXEL_RED 0

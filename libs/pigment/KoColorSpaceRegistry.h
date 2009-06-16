@@ -28,7 +28,6 @@
 
 #include <KoGenericRegistry.h>
 
-class KisPaintDeviceAction;
 class KoColorSpace;
 class KoColorSpaceFactory;
 class KoColorProfile;
@@ -214,16 +213,6 @@ public:
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
     const KoColorSpace * lab16(const KoColorProfile * profile);
-
-    /**
-     * add a KisConstructPaintDeviceAction to the registry for a colorspace
-     */
-    void addPaintDeviceAction(const KoColorSpace* colorSpace, KisPaintDeviceAction* action);
-
-    /**
-     * Get a list of KisConstructPaintDeviceAction for a colorspace
-     */
-    QList<KisPaintDeviceAction *> paintDeviceActionsFor(const KoColorSpace* colorSpace);
 
     /**
      * @return the list of available color models

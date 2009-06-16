@@ -160,15 +160,6 @@ void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
     if (layer) {
 
         KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer));
-        if (!player.isNull()) {
-            // XXX: This should also be done whenever a layer grows!
-            QList<KisPaintDeviceAction *> actions =
-                KoColorSpaceRegistry::instance()->paintDeviceActionsFor(player->paintDevice()->colorSpace());
-            for (int i = 0; i < actions.count(); i++) {
-                actions.at(i)->act(player.data()->paintDevice(), width(), height());
-            }
-
-        }
 
         // The addition of temporary layers is not interesting
         KoProperties props;

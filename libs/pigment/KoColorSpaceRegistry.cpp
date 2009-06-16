@@ -53,8 +53,6 @@
 struct KoColorSpaceRegistry::Private {
     QHash<QString, KoColorProfile * > profileMap;
     QHash<QString, const KoColorSpace * > csMap;
-    typedef QList<KisPaintDeviceAction *> PaintActionList;
-    QHash<QString, PaintActionList> paintDevActionMap;
     const KoColorSpace *alphaCs;
     KoColorConversionSystem *colorConversionSystem;
     KoColorConversionCache* colorConversionCache;
@@ -263,18 +261,6 @@ void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
 void KoColorSpaceRegistry::addProfile(const KoColorProfile* profile)
 {
   addProfile( profile->clone() );
-}
-
-void KoColorSpaceRegistry::addPaintDeviceAction(const KoColorSpace* cs,
-        KisPaintDeviceAction* action)
-{
-    d->paintDevActionMap[cs->id()].append(action);
-}
-
-QList<KisPaintDeviceAction *>
-KoColorSpaceRegistry::paintDeviceActionsFor(const KoColorSpace* cs)
-{
-    return d->paintDevActionMap[cs->id()];
 }
 
 bool KoColorSpaceRegistry::isCached(const QString & csId, const QString & profileName) const

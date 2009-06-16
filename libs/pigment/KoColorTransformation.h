@@ -29,8 +29,8 @@
 
 
 /**
- * This is the base class of all color transform that takes one pixel in input
- * and one pixel in output.
+ * This is the base class of all color transform that takes n pixels in input
+ * and n pixels in output.
  *
  * They are created by color spaces.
  *

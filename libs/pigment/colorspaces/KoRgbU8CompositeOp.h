@@ -49,8 +49,8 @@
   the terms of the LGPL
 
  */
-#ifndef KIS_RGB_U8_COMPOSITEOP
-#define KIS_RGB_U8_COMPOSITEOP
+#ifndef KO_RGB_U8_COMPOSITEOP
+#define KO_RGB_U8_COMPOSITEOP
 
 #include <KoCompositeOp.h>
 

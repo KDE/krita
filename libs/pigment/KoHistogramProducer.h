@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_HISTOGRAM_PRODUCER_
-#define _KIS_HISTOGRAM_PRODUCER_
+#ifndef _KO_HISTOGRAM_PRODUCER_
+#define _KO_HISTOGRAM_PRODUCER_
 
 #include <qglobal.h>
 #include <ksharedptr.h>
@@ -32,7 +32,7 @@ class KoColorSpace;
 
 /**
  * This class is an interface used in the generation of a histogram. It is a container of
- * data, all mathematically interesting things will calculated by a KisHistogram.
+ * data, all mathematically interesting things will calculated by an histogram.
  *
  * The default view will be the entire range each color can be in. And don't let the
  * numberOfBins return anything else then 256 unless you have a very good reason for it.
@@ -127,4 +127,4 @@ private:
    static KoHistogramProducerFactoryRegistry* m_singleton;
 };
 
-#endif // _KIS_HISTOGRAM_PRODUCER
+#endif // _KO_HISTOGRAM_PRODUCER

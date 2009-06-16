@@ -431,11 +431,6 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     painter.fillRect(0, 0, width, height, bgColor, opacity);
     painter.end();
 
-    QList<KisPaintDeviceAction *> actions =
-        KoColorSpaceRegistry::instance()->paintDeviceActionsFor(cs);
-    for (int i = 0; i < actions.count(); i++)
-        actions.at(i)->act(layer->paintDevice(), img->width(), img->height());
-
     img->addNode(layer.data(), img->rootLayer().data());
 
     setCurrentImage(img);

@@ -31,8 +31,8 @@
  * Typically, when you have an ICC color space and color profile, you
  * can convert to any other ICC color space and color profile. While
  * creating a KoColorTransformationFactory for each of this transformation
- * is possible, the number of link will make explode the Color Conversion
- * System. KoColorSpaceEngine will provides a virtual node in the Color
+ * is possible, the number of links will make the Color Conversion explode
+ * System. KoColorSpaceEngine provides a virtual node in the Color
  * Conversion System that can convert to any other node supported by the
  * engine.
  */

@@ -24,7 +24,7 @@
 #include <QtCore/QStringList>
 
 #include "KoFilter.h"
-#include "KoQueryTrader.h"
+#include "KoFilterEntry.h"
 #include <KoStoreDevice.h>
 #include "komain_export.h"
 

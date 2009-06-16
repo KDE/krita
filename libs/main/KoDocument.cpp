@@ -1,30 +1,29 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2000-2005 David Faure <faure@kde.org>
-   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+ * Copyright (C) 2000-2005 David Faure <faure@kde.org>
+ * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "KoDocument.h"
 #include "KoDocument_p.h"
 
 #include "KoDocumentAdaptor.h"
 #include "KoGlobal.h"
-#include "KoDocumentChild.h"
 #include "KoView.h"
 #include "KoMainWindow.h"
 #include "KoFilterManager.h"
@@ -69,11 +68,10 @@
 // This used to "store" but KUrl didn't like it,
 // so let's simply make it "tar" !
 #define STORE_PROTOCOL "tar"
-// The internal path is a hack to make KUrl happy and still pass
-// some kind of relative path to KoDocumentChild
+// The internal path is a hack to make KUrl happy and for document children
 #define INTERNAL_PROTOCOL "intern"
 #define INTERNAL_PREFIX "intern:/"
-// Warning, keep it sync in koStore.cc and koDocumentChild.cc
+// Warning, keep it sync in koStore.cc
 
 Q3PtrList<KoDocument> *KoDocument::s_documentList = 0L;
 
@@ -129,7 +127,6 @@ public:
     }
 
     QList<KoView*> m_views;
-    Q3PtrList<KoDocumentChild> m_children;
     Q3PtrList<KoMainWindow> m_shells;
     QList<QDomDocument> m_viewBuildDocuments;
 
@@ -296,11 +293,6 @@ KoDocument::~KoDocument()
 {
     d->m_autoSaveTimer.stop();
 
-    Q3PtrListIterator<KoDocumentChild> childIt(d->m_children);
-    for (; childIt.current(); ++childIt)
-        disconnect(childIt.current(), SIGNAL(destroyed()),
-                   this, SLOT(slotChildDestroyed()));
-
     // Tell our views that the document is already destroyed and
     // that they shouldn't try to access it.
     foreach(KoView* view, d->m_views)
@@ -308,9 +300,6 @@ KoDocument::~KoDocument()
 
     delete d->m_startUpWidget;
     d->m_startUpWidget = 0;
-
-    d->m_children.setAutoDelete(true);
-    d->m_children.clear();
 
     d->m_shells.setAutoDelete(true);
     d->m_shells.clear();
@@ -616,13 +605,6 @@ void KoDocument::setManager(KParts::PartManager *manager)
     KParts::ReadWritePart::setManager(manager);
     if (d->m_bSingleViewMode && d->m_views.count() == 1)
         d->m_views.first()->setPartManager(manager);
-
-    if (manager) {
-        Q3PtrListIterator<KoDocumentChild> it(d->m_children);
-        for (; it.current(); ++it)
-            if (it.current()->document())
-                manager->addPart(it.current()->document(), false);
-    }
 }
 
 void KoDocument::setReadWrite(bool readwrite)
@@ -631,11 +613,6 @@ void KoDocument::setReadWrite(bool readwrite)
 
     foreach(KoView* view, d->m_views)
         view->updateReadWrite(readwrite);
-
-    Q3PtrListIterator<KoDocumentChild> dIt(d->m_children);
-    for (; dIt.current(); ++dIt)
-        if (dIt.current()->document())
-            dIt.current()->document()->setReadWrite(readwrite);
 
     Q3PtrListIterator<KoMainWindow> it(d->m_shells);
     for (; it.current(); ++it)
@@ -677,49 +654,6 @@ int KoDocument::viewCount() const
     return d->m_views.count();
 }
 
-void KoDocument::insertChild(KoDocumentChild *child)
-{
-    setModified(true);
-
-    d->m_children.append(child);
-
-    connect(child, SIGNAL(changed(KoChild *)),
-            this, SLOT(slotChildChanged(KoChild *)));
-    connect(child, SIGNAL(destroyed()),
-            this, SLOT(slotChildDestroyed()));
-
-    // It may be that insertChild is called without the KoDocumentChild
-    // having a KoDocument attached, yet. This happens for example
-    // when KPresenter loads a document with embedded objects. For those
-    // KPresenterChild objects are allocated and insertChild is called.
-    // Later in loadChildren() KPresenter iterates over the child list
-    // and calls loadDocument for each child. That's exactly where we
-    // will try to do what we cannot do now: Register the child document
-    // at the partmanager (Simon)
-    if (manager() && !isSingleViewMode() && child->document())
-        manager()->addPart(child->document(), false);
-}
-
-void KoDocument::slotChildChanged(KoChild *c)
-{
-    KoDocumentChild* child = ::qobject_cast<KoDocumentChild *>(c);
-    Q_ASSERT(child);
-    emit childChanged(child);
-}
-
-void KoDocument::slotChildDestroyed()
-{
-    setModified(true);
-
-    const KoDocumentChild *child = static_cast<const KoDocumentChild *>(sender());
-    d->m_children.removeRef(child);
-}
-
-const Q3PtrList<KoDocumentChild>& KoDocument::children() const
-{
-    return d->m_children;
-}
-
 KParts::Part *KoDocument::hitTest(QWidget *widget, const QPoint &globalPos)
 {
     foreach(KoView* view, d->m_views) {
@@ -735,30 +669,6 @@ KParts::Part *KoDocument::hitTest(QWidget *widget, const QPoint &globalPos)
     }
 
     return 0;
-}
-
-KoDocument* KoDocument::hitTest(const QPoint &pos, KoView* view, const QMatrix &matrix)
-{
-    // Call KoDocumentChild::hitTest for any child document
-    Q3PtrListIterator<KoDocumentChild> it(d->m_children);
-    for (; it.current(); ++it) {
-        KoDocument *doc = it.current()->hitTest(pos, view, matrix);
-        if (doc)
-            return doc;
-    }
-
-    // Unless we hit an embedded document, the hit is on this document itself.
-    return this;
-}
-
-KoDocumentChild *KoDocument::child(KoDocument *doc)
-{
-    Q3PtrListIterator<KoDocumentChild> it(d->m_children);
-    for (; it.current(); ++it)
-        if (it.current()->document() == doc)
-            return it.current();
-
-    return 0L;
 }
 
 KoDocumentInfo *KoDocument::documentInfo() const
@@ -800,74 +710,6 @@ QDomDocument KoDocument::viewBuildDocument(KoView *view)
 void KoDocument::paintEverything(QPainter &painter, const QRect &rect, KoView *view)
 {
     paintContent(painter, rect);
-    paintChildren(painter, rect, view);
-}
-
-void KoDocument::paintChildren(QPainter &painter, const QRect &/*rect*/, KoView *view)
-{
-    Q3PtrListIterator<KoDocumentChild> it(d->m_children);
-    for (; it.current(); ++it) {
-        // #### todo: paint only if child is visible inside rect
-        painter.save();
-        paintChild(it.current(), painter, view);
-        painter.restore();
-    }
-}
-
-void KoDocument::paintChild(KoDocumentChild *child, QPainter &painter, KoView *view)
-{
-    if (child->isDeleted())
-        return;
-
-    // QRegion rgn = painter.clipRegion();
-
-    child->transform(painter);
-    child->document()->paintEverything(painter, child->contentRect(), view);
-
-    if (view && view->partManager()) {
-        KParts::PartManager *manager = view->partManager();
-
-        painter.scale(1.0 / child->xScaling(), 1.0 / child->yScaling());
-
-        int w = int((qreal)child->contentRect().width() * child->xScaling());
-        int h = int((qreal)child->contentRect().height() * child->yScaling());
-        if ((manager->selectedPart() == (KParts::Part *)child->document() &&
-                manager->selectedWidget() == (QWidget *)view) ||
-                (manager->activePart() == (KParts::Part *)child->document() &&
-                 manager->activeWidget() == (QWidget *)view)) {
-            // painter.setClipRegion( rgn );
-            painter.setClipping(false);
-
-            painter.setPen(Qt::black);
-            painter.fillRect(-5, -5, w + 10, 5, Qt::white);
-            painter.fillRect(-5, h, w + 10, 5, Qt::white);
-            painter.fillRect(-5, -5, 5, h + 10, Qt::white);
-            painter.fillRect(w, -5, 5, h + 10, Qt::white);
-            painter.fillRect(-5, -5, w + 10, 5, QBrush( Qt::BDiagPattern ));
-            painter.fillRect(-5, h, w + 10, 5, QBrush( Qt::BDiagPattern) );
-            painter.fillRect(-5, -5, 5, h + 10, QBrush( Qt::BDiagPattern) );
-            painter.fillRect(w, -5, 5, h + 10, QBrush( Qt::BDiagPattern ));
-
-            if (manager->selectedPart() == (KParts::Part *)child->document() &&
-                    manager->selectedWidget() == (QWidget *)view) {
-                QColor color;
-                if (view->koDocument() == this)
-                    color = Qt::black;
-                else
-                    color = Qt::gray;
-                painter.fillRect(-5, -5, 5, 5, color);
-                painter.fillRect(-5, h, 5, 5, color);
-                painter.fillRect(w, h, 5, 5, color);
-                painter.fillRect(w, -5, 5, 5, color);
-                painter.fillRect(w / 2 - 3, -5, 5, 5, color);
-                painter.fillRect(w / 2 - 3, h, 5, 5, color);
-                painter.fillRect(-5, h / 2 - 3, 5, 5, color);
-                painter.fillRect(w, h / 2 - 3, 5, 5, color);
-            }
-
-            painter.setClipping(true);
-        }
-    }
 }
 
 bool KoDocument::isModified() const
@@ -876,81 +718,7 @@ bool KoDocument::isModified() const
         //kDebug(30003)<<" Modified doc='"<<url().url()<<"' extern="<<isStoredExtern();
         return true;
     }
-    // Then go through internally stored children (considered to be part of this doc)
-    Q3PtrListIterator<KoDocumentChild> it = children();
-    for (; it.current(); ++it) {
-        KoDocument *doc = it.current()->document();
-        if (doc && !it.current()->isStoredExtern() && !it.current()->isDeleted() && doc->isModified())
-            return true;
-    }
     return false;
-}
-
-bool KoDocument::saveChildren(KoStore* _store)
-{
-    //kDebug(30003)<<" checking children of doc='"<<url().url()<<"'";
-    int i = 0;
-    Q3PtrListIterator<KoDocumentChild> it(children());
-    for (; it.current(); ++it) {
-        KoDocument* childDoc = it.current()->document();
-        if (childDoc && !it.current()->isDeleted()) {
-            if (!childDoc->isStoredExtern()) {
-                //kDebug(30003) <<"internal url: /" << i;
-                if (!childDoc->saveToStore(_store, QString::number(i++)))
-                    return false;
-
-                if (!isExporting())
-                    childDoc->setModified(false);
-            }
-            //else kDebug(30003)<<" external (don't save) url:" << childDoc->url().url();
-        }
-    }
-    return true;
-}
-
-bool KoDocument::saveChildrenOdf(SavingContext & documentContext)
-{
-    //kDebug(30003)<<" checking children of doc='"<<url().url()<<"'";
-    Q3PtrListIterator<KoDocumentChild> it(children());
-    for (; it.current(); ++it) {
-        KoDocument* childDoc = it.current()->document();
-        if (childDoc && !it.current()->isDeleted()) {
-            if (!it.current()->saveOdf(documentContext))
-                return false;
-            if (!childDoc->isStoredExtern() && !isExporting())
-                childDoc->setModified(false);
-        }
-    }
-    return true;
-}
-
-bool KoDocument::saveExternalChildren()
-{
-    if (d->m_doNotSaveExtDoc) {
-        //kDebug(30003)<<" Don't save external docs in doc='"<<url().url()<<"'";
-        d->m_doNotSaveExtDoc = false;
-        return true;
-    }
-
-    //kDebug(30003)<<" checking children of doc='"<<url().url()<<"'";
-    KoDocumentChild *ch;
-    Q3PtrListIterator<KoDocumentChild> it = children();
-    for (; (ch = it.current()); ++it) {
-        if (!ch->isDeleted()) {
-            KoDocument* doc = ch->document();
-            if (doc && doc->isStoredExtern() && doc->isModified()) {
-                kDebug(30003) << " save external doc='" << url().url() << "'";
-                doc->setDoNotSaveExtDoc(); // Only save doc + it's internal children
-                if (!doc->save())
-                    return false; // error
-            }
-            //kDebug(30003)<<" not modified doc='"<<url().url()<<"'";
-            // save possible external docs inside doc
-            if (doc && !doc->saveExternalChildren())
-                return false;
-        }
-    }
-    return true;
 }
 
 bool KoDocument::saveNativeFormat(const QString & file)
@@ -1095,13 +863,6 @@ bool KoDocument::saveNativeFormat(const QString & file)
 
         delete store;
     } else {
-        // Save internal children first since they might get a new url
-        if (!saveChildren(store) && !oasis) {
-            if (d->lastErrorMessage.isEmpty())
-                d->lastErrorMessage = i18n("Error while saving embedded documents");   // more details needed
-            delete store;
-            return false;
-        }
 
         kDebug(30003) << "Saving root";
         if (store->open("root")) {
@@ -1143,9 +904,6 @@ bool KoDocument::saveNativeFormat(const QString & file)
         // Success
         delete store;
     }
-    if (!saveExternalChildren()) {
-        return false;
-    }
     return true;
 }
 
@@ -1171,14 +929,6 @@ bool KoDocument::saveToStore(KoStore* _store, const QString & _path)
         setUrl(KUrl(_path));
     else // ugly hack to pass a relative URI
         setUrl(KUrl(INTERNAL_PREFIX +  _path));
-
-    // To make the children happy cd to the correct directory
-    _store->pushDirectory();
-    _store->enterDirectory(_path);
-
-    // Save childen first since they might get a new url
-    if (!saveChildren(_store))
-        return false;
 
     // In the current directory we're the king :-)
     if (_store->open("root")) {
@@ -1805,11 +1555,6 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore * store)
             return false;
         }
 
-        if (!loadChildren(store)) {
-            kError(30003) << "ERROR: Could not load children" << endl;
-            // Don't abort, proceed nonetheless
-        }
-
     } else {
         kError(30003) << "ERROR: No maindoc.xml" << endl;
         d->lastErrorMessage = i18n("Invalid document: no file 'maindoc.xml'.");
@@ -1883,13 +1628,6 @@ bool KoDocument::loadFromStore(KoStore* _store, const QString& url)
     } else {
         setUrl(KUrl(INTERNAL_PREFIX + url));
         _store->enterDirectory(url);
-    }
-
-    if (!loadChildren(_store)) {
-        kError(30003) << "ERROR: Could not load children" << endl;
-#if 0
-        return false;
-#endif
     }
 
     bool result = completeLoading(_store);
@@ -1971,9 +1709,6 @@ bool KoDocument::addVersion(const QString& comment)
     }
     delete store;
 
-    if (!saveExternalChildren())
-        return false;
-
     KoVersionInfo version;
     version.comment = comment;
     version.title = "Version" + QString::number(d->m_versionInfo.count() + 1);
@@ -2039,24 +1774,11 @@ void KoDocument::setModified(bool mod)
 
     if (mod) {
         m_bEmpty = false;
-    } else {
-        // When saving this document, all non-external child documents get saved too.
-        Q3PtrListIterator<KoDocumentChild> it = children();
-        for (; it.current(); ++it) {
-            KoDocument *doc = it.current()->document();
-            if (doc && !it.current()->isStoredExtern() && !it.current()->isDeleted() && doc->isModified())
-                doc->setModified(false);
-        }
     }
 
     // This influences the title
     setTitleModified();
     emit modified(mod);
-}
-
-void KoDocument::setDoNotSaveExtDoc(bool on)
-{
-    d->m_doNotSaveExtDoc = on;
 }
 
 int KoDocument::queryCloseDia()
@@ -2078,7 +1800,6 @@ int KoDocument::queryCloseDia()
 
     switch (res) {
     case KMessageBox::Yes :
-        setDoNotSaveExtDoc(); // Let save() only save myself and my internal docs
         save(); // NOTE: External files always in native format. ###TODO: Handle non-native format
         setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
         break;
@@ -2090,33 +1811,6 @@ int KoDocument::queryCloseDia()
         return res; // cancels the rest of the files
     }
     return res;
-}
-
-int KoDocument::queryCloseExternalChildren()
-{
-    //kDebug(30003)<<" checking for children in:"<<url().url();
-    setDoNotSaveExtDoc(false);
-    Q3PtrListIterator<KoDocumentChild> it(children());
-    for (; it.current(); ++it) {
-        if (!it.current()->isDeleted()) {
-            KoDocument *doc = it.current()->document();
-            if (doc) {
-                bool foo = doc->isStoredExtern();
-                kDebug(36001) << "========== isStoredExtern() returned"
-                << foo << " ==========" << endl;
-
-                if (foo) { { //###TODO: Handle non-native mimetype docs
-                        kDebug(30003) << " found modified child:" << doc->url().url() << " extern=" << doc->isStoredExtern();
-                        if (doc->queryCloseDia() == KMessageBox::Cancel)
-                            return  KMessageBox::Cancel;
-                    }
-                }
-                if (doc->queryCloseExternalChildren() == KMessageBox::Cancel)
-                    return KMessageBox::Cancel;
-            }
-        }
-    }
-    return KMessageBox::Ok;
 }
 
 void KoDocument::setTitleModified(const QString &caption, bool mod)
@@ -2165,11 +1859,6 @@ void KoDocument::setTitleModified()
         // internal doc or not current doc, so pass on the buck
         doc->setTitleModified();
     }
-}
-
-bool KoDocument::loadChildren(KoStore*)
-{
-    return true;
 }
 
 bool KoDocument::completeLoading(KoStore*)
@@ -2240,8 +1929,9 @@ QByteArray KoDocument::nativeFormatMimeType() const
 QByteArray KoDocument::nativeOasisMimeType() const
 {
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
-    if (!service)
-        return QByteArray();
+    if (!service) {
+        return KoDocument::nativeFormatMimeType();
+    }
     return service->property("X-KDE-NativeOasisMimeType").toString().toLatin1();
 }
 
@@ -2612,7 +2302,10 @@ void KoDocument::startCustomDocument()
 KoOpenPane* KoDocument::createOpenPane(QWidget* parent, const KComponentData &componentData,
                                        const QString& templateType)
 {
-    KoOpenPane* openPane = new KoOpenPane(parent, componentData, templateType);
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
+                                                               KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
+
+    KoOpenPane* openPane = new KoOpenPane(parent, componentData, mimeFilter, templateType);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);
     foreach(const CustomDocumentWidgetItem & item, widgetList) {
         openPane->addCustomDocumentWidget(item.widget, item.title, item.icon);

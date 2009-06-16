@@ -25,6 +25,9 @@
 
 #include <kparts/mainwindow.h>
 
+#include <KoCanvasObserver.h>
+#include <KoCanvasObserverProvider.h>
+
 #include <Qt3Support/Q3PtrList>
 
 class KoMainWindowPrivate;
@@ -166,6 +169,8 @@ public:
 
     /// Return the list of dock widgets belonging to this main window.
     QList<QDockWidget*> dockWidgets();
+
+    QList<KoCanvasObserver*> canvasObservers();
 
     /**
      * @return the KoDockerManager which is assigned

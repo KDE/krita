@@ -41,15 +41,6 @@ target_link_libraries(rtreetestapp komain ${QT_QTTEST_LIBRARY} )
 
 ########### next target ###############
 
-set(kopropertiestest_SRCS kopropertiestest.cpp )
-
-kde4_add_unit_test(KoPropertiesTest TESTNAME libs-komain-KoPropertiesTest ${kopropertiestest_SRCS})
-
-target_link_libraries(KoPropertiesTest  ${KDE4_KDEUI_LIBS} komain ${QT_QTTEST_LIBRARY})
-
-
-########### next target ###############
-
 set(documentstructuretest_SRCS documentstructuretest.cpp )
 kde4_add_unit_test(DocumentStructureTest TESTNAME libs-komain-DocumentStructureTest  ${documentstructuretest_SRCS})
 target_link_libraries(DocumentStructureTest komain ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})

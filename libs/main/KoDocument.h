@@ -36,16 +36,14 @@
 #include "KoGridData.h"
 #include "KoGuidesData.h"
 #include <KoXmlReader.h>
+#include <KoOdfDocument.h>
 
-class QXmlSimpleReader;
 class QUndoCommand;
 
 class KoStore;
 class KoOdfReadStore;
 class KoOdfWriteStore;
 class KoMainWindow;
-class KoChild;
-class KoDocumentChild;
 class KoView;
 class KoDocumentInfo;
 class KoOpenPane;
@@ -70,22 +68,13 @@ public:
  *
  *  @short The %KOffice document class
  */
-class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart
+class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart, public KoOdfDocument
 {
     Q_OBJECT
 //     Q_PROPERTY( QByteArray dcopObjectId READ dcopObjectId)
     Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
 
 public:
-    // context passed on saving to saveOdf
-    struct SavingContext {
-        SavingContext(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & embeddedSaver)
-                : odfStore(odfStore)
-                , embeddedSaver(embeddedSaver) {}
-
-        KoOdfWriteStore & odfStore;
-        KoEmbeddedDocumentSaver & embeddedSaver;
-    };
 
     /**
      *  Constructor.
@@ -120,7 +109,7 @@ public:
     bool isSingleViewMode() const;
 
     /**
-     * Is the document embedded?
+     * @return true if the document is embedded in another odf document
      */
     bool isEmbedded() const;
 
@@ -233,7 +222,10 @@ public:
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported
-     * This comes from the X-KDE-NativeOasisMimeType key in the .desktop file
+     * This comes from the X-KDE-NativeOasisMimeType key in the
+     * desktop file
+     *
+     * @return the oasis mimetype or, if it hasn't one, the nativeformatmimetype.
      */
     QByteArray nativeOasisMimeType() const;
 
@@ -365,25 +357,6 @@ public:
     virtual KParts::Part *hitTest(QWidget *widget, const QPoint &globalPos);
 
     /**
-     *  Find the most nested child document which contains the
-     *  requested point. The point is in the coordinate system
-     *  of this part. If no child document contains this point, then
-     *  a pointer to this document is returned.
-     *
-     *  This method can to be reimplemented if the document features child documents.
-     *
-     *  @param pos is in (unzoomed) document coordinates
-     *  @param view the view in which we are testing for a hit. This is used to implement
-     *         logic like "only hit an embedded object if it's selected in the current view"
-     *  @param matrix transforms points from the documents coordinate system
-     *         to the coordinate system of the requested point. This is used by
-     *         transformed child documents, see KoDocumentChild/KoChild.
-     *
-     *  @return Pointer to the document under the mouse at that position
-     */
-    virtual KoDocument *hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix = QMatrix());
-
-    /**
      *  Paints the whole document into the given painter object.
      *
      *  @param painter     The painter object onto which will be drawn.
@@ -397,28 +370,6 @@ public:
      * @note The preview is used in the File Dialog and also to create the Thumbnail
      */
     virtual QPixmap generatePreview(const QSize& size);
-
-    /**
-     *  Paints all of the documents children into the given painter object.
-     *
-     *  @param painter     The painter object onto which will be drawn.
-     *  @param rect        The rect that should be used in the painter object.
-     *  @param view        The KoView is needed to fiddle about with the active widget.
-     *
-     *  @see #paintChild #paintEverything #paintContent
-     */
-    virtual void paintChildren(QPainter &painter, const QRect &rect, KoView *view);
-
-    /**
-     *  Paint a given child. Normally called by paintChildren().
-     *
-     *  @param child       The child to be painted.
-     *  @param painter     The painter object onto which will be drawn.
-     *  @param view        The KoView is needed to fiddle about with the active widget.
-     *
-     *  @see #paintEverything #paintChildren #paintContent
-     */
-    virtual void paintChild(KoDocumentChild *child, QPainter &painter, KoView *view);
 
     /**
      *  Paints the data itself. Normally called by paintEverything(). It does not
@@ -607,21 +558,6 @@ public:
     }
 
     /**
-     * @return the list of all children. Do not modify the
-     *         returned list.
-     */
-    const Q3PtrList<KoDocumentChild>& children() const;
-
-    /**
-     * @return the KoDocumentChild associated with the given Document, but only if
-     *         @p doc is a direct child of this document.
-     *
-     * This is a convenience function. You could get the same result
-     * by traversing the list returned by children().
-     */
-    KoDocumentChild *child(KoDocument *doc);
-
-    /**
      * @return the information concerning this document.
      * @see KoDocumentInfo
      */
@@ -719,23 +655,8 @@ public:
      */
     bool isLoading() const;
 
-    int queryCloseExternalChildren();
     int queryCloseDia();
 
-    /**
-     * @brief Set when we do not want to save external children when saving our 'main' doc.
-     *
-     * This makes it possible to save 'main' doc + all its internal children first, then
-     * go on to save external children. Typically used by query close.
-     * Use:
-     * @code
-     *      doc->setDoNotSaveExtDoc();
-     *      doc->save();    // saves doc and its internal children,
-     *                            //also calls saveExternalChildren() which sets setDoNotSaveExtDoc(false)
-     *      doc->saveExternalChildren();
-     * @endcode
-     */
-    void setDoNotSaveExtDoc(bool on = true);
 
     /**
      * Sets the backup path of the document
@@ -899,16 +820,6 @@ signals:
     void unitChanged(KoUnit);
 
     /**
-     * This signal is emitted when a direct or indirect child document changes
-     * and needs to be updated in all views.
-     *
-     * If one of your child documents emits the childChanged signal, then you may
-     * usually just want to redraw this child. In this case you can ignore the parameter
-     * passed by the signal.
-     */
-    void childChanged(KoDocumentChild *child);
-
-    /**
      * Progress info while loading or saving. The value is in percents (i.e. a number between 0 and 100)
      * Your KoDocument-derived class should emit the signal now and then during load/save.
      * KoMainWindow will take care of displaying a progress bar automatically.
@@ -1003,43 +914,6 @@ protected:
     virtual QList<CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     /**
-     *  OLD XML method. For OASIS just call KoDocumentChild::loadOasisDocument
-     *  after KoDocumentChild::loadOasis.
-     *
-     *  You need to overload this function if your document may contain
-     *  embedded documents. This function is called to load embedded documents.
-     *
-     *  An example implementation may look like this:
-     *  @code
-     *  QPtrListIterator<KoDocumentChild> it( children() );
-     *  for( ; it.current(); ++it )
-     *  {
-     *    if ( !it.current()->loadDocument( _store ) )
-     *    {
-     *      return false;
-     *    }
-     *  }
-     *  return true;
-     *  @endcode
-     */
-    virtual bool loadChildren(KoStore*);
-
-    /**
-     *  Saves all internal children (only!).
-     *  @see saveExternalChildren if you have external children.
-     *  Returns true on success.
-     */
-    virtual bool saveChildren(KoStore* store);
-
-    /**
-     *  Saves all internal children (only!), to the store, using the OASIS format.
-     *  This is called automatically during saveNativeFormat.
-     *  @see saveExternalChildren if you have external children.
-     *  Returns true on success.
-     */
-    virtual bool saveChildrenOdf(SavingContext & documentContext);
-
-    /**
      *  Overload this function if you have to load additional files
      *  from a store. This function is called after loadXML()
      *  and after loadChildren() have been called.
@@ -1058,18 +932,6 @@ protected:
      */
     virtual bool completeSaving(KoStore* store);
 
-    /**
-     * Inserts the new child in the list of children and emits the
-     * childChanged() signal.
-     *
-     * At the same time this method marks this document as modified.
-     *
-     * To remove a child, just delete it. KoDocument will detect this
-     * and remove the child from its lists.
-     *
-     * @see #isModified
-     */
-    virtual void insertChild(KoDocumentChild *child);
 
     /** @internal */
     virtual void setModified() {
@@ -1077,13 +939,6 @@ protected:
     }
 
     KoPageLayout m_pageLayout;
-
-    /**
-     *  Saves all externally stored children.
-     *  Returns true on success.
-     * @see #saveChildren for internal children
-     */
-    virtual bool saveExternalChildren();
 
     /**
      *  Returns whether or not the current openUrl() or openFile() call is
@@ -1110,21 +965,29 @@ protected:
     KoOpenPane* createOpenPane(QWidget* parent, const KComponentData &instance,
                                const QString& templateType = QString());
 
+
+
+    /// to satisfy KoOdfDocument where it overlaps with kparts
+    virtual KUrl getOdfUrl() const {
+        return url();
+    }
+
+    virtual void setOdfUrl( const KUrl& url ) {
+        setUrl( url );
+    }
+
 private slots:
-    void slotChildChanged(KoChild *c);
-    void slotChildDestroyed();
+
     void slotAutoSave();
     void slotStarted(KIO::Job*);
     void startCustomDocument();
+
     /**
-     * Removes the open widget showed at application start up.
+     * Removes the open widget shown at application start up.
      */
     void deleteOpenPane();
 
 private:
-    virtual void insertChild(QObject *) {
-        Q_ASSERT(0);
-    } // avoid compiler warning, but don't call deprecated insertChild() in QObject
 
     KService::Ptr nativeService();
     bool oldLoadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);

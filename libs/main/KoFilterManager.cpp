@@ -33,6 +33,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <KoDocument.h>
+#include <KoDocumentEntry.h>
 #include <klibloader.h>
 #include <k3listbox.h>
 #include <KSqueezedTextLabel>

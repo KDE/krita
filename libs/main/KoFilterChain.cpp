@@ -19,7 +19,8 @@
 #include "KoFilterChain.h"
 
 #include "KoFilterManager.h"  // KoFilterManager::filterAvailable, private API
-#include "KoQueryTrader.h"
+#include "KoDocumentEntry.h"
+#include "KoFilterEntry.h"
 #include "KoDocument.h"
 #include "priorityqueue.h"
 

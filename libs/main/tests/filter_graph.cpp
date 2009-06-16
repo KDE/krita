@@ -20,7 +20,8 @@
 #include <QFile>
 #include <QByteArray>
 #include <QList>
-#include "KoQueryTrader.h"
+#include "KoDocumentEntry.h"
+#include "KoFilterEntry.h"
 #include "KoFilterManager.h"
 #include "kcomponentdata.h"
 #include <kdebug.h>

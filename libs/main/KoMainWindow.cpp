@@ -33,6 +33,7 @@
 #include "KoDockFactory.h"
 #include "KoDockWidgetTitleBar.h"
 #include "KoPrintJob.h"
+#include "KoDocumentEntry.h"
 
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
@@ -1146,7 +1147,6 @@ bool KoMainWindow::queryClose()
 
         switch (res) {
         case KMessageBox::Yes : {
-            d->m_rootDoc->setDoNotSaveExtDoc(); // external docs are saved later
             bool isNative = (d->m_rootDoc->outputMimeType() == d->m_rootDoc->nativeFormatMimeType());
             if (! saveDocument(!isNative))
                 return false;
@@ -1159,10 +1159,6 @@ bool KoMainWindow::queryClose()
         default : // case KMessageBox::Cancel :
             return false;
         }
-    }
-
-    if (d->m_rootDoc->queryCloseExternalChildren() == KMessageBox::Cancel) {
-        return false;
     }
 
     return true;
@@ -1542,8 +1538,6 @@ void KoMainWindow::slotProgress(int value)
         if (!bar) {
             statusBar()->show();
             QApplication::sendPostedEvents(this, QEvent::ChildAdded);
-            // ######## KDE4 porting: removed this call:
-            // setUpLayout();
         }
 
         if (d->m_progress) {
@@ -1889,6 +1883,21 @@ QList<QDockWidget*> KoMainWindow::dockWidgets()
 {
     return d->m_dockWidgetMap.values();
 }
+
+QList<KoCanvasObserver*> KoMainWindow::canvasObservers()
+{
+
+    QList<KoCanvasObserver*> observers;
+
+    foreach(QDockWidget *docker, dockWidgets()) {
+        KoCanvasObserver *observer = dynamic_cast<KoCanvasObserver*>(docker);
+        if (observer) {
+            observers << observer;
+        }
+    }
+    return observers;
+}
+
 
 KoDockerManager * KoMainWindow::dockerManager() const
 {

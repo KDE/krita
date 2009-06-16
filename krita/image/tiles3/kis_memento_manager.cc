@@ -124,7 +124,8 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
 
     KisMementoItemSP mi;
     foreach(mi, changeList) {
-        ht->deleteTile(mi->col(), mi->row());
+        if(mi->parent()->type() == KisMementoItem::CHANGED)
+            ht->deleteTile(mi->col(), mi->row());
         if(mi->type() == KisMementoItem::CHANGED)
             ht->addTile(mi->tile(this));
     }

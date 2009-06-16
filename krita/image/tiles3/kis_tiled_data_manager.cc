@@ -44,6 +44,7 @@
 
 KisTiledDataManager::KisTiledDataManager(quint32 pixelSize, 
                                          const quint8 *defaultPixel)
+    : m_lock(QReadWriteLock::NonRecursive)
 {
     /* See comment in destructor for details */
     m_mementoManager = new KisMementoManager();
@@ -61,7 +62,8 @@ KisTiledDataManager::KisTiledDataManager(quint32 pixelSize,
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm) 
-    : KisShared(dm)
+    : KisShared(dm),
+      m_lock(QReadWriteLock::NonRecursive)
 {
     /* See comment in destructor for details */
     m_mementoManager = new KisMementoManager(*dm.m_mementoManager);
@@ -100,6 +102,8 @@ KisTiledDataManager::~KisTiledDataManager()
 
 void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
 {
+    QWriteLocker locker(&m_lock);
+
     KisTileData *td = globalTileDataStore.createDefaultTileData(pixelSize(),
                                                                 defaultPixel);
     m_hashTable->setDefaultTileData(td);    
@@ -111,12 +115,14 @@ void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
 
 bool KisTiledDataManager::write(KoStore *store)
 {
+    QReadLocker locker(&m_lock);
     Q_UNUSED(store);
     /* FIXME: */
     return true;
 }
 bool KisTiledDataManager::read(KoStore *store)
 {
+    QReadLocker locker(&m_lock);
     Q_UNUSED(store);
     /* FIXME: */
     return true;
@@ -137,6 +143,8 @@ quint8* KisTiledDataManager::duplicatePixel(qint32 num, const quint8 *pixel)
 
 void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
 {
+    QWriteLocker locker(&m_lock);
+
     if(clearPixel == 0)
 	clearPixel = m_defaultPixel;
 
@@ -244,6 +252,8 @@ void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 c
 
 void KisTiledDataManager::clear()
 {
+    QWriteLocker locker(&m_lock);
+    
     m_hashTable->clear();
 
     m_extentMinX = qint32_MAX;
@@ -266,6 +276,8 @@ void KisTiledDataManager::setExtent(QRect newRect)
     // Do nothing if the desired size is bigger than we currently are: 
     // that is handled by the autoextending automatically
     if (newRect.contains(oldRect)) return;
+
+    QWriteLocker locker(&m_lock);
 
     KisTileSP tile;
     QRect tileRect;
@@ -340,6 +352,8 @@ void KisTiledDataManager::updateExtent(qint32 col, qint32 row)
 
 void KisTiledDataManager::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
 {
+    QReadLocker locker(&m_lock);
+
     x = m_extentMinX;
     y = m_extentMinY;
     w = m_extentMaxX - m_extentMinX + 1;
@@ -380,6 +394,7 @@ KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y,
 
 void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)
 {
+    QWriteLocker locker(&m_lock);
     KisTileDataWrapper tw = pixelPtr(x, y, KisTileDataWrapper::WRITE);
     memcpy(tw.data(), data, pixelSize());
 }
@@ -388,6 +403,7 @@ void KisTiledDataManager::writeBytes(const quint8 *data,
 				     qint32 x, qint32 y,
 				     qint32 width, qint32 height)
 {
+    QWriteLocker locker(&m_lock);
     // Actial bytes reading/writing is done in private header 
     writeBytesBody(data, x, y, width, height);
 }
@@ -396,6 +412,7 @@ void KisTiledDataManager::readBytes(quint8 *data,
                                     qint32 x, qint32 y,
                                     qint32 width, qint32 height)
 {
+    QReadLocker locker(&m_lock);
     // Actial bytes reading/writing is done in private header 
     readBytesBody(data, x, y, width, height);
 }
@@ -405,6 +422,7 @@ KisTiledDataManager::readPlanarBytes(QVector<qint32> channelSizes,
 				     qint32 x, qint32 y,
 				     qint32 width, qint32 height)
 {
+    QReadLocker locker(&m_lock);
     // Actial bytes reading/writing is done in private header 
     return readPlanarBytesBody(channelSizes, x, y, width, height);
 }
@@ -415,6 +433,7 @@ void KisTiledDataManager::writePlanarBytes(QVector<quint8*> planes,
 					   qint32 x, qint32 y,
 					   qint32 width, qint32 height)
 {
+    QWriteLocker locker(&m_lock);
     // Actial bytes reading/writing is done in private header 
     writePlanarBytesBody(planes, channelSizes, x, y, width, height);
 }
@@ -458,195 +477,4 @@ qint32 KisTiledDataManager::rowStride(qint32 x, qint32 y) const
 
     return KisTileData::WIDTH * pixelSize();
 }
-
-
-
-
-/*****************************************************************************/
-    /* 
-KisMementoSP KisTiledDataManager::getMemento()
-{
-    m_currentMemento = new KisMemento(m_pixelSize);
-    Q_CHECK_PTR(m_currentMemento);
-
-    memcpy(m_currentMemento->m_defPixel, m_defPixel, m_pixelSize);
-
-    return m_currentMemento;
-}
-
-void KisTiledDataManager::rollback(KisMementoSP memento)
-{
-    if (!memento) return;
-    //Q_ASSERT(memento != 0);
-
-    if (m_currentMemento) {
-        // Undo means our current memento is no longer valid so remove it.
-        m_currentMemento = 0;
-    }
-
-    // Rollback means restoring all of the tiles in the memento to our hashtable.
-
-    // But first clear the memento redo hashtable.
-    // This is necessary as new changes might have been done since last rollback (automatic filters)
-    for (int i = 0; i < 1024; i++) {
-        memento->deleteAll(memento->m_redoHashTable[i]);
-        memento->m_redoHashTable[i] = 0;
-    }
-
-    // Also clear the table of deleted tiles
-    memento->clearTilesToDeleteOnRedo();
-
-    // Now on to the real rollback
-
-    memcpy(memento->m_redoDefPixel, m_defPixel, m_pixelSize);
-    setDefaultPixel(memento->m_defPixel);
-
-    for (int i = 0; i < 1024; i++) {
-        KisTile *tile = memento->m_hashTable[i];
-
-        while (tile) {
-            // The memento has a tile stored that we need to roll back
-            // Now find the corresponding one in our hashtable
-            KisTile *curTile = m_hashTable[i];
-            KisTile *preTile = 0;
-            while (curTile) {
-                if (curTile->getRow() == tile->getRow() && curTile->getCol() == tile->getCol()) {
-                    break;
-                }
-                preTile = curTile;
-                curTile = curTile->getNext();
-            }
-
-            if (curTile) {
-                // Remove it from our hashtable
-                if (preTile)
-                    preTile->setNext(curTile->getNext());
-                else
-                    m_hashTable[i] = curTile->getNext();
-
-                m_numTiles--;
-
-                // And put it in the redo hashtable of the memento
-                curTile->setNext(memento->m_redoHashTable[i]);
-                memento->m_redoHashTable[i] = curTile;
-            } else {
-                memento->addTileToDeleteOnRedo(tile->getCol(), tile->getRow());
-                // As we are pratically adding a new tile we need to update the extent
-                updateExtent(tile->getCol(), tile->getRow());
-            }
-
-            // Put a copy of the memento tile into our hashtable
-            curTile = new KisTile(*tile);
-            Q_CHECK_PTR(curTile);
-            m_numTiles++;
-
-            curTile->setNext(m_hashTable[i]);
-            m_hashTable[i] = curTile;
-
-            tile = tile->getNext();
-        }
-    }
-
-    if (memento->tileListToDeleteOnUndo() != 0) {
-        // XXX: We currently add these tiles above, only to delete them again here.
-        deleteTiles(memento->tileListToDeleteOnUndo());
-    }
-}
-
-void KisTiledDataManager::rollforward(KisMementoSP memento)
-{
-    if (memento.isNull()) return;
-    //Q_ASSERT(memento != 0);
-
-    if (!m_currentMemento.isNull()) {
-        // Redo means our current memento is no longer valid so remove it.
-        m_currentMemento = 0;
-    }
-
-    // Rollforward means restoring all of the tiles in the memento's redo to our hashtable.
-
-    setDefaultPixel(memento->m_redoDefPixel);
-
-    for (int i = 0; i < 1024; i++) {
-        KisTile *tile = memento->m_redoHashTable[i];
-
-        while (tile) {
-            // The memento has a tile stored that we need to roll forward
-            // Now find the corresponding one in our hashtable
-            KisTile *curTile = m_hashTable[i];
-            KisTile *preTile = 0;
-            while (curTile) {
-                if (curTile->getRow() == tile->getRow() && curTile->getCol() == tile->getCol()) {
-                    break;
-                }
-                preTile = curTile;
-                curTile = curTile->getNext();
-            }
-
-            if (curTile) {
-                // Remove it from our hashtable
-                if (preTile)
-                    preTile->setNext(curTile->getNext());
-                else
-                    m_hashTable[i] = curTile->getNext();
-
-                // And delete it (it's equal to the one stored in the memento's undo)
-                m_numTiles--;
-                delete curTile;
-            }
-
-            // Put a copy of the memento tile into our hashtable
-            curTile = new KisTile(*tile);
-            Q_CHECK_PTR(curTile);
-
-            curTile->setNext(m_hashTable[i]);
-            m_hashTable[i] = curTile;
-            m_numTiles++;
-            updateExtent(curTile->getCol(), curTile->getRow());
-
-            tile = tile->getNext();
-        }
-    }
-
-    // Roll forward also means re-deleting the tiles that was deleted but restored by the undo
-    if (memento->tileListToDeleteOnRedo() != 0) {
-        deleteTiles(memento->tileListToDeleteOnRedo());
-    }
-}
-*/
-/*
-void KisTiledDataManager::deleteTiles(const KisMemento::DeletedTile *d)
-{
-    while (d) {
-        quint32 tileHash = calcTileHash(d->col(), d->row());
-        KisTile *curTile = m_hashTable[tileHash];
-        KisTile *preTile = 0;
-        while (curTile) {
-            if (curTile->getRow() == d->row() && curTile->getCol() == d->col()) {
-                break;
-            }
-            preTile = curTile;
-            curTile = curTile->getNext();
-        }
-        if (curTile) {
-            // Remove it from our hashtable
-            if (preTile)
-                preTile->setNext(curTile->getNext());
-            else
-                m_hashTable[tileHash] = curTile->getNext();
-
-            // And delete it (it's equal to the one stored in the memento's undo)
-            m_numTiles--;
-            delete curTile;
-        }
-        d = d->next();
-    }
-
-    recalculateExtent();
-}
-*/
-
-
-
-
 

@@ -20,18 +20,15 @@
 #define KIS_TILEDDATAMANAGER_H_
 
 #include <QtGlobal>
-//#include <Q3ValueVector>
 #include <QVector>
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
 
 //#include "kis_debug.h"
-//#include "kis_tile.h"
-//#include "kis_memento.h"
 #include "krita_export.h"
-#include "kis_tile_hash_table.h"
 
+#include "kis_tile_hash_table.h"
 #include "kis_memento_manager.h"
 
 
@@ -129,22 +126,32 @@ protected:
 public:
 
     void commit() {
+        QReadLocker locker(&m_lock);
         m_mementoManager->commit();
     }
     void rollback() {
+        QWriteLocker locker(&m_lock);
         m_mementoManager->rollback(m_hashTable);
     }
     void rollforward() {
+        QWriteLocker locker(&m_lock);
         m_mementoManager->rollforward(m_hashTable);
     }
-
-//    KisMementoSP getMemento();
-//    void rollback(KisMementoSP memento);
-//    void rollforward(KisMementoSP memento);
-//    bool hasCurrentMemento() const {
-//        return m_currentMemento;
-//    }
-
+/*
+    KisMementoSP getMemento() {
+        Q_ASSERT_X(0, "getMemento", "Not implemented");
+    }
+    void rollback(KisMementoSP memento) {
+        Q_ASSERT_X(0, "rollback(KisMementoSP)", "Not implemented");
+    }
+    void rollforward(KisMementoSP memento) {
+        Q_ASSERT_X(0, "rollforward(KisMementoSP)", "Not implemented");
+    }
+    bool hasCurrentMemento() const {
+        Q_ASSERT_X(0, "hasCurrentMemento", "Not implemented");
+        return 0;
+    }
+*/
 protected:
     /**
      * Reads and writes the tiles from/onto a KoStore 
@@ -215,21 +222,25 @@ public:
      * than there are bytes in the arrays, krita will happily fill
      * your paint device with areas of memory you never wanted to be
      * read. Krita may also crash.
-     *
-     * XXX: what about undo?
      */
     void writePlanarBytes(QVector<quint8*> planes, QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
 
-    /// Get the number of contiguous columns starting at x, valid for all values
-    /// of y between minY and maxY.
+    /**
+     * Get the number of contiguous columns starting at x, valid for all values
+     * of y between minY and maxY.
+     */
     qint32 numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const;
 
-    /// Get the number of contiguous rows starting at y, valid for all values
-    /// of x between minX and maxX.
+    /**
+     * Get the number of contiguous rows starting at y, valid for all values
+     * of x between minX and maxX.
+     */
     qint32 numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const;
 
-    /// Get the row stride at pixel (x, y). This is the number of bytes to add to a
-    /// pointer to pixel (x, y) to access (x, y + 1).
+    /**
+     * Get the row stride at pixel (x, y). This is the number of bytes to add to a
+     * pointer to pixel (x, y) to access (x, y + 1).
+     */
     qint32 rowStride(qint32 x, qint32 y) const;
 
 private:
@@ -246,8 +257,7 @@ private:
     qint32 m_extentMinY;
     qint32 m_extentMaxY;
 
-
-    //KisMementoSP m_currentMemento;
+    mutable QReadWriteLock m_lock;
 
 private:
     qint32 xToCol(qint32 x) const;

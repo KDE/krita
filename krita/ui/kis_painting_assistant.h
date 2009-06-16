@@ -23,10 +23,40 @@
 #include <QPointF>
 
 #include <krita_export.h>
+#include <kis_shared.h>
 
 class QPainter;
 class QRect;
 class KoViewConverter;
+
+#include <kis_shared_ptr.h>
+
+class KisPaintingAssistantHandle;
+typedef KisSharedPtr<KisPaintingAssistantHandle> KisPaintingAssistantHandleSP;
+class KisPaintingAssistant;
+
+
+/**
+  * Represent an handle of the assistant, used to edit the parameters
+  * of an assistants. Handles can be shared between assistants.
+  */
+class KRITAUI_EXPORT KisPaintingAssistantHandle : public QPointF, public KisShared {
+    friend class KisPaintingAssistant;
+public:
+    KisPaintingAssistantHandle(double x, double y);
+    explicit KisPaintingAssistantHandle(QPointF p);
+    KisPaintingAssistantHandle(const KisPaintingAssistantHandle&);
+    ~KisPaintingAssistantHandle();
+    void mergeWith(KisPaintingAssistantHandleSP);
+    KisPaintingAssistantHandle& operator=( const QPointF& );
+private:
+    void registerAssistant(KisPaintingAssistant*);
+    void unregisterAssistant(KisPaintingAssistant*);
+    bool containsAssistant(KisPaintingAssistant*);
+private:
+    struct Private;
+    Private* const d;
+};
 
 /**
  * A KisPaintingAssistant is an object that assist the drawing on the canvas.
@@ -45,6 +75,11 @@ public:
      */
     virtual QPointF adjustPosition(const QPointF& point) const = 0;
     virtual void drawAssistant(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter) const = 0;
+    void replaceHandle( KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
+    const QList<KisPaintingAssistantHandleSP>& handles() const;
+    QList<KisPaintingAssistantHandleSP> handles();
+protected:
+    void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
 private:
     struct Private;
     Private* const d;

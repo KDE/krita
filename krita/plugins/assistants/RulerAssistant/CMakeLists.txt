@@ -1,7 +1,6 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../RulerAssistantCommon)
 
 set(kritarulerassistanttool_PART_SRCS
-    Ruler.cc
     RulerAssistant.cc
     ruler_assistant_tool.cc
     kis_ruler_assistant_tool.cc

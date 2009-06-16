@@ -1,6 +1,6 @@
 project( defaulttools )
 
-include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES})
+include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOMAIN_INCLUDES} )
 
 add_subdirectory(pics)
 
@@ -42,7 +42,7 @@ kde4_add_plugin(defaulttools ${defaulttools_SRCS})
 target_link_libraries(
     defaulttools
     flake
-    koguiutils
+    
     kotext
     komain
     ${KDE4_KDECORE_LIBS}

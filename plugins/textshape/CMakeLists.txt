@@ -3,7 +3,11 @@ project( textPlugin)
 add_subdirectory( pics )
 add_subdirectory( tests )
 
-include_directories( ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
+include_directories(  
+    ${KOTEXT_INCLUDES} 
+    ${FLAKE_INCLUDES} 
+    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets/
+    ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 ########### Flake Plugin library ###############
 
@@ -72,12 +76,16 @@ kde4_add_ui_files(textshape_SRCS
 kde4_add_plugin(textshape ${textshape_SRCS})
 
 target_link_libraries(textshape
-    koguiutils
-    kotext
+    komain
+    koaction
+    kocolorwidgets
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
 )
+
+target_link_libraries(textshape LINK_INTERFACE_LIBRARIES kocolorwidgets komain)
+
 install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

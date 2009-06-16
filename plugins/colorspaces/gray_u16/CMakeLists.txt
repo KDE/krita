@@ -1,8 +1,3 @@
-
-
-
-
-
 ########### next target ###############
 
 set(koffice_graya_u16_LIB_SRCS kis_gray_u16_colorspace.cc )

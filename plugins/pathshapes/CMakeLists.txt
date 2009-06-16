@@ -1,4 +1,4 @@
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOGUIUTILS_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES}  )
 
 add_subdirectory(pics)
 
@@ -41,7 +41,7 @@ kde4_add_plugin(pathshapes ${pathshapes_PART_SRCS})
 target_link_libraries(
     pathshapes
     flake
-    koguiutils
+    
     komain
     kostore
     ${KDE4_KDECORE_LIBS}

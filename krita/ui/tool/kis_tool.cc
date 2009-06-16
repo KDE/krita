@@ -96,7 +96,7 @@ void KisTool::activate(bool)
             break;
         case CURSOR_STYLE_CROSSHAIR:
             useCursor(KisCursor::crossCursor(), true);
-            break;     
+            break;
         case CURSOR_STYLE_POINTER:
             useCursor(KisCursor::upArrowCursor(), true);
             break;
@@ -353,7 +353,7 @@ void KisTool::setupPainter(KisPainter * painter)
 
 QWidget* KisTool::createOptionWidget()
 {
-    d->optionWidget = new QLabel("No options"); // XXX translate later!
+    d->optionWidget = new QLabel(i18n("No options"));
     d->optionWidget->setObjectName(toolId() + " Option Widget");
     return d->optionWidget;
 }
@@ -364,3 +364,4 @@ QWidget* KisTool::optionWidget()
 }
 
 #include "kis_tool.moc"
+

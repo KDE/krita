@@ -26,7 +26,6 @@
 #include <QtTest>
 
 #include <KoStyleManager.h>
-#include <KoDocument.h>
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>
 #include <KoOdfStylesReader.h>

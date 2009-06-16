@@ -40,6 +40,7 @@ class KoVariablePrivate;
 
 /**
  * Base class for in-text variables.
+ *
  * A variable is a field inserted into the text and the content is set to a specific value that
  * is used as text.  This class is pretty boring in that it has just a setValue() to alter the
  * text shown; we depend on plugin writers to create more exciting ways to update variables.

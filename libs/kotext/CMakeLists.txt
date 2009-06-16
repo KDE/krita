@@ -1,4 +1,6 @@
-include_directories( ${KOGUIUTILS_INCLUDES} ${KOMAIN_INCLUDES} )
+include_directories( ${KOODF_INCLUDES} ${KOPROPERTIES_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/koplugin)
+
+include_directories(${PIGMENT_INCLUDES})
 
 add_subdirectory( tests )
 add_subdirectory( styles/tests )
@@ -16,6 +18,8 @@ set(kotext_LIB_SRCS
     KoTextPaste.cpp
     KoTextDocument.cpp
     KoList.cpp
+    KoPageFormat.cpp
+    KoLayoutVisitor.cpp
 
     KoTextEditingRegistry.cpp
     KoTextEditingFactory.cpp
@@ -41,7 +45,6 @@ set(kotext_LIB_SRCS
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp
-    KoRulerController.cpp
     FindDirection_p.cpp
     KoFindStrategy.cpp
     KoReplaceStrategy.cpp
@@ -69,21 +72,20 @@ set(kotext_LIB_SRCS
 )
 
 kde4_add_ui_files(kotext_LIB_SRCS
-   timedateformatwidget.ui
+    timedateformatwidget.ui
     KoParagDecorationTab.ui
     KoCompletionBase.ui
 )
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
-target_link_libraries(kotext flake ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KUTILS_LIBS} koguiutils )
-target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake)
+target_link_libraries(kotext flake ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KUTILS_LIBS} )
+target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake koplugin)
 
 set_target_properties(kotext PROPERTIES
    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
 )
 install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
 
 ########### install files ###############
 

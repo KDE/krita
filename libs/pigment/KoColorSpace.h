@@ -40,7 +40,6 @@ class KoCompositeOp;
 class KoColorProfile;
 class KoColorTransformation;
 class KoColorConversionTransformationFactory;
-class KisFilter;
 class QBitArray;
 
 enum ColorSpaceIndependence {
@@ -110,7 +109,7 @@ public:
  * number of specific color spaces. So RGB is the model and sRGB,
  * adobeRGB, etc are colorspaces.
  *
- * In Pigment KoColorSpace act as both a color model and a color space.
+ * In Pigment KoColorSpace acts as both a color model and a color space.
  * You can think of the class definition as the color model, but the
  * instance of the class as representing a colorspace.
  *
@@ -633,13 +632,6 @@ public:
      *         to unserialize the color
      */
     virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const = 0;
-
-    /**
-     * The backgroundfilters will be run periodically on the newly
-     * created paint device. XXX: Currently this uses timers and not
-     * threads.
-     */
-    virtual QList<KisFilter*> createBackgroundFilters() const { return QList<KisFilter*>(); }
 
     KoColorTransformation* createColorTransformation( const QString & id, const QHash<QString, QVariant> & parameters) const;
 

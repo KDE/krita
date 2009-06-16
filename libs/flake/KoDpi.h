@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright 2002, 2003 David Faure <faure@kde.org>
+   Copyright 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,37 +19,44 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSHAPEPASTE_H
-#define KOSHAPEPASTE_H
+#ifndef KO_DPI_h
+#define KO_DPI_h
 
-#include <KoOdfPaste.h>
+#include <QtCore/QStringList>
+#include <QtGui/QFont>
+#include <QtCore/QMap>
+
 #include "flake_export.h"
 
-class KoCanvasBase;
-class KoShapeContainer;
+class KConfig;
 
-/**
- * Class for pasting shapes to the document
- */
-class FLAKE_EXPORT KoShapePaste : public KoOdfPaste
+class FLAKE_EXPORT KoDpi
 {
 public:
-    /**
-     * Contructor
-     *
-     * @param canvas The canvas on which the paste is done
-     * @param zIndex The highest currently existing zIndex.
-     * @param parent The parent under which the shapes will be pasted
-     */
-    KoShapePaste(KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent);
-    virtual ~KoShapePaste();
+    /// For KoApplication
+    static void initialize()  {
+        (void)self(); // I don't want to make KGlobal instances public, so self() is private
+    }
 
-protected:
-    /// reimplemented
-    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore);
+    static int dpiX() {
+        return self()->m_dpiX;
+    }
+    static int dpiY() {
+        return self()->m_dpiY;
+    }
+    /// @internal, for KoApplication
+    static void setDPI(int x, int y);
 
-    struct Private;
-    Private * const d;
+    ~KoDpi();
+
+private:
+    static KoDpi* self();
+    KoDpi();
+
+    int m_dpiX;
+    int m_dpiY;
+
+    friend class this_is_a_singleton; // work around gcc warning
 };
 
-#endif /* KOSHAPEPASTE_H */
+#endif // KO_DPI

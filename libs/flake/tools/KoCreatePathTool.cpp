@@ -33,10 +33,11 @@
 #include "KoShapeController.h"
 #include "KoCanvasResourceProvider.h"
 
-#include <KoColor.h>
-
 #include <QtGui/QPainter>
 
+#ifndef NO_PIGMENT
+#include <KoColor.h>
+#endif
 
 KoCreatePathTool::KoCreatePathTool(KoCanvasBase * canvas)
         : KoTool(canvas)
@@ -130,7 +131,11 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         m_shape = new KoPathShape();
         m_shape->setShapeId(KoPathShapeId);
         KoLineBorder * border = new KoLineBorder(m_canvas->resourceProvider()->activeBorder());
+#ifndef NO_PIGMENT
         border->setColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
+#else
+        border->setColor(m_canvas->resourceProvider()->foregroundColor());
+#endif
         m_shape->setBorder(border);
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
         const QPointF &point = m_canvas->snapGuide()->snap(event->point, event->modifiers());

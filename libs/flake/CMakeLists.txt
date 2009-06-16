@@ -1,10 +1,13 @@
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${PIGMENT_INCLUDES} ${OPENGL_INCLUDE_DIR})
+project(flake)
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOPROPERTIES_INCLUDES} ${KOODF_INCLUDES} ${KOPICTURE_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/koplugin
+)
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FLAKE_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
-
 
 add_subdirectory(tests)
 add_subdirectory(pics)
@@ -13,9 +16,15 @@ set(flake_SRCS
     KoCanvasBase.cpp
     KoCanvasObserver.cpp
     KoCanvasResourceProvider.cpp
+    KoCutController.cpp
+    KoCopyController.cpp
+    KoDockRegistry.cpp
+    KoPasteController.cpp
+    KoGuidesData.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
     KoPathSegment.cpp
+    KoPositionSelector.cpp
     KoSelection.cpp
     KoShape.cpp
     KoShapeContainer.cpp
@@ -23,6 +32,7 @@ set(flake_SRCS
     KoShapeGroup.cpp
     KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp
+    KoShapePainter.cpp
     KoFrameShape.cpp
     KoTool.cpp
     KoCanvasController.cpp
@@ -85,6 +95,9 @@ set(flake_SRCS
     KoImageData_p.cpp
     KoImageCollection.cpp
     KoOdfWorkaround.cpp
+    KoZoomHandler.cpp
+    KoZoomMode.cpp
+    KoDpi.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -161,8 +174,18 @@ kde4_add_ui_files(flake_SRCS
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} pigmentcms)
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms)
+
+if(HAVE_REQUIRED_LCMS_VERSION)
+	set(EXTRA_LIBS pigmentcms)
+endif(HAVE_REQUIRED_LCMS_VERSION)
+
+
+target_link_libraries(flake ${KDE4_KDEUI_LIBS}
+        			    ${KDE4_KDE3SUPPORT_LIBS} 
+                        ${EXTRA_LIBS}
+		        	    koodf kobase)
+
+target_link_libraries(flake LINK_INTERFACE_LIBRARIES ${EXTRA_LIBS} koodf kobase koplugin)
 
 if(HAVE_OPENGL)
     target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
@@ -188,6 +211,7 @@ install(
     KoDrag.h
     KoDragOdfSaveHelper.h
     KoFlake.h
+    KoGuidesData.h
     KoFrameShape.h
     KoImageCollection.h
     KoImageData.h
@@ -203,6 +227,7 @@ install(
     KoShapeControllerBase.h
     KoShapeFactory.h
     KoShapeLayer.h
+    KoShapePainter.h
     KoShapeLoadingContext.h
     KoShapeOdfSaveHelper.h
     KoLoadingShapeUpdater.h
@@ -217,8 +242,13 @@ install(
     KoToolFactory.h
     KoToolProxy.h
     KoToolRegistry.h
+    KoZoomHandler.h
+    KoZoomMode.h
+    KoDpi.h
     commands/KoShapeRenameCommand.h
+    KoViewConverter.h
     KoOdfWorkaround.h
+    KoRTree.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

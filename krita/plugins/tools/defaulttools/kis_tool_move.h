@@ -24,8 +24,25 @@
 #include "KoToolFactory.h"
 #include "kis_tool.h"
 #include <flake/kis_node_shape.h>
+#include <QWidget>
+#include <QGroupBox>
+#include <QRadioButton>
 
 class KoCanvasBase;
+
+#include "ui_wdgmovetool.h"
+
+class MoveToolOptionsWidget : public QWidget, public Ui::WdgMoveTool
+{
+    Q_OBJECT
+
+public:
+    MoveToolOptionsWidget(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
+};
+
+
 
 // XXX: Moving is not nearly smooth enough!
 class KisToolMove : public KisTool
@@ -46,10 +63,15 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+    virtual QWidget* createOptionWidget();
+    virtual QWidget* optionWidget();
+
 private:
     void drag(const QPoint& pos);
 
 private:
+
+    MoveToolOptionsWidget* m_optionsWidget;
     QRect m_deviceBounds;
     QPoint m_dragStart;
     QPoint m_layerStart;

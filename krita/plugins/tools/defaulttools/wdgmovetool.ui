@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WdgMoveTool</class>
+ <widget class="QWidget" name="WdgMoveTool">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="grpSelectionMethod">
+     <property name="title">
+      <string>Selection Mode</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="radioSelectedLayer">
+        <property name="toolTip">
+         <string>Move the layer that you have currently selected in the layerbox.</string>
+        </property>
+        <property name="text">
+         <string>Move current layer</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="radioFirstLayer">
+        <property name="toolTip">
+         <string>Move the first layer with visible content at the place where you click. This will also select that layer in the layerbox.</string>
+        </property>
+        <property name="text">
+         <string>Move layer with content</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="radioGroup">
+        <property name="toolTip">
+         <string>Move the group containing the first layer that contains visible content.</string>
+        </property>
+        <property name="text">
+         <string>Move the whole group</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>172</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

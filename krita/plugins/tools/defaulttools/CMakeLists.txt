@@ -12,7 +12,7 @@ set(kritadefaulttools_PART_SRCS
     kis_tool_move.cc
     )
 
-kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui)
+kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)
 
 kde4_add_plugin(kritadefaulttools ${kritadefaulttools_PART_SRCS})
 

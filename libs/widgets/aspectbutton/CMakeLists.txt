@@ -1,4 +1,5 @@
 include_directories( ${KORESOURCES_INCLUDES} 
+                     ${KDE4_INCLUDES}
                      ${CMAKE_SOURCE_DIR}/libs/kobase
 )
 

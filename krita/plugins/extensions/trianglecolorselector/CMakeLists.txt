@@ -1,4 +1,4 @@
-include_directories( ${KOGUIUTILS_INCLUDES} )
+include_directories(  )
 set(kritatrianglecolorselector_PART_SRCS trianglecolorselector.cc kis_triangle_color_selector_dock.cc )
 
 

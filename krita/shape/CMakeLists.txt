@@ -1,4 +1,4 @@
-include_directories( ${KOGUIUTILS_INCLUDES} )
+include_directories(  )
 add_subdirectory(pics)
 
 

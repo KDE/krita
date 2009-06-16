@@ -39,7 +39,7 @@
 #include "KoIntegerMaths.h"
 #include <KoDocument.h>
 #include <KoMainWindow.h>
-#include <KoQueryTrader.h>
+#include <KoDocumentEntry.h>
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>

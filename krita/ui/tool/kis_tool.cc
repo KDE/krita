@@ -21,6 +21,8 @@
 #include <QLabel>
 #include <QWidget>
 
+#include <klocale.h>
+
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoTool.h>

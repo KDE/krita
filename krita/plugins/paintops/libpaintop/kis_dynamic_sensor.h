@@ -18,7 +18,7 @@
 #ifndef _KIS_DYNAMIC_SENSOR_H_
 #define _KIS_DYNAMIC_SENSOR_H_
 
-#include "dynamicbrush_export.h"
+#include <krita_export.h>
 
 #include <QObject>
 
@@ -44,7 +44,7 @@ const KoID YTiltId("ytilt", i18n("Y-Tilt"));
  * Sensor are used to extract from KisPaintInformation a single
  * double value which can be used to control
  */
-class DYNAMIC_BRUSH_EXPORT KisDynamicSensor : public QObject, public KisSerializableConfiguration
+class KRITAUI_EXPORT KisDynamicSensor : public QObject, public KisSerializableConfiguration
 {
 public:
     enum ParameterSign {

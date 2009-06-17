@@ -18,7 +18,7 @@
 #ifndef _KIS_DYNAMIC_SENSORS_H_
 #define _KIS_DYNAMIC_SENSORS_H_
 
-#include "kis_dynamic_sensor.h"
+#include "../kis_dynamic_sensor.h"
 
 #include <kis_paintop.h>
 #include <KoID.h>

@@ -20,14 +20,14 @@
 
 #include <QWidget>
 
-#include "dynamicbrush_export.h"
+#include <krita_export.h>
 
 class Ui_SensorSelector;
 class KisDynamicSensor;
 class QHBoxLayout;
 class KoID;
 
-class DYNAMIC_BRUSH_EXPORT KisSensorSelector : public QWidget
+class KRITAUI_EXPORT KisSensorSelector : public QWidget
 {
     Q_OBJECT
 public:

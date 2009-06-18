@@ -37,7 +37,6 @@ set( kopageapp_LIB_SRCS
      KoPADocumentStructureDocker.cpp
      KoPAUtil.cpp
      KoPAPrintJob.cpp
-     KoPAPixmapCache.cpp
      commands/KoPAPageInsertCommand.cpp
      commands/KoPAPageDeleteCommand.cpp
      commands/KoPAPageMoveCommand.cpp

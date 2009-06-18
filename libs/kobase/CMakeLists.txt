@@ -1,8 +1,6 @@
 add_subdirectory( tests )
 
-include_directories( ${CMAKE_SOURCE_DIR}/libs/store
-   ${KDE4_INCLUDES}
-)
+include_directories( ${KDE4_INCLUDES} )
 
 set(kobase_LIB_SRCS
     KoProperties.cpp
@@ -12,12 +10,13 @@ set(kobase_LIB_SRCS
 kde4_add_library(kobase SHARED ${kobase_LIB_SRCS})
 
 target_link_libraries(kobase 
-                      kostore
+                      ${KDE4_KDECORE_LIBS} 
                       ${QT_QTCORE_LIBRARY}
 				      ${QT_QTXML_LIBRARY}
 )
 
 target_link_libraries(kobase LINK_INTERFACE_LIBRARIES
+                   ${KDE4_KDECORE_LIBS}
 				   ${QT_QTCORE_LIBRARY} 
 				   ${QT_QTXML_LIBRARY} )
 

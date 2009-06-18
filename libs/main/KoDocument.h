@@ -728,6 +728,13 @@ public:
     void setUnit(KoUnit u);
 
     /**
+     * Save the unit to the settings writer
+     * 
+     * @param settingsWriter
+     */
+    void saveUnitOdf(KoXmlWriter* settingsWriter) const;
+
+    /**
      * Returns the name of the unit used to display all measures/distances.
      * Use this method for displaying it in the user interface, but use
      * unit() for everything else (conversions etc.)

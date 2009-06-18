@@ -19,7 +19,6 @@
 */
 
 #include "KoUnit.h"
-#include <KoXmlWriter.h>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -220,9 +219,4 @@ QString KoUnit::unitName(KoUnit _unit)
     if (_unit.m_unit == Cicero) return QString::fromLatin1("cc");
     if (_unit.m_unit == Pixel) return QString::fromLatin1("px");
     return QString::fromLatin1("pt");
-}
-
-void KoUnit::saveOdf(KoXmlWriter* settingsWriter, KoUnit _unit)
-{
-    settingsWriter->addConfigItem("unit", unitName(_unit));
 }

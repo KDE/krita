@@ -307,7 +307,7 @@ bool KoPADocument::saveOdfSettings( KoStore * store )
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOdf( settingsWriter, unit() );
+    saveUnitOdf(settingsWriter);
 
     settingsWriter->endElement(); // config:config-item-set
 

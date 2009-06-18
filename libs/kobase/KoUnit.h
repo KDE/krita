@@ -25,8 +25,6 @@
 #include <math.h> // for floor
 #include "kobase_export.h"
 
-class KoXmlWriter;
-
 // 1 inch ^= 72 pt
 // 1 inch ^= 25.399956 mm (-pedantic ;p)
 // 1 pt = 1/12 pi
@@ -189,9 +187,6 @@ public:
 
     /// parse common %KOffice and OO values, like "10cm", "5mm" to pt
     static qreal parseValue(const QString& value, qreal defaultVal = 0.0);
-
-    /// Save a unit in OASIS format
-    static void saveOdf(KoXmlWriter* settingsWriter, KoUnit _unit);
 
 private:
     Unit m_unit;

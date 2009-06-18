@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008-2009 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,10 +38,14 @@
 #include <KoCanvasController.h>
 #include <KoShapeControllerBase.h>
 #include <KoSelection.h>
+#include <KoShapeOdfSaveHelper.h>
+#include <KoPAOdfPageSaveHelper.h>
+#include <KoDrag.h>
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeReorderCommand.h>
 #include <KoShapeLayer.h>
+#include <KoShapePaste.h>
 
 #include <KMenu>
 #include <klocale.h>
@@ -54,6 +59,8 @@
 #include <QtGui/QToolButton>
 #include <QtGui/QButtonGroup>
 #include <QItemSelection>
+#include <QApplication>
+#include <QClipboard>
 
 enum ButtonIds
 {
@@ -616,6 +623,80 @@ void KoPADocumentStructureDocker::addPage()
     }
 }
 
+void KoPADocumentStructureDocker::contextMenuEvent(QContextMenuEvent* event)
+{
+    QMenu menu( this );
+
+    // Not connected yet
+    menu.addAction( SmallIcon( "document-new" ), i18n("Add a new slide"), this, SLOT( addPage() ) );
+    menu.addAction( i18n("Delete selected objects"), this, SLOT( deleteItem() ));
+
+    menu.addAction( i18n( "Cut" ) ,this,  SLOT( editCut() ) );
+    menu.addAction( i18n( "Copy" ), this,  SLOT( editCopy() ));
+    menu.addAction( i18n( "Paste" ), this, SLOT( editPaste() ) );
+
+    menu.exec(event->globalPos());
+}
+
+void KoPADocumentStructureDocker::editCut()
+{
+    editCopy();
+    deleteItem();
+}
+
+void KoPADocumentStructureDocker::editCopy()
+{
+    QList<KoPAPageBase*> pages;
+    QList<KoShapeLayer*> layers;
+    QList<KoShape*> shapes;
+
+    // separate selected layers and selected shapes
+    extractSelectedLayersAndShapes( pages, layers, shapes );
+
+    foreach ( KoShape* shape, layers ) {
+        // Add layers to shapes
+        shapes.append(shape);
+    }
+
+    if ( !shapes.empty() ) {
+        // Copy Shapes or Layers
+        KoShapeOdfSaveHelper saveHelper(shapes);
+        KoDrag drag;
+        drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+        drag.addToClipboard();
+        return;
+    }
+
+    if ( !pages.empty() ) {
+        // Copy Pages
+        KoPAOdfPageSaveHelper saveHelper( m_doc, pages );
+        KoDrag drag;
+        drag.setOdf( KoOdf::mimeType( m_doc->documentType() ), saveHelper );
+        drag.addToClipboard();
+    }
+}
+
+void KoPADocumentStructureDocker::editPaste()
+{
+    const QMimeData * data = QApplication::clipboard()->mimeData();
+
+    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
+        // Paste Shapes or Layers
+        KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
+        KoShapeManager * shapeManager = canvas->shapeManager();
+        int zIndex = 0;
+        foreach (KoShape *shape, shapeManager->shapes()) {
+            zIndex = qMax(zIndex, shape->zIndex());
+        }
+        KoShapePaste paste(canvas, zIndex + 1, shapeManager->selection()->activeLayer());
+        paste.paste(KoOdf::Text, data);
+
+    } else {
+        // Paste Pages
+        KoPACanvas * canvas = dynamic_cast<KoPACanvas *>( KoToolManager::instance()->activeCanvasController()->canvas() );
+        canvas->koPAView()->pagePaste();
+    }
+}
 #include "KoPADocumentStructureDocker.moc"
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

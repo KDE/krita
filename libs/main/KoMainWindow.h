@@ -57,7 +57,7 @@ class PartManager;
  *
  * @note This class does NOT need to be subclassed in your application.
  */
-class KOMAIN_EXPORT KoMainWindow : public KParts::MainWindow
+class KOMAIN_EXPORT KoMainWindow : public KParts::MainWindow, public KoCanvasObserverProvider
 {
     Q_OBJECT
 public:

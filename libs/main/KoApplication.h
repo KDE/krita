@@ -74,20 +74,6 @@ public:
      */
     static bool isStarting();
 
-signals:
-    /// KoDocument needs to be able to emit document signals from here.
-    friend class KoDocument;
-
-    /**
-     * emitted when a new document is opened.
-     */
-    void documentOpened(const QString &ref);
-
-    /**
-     * emitted when an old document is closed.
-     */
-    void documentClosed(const QString &ref);
-
 private:
     bool initHack();
     KoApplicationPrivate * const d;

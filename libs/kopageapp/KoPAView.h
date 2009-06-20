@@ -39,7 +39,6 @@ class KoPADocumentStructureDocker;
 class KoShapeManager;
 class KoZoomAction;
 class KoZoomController;
-class KUrl;
 class QTextDocument;
 class QLabel;
 
@@ -127,23 +126,6 @@ public:
 
     /// reimplemented
     virtual KoPrintJob * createPrintJob();
-
-    /**
-     * Save thumbnail to an image file.
-     *
-     * Export a thumbnail to disk using a pixmap file like e.g. PNG
-     * This method uses a QPixmap::save() call.
-     *
-     * @param page page to get thumbnail of
-     * @param url the url of the image file to be created
-     * @param size the desired image size in px
-     * @param format the format of the image file (see QPixmap::save())
-     * @param quality the quality of the image in [0,100] or -1 to use default (see QPixmap::save())
-     *
-     * @returns whether the image was successfully saved
-     */
-    bool exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const QSize& size = QSize( 512, 512 ),
-                              const char * format = 0, int quality = -1 );
 
 public slots:
     /// Set the active page and updates the UI

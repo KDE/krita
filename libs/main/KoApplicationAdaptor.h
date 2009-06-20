@@ -66,6 +66,17 @@ public Q_SLOTS: // METHODS
      * (see KoMainWindowIface)
      */
     Q_SCRIPTABLE QStringList getWindows();
+
+signals:
+    /**
+     * emitted when a new document is opened.
+     */
+    void documentOpened(const QString &ref);
+
+    /**
+     * emitted when an old document is closed.
+     */
+    void documentClosed(const QString &ref);
 };
 
 #endif

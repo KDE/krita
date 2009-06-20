@@ -80,6 +80,7 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <kio/netaccess.h>
+#include <ktemporaryfile.h>
 
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
@@ -684,6 +685,47 @@ void KoPAView::setActionEnabled( int actions, bool enable )
     {
         m_actionMasterPage->setEnabled( enable );
     }
+}
+
+bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const QSize& size,
+                                    const char * format, int quality )
+{
+    bool res = false;
+    QPixmap pix = page->thumbnail( size );
+    if ( !pix.isNull() ) {
+        // Depending on the desired target size due to rounding
+        // errors during zoom the resulting pixmap *might* be
+        // 1 pixel or 2 pixels wider/higher than desired: we just
+        // remove the additional columns/rows.  This can be done
+        // since KPresenter is leaving a minimal border below/at
+        // the right of the image anyway.
+        if ( size != pix.size() ) {
+            pix = pix.copy( 0, 0, size.width(), size.height() );
+        }
+        // save the pixmap to the desired file
+        KUrl fileUrl( url );
+        if ( fileUrl.protocol().isEmpty() ) {
+            fileUrl.setProtocol( "file" );
+        }
+        const bool bLocalFile = fileUrl.isLocalFile();
+        KTemporaryFile* tmpFile = bLocalFile ? 0 : new KTemporaryFile();
+        if( bLocalFile || tmpFile->open() ) {
+            QFile file( bLocalFile ? fileUrl.path() : tmpFile->fileName() );
+            if ( file.open( QIODevice::ReadWrite ) ) {
+                res = pix.save( &file, format, quality );
+                file.close();
+            }
+            if ( !bLocalFile ) {
+                if ( res ) {
+                    res = KIO::NetAccess::upload( tmpFile->fileName(), fileUrl, this );
+                }
+            }
+        }
+        if ( !bLocalFile ) {
+            delete tmpFile;
+        }
+   }
+   return res;
 }
 
 KoPADocumentStructureDocker* KoPAView::documentStructureDocker() const

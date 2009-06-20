@@ -51,7 +51,7 @@ public:
     /// returns the strategies type
     SnapType type() const;
 
-    static qreal fastDistance(const QPointF &p1, const QPointF &p2);
+    static qreal squareDistance(const QPointF &p1, const QPointF &p2);
     static qreal scalarProduct(const QPointF &p1, const QPointF &p2);
 
     /// returns the snapped position form the last call to snapToPoints

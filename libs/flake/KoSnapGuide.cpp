@@ -109,7 +109,7 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
                 continue;
 
             QPointF snapCandidate = strategy->snappedPosition();
-            qreal distance = KoSnapStrategy::fastDistance(snapCandidate, mousePosition);
+            qreal distance = KoSnapStrategy::squareDistance(snapCandidate, mousePosition);
             if (distance < minDistance) {
                 m_currentStrategy = strategy;
                 minDistance = distance;

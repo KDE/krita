@@ -31,7 +31,6 @@ macro_optional_find_package(OpenEXR)
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
 
-
 # NO_PIGMENT disabled everything that uses pigment in the crudest matter possible
 if (NO_PIGMENT)
     add_definitions(-DNO_PIGMENT)
@@ -40,7 +39,7 @@ if (NO_PIGMENT)
 else (NO_PIGMENT)
 
     include_directories(${CMAKE_SOURCE_DIR}/libs/pigment)
-
+    set (SMALL_PIGMENT FALSE)
     # SMALL_PIGMENT provides just the classed needed to compile koffice libs, but not not Krita.
     if (SMALL_PIGMENT) 
         add_definitions(-DSMALL_PIGMENT)

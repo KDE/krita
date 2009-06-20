@@ -157,6 +157,9 @@ void DefaultToolWidget::updateSize()
 
 void DefaultToolWidget::sizeHasChanged()
 {
+    if (aspectButton->hasFocus())
+        return;
+
     QSizeF newSize( widthSpinBox->value(), heightSpinBox->value() );
 
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
@@ -226,7 +229,6 @@ void DefaultToolWidget::sizeHasChanged()
 
 void DefaultToolWidget::setUnit( const KoUnit &unit )
 {
-    // TODO find a way to get notified whenever the unit changes
     positionXSpinBox->setUnit( unit );
     positionYSpinBox->setUnit( unit );
     widthSpinBox->setUnit( unit );

@@ -407,7 +407,6 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
 
 void KoCanvasController::setToolOptionWidgets(const QMap<QString, QWidget *>&widgetMap)
 {
-    QWidget *view=0;
     QWidget *w = this;
     while (w->parentWidget()) {
         // XXX: This is an ugly hidden dependency

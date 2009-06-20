@@ -251,6 +251,7 @@ QAction *KoView::action(const QDomElement &element) const
 
 KoDocument *KoView::hitTest(const QPoint &viewPos)
 {
+    Q_UNUSED(viewPos);
     return koDocument(); // we no longer have child documents
 }
 

@@ -294,7 +294,6 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader & 
             qreal angle = 90 + e->attributeNS(KoXmlNS::draw, "angle", "0").toDouble() / 10;
             qreal radius = 0.5 * sqrt(size.width() * size.width() + size.height() * size.height());
 
-            qreal border = e->attributeNS(KoXmlNS::draw, "border", "0").remove('%').toDouble();
             qreal sx = cos(angle * M_PI / 180) * radius;
             qreal sy = sin(angle * M_PI / 180) * radius;
             lg->setStart(QPointF(0.5 * size.width() + sx, 0.5 * size.height() - sy));

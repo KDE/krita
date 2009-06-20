@@ -49,8 +49,6 @@ void KoPAPageMoveCommand::init( const QList<KoPAPageBase *> &pages )
 {
     Q_ASSERT( pages.size() > 0 );
 
-    int afterIndex = m_document->pageIndex( m_after );
-
     foreach ( KoPAPageBase *page, pages ) {
         int index = m_document->pageIndex( page );
         m_pageIndices.insert( index, page );

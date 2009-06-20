@@ -724,6 +724,7 @@ QDomDocument KoDocument::viewBuildDocument(KoView *view)
 
 void KoDocument::paintEverything(QPainter &painter, const QRect &rect, KoView *view)
 {
+    Q_UNUSED(view);
     paintContent(painter, rect);
 }
 

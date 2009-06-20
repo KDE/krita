@@ -77,6 +77,7 @@ private:
     QPoint m_layerStart;
     QPoint m_layerPosition;
     bool m_dragging;
+    KisNodeSP m_selectedNode;
 };
 
 

@@ -23,7 +23,7 @@
       <item row="0" column="0">
        <widget class="QRadioButton" name="radioSelectedLayer">
         <property name="toolTip">
-         <string>Move the layer that you have currently selected in the layerbox.</string>
+         <string>Move the layer that you have currently selected in the layerbox. Shortcut: ctrl-click.</string>
         </property>
         <property name="text">
          <string>Move current layer</string>
@@ -46,7 +46,7 @@
       <item row="2" column="0">
        <widget class="QRadioButton" name="radioGroup">
         <property name="toolTip">
-         <string>Move the group containing the first layer that contains visible content.</string>
+         <string>Move the group containing the first layer that contains visible content. Shortcut: ctrl-shift-click.</string>
         </property>
         <property name="text">
          <string>Move the whole group</string>

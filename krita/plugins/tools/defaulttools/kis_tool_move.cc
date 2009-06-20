@@ -113,7 +113,10 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
         const KoColorSpace* cs = image->projection()->colorSpace();
         KoColor color(cs);
         image->projection()->pixel(pos.x(), pos.y(), &color);
-        if (cs->alpha(color.data()) == OPACITY_TRANSPARENT || m_optionsWidget->radioSelectedLayer->isChecked()) {
+
+        if (   cs->alpha(color.data()) == OPACITY_TRANSPARENT
+            || m_optionsWidget->radioSelectedLayer->isChecked()
+            || e->modifiers() == Qt::ControlModifier ) {
             node = currentNode();
         }
         else {
@@ -122,7 +125,8 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
             node = image->rootLayer()->lastChild();
             node = findNode(node, pos.x(), pos.y());
 
-            if (m_optionsWidget->radioGroup->isChecked()) {
+
+            if (m_optionsWidget->radioGroup->isChecked() or e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) ) {
                 node = node->parent();
             }
         }
@@ -132,6 +136,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
             node = currentNode();
         }
 
+        m_selectedNode = node;
         m_dragging = true;
         m_dragStart = QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y()));
         m_layerStart.setX(node->x());
@@ -162,13 +167,11 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
     if (m_dragging) {
         if (m_canvas && e->button() == Qt::LeftButton) {
             QPointF pos = convertToPixelCoord(e);
-            KisNodeSP node = currentNode();
-
-            if (node) {
+            if (m_selectedNode) {
                 drag(QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y())));
                 m_dragging = false;
 
-                QUndoCommand *cmd = new KisNodeMoveCommand(node, m_layerStart, m_layerPosition);
+                QUndoCommand *cmd = new KisNodeMoveCommand(m_selectedNode, m_layerStart, m_layerPosition);
                 Q_CHECK_PTR(cmd);
 
                 m_canvas->addCommand(cmd);
@@ -181,22 +184,20 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
 void KisToolMove::drag(const QPoint& original)
 {
     // original is the position of the user chosen handle point
-    KisNodeSP node = currentNode();
-
-    if (node) {
+    if (m_selectedNode) {
         QPoint pos = original;
         QRect rc;
 
         pos -= m_dragStart; // convert to delta
-        rc = node->extent();
-        node->setX(node->x() + pos.x());
-        node->setY(node->y() + pos.y());
-        rc = rc.unite(node->extent());
+        rc = m_selectedNode->extent();
+        m_selectedNode->setX(m_selectedNode->x() + pos.x());
+        m_selectedNode->setY(m_selectedNode->y() + pos.y());
+        rc = rc.unite(m_selectedNode->extent());
 
-        m_layerPosition = QPoint(node->x(), node->y());
+        m_layerPosition = QPoint(m_selectedNode->x(), m_selectedNode->y());
         m_dragStart = original;
 
-        node->setDirty(rc);
+        m_selectedNode->setDirty(rc);
     }
 }
 

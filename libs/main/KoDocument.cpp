@@ -34,6 +34,7 @@
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
+#include "KoApplication.h"
 
 #include <KoXmlWriter.h>
 
@@ -637,11 +638,25 @@ void KoDocument::addView(KoView *view)
 
     d->m_views.append(view);
     view->updateReadWrite(isReadWrite());
+
+    if (d->m_views.size() == 1) {
+        KoApplication* app = qobject_cast<KoApplication*>(KApplication::kApplication());
+        if (0 != app) {
+            emit app->documentOpened('/'+objectName());
+        }
+    }
 }
 
 void KoDocument::removeView(KoView *view)
 {
     d->m_views.removeAll(view);
+
+    if (d->m_views.isEmpty()) {
+        KoApplication* app = qobject_cast<KoApplication*>(KApplication::kApplication());
+        if (0 != app) {
+            emit app->documentClosed('/'+objectName());
+        }
+    }
 }
 
 QList<KoView*> KoDocument::views() const

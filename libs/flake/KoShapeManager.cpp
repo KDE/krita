@@ -387,8 +387,8 @@ void KoShapeManager::updateTree()
 
     detector.fireSignals();
     if (selectionModified) {
-        emit selectionContentChanged();
         d->selection->updateSizeAndPosition();
+        emit selectionContentChanged();
     }
 }
 

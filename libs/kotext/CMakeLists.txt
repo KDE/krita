@@ -90,3 +90,15 @@ install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 
 install( FILES texteditingplugin.desktop inlinetextobject.desktop textvariableplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+
+install(
+    FILES
+    kotext_export.h
+    KoInlineObject.h
+    KoTextSelectionHandler.h
+    KoTextEditingFactory.h
+    KoTextEditingPlugin.h
+    KoTextEditingRegistry.h
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+)

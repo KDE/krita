@@ -203,16 +203,22 @@ install( FILES flake.desktop flaketool.desktop flakeshape.desktop flakedevice.de
 install(
     FILES
     flake_export.h
+    FlakeColor.h
     KoCanvasBase.h
     KoCanvasController.h
     KoCanvasObserver.h
+    KoCanvasObserverProvider.h
     KoCanvasResourceProvider.h
+    KoCopyController.h
+    KoCutController.h
     KoDataCenter.h
+    KoDpi.h
+    KoDockFactory.h
     KoDrag.h
     KoDragOdfSaveHelper.h
     KoFlake.h
-    KoGuidesData.h
     KoFrameShape.h
+    KoGuidesData.h
     KoImageCollection.h
     KoImageData.h
     KoInputDevice.h
@@ -244,11 +250,9 @@ install(
     KoToolRegistry.h
     KoZoomHandler.h
     KoZoomMode.h
-    KoDpi.h
     commands/KoShapeRenameCommand.h
+    tools/KoInteractionTool.h
     KoViewConverter.h
-    KoOdfWorkaround.h
-    KoRTree.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

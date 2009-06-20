@@ -24,3 +24,12 @@ set_target_properties(kobase PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
 )
 install(TARGETS kobase ${INSTALL_TARGETS_DEFAULT_ARGS} )
+
+install(
+    FILES
+    KoProperties.h
+    KoUnit.h
+    kobase_export.h
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+)

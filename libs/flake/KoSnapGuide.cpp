@@ -254,9 +254,6 @@ QList<QPointF> KoSnapProxy::pointsFromShape(KoShape * shape)
                 snapPoints.append(m.map(p->point()));
             }
         }
-
-        if (shape == m_snapGuide->editedShape())
-            snapPoints.removeLast();
     }
     else
     {

@@ -203,6 +203,7 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
 
     repaintActivePoint();
     m_activePoint = m_shape->lineTo(event->point);
+    m_canvas->snapGuide()->setIgnoredPathPoints( (QList<KoPathPoint*>()<<m_activePoint) );
 }
 
 void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
@@ -252,7 +253,7 @@ void KoCreatePathTool::addPathShape()
 {
     m_shape->normalize();
 
-    m_canvas->snapGuide()->setEditedShape(0);
+    m_canvas->snapGuide()->reset();
 
     // this is done so that nothing happens when the mouseReleaseEvent for the this event is received
     KoPathShape *pathShape = m_shape;

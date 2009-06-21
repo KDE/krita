@@ -53,6 +53,8 @@ void KoSpiralShape::saveOdf( KoShapeSavingContext & context ) const
 
 bool KoSpiralShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
+    Q_UNUSED(element);
+    Q_UNUSED(context);
     // TODO?
     return true;
 }
@@ -76,8 +78,10 @@ QPointF KoSpiralShape::normalize()
 
 void KoSpiralShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
 {
-#if 0
+    Q_UNUSED(handleId);
+    Q_UNUSED(point);
     Q_UNUSED( modifiers );
+#if 0
     QPointF p( point );
 
     QPointF diff( m_center - point );
@@ -188,6 +192,7 @@ void KoSpiralShape::updatePath( const QSizeF &size )
 
 void KoSpiralShape::createPath( const QSizeF &size )
 {
+    Q_UNUSED(size);
     clear();
     QPointF center = QPointF( m_radii.x() / 2.0, m_radii.y() / 2.0 );
     //moveTo( QPointF( size.width(), m_radii.y() ) );

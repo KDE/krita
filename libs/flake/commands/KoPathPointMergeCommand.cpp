@@ -110,6 +110,9 @@ void KoPathPointMergeCommand::redo()
 {
     QUndoCommand::redo();
     
+    if (m_removedPoint)
+        return;
+    
     m_pathShape->update();
     
     KoPathPoint * endPoint = m_pathShape->pointByIndex(m_endPoint);
@@ -162,6 +165,9 @@ void KoPathPointMergeCommand::resetPoints( KoPathPointIndex index1, KoPathPointI
 void KoPathPointMergeCommand::undo()
 {
     QUndoCommand::undo();
+    
+    if (!m_removedPoint)
+        return;
     
     m_pathShape->update();
 

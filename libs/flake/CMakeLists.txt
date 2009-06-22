@@ -232,6 +232,7 @@ install(
     KoShapeController.h
     KoShapeControllerBase.h
     KoShapeFactory.h
+    KoShapeGroup.h
     KoShapeLayer.h
     KoShapePainter.h
     KoShapeLoadingContext.h
@@ -250,7 +251,11 @@ install(
     KoToolRegistry.h
     KoZoomHandler.h
     KoZoomMode.h
+    commands/KoShapeCreateCommand.h
+    commands/KoShapeGroupCommand.h
+    commands/KoShapeUngroupCommand.h
     commands/KoShapeRenameCommand.h
+    commands/KoShapeDeleteCommand.h
     tools/KoInteractionTool.h
     KoViewConverter.h
     DESTINATION

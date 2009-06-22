@@ -70,11 +70,17 @@ private:
     QRectF handleRect(const QPointF &p);
     QRectF grabRect(const QPointF &p);
     void repaintActivePoint();
-
+    
+    /// returns the nearest existing path point 
+    KoPathPoint* endPointAtPosition( const QPointF &position );
+    
     KoPathPoint *m_activePoint;
     KoPathPoint *m_firstPoint;
     int m_handleRadius;
     bool m_mouseOverFirstPoint;
+    KoPathPoint *m_hoveredEndPoint; ///< an end point we hovered before drawing
+    KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
+    KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
 };
 #endif
 

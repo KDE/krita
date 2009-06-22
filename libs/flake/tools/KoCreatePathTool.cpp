@@ -25,6 +25,7 @@
 
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
+#include "KoPathPointData.h"
 #include "KoPointerEvent.h"
 #include "KoLineBorder.h"
 #include "KoCanvasBase.h"
@@ -32,12 +33,21 @@
 #include "KoSelection.h"
 #include "KoShapeController.h"
 #include "KoCanvasResourceProvider.h"
+#include "KoParameterShape.h"
+#include "commands/KoPathPointMergeCommand.h"
 
 #include <QtGui/QPainter>
 
 #ifndef NO_PIGMENT
 #include <KoColor.h>
 #endif
+
+qreal squareDistance( const QPointF &p1, const QPointF &p2)
+{
+    qreal dx = p1.x()-p2.x();
+    qreal dy = p1.y()-p2.y();
+    return dx*dx + dy*dy;
+}
 
 KoCreatePathTool::KoCreatePathTool(KoCanvasBase * canvas)
         : KoTool(canvas)
@@ -46,6 +56,8 @@ KoCreatePathTool::KoCreatePathTool(KoCanvasBase * canvas)
         , m_firstPoint(0)
         , m_handleRadius(3)
         , m_mouseOverFirstPoint(false)
+        , m_existingStartPoint(0)
+        , m_existingEndPoint(0)
 {
 }
 
@@ -118,14 +130,27 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         if (grabRect(m_firstPoint->point()).contains(event->point)) {
             m_activePoint->setPoint(m_firstPoint->point());
             m_shape->closeMerge();
+            // we are closing the path, so reset the existing start path point
+            m_existingStartPoint = 0;
+            // finish path
             addPathShape();
         } else {
             m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
 
-            m_activePoint->setPoint(m_canvas->snapGuide()->snap(event->point, event->modifiers()));
+            QPointF point = m_canvas->snapGuide()->snap(event->point, event->modifiers());
 
-            m_canvas->updateCanvas(m_shape->boundingRect());
-            m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
+            // check whether we hit an start/end node of an existing path
+            m_existingEndPoint = endPointAtPosition(point);
+            if (m_existingEndPoint && m_existingEndPoint != m_existingStartPoint) {
+                point = m_existingEndPoint->parent()->shapeToDocument(m_existingEndPoint->point());
+                m_activePoint->setPoint(point);
+                // finish path
+                addPathShape();
+            } else {
+                m_activePoint->setPoint(point);
+                m_canvas->updateCanvas(m_shape->boundingRect());
+                m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
+            }
         }
     } else {
         m_shape = new KoPathShape();
@@ -138,7 +163,13 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 #endif
         m_shape->setBorder(border);
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
-        const QPointF &point = m_canvas->snapGuide()->snap(event->point, event->modifiers());
+        QPointF point = m_canvas->snapGuide()->snap(event->point, event->modifiers());
+        
+        // check whether we hit an start/end node of an existing path
+        m_existingStartPoint = endPointAtPosition(point);
+        if (m_existingStartPoint) {
+            point = m_existingStartPoint->parent()->shapeToDocument(m_existingStartPoint->point());
+        }
         m_activePoint = m_shape->moveTo(point);
         // set the control points to be different from the default (0, 0)
         // to avoid a unnecessary big area being repainted
@@ -160,7 +191,7 @@ void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     Q_UNUSED(event);
 
     if (m_shape) {
-        // the first click of the qreal click created a new point which has the be removed again
+        // the first click of the double click created a new point which has the be removed again
         m_shape->removePoint(m_shape->pathPointIndex(m_activePoint));
 
         addPathShape();
@@ -174,6 +205,11 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
         m_canvas->snapGuide()->snap(event->point, event->modifiers());
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
 
+        if (endPointAtPosition(event->point))
+            useCursor(Qt::PointingHandCursor, true);
+        else
+            useCursor(Qt::ArrowCursor, true);
+        
         m_mouseOverFirstPoint = false;
         return;
     }
@@ -221,12 +257,18 @@ void KoCreatePathTool::activate(bool temporary)
 
     // retrieve the actual global handle radius
     m_handleRadius = m_canvas->resourceProvider()->handleRadius();
+    
+    // reset snap guide
+    m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
     m_canvas->snapGuide()->reset();
 }
 
 void KoCreatePathTool::deactivate()
 {
+    // reset snap guide
+    m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
     m_canvas->snapGuide()->reset();
+    
     if (m_shape) {
         m_canvas->updateCanvas(handleRect(m_firstPoint->point()));
         m_canvas->updateCanvas(m_shape->boundingRect());
@@ -234,6 +276,8 @@ void KoCreatePathTool::deactivate()
         m_shape = 0;
         m_firstPoint = 0;
         m_activePoint = 0;
+        m_existingStartPoint = 0;
+        m_existingEndPoint = 0;
     }
 }
 
@@ -253,23 +297,96 @@ void KoCreatePathTool::addPathShape()
 {
     m_shape->normalize();
 
+    // reset snap guide
+    m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
     m_canvas->snapGuide()->reset();
 
     // this is done so that nothing happens when the mouseReleaseEvent for the this event is received
     KoPathShape *pathShape = m_shape;
     m_shape = 0;
 
+    KoPathShape * startShape = 0;
+    KoPathShape * endShape = 0;
+    
+    // check if are we extending an existing path
+    if (m_existingStartPoint || m_existingEndPoint) {
+        // we have hit an existing path point on start/finish
+        // what we now do is:
+        // 1. combine the new created path with the ones we hit on start/finish
+        // 2. merge the endpoints of the corresponding subpaths
+        
+        // combine with the path we hit on start
+        KoPathPointIndex startIndex(-1,-1);
+        if (m_existingStartPoint) {
+            startShape = m_existingStartPoint->parent();
+            startIndex = startShape->pathPointIndex(m_existingStartPoint);
+            startIndex.first += 1;
+            pathShape->combine(startShape);
+            if (startIndex.second == 0)
+                pathShape->reverseSubpath(startIndex.first);
+        }
+        // combine with the path we hit on finish
+        KoPathPointIndex endIndex(-1,-1);
+        if (m_existingEndPoint && m_existingEndPoint != m_existingStartPoint) {
+            endShape = m_existingEndPoint->parent();
+            endIndex = endShape->pathPointIndex(m_existingEndPoint);
+            if (endShape != startShape) {
+                endIndex.first += pathShape->subpathCount();
+                pathShape->combine(endShape);
+                if (endIndex.second != 0)
+                    pathShape->reverseSubpath(endIndex.first);
+            } else {
+                // we are connecting to the same path twice
+                // so we already have combined it with the new path
+                endIndex.first += 1;
+            }
+        }
+        // after combining we have a path where the first subpath is the
+        // one we just created, after that the subpaths of the pathshape
+        // we started the new path at, followed by the subpaths of the 
+        // pathshape we finished the new path at
+        
+        // get the path points we want to merge, as these are not going to
+        // change while merging
+        uint newPointCount = pathShape->pointCountSubpath(0);
+        KoPathPoint * newStartPoint = pathShape->pointByIndex(KoPathPointIndex(0,0));
+        KoPathPoint * newEndPoint = pathShape->pointByIndex(KoPathPointIndex(0,newPointCount-1));
+        KoPathPoint * existingStartPoint = pathShape->pointByIndex(startIndex);
+        KoPathPoint * existingEndPoint = pathShape->pointByIndex(endIndex);
+        
+        // merge first two points
+        if (existingStartPoint) {
+            KoPathPointData pd1(pathShape, pathShape->pathPointIndex(existingStartPoint));
+            KoPathPointData pd2(pathShape, pathShape->pathPointIndex(newStartPoint));
+            KoPathPointMergeCommand cmd1(pd1, pd2);
+            cmd1.redo();
+        }
+        // merge last two points
+        if (existingEndPoint) {
+            KoPathPointData pd3(pathShape, pathShape->pathPointIndex(newEndPoint));
+            KoPathPointData pd4(pathShape, pathShape->pathPointIndex(existingEndPoint));
+            KoPathPointMergeCommand cmd2(pd3, pd4);
+            cmd2.redo();
+        }
+    }
+    
     QUndoCommand * cmd = m_canvas->shapeController()->addShape(pathShape);
     if (cmd) {
         KoSelection *selection = m_canvas->shapeManager()->selection();
         selection->deselectAll();
         selection->select(pathShape);
-
+        if (startShape)
+            m_canvas->shapeController()->removeShape(startShape, cmd);
+        if (endShape && startShape != endShape)
+            m_canvas->shapeController()->removeShape(endShape, cmd);
         m_canvas->addCommand(cmd);
     } else {
         m_canvas->updateCanvas(pathShape->boundingRect());
         delete pathShape;
     }
+
+    m_existingStartPoint = 0;
+    m_existingEndPoint = 0;
 }
 
 QRectF KoCreatePathTool::handleRect(const QPointF &p)
@@ -327,4 +444,47 @@ QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets()
     SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(m_canvas->snapGuide());
     map.insert(i18n("Snapping"), widget);
     return map;
+}
+
+KoPathPoint* KoCreatePathTool::endPointAtPosition( const QPointF &position )
+{
+    QRectF roi = grabRect(position);
+    QList<KoShape *> shapes = m_canvas->shapeManager()->shapesAt(roi);
+    
+    KoPathPoint * nearestPoint = 0;
+    qreal minDistance = HUGE_VAL;
+    uint grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
+    qreal maxDistance = m_canvas->viewConverter()->viewToDocumentX(grabSensitivity);
+    
+    foreach(KoShape *shape, shapes) {
+        KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+        if (!path)
+            continue;
+        KoParameterShape *paramShape = dynamic_cast<KoParameterShape*>(shape);
+        if (paramShape && paramShape->isParametricShape())
+            continue;
+        
+        KoPathPoint * p = 0;
+        uint subpathCount = path->subpathCount();
+        for (uint i = 0; i < subpathCount; ++i) {
+            if (path->isClosedSubpath(i))
+                continue;
+            p = path->pointByIndex(KoPathPointIndex(i, 0));
+            // check start of subpath
+            qreal d = squareDistance(position, path->shapeToDocument(p->point()));
+            if (d < minDistance && d < maxDistance) {
+                nearestPoint = p;
+                minDistance = d;
+            }
+            // check end of subpath
+            p = path->pointByIndex(KoPathPointIndex(i, path->pointCountSubpath(i)-1));
+            d = squareDistance(position, path->shapeToDocument(p->point()));
+            if (d < minDistance && d < maxDistance) {
+                nearestPoint = p;
+                minDistance = d;
+            }
+        }
+    }
+    
+    return nearestPoint;
 }

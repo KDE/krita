@@ -39,7 +39,7 @@ public:
      * and the curve (if checked) and return the old opacity
      * of the painter.
      */
-    quint8 apply(KisPainter * painter, double pressure) const;
+    quint8 apply(KisPainter * painter, const KisPaintInformation& info) const;
 
 };
 

@@ -25,10 +25,13 @@
 
 #include "kis_global.h"
 #include "kis_paintop_option.h"
+#include "kis_paint_information.h"
 #include "krita_export.h"
+#include "kis_dynamic_sensor.h"
 
 class KisCurveWidget;
-
+class Ui_WdgCurveOption;
+class KisDynamicSensor;
 /**
  * KisCurveOption is the base class for paintop options that are
  * defined through a curve.
@@ -43,7 +46,7 @@ class PAINTOP_EXPORT KisCurveOption : public KisPaintOpOption
 public:
 
     KisCurveOption(const QString & label, const QString& name, bool checked = true);
-
+    ~KisCurveOption();
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
@@ -51,6 +54,15 @@ public:
 
 protected:
 
+    double computeValue( const KisPaintInformation& info ) const {
+      double v = m_sensor->parameter(info);
+      if(customCurve()) {
+        return scaleToCurve(v);
+      } else {
+        return v;
+      }
+    }
+    
     double scaleToCurve(double pressure) const {
         int offset = int(255.0 * pressure);
         if (offset < 0)
@@ -67,11 +79,14 @@ protected:
 private slots:
 
     void transferCurve();
+    void setSensor(KisDynamicSensor* sensor);
 
 protected:
 
+    KisDynamicSensor* m_sensor;
     bool m_customCurve;
-    KisCurveWidget * m_curveWidget;
+    QWidget* m_widget;
+    Ui_WdgCurveOption* m_curveOption;
     QVector<double> m_curve;
     QString m_name;
 };

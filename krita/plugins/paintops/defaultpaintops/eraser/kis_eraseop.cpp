@@ -121,7 +121,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
 
-    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
+    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info);
 
     double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
 

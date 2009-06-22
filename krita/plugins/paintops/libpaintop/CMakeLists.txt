@@ -27,6 +27,7 @@ set(kritalibpaintop_LIB_SRCS
 
 kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     wdgautobrush.ui
+    wdgcurveoption.ui
     wdgcustombrush.ui
     wdgtextbrush.ui
     wdgincremental.ui

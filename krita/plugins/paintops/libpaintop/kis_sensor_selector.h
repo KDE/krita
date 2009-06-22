@@ -34,6 +34,7 @@ public:
     KisSensorSelector(QWidget* parent);
 public:
     void setCurrent(KisDynamicSensor* sensor);
+    KisDynamicSensor* current();
 signals:
     void sensorChanged(KisDynamicSensor* sensor);
     /**

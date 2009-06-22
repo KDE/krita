@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WdgCurveOption</class>
+ <widget class="QWidget" name="WdgCurveOption">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="KisSensorSelector" name="sensorSelector" native="true"/>
+   </item>
+   <item>
+    <widget class="KisCurveWidget" name="curveWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisSensorSelector</class>
+   <extends>QWidget</extends>
+   <header>kis_sensor_selector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisCurveWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/kis_curve_widget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

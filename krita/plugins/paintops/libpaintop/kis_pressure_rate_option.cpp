@@ -51,7 +51,7 @@ KisPressureRateOption::KisPressureRateOption()
 
     QVBoxLayout* vl = new QVBoxLayout;
     vl->addLayout( hl );
-    vl->addWidget( m_curveWidget );
+    vl->addWidget( m_widget );
 
     w->setLayout( vl );
     setConfigurationPage( w );

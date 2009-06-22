@@ -105,7 +105,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
+    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info);
     KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info.pressure());
 
     double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());

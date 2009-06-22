@@ -19,22 +19,35 @@
 #include "kis_curve_option.h"
 #include "widgets/kis_curve_widget.h"
 
+#include "ui_wdgcurveoption.h"
+#include "kis_dynamic_sensor.h"
+
 KisCurveOption::KisCurveOption(const QString & label, const QString& name, bool checked)
     : KisPaintOpOption(label, checked)
+    , m_sensor(0)
     , m_customCurve(false)
-    , m_curveWidget( new KisCurveWidget() )
+    , m_widget(new QWidget)
+    , m_curveOption(new Ui_WdgCurveOption())
     , m_name( name )
 {
-    setConfigurationPage(m_curveWidget);
+    m_curveOption->setupUi(m_widget);
+    setConfigurationPage(m_widget);
     m_curve = QVector<double>(256, 0.0);
-    connect(m_curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
+    connect(m_curveOption->curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
+    setSensor(KisDynamicSensor::id2Sensor(PressureId.id()));
+    connect(m_curveOption->sensorSelector, SIGNAL(sensorChanged(KisDynamicSensor*)), SLOT(setSensor(KisDynamicSensor*)));
+}
+
+KisCurveOption::~KisCurveOption()
+{
+  delete m_curveOption;
 }
 
 void KisCurveOption::transferCurve()
 {
     double value;
     for (int i = 0; i < 256; i++) {
-        value = m_curveWidget->getCurveValue(i / 255.0);
+        value = m_curveOption->curveWidget->getCurveValue(i / 255.0);
         if (value < PRESSURE_MIN)
             m_curve[i] = PRESSURE_MIN;
         else if (value > PRESSURE_MAX)
@@ -74,4 +87,12 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
         }
     }
     emit sigSettingChanged();
+}
+
+void KisCurveOption::setSensor(KisDynamicSensor* sensor) {
+  delete m_sensor;
+  m_sensor = sensor;
+  if(m_curveOption->sensorSelector->current() != sensor) {
+    m_curveOption->sensorSelector->setCurrent(m_sensor);
+  }
 }

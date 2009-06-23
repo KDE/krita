@@ -93,8 +93,8 @@ macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Manag
 macro_optional_find_package(Boost)
 macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by KPresenter")
 
-macro_optional_find_package(Eigen2)
-macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by KSpread and Krita (available as a module in kdesupport)")
+macro_optional_find_package(Eigen2 2.0.3)
+macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0.3" "Required by KSpread and Krita")
 
 macro_optional_find_package(Blitz)
 macro_log_feature(BLITZ_FOUND "QImageBlitz" "Image effect library" "http://www.kde.org" FALSE "" "Required by Krita (available in kdesupport)")

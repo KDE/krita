@@ -1,5 +1,6 @@
 include_directories( ${KOTEXT_INCLUDES}	
 	${BLITZ_INCLUDES} 
+	${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
 	${CMAKE_CURRENT_SOURCE_DIR}/flake 
 	${CMAKE_CURRENT_SOURCE_DIR}/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources

@@ -1,5 +1,18 @@
 project(koffice)
 
+cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
+
+ ######################
+#######################
+## Constants defines ##
+#######################
+######################
+
+# define the generic version of the KOffice libraries here
+# this makes it easy to advance it when the next KOffice release comes
+set(GENERIC_KOFFICE_LIB_VERSION "5.0.0")
+set(GENERIC_KOFFICE_LIB_SOVERSION "5")
+
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 if(KDE4_BUILD_TESTS)
@@ -7,29 +20,39 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
-# define the generic version of the KOffice libraries here
-# this makes it easy to advance it when the next KOffice release comes
-set(GENERIC_KOFFICE_LIB_VERSION "5.0.0")
-set(GENERIC_KOFFICE_LIB_SOVERSION "5")
-
-cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
-
-# search packages used by KDE
+ ########################
+#########################
+## Look for KDE and Qt ##
+#########################
+########################
 set(KDE_MIN_VERSION "4.1.0")
 find_package(KDE4 4.1.0 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 
 include(KDE4Defaults)
 include(MacroLibrary)
+include (MacroAdditionalCleanFiles)
+include (MacroAddFileDependencies)
+
+ ###########################
+############################
+## Required dependencies  ##
+############################
+###########################
 
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
 
+if (APPLE)
+   find_package(Carbon REQUIRED)
+endif (APPLE)
 
-macro_optional_find_package(OpenEXR)
-macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
-configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
+ ################################
+#################################
+## Check wich pigment to build ##
+#################################
+################################
 
 # NO_PIGMENT disabled everything that uses pigment in the crudest matter possible
 if (NO_PIGMENT)
@@ -65,6 +88,16 @@ else (NO_PIGMENT)
     endif (SMALL_PIGMENT)
 endif (NO_PIGMENT)
 
+ ###########################
+############################
+## Optional dependencies  ##
+############################
+###########################
+
+##
+## Look for OpenGL
+##
+
 macro_optional_find_package(OpenGL)
 set(HAVE_OPENGL 0)
 
@@ -81,36 +114,64 @@ else(OPENGL_FOUND)
 endif(OPENGL_FOUND)
 
 configure_file(config-opengl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-opengl.h )
-
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 
+##
+## Look for OpenEXR
+##
+macro_optional_find_package(OpenEXR)
+macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
+configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
+install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+
+##
+## Test for create ressources
+##
 macro_optional_find_package(CreateResources)
 macro_log_feature(CreateResources_FOUND "Create Resources" "Create Resources (brushes, palettes etc.)" "http://create.freedesktop.org" FALSE "" "Required by KOffice for optional extra resources.")
 
+##
+## Test for kdepimlibs
+##
 macro_optional_find_package(KdepimLibs)
 macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by KPlato and the KDE address book integration (available as a module in KDE)")
 
+##
+## Test for boost
+##
 macro_optional_find_package(Boost)
 macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by KPresenter")
 
-macro_optional_find_package(Eigen2 2.0.3)
-macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0.3" "Required by KSpread and Krita")
+##
+## Test for eigen2
+##
+macro_optional_find_package(Eigen2)
+macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by KSpread and Krita (available as a module in kdesupport)")
 
+##
+## Test for blitz
+##
 macro_optional_find_package(Blitz)
 macro_log_feature(BLITZ_FOUND "QImageBlitz" "Image effect library" "http://www.kde.org" FALSE "" "Required by Krita (available in kdesupport)")
 
+##
+## Test for QCA2
+##
 macro_optional_find_package(QCA2)
 macro_log_feature(QCA2_FOUND "QCA" "Qt Cryptographic Architecture" "http://delta.affinix.com/qca" FALSE "2.0" "Required for encrypted OpenDocument files support (available as a module in kdesupport)")
 
+##
+## Test for exiv2
+##
 set(EXIV2_MIN_VERSION "0.16")
 macro_optional_find_package(Exiv2)
 macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
 
-
-if (APPLE)
-   find_package(Carbon REQUIRED)
-endif (APPLE)
-
+##
+## Test for bzip2
+##
+find_program(BZIP2_EXECUTABLE NAMES bzip2 )
+macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org" FALSE "" "Required by Kexi")
 
 #Set the build of TextShape changetraker
 
@@ -135,21 +196,23 @@ else(WIN32)
     set (KDE4_ICON_DIR  ${CMAKE_INSTALL_PREFIX}/share/icons)
 endif(WIN32)
 
-
-include (MacroAdditionalCleanFiles)
-include (MacroAddFileDependencies)
-
-configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h )
-
-# Look for OpenCTL (XXX: move this inside full_pigment? Or inside pigment?)
-macro_optional_find_package(OpenCTL)
-
-macro_log_feature(OPENCTL_FOUND "OpenCTL" "Free Color Transformation Language implementation" "http://www.openctl.org" FALSE "0.9.2" "Required for High Dynamic Range Color Spaces, YCbCr and LMS support")
-configure_file(config-openctl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openctl.h )
-
+##
+## Test endianess
+##
 include (TestBigEndian)
 TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 configure_file(config-endian.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-endian.h )
+
+##
+## Generate a file for prefix information
+##
+configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h )
+
+ ####################
+#####################
+## Define includes ##
+#####################
+####################
 
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
@@ -166,24 +229,20 @@ set(KOPICTURE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopicture ${CMAKE_BINARY_DIR}/li
 # koodf depends on kostore and kopicture
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf ${CMAKE_BINARY_DIR}/libs/odf ${KOPICTURE_INCLUDES})
 
-
+# flake depends on koodf
 set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake 
-                   ${CMAKE_SOURCE_DIR}/libs/odf 
+                   ${KOODF_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/kobase 
                    ${CMAKE_SOURCE_DIR}/libs/flake/commands 
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools 
                    ${CMAKE_BINARY_DIR}/libs/flake)
+# pigment depends on koplugin and lcms
+set(PIGMENT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin ${CMAKE_SOURCE_DIR}/libs/pigment ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops ${LCMS_INCLUDE_DIR} ${KDE4_INCLUDES} )
 
 # komain depends on kostore, koplugin, flake and koodf
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/flake
-                    ${CMAKE_SOURCE_DIR}/libs/flake/pics
-                    ${CMAKE_SOURCE_DIR}/libs/flake/commands
-                    ${CMAKE_SOURCE_DIR}/libs/flake/tools
-                    ${CMAKE_SOURCE_DIR}/libs/pigment
-                    ${CMAKE_SOURCE_DIR}/libs/pigment/colorspaces
-                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
-                    ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
+                    ${FLAKE_INCLUDES}
+                    ${PIGMENT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/koproperties
                     ${CMAKE_SOURCE_DIR}/libs/store
                     ${CMAKE_SOURCE_DIR}/libs/kotext
@@ -205,17 +264,12 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets/zoom
                     ${CMAKE_SOURCE_DIR}/libs/widgets/input
                     ${CMAKE_SOURCE_DIR}/libs/kopicture
-                    ${CMAKE_SOURCE_DIR}/libs/kobase
                     ${CMAKE_SOURCE_DIR}/libs/koaction
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/resources
-                    ${CMAKE_SOURCE_DIR}/libs/odf
                     ${CMAKE_SOURCE_DIR}/libs/koplugin
- )                   
- 
- # pigment depends on koplugin and lcms
- set(PIGMENT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin ${CMAKE_SOURCE_DIR}/libs/pigment ${CMAKE_SOURCE_DIR}/libs/pigment/colorspaces ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles ${LCMS_INCLUDE_DIR} ${KDE4_INCLUDES} )
- 
+ )
+
  # koresources depends on pigment
  set(KORESOURCES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/resources
  			 ${CMAKE_BINARY_DIR}/libs/resources 
@@ -229,9 +283,6 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext/styles
                     ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
                     ${CMAKE_BINARY_DIR}/libs/kotext)
 
-set(KFORMULA_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kformula
-		      ${CMAKE_BINARY_DIR}/libs/kformula)
-
 set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/kokross)
 
 # kopageapp
@@ -239,56 +290,57 @@ set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/li
 
 set(KOPROPERTIES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kobase ${CMAKE_BINARY_DIR}/libs/kobase)
 
-add_subdirectory(libs)
-add_subdirectory(interfaces)
-add_subdirectory(cmake)
+ #############################################
+##############################################
+## Detect which applications can be compile ##
+##############################################
+#############################################
 
+### Karbon: pigment
 set(SHOULD_BUILD_KARBON TRUE)
 if (NO_PIGMENT)
     set(SHOULD_BUILD_KARBON FALSE)
 endif (NO_PIGMENT)
-macro_optional_add_subdirectory(karbon)
 
-if(EIGEN2_FOUND)
-    macro_optional_add_subdirectory(kspread)
-    if(BUILD_kspread)
-        set(SHOULD_BUILD_KSPREAD TRUE)
-    else(BUILD_kspread)
-        set(SHOULD_BUILD_KSPREAD FALSE)
-    endif(BUILD_kspread)
-else(EIGEN2_FOUND)
+### KSpread: eigen2
+set(SHOULD_BUILD_KSPREAD TRUE)
+if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_KSPREAD FALSE)
-endif(EIGEN2_FOUND)
+endif(NOT EIGEN2_FOUND)
 
-#Check if build kpresenter here to be able to test if we can build filters/kpresenter
-if(Boost_FOUND)
-    set(SHOULD_BUILD_KPRESENTER TRUE)
-    macro_optional_add_subdirectory(kpresenter)
-else(Boost_FOUND)
+### KPresenter: boost
+set(SHOULD_BUILD_KPRESENTER TRUE)
+if(NOT Boost_FOUND)
     set(SHOULD_BUILD_KPRESENTER FALSE)
-endif(Boost_FOUND)
+endif(NOT Boost_FOUND)
 
-FIND_PROGRAM(BZIP2_EXECUTABLE NAMES bzip2 )
-macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org" FALSE "" "Required by Kexi")
+### Kexi: bzip2
+set(SHOULD_BUILD_KEXI TRUE)
+if(NOT BZIP2_EXECUTABLE )
+    set(SHOULD_BUILD_KEXI FALSE)
+endif(NOT BZIP2_EXECUTABLE )
 
-if(BUILD_KEXI)
-    if( BZIP2_EXECUTABLE )
-        macro_optional_add_subdirectory(kexi)
-    endif( BZIP2_EXECUTABLE )
-endif(BUILD_KEXI)
-
-if(KdepimLibs_FOUND)
-    macro_optional_add_subdirectory(kplato)
-endif(KdepimLibs_FOUND)
-
-
+### Krita: non-win32, pigment, blitz, eigen2, exiv2
+set(SHOULD_BUILD_KRITA TRUE)
 if(WIN32 OR SMALL_PIGMENT OR NO_PIGMENT OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-else(WIN32 OR SMALL_PIGMENT OR NO_PIGMENT OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
-    set(SHOULD_BUILD_KRITA TRUE)
-    macro_optional_add_subdirectory(krita)
 endif(WIN32 OR SMALL_PIGMENT OR NO_PIGMENT OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
 
+### KPlato: kdepimlibs
+set(SHOULD_BUILD_KPLATO TRUE)
+if(NOT KdepimLibs_FOUND)
+    set(SHOULD_BUILD_KPLATO FALSE)
+endif(NOT KdepimLibs_FOUND)
+
+ ###################
+####################
+## Subdirectories ##
+####################
+###################
+
+add_subdirectory(libs)
+add_subdirectory(interfaces)
+add_subdirectory(cmake)
 
 macro_optional_add_subdirectory(kword)
 macro_optional_add_subdirectory(kformula)
@@ -298,6 +350,30 @@ macro_optional_add_subdirectory(kdgantt)
 macro_optional_add_subdirectory(kchart)
 macro_optional_add_subdirectory(doc)
 
+if(SHOULD_BUILD_KPRESENTER)
+  macro_optional_add_subdirectory(kpresenter)
+endif(SHOULD_BUILD_KPRESENTER)
+
+if(SHOULD_BUILD_KEXI)
+    macro_optional_add_subdirectory(kexi)
+endif(SHOULD_BUILD_KEXI)
+
+if(SHOULD_BUILD_KPLATO)
+    macro_optional_add_subdirectory(kplato)
+endif(SHOULD_BUILD_KPLATO)
+
+if(SHOULD_BUILD_KSPREAD)
+    macro_optional_add_subdirectory(kspread)
+endif(SHOULD_BUILD_KSPREAD)
+
+if(SHOULD_BUILD_KRITA)
+  macro_optional_add_subdirectory(krita)
+endif(SHOULD_BUILD_KRITA)
+
+if(SHOULD_BUILD_KARBON)
+  macro_optional_add_subdirectory(karbon)
+endif(SHOULD_BUILD_KARBON)
+
 add_subdirectory(pics)
 add_subdirectory(plugins)
 add_subdirectory(servicetypes)
@@ -305,8 +381,6 @@ add_subdirectory(templates)
 add_subdirectory(tools)
 add_subdirectory(filters)
 
-MACRO_DISPLAY_FEATURE_LOG()
+macro_display_feature_log()
 
-ADD_CUSTOM_TARGET(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-
-install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

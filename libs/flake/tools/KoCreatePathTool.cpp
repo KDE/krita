@@ -308,66 +308,11 @@ void KoCreatePathTool::addPathShape()
     KoPathShape * startShape = 0;
     KoPathShape * endShape = 0;
     
-    // check if are we extending an existing path
-    if (m_existingStartPoint || m_existingEndPoint) {
-        // we have hit an existing path point on start/finish
-        // what we now do is:
-        // 1. combine the new created path with the ones we hit on start/finish
-        // 2. merge the endpoints of the corresponding subpaths
-        
-        // combine with the path we hit on start
-        KoPathPointIndex startIndex(-1,-1);
-        if (m_existingStartPoint) {
+    if (connectPaths(pathShape, m_existingStartPoint, m_existingEndPoint)) {
+        if (m_existingStartPoint)
             startShape = m_existingStartPoint->parent();
-            startIndex = startShape->pathPointIndex(m_existingStartPoint);
-            startIndex.first += 1;
-            pathShape->combine(startShape);
-            if (startIndex.second == 0)
-                pathShape->reverseSubpath(startIndex.first);
-        }
-        // combine with the path we hit on finish
-        KoPathPointIndex endIndex(-1,-1);
-        if (m_existingEndPoint && m_existingEndPoint != m_existingStartPoint) {
+        if (m_existingEndPoint && m_existingEndPoint != m_existingStartPoint)
             endShape = m_existingEndPoint->parent();
-            endIndex = endShape->pathPointIndex(m_existingEndPoint);
-            if (endShape != startShape) {
-                endIndex.first += pathShape->subpathCount();
-                pathShape->combine(endShape);
-                if (endIndex.second != 0)
-                    pathShape->reverseSubpath(endIndex.first);
-            } else {
-                // we are connecting to the same path twice
-                // so we already have combined it with the new path
-                endIndex.first += 1;
-            }
-        }
-        // after combining we have a path where the first subpath is the
-        // one we just created, after that the subpaths of the pathshape
-        // we started the new path at, followed by the subpaths of the 
-        // pathshape we finished the new path at
-        
-        // get the path points we want to merge, as these are not going to
-        // change while merging
-        uint newPointCount = pathShape->pointCountSubpath(0);
-        KoPathPoint * newStartPoint = pathShape->pointByIndex(KoPathPointIndex(0,0));
-        KoPathPoint * newEndPoint = pathShape->pointByIndex(KoPathPointIndex(0,newPointCount-1));
-        KoPathPoint * existingStartPoint = pathShape->pointByIndex(startIndex);
-        KoPathPoint * existingEndPoint = pathShape->pointByIndex(endIndex);
-        
-        // merge first two points
-        if (existingStartPoint) {
-            KoPathPointData pd1(pathShape, pathShape->pathPointIndex(existingStartPoint));
-            KoPathPointData pd2(pathShape, pathShape->pathPointIndex(newStartPoint));
-            KoPathPointMergeCommand cmd1(pd1, pd2);
-            cmd1.redo();
-        }
-        // merge last two points
-        if (existingEndPoint) {
-            KoPathPointData pd3(pathShape, pathShape->pathPointIndex(newEndPoint));
-            KoPathPointData pd4(pathShape, pathShape->pathPointIndex(existingEndPoint));
-            KoPathPointMergeCommand cmd2(pd3, pd4);
-            cmd2.redo();
-        }
     }
     
     QUndoCommand * cmd = m_canvas->shapeController()->addShape(pathShape);
@@ -487,4 +432,81 @@ KoPathPoint* KoCreatePathTool::endPointAtPosition( const QPointF &position )
     }
     
     return nearestPoint;
+}
+
+bool KoCreatePathTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd )
+{
+    if (!pointAtStart && !pointAtEnd)
+        return false;
+    
+    KoPathShape * startShape = 0;
+    KoPathShape * endShape = 0;
+    
+    // we have hit an existing path point on start/finish
+    // what we now do is:
+    // 1. combine the new created path with the ones we hit on start/finish
+    // 2. merge the endpoints of the corresponding subpaths
+    
+    uint newPointCount = pathShape->pointCountSubpath(0);
+    KoPathPointIndex newStartPointIndex(0, 0);
+    KoPathPointIndex newEndPointIndex(0, newPointCount-1);
+    KoPathPoint * newStartPoint = pathShape->pointByIndex(newStartPointIndex);
+    KoPathPoint * newEndPoint = pathShape->pointByIndex(newEndPointIndex);
+    
+    // combine with the path we hit on start
+    KoPathPointIndex startIndex(-1,-1);
+    if (pointAtStart) {
+        startShape = pointAtStart->parent();
+        startIndex = startShape->pathPointIndex(pointAtStart);
+        pathShape->combine(startShape);
+        pathShape->moveSubpath(0, pathShape->subpathCount()-1);
+        if (startIndex.second == 0) {
+            pathShape->reverseSubpath(startIndex.first);
+            startIndex.second = pathShape->pointCountSubpath(startIndex.first)-1;
+        }
+    }
+    // combine with the path we hit on finish
+    KoPathPointIndex endIndex(-1,-1);
+    if (pointAtEnd && pointAtEnd != pointAtStart) {
+        endShape = pointAtEnd->parent();
+        endIndex = endShape->pathPointIndex(pointAtEnd);
+        if (endShape != startShape) {
+            endIndex.first += pathShape->subpathCount();
+            pathShape->combine(endShape);
+            if (endIndex.second != 0)
+                pathShape->reverseSubpath(endIndex.first);
+            endIndex.second = 0;
+        } else {
+            // we are connecting to the same path twice
+            // so we already have combined it with the new path
+            endIndex.first += 1;
+        }
+    }
+    // after combining we have a path where with the subpaths in the follwing
+    // order:
+    // 1. the subpaths of the pathshape we started the new path at
+    // 2. the subpath we just created
+    // 3. the subpaths of the pathshape we finished the new path at
+    
+    // get the path points we want to merge, as these are not going to
+    // change while merging
+    KoPathPoint * existingStartPoint = pathShape->pointByIndex(startIndex);
+    KoPathPoint * existingEndPoint = pathShape->pointByIndex(endIndex);
+    
+    // merge first two points
+    if (existingStartPoint) {
+        KoPathPointData pd1(pathShape, pathShape->pathPointIndex(existingStartPoint));
+        KoPathPointData pd2(pathShape, pathShape->pathPointIndex(newStartPoint));
+        KoPathPointMergeCommand cmd1(pd1, pd2);
+        cmd1.redo();
+    }
+    // merge last two points
+    if (existingEndPoint) {
+        KoPathPointData pd3(pathShape, pathShape->pathPointIndex(newEndPoint));
+        KoPathPointData pd4(pathShape, pathShape->pathPointIndex(existingEndPoint));
+        KoPathPointMergeCommand cmd2(pd3, pd4);
+        cmd2.redo();
+    }
+    
+    return true;
 }

@@ -74,6 +74,9 @@ private:
     /// returns the nearest existing path point 
     KoPathPoint* endPointAtPosition( const QPointF &position );
     
+    /// Connects given path with the ones we hit when starting/finishing
+    bool connectPaths( KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd );
+    
     KoPathPoint *m_activePoint;
     KoPathPoint *m_firstPoint;
     int m_handleRadius;

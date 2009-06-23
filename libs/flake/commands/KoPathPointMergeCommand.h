@@ -28,7 +28,7 @@
 #include "flake_export.h"
 
 /// The undo / redo command for merging two subpath end points
-class FLAKE_TEST_EXPORT KoPathPointMergeCommand : public QUndoCommand
+class FLAKE_EXPORT KoPathPointMergeCommand : public QUndoCommand
 {
 public:
     /**

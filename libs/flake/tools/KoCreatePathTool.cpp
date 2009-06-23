@@ -436,11 +436,12 @@ KoPathPoint* KoCreatePathTool::endPointAtPosition( const QPointF &position )
 
 bool KoCreatePathTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd )
 {
+    // at least one point must be valid
     if (!pointAtStart && !pointAtEnd)
         return false;
-    
-    KoPathShape * startShape = 0;
-    KoPathShape * endShape = 0;
+    // do not allow connecting to the same point twice
+    if (pointAtStart == pointAtEnd)
+        pointAtEnd = 0;
     
     // we have hit an existing path point on start/finish
     // what we now do is:
@@ -453,35 +454,37 @@ bool KoCreatePathTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointA
     KoPathPoint * newStartPoint = pathShape->pointByIndex(newStartPointIndex);
     KoPathPoint * newEndPoint = pathShape->pointByIndex(newEndPointIndex);
     
+    KoPathShape * startShape = pointAtStart ? pointAtStart->parent() : 0;
+    KoPathShape * endShape = pointAtEnd ? pointAtEnd->parent() : 0;
+    
     // combine with the path we hit on start
     KoPathPointIndex startIndex(-1,-1);
     if (pointAtStart) {
-        startShape = pointAtStart->parent();
         startIndex = startShape->pathPointIndex(pointAtStart);
         pathShape->combine(startShape);
         pathShape->moveSubpath(0, pathShape->subpathCount()-1);
-        if (startIndex.second == 0) {
-            pathShape->reverseSubpath(startIndex.first);
-            startIndex.second = pathShape->pointCountSubpath(startIndex.first)-1;
-        }
     }
     // combine with the path we hit on finish
     KoPathPointIndex endIndex(-1,-1);
-    if (pointAtEnd && pointAtEnd != pointAtStart) {
-        endShape = pointAtEnd->parent();
+    if (pointAtEnd) {
         endIndex = endShape->pathPointIndex(pointAtEnd);
         if (endShape != startShape) {
             endIndex.first += pathShape->subpathCount();
             pathShape->combine(endShape);
-            if (endIndex.second != 0)
-                pathShape->reverseSubpath(endIndex.first);
-            endIndex.second = 0;
-        } else {
-            // we are connecting to the same path twice
-            // so we already have combined it with the new path
-            endIndex.first += 1;
         }
     }
+    // do we connect twice to a single subpath ?
+    bool connectToSingleSubpath = (startShape == endShape && startIndex.first == endIndex.first);
+    
+    if (startIndex.second == 0 && !connectToSingleSubpath) {
+        pathShape->reverseSubpath(startIndex.first);
+        startIndex.second = pathShape->pointCountSubpath(startIndex.first)-1;
+    }
+    if (endIndex.second > 0 && !connectToSingleSubpath) {
+        pathShape->reverseSubpath(endIndex.first);
+        endIndex.second = 0;
+    }
+    
     // after combining we have a path where with the subpaths in the follwing
     // order:
     // 1. the subpaths of the pathshape we started the new path at

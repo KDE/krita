@@ -42,7 +42,7 @@ public:
      * and the curve (if checked) and return the old opacity
      * of the painter.
      */
-    quint8 apply(quint8 opacity, qint32 sw,  qint32 sh, KisPaintDeviceSP srcDev, double pressure) const;
+    quint8 apply(quint8 opacity, const KisPaintInformation& info) const;
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 

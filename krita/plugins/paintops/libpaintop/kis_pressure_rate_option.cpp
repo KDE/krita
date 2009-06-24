@@ -76,38 +76,17 @@ void KisPressureRateOption::readOptionSetting(const KisPropertiesConfiguration* 
 
 
 
-quint8 KisPressureRateOption::apply( quint8 opacity, qint32 sw,  qint32 sh, KisPaintDeviceSP srcdev, double pressure) const
+quint8 KisPressureRateOption::apply( quint8 opacity, const KisPaintInformation& info) const
 {
     opacity = rate();
 
     if (isChecked()) {
-        if (customCurve()) {
-            opacity = qBound((qint32)OPACITY_TRANSPARENT, 
-                             (qint32)(double(opacity) * scaleToCurve(pressure) / PRESSURE_DEFAULT),
-                             (qint32)OPACITY_OPAQUE);
-
-        } else {
-            opacity = qBound((qint32)OPACITY_TRANSPARENT,
-                             (qint32)(double(opacity) * pressure / PRESSURE_DEFAULT),
-                             (qint32)OPACITY_OPAQUE);
-        }
+        opacity = qBound((qint32)OPACITY_TRANSPARENT, 
+                         (qint32)(double(opacity) * computeValue(info) / PRESSURE_DEFAULT),
+                          (qint32)OPACITY_OPAQUE);
     }
 
-#if 0
-    // TODO It's also applied in the smudgeop, do other paintops that require a rate
-    // needs to do this to their srcDev ?
-    KisRectIterator it = srcdev->createRectIterator(0, 0, sw, sh);
-    KoColorSpace* cs = srcdev->colorSpace();
-
-    while (not it.isDone()) {
-        cs->setAlpha(it.rawData(), (cs->alpha(it.rawData()) * opacity) / OPACITY_OPAQUE, 1);
-        ++it;
-    }
-    return OPACITY_OPAQUE - opacity;
-#else
     return opacity;
-#endif
-
 
 }
 

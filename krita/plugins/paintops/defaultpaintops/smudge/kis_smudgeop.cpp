@@ -143,7 +143,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     */
     int opacity = OPACITY_OPAQUE;
     if (!m_firstRun) {
-        opacity = settings->m_optionsWidget->m_rateOption->apply( opacity, sw, sh, m_srcdev, info.pressure() );
+        opacity = settings->m_optionsWidget->m_rateOption->apply( opacity, info );
 
         KisRectIterator it = m_srcdev->createRectIterator(0, 0, sw, sh);
         KoColorSpace* cs = m_srcdev->colorSpace();

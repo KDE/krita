@@ -83,6 +83,7 @@ private:
     bool m_mouseOverFirstPoint;
     KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
     KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
+    KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on
 };
 #endif
 

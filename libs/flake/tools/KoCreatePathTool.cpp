@@ -58,6 +58,7 @@ KoCreatePathTool::KoCreatePathTool(KoCanvasBase * canvas)
         , m_mouseOverFirstPoint(false)
         , m_existingStartPoint(0)
         , m_existingEndPoint(0)
+        , m_hoveredPoint(0)
 {
 }
 
@@ -108,6 +109,15 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         painter.restore();
     }
 
+    if (m_hoveredPoint) {
+        painter.save();
+        painter.setMatrix(m_hoveredPoint->parent()->absoluteTransformation(&converter), true);
+        KoShape::applyConversion(painter, converter);
+        painter.setPen(Qt::blue);
+        painter.setBrush(Qt::white);   //TODO make configurable
+        m_hoveredPoint->paint(painter, m_handleRadius, KoPathPoint::Node);
+        painter.restore();
+    }
     painter.save();
     KoShape::applyConversion(painter, converter);
     m_canvas->snapGuide()->paint(painter, converter);
@@ -200,16 +210,24 @@ void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
 void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    KoPathPoint * endPoint = endPointAtPosition(event->point);
+    if (m_hoveredPoint != endPoint) {
+        if (m_hoveredPoint) {
+            QPointF nodePos = m_hoveredPoint->parent()->shapeToDocument(m_hoveredPoint->point());
+            m_canvas->updateCanvas(handleRect(nodePos));
+        }
+        m_hoveredPoint = endPoint;
+        if (m_hoveredPoint) {
+            QPointF nodePos = m_hoveredPoint->parent()->shapeToDocument(m_hoveredPoint->point());
+            m_canvas->updateCanvas(handleRect(nodePos));
+        }
+    }
+    
     if (! m_shape) {
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
         m_canvas->snapGuide()->snap(event->point, event->modifiers());
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
 
-        if (endPointAtPosition(event->point))
-            useCursor(Qt::PointingHandCursor, true);
-        else
-            useCursor(Qt::ArrowCursor, true);
-        
         m_mouseOverFirstPoint = false;
         return;
     }
@@ -278,6 +296,7 @@ void KoCreatePathTool::deactivate()
         m_activePoint = 0;
         m_existingStartPoint = 0;
         m_existingEndPoint = 0;
+        m_hoveredPoint = 0;
     }
 }
 
@@ -332,6 +351,7 @@ void KoCreatePathTool::addPathShape()
 
     m_existingStartPoint = 0;
     m_existingEndPoint = 0;
+    m_hoveredPoint = 0;
 }
 
 QRectF KoCreatePathTool::handleRect(const QPointF &p)

@@ -2,6 +2,14 @@ project(koffice)
 
 cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
+ ############
+#############
+## Options ##
+#############
+############
+
+option(BUILD_pigment "Enable the compilation of the pigment CMS libray (needed by krita and karbon)" ON) # we can't use the one coming from macro_optional_add_subdirectory since the option is created after the checks
+
  ######################
 #######################
 ## Constants defines ##
@@ -55,38 +63,38 @@ endif (APPLE)
 ################################
 
 # NO_PIGMENT disabled everything that uses pigment in the crudest matter possible
-if (NO_PIGMENT)
+if (NOT BUILD_pigment)
     add_definitions(-DNO_PIGMENT)
     set (FULL_PIGMENT FALSE)
     set (SMALL_PIGMENT FALSE)
-else (NO_PIGMENT)
+else (NOT BUILD_pigment)
 
     include_directories(${CMAKE_SOURCE_DIR}/libs/pigment)
-    set (SMALL_PIGMENT FALSE)
-    # SMALL_PIGMENT provides just the classed needed to compile koffice libs, but not not Krita.
-    if (SMALL_PIGMENT) 
-        add_definitions(-DSMALL_PIGMENT)
-    else (SMALL_PIGMENT)
 #        macro_optional_find_package(LCMS)
-	find_package(LCMS REQUIRED)
-        set(REQUIRED_LCMS_VERSION 118)
+    find_package(LCMS REQUIRED)
+    set(REQUIRED_LCMS_VERSION 118)
 
-        if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-            # FULL_PIGMENT is the most desirable state, we can compile Krita!
-            set(HAVE_REQUIRED_LCMS_VERSION TRUE)
-            set(FULL_PIGMENT TRUE)
-            add_definitions(-DFULL_PIGMENT)
-        else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-            message( FATAL_ERROR "Old LCMS version found, upgrade to 1.18.")
-            set(HAVE_REQUIRED_LCMS_VERSION FALSE)
-            set(SMALL_PIGMENT TRUE)
-            set(FULL_PIGMENT FALSE)
-        endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+    if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+        # FULL_PIGMENT is the most desirable state, we can compile Krita!
+        set(HAVE_REQUIRED_LCMS_VERSION TRUE)
+        set(FULL_PIGMENT TRUE)
+        set(SMALL_PIGMENT FALSE)
+        add_definitions(-DFULL_PIGMENT)
+    else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+        message( FATAL_ERROR "Old LCMS version found, upgrade to 1.18.")
+        set(HAVE_REQUIRED_LCMS_VERSION FALSE)
+        set(SMALL_PIGMENT TRUE)
+        set(FULL_PIGMENT FALSE)
+    endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
-        macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required by for color management and for Krita")
+    macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required by for color management and for Krita")
+endif (NOT BUILD_pigment)
 
-    endif (SMALL_PIGMENT)
-endif (NO_PIGMENT)
+# SMALL_PIGMENT provides just the classed needed to compile koffice libs, but not not Krita.
+if (SMALL_PIGMENT) 
+    add_definitions(-DSMALL_PIGMENT)
+endif(SMALL_PIGMENT)
+
 
  ###########################
 ############################
@@ -298,9 +306,9 @@ set(KOPROPERTIES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kobase ${CMAKE_BINARY_DIR}/li
 
 ### Karbon: pigment
 set(SHOULD_BUILD_KARBON TRUE)
-if (NO_PIGMENT)
+if (NOT BUILD_pigment)
     set(SHOULD_BUILD_KARBON FALSE)
-endif (NO_PIGMENT)
+endif (NOT BUILD_pigment)
 
 ### KSpread: eigen2
 set(SHOULD_BUILD_KSPREAD TRUE)
@@ -322,9 +330,9 @@ endif(NOT BZIP2_EXECUTABLE )
 
 ### Krita: non-win32, pigment, blitz, eigen2, exiv2
 set(SHOULD_BUILD_KRITA TRUE)
-if(WIN32 OR SMALL_PIGMENT OR NO_PIGMENT OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
+if(WIN32 OR NOT FULL_PIGMENT OR NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(WIN32 OR SMALL_PIGMENT OR NO_PIGMENT OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
+endif(WIN32 OR NOT FULL_PIGMENT OR NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
 
 ### KPlato: kdepimlibs
 set(SHOULD_BUILD_KPLATO TRUE)
@@ -382,5 +390,26 @@ add_subdirectory(tools)
 add_subdirectory(filters)
 
 macro_display_feature_log()
+
+macro(macro_display_application_enabled _appName _shouldBuild)
+if( BUILD_${_appName} AND ${_shouldBuild} MATCHES "[Tt][Rr][Uu][Ee]" )
+  message(STATUS ${_appName} )
+endif( BUILD_${_appName} AND ${_shouldBuild} MATCHES "[Tt][Rr][Uu][Ee]" )
+endmacro(macro_display_application_enabled)
+
+message(STATUS "---------------- The following applications will be build ----------------" )
+
+macro_display_application_enabled(kword TRUE)
+macro_display_application_enabled(kspread ${SHOULD_BUILD_KSPREAD})
+macro_display_application_enabled(kpresenter ${SHOULD_BUILD_KPRESENTER})
+macro_display_application_enabled(kivio TRUE)
+macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})
+macro_display_application_enabled(kplato ${SHOULD_BUILD_KPLATO})
+macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
+macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
+macro_display_application_enabled(kformula TRUE)
+macro_display_application_enabled(kchart TRUE)
+
+message(STATUS "--------------------------------------------------------------------------" )
 
 add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

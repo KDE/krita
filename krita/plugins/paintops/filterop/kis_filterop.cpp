@@ -94,12 +94,12 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     KisBrushSP brush = m_brush;;
     if (!brush) return;
 
-    KisPaintInformation adjustedInfo = settings->m_optionsWidget->m_sizeOption->apply(info);
-    if (! brush->canPaintFor(adjustedInfo))
+    if (! brush->canPaintFor(info))
         return;
 
-    double pScale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());   // TODO: why is there scale and pScale that seems to contains the same things ?
-    QPointF hotSpot = brush->hotSpot(pScale, pScale);
+    double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
+    
+    QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
 
@@ -113,8 +113,6 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
-
-    double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
 
     qint32 maskWidth = brush->maskWidth(scale, 0.0);
     qint32 maskHeight = brush->maskHeight(scale, 0.0);
@@ -169,17 +167,4 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 
     painter()->bitBlt(dstRect.x(), dstRect.y(), m_tmpDevice, sx, sy, sw, sh);
 
-}
-
-double KisFilterOp::paintLine(const KisPaintInformation &pi1,
-                           const KisPaintInformation &pi2,
-                           double savedDist)
-{
-    KisPaintInformation adjustedInfo1(pi1);
-    KisPaintInformation adjustedInfo2(pi2);
-    if (!settings->m_optionsWidget->m_sizeOption->isChecked()) {
-        adjustedInfo1.setPressure(PRESSURE_DEFAULT);
-        adjustedInfo2.setPressure(PRESSURE_DEFAULT);
-    }
-    return KisPaintOp::paintLine(adjustedInfo1, adjustedInfo2, savedDist);
 }

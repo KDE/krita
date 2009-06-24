@@ -81,14 +81,14 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     Q_ASSERT(brush);
     if (!brush) return;
 
-    KisPaintInformation adjustedInfo = settings->m_optionsWidget->m_sizeOption->apply(info);
-    if (!brush->canPaintFor(adjustedInfo))
+    if (!brush->canPaintFor(info))
         return;
+    
+    double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
 
     KisPaintDeviceSP device = painter()->device();
 
-    double pScale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());   // TODO: why is there scale and pScale that seems to contains the same things ?
-    QPointF hotSpot = brush->hotSpot(pScale, pScale);
+    QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -103,13 +103,11 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.y(), &y, &yFraction);
 
     quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info);
-    KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info.pressure());
-
-    double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
+    KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info);
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, 0.0, adjustedInfo, xFraction, yFraction);
+        dab = brush->image(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
     } else {
         KoColor color = painter()->paintColor();
         color.convertTo(dab->colorSpace());

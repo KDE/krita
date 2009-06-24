@@ -29,16 +29,7 @@ KisPressureSizeOption::KisPressureSizeOption()
 }
 
 
-KisPaintInformation KisPressureSizeOption::apply(const KisPaintInformation & info) const
+double KisPressureSizeOption::apply(const KisPaintInformation & info) const
 {
-    KisPaintInformation adjustedInfo(info);
-    if (!isChecked()) {
-        adjustedInfo.setPressure(PRESSURE_DEFAULT);
-    } else {
-        if (customCurve()) {
-            adjustedInfo.setPressure(scaleToCurve(adjustedInfo.pressure()));
-        }
-    }
-
-    return adjustedInfo;
+    return computeValue(info);
 }

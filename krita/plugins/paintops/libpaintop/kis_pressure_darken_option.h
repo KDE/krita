@@ -36,7 +36,7 @@ public:
 
     KisPressureDarkenOption();
 
-    KoColor apply(KisPainter * painter, double pressure) const;
+    KoColor apply(KisPainter * painter, const KisPaintInformation& info) const;
 };
 
 #endif

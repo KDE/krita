@@ -93,13 +93,13 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     Q_ASSERT(brush);
     if (!brush) return;
 
-    KisPaintInformation adjustedInfo = settings->m_optionsWidget->m_sizeOption->apply(info);
-    if (! brush->canPaintFor(adjustedInfo))
+    if (! brush->canPaintFor(info))
         return;
+    
+    double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
 
     KisPaintDeviceSP device = painter()->device();
-    double pScale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
-    QPointF hotSpot = brush->hotSpot(pScale, pScale);
+    QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -115,20 +115,18 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
 
     KisFixedPaintDeviceSP dab = 0;
 
-    double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
-
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), pScale, 0.0, adjustedInfo, xFraction, yFraction);
+        dab = brush->image(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
         dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     } else {
         dab = cachedDab();
         KoColor color = painter()->paintColor();
         dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
-        brush->mask(dab, color, scale, pScale, 0.0, info, xFraction, yFraction);
+        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
     qint32 sw = dab->bounds().width();

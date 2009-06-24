@@ -27,7 +27,18 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KOWIDGETS_EXPORT
-# if defined(MAKE_KOWIDGETS_LIB)
+# if defined(MAKE_KOPROGRESS_LIB) || \
+     defined(MAKE_KOASPECTBUTTON_LIB) || \
+     defined(MAKE_KOCHARACTERSELECTIONDIALOG_LIB) || \
+     defined(MAKE_KOLINESTYLESELECTOR_LIB) || \
+     defined(MAKE_KODOCUMENTSECTIONBOX_LIB) || \
+     defined(MAKE_KOOPENPANE_LIB) || \
+     defined(MAKE_KOPAGELAYOUT_LIB) || \
+     defined(MAKE_KOCOLORWIDGETS_LIB) || \
+     defined(MAKE_KOCVSIMPORT_LIB) || \
+     defined(MAKE_KORESOURCEWIDGET_LIB) || \
+     defined(MAKE_KOINPUT_LIB) || \
+     defined(MAKE_KOZOOMACTION_LIB)
 /* We are building this library */
 #  define KOWIDGETS_EXPORT KDE_EXPORT
 # else

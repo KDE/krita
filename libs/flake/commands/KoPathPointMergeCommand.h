@@ -21,11 +21,10 @@
 #define KOPATHPOINTMERGECOMMAND_H
 
 #include <QUndoCommand>
-#include <QPointF>
-#include "KoPathPoint.h"
-#include "KoPathPointData.h"
 
 #include "flake_export.h"
+
+class KoPathPointData;
 
 /// The undo / redo command for merging two subpath end points
 class FLAKE_EXPORT KoPathPointMergeCommand : public QUndoCommand
@@ -50,28 +49,8 @@ public:
 
 private:
     
-    KoPathPoint * mergePoints( KoPathPoint * p1, KoPathPoint * p2);
-    void resetPoints( KoPathPointIndex index1, KoPathPointIndex index2 );
-    
-    KoPathShape * m_pathShape;
-    KoPathPointIndex m_endPoint;
-    KoPathPointIndex m_startPoint;
-    KoPathPointIndex m_splitIndex;
-
-    // the control points have to be stored in document positions
-    QPointF m_oldNodePoint1;
-    QPointF m_oldControlPoint1;
-    QPointF m_oldNodePoint2;
-    QPointF m_oldControlPoint2;
-    
-    KoPathPoint * m_removedPoint;
-    
-    enum Reverse {
-        ReverseNone = 0,
-        ReverseFirst = 1,
-        ReverseSecond = 2
-    };
-    int m_reverse;
+    class Private;
+    Private * const d;
 };
 
 #endif // KOPATHPOINTMERGECOMMAND_H

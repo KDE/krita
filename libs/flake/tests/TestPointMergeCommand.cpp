@@ -20,6 +20,7 @@
 #include "TestPointMergeCommand.h"
 #include "KoPathPointMergeCommand.h"
 #include "KoPathShape.h"
+#include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include <KDebug>
 
@@ -150,9 +151,6 @@ void TestPointMergeCommand::connectLineSubpaths()
     
     KoPathPointData pd1(&path1, index1);
     KoPathPointData pd2(&path1, index2);
-    
-    KoPathPoint * p1 = path1.pointByIndex(index1);
-    KoPathPoint * p2 = path1.pointByIndex(index2);
     
     QCOMPARE(path1.subpathCount(), 2);
     QCOMPARE(path1.pointByIndex(index1)->point(), QPointF(10,0));

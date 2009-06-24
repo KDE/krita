@@ -830,7 +830,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
     // Try to compute a table of color if the colorspace is RGB8f
     png_colorp palette = 0;
     int num_palette = 0;
-    if (!options.alpha && KoID(device->colorSpace()->id()) == KoID("RGBA")) { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
+    if (!options.alpha && options.tryToSaveAsIndexed && KoID(device->colorSpace()->id()) == KoID("RGBA")) { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
         palette = new png_color[255];
         KisRectConstIteratorPixel it = device->createRectConstIterator(0, 0, img->width(), img->height());
         bool toomuchcolor = false;

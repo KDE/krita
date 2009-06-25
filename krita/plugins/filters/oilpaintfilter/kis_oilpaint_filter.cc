@@ -140,7 +140,7 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
     //    setProgressDone();
 }
 
-// This method have been ported from Pieter Z. Voloshyn algorithm code.
+// This method has been ported from Pieter Z. Voloshyn's algorithm code in Digikam.
 
 /* Function to determine the most frequent color in a matrix
  *

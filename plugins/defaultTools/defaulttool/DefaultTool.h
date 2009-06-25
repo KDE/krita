@@ -139,8 +139,6 @@ private:
 
     /// Returns selection rectangle adjusted by handle proximity threshold
     QRectF handlesSize();
-    /// Return rectangle of handle at given point
-    QRectF handleRectAt( const QPointF &point );
 
     // convenience method;
     KoSelection * koSelection();

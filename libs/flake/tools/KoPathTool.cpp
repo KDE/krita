@@ -76,7 +76,6 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
         : KoTool(canvas)
         , m_activeHandle(0)
         , m_handleRadius(3)
-        , m_grabSensitivity(3)
         , m_pointSelection(this)
         , m_currentStrategy(0)
 {
@@ -814,7 +813,6 @@ void KoPathTool::activate(bool temporary)
     Q_UNUSED(temporary);
     // retrieve the actual global handle radius
     m_handleRadius = m_canvas->resourceProvider()->handleRadius();
-    m_grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
     m_canvas->snapGuide()->reset();
 
     repaintDecorations();
@@ -908,9 +906,6 @@ void KoPathTool::resourceChanged(int key, const QVariant & res)
             repaint(controlPointRect.adjusted(-maxRadius, -maxRadius, maxRadius, maxRadius));
         }
     }
-    else if (key == KoCanvasResource::GrabSensitivity) {
-        m_grabSensitivity = res.toUInt();
-    }
 }
 
 void KoPathTool::pointSelectionChanged()
@@ -926,13 +921,6 @@ void KoPathTool::repaint(const QRectF &repaintRect)
     // widen border to take antialiasing into account
     qreal radius = m_handleRadius + 1;
     m_canvas->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
-}
-
-QRectF KoPathTool::handleGrabRect(const QPointF &p)
-{
-    const KoViewConverter * converter = m_canvas->viewConverter();
-    QSizeF hsize = converter->viewToDocument(QSizeF(m_grabSensitivity, m_grabSensitivity));
-    return QRectF(p.x() - hsize.width(), p.y() - hsize.height(), 2*hsize.width(), 2*hsize.height());
 }
 
 void KoPathTool::deleteSelection()

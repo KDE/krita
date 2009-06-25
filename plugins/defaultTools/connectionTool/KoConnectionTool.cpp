@@ -56,7 +56,10 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
 {
     float x = 0;
     float y = 0;
-    int handleRadius = m_canvas->resourceProvider()->handleRadius();
+
+    // get the correctly sized rect for painting handles
+    QRectF handleRect = handlePaintRect(QPointF());
+
     painter.setRenderHint(QPainter::Antialiasing, true);
     if( m_shapeOn !=  0) {
         // save the painter to restore it later
@@ -66,13 +69,10 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
         KoShape::applyConversion(painter, converter);
         foreach( const QPointF &point, m_shapeOn->connectionPoints() )
         { // Draw all the connection point of the shape
-            QPointF p = transform.map(point);
-            x = p.x() - handleRadius;
-            y = p.y() - handleRadius;
-            painter.fillRect( x, y, 2*handleRadius, 2*handleRadius, QColor(Qt::green) );
+            handleRect.moveCenter(transform.map(point));
+            painter.fillRect( handleRect, QColor(Qt::green) );
         }
         painter.restore();
-
     }
     
     if( isInRoi() ){
@@ -82,8 +82,8 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
         QMatrix transform = m_lastShapeOn->absoluteTransformation(0);
         KoShape::applyConversion(painter, converter);
         QPointF pointSelected = m_lastShapeOn->connectionPoints().value( getConnectionIndex(m_lastShapeOn, m_mouse) );
-        QPointF point = transform.map( pointSelected );
-        painter.fillRect( point.x()-handleRadius, point.y()-handleRadius, 2*handleRadius, 2*handleRadius, QColor(Qt::blue) );
+        handleRect.moveCenter(transform.map( pointSelected ));
+        painter.fillRect( handleRect, QColor(Qt::blue) );
 
         painter.restore();
     }

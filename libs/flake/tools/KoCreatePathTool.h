@@ -68,7 +68,6 @@ protected:
 
 private:
     QRectF handleRect(const QPointF &p);
-    QRectF grabRect(const QPointF &p);
     void repaintActivePoint();
     
     /// returns the nearest existing path point 

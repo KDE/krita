@@ -88,13 +88,6 @@ private:
     void updateOptionsWidget();
     bool segmentAtPoint( const QPointF &point, KoPathShape* &shape, KoPathPoint* &segmentStart, qreal &pointParam );
     
-    /**
-    * Returns a handle rect at the given position.
-    * The position is expected to be in document coordinates.
-    * @return the handle rectangle in document coordinates
-    */
-    QRectF handleGrabRect(const QPointF &p);
-    
 private slots:
     void pointTypeChanged(QAction *type);
     void insertPoints();

@@ -598,15 +598,6 @@ QRectF DefaultTool::handlesSize()
     return bound;
 }
 
-QRectF DefaultTool::handleRectAt( const QPointF &point )
-{
-    qreal handleRadius = m_canvas->resourceProvider()->handleRadius();
-    QRectF handleRect = QRectF(QPointF(), QSizeF(2*handleRadius,2*handleRadius));
-    handleRect = m_canvas->viewConverter()->viewToDocument(handleRect);
-    handleRect.moveCenter(point);
-    return handleRect;
-}
-
 void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
@@ -852,7 +843,7 @@ KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *inner
     {
         QPainterPath path;
         path.addPolygon(m_selectionOutline);
-        *innerHandleMeaning = path.contains(point) || path.intersects(handleRectAt(point));
+        *innerHandleMeaning = path.contains(point) || path.intersects(handlePaintRect(point));
     }
     for (int i = 0; i < KoFlake::NoHandle; ++i) {
         KoFlake::SelectionHandle handle = handleOrder[i];
@@ -1168,7 +1159,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         }
         if (! (selectMultiple || selectNextInStack) && event->buttons() == Qt::LeftButton) {
             const QPainterPath outlinePath = select->transformation().map(select->outline());
-            if (outlinePath.contains(event->point) || outlinePath.intersects(handleRectAt(event->point)))
+            if (outlinePath.contains(event->point) || outlinePath.intersects(handlePaintRect(event->point)))
                 return new ShapeMoveStrategy(this, m_canvas, event->point);
         }
     }

@@ -157,7 +157,7 @@ You can uncheck the box if you are not using transparency and you want to make t
    <item>
     <widget class="QCheckBox" name="tryToSaveAsIndexed">
      <property name="toolTip">
-      <string>Saving as indexed images allow to make smaller PNG, when this option is checked, a test will be perform to determine wether it is possible to save as indexed.</string>
+      <string>Saving as indexed images allow to make smaller PNG, when this option is checked, a test will be perform to determine whether it is possible to save as indexed.</string>
      </property>
      <property name="text">
       <string>If possible, allow to save as indexed</string>

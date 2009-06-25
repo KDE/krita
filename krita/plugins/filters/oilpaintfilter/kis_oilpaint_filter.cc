@@ -167,7 +167,6 @@ void KisOilPaintFilter::MostFrequentColor(const KisPaintDeviceSP src, quint8* ds
 
     const KoColorSpace* cs = src->colorSpace();
 
-
     QVector<float> channel(cs->channelCount());
     QVector<float>* AverageChannels = new QVector<float>[(Intensity + 1)];
 
@@ -186,11 +185,6 @@ void KisOilPaintFilter::MostFrequentColor(const KisPaintDeviceSP src, quint8* ds
 
     while (!it.isDone()) {
 
-        cs->normalisedChannelsValue(it.rawData(), channel);
-
-        // Swapping red and blue here is done because that gives the same
-        // output as digikam, even though it might be interpreted as a bug
-        // in both applications.
         cs->normalisedChannelsValue(it.rawData(), channel);
 
         I = (uint)(cs->intensity8(it.rawData()) * Scale);
@@ -228,14 +222,9 @@ void KisOilPaintFilter::MostFrequentColor(const KisPaintDeviceSP src, quint8* ds
         cs->setAlpha(dst, 255, 1);
     }
 
-    // Swap red and blue back to get the correct color.
-//     color = qRgb (B, G, R);
 
     delete [] IntensityCount;        // free all the arrays
     delete [] AverageChannels;
-    /*    delete [] AverageColorR;
-        delete [] AverageColorG;
-        delete [] AverageColorB;*/
 }
 
 

@@ -149,10 +149,10 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
  * Height           => Image height
  * X                => Position horizontal
  * Y                => Position vertical
- * Radius           => Is the radius of the matrix to be analized
- * Intensity        => Intensity to calcule
+ * Radius           => Is the radius of the matrix to be analyzed
+ * Intensity        => Intensity to calculate
  *
- * Theory           => This function creates a matrix with the analized pixel in
+ * Theory           => This function creates a matrix with the analyzed pixel in
  *                     the center of this matrix and find the most frequenty color
  */
 

@@ -239,8 +239,8 @@ void KoTool::setStatusText(const QString &statusText)
 QRectF KoTool::handleGrabRect(const QPointF &position)
 {
     const KoViewConverter * converter = m_canvas->viewConverter();
-    uint grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
-    QRectF r = converter->viewToDocument(QRectF(0, 0, grabSensitivity, grabSensitivity));
+    uint handleSize = 2*m_canvas->resourceProvider()->grabSensitivity();
+    QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
 }
@@ -248,8 +248,8 @@ QRectF KoTool::handleGrabRect(const QPointF &position)
 QRectF KoTool::handlePaintRect(const QPointF &position)
 {
     const KoViewConverter * converter = m_canvas->viewConverter();
-    uint handleRadius = m_canvas->resourceProvider()->handleRadius();
-    QRectF r = converter->viewToDocument(QRectF(0, 0, handleRadius, handleRadius));
+    uint handleSize = 2*m_canvas->resourceProvider()->handleRadius();
+    QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
 }

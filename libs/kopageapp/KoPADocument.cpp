@@ -521,6 +521,17 @@ KoPageApp::PageType KoPADocument::pageType() const
     return KoPageApp::Page;
 }
 
+void KoPADocument::initEmpty()
+{
+    d->masterPages.clear();
+    d->pages.clear();
+    KoPAMasterPage * masterPage = newMasterPage();
+    d->masterPages.append( masterPage );
+    KoPAPage * page = newPage( masterPage );
+    d->pages.append( page );
+    KoDocument::initEmpty();
+}
+
 void KoPADocument::setActionEnabled( int actions, bool enable )
 {
     foreach( KoView *view, views() )

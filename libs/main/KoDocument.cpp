@@ -1930,6 +1930,7 @@ QByteArray KoDocument::nativeFormatMimeType() const
         return QByteArray();
     }
     QByteArray nativeMimeType = service->property("X-KDE-NativeMimeType").toString().toLatin1();
+#ifndef NDEBUG
     if (nativeMimeType.isEmpty()) {
         // shouldn't happen, let's find out why it happened
         if (!service->serviceTypes().contains("KOfficePart"))
@@ -1939,6 +1940,7 @@ QByteArray KoDocument::nativeFormatMimeType() const
         else
             kWarning(30003) << "Failed to read NativeMimeType from desktop file!";
     }
+#endif
     return nativeMimeType;
 }
 

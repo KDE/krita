@@ -92,6 +92,24 @@ QDockWidget* KoShapeCollectionDockerFactory::createDockWidget()
     return docker;
 }
 
+void KoShapeCollectionDocker::locationChanged(Qt::DockWidgetArea area)
+{
+    switch(area) {
+        case Qt::TopDockWidgetArea:
+        case Qt::BottomDockWidgetArea:
+            m_spacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+            break;
+        case Qt::LeftDockWidgetArea:
+        case Qt::RightDockWidgetArea:
+            m_spacer->changeSize(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+            break;
+        default:
+            break;
+    }
+    m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    m_layout->invalidate();
+}
+
 //
 // KoShapeCollectionDocker
 //
@@ -102,13 +120,15 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     setWindowTitle(i18n("Add Shape"));
 
     QWidget* mainWidget = new QWidget(this);
-    QGridLayout* mainLayout = new QGridLayout(mainWidget);
-    mainLayout->setMargin(0);
-    //mainLayout->setSizeConstraint(QLayout::SetFixedSize);
+    m_layout = new QGridLayout(mainWidget);
+    m_layout->setMargin(0);
+    m_layout->setHorizontalSpacing(0);
+    m_layout->setVerticalSpacing(0);
+    m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     setWidget(mainWidget);
 
     m_quickView = new QListView (mainWidget);
-    mainLayout->addWidget(m_quickView, 0, 0);
+    m_layout->addWidget(m_quickView, 0, 0);
     m_quickView->setViewMode(QListView::IconMode);
     m_quickView->setDragDropMode(QListView::DragOnly);
     m_quickView->setSelectionMode(QListView::SingleSelection);
@@ -121,6 +141,11 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     m_quickView->setTextElideMode(Qt::ElideNone);
     m_quickView->setWordWrap(true);
 
+    m_spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_layout->addItem(m_spacer, 1, 2);
+
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
+
     connect(m_quickView, SIGNAL(clicked(const QModelIndex&)),
             this, SLOT(activateShapeCreationToolFromQuick(const QModelIndex&)));
 	    
@@ -130,12 +155,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     m_moreShapes->setIconSize(QSize(32, 32));
     m_moreShapes->setIcon(KIcon("shape-choose"));
     m_moreShapes->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    mainLayout->addWidget(m_moreShapes, 0, 1);
-    QSpacerItem * verticalSpacer = new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    mainLayout->addItem( verticalSpacer, 1, 0, 1, 2 );
-
-
-    mainLayout->setColumnStretch (2, 10);
+    m_layout->addWidget(m_moreShapes, 0, 1);
 
     m_moreShapesContainer = new CollectionMenu(mainWidget);
     m_moreShapes->setMenu(m_moreShapesContainer);

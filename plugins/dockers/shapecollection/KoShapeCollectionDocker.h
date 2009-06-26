@@ -47,6 +47,8 @@ class QListWidget;
 class QListWidgetItem;
 class QToolButton;
 class QMenu;
+class QSpacerItem;
+class QGridLayout;
 
 class KoShapeCollectionDocker : public QDockWidget
 {
@@ -80,6 +82,9 @@ class KoShapeCollectionDocker : public QDockWidget
         /// Called when the close collection button is clicked
         void removeCurrentCollection();
 
+        /// Called when the docker changes area
+        void locationChanged(Qt::DockWidgetArea area);
+
     protected:
         /**
          * Load the default koffice shapes
@@ -111,6 +116,8 @@ class KoShapeCollectionDocker : public QDockWidget
         QListView *m_collectionView;
         QToolButton *m_closeCollectionButton;
         QToolButton *m_addCollectionButton;
+        QSpacerItem *m_spacer;
+        QGridLayout *m_layout;
 
         QMap<QString, KoCollectionItemModel*> m_modelMap;
 };

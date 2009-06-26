@@ -61,6 +61,8 @@ public:
     KoUnitDoubleSpinBox * miterLimit;
     KoLineStyleSelector * lineStyle;
     KoLineBorder border;
+    QSpacerItem *spacer;
+    QGridLayout *layout;
 };
 
 StrokeDocker::StrokeDocker()
@@ -160,14 +162,18 @@ StrokeDocker::StrokeDocker()
     mainLayout->addWidget( d->miterLimit, 4, 1, 1, 3 );
     connect( d->miterLimit, SIGNAL( valueChangedPt( qreal ) ), this, SLOT( miterLimitChanged() ) );
 
-    mainLayout->setRowStretch( 5, 1 );
-    mainLayout->setColumnStretch( 1, 1 );
-    mainLayout->setColumnStretch( 2, 1 );
-    mainLayout->setColumnStretch( 3, 1 );
+    d->spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    mainLayout->addItem(d->spacer, 5, 4);
+
+    mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    d->layout = mainLayout;
 
     setWidget( mainWidget );
 
     updateControls();
+
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )),
+             this, SLOT(locationChanged(Qt::DockWidgetArea)));
 }
 
 StrokeDocker::~StrokeDocker()
@@ -314,6 +320,24 @@ void StrokeDocker::resourceChanged(int key, const QVariant & value )
         }
         break;
     }
+}
+
+void StrokeDocker::locationChanged(Qt::DockWidgetArea area)
+{
+    switch(area) {
+        case Qt::TopDockWidgetArea:
+        case Qt::BottomDockWidgetArea:
+            d->spacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+            break;
+        case Qt::LeftDockWidgetArea:
+        case Qt::RightDockWidgetArea:
+            d->spacer->changeSize(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+            break;
+        default:
+            break;
+    }
+    d->layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    d->layout->invalidate();
 }
 
 #include "StrokeDocker.moc"

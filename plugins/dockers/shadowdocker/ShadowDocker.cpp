@@ -26,7 +26,9 @@
 #include <KoCanvasController.h>
 #include <KoShadowConfigWidget.h>
 #include <KoShapeShadowCommand.h>
-#include <klocale.h>
+#include <KLocale>
+#include <QtGui/QSpacerItem>
+#include <QtGui/QGridLayout>
 
 class ShadowDocker::Private
 {
@@ -37,6 +39,8 @@ public:
     KoShapeShadow shadow;
     KoShadowConfigWidget * widget;
     KoCanvasBase * canvas;
+    QSpacerItem *spacer;
+    QGridLayout *layout;
 };
 
 ShadowDocker::ShadowDocker()
@@ -44,13 +48,25 @@ ShadowDocker::ShadowDocker()
 {
     setWindowTitle( i18n( "Shadow Properties" ) );
 
-    d->widget = new KoShadowConfigWidget( this );
-    setWidget( d->widget );
+    QWidget * mainWidget = new QWidget(this);
+    d->layout = new QGridLayout(mainWidget);
+
+    d->widget = new KoShadowConfigWidget(mainWidget);
     d->widget->setEnabled( false );
+    d->layout->addWidget(d->widget, 0, 0);
+
+    d->spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    d->layout->addItem(d->spacer, 1, 1);
+
+    d->layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+
+    setWidget( mainWidget );
 
     connect( d->widget, SIGNAL(shadowColorChanged(const KoColor&)), this, SLOT(shadowChanged()));
     connect( d->widget, SIGNAL(shadowOffsetChanged(const QPointF&)), this, SLOT(shadowChanged()));
     connect( d->widget, SIGNAL(shadowVisibilityChanged(bool)), this, SLOT(shadowChanged()));
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )),
+             this, SLOT(locationChanged(Qt::DockWidgetArea)));
 }
 
 ShadowDocker::~ShadowDocker()
@@ -109,6 +125,24 @@ void ShadowDocker::shadowChanged()
     newShadow->setColor( d->widget->shadowColor() );
     newShadow->setOffset( d->widget->shadowOffset() );
     d->canvas->addCommand( new KoShapeShadowCommand( selection->selectedShapes(), newShadow ) );
+}
+
+void ShadowDocker::locationChanged(Qt::DockWidgetArea area)
+{
+    switch(area) {
+        case Qt::TopDockWidgetArea:
+        case Qt::BottomDockWidgetArea:
+            d->spacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+            break;
+        case Qt::LeftDockWidgetArea:
+        case Qt::RightDockWidgetArea:
+            d->spacer->changeSize(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+            break;
+        default:
+            break;
+    }
+    d->layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    d->layout->invalidate();
 }
 
 #include "ShadowDocker.moc"

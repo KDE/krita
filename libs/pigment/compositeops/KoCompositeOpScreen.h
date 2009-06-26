@@ -53,14 +53,14 @@ class KoCompositeOpScreen : public KoCompositeOpAlphaBase<_CSTraits, KoComposite
             {
                 if( (int)channel != _CSTraits::alpha_pos && ( channelFlags.isEmpty() || channelFlags.testBit( channel ) ) )
                 {
-                    compositetype srcColor = src[channel];
-                    compositetype dstColor = dst[channel];
+                    compositetype srcChannel = src[channel];
+                    compositetype dstChannel = dst[channel];
 
-                    srcColor = NATIVE_MAX_VALUE - KoColorSpaceMaths<channels_type>::multiply(NATIVE_MAX_VALUE - dstColor, NATIVE_MAX_VALUE - srcColor);
+                    srcChannel = NATIVE_MAX_VALUE - KoColorSpaceMaths<channels_type>::multiply(NATIVE_MAX_VALUE - dstChannel, NATIVE_MAX_VALUE - srcChannel);
 
-                    channels_type newColor = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
+                    channels_type newChannel = KoColorSpaceMaths<channels_type>::blend(srcChannel, dstChannel, srcBlend);
 
-                    dst[channel] = newColor;
+                    dst[channel] = newChannel;
                 }
             }
         }

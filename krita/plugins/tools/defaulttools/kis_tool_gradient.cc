@@ -244,7 +244,6 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
         m_dragging = false;
 
         if (m_startPos == m_endPos) {
-            // controller->updateCanvas();
             m_dragging = false;
             return;
         }
@@ -269,7 +268,6 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             painter.setGradient(currentGradient());
             painter.setOpacity(m_opacity);
             painter.setCompositeOp(m_compositeOp);
-
 
             /* KoUpdater *progress = m_subject->progressDisplay();
 
@@ -334,7 +332,7 @@ QWidget* KisToolGradient::createOptionWidget()
     QWidget *widget = KisToolPaint::createOptionWidget();
     Q_CHECK_PTR(widget);
     widget->setObjectName(toolId() + " option widget");
-    
+
     m_lbShape = new QLabel(i18n("Shape:"), widget);
     m_lbRepeat = new QLabel(i18n("Repeat:"), widget);
 

@@ -216,6 +216,7 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 void KisLayerBox::updateUI()
 {
     Q_ASSERT(! m_image.isNull());
+
     m_wdgLayerBox->bnDelete->setEnabled(m_nodeManager->activeNode());
     m_wdgLayerBox->bnRaise->setEnabled(m_nodeManager->activeNode()
                                        && (m_nodeManager->activeNode()->nextSibling()
@@ -227,6 +228,7 @@ void KisLayerBox::updateUI()
     m_wdgLayerBox->doubleOpacity->setEnabled(m_nodeManager->activeNode());
     m_wdgLayerBox->doubleOpacity->setDecimals(0);
     m_wdgLayerBox->cmbComposite->setEnabled(m_nodeManager->activeNode());
+
     if (KisNodeSP active = m_nodeManager->activeNode()) {
         if (m_nodeManager->activePaintDevice())
             slotFillCompositeOps(m_nodeManager->activeColorSpace());

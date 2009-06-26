@@ -81,6 +81,7 @@
 #include "widgets/kis_wdg_generator.h"
 #include "kis_layer_box.h"
 #include "kis_node_commands_adapter.h"
+#include "kis_node_manager.h"
 
 KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         : m_view(view)
@@ -342,7 +343,15 @@ void KisLayerManager::layerToggleVisible()
     if (!layer) return;
 
     layer->setVisible(!layer->visible());
+    if (!layer->visible()) {
+        if (layer->nextSibling()) {
+            m_view->nodeManager()->activateNode(layer->nextSibling());
+        }
+        else if ( layer->parentLayer() ) {
+            m_view->nodeManager()->activateNode(layer->parent());
+        }
 
+    }
     layer->setDirty();
 }
 

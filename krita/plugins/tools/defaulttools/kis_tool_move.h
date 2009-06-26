@@ -21,8 +21,9 @@
 #ifndef KIS_TOOL_MOVE_H_
 #define KIS_TOOL_MOVE_H_
 
-#include "KoToolFactory.h"
-#include "kis_tool.h"
+#include <KoToolFactory.h>
+#include <kis_types.h>
+#include <kis_tool.h>
 #include <flake/kis_node_shape.h>
 #include <QWidget>
 #include <QGroupBox>
@@ -78,6 +79,8 @@ private:
     QPoint m_layerPosition;
     bool m_dragging;
     KisNodeSP m_selectedNode;
+    KisNodeSP m_targetLayer;
+    KisSelectionSP m_selection;
 };
 
 

@@ -269,9 +269,9 @@ void KisSelectionManager::updateGUI()
                     if (adjLayer) // There's no reselect for adjustment layers
                         m_reselect->setEnabled(false);
 #endif
-                    }
+    }
 
-        m_cut->setEnabled(enable);
+    m_cut->setEnabled(enable);
     m_clear->setEnabled(enable);
     m_fillForegroundColor->setEnabled(enable);
     m_fillBackgroundColor->setEnabled(enable);

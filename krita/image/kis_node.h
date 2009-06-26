@@ -84,21 +84,21 @@ public:
      * nodes all the way to the root node. By default this is the
      * empty rect (through KisBaseNode::extent())
      */
-    virtual void setDirty();
+    virtual void setDirty() = 0;
 
     /**
      * Add the given rect to the set of dirty rects for this node;
      * this percolates up to parent nodes all the way to the root
      * node.
      */
-    virtual void setDirty(const QRect & rect);
+    virtual void setDirty(const QRect & rect) = 0;
 
     /**
      * Add the given region to the set of dirty rects for this node;
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    virtual void setDirty(const QRegion & region);
+    virtual void setDirty(const QRegion & region) = 0;
 
 public: // Graph methods
 

@@ -133,10 +133,18 @@ public:
      * Adjust the dirty to rect to check which values need to be recomputed
      */
     virtual QRect adjustedDirtyRect( const QRect& _rect ) const;
+
     /**
      * @return the rect that is needed to compute the corresponding values
      */
     virtual QRect neededRect( const QRect& _rect ) const;
+
+    virtual void setDirty();
+
+    virtual void setDirty(const QRect & rect);
+
+    virtual void setDirty(const QRegion & region);
+
 private:
 
     struct Private;

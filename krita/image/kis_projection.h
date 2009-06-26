@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org
+ *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,35 +19,23 @@
 #define KIS_PROJECTION
 
 #include <QObject>
+#include <QThread>
+
 #include "kis_shared.h"
 #include "kis_types.h"
-#include <threadweaver/Job.h>
 #include "krita_export.h"
 
 class QRegion;
 class QRect;
 
-using namespace ThreadWeaver;
-
 /**
-   KisProjection is responsible for keeping the projection of the
-   image's layer stack up to date. Krita's redisplay works as follows:
-
-   * Any user action dirties a region (set of rects) on a layer.
-   * The layer notifies the group layer it belongs to that it is dirty
-   * This percolates up to the root layer
-   * The root layer informs the projection that it has a new dirty
-   region.
-   * The projection aggregates the region with its dirty region.
-   * The projection recomposition thread takes a rect from the dirty
-   region.
-   * The thread composites the rect
-   * The thread emits a cross-thread signal that a certain rect has
-   been recomposited
-   * The canvas widget catches this signal and schedules an update
-     which Qt aggregates into a paint event.
+ * A thread that owns an updater object; the object is
+ * connected to a KisImage instance. Every time we need
+ * an update, a signal is thrown. The event loop of this
+ * thread delivers the signal to the updater, and when
+ * the updater is done, it delivers another signal to KisImage.
  */
-class KRITAIMAGE_EXPORT KisProjection : public QObject, public KisShared
+class KRITAIMAGE_EXPORT KisProjection : public QThread
 {
 
     Q_OBJECT
@@ -57,78 +45,23 @@ public:
     KisProjection(KisImageWSP image);
     virtual ~KisProjection();
 
-    /**
-     * Makes the projection finish the current tasks before accepting
-     * new ones.
-     */
-    void sync();
+    virtual void run();
 
-    /**
-       Lock the projection: we will add new rects to the dirty region,
-       but not composite until unlocked
-    */
     void lock();
-
-    /**
-       Unlock the projection. We will iterate through the accumulated
-       dirty region and emit projectionUpdated signals
-    */
     void unlock();
 
     /**
-       Replace the current rootlayer with the specified rootlayer
-    */
-    void setRootLayer(KisGroupLayerSP rootLayer);
-
-    /**
-     * @return true if there is no recomposition going on or queued
-     *              for the specified rect
+     * called from the main thread, this divides rc in chunks and emits a signal
+     * for KisImageUpdater to catch. KisImageUpdater belongs to this thread.
      */
-    bool upToDate(const QRect & rect);
-
-    /**
-     * @return true if there is no recomposition going on or queued
-     *              for the specified region
-     */
-    bool upToDate(const QRegion & region);
-
-
-    /**
-     * Set the region of interest. Only rects inside this region will
-     * be recomputed.
-     *
-     * @param roi the region of interest in pixels
-     */
+    void updateProjection(KisNodeWSP node, const QRect& rc);
     void setRegionOfInterest(const QRect & roi);
-
-    /**
-     * Return the region of interest.
-     */
-    QRect regionOfInterest();
+    void updateSettings();
+    void setRootLayer(KisGroupLayerSP rootLayer);
 
 signals:
 
-    void sigProjectionUpdated(const QRect &);
-
-
-private slots:
-
-    void updateSettings();
-
-    void slotUpdateUi(ThreadWeaver::Job*);
-
-public slots:
-
-    /**
-     * Add the specified rect to the recomposition queue
-     */
-    void addDirtyRect(const QRect & rect);
-
-
-private:
-
-    /// Breaks up big rects in separate parts
-    void scheduleRect(const QRect & rc);
+    void sigUpdateProjection(KisNodeWSP node, const QRect& rc);
 
 private:
 
@@ -139,5 +72,21 @@ private:
     Private * const m_d;
 
 };
+
+
+class KisImageUpdater : public QObject
+{
+    Q_OBJECT
+
+public slots:
+
+    void startUpdate(KisNodeWSP node, const QRect& rc);
+
+signals:
+
+    void updateDone(const QRect& rc);
+
+};
+
 
 #endif

@@ -59,7 +59,6 @@ KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
         : KisNode()
         , m_d(new Private)
 {
-//     Q_ASSERT( img );
     setName(name);
     setOpacity(opacity);
     m_d->image = img;
@@ -197,6 +196,11 @@ void KisLayer::setImage(KisImageSP image)
     }
 }
 
+void KisLayer::setDirty()
+{
+    setDirty(extent());
+}
+
 void KisLayer::setDirty(const QRect & rect)
 {
     QRect dr = rect;
@@ -205,7 +209,7 @@ void KisLayer::setDirty(const QRect & rect)
     {
         dr |= mask->adjustedDirtyRect( dr );
     }
-    KisNode::setDirty( dr );
+    m_d->image->updateProjection( this, dr );
 }
 
 void KisLayer::setDirty(const QRegion & region)

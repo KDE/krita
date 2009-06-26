@@ -468,7 +468,7 @@ signals:
      *  Emitted whenever an action has caused the image to be
      *  recomposited.
      *
-     * @param rc The recty that has been recomposited.
+     * @param rc The rect that has been recomposited.
      */
     void sigImageUpdated(const QRect &);
 
@@ -503,9 +503,10 @@ signals:
      */
     void sigNodeHasBeenRemoved(KisNode *parent, int index);
 
-
 public slots:
+
     void slotProjectionUpdated(const QRect & rc);
+    void updateProjection(KisNodeSP node, const QRect& rc);
 
 private:
     KisImage& operator=(const KisImage& rhs);

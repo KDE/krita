@@ -44,6 +44,7 @@
 #include "recorder/kis_action_recorder.h"
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
+#include "kis_projection.h"
 #include "kis_background.h"
 #include "kis_change_profile_visitor.h"
 #include "kis_colorspace_convert_visitor.h"
@@ -99,6 +100,8 @@ public:
     KisSelectionSP globalSelection;
     KisSelectionSP deselectedGlobalSelection;
 
+    KisProjection* projection;
+
 };
 KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
         : QObject(0)
@@ -137,10 +140,12 @@ KisImage::KisImage(const KisImage& rhs)
         m_d->nserver = new KisNameServer( *rhs.m_d->nserver );
         Q_CHECK_PTR(m_d->nserver);
 
+        m_d->projection = new KisProjection(this);
     }
 }
 KisImage::~KisImage()
 {
+    delete m_d->projection;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;
@@ -302,6 +307,8 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
     m_d->height = height;
 
     m_d->recorder = new KisActionRecorder();
+
+    m_d->projection = new KisProjection(this);
 }
 
 bool KisImage::locked() const
@@ -835,7 +842,7 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
         node = node->nextSibling();
     }
     undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer));
-    
+
 
     QList<const KisMetaData::Store*> srcs;
     srcs.append(layer->metaData());
@@ -1132,6 +1139,11 @@ KisPerspectiveGrid* KisImage::perspectiveGrid()
 void KisImage::slotProjectionUpdated(const QRect & rc)
 {
     emit sigImageUpdated(rc);
+}
+
+void KisImage::updateProjection(KisNodeSP node, const QRect& rc)
+{
+    node->updateStrategy()->setDirty(rc);
 }
 
 #include "kis_image.moc"

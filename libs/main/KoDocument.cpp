@@ -421,7 +421,7 @@ bool KoDocument::saveFile()
     emit statusBarMessage(i18n("Saving..."));
     bool ret = false;
     bool suppressErrorDialog = false;
-    if (!isNativeFormat(outputMimeType)) {
+    if (!isNativeFormat(outputMimeType, ForExport)) {
         kDebug(30003) << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
         if (!d->filterManager)
@@ -1220,7 +1220,7 @@ bool KoDocument::openFile()
 
     QString importedFile = localFilePath();
 
-    if (!isNativeFormat(typeName.toLatin1())) {
+    if (!isNativeFormat(typeName.toLatin1(), ForImport)) {
         if (!d->filterManager)
             d->filterManager = new KoFilterManager(this);
         KoFilter::ConversionStatus status;
@@ -1376,7 +1376,7 @@ void KoDocument::setMimeTypeAfterLoading(const QString& mimeType)
 
     d->outputMimeType = d->mimeType;
 
-    const bool needConfirm = !isNativeFormat(d->mimeType);
+    const bool needConfirm = !isNativeFormat(d->mimeType, ForImport);
     setConfirmNonNativeSave(false, needConfirm);
     setConfirmNonNativeSave(true, needConfirm);
 }
@@ -2005,15 +2005,16 @@ QStringList KoDocument::readExtraNativeMimeTypes(const KComponentData &component
     return service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
 }
 
-bool KoDocument::isNativeFormat(const QByteArray& mimetype) const
+bool KoDocument::isNativeFormat(const QByteArray& mimetype, ImportExportType importExportType) const
 {
     if (mimetype == nativeFormatMimeType())
         return true;
-    return extraNativeMimeTypes().contains(mimetype);
+    return extraNativeMimeTypes(importExportType).contains(mimetype);
 }
 
-QStringList KoDocument::extraNativeMimeTypes() const
+QStringList KoDocument::extraNativeMimeTypes(KoDocument::ImportExportType importExportType) const
 {
+    Q_UNUSED(importExportType);
     QStringList lst;
     // This implementation is temporary while we treat both koffice-1.3 and OASIS formats as native.
     // But it's good to have this virtual method, in case some app want to

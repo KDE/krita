@@ -174,9 +174,8 @@ QString KoFilterManager::importDocument(const QString& url, KoFilter::Conversion
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
             KoFilterChooser chooser(0,
-                                    KoFilterManager::mimeFilter(nativeFormat, KoFilterManager::Import, m_document->extraNativeMimeTypes()),
-                                    nativeFormat,
-                                    u);
+                    KoFilterManager::mimeFilter(nativeFormat, KoFilterManager::Import,
+                    m_document->extraNativeMimeTypes(KoDocument::ForImport)), nativeFormat, u);
             if (chooser.exec()) {
                 QByteArray f = chooser.filterSelected().toLatin1();
 
@@ -205,7 +204,7 @@ QString KoFilterManager::importDocument(const QString& url, KoFilter::Conversion
     // Are we owned by a KoDocument?
     if (m_document) {
         QByteArray mimeType = m_document->nativeFormatMimeType();
-        QStringList extraMimes = m_document->extraNativeMimeTypes();
+        QStringList extraMimes = m_document->extraNativeMimeTypes(KoDocument::ForImport);
         int i = 0, n = extraMimes.count();
         chain = m_graph.chain(this, mimeType);
         while (!chain && i < n) {
@@ -256,8 +255,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
         // We have to pick the right native mimetype as source.
         QStringList nativeMimeTypes;
         nativeMimeTypes.append(m_document->nativeFormatMimeType());
-        nativeMimeTypes += m_document->extraNativeMimeTypes();
-        nativeMimeTypes.removeAll("application/x-kword"); // hack
+        nativeMimeTypes += m_document->extraNativeMimeTypes(KoDocument::ForImport);
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; !chain && it != end; ++it) {
@@ -494,7 +492,6 @@ QStringList KoFilterManager::mimeFilter(const QByteArray& mimetype, Direction di
     QStringList nativeMimeTypes;
     nativeMimeTypes.append(QString::fromLatin1(mimetype));
     nativeMimeTypes += extraNativeMimeTypes;
-    nativeMimeTypes.removeAll("application/x-kword"); // hack
 
     // Add the native mimetypes first so that they are on top.
     QStringList lst = nativeMimeTypes;
@@ -534,7 +531,6 @@ QStringList KoFilterManager::mimeFilter()
     while (partIt != partEnd) {
         QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
         nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
-        nativeMimeTypes.removeAll("application/x-kword"); // hack
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)

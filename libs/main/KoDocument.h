@@ -229,12 +229,17 @@ public:
      */
     QByteArray nativeOasisMimeType() const;
 
+    enum ImportExportType {
+        ForExport,
+        ForImport
+    };
+
     /// Checks whether a given mimetype can be handled natively.
-    bool isNativeFormat(const QByteArray& mimetype) const;
+    bool isNativeFormat(const QByteArray& mimetype, ImportExportType importExportType) const;
 
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KoDocument without a filter, in *addition* to the main one
-    virtual QStringList extraNativeMimeTypes() const;
+    virtual QStringList extraNativeMimeTypes(ImportExportType importExportType) const;
 
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
     enum { /*SaveAsKOffice1dot1 = 1,*/ // old and removed

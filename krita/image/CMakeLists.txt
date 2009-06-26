@@ -5,14 +5,14 @@ add_subdirectory( tests )
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 # Chose a tiles backend 
-# 0 - image/tiles
-# 1 - image/tiles_new
+# 1 - image/tiles
+# 2 - image/tiles_new
 # 3 - image/tiles3
 
-set(USE_TILESYSTEM 0)
+set(USE_TILESYSTEM 1)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-tiles.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/../config-tiles.h) ### WRONG PLACE???
 
-if(USE_TILESYSTEM EQUAL 0)
+if(USE_TILESYSTEM EQUAL 1)
 set(libkritatile_SRCS
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiled_random_accessor.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledvlineiterator.cc
@@ -31,9 +31,16 @@ set(libkritatile_SRCS
         ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile.cc
         ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data.cc
         ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_store.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_data_manager.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_memento_manager.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tilediterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledrectiterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledvlineiterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledhlineiterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_random_accessor.cc
 )
 add_subdirectory( tiles3 )
-elseif(USE_TILESYSTEM EQUAL 1)
+elseif(USE_TILESYSTEM EQUAL 2)
 set(libkritatile_SRCS
 	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tiled_random_accessor.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tiledvlineiterator.cc

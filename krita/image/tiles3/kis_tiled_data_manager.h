@@ -30,43 +30,38 @@
 
 #include "kis_tile_hash_table.h"
 #include "kis_memento_manager.h"
-
+#include "kis_memento.h"
 
 
 class KisTiledDataManager;
 typedef KisSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
 
-//class KisDataManager;
-//typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
 class KisTiledIterator;
 class KisTiledRandomAccessor;
 class KoStore;
 
 
-/**
- * Not shared. Is it right?
- */
-class KisTileDataWrapper // : class KisShared
+class KisTileDataWrapper
 {
 public:
     enum accessType {
-	READ,
-	WRITE
+        READ,
+        WRITE
     };
     KisTileDataWrapper(KisTileSP tile, qint32 offset, accessType type) 
-	: m_tile(tile), m_offset (offset)
+        : m_tile(tile), m_offset (offset)
     {
-	if(type == READ)
-	    m_tile->lockForRead();
-	else
-	    m_tile->lockForWrite();
+        if(type == READ)
+            m_tile->lockForRead();
+        else
+            m_tile->lockForWrite();
     }
 
     virtual ~KisTileDataWrapper() {
-	m_tile->unlock();
+        m_tile->unlock();
     }
-    
+
     inline KisTileSP& tile() {
       return m_tile;
     }
@@ -78,8 +73,6 @@ private:
     KisTileSP m_tile;
     qint32 m_offset;
 };
-
-//typedef shared...
 
 
 /**
@@ -119,39 +112,43 @@ protected:
 
     void setDefaultPixel(const quint8 *defPixel);
     const quint8 *defaultPixel() const {
-	return m_defaultPixel;
+        return m_defaultPixel;
     }
 
 /* FIXME:*/
 public:
 
-    void commit() {
-        QReadLocker locker(&m_lock);
-        m_mementoManager->commit();
+    inline KisTileSP getTile(qint32 col, qint32 row) {
+         bool newTile;
+         KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
+         if(newTile)
+             updateExtent(tile->col(), tile->row());
+         return tile;
     }
-    void rollback() {
+
+    inline KisTileSP getOldTile(qint32 col, qint32 row) {
+        return m_mementoManager->getCommitedTile(col, row);
+    }
+
+    KisMementoSP getMemento() {
+        QWriteLocker locker(&m_lock);
+        return m_mementoManager->getMemento();
+    }
+    void rollback(KisMementoSP memento) {
+        Q_UNUSED(memento);
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollback(m_hashTable);
     }
-    void rollforward() {
+    void rollforward(KisMementoSP memento) {
+        Q_UNUSED(memento);
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollforward(m_hashTable);
     }
-/*
-    KisMementoSP getMemento() {
-        Q_ASSERT_X(0, "getMemento", "Not implemented");
-    }
-    void rollback(KisMementoSP memento) {
-        Q_ASSERT_X(0, "rollback(KisMementoSP)", "Not implemented");
-    }
-    void rollforward(KisMementoSP memento) {
-        Q_ASSERT_X(0, "rollforward(KisMementoSP)", "Not implemented");
-    }
     bool hasCurrentMemento() const {
-        Q_ASSERT_X(0, "hasCurrentMemento", "Not implemented");
-        return 0;
+        /* FIXME */
+        return true;
     }
-*/
+
 protected:
     /**
      * Reads and writes the tiles from/onto a KoStore 
@@ -203,7 +200,7 @@ public:
     void writeBytes(const quint8 * bytes,
                     qint32 x, qint32 y,
                     qint32 w, qint32 h);
-    
+
     /**
      * Copy the bytes in the paint device into a vector of arrays of bytes,
      * where the number of arrays is the number of channels in the
@@ -248,7 +245,7 @@ private:
     KisMementoManager *m_mementoManager;
     quint8* m_defaultPixel;
     qint32 m_pixelSize;
-   
+
     /**
      * Extents stuff
      */
@@ -264,23 +261,23 @@ private:
     qint32 yToRow(qint32 y) const;
     qint32 divideRoundDown(qint32 x, const qint32 y) const;
     KisTileDataWrapper pixelPtr(qint32 x, qint32 y, 
-				enum KisTileDataWrapper::accessType type);
+                                enum KisTileDataWrapper::accessType type);
 
     void updateExtent(qint32 col, qint32 row);
     void recalculateExtent();
 
     quint8* duplicatePixel(qint32 num, const quint8 *pixel);    
- 
+
     void writeBytesBody(const quint8 *data,
-			qint32 x, qint32 y, qint32 width, qint32 height);
+                        qint32 x, qint32 y, qint32 width, qint32 height);
     void readBytesBody(quint8 *data,
-		       qint32 x, qint32 y, qint32 width, qint32 height);
+                       qint32 x, qint32 y, qint32 width, qint32 height);
     void writePlanarBytesBody(QVector<quint8*> planes,
-			      QVector<qint32> channelsizes,
-			      qint32 x, qint32 y, qint32 w, qint32 h);
+                              QVector<qint32> channelsizes,
+                              qint32 x, qint32 y, qint32 w, qint32 h);
     QVector<quint8*> readPlanarBytesBody(QVector<qint32> channelsizes,
-					 qint32 x, qint32 y,
-					 qint32 w, qint32 h);
+                                         qint32 x, qint32 y,
+                                         qint32 w, qint32 h);
 public:
     void debugPrintInfo() {
         m_mementoManager->debugPrintInfo();
@@ -298,7 +295,6 @@ inline qint32 KisTiledDataManager::divideRoundDown(qint32 x, const qint32 y) con
     return x >= 0 ? 
         x / y :
         -(( (-x - 1) / y) + 1);
-    
 }
 
 

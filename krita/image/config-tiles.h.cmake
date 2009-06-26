@@ -2,8 +2,8 @@
 
 /* Define if you are using the 'old' (Krita 1.5+-style) or 'new' (post-2.O-style) of tile system */
 /**
- * 0 - image/tiles
- * 1 - image/tiles_new
+ * 1 - image/tiles
+ * 2 - image/tiles_new
  * 3 - image/tiles3
  */
 #ifndef CONFIG_TILES_H_
@@ -15,13 +15,27 @@
 #endif
 
 
-#if USE_TILESYSTEM == 0
+#if USE_TILESYSTEM == 1
   #define TILES_DIR(file) <tiles/file>
-#elif USE_TILESYSTEM == 1
+  #define KIS_TILED_ITERATOR_HEADER TILES_DIR(kis_tilediterator.h)
+  #define KIS_TILED_RANDOM_ACCESSOR_HEADER TILES_DIR(kis_tiled_random_accessor.h)
+  #define KIS_TILED_DATA_MANAGER_HEADER TILES_DIR(kis_tileddatamanager.h)
+
+#elif USE_TILESYSTEM == 2
   #define TILES_DIR(file) <tiles_new/file>
+
+  #define KIS_TILED_ITERATOR_HEADER TILES_DIR(kis_tilediterator.h)
+  #define KIS_TILED_RANDOM_ACCESSOR_HEADER TILES_DIR(kis_tiled_random_accessor.h)
+  #define KIS_TILED_DATA_MANAGER_HEADER TILES_DIR(kis_tileddatamanager.h)
 #elif USE_TILESYSTEM == 3
   #define TILES_DIR(file) <tiles3/file>
+
+  #define KIS_TILED_ITERATOR_HEADER TILES_DIR(kis_tilediterator.h)
+  #define KIS_TILED_RANDOM_ACCESSOR_HEADER TILES_DIR(kis_tiled_random_accessor.h)
+  #define KIS_TILED_DATA_MANAGER_HEADER TILES_DIR(kis_tiled_data_manager.h)
+
 #endif
 
+#define KIS_MEMENTO_HEADER TILES_DIR(kis_memento.h)      
 
 #endif /* CONFIG_TILES_H_ */

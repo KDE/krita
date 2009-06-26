@@ -39,8 +39,9 @@ public:
     typedef T               TileType;
     typedef KisSharedPtr<T> TileTypeSP;
 
-    KisTileHashTableTraits();
-    KisTileHashTableTraits(const KisTileHashTableTraits<T> &ht);
+    KisTileHashTableTraits(KisMementoManager *mm);
+    KisTileHashTableTraits(const KisTileHashTableTraits<T> &ht,
+                           KisMementoManager *mm);
 
     /* virtual? */
     ~KisTileHashTableTraits();
@@ -56,9 +57,6 @@ public:
     void setDefaultTileData(KisTileData *defaultTileData);
     KisTileData* defaultTileData();
 
-    void setMementoManager(KisMementoManager *mm);
-    KisMementoManager* mementoManager();
-
     void debugPrintInfo();
     void debugMaxListLength(qint32 &min, qint32 &max);
 private:
@@ -67,7 +65,6 @@ private:
     void linkTile(TileTypeSP tile);
     TileTypeSP unlinkTile(qint32 col, qint32 row);
 
-    
     static inline quint32 calculateHash(qint32 col, qint32 row);
 
     inline qint32 debugChainLen(qint32 idx);

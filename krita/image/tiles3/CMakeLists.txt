@@ -5,5 +5,5 @@ add_subdirectory(tests)
 
 ########### install files ###############
 
-install( FILES  kis_tileddatamanager.h  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+install( FILES  kis_tiled_data_manager.h  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

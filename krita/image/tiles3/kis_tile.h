@@ -20,6 +20,9 @@
 #define KIS_TILE_H_
 
 #include <QReadWriteLock>
+
+#include <QMutex>
+
 #include <QRect>
 
 #include <kis_shared.h>
@@ -33,13 +36,9 @@ typedef KisSharedPtr<KisTile> KisTileSP;
 
 class KisMementoManager;
 
-//class KisTiledDataManager;
-//class KisTiledIterator;
-
-
 
 /**
- * Provides abstraction to a tile.  
+ * Provides abstraction to a tile.
  * + A tile contains a part of a PaintDevice, 
  *   but only the individual pixels are accesable 
  *   and that only via iterators.
@@ -51,7 +50,8 @@ class KisTile : public KisShared
 public:
     KisTile(qint32 col, qint32 row, 
             KisTileData *defaultTileData, KisMementoManager* mm);
-    KisTile(qint32 col, qint32 row, const KisTile& rhs);
+    KisTile(const KisTile& rhs, qint32 col, qint32 row, KisMementoManager* mm);
+    KisTile(const KisTile& rhs, KisMementoManager* mm);
     KisTile(const KisTile& rhs);
     ~KisTile();
 
@@ -81,7 +81,7 @@ public:
     }
 
     inline QRect extent() const {
-	return m_extent;
+        return m_extent;
 //QRect(m_col * KisTileData::WIDTH, m_row * KisTileData::HEIGHT,
 //                     KisTileData::WIDTH, KisTileData::HEIGHT);
     }
@@ -89,7 +89,7 @@ public:
     inline KisTileSP next() const {
         return m_nextTile;
     }
-    
+
     void setNext(KisTileSP next) {
         m_nextTile=next;
     }
@@ -104,20 +104,17 @@ public:
     }
 
 private:
-
-/*    friend class KisTiledIterator;
-    friend class KisTiledDataManager;
-    friend class KisMemento;
-    friend class KisTileManager;
-    friend class KisTileCompressor;
-    friend class KisTiledRandomAccessor;
-*/
-    /*Why it was present before? */
-/*  KisTile& operator=(const KisTile&);*/
     void init(qint32 col, qint32 row, 
               KisTileData *defaultTileData, KisMementoManager* mm);
 
 private:
+
+    /**
+     * Lock for accessing this tiledata
+     */
+//    mutable QReadWriteLock m_RWLock;
+    mutable QMutex m_lock;
+
     KisTileData *m_tileData;
 
     qint32 m_col;

@@ -31,7 +31,7 @@ void KisTile::init(qint32 col, qint32 row,
     m_row=row;
 
     m_extent=QRect(m_col * KisTileData::WIDTH, m_row * KisTileData::HEIGHT,
-		   KisTileData::WIDTH, KisTileData::HEIGHT);
+                   KisTileData::WIDTH, KisTileData::HEIGHT);
 
     m_nextTile=0;
 
@@ -43,32 +43,54 @@ void KisTile::init(qint32 col, qint32 row,
 
 KisTile::KisTile(qint32 col, qint32 row,
                  KisTileData *defaultTileData, KisMementoManager* mm)
+    :m_lock(QMutex::Recursive)
 {
     init(col, row, defaultTileData, mm);
 }
 
-KisTile::KisTile(qint32 col, qint32 row, const KisTile& rhs)
-    : KisShared(rhs)
+KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row, KisMementoManager* mm)
+    : KisShared(rhs),
+      m_lock(QMutex::Recursive)
 {
-    init(col, row, rhs.tileData(), rhs.m_mementoManager);
+    init(col, row, rhs.tileData(), mm);
+}
+
+KisTile::KisTile(const KisTile& rhs, KisMementoManager* mm)
+    : KisShared(rhs),
+      m_lock(QMutex::Recursive)
+{
+    init(rhs.col(), rhs.row(), rhs.tileData(), mm);
 }
 
 KisTile::KisTile(const KisTile& rhs)
-    : KisShared(rhs)
+    : KisShared(rhs),
+      m_lock(QMutex::Recursive)
 {
     init(rhs.col(), rhs.row(), rhs.tileData(), rhs.m_mementoManager);
 }
 
 KisTile::~KisTile()
 {
-    m_mementoManager->registerTileDeleted(this);
+    if(m_mementoManager)
+        m_mementoManager->registerTileDeleted(this);
     globalTileDataStore.releaseTileData(m_tileData);
 }
+
+//#define DEBUG_TILE_LOCKING
+
+#ifdef DEBUG_TILE_LOCKING
+    #define DEBUG_LOG_ACTION(action)                                        \
+        printf("### %s \ttile:\t0x%X (%d, %d) ###\n", action, (quintptr)this, m_col, m_row)
+#else
+    #define DEBUG_LOG_ACTION(action)
+#endif
+
 
 
 void KisTile::lockForRead() const
 {
-    m_tileData->m_RWLock.lockForRead();
+    DEBUG_LOG_ACTION("lock [R]");
+    m_lock.lock();
     globalTileDataStore.ensureTileDataLoaded(m_tileData);
 }
 
@@ -83,15 +105,20 @@ void KisTile::lockForWrite()
         globalTileDataStore.releaseTileData(m_tileData);
         m_tileData = tileData;
         globalTileDataStore.acquireTileData(m_tileData);
-        m_mementoManager->registerTileChange(this);
+        DEBUG_LOG_ACTION("COW done");
+        if(m_mementoManager)
+            m_mementoManager->registerTileChange(this);
     }
-    m_tileData->m_RWLock.lockForWrite();
+
+    DEBUG_LOG_ACTION("lock [W]");
+    m_lock.lock();
     globalTileDataStore.ensureTileDataLoaded(m_tileData);
 }
 
 void KisTile::unlock() const
 {
-    m_tileData->m_RWLock.unlock();
+    DEBUG_LOG_ACTION("unlock");
+    m_lock.unlock();
 }
 
 

@@ -24,7 +24,9 @@
 #include <kis_debug.h>
 
 #include <config-tiles.h> // For the next define
-#include TILES_DIR(kis_tilediterator.h)
+#include KIS_TILED_ITERATOR_HEADER
+#include "kis_datamanager.h"
+
 
 KisRectConstIterator::KisRectConstIterator(KisDataManager *dm, qint32  x, qint32  y, qint32  w, qint32  h)
 {

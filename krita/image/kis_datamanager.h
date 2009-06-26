@@ -19,7 +19,6 @@
 #define KIS_DATAMANAGER_H_
 
 #include <qglobal.h>
-#include "kis_memento.h"
 
 class QRect;
 class KoStore;
@@ -28,8 +27,8 @@ class KoStore;
 // Change the following line to switch (at compiletime) to different datamanager
 //#define USE_TILESYSTEM 0
 #include <config-tiles.h> // For the next define
-#include TILES_DIR(kis_tileddatamanager.h)
-
+#include KIS_TILED_DATA_MANAGER_HEADER
+#include KIS_MEMENTO_HEADER
 
 #define ACTUAL_DATAMGR KisTiledDataManager
 

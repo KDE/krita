@@ -67,11 +67,6 @@ private:
     friend class KisTileDataStore;
 
     /**
-     * Lock for accessing this tiledata
-     */
-    mutable QReadWriteLock m_RWLock;
-
-    /**
      * The state of the tile.
      * Filled in by tileDataStore and
      * checked in KisTile::acquireFor*

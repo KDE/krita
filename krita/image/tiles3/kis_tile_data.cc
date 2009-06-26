@@ -26,8 +26,7 @@ const qint32 KisTileData::HEIGHT = 64;
 
 
 KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
-    :m_RWLock(QReadWriteLock::Recursive),
-     m_state(NORMAL),
+    :m_state(NORMAL),
      m_usersCount(0),
      m_refCount(0), 
      m_pixelSize(pixelSize),
@@ -47,8 +46,7 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
  * + it's unlocked and has refCount==0
  */
 KisTileData::KisTileData(const KisTileData& rhs)
-    :m_RWLock(QReadWriteLock::Recursive),
-     m_state(NORMAL),
+    :m_state(NORMAL),
      m_usersCount(0),
      m_refCount(0),
      m_pixelSize(rhs.m_pixelSize), 
@@ -59,7 +57,6 @@ KisTileData::KisTileData(const KisTileData& rhs)
     const quint32 tileDataSize = m_pixelSize*WIDTH*HEIGHT;
     m_data = new quint8[tileDataSize];
 
-    QReadLocker lock(&rhs.m_RWLock);
     rhs.m_store->ensureTileDataLoaded(&rhs);
     memcpy(m_data, rhs.data(), tileDataSize);
 

@@ -76,6 +76,18 @@ public:
         m_parent = 0;
         m_commitedFlag=false;
     }
+    KisMementoItem(const KisMementoItem &rhs, KisMementoManager *mm)
+    {
+        Q_UNUSED(mm);
+        m_tileData = rhs.m_tileData;
+        /* Setting counter: m_refCount++ */
+        globalTileDataStore.refTileData(m_tileData);
+        m_col = rhs.m_col;
+        m_row = rhs.m_row;
+        m_type = CHANGED;
+        m_parent = 0;
+        m_commitedFlag=false;
+    }
 
     ~KisMementoItem() {
         if(m_tileData) {
@@ -86,7 +98,11 @@ public:
         }
     }
 
-    void deleteTile(KisTile* tile) {
+    void deleteTile(KisTile* tile, KisTileData* defaultTileData) {
+        m_tileData = defaultTileData;
+        /* Setting counter: m_refCount++ */
+        globalTileDataStore.refTileData(m_tileData);
+
         m_col = tile->col();
         m_row = tile->row();
         m_type = DELETED;
@@ -164,7 +180,7 @@ protected:
     enumType m_type;
 
     qint32 m_col;
-    qint32 m_row;    
+    qint32 m_row;
 
     KisMementoItemSP m_next;
     KisMementoItemSP m_parent;

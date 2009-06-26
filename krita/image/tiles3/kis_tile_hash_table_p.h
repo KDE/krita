@@ -18,11 +18,8 @@
  */
 
 
-
-//#include "kis_tile_hash_table.h"
-
 template<class T>
-KisTileHashTableTraits<T>::KisTileHashTableTraits()
+KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
   : m_lock(QReadWriteLock::NonRecursive)
 {
     m_hashTable = new TileTypeSP [TABLE_SIZE];
@@ -33,20 +30,41 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits()
 
     m_numTiles = 0;
     m_defaultTileData = 0;
-    m_mementoManager = 0;
+    m_mementoManager = mm;
 }
 
 template<class T>
-KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T> &ht)
+KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T> &ht, 
+                                                  KisMementoManager *mm)
   : m_lock(QReadWriteLock::NonRecursive)
 {
+    m_mementoManager = mm;
+
+    m_defaultTileData = 0;
+    setDefaultTileData(ht.m_defaultTileData);
+
     m_hashTable = new TileTypeSP [TABLE_SIZE];
     Q_CHECK_PTR(m_hashTable);
-    memcpy(m_hashTable, ht.m_hashTable, sizeof(TileTypeSP) * TABLE_SIZE);
 
+
+    TileTypeSP foreignTile;
+    TileType* nativeTile;
+    TileType* nativeTileHead;
+    for(qint32 i=0; i<TABLE_SIZE; i++) {
+        nativeTileHead=0;
+
+        foreignTile = ht.m_hashTable[i];
+        while (foreignTile) {
+            nativeTile = new TileType(*foreignTile, m_mementoManager);
+            nativeTile->setNext(nativeTileHead);
+            nativeTileHead = nativeTile;
+
+            foreignTile = foreignTile->next();
+        }
+
+        m_hashTable[i] = nativeTileHead;
+    }
     m_numTiles = ht.m_numTiles;
-
-    setDefaultTileData(ht.m_defaultTileData);
 }
 
 template<class T>
@@ -217,16 +235,6 @@ KisTileData* KisTileHashTableTraits<T>::defaultTileData()
     return m_defaultTileData;
 }
 
-template<class T>
-void KisTileHashTableTraits<T>::setMementoManager(KisMementoManager *mm)
-{
-    m_mementoManager = mm;
-}
-template<class T>
-KisMementoManager* KisTileHashTableTraits<T>::mementoManager()
-{
-    return m_mementoManager;
-}
 
 /*************** Debugging stuff ***************/
 

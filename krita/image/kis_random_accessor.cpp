@@ -20,12 +20,12 @@
 
 #include "kis_random_accessor.h"
 
+#include <kis_shared_ptr.h>
 
 #include <config-tiles.h> // For the next define
-#include TILES_DIR(kis_tiled_random_accessor.h)
+#include KIS_TILED_RANDOM_ACCESSOR_HEADER
+#include "kis_datamanager.h"
 
-
-#include <kis_shared_ptr.h>
 
 
 typedef KisSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;

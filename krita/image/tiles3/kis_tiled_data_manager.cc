@@ -32,8 +32,6 @@
 //#include "kis_debug.h"
 
 
-//#include "kis_memento.h"
-
 /* The data area is divided into tiles each say 64x64 pixels (defined at compiletime)
  * The tiles are laid out in a matrix that can have negative indexes.
  * The matrix grows automatically if needed (a call for writeacces to a tile 
@@ -48,8 +46,7 @@ KisTiledDataManager::KisTiledDataManager(quint32 pixelSize,
 {
     /* See comment in destructor for details */
     m_mementoManager = new KisMementoManager();
-    m_hashTable = new KisTileHashTable();
-    m_hashTable->setMementoManager(m_mementoManager);
+    m_hashTable = new KisTileHashTable(m_mementoManager);
 
     m_pixelSize = pixelSize;
     m_defaultPixel = new quint8[m_pixelSize];
@@ -67,14 +64,13 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
 {
     /* See comment in destructor for details */
     m_mementoManager = new KisMementoManager(*dm.m_mementoManager);
-    m_hashTable = new KisTileHashTable(*dm.m_hashTable);
-    m_hashTable->setMementoManager(m_mementoManager);
+    m_hashTable = new KisTileHashTable(*dm.m_hashTable, m_mementoManager);
 
     m_pixelSize = dm.m_pixelSize;
     m_defaultPixel = new quint8[m_pixelSize];
     /**
-     * We don't call setDefaultTileData here, as defaultTileDatas 
-     * will be made shared in m_hashTable(dm->m_hashTable)
+     * We won't call setDefaultTileData here, as defaultTileDatas 
+     * has already been made shared in m_hashTable(dm->m_hashTable)
      */
     memcpy(m_defaultPixel, dm.m_defaultPixel, m_pixelSize);
 
@@ -131,12 +127,12 @@ bool KisTiledDataManager::read(KoStore *store)
 quint8* KisTiledDataManager::duplicatePixel(qint32 num, const quint8 *pixel)
 {
     const qint32 pixelSize = this->pixelSize();
-    /*FIXME:  Make a fun filling here */
+    /* FIXME:  Make a fun filling here */
     quint8 *dstBuf = new quint8[num * pixelSize];
     quint8 *dstIt = dstBuf;
     for(qint32 i=0; i<num; i++) {
-	memcpy(dstIt, pixel, pixelSize);
-	dstIt+=pixelSize;
+        memcpy(dstIt, pixel, pixelSize);
+        dstIt+=pixelSize;
     }
     return dstBuf;
 }
@@ -146,7 +142,7 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
     QWriteLocker locker(&m_lock);
 
     if(clearPixel == 0)
-	clearPixel = m_defaultPixel;
+        clearPixel = m_defaultPixel;
 
     if(clearRect.isEmpty())
         return;
@@ -382,10 +378,12 @@ KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y,
 
     const qint32 pixelIndex = xInTile + yInTile * KisTileData::WIDTH;
 
-    bool newTile;
+/*    bool newTile;
     KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
     if(newTile)
 	updateExtent(tile->col(), tile->row());
+*/
+    KisTileSP tile = getTile(col,row);
 
     return KisTileDataWrapper(tile,
 			      pixelIndex*pixelSize(),

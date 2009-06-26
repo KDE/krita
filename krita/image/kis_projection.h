@@ -54,14 +54,14 @@ public:
      * called from the main thread, this divides rc in chunks and emits a signal
      * for KisImageUpdater to catch. KisImageUpdater belongs to this thread.
      */
-    void updateProjection(KisNodeWSP node, const QRect& rc);
+    void updateProjection(KisNodeSP node, const QRect& rc);
     void setRegionOfInterest(const QRect & roi);
     void updateSettings();
     void setRootLayer(KisGroupLayerSP rootLayer);
 
 signals:
 
-    void sigUpdateProjection(KisNodeWSP node, const QRect& rc);
+    void sigUpdateProjection(KisNodeSP node, const QRect& rc);
 
 private:
 
@@ -80,7 +80,7 @@ class KisImageUpdater : public QObject
 
 public slots:
 
-    void startUpdate(KisNodeWSP node, const QRect& rc);
+    void startUpdate(KisNodeSP node, const QRect& rc);
 
 signals:
 

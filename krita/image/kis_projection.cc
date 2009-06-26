@@ -42,6 +42,7 @@ class KisProjection::Private {
     QRect roi; // Region of interest
     bool useRegionOfInterest; // If false, update all dirty bits, if
     // true, update only region of interest.
+    bool useThreading;
 
 };
 
@@ -65,7 +66,7 @@ KisProjection::~KisProjection()
 void KisProjection::run()
 {
     m_d->updater = new KisImageUpdater();
-    connect(this, SIGNAL(sigUpdateProjection(KisNodeWSP,QRect)), m_d->updater, SLOT(startUpdate(KisNodeWSP,QRect)));
+    connect(this, SIGNAL(sigUpdateProjection(KisNodeSP,QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP,QRect)));
     connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
 
     exec(); // start the event loop
@@ -89,8 +90,12 @@ void KisProjection::setRegionOfInterest(const QRect & roi)
 }
 
 
-void KisProjection::updateProjection(KisNodeWSP node, const QRect& rc)
+void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
 {
+    if (!m_d->useThreading) {
+        node->updateStrategy()->setDirty(rc);
+        m_d->image->slotProjectionUpdated(rc);
+    }
 
     // The chunks do not run concurrently (there is only one KisImageUpdater and only
     // one event loop), but it is still useful, since intermediate results are passed
@@ -139,6 +144,7 @@ void KisProjection::updateSettings()
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->updateRectSize = cfg.readEntry("updaterectsize", 512);
     m_d->useRegionOfInterest = cfg.readEntry("use_region_of_interest", false);
+    m_d->useThreading = cfg.readEntry("use_threading", true);
 }
 
 
@@ -147,7 +153,7 @@ void KisProjection::setRootLayer(KisGroupLayerSP rootLayer)
     connect(rootLayer, SIGNAL(settingsUpdated()), this, SLOT(updateSettings()));
 }
 
-void KisImageUpdater::startUpdate(KisNodeWSP node, const QRect& rc)
+void KisImageUpdater::startUpdate(KisNodeSP node, const QRect& rc)
 {
     node->updateStrategy()->setDirty(rc);
     emit updateDone(rc);

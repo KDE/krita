@@ -701,9 +701,6 @@ KisGroupLayerSP KisImage::rootLayer() const
 
 KisPaintDeviceSP KisImage::projection()
 {
-    // XXX: Projection moved to the updateStrategy -- is synching really needed?
-    //m_d->projection->sync();
-
     Q_ASSERT(m_d->rootLayer);
     KisPaintDeviceSP projection = m_d->rootLayer->projection();
     Q_ASSERT(projection);
@@ -1143,7 +1140,12 @@ void KisImage::slotProjectionUpdated(const QRect & rc)
 
 void KisImage::updateProjection(KisNodeSP node, const QRect& rc)
 {
-    node->updateStrategy()->setDirty(rc);
+    if (!locked()) {
+        if (!m_d->projection->isRunning()) {
+            m_d->projection->start();
+        }
+        m_d->projection->updateProjection(node, rc);
+    }
 }
 
 #include "kis_image.moc"

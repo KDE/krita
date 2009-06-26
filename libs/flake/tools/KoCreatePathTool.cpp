@@ -83,7 +83,6 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 
         KoShape::applyConversion(painter, converter);
 
-        QRectF handle = handlePaintRect(QPoint(0, 0));
         painter.setPen(Qt::blue);
         painter.setBrush(Qt::white);   //TODO make configurable
 

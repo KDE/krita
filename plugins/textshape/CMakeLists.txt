@@ -24,6 +24,9 @@ SET ( textshape_SRCS
     TextChanges.cpp
     TextChange.cpp
 
+    TableData.cpp
+    TableLayout.cpp
+
     dialogs/StylesWidget.cpp
     dialogs/SimpleStyleWidget.cpp
     dialogs/ParagraphLayout.cpp

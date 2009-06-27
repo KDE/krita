@@ -78,3 +78,24 @@ set(TestStylesModel_test_SRCS
 kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
 target_link_libraries(TestStylesModel kotext koaction kocolorwidgets ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
 
+########### next target ###############
+
+set(TestTableLayout_test_SRCS
+    TestTableLayout.cpp
+    ../TableLayout.cpp
+    ../TableData.cpp
+    ../Layout.cpp
+    ../TextShape.cpp
+    ../ListItemsHelper.cpp
+)
+kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
+target_link_libraries(TestTableLayout kotext ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
+
+########### next target ###############
+
+set(TestTableData_test_SRCS
+    TestTableData.cpp
+    ../TableData.cpp
+)
+kde4_add_unit_test(TestTableData TESTNAME shapes-text-TestTableData ${TestTableData_test_SRCS})
+target_link_libraries(TestTableData kotext ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})

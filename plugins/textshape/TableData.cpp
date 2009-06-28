@@ -29,8 +29,7 @@ TableData::TableData() : m_width(0), m_height(0)
 
 QRectF TableData::cellContentRect(const QTextTableCell &cell) const
 {
-    Q_UNUSED(cell);
-    return QRectF();
+    return cellContentRect(cell.row(), cell.column());
 }
 
 QRectF TableData::cellContentRect(int row, int column) const

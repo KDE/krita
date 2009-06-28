@@ -157,10 +157,15 @@ void TestTableLayout::testBasicLayout()
     QCOMPARE(m_tableData->m_columnWidths.size(), 2);
 
     // Check table cell content rectangles are correct.
-    QCOMPARE(m_tableData->cellContentRect(0, 0), QRectF(0, 0, 100, 50));
-    QCOMPARE(m_tableData->cellContentRect(1, 0), QRectF(0, 50, 100, 50));
-    QCOMPARE(m_tableData->cellContentRect(0, 1), QRectF(100, 0, 100, 50));
-    QCOMPARE(m_tableData->cellContentRect(1, 1), QRectF(100, 50, 100, 50));
+    QTextTableCell cell1 = m_table->cellAt(0, 0);
+    QTextTableCell cell2 = m_table->cellAt(1, 0);
+    QTextTableCell cell3 = m_table->cellAt(0, 1);
+    QTextTableCell cell4 = m_table->cellAt(1, 1);
+
+    QCOMPARE(m_tableData->cellContentRect(cell1), QRectF(0, 0, 100, 50));
+    QCOMPARE(m_tableData->cellContentRect(cell2), QRectF(0, 50, 100, 50));
+    QCOMPARE(m_tableData->cellContentRect(cell3), QRectF(100, 0, 100, 50));
+    QCOMPARE(m_tableData->cellContentRect(cell4), QRectF(100, 50, 100, 50));
 
     cleanupTest();
 }

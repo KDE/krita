@@ -35,7 +35,7 @@ class BrushResourceServer : public KoResourceServer<KisBrush>
 
 public:
 
-    BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes") {
+    BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih") {
     }
 
 private:
@@ -70,7 +70,7 @@ KisBrushServer::KisBrushServer()
     KGlobal::mainComponent().dirs()->addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
 
     m_brushServer = new BrushResourceServer();
-    brushThread = new KoResourceLoaderThread(m_brushServer, "*.gbr:*.gih");
+    brushThread = new KoResourceLoaderThread(m_brushServer);
     connect(brushThread, SIGNAL(finished()), this, SLOT(brushThreadDone()));
     brushThread->start();
 }

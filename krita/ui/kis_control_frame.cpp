@@ -51,7 +51,6 @@
 #include "kis_resource_server_provider.h"
 #include "kis_canvas_resource_provider.h"
 
-#include "kis_resource_mediator.h"
 #include "widgets/kis_iconwidget.h"
 
 #include "widgets/kis_gradient_chooser.h"
@@ -69,8 +68,6 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
         , m_gradientWidget(0)
         , m_patternChooserPopup(0)
         , m_gradientChooserPopup(0)
-        , m_patternMediator(0)
-        , m_gradientMediator(0)
         , m_paintopBox(0)
 {
     setObjectName(name);
@@ -132,28 +129,28 @@ void KisControlFrame::slotSetGradient(QTableWidgetItem *item)
 
 void KisControlFrame::slotPatternChanged(KisPattern * pattern)
 {
-    KoResourceItem *item;
-    if (pattern) {
-        if ((item = m_patternMediator->itemFor(pattern)))
-            slotSetPattern(item);
-        else
-            slotSetPattern(new KoResourceItem(pattern));
-    } else
-        slotSetPattern(0);
+//    KoResourceItem *item;
+//    if (pattern) {
+//        if ((item = m_patternMediator->itemFor(pattern)))
+//            slotSetPattern(item);
+//        else
+//            slotSetPattern(new KoResourceItem(pattern));
+//    } else
+//        slotSetPattern(0);
 }
 
 
 void KisControlFrame::slotGradientChanged(KoAbstractGradient * gradient)
 {
-    KoResourceItem *item;
-    if (gradient) {
-        if ((item = m_gradientMediator->itemFor(gradient)))
-            slotSetGradient(item);
-        else
-            slotSetGradient(new KoResourceItem(gradient));
-    } else {
-        slotSetGradient(0);
-    }
+//    KoResourceItem *item;
+//    if (gradient) {
+//        if ((item = m_gradientMediator->itemFor(gradient)))
+//            slotSetGradient(item);
+//        else
+//            slotSetGradient(new KoResourceItem(gradient));
+//    } else {
+//        slotSetGradient(0);
+//    }
 }
 
 void KisControlFrame::createPatternsChooser(KisView2 * view)
@@ -181,23 +178,17 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     customPatterns->setFont(m_font);
     m_patternsTab->addTab(customPatterns, i18n("Custom Pattern"));
 
-    KoResourceServer<KisPattern>* rServer = KisResourceServerProvider::instance()->patternServer();
-    KoResourceServerAdapter<KisPattern>* rServerAdapter;
-    rServerAdapter = new KoResourceServerAdapter<KisPattern>(rServer);
-
-    m_patternMediator = new KisResourceMediator(chooser->itemChooser(), rServerAdapter, view);
-
-    connect(m_patternMediator, SIGNAL(activatedResource(KoResource*)),
+    connect(chooser, SIGNAL(resourceSelected(KoResource*)),
             view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
     connect(customPatterns, SIGNAL(activatedResource(KoResource*)),
             view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
-
-    connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern *)),
-            this, SLOT(slotPatternChanged(KisPattern *)));
-
-    chooser->itemChooser()->setCurrent(0);
-    m_patternMediator->setActiveItem(chooser->itemChooser()->currentItem());
+//
+//    connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern *)),
+//            this, SLOT(slotPatternChanged(KisPattern *)));
+//
+//    chooser->itemChooser()->setCurrent(0);
+//    m_patternMediator->setActiveItem(chooser->itemChooser()->currentItem());
 }
 
 
@@ -221,19 +212,12 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     m_gradientChooser->setFont(m_font);
     m_gradientTab->addTab(m_gradientChooser, i18n("Gradients"));
 
-    KoResourceServer<KoAbstractGradient>* rServer = KoResourceServerProvider::instance()->gradientServer();
-    KoResourceServerAdapter<KoAbstractGradient>* rServerAdapter;
-    rServerAdapter = new KoResourceServerAdapter<KoAbstractGradient>(rServer);
-
-    m_gradientMediator = new KisResourceMediator(m_gradientChooser->itemChooser(), rServerAdapter, view);
-    connect(m_gradientMediator, SIGNAL(activatedResource(KoResource*)),
+    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResource*)),
             view->resourceProvider(), SLOT(slotGradientActivated(KoResource*)));
 
-    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradient *)),
-            this, SLOT(slotGradientChanged(KoAbstractGradient *)));
-
-    m_gradientChooser->itemChooser()->setCurrent(0);
-    m_gradientMediator->setActiveItem(m_gradientChooser->itemChooser()->currentItem());
+//
+//    m_gradientChooser->itemChooser()->setCurrent(0);
+//    m_gradientMediator->setActiveItem(m_gradientChooser->itemChooser()->currentItem());
 }
 
 #include "kis_control_frame.moc"

@@ -73,7 +73,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
 
     setLayout(l);
 
-    m_brushChooser->itemChooser()->setCurrent(0);
+   // m_brushChooser->itemChooser()->setCurrent(0);
     m_autoBrushWidget->activate();
 }
 

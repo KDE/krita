@@ -41,9 +41,8 @@ public:
     /**
     * Constructs a KoResourceLoaderThread for a server
     * @param server the server the resources will be loaded for
-    * @param extensions the file extensions seperate by ':', e.g. "*.kgr:*.svg:*.ggr" 
     */
-    KoResourceLoaderThread(KoResourceServerBase * server, const QString & extensions);
+    KoResourceLoaderThread(KoResourceServerBase * server);
 
     /// loads the resources
     void run();
@@ -51,7 +50,6 @@ private:
     QStringList getFileNames( const QString & extensions);
 
     KoResourceServerBase * m_server;
-    QString m_extensions;
     QStringList m_fileNames;
 
 };

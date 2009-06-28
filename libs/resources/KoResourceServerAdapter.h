@@ -38,6 +38,7 @@ public:
     virtual bool addResource(KoResource* resource) = 0;
     virtual bool removeResource(KoResource* resource) = 0;
     virtual KoResource* importResource( const QString & filename ) = 0;
+    virtual QString extensions() = 0;
 
 signals:
     void resourceAdded(KoResource*);
@@ -127,6 +128,14 @@ public:
     void removingResource(T* resource)
     {
         emitRemovingResource(resource);
+    }
+
+    QString extensions()
+    {
+        if( ! m_resourceServer )
+            return QString();
+
+        return m_resourceServer->extensions();
     }
 
 private:

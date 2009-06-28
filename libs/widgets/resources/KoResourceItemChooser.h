@@ -23,14 +23,13 @@
 #define KO_RESOURCE_ITEM_CHOOSER
 
 #include <QWidget>
-#include <QTableWidgetItem>
+#include <QModelIndex>
 
 #include "kowidgets_export.h"
 
-#include "KoResourceItem.h"
-
 class QButtonGroup;
-class KoResourceChooser;
+class KoAbstractResourceServerAdapter;
+class KoResourceItemView;
 class KoResource;
 
 /**
@@ -41,40 +40,32 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 {
   Q_OBJECT
 public:
-    KoResourceItemChooser( QWidget *parent = 0 );
+    KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent = 0 );
     ~KoResourceItemChooser();
 
-    QTableWidgetItem *currentItem();
-    void setCurrent(QTableWidgetItem *item);
-    void setCurrent(int index);
+    /// Sets number of columns in the view
+    void setColumnCount( int columnCount );
 
-    void clear();
-    void setIconSize(const QSize& size);
-    QSize iconSize() const;
+    /// Gets the currently selected resource
+    /// @returns the selected resource, 0 is no resource is selected
+    KoResource * currentResource();
+
     void showButtons( bool show );
 signals:
-    void selected(QTableWidgetItem *item);
-    void itemDoubleClicked( QTableWidgetItem* item);
-    void importClicked();
-    void deleteClicked();
-
-public slots:
-    void addItem(KoResourceItem *item);
-    void addItems(const QList<KoResourceItem *>& items);
-    void removeItem(KoResourceItem *item);
+    /// Emitted when a resource was selected
+    void resourceSelected( KoResource * resource );
 
 private slots:
     void slotButtonClicked( int button );
-    void selectionChanged();
-
-protected:
-    QSize viewportSize();
+    void activated ( const QModelIndex & index );
 
 private:
     enum Buttons { Button_Import, Button_Remove };
 
-    KoResourceChooser* m_chooser;
-    QButtonGroup* m_buttonGroup;
+    void updateRemoveButtonState();
+
+    class Private;
+    Private * const d;
 };
 
 #endif // KO_RESOURCE_ITEM_CHOOSER

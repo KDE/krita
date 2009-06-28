@@ -26,8 +26,10 @@
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <KoAbstractGradient.h>
+#include <KoResource.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerProvider.h>
+#include <KoResourceServerAdapter.h>
 
 #include "kis_view2.h"
 #include "kis_global.h"
@@ -52,9 +54,18 @@ KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const c
 {
     m_lbName = new QLabel();
 
-    m_itemChooser = new KisItemChooser();
+    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
+    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
+    m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setFixedSize( 250, 250 );
-    connect( m_itemChooser, SIGNAL( update( QTableWidgetItem* ) ), this, SLOT( update( QTableWidgetItem* ) ) );
+    m_itemChooser->setColumnCount(1);
+
+    connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
+             this, SLOT( update( KoResource * ) ) );
+
+    connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
+             this, SIGNAL(resourceSelected( KoResource * ) ) );
+
     m_customGradient = new QPushButton(i18n("Custom Gradient..."));
     m_customGradient->setObjectName("custom gradient button");
     KisCustomGradientDialog * autogradient = new KisCustomGradientDialog(view, 0, "autogradient");
@@ -68,31 +79,16 @@ KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const c
     mainLayout->addWidget(m_customGradient, 10);
 
     setLayout(mainLayout);
-
-    connect( m_itemChooser, SIGNAL(importClicked()), this, SLOT(slotImportGradient()));
 }
 
 KisGradientChooser::~KisGradientChooser()
 {
 }
 
-void KisGradientChooser::update(QTableWidgetItem *item)
+void KisGradientChooser::update( KoResource * resource )
 {
-    KoResourceItem *kisItem = static_cast<KoResourceItem *>(item);
-
-    if (item) {
-        KoAbstractGradient *gradient = static_cast<KoAbstractGradient *>(kisItem->resource());
-
-        m_lbName->setText( i18n(gradient->name().toUtf8().data() ));
-    }
-}
-
-void KisGradientChooser::slotImportGradient()
-{
-    QString filter("*.svg *.kgr *.ggr");
-    QString filename = KFileDialog::getOpenFileName(KUrl(), filter, 0, i18n("Choose Gradient to Add"));
-
-    KoResourceServerProvider::instance()->gradientServer()->importResource(filename);
+    KoAbstractGradient *gradient = static_cast<KoAbstractGradient *>(resource);
+    m_lbName->setText( i18n(gradient->name().toUtf8().data() ));
 }
 
 #include "kis_gradient_chooser.moc"

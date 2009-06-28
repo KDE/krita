@@ -23,140 +23,142 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QPushButton>
-#include <QFileInfo>
-#include <QPainter>
 
+#include <kfiledialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "KoResourceChooser.h"
+#include "KoResourceServerAdapter.h"
+#include "KoResourceItemView.h"
+#include "KoResourceItemDelegate.h"
+#include "KoResourceModel.h"
 #include "KoResource.h"
 
-#define THUMB_SIZE 30
-
-KoResourceItemChooser::KoResourceItemChooser( QWidget *parent )
- : QWidget( parent )
+class KoResourceItemChooser::Private
 {
-    // only serves as beautifier for the iconchooser
-    //frame = new QHBox( this );
-    //frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    m_chooser = new KoResourceChooser( QSize(30,30), this);
-    m_chooser->setIconSize( QSize(30,30) );
+public:
+    Private() : model(0), view(0), buttonGroup(0) {}
+    KoResourceModel* model;
+    KoResourceItemView* view;
+    QButtonGroup* buttonGroup;
+};
 
-    connect( m_chooser, SIGNAL(itemClicked( QTableWidgetItem * ) ), this, SIGNAL( selected( QTableWidgetItem * )));
-    connect( m_chooser, SIGNAL(itemDoubleClicked( QTableWidgetItem * ) ), this, SIGNAL( itemDoubleClicked( QTableWidgetItem* ) ) );
+KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
+ : QWidget( parent ), d( new Private() )
+{
+    Q_ASSERT(resourceAdapter);
+    d->model = new KoResourceModel(resourceAdapter, this);
+    d->view = new KoResourceItemView(this);
+    d->view->setModel(d->model);
+    d->view->setItemDelegate( new KoResourceItemDelegate( this ) );
+    connect( d->view, SIGNAL(activated ( const QModelIndex & ) ),
+             this, SLOT(activated ( const QModelIndex & ) ) );
 
-    m_buttonGroup = new QButtonGroup( this );
-    m_buttonGroup->setExclusive( false );
+    d->buttonGroup = new QButtonGroup( this );
+    d->buttonGroup->setExclusive( false );
 
     QGridLayout* layout = new QGridLayout( this );
-    layout->addWidget( m_chooser, 0, 0, 1, 3 );
+    layout->addWidget( d->view, 0, 0, 1, 3 );
 
     QPushButton *button = new QPushButton( this );
     button->setIcon( SmallIcon( "list-add" ) );
     button->setToolTip( i18n("Import") );
     button->setEnabled( true );
-    m_buttonGroup->addButton( button, Button_Import );
+    d->buttonGroup->addButton( button, Button_Import );
     layout->addWidget( button, 1, 0 );
 
     button = new QPushButton( this );
     button->setIcon( SmallIcon( "list-remove" ) );
     button->setToolTip( i18n("Delete") );
     button->setEnabled( false );
-    m_buttonGroup->addButton( button, Button_Remove );
+    d->buttonGroup->addButton( button, Button_Remove );
     layout->addWidget( button, 1, 1 );
 
-    connect( m_chooser, SIGNAL(itemSelectionChanged() ), this, SLOT( selectionChanged()));
-    connect( m_buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ));
+    connect( d->buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ));
 
     layout->setColumnStretch( 0, 1 );
     layout->setColumnStretch( 1, 1 );
     layout->setColumnStretch( 2, 2 );
     layout->setSpacing( 0 );
     layout->setMargin( 3 );
+
+    updateRemoveButtonState();
 }
 
 KoResourceItemChooser::~KoResourceItemChooser()
 {
-  delete m_chooser;
-  //delete frame;
-}
-
-void KoResourceItemChooser::setCurrent(QTableWidgetItem *item)
-{
-    m_chooser->setCurrentItem(item);
-}
-
-void KoResourceItemChooser::setCurrent(int index)
-{
-    setCurrent(m_chooser->itemAt(index));
-}
-
-void KoResourceItemChooser::clear()
-{
-    m_chooser->clear();
-}
-
-void KoResourceItemChooser::setIconSize(const QSize& size)
-{
-    m_chooser->setIconSize(size);
-}
-
-QSize KoResourceItemChooser::iconSize() const
-{
-    return m_chooser->iconSize();
-}
-
-QTableWidgetItem* KoResourceItemChooser::currentItem()
-{
-    return m_chooser->currentItem();
-}
-
-void KoResourceItemChooser::addItem(KoResourceItem *item)
-{
-    m_chooser->addItem(item);
-}
-
-void KoResourceItemChooser::addItems(const QList<KoResourceItem *>& items)
-{
-    foreach (QTableWidgetItem *item, items)
-        m_chooser->addItem(item);
-}
-
-void KoResourceItemChooser::removeItem(KoResourceItem *item)
-{
-    m_chooser->removeItem(item);
+    delete d;
 }
 
 void KoResourceItemChooser::slotButtonClicked( int button )
 {
-    if( button == Button_Import )
-        emit importClicked();
-    else if( button == Button_Remove )
-        emit deleteClicked();
-}
+    if( button == Button_Import ) {
+        QString extensions = d->model->resourceServerAdapter()->extensions();
+        QString filter = extensions.replace(QString(":"), QString(" "));
+        QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose File to Add" ) );
 
-void KoResourceItemChooser::selectionChanged()
-{
-    QAbstractButton * removeButton = m_buttonGroup->button( Button_Remove );
-    if( removeButton ) {
-        if(currentItem())
-            removeButton->setEnabled( static_cast<KoResourceItem*>(currentItem())->resource()->removable() );
-        else
-            removeButton->setEnabled(false);
+        d->model->resourceServerAdapter()->importResource(filename);
     }
+    else if( button == Button_Remove ) {
+        QModelIndex index = d->view->currentIndex();
+        if( index.isValid() ) {
+
+            KoResource * resource = static_cast<KoResource*>( index.internalPointer() );
+            if( resource ) {
+                d->model->resourceServerAdapter()->removeResource(resource);
+            }
+        }
+    }
+    updateRemoveButtonState();
 }
 
 void KoResourceItemChooser::showButtons( bool show )
 {
-    foreach( QAbstractButton * button, m_buttonGroup->buttons() )
+    foreach( QAbstractButton * button, d->buttonGroup->buttons() )
         show ? button->show() : button->hide();
 }
 
-QSize KoResourceItemChooser::viewportSize()
+void KoResourceItemChooser::setColumnCount( int columnCount )
 {
-    return m_chooser->viewport()->size();
+    d->model->setColumnCount( columnCount );
+}
+
+KoResource *  KoResourceItemChooser::currentResource()
+{
+    QModelIndex index = d->view->currentIndex();
+    if( index.isValid() )
+        return static_cast<KoResource*>( index.internalPointer() );
+
+    return 0;
+}
+
+void KoResourceItemChooser::activated( const QModelIndex & index )
+{
+    if( ! index.isValid() )
+        return;
+
+    KoResource * resource = static_cast<KoResource*>( index.internalPointer() );
+
+    if( resource ) {
+        emit resourceSelected( resource );
+    }
+    updateRemoveButtonState();
+}
+
+void KoResourceItemChooser::updateRemoveButtonState()
+{
+    QAbstractButton * removeButton = d->buttonGroup->button( Button_Remove );
+    if( ! removeButton )
+        return;
+
+    KoResource * resource = currentResource();
+    if( resource ) {
+        removeButton->setEnabled( resource->removable() );
+        return;
+    }
+
+    removeButton->setEnabled( false );
 }
 
 #include "KoResourceItemChooser.moc"

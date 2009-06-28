@@ -38,7 +38,6 @@ class KoResourceItem;
 class KoAbstractGradient;
 class KisGradientChooser;
 class KoResourceItemChooser;
-class KisResourceMediator;
 class KisPaintopBox;
 class KisView2;
 class KisIconWidget;
@@ -84,9 +83,6 @@ private:
 
     QWidget * m_patternChooserPopup;
     QWidget * m_gradientChooserPopup;
-
-    KisResourceMediator *m_patternMediator;
-    KisResourceMediator *m_gradientMediator;
 
     KisGradientChooser * m_gradientChooser;
 

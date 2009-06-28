@@ -47,13 +47,13 @@ KisResourceServerProvider::KisResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
 
 
-    m_patternServer = new KoResourceServer<KisPattern>("kis_patterns");
-    patternThread = new KoResourceLoaderThread(m_patternServer, "*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp:*.pat");
+    m_patternServer = new KoResourceServer<KisPattern>("kis_patterns", "*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp:*.pat");
+    patternThread = new KoResourceLoaderThread(m_patternServer);
     connect(patternThread, SIGNAL(finished()), this, SLOT(patternThreadDone()));
     patternThread->start();
 
-    m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintoppresets");
-    paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer, "*.kpp");
+    m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintoppresets", "*.kpp");
+    paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
     connect(paintOpPresetThread, SIGNAL(finished()), this, SLOT(paintOpPresetThreadDone()));
     paintOpPresetThread->start();
 

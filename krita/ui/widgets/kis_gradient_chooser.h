@@ -26,9 +26,8 @@ class QLabel;
 class QPushButton;
 class KisView2;
 class KisAutogradient;
-class QTableWidgetItem;
-
-#include "kis_item_chooser.h"
+class KoResource;
+class KoResourceItemChooser;
 
 class KisCustomGradientDialog : public KDialog
 {
@@ -55,18 +54,16 @@ public:
     KisGradientChooser(KisView2 * view, QWidget *parent = 0, const char *name = 0);
     virtual ~KisGradientChooser();
 
-    KisItemChooser* itemChooser() {
-        return m_itemChooser;
-    }
+signals:
+    /// Emitted when a resource was selected
+    void resourceSelected( KoResource * resource );
 
 private slots:
-    void slotImportGradient();
-
-    virtual void update(QTableWidgetItem *item);
+    virtual void update( KoResource * resource );
 
 private:
     QLabel *m_lbName;
-    KisItemChooser * m_itemChooser;
+    KoResourceItemChooser * m_itemChooser;
     QPushButton * m_customGradient;
 };
 

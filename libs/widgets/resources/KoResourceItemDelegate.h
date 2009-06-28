@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,33 +16,25 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "kis_preset_chooser.h"
-#include "KoResourceItemChooser.h"
-#include "kis_paintop_preset.h"
-#include "QLabel"
 
+#ifndef KORESOURCEITEMDELEGATE_H
+#define KORESOURCEITEMDELEGATE_H
 
-KisPresetChooser::KisPresetChooser(QWidget * parent)
-        : KisItemChooser(parent)
+#include <QAbstractItemDelegate>
+#include <../KoCheckerBoardPainter.h>
+
+/// The resource item delegate for rendering the resource preview
+class KoResourceItemDelegate : public QAbstractItemDelegate
 {
-    setObjectName("KisPresetChooser");
-    //setMinimumSize(chooserWidget()->sizeHint());
-}
+public:
+    KoResourceItemDelegate( QObject * parent = 0 );
+    virtual ~KoResourceItemDelegate() {}
+    /// reimplemented
+    virtual void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const;
+    /// reimplemented
+    QSize sizeHint ( const QStyleOptionViewItem &, const QModelIndex & ) const;
+private:
+    KoCheckerBoardPainter m_checkerPainter;
+};
 
-
-KisPresetChooser::~KisPresetChooser()
-{
-}
-
-
-void KisPresetChooser::update(QTableWidgetItem* i)
-{
-//    KoResourceItem *item = dynamic_cast<KoResourceItem *>(i);
-//
-//    if (item) {
-//        KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(item->resource());
-//        if (preset) {
-//            parent()->findChild<QLabel*>("lblName")->setText(preset->name());
-//        }
-//    }
-}
+#endif // KORESOURCEITEMDELEGATE_H

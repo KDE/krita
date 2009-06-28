@@ -36,7 +36,8 @@ class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
 
 public:
 
-    GradientResourceServer(const QString& type) : KoResourceServer<KoAbstractGradient>(type)
+    GradientResourceServer(const QString& type, const QString& extensions) :
+            KoResourceServer<KoAbstractGradient>(type, extensions)
     {
     }
 
@@ -60,12 +61,11 @@ private:
     }
 };
 
-KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server, const QString & extensions)
+KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
     : QThread()
     , m_server(server)
-    , m_extensions( extensions )
 {
-    m_fileNames = getFileNames(m_extensions);
+    m_fileNames = getFileNames(m_server->extensions());
 }
 
 void KoResourceLoaderThread::run()
@@ -102,18 +102,18 @@ KoResourceServerProvider::KoResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
 
-    m_patternServer = new KoResourceServer<KoPattern>("ko_patterns");
-    patternThread = new KoResourceLoaderThread(m_patternServer, "*.pat");
+    m_patternServer = new KoResourceServer<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
+    patternThread = new KoResourceLoaderThread(m_patternServer);
     connect(patternThread, SIGNAL(finished()), this, SLOT(patternThreadDone()));
     patternThread->start();
 
-    m_gradientServer = new GradientResourceServer("ko_gradients");
-    gradientThread = new KoResourceLoaderThread(m_gradientServer, "*.kgr:*.svg:*.ggr");
+    m_gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
+    gradientThread = new KoResourceLoaderThread(m_gradientServer);
     connect(gradientThread, SIGNAL(finished()), this, SLOT(gradientThreadDone()));
     gradientThread->start();
 
-    m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes");
-    paletteThread = new KoResourceLoaderThread(m_paletteServer, "*.gpl:*.pal:*.act");
+    m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act");
+    paletteThread = new KoResourceLoaderThread(m_paletteServer);
     connect(paletteThread, SIGNAL(finished()), this, SLOT(paletteThreadDone()));
     paletteThread->start();
 

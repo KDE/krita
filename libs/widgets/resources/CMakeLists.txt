@@ -5,6 +5,9 @@ set(koresourcewidget_LIB_SRCS
     KoResourceItem.cpp
     KoResourceItemChooser.cpp
     KoResourceSelector.cpp
+    KoResourceModel.cpp
+    KoResourceItemDelegate.cpp
+    KoResourceItemView.cpp
     ../KoItemToolTip.cpp
     ../KoCheckerBoardPainter.cpp
 )

@@ -83,7 +83,6 @@ set(kritaui_LIB_SRCS
     kis_palette_docker.cc
     kis_png_converter.cpp
     kis_print_job.cpp 
-    kis_resource_mediator.cc
     kis_resource_server_provider.cpp 
     kis_selection_decoration.cc
     kis_selection_manager.cc 

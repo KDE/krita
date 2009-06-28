@@ -23,6 +23,9 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <KoResourceItemChooser.h>
+#include "kis_pattern.h"
+#include "kis_resource_server_provider.h"
+#include <KoResourceServerAdapter.h>
 
 
 #include "kis_global.h"
@@ -32,65 +35,18 @@ KisItemChooser::KisItemChooser(QWidget *parent, const char *name)
 {
     setObjectName(name);
     QHBoxLayout * layout = new QHBoxLayout(this);
-    m_chooser = new KoResourceItemChooser(this);
+    KoResourceServer<KisPattern> * rserver = KisResourceServerProvider::instance()->patternServer();
+    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPattern>(rserver);
+    m_chooser = new KoResourceItemChooser(adapter, this);
     layout->addWidget( m_chooser );
-    connect(m_chooser, SIGNAL(selected(QTableWidgetItem*)), this, SLOT(slotItemSelected(QTableWidgetItem*)));
-    connect(m_chooser, SIGNAL(importClicked()), this, SIGNAL(importClicked()));
-    connect(m_chooser, SIGNAL(deleteClicked()), this, SIGNAL(deleteClicked()));
+
 }
 
 KisItemChooser::~KisItemChooser()
 {
 }
 
-void KisItemChooser::setCurrent(QTableWidgetItem *item)
-{
-    m_chooser->setCurrent(item);
-    emit( update(item) );
-}
 
-void KisItemChooser::setCurrent(int index)
-{
-    m_chooser->setCurrent(index);
-}
-
-void KisItemChooser::removeItem(KoResourceItem *item)
-{
-    m_chooser->removeItem(item);
-}
-
-QTableWidgetItem* KisItemChooser::currentItem()
-{
-    return m_chooser->currentItem();
-}
-
-void KisItemChooser::selectItem( QTableWidgetItem* item )
-{
-    emit selected( item );
-}
-
-
-void KisItemChooser::slotItemSelected(QTableWidgetItem *item)
-{
-    emit update(item);
-    emit selected(currentItem());
-}
-
-void KisItemChooser::addItem(KoResourceItem *item)
-{
-    m_chooser->addItem(item);
-}
-
-void KisItemChooser::addItems(const QList<KoResourceItem *>& items)
-{
-    foreach(KoResourceItem *item, items)
-    m_chooser->addItem(item);
-}
-
-QWidget *KisItemChooser::chooserWidget() const
-{
-    return m_chooser;
-}
 
 #include "kis_item_chooser.moc"
 

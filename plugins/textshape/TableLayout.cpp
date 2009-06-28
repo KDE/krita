@@ -24,6 +24,7 @@
 #include <QTextTable>
 #include <QPainter>
 #include <QDebug>
+#include <QRectF>
 
 TableLayout::TableLayout(QTextTable *table, TableData *tableData) : m_dirty(true)
 {
@@ -111,6 +112,19 @@ void TableLayout::draw(QPainter *painter) const
 {
     Q_UNUSED(painter);
     // TODO.
+}
+
+QRectF TableLayout::boundingRect() const
+{
+    Q_ASSERT(m_tableData);
+    Q_ASSERT(m_table);
+
+    qreal horizontalMargins = m_table->format().leftMargin() + m_table->format().rightMargin();
+    qreal verticalMargins = m_table->format().topMargin() + m_table->format().bottomMargin();
+
+    return QRectF(m_tableData->m_position.x(), m_tableData->m_position.y(), // x, y
+            m_tableData->m_width + horizontalMargins, // width
+            m_tableData->m_height + verticalMargins); // height
 }
 
 bool TableLayout::isDirty() const

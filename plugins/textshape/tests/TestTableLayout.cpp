@@ -111,6 +111,29 @@ void TestTableLayout::testSetTableData()
     cleanupTest();
 }
 
+void TestTableLayout::testBoundingRect()
+{
+    QStringList cellTexts;
+    QTextTableFormat format;
+    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    format.setWidth(QTextLength(QTextLength::FixedLength, 200));
+    format.setHeight(QTextLength(QTextLength::FixedLength, 100));
+    format.setPadding(0);
+    format.setMargin(0);
+    initTest(format, cellTexts);
+
+    TableLayout tableLayout;
+    tableLayout.setTable(m_table);
+    tableLayout.setTableData(m_tableData);
+    tableLayout.layout();
+
+    QCOMPARE(tableLayout.boundingRect(), QRectF(0, 0, 200, 100));
+
+    // TODO: Test with different borders/margins.
+
+    cleanupTest();
+}
+
 void TestTableLayout::testBasicLayout()
 {
     QStringList cellTexts;

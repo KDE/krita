@@ -55,13 +55,6 @@ public:
      */
     QRectF cellContentRect(int row, int column) const;
 
-    /**
-     * Get the bounding rectangle of the table.
-     * @return the bounding rectangle of the table.
-     */
-    QRectF boundingRect() const;
-
-
 private:
     // To allow direct testing.
     friend class TestTableData;

@@ -37,6 +37,8 @@ private slots:
     void testSetTable();
     /// Test table data setter/getter of table layout.
     void testSetTableData();
+    /// Test table bounding rect.
+    void testBoundingRect();
     /// Test very basic layout functionality.
     void testBasicLayout();
 

@@ -45,8 +45,3 @@ QRectF TableData::cellContentRect(int row, int column) const
             m_columnWidths[column], m_rowHeights[row]);     // width, height
 }
 
-QRectF TableData::boundingRect() const
-{
-    return QRectF();
-}
-

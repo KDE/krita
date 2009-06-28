@@ -24,6 +24,7 @@ class TableData;
 class QTextDocument;
 class QTextTable;
 class QPainter;
+class QRectF;
 
 /**
  * @brief Table layout class.
@@ -131,6 +132,12 @@ public:
      * @param painter a pointer to the QPainter to draw the table with.
      */
     void draw(QPainter *painter) const;
+
+    /**
+     * Get the bounding rectangle of the table.
+     * @return the bounding rectangle of the table.
+     */
+    QRectF boundingRect() const;
 
     /**
      * Check the dirty state.

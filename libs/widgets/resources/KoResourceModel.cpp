@@ -94,7 +94,10 @@ QModelIndex KoResourceModel::index ( int row, int column, const QModelIndex & ) 
 
 void KoResourceModel::setColumnCount( int columnCount )
 {
-    m_columnCount = columnCount;
+    if (columnCount != m_columnCount) {
+        m_columnCount = columnCount;
+        reset();
+    }
 }
 
 KoAbstractResourceServerAdapter * KoResourceModel::resourceServerAdapter()

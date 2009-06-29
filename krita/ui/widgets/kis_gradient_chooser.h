@@ -54,6 +54,12 @@ public:
     KisGradientChooser(KisView2 * view, QWidget *parent = 0, const char *name = 0);
     virtual ~KisGradientChooser();
 
+    /// Gets the currently selected resource
+    /// @returns the selected resource, 0 is no resource is selected
+    KoResource * currentResource();
+
+    void setCurrentItem(int row, int column);
+
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );

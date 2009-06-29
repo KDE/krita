@@ -85,6 +85,18 @@ KisGradientChooser::~KisGradientChooser()
 {
 }
 
+KoResource *  KisGradientChooser::currentResource()
+{
+    return m_itemChooser->currentResource();
+}
+
+void KisGradientChooser::setCurrentItem(int row, int column)
+{
+    m_itemChooser->setCurrentItem(row, column);
+    if(currentResource())
+        update(currentResource());
+}
+
 void KisGradientChooser::update( KoResource * resource )
 {
     KoAbstractGradient *gradient = static_cast<KoAbstractGradient *>(resource);

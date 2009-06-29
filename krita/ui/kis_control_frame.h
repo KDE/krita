@@ -59,11 +59,8 @@ public:
 
 public slots:
 
-    void slotSetPattern(QTableWidgetItem *item);
-    void slotSetGradient(QTableWidgetItem *item);
-
-    void slotPatternChanged(KisPattern * pattern);
-    void slotGradientChanged(KoAbstractGradient * gradient);
+    void slotSetPattern(KisPattern * pattern);
+    void slotSetGradient(KoAbstractGradient * gradient);
 
 private:
 

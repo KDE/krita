@@ -64,6 +64,18 @@ KisPatternChooser::~KisPatternChooser()
 {
 }
 
+KoResource *  KisPatternChooser::currentResource()
+{
+    return m_itemChooser->currentResource();
+}
+
+void KisPatternChooser::setCurrentItem(int row, int column)
+{
+    m_itemChooser->setCurrentItem(row, column);
+    if(currentResource())
+        update(currentResource());
+}
+
 void KisPatternChooser::update( KoResource * resource )
 {
     KisPattern *pattern = static_cast<KisPattern *>(resource);

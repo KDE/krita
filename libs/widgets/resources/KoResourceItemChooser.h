@@ -50,6 +50,13 @@ public:
     /// @returns the selected resource, 0 is no resource is selected
     KoResource * currentResource();
 
+    /**
+     * Sets the sected resource, does nothing if there is no valid item
+     * @param row row of the item
+     * @param column column of the item
+     */
+    void setCurrentItem(int row, int column);
+
     void showButtons( bool show );
 signals:
     /// Emitted when a resource was selected

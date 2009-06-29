@@ -1,47 +1,67 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgChalkOptions</class>
- <widget class="QWidget" name="WdgChalkOptions" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgChalkOptions">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>210</width>
-    <height>60</height>
+    <width>330</width>
+    <height>76</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>210</horstretch>
     <verstretch>60</verstretch>
    </sizepolicy>
   </property>
-  <property name="minimumSize" >
+  <property name="minimumSize">
    <size>
-    <width>210</width>
+    <width>330</width>
     <height>60</height>
    </size>
   </property>
-  <widget class="QWidget" name="layoutWidget" >
-   <property name="geometry" >
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
     <rect>
-     <x>50</x>
+     <x>10</x>
      <y>10</y>
-     <width>105</width>
-     <height>29</height>
+     <width>301</width>
+     <height>30</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout" >
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QLabel" name="radiusLabel" >
-      <property name="text" >
+     <widget class="QLabel" name="radiusLabel">
+      <property name="text">
        <string>radius</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QSpinBox" name="radiusSpinBox" >
-      <property name="value" >
+     <widget class="QSpinBox" name="radiusSpinBox">
+      <property name="maximum">
+       <number>400</number>
+      </property>
+      <property name="value">
        <number>5</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="horizontalSlider">
+      <property name="maximum">
+       <number>400</number>
+      </property>
+      <property name="value">
+       <number>5</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TicksBelow</enum>
       </property>
      </widget>
     </item>
@@ -49,5 +69,38 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>horizontalSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>radiusSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>194</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>80</x>
+     <y>25</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiusSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>82</x>
+     <y>34</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>225</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

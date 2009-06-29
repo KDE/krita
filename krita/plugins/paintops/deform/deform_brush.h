@@ -37,8 +37,6 @@ public:
     ~DeformBrush();
     void paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &info);
 
-    void paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
-
     void bilinear_interpolation(double x, double y , quint8 *dst);
     void bilinear_interpolation_old(double x, double y , quint8 *dst);
 
@@ -53,7 +51,6 @@ public:
 
     void lensDistortion(qreal cursorX,qreal cursorY, qreal k1, qreal k2);
     void deformColor(qreal cursorX,qreal cursorY,qreal amount);
-
 
     void setRadius( int deformRadius ){
         m_radius = deformRadius;
@@ -112,7 +109,7 @@ private:
     KisPaintDeviceSP m_dev;
     KisPaintDeviceSP m_dab;
 
-    KisRandomAccessor * m_readAccessor;
+    KisRandomConstAccessor * m_readAccessor;
     KisRandomAccessor * m_writeAccessor;
     quint32 m_pixelSize;
     

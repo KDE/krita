@@ -12,6 +12,8 @@ set(TestDocumentLayout_test_SRCS
     ../Layout.cpp
     ../TextShape.cpp
     ../ListItemsHelper.cpp
+    ../TableLayout.cpp
+    ../TableData.cpp
 )
 
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
@@ -53,6 +55,8 @@ set(TestChangeListCommand_test_SRCS
     ../ListItemsHelper.cpp
     ../TextShape.cpp
     ../Layout.cpp    
+    ../TableLayout.cpp
+    ../TableData.cpp
 )
 
 
@@ -90,12 +94,3 @@ set(TestTableLayout_test_SRCS
 )
 kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
 target_link_libraries(TestTableLayout kotext ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
-
-########### next target ###############
-
-set(TestTableData_test_SRCS
-    TestTableData.cpp
-    ../TableData.cpp
-)
-kde4_add_unit_test(TestTableData TESTNAME shapes-text-TestTableData ${TestTableData_test_SRCS})
-target_link_libraries(TestTableData kotext ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})

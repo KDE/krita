@@ -21,6 +21,7 @@
  */
 
 #include "Layout.h"
+#include "TableLayout.h"
 #include "ListItemsHelper.h"
 #include "TextShape.h"
 
@@ -55,6 +56,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_data(0),
         m_reset(true),
         m_isRtl(false),
+        m_inTable(false),
         m_parent(parent),
         m_demoText(false),
         m_endOfDemoText(false),
@@ -471,6 +473,25 @@ bool Layout::nextParag()
             m_blockData->setCounterPosition(QPointF(m_borderInsets.left + m_shapeBorder.left +
                                                     m_format.textIndent() + m_format.leftMargin() +
                                                     textList->format().doubleProperty(KoListStyle::Indent), y()));
+    }
+
+    // tables (TODO: Probably inefficient).
+    QTextCursor tableFinder(m_block);
+    QTextTable *table = tableFinder.currentTable();
+    if (table) {
+        if (table != m_tableLayout.table()) {
+            // entering table.
+            m_inTable = true;
+            m_tableLayout.setTable(table);
+            m_tableLayout.layout();
+        }
+    } else {
+        QTextCursor lookBehind(m_block.previous());
+        QTextTable *previousTable = lookBehind.currentTable();
+        if (previousTable) {
+            // leaving table.
+            m_inTable = false;
+        }
     }
 
     return true;

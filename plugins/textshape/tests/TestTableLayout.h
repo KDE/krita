@@ -35,10 +35,8 @@ private slots:
     void testConstruction();
     /// Test table setter/getter of table layout.
     void testSetTable();
-    /// Test table data setter/getter of table layout.
-    void testSetTableData();
     /// Test table bounding rect.
-    void testBoundingRect();
+    void testTableBoundingRect();
     /// Test very basic layout functionality.
     void testBasicLayout();
 
@@ -48,19 +46,18 @@ private:
     KoTextDocumentLayout *m_layout;
     KoStyleManager *m_styleManager;
     Layout *m_textLayout;
-    TableData *m_tableData;
     MockTextShape *m_shape;
 };
 
 class MockTextShape : public TextShape
 {
 public:
-    MockTextShape()
-        : TextShape(0)
+    MockTextShape() : TextShape(0)
     {
         layout = dynamic_cast<KoTextDocumentLayout*>(textShapeData()->document()->documentLayout());
     }
-    void paint(QPainter &painter, const KoViewConverter &converter) {
+    void paint(QPainter &painter, const KoViewConverter &converter)
+    {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }

@@ -19,28 +19,7 @@
 
 #include "TableData.h"
 
-#include <QVector>
-#include <QRectF>
-#include <QTextTableCell>
-
 TableData::TableData() : m_width(0), m_height(0)
 {
-}
-
-QRectF TableData::cellContentRect(const QTextTableCell &cell) const
-{
-    return cellContentRect(cell.row(), cell.column());
-}
-
-QRectF TableData::cellContentRect(int row, int column) const
-{
-    Q_ASSERT(row < m_rowPositions.size());
-    Q_ASSERT(column < m_columnPositions.size());
-
-    // TODO: Take borders, padding et.c. into consideration.
-
-    return QRectF(
-            m_columnPositions[column], m_rowPositions[row], // x, y
-            m_columnWidths[column], m_rowHeights[row]);     // width, height
 }
 

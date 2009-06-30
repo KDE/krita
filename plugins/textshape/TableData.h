@@ -30,9 +30,9 @@ class QTextTableCell;
 /**
  * @brief Table data class.
  *
- * This class holds layout helper data for tables. It has a set of geometry
- * vectors that describes the table, along with some convenience functions for
- * getting the current table/cell geometries.
+ * This class holds layout helper data for table layout.
+ *
+ * \sa TableLayout
  */
 class TableData
 {
@@ -40,28 +40,9 @@ public:
     /// Constructor.
     TableData();
 
-    /**
-     * Get the content rectangle of a given cell.
-     * @param cell the cell.
-     * @return the rectangle of the cell.
-     */
-    QRectF cellContentRect(const QTextTableCell &cell) const;
-
-    /**
-     * Get the content rectangle of a cell at a given table coordinate.
-     * @param row the row of the cell.
-     * @param column the column of the cell.
-     * @return the rectangle of the cell.
-     */
-    QRectF cellContentRect(int row, int column) const;
-
 private:
-    // To allow direct testing.
-    friend class TestTableData;
-    friend class TestTableLayout;
-
-    // To allow direct manipulation during layout.
-    friend class TableLayout;
+    friend class TestTableLayout; // To allow direct testing.
+    friend class TableLayout;     // To allow direct manipulation during layout.
 
     QVector<qreal> m_columnWidths;     /**< Column widths. */
     QVector<qreal> m_columnPositions;  /**< Column positions along X axis. */

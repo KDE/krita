@@ -20,6 +20,8 @@
 #ifndef LAYOUT_H
 #define LAYOUT_H
 
+#include "TableLayout.h"
+
 #include <KoTextDocumentLayout.h>
 #include <KoTextBlockData.h>
 #include <KoInsets.h>
@@ -83,6 +85,8 @@ public:
     }
 
 private:
+    friend class TestTableLayout; // to allow direct testing.
+
     void updateBorders();
     qreal topMargin();
     qreal listIndent();
@@ -120,7 +124,7 @@ private:
     QTextBlockFormat m_format;
     QTextBlock::Iterator m_fragmentIterator;
     KoTextShapeData *m_data;
-    bool m_newShape, m_newParag, m_reset, m_isRtl;
+    bool m_newShape, m_newParag, m_reset, m_isRtl, m_inTable;
     KoInsets m_borderInsets;
     KoInsets m_shapeBorder;
     KoTextDocumentLayout *m_parent;
@@ -138,6 +142,9 @@ private:
     qreal m_dropCapsAffectedLineWidthAdjust, m_y_justBelowDropCaps;
 
     QString m_currentMasterPage;
+
+    // table layout
+    TableLayout m_tableLayout;
 };
 
 #endif

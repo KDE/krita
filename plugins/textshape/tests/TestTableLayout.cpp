@@ -13,7 +13,6 @@ void TestTableLayout::initTestCase()
 {
     m_shape = 0;
     m_table = 0;
-    m_tableData = 0;
     m_textLayout = 0;
     m_styleManager = 0;
 }
@@ -40,9 +39,6 @@ void TestTableLayout::initTest(QTextTableFormat &format, QStringList &cellTexts,
     Q_ASSERT(m_styleManager);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
 
-    m_tableData = new TableData();
-    Q_ASSERT(m_tableData);
-
     QTextCursor cursor(m_doc);
     m_table = cursor.insertTable(rows, columns, format);
     Q_ASSERT(m_table);
@@ -63,7 +59,6 @@ void TestTableLayout::initTest(QTextTableFormat &format, QStringList &cellTexts,
 void TestTableLayout::cleanupTest()
 {
     delete m_table;
-    delete m_tableData;
     delete m_textLayout;
     delete m_styleManager;
 }
@@ -76,11 +71,9 @@ void TestTableLayout::testConstruction()
 
     TableLayout tableLayout1;
     QVERIFY(tableLayout1.table() == 0);
-    QVERIFY(tableLayout1.tableData() == 0);
 
-    TableLayout tableLayout2(m_table, m_tableData);
+    TableLayout tableLayout2(m_table);
     QVERIFY(tableLayout2.table() == m_table);
-    QVERIFY(tableLayout2.tableData() == m_tableData);
 
     cleanupTest();
 }
@@ -98,20 +91,7 @@ void TestTableLayout::testSetTable()
     cleanupTest();
 }
 
-void TestTableLayout::testSetTableData()
-{
-    QStringList cellTexts;
-    QTextTableFormat format;
-    initTest(format, cellTexts);
-
-    TableLayout tableLayout;
-    tableLayout.setTableData(m_tableData);
-    QVERIFY(tableLayout.tableData() == m_tableData);
-
-    cleanupTest();
-}
-
-void TestTableLayout::testBoundingRect()
+void TestTableLayout::testTableBoundingRect()
 {
     QStringList cellTexts;
     QTextTableFormat format;
@@ -122,14 +102,15 @@ void TestTableLayout::testBoundingRect()
     format.setMargin(0);
     initTest(format, cellTexts);
 
-    TableLayout tableLayout;
-    tableLayout.setTable(m_table);
-    tableLayout.setTableData(m_tableData);
+    TableLayout tableLayout(m_table);
     tableLayout.layout();
 
-    QCOMPARE(tableLayout.boundingRect(), QRectF(0, 0, 200, 100));
-
-    // TODO: Test with different borders/margins.
+    /*
+     * TODO:
+     * - Test with different borders/margins.
+     * - Test with a real layout() run and real positioning.
+     */
+    QCOMPARE(tableLayout.tableBoundingRect(), QRectF(0, 0, 200, 100));
 
     cleanupTest();
 }
@@ -145,27 +126,28 @@ void TestTableLayout::testBasicLayout()
     format.setMargin(0);
     initTest(format, cellTexts, 2, 2);
 
-    TableLayout tableLayout;
-    tableLayout.setTable(m_table);
-    tableLayout.setTableData(m_tableData);
-    tableLayout.layout();
+    m_layout->layout();
+
+    // Check that the table and data was correctly added to the table data map.
+    QVERIFY(m_textLayout->m_tableLayout.m_tableDataMap.contains(m_table));
+    TableData *tableData = m_textLayout->m_tableLayout.m_tableDataMap.value(m_table);
+    QVERIFY(tableData);
 
     // Check table dimensions are correct.
-    QCOMPARE(m_tableData->m_rowPositions.size(), 2);
-    QCOMPARE(m_tableData->m_rowHeights.size(), 2);
-    QCOMPARE(m_tableData->m_columnPositions.size(), 2);
-    QCOMPARE(m_tableData->m_columnWidths.size(), 2);
+    QCOMPARE(tableData->m_rowPositions.size(), 2);
+    QCOMPARE(tableData->m_rowHeights.size(), 2);
+    QCOMPARE(tableData->m_columnPositions.size(), 2);
+    QCOMPARE(tableData->m_columnWidths.size(), 2);
 
     // Check table cell content rectangles are correct.
     QTextTableCell cell1 = m_table->cellAt(0, 0);
     QTextTableCell cell2 = m_table->cellAt(1, 0);
     QTextTableCell cell3 = m_table->cellAt(0, 1);
     QTextTableCell cell4 = m_table->cellAt(1, 1);
-
-    QCOMPARE(m_tableData->cellContentRect(cell1), QRectF(0, 0, 100, 50));
-    QCOMPARE(m_tableData->cellContentRect(cell2), QRectF(0, 50, 100, 50));
-    QCOMPARE(m_tableData->cellContentRect(cell3), QRectF(100, 0, 100, 50));
-    QCOMPARE(m_tableData->cellContentRect(cell4), QRectF(100, 50, 100, 50));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0, 100, 50));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(0, 50, 100, 50));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell3), QRectF(100, 0, 100, 50));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell4), QRectF(100, 50, 100, 50));
 
     cleanupTest();
 }

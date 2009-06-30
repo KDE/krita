@@ -26,10 +26,9 @@
 #include <QDebug>
 #include <QRectF>
 
-TableLayout::TableLayout(QTextTable *table, TableData *tableData) : m_dirty(true)
+TableLayout::TableLayout(QTextTable *table) : m_dirty(true)
 {
     setTable(table);
-    setTableData(tableData);
 }
 
 TableLayout::TableLayout() : m_table(0), m_tableData(0), m_dirty(true)
@@ -39,8 +38,20 @@ TableLayout::TableLayout() : m_table(0), m_tableData(0), m_dirty(true)
 void TableLayout::setTable(QTextTable *table)
 {
     Q_ASSERT(table);
-    m_table = table;
+    TableData *tableData;
 
+    if (!m_tableDataMap.contains(table)) {
+        // set up new table data.
+        tableData = new TableData();
+        m_tableDataMap.insert(table, tableData);
+        connect(table, SIGNAL(destroyed(QObject *)), this, SLOT(tableDestroyed(QObject *)));
+    } else {
+        // table data already in map.
+        tableData = m_tableDataMap.value(table);
+    }
+
+    m_table = table;
+    m_tableData = tableData;
     m_dirty = true;
 }
 
@@ -49,28 +60,12 @@ QTextTable *TableLayout::table() const
     return m_table;
 }
 
-void TableLayout::setTableData(TableData *tableData)
-{
-    Q_ASSERT(tableData);
-    m_tableData = tableData;
-
-    m_dirty = true;
-}
-
-TableData *TableLayout::tableData() const
-{
-    return m_tableData;
-}
-
-
 // TODO: Lots and lots.
 void TableLayout::layout()
 {
-    Q_ASSERT(m_table);
-    Q_ASSERT(m_tableData);
+    Q_ASSERT(isValid());
 
-    // No table or table data set, return immediately.
-    if (!m_table || !m_tableData) {
+    if (!isValid()) {
         return;
     }
 
@@ -114,10 +109,9 @@ void TableLayout::draw(QPainter *painter) const
     // TODO.
 }
 
-QRectF TableLayout::boundingRect() const
+QRectF TableLayout::tableBoundingRect() const
 {
-    Q_ASSERT(m_tableData);
-    Q_ASSERT(m_table);
+    Q_ASSERT(isValid());
 
     qreal horizontalMargins = m_table->format().leftMargin() + m_table->format().rightMargin();
     qreal verticalMargins = m_table->format().topMargin() + m_table->format().bottomMargin();
@@ -127,8 +121,48 @@ QRectF TableLayout::boundingRect() const
             m_tableData->m_height + verticalMargins); // height
 }
 
+QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
+{
+    return cellContentRect(cell.row(), cell.column());
+}
+
+QRectF TableLayout::cellContentRect(int row, int column) const
+{
+    Q_ASSERT(isValid());
+    Q_ASSERT(row < m_tableData->m_rowPositions.size());
+    Q_ASSERT(column < m_tableData->m_columnPositions.size());
+
+    // TODO: Take borders, padding et.c. into consideration.
+
+    return QRectF(
+            m_tableData->m_columnPositions[column], m_tableData->m_rowPositions[row], // x, y
+            m_tableData->m_columnWidths[column], m_tableData->m_rowHeights[row]);     // width, height
+}
+
 bool TableLayout::isDirty() const
 {
     return m_dirty;
 }
 
+bool TableLayout::isValid() const
+{
+    return (m_table && m_tableData);
+}
+
+void TableLayout::tableDestroyed(QObject *object)
+{
+    QTextTable *table = static_cast<QTextTable *>(object);
+    Q_ASSERT(table);
+
+    if (m_tableDataMap.contains(table)) {
+        delete m_tableDataMap.value(table);
+        m_tableDataMap.remove(table);
+    }
+
+    if (m_table == table) {
+        m_table = 0;
+        m_tableData = 0;
+    }
+}
+
+#include "TableLayout.moc"

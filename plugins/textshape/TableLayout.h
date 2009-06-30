@@ -20,63 +20,67 @@
 #ifndef TABLELAYOUT_H
 #define TABLELAYOUT_H
 
+#include <QObject>
+#include <QMap>
+
 class TableData;
-class QTextDocument;
 class QTextTable;
+class QTextTableCell;
 class QPainter;
 class QRectF;
 
 /**
  * @brief Table layout class.
  *
- * Given a QTextTable and an accompanying TableData object, this class is able to
- * lay out and draw given table. After layout, the table data object that was passed
- * in may be queried for cell content geometry, border positions et.c.
+ * This class is responsible for laying out and drawing QTextTable instances.
  *
- * A layout is triggered with the layout() function and repeated calls to this
- * function can be used to trigger a re-layout, if, for instance, the table
- * data object has been changed by the layout process.
+ * A layout is triggered with the layout() function.
  *
  * The table layout has a dirty state which indicates whether a layout is needed
  * This state may be queried using the isDirty() function.
  *
- * The table layout may be drawn using a QPainter with the draw() function.
+ * It also has a valid state which indicates if the layout is valid or not.
+ * This state may be queried using the isValid() function.
  *
- * Instances of this class may be reused and the table and table data object can
- * be changed with setTable() and setTableData(), respectively.
+ * The table layout may be drawn using a given QPainter with the draw() function.
  *
- * The class does not take ownership of the table or the table data that is passed
- * in and it is up to the user of this class to delete those objects appropriately.
+ * Instances of this class may be reused and the current table can be set using
+ * the setTable() function. The table layout caches the internal data objects
+ * used for laying out tables.
  *
- * Note that this class does not lay out the table contents. It just lays out
- * the cell rectangles, border positions et.c. and provides an API to query these.
- * It is up to the user of this class to lay out the content into these rectangles,
- * as well as updating the table data and issuing re-layouts of the table if needed.
+ * The table layout does not take ownership of the table and it is up to the user
+ * of this class to delete the table appropriately.
+ *
+ * Note that this class does not lay out the content of the table. It just lays out
+ * and draws the cell borders et.c. and provides an API to query, and to a certain
+ * extent influence, the geometry of the table and its cells. It is up to the user
+ * of this class to lay out the content into the cells of the table.
  *
  * \sa TableData, Layout
  */
-class TableLayout
+class TableLayout : public QObject
 {
+    Q_OBJECT
+
 public:
     /**
      * @brief Constructor.
      *
-     * Create a new table layout from the given table and table data.
+     * Create a new table layout and set it up with the given table.
      *
      * @param table a pointer to the table.
-     * @param tableData a pointer to the table data.
      */
-    TableLayout(QTextTable *table, TableData *tableData);
+    TableLayout(QTextTable *table);
 
     /**
      * @brief Constructor.
      *
-     * Create a new, empty table layout. Calls to layout() will immediately
-     * return and do nothing on table layouts initialized using this constructor,
-     * unless both a table and table data has been set first using setTable()
-     * and setTableData() respectively.
+     * Create a new, empty table layout.
+     *
+     * The table layout will be in an invalid state until a table has been set
+     * using setTable() and calls to layout() will return immediately.
      * 
-     * \sa setTable(), setTableData()
+     * \sa setTable()
      */
     TableLayout();
 
@@ -102,27 +106,6 @@ public:
     QTextTable *table() const;
 
     /**
-     * Set the table data object to be used.
-     *
-     * It is the caller's responsibility to delete the table data object that
-     * is passed in.
-     *
-     * @param a pointer to the table data object.
-     *
-     * \sa tableData(), TableData
-     */
-    void setTableData(TableData *tableData);
-
-    /**
-     * Get the current table data.
-     *
-     * @return a pointer to the current table data or 0 if none has been set.
-     *
-     * \sa setTableData()
-     */
-    TableData *tableData() const;
-
-    /**
      * Trigger a layout of the table.
      */
     void layout();
@@ -137,7 +120,22 @@ public:
      * Get the bounding rectangle of the table.
      * @return the bounding rectangle of the table.
      */
-    QRectF boundingRect() const;
+    QRectF tableBoundingRect() const;
+
+    /**
+     * Get the content rectangle of a given cell.
+     * @param cell the cell.
+     * @return the rectangle of the cell.
+     */
+    QRectF cellContentRect(const QTextTableCell &cell) const;
+
+    /**
+     * Get the content rectangle of a cell at a given table coordinate.
+     * @param row the row of the cell.
+     * @param column the column of the cell.
+     * @return the rectangle of the cell.
+     */
+    QRectF cellContentRect(int row, int column) const;
 
     /**
      * Check the dirty state.
@@ -145,11 +143,25 @@ public:
      */
     bool isDirty() const;
 
-private:
-    QTextTable *m_table;     /**< The current table. */
-    TableData *m_tableData;  /**< The current table data. */
+    /**
+     * Check if the table layout is valid.
+     * @return true if the table layout is valid, otherwise false.
+     */
+    bool isValid() const;
 
-    bool m_dirty;            /**< Table layout is dirty. */
+private slots:
+    /// Called before a table is destroyed.
+    void tableDestroyed(QObject *object);
+
+private:
+    friend class TestTableLayout; // To allow direct testing.
+
+    QTextTable *m_table;              /**< The current table. */
+    TableData *m_tableData;           /**< The current table data. */
+
+    QMap<QTextTable *, TableData *> m_tableDataMap;  /**< The map of table data objects. */
+
+    bool m_dirty;  /**< Table layout is dirty. */
 };
 
 #endif // TABLELAYOUT_H

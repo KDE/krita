@@ -44,6 +44,7 @@ KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name)
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setObjectName(name);
     m_itemChooser->setFixedSize( 250, 250 );
+    m_itemChooser->setRowHeight( 30 );
 
     connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
              this, SLOT( update( KoResource * ) ) );

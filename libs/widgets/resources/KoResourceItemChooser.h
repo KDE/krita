@@ -28,6 +28,7 @@
 #include "kowidgets_export.h"
 
 class QButtonGroup;
+class QAbstractItemDelegate;
 class KoAbstractResourceServerAdapter;
 class KoResourceItemView;
 class KoResource;
@@ -45,6 +46,12 @@ public:
 
     /// Sets number of columns in the view
     void setColumnCount( int columnCount );
+
+    /// Sets the height of the view rows
+    void setRowHeight( int rowHeight );
+
+    /// Sets a custom delegate for the view
+    void setItemDelegate( QAbstractItemDelegate * delegate );
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected

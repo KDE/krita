@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +24,8 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QGridLayout>
+#include <QPainter>
+#include <QAbstractItemDelegate>
 #include <klocale.h>
 
 #include <KoResourceItemChooser.h>
@@ -36,6 +39,51 @@
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
+
+/// The resource item delegate for rendering the resource preview
+class KisBrushDelegate : public QAbstractItemDelegate
+{
+public:
+    KisBrushDelegate( QObject * parent = 0 ) : QAbstractItemDelegate( parent ) {}
+    virtual ~KisBrushDelegate() {}
+    /// reimplemented
+    virtual void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const;
+    /// reimplemented
+    QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & ) const
+    {
+        return option.decorationSize;
+    }
+};
+
+void KisBrushDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    if( ! index.isValid() )
+        return;
+
+    KisBrush * brush = static_cast<KisBrush*>( index.internalPointer() );
+    if (!brush)
+        return;
+
+    QRect itemRect = option.rect;
+    QImage thumbnail = brush->img();
+
+    if(thumbnail.height() > itemRect.height() || thumbnail.width() > itemRect.width()) {
+        thumbnail = thumbnail.scaled( itemRect.size() , Qt::KeepAspectRatio );
+    }
+
+    painter->save();
+    int dx = (itemRect.width() - thumbnail.width()) / 2;
+    int dy = (itemRect.height() - thumbnail.height()) / 2;
+    painter->drawImage( itemRect.x() + dx, itemRect.y() + dy, thumbnail );
+
+    if (option.state & QStyle::State_Selected) {
+        painter->setPen( QPen(option.palette.highlight(), 2.0) );
+        painter->drawRect( option.rect );
+    }
+
+    painter->restore();
+}
+
 
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
         : QWidget(parent)
@@ -56,6 +104,9 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     KoResourceServerAdapter<KisBrush>* adapter = new KoResourceServerAdapter<KisBrush>(rServer);
     m_itemChooser = new KoResourceItemChooser(adapter, this);
+    m_itemChooser->setColumnCount(10);
+    m_itemChooser->setRowHeight(30);
+    m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
 
     connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
              this, SLOT( update( KoResource * ) ) );

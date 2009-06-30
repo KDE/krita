@@ -23,6 +23,7 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QPushButton>
+#include <QHeaderView>
 
 #include <kfiledialog.h>
 #include <kiconloader.h>
@@ -52,6 +53,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->view = new KoResourceItemView(this);
     d->view->setModel(d->model);
     d->view->setItemDelegate( new KoResourceItemDelegate( this ) );
+    d->view->setSelectionMode( QAbstractItemView::SingleSelection );
     connect( d->view, SIGNAL(activated ( const QModelIndex & ) ),
              this, SLOT(activated ( const QModelIndex & ) ) );
 
@@ -122,6 +124,16 @@ void KoResourceItemChooser::showButtons( bool show )
 void KoResourceItemChooser::setColumnCount( int columnCount )
 {
     d->model->setColumnCount( columnCount );
+}
+
+void KoResourceItemChooser::setRowHeight( int rowHeight )
+{
+    d->view->verticalHeader()->setDefaultSectionSize( rowHeight );
+}
+
+void KoResourceItemChooser::setItemDelegate( QAbstractItemDelegate * delegate )
+{
+    d->view->setItemDelegate(delegate);
 }
 
 KoResource *  KoResourceItemChooser::currentResource()

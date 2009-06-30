@@ -120,7 +120,7 @@ public:
                 T* resource = createResource(front);
                 if (resource->load() && resource->valid())
                 {
-                    m_resourcesByFilename[fname] = resource;
+                    m_resourcesByFilename[front] = resource;
 
                     if ( resource->name().isNull() ) {
                         resource->setName( fname );
@@ -147,8 +147,10 @@ public:
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
         }
-        if( ! resource->save() )
+        if( ! resource->save() ) {
+            kWarning(30009) << "Could not save resource!";
             return false;
+        }
 
         Q_ASSERT( !resource->filename().isEmpty() || !resource->name().isEmpty() );
         if ( resource->filename().isEmpty() ) {
@@ -168,11 +170,11 @@ public:
 
     /// Remove a resource from resourceserver and hard disk
     bool removeResource(T* resource) {
-
-        QString fname = QFileInfo(resource->filename()).fileName();
-        if ( !m_resourcesByFilename.contains( fname ) ) {
+        if ( !m_resourcesByFilename.contains( resource->filename() ) ) {
             return false;
         }
+
+        bool removedFromDisk = true;
 
         QFile file( resource->filename() );
         if( ! file.remove() ) {
@@ -183,15 +185,20 @@ public:
             // app-start. But if we cannot remove a resource from the
             // disk, remove it from the chooser at least.
 
-            //return false;
+            removedFromDisk = false;
+            kWarning(30009) << "Could not remove resource!";
         }
 
         notifyRemovingResource(resource);
 
-        //m_resourcesByName.remove[resource->name()];
-        //m_resourcesByFilename.remove[resource->filename()];
-
-        delete resource;
+        if (removedFromDisk) {
+            m_resourcesByName.remove(resource->name());
+            m_resourcesByFilename.remove(resource->filename());
+            delete resource;
+        } else {
+            // TODO: save blacklist to config file and load it again on next start
+            m_resourceBlackList << resource;
+        }
 
         return true;
     }
@@ -199,6 +206,9 @@ public:
     QList<T*> resources() {
         loadLock.lock();
         QList<T*> resourceList = m_resourcesByFilename.values();
+        foreach(T* r, m_resourceBlackList) {
+            resourceList.removeOne(r);
+        }
         loadLock.unlock();
         return resourceList;
     }
@@ -313,7 +323,7 @@ private:
 
     QHash<QString, T*> m_resourcesByName;
     QHash<QString, T*> m_resourcesByFilename;
-
+    QList<T*> m_resourceBlackList;
     QList<KoResourceServerObserver<T>*> m_observers;
 
 };

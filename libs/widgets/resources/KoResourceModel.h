@@ -23,10 +23,12 @@
 #include <QAbstractTableModel>
 
 class KoAbstractResourceServerAdapter;
+class KoResource;
 
 /// The resource model managing the resource data
 class KoResourceModel : public QAbstractTableModel
 {
+    Q_OBJECT
 public:
     KoResourceModel( KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent = 0 );
     virtual ~KoResourceModel() {}
@@ -43,6 +45,11 @@ public:
     void setColumnCount( int columnCount );
     /// @returns the resource server adapter the model is connnected to
     KoAbstractResourceServerAdapter * resourceServerAdapter();
+
+private slots:
+    void resourceAdded(KoResource *resource);
+    void resourceRemoved(KoResource *resource);
+
 private:
     KoAbstractResourceServerAdapter * m_resourceAdapter;
     int m_columnCount;

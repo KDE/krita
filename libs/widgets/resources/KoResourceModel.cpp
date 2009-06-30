@@ -27,6 +27,10 @@ KoResourceModel::KoResourceModel( KoAbstractResourceServerAdapter * resourceAdap
 {
     Q_ASSERT( m_resourceAdapter );
     m_resourceAdapter->connectToResourceServer();
+    connect(m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)), 
+            this, SLOT(resourceAdded(KoResource*)));
+    connect(m_resourceAdapter, SIGNAL(removingResource(KoResource*)), 
+            this, SLOT(resourceRemoved(KoResource*)));
 }
 
 int KoResourceModel::rowCount( const QModelIndex &/*parent*/ ) const
@@ -104,3 +108,31 @@ KoAbstractResourceServerAdapter * KoResourceModel::resourceServerAdapter()
 {
     return m_resourceAdapter;
 }
+
+void KoResourceModel::resourceAdded(KoResource *resource)
+{
+    int newIndex = m_resourceAdapter->resources().indexOf(resource);
+    if (newIndex < 0)
+        return;
+    
+    int row = newIndex / m_columnCount;
+    int col = newIndex % m_columnCount;
+    if (col == 0 || m_columnCount == 1 ) {
+        beginInsertRows(QModelIndex(), row, row);
+        endInsertRows();
+    } else {
+        QModelIndex modelIndex = index(row, col, QModelIndex());
+        emit dataChanged(modelIndex, modelIndex);
+    }
+}
+
+void KoResourceModel::resourceRemoved(KoResource *resource)
+{
+    int oldIndex = m_resourceAdapter->resources().indexOf(resource);
+    if (oldIndex < 0)
+        return;
+    
+    reset();
+}
+
+#include "KoResourceModel.moc"

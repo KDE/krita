@@ -22,11 +22,12 @@
 #include "KoDocumentEntry.h"
 #include "KoFilterEntry.h"
 #include "KoDocument.h"
-#include "priorityqueue.h"
+#include "PriorityQueue_p.h"
 
 #include <QMetaMethod>
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
+#include <kdebug.h>
 
 #include <limits.h> // UINT_MAX
 

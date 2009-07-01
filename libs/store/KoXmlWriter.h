@@ -38,8 +38,10 @@ class KOSTORE_EXPORT KoXmlWriter
 {
 public:
     /**
-     * Create a KoXmlWriter instance to write out an XML document into
-     * the given QIODevice.
+     * Create a KoXmlWriter instance to write out an XML document.
+     * @param dev target device for writing the XML document.
+     * @param indentLevel indentation level for the written document;
+     *                    if 0, no indentations nor new line characters are written.
      */
     explicit KoXmlWriter(QIODevice* dev, int indentLevel = 0);
 

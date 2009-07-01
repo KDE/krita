@@ -118,6 +118,9 @@ public:
     KoDocument* outputDocument();
 
 
+    /// returns the amount of filters this chain contains representing the weight
+    int weight() const;
+
     // debugging
     void dump() const;
 

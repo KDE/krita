@@ -197,9 +197,13 @@ QString KoFilterManager::importDocument(const QString& url, KoFilter::Conversion
         int i = 0;
         int n = extraMimes.count();
         chain = m_graph.chain(this, mimeType);
-        while (!chain && i < n) {
-            mimeType = extraMimes[i].toUtf8();
-            chain = m_graph.chain(this, mimeType);
+        while (i < n) {
+            QByteArray extraMime = extraMimes[i].toUtf8();
+            // TODO check if its the same target mime then continue
+            KoFilterChain::Ptr newChain(0);
+            newChain = m_graph.chain(this, extraMime);
+            if (!chain || (newChain && newChain->weight() < chain->weight()))
+                chain = newChain;
             ++i;
         }
     } else if (!d->importMimeType.isEmpty()) {

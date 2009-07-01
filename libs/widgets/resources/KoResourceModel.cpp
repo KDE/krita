@@ -20,7 +20,6 @@
 #include "KoResourceModel.h"
 
 #include <KoResourceServerAdapter.h>
-#include <KoResourceChooser.h>
 
 KoResourceModel::KoResourceModel( KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent )
     : QAbstractTableModel( parent ), m_resourceAdapter(resourceAdapter), m_columnCount(4)

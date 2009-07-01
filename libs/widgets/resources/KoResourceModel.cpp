@@ -58,7 +58,7 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
 
             return QVariant( resource->img() );
         }
-        case KoResourceChooser::LargeThumbnailRole:
+        case KoResourceModel::LargeThumbnailRole:
         {
             KoResource * resource = static_cast<KoResource*>(index.internalPointer());
             if( ! resource )

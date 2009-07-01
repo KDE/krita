@@ -23,6 +23,7 @@
 #include "kowidgets_export.h"
 #include <QtGui/QComboBox>
 
+class QMouseEvent;
 class KoAbstractResourceServerAdapter;
 class KoResource;
 

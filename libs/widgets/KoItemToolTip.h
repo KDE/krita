@@ -54,7 +54,7 @@ class KoItemToolTip: public QFrame
          * @code
          *    QTextDocument *doc = new QTextDocument( this );
          *
-         *     QImage thumb = index.data( KoResourceChooser::LargeThumbnailRole ).value<QImage>();
+         *     QImage thumb = index.data( KoResourceModel::LargeThumbnailRole ).value<QImage>();
          *     doc->addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
          *
          *     QString name = index.data( Qt::DisplayRole ).toString();

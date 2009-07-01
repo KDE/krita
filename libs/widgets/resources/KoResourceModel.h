@@ -46,6 +46,13 @@ public:
     /// @returns the resource server adapter the model is connnected to
     KoAbstractResourceServerAdapter * resourceServerAdapter();
 
+    /// Extensions to Qt::ItemDataRole.
+    enum ItemDataRole
+    {
+        /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
+        LargeThumbnailRole = 33
+    };
+
 private slots:
     void resourceAdded(KoResource *resource);
     void resourceRemoved(KoResource *resource);

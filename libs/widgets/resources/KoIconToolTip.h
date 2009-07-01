@@ -21,23 +21,12 @@
 #ifndef KORESOURCECHOOSER_H
 #define KORESOURCECHOOSER_H
 
-#include <q3gridview.h>
-#include <q3ptrlist.h>
-#include <QPixmap>
-#include <QMouseEvent>
-#include <QFrame>
-#include <QKeyEvent>
-#include <QResizeEvent>
-#include <QPaintEvent>
-#include <QTableWidget>
-#include <QTableWidgetItem>
 #include "kowidgets_export.h"
 
 #include "../KoItemToolTip.h"
 
 class KoIconToolTip: public KoItemToolTip
 {
-    Q_OBJECT
 
     public:
         KoIconToolTip() {}
@@ -48,41 +37,6 @@ class KoIconToolTip: public KoItemToolTip
 
     private:
         typedef KoItemToolTip super;
-};
-
-/**
- * XXX? A table from which a resource can be chosen.
- */
-class KOWIDGETS_EXPORT KoResourceChooser: public QTableWidget
-{
-    Q_OBJECT
-public:
-    // To make the items sorted, set 'sort' to true and override QTableWidgetItem::compare().
-    explicit KoResourceChooser(QSize iconSize, QWidget *parent = 0L);
-    virtual ~KoResourceChooser();
-
-    void addItem(QTableWidgetItem *item);
-    void removeItem( QTableWidgetItem * item );
-    QTableWidgetItem *itemAt(int index);
-
-    void setIconSize ( const QSize & size );
-
-    /// Extensions to Qt::ItemDataRole.
-    enum ItemDataRole
-    {
-        /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
-        LargeThumbnailRole = 33
-    };
-
-protected:
-    virtual void resizeEvent(QResizeEvent *e);
-    virtual void keyPressEvent(QKeyEvent * e);
-    virtual bool viewportEvent(QEvent * e);
-
-    void setupItems();
-private:
-    struct Private;
-    Private* const d;
 };
 
 #endif // KORESOURCECHOOSER_H

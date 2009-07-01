@@ -1,8 +1,7 @@
 include_directories( ${KORESOURCES_INCLUDES}  ${CMAKE_SOURCE_DIR}/libs/widgets)
 
 set(koresourcewidget_LIB_SRCS
-    KoResourceChooser.cpp
-    KoResourceItem.cpp
+    KoIconToolTip.cpp
     KoResourceItemChooser.cpp
     KoResourceSelector.cpp
     KoResourceModel.cpp
@@ -29,8 +28,6 @@ install(TARGETS koresourcewidget  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(
     FILES
-    KoResourceChooser.h
-    KoResourceItem.h
     KoResourceItemChooser.h
     KoResourceSelector.h
     DESTINATION

@@ -55,6 +55,7 @@ set(komain_LIB_SRCS
     KoViewAdaptor.cpp
     KoView.cpp
     kofficeversion.cc
+    KoOdfExporter.cpp
 )
 
 

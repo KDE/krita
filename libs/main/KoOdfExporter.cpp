@@ -63,11 +63,11 @@ KoFilter::ConversionStatus KoOdfExporter::convert( const QByteArray& from, const
 {
     // check for proper conversion
     if (!acceptsSourceMimeType(from)) {
-        kWarning() << "Invalid source mimetype" << from;
+        kWarning(30003) << "Invalid source mimetype" << from;
         return KoFilter::NotImplemented;
     }
     if (!acceptsDestinationMimeType(to)) {
-        kWarning() << "Invalid destination mimetype" << to;
+        kWarning(30003) << "Invalid destination mimetype" << to;
         return KoFilter::NotImplemented;
     }
 
@@ -75,14 +75,14 @@ KoFilter::ConversionStatus KoOdfExporter::convert( const QByteArray& from, const
     std::auto_ptr<KoStore> outputStore(
         KoStore::createStore( m_chain->outputFile(), KoStore::Write, to, KoStore::Zip ) );
     if ( !outputStore.get() ) {
-        kWarning() << "Unable to open output file!";
+        kWarning(30003) << "Unable to open output file!";
         return KoFilter::FileNotFound;
     }
     outputStore->disallowNameExpansion();
-    kDebug() << "created outputStore.";
+    kDebug(30003) << "created outputStore.";
     KoOdfWriteStore oasisStore( outputStore.get() );
 
-    kDebug() << "created oasisStore.";
+    kDebug(30003) << "created oasisStore.";
 
     // KoGenStyles for writing styles while we're parsing
     KoGenStyles mainStyles;
@@ -136,11 +136,11 @@ KoFilter::ConversionStatus KoOdfExporter::convert( const QByteArray& from, const
 
     //now close content & body writers
     if ( !oasisStore.closeContentWriter() ) {
-        kWarning() << "Error closing content.";
+        kWarning(30003) << "Error closing content.";
         return KoFilter::CreationError;
     }
 
-    kDebug(30010) << "closed content & body writers.";
+    kDebug(30003) << "closed content & body writers.";
 
     //create the manifest file
     KoXmlWriter* realManifestWriter = oasisStore.manifestWriter( to );
@@ -149,7 +149,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert( const QByteArray& from, const
     realManifestWriter->addManifestEntry( "content.xml", "text/xml" );
     realManifestWriter->addCompleteElement(&manifestBuf);
 
-    kDebug(30010) << "created manifest and styles.xml";
+    kDebug(30003) << "created manifest and styles.xml";
 
     //create meta.xml
     if (!outputStore->open("meta.xml")) {

@@ -139,7 +139,7 @@ public:
      */
     bool getBatchMode(void) const;
 
-Q_SIGNALS:
+signals:
     void sigProgress(int);
 
 private:
@@ -173,8 +173,6 @@ private:
     KoFilterManager &operator=(const KoFilterManager& rhs);
 
     void importErrorHelper(const QString& mimeType, const bool suppressDialog = false);
-
-    static const int s_area;
 
     KoDocument* m_document;
     KoFilterChain* const m_parentChain;

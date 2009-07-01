@@ -57,6 +57,10 @@ public:
     void setDefaultTileData(KisTileData *defaultTileData);
     KisTileData* defaultTileData();
 
+    qint32 numTiles() {
+	return m_numTiles;
+    }
+
     void debugPrintInfo();
     void debugMaxListLength(qint32 &min, qint32 &max);
 private:

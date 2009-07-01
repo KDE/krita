@@ -114,7 +114,7 @@ protected:
      *
      * Used for reporting to the stuff at the top about our work
      */
-    KisMemento *m_currentMemento;
+    KisMementoSP m_currentMemento;
 };
 
 #endif /* KIS_MEMENTO_MANAGER_ */

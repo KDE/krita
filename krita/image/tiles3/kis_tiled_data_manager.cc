@@ -26,7 +26,7 @@
 #include "kis_tiled_data_manager_p.h"
 #include "kis_memento_manager.h"
 
-//#include <KoStore.h>
+#include <KoStore.h>
 
 #include "kis_global.h"
 //#include "kis_debug.h"
@@ -112,16 +112,78 @@ void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
 bool KisTiledDataManager::write(KoStore *store)
 {
     QReadLocker locker(&m_lock);
-    Q_UNUSED(store);
-    /* FIXME: */
+    if (!store) return false;
+    
+    char str[80];
+
+    sprintf(str, "%d\n", m_hashTable->numTiles());
+    store->write(str, strlen(str));
+    
+    
+    KisTileHashTableIterator iter(m_hashTable);
+    KisTileSP tile;
+    qint32 x, y;
+    qint32 width, height;
+
+    const qint32 tileDataSize = KisTileData::HEIGHT*KisTileData::WIDTH*pixelSize();
+
+    while(! (tile = iter.tile()) ) {
+	tile->extent().getRect(&x, &y, &width, &height);
+	sprintf(str, "%d,%d,%d,%d\n", x,y, width,height);
+	store->write(str, strlen(str));
+	
+	tile->lockForRead();
+	store->write((char *)tile->data(), tileDataSize);
+	tile->unlock();
+
+	++iter;
+    }
+
     printf("*** KisTiledDataManager::write called \n");
     return true;
 }
 bool KisTiledDataManager::read(KoStore *store)
 {
-    QReadLocker locker(&m_lock);
-    Q_UNUSED(store);
-    /* FIXME: */
+    QWriteLocker locker(&m_lock);
+    if (!store) return false;
+    
+    //clear(); - needed?
+
+    /*nothing*/ m_mementoManager->getMemento();
+
+    KisTileSP tile;
+    const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
+    qint32 x, y;
+    qint32 width, height;
+    char str[80];
+
+    QIODevice *stream = store->device();
+    if (!stream) return false;
+
+    quint32 numTiles;
+    stream->readLine(str, 79);
+    sscanf(str, "%u", &numTiles);
+
+     for (quint32 i = 0; i < numTiles; i++) {
+        stream->readLine(str, 79);
+        sscanf(str, "%d,%d,%d,%d", &x, &y, &width, &height);
+
+        // the following is only correct as long as tile size is not changed
+        // The first time we change tilesize the dimensions just read needs to be respected
+        // but for now we just assume that tiles are the same size as ever.
+        qint32 row = yToRow(y);
+        qint32 col = xToCol(x);
+	bool created;
+
+	tile = m_hashTable->getTileLazy(col, row, created);
+        if(created) 
+	    updateExtent(col, row);
+
+	tile->lockForWrite();
+	store->read((char *)tile->data(), tileDataSize);
+	tile->unlock();
+    }
+
     printf("*** KisTiledDataManager::read called \n");
     return true;
 }

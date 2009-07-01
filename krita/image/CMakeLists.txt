@@ -58,7 +58,7 @@ set(libkritatile_SRCS
 	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tilesourcefile.cc
 )
 add_subdirectory( tiles_new )
-endif(USE_TILESYSTEM EQUAL 0)
+endif(USE_TILESYSTEM EQUAL 1)
 
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
                      ${CMAKE_SOURCE_DIR}/krita/image/metadata

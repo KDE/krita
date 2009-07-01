@@ -128,7 +128,7 @@ KisMementoSP KisMementoManager::getMemento()
     return m_currentMemento;
 }
 
-#define saveAndClearMemento(memento) KisMemento* _mem = (memento); memento=0
+#define saveAndClearMemento(memento) KisMementoSP _mem = (memento); memento=0
 #define restoreMemento(memento) (memento) = _mem
 
 void KisMementoManager::rollback(KisTileHashTable *ht)

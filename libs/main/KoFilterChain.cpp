@@ -736,11 +736,13 @@ void Vertex::relaxVertices(PriorityQueue<Vertex>& queue)
 
 void Vertex::dump(const QByteArray& indent) const
 {
+#ifndef NDEBUG
     kDebug(30500) << indent << "Vertex:" << m_mimeType << " (" << m_weight << "):";
     const QByteArray i(indent + "   ");
     Q3PtrListIterator<Edge> it(m_edges);
     for (; it.current(); ++it)
         it.current()->dump(i);
+#endif
 }
 
 
@@ -799,12 +801,14 @@ KoFilterChain::Ptr Graph::chain(const KoFilterManager* manager, QByteArray& to) 
 
 void Graph::dump() const
 {
+#ifndef NDEBUG
     kDebug(30500) << "+++++++++ Graph::dump +++++++++";
     kDebug(30500) << "From:" << m_from;
     Q3AsciiDictIterator<Vertex> it(m_vertices);
     for (; it.current(); ++it)
         it.current()->dump("   ");
     kDebug(30500) << "+++++++++ Graph::dump (done) +++++++++";
+#endif
 }
 
 // Query the trader and create the vertices and edges representing

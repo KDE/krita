@@ -3,7 +3,7 @@ add_subdirectory( pics )
 add_subdirectory( core )
 add_subdirectory( tests)
 
-include_directories( ${KOGUIUTILS_INCLUDES} )
+include_directories(  )
 
 ########### Flake Plugin library ###############
 
@@ -94,7 +94,7 @@ kde4_add_plugin(musicshape ${musicshape_LIB_SRCS})
 target_link_libraries(
     musicshape
     flake
-    koguiutils
+    
     kostore
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}

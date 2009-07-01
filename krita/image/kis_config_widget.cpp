@@ -38,7 +38,7 @@ void KisConfigWidget::slotConfigChanged()
 
 void KisConfigWidget::kickTimer()
 {
-    m_timer.start(50);
+    m_timer.start(500);
 }
 
 #include "kis_config_widget.moc"

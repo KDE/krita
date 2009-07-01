@@ -1,4 +1,4 @@
-include_directories( ${KOGUIUTILS_INCLUDES} )
+include_directories(  )
 
 ########### Flake Plugin library ###############
 
@@ -16,7 +16,7 @@ kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})
 target_link_libraries(
     pictureshape
     flake
-    koguiutils
+    
     kostore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}

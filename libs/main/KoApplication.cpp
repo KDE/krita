@@ -23,7 +23,7 @@
 #include "KoGlobal.h"
 #include "KoApplicationAdaptor.h"
 #include "KoPrintJob.h"
-#include "KoQueryTrader.h"
+#include "KoDocumentEntry.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
 

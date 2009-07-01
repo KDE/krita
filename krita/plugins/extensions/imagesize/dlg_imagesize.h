@@ -63,6 +63,10 @@ private slots:
     void okClicked();
     void slotWidthPixelsChanged(int w);
     void slotHeightPixelsChanged(int h);
+    void slotWidthPercentageChanged(double w);
+    void slotHeightPercentageChanged(double h);
+    void slotWidthPixelUnitChanged(int index);
+    void slotHeightPixelUnitChanged(int index);
     void slotWidthPhysicalChanged(double w);
     void slotHeightPhysicalChanged(double h);
     void slotWidthUnitChanged(int index);

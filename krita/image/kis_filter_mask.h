@@ -45,6 +45,8 @@ public:
 
     virtual ~KisFilterMask();
 
+    QIcon icon() const;
+
     KisNodeSP clone() const {
         return KisNodeSP(new KisFilterMask(*this));
     }

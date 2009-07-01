@@ -134,3 +134,9 @@ kde4_add_unit_test(TestSegmentTypeCommand TESTNAME libs-flake-TestSegmentTypeCom
 target_link_libraries(TestSegmentTypeCommand ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
 ########### end ###############
+
+set(TestPointMergeCommand_test_SRCS TestPointMergeCommand.cpp )
+kde4_add_unit_test(TestPointMergeCommand TESTNAME libs-flake-TestPointMergeCommand  ${TestPointMergeCommand_test_SRCS})
+target_link_libraries(TestPointMergeCommand ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+########### end ###############

@@ -1,4 +1,4 @@
-include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} )
+include_directories(  ${KOMAIN_INCLUDES}  )
 
 set(kis_tiled_data_tester_SRCS kis_tiled_data_tester.cpp )
 

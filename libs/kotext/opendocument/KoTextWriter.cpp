@@ -40,7 +40,8 @@
 #include <KoGenStyles.h>
 
 #include <opendocument/KoTextSharedSavingData.h>
-#include "changetracker/KoChangeTracker.h"
+#include <changetracker/KoChangeTracker.h>
+#include <changetracker/KoChangeTrackerElement.h>
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 
@@ -92,6 +93,7 @@ KoTextWriter::KoTextWriter(KoShapeSavingContext &context)
 
 KoTextWriter::~KoTextWriter()
 {
+    delete d;
 }
 
 QString KoTextWriter::saveParagraphStyle(const QTextBlock &block)
@@ -226,6 +228,7 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
     // Write the fragments and their formats
     QTextCursor cursor(block);
     QTextCharFormat blockCharFormat = cursor.blockCharFormat();
+    QTextCharFormat previousCharFormat;
     QTextBlock::iterator it;
     for (it = block.begin(); !(it.atEnd()); ++it) {
         QTextFragment currentFragment = it.fragment();
@@ -235,6 +238,14 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
             break;
         if (currentFragment.isValid()) {
             QTextCharFormat charFormat = currentFragment.charFormat();
+            QTextCharFormat compFormat = charFormat;
+            bool identical;
+            previousCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
+            compFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
+            if (previousCharFormat == compFormat)
+                identical = true;
+            else
+                identical = false;
 
             if ( d->changeTracker && d->changeTracker->containsInlineChanges(charFormat) && d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()) {
                 KoGenChange change;
@@ -255,7 +266,7 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
                     d->writer->startElement("text:a", false);
                     d->writer->addAttribute("xlink:type", "simple");
                     d->writer->addAttribute("xlink:href", charFormat.anchorHref());
-                } else if (!styleName.isEmpty()) {
+                } else if (!styleName.isEmpty() /*&& !identical*/) {
                     d->writer->startElement("text:span", false);
                     d->writer->addAttribute("text:style-name", styleName);
                 }
@@ -269,7 +280,7 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
                     d->writer->addTextSpan(text);
                 }
 
-                if (!styleName.isEmpty() || charFormat.isAnchor())
+                if ((!styleName.isEmpty() /*&& !identical*/) || charFormat.isAnchor())
                     d->writer->endElement();
             } // if (inlineObject)
 
@@ -279,6 +290,7 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
                 d->writer->endElement();
                 changeName=QString();
             }
+            previousCharFormat = charFormat;
         } // if (fragment.valid())
     } // foeach(fragment)
 

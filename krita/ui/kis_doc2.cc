@@ -52,7 +52,6 @@
 #include <KoMainWindow.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
-#include <KoQueryTrader.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
@@ -276,18 +275,6 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     return true;
 }
 
-bool KisDoc2::loadChildren(KoStore* store)
-{
-    Q3PtrListIterator<KoDocumentChild> it(children());
-    for (; it.current(); ++it) {
-        if (!it.current()->loadDocument(store)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-
 bool KisDoc2::completeSaving(KoStore *store)
 {
     QString uri = url().url();
@@ -358,12 +345,6 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
 }
 
 
-KoDocument* KisDoc2::hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix)
-{
-    KoDocument* doc = KoDocument::hitTest(pos, view, matrix);
-    return doc;
-}
-
 
 KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace)
 {
@@ -431,12 +412,6 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     painter.fillRect(0, 0, width, height, bgColor, opacity);
     painter.end();
 
-    QList<KisPaintDeviceAction *> actions =
-        KoColorSpaceRegistry::instance()->paintDeviceActionsFor(cs);
-    for (int i = 0; i < actions.count(); i++)
-        actions.at(i)->act(layer->paintDevice(), img->width(), img->height());
-
-    img->setBackgroundColor(bgColor);
     img->addNode(layer.data(), img->rootLayer().data());
 
     setCurrentImage(img);

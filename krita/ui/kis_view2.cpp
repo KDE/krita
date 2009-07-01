@@ -439,12 +439,6 @@ void KisView2::createGUI()
     KoToolManager::instance()->addController(m_d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
 
-    // Remove the plugin dock widgets
-    QList<QDockWidget*> dockWidgets = shell()->dockWidgets();
-    foreach(QDockWidget * dockWidget, dockWidgets) {
-        shell()->removeDockWidget(dockWidget);
-    }
-
     KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
     createDockWidget(&toolBoxFactory);
 
@@ -454,10 +448,8 @@ void KisView2::createGUI()
         setDockerManager(dockerMng);
     }
 
-    connect( m_d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
-             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
-
-
+    connect( m_d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
+             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
 
     KisBirdEyeBoxFactory birdeyeFactory(this);
     m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>(createDockWidget(&birdeyeFactory));
@@ -471,12 +463,6 @@ void KisView2::createGUI()
 
     KisLayerBoxFactory layerboxFactory;
     m_d->layerBox = qobject_cast<KisLayerBox*>(createDockWidget(&layerboxFactory));
-
-    // Add the plugin dock widgets again
-    foreach(QDockWidget * dockWidget, dockWidgets) {
-        shell()->addDockWidget(Qt::RightDockWidgetArea, dockWidget);
-
-    }
 
     m_d->statusBar = new KisStatusBar(this);
     connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),
@@ -557,14 +543,11 @@ void KisView2::createManagers()
 
 void KisView2::updateGUI()
 {
-
     m_d->nodeManager->updateGUI();
-
     m_d->selectionManager->updateGUI();
     m_d->filterManager->updateGUI();
     m_d->zoomManager->updateGUI();
     m_d->imageManager->updateGUI();
-
     m_d->gridManager->updateGUI();
     m_d->perspectiveGridManager->updateGUI();
     m_d->layerBox->updateUI();

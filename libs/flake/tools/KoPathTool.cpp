@@ -34,8 +34,9 @@
 #include "commands/KoPathSegmentBreakCommand.h"
 #include "commands/KoParameterToPathCommand.h"
 #include "commands/KoSubpathJoinCommand.h"
+#include "commands/KoPathPointMergeCommand.h"
 #include "KoParameterShape.h"
-#include <KoPathPoint.h>
+#include "KoPathPoint.h"
 #include "KoPathPointRubberSelectStrategy.h"
 #include "KoPathSegmentChangeStrategy.h"
 #include "PathToolOptionWidget.h"
@@ -45,8 +46,8 @@
 
 #include <KAction>
 #include <KIcon>
-#include <kdebug.h>
-#include <klocale.h>
+#include <KDebug>
+#include <KLocale>
 #include <QtGui/QPainter>
 #include <QtGui/QBitmap>
 #include <QtGui/QTabWidget>
@@ -63,6 +64,13 @@ static unsigned char needle_move_bits[] = {
     0x54, 0x7c, 0x38, 0x1c, 0x10, 0x18, 0x00, 0x00
 };
 
+// helper function to calculate the squared distance between two points
+qreal squaredDistance( const QPointF p1, const QPointF &p2 )
+{
+    qreal dx = p1.x()-p2.x();
+    qreal dy = p1.y()-p2.y();
+    return dx*dx + dy*dy;
+}
 
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
         : KoTool(canvas)
@@ -129,10 +137,10 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     addAction("pathpoint-join", m_actionJoinSegment);
     connect(m_actionJoinSegment, SIGNAL(triggered()), this, SLOT(joinPoints()));
 
-    // TODO: implement me
     m_actionMergePoints = new KAction(KIcon("pathpoint-merge"), i18n("Merge points"), this);
-    //addAction("pathpoint-merge", m_actionMergePoints);
-
+    addAction("pathpoint-merge", m_actionMergePoints);
+    connect(m_actionMergePoints, SIGNAL(triggered()), this, SLOT(mergePoints()));
+    
     m_actionConvertToPath = new KAction(KIcon("convert-to-path"), i18n("To Path"), this);
     m_actionConvertToPath->setShortcut(Qt::Key_P);
     addAction("convert-to-path", m_actionConvertToPath);
@@ -324,6 +332,35 @@ void KoPathTool::joinPoints()
     }
 }
 
+void KoPathTool::mergePoints()
+{
+    if (m_pointSelection.objectCount() != 1 || m_pointSelection.size() != 2)
+        return;
+    
+    QList<KoPathPointData> pointData = m_pointSelection.selectedPointsData();
+    const KoPathPointData & pd1 = pointData.at(0);
+    const KoPathPointData & pd2 = pointData.at(1);
+    const KoPathPointIndex & index1 = pd1.pointIndex;
+    const KoPathPointIndex & index2 = pd2.pointIndex;
+    
+    KoPathShape * path = pd1.pathShape;
+    
+    // check if subpaths are already closed
+    if (path->isClosedSubpath(index1.first) || path->isClosedSubpath(index2.first))
+        return;
+    // check if first point is an endpoint
+    if (index1.second != 0 && index1.second != path->pointCountSubpath(index1.first)-1)
+        return;
+    // check if second point is an endpoint
+    if (index2.second != 0 && index2.second != path->pointCountSubpath(index2.first)-1)
+        return;
+    
+    // now we can start merging the endpoints
+    KoPathPointMergeCommand *cmd = new KoPathPointMergeCommand(pd1, pd2);
+    m_canvas->addCommand(cmd);
+    updateActions();
+}
+
 void KoPathTool::breakAtPoint()
 {
     if (m_pointSelection.hasSelection()) {
@@ -454,7 +491,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     }
 
     foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
-        QRectF roi = handleRect(shape->documentToShape(event->point));
+        QRectF roi = handleGrabRect(shape->documentToShape(event->point));
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
         if (parameterShape && parameterShape->isParametricShape()) {
             int handleId = parameterShape->handleIdAt(roi);
@@ -481,34 +518,61 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
         } else {
             QList<KoPathPoint*> points = shape->pointsAt(roi);
             if (! points.empty()) {
-                KoPathPoint *p = points.first();
-                KoPathPoint::KoPointType type = KoPathPoint::Node;
-
-                // the node point must be hit if the point is not selected yet
-                if (! m_pointSelection.contains(p) && ! roi.contains(p->point()))
+                // find the nearest control point from all points within the roi
+                KoPathPoint * bestPoint = 0;
+                KoPathPoint::KoPointType bestPointType = KoPathPoint::Node;
+                qreal minDistance = HUGE_VAL;
+                foreach(KoPathPoint *p, points) {
+                    // the node point must be hit if the point is not selected yet
+                    if (! m_pointSelection.contains(p) && ! roi.contains(p->point()))
+                        continue;
+                    
+                    // check for the control points first as otherwise it is no longer
+                    // possible to change the control points when they are the same as the point
+                    if (p->activeControlPoint1() && roi.contains(p->controlPoint1())) {
+                        qreal dist = squaredDistance(roi.center(), p->controlPoint1());
+                        if (dist < minDistance) {
+                            bestPoint = p;
+                            bestPointType = KoPathPoint::ControlPoint1;
+                            minDistance = dist;
+                        }
+                    }
+                    
+                    if (p->activeControlPoint2() && roi.contains(p->controlPoint2())) {
+                        qreal dist = squaredDistance(roi.center(), p->controlPoint2());
+                        if (dist < minDistance) {
+                            bestPoint = p;
+                            bestPointType = KoPathPoint::ControlPoint2;
+                            minDistance = dist;
+                        }
+                    }
+                    
+                    // check the node point at last
+                    qreal dist = squaredDistance(roi.center(), p->point());
+                    if (dist < minDistance) {
+                        bestPoint = p;
+                        bestPointType = KoPathPoint::Node;
+                        minDistance = dist;
+                    }
+                }
+                
+                if (! bestPoint)
                     return;
-
-                // check for the control points as otherwise it is no longer
-                // possible to change the control points when they are the same as the point
-                if (p->activeControlPoint1() && roi.contains(p->controlPoint1()))
-                    type = KoPathPoint::ControlPoint1;
-                else if (p->activeControlPoint2() && roi.contains(p->controlPoint2()))
-                    type = KoPathPoint::ControlPoint2;
-
+                
                 useCursor(m_moveCursor);
-                if (type == KoPathPoint::Node)
+                if (bestPointType == KoPathPoint::Node)
                     emit statusTextChanged(i18n("Drag to move point. Shift click to change point type."));
                 else
                     emit statusTextChanged(i18n("Drag to move control point."));
 
                 PointHandle *prev = dynamic_cast<PointHandle*>(m_activeHandle);
-                if (prev && prev->activePoint() == p && prev->activePointType() == type)
+                if (prev && prev->activePoint() == bestPoint && prev->activePointType() == bestPointType)
                     return; // no change;
 
                 if (m_activeHandle)
                     m_activeHandle->repaint();
                 delete m_activeHandle;
-                m_activeHandle = new PointHandle(this, p, type);
+                m_activeHandle = new PointHandle(this, bestPoint, bestPointType);
                 m_activeHandle->repaint();
                 return;
             }
@@ -808,9 +872,12 @@ void KoPathTool::updateActions()
     m_actionAddPoint->setEnabled(hasSegmentsSelected);
     m_actionLineSegment->setEnabled(hasSegmentsSelected);
     m_actionCurveSegment->setEnabled(hasSegmentsSelected);
-    m_actionBreakSegment->setEnabled(hasPointsSelected && m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2);
-    m_actionJoinSegment->setEnabled(hasPointsSelected && m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2);
-    m_actionMergePoints->setEnabled(false);
+    
+    const uint objectCount = m_pointSelection.objectCount();
+    const uint pointCount = m_pointSelection.size();
+    m_actionBreakSegment->setEnabled(objectCount == 1 && pointCount == 2);
+    m_actionJoinSegment->setEnabled(objectCount == 1 && pointCount == 2);
+    m_actionMergePoints->setEnabled(objectCount == 1 && pointCount == 2);
 }
 
 void KoPathTool::deactivate()
@@ -827,18 +894,17 @@ void KoPathTool::deactivate()
 
 void KoPathTool::resourceChanged(int key, const QVariant & res)
 {
-    if (key != KoCanvasResource::HandleRadius)
-        return;
-
-    int oldHandleRadius = m_handleRadius;
-
-    m_handleRadius = res.toUInt();
-
-    // repaint with the bigger of old and new handle radius
-    int maxRadius = qMax(m_handleRadius, oldHandleRadius);
-    foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
-        QRectF controlPointRect = shape->absoluteTransformation(0).map(shape->outline()).controlPointRect();
-        repaint(controlPointRect.adjusted(-maxRadius, -maxRadius, maxRadius, maxRadius));
+    if (key == KoCanvasResource::HandleRadius) {
+        int oldHandleRadius = m_handleRadius;
+        
+        m_handleRadius = res.toUInt();
+        
+        // repaint with the bigger of old and new handle radius
+        int maxRadius = qMax(m_handleRadius, oldHandleRadius);
+        foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
+            QRectF controlPointRect = shape->absoluteTransformation(0).map(shape->outline()).controlPointRect();
+            repaint(controlPointRect.adjusted(-maxRadius, -maxRadius, maxRadius, maxRadius));
+        }
     }
 }
 
@@ -855,12 +921,6 @@ void KoPathTool::repaint(const QRectF &repaintRect)
     // widen border to take antialiasing into account
     qreal radius = m_handleRadius + 1;
     m_canvas->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
-}
-
-QRectF KoPathTool::handleRect(const QPointF &p)
-{
-    QSizeF hsize = m_canvas->viewConverter()->viewToDocument(QSizeF(m_handleRadius, m_handleRadius));
-    return QRectF(p.x() - hsize.width(), p.y() - hsize.height(), 2*hsize.width(), 2*hsize.height());
 }
 
 void KoPathTool::deleteSelection()

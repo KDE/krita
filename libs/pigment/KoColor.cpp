@@ -24,6 +24,12 @@
 
 #include "DebugPigment.h"
 #include "KoColor.h"
+
+
+#ifdef NO_PIGMENT
+
+#else
+
 #include "KoColorModelStandardIds.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
@@ -303,3 +309,5 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, con
         return KoColor();
     }
 }
+
+#endif

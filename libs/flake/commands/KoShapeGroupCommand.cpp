@@ -71,7 +71,7 @@ void KoShapeGroupCommand::redo()
             // the group has changed position and so have the group child shapes
             // -> we need compensate the group position change
             QPointF positionOffset = oldGroupPosition - bound.topLeft();
-            foreach(KoShape * child, m_container->iterator())
+            foreach(KoShape * child, m_container->childShapes())
                 child->setAbsolutePosition(child->absolutePosition() + positionOffset);
         }
     }
@@ -105,7 +105,7 @@ void KoShapeGroupCommand::undo()
         if (m_container->childCount() > 0) {
             bool boundingRectInitialized = false;
             QRectF bound;
-            foreach(KoShape * shape, m_container->iterator()) {
+            foreach(KoShape * shape, m_container->childShapes()) {
                 if (! boundingRectInitialized) {
                     bound = shape->boundingRect();
                     boundingRectInitialized = true;
@@ -115,7 +115,7 @@ void KoShapeGroupCommand::undo()
             // the group has changed position and so have the group child shapes
             // -> we need compensate the group position change
             QPointF positionOffset = oldGroupPosition - bound.topLeft();
-            foreach(KoShape * child, m_container->iterator())
+            foreach(KoShape * child, m_container->childShapes())
                 child->setAbsolutePosition(child->absolutePosition() + positionOffset);
 
             m_container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeftCorner);

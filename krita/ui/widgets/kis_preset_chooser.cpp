@@ -26,7 +26,7 @@ KisPresetChooser::KisPresetChooser(QWidget * parent)
         : KisItemChooser(parent)
 {
     setObjectName("KisPresetChooser");
-    setMinimumSize(chooserWidget()->sizeHint());
+    //setMinimumSize(chooserWidget()->sizeHint());
 }
 
 
@@ -37,12 +37,12 @@ KisPresetChooser::~KisPresetChooser()
 
 void KisPresetChooser::update(QTableWidgetItem* i)
 {
-    KoResourceItem *item = dynamic_cast<KoResourceItem *>(i);
-
-    if (item) {
-        KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(item->resource());
-        if (preset) {
-            parent()->findChild<QLabel*>("lblName")->setText(preset->name());
-        }
-    }
+//    KoResourceItem *item = dynamic_cast<KoResourceItem *>(i);
+//
+//    if (item) {
+//        KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(item->resource());
+//        if (preset) {
+//            parent()->findChild<QLabel*>("lblName")->setText(preset->name());
+//        }
+//    }
 }

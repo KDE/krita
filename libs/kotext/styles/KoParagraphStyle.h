@@ -120,7 +120,7 @@ public:
         TextProgressionDirection,
 
         MasterPageName,         ///< Optional name of the master-page
-        
+
         OutlineLevel            ///< Outline level for headings
 // do 15.5.24
 // continue at 15.5.28

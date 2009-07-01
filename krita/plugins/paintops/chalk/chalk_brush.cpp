@@ -83,7 +83,7 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     KoColorTransformation* transfo = dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
     transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
 
-    int opacity = static_cast<int>((1.0f + result) * 255.0);
+    int opacity = static_cast<int>((1.0f + result) * OPACITY_OPAQUE);
     m_inkColor.setOpacity(opacity);
 
     for (int i = 0;i < m_bristles.size();i++) {

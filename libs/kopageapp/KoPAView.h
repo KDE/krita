@@ -39,7 +39,9 @@ class KoPADocumentStructureDocker;
 class KoShapeManager;
 class KoZoomAction;
 class KoZoomController;
+class KUrl;
 class QTextDocument;
+class QLabel;
 
 /// Creates a view with a KoPACanvas and rulers
 class KOPAGEAPP_EXPORT KoPAView : public KoView
@@ -117,9 +119,31 @@ public:
      * Set the active page and updates the UI
      */
     void doUpdateActivePage( KoPAPageBase * page );
+    
+    /**
+     * Paste the page if everything is ok
+     */
+    void pagePaste();
 
     /// reimplemented
     virtual KoPrintJob * createPrintJob();
+
+    /**
+     * Save thumbnail to an image file.
+     *
+     * Export a thumbnail to disk using a pixmap file like e.g. PNG
+     * This method uses a QPixmap::save() call.
+     *
+     * @param page page to get thumbnail of
+     * @param url the url of the image file to be created
+     * @param size the desired image size in px
+     * @param format the format of the image file (see QPixmap::save())
+     * @param quality the quality of the image in [0,100] or -1 to use default (see QPixmap::save())
+     *
+     * @returns whether the image was successfully saved
+     */
+    bool exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const QSize& size = QSize( 512, 512 ),
+                              const char * format = 0, int quality = -1 );
 
 public slots:
     /// Set the active page and updates the UI
@@ -214,6 +238,11 @@ protected slots:
      */
     void reinitDocumentDocker();
 
+    /** 
+     * Import slideshow 
+     */
+    void importDocument();
+
 protected:
     KoPADocument *m_doc;
     KoPACanvas *m_canvas;
@@ -250,6 +279,9 @@ private:
     KoFind * m_find;
 
     KoPAViewMode *m_viewModeNormal;
+
+    // status bar
+    QLabel * m_status;       ///< ordinary status
 };
 
 #endif /* KOPAVIEW_H */

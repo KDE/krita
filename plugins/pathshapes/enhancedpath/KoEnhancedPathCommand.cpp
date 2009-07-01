@@ -134,7 +134,7 @@ bool KoEnhancedPathCommand::execute()
                 QPointF startPoint( rx * cos( startAngle ), ry * sin( 2*M_PI - startAngle ) );
 
                 if( lineTo )
-                    m_parent->moveTo( m_parent->viewboxToShape( center ) + startPoint );
+                    m_parent->lineTo( m_parent->viewboxToShape( center ) + startPoint );
                 else
                     m_parent->moveTo( m_parent->viewboxToShape( center ) + startPoint );
 
@@ -163,7 +163,7 @@ bool KoEnhancedPathCommand::execute()
                 if( lineTo )
                     m_parent->lineTo( m_parent->viewboxToShape( points[i+2] ) );
                 else
-                    m_parent->lineTo( m_parent->viewboxToShape( points[i+2] ) );
+                    m_parent->moveTo( m_parent->viewboxToShape( points[i+2] ) );
 
                 m_parent->arcTo( rx, ry, startAngle * rad2deg, sweepAngle * rad2deg );
             }

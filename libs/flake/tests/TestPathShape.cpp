@@ -469,14 +469,22 @@ void TestPathShape::openSubpath()
 
     // open at middle point in subpath
     QVERIFY(path.openSubpath(path.pathPointIndex(point1)) == KoPathPointIndex(0, 2));
+    QVERIFY(path.pointByIndex(KoPathPointIndex(0,0))->properties() & KoPathPoint::StartSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(0,2))->properties() & KoPathPoint::StopSubpath);
     // open at first point in subpath
     QVERIFY(path.openSubpath(path.pathPointIndex(point2)) == KoPathPointIndex(1, 0));
+    QVERIFY(path.pointByIndex(KoPathPointIndex(1,0))->properties() & KoPathPoint::StartSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(1,3))->properties() & KoPathPoint::StopSubpath);
     // open at last point in subpath
     QVERIFY(path.openSubpath(path.pathPointIndex(point3)) == KoPathPointIndex(2, 1));
+    QVERIFY(path.pointByIndex(KoPathPointIndex(2,0))->properties() & KoPathPoint::StartSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(2,3))->properties() & KoPathPoint::StopSubpath);
     // try to open open subpath
     QVERIFY(path.openSubpath(path.pathPointIndex(point3)) == KoPathPointIndex(-1, -1));
     // open if the first path is a curve
     QVERIFY(path.openSubpath(path.pathPointIndex(point5)) == KoPathPointIndex(3, 1));
+    QVERIFY(path.pointByIndex(KoPathPointIndex(3,0))->properties() & KoPathPoint::StartSubpath);
+    QVERIFY(path.pointByIndex(KoPathPointIndex(3,2))->properties() & KoPathPoint::StopSubpath);
     // try to open none existing subpath
     QVERIFY(path.openSubpath(KoPathPointIndex(4, 1)) == KoPathPointIndex(-1, -1));
 

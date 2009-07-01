@@ -168,4 +168,4 @@ public:
 
 };
 
-#endif // KIS_COLORSPACE_ALPHA_H_
+#endif // KO_COLORSPACE_ALPHA_H_

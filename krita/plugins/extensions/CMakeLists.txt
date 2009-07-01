@@ -1,5 +1,5 @@
 add_subdirectory( bigbrother )
-
+add_subdirectory( backgrounds )
 add_subdirectory( bracketing2hdr )
 add_subdirectory( colorrange )
 add_subdirectory( colorspaceconversion )
@@ -19,6 +19,7 @@ add_subdirectory( together )
 add_subdirectory( tonemapping )
 add_subdirectory( trianglecolorselector )
 add_subdirectory( histogram_docker )
+add_subdirectory( extensionsmanager )
 
 macro_optional_find_package(GMM)
 macro_log_feature(GMM_FOUND "Gmm++" "Generic C++ template library for sparse, dense and skyline matrices" "http://home.gna.org/getfem/download.html" FALSE "" "Required by the Krita panorama plugin")
@@ -44,6 +45,6 @@ if(HAVE_OPENSHIVA AND HAVE_QTSHIVA)
  add_subdirectory(shiva)
 endif(HAVE_OPENSHIVA AND HAVE_QTSHIVA)
 
-macro_log_feature(HAVE_OPENSHIVA "OpenShiva" "OpenShiva interpreter for the Shiva Kernel Langauge" "http://www.openshiva.org" FALSE "" "Required for Shiva based Generators and Filters")
+macro_log_feature(HAVE_OPENSHIVA "OpenShiva" "OpenShiva interpreter for the Shiva Kernel Language" "http://www.openshiva.org" FALSE "" "Required for Shiva based Generators and Filters")
 macro_log_feature(HAVE_QTSHIVA "QtShiva" "Qt bindings for the OpenShiva interpreter" "http://www.openshiva.org" FALSE "" "Required for Shiva based Generators and Filters")
 

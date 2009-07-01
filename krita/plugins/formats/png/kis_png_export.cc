@@ -104,7 +104,11 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
 
     KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
     wdg->alpha->setChecked(isThereAlpha);
-    wdg->alpha->setEnabled(isThereAlpha);
+    wdg->alpha->setVisible(isThereAlpha);
+    wdg->tryToSaveAsIndexed->setVisible(!isThereAlpha);
+    if(isThereAlpha) {
+      wdg->tryToSaveAsIndexed->setChecked(false);
+    }
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
     if (hasVisibleWidgets()) {
@@ -116,6 +120,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     bool alpha = wdg->alpha->isChecked();
     bool interlace = wdg->interlacing->isChecked();
     int compression = wdg->compressionLevel->value();
+    bool tryToSaveAsIndexed = wdg->tryToSaveAsIndexed->isChecked();
 
     delete kdb;
 
@@ -131,6 +136,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     options.alpha = alpha;
     options.interlace = interlace;
     options.compression = compression;
+    options.tryToSaveAsIndexed = tryToSaveAsIndexed;
     KisExifInfoVisitor eIV;
     eIV.visit(img->rootLayer().data());
     KisMetaData::Store* eI = 0;

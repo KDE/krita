@@ -188,63 +188,63 @@ bool DefaultTool::wantsAutoScroll()
 
 void DefaultTool::setupActions()
 {
-    KAction* actionBringToFront = new KAction(KIcon("object-order-front"),
+    KAction* actionBringToFront = new KAction(KIcon("object-order-front-koffice"),
                                                i18n("Bring to &Front"), this);
     addAction("object_order_front", actionBringToFront);
     actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-    KAction* actionRaise = new KAction(KIcon("object-order-raise"), i18n("&Raise"), this);
+    KAction* actionRaise = new KAction(KIcon("object-order-raise-koffice"), i18n("&Raise"), this);
     addAction("object_order_raise", actionRaise);
     actionRaise->setShortcut(QKeySequence("Ctrl+]"));
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    KAction* actionLower = new KAction(KIcon("object-order-lower"), i18n("&Lower"), this);
+    KAction* actionLower = new KAction(KIcon("object-order-lower-koffice"), i18n("&Lower"), this);
     addAction("object_order_lower", actionLower);
     actionLower->setShortcut(QKeySequence("Ctrl+["));
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-    KAction* actionSendToBack = new KAction(KIcon("object-order-back"),
+    KAction* actionSendToBack = new KAction(KIcon("object-order-back-koffice"),
                                              i18n("Send to &Back"), this);
     addAction("object_order_back", actionSendToBack);
     actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-    KAction* actionAlignLeft = new KAction(KIcon("object-align-horizontal-left"),
+    KAction* actionAlignLeft = new KAction(KIcon("object-align-horizontal-left-koffice"),
                                             i18n("Align Left"), this);
     addAction("object_align_horizontal_left", actionAlignLeft);
     connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-    KAction* actionAlignCenter = new KAction(KIcon("object-align-horizontal-center"),
+    KAction* actionAlignCenter = new KAction(KIcon("object-align-horizontal-center-koffice"),
                                               i18n("Horizontally Center"), this);
     addAction("object_align_horizontal_center", actionAlignCenter);
     connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
 
-    KAction* actionAlignRight = new KAction(KIcon("object-align-horizontal-right"),
+    KAction* actionAlignRight = new KAction(KIcon("object-align-horizontal-right-koffice"),
                                              i18n("Align Right"), this);
     addAction("object_align_horizontal_right", actionAlignRight);
     connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
 
-    KAction* actionAlignTop = new KAction(KIcon("object-align-vertical-top"), i18n("Align Top"), this);
+    KAction* actionAlignTop = new KAction(KIcon("object-align-vertical-top-koffice"), i18n("Align Top"), this);
     addAction("object_align_vertical_top", actionAlignTop);
     connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
 
-    KAction* actionAlignMiddle = new KAction(KIcon("object-align-vertical-center"),
+    KAction* actionAlignMiddle = new KAction(KIcon("object-align-vertical-center-koffice"),
                                               i18n("Vertically Center"), this);
     addAction("object_align_vertical_center", actionAlignMiddle);
     connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
 
-    KAction* actionAlignBottom = new KAction(KIcon("object-align-vertical-bottom"),
+    KAction* actionAlignBottom = new KAction(KIcon("object-align-vertical-bottom-koffice"),
                                               i18n("Align Bottom"), this);
     addAction("object_align_vertical_bottom", actionAlignBottom);
     connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 
-    KAction* actionGroupBottom = new KAction(KIcon("object-group"),
+    KAction* actionGroupBottom = new KAction(KIcon("object-group-koffice"),
                                               i18n("Group"), this);
     addAction("object_group", actionGroupBottom);
     connect(actionGroupBottom, SIGNAL(triggered()), this, SLOT(selectionGroup()));
 
-    KAction* actionUngroupBottom = new KAction(KIcon("object-ungroup"),
+    KAction* actionUngroupBottom = new KAction(KIcon("object-ungroup-koffice"),
                                                 i18n("Ungroup"), this);
     addAction("object_ungroup", actionUngroupBottom);
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
@@ -555,8 +555,8 @@ void DefaultTool::selectGuideAtPosition(const QPointF &position)
     // check if we are on a guide line
     KoGuidesData * guidesData = m_canvas->guidesData();
     if (guidesData && guidesData->showGuideLines()) {
-        qreal handleRadius = m_canvas->resourceProvider()->handleRadius();
-        qreal minDistance = m_canvas->viewConverter()->viewToDocumentX(handleRadius);
+        qreal grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
+        qreal minDistance = m_canvas->viewConverter()->viewToDocumentX(grabSensitivity);
         uint i = 0;
         foreach (qreal guidePos, guidesData->horizontalGuideLines()) {
             qreal distance = qAbs(guidePos - position.y());
@@ -596,15 +596,6 @@ QRectF DefaultTool::handlesSize()
     QPointF border = m_canvas->viewConverter()->viewToDocument(QPointF(HANDLE_DISTANCE, HANDLE_DISTANCE));
     bound.adjust(-border.x(), -border.y(), border.x(), border.y());
     return bound;
-}
-
-QRectF DefaultTool::handleRectAt( const QPointF &point )
-{
-    qreal handleRadius = m_canvas->resourceProvider()->handleRadius();
-    QRectF handleRect = QRectF(QPointF(), QSizeF(2*handleRadius,2*handleRadius));
-    handleRect = m_canvas->viewConverter()->viewToDocument(handleRect);
-    handleRect.moveCenter(point);
-    return handleRect;
 }
 
 void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -852,7 +843,7 @@ KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *inner
     {
         QPainterPath path;
         path.addPolygon(m_selectionOutline);
-        *innerHandleMeaning = path.contains(point) || path.intersects(handleRectAt(point));
+        *innerHandleMeaning = path.contains(point) || path.intersects(handlePaintRect(point));
     }
     for (int i = 0; i < KoFlake::NoHandle; ++i) {
         KoFlake::SelectionHandle handle = handleOrder[i];
@@ -1005,7 +996,7 @@ void DefaultTool::selectionUngroup()
         KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
         if (group) {
             cmd = cmd ? cmd : new QUndoCommand(i18n("Ungroup shapes"));
-            new KoShapeUngroupCommand(group, group->iterator(), cmd);
+            new KoShapeUngroupCommand(group, group->childShapes(), cmd);
             m_canvas->shapeController()->removeShape(group, cmd);
         }
     }
@@ -1168,7 +1159,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         }
         if (! (selectMultiple || selectNextInStack) && event->buttons() == Qt::LeftButton) {
             const QPainterPath outlinePath = select->transformation().map(select->outline());
-            if (outlinePath.contains(event->point) || outlinePath.intersects(handleRectAt(event->point)))
+            if (outlinePath.contains(event->point) || outlinePath.intersects(handlePaintRect(event->point)))
                 return new ShapeMoveStrategy(this, m_canvas, event->point);
         }
     }

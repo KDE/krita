@@ -21,7 +21,7 @@
 #include "KoVersionDialog.h"
 
 #include "KoMainWindow.h"
-#include "KoQueryTrader.h"
+#include "KoDocumentEntry.h"
 
 #include <QFile>
 #include <QGridLayout>

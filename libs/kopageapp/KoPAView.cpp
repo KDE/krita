@@ -26,6 +26,7 @@
 #include <QTimer>
 #include <QApplication>
 #include <QClipboard>
+#include <QLabel>
 
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
@@ -51,6 +52,7 @@
 #include <KoShapeDeleteCommand.h>
 #include <KoCutController.h>
 #include <KoCopyController.h>
+#include <KoFilterManager.h>
 
 #include "KoPADocumentStructureDocker.h"
 #include "KoShapeTraversal.h"
@@ -66,8 +68,7 @@
 #include "commands/KoPAChangeMasterPageCommand.h"
 #include "dialogs/KoPAMasterPageDialog.h"
 
-#include "KoShapeOdfSaveHelper.h"
-
+#include <kfiledialog.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kicon.h>
@@ -75,8 +76,11 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
+#include <kmessagebox.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
+#include <kio/netaccess.h>
+#include <ktemporaryfile.h>
 
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
@@ -129,6 +133,14 @@ void KoPAView::initGUI()
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, qreal ) ) );
 
     m_zoomAction = m_zoomController->zoomAction();
+
+    // set up status bar message
+    m_status = new QLabel( QString(), statusBar() );
+    m_status->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+    m_status->setMinimumWidth( 300 );
+    addStatusBarItem( m_status, 1 );
+    connect( KoToolManager::instance(), SIGNAL( changedStatusText( const QString & ) ),
+             m_status, SLOT( setText( const QString & ) ) );
     addStatusBarItem( m_zoomAction->createWidget( statusBar() ), 0, true );
 
     m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
@@ -175,8 +187,8 @@ void KoPAView::initGUI()
         setDockerManager(dockerMng);
     }
 
-    connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
-             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
+    connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
+             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(m_canvas, SIGNAL(documentSize(const QSize&)), m_canvasController, SLOT(setDocumentSize(const QSize&)));
@@ -275,7 +287,59 @@ void KoPAView::initActions()
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
 
+    KAction * am = new KAction(i18n("Import Document..."), this);
+    actionCollection()->addAction("import_document", am);
+    connect(am, SIGNAL(triggered()), this, SLOT(importDocument()));
+
     m_find = new KoFind( this, m_canvas->resourceProvider(), actionCollection() );
+}
+
+void KoPAView::importDocument()
+{
+    KFileDialog *dialog = new KFileDialog( KUrl("kfiledialog:///OpenDialog"),QString(), this );
+    dialog->setObjectName( "file dialog" );
+    dialog->setMode( KFile::File );
+    if ( m_doc->pageType() == KoPageApp::Slide ) {
+        dialog->setCaption(i18n("Import Slideshow"));
+    }
+    else {
+        dialog->setCaption(i18n("Import Document"));
+    }
+
+    // TODO make it possible to select also other supported types (then the default format) here.
+    // this needs to go via the filters to get the file in the correct format.
+    // For now we only support the native mime types
+    QStringList mimeFilter;
+#if 1
+    mimeFilter << KoOdf::mimeType( m_doc->documentType() ) << KoOdf::templateMimeType( m_doc->documentType() );
+#else
+    mimeFilter = KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(m_doc->componentData()), KoFilterManager::Import,
+                                              KoDocument::readExtraNativeMimeTypes() );
+#endif
+
+    dialog->setMimeFilter( mimeFilter );
+    if (dialog->exec() == QDialog::Accepted) {
+        KUrl url(dialog->selectedUrl());
+        QString tmpFile;
+        if ( KIO::NetAccess::download( url, tmpFile, 0 ) ) {
+            QFile file( tmpFile );
+            file.open( QIODevice::ReadOnly );
+            QByteArray ba;
+            ba = file.readAll();
+
+            // set the correct mime type as otherwise it does not find the correct tag when loading
+            QMimeData data;
+            data.setData( KoOdf::mimeType( m_doc->documentType() ), ba);
+            KoPAPastePage paste( m_doc,m_activePage );
+            if ( ! paste.paste( m_doc->documentType(), &data ) ) {
+                KMessageBox::error( 0L, i18n("Could not import\n%1", url.pathOrUrl()));
+            }
+        }
+        else {
+            KMessageBox::error( 0L, i18n("Could not import\n%1", url.pathOrUrl()));
+        }
+    }
+    delete dialog;
 }
 
 void KoPAView::viewSnapToGrid(bool snap)
@@ -293,17 +357,22 @@ void KoPAView::viewGuides(bool show)
 void KoPAView::editPaste()
 {
     if ( !m_canvas->toolProxy()->paste() ) {
-        const QMimeData * data = QApplication::clipboard()->mimeData();
+        pagePaste();
+    }
+}
 
-        KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
+void KoPAView::pagePaste()
+{
+    const QMimeData * data = QApplication::clipboard()->mimeData();
 
-        for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
-        {
-            if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
-                KoPAPastePage paste( m_doc, m_activePage );
-                paste.paste( documentTypes[i], data );
-                break;
-            }
+    KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
+
+    for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
+    {
+        if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
+            KoPAPastePage paste( m_doc, m_activePage );
+            paste.paste( documentTypes[i], data );
+            break;
         }
     }
 }
@@ -319,13 +388,13 @@ void KoPAView::editSelectAll()
     if( !selection )
         return;
 
-    QList<KoShape*> shapes = activePage()->iterator();
+    QList<KoShape*> shapes = activePage()->childShapes();
 
     foreach( KoShape *shape, shapes ) {
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>( shape );
 
         if ( layer ) {
-            QList<KoShape*> layerShapes( layer->iterator() );
+            QList<KoShape*> layerShapes( layer->childShapes() );
             foreach( KoShape *layerShape, layerShapes ) {
                 selection->select( layerShape );
                 layerShape->update();
@@ -458,7 +527,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     shapeManager()->removeAdditional( m_activePage );
     m_activePage = page;
     shapeManager()->addAdditional( m_activePage );
-    QList<KoShape*> shapes = page->iterator();
+    QList<KoShape*> shapes = page->childShapes();
     shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
     //Make the top most layer active
     if ( !shapes.isEmpty() ) {
@@ -470,7 +539,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
     if ( paPage ) {
         KoPAMasterPage * masterPage = paPage->masterPage();
-        QList<KoShape*> masterShapes = masterPage->iterator();
+        QList<KoShape*> masterShapes = masterPage->childShapes();
         masterShapeManager()->setShapes(masterShapes, KoShapeManager::AddWithoutRepaint);
         //Make the top most layer active
         if ( !masterShapes.isEmpty() ) {
@@ -616,6 +685,47 @@ void KoPAView::setActionEnabled( int actions, bool enable )
     {
         m_actionMasterPage->setEnabled( enable );
     }
+}
+
+bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const QSize& size,
+                                    const char * format, int quality )
+{
+    bool res = false;
+    QPixmap pix = page->thumbnail( size );
+    if ( !pix.isNull() ) {
+        // Depending on the desired target size due to rounding
+        // errors during zoom the resulting pixmap *might* be
+        // 1 pixel or 2 pixels wider/higher than desired: we just
+        // remove the additional columns/rows.  This can be done
+        // since KPresenter is leaving a minimal border below/at
+        // the right of the image anyway.
+        if ( size != pix.size() ) {
+            pix = pix.copy( 0, 0, size.width(), size.height() );
+        }
+        // save the pixmap to the desired file
+        KUrl fileUrl( url );
+        if ( fileUrl.protocol().isEmpty() ) {
+            fileUrl.setProtocol( "file" );
+        }
+        const bool bLocalFile = fileUrl.isLocalFile();
+        KTemporaryFile* tmpFile = bLocalFile ? 0 : new KTemporaryFile();
+        if( bLocalFile || tmpFile->open() ) {
+            QFile file( bLocalFile ? fileUrl.path() : tmpFile->fileName() );
+            if ( file.open( QIODevice::ReadWrite ) ) {
+                res = pix.save( &file, format, quality );
+                file.close();
+            }
+            if ( !bLocalFile ) {
+                if ( res ) {
+                    res = KIO::NetAccess::upload( tmpFile->fileName(), fileUrl, this );
+                }
+            }
+        }
+        if ( !bLocalFile ) {
+            delete tmpFile;
+        }
+   }
+   return res;
 }
 
 KoPADocumentStructureDocker* KoPAView::documentStructureDocker() const

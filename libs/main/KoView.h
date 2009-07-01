@@ -26,18 +26,13 @@
 
 #include <kparts/part.h>
 
-#include "KoChild.h"
 #include "komain_export.h"
-#include "KoDocumentChild.h"
 #include "KoFrame.h"
-#include "KoViewChild.h"
 
 class KoDocument;
 class KoMainWindow;
 class KoPrintJob;
 class KoViewPrivate;
-class KoViewChild;
-class KoDocumentChild;
 class KoDockFactory;
 
 // KOffice class but not in main module
@@ -68,6 +63,7 @@ class QToolBar;
 class KOMAIN_EXPORT KoView : public QWidget, public KParts::PartBase
 {
     Q_OBJECT
+
 public:
     /**
      * Creates a new view for the document. Usually you don't create views yourself
@@ -207,28 +203,6 @@ public:
     virtual int canvasYOffset() const;
 
     /**
-     * Overload this function if you need to perform some actions
-     * after KoView (the part widget) is inserted into canvas.
-     * You should call for example addChild(QWidget*) method
-     * of QScrollView here, if canvas is a viewport of QScrollView.
-     *
-     * By default this function does nothing.
-     */
-    virtual void canvasAddChild(KoViewChild *child);
-
-    /**
-     * @return the selected child. The function returns 0 if
-     *         no direct child is currently selected.
-     */
-    virtual KoDocumentChild *selectedChild();
-
-    /**
-     * @return the active child. The function returns 0 if
-     *         no direct child is currently active.
-     */
-    virtual KoDocumentChild *activeChild();
-
-    /**
      * Sets up so that autoScroll signals are emitted when the mouse pointer is outside the view
      */
     void enableAutoScroll();
@@ -243,13 +217,6 @@ public:
      */
     virtual void paintEverything(QPainter &painter, const QRect &rect);
 
-    /**
-     * @return TRUE if the document @p doc is represented in this view by
-     *         some KoViewChild.
-     *
-     * This is just a convenience function for @ref #child.
-     */
-    bool hasDocumentInWindow(KoDocument *doc);
 
     /**
      * Returns the matrix which is used by the view to transform the content.
@@ -287,18 +254,6 @@ public:
      * Overload for QRect, usually it's not needed to reimplement this one.
      */
     virtual QRect reverseViewTransformations(const QRect&) const;
-
-    /**
-     * @return the KoViewChild which is responsible for the @p view or 0.
-     *
-     * This method does no recursion.
-     */
-    KoViewChild *child(KoView *view);
-    /**
-     * A convenience function which returns the KoViewChild which in turn holds the
-     * @ref KoView that in turn holds the @p document.
-     */
-    KoViewChild *child(KoDocument *document);
 
     /**
      * In order to print the document represented by this view a new print job should
@@ -482,12 +437,6 @@ Q_SIGNALS:
 
     void autoScroll(const QPoint &scrollDistance);
 
-    void childSelected(KoDocumentChild *child);
-    void childUnselected(KoDocumentChild *child);
-
-    void childActivated(KoDocumentChild *child);
-    void childDeactivated(KoDocumentChild *child);
-
     void regionInvalidated(const QRegion &region, bool erase);
 
     void invalidated();
@@ -508,8 +457,6 @@ signals:
 #define signals protected
 
 protected Q_SLOTS:
-    virtual void slotChildActivated(bool a);
-    virtual void slotChildChanged(KoDocumentChild *child);
     virtual void slotAutoScroll();
 
 private:

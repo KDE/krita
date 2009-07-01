@@ -6,6 +6,10 @@ endif(MSVC)
 
 macro_optional_find_package(Spnav)
 
+include_directories(
+        ${KOMAIN_INCLUDES}
+)
+
 macro_log_feature(SPNAV_FOUND "Spnav" "3Dconnexion device driver and SDK" "http://spacenav.sourceforge.net/" FALSE "" "Required by SpaceNavigator 3D mouse plugin")
 
 add_subdirectory( scan )

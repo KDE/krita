@@ -29,7 +29,8 @@
 #include <KoID.h>
 #include "flake_export.h"
 
-class KoColor;
+#include "FlakeColor.h"
+
 class KoShape;
 class KoLineBorder;
 
@@ -51,6 +52,7 @@ enum CanvasResource {
     CompositeOperation,
     CompositeOpacity,
     HandleRadius,       ///< The handle radius used for drawing handles of any kind
+    GrabSensitivity,    ///< The grab sensitivity used for grabbing handles of any kind
     PageSize,           ///< The size of the (current) page in postscript points.
     DocumentIsLoading,  ///< A boolean that is set to true while loading is happening.
     Unit,               ///< The unit of this canvas
@@ -92,12 +94,14 @@ public:
      * @param value the new value for the key.
      */
     void setResource(int key, const QVariant & value);
+
     /**
-     * Set a resource of type KoColor.
+     * Set a resource of type FlakeColor.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param color the new value for the key.
      */
-    void setResource(int key, const KoColor & color);
+    void setResource(int key, const FlakeColor & color);
+
     /**
      * Set a resource of type KoId.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
@@ -122,21 +126,22 @@ public:
      * Set the foregroundColor resource.
      * @param color the new foreground color
      */
-    void setForegroundColor(const KoColor & color);
+    void setForegroundColor(const FlakeColor & color);
+
     /**
      * Return the foregroundColor
      */
-    KoColor foregroundColor();
+    FlakeColor foregroundColor();
 
     /**
      * Set the backgroundColor resource.
      * @param color the new background color
      */
-    void setBackgroundColor(const KoColor & color);
+    void setBackgroundColor(const FlakeColor & color);
     /**
      * Return the backgroundColor
      */
-    KoColor backgroundColor();
+    FlakeColor backgroundColor();
 
     /**
      * Tools that provide a handle for controlling the content that the tool can edit can
@@ -146,13 +151,22 @@ public:
     void setHandleRadius(int handleSize);
     /// Returns the actual handle radius
     int handleRadius();
-
+    
+    /**
+     * Tools that are used to grab handles or similar with the mouse
+     * should use this value to determine if the mouse is near enough
+     * @param grabSensitivity the grab sensitivity in pixels
+     */
+    void setGrabSensitivity(uint grabSensitivity);
+    /// Returns the actual grab sensitivity
+    uint grabSensitivity();
+    
     /// Sets the border resource
     void setActiveBorder( const KoLineBorder &border );
-    
+
     /// Returns the border resource
     KoLineBorder activeBorder();
-    
+
     /**
      * Sets that the new unit of this canvas has changed
      * The actual unit can be obtained directly from the canvas
@@ -178,10 +192,10 @@ public:
     qreal doubleResource(int key) const;
 
     /**
-     * Return the resource determined by param key as a KoColor.
+     * Return the resource determined by param key as a FlakeColor.
      * @param key the indentifying key for the resource.
      */
-    KoColor koColorResource(int key);
+    FlakeColor koColorResource(int key);
 
     /**
      * Return the resource determined by param key as a KoID.

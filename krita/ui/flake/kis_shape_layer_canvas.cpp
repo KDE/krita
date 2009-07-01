@@ -120,8 +120,8 @@ void KisShapeLayerCanvas::repaint()
     KisPaintDeviceSP dev = new KisPaintDevice(m_projection->colorSpace());
     dev->convertFromQImage(img, "");
     KisPainter kp(m_projection.data());
-    kp.bitBlt(r.x(), r.y(), m_projection->colorSpace()->compositeOp(COMPOSITE_COPY),
-              dev, OPACITY_OPAQUE, 0, 0, r.width(), r.height());
+    kp.setCompositeOp(m_projection->colorSpace()->compositeOp(COMPOSITE_COPY));
+    kp.bitBlt(r.x(), r.y(), dev, 0, 0, r.width(), r.height());
     kp.end();
     m_parentLayer->setDirty(r);
     m_dirty = QRegion();

@@ -116,52 +116,55 @@ public:
     /// Removes all subpaths and their points from the path
     void clear();
     /**
-     * @brief Start a new Subpath
+     * @brief Starts a new Subpath
      *
      * Moves the pen to p and starts a new subpath.
      *
-     * @return The newly created point
+     * @return the newly created point
      */
     KoPathPoint * moveTo(const QPointF &p);
 
     /**
-     * @brief add a line
+     * @brief Adds a new line segment
      *
-     * Adds a straight line between the last point and the given p.
+     * Adds a straight line between the last point and the given point p.
      *
-     * @return The newly created point
+     * @return the newly created point
      */
     KoPathPoint * lineTo(const QPointF &p);
 
     /**
-     * @brief add a cubic Bezier curve.
+     * @brief Adds a new cubic Bezier curve segment.
      *
-     * Adds a cubic Bezier curve between the last point and the given p,
-     * using the control points specified by c1, and c2.
+     * Adds a cubic Bezier curve between the last point and the given point p,
+     * using the control points specified by c1 and c2.
+     *
      * @param c1 control point1
      * @param c2 control point2
-     * @param p The endpoint of this curve-part
+     * @param p the endpoint of this curve segment
      *
      * @return The newly created point
      */
     KoPathPoint * curveTo(const QPointF &c1, const QPointF &c2, const QPointF &p);
 
     /**
-     * @brief add a quadratic Bezier curve.
+     * @brief Adds a new quadratic Bezier curve segment.
      *
-     * Adds a quadratic Bezier curve between the last point and the given p,
+     * Adds a quadratic Bezier curve between the last point and the given point p,
      * using the control point specified by c.
+     *
      * @param c control point
-     * @param p The endpoint of this curve-part
+     * @param p the endpoint of this curve segment
      *
      * @return The newly created point
      */
     KoPathPoint * curveTo(const QPointF &c, const QPointF &p);
 
     /**
-     * @brief add a arc.
+     * @brief Add an arc.
      *
      * Adds an arc starting at the current point. The arc will be converted to bezier curves.
+     *
      * @param rx x radius of the ellipse
      * @param ry y radius of the ellipse
      * @param startAngle the angle where the arc will be started
@@ -174,12 +177,12 @@ public:
 
 
     /**
-     * @brief close the current subpath
+     * @brief Closes the current subpath
      */
     void close();
 
     /**
-     * @brief close the current subpath
+     * @brief Closes the current subpath
      *
      * It tries to merge the last and first point of the subpath
      * to one point and then closes the subpath. If merging is not
@@ -193,8 +196,9 @@ public:
      * @brief Normalizes the path data.
      *
      * The path points are transformed so that the top-left corner
-     * of the bounding rect is (0,0).
-     * This should be called after adding points to the path.
+     * of the bounding rect is at (0,0).
+     * This should be called after adding points to the path or changing
+     * positions of path points.
      * @return the offset by which the points are moved in shape coordinates.
      */
     virtual QPointF normalize();
@@ -214,62 +218,62 @@ public:
     QList<KoPathSegment> segmentsAt(const QRectF &r);
 
     /**
-     * @brief Get the path point index of a point
+     * @brief Returns the path point index of a given path point
      *
-     * @param point for which you want to get the info
+     * @param point the point for which you want to get the index
      * @return path point index of the point if it exists
      *         otherwise KoPathPointIndex( -1, -1 )
      */
     KoPathPointIndex pathPointIndex(const KoPathPoint *point) const;
 
     /**
-     * @brief Get the point defined by a path point index
+     * @brief Returns the path point specified by a path point index
      *
-     * @param pointIndex of the point to get
+     * @param pointIndex index of the point to get
      *
      * @return KoPathPoint on success, 0 otherwise e.g. out of bounds
      */
     KoPathPoint * pointByIndex(const KoPathPointIndex &pointIndex) const;
 
     /**
-     * @brief Get the segment defined by a path point index
+     * @brief Returns the segment specified by a path point index
      *
      * A semgent is defined by the point index of the first point in the segment.
      * A segment contains the defined point and its following point. If the subpath is
      * closed and the and the pointIndex point to the last point in the subpath, the
      * following point is the first point in the subpath.
      *
-     * @param pointIndex of the first point of the segment
+     * @param pointIndex index of the first point of the segment
      *
      * @return Segment containing both points of the segment or KoPathSegment( 0, 0 ) on error e.g. out of bounds
      */
     KoPathSegment segmentByIndex(const KoPathPointIndex &pointIndex) const;
 
     /**
-     * @brief Get the number of points in the path
+     * @brief Returns the number of points in the path
      *
      * @return The number of points in the path
      */
     int pointCount() const;
 
     /**
-     * @brief Get the number of subpaths in the path
+     * @brief Returns the number of subpaths in the path
      *
      * @return The number of subpaths in the path
      */
     int subpathCount() const;
 
     /**
-     * @brief Get the number of points in a subpath
+     * @brief Returns the number of points in a subpath
      *
      * @return The number of points in the subpath or -1 if subpath out of bounds
      */
     int pointCountSubpath(int subpathIndex) const;
 
     /**
-     * @brief Check if subpath is closed
+     * @brief Checks if a subpath is closed
      *
-     * @param subpathIndex of the subpath to check
+     * @param subpathIndex index of the subpath to check
      *
      * @return true when the subpath is closed, false otherwise
      */
@@ -280,11 +284,11 @@ public:
      *
      * This method keeps the subpath closed if it is closed, and open when it was
      * open. So it can change the properties of the point inserted.
-     * You might need to update the point before/after to get the wanted result
+     * You might need to update the point before/after to get the desired result
      * e.g. when you insert the point into a curve.
      *
      * @param point to insert
-     * @param pointIndex where the point should be inserted
+     * @param pointIndex index at which the point should be inserted
      *
      * @return true on success,
      *         false when pointIndex is out of bounds
@@ -292,11 +296,11 @@ public:
     bool insertPoint(KoPathPoint* point, const KoPathPointIndex &pointIndex);
 
     /**
-     * @brief Removes point from the path.
+     * @brief Removes a point from the path.
      *
      * Note that the ownership of the point will pass to the caller.
      *
-     * @param pointIndex of the point which should be removed
+     * @param pointIndex index of the point which should be removed
      *
      * @return The removed point on success,
      *         otherwise 0
@@ -313,7 +317,7 @@ public:
      * It does not break at the last position of a subpath or if there is only one
      * point in the subpath.
      *
-     * @param pointIndex after which the path should be broken
+     * @param pointIndex index of the point after which the path should be broken
      *
      * @return true if the subpath was broken, otherwise false
      */
@@ -324,17 +328,17 @@ public:
      *
      * Joins the given subpath with the following one by inserting a segment between
      * the two subpathes.
-     * This does nothing if the given ot the following subpath is closed or on the
-     * last subpath of the path.
+     * This does nothing if the specified subpath is the last subpath
+     * or one of both subpaths is closed.
      *
-     * @param subpathIndex of the subpath which will be joined with its following one
+     * @param subpathIndex index of the subpath being joined with the following subpath
      *
      * @return true if the subpath was joined, otherwise false
      */
     bool join(int subpathIndex);
 
     /**
-     * @brief Move the position of a subpath within a path
+     * @brief Moves the position of a subpath within a path
      *
      * @param oldSubpathIndex old index of the subpath
      * @param newSubpathIndex new index of the subpath
@@ -344,12 +348,12 @@ public:
     bool moveSubpath(int oldSubpathIndex, int newSubpathIndex);
 
     /**
-     * @brief Open a closed subpath
+     * @brief Opens a closed subpath
      *
-     * The subpath is opened by removing the segment before the given point, makeing
+     * The subpath is opened by removing the segment before the given point, making
      * the given point the new start point of the subpath.
      *
-     * @param pointIndex to where to open the closed subpath
+     * @param pointIndex the index of the point at which to open the closed subpath
      * @return the new position of the old first point in the subpath
      *         otherwise KoPathPointIndex( -1, -1 )
      */
@@ -371,26 +375,27 @@ public:
      *
      * The last point becomes the first point and the first one becomes the last one.
      *
-     * @param subpathIndex the pointIndex of the subpath to reverse
+     * @param subpathIndex the index of the subpath to reverse
      */
     bool reverseSubpath(int subpathIndex);
 
     /**
-     * @brief Remove subpath from path
-     *
-     * @return The removed subpath on succes, 0 otherwise.
+     * @brief Removes subpath from the path
+     * @param subpathIndex the index of the subpath to remove
+     * @return the removed subpath on succes, 0 otherwise.
      */
     KoSubpath * removeSubpath(int subpathIndex);
 
     /**
-     * @brief Add a Subpath at the given index to the path
-     *
+     * @brief Adds a subpath at the given index to the path
+     * @param subpath the subpath to add
+     * @param subpathIndex the index at which the new subpath should be inserted
      * @return true on success, false otherwise e.g. subpathIndex out of bounds
      */
     bool addSubpath(KoSubpath * subpath, int subpathIndex);
 
     /**
-     * @brief Combines two path by appending the data of the specified path.
+     * @brief Combines two path shapes by appending the data of the specified path.
      * @param path the path to combine with
      * @return true if combining was successful, else false
      */
@@ -449,8 +454,8 @@ private:
     void closeMergeSubpath(KoSubpath *subpath);
 
     /**
-     * @brief Get subpath at subpathIndex
-     *
+     * @brief Returns subpath at given index
+     * @param subpathIndex the index of the subpath to return
      * @return subPath on success, or 0 when subpathIndex is out of bounds
      */
     KoSubpath * subPath(int subpathIndex) const;
@@ -465,7 +470,7 @@ private:
 protected:
     QRectF handleRect(const QPointF &p, qreal radius) const;
     /**
-     * @brief add a arc.
+     * @brief Add an arc.
      *
      * Adds an arc starting at the current point. The arc will be converted to bezier curves.
      * @param rx x radius of the ellipse
@@ -486,7 +491,7 @@ protected:
     void applyViewboxTransformation(const KoXmlElement & element);
 
     /**
-     * @brief Save the node types
+     * @brief Saves the node types
      *
      * This is inspired by inkscape and uses the same mechanism as they do.
      * The only difference is that they use sodipodi:nodeTypes as element and 
@@ -511,7 +516,7 @@ protected:
     QString nodeTypes() const;
 
     /**
-     * @brief Load node types
+     * @brief Loads node types
      */
     void loadNodeTypes(const KoXmlElement & element);
 

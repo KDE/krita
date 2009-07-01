@@ -81,6 +81,7 @@
 #include "widgets/kis_wdg_generator.h"
 #include "kis_layer_box.h"
 #include "kis_node_commands_adapter.h"
+#include "kis_node_manager.h"
 
 KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         : m_view(view)
@@ -103,6 +104,7 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         , m_layerTop(0)
         , m_actLayerVis(false)
         , m_imgResizeToLayer(0)
+        , m_flattenLayer(0)
         , m_activeLayer(0)
         , m_commandsAdapter( new KisNodeCommandsAdapter( m_view ) )
 {
@@ -150,32 +152,36 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_imgMergeLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(m_imgMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
-    m_layerAdd  = new KAction(i18n("&Add..."), this);
+    m_flattenLayer  = new KAction(i18n("&Flatten Layer"), this);
+    actionCollection->addAction("flatten_layer", m_flattenLayer);
+    connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
+
+    m_layerAdd  = new KAction(KIcon("document-new"), i18n("&Paint Layer"), this);
     actionCollection->addAction("insert_layer", m_layerAdd);
     m_layerAdd->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(m_layerAdd, SIGNAL(triggered()), this, SLOT(layerAdd()));
 
-    m_actionAdjustmentLayer  = new KAction(i18n("&Filter Layer"), this);
+    m_actionAdjustmentLayer  = new KAction(KIcon("view-filter"), i18n("&Filter Layer..."), this);
     actionCollection->addAction("insert_adjustment_layer", m_actionAdjustmentLayer);
     connect(m_actionAdjustmentLayer, SIGNAL(triggered()), this, SLOT(addAdjustmentLayer()));
 
-    m_actionGeneratorLayer  = new KAction(i18n("&Generator Layer"), this);
-    actionCollection->addAction("insert_Generator_layer", m_actionGeneratorLayer);
+    m_actionGeneratorLayer  = new KAction(KIcon("view-filter"), i18n("&Generator Layer..."), this);
+    actionCollection->addAction("insert_generator_layer", m_actionGeneratorLayer);
     connect(m_actionGeneratorLayer, SIGNAL(triggered()), this, SLOT(addGeneratorLayer()));
 
-    m_layerAddCloneLayer  = new KAction(i18n("&Clone Layer"), this);
+    m_layerAddCloneLayer  = new KAction(KIcon("edit-copy"), i18n("&Clone Layer"), this);
     actionCollection->addAction("insert_clone_layer", m_layerAddCloneLayer);
     connect(m_layerAddCloneLayer, SIGNAL(triggered()), this, SLOT(addCloneLayer()));
 
-    m_layerAddShapeLayer  = new KAction(i18n("&Shape Layer"), this);
+    m_layerAddShapeLayer  = new KAction(KIcon("bookmark-new"), i18n("&Shape Layer"), this);
     actionCollection->addAction("insert_shape_layer", m_layerAddShapeLayer);
     connect(m_layerAddShapeLayer, SIGNAL(triggered()), this, SLOT(addShapeLayer()));
 
-    m_layerRm  = new KAction(i18n("&Remove"), this);
+    m_layerRm  = new KAction(KIcon("edit-delete"), i18n("&Remove"), this);
     actionCollection->addAction("remove_layer", m_layerRm);
     connect(m_layerRm, SIGNAL(triggered()), this, SLOT(layerRemove()));
 
-    m_layerDup  = new KAction(i18n("Duplicate"), this);
+    m_layerDup  = new KAction(KIcon("edit-copy"), i18n("Duplicate current Layer"), this);
     actionCollection->addAction("duplicate_layer", m_layerDup);
     connect(m_layerDup, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 
@@ -201,12 +207,12 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_layerTop->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketRight));
     connect(m_layerTop, SIGNAL(triggered()), this, SLOT(layerFront()));
 
-    m_layerBottom  = new KAction(KIcon("go-down"), i18n("To Bottom"), this);
+    m_layerBottom  = new KAction(KIcon("go-bottom"), i18n("To Bottom"), this);
     actionCollection->addAction("bottomlayer", m_layerBottom);
     m_layerBottom->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketLeft));
     connect(m_layerBottom, SIGNAL(triggered()), this, SLOT(layerBack()));
 
-    m_layerProperties  = new KAction(i18n("Properties..."), this);
+    m_layerProperties  = new KAction(KIcon("document-properties"), i18n("Properties..."), this);
     actionCollection->addAction("layer_properties", m_layerProperties);
     connect(m_layerProperties, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
@@ -214,15 +220,15 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 
-    KAction * action  = new KAction(KIcon("view-split-left-right"), i18n("Flip on &X Axis"), this);
+    KAction * action  = new KAction(KIcon("view-split-left-right"), i18n("Mirror Horizontally"), this);
     actionCollection->addAction("mirrorLayerX", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerX()));
 
-    action  = new KAction(KIcon("view-split-top-bottom"), i18n("Flip on &Y Axis"), this);
+    action  = new KAction(KIcon("view-split-top-bottom"), i18n("Mirror Vertically"), this);
     actionCollection->addAction("mirrorLayerY", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerY()));
 
-    m_imgResizeToLayer  = new KAction(i18n("Resize Image to Size of Current Layer"), this);
+    m_imgResizeToLayer  = new KAction(i18n("Size Canvas to Size of Current Layer"), this);
     actionCollection->addAction("resizeimgtolayer", m_imgResizeToLayer);
     connect(m_imgResizeToLayer, SIGNAL(triggered()), this, SLOT(imgResizeToActiveLayer()));
 }
@@ -263,6 +269,7 @@ void KisLayerManager::updateGUI()
     // XXX these should be named layer instead of img
     m_imgFlatten->setEnabled(nlayers > 1);
     m_imgMergeLayer->setEnabled(nlayers > 1 && layer && layer->prevSibling());
+    m_flattenLayer->setEnabled(nlayers > 1 && layer && layer->firstChild());
 
 
     // XXX: Check whether the colorspace was really changed
@@ -336,7 +343,15 @@ void KisLayerManager::layerToggleVisible()
     if (!layer) return;
 
     layer->setVisible(!layer->visible());
+    if (!layer->visible()) {
+        if (layer->nextSibling()) {
+            m_view->nodeManager()->activateNode(layer->nextSibling());
+        }
+        else if ( layer->parentLayer() ) {
+            m_view->nodeManager()->activateNode(layer->parent());
+        }
 
+    }
     layer->setDirty();
 }
 
@@ -951,12 +966,27 @@ void KisLayerManager::mergeLayer()
     if (!strategy) return;
 
     KisLayerSP  newLayer = img->mergeLayer(layer, strategy);
-    if(newLayer) {
+    if (newLayer) {
         newLayer->setDirty();
     }
 
     m_view->updateGUI();
 
+}
+
+void KisLayerManager::flattenLayer()
+{
+    KisImageSP img = m_view->image();
+    if (!img) return;
+
+    KisLayerSP layer = activeLayer();
+    if (!layer) return;
+
+    KisLayerSP newLayer = img->flattenLayer(layer);
+    if (newLayer) {
+        newLayer->setDirty();
+    }
+    m_view->updateGUI();
 }
 
 void KisLayerManager::layersUpdated()

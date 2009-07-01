@@ -73,16 +73,17 @@ bool KisSprayShapeOption::jitterShapeSize() const {
 }
 
 qreal KisSprayShapeOption::heightPerc() const {
-    return m_options->widthPro->value(); 
+    return m_options->heightPro->value();
 }
 
 qreal KisSprayShapeOption::widthPerc() const {
-    return m_options->heightPro->value();
+    return m_options->widthPro->value(); 
 }
 
 bool KisSprayShapeOption::proportional() const {
     return m_options->proportionalBox->isChecked();
 }
+
 
 
 // TODO
@@ -100,5 +101,19 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
 }
 
 
+qreal KisSprayShapeOption::maxTresh() const
+{
+    return m_options->maxTreshSpin->value();
+}
 
+
+qreal KisSprayShapeOption::minTresh() const
+{
+    return m_options->minTreshSpin->value();
+}
+
+bool KisSprayShapeOption::highRendering() const
+{
+    return m_options->renderBox->isChecked();
+}
 

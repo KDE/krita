@@ -21,7 +21,7 @@
 #include "KoCanvasResourceProvider.h"
 
 #include <QVariant>
-#include <KoColor.h>
+
 #include "KoShape.h"
 #include "KoLineBorder.h"
 
@@ -37,6 +37,7 @@ KoCanvasResourceProvider::KoCanvasResourceProvider(QObject * parent)
 {
     // initialize handle radius to a sane value
     setHandleRadius(3);
+    setGrabSensitivity(3);
 }
 
 KoCanvasResourceProvider::~KoCanvasResourceProvider()
@@ -65,7 +66,7 @@ QVariant KoCanvasResourceProvider::resource(int key)
         return d->resources.value(key);
 }
 
-void KoCanvasResourceProvider::setResource(int key, const KoColor & color)
+void KoCanvasResourceProvider::setResource(int key, const FlakeColor & color)
 {
     QVariant v;
     v.setValue(color);
@@ -86,35 +87,35 @@ void KoCanvasResourceProvider::setResource(int key, KoShape* shape)
     setResource(key, v);
 }
 
-KoColor KoCanvasResourceProvider::koColorResource(int key)
+FlakeColor KoCanvasResourceProvider::koColorResource(int key)
 {
     if (! d->resources.contains(key)) {
-        KoColor empty;
+        FlakeColor empty;
         return empty;
     }
-    return resource(key).value<KoColor>();
+    return resource(key).value<FlakeColor>();
 }
 
 
-void KoCanvasResourceProvider::setForegroundColor(const KoColor & color)
+void KoCanvasResourceProvider::setForegroundColor(const FlakeColor & color)
 {
     setResource(KoCanvasResource::ForegroundColor, color);
 }
 
-KoColor KoCanvasResourceProvider::foregroundColor()
+FlakeColor KoCanvasResourceProvider::foregroundColor()
 {
     return koColorResource(KoCanvasResource::ForegroundColor);
 }
 
 
-void KoCanvasResourceProvider::setBackgroundColor(const KoColor & color)
+void KoCanvasResourceProvider::setBackgroundColor(const FlakeColor & color)
 {
     //QVariant v;
     //v.setValue( color );
     setResource(KoCanvasResource::BackgroundColor, color);
 }
 
-KoColor KoCanvasResourceProvider::backgroundColor()
+FlakeColor KoCanvasResourceProvider::backgroundColor()
 {
     return koColorResource(KoCanvasResource::BackgroundColor);
 }
@@ -143,6 +144,19 @@ void KoCanvasResourceProvider::setHandleRadius(int handleRadius)
 int KoCanvasResourceProvider::handleRadius()
 {
     return resource(KoCanvasResource::HandleRadius).toInt();
+}
+
+void KoCanvasResourceProvider::setGrabSensitivity(uint grabSensitivity)
+{
+    // do not allow arbitrary small handles
+    if (grabSensitivity < 1)
+        grabSensitivity = 1;
+    setResource(KoCanvasResource::GrabSensitivity, QVariant(grabSensitivity));
+}
+
+uint KoCanvasResourceProvider::grabSensitivity()
+{
+    return resource(KoCanvasResource::GrabSensitivity).toUInt();
 }
 
 void KoCanvasResourceProvider::setActiveBorder( const KoLineBorder &border )

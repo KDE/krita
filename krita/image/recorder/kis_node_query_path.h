@@ -33,16 +33,15 @@ public:
     KisNodeQueryPath& operator=(const KisNodeQueryPath& );
     QList<KisNodeSP> queryNodes(KisImageSP image, KisNodeSP currentNode) const;
     bool isRelative() const;
-    /**
-     * This function return a string representing this path. Which is a list seperated by '\' of:
-     * - '*': represents all layers
-     * - '..': represents the parent layer
-     * - number: index of the layer
-     *
-     * For instance: "1/*" return all children of the first layer, "../3" return the third layer of the parent
-     * of the current layer
-     * If the string start with "/" then it's an aboslute path, otherwise it's a relative path.
-     */
+    // Use "///" style because of the needed "/*"
+    /// This function return a string representing this path. Which is a list seperated by '\' of:
+    /// - '*': represents all layers
+    /// - '..': represents the parent layer
+    /// - number: index of the layer
+    ///
+    /// For instance: "1/*" return all children of the first layer, "../3" return the third layer of the parent
+    /// of the current layer
+    /// If the string starts with "/" then it's an aboslute path, otherwise it's a relative path.
     QString toString() const;
     /**
      * @param path

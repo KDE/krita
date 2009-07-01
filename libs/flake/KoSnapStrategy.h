@@ -20,6 +20,8 @@
 #ifndef KOSNAPSTRATEGY_H
 #define KOSNAPSTRATEGY_H
 
+#include "flake_export.h"
+
 #include <QtCore/QPointF>
 #include <QtGui/QPainterPath>
 
@@ -27,7 +29,7 @@ class KoPathPoint;
 class KoSnapProxy;
 class KoViewConverter;
 
-class KoSnapStrategy
+class FLAKE_EXPORT KoSnapStrategy
 {
 public:
     /// the different possible snap types
@@ -49,7 +51,7 @@ public:
     /// returns the strategies type
     SnapType type() const;
 
-    static qreal fastDistance(const QPointF &p1, const QPointF &p2);
+    static qreal squareDistance(const QPointF &p1, const QPointF &p2);
     static qreal scalarProduct(const QPointF &p1, const QPointF &p2);
 
     /// returns the snapped position form the last call to snapToPoints

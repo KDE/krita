@@ -1,9 +1,11 @@
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 
 set(kritatoolcurves_PART_SRCS
 #    tool_curves.cc
     kis_curve_framework.cc
-#    kis_tool_curve.cc
+    kis_curve_magnetic.cpp
+    kis_tool_curve.cc
 #    kis_tool_bezier.cc
 #    kis_tool_bezier_paint.cc
 #    kis_tool_bezier_select.cc
@@ -15,7 +17,9 @@ set(kritatoolcurves_PART_SRCS
 kde4_add_plugin(kritatoolcurves ${kritatoolcurves_PART_SRCS})
 
 
-target_link_libraries(kritatoolcurves kritaui)
+target_link_libraries(kritatoolcurves kritaui 
+    ${KDE4_KDE3SUPPORT_LIBS}
+)
 
 install(TARGETS kritatoolcurves  DESTINATION ${PLUGIN_INSTALL_DIR})
 

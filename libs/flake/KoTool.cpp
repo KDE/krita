@@ -21,7 +21,7 @@
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasResourceProvider.h"
-
+#include "KoViewConverter.h"
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -234,6 +234,24 @@ KoCanvasBase * KoTool::canvas() const
 void KoTool::setStatusText(const QString &statusText)
 {
     emit statusTextChanged(statusText);
+}
+
+QRectF KoTool::handleGrabRect(const QPointF &position)
+{
+    const KoViewConverter * converter = m_canvas->viewConverter();
+    uint handleSize = 2*m_canvas->resourceProvider()->grabSensitivity();
+    QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
+    r.moveCenter(position);
+    return r;
+}
+
+QRectF KoTool::handlePaintRect(const QPointF &position)
+{
+    const KoViewConverter * converter = m_canvas->viewConverter();
+    uint handleSize = 2*m_canvas->resourceProvider()->handleRadius();
+    QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
+    r.moveCenter(position);
+    return r;
 }
 
 #include "KoTool.moc"

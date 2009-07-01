@@ -20,8 +20,6 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
-
 /**
  * A module that provides a tool for editing the perspective grid.
  */
@@ -31,10 +29,6 @@ class ToolPerspectiveGrid : public KParts::Plugin
 public:
     ToolPerspectiveGrid(QObject *parent, const QStringList &);
     virtual ~ToolPerspectiveGrid();
-
-private:
-
-    KisView * m_view;
 
 };
 

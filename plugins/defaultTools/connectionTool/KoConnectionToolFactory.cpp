@@ -30,6 +30,7 @@ KoConnectionToolFactory::KoConnectionToolFactory( QObject *parent )
     setIcon("x-shape-connection");
     setToolType(mainToolType());
     setPriority(1);
+    setActivationShapeId("flake/always");
 }
 
 KoConnectionToolFactory::~KoConnectionToolFactory()

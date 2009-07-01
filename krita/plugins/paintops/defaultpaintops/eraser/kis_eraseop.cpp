@@ -102,13 +102,13 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     Q_ASSERT(brush);
     if (!brush) return;
 
-    KisPaintInformation adjustedInfo = settings->m_optionsWidget->m_sizeOption->apply(info);
-    if (! brush->canPaintFor(adjustedInfo))
+    if (! brush->canPaintFor(info))
         return;
 
+    double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
+    
     KisPaintDeviceSP device = painter()->device();
-    double pScale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());   // TODO: why is there scale and pScale that seems to contains the same things ?
-    QPointF hotSpot = brush->hotSpot(pScale, pScale);
+    QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
     qint32 x;
@@ -119,11 +119,9 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
+    KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
 
-    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
-
-    double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
+    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info);
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
@@ -141,7 +139,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     qint32 sh = dstRect.height();
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, 0.0, adjustedInfo, xFraction, yFraction);
+        dab = brush->image(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
     } else {
         dab = cachedDab();
         KoColor color = painter()->paintColor();
@@ -149,7 +147,10 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab, painter()->opacity(), sx, sy, sw, sh);
+    const KoCompositeOp* op = painter()->compositeOp();
+    painter()->setCompositeOp(COMPOSITE_ERASE);
+    painter()->bltFixed(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
+    painter()->setCompositeOp(op);
 
     painter()->setOpacity(origOpacity);
 

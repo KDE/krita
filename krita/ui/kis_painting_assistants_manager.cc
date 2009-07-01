@@ -98,3 +98,17 @@ void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QPoint& do
         gc.restore();
     }
 }
+
+QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsManager::handles() {
+    QList<KisPaintingAssistantHandleSP> hs;
+    foreach(KisPaintingAssistant* assistant, d->assistants)
+    {
+        foreach(KisPaintingAssistantHandleSP handle, assistant->handles())
+        {
+            if(!hs.contains(handle)) {
+                hs.push_back(handle);
+            }
+        }
+    }
+    return hs;
+}

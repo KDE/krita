@@ -176,7 +176,7 @@ public:
         return m_children.count();
     }
     /// reimplemented
-    QList<KoShape*> iterator() const {
+    QList<KoShape*> childShapes() const {
         return m_children;
     }
     /// reimplemented

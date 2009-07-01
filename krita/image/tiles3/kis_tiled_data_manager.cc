@@ -114,6 +114,7 @@ bool KisTiledDataManager::write(KoStore *store)
     QReadLocker locker(&m_lock);
     Q_UNUSED(store);
     /* FIXME: */
+    printf("*** KisTiledDataManager::write called \n");
     return true;
 }
 bool KisTiledDataManager::read(KoStore *store)
@@ -121,6 +122,7 @@ bool KisTiledDataManager::read(KoStore *store)
     QReadLocker locker(&m_lock);
     Q_UNUSED(store);
     /* FIXME: */
+    printf("*** KisTiledDataManager::read called \n");
     return true;
 }
 

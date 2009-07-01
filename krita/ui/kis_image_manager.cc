@@ -57,7 +57,7 @@ void KisImageManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("insert_image_as_layer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
 
-    action  = new KAction(i18n("Properties..."), this);
+    action  = new KAction(KIcon("document-properties"), i18n("Properties..."), this);
     actionCollection->addAction("img_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }
@@ -110,6 +110,15 @@ void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, bool cropLayers)
     if (!m_view->image()) return;
 
     m_view->image()->resize(w, h, cropLayers);
+    m_view->image()->setModified();
+    m_view->layerManager()->layersUpdated();
+}
+
+void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset)
+{
+    if (!m_view->image()) return;
+
+    m_view->image()->resizeWithOffset(w, h, xOffset, yOffset);
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
 }

@@ -40,18 +40,18 @@ class KOODF_EXPORT KoGenStyle
 public:
     /**
      * Possible values for the "type" argument of the KoGenStyle constructor.
-     * If there is a still missing add it here so that it is possible to use the same
-     * saving code in all applications.
+     * @note If there is still something missing, add it here so that it is possible to use the same
+     *       saving code in all applications.
      */
     enum Type {
         StylePageLayout,             ///< style:page-layout as in odf 14.3 Page Layout
         StyleUser,                   ///< style:style with style:paragraph-properties as in odf 14.1 Style Element (office:styles)
-        StyleAuto,                   ///< style:style with style:paragraph-properties as in odf 14.1 Style Element
+        StyleAuto,                   ///< style:style with style:paragraph-properties as in odf 14.1 Style Element (office:automatic-styles)
         StyleText,                   ///< style:style with style:text-properties as in odf 14.8.1 Text Styles (office:styles)
-        StyleTextAuto,               ///< style:style with style:text-properties as in odf 14.8.1 Text Styles
+        StyleTextAuto,               ///< style:style with style:text-properties as in odf 14.8.1 Text Styles (office:automatic-styles)
         StyleList,                   ///< text:list-style as in odf 14.10 List Style (office:styles)
-        StyleListAuto,               ///< text:list-style as in odf 14.10 List Style
-        StyleSectionAuto,            ///< style:style with style:section-properties as in odf 14.8.3 Section Styles
+        StyleListAuto,               ///< text:list-style as in odf 14.10 List Style (office:automatic-styles)
+        StyleSectionAuto,            ///< style:style with style:section-properties as in odf 14.8.3 Section Styles (office:automatic-styles)
         StyleNumericNumber,          ///< number:number-style as in odf 14.7.1 Number Style
         StyleNumericDate,            ///< number:date-style as in odf 14.7.4 Date Style
         StyleNumericTime,            ///< number:time-style as in odf 14.7.5 Time Style
@@ -61,8 +61,8 @@ public:
         StyleNumericCurrency,        ///< number:currency-style as in odf 14.7.2 Currency Style
         StyleNumericText,            ///< number:text-style 14.7.7 Text Style not used
         StyleHatch,                  ///< draw:hatch as in odf 14.14.3 Hatch (office:styles)
-        StyleGraphicAuto,            ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles
-        StylePresentationAuto,       ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles
+        StyleGraphicAuto,            ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
+        StylePresentationAuto,       ///< style:style with style:graphic-properties as in 14.13.1 Graphic and Presentation Styles (office:automatic-styles)
         StyleStrokeDash,             ///< draw:stroke-dash as in odf 14.14.7 Stroke Dash (office:styles)
         StyleGradient,               ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
         StyleGradientLinear,         ///< svg:linearGradient as in odf 14.14.2 SVG Gradients (office:styles)
@@ -74,13 +74,14 @@ public:
         StyleOpacity,                ///< draw:opacity as in odf 14.14.5 Opacity Gradient not used
         StyleMarker,                 ///< draw:marker as in odf 14.14.6 Marker
         StylePresentationPageLayout, ///< style:presentation-page-layout as in odf 14.15 Presentation Page Layouts
-        StyleAutoTable,              ///< style:table-properties as in odf 15.8 Table Formatting Properties // office:style needed?
+        StyleAutoTable,              ///< style:table-properties as in odf 15.8 Table Formatting Propertie (office:automatic-styles)
+// office:style needed?
         StyleTableColumn,            ///< style:table-column-properties as in odf 15.9 Column Formatting Properties (office:style)
-        StyleAutoTableColumn,        ///< style:table-column-properties as in odf 15.9 Column Formatting Properties
+        StyleAutoTableColumn,        ///< style:table-column-properties as in odf 15.9 Column Formatting Properties (office:automatic-styles)
         StyleTableRow,               ///< style:table-row-properties as in odf 15.10 Table Row Formatting Properties (office:style)
-        StyleAutoTableRow,           ///< style:table-row-properties as in odf 15.10 Table Row Formatting Properties
+        StyleAutoTableRow,           ///< style:table-row-properties as in odf 15.10 Table Row Formatting Properties (office:automatic-styles)
         StyleTableCell,              ///< style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:style)
-        StyleAutoTableCell,          ///< style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties
+        StyleAutoTableCell,          ///< style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:automatic-styles)
         //   TODO differently
         StyleMaster                  ///< 14.4 Master Pages
         /// style:default-style as in odf 14.2 Default Styles
@@ -141,6 +142,11 @@ public:
     /// Return the family name
     const char* familyName() const {
         return m_familyName.data();
+    }
+
+    /// Sets the name of style's parent.
+    void setParentName(const QString& name) {
+        m_parentName = name;
     }
 
     /// Return the name of style's parent, if set

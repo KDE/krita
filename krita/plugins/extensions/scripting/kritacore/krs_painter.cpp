@@ -154,7 +154,9 @@ void Painter::composeWith(qint32 dx, qint32 dy, const QString& compositeOp, cons
 {
     const PaintDevice* sourcePL = dynamic_cast< const PaintDevice* >(source);
     if (sourcePL) {
-        m_painter->bitBlt(dx, dy, compositeOp, sourcePL->paintDevice(), opacity, sx, sy, sw, sh);
+        m_painter->setCompositeOp(compositeOp);
+        m_painter->setOpacity(opacity);
+        m_painter->bitBlt(dx, dy, sourcePL->paintDevice(), sx, sy, sw, sh);
     }
 }
 

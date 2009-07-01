@@ -49,14 +49,27 @@ class KoResource;
 class KORESOURCES_EXPORT KoResourceServerBase {
 
 public:
-    KoResourceServerBase(const QString& type): m_type(type) {}
+    /**
+    * Constructs a KoResourceServerBase
+    * @param resource type, has to be the same as used by KStandardDirs
+    * @param extensions the file extensions seperate by ':', e.g. "*.kgr:*.svg:*.ggr"
+    */
+    KoResourceServerBase(const QString& type, const QString& extensions)
+        : m_type(type), m_extensions(extensions) {}
     virtual ~KoResourceServerBase() {}
 
     virtual void loadResources(QStringList filenames) = 0;
     QString type() { return m_type; }
 
+    /**
+    * File extensions for resources of the server
+    * @returns the file extensions seperated by ':', e.g. "*.kgr:*.svg:*.ggr"
+    */
+    QString extensions() { return m_extensions; }
+
 private:
     QString m_type;
+    QString m_extensions;
 
 protected:
 
@@ -71,8 +84,8 @@ protected:
 template <class T> class KoResourceServer : public KoResourceServerBase {
 
 public:
-    KoResourceServer(const QString& type)
-        : KoResourceServerBase(type)
+    KoResourceServer(const QString& type, const QString& extensions)
+        : KoResourceServerBase(type, extensions)
         {
         }
 
@@ -156,7 +169,8 @@ public:
     /// Remove a resource from resourceserver and hard disk
     bool removeResource(T* resource) {
 
-        if ( !m_resourcesByFilename.contains( resource->filename() ) ) {
+        QString fname = QFileInfo(resource->filename()).fileName();
+        if ( !m_resourcesByFilename.contains( fname ) ) {
             return false;
         }
 

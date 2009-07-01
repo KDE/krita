@@ -774,7 +774,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     }
 
     if (!progressUpdater() || (progressUpdater() && !progressUpdater()->interrupted())) {
-        bltSelection(startx, starty, compositeOp(), dev, opacity(), startx, starty, width, height);
+        bitBlt(startx, starty, dev, startx, starty, width, height);
     }
     delete shapeStrategy;
 

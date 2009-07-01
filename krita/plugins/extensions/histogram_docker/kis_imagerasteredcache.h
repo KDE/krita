@@ -25,6 +25,7 @@
 #include <q3valuevector.h>
 #include <q3valuelist.h>
 #include <QTimer>
+#include <QDockWidget>
 
 #include <kis_paint_device.h>
 
@@ -57,6 +58,8 @@ public:
     KisImageRasteredCache(KisView2* view, Observer* o);
     virtual ~KisImageRasteredCache();
 
+    void setDocker(QDockWidget* docker) { m_docker = docker; }
+
 signals:
     void cacheUpdated();
 
@@ -87,6 +90,7 @@ private:
     int m_width, m_height;
     KisView2 * m_view;
     bool m_busy;
+    QDockWidget* m_docker;
 
     KisPaintDeviceSP m_imageProjection;
 };

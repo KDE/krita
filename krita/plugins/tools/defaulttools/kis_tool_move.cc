@@ -26,19 +26,31 @@
 
 #include <klocale.h>
 
+#include "KoCanvasBase.h"
+#include "KoPointerEvent.h"
+#include "KoColorSpace.h"
+#include "KoColor.h"
+#include "KoCompositeOp.h"
+
 #include "commands/kis_node_commands.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
-
-#include "KoCanvasBase.h"
-#include "KoPointerEvent.h"
+#include "kis_undo_adapter.h"
 #include "kis_node.h"
+#include "kis_paint_device.h"
+#include "kis_layer.h"
+#include "kis_selection.h"
+#include "kis_paint_layer.h"
+#include "kis_group_layer.h"
+#include "kis_types.h"
+#include "kis_painter.h"
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
 {
     setObjectName("tool_move");
     m_dragging = false;
+    m_optionsWidget = 0;
 }
 
 KisToolMove::~KisToolMove()
@@ -51,16 +63,134 @@ void KisToolMove::paint(QPainter& gc, const KoViewConverter &converter)
     Q_UNUSED(converter);
 }
 
+// recursive search a node with a non-  transparent pixel
+KisNodeSP findNode(KisNodeSP node, int x, int y) {
+
+    // if this is a group and the pixel is transparent, don't even enter it
+    if (node->inherits("KisGroupLayer")) {
+        KisGroupLayerSP layer = dynamic_cast<KisGroupLayer*>(node.data());
+        const KoColorSpace* cs = layer->projection()->colorSpace();
+        KoColor color(cs);
+        layer->projection()->pixel(x, y, &color);
+        if (cs->alpha(color.data()) == OPACITY_TRANSPARENT) {
+            return 0;
+        }
+    }
+
+    KisNodeSP foundNode = 0;
+    while (node) {
+        if (node->isEditable()) {
+            if (node->inherits("KisGroupLayer")) {
+                foundNode = findNode(node, x, y);
+            }
+            else if (node->inherits("KisLayer")) {
+                KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+                if (layer) {
+                    const KoColorSpace* cs = layer->projection()->colorSpace();
+                    KoColor color(layer->projection()->colorSpace());
+                    layer->projection()->pixel( x, y, &color );
+
+                    // XXX:; have threshold here? Like, only a little bit transparent, we don't select it?
+                    if (cs->alpha(color.data()) != OPACITY_TRANSPARENT) {
+                        foundNode = node;
+                    }
+                }
+            }
+            if (foundNode) {
+                return foundNode;
+            }
+        }
+        node = node->prevSibling();
+    }
+    return 0;
+}
+
 void KisToolMove::mousePressEvent(KoPointerEvent *e)
 {
     if (m_canvas && e->button() == Qt::LeftButton) {
         QPointF pos = convertToPixelCoord(e);
 
         KisNodeSP node;
-
-        if (!currentImage() || !(node = currentNode()) || !node->visible())
+        KisImageSP image = currentImage();
+        if (!image || !image->rootLayer() || image->rootLayer()->childCount() == 0 ) {
             return;
+        }
+        // shortcut: if the pixel at projection is transparent, it's all transparent
+        const KoColorSpace* cs = image->projection()->colorSpace();
+        KoColor color(cs);
+        image->projection()->pixel(pos.x(), pos.y(), &color);
 
+        m_selection = currentSelection();
+
+        if (   cs->alpha(color.data()) == OPACITY_TRANSPARENT
+            || m_optionsWidget->radioSelectedLayer->isChecked()
+            || e->modifiers() == Qt::ControlModifier ) {
+            node = currentNode();
+        }
+        else {
+
+            // iterate over all layers at the current position, get the pixel at x,y and check whether it's transparent
+            node = image->rootLayer()->lastChild();
+            node = findNode(node, pos.x(), pos.y());
+
+            // if there is a selection, we cannot move the group
+            if (!m_selection && (m_optionsWidget->radioGroup->isChecked() or e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) ) {
+                node = node->parent();
+            }
+        }
+
+        // shouldn't happen
+        if (!node) {
+            node = currentNode();
+        }
+
+        if (currentImage()->undo()) {
+            currentImage()->undoAdapter()->beginMacro(i18n("Move"));
+        }
+        
+        if (m_selection) {
+            // Create a temporary layer with the contents of the selection of the current layer.
+            Q_ASSERT(!node->inherits("KisGroupLayer"));
+            
+            KisLayerSP oldLayer = dynamic_cast<KisPaintLayer*>(node.data());
+
+            // we can only do the selection thing if the source layer was a paint layer, not a mask
+            if (oldLayer) {
+
+                KisPaintDeviceSP dev = new KisPaintDevice(oldLayer->colorSpace());
+
+                // copy the contents to the new device
+                KisPainter gc(dev);
+                gc.setSelection(m_selection);
+                gc.setCompositeOp(COMPOSITE_OVER);
+                gc.setOpacity(OPACITY_OPAQUE);
+                QRect rc = oldLayer->extent();
+                gc.bitBlt(rc.topLeft(), oldLayer->paintDevice(), rc);
+                gc.end();
+
+                // clear the old layer
+                oldLayer->paintDevice()->clearSelection(m_selection);
+
+                // XXX: clear away the selection???
+
+                // create the new layer and add it.
+                KisPaintLayerSP layer = new KisPaintLayer(currentImage(),
+                                                        node->name() + "(moved)",
+                                                        oldLayer->opacity(),
+                                                        dev);
+                layer->setTemporary(true);
+                currentImage()->addNode(layer, node->parent(), node);
+
+                m_targetLayer = node;
+                m_selectedNode = layer;
+            }
+        }
+        else {
+            // No selection
+            m_selectedNode = node;
+            m_targetLayer = 0;
+        }
+        
         m_dragging = true;
         m_dragStart = QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y()));
         m_layerStart.setX(node->x());
@@ -91,13 +221,11 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
     if (m_dragging) {
         if (m_canvas && e->button() == Qt::LeftButton) {
             QPointF pos = convertToPixelCoord(e);
-            KisNodeSP node = currentNode();
-
-            if (node) {
+            if (m_selectedNode) {
                 drag(QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y())));
                 m_dragging = false;
 
-                QUndoCommand *cmd = new KisNodeMoveCommand(node, m_layerStart, m_layerPosition);
+                QUndoCommand *cmd = new KisNodeMoveCommand(m_selectedNode, m_layerStart, m_layerPosition);
                 Q_CHECK_PTR(cmd);
 
                 m_canvas->addCommand(cmd);
@@ -110,23 +238,39 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
 void KisToolMove::drag(const QPoint& original)
 {
     // original is the position of the user chosen handle point
-    KisNodeSP node = currentNode();
-
-    if (node) {
+    if (m_selectedNode) {
         QPoint pos = original;
         QRect rc;
 
         pos -= m_dragStart; // convert to delta
-        rc = node->extent();
-        node->setX(node->x() + pos.x());
-        node->setY(node->y() + pos.y());
-        rc = rc.unite(node->extent());
+        rc = m_selectedNode->extent();
+        m_selectedNode->setX(m_selectedNode->x() + pos.x());
+        m_selectedNode->setY(m_selectedNode->y() + pos.y());
 
-        m_layerPosition = QPoint(node->x(), node->y());
+        if (m_selection) {
+            m_selection->setX(m_selection->x() + pos.x());
+            m_selection->setY(m_selection->y() + pos.y());
+        }
+        
+        rc = rc.unite(m_selectedNode->extent());
+
+        m_layerPosition = QPoint(m_selectedNode->x(), m_selectedNode->y());
         m_dragStart = original;
 
-        node->setDirty(rc);
+        m_selectedNode->setDirty(rc);
     }
+}
+
+QWidget* KisToolMove::createOptionWidget()
+{
+    m_optionsWidget = new MoveToolOptionsWidget(0);
+    return m_optionsWidget;
+}
+
+
+QWidget* KisToolMove::optionWidget()
+{
+    return m_optionsWidget;
 }
 
 

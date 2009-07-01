@@ -184,7 +184,8 @@ public:
 
 public:
 
-    using KisNode::setDirty;
+    virtual void setDirty();
+    
     virtual void setDirty(const QRect & rect);
 
     virtual void setDirty(const QRegion & region);
@@ -208,6 +209,9 @@ public:
      */
     KisEffectMaskSP previewMask() const;
 
+    /**
+     * XXX
+     */
     KisLayerSP KDE_DEPRECATED parentLayer() const;
 
     /**
@@ -221,6 +225,7 @@ public:
     KisMetaData::Store* metaData();
 
 protected:
+
     /**
      * Apply the effect masks to the given projection, producing
      * finally the dst paint device.

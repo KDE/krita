@@ -47,6 +47,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Dirk Schoenberger"), KLocalizedString(), "dirk.schoenberger@sz-online.de");
     aboutData->addAuthor(ki18n("Danny Allen"), KLocalizedString() , "danny@dannyallen.co.uk");
     aboutData->addAuthor(ki18n("Dmitry Kazakov"), KLocalizedString() , "dimula73@gmail.com");
+    aboutData->addAuthor(ki18n("Edward Apap"), KLocalizedString() , "schumifer@hotmail.com");
     aboutData->addAuthor(ki18n("Hanisch Elián"), KLocalizedString() , "lambdae2@gmail.com");
     aboutData->addAuthor(ki18n("Emanuele Tamponi"), KLocalizedString(), "emanuele@valinor.it");
     aboutData->addAuthor(ki18n("Gábor Lehel"), KLocalizedString(), "<illissius@gmail.com>");

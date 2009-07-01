@@ -45,8 +45,13 @@ public:
      * Call this function to merge a list of meta data stores in one.
      * @param dst the destination store
      * @param srcs the list of source meta data store
+     * @param scores a list of score which defines the importance of each store compared to the other
+     *              the sum of score is expected to be equal to 1.0.
+     *              One way to attribute a score is to compute the area of each layer and then
+     *              to give a higher score to the biggest layer.
+     * srcs and scores list must have the same size.
      */
-    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const = 0;
+    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> scores) const = 0;
 };
 
 }

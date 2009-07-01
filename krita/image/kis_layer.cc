@@ -59,7 +59,6 @@ KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
         : KisNode()
         , m_d(new Private)
 {
-//     Q_ASSERT( img );
     setName(name);
     setOpacity(opacity);
     m_d->image = img;
@@ -165,7 +164,7 @@ const QString& KisLayer::compositeOpId() const
 const KoCompositeOp * KisLayer::compositeOp() const
 {
     dbgImage << m_d->compositeOp;
-    
+
     KisLayerSP parent = parentLayer();
     if( !parent )
     {
@@ -197,6 +196,11 @@ void KisLayer::setImage(KisImageSP image)
     }
 }
 
+void KisLayer::setDirty()
+{
+    setDirty(extent());
+}
+
 void KisLayer::setDirty(const QRect & rect)
 {
     QRect dr = rect;
@@ -205,11 +209,11 @@ void KisLayer::setDirty(const QRect & rect)
     {
         dr |= mask->adjustedDirtyRect( dr );
     }
-    KisNode::setDirty( dr );
+    m_d->image->updateProjection( this, dr );
 }
 
 void KisLayer::setDirty(const QRegion & region)
-{ 
+{
     if (region.isEmpty()) return;
 
     foreach(const QRect & rc, region.rects()) {
@@ -260,11 +264,11 @@ void KisLayer::applyEffectMasks(const KisPaintDeviceSP original, const KisPaintD
     masks.push_front(m_d->previewMask);
 
     // Compute the needed area
-    
+
     QRect currentNeededRc = rc;
-    
+
     QList< QRect > neededRects;
-    
+
     neededRects.push_front( rc );
     for( int i = masks.size() - 1; i >= 0 ; --i )
     {
@@ -280,13 +284,13 @@ void KisLayer::applyEffectMasks(const KisPaintDeviceSP original, const KisPaintD
         }
     }
     dbgImage << "Apply effects on " << rc << " with a total needed rect of " << currentNeededRc;
-    
+
     if (masks.size() > 0) {
         KisPaintDeviceSP tmp = new KisPaintDevice( projection->colorSpace());
         KisPainter gc(tmp);
         gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
         gc.bitBlt(currentNeededRc.topLeft(), original, currentNeededRc);
-    
+
         // Then loop through the effect masks and apply them
         for (int i = 0; i < masks.size(); ++i) {
 
@@ -297,7 +301,7 @@ void KisLayer::applyEffectMasks(const KisPaintDeviceSP original, const KisPaintD
                 effectMask->apply(tmp, neededRects[i]);
             }
         }
-    
+
         KisPainter gc2(projection);
         gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
         gc2.bitBlt(rc.topLeft(), tmp, rc);

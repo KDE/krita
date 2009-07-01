@@ -52,8 +52,8 @@ KisAutoBrush::~KisAutoBrush()
     delete d;
 }
 
-void KisAutoBrush::generateMask(KisPaintDeviceSP dst,
-                                KisBrush::ColoringInformation* src,
+void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+                                KisBrush::ColoringInformation* coloringInformation,
                                 double scaleX, double scaleY, double angle,
                                 const KisPaintInformation& info,
                                 double subPixelX , double subPixelY) const
@@ -74,25 +74,75 @@ void KisAutoBrush::generateMask(KisPaintDeviceSP dst,
     double centerY = dstHeight * 0.5 - 1.0 + subPixelY;
     double cosa = cos(angle);
     double sina = sin(angle);
-    // Apply the alpha mask
 
-    KisHLineIteratorPixel hiter = dst->createHLineIterator(0, 0, dstWidth);
-    for (int y = 0; y < dstHeight; y++) {
-        while (! hiter.isDone()) {
-            double x_ = (hiter.x() - centerX) * invScaleX;
-            double y_ = (hiter.y() - centerY) * invScaleY ;
-            double x = cosa * x_ - sina * y_;
-            double y = sina * x_ + cosa * y_;
-            if (src) {
-                memcpy(hiter.rawData(), src->color(), pixelSize);
-                src->nextColumn();
-            }
-            cs->setAlpha(hiter.rawData(),
-                         OPACITY_OPAQUE - d->shape->interpolatedValueAt(x, y), 1);
-            ++hiter;
+    // if there's coloring information, we merely change the alpha: in that case,
+    // the dab should be big enough!
+    if (coloringInformation) {
+
+        // old bounds
+        QRect bounds = dst->bounds();
+
+        // new bounds. we don't care if there is some extra memory occcupied.
+        dst->setRect(QRect(0, 0, dstWidth, dstHeight));
+
+        if (dstWidth * dstHeight <= bounds.width() * bounds.height()) {
+            // just clear the data in dst,
+            memset(dst->data(), OPACITY_TRANSPARENT, dstWidth * dstHeight * dst->pixelSize());
         }
-        if (src) src->nextRow();
-        hiter.nextRow();
+        else {
+            // enlarge the data
+            dst->initialize();
+        }
+    }
+    else {
+        if (dst->data() == 0 || dst->bounds().isEmpty()) {
+            qWarning() << "Creating a default black dab: no coloring info and no initialized paint device to mask";
+            dst->clear(QRect(0, 0, dstWidth, dstHeight));
+        }
+        Q_ASSERT(dst->bounds().size().width() >= dstWidth && dst->bounds().size().height() >= dstHeight);
+    }
+
+    quint8* dabPointer = dst->data();
+
+    quint8* color = 0;
+    if (coloringInformation) {
+        if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
+            color = const_cast<quint8*>(coloringInformation->color());
+        }
+    }
+    else {
+        // Mask everything out
+        cs->setAlpha(dst->data(), OPACITY_TRANSPARENT, dst->bounds().width() * dst->bounds().height());
+    }
+
+    int rowWidth = dst->bounds().width();
+
+    for (int y = 0; y < dstHeight; y++) {
+        for (int x = 0; x < dstWidth; x++) {
+
+            double x_ = (x - centerX) * invScaleX;
+            double y_ = (y - centerY) * invScaleY;
+            double maskX = cosa * x_ - sina * y_;
+            double maskY = sina * x_ + cosa * y_;
+
+            if (coloringInformation) {
+                if (color) {
+                    memcpy(dabPointer, color, pixelSize);
+                }
+                else {
+                    memcpy(dabPointer, coloringInformation->color(), pixelSize);
+                    coloringInformation->nextColumn();
+                }
+            }
+            cs->setAlpha(dabPointer, OPACITY_OPAQUE - d->shape->interpolatedValueAt(maskX, maskY), 1);
+            dabPointer += pixelSize;
+        }
+        if (!color && coloringInformation) {
+            coloringInformation->nextRow();
+        }
+        if (dstWidth < rowWidth) {
+            dabPointer += (pixelSize * (rowWidth - dstWidth));
+        }
     }
 
 
@@ -110,7 +160,7 @@ QImage KisAutoBrush::createBrushPreview()
     int width = qMax((int)(d->shape->width() + 0.5), 1);
     int height = qMax((int)(d->shape->height() + 0.5), 1);
     QImage img(width, height, QImage::Format_ARGB32);
-    
+
     double centerX = img.width() * 0.5;
     double centerY = img.height() * 0.5;
     for (int j = 0; j < d->shape->height(); j++) {

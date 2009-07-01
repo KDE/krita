@@ -22,9 +22,11 @@
 #include <QTime>
 
 #include <KoStore.h>
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
+#include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_layer.h"
@@ -43,7 +45,6 @@ void KisPaintDeviceTest::testCreation()
     QVERIFY(dev->objectName() == QString());
 
     dev = new KisPaintDevice(cs);
-    QVERIFY(dev->objectName() == "test");
     QVERIFY(*dev->colorSpace() == *cs);
     QVERIFY(dev->x() == 0);
     QVERIFY(dev->y() == 0);
@@ -55,7 +56,6 @@ void KisPaintDeviceTest::testCreation()
     KisPaintLayerSP layer = new KisPaintLayer(image, "bla", 125);
 
     dev = new KisPaintDevice(layer.data(), cs);
-    QVERIFY(dev->objectName() == QString("test2"));
     QVERIFY(*dev->colorSpace() == *cs);
     QVERIFY(dev->x() == 0);
     QVERIFY(dev->y() == 0);
@@ -136,7 +136,6 @@ void KisPaintDeviceTest::testGeometry()
 
     dev->clear(QRect(50, 50, 50, 50));
     dev->pixel(80, 80, &c);
-    QVERIFY(c == Qt::black);
     QVERIFY(c.alpha() == OPACITY_TRANSPARENT);
 
     dev->fill(0, 0, 512, 512, pixel);
@@ -146,7 +145,6 @@ void KisPaintDeviceTest::testGeometry()
 
     dev->clear();
     dev->pixel(80, 80, &c);
-    QVERIFY(c == Qt::black);
     QVERIFY(c.alpha() == OPACITY_TRANSPARENT);
 
     // XXX: No idea why we get this extent and bounds after a clear --
@@ -320,7 +318,7 @@ void KisPaintDeviceTest::testThumbnail()
         QImage thumb = dev->createThumbnail(50, 50);
         QVERIFY(thumb.width() <= 50);
         QVERIFY(thumb.height() <= 50);
-	image.save("kis_paint_device_test_test_thumbnail.png");
+        image.save("kis_paint_device_test_test_thumbnail.png");
     }
 
 }
@@ -431,6 +429,35 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     QVERIFY(c1.blue() == 100);
     QVERIFY(c1.alpha() == 155);
 }
+
+void KisPaintDeviceTest::testBltPerformance()
+{
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP fdev = new KisPaintDevice(cs);
+    fdev->convertFromQImage(image, "");
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
+
+    QTime t;
+    t.start();
+
+    int x;
+    for (x = 0; x < 1000; ++x) {
+        KisPainter gc(dev);
+        gc.bitBlt(QPoint(0,0), fdev, image.rect());
+    }
+
+    qDebug() << x
+             << "blits"
+             << " done in "
+             << t.elapsed()
+             << "ms";
+
+
+}
+
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
 #include "kis_paint_device_test.moc"

@@ -293,8 +293,9 @@ void KoToolProxy::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
                 }
             }
         }
+    } else {
+        event->ignore();
     }
-    else event->ignore();
 }
 
 void KoToolProxy::keyPressEvent(QKeyEvent *event)

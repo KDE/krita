@@ -230,9 +230,9 @@ bool KoStore::open(const QString & _name)
     }
 
     if (m_mode == Write) {
-        kDebug(s_area) << "KoStore: opening for writing '" << m_sName << "'";
+        kDebug(s_area) << "KoStore: opening for writing" << m_sName;
         if (m_strFiles.contains(m_sName)) {
-            kWarning(s_area) << "KoStore: Duplicate filename " << m_sName;
+            kWarning(s_area) << "KoStore: Duplicate filename" << m_sName;
             //return KIO::ERR_FILE_ALREADY_EXIST;
             return false;
         }
@@ -243,7 +243,7 @@ bool KoStore::open(const QString & _name)
         if (!openWrite(m_sName))
             return false;
     } else if (m_mode == Read) {
-        kDebug(s_area) << "Opening for reading '" << m_sName << "'";
+        kDebug(s_area) << "Opening for reading" << m_sName;
         if (!openRead(m_sName))
             return false;
     } else

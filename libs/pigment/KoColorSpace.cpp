@@ -151,9 +151,16 @@ void KoColorSpace::addChannel(KoChannelInfo * ci)
     d->channels.push_back(ci);
 }
 
-quint8 *KoColorSpace::allocPixelBuffer(quint32 numPixels) const
+quint8 *KoColorSpace::allocPixelBuffer(quint32 numPixels, bool clear, quint8 defaultvalue) const
 {
-    return new quint8[pixelSize()*numPixels];
+    if (numPixels == 0) {
+        return 0;
+    }
+    quint8* buf = new quint8[pixelSize()*numPixels];
+    if (clear) {
+        memset(buf, defaultvalue, pixelSize() * numPixels);
+    }
+    return buf;
 }
 
 QList<KoCompositeOp*> KoColorSpace::compositeOps() const
@@ -343,7 +350,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
         }
 
         // The old srcRowStride is no longer valid because we converted to the current cs
-        srcRowStride = cols * pixelSize();
+        srcRowStride = (srcRowStride / srcSpace->pixelSize()) * pixelSize();
 
         op->composite( dst, dststride,
                        conversionData, srcRowStride,

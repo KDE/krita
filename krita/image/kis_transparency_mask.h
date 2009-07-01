@@ -50,6 +50,7 @@ public:
 
     KisTransparencyMask(const KisTransparencyMask& rhs);
 
+    QIcon icon() const;
 
     bool allowAsChild(KisNodeSP) const;
 

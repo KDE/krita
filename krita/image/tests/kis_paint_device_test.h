@@ -25,6 +25,9 @@ class KisPaintDeviceTest : public QObject
 {
     Q_OBJECT
 
+
+private slots:
+
     void testCreation();
     void testStore();
     void testGeometry();
@@ -36,11 +39,8 @@ class KisPaintDeviceTest : public QObject
     void testRoundtripReadWrite();
     void testPlanarReadWrite();
     void testColorSpaceConversion();
-
-private slots:
-
     void testRoundtripConversion();
-
+    void testBltPerformance();
 };
 
 #endif

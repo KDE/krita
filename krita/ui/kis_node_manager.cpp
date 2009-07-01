@@ -42,6 +42,7 @@
 #include "kis_layer_manager.h"
 #include "kis_selection_manager.h"
 #include "kis_node_commands_adapter.h"
+#include "kis_layer_box.h"
 
 struct KisNodeManager::Private {
 
@@ -94,6 +95,7 @@ void KisNodeManager::updateGUI()
     // enable/disable all relevant actions
     m_d->layerManager->updateGUI();
     m_d->maskManager->updateGUI();
+    m_d->view->layerBox()->updateUI();
 }
 
 

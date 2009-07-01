@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -70,6 +71,10 @@ public:
     void setActivePage(KoPAPageBase *page);
     void setMasterMode(bool master);
 
+protected:
+    /// This is the context menu for the slide show in the KoPADocumentStructure docker
+    void contextMenuEvent(QContextMenuEvent* event);
+
 signals:
     void pageChanged(KoPAPageBase *page);
 
@@ -95,6 +100,9 @@ private slots:
     void thumbnailView();
 
     void itemSelected( const QItemSelection& selected, const QItemSelection& deselected );
+    void editCut();
+    void editCopy();
+    void editPaste(); 
 
 private:
     void extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );

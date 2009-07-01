@@ -28,7 +28,7 @@ KisPressureDarkenOption::KisPressureDarkenOption()
 }
 
 
-KoColor KisPressureDarkenOption::apply(KisPainter * painter, double pressure) const
+KoColor KisPressureDarkenOption::apply(KisPainter * painter, const KisPaintInformation& info) const
 {
     if (!isChecked()) {
         return painter->paintColor();
@@ -38,12 +38,7 @@ KoColor KisPressureDarkenOption::apply(KisPainter * painter, double pressure) co
     KoColor origColor = darkened;
 
     // Darken docs aren't really clear about what exactly the amount param can have as value...
-    quint32 darkenAmount;
-    if (!customCurve()) {
-        darkenAmount = (qint32)(255  - 75 * pressure);
-    } else {
-        darkenAmount = (qint32)(255  - 75 * scaleToCurve(pressure));
-    }
+    quint32 darkenAmount = (qint32)(255  - 75 * computeValue(info));
     KoColorTransformation* darkenTransformation  = darkened.colorSpace()->createDarkenAdjustment(darkenAmount, false, 0.0);
     darkenTransformation ->transform(painter->paintColor().data(), darkened.data(), 1);
     painter->setPaintColor(darkened);

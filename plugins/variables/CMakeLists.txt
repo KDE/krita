@@ -1,6 +1,11 @@
 project(textvariables)
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOGUIUTILS_INCLUDES} ${KOMAIN_INCLUDES} )
+include_directories( ${KDE4_INCLUDE_DIR} 
+    ${QT_INCLUDES} 
+    ${KOTEXT_INCLUDES} 
+    ${KOPROPERTIES_INCLUDES}
+     
+    ${KOMAIN_INCLUDES} )
 
 set(textvariables_SRCS
     VariablesPlugin.cpp
@@ -29,6 +34,7 @@ target_link_libraries(
     koodf
     komain 
     flake
+    kobase
     ${KDE4_KDEUI_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     )

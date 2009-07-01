@@ -103,7 +103,7 @@ public:
         StyleManager = QTextDocument::UserResource,
         Lists,
         InlineTextManager,
-        ChangeTrackerRessource = QTextDocument::UserResource
+        ChangeTrackerResource
     };
     static const QUrl StyleManagerURL;
     static const QUrl ListsURL;

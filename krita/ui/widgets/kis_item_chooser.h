@@ -44,31 +44,6 @@ public:
     KisItemChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisItemChooser();
 
-    QTableWidgetItem *currentItem();
-    void setCurrent(QTableWidgetItem *item);
-    void setCurrent(int index);
-
-    void removeItem( KoResourceItem *item );
-    void selectItem( QTableWidgetItem* item );
-
-public slots:
-
-    void addItem(KoResourceItem *item);
-    void addItems(const QList<KoResourceItem *>& items);
-
-signals:
-
-    void selected(QTableWidgetItem *item);
-    void importClicked();
-    void deleteClicked();
-    void update( QTableWidgetItem* );
-
-protected:
-
-    QWidget *chooserWidget() const;
-
-private slots:
-    void slotItemSelected(QTableWidgetItem *item);
 
 private:
     KHBox *m_frame;

@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgDeformOptions</class>
- <widget class="QWidget" name="WdgDeformOptions" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgDeformOptions">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,108 +10,183 @@
     <height>458</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="minimumSize" >
+  <property name="minimumSize">
    <size>
     <width>340</width>
     <height>415</height>
    </size>
   </property>
-  <layout class="QGridLayout" name="gridLayout" >
-   <item row="0" column="0" colspan="2" >
-    <widget class="QLabel" name="deformLabel" >
-     <property name="font" >
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="deformLabel">
+     <property name="font">
       <font>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>Deform Mode</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
-    <widget class="QRadioButton" name="shrinkBtn" >
-     <property name="text" >
+   <item row="2" column="0">
+    <widget class="QRadioButton" name="growBtn">
+     <property name="text">
+      <string>Grow</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QRadioButton" name="shrinkBtn">
+     <property name="text">
       <string>Shrink</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" >
-    <widget class="QRadioButton" name="swirlCCWBtn" >
-     <property name="text" >
+   <item row="3" column="0">
+    <widget class="QRadioButton" name="swirlCCWBtn">
+     <property name="text">
       <string>Swirl CCW</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
-    <widget class="QRadioButton" name="swirlCWBtn" >
-     <property name="text" >
+   <item row="3" column="1">
+    <widget class="QRadioButton" name="swirlCWBtn">
+     <property name="text">
       <string>Swirl CW</string>
      </property>
-     <property name="checked" >
+     <property name="checked">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="8" column="1" >
-    <widget class="QSpinBox" name="deformRadiusSPBox" >
-     <property name="maximum" >
+   <item row="5" column="0">
+    <widget class="QRadioButton" name="moveBtn">
+     <property name="text">
+      <string>Move</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QRadioButton" name="colorBtn">
+     <property name="text">
+      <string>Color deformation</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QRadioButton" name="lensOutBtn">
+     <property name="text">
+      <string>Lens zoom out</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QRadioButton" name="lensBtn">
+     <property name="text">
+      <string>Lens zoom in</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="deformRadiusLbl">
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Deform Radius</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <widget class="QSpinBox" name="deformRadiusSPBox">
+     <property name="maximum">
       <number>4096</number>
      </property>
-     <property name="value" >
+     <property name="value">
       <number>100</number>
      </property>
     </widget>
    </item>
-   <item row="11" column="1" >
-    <widget class="QDoubleSpinBox" name="deformAmountSPBox" >
-     <property name="minimum" >
+   <item row="11" column="0">
+    <widget class="QLabel" name="deformAmountLbl">
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Deform Amount</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="1">
+    <widget class="QDoubleSpinBox" name="deformAmountSPBox">
+     <property name="minimum">
       <double>0.010000000000000</double>
      </property>
-     <property name="maximum" >
+     <property name="maximum">
       <double>1.000000000000000</double>
      </property>
-     <property name="singleStep" >
+     <property name="singleStep">
       <double>0.100000000000000</double>
      </property>
-     <property name="value" >
+     <property name="value">
       <double>0.200000000000000</double>
      </property>
     </widget>
    </item>
-   <item row="14" column="0" colspan="2" >
-    <widget class="QCheckBox" name="interpolationChBox" >
-     <property name="text" >
+   <item row="14" column="0" colspan="2">
+    <widget class="QCheckBox" name="interpolationChBox">
+     <property name="text">
       <string>Bilinear interpolation</string>
      </property>
-     <property name="checked" >
+     <property name="checked">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="15" column="0" colspan="2" >
-    <widget class="QCheckBox" name="addPaintChBox" >
-     <property name="text" >
+   <item row="15" column="0" colspan="2">
+    <widget class="QCheckBox" name="addPaintChBox">
+     <property name="text">
       <string>Paint when not moving the brush</string>
      </property>
-     <property name="checked" >
+     <property name="checked">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="18" column="1" >
-    <spacer name="verticalSpacer" >
-     <property name="orientation" >
+   <item row="16" column="0">
+    <widget class="QCheckBox" name="useCounter">
+     <property name="text">
+      <string>Use counter</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0" colspan="2">
+    <widget class="QCheckBox" name="useOldData">
+     <property name="text">
+      <string>Use undeformed image</string>
+     </property>
+    </widget>
+   </item>
+   <item row="20" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>167</height>
@@ -118,83 +194,32 @@
      </property>
     </spacer>
    </item>
-   <item row="8" column="0" >
-    <widget class="QLabel" name="deformRadiusLbl" >
-     <property name="font" >
-      <font>
-       <weight>50</weight>
-       <bold>false</bold>
-      </font>
+   <item row="18" column="1">
+    <widget class="KDoubleNumInput" name="spacingKDNumInp">
+     <property name="value">
+      <double>0.250000000000000</double>
      </property>
-     <property name="text" >
-      <string>Deform Radius</string>
+     <property name="maximum">
+      <double>5.000000000000000</double>
      </property>
     </widget>
    </item>
-   <item row="11" column="0" >
-    <widget class="QLabel" name="deformAmountLbl" >
-     <property name="font" >
-      <font>
-       <weight>50</weight>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="text" >
-      <string>Deform Amount</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" >
-    <widget class="QRadioButton" name="growBtn" >
-     <property name="text" >
-      <string>Grow</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" >
-    <widget class="QRadioButton" name="moveBtn" >
-     <property name="text" >
-      <string>Move</string>
-     </property>
-    </widget>
-   </item>
-   <item row="16" column="0" >
-    <widget class="QCheckBox" name="useCounter" >
-     <property name="text" >
-      <string>Use counter</string>
-     </property>
-    </widget>
-   </item>
-   <item row="17" column="0" colspan="2" >
-    <widget class="QCheckBox" name="useOldData" >
-     <property name="text" >
-      <string>Use undeformed image</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0" >
-    <widget class="QRadioButton" name="lensOutBtn" >
-     <property name="text" >
-      <string>Lens zoom out</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" >
-    <widget class="QRadioButton" name="colorBtn" >
-     <property name="text" >
-      <string>Color deformation</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1" >
-    <widget class="QRadioButton" name="lensBtn" >
-     <property name="text" >
-      <string>Lens zoom in</string>
+   <item row="18" column="0">
+    <widget class="QLabel" name="spacingLabel">
+     <property name="text">
+      <string>spacing:</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KDoubleNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

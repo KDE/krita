@@ -1,3 +1,4 @@
+include_directories(${CMAKE_CURRENT_SOURCE_DIR/..}
 set(kritaxyzfloathdrplugin_PART_SRCS xyz_float_hdr.cc kis_xyz_f32_hdr_colorspace.cc )
 
 kde4_add_plugin(kritaxyzfloathdrplugin ${kritaxyzfloathdrplugin_PART_SRCS})

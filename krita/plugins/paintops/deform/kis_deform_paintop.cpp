@@ -24,7 +24,6 @@
 #include <QRect>
 #include <QList>
 #include <QColor>
-//#include <QMutexLocker>
 
 #include <qdebug.h>
 
@@ -36,7 +35,6 @@
 #include <kis_image.h>
 #include <kis_debug.h>
 
-#include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
@@ -52,57 +50,64 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
         : KisPaintOp(painter)
 {
     Q_ASSERT(settings);
-    m_image = image;
     m_deformBrush.setAction( settings->deformAction() );
     m_deformBrush.setRadius( settings->radius() );
     m_deformBrush.setDeformAmount ( settings->deformAmount() );
     m_deformBrush.setInterpolation( settings->bilinear() );
-    m_deformBrush.setImage(image);
+    m_deformBrush.setImage( image );
     m_deformBrush.setCounter(1);
     m_useMovementPaint = settings->useMovementPaint();
     m_deformBrush.setUseCounter( settings->useCounter() );
     m_deformBrush.setUseOldData( settings->useOldData() );
 
-    if ( !settings->node() ){
+    if ( !settings->node() ) {
         m_dev = 0;
-    }else{
+    }
+    else {
         m_dev = settings->node()->paintDevice();
     }
+
+    if ( ( settings->radius() ) > 1)
+    {
+        m_ySpacing = m_xSpacing = settings->radius() * settings->spacing();
+    } else
+    {
+        m_ySpacing = m_xSpacing = 1.0;
+    }
+    m_spacing = m_xSpacing;
+
 }
 
 KisDeformPaintOp::~KisDeformPaintOp()
 {
 }
 
+double KisDeformPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
+        Q_UNUSED(pressure1);
+        Q_UNUSED(pressure2);
+        xSpacing = m_xSpacing;
+        ySpacing = m_ySpacing;
+        return m_spacing;
+}
+
+
 void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 {
-//    QMutexLocker locker(&m_mutex);
-
     if (!painter()) return;
-    /* m_dev = painter()->device(); */
     if (!m_dev) return;
 
-    dab = cachedDab();
-    dab->clear();
+    if (!m_dab) {
+        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+    }
+    else {
+        m_dab->clear();
+    }
 
-    //write device, read device, position 
-    m_deformBrush.paint(dab,m_dev, info);
+    //write device, read device, position
+    m_deformBrush.paint(m_dab, m_dev, info);
 
-    QRect rc = dab->extent();
-
-    painter()->bltSelection(
-        rc.x(), rc.y(),
-        painter()->compositeOp(),
-        dab,
-        painter()->opacity(),
-        rc.x(), rc.y(),
-        rc.width(), rc.height());
+    QRect rc = m_dab->extent();
+    painter()->bitBlt( rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
 }
 
 
-double KisDeformPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
-{
-    paintAt(pi1);
-    paintAt(pi2);
-    return 0;
-}

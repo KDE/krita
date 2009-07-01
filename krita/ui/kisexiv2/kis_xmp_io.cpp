@@ -127,125 +127,129 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
         dbgFile << it->key().c_str();
         Exiv2::XmpKey key(it->key());
         dbgFile << key.groupName().c_str() << " " << key.tagName().c_str() << " " << key.ns().c_str();
-        const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromPrefix(key.groupName().c_str());
-        if( !schema)
-        {
-          schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri( key.ns().c_str() );
-          if( !schema )
-          {
-            schema = KisMetaData::SchemaRegistry::instance()->create(key.ns().c_str(), key.groupName().c_str() );
-            Q_ASSERT(schema);
-          }
-        }
-        const Exiv2::Value::AutoPtr value = it->getValue();
-        // Decrypt key
-        QString structName = "";
-        QString tagName = key.tagName().c_str();
-        const KisMetaData::TypeInfo* typeInfo = 0;
-        bool isStructureEntry = false;
-        if( tagName.contains("/") )
-        {
-            QRegExp regexp("([A-Za-z]\\w+)/([A-Za-z]\\w+):([A-Za-z]\\w+)");
-            if(regexp.indexIn(tagName) != -1 )
-            {
-                structName = regexp.capturedTexts()[1];
-                tagName =  regexp.capturedTexts()[3];
-                typeInfo = schema->propertyType(structName);
-                if( typeInfo && typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType )
-                {
-                    typeInfo = typeInfo->structureSchema()->propertyType(tagName);
-                }
-                isStructureEntry = true;
-            } else {
-                dbgFile << "Decoding structure name/entry failed: " << tagName;
-            }
+        if( (key.groupName() == "exif" || key.groupName() == "tiff") && key.tagName() == "NativeDigest" ) { // TODO: someone who has time to lose can look in adding support for NativeDigest, it's undocumented use by the XMP SDK to check if exif data has been changed while XMP hasn't been updated
+          dbgFile << "droped";
         } else {
-            typeInfo = schema->propertyType(tagName);
-        }
-        KisMetaData::Value v;
-        
-        bool ignoreValue = false;
-        if( value->typeId() == Exiv2::xmpBag || value->typeId() == Exiv2::xmpSeq || 
-            value->typeId() == Exiv2::xmpAlt )
-        {
-            const KisMetaData::TypeInfo* embeddedTypeInfo = 0;
-            if( typeInfo )
+            const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromPrefix(key.groupName().c_str());
+            if( !schema)
             {
-                embeddedTypeInfo = typeInfo->embeddedPropertyType();
+              schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri( key.ns().c_str() );
+              if( !schema )
+              {
+                schema = KisMetaData::SchemaRegistry::instance()->create(key.ns().c_str(), key.groupName().c_str() );
+                Q_ASSERT(schema);
+              }
             }
-            const KisMetaData::Parser* parser = 0;
-            if( embeddedTypeInfo )
+            const Exiv2::Value::AutoPtr value = it->getValue();
+            // Decrypt key
+            QString structName = "";
+            QString tagName = key.tagName().c_str();
+            const KisMetaData::TypeInfo* typeInfo = 0;
+            bool isStructureEntry = false;
+            if( tagName.contains("/") )
             {
-                parser = embeddedTypeInfo->parser();
-            }
-            const Exiv2::XmpArrayValue* xav = dynamic_cast<const Exiv2::XmpArrayValue*>(value.get());
-            Q_ASSERT(xav);
-            QList<KisMetaData::Value> array;
-            for (std::vector< std::string >::const_iterator it = xav->value_.begin();
-                    it != xav->value_.end(); ++it) {
-                QString value = it->c_str();
-                if(parser)
+                QRegExp regexp("([A-Za-z]\\w+)/([A-Za-z]\\w+):([A-Za-z]\\w+)");
+                if(regexp.indexIn(tagName) != -1 )
                 {
-                    array.push_back(parser->parse(value));
+                    structName = regexp.capturedTexts()[1];
+                    tagName =  regexp.capturedTexts()[3];
+                    typeInfo = schema->propertyType(structName);
+                    if( typeInfo && typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType )
+                    {
+                        typeInfo = typeInfo->structureSchema()->propertyType(tagName);
+                    }
+                    isStructureEntry = true;
                 } else {
-                    dbgImage << "No parser " << tagName;
-                    array.push_back(KisMetaData::Value(value));
+                    dbgFile << "Decoding structure name/entry failed: " << tagName;
                 }
-            }
-            KisMetaData::Value::ValueType vt = KisMetaData::Value::Invalid;
-            switch (xav->xmpArrayType()) {
-            case Exiv2::XmpValue::xaNone:
-                qFatal("Unsupported array.");
-                break;
-            case Exiv2::XmpValue::xaAlt:
-                vt = KisMetaData::Value::AlternativeArray;
-                break;
-            case Exiv2::XmpValue::xaBag:
-                vt = KisMetaData::Value::UnorderedArray;
-                break;
-            case Exiv2::XmpValue::xaSeq:
-                vt = KisMetaData::Value::OrderedArray;
-                break;
-            }
-            v = KisMetaData::Value(array, vt);
-        } else if( value->typeId() == Exiv2::langAlt ) {
-            const Exiv2::LangAltValue* xav = dynamic_cast<const Exiv2::LangAltValue*>(value.get());
-            QList<KisMetaData::Value> alt;
-            for( std::map< std::string, std::string>::const_iterator it = xav->value_.begin();
-                 it != xav->value_.end(); ++it )
-            {
-                KisMetaData::Value valt( it->second.c_str() );
-                valt.addPropertyQualifier( "xml:lang", KisMetaData::Value(it->first.c_str()) );
-                alt.push_back( valt );
-            }
-            v = KisMetaData::Value( alt, KisMetaData::Value::LangArray );
-        } else {
-            QString valTxt = value->toString().c_str();
-            if( typeInfo && typeInfo->parser() )
-            {
-                v = typeInfo->parser()->parse(valTxt);
             } else {
-                dbgFile << "No parser " << tagName;
-                v = KisMetaData::Value( valTxt );
+                typeInfo = schema->propertyType(tagName);
             }
-            if( valTxt == "type=\"Struct\"" )
+            KisMetaData::Value v;
+            
+            bool ignoreValue = false;
+            if( value->typeId() == Exiv2::xmpBag || value->typeId() == Exiv2::xmpSeq || 
+                value->typeId() == Exiv2::xmpAlt )
             {
-                if( !typeInfo or typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType )
+                const KisMetaData::TypeInfo* embeddedTypeInfo = 0;
+                if( typeInfo )
                 {
-                    ignoreValue = true;
+                    embeddedTypeInfo = typeInfo->embeddedPropertyType();
+                }
+                const KisMetaData::Parser* parser = 0;
+                if( embeddedTypeInfo )
+                {
+                    parser = embeddedTypeInfo->parser();
+                }
+                const Exiv2::XmpArrayValue* xav = dynamic_cast<const Exiv2::XmpArrayValue*>(value.get());
+                Q_ASSERT(xav);
+                QList<KisMetaData::Value> array;
+                for (std::vector< std::string >::const_iterator it = xav->value_.begin();
+                        it != xav->value_.end(); ++it) {
+                    QString value = it->c_str();
+                    if(parser)
+                    {
+                        array.push_back(parser->parse(value));
+                    } else {
+                        dbgImage << "No parser " << tagName;
+                        array.push_back(KisMetaData::Value(value));
+                    }
+                }
+                KisMetaData::Value::ValueType vt = KisMetaData::Value::Invalid;
+                switch (xav->xmpArrayType()) {
+                case Exiv2::XmpValue::xaNone:
+                    qFatal("Unsupported array.");
+                    break;
+                case Exiv2::XmpValue::xaAlt:
+                    vt = KisMetaData::Value::AlternativeArray;
+                    break;
+                case Exiv2::XmpValue::xaBag:
+                    vt = KisMetaData::Value::UnorderedArray;
+                    break;
+                case Exiv2::XmpValue::xaSeq:
+                    vt = KisMetaData::Value::OrderedArray;
+                    break;
+                }
+                v = KisMetaData::Value(array, vt);
+            } else if( value->typeId() == Exiv2::langAlt ) {
+                const Exiv2::LangAltValue* xav = dynamic_cast<const Exiv2::LangAltValue*>(value.get());
+                QList<KisMetaData::Value> alt;
+                for( std::map< std::string, std::string>::const_iterator it = xav->value_.begin();
+                    it != xav->value_.end(); ++it )
+                {
+                    KisMetaData::Value valt( it->second.c_str() );
+                    valt.addPropertyQualifier( "xml:lang", KisMetaData::Value(it->first.c_str()) );
+                    alt.push_back( valt );
+                }
+                v = KisMetaData::Value( alt, KisMetaData::Value::LangArray );
+            } else {
+                QString valTxt = value->toString().c_str();
+                if( typeInfo && typeInfo->parser() )
+                {
+                    v = typeInfo->parser()->parse(valTxt);
+                } else {
+                    dbgFile << "No parser " << tagName;
+                    v = KisMetaData::Value( valTxt );
+                }
+                if( valTxt == "type=\"Struct\"" )
+                {
+                    if( !typeInfo or typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType )
+                    {
+                        ignoreValue = true;
+                    }
                 }
             }
-        }
-        dbgFile << ppVar(tagName);
-        if( isStructureEntry )
-        {
-            structures[schema][structName][tagName] = v;
-        } else {
-            if( !ignoreValue )
+            dbgFile << ppVar(tagName);
+            if( isStructureEntry )
             {
-                store->addEntry(KisMetaData::Entry(schema, tagName, v));
+                structures[schema][structName][tagName] = v;
             } else {
-                dbgFile << "Ignoring value for " << tagName << " " << v;
+                if( !ignoreValue )
+                {
+                    store->addEntry(KisMetaData::Entry(schema, tagName, v));
+                } else {
+                    dbgFile << "Ignoring value for " << tagName << " " << v;
+                }
             }
         }
     }

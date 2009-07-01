@@ -1,6 +1,6 @@
 project( paragraphPlugin )
 
-include_directories( ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} )
+include_directories(  ${KOTEXT_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
@@ -29,7 +29,7 @@ kde4_add_plugin(paragraphtool ${paragraphtool_SRCS})
 target_link_libraries(
     paragraphtool
     flake
-    koguiutils
+    
     kotext
     komain
     kostore

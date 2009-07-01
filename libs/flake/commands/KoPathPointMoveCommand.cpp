@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006,2008-2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
@@ -24,14 +24,34 @@
 #include <klocale.h>
 
 KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QPointF &offset, QUndoCommand *parent)
-        : QUndoCommand(parent)
-        , m_offset(offset)
-        , m_undoCalled(true)
+    : QUndoCommand(parent)
+    , m_undoCalled(true)
 {
     setText(i18n("Move points"));
 
     foreach( const KoPathPointData &data, pointData ) {
-        m_points[data.pathShape].insert( data.pointIndex );
+        if (!m_points.contains(data)) {
+            m_points[data] = offset;
+            m_paths.insert(data.pathShape);
+        }
+    }
+}
+
+KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QList<QPointF> &offsets, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_undoCalled(true)
+{
+    Q_ASSERT(pointData.count() == offsets.count());
+    
+    setText(i18n("Move points"));
+    
+    uint dataCount = pointData.count();
+    for (uint i = 0; i < dataCount; ++i) {
+        const KoPathPointData & data = pointData[i];
+        if (!m_points.contains(data)) {
+            m_points[data] = offsets[i];
+            m_paths.insert(data.pathShape);
+        }
     }
 }
 
@@ -41,7 +61,7 @@ void KoPathPointMoveCommand::redo()
     if (! m_undoCalled)
         return;
     
-    applyOffset( m_offset );
+    applyOffset( 1.0 );
     
     m_undoCalled = false;
 }
@@ -52,28 +72,32 @@ void KoPathPointMoveCommand::undo()
     if (m_undoCalled)
         return;
     
-    applyOffset( -1.0 * m_offset );
+    applyOffset( -1.0 );
 
     m_undoCalled = true;
 }
 
-void KoPathPointMoveCommand::applyOffset( const QPointF &offset )
+void KoPathPointMoveCommand::applyOffset( qreal factor )
 {
-    QMap<KoPathShape*, QSet<KoPathPointIndex> >::iterator it(m_points.begin());
-    for (; it != m_points.end(); ++it) {
-        KoPathShape * path = it.key();
-        // transform offset from document to shape coordinate system
-        QPointF shapeOffset = path->documentToShape(offset) - path->documentToShape(QPointF());
-        QMatrix matrix;
-        matrix.translate(shapeOffset.x(), shapeOffset.y());
-        
+    foreach(KoPathShape * path, m_paths) {
         // repaint old bounding rect
         path->update();
-        foreach(const KoPathPointIndex & index, it.value()) {
-            KoPathPoint * p = path->pointByIndex(index);
-            if ( p )
-                p->map(matrix, true);
-        }
+    }
+    
+    QMap<KoPathPointData, QPointF>::iterator it(m_points.begin());
+    for (; it != m_points.end(); ++it) {
+        KoPathShape * path = it.key().pathShape;
+        // transform offset from document to shape coordinate system
+        QPointF shapeOffset = path->documentToShape(factor*it.value()) - path->documentToShape(QPointF());
+        QMatrix matrix;
+        matrix.translate(shapeOffset.x(), shapeOffset.y());
+
+        KoPathPoint * p = path->pointByIndex(it.key().pointIndex);
+        if ( p )
+            p->map(matrix, true);
+    }
+    
+    foreach(KoPathShape * path, m_paths) {
         path->normalize();
         // repaint new bounding rect
         path->update();

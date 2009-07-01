@@ -61,7 +61,7 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
     Q_OBJECT
 
 public:
-    KisDoc2(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+    KisDoc2(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = true);
     virtual ~KisDoc2();
 
 public:
@@ -73,16 +73,9 @@ public:
     virtual bool completeSaving(KoStore*);
     virtual bool loadOdf(KoOdfReadStore & odfStore);
     virtual bool saveOdf(SavingContext &documentContext);
-    virtual bool loadChildren(KoStore* store);
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
     virtual QByteArray mimeType() const;
     virtual QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
-
-    virtual KParts::Part * hitTest(QWidget * w, const QPoint& pt) {
-        return KoDocument::hitTest(w, pt);
-    }
-
-    virtual KoDocument* hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix = QMatrix());
 
     /**
      * Draw the image embedded in another KOffice document

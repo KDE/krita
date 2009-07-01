@@ -60,9 +60,8 @@ public:
 
 private:
     KisImageSP m_image;
-    KisPaintDeviceSP dab;
+    KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
-//    QMutex m_mutex;
     CurveBrush m_curveBrush;
 };
 

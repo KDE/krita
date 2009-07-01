@@ -42,7 +42,7 @@ public:
     int count() const {
         return m_members.count();
     }
-    QList<KoShape*> iterator() const {
+    QList<KoShape*> childShapes() const {
         return QList<KoShape*>(m_members);
     }
     void containerChanged(KoShapeContainer *) { }

@@ -48,7 +48,7 @@ QDomDocument FolderShape::save()
     QDomDocument doc;
     QDomElement element = doc.createElement("book");
     doc.appendChild( element );
-    foreach (KoShape *child, iterator()) {
+    foreach (KoShape *child, childShapes()) {
         IconShape *ic = dynamic_cast<IconShape*> (child);
         if (ic) {
             ic->save(element);

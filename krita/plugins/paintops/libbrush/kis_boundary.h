@@ -37,7 +37,7 @@
 class KRITAIMAGE_EXPORT KisBoundary
 {
 public:
-    KisBoundary(KisPaintDeviceSP dev);
+    KisBoundary(KisFixedPaintDeviceSP dev);
     ~KisBoundary();
     void generateBoundary(int w, int h);
     typedef QPair<QPointF, int> PointPair; // int->length

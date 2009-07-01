@@ -363,6 +363,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
     for (QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin();
             it != store->end(); ++it) {
         const KisMetaData::Entry& entry = *it;
+        dbgFile << "Trying to save: " << entry.name() << " of " << entry.schema()->prefix() << ":" << entry.schema()->uri();
         QString exivKey = "";
         if (entry.schema()->uri() == KisMetaData::Schema::TIFFSchemaUri) {
             exivKey = "Exif.Image." + entry.name();

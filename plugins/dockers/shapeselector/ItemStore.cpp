@@ -252,7 +252,7 @@ QRectF ItemStore::loadShapeTypes()
             int line, column;
             if (doc.setContent(children, false, &error, &line, &column)) {
                 folder->load(doc);
-                foreach(KoShape *child, folder->iterator())
+                foreach(KoShape *child, folder->childShapes())
                     s_itemStorePrivate()->addShape(child);
             }
             else {

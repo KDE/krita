@@ -1,121 +1,131 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>DefaultToolWidget</class>
- <widget class="QWidget" name="DefaultToolWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="DefaultToolWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>154</width>
-    <height>62</height>
+    <width>153</width>
+    <height>60</height>
    </rect>
   </property>
-  <property name="focusPolicy" >
+  <property name="focusPolicy">
    <enum>Qt::NoFocus</enum>
   </property>
-  <layout class="QGridLayout" name="gridLayout" >
-   <property name="margin" >
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetMinAndMaxSize</enum>
+   </property>
+   <property name="margin">
     <number>0</number>
    </property>
-   <item rowspan="2" row="0" column="0" >
-    <widget class="KoPositionSelector" native="1" name="positionSelector" />
+   <item row="0" column="0" rowspan="2">
+    <widget class="KoPositionSelector" name="positionSelector" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
+   <item row="0" column="1">
+    <widget class="QLabel" name="label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
       <string>X:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="2" >
-    <widget class="KoUnitDoubleSpinBox" name="positionXSpinBox" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+   <item row="0" column="2">
+    <widget class="KoUnitDoubleSpinBox" name="positionXSpinBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimum" >
+     <property name="minimum">
       <double>-10000.000000000000000</double>
      </property>
-     <property name="maximum" >
+     <property name="maximum">
       <double>10000.000000000000000</double>
      </property>
     </widget>
    </item>
-   <item row="0" column="3" >
-    <widget class="KoUnitDoubleSpinBox" name="widthSpinBox" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+   <item row="0" column="3">
+    <widget class="KoUnitDoubleSpinBox" name="widthSpinBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimum" >
+     <property name="minimum">
       <double>-10000.000000000000000</double>
      </property>
-     <property name="maximum" >
+     <property name="maximum">
       <double>10000.000000000000000</double>
      </property>
     </widget>
    </item>
-   <item rowspan="2" row="0" column="4" >
-    <widget class="KoAspectButton" name="aspectButton" >
-     <property name="text" >
+   <item row="0" column="4" rowspan="2">
+    <widget class="KoAspectButton" name="aspectButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
+   <item row="1" column="1">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
       <string>Y:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="2" >
-    <widget class="KoUnitDoubleSpinBox" name="positionYSpinBox" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+   <item row="1" column="2">
+    <widget class="KoUnitDoubleSpinBox" name="positionYSpinBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimum" >
+     <property name="minimum">
       <double>-10000.000000000000000</double>
      </property>
-     <property name="maximum" >
+     <property name="maximum">
       <double>10000.000000000000000</double>
      </property>
     </widget>
    </item>
-   <item row="1" column="3" >
-    <widget class="KoUnitDoubleSpinBox" name="heightSpinBox" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+   <item row="1" column="3">
+    <widget class="KoUnitDoubleSpinBox" name="heightSpinBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimum" >
+     <property name="minimum">
       <double>-10000.000000000000000</double>
      </property>
-     <property name="maximum" >
+     <property name="maximum">
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="2" column="2" colspan="2" >
-    <spacer name="verticalSpacer" >
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>20</width>
-       <height>7</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

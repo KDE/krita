@@ -29,7 +29,6 @@
 class KisPattern;
 class KoResource;
 class KisView2;
-class KisResourceMediator;
 
 class KisWdgCustomPattern : public QWidget, public Ui::KisWdgCustomPattern
 {

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_INTEGER_MATHS_H
-#define KIS_INTEGER_MATHS_H
+#ifndef KO_INTEGER_MATHS_H
+#define KO_INTEGER_MATHS_H
 
 #define UINT8_MAX 255u
 #define UINT8_MIN 0u

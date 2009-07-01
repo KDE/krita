@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -69,11 +69,20 @@ protected:
 private:
     QRectF handleRect(const QPointF &p);
     void repaintActivePoint();
-
+    
+    /// returns the nearest existing path point 
+    KoPathPoint* endPointAtPosition( const QPointF &position );
+    
+    /// Connects given path with the ones we hit when starting/finishing
+    bool connectPaths( KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd );
+    
     KoPathPoint *m_activePoint;
     KoPathPoint *m_firstPoint;
     int m_handleRadius;
     bool m_mouseOverFirstPoint;
+    KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
+    KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
+    KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on
 };
 #endif
 

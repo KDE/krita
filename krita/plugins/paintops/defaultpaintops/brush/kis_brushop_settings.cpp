@@ -85,24 +85,25 @@ KisPaintOpSettingsSP KisBrushOpSettings::clone() const
 
 }
 
-QRectF KisBrushOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image) const
+QRectF KisBrushOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode) const
 {
+    if(_mode != CURSOR_IS_OUTLINE) return QRectF();
     KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     return image->pixelToDocument(
-            QRectF(0,0, brush->width(), brush->height()).translated(-(hotSpot + QPointF(0.5, 0.5)) )
+            QRectF(0,0, brush->width() + 1, brush->height() + 1).translated(-(hotSpot + QPointF(0.5, 0.5)) )
         ).translated( pos );
 }
 
-void KisBrushOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const
+void KisBrushOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
+    if(_mode != CURSOR_IS_OUTLINE) return;
     KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     painter.setPen(Qt::black);
     painter.setBackground(Qt::black);
     painter.translate(converter.documentToView( pos - image->pixelToDocument(hotSpot + QPointF(0.5, 0.5) )));
     KisBoundaryPainter::paint( brush->boundary(), image, painter, converter);
-//     painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRect(0,0, brush->width(), brush->height()) ).translated( pos - hotSpot + QPoint(1,1) ) ) );
 }
 
 #include "kis_brushop_settings.moc"

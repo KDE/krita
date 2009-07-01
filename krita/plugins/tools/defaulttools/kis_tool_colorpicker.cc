@@ -94,7 +94,7 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
                 KMessageBox::information(0, i18n("Cannot pick a color as no layer is active."));
                 return;
             }
-            if (!currentNode()-> visible()) {
+            if (!currentNode()->visible()) {
                 KMessageBox::information(0, i18n("Cannot pick a color as the active layer is not visible."));
                 return;
             }

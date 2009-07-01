@@ -288,17 +288,12 @@ void KisShapeSelection::removeChild(KoShape *object)
 QPainterPath KisShapeSelection::selectionOutline()
 {
     if (m_dirty) {
-        QList<KoShape*> shapesList = iterator();
+        QList<KoShape*> shapesList = childShapes();
 
         QPainterPath outline;
-        KoPathShape* pathShape;
         foreach(KoShape * shape, shapesList) {
-            pathShape = dynamic_cast<KoPathShape*>(shape);
-            if (pathShape) {
                 QMatrix shapeMatrix = shape->absoluteTransformation(0);
-
                 outline = outline.united(shapeMatrix.map(shape->outline()));
-            }
         }
         m_outline = outline;
         m_dirty = false;
@@ -371,7 +366,7 @@ void KisShapeSelection::renderSelection(KisSelection* projection, const QRect& r
         }
     }
     KisPainter painter(projection);
-    painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, tmpMask, r.x(), r.y(), r.width(), r.height());
+    painter.bitBlt(r.x(), r.y(), tmpMask, r.x(), r.y(), r.width(), r.height());
     painter.end();
     dbgRender << "Shape selection rendering: " << t.elapsed();
 }

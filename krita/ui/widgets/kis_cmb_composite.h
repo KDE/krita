@@ -26,7 +26,7 @@
 #include "KoCompositeOp.h"
 
 class KisCompositeOpsModel;
-class KisCompositeOpsCategorizedModel;
+class KCategorizedSortFilterProxyModel;
 
 /**
  * A combobox filled with the various composition strategies
@@ -65,7 +65,7 @@ private:
     KoCompositeOp* itemAt(int idx) const;
 
     KisCompositeOpsModel* m_lastModel;
-    KisCompositeOpsCategorizedModel* m_sortModel;
+    KCategorizedSortFilterProxyModel* m_sortModel;
 };
 
 #endif

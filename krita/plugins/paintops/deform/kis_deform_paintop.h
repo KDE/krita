@@ -47,29 +47,20 @@ public:
     }
 
     void paintAt(const KisPaintInformation& info);
-    double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
-
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(xSpacing);
-        Q_UNUSED(ySpacing);
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        // XXX: this is wrong, but that doesn't matter, since paintLine doesn't use spacing.
-        return 0.5;
-    }
+    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
 
 
 private:
-    QColor c;
-    QPointF m_previousPoint;
-    KisImageSP m_image;
-    bool newStrokeFlag;
     bool m_useMovementPaint;
-    //Stroke stroke;
-    KisPaintDeviceSP dab;
+
+    KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
-//    QMutex m_mutex;
+
     DeformBrush m_deformBrush;
+    qreal m_xSpacing;
+    qreal m_ySpacing;
+    qreal m_spacing;
+
 };
 
 #endif // KIS_DEFORMPAINTOP_H_

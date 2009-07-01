@@ -98,27 +98,6 @@ public:
                            qint32 height,
                            const KoColorProfile * profile);
 
-    /**
-     * Render the projection scaled onto a QImage. Use this when zoom
-     * < 100% to avoid color-adjusting pixels that will be filtered
-     * away anyway. It uses nearest-neighbour sampling, so the result
-     * is inaccurate and ugly. Set the option "fast_zoom" to true to
-     * make Krita use this.
-     *
-     * XXX: Implement the mask option to draw the mask onto the
-     * scaled image.
-     *
-     * @param r the source rectangle in pixels that needs to be drawn
-     * @param xScale the X axis scale (1.0 == 100%)
-     * @param yScale the Y axis scale (1.0 == 100%)
-     * @param projection the display profile
-     * @param mask the mask that will be rendered on top of the image
-     * @return a qimage containing the sampled image pixels
-     */
-    QImage convertToQImage(const QRect& r,
-                           const double xScale, const double yScale,
-                           const KoColorProfile *profile,
-                           KisSelectionSP mask = 0);
 
     QImage convertToQImage(const QRect& r, const QSize& scaledImageSize, const KoColorProfile *profile);
 
@@ -140,8 +119,15 @@ public:
      */
     bool locked() const;
 
-    KoColor backgroundColor() const;
-    void setBackgroundColor(const KoColor & color);
+    /**
+     * @return the image that is used as background tile.
+     */
+    KisBackgroundSP backgroundPattern() const;
+
+    /**
+     * Set a 64x64 tile for the background of the image.
+     */
+    void setBackgroundPattern(KisBackgroundSP image);
 
     /**
      * @return the global selection object or 0 if there is none. The
@@ -206,6 +192,17 @@ public:
      * @param cropLayers if true, all layers are cropped to the new rect
      */
     void resize(const QRect& rc, bool cropLayers = false);
+
+    /**
+     * Resize the image to the specified width and height. The previous
+     * image is offset by the amount specified.
+     *
+     * @param w the width of the image
+     * @param h the height of the image
+     * @param xOffset the horizontal offset of the previous image
+     * @param yOffset the vertical offset of the previous image
+     */
+    void resizeWithOffset(qint32 w, qint32 h, qint32 xOffset = 0, qint32 yOffset = 0);
 
     /**
      * Execute a scale transform on all layers in this image.
@@ -397,6 +394,14 @@ public:
      */
     KisLayerSP mergeLayer(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
 
+    /**
+     * flatten the layer: that is, the projection becomes the layer
+     * and all subnodes are removed. If this is not a paint layer, it will morph
+     * into a paint layer.
+     */
+    KisLayerSP flattenLayer(KisLayerSP layer);
+
+
     QRect bounds() const;
 
     /// use if the layers have changed _completely_ (eg. when flattening)
@@ -463,7 +468,7 @@ signals:
      *  Emitted whenever an action has caused the image to be
      *  recomposited.
      *
-     * @param rc The recty that has been recomposited.
+     * @param rc The rect that has been recomposited.
      */
     void sigImageUpdated(const QRect &);
 
@@ -498,9 +503,10 @@ signals:
      */
     void sigNodeHasBeenRemoved(KisNode *parent, int index);
 
-
 public slots:
+
     void slotProjectionUpdated(const QRect & rc);
+    void updateProjection(KisNodeSP node, const QRect& rc);
 
 private:
     KisImage& operator=(const KisImage& rhs);

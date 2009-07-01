@@ -20,19 +20,12 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
-
 class GridPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
     GridPlugin(QObject *parent, const QStringList &);
     virtual ~GridPlugin();
-
-private:
-
-    KisView * m_view;
-
 };
 
 #endif

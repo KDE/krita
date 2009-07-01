@@ -40,19 +40,7 @@ class KisTiledIterator;
 class KisTiledRandomAccessor;
 class KoStore;
 
-class KisTileDataWrapper : public KisShared
-{
-    KisTile* m_tile;
-    qint32 m_offset;
-public:
-    KisTileDataWrapper(KisTile* tile, qint32 offset);
-    virtual ~KisTileDataWrapper();
-    quint8* data() const {
-        return m_tile->data() + m_offset;
-    }
-};
-
-typedef KisSharedPtr<KisTileDataWrapper> KisTileDataWrapperSP;
+class KisTileDataWrapper;
 
 /**
  * KisTiledDataManager implements the interface that KisDataManager defines
@@ -213,8 +201,7 @@ private:
     qint32 xToCol(qint32 x) const;
     qint32 yToRow(qint32 y) const;
     void getContiguousColumnsAndRows(qint32 x, qint32 y, qint32 *columns, qint32 *rows);
-    quint8* pixelPtr(qint32 x, qint32 y, bool writable);
-    KisTileDataWrapperSP pixelPtrSafe(qint32 x, qint32 y, bool writable);
+    KisTileDataWrapper* pixelPtrSafe(qint32 x, qint32 y, bool writable);
 };
 
 

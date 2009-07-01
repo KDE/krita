@@ -1,5 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
+include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 ########### next target ###############
 
 
@@ -34,6 +34,17 @@ set(kis_paint_device_test_SRCS kis_paint_device_test.cpp )
 kde4_add_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
 
 target_link_libraries(KisPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+
+set(kis_fixed_paint_device_test_SRCS kis_fixed_paint_device_test.cpp )
+
+kde4_add_unit_test(KisFixedPaintDeviceTest TESTNAME krita-image-KisFixedPaintDeviceTest ${kis_fixed_paint_device_test_SRCS})
+
+target_link_libraries(KisFixedPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
 
 ########### next target ###############
 
@@ -300,6 +311,12 @@ target_link_libraries(KisImageTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LI
 set(kis_iterators_pixel_test_SRCS kis_iterators_pixel_test.cpp )
 kde4_add_unit_test(KisIteratorsPixelTest TESTNAME krita-image-KisIteratorsPixelTest ${kis_iterators_pixel_test_SRCS})
 target_link_libraries(KisIteratorsPixelTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_iterator_benchmark_SRCS kis_iterator_benchmark.cpp )
+kde4_add_unit_test(KisIteratorBenchmark TESTNAME krita-image-KisIteratorBenchmark ${kis_iterator_benchmark_SRCS})
+target_link_libraries(KisIteratorBenchmark  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

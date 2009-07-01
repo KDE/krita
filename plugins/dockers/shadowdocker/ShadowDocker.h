@@ -43,6 +43,8 @@ private slots:
     virtual void setCanvas( KoCanvasBase *canvas );
 
     void shadowChanged();
+    void locationChanged(Qt::DockWidgetArea area);
+
 private:
     class Private;
     Private * const d;

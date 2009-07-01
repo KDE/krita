@@ -349,14 +349,23 @@ const QPainterPath KoPathShape::outline() const
 
 QRectF KoPathShape::boundingRect() const
 {
-    QRectF bb(outline().boundingRect());
+    QMatrix transform = absoluteTransformation(0);
+    // calculate the bounding rect of the transformed outline
+    QRectF bb(transform.map(outline()).boundingRect());
     if (border()) {
         KoInsets inset;
         border()->borderInsets(this, inset);
-        bb.adjust(-inset.left, -inset.top, inset.right, inset.bottom);
+        
+        // calculate transformed border insets
+        QPointF center = transform.map(QPointF());
+        QPointF tl = transform.map(QPointF(-inset.left,-inset.top)) - center;
+        QPointF br = transform.map(QPointF(inset.right,inset.bottom)) -center;
+        qreal left = qMin(tl.x(),br.x());
+        qreal right = qMax(tl.x(),br.x());
+        qreal top = qMin(tl.y(),br.y());
+        qreal bottom = qMax(tl.y(),br.y());
+        bb.adjust(left, top, right, bottom);
     }
-    //qDebug() << "KoPathShape::boundingRect = " << bb;
-    bb = absoluteTransformation(0).mapRect(bb);
     if (shadow()) {
         KoInsets insets;
         shadow()->insets(this, insets);
@@ -364,7 +373,6 @@ QRectF KoPathShape::boundingRect() const
     }
     return bb;
 }
-
 
 QSizeF KoPathShape::size() const
 {
@@ -630,7 +638,7 @@ QList<KoPathSegment> KoPathShape::segmentsAt(const QRectF &r)
     int subpathCount = m_subpaths.count();
     for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
         KoSubpath * subpath = m_subpaths[subpathIndex];
-        int pointCount = subpath[subpathIndex].count();
+        int pointCount = subpath->count();
         bool subpathClosed = isClosedSubpath(subpathIndex);
         for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
             if (pointIndex == (pointCount - 1) && ! subpathClosed)
@@ -727,7 +735,10 @@ bool KoPathShape::isClosedSubpath(int subpathIndex)
     if (subpath == 0)
         return false;
 
-    return subpath->last()->properties() & KoPathPoint::CloseSubpath;
+    const bool firstClosed = subpath->first()->properties() & KoPathPoint::CloseSubpath;
+    const bool lastClosed = subpath->last()->properties() & KoPathPoint::CloseSubpath;
+    
+    return firstClosed && lastClosed;
 }
 
 bool KoPathShape::insertPoint(KoPathPoint* point, const KoPathPointIndex &pointIndex)
@@ -807,8 +818,8 @@ bool KoPathShape::breakAfter(const KoPathPointIndex &pointIndex)
 {
     KoSubpath * subpath = subPath(pointIndex.first);
 
-    if (subpath == 0 || pointIndex.second < 0 || pointIndex.second > subpath->size() - 2
-            || subpath->last()->properties() & KoPathPoint::CloseSubpath)
+    if (!subpath || pointIndex.second < 0 || pointIndex.second > subpath->size() - 2
+        || isClosedSubpath(pointIndex.first))
         return false;
 
     KoSubpath * newSubpath = new KoSubpath;
@@ -833,8 +844,8 @@ bool KoPathShape::join(int subpathIndex)
     KoSubpath * subpath = subPath(subpathIndex);
     KoSubpath * nextSubpath = subPath(subpathIndex + 1);
 
-    if (subpath == 0 || nextSubpath == 0 || subpath->last()->properties() & KoPathPoint::CloseSubpath
-            || nextSubpath->last()->properties() & KoPathPoint::CloseSubpath)
+    if (!subpath || !nextSubpath || isClosedSubpath(subpathIndex) 
+            || isClosedSubpath(subpathIndex+1))
         return false;
 
     // the last point of the subpath does not end the subpath anymore
@@ -862,6 +873,9 @@ bool KoPathShape::moveSubpath(int oldSubpathIndex, int newSubpathIndex)
     if (subpath == 0 || newSubpathIndex >= m_subpaths.size())
         return false;
 
+    if (oldSubpathIndex == newSubpathIndex)
+        return true;
+    
     m_subpaths.removeAt(oldSubpathIndex);
     m_subpaths.insert(newSubpathIndex, subpath);
 
@@ -872,8 +886,8 @@ KoPathPointIndex KoPathShape::openSubpath(const KoPathPointIndex &pointIndex)
 {
     KoSubpath * subpath = subPath(pointIndex.first);
 
-    if (subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size()
-            || !(subpath->last()->properties() & KoPathPoint::CloseSubpath))
+    if (!subpath || pointIndex.second < 0 || pointIndex.second >= subpath->size()
+            || !isClosedSubpath(pointIndex.first))
         return KoPathPointIndex(-1, -1);
 
     KoPathPoint * oldStartPoint = subpath->first();
@@ -889,7 +903,7 @@ KoPathPointIndex KoPathShape::openSubpath(const KoPathPointIndex &pointIndex)
     // make the first point a start node
     subpath->first()->setProperty(KoPathPoint::StartSubpath);
     // make the last point an end node
-    subpath->last()->unsetProperty(KoPathPoint::StopSubpath);
+    subpath->last()->setProperty(KoPathPoint::StopSubpath);
 
     return pathPointIndex(oldStartPoint);
 }
@@ -898,8 +912,8 @@ KoPathPointIndex KoPathShape::closeSubpath(const KoPathPointIndex &pointIndex)
 {
     KoSubpath * subpath = subPath(pointIndex.first);
 
-    if (subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size()
-            || subpath->last()->properties() & KoPathPoint::CloseSubpath)
+    if (!subpath || pointIndex.second < 0 || pointIndex.second >= subpath->size()
+        || isClosedSubpath(pointIndex.first))
         return KoPathPointIndex(-1, -1);
 
     KoPathPoint * oldStartPoint = subpath->first();

@@ -17,6 +17,8 @@
 
 #include "specificcolorselector_dock.h"
 
+#include <klocale.h>
+
 #include <kis_layer.h>
 #include <kis_view2.h>
 #include <canvas/kis_canvas2.h>

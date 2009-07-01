@@ -22,12 +22,12 @@
 #include <QList>
 
 #include "KoColorSpace.h"
-#include "kis_paint_device.h"
+#include "kis_fixed_paint_device.h"
 #include "kis_iterators_pixel.h"
 
 struct KisBoundary::Private {
     bool isDark(quint8 val);
-    KisPaintDeviceSP m_device;
+    KisFixedPaintDeviceSP m_device;
     int m_fuzzyness;
 
     PointPairListList m_horSegments;
@@ -35,7 +35,7 @@ struct KisBoundary::Private {
 
 };
 
-KisBoundary::KisBoundary(KisPaintDeviceSP dev) : d(new Private)
+KisBoundary::KisBoundary(KisFixedPaintDeviceSP dev) : d(new Private)
 {
     d->m_device = dev;
     d->m_fuzzyness = 255 / 2;
@@ -56,50 +56,64 @@ void KisBoundary::generateBoundary(int w, int h)
         return;
 
     const KoColorSpace* cs = d->m_device->colorSpace();
+    int pixelSize = d->m_device->pixelSize();
 
+    // Yes, we start looking before the begin of the data. There we return the default pixel,
+    // which is transparent.
+    quint8* dataPointer = d->m_device->data();
+    quint8* dataPointerTop = d->m_device->data() - w * pixelSize;
+    quint8* dataPointerBot = d->m_device->data();
     // Horizontal
-    for (int currentY = - 1; currentY < h; currentY++) {
-
-        KisHLineConstIteratorPixel topIt = d->m_device->createHLineIterator(0, currentY, w);
-        KisHLineConstIteratorPixel botIt = d->m_device->createHLineIterator(0, currentY + 1, w);
-
-        bool darkTop;
-        bool darkBot;
+    for (int currentY = -1; currentY < h; currentY++) {
 
         d->m_horSegments.append(QList<PointPair>());
 
-        while (!topIt.isDone()) {
-            darkTop = cs->alpha(topIt.rawData());
-            darkBot = cs->alpha(botIt.rawData());
+        for( int currentX = 0; currentX < w; currentX++) {
+
+            bool darkTop;
+            bool darkBot;
+
+            if (dataPointerTop < dataPointer) {
+                darkTop = OPACITY_TRANSPARENT;
+            }
+            else {
+                darkTop = cs->alpha(dataPointerTop);
+            }
+            darkBot = cs->alpha(dataPointerBot);
+
             if (darkTop != darkBot) {
                 // detected a change
-                d->m_horSegments.back().append(qMakePair(QPointF(botIt.x(), botIt.y()), 1));
+                d->m_horSegments.back().append(qMakePair(QPointF(currentX, currentY + 1), 1));
             }
-            ++topIt;
-            ++botIt;
+
+            dataPointerTop++;
+            dataPointerBot++;
         }
     }
 
     // Vertical
     for (int currentX = - 1; currentX < w; currentX++) {
-        KisVLineConstIteratorPixel leftIt = d->m_device->createVLineIterator(currentX, 0, h);
-        KisVLineConstIteratorPixel rightIt = d->m_device->createVLineIterator(currentX + 1, 0, h);
+
         bool darkLeft;
         bool darkRight;
 
         d->m_vertSegments.append(QList<PointPair>());
 
-        while (!leftIt.isDone()) {
-            darkLeft = cs->alpha(leftIt.rawData());
-            darkRight = cs->alpha(rightIt.rawData());
+        for (int currentY = 0; currentY < h; currentY++) {
+
+            quint8* dataPointerLeft = d->m_device->data() + ( h * pixelSize ) + ( currentX * pixelSize );
+            quint8* dataPointerRight = dataPointerTop - pixelSize;
+
+            darkLeft = cs->alpha(dataPointerLeft);
+            darkRight = cs->alpha(dataPointerRight);
+
             if (darkLeft != darkRight) {
                 // detected a change
-                d->m_vertSegments.back().append(qMakePair(QPointF(rightIt.x(), rightIt.y()), 1));
+                d->m_vertSegments.back().append(qMakePair(QPointF(currentX, currentY), 1));
             }
-            ++leftIt;
-            ++rightIt;
         }
     }
+
 }
 
 const KisBoundary::PointPairListList& KisBoundary::horizontalSegment() const

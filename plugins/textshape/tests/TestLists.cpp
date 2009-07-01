@@ -13,7 +13,7 @@ void TestDocumentLayout::testBasicList()
     initForNewTest("Base\nListItem\nListItem2: The quick brown fox jums over the lazy dog.\nNormal\nNormal");
 
     KoParagraphStyle style;
-    QTextBlock block = doc->begin();
+    QTextBlock block = m_doc->begin();
     style.applyStyle(block);
     block = block.next();
     QVERIFY(block.isValid());
@@ -30,28 +30,28 @@ void TestDocumentLayout::testBasicList()
     QVERIFY(block.isValid());
     style.applyStyle(block); // make this a listStyle
 
-    layout->layout();
+    m_layout->layout();
 
-    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
-    block = doc->begin().next();
+    QCOMPARE(m_blockLayout->lineAt(0).x(), 0.0);
+    block = m_doc->begin().next();
     QVERIFY(block.isValid());
-    blockLayout = block.layout(); // parag 2
+    m_blockLayout = block.layout(); // parag 2
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     QVERIFY(data);
     qreal counterSpacing = data->counterSpacing();
     QVERIFY(counterSpacing > 0.);
     // 12 is hardcoded to be the width of a discitem (taken from the default font):
-    QCOMPARE(blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
+    QCOMPARE(m_blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
     block = block.next();
     QVERIFY(block.isValid());
-    blockLayout = block.layout(); // parag 3
-    QCOMPARE(blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
-    QVERIFY(blockLayout->lineCount() > 1);
-    QCOMPARE(blockLayout->lineAt(1).x(), 12.0 + counterSpacing); // make sure not only the first line is indented
+    m_blockLayout = block.layout(); // parag 3
+    QCOMPARE(m_blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
+    QVERIFY(m_blockLayout->lineCount() > 1);
+    QCOMPARE(m_blockLayout->lineAt(1).x(), 12.0 + counterSpacing); // make sure not only the first line is indented
     block = block.next();
     QVERIFY(block.isValid());
-    blockLayout = block.layout(); // parag 4
-    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
+    m_blockLayout = block.layout(); // parag 4
+    QCOMPARE(m_blockLayout->lineAt(0).x(), 0.0);
 }
 
 void TestDocumentLayout::testNumberedList()
@@ -59,8 +59,8 @@ void TestDocumentLayout::testNumberedList()
     initForNewTest("Base\nListItem1\nListItem2\nListItem3\nListItem4\nListItem5\nListItem6\nListItem6\nListItem7\nListItem8\nListItem9\nListItem10\nListItem11\nListItem12\n");
 
     KoParagraphStyle style;
-    styleManager->add(&style);
-    QTextBlock block = doc->begin();
+    m_styleManager->add(&style);
+    QTextBlock block = m_doc->begin();
     style.applyStyle(block);
     block = block.next();
 
@@ -85,11 +85,11 @@ void TestDocumentLayout::testNumberedList()
         QCOMPARE(textList->format().intProperty(QTextListFormat::ListStyle), (int)(KoListStyle::DecimalItem));
         block = block.next();
     }
-    layout->layout();
+    m_layout->layout();
 
 
-    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
-    QTextBlock blok = doc->begin().next();
+    QCOMPARE(m_blockLayout->lineAt(0).x(), 0.0);
+    QTextBlock blok = m_doc->begin().next();
     qreal indent = blok.layout()->lineAt(0).x();
     QVERIFY(indent > 0.0);
     for (i = 1; i <= 9; i++) {
@@ -107,10 +107,10 @@ void TestDocumentLayout::testNumberedList()
         // qDebug() << "->" << block.text();
         block = block.next();
     }
-    layout->layout();
+    m_layout->layout();
 
-    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
-    blok = doc->begin().next();
+    QCOMPARE(m_blockLayout->lineAt(0).x(), 0.0);
+    blok = m_doc->begin().next();
     qreal indent2 = blok.layout()->lineAt(0).x();
     QVERIFY(indent2 > indent); // since it takes an extra digit
     for (i = 2; i <= 12; i++) {
@@ -120,7 +120,7 @@ void TestDocumentLayout::testNumberedList()
     }
 
     // now to make sure the text is actually properly set.
-    block = doc->begin().next();
+    block = m_doc->begin().next();
     i = 0;
     while (block.isValid() && i < 13) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
@@ -133,7 +133,7 @@ void TestDocumentLayout::testNumberedList()
     llp.setStartValue(4);
     listStyle.setLevelProperties(llp);
 
-    QTextCursor cursor(doc);
+    QTextCursor cursor(m_doc);
     cursor.setPosition(10); // listItem1
     QTextBlockFormat format = cursor.blockFormat();
     format.setProperty(KoParagraphStyle::ListStartValue, 4);
@@ -145,10 +145,10 @@ void TestDocumentLayout::testNumberedList()
     cursor.setBlockFormat(format);
 
     // at this point we start numbering at 4. Have 4, 5, 6, 12, 13, 14, 15 etc
-    layout->layout();
+    m_layout->layout();
 
     // now to make sur the text is actually properly set.
-    block = doc->begin().next();
+    block = m_doc->begin().next();
     i = 4;
     while (block.isValid() && i < 22) {
         if (i == 7) i = 12;
@@ -173,7 +173,7 @@ void TestDocumentLayout::testInterruptedLists()
     listStyle.setLevelProperties(llp);
     style.setListStyle(&listStyle);
 
-    QTextBlock block = doc->begin();
+    QTextBlock block = m_doc->begin();
     style.applyStyle(block);
     block = block.next();
     style.applyStyle(block);
@@ -182,9 +182,9 @@ void TestDocumentLayout::testInterruptedLists()
     block = block.next();
     style.applyStyle(block);
 
-    layout->layout();
+    m_layout->layout();
 
-    block = doc->begin();
+    block = m_doc->begin();
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     QVERIFY(data);
     QVERIFY(data->counterText() == "1.");
@@ -207,10 +207,10 @@ void TestDocumentLayout::testInterruptedLists()
 // I have doubts what consecutiveNumbering should do.  Disable the feature for now.
 #if 0
     // now the other way around
-    block = doc->begin();
+    block = m_doc->begin();
     listStyle.setConsecutiveNumbering(false);
     listStyle.applyStyle(block);
-    layout->layout();
+    m_layout->layout();
 
     data = dynamic_cast<KoTextBlockData*>(block.userData());
     QVERIFY(data);
@@ -238,13 +238,13 @@ void TestDocumentLayout::testNestedLists()
     initForNewTest("Root\nplants\nherbs\ncinnamon\ncurry\nroses\nhumans\nFrank\nAnkje\nOther\nSkip\nLastItem");
 
     KoParagraphStyle h1;
-    styleManager->add(&h1);
+    m_styleManager->add(&h1);
     KoParagraphStyle h2;
-    styleManager->add(&h2);
+    m_styleManager->add(&h2);
     KoParagraphStyle h3;
-    styleManager->add(&h3);
+    m_styleManager->add(&h3);
     KoParagraphStyle h4;
-    styleManager->add(&h4);
+    m_styleManager->add(&h4);
 
     KoListStyle listStyle;
     KoListLevelProperties llp1;
@@ -286,7 +286,7 @@ void TestDocumentLayout::testNestedLists()
     h4.setListStyle(&listStyle4);
     h4.setListLevel(4);
 
-    QTextBlock block = doc->begin().next();
+    QTextBlock block = m_doc->begin().next();
     h1.applyStyle(block);
     block = block.next();
     h2.applyStyle(block);
@@ -310,9 +310,9 @@ void TestDocumentLayout::testNestedLists()
     QVERIFY(block.isValid());
     h4.applyStyle(block);
 
-    layout->layout();
+    m_layout->layout();
 
-    block = doc->begin();
+    block = m_doc->begin();
     QVERIFY(block.userData() == 0);
     block = block.next();
     static const char* texts[] = { "1", "1.1.", "1.1.1", "1.1.2", "1.2.", "2", "2.1.", "2.2.", "3", "3.0.1", "1.1" };
@@ -339,9 +339,9 @@ void TestDocumentLayout::testAutoRestartList()
     initForNewTest("Humans\nGandhi\nEinstein\nInventions\nCar\nToilet\nLaboratory\n");
 
     KoParagraphStyle h1;
-    styleManager->add(&h1);
+    m_styleManager->add(&h1);
     KoParagraphStyle h2;
-    styleManager->add(&h2);
+    m_styleManager->add(&h2);
 
     KoListStyle listStyle;
     KoListLevelProperties llp = listStyle.levelProperties(1);
@@ -360,7 +360,7 @@ void TestDocumentLayout::testAutoRestartList()
     listStyle2.setLevelProperties(llp2);
     h2.setListStyle(&listStyle2);
 
-    QTextBlock block = doc->begin();
+    QTextBlock block = m_doc->begin();
     h1.applyStyle(block);
     block = block.next(); h2.applyStyle(block);
     block = block.next(); h2.applyStyle(block);
@@ -370,7 +370,7 @@ void TestDocumentLayout::testAutoRestartList()
     block = block.next(); h2.applyStyle(block);
     block = block.next(); h2.applyStyle(block);
 
-    layout->layout();
+    m_layout->layout();
 
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(car.userData());
     QVERIFY(data);
@@ -384,9 +384,9 @@ void TestDocumentLayout::testListParagraphIndent()
     initForNewTest("Foo\nBar\n");
 
     KoParagraphStyle h1;
-    styleManager->add(&h1);
+    m_styleManager->add(&h1);
     KoParagraphStyle h2;
-    styleManager->add(&h2);
+    m_styleManager->add(&h2);
     h2.setTextIndent(10);
 
     KoListStyle listStyle;
@@ -394,12 +394,12 @@ void TestDocumentLayout::testListParagraphIndent()
     KoListStyle listStyle2;
     h2.setListStyle(&listStyle2);
 
-    QTextBlock block = doc->begin();
+    QTextBlock block = m_doc->begin();
     h1.applyStyle(block);
     block = block.next();
     h2.applyStyle(block);
 
-    layout->layout();
+    m_layout->layout();
 
     // still at h2 parag!
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
@@ -423,7 +423,7 @@ void TestDocumentLayout::testRestartNumbering()
     initForNewTest("a\nb\na\nb\nc");
 
     KoParagraphStyle h1;
-    styleManager->add(&h1);
+    m_styleManager->add(&h1);
     KoListStyle listStyle;
     KoListLevelProperties llp;
     llp.setStyle(KoListStyle::DecimalItem);
@@ -431,23 +431,23 @@ void TestDocumentLayout::testRestartNumbering()
     listStyle.setLevelProperties(llp);
     h1.setListStyle(&listStyle);
 
-    QTextBlock block = doc->begin();
+    QTextBlock block = m_doc->begin();
     while (block.isValid()) {
         h1.applyStyle(block);
         block = block.next();
     }
 
-    QTextCursor cursor(doc);
+    QTextCursor cursor(m_doc);
     cursor.setPosition(5);
     QCOMPARE(cursor.block().text(), QString("a"));
     QTextBlockFormat format = cursor.blockFormat();
     format.setProperty(KoParagraphStyle::RestartListNumbering, true);
     cursor.setBlockFormat(format);
 
-    layout->layout();
+    m_layout->layout();
 
     static const char *values[] = { "1", "2", "1", "2", "3" };
-    block = doc->begin();
+    block = m_doc->begin();
     int i = 0;
     while (block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
@@ -465,14 +465,14 @@ void TestDocumentLayout::testRightToLeftList()
 
     KoParagraphStyle h1;
     h1.setTextProgressionDirection(KoText::RightLeftTopBottom);
-    styleManager->add(&h1);
+    m_styleManager->add(&h1);
     KoListStyle listStyle;
     KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
     listStyle.setLevelProperties(llp);
     h1.setListStyle(&listStyle);
 
-    QTextBlock block = doc->begin();
+    QTextBlock block = m_doc->begin();
     h1.applyStyle(block);
     block = block.next();
     h1.applyStyle(block);
@@ -480,9 +480,9 @@ void TestDocumentLayout::testRightToLeftList()
     h1.applyStyle(block);
     block = block.next();
 
-    layout->layout();
+    m_layout->layout();
 
-    block = doc->begin();
+    block = m_doc->begin();
     while (block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
         QVERIFY(data);
@@ -497,7 +497,7 @@ void TestDocumentLayout::testLetterSynchronization()
     initForNewTest("a\nb\na\nb\nc");
 
     KoParagraphStyle h1;
-    styleManager->add(&h1);
+    m_styleManager->add(&h1);
     KoListStyle listStyle;
     KoListLevelProperties llp;
     llp.setStyle(KoListStyle::AlphaLowerItem);
@@ -506,16 +506,16 @@ void TestDocumentLayout::testLetterSynchronization()
     listStyle.setLevelProperties(llp);
     h1.setListStyle(&listStyle);
 
-    QTextBlock block = doc->begin();
+    QTextBlock block = m_doc->begin();
     while (block.isValid()) {
         h1.applyStyle(block);
         block = block.next();
     }
 
-    layout->layout();
+    m_layout->layout();
 
     static const char *values[] = { "y", "z", "aa", "bb", "cc" };
-    block = doc->begin();
+    block = m_doc->begin();
     int i = 0;
     while (block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
@@ -538,23 +538,23 @@ void TestDocumentLayout::testInvalidateLists()
     listStyle.setLevelProperties(llp);
     //style.setListStyle(&listStyle);
 
-    QTextBlock block = doc->begin().next();
+    QTextBlock block = m_doc->begin().next();
     QVERIFY(block.isValid());
     listStyle.applyStyle(block);
     block = block.next();
     QVERIFY(block.isValid());
     listStyle.applyStyle(block);
 
-    layout->layout();
+    m_layout->layout();
 
     // check the list items were done (semi) properly
-    block = doc->begin().next();
+    block = m_doc->begin().next();
     QVERIFY(block.textList());
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
     QVERIFY(data);
     QVERIFY(data->hasCounterData());
 
-    QTextCursor cursor(doc);
+    QTextCursor cursor(m_doc);
     cursor.setPosition(10); // list item1
     cursor.insertText("x");
     QCOMPARE(data->hasCounterData(), true); // nothing changed

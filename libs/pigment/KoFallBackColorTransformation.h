@@ -29,14 +29,14 @@ class KoColorTransformation;
 class KoColorConversionTransformation;
 
 /**
- * Use this color transformation to encapsulate an other KoColorTransformation
+ * Use this color transformation to encapsulate another KoColorTransformation
  * and perform a color conversion before and after using that KoColorTransformation.
  */
 class PIGMENTCMS_EXPORT KoFallBackColorTransformation : public KoColorTransformation {
     public:
         /**
          * Create a fall back color transformation using the given two color
-         * space. This constructor will initialize his own color conversion
+         * spaces. This constructor will initialize his own color conversion
          * objects.
          * 
          * The created object takes owner ship of the transormation and will
@@ -48,9 +48,9 @@ class PIGMENTCMS_EXPORT KoFallBackColorTransformation : public KoColorTransforma
          */
         KoFallBackColorTransformation(const KoColorSpace* _cs, const KoColorSpace* _fallBackCS, KoColorTransformation* _transfo);
         /**
-         * Creates a fall back color transformation using the two transformation
-         * given as parameters. The created object take owner ship over the
-         * conversion and the color transformations and will take charge of
+         * Creates a fall back color transformation using the two transformations
+         * given as parameters. The created object take ownership of the
+         * conversion and the color transformations and will be in charge of
          * deleting them.
          *
          * @param csToFallBack transformation from the color space to the fallback

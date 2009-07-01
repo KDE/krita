@@ -49,7 +49,7 @@ public:
     /// reimplemented from KoShapeContainerModel
     virtual int count() const;
     /// reimplemented from KoShapeContainerModel
-    virtual QList<KoShape*> iterator() const;
+    virtual QList<KoShape*> childShapes() const;
     /// reimplemented from KoShapeContainerModel
     virtual void containerChanged(KoShapeContainer *container);
     /// reimplemented from KoShapeContainerModel

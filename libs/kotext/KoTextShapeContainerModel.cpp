@@ -96,7 +96,7 @@ int KoTextShapeContainerModel::count() const
     return d->children.count();
 }
 
-QList<KoShape*> KoTextShapeContainerModel::iterator() const
+QList<KoShape*> KoTextShapeContainerModel::childShapes() const
 {
     return d->children.keys();
 }

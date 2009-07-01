@@ -26,9 +26,10 @@
 #include <QCursor>
 #include <Q3ValueVector>
 
-#include "kis_canvas_subject.h"
 #include "kis_selection.h"
 #include "kis_tool_paint.h"
+#include "KoToolFactory.h"
+#include <flake/kis_node_shape.h>
 
 #include "kis_curve_framework.h"
 
@@ -44,22 +45,21 @@ double pointToSegmentDistance(const QPointF& p, const QPointF& l0, const QPointF
 class KisToolCurve : public KisToolPaint
 {
 
-
     Q_OBJECT
 
 public:
-    KisToolCurve(const QString& UIName);
+
+    KisToolCurve(KoCanvasBase* canvas, const QString& UIName);
     virtual ~KisToolCurve();
 
-    virtual void update(KisCanvasSubject *subject);
     virtual QWidget* createOptionWidget();
 
-    virtual void buttonPress(KoPointerEvent *event);
-    virtual void move(KoPointerEvent *event);
-    virtual void buttonRelease(KoPointerEvent *event);
-    virtual void doubleClick(KoPointerEvent *event);
-    virtual void keyPress(QKeyEvent *event);
-    virtual void keyRelease(QKeyEvent *event);
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void mouseDoubleClick(KoPointerEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void keyReleaseEvent(QKeyEvent *event);
 
 public slots:
 

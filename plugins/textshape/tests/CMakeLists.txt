@@ -1,5 +1,8 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories( ${CMAKE_SOURCE_DIR}/plugins/textshape ${CMAKE_BINARY_DIR}/plugins/textshape ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/plugins/textshape 
+    ${CMAKE_BINARY_DIR}/plugins/textshape 
+    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
+    ${KOTEXT_INCLUDES} )
 
 ########### next target ###############
 
@@ -12,7 +15,7 @@ set(TestDocumentLayout_test_SRCS
 )
 
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
-target_link_libraries(TestDocumentLayout kotext ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestDocumentLayout kotext koaction kocolorwidgets ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -54,7 +57,7 @@ set(TestChangeListCommand_test_SRCS
 
 
 kde4_add_unit_test(TestChangeListCommand TESTNAME shapes-text-TestChangeListCommand ${TestChangeListCommand_test_SRCS})
-target_link_libraries(TestChangeListCommand koguiutils kotext ${QT_QTTEST_LIBRARY}  ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS})
+target_link_libraries(TestChangeListCommand  kocolorwidgets komain ${QT_QTTEST_LIBRARY}  ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS})
 
 ########### next target ###############
 
@@ -73,5 +76,26 @@ set(TestStylesModel_test_SRCS
     ../dialogs/StylesModel.cpp
 )
 kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
-target_link_libraries(TestStylesModel kotext ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
+target_link_libraries(TestStylesModel kotext koaction kocolorwidgets ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
 
+########### next target ###############
+
+set(TestTableLayout_test_SRCS
+    TestTableLayout.cpp
+    ../TableLayout.cpp
+    ../TableData.cpp
+    ../Layout.cpp
+    ../TextShape.cpp
+    ../ListItemsHelper.cpp
+)
+kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
+target_link_libraries(TestTableLayout kotext ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
+
+########### next target ###############
+
+set(TestTableData_test_SRCS
+    TestTableData.cpp
+    ../TableData.cpp
+)
+kde4_add_unit_test(TestTableData TESTNAME shapes-text-TestTableData ${TestTableData_test_SRCS})
+target_link_libraries(TestTableData kotext ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})

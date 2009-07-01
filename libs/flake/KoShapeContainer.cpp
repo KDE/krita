@@ -80,7 +80,7 @@ public:
         return m_relations.count();
     }
 
-    QList<KoShape*> iterator() const {
+    QList<KoShape*> childShapes() const {
         QList<KoShape*> answer;
         foreach(Relation *relation, m_relations)
             answer.append(relation->child());
@@ -128,7 +128,7 @@ public:
     Private() : children(0) {}
     ~Private() {
         if (children) {
-            foreach(KoShape *shape, children->iterator())
+            foreach(KoShape *shape, children->childShapes())
                 shape->setParent(0);
             delete children;
         }
@@ -155,7 +155,7 @@ KoShapeContainer::~KoShapeContainer()
 void KoShapeContainer::addChild(KoShape *shape)
 {
     Q_ASSERT(shape);
-    if (shape->parent() == this && iterator().contains(shape))
+    if (shape->parent() == this && childShapes().contains(shape))
         return;
     if (d->children == 0)
         d->children = new ChildrenData();
@@ -205,7 +205,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     if (d->children == 0 || d->children->count() == 0)
         return;
 
-    QList<KoShape*> sortedObjects = d->children->iterator();
+    QList<KoShape*> sortedObjects = d->children->childShapes();
     qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
 
     QMatrix baseMatrix = absoluteTransformation(0).inverted() * painter.matrix();
@@ -244,15 +244,16 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     }
 }
 
-void KoShapeContainer::shapeChanged(ChangeType type)
+void KoShapeContainer::shapeChanged(ChangeType type, KoShape *shape)
 {
+    Q_UNUSED(shape);
     if (d->children == 0)
         return;
     if (!(type == RotationChanged || type == ScaleChanged || type == ShearChanged
             || type == SizeChanged || type == PositionChanged))
         return;
     d->children->containerChanged(this);
-    foreach(KoShape *shape, d->children->iterator())
+    foreach(KoShape *shape, d->children->childShapes())
         shape->notifyChanged();
 }
 
@@ -267,16 +268,16 @@ void KoShapeContainer::update() const
 {
     KoShape::update();
     if (d->children)
-        foreach(KoShape *shape, d->children->iterator())
+        foreach(KoShape *shape, d->children->childShapes())
             shape->update();
 }
 
-QList<KoShape*> KoShapeContainer::iterator() const
+QList<KoShape*> KoShapeContainer::childShapes() const
 {
     if (d->children == 0)
         return QList<KoShape*>();
 
-    return d->children->iterator();
+    return d->children->childShapes();
 }
 
 KoShapeContainerModel *KoShapeContainer::model() const

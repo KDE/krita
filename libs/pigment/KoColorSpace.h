@@ -40,7 +40,6 @@ class KoCompositeOp;
 class KoColorProfile;
 class KoColorTransformation;
 class KoColorConversionTransformationFactory;
-class KisFilter;
 class QBitArray;
 
 enum ColorSpaceIndependence {
@@ -110,7 +109,7 @@ public:
  * number of specific color spaces. So RGB is the model and sRGB,
  * adobeRGB, etc are colorspaces.
  *
- * In Pigment KoColorSpace act as both a color model and a color space.
+ * In Pigment KoColorSpace acts as both a color model and a color space.
  * You can think of the class definition as the color model, but the
  * instance of the class as representing a colorspace.
  *
@@ -131,12 +130,12 @@ protected:
     KoColorSpace();
 
 public:
+
     /// Should be called by real color spaces
     KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp );
     virtual ~KoColorSpace();
 
     virtual bool operator==(const KoColorSpace& rhs) const;
-
 
 public:
 
@@ -205,15 +204,16 @@ public:
      */
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
 
-	/**
-	 * Return a QVector of floats with channels' values normalized
-	 * to floating point range 0 to 1.
-	 */
-	virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const = 0;
-  /**
-   * Write in the pixel the value from the normalized vector.
-   */
-	virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const = 0;
+    /**
+     * Return a QVector of floats with channels' values normalized
+     * to floating point range 0 to 1.
+     */
+    virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const = 0;
+
+    /**
+     * Write in the pixel the value from the normalized vector.
+     */
+    virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const = 0;
 
     /**
      * Convert the value of the channel at the specified position into
@@ -360,7 +360,7 @@ public:
      * This functions allocates the ncessary memory for numPixels number of pixels.
      * It is your responsibility to delete[] it.
      */
-    quint8 *allocPixelBuffer(quint32 numPixels) const;
+    quint8 *allocPixelBuffer(quint32 numPixels, bool clear = false, quint8 defaultvalue = 0) const;
 
     /**
      * Convert the specified data to Lab (D50). All colorspaces are guaranteed to support this
@@ -494,7 +494,6 @@ public:
      */
     virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const = 0;
 
-
     /**
      * Invert color channels of the given pixels
      * This function is thread-safe, but you need to create one KoColorTransformation per thread.
@@ -535,13 +534,13 @@ public:
      * colorspace.
      *
      * @param dst pointer to the pixels onto which src will be composited. dst is "below" src.
-     * @param dststride skip in bytes to the starting point of the next row of dst pixels
+     * @param dststride the total number of bytes in one line in the dst paint device
      * @param srcSpace the colorspace of the source pixels that will be composited onto "us"
      * @param src pointer to the pixels that will be composited onto "us"
-     * @param srcRowStride skip in bytes to the starting point of the next row of src pixels
+     * @param srcRowStride the total number of bytes in one line in the src paint device
      * @param srcAlphaMask pointer to an alpha mask that determines whether and how much
      *        of src will be composited onto dst
-     * @param maskRowStride skip in bytes to the starting point of the next row of mask pixels
+     * @param maskRowStride the total number of bytes in one line in the mask paint device
      * @param rows the number of rows of pixels we'll be compositing
      * @param cols the length in pixels of a single row we'll be compositing.
      * @param op the composition operator to use, e.g. COPY_OVER
@@ -549,61 +548,62 @@ public:
      *        channels won't.
      */
     virtual void bitBlt(quint8 *dst,
-			qint32 dststride,
-			const KoColorSpace * srcSpace,
-			const quint8 *src,
-			qint32 srcRowStride,
-			const quint8 *srcAlphaMask,
-			qint32 maskRowStride,
-			quint8 opacity,
-			qint32 rows,
-			qint32 cols,
-			const KoCompositeOp * op,
+                        qint32 dststride,
+                        const KoColorSpace * srcSpace,
+                        const quint8 *src,
+                        qint32 srcRowStride,
+                        const quint8 *srcAlphaMask,
+                        qint32 maskRowStride,
+                        quint8 opacity,
+                        qint32 rows,
+                        qint32 cols,
+                        const KoCompositeOp * op,
                         const QBitArray & channelFlags) const;
+
     /**
      * Convenience function for the above where all channels are turned on.
      */
     virtual void bitBlt(quint8 *dst,
-			qint32 dststride,
-			const KoColorSpace * srcSpace,
-			const quint8 *src,
-			qint32 srcRowStride,
-			const quint8 *srcAlphaMask,
-			qint32 maskRowStride,
-			quint8 opacity,
-			qint32 rows,
-			qint32 cols,
+                        qint32 dststride,
+                        const KoColorSpace * srcSpace,
+                        const quint8 *src,
+                        qint32 srcRowStride,
+                        const quint8 *srcAlphaMask,
+                        qint32 maskRowStride,
+                        quint8 opacity,
+                        qint32 rows,
+                        qint32 cols,
                         const KoCompositeOp * op) const;
 
     /**
      * Convenience function for the above if you don't have the composite op object yet.
      */
     virtual void bitBlt(quint8 *dst,
-			qint32 dststride,
-			const KoColorSpace * srcSpace,
-			const quint8 *src,
-			qint32 srcRowStride,
-			const quint8 *srcAlphaMask,
-			qint32 maskRowStride,
-			quint8 opacity,
-			qint32 rows,
-			qint32 cols,
-			const QString & op,
+                        qint32 dststride,
+                        const KoColorSpace * srcSpace,
+                        const quint8 *src,
+                        qint32 srcRowStride,
+                        const quint8 *srcAlphaMask,
+                        qint32 maskRowStride,
+                        quint8 opacity,
+                        qint32 rows,
+                        qint32 cols,
+                        const QString & op,
                         const QBitArray & channelFlags) const;
 
     /**
      * Convenience function for the above, if you simply want all channels composited
      */
     virtual void bitBlt(quint8 *dst,
-			qint32 dststride,
-			const KoColorSpace * srcSpace,
-			const quint8 *src,
-			qint32 srcRowStride,
-			const quint8 *srcAlphaMask,
-			qint32 maskRowStride,
-			quint8 opacity,
-			qint32 rows,
-			qint32 cols,
+                        qint32 dststride,
+                        const KoColorSpace * srcSpace,
+                        const quint8 *src,
+                        qint32 srcRowStride,
+                        const quint8 *srcAlphaMask,
+                        qint32 maskRowStride,
+                        quint8 opacity,
+                        qint32 rows,
+                        qint32 cols,
                         const QString& op) const;
 
 
@@ -621,6 +621,7 @@ public:
      * @param doc is the document containing colorElt
      */
     virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const = 0;
+
     /**
      * Unserialize a color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
@@ -632,16 +633,10 @@ public:
      */
     virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const = 0;
 
-    /**
-     * The backgroundfilters will be run periodically on the newly
-     * created paint device. XXX: Currently this uses timers and not
-     * threads.
-     */
-    virtual QList<KisFilter*> createBackgroundFilters() const
-        { return QList<KisFilter*>(); }
-
     KoColorTransformation* createColorTransformation( const QString & id, const QHash<QString, QVariant> & parameters) const;
+
 protected:
+
     /**
      * Use this function in the constructor of your colorspace to add the information about a channel.
      * @param ci a pointer to the information about a channel
@@ -651,6 +646,7 @@ protected:
     const KoColorConversionTransformation* fromLabA16Converter() const;
     const KoColorConversionTransformation* toRgbA16Converter() const;
     const KoColorConversionTransformation* fromRgbA16Converter() const;
+
 private:
 
     /**
@@ -668,77 +664,80 @@ private:
  */
 class KoColorSpaceFactory {
 public:
-    virtual ~KoColorSpaceFactory() {}
-    /**
-     * Return the unchanging name of this color space
-     */
-    virtual QString id() const = 0;
+     virtual ~KoColorSpaceFactory() {}
+     /**
+      * Return the unchanging name of this color space
+      */
+     virtual QString id() const = 0;
 
-    /**
-     * return the i18n'able description.
-     */
-    virtual QString name() const = 0;
+     /**
+      * return the i18n'able description.
+      */
+     virtual QString name() const = 0;
 
-    /**
-     * @return true if the color space should be shown in an User Interface, or false
-     *         other wise.
-     */
-    virtual bool userVisible() const =0;
-    /**
-     * @return a string that identify the color model (for instance "RGB" or "CMYK" ...)
-     * @see KoColorModelStandardIds.h
-     */
-    virtual KoID colorModelId() const = 0;
-    /**
-     * @return a string that identify the bit depth (for instance "U8" or "F16" ...)
-     * @see KoColorModelStandardIds.h
-     */
-    virtual KoID colorDepthId() const = 0;
+     /**
+      * @return true if the color space should be shown in an User Interface, or false
+      *         other wise.
+      */
+     virtual bool userVisible() const =0;
 
-    /**
-     * @param profile a pointer to a color profile
-     * @return true if the color profile can be used by a color space created by
-     * this factory
-     */
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const =0;
-    /**
-     * creates a color space using the given profile.
-     */
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const = 0;
+     /**
+      * @return a string that identify the color model (for instance "RGB" or "CMYK" ...)
+      * @see KoColorModelStandardIds.h
+      */
+     virtual KoID colorModelId() const = 0;
 
-    /**
-     * @return the name of the color space engine for this color space, or "" if none
-     */
-    virtual QString colorSpaceEngine() const = 0;
-    /**
-     * @return true if the color space supports High-Dynamic Range.
-     */
-    virtual bool isHdr() const = 0;
-    /**
-     * @return the reference depth, that is for a color space where all channels have the same
-     * depth, this is the depth of one channel, for a color space with different bit depth for
-     * each channel, it's usually the higest bit depth. This value is used by the Color
-     * Conversion System to check if a lost of bit depth during a color conversion is
-     * acceptable, for instance when converting from RGB32bit to XYZ16bit, it's acceptable to go
-     * through a conversion to RGB16bit, while it's not the case for RGB32bit to XYZ32bit.
-     */
-    virtual int referenceDepth() const = 0;
-    /**
-     * @return the list of color conversion provided by this colorspace, the factories
-     * constructed by this functions are owned by the caller of the function
-     */
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
+     /**
+      * @return a string that identify the bit depth (for instance "U8" or "F16" ...)
+      * @see KoColorModelStandardIds.h
+      */
+     virtual KoID colorDepthId() const = 0;
 
-    /**
-     *  @return
-     */
-    /**
-     * Returns the default icc profile for use with this colorspace. This may be ""
-     *
-     * @return the default icc profile name
-     */
-    virtual QString defaultProfile() const = 0;
+     /**
+      * @param profile a pointer to a color profile
+      * @return true if the color profile can be used by a color space created by
+      * this factory
+      */
+     virtual bool profileIsCompatible(const KoColorProfile* profile) const =0;
 
-};
+     /**
+      * creates a color space using the given profile.
+      */
+     virtual KoColorSpace *createColorSpace(const KoColorProfile *) const = 0;
+
+     /**
+      * @return the name of the color space engine for this color space, or "" if none
+      */
+     virtual QString colorSpaceEngine() const = 0;
+
+     /**
+      * @return true if the color space supports High-Dynamic Range.
+      */
+     virtual bool isHdr() const = 0;
+
+     /**
+      * @return the reference depth, that is for a color space where all channels have the same
+      * depth, this is the depth of one channel, for a color space with different bit depth for
+      * each channel, it's usually the higest bit depth. This value is used by the Color
+      * Conversion System to check if a lost of bit depth during a color conversion is
+      * acceptable, for instance when converting from RGB32bit to XYZ16bit, it's acceptable to go
+      * through a conversion to RGB16bit, while it's not the case for RGB32bit to XYZ32bit.
+      */
+     virtual int referenceDepth() const = 0;
+
+     /**
+      * @return the list of color conversion provided by this colorspace, the factories
+      * constructed by this functions are owned by the caller of the function
+      */
+     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
+
+     /**
+      * Returns the default icc profile for use with this colorspace. This may be ""
+      *
+      * @return the default icc profile name
+      */
+     virtual QString defaultProfile() const = 0;
+
+ };
 
 #endif // KOCOLORSPACE_H

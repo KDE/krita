@@ -289,6 +289,7 @@ private:
     InsertCharacter *m_specialCharacterDocker;
 
     bool m_textTyping;
+    bool m_textDeleting;
 
     QTimer m_changeTipTimer;
     int m_changeTipCursorPos;

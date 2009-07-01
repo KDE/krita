@@ -46,7 +46,7 @@ int FolderShapeModel::count() const {
     return m_icons.count();
 }
 
-QList<KoShape *> FolderShapeModel::iterator() const {
+QList<KoShape *> FolderShapeModel::childShapes() const {
     return m_icons;
 }
 

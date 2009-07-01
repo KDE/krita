@@ -38,7 +38,6 @@ class KoResourceItem;
 class KoAbstractGradient;
 class KisGradientChooser;
 class KoResourceItemChooser;
-class KisResourceMediator;
 class KisPaintopBox;
 class KisView2;
 class KisIconWidget;
@@ -60,11 +59,8 @@ public:
 
 public slots:
 
-    void slotSetPattern(QTableWidgetItem *item);
-    void slotSetGradient(QTableWidgetItem *item);
-
-    void slotPatternChanged(KisPattern * pattern);
-    void slotGradientChanged(KoAbstractGradient * gradient);
+    void slotSetPattern(KisPattern * pattern);
+    void slotSetGradient(KoAbstractGradient * gradient);
 
 private:
 
@@ -84,9 +80,6 @@ private:
 
     QWidget * m_patternChooserPopup;
     QWidget * m_gradientChooserPopup;
-
-    KisResourceMediator *m_patternMediator;
-    KisResourceMediator *m_gradientMediator;
 
     KisGradientChooser * m_gradientChooser;
 

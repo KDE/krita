@@ -108,8 +108,8 @@ void KisCubismFilter::process(KisConstProcessingInformation srcInfo,
         cubism(src, srcTopLeft, dev, dstTopLeft, size, tileSize, tileSaturation);
 
         KisPainter gc(dst);
-        gc.bltSelection(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_OVER, dev, srcInfo.selection(), OPACITY_OPAQUE,                        
-                        dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
+        gc.setSelection(srcInfo.selection());
+        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), dev, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
         gc.end();
     } else {
         cubism(src, srcTopLeft, dst, dstTopLeft, size, tileSize, tileSaturation);

@@ -62,7 +62,7 @@ private:
     KisImageSP m_image;
     bool newStrokeFlag;
 
-    KisPaintDeviceSP dab;
+    KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
 
 //    QMutex m_mutex;

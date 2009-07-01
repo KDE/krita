@@ -10,6 +10,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_selection_widget.cpp
     kis_curve_option.cpp
     kis_custom_brush_widget.cpp
+    kis_dynamic_sensor.cc
     kis_filter_option.cpp
     kis_paint_action_type_option.cpp
     kis_paintop_option.cpp
@@ -18,15 +19,21 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_opacity_option.cpp
     kis_pressure_rate_option.cpp
     kis_pressure_size_option.cpp
+    kis_sensor_selector.cc
     kis_text_brush_chooser.cpp
+    sensors/kis_dynamic_sensors.cc
+    sensors/kis_dynamic_sensor_time.cc
 )
 
 kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     wdgautobrush.ui
+    wdgcurveoption.ui
     wdgcustombrush.ui
     wdgtextbrush.ui
     wdgincremental.ui
     wdgfilteroption.ui
+    sensors/SensorTimeConfiguration.ui
+    SensorSelector.ui
 )
 
 kde4_add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )

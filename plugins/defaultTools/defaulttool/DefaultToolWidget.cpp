@@ -157,6 +157,9 @@ void DefaultToolWidget::updateSize()
 
 void DefaultToolWidget::sizeHasChanged()
 {
+    if (aspectButton->hasFocus())
+        return;
+
     QSizeF newSize( widthSpinBox->value(), heightSpinBox->value() );
 
     KoSelection *selection = m_tool->canvas()->shapeManager()->selection();
@@ -173,10 +176,13 @@ void DefaultToolWidget::sizeHasChanged()
 
     if( rect.width() != newSize.width() || rect.height() != newSize.height() )
     {
+        // get the scale/resize center from the position selector
+        QPointF scaleCenter = selection->absolutePosition( positionSelector->position() );
+
         QMatrix resizeMatrix;
-        resizeMatrix.translate( rect.x(), rect.y() );
+        resizeMatrix.translate( scaleCenter.x(), scaleCenter.y() );
         resizeMatrix.scale( newSize.width() / rect.width(), newSize.height() / rect.height() );
-        resizeMatrix.translate( -rect.x(), -rect.y() );
+        resizeMatrix.translate( -scaleCenter.x(), -scaleCenter.y() );
 
         QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
         QList<QSizeF> oldSizes, newSizes;
@@ -223,7 +229,6 @@ void DefaultToolWidget::sizeHasChanged()
 
 void DefaultToolWidget::setUnit( const KoUnit &unit )
 {
-    // TODO find a way to get notified whenever the unit changes
     positionXSpinBox->setUnit( unit );
     positionYSpinBox->setUnit( unit );
     widthSpinBox->setUnit( unit );

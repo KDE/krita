@@ -33,6 +33,7 @@
 #include "KoDockFactory.h"
 #include "KoDockWidgetTitleBar.h"
 #include "KoPrintJob.h"
+#include "KoDocumentEntry.h"
 
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
@@ -221,6 +222,8 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
 
+    setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
+    
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
     d->m_manager = new KoPartManager(this);
@@ -831,9 +834,10 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
     int oldSpecialOutputFlag = pDoc->specialOutputFlag();
     KUrl suggestedURL = pDoc->url();
 
-    QStringList mimeFilter = KoFilterManager::mimeFilter(_native_format, KoFilterManager::Export, pDoc->extraNativeMimeTypes());
+    QStringList mimeFilter = KoFilterManager::mimeFilter(_native_format,
+            KoFilterManager::Export, pDoc->extraNativeMimeTypes(KoDocument::ForExport));
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
-        kDebug(30003) << "KoMainWindow::saveDocument no export filter for '" << oldOutputFormat << "'";
+        kDebug(30003) << "KoMainWindow::saveDocument no export filter for" << oldOutputFormat;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
         // dialog and then tries to just plain Save ---
@@ -945,7 +949,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
             // don't change this line unless you know what you're doing :)
             if (!justChangingFilterOptions || pDoc->confirmNonNativeSave(isExporting())) {
-                if (!pDoc->isNativeFormat(outputFormat))
+                if (!pDoc->isNativeFormat(outputFormat, KoDocument::ForExport))
                     wantToSave = exportConfirmation(outputFormat);
             }
 
@@ -1012,7 +1016,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
             ret = false;
     } else { // saving
         bool needConfirm = pDoc->confirmNonNativeSave(false) &&
-                           !pDoc->isNativeFormat(oldOutputFormat);
+                           !pDoc->isNativeFormat(oldOutputFormat, KoDocument::ForExport);
         if (!needConfirm ||
                 (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
            ) {
@@ -1093,6 +1097,7 @@ void KoMainWindow::saveWindowSettings()
             if (i.value()->widget()) {
                 KConfigGroup dockGroup = group.group(QString("DockWidget ") + i.key());
                 dockGroup.writeEntry("Collapsed", i.value()->widget()->isHidden());
+                dockGroup.writeEntry("DockArea", (int) dockWidgetArea(i.value()));
             }
         }
 
@@ -1143,7 +1148,6 @@ bool KoMainWindow::queryClose()
 
         switch (res) {
         case KMessageBox::Yes : {
-            d->m_rootDoc->setDoNotSaveExtDoc(); // external docs are saved later
             bool isNative = (d->m_rootDoc->outputMimeType() == d->m_rootDoc->nativeFormatMimeType());
             if (! saveDocument(!isNative))
                 return false;
@@ -1156,10 +1160,6 @@ bool KoMainWindow::queryClose()
         default : // case KMessageBox::Cancel :
             return false;
         }
-    }
-
-    if (d->m_rootDoc->queryCloseExternalChildren() == KMessageBox::Cancel) {
-        return false;
     }
 
     return true;
@@ -1539,8 +1539,6 @@ void KoMainWindow::slotProgress(int value)
         if (!bar) {
             statusBar()->show();
             QApplication::sendPostedEvents(this, QEvent::ChildAdded);
-            // ######## KDE4 porting: removed this call:
-            // setUpLayout();
         }
 
         if (d->m_progress) {
@@ -1830,6 +1828,11 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactory* factory)
         default:;
         }
 
+        if (rootDocument()) {
+            KConfigGroup group = KGlobal::config()->group(rootDocument()->componentData().componentName()).group("DockWidget " + factory->id());
+            side = static_cast<Qt::DockWidgetArea>(group.readEntry("DockArea", static_cast<int>(side)));
+        }
+
         addDockWidget(side, dockWidget);
         if (dockWidget->features() & QDockWidget::DockWidgetClosable) {
             d->m_dockWidgetMenu->addAction(dockWidget->toggleViewAction());
@@ -1881,6 +1884,21 @@ QList<QDockWidget*> KoMainWindow::dockWidgets()
 {
     return d->m_dockWidgetMap.values();
 }
+
+QList<KoCanvasObserver*> KoMainWindow::canvasObservers()
+{
+
+    QList<KoCanvasObserver*> observers;
+
+    foreach(QDockWidget *docker, dockWidgets()) {
+        KoCanvasObserver *observer = dynamic_cast<KoCanvasObserver*>(docker);
+        if (observer) {
+            observers << observer;
+        }
+    }
+    return observers;
+}
+
 
 KoDockerManager * KoMainWindow::dockerManager() const
 {

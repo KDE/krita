@@ -21,8 +21,6 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
-
 /**
  * A module that provides a transform tool.
  */
@@ -32,11 +30,6 @@ class ToolTransform : public KParts::Plugin
 public:
     ToolTransform(QObject *parent, const QStringList &);
     virtual ~ToolTransform();
-
-private:
-
-    KisView * m_view;
-
 };
 
 #endif // TOOL_TRANSFORM_H_

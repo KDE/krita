@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QCursor>
 #include <QStringList>
+#include <QtCore/QRectF>
 
 #include "flake_export.h"
 
@@ -387,6 +388,26 @@ protected:
      */
     void setPopupActionList(const QList<QAction*> &list);
 
+    /**
+    * Returns a handle grab rect at the given position.
+    *
+    * The position is expected to be in document coordinates. The grab sensitivity
+    * canvas resource is used for the dimension of the rectangle.
+    *
+    * @return the handle rectangle in document coordinates
+    */
+    QRectF handleGrabRect(const QPointF &position);
+    
+    /**
+    * Returns a handle paint rect at the given position.
+    *
+    * The position is expected to be in document coordinates. The handle radius
+    * canvas resource is used for the dimension of the rectangle.
+    *
+    * @return the handle rectangle in document coordinates
+    */
+    QRectF handlePaintRect(const QPointF &position);
+    
 protected:
     KoCanvasBase * const m_canvas; ///< the canvas interface this tool will work for.
     friend class KoToolProxy;

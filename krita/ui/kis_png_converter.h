@@ -42,13 +42,14 @@ class Store;
 }
 
 struct KisPNGOptions {
-    KisPNGOptions() : compression(0), interlace(false), alpha(true), exif(true), iptc(true), xmp(true) {}
+    KisPNGOptions() : compression(0), interlace(false), alpha(true), exif(true), iptc(true), xmp(true), tryToSaveAsIndexed(true) {}
     int compression;
     bool interlace;
     bool alpha;
     bool exif;
     bool iptc;
     bool xmp;
+    bool tryToSaveAsIndexed;
     QList<const KisMetaData::Filter*> filters;
 };
 

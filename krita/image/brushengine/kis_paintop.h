@@ -68,7 +68,6 @@ public:
         return false;
     }
 
-
     /**
      * Draw a line between pos1 and pos2 using the currently set brush and color.
      * If savedDist is less than zero, the brush is painted at pos1 before being
@@ -107,8 +106,8 @@ protected:
 
     static double scaleForPressure(double pressure);
 
-    KisPaintDeviceSP cachedDab();
-    KisPaintDeviceSP cachedDab(const KoColorSpace *cs);
+    KisFixedPaintDeviceSP cachedDab();
+    KisFixedPaintDeviceSP cachedDab(const KoColorSpace *cs);
 
     /**
      * Split the coordinate into whole + fraction, where fraction is always >= 0.

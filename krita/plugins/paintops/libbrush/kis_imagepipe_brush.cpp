@@ -222,21 +222,21 @@ QImage KisImagePipeBrush::img() const
 }
 
 
-void KisImagePipeBrush::generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY) const
+void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY) const
 {
     Q_UNUSED(scaleX);
     Q_UNUSED(scaleY);
     Q_UNUSED(angle);
     if (m_d->brushes.isEmpty()) return;
     selectNextBrush(info);
-    m_d->brushes.at(m_d->currentBrush)->generateMask(dst, src, 1.0, 1.0, 0.0, info, subPixelX, subPixelY);
+    m_d->brushes.at(m_d->currentBrush)->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, 1.0, 1.0, 0.0, info, subPixelX, subPixelY);
 }
 
-KisPaintDeviceSP KisImagePipeBrush::image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisFixedPaintDeviceSP KisImagePipeBrush::image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     Q_UNUSED(scale);
     Q_UNUSED(angle);
-    if (m_d->brushes.isEmpty()) return KisPaintDeviceSP(0);
+    if (m_d->brushes.isEmpty()) return KisFixedPaintDeviceSP(0);
     selectNextBrush(info);
     return m_d->brushes.at(m_d->currentBrush)->image(colorSpace, 1.0, 0.0, info, subPixelX, subPixelY);
 }

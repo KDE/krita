@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <KoResourceItemChooser.h>
+#include <KoResourceServerAdapter.h>
 
 #include "KoColorSpace.h"
 
@@ -38,9 +39,17 @@ KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name)
     setObjectName(name);
     m_lbName = new QLabel(this);
 
-    m_itemChooser = new KisItemChooser();
+    KoResourceServer<KisPattern> * rserver = KisResourceServerProvider::instance()->patternServer();
+    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPattern>(rserver);
+    m_itemChooser = new KoResourceItemChooser(adapter, this);
+    m_itemChooser->setObjectName(name);
     m_itemChooser->setFixedSize( 250, 250 );
-    connect( m_itemChooser, SIGNAL( update( QTableWidgetItem* ) ), this, SLOT( update( QTableWidgetItem* ) ) );
+
+    connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
+             this, SLOT( update( KoResource * ) ) );
+
+    connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
+             this, SIGNAL(resourceSelected( KoResource * ) ) );
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
@@ -49,32 +58,30 @@ KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name)
     mainLayout->addWidget(m_itemChooser, 10);
 
     setLayout( mainLayout );
-    connect( m_itemChooser, SIGNAL(importClicked()), this, SLOT(slotImportPattern()));
 }
 
 KisPatternChooser::~KisPatternChooser()
 {
 }
 
-void KisPatternChooser::update(QTableWidgetItem *item)
+KoResource *  KisPatternChooser::currentResource()
 {
-    KoResourceItem *kisItem = static_cast<KoResourceItem *>(item);
-
-    if (item) {
-        KisPattern *pattern = static_cast<KisPattern *>(kisItem->resource());
-
-        QString text = QString("%1 (%2 x %3)").arg( i18n(pattern->name().toUtf8().data()) ).arg(pattern->width()).arg(pattern->height());
-
-        m_lbName->setText(text);
-    }
+    return m_itemChooser->currentResource();
 }
 
-void KisPatternChooser::slotImportPattern()
+void KisPatternChooser::setCurrentItem(int row, int column)
 {
-    QString filter("*.jpg *.gif *.png *.tif *.xpm *.bmp");
-    QString filename = KFileDialog::getOpenFileName(KUrl(), filter, 0, i18n("Choose Pattern to Add"));
+    m_itemChooser->setCurrentItem(row, column);
+    if(currentResource())
+        update(currentResource());
+}
 
-    KisResourceServerProvider::instance()->patternServer()->importResource(filename);
+void KisPatternChooser::update( KoResource * resource )
+{
+    KisPattern *pattern = static_cast<KisPattern *>(resource);
+
+    QString text = QString("%1 (%2 x %3)").arg( i18n(pattern->name().toUtf8().data()) ).arg(pattern->width()).arg(pattern->height());
+    m_lbName->setText(text);
 }
 
 #include "kis_pattern_chooser.moc"

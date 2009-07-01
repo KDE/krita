@@ -28,7 +28,6 @@
 #include "KoMainWindow.h"
 #include "KoFrame.h"
 #include "KoViewAdaptor.h"
-#include "KoDocumentChild.h"
 #include "KoDockFactory.h"
 
 #include <kactioncollection.h>
@@ -60,10 +59,8 @@ public:
     KoViewPrivate() {
         m_inOperation = false;
         m_zoom = 1.0;
-        m_children.setAutoDelete(true);
         m_manager = 0L;
         m_tempActiveWidget = 0L;
-//     m_dcopObject = 0;
         m_registered = false;
         m_documentDeleted = false;
         m_viewBar = 0L;
@@ -74,9 +71,7 @@ public:
     QPointer<KoDocument> m_doc; // our KoDocument
     QPointer<KParts::PartManager> m_manager;
     qreal m_zoom;
-    Q3PtrList<KoViewChild> m_children;
     QWidget *m_tempActiveWidget;
-//   KoViewIface *m_dcopObject;
     bool m_registered;  // are we registered at the part manager?
     bool m_documentDeleted; // true when m_doc gets deleted [can't use m_doc==0
     // since this only happens in ~QObject, and views
@@ -146,9 +141,6 @@ KoView::KoView(KoDocument *document, QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
 
     setMouseTracking(true);
-
-    connect(d->m_doc, SIGNAL(childChanged(KoDocumentChild *)),
-            this, SLOT(slotChildChanged(KoDocumentChild *)));
 
     connect(d->m_doc, SIGNAL(beginOperation()),
             this, SLOT(beginOperation()));
@@ -224,11 +216,6 @@ bool KoView::documentDeleted() const
     return d->m_documentDeleted;
 }
 
-bool KoView::hasDocumentInWindow(KoDocument *doc)
-{
-    return child(doc) != 0L;
-}
-
 void KoView::setPartManager(KParts::PartManager *manager)
 {
     d->m_manager = manager;
@@ -264,31 +251,8 @@ QAction *KoView::action(const QDomElement &element) const
 
 KoDocument *KoView::hitTest(const QPoint &viewPos)
 {
-    KoViewChild *viewChild;
-
-    QPoint pos = reverseViewTransformations(viewPos);
-
-    KoDocumentChild *docChild = selectedChild();
-    if (docChild) {
-        if ((viewChild = child(docChild->document()))) {
-            if (viewChild->frameRegion().contains(pos))
-                return 0;
-        } else
-            if (docChild->frameRegion().contains(pos))
-                return 0;
-    }
-
-    docChild = activeChild();
-    if (docChild) {
-        if ((viewChild = child(docChild->document()))) {
-            if (viewChild->frameRegion().contains(pos))
-                return 0;
-        } else
-            if (docChild->frameRegion().contains(pos))
-                return 0;
-    }
-
-    return koDocument()->hitTest(pos, this);
+    Q_UNUSED(viewPos);
+    return koDocument(); // we no longer have child documents
 }
 
 int KoView::leftBorder() const
@@ -339,10 +303,6 @@ int KoView::canvasYOffset() const
     return 0;
 }
 
-void KoView::canvasAddChild(KoViewChild *)
-{
-}
-
 void KoView::customEvent(QEvent *ev)
 {
     if (KParts::PartActivateEvent::test(ev))
@@ -355,56 +315,12 @@ void KoView::customEvent(QEvent *ev)
 
 void KoView::partActivateEvent(KParts::PartActivateEvent *event)
 {
-    if (event->part() != (KParts::Part *)koDocument()) {
-        Q_ASSERT(event->part()->inherits("KoDocument"));
-
-        KoDocumentChild *child = koDocument()->child((KoDocument *)event->part());
-        if (child && event->activated()) {
-            if (child->isRectangle()) {
-                KoViewChild *viewChild = new KoViewChild(child, this);
-                d->m_children.append(viewChild);
-
-                QApplication::setOverrideCursor(Qt::WaitCursor);
-                // This is the long operation (due to toolbar layout stuff)
-                d->m_manager->setActivePart(child->document(), viewChild->frame()->view());
-                QApplication::restoreOverrideCursor();
-
-                // Now we can move the frame to the right place
-                viewChild->setInitialFrameGeometry();
-            } else {
-                emit regionInvalidated(child->frameRegion(matrix()), true);
-            }
-            emit childActivated(child);
-        } else if (child) {
-            emit regionInvalidated(child->frameRegion(matrix()), true);
-            emit childDeactivated(child);
-        } else
-            emit invalidated();
-    } else
-        emit activated(event->activated());
+    emit activated(event->activated());
 }
 
 void KoView::partSelectEvent(KParts::PartSelectEvent *event)
 {
-    if (event->part() != (KParts::Part *)koDocument()) {
-        Q_ASSERT(event->part()->inherits("KoDocument"));
-
-        KoDocumentChild *child = koDocument()->child((KoDocument *)event->part());
-
-        if (child && event->selected()) {
-            QRegion r = child->frameRegion(matrix());
-            r.translate(- canvasXOffset(), - canvasYOffset());
-            emit regionInvalidated(r, true);
-            emit childSelected(child);
-        } else if (child) {
-            QRegion r = child->frameRegion(matrix());
-            r.translate(- canvasXOffset(), - canvasYOffset());
-            emit regionInvalidated(r, true);
-            emit childUnselected(child);
-        } else
-            emit invalidated();
-    } else
-        emit selected(event->selected());
+    emit selected(event->selected());
 }
 
 void KoView::guiActivateEvent(KParts::GUIActivateEvent * ev)
@@ -451,35 +367,6 @@ void KoView::removeStatusBarItem(QWidget * widget)
         kWarning() << "KoView::removeStatusBarItem. Widget not found : " << widget;
 }
 
-
-
-
-KoDocumentChild *KoView::selectedChild()
-{
-    if (!d->m_manager)
-        return 0L;
-
-    KParts::Part *selectedPart = d->m_manager->selectedPart();
-
-    if (!selectedPart || !selectedPart->inherits("KoDocument"))
-        return 0L;
-
-    return koDocument()->child((KoDocument *)selectedPart);
-}
-
-KoDocumentChild *KoView::activeChild()
-{
-    if (!d->m_manager)
-        return 0L;
-
-    KParts::Part *activePart = d->m_manager->activePart();
-
-    if (!activePart || !activePart->inherits("KoDocument"))
-        return 0L;
-
-    return koDocument()->child((KoDocument *)activePart);
-}
-
 void KoView::enableAutoScroll()
 {
     d->m_scrollTimer->start(50);
@@ -495,93 +382,12 @@ void KoView::paintEverything(QPainter &painter, const QRect &rect)
     koDocument()->paintEverything(painter, rect, this);
 }
 
-KoViewChild *KoView::child(KoView *view)
-{
-    Q3PtrListIterator<KoViewChild> it(d->m_children);
-    for (; it.current(); ++it)
-        if (it.current()->frame()->view() == view)
-            return it.current();
-
-    return 0L;
-}
-
-KoViewChild *KoView::child(KoDocument *doc)
-{
-    Q3PtrListIterator<KoViewChild> it(d->m_children);
-    for (; it.current(); ++it)
-        if (it.current()->documentChild()->document() == doc)
-            return it.current();
-
-    return 0L;
-}
-
 QMatrix KoView::matrix() const
 {
     QMatrix m;
     m.scale(zoom(), zoom());
     //m.translate(  canvasXOffset() ,  canvasYOffset() );
     return m;
-}
-
-void KoView::slotChildActivated(bool a)
-{
-    // Only interested in deactivate events
-    if (a)
-        return;
-
-    KoViewChild* ch = child((KoView*)sender());
-    if (!ch)
-        return;
-
-    KoView* view = ch->frame()->view();
-
-    QWidget *activeWidget = view->d->m_tempActiveWidget;
-
-    if (d->m_manager->activeWidget())
-        activeWidget = d->m_manager->activeWidget();
-
-    if (!activeWidget || !activeWidget->inherits("KoView"))
-        return;
-
-    // Is the new active view a child of this one ?
-    // In this case we may not delete!
-    //  QObject *n = d->m_manager->activeWidget();
-    QObject *n = activeWidget;
-    while (n)
-        if (n == (QObject *)view)
-            return;
-        else
-            n = n->parent();
-
-
-    d->m_tempActiveWidget = activeWidget;
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->m_manager->setActivePart(0L);
-
-    QPointer<KoDocumentChild> docChild = ch->documentChild();
-    QPointer<KoFrame> chFrame = ch->frame();
-    if (docChild && chFrame && chFrame->view()) {
-        docChild->setContentsPos(chFrame->view()->canvasXOffset(),
-                                 chFrame->view()->canvasYOffset());
-        docChild->document()->setViewBuildDocument(chFrame->view(), chFrame->view()->xmlguiBuildDocument());
-    }
-
-    d->m_children.remove(ch);
-
-    d->m_manager->addPart(docChild->document(), false);   // the destruction of the view removed the part from the partmanager. re-add it :)
-
-    QApplication::restoreOverrideCursor();
-
-    // #### HACK
-    // We want to delete as many views as possible and this
-    // trick is used to go upwards in the view-tree.
-    emit activated(false);
-}
-
-void KoView::slotChildChanged(KoDocumentChild *child)
-{
-    QRegion region(child->oldPointArray(matrix()));
-    emit regionInvalidated(child->frameRegion(matrix(), true).unite(region), true);
 }
 
 int KoView::autoScrollAcceleration(int offset) const

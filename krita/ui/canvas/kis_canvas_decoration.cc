@@ -47,7 +47,7 @@ const QString& KisCanvasDecoration::id() const
 
 const QString& KisCanvasDecoration::name() const
 {
-    return d->id;
+    return d->name;
 }
 
 void KisCanvasDecoration::setVisible(bool v)

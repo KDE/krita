@@ -60,7 +60,7 @@ void DateVariable::saveOdf(KoShapeSavingContext & context)
     } else {
         writer->addAttribute("text:fixed", false);
     }
-    if (m_type == Time) {
+    if (m_displayType == Time) {
         writer->addAttribute("text:time-value", m_time.toString(Qt::ISODate));
     } else {
         writer->addAttribute("text:date-value", m_time.toString(Qt::ISODate));

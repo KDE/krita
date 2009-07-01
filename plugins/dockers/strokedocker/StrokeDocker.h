@@ -75,6 +75,7 @@ private slots:
     virtual void setCanvas( KoCanvasBase *canvas );
 
     void resourceChanged(int key, const QVariant & value);
+    void locationChanged(Qt::DockWidgetArea area);
 
 private:
     class Private;

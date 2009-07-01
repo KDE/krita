@@ -63,10 +63,12 @@ endif(USE_TILESYSTEM EQUAL 0)
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
                      ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
+                     ${KOPROPERTIES_INCLUDES}
 )
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_painter.cc
    brushengine/kis_paint_information.cc
    brushengine/kis_paintop.cc
    brushengine/kis_paintop_factory.cpp
@@ -106,6 +108,7 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator_layer.cpp
    generator/kis_generator_registry.cpp
    kis_adjustment_layer.cc
+   kis_background.cpp
    kis_base_node.cpp
    kis_base_processor.cpp
    kis_basic_math_toolbox.cpp
@@ -135,8 +138,8 @@ set(kritaimage_LIB_SRCS
    kis_node_progress_proxy.cpp
    kis_node_visitor.cpp
    kis_paint_device.cc
+   kis_fixed_paint_device.cpp
    kis_paint_layer.cc
-   kis_painter.cc
    kis_painterly_overlay.cpp
    kis_painterly_overlay_colorspace.cpp
    kis_pattern.cc
@@ -194,8 +197,8 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} koguiutils ${KDE4_THREADWEAVER_LIBRARIES} )
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koguiutils ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
+target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} koprogress kostore kobase koresources pigmentcms kocolorwidgets koresourcewidget  ${KDE4_THREADWEAVER_LIBRARIES} )
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kobase koprogress kostore koresources pigmentcms kocolorwidgets koresourcewidget ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})

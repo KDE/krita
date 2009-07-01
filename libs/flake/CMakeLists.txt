@@ -1,10 +1,13 @@
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${PIGMENT_INCLUDES})
+project(flake)
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOPROPERTIES_INCLUDES} ${KOODF_INCLUDES} ${KOPICTURE_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/koplugin
+)
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FLAKE_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
-
 
 add_subdirectory(tests)
 add_subdirectory(pics)
@@ -13,9 +16,15 @@ set(flake_SRCS
     KoCanvasBase.cpp
     KoCanvasObserver.cpp
     KoCanvasResourceProvider.cpp
+    KoCutController.cpp
+    KoCopyController.cpp
+    KoDockRegistry.cpp
+    KoPasteController.cpp
+    KoGuidesData.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
     KoPathSegment.cpp
+    KoPositionSelector.cpp
     KoSelection.cpp
     KoShape.cpp
     KoShapeContainer.cpp
@@ -23,6 +32,7 @@ set(flake_SRCS
     KoShapeGroup.cpp
     KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp
+    KoShapePainter.cpp
     KoFrameShape.cpp
     KoTool.cpp
     KoCanvasController.cpp
@@ -85,6 +95,9 @@ set(flake_SRCS
     KoImageData_p.cpp
     KoImageCollection.cpp
     KoOdfWorkaround.cpp
+    KoZoomHandler.cpp
+    KoZoomMode.cpp
+    KoDpi.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -122,6 +135,7 @@ set(flake_SRCS
     commands/KoEventActionAddCommand.cpp
     commands/KoEventActionRemoveCommand.cpp
     commands/KoShapeRenameCommand.cpp
+    commands/KoPathPointMergeCommand.cpp
     tools/KoCreatePathTool.cpp
     tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp
@@ -160,8 +174,18 @@ kde4_add_ui_files(flake_SRCS
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} pigmentcms)
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms)
+
+if(HAVE_REQUIRED_LCMS_VERSION)
+	set(EXTRA_LIBS pigmentcms)
+endif(HAVE_REQUIRED_LCMS_VERSION)
+
+
+target_link_libraries(flake ${KDE4_KDEUI_LIBS}
+        			    ${KDE4_KDE3SUPPORT_LIBS} 
+                        ${EXTRA_LIBS}
+		        	    koodf kobase)
+
+target_link_libraries(flake LINK_INTERFACE_LIBRARIES ${EXTRA_LIBS} koodf kobase koplugin)
 
 if(HAVE_OPENGL)
     target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
@@ -179,14 +203,22 @@ install( FILES flake.desktop flaketool.desktop flakeshape.desktop flakedevice.de
 install(
     FILES
     flake_export.h
+    FlakeColor.h
     KoCanvasBase.h
     KoCanvasController.h
     KoCanvasObserver.h
+    KoCanvasObserverProvider.h
     KoCanvasResourceProvider.h
+    KoCopyController.h
+    KoCutController.h
     KoDataCenter.h
+    KoDpi.h
+    KoDockFactory.h
     KoDrag.h
+    KoDragOdfSaveHelper.h
     KoFlake.h
     KoFrameShape.h
+    KoGuidesData.h
     KoImageCollection.h
     KoImageData.h
     KoInputDevice.h
@@ -196,12 +228,17 @@ install(
     KoSelection.h
     KoShape.h
     KoShapeContainer.h
+    KoShapeContainerModel.h
     KoShapeController.h
     KoShapeControllerBase.h
     KoShapeFactory.h
+    KoShapeGroup.h
     KoShapeLayer.h
+    KoShapePainter.h
     KoShapeLoadingContext.h
+    KoShapeOdfSaveHelper.h
     KoLoadingShapeUpdater.h
+    KoShapeConfigWidgetBase.h
     KoShapeManager.h
     KoShapeRegistry.h
     KoShapeSavingContext.h
@@ -212,8 +249,15 @@ install(
     KoToolFactory.h
     KoToolProxy.h
     KoToolRegistry.h
+    KoZoomHandler.h
+    KoZoomMode.h
+    commands/KoShapeCreateCommand.h
+    commands/KoShapeGroupCommand.h
+    commands/KoShapeUngroupCommand.h
     commands/KoShapeRenameCommand.h
-    KoOdfWorkaround.h
+    commands/KoShapeDeleteCommand.h
+    tools/KoInteractionTool.h
+    KoViewConverter.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

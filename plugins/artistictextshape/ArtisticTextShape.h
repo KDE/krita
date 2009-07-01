@@ -130,10 +130,10 @@ public:
     /// Gets the extents of the char with the given index
     void getCharExtentsAt( unsigned int charNum, QRectF &extents ) const;
 
-private:
     /// reimplemented from KoShape
-    virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
+    virtual void shapeChanged(ChangeType type, KoShape * shape);
 
+private:
     void updateSizeAndPosition( bool global = false );
     void cacheGlyphOutlines();
     bool pathHasChanged() const;

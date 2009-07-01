@@ -62,7 +62,7 @@ public:
     KisEmbossLaplascianFilter();
 public:
     static inline KoID id() {
-        return KoID("emboss laplascian", i18n("Emboss Laplascian"));
+        return KoID("emboss laplascian", i18n("Emboss (Laplacian)"));
     }
 };
 

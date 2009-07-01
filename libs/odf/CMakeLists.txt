@@ -1,6 +1,6 @@
 add_subdirectory( tests )
 
-include_directories( ${KOSTORE_INCLUDES} )
+include_directories( ${KOPICTURE_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kobase)
 
 ########### libkoodf ###############
 
@@ -12,7 +12,6 @@ set(koodf_LIB_SRCS
     KoOdf.cpp
     KoXmlNS.cpp
     KoDom.cpp
-    KoUnit.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
     KoOdfLoadingContext.cpp
@@ -23,15 +22,17 @@ set(koodf_LIB_SRCS
     KoOdfReadStore.cpp
     KoOdfWriteStore.cpp
     KoStyleStack.cpp
-
+    KoOdfGraphicStyles.cpp
     KoGenChange.cpp
     KoGenChanges.cpp
+    KoOdfDocument.cpp
+    KoEmbeddedDocumentSaver.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
 
-target_link_libraries(koodf kostore)
-target_link_libraries(koodf LINK_INTERFACE_LIBRARIES kostore)
+target_link_libraries(koodf kostore kopicture kobase)
+target_link_libraries(koodf LINK_INTERFACE_LIBRARIES kostore kopicture kobase)
 
 set_target_properties(koodf PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
@@ -44,7 +45,6 @@ install( FILES
     KoOdf.h
     KoXmlNS.h
     KoDom.h
-    KoUnit.h
     KoGenStyle.h
     KoGenStyles.h
     KoOdfLoadingContext.h
@@ -55,6 +55,9 @@ install( FILES
     KoOdfReadStore.h
     KoOdfWriteStore.h
     KoStyleStack.h
+    KoOdfGraphicStyles.h
+    KoOdfDocument.h
+    KoEmbeddedDocumentSaver.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 if(CHANGETRK)

@@ -19,29 +19,44 @@
 
 #include "KoChangeTracker.h"
 
+//KOffice includes
 #include "styles/KoCharacterStyle.h"
-
+#include "KoChangeTrackerElement.h"
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
+//KDE includes
 #include <KDebug>
 #include <KDateTime>
 
+//Qt includes
 #include <QList>
+#include <QString>
+#include <QHash>
+#include <QTextFormat>
+#include <QTextCharFormat>
+#include <QTextDocumentFragment>
 
 class KoChangeTracker::Private
 {
 public:
-    Private() { }
+    Private()
+      : m_changeId(1),
+        m_enabled(false),
+        m_displayDeleted(false)
+    {
+    }
     ~Private() { }
 
-    QHash<int, int> m_childs;
+    // TODO remove the m_ prefix
+    QHash<int, int> m_childs; // TODO rename to 'children'
     QHash<int, int> m_parents;
     QHash<int, KoChangeTrackerElement *> m_changes;
     QHash<QString, int> m_loadedChanges;
     QList<int> m_saveChanges;
     int m_changeId;
     bool m_enabled;
+    bool m_displayDeleted;
 };
 
 KoChangeTracker::KoChangeTracker(QObject *parent)
@@ -58,13 +73,22 @@ KoChangeTracker::~KoChangeTracker()
 
 void KoChangeTracker::setEnabled(bool enabled)
 {
-    kDebug() << "in change tracker enable: " << enabled;
     d->m_enabled = enabled;
 }
 
 bool KoChangeTracker::isEnabled()
 {
     return d->m_enabled;
+}
+
+void KoChangeTracker::setDisplayDeleted(bool enabled)
+{
+    d->m_displayDeleted = enabled;
+}
+
+bool KoChangeTracker::displayDeleted()
+{
+    return d->m_displayDeleted;
 }
 
 int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId)
@@ -99,6 +123,27 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
     changeElement->setCreator(QString("essai insert"));
+
+    changeElement->setEnabled(d->m_enabled);
+
+    d->m_changes.insert(d->m_changeId, changeElement);
+
+    return d->m_changeId++;
+}
+
+int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment selection, int existingChangeId)
+{
+    if ( existingChangeId ) {
+        d->m_childs.insert(existingChangeId, d->m_changeId);
+        d->m_parents.insert(d->m_changeId, existingChangeId);
+    }
+
+    KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::deleteChange);
+
+    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
+    changeElement->setCreator(QString("essai delete"));
+    //TODO preserve formating info there. this will do for now
+    changeElement->setDeleteData(selection.toPlainText());
 
     changeElement->setEnabled(d->m_enabled);
 

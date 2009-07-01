@@ -307,7 +307,7 @@ bool KoPADocument::saveOdfSettings( KoStore * store )
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOdf( settingsWriter, unit() );
+    saveUnitOdf(settingsWriter);
 
     settingsWriter->endElement(); // config:config-item-set
 
@@ -519,6 +519,17 @@ void KoPADocument::updateViews(KoPAPageBase *page)
 KoPageApp::PageType KoPADocument::pageType() const
 {
     return KoPageApp::Page;
+}
+
+void KoPADocument::initEmpty()
+{
+    d->masterPages.clear();
+    d->pages.clear();
+    KoPAMasterPage * masterPage = newMasterPage();
+    d->masterPages.append( masterPage );
+    KoPAPage * page = newPage( masterPage );
+    d->pages.append( page );
+    KoDocument::initEmpty();
 }
 
 void KoPADocument::setActionEnabled( int actions, bool enable )

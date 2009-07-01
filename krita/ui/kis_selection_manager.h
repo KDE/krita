@@ -71,6 +71,7 @@ public slots:
     void copy();
     void paste();
     void pasteNew();
+    void pasteAt();
     void cutToNewLayer();
     void selectAll();
     void deselect();
@@ -117,10 +118,11 @@ private:
     KisClipboard * m_clipboard;
 
     KisNodeCommandsAdapter* m_adapter;
-    
+
     KAction *m_copy;
     KAction *m_cut;
     KAction *m_paste;
+    KAction *m_pasteAt;
     KAction *m_pasteNew;
     KAction *m_cutToNewLayer;
     KAction *m_selectAll;

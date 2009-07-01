@@ -142,7 +142,7 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Generated Layer..."), this, SLOT(slotNewGeneratorLayer()));
     m_newLayerMenu->addSeparator();
     m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
-    m_newLayerMenu->addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
+    m_newLayerMenu->addAction(KIcon("bookmarks"), i18n("&Filter Mask..."), this, SLOT(slotNewEffectMask()));
 #if 0 // XXX_2.0
     m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
 #endif
@@ -216,6 +216,7 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 void KisLayerBox::updateUI()
 {
     Q_ASSERT(! m_image.isNull());
+
     m_wdgLayerBox->bnDelete->setEnabled(m_nodeManager->activeNode());
     m_wdgLayerBox->bnRaise->setEnabled(m_nodeManager->activeNode()
                                        && (m_nodeManager->activeNode()->nextSibling()
@@ -227,6 +228,7 @@ void KisLayerBox::updateUI()
     m_wdgLayerBox->doubleOpacity->setEnabled(m_nodeManager->activeNode());
     m_wdgLayerBox->doubleOpacity->setDecimals(0);
     m_wdgLayerBox->cmbComposite->setEnabled(m_nodeManager->activeNode());
+
     if (KisNodeSP active = m_nodeManager->activeNode()) {
         if (m_nodeManager->activePaintDevice())
             slotFillCompositeOps(m_nodeManager->activeColorSpace());
@@ -380,6 +382,7 @@ void KisLayerBox::slotRmClicked()
         KisNodeSP node = m_nodeModel->nodeFromIndex(l.at(i));
         m_nodeManager->removeNode( node );
     }
+    m_nodeManager->updateGUI();
 }
 
 void KisLayerBox::slotRaiseClicked()

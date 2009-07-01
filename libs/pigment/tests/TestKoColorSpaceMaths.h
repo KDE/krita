@@ -8,6 +8,7 @@ class TestKoColorSpaceMaths : public QObject
     Q_OBJECT
 private slots:
     void testColorSpaceMathsTraits();
+    void testScaleToA();
 };
 
 #endif

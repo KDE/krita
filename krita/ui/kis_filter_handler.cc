@@ -124,9 +124,9 @@ void KisFilterHandler::reapply()
 
 void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
 {
+    // XXX: if the layer only had a preview mask and is a paint layer, then use flatten instead of applying the filter again
     dbgUI << "Applying a filter";
     if (!layer) return;
-
 
     KisSystemLocker l( layer );
 

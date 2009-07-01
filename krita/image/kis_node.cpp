@@ -101,25 +101,6 @@ KisProjectionUpdateStrategy * KisNode::updateStrategy() const
     return m_d->updateStrategy;
 }
 
-void KisNode::setDirty()
-{
-    m_d->updateStrategy->setDirty(extent());
-}
-
-void KisNode::setDirty(const QRect & rc)
-{
-    m_d->updateStrategy->setDirty(rc);
-}
-
-void KisNode::setDirty(const QRegion & region)
-{
-    if (region.isEmpty()) return;
-
-    foreach(const QRect & rc, region.rects()) {
-        m_d->updateStrategy->setDirty(rc);
-    }
-}
-
 KisNodeSP KisNode::parent() const
 {
     return m_d->parent;

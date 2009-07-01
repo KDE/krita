@@ -33,7 +33,7 @@ public:
     virtual bool childClipped(const KoShape *child) const;
     virtual bool isChildLocked(const KoShape *child) const;
     virtual int count() const;
-    virtual QList<KoShape *> iterator() const;
+    virtual QList<KoShape *> childShapes() const;
     virtual void containerChanged(KoShapeContainer *container);
     virtual void childChanged(KoShape *child, KoShape::ChangeType type);
 

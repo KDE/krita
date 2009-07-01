@@ -117,15 +117,17 @@ const KComponentData &KisFactory2::componentData()
 
         s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
 
-	// for cursors
+        // for cursors
         s_instance->dirs()->addResourceType("kis_pics", "data", "krita/pics/");
 
-	// for images in the paintop box
+        // for images in the paintop box
         s_instance->dirs()->addResourceType("kis_images", "data", "krita/images/");
 
         s_instance->dirs()->addResourceType("kis_profiles", "data", "krita/profiles/");
 
         s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
+
+        s_instance->dirs()->addResourceType("kis_backgrounds", "data", "krita/backgrounds/");
 
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");

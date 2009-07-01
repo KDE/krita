@@ -94,12 +94,12 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     KisBrushSP brush = m_brush;;
     if (!brush) return;
 
-    KisPaintInformation adjustedInfo = settings->m_optionsWidget->m_sizeOption->apply(info);
-    if (! brush->canPaintFor(adjustedInfo))
+    if (! brush->canPaintFor(info))
         return;
 
-    double pScale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());   // TODO: why is there scale and pScale that seems to contains the same things ?
-    QPointF hotSpot = brush->hotSpot(pScale, pScale);
+    double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
+    
+    QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
 
@@ -114,12 +114,8 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
-
     qint32 maskWidth = brush->maskWidth(scale, 0.0);
     qint32 maskHeight = brush->maskHeight(scale, 0.0);
-
-    m_tmpDevice->clear();
 
     // Filter the paint device
     filter->process(KisConstProcessingInformation(source(), QPoint(x, y)),
@@ -128,7 +124,14 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
                     settings->filterConfig(), 0);
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
-    brush->mask(m_tmpDevice, scale, scale, 0.0, info, xFraction, yFraction);
+
+    KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(m_tmpDevice->colorSpace());
+    fixedDab->setRect(m_tmpDevice->extent());
+    fixedDab->initialize();
+
+    m_tmpDevice->readBytes(fixedDab->data(), fixedDab->bounds());
+    brush->mask(fixedDab, scale, scale, 0.0, info, xFraction, yFraction);
+    m_tmpDevice->writeBytes(fixedDab->data(), fixedDab->bounds());
 
     if (!settings->ignoreAlpha()) {
         KisHLineIteratorPixel itTmpDev = m_tmpDevice->createHLineIterator(0, 0, maskWidth);
@@ -162,19 +165,6 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_tmpDevice, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bitBlt(dstRect.x(), dstRect.y(), m_tmpDevice, sx, sy, sw, sh);
 
-}
-
-double KisFilterOp::paintLine(const KisPaintInformation &pi1,
-                           const KisPaintInformation &pi2,
-                           double savedDist)
-{
-    KisPaintInformation adjustedInfo1(pi1);
-    KisPaintInformation adjustedInfo2(pi2);
-    if (!settings->m_optionsWidget->m_sizeOption->isChecked()) {
-        adjustedInfo1.setPressure(PRESSURE_DEFAULT);
-        adjustedInfo2.setPressure(PRESSURE_DEFAULT);
-    }
-    return KisPaintOp::paintLine(adjustedInfo1, adjustedInfo2, savedDist);
 }

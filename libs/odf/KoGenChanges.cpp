@@ -102,8 +102,8 @@ QString KoGenChanges::makeUniqueName(const QString& base) const
 
 const KoGenChange* KoGenChanges::change(const QString& name) const
 {
-    ChangeArray::const_iterator it = d->changeArray.begin();
-    const ChangeArray::const_iterator end = d->changeArray.end();
+    ChangeArray::const_iterator it = d->changeArray.constBegin();
+    const ChangeArray::const_iterator end = d->changeArray.constEnd();
     for (; it != end ; ++it) {
         if ((*it).name == name)
             return (*it).change;

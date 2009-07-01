@@ -23,7 +23,6 @@
 #include <KoOdfPaste.h>
 #include "flake_export.h"
 
-class KoDocument;
 class KoCanvasBase;
 class KoShapeContainer;
 

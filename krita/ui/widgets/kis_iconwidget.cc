@@ -21,20 +21,20 @@
 
 #include <QPainter>
 #include <QIcon>
-#include <QTableWidgetItem>
+#include <KoResource.h>
 
 
 KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
         : KisPopupButton(parent)
 {
     setObjectName(name);
-    m_item = 0;
+    m_resource = 0;
     setFixedSize( QSize( 26, 26 ) );
 }
 
-void KisIconWidget::slotSetItem(QTableWidgetItem& item)
+void KisIconWidget::slotSetItem(KoResource * resource)
 {
-    m_item = &item;
+    m_resource = resource;
     update();
 }
 
@@ -43,8 +43,8 @@ void KisIconWidget::paintEvent(QPaintEvent *)
     QPainter p(this);
     qint32 cw = width();
     qint32 ch = height();
-    if (m_item) {
-        m_item->icon().paint(&p, 0, 0, 24, 24);
+    if (m_resource) {
+        p.drawImage(QRect( 0, 0, 24, 24), m_resource->img());
     } else {
         p.fillRect(0, 0, cw, ch, Qt::white);
     }

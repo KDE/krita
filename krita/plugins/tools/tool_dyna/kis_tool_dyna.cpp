@@ -48,6 +48,7 @@
 
 #include "kis_paint_device.h"
 #include "kis_layer.h"
+#include <QDoubleSpinBox>
 
 #define MAXIMUM_SMOOTHNESS 1000
 #define MAXIMUM_MAGNETISM 1000
@@ -67,9 +68,6 @@ KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
 
 
 void KisToolDyna::initDyna() {
-    // dyna init
-    first = false;
-
     /* dynadraw init */
     m_curmass = 0.5;
     m_curdrag = 0.15;
@@ -80,7 +78,6 @@ void KisToolDyna::initDyna() {
     m_widthRange = 0.05;
 
     m_previousPressure = 0.5;
-
 }
 
 
@@ -106,7 +103,8 @@ void KisToolDyna::timeoutPaint()
 
 void KisToolDyna::initPaint(KoPointerEvent *e)
 {
-    initDyna();
+    //initDyna();
+    first = false;
     initMouse( convertToPixelCoord(e->point) );
 
     KisToolFreehand::initPaint(e);
@@ -125,7 +123,6 @@ void KisToolDyna::initPaint(KoPointerEvent *e)
 
 void KisToolDyna::endPaint()
 {
-    dbgPlugins << "DYNA endPAINT!!";
     m_timer->stop();
     KisToolFreehand::endPaint();
 }
@@ -135,7 +132,6 @@ void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_mode != PAINT) return;
 
-    dbgPlugins << "mouse move!!";
     initMouse( convertToPixelCoord(e->point)  );
 
     qreal mx, my;   
@@ -175,6 +171,49 @@ void KisToolDyna::slotSetMagnetism(int magnetism)
     m_magnetism = expf(magnetism / (double)MAXIMUM_MAGNETISM) / expf(1.0);
 }
 
+
+void KisToolDyna::slotSetDrag(double drag)
+{
+    m_dragDist = drag;
+}
+
+
+void KisToolDyna::slotSetMass(double mass)
+{
+    m_curmass = mass;
+}
+
+
+void KisToolDyna::slotSetDynaWidth(double width)
+{
+    m_width = width;
+}
+
+
+void KisToolDyna::slotSetWidthRange(double widthRange)
+{
+    m_widthRange = widthRange;
+}
+
+
+void KisToolDyna::slotSetXangle(double angle)
+{
+    m_xangle = angle;
+}
+
+
+void KisToolDyna::slotSetYangle(double angle)
+{
+    m_yangle = angle;
+}
+
+
+void KisToolDyna::slotSetFixedAngle(bool fixedAngle)
+{
+    m_mouse.fixedangle = fixedAngle;
+}
+
+
 QWidget * KisToolDyna::createOptionWidget()
 {
 
@@ -192,10 +231,6 @@ QWidget * KisToolDyna::createOptionWidget()
     connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
     connect(m_sliderSmoothness, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothness(int)));
     m_sliderSmoothness->setValue(m_smoothness * MAXIMUM_SMOOTHNESS);
-    // Queueing checkbox
-    m_chkQueueing = new QCheckBox(i18n("Queue paint tasks"), optionWidget);
-    m_chkQueueing->setChecked(true);
-    connect(m_chkQueueing, SIGNAL(toggled(bool)), this, SLOT(setQueueing(bool)));
     // Drawing assistant configuration
     m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
@@ -209,6 +244,36 @@ QWidget * KisToolDyna::createOptionWidget()
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
     connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
 
+    QLabel* initWidthLbl = new QLabel(i18n("Initial width:"), optionWidget);
+    QLabel* massLbl = new QLabel(i18n("Mass:"), optionWidget);
+    QLabel* dragLbl = new QLabel(i18n("Drag:"), optionWidget);
+    QLabel* xAngleLbl = new QLabel(i18n("X angle:"), optionWidget);
+    QLabel* yAngleLbl = new QLabel(i18n("Y angle:"), optionWidget);
+    QLabel* widthRangeLbl = new QLabel(i18n("Width range:"), optionWidget);
+
+    m_chkFixedAngle = new QCheckBox(i18n("Fixed angle:"), optionWidget);
+    m_chkFixedAngle->setChecked( false );
+    connect(m_chkFixedAngle, SIGNAL(toggled(bool)), this, SLOT(slotSetFixedAngle(bool)));
+
+    m_initWidthSPBox = new QDoubleSpinBox(optionWidget);
+    m_initWidthSPBox->setValue( 1.5 );
+    connect(m_initWidthSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDynaWidth(double)));
+    m_massSPBox = new QDoubleSpinBox(optionWidget);
+    m_massSPBox->setValue( 0.5 );
+    connect(m_massSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetMass(double)));
+    m_dragSPBox = new QDoubleSpinBox(optionWidget);
+    m_dragSPBox->setValue( 0.15 );
+    connect(m_dragSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDrag(double)));
+    m_xAngleSPBox = new QDoubleSpinBox(optionWidget);
+    m_xAngleSPBox->setValue( 0.6 );
+    connect(m_xAngleSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetXangle(double)));
+    m_yAngleSPBox = new QDoubleSpinBox(optionWidget);
+    m_yAngleSPBox->setValue( 0.2 );
+    connect(m_yAngleSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetYangle(double)));
+    m_widthRangeSPBox = new QDoubleSpinBox(optionWidget);
+    m_widthRangeSPBox->setValue( 0.05 );
+    connect(m_widthRangeSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWidthRange(double)));
+
     m_optionLayout = new QGridLayout(optionWidget);
     Q_CHECK_PTR(m_optionLayout);
 
@@ -221,7 +286,19 @@ QWidget * KisToolDyna::createOptionWidget()
     m_optionLayout->addWidget(m_chkAssistant, 3, 0);
     m_optionLayout->addWidget(labelMagnetism, 4, 0);
     m_optionLayout->addWidget(m_sliderMagnetism, 4, 1, 1, 2);
-    m_optionLayout->addWidget(m_chkQueueing, 5, 0);
+    m_optionLayout->addWidget(initWidthLbl, 5, 0);
+    m_optionLayout->addWidget(m_initWidthSPBox, 5, 1, 1, 2);
+    m_optionLayout->addWidget(massLbl, 6, 0);
+    m_optionLayout->addWidget(m_massSPBox, 6, 1, 1, 2);
+    m_optionLayout->addWidget(dragLbl, 7, 0);
+    m_optionLayout->addWidget(m_dragSPBox, 7, 1, 1, 2);
+    m_optionLayout->addWidget(m_chkFixedAngle, 8, 0);
+    m_optionLayout->addWidget(xAngleLbl, 9, 0);
+    m_optionLayout->addWidget(m_xAngleSPBox, 9, 1, 1, 2);
+    m_optionLayout->addWidget(yAngleLbl, 10, 0);
+    m_optionLayout->addWidget(m_yAngleSPBox, 10, 1, 1, 2);
+    m_optionLayout->addWidget(widthRangeLbl, 11, 0);
+    m_optionLayout->addWidget(m_widthRangeSPBox, 11, 1, 1, 2);
 
     return optionWidget;
 }
@@ -323,18 +400,27 @@ void KisToolDyna::drawSegment(KoPointerEvent* event) {
     nowl.ry() *= currentImage()->height();
     nowr.ry() *= currentImage()->height();
 
-
-
     qreal m_pressure;
     qreal xTilt, yTilt;
     qreal m_rotation;
     qreal m_tangentialPressure;
 
+#if 0
+    // some funny debugging 
     dbgPlugins << "m_mouse.vel: " << m_mouse.vel;
     dbgPlugins << "m_mouse.velx: " << m_mouse.velx;
     dbgPlugins << "m_mouse.vely: " << m_mouse.vely;
     dbgPlugins << "m_mouse.accx: " << m_mouse.accx;
     dbgPlugins << "m_mouse.accy: " << m_mouse.accy;
+
+
+    dbgPlugins << "fixed: " << m_mouse.fixedangle;
+    dbgPlugins << "drag: " << m_curdrag;
+    dbgPlugins << "mass: " << m_curmass;
+    dbgPlugins << "xAngle: " << m_xangle;
+    dbgPlugins << "yAngle: " << m_yangle;
+
+#endif
 
     m_pressure =  m_mouse.vel * 100;
     if (m_pressure > 1.0) m_pressure = 1.0;

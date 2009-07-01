@@ -125,4 +125,25 @@ QRect KisMask::neededRect( const QRect& _rect ) const
     return _rect;
 }
 
+void KisMask::setDirty()
+{
+    if (parent() && parent()->inherits("KisLayer")) {
+        parent()->setDirty();
+    }
+}
+
+void KisMask::setDirty(const QRect & rect)
+{
+    if (parent() && parent()->inherits("KisLayer")) {
+        parent()->setDirty(rect);
+    }
+}
+
+void KisMask::setDirty(const QRegion & region)
+{
+    if (parent() && parent()->inherits("KisLayer")) {
+        parent()->setDirty(region);
+    }
+}
+
 #include "kis_mask.moc"

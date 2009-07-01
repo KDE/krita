@@ -39,12 +39,14 @@ KisScaledBrush::KisScaledBrush(KisQImagemaskSP scaledMask, const QImage& scaledI
         // Convert image to pre-multiplied by alpha.
 
         m_image.detach();
-
         for (int y = 0; y < m_image.height(); y++) {
-            for (int x = 0; x < m_image.width(); x++) {
 
-                QRgb pixel = m_image.pixel(x, y);
+            QRgb *imagePixelPtr = reinterpret_cast<QRgb *>(m_image.scanLine(y));
+            const QRgb *scanline = reinterpret_cast<const QRgb *>(scaledImage.scanLine(y));
 
+            for (int x = 0; x < m_image.width(); x++)
+            {
+                QRgb pixel = scanline[x];
                 int red = qRed(pixel);
                 int green = qGreen(pixel);
                 int blue = qBlue(pixel);
@@ -54,9 +56,10 @@ KisScaledBrush::KisScaledBrush(KisQImagemaskSP scaledMask, const QImage& scaledI
                 green = (green * alpha) / 255;
                 blue = (blue * alpha) / 255;
 
-                m_image.setPixel(x, y, qRgba(red, green, blue, alpha));
+                *imagePixelPtr = qRgba(red, green, blue, alpha);
+                ++imagePixelPtr;
             }
         }
+
     }
 }
-

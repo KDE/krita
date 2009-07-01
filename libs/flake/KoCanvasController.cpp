@@ -30,8 +30,7 @@
 #include "KoViewConverter.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasObserver.h"
-#include <KoMainWindow.h>
-#include <KoView.h>
+#include "KoCanvasObserverProvider.h"
 #include "tools/KoGuidesTool.h"
 #include "KoToolManager.h"
 
@@ -408,16 +407,16 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
 
 void KoCanvasController::setToolOptionWidgets(const QMap<QString, QWidget *>&widgetMap)
 {
-    KoView *view=0;
     QWidget *w = this;
     while (w->parentWidget()) {
-        view = qobject_cast<KoView*>(w);
-        if(view) {
-            emit toolOptionWidgetsChanged(widgetMap, view);
+        // XXX: This is an ugly hidden dependency
+        if (w->inherits( "KoView" )) {
+            emit toolOptionWidgetsChanged(widgetMap, w);
             break;
         }
         w = w->parentWidget();
     }
+    emit toolOptionWidgetsChanged(widgetMap);
 }
 
 void KoCanvasController::setDocumentSize(const QSize & sz, bool recalculateCenter)
@@ -632,14 +631,15 @@ void KoCanvasController::activate()
     while (parent->parentWidget())
         parent = parent->parentWidget();
 
-    KoMainWindow *mw = dynamic_cast<KoMainWindow*>(parent);
-    if (! mw)
+    KoCanvasObserverProvider* observerProvider = dynamic_cast<KoCanvasObserverProvider*>(parent);
+    if (!observerProvider)
         return;
 
-    foreach(QDockWidget *docker, mw->dockWidgets()) {
+    foreach(KoCanvasObserver *docker, observerProvider->canvasObservers()) {
         KoCanvasObserver *observer = dynamic_cast<KoCanvasObserver*>(docker);
-        if (observer)
+        if (observer) {
             observer->setCanvas(canvas());
+        }
     }
 }
 

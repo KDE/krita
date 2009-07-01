@@ -21,8 +21,6 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
-
 /**
  * A module that provides a star tool.
  */
@@ -32,10 +30,6 @@ class ToolStar : public KParts::Plugin
 public:
     ToolStar(QObject *parent, const QStringList &);
     virtual ~ToolStar();
-
-private:
-
-    KisView * m_view;
 
 };
 

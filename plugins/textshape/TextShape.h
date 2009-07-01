@@ -106,7 +106,7 @@ protected:
     virtual bool loadOdfFrameElement(const KoXmlElement & element, KoShapeLoadingContext & context);
 
 private:
-    void shapeChanged(ChangeType type);
+    void shapeChanged(ChangeType type, KoShape *shape = 0);
 
     KoTextShapeData *m_textShapeData;
     QTextDocument *m_footnotes;

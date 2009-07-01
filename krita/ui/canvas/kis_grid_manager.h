@@ -44,6 +44,7 @@ public:
 public slots:
 
     void updateGUI();
+    void checkVisibilityAction(bool check);
 
 private slots:
 
@@ -60,6 +61,7 @@ protected:
 private:
 
     KisView2* m_view;
+    KToggleAction *toggleGrid;
     KToggleAction* m_toggleSnapToGrid;
     KAction* m_gridConfig;
     KAction* m_gridFastConfig1x1;

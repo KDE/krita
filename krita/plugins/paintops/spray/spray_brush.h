@@ -25,6 +25,10 @@
 
 #include "kis_paint_device.h"
 #include "kis_painter.h"
+#include "kis_paint_information.h"
+#include <qrect.h>
+
+class QRect;
 
 class SprayBrush
 {
@@ -34,13 +38,18 @@ public:
     SprayBrush();
     ~SprayBrush();
     SprayBrush(KoColor inkColor);
-    void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
+    void paint(KisPaintDeviceSP dev, const KisPaintInformation& info, const KoColor &color);
     
     /// Paints Wu Particle
     void paintParticle(KisRandomAccessor &writeAccessor,const KoColor &color,qreal rx, qreal ry);
     void paintCircle(KisPainter &painter,qreal x, qreal y, int radius, int steps);
     void paintEllipse(KisPainter &painter,qreal x, qreal y, int a, int b, qreal angle, int steps);
     void paintRectangle(KisPainter &painter,qreal x, qreal y, int width, int height, qreal angle, int steps);
+
+    void paintMetaballs(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor);
+    void paintDistanceMap(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor);
+
+    void paintOutline(KisPaintDeviceSP dev, const KoColor& painterColor, qreal posX, qreal posY, qreal radius);
 
     void setDiameter(int diameter){
         m_diameter = diameter;
@@ -59,6 +68,7 @@ public:
         m_jitterMovement = jitterMovement;
     }
 
+    // set the amount of the jittering brush position
     void setAmount(qreal amount){
         m_amount = amount;
     }
@@ -66,8 +76,6 @@ public:
     void setScale(qreal scale){
         m_scale = scale;
     }
-
-    void setCurveData(const QList<qreal>& curveData);
 
     void setObject(int object){
         m_object = object;
@@ -81,12 +89,52 @@ public:
         m_jitterShapeSize = jitterShapeSize;
     }
 
-    void setObjectDimenstion(int width, int height){
+    void setObjectDimension(int width, int height){
         m_width = width;
         m_height = height;
     }
 
-    
+    // getters
+    qreal radius(){
+        return m_radius;
+    }
+
+    qreal objectWidth(){
+        return m_width;
+    }
+
+    qreal objectHeight(){
+        return m_height;
+    }
+
+    void setUseDensity(bool useDensity){
+        m_useDensity = useDensity;
+    }
+
+    void setParticleCount(int particleCount){
+        m_particlesCount = particleCount;
+    }
+
+    void setMaxTreshold(qreal tresh){
+        m_maxtresh = tresh;
+    }
+
+    void setMinTreshold(qreal tresh){
+        m_mintresh = tresh;
+    }
+
+    void setRendering(bool highQuality){
+        m_highQuality = highQuality;
+    }
+
+    void setRadius(qreal radiusX, qreal radiusY){
+        m_radiusX = qRound(radiusX);
+        m_radiusY = qRound(radiusY);
+    }
+
+    void setComputeArea(QRect area){
+        m_computeArea = area;
+    }
 
 private:
     KoColor m_inkColor;
@@ -106,10 +154,27 @@ private:
 
     int m_object;
     int m_shape;
+
     // object shape
     int m_width;
     int m_height;
     bool m_jitterShapeSize;
+
+    // particles
+    int m_particlesCount;
+    bool m_useDensity;
+
+    // metaballs
+    qreal m_maxtresh;
+    qreal m_mintresh;
+
+    int m_radiusX;
+    int m_radiusY;
+
+    bool m_highQuality;
+
+    QRect m_computeArea;
+    
 };
 
 #endif

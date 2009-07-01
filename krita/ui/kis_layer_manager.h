@@ -95,9 +95,10 @@ public slots:
     void mirrorLayerY();
     void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateLayer(double radians);
-    void shearLayer(double angleX, double angleY)        ;
+    void shearLayer(double angleX, double angleY);
     void flattenImage();
     void mergeLayer();
+    void flattenLayer();
 
     void layersUpdated();
 
@@ -154,7 +155,7 @@ private:
     KAction *m_layerTop;
     bool m_actLayerVis;
     KAction *m_imgResizeToLayer;
-
+    KAction *m_flattenLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 };

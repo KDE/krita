@@ -85,13 +85,14 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     Q_ASSERT(brush);
     if (!brush) return;
 
-    KisPaintInformation adjustedInfo = settings->m_optionsWidget->m_sizeOption->apply(info);
-    if (! brush->canPaintFor(adjustedInfo))
+    if (! brush->canPaintFor(info))
         return;
+    
+    double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
 
     KisPaintDeviceSP device = painter()->device();
-    double pScale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());   // TODO: why is there scale and pScale that seems to contains the same things ?
-    QPointF hotSpot = brush->hotSpot(pScale, pScale);
+
+    QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -105,10 +106,8 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
-    KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info.pressure());
-
-    double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
+    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info);
+    KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info);
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
@@ -125,9 +124,9 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
+    KisFixedPaintDeviceSP dab;
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, 0.0, adjustedInfo, xFraction, yFraction);
+        dab = brush->image(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
     } else {
         dab = cachedDab();
         KoColor color = painter()->paintColor();
@@ -135,25 +134,11 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
-    settings->m_optionsWidget->m_bidiOption->apply(dab, device, painter(), sx, sy, sw, sh, adjustedInfo.pressure(), dstRect);
+    settings->m_optionsWidget->m_bidiOption->applyFixed(dab, device, painter(), sx, sy, sw, sh, scale, dstRect);
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bltFixed(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
 
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);
 
 }
-
-double KisComplexOp::paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist)
-{
-    KisPaintInformation adjustedInfo1(pi1);
-    KisPaintInformation adjustedInfo2(pi2);
-    if (!settings->m_optionsWidget->m_sizeOption->isChecked()) {
-        adjustedInfo1.setPressure(PRESSURE_DEFAULT);
-        adjustedInfo2.setPressure(PRESSURE_DEFAULT);
-    }
-    return KisPaintOp::paintLine(adjustedInfo1, adjustedInfo2, savedDist);
-}
-

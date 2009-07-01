@@ -1,4 +1,12 @@
-include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/flake ${CMAKE_CURRENT_SOURCE_DIR}/openrastertk ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR} )
+include_directories( ${KOTEXT_INCLUDES}	
+	${BLITZ_INCLUDES} 
+	${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
+	${CMAKE_CURRENT_SOURCE_DIR}/flake 
+	${CMAKE_CURRENT_SOURCE_DIR}/resources
+	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
+	${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
+	${CMAKE_SOURCE_DIR}/krita/image/metadata 
+	${EXIV2_INCLUDE_DIR} )
 
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
@@ -44,12 +52,12 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
     kis_canvas_resource_provider.cpp 
+    kis_categorized_item_delegate.cpp
     kis_clipboard.cc 
     kis_config.cc
     kis_config_notifier.cpp 
     kis_control_frame.cpp
     kis_composite_ops_model.cc
-    kis_composite_ops_categorized_model.cc
     kis_cursor.cc
     kis_custom_palette.cc 
     kis_custom_pattern.cc
@@ -75,7 +83,6 @@ set(kritaui_LIB_SRCS
     kis_palette_docker.cc
     kis_png_converter.cpp
     kis_print_job.cpp 
-    kis_resource_mediator.cc
     kis_resource_server_provider.cpp 
     kis_selection_decoration.cc
     kis_selection_manager.cc 
@@ -184,7 +191,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} ${BLITZ_LIBRARIES} ${KDE4_KPARTS_LIBS} kritaimage kotext ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} ${BLITZ_LIBRARIES} ${KDE4_KPARTS_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain koresourcewidget ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
@@ -194,7 +201,7 @@ if(HAVE_OPENGL)
     endif(HAVE_GLEW)
 endif(HAVE_OPENGL)
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage ${GL_INTERFACE_LIBRARIES})
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES})
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

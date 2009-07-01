@@ -229,6 +229,10 @@ public:
      */
     virtual KoPageApp::PageType pageType() const;
 
+public slots:
+    /// reimplemented
+    virtual void initEmpty();
+
 signals:
     void shapeAdded(KoShape* shape);
     void shapeRemoved(KoShape* shape);

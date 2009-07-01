@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006,2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
@@ -22,6 +22,8 @@
 #ifndef KOPATHPOINTMOVECOMMAND_H
 #define KOPATHPOINTMOVECOMMAND_H
 
+#include "flake_export.h"
+
 #include <QUndoCommand>
 #include <QPointF>
 
@@ -29,28 +31,36 @@
 #include "KoPathPointData.h"
 
 /// The undo / redo command for path point moving.
-class KoPathPointMoveCommand : public QUndoCommand
+class FLAKE_EXPORT KoPathPointMoveCommand : public QUndoCommand
 {
 public:
     /**
-     * Command to move path point.
+     * Command to move path points.
      * @param pointData the path points to move
      * @param offset the offset by which the point is moved in document coordinates
      * @param parent the parent command used for macro commands
      */
     KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QPointF &offset, QUndoCommand *parent = 0);
 
+    /**
+    * Command to move path points.
+    * @param pointData the path points to move
+    * @param offsets the offsets by which the points are moved in document coordinates
+    * @param parent the parent command used for macro commands
+    */
+    KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QList<QPointF> &offsets, QUndoCommand *parent = 0);
+    
     /// redo the command
     void redo();
     /// revert the actions done in redo
     void undo();
 
 private:
-    void applyOffset( const QPointF &offset );
+    void applyOffset( qreal factor );
     
-    QPointF m_offset;
     bool m_undoCalled; // this command stores diffs; so calling undo twice will give wrong results. Guard against that.
-    QMap<KoPathShape*, QSet<KoPathPointIndex> > m_points;
+    QMap<KoPathPointData, QPointF > m_points;
+    QSet<KoPathShape*> m_paths;
 };
 
 #endif // KOPATHPOINTMOVECOMMAND_H

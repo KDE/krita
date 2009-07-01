@@ -28,7 +28,7 @@
 
 #include "KoDocument.h"
 #include "KoMainWindow.h"
-#include "KoQueryTrader.h"
+#include "KoDocumentEntry.h"
 #include "KoView.h"
 
 KoApplicationAdaptor::KoApplicationAdaptor(QObject *parent)

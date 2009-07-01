@@ -29,6 +29,30 @@
 #include "kis_memento.h"
 #include "kis_tilemanager.h"
 
+
+class KisTileDataWrapper
+{
+    KisTile* m_tile;
+    qint32 m_offset;
+public:
+    KisTileDataWrapper(KisTile* tile, qint32 offset)
+        : m_tile(tile), m_offset(offset)
+    {
+        m_tile->addReader();
+    }
+
+    virtual ~KisTileDataWrapper()
+    {
+        m_tile->removeReader();
+    }
+
+    quint8* data() const {
+        return m_tile->data() + m_offset;
+    }
+};
+
+
+
 /* The data area is divided into tiles each say 64x64 pixels (defined at compiletime)
  * The tiles are laid out in a matrix that can have negative indexes.
  * The matrix grows automatically if needed (a call for writeacces to a tile outside the current extent)
@@ -794,15 +818,7 @@ KisTile *KisTiledDataManager::getOldTile(qint32 col, qint32 row, KisTile *def)
     return tile;
 }
 
-quint8* KisTiledDataManager::pixelPtr(qint32 x, qint32 y, bool writable)
-{
-    // Ahem, this is a bit not as good. The point is, this function needs the tile data,
-    // but it might be swapped out. This code swaps it in, but at function exit it might
-    // be swapped out again! THIS MAKES THE RETURNED POINTER QUITE VOLATILE
-    return pixelPtrSafe(x, y, writable) -> data();
-}
-
-KisTileDataWrapperSP KisTiledDataManager::pixelPtrSafe(qint32 x, qint32 y, bool writable)
+KisTileDataWrapper* KisTiledDataManager::pixelPtrSafe(qint32 x, qint32 y, bool writable)
 {
     qint32 row = yToRow(y);
     qint32 col = xToCol(x);
@@ -814,13 +830,16 @@ KisTileDataWrapperSP KisTiledDataManager::pixelPtrSafe(qint32 x, qint32 y, bool 
 
     KisTile *tile = getTile(col, row, writable);
 
-    return new KisTileDataWrapper(tile, offset);
+    KisTileDataWrapper* ktdw = new KisTileDataWrapper(tile, offset);
+
+    return ktdw;
 }
 
 void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)
 {
-    quint8 *pixel = pixelPtr(x, y, true);
-    memcpy(pixel, data, m_pixelSize);
+    KisTileDataWrapper* tileData = pixelPtrSafe(x, y, true);
+    memcpy(tileData->data(), data, m_pixelSize);
+    delete tileData;
 }
 
 
@@ -855,8 +874,8 @@ void KisTiledDataManager::readBytes(quint8 * data,
 
             qint32 columns = qMin(numContiguousSrcColumns, columnsRemaining);
 
-            KisTileDataWrapperSP tileData = pixelPtrSafe(srcX, srcY, false);
-            const quint8 *srcData = tileData -> data();
+            KisTileDataWrapper* tileData = pixelPtrSafe(srcX, srcY, false);
+            const quint8 *srcData = tileData->data();
             qint32 srcRowStride = rowStride(srcX, srcY);
 
             quint8 *dstData = data + ((dstX + (dstY * w)) * m_pixelSize);
@@ -871,6 +890,8 @@ void KisTiledDataManager::readBytes(quint8 * data,
             srcX += columns;
             dstX += columns;
             columnsRemaining -= columns;
+
+            delete tileData;
         }
 
         srcY += rows;
@@ -914,7 +935,7 @@ void KisTiledDataManager::writeBytes(const quint8 * bytes,
 
             qint32 columns = qMin(numContiguousdstColumns, columnsRemaining);
 
-            KisTileDataWrapperSP tileData = pixelPtrSafe(dstX, dstY, true);
+            KisTileDataWrapper* tileData = pixelPtrSafe(dstX, dstY, true);
             quint8 *dstData = tileData->data();
             qint32 dstRowStride = rowStride(dstX, dstY);
 
@@ -927,6 +948,7 @@ void KisTiledDataManager::writeBytes(const quint8 * bytes,
                 dstData += dstRowStride;
             }
 
+            delete tileData;
             dstX += columns;
             srcX += columns;
             columnsRemaining -= columns;
@@ -982,8 +1004,8 @@ QVector<quint8*> KisTiledDataManager::readPlanarBytes(QVector<qint32> channelsiz
 
             qint32 columns = qMin(numContiguousSrcColumns, columnsRemaining);
 
-            KisTileDataWrapperSP tileData = pixelPtrSafe(srcX, srcY, false);
-            const quint8 *srcData = tileData -> data();
+            KisTileDataWrapper* tileData = pixelPtrSafe(srcX, srcY, false);
+            const quint8 *srcData = tileData->data();
 
             for (qint32 row = 0; row < rows; row++) {
                 for (qint32 col = 0; col < columns; ++col) {
@@ -1000,7 +1022,7 @@ QVector<quint8*> KisTiledDataManager::readPlanarBytes(QVector<qint32> channelsiz
 
                 }
             }
-
+            delete tileData;
             srcX += columns;
             columnsRemaining -= columns;
         }
@@ -1046,7 +1068,7 @@ void KisTiledDataManager::writePlanarBytes(QVector<quint8*> planes, QVector<qint
 
             qint32 columns = qMin(numContiguousdstColumns, columnsRemaining);
 
-            KisTileDataWrapperSP tileData = pixelPtrSafe(dstX, dstY, true);
+            KisTileDataWrapper* tileData = pixelPtrSafe(dstX, dstY, true);
             quint8 *dstData = tileData->data();
 
             for (qint32 row = 0; row < rows; ++row) {
@@ -1059,7 +1081,7 @@ void KisTiledDataManager::writePlanarBytes(QVector<quint8*> planes, QVector<qint
                     }
                 }
             }
-
+            delete tileData;
             dstX += columns;
             columnsRemaining -= columns;
         }
@@ -1116,13 +1138,3 @@ qint32 KisTiledDataManager::numTiles(void) const
     return m_numTiles;
 }
 
-KisTileDataWrapper::KisTileDataWrapper(KisTile* tile, qint32 offset)
-        : m_tile(tile), m_offset(offset)
-{
-    m_tile->addReader();
-}
-
-KisTileDataWrapper::~KisTileDataWrapper()
-{
-    m_tile->removeReader();
-}

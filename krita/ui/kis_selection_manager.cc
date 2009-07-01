@@ -34,11 +34,12 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 
+#include "KoCanvasController.h"
 #include "KoChannelInfo.h"
 #include "KoIntegerMaths.h"
 #include <KoDocument.h>
 #include <KoMainWindow.h>
-#include <KoQueryTrader.h>
+#include <KoDocumentEntry.h>
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -138,10 +139,13 @@ void KisSelectionManager::setup(KActionCollection * collection)
     collection->addAction("paste_new", m_pasteNew);
     connect(m_pasteNew, SIGNAL(triggered()), this, SLOT(pasteNew()));
 
+    m_pasteAt = new KAction(i18n("Paste at cursor"), this);
+    collection->addAction("paste_at", m_pasteAt);
+    connect(m_pasteAt, SIGNAL(triggered()), this, SLOT(pasteAt()));
+
     m_selectAll = collection->addAction(KStandardAction::SelectAll,  "select_all", this, SLOT(selectAll()));
 
     m_deselect = collection->addAction(KStandardAction::Deselect,  "deselect", this, SLOT(deselect()));
-
 
     m_clear = collection->addAction(KStandardAction::Clear,  "clear", this, SLOT(clear()));
 
@@ -265,9 +269,9 @@ void KisSelectionManager::updateGUI()
                     if (adjLayer) // There's no reselect for adjustment layers
                         m_reselect->setEnabled(false);
 #endif
-                    }
+    }
 
-        m_cut->setEnabled(enable);
+    m_cut->setEnabled(enable);
     m_clear->setEnabled(enable);
     m_fillForegroundColor->setEnabled(enable);
     m_fillBackgroundColor->setEnabled(enable);
@@ -383,9 +387,9 @@ void KisSelectionManager::cut()
     Q_CHECK_PTR(t);
 
     layer->paintDevice()->clearSelection(m_view->selection());
-#if 0 // XXX_SELECTION
-    dev->deselect();
-#endif
+
+    deselect();
+
     m_view->document()->addCommand(t);
 }
 
@@ -419,7 +423,8 @@ void KisSelectionManager::copy()
         // Copy image data
         KisPainter gc;
         gc.begin(clip);
-        gc.bitBlt(0, 0, COMPOSITE_COPY, dev, r.x(), r.y(), r.width(), r.height());
+        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.bitBlt(0, 0, dev, r.x(), r.y(), r.width(), r.height());
         gc.end();
 
         if (selection) {
@@ -464,7 +469,8 @@ void KisSelectionManager::paste()
         QRect r = clip->exactBounds();
         KisPainter gc;
         gc.begin(layer->paintDevice());
-        gc.bitBlt(0, 0, COMPOSITE_COPY, clip, r.x(), r.y(), r.width(), r.height());
+        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
         gc.end();
 
         //figure out where to position the clip
@@ -477,8 +483,14 @@ void KisSelectionManager::paste()
         if (bottomright.y() > img->height())
             center.setY(img->height() / 2);
         center -= QPoint(r.width() / 2, r.height() / 2);
-        layer->setX(center.x());
-        layer->setY(center.y());
+
+        const KoCanvasBase* canvasBase = m_view->canvasBase();
+        const KoViewConverter* viewConverter = m_view->canvasBase()->viewConverter();
+
+        layer->setX(viewConverter->viewToDocumentX(canvasBase->canvasController()->canvasOffsetX() + center.x()));
+        layer->setY(viewConverter->viewToDocumentY(canvasBase->canvasController()->canvasOffsetY() + center.y()));
+
+        qDebug() << "layer x,y:" << layer->x() << ", " << layer->y();
 
         /*XXX CBR have an idea of asking the user if he is about to paste a clip in another cs than that of
           the image if that is what he want rather than silently converting
@@ -495,6 +507,11 @@ void KisSelectionManager::paste()
         layer->setDirty();
     } else
         m_view->canvasBase()->toolProxy()->paste();
+}
+
+void KisSelectionManager::pasteAt()
+{
+    //XXX
 }
 
 void KisSelectionManager::pasteNew()
@@ -522,7 +539,8 @@ void KisSelectionManager::pasteNew()
     KisPaintLayerSP layer = new KisPaintLayer(img.data(), clip->objectName(), OPACITY_OPAQUE, clip->colorSpace());
 
     KisPainter p(layer->paintDevice());
-    p.bitBlt(0, 0, COMPOSITE_COPY, clip, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+    p.setCompositeOp(COMPOSITE_COPY);
+    p.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
     p.end();
 
     img->addNode(layer.data(), img->rootLayer());
@@ -633,8 +651,8 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
     KisPainter painter2(dev, selection);
 
     if (img->undo()) painter2.beginTransaction(transactionText);
-    painter2.bltSelection(0, 0, COMPOSITE_OVER, filled, OPACITY_OPAQUE,
-                          0, 0, img->width(), img->height());
+
+    painter2.bitBlt(0, 0, filled, 0, 0, img->width(), img->height());
 
     dev->setDirty();
 

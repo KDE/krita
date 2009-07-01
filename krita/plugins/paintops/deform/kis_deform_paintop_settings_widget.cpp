@@ -50,6 +50,7 @@ void  KisDeformPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfi
     m_options->addPaintChBox->setChecked( config->getBool( "use_movement_paint" ) );
     m_options->useCounter->setChecked( config->getBool( "use_counter" ) );
     m_options->useOldData->setChecked(config->getBool( "use_old_data" ) );
+    m_options->spacingKDNumInp->setValue( config->getDouble("spacing") );
 
     int deformAction = config->getInt( "deform_action" );
     if ( deformAction == 1 )
@@ -88,6 +89,7 @@ void KisDeformPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfigurat
     config->setProperty( "use_movement_paint", useMovementPaint() );
     config->setProperty( "use_counter", useCounter() );
     config->setProperty( "use_old_data", useOldData() );
+    config->setProperty( "spacing", spacing() );
 }
 
 int  KisDeformPaintOpSettingsWidget::radius() const
@@ -142,3 +144,6 @@ bool KisDeformPaintOpSettingsWidget::useOldData() const{
     return m_options->useOldData->isChecked();
 }
 
+qreal KisDeformPaintOpSettingsWidget::spacing() const{
+    return m_options->spacingKDNumInp->value();
+} 

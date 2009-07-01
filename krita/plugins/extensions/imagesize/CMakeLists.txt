@@ -1,13 +1,16 @@
-
+add_subdirectory( pics )
 
 set(kritaimagesize_PART_SRCS
     imagesize.cc
     dlg_imagesize.cc
+    dlg_canvassize.cc
     dlg_layersize.cc
+    kcanvaspreview.cc
     )
 
 kde4_add_ui_files(kritaimagesize_PART_SRCS
     wdg_imagescale.ui
+    wdg_canvassize.ui
     wdg_layersize.ui
     )
 

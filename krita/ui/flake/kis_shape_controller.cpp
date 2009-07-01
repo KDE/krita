@@ -93,7 +93,7 @@ void KisShapeController::Private::removeShapeAndChildrenFromMap( KoShape* shape)
 {
     KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
     if (parent) {
-        foreach(KoShape * child, parent->iterator()) {
+        foreach(KoShape * child, parent->childShapes()) {
             removeShapeFromMap(child);
         }
     }
@@ -187,7 +187,7 @@ void KisShapeController::removeShape(KoShape* shape)
     {
         KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
         if (parent) {
-            foreach(KoShape * child, parent->iterator()) {
+            foreach(KoShape * child, parent->childShapes()) {
                 removeShape(child);
             }
         }
@@ -199,8 +199,7 @@ void KisShapeController::removeShape(KoShape* shape)
 
     if ( ( shape->shapeId() == KIS_NODE_SHAPE_ID
             || shape->shapeId() == KIS_SHAPE_LAYER_ID
-            || shape->shapeId() == KIS_LAYER_CONTAINER_ID
-            || shape->shapeId() == KoPathShapeId) // Those shape can be in a selection
+            || shape->shapeId() == KIS_LAYER_CONTAINER_ID) // Those shape can be in a selection
         && (KoToolManager::instance()->activeCanvasController()
                 && KoToolManager::instance()->activeCanvasController()->canvas()) // FIXME don't we check twice for the same thing ?
         && (canvas =  dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas()) )

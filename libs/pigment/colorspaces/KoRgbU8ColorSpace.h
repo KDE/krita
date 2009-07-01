@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_STRATEGY_COLORSPACE_RGB_H_
-#define KIS_STRATEGY_COLORSPACE_RGB_H_
+#ifndef KO_STRATEGY_COLORSPACE_RGB_H_
+#define KO_STRATEGY_COLORSPACE_RGB_H_
 
 #include <klocale.h>
 #include <KoLcmsColorSpace.h>
@@ -69,4 +69,4 @@ public:
     virtual QString defaultProfile() const { return "sRGB built-in - (lcms internal)"; }
 };
 
-#endif // KIS_STRATEGY_COLORSPACE_RGB_H_
+#endif // KO_STRATEGY_COLORSPACE_RGB_H_

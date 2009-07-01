@@ -213,7 +213,7 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
             if( container )
             {
                 bbox = QRectF();
-                foreach( KoShape* shape, container->iterator() )
+                foreach( KoShape* shape, container->childShapes() )
                     bbox = bbox.united( shape->outline().boundingRect() );
             }
             return qreal(bbox.width()) / bbox.height();
@@ -328,7 +328,7 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
 
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
     if( container )
-        shapes = container->iterator();
+        shapes = container->childShapes();
     else
         shapes.append( shape );
 
@@ -344,12 +344,12 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
 
 KoShape * KoPADocumentModel::childFromIndex( KoShapeContainer *parent, int row ) const
 {
-    return parent->iterator().at(row);
+    return parent->childShapes().at(row);
 
     if( parent != m_lastContainer )
     {
         m_lastContainer = parent;
-        m_childs = parent->iterator();
+        m_childs = parent->childShapes();
         qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
     }
     return m_childs.at( row );
@@ -360,12 +360,12 @@ int KoPADocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child 
     if ( !m_document )
         return 0;
 
-    return parent->iterator().indexOf( child );
+    return parent->childShapes().indexOf( child );
 
     if( parent != m_lastContainer )
     {
         m_lastContainer = parent;
-        m_childs = parent->iterator();
+        m_childs = parent->childShapes();
         qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
     }
     return m_childs.indexOf( child );
@@ -476,20 +476,8 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             if ( row < 0 ) {
                 return false;
             }
-            QUndoCommand *command;
             KoPAPageBase *after = ( row != 0 ) ? m_document->pageByIndex( row - 1, false ) : 0;
-            // TODO: After string freeze is lifted, the command name can be changed to
-            //  "Move slides" and "Move pages" to reflect the actual behavior
-            if ( m_document->pageType() == KoPageApp::Slide ) {
-                command = new QUndoCommand( i18n( "Move slide") );
-            }
-            else {
-                command = new QUndoCommand( i18n( "Move page" ) );
-            }
-            foreach ( KoPAPageBase *page, pages ) {
-                KoPAPageMoveCommand *moveCommand = new KoPAPageMoveCommand( m_document, page, after, command );
-                after = page;
-            }
+            KoPAPageMoveCommand *command = new KoPAPageMoveCommand( m_document, pages, after );
             m_document->addCommand( command );
             kDebug(30010) << "KoPADocumentModel::dropMimeData parent = root, dropping page(s) as root, moving page(s)";
             return true;

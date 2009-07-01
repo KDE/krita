@@ -21,7 +21,7 @@
 #ifndef KOSHAPEUNGROUPCOMMAND_H
 #define KOSHAPEUNGROUPCOMMAND_H
 
-#include "commands/KoShapeGroupCommand.h"
+#include "KoShapeGroupCommand.h"
 
 #include "flake_export.h"
 

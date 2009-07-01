@@ -38,6 +38,7 @@ private slots:
     void redoUndoBefore();
     void redoUndoStart();
     void redoUndoEnd();
+    void redoUndoAfterInBetween();
 
 private:
     void checkOrder( QList<KoPAMasterPage*> & pages );

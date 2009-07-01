@@ -159,24 +159,29 @@ QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImage
     return image->pixelToDocument(rect2);
 }
 
-QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image) const
+QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode) const
 {
-    KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
-    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-    QRectF rect = image->pixelToDocument(QRect(0,0, brush->width(), brush->height()) );
-    rect.translate( pos - hotSpot + QPoint(1,1) );
-    rect |= duplicateOutlineRect(pos, image);
-    return rect;
+    QRectF dubRect = duplicateOutlineRect(pos, image);
+    if(_mode == CURSOR_IS_OUTLINE ) {
+        KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
+        QPointF hotSpot = brush->hotSpot(1.0, 1.0);
+        QRectF rect = QRect(0,0, brush->width(), brush->height());
+        rect.translate( pos - hotSpot - QPoint( 0.5, 0.5) );
+        rect = image->pixelToDocument( rect ).translated( pos );
+        dubRect |= rect;
+    }
+    return dubRect;
 }
 
-void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const
+void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
     KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
-    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     painter.setPen(Qt::black);
     painter.setBackground(Qt::black);
-    painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRect(0,0, brush->width(), brush->height()) ).translated( pos - hotSpot + QPoint(1,1) ) ) );
-    
+    if(_mode == CURSOR_IS_OUTLINE ) {
+      QPointF hotSpot = brush->hotSpot(1.0, 1.0);
+      painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRectF(0,0, brush->width(), brush->height()).translated( - hotSpot - QPoint(1.0,1.0) ) ).translated(pos) ) );
+    }
     QRectF rect2 = converter.documentToView( duplicateOutlineRect( pos, image ) );
     painter.drawLine(rect2.topLeft(), rect2.bottomRight() );
     painter.drawLine(rect2.topRight(), rect2.bottomLeft() );

@@ -41,10 +41,8 @@
 #include "kis_view2.h"
 #include <kis_histogram_view.h>
 
-
 #include "kis_imagerasteredcache.h"
 #include "kis_accumulating_producer.h"
-
 
 namespace
 {
@@ -61,7 +59,7 @@ public:
 class KisHistogramDockFactory : public KoDockFactory
 {
 public:
-    KisHistogramDockFactory(KisHistogramView * view)
+    KisHistogramDockFactory(KisHistogramView* view)
             : m_view(view) {
     }
 
@@ -134,7 +132,8 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
                 this, SLOT(colorSpaceChanged(const KoColorSpace*))); // No need to force updates here
 
         // Add it to the control palette
-        m_view->createDockWidget(new KisHistogramDockFactory(m_hview));
+        m_docker = m_view->createDockWidget(new KisHistogramDockFactory(m_hview));
+        m_cache->setDocker(m_docker);
     } else {
         m_cache = 0;
     }

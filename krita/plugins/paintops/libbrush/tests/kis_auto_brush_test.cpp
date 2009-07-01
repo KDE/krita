@@ -19,14 +19,94 @@
 #include "kis_auto_brush_test.h"
 
 #include <qtest_kde.h>
+#include "testutil.h"
 #include "../kis_auto_brush.h"
 #include "kis_mask_generator.h"
+#include "kis_paint_device.h"
+#include "kis_fill_painter.h"
+#include <KoColor.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 
 void KisAutoBrushTest::testCreation()
 {
     KisCircleMaskGenerator circle(10, 10, 1.0, 1.0);
     KisRectangleMaskGenerator rect(10, 10, 1.0, 1.0);
 }
+
+void KisAutoBrushTest::testMaskGeneration()
+{
+    KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 10, 1.0, 1.0);
+    KisBrushSP a = new KisAutoBrush(circle);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    KisVector2D v2d = KisVector2D::Zero();
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+
+    // check masking an existing paint device
+    KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
+    fdev->setRect(QRect(0, 0, 100, 100));
+    fdev->initialize();
+    cs->setAlpha(fdev->data(), OPACITY_OPAQUE, 100 * 100);
+
+    QPoint errpoint;
+    QImage result (QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_1.png");
+    QImage image = fdev->convertToQImage();
+
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("kis_autobrush_test_1.png");
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+
+    a->mask(fdev, 1.0, 1.0, 0.0, info);
+
+    result = QImage (QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_2.png");
+    image = fdev->convertToQImage();
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("kis_autobrush_test_2.png");
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+
+    // Check creating a mask dab with a single color
+    fdev = new KisFixedPaintDevice(cs);
+    a->mask(fdev, KoColor(Qt::black, cs), 1.0, 1.0, 0.0, info);
+
+    result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_3.png");
+    image = fdev->convertToQImage();
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("kis_autobrush_test_3.png");
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+
+    // Check creating a mask dab with a color taken from a paint device
+    KoColor red(Qt::red, cs);
+    cs->setAlpha(red.data(), 128, 1);
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->fill(0, 0, 100, 100, red.data());
+
+    fdev = new KisFixedPaintDevice(cs);
+    a->mask(fdev, dev, 1.0, 1.0, 0.0, info);
+
+    result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_4.png");
+    image = fdev->convertToQImage();
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("kis_autobrush_test_4.png");
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+
+    // check creating a mask dab with a default color
+    fdev = new KisFixedPaintDevice(cs);
+    a->mask(fdev, 1.0, 1.0, 0.0, info);
+
+    result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_3.png");
+    image = fdev->convertToQImage();
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        image.save("kis_autobrush_test_5.png");
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+
+}
+
 
 QTEST_KDEMAIN(KisAutoBrushTest, GUI)
 #include "kis_auto_brush_test.moc"

@@ -197,8 +197,8 @@ void KoConnectionShape::updatePath(const QSizeF &size)
 {
     Q_UNUSED(size);
 
-    const qreal MinimumEscapeLength = 20.0;
-
+    QPointF dst = 0.3 * ( m_handles[0] - m_handles[1]);
+    const qreal MinimumEscapeLength = qMax(0.01, qMin(qAbs(dst.x()), qMin(qAbs(dst.y()), 20.0)));
     clear();
     switch (d->connectionType) {
     case Standard: {
@@ -292,11 +292,16 @@ bool KoConnectionShape::setConnection1(KoShape * shape1, int connectionPointInde
     if (hasDependee(shape1))
         return false;
     
+    // check if the connection point does exist
+    if (shape1 && connectionPointIndex1 >= shape1->connectionPoints().count())
+        return false;
+    
     if (d->shape1)
         d->shape1->removeDependee(this);
     d->shape1 = shape1;
     if (d->shape1)
         d->shape1->addDependee(this);
+    
     d->connectionPointIndex1 = connectionPointIndex1;
     
     return true;
@@ -308,11 +313,16 @@ bool KoConnectionShape::setConnection2(KoShape * shape2, int connectionPointInde
     if (hasDependee(shape2))
         return false;
     
+    // check if the connection point does exist
+    if (shape2 && connectionPointIndex2 >= shape2->connectionPoints().count())
+        return false;
+    
     if (d->shape2)
         d->shape2->removeDependee(this);
     d->shape2 = shape2;
     if (d->shape2)
         d->shape2->addDependee(this);
+    
     d->connectionPointIndex2 = connectionPointIndex2;
     
     return true;
@@ -467,32 +477,29 @@ QPointF KoConnectionShape::perpendicularDirection(const QPointF &p1, const QPoin
     return perpendicular;
 }
 
-void KoConnectionShape::shapeChanged(ChangeType type)
+void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
 {
-    if (! isParametricShape())
-        return;
-
     switch (type) {
-    case RotationChanged:
-    case ShearChanged:
-    case ScaleChanged:
-    case GenericMatrixChange:
-        d->forceUpdate = true;
-        break;
-    default:
-        return;
+        case PositionChanged:
+        case RotationChanged:
+        case ShearChanged:
+        case ScaleChanged:
+        case GenericMatrixChange:
+            if (isParametricShape())
+                d->forceUpdate = true;
+            break;
+        case Deleted:
+            if (shape != d->shape1 && shape != d->shape2)
+                return;
+            if (shape == d->shape1)
+                setConnection1(0, -1);
+            if (shape == d->shape2)
+                setConnection2(0, -1);
+            break;
+        default:
+            return;
     }
-}
 
-void KoConnectionShape::notifyShapeChanged(KoShape * shape, ChangeType type)
-{
-    if (type == KoShape::Deleted) {
-        if (shape == d->shape1)
-            setConnection1(0, -1);
-        else if (shape == d->shape2)
-            setConnection2(0, -1);
-    }
-
-    if (isParametricShape())
+    if (shape && (shape == d->shape1 || shape == d->shape2) && isParametricShape())
         updateConnections();
 }

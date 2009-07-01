@@ -29,7 +29,6 @@
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoUnit.h>
-#include <KoPageLayout.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoShapeContainer.h>

@@ -1,5 +1,3 @@
-
-
 add_subdirectory( templates )
 
 if(KUNITTEST_FOUND)

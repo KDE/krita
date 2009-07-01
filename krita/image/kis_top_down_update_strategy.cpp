@@ -88,10 +88,10 @@ namespace
           }*/
 
             KisPainter gc(m_projection);
-
             gc.setChannelFlags(layer->channelFlags());
-
-            gc.bitBlt(rc.left(), rc.top(), layer->compositeOp() , dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
+            gc.setCompositeOp(layer->compositeOp());
+            gc.setOpacity(layer->opacity());
+            gc.bitBlt(rc.topLeft(), dev, rc);
 
             return true;
         }
@@ -112,7 +112,7 @@ namespace
 
             KisPainter gc(m_projection);
             gc.setChannelFlags(layer->channelFlags());
-            gc.bitBlt(rc.left(), rc.top(), layer->compositeOp() , dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
+
 
             return true;
         }
@@ -138,18 +138,19 @@ namespace
 
             KisPainter gc(m_projection);
             QBitArray flags = layer->channelFlags();
-//            for (int i = 0; i < flags.size(); ++i) {
-//                qDebug() << "KisTopDownUpdateStrategy::visit, flag " << i << " is " << flags.testBit(i);
-//            }
             gc.setChannelFlags(flags);
 
             KisPaintDeviceSP source = layer->projection();
-
-            if (first)
-                gc.bitBlt(rc.left(), rc.top(), m_projection->colorSpace()->compositeOp(COMPOSITE_COPY), source, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
-            else
-                gc.bitBlt(rc.left(), rc.top(), layer->compositeOp(), source, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
-
+            gc.setOpacity(layer->opacity());
+            
+            if (first) {
+                gc.setCompositeOp(m_projection->colorSpace()->compositeOp(COMPOSITE_COPY));
+                gc.bitBlt(rc.topLeft(), source, rc);
+            }
+            else {
+                gc.setCompositeOp(layer->compositeOp());
+                gc.bitBlt(rc.topLeft(), source, rc);
+            }
             return true;
         }
 
@@ -166,11 +167,12 @@ namespace
 
             QRect rc = dev->extent() & m_rc;
 
-
             KisPainter gc(m_projection);
             gc.setChannelFlags(layer->channelFlags());
-            gc.bitBlt(rc.left(), rc.top(), layer->compositeOp(), dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
-
+            gc.setCompositeOp(layer->compositeOp());
+            gc.setOpacity(layer->opacity());
+            gc.bitBlt(rc.topLeft(), dev, rc);
+            
             return true;
         }
 
@@ -232,14 +234,17 @@ namespace
 
             // Copy the filtered bits onto the projection
             KisPainter gc(m_projection);
-            if (selection)
-                gc.bltSelection(tmpRc.left(), tmpRc.top(),
-                                layer->compositeOp(), layerProjection, selection, layer->opacity(),
-                                tmpRc.left(), tmpRc.top(), tmpRc.width(), tmpRc.height());
-            else
-                gc.bitBlt(tmpRc.left(), tmpRc.top(),
-                          layer->compositeOp(), layerProjection, layer->opacity(),
-                          tmpRc.left(), tmpRc.top(), tmpRc.width(), tmpRc.height());
+            if (selection) {
+                gc.setSelection(selection);
+                gc.setCompositeOp(layer->compositeOp());
+                gc.setOpacity(layer->opacity());
+                gc.bitBlt(tmpRc.topLeft(), layerProjection, tmpRc);
+            }
+            else {
+                gc.setCompositeOp(layer->compositeOp());
+                gc.setOpacity(layer->opacity());
+                gc.bitBlt(tmpRc.topLeft(), layerProjection, tmpRc);
+            }
             gc.end();
 
             return true;

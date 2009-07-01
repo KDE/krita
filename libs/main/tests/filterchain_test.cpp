@@ -82,26 +82,20 @@ int main(int /*argc*/, char ** /*argv*/)
 
     kDebug() << "Checking mimeFilter() for Import:";
     QStringList list = KoFilterManager::mimeFilter("application/x-kword",  KoFilterManager::Import);
-    QStringList::ConstIterator it = list.begin();
-    QStringList::ConstIterator end = list.end();
-    for (; it != end; ++it)
-        kDebug() << "" << *it;
+    Q_FOREACH(const QString& it, list)
+        kDebug() << "" << it;
     kDebug() << "" << list.count() << " entries.";
 
     kDebug() << "Checking mimeFilter() for Export:";
     list = KoFilterManager::mimeFilter("application/x-kword",  KoFilterManager::Export);
-    it = list.begin();
-    end = list.end();
-    for (; it != end; ++it)
-        kDebug() << "" << *it;
+    Q_FOREACH(const QString& it, list)
+        kDebug() << "" << it;
     kDebug() << "" << list.count() << " entries.";
 
     kDebug() << "Checking KoShell's mimeFilter():";
     list = KoFilterManager::mimeFilter();
-    it = list.begin();
-    end = list.end();
-    for (; it != end; ++it)
-        kDebug() << "" << *it;
+    Q_FOREACH(const QString& it, list)
+        kDebug() << "" << it;
     kDebug() << "" << list.count() << " entries.";
 
     delete manager;

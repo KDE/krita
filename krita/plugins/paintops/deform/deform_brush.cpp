@@ -108,7 +108,7 @@ inline void DeformBrush::movePixel(qreal newX, qreal newY, quint8 *dst){
 }
 
 /***
-* Fast methods uses KisRectIterator, 
+* methods with fast prefix (like this one called fastScale) uses KisRectIterator, 
 * they are faster just a little bit (according my tests 120 miliseconds faster with big radius, slower with small radius)
 **/
 void DeformBrush::fastScale(qreal cursorX,qreal cursorY, qreal factor){
@@ -320,7 +320,7 @@ void DeformBrush::fastSwirl(qreal cursorX,qreal cursorY, qreal alpha){
 
 
 /***
-* Common methods uses KisRandomAccessor, 
+* Methods without fast prefix uses KisRandomAccessor (m_writeAccesor created on temporary device)
 **/
 void DeformBrush::lensDistortion(qreal cursorX,qreal cursorY, qreal k1, qreal k2){
     int curXi = static_cast<int>(cursorX+0.5);
@@ -511,10 +511,10 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
     KisRandomAccessor accessor = dev->createRandomAccessor((int)x1, (int)y1);
     m_writeAccessor = &accessor;
 
-    KisRandomAccessor accessor2 = layer->createRandomAccessor((int)x1, (int)y1);
+    KisRandomConstAccessor accessor2 = layer->createRandomConstAccessor((int)x1, (int)y1);
     m_readAccessor = &accessor2;
 
-    KisRandomSubAccessorPixel srcAcc = m_dev->createRandomSubAccessor();
+    KisRandomSubAccessorPixel srcAcc = layer->createRandomSubAccessor();
     m_srcAcc = &srcAcc;
 
 #if 1
@@ -545,7 +545,7 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
             fastSwirl(x1,y1, (m_counter) *  degToRad);
             //fastSwirl(x1,y1, (1.0/360*m_counter) *  radToDeg); // crazy fast swirl
         }else{
-            fastSwirl(x1,y1, ( 360 * m_amount) *  degToRad);
+            fastSwirl(x1,y1, ( 360 * m_amount * 0.5) *  degToRad);
         }
 
     } else 
@@ -557,7 +557,7 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
             fastSwirl(x1,y1, (m_counter) *  degToRad);
             //fastSwirl(x1,y1, (1.0/360*m_counter) * -radToDeg); // crazy fast swirl ccw
         }else{
-            fastSwirl(x1,y1, ( 360 * m_amount) *  -degToRad);
+            fastSwirl(x1,y1, ( 360 * m_amount * 0.5) *  -degToRad);
         }
     } else 
     
@@ -645,35 +645,6 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
 }
 
 
-void DeformBrush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2)
-{
-    Q_UNUSED(dev);
-    Q_UNUSED(layer);
-    Q_UNUSED(pi1);
-    Q_UNUSED(pi2);
-#if 0    
-    qreal dx = pi2.pos().x() - pi1.pos().x();
-    qreal dy = pi2.pos().y() - pi1.pos().y();
-
-    qreal x1 = pi1.pos().x();
-    qreal y1 = pi1.pos().y();
-
-    qreal x2 = pi2.pos().x();
-    qreal y2 = pi2.pos().y();
-
-    qreal angle = atan2(dy, dx);
-    
-    qreal slope = 0.0;
-    if (dx != 0){
-        slope = dy / dx;
-    } 
-
-    qreal distance = sqrt(dx * dx + dy * dy);
-    qreal pressure = pi2.pressure();
-#endif 
-}
-
-
 bool DeformBrush::point_interpolation( qreal* x, qreal* y, KisImageSP image ) {
     if ( *x >= 0 && *x < image->width()-1 && *y >= 0 && *y < image->height()-1){
         *x = *x + 0.5; // prepare for typing to int
@@ -706,7 +677,6 @@ void DeformBrush::precomputeDistances(int radius){
 }
 
 
-/// result of bilinear interpolation is in m_tempColor
 void DeformBrush::bilinear_interpolation(double x, double y, quint8 *dst) {
     KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
 

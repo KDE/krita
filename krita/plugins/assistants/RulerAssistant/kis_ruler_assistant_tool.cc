@@ -39,7 +39,6 @@ KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_rulerassistanttool");
-    m_mode = MODE_NOTHING;
     m_widget = 0;
 }
 
@@ -57,17 +56,19 @@ void KisRulerAssistantTool::activate(bool )
     // Add code here to initialize your tool when it got activated
     KisTool::activate();
     
-    m_rulerAssistant = new RulerAssistant();
+    RulerAssistant* m_rulerAssistant = new RulerAssistant();
     
     QRectF imageArea = QRectF( pixelToView( QPoint(0,0) ),
                                m_canvas->image()->pixelToDocument( QPoint( m_canvas->image()->width(), m_canvas->image()->height()) ) );
     
     m_canvas->view()->paintingAssistantManager()->addAssistant(m_rulerAssistant);
     
-    dbgPlugins << imageArea << m_rulerAssistant->ruler()->point1() << m_rulerAssistant->ruler()->point2();
+    dbgPlugins << imageArea << *m_rulerAssistant->handles()[0] << *m_rulerAssistant->handles()[1];
     
-    m_rulerAssistant->ruler()->setPoint1( adjustPointF( m_rulerAssistant->ruler()->point1(), imageArea ) );
-    m_rulerAssistant->ruler()->setPoint2( adjustPointF( m_rulerAssistant->ruler()->point2(), imageArea ) );
+    m_handles = m_canvas->view()->paintingAssistantManager()->handles();
+    m_canvas->view()->paintingAssistantManager()->setVisible(true);
+    m_canvas->updateCanvas();
+    m_handleDrag = 0;
 }
 
 void KisRulerAssistantTool::deactivate()
@@ -84,30 +85,27 @@ inline double norm2(const QPointF& p)
 
 void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
 {
-  if( norm2(event->point - m_rulerAssistant->ruler()->point1() ) < 10)
-  {
-      m_mode = MODE_POINT1DRAGING;
-      m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-  } else if( norm2(event->point - m_rulerAssistant->ruler()->point2() ) < 10 )
-  {
-      m_mode = MODE_POINT2DRAGING;
-      m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-  } else {
-      event->ignore();
-  }
+    m_handleDrag = 0;
+    foreach(KisPaintingAssistantHandleSP handle, m_handles)
+    {
+        if( norm2(event->point - *handle ) < 10)
+        {
+            m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+            m_handleDrag = handle;
+            break;
+        }
+    }
+    if(!m_handleDrag) {
+        event->ignore();
+    }
 }
 
 
 void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if( m_mode == MODE_POINT1DRAGING)
-    {
-        m_rulerAssistant->ruler()->setPoint1( event->point);
-        m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-    } else if( m_mode == MODE_POINT2DRAGING)
-    {
-        m_rulerAssistant->ruler()->setPoint2( event->point);
-        m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+    if(m_handleDrag) {
+        *m_handleDrag = event->point;
+        m_canvas->updateCanvas();
     } else {
         event->ignore();
     }
@@ -115,27 +113,25 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
-    m_mode = MODE_NOTHING;
-    m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+    if(m_handleDrag) {
+        m_handleDrag = 0;
+        m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+    } else {
+        event->ignore();
+    }
 }
 
 void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
-    if( m_mode == MODE_POINT1DRAGING)
+    foreach(KisPaintingAssistantHandleSP handle, m_handles)
     {
-      _gc.setBrush( QColor(0,0,0,125) );
-    } else {
-      _gc.setBrush( QColor(0,0,0,0) );
+        if( handle == m_handleDrag ) {
+            _gc.setBrush( QColor(0,0,0,125) );
+        } else {
+            _gc.setBrush( QColor(0,0,0,0) );
+        }
+        _gc.drawEllipse( QRectF( _converter.documentToView( *handle ) -  QPointF(5,5), QSizeF(10,10)));
     }
-    _gc.drawEllipse( QRectF( _converter.documentToView( m_rulerAssistant->ruler()->point1() ) - QPointF(5,5), QSizeF(10,10)));
-    if( m_mode == MODE_POINT2DRAGING)
-    {
-      _gc.setBrush( QColor(0,0,0,125) );
-    } else {
-      _gc.setBrush( QColor(0,0,0,0) );
-    }
-    _gc.drawEllipse( QRectF( _converter.documentToView( m_rulerAssistant->ruler()->point2() ) - QPointF(5,5), QSizeF(10,10)));
 }
 
 

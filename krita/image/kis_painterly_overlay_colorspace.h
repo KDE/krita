@@ -30,7 +30,7 @@
  * XXX: Maybe split in two: one surface and one artistic medium
  * overlay? Now these properties are mixed up
  *
- * * adsobency: property of the canvas. How fast wetness is dried
+ * * adsorbency: property of the canvas. How fast wetness is dried
  * * gravity: property of the canvas: which direction the paint is
  * supposed to flow
  * * mixability: property of the paint. How easy it is to mix the paint

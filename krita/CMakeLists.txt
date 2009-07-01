@@ -58,13 +58,18 @@ if (SHOULD_BUILD_KRITA)
 
         # For generated files from .ui
         ${CMAKE_BINARY_DIR}/krita/ui
-
-        ${KOGUIUTILS_INCLUDES}
+        
         ${LCMS_INCLUDE_DIR}
         ${PIGMENT_INCLUDES}
         ${KORESOURCES_INCLUDES}
+        ${KOPROPERTIES_INCLUDES}
         ${KOTEXT_INCLUDES}
-
+        ${KOMAIN_INCLUDES}
+	    ${CMAKE_SOURCE_DIR}/libs/widgets/resources
+        ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
+        
+        ${EIGEN2_INCLUDE_DIR}
+        
         # 'Export' this for use by filters
         CACHE INTERNAL ""
     )
@@ -78,8 +83,6 @@ if (SHOULD_BUILD_KRITA)
         endif(HAVE_GLEW)
     endif(HAVE_OPENGL)
 
-    include_directories(${EIGEN2_INCLUDE_DIR})
-
     add_subdirectory( image )
     add_subdirectory( ui )
     add_subdirectory( shape )
@@ -88,42 +91,30 @@ if (SHOULD_BUILD_KRITA)
     add_subdirectory( data )
     add_subdirectory( pics )
 
-
-    ########### next target ###############
-
     set(kritapart_PART_SRCS krita_part_init.cc)
-
     kde4_add_plugin(kritapart WITH_PREFIX ${kritapart_PART_SRCS})
-
-    
-
     target_link_libraries(kritapart kritaui)
-
     install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
-
-
-    ########### next target ###############
-
     set(krita_KDEINIT_SRCS main.cc)
-
     kde4_add_app_icon(krita_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/krita.png")
-
     kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
+    if (Q_WS_MAC)
+       set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+       set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.krita")
+       set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita 2")
+    endif (Q_WS_MAC)
+
     target_link_libraries(kdeinit_krita kritaui)
-
-    install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
-
     target_link_libraries(krita ${QT_QTCORE_LIBRARY} kdeinit_krita)
 
     install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-    ########### install files ###############
-
+    install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
     install( FILES  krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
     install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
     install( FILES  krita.rc krita_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/krita)
 
-    #kde4_create_doxygen_docs( EXCLUDE CImg.h colorspaces plugins  image/tiles  )
+
+
 endif (SHOULD_BUILD_KRITA)

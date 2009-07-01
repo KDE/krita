@@ -27,6 +27,15 @@
 class QDomDocument;
 class QDomElement;
 
+#ifdef NO_PIGMENT
+
+class PIGMENTCMS_EXPORT KoColor : public QColor {
+
+    QColor toQColor() { return QColor(this); }
+};
+
+#else
+
 class KoColorProfile;
 class KoColorSpace;
 
@@ -87,7 +96,7 @@ public:
     void toQColor(QColor *c) const;
     /// a convenience method for the above.
     QColor toQColor() const;
-    
+
     /**
      * Convenient function to set the opacity of the color.
      */
@@ -118,21 +127,21 @@ public:
     /**
      * Serialize this color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
-     * 
+     *
      * This function doesn't create the <color /> element but rather the <CMYK />,
      * <sRGB />, <RGB /> ... elements. It is assumed that colorElt is the <color />
      * element.
-     * 
+     *
      * @param colorElt root element for the serialization, it is assumed that this
      *                 element is <color />
      * @param doc is the document containing colorElt
      */
     void toXML(QDomDocument& doc, QDomElement& colorElt) const;
-    
+
     /**
      * Unserialize a color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
-     * 
+     *
      * @param elt the element to unserialize (<CMYK />, <sRGB />, <RGB />)
      * @param bitDepthId the bit depth is unspecified by the spec, this allow to select
      *                   a preferred bit depth for creating the KoColor object (if that
@@ -144,7 +153,7 @@ public:
      *         to unserialize the color
      */
     static KoColor fromXML(const QDomElement& elt, const QString & bitDepthId, const QHash<QString, QString> & aliases);
-    
+
 #ifndef NODEBUG
     /// use kDebug calls to print internal info
     void dump() const;
@@ -154,6 +163,7 @@ private:
     class Private;
     Private * const d;
 };
+#endif
 
 Q_DECLARE_METATYPE( KoColor )
 

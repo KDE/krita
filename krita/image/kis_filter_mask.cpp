@@ -67,6 +67,10 @@ KisFilterConfiguration * KisFilterMask::filter() const
     return m_d->filterConfig;
 }
 
+QIcon KisFilterMask::icon() const
+{
+    return KIcon("view-filter");
+}
 
 void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
 {

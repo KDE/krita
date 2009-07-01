@@ -23,6 +23,7 @@
 
 #include <QRect>
 #include <QColor>
+#include <QList>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -38,6 +39,8 @@
 #include <kis_paintop.h>
 #include <kis_selection.h>
 #include <kis_random_accessor.h>
+#include "metaball.h"
+#include <qapplication.h>
 
 KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
     : KisPaintOp( painter )
@@ -45,7 +48,6 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     , m_image ( image )
 {
     m_sprayBrush.setDiameter( settings->diameter() );
-    m_sprayBrush.setCoverity( settings->coverage() / 100.0 );
     m_sprayBrush.setJitterSize( settings->jitterSize() );
     m_sprayBrush.setJitterMovement( settings->jitterMovement() );
 
@@ -54,17 +56,33 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sprayBrush.setJitterShapeSize(settings->jitterShapeSize());
 
     if (settings->proportional()){
-        m_sprayBrush.setObjectDimenstion( settings->widthPerc()/100.0 * settings->diameter() * settings->scale(), settings->heightPerc()/100.0 * settings->diameter() * settings->scale());
+        m_sprayBrush.setObjectDimension( settings->widthPerc()  / 100.0 * settings->diameter() * settings->scale(),
+                                          settings->heightPerc() / 100.0 * settings->diameter() * settings->scale());
     } else
     {
-        m_sprayBrush.setObjectDimenstion( settings->width(), settings->height() );
+        m_sprayBrush.setObjectDimension( settings->width(), settings->height() );
     }
-    
-
 
     m_sprayBrush.setAmount( settings->amount() );
     m_sprayBrush.setScale( settings->scale() );
-    
+
+
+    m_sprayBrush.setCoverity( settings->coverage() / 100.0 );
+    m_sprayBrush.setUseDensity( settings->useDensity() );
+    m_sprayBrush.setParticleCount( settings->particleCount() );
+
+    m_sprayBrush.setMaxTreshold( settings->maxTresh() );
+    m_sprayBrush.setMinTreshold( settings->minTresh() );
+
+    QRect area;
+    if ( settings->highRendering() ){
+        area = QRect( 0, 0, m_image->width(), m_image->height() );
+        m_sprayBrush.setComputeArea( area );
+    }else{
+        area = QRect( 0, 0, settings->diameter() * 1.5 , settings->diameter() * 1.5 );
+    }
+    m_sprayBrush.setComputeArea( area );
+    // spacing 
     if ( (settings->diameter() * 0.5) > 1)
     {
         m_ySpacing = m_xSpacing = settings->diameter() * 0.5 * settings->spacing();
@@ -94,24 +112,18 @@ void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return;
 
-    dab = cachedDab();
-    dab->clear();
+    if (!m_dab) {
+        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+    }
+    else {
+        m_dab->clear();
+    }
 
-    qreal x1, y1;
+    m_sprayBrush.paint(m_dab, info, painter()->paintColor());
 
-    x1 = info.pos().x();
-    y1 = info.pos().y();
+    QRect rc = m_dab->extent();
 
-    m_sprayBrush.paint(dab, x1, y1, painter()->paintColor());
-
-    QRect rc = dab->extent();
-
-    painter()->bltSelection(
-        rc.x(), rc.y(),
-        painter()->compositeOp(),
-        dab,
-        painter()->opacity(),
-        rc.x(), rc.y(),
-        rc.width(), rc.height());
+    painter()->bitBlt(rc.topLeft(), m_dab, rc);
 
 }
+

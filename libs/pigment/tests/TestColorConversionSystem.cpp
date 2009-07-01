@@ -27,8 +27,6 @@
 #include <KoColorConversionSystem.h>
 #include <KoColorModelStandardIds.h>
 
-#include <config-openctl.h>
-
 TestColorConversionSystem::TestColorConversionSystem()
 {
     foreach( KoID modelId, KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces))
@@ -72,11 +70,7 @@ void TestColorConversionSystem::testGoodConnections()
             }
         }
     }
-#ifdef HAVE_OPENCTL
     int failed = 0;
-#else
-    int failed = 42;
-#endif
     QVERIFY2( countFail == failed, QString("%1 tests have fails (it should have been %2)").arg( countFail).arg(failed).toLatin1() );
 }
 

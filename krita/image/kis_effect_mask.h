@@ -47,7 +47,7 @@ public:
     KisEffectMask(const KisEffectMask& rhs);
 
     QIcon icon() const {
-        return KIcon(""); // XXX: Find nice icon for the subclasses.
+        return KIcon("bookmarks");
     }
 
     /**

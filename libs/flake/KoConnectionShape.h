@@ -61,10 +61,26 @@ public:
     // reimplemented
     virtual bool hitTest(const QPointF &position) const;
 
-    /// Sets the first shape the connector is connected to
+    /**
+     * Sets the first shape the connector is connected to
+     *
+     * Passing a null pointer as the first parameter will reset the connection.
+     *
+     * @param shape1 the shape to connect to or null to reset the connection
+     * @param connectionPointIndex1 the index of the connection point to connect to
+     * @return true if connection could be established, otherwise false
+     */
     bool setConnection1(KoShape * shape1, int connectionPointIndex);
 
-    /// Sets the second shape the connector is connected to
+    /**
+    * Sets the second shape the connector is connected to
+    *
+    * Passing a null pointer as the first parameter will reset the connection.
+    *
+    * @param shape2 the shape to connect to or null to reset the connection
+    * @param connectionPointIndex2 the index of the connection point to connect to
+    * @return true if connection could be established, otherwise false
+    */
     bool setConnection2(KoShape * shape2, int connectionPointIndex);
 
     /// Returns the connection to the first shape
@@ -81,16 +97,13 @@ public:
 
     /// Sets the connection type
     void setConnectionType(Type connectionType);
-protected:
 
+protected:
     /// reimplemented
     void moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
     /// reimplemented
     void updatePath(const QSizeF &size);
-
-    /// reimplemented
-    virtual void shapeChanged(ChangeType type);
 
     /// Returns if given handle is connected to a shape
     bool handleConnected(int handleId) const;
@@ -104,11 +117,10 @@ protected:
     /// Returns perpendicular direction from given point p1 and direction d1 toward point p2
     QPointF perpendicularDirection(const QPointF &p1, const QPointF &d1, const QPointF &p2);
 
+    /// reimplemented
+    virtual void shapeChanged(ChangeType type, KoShape * shape);
+
 private:
-
-    // reimplemented
-    virtual void notifyShapeChanged(KoShape * shape, ChangeType type);
-
     qreal scalarProd(const QPointF &v1, const QPointF &v2);
     qreal crossProd(const QPointF &v1, const QPointF &v2);
 

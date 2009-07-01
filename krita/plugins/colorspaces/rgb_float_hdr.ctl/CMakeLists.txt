@@ -1,4 +1,4 @@
-
+include_directories(${CMAKE_CURRENT_SOURCE_DIR/..}
 set(kritargbfloathdrplugin_PART_SRCS rgb_float_hdr.cc kis_rgb_f16_hdr_colorspace.cc kis_rgb_f32_hdr_colorspace.cc )
 
 kde4_add_plugin(kritargbfloathdrplugin ${kritargbfloathdrplugin_PART_SRCS})

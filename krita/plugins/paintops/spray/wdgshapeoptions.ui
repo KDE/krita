@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>425</width>
-    <height>200</height>
+    <height>269</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,9 +21,6 @@
     <width>425</width>
     <height>200</height>
    </size>
-  </property>
-  <property name="windowTitle">
-   <string>Form</string>
   </property>
   <widget class="QGroupBox" name="objectBox">
    <property name="geometry">
@@ -102,6 +99,11 @@
         <string>Rectangle</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Metaball</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item>
@@ -116,7 +118,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="heightSpin">
+         <widget class="QSpinBox" name="widthSpin">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -137,7 +139,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="widthSpin">
+         <widget class="QSpinBox" name="heightSpin">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -208,6 +210,74 @@
     </item>
    </layout>
   </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>158</width>
+     <height>58</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="MetaballLbl">
+      <property name="text">
+       <string>Min treshold</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QDoubleSpinBox" name="minTreshSpin">
+      <property name="decimals">
+       <number>1</number>
+      </property>
+      <property name="minimum">
+       <double>-100.000000000000000</double>
+      </property>
+      <property name="value">
+       <double>-1.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="MetaballLbl2">
+      <property name="text">
+       <string>Max treshold</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QDoubleSpinBox" name="maxTreshSpin">
+      <property name="decimals">
+       <number>1</number>
+      </property>
+      <property name="minimum">
+       <double>-100.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>1000.000000000000000</double>
+      </property>
+      <property name="value">
+       <double>6.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QCheckBox" name="renderBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>200</y>
+     <width>181</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>High quality rendering</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>
@@ -246,7 +316,7 @@
   <connection>
    <sender>proportionalBox</sender>
    <signal>clicked(bool)</signal>
-   <receiver>widthSpin</receiver>
+   <receiver>heightSpin</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -262,7 +332,7 @@
   <connection>
    <sender>proportionalBox</sender>
    <signal>clicked(bool)</signal>
-   <receiver>heightSpin</receiver>
+   <receiver>widthSpin</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">

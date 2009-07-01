@@ -70,7 +70,6 @@ protected:
     virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
 
-    void paintOutline(const QPointF& point);
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 protected slots:
@@ -79,7 +78,6 @@ protected slots:
     void setAssistant(bool assistant);
 
 private:
-
     /**
      * adjust a coordinates according to a KisPaintingAssitant, if available.
      */
@@ -111,6 +109,7 @@ protected:
 private:
 
     QPointF mousePos;
+    QRectF oldOutlineRect;
     bool m_paintedOutline;
     QRegion m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;

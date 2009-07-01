@@ -286,7 +286,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     double normalizedX;
     int x;
 
-    p.setPen(QPen::QPen(palette().text(), 1, Qt::SolidLine));
+    p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
     for (x = 0 ; x < wWidth ; x++) {
         normalizedX = double(x) / wWidth;
         curY = wHeight-getCurveValue(normalizedX)*wHeight;

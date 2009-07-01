@@ -45,16 +45,17 @@
 #include "kis_paint_information.h"
 #include "kis_vec.h"
 #include "kis_perspective_math.h"
+#include "kis_fixed_paint_device.h"
 
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #define MAXIMUM_SCALE 2
 
 struct KisPaintOp::Private {
     Private() : dab(0) {}
-    KisPaintDeviceSP dab;
+    KisFixedPaintDeviceSP dab;
     KoColor color;
     KoColor previousPaintColor;
-    KisPainter * painter;
+    KisPainter* painter;
 };
 
 
@@ -68,15 +69,15 @@ KisPaintOp::~KisPaintOp()
     delete d;
 }
 
-KisPaintDeviceSP KisPaintOp::cachedDab()
+KisFixedPaintDeviceSP KisPaintOp::cachedDab()
 {
     return cachedDab(d->painter->device()->colorSpace());
 }
 
-KisPaintDeviceSP KisPaintOp::cachedDab(const KoColorSpace *cs)
+KisFixedPaintDeviceSP KisPaintOp::cachedDab(const KoColorSpace *cs)
 {
     if (!d->dab || !(*d->dab->colorSpace() == *cs)) {
-        d->dab = KisPaintDeviceSP(new KisPaintDevice(cs));
+        d->dab = new KisFixedPaintDevice(cs);
     }
     return d->dab;
 }

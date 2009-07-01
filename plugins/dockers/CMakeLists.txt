@@ -1,6 +1,10 @@
 project(kofficedockers)
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} )
+include_directories( ${KDE4_INCLUDE_DIR}
+		     ${QT_INCLUDES}
+		      
+		     ${FLAKE_INCLUDES} 
+		     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets)
 
 set(kofficedockers_SRCS
 
@@ -15,10 +19,12 @@ set(kofficedockers_SRCS
     shapecollection/KoCollectionItemModel.cpp
     shapecollection/KoOdfCollectionLoader.cpp
 
+    Plugin.cpp
+)
+
+set( kofficedockers_SRCS ${kofficedockers_SRCS}
     shadowdocker/ShadowDocker.cpp
     shadowdocker/ShadowDockerFactory.cpp
-
-    Plugin.cpp
 )
 
 set(kofficedockers_SRCS ${kofficedockers_SRCS}
@@ -43,17 +49,19 @@ set(kofficedockers_SRCS ${kofficedockers_SRCS}
 
 add_subdirectory( strokedocker/pics )
 
-#kde4_add_ui_files( kofficedockers_SRCS
-#)
-
 kde4_add_plugin(kofficedockers ${kofficedockers_SRCS})
+
+set(EXTRA_LIBS pigmentcms kocolorwidgets)
 
 target_link_libraries(
     kofficedockers
-    koguiutils
+    
     komain
     flake
     kostore
+    koresources
+    kocolorwidgets
+    ${EXTRA_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}

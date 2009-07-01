@@ -22,7 +22,7 @@
 
 #include <widgets/kis_popup_button.h>
 
-class QTableWidgetItem;
+class KoResource;
 
 class KisIconWidget : public KisPopupButton
 {
@@ -37,13 +37,13 @@ public:
     KisIconWidget(QWidget *parent = 0, const char *name = 0);
 
 public slots:
-    void slotSetItem(QTableWidgetItem& item);
+    void slotSetItem(KoResource * resource);
 
 protected:
     virtual void paintEvent(QPaintEvent *);
 
 private:
-    QTableWidgetItem *m_item;
+    KoResource *m_resource;
 };
 
 #endif // KIS_ICONWIDGET_H_

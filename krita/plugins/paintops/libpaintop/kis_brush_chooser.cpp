@@ -24,14 +24,12 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <klocale.h>
-#include <kfiledialog.h>
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 
-#include "kis_resource_mediator.h"
 #include "kis_brush_registry.h"
 #include "kis_brush_server.h"
 #include "widgets/kis_double_widget.h"
@@ -55,8 +53,12 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     m_lbName = new QLabel(this);
 
-    m_itemChooser = new KisItemChooser( this );
-    connect( m_itemChooser, SIGNAL( update( QTableWidgetItem* ) ), this, SLOT( update( QTableWidgetItem* ) ) );
+    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
+    KoResourceServerAdapter<KisBrush>* adapter = new KoResourceServerAdapter<KisBrush>(rServer);
+    m_itemChooser = new KoResourceItemChooser(adapter, this);
+
+    connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
+             this, SLOT( update( KoResource * ) ) );
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
@@ -74,20 +76,10 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     spacingLayout->addWidget(m_slSpacing, 0, 1);
 
     spacingLayout->addWidget(m_chkColorMask, 1, 0, 1, 2);
-
-    connect(m_itemChooser, SIGNAL(importClicked()), this, SLOT(slotImportBrush()));
-
-    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    KoResourceServerAdapter<KisBrush>* rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
-
-    m_brushMediator = new KisResourceMediator(m_itemChooser, rServerAdapter, this);
-    connect(m_brushMediator, SIGNAL(activatedResource(KoResource*)),
-            this, SLOT(slotActivatedBrush(KoResource*)));
 }
 
 KisBrushChooser::~KisBrushChooser()
 {
-    delete m_brushMediator;
 }
 
 void KisBrushChooser::setBrush( KisBrushSP _brush )
@@ -111,10 +103,10 @@ void KisBrushChooser::setBrush( KisBrushSP _brush )
 
 void KisBrushChooser::slotSetItemSpacing(double spacingValue)
 {
-    KoResourceItem *item = static_cast<KoResourceItem *>(m_itemChooser->currentItem());
+    KoResource * resource = static_cast<KoResource *>(m_itemChooser->currentResource());
 
-    if (item) {
-        KisBrush *brush = static_cast<KisBrush *>(item->resource());
+    if (resource) {
+        KisBrush *brush = static_cast<KisBrush *>(resource);
         brush->setSpacing(spacingValue);
         slotActivatedBrush(brush);
 
@@ -124,10 +116,10 @@ void KisBrushChooser::slotSetItemSpacing(double spacingValue)
 
 void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 {
-    KoResourceItem *item = static_cast<KoResourceItem *>(m_itemChooser->currentItem());
+    KoResource * resource = static_cast<KoResource *>(m_itemChooser->currentResource());
 
-    if (item) {
-        KisGbrBrush* brush = static_cast<KisGbrBrush*>(item->resource());
+    if (resource) {
+        KisGbrBrush* brush = static_cast<KisGbrBrush*>(resource);
         brush->setUseColorAsMask(useColorAsMask);
         slotActivatedBrush(brush);
 
@@ -135,35 +127,21 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
     }
 }
 
-void KisBrushChooser::update(QTableWidgetItem *item)
+void KisBrushChooser::update(KoResource * resource)
 {
-    KoResourceItem *kisItem = static_cast<KoResourceItem *>(item);
+    KisGbrBrush* brush = static_cast<KisGbrBrush*>(resource);
 
-    if (kisItem) {
-        KisGbrBrush* brush = static_cast<KisGbrBrush*>(kisItem->resource());
+    QString text = QString("%1 (%2 x %3)")
+                   .arg( i18n(brush->name().toUtf8().data()) )
+                   .arg(brush->width())
+                   .arg(brush->height());
 
-        QString text = QString("%1 (%2 x %3)")
-                       .arg( i18n(brush->name().toUtf8().data()) )
-                       .arg(brush->width())
-                       .arg(brush->height());
+    m_lbName->setText(text);
+    m_slSpacing->setValue(brush->spacing());
+    m_chkColorMask->setChecked(brush->useColorAsMask());
+    m_chkColorMask->setEnabled(brush->hasColor());
 
-        m_lbName->setText(text);
-        m_slSpacing->setValue(brush->spacing());
-        m_chkColorMask->setChecked(brush->useColorAsMask());
-        m_chkColorMask->setEnabled(brush->hasColor());
-
-        emit sigBrushChanged();
-    }
-
-
-}
-
-void KisBrushChooser::slotImportBrush()
-{
-    QString filter("*.gbr *.gih");
-    QString filename = KFileDialog::getOpenFileName(KUrl(), filter, 0, i18n("Choose Brush to Add"));
-
-    KisBrushServer::instance()->brushServer()->importResource(filename);
+    emit sigBrushChanged();
 }
 
 void KisBrushChooser::slotActivatedBrush(KoResource * resource)

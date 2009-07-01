@@ -21,6 +21,7 @@ class RulerAssistant;
 
 #include <kis_tool.h>
 #include <KoToolFactory.h>
+#include "kis_painting_assistant.h"
 
 class RulerDecoration;
 class KisCanvas2;
@@ -28,11 +29,6 @@ class ConstraintSolver;
 
 class KisRulerAssistantTool : public KisTool {
     Q_OBJECT
-    enum Mode {
-        MODE_NOTHING,
-        MODE_POINT1DRAGING,
-        MODE_POINT2DRAGING
-    };
 public:
     KisRulerAssistantTool(KoCanvasBase * canvas);
     virtual ~KisRulerAssistantTool();
@@ -52,9 +48,9 @@ protected:
 
 protected:
     KisCanvas2* m_canvas;
-    RulerAssistant* m_rulerAssistant;
-    Mode m_mode;
     QWidget* m_widget;
+    QList<KisPaintingAssistantHandleSP> m_handles;
+    KisPaintingAssistantHandleSP m_handleDrag;
 };
 
 

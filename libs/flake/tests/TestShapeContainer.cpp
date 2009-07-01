@@ -47,19 +47,19 @@ void TestShapeContainer::testSetParent()
     MockContainer container2(model2);
     MockShape shape;
     // init test
-    QCOMPARE(model1->iterator().count(), 0);
-    QCOMPARE(model2->iterator().count(), 0);
+    QCOMPARE(model1->childShapes().count(), 0);
+    QCOMPARE(model2->childShapes().count(), 0);
 
     shape.setParent(&container1);
-    QCOMPARE(model1->iterator().count(), 1);
-    QCOMPARE(model2->iterator().count(), 0);
+    QCOMPARE(model1->childShapes().count(), 1);
+    QCOMPARE(model2->childShapes().count(), 0);
     QCOMPARE(shape.parent(), &container1);
 
     shape.setParent(&container2);
-    QCOMPARE(model1->iterator().count(), 0);
-    QCOMPARE(container1.iterator().count(), 0);
-    QCOMPARE(model2->iterator().count(), 1);
-    QCOMPARE(container2.iterator().count(), 1);
+    QCOMPARE(model1->childShapes().count(), 0);
+    QCOMPARE(container1.childShapes().count(), 0);
+    QCOMPARE(model2->childShapes().count(), 1);
+    QCOMPARE(container2.childShapes().count(), 1);
     QCOMPARE(shape.parent(), &container2);
 }
 
@@ -69,10 +69,10 @@ void TestShapeContainer::testSetParent2()
     MockContainer container(model);
     MockShape *shape = new MockShape();
     shape->setParent(&container);
-    QCOMPARE(model->iterator().count(), 1);
+    QCOMPARE(model->childShapes().count(), 1);
 
     shape->setParent(0);
-    QCOMPARE(model->iterator().count(), 0);
+    QCOMPARE(model->childShapes().count(), 0);
 }
 
 QTEST_MAIN(TestShapeContainer)

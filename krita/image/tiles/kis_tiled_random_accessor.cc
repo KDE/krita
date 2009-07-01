@@ -120,8 +120,8 @@ KisTiledRandomAccessor::KisTileInfo* KisTiledRandomAccessor::fetchTileData(qint3
 
     kti->area_x1 = col * KisTile::HEIGHT;
     kti->area_y1 = row * KisTile::WIDTH;
-    kti->area_x2 = kti->area_x1 + KisTile::HEIGHT - 2;
-    kti->area_y2 = kti->area_y1 + KisTile::WIDTH - 2;
+    kti->area_x2 = kti->area_x1 + KisTile::HEIGHT - 1;
+    kti->area_y2 = kti->area_y1 + KisTile::WIDTH - 1;
 
     // set old data
     kti->oldtile = m_ktm->getOldTile(col, row, kti->tile);

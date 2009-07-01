@@ -59,7 +59,7 @@ public:
 
 private:
     void childCountChanged();
-    virtual void shapeChanged(ChangeType type);
+    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
     
 };
 

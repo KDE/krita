@@ -38,6 +38,9 @@ public:
     virtual ~KisDeformPaintOpSettings() {}
     KisPaintOpSettingsSP clone() const;
 
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode ) const;
+    virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
+
     using KisPropertiesConfiguration::fromXML;
     using KisPropertiesConfiguration::toXML;
 
@@ -53,6 +56,7 @@ public:
     bool useMovementPaint() const;
     bool useCounter() const;
     bool useOldData() const;
+    qreal spacing() const;
 
 private:
     KisDeformPaintOpSettingsWidget* m_options;

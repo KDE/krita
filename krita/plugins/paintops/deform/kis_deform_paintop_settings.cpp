@@ -18,6 +18,7 @@
 #include <kis_deform_paintop_settings.h>
 
 #include <KoColorSpaceRegistry.h>
+#include <KoViewConverter.h>
 
 #include <kis_image.h>
 #include <kis_debug.h>
@@ -89,6 +90,11 @@ int KisDeformPaintOpSettings::deformAction() const
     return m_options->deformAction();
 }
 
+qreal KisDeformPaintOpSettings::spacing() const
+{
+    return m_options->spacing();
+}
+
 void KisDeformPaintOpSettings::fromXML(const QDomElement& elt)
 {
     // First, call the parent class fromXML to make sure all the
@@ -108,3 +114,18 @@ void KisDeformPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) co
     delete settings;
 }
 
+QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode) const
+{
+    if(_mode != CURSOR_IS_OUTLINE) return QRectF();
+    qreal size = radius() * 2;
+    size += 10;
+    return image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos);
+}
+
+void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
+{
+    if(_mode != CURSOR_IS_OUTLINE) return;
+    qreal size = radius() * 2;
+    painter.setPen(Qt::black);
+    painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos) ) );
+}

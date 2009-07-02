@@ -15,13 +15,6 @@ TestPosition::TestPosition()
 
 void TestPosition::init()
 {
-    delete container;
-    delete container2;
-    delete shape1;
-    delete shape2;
-    delete childShape1;
-    delete childShape2;
-
     shape1 = new MockShape();
     shape1->setPosition(QPointF(50, 50));
     shape1->setSize(QSize(50, 50));
@@ -45,6 +38,16 @@ void TestPosition::init()
     container2->setSize(QSizeF(100, 100));
     container2->rotate(90);
     container2->addChild(childShape2);
+}
+
+void TestPosition::cleanup()
+{
+    delete container;
+    delete container2;
+    delete shape1;
+    delete shape2;
+    delete childShape1;
+    delete childShape2;
 }
 
 void TestPosition::testBasePosition()

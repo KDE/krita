@@ -3,7 +3,7 @@
    Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007,2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 */
 
 #include "KoSelection.h"
+#include "KoSelection_p.h"
 #include "KoShapeContainer.h"
 #include "KoShapeGroup.h"
 #include "KoPointerEvent.h"
@@ -29,36 +30,15 @@
 #include <QPainter>
 #include <QTimer>
 
-class KoSelection::Private
-{
-public:
-    Private(KoSelection *parent) : eventTriggered(false), activeLayer(0), q(parent) {}
-    QList<KoShape*> selectedShapes;
-    bool eventTriggered;
-
-    KoShapeLayer *activeLayer;
-
-    void requestSelectionChangedEvent();
-    void selectGroupChildren(KoShapeGroup *group);
-    void deselectGroupChildren(KoShapeGroup *group);
-
-    void selectionChangedEvent();
-
-    QRectF sizeRect();
-
-    KoSelection *q;
-    QRectF globalBound;
-};
-
-QRectF KoSelection::Private::sizeRect()
+QRectF KoSelectionPrivate::sizeRect()
 {
     bool first = true;
     QRectF bb;
 
     QMatrix invSelectionTransform = q->absoluteTransformation(0).inverted();
-    
+
     QRectF bound;
-    
+
     if (!selectedShapes.isEmpty()) {
         QList<KoShape*>::const_iterator it = selectedShapes.constBegin();
         for (; it != selectedShapes.constEnd(); ++it) {
@@ -80,11 +60,10 @@ QRectF KoSelection::Private::sizeRect()
     }
 
     globalBound = bound;
-    
     return bb;
 }
 
-void KoSelection::Private::requestSelectionChangedEvent()
+void KoSelectionPrivate::requestSelectionChangedEvent()
 {
     if (eventTriggered)
         return;
@@ -92,14 +71,14 @@ void KoSelection::Private::requestSelectionChangedEvent()
     QTimer::singleShot(0, q, SLOT(selectionChangedEvent()));
 }
 
-void KoSelection::Private::selectionChangedEvent()
+void KoSelectionPrivate::selectionChangedEvent()
 {
     eventTriggered = false;
     q->setScale(1, 1);
     emit q->selectionChanged();
 }
 
-void KoSelection::Private::selectGroupChildren(KoShapeGroup *group)
+void KoSelectionPrivate::selectGroupChildren(KoShapeGroup *group)
 {
     if (! group)
         return;
@@ -115,7 +94,7 @@ void KoSelection::Private::selectGroupChildren(KoShapeGroup *group)
     }
 }
 
-void KoSelection::Private::deselectGroupChildren(KoShapeGroup *group)
+void KoSelectionPrivate::deselectGroupChildren(KoShapeGroup *group)
 {
     if (! group)
         return;
@@ -133,13 +112,12 @@ void KoSelection::Private::deselectGroupChildren(KoShapeGroup *group)
 ////////////
 
 KoSelection::KoSelection()
-        : d(new Private(this))
+    : KoShape(*(new KoSelectionPrivate(this)))
 {
 }
 
 KoSelection::~KoSelection()
 {
-    delete d;
 }
 
 void KoSelection::paint(QPainter &painter, const KoViewConverter &converter)
@@ -150,14 +128,15 @@ void KoSelection::paint(QPainter &painter, const KoViewConverter &converter)
 
 void KoSelection::select(KoShape * object, bool recursive)
 {
+    Q_D(KoSelection);
     Q_ASSERT(object != this);
     Q_ASSERT(object);
     if (! object->isSelectable() || ! object->isVisible(true))
         return;
-    
+
     // save old number of selected shapes
     uint oldSelectionCount = d->selectedShapes.count();
-    
+
     if (!d->selectedShapes.contains(object))
         d->selectedShapes << object;
 
@@ -188,7 +167,7 @@ void KoSelection::select(KoShape * object, bool recursive)
         // reset global bound if there were no shapes selected before
         if( ! oldSelectionCount )
             d->globalBound = QRectF();
-        
+
         setTransformation(QMatrix());
         // we are resetting the transformation here anyway,
         // so we can just add the newly selected shapes to the bounding box
@@ -198,18 +177,19 @@ void KoSelection::select(KoShape * object, bool recursive)
             KoShape * shape = d->selectedShapes[i];
             const QMatrix shapeTransform = shape->absoluteTransformation(0);
             const QRectF shapeRect(QRectF(QPointF(), shape->size()));
-            
+
             d->globalBound = d->globalBound.united( shapeTransform.mapRect( shapeRect ) );
         }
         setSize(d->globalBound.size());
         setPosition(d->globalBound.topLeft());
     }
-    
+
     d->requestSelectionChangedEvent();
 }
 
 void KoSelection::deselect(KoShape * object, bool recursive)
 {
+    Q_D(KoSelection);
     if (! d->selectedShapes.contains(object))
         return;
 
@@ -237,6 +217,7 @@ void KoSelection::deselect(KoShape * object, bool recursive)
 
 void KoSelection::deselectAll()
 {
+    Q_D(KoSelection);
     // reset the transformation matrix of the selection
     setTransformation(QMatrix());
 
@@ -248,6 +229,7 @@ void KoSelection::deselectAll()
 
 int KoSelection::count() const
 {
+    Q_D(const KoSelection);
     int count = 0;
     foreach(KoShape *shape, d->selectedShapes)
         if (dynamic_cast<KoShapeGroup*>(shape) == 0)
@@ -257,6 +239,7 @@ int KoSelection::count() const
 
 bool KoSelection::hitTest(const QPointF &position) const
 {
+    Q_D(const KoSelection);
     if (count() > 1) {
         QRectF bb(boundingRect());
         return bb.contains(position);
@@ -267,6 +250,7 @@ bool KoSelection::hitTest(const QPointF &position) const
 }
 void KoSelection::updateSizeAndPosition()
 {
+    Q_D(KoSelection);
     QRectF bb = d->sizeRect();
     QMatrix matrix = absoluteTransformation(0);
     setSize(bb.size());
@@ -281,6 +265,7 @@ QRectF KoSelection::boundingRect() const
 
 const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) const
 {
+    Q_D(const KoSelection);
     QList<KoShape*> answer;
     // strip the child objects when there is also a parent included.
     bool doStripping = strip == KoFlake::StrippedSelection;
@@ -307,6 +292,7 @@ const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) 
 
 bool KoSelection::isSelected(const KoShape *object) const
 {
+    Q_D(const KoSelection);
     if (object == this)
         return true;
 
@@ -327,12 +313,14 @@ KoShape *KoSelection::firstSelectedShape(KoFlake::SelectionType strip) const
 
 void KoSelection::setActiveLayer(KoShapeLayer* layer)
 {
+    Q_D(KoSelection);
     d->activeLayer = layer;
     emit currentLayerChanged(layer);
 }
 
 KoShapeLayer* KoSelection::activeLayer() const
 {
+    Q_D(const KoSelection);
     return d->activeLayer;
 }
 

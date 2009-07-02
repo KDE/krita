@@ -2,7 +2,7 @@
 
    Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2007,2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2006,2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -35,6 +35,7 @@
 
 class KoShapeGroup;
 class KoShapeLayer;
+class KoSelectionPrivate;
 
 /**
  * A selection is a shape that contains a number of references
@@ -147,10 +148,8 @@ private:
     virtual void saveOdf(KoShapeSavingContext &) const;
     virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &);
 
-    Q_PRIVATE_SLOT(d, void selectionChangedEvent())
-
-    class Private;
-    Private * const d;
+    Q_PRIVATE_SLOT(d_func(), void selectionChangedEvent())
+    Q_DECLARE_PRIVATE_D(KoShape::d_ptr, KoSelection)
 };
 
 #endif

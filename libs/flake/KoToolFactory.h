@@ -238,7 +238,14 @@ protected:
     void setShortcut(const KShortcut & shortcut);
 
     /**
-     * set wheater the tools instance this factory creates can be reused between input devices.
+     * set if the tools instance this factory creates can be reused between input devices.
+     * There is always at least one instance of a tool per view. KOffice will use this boolean to
+     * decide if additionally it should create one instance per input device, like mouse and tablet.
+     *
+     * When a user has a mouse and 2 tablet pens it is useful to have one tool per device since each
+     * tool can then remember its own selection and its own cursor-position etc.
+     * Default value is true.
+     *
      * @param agnostic when true the tool instance can be reused, false if a new instance needs to be created.
      */
     void setInputDeviceAgnostic(bool agnostic);

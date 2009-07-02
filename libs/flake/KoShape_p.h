@@ -25,7 +25,7 @@ class KoShapePrivate
 {
 public:
     KoShapePrivate(KoShape *shape);
-    ~KoShapePrivate();
+    virtual ~KoShapePrivate();
     void shapeChanged(KoShape::ChangeType type);
 
     QSizeF size; // size in pt
@@ -42,7 +42,7 @@ public:
     KoShapeApplicationData *appData;
     KoShapeBackground * fill; ///< Stands for the background color / fill etc.
     KoShapeBorderModel *border; ///< points to a border, or 0 if there is no border
-    KoShape *me;
+    KoShape *q;
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
     QMap<QByteArray, QString> additionalAttributes;

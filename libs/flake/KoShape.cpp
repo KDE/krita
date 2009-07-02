@@ -74,7 +74,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
     appData(0),
     fill(0),
     border(0),
-    me(shape),
+    q(shape),
     shadow(0),
     zIndex(0),
     visible(true),
@@ -84,16 +84,16 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
     selectable(true),
     detectCollision(false),
     protectContent(false)
-    {
-    }
+{
+}
 
 KoShapePrivate::~KoShapePrivate()
 {
     if (parent)
-        parent->removeChild(me);
+        parent->removeChild(q);
     foreach(KoShapeManager *manager, shapeManagers) {
-        manager->remove(me);
-        manager->removeAdditional(me);
+        manager->remove(q);
+        manager->removeAdditional(q);
     }
     delete userData;
     delete appData;
@@ -109,10 +109,10 @@ KoShapePrivate::~KoShapePrivate()
 void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
 {
     if (parent)
-        parent->model()->childChanged(me, type);
-    me->shapeChanged(type);
+        parent->model()->childChanged(q, type);
+    q->shapeChanged(type);
     foreach(KoShape * shape, dependees)
-        shape->shapeChanged(type, me);
+        shape->shapeChanged(type, q);
 }
 
 

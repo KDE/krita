@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 
 class QPainter;
 class KoShapeContainerModel;
+class KoShapeContainerPrivate;
 
 /**
  * This is the base class that all Flake group-shapes are based on.
@@ -67,7 +68,6 @@ class KoShapeContainerModel;
  */
 class FLAKE_EXPORT KoShapeContainer : public KoShape
 {
-
 public:
 
     /**
@@ -166,11 +166,13 @@ protected:
      */
     virtual void childCountChanged() { }
 
+    /// constructor
+    KoShapeContainer(KoShapeContainerPrivate &);
+
 private:
     void shapeChanged(ChangeType type, KoShape *shape = 0);
 
-    class Private;
-    Private * const d;
+    Q_DECLARE_PRIVATE(KoShapeContainer)
 };
 
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoShapeContainer.h"
+#include "KoShapeContainer_p.h"
 #include "KoShapeContainerModel.h"
 #include "KoShapeBorderModel.h"
 #include "KoChildrenData.h"
@@ -26,38 +27,41 @@
 #include <QPainter>
 #include <QPainterPath>
 
-class KoShapeContainer::Private
+KoShapeContainerPrivate::KoShapeContainerPrivate(KoShapeContainer *q)
+    : KoShapePrivate(q),
+    children(0)
 {
-public:
-    Private() : children(0) {}
-    ~Private() {
-        if (children) {
-            foreach(KoShape *shape, children->childShapes())
-                shape->setParent(0);
-            delete children;
-        }
-    }
-    KoShapeContainerModel *children;
-};
+}
 
-KoShapeContainer::KoShapeContainer() : KoShape(), d(new Private())
+KoShapeContainerPrivate::~KoShapeContainerPrivate()
+{
+    delete children;
+}
+
+KoShapeContainer::KoShapeContainer()
+    : KoShape(*(new KoShapeContainerPrivate(this)))
 {
 }
 
 KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
-        : KoShape(),
-        d(new Private())
+        : KoShape(*(new KoShapeContainerPrivate(this)))
 {
+    Q_D(KoShapeContainer);
     d->children = model;
 }
 
 KoShapeContainer::~KoShapeContainer()
 {
-    delete d;
+    Q_D(KoShapeContainer);
+    if (d->children) {
+        foreach(KoShape *shape, d->children->childShapes())
+            shape->setParent(0);
+    }
 }
 
 void KoShapeContainer::addChild(KoShape *shape)
 {
+    Q_D(KoShapeContainer);
     Q_ASSERT(shape);
     if (shape->parent() == this && childShapes().contains(shape))
         return;
@@ -72,6 +76,7 @@ void KoShapeContainer::addChild(KoShape *shape)
 
 void KoShapeContainer::removeChild(KoShape *shape)
 {
+    Q_D(KoShapeContainer);
     Q_ASSERT(shape);
     if (d->children == 0)
         return;
@@ -82,6 +87,7 @@ void KoShapeContainer::removeChild(KoShape *shape)
 
 int  KoShapeContainer::childCount() const
 {
+    Q_D(const KoShapeContainer);
     if (d->children == 0)
         return 0;
     return d->children->count();
@@ -89,6 +95,7 @@ int  KoShapeContainer::childCount() const
 
 bool KoShapeContainer::isChildLocked(const KoShape *child) const
 {
+    Q_D(const KoShapeContainer);
     if (d->children == 0)
         return false;
     return d->children->isChildLocked(child);
@@ -96,6 +103,7 @@ bool KoShapeContainer::isChildLocked(const KoShape *child) const
 
 void KoShapeContainer::setClipping(const KoShape *child, bool clipping)
 {
+    Q_D(KoShapeContainer);
     if (d->children == 0)
         return;
     d->children->setClipping(child, clipping);
@@ -103,6 +111,7 @@ void KoShapeContainer::setClipping(const KoShape *child, bool clipping)
 
 void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_D(KoShapeContainer);
     painter.save();
     paintComponent(painter, converter);
     painter.restore();
@@ -150,6 +159,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 
 void KoShapeContainer::shapeChanged(ChangeType type, KoShape *shape)
 {
+    Q_D(KoShapeContainer);
     Q_UNUSED(shape);
     if (d->children == 0)
         return;
@@ -163,6 +173,7 @@ void KoShapeContainer::shapeChanged(ChangeType type, KoShape *shape)
 
 bool KoShapeContainer::childClipped(const KoShape *child) const
 {
+    Q_D(const KoShapeContainer);
     if (d->children == 0) // throw exception??
         return false;
     return d->children->childClipped(child);
@@ -170,6 +181,7 @@ bool KoShapeContainer::childClipped(const KoShape *child) const
 
 void KoShapeContainer::update() const
 {
+    Q_D(const KoShapeContainer);
     KoShape::update();
     if (d->children)
         foreach(KoShape *shape, d->children->childShapes())
@@ -178,6 +190,7 @@ void KoShapeContainer::update() const
 
 QList<KoShape*> KoShapeContainer::childShapes() const
 {
+    Q_D(const KoShapeContainer);
     if (d->children == 0)
         return QList<KoShape*>();
 
@@ -186,6 +199,7 @@ QList<KoShape*> KoShapeContainer::childShapes() const
 
 KoShapeContainerModel *KoShapeContainer::model() const
 {
+    Q_D(const KoShapeContainer);
     return d->children;
 }
 

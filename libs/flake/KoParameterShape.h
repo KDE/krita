@@ -24,6 +24,8 @@
 #include "KoPathShape.h"
 #include "flake_export.h"
 
+class KoParameterShapePrivate;
+
 /**
  * KoParameterShape is the base class for all parametric shapes
  * in flake.
@@ -140,8 +142,7 @@ protected:
     QList<QPointF> m_handles;
 
 private:
-    class Private;
-    Private * const d;
+    Q_DECLARE_PRIVATE(KoParameterShape)
 };
 
 #endif /* KOPARAMETERSHAPE_H */

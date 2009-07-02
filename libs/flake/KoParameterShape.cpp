@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,25 +19,29 @@
 */
 
 #include "KoParameterShape.h"
+#include "KoPathShape_p.h"
 
 #include <QPainter>
 #include <KDebug>
 
-class KoParameterShape::Private
+class KoParameterShapePrivate : public KoPathShapePrivate
 {
 public:
-    Private() : modified(false) {}
+    KoParameterShapePrivate(KoParameterShape *shape)
+        : KoPathShapePrivate(shape),
+        modified(false)
+    {
+    }
     bool modified;
 };
 
 KoParameterShape::KoParameterShape()
-        : d(new Private())
+    : KoPathShape(*(new KoParameterShapePrivate(this)))
 {
 }
 
 KoParameterShape::~KoParameterShape()
 {
-    delete d;
 }
 
 void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
@@ -137,11 +141,13 @@ QPointF KoParameterShape::normalize()
 
 bool KoParameterShape::isParametricShape() const
 {
+    Q_D(const KoParameterShape);
     return !d->modified;
 }
 
 void KoParameterShape::setModified(bool modified)
 {
+    Q_D(KoParameterShape);
     d->modified = modified;
     update();
 }

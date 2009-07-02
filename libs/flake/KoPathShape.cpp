@@ -54,6 +54,11 @@ KoPathShape::KoPathShape()
 {
 }
 
+KoPathShape::KoPathShape(KoPathShapePrivate &dd)
+    : KoShape(dd)
+{
+}
+
 KoPathShape::~KoPathShape()
 {
     clear();

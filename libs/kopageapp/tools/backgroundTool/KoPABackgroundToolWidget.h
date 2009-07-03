@@ -30,7 +30,7 @@ class KoPABackgroundToolWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoPABackgroundToolWidget( KoPABackgroundTool *tool, QWidget *parent = 0 );
+    explicit KoPABackgroundToolWidget( KoPABackgroundTool *tool, QWidget *parent = 0 );
     virtual ~KoPABackgroundToolWidget();
 
 public slots:

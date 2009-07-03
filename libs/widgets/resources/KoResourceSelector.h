@@ -39,7 +39,7 @@ public:
      * @param resourceAdapter the resource adapter providing the resources to display
      * @param parent the parent widget
      */
-    KoResourceSelector( KoAbstractResourceServerAdapter * resourceAdapter, QWidget * parent = 0 );
+    explicit KoResourceSelector( KoAbstractResourceServerAdapter * resourceAdapter, QWidget * parent = 0 );
     
     /// Destroys the resource selector
     virtual ~KoResourceSelector();

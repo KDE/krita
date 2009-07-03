@@ -30,7 +30,7 @@ class KoResourceModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    KoResourceModel( KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent = 0 );
+    explicit KoResourceModel( KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent = 0 );
     virtual ~KoResourceModel() {}
 
     /// reimplemented

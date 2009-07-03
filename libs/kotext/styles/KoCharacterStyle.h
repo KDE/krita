@@ -122,7 +122,7 @@ public:
      */
     explicit KoCharacterStyle(QObject *parent = 0);
     /// Copy constructor
-    KoCharacterStyle(const QTextCharFormat &format, QObject *parent = 0);
+    explicit KoCharacterStyle(const QTextCharFormat &format, QObject *parent = 0);
     /// Destructor
     ~KoCharacterStyle();
 

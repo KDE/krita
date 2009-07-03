@@ -44,7 +44,7 @@ namespace KParts
 class KoPADocumentStructureDockerFactory : public KoDockFactory
 {
 public:
-    KoPADocumentStructureDockerFactory( KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType = KoPageApp::Page);
+    explicit KoPADocumentStructureDockerFactory( KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType = KoPageApp::Page);
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();

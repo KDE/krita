@@ -44,14 +44,16 @@ class KoOdfExporter::Private
 {
 public:
     Private() {}
+    QByteArray bodyContentElement;
 };
 
 //------------------------------------------
 
-KoOdfExporter::KoOdfExporter( QObject* parent )
+KoOdfExporter::KoOdfExporter( const QString& bodyContentElement, QObject* parent )
  : KoFilter( parent )
  , d( new Private )
 {
+    d->bodyContentElement = QByteArray("office:") + bodyContentElement.toLatin1();
 }
 
 KoOdfExporter::~KoOdfExporter()
@@ -113,7 +115,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert( const QByteArray& from, const
 
     // open main tags
     bodyWriter.startElement("office:body");
-    bodyWriter.startElement("office:text");
+    bodyWriter.startElement(d->bodyContentElement.constData());
 
     const KoFilter::ConversionStatus result 
         = createDocument(outputStore.get(), &writers);
@@ -125,7 +127,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert( const QByteArray& from, const
     mainStyles.saveOdfAutomaticStyles(&contentWriter, false);
 
     //close tags in body
-    bodyWriter.endElement();//office:text
+    bodyWriter.endElement();//office:*
     bodyWriter.endElement();//office:body
 
     //now create real content/body writers & dump the information there

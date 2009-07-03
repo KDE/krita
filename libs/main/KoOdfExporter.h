@@ -72,8 +72,13 @@ public:
 protected:
     /**
      * This is the constructor your filter has to call, obviously.
+     * @param bodyContentElement element name for the content:
+     *                           "text" for ODT format, "presentation" for ODP,
+     *                           "spreadsheet" for ODS, "drawing" for ODG.
+     *                           office:text element will be created within office:body, etc.
+     * @param parent parent object.
      */
-    KoOdfExporter(QObject* parent = 0);
+    KoOdfExporter(const QString& bodyContentElement, QObject* parent = 0);
 
     /**
      * @return true if @a mime is accepted source mime type.

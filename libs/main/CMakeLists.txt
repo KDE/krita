@@ -40,8 +40,6 @@ set(komain_LIB_SRCS
     KoFrame.cpp
     KoGlobal.cpp
     KoGridData.cpp
-    KoGuideLineDia.cpp
-    KoGuides.cpp
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp

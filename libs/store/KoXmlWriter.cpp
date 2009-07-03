@@ -38,9 +38,9 @@ public:
         //TODO: look at if we must delete "dev". For me we must delete it otherwise we will leak it
     }
 
-    QIODevice* const dev;
+    QIODevice* dev;
     QStack<Tag> tags;
-    const int baseIndentLevel;
+    int baseIndentLevel;
 
     char* indentBuffer; // maybe make it static, but then it needs a K_GLOBAL_STATIC
     // and would eat 1K all the time... Maybe refcount it :)
@@ -55,11 +55,9 @@ KoXmlWriter::KoXmlWriter(QIODevice* dev, int indentLevel)
 
 void KoXmlWriter::init()
 {
-    d->indentBuffer = d->baseIndentLevel > 0 ? new char[ s_indentBufferLength ] : 0;
-    if (d->indentBuffer) {
-        memset(d->indentBuffer, ' ', s_indentBufferLength);
-        *d->indentBuffer = '\n'; // write newline before indentation, in one go
-    }
+    d->indentBuffer = new char[ s_indentBufferLength ];
+    memset(d->indentBuffer, ' ', s_indentBufferLength);
+    *d->indentBuffer = '\n'; // write newline before indentation, in one go
 
     d->escapeBuffer = new char[s_escapeBufferLen];
     if (!d->dev->isOpen())
@@ -268,8 +266,6 @@ void KoXmlWriter::addAttributePt(const char* attrName, float value)
 
 void KoXmlWriter::writeIndent()
 {
-    if (d->baseIndentLevel == 0) // optimization: no indentation at all
-        return;
     // +1 because of the leading '\n'
     d->dev->write(d->indentBuffer, qMin(indentLevel() + 1,
                                         s_indentBufferLength));
@@ -505,8 +501,6 @@ QIODevice *KoXmlWriter::device() const
 
 int KoXmlWriter::indentLevel() const
 {
-    if (d->baseIndentLevel == 0)
-        return 0;
     return d->tags.size() + d->baseIndentLevel;
 }
 

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=metadataeditor
+Name[bg]=редактор на метаданни
 Name[da]=metadataredigering
 Name[de]=Metadateneditor
 Name[el]=επεξεργαστής μεταδεδομένων
@@ -24,6 +25,7 @@ Name[x-test]=xxmetadataeditorxx
 Name[zh_CN]=元数据编辑器
 Name[zh_TW]=中繼資料編輯器
 Comment=metadataeditor
+Comment[bg]=редактор на метаданни
 Comment[da]=metadataredigering
 Comment[de]=Metadateneditor
 Comment[el]=επεξεργαστής μεταδεδομένων

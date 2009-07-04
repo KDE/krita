@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/Brush
 Comment=Brush plugin for Krita
+Comment[bg]=Приставка за четки за Krita
 Comment[ca]=Connector de pinzell per al Krita
 Comment[da]=Penselplugin til Krita
 Comment[de]=Pinselmodul für Krita

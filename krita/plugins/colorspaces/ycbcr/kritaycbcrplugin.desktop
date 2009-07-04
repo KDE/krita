@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=YCbCr (integer 8-bit and 16-bit) Color Model
+Name[bg]=Цветови модел YCbCr (8 и 16 бита)
 Name[ca]=Model de color YCbCr (enters de 8-bits i 16-bits)
 Name[da]=YCbCr-farvemodel (heltal 8-bit og 16-bit)
 Name[de]=YCbCr-Farbmodell (8-bit und 16-bit Ganzzahl)
@@ -29,6 +30,7 @@ Name[uk]=Модель кольорів YCbCr (цілі 8-бітові і 16-бі
 Name[x-test]=xxYCbCr (integer 8-bit and 16-bit) Color Modelxx
 Name[zh_TW]=YCbCr（八位元與十六位元整數）色彩模型
 Comment=Color model for 8-bit and 16-bit per channel for YCbCr images
+Comment[bg]=Цветови модел за изображения YCbCr с 8 и 16 бита на канал
 Comment[ca]=Model de color d'enters de 8 bits i 16 bits per a canal d'imatges YCbCr
 Comment[da]=Farvemodel for 8-bit og 16-bit pr. kanal YCbCr-billeder
 Comment[de]=Farbmodell für 8-bit und 16-bit pro Kanal YCbCr-Bilder

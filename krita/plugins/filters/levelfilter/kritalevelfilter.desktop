@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Levels
+Name[bg]=Нива
 Name[br]=Liveoù
 Name[ca]=Nivells
 Name[cs]=Úrovně
@@ -33,6 +34,7 @@ Name[uk]=Рівні
 Name[x-test]=xxLevelsxx
 Name[zh_TW]=等級
 Comment=Levels
+Comment[bg]=Нива
 Comment[br]=Liveoù
 Comment[ca]=Nivells
 Comment[cs]=Úrovně

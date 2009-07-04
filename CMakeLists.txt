@@ -8,8 +8,6 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 #############
 ############
 
-option(BUILD_pigment "Enable the compilation of the pigment CMS libray (needed by krita and karbon)" ON) # we can't use the one coming from macro_optional_add_subdirectory since the option is created after the checks
-
  ######################
 #######################
 ## Constants defines ##
@@ -62,39 +60,20 @@ endif (APPLE)
 #################################
 ################################
 
-# NO_PIGMENT disabled everything that uses pigment in the crudest matter possible
-if (NOT BUILD_pigment)
-    add_definitions(-DNO_PIGMENT)
-    set (FULL_PIGMENT FALSE)
-    set (SMALL_PIGMENT FALSE)
-else (NOT BUILD_pigment)
+include_directories(${CMAKE_SOURCE_DIR}/libs/pigment)
+find_package(LCMS REQUIRED)
+set(REQUIRED_LCMS_VERSION 118)
 
-    include_directories(${CMAKE_SOURCE_DIR}/libs/pigment)
-#        macro_optional_find_package(LCMS)
-    find_package(LCMS REQUIRED)
-    set(REQUIRED_LCMS_VERSION 118)
+if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+    # FULL_PIGMENT is the most desirable state, we can compile Krita!
+    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
+    set(BUILD_PIGMENT TRUE)
+else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+    message( FATAL_ERROR "Old LCMS version found, upgrade to 1.18.")
+    set(BUILD_PIGMENT FALSE)
+endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
-    if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-        # FULL_PIGMENT is the most desirable state, we can compile Krita!
-        set(HAVE_REQUIRED_LCMS_VERSION TRUE)
-        set(FULL_PIGMENT TRUE)
-        set(SMALL_PIGMENT FALSE)
-        add_definitions(-DFULL_PIGMENT)
-    else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-        message( FATAL_ERROR "Old LCMS version found, upgrade to 1.18.")
-        set(HAVE_REQUIRED_LCMS_VERSION FALSE)
-        set(SMALL_PIGMENT TRUE)
-        set(FULL_PIGMENT FALSE)
-    endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-
-    macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required by for color management and for Krita")
-endif (NOT BUILD_pigment)
-
-# SMALL_PIGMENT provides just the classed needed to compile koffice libs, but not not Krita.
-if (SMALL_PIGMENT) 
-    add_definitions(-DSMALL_PIGMENT)
-endif(SMALL_PIGMENT)
-
+macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required by for color management and for Krita")
 
  ###########################
 ############################
@@ -306,9 +285,9 @@ set(KOPROPERTIES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kobase ${CMAKE_BINARY_DIR}/li
 
 ### Karbon: pigment
 set(SHOULD_BUILD_KARBON TRUE)
-if (NOT BUILD_pigment)
+if (NOT BUILD_PIGMENT)
     set(SHOULD_BUILD_KARBON FALSE)
-endif (NOT BUILD_pigment)
+endif (NOT BUILD_PIGMENT)
 
 ### KSpread: eigen2
 set(SHOULD_BUILD_KSPREAD TRUE)
@@ -330,9 +309,9 @@ endif(NOT BZIP2_EXECUTABLE )
 
 ### Krita: non-win32, pigment, blitz, eigen2, exiv2
 set(SHOULD_BUILD_KRITA TRUE)
-if(WIN32 OR NOT FULL_PIGMENT OR NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
+if(WIN32 OR NOT BUILD_PIGMENT OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(WIN32 OR NOT FULL_PIGMENT OR NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
+endif(WIN32 OR NOT BUILD_PIGMENT OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
 
 ### KPlato: kdepimlibs
 set(SHOULD_BUILD_KPLATO TRUE)

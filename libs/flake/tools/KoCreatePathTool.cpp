@@ -38,9 +38,7 @@
 
 #include <QtGui/QPainter>
 
-#ifndef NO_PIGMENT
 #include <KoColor.h>
-#endif
 
 qreal squareDistance( const QPointF &p1, const QPointF &p2)
 {
@@ -165,11 +163,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         m_shape = new KoPathShape();
         m_shape->setShapeId(KoPathShapeId);
         KoLineBorder * border = new KoLineBorder(m_canvas->resourceProvider()->activeBorder());
-#ifndef NO_PIGMENT
         border->setColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
-#else
-        border->setColor(m_canvas->resourceProvider()->foregroundColor());
-#endif
         m_shape->setBorder(border);
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
         QPointF point = m_canvas->snapGuide()->snap(event->point, event->modifiers());

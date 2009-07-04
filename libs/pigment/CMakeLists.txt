@@ -2,102 +2,84 @@ project(pigmentcms)
 
 include_directories( ${PIGMENT_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
 
-if (SMALL_PIGMENT)
+include_directories( ${LCMS_INCLUDE_DIR} )
+add_subdirectory( colorprofiles )
 
-    set(pigmentcms_SRCS 
-        KoColor.cpp
-    )
+set(FILE_OPENEXR_SOURCES)
+set(LINK_OPENEXR_LIB)
+if(OPENEXR_FOUND)
+    include_directories(${OPENEXR_INCLUDE_DIR})
+    set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
+    add_definitions(${OPENEXR_DEFINITIONS})
+endif(OPENEXR_FOUND)
 
-    set(PIGMENT_INSTALL_FILES 
-         pigment_export.h
-         DebugPigment.h
-         KoBasicHistogramProducers.h
-         KoChannelInfo.h
-         KoColor.h
-    )
+set(pigmentcms_SRCS
+    KoBasicHistogramProducers.cpp
+    KoColor.cpp
+    KoColorConversionAlphaTransformation.cpp
+    KoColorConversionCache.cpp
+    KoColorConversions.cpp
+    KoColorConversionSystem.cpp
+    KoColorConversionTransformation.cpp
+    KoColorConversionTransformationFactory.cpp
+    KoColorModelStandardIds.cpp
+    KoColorProfile.cpp
+    KoColorSpace.cpp
+    KoColorSpaceEngine.cpp
+    KoColorSpaceMaths.cpp
+    KoColorSpaceRegistry.cpp
+    KoColorTransformation.cpp
+    KoColorTransformationFactory.cpp
+    KoColorTransformationFactoryRegistry.cpp
+    KoCompositeOp.cpp
+    KoCopyColorConversionTransformation.cpp
+    KoFallBackColorTransformation.cpp
+    KoHistogramProducer.cpp
+    KoIccColorSpaceEngine.cpp
+    KoLcmsColorSpace.cpp
+    KoMultipleColorConversionTransformation.cpp
+    KoUniqueNumberForIdServer.cpp
+    colorprofiles/KoIccColorProfile.cpp
+    colorprofiles/KoLcmsColorProfileContainer.cpp
+    colorspaces/KoAlphaColorSpace.cpp
+    colorspaces/KoLabColorSpace.cpp
+    colorspaces/KoRgbU16ColorSpace.cpp
+    colorspaces/KoRgbU8ColorSpace.cc
+    colorspaces/KoRgbU8CompositeOp.cpp
+)
 
-else (SMALL_PIGMENT)
+set(PIGMENT_INSTALL_FILES 
+        pigment_export.h
+        DebugPigment.h
+        KoBasicHistogramProducers.h
+        KoChannelInfo.h
+        KoColor.h
+        KoColorConversionTransformation.h
+        KoColorConversionTransformationAbstractFactory.h
+        KoColorConversionTransformationFactory.h
+        KoColorModelStandardIds.h
+        KoColorProfile.h
+        KoColorSpace.h
+        KoColorSpaceEngine.h
+        KoColorSpaceAbstract.h
+        KoColorSpaceConstants.h
+        KoColorSpaceMaths.h
+        KoColorSpaceRegistry.h
+        KoColorSpaceTraits.h
+        KoColorTransformation.h
+        KoColorTransformationFactory.h
+        KoColorTransformationFactoryRegistry.h
+        KoCompositeOp.h
+        KoFallBackColorTransformation.h
+        KoIntegerMaths.h
+        KoLabDarkenColorTransformation.h
+        KoMixColorsOpImpl.h
+        KoHistogramProducer.h
+)
 
-    include_directories( ${LCMS_INCLUDE_DIR} )
-    add_subdirectory( colorprofiles )
+add_subdirectory(tests)
 
-    set(FILE_OPENEXR_SOURCES)
-    set(LINK_OPENEXR_LIB)
-    if(OPENEXR_FOUND)
-        include_directories(${OPENEXR_INCLUDE_DIR})
-        set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
-        add_definitions(${OPENEXR_DEFINITIONS})
-    endif(OPENEXR_FOUND)
-
-    set(pigmentcms_SRCS
-        KoBasicHistogramProducers.cpp
-        KoColor.cpp
-        KoColorConversionAlphaTransformation.cpp
-        KoColorConversionCache.cpp
-        KoColorConversions.cpp
-        KoColorConversionSystem.cpp
-        KoColorConversionTransformation.cpp
-        KoColorConversionTransformationFactory.cpp
-        KoColorModelStandardIds.cpp
-        KoColorProfile.cpp
-        KoColorSpace.cpp
-        KoColorSpaceEngine.cpp
-        KoColorSpaceMaths.cpp
-        KoColorSpaceRegistry.cpp
-        KoColorTransformation.cpp
-        KoColorTransformationFactory.cpp
-        KoColorTransformationFactoryRegistry.cpp
-        KoCompositeOp.cpp
-        KoCopyColorConversionTransformation.cpp
-        KoFallBackColorTransformation.cpp
-        KoHistogramProducer.cpp
-        KoIccColorSpaceEngine.cpp
-        KoLcmsColorSpace.cpp
-        KoMultipleColorConversionTransformation.cpp
-        KoUniqueNumberForIdServer.cpp
-        colorprofiles/KoIccColorProfile.cpp
-        colorprofiles/KoLcmsColorProfileContainer.cpp
-        colorspaces/KoAlphaColorSpace.cpp
-        colorspaces/KoLabColorSpace.cpp
-        colorspaces/KoRgbU16ColorSpace.cpp
-        colorspaces/KoRgbU8ColorSpace.cc
-        colorspaces/KoRgbU8CompositeOp.cpp
-    )
-
-    set(PIGMENT_INSTALL_FILES 
-         pigment_export.h
-         DebugPigment.h
-         KoBasicHistogramProducers.h
-         KoChannelInfo.h
-         KoColor.h
-         KoColorConversionTransformation.h
-         KoColorConversionTransformationAbstractFactory.h
-         KoColorConversionTransformationFactory.h
-         KoColorModelStandardIds.h
-         KoColorProfile.h
-         KoColorSpace.h
-         KoColorSpaceEngine.h
-         KoColorSpaceAbstract.h
-         KoColorSpaceConstants.h
-         KoColorSpaceMaths.h
-         KoColorSpaceRegistry.h
-         KoColorSpaceTraits.h
-         KoColorTransformation.h
-         KoColorTransformationFactory.h
-         KoColorTransformationFactoryRegistry.h
-         KoCompositeOp.h
-         KoFallBackColorTransformation.h
-         KoIntegerMaths.h
-         KoLabDarkenColorTransformation.h
-         KoMixColorsOpImpl.h
-         KoHistogramProducer.h
-    )
-
-    add_subdirectory(tests)
-
-    set (EXTRA_LIBRARIES ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB})
-
-endif (SMALL_PIGMENT)
+set (EXTRA_LIBRARIES ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB})
 
 if(MSVC)
   # avoid "cannot open file 'LIBC.lib'" error

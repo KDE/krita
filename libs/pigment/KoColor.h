@@ -27,15 +27,6 @@
 class QDomDocument;
 class QDomElement;
 
-#ifdef NO_PIGMENT
-
-class PIGMENTCMS_EXPORT KoColor : public QColor {
-
-    QColor toQColor() { return QColor(this); }
-};
-
-#else
-
 class KoColorProfile;
 class KoColorSpace;
 
@@ -163,7 +154,6 @@ private:
     class Private;
     Private * const d;
 };
-#endif
 
 Q_DECLARE_METATYPE( KoColor )
 

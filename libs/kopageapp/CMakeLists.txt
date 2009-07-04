@@ -2,16 +2,13 @@ include_directories(
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/documentsectionbox
     ${CMAKE_SOURCE_DIR}/libs/widgets
+    ${PIGMENT_INCLUDES}
 )
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the KOPAGEAPP_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
-
-if(NOT NO_PIGMENT)
-    include_directories(${PIGMENT_INCLUDES})
-endif(NOT NO_PIGMENT)
 
 
 add_subdirectory(tests)

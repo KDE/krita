@@ -88,7 +88,8 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         return;
     
     double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
-
+    if( (scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01 ) return;
+    
     KisPaintDeviceSP device = painter()->device();
 
     QPointF hotSpot = brush->hotSpot(scale, scale);

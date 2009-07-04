@@ -546,6 +546,40 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
     return attrs;
 }
 
+QString KoTextDebug::tableAttributes(const QTextTableFormat &tableFormat)
+{
+    QString attrs;
+
+    QMap<int, QVariant> properties = tableFormat.properties();
+    foreach(int id, properties.keys()) {
+        QString key, value;
+        switch (id) {
+        case QTextTableFormat::TableColumnWidthConstraints:
+        case QTextTableFormat::TableColumns:
+            key = "columns";
+            value = QString::number(properties[id].toInt());
+            break;
+        case QTextTableFormat::TableCellSpacing:
+            key = "cell-spacing";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextTableFormat::TableCellPadding:
+            key = "cell-padding";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextTableFormat::TableHeaderRowCount:
+            key = "header-row-count";
+            value = QString::number(properties[id].toInt());
+            break;
+        default:
+            break;
+        }
+        if (!key.isEmpty())
+            attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+    }
+    return attrs;
+}
+
 void KoTextDebug::dumpFrame(const QTextFrame *frame)
 {
     depth += INDENT;
@@ -604,11 +638,14 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
         qDebug(" ");
 }
 
-void KoTextDebug::dumpTable(const QTextTable *)
+void KoTextDebug::dumpTable(const QTextTable *table)
 {
     depth += INDENT;
-    qDebug("%*s%s", depth, " ", "<table>");
-    // FIXME
+
+    QString attrs;
+    attrs.append(tableAttributes(table->format()));
+
+    qDebug("%*s<table%s>", depth, " ", qPrintable(attrs));
     qDebug("%*s%s", depth, " ", "</table>");
     depth -= INDENT;
 }

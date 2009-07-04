@@ -70,8 +70,6 @@ void TableLayout::layout()
     }
 
     QTextTableFormat tableFormat = m_table->format();
-    QTextFrame *parentFrame = m_table->parentFrame();
-    Q_ASSERT(parentFrame);
 
     m_tableData->m_rowPositions.resize(m_table->rows());
     m_tableData->m_rowHeights.resize(m_table->rows());

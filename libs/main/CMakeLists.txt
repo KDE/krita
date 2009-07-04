@@ -37,6 +37,7 @@ set(komain_LIB_SRCS
     KoFilter.cpp
     KoFilterEntry.cpp
     KoFilterManager.cpp
+    KoFilterManager_p.cpp
     KoFrame.cpp
     KoGlobal.cpp
     KoGridData.cpp

@@ -754,7 +754,7 @@ void TestDocumentLayout::testBorderData()
     //  * two paragraphs share a border
     //  * The top indent (of all parags) does not have a border
     //  * The left border is left of the counter
-    QCOMPARE(border->rect(), QRectF(0, 24.4, 200, 38.8));
+    QCOMPARE(border->rect(), QRectF(0, 24.4, 188, 38.8));
 
     style.setBottomMargin(5);
     // manually reapply and relayout to force immediate reaction.
@@ -770,7 +770,7 @@ void TestDocumentLayout::testBorderData()
     // The tested here is
     //  * the bottom border of the last parag is directly under the text. (so similar to rule 2)
     // This means that the height is the prev 38.8 + the bottom of the top parag: 5pt = 43.8pt
-    QCOMPARE(border->rect(), QRectF(0, 24.4, 200, 43.8));
+    QCOMPARE(border->rect(), QRectF(0, 24.4, 188, 43.8));
 
     QCOMPARE(data->counterPosition(), QPointF(3, 24.4));
 

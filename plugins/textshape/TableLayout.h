@@ -130,14 +130,6 @@ public:
     QRectF cellContentRect(const QTextTableCell &cell) const;
 
     /**
-     * Get the content rectangle of a cell at a given table coordinate.
-     * @param row the row of the cell.
-     * @param column the column of the cell.
-     * @return the rectangle of the cell.
-     */
-    QRectF cellContentRect(int row, int column) const;
-
-    /**
      * Check the dirty state.
      * @return true if the table needs to be laid out, otherwise false.
      */
@@ -152,6 +144,15 @@ public:
 private slots:
     /// Called before a table is destroyed.
     void tableDestroyed(QObject *object);
+
+private:
+    /**
+     * Get the content rectangle of a cell at a given table coordinate.
+     * @param row the row of the cell.
+     * @param column the column of the cell.
+     * @return the rectangle of the cell.
+     */
+    QRectF cellContentRect(int row, int column) const;
 
 private:
     friend class TestTableLayout; // To allow direct testing.

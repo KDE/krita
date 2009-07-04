@@ -89,10 +89,16 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
     emit sigSettingChanged();
 }
 
-void KisCurveOption::setSensor(KisDynamicSensor* sensor) {
+void KisCurveOption::setSensor(KisDynamicSensor* sensor)
+{
   delete m_sensor;
   m_sensor = sensor;
   if(m_curveOption->sensorSelector->current() != sensor) {
     m_curveOption->sensorSelector->setCurrent(m_sensor);
   }
+}
+
+KisDynamicSensor* KisCurveOption::sensor()
+{
+  return m_sensor;
 }

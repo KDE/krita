@@ -67,6 +67,9 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
     Q_ASSERT(painter);
     Q_ASSERT(settings->m_optionsWidget->m_brushOption);
     m_brush = settings->m_optionsWidget->m_brushOption->brush();
+    settings->m_optionsWidget->m_sizeOption->sensor()->reset();
+    settings->m_optionsWidget->m_opacityOption->sensor()->reset();
+    settings->m_optionsWidget->m_darkenOption->sensor()->reset();
 }
 
 KisBrushOp::~KisBrushOp()

@@ -44,7 +44,7 @@ const KoID YTiltId("ytilt", i18n("Y-Tilt"));
  * Sensor are used to extract from KisPaintInformation a single
  * double value which can be used to control
  */
-class KRITAUI_EXPORT KisDynamicSensor : public QObject, public KisSerializableConfiguration
+class KRITAUI_EXPORT KisDynamicSensor : public KisSerializableConfiguration
 {
 public:
     enum ParameterSign {
@@ -55,11 +55,16 @@ public:
 protected:
     KisDynamicSensor(const KoID& id);
 public:
-    virtual ~KisDynamicSensor() { }
+    virtual ~KisDynamicSensor();
     /**
      * @return the value of this sensor for the given KisPaintInformation
      */
     virtual double parameter(const KisPaintInformation& info) = 0;
+    /**
+     * This function is call before begining a stroke to reset the sensor.
+     * Default implementation does nothing.
+     */
+    virtual void reset();
     virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector*);
     /**
      * Creates a sensor from its identifiant.

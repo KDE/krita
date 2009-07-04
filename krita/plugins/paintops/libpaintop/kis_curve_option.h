@@ -51,7 +51,7 @@ public:
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-
+    KisDynamicSensor* sensor();
 protected:
 
     double computeValue( const KisPaintInformation& info ) const {

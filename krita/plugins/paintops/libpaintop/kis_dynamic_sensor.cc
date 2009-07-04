@@ -25,10 +25,16 @@ KisDynamicSensor::KisDynamicSensor(const KoID& id) : m_id(id)
 {
 }
 
+KisDynamicSensor::~KisDynamicSensor() { }
+
 QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, KisSensorSelector*)
 {
     Q_UNUSED(parent);
     return 0;
+}
+
+void KisDynamicSensor::reset()
+{
 }
 
 KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)

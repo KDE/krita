@@ -299,7 +299,7 @@ bool TextShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &con
                     element.attributeNS(KoXmlNS::draw, "style-name"), "graphic",
                     context.odfLoadingContext().useStylesAutoStyles());
         if (!style)
-            kWarning(32500) << "graphic style not found:" << element.attributeNS(KoXmlNS::draw, "style-name");
+            kDebug(32500) << "graphic style not found:" << element.attributeNS(KoXmlNS::draw, "style-name");
         Q_ASSERT(style);
     }
     else if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
@@ -307,7 +307,7 @@ bool TextShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &con
                     element.attributeNS(KoXmlNS::presentation, "style-name"), "presentation",
                     context.odfLoadingContext().useStylesAutoStyles());
         if (!style)
-            kWarning(32500) << "presentation style not found:" << element.attributeNS(KoXmlNS::presentation, "style-name");
+            kDebug(32500) << "presentation style not found:" << element.attributeNS(KoXmlNS::presentation, "style-name");
         Q_ASSERT(style);
     }
 

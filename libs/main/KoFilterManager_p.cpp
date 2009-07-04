@@ -24,9 +24,9 @@
 #include "KoFilterManager_p.h"
 
 #include <QVBoxLayout>
+#include <QListWidget>
 
 #include <KLocale>
-#include <K3ListBox>
 #include <KSqueezedTextLabel>
 #include <KMimeType>
 
@@ -51,7 +51,7 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
         KSqueezedTextLabel *l = new KSqueezedTextLabel(url.path(), page);
         layout->addWidget(l);
     }
-    m_filterList = new K3ListBox(page, "filterlist");
+    m_filterList = new QListWidget(page);
     layout->addWidget(m_filterList);
     page->setLayout(layout);
 
@@ -62,19 +62,18 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
         KMimeType::Ptr mime = KMimeType::mimeType(*it);
         const QString name = mime ? mime->comment() : *it;
         if (! name.isEmpty())
-            m_filterList->insertItem(name);
+            m_filterList->addItem(name);
     }
 
     if (nativeFormat == "application/x-kword") {
         const int index = m_mimeTypes.indexOf("text/plain");
         if (index > -1)
-            m_filterList->setCurrentItem(index);
+            m_filterList->setCurrentRow(index);
     }
 
-    if (m_filterList->currentItem() == -1)
-        m_filterList->setCurrentItem(0);
+    if (m_filterList->currentRow() == -1)
+        m_filterList->setCurrentRow(0);
 
-    m_filterList->centerCurrentItem();
     m_filterList->setFocus();
 
     connect(m_filterList, SIGNAL(selected(int)), this, SLOT(accept()));
@@ -87,7 +86,7 @@ KoFilterChooser::~KoFilterChooser()
 
 QString KoFilterChooser::filterSelected()
 {
-    const int item = m_filterList->currentItem();
+    const int item = m_filterList->currentRow();
 
     if (item > -1)
         return m_mimeTypes [item];

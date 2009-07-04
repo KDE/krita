@@ -26,7 +26,7 @@
 #include <KUrl>
 #include <KDialog>
 
-class K3ListBox;
+class QListWidget;
 
 class KoFilterManager::Private
 {
@@ -46,7 +46,7 @@ public:
 
 private:
     QStringList m_mimeTypes;
-    K3ListBox *m_filterList;
+    QListWidget *m_filterList;
 };
 
 #endif

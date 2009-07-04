@@ -103,7 +103,7 @@ qreal Layout::width()
     qreal ptWidth = shape->size().width() - m_format.leftMargin() - m_format.rightMargin();
     if (m_newParag)
         ptWidth -= resolveTextIndent();
-    if (m_newParag && m_blockData)
+    if (m_blockData)
         ptWidth -= listIndent();
     ptWidth -= m_borderInsets.left + m_borderInsets.right + m_shapeBorder.right;
     ptWidth -= m_dropCapsAffectedLineWidthAdjust;

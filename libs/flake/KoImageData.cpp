@@ -38,8 +38,8 @@
 #include "KoImageCollection.h"
 #include "KoImageData_p.h"
 
-KoImageData::KoImageData(KoImageCollection *collection, const QImage & image)
-: d(new KoImageDataPrivate(collection))
+KoImageData::KoImageData(KoImageCollection *collection, const QImage &image)
+    : d(new KoImageDataPrivate(collection))
 {
     d->image = image;
     QByteArray ba;
@@ -52,41 +52,39 @@ KoImageData::KoImageData(KoImageCollection *collection, const QImage & image)
     d->suffix = "png";
 }
 
-KoImageData::KoImageData(KoImageCollection *collection, const KUrl & url)
-: d(new KoImageDataPrivate(collection))
+KoImageData::KoImageData(KoImageCollection *collection, const KUrl &url)
+    : d(new KoImageDataPrivate(collection))
 {
     QString tmpFile;
-    if ( KIO::NetAccess::download( url, tmpFile, 0 ) ) {
-        QFile file( tmpFile );
-        file.open( QIODevice::ReadOnly );
-        loadFromFile( file );
+    if (KIO::NetAccess::download(url, tmpFile, 0)) {
+        QFile file(tmpFile);
+        file.open(QIODevice::ReadOnly);
+        loadFromFile(file);
         setSuffix(url.prettyUrl());
-    }
-    else {
+    } else {
         kWarning(30006) << "open image " << url.prettyUrl() << "failed";
         d->errorCode = OpenFailed;
     }
 }
 
-KoImageData::KoImageData(KoImageCollection *collection, const QString & href, KoStore * store)
-: d(new KoImageDataPrivate(collection))
+KoImageData::KoImageData(KoImageCollection *collection, const QString &href, KoStore *store)
+    : d(new KoImageDataPrivate(collection))
 {
-    if ( store->open(href) ) {
+    if (store->open(href)) {
         // TODO should we use KoStore::extractFile ?
         KoStoreDevice device(store);
         loadFromFile(device);
         setSuffix(href);
         store->close();
-    }
-    else {
+    } else {
         kWarning(30006) << "open image " << href << "failed";
         d->errorCode = OpenFailed;
     }
 }
 
 KoImageData::KoImageData(const KoImageData &imageData)
-: KoShapeUserData()
-, d(imageData.d)
+    : KoShapeUserData(),
+    d(imageData.d)
 {
 }
 
@@ -109,53 +107,52 @@ KoImageData::ImageQuality KoImageData::imageQuality() const
 QPixmap KoImageData::pixmap()
 {
     if (d->pixmap.isNull()) {
+        if (d->quality == NoPreviewImage) {
+            d->image = QImage(); // free memory
+            d->pixmap = QPixmap(1, 1);
+            QPainter p(&d->pixmap);
+            p.setPen(QPen(Qt::gray));
+            p.drawPoint(0, 0);
+            p.end();
+            return d->pixmap;
+        }
         image(); // force loading if only present if only present as raw data
 
-        if (! d->image.isNull()) {
-            if (d->quality == NoPreviewImage) {
-                d->pixmap = QPixmap(1, 1);
-                QPainter p(&d->pixmap);
-                p.setPen(QPen(Qt::gray));
-                p.drawPoint(0, 0);
-                p.end();
-            }
-            else {
-                int multiplier = 150; // max 150 ppi
-                if (d->quality == LowQuality)
-                    multiplier = 50;
-                else if (d->quality == MediumQuality)
-                    multiplier = 100;
-                int width = qMin(d->image.width(), qRound(imageSize().width() * multiplier / 72.));
-                int height = qMin(d->image.height(), qRound(imageSize().height() * multiplier / 72.));
-                // kDebug(30006)() <<"  image:" << width <<"x" << height;
+        if (!d->image.isNull()) {
+            int multiplier = 150; // max 150 ppi
+            if (d->quality == LowQuality)
+                multiplier = 50;
+            else if (d->quality == MediumQuality)
+                multiplier = 100;
+            int width = qMin(d->image.width(), qRound(imageSize().width() * multiplier / 72.));
+            int height = qMin(d->image.height(), qRound(imageSize().height() * multiplier / 72.));
+            // kDebug(30006)() <<"  image:" << width <<"x" << height;
 
-                QImage scaled = d->image.scaled(width, height);
-                if (!d->rawData.isEmpty()) { // free memory
-                    d->image = QImage();
-                }
-
-                d->pixmap = QPixmap::fromImage(scaled);
+            QImage scaled = d->image.scaled(width, height);
+            if (!d->rawData.isEmpty()) { // free memory
+                d->image = QImage();
             }
+
+            d->pixmap = QPixmap::fromImage(scaled);
         }
     }
     return d->pixmap;
 }
 
-bool KoImageData::saveToFile(QIODevice & device)
+bool KoImageData::saveToFile(QIODevice &device)
 {
     return d->saveToFile(device);
 }
 
-bool KoImageData::loadFromFile(QIODevice & device)
+bool KoImageData::loadFromFile(QIODevice &device)
 {
     d->rawData = device.readAll();
-    bool loaded = d->image.loadFromData( d->rawData );
-    if ( loaded ) {
+    bool loaded = d->image.loadFromData(d->rawData);
+    if (loaded) {
         QCryptographicHash ch(QCryptographicHash::Md5);
         ch.addData(d->rawData);
         d->key = ch.result();
-    }
-    else {
+    } else {
         d->errorCode = LoadFailed;
     }
     return loaded;
@@ -182,7 +179,7 @@ const QSizeF KoImageData::imageSize()
 
 const QImage KoImageData::image() const
 {
-    if ( d->image.isNull() ) {
+    if (d->image.isNull()) {
         d->image.loadFromData( d->rawData );
     }
     return d->image;
@@ -193,7 +190,7 @@ bool KoImageData::operator==(const KoImageData &other) const
     return other.d == d;
 }
 
-KoImageData & KoImageData::operator=(const KoImageData &other)
+KoImageData &KoImageData::operator=(const KoImageData &other)
 {
     d = other.d;
     return *this;
@@ -217,7 +214,7 @@ KoImageData::ErrorCode KoImageData::errorCode() const
 void KoImageData::setSuffix(const QString & name)
 {
     QRegExp rx("\\.([^/]+$)"); // TODO does this work on windows or do we have to use \ instead of / for a path separator?
-    if ( rx.indexIn(name) != -1 ) {
+    if (rx.indexIn(name) != -1) {
         d->suffix = rx.cap(1);
     }
 }

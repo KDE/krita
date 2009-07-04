@@ -27,9 +27,9 @@
 #include "KoImageCollection.h"
 
 KoImageDataPrivate::KoImageDataPrivate(KoImageCollection *c)
-:collection(c)
-,quality(KoImageData::HighQuality)
-,errorCode(KoImageData::Success)
+    :collection(c),
+    quality(KoImageData::HighQuality),
+    errorCode(KoImageData::Success)
 {
 }
 

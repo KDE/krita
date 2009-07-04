@@ -38,15 +38,15 @@ class KoXmlWriter;
 class KoStore;
 
 /**
- * Class meant to hold the full image data so it can be shared between image shapes.
+ * This class is meant to represent the image data so it can be shared between image shapes.
  * In KOffice there is a picture shape and a krita shape which both can both show
  * an image.  To allow smooth transition of image data between shapes, as well as allowing
  * lower-resolution data to be shown this class will actually be the backing store of
  * the image data and it can create a pre-rendered QPixmap without deminishing the backing-store
  * data.
  * This class inherits from KoShapeUserData which means you can set it on any KoShape using
- * KoShape::setUserData() and get it using KoShape::userData().  The pictureshape plugin should
- * use this class' API to show its image data.
+ * KoShape::setUserData() and get it using KoShape::userData().  The pictureshape plugin
+ * uses this class to show its image data.
  * Such plugins are suggested to not make a copy of the pixmap data, but use the fact that this
  * image data caches one for every request to pixmap()
  */
@@ -55,13 +55,13 @@ class FLAKE_EXPORT KoImageData : public KoShapeUserData
 public:
     /**
      * The image quality that the pixmap() method will render to.
-     * The DPI of the original image are read from the source file making this real units quality metrics.
+     * The DPI of the original image is read from the source file making this real units quality metrics.
      */
     enum ImageQuality {
         NoPreviewImage,      ///<  shows a dummy.
-        LowQuality,     // 50ppi
-        MediumQuality,  // 100ppi
-        HighQuality     // upto 150ppi
+        LowQuality,     ///< 50ppi
+        MediumQuality,  ///< 100ppi
+        HighQuality     ///< upto 150ppi
     };
 
     /**
@@ -74,6 +74,7 @@ public:
         SaveInline              ///< Save the image serialized in the content.xml
     };
 
+    /// Various error codes representing what has gone wrong
     enum ErrorCode {
         Success,
         OpenFailed,
@@ -117,14 +118,14 @@ public:
      * @param device the device that is used to get the data from.
      * @return returns true if load was successful.
      */
-    bool saveToFile(QIODevice & device);
+    bool saveToFile(QIODevice &device);
 
     /**
      * The size of the image in points
      */
     const QSizeF imageSize();
 
-    KoImageData & operator=(const KoImageData &other);
+    KoImageData &operator=(const KoImageData &other);
 
     bool operator==(const KoImageData &other) const;
 
@@ -153,20 +154,28 @@ private:
      *
      * @param collection the image collection which will do the loading of the image data for us.
      */
-    KoImageData(KoImageCollection *collection, const QImage & image);
-    KoImageData(KoImageCollection *collection, const KUrl & url);
-    KoImageData(KoImageCollection *collection, const QString & href, KoStore * store);
+    KoImageData(KoImageCollection *collection, const QImage &image);
+    /**
+     * constructor
+     * This is private to only allow the KoImageCollection to create new KoImageData objects
+     */
+    KoImageData(KoImageCollection *collection, const KUrl &url);
+    /**
+     * constructor
+     * This is private to only allow the KoImageCollection to create new KoImageData objects
+     */
+    KoImageData(KoImageCollection *collection, const QString &href, KoStore *store);
 
     /**
-     * Load the image data from the param device.
+     * Load the image data from the \a device.
      * Note that if the file is bigger than 250Kb instead of loading the full file into memory it will
      * copy the data to a temp-file and postpone loading it until the first time pixmap() is called.
      * @param device the device that is used to get the data from.
      * @return returns true if load was successful.
      */
-    bool loadFromFile(QIODevice & device);
+    bool loadFromFile(QIODevice &device);
 
-    void setSuffix(const QString & name);
+    void setSuffix(const QString &name);
 
     QExplicitlySharedDataPointer<KoImageDataPrivate> d;
 };

@@ -46,6 +46,7 @@
 #include <QTextList>
 #include <QStyle>
 #include <QFontMetrics>
+#include <QTextTableCell>
 
 
 // ---------------- layout helper ----------------
@@ -100,11 +101,12 @@ bool Layout::interrupted()
 qreal Layout::width()
 {
     Q_ASSERT(shape);
-    qreal ptWidth = shape->size().width() - m_format.leftMargin() - m_format.rightMargin();
+    qreal ptWidth = m_inTable ? resolveTableCellWidth() : shape->size().width();
     if (m_newParag)
         ptWidth -= resolveTextIndent();
     if (m_blockData)
         ptWidth -= listIndent();
+    ptWidth -= m_format.leftMargin() + m_format.rightMargin();
     ptWidth -= m_borderInsets.left + m_borderInsets.right + m_shapeBorder.right;
     ptWidth -= m_dropCapsAffectedLineWidthAdjust;
     return ptWidth;
@@ -113,6 +115,9 @@ qreal Layout::width()
 qreal Layout::x()
 {
     qreal result = m_newParag ? resolveTextIndent() : 0.0;
+    if (m_inTable) {
+        result += resolveTableCellXOffset();
+    }
     result += m_isRtl ? m_format.rightMargin() : m_format.leftMargin();
     result += listIndent();
     result += m_borderInsets.left + m_shapeBorder.left;
@@ -123,6 +128,20 @@ qreal Layout::x()
 qreal Layout::y()
 {
     return m_y;
+}
+
+qreal Layout::resolveTableCellWidth() const
+{
+    QTextTableCell cell = m_tableLayout.cellAt(m_block.position());
+    Q_ASSERT(cell.isValid());
+    return m_tableLayout.cellContentRect(cell).width();
+}
+
+qreal Layout::resolveTableCellXOffset() const
+{
+    QTextTableCell cell = m_tableLayout.cellAt(m_block.position());
+    Q_ASSERT(cell.isValid());
+    return m_tableLayout.cellContentRect(cell).x();
 }
 
 qreal Layout::resolveTextIndent()
@@ -322,6 +341,23 @@ bool Layout::nextParag()
     else
         m_isRtl =  dir == KoText::RightLeftTopBottom || dir == KoText::PerhapsRightLeftTopBottom;
 
+    // tables (TODO: Probably inefficient).
+    QTextCursor tableFinder(m_block);
+    QTextTable *table = tableFinder.currentTable();
+    if (table) {
+        if (table != m_tableLayout.table()) {
+            m_tableLayout.setTable(table); // entering table.
+        }
+        m_tableLayout.layout();
+        m_inTable = true;
+    } else {
+        QTextCursor lookBehind(m_block.previous());
+        QTextTable *previousTable = lookBehind.currentTable();
+        if (previousTable) {
+            m_inTable = false; // leaving table.
+        }
+    }
+
     // initialize list item stuff for this parag.
     QTextList *textList = m_block.textList();
     if (textList) {
@@ -473,25 +509,6 @@ bool Layout::nextParag()
             m_blockData->setCounterPosition(QPointF(m_borderInsets.left + m_shapeBorder.left +
                                                     m_format.textIndent() + m_format.leftMargin() +
                                                     textList->format().doubleProperty(KoListStyle::Indent), y()));
-    }
-
-    // tables (TODO: Probably inefficient).
-    QTextCursor tableFinder(m_block);
-    QTextTable *table = tableFinder.currentTable();
-    if (table) {
-        if (table != m_tableLayout.table()) {
-            // entering table.
-            m_inTable = true;
-            m_tableLayout.setTable(table);
-            m_tableLayout.layout();
-        }
-    } else {
-        QTextCursor lookBehind(m_block.previous());
-        QTextTable *previousTable = lookBehind.currentTable();
-        if (previousTable) {
-            // leaving table.
-            m_inTable = false;
-        }
     }
 
     return true;

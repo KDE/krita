@@ -130,6 +130,13 @@ public:
     QRectF cellContentRect(const QTextTableCell &cell) const;
 
     /**
+     * Get the cell that contains the character at the given position in the document.
+     * @param position the character position in the document.
+     * @return the table cell.
+     */
+    QTextTableCell cellAt(int position) const;
+
+    /**
      * Check the dirty state.
      * @return true if the table needs to be laid out, otherwise false.
      */

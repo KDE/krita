@@ -137,6 +137,17 @@ QRectF TableLayout::cellContentRect(int row, int column) const
             m_tableData->m_columnWidths[column], m_tableData->m_rowHeights[row]);     // width, height
 }
 
+QTextTableCell TableLayout::cellAt(int position) const
+{
+    Q_ASSERT(isValid());
+
+    if (!isValid()) {
+        return QTextTableCell();
+    }
+
+    return m_table->cellAt(position);
+}
+
 bool TableLayout::isDirty() const
 {
     return m_dirty;

@@ -84,21 +84,21 @@ public:
      * nodes all the way to the root node. By default this is the
      * empty rect (through KisBaseNode::extent())
      */
-    virtual void setDirty() {};
+    virtual void setDirty() {}
 
     /**
      * Add the given rect to the set of dirty rects for this node;
      * this percolates up to parent nodes all the way to the root
      * node.
      */
-    virtual void setDirty(const QRect & rect) {};
+    virtual void setDirty(const QRect & rect) { Q_UNUSED(rect); }
 
     /**
      * Add the given region to the set of dirty rects for this node;
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    virtual void setDirty(const QRegion & region) {};
+    virtual void setDirty(const QRegion & region) { Q_UNUSED(region); }
 
 public: // Graph methods
 
@@ -206,19 +206,19 @@ protected:
      * Re-implement this method if your node type has to do something
      * before it is removed.
      */
-    virtual void prepareForRemoval() {};
+    virtual void prepareForRemoval() {}
 
     /**
      * Re-implement this method if your node type has to do something
      * before being added to the stack.
      */
-    virtual void prepareForAddition() {};
+    virtual void prepareForAddition() {}
 
     /**
      * Re-implement this method if your node type has to do something
      * right after being added to the stack.
      */
-    virtual void initAfterAddition() {};
+    virtual void initAfterAddition() {}
 
 
 private:

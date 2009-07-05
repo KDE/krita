@@ -40,7 +40,7 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 {
   Q_OBJECT
 public:
-    KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent = 0 );
+    explicit KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent = 0 );
     ~KoResourceItemChooser();
 
     /// Sets number of columns in the view

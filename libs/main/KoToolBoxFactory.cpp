@@ -18,7 +18,7 @@
  */
 
 #include "KoToolBoxFactory.h"
-#include "klocale.h"
+#include <klocale.h>
 #include <KoToolManager.h>
 #include "KoToolBox_p.h"
 

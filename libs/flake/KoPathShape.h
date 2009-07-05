@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2007,2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -34,6 +34,7 @@
 class KoPathShape;
 class KoPointGroup;
 class KoPathPoint;
+class KoPathShapePrivate;
 
 typedef QPair<int, int> KoPathPointIndex;
 typedef QMap<KoPathShape *, QSet<KoPathPointIndex> > KoPathShapePointIndexMap;
@@ -442,6 +443,10 @@ public:
     /// Creates path shape from given QPainterPath
     static KoPathShape * fromQPainterPath(const QPainterPath &path);
 
+protected:
+    /// constructor
+    KoPathShape(KoPathShapePrivate &);
+
 private:
     // TODO move all the private methods to live on the d pointer object
     void map(const QMatrix &matrix);
@@ -531,8 +536,7 @@ protected:
     KoSubpathList m_subpaths;
 
 private:
-    class Private;
-    Private * const d;
+    Q_DECLARE_PRIVATE(KoPathShape)
 };
 
 #endif /* KOPATHSHAPE_H */

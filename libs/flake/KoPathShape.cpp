@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2007-2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 */
 
 #include "KoPathShape.h"
+#include "KoPathShape_p.h"
 #include "KoPathPoint.h"
 #include "KoPointGroup.h"
 #include "KoShapeBorderModel.h"
@@ -42,24 +43,25 @@
 #include <KDebug>
 #include <QtGui/QPainter>
 
-class KoPathShape::Private
+KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
+    : KoShapePrivate(q),
+    fillRule(Qt::OddEvenFill)
 {
-public:
-    Private() : fillRule(Qt::OddEvenFill) {
-    }
-
-    Qt::FillRule fillRule;
-};
+}
 
 KoPathShape::KoPathShape()
-        : d(new Private())   // while we don't actually have any private data, just leave it as this.
+    :KoShape(*(new KoPathShapePrivate(this)))
+{
+}
+
+KoPathShape::KoPathShape(KoPathShapePrivate &dd)
+    : KoShape(dd)
 {
 }
 
 KoPathShape::~KoPathShape()
 {
     clear();
-    delete d;
 }
 
 void KoPathShape::saveOdf(KoShapeSavingContext & context) const
@@ -134,6 +136,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
 
 QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
+    Q_D(const KoPathShape);
     style.addProperty("svg:fill-rule", d->fillRule == Qt::OddEvenFill ? "evenodd" : "nonzero");
 
     return KoShape::saveStyle(style, context);
@@ -141,6 +144,7 @@ QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context)
 
 void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
+    Q_D(KoPathShape);
     KoShape::loadStyle(element, context);
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
@@ -216,6 +220,7 @@ void KoPathShape::clear()
 
 void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_D(KoPathShape);
     applyConversion(painter, converter);
     QPainterPath path(outline());
     path.setFillRule(d->fillRule);
@@ -1225,11 +1230,13 @@ void KoPathShape::loadNodeTypes(const KoXmlElement & element)
 
 Qt::FillRule KoPathShape::fillRule() const
 {
+    Q_D(const KoPathShape);
     return d->fillRule;
 }
 
 void KoPathShape::setFillRule(Qt::FillRule fillRule)
 {
+    Q_D(KoPathShape);
     d->fillRule = fillRule;
 }
 

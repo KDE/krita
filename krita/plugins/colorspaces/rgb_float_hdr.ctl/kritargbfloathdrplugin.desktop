@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=RGB (float 16-bit and 32-bit HDR) Color Model
+Name[bg]=Цветови модел RGB (16 и 32 бита HDR)
 Name[ca]=Model de color RGB (flotant 16-bits i HDR 32-bits)
 Name[da]=RGB-farvemodel (float 16-bit og 32-bit HDR)
 Name[de]=RGB-Farbmodell (16-bit und 32-bit Fließkomma HDR)
@@ -28,7 +29,7 @@ Name[uk]=Модель кольорів RGB (дійсні 16-бітові та 32
 Name[x-test]=xxRGB (float 16-bit and 32-bit HDR) Color Modelxx
 Name[zh_TW]=RGB（浮點 16 位元與 32 位元 HDR）色彩模型
 Comment=Color model for 16-bit and 32-bit per channel in floating point for High-Dynamic Range RGB images
-Comment[bg]=Цветови модел за 16 и 32 битови изображения RGB
+Comment[bg]=Цветови модел за 16 и 32 бита на канал за HDR RGB изображения
 Comment[ca]=Model de color per a 16 bits i 32 bits per canal en punt flotant per a imatges RGB de marge dinàmic elevat (HDR)
 Comment[da]=Farvemodel for 16-bit og 32-bit pr. kanal med flydende komma til høj dynamisk rækkevidde RGB-billeder
 Comment[de]=Farbmodell für 16-bit und 32-bit pro Kanal in Fließkomma für High-Dynamic Range RGB-Bilder

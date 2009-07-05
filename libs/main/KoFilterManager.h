@@ -88,6 +88,7 @@ public:
      * then we imported the file directly into the document.
      */
     QString importDocument(const QString& url, KoFilter::ConversionStatus& status);
+
     /**
      * @brief Exports the given file/document to the specified URL/mimetype.
      *
@@ -96,8 +97,6 @@ public:
      * Oh, well, export is a C++ keyword ;)
      */
     KoFilter::ConversionStatus exportDocument(const QString& url, QByteArray& mimeType);
-
-
 
     ///@name Static API
     //@{
@@ -139,7 +138,7 @@ public:
      */
     bool getBatchMode(void) const;
 
-Q_SIGNALS:
+signals:
     void sigProgress(int);
 
 private:
@@ -173,8 +172,6 @@ private:
     KoFilterManager &operator=(const KoFilterManager& rhs);
 
     void importErrorHelper(const QString& mimeType, const bool suppressDialog = false);
-
-    static const int s_area;
 
     KoDocument* m_document;
     KoFilterChain* const m_parentChain;

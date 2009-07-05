@@ -37,11 +37,10 @@ set(komain_LIB_SRCS
     KoFilter.cpp
     KoFilterEntry.cpp
     KoFilterManager.cpp
+    KoFilterManager_p.cpp
     KoFrame.cpp
     KoGlobal.cpp
     KoGridData.cpp
-    KoGuideLineDia.cpp
-    KoGuides.cpp
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp
@@ -55,6 +54,7 @@ set(komain_LIB_SRCS
     KoViewAdaptor.cpp
     KoView.cpp
     kofficeversion.cc
+    KoOdfExporter.cpp
 )
 
 

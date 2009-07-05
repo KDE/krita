@@ -57,6 +57,7 @@ class KoShapeControllerBase;
 class KoDataCenter;
 class KoShapeShadow;
 class KoEventAction;
+class KoShapePrivate;
 
 /**
  *
@@ -793,6 +794,8 @@ public:
     void removeAdditionalStyleAttribute(const char * name);
 
 protected:
+    /// constructor
+    KoShape(KoShapePrivate &);
 
     /* ** loading saving helper methods */
     /// attributes from ODF 1.1 chapter 9.2.15 Common Drawing Shape Attributes
@@ -902,14 +905,14 @@ protected:
      */
     void notifyChangedShape(ChangeType type);
 
+    KoShapePrivate *d_ptr;
+
 private:
     friend class KoShapeManager;
     void addShapeManager(KoShapeManager * manager);
     void removeShapeManager(KoShapeManager * manager);
 
-    class Private;
-    friend class Private;
-    Private * const d;
+    Q_DECLARE_PRIVATE(KoShape)
 };
 
 Q_DECLARE_METATYPE(KoShape*)

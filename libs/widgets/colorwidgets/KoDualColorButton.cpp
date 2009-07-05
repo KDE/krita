@@ -19,7 +19,7 @@
 #include "KoDualColorButton.h"
 #include "KoUniColorDialog.h"
 #include "KoColor.h"
-#include "kcolormimedata.h"
+#include <kcolormimedata.h>
 
 #include "dcolorarrow.xbm"
 #include "dcolorreset.xpm"

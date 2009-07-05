@@ -108,6 +108,12 @@ private:
     qreal findFootnote(const QTextLine &line, int *oldLength);
     void resetPrivate();
 
+    // get the table cell width.
+    qreal resolveTableCellWidth() const;
+
+    // get the table cell X offset.
+    qreal resolveTableCellXOffset() const;
+
 private:
     KoStyleManager *m_styleManager;
 

@@ -30,105 +30,130 @@
 
 #include <math.h>
 
+class KoSnapGuide::Private
+{
+public:
+    Private(KoCanvasBase *parentCanvas)
+    : canvas(parentCanvas), editedShape(0), currentStrategy(0)
+    , usedStrategies(0), active(true), snapDistance(10)
+    {
+    }
+    
+    ~Private()
+    {
+        qDeleteAll( strategies );
+        strategies.clear();
+    }
+    
+    KoCanvasBase * canvas;
+    KoShape * editedShape;
+    
+    QList<KoSnapStrategy*> strategies;
+    KoSnapStrategy * currentStrategy;
+    
+    int usedStrategies;
+    bool active;
+    int snapDistance;
+    QList<KoPathPoint*> ignoredPoints;
+    QList<KoShape*> ignoredShapes;
+};
 
 KoSnapGuide::KoSnapGuide(KoCanvasBase * canvas)
-        : m_canvas(canvas), m_editedShape(0), m_currentStrategy(0)
-        , m_usedStrategies(0), m_active(true), m_snapDistance(10)
+: d(new Private(canvas))
 {
-    m_strategies.append(new GridSnapStrategy());
-    m_strategies.append(new NodeSnapStrategy());
-    m_strategies.append(new OrthogonalSnapStrategy());
-    m_strategies.append(new ExtensionSnapStrategy());
-    m_strategies.append(new IntersectionSnapStrategy());
-    m_strategies.append(new BoundingBoxSnapStrategy());
-    m_strategies.append(new LineGuideSnapStrategy());
+    d->strategies.append(new GridSnapStrategy());
+    d->strategies.append(new NodeSnapStrategy());
+    d->strategies.append(new OrthogonalSnapStrategy());
+    d->strategies.append(new ExtensionSnapStrategy());
+    d->strategies.append(new IntersectionSnapStrategy());
+    d->strategies.append(new BoundingBoxSnapStrategy());
+    d->strategies.append(new LineGuideSnapStrategy());
 }
 
 KoSnapGuide::~KoSnapGuide()
 {
-    qDeleteAll( m_strategies );
-    m_strategies.clear();
+    delete d;
 }
 
 void KoSnapGuide::setEditedShape(KoShape * shape)
 {
-    m_editedShape = shape;
+    d->editedShape = shape;
 }
 
 KoShape * KoSnapGuide::editedShape() const
 {
-    return m_editedShape;
+    return d->editedShape;
 }
 
 void KoSnapGuide::enableSnapStrategies(int strategies)
 {
-    m_usedStrategies = strategies;
+    d->usedStrategies = strategies;
 }
 
 int KoSnapGuide::enabledSnapStrategies() const
 {
-    return m_usedStrategies;
+    return d->usedStrategies;
 }
 
 void KoSnapGuide::enableSnapping(bool on)
 {
-    m_active = on;
+    d->active = on;
 }
 
 bool KoSnapGuide::isSnapping() const
 {
-    return m_active;
+    return d->active;
 }
 
 void KoSnapGuide::setSnapDistance(int distance)
 {
-    m_snapDistance = qAbs(distance);
+    d->snapDistance = qAbs(distance);
 }
 
 int KoSnapGuide::snapDistance() const
 {
-    return m_snapDistance;
+    return d->snapDistance;
 }
 
 QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers modifiers)
 {
-    m_currentStrategy = 0;
+    d->currentStrategy = 0;
 
-    if (! m_active || (modifiers & Qt::ShiftModifier))
+    if (! d->active || (modifiers & Qt::ShiftModifier))
         return mousePosition;
 
     KoSnapProxy proxy(this);
 
     qreal minDistance = HUGE_VAL;
 
-    qreal maxSnapDistance = m_canvas->viewConverter()->viewToDocument(QSizeF(m_snapDistance, m_snapDistance)).width();
+    qreal maxSnapDistance = d->canvas->viewConverter()->viewToDocument(QSizeF(d->snapDistance, d->snapDistance)).width();
 
-    foreach(KoSnapStrategy * strategy, m_strategies) {
-        if (m_usedStrategies & strategy->type() || strategy->type() == KoSnapStrategy::Grid) {
+    foreach(KoSnapStrategy * strategy, d->strategies) {
+        if (d->usedStrategies & strategy->type() || strategy->type() == KoSnapStrategy::Grid) {
             if (! strategy->snap(mousePosition, &proxy, maxSnapDistance))
                 continue;
 
             QPointF snapCandidate = strategy->snappedPosition();
             qreal distance = KoSnapStrategy::squareDistance(snapCandidate, mousePosition);
             if (distance < minDistance) {
-                m_currentStrategy = strategy;
+                d->currentStrategy = strategy;
                 minDistance = distance;
             }
         }
     }
 
-    if (! m_currentStrategy)
+    if (! d->currentStrategy)
         return mousePosition;
 
-    return m_currentStrategy->snappedPosition();
+    return d->currentStrategy->snappedPosition();
 }
 
 QRectF KoSnapGuide::boundingRect()
 {
     QRectF rect;
 
-    if (m_currentStrategy) {
-        rect = m_currentStrategy->decoration(*m_canvas->viewConverter()).boundingRect();
+    if (d->currentStrategy) {
+        rect = d->currentStrategy->decoration(*d->canvas->viewConverter()).boundingRect();
         return rect.adjusted(-2, -2, 2, 2);
     } else {
         return rect;
@@ -137,10 +162,10 @@ QRectF KoSnapGuide::boundingRect()
 
 void KoSnapGuide::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (! m_currentStrategy || ! m_active)
+    if (! d->currentStrategy || ! d->active)
         return;
 
-    QPainterPath decoration = m_currentStrategy->decoration(converter);
+    QPainterPath decoration = d->currentStrategy->decoration(converter);
 
     painter.setBrush(Qt::NoBrush);
 
@@ -157,35 +182,35 @@ void KoSnapGuide::paint(QPainter &painter, const KoViewConverter &converter)
 
 KoCanvasBase * KoSnapGuide::canvas() const
 {
-    return m_canvas;
+    return d->canvas;
 }
 
 void KoSnapGuide::setIgnoredPathPoints(const QList<KoPathPoint*> &ignoredPoints)
 {
-    m_ignoredPoints = ignoredPoints;
+    d->ignoredPoints = ignoredPoints;
 }
 
 QList<KoPathPoint*> KoSnapGuide::ignoredPathPoints() const
 {
-    return m_ignoredPoints;
+    return d->ignoredPoints;
 }
 
 void KoSnapGuide::setIgnoredShapes(const QList<KoShape*> &ignoredShapes)
 {
-    m_ignoredShapes = ignoredShapes;
+    d->ignoredShapes = ignoredShapes;
 }
 
 QList<KoShape*> KoSnapGuide::ignoredShapes() const
 {
-    return m_ignoredShapes;
+    return d->ignoredShapes;
 }
 
 void KoSnapGuide::reset()
 {
-    m_currentStrategy = 0;
-    m_editedShape = 0;
-    m_ignoredPoints.clear();
-    m_ignoredShapes.clear();
+    d->currentStrategy = 0;
+    d->editedShape = 0;
+    d->ignoredPoints.clear();
+    d->ignoredShapes.clear();
 }
 
 /////////////////////////////////////////////////////////

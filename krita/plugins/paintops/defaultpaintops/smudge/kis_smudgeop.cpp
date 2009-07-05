@@ -77,6 +77,9 @@ KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painte
     }
     m_srcdev = new KisPaintDevice(m_source->colorSpace());
     m_target = new KisPaintDevice(m_source->colorSpace());
+    settings->m_optionsWidget->m_sizeOption->sensor()->reset();
+    settings->m_optionsWidget->m_opacityOption->sensor()->reset();
+    settings->m_optionsWidget->m_rateOption->sensor()->reset();
 
 }
 
@@ -97,6 +100,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
         return;
     
     double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
+    if( (scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01 ) return;
 
     KisPaintDeviceSP device = painter()->device();
     QPointF hotSpot = brush->hotSpot(scale, scale);

@@ -47,9 +47,9 @@ class KoCanvasBase;
  * Snapping strategies can be enabled/disabled by passing a mask of corresponding
  * snapping ids to KoSnapGuide::enableSnapStrategies. There can be one or more snapping 
  * strategies enabled at the same time. The best result (with the nearest distance to the 
- * original position) is then used returned to the caller of KoSnapGuide::snap.
+ * original position) is then returned to the caller of KoSnapGuide::snap.
  *
- * The snape guide is part of the KoCanvasBase class and thus can be accessed by any tool
+ * The snap guide is part of the KoCanvasBase class and thus can be accessed by any tool
  * or application via the canvas pointer.
  * For letting the user manage which snap stratgies to enable, there is a snap guide config
  * widget in guiutils.
@@ -116,17 +116,8 @@ public:
     void reset();
 
 private:
-    KoCanvasBase * m_canvas;
-    KoShape * m_editedShape;
-
-    QList<KoSnapStrategy*> m_strategies;
-    KoSnapStrategy * m_currentStrategy;
-
-    int m_usedStrategies;
-    bool m_active;
-    int m_snapDistance;
-    QList<KoPathPoint*> m_ignoredPoints;
-    QList<KoShape*> m_ignoredShapes;
+    class Private;
+    Private * const d;
 };
 
 /**

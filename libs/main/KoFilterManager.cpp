@@ -2,6 +2,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
                  2000, 2001 Werner Trobin <trobin@kde.org>
    Copyright (C) 2004 Nicolas Goutte <goutte@kde.org>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +22,8 @@
 
 #include "KoFilterManager.h"
 #include "KoFilterManager_p.h"
+#include "KoDocument.h"
+#include "KoDocumentEntry.h"
 
 #include <QFile>
 #include <QLabel>
@@ -30,103 +33,24 @@
 #include <QByteArray>
 #include <Q3ValueList>
 
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <KoDocument.h>
-#include <KoDocumentEntry.h>
-#include <klibloader.h>
-#include <k3listbox.h>
+#include <KLocale>
+#include <KMessageBox>
+#include <KLibLoader>
 #include <KSqueezedTextLabel>
-#include <kmimetype.h>
-#include <kdebug.h>
+#include <KMimeType>
+#include <KDebug>
 
 #include <queue>
 
 #include <unistd.h>
 
-class KoFilterManager::Private
-{
-public:
-    bool m_batch;
-    QByteArray m_importMimeType;
-};
-
-
-KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &nativeFormat, const KUrl &url)
-        : KDialog(parent),
-        m_mimeTypes(mimeTypes)
-{
-    setObjectName("kofilterchooser");
-    setButtons(Ok | Cancel);
-    setInitialSize(QSize(300, 350));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
-    setCaption(i18n("Choose Filter"));
-    setModal(true);
-
-    QWidget *page = new QWidget(this);
-    setMainWidget(page);
-
-    QVBoxLayout *layout = new QVBoxLayout(page);
-    if (url.isValid()) {
-        KSqueezedTextLabel *l = new KSqueezedTextLabel(url.path(), page);
-        layout->addWidget(l);
-    }
-    m_filterList = new K3ListBox(page, "filterlist");
-    layout->addWidget(m_filterList);
-    page->setLayout(layout);
-
-    Q_ASSERT(!m_mimeTypes.isEmpty());
-    for (QStringList::ConstIterator it = m_mimeTypes.constBegin();
-            it != m_mimeTypes.constEnd();
-            it++) {
-        KMimeType::Ptr mime = KMimeType::mimeType(*it);
-        const QString name = mime ? mime->comment() : *it;
-        if (! name.isEmpty())
-            m_filterList->insertItem(name);
-    }
-
-    if (nativeFormat == "application/x-kword") {
-        const int index = m_mimeTypes.indexOf("text/plain");
-        if (index > -1)
-            m_filterList->setCurrentItem(index);
-    }
-
-    if (m_filterList->currentItem() == -1)
-        m_filterList->setCurrentItem(0);
-
-    m_filterList->centerCurrentItem();
-    m_filterList->setFocus();
-
-    connect(m_filterList, SIGNAL(selected(int)), this, SLOT(accept()));
-    resize(QSize(520, 400));//.expandedTo(minimumSizeHint()));
-}
-
-KoFilterChooser::~KoFilterChooser()
-{
-}
-
-QString KoFilterChooser::filterSelected()
-{
-    const int item = m_filterList->currentItem();
-
-    if (item > -1)
-        return m_mimeTypes [item];
-    else
-        return QString();
-}
-
-
 // static cache for filter availability
 QMap<QString, bool> KoFilterManager::m_filterAvailable;
-
-const int KoFilterManager::s_area = 30500;
-
 
 KoFilterManager::KoFilterManager(KoDocument* document) :
         m_document(document), m_parentChain(0), m_graph(""), d(new Private)
 {
-    d -> m_batch = false;
+    d->batch = false;
     if (document)
         QObject::connect(this, SIGNAL(sigProgress(int)),
                          document, SIGNAL(sigProgress(int)));
@@ -138,14 +62,14 @@ KoFilterManager::KoFilterManager(const QString& url, const QByteArray& mimetypeH
         m_document(0), m_parentChain(parentChain), m_importUrl(url), m_importUrlMimetypeHint(mimetypeHint),
         m_graph(""), d(new Private)
 {
-    d -> m_batch = false;
+    d->batch = false;
 }
 
 KoFilterManager::KoFilterManager(const QByteArray& mimeType) :
         m_document(0), m_parentChain(0), m_graph(""), d(new Private)
 {
-    d -> m_batch = false;
-    d -> m_importMimeType = mimeType;
+    d->batch = false;
+    d->importMimeType = mimeType;
 }
 
 KoFilterManager::~KoFilterManager()
@@ -164,7 +88,7 @@ QString KoFilterManager::importDocument(const QString& url, KoFilter::Conversion
     if (!m_graph.isValid()) {
         bool userCancelled = false;
 
-        kWarning(s_area) << "Can't open " << t->name() << ", trying filter chooser";
+        kWarning(30500) << "Can't open " << t->name() << ", trying filter chooser";
         if (m_document) {
             if (!m_document->isAutoErrorHandlingEnabled()) {
                 status = KoFilter::BadConversionGraph;
@@ -192,8 +116,8 @@ QString KoFilterManager::importDocument(const QString& url, KoFilter::Conversion
         }
 
         if (!m_graph.isValid()) {
-            kError(s_area) << "Couldn't create a valid graph for this source mimetype: "
-            << t->name() << endl;
+            kError(30500) << "Couldn't create a valid graph for this source mimetype: "
+                << t->name();
             importErrorHelper(t->name(), userCancelled);
             status = KoFilter::BadConversionGraph;
             return QString();
@@ -205,23 +129,28 @@ QString KoFilterManager::importDocument(const QString& url, KoFilter::Conversion
     if (m_document) {
         QByteArray mimeType = m_document->nativeFormatMimeType();
         QStringList extraMimes = m_document->extraNativeMimeTypes(KoDocument::ForImport);
-        int i = 0, n = extraMimes.count();
+        int i = 0;
+        int n = extraMimes.count();
         chain = m_graph.chain(this, mimeType);
-        while (!chain && i < n) {
-            mimeType = extraMimes[i].toUtf8();
-            chain = m_graph.chain(this, mimeType);
+        while (i < n) {
+            QByteArray extraMime = extraMimes[i].toUtf8();
+            // TODO check if its the same target mime then continue
+            KoFilterChain::Ptr newChain(0);
+            newChain = m_graph.chain(this, extraMime);
+            if (!chain || (newChain && newChain->weight() < chain->weight()))
+                chain = newChain;
             ++i;
         }
-    } else if (!d->m_importMimeType.isEmpty()) {
-        chain = m_graph.chain(this, d->m_importMimeType);
+    } else if (!d->importMimeType.isEmpty()) {
+        chain = m_graph.chain(this, d->importMimeType);
     } else {
-        kError(s_area) << "You aren't supposed to use import() from a filter!" << endl;
+        kError(30500) << "You aren't supposed to use import() from a filter!" << endl;
         status = KoFilter::UsageError;
         return QString();
     }
 
     if (!chain) {
-        kError(s_area) << "Couldn't create a valid filter chain!" << endl;
+        kError(30500) << "Couldn't create a valid filter chain!" << endl;
         importErrorHelper(t->name());
         status = KoFilter::BadConversionGraph;
         return QString();
@@ -264,20 +193,20 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
                 chain = m_graph.chain(this, mimeType);
         }
     } else if (!m_importUrlMimetypeHint.isEmpty()) {
-        kDebug(s_area) << "Using the mimetype hint:" << m_importUrlMimetypeHint;
+        kDebug(30500) << "Using the mimetype hint:" << m_importUrlMimetypeHint;
         m_graph.setSourceMimeType(m_importUrlMimetypeHint);
     } else {
         KUrl u;
         u.setPath(m_importUrl);
         KMimeType::Ptr t = KMimeType::findByUrl(u, 0, true);
         if (!t || t->name() == KMimeType::defaultMimeType()) {
-            kError(s_area) << "No mimetype found for" << m_importUrl;
+            kError(30500) << "No mimetype found for" << m_importUrl;
             return KoFilter::BadMimeType;
         }
         m_graph.setSourceMimeType(t->name().toLatin1());
 
         if (!m_graph.isValid()) {
-            kWarning(s_area) << "Can't open" << t->name() << ", trying filter chooser";
+            kWarning(30500) << "Can't open" << t->name() << ", trying filter chooser";
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
             KoFilterChooser chooser(0, KoFilterManager::mimeFilter(), QString(), u);
@@ -291,7 +220,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
     }
 
     if (!m_graph.isValid()) {
-        kError(s_area) << "Couldn't create a valid graph for this source mimetype.";
+        kError(30500) << "Couldn't create a valid graph for this source mimetype.";
         if (!userCancelled) KMessageBox::error(0L, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
@@ -300,7 +229,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
         chain = m_graph.chain(this, mimeType);
 
     if (!chain) {
-        kError(s_area) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
+        kError(30500) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
         KMessageBox::error(0L, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
@@ -375,7 +304,6 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
     const Q3ValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.constEnd();
 
     for (; it != end; ++it) {
-
         QStringList impList; // Import list
         QStringList expList; // Export list
 
@@ -386,7 +314,6 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
                 if (!stopList.contains(testIt))
                     expList.append(testIt);
             }
-
             impList = (*it)->import;
         } else {
             // Export: "stop" mime type should not appear in import
@@ -394,7 +321,6 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
                 if (!stopList.contains(testIt))
                     impList.append(testIt);
             }
-
             expList = (*it)->export_;
         }
 
@@ -418,7 +344,6 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
         if (KoFilterManager::filterAvailable(*it)) {
             QStringList::ConstIterator exportIt = expList.constBegin();
             const QStringList::ConstIterator exportEnd = expList.constEnd();
-
             for (; exportIt != exportEnd; ++exportIt) {
                 // First make sure the export vertex is in place
                 const QByteArray key = (*exportIt).toLatin1();    // latin1 is okay here
@@ -440,8 +365,9 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
                         vertices[(*importIt).toLatin1()]->addEdge(exp);
                 }
             }
-        } else
+        } else {
             kDebug(30500) << "Filter:" << (*it)->service()->name() << " does not apply.";
+        }
     }
 }
 
@@ -477,13 +403,13 @@ QStringList connected(const Q3AsciiDict<Vertex>& vertices, const QByteArray& mim
     }
     return connected;
 }
-}
+} // anon namespace
 
 // The static method to figure out to which parts of the
 // graph this mimetype has a connection to.
-QStringList KoFilterManager::mimeFilter(const QByteArray& mimetype, Direction direction, const QStringList& extraNativeMimeTypes)
+QStringList KoFilterManager::mimeFilter(const QByteArray &mimetype, Direction direction, const QStringList &extraNativeMimeTypes)
 {
-    //kDebug(s_area) <<"mimetype=" << mimetype <<" extraNativeMimeTypes=" << extraNativeMimeTypes;
+    //kDebug(30500) <<"mimetype=" << mimetype <<" extraNativeMimeTypes=" << extraNativeMimeTypes;
     Q3AsciiDict<Vertex> vertices;
     buildGraph(vertices, direction);
 
@@ -497,10 +423,10 @@ QStringList KoFilterManager::mimeFilter(const QByteArray& mimetype, Direction di
     QStringList lst = nativeMimeTypes;
 
     // Now look for filters which output each of those natives mimetypes
-    foreach(const QString & natit, nativeMimeTypes) {
+    foreach(const QString &natit, nativeMimeTypes) {
         const QStringList outMimes = connected(vertices, natit.toLatin1());
-        //kDebug(s_area) <<"output formats connected to mime" << natit <<" :" << outMimes;
-        foreach(const QString & mit, outMimes) {
+        //kDebug(30500) <<"output formats connected to mime" << natit <<" :" << outMimes;
+        foreach(const QString &mit, outMimes) {
             if (!lst.contains(mit))     // append only if not there already. Qt4: QSet<QString>?
                 lst.append(mit);
         }
@@ -566,7 +492,7 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
         KLibrary* library = KLibLoader::self()->library(QFile::encodeName(entry->service()->library()));
         if (!library) {
             kWarning(30500) << "Huh?? Couldn't load the lib: "
-            << KLibLoader::self()->lastErrorMessage() << endl;
+                << KLibLoader::self()->lastErrorMessage() << endl;
             m_filterAvailable[ key ] = false;
             return false;
         }
@@ -576,16 +502,16 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
         KLibrary::void_function_ptr sym = library->resolveFunction(symname);
         if (!sym) {
             kWarning(30500) << "The library " << library->objectName()
-            << " does not offer a check_" << library->objectName()
-            << " function." << endl;
-            m_filterAvailable[ key ] = false;
+                << " does not offer a check_" << library->objectName()
+                << " function." << endl;
+            m_filterAvailable[key] = false;
         } else {
             typedef int (*t_func)();
             t_func check = (t_func)sym;
             m_filterAvailable[ key ] = check() == 1;
         }
     }
-    return m_filterAvailable[ key ];
+    return m_filterAvailable[key];
 }
 
 void KoFilterManager::importErrorHelper(const QString& mimeType, const bool suppressDialog)
@@ -597,13 +523,12 @@ void KoFilterManager::importErrorHelper(const QString& mimeType, const bool supp
 
 void KoFilterManager::setBatchMode(const bool batch)
 {
-    d->m_batch = batch;
+    d->batch = batch;
 }
 
 bool KoFilterManager::getBatchMode(void) const
 {
-    return d->m_batch;
+    return d->batch;
 }
 
 #include <KoFilterManager.moc>
-#include <KoFilterManager_p.moc>

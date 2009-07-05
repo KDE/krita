@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Clarence Dang <dang@kde.org>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,16 +23,20 @@
 #include <QString>
 #include <QStringList>
 
-#include <kurl.h>
-#include <kdialog.h>
+#include <KUrl>
+#include <KDialog>
 
-class K3ListBox;
+class QListWidget;
 
+class KoFilterManager::Private
+{
+public:
+    bool batch;
+    QByteArray importMimeType;
+};
 
 class KoFilterChooser : public KDialog
 {
-    Q_OBJECT
-
 public:
     KoFilterChooser(QWidget *parent, const QStringList &mimeTypes,
                     const QString &nativeFormat = QString(), const KUrl &url = KUrl());
@@ -41,7 +46,7 @@ public:
 
 private:
     QStringList m_mimeTypes;
-    K3ListBox *m_filterList;
+    QListWidget *m_filterList;
 };
 
 #endif

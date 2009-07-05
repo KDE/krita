@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,14 +18,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <priorityqueue.h>
+#include "priorityqueue_test.h"
+#include <PriorityQueue_p.h>
 #include <kdebug.h>
-#include <q3ptrlist.h>
-#include <q3asciidict.h>
-#include <stdlib.h>
-#include <time.h>
+#include <QList>
 
-struct Node {
+struct Node
+{
     Node(unsigned int key) : m_key(key), m_index(0) {}
 
     unsigned int key() const {
@@ -45,15 +45,17 @@ private:
     int m_index;
 };
 
-static const char* const keys[] = { "one",  "two", "three",  "four", "five",
-                                    "six", "seven", "eight", "nine", "ten",
-                                    "eleven", "twelve", 0
-                                  };
-
-int main(int /*argc*/, char ** /*argv*/)
+static const char* const keys[] =
 {
-    Q3PtrList<Node> list;
-    list.setAutoDelete(true);
+    "one",  "two", "three",  "four", "five",
+    "six", "seven", "eight", "nine", "ten",
+    "eleven", "twelve", 0
+};
+
+
+void PriorityQueue_test::testQueue()
+{
+    QList<Node*> list;
     Q3AsciiDict<Node> dict;
 
     KOffice::PriorityQueue<Node> queue;
@@ -63,34 +65,40 @@ int main(int /*argc*/, char ** /*argv*/)
         Node *n = new Node(rand() % 20);
         list.append(n);
         queue.insert(n);
-        // Check whether the AsciiDict CTOR is okay
         Node *n2 = new Node(*n);
-        dict.insert(keys[ i ], n2);
+        dict.insert(keys[i], n2);
     }
 
-    kDebug() << "##### Queue 1:";
-    queue.dump();
+    //kDebug() << "##### Queue 1:";
+    //queue.dump();
+    QCOMPARE((int) queue.count(), list.count());
+    QCOMPARE(queue.isEmpty(), false);
+    QCOMPARE(queue.extractMinimum()->index(), 0);
 
-    kDebug() << "##### Queue 2:";
+
+// TODO figure out what this class is supposed to do and add more tests...
+    //kDebug() << "##### Queue 2:";
     KOffice::PriorityQueue<Node> queue2(dict);
-    queue2.dump();
+    //queue2.dump();
 
     Node *n = list.at(6);
-    kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
+    //kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
     n->setKey(2);
     queue.keyDecreased(n);
-    queue.dump();
+    //queue.dump();
 
     n = list.at(2);
-    kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
+    //kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
     n->setKey(0);
     queue.keyDecreased(n);
-    queue.dump();
+    //queue.dump();
 
     n = queue.extractMinimum();
     while (n) {
-        queue.dump();
+        //queue.dump();
         n = queue.extractMinimum();
     }
-    return 0;
 }
+
+QTEST_MAIN(PriorityQueue_test)
+#include "priorityqueue_test.moc"

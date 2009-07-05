@@ -20,7 +20,6 @@
 #include "KoResourceModel.h"
 
 #include <KoResourceServerAdapter.h>
-#include <KoResourceChooser.h>
 
 KoResourceModel::KoResourceModel( KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent )
     : QAbstractTableModel( parent ), m_resourceAdapter(resourceAdapter), m_columnCount(4)
@@ -54,7 +53,7 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
 
             return QVariant( resource->img() );
         }
-        case KoResourceChooser::LargeThumbnailRole:
+        case KoResourceModel::LargeThumbnailRole:
         {
             KoResource * resource = static_cast<KoResource*>(index.internalPointer());
             if( ! resource )

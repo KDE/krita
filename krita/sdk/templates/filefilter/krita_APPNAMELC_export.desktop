@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=
 Name=Krita %{APPNAMELC} Export Filter
+Name[bg]=Филтър за експортиране от Krita в %{APPNAMELC}
 Name[ca]=Filtre d'exportació %{APPNAMELC} per al Krita
 Name[da]=Krita %{APPNAMELC}-eksportfilter
 Name[de]=Krita %{APPNAMELC}-Exportfilter

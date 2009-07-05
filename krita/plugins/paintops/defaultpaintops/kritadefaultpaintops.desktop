@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Default Paint Operations
-Name[bg]=Операции за рисуване по подразбиране
+Name[bg]=Дайствия за рисуване по подразбиране
 Name[ca]=Operacions de pintura per defecte
 Name[cy]=Gweithrediadau Paent Rhagosodol
 Name[da]=Standard maleoperationer
@@ -46,7 +46,7 @@ Name[x-test]=xxDefault Paint Operationsxx
 Name[zh_CN]=默认绘图操作
 Name[zh_TW]=預設繪圖操作
 Comment=Default paint operations
-Comment[bg]=Операции за рисуване по подразбиране
+Comment[bg]=Действия за рисуване по подразбиране
 Comment[ca]=Operacions de pintura per defecte
 Comment[cy]=Gweithrediadau paent rhagosodol
 Comment[da]=Standard maleoperationer

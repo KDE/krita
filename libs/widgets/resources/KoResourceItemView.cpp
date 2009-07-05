@@ -18,6 +18,8 @@
  */
 
 #include "KoResourceItemView.h"
+#include <QtCore/QEvent>
+#include <QtGui/QHelpEvent>
 #include <QtGui/QHeaderView>
 
 KoResourceItemView::KoResourceItemView( QWidget * parent )

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=XYZ (float 16-bit and 32-bit HDR) Color Model
+Name[bg]=Цветови модел XYZ (16 и 32 бита HDR)
 Name[ca]=Model de color XYZ (flotant 16-bits i HDR 32-bits)
 Name[da]=XYZ-farvemodel (float 16-bit og 32-bit HDR)
 Name[de]=XYZ-Farbmodell (16-bit und 32-bit Fließkomma HDR)
@@ -28,6 +29,7 @@ Name[uk]=Модель кольорі XYZ (дійсні 16-бітові та 32-�
 Name[x-test]=xxXYZ (float 16-bit and 32-bit HDR) Color Modelxx
 Name[zh_TW]=XYZ（浮點 16 位元與 32 位元 HDR）色彩模型
 Comment=Color model for 16-bit and 32-bit per channel in floating point for High-Dynamic Range XYZ images
+Comment[bg]=Цветови модел за 16 и 32 бита на канал за HDR XYZ изображения
 Comment[ca]=Model de color per a 16 bits i 32 bits per canal en punt flotant per a imatges XYZ de marge dinàmic elevat
 Comment[da]=Farvemodel for 16-bit og 32-bit pr. kanal med flydende komma til høj dynamisk rækkevidde XYZ-billeder
 Comment[de]=Farbmodell für 16-bit und 32-bit pro Kanal in Fließkomma für High-Dynamic Range XYZ-Bilder

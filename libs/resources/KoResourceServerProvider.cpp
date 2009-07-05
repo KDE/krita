@@ -78,7 +78,7 @@ QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)
     QStringList extensionList = extensions.split(':');
     QStringList fileNames;
 
-    foreach (QString extension, extensionList) {
+    foreach (const QString &extension, extensionList) {
         fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_server->type().toAscii(), extension);
     }
     return fileNames;

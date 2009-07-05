@@ -1,0 +1,62 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
+#ifndef KOSHAPEPRIVATE_H
+#define KOSHAPEPRIVATE_H
+
+#include "KoShape.h"
+
+class KoShapePrivate
+{
+public:
+    KoShapePrivate(KoShape *shape);
+    virtual ~KoShapePrivate();
+    void shapeChanged(KoShape::ChangeType type);
+
+    QSizeF size; // size in pt
+    QString shapeId;
+    QString name; ///< the shapes names
+
+    QMatrix localMatrix; ///< the shapes local transformation matrix
+
+    QVector<QPointF> connectors; // in pt
+
+    KoShapeContainer *parent;
+    QSet<KoShapeManager *> shapeManagers;
+    KoShapeUserData *userData;
+    KoShapeApplicationData *appData;
+    KoShapeBackground * fill; ///< Stands for the background color / fill etc.
+    KoShapeBorderModel *border; ///< points to a border, or 0 if there is no border
+    KoShape *q;
+    QList<KoShape*> dependees; ///< list of shape dependent on this shape
+    KoShapeShadow * shadow; ///< the current shape shadow
+    QMap<QByteArray, QString> additionalAttributes;
+    QMap<QByteArray, QString> additionalStyleAttributes;
+    QList<KoEventAction *> eventActions; ///< list of event actions the shape has
+
+    int zIndex : 14; // should be enough ;)
+    int visible : 1;
+    int printable : 1;
+    int geometryProtected : 1;
+    int keepAspect : 1;
+    int selectable : 1;
+    int detectCollision : 1;
+    int protectContent : 1;
+};
+
+#endif

@@ -25,6 +25,8 @@
 #include <QtGui/QPainter>
 #include <QtGui/QTableView>
 #include <QtGui/QHeaderView>
+#include <QtGui/QHeaderView>
+#include <QtGui/QMouseEvent>
 
 #include <KDebug>
 

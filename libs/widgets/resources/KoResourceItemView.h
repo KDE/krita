@@ -20,8 +20,10 @@
 #ifndef KORESOURCEITEMVIEW_H
 #define KORESOURCEITEMVIEW_H
 
-#include <KoResourceChooser.h>
+#include <QTableView>
+#include <KoIconToolTip.h>
 
+class QEvent;
 class KoResourceModel;
 
 /// The resource view

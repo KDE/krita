@@ -142,7 +142,8 @@ void KoScriptManagerAddFileWidget::slotUpdate()
 
 KoScriptManagerAddScriptWidget::KoScriptManagerAddScriptWidget(KoScriptManagerAddWizard *wizard)
     : QWidget(wizard),
-    m_wizard(wizard)
+    m_wizard(wizard),
+    m_editor(0)
 {
     setObjectName("ScriptManagerAddScriptWidget");
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -159,11 +160,10 @@ void KoScriptManagerAddScriptWidget::slotUpdate()
     //d->wizard->setValid(d->wizard->m_scriptItem, d->editor && d->editor->isValid());
 
     m_wizard->setValid(m_wizard->m_scriptItem,
-                         ! (m_editor == 0 ||
-                             m_editor->nameEdit()->text().isEmpty() ||
-                             m_editor->textEdit()->text().isEmpty() ||
-                             m_editor->interpreterEdit()->currentText().isEmpty() ||
-                             m_editor->fileEdit()->url().fileName().isEmpty() )
+                         ! (m_editor == 0 || m_editor->nameEdit()->text().isEmpty()
+                             || m_editor->textEdit()->text().isEmpty()
+                             || m_editor->interpreterEdit()->currentText().isEmpty()
+                             || m_editor->fileEdit()->url().fileName().isEmpty() )
                         );
 }
 

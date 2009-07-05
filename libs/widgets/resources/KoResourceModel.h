@@ -23,12 +23,14 @@
 #include <QAbstractTableModel>
 
 class KoAbstractResourceServerAdapter;
+class KoResource;
 
 /// The resource model managing the resource data
 class KoResourceModel : public QAbstractTableModel
 {
+    Q_OBJECT
 public:
-    KoResourceModel( KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent = 0 );
+    explicit KoResourceModel( KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent = 0 );
     virtual ~KoResourceModel() {}
 
     /// reimplemented
@@ -43,6 +45,18 @@ public:
     void setColumnCount( int columnCount );
     /// @returns the resource server adapter the model is connnected to
     KoAbstractResourceServerAdapter * resourceServerAdapter();
+
+    /// Extensions to Qt::ItemDataRole.
+    enum ItemDataRole
+    {
+        /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
+        LargeThumbnailRole = 33
+    };
+
+private slots:
+    void resourceAdded(KoResource *resource);
+    void resourceRemoved(KoResource *resource);
+
 private:
     KoAbstractResourceServerAdapter * m_resourceAdapter;
     int m_columnCount;

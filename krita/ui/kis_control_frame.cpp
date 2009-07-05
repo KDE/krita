@@ -41,7 +41,6 @@
 #include <kactioncollection.h>
 #include <KoDualColorButton.h>
 #include <KoAbstractGradient.h>
-#include <KoResourceItem.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerAdapter.h>

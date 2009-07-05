@@ -29,6 +29,7 @@ class QTextTable;
 class QTextFragment;
 class QTextCharFormat;
 class QTextListFormat;
+class QTextTableFormat;
 class QTextBlockFormat;
 class KoParagraphStyle;
 class KoCharacterStyle;
@@ -42,13 +43,14 @@ public:
     static void dumpDocument(const QTextDocument *document);
     static void dumpFrame(const QTextFrame *frame);
     static void dumpBlock(const QTextBlock &block);
-    static void dumpTable(const QTextTable *);
+    static void dumpTable(const QTextTable *table);
     static void dumpFragment(const QTextFragment &fragment);
     static QString textAttributes(const QTextCharFormat &format);
     static QString textAttributes(const KoCharacterStyle &style);
     static QString paraAttributes(const QTextBlockFormat &format);
     static QString paraAttributes(const KoParagraphStyle &style);
     static QString listAttributes(const QTextListFormat &format);
+    static QString tableAttributes(const QTextTableFormat &tableformat);
     static QString inlineObjectAttributes(const QTextCharFormat &textFormat);
 
 private:

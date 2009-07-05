@@ -22,11 +22,12 @@
 #include "KoDocumentEntry.h"
 #include "KoFilterEntry.h"
 #include "KoDocument.h"
-#include "priorityqueue.h"
+#include "PriorityQueue_p.h"
 
 #include <QMetaMethod>
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
+#include <kdebug.h>
 
 #include <limits.h> // UINT_MAX
 
@@ -654,6 +655,10 @@ KoDocument* KoFilterChain::createDocument(const QByteArray& mimeType)
     return doc;
 }
 
+int KoFilterChain::weight() const
+{
+    return m_chainLinks.count();
+}
 
 namespace KOffice
 {
@@ -735,11 +740,13 @@ void Vertex::relaxVertices(PriorityQueue<Vertex>& queue)
 
 void Vertex::dump(const QByteArray& indent) const
 {
+#ifndef NDEBUG
     kDebug(30500) << indent << "Vertex:" << m_mimeType << " (" << m_weight << "):";
     const QByteArray i(indent + "   ");
     Q3PtrListIterator<Edge> it(m_edges);
     for (; it.current(); ++it)
         it.current()->dump(i);
+#endif
 }
 
 
@@ -798,12 +805,14 @@ KoFilterChain::Ptr Graph::chain(const KoFilterManager* manager, QByteArray& to) 
 
 void Graph::dump() const
 {
+#ifndef NDEBUG
     kDebug(30500) << "+++++++++ Graph::dump +++++++++";
     kDebug(30500) << "From:" << m_from;
     Q3AsciiDictIterator<Vertex> it(m_vertices);
     for (; it.current(); ++it)
         it.current()->dump("   ");
     kDebug(30500) << "+++++++++ Graph::dump (done) +++++++++";
+#endif
 }
 
 // Query the trader and create the vertices and edges representing

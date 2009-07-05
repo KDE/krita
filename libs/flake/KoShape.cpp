@@ -21,6 +21,7 @@
 */
 
 #include "KoShape.h"
+#include "KoShape_p.h"
 #include "KoShapeContainer.h"
 #include "KoShapeLayer.h"
 #include "KoShapeContainerModel.h"
@@ -66,89 +67,60 @@
 
 #include <limits>
 
-class KoShape::Private
+KoShapePrivate::KoShapePrivate(KoShape *shape)
+    : size(50, 50),
+    parent(0),
+    userData(0),
+    appData(0),
+    fill(0),
+    border(0),
+    q(shape),
+    shadow(0),
+    zIndex(0),
+    visible(true),
+    printable(true),
+    geometryProtected(false),
+    keepAspect(false),
+    selectable(true),
+    detectCollision(false),
+    protectContent(false)
 {
-public:
-    Private(KoShape *shape)
-            : size(50, 50),
-            parent(0),
-            userData(0),
-            appData(0),
-            fill(0),
-            border(0),
-            me(shape),
-            shadow(0),
-            zIndex(0),
-            visible(true),
-            printable(true),
-            geometryProtected(false),
-            keepAspect(false),
-            selectable(true),
-            detectCollision(false),
-            protectContent(false)
-    {
+}
+
+KoShapePrivate::~KoShapePrivate()
+{
+    if (parent)
+        parent->removeChild(q);
+    foreach(KoShapeManager *manager, shapeManagers) {
+        manager->remove(q);
+        manager->removeAdditional(q);
     }
+    delete userData;
+    delete appData;
+    if (border && ! border->removeUser())
+        delete border;
+    if (shadow && ! shadow->removeUser())
+        delete shadow;
+    if (fill && ! fill->removeUser())
+        delete fill;
+    qDeleteAll(eventActions);
+}
 
-    ~Private() {
-        if (parent)
-            parent->removeChild(me);
-        foreach(KoShapeManager *manager, shapeManagers) {
-            manager->remove(me);
-            manager->removeAdditional(me);
-        }
-        delete userData;
-        delete appData;
-        if (border && ! border->removeUser())
-            delete border;
-        if (shadow && ! shadow->removeUser())
-            delete shadow;
-        if (fill && ! fill->removeUser())
-            delete fill;
-        qDeleteAll(eventActions);
-    }
+void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
+{
+    if (parent)
+        parent->model()->childChanged(q, type);
+    q->shapeChanged(type);
+    foreach(KoShape * shape, dependees)
+        shape->shapeChanged(type, q);
+}
 
-    void shapeChanged(ChangeType type) {
-        if (parent)
-            parent->model()->childChanged(me, type);
-        me->shapeChanged(type);
-        foreach(KoShape * shape, dependees)
-            shape->shapeChanged(type, me);
-    }
 
-    QSizeF size; // size in pt
-    QString shapeId;
-    QString name; ///< the shapes names
-
-    QMatrix localMatrix; ///< the shapes local transformation matrix
-
-    QVector<QPointF> connectors; // in pt
-
-    KoShapeContainer *parent;
-    QSet<KoShapeManager *> shapeManagers;
-    KoShapeUserData *userData;
-    KoShapeApplicationData *appData;
-    KoShapeBackground * fill; ///< Stands for the background color / fill etc.
-    KoShapeBorderModel *border; ///< points to a border, or 0 if there is no border
-    KoShape *me;
-    QList<KoShape*> dependees; ///< list of shape dependent on this shape
-    KoShapeShadow * shadow; ///< the current shape shadow
-    QMap<QByteArray, QString> additionalAttributes;
-    QMap<QByteArray, QString> additionalStyleAttributes;
-    QList<KoEventAction *> eventActions; ///< list of event actions the shape has
-
-    int zIndex : 14; // should be enough ;)
-    int visible : 1;
-    int printable : 1;
-    int geometryProtected : 1;
-    int keepAspect : 1;
-    int selectable : 1;
-    int detectCollision : 1;
-    int protectContent : 1;
-};
-
+// ======== KoShape
 KoShape::KoShape()
-        : d(new Private(this))
+        : d_ptr(new KoShapePrivate(this))
 {
+    Q_D(KoShape);
     d->connectors.append(QPointF(0.5, 0.0));
     d->connectors.append(QPointF(1.0, 0.5));
     d->connectors.append(QPointF(0.5, 1.0));
@@ -157,10 +129,16 @@ KoShape::KoShape()
     notifyChanged();
 }
 
+KoShape::KoShape(KoShapePrivate &dd)
+    : d_ptr(&dd)
+{
+}
+
 KoShape::~KoShape()
 {
+    Q_D(KoShape);
     d->shapeChanged(Deleted);
-    delete d;
+    delete d_ptr;
 }
 
 void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
@@ -187,6 +165,7 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
 
 void KoShape::setScale(qreal sx, qreal sy)
 {
+    Q_D(KoShape);
     QPointF pos = position();
     QMatrix scaleMatrix;
     scaleMatrix.translate(pos.x(), pos.y());
@@ -200,6 +179,7 @@ void KoShape::setScale(qreal sx, qreal sy)
 
 void KoShape::rotate(qreal angle)
 {
+    Q_D(KoShape);
     QPointF center = d->localMatrix.map(QPointF(0.5 * size().width(), 0.5 * size().height()));
     QMatrix rotateMatrix;
     rotateMatrix.translate(center.x(), center.y());
@@ -213,6 +193,7 @@ void KoShape::rotate(qreal angle)
 
 void KoShape::setShear(qreal sx, qreal sy)
 {
+    Q_D(KoShape);
     QPointF pos = position();
     QMatrix shearMatrix;
     shearMatrix.translate(pos.x(), pos.y());
@@ -226,6 +207,7 @@ void KoShape::setShear(qreal sx, qreal sy)
 
 void KoShape::setSize(const QSizeF &newSize)
 {
+    Q_D(KoShape);
     QSizeF oldSize(size());
     if (oldSize == newSize)
         return;
@@ -254,6 +236,7 @@ void KoShape::setSize(const QSizeF &newSize)
 
 void KoShape::setPosition(const QPointF &newPosition)
 {
+    Q_D(KoShape);
     QPointF currentPos = position();
     if (newPosition == currentPos)
         return;
@@ -267,6 +250,7 @@ void KoShape::setPosition(const QPointF &newPosition)
 
 bool KoShape::hitTest(const QPointF &position) const
 {
+    Q_D(const KoShape);
     if (d->parent && d->parent->childClipped(this) && !d->parent->hitTest(position))
         return false;
 
@@ -293,6 +277,7 @@ bool KoShape::hitTest(const QPointF &position) const
 
 QRectF KoShape::boundingRect() const
 {
+    Q_D(const KoShape);
     QRectF bb(QPointF(0, 0), size());
     if (d->border) {
         KoInsets insets;
@@ -310,6 +295,7 @@ QRectF KoShape::boundingRect() const
 
 QMatrix KoShape::absoluteTransformation(const KoViewConverter *converter) const
 {
+    Q_D(const KoShape);
     QMatrix matrix;
     // apply parents matrix to inherit any transformations done there.
     KoShapeContainer * container = d->parent;
@@ -346,6 +332,7 @@ void KoShape::applyAbsoluteTransformation(const QMatrix &matrix)
 
 void KoShape::applyTransformation(const QMatrix &matrix)
 {
+    Q_D(KoShape);
     d->localMatrix = matrix * d->localMatrix;
     notifyChanged();
     d->shapeChanged(GenericMatrixChange);
@@ -353,6 +340,7 @@ void KoShape::applyTransformation(const QMatrix &matrix)
 
 void KoShape::setTransformation(const QMatrix &matrix)
 {
+    Q_D(KoShape);
     d->localMatrix = matrix;
     notifyChanged();
     d->shapeChanged(GenericMatrixChange);
@@ -360,6 +348,7 @@ void KoShape::setTransformation(const QMatrix &matrix)
 
 QMatrix KoShape::transformation() const
 {
+    Q_D(const KoShape);
     return d->localMatrix;
 }
 
@@ -385,6 +374,7 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 
 void KoShape::setParent(KoShapeContainer *parent)
 {
+    Q_D(KoShape);
     if (d->parent == parent)
         return;
     KoShapeContainer *oldParent = d->parent;
@@ -401,6 +391,7 @@ void KoShape::setParent(KoShapeContainer *parent)
 
 int KoShape::zIndex() const
 {
+    Q_D(const KoShape);
     if (parent()) // we can't be under our parent...
         return qMax((int) d->zIndex, parent()->zIndex());
     return d->zIndex;
@@ -408,6 +399,7 @@ int KoShape::zIndex() const
 
 void KoShape::update() const
 {
+    Q_D(const KoShape);
     if (!d->shapeManagers.empty()) {
         QRectF rect(boundingRect());
         foreach(KoShapeManager * manager, d->shapeManagers)
@@ -417,6 +409,7 @@ void KoShape::update() const
 
 void KoShape::update(const QRectF &shape) const
 {
+    Q_D(const KoShape);
     if (!d->shapeManagers.empty() && isVisible()) {
         QRectF rect(absoluteTransformation(0).mapRect(shape));
         foreach(KoShapeManager * manager, d->shapeManagers) {
@@ -427,6 +420,7 @@ void KoShape::update(const QRectF &shape) const
 
 const QPainterPath KoShape::outline() const
 {
+    Q_D(const KoShape);
     QPainterPath path;
     path.addRect(QRectF(QPointF(0, 0), QSizeF(qMax(d->size.width(), qreal(0.0001)), qMax(d->size.height(), qreal(0.0001)))));
     return path;
@@ -447,6 +441,7 @@ QPointF KoShape::absolutePosition(KoFlake::Position anchor) const
 
 void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor)
 {
+    Q_D(KoShape);
     QPointF currentAbsPosition = absolutePosition(anchor);
     QPointF translate = newPosition - currentAbsPosition;
     QMatrix translateMatrix;
@@ -458,6 +453,7 @@ void KoShape::setAbsolutePosition(QPointF newPosition, KoFlake::Position anchor)
 
 void KoShape::copySettings(const KoShape *shape)
 {
+    Q_D(KoShape);
     d->size = shape->size();
     d->connectors.clear();
     foreach(const QPointF & point, shape->connectionPoints())
@@ -473,11 +469,12 @@ void KoShape::copySettings(const KoShape *shape)
 
     d->geometryProtected = shape->isGeometryProtected();
     d->keepAspect = shape->keepAspectRatio();
-    d->localMatrix = shape->d->localMatrix;
+    d->localMatrix = shape->d_ptr->localMatrix;
 }
 
 void KoShape::notifyChanged()
 {
+    Q_D(KoShape);
     foreach(KoShapeManager * manager, d->shapeManagers) {
         manager->notifyShapeChanged(this);
     }
@@ -485,28 +482,33 @@ void KoShape::notifyChanged()
 
 void KoShape::setUserData(KoShapeUserData *userData)
 {
+    Q_D(KoShape);
     delete d->userData;
     d->userData = userData;
 }
 
 KoShapeUserData *KoShape::userData() const
 {
+    Q_D(const KoShape);
     return d->userData;
 }
 
 void KoShape::setApplicationData(KoShapeApplicationData *appData)
 {
+    Q_D(KoShape);
     // appdata is deleted by the application.
     d->appData = appData;
 }
 
 KoShapeApplicationData *KoShape::applicationData() const
 {
+    Q_D(const KoShape);
     return d->appData;
 }
 
 bool KoShape::hasTransparency()
 {
+    Q_D(KoShape);
     if (! d->fill)
         return true;
     else
@@ -515,6 +517,7 @@ bool KoShape::hasTransparency()
 
 KoInsets KoShape::borderInsets() const
 {
+    Q_D(const KoShape);
     KoInsets answer;
     if (d->border)
         d->border->borderInsets(this, answer);
@@ -523,6 +526,7 @@ KoInsets KoShape::borderInsets() const
 
 qreal KoShape::rotation() const
 {
+    Q_D(const KoShape);
     // try to extract the rotation angle out of the local matrix
     // if it is a pure rotation matrix
 
@@ -543,11 +547,13 @@ qreal KoShape::rotation() const
 
 QSizeF KoShape::size() const
 {
+    Q_D(const KoShape);
     return d->size;
 }
 
 QPointF KoShape::position() const
 {
+    Q_D(const KoShape);
     QPointF center(0.5*size().width(), 0.5*size().height());
     return d->localMatrix.map(center) - center;
     //return d->localMatrix.map( QPointF(0,0) );
@@ -555,6 +561,7 @@ QPointF KoShape::position() const
 
 void KoShape::addConnectionPoint(const QPointF &point)
 {
+    Q_D(KoShape);
     QSizeF s = size();
     // convert glue point from shape coordinates to factors of size
     d->connectors.append(QPointF(point.x() / s.width(), point.y() / s.height()));
@@ -562,6 +569,7 @@ void KoShape::addConnectionPoint(const QPointF &point)
 
 QList<QPointF> KoShape::connectionPoints() const
 {
+    Q_D(const KoShape);
     QList<QPointF> points;
     QSizeF s = size();
     // convert glue points to shape coordinates
@@ -573,6 +581,7 @@ QList<QPointF> KoShape::connectionPoints() const
 
 void KoShape::addEventAction(KoEventAction * action)
 {
+    Q_D(KoShape);
     if (! d->eventActions.contains(action)) {
         d->eventActions.append(action);
     }
@@ -580,6 +589,7 @@ void KoShape::addEventAction(KoEventAction * action)
 
 void KoShape::removeEventAction(KoEventAction * action)
 {
+    Q_D(KoShape);
     if (d->eventActions.contains(action)) {
         d->eventActions.removeAll(action);
     }
@@ -587,11 +597,13 @@ void KoShape::removeEventAction(KoEventAction * action)
 
 QList<KoEventAction *> KoShape::eventActions() const
 {
+    Q_D(const KoShape);
     return d->eventActions;
 }
 
 void KoShape::setBackground(KoShapeBackground * fill)
 {
+    Q_D(KoShape);
     if (d->fill)
         d->fill->removeUser();
     d->fill = fill;
@@ -603,22 +615,26 @@ void KoShape::setBackground(KoShapeBackground * fill)
 
 KoShapeBackground * KoShape::background() const
 {
+    Q_D(const KoShape);
     return d->fill;
 }
 
 void KoShape::setZIndex(int zIndex)
 {
+    Q_D(KoShape);
     notifyChanged();
     d->zIndex = zIndex;
 }
 
 void KoShape::setVisible(bool on)
 {
+    Q_D(KoShape);
     d->visible = on;
 }
 
 bool KoShape::isVisible(bool recursive) const
 {
+    Q_D(const KoShape);
     if (! recursive)
         return d->visible;
     if (recursive && ! d->visible)
@@ -635,11 +651,13 @@ bool KoShape::isVisible(bool recursive) const
 
 void KoShape::setPrintable(bool on)
 {
+    Q_D(KoShape);
     d->printable = on;
 }
 
 bool KoShape::isPrintable() const
 {
+    Q_D(const KoShape);
     if (d->visible)
         return d->printable;
     else
@@ -648,86 +666,103 @@ bool KoShape::isPrintable() const
 
 void KoShape::setSelectable(bool selectable)
 {
+    Q_D(KoShape);
     d->selectable = selectable;
 }
 
 bool KoShape::isSelectable() const
 {
+    Q_D(const KoShape);
     return d->selectable;
 }
 
 void KoShape::setGeometryProtected(bool on)
 {
+    Q_D(KoShape);
     d->geometryProtected = on;
 }
 
 bool KoShape::isGeometryProtected() const
 {
+    Q_D(const KoShape);
     return d->geometryProtected;
 }
 
 void KoShape::setContentProtected(bool protect)
 {
+    Q_D(KoShape);
     d->protectContent = protect;
 }
 
 bool KoShape::isContentProtected() const
 {
+    Q_D(const KoShape);
     return d->protectContent;
 }
 
 KoShapeContainer *KoShape::parent() const
 {
+    Q_D(const KoShape);
     return d->parent;
 }
 
 void KoShape::setKeepAspectRatio(bool keepAspect)
 {
+    Q_D(KoShape);
     d->keepAspect = keepAspect;
 }
 
 bool KoShape::keepAspectRatio() const
 {
+    Q_D(const KoShape);
     return d->keepAspect;
 }
 
 const QString &KoShape::shapeId() const
 {
+    Q_D(const KoShape);
     return d->shapeId;
 }
 
 void KoShape::setShapeId(const QString &id)
 {
+    Q_D(KoShape);
     d->shapeId = id;
 }
 
 void KoShape::setCollisionDetection(bool detect)
 {
+    Q_D(KoShape);
     d->detectCollision = detect;
 }
 
 bool KoShape::collisionDetection()
 {
+    Q_D(KoShape);
     return d->detectCollision;
 }
 
 void KoShape::addShapeManager(KoShapeManager * manager)
 {
+    Q_D(KoShape);
     d->shapeManagers.insert(manager);
 }
 
 void KoShape::removeShapeManager(KoShapeManager * manager)
 {
+    Q_D(KoShape);
     d->shapeManagers.remove(manager);
 }
 
 KoShapeBorderModel *KoShape::border() const
 {
+    Q_D(const KoShape);
     return d->border;
 }
 
 void KoShape::setBorder(KoShapeBorderModel *border)
 {
+    Q_D(KoShape);
     if (d->border)
         d->border->removeUser();
     d->border = border;
@@ -739,6 +774,7 @@ void KoShape::setBorder(KoShapeBorderModel *border)
 
 void KoShape::setShadow(KoShapeShadow * shadow)
 {
+    Q_D(KoShape);
     if (d->shadow)
         d->shadow->removeUser();
     d->shadow = shadow;
@@ -750,32 +786,38 @@ void KoShape::setShadow(KoShapeShadow * shadow)
 
 KoShapeShadow * KoShape::shadow() const
 {
+    Q_D(const KoShape);
     return d->shadow;
 }
 
 const QMatrix& KoShape::matrix() const
 {
+    Q_D(const KoShape);
     return d->localMatrix;
 }
 
 void KoShape::removeConnectionPoint(int index)
 {
+    Q_D(KoShape);
     if (index < d->connectors.count())
         d->connectors.remove(index);
 }
 
 QString KoShape::name() const
 {
+    Q_D(const KoShape);
     return d->name;
 }
 
 void KoShape::setName(const QString & name)
 {
+    Q_D(KoShape);
     d->name = name;
 }
 
 void KoShape::deleteLater()
 {
+    Q_D(KoShape);
     foreach(KoShapeManager *manager, d->shapeManagers)
         manager->remove(this);
     d->shapeManagers.clear();
@@ -784,6 +826,7 @@ void KoShape::deleteLater()
 
 bool KoShape::isEditable() const
 {
+    Q_D(const KoShape);
     if (!d->visible || d->geometryProtected)
         return false;
 
@@ -796,6 +839,7 @@ bool KoShape::isEditable() const
 // loading & saving methods
 QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
+    Q_D(const KoShape);
     // and fill the style
     KoShapeBorderModel * b = border();
     if (b) {
@@ -829,7 +873,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         value += "content";
     }
     if (!value.isEmpty())
-        d->additionalStyleAttributes.insert("style:protect", value);
+        (const_cast<KoShapePrivate*>(d))->additionalStyleAttributes.insert("style:protect", value);
 
     QMap<QByteArray, QString>::const_iterator it(d->additionalStyleAttributes.constBegin());
     for (; it != d->additionalStyleAttributes.constEnd(); ++it) {
@@ -862,6 +906,7 @@ void KoShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext &con
 
 bool KoShape::loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingContext &context, int attributes)
 {
+    Q_D(KoShape);
     if (attributes & OdfPosition) {
         QPointF pos(position());
         if (element.hasAttributeNS(KoXmlNS::svg, "x"))
@@ -984,13 +1029,13 @@ KoShapeBorderModel * KoShape::loadOdfStroke(const KoXmlElement & element, KoShap
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
-    
+
     QString stroke = getStyleProperty("stroke", element, context);
     if (stroke == "solid" || stroke == "dash") {
         QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke, stylesReader);
 
         KoLineBorder * border = new KoLineBorder();
-        
+
         if (styleStack.hasProperty(KoXmlNS::koffice, "stroke-gradient")) {
             QString gradientName = styleStack.property(KoXmlNS::koffice, "stroke-gradient");
             QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyleByName(stylesReader, gradientName, size());
@@ -1114,6 +1159,7 @@ QMatrix KoShape::parseOdfTransform(const QString &transform)
 
 void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) const
 {
+    Q_D(const KoShape);
     if (attributes & OdfStyle) {
         KoGenStyle style;
         // all items that should be written to 'draw:frame' and any other 'draw:' object that inherits this shape
@@ -1191,6 +1237,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 
 void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
 {
+    Q_D(const KoShape);
     // save event listeners see ODF 9.2.21 Event Listeners
     if (d->eventActions.size() > 0) {
         context.xmlWriter().startElement("office:event-listeners");
@@ -1241,21 +1288,23 @@ QRectF KoShape::documentToShape(const QRectF &rect) const
 
 bool KoShape::addDependee(KoShape * shape)
 {
+    Q_D(KoShape);
     if (! shape)
         return false;
-    
+
     // refuse to establish a circular dependency
     if (shape->hasDependee(this))
         return false;
-    
+
     if (! d->dependees.contains(shape))
         d->dependees.append(shape);
-    
+
     return true;
 }
 
 void KoShape::removeDependee(KoShape * shape)
 {
+    Q_D(KoShape);
     int index = d->dependees.indexOf(shape);
     if (index >= 0)
         d->dependees.removeAt(index);
@@ -1263,6 +1312,7 @@ void KoShape::removeDependee(KoShape * shape)
 
 bool KoShape::hasDependee(KoShape * shape) const
 {
+    Q_D(const KoShape);
     return d->dependees.contains(shape);
 }
 
@@ -1274,6 +1324,7 @@ void KoShape::shapeChanged(ChangeType type, KoShape *shape)
 
 void KoShape::notifyChangedShape(ChangeType type)
 {
+    Q_D(KoShape);
     d->shapeChanged(type);
 }
 
@@ -1284,31 +1335,37 @@ KoSnapData KoShape::snapData() const
 
 void KoShape::setAdditionalAttribute(const char * name, const QString & value)
 {
+    Q_D(KoShape);
     d->additionalAttributes.insert(name, value);
 }
 
 void KoShape::removeAdditionalAttribute(const char * name)
 {
+    Q_D(KoShape);
     d->additionalAttributes.remove(name);
 }
 
 bool KoShape::hasAdditionalAttribute(const char * name) const
 {
+    Q_D(const KoShape);
     return d->additionalAttributes.contains(name);
 }
 
 QString KoShape::additionalAttribute(const char * name) const
 {
+    Q_D(const KoShape);
     return d->additionalAttributes.value(name);
 }
 
 void KoShape::setAdditionalStyleAttribute(const char * name, const QString & value)
 {
+    Q_D(KoShape);
     d->additionalStyleAttributes.insert(name, value);
 }
 
 void KoShape::removeAdditionalStyleAttribute(const char * name)
 {
+    Q_D(KoShape);
     d->additionalStyleAttributes.remove(name);
 }
 

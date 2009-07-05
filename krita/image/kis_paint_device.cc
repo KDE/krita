@@ -507,32 +507,33 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
     KisPaintDeviceSP thumbnail = new KisPaintDevice(colorSpace());
     thumbnail->clear();
 
-    int srcw, srch;
+    int srcWidth, srcHeight;
+    int srcX0, srcY0;
     const QRect e = extent();
-    srcw = e.width();
-    srch = e.height();
+    e.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
+    
 
-    if (w > srcw) {
-        w = srcw;
-        h = qint32(double(srcw) / w * h);
+    if (w > srcWidth) {
+        w = srcWidth;
+        h = qint32(double(srcWidth) / w * h);
     }
-    if (h > srch) {
-        h = srch;
-        w = qint32(double(srch) / h * w);
+    if (h > srcHeight) {
+        h = srcHeight;
+        w = qint32(double(srcHeight) / h * w);
     }
 
-    if (srcw > srch)
-        h = qint32(double(srch) / srcw * w);
-    else if (srch > srcw)
-        w = qint32(double(srcw) / srch * h);
+    if (srcWidth > srcHeight)
+        h = qint32(double(srcHeight) / srcWidth * w);
+    else if (srcHeight > srcWidth)
+        w = qint32(double(srcWidth) / srcHeight * h);
 
     KisRandomConstAccessorPixel iter = createRandomConstAccessor(0, 0);
     KisRandomAccessorPixel dstIter = thumbnail->createRandomAccessor( 0, 0 );
 
     for (qint32 y = 0; y < h; ++y) {
-        qint32 iY = (y * srch) / h;
+        qint32 iY = srcY0 + (y * srcHeight) / h;
         for (qint32 x = 0; x < w; ++x) {
-            qint32 iX = (x * srcw) / w;
+            qint32 iX = srcX0 + (x * srcWidth) / w;
             iter.moveTo(iX, iY);
             dstIter.moveTo(x,  y );
             memcpy( dstIter.rawData(), iter.rawData(), m_d->pixelSize );

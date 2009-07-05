@@ -152,16 +152,17 @@ void KoPathPoint::removeControlPoint2()
 
 void KoPathPoint::setProperties(KoPointProperties properties)
 {
-    if (! activeControlPoint1() || ! activeControlPoint2()) {
-        // strip smooth and symmetric flags if points has not two control points
-        properties &= ~IsSmooth;
-        properties &= ~IsSymmetric;
-    }
     d->properties = properties;
     // CloseSubpath only allowed with StartSubpath or StopSubpath
     if ((d->properties & StartSubpath) == 0 && (d->properties & StopSubpath) == 0)
         d->properties &= ~CloseSubpath;
 
+    if (! activeControlPoint1() || ! activeControlPoint2()) {
+        // strip smooth and symmetric flags if point has not two control points
+        d->properties &= ~IsSmooth;
+        d->properties &= ~IsSymmetric;
+    }
+    
     if (d->shape)
         d->shape->notifyChanged();
 }
@@ -175,18 +176,21 @@ void KoPathPoint::setProperty(KoPointProperty property)
         // nothing special to do here
         break;
     case IsSmooth:
-        if (! activeControlPoint1() || ! activeControlPoint2())
-            return;
         d->properties &= ~IsSymmetric;
         break;
     case IsSymmetric:
-        if (! activeControlPoint1() || ! activeControlPoint2())
-            return;
         d->properties &= ~IsSmooth;
         break;
     default: return;
     }
+
     d->properties |= property;
+
+    if (! activeControlPoint1() || ! activeControlPoint2()) {
+        // strip smooth and symmetric flags if point has not two control points
+        d->properties &= ~IsSymmetric;
+        d->properties &= ~IsSmooth;
+    }
 }
 
 void KoPathPoint::unsetProperty(KoPointProperty property)

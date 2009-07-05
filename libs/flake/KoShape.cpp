@@ -85,6 +85,10 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
     detectCollision(false),
     protectContent(false)
 {
+    connectors.append(QPointF(0.5, 0.0));
+    connectors.append(QPointF(1.0, 0.5));
+    connectors.append(QPointF(0.5, 1.0));
+    connectors.append(QPointF(0.0, 0.5));
 }
 
 KoShapePrivate::~KoShapePrivate()
@@ -120,12 +124,6 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
 KoShape::KoShape()
         : d_ptr(new KoShapePrivate(this))
 {
-    Q_D(KoShape);
-    d->connectors.append(QPointF(0.5, 0.0));
-    d->connectors.append(QPointF(1.0, 0.5));
-    d->connectors.append(QPointF(0.5, 1.0));
-    d->connectors.append(QPointF(0.0, 0.5));
-
     notifyChanged();
 }
 

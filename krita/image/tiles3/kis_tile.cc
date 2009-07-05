@@ -90,7 +90,7 @@ KisTile::~KisTile()
 void KisTile::lockForRead() const
 {
     DEBUG_LOG_ACTION("lock [R]");
-    m_lock.lock();
+//    m_lock.lock();
     globalTileDataStore.ensureTileDataLoaded(m_tileData);
 }
 
@@ -111,14 +111,14 @@ void KisTile::lockForWrite()
     }
 
     DEBUG_LOG_ACTION("lock [W]");
-    m_lock.lock();
+//    m_lock.lock();
     globalTileDataStore.ensureTileDataLoaded(m_tileData);
 }
 
 void KisTile::unlock() const
 {
     DEBUG_LOG_ACTION("unlock");
-    m_lock.unlock();
+//    m_lock.unlock();
 }
 
 

@@ -29,23 +29,6 @@
 class QImage;
 
 /**
- * paintop options can react one or more of these actuators to change a certain
- * property of that option, such as brush size or opacity. If the same actuator
- * influences more than one option at the same time, that's no problem: both
- * options will be changed. It is also possible to have more than one actuator
- * associated with a single paintop, so you can change the brush size with mouse
- * wheel, tilt, pressure and shortcut keys at the same time. The default shortcut
- * keys are [ and ].
- */
-enum KRITA_PAINTOP_OPTION_ACTUATOR {
-    PRESSURE,
-    TILT,
-    WHEEL,
-    RATE,
-    SHORTCUTS
-};
-
-/**
  * A KisPaintOpPreset contains a particular set of settings
  * associated with a paintop, like brush, paintopsettings.
  */
@@ -72,13 +55,6 @@ public:
 
     /// return the settings that define this paintop preset
     KisPaintOpSettingsSP settings() const;
-
-    /**
-     * reimplement this function to pass the actuator event to all options
-     * that react to actuators
-     */
-    //virtual void actuate( KisActuatorEvent* event );
-
 
     bool load();
 

@@ -83,6 +83,7 @@ private:
     KoPathPoint *m_firstPoint;
     int m_handleRadius;
     bool m_mouseOverFirstPoint;
+    bool m_pointIsDragged;
     KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
     KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
     KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on

@@ -122,6 +122,7 @@ KoCreatePathTool::KoCreatePathTool(KoCanvasBase * canvas)
         , m_firstPoint(0)
         , m_handleRadius(3)
         , m_mouseOverFirstPoint(false)
+        , m_pointIsDragged(false)
         , m_existingStartPoint(0)
         , m_existingEndPoint(0)
         , m_hoveredPoint(0)
@@ -155,12 +156,12 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         painter.setBrush(Qt::white);   //TODO make configurable
 
         const bool firstPoint = (m_firstPoint == m_activePoint);
-        const bool pointIsBeingDragged = m_activePoint->activeControlPoint1();
-        if (pointIsBeingDragged || firstPoint) {
+        if (m_pointIsDragged || firstPoint) {
             const bool onlyPaintActivePoints = false;
-            m_activePoint->paint(painter, m_handleRadius,
-                                 KoPathPoint::ControlPoint1 | KoPathPoint::ControlPoint2,
-                                 onlyPaintActivePoints);
+            KoPathPoint::KoPointTypes paintFlags = KoPathPoint::ControlPoint2;
+            if (m_activePoint->activeControlPoint1())
+                paintFlags |= KoPathPoint::ControlPoint1;
+            m_activePoint->paint(painter, m_handleRadius, paintFlags, onlyPaintActivePoints);
         }
 
         // paint the first point
@@ -304,19 +305,23 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
     m_mouseOverFirstPoint = handleGrabRect(m_firstPoint->point()).contains(event->point);
 
     m_canvas->updateCanvas(m_shape->boundingRect());
-
+    m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
+    QPointF snappedPosition = m_canvas->snapGuide()->snap(event->point, event->modifiers());
+    
     repaintActivePoint();
     if (event->buttons() & Qt::LeftButton) {
-        m_activePoint->setControlPoint2(event->point);
-        m_activePoint->setControlPoint1(m_activePoint->point() + (m_activePoint->point() - event->point));
-        m_canvas->updateCanvas(m_shape->boundingRect());
+        m_pointIsDragged = true;
+        QPointF offset = snappedPosition - m_activePoint->point();
+        m_activePoint->setControlPoint2(m_activePoint->point() + offset);
+        if ((event->modifiers() & Qt::AltModifier) == 0)
+            m_activePoint->setControlPoint1(m_activePoint->point() - offset);
         repaintActivePoint();
     } else {
-        m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
-        m_activePoint->setPoint(m_canvas->snapGuide()->snap(event->point, event->modifiers()));
-        m_canvas->updateCanvas(m_shape->boundingRect());
-        m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
+        m_activePoint->setPoint(snappedPosition);
     }
+
+    m_canvas->updateCanvas(m_shape->boundingRect());
+    m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
 }
 
 void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -325,6 +330,7 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
         return;
 
     repaintActivePoint();
+    m_pointIsDragged = false;
     m_activePoint = m_shape->lineTo(event->point);
     m_canvas->snapGuide()->setIgnoredPathPoints( (QList<KoPathPoint*>()<<m_activePoint) );
 }
@@ -428,9 +434,8 @@ void KoCreatePathTool::addPathShape()
 void KoCreatePathTool::repaintActivePoint()
 {
     const bool isFirstPoint = (m_activePoint == m_firstPoint);
-    const bool pointIsBeeingDragged = m_activePoint->activeControlPoint1();
 
-    if (!isFirstPoint && !pointIsBeeingDragged)
+    if (!isFirstPoint && !m_pointIsDragged)
         return;
 
     QRectF rect = m_activePoint->boundingRect(false);

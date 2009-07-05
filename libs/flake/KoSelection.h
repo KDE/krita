@@ -33,7 +33,6 @@
 
 #include "flake_export.h"
 
-class KoShapeGroup;
 class KoShapeLayer;
 class KoSelectionPrivate;
 

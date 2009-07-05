@@ -21,6 +21,8 @@
 
 #include "KoShape_p.h"
 
+class KoShapeGroup;
+
 class KoSelectionPrivate : public KoShapePrivate
 {
 public:

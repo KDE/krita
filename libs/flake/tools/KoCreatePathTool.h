@@ -37,6 +37,7 @@ class QRectF;
  */
 class FLAKE_EXPORT KoCreatePathTool : public KoTool
 {
+    Q_OBJECT
 public:
     /**
      * Constructor for the tool that allows you to create new paths by hand.
@@ -54,9 +55,9 @@ public:
     virtual void keyPressEvent(QKeyEvent *event);
 
 public slots:
-    void activate(bool temporary = false);
+    virtual void activate(bool temporary = false);
     virtual void deactivate();
-    void resourceChanged(int key, const QVariant & res);
+    virtual void resourceChanged(int key, const QVariant & res);
 
 protected:
     /// add path shape to document
@@ -66,8 +67,10 @@ protected:
 
     KoPathShape *m_shape;
 
+private slots:
+    void angleDeltaChanged(int value);
+    
 private:
-    QRectF handleRect(const QPointF &p);
     void repaintActivePoint();
     
     /// returns the nearest existing path point 
@@ -83,6 +86,10 @@ private:
     KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
     KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
     KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on
+
+    class AngleSnapStrategy;
+    AngleSnapStrategy *m_angleSnapStrategy;
+    int m_angleSnappingDelta;
 };
 #endif
 

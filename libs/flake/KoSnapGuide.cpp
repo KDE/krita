@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -95,6 +95,15 @@ int KoSnapGuide::enabledSnapStrategies() const
     return d->usedStrategies;
 }
 
+bool KoSnapGuide::addCustomSnapStrategy(KoSnapStrategy * customStrategy)
+{
+    if (!customStrategy || customStrategy->type() != KoSnapStrategy::Custom)
+        return false;
+    
+    d->strategies.append(customStrategy);
+    return true;
+}
+
 void KoSnapGuide::enableSnapping(bool on)
 {
     d->active = on;
@@ -129,7 +138,9 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
     qreal maxSnapDistance = d->canvas->viewConverter()->viewToDocument(QSizeF(d->snapDistance, d->snapDistance)).width();
 
     foreach(KoSnapStrategy * strategy, d->strategies) {
-        if (d->usedStrategies & strategy->type() || strategy->type() == KoSnapStrategy::Grid) {
+        if (d->usedStrategies & strategy->type() 
+            || strategy->type() == KoSnapStrategy::Grid
+            || strategy->type() == KoSnapStrategy::Custom) {
             if (! strategy->snap(mousePosition, &proxy, maxSnapDistance))
                 continue;
 
@@ -211,6 +222,14 @@ void KoSnapGuide::reset()
     d->editedShape = 0;
     d->ignoredPoints.clear();
     d->ignoredShapes.clear();
+    // remove all custom strategies
+    int strategyCount = d->strategies.count();
+    for(int i = strategyCount-1; i >= 0; --i) {
+        if (d->strategies[i]->type() == KoSnapStrategy::Custom) {
+            delete d->strategies[i];
+            d->strategies.removeAt(i);
+        }
+    }
 }
 
 /////////////////////////////////////////////////////////

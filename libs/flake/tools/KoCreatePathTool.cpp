@@ -22,6 +22,7 @@
 #include "KoCreatePathTool.h"
 #include "KoSnapGuide.h"
 #include "SnapGuideConfigWidget.h"
+#include "KoSnapStrategy.h"
 
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
@@ -36,9 +37,12 @@
 #include "KoParameterShape.h"
 #include "commands/KoPathPointMergeCommand.h"
 
-#include <QtGui/QPainter>
-
 #include <KoColor.h>
+
+#include <KNumInput>
+
+#include <QtGui/QPainter>
+#include <QtGui/QLabel>
 
 qreal squareDistance( const QPointF &p1, const QPointF &p2)
 {
@@ -46,6 +50,70 @@ qreal squareDistance( const QPointF &p1, const QPointF &p2)
     qreal dy = p1.y()-p2.y();
     return dx*dx + dy*dy;
 }
+
+class KoCreatePathTool::AngleSnapStrategy : public KoSnapStrategy
+{
+public:
+    AngleSnapStrategy( qreal angleStep )
+    : KoSnapStrategy(KoSnapStrategy::Custom), m_angleStep(angleStep), m_active(false)
+    {
+    }
+    
+    void setStartPoint(const QPointF &startPoint)
+    {
+        m_startPoint = startPoint;
+        m_active = true;
+    }
+
+    void setAngleStep(qreal angleStep)
+    {
+        m_angleStep = qAbs(angleStep);
+    }
+    
+    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
+    {
+        Q_UNUSED(proxy);
+        
+        if (!m_active)
+            return false;
+        
+        QLineF line(m_startPoint, mousePosition);
+        qreal currentAngle = line.angle();
+        int prevStep = qAbs(currentAngle / m_angleStep);
+        int nextStep = prevStep + 1;
+        qreal prevAngle = prevStep*m_angleStep;
+        qreal nextAngle = nextStep*m_angleStep;
+        
+        if (qAbs(currentAngle - prevAngle) <= qAbs(currentAngle - nextAngle)) {
+            line.setAngle(prevAngle); 
+        } else {
+            line.setAngle(nextAngle); 
+        }
+
+        qreal maxSquareSnapDistance = maxSnapDistance*maxSnapDistance;
+        qreal snapDistance = squareDistance(mousePosition, line.p2());
+        if (snapDistance > maxSquareSnapDistance)
+            return false;
+
+        setSnappedPosition(line.p2());
+        return true;
+    }
+    
+    virtual QPainterPath decoration(const KoViewConverter &converter) const
+    {
+        Q_UNUSED(converter);
+        
+        QPainterPath decoration;
+        decoration.moveTo(m_startPoint);
+        decoration.lineTo(snappedPosition());
+        return decoration;
+    }
+    
+private:
+    QPointF m_startPoint;
+    qreal m_angleStep;
+    bool m_active;
+};
 
 KoCreatePathTool::KoCreatePathTool(KoCanvasBase * canvas)
         : KoTool(canvas)
@@ -57,6 +125,8 @@ KoCreatePathTool::KoCreatePathTool(KoCanvasBase * canvas)
         , m_existingStartPoint(0)
         , m_existingEndPoint(0)
         , m_hoveredPoint(0)
+        , m_angleSnapStrategy(0)
+        , m_angleSnappingDelta(15)
 {
 }
 
@@ -186,7 +256,13 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
 
         m_canvas->snapGuide()->setEditedShape(m_shape);
+        
+        m_angleSnapStrategy = new AngleSnapStrategy(m_angleSnappingDelta);
+        m_canvas->snapGuide()->addCustomSnapStrategy(m_angleSnapStrategy);
     }
+    
+    if (m_angleSnapStrategy)
+        m_angleSnapStrategy->setStartPoint(m_activePoint->point());
 }
 
 void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -290,6 +366,7 @@ void KoCreatePathTool::deactivate()
         m_existingStartPoint = 0;
         m_existingEndPoint = 0;
         m_hoveredPoint = 0;
+        m_angleSnapStrategy = 0;
     }
 }
 
@@ -312,7 +389,8 @@ void KoCreatePathTool::addPathShape()
     // reset snap guide
     m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
     m_canvas->snapGuide()->reset();
-
+    m_angleSnapStrategy = 0;
+    
     // this is done so that nothing happens when the mouseReleaseEvent for the this event is received
     KoPathShape *pathShape = m_shape;
     m_shape = 0;
@@ -384,7 +462,27 @@ QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets()
     QMap<QString, QWidget *> map;
     SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(m_canvas->snapGuide());
     map.insert(i18n("Snapping"), widget);
+    
+    QWidget * angleWidget = new QWidget();
+    angleWidget->setObjectName("Angle Constrains");
+    QGridLayout * layout = new QGridLayout(angleWidget);
+    layout->addWidget( new QLabel(i18n("Angle snapping delta"), angleWidget), 0, 0);
+    KIntNumInput * angleEdit = new KIntNumInput(m_angleSnappingDelta, angleWidget);
+    angleEdit->setRange(1, 360, 1);
+    angleEdit->setSuffix(" °");
+    layout->addWidget( angleEdit, 0, 1);
+    map.insert(i18n("Angle Constrains"), angleWidget);
+    
+    connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
+    
     return map;
+}
+
+void KoCreatePathTool::angleDeltaChanged(int value)
+{
+    m_angleSnappingDelta = value;
+    if (m_angleSnapStrategy)
+        m_angleSnapStrategy->setAngleStep(m_angleSnappingDelta);
 }
 
 KoPathPoint* KoCreatePathTool::endPointAtPosition( const QPointF &position )

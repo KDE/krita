@@ -179,7 +179,7 @@ void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
     m_shapeOn = m_canvas->shapeManager()->shapeAt( event->point );
     if( dynamic_cast<KoSelection*>( m_shapeOn ) )
         m_shapeOn = 0;
-
+    
     if( m_connectionShape != 0 ) {
         if( isInRoi() ) {
             // Make the connection
@@ -188,6 +188,7 @@ void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
         } else if( m_shapeOn != 0 ) {
             // Make the connection
             m_connectionShape->setConnection2( m_shapeOn, 0);
+            
             updateConnections();
         } else {
             m_connectionShape->setConnection2( 0, 0);
@@ -246,10 +247,12 @@ void KoConnectionTool::updateConnections()
     if( connection1.first != 0 and connection2.first != 0 ) {
         KoShape* shape1 = connection1.first;
         KoShape* shape2 = connection2.first;
-        if( !m_isTied->first )
+        if( !m_isTied->first ){
             m_connectionShape->setConnection1( shape1 , getConnectionIndex( shape1, shape2->absolutePosition() ) );
-        if( !m_isTied->second )
+        }
+        if( !m_isTied->second ){
             m_connectionShape->setConnection2( shape2 , getConnectionIndex( shape2, shape1->absolutePosition() ) );
+        }
     // If only the first item of the connection is a shape
     } else if( connection1.first != 0 ) {
         KoShape* shape = connection1.first;

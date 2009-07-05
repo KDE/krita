@@ -54,89 +54,141 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
         : KisFilterConfiguration("brightnesscontrast", 1)
 {
     for (quint32 i = 0; i < 256; ++i) {
-        transfer[i] = i * 257;
+        m_transfer[i] = i * 257;
     }
     QPointF p;
     p.rx() = 0.0; p.ry() = 0.0;
-    curve.append(p);
+    m_curve.append(p);
     p.rx() = 1.0; p.ry() = 1.0;
-    curve.append(p);
+    m_curve.append(p);
 }
 
 KisBrightnessContrastFilterConfiguration::~KisBrightnessContrastFilterConfiguration()
 {
 }
 
-void KisBrightnessContrastFilterConfiguration::fromXML(const QString& s)
+void KisBrightnessContrastFilterConfiguration::fromLegacyXML(const QDomElement& root)
 {
-    QDomDocument doc;
-    doc.setContent(s);
-    QDomElement e = doc.documentElement();
-    QDomNode n = e.firstChild();
+    fromXML(root);
+}
 
-    while (!n.isNull()) {
-        e = n.toElement();
-        if (!e.isNull()) {
-            if (e.attribute("name") == "transfer") { // ### 1.6 needs .tagName("name") here!
-                QStringList data = e.text().split(',');
-                QStringList::Iterator start = data.begin();
-                QStringList::Iterator end = data.end();
-                int i = 0;
-                for (QStringList::Iterator it = start; it != end && i < 256; ++it) {
-                    QString s = *it;
-                    transfer[i] = s.toUShort();
-                    i++;
-                }
-            } else if (e.attribute("name") == "curve") { // ### 1.6 needs .tagName("name") here!
-                QStringList data = e.text().split(';');
-                curve.clear();
-                foreach(const QString & pair, data) {
-                    if (pair.indexOf(',') > -1) {
-                        QPointF p;
-                        p.rx() = pair.section(',', 0, 0).toDouble();
-                        p.ry() = pair.section(',', 1, 1).toDouble();
-                        curve.append(p);
+void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
+{
+    KisCurve curve;
+    quint16 numTransfers=0;
+    int version;
+    version  = root.attribute("version").toInt();
+
+    QDomElement e = root.firstChild().toElement();
+    QString attributeName;
+
+     while (!e.isNull()) {
+        if ((attributeName = e.attribute("name")) == "nTransfers") {
+            numTransfers = e.text().toUShort();
+        } 
+        else {
+            QRegExp rx("curve(\\d+)");
+            if (rx.indexIn(attributeName, 0) != -1) {
+                quint16 index = rx.cap(1).toUShort();
+                
+                if(index == 0 && !e.text().isEmpty()) {
+                    /**
+                     * We are going to use first curve only
+                     */
+                    QStringList data = e.text().split(';');
+                    
+                    foreach(const QString & pair, data) {
+                        if (pair.indexOf(',') > -1) {
+                            QPointF p;
+                            p.rx() = pair.section(',', 0, 0).toDouble();
+                            p.ry() = pair.section(',', 1, 1).toDouble();
+                            curve.append(p);
+                        }
                     }
                 }
             }
         }
-        n = n.nextSibling();
+        e=e.nextSiblingElement();
+     }
+
+     if(curve.isEmpty())
+         return;
+
+     setVersion(version);
+     setCurve(curve);
+     updateTransfers();
+}
+
+void KisBrightnessContrastFilterConfiguration::setCurve(KisCurve &curve)
+{
+    m_curve.clear();
+    m_curve=curve;
+}
+
+#define bounds(x,a,b) (x<a ? a : (x>b ? b :x))
+
+void KisBrightnessContrastFilterConfiguration::updateTransfers()
+{
+    qint32 val;
+    for (int i = 0; i < 256; ++i) {
+        /* Direct uncached version */
+        val = int(0xFFFF * KisCurveWidget::getCurveValue(m_curve, i / 255.0));
+        val = bounds(val, 0, 0xFFFF);
+        m_transfer[i] = val;
     }
 }
 
-QString KisBrightnessContrastFilterConfiguration::toString()
+/**
+ * Inherited from KisPropertiesConfiguration
+ */
+//void KisPerChannelFilterConfiguration::fromXML(const QString& s)
+
+void KisBrightnessContrastFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
 {
-    QDomDocument doc = QDomDocument("filterconfig");
-    QDomElement root = doc.createElement("filterconfig");
-    root.setAttribute("name", name());
+    toXML(doc,root);
+}
+
+void KisBrightnessContrastFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
+{
+    /**
+     * <params version=1>
+     *       <param name="nTransfers">1</param>
+     *       <param name="curve0">0,0;0.5,0.5;1,1;</param>
+     * </params>
+     */
+
+    /* This is a constant for Brightness/Contranst filter */
+    const qint32 numTransfers = 1;
+    
+
     root.setAttribute("version", version());
+    
+    QDomElement t = doc.createElement("param");
+    QDomText text = doc.createTextNode(QString::number(numTransfers));
+    t.setAttribute("name", "nTransfers");
+    t.appendChild(text);
+    root.appendChild(t);
 
-    doc.appendChild(root);
+    t = doc.createElement("param");
+    t.setAttribute("name", "curve0");
 
-    QDomElement e = doc.createElement("transfer");
-    QString sTransfer;
-    for (uint i = 0; i < 256 ; ++i) {
-        sTransfer += QString::number(transfer[i]);
-        sTransfer += ',';
-    }
-    QDomText text = doc.createCDATASection(sTransfer);
-    e.appendChild(text);
-    root.appendChild(e);
-
-    e = doc.createElement("curve");
     QString sCurve;
-    foreach(const QPointF & pair, curve) {
+    foreach(const QPointF & pair, m_curve) {
         sCurve += QString::number(pair.x());
         sCurve += ',';
         sCurve += QString::number(pair.y());
         sCurve += ';';
     }
-    text = doc.createCDATASection(sCurve);
-    e.appendChild(text);
-    root.appendChild(e);
-
-    return doc.toString();
+    text = doc.createTextNode(sCurve);
+    t.appendChild(text);
+    root.appendChild(t);
 }
+
+/**
+ * Inherited from KisPropertiesConfiguration
+ */
+//QString KisPerChannelFilterConfiguration::toXML()
+
 
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Brightness/Contrast curve..."))
@@ -170,7 +222,7 @@ KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const K
     const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>( config );
     if(!configBC) return 0;
 
-    KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->transfer);
+    KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->m_transfer);
 }
 
 KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
@@ -252,9 +304,9 @@ KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::co
         if (val < 0)
             val = 0;
 
-        cfg->transfer[i] = val;
+        cfg->m_transfer[i] = val;
     }
-    cfg->curve = m_page->curveWidget->getCurve();
+    cfg->m_curve = m_page->curveWidget->getCurve();
     return cfg;
 }
 
@@ -262,7 +314,7 @@ void KisBrightnessContrastConfigWidget::setConfiguration(const KisPropertiesConf
 {
     const KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<const KisBrightnessContrastFilterConfiguration *>(config);
     Q_ASSERT(cfg);
-    m_page->curveWidget->setCurve(cfg->curve);
+    m_page->curveWidget->setCurve(cfg->m_curve);
 }
 
 #include "kis_brightness_contrast_filter.moc"

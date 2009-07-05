@@ -100,7 +100,6 @@ private:
 
 class KisPerChannelConfigWidget : public KisConfigWidget
 {
-
     Q_OBJECT
 
 public:
@@ -130,8 +129,6 @@ private:
     // scales for displaying color numbers
     double m_scale;
     double m_shift;
-    
-
 };
 
 #endif

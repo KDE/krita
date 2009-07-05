@@ -152,11 +152,11 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
     KisBrightnessContrastFilterConfiguration * cfg = new KisBrightnessContrastFilterConfiguration();
 
     for (int i = 0; i < 255; i++)
-        cfg->transfer[i] = 0xFFFF;
+        cfg->m_transfer[i] = 0xFFFF;
 
     if (diff != 0) {
         for (int i = 0; i < minvalue; i++)
-            cfg->transfer[i] = 0x0;
+            cfg->m_transfer[i] = 0x0;
         for (int i = minvalue; i < maxvalue; i++) {
             qint32 val = (i - minvalue) / diff;
 
@@ -166,10 +166,10 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
             if (val < 0)
                 val = 0;
 
-            cfg->transfer[i] = val;
+            cfg->m_transfer[i] = val;
         }
         for (int i = maxvalue; i < 256; i++)
-            cfg->transfer[i] = 0xFFFF;
+            cfg->m_transfer[i] = 0xFFFF;
     }
 
     KisSelectionSP dstSel;
@@ -181,7 +181,7 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
     }
 
     // apply
-    KoColorTransformation *adj = src->colorSpace()->createBrightnessContrastAdjustment(cfg->transfer);
+    KoColorTransformation *adj = src->colorSpace()->createBrightnessContrastAdjustment(cfg->m_transfer);
 
     KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
 

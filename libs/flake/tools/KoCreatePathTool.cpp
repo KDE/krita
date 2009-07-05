@@ -331,7 +331,15 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
 
     repaintActivePoint();
     m_pointIsDragged = false;
+    KoPathPoint * lastActivePoint = m_activePoint;
     m_activePoint = m_shape->lineTo(event->point);
+    // apply symmetric point property if applicable
+    if (lastActivePoint->activeControlPoint1() && lastActivePoint->activeControlPoint2()) {
+        QPointF diff1 = lastActivePoint->point() - lastActivePoint->controlPoint1();
+        QPointF diff2 = lastActivePoint->controlPoint2() - lastActivePoint->point();
+        if (qFuzzyCompare(diff1.x(), diff2.x()) && qFuzzyCompare(diff1.y(), diff2.y()))
+            lastActivePoint->setProperty(KoPathPoint::IsSymmetric);
+    }
     m_canvas->snapGuide()->setIgnoredPathPoints( (QList<KoPathPoint*>()<<m_activePoint) );
 }
 

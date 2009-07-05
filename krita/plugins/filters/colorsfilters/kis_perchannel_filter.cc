@@ -339,8 +339,8 @@ void KisPerChannelFilterConfiguration::updateTransfersCached(KisCurveWidget &cac
         for (int i = 0; i < 256; ++i) {
             /* Cached version of the cycle */
             val = int(0xFFFF * cacheCurveWidget.getCurveValue(i / 255.0));
-                val = bounds(val, 0, 0xFFFF);
-                m_transfers[ch][i] = val;
+            val = bounds(val, 0, 0xFFFF);
+            m_transfers[ch][i] = val;
         }
     }
 }
@@ -423,10 +423,6 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
 
     root.setAttribute("version", version());
 
-    QDomElement c = doc.createElement("curves");
-    c.setAttribute("number", m_nTransfers);
-    c.setAttribute("name", "curves");
-
     QDomElement t = doc.createElement("param");
     QDomText text = doc.createTextNode(QString::number(m_nTransfers));
     t.setAttribute("name", "nTransfers");
@@ -458,7 +454,7 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
 /**
  * Inherited from KisPropertiesConfiguration
  */
-//void KisPerChannelFilterConfiguration::toXML()
+//QString KisPerChannelFilterConfiguration::toXML()
 
 
 KisPerChannelFilter::KisPerChannelFilter() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Adjustment curves..."))

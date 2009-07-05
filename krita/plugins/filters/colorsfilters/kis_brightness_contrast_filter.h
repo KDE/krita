@@ -35,6 +35,8 @@
 class QWidget;
 class KoColorTransformation;
 
+typedef QList<QPointF> KisCurve;
+
 class WdgBrightnessContrast : public QWidget, public Ui::WdgBrightnessContrast
 {
     Q_OBJECT
@@ -50,15 +52,26 @@ class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration
 
 public:
     using KisFilterConfiguration::fromXML;
+    using KisFilterConfiguration::toXML;
+    using KisFilterConfiguration::toLegacyXML;
+    using KisFilterConfiguration::fromLegacyXML;
+
+    virtual void fromLegacyXML(const QDomElement& root);
+    virtual void toLegacyXML(QDomDocument& doc, QDomElement& root) const;
+
+    virtual void fromXML(const QDomElement& e);
+    virtual void toXML(QDomDocument& doc, QDomElement& root) const;
 
     KisBrightnessContrastFilterConfiguration();
     virtual ~KisBrightnessContrastFilterConfiguration();
-    virtual void fromXML(const QString&);
-    virtual QString toString();
 
 public:
-    quint16 transfer[256];
-    QList<QPointF>  curve;
+    quint16 m_transfer[256];
+    KisCurve m_curve;
+
+protected:
+    void setCurve(KisCurve &curve);
+    void updateTransfers();
 };
 
 /**
@@ -82,9 +95,6 @@ public:
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
-    virtual KisPropertiesConfiguration * configuration() {
-        return new KisBrightnessContrastFilterConfiguration();
-    }
 
     virtual bool workWith(const KoColorSpace* cs) const;
 };

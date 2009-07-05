@@ -1,10 +1,10 @@
 <ctlcolorspace>
     <info  colorModelId="RGBA" colorModelName="Red Green Blue" type="float" depth="16" name="RGB (16-bit float/channel) for High Dynamic Range imaging" id="RgbAF16" />
     <channels>
-        <channel name="Red"   shortName="r" index="2" channelType="Color" valueType="float16" size="4" color="255,0,0" />
-        <channel name="Green" shortName="g" index="1" channelType="Color" valueType="float16" size="4" color="0,255,0" />
-        <channel name="Blue"  shortName="b" index="0" channelType="Color" valueType="float16" size="4" color="0,0,255" />
-        <channel name="Alpha" shortName="a" index="3" channelType="Alpha" valueType="float16" size="4" />
+        <channel name="Red"   shortName="r" index="2" channelType="Color" valueType="float16" size="2" color="255,0,0" />
+        <channel name="Green" shortName="g" index="1" channelType="Color" valueType="float16" size="2" color="0,255,0" />
+        <channel name="Blue"  shortName="b" index="0" channelType="Color" valueType="float16" size="2" color="0,0,255" />
+        <channel name="Alpha" shortName="a" index="3" channelType="Alpha" valueType="float16" size="2" />
     </channels>
     <isHdr />
     <defaultProfile name="Standard Linear RGB (scRGB/sRGB64)" />

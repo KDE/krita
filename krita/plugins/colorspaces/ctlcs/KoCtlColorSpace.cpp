@@ -28,6 +28,8 @@
 
 #include <kis_debug.h>
 
+#include "config-openctl910.h"
+
 struct KoCtlColorSpace::Private
 {
     Private() : alphaCtlChannel(0) {}

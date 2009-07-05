@@ -1,10 +1,13 @@
-include_directories(${OPENCTL_INCLUDE_DIR} )
+include_directories(${OPENCTL_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_definitions(${OPENCTL_DEFINITIONS})
 
 add_subdirectory(ctlmodules)
 add_subdirectory(ctlprofiles)
 add_subdirectory(ctlcolorspaces)
+
+# This is temporary, when we are close to koffice release (and when OpenCTL 0.9.10 is released), make this a hard requirement
+configure_file(config-openctl910.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openctl910.h )
 
 set( CTLCS_SRCS
     KoCtlChannel.cpp

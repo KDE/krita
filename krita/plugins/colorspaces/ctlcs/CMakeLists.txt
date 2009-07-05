@@ -9,6 +9,10 @@ add_subdirectory(ctlcolorspaces)
 # This is temporary, when we are close to koffice release (and when OpenCTL 0.9.10 is released), make this a hard requirement
 configure_file(config-openctl910.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openctl910.h )
 
+if( HAVE_OPENCTL_910 )
+  set( SRCS_910 KoCtlTemplatesRegistry.cpp )
+endif( HAVE_OPENCTL_910 )
+
 set( CTLCS_SRCS
     KoCtlChannel.cpp
     KoCtlColorProfile.cpp
@@ -18,7 +22,9 @@ set( CTLCS_SRCS
     KoCtlColorSpaceInfo.cpp
     KoCtlParser.cpp
     ctl_cs_plugin.cpp
+    ${SRCS_910}
 )
+
 
 kde4_add_plugin(krita_ctlcs_plugin ${CTLCS_SRCS})
 

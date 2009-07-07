@@ -62,11 +62,11 @@ public:
      */
     void updateConnections();
     /**
-     * @brief return the index of the nearest connection point of the shape with the point
+     * @brief Return the index of the nearest connection point of the shape with the point
      *
      * @param shape The shape to connect
      * @param point The point to connect
-     * @return the index of the nearest point
+     * @return The index of the nearest point
      */
     int getConnectionIndex( KoShape * shape, QPointF point );
     /**
@@ -74,11 +74,11 @@ public:
      *
      * @param p1 The first point
      * @param p2 The second point
-     * @return the float which is the square of the distance
+     * @return The float which is the square of the distance
      */
     float distanceSquare( QPointF p1, QPointF p2 );
     /**
-     * @brief true if the mouse is near to a connection point
+     * @brief Return true if the mouse is near to a connection point
      */
     bool isInRoi();
     /**

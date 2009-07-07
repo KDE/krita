@@ -173,13 +173,34 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
 
 void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
 {
+    // Record the last shape
     if( m_shapeOn != 0 )
         m_lastShapeOn = m_shapeOn;
+    // Record the mouse position
     m_mouse = event->point;
+    // Look at the new shape under the mouse
     m_shapeOn = m_canvas->shapeManager()->shapeAt( event->point );
+
+    // forgot the selections
     if( dynamic_cast<KoSelection*>( m_shapeOn ) )
         m_shapeOn = 0;
-    
+
+    // Find the none connection shape on the background
+    if( dynamic_cast<KoConnectionShape*>( m_shapeOn ) ){
+
+        m_shapeOn = 0;
+        QList<KoShape*> listOfShape = m_canvas->shapeManager()->shapesAt( QRectF(m_mouse, m_mouse) );
+        
+        foreach(KoShape * shapeOn, listOfShape){
+            if( dynamic_cast<KoConnectionShape*>( shapeOn ) ){
+                m_shapeOn = 0;
+            } else {
+                m_shapeOn = shapeOn;
+                break;
+            }
+        }
+    }
+        
     if( m_connectionShape != 0 ) {
         if( isInRoi() ) {
             // Make the connection
@@ -292,7 +313,6 @@ int KoConnectionTool::getConnectionIndex( KoShape * shape, QPointF point )
     // return the nearest point index
     return nearestPointIndex;
 }
-
 
 float KoConnectionTool::distanceSquare( QPointF p1, QPointF p2 )
 {

@@ -77,27 +77,34 @@ void TableLayout::layout()
     m_tableData->m_rowHeights.resize(m_table->rows());
     m_tableData->m_columnPositions.resize(m_table->columns());
     m_tableData->m_columnWidths.resize(m_table->columns());
+    m_tableData->m_cellContentHeights.resize(m_table->columns() * m_table->rows());
 
-    // TODO: Table position. Find out where we are, or does this have to be passed in?
-
-    // Table width. Only explicit fixed width for now.
-    m_tableData->m_width = tableFormat.width().rawValue();
+    // Table width.
+    if (tableFormat.width().type() == QTextLength::FixedLength) {
+        m_tableData->m_width = tableFormat.width().rawValue();
+    } else {
+        m_tableData->m_width = 0; // TODO: Variable / percentage.
+    }
 
     // Column widths/positions. Only explicit fixed width for now.
     qreal columnWidth = m_tableData->m_width / m_table->columns();
     m_tableData->m_columnWidths.fill(columnWidth);
     for (int col = 0; col < m_tableData->m_columnPositions.size(); ++col) {
-        m_tableData->m_columnPositions[col] = col * columnWidth; // TODO: + table x pos
+        m_tableData->m_columnPositions[col] = col * columnWidth;
     }
 
-    // Table height. Only explicit fixed height for now.
-    m_tableData->m_height = tableFormat.height().rawValue();
+    // Table height.
+    if (tableFormat.height().type() == QTextLength::FixedLength) {
+        m_tableData->m_height = tableFormat.height().rawValue();
+    } else {
+        m_tableData->m_height = 0; // TODO: Variable / percentage.
+    }
 
     // Row heights/positions. Only explicit fixed width for now.
     qreal rowHeight = m_tableData->m_height / m_table->rows();
     m_tableData->m_rowHeights.fill(rowHeight);
     for (int row = 0; row < m_tableData->m_rowPositions.size(); ++row) {
-        m_tableData->m_rowPositions[row] = row * rowHeight; // TODO: + table y pos
+        m_tableData->m_rowPositions[row] = row * rowHeight;
     }
 
     m_dirty = false;
@@ -116,7 +123,7 @@ QRectF TableLayout::boundingRect() const
     qreal horizontalMargins = m_table->format().leftMargin() + m_table->format().rightMargin();
     qreal verticalMargins = m_table->format().topMargin() + m_table->format().bottomMargin();
 
-    return QRectF(m_tableData->m_position.x(), m_tableData->m_position.y(), // x, y
+    return QRectF(m_position.x(), m_position.y(),     // x, y
             m_tableData->m_width + horizontalMargins, // width
             m_tableData->m_height + verticalMargins); // height
 }
@@ -124,6 +131,40 @@ QRectF TableLayout::boundingRect() const
 QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
 {
     return cellContentRect(cell.row(), cell.column());
+}
+
+void TableLayout::calculateRows(int fromRow)
+{
+    Q_ASSERT(isValid());
+    Q_ASSERT(fromRow >= 0);
+    Q_ASSERT(fromRow < m_table->rows());
+
+    if (!isValid()) {
+        return;
+    }
+
+    if (fromRow < 0 || fromRow >= m_table->rows()) {
+        return;
+    }
+
+    // TODO.
+}
+
+void TableLayout::calculateColumns(int fromColumn)
+{
+    Q_ASSERT(isValid());
+    Q_ASSERT(fromColumn >= 0);
+    Q_ASSERT(fromColumn < m_table->columns());
+
+    if (!isValid()) {
+        return;
+    }
+
+    if (fromColumn < 0 || fromColumn >= m_table->columns()) {
+        return;
+    }
+
+    // TODO.
 }
 
 QRectF TableLayout::cellContentRect(int row, int column) const

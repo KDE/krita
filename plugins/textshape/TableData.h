@@ -49,7 +49,8 @@ private:
     QVector<qreal> m_rowHeights;       /**< Row heights. */
     QVector<qreal> m_rowPositions;     /**< Row positions along Y axis. */
 
-    QPointF m_position;  /**< Table position. */
+    QVector<qreal> m_cellContentHeights;  /**< Cell content heights. */
+
     qreal m_width;       /**< Table width. */
     qreal m_height;      /**< Table height. */
 };

@@ -101,7 +101,7 @@ bool Layout::interrupted()
 qreal Layout::width()
 {
     Q_ASSERT(shape);
-    qreal ptWidth = m_inTable ? resolveTableCellWidth() : shape->size().width();
+    qreal ptWidth = m_inTable ? m_tableLayout.cellContentRect(m_tableCell).width() : shape->size().width();
     if (m_newParag)
         ptWidth -= resolveTextIndent();
     if (m_blockData)
@@ -116,7 +116,7 @@ qreal Layout::x()
 {
     qreal result = m_newParag ? resolveTextIndent() : 0.0;
     if (m_inTable) {
-        result += resolveTableCellXOffset();
+        result += m_tableLayout.cellContentRect(m_tableCell).x();
     }
     result += m_isRtl ? m_format.rightMargin() : m_format.leftMargin();
     result += listIndent();
@@ -128,20 +128,6 @@ qreal Layout::x()
 qreal Layout::y()
 {
     return m_y;
-}
-
-qreal Layout::resolveTableCellWidth() const
-{
-    QTextTableCell cell = m_tableLayout.cellAt(m_block.position());
-    Q_ASSERT(cell.isValid());
-    return m_tableLayout.cellContentRect(cell).width();
-}
-
-qreal Layout::resolveTableCellXOffset() const
-{
-    QTextTableCell cell = m_tableLayout.cellAt(m_block.position());
-    Q_ASSERT(cell.isValid());
-    return m_tableLayout.cellContentRect(cell).x();
 }
 
 qreal Layout::resolveTextIndent()
@@ -346,15 +332,29 @@ bool Layout::nextParag()
     QTextTable *table = tableFinder.currentTable();
     if (table) {
         if (table != m_tableLayout.table()) {
-            m_tableLayout.setTable(table); // entering table.
+            // entered table.
+            m_tableLayout.setTable(table);
+            m_tableLayout.setPosition(QPointF(x(), y())); // FIXME.
         }
         m_tableLayout.layout();
+        m_tableCell = table->cellAt(m_block.position());
+        QTextTableCell previousCell = table->cellAt(m_block.previous().position());
+        QTextTableCell nextCell = table->cellAt(m_block.next().position());
+        if (m_tableCell != previousCell) {
+            // entered cell.
+            m_y = m_tableLayout.position().y() + m_tableLayout.cellContentRect(m_tableCell).y();
+        }
+        if (m_tableCell != nextCell) {
+            // leaving cell (TODO: Adjust cell height).
+        }
         m_inTable = true;
     } else {
         QTextCursor lookBehind(m_block.previous());
         QTextTable *previousTable = lookBehind.currentTable();
         if (previousTable) {
-            m_inTable = false; // leaving table.
+            // left table.
+            m_inTable = false;
+            m_tableCell = QTextTableCell();
         }
     }
 

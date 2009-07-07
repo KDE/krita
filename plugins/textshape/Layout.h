@@ -28,6 +28,7 @@
 
 #include <QTextLine>
 #include <QTextBlock>
+#include <QTextTableCell>
 #include <QHash>
 
 class KoStyleManager;
@@ -112,12 +113,6 @@ private:
     qreal findFootnote(const QTextLine &line, int *oldLength);
     void resetPrivate();
 
-    // get the table cell width.
-    qreal resolveTableCellWidth() const;
-
-    // get the table cell X offset.
-    qreal resolveTableCellXOffset() const;
-
 private:
     KoStyleManager *m_styleManager;
 
@@ -149,8 +144,8 @@ private:
 
     QString m_currentMasterPage;
 
-    // table layout
-    TableLayout m_tableLayout;
+    TableLayout m_tableLayout;   /**< Table layout. */
+    QTextTableCell m_tableCell;  /**< Current table cell. */
 };
 
 #endif

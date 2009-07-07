@@ -173,7 +173,14 @@ public:
     bool isValid() const;
 
 private slots:
-    /// Called before a table is destroyed.
+    /**
+     * Table data map cleanup slot.
+     *
+     * This slot is called when a table is destroyed and takes care of cleaning up
+     * the internal table data map cache.
+     *
+     * @param object pointer to the object that was destroyed.
+     */
     void tableDestroyed(QObject *object);
 
 private:
@@ -190,11 +197,31 @@ private:
      */
     QRectF cellContentRect(int row, int column) const;
 
+    /**
+     * Calculate row heights and Y positions, starting at the given row.
+     *
+     * This function calculates the row heights and Y positions based on the cell
+     * contents, starting at the given row \a fromRow.
+     *
+     * @param from the row from which to start calculating.
+     */
+    void calculateRows(int fromRow);
+
+    /**
+     * Calculate column widths and X positions, starting at the given column.
+     *
+     * This function calculates the column widths and X positions, starting at the
+     * given column \a fromColumn.
+     *
+     * @param from the column from which to start calculating.
+     */
+    void calculateColumns(int fromColumn);
+
 private:
     friend class TestTableLayout; // To allow direct testing.
 
-    QTextTable *m_table;              /**< The current table. */
-    TableData *m_tableData;           /**< The current table data. */
+    QTextTable *m_table;     /**< The current table. */
+    TableData *m_tableData;  /**< The current table data. */
 
     QMap<QTextTable *, TableData *> m_tableDataMap;  /**< The map of table data objects. */
 

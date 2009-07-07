@@ -101,6 +101,11 @@ void TestTableLayout::testSetTable()
 
 void TestTableLayout::testBoundingRect()
 {
+    /*
+     * TODO:
+     * - Test with different borders/margins.
+     * - Test with more scenarios/table positions.
+     */
     QStringList cellTexts;
     QTextTableFormat format;
     format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
@@ -110,15 +115,16 @@ void TestTableLayout::testBoundingRect()
     format.setMargin(0);
     initTest(format, cellTexts);
 
-    TableLayout tableLayout(m_table);
-    tableLayout.layout();
+    // Insert a block before the table.
+    QTextCursor textCursor(m_doc);
+    textCursor.insertText("Text");
+
+    m_layout->layout();
 
     /*
-     * TODO:
-     * - Test with different borders/margins.
-     * - Test with a real layout() run and real positioning.
+     * Rule: One single line block before table, so y == 14.4.
      */
-    QCOMPARE(tableLayout.boundingRect(), QRectF(0, 0, 200, 100));
+    QCOMPARE(m_textLayout->m_tableLayout.boundingRect(), QRectF(0, 14.4, 200, 100));
 
     cleanupTest();
 }
@@ -126,6 +132,10 @@ void TestTableLayout::testBoundingRect()
 void TestTableLayout::testBasicLayout()
 {
     QStringList cellTexts;
+    cellTexts.append("Cell 1");
+    cellTexts.append("Cell\n2");
+    cellTexts.append("Cell 3");
+    cellTexts.append("Cell 4");
     QTextTableFormat format;
     format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
     format.setWidth(QTextLength(QTextLength::FixedLength, 200));
@@ -133,6 +143,10 @@ void TestTableLayout::testBasicLayout()
     format.setPadding(0);
     format.setMargin(0);
     initTest(format, cellTexts, 2, 2);
+
+    // Insert a block before the table.
+    QTextCursor textCursor(m_doc);
+    textCursor.insertText("Text");
 
     m_layout->layout();
 

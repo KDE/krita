@@ -78,6 +78,14 @@ void TestTableLayout::testConstruction()
     cleanupTest();
 }
 
+void TestTableLayout::testSetPosition()
+{
+    TableLayout tableLayout;
+    QPointF position(1, 3);
+    tableLayout.setPosition(position);
+    QCOMPARE(tableLayout.position(), position);
+}
+
 void TestTableLayout::testSetTable()
 {
     QStringList cellTexts;
@@ -91,7 +99,7 @@ void TestTableLayout::testSetTable()
     cleanupTest();
 }
 
-void TestTableLayout::testTableBoundingRect()
+void TestTableLayout::testBoundingRect()
 {
     QStringList cellTexts;
     QTextTableFormat format;
@@ -110,7 +118,7 @@ void TestTableLayout::testTableBoundingRect()
      * - Test with different borders/margins.
      * - Test with a real layout() run and real positioning.
      */
-    QCOMPARE(tableLayout.tableBoundingRect(), QRectF(0, 0, 200, 100));
+    QCOMPARE(tableLayout.boundingRect(), QRectF(0, 0, 200, 100));
 
     cleanupTest();
 }

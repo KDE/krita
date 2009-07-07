@@ -21,6 +21,7 @@
 #define TABLELAYOUT_H
 
 #include <QObject>
+#include <QPointF>
 #include <QMap>
 
 class TableData;
@@ -120,12 +121,17 @@ public:
      * Get the bounding rectangle of the table.
      * @return the bounding rectangle of the table.
      */
-    QRectF tableBoundingRect() const;
+    QRectF boundingRect() const;
 
     /**
      * Get the content rectangle of a given cell.
+     *
+     * The rectangle returned is relative to the table position.
+     *
      * @param cell the cell.
      * @return the rectangle of the cell.
+     *
+     * \sa position(), setPosition()
      */
     QRectF cellContentRect(const QTextTableCell &cell) const;
 
@@ -135,6 +141,24 @@ public:
      * @return the table cell.
      */
     QTextTableCell cellAt(int position) const;
+
+    /**
+     * Get the position of the table layout.
+     *
+     * @return the position of the table layout.
+     *
+     * \sa setPosition()
+     */
+    QPointF position() const;
+
+    /**
+     * Set the position of the table layout.
+     *
+     * @param position the position of the table layout.
+     *
+     * \sa position()
+     */
+    void setPosition(QPointF position);
 
     /**
      * Check the dirty state.
@@ -155,9 +179,14 @@ private slots:
 private:
     /**
      * Get the content rectangle of a cell at a given table coordinate.
+     *
+     * The rectangle returned is relative to the table position.
+     *
      * @param row the row of the cell.
      * @param column the column of the cell.
      * @return the rectangle of the cell.
+     *
+     * \sa position(), setPosition()
      */
     QRectF cellContentRect(int row, int column) const;
 
@@ -169,7 +198,8 @@ private:
 
     QMap<QTextTable *, TableData *> m_tableDataMap;  /**< The map of table data objects. */
 
-    bool m_dirty;  /**< Table layout is dirty. */
+    QPointF m_position;  /**< The global position of the table layout. */
+    bool m_dirty;        /**< Table layout is dirty. */
 };
 
 #endif // TABLELAYOUT_H

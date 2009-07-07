@@ -25,10 +25,12 @@
 #include <QPainter>
 #include <QDebug>
 #include <QRectF>
+#include <QPointF>
 
 TableLayout::TableLayout(QTextTable *table) : m_dirty(true)
 {
     setTable(table);
+    setPosition(QPointF(0, 0));
 }
 
 TableLayout::TableLayout() : m_table(0), m_tableData(0), m_dirty(true)
@@ -107,7 +109,7 @@ void TableLayout::draw(QPainter *painter) const
     // TODO.
 }
 
-QRectF TableLayout::tableBoundingRect() const
+QRectF TableLayout::boundingRect() const
 {
     Q_ASSERT(isValid());
 
@@ -146,6 +148,16 @@ QTextTableCell TableLayout::cellAt(int position) const
     }
 
     return m_table->cellAt(position);
+}
+
+QPointF TableLayout::position() const
+{
+    return m_position;
+}
+
+void TableLayout::setPosition(QPointF position)
+{
+    m_position = position;
 }
 
 bool TableLayout::isDirty() const

@@ -70,7 +70,6 @@ target_link_libraries(komain
                       kodocumentsectionbox koinput kolinestyleselector koodf koopenpane kopicture koplugin koprogress 
                       koresources koresourcewidget kostore kozoomaction pigmentcms kotext kopagelayout
     ${KDE4_KPARTS_LIBS}
-    ${KDE4_KFILE_LIBRARY}
     ${KDE4_KABC_LIBS}
     ${KDE4_THREADWEAVER_LIBRARIES}
     ${KDE4_KDE3SUPPORT_LIBS}

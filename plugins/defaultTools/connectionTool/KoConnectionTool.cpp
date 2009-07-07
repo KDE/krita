@@ -113,6 +113,9 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         tempShape = m_lastShapeOn;
     else
         tempShape = m_canvas->shapeManager()->shapeAt( event->point );
+
+    tempShape = secondShape( tempShape );
+    
     if( dynamic_cast<KoSelection*>( tempShape ) )
         tempShape = 0;
     // First click
@@ -185,21 +188,7 @@ void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
     if( dynamic_cast<KoSelection*>( m_shapeOn ) )
         m_shapeOn = 0;
 
-    // Find the none connection shape on the background
-    if( dynamic_cast<KoConnectionShape*>( m_shapeOn ) ){
-
-        m_shapeOn = 0;
-        QList<KoShape*> listOfShape = m_canvas->shapeManager()->shapesAt( QRectF(m_mouse, m_mouse) );
-        
-        foreach(KoShape * shapeOn, listOfShape){
-            if( dynamic_cast<KoConnectionShape*>( shapeOn ) ){
-                m_shapeOn = 0;
-            } else {
-                m_shapeOn = shapeOn;
-                break;
-            }
-        }
-    }
+    m_shapeOn = secondShape( m_shapeOn );
         
     if( m_connectionShape != 0 ) {
         if( isInRoi() ) {
@@ -333,6 +322,25 @@ bool KoConnectionTool::isInRoi()
         if( distanceSquare( mouse, point) <= grabSensitivity )
             return true;
     return false;
+}
+
+KoShape * KoConnectionTool::secondShape( KoShape * shape )
+{
+    KoShape * returnShape = shape;
+    // Find the none connection shape on the background
+    if( dynamic_cast<KoConnectionShape*>( shape ) ){
+        QList<KoShape*> listOfShape = m_canvas->shapeManager()->shapesAt( QRectF(m_mouse, QSize(1,1)) );
+
+        foreach(KoShape * shapeOn, listOfShape){
+            if( dynamic_cast<KoConnectionShape*>( shapeOn ) ){
+                returnShape = 0;
+            } else {
+                returnShape = shapeOn;
+                break;
+            }
+        }
+    }
+    return returnShape;
 }
 
 void KoConnectionTool::command()

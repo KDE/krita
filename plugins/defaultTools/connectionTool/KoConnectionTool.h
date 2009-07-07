@@ -82,6 +82,13 @@ public:
      */
     bool isInRoi();
     /**
+     * @brief If the shape asked is a connection shape, return what is under this shape
+     *
+     * @param shape which has to be tested
+     * @return A good shape or 0 for the background
+     */
+    KoShape * secondShape( KoShape * shape );
+    /**
      * @brief Permit to activate the connection with a comand
      */
     void command();

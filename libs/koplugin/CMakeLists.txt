@@ -10,7 +10,6 @@ kde4_add_library(koplugin SHARED ${koplugin_LIB_SRCS})
 
 target_link_libraries(koplugin 
     ${KDE4_KDECORE_LIBS}
-    ${KDE4_KPARTS_LIBS}
 )
 
 target_link_libraries(koplugin LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} )

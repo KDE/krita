@@ -99,6 +99,7 @@ set(flake_SRCS
     KoZoomHandler.cpp
     KoZoomMode.cpp
     KoDpi.cpp
+    KoFilterEffect.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp

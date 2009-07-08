@@ -58,6 +58,7 @@ class KoDataCenter;
 class KoShapeShadow;
 class KoEventAction;
 class KoShapePrivate;
+class KoFilterEffect;
 
 /**
  *
@@ -792,6 +793,26 @@ public:
     void setAdditionalStyleAttribute(const char * name, const QString & value);
 
     void removeAdditionalStyleAttribute(const char * name);
+
+    /**
+     * The first filter of the list is the first to be applied.
+     *
+     * @return the list of filter effects applied on the shape when rendering.
+     */
+    const QList<KoFilterEffect*> filterEffectStack() const;
+    
+    /**
+     * Inserts a new filter at the given position in the filter list.
+     * @param index the list index to insert the new filter at
+     * @param filter the new filter to insert
+     */
+    void insertFilterEffect(uint index, KoFilterEffect * filter);
+    
+    /**
+     * Removes the filter with the given index from the filter list.
+     * @param index the index of the filter to remove
+     */
+    void removeFilterEffect(uint index);
 
 protected:
     /// constructor

@@ -32,6 +32,7 @@
 #include "KoShapeManagerPaintingStrategy.h"
 #include "KoShapeShadow.h"
 #include "KoShapeLayer.h"
+#include "KoFilterEffect.h"
 
 #include <KoRTree.h>
 
@@ -220,12 +221,54 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         shape->shadow()->paint(shape, painter, converter);
         painter.restore();
     }
-    painter.save();
-    shape->paint(painter, converter);
-    painter.restore();
-    if (shape->border()) {
+    if(shape->filterEffectStack().empty())
+    {
         painter.save();
-        shape->border()->paintBorder(shape, painter, converter);
+        shape->paint(painter, converter);
+        painter.restore();
+        if (shape->border()) {
+            painter.save();
+            shape->border()->paintBorder(shape, painter, converter);
+            painter.restore();
+        }
+    } else {
+        // There are filter effets, then we need to prerender the shape on an image, to filter it
+
+        // First step, compute the rectangle used for the image
+        QRect rect = converter.documentToView( shape->boundingRect() ).toRect();
+        
+        // TODO understand why the rect is too big, it's visible when you rotate the shape
+        
+        // TODO: use needed rect
+
+        // Init the buffer image
+        QImage image(rect.width(), rect.height(), QImage::Format_ARGB32);
+        image.fill(qRgba(0,0,0,0));
+
+        // Init the buffer painter
+        QPainter imagePainter;
+        imagePainter.begin(&image);
+
+        // Paint the shape on the image
+        imagePainter.save();
+        shape->paint(imagePainter, converter);
+        imagePainter.restore();
+        if (shape->border()) {
+            imagePainter.save();
+            shape->border()->paintBorder(shape, imagePainter, converter);
+            imagePainter.restore();
+        }
+        imagePainter.end();
+
+        // Filter
+        foreach(KoFilterEffect* filterEffect, shape->filterEffectStack())
+        {
+            filterEffect->processImage(image);
+        }
+
+        // Paint the result
+        painter.save();
+        painter.drawImage(QPoint(0,0), image);
         painter.restore();
     }
     if (! forPrint) {

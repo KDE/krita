@@ -2,6 +2,7 @@
  *  kis_paintop_box.cc - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2009 Sven Langkamp (sven.langkamp@gmail.com)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -120,7 +121,8 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
             SLOT(slotInputDeviceChanged(const KoInputDevice &)));
 
 
-
+    connect(m_presetsPopup, SIGNAL( savePresetClicked()),
+            this, SLOT( slotSaveActivePreset()));
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -139,6 +141,7 @@ void KisPaintopBox::slotItemSelected(int index)
 {
     dbgUI << "KisPaintopBox::slotItemSelected " << index;
 
+    /*
     if (index < m_displayedOps.count()) {
         KoID paintop = m_displayedOps.at(index);
         dbgUI << "\t\t selected " << paintop;
@@ -157,6 +160,7 @@ void KisPaintopBox::slotItemSelected(int index)
             }
         }
     }
+    */
 }
 
 void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)
@@ -329,6 +333,27 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInp
     }
 }
 
+void KisPaintopBox::slotSaveActivePreset()
+{
+    KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
+    if(!preset)
+        return;
+
+    KisPaintOpPreset* newPreset = preset->clone();
+
+    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    QString saveLocation = rServer->saveLocation();
+
+    int i = 1;
+    QFileInfo fileInfo;
+    do {
+        fileInfo.setFile( saveLocation + QString("PaintOpPreset%1.kpp").arg( i ));
+        i++;
+    } while( fileInfo.exists() );
+    newPreset->setFilename( fileInfo.filePath() );
+
+    rServer->addResource(newPreset);
+}
+
 
 #include "kis_paintop_box.moc"
-

@@ -31,6 +31,7 @@ class KisPropertiesConfiguration;
  */
 class KisPaintOpPresetsPopup : public QWidget
 {
+    Q_OBJECT
 
 public:
 
@@ -39,6 +40,9 @@ public:
     ~KisPaintOpPresetsPopup();
 
     void setPaintOpSettingsWidget(QWidget * widget);
+
+signals:
+    void savePresetClicked();
 
 private:
 

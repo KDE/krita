@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (C) Sven Langkamp <sven.langkamp@gmail.com>, (C) 2009
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,8 +22,10 @@
 #include <QFile>
 #include <QSize>
 #include <QImage>
+#include <QDomDocument>
 
 #include <KoColorSpaceRegistry.h>
+#include <KoInputDevice.h>
 
 #include "kis_types.h"
 #include "kis_paintop_settings.h"
@@ -56,7 +59,7 @@ KisPaintOpPreset::~KisPaintOpPreset()
     delete m_d;
 }
 
-KisPaintOpPresetSP KisPaintOpPreset::clone() const
+KisPaintOpPreset* KisPaintOpPreset::clone() const
 {
     KisPaintOpPreset * preset = new KisPaintOpPreset();
     if (settings()) {
@@ -101,12 +104,33 @@ bool KisPaintOpPreset::load()
         return false;
 
     QFile f(filename());
-    f.open(QIODevice::ReadOnly);
-    m_d->settings->fromXML(QString(f.readAll()));
-    f.close();
-    return true;
 
-    //setName(m_d->settings->getString("name"));
+    QDomDocument doc;
+    if (!f.open(QIODevice::ReadOnly))
+         return false;
+    if (!doc.setContent(&f)) {
+        f.close();
+        return false;
+    }
+    f.close();
+
+    QDomElement element = doc.documentElement();
+    QString paintopid = element.attribute("paintopid");
+
+    if( paintopid.isEmpty() )
+        return false;
+
+    KoID id(paintopid, "");
+    KoInputDevice input = KoInputDevice::mouse(); // TODO: Load inputdevice?
+
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0, input, 0);
+    if( !settings )
+        return false;
+    settings->fromXML( element );
+    setSettings(settings);
+
+    updateImg();
+    return true;
 }
 
 bool KisPaintOpPreset::save()
@@ -116,7 +140,21 @@ bool KisPaintOpPreset::save()
 
     QFile f(filename());
     f.open(QIODevice::WriteOnly);
-    f.write(m_d->settings->toXML().toUtf8());
+
+    QDomDocument doc;
+    QDomElement root = doc.createElement("preset");
+
+    QString paintopid = m_d->settings->getString("paintop", "");
+    if( paintopid.isEmpty() )
+        return false;
+
+    root.setAttribute("paintopid", paintopid);
+    doc.appendChild(root);
+
+    m_d->settings->toXML(doc, root);
+
+    QTextStream textStream(&f);
+    doc.save(textStream, 4);
     f.close();
     return true;
 }

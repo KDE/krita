@@ -42,7 +42,7 @@ public:
 
     ~KisPaintOpPreset();
 
-    KisPaintOpPresetSP clone() const;
+    KisPaintOpPreset* clone() const;
 
     /// set the id of the paintop plugin
     void setPaintOp(const KoID & paintOp);

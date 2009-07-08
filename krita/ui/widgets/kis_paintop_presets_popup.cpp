@@ -63,6 +63,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
 
     m_d->settingsWidget = 0;
     setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+
+    connect(m_d->uiWdgPaintOpPresets.bnSave, SIGNAL( clicked()),
+            this, SIGNAL( savePresetClicked()));
 }
 
 
@@ -97,3 +100,5 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     widget->show();
 
 }
+
+#include "kis_paintop_presets_popup.moc"

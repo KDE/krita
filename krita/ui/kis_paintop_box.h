@@ -75,6 +75,7 @@ private slots:
     void colorSpaceChanged(const KoColorSpace *cs);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCurrentNodeChanged(KisNodeSP node);
+    void slotSaveActivePreset();
 
 private:
 

@@ -26,7 +26,6 @@
 #include <QBuffer>
 #include <QPainter>
 #include <QPrinter>
-#include <q3paintdevicemetrics.h>
 #include <QFile>
 #include <QTextStream>
 #include <QRegExp>
@@ -223,18 +222,15 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
     QSize screenSize(width, height);
     //kDebug( 30003 ) <<"KoPictureEps::draw screenSize=" << screenSize.width() <<"x" << screenSize.height();
 
-    Q3PaintDeviceMetrics metrics(painter.device());
-    kDebug(30003) << "Metrics: X:" << metrics.logicalDpiX() << " x Y:" << metrics.logicalDpiX() << " (in KoPictureEps::draw)";
-
     if (dynamic_cast<QPrinter*>(painter.device())) { // Is it an external device (i.e. printer)
         kDebug(30003) << "Drawing for a printer (in KoPictureEps::draw)";
         // For printing, always re-sample the image, as a printer has never the same resolution than a display.
-        QImage image(scaleWithGhostScript(screenSize, metrics.logicalDpiX(), metrics.logicalDpiY()));
+        QImage image(scaleWithGhostScript(screenSize, painter.device()->logicalDpiX(), painter.device()->logicalDpiY()));
         // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawImage
         // translates it to the (x,y) point -> we need (x+sx, y+sy).
         painter.drawImage(x + sx, y + sy, image, sx, sy, sw, sh);
     } else { // No, it is simply a display
-        scaleAndCreatePixmap(screenSize, fastMode, metrics.logicalDpiX(), metrics.logicalDpiY());
+        scaleAndCreatePixmap(screenSize, fastMode, painter.device()->logicalDpiX(), painter.device()->logicalDpiY());
 
         // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawPixmap
         // translates it to the (x,y) point -> we need (x+sx, y+sy).

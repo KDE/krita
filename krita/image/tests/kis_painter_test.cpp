@@ -118,11 +118,12 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
     KisPaintDeviceSP dst2 = new KisPaintDevice(cs);
     KisPainter painter2(dst2);
     painter2.setSelection(selection);
-    painter2.setCompositeOp(dst2->colorSpace()->compositeOp(COMPOSITE_SUBSTRACT));
+    painter2.setCompositeOp(dst2->colorSpace()->compositeOp(COMPOSITE_SUBTRACT));
     painter2.bitBlt(0, 0,src, 0, 0, 30, 30);
     painter2.end();
 
-    QCOMPARE(dst2->exactBounds(), QRect(0, 0, 64, 64));
+    qDebug() << "dst 2 colorspace" <<  dst2->colorSpace()->name() << dst2->exactBounds();
+    QCOMPARE(dst2->exactBounds(), QRect(10, 10, 10, 10));
 }
 
 void KisPainterTest::testPaintDeviceBltSelection()

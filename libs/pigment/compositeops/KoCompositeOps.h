@@ -22,16 +22,17 @@
 
 #include "KoColorSpace.h"
 
-#include "compositeops/KoCompositeOpOver.h"
+#include "compositeops/KoCompositeOpAdd.h"
+#include "compositeops/KoCompositeOpAlphaDarken.h"
+#include "compositeops/KoCompositeOpBurn.h"
+#include "compositeops/KoCompositeOpDivide.h"
+#include "compositeops/KoCompositeOpDodge.h"
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpMultiply.h"
-#include "compositeops/KoCompositeOpDivide.h"
-#include "compositeops/KoCompositeOpBurn.h"
-#include "compositeops/KoCompositeOpDodge.h"
-#include "compositeops/KoCompositeOpScreen.h"
+#include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpOverlay.h"
-#include "compositeops/KoCompositeOpAlphaDarken.h"
-
+#include "compositeops/KoCompositeOpScreen.h"
+#include "compositeops/KoCompositeOpSubtract.h"
 /**
  * This function add to the colorspace all the composite ops defined by
  * the pigment library.
@@ -39,15 +40,17 @@
 template<class _Traits_>
 void addStandardCompositeOps(KoColorSpace* cs)
 {
-    cs->addCompositeOp( new KoCompositeOpOver<_Traits_>( cs ) );
+    cs->addCompositeOp( new KoCompositeOpAdd<_Traits_>( cs ) );
+    cs->addCompositeOp( new KoCompositeOpAlphaDarken<_Traits_>( cs ) );
+    cs->addCompositeOp( new KoCompositeOpBurn<_Traits_>( cs ) );
+    cs->addCompositeOp( new KoCompositeOpDivide<_Traits_>( cs ) );
+    cs->addCompositeOp( new KoCompositeOpDodge<_Traits_>( cs ) );
     cs->addCompositeOp( new KoCompositeOpErase<_Traits_>( cs ) );
     cs->addCompositeOp( new KoCompositeOpMultiply<_Traits_>( cs ) );
-    cs->addCompositeOp( new KoCompositeOpDivide<_Traits_>( cs ) );
-    cs->addCompositeOp( new KoCompositeOpBurn<_Traits_>( cs ) );
-    cs->addCompositeOp( new KoCompositeOpDodge<_Traits_>( cs ) );
-    cs->addCompositeOp( new KoCompositeOpScreen<_Traits_>( cs ) );
+    cs->addCompositeOp( new KoCompositeOpOver<_Traits_>( cs ) );
     cs->addCompositeOp( new KoCompositeOpOverlay<_Traits_>( cs ) );
-    cs->addCompositeOp( new KoCompositeOpAlphaDarken<_Traits_>( cs ) );
+    cs->addCompositeOp( new KoCompositeOpScreen<_Traits_>( cs ) );
+    cs->addCompositeOp( new KoCompositeOpSubtract<_Traits_>( cs ) );
 }
 
 #endif

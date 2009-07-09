@@ -49,6 +49,7 @@ class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
                                                  qint32 pixelSize,
                                                  const QBitArray & channelFlags )
         {
+            Q_UNUSED(pixelSize);
             if (srcBlend == NATIVE_OPACITY_OPAQUE) {
                 for(int i = 0; (uint)i <  _CSTraits::channels_nb; i++)
                 {

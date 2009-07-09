@@ -279,7 +279,7 @@ namespace {
     public:
 
         CompositeSubtract(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_SUBSTRACT, i18n("Subtract" ), KoCompositeOp::categoryArithmetic() )
+            : KoCompositeOp(cs, COMPOSITE_SUBTRACT, i18n("Subtract" ), KoCompositeOp::categoryArithmetic() )
             {
             }
 

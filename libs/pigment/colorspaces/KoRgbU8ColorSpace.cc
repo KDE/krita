@@ -32,7 +32,7 @@
 
 #include "compositeops/KoCompositeOps.h"
 #include "compositeops/KoCompositeOpAdd.h"
-#include "compositeops/KoCompositeOpSubstract.h"
+#include "compositeops/KoCompositeOpSubtract.h"
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))
@@ -77,15 +77,23 @@ KoRgbU8ColorSpace::KoRgbU8ColorSpace( KoColorProfile *p) :
 
     init();
 
+    // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
     addStandardCompositeOps<RgbU8Traits>(this);
+
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_DARKEN,  i18n( "Darken" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_LIGHTEN,  i18n( "Lighten" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_HUE,  i18n( "Hue" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_SATURATION,  i18n( "Saturation" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_VALUE,  i18n( "Value" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_COLOR,  i18n( "Color" )));
-    addCompositeOp( new KoCompositeOpAdd<RgbU8Traits>( this ) ); // TODO move it to the saddStandardCompositeOps (after 2.0)
-    addCompositeOp( new KoCompositeOpSubstract<RgbU8Traits>( this ) ); // TODO move it to the saddStandardCompositeOps (after 2.0)
+    addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_IN,  i18n( "In" )));
+    addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_OUT,  i18n( "Out" )));
+    addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_ADD,  i18n( "Add" )));
+    addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_DIFF,  i18n( "Diff" )));
+    addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_BUMPMAP,  i18n( "Bumpmap" )));
+    addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_CLEAR,  i18n( "Clear" )));
+    addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_DISSOLVE,  i18n( "Dissolve" )));
+
 }
 
 

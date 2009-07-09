@@ -46,7 +46,7 @@ KisCompositeOpsModel::KisCompositeOpsModel(const QList<KoCompositeOp*>& list)
         COMPOSITE_PLUS <<
         COMPOSITE_MINUS <<
         COMPOSITE_ADD <<
-        COMPOSITE_SUBSTRACT <<
+        COMPOSITE_SUBTRACT <<
         COMPOSITE_DIFF <<
         COMPOSITE_MULT <<
         COMPOSITE_DIVIDE <<

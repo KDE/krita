@@ -342,7 +342,7 @@ _TType_ levenbergMarquardt(_TFunction_* f, std::vector<_TType_>& parameters, int
         gmm::row_matrix< gmm::rsvector<_TType_> > M2(jacobian.ncols(), jacobian.ncols());
         for (uint k = 0; k < M2.ncols(); k++) M2(k, k) = 1.0;
         gmm::scale(M2, -lambda);
-        // substract it to M
+        // subtract it to M
         gmm::add(M, M2);
 //         std::cout << M2 << std::endl;
         /*        std::cout << std::endl << "[[";

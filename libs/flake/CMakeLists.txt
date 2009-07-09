@@ -100,6 +100,8 @@ set(flake_SRCS
     KoZoomMode.cpp
     KoDpi.cpp
     KoFilterEffect.cpp
+    KoFilterEffectFactory.cpp
+    KoFilterEffectRegistry.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -200,7 +202,15 @@ set_target_properties(flake PROPERTIES
 ########### install files ###############
 
 install(TARGETS flake  ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( FILES flake.desktop flaketool.desktop flakeshape.desktop flakedevice.desktop presentationeventaction.desktop scripteventaction.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES 
+    flake.desktop 
+    flaketool.desktop 
+    flakeshape.desktop 
+    flakedevice.desktop 
+    presentationeventaction.desktop 
+    scripteventaction.desktop 
+    filtereffect.desktop
+    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(
     FILES

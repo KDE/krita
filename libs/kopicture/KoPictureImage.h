@@ -73,7 +73,7 @@ public:
      */
     virtual void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
-    virtual Q3DragObject* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
+    virtual QMimeData* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
 
     virtual bool loadData(const QByteArray& array, const QString& extension);
 

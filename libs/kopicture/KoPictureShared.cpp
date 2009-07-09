@@ -26,7 +26,7 @@
 #include <QPainter>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3DragObject>
+#include <QMimeData>
 
 #include <kdebug.h>
 #include <kurl.h>
@@ -62,7 +62,7 @@ KoPictureShared::~KoPictureShared(void)
 }
 
 KoPictureShared::KoPictureShared(const KoPictureShared &other)
-        : Q3Shared() // Some compilers want it explicitly!
+        : Shared() // Some compilers want it explicitly!
 {
     // We need to use newCopy, because we want a real copy, not just a copy of the part of KoPictureBase
     if (other.m_base)
@@ -382,7 +382,7 @@ QPixmap KoPictureShared::generatePixmap(const QSize& size, bool smoothScale)
     return QPixmap();
 }
 
-Q3DragObject* KoPictureShared::dragObject(QWidget *dragSource, const char *name)
+QMimeData* KoPictureShared::dragObject(QWidget *dragSource, const char *name)
 {
     if (m_base)
         return m_base->dragObject(dragSource, name);

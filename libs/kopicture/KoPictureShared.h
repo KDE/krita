@@ -20,7 +20,6 @@
 #ifndef __koPictureShared_h__
 #define __koPictureShared_h__
 
-#include <q3shared.h>
 #include <QString>
 #include <QIODevice>
 #include <QPixmap>
@@ -30,18 +29,24 @@
 class KoXmlWriter;
 class QPainter;
 class QSize;
-class Q3DragObject;
+class QMimeData;
 
 class KoPictureBase;
+
+struct Shared
+{
+    Shared() : count(1) {}
+    void ref() { ++count; }
+    bool deref() { return !--count; }
+    uint count;
+};
 
 #include "kopicture_export.h"
 /**
  * @internal
  * KoPictureShared is the class that contains the shared part for KoPicture
- *
- * @warning As with all QShared objects, the sharing is neither automatic nor transparent!
  */
-class KOPICTURE_EXPORT KoPictureShared : public Q3Shared
+class KOPICTURE_EXPORT KoPictureShared : public Shared
 {
 public:
     /**
@@ -95,7 +100,7 @@ public:
      * @param dragSource must be 0 when copying to the clipboard
      * @return 0L if the picture is null!
      */
-    Q3DragObject* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
+    QMimeData* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
 
     bool load(QIODevice* io, const QString& extension);
     bool loadFromBase64(const QByteArray& str);

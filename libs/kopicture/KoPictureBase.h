@@ -31,7 +31,7 @@ class KoXmlWriter;
 class QPainter;
 class QSize;
 class QIODevice;
-class Q3DragObject;
+class QMimeData;
 
 const char NULL_MIME_TYPE[] = "application/x-zerosize";
 
@@ -85,7 +85,7 @@ public:
      * @param dragSource must be 0 when copying to the clipboard
      * @return 0L if the picture is null!
      */
-    virtual Q3DragObject* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
+    virtual QMimeData* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
 
     virtual bool load(QIODevice* io, const QString& extension);
 

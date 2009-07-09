@@ -32,7 +32,7 @@
 #include <QImageReader>
 #include <QPixmap>
 #include <QApplication>
-#include <q3dragobject.h>
+#include <QMimeData>
 
 class KoPictureImage::Private
 {

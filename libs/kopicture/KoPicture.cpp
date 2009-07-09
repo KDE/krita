@@ -248,7 +248,7 @@ bool KoPicture::setKeyAndDownloadPicture(const KUrl& url, QWidget *window)
     return result;
 }
 
-Q3DragObject* KoPicture::dragObject(QWidget *dragSource, const char *name)
+QMimeData* KoPicture::dragObject(QWidget *dragSource, const char *name)
 {
     if (m_sharedData)
         return m_sharedData->dragObject(dragSource, name);

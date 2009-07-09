@@ -28,12 +28,11 @@
 
 #include <kcodecs.h>
 #include <QPainter>
-#include <q3picture.h>
+#include <QMimeData>
 #include <QPixmap>
-#include <q3dragobject.h>
-//Added by qt3to4:
 #include <QBuffer>
 #include <kconfiggroup.h>
+
 static int s_useSlowResizeMode = -1; // unset
 
 KoPictureBase::KoPictureBase(void)

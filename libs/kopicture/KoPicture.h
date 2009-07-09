@@ -30,7 +30,7 @@
 class KoXmlWriter;
 class QPainter;
 class QSize;
-class Q3DragObject;
+class QMimeData;
 class KUrl;
 
 class KoPictureShared;
@@ -113,7 +113,7 @@ public:
      * @param name name for the QDragObject
      * @return 0L if the picture is null, or if a dragobject for it isn't implemented [yet]
      */
-    Q3DragObject* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
+    QMimeData* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
 
     bool load(QIODevice* io, const QString& extension);
 

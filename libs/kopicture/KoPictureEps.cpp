@@ -32,7 +32,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QApplication>
-#include <q3dragobject.h>
+#include <QMimeData>
 
 #include <kglobal.h>
 #include <kdebug.h>

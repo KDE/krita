@@ -223,8 +223,13 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${CMAKE_SOURCE_DIR}/libs/flake/commands 
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools 
                    ${CMAKE_BINARY_DIR}/libs/flake)
+
 # pigment depends on koplugin and lcms
-set(PIGMENT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin ${CMAKE_SOURCE_DIR}/libs/pigment ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops ${LCMS_INCLUDE_DIR} ${KDE4_INCLUDES} )
+set(PIGMENT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin 
+                     ${CMAKE_SOURCE_DIR}/libs/pigment 
+                     ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops 
+                     ${LCMS_INCLUDE_DIR} 
+                     ${KDE4_INCLUDES} )
 
 # komain depends on kostore, koplugin, flake and koodf
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}

@@ -10,7 +10,6 @@ set(kopicture_LIB_SRCS
    KoPictureShared.cpp
    KoPictureImage.cpp
    KoPictureClipart.cpp
-   KoPictureCollection.cpp
    KoPictureEps.cpp
 )
 
@@ -32,6 +31,5 @@ install(TARGETS kopicture ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES
     KoPictureKey.h 
     KoPicture.h 
-    KoPictureCollection.h 
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

@@ -185,7 +185,7 @@ endif(HAVE_REQUIRED_LCMS_VERSION)
 target_link_libraries(flake ${KDE4_KDEUI_LIBS}
         			    ${KDE4_KDE3SUPPORT_LIBS} 
                         ${EXTRA_LIBS}
-		        	    koodf kobase)
+		        	    koodf kobase koplugin)
 
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES ${EXTRA_LIBS} koodf kobase koplugin)
 

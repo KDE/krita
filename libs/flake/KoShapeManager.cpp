@@ -221,8 +221,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         shape->shadow()->paint(shape, painter, converter);
         painter.restore();
     }
-    if(shape->filterEffectStack().empty())
-    {
+    if(shape->filterEffectStack().empty()) {
         painter.save();
         shape->paint(painter, converter);
         painter.restore();
@@ -261,8 +260,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         imagePainter.end();
 
         // Filter
-        foreach(KoFilterEffect* filterEffect, shape->filterEffectStack())
-        {
+        foreach(KoFilterEffect* filterEffect, shape->filterEffectStack()) {
             filterEffect->processImage(image);
         }
 

@@ -1368,19 +1368,19 @@ void KoShape::removeAdditionalStyleAttribute(const char * name)
     d->additionalStyleAttributes.remove(name);
 }
 
-const QList<KoFilterEffect*> KoShape::filterEffectStack() const
+QList<KoFilterEffect*> KoShape::filterEffectStack() const
 {
     Q_D(const KoShape);
     return d->filterEffects;
 }
 
-void KoShape::insertFilterEffect(uint index, KoFilterEffect * filter)
+void KoShape::insertFilterEffect(int index, KoFilterEffect * filter)
 {
     Q_D(KoShape);
     d->filterEffects.insert(index, filter);
 }
 
-void KoShape::removeFilterEffect(uint index)
+void KoShape::removeFilterEffect(int index)
 {
     Q_D(KoShape);
     d->filterEffects.removeAt(index);

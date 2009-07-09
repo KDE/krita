@@ -799,20 +799,20 @@ public:
      *
      * @return the list of filter effects applied on the shape when rendering.
      */
-    const QList<KoFilterEffect*> filterEffectStack() const;
+    QList<KoFilterEffect*> filterEffectStack() const;
     
     /**
      * Inserts a new filter at the given position in the filter list.
      * @param index the list index to insert the new filter at
      * @param filter the new filter to insert
      */
-    void insertFilterEffect(uint index, KoFilterEffect * filter);
+    void insertFilterEffect(int index, KoFilterEffect * filter);
     
     /**
      * Removes the filter with the given index from the filter list.
      * @param index the index of the filter to remove
      */
-    void removeFilterEffect(uint index);
+    void removeFilterEffect(int index);
 
 protected:
     /// constructor

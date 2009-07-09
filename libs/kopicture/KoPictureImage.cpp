@@ -174,9 +174,13 @@ QString KoPictureImage::getMimeType(const QString& extension) const
     return mimetype;
 }
 
-Q3DragObject* KoPictureImage::dragObject(QWidget *dragSource, const char *name)
+QMimeData* KoPictureImage::dragObject(QWidget *dragSource, const char *name)
 {
-    return new Q3ImageDrag(m_originalImage, dragSource, name);
+    Q_UNUSED(dragSource); // Was used in Qt3? 
+    QMimeData* mimeData = new QMimeData();
+    mimeData->setImageData(m_originalImage);
+    mimeData->setObjectName(name);
+    return mimeData;
 }
 
 QImage KoPictureImage::generateImage(const QSize& size)

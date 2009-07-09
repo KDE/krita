@@ -123,13 +123,18 @@ bool KoPictureBase::isSlowResizeModeAllowed(void) const
     return s_useSlowResizeMode != 0;
 }
 
-Q3DragObject* KoPictureBase::dragObject(QWidget * dragSource, const char * name)
+QMimeData* KoPictureBase::dragObject(QWidget * dragSource, const char * name)
 {
+    Q_UNUSED(dragSource);
     QImage image(generateImage(getOriginalSize()));
     if (image.isNull())
         return 0L;
-    else
-        return new Q3ImageDrag(image, dragSource, name);
+    else {
+        QMimeData* mimeData = new QMimeData();
+        mimeData->setImageData(image);
+        mimeData->setObjectName(name);
+        return mimeData; // XXX: Qt3 use dragsource here?
+    }
 }
 
 QImage KoPictureBase::generateImage(const QSize& size)

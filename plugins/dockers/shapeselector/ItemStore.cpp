@@ -252,8 +252,8 @@ QRectF ItemStore::loadShapeTypes()
                 foreach(KoShape *child, folder->childShapes())
                     s_itemStorePrivate()->addShape(child);
             } else {
-                kWarning() << "ERROR: Could not parse xml for folder" << i << "at Line" << line << "Column" << column;
-                kWarning() << "  " << error;
+                kWarning(31000) << "ERROR: Could not parse xml for folder" << i << "at Line" << line << "Column" << column;
+                kWarning(31000) << "  " << error;
             }
         }
         s_itemStorePrivate()->addFolder(folder);

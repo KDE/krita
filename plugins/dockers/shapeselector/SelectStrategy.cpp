@@ -90,7 +90,7 @@ void SelectStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardM
                 addOffset = false;
                 itemData = cbps->clipboardData();
             } else {
-                kWarning() << "Unimplemented drag for this type!";
+                kWarning(31000) << "Unimplemented drag for this type!";
                 return;
             }
         }

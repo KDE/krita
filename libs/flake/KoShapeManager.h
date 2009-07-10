@@ -79,7 +79,7 @@ public:
     void setShapes(const QList<KoShape *> &shapes, Repaint repaint = PaintShapeOnAdd);
 
     /// returns the list of maintained shapes
-    const QList<KoShape *> & shapes() const;
+    QList<KoShape*> shapes() const;
 
     /**
      * Add a KoShape to be displayed and managed by this manager.

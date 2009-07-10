@@ -433,7 +433,7 @@ void KoShapeManager::updateTree()
     }
 }
 
-const QList<KoShape *> & KoShapeManager::shapes() const
+QList<KoShape*> KoShapeManager::shapes() const
 {
     return d->shapes;
 }

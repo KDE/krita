@@ -61,36 +61,36 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /**
-     * Adds an object to the selection.
+     * Adds a shape to the selection.
      *
-     * If the object is a KoShapeGroup all of its child objects are automatically added
+     * If the shape is a KoShapeGroup all of its child shapes are automatically added
      * to the selection.
-     * If the object has no parent or is not a KoShapeGroup, only the given object is
+     * If the shape has no parent or is not a KoShapeGroup, only the given shape is
      * added to the selection.
-     * If the given object is a child of a KoShapeGroup and recursive selection is enabled
-     * the all parents and their child object up to the toplevel KoShapeGroup are added to
+     * If the given shape is a child of a KoShapeGroup and recursive selection is enabled
+     * the all parents and their child shapes up to the toplevel KoShapeGroup are added to
      * the selection.
      *
-     * @param object the object to add to the selection
+     * @param shape the shape to add to the selection
      * @param recursive enables recursively selecting shapes of parent groups
      */
-    void select(KoShape * object, bool recursive = true);
+    void select(KoShape *shape, bool recursive = true);
 
     /**
-     * Removes a selected object.
+     * Removes a selected shape.
      *
-     * If the object is a KoShapeGroup all of its child objects are automatically removed
+     * If the shape is a KoShapeGroup all of its child shapes are automatically removed
      * from the selection.
-     * If the object has no parent or is not a KoShapeGroup, only the given object is
+     * If the shape has no parent or is not a KoShapeGroup, only the given shape is
      * removed from the selection.
-     * If the given object is a child of a KoShapeGroup and recursive selection is enabled
-     * the all parents and their child object up to the toplevel KoShapeGroup are removed
+     * If the given shape is a child of a KoShapeGroup and recursive selection is enabled
+     * the all parents and their child shape up to the toplevel KoShapeGroup are removed
      * from the selection.
      *
-     * @param object the object to remove from the selection
+     * @param shape the shape to remove from the selection
      * @param recursive enables recursively deselecting shapes of parent groups
      */
-    void deselect(KoShape * object, bool recursive = true);
+    void deselect(KoShape *shape, bool recursive = true);
 
     /// clear the selections list
     void deselectAll();
@@ -111,7 +111,7 @@ public:
     KoShape *firstSelectedShape(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
 
     /// return true if the shape is selected
-    bool isSelected(const KoShape *object) const;
+    bool isSelected(const KoShape *shape) const;
 
     /// return the selection count, i.e. the number of all selected shapes
     int count() const;

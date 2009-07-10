@@ -126,28 +126,28 @@ void KoSelection::paint(QPainter &painter, const KoViewConverter &converter)
     Q_UNUSED(converter);
 }
 
-void KoSelection::select(KoShape * object, bool recursive)
+void KoSelection::select(KoShape *shape, bool recursive)
 {
     Q_D(KoSelection);
-    Q_ASSERT(object != this);
-    Q_ASSERT(object);
-    if (! object->isSelectable() || ! object->isVisible(true))
+    Q_ASSERT(shape != this);
+    Q_ASSERT(shape);
+    if (!shape->isSelectable() || !shape->isVisible(true))
         return;
 
     // save old number of selected shapes
     uint oldSelectionCount = d->selectedShapes.count();
 
-    if (!d->selectedShapes.contains(object))
-        d->selectedShapes << object;
+    if (!d->selectedShapes.contains(shape))
+        d->selectedShapes << shape;
 
     // automatically recursively select all child shapes downwards in the hierarchy
-    KoShapeGroup* group = dynamic_cast<KoShapeGroup*>(object);
+    KoShapeGroup* group = dynamic_cast<KoShapeGroup*>(shape);
     if (group)
         d->selectGroupChildren(group);
 
     if (recursive) {
         // recursively select all parents and their children upwards the hierarchy
-        KoShapeContainer *parent = object->parent();
+        KoShapeContainer *parent = shape->parent();
         while (parent) {
             KoShapeGroup *parentGroup = dynamic_cast<KoShapeGroup*>(parent);
             if (! parentGroup) break;
@@ -160,7 +160,7 @@ void KoSelection::select(KoShape * object, bool recursive)
     }
 
     if (d->selectedShapes.count() == 1) {
-        setTransformation(object->absoluteTransformation(0));
+        setTransformation(shape->absoluteTransformation(0));
         updateSizeAndPosition();
     }
     else {
@@ -187,18 +187,18 @@ void KoSelection::select(KoShape * object, bool recursive)
     d->requestSelectionChangedEvent();
 }
 
-void KoSelection::deselect(KoShape * object, bool recursive)
+void KoSelection::deselect(KoShape *shape, bool recursive)
 {
     Q_D(KoSelection);
-    if (! d->selectedShapes.contains(object))
+    if (! d->selectedShapes.contains(shape))
         return;
 
-    d->selectedShapes.removeAll(object);
+    d->selectedShapes.removeAll(shape);
 
-    KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(object);
+    KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
     if (recursive) {
         // recursively find the top group upwards int the hierarchy
-        KoShapeGroup * parentGroup = dynamic_cast<KoShapeGroup*>(object->parent());
+        KoShapeGroup *parentGroup = dynamic_cast<KoShapeGroup*>(shape->parent());
         while (parentGroup) {
             group = parentGroup;
             parentGroup = dynamic_cast<KoShapeGroup*>(parentGroup->parent());
@@ -290,15 +290,16 @@ const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) 
     return answer;
 }
 
-bool KoSelection::isSelected(const KoShape *object) const
+bool KoSelection::isSelected(const KoShape *shape) const
 {
     Q_D(const KoSelection);
-    if (object == this)
+    if (shape == this)
         return true;
 
-    foreach(KoShape *shape, d->selectedShapes)
-        if (shape == object)
+    foreach (KoShape *s, d->selectedShapes) {
+        if (s == shape)
             return true;
+    }
 
     return false;
 }

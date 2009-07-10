@@ -501,6 +501,12 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to)
         return;
     foreach(CanvasData *data, d->canvasses.value(newCanvas)) {
         if (data->inputDevice == d->inputDevice) {
+            if (d->canvasData) { // deactivate the old one.
+                d->canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ArrowCursor);
+                if (d->canvasData->activeTool)
+                    d->canvasData->activeTool->deactivate();
+            }
+
             d->canvasData = data;
             d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
             d->canvasData->canvas->activate();

@@ -26,6 +26,10 @@ class KoShapePrivate
 public:
     KoShapePrivate(KoShape *shape);
     virtual ~KoShapePrivate();
+    /**
+     * Notify the shape that a change was done. To be used by inheriting shapes.
+     * @param type the change type
+     */
     void shapeChanged(KoShape::ChangeType type);
 
     QSizeF size; // size in pt

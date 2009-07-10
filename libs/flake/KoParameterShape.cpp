@@ -50,6 +50,7 @@ void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::Keybo
         kWarning(30006) << "handleId out of bounds";
         return;
     }
+    Q_D(KoParameterShape);
 
     update();
     // function to do special stuff
@@ -57,7 +58,7 @@ void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::Keybo
 
     updatePath(size());
     update();
-    notifyChangedShape(ParameterChanged);
+    d->shapeChanged(ParameterChanged);
 }
 
 

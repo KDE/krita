@@ -920,12 +920,6 @@ protected:
     /// return the current matrix that contains the rotation/scale/position of this shape
     const QMatrix& matrix() const;
 
-    /**
-     * Notify the shape that a change was done. To be used by inheriting shapes.
-     * @param type the change type
-     */
-    void notifyChangedShape(ChangeType type);
-
     KoShapePrivate *d_ptr;
 
 private:

@@ -314,15 +314,9 @@ void KisToolGradient::paintLine(QPainter& gc)
     if (m_canvas) {
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
-        QPointF start;
-        QPointF end;
 
-        start = m_startPos;
-        end = m_endPos;
         gc.setPen(pen);
-        start = QPoint(static_cast<int>(start.x()), static_cast<int>(start.y()));
-        end = QPoint(static_cast<int>(end.x()), static_cast<int>(end.y()));
-        gc.drawLine(start, end);
+        gc.drawLine(m_startPos, m_endPos);
         gc.setPen(old);
     }
 }

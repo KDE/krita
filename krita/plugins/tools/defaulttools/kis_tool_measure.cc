@@ -115,24 +115,17 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 
     QPen old = gc.pen();
     QPen pen(Qt::SolidLine);
-    QPointF start;
-    QPointF end;
-
-    start = m_startPos;
-    end = m_endPos;
-
     gc.setPen(pen);
-    start = QPoint(static_cast<int>(start.x()), static_cast<int>(start.y()));
-    end = QPoint(static_cast<int>(end.x()), static_cast<int>(end.y()));
-    gc.drawLine(start, end);
+
+    gc.drawLine(m_startPos, m_endPos);
 
     if (deltaX() >= 0)
-        gc.drawLine(QPointF(start.x(), start.y()), QPointF(start.x() + INNER_RADIUS, start.y()));
+        gc.drawLine(QPointF(m_startPos.x(), m_startPos.y()), QPointF(m_startPos.x() + INNER_RADIUS, m_startPos.y()));
     else
-        gc.drawLine(QPointF(start.x(), start.y()), QPointF(start.x() - INNER_RADIUS, start.y()));
+        gc.drawLine(QPointF(m_startPos.x(), m_startPos.y()), QPointF(m_startPos.x() - INNER_RADIUS, m_startPos.y()));
 
     if (distance() >= INNER_RADIUS) {
-        QRectF rectangle(start.x() - INNER_RADIUS, start.y() - INNER_RADIUS, 2*INNER_RADIUS, 2*INNER_RADIUS);
+        QRectF rectangle(m_startPos.x() - INNER_RADIUS, m_startPos.y() - INNER_RADIUS, 2*INNER_RADIUS, 2*INNER_RADIUS);
         int startAngle = (deltaX() >= 0) ? 0 : 180 * 16;
 
         int spanAngle;

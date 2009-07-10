@@ -191,14 +191,9 @@ void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
     if (m_canvas) {
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
-        QPoint start;
-        QPoint end;
-
         gc.setPen(pen);
 
-        start = QPoint(static_cast<int>(m_dragStart.x()), static_cast<int>(m_dragStart.y()));
-        end = QPoint(static_cast<int>(m_dragEnd.x()), static_cast<int>(m_dragEnd.y()));
-        gc.drawRect(QRect(start, end));
+        gc.drawRect(QRectF(m_dragStart, m_dragEnd));
         gc.setPen(old);
     }
 }

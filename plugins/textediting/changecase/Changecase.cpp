@@ -55,7 +55,7 @@ void Changecase::checkSection(QTextDocument *document, int startPosition, int en
     m_endPosition = endPosition;
 
     KDialog *dialog = new KDialog();
-    dialog->setCaption(i18n("Changecase"));
+    dialog->setCaption(i18n("Change case"));
     dialog->setButtons(KDialog::Ok | KDialog::Cancel);
 
     QWidget *widget = new QWidget(dialog);

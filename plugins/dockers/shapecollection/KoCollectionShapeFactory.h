@@ -21,6 +21,8 @@
 
 #include <KoShapeFactory.h>
 
+class KoShapeControllerBase;
+
 class KoCollectionShapeFactory : public KoShapeFactory
 {
     Q_OBJECT

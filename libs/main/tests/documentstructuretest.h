@@ -22,7 +22,6 @@
 
 #include <QObject>
 
-class KoStore;
 class KComponentData;
 
 class DocumentStructureTest : public QObject

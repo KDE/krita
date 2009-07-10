@@ -47,7 +47,6 @@ class KoMainWindow;
 class KoView;
 class KoDocumentInfo;
 class KoOpenPane;
-class KoEmbeddedDocumentSaver;
 
 
 class KoVersionInfo

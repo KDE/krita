@@ -33,7 +33,6 @@
 
 #include <koresource_export.h>
 
-class QImage;
 
 enum {
     INTERP_LINEAR = 0,

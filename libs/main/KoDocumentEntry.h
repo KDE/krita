@@ -26,11 +26,9 @@
 #include <QtCore/QList>
 #include "komain_export.h"
 
-class QObject;
 class QStringList;
 class KoDocument;
 class KoFilter;
-class KoFilterChain;
 
 /**
  *  Represents an available KOffice component

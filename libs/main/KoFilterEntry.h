@@ -28,7 +28,6 @@
 
 class QObject;
 class QStringList;
-class KoDocument;
 class KoFilter;
 class KoFilterChain;
 /**

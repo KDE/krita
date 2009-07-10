@@ -24,7 +24,6 @@
 #include "KoFilter.h"
 
 class KoXmlWriter;
-class KoChain;
 class KoStore;
 class KoGenStyles;
 

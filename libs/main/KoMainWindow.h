@@ -37,7 +37,6 @@ class KoPrintJob;
 class KoDockFactory;
 class KRecentFilesAction;
 class QDockWidget;
-class QAction;
 class QLabel;
 
 // KOffice class but not in main module

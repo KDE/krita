@@ -27,10 +27,7 @@
 #include <QtCore/QHash>
 #include <QtGui/QDockWidget>
 
-class QButtonGroup;
-class QBoxLayout;
 class QToolButton;
-class ToolArea;
 class KoCanvasController;
 class KoCanvasBase;
 class KoShapeLayer;

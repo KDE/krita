@@ -34,7 +34,6 @@ class QSizeF;
 class KUrl;
 class KoImageCollection;
 class KoImageDataPrivate;
-class KoXmlWriter;
 class KoStore;
 
 /**

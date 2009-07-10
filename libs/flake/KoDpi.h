@@ -28,7 +28,6 @@
 
 #include "flake_export.h"
 
-class KConfig;
 
 class FLAKE_EXPORT KoDpi
 {

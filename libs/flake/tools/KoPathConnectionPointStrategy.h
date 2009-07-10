@@ -26,7 +26,6 @@
 #include "KoParameterChangeStrategy.h"
 #include "KoConnectionShape.h"
 
-class KoParameterShape;
 class KoCanvasBase;
 class KoPathTool;
 

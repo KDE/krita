@@ -26,7 +26,6 @@
 #include "flake_export.h"
 
 class KoInteractionStrategy;
-class KoShape;
 
 #define KoInteractionTool_ID "InteractionTool"
 

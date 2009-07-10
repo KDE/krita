@@ -25,7 +25,6 @@
 #include "flake_export.h"
 
 class KoPathShape;
-class KoShapeControllerBase;
 
 /// The undo / redo command for reversing path directions
 class FLAKE_EXPORT KoPathReverseCommand : public QUndoCommand

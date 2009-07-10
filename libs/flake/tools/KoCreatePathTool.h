@@ -28,7 +28,6 @@
 
 class KoPathShape;
 class KoPathPoint;
-class QRectF;
 
 #define KoCreatePathTool_ID "CreatePathTool"
 

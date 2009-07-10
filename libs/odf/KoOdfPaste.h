@@ -25,7 +25,6 @@
 #include "koodf_export.h"
 #include "KoXmlReaderForward.h"
 
-class QString;
 class QMimeData;
 class KoOdfReadStore;
 

@@ -28,8 +28,6 @@
 #include "koodf_export.h"
 #include "KoOdfNumberStyles.h"
 
-class KoGenStyles;
-class KoXmlWriter;
 
 /**
  * Repository of styles used during loading of OASIS/OOo file

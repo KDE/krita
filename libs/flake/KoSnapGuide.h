@@ -30,7 +30,6 @@
 
 class KoSnapStrategy;
 class KoShape;
-class KoPathShape;
 class KoPathPoint;
 class KoViewConverter;
 class KoCanvasBase;

@@ -24,7 +24,6 @@
 
 #include "flake_export.h"
 
-class QWidget;
 class KoEventAction;
 class KoEventActionWidget;
 

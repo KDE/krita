@@ -32,7 +32,6 @@
 #define KoPathShapeId "KoPathShape"
 
 class KoPathShape;
-class KoPointGroup;
 class KoPathPoint;
 class KoPathShapePrivate;
 

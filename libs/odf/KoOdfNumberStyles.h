@@ -29,7 +29,6 @@
 class KoGenStyles;
 class KoXmlWriter;
 class KoGenStyle;
-class KoStyleStack;
 
 /**
  * Loading and saving of number styles

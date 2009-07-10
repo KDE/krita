@@ -29,7 +29,6 @@ class QPointF;
 class QMatrix;
 class QRectF;
 class QPainter;
-class QSizeF;
 class KoPointGroup;
 
 /**

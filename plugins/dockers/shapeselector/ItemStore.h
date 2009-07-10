@@ -28,7 +28,8 @@ class KoShape;
 class FolderShape;
 class ClipboardProxyShape;
 
-class ItemStore {
+class ItemStore
+{
 public:
     ItemStore();
     ItemStore(KoShapeManager *shapeManager);
@@ -54,7 +55,8 @@ private:
     KoShapeManager *m_shapeManager;
 };
 
-class ItemStorePrivate : public QObject {
+class ItemStorePrivate : public QObject
+{
     Q_OBJECT
 public:
     ItemStorePrivate();

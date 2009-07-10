@@ -26,7 +26,8 @@
 class Canvas;
 class KoShape;
 
-class SelectStrategy : public QObject , public InteractionStrategy {
+class SelectStrategy : public QObject, public InteractionStrategy
+{
     Q_OBJECT
 public:
     SelectStrategy(Canvas *canvas, KoShape *clickedShape, KoPointerEvent &event);

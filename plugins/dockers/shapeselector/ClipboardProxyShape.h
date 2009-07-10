@@ -31,7 +31,8 @@ class KoShapeSavingContext;
 
 #define OASIS_MIME "application/vnd.oasis.opendocument.text"
 
-class ClipboardProxyShape : public KoShape {
+class ClipboardProxyShape : public KoShape
+{
 public:
     /*
      * constructs a shape that will show a clipboard item at a specific size,

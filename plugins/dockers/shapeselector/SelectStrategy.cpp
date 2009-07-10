@@ -43,7 +43,7 @@ SelectStrategy::SelectStrategy(Canvas *canvas, KoShape *clickedShape, KoPointerE
             shape->update();
         canvas->shapeManager()->selection()->deselectAll();
     }
-    if(clickedShape) {
+    if (clickedShape) {
         canvas->shapeManager()->selection()->select(clickedShape);
         clickedShape->update();
     }
@@ -53,45 +53,43 @@ SelectStrategy::SelectStrategy(Canvas *canvas, KoShape *clickedShape, KoPointerE
 void SelectStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
-    if(m_clickedShape == 0)
+    if (m_clickedShape == 0)
         return;
     QPointF distance = m_clickedShape->position() - mouseLocation;
     QPointF pixelDistance = m_canvas->viewConverter()->documentToView(distance);
-    if(qAbs(pixelDistance.x()) < 5 && qAbs(pixelDistance.y()) < 5)
+    if (qAbs(pixelDistance.x()) < 5 && qAbs(pixelDistance.y()) < 5)
         return;
 
     // start drag
     QString mimeType;
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-    TemplateShape *templateShape = dynamic_cast<TemplateShape*> (m_clickedShape);
+    TemplateShape *templateShape = dynamic_cast<TemplateShape*>(m_clickedShape);
     bool addOffset = true;
-    if(templateShape) {
+    if (templateShape) {
         dataStream << templateShape->shapeTemplate().id;
         KoProperties *props = templateShape->shapeTemplate().properties;
-        if(props)
+        if (props)
             dataStream << props->store("item"); // is an xml-QString
         else
             dataStream << QString();
         mimeType = SHAPETEMPLATE_MIMETYPE;
-    }
-    else {
-        GroupShape *group = dynamic_cast<GroupShape*> (m_clickedShape);
-        if(group) {
+    } else {
+        GroupShape *group = dynamic_cast<GroupShape*>(m_clickedShape);
+        if (group) {
             dataStream << group->groupId();
             mimeType = SHAPEID_MIMETYPE;
         }
-        else if(dynamic_cast<FolderShape*> (m_clickedShape)) {
+        else if (dynamic_cast<FolderShape*>(m_clickedShape)) {
             dataStream << QString();
             mimeType = FOLDERSHAPE_MIMETYPE;
         } else {
-            ClipboardProxyShape *cbps = dynamic_cast<ClipboardProxyShape*> (m_clickedShape);
+            ClipboardProxyShape *cbps = dynamic_cast<ClipboardProxyShape*>(m_clickedShape);
             if (cbps) {
                 mimeType = OASIS_MIME;
                 addOffset = false;
                 itemData = cbps->clipboardData();
-            }
-            else {
+            } else {
                 kWarning() << "Unimplemented drag for this type!";
                 return;
             }
@@ -106,16 +104,16 @@ void SelectStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardM
 
     QDrag *drag = new QDrag(m_canvas);
     drag->setMimeData(mimeData);
-    IconShape *iconShape = dynamic_cast<IconShape*> (m_clickedShape);
-    if(iconShape)
+    IconShape *iconShape = dynamic_cast<IconShape*>(m_clickedShape);
+    if (iconShape)
         drag->setPixmap(iconShape->pixmap());
     drag->setHotSpot(offset.toPoint());
 
-    if(drag->start(Qt::CopyAction | Qt::MoveAction) != Qt::MoveAction)
+    if (drag->start(Qt::CopyAction | Qt::MoveAction) != Qt::MoveAction)
         m_emitItemSelected = false;
 }
 
-void SelectStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
+void SelectStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
     if (m_clickedShape && m_emitItemSelected)

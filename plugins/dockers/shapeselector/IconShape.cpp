@@ -24,7 +24,8 @@
 #include <QPainter>
 #include <KIcon>
 
-IconShape::IconShape(const QString &icon) {
+IconShape::IconShape(const QString &icon)
+{
     m_icon = KIcon(icon).pixmap(22);
     setSize(m_icon.size());
 }
@@ -33,7 +34,8 @@ IconShape::~IconShape()
 {
 }
 
-void IconShape::paint(QPainter &painter, const KoViewConverter &converter) {
+void IconShape::paint(QPainter &painter, const KoViewConverter &converter)
+{
     applyConversion(painter, converter);
     painter.drawPixmap(QRect( QPoint(0,0), m_icon.size()), m_icon);
 }

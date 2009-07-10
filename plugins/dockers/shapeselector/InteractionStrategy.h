@@ -23,7 +23,8 @@
 
 class KoPointerEvent;
 
-class InteractionStrategy {
+class InteractionStrategy
+{
 public:
     InteractionStrategy() {}
     virtual ~InteractionStrategy() {}

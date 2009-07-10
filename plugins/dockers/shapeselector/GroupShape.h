@@ -23,7 +23,8 @@
 
 class KoShapeFactory;
 
-class GroupShape : public IconShape {
+class GroupShape : public IconShape
+{
 public:
     GroupShape(KoShapeFactory *shapeFactory);
 

@@ -25,12 +25,13 @@ class Canvas;
 class KoShape;
 class QMouseEvent;
 
-class RightClickStrategy : public InteractionStrategy {
+class RightClickStrategy : public InteractionStrategy
+{
 public:
     RightClickStrategy(Canvas *canvas, KoShape *clickedShape, KoPointerEvent &event);
 
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual void finishInteraction( Qt::KeyboardModifiers modifiers );
+    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
 
 private:
     // actions

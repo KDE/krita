@@ -23,7 +23,8 @@
 
 #include <KoShapeFactory.h>
 
-class TemplateShape : public IconShape {
+class TemplateShape : public IconShape
+{
 public:
     TemplateShape(const KoShapeTemplate &shapeTemplate);
 

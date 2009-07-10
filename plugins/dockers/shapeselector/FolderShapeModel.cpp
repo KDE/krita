@@ -27,26 +27,32 @@ FolderShapeModel::FolderShapeModel(FolderShape *parent)
 {
 }
 
-void FolderShapeModel::remove(KoShape *child) {
+void FolderShapeModel::remove(KoShape *child)
+{
     m_icons.removeAll(child);
 }
 
-void FolderShapeModel::setClipping(const KoShape *, bool ) {
+void FolderShapeModel::setClipping(const KoShape *, bool )
+{
 }
 
-bool FolderShapeModel::childClipped(const KoShape *) const {
+bool FolderShapeModel::childClipped(const KoShape *) const
+{
     return true;
 }
 
-bool FolderShapeModel::isChildLocked(const KoShape *) const {
+bool FolderShapeModel::isChildLocked(const KoShape *) const
+{
     return false;
 }
 
-int FolderShapeModel::count() const {
+int FolderShapeModel::count() const
+{
     return m_icons.count();
 }
 
-QList<KoShape *> FolderShapeModel::childShapes() const {
+QList<KoShape *> FolderShapeModel::childShapes() const
+{
     return m_icons;
 }
 
@@ -60,9 +66,9 @@ void FolderShapeModel::folderResized()
     int x = 5, y = 5;
     const qreal width = m_parent->size().width();
     int rowHeight=0;
-    foreach(KoShape *shape, m_icons) {
+    foreach (KoShape *shape, m_icons) {
         const QSizeF size = shape->size();
-        if(x + size.width() > width) { // next row
+        if (x + size.width() > width) { // next row
             y += rowHeight + 5; // 5 = gap
             x = 5;
         }
@@ -75,25 +81,27 @@ void FolderShapeModel::folderResized()
     }
 }
 
-void FolderShapeModel::childChanged(KoShape *child, KoShape::ChangeType type) {
+void FolderShapeModel::childChanged(KoShape *child, KoShape::ChangeType type)
+{
     Q_UNUSED(child);
     Q_UNUSED(type);
 }
 
-void FolderShapeModel::add(KoShape *shape) {
+void FolderShapeModel::add(KoShape *shape)
+{
     int x = 5, y = 5;
     const int w = (int) shape->size().width();
     const qreal width = m_parent->size().width();
     bool ok;
     do {
         int rowHeight=0;
-        ok=true;
-        foreach(const KoShape *shape, m_icons) {
-            if(shape->position().y() > y || shape->position().y() + shape->size().height() < y)
+        ok = true;
+        foreach (const KoShape *shape, m_icons) {
+            if (shape->position().y() > y || shape->position().y() + shape->size().height() < y)
                 continue; // other row.
             rowHeight = qMax(rowHeight, qRound(shape->size().height()));
             x = qMax(x, qRound(shape->position().x() + shape->size().width()) + 5); // 5=gap
-            if(x + w > width) { // next row
+            if (x + w > width) { // next row
                 y += rowHeight + 5; // 5 = gap
                 x = 5;
                 ok=false;

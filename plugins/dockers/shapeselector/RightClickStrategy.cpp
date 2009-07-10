@@ -73,26 +73,26 @@ void RightClickStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
         zoomOutAction = new QAction(i18n("Zoom Out"), &menu);
         menu.addAction(zoomOutAction);
     }
-    FolderShape *folder = dynamic_cast<FolderShape*> (m_clickedShape);
+    FolderShape *folder = dynamic_cast<FolderShape*>(m_clickedShape);
     if (folder && folder != m_canvas->itemStore()->mainFolder()) {
         removeFolder = new QAction(i18n("Remove Folder"), &menu);
         menu.addAction(removeFolder);
     }
 
-    QAction * selected = m_canvas->popup(&menu, m_lastPosition);
+    QAction *selected = m_canvas->popup(&menu, m_lastPosition);
     if (selected == 0)
         return;
-    if (selected == save)
+    if (selected == save) {
         saveSelection();
-    else if (selected == load)
+    } else if (selected == load) {
         this->load();
-    else if (selected == newFolder)
+    } else if (selected == newFolder) {
         createNewFolder();
-    else if (selected == zoomInAction)
+    } else if (selected == zoomInAction) {
         m_canvas->zoomIn(m_lastPosition);
-    else if (selected == zoomOutAction)
+    } else if (selected == zoomOutAction) {
         m_canvas->zoomOut(m_lastPosition);
-    else if (selected == removeFolder) {
+    } else if (selected == removeFolder) {
         Q_ASSERT(folder);
         m_canvas->itemStore()->removeFolder(folder);
         FolderShape *main = m_canvas->itemStore()->mainFolder();
@@ -133,8 +133,7 @@ void RightClickStrategy::createNewFolder()
 
         fs->setPosition(QPointF(size.width(), insets.top));
         fs->setSize(size);
-    }
-    else {
+    } else {
         fs->setAbsolutePosition(m_lastPosition);
         fs->setSize(QSizeF(150, 100));
     }
@@ -145,9 +144,9 @@ void RightClickStrategy::createNewFolder()
 void RightClickStrategy::saveSelection()
 {
     KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    FolderShape *fs = dynamic_cast<FolderShape*> (shape);
+    FolderShape *fs = dynamic_cast<FolderShape*>(shape);
     if (fs == 0)
-        fs = dynamic_cast<FolderShape*> (shape->parent());
+        fs = dynamic_cast<FolderShape*>(shape->parent());
     if (fs == 0) // TODO give feedback ?
         return;
 

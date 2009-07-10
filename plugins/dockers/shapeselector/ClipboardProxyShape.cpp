@@ -34,7 +34,7 @@ ClipboardProxyShape::ClipboardProxyShape(KoShape*clipboardItem, const QByteArray
 
 static void deleteShape(KoShape *shape)
 {
-    KoShapeContainer *container = dynamic_cast<KoShapeContainer*> (shape);
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
         foreach(KoShape *shape, container->childShapes())
             deleteShape(shape);

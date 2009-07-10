@@ -35,9 +35,9 @@ void FolderBorder::borderInsets(const KoShape *shape, KoInsets &insets)
     insets.left = 1;
     insets.right = 1;
     insets.bottom = 1;
-    if (shape->name().isEmpty())
+    if (shape->name().isEmpty()) {
         insets.top = 1;
-    else {
+    } else {
         QFontMetricsF fm(KGlobalSettings::windowTitleFont());
         insets.top = fm.height();
     }
@@ -59,7 +59,7 @@ void FolderBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewCo
     painter.setPen(QPen(KGlobalSettings::activeTitleColor()));
     QSizeF size = shape->size();
     painter.drawRect(QRectF(QPointF(),size));
-    if (! shape->name().isEmpty()) {
+    if (!shape->name().isEmpty()) {
         QFont font = KGlobalSettings::windowTitleFont();
         QFontMetricsF fm(font);
         topBorder += fm.height();
@@ -70,7 +70,7 @@ void FolderBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewCo
     }
 }
 
-void FolderBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color)
+void FolderBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color)
 {
     // FIXME
     paintBorder(shape, painter, converter);

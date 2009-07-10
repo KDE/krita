@@ -23,7 +23,8 @@
 
 class Canvas;
 
-class DragCanvasStrategy : public InteractionStrategy {
+class DragCanvasStrategy : public InteractionStrategy
+{
 public:
     DragCanvasStrategy(Canvas *canvas, KoPointerEvent &event);
 

@@ -23,7 +23,8 @@
 
 class FolderShape;
 
-class FolderShapeModel : public KoShapeContainerModel {
+class FolderShapeModel : public KoShapeContainerModel
+{
 public:
     FolderShapeModel(FolderShape *parent);
 

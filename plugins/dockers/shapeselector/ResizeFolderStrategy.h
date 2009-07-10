@@ -26,7 +26,8 @@
 class Canvas;
 class FolderShape;
 
-class ResizeFolderStrategy : public InteractionStrategy {
+class ResizeFolderStrategy : public InteractionStrategy
+{
 public:
     ResizeFolderStrategy(Canvas *canvas, FolderShape *clickedFolder, KoPointerEvent &event);
 

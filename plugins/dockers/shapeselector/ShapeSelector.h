@@ -35,7 +35,8 @@ class QFile;
  * The shape selector shows a widget that holds templates and clipboard data
  * for the user to easilly move that between apps and maintain functionality.
  */
-class ShapeSelector : public QDockWidget {
+class ShapeSelector : public QDockWidget
+{
     Q_OBJECT
 public:
     explicit ShapeSelector(QWidget *parent = 0);

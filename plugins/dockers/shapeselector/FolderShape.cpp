@@ -32,12 +32,13 @@ FolderShape::FolderShape()
 {
 }
 
-void FolderShape::paintComponent(QPainter &painter, const KoViewConverter &converter) {
+void FolderShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
+{
     Q_UNUSED(painter);
     Q_UNUSED(converter);
 }
 
-void FolderShape::setSize( const QSizeF &size )
+void FolderShape::setSize(const QSizeF &size)
 {
     KoShapeContainer::setSize(size);
     static_cast<FolderShapeModel*>(model())->folderResized();
@@ -47,14 +48,14 @@ QDomDocument FolderShape::save()
 {
     QDomDocument doc;
     QDomElement element = doc.createElement("book");
-    doc.appendChild( element );
+    doc.appendChild(element);
     foreach (KoShape *child, childShapes()) {
-        IconShape *ic = dynamic_cast<IconShape*> (child);
+        IconShape *ic = dynamic_cast<IconShape*>(child);
         if (ic) {
             ic->save(element);
             continue;
         }
-        ClipboardProxyShape *proxy = dynamic_cast<ClipboardProxyShape*> (child);
+        ClipboardProxyShape *proxy = dynamic_cast<ClipboardProxyShape*>(child);
         if (proxy) {
             QDomElement clipboard = doc.createElement("clipboard");
             element.appendChild(clipboard);
@@ -70,13 +71,12 @@ void FolderShape::load(const QDomDocument &document)
 {
     QDomElement root = document.firstChildElement();
     QDomElement item = root.firstChildElement();
-    while (! item.isNull()) {
+    while (!item.isNull()) {
         if (item.tagName() == "template") {
             TemplateShape *t = TemplateShape::createShape(item);
             Q_ASSERT(t);
             addChild(t);
-        }
-        else if (item.tagName() == "clipboard") {
+        } else if (item.tagName() == "clipboard") {
             QByteArray data = item.text().toLatin1();
             KoShape *clipboardShape = ItemStore::createShapeFromPaste(data);
             if (clipboardShape) {

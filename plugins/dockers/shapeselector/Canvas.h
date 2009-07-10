@@ -39,7 +39,8 @@ class QPointF;
 class QAction;
 class QMenu;
 
-class DummyShapeController : public KoShapeControllerBase {
+class DummyShapeController : public KoShapeControllerBase
+{
 public:
     DummyShapeController();
     ~DummyShapeController();
@@ -52,7 +53,8 @@ private:
     QMap<QString, KoDataCenter *> m_dataCenterMap;
 };
 
-class Canvas : public QWidget, public KoCanvasBase {
+class Canvas : public QWidget, public KoCanvasBase
+{
     Q_OBJECT
 public:
     Canvas(ShapeSelector *parent);
@@ -81,7 +83,7 @@ public:
      */
     int zoomIndex();
 
-    QAction * popup(QMenu *menu, const QPointF &docCoordinate);
+    QAction *popup(QMenu *menu, const QPointF &docCoordinate);
 
     void moveDocumentOffset(const QPointF &offset);
     void resetDocumentOffset();

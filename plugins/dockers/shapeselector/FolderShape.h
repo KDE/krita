@@ -25,7 +25,8 @@
 
 #define FOLDERSHAPE_MIMETYPE "application/x-flake-shapeSelector-folder"
 
-class FolderShape : public KoShapeContainer {
+class FolderShape : public KoShapeContainer
+{
 public:
     FolderShape();
 

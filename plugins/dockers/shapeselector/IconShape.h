@@ -24,7 +24,8 @@
 class KoCreateShapesTool;
 class QDomElement;
 
-class IconShape : public KoShape {
+class IconShape : public KoShape
+{
 public:
     IconShape(const QString &icon);
     virtual ~IconShape();

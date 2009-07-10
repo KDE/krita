@@ -68,7 +68,7 @@ void ItemStorePrivate::addFolder(FolderShape *folder)
     folders.append(folder);
     if (folders.count() > 1)
         mainFolder = 0;
-    foreach(KoShapeManager *sm, shapeManagers)
+    foreach (KoShapeManager *sm, shapeManagers)
         sm->add(folder);
 }
 
@@ -76,7 +76,7 @@ void ItemStorePrivate::removeFolder(FolderShape *folder)
 {
     Q_ASSERT(folder);
     Q_ASSERT(folder != mainFolder); // can't remove the last folder
-    foreach(KoShapeManager *sm, shapeManagers)
+    foreach (KoShapeManager *sm, shapeManagers)
         sm->remove(folder);
     folders.removeAll(folder);
     if (folders.count() == 1)
@@ -87,14 +87,14 @@ void ItemStorePrivate::addShape(KoShape *shape)
 {
     if (shapes.contains(shape))
         return;
-    foreach(KoShapeManager *sm, shapeManagers)
+    foreach (KoShapeManager *sm, shapeManagers)
         sm->add(shape);
     shapes.append(shape);
 }
 
 void ItemStorePrivate::removeShape(KoShape *shape)
 {
-    foreach(KoShapeManager *sm, shapeManagers)
+    foreach (KoShapeManager *sm, shapeManagers)
         sm->remove(shape);
     shapes.removeAll(shape);
 }
@@ -129,8 +129,7 @@ void ItemStorePrivate::removeUser(KoShapeManager *sm)
         conf.deleteEntry(QString::fromLatin1("book.%1_items").arg(i).toAscii().data());
     }
 
-    if (shapeManagers.count() == 0) // last one
-    {
+    if (shapeManagers.count() == 0) { // last one
         qDeleteAll(folders);
         folders.clear();
         qDeleteAll(shapes);
@@ -155,8 +154,7 @@ void ItemStorePrivate::setClipboardShape(ClipboardProxyShape *shape)
         shape->setPosition(currentClipboard->position());
         removeShape(currentClipboard);
         delete currentClipboard;
-    }
-    else {
+    } else {
         // find a good default spot for the new clipboard shape.
         if (mainFolder)
             shape->setParent(mainFolder);
@@ -227,7 +225,6 @@ FolderShape * ItemStore::mainFolder() const
 QRectF ItemStore::loadShapeTypes()
 {
     qreal maxHeight = 0;
-
     if (s_itemStorePrivate()->shapeManagers.count() > 1)
         return QRectF(); // someone else already did the init.
 
@@ -254,8 +251,7 @@ QRectF ItemStore::loadShapeTypes()
                 folder->load(doc);
                 foreach(KoShape *child, folder->childShapes())
                     s_itemStorePrivate()->addShape(child);
-            }
-            else {
+            } else {
                 kWarning() << "ERROR: Could not parse xml for folder" << i << "at Line" << line << "Column" << column;
                 kWarning() << "  " << error;
             }
@@ -266,9 +262,9 @@ QRectF ItemStore::loadShapeTypes()
             if (books > 1)
                 mainFolder->setBorder(new FolderBorder());
             boundingRect = mainFolder->boundingRect();
-        }
-        else
+        } else {
             boundingRect = boundingRect.unite(folder->boundingRect());
+        }
     }
 
     if (mainFolder == 0) {
@@ -278,17 +274,17 @@ QRectF ItemStore::loadShapeTypes()
         s_itemStorePrivate()->addFolder(mainFolder);
     }
 
-    foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
+    foreach (const QString &id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
         if (factory->hidden())
             continue;
         bool oneAdded=false;
-        foreach(const KoShapeTemplate & shapeTemplate, factory->templates()) {
+        foreach (const KoShapeTemplate &shapeTemplate, factory->templates()) {
             oneAdded=true;
             TemplateShape *ts = new TemplateShape(shapeTemplate);
             KoShapeTemplate t1 = ts->shapeTemplate();
             foreach(KoShape *shape, s_itemStorePrivate()->shapes) {
-                TemplateShape *t = dynamic_cast<TemplateShape*> (shape);
+                TemplateShape *t = dynamic_cast<TemplateShape*>(shape);
                 if (t == 0)
                     continue;
                 KoShapeTemplate t2 = t->shapeTemplate();
@@ -304,7 +300,7 @@ QRectF ItemStore::loadShapeTypes()
                 maxHeight = qMax(maxHeight, ts->size().height());
             }
         }
-        if(!oneAdded) {
+        if (!oneAdded) {
             KoShape *group = new GroupShape(factory);
             mainFolder->addChild(group);
             s_itemStorePrivate()->addShape(group);
@@ -335,15 +331,14 @@ KoShape *ItemStore::createShapeFromPaste(QByteArray &bytes)
         {
         }
 
-        bool process( const KoXmlElement & body, KoOdfReadStore & odfStore )
+        bool process(const KoXmlElement &body, KoOdfReadStore &odfStore)
         {
-            KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store() );
-            KoShapeLoadingContext context( loadingContext, m_shapeController->dataCenterMap() );
+            KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
+            KoShapeLoadingContext context(loadingContext, m_shapeController->dataCenterMap());
 
             KoXmlElement element;
-            forEachElement( element, body )
-            {
-                m_shape = KoShapeRegistry::instance()->createShapeFromOdf( element, context );
+            forEachElement(element, body) {
+                m_shape = KoShapeRegistry::instance()->createShapeFromOdf(element, context);
                 if (m_shape)
                     return true;
             }

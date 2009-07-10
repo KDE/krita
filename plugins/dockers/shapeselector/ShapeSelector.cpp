@@ -37,7 +37,7 @@
 
 // ************** ShapeSelector ************
 ShapeSelector::ShapeSelector(QWidget *parent)
-: QDockWidget(i18n("Shapes"), parent),
+    : QDockWidget(i18n("Shapes"), parent),
     m_canvas(new Canvas(this))
 {
     setObjectName("ShapeSelector");
@@ -49,23 +49,25 @@ ShapeSelector::~ShapeSelector()
 {
 }
 
-void ShapeSelector::itemSelected() {
+void ShapeSelector::itemSelected()
+{
     KoShape *koShape = m_canvas->itemStore()->shapeManager()->selection()->firstSelectedShape();
-    if(koShape == 0)
+    if (koShape == 0)
         return;
-    IconShape *shape= dynamic_cast<IconShape*> (koShape);
-    if(shape == 0)
+    IconShape *shape= dynamic_cast<IconShape*>(koShape);
+    if (shape == 0)
         return;
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
-    if(canvasController) {
+    if (canvasController) {
         KoCreateShapesTool * tool = KoToolManager::instance()->shapeCreatorTool( canvasController->canvas() );
         shape->visit( tool );
         KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);
     }
 }
 
-void ShapeSelector::setSize(const QSize &size) {
+void ShapeSelector::setSize(const QSize &size)
+{
     if (m_canvas->itemStore()->mainFolder())
         m_canvas->itemStore()->mainFolder()->setSize(QSizeF(size));
 }
@@ -73,11 +75,10 @@ void ShapeSelector::setSize(const QSize &size) {
 void ShapeSelector::addItems(const KUrl &url, FolderShape *targetFolder)
 {
     QString localFile;
-    if( KIO::NetAccess::download( url, localFile, this ) )
-    {
+    if (KIO::NetAccess::download(url, localFile, this)) {
         QFile file(localFile);
         addItems(file, targetFolder);
-        KIO::NetAccess::removeTempFile( localFile );
+        KIO::NetAccess::removeTempFile(localFile);
     } else {
         KMessageBox::error(this, KIO::NetAccess::lastErrorString() );
     }
@@ -92,7 +93,7 @@ void ShapeSelector::addItems(QFile &file, FolderShape *targetFolder)
 
         QDomElement root = doc.firstChildElement();
         QDomElement element = root.firstChildElement();
-        while(!element.isNull()) {
+        while (!element.isNull()) {
             if (element.tagName() == "template") {
                 TemplateShape *ts = TemplateShape::createShape(element);
                 targetFolder->addChild(ts);

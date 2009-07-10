@@ -30,16 +30,19 @@ GroupShape::GroupShape(KoShapeFactory *shapeFactory)
     m_shapeFactory = shapeFactory;
 }
 
-void GroupShape::visit(KoCreateShapesTool *tool) {
+void GroupShape::visit(KoCreateShapesTool *tool)
+{
     tool->setShapeId(m_shapeFactory->id());
     tool->setShapeProperties(0);
 }
 
-QString GroupShape::toolTip() {
+QString GroupShape::toolTip()
+{
     return m_shapeFactory->toolTip();
 }
 
-QString GroupShape::groupId() const {
+QString GroupShape::groupId() const
+{
     return m_shapeFactory->id();
 }
 

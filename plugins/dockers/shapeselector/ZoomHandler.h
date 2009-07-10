@@ -22,7 +22,8 @@
 
 #include <KoViewConverter.h>
 
-class ZoomHandler : public KoViewConverter {
+class ZoomHandler : public KoViewConverter
+{
 public:
     ZoomHandler();
 

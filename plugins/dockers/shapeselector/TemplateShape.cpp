@@ -30,12 +30,14 @@ TemplateShape::TemplateShape(const KoShapeTemplate &shapeTemplate)
     m_shapeTemplate = shapeTemplate;
 }
 
-void TemplateShape::visit(KoCreateShapesTool *tool) {
+void TemplateShape::visit(KoCreateShapesTool *tool)
+{
     tool->setShapeId(m_shapeTemplate.id);
     tool->setShapeProperties(m_shapeTemplate.properties);
 }
 
-QString TemplateShape::toolTip() {
+QString TemplateShape::toolTip()
+{
     return m_shapeTemplate.toolTip;
 }
 
@@ -59,7 +61,7 @@ TemplateShape *TemplateShape::createShape(const QDomElement &element)
     t.id = element.attribute("id");
     t.toolTip = element.attribute("toolTip");
     t.icon = element.attribute("icon");
-    if (! element.firstChildElement("property").isNull()) { // has properties
+    if (!element.firstChildElement("property").isNull()) { // has properties
         t.properties = new KoProperties();
         t.properties->load(element);
     }

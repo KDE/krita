@@ -23,6 +23,9 @@
 class QImage;
 class QString;
 class QRect;
+class QRectF;
+class QDomElement;
+class KoViewConverter;
 
 #include "flake_export.h"
 
@@ -36,22 +39,38 @@ public:
     KoFilterEffect( const QString& id, const QString& name );
     virtual ~KoFilterEffect();
     
-    /**
-     * Apply the effect on an image.
-     */
-    virtual void processImage(QImage &image) const = 0;
-    
-    /**
-     * @param needed the rectangle on which the filter will be processed
-     * @return the rectangle that is needed to process the @p needed rectangle 
-     */
-    virtual QRect inputRect(const QRect& needed) const = 0;
-
     /// Returns the user visible name of the filter
     QString name() const;
     
     /// Returns the unique id of the filter
     QString id() const;
+    
+    /// Sets the clipping rectangle used for this filter
+    void setClipRect(const QRectF &clipRect);
+    
+    /// Returns the clipping rectangle used for this filter
+    QRectF clipRect() const;
+    
+    /// Sets the region the filter is applied to
+    void setFilterRect(const QRectF &filterRect);
+    
+    /// Returns the region this filter is applied to
+    QRectF filterRect() const;
+    
+    /**
+     * Apply the effect on an image.
+     * @param image the image the filter should be applied to
+     * @param filterRegion the region of the image corresponding to the filter region
+     * @param converter to convert between document and view coordinates 
+     */
+    virtual void processImage(QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const = 0;
+    
+    /**
+     * Loads data from given xml element.
+     * @param element the xml element to load data from
+     * @return true if loading was successful, else false
+     */
+    virtual bool load( const QDomElement &element ) = 0;
     
 private:
     struct Private;

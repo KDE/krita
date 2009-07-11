@@ -20,10 +20,13 @@
 #include "KoFilterEffect.h"
 
 #include <QString>
+#include <QtCore/QRectF>
 
 struct KoFilterEffect::Private {
   QString id;
   QString name;
+  QRectF clipRect;
+  QRectF filterRect;
 };
 
 KoFilterEffect::KoFilterEffect( const QString& id, const QString& name ) 
@@ -46,4 +49,24 @@ QString KoFilterEffect::name() const
 QString KoFilterEffect::id() const
 {
     return d->id;
+}
+
+void KoFilterEffect::setClipRect(const QRectF &clipRect)
+{
+    d->clipRect = clipRect;
+}
+
+QRectF KoFilterEffect::clipRect() const
+{
+    return d->clipRect;
+}
+
+void KoFilterEffect::setFilterRect(const QRectF &filterRect)
+{
+    d->filterRect = filterRect;
+}
+
+QRectF KoFilterEffect::filterRect() const
+{
+    return d->filterRect;
 }

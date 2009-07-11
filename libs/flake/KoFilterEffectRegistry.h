@@ -22,7 +22,8 @@
 
 #include <KoGenericRegistry.h>
 #include <KoFilterEffectFactory.h>
-#include <QObject>
+#include <QtCore/QObject>
+#include <QtXml/QDomElement>
 
 #include "flake_export.h"
 
@@ -38,6 +39,9 @@ public:
     * Creates an instance on the first call.
     */
     static KoFilterEffectRegistry * instance();
+    
+    /// Creates filter effect from given xml element
+    KoFilterEffect * createFilterEffectFromXml(const QDomElement & element);
     
 private:
     KoFilterEffectRegistry();

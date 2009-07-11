@@ -234,20 +234,24 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         // There are filter effets, then we need to prerender the shape on an image, to filter it
 
         // First step, compute the rectangle used for the image
-        QRect rect = converter.documentToView( shape->boundingRect() ).toRect();
+        QRectF clipRegion;
+        foreach(KoFilterEffect* filterEffect, shape->filterEffectStack()) {
+            clipRegion |= filterEffect->clipRect();
+        }
+        clipRegion = converter.documentToView(clipRegion);
+        // determine the offset of the clipping rect from the shapes origin
+        QPointF clippingOffset = clipRegion.topLeft();
         
-        // TODO understand why the rect is too big, it's visible when you rotate the shape
-        
-        // TODO: use needed rect
-
         // Init the buffer image
-        QImage image(rect.width(), rect.height(), QImage::Format_ARGB32);
+        QImage image(clipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
         image.fill(qRgba(0,0,0,0));
 
         // Init the buffer painter
-        QPainter imagePainter;
-        imagePainter.begin(&image);
-
+        QPainter imagePainter(&image);
+        imagePainter.translate(-1.0f*clippingOffset);
+        imagePainter.setPen(Qt::NoPen);
+        imagePainter.setBrush(Qt::NoBrush);
+        
         // Paint the shape on the image
         imagePainter.save();
         shape->paint(imagePainter, converter);
@@ -261,12 +265,15 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
 
         // Filter
         foreach(KoFilterEffect* filterEffect, shape->filterEffectStack()) {
-            filterEffect->processImage(image);
+            QRectF filterRegion = converter.documentToView(filterEffect->filterRect());
+            QPointF filterOffset = filterRegion.topLeft()-2*clippingOffset;
+            QRect subRegion = filterRegion.translated(filterOffset).toRect();
+            filterEffect->processImage(image, subRegion, converter);
         }
 
         // Paint the result
         painter.save();
-        painter.drawImage(QPoint(0,0), image);
+        painter.drawImage(clippingOffset, image);
         painter.restore();
     }
     if (! forPrint) {

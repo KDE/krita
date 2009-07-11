@@ -18,6 +18,7 @@
  */
 
 #include "KoFilterEffectRegistry.h"
+#include "KoFilterEffect.h"
 #include <KoPluginLoader.h>
 #include <KGlobal>
 
@@ -47,6 +48,20 @@ KoFilterEffectRegistry* KoFilterEffectRegistry::instance()
         s_instance->init();
     }
     return s_instance;
+}
+
+KoFilterEffect * KoFilterEffectRegistry::createFilterEffectFromXml(const QDomElement & element)
+{
+    KoFilterEffectFactory * factory = get(element.tagName());
+    if (!factory)
+        return 0;
+    
+    KoFilterEffect * filterEffect = factory->createFilterEffect();
+    if (filterEffect->load(element))
+        return filterEffect;
+    
+    delete filterEffect;
+    return 0;
 }
 
 #include "KoFilterEffectRegistry.moc"

@@ -38,6 +38,7 @@ class QHBoxLayout;
 
 class KoID;
 class KoColorSpace;
+class KoResourceSelector;
 
 class KisView2;
 class KisCanvasResourceProvider;
@@ -89,7 +90,7 @@ private:
 
     KisCanvasResourceProvider *m_resourceProvider;
     QComboBox * m_cmbPaintops;
-    QComboBox * m_cmbPaintopPresets;
+    KoResourceSelector * m_cmbPaintopPresets;
 
     QHBoxLayout * m_layout;
     KisPaintOpSettingsWidget * m_optionWidget;

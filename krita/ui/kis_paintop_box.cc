@@ -37,6 +37,8 @@
 
 #include <KoToolManager.h>
 #include <KoColorSpace.h>
+#include <KoResourceSelector.h>
+#include <KoResourceServerAdapter.h>
 
 #include <kis_paintop_registry.h>
 #include <kis_canvas_resource_provider.h>
@@ -55,6 +57,38 @@
 #include "widgets/kis_preset_widget.h"
 #include "widgets/kis_paintop_presets_popup.h"
 #include <kis_paintop_settings_widget.h>
+
+/// The resource item delegate for rendering the resource preview
+class KisSmallPresetDelegate : public QAbstractItemDelegate
+{
+public:
+    KisSmallPresetDelegate( QObject * parent = 0 ) : QAbstractItemDelegate( parent ) {}
+    virtual ~KisSmallPresetDelegate() {}
+    /// reimplemented
+    virtual void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const;
+    /// reimplemented
+    QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & ) const
+    {
+        return option.decorationSize;
+    }
+};
+
+void KisSmallPresetDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    if( ! index.isValid() )
+        return;
+
+    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>( index.internalPointer() );
+
+    if (option.state & QStyle::State_Selected) {
+        painter->setPen( QPen(option.palette.highlight(), 2.0) );
+        painter->fillRect( option.rect, option.palette.highlight() );
+    } else
+        painter->fillRect( option.rect, Qt::white);
+
+    painter->drawImage( option.rect.x(), option.rect.y(),
+                        preset->settings()->sampleStroke( option.rect.size() ) );
+}
 
 
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
@@ -79,15 +113,21 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbPaintops->setMaxVisibleItems( 20 );
     m_cmbPaintops->setToolTip(i18n("Artist's materials"));
 
-    m_cmbPaintopPresets = new KComboBox(this);
-    m_cmbPaintopPresets->setObjectName("KisPaintopBox::m_cmbPaintopPresets");
-    m_cmbPaintopPresets->setMinimumWidth(150);
-    m_cmbPaintopPresets->setToolTip(i18n("Brush presets"));
-
 #ifdef Q_WS_MAC
     m_cmbPaintops->setAttribute(Qt::WA_MacSmallSize, true);
     m_cmbPaintopPresets->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
+
+    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
+    m_cmbPaintopPresets = new KoResourceSelector( adapter, this);
+    m_cmbPaintopPresets->setMinimumWidth(300);
+    m_cmbPaintopPresets->setMinimumHeight(40);
+    m_cmbPaintopPresets->setColumnCount(1);
+    m_cmbPaintopPresets->setRowHeight(40);
+    m_cmbPaintopPresets->setItemDelegate(new KisSmallPresetDelegate(this));
+    m_cmbPaintopPresets->setToolTip(i18n("Brush presets"));
+
 
     m_presetWidget = new KisPresetWidget(this, "presetwidget");
     m_presetWidget->setToolTip(i18n("Edit brush preset"));
@@ -141,16 +181,18 @@ void KisPaintopBox::slotItemSelected(int index)
 {
     dbgUI << "KisPaintopBox::slotItemSelected " << index;
 
-    /*
+
     if (index < m_displayedOps.count()) {
         KoID paintop = m_displayedOps.at(index);
         dbgUI << "\t\t selected " << paintop;
         setCurrentPaintop(paintop);
 
+        /*
         m_cmbPaintopPresets->clear();
         KisPaintOpPresetSP preset =
             activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice());
         m_cmbPaintopPresets->addItem(preset->name(), QVariant::fromValue<KisPaintOpPresetSP>(preset));
+
 
         foreach(KisPaintOpPreset* preset,
                 KisResourceServerProvider::instance()->paintOpPresetServer()->resources()) {
@@ -159,8 +201,8 @@ void KisPaintopBox::slotItemSelected(int index)
                 m_cmbPaintopPresets->addItem(preset->name(), QVariant::fromValue<KisPaintOpPresetSP>(preset));
             }
         }
+        */
     }
-    */
 }
 
 void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)

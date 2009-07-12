@@ -21,7 +21,6 @@ set(komain_LIB_SRCS
     kkbdaccessextensions.cpp
     KoApplicationAdaptor.cpp
     KoApplication.cpp
-    KoColorDocker.cpp
     KoDocInfoPropsFactory.cpp
     KoDockerManager.cpp
     KoDockWidgetTitleBar.cpp
@@ -57,6 +56,11 @@ set(komain_LIB_SRCS
     KoOdfExporter.cpp
 )
 
+if (NOT NO_PIGMENT)
+    set(komain_LIB_SRCS ${komain_LIB_SRCS}
+        KoColorDocker.cpp
+    )
+endif (NOT NO_PIGMENT)
 
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
@@ -65,20 +69,24 @@ kde4_add_ui_files( komain_LIB_SRCS
 
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
-target_link_libraries(komain 
-                      flake koaction koaspectbutton kobase kocharacterselectiondialog kocolorwidgets kocvsimport 
+if (NOT NO_PIGMENT)
+    set (extra_libs kocolorwidgets koresources pigmentcms koresourcewidget )
+endif (NOT NO_PIGMENT)
+
+target_link_libraries(komain ${extra_libs}
+                      flake koaction koaspectbutton kobase kocharacterselectiondialog kocvsimport 
                       kodocumentsectionbox koinput kolinestyleselector koodf koopenpane kopicture koplugin koprogress 
-                      koresources koresourcewidget kostore kozoomaction pigmentcms kotext kopagelayout
+                      kostore kozoomaction kotext kopagelayout
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KABC_LIBS}
     ${KDE4_THREADWEAVER_LIBRARIES}
     ${KDE4_KDE3SUPPORT_LIBS}
 )
 
-target_link_libraries(komain LINK_INTERFACE_LIBRARIES 
-                      flake koaction koaspectbutton kobase kocharacterselectiondialog kocolorwidgets kocvsimport
+target_link_libraries(komain LINK_INTERFACE_LIBRARIES ${extra_libs}
+                      flake koaction koaspectbutton kobase kocharacterselectiondialog kocvsimport
                       kodocumentsectionbox koinput kolinestyleselector koodf koopenpane kopicture koplugin koprogress
-                      koresources koresourcewidget kostore kozoomaction pigmentcms kotext kopagelayout
+                      kostore kozoomaction kotext kopagelayout
                       ${QT_QTGUI_LIBRARY})
 
 set_target_properties(komain PROPERTIES

@@ -37,8 +37,6 @@
 #include "KoParameterShape.h"
 #include "commands/KoPathPointMergeCommand.h"
 
-#include <KoColor.h>
-
 #include <KNumInput>
 
 #include <QtGui/QPainter>

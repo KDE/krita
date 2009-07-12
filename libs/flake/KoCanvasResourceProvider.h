@@ -100,7 +100,7 @@ public:
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param color the new value for the key.
      */
-    void setResource(int key, const FlakeColor & color);
+    void setResource(int key, const KoColor & color);
 
     /**
      * Set a resource of type KoId.
@@ -126,22 +126,22 @@ public:
      * Set the foregroundColor resource.
      * @param color the new foreground color
      */
-    void setForegroundColor(const FlakeColor & color);
+    void setForegroundColor(const KoColor & color);
 
     /**
      * Return the foregroundColor
      */
-    FlakeColor foregroundColor();
+    KoColor foregroundColor();
 
     /**
      * Set the backgroundColor resource.
      * @param color the new background color
      */
-    void setBackgroundColor(const FlakeColor & color);
+    void setBackgroundColor(const KoColor & color);
     /**
      * Return the backgroundColor
      */
-    FlakeColor backgroundColor();
+    KoColor backgroundColor();
 
     /**
      * Tools that provide a handle for controlling the content that the tool can edit can
@@ -192,10 +192,10 @@ public:
     qreal doubleResource(int key) const;
 
     /**
-     * Return the resource determined by param key as a FlakeColor.
+     * Return the resource determined by param key as a KoColor.
      * @param key the indentifying key for the resource.
      */
-    FlakeColor koColorResource(int key);
+    KoColor koColorResource(int key);
 
     /**
      * Return the resource determined by param key as a KoID.

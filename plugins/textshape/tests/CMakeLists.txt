@@ -1,8 +1,15 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/textshape 
-    ${CMAKE_BINARY_DIR}/plugins/textshape 
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
+    ${CMAKE_SOURCE_DIR}/plugins/textshape/dialogs
+    ${CMAKE_BINARY_DIR}/plugins/textshape/dialogs
+    ${CMAKE_BINARY_DIR}/plugins/textshape
     ${KOTEXT_INCLUDES} )
+
+if(NOT NO_PIGMENT)
+    include_directories(${PIGMENT_INCLUDES})
+endif(NOT NO_PIGMENT)
+
 
 ########### next target ###############
 
@@ -17,7 +24,11 @@ set(TestDocumentLayout_test_SRCS
 )
 
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
-target_link_libraries(TestDocumentLayout kotext koaction kocolorwidgets ${QT_QTTEST_LIBRARY})
+if(NOT NO_PIGMENT)
+    set(EXTRA_LIBS kocolorwidgets)
+endif(NOT NO_PIGMENT)
+
+target_link_libraries(TestDocumentLayout ${EXTRA_LIBS} kotext koaction ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -61,7 +72,7 @@ set(TestChangeListCommand_test_SRCS
 
 
 kde4_add_unit_test(TestChangeListCommand TESTNAME shapes-text-TestChangeListCommand ${TestChangeListCommand_test_SRCS})
-target_link_libraries(TestChangeListCommand  kocolorwidgets komain ${QT_QTTEST_LIBRARY}  ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS})
+target_link_libraries(TestChangeListCommand  ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY}  ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS})
 
 ########### next target ###############
 
@@ -80,7 +91,7 @@ set(TestStylesModel_test_SRCS
     ../dialogs/StylesModel.cpp
 )
 kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
-target_link_libraries(TestStylesModel kotext koaction kocolorwidgets ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
+target_link_libraries(TestStylesModel kotext koaction ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
 
 ########### next target ###############
 

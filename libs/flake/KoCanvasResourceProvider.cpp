@@ -66,7 +66,7 @@ QVariant KoCanvasResourceProvider::resource(int key)
         return d->resources.value(key);
 }
 
-void KoCanvasResourceProvider::setResource(int key, const FlakeColor & color)
+void KoCanvasResourceProvider::setResource(int key, const KoColor & color)
 {
     QVariant v;
     v.setValue(color);
@@ -87,35 +87,33 @@ void KoCanvasResourceProvider::setResource(int key, KoShape* shape)
     setResource(key, v);
 }
 
-FlakeColor KoCanvasResourceProvider::koColorResource(int key)
+KoColor KoCanvasResourceProvider::koColorResource(int key)
 {
     if (! d->resources.contains(key)) {
-        FlakeColor empty;
+        KoColor empty;
         return empty;
     }
-    return resource(key).value<FlakeColor>();
+    return resource(key).value<KoColor>();
 }
 
 
-void KoCanvasResourceProvider::setForegroundColor(const FlakeColor & color)
+void KoCanvasResourceProvider::setForegroundColor(const KoColor & color)
 {
     setResource(KoCanvasResource::ForegroundColor, color);
 }
 
-FlakeColor KoCanvasResourceProvider::foregroundColor()
+KoColor KoCanvasResourceProvider::foregroundColor()
 {
     return koColorResource(KoCanvasResource::ForegroundColor);
 }
 
 
-void KoCanvasResourceProvider::setBackgroundColor(const FlakeColor & color)
+void KoCanvasResourceProvider::setBackgroundColor(const KoColor & color)
 {
-    //QVariant v;
-    //v.setValue( color );
     setResource(KoCanvasResource::BackgroundColor, color);
 }
 
-FlakeColor KoCanvasResourceProvider::backgroundColor()
+KoColor KoCanvasResourceProvider::backgroundColor()
 {
     return koColorResource(KoCanvasResource::BackgroundColor);
 }

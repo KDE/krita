@@ -21,6 +21,39 @@ set(GENERIC_KOFFICE_LIB_SOVERSION "5")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
+set(TINY FALSE)
+
+IF (TINY)
+    add_definitions("-DTINY_OFFICE")
+    set(SHOULD_BUILD_KWORD TRUE)
+    set(SHOULD_BUILD_KPRESENTER TRUE)
+    set(SHOULD_BUILD_KSPREAD TRUE)
+    set(SHOULD_BUILD_PIGMENT FALSE)
+    set(SHOULD_BUILD_KARBON FALSE)
+    set(SHOULD_BUILD_KRITA FALSE)
+    set(SHOULD_BUILD_KEXI FALSE)
+    set(SHOULD_BUILD_KIVIO FALSE)
+    set(SHOULD_BUILD_KPLATO FALSE)
+    set(SHOULD_BUILD_KFORMULA FALSE)
+    set(SHOULD_BUILD_KCHART TRUE)
+    set(SHOULD_BUILD_KDGANTT FALSE)
+    set(SHOULD_BUILD_KOUNAVAIL FALSE)
+ELSE(TINY)
+    set(SHOULD_BUILD_KWORD TRUE)
+    set(SHOULD_BUILD_KPRESENTER TRUE)
+    set(SHOULD_BUILD_KSPREAD TRUE)
+    set(SHOULD_BUILD_PIGMENT TRUE)
+    set(SHOULD_BUILD_KARBON TRUE)
+    set(SHOULD_BUILD_KRITA TRUE)
+    set(SHOULD_BUILD_KEXI TRUE)
+    set(SHOULD_BUILD_KIVIO TRUE)
+    set(SHOULD_BUILD_KPLATO TRUE)
+    set(SHOULD_BUILD_KFORMULA TRUE)
+    set(SHOULD_BUILD_KCHART TRUE)
+    set(SHOULD_BUILD_KDGANTT TRUE)
+    set(SHOULD_BUILD_KOUNAVAIL TRUE)
+ENDIF(TINY)
+
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FOO_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
@@ -60,20 +93,32 @@ endif (APPLE)
 #################################
 ################################
 
-include_directories(${CMAKE_SOURCE_DIR}/libs/pigment)
-find_package(LCMS REQUIRED)
-set(REQUIRED_LCMS_VERSION 118)
+IF(SHOULD_BUILD_PIGMENT)
+    SET(NO_PIGMENT FALSE)
 
-if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    # FULL_PIGMENT is the most desirable state, we can compile Krita!
-    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
-    set(BUILD_pigment TRUE)
-else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    message( FATAL_ERROR "Old LCMS version found, upgrade to 1.18.")
-    set(BUILD_pigment FALSE)
-endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+    macro_optional_find_package(OpenEXR)
+    macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
+    configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
 
-macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required by for color management and for Krita")
+    include_directories(${CMAKE_SOURCE_DIR}/libs/pigment)
+    find_package(LCMS REQUIRED)
+    set(REQUIRED_LCMS_VERSION 118)
+
+    if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+        # FULL_PIGMENT is the most desirable state, we can compile Krita!
+        set(HAVE_REQUIRED_LCMS_VERSION TRUE)
+        set(BUILD_pigment TRUE)
+    else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+        message( FATAL_ERROR "Old LCMS version found, upgrade to 1.18.")
+        set(BUILD_pigment FALSE)
+    endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+
+    macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required by for color management and for Krita")
+
+ELSE(SHOULD_BUILD_PIGMENT)
+    SET(NO_PIGMENT TRUE)
+    add_definitions("-DNO_PIGMENT")
+ENDIF(SHOULD_BUILD_PIGMENT)
 
  ###########################
 ############################
@@ -224,17 +269,18 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools 
                    ${CMAKE_BINARY_DIR}/libs/flake)
 
+if (NOT NO_PIGMENT)
 # pigment depends on koplugin and lcms
-set(PIGMENT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin 
+    set(PIGMENT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin 
                      ${CMAKE_SOURCE_DIR}/libs/pigment 
                      ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops 
                      ${LCMS_INCLUDE_DIR} 
                      ${KDE4_INCLUDES} )
+endif (NOT NO_PIGMENT)
 
 # komain depends on kostore, koplugin, flake and koodf
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${FLAKE_INCLUDES}
-                    ${PIGMENT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/koproperties
                     ${CMAKE_SOURCE_DIR}/libs/store
                     ${CMAKE_SOURCE_DIR}/libs/kotext
@@ -262,8 +308,14 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/koplugin
  )
 
- # koresources depends on pigment
- set(KORESOURCES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/resources
+if(BUILD_pigment)
+    set(KOMAIN_INCLUDES ${KOMAIN_INCLUDES}
+                    ${PIGMENT_INCLUDES}
+    )
+endif(BUILD_pigment)
+
+# koresources depends on pigment
+set(KORESOURCES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/resources
  			 ${CMAKE_BINARY_DIR}/libs/resources 
  			 ${PIGMENT_INCLUDES} 
 			 ${KDE4_INCLUDES})
@@ -289,37 +341,31 @@ set(KOPROPERTIES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kobase ${CMAKE_BINARY_DIR}/li
 #############################################
 
 ### Karbon: pigment
-set(SHOULD_BUILD_KARBON TRUE)
 if (NOT BUILD_pigment)
     set(SHOULD_BUILD_KARBON FALSE)
 endif (NOT BUILD_pigment)
 
 ### KSpread: eigen2
-set(SHOULD_BUILD_KSPREAD TRUE)
 if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_KSPREAD FALSE)
 endif(NOT EIGEN2_FOUND)
 
 ### KPresenter: boost
-set(SHOULD_BUILD_KPRESENTER TRUE)
 if(NOT Boost_FOUND)
     set(SHOULD_BUILD_KPRESENTER FALSE)
 endif(NOT Boost_FOUND)
 
 ### Kexi: bzip2
-set(SHOULD_BUILD_KEXI FALSE)
 if(NOT BZIP2_EXECUTABLE )
     set(SHOULD_BUILD_KEXI FALSE)
 endif(NOT BZIP2_EXECUTABLE )
 
 ### Krita: non-win32, pigment, blitz, eigen2, exiv2
-set(SHOULD_BUILD_KRITA TRUE)
 if(WIN32 OR NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
 endif(WIN32 OR NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
 
 ### KPlato: kdepimlibs
-set(SHOULD_BUILD_KPLATO TRUE)
 if(NOT KdepimLibs_FOUND)
     set(SHOULD_BUILD_KPLATO FALSE)
 endif(NOT KdepimLibs_FOUND)
@@ -334,13 +380,29 @@ add_subdirectory(libs)
 add_subdirectory(interfaces)
 add_subdirectory(cmake)
 
-macro_optional_add_subdirectory(kword)
-macro_optional_add_subdirectory(kformula)
-macro_optional_add_subdirectory(kivio)
-macro_optional_add_subdirectory(kounavail)
-macro_optional_add_subdirectory(kdgantt)
-macro_optional_add_subdirectory(kchart)
-macro_optional_add_subdirectory(doc)
+if(SHOULD_BUILD_KWORD)
+    macro_optional_add_subdirectory(kword)
+endif(SHOULD_BUILD_KWORD)
+
+if (SHOULD_BUILD_KFORMULA)
+    macro_optional_add_subdirectory(kformula)
+endif (SHOULD_BUILD_KFORMULA)
+
+if (SHOULD_BUILD_KIVIO)
+    macro_optional_add_subdirectory(kivio)
+endif (SHOULD_BUILD_KIVIO)
+
+if (SHOULD_BUILD_KOUNAVAIL)
+    macro_optional_add_subdirectory(kounavail)
+endif (SHOULD_BUILD_KOUNAVAIL)    
+
+if (SHOULD_BUILD_KPLATO)
+    macro_optional_add_subdirectory(kdgantt)
+endif (SHOULD_BUILD_KPLATO)
+
+if (SHOULD_BUILD_KCHART)
+    macro_optional_add_subdirectory(kchart)
+endif (SHOULD_BUILD_KCHART)
 
 if(SHOULD_BUILD_KPRESENTER)
   macro_optional_add_subdirectory(kpresenter)
@@ -366,6 +428,8 @@ if(SHOULD_BUILD_KARBON)
   macro_optional_add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
 
+macro_optional_add_subdirectory(doc)
+
 add_subdirectory(pics)
 add_subdirectory(plugins)
 add_subdirectory(servicetypes)
@@ -383,16 +447,16 @@ endmacro(macro_display_application_enabled)
 
 message(STATUS "---------------- The following applications will be build ----------------" )
 
-macro_display_application_enabled(kword TRUE)
+macro_display_application_enabled(kword ${SHOULD_BUILD_KWORD})
 macro_display_application_enabled(kspread ${SHOULD_BUILD_KSPREAD})
 macro_display_application_enabled(kpresenter ${SHOULD_BUILD_KPRESENTER})
-macro_display_application_enabled(kivio TRUE)
+macro_display_application_enabled(kivio ${SHOULD_BUILD_KIVIO})
 macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})
 macro_display_application_enabled(kplato ${SHOULD_BUILD_KPLATO})
 macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
 macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
-macro_display_application_enabled(kformula TRUE)
-macro_display_application_enabled(kchart TRUE)
+macro_display_application_enabled(kformula ${SHOULD_BUILD_KFORMULA})
+macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
 
 message(STATUS "--------------------------------------------------------------------------" )
 

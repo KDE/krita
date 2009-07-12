@@ -176,14 +176,11 @@ kde4_add_ui_files(flake_SRCS
     tools/KoZoomToolWidget.ui
 )
 
-
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-
-if(HAVE_REQUIRED_LCMS_VERSION)
+if(NOT NO_PIGMENT)
 	set(EXTRA_LIBS pigmentcms)
-endif(HAVE_REQUIRED_LCMS_VERSION)
-
+endif(NOT NO_PIGMENT)
 
 target_link_libraries(flake ${KDE4_KDEUI_LIBS}
         			    ${KDE4_KDE3SUPPORT_LIBS} 

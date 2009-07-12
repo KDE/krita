@@ -22,10 +22,15 @@
 // XXX: or do the #ifdef everywhere, as in Qt?
 #ifdef NO_PIGMENT
 #include <QColor>
-#define FlakeColor QColor
+class KoColor : public QColor {
+public:
+    QColor toQColor() { return *this; }
+    QColor toQColor() const { return *this; }
+
+};
+Q_DECLARE_METATYPE(KoColor)
 #else
-#include <KoColor.h>
-#define FlakeColor KoColor
+#   include <KoColor.h>
 #endif
 
 #endif

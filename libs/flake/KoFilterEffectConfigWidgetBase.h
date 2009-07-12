@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
- * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2009 Jan Hambrecht <jaham@gmx.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -18,56 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoFilterEffect.h"
+#ifndef KOFILTEREFFECTCONFIGWIDGETBASE_H
+#define KOFILTEREFFECTCONFIGWIDGETBASE_H
 
-#include <QString>
-#include <QtCore/QRectF>
+#include "flake_export.h"
+#include <QtGui/QWidget>
 
-struct KoFilterEffect::Private {
-  QString id;
-  QString name;
-  QRectF clipRect;
-  QRectF filterRect;
+class KoFilterEffect;
+
+/// Base class for filter effects config widgets
+class FLAKE_EXPORT KoFilterEffectConfigWidgetBase : public QWidget
+{
+    Q_OBJECT
+public:
+    KoFilterEffectConfigWidgetBase(QWidget *parent = 0);
+    virtual ~KoFilterEffectConfigWidgetBase() {};
+    
+    /// Sets the filter effect to be edited by the config widget
+    virtual bool editFilterEffect(KoFilterEffect * filterEffect) = 0;
+    
+signals:
+    /// Is emitted when the filter effect has changed
+    void filterChanged();
 };
 
-KoFilterEffect::KoFilterEffect( const QString& id, const QString& name ) 
-    : d(new Private)
-{
-  d->id = id;
-  d->name = name;
-}
-
-KoFilterEffect::~KoFilterEffect()
-{
-    delete d;
-}
-
-QString KoFilterEffect::name() const
-{
-    return d->name;
-}
-
-QString KoFilterEffect::id() const
-{
-    return d->id;
-}
-
-void KoFilterEffect::setClipRect(const QRectF &clipRect)
-{
-    d->clipRect = clipRect;
-}
-
-QRectF KoFilterEffect::clipRect() const
-{
-    return d->clipRect;
-}
-
-void KoFilterEffect::setFilterRect(const QRectF &filterRect)
-{
-    d->filterRect = filterRect;
-}
-
-QRectF KoFilterEffect::filterRect() const
-{
-    return d->filterRect;
-}
+#endif // KOFILTEREFFECTCONFIGWIDGETBASE_H

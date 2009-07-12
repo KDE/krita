@@ -24,6 +24,7 @@
 #include <QObject>
 
 class KoFilterEffect;
+class KoFilterEffectConfigWidgetBase;
 
 class FLAKE_EXPORT KoFilterEffectFactory : public QObject
 {
@@ -38,13 +39,7 @@ public:
     */
     KoFilterEffectFactory(QObject *parent, const QString &id, const QString &name);
     virtual ~KoFilterEffectFactory();
-     
-    /**
-    * This method should be implemented by factories to create a filter effect
-    * @return a new filter effect
-    */
-    virtual KoFilterEffect * createFilterEffect() const = 0;
-    
+
     /**
     * Returns the id for the filter this factory creates.
     * @return the id for the filter this factory creates
@@ -56,7 +51,19 @@ public:
     * @return the user visible (and translated) name to be seen by the user
     */
     QString name() const;
-
+    
+    /**
+    * This method should be implemented by factories to create a filter effect.
+    * @return a new filter effect
+    */
+    virtual KoFilterEffect * createFilterEffect() const = 0;
+    
+    /**
+     * This method should be implemented by factories to create a filter effect config widget.
+     * @return the filter effect options widget
+     */
+    virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const = 0;
+    
 private:
     class Private;
     Private * const d;

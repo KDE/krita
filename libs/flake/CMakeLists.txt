@@ -102,6 +102,7 @@ set(flake_SRCS
     KoFilterEffect.cpp
     KoFilterEffectFactory.cpp
     KoFilterEffectRegistry.cpp
+    KoFilterEffectConfigWidgetBase.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp

@@ -1,126 +1,119 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgPaintOpPresets</class>
- <widget class="QWidget" name="WdgPaintOpPresets" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgPaintOpPresets">
+  <property name="geometry">
    <rect>
     <x>0</x>
-    <y>0</y>
-    <width>212</width>
-    <height>178</height>
+    <y>122</y>
+    <width>393</width>
+    <height>208</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4" >
-   <item row="0" column="0" >
-    <widget class="QTabWidget" name="tabPresets" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Fixed" >
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabPresets">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="currentIndex" >
+     <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tabCustom" >
-      <attribute name="title" >
+     <widget class="QWidget" name="tabCustom">
+      <attribute name="title">
        <string>Current Preset Definition</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout" >
-       <item row="0" column="1" >
-        <widget class="QLineEdit" name="txtPreset" >
-         <property name="toolTip" >
-          <string>Current brush definition</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" >
-        <widget class="QLabel" name="label" >
-         <property name="text" >
-          <string>Name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="2" >
-        <widget class="QFrame" name="frmOptionWidgetContainer" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="4" column="0" colspan="2">
+        <widget class="QFrame" name="frmOptionWidgetContainer">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>4</verstretch>
           </sizepolicy>
          </property>
-         <property name="frameShape" >
+         <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
-         <property name="frameShadow" >
+         <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2" >
-        <widget class="QLabel" name="lblPreview" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip" >
-          <string>preview of a brush stroke</string>
-         </property>
-         <property name="frameShape" >
-          <enum>QFrame::Panel</enum>
-         </property>
-         <property name="frameShadow" >
-          <enum>QFrame::Sunken</enum>
-         </property>
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Name:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="txtPreset">
+           <property name="toolTip">
+            <string>Current brush definition</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="bnSave">
+           <property name="toolTip">
+            <string>save the current brush definition under this name</string>
+           </property>
+           <property name="text">
+            <string>&amp;Save to Presets</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
-       <item row="3" column="1" >
-        <widget class="QPushButton" name="bnSave" >
-         <property name="toolTip" >
-          <string>save the current brush definition under this name</string>
+       <item row="5" column="0">
+        <widget class="KisPresetWidget" name="presetPreview">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>100</height>
+          </size>
          </property>
-         <property name="text" >
-          <string>&amp;Save to Presets</string>
+         <property name="text">
+          <string>PushButton</string>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabChooser" >
-      <attribute name="title" >
+     <widget class="QWidget" name="tabChooser">
+      <attribute name="title">
        <string>Preset Collection</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_2" >
-       <item row="0" column="0" >
-        <widget class="QLabel" name="lblName" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>Name</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" >
-        <widget class="KisPresetChooser" native="1" name="wdgPresetChooser" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+       <item row="1" column="0">
+        <widget class="KisPresetChooser" name="wdgPresetChooser" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>4</horstretch>
            <verstretch>4</verstretch>
           </sizepolicy>
@@ -139,6 +132,11 @@
    <extends>QWidget</extends>
    <header>widgets/kis_preset_chooser.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisPresetWidget</class>
+   <extends>QPushButton</extends>
+   <header>widgets/kis_preset_widget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

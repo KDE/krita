@@ -310,6 +310,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         dbgUI << "\t\t writing configuration to option widget";
         m_optionWidget->writeConfiguration( const_cast<KisPaintOpSettings*>( m_activePreset->settings().data() ) );
         m_optionWidget->disconnect(m_presetWidget);
+        m_optionWidget->disconnect(m_presetsPopup->presetPreview());
     }
 
     m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
@@ -329,6 +330,8 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         Q_ASSERT(m_optionWidget);
         Q_ASSERT(m_presetWidget);
         connect(m_optionWidget, SIGNAL(sigPleaseUpdatePreview()), m_presetWidget, SLOT(updatePreview()));
+        connect(m_optionWidget, SIGNAL(sigPleaseUpdatePreview()),
+                m_presetsPopup->presetPreview(), SLOT(updatePreview()));
     } else {
         m_presetsPopup->setPaintOpSettingsWidget(0);
     }
@@ -338,6 +341,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 
     m_activePreset = preset;
     m_presetWidget->setPreset(m_activePreset);
+    m_presetsPopup->presetPreview()->setPreset(m_activePreset);
 }
 
 KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)

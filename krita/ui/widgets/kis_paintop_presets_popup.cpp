@@ -28,6 +28,7 @@
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include <kis_paintop_preset.h>
+#include <widgets/kis_preset_widget.h>
 
 #include <ui_wdgpaintoppresets.h>
 
@@ -99,6 +100,11 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     m_d->layout->update();
     widget->show();
 
+}
+
+KisPresetWidget* KisPaintOpPresetsPopup::presetPreview()
+{
+    return m_d->uiWdgPaintOpPresets.presetPreview;
 }
 
 #include "kis_paintop_presets_popup.moc"

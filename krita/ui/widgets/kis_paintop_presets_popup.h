@@ -24,6 +24,7 @@
 class QString;
 class KisPaintOpPreset;
 class KisPropertiesConfiguration;
+class KisPresetWidget;
 
 /**
  * Popup widget for presets with built-in functionality
@@ -40,6 +41,12 @@ public:
     ~KisPaintOpPresetsPopup();
 
     void setPaintOpSettingsWidget(QWidget * widget);
+
+    /**
+     * The preset preview at the widget bottom
+     * @return the preset preview
+     */
+    KisPresetWidget* presetPreview();
 
 signals:
     void savePresetClicked();

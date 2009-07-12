@@ -65,9 +65,10 @@ void KisPresetDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
     QString paintop = preset->settings()->getString("paintop");
     painter->drawText( option.rect.x() + 5, option.rect.y() + option.rect.height() - 5, paintop );
 
-    QRect previewRect = option.rect.adjusted(200, 10, -20, -10);
+    QRect previewRect = option.rect.adjusted(200, 0, -20, 0);
+    QImage preview = preset->settings()->sampleStroke( previewRect.size() );
     painter->drawImage( previewRect.x(), previewRect.y(),
-                        preset->settings()->sampleStroke( previewRect.size() ) );
+                        preview.scaled( previewRect.size(), Qt::KeepAspectRatio) );
 }
 
 KisItemChooser::KisItemChooser(QWidget *parent, const char *name)

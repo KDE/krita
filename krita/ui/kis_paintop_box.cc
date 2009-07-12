@@ -86,8 +86,9 @@ void KisSmallPresetDelegate::paint( QPainter * painter, const QStyleOptionViewIt
     } else
         painter->fillRect( option.rect, Qt::white);
 
+    QImage preview = preset->settings()->sampleStroke( option.rect.size() );
     painter->drawImage( option.rect.x(), option.rect.y(),
-                        preset->settings()->sampleStroke( option.rect.size() ) );
+                        preview.scaled( option.rect.size(), Qt::KeepAspectRatio) );
 }
 
 

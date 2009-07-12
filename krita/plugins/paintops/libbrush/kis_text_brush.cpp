@@ -50,5 +50,6 @@ void KisTextBrush::updateBrush()
     p.drawText(0, metric.ascent(), m_txt);
     p.end();
     setImage(px.toImage());
+    setValid(true);
 }
 

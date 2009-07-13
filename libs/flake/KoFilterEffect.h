@@ -27,6 +27,7 @@ class QRect;
 class QRectF;
 class QDomElement;
 class KoViewConverter;
+class KoXmlWriter;
 
 #include "flake_export.h"
 
@@ -71,7 +72,13 @@ public:
      * @param element the xml element to load data from
      * @return true if loading was successful, else false
      */
-    virtual bool load( const QDomElement &element ) = 0;
+    virtual bool load(const QDomElement &element) = 0;
+    
+    /**
+     * Writes custom data to given xml element.
+     * @param writer the xml writer to write data to
+     */
+    virtual void save(KoXmlWriter &writer) = 0;
     
 private:
     struct Private;

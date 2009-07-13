@@ -22,6 +22,8 @@
 
 #include "flake_export.h"
 
+#include <QtCore/QDebug>
+
 /**
  * An Insets object is a representation of the borders of a shape.
  */
@@ -46,10 +48,15 @@ public:
      */
     KoInsets() : top(0.), bottom(0.), left(0.), right(0.) {
     }
+
     qreal top;     ///< Top inset
     qreal bottom;  ///< Bottom inset
     qreal left;    ///< Left inset
     qreal right;   ///< Right inset
 };
+
+#ifndef QT_NO_DEBUG_STREAM
+FLAKE_EXPORT QDebug operator<<(QDebug, const KoInsets &);
+#endif
 
 #endif

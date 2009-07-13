@@ -19,6 +19,7 @@ set(flake_SRCS
     KoCutController.cpp
     KoCopyController.cpp
     KoDockRegistry.cpp
+    KoInsets.cpp
     KoPasteController.cpp
     KoGuidesData.cpp
     KoPathShape.cpp

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
 
@@ -634,18 +634,21 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
 {
     qreal x=0.0, y=0.0;
     if (direction == Qt::Key_Left)
-        x=-0.5;
+        x = -5;
     else if (direction == Qt::Key_Right)
-        x=0.5;
+        x = 5;
     else if (direction == Qt::Key_Up)
-        y=-0.5;
+        y = -5;
     else if (direction == Qt::Key_Down)
-        y=0.5;
+        y = 5;
 
     if (x != 0.0 || y != 0.0) { // actually move
-        if ((modifiers & Qt::ShiftModifier) == 0) { // no shift used
+        if ((modifiers & Qt::ShiftModifier) != 0) {
             x *= 10;
             y *= 10;
+        } else if ((modifiers & Qt::AltModifier) != 0) { // more precise
+            x /= 5;
+            y /= 5;
         }
 
         QList<QPointF> prevPos;

@@ -307,7 +307,7 @@ void  Canvas::dropEvent(QDropEvent *event)
 
 void Canvas::paintEvent(QPaintEvent *e)
 {
-    QPainter painter( this );
+    QPainter painter(this);
     painter.setClipRect(e->rect());
     qreal zoomX, zoomY;
     m_converter.zoom(&zoomX, &zoomY);

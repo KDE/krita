@@ -106,7 +106,7 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
     }
 }
 
-void KoShapeManager::add(KoShape *shape,  Repaint repaint)
+void KoShapeManager::add(KoShape *shape, Repaint repaint)
 {
     if (d->shapes.contains(shape))
         return;

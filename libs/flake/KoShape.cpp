@@ -120,6 +120,26 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
         shape->shapeChanged(type, q);
 }
 
+void KoShapePrivate::updateBorder()
+{
+    if (border == 0)
+        return;
+    KoInsets insets;
+    border->borderInsets(q, insets);
+    QSizeF inner = q->size();
+    // update left
+    q->update(QRectF(-insets.left, -insets.top, insets.left,
+                inner.height() + insets.top + insets.bottom));
+    // update top
+    q->update(QRectF(-insets.left, -insets.top,
+                inner.width() + insets.left + insets.right, insets.top));
+    // update right
+    q->update(QRectF(inner.width(), -insets.top, insets.right,
+                inner.height() + insets.top + insets.bottom));
+    // update bottom
+    q->update(QRectF(-insets.left, inner.height(),
+                inner.width() + insets.left + insets.right, insets.bottom));
+}
 
 // ======== KoShape
 KoShape::KoShape()
@@ -762,11 +782,13 @@ KoShapeBorderModel *KoShape::border() const
 void KoShape::setBorder(KoShapeBorderModel *border)
 {
     Q_D(KoShape);
+    d->updateBorder();
     if (d->border)
         d->border->removeUser();
     d->border = border;
     if (d->border)
         d->border->addUser();
+    d->updateBorder();
     d->shapeChanged(BorderChanged);
     notifyChanged();
 }
@@ -777,8 +799,10 @@ void KoShape::setShadow(KoShapeShadow * shadow)
     if (d->shadow)
         d->shadow->removeUser();
     d->shadow = shadow;
-    if (d->shadow)
+    if (d->shadow) {
         d->shadow->addUser();
+        // TODO update changed area
+    }
     d->shapeChanged(ShadowChanged);
     notifyChanged();
 }

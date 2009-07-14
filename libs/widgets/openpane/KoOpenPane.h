@@ -29,10 +29,10 @@ class KConfig;
 class KoOpenPanePrivate;
 class KComponentData;
 class QPixmap;
-class Q3ListViewItem;
 class KoTemplatesPane;
 class KoDetailsPane;
 class KUrl;
+class QTreeWidgetItem;
 
 class KOWIDGETS_EXPORT KoOpenPane : public QWidget
 {
@@ -48,8 +48,8 @@ public:
     KoOpenPane(QWidget *parent, const KComponentData &instance, const QStringList& mimeFilter, const QString& templateType = QString());
     virtual ~KoOpenPane();
 
-    Q3ListViewItem* addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight);
-    Q3ListViewItem* addPane(const QString& title, const QPixmap& icon, QWidget* widget, int sortWeight);
+    QTreeWidgetItem* addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight);
+    QTreeWidgetItem* addPane(const QString& title, const QPixmap& icon, QWidget* widget, int sortWeight);
 
     /**
      * If the application has a way to create a document not based on a template, but on user
@@ -62,8 +62,8 @@ public:
     void addCustomDocumentWidget(QWidget *widget, const QString& title = QString(), const QString& icon = QString());
 
 protected slots:
-    void selectionChanged(Q3ListViewItem* item);
-    void itemClicked(Q3ListViewItem* item);
+    void updateSelectedWidget();
+    void itemClicked(QTreeWidgetItem* item);
 
     /// Saves the splitter sizes for KoDetailsPaneBase based panes
     void saveSplitterSizes(KoDetailsPane* sender, const QList<int>& sizes);
@@ -85,8 +85,6 @@ protected:
      * @param templateType the template-type (group) that should be selected on creation.
      */
     void initTemplates(const QString& templateType);
-
-    void updateSectionListMaxHeight();
 
 private:
 

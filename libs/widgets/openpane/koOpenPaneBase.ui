@@ -1,64 +1,67 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>KoOpenPaneBase</class>
- <widget class="QWidget" name="KoOpenPaneBase" >
-  <property name="geometry" >
+ <widget class="QWidget" name="KoOpenPaneBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>534</width>
+    <width>651</width>
     <height>482</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QSplitter" name="m_splitter" >
-     <property name="orientation" >
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="K3ListView" name="m_sectionList" >
-      <property name="enabled" >
-       <bool>true</bool>
-      </property>
-      <property name="minimumSize" >
+     <widget class="QTreeWidget" name="m_sectionList">
+      <property name="iconSize">
        <size>
-        <width>100</width>
-        <height>0</height>
+        <width>48</width>
+        <height>48</height>
        </size>
       </property>
-      <property name="allColumnsShowFocus" >
-       <bool>true</bool>
-      </property>
-      <property name="shadeSortColumn" >
+      <property name="rootIsDecorated">
        <bool>false</bool>
       </property>
+      <property name="uniformRowHeights">
+       <bool>true</bool>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="allColumnsShowFocus">
+       <bool>true</bool>
+      </property>
+      <attribute name="headerVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="headerVisible">
+       <bool>false</bool>
+      </attribute>
       <column>
-       <property name="text" >
-        <string/>
+       <property name="text">
+        <string notr="true">1</string>
        </property>
       </column>
      </widget>
-     <widget class="QStackedWidget" name="m_widgetStack" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+     <widget class="QStackedWidget" name="m_widgetStack">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <widget class="QWidget" name="WStackPage" />
+      <widget class="QWidget" name="WStackPage"/>
      </widget>
     </widget>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
-  <customwidgets>
-  <customwidget>
-   <class>K3ListView</class>
-   <extends>Q3ListView</extends>
-   <header>k3listview.h</header>
-  </customwidget>
- </customwidgets>
+ <layoutdefault spacing="6" margin="11"/>
+ <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
  <resources/>
  <connections/>
 </ui>

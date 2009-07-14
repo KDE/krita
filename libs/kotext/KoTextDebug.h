@@ -45,7 +45,7 @@ class KoCharacterStyle;
  *
  * This class provides a set of public static functions for debugging the structure of
  * QTextDocument text documents. The functions will dump the structure of the document
- * along with any formats in a human-friendly pseudo-XML format. Example:
+ * along with any formats in a human-friendly pseudo-XML format.
  *
  * To most top level function is dumpDocument(), which can be used to dump an entire
  * document. In addition to that, there's a set of functions for dumping certain

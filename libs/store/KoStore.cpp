@@ -34,7 +34,7 @@
 
 #include <kurl.h>
 #include <kdebug.h>
-#include <kdeversion.h>
+
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>

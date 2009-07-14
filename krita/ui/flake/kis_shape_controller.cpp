@@ -108,7 +108,8 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
     m_d->nameServer = nameServer;
     m_d->image = 0;
     // Ask every shapefactory to populate the dataCenterMap
-    foreach(KoShapeFactory * shapeFactory, KoShapeRegistry::instance()->values()) {
+    QList<KoShapeFactory*> shapeFactories = KoShapeRegistry::instance()->values();
+    foreach(const KoShapeFactory * shapeFactory, shapeFactories) {
         shapeFactory->populateDataCenterMap(m_d->dataCenterMap);
     }
 }

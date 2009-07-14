@@ -25,7 +25,7 @@
 
 #include <kzip.h>
 #include <kdebug.h>
-#include <kdeversion.h>
+
 #include <kurl.h>
 #include <kio/netaccess.h>
 

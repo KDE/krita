@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KRITA_KROSS_KRITACOREMONITOR_H
-#define KRITA_KROSS_KRITACOREMONITOR_H
+#ifndef KRS_MONITOR_H
+#define KRS_MONITOR_H
 
 #include <QObject>
 #include "krosskritacore_export.h"

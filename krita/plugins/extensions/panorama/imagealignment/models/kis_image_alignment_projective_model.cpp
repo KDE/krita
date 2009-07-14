@@ -14,11 +14,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
-#include "kis_image_alignment_projective_model.h"
-
 #include "models/kis_image_alignment_projective_model.h"
-#include "kis_image_alignment_model_p.h"
 
+#include "kis_image_alignment_model_p.h"
 #include "kis_matched_point.h"
 #include "imagoptim_p.h"
 #include "imagoptim_functions.h"

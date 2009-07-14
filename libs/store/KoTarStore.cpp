@@ -26,7 +26,7 @@
 #include <ktar.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <kdeversion.h>
+
 #include <kio/netaccess.h>
 
 KoTarStore::KoTarStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification)

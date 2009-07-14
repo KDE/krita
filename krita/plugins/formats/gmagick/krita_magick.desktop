@@ -12,7 +12,6 @@ Name[x-test]=xxKritaxx
 Name[zh_TW]=繪圖_Krita
 Type=Application
 NoDisplay=true
-Path=
 StartupNotify=true
 Terminal=false
 X-DBUS-StartupType=Multi

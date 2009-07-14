@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+// Local includes.
+#include "kgradientslider.h"
 
 // C++ includes.
 
@@ -34,8 +36,6 @@
 #include <QBrush>
 #include <QLinearGradient>
 
-// Local includes.
-#include "kgradientslider.h"
 
 
 KGradientSlider::KGradientSlider(QWidget *parent)

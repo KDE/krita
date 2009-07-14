@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_GENERATOR_REGISTRY_H_
-#define KIS_GENERATOR_REGISTRY_H_
+#ifndef KIS_BRUSH_REGISTRY_H_
+#define KIS_BRUSH_REGISTRY_H_
 
 #include <QObject>
 

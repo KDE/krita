@@ -16,8 +16,8 @@ class RulerAssistant;
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_TOOL_RULER_ASSISTANT_TOOL_H_
-#define _KIS_TOOL_RULER_ASSISTANT_TOOL_H_
+#ifndef _KIS_RULER_ASSISTANT_TOOL_H_
+#define _KIS_RULER_ASSISTANT_TOOL_H_
 
 #include <kis_tool.h>
 #include <KoToolFactory.h>

@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KRITA_KROSS_KRITACOREMODULE_H
-#define KRITA_KROSS_KRITACOREMODULE_H
+#ifndef KRS_MODULE_H
+#define KRS_MODULE_H
 
 #include <QString>
 #include <QVariant>

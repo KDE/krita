@@ -578,7 +578,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
         dbgFile << "Trying to store annotation of type" << (*it) -> type() << " of size" << (*it) -> annotation() . size();
 
-        if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
+        if ((*it) -> type().startsWith(QLatin1String("krita_attribute:"))) { // Attribute
             // FIXME
             dbgFile << "cannot save this annotation :" << (*it) -> type();
         } else { // Profile

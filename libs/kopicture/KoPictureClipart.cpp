@@ -26,7 +26,7 @@
 #include <QPixmap>
 
 #include <kdebug.h>
-#include <kdeversion.h>
+
 
 #include "KoPictureKey.h"
 #include "KoPictureBase.h"

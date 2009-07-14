@@ -221,7 +221,7 @@ bool KoCtlColorSpaceInfo::load()
                         // Parse color
                         if( e.hasAttribute("color") )
                         {
-                            QStringList colorlist = e.attribute("color").split(",");
+                            QStringList colorlist = e.attribute("color").split(',');
                             if(colorlist.size() != 3) return false;
                             info->d->color = QColor( colorlist[0].toInt(), colorlist[1].toInt(), colorlist[2].toInt() );
                         }

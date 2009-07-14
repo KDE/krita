@@ -103,7 +103,7 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsManager::handles() {
     QList<KisPaintingAssistantHandleSP> hs;
     foreach(KisPaintingAssistant* assistant, d->assistants)
     {
-        foreach(KisPaintingAssistantHandleSP handle, assistant->handles())
+        foreach(const KisPaintingAssistantHandleSP handle, assistant->handles())
         {
             if(!hs.contains(handle)) {
                 hs.push_back(handle);

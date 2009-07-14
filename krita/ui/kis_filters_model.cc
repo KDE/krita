@@ -71,9 +71,8 @@ struct KisFiltersModel::Private {
 KisFiltersModel::KisFiltersModel(KisPaintDeviceSP thumb) : d(new Private)
 {
     d->thumb = thumb;
-    KisFilterRegistry* registry = KisFilterRegistry::instance();
-    foreach(const QString & key, registry->keys()) {
-        KisFilterSP filter = registry->get(key);
+    QList<KisFilterSP> filters = KisFilterRegistry::instance()->values();
+    foreach(const KisFilterSP filter, filters) {
         Q_ASSERT(filter);
         if (!d->categories.contains(filter->menuCategory().id())) {
             Private::Category cat;

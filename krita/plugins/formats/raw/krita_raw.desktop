@@ -14,3 +14,4 @@ X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
 X-DBUS-ServiceName=org.koffice.krita
 NoDisplay=true
+Type=Application

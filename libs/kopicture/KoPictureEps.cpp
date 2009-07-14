@@ -36,7 +36,7 @@
 
 #include <kglobal.h>
 #include <kdebug.h>
-#include <kdeversion.h>
+
 #include <ktemporaryfile.h>
 #include <kshell.h>
 

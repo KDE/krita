@@ -68,3 +68,4 @@ KoColorTransformation* KisFilterInvert::createTransformation(const KoColorSpace*
     Q_UNUSED(config);
     return cs->createInvertTransformation();
 }
+

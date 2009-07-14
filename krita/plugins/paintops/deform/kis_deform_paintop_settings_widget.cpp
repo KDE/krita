@@ -147,3 +147,4 @@ bool KisDeformPaintOpSettingsWidget::useOldData() const{
 qreal KisDeformPaintOpSettingsWidget::spacing() const{
     return m_options->spacingKDNumInp->value();
 } 
+

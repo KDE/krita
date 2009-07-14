@@ -87,7 +87,7 @@
 #include <QVector>
 
 
-#include <kdeversion.h>
+
 
 
 /*

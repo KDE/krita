@@ -27,7 +27,7 @@
 #include <kdesktopfile.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <kdeversion.h>
+
 #include <kcomponentdata.h>
 #include <ksavefile.h>
 #include <kstandarddirs.h>

@@ -28,7 +28,7 @@
 #include <QString>
 #include <QTextCharFormat>
 #include "kotext_export.h"
-#include <kdeversion.h>
+
 
 class StylePrivate;
 class QTextBlock;
@@ -174,16 +174,15 @@ public:
     /// Return how the text should be capitalized
     QFont::Capitalization fontCapitalization() const;
 
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
-    /// See similar named method on QTextCharFormat (Qt 4.5 and above)
+    /// See similar named method on QTextCharFormat
     void setFontStyleHint(QFont::StyleHint styleHint);
-    /// See similar named method on QTextCharFormat (Qt 4.5 and above)
+    /// See similar named method on QTextCharFormat
     QFont::StyleHint fontStyleHint() const;
-    /// See similar named method on QTextCharFormat (Qt 4.5 and above)
+    /// See similar named method on QTextCharFormat
     void setFontKerning(bool enable);
-    /// See similar named method on QTextCharFormat (Qt 4.5 and above)
+    /// See similar named method on QTextCharFormat
     bool fontKerning() const;
-#endif
+
     /// See similar named method on QTextCharFormat
     void setBackground(const QBrush &brush);
     /// See similar named method on QTextCharFormat

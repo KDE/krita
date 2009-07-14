@@ -15,7 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_brush_registry.h"
 
 #include <QString>
@@ -33,7 +32,6 @@
 
 #include "kis_brush_server.h"
 #include "kis_brush_factory.h"
-#include "kis_brush_registry.h"
 #include "kis_auto_brush_factory.h"
 #include "kis_gbr_brush_factory.h"
 #include "kis_text_brush_factory.h"

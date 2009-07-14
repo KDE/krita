@@ -1,2 +1,2 @@
 EXCLUDE explicit cpp qclasses typedefs
-SKIP /colorspaces/wetsticky/ws/\|/colorspaces/wet/wetdreams/\|/plugins/filters/cimg/CImg\.h\|/ui/obsolete|/plugins/painterlyframework.old|sdk|plugins/viewplugins/tonemapping/libpfs/\|/plugins/viewplugins/tonemapping/operators/
+SKIP /colorspaces/wetsticky/ws/\|/colorspaces/wet/wetdreams/\|/plugins/filters/cimg/CImg\.h\|/ui/obsolete|/plugins/painterlyframework.old|sdk|plugins/viewplugins/tonemapping/libpfs/\|/plugins/extensions/tonemapping/operators/\|/plugins/extensions/tonemapping/libpfs/

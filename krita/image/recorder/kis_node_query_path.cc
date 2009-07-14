@@ -161,7 +161,7 @@ QString KisNodeQueryPath::toString() const
         switch(pe.type)
         {
             case PathElement::Wildcard:
-                str += "*";
+                str += '*';
                 break;
             case PathElement::Parent:
                 str += "..";

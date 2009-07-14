@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KROSS_KRITACOREHISTOGRAM_H
-#define KROSS_KRITACOREHISTOGRAM_H
+#ifndef KRS_HISTOGRAM_H
+#define KRS_HISTOGRAM_H
 
 #include <QObject>
 

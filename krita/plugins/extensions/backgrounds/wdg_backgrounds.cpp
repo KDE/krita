@@ -51,7 +51,7 @@ WdgBackgrounds::WdgBackgrounds(QWidget* parent)
     noneItem->setData(Qt::DecorationRole, none);
     noneItem->setData(Qt::UserRole + 1, "none");
 
-    foreach(QString fileName, backgroundFileNames) {
+    foreach(const QString& fileName, backgroundFileNames) {
         QImage img = QImage(fileName).copy(0, 0, 64, 64);
         QListWidgetItem* item = new QListWidgetItem(lstBackgrounds);
         //item->setData(Qt::DisplayRole, fileName);

@@ -171,9 +171,9 @@ bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
               Q_ASSERT( it->getValue()->typeId() == Exiv2::string );
               QString data = it->getValue()->toString().c_str();
               
-              QStringList list = data.split(",");
+              QStringList list = data.split(',');
               QList<KisMetaData::Value> values;
-              foreach( QString entry, list)
+              foreach( const QString entry, list)
               {
                 values.push_back(KisMetaData::Value(entry));
               }

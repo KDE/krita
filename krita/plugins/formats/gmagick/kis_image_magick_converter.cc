@@ -32,7 +32,7 @@
 #include <qfileinfo.h>
 #include <qstring.h>
 
-#include <kdeversion.h>
+
 #include <kis_debug.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -298,7 +298,7 @@ void exportAnnotationsForImage(Image * dst, vKisAnnotationSP_it& it, vKisAnnotat
 
         dbgFile << "Trying to store annotation of type" << (*it) -> type() << " of size" << (*it) -> annotation() . size();
 
-        if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
+        if ((*it) -> type().startsWith(QLatin1String("krita_attribute:"))) { // Attribute
             if (!SetImageAttribute(dst,
                                    (*it) -> type().mid(strlen("krita_attribute:")).ascii(),
                                    (*it) -> annotation() . data())) {

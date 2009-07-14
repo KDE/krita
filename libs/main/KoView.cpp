@@ -43,7 +43,7 @@
 #include <QToolBar>
 #include <QApplication>
 #include <Q3ValueList>
-#include <kdeversion.h>
+
 
 //static
 QString KoView::newObjectName()

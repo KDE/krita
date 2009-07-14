@@ -131,7 +131,7 @@ void KisToolBrush::leave(QEvent */*e*/)
 
 void KisToolBrush::slotSetRate(int rate) {
     m_rate = rate;
-    m_sliderRate->setToolTip( QString::number(m_rate) + " " + i18n("ms") );
+    m_sliderRate->setToolTip( QString::number(m_rate) + ' ' + i18n("ms") );
 }
 
 void KisToolBrush::slotSetSmoothness(int smoothness)
@@ -160,7 +160,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderRate->setMaximum(MAXIMUM_RATE);
     connect(m_sliderRate, SIGNAL(valueChanged(int)), SLOT(slotSetRate(int)));
     m_sliderRate->setValue( m_rate );
-    m_sliderRate->setToolTip( QString::number(m_rate) + " " + i18n("ms") );
+    m_sliderRate->setToolTip( QString::number(m_rate) + ' ' + i18n("ms") );
 
     m_spinRate = new QSpinBox(optionWidget);
     m_spinRate->setMinimum(0);

@@ -976,7 +976,7 @@
            </item>
            <item>
             <property name="text" >
-             <string>Color sequencial area sensor</string>
+             <string>Color sequential area sensor</string>
             </property>
            </item>
            <item>
@@ -986,7 +986,7 @@
            </item>
            <item>
             <property name="text" >
-             <string>Color sequencial linear sensor</string>
+             <string>Color sequential linear sensor</string>
             </property>
            </item>
           </widget>

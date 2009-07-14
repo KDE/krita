@@ -99,7 +99,7 @@ void KisMacro::play(const KisPlayInfo& info) const
     for (QList<KisRecordedAction*>::iterator it = d->actions.begin(); it != d->actions.end(); ++it) {
         if ( *it ) {
             QList<KisNodeSP> nodes = (*it)->nodeQueryPath().queryNodes(info.image(), info.currentNode());
-            foreach(KisNodeSP node, nodes)
+            foreach(const KisNodeSP node, nodes)
             {
                 dbgImage << "Play action : " << (*it)->name();
                 (*it)->play(node, info);

@@ -23,7 +23,7 @@
 #include <QtTest>
 #include <QtGui>
 
-#include <kdeversion.h>
+
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>

@@ -16,6 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#ifndef KO_CTL_PARSER
+#define KO_CTL_PARSER
 
 class QString;
 class KoID;
@@ -24,3 +26,5 @@ namespace KoCtlParser {
     KoID generateDepthID(const QString& depth, const QString& type);
     
 }
+
+#endif

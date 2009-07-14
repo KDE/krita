@@ -25,7 +25,7 @@
 #include <KoXmlReader.h>
 #include <ktar.h>
 #include <ktemporaryfile.h>
-#include <kdeversion.h>
+
 #include <kfilterdev.h>
 #include <kdebug.h>
 

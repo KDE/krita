@@ -22,7 +22,7 @@
 
 #include "kotext_export.h"
 
-#include <kdeversion.h>
+
 
 #include <QtCore/QStringList>
 #include <QtCore/QChar>

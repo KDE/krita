@@ -38,7 +38,7 @@ KoID KoCtlParser::generateDepthID(const QString& depth, const QString& type)
             return Float16BitsColorDepthID;
         else if(depth == "32" )
             return Float32BitsColorDepthID;
-        else if(depth == "" )
+        else if(depth.isEmpty() )
             return KoID("F", i18n("Float"));
     }
     dbgPlugins << "Invalid type";

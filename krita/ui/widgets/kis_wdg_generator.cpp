@@ -91,10 +91,9 @@ void KisWdgGenerator::init(KisPaintDeviceSP dev)
     d->dev = dev;
     d->uiWdgGenerators.setupUi(this);
     d->widgetLayout = new QGridLayout(d->uiWdgGenerators.centralWidgetHolder);
-    KisGeneratorRegistry * registry = KisGeneratorRegistry::instance();
+    QList<KisGeneratorSP> generators = KisGeneratorRegistry::instance()->values();
 
-    foreach(const QString & key, registry->keys()) {
-        KisGeneratorSP generator = registry->get(key);
+    foreach(const KisGeneratorSP generator, generators) {
         Q_ASSERT(generator);
         KisGeneratorItem * item = new KisGeneratorItem(generator->name(),
                 d->uiWdgGenerators.lstGenerators,

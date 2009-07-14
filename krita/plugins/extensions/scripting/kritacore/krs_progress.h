@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KRITACOREPROGRESS_H
-#define KRITACOREPROGRESS_H
+#ifndef KRS_PROGRESS_H
+#define KRS_PROGRESS_H
 
 #include "krosskritacore_export.h"
 

@@ -88,14 +88,14 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
 void KisPaintingAssistant::initHandles(QList<KisPaintingAssistantHandleSP> _handles) {
     Q_ASSERT(d->handles.isEmpty());
     d->handles = _handles;
-    foreach(KisPaintingAssistantHandleSP handle, _handles) {
+    foreach(const KisPaintingAssistantHandleSP handle, _handles) {
         handle->registerAssistant(this);
     }
 }
 
 KisPaintingAssistant::~KisPaintingAssistant()
 {
-    foreach(KisPaintingAssistantHandleSP handle, d->handles) {
+    foreach(const KisPaintingAssistantHandleSP handle, d->handles) {
         handle->unregisterAssistant(this);
     }
     delete d;

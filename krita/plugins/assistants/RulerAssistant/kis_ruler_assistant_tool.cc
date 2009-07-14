@@ -86,7 +86,7 @@ inline double norm2(const QPointF& p)
 void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
 {
     m_handleDrag = 0;
-    foreach(KisPaintingAssistantHandleSP handle, m_handles)
+    foreach(const KisPaintingAssistantHandleSP handle, m_handles)
     {
         if( norm2(event->point - *handle ) < 10)
         {
@@ -123,7 +123,7 @@ void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
-    foreach(KisPaintingAssistantHandleSP handle, m_handles)
+    foreach(const KisPaintingAssistantHandleSP handle, m_handles)
     {
         if( handle == m_handleDrag ) {
             _gc.setBrush( QColor(0,0,0,125) );

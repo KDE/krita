@@ -45,6 +45,7 @@
 #include "KoEventAction.h"
 #include "KoEventActionRegistry.h"
 #include "KoOdfWorkaround.h"
+#include "KoFilterEffect.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -247,6 +248,11 @@ void KoShape::setSize(const QSizeF &newSize)
         l->setLineBrush(brush);
     }
 
+    foreach(KoFilterEffect *effect, d->filterEffects) {
+        effect->setClipRect(matrix.mapRect(effect->clipRect()));
+        effect->setFilterRect(matrix.mapRect(effect->filterRect()));
+    }
+    
     d->size = newSize;
 
     notifyChanged();

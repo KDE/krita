@@ -129,7 +129,6 @@ public:
 
     QList<KoView*> m_views;
     Q3PtrList<KoMainWindow> m_shells;
-    QList<QDomDocument> m_viewBuildDocuments;
 
     KoViewWrapperWidget *m_wrapperWidget;
 //     KoDocumentIface * m_dcopObject;
@@ -689,37 +688,6 @@ KParts::Part *KoDocument::hitTest(QWidget *widget, const QPoint &globalPos)
 KoDocumentInfo *KoDocument::documentInfo() const
 {
     return d->m_docInfo;
-}
-
-void KoDocument::setViewBuildDocument(KoView *view, const QDomDocument &doc)
-{
-    int viewIdx = d->m_views.indexOf(view);
-    if (viewIdx == -1)
-        return;
-
-    if (d->m_viewBuildDocuments.count() == viewIdx)
-        d->m_viewBuildDocuments.append(doc);
-    else if (d->m_viewBuildDocuments.count() > viewIdx)
-        d->m_viewBuildDocuments[ viewIdx ] = doc;
-}
-
-QDomDocument KoDocument::viewBuildDocument(KoView *view)
-{
-    QDomDocument res;
-
-    int viewIdx = d->m_views.indexOf(view);
-    if (viewIdx == -1)
-        return res;
-
-    if (viewIdx >= d->m_viewBuildDocuments.count())
-        return res;
-
-    res = d->m_viewBuildDocuments[ viewIdx ];
-
-    // make this entry empty. otherwise we get a segfault in QMap ;-(
-    d->m_viewBuildDocuments[ viewIdx ] = QDomDocument();
-
-    return res;
 }
 
 void KoDocument::paintEverything(QPainter &painter, const QRect &rect, KoView *view)

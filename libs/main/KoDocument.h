@@ -567,9 +567,6 @@ public:
      */
     KoDocumentInfo *documentInfo() const;
 
-    void setViewBuildDocument(KoView *view, const QDomDocument &doc);
-    QDomDocument viewBuildDocument(KoView *view);
-
     /**
      * Appends the shell to the list of shells which show this
      * document as their root document.

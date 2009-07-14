@@ -111,19 +111,21 @@ public:
      * @param child the child of this container that the user is trying to move.
      * @param move the distance that the user proposes to move child from the current position.
      */
-    virtual void proposeMove(KoShape *child, QPointF &move) {
-        Q_UNUSED(child); Q_UNUSED(move);
-    }
+    virtual void proposeMove(KoShape *child, QPointF &move);
 
     /**
      * This method is called when one of the child shapes has been modified.
      * When a child shape is rotated, moved or scaled/skewed this method will be called
      * to inform the container of such a change.  The change has already happened at the
      * time this method is called.
+     * The base implementation notifies the grand parent of the child that there was a 
+     * change in a child. A reimplentation if this function should call this method when
+     * overwriding the function.
+     *
      * @param child the child that has been changed
      * @param type this enum shows which change the child has had.
      */
-    virtual void childChanged(KoShape *child, KoShape::ChangeType type) = 0;
+    virtual void childChanged(KoShape *child, KoShape::ChangeType type);
 };
 
 #endif

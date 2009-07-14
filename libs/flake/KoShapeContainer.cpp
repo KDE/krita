@@ -83,6 +83,11 @@ void KoShapeContainer::removeChild(KoShape *shape)
     d->children->remove(shape);
     shape->setParent(0);
     childCountChanged();
+
+    KoShapeContainer * grandparent = parent();
+    if (grandparent) {
+        grandparent->model()->childChanged(this, KoShape::ChildChanged);
+    }
 }
 
 int  KoShapeContainer::childCount() const

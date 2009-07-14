@@ -20,6 +20,8 @@
 #include "KoPAPageBase.h"
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
+#include "KoPAPixmapCache.h"
+#include "KoPAPageContainerModel.h"
 
 #include <QPainter>
 
@@ -40,7 +42,7 @@
 #include <KoShapeBackground.h>
 
 KoPAPageBase::KoPAPageBase()
-: KoShapeContainer()
+: KoShapeContainer( new KoPAPageContainerModel() )
 {
     // Add a default layer
     KoShapeLayer* layer = new KoShapeLayer;
@@ -216,7 +218,33 @@ KoPageApp::PageType KoPAPageBase::pageType() const
 
 QPixmap KoPAPageBase::thumbnail( const QSize& size )
 {
+#ifdef CACHE_PAGE_THUMBNAILS
+    QString key = thumbnailKey();
+    QPixmap pm;
+    if ( !KoPAPixmapCache::instance()->find( key, size, pm ) ) {
+        pm = generateThumbnail( size );
+        KoPAPixmapCache::instance()->insert( key, pm );
+        kDebug(30010) << "create thumbnail" << this;
+    }
+    else {
+        kDebug(30010) << "thumbnail in cache " << this;
+    }
+    return pm;
+#else
     return generateThumbnail( size );
+#endif
+}
+
+void KoPAPageBase::pageUpdated()
+{
+    KoPAPixmapCache::instance()->remove( thumbnailKey() );
+}
+
+QString KoPAPageBase::thumbnailKey() const
+{
+     QString key;
+     key.sprintf( "%p", static_cast<const void *>( this ) );
+     return key;
 }
 
 KoShapeManagerPaintingStrategy * KoPAPageBase::getPaintingStrategy() const

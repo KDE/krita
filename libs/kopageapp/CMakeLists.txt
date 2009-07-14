@@ -21,9 +21,11 @@ set( kopageapp_LIB_SRCS
      KoPAView.cpp
      KoPACanvas.cpp
      KoPASavingContext.cpp
+     KoPAPixmapCache.cpp
      KoPAPageBase.cpp
      KoPAMasterPage.cpp
      KoPAPage.cpp
+     KoPAPageContainerModel.cpp
      KoPAViewMode.cpp
      KoPAViewModeNormal.cpp
      KoPALoadingContext.cpp

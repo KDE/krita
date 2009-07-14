@@ -33,6 +33,7 @@
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
 #include "KoPAUtil.h"
+#include "KoPAPixmapCache.h"
 
 KoPAMasterPage::KoPAMasterPage()
 : KoPAPageBase()
@@ -115,6 +116,13 @@ bool KoPAMasterPage::displayMasterBackground()
 void KoPAMasterPage::setDisplayMasterBackground( bool display )
 {
     Q_UNUSED( display );
+}
+
+void KoPAMasterPage::pageUpdated()
+{
+    KoPAPageBase::pageUpdated();
+    // TODO that is not the best way as it removes to much from the cache
+    KoPAPixmapCache::instance()->clear( false );
 }
 
 QPixmap KoPAMasterPage::generateThumbnail( const QSize& size )

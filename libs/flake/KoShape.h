@@ -120,7 +120,9 @@ public:
         BorderChanged, ///< the shapes border has changed
         BackgroundChanged, ///< the shapes background has changed
         ShadowChanged, ///< the shapes shadow has changed
-        ParameterChanged ///< the shapes parameter has changed (KoParameterShape only)
+        ParameterChanged, ///< the shapes parameter has changed (KoParameterShape only)
+        ContentChanged, ///< the content of the shape changed e.g. a new image inside a pixmap/text change inside a textshape
+        ChildChanged ///< a child of a container was changed/removed. This is propagated to all parents
     };
 
     /**

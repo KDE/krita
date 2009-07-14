@@ -147,9 +147,3 @@ bool KoChildrenData::isChildLocked(const KoShape *child) const
 void KoChildrenData::containerChanged(KoShapeContainer *)
 {
 }
-
-void KoChildrenData::childChanged(KoShape *child, KoShape::ChangeType type)
-{
-    Q_UNUSED(child);
-    Q_UNUSED(type);
-}

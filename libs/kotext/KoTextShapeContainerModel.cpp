@@ -123,6 +123,7 @@ void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType
             lay->interruptLayout();
         data->fireResizeEvent();
     }
+    KoShapeContainerModel::childChanged( child, type );
 }
 
 void KoTextShapeContainerModel::addAnchor(KoTextAnchor *anchor)

@@ -20,7 +20,6 @@
 #ifndef KOPAPAGEBASE_H
 #define KOPAPAGEBASE_H
 
-
 #include <QList>
 #include <QString>
 #include <QPixmap>
@@ -31,6 +30,8 @@
 #include "KoPageApp.h"
 #include "KoPASavingContext.h"
 #include "kopageapp_export.h"
+
+#define CACHE_PAGE_THUMBNAILS
 
 struct KoPageLayout;
 class KoOdfLoadingContext;
@@ -108,6 +109,13 @@ public:
     virtual void setDisplayMasterBackground( bool display ) = 0;
 
     QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
+
+    /**
+     * This function is called when the content of the page changes
+     *
+     * It invalidates the pages thumbnail cache.
+     */
+    virtual void pageUpdated();
 
     /// reimplemented
     virtual QSizeF size() const;
@@ -221,6 +229,11 @@ protected:
      * Create thumbnail for the page
      */
     virtual QPixmap generateThumbnail( const QSize& size = QSize( 512, 512 ) ) = 0;
+
+    /**
+     * Get the key used for for caching the tumbnail pixmap
+     */
+    QString thumbnailKey() const;
 
     /**
      * Get the painting strategy used for generating thumbnails

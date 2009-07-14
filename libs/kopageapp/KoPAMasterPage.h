@@ -54,6 +54,10 @@ public:
     /// reimplemented
     virtual void setDisplayMasterBackground( bool display );
 
+    /// reimplemented
+    virtual void pageUpdated();
+
+    /// reimplemented
     virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
 
 protected:

@@ -58,9 +58,6 @@ public:
     /// reimplemented
     virtual void containerChanged(KoShapeContainer *);
 
-    /// reimplemented
-    virtual void childChanged(KoShape *child, KoShape::ChangeType type);
-
 private:
     class Private;
     Private * const d;

@@ -46,7 +46,6 @@ public:
         return QList<KoShape*>(m_members);
     }
     void containerChanged(KoShapeContainer *) { }
-    void childChanged(KoShape *, KoShape::ChangeType) { }
     bool isChildLocked(const KoShape *child) const {
         Q_ASSERT(child->parent());
         return child->isGeometryProtected() || child->parent()->isGeometryProtected();

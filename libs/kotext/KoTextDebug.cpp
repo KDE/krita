@@ -97,7 +97,7 @@ void KoTextDebug::dumpDocument(const QTextDocument *doc)
 {
     Q_ASSERT(doc);
     document = doc;
-    qDebug() << QString("<document defaultfont=\"%1\">").arg(doc->defaultFont().toString());
+    qDebug() << qPrintable(QString("<document defaultfont=\"%1\">").arg(doc->defaultFont().toString()));
     dumpFrame(document->rootFrame());
     qDebug() << "</document>";
     document = 0;
@@ -592,6 +592,7 @@ QString KoTextDebug::frameAttributes(const QTextFrameFormat &frameFormat)
             break;
         case QTextFrameFormat::FrameBorderStyle:
             key = "border-style";
+            // determine border style.
             switch (properties[id].toInt()) {
             case QTextFrameFormat::BorderStyle_None:
                 value = "None";
@@ -784,14 +785,17 @@ void KoTextDebug::dumpTable(const QTextTable *table)
 
     QString attrs;
     attrs.append(tableAttributes(table->format()));
-    attrs.append(frameAttributes(table->frameFormat()));
+    attrs.append(frameAttributes(table->frameFormat())); // include frame attribues too.
 
     qDebug("%*s<table%s>", depth, " ", qPrintable(attrs));
+
+    // loop through all the cells in the table and dump the cells.
     for (int row = 0; row < table->rows(); ++row) {
         for (int column = 0; column < table->columns(); ++column) {
             dumpTableCell(table->cellAt(row, column));
         }
     }
+
     qDebug("%*s%s", depth, " ", "</table>");
     depth -= INDENT;
 }
@@ -806,11 +810,14 @@ void KoTextDebug::dumpTableCell(const QTextTableCell &cell)
 
     qDebug("%*s<cell%s>", depth, " ", qPrintable(attrs));
 
+    // iterate through the cell content.
     QTextFrame::iterator cellIter = cell.begin();
     while (!cellIter.atEnd()) {
         if (cellIter.currentFrame() != 0) {
+            // content is a frame or table.
             dumpFrame(cellIter.currentFrame());
         } else {
+            // content is a block.
             dumpBlock(cellIter.currentBlock());
         }
         ++cellIter;

@@ -580,10 +580,150 @@ QString KoTextDebug::tableAttributes(const QTextTableFormat &tableFormat)
     return attrs;
 }
 
+QString KoTextDebug::frameAttributes(const QTextFrameFormat &frameFormat)
+{
+    QString attrs;
+
+    QMap<int, QVariant> properties = frameFormat.properties();
+    foreach(int id, properties.keys()) {
+        QString key, value;
+        switch (id) {
+        case QTextFrameFormat::FrameBorderBrush:
+            break;
+        case QTextFrameFormat::FrameBorderStyle:
+            key = "border-style";
+            switch (properties[id].toInt()) {
+            case QTextFrameFormat::BorderStyle_None:
+                value = "None";
+                break;
+            case QTextFrameFormat::BorderStyle_Dotted:
+                value = "Dotted";
+                break;
+            case QTextFrameFormat::BorderStyle_Dashed:
+                value = "Dashed";
+                break;
+            case QTextFrameFormat::BorderStyle_Solid:
+                value = "Solid";
+                break;
+            case QTextFrameFormat::BorderStyle_Double:
+                value = "Double";
+                break;
+            case QTextFrameFormat::BorderStyle_DotDash:
+                value = "DotDash";
+                break;
+            case QTextFrameFormat::BorderStyle_DotDotDash:
+                value = "DotDotDash";
+                break;
+            case QTextFrameFormat::BorderStyle_Groove:
+                value = "Groove";
+                break;
+            case QTextFrameFormat::BorderStyle_Ridge:
+                value = "Ridge";
+                break;
+            case QTextFrameFormat::BorderStyle_Inset:
+                value = "Inset";
+                break;
+            case QTextFrameFormat::BorderStyle_Outset:
+                value = "Outset";
+                break;
+            default:
+                value = "Unknown";
+                break;
+            }
+            break;
+        case QTextFrameFormat::FrameBorder:
+            key = "border";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextFrameFormat::FrameMargin:
+            key = "margin";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextFrameFormat::FramePadding:
+            key = "padding";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextFrameFormat::FrameWidth:
+            key = "width";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextFrameFormat::FrameHeight:
+            key = "height";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextFrameFormat::FrameTopMargin:
+            key = "top-margin";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextFrameFormat::FrameBottomMargin:
+            key = "bottom-margin";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextFrameFormat::FrameLeftMargin:
+            key = "left-margin";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextFrameFormat::FrameRightMargin:
+            key = "right-margin";
+            value = QString::number(properties[id].toDouble());
+            break;
+        default:
+            break;
+        }
+        if (!key.isEmpty())
+            attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+    }
+    return attrs;
+}
+
+QString KoTextDebug::tableCellAttributes(const QTextTableCellFormat &tableCellFormat)
+{
+    QString attrs;
+
+    QMap<int, QVariant> properties = tableCellFormat.properties();
+    foreach(int id, properties.keys()) {
+        QString key, value;
+        switch (id) {
+        case QTextTableCellFormat::TableCellRowSpan:
+            key = "row-span";
+            value = QString::number(properties[id].toInt());
+            break;
+        case QTextTableCellFormat::TableCellColumnSpan:
+            key = "column-span";
+            value = QString::number(properties[id].toInt());
+            break;
+        case QTextTableCellFormat::TableCellTopPadding:
+            key = "top-padding";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextTableCellFormat::TableCellBottomPadding:
+            key = "bottom-padding";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextTableCellFormat::TableCellLeftPadding:
+            key = "left-padding";
+            value = QString::number(properties[id].toDouble());
+            break;
+        case QTextTableCellFormat::TableCellRightPadding:
+            key = "right-padding";
+            value = QString::number(properties[id].toDouble());
+            break;
+        default:
+            break;
+        }
+        if (!key.isEmpty())
+            attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+    }
+    return attrs;
+}
+
 void KoTextDebug::dumpFrame(const QTextFrame *frame)
 {
     depth += INDENT;
-    qDebug("%*s%s", depth, " ", "<frame>");
+
+    QString attrs;
+    attrs.append(frameAttributes(frame->frameFormat()));
+    qDebug("%*s<frame%s>", depth, " ", qPrintable(attrs));
 
     QTextFrame::iterator iterator = frame->begin();
 
@@ -644,9 +784,40 @@ void KoTextDebug::dumpTable(const QTextTable *table)
 
     QString attrs;
     attrs.append(tableAttributes(table->format()));
+    attrs.append(frameAttributes(table->frameFormat()));
 
     qDebug("%*s<table%s>", depth, " ", qPrintable(attrs));
+    for (int row = 0; row < table->rows(); ++row) {
+        for (int column = 0; column < table->columns(); ++column) {
+            dumpTableCell(table->cellAt(row, column));
+        }
+    }
     qDebug("%*s%s", depth, " ", "</table>");
+    depth -= INDENT;
+}
+
+void KoTextDebug::dumpTableCell(const QTextTableCell &cell)
+{
+    depth += INDENT;
+
+    QString attrs;
+    attrs.append(textAttributes(cell.format()));
+    attrs.append(tableCellAttributes(cell.format().toTableCellFormat()));
+
+    qDebug("%*s<cell%s>", depth, " ", qPrintable(attrs));
+
+    QTextFrame::iterator cellIter = cell.begin();
+    while (!cellIter.atEnd()) {
+        if (cellIter.currentFrame() != 0) {
+            dumpFrame(cellIter.currentFrame());
+        } else {
+            dumpBlock(cellIter.currentBlock());
+        }
+        ++cellIter;
+    }
+
+    qDebug("%*s%s", depth, " ", "</cell>");
+
     depth -= INDENT;
 }
 

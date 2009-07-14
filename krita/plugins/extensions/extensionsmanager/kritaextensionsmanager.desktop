@@ -2,6 +2,7 @@
 Name=ExtensionsManager
 Name[es]=Gestor de extensiones
 Name[et]=Laienduste haldur
+Name[gl]=Xestor de engadidos
 Name[nds]=Verwiedernpleger
 Name[pt]=Gestor de Extensões
 Name[pt_BR]=Gerenciador de Extensões
@@ -12,6 +13,7 @@ Name[zh_TW]=延伸管理員
 Comment=ExtensionsManager
 Comment[es]=Gestor de extensiones
 Comment[et]=Laienduste haldur
+Comment[gl]=Xestor de engadidos
 Comment[nds]=Verwiedernpleger
 Comment[pt]=Gestor de Extensões
 Comment[pt_BR]=Gerenciador de Extensões

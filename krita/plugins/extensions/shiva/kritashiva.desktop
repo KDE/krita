@@ -2,6 +2,7 @@
 Name=Shiva Kernel Language Support
 Name[es]=Implementación del lenguaje del núcleo Shiva
 Name[et]=Shiva kernelikeele toetus
+Name[gl]=Soporte da Linguaxe de Kernel Shiva
 Name[it]=Supporto per il linguaggio Shiva Kernel
 Name[nds]=Shiva-Karn-Spraakünnerstütten
 Name[nl]=Ondersteuning van Shiva-kerneltaal
@@ -14,6 +15,7 @@ Name[zh_TW]=Shiva 核心語言支援
 Comment=Shiva Kernel Language Support
 Comment[es]=Implementación del lenguaje del núcleo Shiva
 Comment[et]=Shiva kernelikeele toetus
+Comment[gl]=Soporte da LInguaxe de Kernel Shiva
 Comment[it]=Supporto per il linguaggio Shiva Kernel
 Comment[nds]=Shiva-Karn-Spraakünnerstütten
 Comment[nl]=Ondersteuning van Shiva-kerneltaal

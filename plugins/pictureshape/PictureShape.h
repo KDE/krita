@@ -49,6 +49,11 @@ public:
     /// reimplemented
     void init(const QMap<QString, KoDataCenter *> & dataCenterMap);
 
+    /**
+     * Get the collection used in the shape
+     */
+    KoImageCollection* imageCollection() const;
+
 protected:
     virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context );
 

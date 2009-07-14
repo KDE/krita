@@ -138,7 +138,13 @@ bool PictureShape::loadFromUrl( KUrl &url )
     return data != 0;
 }
 
+KoImageCollection* PictureShape::imageCollection() const
+{
+    return m_imageCollection;
+}
+
 void PictureShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
 {
     m_imageCollection = (KoImageCollection *)dataCenterMap["ImageCollection"];
 }
+

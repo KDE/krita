@@ -19,6 +19,7 @@
 
 #include "PictureTool.h"
 #include "PictureShape.h"
+#include "ChangeImageCommand.h"
 
 #include <QToolButton>
 #include <QGridLayout>
@@ -28,6 +29,7 @@
 #include <KFileDialog>
 
 #include <KoCanvasBase.h>
+#include <KoImageCollection.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
@@ -83,10 +85,15 @@ QWidget * PictureTool::createOptionWidget()
 
 void PictureTool::slotChangeUrl()
 {
-  //kDebug()<<" PictureTool::slotChangeUrl";
-  KUrl url = KFileDialog::getOpenUrl();
-  if(!url.isEmpty() && m_pictureshape)
-    m_pictureshape->loadFromUrl(url);
+    //kDebug()<<" PictureTool::slotChangeUrl";
+    KUrl url = KFileDialog::getOpenUrl();
+    if (!url.isEmpty() && m_pictureshape) {
+        KoImageData* data = m_pictureshape->imageCollection()->getImage(url);
+        if (data) {
+            ChangeImageCommand *cmd = new ChangeImageCommand(m_pictureshape, data);
+            m_canvas->addCommand(cmd);
+        }
+    }
 }
 
 void PictureTool::mouseDoubleClickEvent( KoPointerEvent *event ) {

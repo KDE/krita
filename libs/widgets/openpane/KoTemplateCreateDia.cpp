@@ -42,6 +42,9 @@
 #include <k3listview.h>
 #include <klocale.h>
 #include <KoTemplates.h>
+#include <KoTemplateTree.h>
+#include <KoTemplateGroup.h>
+#include <KoTemplate.h>
 #include <kicondialog.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
@@ -463,8 +466,11 @@ void KoTemplateCreateDia::slotRemove() {
     }
     else {
         bool done=false;
-        for(KoTemplateGroup *g=d->m_tree->first(); g!=0L && !done; g=d->m_tree->next()) {
-            KoTemplate *t=g->find(item->text(0));
+        QList<KoTemplateGroup*> groups = d->m_tree->groups();
+        QList<KoTemplateGroup*>::const_iterator it = groups.begin();
+        for(; it != groups.end() && !done; ++it) {
+            KoTemplate *t = (*it)->find(item->text(0));
+
             if(t) {
                 t->setHidden(true);
                 done=true;
@@ -503,11 +509,12 @@ void KoTemplateCreateDia::updatePixmap() {
 
 void KoTemplateCreateDia::fillGroupTree() {
 
-    for(KoTemplateGroup *group=d->m_tree->first(); group!=0L; group=d->m_tree->next()) {
+    foreach(KoTemplateGroup *group, d->m_tree->groups()) {
         if(group->isHidden())
             continue;
         Q3ListViewItem *groupItem=new Q3ListViewItem(d->m_groups, group->name());
-        for(KoTemplate *t=group->first(); t!=0L; t=group->next()) {
+
+        foreach(KoTemplate *t, group->templates()) {
             if(t->isHidden())
                 continue;
             (void)new Q3ListViewItem(groupItem, t->name());

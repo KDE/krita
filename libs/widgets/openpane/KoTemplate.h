@@ -21,7 +21,6 @@
 #ifndef koTemplate_h
 #define koTemplate_h
 
-#include <q3ptrlist.h>
 #include <QStringList>
 #include <QPixmap>
 #include "kowidgets_export.h"

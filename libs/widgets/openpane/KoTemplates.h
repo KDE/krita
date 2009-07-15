@@ -21,15 +21,9 @@
 #ifndef KO_TEMPLATES_H
 #define KO_TEMPLATES_H
 
-#include <q3ptrlist.h>
-#include <QStringList>
-#include <QPixmap>
-#include <kcomponentdata.h>
-
 #include "kowidgets_export.h"
-#include "KoTemplate.h"
-#include "KoTemplateGroup.h"
-#include "KoTemplateTree.h"
+
+class QString;
 
 namespace KoTemplates
 {

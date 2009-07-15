@@ -35,7 +35,9 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-#include "KoTemplates.h"
+#include "KoTemplateTree.h"
+#include "KoTemplateGroup.h"
+#include "KoTemplate.h"
 #include "KoDetailsPane.h"
 #include "KoTemplatesPane.h"
 #include "KoRecentDocumentsPane.h"
@@ -190,7 +192,7 @@ void KoOpenPane::initTemplates(const QString& templateType)
     if (!templateType.isEmpty()) {
         KoTemplateTree templateTree(templateType.toLocal8Bit(), d->m_componentData, true);
 
-        for (KoTemplateGroup *group = templateTree.first(); group != 0L; group = templateTree.next()) {
+        foreach (KoTemplateGroup *group, templateTree.groups()) {
             if (group->isHidden()) {
                 continue;
             }
@@ -210,7 +212,7 @@ void KoOpenPane::initTemplates(const QString& templateType)
                     this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)));
             connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
                     pane, SLOT(resizeSplitter(KoDetailsPane*, const QList<int>&)));
-            QTreeWidgetItem* item = addPane(group->name(), group->first()->loadPicture(d->m_componentData),
+            QTreeWidgetItem* item = addPane(group->name(), group->templates().first()->loadPicture(d->m_componentData),
                                            pane, group->sortingWeight() + templateOffset);
 
             if (!firstItem) {

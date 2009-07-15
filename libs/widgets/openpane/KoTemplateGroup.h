@@ -21,7 +21,7 @@
 #ifndef koTemplateGroup_h
 #define koTemplateGroup_h
 
-#include <q3ptrlist.h>
+#include <QList>
 #include <QStringList>
 #include <QPixmap>
 #include "kowidgets_export.h"
@@ -37,7 +37,7 @@ public:
                              const QString &dir = QString(),
                              int _sortingWeight = 0,
                              bool touched = false);
-    ~KoTemplateGroup() {}
+    ~KoTemplateGroup();
 
     QString name() const {
         return m_name;
@@ -59,21 +59,7 @@ public:
     /// if we should hide, we hide all the children
     void setHidden(bool hidden = true) const;
 
-    KoTemplate *first() {
-        return m_templates.first();
-    }
-    KoTemplate *next() {
-        return m_templates.next();
-    }
-    KoTemplate *last() {
-        return m_templates.last();
-    }
-    KoTemplate *prev() {
-        return m_templates.prev();
-    }
-    KoTemplate *current() {
-        return m_templates.current();
-    }
+    QList<KoTemplate*> templates() const { return m_templates; }
 
     bool add(KoTemplate *t, bool force = false, bool touch = true);
     KoTemplate *find(const QString &name) const;
@@ -85,7 +71,7 @@ public:
 private:
     QString m_name;
     QStringList m_dirs;
-    Q3PtrList<KoTemplate> m_templates;
+    QList<KoTemplate*> m_templates;
     mutable bool m_touched;
     int m_sortingWeight;
 };

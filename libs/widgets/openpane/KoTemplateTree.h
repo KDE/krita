@@ -21,7 +21,7 @@
 #ifndef koTemplateTree_h
 #define koTemplateTree_h
 
-#include <q3ptrlist.h>
+#include <QList>
 #include <QStringList>
 #include <QPixmap>
 #include "kowidgets_export.h"
@@ -36,7 +36,7 @@ class KOWIDGETS_EXPORT KoTemplateTree
 public:
     KoTemplateTree(const QByteArray &templateType, const KComponentData &instance,
                    bool readTree = false);
-    ~KoTemplateTree() {}
+    ~KoTemplateTree();
 
     QByteArray templateType() const {
         return m_templateType;
@@ -46,22 +46,6 @@ public:
     }
     void readTemplateTree();
     void writeTemplateTree();
-
-    KoTemplateGroup *first() {
-        return m_groups.first();
-    }
-    KoTemplateGroup *next() {
-        return m_groups.next();
-    }
-    KoTemplateGroup *last() {
-        return m_groups.last();
-    }
-    KoTemplateGroup *prev() {
-        return m_groups.prev();
-    }
-    KoTemplateGroup *current() {
-        return m_groups.current();
-    }
 
     void add(KoTemplateGroup *g);
     KoTemplateGroup *find(const QString &name) const;
@@ -73,6 +57,8 @@ public:
         return m_defaultTemplate;
     }
 
+    QList<KoTemplateGroup*> groups () const { return m_groups; }
+
 private:
     void readGroups();
     void readTemplates();
@@ -81,7 +67,7 @@ private:
 
     QByteArray m_templateType;
     KComponentData m_componentData;
-    Q3PtrList<KoTemplateGroup> m_groups;
+    QList<KoTemplateGroup*> m_groups;
     KoTemplateGroup *m_defaultGroup;
     KoTemplate *m_defaultTemplate;
 };

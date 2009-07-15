@@ -19,7 +19,8 @@
 
 #include "KoTemplatesPane.h"
 
-#include "KoTemplates.h"
+#include "KoTemplateGroup.h"
+#include "KoTemplate.h"
 
 #include <QStandardItemModel>
 #include <kcomponentdata.h>
@@ -54,7 +55,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_compone
     QStandardItem* rootItem = model()->invisibleRootItem();
     QStandardItem* defaultItem = 0;
 
-    for (KoTemplate* t = group->first(); t != 0L; t = group->next()) {
+    foreach (KoTemplate* t, group->templates()) {
         if (t->isHidden())
             continue;
 

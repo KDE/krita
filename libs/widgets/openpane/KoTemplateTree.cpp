@@ -46,10 +46,13 @@ KoTemplateTree::KoTemplateTree(const QByteArray &templateType,
         m_templateType(templateType), m_componentData(componentData), m_defaultGroup(0L),
         m_defaultTemplate(0L)
 {
-
-    m_groups.setAutoDelete(true);
     if (readTree)
         readTemplateTree();
+}
+
+KoTemplateTree::~KoTemplateTree()
+{
+    qDeleteAll(m_groups);
 }
 
 void KoTemplateTree::readTemplateTree()
@@ -63,13 +66,15 @@ void KoTemplateTree::writeTemplateTree()
 {
     QString localDir = m_componentData.dirs()->saveLocation(m_templateType);
 
-    for (KoTemplateGroup *group = m_groups.first(); group != 0L; group = m_groups.next()) {
+    foreach (KoTemplateGroup *group, m_groups) {
         //kDebug( 30003 ) <<"---------------------------------";
         //kDebug( 30003 ) <<"group:" << group->name();
 
         bool touched = false;
-        for (KoTemplate *t = group->first(); t != 0L && !touched && !group->touched(); t = group->next())
-            touched = t->touched();
+        QList<KoTemplate*> templates = group->templates();
+        QList<KoTemplate*>::iterator it = templates.begin();
+        for (; it != templates.end() && !touched && !group->touched(); ++it)
+            touched = (*it)->touched();
 
         if (group->touched() || touched) {
             //kDebug( 30003 ) <<"touched";
@@ -88,7 +93,7 @@ void KoTemplateTree::writeTemplateTree()
                 }
             }
         }
-        for (KoTemplate *t = group->first(); t != 0L; t = group->next()) {
+        foreach (KoTemplate *t, templates) {
             if (t->touched()) {
                 //kDebug( 30003 ) <<"++template:" << t->name();
                 writeTemplate(t, group, localDir);
@@ -107,19 +112,30 @@ void KoTemplateTree::add(KoTemplateGroup *g)
 {
 
     KoTemplateGroup *group = find(g->name());
-    if (group == 0L)
+    if (group == NULL)
         m_groups.append(g);
-    else
+    else {
         group->addDir(g->dirs().first()); // "...there can be only one..." (Queen)
+        delete g;
+        g = NULL;
+    }
 }
 
 KoTemplateGroup *KoTemplateTree::find(const QString &name) const
 {
+    QList<KoTemplateGroup*>::const_iterator it = m_groups.begin();
+    KoTemplateGroup* ret = NULL;
 
-    Q3PtrListIterator<KoTemplateGroup> it(m_groups);
-    while (it.current() && it.current()->name() != name)
+    while (it != m_groups.end()) {
+        if ((*it)->name() == name) {
+            ret = *it;
+            break;
+        }
+
         ++it;
-    return it.current();
+    }
+
+    return ret;
 }
 
 void KoTemplateTree::readGroups()
@@ -162,9 +178,8 @@ void KoTemplateTree::readTemplates()
         dontShow = "metric";
     }
 
-    Q3PtrListIterator<KoTemplateGroup> groupIt(m_groups);
-    for (; groupIt.current() != 0L; ++groupIt) {
-        QStringList dirs = groupIt.current()->dirs();
+    foreach (KoTemplateGroup* group, m_groups) {
+        QStringList dirs = group->dirs();
         for (QStringList::ConstIterator it = dirs.constBegin(); it != dirs.constEnd(); ++it) {
             QDir d(*it);
             if (!d.exists())
@@ -233,7 +248,7 @@ void KoTemplateTree::readTemplates()
                 }
                 KoTemplate *t = new KoTemplate(text, description, templatePath, icon, fileName,
                                                measureSystem, hidden);
-                groupIt.current()->add(t, false, false); // false -> we aren't a "user", false -> don't
+                group->add(t, false, false); // false -> we aren't a "user", false -> don't
                 // "touch" the group to avoid useless
                 // creation of dirs in .kde/blah/...
                 if (defaultTemplate)

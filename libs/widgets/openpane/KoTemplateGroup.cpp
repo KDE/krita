@@ -44,16 +44,20 @@ KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
         m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight)
 {
     m_dirs.append(dir);
-    m_templates.setAutoDelete(true);
+}
+
+KoTemplateGroup::~KoTemplateGroup()
+{
+    qDeleteAll(m_templates);
 }
 
 bool KoTemplateGroup::isHidden() const
 {
 
-    Q3PtrListIterator<KoTemplate> it(m_templates);
+    QList<KoTemplate*>::const_iterator it = m_templates.begin();
     bool hidden = true;
-    while (it.current() != 0L && hidden) {
-        hidden = it.current()->isHidden();
+    while (it != m_templates.end() && hidden) {
+        hidden = (*it)->isHidden();
         ++it;
     }
     return hidden;
@@ -61,10 +65,9 @@ bool KoTemplateGroup::isHidden() const
 
 void KoTemplateGroup::setHidden(bool hidden) const
 {
+    foreach (KoTemplate* t, m_templates)
+        t->setHidden(hidden);
 
-    Q3PtrListIterator<KoTemplate> it(m_templates);
-    for (; it.current() != 0L; ++it)
-        it.current()->setHidden(hidden);
     m_touched = true;
 }
 
@@ -81,7 +84,8 @@ bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch)
         QFile::remove(myTemplate->fileName());
         QFile::remove(myTemplate->picture());
         QFile::remove(myTemplate->file());
-        m_templates.removeRef(myTemplate);
+        m_templates.removeAll(myTemplate);
+        delete myTemplate;
         m_templates.append(t);
         m_touched = touch;
         return true;
@@ -91,10 +95,18 @@ bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch)
 
 KoTemplate *KoTemplateGroup::find(const QString &name) const
 {
+    QList<KoTemplate*>::const_iterator it = m_templates.begin();
+    KoTemplate* ret = NULL;
 
-    Q3PtrListIterator<KoTemplate> it(m_templates);
-    while (it.current() && it.current()->name() != name)
+    while (it != m_templates.end()) {
+        if ((*it)->name() == name) {
+            ret = *it;
+            break;
+        }
+
         ++it;
-    return it.current();
+    }
+
+    return ret;
 }
 

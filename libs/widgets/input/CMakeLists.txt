@@ -2,7 +2,6 @@ include_directories(${KDE4_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/odf 
     ${CMAKE_SOURCE_DIR}/libs/kobase 
     ${CMAKE_SOURCE_DIR}/libs/widgets)
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 ########### next target ###############
 
@@ -21,8 +20,6 @@ target_link_libraries(koinput
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KFILE_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
-    ${KDE4_KDE3SUPPORT_LIBS}
 )
 
 set_target_properties(koinput PROPERTIES

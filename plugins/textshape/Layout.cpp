@@ -327,32 +327,41 @@ bool Layout::nextParag()
     else
         m_isRtl =  dir == KoText::RightLeftTopBottom || dir == KoText::PerhapsRightLeftTopBottom;
 
-    // tables (TODO: Probably inefficient).
+    // tables.
     QTextCursor tableFinder(m_block);
     QTextTable *table = tableFinder.currentTable();
     if (table) {
         if (table != m_tableLayout.table()) {
             // entered table.
             m_tableLayout.setTable(table);
-            m_tableLayout.setPosition(QPointF(x(), y())); // FIXME.
+            m_tableLayout.setPosition(QPointF(x(), y())); // FIXME?
+            m_tableLayout.layout();
         }
-        m_tableLayout.layout();
         m_tableCell = table->cellAt(m_block.position());
         QTextTableCell previousCell = table->cellAt(m_block.previous().position());
         QTextTableCell nextCell = table->cellAt(m_block.next().position());
         if (m_tableCell != previousCell) {
-            // entered cell.
-            m_y = m_tableLayout.position().y() + m_tableLayout.cellContentRect(m_tableCell).y();
-        }
-        if (m_tableCell != nextCell) {
-            // leaving cell (TODO: Adjust cell height).
+            if (previousCell.isValid()) {
+                // left cell
+                m_tableLayout.calculateCellContentHeight(previousCell);
+            }
+            if (m_tableCell.isValid()) {
+                // entered cell.
+                m_y = m_tableLayout.position().y() + m_tableLayout.cellContentRect(m_tableCell).y();
+            }
         }
         m_inTable = true;
     } else {
         QTextCursor lookBehind(m_block.previous());
         QTextTable *previousTable = lookBehind.currentTable();
         if (previousTable) {
+            QTextTableCell previousCell = previousTable->cellAt(m_block.previous().position());
+            if (previousCell.isValid()) {
+                // left last cell
+                m_tableLayout.calculateCellContentHeight(previousCell);
+            }
             // left table.
+            m_tableLayout.layout();
             m_inTable = false;
             m_tableCell = QTextTableCell();
         }

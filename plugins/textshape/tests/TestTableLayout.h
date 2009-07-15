@@ -26,6 +26,8 @@ private:
     void initTest(QTextTableFormat &format, QStringList &cellTexts, int rows = 1, int columns = 1);
     /// Clean up after a test.
     void cleanupTest();
+    /// Table layout debug function.
+    void debugTableLayout(const TableLayout& layout) const;
 
 private slots:
     /// Initialize test case.

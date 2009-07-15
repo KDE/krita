@@ -22,6 +22,7 @@
 
 #include <QTextDocument>
 #include <QTextTable>
+#include <QTextLine>
 #include <QPainter>
 #include <QDebug>
 #include <QRectF>
@@ -54,6 +55,17 @@ void TableLayout::setTable(QTextTable *table)
 
     m_table = table;
     m_tableData = tableData;
+
+    m_tableData->m_rowPositions.resize(m_table->rows());
+    m_tableData->m_rowHeights.resize(m_table->rows());
+    m_tableData->m_columnPositions.resize(m_table->columns());
+    m_tableData->m_columnWidths.resize(m_table->columns());
+    m_tableData->m_contentHeights.resize(m_table->rows());
+
+    for (int row = 0; row < m_table->rows(); ++row) {
+        m_tableData->m_contentHeights[row].resize(m_table->columns());
+    }
+
     m_dirty = true;
 }
 
@@ -73,12 +85,6 @@ void TableLayout::layout()
 
     QTextTableFormat tableFormat = m_table->format();
 
-    m_tableData->m_rowPositions.resize(m_table->rows());
-    m_tableData->m_rowHeights.resize(m_table->rows());
-    m_tableData->m_columnPositions.resize(m_table->columns());
-    m_tableData->m_columnWidths.resize(m_table->columns());
-    m_tableData->m_cellContentHeights.resize(m_table->columns() * m_table->rows());
-
     // Table width.
     if (tableFormat.width().type() == QTextLength::FixedLength) {
         m_tableData->m_width = tableFormat.width().rawValue();
@@ -93,21 +99,45 @@ void TableLayout::layout()
         m_tableData->m_columnPositions[col] = col * columnWidth;
     }
 
-    // Table height.
-    if (tableFormat.height().type() == QTextLength::FixedLength) {
-        m_tableData->m_height = tableFormat.height().rawValue();
-    } else {
-        m_tableData->m_height = 0; // TODO: Variable / percentage.
-    }
-
-    // Row heights/positions. Only explicit fixed width for now.
-    qreal rowHeight = m_tableData->m_height / m_table->rows();
-    m_tableData->m_rowHeights.fill(rowHeight);
-    for (int row = 0; row < m_tableData->m_rowPositions.size(); ++row) {
-        m_tableData->m_rowPositions[row] = row * rowHeight;
-    }
-
+    layoutFromRow(0);
     m_dirty = false;
+}
+
+void TableLayout::layoutFromRow(int fromRow)
+{
+    Q_ASSERT(isValid());
+    Q_ASSERT(fromRow >= 0);
+    Q_ASSERT(fromRow < m_table->rows());
+
+    if (!isValid()) {
+        return;
+    }
+
+    if (fromRow < 0 || fromRow >= m_table->rows()) {
+        return;
+    }
+
+    m_tableData->m_height = m_tableData->m_rowPositions[fromRow];
+
+    for (int row = fromRow; row < m_table->rows(); ++row) {
+        /*
+         * 1. find max content height in row.
+         * 2. adjust row/table height.
+         * 3. adjust row Y position.
+         */
+        qreal contentHeight = 0;
+        foreach (qreal height, m_tableData->m_contentHeights.at(row)) {
+            contentHeight = qMax(contentHeight, height);
+        }
+
+        m_tableData->m_rowHeights[row] = contentHeight;
+        m_tableData->m_height += m_tableData->m_rowHeights[row];
+
+        if (row > 0) { // never adjust Y position of first row.
+            m_tableData->m_rowPositions[row] = m_tableData->m_rowPositions[row - 1] +
+                m_tableData->m_rowHeights[row - 1];
+        }
+    }
 }
 
 void TableLayout::draw(QPainter *painter) const
@@ -123,31 +153,64 @@ QRectF TableLayout::boundingRect() const
     qreal horizontalMargins = m_table->format().leftMargin() + m_table->format().rightMargin();
     qreal verticalMargins = m_table->format().topMargin() + m_table->format().bottomMargin();
 
-    return QRectF(m_position.x(), m_position.y(),     // x, y
-            m_tableData->m_width + horizontalMargins, // width
-            m_tableData->m_height + verticalMargins); // height
+    return QRectF(m_position.x(), m_position.y(),
+            m_tableData->m_width + horizontalMargins,
+            m_tableData->m_height + verticalMargins);
 }
 
 QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
 {
+    Q_ASSERT(cell.isValid());
+
     return cellContentRect(cell.row(), cell.column());
 }
 
-void TableLayout::calculateRows(int fromRow)
+QRectF TableLayout::cellContentRect(int row, int column) const
 {
     Q_ASSERT(isValid());
-    Q_ASSERT(fromRow >= 0);
-    Q_ASSERT(fromRow < m_table->rows());
+    Q_ASSERT(row < m_tableData->m_rowPositions.size());
+    Q_ASSERT(column < m_tableData->m_columnPositions.size());
 
-    if (!isValid()) {
+    return QRectF(
+            m_tableData->m_columnPositions[column], m_tableData->m_rowPositions[row],
+            m_tableData->m_columnWidths[column], m_tableData->m_rowHeights[row]);
+}
+
+void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)
+{
+    Q_ASSERT(isValid());
+    Q_ASSERT(cell.isValid());
+
+    if (!isValid() || !cell.isValid()) {
         return;
     }
 
-    if (fromRow < 0 || fromRow >= m_table->rows()) {
-        return;
-    }
+    // get the first line in the first block in the cell.
+    QTextFrame::iterator cellIterator = cell.begin();
+    Q_ASSERT(cellIterator.currentFrame() == 0);
+    QTextBlock firstBlock = cellIterator.currentBlock();
+    Q_ASSERT(firstBlock.isValid());
+    QTextLine topLine = firstBlock.layout()->lineAt(0);
+    Q_ASSERT(topLine.isValid());
 
-    // TODO.
+    // get the last line in the last block in the cell.
+    cellIterator = cell.end();
+    cellIterator--;
+    Q_ASSERT(cellIterator.currentFrame() == 0);
+    QTextBlock lastBlock = cellIterator.currentBlock();
+    Q_ASSERT(lastBlock.isValid());
+    QTextLine bottomLine = lastBlock.layout()->lineAt(lastBlock.lineCount() - 1);
+    Q_ASSERT(bottomLine.isValid());
+
+    qreal contentHeight = (bottomLine.y() + bottomLine.height()) - topLine.y();
+    Q_ASSERT(contentHeight >= 0); // sanity check.
+    contentHeight = qMax(contentHeight, 0.);
+
+    // update content height value of the cell.
+    m_tableData->m_contentHeights[cell.row()][cell.column()] = contentHeight;
+
+    // re-layout from the row the cell is in.
+    layoutFromRow(cell.row());
 }
 
 void TableLayout::calculateColumns(int fromColumn)
@@ -165,19 +228,6 @@ void TableLayout::calculateColumns(int fromColumn)
     }
 
     // TODO.
-}
-
-QRectF TableLayout::cellContentRect(int row, int column) const
-{
-    Q_ASSERT(isValid());
-    Q_ASSERT(row < m_tableData->m_rowPositions.size());
-    Q_ASSERT(column < m_tableData->m_columnPositions.size());
-
-    // TODO: Take borders, padding et.c. into consideration.
-
-    return QRectF(
-            m_tableData->m_columnPositions[column], m_tableData->m_rowPositions[row], // x, y
-            m_tableData->m_columnWidths[column], m_tableData->m_rowHeights[row]);     // width, height
 }
 
 QTextTableCell TableLayout::cellAt(int position) const

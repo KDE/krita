@@ -30,12 +30,68 @@ class QTextTableCell;
 class QPainter;
 class QRectF;
 
+/*
+ * Anatomy of a Table
+ * ------------------
+ *
+ *   +--1. Table Bounding Rect----------------------------------------- -- -
+ *   |
+ *   |   +--2. Table Border Rect--------------------------------------- -- -
+ *   |   |
+ *   |   |   +--3. Cell Border Rect--------------+---+----------------- -- -
+ *   |   |   |                                   |   |
+ *   |   |   |   +--4. Cell Content Rect-----+   |   |   +------------- -- -
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   |          Cell 1           |   |   |   |          Cell 2
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   +---------------------------+   |   |   +------------- -- -
+ *   |   |   |                                   |   |
+ *   |   |   +-----------------------------------+   +----------------- -- -
+ *   |   |   |                              5. Cell Spacing
+ *   |   |   +-----------------------------------+   +----------------- -- -
+ *   |   |   |                                   |   |
+ *   |   |   |   +---------------------------+   |   |   +------------- -- -
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   |          Cell 3           |   |   |   |          Cell 4
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   |                           |   |   |   |
+ *   |   |   |   +---------------------------+   |   |   +------------- -- -
+ *   |   |   |   6. Cell Padding                 |   |
+ *   |   |   +-----------------------------------+---+----------------- -- -
+ *   |   |   7. Table Padding
+ *   |   +------------------------------------------------------------- -- -
+ *   |   8. Table Margin
+ *   +----------------------------------------------------------------- -- -
+ *
+ *  #    API (Most still to be written)
+ * -------------------------------------------------------------------------
+ * (1)   TableLayout::boundingRect()
+ * (2)   TableLayout::borderRect()
+ * (3)   TableLayout::cellBorderRect(cell)
+ * (4)   TableLayout::cellContentRect(cell)
+ * (5)   QTextTableFormat::cellSpacing()
+ * (6)   QTextTableCellFormat::left-/right-/top-/bottomPadding() [*]
+ * (7)   QTextTableFormat::padding()
+ * (8)   QTextTableFormat::margin()
+ * -------------------------------------------------------------------------
+ *
+ * [*] Or QTextTableFormat::cellPadding() if not specified per cell.
+ */
+
 /**
  * @brief Table layout class.
  *
  * This class is responsible for laying out and drawing QTextTable instances.
  *
- * A layout is triggered with the layout() function.
+ * A full layout is triggered with the layout() function, or from a specific row
+ * with the layoutFromRow() function.
  *
  * The table layout has a dirty state which indicates whether a layout is needed
  * This state may be queried using the isDirty() function.
@@ -107,18 +163,27 @@ public:
     QTextTable *table() const;
 
     /**
-     * Trigger a layout of the table.
+     * Trigger a full layout of the table.
      */
     void layout();
 
     /**
+     * Trigger a layout of the table, starting at row \fromRow.
+     *
+     * @param from the row from which to start calculating.
+     */
+    void layoutFromRow(int fromRow);
+
+    /**
      * Draw the table using the given QPainter.
+     *
      * @param painter a pointer to the QPainter to draw the table with.
      */
     void draw(QPainter *painter) const;
 
     /**
      * Get the bounding rectangle of the table.
+     *
      * @return the bounding rectangle of the table.
      */
     QRectF boundingRect() const;
@@ -136,7 +201,20 @@ public:
     QRectF cellContentRect(const QTextTableCell &cell) const;
 
     /**
+     * Calculate the content height of a given cell.
+     *
+     * Call this when the content of the cell has changed.
+     *
+     * @note Make sure that all blocks in the cell have been laid out before calling
+     * this function.
+     *
+     * @param cell the cell.
+     */
+    void calculateCellContentHeight(const QTextTableCell &cell);
+
+    /**
      * Get the cell that contains the character at the given position in the document.
+
      * @param position the character position in the document.
      * @return the table cell.
      */
@@ -196,16 +274,6 @@ private:
      * \sa position(), setPosition()
      */
     QRectF cellContentRect(int row, int column) const;
-
-    /**
-     * Calculate row heights and Y positions, starting at the given row.
-     *
-     * This function calculates the row heights and Y positions based on the cell
-     * contents, starting at the given row \a fromRow.
-     *
-     * @param from the row from which to start calculating.
-     */
-    void calculateRows(int fromRow);
 
     /**
      * Calculate column widths and X positions, starting at the given column.

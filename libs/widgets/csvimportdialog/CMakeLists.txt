@@ -1,5 +1,3 @@
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 include_directories( ${KORESOURCES_INCLUDES} 
                      ${CMAKE_SOURCE_DIR}/libs/kobase
 )
@@ -17,7 +15,6 @@ kde4_add_library(kocvsimport SHARED ${kocvsimport_LIB_SRCS})
 target_link_libraries(kocvsimport
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
 )
 
 set_target_properties(kocvsimport PROPERTIES

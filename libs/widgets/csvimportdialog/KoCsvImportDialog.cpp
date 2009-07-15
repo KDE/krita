@@ -24,7 +24,8 @@
 #include <QTextCodec>
 #include <QTextStream>
 
-#include <Q3Table>
+#include <QTableWidget>
+#include <QTableWidgetSelectionRange>
 
 // KDE
 #include <kcharsets.h>
@@ -104,8 +105,9 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     d->dialog->comboBoxEncoding->insertItems( 0, encodings );
 
     setDataTypes(Generic|Text|Date|None);
-
-    d->dialog->m_sheet->setReadOnly( true );
+ 
+    // XXX:	Qt3->Q4
+    //d->dialog->m_sheet->setReadOnly( true );
 
     d->loadSettings();
 
@@ -113,7 +115,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     resize( 600, 400 ); // Try to show as much as possible of the table view
     setMainWidget(d->dialog);
 
-    d->dialog->m_sheet->setSelectionMode( Q3Table::Multi );
+    d->dialog->m_sheet->setSelectionMode( QAbstractItemView::MultiSelection );
 
     QButtonGroup* buttonGroup = new QButtonGroup( this );
     buttonGroup->addButton(d->dialog->m_radioComma, 0);
@@ -175,7 +177,7 @@ bool KoCsvImportDialog::firstColContainHeaders() const
 
 int KoCsvImportDialog::rows() const
 {
-    int rows = d->dialog->m_sheet->numRows();
+    int rows = d->dialog->m_sheet->rowCount();
 
     if ( d->endRow >= 0 )
 	rows = d->endRow - d->startRow + 1;
@@ -186,7 +188,7 @@ int KoCsvImportDialog::rows() const
 
 int KoCsvImportDialog::cols() const
 {
-    int cols = d->dialog->m_sheet->numCols();
+    int cols = d->dialog->m_sheet->columnCount();
 
     if ( d->endCol >= 0 )
 	cols = d->endCol - d->startCol + 1;
@@ -201,7 +203,7 @@ QString KoCsvImportDialog::text(int row, int col) const
     if ( row >= rows() || col >= cols())
 	return QString();
 
-    return d->dialog->m_sheet->text( row - d->startRow, col - d->startCol );
+    return d->dialog->m_sheet->item( row - d->startRow, col - d->startCol )->text();
 }
 
 void KoCsvImportDialog::setDataTypes(DataTypes dataTypes)
@@ -300,9 +302,9 @@ void KoCsvImportDialog::Private::fillTable()
 
     qApp->setOverrideCursor(Qt::WaitCursor);
 
-    for (row = 0; row < dialog->m_sheet->numRows(); ++row)
-        for (column = 0; column < dialog->m_sheet->numCols(); ++column)
-            dialog->m_sheet->clearCell(row, column);
+    for (row = 0; row < dialog->m_sheet->rowCount(); ++row)
+        for (column = 0; column < dialog->m_sheet->columnCount(); ++column)
+            dialog->m_sheet->item(row, column)->setText("");
 
     int maxColumn = 1;
     row = column = 1;
@@ -531,11 +533,11 @@ void KoCsvImportDialog::Private::fillTable()
     adjustRows( row - startRow );
     adjustCols( maxColumn - startCol );
 
-    for (column = 0; column < dialog->m_sheet->numCols(); ++column)
+    for (column = 0; column < dialog->m_sheet->columnCount(); ++column)
     {
-        const QString header = dialog->m_sheet->horizontalHeader()->label(column);
+        const QString header = dialog->m_sheet->model()->headerData(column, Qt::Horizontal).toString();
         if ( formatList.contains( header ) )
-            dialog->m_sheet->horizontalHeader()->setLabel(column, i18n("Generic"));
+            dialog->m_sheet->model()->setHeaderData(column, Qt::Horizontal, i18n("Generic"));
     }
 
     dialog->m_rowStart->setMinimum(1);
@@ -555,7 +557,8 @@ void KoCsvImportDialog::Private::fillTable()
 
 KoCsvImportDialog::DataType KoCsvImportDialog::dataType(int col) const
 {
-    const QString header = d->dialog->m_sheet->horizontalHeader()->label(col);
+    const QString header = d->dialog->m_sheet->model()->headerData(col, Qt::Horizontal).toString();
+
     if (header == i18n("Generic"))
         return Generic;
     else if (header == i18n("Text"))
@@ -577,19 +580,19 @@ void KoCsvImportDialog::Private::setText(int row, int col, const QString& text)
     if ((row > (endRow - startRow) && endRow > 0) || (col > (endCol - startCol) && endCol > 0))
       return;
 
-    if (dialog->m_sheet->numRows() < row)
+    if (dialog->m_sheet->rowCount() < row)
     {
-        dialog->m_sheet->setNumRows(row + 5000); /* We add 5000 at a time to limit recalculations */
+        dialog->m_sheet->setRowCount(row + 5000); /* We add 5000 at a time to limit recalculations */
         rowsAdjusted = true;
     }
 
-    if (dialog->m_sheet->numCols() < col)
+    if (dialog->m_sheet->columnCount() < col)
     {
-        dialog->m_sheet->setNumCols(col);
+        dialog->m_sheet->setColumnCount(col);
         columnsAdjusted = true;
     }
 
-    dialog->m_sheet->setText(row - 1, col - 1, text);
+    dialog->m_sheet->item(row - 1, col - 1)->setText(text);
 }
 
 /*
@@ -599,7 +602,7 @@ void KoCsvImportDialog::Private::adjustRows(int iRows)
 {
     if (rowsAdjusted)
     {
-        dialog->m_sheet->setNumRows(iRows);
+        dialog->m_sheet->setRowCount(iRows);
         rowsAdjusted = false;
     }
 }
@@ -608,7 +611,7 @@ void KoCsvImportDialog::Private::adjustCols(int iCols)
 {
     if (columnsAdjusted)
     {
-        dialog->m_sheet->setNumCols(iCols);
+        dialog->m_sheet->setColumnCount(iCols);
         columnsAdjusted = false;
 
         if (endCol == -1)
@@ -616,7 +619,7 @@ void KoCsvImportDialog::Private::adjustCols(int iCols)
           if (iCols > (endCol - startCol))
             iCols = endCol - startCol;
 
-          dialog->m_sheet->setNumCols(iCols);
+          dialog->m_sheet->setColumnCount(iCols);
         }
     }
 }
@@ -638,13 +641,10 @@ void KoCsvImportDialog::genericDelimiterChanged( const QString & )
 
 void KoCsvImportDialog::formatChanged( const QString& newValue )
 {
-    //kDebug(30501) <<"KoCsvImportDialog::formatChanged:" << newValue;
-    for ( int i = 0; i < d->dialog->m_sheet->numSelections(); ++i )
-    {
-        Q3TableSelection select ( d->dialog->m_sheet->selection( i ) );
-        for ( int j = select.leftCol(); j <= select.rightCol() ; ++j )
-        {
-            d->dialog->m_sheet->horizontalHeader()->setLabel( j, newValue );
+    QList<QTableWidgetSelectionRange> selectionRanges = d->dialog->m_sheet->selectedRanges();
+    foreach (const QTableWidgetSelectionRange selectionRange, selectionRanges) {
+        for (int j = selectionRange.leftColumn(); j <= selectionRange.rightColumn(); ++j) {
+             d->dialog->m_sheet->horizontalHeaderItem(j)->setText(newValue);
         }
     }
 }
@@ -704,7 +704,7 @@ bool KoCsvImportDialog::Private::checkUpdateRange()
 
 void KoCsvImportDialog::currentCellChanged(int, int col)
 {
-    const QString header = d->dialog->m_sheet->horizontalHeader()->label(col);
+    const QString header = d->dialog->m_sheet->model()->headerData(col, Qt::Horizontal).toString();
     const int index = d->dialog->m_formatComboBox->findText(header);
     d->dialog->m_formatComboBox->setCurrentIndex(index > -1 ? index : 0);
 }

@@ -71,15 +71,9 @@ set(kotext_LIB_SRCS
     KoTextDrag.cpp
 )
 
-kde4_add_ui_files(kotext_LIB_SRCS
-    timedateformatwidget.ui
-    KoParagDecorationTab.ui
-    KoCompletionBase.ui
-)
-
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
-target_link_libraries(kotext flake ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KUTILS_LIBS} )
+target_link_libraries(kotext flake ${KDE4_KDEUI_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KUTILS_LIBS} )
 target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake koplugin)
 
 set_target_properties(kotext PROPERTIES

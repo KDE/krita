@@ -251,7 +251,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         imagePainter.translate(-1.0f*clippingOffset);
         imagePainter.setPen(Qt::NoPen);
         imagePainter.setBrush(Qt::NoBrush);
-        imagePainter.setRenderHint(QPainter::Antialiasing, true);
+        imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
         
         // Paint the shape on the image
         imagePainter.save();

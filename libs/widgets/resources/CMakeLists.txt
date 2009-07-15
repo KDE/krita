@@ -14,7 +14,6 @@ set(koresourcewidget_LIB_SRCS
 kde4_add_library(koresourcewidget SHARED ${koresourcewidget_LIB_SRCS})
 
 target_link_libraries(koresourcewidget koresources  
-    ${KDE4_KDE3SUPPORT_LIBS} 
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
 )

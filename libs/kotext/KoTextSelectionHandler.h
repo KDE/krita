@@ -130,9 +130,9 @@ public slots:
     void nextParagraph();
 
     /**
-     * Insert a tabl at the current cursor position.
+     * Insert a table at the current cursor position.
      * @param rows the number of rows in the created table.
-     * @param columns the number of columns in the created table..
+     * @param columns the number of columns in the created table.
      */
     void insertTable(int rows, int columns);
 

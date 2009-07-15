@@ -412,8 +412,7 @@ void KoTextSelectionHandler::insertTable(int rows, int columns)
 {
     QTextTableFormat tableFormat;
 
-    tableFormat.setHeight(200);
-    tableFormat.setWidth(400);
+    tableFormat.setWidth(400); // Only fixed width supported right now.
 
     d->caret->insertTable(rows, columns, tableFormat);
 }

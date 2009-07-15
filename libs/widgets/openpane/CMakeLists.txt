@@ -29,7 +29,6 @@ target_link_libraries(koopenpane
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KFILE_LIBRARY}
-    ${KDE4_KDE3SUPPORT_LIBS}
 )
 
 set_target_properties(koopenpane PROPERTIES

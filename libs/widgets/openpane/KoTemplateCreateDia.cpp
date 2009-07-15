@@ -25,10 +25,8 @@
 #include <QFile>
 #include <QLayout>
 #include <QLabel>
-#include <q3groupbox.h>
 #include <QRadioButton>
 #include <QPushButton>
-#include <q3header.h>
 #include <QCheckBox>
 #include <QToolTip>
 #include <QVBoxLayout>
@@ -36,10 +34,12 @@
 #include <QHBoxLayout>
 #include <QFrame>
 #include <QByteArray>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QGroupBox>
 
 #include <ktemporaryfile.h>
 #include <klineedit.h>
-#include <k3listview.h>
 #include <klocale.h>
 #include <KoTemplates.h>
 #include <KoTemplateTree.h>
@@ -91,7 +91,7 @@ public:
     QLabel *m_preview;
     QString m_customFile;
     QPixmap m_customPixmap;
-    K3ListView *m_groups;
+    QTreeWidget *m_groups;
     QPushButton *m_add, *m_remove;
     QCheckBox *m_defaultTemplate;
     KComponentData m_componentData;
@@ -137,16 +137,16 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, const 
 
     label=new QLabel(i18n("Group:"), mainwidget);
     leftbox->addWidget(label);
-    d->m_groups=new K3ListView(mainwidget);
+    d->m_groups = new QTreeWidget(mainwidget);
     leftbox->addWidget(d->m_groups);
-    d->m_groups->addColumn("");
-    d->m_groups->header()->hide();
+    d->m_groups->setColumnCount(1);
+    d->m_groups->setHeaderHidden(true);
     d->m_groups->setRootIsDecorated(true);
-    d->m_groups->setSorting(0);
+    d->m_groups->setSortingEnabled(true);
 
     d->m_tree=new KoTemplateTree(templateType, componentData, true);
     fillGroupTree();
-    d->m_groups->sort();
+    d->m_groups->sortItems(0, Qt::AscendingOrder);
 
     QHBoxLayout *bbox=new QHBoxLayout();
     leftbox->addLayout( bbox );
@@ -159,7 +159,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, const 
 
     QVBoxLayout *rightbox=new QVBoxLayout();
     mbox->addLayout( rightbox );
-    Q3GroupBox *pixbox=new Q3GroupBox(i18n("Picture"), mainwidget);
+    QGroupBox *pixbox = new QGroupBox(i18n("Picture"), mainwidget);
     rightbox->addWidget(pixbox);
     QVBoxLayout *pixlayout=new QVBoxLayout(pixbox );
     pixlayout->setMargin(KDialog::marginHint());
@@ -200,7 +200,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, const 
     d->m_changed=false;
     updatePixmap();
 
-    connect(d->m_groups,SIGNAL( selectionChanged()),this,SLOT(slotSelectionChanged()));
+    connect(d->m_groups, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));
 
     d->m_remove->setEnabled(d->m_groups->currentItem());
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
@@ -212,12 +212,12 @@ KoTemplateCreateDia::~KoTemplateCreateDia() {
 
 void KoTemplateCreateDia::slotSelectionChanged()
 {
-    const Q3ListViewItem* item = d->m_groups->currentItem();
+    const QTreeWidgetItem* item = d->m_groups->currentItem();
     d->m_remove->setEnabled( item );
     if ( ! item )
         return;
 
-    if ( item->depth() > 0 )
+    if ( item->parent() != NULL )
     {
         d->m_name->setText( item->text( 0 ) );
     }
@@ -234,16 +234,16 @@ void KoTemplateCreateDia::createTemplate( const QByteArray &templateType, const 
 void KoTemplateCreateDia::slotOk() {
 
     // get the current item, if there is one...
-    Q3ListViewItem *item=d->m_groups->currentItem();
+    QTreeWidgetItem *item = d->m_groups->currentItem();
     if(!item)
-        item=d->m_groups->firstChild();
+        item = d->m_groups->topLevelItem(0);
     if(!item) {    // safe :)
         d->m_tree->writeTemplateTree();
         slotButtonClicked( KDialog::Cancel );
         return;
     }
     // is it a group or a template? anyway - get the group :)
-    if(item->depth()!=0)
+    if(item->parent() != NULL)
         item=item->parent();
     if(!item) {    // *very* safe :P
         d->m_tree->writeTemplateTree();
@@ -362,6 +362,7 @@ void KoTemplateCreateDia::slotOk() {
 
     if ( d->m_defaultTemplate->isChecked() )
     {
+
       KConfigGroup grp( d->m_componentData.config(), "TemplateChooserDialog" );
       grp.writeEntry( "LastReturnType", "Template" );
       grp.writePathEntry( "FullTemplateName", dir + '/' + t->file() );
@@ -408,7 +409,7 @@ void KoTemplateCreateDia::slotSelect() {
 
 void KoTemplateCreateDia::slotNameChanged(const QString &name) {
 
-    if( ( name.trimmed().isEmpty() || !d->m_groups->firstChild() ) && !d->m_changed )
+    if( ( name.trimmed().isEmpty() || !d->m_groups->topLevelItem(0) ) && !d->m_changed )
         enableButtonOk(false);
     else
         enableButtonOk(true);
@@ -429,9 +430,9 @@ void KoTemplateCreateDia::slotAddGroup() {
     dir+=name;
     KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir, 0, true);
     d->m_tree->add(newGroup);
-    Q3ListViewItem *item=new Q3ListViewItem(d->m_groups, name);
+    QTreeWidgetItem *item = new QTreeWidgetItem(d->m_groups, QStringList() << name);
     d->m_groups->setCurrentItem(item);
-    d->m_groups->sort();
+    d->m_groups->sortItems(0, Qt::AscendingOrder);
     d->m_name->setFocus();
     enableButtonOk(true);
     d->m_changed=true;
@@ -439,13 +440,13 @@ void KoTemplateCreateDia::slotAddGroup() {
 
 void KoTemplateCreateDia::slotRemove() {
 
-    Q3ListViewItem *item=d->m_groups->currentItem();
+    QTreeWidgetItem *item = d->m_groups->currentItem();
     if(!item)
         return;
 
     QString what;
         QString removed;
-        if (item->depth()==0) {
+        if (item->parent() == NULL) {
                 what =  i18n("Do you really want to remove that group?");
                 removed = i18n("Remove Group");
         } else {
@@ -459,7 +460,7 @@ void KoTemplateCreateDia::slotRemove() {
         return;
     }
 
-    if(item->depth()==0) {
+    if(item->parent() == NULL) {
         KoTemplateGroup *group=d->m_tree->find(item->text(0));
         if(group)
             group->setHidden(true);
@@ -512,12 +513,12 @@ void KoTemplateCreateDia::fillGroupTree() {
     foreach(KoTemplateGroup *group, d->m_tree->groups()) {
         if(group->isHidden())
             continue;
-        Q3ListViewItem *groupItem=new Q3ListViewItem(d->m_groups, group->name());
+        QTreeWidgetItem *groupItem=new QTreeWidgetItem(d->m_groups, QStringList() << group->name());
 
         foreach(KoTemplate *t, group->templates()) {
             if(t->isHidden())
                 continue;
-            (void)new Q3ListViewItem(groupItem, t->name());
+            (void)new QTreeWidgetItem(groupItem, QStringList() << t->name());
         }
     }
 }

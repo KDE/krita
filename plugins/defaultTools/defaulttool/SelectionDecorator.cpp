@@ -24,12 +24,12 @@
 #include <KoShape.h>
 #include <KoSelection.h>
 #include <kstandarddirs.h>
-#include <k3staticdeleter.h>
+#include <kglobal.h>
 
 #define HANDLE_DISTANCE 10
 
-QImage * SelectionDecorator::s_rotateCursor=0;
-static K3StaticDeleter<QImage> staticRotateCursorDeleter;
+K_GLOBAL_STATIC(QImage, s_rotateCursor)
+
 KoFlake::Position SelectionDecorator::m_hotPosition = KoFlake::TopLeftCorner;
 
 SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
@@ -39,8 +39,7 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 , m_arrows(arrows)
 , m_handleRadius( 3 )
 {
-    if(SelectionDecorator::s_rotateCursor == 0) {
-        staticRotateCursorDeleter.setObject(s_rotateCursor, new QImage());
+    if(s_rotateCursor == 0) {
         s_rotateCursor->load(KStandardDirs::locate("lib", "flake/rotate.png"));
     }
 }

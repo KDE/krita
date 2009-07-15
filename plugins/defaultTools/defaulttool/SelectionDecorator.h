@@ -74,7 +74,6 @@ private:
     static KoFlake::Position m_hotPosition;
     KoSelection *m_selection;
     int m_handleRadius;
-    static QImage *s_rotateCursor;
 };
 
 #endif

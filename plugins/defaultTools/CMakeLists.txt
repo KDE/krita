@@ -46,7 +46,6 @@ target_link_libraries(
     kotext
     komain
     ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
     )

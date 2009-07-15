@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -405,6 +406,16 @@ void KoTextSelectionHandler::setTextBackgroundColor(const QColor &color)
 QString KoTextSelectionHandler::selectedText() const
 {
     return d->caret->selectedText();
+}
+
+void KoTextSelectionHandler::insertTable(int rows, int columns)
+{
+    QTextTableFormat tableFormat;
+
+    tableFormat.setHeight(200);
+    tableFormat.setWidth(400);
+
+    d->caret->insertTable(rows, columns, tableFormat);
 }
 
 void KoTextSelectionHandler::insert(const QString &text)

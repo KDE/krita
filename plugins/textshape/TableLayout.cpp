@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Elvis Stansvik <elvstone@gmail.org>
+ * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -144,6 +145,16 @@ void TableLayout::draw(QPainter *painter) const
 {
     Q_UNUSED(painter);
     // TODO.
+painter->setPen(Qt::red);
+painter->drawRect(boundingRect());
+/*
+    for (int row = 0; row <m_ table->rows(); ++ row) {
+        for (int column = 0; column < m_table->columns(); ++column) {
+            QTextTableCell tableCell = m_table->cellAt(row, column);
+            
+        }
+    }
+*/
 }
 
 QRectF TableLayout::boundingRect() const

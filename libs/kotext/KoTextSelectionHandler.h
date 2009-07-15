@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -118,6 +119,7 @@ public slots:
      * Alter the selections font size to be slightly smaller.
      */
     void decreaseFontSize();
+
     void setHorizontalTextAlignment(Qt::Alignment align);
     void setVerticalTextAlignment(Qt::Alignment align);
     void setTextColor(const QColor &color);
@@ -126,6 +128,13 @@ public slots:
     void increaseIndent();
     void decreaseIndent();
     void nextParagraph();
+
+    /**
+     * Insert a tabl at the current cursor position.
+     * @param rows the number of rows in the created table.
+     * @param columns the number of columns in the created table..
+     */
+    void insertTable(int rows, int columns);
 
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.

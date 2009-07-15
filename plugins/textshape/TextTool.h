@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -159,6 +160,8 @@ private slots:
     void setDefaultFormat();
     /// see KoTextSelectionHandler::insertIndexMarker
     void insertIndexMarker();
+    /// shows a dialog to insert a table
+    void insertTable();
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
     /// When enabled, make the change tracker record changes made while typing

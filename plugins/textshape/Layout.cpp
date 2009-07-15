@@ -3,6 +3,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
+ * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -775,9 +776,13 @@ qreal Layout::topMargin()
 
 void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
+    drawFrame(m_parent->document()->rootFrame(), painter, context);
+}
+
+void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
+{
     painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
     const QRegion clipRegion = painter->clipRegion();
-    QTextBlock block = m_parent->document()->begin();
     KoTextBlockBorderData *lastBorder = 0;
     bool started = false;
     int selectionStart = -1, selectionEnd = -1;
@@ -789,7 +794,21 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
             qSwap(selectionStart, selectionEnd);
     }
 
-    while (block.isValid()) {
+    QTextFrame::iterator it;
+    for (it = frame->begin(); !(it.atEnd()); ++it) {
+        QTextBlock block = it.currentBlock();
+        QTextTable *table = qobject_cast<QTextTable *>( it.currentFrame());
+
+        if (table) {
+            m_tableLayout.setTable(table);
+            m_tableLayout.draw(painter);
+            drawFrame(table, painter, context); // this actually only draws the text inside
+            continue;
+        } else {
+            if (!block.isValid())
+                continue;
+        }
+
         QTextLayout *layout = block.layout();
 
         if (!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
@@ -843,7 +862,6 @@ selection.format.property(KoCharacterStyle::ChangeTrackerId);
             lastBorder = border;
         } else if (started) // when out of the cliprect, then we are done drawing.
             break;
-        block = block.next();
     }
     if (lastBorder)
         lastBorder->paint(*painter);

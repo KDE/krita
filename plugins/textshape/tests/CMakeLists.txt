@@ -63,6 +63,7 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/NewStyleWidget.cpp
     ../dialogs/FormattingPreview.cpp
     ../dialogs/StyleManagerWelcome.cpp
+    ../dialogs/TableDialog.cpp
     ../ListItemsHelper.cpp
     ../TextShape.cpp
     ../Layout.cpp    

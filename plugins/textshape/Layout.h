@@ -94,6 +94,7 @@ private:
     void cleanupShapes();
     void cleanupShape(KoShape *daShape);
     void nextShape();
+    void drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumentLayout::PaintContext & context);
     void drawListItem(QPainter *painter, const QTextBlock &block);
     void drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);

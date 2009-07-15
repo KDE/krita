@@ -3,6 +3,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/InsertCharacter.h"
 #include "dialogs/FontDia.h"
+#include "dialogs/TableDialog.h"
 #include "commands/TextCommandBase.h"
 #include "commands/ChangeListCommand.h"
 #include "commands/ChangeListLevelCommand.h"
@@ -385,6 +387,12 @@ TextTool::TextTool(KoCanvasBase *canvas)
             i++;
         }
     }
+
+    action = new KAction(i18n("Table..."), this);
+    addAction("insert_table", action);
+    action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
+    action->setToolTip(i18n("Insert a table into the document."));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
 
     action = new KAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
@@ -1670,6 +1678,21 @@ void TextTool::insertIndexMarker()
     m_selectionHandler.insertIndexMarker();
 }
 
+void TextTool::insertTable()
+{
+    TableDialog *dia = new TableDialog(0);
+/*
+    connect(dia, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));
+    connect(dia, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+*/
+    dia->exec();
+
+    m_selectionHandler.insertTable(dia->rows(), dia->columns());
+
+    delete dia;
+}
+
+
 void TextTool::formatParagraph()
 {
     ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(this, &m_caret);
@@ -1680,6 +1703,7 @@ void TextTool::formatParagraph()
     dia->exec();
     delete dia;
 }
+
 
 void TextTool::toggleTrackChanges(bool on)
 {

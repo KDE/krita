@@ -264,17 +264,47 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         }
         imagePainter.end();
 
+        QHash<QString, QImage> imageBuffers;
+        
+        imageBuffers.insert("SourceGraphic", image);
+        imageBuffers.insert(QString(), image);
+        QImage sourceAlpha = image.alphaChannel();
+        image.fill(qRgba(0,0,0,255));
+        image.setAlphaChannel(sourceAlpha);
+        imageBuffers.insert("SourceAlpha", image);
+        
         // Filter
         foreach(KoFilterEffect* filterEffect, shape->filterEffectStack()) {
             QRectF filterRegion = converter.documentToView(filterEffect->filterRect());
             QPointF filterOffset = filterRegion.topLeft()-2*clippingOffset;
             QRect subRegion = filterRegion.translated(filterOffset).toRect();
-            filterEffect->processImage(image, subRegion, converter);
+            
+            if (filterEffect->hasSingleInput()) {
+                QList<QString> inputs = filterEffect->inputs();
+                QString input = inputs.count() ? inputs.first() : QString();
+                // get input image from image buffers
+                QImage inputImage = imageBuffers.value(input);
+                // apply the filter effect
+                QImage result = filterEffect->processImage(inputImage, subRegion, converter);
+                // store result of effect
+                imageBuffers.insert(filterEffect->output(), result);
+            } else {
+                QList<QImage> inputImages;
+                foreach(const QString &input, filterEffect->inputs()) {
+                    inputImages.append(imageBuffers.value(input));
+                }
+                // apply the filter effect
+                QImage result = filterEffect->processImages(inputImages, subRegion, converter);
+                // store result of effect
+                imageBuffers.insert(filterEffect->output(), result);
+            }
         }
 
+        KoFilterEffect * lastEffect = shape->filterEffectStack().last();
+        
         // Paint the result
         painter.save();
-        painter.drawImage(clippingOffset, image);
+        painter.drawImage(clippingOffset, imageBuffers.value(lastEffect->output()));
         painter.restore();
     }
     if (! forPrint) {

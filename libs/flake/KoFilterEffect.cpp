@@ -28,6 +28,8 @@ struct KoFilterEffect::Private {
   QString name;
   QRectF clipRect;
   QRectF filterRect;
+  QList<QString> inputs;
+  QString output;
 };
 
 KoFilterEffect::KoFilterEffect( const QString& id, const QString& name ) 
@@ -70,4 +72,50 @@ void KoFilterEffect::setFilterRect(const QRectF &filterRect)
 QRectF KoFilterEffect::filterRect() const
 {
     return d->filterRect;
+}
+
+QList<QString> KoFilterEffect::inputs() const
+{
+    return d->inputs;
+}
+
+void KoFilterEffect::addInput(const QString &input)
+{
+    d->inputs.append(input);
+}
+
+void KoFilterEffect::insertInput(int index, const QString &input)
+{
+    d->inputs.insert(index, input);
+}
+
+void KoFilterEffect::removeInput(int index)
+{
+    d->inputs.removeAt(index);
+}
+
+void KoFilterEffect::setOutput(const QString &output)
+{
+    d->output = output;
+}
+
+QString KoFilterEffect::output() const
+{
+    return d->output;
+}
+
+bool KoFilterEffect::hasSingleInput() const
+{
+    return true;
+}
+
+QImage KoFilterEffect::processImages(const QList<QImage> &images, const QRect &filterRegion, const KoViewConverter &converter) const
+{
+    Q_ASSERT(images.count());
+    
+    Q_UNUSED(images);
+    Q_UNUSED(filterRegion);
+    Q_UNUSED(converter);
+    
+    return images.first();
 }

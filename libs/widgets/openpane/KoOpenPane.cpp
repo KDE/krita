@@ -325,7 +325,7 @@ void KoOpenPane::itemClicked(QTreeWidgetItem* item)
 {
     KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(item);
 
-    if (selectedItem) {
+    if (selectedItem && selectedItem->widgetIndex() >= 0) {
         d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
     }
 }

@@ -184,9 +184,20 @@ QRectF TableLayout::boundingRect() const
 
 QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
 {
+    Q_ASSERT(isValid());
     Q_ASSERT(cell.isValid());
+    Q_ASSERT(cell.row() < m_tableData->m_rowPositions.size());
+    Q_ASSERT(cell.column() < m_tableData->m_columnPositions.size());
 
-    return cellContentRect(cell.row(), cell.column());
+    QRectF r = cellBoundingRect(cell.row(), cell.column());
+    r.adjust(0, 0, -0, -0); //TODO should be real padding values
+    if (m_tableData->tableModel == TableData::Collapsing) {
+         r.adjust(0/2, 0/2, -0/2, -0/2);  // TODO should use real border width values
+    } else {
+        r.adjust(0, 0, -0, -0); // TODO should use real border width values
+    }
+
+    return r;
 }
 
 QRectF TableLayout::cellBoundingRect(QTextTableCell &cell) const
@@ -205,23 +216,6 @@ QRectF TableLayout::cellBoundingRect(int row, int column) const
     return QRectF(
             m_tableData->m_columnPositions[column], m_tableData->m_rowPositions[row],
             m_tableData->m_columnWidths[column], m_tableData->m_rowHeights[row]);
-}
-
-QRectF TableLayout::cellContentRect(int row, int column) const
-{
-    Q_ASSERT(isValid());
-    Q_ASSERT(row < m_tableData->m_rowPositions.size());
-    Q_ASSERT(column < m_tableData->m_columnPositions.size());
-
-    QRectF r = cellBoundingRect(row, column);
-    r.adjust(0, 0, -0, -0); //TODO should be real padding values
-    if (m_tableData->tableModel == TableData::Collapsing) {
-         r.adjust(0/2, 0/2, -0/2, -0/2);  // TODO should use real border width values
-    } else {
-        r.adjust(0, 0, -0, -0); // TODO should use real border width values
-    }
-
-    return r;
 }
 
 void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)

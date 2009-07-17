@@ -288,20 +288,6 @@ private:
      */
     QRectF cellBoundingRect(int row, int column) const;
 
-    /**
-     * Get the content rectangle of a cell at a given table coordinate.
-     *
-     * This amounts to the borderRect shrunk by the various padding values
-     * The rectangle returned is relative to the table position.
-     *
-     * @param row the row of the cell.
-     * @param column the column of the cell.
-     * @return the rectangle of the cell.
-     *
-     * \sa position(), setPosition()
-     */
-    QRectF cellContentRect(int row, int column) const;
-
 private:
     friend class TestTableLayout; // To allow direct testing.
 

@@ -57,7 +57,6 @@ class KoViewPrivate
 {
 public:
     KoViewPrivate() {
-        m_inOperation = false;
         m_zoom = 1.0;
         m_manager = 0L;
         m_tempActiveWidget = 0L;
@@ -119,7 +118,6 @@ public:
         bool m_visible;  // true when the item has been added to the statusbar
     };
     Q3ValueList<StatusBarItem> m_statusBarItems; // Our statusbar items
-    bool m_inOperation; //in the middle of an operation (no screen refreshing)?
     QToolBar* m_viewBar;
 };
 
@@ -437,7 +435,6 @@ KoPrintJob * KoView::createPrintJob()
     return 0;
 }
 
-
 void KoView::setupGlobalActions()
 {
     actionNewView  = new KAction(KIcon("window-new"), i18n("&New View"), this);
@@ -453,25 +450,6 @@ void KoView::newView()
     KoMainWindow *shell = new KoMainWindow(thisDocument->componentData());
     shell->setRootDocument(thisDocument);
     shell->show();
-}
-
-bool KoView::isInOperation() const
-{
-    return d->m_inOperation;
-}
-
-void KoView::beginOperation()
-{
-    d->m_inOperation = true;
-    canvas()->setUpdatesEnabled(false);
-}
-
-void KoView::endOperation()
-{
-    canvas()->setUpdatesEnabled(true);
-    d->m_inOperation = false;
-
-//   canvas()->update();
 }
 
 KoDockerManager * KoView::dockerManager() const

@@ -356,13 +356,6 @@ public:
     void restoreDockWidget(QDockWidget *dock);
 
     /**
-     * Check to see if the view is currently in the middle of an operation which means
-     * that there will be no screen refreshes until a signal from the document hits
-     * the @ref #endOperation slot
-     */
-    bool isInOperation() const;
-
-    /**
      * @return the view bar. The bar is created only if this function is called.
      */
     QToolBar* viewBar();
@@ -375,22 +368,6 @@ public Q_SLOTS:
      * Slot to create a new view around the contained @ref #koDocument.
      */
     virtual void newView();
-
-    /**
-     * Slot to allow code to signal the beginning of an operation where the screen should
-     * not update until it is done.
-     *
-     * @see #endOperation
-     */
-    virtual void beginOperation();
-
-    /**
-     * Slot to allow code to signal the end of an operation where the screen should
-     * not have been updating. So now it will update.
-     *
-     * @see #beginOperation
-     */
-    virtual void endOperation();
 
     /**
      * Display a message in the status bar (calls QStatusBar::message())

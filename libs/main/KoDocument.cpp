@@ -105,7 +105,6 @@ public:
             m_specialOutputFlag(0),   // default is native format
             m_isImporting(false), m_isExporting(false),
             m_password(QString()),
-            m_numOperations(0),
             modifiedAfterAutosave(false),
             m_autosaving(false),
             m_shouldCheckAutoSaveFile(true),
@@ -150,7 +149,6 @@ public:
     QTimer m_autoSaveTimer;
     QString lastErrorMessage; // see openFile()
     int m_autoSaveDelay; // in seconds, 0 to disable.
-    int m_numOperations;
     bool modifiedAfterAutosave;
     bool m_bSingleViewMode;
     bool m_autosaving;
@@ -1704,33 +1702,6 @@ bool KoDocument::addVersion(const QString& comment)
     save(); //finally save the document + the new version
     return true;
 }
-
-bool KoDocument::isInOperation() const
-{
-    return d->m_numOperations > 0;
-}
-
-void KoDocument::emitBeginOperation()
-{
-
-    /* if we're already in an operation, don't send the signal again */
-    if (!isInOperation())
-        emit beginOperation();
-    d->m_numOperations++;
-}
-
-void KoDocument::emitEndOperation()
-{
-    d->m_numOperations--;
-
-    /* don't end the operation till we've cleared all the nested operations */
-    if (d->m_numOperations == 0)
-        emit endOperation();
-    else if (d->m_numOperations < 0)
-        /* ignore 'end' calls with no matching 'begin' call */
-        d->m_numOperations = 0;
-}
-
 
 bool KoDocument::isStoredExtern() const
 {

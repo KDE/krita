@@ -600,28 +600,11 @@ public:
     }
 
     /**
-     * @brief Return a DCOP interface for this document
-     *
-     * %KOffice parts are strongly recommended to reimplement this method,
-     * so that their DCOP interface provides more functionality than the basic KoDocumentIface
-     */
-//     virtual DCOPObject * dcopObject();
-
-    /**
-     * @return the ID of the DCOP interface for this document.
-     **/
-//     QByteArray dcopObjectId() const;
-
-    /**
      * Signal the progress of operations such as loading or saving.
      */
     void emitProgress(int value) {
         emit sigProgress(value);
     }
-
-    bool isInOperation() const;
-    virtual void emitBeginOperation();
-    virtual void emitEndOperation();
 
     /**
      * Return true if url() is a real filename, false if url() is
@@ -845,9 +828,6 @@ signals:
      * This is emitted by KoDocument and used by KoView to clear the statusbar message
      */
     void clearStatusBarMessage();
-
-    void beginOperation();
-    void endOperation();
 
     /**
     * Emitted when the document is modified

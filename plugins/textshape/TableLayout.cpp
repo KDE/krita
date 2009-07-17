@@ -254,23 +254,6 @@ void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)
     layoutFromRow(cell.row());
 }
 
-void TableLayout::calculateColumns(int fromColumn)
-{
-    Q_ASSERT(isValid());
-    Q_ASSERT(fromColumn >= 0);
-    Q_ASSERT(fromColumn < m_table->columns());
-
-    if (!isValid()) {
-        return;
-    }
-
-    if (fromColumn < 0 || fromColumn >= m_table->columns()) {
-        return;
-    }
-
-    // TODO.
-}
-
 QTextTableCell TableLayout::cellAt(int position) const
 {
     Q_ASSERT(isValid());

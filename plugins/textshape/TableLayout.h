@@ -293,16 +293,6 @@ private:
      */
     QRectF cellContentRect(int row, int column) const;
 
-    /**
-     * Calculate column widths and X positions, starting at the given column.
-     *
-     * This function calculates the column widths and X positions, starting at the
-     * given column \a fromColumn.
-     *
-     * @param from the column from which to start calculating.
-     */
-    void calculateColumns(int fromColumn);
-
 private:
     friend class TestTableLayout; // To allow direct testing.
 

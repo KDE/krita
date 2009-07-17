@@ -23,12 +23,17 @@
 #include <QObject>
 #include <QPointF>
 #include <QMap>
+#include <QTextFormat>
 
 class TableData;
 class QTextTable;
 class QTextTableCell;
 class QPainter;
 class QRectF;
+
+enum KoTableCellProperty{
+    Borders = QTextFormat::UserProperty + 1000 /// the border data for this cell
+};
 
 /*
  * Anatomy of a Table
@@ -263,8 +268,21 @@ private slots:
 
 private:
     /**
+     * Get the bounding rectangle of a given cell.
+     *
+     * The rectangle returned is relative to the table position.
+     *
+     * @param cell the cell.
+     * @return the rectangle of the cell.
+     *
+     * \sa position(), setPosition()
+     */
+    QRectF cellBoundingRect(int row, int column) const;
+
+    /**
      * Get the content rectangle of a cell at a given table coordinate.
      *
+     * This amounts to the borderRect shrunk by the various padding values
      * The rectangle returned is relative to the table position.
      *
      * @param row the row of the cell.

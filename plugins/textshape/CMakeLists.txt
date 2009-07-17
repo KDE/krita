@@ -26,6 +26,7 @@ SET ( textshape_SRCS
 
     TableData.cpp
     TableLayout.cpp
+    TableCellBorderData.cpp
 
     dialogs/StylesWidget.cpp
     dialogs/SimpleStyleWidget.cpp

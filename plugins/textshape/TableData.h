@@ -53,6 +53,8 @@ private:
 
     qreal m_width;       /**< Table width. */
     qreal m_height;      /**< Table height. */
+    enum TableModels {Collapsing, Seperating};
+    TableModels tableModel;
 };
 
 #endif // TABLEDATA_H

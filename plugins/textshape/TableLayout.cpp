@@ -20,6 +20,7 @@
 
 #include "TableLayout.h"
 #include "TableData.h"
+#include "TableCellBorderData.h"
 
 #include <QTextDocument>
 #include <QTextTable>
@@ -78,6 +79,7 @@ QTextTable *TableLayout::table() const
 // TODO: Lots and lots.
 void TableLayout::layout()
 {
+qDebug() << "blah";
     Q_ASSERT(isValid());
 
     if (!isValid()) {
@@ -145,16 +147,27 @@ void TableLayout::draw(QPainter *painter) const
 {
     Q_UNUSED(painter);
     // TODO.
-painter->setPen(Qt::red);
-painter->drawRect(boundingRect());
-/*
-    for (int row = 0; row <m_ table->rows(); ++ row) {
+    QRectF tableRect = boundingRect();
+    painter->save();
+    painter->translate(tableRect.topLeft());
+
+    for (int row = 0; row <m_table->rows(); ++ row) {
         for (int column = 0; column < m_table->columns(); ++column) {
             QTextTableCell tableCell = m_table->cellAt(row, column);
-            
+            TableCellBorderData borderData;
+/* make out own border data for now BEGIN*/
+if(row==0)
+    borderData.setEdge(TableCellBorderData::Top,TableCellBorderData::Double, 3.0, KoColor(), 0.0);
+borderData.setEdge(TableCellBorderData::Bottom,TableCellBorderData::Solid, 3.0, KoColor(), 0.0);
+borderData.setEdge(TableCellBorderData::Left,TableCellBorderData::Solid, 3.0, KoColor(), 0.0);
+if(column==m_table->columns()-1)
+    borderData.setEdge(TableCellBorderData::Left,TableCellBorderData::Solid, 3.0, KoColor(), 0.0); 
+/* make out own border data for now END*/
+
+            borderData.paint(*painter, cellBoundingRect(row, column));
         }
     }
-*/
+    painter->restore();
 }
 
 QRectF TableLayout::boundingRect() const
@@ -176,7 +189,7 @@ QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
     return cellContentRect(cell.row(), cell.column());
 }
 
-QRectF TableLayout::cellContentRect(int row, int column) const
+QRectF TableLayout::cellBoundingRect(int row, int column) const
 {
     Q_ASSERT(isValid());
     Q_ASSERT(row < m_tableData->m_rowPositions.size());
@@ -185,6 +198,23 @@ QRectF TableLayout::cellContentRect(int row, int column) const
     return QRectF(
             m_tableData->m_columnPositions[column], m_tableData->m_rowPositions[row],
             m_tableData->m_columnWidths[column], m_tableData->m_rowHeights[row]);
+}
+
+QRectF TableLayout::cellContentRect(int row, int column) const
+{
+    Q_ASSERT(isValid());
+    Q_ASSERT(row < m_tableData->m_rowPositions.size());
+    Q_ASSERT(column < m_tableData->m_columnPositions.size());
+
+    QRectF r = cellBoundingRect(row, column);
+    r.adjust(0, 0, -0, -0); //TODO should be real padding values
+    if (m_tableData->tableModel = TableData::Collapsing) {
+         r.adjust(0/2, 0/2, -0/2, -0/2);  // TODO should use real border width values
+    } else {
+        r.adjust(0, 0, -0, -0); // TODO should use real border width values
+    }
+
+    return r;
 }
 
 void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)

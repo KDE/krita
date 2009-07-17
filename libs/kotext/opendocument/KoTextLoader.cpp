@@ -5,6 +5,7 @@
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -63,6 +64,7 @@
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QTextList>
+#include <QTextTable>
 #include <QTime>
 #include <klocale.h>
 #include <kdebug.h>
@@ -239,12 +241,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                 loadShape(tag, cursor);
             } else if (tag.namespaceURI() == KoXmlNS::table) {
                 if (localName == "table") {
-                    loadTable(tag, cursor);
-                } else {
-                    kWarning(32500) << "unhandled table:" << localName;
-                }
-#if 0 // TODO commented out for now
-                if (localName == "table") {
                     cursor.insertText("\n");
                     cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 1);
                     QTextTable *tbl = cursor.insertTable(1, 1);
@@ -282,9 +278,14 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                     // Ok, it's a cell...
                                                     const int currentRow = tbl->rows() - 1;
                                                     QTextTableCell cell = tbl->cellAt(currentRow, currentCell);
+                                                    int rowsSpanned = tblTag.attributeNS(KoXmlNS::table, "number-rows-spanned", "1").toInt();
+                                                    int columnsSpanned = tblTag.attributeNS(KoXmlNS::table, "number-columns-spanned", "1").toInt();
+                                                    // rowsSpanned disabled for now as that would mean spanning into rows not yet created. Need to figure out some way to handle this
+                                                    tbl->mergeCells(currentRow, currentCell, 1/*rowsSpanned*/, columnsSpanned);
+                                    
                                                     if (cell.isValid()) {
                                                         cursor = cell.firstCursorPosition();
-                                                        loadBody(context, rowTag, cursor);
+                                                        loadBody(rowTag, cursor);
                                                     } else
                                                         kDebug(32500) << "Invalid table-cell row=" << currentRow << " column=" << currentCell;
                                                     currentCell++;
@@ -301,7 +302,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                 } else {
                     kWarning(32500) << "KoTextLoader::loadBody unhandled table::" << localName;
                 }
-#endif
             }
         }
         processBody();

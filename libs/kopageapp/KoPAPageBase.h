@@ -120,6 +120,14 @@ public:
     /// reimplemented
     virtual QSizeF size() const;
 
+    // reimplemented
+    virtual QRectF boundingRect() const;
+
+    /**
+     * Returns the bounding rectangle of the pages content
+     */
+    virtual QRectF contentRect() const;
+
     /**
      * This function is called after a shape is added to the document on this page
      * The default implementation is empty.

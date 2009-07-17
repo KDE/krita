@@ -201,6 +201,27 @@ QSizeF KoPAPageBase::size() const
     return QSize( layout.width, layout.height );
 }
 
+QRectF KoPAPageBase::boundingRect() const
+{
+    //return KoShapeContainer::boundingRect();
+    return contentRect().united(QRectF(QPointF(0, 0), size() ));
+}
+
+QRectF KoPAPageBase::contentRect() const
+{
+    QRectF bb;
+    foreach (KoShape* layer, childShapes()) {
+        if (bb.isNull()) {
+            bb = layer->boundingRect();
+        }
+        else {
+            bb = bb.united(layer->boundingRect());
+        }
+    }
+
+    return bb;
+}
+
 void KoPAPageBase::shapeAdded( KoShape * shape )
 {
     Q_UNUSED( shape );

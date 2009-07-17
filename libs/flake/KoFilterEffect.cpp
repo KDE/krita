@@ -24,12 +24,18 @@
 #include <QtCore/QRectF>
 
 struct KoFilterEffect::Private {
-  QString id;
-  QString name;
-  QRectF clipRect;
-  QRectF filterRect;
-  QList<QString> inputs;
-  QString output;
+    Private()
+        : requiredInputCount(1), maximalInputCount(1)
+    {}
+    
+    QString id;
+    QString name;
+    QRectF clipRect;
+    QRectF filterRect;
+    QList<QString> inputs;
+    QString output;
+    int requiredInputCount;
+    int maximalInputCount;
 };
 
 KoFilterEffect::KoFilterEffect( const QString& id, const QString& name ) 
@@ -81,12 +87,14 @@ QList<QString> KoFilterEffect::inputs() const
 
 void KoFilterEffect::addInput(const QString &input)
 {
-    d->inputs.append(input);
+    if (d->inputs.count() < d->maximalInputCount)
+        d->inputs.append(input);
 }
 
 void KoFilterEffect::insertInput(int index, const QString &input)
 {
-    d->inputs.insert(index, input);
+    if (d->inputs.count() < d->maximalInputCount)
+        d->inputs.insert(index, input);
 }
 
 void KoFilterEffect::removeInput(int index)
@@ -104,9 +112,14 @@ QString KoFilterEffect::output() const
     return d->output;
 }
 
-bool KoFilterEffect::hasSingleInput() const
+int KoFilterEffect::requiredInputCount() const
 {
-    return true;
+    return d->requiredInputCount;
+}
+
+int KoFilterEffect::maximalInputCount() const
+{
+    return d->maximalInputCount;
 }
 
 QImage KoFilterEffect::processImages(const QList<QImage> &images, const QRect &filterRegion, const KoViewConverter &converter) const
@@ -118,4 +131,14 @@ QImage KoFilterEffect::processImages(const QList<QImage> &images, const QRect &f
     Q_UNUSED(converter);
     
     return images.first();
+}
+
+void KoFilterEffect::setRequiredInputCount(int count)
+{
+    d->requiredInputCount = qMax(1,count);
+}
+
+void KoFilterEffect::setMaximalInputCount(int count)
+{
+    d->maximalInputCount = qMax(1,count);
 }

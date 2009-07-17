@@ -97,13 +97,21 @@ public:
     void removeInput(int index);
     
     /**
-     * Returns if this effect only works on a single input image.
-     *
-     * The default implementation returns true, as most of the 
-     * effects only have a single input image to process.
+     * Return the required number of input images.
+     * The default required number of input images is 1.
+     * Derived classes should call setRequiredInputCount to set
+     * a different number.
      */
-    virtual bool hasSingleInput() const;
+    int requiredInputCount() const;
     
+    /**
+     * Returns the maximal number of input images.
+     * The default maximal number of input images is 1.
+     * Derived classes should call setMaximalInputCount to set
+     * a different number.
+     */
+    int maximalInputCount() const;
+
     /**
      * Apply the effect on an image.
      * @param image the image the filter should be applied to
@@ -133,6 +141,13 @@ public:
      */
     virtual void save(KoXmlWriter &writer) = 0;
     
+protected:
+    /// Sets the required number of input images
+    void setRequiredInputCount(int count);
+    
+    /// Sets the maximal number of input images
+    void setMaximalInputCount(int count);
+
 private:
     struct Private;
     Private* const d;

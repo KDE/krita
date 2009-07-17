@@ -2,7 +2,8 @@
 
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
-
+   Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -279,7 +280,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
             QPointF filterOffset = filterRegion.topLeft()-2*clippingOffset;
             QRect subRegion = filterRegion.translated(filterOffset).toRect();
             
-            if (filterEffect->hasSingleInput()) {
+            if (filterEffect->maximalInputCount() == 1) {
                 QList<QString> inputs = filterEffect->inputs();
                 QString input = inputs.count() ? inputs.first() : QString();
                 // get input image from image buffers

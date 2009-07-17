@@ -43,6 +43,8 @@ private slots:
     void testBoundingRect();
     /// Test very basic layout functionality.
     void testBasicLayout();
+    /// Test table padding.
+    void testTableMargin();
 
 private:
     QTextDocument *m_doc;

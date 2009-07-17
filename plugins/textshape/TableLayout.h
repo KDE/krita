@@ -194,6 +194,16 @@ public:
     QRectF boundingRect() const;
 
     /**
+     * Get the bounding rectangle of a given cell.
+     *
+     * The rectangle returned is relative to the table position.
+     *
+     * @param cell the cell.
+     * @return the bounding rectangle of the cell.
+     */
+    QRectF cellBoundingRect(QTextTableCell &cell) const;
+
+    /**
      * Get the content rectangle of a given cell.
      *
      * The rectangle returned is relative to the table position.
@@ -272,10 +282,9 @@ private:
      *
      * The rectangle returned is relative to the table position.
      *
-     * @param cell the cell.
-     * @return the rectangle of the cell.
-     *
-     * \sa position(), setPosition()
+     * @param row the row of the cell.
+     * @param column the column of the cell.
+     * @return the bounding rectangle of the cell.
      */
     QRectF cellBoundingRect(int row, int column) const;
 

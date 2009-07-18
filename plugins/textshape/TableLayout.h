@@ -223,9 +223,18 @@ public:
     QRectF boundingRect() const;
 
     /**
+     * Get the content rectangle of the table.
+     *
+     * The rectangle returned is relative to the table layout position.
+     *
+     * @return the content rectangle of the table.
+     */
+    QRectF contentRect() const;
+
+    /**
      * Get the bounding rectangle of a given cell.
      *
-     * The rectangle returned is relative to the table position.
+     * The rectangle returned is relative to the table layout position.
      *
      * @param cell the cell.
      * @return the bounding rectangle of the cell.
@@ -235,7 +244,7 @@ public:
     /**
      * Get the content rectangle of a given cell.
      *
-     * The rectangle returned is relative to the table position.
+     * The rectangle returned is relative to the table layout position.
      *
      * @param cell the cell.
      * @return the rectangle of the cell.
@@ -309,7 +318,7 @@ private:
     /**
      * Get the bounding rectangle of a given cell.
      *
-     * The rectangle returned is relative to the table position.
+     * The rectangle returned is relative to the table layout position.
      *
      * @param row the row of the cell.
      * @param column the column of the cell.

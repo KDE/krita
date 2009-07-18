@@ -124,7 +124,7 @@ qDebug() << "blah";
     qreal columnWidth = m_tableData->m_width / m_table->columns();
     m_tableData->m_columnWidths.fill(columnWidth);
     for (int col = 0; col < m_tableData->m_columnPositions.size(); ++col) {
-        m_tableData->m_columnPositions[col] = col * columnWidth;
+        m_tableData->m_columnPositions[col] = (col * columnWidth) + tableFormat.leftMargin();
     }
 
     layoutFromRow(0);
@@ -145,26 +145,30 @@ void TableLayout::layoutFromRow(int fromRow)
         return;
     }
 
-    m_tableData->m_height = m_tableData->m_rowPositions[fromRow];
+    QTextTableFormat tableFormat = m_table->format();
+
+    m_tableData->m_height = m_tableData->m_rowPositions[fromRow] - tableFormat.topMargin();
 
     for (int row = fromRow; row < m_table->rows(); ++row) {
-        /*
-         * 1. find max content height in row.
-         * 2. adjust row/table height.
-         * 3. adjust row Y position.
-         */
+        // adjust row height to the largest content height in the row.
         qreal contentHeight = 0;
         foreach (qreal height, m_tableData->m_contentHeights.at(row)) {
             contentHeight = qMax(contentHeight, height);
         }
-
         m_tableData->m_rowHeights[row] = contentHeight;
-        m_tableData->m_height += m_tableData->m_rowHeights[row];
 
-        if (row > 0) { // never adjust Y position of first row.
-            m_tableData->m_rowPositions[row] = m_tableData->m_rowPositions[row - 1] +
-                m_tableData->m_rowHeights[row - 1];
+        // adjust row Y position.
+        if (row > 0) {
+            m_tableData->m_rowPositions[row] =
+                m_tableData->m_rowPositions[row - 1] + // position of previous row.
+                m_tableData->m_rowHeights[row - 1];    // height of previous row.
+        } else {
+            // this is the first row, so just use table top margin.
+            m_tableData->m_rowPositions[row] = tableFormat.topMargin();
         }
+
+        // adjust table height.
+        m_tableData->m_height += m_tableData->m_rowHeights[row];
     }
 }
 
@@ -205,6 +209,16 @@ QRectF TableLayout::boundingRect() const
     return QRectF(m_position.x(), m_position.y(),
             m_tableData->m_width + horizontalMargins,
             m_tableData->m_height + verticalMargins);
+}
+
+QRectF TableLayout::contentRect() const
+{
+    Q_ASSERT(isValid());
+
+    QTextTableFormat tableFormat = m_table->format();
+
+    return QRectF(tableFormat.leftMargin(), tableFormat.topMargin(),
+            m_tableData->m_width, m_tableData->m_height);
 }
 
 QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const

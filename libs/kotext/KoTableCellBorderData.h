@@ -41,7 +41,7 @@ enum KoTableCellProperty{
     BottomBorderInnerPen,    ///< the bottom border inner pen
     RightBorderOuterPen,     ///< the right border outer pen
     RightBorderSpacing,        ///< the right border spacing between inner and outer border
-    RightBorderInnerPen,     ///< the right border inner pen
+    RightBorderInnerPen     ///< the right border inner pen
 };
 
 /**

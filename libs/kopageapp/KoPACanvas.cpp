@@ -34,15 +34,40 @@
 #include <QMenu>
 #include <QMouseEvent>
 
+class KoPACanvas::Private
+{
+public:
+    Private(KoPAView * view, KoPADocument * doc)
+    : view(view)
+    , doc(doc)
+    , shapeManager(0)
+    , masterShapeManager(0)
+    , toolProxy(0)
+    {}
+
+    ~Private()
+    {
+        delete toolProxy;
+        delete masterShapeManager;
+        delete shapeManager;
+    }
+
+    KoPAView * view;
+    KoPADocument * doc;
+    KoShapeManager * shapeManager;
+    KoShapeManager * masterShapeManager;
+    KoToolProxy * toolProxy;
+    QPoint documentOffset;
+};
+
 KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
 : QWidget( view )
 , KoCanvasBase( doc )
-, m_view( view )
-, m_doc( doc )
+, d(new Private(view, doc))
 {
-    m_shapeManager = new KoShapeManager( this );
-    m_masterShapeManager = new KoShapeManager( this );
-    m_toolProxy = new KoToolProxy( this );
+    d->shapeManager = new KoShapeManager( this );
+    d->masterShapeManager = new KoShapeManager( this );
+    d->toolProxy = new KoToolProxy( this );
     setFocusPolicy( Qt::StrongFocus );
     // this is much faster than painting it in the paintevent
     setBackgroundRole( QPalette::Base );
@@ -53,59 +78,82 @@ KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
 
 KoPACanvas::~KoPACanvas()
 {
-    delete m_toolProxy;
-    delete m_masterShapeManager;
-    delete m_shapeManager;
+    delete d;
+}
+
+KoPADocument* KoPACanvas::document() const
+{
+    return d->doc;
+}
+
+KoToolProxy* KoPACanvas::toolProxy() const
+{
+    return d->toolProxy;
+}
+
+QWidget* KoPACanvas::canvasWidget()
+{
+    return this;
+}
+
+const QWidget* KoPACanvas::canvasWidget() const
+{
+    return this;
+}
+
+KoPAView* KoPACanvas::koPAView() const
+{
+    return d->view;
 }
 
 void KoPACanvas::updateSize()
 {
     QSize size;
 
-    if ( m_view->activePage() ) {
-        KoPageLayout pageLayout = m_view->activePage()->pageLayout();
-        size.setWidth( qRound( m_view->zoomHandler()->zoomItX( pageLayout.width ) ) );
-        size.setHeight( qRound( m_view->zoomHandler()->zoomItX( pageLayout.height ) ) );
+    if ( d->view->activePage() ) {
+        KoPageLayout pageLayout = d->view->activePage()->pageLayout();
+        size.setWidth( qRound( d->view->zoomHandler()->zoomItX( pageLayout.width ) ) );
+        size.setHeight( qRound( d->view->zoomHandler()->zoomItX( pageLayout.height ) ) );
     }
 
     emit documentSize(size);
 }
 
 void KoPACanvas::setDocumentOffset(const QPoint &offset) {
-    m_documentOffset = offset;
+    d->documentOffset = offset;
 }
 
 void KoPACanvas::gridSize( qreal *horizontal, qreal *vertical ) const
 {
-    *horizontal = m_doc->gridData().gridX();
-    *vertical = m_doc->gridData().gridY();
+    *horizontal = d->doc->gridData().gridX();
+    *vertical = d->doc->gridData().gridY();
 }
 
 bool KoPACanvas::snapToGrid() const
 {
-    return m_doc->gridData().snapToGrid();
+    return d->doc->gridData().snapToGrid();
 }
 
 void KoPACanvas::addCommand( QUndoCommand *command )
 {
-    m_doc->addCommand( command );
+    d->doc->addCommand( command );
 }
 
 KoShapeManager * KoPACanvas::shapeManager() const
 {
-    return m_shapeManager;
+    return d->shapeManager;
 }
 
 KoShapeManager * KoPACanvas::masterShapeManager() const
 {
-    return m_masterShapeManager;
+    return d->masterShapeManager;
 }
 
 void KoPACanvas::updateCanvas( const QRectF& rc )
 {
     QRect clipRect( viewConverter()->documentToView( rc ).toRect() );
     clipRect.adjust( -2, -2, 2, 2 ); // Resize to fit anti-aliasing
-    clipRect.moveTopLeft( clipRect.topLeft() - m_documentOffset);
+    clipRect.moveTopLeft( clipRect.topLeft() - d->documentOffset);
     update( clipRect );
 
     emit canvasUpdated();
@@ -113,32 +161,32 @@ void KoPACanvas::updateCanvas( const QRectF& rc )
 
 const KoViewConverter * KoPACanvas::viewConverter() const
 {
-    return m_view->viewConverter( const_cast<KoPACanvas *>( this ) );
+    return d->view->viewConverter( const_cast<KoPACanvas *>( this ) );
 }
 
 KoUnit KoPACanvas::unit() const
 {
-    return m_doc->unit();
+    return d->doc->unit();
 }
 
 const QPoint & KoPACanvas::documentOffset() const
 {
-    return m_documentOffset;
+    return d->documentOffset;
 }
 
 void KoPACanvas::paintEvent( QPaintEvent *event )
 {
-    m_view->viewMode()->paintEvent( this, event );
+    d->view->viewMode()->paintEvent( this, event );
 }
 
 void KoPACanvas::tabletEvent( QTabletEvent *event )
 {
-    m_view->viewMode()->tabletEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    d->view->viewMode()->tabletEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
 }
 
 void KoPACanvas::mousePressEvent( QMouseEvent *event )
 {
-    m_view->viewMode()->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    d->view->viewMode()->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
 
     if(!event->isAccepted() && event->button() == Qt::RightButton)
     {
@@ -149,22 +197,22 @@ void KoPACanvas::mousePressEvent( QMouseEvent *event )
 
 void KoPACanvas::mouseDoubleClickEvent( QMouseEvent *event )
 {
-    m_view->viewMode()->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    d->view->viewMode()->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
 }
 
 void KoPACanvas::mouseMoveEvent( QMouseEvent *event )
 {
-    m_view->viewMode()->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    d->view->viewMode()->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
 }
 
 void KoPACanvas::mouseReleaseEvent( QMouseEvent *event )
 {
-    m_view->viewMode()->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    d->view->viewMode()->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
 }
 
 void KoPACanvas::keyPressEvent( QKeyEvent *event )
 {
-    m_view->viewMode()->keyPressEvent( event );
+    d->view->viewMode()->keyPressEvent( event );
     if (! event->isAccepted()) {
         if (event->key() == Qt::Key_Backtab
                 || (event->key() == Qt::Key_Tab && (event->modifiers() & Qt::ShiftModifier)))
@@ -176,17 +224,17 @@ void KoPACanvas::keyPressEvent( QKeyEvent *event )
 
 void KoPACanvas::keyReleaseEvent( QKeyEvent *event )
 {
-    m_view->viewMode()->keyReleaseEvent( event );
+    d->view->viewMode()->keyReleaseEvent( event );
 }
 
 void KoPACanvas::wheelEvent ( QWheelEvent * event )
 {
-    m_view->viewMode()->wheelEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    d->view->viewMode()->wheelEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
 }
 
 void KoPACanvas::closeEvent( QCloseEvent * event )
 {
-    m_view->viewMode()->closeEvent( event );
+    d->view->viewMode()->closeEvent( event );
 }
 
 void KoPACanvas::updateInputMethodInfo()
@@ -196,12 +244,12 @@ void KoPACanvas::updateInputMethodInfo()
 
 QVariant KoPACanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    return m_toolProxy->inputMethodQuery(query, *(viewConverter()) );
+    return d->toolProxy->inputMethodQuery(query, *(viewConverter()) );
 }
 
 void KoPACanvas::inputMethodEvent(QInputMethodEvent *event)
 {
-    m_toolProxy->inputMethodEvent(event);
+    d->toolProxy->inputMethodEvent(event);
 }
 
 void KoPACanvas::resizeEvent( QResizeEvent * event )
@@ -211,9 +259,9 @@ void KoPACanvas::resizeEvent( QResizeEvent * event )
 
 void KoPACanvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList )
 {
-    m_view->unplugActionList( "toolproxy_action_list" );
-    m_view->plugActionList( "toolproxy_action_list", actionList );
-    QMenu *menu = dynamic_cast<QMenu*>( m_view->factory()->container( "default_canvas_popup", m_view ) );
+    d->view->unplugActionList( "toolproxy_action_list" );
+    d->view->plugActionList( "toolproxy_action_list", actionList );
+    QMenu *menu = dynamic_cast<QMenu*>( d->view->factory()->container( "default_canvas_popup", d->view ) );
 
     if( menu )
         menu->exec( globalPos );
@@ -221,7 +269,7 @@ void KoPACanvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>
 
 KoGuidesData * KoPACanvas::guidesData()
 {
-    return &m_doc->guidesData();
+    return &d->doc->guidesData();
 }
 
 #include "KoPACanvas.moc"

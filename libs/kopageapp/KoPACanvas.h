@@ -28,7 +28,6 @@
 
 class KoPAView;
 class KoPADocument;
-class KAction;
 
 /// Widget that shows a KoPAPage
 class KOPAGEAPP_EXPORT KoPACanvas : public QWidget, public KoCanvasBase
@@ -39,7 +38,7 @@ public:
     ~KoPACanvas();
 
     /// Returns pointer to the KoPADocument
-    KoPADocument* document() const { return m_doc; }
+    KoPADocument* document() const;
 
     /// reimplemented method
     virtual void gridSize( qreal *horizontal, qreal *vertical ) const;
@@ -57,14 +56,14 @@ public:
     /// reimplemented from KoCanvasBase
     virtual KoGuidesData * guidesData();
 
-    KoToolProxy * toolProxy() const { return m_toolProxy; }
+    KoToolProxy * toolProxy() const;
     const KoViewConverter *viewConverter() const;
-    QWidget* canvasWidget() { return this; }
-    const QWidget* canvasWidget() const { return this; }
+    QWidget* canvasWidget();
+    const QWidget* canvasWidget() const;
     KoUnit unit() const;
     const QPoint & documentOffset() const;
 
-    KoPAView* koPAView () const { return m_view; }
+    KoPAView* koPAView () const;
 
 public slots:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
@@ -119,12 +118,9 @@ protected:
      */
     void showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList );
 
-    KoPAView * m_view;
-    KoPADocument * m_doc;
-    KoShapeManager * m_shapeManager;
-    KoShapeManager * m_masterShapeManager;
-    KoToolProxy * m_toolProxy;
-    QPoint m_documentOffset;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif /* KOPACANVAS_H */

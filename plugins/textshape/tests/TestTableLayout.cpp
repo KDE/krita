@@ -97,6 +97,7 @@ void TestTableLayout::debugTableLayout(const TableLayout& layout) const
 
 
 
+/*
 void TestTableLayout::testConstruction()
 {
     QStringList cellTexts;
@@ -106,12 +107,11 @@ void TestTableLayout::testConstruction()
     TableLayout tableLayout1;
     QVERIFY(tableLayout1.table() == 0);
 
-    TableLayout tableLayout2(m_table);
+    TableLayout tableLayout2(m_textLayout, m_layout->m_table);
     QVERIFY(tableLayout2.table() == m_table);
 
     cleanupTest();
 }
-
 void TestTableLayout::testSetPosition()
 {
     TableLayout tableLayout;
@@ -131,7 +131,7 @@ void TestTableLayout::testSetTable()
     QVERIFY(tableLayout.table() == m_table);
 
     cleanupTest();
-}
+}*/
 
 void TestTableLayout::testBoundingRect()
 {

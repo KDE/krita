@@ -20,12 +20,15 @@
 #ifndef TABLELAYOUT_H
 #define TABLELAYOUT_H
 
+#include "KoTextDocumentLayout.h"
+
 #include <QObject>
 #include <QPointF>
 #include <QMap>
 #include <QTextFormat>
 
 class TableData;
+
 class QTextTable;
 class QTextTableCell;
 class QPainter;
@@ -128,23 +131,49 @@ public:
     /**
      * @brief Constructor.
      *
-     * Create a new table layout and set it up with the given table.
+     * Create a new table layout and set it up with the given parent layout
+     * and table.
      *
+     * @param parentLayout the parent layout.
      * @param table a pointer to the table.
      */
-    TableLayout(QTextTable *table);
+    TableLayout(KoTextDocumentLayout::LayoutState *parentLayout, QTextTable *table);
 
     /**
      * @brief Constructor.
      *
      * Create a new, empty table layout.
      *
-     * The table layout will be in an invalid state until a table has been set
-     * using setTable() and calls to layout() will return immediately.
+     * The table layout will be in an invalid state until a parent layout and
+     * table has been set using setTable() and setParentLayout(). Calls to
+     * layout() will return immediately until this has been done.
      * 
-     * \sa setTable()
+     * \sa setTable(), setParentLayout()
+     *
+     * @param parentLayout a pointer to the parent layout.
      */
     TableLayout();
+
+    /**
+     * Set the parent layout.
+     * 
+     * It is the caller's responsibility to delete the table object that is
+     * passed in.
+     *
+     * @param parentLayout a pointer the parentLayout.
+     *
+     * \sa parentLayout()
+     */
+    void setParentLayout(KoTextDocumentLayout::LayoutState *parentLayout);
+
+    /**
+     * Get the current parent layout.
+     *
+     * @return a pointer to the parent layout.
+     *
+     * \sa setTable()
+     */
+    KoTextDocumentLayout::LayoutState *parentLayout() const;
 
     /**
      * Set the table to be laid out.
@@ -290,6 +319,8 @@ private:
 
 private:
     friend class TestTableLayout; // To allow direct testing.
+
+    KoTextDocumentLayout::LayoutState *m_parentLayout; /**< Parent layout. */
 
     QTextTable *m_table;     /**< The current table. */
     TableData *m_tableData;  /**< The current table data. */

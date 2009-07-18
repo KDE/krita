@@ -68,6 +68,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_dropCapsAffectedLineWidthAdjust(0),
         m_y_justBelowDropCaps(0)
 {
+    m_tableLayout.setParentLayout(this);
 }
 
 bool Layout::start()

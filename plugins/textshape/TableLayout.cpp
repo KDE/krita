@@ -18,6 +18,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KoTextDocumentLayout.h"
+#include "KoShape.h"
+
 #include "TableLayout.h"
 #include "TableData.h"
 #include "TableCellBorderData.h"
@@ -30,14 +33,31 @@
 #include <QRectF>
 #include <QPointF>
 
-TableLayout::TableLayout(QTextTable *table) : m_dirty(true)
+TableLayout::TableLayout(KoTextDocumentLayout::LayoutState *parentLayout, QTextTable *table) : m_dirty(true)
 {
+    setParentLayout(parentLayout);
     setTable(table);
     setPosition(QPointF(0, 0));
 }
 
-TableLayout::TableLayout() : m_table(0), m_tableData(0), m_dirty(true)
+TableLayout::TableLayout() :
+    m_parentLayout(0),
+    m_table(0),
+    m_tableData(0),
+    m_dirty(true)
 {
+}
+
+void TableLayout::setParentLayout(KoTextDocumentLayout::LayoutState *parentLayout)
+{
+    Q_ASSERT(parentLayout);
+
+    m_parentLayout = parentLayout;
+}
+
+KoTextDocumentLayout::LayoutState *TableLayout::parentLayout() const
+{
+    return m_parentLayout;
 }
 
 void TableLayout::setTable(QTextTable *table)
@@ -89,10 +109,15 @@ qDebug() << "blah";
     QTextTableFormat tableFormat = m_table->format();
 
     // Table width.
-    if (tableFormat.width().type() == QTextLength::FixedLength) {
-        m_tableData->m_width = tableFormat.width().rawValue();
-    } else {
-        m_tableData->m_width = 0; // TODO: Variable / percentage.
+    switch (tableFormat.width().type()) {
+        case QTextLength::VariableLength:
+        case QTextLength::FixedLength:
+            m_tableData->m_width = tableFormat.width().rawValue();
+            break;
+        case QTextLength::PercentageLength:
+            qreal parentWidth = m_parentLayout->shape->size().width();
+            m_tableData->m_width = tableFormat.width().rawValue() * (parentWidth / 100);
+            break;
     }
 
     // Column widths/positions. Only explicit fixed width for now.
@@ -283,7 +308,7 @@ bool TableLayout::isDirty() const
 
 bool TableLayout::isValid() const
 {
-    return (m_table && m_tableData);
+    return (m_parentLayout && m_table && m_tableData);
 }
 
 void TableLayout::tableDestroyed(QObject *object)

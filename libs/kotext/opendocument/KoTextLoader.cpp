@@ -300,7 +300,7 @@ if(currentCell == columns-1)
 /* make our own border data for now END*/
 }
                                                     QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                                                    borderData.save(cellFormat);
+                                                    borderData.applyStyle(cellFormat);
                                                     cell.setFormat(cellFormat);
 
                                                     if (cell.isValid()) {

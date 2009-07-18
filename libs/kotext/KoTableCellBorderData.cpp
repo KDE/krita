@@ -23,10 +23,11 @@
 #include <kdebug.h>
 
 struct Edge {
-    Edge() : distance(0.0) { }
+    Edge() : spacing(0.0) { }
     QPen innerPen;
     QPen outerPen;
-    qreal distance;
+    qreal spacing;
+    qreal padding;
 };
 
 class TableCellBorderData::Private
@@ -91,7 +92,7 @@ bool TableCellBorderData::equals(const TableCellBorderData &border)
             return false;
         if (d->edges[i].innerPen != border.d->edges[i].innerPen)
             return false;
-        if (qAbs(d->edges[i].distance - border.d->edges[i].distance) > 1E-10)
+        if (qAbs(d->edges[i].spacing - border.d->edges[i].spacing) > 1E-10)
             return false;
     }
     return true;
@@ -106,27 +107,27 @@ void TableCellBorderData::paint(QPainter &painter, const QRectF &bounds) const
         painter.setPen(pen);
         const qreal t = bounds.top() + pen.widthF() / 2.0;
         painter.drawLine(QLineF(bounds.left(), t, bounds.right(), t));
-        innerBounds.setTop(bounds.top() + d->edges[Top].distance + pen.widthF());
+        innerBounds.setTop(bounds.top() + d->edges[Top].spacing + pen.widthF());
     }
     if (d->edges[Bottom].outerPen.widthF() > 0) {
         QPen pen = d->edges[Bottom].outerPen;
         painter.setPen(pen);
         const qreal b = bounds.bottom() - pen.widthF() / 2.0;
-        innerBounds.setBottom(bounds.bottom() - d->edges[Bottom].distance - pen.widthF());
+        innerBounds.setBottom(bounds.bottom() - d->edges[Bottom].spacing - pen.widthF());
         painter.drawLine(QLineF(bounds.left(), b, bounds.right(), b));
     }
     if (d->edges[Left].outerPen.widthF() > 0) {
         QPen pen = d->edges[Left].outerPen;
         painter.setPen(pen);
         const qreal l = bounds.left() + pen.widthF() / 2.0;
-        innerBounds.setLeft(bounds.left() + d->edges[Left].distance + pen.widthF());
+        innerBounds.setLeft(bounds.left() + d->edges[Left].spacing + pen.widthF());
         painter.drawLine(QLineF(l, bounds.top(), l, bounds.bottom()));
     }
     if (d->edges[Right].outerPen.widthF() > 0) {
         QPen pen = d->edges[Right].outerPen;
         painter.setPen(pen);
         const qreal r = bounds.right() - pen.widthF() / 2.0;
-        innerBounds.setRight(bounds.right() - d->edges[Right].distance - pen.widthF());
+        innerBounds.setRight(bounds.right() - d->edges[Right].spacing - pen.widthF());
         painter.drawLine(QLineF(r, bounds.top(), r, bounds.bottom()));
     }
     // inner lines
@@ -156,48 +157,58 @@ void TableCellBorderData::paint(QPainter &painter, const QRectF &bounds) const
     }
 }
 
-void TableCellBorderData::save(QTextTableCellFormat &format)
+void TableCellBorderData::applyStyle(QTextTableCellFormat &format)
 {
     format.setProperty(TopBorderOuterPen, d->edges[Top].outerPen);
-    format.setProperty(TopBorderSpacing,  d->edges[Top].distance);
+    format.setProperty(TopBorderSpacing,  d->edges[Top].spacing);
     format.setProperty(TopBorderInnerPen, d->edges[Top].innerPen);
     format.setProperty(LeftBorderOuterPen, d->edges[Left].outerPen);
-    format.setProperty(LeftBorderSpacing,  d->edges[Left].distance);
+    format.setProperty(LeftBorderSpacing,  d->edges[Left].spacing);
     format.setProperty(LeftBorderInnerPen, d->edges[Left].innerPen);
     format.setProperty(BottomBorderOuterPen, d->edges[Bottom].outerPen);
-    format.setProperty(BottomBorderSpacing,  d->edges[Bottom].distance);
+    format.setProperty(BottomBorderSpacing,  d->edges[Bottom].spacing);
     format.setProperty(BottomBorderInnerPen, d->edges[Bottom].innerPen);
     format.setProperty(RightBorderOuterPen, d->edges[Right].outerPen);
-    format.setProperty(RightBorderSpacing,  d->edges[Right].distance);
+    format.setProperty(RightBorderSpacing,  d->edges[Right].spacing);
     format.setProperty(RightBorderInnerPen, d->edges[Right].innerPen);
+
+    format.setTopPadding(d->edges[Top].padding);
+    format.setLeftPadding(d->edges[Left].padding);
+    format.setRightPadding(d->edges[Right].padding);
+    format.setBottomPadding(d->edges[Bottom].padding);
 }
 
 void TableCellBorderData::load(const QTextTableCellFormat &format)
 {
     d->edges[Top].outerPen = format.penProperty(TopBorderOuterPen);
-    d->edges[Top].distance = format.doubleProperty(TopBorderSpacing);
+    d->edges[Top].spacing = format.doubleProperty(TopBorderSpacing);
     d->edges[Top].innerPen = format.penProperty(TopBorderInnerPen);
 
     d->edges[Left].outerPen = format.penProperty(LeftBorderOuterPen);
-    d->edges[Left].distance = format.doubleProperty(LeftBorderSpacing);
+    d->edges[Left].spacing = format.doubleProperty(LeftBorderSpacing);
     d->edges[Left].innerPen = format.penProperty(LeftBorderInnerPen);
 
     d->edges[Bottom].outerPen =format.penProperty(BottomBorderOuterPen);
-    d->edges[Bottom].distance = format.doubleProperty(BottomBorderSpacing);
+    d->edges[Bottom].spacing = format.doubleProperty(BottomBorderSpacing);
     d->edges[Bottom].innerPen = format.penProperty(BottomBorderInnerPen);
 
     d->edges[Right].outerPen = format.penProperty(RightBorderOuterPen);
-    d->edges[Right].distance = format.doubleProperty(RightBorderSpacing);
+    d->edges[Right].spacing = format.doubleProperty(RightBorderSpacing);
     d->edges[Right].innerPen = format.penProperty(RightBorderInnerPen);
+
+    d->edges[Top].padding = format.topPadding();
+    d->edges[Left].padding = format.leftPadding();
+    d->edges[Right].padding = format.rightPadding();
+    d->edges[Bottom].padding = format.bottomPadding();
 }
 
 QRectF TableCellBorderData::contentRect(const QRectF &boundingRect)
 {
     return boundingRect.adjusted(
-                d->edges[Left].outerPen.widthF() + d->edges[Left].distance + d->edges[Left].innerPen.widthF(),
-                d->edges[Top].outerPen.widthF() + d->edges[Top].distance + d->edges[Top].innerPen.widthF(),
-                - d->edges[Right].outerPen.widthF() - d->edges[Right].distance - d->edges[Right].innerPen.widthF(),
-                - d->edges[Bottom].outerPen.widthF() - d->edges[Bottom].distance - d->edges[Bottom].innerPen.widthF()
+                d->edges[Left].outerPen.widthF() + d->edges[Left].spacing + d->edges[Left].innerPen.widthF() + d->edges[Left].padding,
+                d->edges[Top].outerPen.widthF() + d->edges[Top].spacing + d->edges[Top].innerPen.widthF() + d->edges[Top].padding,
+                - d->edges[Right].outerPen.widthF() - d->edges[Right].spacing - d->edges[Right].innerPen.widthF() - d->edges[Right].padding,
+                - d->edges[Bottom].outerPen.widthF() - d->edges[Bottom].spacing - d->edges[Bottom].innerPen.widthF() - d->edges[Bottom].padding
    ) ;
 }
 
@@ -215,7 +226,7 @@ void TableCellBorderData::setEdge(Side side, Style style, qreal width, KoColor c
     edge.outerPen = edge.innerPen;
     edge.outerPen.setWidthF(width);
 
-    edge.distance = width; // set the distance between to be the same as the outer width
+    edge.spacing = width; // set the spacing between to be the same as the outer width
     edge.innerPen.setWidthF(innerWidth);
 
     d->edges[side] = edge;

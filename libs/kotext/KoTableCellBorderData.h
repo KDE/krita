@@ -97,7 +97,7 @@ public:
      *
      * @param format the QTextTableCellFormat.
      */
-    void save(QTextTableCellFormat &format);
+    void applyStyle(QTextTableCellFormat &format);
 
     /**
      * Restore all properties from a QTextTableCellFormat structure.

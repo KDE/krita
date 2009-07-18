@@ -4,10 +4,12 @@
 
 #include <KoStyleManager.h>
 #include <KoTextDocument.h>
+#include <KoTableCellBorderData.h>
 
 #include <QTextDocument>
 #include <QTextTable>
 #include <QTextCursor>
+#include <QPen>
 
 void TestTableLayout::initTestCase()
 {
@@ -106,7 +108,6 @@ void TestTableLayout::testBoundingRect()
     QTextTableFormat format;
     format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
     format.setWidth(QTextLength(QTextLength::FixedLength, 200));
-    format.setHeight(QTextLength(QTextLength::FixedLength, 100));
     format.setBorder(0);
     format.setPadding(0);
     format.setMargin(0);
@@ -140,7 +141,6 @@ void TestTableLayout::testBasicLayout()
     QTextTableFormat format;
     format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
     format.setWidth(QTextLength(QTextLength::FixedLength, 200));
-    format.setHeight(QTextLength(QTextLength::FixedLength, 100));
     format.setBorder(0);
     format.setPadding(0);
     format.setMargin(0);
@@ -149,10 +149,9 @@ void TestTableLayout::testBasicLayout()
 
     /*
      * - 2x2 table
-     * - 200x100pt
+     * - 100pt wide
      * - 2pt table padding.
      * - No table borders or margins.
-     * - No cell padding.
      */
     initTest(format, cellTexts, 2, 2);
 
@@ -227,7 +226,6 @@ void TestTableLayout::testTableMargin() {
     QTextTableFormat format;
     format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
     format.setWidth(QTextLength(QTextLength::FixedLength, 200));
-    format.setHeight(QTextLength(QTextLength::FixedLength, 100));
     format.setBorder(0);
     format.setPadding(0);
     format.setMargin(2);
@@ -236,10 +234,9 @@ void TestTableLayout::testTableMargin() {
 
     /*
      * - 2x2 table
-     * - 200x100pt
+     * - 100pt wide
      * - 2pt table padding.
      * - No table borders or margins.
-     * - No cell padding.
      */
     initTest(format, cellTexts, 2, 2);
 
@@ -288,6 +285,72 @@ void TestTableLayout::testTableMargin() {
     QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4), QRectF(102, 18, 100, 16));
 
     // TODO: Check block positions.
+
+    cleanupTest();
+}
+
+void TestTableLayout::testCellStyles()
+{
+    QStringList cellTexts;
+    QTextTableFormat format;
+    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    format.setWidth(QTextLength(QTextLength::FixedLength, 200));
+    format.setBorder(0);
+    format.setPadding(0);
+    format.setMargin(0);
+    format.setCellSpacing(0);
+    format.setCellPadding(0);
+
+    /*
+     * - 2x2 table
+     * - 200x200pt
+     * - No table padding.
+     * - No table borders.
+     */
+    initTest(format, cellTexts, 2, 2);
+
+    /*
+     * Cell 0, 0
+     *
+     * Set
+     *  inner border = 1pt
+     *  outer border = 2pt
+     *  border distance = 4pt
+     * on all sides.
+     */
+    QTextTableCell cell1 = m_table->cellAt(0, 0);
+    QTextTableCellFormat cell1Format;
+    cell1Format.setProperty(TopBorderOuterPen, QPen(Qt::black, 1));
+    cell1Format.setProperty(TopBorderSpacing, 2.0);
+    cell1Format.setProperty(TopBorderInnerPen, QPen(Qt::black, 4));
+    cell1Format.setProperty(LeftBorderOuterPen, QPen(Qt::black, 1));
+    cell1Format.setProperty(LeftBorderSpacing, 2.0);
+    cell1Format.setProperty(LeftBorderInnerPen, QPen(Qt::black, 4));
+    cell1Format.setProperty(BottomBorderOuterPen, QPen(Qt::black, 1));
+    cell1Format.setProperty(BottomBorderSpacing, 2.0);
+    cell1Format.setProperty(BottomBorderInnerPen, QPen(Qt::black, 4));
+    cell1Format.setProperty(RightBorderOuterPen, QPen(Qt::black, 1));
+    cell1Format.setProperty(RightBorderSpacing, 2.0);
+    cell1Format.setProperty(RightBorderInnerPen, QPen(Qt::black, 4));
+    cell1Format.setPadding(8.0);
+    cell1.setFormat(cell1Format);
+
+    m_layout->layout();
+
+    /*
+     * Cell 0, 0 rules:
+     *   x = 1 + 2 + 4 = 7
+     *   y = 1 + 2 + 4 = 7
+     *   width = 100 - (2 * 7)
+     *   height = 16 - (2 * 7)
+     */
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(15, 15, 70, -14));
+
+    /*
+     * TODO:
+     * - Test actual block positions too.
+     * - Fix the compare above once we support min row height.
+     */
 
     cleanupTest();
 }

@@ -39,6 +39,8 @@ private slots:
     void testBasicLayout();
     /// Test table padding.
     void testTableMargin();
+    /// Test table cell styles.
+    void testCellStyles();
 
 private:
     QTextDocument *m_doc;

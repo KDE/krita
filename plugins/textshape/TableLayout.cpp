@@ -220,18 +220,14 @@ QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
     Q_ASSERT(cell.row() < m_tableData->m_rowPositions.size());
     Q_ASSERT(cell.column() < m_tableData->m_columnPositions.size());
 
-    QRectF r = cellBoundingRect(cell.row(), cell.column());
-    r.adjust(0, 0, -0, -0); //TODO should be real padding values
-    if (m_tableData->tableModel == TableData::Collapsing) {
-         r.adjust(0/2, 0/2, -0/2, -0/2);  // TODO should use real border width values
-    } else {
-        r.adjust(0, 0, -0, -0); // TODO should use real border width values
-    }
+    // get the border data for the cell and return the adjusted rect.
+    TableCellBorderData borderData;
+    borderData.load(cell.format().toTableCellFormat());
 
-    return r;
+    return borderData.contentRect(cellBoundingRect(cell));
 }
 
-QRectF TableLayout::cellBoundingRect(QTextTableCell &cell) const
+QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell) const
 {
     Q_ASSERT(cell.isValid());
 

@@ -235,7 +235,7 @@ public:
      * @param cell the cell.
      * @return the bounding rectangle of the cell.
      */
-    QRectF cellBoundingRect(QTextTableCell &cell) const;
+    QRectF cellBoundingRect(const QTextTableCell &cell) const;
 
     /**
      * Get the content rectangle of a given cell.

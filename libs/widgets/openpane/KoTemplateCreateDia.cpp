@@ -468,8 +468,8 @@ void KoTemplateCreateDia::slotRemove() {
     else {
         bool done=false;
         QList<KoTemplateGroup*> groups = d->m_tree->groups();
-        QList<KoTemplateGroup*>::const_iterator it = groups.begin();
-        for(; it != groups.end() && !done; ++it) {
+        QList<KoTemplateGroup*>::const_iterator it = groups.constBegin();
+        for(; it != groups.constEnd() && !done; ++it) {
             KoTemplate *t = (*it)->find(item->text(0));
 
             if(t) {

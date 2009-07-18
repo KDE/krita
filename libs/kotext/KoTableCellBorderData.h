@@ -30,18 +30,18 @@
 #include "kotext_export.h"
 
 enum KoTableCellProperty{
-    TopBorderOuterWidth = QTextFormat::UserProperty + 2000, /// the top border outer width
-    TopBorderSpacing, /// the top border spacing between inner and outer border
-    TopBorderInnerWidth, /// the top border inner width
-    LeftBorderOuterWidth, /// the left border outer width
-    LeftBorderSpacing, /// the left border spacing between inner and outer border
-    LeftBorderInnerWidth, /// the left border inner width
-    BottomBorderOuterWidth, /// the bottom border outer width
-    BottomBorderSpacing, /// the bottom border spacing between inner and outer border
-    BottomBorderInnerWidth, /// the bottom border inner width
-    RightBorderOuterWidth, /// the right border outer width
-    RightBorderSpacing, /// the right border spacing between inner and outer border
-    RightBorderInnerWidth, /// the right border inner width
+    TopBorderOuterWidth = QTextFormat::UserProperty + 2000, ///< the top border outer width
+    TopBorderSpacing,          ///< the top border spacing between inner and outer border
+    TopBorderInnerWidth,       ///< the top border inner width
+    LeftBorderOuterWidth,      ///< the left border outer width
+    LeftBorderSpacing,         ///< the left border spacing between inner and outer border
+    LeftBorderInnerWidth,      ///< the left border inner width
+    BottomBorderOuterWidth,    ///< the bottom border outer width
+    BottomBorderSpacing,       ///< the bottom border spacing between inner and outer border
+    BottomBorderInnerWidth,    ///< the bottom border inner width
+    RightBorderOuterWidth,     ///< the right border outer width
+    RightBorderSpacing,        ///< the right border spacing between inner and outer border
+    RightBorderInnerWidth,     ///< the right border inner width
 };
 
 /**
@@ -58,16 +58,16 @@ public:
     /// Enum used to differentiate between the 4 types of borders this class maintains
     enum Side {
         Top = 0, ///< References the border at the top of the paragraph
-        Left,   ///< References the border at the left side of the paragraph
-        Bottom, ///< References the border at the bottom of the paragraph
-        Right   ///< References the border at the right side of the paragraph
+        Left,    ///< References the border at the left side of the paragraph
+        Bottom,  ///< References the border at the bottom of the paragraph
+        Right    ///< References the border at the right side of the paragraph
     };
 
     /// Enum used to differentiate between the 3 types of border styles
     enum Style {
         None = 0, ///< No line border
-        Solid, ///< Solid line border
-        Double   ///< Double lined border
+        Solid,    ///< Solid line border
+        Double    ///< Double lined border
     };
 
     /**
@@ -92,38 +92,44 @@ public:
     /// refcounting
     int useCount() const;
 
-
     /**
      * Store all properties into a QTextTableCellFormat structure.
-     * @param format the QTextTableCellFormat
+     *
+     * @param format the QTextTableCellFormat.
      */
     void save(QTextTableCellFormat &format);
 
     /**
      * Restore all properties from a QTextTableCellFormat structure.
-     * @param format the QTextTableCellFormat
+     *
+     * @param format the QTextTableCellFormat:
      */
     void load(const QTextTableCellFormat &format);
 
 
     /**
-     * @return the rect available for contents when taking borders and padding into consideration.
+     * Get the bouding rectange \boundingRect adjusted according to the paddings and margins
+     * of this border data.
+     *
+     * @return the adjusted rectangle.
      */
-    QRectF contentsRect(const QRectF &boundingRect);
-
+    QRectF contentRect(const QRectF &boundingRect);
 
     /**
-     * Set the properties of an edge based on a paragraph-format.
+     * Set the properties of an edge based on a paragraph format.
+     *
      * @param side defines which edge this is for.
      * @param style the border style for this side.
      * @param width the thickness of the border-line.
-     * @param color the color of the border-line(s).
-//     * @param space the amount of spacing between the outer border and the inner border in case of style being double
-     * @param innerWidth the thickness of the inner border-line in case of style being double
+     * @param color the color of the border line(s).
+     * @param space the amount of spacing between the outer border and the inner border in case of style being double
+     * @param innerWidth the thickness of the inner border line in case of style being double
      */
     void setEdge(Side side, Style style, qreal width, KoColor color, qreal innerWidth);
 
     /**
+     * Check if the border data has any borders.
+     *
      * @return true if there has been at least one border set.
      */
     bool hasBorders() const;
@@ -134,8 +140,11 @@ public:
 
     /**
      * Paint the borders.
+     *
+     * @painter the painter to draw with.
+     * @bounds the bounding rectangle to draw.
      */
-    void paint(QPainter &painter, const QRectF &boundingRec) const;
+    void paint(QPainter &painter, const QRectF &bounds) const;
 
 private:
     class Private;

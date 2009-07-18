@@ -171,7 +171,7 @@ void TableCellBorderData::load(const QTextTableCellFormat &format)
     format.doubleProperty(RightBorderInnerWidth);//, d->edges[Right].innerPen.widthF());
 }
 
-QRectF TableCellBorderData::contentsRect(const QRectF &boundingRect)
+QRectF TableCellBorderData::contentRect(const QRectF &boundingRect)
 {
     return boundingRect.adjusted(
                 d->edges[Left].outerPen.widthF() + d->edges[Left].distance + d->edges[Left].innerPen.widthF(),

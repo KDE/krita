@@ -342,9 +342,9 @@ void TestTableLayout::testCellStyles()
      *   x = 1 + 2 + 4 = 7
      *   y = 1 + 2 + 4 = 7
      *   width = 100 - (2 * 7)
-     *   height = 16 - (2 * 7)
+     *   height = 16 (one line)
      */
-    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(15, 15, 70, -14));
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(15, 15, 70, 16));
 
     /*
      * TODO:

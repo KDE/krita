@@ -244,11 +244,11 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         QPointF clippingOffset = clipRegion.topLeft();
         
         // Init the buffer image
-        QImage image(clipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
-        image.fill(qRgba(0,0,0,0));
+        QImage sourceGraphic(clipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
+        sourceGraphic.fill(qRgba(0,0,0,0));
 
         // Init the buffer painter
-        QPainter imagePainter(&image);
+        QPainter imagePainter(&sourceGraphic);
         imagePainter.translate(-1.0f*clippingOffset);
         imagePainter.setPen(Qt::NoPen);
         imagePainter.setBrush(Qt::NoBrush);
@@ -265,14 +265,14 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         }
         imagePainter.end();
 
-        QHash<QString, QImage> imageBuffers;
+        QImage sourceAlpha = sourceGraphic;
+        sourceAlpha.fill(qRgba(0,0,0,255));
+        sourceAlpha.setAlphaChannel(sourceGraphic.alphaChannel());
         
-        imageBuffers.insert("SourceGraphic", image);
-        imageBuffers.insert(QString(), image);
-        QImage sourceAlpha = image.alphaChannel();
-        image.fill(qRgba(0,0,0,255));
-        image.setAlphaChannel(sourceAlpha);
-        imageBuffers.insert("SourceAlpha", image);
+        QHash<QString, QImage> imageBuffers;
+        imageBuffers.insert("SourceGraphic", sourceGraphic);
+        imageBuffers.insert(QString(), sourceGraphic);
+        imageBuffers.insert("SourceAlpha", sourceAlpha);
         
         // Filter
         foreach(KoFilterEffect* filterEffect, shape->filterEffectStack()) {

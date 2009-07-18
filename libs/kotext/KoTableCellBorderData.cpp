@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TableCellBorderData.h"
+#include "KoTableCellBorderData.h"
 
 #include <kdebug.h>
 
@@ -139,11 +139,53 @@ void TableCellBorderData::paint(QPainter &painter, const QRectF &bounds) const
     }
 }
 
+void TableCellBorderData::save(QTextTableCellFormat &format)
+{
+    format.setProperty(TopBorderOuterWidth, d->edges[Top].outerPen.widthF());
+    format.setProperty(TopBorderSpacing,  d->edges[Top].distance);
+    format.setProperty(TopBorderInnerWidth, d->edges[Top].innerPen.widthF());
+    format.setProperty(LeftBorderOuterWidth, d->edges[Left].outerPen.widthF());
+    format.setProperty(LeftBorderSpacing,  d->edges[Left].distance);
+    format.setProperty(LeftBorderInnerWidth, d->edges[Left].innerPen.widthF());
+    format.setProperty(BottomBorderOuterWidth, d->edges[Bottom].outerPen.widthF());
+    format.setProperty(BottomBorderSpacing,  d->edges[Bottom].distance);
+    format.setProperty(BottomBorderInnerWidth, d->edges[Bottom].innerPen.widthF());
+    format.setProperty(RightBorderOuterWidth, d->edges[Right].outerPen.widthF());
+    format.setProperty(RightBorderSpacing,  d->edges[Right].distance);
+    format.setProperty(RightBorderInnerWidth, d->edges[Right].innerPen.widthF());
+}
+
+void TableCellBorderData::load(const QTextTableCellFormat &format)
+{
+    d->edges[Top].outerPen.setWidthF(format.doubleProperty(TopBorderOuterWidth));
+    d->edges[Top].distance = format.doubleProperty(TopBorderSpacing);
+    format.doubleProperty(TopBorderInnerWidth);//, d->edges[Top].innerPen.widthF());
+    format.doubleProperty(LeftBorderOuterWidth);//, d->edges[Left].outerPen.widthF());
+    d->edges[Left].distance = format.doubleProperty(LeftBorderSpacing);
+    format.doubleProperty(LeftBorderInnerWidth);//, d->edges[Left].innerPen.widthF());
+    format.doubleProperty(BottomBorderOuterWidth);//, d->edges[Bottom].outerPen.widthF());
+    d->edges[Bottom].distance = format.doubleProperty(BottomBorderSpacing);
+    format.doubleProperty(BottomBorderInnerWidth);//, d->edges[Bottom].innerPen.widthF());
+    format.doubleProperty(RightBorderOuterWidth);//, d->edges[Right].outerPen.widthF());
+    d->edges[Right].distance = format.doubleProperty(RightBorderSpacing);
+    format.doubleProperty(RightBorderInnerWidth);//, d->edges[Right].innerPen.widthF());
+}
+
+QRectF TableCellBorderData::contentsRect(const QRectF &boundingRect)
+{
+    return boundingRect.adjusted(
+                d->edges[Left].outerPen.widthF() + d->edges[Left].distance + d->edges[Left].innerPen.widthF(),
+                d->edges[Top].outerPen.widthF() + d->edges[Top].distance + d->edges[Top].innerPen.widthF(),
+                - d->edges[Right].outerPen.widthF() - d->edges[Right].distance - d->edges[Right].innerPen.widthF(),
+                - d->edges[Bottom].outerPen.widthF() - d->edges[Bottom].distance - d->edges[Bottom].innerPen.widthF()
+   ) ;
+}
+
 void TableCellBorderData::setEdge(Side side, Style style, qreal width, KoColor color, qreal innerWidth)
 {
     Edge edge;
     switch (style) {
-    case Dotted: edge.innerPen.setStyle(Qt::DotLine); break;
+//    case Dotted: edge.innerPen.setStyle(Qt::DotLine); break;
     default:
         edge.innerPen.setStyle(Qt::SolidLine);
     }

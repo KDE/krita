@@ -21,7 +21,6 @@ set(TestDocumentLayout_test_SRCS
     ../ListItemsHelper.cpp
     ../TableLayout.cpp
     ../TableData.cpp
-    ../TableCellBorderData.cpp
 )
 
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
@@ -70,7 +69,6 @@ set(TestChangeListCommand_test_SRCS
     ../Layout.cpp    
     ../TableLayout.cpp
     ../TableData.cpp
-    ../TableCellBorderData.cpp
 )
 
 
@@ -102,7 +100,6 @@ set(TestTableLayout_test_SRCS
     TestTableLayout.cpp
     ../TableLayout.cpp
     ../TableData.cpp
-    ../TableCellBorderData.cpp
     ../Layout.cpp
     ../TextShape.cpp
     ../ListItemsHelper.cpp

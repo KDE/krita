@@ -47,7 +47,9 @@
 #include <KoVariableRegistry.h>
 #include <KoProperties.h>
 #include <KoTextBlockData.h>
+#include <KoColor.h>
 
+#include "KoTableCellBorderData.h"
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
@@ -282,7 +284,23 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                     int columnsSpanned = tblTag.attributeNS(KoXmlNS::table, "number-columns-spanned", "1").toInt();
                                                     // rowsSpanned disabled for now as that would mean spanning into rows not yet created. Need to figure out some way to handle this
                                                     tbl->mergeCells(currentRow, currentCell, 1/*rowsSpanned*/, columnsSpanned);
-                                    
+
+                                                    TableCellBorderData borderData;
+
+{
+/* make our own border data for now BEGIN*/
+if(currentRow==0)
+    borderData.setEdge(TableCellBorderData::Top,TableCellBorderData::Double, 1.0, KoColor(), 0.0);
+borderData.setEdge(TableCellBorderData::Bottom,TableCellBorderData::Solid, 1.0, KoColor(), 0.0);
+borderData.setEdge(TableCellBorderData::Left,TableCellBorderData::Solid, 1.0, KoColor(), 0.0);
+if(currentCell == columns-1)
+    borderData.setEdge(TableCellBorderData::Right,TableCellBorderData::Solid, 1.0, KoColor(), 0.0); 
+/* make our own border data for now END*/
+}
+                                                    QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+                                                    borderData.save(cellFormat);
+                                                    cell.setFormat(cellFormat);
+
                                                     if (cell.isValid()) {
                                                         cursor = cell.firstCursorPosition();
                                                         loadBody(rowTag, cursor);

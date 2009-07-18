@@ -34,10 +34,6 @@ class QTextTableCell;
 class QPainter;
 class QRectF;
 
-enum KoTableCellProperty{
-    Borders = QTextFormat::UserProperty + 1000 /// the border data for this cell
-};
-
 /*
  * Anatomy of a Table
  * ------------------

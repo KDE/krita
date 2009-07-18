@@ -23,7 +23,8 @@
 
 #include "TableLayout.h"
 #include "TableData.h"
-#include "TableCellBorderData.h"
+
+#include <KoTableCellBorderData.h>
 
 #include <QTextDocument>
 #include <QTextTable>
@@ -184,15 +185,7 @@ void TableLayout::draw(QPainter *painter) const
         for (int column = 0; column < m_table->columns(); ++column) {
             QTextTableCell tableCell = m_table->cellAt(row, column);
             TableCellBorderData borderData;
-/* make out own border data for now BEGIN*/
-if(row==0)
-    borderData.setEdge(TableCellBorderData::Top,TableCellBorderData::Double, 3.0, KoColor(), 0.0);
-borderData.setEdge(TableCellBorderData::Bottom,TableCellBorderData::Solid, 3.0, KoColor(), 0.0);
-borderData.setEdge(TableCellBorderData::Left,TableCellBorderData::Solid, 3.0, KoColor(), 0.0);
-if(column==m_table->columns()-1)
-    borderData.setEdge(TableCellBorderData::Left,TableCellBorderData::Solid, 3.0, KoColor(), 0.0); 
-/* make out own border data for now END*/
-
+            borderData.load(tableCell.format().toTableCellFormat());
             borderData.paint(*painter, cellBoundingRect(row, column));
         }
     }

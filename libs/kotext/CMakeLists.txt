@@ -20,6 +20,7 @@ set(kotext_LIB_SRCS
     KoList.cpp
     KoPageFormat.cpp
     KoLayoutVisitor.cpp
+    KoTableCellBorderData.cpp
 
     KoTextEditingRegistry.cpp
     KoTextEditingFactory.cpp

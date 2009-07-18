@@ -17,8 +17,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef TABLECELLBORDERDATA_H
-#define TABLECELLBORDERDATA_H
+#ifndef KOTABLECELLBORDERDATA_H
+#define KOTABLECELLBORDERDATA_H
 
 #include "styles/KoParagraphStyle.h"
 #include <KoColor.h>
@@ -26,7 +26,23 @@
 #include <QPen>
 #include <QRectF>
 #include <QPainter>
+#include <QTextTableCellFormat>
 #include "kotext_export.h"
+
+enum KoTableCellProperty{
+    TopBorderOuterWidth = QTextFormat::UserProperty + 2000, /// the top border outer width
+    TopBorderSpacing, /// the top border spacing between inner and outer border
+    TopBorderInnerWidth, /// the top border inner width
+    LeftBorderOuterWidth, /// the left border outer width
+    LeftBorderSpacing, /// the left border spacing between inner and outer border
+    LeftBorderInnerWidth, /// the left border inner width
+    BottomBorderOuterWidth, /// the bottom border outer width
+    BottomBorderSpacing, /// the bottom border spacing between inner and outer border
+    BottomBorderInnerWidth, /// the bottom border inner width
+    RightBorderOuterWidth, /// the right border outer width
+    RightBorderSpacing, /// the right border spacing between inner and outer border
+    RightBorderInnerWidth, /// the right border inner width
+};
 
 /**
  * This class holds data for paragraph-borders.
@@ -49,8 +65,8 @@ public:
 
     /// Enum used to differentiate between the 3 types of border styles
     enum Style {
-        Solid = 0, ///< Solid Line border
-        Dotted, ///< Dotted line border
+        None = 0, ///< No line border
+        Solid, ///< Solid line border
         Double   ///< Double lined border
     };
 
@@ -75,6 +91,26 @@ public:
     int removeUser();
     /// refcounting
     int useCount() const;
+
+
+    /**
+     * Store all properties into a QTextTableCellFormat structure.
+     * @param format the QTextTableCellFormat
+     */
+    void save(QTextTableCellFormat &format);
+
+    /**
+     * Restore all properties from a QTextTableCellFormat structure.
+     * @param format the QTextTableCellFormat
+     */
+    void load(const QTextTableCellFormat &format);
+
+
+    /**
+     * @return the rect available for contents when taking borders and padding into consideration.
+     */
+    QRectF contentsRect(const QRectF &boundingRect);
+
 
     /**
      * Set the properties of an edge based on a paragraph-format.

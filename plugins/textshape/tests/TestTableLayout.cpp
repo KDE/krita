@@ -95,44 +95,6 @@ void TestTableLayout::debugTableLayout(const TableLayout& layout) const
     qDebug() << "</table>";
 }
 
-
-
-/*
-void TestTableLayout::testConstruction()
-{
-    QStringList cellTexts;
-    QTextTableFormat format;
-    initTest(format, cellTexts);
-
-    TableLayout tableLayout1;
-    QVERIFY(tableLayout1.table() == 0);
-
-    TableLayout tableLayout2(m_textLayout, m_layout->m_table);
-    QVERIFY(tableLayout2.table() == m_table);
-
-    cleanupTest();
-}
-void TestTableLayout::testSetPosition()
-{
-    TableLayout tableLayout;
-    QPointF position(1, 3);
-    tableLayout.setPosition(position);
-    QCOMPARE(tableLayout.position(), position);
-}
-
-void TestTableLayout::testSetTable()
-{
-    QStringList cellTexts;
-    QTextTableFormat format;
-    initTest(format, cellTexts);
-
-    TableLayout tableLayout;
-    tableLayout.setTable(m_table);
-    QVERIFY(tableLayout.table() == m_table);
-
-    cleanupTest();
-}*/
-
 void TestTableLayout::testBoundingRect()
 {
     /*

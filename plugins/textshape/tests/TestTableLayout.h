@@ -33,15 +33,6 @@ private slots:
     /// Initialize test case.
     void initTestCase();
 
-    /*
-     * Disabled for now.
-     */
-    /*/// Test constructors of table layout.
-    void testConstruction();
-    /// Test position setter/getter of table layout.
-    void testSetPosition();
-    /// Test table setter/getter of table layout.
-    void testSetTable();*/
     /// Test table bounding rect.
     void testBoundingRect();
     /// Test very basic layout functionality.

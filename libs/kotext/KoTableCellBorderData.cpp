@@ -202,14 +202,24 @@ void TableCellBorderData::load(const QTextTableCellFormat &format)
     d->edges[Bottom].padding = format.bottomPadding();
 }
 
-QRectF TableCellBorderData::contentRect(const QRectF &boundingRect)
+QRectF TableCellBorderData::contentRect(const QRectF &boundingRect) const
 {
     return boundingRect.adjusted(
                 d->edges[Left].outerPen.widthF() + d->edges[Left].spacing + d->edges[Left].innerPen.widthF() + d->edges[Left].padding,
                 d->edges[Top].outerPen.widthF() + d->edges[Top].spacing + d->edges[Top].innerPen.widthF() + d->edges[Top].padding,
                 - d->edges[Right].outerPen.widthF() - d->edges[Right].spacing - d->edges[Right].innerPen.widthF() - d->edges[Right].padding,
                 - d->edges[Bottom].outerPen.widthF() - d->edges[Bottom].spacing - d->edges[Bottom].innerPen.widthF() - d->edges[Bottom].padding
-   ) ;
+   );
+}
+
+QRectF TableCellBorderData::boundingRect(const QRectF &contentRect) const
+{
+    return contentRect.adjusted(
+                - d->edges[Left].outerPen.widthF() - d->edges[Left].spacing - d->edges[Left].innerPen.widthF() - d->edges[Left].padding,
+                - d->edges[Top].outerPen.widthF() - d->edges[Top].spacing - d->edges[Top].innerPen.widthF() - d->edges[Top].padding,
+                d->edges[Right].outerPen.widthF() + d->edges[Right].spacing + d->edges[Right].innerPen.widthF() + d->edges[Right].padding,
+                d->edges[Bottom].outerPen.widthF() + d->edges[Bottom].spacing + d->edges[Bottom].innerPen.widthF() + d->edges[Bottom].padding
+   );
 }
 
 void TableCellBorderData::setEdge(Side side, Style style, qreal width, KoColor color, qreal innerWidth)

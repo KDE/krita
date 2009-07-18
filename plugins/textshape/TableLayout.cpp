@@ -116,7 +116,8 @@ qDebug() << "blah";
             break;
         case QTextLength::PercentageLength:
             qreal parentWidth = m_parentLayout->shape->size().width();
-            m_tableData->m_width = tableFormat.width().rawValue() * (parentWidth / 100);
+            m_tableData->m_width = tableFormat.width().rawValue() * (parentWidth / 100)
+                - tableFormat.leftMargin() - tableFormat.rightMargin();
             break;
     }
 
@@ -150,12 +151,21 @@ void TableLayout::layoutFromRow(int fromRow)
     m_tableData->m_height = m_tableData->m_rowPositions[fromRow] - tableFormat.topMargin();
 
     for (int row = fromRow; row < m_table->rows(); ++row) {
-        // adjust row height to the largest content height in the row.
-        qreal contentHeight = 0;
-        foreach (qreal height, m_tableData->m_contentHeights.at(row)) {
-            contentHeight = qMax(contentHeight, height);
+        // adjust row height to the largest cell height in the row.
+        qreal rowHeight = 0;
+        for (int col = 0; col < m_table->columns(); ++col) {
+            // get the cell border data.
+            QTextTableCell cell = m_table->cellAt(row, col);
+            QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+            TableCellBorderData cellBorderData;
+            cellBorderData.load(cellFormat);
+
+            // passing content rect to boundingRect(), we're only interested in height.
+            QRectF heightRect(1, 1, 1, m_tableData->m_contentHeights.at(row).at(col));
+
+            rowHeight = qMax(rowHeight, cellBorderData.boundingRect(heightRect).height());
         }
-        m_tableData->m_rowHeights[row] = contentHeight;
+        m_tableData->m_rowHeights[row] = rowHeight;
 
         // adjust row Y position.
         if (row > 0) {
@@ -180,7 +190,7 @@ void TableLayout::draw(QPainter *painter) const
     painter->save();
     painter->translate(tableRect.topLeft());
 
-    for (int row = 0; row <m_table->rows(); ++ row) {
+    for (int row = 0; row < m_table->rows(); ++row) {
         for (int column = 0; column < m_table->columns(); ++column) {
             QTextTableCell tableCell = m_table->cellAt(row, column);
             TableCellBorderData borderData;

@@ -108,12 +108,25 @@ public:
 
 
     /**
-     * Get the bouding rectange \boundingRect adjusted according to the paddings and margins
-     * of this border data.
+     * Get the bounding rectange \boundingRect adjusted according to the paddings and margins
+     * of this border data. The inverse of this function is boundingRect().
      *
+     * \sa boundingRect()
+     *
+     * @param the bounding rectangle.
      * @return the adjusted rectangle.
      */
-    QRectF contentRect(const QRectF &boundingRect);
+    QRectF contentRect(const QRectF &boundingRect) const;
+
+    /**
+     * Get the bounding rect given a content rect, this is the inverse of contentRect().
+     *
+     * \sa contentRect()
+     *
+     * @param contentRect the content rectange.
+     * @return the bounding rectange.
+     */
+    QRectF boundingRect(const QRectF &contentRect) const;
 
     /**
      * Set the properties of an edge based on a paragraph format.

@@ -285,7 +285,9 @@ static void importOdfLine(const QString &type, const QString &style, const QStri
 
     QString fixedType = type;
     QString fixedStyle = style;
-    if (fixedType.isEmpty() && !fixedStyle.isEmpty())
+    if (fixedStyle == "none")
+        fixedType.clear();
+    else if (fixedType.isEmpty() && !fixedStyle.isEmpty())
         fixedType = "single";
     else if (!fixedType.isEmpty() && fixedStyle.isEmpty())
         fixedStyle = "solid";

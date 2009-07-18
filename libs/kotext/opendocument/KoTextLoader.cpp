@@ -245,7 +245,9 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                 if (localName == "table") {
                     cursor.insertText("\n");
                     cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 1);
-                    QTextTable *tbl = cursor.insertTable(1, 1);
+                    QTextTableFormat tableFormat;
+                    tableFormat.setWidth(300);
+                    QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
                     int rows = 0;
                     int columns = 0;
                     kDebug(32500) << "Table inserted";
@@ -290,7 +292,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 {
 /* make our own border data for now BEGIN*/
 if(currentRow==0)
-    borderData.setEdge(TableCellBorderData::Top,TableCellBorderData::Double, 1.0, KoColor(), 0.0);
+    borderData.setEdge(TableCellBorderData::Top,TableCellBorderData::Solid, 1.0, KoColor(), 0.0);
 borderData.setEdge(TableCellBorderData::Bottom,TableCellBorderData::Solid, 1.0, KoColor(), 0.0);
 borderData.setEdge(TableCellBorderData::Left,TableCellBorderData::Solid, 1.0, KoColor(), 0.0);
 if(currentCell == columns-1)

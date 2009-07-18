@@ -41,6 +41,23 @@ public:
 TableCellBorderData::TableCellBorderData()
         : d(new Private())
 {
+    // set thise so we don't have to on each load()
+    d->edges[Top].innerPen.setJoinStyle(Qt::MiterJoin);
+    d->edges[Top].innerPen.setCapStyle(Qt::FlatCap);
+    d->edges[Left].innerPen.setJoinStyle(Qt::MiterJoin);
+    d->edges[Left].innerPen.setCapStyle(Qt::FlatCap);
+    d->edges[Bottom].innerPen.setJoinStyle(Qt::MiterJoin);
+    d->edges[Bottom].innerPen.setCapStyle(Qt::FlatCap);
+    d->edges[Right].innerPen.setJoinStyle(Qt::MiterJoin);
+    d->edges[Right].innerPen.setCapStyle(Qt::FlatCap);
+    d->edges[Top].outerPen.setJoinStyle(Qt::MiterJoin);
+    d->edges[Top].outerPen.setCapStyle(Qt::FlatCap);
+    d->edges[Left].outerPen.setJoinStyle(Qt::MiterJoin);
+    d->edges[Left].outerPen.setCapStyle(Qt::FlatCap);
+    d->edges[Bottom].outerPen.setJoinStyle(Qt::MiterJoin);
+    d->edges[Bottom].outerPen.setCapStyle(Qt::FlatCap);
+    d->edges[Right].outerPen.setJoinStyle(Qt::MiterJoin);
+    d->edges[Right].outerPen.setCapStyle(Qt::FlatCap);
 }
 
 TableCellBorderData::~TableCellBorderData()
@@ -141,34 +158,37 @@ void TableCellBorderData::paint(QPainter &painter, const QRectF &bounds) const
 
 void TableCellBorderData::save(QTextTableCellFormat &format)
 {
-    format.setProperty(TopBorderOuterWidth, d->edges[Top].outerPen.widthF());
+    format.setProperty(TopBorderOuterPen, d->edges[Top].outerPen);
     format.setProperty(TopBorderSpacing,  d->edges[Top].distance);
-    format.setProperty(TopBorderInnerWidth, d->edges[Top].innerPen.widthF());
-    format.setProperty(LeftBorderOuterWidth, d->edges[Left].outerPen.widthF());
+    format.setProperty(TopBorderInnerPen, d->edges[Top].innerPen);
+    format.setProperty(LeftBorderOuterPen, d->edges[Left].outerPen);
     format.setProperty(LeftBorderSpacing,  d->edges[Left].distance);
-    format.setProperty(LeftBorderInnerWidth, d->edges[Left].innerPen.widthF());
-    format.setProperty(BottomBorderOuterWidth, d->edges[Bottom].outerPen.widthF());
+    format.setProperty(LeftBorderInnerPen, d->edges[Left].innerPen);
+    format.setProperty(BottomBorderOuterPen, d->edges[Bottom].outerPen);
     format.setProperty(BottomBorderSpacing,  d->edges[Bottom].distance);
-    format.setProperty(BottomBorderInnerWidth, d->edges[Bottom].innerPen.widthF());
-    format.setProperty(RightBorderOuterWidth, d->edges[Right].outerPen.widthF());
+    format.setProperty(BottomBorderInnerPen, d->edges[Bottom].innerPen);
+    format.setProperty(RightBorderOuterPen, d->edges[Right].outerPen);
     format.setProperty(RightBorderSpacing,  d->edges[Right].distance);
-    format.setProperty(RightBorderInnerWidth, d->edges[Right].innerPen.widthF());
+    format.setProperty(RightBorderInnerPen, d->edges[Right].innerPen);
 }
 
 void TableCellBorderData::load(const QTextTableCellFormat &format)
 {
-    d->edges[Top].outerPen.setWidthF(format.doubleProperty(TopBorderOuterWidth));
+    d->edges[Top].outerPen = format.penProperty(TopBorderOuterPen);
     d->edges[Top].distance = format.doubleProperty(TopBorderSpacing);
-    format.doubleProperty(TopBorderInnerWidth);//, d->edges[Top].innerPen.widthF());
-    format.doubleProperty(LeftBorderOuterWidth);//, d->edges[Left].outerPen.widthF());
+    d->edges[Top].innerPen = format.penProperty(TopBorderInnerPen);
+
+    d->edges[Left].outerPen = format.penProperty(LeftBorderOuterPen);
     d->edges[Left].distance = format.doubleProperty(LeftBorderSpacing);
-    format.doubleProperty(LeftBorderInnerWidth);//, d->edges[Left].innerPen.widthF());
-    format.doubleProperty(BottomBorderOuterWidth);//, d->edges[Bottom].outerPen.widthF());
+    d->edges[Left].innerPen = format.penProperty(LeftBorderInnerPen);
+
+    d->edges[Bottom].outerPen =format.penProperty(BottomBorderOuterPen);
     d->edges[Bottom].distance = format.doubleProperty(BottomBorderSpacing);
-    format.doubleProperty(BottomBorderInnerWidth);//, d->edges[Bottom].innerPen.widthF());
-    format.doubleProperty(RightBorderOuterWidth);//, d->edges[Right].outerPen.widthF());
+    d->edges[Bottom].innerPen = format.penProperty(BottomBorderInnerPen);
+
+    d->edges[Right].outerPen = format.penProperty(RightBorderOuterPen);
     d->edges[Right].distance = format.doubleProperty(RightBorderSpacing);
-    format.doubleProperty(RightBorderInnerWidth);//, d->edges[Right].innerPen.widthF());
+    d->edges[Right].innerPen = format.penProperty(RightBorderInnerPen);
 }
 
 QRectF TableCellBorderData::contentRect(const QRectF &boundingRect)

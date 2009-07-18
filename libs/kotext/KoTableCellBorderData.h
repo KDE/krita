@@ -30,18 +30,18 @@
 #include "kotext_export.h"
 
 enum KoTableCellProperty{
-    TopBorderOuterWidth = QTextFormat::UserProperty + 2000, ///< the top border outer width
+    TopBorderOuterPen = QTextFormat::UserProperty + 2000, ///< the top border pen
     TopBorderSpacing,          ///< the top border spacing between inner and outer border
-    TopBorderInnerWidth,       ///< the top border inner width
-    LeftBorderOuterWidth,      ///< the left border outer width
+    TopBorderInnerPen,       ///< the top border inner pen
+    LeftBorderOuterPen,      ///< the left border outer pen
     LeftBorderSpacing,         ///< the left border spacing between inner and outer border
-    LeftBorderInnerWidth,      ///< the left border inner width
-    BottomBorderOuterWidth,    ///< the bottom border outer width
+    LeftBorderInnerPen,      ///< the left border inner pen
+    BottomBorderOuterPen,    ///< the bottom border outer pen
     BottomBorderSpacing,       ///< the bottom border spacing between inner and outer border
-    BottomBorderInnerWidth,    ///< the bottom border inner width
-    RightBorderOuterWidth,     ///< the right border outer width
+    BottomBorderInnerPen,    ///< the bottom border inner pen
+    RightBorderOuterPen,     ///< the right border outer pen
     RightBorderSpacing,        ///< the right border spacing between inner and outer border
-    RightBorderInnerWidth,     ///< the right border inner width
+    RightBorderInnerPen,     ///< the right border inner pen
 };
 
 /**

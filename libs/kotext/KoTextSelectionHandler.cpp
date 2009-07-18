@@ -20,6 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KoTableCellBorderData.h"
 #include "KoTextSelectionHandler.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextShapeData.h"
@@ -42,6 +43,8 @@
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QTextList>
+#include <QTextTable>
+#include <QTextTableCell>
 
 #include <QTextFormat>
 
@@ -412,9 +415,32 @@ void KoTextSelectionHandler::insertTable(int rows, int columns)
 {
     QTextTableFormat tableFormat;
 
-    tableFormat.setWidth(400); // Only fixed width supported right now.
+    tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
+    tableFormat.setMargin(5);
 
-    d->caret->insertTable(rows, columns, tableFormat);
+    QTextTable *table = d->caret->insertTable(rows, columns, tableFormat);
+
+    // Format the cells a bit.
+    for (int row = 0; row < table->rows(); ++row) {
+        for (int col = 0; col < table->columns(); ++col) {
+            QTextTableCell cell = table->cellAt(row, col);
+            QTextTableCellFormat format;
+            format.setProperty(TopBorderOuterPen, QPen(Qt::black, 2));
+            format.setProperty(TopBorderSpacing,  2);
+            format.setProperty(TopBorderInnerPen, QPen(Qt::black, 2));
+            format.setProperty(LeftBorderOuterPen, QPen(Qt::black, 2));
+            format.setProperty(LeftBorderSpacing, 2);
+            format.setProperty(LeftBorderInnerPen, QPen(Qt::black, 2));
+            format.setProperty(BottomBorderOuterPen, QPen(Qt::black, 2));
+            format.setProperty(BottomBorderSpacing, 2);
+            format.setProperty(BottomBorderInnerPen, QPen(Qt::black, 2));
+            format.setProperty(RightBorderOuterPen, QPen(Qt::black, 2));
+            format.setProperty(RightBorderSpacing, 2);
+            format.setProperty(RightBorderInnerPen, QPen(Qt::black, 2));
+            format.setPadding(5);
+            cell.setFormat(format);
+        }
+    }
 }
 
 void KoTextSelectionHandler::insert(const QString &text)

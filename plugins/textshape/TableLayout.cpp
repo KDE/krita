@@ -18,13 +18,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoTextDocumentLayout.h"
-#include "KoShape.h"
-
 #include "TableLayout.h"
 #include "TableData.h"
 
 #include <KoTableCellBorderData.h>
+#include <KoTextDocumentLayout.h>
+#include <KoShape.h>
 
 #include <QTextDocument>
 #include <QTextTable>

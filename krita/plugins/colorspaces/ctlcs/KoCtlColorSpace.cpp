@@ -29,6 +29,7 @@
 #include <kis_debug.h>
 
 #include "config-openctl910.h"
+#include "KoCtlTemplatesRegistry.h"
 
 struct KoCtlColorSpace::Private
 {
@@ -94,7 +95,11 @@ KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlCol
             d->alphaCtlChannel = ctlchannel;
         }
     }
-    
+#ifdef HAVE_OPENCTL_910
+#if HAVE_OPENCTL_910
+    KoCtlTemplatesRegistry::instance();
+#endif
+#endif
 }
 
 KoCtlColorSpace::~KoCtlColorSpace()

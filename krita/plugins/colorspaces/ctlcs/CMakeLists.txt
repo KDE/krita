@@ -5,6 +5,7 @@ add_definitions(${OPENCTL_DEFINITIONS})
 add_subdirectory(ctlmodules)
 add_subdirectory(ctlprofiles)
 add_subdirectory(ctlcolorspaces)
+add_subdirectory(ctlcompositeops)
 
 # This is temporary, when we are close to koffice release (and when OpenCTL 0.9.10 is released), make this a hard requirement
 configure_file(config-openctl910.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openctl910.h )

@@ -1,0 +1,4 @@
+@operation(compose, inputs=2)
+{
+  @allchannels( @out = ( ( @in(0) - @in(1)) * @alpha + @in(1) ) / @unit; )
+}

@@ -126,7 +126,6 @@ qDebug() << "blah";
     m_tableData->m_columnWidths.fill(columnWidth);
     for (int col = 0; col < m_tableData->m_columnPositions.size(); ++col) {
         qreal columnPosition = (col * columnWidth) + tableFormat.leftMargin();
-        qDebug() << tableFormat.alignment();
         // handle table alignment.
         switch (tableFormat.alignment()) {
             case Qt::AlignRight:

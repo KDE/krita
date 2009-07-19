@@ -257,6 +257,7 @@ QRectF TableLayout::cellBoundingRect(int row, int column) const
 
 void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)
 {
+    qDebug() << "calc cell content height" << cell.row() << "," << cell.column();
     Q_ASSERT(isValid());
     Q_ASSERT(cell.isValid());
 
@@ -280,6 +281,7 @@ void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)
     Q_ASSERT(lastBlock.isValid());
     QTextLine bottomLine = lastBlock.layout()->lineAt(lastBlock.lineCount() - 1);
     Q_ASSERT(bottomLine.isValid());
+
 
     qreal contentHeight = (bottomLine.y() + bottomLine.height()) - topLine.y();
     Q_ASSERT(contentHeight >= 0); // sanity check.

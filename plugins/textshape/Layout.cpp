@@ -361,26 +361,39 @@ bool Layout::nextParag()
         QTextTableCell previousCell = table->cellAt(m_block.previous().position());
         QTextTableCell nextCell = table->cellAt(m_block.next().position());
 
-        /*
-         * The current cell is not the same as the one the previous block
-         * was in. This means the layout processed stepped over a cell
-         * boundary.
-         */
         if (m_tableCell != previousCell) {
             /*
-             * The cell the previous cell was in is valid, which means
-             * we just left a cell, so tell the table layout to calculate
-             * its height.
+             * The current cell is not the same as the one the previous block
+             * was in. This means the layout processed stepped out of or into
+             * a cell.
              */
-            if (previousCell.isValid()) {
+           if (previousCell.isValid()) {
+                /*
+                 * The previous cell was valid, which means we just left a cell,
+                 * so tell the table layout to calculate its height.
+                 */
+
+               // DEBUG
+                QTextFrame::iterator it = previousCell.begin();
+                while (!it.atEnd()) {
+                    QTextBlock block = it.currentBlock();
+                    qDebug() << "block [" << block.text() << "]";
+                    for (int i = 0; i < block.lineCount(); ++i) {
+                        QTextLine line = block.layout()->lineAt(i);
+                        qDebug() << "line rect" << line.rect();
+                    }
+                    ++it;
+                }
+                // END DEBUG
+
                 m_tableLayout.calculateCellContentHeight(previousCell);
             }
-            /*
-             * The current cell is valid, which means we just entered a
-             * cell, so adjust the Y position of the layout to the Y
-             * position of the cell content rectangle.
-             */
             if (m_tableCell.isValid()) {
+                /*
+                 * The current cell is valid, which means we just entered a
+                 * cell, so adjust the Y position of the layout to the Y
+                 * position of the cell content rectangle.
+                 */
                 m_y = m_tableLayout.position().y() + m_tableLayout.cellContentRect(m_tableCell).y();
             }
         }
@@ -401,6 +414,18 @@ bool Layout::nextParag()
                  * We left the last cell of the table, so tell the table layout
                  * to calculate its height.
                  */
+                // DEBUG
+                QTextFrame::iterator it = previousCell.begin();
+                while (!it.atEnd()) {
+                    QTextBlock block = it.currentBlock();
+                    qDebug() << "block [" << block.text() << "]";
+                    for (int i = 0; i < block.lineCount(); ++i) {
+                        QTextLine line = block.layout()->lineAt(i);
+                        qDebug() << "line rect" << line.rect();
+                    }
+                    ++it;
+                }
+                // END DEBUG
                 m_tableLayout.calculateCellContentHeight(previousCell);
             }
             /*

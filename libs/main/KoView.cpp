@@ -138,15 +138,6 @@ KoView::KoView(KoDocument *document, QWidget *parent)
 
     setFocusPolicy(Qt::StrongFocus);
 
-    setMouseTracking(true);
-
-    connect(d->m_doc, SIGNAL(beginOperation()),
-            this, SLOT(beginOperation()));
-
-    connect(d->m_doc, SIGNAL(endOperation()),
-            this, SLOT(endOperation()));
-
-
     setupGlobalActions();
 
     KStatusBar * sb = statusBar();

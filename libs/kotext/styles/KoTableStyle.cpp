@@ -317,7 +317,7 @@ void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &con
         setMasterPageName(masterPage);
     }
     context.styleStack().save();
-    QString family = element->attributeNS(KoXmlNS::style, "family", "paragraph");
+    QString family = element->attributeNS(KoXmlNS::style, "family", "table");
     context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
 
     context.styleStack().setTypeProperties("table");   // load all style attributes from "style:table-properties"

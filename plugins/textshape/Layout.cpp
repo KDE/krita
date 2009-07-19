@@ -401,12 +401,13 @@ bool Layout::nextParag()
                 m_tableLayout.calculateCellContentHeight(previousCell);
             }
             /*
-             * Perform a layout of the table, as all the table content should now
-             * have been laid out.
+             * Perform a layout of the table, and position the layout process after the
+             * table, as all the table content should now have been laid out.
              */
             m_tableLayout.layout();
             m_inTable = false; // Reset table state.
             m_tableCell = QTextTableCell(); // Set the current cell to an invalid one.
+            m_y = m_tableLayout.position().y() + m_tableLayout.boundingRect().height();
         }
     }
 

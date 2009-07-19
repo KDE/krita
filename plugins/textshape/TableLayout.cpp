@@ -152,7 +152,7 @@ void TableLayout::layoutFromRow(int fromRow)
 
     /*
      * Note that the cells that span more than one row or column are
-     * shared, so that QTextTable::cellAt() the combined cell, and
+     * shared, so that QTextTable::cellAt() returns the combined cell, and
      * that this combined cell has row()/column() corresponding to
      * the top left corner of the span. We rely on this in this code.
      */

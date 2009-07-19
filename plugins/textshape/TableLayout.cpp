@@ -272,9 +272,8 @@ void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)
     Q_ASSERT(cellIterator.currentFrame() == 0);
     QTextBlock lastBlock = cellIterator.currentBlock();
     Q_ASSERT(lastBlock.isValid());
-    QTextLine bottomLine = lastBlock.layout()->lineAt(lastBlock.lineCount() - 1);
+    QTextLine bottomLine = lastBlock.layout()->lineAt(lastBlock.layout()->lineCount() - 1);
     Q_ASSERT(bottomLine.isValid());
-
 
     qreal contentHeight = (bottomLine.y() + bottomLine.height()) - topLine.y();
     Q_ASSERT(contentHeight >= 0); // sanity check.

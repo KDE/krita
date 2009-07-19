@@ -79,6 +79,8 @@ Qt::Alignment KoText::alignmentFromString(const QString &align)
         alignment = Qt::AlignHCenter;
     else if (align == "justify")
         alignment = Qt::AlignJustify;
+    else if (align == "margins") // in tables this is effectively the same as justify
+        alignment = Qt::AlignJustify;
     return alignment;
 }
 

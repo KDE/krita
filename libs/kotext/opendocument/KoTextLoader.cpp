@@ -55,6 +55,7 @@
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoListStyle.h"
 #include "styles/KoListLevelProperties.h"
+#include "styles/KoTableStyle.h"
 #include "KoTextSharedLoadingData.h"
 #include "KoTextDocument.h"
 #include "KoTextDebug.h"
@@ -246,7 +247,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                     cursor.insertText("\n");
                     cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 1);
                     QTextTableFormat tableFormat;
-                    tableFormat.setWidth(300);
+                    KoTableStyle *tblStyle = d->textSharedData->tableStyle(tag.attributeNS(KoXmlNS::table, "style-name", "1"),false);
+                    tblStyle->applyStyle(tableFormat);
                     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
                     int rows = 0;
                     int columns = 0;

@@ -32,6 +32,7 @@ class KoOdfLoadingContext;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class KoListStyle;
+class KoTableStyle;
 class KoStyleManager;
 class KoShape;
 class KoShapeLoadingContext;
@@ -86,8 +87,21 @@ public:
 
     /**
      * Get the list style for the given name
+     *
+     * @param name The name of the style to get
+     * @param stylesDotXml If set the styles from styles.xml are use if unset sytles from content.xml are used.
+     * @return The list style for the given name or 0 if not found
      */
     KoListStyle *listStyle(const QString &name, bool stylesDotXml);
+
+    /**
+     * Get the table style for the given name
+     *
+     * @param name The name of the style to get
+     * @param stylesDotXml If set the styles from styles.xml are use if unset sytles from content.xml are used.
+     * @return The table style for the given name or 0 if not found
+     */
+    KoTableStyle *tableStyle(const QString &name, bool stylesDotXml);
 
 protected:
     /**
@@ -119,6 +133,11 @@ private:
     void addListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                        KoStyleManager *styleManager = 0);
     QList<QPair<QString, KoListStyle *> > loadListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
+
+    // helper functions for loading of table styles
+    void addTableStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
+                       KoStyleManager *styleManager = 0);
+    QList<QPair<QString, KoTableStyle *> > loadTableStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     void addOutlineStyle(KoOdfLoadingContext & context, KoStyleManager *styleManager);
 

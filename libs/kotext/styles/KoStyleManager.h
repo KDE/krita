@@ -2,6 +2,7 @@
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,6 +33,7 @@ class QTextDocument;
 class KoCharacterStyle;
 class KoParagraphStyle;
 class KoListStyle;
+class KoTableStyle;
 class KoXmlWriter;
 class ChangeFollower;
 class KoGenStyles;
@@ -79,6 +81,10 @@ public:
      * Add a new list style, automatically giving it a new styleId.
      */
     void add(KoListStyle *style);
+    /**
+     * Add a new table style, automatically giving it a new styleId.
+     */
+    void add(KoTableStyle *style);
 
     /**
      * Remove a style.
@@ -92,6 +98,10 @@ public:
      * Remove a list style.
      */
     void remove(KoListStyle *style);
+    /**
+     * Remove a table style.
+     */
+    void remove(KoTableStyle *style);
 
     /**
      * Add a document for which the styles will be applied.
@@ -128,6 +138,15 @@ public:
     KoListStyle *listStyle(int id) const;
 
     /**
+     * Return a tableStyle by its id.
+     * From documents you can retrieve the id out of each QTextTableFormat
+     * by requesting the KoTableStyle::StyleId property.
+     * @param id the unique Id to search for.
+     * @see KoTableStyle::styleId()
+     */
+    KoTableStyle *tableStyle(int id) const;
+
+    /**
      * Return the first characterStyle with the param user-visible-name.
      * Since the name does not have to be unique there can be multiple
      * styles registered with that name, only the first is returned
@@ -151,6 +170,15 @@ public:
     KoListStyle *listStyle(const QString &name) const;
 
     /**
+     * Return the first tableStyle with the param user-visible-name.
+     * Since the name does not have to be unique there can be multiple
+     * styles registered with that name, only the first is returned
+     * @param name the name of the style.
+     * @see tableStyle(id);
+     */
+    KoTableStyle *tableStyle(const QString &name) const;
+
+     /**
      * Return the default paragraph style that will always be present in each
      * document. You can alter the style, but you can never delete it.
      * The default is suppost to stay invisible to the user and its called
@@ -184,6 +212,9 @@ public:
     /// return all the listStyles registered.
     QList<KoListStyle*> listStyles() const;
 
+    /// return all the listStyles registered.
+    QList<KoTableStyle*> tableStyles() const;
+
     /// reimplemented
     virtual bool completeLoading(KoStore *store);
 
@@ -194,9 +225,11 @@ signals:
     void styleAdded(KoParagraphStyle*);
     void styleAdded(KoCharacterStyle*);
     void styleAdded(KoListStyle*);
+    void styleAdded(KoTableStyle*);
     void styleRemoved(KoParagraphStyle*);
     void styleRemoved(KoCharacterStyle*);
     void styleRemoved(KoListStyle*);
+    void styleRemoved(KoTableStyle*);
 
 public slots:
     /**
@@ -218,6 +251,13 @@ public slots:
      * Note that successive calls are aggregated.
      */
     void alteredStyle(const KoListStyle *style);
+
+    /**
+     * Slot that should be called whenever a style is changed. This will update
+     * all documents with the style.
+     * Note that successive calls are aggregated.
+     */
+    void alteredStyle(const KoTableStyle *style);
 
 private slots:
     void updateAlteredStyles(); // for the QTimer::singleshot

@@ -82,6 +82,7 @@ public:
         StyleAutoTableRow,           ///< style:table-row-properties as in odf 15.10 Table Row Formatting Properties (office:automatic-styles)
         StyleTableCell,              ///< style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:style)
         StyleAutoTableCell,          ///< style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:automatic-styles)
+        StyleTable,               ///< style:table-properties as in odf1.2 16.9 Table Formatting Properties (office:style)
         //   TODO differently
         StyleMaster                  ///< 14.4 Master Pages
         /// style:default-style as in odf 14.2 Default Styles

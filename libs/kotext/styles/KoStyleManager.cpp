@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +24,7 @@
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
 #include "KoListLevelProperties.h"
+#include "KoTableStyle.h"
 #include "ChangeFollower.h"
 #include "KoTextDocument.h"
 
@@ -47,6 +49,7 @@ public:
     QList<KoParagraphStyle*> paragStyles;
     QList<KoListStyle*> listStyles;
     QList<KoListStyle *> automaticListStyles;
+    QList<KoTableStyle *> tableStyles;
     QList<ChangeFollower*> documentUpdaterProxies;
 
     bool updateTriggered;
@@ -150,6 +153,16 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         listStyle->saveOdf(style);
         mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
     }
+
+    foreach(KoTableStyle *tableStyle, d->tableStyles) {
+        QString name(QString(QUrl::toPercentEncoding(tableStyle->name(), "", " ")).replace('%', '_'));
+        if (name.isEmpty())
+            name = "T"; //TODO is this correct?
+
+        KoGenStyle style(KoGenStyle::StyleTable);
+        tableStyle->saveOdf(style);
+        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+    }
 }
 
 void KoStyleManager::add(KoCharacterStyle *style)
@@ -197,6 +210,16 @@ void KoStyleManager::addAutomaticListStyle(KoListStyle *style)
     d->automaticListStyles.append(style);
 }
 
+void KoStyleManager::add(KoTableStyle *style)
+{
+    if (d->tableStyles.contains(style))
+        return;
+    style->setParent(this);
+    style->setStyleId(d->s_stylesNumber++);
+    d->tableStyles.append(style);
+    emit styleAdded(style);
+}
+
 void KoStyleManager::remove(KoCharacterStyle *style)
 {
     if (d->charStyles.removeAll(style))
@@ -212,6 +235,12 @@ void KoStyleManager::remove(KoParagraphStyle *style)
 void KoStyleManager::remove(KoListStyle *style)
 {
     if (d->listStyles.removeAll(style))
+        emit styleRemoved(style);
+}
+
+void KoStyleManager::remove(KoTableStyle *style)
+{
+    if (d->tableStyles.removeAll(style))
         emit styleRemoved(style);
 }
 
@@ -253,6 +282,19 @@ void KoStyleManager::alteredStyle(const KoCharacterStyle *style)
 }
 
 void KoStyleManager::alteredStyle(const KoListStyle *style)
+{
+    Q_ASSERT(style);
+    int id = style->styleId();
+    if (id <= 0) {
+        kWarning(32500) << "alteredStyle received from a non registered style!";
+        return;
+    }
+    if (!d->updateQueue.contains(id))
+        d->updateQueue.append(id);
+    requestFireUpdate();
+}
+
+void KoStyleManager::alteredStyle(const KoTableStyle *style)
 {
     Q_ASSERT(style);
     int id = style->styleId();
@@ -345,6 +387,16 @@ KoListStyle *KoStyleManager::listStyle(int id, bool *automatic) const
     return 0;
 }
 
+KoTableStyle *KoStyleManager::tableStyle(int id) const
+{
+    foreach(KoTableStyle *style, d->tableStyles) {
+        if (style->styleId() == id)
+            return style;
+    }
+    return 0;
+}
+
+
 KoCharacterStyle *KoStyleManager::characterStyle(const QString &name) const
 {
     foreach(KoCharacterStyle *style, d->charStyles) {
@@ -366,6 +418,15 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const
 KoListStyle *KoStyleManager::listStyle(const QString &name) const
 {
     foreach(KoListStyle *style, d->listStyles) {
+        if (style->name() == name)
+            return style;
+    }
+    return 0;
+}
+
+KoTableStyle *KoStyleManager::tableStyle(const QString &name) const
+{
+    foreach(KoTableStyle *style, d->tableStyles) {
         if (style->name() == name)
             return style;
     }
@@ -408,6 +469,11 @@ QList<KoParagraphStyle*> KoStyleManager::paragraphStyles() const
 QList<KoListStyle*> KoStyleManager::listStyles() const
 {
     return d->listStyles;
+}
+
+QList<KoTableStyle*> KoStyleManager::tableStyles() const
+{
+    return d->tableStyles;
 }
 
 bool KoStyleManager::completeLoading(KoStore *)

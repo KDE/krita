@@ -188,6 +188,8 @@ protected slots:
 
     void formatMasterPage();
 
+    void formatPageLayout();
+
     /// Change the current view mode to work on master pages
     void setMasterMode( bool master );
 
@@ -269,6 +271,7 @@ private:
     KAction * m_actionDeletePage;
 
     KAction *m_actionMasterPage;
+    KAction *m_actionPageLayout;
 
     KoRuler *m_horizontalRuler;
     KoRuler *m_verticalRuler;

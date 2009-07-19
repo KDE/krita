@@ -24,12 +24,14 @@
 
 #include <QObject>
 
+class KoPageLayout;
 class KoPAView;
 class KoPACanvas;
 class KoPAPageBase;
 class KoToolProxy;
 class KoShape;
 class KoViewConverter;
+class QPainter;
 class QPaintEvent;
 class QTabletEvent;
 class QMouseEvent;
@@ -37,6 +39,7 @@ class QKeyEvent;
 class QWheelEvent;
 class QCloseEvent;
 class QPointF;
+class QUndoCommand;
 
 class KOPAGEAPP_EXPORT KoPAViewMode : public QObject
 {
@@ -151,6 +154,10 @@ public:
      * @param shape the shape removed from the document
      */
     virtual void removeShape( KoShape *shape );
+
+    virtual const KoPageLayout &activePageLayout() const;
+
+    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent = 0 );
 
 protected:
     KoPACanvas * m_canvas;

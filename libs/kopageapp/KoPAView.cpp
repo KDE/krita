@@ -66,7 +66,9 @@
 #include "KoPAPrintJob.h"
 #include "commands/KoPAPageInsertCommand.h"
 #include "commands/KoPAChangeMasterPageCommand.h"
+#include "commands/KoPAChangePageLayoutCommand.h"
 #include "dialogs/KoPAMasterPageDialog.h"
+#include "dialogs/KoPAPageLayoutDialog.h"
 
 #include <kfiledialog.h>
 #include <kdebug.h>
@@ -277,6 +279,10 @@ void KoPAView::initActions()
     actionCollection()->addAction("format_masterpage", m_actionMasterPage);
     connect(m_actionMasterPage, SIGNAL(triggered()), this, SLOT(formatMasterPage()));
 
+    m_actionPageLayout = new KAction( i18n( "Page Layout..." ), this );
+    actionCollection()->addAction( "format_pagelayout", m_actionPageLayout );
+    connect( m_actionPageLayout, SIGNAL( triggered() ), this, SLOT( formatPageLayout() ) );
+
     actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
     actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
     actionCollection()->addAction(KStandardAction::FirstPage,  "page_first", this, SLOT(goToFirstPage()));
@@ -431,6 +437,21 @@ void KoPAView::formatMasterPage()
     }
 
     delete dialog;
+}
+
+void KoPAView::formatPageLayout()
+{
+    const KoPageLayout &pageLayout = m_viewMode->activePageLayout();
+
+    KoPAPageLayoutDialog dialog( m_doc, pageLayout, m_canvas );
+
+    if ( dialog.exec() == QDialog::Accepted ) {
+        QUndoCommand *command = new QUndoCommand( i18n( "Change page layout" ) );
+        m_viewMode->changePageLayout( dialog.pageLayout(), dialog.applyToDocument(), command );
+
+        m_canvas->addCommand( command );
+    }
+
 }
 
 void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )

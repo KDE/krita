@@ -30,6 +30,7 @@
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"
 #include "KoPAView.h"
+#include "commands/KoPAChangePageLayoutCommand.h"
 
 KoPAViewModeNormal::KoPAViewModeNormal( KoPAView * view, KoPACanvas * canvas )
 : KoPAViewMode( view, canvas )
@@ -63,6 +64,9 @@ void KoPAViewModeNormal::paintEvent( KoPACanvas *canvas, QPaintEvent* event )
     QRectF updateRect = converter->viewToDocument( clipRect );
     m_canvas->document()->gridData().paintGrid( painter, *converter, updateRect );
     m_canvas->document()->guidesData().paintGuides( painter, *converter, updateRect );
+
+    // paint the page margins
+    paintMargins( painter, *converter );
 
     painter.setRenderHint( QPainter::Antialiasing );
     m_toolProxy->paint( painter, *converter );
@@ -185,5 +189,29 @@ void KoPAViewModeNormal::removeShape( KoShape *shape )
             m_view->kopaCanvas()->masterShapeManager()->remove( shape );
         }
     }
+}
+
+void KoPAViewModeNormal::changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent )
+{
+    KoPAPageBase *page = m_view->activePage();
+    KoPAMasterPage *masterPage = dynamic_cast<KoPAMasterPage *>( page );
+    if ( !masterPage ) {
+        masterPage = static_cast<KoPAPage *>( page )->masterPage();
+    }
+
+    new KoPAChangePageLayoutCommand( m_canvas->document(), masterPage, pageLayout, applyToDocument, parent );
+}
+
+void KoPAViewModeNormal::paintMargins( QPainter &painter, const KoViewConverter &converter )
+{
+    KoPAPageBase *page = m_view->activePage();
+    KoPageLayout pl = page->pageLayout();
+
+    QSizeF pageSize = QSizeF( pl.width, pl.height );
+    QRectF marginRect( pl.left, pl.top, pageSize.width() - pl.left-pl.right, pageSize.height() - pl.top - pl.bottom );
+
+    QPen pen( Qt::gray );
+    painter.setPen( pen );
+    painter.drawRect( converter.documentToView( marginRect ) );
 }
 

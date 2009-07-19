@@ -40,9 +40,11 @@ set( kopageapp_LIB_SRCS
      commands/KoPAPageDeleteCommand.cpp
      commands/KoPAPageMoveCommand.cpp
      commands/KoPAChangeMasterPageCommand.cpp
+     commands/KoPAChangePageLayoutCommand.cpp
      commands/KoPADisplayMasterShapesCommand.cpp
      commands/KoPADisplayMasterBackgroundCommand.cpp
      dialogs/KoPAMasterPageDialog.cpp
+     dialogs/KoPAPageLayoutDialog.cpp
 )
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})

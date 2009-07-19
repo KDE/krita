@@ -20,8 +20,10 @@
 #include "KoPAViewMode.h"
 
 #include "KoPACanvas.h"
+#include "KoPAPageBase.h"
 #include "KoPAView.h"
 #include <KoCanvasController.h>
+#include <KoPageLayout.h>
 
 KoPAViewMode::KoPAViewMode( KoPAView * view, KoPACanvas * canvas )
 : m_canvas( canvas )
@@ -90,4 +92,17 @@ void KoPAViewMode::removeShape( KoShape *shape )
     Q_UNUSED( shape );
 }
 
+const KoPageLayout &KoPAViewMode::activePageLayout() const
+{
+    return m_view->activePage()->pageLayout();
+}
+
+void KoPAViewMode::changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent )
+{
+    Q_UNUSED( pageLayout );
+    Q_UNUSED( applyToDocument );
+    Q_UNUSED( parent );
+}
+
 #include "KoPAViewMode.moc"
+

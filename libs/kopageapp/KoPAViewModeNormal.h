@@ -60,7 +60,11 @@ public:
     
     void removeShape( KoShape *shape );
 
+    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent = 0 );
+
 private:
+    void paintMargins( QPainter &painter, const KoViewConverter &converter );
+
     /// if true it works on master pages, if false on normal pages
     bool m_masterMode;
     /// the page which was active before entering the master mode

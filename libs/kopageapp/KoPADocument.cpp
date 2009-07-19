@@ -511,8 +511,16 @@ void KoPADocument::updateViews(KoPAPageBase *page)
 
     foreach (KoView *view, views()) {
         KoPAView *paView = static_cast<KoPAView *>(view);
-        if (paView->activePage() == page)
-            paView->updateActivePage(page);
+        if ( paView->activePage() == page ) {
+            paView->updateActivePage( page );
+        }
+        else if ( dynamic_cast<KoPAMasterPage *>( page ) ) {
+            // if the page changed is a master page, we need to check whether it is the current page's master page
+            KoPAPage *activePage = dynamic_cast<KoPAPage *>( paView->activePage() );
+            if ( activePage && activePage->masterPage() == page ) {
+                paView->updateActivePage( activePage );
+            }
+        }
     }
 }
 

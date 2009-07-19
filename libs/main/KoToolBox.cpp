@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2008 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2005-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -153,13 +153,14 @@ private:
     QString m_name;
 };
 
-// Priorities for a specific columnwidth of a child depending on the width of the parent.
-static const int rowPriorities[][5] = {
-    { 1, 1, 1, 1, 1 },
-    { 2, 1, 1, 1, 1 },
-    { 3, 2, 1, 1, 1 },
-    { 2, 4, 1, 1, 1 },
-    { 3, 2, 4, 5, 1 }
+// Priorities for a specific columnwidth for section depending on the width of the docker.
+static const int rowPriorities[][6] = {
+    { 1, 1, 1, 1, 1 }, // values used when the docker has 1 column
+    { 2, 1, 1, 1, 1 }, // values used when the docker has 2 columns
+    { 3, 2, 1, 1, 1 }, // 3
+    { 2, 4, 1, 1, 1 }, // 4
+    { 5, 3, 2, 4, 1 }, // 5
+    { 6, 3, 2, 4, 1 }  // 6
 };
 
 class ToolBoxLayout : public QLayout
@@ -235,7 +236,7 @@ public:
             return 0;
         QSize iconSize = static_cast<Section*> (m_sections[0]->widget())->iconSize();
         const int maxColumns = qMax(1, width / iconSize.width());
-        const int prioIndex = qMin(5, maxColumns) - 1;
+        const int prioIndex = qMin(6, maxColumns) - 1;
         // kDebug() << "tryPlaceItems w:" << width << "prioIndex:" << prioIndex << "max:" << maxColumns;
 
         int x = 0;
@@ -277,8 +278,6 @@ public:
                 }
 
                 preferredColumnWidth = suggestedColumnWidth;
-                if (rows > 2 && rows < colsLeft) // then its pretty wide, wait for something better...
-                    continue;
                 break;
             }
             // kDebug() << " + preferredColumnWidth" << preferredColumnWidth;

@@ -333,30 +333,29 @@ bool Layout::nextParag()
     QTextCursor tableFinder(m_block);
     QTextTable *table = tableFinder.currentTable();
     if (table) {
-        // The current table is different from the one that is currently
-        // set on the table layout, which means we have entered a table.
-        if (table != m_tableLayout.table()) {
-             // Set the current table on the table layout and position the
-             // table layout at the current layout position, then perform
-             // an initial layout of the table.
+        // Save the current table cell.
+        m_tableCell = table->cellAt(m_block.position());
+
+        // previousCell is the cell that the previous blocks is in. It can be
+        // the same as the current cell, or it can be different, or it can be
+        // invalid (if the previous cell is not in a table at all).
+        QTextTableCell previousCell = table->cellAt(m_block.previous().position());
+
+        if (!previousCell.isValid()) {
+            // The previous cell is invalid, which means we have entered a
+            // table, so set the current table on the table layout and position
+            // the table layout at the current layout position, then perform
+            // an initial layout of the table.
             m_tableLayout.setTable(table);
             m_tableLayout.setPosition(QPointF(x(), y())); // FIXME?
             m_tableLayout.layout();
         }
 
-        // Save the current table cell.
-        m_tableCell = table->cellAt(m_block.position());
-
-         // previousCell is the cell that the previous blocks is in. It can be
-         // the same as the current cell, or it can be different, or it can be
-         // invalid (if the previous cell is not in a table at all).
-        QTextTableCell previousCell = table->cellAt(m_block.previous().position());
-
         if (m_tableCell != previousCell) {
-             // The current cell is not the same as the one the previous block
-             // was in. This means the layout processed stepped out of or into
-             // a cell.
-           if (previousCell.isValid()) {
+            // The current cell is not the same as the one the previous block
+            // was in. This means the layout processed stepped out of or into
+            // a cell.
+            if (previousCell.isValid()) {
                 // The previous cell was valid, which means we just left a cell,
                 // so tell the table layout to calculate its height.
                 m_tableLayout.calculateCellContentHeight(previousCell);

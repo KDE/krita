@@ -41,6 +41,18 @@ private slots:
     void testTableMargin();
     /// Test table cell styles.
     void testCellStyles();
+    /// Test cell column spanning.
+    void testCellColumnSpanning();
+    /// Test cell row spanning.
+    void testCellRowSpanning();
+    /// Test cell row and column spanning.
+    void testCellRowAndColumnSpanning();
+    /*
+     * Test that the height of the right row is updated when the span
+     * area of a cell with row spanning gets its content changed from
+     * a text insertion.
+     */
+    void testCellRowSpanningCellHeight();
 
 private:
     QTextDocument *m_doc;

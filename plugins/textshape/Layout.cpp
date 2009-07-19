@@ -370,19 +370,6 @@ bool Layout::nextParag()
                  * so tell the table layout to calculate its height.
                  */
 
-               // DEBUG
-                QTextFrame::iterator it = previousCell.begin();
-                while (!it.atEnd()) {
-                    QTextBlock block = it.currentBlock();
-                    qDebug() << "block [" << block.text() << "]";
-                    for (int i = 0; i < block.lineCount(); ++i) {
-                        QTextLine line = block.layout()->lineAt(i);
-                        qDebug() << "line rect" << line.rect();
-                    }
-                    ++it;
-                }
-                // END DEBUG
-
                 m_tableLayout.calculateCellContentHeight(previousCell);
             }
             if (m_tableCell.isValid()) {
@@ -411,18 +398,6 @@ bool Layout::nextParag()
                  * We left the last cell of the table, so tell the table layout
                  * to calculate its height.
                  */
-                // DEBUG
-                QTextFrame::iterator it = previousCell.begin();
-                while (!it.atEnd()) {
-                    QTextBlock block = it.currentBlock();
-                    qDebug() << "block [" << block.text() << "]";
-                    for (int i = 0; i < block.lineCount(); ++i) {
-                        QTextLine line = block.layout()->lineAt(i);
-                        qDebug() << "line rect" << line.rect();
-                    }
-                    ++it;
-                }
-                // END DEBUG
                 m_tableLayout.calculateCellContentHeight(previousCell);
             }
             /*

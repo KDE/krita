@@ -355,6 +355,119 @@ void TestTableLayout::testCellStyles()
     cleanupTest();
 }
 
+void TestTableLayout::testCellColumnSpanning()
+{
+    QStringList cellTexts;
+    QTextTableFormat format;
+    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    format.setWidth(QTextLength(QTextLength::FixedLength, 200));
+    format.setBorder(0);
+    format.setPadding(0);
+    format.setMargin(0);
+    format.setCellSpacing(0);
+    format.setCellPadding(0);
+
+    initTest(format, cellTexts, 2, 2);
+
+
+    QTextTableCell cell1 = m_table->cellAt(0, 0);
+    m_table->mergeCells(0, 0, 1, 2);
+    m_layout->layout();
+    cell1 = m_table->cellAt(0, 0);
+
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(0, 0, 200, 16));
+
+    cleanupTest();
+}
+
+void TestTableLayout::testCellRowSpanning()
+{
+    QStringList cellTexts;
+    QTextTableFormat format;
+    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    format.setWidth(QTextLength(QTextLength::FixedLength, 200));
+    format.setBorder(0);
+    format.setPadding(0);
+    format.setMargin(0);
+    format.setCellSpacing(0);
+    format.setCellPadding(0);
+
+    initTest(format, cellTexts, 2, 2);
+
+    QTextTableCell cell1 = m_table->cellAt(0, 0);
+    m_table->mergeCells(0, 0, 2, 1);
+
+    m_layout->layout();
+    cell1 = m_table->cellAt(0, 0);
+
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(0, 0, 100, 32));
+
+    cleanupTest();
+}
+
+void TestTableLayout::testCellRowAndColumnSpanning()
+{
+    QStringList cellTexts;
+    QTextTableFormat format;
+    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    format.setWidth(QTextLength(QTextLength::FixedLength, 300));
+    format.setBorder(0);
+    format.setPadding(0);
+    format.setMargin(0);
+    format.setCellSpacing(0);
+    format.setCellPadding(0);
+
+    initTest(format, cellTexts, 3, 3);
+
+    QTextTableCell cell1 = m_table->cellAt(0, 0);
+    m_table->mergeCells(0, 0, 2, 2);
+
+    m_layout->layout();
+    cell1 = m_table->cellAt(0, 0);
+
+    QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell1), QRectF(0, 0, 200, 32));
+
+    cleanupTest();
+}
+
+void TestTableLayout::testCellRowSpanningCellHeight()
+{
+    QStringList cellTexts;
+    // Five blocks in top left cell.
+    cellTexts.append("A\nB\nC\nD\nE");
+    QTextTableFormat format;
+    format.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    format.setWidth(QTextLength(QTextLength::FixedLength, 200));
+    format.setBorder(0);
+    format.setPadding(0);
+    format.setMargin(0);
+    format.setCellSpacing(0);
+    format.setCellPadding(0);
+
+    initTest(format, cellTexts, 2, 2);
+
+    // Let Cell 0, 0 span 2 rows.
+    m_table->mergeCells(0, 0, 2, 1);
+
+    m_layout->layout();
+
+    QTextTableCell cell4 = m_table->cellAt(1, 1);
+
+    /*
+     * +--------------+--------------+
+     * | Height: 73.6 | Height: 16   |
+     * |              +--------------+
+     * |              | Height:      |
+     * |              |  4 * 14.4    |
+     * |              |              |
+     * |              |              |
+     * +--------------+--------------+
+     */
+    QVERIFY((m_textLayout->m_tableLayout.cellBoundingRect(cell4).height() - (4 * 14.4)) < 0.125);
+
+    cleanupTest();
+}
+
 QTEST_KDEMAIN(TestTableLayout, GUI)
 
 #include <TestTableLayout.moc>

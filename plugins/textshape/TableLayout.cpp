@@ -150,20 +150,46 @@ void TableLayout::layoutFromRow(int fromRow)
 
     m_tableData->m_height = m_tableData->m_rowPositions[fromRow] - tableFormat.topMargin();
 
+    /*
+     * Note that the cells that span more than one row or column are
+     * shared, so that QTextTable::cellAt() the combined cell, and
+     * that this combined cell has row()/column() corresponding to
+     * the top left corner of the span. We rely on this in this code.
+     */
     for (int row = fromRow; row < m_table->rows(); ++row) {
         // adjust row height to the largest cell height in the row.
         qreal rowHeight = 0;
-        for (int col = 0; col < m_table->columns(); ++col) {
+        int col = 0;
+        while (col < m_table->columns()) {
             // get the cell border data.
             QTextTableCell cell = m_table->cellAt(row, col);
             QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-            TableCellBorderData cellBorderData;
-            cellBorderData.load(cellFormat);
+            if (row == cell.row() + cell.rowSpan() - 1) {
+                /*
+                 * we are only in cells that vertically ends in this row.
+                 * we only want these cells because cells that don't end in this
+                 * row should not affect the row height.
+                 */
+                TableCellBorderData cellBorderData;
+                cellBorderData.load(cellFormat);
 
-            // passing content rect to boundingRect(), we're only interested in height.
-            QRectF heightRect(1, 1, 1, m_tableData->m_contentHeights.at(row).at(col));
+                // passing content rect to boundingRect() (we're only interested in height).
+                QRectF heightRect(1, 1, 1, m_tableData->m_contentHeights.at(cell.row()).at(cell.column()));
+                qDebug() << "row" << row << " col " << col << " height" << heightRect;
+                qDebug() << "cell.row()" << cell.row();
 
-            rowHeight = qMax(rowHeight, cellBorderData.boundingRect(heightRect).height());
+                /*
+                 * we need to calculate the height which this cell contributes to this
+                 * row, so once we have the height of the entire cell, including borders
+                 * and padding, we can now subtract the height of the rows above.
+                 */
+                qreal cellHeight = cellBorderData.boundingRect(heightRect).height();
+                for (int r = row - 1; r >= cell.row(); --r) {
+                    cellHeight -= m_tableData->m_rowHeights[r];
+                }
+                rowHeight = qMax(rowHeight, cellHeight);
+            }
+            col += cell.columnSpan();
         }
         m_tableData->m_rowHeights[row] = rowHeight;
 
@@ -193,9 +219,12 @@ void TableLayout::draw(QPainter *painter) const
     for (int row = 0; row < m_table->rows(); ++row) {
         for (int column = 0; column < m_table->columns(); ++column) {
             QTextTableCell tableCell = m_table->cellAt(row, column);
-            TableCellBorderData borderData;
-            borderData.load(tableCell.format().toTableCellFormat());
-            borderData.paint(*painter, cellBoundingRect(tableCell));
+            if (row == tableCell.row() && column == tableCell.column()) {
+                // This is an actual cell we want to draw, and not a covered one.
+                TableCellBorderData borderData;
+                borderData.load(tableCell.format().toTableCellFormat());
+                borderData.paint(*painter, cellBoundingRect(tableCell));
+            }
         }
     }
     painter->restore();
@@ -243,14 +272,24 @@ QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell) const
     Q_ASSERT(cell.row() < m_tableData->m_rowPositions.size());
     Q_ASSERT(cell.column() < m_tableData->m_columnPositions.size());
 
+    qreal width = 0;
+    qreal height = 0;
+
+    for (int c = 0; c < cell.columnSpan(); ++c) {
+        width += m_tableData->m_columnWidths[cell.column() + c];
+    }
+
+    for (int r = 0; r < cell.rowSpan(); ++r) {
+        height += m_tableData->m_rowHeights[cell.row() + r];
+    }
+
     return QRectF(
             m_tableData->m_columnPositions[cell.column()], m_tableData->m_rowPositions[cell.row()],
-            m_tableData->m_columnWidths[cell.column()], m_tableData->m_rowHeights[cell.row()]);
+            width, height);
 }
 
 void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)
 {
-    qDebug() << "calc cell content height" << cell.row() << "," << cell.column();
     Q_ASSERT(isValid());
     Q_ASSERT(cell.isValid());
 

@@ -348,8 +348,8 @@ KoToolBox::KoToolBox(KoCanvasController *canvas)
     // Update visibility of buttons
     setButtonsVisible(canvas, QList<QString>());
 
-    connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*, int)),
-            this, SLOT(setActiveTool(const KoCanvasController*, int)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)),
+            this, SLOT(setActiveTool(KoCanvasController*, int)));
     connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
             this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(const KoCanvasController*, QList<QString>)),
@@ -379,7 +379,7 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
         d->buttonGroup->addButton(button, buttonGroupId);
 }
 
-void KoToolBox::setActiveTool(const KoCanvasController *canvas, int id)
+void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
 {
     if (canvas->canvas() != d->canvas)
         return;

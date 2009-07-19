@@ -75,7 +75,7 @@ public slots:
      * @param canvas the currently active canvas.
      * @param id an id to identify the button to activate.
      */
-    void setActiveTool(const KoCanvasController *canvas, int id);
+    void setActiveTool(KoCanvasController *canvas, int id);
 
     /**
      * Show only the dynamic buttons that have a code from parameter codes.

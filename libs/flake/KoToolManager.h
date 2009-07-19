@@ -193,7 +193,7 @@ signals:
      * @param canvas the currently active canvas.
      * @param uniqueToolId a random but unique code for the new tool.
      */
-    void changedTool(const KoCanvasController *canvas, int uniqueToolId);
+    void changedTool(KoCanvasController *canvas, int uniqueToolId);
 
     /**
      * Emitted after the selection changed to state which unique shape-types are now

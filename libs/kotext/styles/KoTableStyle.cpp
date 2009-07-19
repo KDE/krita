@@ -335,6 +335,34 @@ void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &con
     context.styleStack().restore();
 }
 
+Qt::Alignment KoTableStyle::alignmentFromString(const QString &align)
+{
+    Qt::Alignment alignment = Qt::AlignLeft;
+    if (align == "left")
+        alignment = Qt::AlignLeft;
+    else if (align == "right")
+        alignment = Qt::AlignRight;
+    else if (align == "center")
+        alignment = Qt::AlignHCenter;
+    else if (align == "margins") // in tables this is effectively the same as justify
+        alignment = Qt::AlignJustify;
+    return alignment;
+}
+
+QString KoTableStyle::alignmentToString(Qt::Alignment alignment)
+{
+    QString align = "";
+    if (alignment == Qt::AlignLeft)
+        align = "left";
+    else if (alignment == Qt::AlignRight)
+        align = "right";
+    else if (alignment == Qt::AlignHCenter)
+        align = "center";
+    else if (alignment == Qt::AlignJustify)
+        align = "margins";
+    return align;
+}
+
 void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {     // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
@@ -362,7 +390,7 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
 
     // Alignment
     if (styleStack.hasProperty(KoXmlNS::table, "align")) {
-        setAlignment(KoText::alignmentFromString(styleStack.property(KoXmlNS::table, "align")));
+        setAlignment(alignmentFromString(styleStack.property(KoXmlNS::table, "align")));
     }
 
     // Margin

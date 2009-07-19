@@ -201,6 +201,8 @@ private:
      * OpenDocument format.
      */
     void loadOdfProperties(KoStyleStack &styleStack);
+    Qt::Alignment alignmentFromString(const QString &align);
+    QString alignmentToString(Qt::Alignment alignment);
     qreal propertyDouble(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;

@@ -125,7 +125,22 @@ qDebug() << "blah";
     qreal columnWidth = m_tableData->m_width / m_table->columns();
     m_tableData->m_columnWidths.fill(columnWidth);
     for (int col = 0; col < m_tableData->m_columnPositions.size(); ++col) {
-        m_tableData->m_columnPositions[col] = (col * columnWidth) + tableFormat.leftMargin();
+        qreal columnPosition = (col * columnWidth) + tableFormat.leftMargin();
+        qDebug() << tableFormat.alignment();
+        // handle table alignment.
+        switch (tableFormat.alignment()) {
+            case Qt::AlignRight:
+                // Table is right-aligned, so add all of the remaining space.
+                columnPosition += m_parentLayout->shape->size().width() - m_tableData->m_width;
+                break;
+            case Qt::AlignHCenter:
+                // Table is centered, so add half of the remaining space.
+                columnPosition += (m_parentLayout->shape->size().width() - m_tableData->m_width) / 2;
+                break;
+            default:
+                break;
+        }
+        m_tableData->m_columnPositions[col] = columnPosition;
     }
 
     layoutFromRow(0);

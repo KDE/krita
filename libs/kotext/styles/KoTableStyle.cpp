@@ -316,9 +316,13 @@ void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &con
     if (! masterPage.isNull()) {
         setMasterPageName(masterPage);
     }
+    context.styleStack().save();
+    QString family = element->attributeNS(KoXmlNS::style, "family", "paragraph");
+    context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
 
     context.styleStack().setTypeProperties("table");   // load all style attributes from "style:table-properties"
     loadOdfProperties(context.styleStack());   // load the KoTableStyle from the stylestack
+    context.styleStack().restore();
 }
 
 void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
@@ -341,7 +345,6 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
     // Width
     if (styleStack.hasProperty(KoXmlNS::style, "width")) {
         setWidth(QTextLength(QTextLength::FixedLength, KoUnit::parseValue(styleStack.property(KoXmlNS::style, "width"))));
-qDebug() << "Found properties";
     }
     if (styleStack.hasProperty(KoXmlNS::style, "rel-width")) {
         setWidth(QTextLength(QTextLength::PercentageLength, KoUnit::parseValue(styleStack.property(KoXmlNS::style, "rel-width"))));

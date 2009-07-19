@@ -333,16 +333,12 @@ bool Layout::nextParag()
     QTextCursor tableFinder(m_block);
     QTextTable *table = tableFinder.currentTable();
     if (table) {
-        /*
-         * The current table is different from the one that is currently
-         * set on the table layout, which means we have entered a table.
-         */
+        // The current table is different from the one that is currently
+        // set on the table layout, which means we have entered a table.
         if (table != m_tableLayout.table()) {
-            /*
-             * Set the current table on the table layout and position the
-             * table layout at the current layout position, then perform
-             * an initial layout of the table.
-             */
+             // Set the current table on the table layout and position the
+             // table layout at the current layout position, then perform
+             // an initial layout of the table.
             m_tableLayout.setTable(table);
             m_tableLayout.setPosition(QPointF(x(), y())); // FIXME?
             m_tableLayout.layout();
@@ -351,59 +347,43 @@ bool Layout::nextParag()
         // Save the current table cell.
         m_tableCell = table->cellAt(m_block.position());
 
-        /*
-         * previousCell is the cell that the previous blocks is in. It can be
-         * the same as the current cell, or it can be different, or it can be
-         * invalid (if the previous cell is not in a table at all).
-         */
+         // previousCell is the cell that the previous blocks is in. It can be
+         // the same as the current cell, or it can be different, or it can be
+         // invalid (if the previous cell is not in a table at all).
         QTextTableCell previousCell = table->cellAt(m_block.previous().position());
 
         if (m_tableCell != previousCell) {
-            /*
-             * The current cell is not the same as the one the previous block
-             * was in. This means the layout processed stepped out of or into
-             * a cell.
-             */
+             // The current cell is not the same as the one the previous block
+             // was in. This means the layout processed stepped out of or into
+             // a cell.
            if (previousCell.isValid()) {
-                /*
-                 * The previous cell was valid, which means we just left a cell,
-                 * so tell the table layout to calculate its height.
-                 */
-
+                // The previous cell was valid, which means we just left a cell,
+                // so tell the table layout to calculate its height.
                 m_tableLayout.calculateCellContentHeight(previousCell);
             }
             if (m_tableCell.isValid()) {
-                /*
-                 * The current cell is valid, which means we just entered a
-                 * cell, so adjust the Y position of the layout to the Y
-                 * position of the cell content rectangle.
-                 */
+                // The current cell is valid, which means we just entered a
+                // cell, so adjust the Y position of the layout to the Y
+                // position of the cell content rectangle.
                 m_y = m_tableLayout.position().y() + m_tableLayout.cellContentRect(m_tableCell).y();
             }
         }
         m_inTable = true; // We are inside a table.
     } else { // We are not inside a table, but we have to check if we just left one.
-
         QTextCursor lookBehind(m_block.previous());
         QTextTable *previousTable = lookBehind.currentTable();
 
-        /*
-         * We just left a table, so make sure the table layout updates
-         * the height of the last cell in it, and reset the table state.
-         */
+        // We just left a table, so make sure the table layout updates
+        // the height of the last cell in it, and reset the table state.
         if (previousTable) {
             QTextTableCell previousCell = previousTable->cellAt(m_block.previous().position());
             if (previousCell.isValid()) {
-                /*
-                 * We left the last cell of the table, so tell the table layout
-                 * to calculate its height.
-                 */
+                //We left the last cell of the table, so tell the table layout
+                //to calculate its height.
                 m_tableLayout.calculateCellContentHeight(previousCell);
             }
-            /*
-             * Perform a layout of the table, and position the layout process after the
-             * table, as all the table content should now have been laid out.
-             */
+            // Perform a layout of the table, and position the layout process after the
+            // table, as all the table content should now have been laid out.
             m_tableLayout.layout();
             m_inTable = false; // Reset table state.
             m_tableCell = QTextTableCell(); // Set the current cell to an invalid one.

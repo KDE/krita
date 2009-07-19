@@ -52,11 +52,11 @@ public:
     enum Property {
         StyleId = QTextTableFormat::UserProperty + 1,
         // Linespacing properties
-        BreakBefore,    ///< If true, insert a frame break before this paragraph
-        BreakAfter,     ///< If true, insert a frame break after this paragraph
-
-        MasterPageName,         ///< Optional name of the master-page
-
+        KeepWithNext,    ///< If true, keep table with next paragraph
+        BreakBefore,    ///< If true, insert a frame break before this table
+        BreakAfter,     ///< If true, insert a frame break after this table
+        MayBreakBetweenRows,     ///< If true, then the table is allowed to break between rows
+        MasterPageName         ///< Optional name of the master-page
     };
 
     /// Constructor
@@ -74,6 +74,12 @@ public:
 
     /// See similar named method on QTextFrameFormat
     void setWidth(const QTextLength &width);
+
+    /// The property specifies if the table should be kept together with the next paragraph
+    void setKeepWithNext(bool keep);
+
+    /// The property specifies if the table should allow it to be break. Break within a row is specified per row
+    void setMayBreakBetweenRows(bool allow);
 
     /// See similar named method on QTextBlockFormat
     void setBackground(const QBrush &brush);

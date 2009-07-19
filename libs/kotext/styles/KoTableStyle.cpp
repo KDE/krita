@@ -160,6 +160,42 @@ void KoTableStyle::applyStyle(QTextTableFormat &format) const
     }
 }
 
+void KoTableStyle::setWidth(const QTextLength &width)
+{
+    d->setProperty(QTextFormat::FrameWidth, width);
+}
+
+void KoTableStyle::setKeepWithNext(bool keep)
+{
+    d->setProperty(KeepWithNext, keep);
+}
+
+void KoTableStyle::setMayBreakBetweenRows(bool allow)
+{
+    d->setProperty(MayBreakBetweenRows, allow);
+}
+
+void KoTableStyle::setBackground(const QBrush &brush)
+{
+    d->setProperty(QTextFormat::BackgroundBrush, brush);
+}
+
+void KoTableStyle::clearBackground()
+{
+    d->stylesPrivate.remove(QTextCharFormat::BackgroundBrush);
+}
+
+QBrush KoTableStyle::background() const
+{
+    QVariant variant = d->stylesPrivate.value(QTextFormat::BackgroundBrush);
+
+    if (variant.isNull()) {
+        QBrush brush;
+        return brush;
+    }
+    return qvariant_cast<QBrush>(variant);
+}
+
 void KoTableStyle::setBreakBefore(bool on)
 {
     setProperty(BreakBefore, on);
@@ -278,32 +314,6 @@ void KoTableStyle::setMasterPageName(const QString &name)
     setProperty(MasterPageName, name);
 }
 
-void KoTableStyle::setWidth(const QTextLength &width)
-{
-    d->setProperty(QTextFormat::FrameWidth, width);
-}
-
-void KoTableStyle::setBackground(const QBrush &brush)
-{
-    d->setProperty(QTextFormat::BackgroundBrush, brush);
-}
-
-void KoTableStyle::clearBackground()
-{
-    d->stylesPrivate.remove(QTextCharFormat::BackgroundBrush);
-}
-
-QBrush KoTableStyle::background() const
-{
-    QVariant variant = d->stylesPrivate.value(QTextFormat::BackgroundBrush);
-
-    if (variant.isNull()) {
-        QBrush brush;
-        return brush;
-    }
-    return qvariant_cast<QBrush>(variant);
-}
-
 void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
 {
     if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
@@ -372,19 +382,15 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
         hasMarginRight = true;
     }
 
-    // Page breaking
-#if 0
-    int pageBreaking = 0;
+    // keep table with next paragraph? 
     if (styleStack.hasProperty(KoXmlNS::fo, "keep-with-next")) {
         // OASIS spec says it's "auto"/"always", not a boolean.
         QString val = styleStack.property(KoXmlNS::fo, "keep-with-next");
         if (val == "true" || val == "always")
-            pageBreaking |= KoParagLayout::KeepWithNext;
+            setKeepWithNext(true);
     }
-    layout.pageBreaking = pageBreaking;
-#else
 
-    // The fo:break-before and fo:break-after attributes insert a page or column break before or after a paragraph.
+    // The fo:break-before and fo:break-after attributes insert a page or column break before or after a table.
     if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
         if (styleStack.property(KoXmlNS::fo, "break-before") != "auto")
             setBreakBefore(true);
@@ -394,7 +400,11 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
             setBreakAfter(true);
     }
 
-#endif
+    if (styleStack.hasProperty(KoXmlNS::fo, "may-break-between-rows")) {
+        if (styleStack.property(KoXmlNS::fo, "may-break-between-rows") == "true")
+            setMayBreakBetweenRows(true);
+    }
+
 
     // The fo:background-color attribute specifies the background color of a paragraph.
     if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {

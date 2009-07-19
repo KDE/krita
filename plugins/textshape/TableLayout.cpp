@@ -214,6 +214,7 @@ void TableLayout::draw(QPainter *painter) const
     // TODO.
     QRectF tableRect = boundingRect();
     painter->save();
+    painter->fillRect(tableRect,m_table->format().background());
     painter->translate(tableRect.topLeft());
 
     for (int row = 0; row < m_table->rows(); ++row) {

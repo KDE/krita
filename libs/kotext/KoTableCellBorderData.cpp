@@ -105,55 +105,63 @@ void TableCellBorderData::paint(QPainter &painter, const QRectF &bounds) const
         QPen pen = d->edges[Top].outerPen;
 
         painter.setPen(pen);
-        const qreal t = bounds.top() + pen.widthF() / 2.0;
-        painter.drawLine(QLineF(bounds.left(), t, bounds.right(), t));
+        const qreal hpw = pen.widthF() / 2.0; // half pen width
+        const qreal t = bounds.top() + hpw;
         innerBounds.setTop(bounds.top() + d->edges[Top].spacing + pen.widthF());
+        painter.drawLine(QLineF(bounds.left() + hpw, t, bounds.right() - hpw, t));
     }
     if (d->edges[Bottom].outerPen.widthF() > 0) {
         QPen pen = d->edges[Bottom].outerPen;
         painter.setPen(pen);
-        const qreal b = bounds.bottom() - pen.widthF() / 2.0;
+        const qreal hpw = pen.widthF() / 2.0; // half pen width
+        const qreal b = bounds.bottom() - hpw;
         innerBounds.setBottom(bounds.bottom() - d->edges[Bottom].spacing - pen.widthF());
-        painter.drawLine(QLineF(bounds.left(), b, bounds.right(), b));
+        painter.drawLine(QLineF(bounds.left() + hpw, b, bounds.right() - hpw, b));
     }
     if (d->edges[Left].outerPen.widthF() > 0) {
         QPen pen = d->edges[Left].outerPen;
         painter.setPen(pen);
-        const qreal l = bounds.left() + pen.widthF() / 2.0;
+        const qreal hpw = pen.widthF() / 2.0; // half pen width
+        const qreal l = bounds.left() + hpw;
         innerBounds.setLeft(bounds.left() + d->edges[Left].spacing + pen.widthF());
-        painter.drawLine(QLineF(l, bounds.top(), l, bounds.bottom()));
+        painter.drawLine(QLineF(l, bounds.top() + hpw, l, bounds.bottom() - hpw));
     }
     if (d->edges[Right].outerPen.widthF() > 0) {
         QPen pen = d->edges[Right].outerPen;
         painter.setPen(pen);
-        const qreal r = bounds.right() - pen.widthF() / 2.0;
+        const qreal hpw = pen.widthF() / 2.0; // half pen width
+        const qreal r = bounds.right() - hpw;
         innerBounds.setRight(bounds.right() - d->edges[Right].spacing - pen.widthF());
-        painter.drawLine(QLineF(r, bounds.top(), r, bounds.bottom()));
+        painter.drawLine(QLineF(r, bounds.top() + hpw, r, bounds.bottom() - hpw));
     }
     // inner lines
     if (d->edges[Top].innerPen.widthF() > 0) {
         QPen pen = d->edges[Top].innerPen;
         painter.setPen(pen);
-        const qreal t = innerBounds.top() + pen.widthF() / 2.0;
-        painter.drawLine(QLineF(innerBounds.left(), t, innerBounds.right(), t));
+        const qreal hpw = pen.widthF() / 2.0; // half pen width
+        const qreal t = innerBounds.top() + hpw;
+        painter.drawLine(QLineF(innerBounds.left() + hpw, t, innerBounds.right() - hpw, t));
     }
     if (d->edges[Bottom].innerPen.widthF() > 0) {
         QPen pen = d->edges[Bottom].innerPen;
         painter.setPen(pen);
-        const qreal b = innerBounds.bottom() - pen.widthF() / 2.0;
-        painter.drawLine(QLineF(innerBounds.left(), b, innerBounds.right(), b));
+        const qreal hpw = pen.widthF() / 2.0; // half pen width
+        const qreal b = innerBounds.bottom() - hpw;
+        painter.drawLine(QLineF(innerBounds.left() + hpw, b, innerBounds.right() - hpw, b));
     }
     if (d->edges[Left].innerPen.widthF() > 0) {
         QPen pen = d->edges[Left].innerPen;
         painter.setPen(pen);
-        const qreal l = innerBounds.left() + pen.widthF() / 2.0;
-        painter.drawLine(QLineF(l, innerBounds.top(), l, innerBounds.bottom()));
+        const qreal hpw = pen.widthF() / 2.0; // half pen width
+        const qreal l = innerBounds.left() + hpw;
+        painter.drawLine(QLineF(l, innerBounds.top() + hpw, l, innerBounds.bottom() - hpw));
     }
     if (d->edges[Right].innerPen.widthF() > 0) {
         QPen pen = d->edges[Right].innerPen;
         painter.setPen(pen);
-        const qreal r = innerBounds.right() - pen.widthF() / 2.0;
-        painter.drawLine(QLineF(r, innerBounds.top(), r, innerBounds.bottom()));
+        const qreal hpw = pen.widthF() / 2.0; // half pen width
+        const qreal r = innerBounds.right() - hpw;
+        painter.drawLine(QLineF(r, innerBounds.top() + hpw, r, innerBounds.bottom() - hpw));
     }
 }
 

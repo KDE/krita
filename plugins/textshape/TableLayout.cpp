@@ -175,8 +175,6 @@ void TableLayout::layoutFromRow(int fromRow)
 
                 // passing content rect to boundingRect() (we're only interested in height).
                 QRectF heightRect(1, 1, 1, m_tableData->m_contentHeights.at(cell.row()).at(cell.column()));
-                qDebug() << "row" << row << " col " << col << " height" << heightRect;
-                qDebug() << "cell.row()" << cell.row();
 
                 /*
                  * we need to calculate the height which this cell contributes to this

@@ -50,11 +50,11 @@ KoPAChangePageLayoutCommand::~KoPAChangePageLayoutCommand()
 
 void KoPAChangePageLayoutCommand::redo()
 {
-    QList<KoPAPageBase *> masterPages = m_document->pages( true );
-    foreach ( KoPAPageBase *page, masterPages ) {
-        KoPAMasterPage *masterPage = static_cast<KoPAMasterPage *>( page );
-        masterPage->setPageLayout( m_newPageLayout );
-        m_document->updateViews( masterPage );
+    QMap<KoPAMasterPage *, KoPageLayout>::const_iterator it = m_oldLayouts.constBegin();
+    while ( it != m_oldLayouts.constEnd() ) {
+        it.key()->setPageLayout( m_newPageLayout );
+        m_document->updateViews( it.key() );
+        it++;
     }
 }
 

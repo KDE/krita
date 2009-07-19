@@ -311,18 +311,6 @@ private slots:
     void tableDestroyed(QObject *object);
 
 private:
-    /**
-     * Get the bounding rectangle of a given cell.
-     *
-     * The rectangle returned is relative to the table layout position.
-     *
-     * @param row the row of the cell.
-     * @param column the column of the cell.
-     * @return the bounding rectangle of the cell.
-     */
-    QRectF cellBoundingRect(int row, int column) const;
-
-private:
     friend class TestTableLayout; // To allow direct testing.
 
     KoTextDocumentLayout::LayoutState *m_parentLayout; /**< Parent layout. */

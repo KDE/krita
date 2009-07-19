@@ -195,7 +195,7 @@ void TableLayout::draw(QPainter *painter) const
             QTextTableCell tableCell = m_table->cellAt(row, column);
             TableCellBorderData borderData;
             borderData.load(tableCell.format().toTableCellFormat());
-            borderData.paint(*painter, cellBoundingRect(row, column));
+            borderData.paint(*painter, cellBoundingRect(tableCell));
         }
     }
     painter->restore();
@@ -239,20 +239,13 @@ QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
 
 QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell) const
 {
-    Q_ASSERT(cell.isValid());
-
-    return cellBoundingRect(cell.row(), cell.column());
-}
-
-QRectF TableLayout::cellBoundingRect(int row, int column) const
-{
     Q_ASSERT(isValid());
-    Q_ASSERT(row < m_tableData->m_rowPositions.size());
-    Q_ASSERT(column < m_tableData->m_columnPositions.size());
+    Q_ASSERT(cell.row() < m_tableData->m_rowPositions.size());
+    Q_ASSERT(cell.column() < m_tableData->m_columnPositions.size());
 
     return QRectF(
-            m_tableData->m_columnPositions[column], m_tableData->m_rowPositions[row],
-            m_tableData->m_columnWidths[column], m_tableData->m_rowHeights[row]);
+            m_tableData->m_columnPositions[cell.column()], m_tableData->m_rowPositions[cell.row()],
+            m_tableData->m_columnWidths[cell.column()], m_tableData->m_rowHeights[cell.row()]);
 }
 
 void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)

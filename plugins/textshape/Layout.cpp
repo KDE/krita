@@ -296,7 +296,7 @@ bool Layout::nextParag()
                     m_data->setPosition(m_block.position());
             }
             m_y += m_borderInsets.bottom;
-            borderBottom = m_y; // don't inlude the bottom margin!
+            borderBottom = m_y; // don't include the bottom margin!
             m_y += m_format.bottomMargin();
         }
 
@@ -352,14 +352,11 @@ bool Layout::nextParag()
         m_tableCell = table->cellAt(m_block.position());
 
         /*
-         * previousCell and nextCell are the cells that the previous and
-         * next blocks are in, respectively. These can be the same 
-         * as the current cell, or they can be different, or they can
-         * be invalid (if the next or previous cells are not in a table
-         * at all).
+         * previousCell is the cell that the previous blocks is in. It can be
+         * the same as the current cell, or it can be different, or it can be
+         * invalid (if the previous cell is not in a table at all).
          */
         QTextTableCell previousCell = table->cellAt(m_block.previous().position());
-        QTextTableCell nextCell = table->cellAt(m_block.next().position());
 
         if (m_tableCell != previousCell) {
             /*

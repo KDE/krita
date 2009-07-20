@@ -47,7 +47,7 @@ public:
     explicit KoDocumentAdaptor(KoDocument * doc);
     ~KoDocumentAdaptor();
 
-public Q_SLOTS: // METHODS
+public slots: // METHODS
     /**
      * Returns the URL for this document (empty, real URL, or internal one)
      */

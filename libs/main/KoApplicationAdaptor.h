@@ -41,7 +41,7 @@ public:
     explicit KoApplicationAdaptor(QObject *parent);
     virtual ~KoApplicationAdaptor();
 
-public Q_SLOTS: // METHODS
+public slots: // METHODS
     /**
      * Creates a new document for the given native mimetype
      * Use it to create a shell and to load an existing file, if any

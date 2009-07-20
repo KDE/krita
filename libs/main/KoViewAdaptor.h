@@ -46,7 +46,7 @@ public:
 
     virtual ~KoViewAdaptor();
 
-public Q_SLOTS: // METHODS
+public slots: // METHODS
     //DCOPRef action( const DCOPCString &name );
     Q_SCRIPTABLE QStringList/*DCOPCStringList*/ actions();
     //QMap<DCOPCString,DCOPRef> actionMap();

@@ -105,7 +105,7 @@ public:
      */
     int jobCount();
 
-Q_SIGNALS:
+signals:
     /**
      * The signal emitted when the action is triggered.
      * Note that this signal is queued and can very well be in a different thread
@@ -122,7 +122,7 @@ Q_SIGNALS:
      */
     void updateUi(const QVariant &params);
 
-public Q_SLOTS:
+public slots:
     /**
      * Call this to request the action to be executed. The request will be handled
      * according to the current ExecutePolicy

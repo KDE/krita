@@ -21,38 +21,24 @@
 #define __koView_h__
 
 #include <QtGui/QWidget>
-#include <QtCore/QPointer>
-#include <QtCore/QCustomEvent>
-
 #include <kparts/part.h>
-
 #include "komain_export.h"
-#include "KoFrame.h"
 
 class KoDocument;
 class KoMainWindow;
 class KoPrintJob;
 class KoViewPrivate;
 class KoDockFactory;
-
-// KOffice class but not in main module
 class KoDockerManager;
+class KoZoomController;
 
 // KDE classes
 class KStatusBar;
 class KXmlGuiWindow;
 class KAction;
-class KActionCollection;
-namespace KParts
-{
-class PartManager;
-class PartActivateEvent;
-class PartSelectEvent;
-}
 
 // Qt classes
 class QDockWidget;
-class QCustomEvent;
 class QToolBar;
 
 /**

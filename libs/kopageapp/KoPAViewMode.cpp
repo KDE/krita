@@ -25,6 +25,8 @@
 #include <KoCanvasController.h>
 #include <KoPageLayout.h>
 
+#include <QCloseEvent>
+
 KoPAViewMode::KoPAViewMode( KoPAView * view, KoPACanvas * canvas )
 : m_canvas( canvas )
 , m_toolProxy( canvas->toolProxy() )

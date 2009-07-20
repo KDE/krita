@@ -33,6 +33,7 @@ class KoParagraphStyle;
 class KoCharacterStyle;
 class KoListStyle;
 class KoTableStyle;
+class KoTableCellStyle;
 class KoStyleManager;
 class KoShape;
 class KoShapeLoadingContext;
@@ -69,7 +70,7 @@ public:
      * The name is the style:name given in the file
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset sytles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
      * @return The paragraph style for the given name or 0 if not found
      */
     KoParagraphStyle *paragraphStyle(const QString &name, bool stylesDotXml);
@@ -80,7 +81,7 @@ public:
      * The name is the style:name given in the file
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset sytles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
      * @return The character style for the given name or 0 if not found
      */
     KoCharacterStyle *characterStyle(const QString &name, bool stylesDotXml);
@@ -89,7 +90,7 @@ public:
      * Get the list style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset sytles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
      * @return The list style for the given name or 0 if not found
      */
     KoListStyle *listStyle(const QString &name, bool stylesDotXml);
@@ -98,10 +99,19 @@ public:
      * Get the table style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset sytles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
      * @return The table style for the given name or 0 if not found
      */
     KoTableStyle *tableStyle(const QString &name, bool stylesDotXml);
+
+    /**
+     * Get the table style for the given name
+     *
+     * @param name The name of the style to get
+     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @return The table cell style for the given name or 0 if not found
+     */
+    KoTableCellStyle *tableCellStyle(const QString &name, bool stylesDotXml);
 
 protected:
     /**
@@ -138,6 +148,11 @@ private:
     void addTableStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                        KoStyleManager *styleManager = 0);
     QList<QPair<QString, KoTableStyle *> > loadTableStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
+
+    // helper functions for loading of table styles
+    void addTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
+                       KoStyleManager *styleManager = 0);
+    QList<QPair<QString, KoTableCellStyle *> > loadTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     void addOutlineStyle(KoOdfLoadingContext & context, KoStyleManager *styleManager);
 

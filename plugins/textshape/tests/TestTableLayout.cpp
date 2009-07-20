@@ -4,7 +4,7 @@
 
 #include <KoStyleManager.h>
 #include <KoTextDocument.h>
-#include <KoTableCellBorderData.h>
+#include <KoTableCellStyle.h>
 
 #include <QTextDocument>
 #include <QTextTable>
@@ -320,18 +320,18 @@ void TestTableLayout::testCellStyles()
      */
     QTextTableCell cell1 = m_table->cellAt(0, 0);
     QTextTableCellFormat cell1Format;
-    cell1Format.setProperty(TopBorderOuterPen, QPen(Qt::black, 1));
-    cell1Format.setProperty(TopBorderSpacing, 2.0);
-    cell1Format.setProperty(TopBorderInnerPen, QPen(Qt::black, 4));
-    cell1Format.setProperty(LeftBorderOuterPen, QPen(Qt::black, 1));
-    cell1Format.setProperty(LeftBorderSpacing, 2.0);
-    cell1Format.setProperty(LeftBorderInnerPen, QPen(Qt::black, 4));
-    cell1Format.setProperty(BottomBorderOuterPen, QPen(Qt::black, 1));
-    cell1Format.setProperty(BottomBorderSpacing, 2.0);
-    cell1Format.setProperty(BottomBorderInnerPen, QPen(Qt::black, 4));
-    cell1Format.setProperty(RightBorderOuterPen, QPen(Qt::black, 1));
-    cell1Format.setProperty(RightBorderSpacing, 2.0);
-    cell1Format.setProperty(RightBorderInnerPen, QPen(Qt::black, 4));
+    cell1Format.setProperty(KoTableCellStyle::TopBorderOuterPen, QPen(Qt::black, 1));
+    cell1Format.setProperty(KoTableCellStyle::TopBorderSpacing, 2.0);
+    cell1Format.setProperty(KoTableCellStyle::TopBorderInnerPen, QPen(Qt::black, 4));
+    cell1Format.setProperty(KoTableCellStyle::LeftBorderOuterPen, QPen(Qt::black, 1));
+    cell1Format.setProperty(KoTableCellStyle::LeftBorderSpacing, 2.0);
+    cell1Format.setProperty(KoTableCellStyle::LeftBorderInnerPen, QPen(Qt::black, 4));
+    cell1Format.setProperty(KoTableCellStyle::BottomBorderOuterPen, QPen(Qt::black, 1));
+    cell1Format.setProperty(KoTableCellStyle::BottomBorderSpacing, 2.0);
+    cell1Format.setProperty(KoTableCellStyle::BottomBorderInnerPen, QPen(Qt::black, 4));
+    cell1Format.setProperty(KoTableCellStyle::RightBorderOuterPen, QPen(Qt::black, 1));
+    cell1Format.setProperty(KoTableCellStyle::RightBorderSpacing, 2.0);
+    cell1Format.setProperty(KoTableCellStyle::RightBorderInnerPen, QPen(Qt::black, 4));
     cell1Format.setPadding(8.0);
     cell1.setFormat(cell1Format);
 

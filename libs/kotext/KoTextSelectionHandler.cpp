@@ -20,7 +20,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoTableCellBorderData.h"
 #include "KoTextSelectionHandler.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextShapeData.h"
@@ -30,6 +29,7 @@
 #include "KoBookmarkManager.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
+#include "styles/KoTableCellStyle.h"
 #include "styles/KoStyleManager.h"
 #include "KoTextDocument.h"
 
@@ -425,18 +425,18 @@ void KoTextSelectionHandler::insertTable(int rows, int columns)
         for (int col = 0; col < table->columns(); ++col) {
             QTextTableCell cell = table->cellAt(row, col);
             QTextTableCellFormat format;
-            format.setProperty(TopBorderOuterPen, QPen(Qt::black, 2));
-            format.setProperty(TopBorderSpacing,  2.0);
-            format.setProperty(TopBorderInnerPen, QPen(Qt::black, 2));
-            format.setProperty(LeftBorderOuterPen, QPen(Qt::black, 2));
-            format.setProperty(LeftBorderSpacing, 2.0);
-            format.setProperty(LeftBorderInnerPen, QPen(Qt::black, 2));
-            format.setProperty(BottomBorderOuterPen, QPen(Qt::black, 2));
-            format.setProperty(BottomBorderSpacing, 2.0);
-            format.setProperty(BottomBorderInnerPen, QPen(Qt::black, 2));
-            format.setProperty(RightBorderOuterPen, QPen(Qt::black, 2));
-            format.setProperty(RightBorderSpacing, 2.0);
-            format.setProperty(RightBorderInnerPen, QPen(Qt::black, 2));
+            format.setProperty(KoTableCellStyle::TopBorderOuterPen, QPen(Qt::black, 2));
+            format.setProperty(KoTableCellStyle::TopBorderSpacing,  2.0);
+            format.setProperty(KoTableCellStyle::TopBorderInnerPen, QPen(Qt::black, 2));
+            format.setProperty(KoTableCellStyle::LeftBorderOuterPen, QPen(Qt::black, 2));
+            format.setProperty(KoTableCellStyle::LeftBorderSpacing, 2.0);
+            format.setProperty(KoTableCellStyle::LeftBorderInnerPen, QPen(Qt::black, 2));
+            format.setProperty(KoTableCellStyle::BottomBorderOuterPen, QPen(Qt::black, 2));
+            format.setProperty(KoTableCellStyle::BottomBorderSpacing, 2.0);
+            format.setProperty(KoTableCellStyle::BottomBorderInnerPen, QPen(Qt::black, 2));
+            format.setProperty(KoTableCellStyle::RightBorderOuterPen, QPen(Qt::black, 2));
+            format.setProperty(KoTableCellStyle::RightBorderSpacing, 2.0);
+            format.setProperty(KoTableCellStyle::RightBorderInnerPen, QPen(Qt::black, 2));
             format.setPadding(5);
             cell.setFormat(format);
         }

@@ -49,13 +49,13 @@
 #include <KoTextBlockData.h>
 #include <KoColor.h>
 
-#include "KoTableCellBorderData.h"
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoListStyle.h"
 #include "styles/KoListLevelProperties.h"
 #include "styles/KoTableStyle.h"
+#include "styles/KoTableCellStyle.h"
 #include "KoTextSharedLoadingData.h"
 #include "KoTextDocument.h"
 #include "KoTextDebug.h"
@@ -289,20 +289,9 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                     // rowsSpanned disabled for now as that would mean spanning into rows not yet created. Need to figure out some way to handle this
                                                     tbl->mergeCells(currentRow, currentCell, 1/*rowsSpanned*/, columnsSpanned);
 
-                                                    TableCellBorderData borderData;
-
-{
-/* make our own border data for now BEGIN*/
-if(currentRow==0)
-    borderData.setEdge(TableCellBorderData::Top,TableCellBorderData::Solid, 1.0, KoColor(), 0.0);
-borderData.setEdge(TableCellBorderData::Bottom,TableCellBorderData::Solid, 1.0, KoColor(), 0.0);
-borderData.setEdge(TableCellBorderData::Left,TableCellBorderData::Solid, 1.0, KoColor(), 0.0);
-if(currentCell == columns-1)
-    borderData.setEdge(TableCellBorderData::Right,TableCellBorderData::Solid, 1.0, KoColor(), 0.0); 
-/* make our own border data for now END*/
-}
+                                                    KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(rowTag.attributeNS(KoXmlNS::table, "style-name", "1"),false);
                                                     QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                                                    borderData.applyStyle(cellFormat);
+                                                    cellStyle->applyStyle(cellFormat);
                                                     cell.setFormat(cellFormat);
 
                                                     if (cell.isValid()) {

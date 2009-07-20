@@ -20,7 +20,6 @@ set(kotext_LIB_SRCS
     KoList.cpp
     KoPageFormat.cpp
     KoLayoutVisitor.cpp
-    KoTableCellBorderData.cpp
 
     KoTextEditingRegistry.cpp
     KoTextEditingFactory.cpp
@@ -62,6 +61,7 @@ set(kotext_LIB_SRCS
     styles/KoListLevelProperties.cpp
     styles/ChangeFollower.cpp
     styles/KoTableStyle.cpp
+    styles/KoTableCellStyle.cpp
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextSharedSavingData.cpp
     opendocument/KoTextLoader.cpp

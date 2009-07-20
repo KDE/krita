@@ -21,7 +21,7 @@
 #include "TableLayout.h"
 #include "TableData.h"
 
-#include <KoTableCellBorderData.h>
+#include <KoTableCellStyle.h>
 #include <KoTextDocumentLayout.h>
 #include <KoShape.h>
 
@@ -184,8 +184,7 @@ void TableLayout::layoutFromRow(int fromRow)
                  * we only want these cells because cells that don't end in this
                  * row should not affect the row height.
                  */
-                TableCellBorderData cellBorderData;
-                cellBorderData.load(cellFormat);
+                KoTableCellStyle cellStyle(cellFormat);
 
                 // passing content rect to boundingRect() (we're only interested in height).
                 QRectF heightRect(1, 1, 1, m_tableData->m_contentHeights.at(cell.row()).at(cell.column()));
@@ -195,7 +194,7 @@ void TableLayout::layoutFromRow(int fromRow)
                  * row, so once we have the height of the entire cell, including borders
                  * and padding, we can now subtract the height of the rows above.
                  */
-                qreal cellHeight = cellBorderData.boundingRect(heightRect).height();
+                qreal cellHeight = cellStyle.boundingRect(heightRect).height();
                 for (int r = row - 1; r >= cell.row(); --r) {
                     cellHeight -= m_tableData->m_rowHeights[r];
                 }
@@ -234,9 +233,8 @@ void TableLayout::draw(QPainter *painter) const
             QTextTableCell tableCell = m_table->cellAt(row, column);
             if (row == tableCell.row() && column == tableCell.column()) {
                 // This is an actual cell we want to draw, and not a covered one.
-                TableCellBorderData borderData;
-                borderData.load(tableCell.format().toTableCellFormat());
-                borderData.paint(*painter, cellBoundingRect(tableCell));
+                KoTableCellStyle cellStyle(tableCell.format().toTableCellFormat());
+                cellStyle.paint(*painter, cellBoundingRect(tableCell));
             }
         }
     }
@@ -273,10 +271,9 @@ QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
     Q_ASSERT(cell.column() < m_tableData->m_columnPositions.size());
 
     // get the border data for the cell and return the adjusted rect.
-    TableCellBorderData borderData;
-    borderData.load(cell.format().toTableCellFormat());
+    KoTableCellStyle cellStyle(cell.format().toTableCellFormat());
 
-    return borderData.contentRect(cellBoundingRect(cell));
+    return cellStyle.contentRect(cellBoundingRect(cell));
 }
 
 QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell) const

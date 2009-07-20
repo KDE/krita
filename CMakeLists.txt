@@ -99,6 +99,7 @@ IF(SHOULD_BUILD_PIGMENT)
     macro_optional_find_package(OpenEXR)
     macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
     configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
+    install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
     include_directories(${CMAKE_SOURCE_DIR}/libs/pigment)
     find_package(LCMS REQUIRED)
@@ -147,14 +148,6 @@ endif(OPENGL_FOUND)
 
 configure_file(config-opengl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-opengl.h )
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
-
-##
-## Look for OpenEXR
-##
-macro_optional_find_package(OpenEXR)
-macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
-configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
-install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 ##
 ## Test for create ressources

@@ -72,7 +72,7 @@ public:
 
     KoZoomHandler* zoomHandler() { return &m_zoomHandler; }
 
-    KoZoomController *zoomController() { return m_zoomController; }
+    KoZoomController *zoomController() const { return m_zoomController; }
 
     KoRuler *horizontalRuler() { return m_horizontalRuler; }
     KoRuler *verticalRuler() { return m_verticalRuler; }

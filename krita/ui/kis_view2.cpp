@@ -293,6 +293,10 @@ void KisView2::dropEvent(QDropEvent *event)
     }
 }
 
+KoZoomController *KisView2::zoomController() const
+{
+    return m_d->zoomManager->zoomController();
+}
 
 KisImageSP KisView2::image()
 {
@@ -432,7 +436,6 @@ void KisView2::slotLoadingFinished()
 //     dbgUI <<"image finished loading, active layer:" << img->activeLayer() <<", root layer:" << img->rootLayer();
 
 }
-
 
 void KisView2::createGUI()
 {

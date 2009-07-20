@@ -73,8 +73,9 @@ public:
     KoZoomController *parent;
 };
 
-KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons)
-    : d(new Private(this, specialButtons))
+KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons, QObject *parent)
+    : QObject(parent),
+    d(new Private(this, specialButtons))
 {
     d->canvasController = co;
     d->fitMargin = co->margin();

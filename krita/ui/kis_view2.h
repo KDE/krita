@@ -80,6 +80,9 @@ public:
         Q_UNUSED(readwrite);
     }
 
+    // KoView implementation
+    virtual KoZoomController *zoomController() const;
+
 public:  // Krita specific interfaces
 
     /// Return the image this view is displaying

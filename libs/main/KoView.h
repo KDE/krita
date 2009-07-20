@@ -261,6 +261,11 @@ public:
     virtual void updateReadWrite(bool readwrite) = 0;
 
     /**
+     * Return the zoomController for this view.
+     */
+    virtual KoZoomController *zoomController() const = 0;
+
+    /**
      * Creates a dockwidget if needed from @p factory if the mainwindow is a KoMainWindow by calling
      * KoMainWindow::createDockWidget()
      *

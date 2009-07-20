@@ -246,8 +246,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                     cursor.insertText("\n");
                     cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 1);
                     QTextTableFormat tableFormat;
-                    KoTableStyle *tblStyle = d->textSharedData->tableStyle(tag.attributeNS(KoXmlNS::table, "style-name", "1"),false);
-                    tblStyle->applyStyle(tableFormat);
+                    QString tableStyleName = tag.attributeNS(KoXmlNS::table, "style-name", "");
+                    if (!tableStyleName.isEmpty()) {
+                        KoTableStyle *tblStyle = d->textSharedData->tableStyle(tag.attributeNS(KoXmlNS::table, "style-name", ""), d->stylesDotXml);
+                        tblStyle->applyStyle(tableFormat);
+                    }
                     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
                     int rows = 0;
                     int columns = 0;
@@ -288,10 +291,13 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                     // rowsSpanned disabled for now as that would mean spanning into rows not yet created. Need to figure out some way to handle this
                                                     tbl->mergeCells(currentRow, currentCell, 1/*rowsSpanned*/, columnsSpanned);
 
-                                                    KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(rowTag.attributeNS(KoXmlNS::table, "style-name", "1"),false);
-                                                    QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                                                    cellStyle->applyStyle(cellFormat);
-                                                    cell.setFormat(cellFormat);
+                                                    QString cellStyleName = rowTag.attributeNS(KoXmlNS::table, "style-name", "");
+                                                    if (!cellStyleName.isEmpty()) {
+                                                        KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(cellStyleName, d->stylesDotXml);
+                                                        QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+                                                        cellStyle->applyStyle(cellFormat);
+                                                        cell.setFormat(cellFormat);
+                                                    }
 
                                                     if (cell.isValid()) {
                                                         cursor = cell.firstCursorPosition();

@@ -467,13 +467,7 @@ KoTableStyle *KoTableStyle::clone(QObject *parent)
 
 bool KoTableStyle::operator==(const KoTableStyle &other) const
 {
-/*
-    if (!compareParagraphProperties(other))
-        return false;
-    if (!compareCharacterProperties(other))
-        return false;
-*/
-    return true;
+    return other.d->stylesPrivate == d->stylesPrivate;
 }
 
 void KoTableStyle::removeDuplicates(const KoTableStyle &other)

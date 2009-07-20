@@ -33,6 +33,8 @@ class QPainter;
 class KoViewConverter;
 class KoColorProfile;
 
+class KisProjectionCache;
+
 #include <kis_types.h>
 
 class KisPrescaledProjection;
@@ -121,6 +123,11 @@ public:
      */
     QRect viewRectFromImagePixels(const QRect & imageRect);
 
+    /**
+     * Return the intersection of the widget size and the given rect
+     * in image pixels converted to widget pixels.
+     */
+    void updateDocumentOrigin(const QPoint &documentOrigin);
 
 public slots:
 

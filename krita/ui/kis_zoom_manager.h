@@ -63,6 +63,8 @@ private slots:
     void toggleShowRulers(bool show);
     void mousePositionChanged(const QPoint &pos);
     void changeAspectMode(bool aspectMode);
+    void pageOffsetChanged();
+
 
 private:
 

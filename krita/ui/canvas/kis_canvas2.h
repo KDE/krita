@@ -78,6 +78,7 @@ public: // KoCanvasBase implementation
     virtual void startMacro(const QString &title);
     virtual void stopMacro();
 
+    virtual QPoint documentOrigin() const;
 
     /**
      * Return the right shape manager for the current layer. That is
@@ -133,6 +134,10 @@ public: // KisCanvas2 methods
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
 
+
+signals:
+    void documentOriginChanged();
+
 public slots:
 
     /// Update the entire canvas area
@@ -143,6 +148,12 @@ public slots:
     void updateCanvasProjection(const QRect & rc);
 
     void setImageSize(qint32 w, qint32 h);
+
+    /// adjust the origin of the document
+    void adjustOrigin();
+
+    /// documentOffset changed, now update the rulers in zoom manager
+    void updateRulers();
 
 private slots:
 

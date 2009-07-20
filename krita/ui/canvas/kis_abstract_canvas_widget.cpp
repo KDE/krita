@@ -42,6 +42,7 @@ void KisAbstractCanvasWidget::drawDecorations(QPainter & gc, bool tools,
     gc.setRenderHint(QPainter::HighQualityAntialiasing);
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
     gc.translate(QPoint(-documentOffset.x(), -documentOffset.y()));
+    gc.translate( documentOrigin() );
 
     // Paint the shapes (other than the layers)
     gc.save();
@@ -60,6 +61,7 @@ void KisAbstractCanvasWidget::drawDecorations(QPainter & gc, bool tools,
         toolProxy()->paint(gc, *canvas->viewConverter());
         gc.restore();
     }
+
 
 }
 

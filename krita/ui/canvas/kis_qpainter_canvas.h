@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
+ * Copyright (C) Lukáš Tvrdý <lukast.dev@gmail.com>, (C) 2009
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -101,6 +102,17 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
+protected:
+    /// these methods take origin coordinate into account, basicly it means (point - origin)
+    QPoint widgetToView( const QPoint& p ) const;
+    QRect widgetToView( const QRect& r ) const;
+    QPoint viewToWidget( const QPoint& p ) const;
+    QRect viewToWidget( const QRect& r ) const;
+
+    /// document size in widget pixels
+    QSize documentSize();
+
+
 public: // KisAbstractCanvasWidget
 
     QWidget * widget() {
@@ -110,6 +122,20 @@ public: // KisAbstractCanvasWidget
     KoToolProxy * toolProxy();
 
     void documentOffsetMoved(const QPoint &);
+
+    QPoint documentOrigin();
+    void adjustOrigin();
+
+signals:
+
+    /**
+     * This signal is emitted when the document origin has changed.
+     * The document origin is the point (in pixel) on the virtual
+     * canvas where the documents origin (0,0) or the top left
+     * corner of the page is. Copied from Karbon
+     */
+    void documentOriginChanged( const QPoint &origin );
+
 
 private slots:
     void slotConfigChanged();

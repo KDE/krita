@@ -59,6 +59,7 @@
 #ifdef HAVE_OPENGL
 #include <QGLFormat>
 #endif
+#include "kis_projection_cache.h"
 
 class KisCanvas2::KisCanvas2Private
 {
@@ -243,6 +244,8 @@ void KisCanvas2::createQPainterCanvas()
     m_d->prescaledProjection->setMonitorProfile( monitorProfile() );
     canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
 
+    connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&) ), this, SLOT(updateRulers()));
+
     setCanvasWidget(canvasWidget);
 }
 
@@ -252,9 +255,13 @@ void KisCanvas2::createOpenGLCanvas()
     if (QGLFormat::hasOpenGL()) {
         // XXX: The image isn't done loading here!
         m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile);
-        setCanvasWidget(new KisOpenGLCanvas2(this, m_d->view, m_d->openGLImageTextures));
+        KisOpenGLCanvas2 * canvasWidget = new KisOpenGLCanvas2(this, m_d->view, m_d->openGLImageTextures);
+        setCanvasWidget( canvasWidget );
         m_d->currentCanvasIsOpenGL = true;
         m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
+   
+        connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&) ), this, SLOT(updateRulers()));
+
     } else {
         warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
         createQPainterCanvas();
@@ -290,8 +297,10 @@ KisView2* KisCanvas2::view()
 QRect KisCanvas2::viewRectFromDoc(const QRectF & rc)
 {
     QRect viewRect = m_d->viewConverter->documentToView(rc).toAlignedRect();
-    viewRect = viewRect.translated(-m_d->documentOffset);
-    viewRect = viewRect.intersected(QRect(0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height()));
+    viewRect = viewRect.translated(-m_d->documentOffset );
+    // comment out this line if zou want to see the preview outside of the canvas
+    // viewRect = viewRect.intersected(QRect(0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height()));
+    viewRect.translate( documentOrigin() );
     return viewRect;
 }
 
@@ -306,14 +315,12 @@ void KisCanvas2::updateCanvasProjection(const QRect & rc)
 #endif
 
     QRect vRect = m_d->prescaledProjection->viewRectFromImagePixels(rc);
+    vRect.translate( m_d->canvasWidget->documentOrigin() );
 
     if (!vRect.isEmpty()) {
-
         m_d->prescaledProjection->updateCanvasProjection(rc);
-
         // Regardless, the actual
         m_d->canvasWidget->widget()->update(vRect);
-
     }
 }
 
@@ -443,5 +450,24 @@ KisCanvasDecoration* KisCanvas2::decoration(const QString& id)
 {
     return m_d->canvasWidget->decoration(id);
 }
+
+
+QPoint KisCanvas2::documentOrigin() const
+{
+    return m_d->canvasWidget->documentOrigin();
+}
+
+
+void KisCanvas2::adjustOrigin()
+{
+    m_d->canvasWidget->adjustOrigin();
+}
+
+
+void KisCanvas2::updateRulers()
+{
+    emit documentOriginChanged();
+}
+
 
 #include "kis_canvas2.moc"

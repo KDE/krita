@@ -112,11 +112,26 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
+signals:
+    /**
+     * This signal is emitted when the document origin has changed.
+     * The document origin is the point (in pixel) on the virtual
+     * canvas where the documents origin (0,0) or the top left
+     * corner of the page is. Copied from Karbon
+     */
+    void documentOriginChanged( const QPoint &origin );
+
 protected:
 
     void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
+
+    /// these methods take origin coordinate into account, basicly it means (point - origin)
+    QPoint widgetToView( const QPoint& p ) const;
+    QRect widgetToView( const QRect& r ) const;
+    QPoint viewToWidget( const QPoint& p ) const;
+    QRect viewToWidget( const QRect& r ) const;
 
 public: // KisAbstractCanvasWidget
 
@@ -127,6 +142,9 @@ public: // KisAbstractCanvasWidget
     KoToolProxy * toolProxy();
 
     void documentOffsetMoved(const QPoint & pt);
+    virtual QPoint documentOrigin();
+    void adjustOrigin();
+    
 
 private:
     class Private;

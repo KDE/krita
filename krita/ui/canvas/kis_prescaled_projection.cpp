@@ -90,6 +90,7 @@ struct KisPrescaledProjection::Private {
         , showMask(true)
         , checkSize(32)
         , documentOffset(0, 0)
+        , documentOrigin(0, 0)
         , canvasSize(0, 0)
         , imageSize(0, 0)
         , viewConverter(0)
@@ -109,7 +110,11 @@ struct KisPrescaledProjection::Private {
     qint32 checkSize;
     QImage prescaledQImage;
     QPixmap prescaledPixmap;
+
+    
     QPoint documentOffset; // in view pixels
+    QPoint documentOrigin; // in view pixels too 
+
     QSize canvasSize; // in view pixels
     QSize imageSize; // in kisimage pixels
     KisImageSP image;
@@ -518,7 +523,6 @@ QRect KisPrescaledProjection::viewRectFromImagePixels(const QRect & rc)
     QRect viewRect = m_d->viewConverter->documentToView(docRect).toAlignedRect();
     viewRect = viewRect.translated(-m_d->documentOffset);
     viewRect = viewRect.intersected(QRect(0, 0, m_d->canvasSize.width(), m_d->canvasSize.height()));
-
     return viewRect;
 }
 
@@ -529,6 +533,12 @@ QRect KisPrescaledProjection::imageRectFromViewPortPixels(const QRect & viewport
     QRectF docRect = m_d->viewConverter->viewToDocument(translatedRect);
 
     return m_d->image->documentToIntPixel(docRect).intersected(m_d->image->bounds());
+}
+
+
+void KisPrescaledProjection::updateDocumentOrigin(const QPoint& documentOrigin)
+{
+    m_d->documentOrigin = documentOrigin;
 }
 
 

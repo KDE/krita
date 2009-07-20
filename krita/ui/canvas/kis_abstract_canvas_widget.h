@@ -48,6 +48,10 @@ public:
 
     virtual void documentOffsetMoved(const QPoint &) = 0;
 
+    virtual QPoint documentOrigin() = 0;
+
+    virtual void adjustOrigin() = 0;
+
     /**
      * Draw the specified decorations on the view.
      */
@@ -64,6 +68,7 @@ public:
     QImage checkImage(qint32 checkSize);
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
+    
 private:
     QList<KisCanvasDecoration*> m_decorations;
 };

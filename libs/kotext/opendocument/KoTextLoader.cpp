@@ -47,7 +47,6 @@
 #include <KoVariableRegistry.h>
 #include <KoProperties.h>
 #include <KoTextBlockData.h>
-#include <KoColor.h>
 
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"

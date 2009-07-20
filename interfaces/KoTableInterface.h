@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOFFICE_TABLE_INTERFACE
-#define KOFFICE_TABLE_INTERFACE
+#ifndef KO_TABLE_INTERFACE
+#define KO_TABLE_INTERFACE
 
 #include <KoCanvasResourceProvider.h>
 

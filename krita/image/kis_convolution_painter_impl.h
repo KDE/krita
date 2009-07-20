@@ -168,7 +168,6 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
             lastProgressPercent = progressPercent;
 
             if (progressUpdater()->interrupted()) {
-                dbgImage << "Convolution is interupted";
                 for (int i = 0; i < cacheSize; i++)
                     delete[] pixelPtrCache[i];
                 delete[] pixelPtrCache;

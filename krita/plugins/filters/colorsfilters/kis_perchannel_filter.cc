@@ -202,7 +202,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
       default:
         m_shift = 0;
         m_scale = 100.0;
-        //Hack Alert: shoud be changed to float
+        //Hack Alert: should be changed to float
         min=0;
         max=100;
         break;

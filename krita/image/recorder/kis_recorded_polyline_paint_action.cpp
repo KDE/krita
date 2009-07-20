@@ -40,7 +40,7 @@
 #include "kis_layer.h"
 
 struct KisRecordedPolyLinePaintAction::Private {
-    QList<KisPaintInformation> infos;
+    QList<KisPaintInformation> paintInformationObjects;
 };
 
 KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const QString & name,
@@ -70,18 +70,18 @@ KisRecordedPolyLinePaintAction::~KisRecordedPolyLinePaintAction()
 
 void KisRecordedPolyLinePaintAction::addPoint(const KisPaintInformation& info)
 {
-    d->infos.append(info);
+    d->paintInformationObjects.append(info);
 }
 
 void KisRecordedPolyLinePaintAction::playPaint(const KisPlayInfo&, KisPainter* painter) const
 {
-    dbgUI << "play poly line paint with " << d->infos.size() << " points";
-    if (d->infos.size() <= 0) return;
-    painter->paintAt(d->infos[0]);
+    dbgUI << "play poly line paint with " << d->paintInformationObjects.size() << " points";
+    if (d->paintInformationObjects.size() <= 0) return;
+    painter->paintAt(d->paintInformationObjects[0]);
     double savedDist = 0.0;
-    for (int i = 0; i < d->infos.size() - 1; i++) {
-        dbgUI << d->infos[i].pos() << " to " << d->infos[i+1].pos();
-        savedDist = painter->paintLine(d->infos[i], d->infos[i+1], savedDist);
+    for (int i = 0; i < d->paintInformationObjects.size() - 1; i++) {
+        dbgUI << d->paintInformationObjects[i].pos() << " to " << d->paintInformationObjects[i+1].pos();
+        savedDist = painter->paintLine(d->paintInformationObjects[i], d->paintInformationObjects[i+1], savedDist);
     }
 }
 
@@ -89,7 +89,7 @@ void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement& elt) 
 {
     KisRecordedPaintAction::toXML(doc, elt);
     QDomElement waypointsElt = doc.createElement("Waypoints");
-    foreach(KisPaintInformation info, d->infos) {
+    foreach(KisPaintInformation info, d->paintInformationObjects) {
         QDomElement infoElt = doc.createElement("Waypoint");
         info.toXML(doc, infoElt);
         waypointsElt.appendChild(infoElt);

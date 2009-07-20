@@ -331,7 +331,7 @@ public:
 
 
     /**
-     * Syncronize In/Out spinboxes with the curve
+     * Synchronize In/Out spinboxes with the curve
      */
     void syncIOControls();
 

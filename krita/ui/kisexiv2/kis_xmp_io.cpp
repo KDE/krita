@@ -128,7 +128,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
         Exiv2::XmpKey key(it->key());
         dbgFile << key.groupName().c_str() << " " << key.tagName().c_str() << " " << key.ns().c_str();
         if( (key.groupName() == "exif" || key.groupName() == "tiff") && key.tagName() == "NativeDigest" ) { // TODO: someone who has time to lose can look in adding support for NativeDigest, it's undocumented use by the XMP SDK to check if exif data has been changed while XMP hasn't been updated
-          dbgFile << "droped";
+          dbgFile << "dropped";
         } else {
             const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromPrefix(key.groupName().c_str());
             if( !schema)

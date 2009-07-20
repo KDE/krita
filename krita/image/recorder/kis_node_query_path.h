@@ -34,7 +34,7 @@ public:
     QList<KisNodeSP> queryNodes(KisImageSP image, KisNodeSP currentNode) const;
     bool isRelative() const;
     // Use "///" style because of the needed "/*"
-    /// This function return a string representing this path. Which is a list seperated by '\' of:
+    /// This function return a string representing this path. Which is a list separated by '\' of:
     /// - '*': represents all layers
     /// - '..': represents the parent layer
     /// - number: index of the layer

@@ -31,7 +31,7 @@ public:
     virtual ~KisRecordedActionEditorFactory();
     /**
      * Create an editor for the action.
-     * The widget is expected to have a 'actionChanged' signal that is emited
+     * The widget is expected to have a 'actionChanged' signal that is emitted
      * when the editor has changed one of the parameter of the action.
      */
     virtual QWidget* createEditor(QWidget* parent, KisRecordedAction* action) const = 0;

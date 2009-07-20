@@ -61,7 +61,7 @@ public:
      */
     virtual double parameter(const KisPaintInformation& info) = 0;
     /**
-     * This function is call before begining a stroke to reset the sensor.
+     * This function is call before beginning a stroke to reset the sensor.
      * Default implementation does nothing.
      */
     virtual void reset();

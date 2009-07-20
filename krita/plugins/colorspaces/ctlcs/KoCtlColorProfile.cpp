@@ -322,9 +322,9 @@ bool KoCtlColorProfile::load()
 
 GTLCore::PixelDescription KoCtlColorProfile::createPixelDescription(const KoColorSpace* cs) const
 {
-    QList<KoChannelInfo*> infos = cs->channels();
+    QList<KoChannelInfo*> channels = cs->channels();
     std::vector<const GTLCore::Type* > types;
-    foreach( KoChannelInfo* info, infos)
+    foreach( KoChannelInfo* info, channels)
     {
         switch( info->channelValueType() )
         {

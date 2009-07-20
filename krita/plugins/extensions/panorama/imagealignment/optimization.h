@@ -65,7 +65,7 @@ struct Newton {
  * which return the jacobian
  * - int count() const which return the number of functions f_i
  *
- * And optionnally when using the gaussNewton algorithm witht the Newton method:
+ * And optionally when using the gaussNewton algorithm witht the Newton method:
  *  - gmm::row_matrix\< gmm::rsvector\<double\> \> hessian(const std::vector\<double\>& x, int n) const
  * which return the hessian
  *

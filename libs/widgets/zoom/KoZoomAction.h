@@ -67,6 +67,8 @@ public:
      */
     void setSpecialButtons( SpecialButtons buttons );
 
+    qreal effectiveZoom() const;
+
 public slots:
 
   /**

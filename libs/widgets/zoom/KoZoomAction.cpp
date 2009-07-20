@@ -85,6 +85,11 @@ KoZoomAction::~KoZoomAction()
     delete d;
 }
 
+qreal KoZoomAction::effectiveZoom() const
+{
+    return d->effectiveZoom;
+}
+
 void KoZoomAction::setZoom( qreal zoom )
 {
     setEffectiveZoom(zoom);

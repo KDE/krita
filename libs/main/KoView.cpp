@@ -57,7 +57,6 @@ class KoViewPrivate
 {
 public:
     KoViewPrivate() {
-        m_zoom = 1.0;
         m_manager = 0L;
         m_tempActiveWidget = 0L;
         m_registered = false;
@@ -69,7 +68,6 @@ public:
 
     QPointer<KoDocument> m_doc; // our KoDocument
     QPointer<KParts::PartManager> m_manager;
-    qreal m_zoom;
     QWidget *m_tempActiveWidget;
     bool m_registered;  // are we registered at the part manager?
     bool m_documentDeleted; // true when m_doc gets deleted [can't use m_doc==0
@@ -264,17 +262,6 @@ int KoView::bottomBorder() const
     return 0;
 }
 
-void KoView::setZoom(qreal zoom)
-{
-    d->m_zoom = zoom;
-    update();
-}
-
-qreal KoView::zoom() const
-{
-    return d->m_zoom;
-}
-
 QWidget *KoView::canvas() const
 {
     //dfaure: since the view plays two roles in this method (the const means "you can modify the canvas
@@ -369,14 +356,6 @@ void KoView::disableAutoScroll()
 void KoView::paintEverything(QPainter &painter, const QRect &rect)
 {
     koDocument()->paintEverything(painter, rect, this);
-}
-
-QMatrix KoView::matrix() const
-{
-    QMatrix m;
-    m.scale(zoom(), zoom());
-    //m.translate(  canvasXOffset() ,  canvasYOffset() );
-    return m;
 }
 
 int KoView::autoScrollAcceleration(int offset) const
@@ -509,28 +488,6 @@ void KoView::restoreDockWidget(QDockWidget *dock)
 {
     if (shell())
         shell()->restoreDockWidget(dock);
-}
-
-QPoint KoView::applyViewTransformations(const QPoint& p) const
-{
-    return QPoint(qRound(p.x() * zoom()), qRound(p.y() * zoom()));
-}
-
-QPoint KoView::reverseViewTransformations(const QPoint& v) const
-{
-    return QPoint(qRound(v.x() / zoom()), qRound(v.y() / zoom()));
-}
-
-QRect KoView::applyViewTransformations(const QRect& r) const
-{
-    return QRect(applyViewTransformations(r.topLeft()),
-                 applyViewTransformations(r.bottomRight()));
-}
-
-QRect KoView::reverseViewTransformations(const QRect& r) const
-{
-    return QRect(reverseViewTransformations(r.topLeft()),
-                 reverseViewTransformations(r.bottomRight()));
 }
 
 QToolBar* KoView::viewBar()

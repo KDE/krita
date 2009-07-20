@@ -159,24 +159,6 @@ public:
     virtual int bottomBorder() const;
 
     /**
-     * Scales the view on the content. This does not affect the contents
-     * data structures. You can use this mechanism to implement a zoom
-     * for example.
-     *
-     * The method calls QWidget::update so that the scaled content
-     * is automatically displayed.
-     *
-     * The default scaling is 1.0 in both orientations.
-     */
-    virtual void setZoom(qreal zoom);
-    /**
-     * @return the current scaling factor (zoom level)
-     *
-     * @see #setZoom
-     */
-    virtual qreal zoom() const;
-
-    /**
      * Overload this function if the content will be displayed
      * on some child widget instead of the view directly.
      *
@@ -216,44 +198,6 @@ public:
      * calls KoDocument::paintEverything()
      */
     virtual void paintEverything(QPainter &painter, const QRect &rect);
-
-
-    /**
-     * Returns the matrix which is used by the view to transform the content.
-     * Currently only scaling is supported.
-     *
-     * The matrix changes when calling @ref #setZoom.
-     *
-     * @deprecated, use applyViewTransformations / reverseViewTransformations instead.
-     */
-    virtual KDE_DEPRECATED QMatrix matrix() const;
-
-    /**
-     * Apply the transformations that the view makes to its contents.
-     * This is used for embedded objects.
-     * By default this simply applies the zoom().
-     * Reimplement to add some translation if needed (e.g. to center the page)
-     */
-    virtual QPoint applyViewTransformations(const QPoint&) const;
-
-    /**
-     * Reverse the transformations that the view makes to its contents,
-     * i.e. undo the transformations done by applyViewTransformations().
-     * This is used for embedded objects.
-     * By default this simply unzooms the point.
-     * Reimplement to add some translation if needed (e.g. to center the page)
-     */
-    virtual QPoint reverseViewTransformations(const QPoint&) const;
-
-    /**
-     * Overload for QRect, usually it's not needed to reimplement this one.
-     */
-    virtual QRect applyViewTransformations(const QRect&) const;
-
-    /**
-     * Overload for QRect, usually it's not needed to reimplement this one.
-     */
-    virtual QRect reverseViewTransformations(const QRect&) const;
 
     /**
      * In order to print the document represented by this view a new print job should

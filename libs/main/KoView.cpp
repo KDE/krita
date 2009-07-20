@@ -345,7 +345,7 @@ void KoView::removeStatusBarItem(QWidget * widget)
 
 void KoView::enableAutoScroll()
 {
-    //d->m_scrollTimer->start(50);
+    d->m_scrollTimer->start(50);
 }
 
 void KoView::disableAutoScroll()

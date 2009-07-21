@@ -18,7 +18,6 @@ if( QCA2_FOUND )
 endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
-    kkbdaccessextensions.cpp
     KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDocInfoPropsFactory.cpp
@@ -32,11 +31,6 @@ set(komain_LIB_SRCS
     KoDocumentInfoPropsPage.cpp
     KoFactory.cpp
     KoFileDialog.cpp
-    KoFilterChain.cpp
-    KoFilter.cpp
-    KoFilterEntry.cpp
-    KoFilterManager.cpp
-    KoFilterManager_p.cpp
     KoFrame.cpp
     KoGlobal.cpp
     KoGridData.cpp
@@ -54,6 +48,12 @@ set(komain_LIB_SRCS
     KoView.cpp
     kofficeversion.cc
     KoOdfExporter.cpp
+    KoFilterManager.cpp
+    KoFilterChain.cpp
+    KoFilter.cpp
+    KoFilterEntry.cpp
+    KoFilterManager_p.cpp
+
 )
 
 if (NOT NO_PIGMENT)
@@ -128,10 +128,8 @@ install( FILES
     KoGridData.h
     KoMainWindow.h 
     KoVersionDialog.h 
-    kkbdaccessextensions.h 
     KoView.h 
     KoViewAdaptor.h 
-    kkbdaccessextensions.h 
     kofficeversion.h 
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)

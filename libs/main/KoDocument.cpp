@@ -74,7 +74,7 @@
 #define INTERNAL_PREFIX "intern:/"
 // Warning, keep it sync in koStore.cc
 
-Q3PtrList<KoDocument> *KoDocument::s_documentList = 0L;
+QList<KoDocument*> *KoDocument::s_documentList = 0L;
 
 using namespace std;
 class KoViewWrapperWidget;
@@ -100,7 +100,6 @@ class KoDocument::Private
 {
 public:
     Private() :
-//         m_dcopObject( 0L ),
             filterManager(0L),
             m_specialOutputFlag(0),   // default is native format
             m_isImporting(false), m_isExporting(false),
@@ -127,7 +126,7 @@ public:
     }
 
     QList<KoView*> m_views;
-    Q3PtrList<KoMainWindow> m_shells;
+    QList<KoMainWindow*> m_shells;
 
     KoViewWrapperWidget *m_wrapperWidget;
 //     KoDocumentIface * m_dcopObject;
@@ -240,7 +239,7 @@ KoDocument::KoDocument(QWidget * parentWidget, QObject* parent, bool singleViewM
         , d(new Private)
 {
     if (s_documentList == 0L)
-        s_documentList = new Q3PtrList<KoDocument>;
+        s_documentList = new QList<KoDocument*>;
     s_documentList->append(this);
 
     m_bEmpty = true;
@@ -293,19 +292,19 @@ KoDocument::~KoDocument()
 
     // Tell our views that the document is already destroyed and
     // that they shouldn't try to access it.
-    foreach(KoView* view, d->m_views)
+    foreach(KoView* view, d->m_views) {
         view->setDocumentDeleted();
-
+    }
     delete d->m_startUpWidget;
     d->m_startUpWidget = 0;
 
-    d->m_shells.setAutoDelete(true);
-    d->m_shells.clear();
+    while(!d->m_shells.isEmpty()) {
+        delete d->m_shells.takeFirst();
+    }
 
-//     delete d->m_dcopObject;
     delete d->filterManager;
     delete d;
-    s_documentList->removeRef(this);
+    s_documentList->remove(this);
     // last one?
     if (s_documentList->isEmpty()) {
         delete s_documentList;
@@ -609,13 +608,12 @@ void KoDocument::setReadWrite(bool readwrite)
 {
     KParts::ReadWritePart::setReadWrite(readwrite);
 
-    foreach(KoView* view, d->m_views)
+    foreach(KoView* view, d->m_views) {
         view->updateReadWrite(readwrite);
-
-    Q3PtrListIterator<KoMainWindow> it(d->m_shells);
-    for (; it.current(); ++it)
-        it.current()->setReadWrite(readwrite);
-
+    }
+    foreach(KoMainWindow* mainWindow, d->m_shells) {
+        mainWindow->setReadWrite(readwrite);
+    }
     setAutoSave(d->m_autoSaveDelay);
 }
 
@@ -1127,9 +1125,9 @@ bool KoDocument::openUrl(const KUrl & _url)
         //if ( d->m_shells.isEmpty() )
         //    kWarning(30003) << "no shell yet !";
         // Add to recent actions list in our shells
-        Q3PtrListIterator<KoMainWindow> it(d->m_shells);
-        for (; it.current(); ++it)
-            it.current()->addRecentURL(_url);
+        foreach(KoMainWindow* mainWindow, d->m_shells) {
+            mainWindow->addRecentURL(_url);
+        }
     }
     return ret;
 }
@@ -1777,11 +1775,10 @@ void KoDocument::setTitleModified(const QString &caption, bool mod)
         return;
     }
     // we must be root doc so update caption in all related windows
-    Q3PtrListIterator<KoMainWindow> it(d->m_shells);
-    for (; it.current(); ++it) {
-        it.current()->updateCaption(caption, mod);
-        it.current()->updateReloadFileAction(this);
-        it.current()->updateVersionsFileAction(this);
+    foreach(KoMainWindow* mainWindow, d->m_shells) {
+        mainWindow->updateCaption(caption, mod);
+        mainWindow->updateReloadFileAction(this);
+        mainWindow->updateVersionsFileAction(this);
     }
 }
 
@@ -1981,7 +1978,7 @@ int KoDocument::supportedSpecialFormats() const
 
 void KoDocument::addShell(KoMainWindow *shell)
 {
-    if (d->m_shells.findRef(shell) == -1) {
+    if (d->m_shells.indexOf(shell) == -1) {
         //kDebug(30003) <<"shell" << (void*)shell <<"added to doc" << this;
         d->m_shells.append(shell);
         connect(shell, SIGNAL(documentSaved()), d->m_undoStack, SLOT(setClean()));
@@ -1991,10 +1988,10 @@ void KoDocument::addShell(KoMainWindow *shell)
 void KoDocument::removeShell(KoMainWindow *shell)
 {
     //kDebug(30003) <<"shell" << (void*)shell <<"removed from doc" << this;
-    d->m_shells.removeRef(shell);
+    d->m_shells.removeAt(d->m_shells.indexOf(shell));
 }
 
-const Q3PtrList<KoMainWindow>& KoDocument::shells() const
+const QList<KoMainWindow*>& KoDocument::shells() const
 {
     return d->m_shells;
 }
@@ -2208,7 +2205,7 @@ void KoDocument::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
 
         if (!fullTemplateName.isEmpty()) {
             openTemplate(fullTemplateName);
-            shells().getFirst()->setRootDocument(this);
+            shells().first()->setRootDocument(this);
             return;
         }
     }
@@ -2300,8 +2297,9 @@ void KoDocument::deleteOpenPane()
         d->m_startUpWidget->hide();
         d->m_startUpWidget->deleteLater();
 
-        shells().getFirst()->factory()->container("mainToolBar", shells().getFirst())->show();
-        shells().getFirst()->setRootDocument(this);
+        shells().first()->factory()->container("mainToolBar",
+                                               shells().first())->show();
+        shells().first()->setRootDocument(this);
     } else {
         emit closeEmbedInitDialog();
     }

@@ -22,7 +22,7 @@
 #define KOFILEDIALOG_H
 
 #include <kfiledialog.h>
-#include <q3valuevector.h>
+#include <QVector>
 
 /**
  * Extension to KFileDialog in order to add special entries to the filter combo,
@@ -47,7 +47,7 @@ private slots:
     void slotChangedfilter(int index);
 
 private:
-    Q3ValueVector<int> m_specialFormats;
+    QVector<int> m_specialFormats;
 };
 
 #endif /* KOFILEDIALOG_H */

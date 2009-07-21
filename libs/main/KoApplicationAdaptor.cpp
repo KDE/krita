@@ -60,11 +60,11 @@ QString KoApplicationAdaptor::createDocument(const QString &nativeFormat)
 QStringList KoApplicationAdaptor::getDocuments()
 {
     QStringList lst;
-    Q3PtrList<KoDocument> *documents = KoDocument::documentList();
+    QList<KoDocument*> *documents = KoDocument::documentList();
     if (documents) {
-        Q3PtrListIterator<KoDocument> it(*documents);
-        for (; it.current(); ++it)
-            lst.append('/' + it.current()->objectName());
+        foreach(KoDocument* document, *KoDocument::documentList()) {
+            lst.append('/' + document->objectName());
+        }
     }
     return lst;
 }
@@ -72,12 +72,12 @@ QStringList KoApplicationAdaptor::getDocuments()
 QStringList KoApplicationAdaptor::getViews()
 {
     QStringList lst;
-    Q3PtrList<KoDocument> *documents = KoDocument::documentList();
+    QList<KoDocument*> *documents = KoDocument::documentList();
     if (documents) {
-        Q3PtrListIterator<KoDocument> it(*documents);
-        for (; it.current(); ++it) {
-            foreach(KoView* view, it.current()->views())
+        foreach(KoDocument* document, *KoDocument::documentList()) {
+            foreach(KoView* view, document->views()) {
                 lst.append('/' + view->objectName());
+            }
         }
     }
     return lst;

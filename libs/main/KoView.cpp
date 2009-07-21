@@ -42,7 +42,7 @@
 #include <QtGui/QDockWidget>
 #include <QToolBar>
 #include <QApplication>
-#include <Q3ValueList>
+#include <QListt>
 
 
 //static
@@ -115,7 +115,8 @@ public:
         bool m_permanent;
         bool m_visible;  // true when the item has been added to the statusbar
     };
-    Q3ValueList<StatusBarItem> m_statusBarItems; // Our statusbar items
+    QList<StatusBarItem> m_statusBarItems; // Our statusbar items
+    bool m_inOperation; //in the middle of an operation (no screen refreshing)?
     QToolBar* m_viewBar;
 };
 
@@ -309,12 +310,12 @@ void KoView::showAllStatusBarItems(bool show)
     KStatusBar * sb = statusBar();
     if (!sb)
         return;
-    Q3ValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
-    for (; it != d->m_statusBarItems.end() ; ++it)
+    foreach(KoViewPrivate::StatusBarItem sbItem, d->m_statusBarItems) {
         if (show)
-            (*it).ensureItemShown(sb);
+            sbItem.ensureItemShown(sb);
         else
-            (*it).ensureItemHidden(sb);
+            sbItem.ensureItemHidden(sb);
+    }
 }
 
 
@@ -322,25 +323,26 @@ void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
     KoViewPrivate::StatusBarItem item(widget, stretch, permanent);
     d->m_statusBarItems.append(item);
-    Q3ValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.fromLast();
+    KoViewPrivate::StatusBarItem item = d->m_statusBarItems.last();
     KStatusBar * sb = statusBar();
-    if (sb)
-        (*it).ensureItemShown(sb);
+    if (sb) {
+        item.ensureItemShown(sb);
+    }
 }
 
 void KoView::removeStatusBarItem(QWidget * widget)
 {
     KStatusBar * sb = statusBar();
-    Q3ValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
-    for (; it != d->m_statusBarItems.end() ; ++it)
-        if ((*it).widget() == widget) {
-            if (sb)
-                (*it).ensureItemHidden(sb);
-            d->m_statusBarItems.remove(it);
+    
+    foreach(KoViewPrivate::StatusBarItem sbItem, d->m_statusBarItems) {
+        if (sbItem.widget() == widget) {
+            if (sb) {
+                sbItem.ensureItemHidden(sb);
+            }
+            m_statusBarItems.removeOne(sb);
             break;
         }
-    if (it == d->m_statusBarItems.end())
-        kWarning() << "KoView::removeStatusBarItem. Widget not found : " << widget;
+    }
 }
 
 void KoView::enableAutoScroll()

@@ -28,8 +28,6 @@
 #include <KoCanvasObserver.h>
 #include <KoCanvasObserverProvider.h>
 
-#include <Qt3Support/Q3PtrList>
-
 class KoMainWindowPrivate;
 class KoDocument;
 class KoView;
@@ -346,11 +344,6 @@ protected: // protected methods are mostly for koshell, it's the only one derivi
 
     /// Helper method for slotFileNew and slotFileClose
     void chooseNewDocument(InitDocFlags initDocFlags);
-    /**
-     * Special method for KOShell, to allow switching the root
-     * document (and its views) among a set of them.
-     */
-    void setRootDocumentDirect(KoDocument *doc, const Q3PtrList<KoView> & views);
 
     /**
      * Create a new empty document.

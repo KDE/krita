@@ -26,45 +26,22 @@
 
 #include <kactioncollection.h>
 #include <kaction.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 KoViewAdaptor::KoViewAdaptor(KoView *view)
         : QDBusAbstractAdaptor(view)
 {
     setAutoRelaySignals(true);
     m_pView = view;
-//     m_actionProxy = new KDCOPActionProxy( view->actionCollection(), this );
 }
-
-// KoViewAdaptor::KoViewAdaptor( const char *name, KoView *view )
-//     : QDBusAbstractAdaptor(view)
-// {
-//     setAutoRelaySignals(true);
-//     m_pView = view;
-// //     m_actionProxy = new KDCOPActionProxy( view->actionCollection(), this );
-// }
 
 KoViewAdaptor::~KoViewAdaptor()
 {
-//     delete m_actionProxy;
 }
 
-// QString KoViewAdaptor::action( const QString/*DCOPCString*/ &name )
-// {
-// //     return /*DCOPRef( kapp->dcopClient()->appId(), */m_actionProxy->actionObjectId( name );
-// }
 
 QStringList KoViewAdaptor::actions()
 {
-//     DCOPCStringList res;
-//     Q3ValueList<KAction *> lst = m_actionProxy->actions();
-//     Q3ValueList<KAction *>::ConstIterator it = lst.begin();
-//     Q3ValueList<KAction *>::ConstIterator end = lst.end();
-//     for (; it != end; ++it )
-//         res.append( (*it)->objectName().toUtf8() );
-//
-//     return res;
     QStringList tmp_actions;
     QList<QAction*> lst = m_pView->actionCollection()->actions();
     foreach(QAction* it, lst) {
@@ -73,10 +50,5 @@ QStringList KoViewAdaptor::actions()
     }
     return tmp_actions;
 }
-/*
-QMap<QString,QString> KoViewAdaptor::actionMap()
-{
-//     return m_actionProxy->actionMap();
-}*/
 
 #include "KoViewAdaptor.moc"

@@ -20,6 +20,8 @@
 
 #include "KoDocumentAdaptor.h"
 
+#include <QList>
+
 #include "KoDocument.h"
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
@@ -27,9 +29,6 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3PtrList>
 
 
 KoDocumentAdaptor::KoDocumentAdaptor(KoDocument * doc)
@@ -80,21 +79,8 @@ QString KoDocumentAdaptor::view(int idx)
     return v->objectName();
 }
 
-// DCOPRef KoDocumentAdaptor::action( const DCOPCString &name )
-// {
-//     return DCOPRef( kapp->dcopClient()->appId(), m_actionProxy->actionObjectId( name ) );
-// }
-
 QStringList KoDocumentAdaptor::actions()
 {
-//     DCOPCStringList res;
-//     Q3ValueList<KAction *> lst = m_actionProxy->actions();
-//     Q3ValueList<KAction *>::ConstIterator it = lst.begin();
-//     Q3ValueList<KAction *>::ConstIterator end = lst.end();
-//     for (; it != end; ++it )
-//         res.append( (*it)->objectName().toUtf8() );
-//
-//     return res;
     QStringList tmp_actions;
     QList<QAction*> lst = m_pDoc->actionCollection()->actions();
     foreach(QAction* it, lst) {
@@ -103,11 +89,6 @@ QStringList KoDocumentAdaptor::actions()
     }
     return tmp_actions;
 }
-
-// QMap<DCOPCString,DCOPRef> KoDocumentAdaptor::actionMap()
-// {
-//     return m_actionProxy->actionMap();
-// }
 
 void KoDocumentAdaptor::save()
 {

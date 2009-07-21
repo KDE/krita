@@ -29,7 +29,6 @@
 #include "KoFrame.h"
 #include "KoFileDialog.h"
 #include "KoVersionDialog.h"
-#include "kkbdaccessextensions.h"
 #include "KoDockFactory.h"
 #include "KoDockWidgetTitleBar.h"
 #include "KoPrintJob.h"
@@ -161,7 +160,7 @@ public:
     KoMainWindow *parent;
     KoDocument *m_rootDoc;
     KoDocument *m_docToOpen;
-    Q3PtrList<KoView> m_rootViews;
+    QList<KoView*> m_rootViews;
     KParts::PartManager *m_manager;
 
     KParts::Part *m_activePart;
@@ -223,7 +222,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     Q_ASSERT(componentData.isValid());
 
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
-    
+
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
     d->m_manager = new KoPartManager(this);
@@ -302,8 +301,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->m_splitter = new QSplitter(Qt::Horizontal, this);
     d->m_splitter->setObjectName("mw-splitter");
     setCentralWidget(d->m_splitter);
-    // Keyboard accessibility enhancements.
-    new KKbdAccessExtensions(actionCollection(), this);
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     KAction *closeAllViews  = new KAction(KIcon("window-close"), i18n("&Close All Views"), this);
@@ -391,12 +388,13 @@ KoMainWindow::~KoMainWindow()
     // safety first ;)
     d->m_manager->setActivePart(0);
 
-    if (d->m_rootViews.findRef(d->m_activeView) == -1) {
+    if (d->m_rootViews.find(d->m_activeView) == -1) {
         delete d->m_activeView;
         d->m_activeView = 0L;
     }
-    d->m_rootViews.setAutoDelete(true);
-    d->m_rootViews.clear();
+    while(!m_rootViews.isEmpty()) {
+        delete m_rootViews.takeFirst();
+    }
 
     // We have to check if this was a root document.
     // -> We aren't allowed to delete the (embedded) document!
@@ -430,7 +428,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
     }
 
     //kDebug(30003) <<"KoMainWindow::setRootDocument this =" << this <<" doc =" << doc;
-    Q3PtrList<KoView> oldRootViews = d->m_rootViews;
+    QList<KoView*> oldRootViews = d->m_rootViews;
     d->m_rootViews.clear();
     KoDocument *oldRootDoc = d->m_rootDoc;
 
@@ -516,22 +514,6 @@ void KoMainWindow::setReadWrite(bool readwrite)
     d->m_importFile->setEnabled(readwrite);
     d->m_readOnly =  !readwrite;
     updateCaption();
-}
-
-void KoMainWindow::setRootDocumentDirect(KoDocument *doc, const Q3PtrList<KoView> & views)
-{
-    d->m_rootDoc = doc;
-    d->m_rootViews = views;
-    bool enable = d->m_rootDoc != 0 ? true : false;
-    d->m_paDocInfo->setEnabled(enable);
-    d->m_paSave->setEnabled(enable);
-    d->m_paSaveAs->setEnabled(enable);
-    d->m_exportFile->setEnabled(enable);
-    d->m_paPrint->setEnabled(enable);
-    d->m_paPrintPreview->setEnabled(enable);
-    d->m_sendfile->setEnabled(enable);
-    d->m_exportPdf->setEnabled(enable);
-    d->m_paCloseFile->setEnabled(enable);
 }
 
 void KoMainWindow::addRecentURL(const KUrl& url)
@@ -1386,7 +1368,7 @@ void KoMainWindow::slotNewToolbarConfig()
                             d->m_veryHackyActionList);
 
     // This one only for root views
-    if (d->m_rootViews.findRef(d->m_activeView) != -1)
+    if (d->m_rootViews.find(d->m_activeView) != -1)
         factory->plugActionList(d->m_activeView, "view_split",
                                 d->m_splitViewActionList);
     plugActionList("toolbarlist", d->m_toolbarList);
@@ -1452,7 +1434,6 @@ void KoMainWindow::slotSplitView()
 
 void KoMainWindow::slotCloseAllViews()
 {
-
     // Attention: Very touchy code... you know what you're doing? Goooood :)
     d->m_forQuit = true;
     if (queryClose()) {
@@ -1460,17 +1441,18 @@ void KoMainWindow::slotCloseAllViews()
         if (d->m_rootDoc && d->m_rootDoc->isEmbedded()) {
             hide();
             d->m_rootDoc->removeShell(this);
-            Q3PtrListIterator<KoMainWindow> it(d->m_rootDoc->shells());
-            while (it.current()) {
-                it.current()->hide();
-                delete it.current(); // this updates the lists' current pointer and thus
-                // the iterator (the shell dtor calls removeShell)
+            QList<KoMainWindow*> shells = d->m_rootDoc->shells();
+            while (!shells.isEmpty()) {
+                KoMainWindow* window = shells.takeFirst();
+                window->hide();
+                delete window;
                 d->m_rootDoc = 0;
             }
         }
         // not embedded -> destroy the document and all shells/views ;)
-        else
+        else {
             setRootDocument(0L);
+        }
         close();  // close this window (and quit the app if necessary)
     }
     d->m_forQuit = false;
@@ -1479,7 +1461,7 @@ void KoMainWindow::slotCloseAllViews()
 void KoMainWindow::slotRemoveView()
 {
     KoView *view;
-    if (d->m_rootViews.findRef(d->m_activeView) != -1)
+    if (d->m_rootViews.find(d->m_activeView) != -1)
         view = d->m_rootViews.current();
     else
         view = d->m_rootViews.first();
@@ -1608,7 +1590,7 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         factory->plugActionList(d->m_activeView, "view_closeallviews",
                                 d->m_veryHackyActionList);
         // This one only for root views
-        if (d->m_rootViews.findRef(d->m_activeView) != -1)
+        if (d->m_rootViews.find(d->m_activeView) != -1)
             factory->plugActionList(d->m_activeView, "view_split", d->m_splitViewActionList);
 
         // Position and show toolbars according to user's preference

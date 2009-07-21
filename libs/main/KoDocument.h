@@ -24,7 +24,7 @@
 
 #include <QtCore/QDateTime>
 #include <QtGui/QMatrix>
-#include <Qt3Support/Q3PtrList>
+#include <QList>
 
 #include <kparts/part.h>
 #include <kservice.h>
@@ -47,7 +47,6 @@ class KoMainWindow;
 class KoView;
 class KoDocumentInfo;
 class KoOpenPane;
-
 
 class KoVersionInfo
 {
@@ -585,7 +584,7 @@ public:
     /**
      * @return the list of shells for the main window
      */
-    const Q3PtrList<KoMainWindow>& shells() const;
+    const QList<KoMainWindow*>& shells() const;
 
     /**
      * @return the number of shells for the main window
@@ -595,7 +594,7 @@ public:
     /**
      * @return the list of all the currently opened documents
      */
-    static Q3PtrList<KoDocument> *documentList() {
+    static QList<KoDocument*> *documentList() {
         return s_documentList;
     }
 
@@ -713,7 +712,7 @@ public:
 
     /**
      * Save the unit to the settings writer
-     * 
+     *
      * @param settingsWriter
      */
     void saveUnitOdf(KoXmlWriter* settingsWriter) const;
@@ -984,11 +983,16 @@ private:
 
     bool savePreview(KoStore* store);
     bool saveOasisPreview(KoStore* store, KoXmlWriter* manifestWriter);
+
     class Private;
     Private * const d;
+
     KService::Ptr m_nativeService;
+
     bool m_bEmpty;
-    static Q3PtrList<KoDocument> *s_documentList;
+
+    static QList<KoDocument*> *s_documentList;
+
     static const int s_defaultAutoSave;
 };
 

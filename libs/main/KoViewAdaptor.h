@@ -30,9 +30,7 @@ class QString;
 class QStringList;
 
 #include "komain_export.h"
-//Added by qt3to4:
 
-// class KDCOPActionProxy;
 class KoView;
 
 class KOMAIN_EXPORT KoViewAdaptor : public QDBusAbstractAdaptor
@@ -41,19 +39,14 @@ class KOMAIN_EXPORT KoViewAdaptor : public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.view")
 public:
     explicit KoViewAdaptor(KoView *view);
-    //KoViewAdaptor( const char *name, KoView *view );
-    // TODO same args order as KoDocumentIface
 
     virtual ~KoViewAdaptor();
 
 public slots: // METHODS
-    //DCOPRef action( const DCOPCString &name );
     Q_SCRIPTABLE QStringList/*DCOPCStringList*/ actions();
-    //QMap<DCOPCString,DCOPRef> actionMap();
 
 protected:
     KoView *m_pView;
-    //KDCOPActionProxy *m_actionProxy;
 
 };
 

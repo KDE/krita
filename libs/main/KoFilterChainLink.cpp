@@ -35,10 +35,17 @@ namespace
 namespace KOfficeFilter {
 
     ChainLink::ChainLink(KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
-                         const QByteArray& from, const QByteArray& to) :
-    m_chain(chain), m_filterEntry(filterEntry), m_from(from), m_to(to),
-    m_filter(0), d(0)
+                         const QByteArray& from, const QByteArray& to)
+        : m_chain(chain)
+        , m_filterEntry(filterEntry)
+        , m_from(from)
+        , m_to(to)
+        , m_filter(0)
+        , d(0)
     {
+    }
+
+    ChainLink::~ChainLink() {
     }
 
     KoFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink* const parentChainLink)

@@ -116,56 +116,49 @@ void Graph::buildGraph()
 {
     // Make sure that all available parts are added to the graph
     const QList<KoDocumentEntry> parts(KoDocumentEntry::query(KoDocumentEntry::AllEntries));
-    QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
-    QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
-    while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
-        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
-        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
-        QStringList::ConstIterator end = nativeMimeTypes.constEnd();
-        for (; it != end; ++it)
-            if (!(*it).isEmpty())
-                m_vertices.insert((*it).toLatin1(), new Vertex((*it).toLatin1()));
-        ++partIt;
+    foreach(const KoDocumentEntry& part, parts) {
+
+        QStringList nativeMimeTypes = part.service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
+        nativeMimeTypes += part.service()->property("X-KDE-NativeMimeType").toString();
+
+        foreach(const QString& nativeMimeType, nativeMimeTypes) {
+            m_vertices[nativeMimeType.toLatin1()] = new Vertex(nativeMimeType.toLatin1());
+        }
     }
 
     // no constraint here - we want *all* :)
     const QList<KoFilterEntry::Ptr> filters(KoFilterEntry::query());
-    QList<KoFilterEntry::Ptr>::ConstIterator it = filters.constBegin();
-    QList<KoFilterEntry::Ptr>::ConstIterator end = filters.constEnd();
 
-    for (; it != end; ++it) {
+    foreach(KoFilterEntry::Ptr filter, filters) {
+
         // First add the "starting points" to the dict
-        QStringList::ConstIterator importIt = (*it)->import.constBegin();
-        QStringList::ConstIterator importEnd = (*it)->import.constEnd();
-        for (; importIt != importEnd; ++importIt) {
-            const QByteArray key = (*importIt).toLatin1();    // latin1 is okay here (werner)
+        foreach (const QString& import, filter->import) {
+            const QByteArray key = import.toLatin1();    // latin1 is okay here (werner)
             // already there?
             if (!m_vertices[ key ])
                 m_vertices.insert(key, new Vertex(key));
         }
 
         // Are we allowed to use this filter at all?
-        if (KoFilterManager::filterAvailable(*it)) {
-            QStringList::ConstIterator exportIt = (*it)->export_.constBegin();
-            QStringList::ConstIterator exportEnd = (*it)->export_.constEnd();
+        if (KoFilterManager::filterAvailable(filter)) {
 
-            for (; exportIt != exportEnd; ++exportIt) {
+            foreach(const QString& exportIt, filter->export_) {
+
                 // First make sure the export vertex is in place
-                const QByteArray key = (*exportIt).toLatin1();    // latin1 is okay here
+                const QByteArray key = exportIt.toLatin1();    // latin1 is okay here
                 Vertex* exp = m_vertices[ key ];
                 if (!exp) {
                     exp = new Vertex(key);
                     m_vertices.insert(key, exp);
                 }
                 // Then create the appropriate edges
-                importIt = (*it)->import.constBegin();
-                for (; importIt != importEnd; ++importIt)
-                    m_vertices[(*importIt).toLatin1()]->addEdge(new Edge(exp, *it));
+                foreach(const QString& import, filter->import) {
+                    m_vertices[import.toLatin1()]->addEdge(new Edge(exp, filter));
+                }
             }
         } else
-            kDebug(30500) << "Filter:" << (*it)->service()->name() << " doesn't apply.";
+            kDebug(30500) << "Filter:" << filter->service()->name() << " doesn't apply.";
     }
 }
 

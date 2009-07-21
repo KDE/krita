@@ -52,23 +52,24 @@ namespace KOfficeFilter {
 
     ChainLink* ChainLinkList::next()
     {
-        if (m_current == count()) {
+        ++m_current;
+        if (m_current >= count()) {
             return 0;
         }
-        ++m_current;
-
         return current();
     }
 
     void ChainLinkList::prepend(ChainLink* link)
     {
+        Q_ASSERT(link);
         m_chainLinks.prepend(link);
         m_current = 0;
     }
 
     void ChainLinkList::append(ChainLink* link)
     {
+        Q_ASSERT(link);
         m_chainLinks.append(link);
-        m_current = m_chainLinks.count();
+        m_current = m_chainLinks.count() -1;
     }
 };

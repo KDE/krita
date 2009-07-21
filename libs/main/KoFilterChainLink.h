@@ -36,6 +36,8 @@ public:
     ChainLink(KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
               const QByteArray& from, const QByteArray& to);
 
+    ~ChainLink();
+
     KoFilter::ConversionStatus invokeFilter(const ChainLink* const parentChainLink);
 
     QByteArray from() const {

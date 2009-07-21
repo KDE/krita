@@ -331,7 +331,7 @@ public slots:
     void slotProgress(int value);
 
 
-protected: // protected methods are mostly for koshell, it's the only one deriving from KoMainWindow
+private:
 
     /**
      * This setting indicates who is calling chooseNewDocument.

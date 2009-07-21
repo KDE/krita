@@ -664,7 +664,6 @@ bool KoMainWindow::openDocument(KoDocument *newdoc, const KUrl & url)
     return openDocumentInternal(url, newdoc);
 }
 
-// ## If you modify anything here, please check KoShellWindow::openDocumentInternal
 bool KoMainWindow::openDocumentInternal(const KUrl & url, KoDocument *newdoc)
 {
     //kDebug(30003) <<"KoMainWindow::openDocument" << url.url();

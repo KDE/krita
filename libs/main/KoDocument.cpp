@@ -1926,9 +1926,7 @@ QByteArray KoDocument::readNativeFormatMimeType(const KComponentData &componentD
         if (!ptr)
             kError(30003) << "The serviceType KOfficePart is missing. Check that you have a kofficepart.desktop file in the share/servicetypes directory." << endl;
         else {
-            QString instname = componentData.isValid() ? componentData.componentName() : KGlobal::mainComponent().componentName();
-            if (instname != "koshell")   // hack for koshell
-                kWarning(30003) << service->entryPath() << ": no X-KDE-NativeMimeType entry!";
+            kWarning(30003) << service->entryPath() << ": no X-KDE-NativeMimeType entry!";
         }
     }
 

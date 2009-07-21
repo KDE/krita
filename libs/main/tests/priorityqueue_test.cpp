@@ -56,9 +56,9 @@ static const char* const keys[] =
 void PriorityQueue_test::testQueue()
 {
     QList<Node*> list;
-    QHash<QByteArray, Node> dict;
+    QHash<QByteArray, Node*> dict;
 
-    KOffice::PriorityQueue<Node> queue;
+    KOfficeFilter::PriorityQueue<Node> queue;
 
     srand(time(0));
     for (int i = 0; i < 12; ++i) {
@@ -76,9 +76,9 @@ void PriorityQueue_test::testQueue()
     QCOMPARE(queue.extractMinimum()->index(), 0);
 
 
-// TODO figure out what this class is supposed to do and add more tests...
+    // TODO figure out what this class is supposed to do and add more tests...
     //kDebug() << "##### Queue 2:";
-    KOffice::PriorityQueue<Node> queue2(dict);
+    KOfficeFilter::PriorityQueue<Node> queue2(dict);
     //queue2.dump();
 
     Node *n = list.at(6);

@@ -32,7 +32,7 @@ int main(int /*argc*/, char ** /*argv*/)
 
     KoFilterManager *manager = new KoFilterManager(0);
     kDebug() << "Trying to build some filter chains...";
-    QLatin1String mimeType("foo/bar");
+    QByteArray mimeType("foo/bar");
     KoFilterChain::Ptr chain = g.chain(manager, mimeType);
     if (!chain)
         kDebug() << "Chain for 'foo/bar' is not available, OK";

@@ -31,7 +31,6 @@ set(komain_LIB_SRCS
     KoDocumentInfoPropsPage.cpp
     KoFactory.cpp
     KoFileDialog.cpp
-    KoFrame.cpp
     KoGlobal.cpp
     KoGridData.cpp
     KoMainWindow.cpp
@@ -123,7 +122,6 @@ install( FILES
     KoFilterChain.h
     KoFilterEntry.h 
     KoFilterManager.h 
-    KoFrame.h 
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h 

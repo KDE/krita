@@ -54,6 +54,8 @@
 #include <kis_selection.h>
 #include <kis_paintop_preset.h>
 
+#include <kis_transaction.h>
+
 // Krita/ui
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
@@ -337,7 +339,8 @@ void KisToolFreehand::endPaint()
         KisLayerSP layer = dynamic_cast<KisLayer*>(currentNode().data());
 
         if (layer && !m_paintIncremental) {
-            m_painter->endTransaction();
+            KisTransaction *incrementalTransaction = 
+		dynamic_cast<KisTransaction*>(m_painter->endTransaction());
 
             KisPainter painter(m_source, currentSelection());
             painter.setCompositeOp(m_compositeOp);
@@ -365,6 +368,8 @@ void KisToolFreehand::endPaint()
             if (indirect)
                 indirect->setTemporaryTarget(0);
             //m_source->setDirty(painter.dirtyRegion());
+	    
+	    delete incrementalTransaction;
 
             m_canvas->addCommand(painter.endTransaction());
         } else {

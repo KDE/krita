@@ -5,7 +5,7 @@ if (KdepimLibs_FOUND)
    add_definitions(-DKDEPIMLIBS_FOUND)
 endif (KdepimLibs_FOUND)
 
-include_directories( ${KOMAIN_INCLUDES} 
+include_directories( ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
 )
@@ -52,7 +52,10 @@ set(komain_LIB_SRCS
     KoFilter.cpp
     KoFilterEntry.cpp
     KoFilterManager_p.cpp
-
+    KoFilterVertex.cpp
+    KoFilterGraph.cpp
+    KoFilterEdge.cpp
+    KoFilterChainLink.cpp
 )
 
 if (NOT NO_PIGMENT)
@@ -64,7 +67,7 @@ endif (NOT NO_PIGMENT)
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
    koDocumentInfoAuthorWidget.ui
-)   
+)
 
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
@@ -73,8 +76,8 @@ if (NOT NO_PIGMENT)
 endif (NOT NO_PIGMENT)
 
 target_link_libraries(komain ${extra_libs}
-                      flake koaction koaspectbutton kobase kocharacterselectiondialog kocvsimport 
-                      kodocumentsectionbox koinput kolinestyleselector koodf koopenpane kopicture koplugin koprogress 
+                      flake koaction koaspectbutton kobase kocharacterselectiondialog kocvsimport
+                      kodocumentsectionbox koinput kolinestyleselector koodf koopenpane kopicture koplugin koprogress
                       kostore kozoomaction kotext kopagelayout
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KABC_LIBS}
@@ -111,24 +114,24 @@ install(FILES kodocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES kofficedocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
 install(FILES koffice_shell.rc DESTINATION ${DATA_INSTALL_DIR}/koffice )
 install( FILES
-    KoApplication.h 
-    KoApplicationAdaptor.h 
-    KoDocument.h 
-    KoDocumentEntry.h 
-    KoDocumentInfo.h 
-    KoDocumentInfoDlg.h 
-    KoFactory.h 
+    KoApplication.h
+    KoApplicationAdaptor.h
+    KoDocument.h
+    KoDocumentEntry.h
+    KoDocumentInfo.h
+    KoDocumentInfoDlg.h
+    KoFactory.h
     KoFilter.h
     KoFilterChain.h
-    KoFilterEntry.h 
-    KoFilterManager.h 
+    KoFilterEntry.h
+    KoFilterManager.h
     KoGlobal.h
     KoGridData.h
-    KoMainWindow.h 
-    KoVersionDialog.h 
-    KoView.h 
-    KoViewAdaptor.h 
-    kofficeversion.h 
+    KoMainWindow.h
+    KoVersionDialog.h
+    KoView.h
+    KoViewAdaptor.h
+    kofficeversion.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

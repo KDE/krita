@@ -19,8 +19,8 @@
 #ifndef __koffice_filter_chain_h__
 #define __koffice_filter_chain_h__
 
-#include <Qt3Support/Q3AsciiDict>
-#include <Qt3Support/Q3PtrList>
+#include <QHash>
+#include <QList>
 #include <QtCore/QStringList>
 
 #include "KoFilter.h"
@@ -32,9 +32,13 @@ class KTemporaryFile;
 class KoFilterManager;
 class KoDocument;
 
-namespace KOffice
+
+namespace KoFilter
 {
-class Graph;
+    class Graph;
+    class ChainLink;
+    class Vertex;
+    class Edge;
 }
 
 /**
@@ -50,7 +54,7 @@ class KOMAIN_EXPORT KoFilterChain : public KShared
 {
     // Only KOffice::Graph is allowed to construct instances and
     // add chain links.
-    friend class KOffice::Graph;
+    friend class KoFilter::Graph;
     friend class KoFilterManager;
 
 public:
@@ -174,53 +178,6 @@ private:
     KoDocument* createDocument(const QString& file);
     KoDocument* createDocument(const QByteArray& mimeType);
 
-    /**
-     * A small private helper class with represents one single filter
-     * (one link of the chain)
-     * @internal
-     */
-    class ChainLink
-    {
-
-    public:
-        ChainLink(KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
-                  const QByteArray& from, const QByteArray& to);
-
-        KoFilter::ConversionStatus invokeFilter(const ChainLink* const parentChainLink);
-
-        QByteArray from() const {
-            return m_from;
-        }
-        QByteArray to() const {
-            return m_to;
-        }
-
-        // debugging
-        void dump() const;
-
-        // This hack is only needed due to crappy Microsoft design and
-        // circular dependencies in their embedded files :}
-        int lruPartIndex() const;
-
-    private:
-        ChainLink(const ChainLink& rhs);
-        ChainLink& operator=(const ChainLink& rhs);
-
-        void setupCommunication(const KoFilter* const parentFilter) const;
-        void setupConnections(const KoFilter* sender, const KoFilter* receiver) const;
-
-        KoFilterChain* m_chain;
-        KoFilterEntry::Ptr m_filterEntry;
-        QByteArray m_from, m_to;
-
-        // This hack is only needed due to crappy Microsoft design and
-        // circular dependencies in their embedded files :}
-        KoFilter* m_filter;
-
-        class Private;
-        Private * const d;
-    };
-
     // "A whole is that which has beginning, middle, and end" - Aristotle
     // ...but we also need to signal "Done" state, Mr. Aristotle
     enum Whole { Beginning = 1, Middle = 2, End = 4, Done = 8 };
@@ -230,7 +187,8 @@ private:
     KoFilterChain& operator=(const KoFilterChain& rhs);
 
     const KoFilterManager* const m_manager;
-    Q3PtrList<ChainLink> m_chainLinks;
+    QList<KoFilter::ChainLink*> m_chainLinks;
+    KoFilter::ChainLink* m_currentChainLink;
 
     // stuff needed for bookkeeping
     int m_state;
@@ -264,177 +222,5 @@ private:
     class Private;
     Private * const d;
 };
-
-
-// As we use quite generic classnames...
-namespace KOffice
-{
-class Vertex;
-template<class T> class PriorityQueue;
-
-/**
- * An internal class representing a filter (=edge) in the filter graph.
- * @internal
- */
-class Edge
-{
-
-public:
-    // creates a new edge to "vertex" with the given weight.
-    Edge(Vertex* vertex, KoFilterEntry::Ptr filterEntry);
-    ~Edge() {}
-
-    unsigned int weight() const {
-        return m_filterEntry ? m_filterEntry->weight : 0;
-    }
-    KoFilterEntry::Ptr filterEntry() const {
-        return m_filterEntry;
-    }
-    const Vertex* vertex() const {
-        return m_vertex;
-    }
-
-    // Relaxes the "connected" vertex (i.e. the weight of the
-    // connected vertex = "predec.->key()" (parameter) + weight of this edge
-    // As this will only be called once we calculate the weight
-    // of the edge "on the fly"
-    // Note: We have to pass the queue as we have to call keyDecreased :}
-    void relax(const Vertex* predecessor, PriorityQueue<Vertex>& queue);
-
-    // debugging
-    void dump(const QByteArray& indent) const;
-
-private:
-    Edge(const Edge& rhs);
-    Edge& operator=(const Edge& rhs);
-
-    Vertex* m_vertex;
-    KoFilterEntry::Ptr m_filterEntry;
-
-    class Private;
-    Private * const d;
-};
-
-
-/**
- * An internal class representing a mime type (=node, vertex) in the filter graph.
- * @internal
- */
-class Vertex
-{
-
-public:
-    Vertex(const QByteArray& mimeType);
-    ~Vertex() {}
-
-    QByteArray mimeType() const {
-        return m_mimeType;
-    }
-
-    // Current "weight" of the vertex - will be "relaxed" when
-    // running the shortest path algorithm. Returns true if it
-    // really has been "relaxed"
-    bool setKey(unsigned int key);
-    unsigned int key() const {
-        return m_weight;
-    }
-    // Can be used to set the key back to "Infinity" (UINT_MAX)
-    // and reset the predecessor of this vertex
-    void reset();
-
-    // Position in the heap, needed for a fast keyDecreased operation
-    void setIndex(int index) {
-        m_index = index;
-    }
-    int index() const {
-        return m_index;
-    }
-
-    // predecessor on the way from the source to the destination,
-    // needed for the shortest path algorithm
-    void setPredecessor(const Vertex* predecessor) {
-        m_predecessor = predecessor;
-    }
-    const Vertex* predecessor() const {
-        return m_predecessor;
-    }
-
-    // Adds an outgoing edge to the vertex, transfers ownership
-    void addEdge(const Edge* edge);
-    // Finds the lightest(!) edge pointing to the given vertex, if any (0 if not found)
-    // This means it will always search the whole list of edges
-    const Edge* findEdge(const Vertex* vertex) const;
-
-    // This method is called when we need to relax all "our" edges.
-    // We need to pass the queue as we have to notify it about key changes - ugly :(
-    void relaxVertices(PriorityQueue<Vertex>& queue);
-
-    // debugging
-    void dump(const QByteArray& indent) const;
-
-private:
-    Vertex(const Vertex& rhs);
-    Vertex& operator=(const Vertex& rhs);
-
-    Q3PtrList<Edge> m_edges;
-    const Vertex* m_predecessor;
-    QByteArray m_mimeType;
-    unsigned int m_weight; // "key" inside the queue
-    int m_index; // position inside the queue, needed for a fast keyDecreased()
-
-    class Private;
-    Private * const d;
-};
-
-
-/**
- * The main worker behind the scenes. Manages the creation of the graph,
- * processing the information in it, and creating the filter chains.
- * @internal
- * Only exported for unit tests.
- */
-class KOMAIN_EXPORT Graph
-{
-
-public:
-    explicit Graph(const QByteArray& from);
-    ~Graph() {}
-
-    bool isValid() const {
-        return m_graphValid;
-    }
-
-    QByteArray sourceMimeType() const {
-        return m_from;
-    }
-    void setSourceMimeType(const QByteArray& from);
-
-    // Creates a chain from "from" to the "to" mimetype
-    // If the "to" mimetype isEmpty() then we try to find the
-    // closest KOffice mimetype and use that as destination.
-    // After such a search "to" will contain the dest. mimetype (return value)
-    // if the search was successful. Might return 0!
-    KoFilterChain::Ptr chain(const KoFilterManager* manager, QByteArray& to) const;
-
-    // debugging
-    void dump() const;
-
-private:
-    Graph(const Graph& rhs);
-    Graph& operator=(const Graph& rhs);
-
-    void buildGraph();
-    void shortestPaths();
-    QByteArray findKOfficePart() const;
-
-    Q3AsciiDict<Vertex> m_vertices;
-    QByteArray m_from;
-    bool m_graphValid;
-
-    class Private;
-    Private * const d;
-};
-
-} // namespace KOffice
 
 #endif // __koffice_filter_chain_h__

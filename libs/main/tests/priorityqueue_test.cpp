@@ -56,7 +56,7 @@ static const char* const keys[] =
 void PriorityQueue_test::testQueue()
 {
     QList<Node*> list;
-    Q3AsciiDict<Node> dict;
+    QHash<QByteArray, Node> dict;
 
     KOffice::PriorityQueue<Node> queue;
 

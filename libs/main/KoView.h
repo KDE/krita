@@ -121,13 +121,6 @@ public:
      * and a right and bottom border is used to display scrollbars. If the view
      * becomes inactive, then this stuff is not displayed anymore.
      *
-     * KoFrame uses this border information. If an embedded document becomes active
-     * then it is resized so that it has enough space to display the borders and to
-     * display the same content as before the activation.
-     * So if for example all of your borders are 20 pixels, then activating the embedded
-     * document causes the KoView to move 20 pixels up/left and the size and width increases
-     * by 20+20 pixels each.
-     *
      * The default border is 0.
      */
     virtual int leftBorder() const;

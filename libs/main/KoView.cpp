@@ -26,7 +26,6 @@
 #include "KoDockRegistry.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
-#include "KoFrame.h"
 #include "KoViewAdaptor.h"
 #include "KoDockFactory.h"
 

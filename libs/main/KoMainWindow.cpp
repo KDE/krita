@@ -26,7 +26,6 @@
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
-#include "KoFrame.h"
 #include "KoFileDialog.h"
 #include "KoVersionDialog.h"
 #include "KoDockFactory.h"
@@ -84,7 +83,7 @@ public:
         setIgnoreScrollBars(true);
     }
     virtual bool eventFilter(QObject *obj, QEvent *ev) {
-        if (!obj->isWidgetType() || ::qobject_cast<KoFrame *>(obj))
+        if (!obj->isWidgetType() )
             return false;
         return KParts::PartManager::eventFilter(obj, ev);
     }

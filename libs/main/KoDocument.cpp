@@ -2380,8 +2380,9 @@ KoMainWindow* KoDocument::currentShell()
     }
 
     KoMainWindow* shell = qobject_cast<KoMainWindow*>(widget);
-    Q_ASSERT(shell);
-    Q_ASSERT(d->m_shells.contains(shell));
+    if (!shell) {
+        shell = d->m_shells.first();
+    }
     return shell;
 }
 

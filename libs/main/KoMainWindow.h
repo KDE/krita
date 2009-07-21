@@ -401,9 +401,11 @@ protected: // protected methods are mostly for koshell, it's the only one derivi
     KRecentFilesAction *recentAction() const;
 
 protected slots:
+
     virtual void slotActivePartChanged(KParts::Part *newPart);
 
 private slots:
+
     void slotLoadCompleted();
     void slotLoadCanceled(const QString &);
     void slotSaveCompleted();
@@ -421,7 +423,11 @@ private:
 
     void saveWindowSettings();
 
+    // retrieve the current KoView
+    KoView* currentView() const;
+
 private:
+
     KoMainWindowPrivate * const d;
 };
 

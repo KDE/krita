@@ -61,6 +61,7 @@
 #include <QDockWidget>
 #include <QApplication>
 #include <QLayout>
+#include <QLabel>
 #include <QProgressBar>
 #include <QSplitter>
 #include <QTabBar>
@@ -387,12 +388,12 @@ KoMainWindow::~KoMainWindow()
     // safety first ;)
     d->m_manager->setActivePart(0);
 
-    if (d->m_rootViews.find(d->m_activeView) == -1) {
+    if (d->m_rootViews.indexOf(d->m_activeView) == -1) {
         delete d->m_activeView;
         d->m_activeView = 0L;
     }
-    while(!m_rootViews.isEmpty()) {
-        delete m_rootViews.takeFirst();
+    while(!d->m_rootViews.isEmpty()) {
+        delete d->m_rootViews.takeFirst();
     }
 
     // We have to check if this was a root document.
@@ -476,13 +477,13 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
     d->m_paCloseFile->setEnabled(enable);
     updateCaption();
 
-    d->m_manager->setActivePart(d->m_rootDoc, d->m_rootViews.current());
+    d->m_manager->setActivePart(d->m_rootDoc, currentView());
 
     emit restoringDone();
 
-    oldRootViews.setAutoDelete(true);
-    oldRootViews.clear();
-
+    while(!oldRootViews.isEmpty()) {
+        delete oldRootViews.takeFirst();
+    }
     if (oldRootDoc && oldRootDoc->viewCount() == 0) {
         //kDebug(30003) <<"No more views, deleting old doc" << oldRootDoc;
         oldRootDoc->clearUndoHistory();
@@ -620,7 +621,7 @@ KoDocument *KoMainWindow::rootDocument() const
 
 KoView *KoMainWindow::rootView() const
 {
-    if (d->m_rootViews.find(d->m_activeView) != -1)
+    if (d->m_rootViews.indexOf(d->m_activeView) != -1)
         return d->m_activeView;
     return d->m_rootViews.first();
 }
@@ -1367,7 +1368,7 @@ void KoMainWindow::slotNewToolbarConfig()
                             d->m_veryHackyActionList);
 
     // This one only for root views
-    if (d->m_rootViews.find(d->m_activeView) != -1)
+    if (d->m_rootViews.indexOf(d->m_activeView) != -1)
         factory->plugActionList(d->m_activeView, "view_split",
                                 d->m_splitViewActionList);
     plugActionList("toolbarlist", d->m_toolbarList);
@@ -1421,7 +1422,7 @@ void KoMainWindow::showToolbar(const char * tbName, bool shown)
 void KoMainWindow::slotSplitView()
 {
     d->m_splitted = true;
-    KoView *current = d->m_rootViews.current();
+    KoView *current = currentView();
     KoView *newView = d->m_rootDoc->createView(d->m_splitter);
     d->m_rootViews.append(newView);
     current->show();
@@ -1460,13 +1461,16 @@ void KoMainWindow::slotCloseAllViews()
 void KoMainWindow::slotRemoveView()
 {
     KoView *view;
-    if (d->m_rootViews.find(d->m_activeView) != -1)
-        view = d->m_rootViews.current();
+    if (d->m_rootViews.indexOf(d->m_activeView) != -1)
+        view = currentView();
     else
         view = d->m_rootViews.first();
+
     view->hide();
-    if (!d->m_rootViews.removeRef(view))
+
+    if (d->m_rootViews.indexOf(view) == -1) {
         kWarning() << "view not found in d->m_rootViews!";
+    }
 
     if (d->m_rootViews.count() == 1) {
         d->m_removeView->setEnabled(false);
@@ -1589,7 +1593,7 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         factory->plugActionList(d->m_activeView, "view_closeallviews",
                                 d->m_veryHackyActionList);
         // This one only for root views
-        if (d->m_rootViews.find(d->m_activeView) != -1)
+        if (d->m_rootViews.indexOf(d->m_activeView) != -1)
             factory->plugActionList(d->m_activeView, "view_split", d->m_splitViewActionList);
 
         // Position and show toolbars according to user's preference
@@ -1898,6 +1902,17 @@ void KoMainWindow::setDockerManager(KoDockerManager *dm)
 KRecentFilesAction *KoMainWindow::recentAction() const
 {
     return d->recent;
+}
+
+KoView* KoMainWindow::currentView() const
+{
+    // XXX
+    if (d->m_activeView) {
+        return d->m_activeView;
+    }
+    else {
+        return d->m_rootViews.first();
+    }
 }
 
 #include "KoMainWindow.moc"

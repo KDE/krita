@@ -41,7 +41,7 @@
 #include <QtGui/QDockWidget>
 #include <QToolBar>
 #include <QApplication>
-#include <QListt>
+#include <QList>
 
 
 //static
@@ -84,6 +84,14 @@ public:
                 : m_widget(0), m_visible(false) {}
         StatusBarItem(QWidget * widget, int stretch, bool permanent)
                 : m_widget(widget), m_stretch(stretch), m_permanent(permanent), m_visible(false) {}
+
+        bool operator==(const StatusBarItem& rhs) {
+            return m_widget == rhs.m_widget;
+        }
+
+        bool operator!=(const StatusBarItem& rhs) {
+            return m_widget != rhs.m_widget;
+        }
 
         QWidget * widget() const {
             return m_widget;
@@ -322,23 +330,23 @@ void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
     KoViewPrivate::StatusBarItem item(widget, stretch, permanent);
     d->m_statusBarItems.append(item);
-    KoViewPrivate::StatusBarItem item = d->m_statusBarItems.last();
+    item = d->m_statusBarItems.last();
     KStatusBar * sb = statusBar();
     if (sb) {
         item.ensureItemShown(sb);
     }
 }
 
-void KoView::removeStatusBarItem(QWidget * widget)
+void KoView::removeStatusBarItem(QWidget *widget)
 {
-    KStatusBar * sb = statusBar();
-    
+    KStatusBar *sb = statusBar();
+
     foreach(KoViewPrivate::StatusBarItem sbItem, d->m_statusBarItems) {
         if (sbItem.widget() == widget) {
             if (sb) {
                 sbItem.ensureItemHidden(sb);
             }
-            m_statusBarItems.removeOne(sb);
+            d->m_statusBarItems.removeOne(sbItem);
             break;
         }
     }

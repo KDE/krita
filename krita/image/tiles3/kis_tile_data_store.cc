@@ -17,14 +17,14 @@
  */
 
 
-#include "kis_tile_data.h"
+#include <stdio.h>
 #include "kis_tile_data_store.h"
 
 
 /**
  * TODO:
  * 1) Swapper thread
- * 2) Pool of prealloc'ed tiledata objects
+ * 2) [Done] Pool of prealloc'ed tiledata objects
  * 3) Compression before swapping
  */
 
@@ -87,13 +87,16 @@ void KisTileDataStore::tileListClear()
 }
 
 KisTileDataStore::KisTileDataStore()
-    : m_listRWLock(QReadWriteLock::Recursive),
+    : m_pooler(this),
+      m_listRWLock(QReadWriteLock::Recursive),
       m_tileDataListHead(0)
 {
+    m_pooler.start();
 }
 
 KisTileDataStore::~KisTileDataStore()
 {
+    m_pooler.terminatePooler();
     tileListClear();
 }
 
@@ -105,10 +108,34 @@ KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *def
     return td;
 }
 
+
+//#define DEBUG_PRECLONE
+
+#ifdef DEBUG_PRECLONE
+#define DEBUG_PRECLONE_ACTION(action, oldTD, newTD)	\
+    printf("!!! %s:\t\t\t  0x%X -> 0x%X    \t\t!!!\n",	\
+	   action, (quintptr)oldTD, (quintptr) newTD)
+#define DEBUG_FREE_ACTION(td) \
+    printf("Tile data free'd \t(0x%X)\n", td)
+#else
+#define DEBUG_PRECLONE_ACTION(action, oldTD, newTD)
+#define DEBUG_FREE_ACTION(td)
+#endif
+
 KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
 {
-    KisTileData *td = new KisTileData(*rhs);
+    KisTileData *td;
 
+    /* FIXME: race condition in QList */
+    if(!rhs->m_clonesList.isEmpty()) {
+	td = rhs->m_clonesList.takeFirst();
+	DEBUG_PRECLONE_ACTION("+ Pre-clone HIT", rhs, td);
+    }
+    else {
+	td = new KisTileData(*rhs);
+	DEBUG_PRECLONE_ACTION("- Pre-clone #MISS#", rhs, td);
+    }
+	
     tileListAppend(td);
     return td;
 }
@@ -116,6 +143,8 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
 void KisTileDataStore::freeTileData(KisTileData *td)
 {
     Q_ASSERT(td->m_store==this);
+
+    DEBUG_FREE_ACTION(TD);
 
     tileListDetach(td);
     delete td;
@@ -128,7 +157,6 @@ void KisTileDataStore::ensureTileDataLoaded(const KisTileData *td)
 }
 
 
-#include <stdio.h>
 void KisTileDataStore::debugPrintList()
 {
     KisTileData *iter;

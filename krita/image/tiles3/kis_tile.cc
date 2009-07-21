@@ -77,12 +77,20 @@ KisTile::~KisTile()
 }
 
 //#define DEBUG_TILE_LOCKING
+//#define DEBUG_TILE_COWING
 
 #ifdef DEBUG_TILE_LOCKING
     #define DEBUG_LOG_ACTION(action)                                        \
-        printf("### %s \ttile:\t0x%X (%d, %d) ###\n", action, (quintptr)this, m_col, m_row)
+         printf("### %s \ttile:\t0x%X (%d, %d) (0x%X) ###\n", action, (quintptr)this, m_col, m_row, (quintptr)m_tileData)
 #else
     #define DEBUG_LOG_ACTION(action)
+#endif
+
+#ifdef DEBUG_TILE_COWING
+    #define DEBUG_COWING(newTD) \
+         printf("### COW done \ttile:\t0x%X (%d, %d) (0x%X -> 0x%X) [mm: 0x%X] ###\n", (quintptr)this, m_col, m_row, (quintptr)m_tileData, (quintptr)newTD, m_mementoManager);
+#else
+    #define DEBUG_COWING(newTD)
 #endif
 
 
@@ -102,10 +110,10 @@ void KisTile::lockForWrite()
     /* We are doing COW here */
     if(lazyCopying()) {
         KisTileData *tileData = globalTileDataStore.duplicateTileData(m_tileData);
+	DEBUG_COWING(tileData);
         globalTileDataStore.releaseTileData(m_tileData);
         m_tileData = tileData;
         globalTileDataStore.acquireTileData(m_tileData);
-        DEBUG_LOG_ACTION("COW done");
         if(m_mementoManager)
             m_mementoManager->registerTileChange(this);
     }
@@ -117,7 +125,7 @@ void KisTile::lockForWrite()
 
 void KisTile::unlock() const
 {
-    DEBUG_LOG_ACTION("unlock");
+    //DEBUG_LOG_ACTION("unlock");
 //    m_lock.unlock();
 }
 

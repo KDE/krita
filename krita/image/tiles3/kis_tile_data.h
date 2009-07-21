@@ -21,8 +21,12 @@
 #include <string.h>
 #include <QReadWriteLock>
 #include <QAtomicInt>
+#include <QList>
 
+class KisTileData;
 class KisTileDataStore;
+
+typedef QList<KisTileData*> KisTileDataCache;
 
 /**
  * Stores actual tile's data
@@ -61,6 +65,15 @@ public:
 
 private:
     void fillWithPixel(const quint8 *defPixel);
+
+private:
+    friend class KisTileDataPooler;
+    /**
+     * A list of pre-duplicated tiledatas.
+     * To make a COW faster, KisTileDataPooler thread duplicates
+     * a tile beforehand and stores clones here, in this list
+     */
+    KisTileDataCache m_clonesList;
 
 private:
     friend class KisTile;

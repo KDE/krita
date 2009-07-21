@@ -70,6 +70,12 @@ KisTileData::~KisTileData()
 
     if(m_data)
         delete[] m_data;
+
+    /* Free clones list */
+    KisTileData *td;
+    foreach(td, m_clonesList) {
+	delete td;
+    }
 }
 
 void KisTileData::fillWithPixel(const quint8 *defPixel)

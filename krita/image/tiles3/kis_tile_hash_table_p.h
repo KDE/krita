@@ -72,6 +72,7 @@ KisTileHashTableTraits<T>::~KisTileHashTableTraits()
 {
     clear();
     delete[] m_hashTable;
+    setDefaultTileData(0);
 }
 
 template<class T>
@@ -233,8 +234,10 @@ void KisTileHashTableTraits<T>::setDefaultTileData(KisTileData *defaultTileData)
         m_defaultTileData=0;
     }
 
-    globalTileDataStore.acquireTileData(defaultTileData);
-    m_defaultTileData=defaultTileData;
+    if(defaultTileData) {
+	globalTileDataStore.acquireTileData(defaultTileData);
+	m_defaultTileData=defaultTileData;
+    }
 }
 
 template<class T>

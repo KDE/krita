@@ -24,14 +24,16 @@
 //#define DEBUG_MM
 
 #ifdef DEBUG_MM
-
 #define DEBUG_LOG_TILE_ACTION(action, tile, col, row)                   \
-  printf("### MementoManager (0x%X): %s "                               \
-         "\ttile:\t0x%X (%d, %d) ###\n", (quintptr)this, action,        \
-         (quintptr)tile, col, row)
+    printf("### MementoManager (0x%X): %s "				\
+	   "\ttile:\t0x%X (%d, %d) ###\n", (quintptr)this, action,	\
+	   (quintptr)tile, col, row)
+
+#define DEBUG_LOG_SIMPLE_ACTION(action)					\
+    printf("### MementoManager (0x%X): %s\n", (quintptr)this, action)
 
 #define DEBUG_DUMP_MESSAGE(action) do {                                 \
-      printf("\n### MementoManager (0x%X): %s \t\t##########\n",        \
+      printf("\n### MementoManager (0x%X): %s \t\t##########\n",	\
              (quintptr)this, action);                                   \
       debugPrintInfo();                                                 \
       printf("##################################################################\n\n"); \
@@ -40,6 +42,7 @@
 #else
 
 #define DEBUG_LOG_TILE_ACTION(action, tile, col, row)
+#define DEBUG_LOG_SIMPLE_ACTION(action)
 #define DEBUG_DUMP_MESSAGE(action)
 #endif
 
@@ -63,6 +66,7 @@ KisMementoManager::~KisMementoManager()
 {
     // Nothing to be done here. Happily...
     // Everything is done by QList and KisSharedPtr...
+    DEBUG_LOG_SIMPLE_ACTION("died\n");
 }
 
 /**
@@ -110,18 +114,27 @@ void KisMementoManager::commit()
     }
     m_revisions.append(m_index);
     m_index.clear();
+
+    // Waking up pooler to make copies for us
+    globalTileDataStore.kickPooler();
 }
 
 KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row)
 {
-    bool newTile;
-    return m_headsHashTable.getTileLazy(col, row, newTile)->tile(0);
+    /**
+     * Our getOldTile  mechanism is supposed to return  current tile, if
+     * no history  exists. So we return  zero here if  nothing is found,
+     * but data manager  will make all work on  getting current tile for
+     * us
+     */
+    KisMementoItemSP mi = m_headsHashTable.getExistedTile(col, row);
+    return mi ? mi->tile(0) : 0;
 }
 
 KisMementoSP KisMementoManager::getMemento() 
 {
     commit();
-    m_currentMemento = new KisMemento();
+    m_currentMemento = new KisMemento(this);
 
     DEBUG_DUMP_MESSAGE("GET_MEMENTO");
 

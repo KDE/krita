@@ -40,9 +40,11 @@ typedef KisSharedPtr<KisMemento> KisMementoSP;
 class KisMemento : public KisShared
 {
 public:
-    inline KisMemento() {
+    inline KisMemento(KisMementoManager* mementoManager) {
+	m_mementoManager = mementoManager;
+
         m_valid = true;
-        
+
         m_extentMinX = qint32_MAX;
         m_extentMinY = qint32_MAX;
         m_extentMaxX = qint32_MIN;
@@ -52,11 +54,16 @@ public:
     inline ~KisMemento() {
     }
 
+    inline void reportEndTransaction() {
+	if(m_mementoManager)
+	    m_mementoManager->commit();
+    }
+
     inline void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h){
         x = m_extentMinX;
         y = m_extentMinY;
-        w = m_extentMaxX - m_extentMinX + 1;
-        h = m_extentMaxY - m_extentMinY + 1;
+	w = (m_extentMaxX >= m_extentMinX) ? m_extentMaxX - m_extentMinX + 1 : 0;
+	h = (m_extentMaxY >= m_extentMinY) ? m_extentMaxY - m_extentMinY + 1 : 0;
     }
 
     inline QRect extent(){
@@ -98,6 +105,8 @@ private:
     }
 
 private:
+    KisMementoManager* m_mementoManager;
+
     qint32 m_extentMinX;
     qint32 m_extentMaxX;
     qint32 m_extentMinY;

@@ -9,7 +9,7 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 # 2 - image/tiles_new
 # 3 - image/tiles3
 
-set(USE_TILESYSTEM 1)
+set(USE_TILESYSTEM 3)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-tiles.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/../config-tiles.h) ### WRONG PLACE???
 
 if(USE_TILESYSTEM EQUAL 1)
@@ -31,6 +31,7 @@ set(libkritatile_SRCS
         ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile.cc
         ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data.cc
         ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_store.cc
+        ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_pooler.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_data_manager.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_memento_manager.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tilediterator.cc

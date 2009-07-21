@@ -22,6 +22,8 @@
 #include <QReadWriteLock>
 #include "kis_tile_data.h"
 
+#include "kis_tile_data_pooler.h"
+
 
 /**
  * Stores tileData objects. When needed compresses them and swaps.
@@ -84,6 +86,11 @@ public:
         return allocTileData(pixelSize, defPixel);
     }
     
+    // Called by The Memento Manager after every commit
+    inline void kickPooler() {
+	m_pooler.kick();
+    }
+
 private:
     KisTileData *allocTileData(qint32 pixelSize, const quint8 *defPixel);
     void freeTileData(KisTileData *td);
@@ -93,10 +100,12 @@ private:
     void tileListClear();
 
 private:
+    friend class KisTileDataPooler;
+    KisTileDataPooler m_pooler;
+
     QReadWriteLock m_listRWLock;
     KisTileData *m_tileDataListHead;
 };
-
 
 extern KisTileDataStore globalTileDataStore;
 

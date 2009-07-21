@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <QString>
-#include <QHash>
+#include <q3asciidict.h>
 #include <kdebug.h>
 
 // Better put all those internal classes in some namespace to avoid clashes
@@ -61,7 +61,7 @@ template<class T> class PriorityQueue
 public:
     PriorityQueue() {}
     PriorityQueue(const PriorityQueue<T>& rhs) : m_vector(rhs.m_vector) {}
-    PriorityQueue(const QHash<QByteArray,T>& items);
+    PriorityQueue(const Q3AsciiDict<T>& items);
     ~PriorityQueue() {}
 
     PriorityQueue<T> &operator=(const PriorityQueue<T>& rhs) {
@@ -116,10 +116,10 @@ private:
 };
 
 template<class T>
-PriorityQueue<T>::PriorityQueue(const QHash<QByteArray, T>& items) : m_vector(items.count())
+PriorityQueue<T>::PriorityQueue(const Q3AsciiDict<T>& items) : m_vector(items.count())
 {
     // First put all items into the vector
-    QHash<QByteArray,T> it(items);
+    Q3AsciiDictIterator<T> it(items);
     for (int i = 0; it.current(); ++it, ++i) {
         it.current()->setIndex(i);
         m_vector[ i ] = it.current();

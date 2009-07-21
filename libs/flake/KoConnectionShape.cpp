@@ -180,7 +180,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 
 bool KoConnectionShape::hitTest(const QPointF &position) const
 {
-    return KoShape::hitTest(position);
+    return KoParameterShape::hitTest(position);
 }
 
 void KoConnectionShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)

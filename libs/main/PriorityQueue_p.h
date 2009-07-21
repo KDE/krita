@@ -116,13 +116,15 @@ private:
 };
 
 template<class T>
-PriorityQueue<T>::PriorityQueue(const QHash<QByteArray, T*>& items) : m_vector(items.count())
+PriorityQueue<T>::PriorityQueue(const QHash<QByteArray, T*>& items)
+    : m_vector(items.count())
 {
     // First put all items into the vector
     int i = 0;
     foreach(T* item, items) {
         item->setIndex(i);
         m_vector[i] = item;
+        ++i;
     }
     // Then build a heap in that vector
     buildHeap();
@@ -182,13 +184,16 @@ void PriorityQueue<T>::dump() const
 template<class T>
 void PriorityQueue<T>::heapify(int i)
 {
-    int l = left(i), r = right(i), size = static_cast<int>(m_vector.size());
+    int l = left(i);
+    int r = right(i);
+    int size = static_cast<int>(m_vector.size());
     int smallest;
 
-    if (l < size && m_vector[ l ]->key() < m_vector[ i ]->key())
+    if (l < size && i < size && m_vector[ l ]->key() < m_vector[ i ]->key())
         smallest = l;
     else
         smallest = i;
+
     if (r < size && m_vector[ r ]->key() < m_vector[ smallest ]->key())
         smallest = r;
 

@@ -69,33 +69,32 @@ void PriorityQueue_test::testQueue()
         dict.insert(keys[i], n2);
     }
 
-    //kDebug() << "##### Queue 1:";
-    //queue.dump();
+    kDebug() << "##### Queue 1:";
+    queue.dump();
     QCOMPARE((int) queue.count(), list.count());
     QCOMPARE(queue.isEmpty(), false);
     QCOMPARE(queue.extractMinimum()->index(), 0);
 
 
-    // TODO figure out what this class is supposed to do and add more tests...
-    //kDebug() << "##### Queue 2:";
+    kDebug() << "##### Queue 2:";
     KOfficeFilter::PriorityQueue<Node> queue2(dict);
     //queue2.dump();
 
     Node *n = list.at(6);
-    //kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
+    kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
     n->setKey(2);
     queue.keyDecreased(n);
-    //queue.dump();
+    queue.dump();
 
     n = list.at(2);
-    //kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
+    kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
     n->setKey(0);
     queue.keyDecreased(n);
-    //queue.dump();
+    queue.dump();
 
     n = queue.extractMinimum();
     while (n) {
-        //queue.dump();
+        queue.dump();
         n = queue.extractMinimum();
     }
 }

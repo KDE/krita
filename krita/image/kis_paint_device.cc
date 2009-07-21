@@ -223,6 +223,7 @@ QRect KisPaintDevice::exactBounds() const
     // Solution n°2
     qint32  x, y, w, h, boundX2, boundY2, boundW2, boundH2;
     QRect rc = extent();
+
     x = boundX2 = rc.x();
     y = boundY2 = rc.y();
     w = boundW2 = rc.width();
@@ -248,7 +249,7 @@ QRect KisPaintDevice::exactBounds() const
 
     found = false;
 
-    for (qint32 y2 = y + h; y2 >= y ; --y2) {
+    for (qint32 y2 = y + h - 1; y2 >= y ; --y2) {
         KisHLineConstIterator it = const_cast<KisPaintDevice *>(this)->createHLineConstIterator(x, y2, w);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), defaultPixel, m_d->pixelSize) != 0) {
@@ -283,7 +284,7 @@ QRect KisPaintDevice::exactBounds() const
     // Look for right edge )
     {
 
-        for (qint32 x2 = x + w; x2 >= x; --x2) {
+        for (qint32 x2 = x + w - 1; x2 >= x; --x2) {
 
             KisVLineConstIterator it = const_cast<KisPaintDevice *>(this)->createVLineConstIterator(x2, boundY2, boundH2);
             while (!it.isDone() && found == false) {
@@ -511,7 +512,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
     int srcX0, srcY0;
     const QRect e = extent();
     e.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
-    
+
 
     if (w > srcWidth) {
         w = srcWidth;

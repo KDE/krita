@@ -165,9 +165,13 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
                 if (!d->previewCache.contains(filter->filter)) {
 //                     KisPaintDeviceSP target = new KisPaintDevice( d->thumb->colorSpace() );
                     KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
-                    KisConstProcessingInformation cpi(d->thumb, QPoint(0, 0));
-                    KisProcessingInformation cp(target, QPoint(0, 0));
-                    filter->filter->process(cpi, cp, QSize(100, 100), filter->filter->defaultConfiguration(d->thumb));
+
+                    QRect rc = target->exactBounds();
+
+                    KisConstProcessingInformation cpi(d->thumb, rc.topLeft());
+                    KisProcessingInformation cp(target, rc.topLeft());
+
+                    filter->filter->process(cpi, cp, rc.size()/*QSize(100, 100)*/, filter->filter->defaultConfiguration(d->thumb));
                     d->previewCache[ filter->filter ] = target->convertToQImage(0);
                 }
                 return d->previewCache[ filter->filter ];

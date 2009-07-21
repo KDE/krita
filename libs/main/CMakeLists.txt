@@ -49,6 +49,7 @@ set(komain_LIB_SRCS
     KoFilterManager.cpp
     KoFilterChain.cpp
     KoFilter.cpp
+    KoEmbeddingFilter.cpp
     KoFilterEntry.cpp
     KoFilterManager_p.cpp
     KoFilterVertex.cpp

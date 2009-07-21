@@ -24,6 +24,7 @@
 #include <QtCore/QStringList>
 
 #include "KoFilter.h"
+#include "KoEmbeddingFilter.h"
 #include "KoFilterEntry.h"
 #include <KoStoreDevice.h>
 #include "komain_export.h"

@@ -127,7 +127,14 @@ public:
     }
 
     inline KisTileSP getOldTile(qint32 col, qint32 row) {
-        return m_mementoManager->getCommitedTile(col, row);
+	/**
+	 * FIXME: A kind of optimization
+	 */
+//	if(!hasCurrentMemento())
+//	    return getTile(col, row);
+
+	KisTileSP tile = m_mementoManager->getCommitedTile(col, row);
+	return tile ? tile : getTile(col, row);
     }
 
     KisMementoSP getMemento() {
@@ -145,8 +152,8 @@ public:
         m_mementoManager->rollforward(m_hashTable);
     }
     bool hasCurrentMemento() const {
-        /* FIXME */
-        return true;
+	return m_mementoManager->hasCurrentMemento();
+	//return true;
     }
 
 protected:

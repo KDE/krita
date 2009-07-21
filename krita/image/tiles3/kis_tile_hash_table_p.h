@@ -145,6 +145,14 @@ bool KisTileHashTableTraits<T>::tileExists(qint32 col, qint32 row)
 
 template<class T>
 typename KisTileHashTableTraits<T>::TileTypeSP 
+KisTileHashTableTraits<T>::getExistedTile(qint32 col, qint32 row)
+{
+    QReadLocker locker(&m_lock);
+    return getTile(col,row);
+}
+
+template<class T>
+typename KisTileHashTableTraits<T>::TileTypeSP 
 KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
 					bool& newTile)
 {

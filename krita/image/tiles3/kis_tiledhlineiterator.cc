@@ -18,52 +18,53 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
+#include <QtGlobal>
+
 #include "kis_tilediterator.h"
 #include "kis_debug.h"
 
 KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager, 
                                              qint32 x, qint32 y, 
-                                             qint32 w, bool writable) :
-        KisTiledIterator(dataManager),
-        m_right(x + w - 1), m_left(x)
+                                             qint32 w, bool writable)
+    : KisTiledIterator(dataManager)
 {
     m_writable = writable;
+
     m_x = x;
     m_y = y;
 
-    // Find tile row,col matching x,y
-    m_row = yToRow(m_y);
-    m_leftCol = xToCol(m_x);
+    m_left = x;
+    m_right = x + w - 1;
+
+    m_isDoneFlag = !w;
+    if(m_left > m_right) {
+	m_isDoneFlag = true;
+	return;
+    }
+
+    m_leftCol = xToCol(m_left);
     m_rightCol = xToCol(m_right);
-    m_col = m_leftCol;
 
-    // calc limits within the tile
-    m_yInTile = m_y - m_row * KisTileData::HEIGHT;
-    m_leftInTile = m_x - m_leftCol * KisTileData::WIDTH;
+    m_row = yToRow(m_y);
+    m_yInTile = calcYInTile(m_y, m_row);
 
-    if (m_col == m_rightCol)
-        m_rightInTile = m_right - m_rightCol * KisTileData::WIDTH;
-    else
-        m_rightInTile = KisTileData::WIDTH - 1;
-
-    m_xInTile = m_leftInTile;
-
-    fetchTileData(m_col, m_row);
-    m_offset = m_pixelSize * (m_yInTile * KisTileData::WIDTH + m_xInTile);
+    qint32 leftInLeftmostTile = calcLeftInTile(m_leftCol);
+    switchToTile(m_leftCol, leftInLeftmostTile);
 }
 
 KisTiledHLineIterator::KisTiledHLineIterator(const KisTiledHLineIterator& rhs)
         : KisTiledIterator(rhs)
 {
     if (this != &rhs) {
-        m_right = rhs.m_right;
         m_left = rhs.m_left;
+        m_right = rhs.m_right;
         m_leftCol = rhs.m_leftCol;
         m_rightCol = rhs.m_rightCol;
         m_xInTile = rhs.m_xInTile;
         m_yInTile = rhs.m_yInTile;
         m_leftInTile = rhs.m_leftInTile;
         m_rightInTile = rhs.m_rightInTile;
+	m_isDoneFlag = rhs.m_isDoneFlag;
     }
 }
 
@@ -71,14 +72,15 @@ KisTiledHLineIterator& KisTiledHLineIterator::operator=(const KisTiledHLineItera
 {
     if (this != &rhs) {
         KisTiledIterator::operator=(rhs);
-        m_right = rhs.m_right;
         m_left = rhs.m_left;
+        m_right = rhs.m_right;
         m_leftCol = rhs.m_leftCol;
         m_rightCol = rhs.m_rightCol;
         m_xInTile = rhs.m_xInTile;
         m_yInTile = rhs.m_yInTile;
         m_leftInTile = rhs.m_leftInTile;
         m_rightInTile = rhs.m_rightInTile;
+	m_isDoneFlag = rhs.m_isDoneFlag;
     }
     return *this;
 }
@@ -87,114 +89,110 @@ KisTiledHLineIterator::~KisTiledHLineIterator()
 {
 }
 
-KisTiledHLineIterator & KisTiledHLineIterator::operator ++ ()
-{
-    if (m_xInTile >= m_rightInTile) {
-        nextTile();
-        fetchTileData(m_col, m_row);
-        m_xInTile = m_leftInTile;
-        m_offset = m_pixelSize * (m_yInTile * KisTileData::WIDTH + m_xInTile);
-    } else {
-        m_xInTile++;
-        m_offset += m_pixelSize;
-    }
-    m_x++;
-
-    return *this;
-}
-
-void KisTiledHLineIterator::nextTile()
-{
-    if (m_col < m_rightCol) {
-        m_col++;
-        m_leftInTile = 0;
-
-        if (m_col == m_rightCol)
-            m_rightInTile = m_right - m_rightCol * KisTileData::WIDTH;
-        else
-            m_rightInTile = KisTileData::WIDTH - 1;
-    }
-}
-
-void KisTiledHLineIterator::prevTile()
-{
-    if (m_col > m_leftCol) {
-        m_col--;
-
-        if (m_col == m_leftCol) {
-            m_leftInTile = m_left - m_leftCol * KisTileData::WIDTH;
-        } else {
-            m_leftInTile = 0;
-        }
-        // the only place this doesn't apply, is if we're in rightCol, and we can't go there
-        m_rightInTile = KisTileData::WIDTH - 1;
-    }
-}
-
 qint32 KisTiledHLineIterator::nConseqHPixels() const
 {
     return m_rightInTile - m_xInTile + 1;
 }
 
-KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
+void KisTiledHLineIterator::switchToTile(qint32 col, qint32 xInTile)
 {
-    // XXX what if outside the valid range of this iterator?
-    if (m_xInTile + n > m_rightInTile) {
-        m_x += n;
-        m_col = xToCol(m_x);
-        m_xInTile = m_x - m_col * KisTileData::WIDTH;
-        m_leftInTile = 0;
+    // The caller must ensure that we are not out of bounds
+    Q_ASSERT(col <= m_rightCol);
+    Q_ASSERT(col >= m_leftCol);
 
-        if (m_col == m_rightCol)
-            m_rightInTile = m_right - m_rightCol * KisTileData::WIDTH;
-        else
-            m_rightInTile = KisTileData::WIDTH - 1;
+    m_rightInTile = calcRightInTile(col);
+    m_leftInTile = calcLeftInTile(col);
 
-        fetchTileData(m_col, m_row);
-    } else {
-        m_xInTile += n;
-        m_x += n;
+    m_col = col;
+    m_xInTile = xInTile;
+    m_offset = calcOffset(m_xInTile, m_yInTile);
+
+    fetchTileData(col, m_row);
+}
+
+KisTiledHLineIterator & KisTiledHLineIterator::operator++ ()
+{
+    // We won't increment m_x here as integer can overflow here
+    if(m_x >= m_right) {
+	m_isDoneFlag = true;
     }
-    m_offset = m_pixelSize * (m_yInTile * KisTileData::WIDTH + m_xInTile);
+    else {
+	m_x++;
+	if(++m_xInTile <= m_rightInTile)
+	    m_offset += m_pixelSize;
+	else
+	    // Switching to the beginning of the next tile
+	    switchToTile(m_col+1, 0);
+    }
 
     return *this;
 }
 
-KisTiledHLineIterator & KisTiledHLineIterator::operator -- ()
+KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
 {
-    if (m_xInTile <= 0) {
-        prevTile();
-        fetchTileData(m_col, m_row);
-        m_xInTile = KisTileData::WIDTH - 1;
-        m_offset = m_pixelSize * (m_yInTile * KisTileData::WIDTH + m_xInTile);
-    } else {
-        m_xInTile--;
-        m_offset -= m_pixelSize;
+    // XXX what if outside the valid range of this iterator?
+    // AAA two ways: int overflow is catched in assert or 
+    //               borders are checked below
+
+    Q_ASSERT_X(! (m_x>0 && (m_x+n)<0),"hlineIt+=", "Integer overflow");
+
+    // We won't increment m_x here first as integer can overflow
+    if(m_x >= m_right || (m_x += n) > m_right) {
+	m_isDoneFlag = true;
     }
-    m_x--;
+    else {
+	qint32 col = xToCol(m_x);
+	
+	if(col == m_col) {
+	    /**
+	     * FIXME: most unlikely case. Think over unlikely(...) here
+	     */
+	    m_xInTile += n;
+	}
+	else {
+	    qint32 xInTile = calcXInTile(m_x, col);
+	    switchToTile(col, xInTile);
+	}
+    }
+
+    return *this;
+}
+
+KisTiledHLineIterator & KisTiledHLineIterator::operator-- ()
+{
+    if(m_x <= m_left) {
+	/* do nothing */
+    }
+    else {
+	m_x--;
+	if(--m_xInTile >= m_leftInTile)
+	    m_offset -= m_pixelSize;
+	else
+	    // Switching to the end of the previous tile
+	    switchToTile(m_col-1, KisTileData::WIDTH-1);
+
+	m_isDoneFlag = false;
+    }
 
     return *this;
 }
 
 void KisTiledHLineIterator::nextRow()
 {
-    m_y++;
-    m_yInTile++;
+    qint32 leftInLeftmostTile = calcLeftInTile(m_leftCol);
+
     m_x = m_left;
-    m_leftInTile = m_x - m_leftCol * KisTileData::WIDTH;
-    m_xInTile = m_leftInTile;
-    if (m_yInTile >= KisTileData::HEIGHT) { // Need a new row
-        m_yInTile = 0;
-        m_row++;
-        m_col = m_leftCol;
-        fetchTileData(m_col, m_row);
-    } else if (m_leftCol != m_col) {
-        m_col = m_leftCol;
-        fetchTileData(m_col, m_row);
+    m_y++;
+
+    if(++m_yInTile < KisTileData::HEIGHT) {
+	/* do nothing, usual case */
     }
-    if (m_col == m_rightCol)
-        m_rightInTile = m_right - m_rightCol * KisTileData::WIDTH;
-    else
-        m_rightInTile = KisTileData::WIDTH - 1;
-    m_offset = m_pixelSize * (m_yInTile * KisTileData::WIDTH + m_xInTile);
+    else {
+	m_row++;
+	m_yInTile = 0;
+    }
+
+    switchToTile(m_leftCol, leftInLeftmostTile);
+    
+    m_isDoneFlag = false;
 }

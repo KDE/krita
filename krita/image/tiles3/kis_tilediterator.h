@@ -36,8 +36,8 @@ protected:
     qint32 m_pixelSize;        // bytes per pixel
     qint32 m_x;        // current x position
     qint32 m_y;        // current y position
-    qint32 m_row;    // row in tilemgr
-    qint32 m_col;    // col in tilemgr
+    qint32 m_row;    // current row in tilemgr
+    qint32 m_col;    // current col in tilemgr
     quint8 *m_data;
     quint8 *m_oldData;
     qint32 m_offset;
@@ -66,6 +66,20 @@ protected:
     inline quint32 yToRow(quint32 y) const {
         return m_dataManager ? m_dataManager->yToRow(y) : 0;
     }
+
+    inline qint32 calcOffset(qint32 x, qint32 y) const {
+	return m_pixelSize * (y * KisTileData::WIDTH + x);
+    }
+
+    inline qint32 calcXInTile(qint32 x, qint32 col) const {
+	return x - col * KisTileData::WIDTH;
+    }
+    
+    inline qint32 calcYInTile(qint32 y, qint32 row) const {
+	return y - row * KisTileData::HEIGHT;
+    }
+
+
     void fetchTileData(qint32 col, qint32 row);
 
 public:
@@ -179,7 +193,7 @@ public:
 
     /// returns true when the iterator has reached the end
     bool isDone() const {
-        return m_x > m_right;
+	return m_isDoneFlag;
     }
 
     /// increment to the next row and rewind to the beginning
@@ -190,14 +204,27 @@ protected:
     qint32 m_left;
     qint32 m_leftCol;
     qint32 m_rightCol;
+
     qint32 m_xInTile;
     qint32 m_yInTile;
     qint32 m_leftInTile;
     qint32 m_rightInTile;
 
+    bool m_isDoneFlag;
+
 private:
-    void nextTile();
-    void prevTile();
+    inline qint32 calcLeftInTile(qint32 col) const {
+	return (col > m_leftCol) ? 0
+	    : m_left - m_leftCol * KisTileData::WIDTH;
+    }
+    
+    inline qint32 calcRightInTile(qint32 col) const {
+	return (col < m_rightCol) 
+	    ? KisTileData::WIDTH - 1
+	    : m_right - m_rightCol * KisTileData::WIDTH;
+    }
+    
+    void switchToTile(qint32 col, qint32 xInTile);
 };
 
 /**
@@ -223,7 +250,7 @@ public:
 
     /// returns true when the iterator has reached the end
     bool isDone() const {
-        return m_y > m_bottom;
+	return m_isDoneFlag;
     }
 
     /// increment to the next column and rewind to the beginning
@@ -238,9 +265,22 @@ protected:
     qint32 m_yInTile;
     qint32 m_topInTile;
     qint32 m_bottomInTile;
+    bool m_isDoneFlag;
+    qint32 m_lineStride;
 
 private:
-    void nextTile();
+    inline qint32 calcTopInTile(qint32 row) const {
+	return (row > m_topRow) ? 0
+	    : m_top - m_topRow * KisTileData::HEIGHT;
+    }
+    
+    inline qint32 calcBottomInTile(qint32 row) const {
+	return (row < m_bottomRow) 
+	    ? KisTileData::HEIGHT - 1
+	    : m_bottom - m_bottomRow * KisTileData::HEIGHT;
+    }
+    
+    void switchToTile(qint32 col, qint32 xInTile);
 };
 
 #endif // KIS_TILED_ITERATOR_H_

@@ -48,6 +48,7 @@ public:
     
     bool tileExists(qint32 col, qint32 row);
     TileTypeSP getTileLazy(qint32 col, qint32 row, bool& newTile);
+    TileTypeSP getExistedTile(qint32 col, qint32 row);
     void addTile(TileTypeSP tile);
     void deleteTile(TileTypeSP tile);
     void deleteTile(qint32 col, qint32 row);

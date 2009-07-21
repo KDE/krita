@@ -416,8 +416,8 @@ void KisTiledDataManager::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) con
 
     x = m_extentMinX;
     y = m_extentMinY;
-    w = m_extentMaxX - m_extentMinX + 1;
-    h = m_extentMaxY - m_extentMinY + 1;
+    w = (m_extentMaxX >= m_extentMinX) ? m_extentMaxX - m_extentMinX + 1 : 0;
+    h = (m_extentMaxY >= m_extentMinY) ? m_extentMaxY - m_extentMinY + 1 : 0;
 }
 
 QRect KisTiledDataManager::extent() const

@@ -24,33 +24,31 @@
 KisTiledVLineIterator::KisTiledVLineIterator(KisTiledDataManager *dataManager,
                                              qint32 x,  qint32 y,
                                              qint32 h, bool writable) :
-        KisTiledIterator(dataManager),
-        m_bottom(y + h - 1)
+        KisTiledIterator(dataManager)
 {
+    m_lineStride = m_pixelSize * KisTileData::WIDTH;
     m_writable = writable;
-    m_top = y;
+
     m_x = x;
     m_y = y;
 
-    // Find tile row,col matching x,y
-    m_col = xToCol(m_x);
-    m_topRow = yToRow(m_y);
+    m_top = y;
+    m_bottom = y + h - 1;
+
+    m_isDoneFlag = !h;
+    if(m_top > m_bottom) {
+	m_isDoneFlag = true;
+	return;
+    }
+
+    m_topRow = yToRow(m_top);
     m_bottomRow = yToRow(m_bottom);
-    m_row = m_topRow;
 
-    // calc limits within the tile
-    m_xInTile = m_x - m_col * KisTileData::WIDTH;
-    m_topInTile = m_y - m_topRow * KisTileData::HEIGHT;
+    m_col = xToCol(m_x);
+    m_xInTile = calcXInTile(m_x, m_col);
 
-    if (m_row == m_bottomRow)
-        m_bottomInTile = m_bottom - m_bottomRow * KisTileData::HEIGHT;
-    else
-        m_bottomInTile = KisTileData::HEIGHT - 1;
-
-    m_yInTile = m_topInTile;
-
-    fetchTileData(m_col, m_row);
-    m_offset = m_pixelSize * (m_yInTile * KisTileData::WIDTH + m_xInTile);
+    qint32 topInTopmostTile = calcTopInTile(m_topRow);
+    switchToTile(m_topRow, topInTopmostTile);
 }
 
 KisTiledVLineIterator::KisTiledVLineIterator(const KisTiledVLineIterator& rhs)
@@ -65,6 +63,8 @@ KisTiledVLineIterator::KisTiledVLineIterator(const KisTiledVLineIterator& rhs)
         m_yInTile = rhs.m_yInTile;
         m_topInTile = rhs.m_topInTile;
         m_bottomInTile = rhs.m_bottomInTile;
+	m_isDoneFlag = rhs.m_isDoneFlag;
+	m_lineStride = m_pixelSize * KisTileData::WIDTH;
     }
 }
 
@@ -81,6 +81,8 @@ KisTiledVLineIterator& KisTiledVLineIterator::operator=(const KisTiledVLineItera
         m_yInTile = rhs.m_yInTile;
         m_topInTile = rhs.m_topInTile;
         m_bottomInTile = rhs.m_bottomInTile;
+	m_isDoneFlag = rhs.m_isDoneFlag;
+	m_lineStride = m_pixelSize * KisTileData::WIDTH;
     }
     return *this;
 }
@@ -89,57 +91,58 @@ KisTiledVLineIterator::~KisTiledVLineIterator()
 {
 }
 
+void KisTiledVLineIterator::switchToTile(qint32 row, qint32 yInTile)
+{
+    // The caller must ensure that we are not out of bounds
+    Q_ASSERT(row <= m_bottomRow);
+    Q_ASSERT(row >= m_topRow);
+
+    m_topInTile = calcTopInTile(row);
+    m_bottomInTile = calcBottomInTile(row);
+
+    m_row = row;
+    m_yInTile = yInTile;
+    m_offset = calcOffset(m_xInTile, m_yInTile);
+
+    fetchTileData(m_col, row);
+}
+
 KisTiledVLineIterator & KisTiledVLineIterator::operator ++ ()
 {
-    if (m_yInTile >= m_bottomInTile) {
-        nextTile();
-        fetchTileData(m_col, m_row);
-        m_yInTile = m_topInTile;
-        m_offset = m_pixelSize * (m_yInTile * KisTileData::WIDTH + m_xInTile);
-    } else {
-        m_yInTile++;
-        m_offset += m_pixelSize * KisTileData::WIDTH;
+    // We won't increment m_y here as integer can overflow here
+    if(m_y >= m_bottom) {
+	m_isDoneFlag = true;
     }
-    m_y++;
+    else {
+	m_y++;
+	if(++m_yInTile <= m_bottomInTile)
+	    m_offset += m_lineStride;
+	else
+	    // Switching to the beginning of the next tile
+	    switchToTile(m_row+1, 0);
+    }
 
     return *this;
 }
 
-void KisTiledVLineIterator::nextTile()
-{
-    if (m_row < m_bottomRow) {
-        m_row++;
-        m_topInTile = 0;
-
-        if (m_row == m_bottomRow)
-            m_bottomInTile = m_bottom - m_bottomRow * KisTileData::HEIGHT;
-        else
-            m_bottomInTile = KisTileData::HEIGHT - 1;
-    }
-}
-
 void KisTiledVLineIterator::nextCol()
 {
-    m_x++;
-    m_xInTile++;
-    m_y = m_top;
-    m_topInTile = m_y - m_topRow * KisTileData::HEIGHT;
-    m_yInTile = m_topInTile;
-    if (m_xInTile >= KisTileData::WIDTH) { // Need a new row
-        m_xInTile = 0;
-        m_col++;
-        m_row = m_topRow;
-        fetchTileData(m_col, m_row);
-    } else if (m_topRow != m_row) {
-        m_row = m_topRow;
-        fetchTileData(m_col, m_row);
-    }
-    if (m_row == m_bottomRow)
-        m_bottomInTile = m_bottom - m_bottomRow * KisTileData::HEIGHT;
-    else
-        m_bottomInTile = KisTileData::HEIGHT - 1;
+    qint32 topInTopmostTile = calcTopInTile(m_topRow);
 
-    m_offset = m_pixelSize * (m_yInTile * KisTileData::WIDTH + m_xInTile);
+    m_y = m_top;
+    m_x++;
+
+    if(++m_xInTile < KisTileData::WIDTH) {
+	/* do nothing, usual case */
+    }
+    else {
+	m_col++;
+	m_xInTile = 0;
+    }
+
+    switchToTile(m_topRow, topInTopmostTile);   
+ 
+    m_isDoneFlag = false;
 }
 
 /*

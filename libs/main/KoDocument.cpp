@@ -115,7 +115,8 @@ public:
             m_storeInternal(false),
             m_bLoading(false),
             m_startUpWidget(0),
-            m_undoStack(0) {
+            m_undoStack(0)
+    {
         m_confirmNonNativeSave[0] = true;
         m_confirmNonNativeSave[1] = true;
         if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
@@ -129,7 +130,6 @@ public:
     QList<KoMainWindow*> m_shells;
 
     KoViewWrapperWidget *m_wrapperWidget;
-//     KoDocumentIface * m_dcopObject;
     KoDocumentInfo *m_docInfo;
 
     KoUnit m_unit;
@@ -304,7 +304,7 @@ KoDocument::~KoDocument()
 
     delete d->filterManager;
     delete d;
-    s_documentList->remove(this);
+    s_documentList->removeOne(this);
     // last one?
     if (s_documentList->isEmpty()) {
         delete s_documentList;
@@ -398,7 +398,7 @@ bool KoDocument::saveFile()
             KSaveFile::backupFile(url().toLocalFile(), d->m_backupPath);
         else {
             KIO::UDSEntry entry;
-            if (KIO::NetAccess::stat(url(), entry, shells().current())) {     // this file exists => backup
+            if (KIO::NetAccess::stat(url(), entry, currentShell())) {     // this file exists => backup
                 emit statusBarMessage(i18n("Making backup..."));
                 KUrl backup;
                 if (d->m_backupPath.isEmpty())
@@ -553,7 +553,7 @@ void KoDocument::slotAutoSave()
             // That advice should also fix this error from occurring again
             emit statusBarMessage(i18n("The password of this encrypted document is not known. Autosave aborted! Please save your work manually."));
         } else {
-            connect(this, SIGNAL(sigProgress(int)), shells().current(), SLOT(slotProgress(int)));
+            connect(this, SIGNAL(sigProgress(int)), currentShell(), SLOT(slotProgress(int)));
             emit statusBarMessage(i18n("Autosaving..."));
             d->m_autosaving = true;
             bool ret = saveNativeFormat(autoSaveFile(localFilePath()));
@@ -564,7 +564,7 @@ void KoDocument::slotAutoSave()
             }
             d->m_autosaving = false;
             emit clearStatusBarMessage();
-            disconnect(this, SIGNAL(sigProgress(int)), shells().current(), SLOT(slotProgress(int)));
+            disconnect(this, SIGNAL(sigProgress(int)), currentShell(), SLOT(slotProgress(int)));
             if (!ret)
                 emit statusBarMessage(i18n("Error during autosave! Partition full?"));
         }
@@ -2140,7 +2140,7 @@ bool KoDocument::hasExternURL() const
 void KoDocument::slotStarted(KIO::Job* job)
 {
     if (job && job->ui()) {
-        job->ui()->setWindow(d->m_shells.current());
+        job->ui()->setWindow(currentShell());
     }
 }
 
@@ -2369,6 +2369,22 @@ KoGuidesData &KoDocument::guidesData()
 {
     return d->guidesData;
 }
+
+KoMainWindow* KoDocument::currentShell()
+{
+    QWidget* widget = qApp->activeWindow();
+    if (!widget) return 0;
+
+    while(qobject_cast<KoMainWindow*>(widget) == 0 && widget->parent() && widget->parent()->inherits("QWidget")) {
+        widget = qobject_cast<QWidget*>(widget->parent());
+    }
+
+    KoMainWindow* shell = qobject_cast<KoMainWindow*>(widget);
+    Q_ASSERT(shell);
+    Q_ASSERT(d->m_shells.contains(shell));
+    return shell;
+}
+
 
 #include "KoDocument_p.moc"
 #include "KoDocument.moc"

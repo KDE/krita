@@ -976,6 +976,9 @@ private slots:
 
 private:
 
+    /// @return the current KoMainWindow shell
+    KoMainWindow* currentShell();
+
     KService::Ptr nativeService();
     bool oldLoadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
     bool loadNativeFormatFromStore(const QString& file);

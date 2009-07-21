@@ -1,6 +1,6 @@
 /*
    Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
    Copyright (c) 2008 Carlos Licea <carlos.licea@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -38,6 +38,7 @@ class KoLineBorder;
  * The KoCanvasResource contains a set of per-canvas
  * properties, like current foreground color, current background
  * color and more.
+ * \sa KoCanvasResourceProvider
  */
 namespace KoCanvasResource
 {
@@ -74,6 +75,7 @@ enum CanvasResource {
  * properties, like current foreground color, current background
  * color and more. All tools belonging to the current canvas are
  * notified when a Resource changes (is set).
+ * The properties come from the KoCanvasResource::CanvasResource enum.
  */
 class FLAKE_EXPORT KoCanvasResourceProvider : public QObject
 {
@@ -118,7 +120,7 @@ public:
     /**
      * Returns a qvariant containing the specified resource or a standard one if the
      * specified resource does not exist.
-     * @param key the key.
+     * @param key the key, based on KoCanvasResource::CanvasResource.
      */
     QVariant resource(int key);
 
@@ -151,7 +153,7 @@ public:
     void setHandleRadius(int handleSize);
     /// Returns the actual handle radius
     int handleRadius();
-    
+
     /**
      * Tools that are used to grab handles or similar with the mouse
      * should use this value to determine if the mouse is near enough
@@ -160,7 +162,7 @@ public:
     void setGrabSensitivity(uint grabSensitivity);
     /// Returns the actual grab sensitivity
     uint grabSensitivity();
-    
+
     /// Sets the border resource
     void setActiveBorder( const KoLineBorder &border );
 
@@ -175,61 +177,61 @@ public:
 
     /**
      * Return the resource determined by param key as a boolean.
-     * @param key the indentifying key for the resource.
+     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
     bool boolResource(int key) const;
 
     /**
      * Return the resource determined by param key as an integer.
-     * @param key the indentifying key for the resource.
+     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
     int intResource(int key) const;
 
     /**
      * Return the resource determined by param key as a qreal.
-     * @param key the indentifying key for the resource.
+     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
     qreal doubleResource(int key) const;
 
     /**
      * Return the resource determined by param key as a KoColor.
-     * @param key the indentifying key for the resource.
+     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
     KoColor koColorResource(int key);
 
     /**
      * Return the resource determined by param key as a KoID.
-     * @param key the indentifying key for the resource.
+     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
     KoID koIDResource(int key);
 
     /**
      * Return the resource determined by param key as a pointer to a KoShape.
-     * @param key the indentifying key for the resource.
+     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
     KoShape * koShapeResource(int key);
 
     /**
      * Return the resource determined by param key as a QString .
-     * @param key the indentifying key for the resource.
+     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
     QString stringResource(int key);
 
     /**
      * Return the resource determined by param key as a QSizeF.
-     * @param key the indentifying key for the resource.
+     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
     QSizeF sizeResource(int key);
 
     /**
      * Returns true if there is a resource set with the requested key.
-     * @param key the indentifying key for the resource.
+     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
     bool hasResource(int key);
 
     /**
      * Remove the resource with @p key from the provider.
-     * @param key the key that will be used to remove the resource.
+     * @param key the key that will be used to remove the resource, based on KoCanvasResource::CanvasResource..
      * There will be a signal emitted with a variable that will return true on QVariable::isNull();
      */
     void clearResource(int key);
@@ -238,7 +240,7 @@ signals:
     /**
      * This signal is emitted every time a resource is set that is either
      * new or different from the previous set value.
-     * @param key the indentifying key for the resource
+     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource.
      * @param value the variants new value.
      */
     void resourceChanged(int key, const QVariant & value);

@@ -16,11 +16,17 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "KoFilterVertex.h"
+#include <limits.h> // UINT_MAX
+#include "KoFilterEdge.h"
 
-namespace KoFilter {
+namespace KOfficeFilter {
 
-Vertex::Vertex(const QByteArray& mimeType) : m_predecessor(0), m_mimeType(mimeType),
-        m_weight(UINT_MAX), m_index(-1), d(0)
+Vertex::Vertex(const QByteArray& mimeType)
+        : m_predecessor(0)
+        , m_mimeType(mimeType)
+        , m_weight(UINT_MAX)
+        , m_index(-1)
+        , d(0)
 {
 }
 
@@ -39,7 +45,7 @@ void Vertex::reset()
     m_predecessor = 0;
 }
 
-void Vertex::addEdge(const Edge* edge)
+void Vertex::addEdge(Edge* edge)
 {
     if (!edge || edge->weight() == 0)
         return;
@@ -62,7 +68,7 @@ const Edge* Vertex::findEdge(const Vertex* vertex) const
 
 void Vertex::relaxVertices(PriorityQueue<Vertex>& queue)
 {
-    foreach(Edge* e, m_edgets) {
+    foreach(Edge* e, m_edges) {
         e->relax(this, queue);
     }
 }

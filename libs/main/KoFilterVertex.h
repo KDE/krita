@@ -19,8 +19,9 @@
 #define KOFILTERVERTEX_H
 
 #include "KoFilterChain.h"
+#include "PriorityQueue_p.h"
 
-namespace KoFilter {
+namespace KOfficeFilter {
 /**
  * An internal class representing a mime type (=node, vertex) in the filter graph.
  * @internal
@@ -69,7 +70,7 @@ public:
     }
 
     // Adds an outgoing edge to the vertex, transfers ownership
-    void addEdge(const Edge* edge);
+    void addEdge(Edge* edge);
 
     // Finds the lightest(!) edge pointing to the given vertex, if any (0 if not found)
     // This means it will always search the whole list of edges

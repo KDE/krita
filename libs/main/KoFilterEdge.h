@@ -19,8 +19,9 @@
 #define KOFILTEREDGE_H
 
 #include "KoFilterChain.h"
+#include "PriorityQueue_p.h"
 
-namespace KoFilter {
+namespace KOfficeFilter {
 /**
  * An internal class representing a filter (=edge) in the filter graph.
  * @internal

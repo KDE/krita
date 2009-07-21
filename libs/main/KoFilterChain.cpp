@@ -38,18 +38,22 @@
 
 // Those "defines" are needed in the setupConnections method below.
 // Please always keep the strings and the length in sync!
-namespace
-{
-    const char* const SIGNAL_PREFIX = "commSignal";
-    const int SIGNAL_PREFIX_LEN = 10;
-    const char* const SLOT_PREFIX = "commSlot";
-    const int SLOT_PREFIX_LEN = 8;
-}
+using namespace KOfficeFilter;
 
+
+KoFilterChain::KoFilterChain(const KoFilterManager* manager) :
+        m_manager(manager), m_state(Beginning), m_inputStorage(0),
+        m_inputStorageDevice(0), m_outputStorage(0), m_outputStorageDevice(0),
+        m_inputDocument(0), m_outputDocument(0), m_inputTempFile(0),
+        m_outputTempFile(0), m_inputQueried(Nil), m_outputQueried(Nil), d(0)
+{
+}
 
 
 KoFilterChain::~KoFilterChain()
 {
+    m_chainLinks.deleteAll();
+
     if (filterManagerParentChain() && filterManagerParentChain()->m_outputStorage)
         filterManagerParentChain()->m_outputStorage->leaveDirectory();
     manageIO(); // Called for the 2nd time in a row -> clean up
@@ -227,23 +231,15 @@ KoDocument* KoFilterChain::outputDocument()
     return m_outputDocument;
 }
 
-void KoFilterChain::dump() const
+void KoFilterChain::dump()
 {
     kDebug(30500) << "########## KoFilterChain with" << m_chainLinks.count() << " members:";
-    Q3PtrListIterator<ChainLink> it(m_chainLinks);
-    for (; it.current(); ++it)
-        it.current()->dump();
+    ChainLink* link = m_chainLinks.first();
+    while (link) {
+        link->dump();
+        link = m_chainLinks.next();
+    }
     kDebug(30500) << "########## KoFilterChain (done) ##########";
-}
-
-KoFilterChain::KoFilterChain(const KoFilterManager* manager) :
-        m_manager(manager), m_state(Beginning), m_inputStorage(0),
-        m_inputStorageDevice(0), m_outputStorage(0), m_outputStorageDevice(0),
-        m_inputDocument(0), m_outputDocument(0), m_inputTempFile(0),
-        m_outputTempFile(0), m_inputQueried(Nil), m_outputQueried(Nil), d(0)
-{
-    // We "own" our chain links, the filter entries are implicitly shared
-    m_chainLinks.setAutoDelete(true);
 }
 
 void KoFilterChain::appendChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to)

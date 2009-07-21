@@ -27,13 +27,14 @@
 #include "KoFilterEntry.h"
 #include <KoStoreDevice.h>
 #include "komain_export.h"
+#include "KoFilterChainLinkList.h"
 
 class KTemporaryFile;
 class KoFilterManager;
 class KoDocument;
 
 
-namespace KoFilter
+namespace KOfficeFilter
 {
     class Graph;
     class ChainLink;
@@ -54,7 +55,7 @@ class KOMAIN_EXPORT KoFilterChain : public KShared
 {
     // Only KOffice::Graph is allowed to construct instances and
     // add chain links.
-    friend class KoFilter::Graph;
+    friend class Graph;
     friend class KoFilterManager;
 
 public:
@@ -126,12 +127,15 @@ public:
     int weight() const;
 
     // debugging
-    void dump() const;
+    void dump();
 
 private:
     // ### API for KOffice::Graph:
     // Construct a filter chain belonging to some KoFilterManager.
     // The parent filter manager may be 0.
+
+    friend class KOfficeFilter::Graph;
+
     KoFilterChain(const KoFilterManager* manager);
 
     void appendChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
@@ -187,8 +191,8 @@ private:
     KoFilterChain& operator=(const KoFilterChain& rhs);
 
     const KoFilterManager* const m_manager;
-    QList<KoFilter::ChainLink*> m_chainLinks;
-    KoFilter::ChainLink* m_currentChainLink;
+
+    KOfficeFilter::ChainLinkList m_chainLinks;
 
     // stuff needed for bookkeeping
     int m_state;

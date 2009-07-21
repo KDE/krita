@@ -17,8 +17,10 @@
 */
 
 #include "KoFilterEdge.h"
+#include "KoFilterVertex.h"
+#include "PriorityQueue_p.h"
 
-namespace KoFilter {
+namespace KOfficeFilter {
 
 Edge::Edge(Vertex* vertex, KoFilterEntry::Ptr filterEntry) :
         m_vertex(vertex), m_filterEntry(filterEntry), d(0)

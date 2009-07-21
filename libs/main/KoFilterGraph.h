@@ -20,10 +20,11 @@
 
 #include "komain_export.h"
 #include "KoFilterChain.h"
+#include "KoFilterVertex.h"
 #include <QByteArray>
 #include <QHash>
 
-namespace KoFilter {
+namespace KOfficeFilter {
 
 /**
  * The main worker behind the scenes. Manages the creation of the graph,
@@ -36,7 +37,7 @@ class KOMAIN_EXPORT Graph
 
 public:
     explicit Graph(const QByteArray& from);
-    ~Graph() {}
+    ~Graph();
 
     bool isValid() const {
         return m_graphValid;
@@ -65,7 +66,7 @@ private:
     void shortestPaths();
     QByteArray findKOfficePart() const;
 
-    QHash<QByteArray, Vertex> m_vertices;
+    QHash<QByteArray, KOfficeFilter::Vertex*> m_vertices;
     QByteArray m_from;
     bool m_graphValid;
 

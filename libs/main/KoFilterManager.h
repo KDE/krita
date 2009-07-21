@@ -27,6 +27,8 @@
 #include <QtCore/QByteArray>
 
 #include "KoFilterChain.h"
+#include "KoFilterGraph.h"
+
 #include "komain_export.h"
 class KoDocument;
 
@@ -177,7 +179,7 @@ private:
     KoFilterChain* const m_parentChain;
     QString m_importUrl, m_exportUrl;
     QByteArray m_importUrlMimetypeHint;  ///< suggested mimetype
-    KOffice::Graph m_graph;
+    KOfficeFilter::Graph m_graph;
     Direction m_direction;
 
     /// A static cache for the availability checks of filters

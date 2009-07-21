@@ -9,7 +9,6 @@ include_directories( ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
 )
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 ########### next target ###############
 
@@ -56,6 +55,7 @@ set(komain_LIB_SRCS
     KoFilterGraph.cpp
     KoFilterEdge.cpp
     KoFilterChainLink.cpp
+    KoFilterChainLinkList.cpp
 )
 
 if (NOT NO_PIGMENT)
@@ -82,7 +82,6 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KABC_LIBS}
     ${KDE4_THREADWEAVER_LIBRARIES}
-    ${KDE4_KDE3SUPPORT_LIBS}
 )
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES ${extra_libs}

@@ -17,14 +17,41 @@
 */
 #include "KoFilterGraph.h"
 
-namespace KoFilter {
+#include "KoFilterManager.h"  // KoFilterManager::filterAvailable, private API
+#include "KoDocumentEntry.h"
+#include "KoFilterEntry.h"
+#include "KoDocument.h"
 
-Graph::Graph(const QByteArray& from) : m_vertices(47), m_from(from),
-        m_graphValid(false), d(0)
+#include "PriorityQueue_p.h"
+#include "KoFilterEdge.h"
+#include "KoFilterChainLink.h"
+#include "KoFilterVertex.h"
+
+#include <QMetaMethod>
+#include <ktemporaryfile.h>
+#include <kmimetype.h>
+#include <kdebug.h>
+
+#include <limits.h> // UINT_MAX
+
+
+namespace KOfficeFilter {
+
+Graph::Graph(const QByteArray& from)
+        : m_from(from)
+        , m_graphValid(false)
+        , d(0)
 {
-    m_vertices.setAutoDelete(true);
     buildGraph();
     shortestPaths();  // Will return after a single lookup if "from" is invalid (->no check here)
+}
+
+Graph::~Graph()
+{
+    foreach(Vertex* vertex, m_vertices) {
+        delete vertex;
+    }
+    m_vertices.clear();
 }
 
 void Graph::setSourceMimeType(const QByteArray& from)
@@ -35,8 +62,8 @@ void Graph::setSourceMimeType(const QByteArray& from)
     m_graphValid = false;
 
     // Initialize with "infinity" ...
-    foreach(Vertex vertex, m_vertices) {
-        vertex.reset();
+    foreach(Vertex* vertex, m_vertices) {
+        vertex->reset();
     }
     // ...and re-run the shortest path search for the new source mime
     shortestPaths();

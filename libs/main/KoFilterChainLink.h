@@ -15,7 +15,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
 #ifndef KOFILTERCHAINLINK_H
 #define KOFILTERCHAINLINK_H
 
@@ -23,7 +22,8 @@
 
 class QByteArray;
 
-namespace KoFilter {
+namespace KOfficeFilter {
+
 /**
  * A small private helper class with represents one single filter
  * (one link of the chain)

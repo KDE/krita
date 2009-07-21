@@ -28,10 +28,9 @@
 #include <QFile>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <q3ptrlist.h>
+#include <QList>
 #include <QApplication>
 #include <QByteArray>
-#include <Q3ValueList>
 
 #include <KLocale>
 #include <KMessageBox>
@@ -260,19 +259,19 @@ public:
     void addEdge(Vertex* vertex) {
         if (vertex) m_edges.append(vertex);
     }
-    Q3PtrList<Vertex> edges() const {
+    QList<Vertex*> edges() const {
         return m_edges;
     }
 
 private:
     Color m_color;
     QByteArray m_mimeType;
-    Q3PtrList<Vertex> m_edges;
+    QList<Vertex*> m_edges;
 };
 
 // Some helper methods for the static stuff
 // This method builds up the graph in the passed ascii dict
-void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direction)
+void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction direction)
 {
     QStringList stopList; // Lists of mimetypes that are considered end of chains
     stopList << "text/plain";
@@ -280,13 +279,11 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
     stopList << "text/x-tex";
     stopList << "text/html";
 
-    vertices.setAutoDelete(true);
-
     // partly copied from build graph, but I don't see any other
     // way without crude hacks, as we have to obey the direction here
-    Q3ValueList<KoDocumentEntry> parts(KoDocumentEntry::query(false, QString()));
-    Q3ValueList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
-    Q3ValueList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
+    QList<KoDocumentEntry> parts(KoDocumentEntry::query(false, QString()));
+    QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
+    QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
     while (partIt != partEnd) {
         QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
@@ -299,10 +296,10 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
         ++partIt;
     }
 
-    Q3ValueList<KoFilterEntry::Ptr> filters = KoFilterEntry::query(); // no constraint here - we want *all* :)
-    Q3ValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.constBegin();
-    const Q3ValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.constEnd();
-
+    QList<KoFilterEntry::Ptr> filters = KoFilterEntry::query(); // no constraint here - we want *all* :)
+    QList<KoFilterEntry::Ptr>::ConstIterator it = filters.constBegin();
+    QList<KoFilterEntry::Ptr>::ConstIterator end = filters.constEnd();
+    foreach(KoFilterEntry::Ptr filterEntry, filters)
     for (; it != end; ++it) {
         QStringList impList; // Import list
         QStringList expList; // Export list
@@ -374,7 +371,7 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
 // This method runs a BFS on the graph to determine the connected
 // nodes. Make sure that the graph is "cleared" (the colors of the
 // nodes are all white)
-QStringList connected(const Q3AsciiDict<Vertex>& vertices, const QByteArray& mimetype)
+QStringList connected(const QHash<QByteArray, Vertex*>& vertices, const QByteArray& mimetype)
 {
     if (mimetype.isEmpty())
         return QStringList();
@@ -390,12 +387,11 @@ QStringList connected(const Q3AsciiDict<Vertex>& vertices, const QByteArray& mim
     while (!queue.empty()) {
         v = queue.front();
         queue.pop();
-        Q3PtrList<Vertex> edges = v->edges();
-        Q3PtrListIterator<Vertex> it(edges);
-        for (; it.current(); ++it) {
-            if (it.current()->color() == Vertex::White) {
-                it.current()->setColor(Vertex::Gray);
-                queue.push(it.current());
+        QList<Vertex*> edges = v->edges();
+        foreach(Vertex* current, edges) {
+            if (current->color() == Vertex::White) {
+                current->setColor(Vertex::Gray);
+                queue.push(current);
             }
         }
         v->setColor(Vertex::Black);
@@ -410,7 +406,7 @@ QStringList connected(const Q3AsciiDict<Vertex>& vertices, const QByteArray& mim
 QStringList KoFilterManager::mimeFilter(const QByteArray &mimetype, Direction direction, const QStringList &extraNativeMimeTypes)
 {
     //kDebug(30500) <<"mimetype=" << mimetype <<" extraNativeMimeTypes=" << extraNativeMimeTypes;
-    Q3AsciiDict<Vertex> vertices;
+    QHash<QByteArray, Vertex*> vertices;
     buildGraph(vertices, direction);
 
     // TODO maybe use the fake vertex trick from the method below, to make the search faster?
@@ -437,12 +433,12 @@ QStringList KoFilterManager::mimeFilter(const QByteArray &mimetype, Direction di
 
 QStringList KoFilterManager::mimeFilter()
 {
-    Q3AsciiDict<Vertex> vertices;
+    QHash<QByteArray, Vertex*> vertices;
     buildGraph(vertices, KoFilterManager::Import);
 
-    Q3ValueList<KoDocumentEntry> parts(KoDocumentEntry::query(false, QString()));
-    Q3ValueList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
-    Q3ValueList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
+    QList<KoDocumentEntry> parts(KoDocumentEntry::query(false, QString()));
+    QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
+    QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
     if (partIt == partEnd)
         return QStringList();

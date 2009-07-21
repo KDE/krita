@@ -15,102 +15,118 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-
 #include "KoFilterChainLink.h"
-namespace KoFilter {
-ChainLink::ChainLink(KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
-                                    const QByteArray& from, const QByteArray& to) :
-        m_chain(chain), m_filterEntry(filterEntry), m_from(from), m_to(to),
-        m_filter(0), d(0)
+#include <QMetaMethod>
+#include <ktemporaryfile.h>
+#include <kmimetype.h>
+#include <kdebug.h>
+#include "KoFilterEntry.h"
+#include "KoFilterManager.h"
+
+
+namespace
 {
+    const char* const SIGNAL_PREFIX = "commSignal";
+    const int SIGNAL_PREFIX_LEN = 10;
+    const char* const SLOT_PREFIX = "commSlot";
+    const int SLOT_PREFIX_LEN = 8;
 }
 
-KoFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink* const parentChainLink)
-{
-    if (!m_filterEntry) {
-        kError(30500) << "This filter entry is null. Strange stuff going on." << endl;
-        return KoFilter::CreationError;
+namespace KOfficeFilter {
+
+    ChainLink::ChainLink(KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
+                         const QByteArray& from, const QByteArray& to) :
+    m_chain(chain), m_filterEntry(filterEntry), m_from(from), m_to(to),
+    m_filter(0), d(0)
+    {
     }
 
-    m_filter = m_filterEntry->createFilter(m_chain);
+    KoFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink* const parentChainLink)
+    {
+        if (!m_filterEntry) {
+            kError(30500) << "This filter entry is null. Strange stuff going on." << endl;
+            return KoFilter::CreationError;
+        }
 
-    if (!m_filter) {
-        kError(30500) << "Couldn't create the filter." << endl;
-        return KoFilter::CreationError;
+        m_filter = m_filterEntry->createFilter(m_chain);
+
+        if (!m_filter) {
+            kError(30500) << "Couldn't create the filter." << endl;
+            return KoFilter::CreationError;
+        }
+
+        if (parentChainLink)
+            setupCommunication(parentChainLink->m_filter);
+
+        KoFilter::ConversionStatus status = m_filter->convert(m_from, m_to);
+        delete m_filter;
+        m_filter = 0;
+        return status;
     }
 
-    if (parentChainLink)
-        setupCommunication(parentChainLink->m_filter);
+    void ChainLink::dump() const
+    {
+        kDebug(30500) << "   Link:" << m_filterEntry->service()->name();
+    }
 
-    KoFilter::ConversionStatus status = m_filter->convert(m_from, m_to);
-    delete m_filter;
-    m_filter = 0;
-    return status;
-}
+    int ChainLink::lruPartIndex() const
+    {
+        if (m_filter && m_filter->inherits("KoEmbeddingFilter"))
+            return static_cast<KoEmbeddingFilter*>(m_filter)->lruPartIndex();
+        return -1;
+    }
 
-void ChainLink::dump() const
-{
-    kDebug(30500) << "   Link:" << m_filterEntry->service()->name();
-}
+    void ChainLink::setupCommunication(const KoFilter* const parentFilter) const
+    {
+        // progress information
+        QObject::connect(m_filter, SIGNAL(sigProgress(int)),
+                         m_chain->manager(), SIGNAL(sigProgress(int)));
 
-int ChainLink::lruPartIndex() const
-{
-    if (m_filter && m_filter->inherits("KoEmbeddingFilter"))
-        return static_cast<KoEmbeddingFilter*>(m_filter)->lruPartIndex();
-    return -1;
-}
+        if (!parentFilter)
+            return;
 
-void ChainLink::setupCommunication(const KoFilter* const parentFilter) const
-{
-    // progress information
-    QObject::connect(m_filter, SIGNAL(sigProgress(int)),
-                     m_chain->manager(), SIGNAL(sigProgress(int)));
+        const QMetaObject* const parent = parentFilter->metaObject();
+        const QMetaObject* const child = m_filter->metaObject();
+        if (!parent || !child)
+            return;
 
-    if (!parentFilter)
-        return;
+        setupConnections(parentFilter, m_filter);
+        setupConnections(m_filter, parentFilter);
+    }
 
-    const QMetaObject* const parent = parentFilter->metaObject();
-    const QMetaObject* const child = m_filter->metaObject();
-    if (!parent || !child)
-        return;
+    void ChainLink::setupConnections(const KoFilter* sender, const KoFilter* receiver) const
+    {
+        const QMetaObject* const parent = sender->metaObject();
+        const QMetaObject* const child = receiver->metaObject();
+        if (!parent || !child)
+            return;
 
-    setupConnections(parentFilter, m_filter);
-    setupConnections(m_filter, parentFilter);
-}
-
-void ChainLink::setupConnections(const KoFilter* sender, const KoFilter* receiver) const
-{
-    const QMetaObject* const parent = sender->metaObject();
-    const QMetaObject* const child = receiver->metaObject();
-    if (!parent || !child)
-        return;
-
-    int senderMethodCount = parent->methodCount();
-    for (int i = 0; i < senderMethodCount; ++i) {
-        QMetaMethod signal = parent->method(i);
-        if (signal.methodType() != QMetaMethod::Signal)
-            continue;
-        // ### untested (QMetaMethod::signature())
-        if (strncmp(signal.signature(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN) == 0) {
-            int receiverMethodCount = child->methodCount();
-            for (int j = 0; j < receiverMethodCount; ++j) {
-                QMetaMethod slot = child->method(j);
-                if (slot.methodType() != QMetaMethod::Slot)
-                    continue;
-                if (strncmp(slot.signature(), SLOT_PREFIX, SLOT_PREFIX_LEN) == 0) {
-                    if (strcmp(signal.signature() + SIGNAL_PREFIX_LEN, slot.signature() + SLOT_PREFIX_LEN) == 0) {
-                        QByteArray signalString;
-                        signalString.setNum(QSIGNAL_CODE);
-                        signalString += signal.signature();
-                        QByteArray slotString;
-                        slotString.setNum(QSLOT_CODE);
-                        slotString += slot.signature();
-                        QObject::connect(sender, signalString, receiver, slotString);
+        int senderMethodCount = parent->methodCount();
+        for (int i = 0; i < senderMethodCount; ++i) {
+            QMetaMethod signal = parent->method(i);
+            if (signal.methodType() != QMetaMethod::Signal)
+                continue;
+            // ### untested (QMetaMethod::signature())
+            if (strncmp(signal.signature(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN) == 0) {
+                int receiverMethodCount = child->methodCount();
+                for (int j = 0; j < receiverMethodCount; ++j) {
+                    QMetaMethod slot = child->method(j);
+                    if (slot.methodType() != QMetaMethod::Slot)
+                        continue;
+                    if (strncmp(slot.signature(), SLOT_PREFIX, SLOT_PREFIX_LEN) == 0) {
+                        if (strcmp(signal.signature() + SIGNAL_PREFIX_LEN, slot.signature() + SLOT_PREFIX_LEN) == 0) {
+                            QByteArray signalString;
+                            signalString.setNum(QSIGNAL_CODE);
+                            signalString += signal.signature();
+                            QByteArray slotString;
+                            slotString.setNum(QSLOT_CODE);
+                            slotString += slot.signature();
+                            QObject::connect(sender, signalString, receiver, slotString);
+                        }
                     }
                 }
             }
         }
     }
-}
 
 };

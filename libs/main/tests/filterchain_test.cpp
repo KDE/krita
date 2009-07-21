@@ -21,20 +21,18 @@
 #include "KoFilterManager.h"
 #include "kcomponentdata.h"
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 int main(int /*argc*/, char ** /*argv*/)
 {
     KComponentData componentData("filterchain_test");    // we need an instance when using the trader
-    KOffice::Graph g("application/x-kspread");
+    KOfficeFilter::Graph g("application/x-kspread");
     g.dump();
     g.setSourceMimeType("application/x-kword");
     g.dump();
 
     KoFilterManager *manager = new KoFilterManager(0);
     kDebug() << "Trying to build some filter chains...";
-    Q3CString mimeType("foo/bar");
+    QLatin1String mimeType("foo/bar");
     KoFilterChain::Ptr chain = g.chain(manager, mimeType);
     if (!chain)
         kDebug() << "Chain for 'foo/bar' is not available, OK";

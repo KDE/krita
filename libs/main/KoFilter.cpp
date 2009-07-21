@@ -20,14 +20,11 @@
 #include "KoFilter.h"
 
 #include <QFile>
-//Added by qt3to4:
-#include <Qt3Support/Q3PtrStack>
-
 #include <kurl.h>
 #include <kmimetype.h>
 #include <ktemporaryfile.h>
 #include <kdebug.h>
-
+#include <QStack>
 #include "KoFilterManager.h"
 
 
@@ -43,7 +40,7 @@ public:
      * A stack which keeps track of the current part references.
      * We push one PartState structure for every embedding level.
      */
-    Q3PtrStack<PartState> partStack;
+    QStack<PartState*> partStack;
 };
 
 KoFilter::KoFilter(QObject* parent) : QObject(parent), m_chain(0), d(0)

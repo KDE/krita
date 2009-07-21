@@ -104,7 +104,7 @@ void Graph::dump() const
 #ifndef NDEBUG
     kDebug(30500) << "+++++++++ Graph::dump +++++++++";
     kDebug(30500) << "From:" << m_from;
-    foreach(Vertex vertex, m_vertices) {
+    foreach(Vertex *vertex, m_vertices) {
         vertex->dump("   ");
     }
     kDebug(30500) << "+++++++++ Graph::dump (done) +++++++++";

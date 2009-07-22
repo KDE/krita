@@ -21,7 +21,7 @@ set(GENERIC_KOFFICE_LIB_SOVERSION "5")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
-set(TINY FALSE)
+option(TINY "compile a tiny KOffice" ON)
 
 IF (TINY)
     add_definitions("-DTINY_OFFICE")

@@ -59,7 +59,7 @@
 #include "kis_perspective_grid_manager.h"
 #include "kis_config_notifier.h"
 
-#define DEBUG_REPAINT
+//#define DEBUG_REPAINT
 #include <QtGui/qpainter.h>
 #include <KoCanvasController.h>
 
@@ -175,7 +175,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random() % 255, random() % 255, random() % 255, 150);
-//    gc.fillRect(ev->rect(), color);
+    gc.fillRect(ev->rect(), color);
 #endif
     drawDecorations(gc, true, m_d->documentOffset, fillRect.translated(-m_d->origin), m_d->canvas);
     gc.end();

@@ -37,6 +37,8 @@ class QTextFrameFormat;
 class QTextBlockFormat;
 class KoParagraphStyle;
 class KoCharacterStyle;
+class KoTableStyle;
+class KoTableCellStyle;
 
 #include <QMap>
 #include <QVariant>
@@ -199,6 +201,18 @@ public:
     static QString listAttributes(const QTextListFormat &format);
 
     /**
+     * Get the properties of the given table style.
+     *
+     * The returned string will be formatted in XML-like attribute list format:
+     *
+     * <pre>"key=value key2=value2 ..."</pre>
+     *
+     * @param tableStyle the table style from which properties should be fetched.
+     * @return the formatted attribute string.
+     */
+    static QString tableAttributes(const KoTableStyle &tableStyle);
+
+    /**
      * Get the properties of the given table format.
      *
      * The returned string will be formatted in XML-like attribute list format:
@@ -209,6 +223,18 @@ public:
      * @return the formatted attribute string.
      */
     static QString tableAttributes(const QTextTableFormat &tableFormat);
+
+    /**
+     * Get the properties of the given table cell style.
+     *
+     * The returned string will be formatted in XML-like attribute list format:
+     *
+     * <pre>"key=value key2=value2 ..."</pre>
+     *
+     * @param tableStyle the table cell style from which properties should be fetched.
+     * @return the formatted attribute string.
+     */
+    static QString tableCellAttributes(const KoTableCellStyle &tableCellStyle);
 
     /**
      * Get the properties of the given table cell format.

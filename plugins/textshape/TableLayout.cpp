@@ -99,7 +99,6 @@ QTextTable *TableLayout::table() const
 // TODO: Lots and lots.
 void TableLayout::layout()
 {
-qDebug() << "blah";
     Q_ASSERT(isValid());
 
     if (!isValid()) {

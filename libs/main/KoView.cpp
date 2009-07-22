@@ -56,23 +56,23 @@ class KoViewPrivate
 {
 public:
     KoViewPrivate() {
-        m_manager = 0L;
-        m_tempActiveWidget = 0L;
-        m_registered = false;
-        m_documentDeleted = false;
-        m_viewBar = 0L;
+        manager = 0L;
+        tempActiveWidget = 0L;
+        registered = false;
+        documentDeleted = false;
+        viewBar = 0L;
     }
     ~KoViewPrivate() {
     }
 
     QPointer<KoDocument> m_doc; // our KoDocument
-    QPointer<KParts::PartManager> m_manager;
-    QWidget *m_tempActiveWidget;
-    bool m_registered;  // are we registered at the part manager?
-    bool m_documentDeleted; // true when m_doc gets deleted [can't use m_doc==0
+    QPointer<KParts::PartManager> manager;
+    QWidget *tempActiveWidget;
+    bool registered;  // are we registered at the part manager?
+    bool documentDeleted; // true when m_doc gets deleted [can't use m_doc==0
     // since this only happens in ~QObject, and views
     // get deleted by ~KoDocument].
-    QTimer *m_scrollTimer;
+    QTimer *scrollTimer;
 
 
     // Hmm sorry for polluting the private class with such a big inner class.
@@ -122,9 +122,10 @@ public:
         bool m_permanent;
         bool m_visible;  // true when the item has been added to the statusbar
     };
-    QList<StatusBarItem> m_statusBarItems; // Our statusbar items
-    bool m_inOperation; //in the middle of an operation (no screen refreshing)?
-    QToolBar* m_viewBar;
+
+    QList<StatusBarItem> statusBarItems; // Our statusbar items
+    bool inOperation; //in the middle of an operation (no screen refreshing)?
+    QToolBar* viewBar;
 };
 
 KoView::KoView(KoDocument *document, QWidget *parent)
@@ -166,8 +167,8 @@ KoView::KoView(KoDocument *document, QWidget *parent)
     }
     d->m_doc->setCurrent();
 
-    d->m_scrollTimer = new QTimer(this);
-    connect(d->m_scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
+    d->scrollTimer = new QTimer(this);
+    connect(d->scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
 
     // add all plugins.
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
@@ -183,12 +184,12 @@ KoView::KoView(KoDocument *document, QWidget *parent)
 KoView::~KoView()
 {
     kDebug(30003) << "KoView::~KoView" << this;
-    delete d->m_scrollTimer;
+    delete d->scrollTimer;
 //   delete d->m_dcopObject;
-    if (!d->m_documentDeleted) {
+    if (!d->documentDeleted) {
         if (koDocument() && !koDocument()->isSingleViewMode()) {
-            if (d->m_manager && d->m_registered)   // if we aren't registered we mustn't unregister :)
-                d->m_manager->removePart(koDocument());
+            if (d->manager && d->registered)   // if we aren't registered we mustn't unregister :)
+                d->manager->removePart(koDocument());
             d->m_doc->removeView(this);
             d->m_doc->setCurrent(false);
         }
@@ -203,28 +204,28 @@ KoDocument *KoView::koDocument() const
 
 void KoView::setDocumentDeleted()
 {
-    d->m_documentDeleted = true;
+    d->documentDeleted = true;
 }
 
 bool KoView::documentDeleted() const
 {
-    return d->m_documentDeleted;
+    return d->documentDeleted;
 }
 
 void KoView::setPartManager(KParts::PartManager *manager)
 {
-    d->m_manager = manager;
+    d->manager = manager;
     if (!koDocument()->isSingleViewMode() &&
             !manager->parts().contains(koDocument())) {  // is there another view registered?
-        d->m_registered = true; // no, so we have to register now and ungregister again in the DTOR
+        d->registered = true; // no, so we have to register now and ungregister again in the DTOR
         manager->addPart(koDocument(), false);
     } else
-        d->m_registered = false;  // There is already another view registered for that part...
+        d->registered = false;  // There is already another view registered for that part...
 }
 
 KParts::PartManager *KoView::partManager() const
 {
-    return d->m_manager;
+    return d->manager;
 }
 
 QAction *KoView::action(const QDomElement &element) const
@@ -317,7 +318,7 @@ void KoView::showAllStatusBarItems(bool show)
     KStatusBar * sb = statusBar();
     if (!sb)
         return;
-    foreach(KoViewPrivate::StatusBarItem sbItem, d->m_statusBarItems) {
+    foreach(KoViewPrivate::StatusBarItem sbItem, d->statusBarItems) {
         if (show)
             sbItem.ensureItemShown(sb);
         else
@@ -329,8 +330,8 @@ void KoView::showAllStatusBarItems(bool show)
 void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
     KoViewPrivate::StatusBarItem item(widget, stretch, permanent);
-    d->m_statusBarItems.append(item);
-    item = d->m_statusBarItems.last();
+    d->statusBarItems.append(item);
+    item = d->statusBarItems.last();
     KStatusBar * sb = statusBar();
     if (sb) {
         item.ensureItemShown(sb);
@@ -341,12 +342,12 @@ void KoView::removeStatusBarItem(QWidget *widget)
 {
     KStatusBar *sb = statusBar();
 
-    foreach(KoViewPrivate::StatusBarItem sbItem, d->m_statusBarItems) {
+    foreach(KoViewPrivate::StatusBarItem sbItem, d->statusBarItems) {
         if (sbItem.widget() == widget) {
             if (sb) {
                 sbItem.ensureItemHidden(sb);
             }
-            d->m_statusBarItems.removeOne(sbItem);
+            d->statusBarItems.removeOne(sbItem);
             break;
         }
     }
@@ -354,12 +355,12 @@ void KoView::removeStatusBarItem(QWidget *widget)
 
 void KoView::enableAutoScroll()
 {
-    d->m_scrollTimer->start(50);
+    d->scrollTimer->start(50);
 }
 
 void KoView::disableAutoScroll()
 {
-    d->m_scrollTimer->stop();
+    d->scrollTimer->stop();
 }
 
 void KoView::paintEverything(QPainter &painter, const QRect &rect)
@@ -501,12 +502,12 @@ void KoView::restoreDockWidget(QDockWidget *dock)
 
 QToolBar* KoView::viewBar()
 {
-    if (!d->m_viewBar) {
-        d->m_viewBar = new QToolBar(statusBar());
-        addStatusBarItem(d->m_viewBar, 0 , true);
+    if (!d->viewBar) {
+        d->viewBar = new QToolBar(statusBar());
+        addStatusBarItem(d->viewBar, 0 , true);
     }
 
-    return d->m_viewBar;
+    return d->viewBar;
 }
 
 QList<QAction*> KoView::createChangeUnitActions()

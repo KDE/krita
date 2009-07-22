@@ -219,6 +219,13 @@ void KisOpenGLCanvas2::paintGL()
                 y += m_d->openGLImageTextures->imageTextureTileHeight()) {
 
             glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->imageTextureTile(x, y));
+            if (scaleX > 2.0){
+                glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+                glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+            }else{
+                glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+                glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+            }
 
             glBegin(GL_QUADS);
 
@@ -256,7 +263,6 @@ void KisOpenGLCanvas2::paintGL()
     bool drawTools = true;
 
     QPainter gc(this);
-
     drawDecorations(gc, drawTools,
                     m_d->documentOffset,
                     QRect(QPoint(0, 0), QSize(width(), height() )),

@@ -114,6 +114,13 @@ private:
     qreal findFootnote(const QTextLine &line, int *oldLength);
     void resetPrivate();
 
+    /**
+     * Handle any table layout work that needs to be done for the current block.
+     *
+     * This function is called from nextParag().
+     */
+    void handleTable();
+
 private:
     KoStyleManager *m_styleManager;
 

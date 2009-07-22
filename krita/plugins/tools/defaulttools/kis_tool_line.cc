@@ -192,26 +192,13 @@ QPointF KisToolLine::straightLine(QPointF point)
     return result;
 }
 
-void KisToolLine::paintLine()
-{
-    if (m_canvas) {
-        QPainter gc(m_canvas->canvasWidget());
-        QRect rc;
-
-        paintLine(gc, rc);
-    }
-}
 
 void KisToolLine::paintLine(QPainter& gc, const QRect&)
 {
     if (m_canvas) {
-        //KisCanvasController *controller = m_subject->canvasController();
-        //RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
-//        Q_ASSERT(controller);
         gc.setPen(pen);
-        //gc.drawLine(start.toPoint(), end.toPoint());
         gc.drawLine(m_startPos, m_endPos);
         gc.setPen(old);
     }

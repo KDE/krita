@@ -56,9 +56,7 @@ public:
     virtual QString quickHelp() const;
 
 private:
-    void paintLine();
     void paintLine(QPainter& gc, const QRect& rc);
-
     QPointF straightLine(QPointF point);
 
 private:

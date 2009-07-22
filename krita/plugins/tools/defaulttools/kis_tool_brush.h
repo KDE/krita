@@ -30,9 +30,9 @@ class QCheckBox;
 class QComboBox;
 class QGridLayout;
 class QSlider;
-class QSpinBox;
 
 class KoCanvasBase;
+class KoSliderCombo;
 
 class KisToolBrush : public KisToolFreehand
 {
@@ -68,8 +68,7 @@ private:
     QCheckBox * m_chkAssistant;
     QSlider * m_sliderMagnetism;
     QSlider * m_sliderSmoothness;
-    QSlider * m_sliderRate;
-    QSpinBox * m_spinRate;
+    KoSliderCombo * m_sliderRate;
 };
 
 

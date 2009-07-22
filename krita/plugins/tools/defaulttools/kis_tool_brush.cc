@@ -30,14 +30,15 @@
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QSlider>
-#include <QSpinBox>
 #include <QComboBox>
+#include <QSizePolicy>
 
 #include <kis_debug.h>
 #include <klocale.h>
 
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
+#include "KoSliderCombo.h"
 
 #include "kis_config.h"
 #include "kis_paintop_preset.h"
@@ -149,27 +150,21 @@ QWidget * KisToolBrush::createOptionWidget()
 
     QWidget * optionWidget = KisToolFreehand::createOptionWidget();
     optionWidget->setObjectName(toolId() + "option widget");
+    optionWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness"), optionWidget);
     m_chkSmooth->setObjectName("chkSmooth");
     m_chkSmooth->setChecked(m_smooth);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
 
     QLabel* labelRate = new QLabel(i18n("Rate:"), optionWidget);
-    m_sliderRate = new QSlider(Qt::Horizontal, optionWidget);
+    m_sliderRate = new KoSliderCombo(optionWidget);
     m_sliderRate->setMinimum(0);
     m_sliderRate->setMaximum(MAXIMUM_RATE);
     connect(m_sliderRate, SIGNAL(valueChanged(int)), SLOT(slotSetRate(int)));
     m_sliderRate->setValue( m_rate );
     m_sliderRate->setToolTip( QString::number(m_rate) + ' ' + i18n("ms") );
 
-    m_spinRate = new QSpinBox(optionWidget);
-    m_spinRate->setMinimum(0);
-    m_spinRate->setMaximum(MAXIMUM_RATE);
-    connect(m_spinRate, SIGNAL(valueChanged(int)), SLOT(slotSetRate(int)));
-    m_spinRate->setValue( m_rate );
-
-    connect(m_spinRate, SIGNAL(valueChanged(int)), m_sliderRate,SLOT(setValue(int)));
-    connect(m_sliderRate, SIGNAL(valueChanged(int)), m_spinRate,SLOT(setValue(int)));
 
     m_sliderSmoothness = new QSlider(Qt::Horizontal, optionWidget);
     m_sliderSmoothness->setMinimum(0);
@@ -200,14 +195,12 @@ QWidget * KisToolBrush::createOptionWidget()
 
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
     m_optionLayout->addWidget(labelRate, 1, 0);
-    m_optionLayout->addWidget(m_sliderRate, 1, 1);
-    m_optionLayout->addWidget(m_spinRate, 1 , 2);
+    m_optionLayout->addWidget(m_sliderRate, 1, 1,1,2);
     m_optionLayout->addWidget(m_chkSmooth, 2, 0);
     m_optionLayout->addWidget(m_sliderSmoothness, 2, 1, 1, 2);
     m_optionLayout->addWidget(m_chkAssistant, 4, 0);
     m_optionLayout->addWidget(labelMagnetism, 5, 0);
     m_optionLayout->addWidget(m_sliderMagnetism, 5, 1, 1, 2);
-
     return optionWidget;
 }
 

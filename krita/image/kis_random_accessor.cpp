@@ -20,15 +20,13 @@
 
 #include "kis_random_accessor.h"
 
+#include <kis_shared_ptr.h>
 
 #include <config-tiles.h> // For the next define
-#ifdef USE_OLD_TILESYSTEM
-#include "tiles/kis_tiled_random_accessor.h"
-#else
-#include "tiles_new/kis_tiled_random_accessor.h"
-#endif
+#include KIS_TILED_RANDOM_ACCESSOR_HEADER
+#include "kis_datamanager.h"
 
-#include <kis_shared_ptr.h>
+
 
 typedef KisSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;
 

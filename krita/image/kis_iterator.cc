@@ -23,14 +23,10 @@
 
 #include <kis_debug.h>
 
-
-#include "kis_datamanager.h"
 #include <config-tiles.h> // For the next define
-#ifdef USE_OLD_TILESYSTEM
-#include "tiles/kis_tilediterator.h"
-#else
-#include "tiles_new/kis_tilediterator.h"
-#endif
+#include KIS_TILED_ITERATOR_HEADER
+#include "kis_datamanager.h"
+
 
 KisRectConstIterator::KisRectConstIterator(KisDataManager *dm, qint32  x, qint32  y, qint32  w, qint32  h)
 {

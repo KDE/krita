@@ -52,6 +52,6 @@ namespace KOfficeFilter {
 
     };
 
-};
+}
 
 #endif // KOFILTERCHAINLINKLIST_H

@@ -75,5 +75,5 @@ private:
     Private * const d;
 };
 
-};
+}
 #endif // KOFILTERGRAPH_H

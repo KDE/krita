@@ -99,5 +99,5 @@ private:
     Private * const d;
 };
 
-};
+}
 #endif // KOFILTERVERTEX_H

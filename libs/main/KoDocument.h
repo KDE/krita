@@ -408,9 +408,7 @@ public:
     /**
      *  @return true if the document is empty.
      */
-    virtual bool isEmpty() const {
-        return m_bEmpty;
-    }
+    virtual bool isEmpty() const;
 
     /**
      *  @brief Sets the document to empty.
@@ -420,9 +418,7 @@ public:
      *
      *  @see isEmpty()
      */
-    virtual void setEmpty() {
-        m_bEmpty = true;
-    }
+    virtual void setEmpty();
 
     /**
      *  @brief Loads a document from a store.
@@ -925,8 +921,6 @@ protected:
         KParts::ReadWritePart::setModified();
     }
 
-    KoPageLayout m_pageLayout;
-
     /**
      *  Returns whether or not the current openUrl() or openFile() call is
      *  actually an import operation (like File --> Import).
@@ -990,9 +984,6 @@ private:
     class Private;
     Private * const d;
 
-    KService::Ptr m_nativeService;
-
-    bool m_bEmpty;
 
     static QList<KoDocument*> *s_documentList;
 

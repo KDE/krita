@@ -626,10 +626,6 @@ QString KoTextDebug::tableAttributes(const QTextTableFormat &tableFormat)
             key = "cell-spacing";
             value = QString::number(properties[id].toDouble());
             break;
-        case QTextTableFormat::TableCellPadding:
-            key = "cell-padding";
-            value = QString::number(properties[id].toDouble());
-            break;
         case QTextTableFormat::TableHeaderRowCount:
             key = "header-row-count";
             value = QString::number(properties[id].toInt());
@@ -772,19 +768,19 @@ QString KoTextDebug::tableCellAttributes(const QTextTableCellFormat &tableCellFo
             key = "column-span";
             value = QString::number(properties[id].toInt());
             break;
-        case KoTableCellStyle::TopPadding:
+        case QTextFormat::TableCellTopPadding:
             key = "top-padding";
             value = QString::number(properties[id].toDouble());
             break;
-        case KoTableCellStyle::BottomPadding:
+        case QTextFormat::TableCellBottomPadding:
             key = "bottom-padding";
             value = QString::number(properties[id].toDouble());
             break;
-        case KoTableCellStyle::LeftPadding:
+        case QTextFormat::TableCellLeftPadding:
             key = "left-padding";
             value = QString::number(properties[id].toDouble());
             break;
-        case KoTableCellStyle::RightPadding:
+        case QTextFormat::TableCellRightPadding:
             key = "right-padding";
             value = QString::number(properties[id].toDouble());
             break;

@@ -68,10 +68,6 @@ public:
         RightBorderOuterPen,     ///< the right border outer pen
         RightBorderSpacing,        ///< the right border spacing between inner and outer border
         RightBorderInnerPen,     ///< the right border inner pen
-        LeftPadding,    ///< distance between text and border
-        TopPadding,     ///< distance between text and border
-        RightPadding,   ///< distance between text and border
-        BottomPadding,   ///< distance between text and border
         MasterPageName         ///< Optional name of the master-page
     };
 

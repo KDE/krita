@@ -269,22 +269,22 @@ void KoTableCellStyle::setParentStyle(KoTableCellStyle *parent)
 
 void KoTableCellStyle::setLeftPadding(qreal padding)
 {
-    setProperty(LeftPadding, padding);
+    setProperty(QTextFormat::TableCellLeftPadding, padding);
 }
 
 void KoTableCellStyle::setTopPadding(qreal padding)
 {
-    setProperty(TopPadding, padding);
+    setProperty(QTextFormat::TableCellTopPadding, padding);
 }
 
 void KoTableCellStyle::setRightPadding(qreal padding)
 {
-    setProperty(RightPadding, padding);
+    setProperty(QTextFormat::TableCellRightPadding, padding);
 }
 
 void KoTableCellStyle::setBottomPadding(qreal padding)
 {
-    setProperty(BottomPadding, padding);
+    setProperty(QTextFormat::TableCellBottomPadding, padding);
 }
 
 void KoTableCellStyle::setPadding(qreal padding)

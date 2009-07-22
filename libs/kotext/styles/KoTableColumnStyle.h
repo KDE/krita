@@ -18,8 +18,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOTABLESTYLE_H
-#define KOTABLESTYLE_H
+#ifndef KOTABLECOLUMNSTYLE_H
+#define KOTABLECOLUMNSTYLE_H
 
 #include "KoText.h"
 #include "kotext_export.h"
@@ -38,93 +38,56 @@ class KoGenStyles;
 class KoOdfLoadingContext;
 
 /**
- * A container for all properties for the table wide style.
- * Each table in the main text either is based on a table style, or its not. Where
- * it is based on a table style this is indecated that it has a property 'StyleId'
- * with an integer as value.  The integer value corresponds to the styleId() output of
- * a specific KoTableStyle.
+ * A container for all properties for the table column style.
+ * Each table column in the main text either is based on a table column style, or its not.
+ * Column styles are stored (besides in the KoStyleManager) in the KoTableColumnAndRowStyleManager.
+ * The style has a property 'StyleId' with an integer as value.  The integer value corresponds to the styleId() output of
+ * a specific KoTableColumnStyle.
  * @see KoStyleManager
+ * @see KoTableRowAndColumnStyleManager
  */
-class KOTEXT_EXPORT KoTableStyle : public QObject
+class KOTEXT_EXPORT KoTableColumnStyle : public QObject
 {
     Q_OBJECT
 public:
     enum Property {
         StyleId = QTextTableFormat::UserProperty + 1,
         // Linespacing properties
-        KeepWithNext,    ///< If true, keep table with next paragraph
         BreakBefore,    ///< If true, insert a frame break before this table
         BreakAfter,     ///< If true, insert a frame break after this table
-        MayBreakBetweenRows,     ///< If true, then the table is allowed to break between rows
-        ColumnAndRowStyleManager,     ///< QMetaType::VoidStar pointer to a KoColumnAndRowStyleManager
-                                                             /// It's not really a property of KoTableStyle but defined here for convinience
         MasterPageName         ///< Optional name of the master-page
     };
 
     /// Constructor
-    KoTableStyle(QObject *parent = 0);
-    /// Creates a KoTableStyle with the given table format, and \a parent
-    KoTableStyle(const QTextTableFormat &blockFormat, QObject *parent = 0);
+    KoTableColumnStyle(QObject *parent = 0);
+/*
+    /// Creates a KoTableColumnStyle with the given table format, and \a parent
+    KoTableColumnStyle(const QTextTableFormat &blockFormat, QObject *parent = 0);
+*/
     /// Destructor
-    ~KoTableStyle();
+    ~KoTableColumnStyle();
 
-    /// Creates a KoTableStyle that represents the formatting of \a block.
-    static KoTableStyle *fromTable(const QTextTable &table, QObject *parent = 0);
+/*
+    /// Creates a KoTableColumnStyle that represents the formatting of \a block.
+    static KoTableColumnStyle *fromTable(const QTextTable &table, QObject *parent = 0);
+*/
 
     /// creates a clone of this style with the specified parent
-    KoTableStyle *clone(QObject *parent = 0);
+    KoTableColumnStyle *clone(QObject *parent = 0);
 
     /// See similar named method on QTextFrameFormat
-    void setWidth(const QTextLength &width);
-
-    /// The property specifies if the table should be kept together with the next paragraph
-    void setKeepWithNext(bool keep);
-
-    /// The property specifies if the table should allow it to be break. Break within a row is specified per row
-    void setMayBreakBetweenRows(bool allow);
-
-    /// See similar named method on QTextBlockFormat
-    void setBackground(const QBrush &brush);
-    /// See similar named method on QTextBlockFormat
-    QBrush background() const;
-    /// See similar named method on QTextBlockFormat
-    void clearBackground();
+    void setColumnWidth(const QTextLength &width);
 
     void setBreakBefore(bool on);
     bool breakBefore();
     void setBreakAfter(bool on);
     bool breakAfter();
 
-    // ************ properties from QTextTableFormat
-    /// duplicated property from QTextBlockFormat
-    void setTopMargin(qreal topMargin);
-    /// duplicated property from QTextBlockFormat
-    qreal topMargin() const;
-    /// duplicated property from QTextBlockFormat
-    void setBottomMargin(qreal margin);
-    /// duplicated property from QTextBlockFormat
-    qreal bottomMargin() const;
-    /// duplicated property from QTextBlockFormat
-    void setLeftMargin(qreal margin);
-    /// duplicated property from QTextBlockFormat
-    qreal leftMargin() const;
-    /// duplicated property from QTextBlockFormat
-    void setRightMargin(qreal margin);
-    /// duplicated property from QTextBlockFormat
-    qreal rightMargin() const;
-    /// set the margin around the table, making the margin on all sides equal.
-    void setMargin(qreal margin);
-
-    /// duplicated property from QTextBlockFormat
-    void setAlignment(Qt::Alignment alignment);
-    /// duplicated property from QTextBlockFormat
-    Qt::Alignment alignment() const;
-
     /// set the parent style this one inherits its unset properties from.
-    void setParentStyle(KoTableStyle *parent);
+    void setParentStyle(KoTableColumnStyle *parent);
 
     /// return the parent style
-    KoTableStyle *parentStyle() const;
+    KoTableColumnStyle *parentStyle() const;
 
     /// return the name of the style.
     QString name() const;
@@ -145,20 +108,22 @@ public:
 
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
-    void copyProperties(const KoTableStyle *style);
+    void copyProperties(const KoTableColumnStyle *style);
 
     /**
-     * Apply this style to a tableFormat by copying all properties from this, and parent
-     * styles to the target table format.
+     * Apply this style to a blockFormat by copying all properties from this, and parent
+     * styles to the target block format.  Note that the character format will not be applied
+     * using this method, use the other applyStyle() method for that.
      */
+/*
     void applyStyle(QTextTableFormat &format) const;
-
+*/
     void remove(int key);
 
     /// Compare the properties of this style with the other
-    bool operator==(const KoTableStyle &other) const;
+    bool operator==(const KoTableColumnStyle &other) const;
 
-    void removeDuplicates(const KoTableStyle &other);
+    void removeDuplicates(const KoTableColumnStyle &other);
 
     /**
      * Load the style form the element
@@ -171,7 +136,7 @@ public:
     void saveOdf(KoGenStyle &style);
 
     /**
-     * Returns true if this table style has the property set.
+     * Returns true if this table column style has the property set.
      * Note that this method does not delegate to the parent style.
      * @param key the key as found in the Property enum
      */

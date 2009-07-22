@@ -47,6 +47,7 @@
 #include <KoVariableRegistry.h>
 #include <KoProperties.h>
 #include <KoTextBlockData.h>
+#include <KoTableColumnAndRowStyleManager.h>
 
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"
@@ -54,6 +55,7 @@
 #include "styles/KoListStyle.h"
 #include "styles/KoListLevelProperties.h"
 #include "styles/KoTableStyle.h"
+#include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableCellStyle.h"
 #include "KoTextSharedLoadingData.h"
 #include "KoTextDocument.h"
@@ -251,6 +253,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         KoTableStyle *tblStyle = d->textSharedData->tableStyle(tag.attributeNS(KoXmlNS::table, "style-name", ""), d->stylesDotXml);
                         tblStyle->applyStyle(tableFormat);
                     }
+                    KoTableColumnAndRowStyleManager *tcarManager = new KoTableColumnAndRowStyleManager;
+                    tableFormat.setProperty(KoTableStyle::ColumnAndRowStyleManager, QVariant(QMetaType::VoidStar, tcarManager));
                     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
                     int rows = 0;
                     int columns = 0;
@@ -263,6 +267,13 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                 if (tblLocalName == "table-column") {
                                     // Do some parsing with the column, see §8.2.1, ODF 1.1 spec
                                     int repeatColumn = tblTag.attributeNS(KoXmlNS::table, "number-columns-repeated", "1").toInt();
+                                    QString columnStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
+                                    if (!columnStyleName.isEmpty()) {
+                                        KoTableColumnStyle *columnStyle = d->textSharedData->tableColumnStyle(columnStyleName, d->stylesDotXml);
+                                        for(int c = columns; c < columns + repeatColumn; c++) {
+                                            tcarManager->setColumnStyle(c, columnStyle);
+                                        }
+                                    }
                                     columns = columns + repeatColumn;
                                     if (rows > 0)
                                         tbl->resize(rows, columns);
@@ -313,6 +324,10 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                             }
                         }
                     }
+                    // TODO This is the place to do the merge cells and not above as we do right now
+                    // The reason is that we can't do row spans above, and thus we shouldn't do column span either
+                    // but for that we need to store the merging data in a list or something QList<QRect> maybe
+
                     cursor = tbl->lastCursorPosition();
                     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
                 } else {

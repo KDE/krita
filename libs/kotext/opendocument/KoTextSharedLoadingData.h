@@ -33,6 +33,7 @@ class KoParagraphStyle;
 class KoCharacterStyle;
 class KoListStyle;
 class KoTableStyle;
+class KoTableColumnStyle;
 class KoTableCellStyle;
 class KoStyleManager;
 class KoShape;
@@ -105,6 +106,15 @@ public:
     KoTableStyle *tableStyle(const QString &name, bool stylesDotXml);
 
     /**
+     * Get the table column style for the given name
+     *
+     * @param name The name of the style to get
+     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @return The table column style for the given name or 0 if not found
+     */
+    KoTableColumnStyle *tableColumnStyle(const QString &name, bool stylesDotXml);
+
+    /**
      * Get the table style for the given name
      *
      * @param name The name of the style to get
@@ -149,7 +159,12 @@ private:
                        KoStyleManager *styleManager = 0);
     QList<QPair<QString, KoTableStyle *> > loadTableStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
-    // helper functions for loading of table styles
+    // helper functions for loading of table column styles
+    void addTableColumnStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
+                       KoStyleManager *styleManager = 0);
+    QList<QPair<QString, KoTableColumnStyle *> > loadTableColumnStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
+
+    // helper functions for loading of table cell styles
     void addTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                        KoStyleManager *styleManager = 0);
     QList<QPair<QString, KoTableCellStyle *> > loadTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);

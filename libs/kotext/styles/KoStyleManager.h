@@ -34,6 +34,7 @@ class KoCharacterStyle;
 class KoParagraphStyle;
 class KoListStyle;
 class KoTableStyle;
+class KoTableColumnStyle;
 class KoTableCellStyle;
 class KoXmlWriter;
 class ChangeFollower;
@@ -87,6 +88,10 @@ public:
      */
     void add(KoTableStyle *style);
     /**
+     * Add a new table column style, automatically giving it a new styleId.
+     */
+    void add(KoTableColumnStyle *style);
+    /**
      * Add a new table cell style, automatically giving it a new styleId.
      */
     void add(KoTableCellStyle *style);
@@ -107,6 +112,10 @@ public:
      * Remove a table style.
      */
     void remove(KoTableStyle *style);
+    /**
+     * Remove a table column style.
+     */
+    void remove(KoTableColumnStyle *style);
     /**
      * Remove a table cell style.
      */
@@ -156,6 +165,14 @@ public:
     KoTableStyle *tableStyle(int id) const;
 
     /**
+     * Return a tableColumnStyle by its id.
+     * From documents you can retrieve the id out of the KoTableRowandColumnStyleManager
+     * @param id the unique Id to search for.
+     * @see KoTableColumnStyle::styleId()
+     */
+    KoTableColumnStyle *tableColumnStyle(int id) const;
+
+    /**
      * Return a tableCellStyle by its id.
      * From documents you can retrieve the id out of each QTextTableCellFormat
      * by requesting the KoTableCellStyle::StyleId property.
@@ -195,6 +212,15 @@ public:
      * @see tableStyle(id);
      */
     KoTableStyle *tableStyle(const QString &name) const;
+
+    /**
+     * Return the first tableColumnStyle with the param user-visible-name.
+     * Since the name does not have to be unique there can be multiple
+     * styles registered with that name, only the first is returned
+     * @param name the name of the style.
+     * @see tableColumnStyle(id);
+     */
+    KoTableColumnStyle *tableColumnStyle(const QString &name) const;
 
     /**
      * Return the first tableCellStyle with the param user-visible-name.
@@ -239,10 +265,13 @@ public:
     /// return all the listStyles registered.
     QList<KoListStyle*> listStyles() const;
 
-    /// return all the listStyles registered.
+    /// return all the tableStyles registered.
     QList<KoTableStyle*> tableStyles() const;
 
-    /// return all the listCellStyles registered.
+    /// return all the tableColumnStyles registered.
+    QList<KoTableColumnStyle*> tableColumnStyles() const;
+
+    /// return all the tableCellStyles registered.
     QList<KoTableCellStyle*> tableCellStyles() const;
 
     /// reimplemented
@@ -256,11 +285,13 @@ signals:
     void styleAdded(KoCharacterStyle*);
     void styleAdded(KoListStyle*);
     void styleAdded(KoTableStyle*);
+    void styleAdded(KoTableColumnStyle*);
     void styleAdded(KoTableCellStyle*);
     void styleRemoved(KoParagraphStyle*);
     void styleRemoved(KoCharacterStyle*);
     void styleRemoved(KoListStyle*);
     void styleRemoved(KoTableStyle*);
+    void styleRemoved(KoTableColumnStyle*);
     void styleRemoved(KoTableCellStyle*);
 
 public slots:
@@ -290,6 +321,13 @@ public slots:
      * Note that successive calls are aggregated.
      */
     void alteredStyle(const KoTableStyle *style);
+
+    /**
+     * Slot that should be called whenever a style is changed. This will update
+     * all documents with the style.
+     * Note that successive calls are aggregated.
+     */
+    void alteredStyle(const KoTableColumnStyle *style);
 
     /**
      * Slot that should be called whenever a style is changed. This will update

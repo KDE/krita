@@ -52,6 +52,7 @@ set(kotext_LIB_SRCS
     KoFind.cpp
     KoTextDebug.cpp
     KoTextPage.cpp
+    KoTableColumnAndRowStyleManager.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
@@ -61,6 +62,7 @@ set(kotext_LIB_SRCS
     styles/KoListLevelProperties.cpp
     styles/ChangeFollower.cpp
     styles/KoTableStyle.cpp
+    styles/KoTableColumnStyle.cpp
     styles/KoTableCellStyle.cpp
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextSharedSavingData.cpp

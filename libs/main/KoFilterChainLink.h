@@ -74,5 +74,5 @@ private:
     Private * const d;
 };
 
-};
+}
 #endif // KOFILTERCHAINLINK_H

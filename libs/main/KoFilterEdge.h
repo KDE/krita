@@ -65,6 +65,6 @@ private:
     class Private;
     Private * const d;
 };
-};
+}
 
 #endif // KOFILTEREDGE_H

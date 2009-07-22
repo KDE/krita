@@ -85,4 +85,4 @@ void Vertex::dump(const QByteArray& indent) const
 #endif
 }
 
-};
+}

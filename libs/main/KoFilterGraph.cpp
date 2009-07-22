@@ -240,4 +240,4 @@ QByteArray Graph::findKOfficePart() const
 
     return v->mimeType();
 }
-};
+}

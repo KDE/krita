@@ -73,4 +73,4 @@ namespace KOfficeFilter {
         m_chainLinks.append(link);
         m_current = m_chainLinks.count() -1;
     }
-};
+}

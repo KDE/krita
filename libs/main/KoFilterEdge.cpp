@@ -48,4 +48,4 @@ void Edge::dump(const QByteArray& indent) const
         << m_filterEntry->weight << ")" << endl;
 }
 
-};
+}

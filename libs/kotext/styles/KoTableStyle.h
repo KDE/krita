@@ -146,15 +146,14 @@ public:
     void copyProperties(const KoTableStyle *style);
 
     /**
-     * Apply this style to a blockFormat by copying all properties from this, and parent
-     * styles to the target block format.  Note that the character format will not be applied
-     * using this method, use the other applyStyle() method for that.
+     * Apply this style to a tableFormat by copying all properties from this, and parent
+     * styles to the target table format.
      */
     void applyStyle(QTextTableFormat &format) const;
 
     void remove(int key);
 
-    /// Compare the paragraph, character and list properties of this style with the other
+    /// Compare the properties of this style with the other
     bool operator==(const KoTableStyle &other) const;
 
     void removeDuplicates(const KoTableStyle &other);
@@ -170,7 +169,7 @@ public:
     void saveOdf(KoGenStyle &style);
 
     /**
-     * Returns true if this paragraph style has the property set.
+     * Returns true if this table style has the property set.
      * Note that this method does not delegate to the parent style.
      * @param key the key as found in the Property enum
      */

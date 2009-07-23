@@ -130,8 +130,8 @@ void KisToolBrush::leave(QEvent */*e*/)
 #endif
 
 
-void KisToolBrush::slotSetRate(int rate) {
-    m_rate = rate;
+void KisToolBrush::slotSetRate(qreal rate) {
+    m_rate = qRound(rate);
     m_sliderRate->setToolTip( QString::number(m_rate) + ' ' + i18n("ms") );
 }
 
@@ -150,7 +150,7 @@ QWidget * KisToolBrush::createOptionWidget()
 
     QWidget * optionWidget = KisToolFreehand::createOptionWidget();
     optionWidget->setObjectName(toolId() + "option widget");
-    optionWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    optionWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness"), optionWidget);
     m_chkSmooth->setObjectName("chkSmooth");
@@ -161,7 +161,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderRate = new KoSliderCombo(optionWidget);
     m_sliderRate->setMinimum(0);
     m_sliderRate->setMaximum(MAXIMUM_RATE);
-    connect(m_sliderRate, SIGNAL(valueChanged(int)), SLOT(slotSetRate(int)));
+    connect(m_sliderRate, SIGNAL(valueChanged(qreal, bool)), SLOT(slotSetRate(qreal)));
     m_sliderRate->setValue( m_rate );
     m_sliderRate->setToolTip( QString::number(m_rate) + ' ' + i18n("ms") );
 

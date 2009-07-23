@@ -36,13 +36,11 @@ GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const QStringList &)
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     
     KoColorSpaceFactory * csf = new KisGrayAU16ColorSpaceFactory();
-    KoColorSpace * colorSpaceGRAYU16 = new KisGrayAU16ColorSpace( KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile())->clone());
-    Q_CHECK_PTR(colorSpaceGRAYU16);
     f->add(csf);
     
     KoHistogramProducerFactoryRegistry::instance()->add(
             new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), colorSpaceGRAYU16) );
+            (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), csf->id()) );
 
 }
 

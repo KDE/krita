@@ -38,12 +38,9 @@ CMYKU8Plugin::CMYKU8Plugin(QObject *parent, const QStringList &)
     KoColorSpaceFactory * csf = new KisCmykU8ColorSpaceFactory();
     f->add(csf);
     
-    KoColorSpace * colorSpaceCMYKU8 = new KisCmykU8ColorSpace( KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile())->clone());
-    Q_CHECK_PTR(colorSpaceCMYKU8);
-    
     KoHistogramProducerFactoryRegistry::instance()->add(
             new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-            (KoID("CMYK8HISTO", i18n("CMYK8 Histogram")), colorSpaceCMYKU8) );
+            (KoID("CMYK8HISTO", i18n("CMYK8 Histogram")), csf->id()) );
 
 }
 

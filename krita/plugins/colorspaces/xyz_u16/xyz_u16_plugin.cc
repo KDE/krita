@@ -42,12 +42,9 @@ XYZU16Plugin::XYZU16Plugin(QObject *parent, const QStringList &)
     KoColorSpaceFactory * csf = new KisXyzU16ColorSpaceFactory();
     f->add(csf);
 
-    KoColorSpace * colorSpaceXYZU16 = new KisXyzU16ColorSpace(KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile())->clone());
-    Q_CHECK_PTR(colorSpaceXYZU16);
-
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-        (KoID("XYZ16HISTO", i18n("XYZ16 Histogram")), colorSpaceXYZU16));
+        (KoID("XYZ16HISTO", i18n("XYZ16 Histogram")), csf->id()));
 
 }
 

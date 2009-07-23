@@ -116,7 +116,7 @@ void KoColorSpaceRegistry::init()
     add(new KoLabColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
                 new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-                (KoID("LABAHISTO", i18n("L*a*b* Histogram")), lab16()));
+                (KoID("LABAHISTO", i18n("L*a*b* Histogram")), KoLabColorSpace::colorSpaceId()));
     KoColorProfile *rgbProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreate_sRGBProfile());
     addProfile(rgbProfile);
     add(new KoRgbU16ColorSpaceFactory());
@@ -124,7 +124,7 @@ void KoColorSpaceRegistry::init()
     add(new KoRgbU8ColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
                 new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-                (KoID("RGB8HISTO", i18n("RGB8 Histogram")), rgb8()) );
+                (KoID("RGB8HISTO", i18n("RGB8 Histogram")), KoRgbU8ColorSpace::colorSpaceId()) );
 
 
 

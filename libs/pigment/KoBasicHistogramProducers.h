@@ -29,6 +29,7 @@
 #include "KoColorSpace.h"
 #include "KoID.h"
 #include "pigment_export.h"
+#include "KoColorSpaceRegistry.h"
 
 class PIGMENTCMS_EXPORT KoBasicHistogramProducer : public KoHistogramProducer {
 public:
@@ -125,17 +126,16 @@ public:
  */
 template<class T> class KoBasicHistogramProducerFactory : public KoHistogramProducerFactory {
 public:
-    KoBasicHistogramProducerFactory(const KoID& id, const KoColorSpace *colorSpace)
-        : KoHistogramProducerFactory(id), m_cs(colorSpace)
+    KoBasicHistogramProducerFactory(const KoID& id, const QString& csId)
+        : KoHistogramProducerFactory(id), m_csId(csId)
     {
-        Q_ASSERT(colorSpace);
     }
     virtual ~KoBasicHistogramProducerFactory() {}
-    virtual KoHistogramProducerSP generate() { return KoHistogramProducerSP(new T(KoID(id(), name()), m_cs)); }
-    virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const { return colorSpace->id() == m_cs->id(); }
+    virtual KoHistogramProducerSP generate() { return KoHistogramProducerSP(new T(KoID(id(), name()), KoColorSpaceRegistry::instance()->colorSpace(m_csId, 0))); }
+    virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const { return colorSpace->id() == m_csId; }
     virtual float preferrednessLevelWith(const KoColorSpace* /*colorSpace*/) const { return 1.0; }
 protected:
-    const KoColorSpace *m_cs;
+    QString m_csId;
 };
 
 /**

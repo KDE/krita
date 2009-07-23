@@ -70,6 +70,8 @@
 #include <QTextList>
 #include <QTextTable>
 #include <QTime>
+#include <QList>
+#include <QRect>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -258,6 +260,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
                     int rows = 0;
                     int columns = 0;
+                    QList<QRect> spanStore; //temporary list to store spans until the entire table have been created
                     kDebug(32500) << "Table inserted";
                     KoXmlElement tblTag;
                     forEachElement(tblTag, tag) {
@@ -297,10 +300,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                     // Ok, it's a cell...
                                                     const int currentRow = tbl->rows() - 1;
                                                     QTextTableCell cell = tbl->cellAt(currentRow, currentCell);
+                                                    
+                                                    // store spans until entire table have been loaded
                                                     int rowsSpanned = tblTag.attributeNS(KoXmlNS::table, "number-rows-spanned", "1").toInt();
                                                     int columnsSpanned = tblTag.attributeNS(KoXmlNS::table, "number-columns-spanned", "1").toInt();
-                                                    // rowsSpanned disabled for now as that would mean spanning into rows not yet created. Need to figure out some way to handle this
-                                                    tbl->mergeCells(currentRow, currentCell, 1/*rowsSpanned*/, columnsSpanned);
+                                                    spanStore.append(QRect(currentCell, currentRow, columnsSpanned, rowsSpanned));
 
                                                     QString cellStyleName = rowTag.attributeNS(KoXmlNS::table, "style-name", "");
                                                     if (!cellStyleName.isEmpty()) {
@@ -324,9 +328,10 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                             }
                         }
                     }
-                    // TODO This is the place to do the merge cells and not above as we do right now
-                    // The reason is that we can't do row spans above, and thus we shouldn't do column span either
-                    // but for that we need to store the merging data in a list or something QList<QRect> maybe
+                    // Finally create spans
+                    foreach (const QRect &span, spanStore) {
+                        tbl->mergeCells(span.y(), span.x(), span.height(), span.width()); // for some reason Qt takes row, column
+                    }
 
                     cursor = tbl->lastCursorPosition();
                     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);

@@ -196,7 +196,8 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     // updates, so no need to prescale!
     QRect vRect = viewRectFromDoc(rc);
     if (!vRect.isEmpty()) {
-        m_d->canvasWidget->widget()->update(vRect);
+        //m_d->canvasWidget->widget()->update(vRect);
+        m_d->canvasWidget->widget()->update();
     }
 }
 
@@ -320,7 +321,8 @@ void KisCanvas2::updateCanvasProjection(const QRect & rc)
     if (!vRect.isEmpty()) {
         m_d->prescaledProjection->updateCanvasProjection(rc);
         // Regardless, the actual
-        m_d->canvasWidget->widget()->update(vRect);
+        //m_d->canvasWidget->widget()->update(vRect);
+        m_d->canvasWidget->widget()->update();
     }
 }
 
@@ -467,6 +469,12 @@ void KisCanvas2::adjustOrigin()
 void KisCanvas2::updateRulers()
 {
     emit documentOriginChanged();
+}
+
+
+QPoint KisCanvas2::documentOffset() const
+{
+    return m_d->documentOffset;
 }
 
 

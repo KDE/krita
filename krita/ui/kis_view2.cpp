@@ -64,6 +64,7 @@
 #include <KoDockerManager.h>
 #include <KoDockRegistry.h>
 #include <KoResourceServerProvider.h>
+#include <KoCompositeOp.h>
 
 #include <kactioncollection.h>
 
@@ -102,6 +103,10 @@
 #include "kis_selection.h"
 #include "kis_print_job.h"
 #include "kis_painting_assistants_manager.h"
+#include <boost/concept_check.hpp>
+#include <kis_paint_layer.h>
+
+#include "kis_node_commands_adapter.h"
 
 class KisView2::KisView2Private
 {
@@ -238,6 +243,8 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
     // be showing a progress bar and calling qApp->processEvents().
     if (K3URLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
         event->accept();
+    } else if ( event->mimeData()->hasImage() ){
+        event->accept();
     } else {
         event->ignore();
     }
@@ -245,8 +252,41 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
 
 void KisView2::dropEvent(QDropEvent *event)
 {
-    KUrl::List urls;
+    if (event->mimeData()->hasImage())
+    {
+        QImage qimg = qvariant_cast<QImage>(event->mimeData()->imageData());
+        KisImageSP img = image();
+        
+        if (img) {
+            KisPaintDeviceSP device = new KisPaintDevice( img->colorSpace() );
+            device->convertFromQImage(qimg,"");
+            KisLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, device);
 
+            QPointF pos = img->documentToIntPixel( m_d->viewConverter->viewToDocument( event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin() ) );
+            layer->setX( pos.x() );
+            layer->setY( pos.y() );
+
+            if (layer) {
+                //layer->setCompositeOp(COMPOSITE_OVER);
+                KisNodeCommandsAdapter adapter(this);
+
+                if (!m_d->nodeManager->layerManager()->activeLayer()){
+                    adapter.addNode(layer.data(), img->rootLayer().data() , 0);
+                }else
+                {
+                    adapter.addNode(layer.data(), m_d->nodeManager->layerManager()->activeLayer()->parent().data(), m_d->nodeManager->layerManager()->activeLayer().data());
+                }
+
+                layer->setDirty();
+                canvas()->update();
+                layerBox()->setCurrentNode( layer );
+                
+            } 
+        }
+        return;
+    }
+
+    KUrl::List urls;
     if (K3URLDrag::decode(event, urls)) {
         if (urls.count() > 0) {
 

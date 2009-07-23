@@ -79,6 +79,7 @@ public: // KoCanvasBase implementation
     virtual void stopMacro();
 
     virtual QPoint documentOrigin() const;
+    QPoint documentOffset() const;
 
     /**
      * Return the right shape manager for the current layer. That is

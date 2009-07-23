@@ -2175,11 +2175,10 @@ KoPageLayout KoDocument::pageLayout(int /*pageNumber*/) const
     return d->pageLayout;
 }
 
-void KoDocument::setPageLayout(KoPageLayout pageLayout) 
+void KoDocument::setPageLayout(const KoPageLayout &pageLayout) 
 {
     d->pageLayout = pageLayout;
 }
-
 
 KoUnit KoDocument::unit() const
 {

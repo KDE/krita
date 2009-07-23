@@ -614,7 +614,7 @@ public:
      * @see KoPageLayout
      */
     virtual KoPageLayout pageLayout(int pageNumber = 0) const;
-    void setPageLayout(KoPageLayout pageLayout);
+    virtual void setPageLayout(const KoPageLayout &pageLayout);
 
     /**
      * Performs a cleanup of unneeded backup files

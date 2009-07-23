@@ -258,7 +258,7 @@ void KisView2::dropEvent(QDropEvent *event)
         KisImageSP img = image();
         
         if (img) {
-            KisPaintDeviceSP device = new KisPaintDevice( img->colorSpace() );
+            KisPaintDeviceSP device = new KisPaintDevice( KoColorSpaceRegistry::instance()->rgb8() );
             device->convertFromQImage(qimg,"");
             KisLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, device);
 
@@ -267,20 +267,16 @@ void KisView2::dropEvent(QDropEvent *event)
             layer->setY( pos.y() );
 
             if (layer) {
-                //layer->setCompositeOp(COMPOSITE_OVER);
                 KisNodeCommandsAdapter adapter(this);
-
                 if (!m_d->nodeManager->layerManager()->activeLayer()){
                     adapter.addNode(layer.data(), img->rootLayer().data() , 0);
                 }else
                 {
                     adapter.addNode(layer.data(), m_d->nodeManager->layerManager()->activeLayer()->parent().data(), m_d->nodeManager->layerManager()->activeLayer().data());
                 }
-
                 layer->setDirty();
                 canvas()->update();
                 layerBox()->setCurrentNode( layer );
-                
             } 
         }
         return;

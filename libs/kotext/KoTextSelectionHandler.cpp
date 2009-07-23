@@ -425,19 +425,14 @@ void KoTextSelectionHandler::insertTable(int rows, int columns)
         for (int col = 0; col < table->columns(); ++col) {
             QTextTableCell cell = table->cellAt(row, col);
             QTextTableCellFormat format;
-            format.setProperty(KoTableCellStyle::TopBorderOuterPen, QPen(Qt::black, 2));
-            format.setProperty(KoTableCellStyle::TopBorderSpacing,  2.0);
-            format.setProperty(KoTableCellStyle::TopBorderInnerPen, QPen(Qt::black, 2));
-            format.setProperty(KoTableCellStyle::LeftBorderOuterPen, QPen(Qt::black, 2));
-            format.setProperty(KoTableCellStyle::LeftBorderSpacing, 2.0);
-            format.setProperty(KoTableCellStyle::LeftBorderInnerPen, QPen(Qt::black, 2));
-            format.setProperty(KoTableCellStyle::BottomBorderOuterPen, QPen(Qt::black, 2));
-            format.setProperty(KoTableCellStyle::BottomBorderSpacing, 2.0);
-            format.setProperty(KoTableCellStyle::BottomBorderInnerPen, QPen(Qt::black, 2));
-            format.setProperty(KoTableCellStyle::RightBorderOuterPen, QPen(Qt::black, 2));
-            format.setProperty(KoTableCellStyle::RightBorderSpacing, 2.0);
-            format.setProperty(KoTableCellStyle::RightBorderInnerPen, QPen(Qt::black, 2));
-            format.setPadding(5);
+            KoTableCellStyle cellStyle;
+            cellStyle.setEdge(KoTableCellStyle::Top, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableCellStyle::Left, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableCellStyle::Bottom, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableCellStyle::Right, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setPadding(5);
+
+            cellStyle.applyStyle(format);
             cell.setFormat(format);
         }
     }

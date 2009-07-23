@@ -178,7 +178,7 @@ void KoTableCellStyle::setEdgeDoubleBorderValues(Side side, qreal innerWidth, qr
 {
     qreal totalWidth = d->edges[side].outerPen.widthF() + d->edges[side].spacing + d->edges[side].innerPen.widthF();
     if(d->edges[side].innerPen.widthF() > 0.0) {
-        d->edges[side].outerPen.setWidthF(totalWidth - innerWidth + space);
+        d->edges[side].outerPen.setWidthF(totalWidth - innerWidth - space);
         d->edges[side].spacing = space;
         d->edges[side].innerPen.setWidthF(innerWidth);
     }

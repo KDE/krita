@@ -125,10 +125,10 @@ public:
      *
      * @param side defines which edge this is for.
      * @param style the border style for this side.
-     * @param width the thickness of the border-line. Includes spacing and innerwidth, which can be specified below
+     * @param totalWidth the thickness of the border. Sum of outerwidth, spacing and innerwidth for double borders
      * @param color the color of the border line(s).
      */
-    void setEdge(Side side, BorderStyle style, qreal width, QColor color);
+    void setEdge(Side side, BorderStyle style, qreal totalWidth, QColor color);
 
     /**
      * Set the properties of an double border.

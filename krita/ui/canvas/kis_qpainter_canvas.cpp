@@ -262,8 +262,7 @@ void KisQPainterCanvas::tabletEvent(QTabletEvent *e)
     subpixelX = subpixelX - ((int) subpixelX); // leave only part behind the dot
     qreal subpixelY = e->hiResGlobalY();
     subpixelY = subpixelY - ((int) subpixelY); // leave only part behind the dot
-    QPointF pos(e->x() + subpixelX + m_d->documentOffset.x(), e->y() + subpixelY + m_d->documentOffset.y());
-    // TODO: fix tablet coordinate, QPoint vs QPointF
+    QPointF pos(e->x() + subpixelX + m_d->documentOffset.x() - m_d->origin.x(), e->y() + subpixelY + m_d->documentOffset.y() - m_d->origin.y());
     m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(pos));
 }
 
@@ -330,8 +329,6 @@ void KisQPainterCanvas::adjustOrigin()
 
 
     emit documentOriginChanged( m_d->origin );
-    // update documentOrigin in prescaledProjection
-    //m_d->prescaledProjection->updateDocumentOrigin(m_d->origin);
 }
 
 
@@ -369,7 +366,7 @@ QSize KisQPainterCanvas::documentSize()
 {
     KisImageSP image = m_d->canvas->image();
     return QSize(int(ceil(m_d->viewConverter->documentToViewX(image->width()  / image->xRes()))),
-                       int(ceil(m_d->viewConverter->documentToViewY(image->height() / image->yRes()))));
+                 int(ceil(m_d->viewConverter->documentToViewY(image->height() / image->yRes()))));
 }
 
 

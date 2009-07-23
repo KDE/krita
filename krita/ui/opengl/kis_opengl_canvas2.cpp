@@ -381,7 +381,7 @@ void KisOpenGLCanvas2::tabletEvent(QTabletEvent *e)
     subpixelX = subpixelX - ((int) subpixelX); // leave only part behind the dot
     qreal subpixelY = e->hiResGlobalY();
     subpixelY = subpixelY - ((int) subpixelY); // leave only part behind the dot
-    QPointF pos(e->x() + subpixelX + m_d->documentOffset.x(), e->y() + subpixelY + m_d->documentOffset.y());
+    QPointF pos(e->x() + subpixelX + m_d->documentOffset.x() - m_d->origin.x(), e->y() + subpixelY + m_d->documentOffset.y() - m_d->origin.y() );
     m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(pos));
 }
 

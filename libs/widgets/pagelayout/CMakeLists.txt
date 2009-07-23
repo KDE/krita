@@ -36,3 +36,9 @@ set_target_properties(kopagelayout PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
 )
 install(TARGETS kopagelayout ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install( FILES
+    KoPageLayout.h
+    KoPageLayoutDialog.h
+    KoPageLayoutWidget.h
+    KoPagePreviewWidget.h
+    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)

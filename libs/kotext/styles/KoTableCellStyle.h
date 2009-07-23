@@ -125,12 +125,22 @@ public:
      *
      * @param side defines which edge this is for.
      * @param style the border style for this side.
-     * @param width the thickness of the border-line.
+     * @param width the thickness of the border-line. Includes spacing and innerwidth, which can be specified below
      * @param color the color of the border line(s).
+     */
+    void setEdge(Side side, BorderStyle style, qreal width, QColor color);
+
+    /**
+     * Set the properties of an double border.
+     * Note: you need to set the edge first or that would overwrite these values.
+     *
+     * The values will not be set if the border doesn't have a double style
+     *
+     * @param side defines which edge this is for.
      * @param space the amount of spacing between the outer border and the inner border in case of style being double
      * @param innerWidth the thickness of the inner border line in case of style being double
      */
-    void setEdge(Side side, BorderStyle style, qreal width, QColor color, qreal innerWidth = 0.0, qreal space = 0.0);
+    void setEdgeDoubleBorderValues(Side side, qreal innerWidth, qreal space);
 
     /**
      * Check if the border data has any borders.

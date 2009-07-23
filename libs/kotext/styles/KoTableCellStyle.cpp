@@ -148,10 +148,16 @@ QRectF KoTableCellStyle::boundingRect(const QRectF &contentRect) const
    );
 }
 
-void KoTableCellStyle::setEdge(Side side, BorderStyle style, qreal width, QColor color, qreal innerWidth, qreal space)
+void KoTableCellStyle::setEdge(Side side, BorderStyle style, qreal width, QColor color)
 {
     Edge edge;
+    qreal innerWidth = 0.0, space = 0.0;
     switch (style) {
+    case BorderDouble:
+        innerWidth = space = width/4; //some nice default look
+        width -= (space + innerWidth);
+        edge.outerPen.setStyle(Qt::SolidLine);
+        break;
 //    case Dotted: edge.innerPen.setStyle(Qt::DotLine); break;
     default:
         edge.outerPen.setStyle(Qt::SolidLine);
@@ -166,6 +172,16 @@ void KoTableCellStyle::setEdge(Side side, BorderStyle style, qreal width, QColor
     edge.innerPen.setWidthF(innerWidth);
 
     d->edges[side] = edge;
+}
+
+void KoTableCellStyle::setEdgeDoubleBorderValues(Side side, qreal innerWidth, qreal space)
+{
+    qreal totalWidth = d->edges[side].outerPen.widthF() + d->edges[side].spacing + d->edges[side].innerPen.widthF();
+    if(d->edges[side].innerPen.widthF() > 0.0) {
+        d->edges[side].outerPen.setWidthF(totalWidth - innerWidth + space);
+        d->edges[side].spacing = space;
+        d->edges[side].innerPen.setWidthF(innerWidth);
+    }
 }
 
 bool KoTableCellStyle::hasBorders() const
@@ -471,9 +487,10 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext 
 
 void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
+/*
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {     // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
         // LTR is lr-tb. RTL is rl-tb
-/*
+
         QString writingMode = styleStack.property(KoXmlNS::style, "writing-mode");
         if (writingMode == "lr" || writingMode == "lr-tb")
             setTextProgressionDirection(KoText::LeftRightTopBottom);
@@ -483,8 +500,8 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
             setTextProgressionDirection(KoText::TopBottomRightLeft);
         else
             setTextProgressionDirection(KoText::AutoDirection);
-*/
     }
+*/
     // Padding
     if (styleStack.hasProperty(KoXmlNS::fo, "padding-left"))
         setLeftPadding(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding-left")));
@@ -522,44 +539,36 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
             setEdge(Bottom, oasisBorderStyle(border.section(' ', 1, 1)), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
         }
     }
-/*
+
     if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "left")) {
         QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "left");
         if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setLeftInnerBorderWidth(KoUnit::parseValue(blw[0], 0.1));
-            setLeftBorderSpacing(KoUnit::parseValue(blw[1], 1.0));
-            setLeftBorderWidth(KoUnit::parseValue(blw[2], 0.1));
+            setEdgeDoubleBorderValues(Left, KoUnit::parseValue(blw[1], 1.0), KoUnit::parseValue(blw[2], 0.1));
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "top")) {
         QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "top");
         if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setTopInnerBorderWidth(KoUnit::parseValue(blw[0], 0.1));
-            setTopBorderSpacing(KoUnit::parseValue(blw[1], 1.0));
-            setTopBorderWidth(KoUnit::parseValue(blw[2], 0.1));
+            setEdgeDoubleBorderValues(Top, KoUnit::parseValue(blw[1], 1.0), KoUnit::parseValue(blw[2], 0.1));
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "right")) {
         QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "right");
         if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setRightInnerBorderWidth(KoUnit::parseValue(blw[0], 0.1));
-            setRightBorderSpacing(KoUnit::parseValue(blw[1], 1.0));
-            setRightBorderWidth(KoUnit::parseValue(blw[2], 0.1));
+            setEdgeDoubleBorderValues(Right, KoUnit::parseValue(blw[1], 1.0), KoUnit::parseValue(blw[2], 0.1));
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "bottom")) {
         QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "bottom");
         if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setBottomInnerBorderWidth(KoUnit::parseValue(blw[0], 0.1));
-            setBottomBorderSpacing(KoUnit::parseValue(blw[1], 1.0));
-            setBottomBorderWidth(KoUnit::parseValue(blw[2], 0.1));
+            setEdgeDoubleBorderValues(Bottom, KoUnit::parseValue(blw[1], 1.0), KoUnit::parseValue(blw[2], 0.1));
         }
     }
-*/
+
     // The fo:background-color attribute specifies the background color of a cell.
     if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
         const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");

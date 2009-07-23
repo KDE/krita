@@ -97,6 +97,7 @@ install(
     KoTextEditingFactory.h
     KoTextEditingPlugin.h
     KoTextEditingRegistry.h
+    KoPageFormat.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

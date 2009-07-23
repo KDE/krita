@@ -41,4 +41,5 @@ install( FILES
     KoPageLayoutDialog.h
     KoPageLayoutWidget.h
     KoPagePreviewWidget.h
+    ../kowidgets_export.h
     DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)

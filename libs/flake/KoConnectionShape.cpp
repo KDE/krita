@@ -198,7 +198,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     Q_UNUSED(size);
 
     QPointF dst = 0.3 * ( m_handles[0] - m_handles[1]);
-    const qreal MinimumEscapeLength = qMax(0.01, qMin(qAbs(dst.x()), qMin(qAbs(dst.y()), 20.0)));
+    const qreal MinimumEscapeLength = qMax(0.01, qMin(qAbs(dst.x()), qMin(qAbs(dst.y()), (qreal)20)));
     clear();
     switch (d->connectionType) {
     case Standard: {

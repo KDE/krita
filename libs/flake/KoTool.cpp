@@ -171,7 +171,7 @@ QHash<QString, KAction*> KoTool::actions() const
 
 KAction *KoTool::action(const QString &name) const
 {
-    return d->actionCollection[name];
+    return d->actionCollection.value(name);
 }
 
 QWidget * KoTool::createOptionWidget()

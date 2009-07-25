@@ -16,19 +16,22 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "KoTableColumnAndRowStyleManager.h"
 
 #include "styles/KoTableColumnStyle.h"
 
-#include <QList>
+#include <QMap>
+#include <QDebug>
 
 class KoTableColumnAndRowStyleManager::Private
 {
 public:
     Private()  { }
     ~Private() {
+        qDeleteAll(tableColumnStyles);
     }
-    QList<KoTableColumnStyle *> tableColumnStyles;
+    QMap<int, KoTableColumnStyle *> tableColumnStyles;
 };
 
 KoTableColumnAndRowStyleManager::KoTableColumnAndRowStyleManager()
@@ -36,6 +39,38 @@ KoTableColumnAndRowStyleManager::KoTableColumnAndRowStyleManager()
 {
 }
 
+KoTableColumnAndRowStyleManager::~KoTableColumnAndRowStyleManager()
+{
+    delete d;
+}
+
 void KoTableColumnAndRowStyleManager::setColumnStyle(int column, KoTableColumnStyle *columnStyle)
 {
+    Q_ASSERT(columnStyle);
+    Q_ASSERT(column >= 0);
+
+    if (column < 0) {
+        return;
+    }
+
+    KoTableColumnStyle *oldColumnStyle = d->tableColumnStyles.value(column);
+
+    if (oldColumnStyle == columnStyle) {
+        return;
+    }
+
+    delete oldColumnStyle;
+    d->tableColumnStyles.insert(column, columnStyle);
 }
+
+KoTableColumnStyle *KoTableColumnAndRowStyleManager::columnStyle(int column)
+{
+    Q_ASSERT(column >= 0);
+
+    if (column < 0) {
+        return 0;
+    }
+
+    return d->tableColumnStyles.value(column, 0);
+}
+

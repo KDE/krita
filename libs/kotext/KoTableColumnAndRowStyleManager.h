@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2009 Elvis Stansvik <elvstone@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,21 +23,42 @@
 #include "kotext_export.h"
 
 class KoTableColumnStyle;
-class KoTableCellStyle;
 
 /**
  * Manages all column and row styles for a table.
+ *
+ * TODO:
+ *  - Eliminate duplicates.
+ *  - Delegate to KoStyleManager for named styles.
+ *  - Keep instances instead of pointers to styles after the styles
+ *    have been made implicitly shared.
  */
 class KOTEXT_EXPORT KoTableColumnAndRowStyleManager
 {
 public:
-    KoTableColumnAndRowStyleManager();
+    explicit KoTableColumnAndRowStyleManager();
+    virtual ~KoTableColumnAndRowStyleManager();
 
+    /**
+     * Set the column style for the column \a column to \a columnStyle.
+     *
+     * @param column the column to set the style for.
+     * @param columnStyle a pointer to the columns style.
+     */
     void setColumnStyle(int column, KoTableColumnStyle *columnStyle);
+
+    /**
+     * Get the column style for the column \a column.
+     *
+     * @param column the column to get the style for.
+     * @return the column style.
+     */
+    KoTableColumnStyle *columnStyle(int column);
 
 private:
     class Private;
     Private* const d;
 };
 
-#endif
+#endif // KOTABLECOLUMNANDROWSTYLEMANAGER_H
+

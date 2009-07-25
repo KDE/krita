@@ -515,14 +515,14 @@ void Layout::handleTable()
             m_tableLayout.setTable(table);
 
             // FIXME-BREAK-BEFORE
-            KoTableStyle tableStyle(table->format());
+            /*KoTableStyle tableStyle(table->format());
             if (!m_newShape && tableStyle.breakBefore() && m_block.position() > m_data->position()) {
                 qDebug() << "break-before";
                 m_data->setEndPosition(m_block.position() - 1);
                 nextShape();
                 if (m_data)
                     m_data->setPosition(m_block.position());
-            }
+            }*/
             // END FIXME-BREAK-BEFORE
 
             m_tableLayout.setPosition(QPointF(x(), y())); // FIXME?

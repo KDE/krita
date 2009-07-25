@@ -42,7 +42,8 @@ class KoGenStyles;
 class KoTextShapeData;
 
 /**
- * Manages all character and paragraph styles for any number of documents.
+ * Manages all character, paragraph, table and table cell styles for any number
+ * of documents.
  */
 class KOTEXT_EXPORT KoStyleManager : public QObject, public KoDataCenter
 {

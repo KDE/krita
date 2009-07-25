@@ -256,7 +256,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         tblStyle->applyStyle(tableFormat);
                     }
                     KoTableColumnAndRowStyleManager *tcarManager = new KoTableColumnAndRowStyleManager;
-                    tableFormat.setProperty(KoTableStyle::ColumnAndRowStyleManager, QVariant(QMetaType::VoidStar, tcarManager));
+                    tableFormat.setProperty(KoTableStyle::ColumnAndRowStyleManager, QVariant::fromValue(reinterpret_cast<void *>(tcarManager)));
                     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
                     int rows = 0;
                     int columns = 0;

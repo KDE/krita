@@ -51,8 +51,9 @@ public:
         qDeleteAll(characterStylesToDelete);
         qDeleteAll(listStylesToDelete);
         qDeleteAll(tableStylesToDelete);
-        qDeleteAll(tableColumnStylesToDelete);
         qDeleteAll(tableCellStylesToDelete);
+        // NOTE: Table column/row styles are managed by KoTableColumnAndRowStyleManager
+        //       and are not deleted here.
     }
 
     // It is possible that automatic-styles in content.xml and styles.xml have the same name
@@ -76,7 +77,6 @@ public:
     QList<KoCharacterStyle *> characterStylesToDelete;
     QList<KoListStyle *> listStylesToDelete;
     QList<KoTableStyle *> tableStylesToDelete;
-    QList<KoTableColumnStyle *> tableColumnStylesToDelete;
     QList<KoTableCellStyle *> tableCellStylesToDelete;
     QHash<QString, KoParagraphStyle*> namedParagraphStyles;
 };
@@ -361,8 +361,6 @@ void KoTextSharedLoadingData::addTableColumnStyles(KoOdfLoadingContext &context,
         // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
         if (styleManager) {
             styleManager->add(it->second);
-        } else {
-            d->tableColumnStylesToDelete.append(it->second);
         }
     }
 }

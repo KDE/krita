@@ -23,6 +23,7 @@
 #include "kotext_export.h"
 
 class KoTableColumnStyle;
+class KoTableRowStyle;
 
 /**
  * Manages all column and row styles for a table.
@@ -43,7 +44,7 @@ public:
      * Set the column style for the column \a column to \a columnStyle.
      *
      * @param column the column to set the style for.
-     * @param columnStyle a pointer to the columns style.
+     * @param columnStyle a pointer to the column style.
      */
     void setColumnStyle(int column, KoTableColumnStyle *columnStyle);
 
@@ -54,6 +55,22 @@ public:
      * @return the column style.
      */
     KoTableColumnStyle *columnStyle(int column);
+
+    /**
+     * Set the row style for the row \a row to \a rowStyle.
+     *
+     * @param row the row to set the style for.
+     * @param rowStyle a pointer to the row style.
+     */
+    void setRowStyle(int row, KoTableRowStyle *rowStyle);
+
+    /**
+     * Get the row style for the row \a column.
+     *
+     * @param row the row to get the style for.
+     * @return the row style.
+     */
+    KoTableRowStyle *rowStyle(int row);
 
 private:
     class Private;

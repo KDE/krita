@@ -63,6 +63,7 @@ set(kotext_LIB_SRCS
     styles/ChangeFollower.cpp
     styles/KoTableStyle.cpp
     styles/KoTableColumnStyle.cpp
+    styles/KoTableRowStyle.cpp
     styles/KoTableCellStyle.cpp
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextSharedSavingData.cpp

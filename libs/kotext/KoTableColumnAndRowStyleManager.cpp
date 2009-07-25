@@ -20,8 +20,10 @@
 #include "KoTableColumnAndRowStyleManager.h"
 
 #include "styles/KoTableColumnStyle.h"
+#include "styles/KoTableRowStyle.h"
 
-#include <QMap>
+#include <QVector>
+#include <QSet>
 #include <QDebug>
 
 class KoTableColumnAndRowStyleManager::Private
@@ -29,9 +31,13 @@ class KoTableColumnAndRowStyleManager::Private
 public:
     Private()  { }
     ~Private() {
-        qDeleteAll(tableColumnStyles);
+        qDeleteAll(tableColumnStylesToDelete);
+        qDeleteAll(tableRowStylesToDelete);
     }
-    QMap<int, KoTableColumnStyle *> tableColumnStyles;
+    QVector<KoTableColumnStyle *> tableColumnStyles;
+    QVector<KoTableRowStyle *> tableRowStyles;
+    QSet<KoTableRowStyle *> tableRowStylesToDelete;
+    QSet<KoTableColumnStyle *> tableColumnStylesToDelete;
 };
 
 KoTableColumnAndRowStyleManager::KoTableColumnAndRowStyleManager()
@@ -53,13 +59,12 @@ void KoTableColumnAndRowStyleManager::setColumnStyle(int column, KoTableColumnSt
         return;
     }
 
-    KoTableColumnStyle *oldColumnStyle = d->tableColumnStyles.value(column);
-
-    if (oldColumnStyle == columnStyle) {
+    if (d->tableColumnStyles.value(column) == columnStyle) {
         return;
     }
+    
+    d->tableColumnStylesToDelete.insert(columnStyle); // add the style so it can be deleted on destruction
 
-    delete oldColumnStyle;
     d->tableColumnStyles.insert(column, columnStyle);
 }
 
@@ -72,5 +77,34 @@ KoTableColumnStyle *KoTableColumnAndRowStyleManager::columnStyle(int column)
     }
 
     return d->tableColumnStyles.value(column, 0);
+}
+
+void KoTableColumnAndRowStyleManager::setRowStyle(int row, KoTableRowStyle *rowStyle)
+{
+    Q_ASSERT(rowStyle);
+    Q_ASSERT(row >= 0);
+
+    if (row < 0) {
+        return;
+    }
+
+    if (d->tableRowStyles.value(row) == rowStyle) {
+        return;
+    }
+
+    d->tableRowStylesToDelete.insert(rowStyle); // add the style so it can be deleted on destruction
+
+    d->tableRowStyles.insert(row, rowStyle);
+}
+
+KoTableRowStyle *KoTableColumnAndRowStyleManager::rowStyle(int row)
+{
+    Q_ASSERT(row >= 0);
+
+    if (row < 0) {
+        return 0;
+    }
+
+    return d->tableRowStyles.value(row, 0);
 }
 

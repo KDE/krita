@@ -283,7 +283,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                     else
                                         tbl->resize(1, columns);
                                 } else if (tblLocalName == "table-row") {
-                                    // Lot of work to do here...
+                                    QString rowStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
+                                    if (!rowStyleName.isEmpty()) {
+                                        KoTableRowStyle *rowStyle = d->textSharedData->tableRowStyle(rowStyleName, d->stylesDotXml);
+                                        tcarManager->setRowStyle(rows, rowStyle);
+                                    }
                                     rows++;
                                     if (columns > 0)
                                         tbl->resize(rows, columns);

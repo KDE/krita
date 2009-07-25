@@ -61,21 +61,6 @@ KoTableColumnStyle::KoTableColumnStyle(QObject *parent)
 {
 }
 
-/*
-KoTableColumnStyle::KoTableColumnStyle(const QTextTableFormat &tableFormat, QObject *parent)
-        : QObject(parent),
-        d(new Private())
-{
-    d->stylesPrivate = tableFormat.properties();
-}
-
-KoTableColumnStyle *KoTableColumnStyle::fromTable(const QTextTable &table, QObject *parent)
-{
-    QTextTableFormat tableFormat = table.format();
-    return new KoTableColumnStyle(tableFormat, parent);
-}
-*/
-
 KoTableColumnStyle::~KoTableColumnStyle()
 {
     delete d;
@@ -150,22 +135,24 @@ QColor KoTableColumnStyle::propertyColor(int key) const
     return qvariant_cast<QColor>(variant);
 }
 
-/*
-void KoTableColumnStyle::applyStyle(QTextTableFormat &format) const
+void KoTableColumnStyle::setColumnWidth(qreal width)
 {
-    if (d->parentStyle) {
-        d->parentStyle->applyStyle(format);
-    }
-    QList<int> keys = d->stylesPrivate.keys();
-    for (int i = 0; i < keys.count(); i++) {
-        QVariant variant = d->stylesPrivate.value(keys[i]);
-        format.setProperty(keys[i], variant);
-    }
+    setProperty(ColumnWidth, width);
 }
-*/
 
-void KoTableColumnStyle::setColumnWidth(const QTextLength &width)
+qreal KoTableColumnStyle::columnWidth() const
 {
+    return propertyDouble(ColumnWidth);
+}
+
+void KoTableColumnStyle::setRelativeColumnWidth(qreal width)
+{
+    setProperty(RelativeColumnWidth, width);
+}
+
+qreal KoTableColumnStyle::relativeColumnWidth() const
+{
+    return propertyDouble(RelativeColumnWidth);
 }
 
 void KoTableColumnStyle::setBreakBefore(bool on)
@@ -250,15 +237,16 @@ void KoTableColumnStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContex
 
 void KoTableColumnStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
-    // Column Width
+    // Column width.
     if (styleStack.hasProperty(KoXmlNS::style, "column-width")) {
-        setColumnWidth(QTextLength(QTextLength::FixedLength, KoUnit::parseValue(styleStack.property(KoXmlNS::style, "column-width"))));
+        setColumnWidth(KoUnit::parseValue(styleStack.property(KoXmlNS::style, "column-width")));
     }
+    // Relative column width.
     if (styleStack.hasProperty(KoXmlNS::style, "rel-column-width")) {
-        setColumnWidth(QTextLength(QTextLength::PercentageLength, styleStack.property(KoXmlNS::style, "rel-column-width").remove('%').toDouble()));
+        setRelativeColumnWidth(styleStack.property(KoXmlNS::style, "rel-column-width").remove('*').toDouble());
     }
 
-    // The fo:break-before and fo:break-after attributes insert a page or column break before or after a table.
+    // The fo:break-before and fo:break-after attributes insert a page or column break before or after a column.
     if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
         if (styleStack.property(KoXmlNS::fo, "break-before") != "auto")
             setBreakBefore(true);
@@ -297,6 +285,7 @@ void KoTableColumnStyle::removeDuplicates(const KoTableColumnStyle &other)
 
 void KoTableColumnStyle::saveOdf(KoGenStyle &style)
 {
+    Q_UNUSED(style);
 /*
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {

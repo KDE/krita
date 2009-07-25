@@ -39,12 +39,16 @@ class KoOdfLoadingContext;
 
 /**
  * A container for all properties for the table column style.
- * Each table column in the main text either is based on a table column style, or its not.
- * Column styles are stored (besides in the KoStyleManager) in the KoTableColumnAndRowStyleManager.
- * The style has a property 'StyleId' with an integer as value.  The integer value corresponds to the styleId() output of
- * a specific KoTableColumnStyle.
- * @see KoStyleManager
- * @see KoTableRowAndColumnStyleManager
+ *
+ * Named column styles are stored in the KoStyleManager and automatic ones in the
+ * KoTableColumnAndRowStyleManager.
+ *
+ * The style has a property 'StyleId' with an integer as value. The integer value
+ * corresponds to the styleId() output of a specific KoTableColumnStyle.
+ *
+ * TODO: Make this class implicitly shared.
+ *
+ * @see KoStyleManager, KoTableRowAndColumnStyleManager
  */
 class KOTEXT_EXPORT KoTableColumnStyle : public QObject
 {
@@ -52,78 +56,84 @@ class KOTEXT_EXPORT KoTableColumnStyle : public QObject
 public:
     enum Property {
         StyleId = QTextTableFormat::UserProperty + 1,
-        // Linespacing properties
-        BreakBefore,    ///< If true, insert a frame break before this table
-        BreakAfter,     ///< If true, insert a frame break after this table
-        MasterPageName         ///< Optional name of the master-page
+        ColumnWidth,         ///< Column width.
+        RelativeColumnWidth, ///< Relative column width.
+        BreakBefore,         ///< If true, insert a frame break before this table
+        BreakAfter,          ///< If true, insert a frame break after this table
+        MasterPageName       ///< Optional name of the master-page
     };
 
     /// Constructor
     KoTableColumnStyle(QObject *parent = 0);
-/*
-    /// Creates a KoTableColumnStyle with the given table format, and \a parent
-    KoTableColumnStyle(const QTextTableFormat &blockFormat, QObject *parent = 0);
-*/
+
     /// Destructor
     ~KoTableColumnStyle();
 
-/*
-    /// Creates a KoTableColumnStyle that represents the formatting of \a block.
-    static KoTableColumnStyle *fromTable(const QTextTable &table, QObject *parent = 0);
-*/
-
-    /// creates a clone of this style with the specified parent
+    /// Creates a clone of this style with the specified parent.
     KoTableColumnStyle *clone(QObject *parent = 0);
 
-    /// See similar named method on QTextFrameFormat
-    void setColumnWidth(const QTextLength &width);
+    /// Set the column width.
+    void setColumnWidth(qreal width);
 
+    /// Get the column width.
+    qreal columnWidth() const;
+
+    /// Set the column width.
+    void setRelativeColumnWidth(qreal width);
+
+    /// Get the column width.
+    qreal relativeColumnWidth() const;
+
+    /// Set break before. See §7.19.2 of [XSL].
     void setBreakBefore(bool on);
+
+    /// Get break before. See §7.19.2 of [XSL].
     bool breakBefore();
+
+    /// Set break after. See §7.19.1 of [XSL].
     void setBreakAfter(bool on);
+
+    /// Get break after. See §7.19.1 of [XSL].
     bool breakAfter();
 
-    /// set the parent style this one inherits its unset properties from.
+    /// Set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableColumnStyle *parent);
 
-    /// return the parent style
+    /// Return the parent style.
     KoTableColumnStyle *parentStyle() const;
 
-    /// return the name of the style.
+    /// Return the name of the style.
     QString name() const;
 
-    /// set a user-visible name on the style.
+    /// Set a user-visible name on the style.
     void setName(const QString &name);
 
-    /// each style has a unique ID (non persistent) given out by the styleManager
+    /// Each style has a unique ID (non persistent) given out by the style manager.
     int styleId() const;
 
-    /// each style has a unique ID (non persistent) given out by the styleManager
+    /// Each style has a unique ID (non persistent) given out by the styleManager.
     void setStyleId(int id);
 
-    /// return the optional name of the master-page or a QString() if this paragraph isn't attached to a master-page.
+    /**
+     * Return the optional name of the master-page or a QString() if this paragraph
+     * isn't attached to a master-page.
+     */
     QString masterPageName() const;
+
     /// Set the name of the master-page.
     void setMasterPageName(const QString &name);
 
-
-    /// copy all the properties from the other style to this style, effectively duplicating it.
+    /// Copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoTableColumnStyle *style);
 
-    /**
-     * Apply this style to a blockFormat by copying all properties from this, and parent
-     * styles to the target block format.  Note that the character format will not be applied
-     * using this method, use the other applyStyle() method for that.
-     */
-/*
-    void applyStyle(QTextTableFormat &format) const;
-*/
+    /// Remove the property \key from this style.
     void remove(int key);
 
-    /// Compare the properties of this style with the other
-    bool operator==(const KoTableColumnStyle &other) const;
-
+    /// Remove properties in this style that are already in other.
     void removeDuplicates(const KoTableColumnStyle &other);
+
+    /// Compare the properties of this style with the other.
+    bool operator==(const KoTableColumnStyle &other) const;
 
     /**
      * Load the style form the element
@@ -145,11 +155,13 @@ public:
     /**
      * Set a property with key to a certain value, overriding the value from the parent style.
      * If the value set is equal to the value of the parent style, the key will be removed instead.
+     *
      * @param key the Property to set.
      * @param value the new value to set on this style.
      * @see hasProperty(), value()
      */
     void setProperty(int key, const QVariant &value);
+
     /**
      * Return the value of key as represented on this style, taking into account parent styles.
      * You should consider using the direct accessors for individual properties instead.

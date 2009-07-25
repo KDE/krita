@@ -1014,7 +1014,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
         if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection()) {
-            bool m_changeRegistered = m_textDeleting;
+            //bool m_changeRegistered = m_textDeleting;
             startMacro(i18n("Delete"));
 /*            if (KoTextDocument(m_textShapeData->document()).changeTracker() && KoTextDocument(m_textShapeData->document()).changeTracker()->isEnabled()) {
                 QTextCharFormat format;
@@ -2065,10 +2065,12 @@ void TextTool::debugTextDocument()
                 }
             }
         }
-        if (!fragmentText.isEmpty())
+        if (!fragmentText.isEmpty()) {
             kDebug(32500) << fragmentText;
-        else if (block.length() == 1) // no actual tet
+        }
+        else if (block.length() == 1) { // no actual tet
             kDebug(32500) << "\\n";
+        }
         foreach (QTextCharFormat cf, inlineCharacters) {
             KoInlineObject *object= inlineManager->inlineTextObject(cf);
             kDebug(32500) << "At pos:" << cf.intProperty(CHARPOSITION) << object;
@@ -2113,8 +2115,9 @@ void TextTool::debugTextStyles()
             foreach (int level, ls->listLevels()) {
                 KoListLevelProperties llp = ls->levelProperties(level);
                 kDebug(32500) << "  |  level" << llp.level() << " style (enum):" << llp.style();
-                if (llp.bulletCharacter().unicode() != 0)
+                if (llp.bulletCharacter().unicode() != 0) {
                     kDebug(32500) << "  |  bullet" << llp.bulletCharacter();
+                }
             }
             seenStyles << ls->styleId();
         }

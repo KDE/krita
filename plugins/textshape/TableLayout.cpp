@@ -24,6 +24,7 @@
 #include <KoTableStyle.h>
 #include <KoTableCellStyle.h>
 #include <KoTableColumnStyle.h>
+#include <KoTableRowStyle.h>
 #include <KoTableColumnAndRowStyleManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoShape.h>
@@ -210,7 +211,12 @@ void TableLayout::layoutFromRow(int fromRow)
 
     QTextTableFormat tableFormat = m_table->format();
 
-    m_tableLayoutData->m_height = m_tableLayoutData->m_rowPositions[fromRow] - tableFormat.topMargin();
+    // Get the column and row style manager.
+    Q_ASSERT(tableFormat.hasProperty(KoTableStyle::ColumnAndRowStyleManager));
+    KoTableColumnAndRowStyleManager *carsManager =
+    reinterpret_cast<KoTableColumnAndRowStyleManager *>(
+            tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
+    Q_ASSERT(carsManager);
 
     /*
      * Implementation Note:
@@ -233,9 +239,16 @@ void TableLayout::layoutFromRow(int fromRow)
      * a cell "vertically" ends in the current row, as those are the only
      * cells that should contribute to the row height.
      */
+
+    // Table height is at least as high as the rows that are above the
+    // the row we're starting on.
+    m_tableLayoutData->m_height = m_tableLayoutData->m_rowPositions[fromRow] - tableFormat.topMargin();
+
     for (int row = fromRow; row < m_table->rows(); ++row) {
+        KoTableRowStyle *rowStyle = carsManager->rowStyle(row);
+
         // Adjust row height.
-        qreal rowHeight = 0;
+        qreal rowHeight = rowStyle ? rowStyle->minimumRowHeight() : 0.0;
         int col = 0;
         while (col < m_table->columns()) {
             // Get the cell format.
@@ -279,7 +292,7 @@ void TableLayout::layoutFromRow(int fromRow)
             m_tableLayoutData->m_rowPositions[row] = tableFormat.topMargin();
         }
 
-        // Adjust table height.
+        // Add row height to table height.
         m_tableLayoutData->m_height += m_tableLayoutData->m_rowHeights[row];
     }
 }

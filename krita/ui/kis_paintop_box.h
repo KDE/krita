@@ -90,7 +90,6 @@ private:
 
     KisCanvasResourceProvider *m_resourceProvider;
     QComboBox * m_cmbPaintops;
-    KoResourceSelector * m_cmbPaintopPresets;
 
     QHBoxLayout * m_layout;
     KisPaintOpSettingsWidget * m_optionWidget;

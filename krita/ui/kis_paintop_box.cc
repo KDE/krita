@@ -58,40 +58,6 @@
 #include "widgets/kis_paintop_presets_popup.h"
 #include <kis_paintop_settings_widget.h>
 
-/// The resource item delegate for rendering the resource preview
-class KisSmallPresetDelegate : public QAbstractItemDelegate
-{
-public:
-    KisSmallPresetDelegate( QObject * parent = 0 ) : QAbstractItemDelegate( parent ) {}
-    virtual ~KisSmallPresetDelegate() {}
-    /// reimplemented
-    virtual void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const;
-    /// reimplemented
-    QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & ) const
-    {
-        return option.decorationSize;
-    }
-};
-
-void KisSmallPresetDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
-{
-    if( ! index.isValid() )
-        return;
-
-    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>( index.internalPointer() );
-
-    if (option.state & QStyle::State_Selected) {
-        painter->setPen( QPen(option.palette.highlight(), 2.0) );
-        painter->fillRect( option.rect, option.palette.highlight() );
-    } else
-        painter->fillRect( option.rect, Qt::white);
-
-    QImage preview = preset->settings()->sampleStroke( option.rect.size() );
-    painter->drawImage( option.rect.x(), option.rect.y(),
-                        preview.scaled( option.rect.size(), Qt::KeepAspectRatio) );
-}
-
-
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
         : QWidget(parent)
         , m_resourceProvider(view->resourceProvider())
@@ -119,24 +85,12 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbPaintopPresets->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
 
-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
-    m_cmbPaintopPresets = new KoResourceSelector( adapter, this);
-    m_cmbPaintopPresets->setMinimumWidth(300);
-    m_cmbPaintopPresets->setMinimumHeight(40);
-    m_cmbPaintopPresets->setColumnCount(1);
-    m_cmbPaintopPresets->setRowHeight(40);
-    m_cmbPaintopPresets->setItemDelegate(new KisSmallPresetDelegate(this));
-    m_cmbPaintopPresets->setToolTip(i18n("Brush presets"));
-
-
     m_presetWidget = new KisPresetWidget(this, "presetwidget");
     m_presetWidget->setToolTip(i18n("Edit brush preset"));
     m_presetWidget->setFixedSize(120, 26);
 
     m_layout = new QHBoxLayout(this);
     m_layout->addWidget(m_cmbPaintops);
-    m_layout->addWidget(m_cmbPaintopPresets);
     m_layout->addWidget(m_presetWidget);
 
     m_presetsPopup = new KisPaintOpPresetsPopup();

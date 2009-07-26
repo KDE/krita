@@ -94,6 +94,8 @@ void KoTableColumnAndRowStyleManager::setRowStyle(int row, KoTableRowStyle *rowS
 
     d->tableRowStylesToDelete.insert(rowStyle); // add the style so it can be deleted on destruction
 
+    while (row > d->tableRowStyles.size())
+        d->tableRowStyles.append(0);
     d->tableRowStyles.insert(row, rowStyle);
 }
 

@@ -38,55 +38,54 @@ class QRectF;
  * Anatomy of a Table
  * ------------------
  *
- *   +--1. Table Bounding Rect----------------------------------------- -- -
+ *   +-----1. Table Position
  *   |
- *   |   +--2. Table Border Rect--------------------------------------- -- -
- *   |   |
- *   |   |   +--3. Cell Border Rect--------------+---+----------------- -- -
- *   |   |   |                                   |   |
- *   |   |   |   +--4. Cell Content Rect-----+   |   |   +------------- -- -
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   |          Cell 1           |   |   |   |          Cell 2
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   +---------------------------+   |   |   +------------- -- -
- *   |   |   |                                   |   |
- *   |   |   +-----------------------------------+   +----------------- -- -
- *   |   |   |                              5. Cell Spacing
- *   |   |   +-----------------------------------+   +----------------- -- -
- *   |   |   |                                   |   |
- *   |   |   |   +---------------------------+   |   |   +------------- -- -
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   |          Cell 3           |   |   |   |          Cell 4
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   |                           |   |   |   |
- *   |   |   |   +---------------------------+   |   |   +------------- -- -
- *   |   |   |   6. Cell Padding                 |   |
- *   |   |   +-----------------------------------+---+----------------- -- -
- *   |   |   7. Table Padding
- *   |   +------------------------------------------------------------- -- -
- *   |   8. Table Margin
- *   +----------------------------------------------------------------- -- -
+ *   v
+ *   X-------------------------2. Table Bounding Rect--------------------------+
+ *   |                                                                         |
+ *   |   +--3. Cell Bounding Rect---------+--------------------------------+   |
+ *   |   |                                |                                |   |
+ *   |   |   +--4. Cell Content Rect--+   |   +------------------------+   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   |          Cell 1        |   |   |          Cell 2        |   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   +------------------------+   |   +------------------------+   |   |
+ *   |   |        5. Cell Padding         |                                |   |
+ *   |   +--------------------------------+--------------------------------+   |
+ *   |   |                                |                                |   |
+ *   |   |   +------------------------+   |   +------------------------+   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   |          Cell 3        |   |   |          Cell 4        |   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   |                        |   |   |                        |   |   |
+ *   |   |   +------------------------+   |   +------------------------+   |   |
+ *   |   |                                |                                |   |
+ *   |   +--------------------------------+--------------------------------+   |
+ *   |                            6. Table Margin                              |
+ *   +-------------------------------------------------------------------------+
  *
- *  #    API (Most still to be written)
- * -------------------------------------------------------------------------
- * (1)   TableLayout::boundingRect()
- * (2)   TableLayout::borderRect()
- * (3)   TableLayout::cellBorderRect(cell)
- * (4)   TableLayout::cellContentRect(cell)
- * (5)   QTextTableFormat::cellSpacing()
- * (6)   QTextTableCellFormat::left-/right-/top-/bottomPadding() [*]
- * (7)   QTextTableFormat::padding()
- * (8)   QTextTableFormat::margin()
- * -------------------------------------------------------------------------
- *
- * [*] Or QTextTableFormat::cellPadding() if not specified per cell.
+ *  #    API                                       Relative To
+ * --------------------------------------------------------------------
+ * (1)   TableLayout::position()/setPosition()     Document
+ * (2)   TableLayout::boundingRect()               Table Position (1)
+ * (3)   TableLayout::cellBoundingRect()           Table Position (1)
+ * (4)   TableLayout::cellContentRect()            Table Position (1)
+ * (5)   QTextTableCellFormat::leftPadding()       (N/A)
+ *       QTextTableCellFormat::rightPadding()      (N/A)
+ *       QTextTableCellFormat::topPadding()        (N/A)
+ *       QTextTableCellFormat::bottomPadding()     (N/A)
+ * (6)   QTextTableFormat::leftMargin()            (N/A)
+ *       QTextTableFormat::rightMargin()           (N/A)
+ *       QTextTableFormat::topMargin()             (N/A)
+ *       QTextTableFormat::bottomMargin()          (N/A)
+ * --------------------------------------------------------------------
  */
 
 /**

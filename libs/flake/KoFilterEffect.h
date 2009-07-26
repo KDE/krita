@@ -154,6 +154,15 @@ protected:
     /// Sets the maximal number of input images
     void setMaximalInputCount(int count);
 
+    /**
+     * Saves common filter attributes
+     *
+     * Saves result, subregion and input attributes. The input attrinbute
+     * is only saved if required, maximal and actual input count equals 1.
+     * All other filters have to write inputs on their own.
+     */
+    void saveCommonAttributes(KoXmlWriter &writer);
+    
 private:
     struct Private;
     Private* const d;

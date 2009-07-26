@@ -19,6 +19,7 @@
  */
 
 #include "KoFilterEffect.h"
+#include "KoXmlWriter.h"
 
 #include <QString>
 #include <QtCore/QRectF>
@@ -159,4 +160,16 @@ void KoFilterEffect::setRequiredInputCount(int count)
 void KoFilterEffect::setMaximalInputCount(int count)
 {
     d->maximalInputCount = qMax(1,count);
+}
+
+void KoFilterEffect::saveCommonAttributes(KoXmlWriter &writer)
+{
+    writer.addAttribute("result", output());
+    if( requiredInputCount() == 1 && maximalInputCount() == 1 && d->inputs.count() == 1) {
+        writer.addAttribute("in", d->inputs[0]);
+    }
+    writer.addAttribute("x", d->filterRect.x());
+    writer.addAttribute("y", d->filterRect.y());
+    writer.addAttribute("width", d->filterRect.width());
+    writer.addAttribute("height", d->filterRect.height());
 }

@@ -42,7 +42,6 @@ TableLayout::TableLayout(KoTextDocumentLayout::LayoutState *parentLayout, QTextT
 {
     setParentLayout(parentLayout);
     setTable(table);
-    setPosition(QPointF(0, 0));
 }
 
 TableLayout::TableLayout() :
@@ -307,7 +306,7 @@ QRectF TableLayout::boundingRect() const
     qreal horizontalMargins = m_table->format().leftMargin() + m_table->format().rightMargin();
     qreal verticalMargins = m_table->format().topMargin() + m_table->format().bottomMargin();
 
-    return QRectF(m_position.x(), m_position.y(),
+    return QRectF(m_tableData->m_position.x(), m_tableData->m_position.y(),
             m_tableData->m_width + horizontalMargins,
             m_tableData->m_height + verticalMargins);
 }
@@ -407,12 +406,20 @@ QTextTableCell TableLayout::cellAt(int position) const
 
 QPointF TableLayout::position() const
 {
-    return m_position;
+    Q_ASSERT(isValid());
+
+    return m_tableData->m_position;
 }
 
 void TableLayout::setPosition(QPointF position)
 {
-    m_position = position;
+    Q_ASSERT(isValid());
+
+    if (!isValid()) {
+        return;
+    }
+
+    m_tableData->m_position = position;
 }
 
 bool TableLayout::isDirty() const

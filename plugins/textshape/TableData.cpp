@@ -19,7 +19,7 @@
 
 #include "TableData.h"
 
-TableData::TableData() : m_width(0), m_height(0)
+TableData::TableData() : m_width(0), m_height(0), m_position(QPointF(0, 0))
 {
 }
 

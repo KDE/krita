@@ -53,6 +53,8 @@ private:
 
     qreal m_width;       /**< Table width. */
     qreal m_height;      /**< Table height. */
+
+    QPointF m_position;  /**< The global position of the table. */
 };
 
 #endif // TABLEDATA_H

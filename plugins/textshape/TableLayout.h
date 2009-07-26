@@ -320,7 +320,6 @@ private:
 
     QMap<QTextTable *, TableData *> m_tableDataMap;  /**< The map of table data objects. */
 
-    QPointF m_position;  /**< The global position of the table layout. */
     bool m_dirty;        /**< Table layout is dirty. */
 };
 

@@ -3,8 +3,12 @@
 #include "../TableLayoutData.h"
 
 #include <KoStyleManager.h>
+#include <KoTableColumnAndRowStyleManager.h>
 #include <KoTextDocument.h>
 #include <KoTableCellStyle.h>
+#include <KoTableColumnStyle.h>
+#include <KoTableRowStyle.h>
+#include <KoTableStyle.h>
 
 #include <QTextDocument>
 #include <QTextTable>
@@ -17,6 +21,7 @@ void TestTableLayout::initTestCase()
     m_table = 0;
     m_textLayout = 0;
     m_styleManager = 0;
+    m_tableColumnAndRowStyleManager = 0;
 }
 
 void TestTableLayout::initTest(QTextTableFormat &format, QStringList &cellTexts,
@@ -41,6 +46,25 @@ void TestTableLayout::initTest(QTextTableFormat &format, QStringList &cellTexts,
     Q_ASSERT(m_styleManager);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
 
+    // set up a column and row style manager.
+    m_tableColumnAndRowStyleManager = new KoTableColumnAndRowStyleManager();
+    Q_ASSERT(m_tableColumnAndRowStyleManager);
+    format.setProperty(KoTableStyle::ColumnAndRowStyleManager, QVariant::fromValue(reinterpret_cast<void *>(m_tableColumnAndRowStyleManager)));
+
+    // set up some default column and row styles.
+    KoTableColumnStyle *columnStyle = new KoTableColumnStyle();
+    Q_ASSERT(columnStyle);
+    columnStyle->setRelativeColumnWidth(50.0);
+    for (int col = 0; col < columns; ++col) {
+        m_tableColumnAndRowStyleManager->setColumnStyle(col, columnStyle);
+    }
+    KoTableRowStyle *rowStyle = new KoTableRowStyle();
+    Q_ASSERT(rowStyle);
+    for (int row = 0; row < rows; ++row) {
+        m_tableColumnAndRowStyleManager->setRowStyle(row, rowStyle);
+    }
+
+    // insert the table
     QTextCursor cursor(m_doc);
     m_table = cursor.insertTable(rows, columns, format);
     Q_ASSERT(m_table);
@@ -63,6 +87,7 @@ void TestTableLayout::cleanupTest()
     delete m_table;
     delete m_textLayout;
     delete m_styleManager;
+    delete m_tableColumnAndRowStyleManager;
 }
 
 void TestTableLayout::debugTableLayout(const TableLayout& layout) const

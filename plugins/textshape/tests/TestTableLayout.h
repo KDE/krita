@@ -11,6 +11,7 @@ class TableLayoutData;
 class MockTextShape;
 class KoTextDocumentLayout;
 class KoStyleManager;
+class KoTableColumnAndRowStyleManager;
 class QTextDocument;
 class QTextTable;
 
@@ -59,6 +60,7 @@ private:
     QTextTable *m_table;
     KoTextDocumentLayout *m_layout;
     KoStyleManager *m_styleManager;
+    KoTableColumnAndRowStyleManager *m_tableColumnAndRowStyleManager;
     Layout *m_textLayout;
     MockTextShape *m_shape;
 };

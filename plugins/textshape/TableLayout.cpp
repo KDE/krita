@@ -129,58 +129,47 @@ void TableLayout::layout()
             break;
     }
 
-    // Column widths and positions.
-    if (tableFormat.hasProperty(KoTableStyle::ColumnAndRowStyleManager)) {
-        // Get the column and row style manager.
-        KoTableColumnAndRowStyleManager *carsManager =
-            reinterpret_cast<KoTableColumnAndRowStyleManager *>(
-                    tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
-        Q_ASSERT(carsManager);
+    // Get the column and row style manager.
+    Q_ASSERT(tableFormat.hasProperty(KoTableStyle::ColumnAndRowStyleManager));
+    KoTableColumnAndRowStyleManager *carsManager =
+    reinterpret_cast<KoTableColumnAndRowStyleManager *>(
+            tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
+    Q_ASSERT(carsManager);
 
-        // Column widths.
-        qreal availableWidth = m_tableLayoutData->m_width; // Width available for columns.
-        QList<int> relativeWidthColumns; // List of relative width columns.
-        qreal relativeWidthSum; // Sum of relative column width values.
-        for (int col = 0; col < m_tableLayoutData->m_columnPositions.size(); ++col) {
-            KoTableColumnStyle *columnStyle = carsManager->columnStyle(col);
-            Q_ASSERT(columnStyle); // Can there be no style?
-            if (columnStyle->hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
-                // Relative width specified. Will be handled in the next loop.
-                relativeWidthColumns.append(col);
-                relativeWidthSum += columnStyle->relativeColumnWidth();
-            } else if (columnStyle->hasProperty(KoTableColumnStyle::ColumnWidth)) {
-                // Only width specified, so use it.
-                m_tableLayoutData->m_columnWidths[col] = columnStyle->columnWidth();
-                availableWidth -= columnStyle->columnWidth();
-            } else {
-                // Neither width nor relative width specified. Can this happen?
-                kWarning(32600) << "Neither column-width nor rel-column-width specified";
-                m_tableLayoutData->m_columnWidths[col] = 0.0;
-            }
+    // Column widths.
+    qreal availableWidth = m_tableLayoutData->m_width; // Width available for columns.
+    QList<int> relativeWidthColumns; // List of relative width columns.
+    qreal relativeWidthSum; // Sum of relative column width values.
+    for (int col = 0; col < m_tableLayoutData->m_columnPositions.size(); ++col) {
+        KoTableColumnStyle *columnStyle = carsManager->columnStyle(col);
+        Q_ASSERT(columnStyle); // Can there be no style?
+        if (columnStyle->hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
+            // Relative width specified. Will be handled in the next loop.
+            relativeWidthColumns.append(col);
+            relativeWidthSum += columnStyle->relativeColumnWidth();
+        } else if (columnStyle->hasProperty(KoTableColumnStyle::ColumnWidth)) {
+            // Only width specified, so use it.
+            m_tableLayoutData->m_columnWidths[col] = columnStyle->columnWidth();
+            availableWidth -= columnStyle->columnWidth();
+        } else {
+            // Neither width nor relative width specified. Can this happen?
+            kWarning(32600) << "Neither column-width nor rel-column-width specified";
+            m_tableLayoutData->m_columnWidths[col] = 0.0;
         }
-        // Relative column widths have now been summed up and can be distributed.
-        foreach (qreal col, relativeWidthColumns) {
-            KoTableColumnStyle *columnStyle = carsManager->columnStyle(col);
-            Q_ASSERT(columnStyle);
-            m_tableLayoutData->m_columnWidths[col] =
-                qMax(columnStyle->relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
-        }
+    }
+    // Relative column widths have now been summed up and can be distributed.
+    foreach (qreal col, relativeWidthColumns) {
+        KoTableColumnStyle *columnStyle = carsManager->columnStyle(col);
+        Q_ASSERT(columnStyle);
+        m_tableLayoutData->m_columnWidths[col] =
+            qMax(columnStyle->relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
+    }
 
-        // Column positions.
-        qreal columnPosition = 0.0;
-        for (int col = 0; col < m_tableLayoutData->m_columnPositions.size(); ++col) {
-            m_tableLayoutData->m_columnPositions[col] = columnPosition + tableFormat.leftMargin();
-            columnPosition += m_tableLayoutData->m_columnWidths[col];
-        }
-    } else {
-        // FIXME: Unit tests need to set up a KoTableColumnAndRowStyleManager.
-        //        Keeping this code for them to keep passing for now.
-        kWarning(32600) << "No KoTableColumnAndRowStyleManager!";
-        qreal columnWidth = m_tableLayoutData->m_width / m_table->columns();
-        m_tableLayoutData->m_columnWidths.fill(columnWidth);
-        for (int col = 0; col < m_tableLayoutData->m_columnPositions.size(); ++col) {
-            m_tableLayoutData->m_columnPositions[col] = (col * columnWidth) + tableFormat.leftMargin();
-        }
+    // Column positions.
+    qreal columnPosition = 0.0;
+    for (int col = 0; col < m_tableLayoutData->m_columnPositions.size(); ++col) {
+        m_tableLayoutData->m_columnPositions[col] = columnPosition + tableFormat.leftMargin();
+        columnPosition += m_tableLayoutData->m_columnWidths[col];
     }
 
     // Table alignment.

@@ -168,27 +168,19 @@ void TableLayout::layout()
 
     // Column positions.
     qreal columnPosition = 0.0;
-    for (int col = 0; col < m_tableLayoutData->m_columnPositions.size(); ++col) {
-        m_tableLayoutData->m_columnPositions[col] = columnPosition + tableFormat.leftMargin();
-        columnPosition += m_tableLayoutData->m_columnWidths[col];
+    qreal columnOffset = tableFormat.leftMargin();
+    if (tableFormat.alignment() == Qt::AlignRight) {
+        // Table is right-aligned, so add all of the remaining space.
+        columnOffset += m_parentLayout->shape->size().width() - m_tableLayoutData->m_width;
     }
-
-    // Table alignment.
+    if (tableFormat.alignment() == Qt::AlignHCenter) {
+        // Table is centered, so add half of the remaining space.
+        columnOffset += (m_parentLayout->shape->size().width() - m_tableLayoutData->m_width) / 2;
+    }
     for (int col = 0; col < m_tableLayoutData->m_columnPositions.size(); ++col) {
-        switch (tableFormat.alignment()) {
-            case Qt::AlignRight:
-                // Table is right-aligned, so add all of the remaining space.
-                m_tableLayoutData->m_columnPositions[col] +=
-                    m_parentLayout->shape->size().width() - m_tableLayoutData->m_width;
-                break;
-            case Qt::AlignHCenter:
-                // Table is centered, so add half of the remaining space.
-                m_tableLayoutData->m_columnPositions[col] +=
-                    (m_parentLayout->shape->size().width() - m_tableLayoutData->m_width) / 2;
-                break;
-            default:
-                break;
-        }
+        m_tableLayoutData->m_columnPositions[col] = columnPosition + columnOffset;
+        // Increment by this column's width.
+        columnPosition += m_tableLayoutData->m_columnWidths[col];
     }
 
     layoutFromRow(0);

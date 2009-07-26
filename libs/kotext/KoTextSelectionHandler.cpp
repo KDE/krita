@@ -29,9 +29,13 @@
 #include "KoBookmarkManager.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
+#include "styles/KoTableColumnStyle.h"
+#include "styles/KoTableRowStyle.h"
 #include "styles/KoTableCellStyle.h"
+#include "styles/KoTableStyle.h"
 #include "styles/KoStyleManager.h"
 #include "KoTextDocument.h"
+#include "KoTableColumnAndRowStyleManager.h"
 
 #include "changetracker/KoChangeTracker.h"
 
@@ -414,9 +418,25 @@ QString KoTextSelectionHandler::selectedText() const
 void KoTextSelectionHandler::insertTable(int rows, int columns)
 {
     QTextTableFormat tableFormat;
-
     tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
-    tableFormat.setMargin(5);
+
+    // Create a column and row style manager for the table.
+    KoTableColumnAndRowStyleManager *tableColumnAndRowStyleManager = new KoTableColumnAndRowStyleManager();
+    Q_ASSERT(tableColumnAndRowStyleManager);
+    tableFormat.setProperty(KoTableStyle::ColumnAndRowStyleManager, QVariant::fromValue(reinterpret_cast<void *>(tableColumnAndRowStyleManager)));
+
+    // Set up some default column and row styles.
+    KoTableColumnStyle *columnStyle = new KoTableColumnStyle();
+    Q_ASSERT(columnStyle);
+    columnStyle->setRelativeColumnWidth(50.0);
+    for (int col = 0; col < columns; ++col) {
+        tableColumnAndRowStyleManager->setColumnStyle(col, columnStyle);
+    }
+    KoTableRowStyle *rowStyle = new KoTableRowStyle();
+    Q_ASSERT(rowStyle);
+    for (int row = 0; row < rows; ++row) {
+        tableColumnAndRowStyleManager->setRowStyle(row, rowStyle);
+    }
 
     QTextTable *table = d->caret->insertTable(rows, columns, tableFormat);
 

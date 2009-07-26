@@ -788,12 +788,12 @@ KoShapeBorderModel *KoShape::border() const
 void KoShape::setBorder(KoShapeBorderModel *border)
 {
     Q_D(KoShape);
+    if (border)
+        border->addUser();
     d->updateBorder();
     if (d->border)
         d->border->removeUser();
     d->border = border;
-    if (d->border)
-        d->border->addUser();
     d->updateBorder();
     d->shapeChanged(BorderChanged);
     notifyChanged();

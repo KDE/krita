@@ -403,7 +403,7 @@ void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)
     // Get the last line in the last block in the cell.
     cellIterator = cell.end();
     cellIterator--;
-    Q_ASSERT(cellIterator.currentFrame() == 0); // TODO: Nexted tables?
+    Q_ASSERT(cellIterator.currentFrame() == 0); // TODO: Nested tables?
     QTextBlock lastBlock = cellIterator.currentBlock();
     Q_ASSERT(lastBlock.isValid());
     QTextLine bottomLine = lastBlock.layout()->lineAt(lastBlock.layout()->lineCount() - 1);

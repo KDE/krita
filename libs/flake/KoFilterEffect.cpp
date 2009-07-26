@@ -70,6 +70,15 @@ QRectF KoFilterEffect::clipRect() const
     return d->clipRect;
 }
 
+QRectF KoFilterEffect::clipRectForBoundingRect(const QRectF &boundingRect) const
+{
+    qreal x = boundingRect.x() + d->clipRect.x() * boundingRect.width();
+    qreal y = boundingRect.y() + d->clipRect.y() * boundingRect.height();
+    qreal w = d->clipRect.width() * boundingRect.width();
+    qreal h = d->clipRect.height() * boundingRect.height();
+    return QRectF(x, y, w, h);
+}
+
 void KoFilterEffect::setFilterRect(const QRectF &filterRect)
 {
     d->filterRect = filterRect;
@@ -78,6 +87,15 @@ void KoFilterEffect::setFilterRect(const QRectF &filterRect)
 QRectF KoFilterEffect::filterRect() const
 {
     return d->filterRect;
+}
+
+QRectF KoFilterEffect::filterRectForBoundingRect(const QRectF &boundingRect) const
+{
+    qreal x = boundingRect.x() + d->filterRect.x() * boundingRect.width();
+    qreal y = boundingRect.y() + d->filterRect.y() * boundingRect.height();
+    qreal w = d->filterRect.width() * boundingRect.width();
+    qreal h = d->filterRect.height() * boundingRect.height();
+    return QRectF(x, y, w, h);
 }
 
 QList<QString> KoFilterEffect::inputs() const

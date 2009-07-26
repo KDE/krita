@@ -248,11 +248,6 @@ void KoShape::setSize(const QSizeF &newSize)
         l->setLineBrush(brush);
     }
 
-    foreach(KoFilterEffect *effect, d->filterEffects) {
-        effect->setClipRect(matrix.mapRect(effect->clipRect()));
-        effect->setFilterRect(matrix.mapRect(effect->filterRect()));
-    }
-    
     d->size = newSize;
 
     notifyChanged();

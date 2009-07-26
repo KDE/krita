@@ -233,18 +233,18 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         }
     } else {
         // There are filter effets, then we need to prerender the shape on an image, to filter it
-
+        QRectF shapeBound(QPointF(), shape->size());
         // First step, compute the rectangle used for the image
         QRectF clipRegion;
         foreach(KoFilterEffect* filterEffect, shape->filterEffectStack()) {
-            clipRegion |= filterEffect->clipRect();
+            clipRegion |= filterEffect->clipRectForBoundingRect(shapeBound);
         }
-        clipRegion = converter.documentToView(clipRegion);
+        QRectF zoomedClipRegion = converter.documentToView(clipRegion);
         // determine the offset of the clipping rect from the shapes origin
-        QPointF clippingOffset = clipRegion.topLeft();
+        QPointF clippingOffset = zoomedClipRegion.topLeft();
         
         // Init the buffer image
-        QImage sourceGraphic(clipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
+        QImage sourceGraphic(zoomedClipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
         sourceGraphic.fill(qRgba(0,0,0,0));
 
         // Init the buffer painter
@@ -276,7 +276,8 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         
         // Filter
         foreach(KoFilterEffect* filterEffect, shape->filterEffectStack()) {
-            QRectF filterRegion = converter.documentToView(filterEffect->filterRect());
+            QRectF filterRegion = filterEffect->filterRectForBoundingRect(clipRegion);
+            filterRegion = converter.documentToView(filterRegion);
             QPointF filterOffset = filterRegion.topLeft()-2*clippingOffset;
             QRect subRegion = filterRegion.translated(filterOffset).toRect();
             

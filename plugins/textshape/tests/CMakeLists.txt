@@ -20,7 +20,7 @@ set(TestDocumentLayout_test_SRCS
     ../TextShape.cpp
     ../ListItemsHelper.cpp
     ../TableLayout.cpp
-    ../TableData.cpp
+    ../TableLayoutData.cpp
 )
 
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
@@ -68,7 +68,7 @@ set(TestChangeListCommand_test_SRCS
     ../TextShape.cpp
     ../Layout.cpp    
     ../TableLayout.cpp
-    ../TableData.cpp
+    ../TableLayoutData.cpp
 )
 
 
@@ -99,7 +99,7 @@ target_link_libraries(TestStylesModel kotext koaction ${EXTRA_LIBS} ${QT_QTTEST_
 set(TestTableLayout_test_SRCS
     TestTableLayout.cpp
     ../TableLayout.cpp
-    ../TableData.cpp
+    ../TableLayoutData.cpp
     ../Layout.cpp
     ../TextShape.cpp
     ../ListItemsHelper.cpp

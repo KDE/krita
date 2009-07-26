@@ -7,7 +7,7 @@
 #include "../Layout.h"
 #include "../TextShape.h"
 
-class TableData;
+class TableLayoutData;
 class MockTextShape;
 class KoTextDocumentLayout;
 class KoStyleManager;

@@ -1,6 +1,6 @@
 #include "TestTableLayout.h"
 #include "../TableLayout.h"
-#include "../TableData.h"
+#include "../TableLayoutData.h"
 
 #include <KoStyleManager.h>
 #include <KoTextDocument.h>
@@ -68,16 +68,16 @@ void TestTableLayout::cleanupTest()
 void TestTableLayout::debugTableLayout(const TableLayout& layout) const
 {
     Q_ASSERT(layout.m_table);
-    Q_ASSERT(layout.m_tableData);
-    qDebug() << qPrintable(QString("<table width=%1 height=%2>").arg(layout.m_tableData->m_width).arg(layout.m_tableData->m_height));
+    Q_ASSERT(layout.m_tableLayoutData);
+    qDebug() << qPrintable(QString("<table width=%1 height=%2>").arg(layout.m_tableLayoutData->m_width).arg(layout.m_tableLayoutData->m_height));
     for (int row = 0; row < layout.m_table->rows(); ++row) {
         qDebug() << " <row>";
         for (int col = 0; col < layout.m_table->columns(); ++col) {
             QTextTableCell cell = layout.m_table->cellAt(row, col);
             qDebug() << qPrintable(QString("  <cell row=%1 col=%2>").arg(row).arg(col));
-            qDebug() << qPrintable(QString("   m_columnWidths[%1] = %2, m_columnPositions[%3] = %4").arg(col).arg(layout.m_tableData->m_columnWidths[col]).arg(col).arg(layout.m_tableData->m_columnPositions[col]));
-            qDebug() << qPrintable(QString("   m_rowHeights[%1] = %2, m_rowPositions[%3] = %4").arg(row).arg(layout.m_tableData->m_rowHeights[row]).arg(row).arg(layout.m_tableData->m_rowPositions[row]));
-            qDebug() << qPrintable(QString("   m_contentHeights[%1][%2] = %3, cellContentRect(cell) = ").arg(row).arg(col).arg(layout.m_tableData->m_contentHeights[row][col])) << layout.cellContentRect(cell);
+            qDebug() << qPrintable(QString("   m_columnWidths[%1] = %2, m_columnPositions[%3] = %4").arg(col).arg(layout.m_tableLayoutData->m_columnWidths[col]).arg(col).arg(layout.m_tableLayoutData->m_columnPositions[col]));
+            qDebug() << qPrintable(QString("   m_rowHeights[%1] = %2, m_rowPositions[%3] = %4").arg(row).arg(layout.m_tableLayoutData->m_rowHeights[row]).arg(row).arg(layout.m_tableLayoutData->m_rowPositions[row]));
+            qDebug() << qPrintable(QString("   m_contentHeights[%1][%2] = %3, cellContentRect(cell) = ").arg(row).arg(col).arg(layout.m_tableLayoutData->m_contentHeights[row][col])) << layout.cellContentRect(cell);
             QTextFrame::iterator it = cell.begin();
             qDebug() << "   CONTENT {";
             while (!it.atEnd()) {
@@ -157,16 +157,16 @@ void TestTableLayout::testBasicLayout()
 
     m_layout->layout();
 
-    // Check that the table and data was correctly added to the table data map.
-    QVERIFY(m_textLayout->m_tableLayout.m_tableDataMap.contains(m_table));
-    TableData *tableData = m_textLayout->m_tableLayout.m_tableDataMap.value(m_table);
-    QVERIFY(tableData);
+    // Check that the table and layout data was correctly added to the table data map.
+    QVERIFY(m_textLayout->m_tableLayout.m_tableLayoutDataMap.contains(m_table));
+    TableLayoutData *tableLayoutData = m_textLayout->m_tableLayout.m_tableLayoutDataMap.value(m_table);
+    QVERIFY(tableLayoutData);
 
     // Check table dimensions are correct.
-    QCOMPARE(tableData->m_rowPositions.size(), 2);
-    QCOMPARE(tableData->m_rowHeights.size(), 2);
-    QCOMPARE(tableData->m_columnPositions.size(), 2);
-    QCOMPARE(tableData->m_columnWidths.size(), 2);
+    QCOMPARE(tableLayoutData->m_rowPositions.size(), 2);
+    QCOMPARE(tableLayoutData->m_rowHeights.size(), 2);
+    QCOMPARE(tableLayoutData->m_columnPositions.size(), 2);
+    QCOMPARE(tableLayoutData->m_columnWidths.size(), 2);
 
     // Check cell bounding rectangles.
 

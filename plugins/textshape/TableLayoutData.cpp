@@ -17,9 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TableData.h"
+#include "TableLayoutData.h"
 
-TableData::TableData() : m_width(0), m_height(0), m_position(QPointF(0, 0))
+TableLayoutData::TableLayoutData() :
+    m_width(0),
+    m_height(0),
+    m_position(QPointF(0, 0))
 {
 }
 

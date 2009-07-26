@@ -17,28 +17,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TABLEDATA_H
-#define TABLEDATA_H
+#ifndef TABLELAYOUTDATA_H
+#define TABLELAYOUTDATA_H
 
 #include <QtGlobal>
 #include <QVector>
 #include <QPointF>
 
-class QRectF;
-class QTextTableCell;
-
 /**
- * @brief Table data class.
+ * @brief Table layout data class.
  *
  * This class holds layout helper data for table layout.
  *
  * \sa TableLayout
  */
-class TableData
+class TableLayoutData
 {
 public:
     /// Constructor.
-    TableData();
+    TableLayoutData();
 
 private:
     friend class TestTableLayout; // To allow direct testing.
@@ -57,4 +54,4 @@ private:
     QPointF m_position;  /**< The global position of the table. */
 };
 
-#endif // TABLEDATA_H
+#endif // TABLELAYOUTDATA_H

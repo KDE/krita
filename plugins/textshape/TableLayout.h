@@ -27,7 +27,7 @@
 #include <QMap>
 #include <QTextFormat>
 
-class TableData;
+class TableLayoutData;
 
 class QTextTable;
 class QTextTableCell;
@@ -116,7 +116,7 @@ class QRectF;
  * extent influence, the geometry of the table and its cells. It is up to the user
  * of this class to lay out the content into the cells of the table.
  *
- * \sa TableData, Layout
+ * \sa TableLayoutData, Layout
  */
 class TableLayout : public QObject
 {
@@ -303,7 +303,7 @@ private slots:
      * Table data map cleanup slot.
      *
      * This slot is called when a table is destroyed and takes care of cleaning up
-     * the internal table data map cache.
+     * the internal table layout data map cache.
      *
      * @param object pointer to the object that was destroyed.
      */
@@ -314,10 +314,10 @@ private:
 
     KoTextDocumentLayout::LayoutState *m_parentLayout; /**< Parent layout. */
 
-    QTextTable *m_table;     /**< The current table. */
-    TableData *m_tableData;  /**< The current table data. */
+    QTextTable *m_table;                /**< The current table. */
+    TableLayoutData *m_tableLayoutData; /**< The current table layout data. */
 
-    QMap<QTextTable *, TableData *> m_tableDataMap;  /**< The map of table data objects. */
+    QMap<QTextTable *, TableLayoutData *> m_tableLayoutDataMap;  /**< The map of table layout data objects. */
 
     bool m_dirty;        /**< Table layout is dirty. */
 };

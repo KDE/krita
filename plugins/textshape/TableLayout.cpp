@@ -223,56 +223,73 @@ void TableLayout::layoutFromRow(int fromRow)
     m_tableData->m_height = m_tableData->m_rowPositions[fromRow] - tableFormat.topMargin();
 
     /*
-     * Note that the cells that span more than one row or column are
-     * shared, so that QTextTable::cellAt() returns the combined cell, and
-     * that this combined cell has row()/column() corresponding to
-     * the top left corner of the span. We rely on this in this code.
+     * Implementation Note:
+     *
+     * An undocumented behavior of QTextTable::cellAt is that requesting a
+     * cell that is covered by a spanning cell will return the cell that
+     * spans over the requested cell. Example:
+     *
+     * +------------+------------+
+     * |            |            |
+     * |            |            |
+     * |            +------------+
+     * |            |            |
+     * |            |            |
+     * +------------+------------+
+     *
+     * table.cellAt(1, 0).row() // Will return 0.
+     *
+     * In the code below, we rely on this behavior to determine wheather
+     * a cell "vertically" ends in the current row, as those are the only
+     * cells that should contribute to the row height.
      */
     for (int row = fromRow; row < m_table->rows(); ++row) {
-        // adjust row height to the largest cell height in the row.
+        // Adjust row height.
         qreal rowHeight = 0;
         int col = 0;
         while (col < m_table->columns()) {
-            // get the cell border data.
+            // Get the cell format.
             QTextTableCell cell = m_table->cellAt(row, col);
             QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+
             if (row == cell.row() + cell.rowSpan() - 1) {
                 /*
-                 * we are only in cells that vertically ends in this row.
-                 * we only want these cells because cells that don't end in this
-                 * row should not affect the row height.
+                 * This cell ends vertically in this row, and hence should
+                 * contribute to the row height. So we get the height of the
+                 * entire cell, including borders and padding. This is done
+                 * by calling KoTableCellStyle::boundingRect() with a
+                 * rectangle as high as the cell content.
                  */
                 KoTableCellStyle cellStyle(cellFormat);
-
-                // passing content rect to boundingRect() (we're only interested in height).
                 QRectF heightRect(1, 1, 1, m_tableData->m_contentHeights.at(cell.row()).at(cell.column()));
+                qreal cellHeight = cellStyle.boundingRect(heightRect).height();
+
+                // Subtract the height of the rows above.
+                for (int rowAbove = row - 1; rowAbove >= cell.row(); --rowAbove) {
+                    cellHeight -= m_tableData->m_rowHeights[rowAbove];
+                }
 
                 /*
-                 * we need to calculate the height which this cell contributes to this
-                 * row, so once we have the height of the entire cell, including borders
-                 * and padding, we can now subtract the height of the rows above.
+                 * Now we know how much height this cell contributes to the row,
+                 * and can determine wheather the row height will grow.
                  */
-                qreal cellHeight = cellStyle.boundingRect(heightRect).height();
-                for (int r = row - 1; r >= cell.row(); --r) {
-                    cellHeight -= m_tableData->m_rowHeights[r];
-                }
                 rowHeight = qMax(rowHeight, cellHeight);
             }
-            col += cell.columnSpan();
+            col += cell.columnSpan(); // Skip across column spans.
         }
         m_tableData->m_rowHeights[row] = rowHeight;
 
-        // adjust row Y position.
+        // Adjust row Y position.
         if (row > 0) {
             m_tableData->m_rowPositions[row] =
-                m_tableData->m_rowPositions[row - 1] + // position of previous row.
-                m_tableData->m_rowHeights[row - 1];    // height of previous row.
+                m_tableData->m_rowPositions[row - 1] + // Position of previous row.
+                m_tableData->m_rowHeights[row - 1];    // Height of previous row.
         } else {
-            // this is the first row, so just use table top margin.
+            // This is the first row, so just use table top margin.
             m_tableData->m_rowPositions[row] = tableFormat.topMargin();
         }
 
-        // adjust table height.
+        // Adjust table height.
         m_tableData->m_height += m_tableData->m_rowHeights[row];
     }
 }
@@ -280,7 +297,6 @@ void TableLayout::layoutFromRow(int fromRow)
 void TableLayout::draw(QPainter *painter) const
 {
     Q_UNUSED(painter);
-    // TODO.
     QRectF tableRect = boundingRect();
     painter->save();
     painter->fillRect(tableRect,m_table->format().background());

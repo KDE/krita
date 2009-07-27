@@ -169,19 +169,6 @@ int KoImageCollection::count() const
     return d->images.count();
 }
 
-#if 0
-void KoImageCollection::lookup(KoImageData image)
-{
-    KoImageDataPrivate * found = d->images.value(image->key(), 0);
-    if (found != 0) {
-        image->d = found;
-    }
-    else {
-        d->images.insert(image->key(), image->d.data());
-    }
-}
-#endif
-
 void KoImageCollection::removeOnKey(const QByteArray &imageDataKey)
 {
     d->images.remove(imageDataKey);

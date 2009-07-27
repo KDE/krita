@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
@@ -53,29 +53,6 @@ class KoStore;
 class FLAKE_EXPORT KoImageData : public KoShapeUserData
 {
 public:
-    /**
-     * The image quality that the pixmap() method will render to.
-     * The DPI of the original image is read from the source file making this real units quality metrics.
-     */
-    enum ImageQuality {
-        NoPreviewImage,      ///<  shows a dummy.
-        LowQuality,     ///< 50ppi
-        MediumQuality,  ///< 100ppi
-        HighQuality     ///< upto 150ppi
-    };
-
-#if 0
-    /**
-     * The storate location
-     */
-    enum StorageLocation {
-        SaveRelativeUrl,        ///< in the odf use a relative (to document) xlink:href, if possible
-        SaveAbsoluteUrl,        ///< in the odf use a fully specified xlink:href
-        SaveInStore,            ///< Save the image in the ODF store
-        SaveInline              ///< Save the image serialized in the content.xml
-    };
-#endif
-
     /// Various error codes representing what has gone wrong
     enum ErrorCode {
         Success,
@@ -95,18 +72,6 @@ public:
     /// destructor
     virtual ~KoImageData();
 
-#if 0
-    /**
-     * Alter the image quality rendered by this data object, will also remove the cached data.
-     */
-    void setImageQuality(ImageQuality quality);
-    // TODO remove ImageQuality
-    /**
-     * Return the current image quality
-     */
-    ImageQuality imageQuality() const;
-#endif
-
     /**
      * Renders a pixmap the first time you request it is called and returns it.
      * @returns the cached pixmap
@@ -119,7 +84,6 @@ public:
     void setImage(const QImage &image, KoImageCollection *collection = 0);
     void setImage(const KUrl &image, KoImageCollection *collection = 0);
     void setImage(const QString &location, KoStore *store, KoImageCollection *collection = 0);
-    //void setImage(const QString &image, KoImageCollection *collection = 0); // TODO can I get rid of this one due to it auto-converting to KUrl ?
 
     /**
      * Return the internal store of the image.
@@ -133,7 +97,7 @@ public:
      * @param device the device that is used to get the data from.
      * @return returns true if load was successful.
      */
-    bool saveToFile(QIODevice &device);
+    bool saveToFile(QIODevice &device); // TODO rename as its not always a file we save to
 
     /**
      * The size of the image in points
@@ -158,51 +122,13 @@ public:
     bool isValid() const;
 
     /// \internal
-    KoImageDataPrivate *priv();
+    KoImageDataPrivate *priv() { return d.data(); }
 
-signals:
-    void imageLoaded();
-
-private:
-    /**
-     * Only the image collection is able to create the KoImageData.
-     * This is done to make sure the same images get the same KoImageData::Private pointer 
-     * and reuse it.
-     */
+protected:
     friend class KoImageCollection;
-#if 0
-    // TODO get rid of these and just have setters.
-    /**
-     * constructor
-     * This is private to only allow the KoImageCollection to create new KoImageData objects
-     *
-     * @param collection the image collection which will do the loading of the image data for us.
-     */
-    KoImageData(KoImageCollection *collection, const QImage &image);
-    /**
-     * constructor
-     * This is private to only allow the KoImageCollection to create new KoImageData objects
-     */
-    KoImageData(KoImageCollection *collection, const KUrl &url);
-    /**
-     * constructor
-     * This is private to only allow the KoImageCollection to create new KoImageData objects
-     */
-    KoImageData(KoImageCollection *collection, const QString &href, KoStore *store);
-#endif
-
     KoImageData(KoImageDataPrivate *priv);
 
-    // TODO move these to the private
-    /**
-     * Load the image data from the \a device.
-     * Note that if the file is bigger than 250Kb instead of loading the full file into memory it will
-     * copy the data to a temp-file and postpone loading it until the first time pixmap() is called.
-     * @param device the device that is used to get the data from.
-     * @return returns true if load was successful.
-     */
-    bool loadFromFile(QIODevice &device);
-
+private:
     // TODO move these to the private
     void setSuffix(const QString &name);
 

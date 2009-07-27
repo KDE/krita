@@ -28,7 +28,6 @@
 
 KoImageDataPrivate::KoImageDataPrivate()
     : collection(0),
-    quality(KoImageData::HighQuality),
     errorCode(KoImageData::Success),
     dataStoreState(StateEmpty),
     temporaryFile(0)

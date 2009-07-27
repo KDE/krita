@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
@@ -38,51 +38,6 @@
 
 #include "KoImageCollection.h"
 #include "KoImageData_p.h"
-#if 0
-KoImageData::KoImageData(KoImageCollection *collection, const QImage &image)
-    : d(new KoImageDataPrivate(collection))
-{
-    d->image = image;
-    QByteArray ba;
-    QBuffer buffer(&ba);
-    buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "PNG"); // use .png for images we get as QImage
-    QCryptographicHash ch(QCryptographicHash::Md5);
-    ch.addData(ba);
-    d->key = ch.result();
-    d->suffix = "png";
-}
-
-KoImageData::KoImageData(KoImageCollection *collection, const KUrl &url)
-    : d(new KoImageDataPrivate(collection))
-{
-    QString tmpFile;
-    if (KIO::NetAccess::download(url, tmpFile, 0)) {
-        QFile file(tmpFile);
-        file.open(QIODevice::ReadOnly);
-        loadFromFile(file);
-        setSuffix(url.prettyUrl());
-    } else {
-        kWarning(30006) << "open image " << url.prettyUrl() << "failed";
-        d->errorCode = OpenFailed;
-    }
-}
-
-KoImageData::KoImageData(KoImageCollection *collection, const QString &href, KoStore *store)
-    : d(new KoImageDataPrivate(collection))
-{
-    if (store->open(href)) {
-        // TODO should we use KoStore::extractFile ?
-        KoStoreDevice device(store);
-        loadFromFile(device);
-        setSuffix(href);
-        store->close();
-    } else {
-        kWarning(30006) << "open image " << href << "failed";
-        d->errorCode = OpenFailed;
-    }
-}
-#endif
 
 KoImageData::KoImageData()
 {
@@ -102,20 +57,6 @@ KoImageData::KoImageData(KoImageDataPrivate *priv)
 KoImageData::~KoImageData()
 {
 }
-
-#if 0
-void KoImageData::setImageQuality(KoImageData::ImageQuality quality)
-{
-    if (d->quality == quality) return;
-    d->pixmap = QPixmap(); // remove data
-    d->quality  = quality;
-}
-
-KoImageData::ImageQuality KoImageData::imageQuality() const
-{
-    return d->quality;
-}
-#endif
 
 QPixmap KoImageData::pixmap(const QSize &size)
 {
@@ -176,20 +117,6 @@ bool KoImageData::hasCachedPixmap()
 bool KoImageData::saveToFile(QIODevice &device) // TODO why is this public *and* on the private?
 {
     return d->saveToFile(device);
-}
-
-bool KoImageData::loadFromFile(QIODevice &device) // TODO remove
-{
-    d->rawData = device.readAll();
-    bool loaded = d->image.loadFromData(d->rawData);
-    if (loaded) {
-        QCryptographicHash ch(QCryptographicHash::Md5);
-        ch.addData(d->rawData);
-        d->key = ch.result();
-    } else {
-        d->errorCode = LoadFailed;
-    }
-    return loaded;
 }
 
 const QSizeF KoImageData::imageSize()
@@ -311,12 +238,6 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
         }
     }
 }
-#if 0
-void KoImageData::setImage(const QString &url, KoImageCollection *collection)
-{
-    // TODO
-}
-#endif
 
 bool KoImageData::isValid() const
 {
@@ -355,10 +276,4 @@ void KoImageData::setSuffix(const QString & name)
     if (rx.indexIn(name) != -1) {
         d->suffix = rx.cap(1);
     }
-}
-
-// TODO maybe make inline?
-KoImageDataPrivate *KoImageData::priv()
-{
-    return d.data();
 }

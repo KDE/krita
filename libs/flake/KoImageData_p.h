@@ -53,7 +53,6 @@ public:
     };
 
     KoImageCollection *collection;
-    KoImageData::ImageQuality quality; // TODO remove
     KoImageData::ErrorCode errorCode;
     QSizeF imageSize;
     QByteArray key; // key to identify the picture // TODO make a qint64

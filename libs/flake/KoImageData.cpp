@@ -278,12 +278,12 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         delete d->temporaryFile;
         d->errorCode = Success;
         d->suffix = "png"; // good default for non-lossy storage.
+        d->imageLocation.clear();
         if (imageData.size() > MAX_MEMORY_IMAGESIZE) {
             d->image = QImage();
             // store image
             QBuffer buffer;
             d->copyToTemporary(buffer);
-            return;
         } else {
             QImage image;
             if (!image.loadFromData(imageData)) {
@@ -291,12 +291,11 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
                 return;
             }
             d->image = image;
+            d->dataStoreState = KoImageDataPrivate::StateImageOnly;
         }
-        d->imageLocation.clear();
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(imageData);
         d->key = md5.result();
-        d->dataStoreState = KoImageDataPrivate::StateImageOnly;
     }
 }
 

@@ -9,7 +9,7 @@ class TestImageCollection : public QObject
 private slots:
     // tests
     void testGetImageImage();
-    void testGetImageKUrl();
+    void testGetExternalImage();
     void testGetImageStore();
 
     // imageData tests

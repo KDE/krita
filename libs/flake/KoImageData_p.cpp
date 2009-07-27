@@ -24,6 +24,7 @@
 #include "KoImageCollection.h"
 
 #include <QTemporaryFile>
+#include <QImageWriter>
 #include <KDebug>
 
 KoImageDataPrivate::KoImageDataPrivate()
@@ -41,14 +42,46 @@ KoImageDataPrivate::~KoImageDataPrivate()
     delete temporaryFile;
 }
 
-bool KoImageDataPrivate::saveToFile(QIODevice & device)
+bool KoImageDataPrivate::saveData(QIODevice &device)
 {
-#if 0
-    if (!rawData.isEmpty()) {
-        return device.write(rawData) == rawData.size();
+    switch (dataStoreState) {
+    case KoImageDataPrivate::StateEmpty:
+        return false;
+    case KoImageDataPrivate::StateNotLoaded:
+        // spool directly.
+        Q_ASSERT(temporaryFile); // otherwise the collection should not have called this
+        if (temporaryFile) {
+            if (!temporaryFile->open()) {
+                kWarning(30006) << "Read file from temporary store failed";
+                return false;
+            }
+            char buf[4096];
+            while (true) {
+                device.waitForReadyRead(-1);
+                qint64 bytes = temporaryFile->read(buf, sizeof(buf));
+                if (bytes == -1)
+                    break; // done!
+                do {
+                    bytes -= device.write(buf, bytes);
+                } while (bytes > 0);
+            }
+            temporaryFile->close();
+        }
+        return true;
+    case KoImageDataPrivate::StateImageLoaded:
+    case KoImageDataPrivate::StateImageOnly: {
+        // save image
+        QImageWriter writer(&device, suffix.toLatin1());
+        return writer.write(image);
+      }
     }
-    else {
-        return image.save(&device, "PNG"); // if we only have a image save it as png
+    return false;
+}
+
+void KoImageDataPrivate::setSuffix(const QString &name)
+{
+    QRegExp rx("\\.([^/]+$)"); // TODO does this work on windows or do we have to use \ instead of / for a path separator?
+    if (rx.indexIn(name) != -1) {
+        suffix = rx.cap(1);
     }
-#endif
 }

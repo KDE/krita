@@ -103,11 +103,6 @@ bool KoImageData::hasCachedPixmap() const
     return d && !d->pixmap.isNull();
 }
 
-bool KoImageData::saveToFile(QIODevice &device) // TODO why is this public *and* on the private?
-{
-    return d->saveToFile(device);
-}
-
 const QSizeF KoImageData::imageSize()
 {
     if (!d->imageSize.isValid()) {
@@ -162,6 +157,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
     } else {
         if (d.data() == 0)
             d = new KoImageDataPrivate();
+        d->suffix = "png"; // good default for non-lossy storage.
         d->image = image;
         d->imageLocation.clear();
         d->key = QString::number(image.cacheKey()).toLatin1();
@@ -169,20 +165,21 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
     }
 }
 
-void KoImageData::setImage(const KUrl &url, KoImageCollection *collection)
+void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *collection)
 {
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and we'll go to the other clause
-        KoImageData other = collection->getImage(url);
+        KoImageData other = collection->getExternalImage(location);
         delete d.data();
         d = other.d;
     } else {
         if (d.data() == 0)
             d = new KoImageDataPrivate();
         d->image = QImage();
-        d->imageLocation = url;
-        d->key = url.toEncoded();
+        d->imageLocation = location;
+        d->setSuffix(location.toEncoded());
+        d->key = location.toEncoded();
         d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
     }
 }
@@ -203,6 +200,7 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             d->key.clear();
             d->image = QImage();
         }
+        d->setSuffix(url);
 
         if (store->open(url)) {
             KoStoreDevice device(store);
@@ -222,7 +220,7 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             char buf[8096];
             while (true) {
                 device.waitForReadyRead(-1);
-                qint64 bytes = device.readData(buf, sizeof(buf));
+                qint64 bytes = device.read(buf, sizeof(buf));
                 if (bytes <= 0)
                     break; // done!
                 md5.addData(buf, bytes);
@@ -273,12 +271,4 @@ QString KoImageData::suffix() const
 KoImageData::ErrorCode KoImageData::errorCode() const
 {
     return d->errorCode;
-}
-
-void KoImageData::setSuffix(const QString & name)
-{
-    QRegExp rx("\\.([^/]+$)"); // TODO does this work on windows or do we have to use \ instead of / for a path separator?
-    if (rx.indexIn(name) != -1) {
-        d->suffix = rx.cap(1);
-    }
 }

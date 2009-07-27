@@ -56,55 +56,54 @@ KoImageCollection::~KoImageCollection()
 bool KoImageCollection::completeLoading(KoStore *store)
 {
     Q_UNUSED( store );
+    d->storeImages.clear();
     return true;
 }
 
-bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context)
+bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context)
 {
-/*
     QMap<QByteArray, QString> images(context->imagesToSave());
     QMap<QByteArray, QString>::iterator it(images.begin());
 
     QMap<QByteArray, KoImageDataPrivate *>::iterator dataIt(d->images.begin());
 
     while (it != images.end()) {
-        if ( dataIt == d->images.end() ) {
+        if (dataIt == d->images.end()) {
             // this should not happen
             kWarning(30006) << "image not found";
             Q_ASSERT(0);
             break;
         }
-        else if ( dataIt.key() == it.key() ) {
-            if (store->open(it.value())) {
+        else if (dataIt.key() == it.key()) {
+            KoImageDataPrivate *imageData;
+            if (imageData->imageLocation.isValid()) {
+                // TODO store url
+                Q_ASSERT(0); // not impleented yet
+            }
+            else if (store->open(it.value())) {
                 KoStoreDevice device(store);
-                bool ok = dataIt.value()->saveToFile(device);
+                bool ok = imageData->saveData(device);
                 store->close();
                 // TODO error handling
-                if ( ok ) {
+                if (ok) {
                     const QString mimetype(KMimeType::findByPath(it.value(), 0 , true)->name());
                     manifestWriter->addManifestEntry(it.value(), mimetype);
-                }
-                else {
+                } else {
                     kWarning(30006) << "saving image failed";
                 }
-            }
-            else {
+            } else {
                 kWarning(30006) << "saving image failed: open store failed";
             }
             ++dataIt;
             ++it;
-        }
-        else if ( dataIt.key() < it.key() ) {
+        } else if (dataIt.key() < it.key()) {
             ++dataIt;
-        }
-        else {
+        } else {
             // this should not happen
             kWarning(30006) << "image not found";
             Q_ASSERT(0);
         }
     }
-
-*/
     return true;
 }
 
@@ -123,7 +122,7 @@ KoImageData KoImageCollection::getImage(const QImage &image)
     return data;
 }
 
-KoImageData KoImageCollection::getImage(const KUrl &url)
+KoImageData KoImageCollection::getExternalImage(const QUrl &url)
 {
     Q_ASSERT(!url.isEmpty() && url.isValid());
 
@@ -131,7 +130,7 @@ KoImageData KoImageCollection::getImage(const KUrl &url)
     if (d->images.contains(key))
         return d->images.value(key);
     KoImageData data;
-    data.setImage(url);
+    data.setExternalImage(url);
     data.priv()->collection = this;
     Q_ASSERT(data.key() == key);
     d->images.insert(key, data.priv());

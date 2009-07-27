@@ -24,9 +24,7 @@
 #define KOIMAGEDATA_P_H
 
 #include <QSharedData>
-
-#include <KUrl>
-
+#include <QUrl>
 #include <QByteArray>
 #include <QImage>
 #include <QPixmap>
@@ -43,7 +41,16 @@ public:
     KoImageDataPrivate();
     virtual ~KoImageDataPrivate();
 
-    bool saveToFile(QIODevice &device);
+    /**
+     * Save the image data to the param device.
+     * The full file is saved.
+     * @param device the device that is used to get the data from.
+     * @return returns true if load was successful.
+     */
+    bool saveData(QIODevice &device);
+
+    /// store the suffix based on the full filename.
+    void setSuffix(const QString &fileName);
 
     enum DataStoreState {
         StateEmpty,     ///< No image data, either as url or as QImage
@@ -56,12 +63,11 @@ public:
     KoImageData::ErrorCode errorCode;
     QSizeF imageSize;
     QByteArray key; // key to identify the picture // TODO make a qint64
-    QByteArray rawData; // the raw data of the picture either from the file or store // TODO remove
-    QString suffix; // the suffix of the picture e.g. png
+    QString suffix; // the suffix of the picture e.g. png  TODO use a QByteArray ?
 
     // Image data store.
     DataStoreState dataStoreState;
-    KUrl imageLocation;
+    QUrl imageLocation;
     QImage image;
     /// screen optimized cached version.
     QPixmap pixmap;

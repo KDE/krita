@@ -25,6 +25,7 @@
 
 class QImage;
 class KUrl;
+class QUrl;
 class KoStore;
 class KoImageData;
 class KoImageDataPrivate;
@@ -53,7 +54,7 @@ public:
     // TODO rename 'getImage' to something more sane
     // return or create a data object for the image data
     KoImageData getImage(const QImage &image);
-    KoImageData getImage(const KUrl &url);
+    KoImageData getExternalImage(const QUrl &url);
     KoImageData getImage(const QString &href, KoStore *store);
 
     void add(const KoImageData &data);

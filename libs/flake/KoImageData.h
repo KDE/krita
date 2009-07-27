@@ -33,6 +33,7 @@ class QPixmap;
 class QImage;
 class QSizeF;
 class KUrl;
+class QUrl;
 class KoImageCollection;
 class KoImageDataPrivate;
 class KoStore;
@@ -75,6 +76,7 @@ public:
     /**
      * Renders a pixmap the first time you request it is called and returns it.
      * @returns the cached pixmap
+     * @see isValid(), hasCachedPixmap()
      */
     QPixmap pixmap(const QSize &targetSize = QSize());
 
@@ -82,23 +84,15 @@ public:
     bool hasCachedPixmap() const;
 
     void setImage(const QImage &image, KoImageCollection *collection = 0);
-    void setImage(const KUrl &image, KoImageCollection *collection = 0);
+    void setExternalImage(const QUrl &location, KoImageCollection *collection = 0);
     void setImage(const QString &location, KoStore *store, KoImageCollection *collection = 0);
 
     /**
      * Return the internal store of the image.
-     * @see QImage::isNull(), isValid()
+     * @see isValid(), hasCachedImage()
      */
-    QImage image() const; // TODO why do we want to expose the image? saveToFile() should be enough, no?
+    QImage image() const;
     bool hasCachedImage() const;
-
-    /**
-     * Save the image data to the param device.
-     * The full file is saved.
-     * @param device the device that is used to get the data from.
-     * @return returns true if load was successful.
-     */
-    bool saveToFile(QIODevice &device); // TODO rename as its not always a file we save to
 
     /**
      * The size of the image in points
@@ -130,9 +124,6 @@ protected:
     KoImageData(KoImageDataPrivate *priv);
 
 private:
-    // TODO move these to the private
-    void setSuffix(const QString &name);
-
     QExplicitlySharedDataPointer<KoImageDataPrivate> d;
 };
 

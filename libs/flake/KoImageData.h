@@ -84,6 +84,7 @@ public:
     bool hasCachedPixmap() const;
 
     void setImage(const QImage &image, KoImageCollection *collection = 0);
+    void setImage(const QByteArray &imageData, KoImageCollection *collection = 0);
     void setExternalImage(const QUrl &location, KoImageCollection *collection = 0);
     void setImage(const QString &location, KoStore *store, KoImageCollection *collection = 0);
 

@@ -27,6 +27,7 @@
 #include <KIconLoader>
 #include <KUrl>
 #include <KFileDialog>
+#include <KIO/Job>
 
 #include <KoCanvasBase.h>
 #include <KoImageCollection.h>
@@ -68,41 +69,51 @@ QWidget * PictureTool::createOptionWidget()
 {
 
     QWidget *optionWidget = new QWidget();
-    QGridLayout *layout = new QGridLayout( optionWidget );
+    QGridLayout *layout = new QGridLayout(optionWidget);
 
     QToolButton *button = 0;
 
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("open") );
-    button->setToolTip( i18n( "Open" ) );
-    layout->addWidget( button, 0, 0 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotChangeUrl() ) );
+    button = new QToolButton(optionWidget);
+    button->setIcon(SmallIcon("open"));
+    button->setToolTip(i18n( "Open"));
+    layout->addWidget(button, 0, 0);
+    connect(button, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
 
     return optionWidget;
-
-    return 0;
 }
 
-void PictureTool::slotChangeUrl()
+void PictureTool::changeUrlPressed()
 {
-    //kDebug()<<" PictureTool::slotChangeUrl";
+    if (m_pictureshape == 0)
+        return;
     KUrl url = KFileDialog::getOpenUrl();
-    if (!url.isEmpty() && m_pictureshape) {
-        KoImageData* data = m_pictureshape->imageCollection()->getImage(url);
-        if (data) {
-            ChangeImageCommand *cmd = new ChangeImageCommand(m_pictureshape, data);
-            m_canvas->addCommand(cmd);
-        }
+    if (!url.isEmpty()) {
+        // TODO move this to an action in the libs, with a nice dialog or something.
+        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
+        connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
     }
 }
 
-void PictureTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
+void PictureTool::setImageData(KJob *job)
+{
+    if (m_pictureshape == 0)
+        return; // ugh, the user deselected the image in between. We should move this code to main anyway redesign it
+    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    Q_ASSERT(transferJob);
+
+    KoImageData *data = m_pictureshape->imageCollection()->createImageData(transferJob->data());
+    ChangeImageCommand *cmd = new ChangeImageCommand(m_pictureshape, data);
+    m_canvas->addCommand(cmd);
+}
+
+void PictureTool::mouseDoubleClickEvent( KoPointerEvent *event )
+{
     if(m_canvas->shapeManager()->shapeAt(event->point) != m_pictureshape) {
         event->ignore(); // allow the event to be used by another
         return;
     }
 
-    slotChangeUrl();
+    changeUrlPressed();
 /*
     repaintSelection();
     updateSelectionHandler();

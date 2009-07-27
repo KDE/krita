@@ -37,29 +37,25 @@ public:
     virtual ~PictureShape();
 
     // reimplemented
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     // reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
-
-    /// Load data from a file - data will be saved in odf - the referenced file is not modified
-    bool loadFromUrl( KUrl & );
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// reimplemented
-    void init(const QMap<QString, KoDataCenter *> & dataCenterMap);
+    void init(const QMap<QString, KoDataCenter*> &dataCenterMap);
 
     /**
-     * Get the collection used in the shape
+     * Get the collection used in the shape.
      */
-    KoImageCollection* imageCollection() const;
+    KoImageCollection *imageCollection() const;
 
 protected:
-    virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context );
+    virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
     KoImageCollection *m_imageCollection;
-    KoImageData *m_imageData;
 };
 
 

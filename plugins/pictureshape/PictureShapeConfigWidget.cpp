@@ -76,13 +76,14 @@ void PictureShapeConfigWidget::save()
 {
     if (!m_shape)
         return;
-
+/*
     KUrl url = m_fileWidget->selectedUrl();
     if (!url.isEmpty())
         m_shape->loadFromUrl(url);
 
     kDebug(31000) << "image url =" << url;
     m_shape->setKeepAspectRatio(true);
+*/
 }
 
 bool PictureShapeConfigWidget::showOnShapeCreate()

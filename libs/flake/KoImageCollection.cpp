@@ -23,6 +23,7 @@
 #include "KoShapeSavingContext.h"
 
 #include <KoStoreDevice.h>
+#include <QCryptographicHash>
 #include <KoXmlWriter.h>
 
 #include <QMap>
@@ -155,6 +156,21 @@ KoImageData *KoImageCollection::createImageData(const QString &href, KoStore *st
     data->priv()->collection = this;
     d->storeImages.insert(storeKey, data->priv());
     d->images.insert(data->key(), data->priv());
+    return data;
+}
+
+KoImageData *KoImageCollection::createImageData(const QByteArray &imageData)
+{
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(imageData);
+    QByteArray key = md5.result();
+    if (d->images.contains(key))
+        return new KoImageData(d->images.value(key));
+    KoImageData *data = new KoImageData();
+    data->setImage(imageData);
+    data->priv()->collection = this;
+    Q_ASSERT(data->key() == key);
+    d->images.insert(key, data->priv());
     return data;
 }
 

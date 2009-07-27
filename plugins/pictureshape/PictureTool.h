@@ -21,6 +21,7 @@
 #define PICTURE_TOOL
 
 #include <KoTool.h>
+#include <KJob>
 
 class PictureShape;
 
@@ -51,7 +52,8 @@ protected:
     virtual QWidget * createOptionWidget();
 
 private slots:
-    void slotChangeUrl();
+    void changeUrlPressed();
+    void setImageData(KJob *job);
 
 private:
     PictureShape *m_pictureshape;

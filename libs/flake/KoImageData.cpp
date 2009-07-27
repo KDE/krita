@@ -29,6 +29,7 @@
 #include <kdebug.h>
 
 #include <QBuffer>
+#include <QCryptographicHash>
 #include <QTimer>
 #include <QPainter>
 #include <QImageWriter>
@@ -259,6 +260,44 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             d->errorCode = OpenFailed;
             return;
         }
+    }
+}
+
+void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *collection)
+{
+    if (collection) {
+        // let the collection first check if it already has one. If it doesn't it'll call this method
+        // again and we'll go to the other clause
+        KoImageData *other = collection->createImageData(imageData);
+        this->operator=(*other);
+        delete other;
+    } else {
+        if (d == 0) {
+            d = new KoImageDataPrivate();
+            d->refCount.ref();
+        }
+        delete d->temporaryFile;
+        d->errorCode = Success;
+        d->suffix = "png"; // good default for non-lossy storage.
+        if (imageData.size() > MAX_MEMORY_IMAGESIZE) {
+            d->image = QImage();
+            // store image
+            QBuffer buffer;
+            d->copyToTemporary(buffer);
+            return;
+        } else {
+            QImage image;
+            if (!image.loadFromData(imageData)) {
+                d->errorCode = OpenFailed;
+                return;
+            }
+            d->image = image;
+        }
+        d->imageLocation.clear();
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(imageData);
+        d->key = md5.result();
+        d->dataStoreState = KoImageDataPrivate::StateImageOnly;
     }
 }
 

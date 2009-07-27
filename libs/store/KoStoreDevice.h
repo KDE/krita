@@ -58,13 +58,6 @@ public:
             return 0xffffffff;
     }
 
-    virtual qint64 readData(char *data, qint64 maxlen) {
-        return m_store->read(data, maxlen);
-    }
-    virtual qint64 writeData(const char *data, qint64 len) {
-        return m_store->write(data, len);
-    }
-
 #if 0
     int getch() {
         char c[2];
@@ -100,6 +93,15 @@ public:
 
 protected:
     KoStore * m_store;
+
+    virtual qint64 readData(char *data, qint64 maxlen) {
+        return m_store->read(data, maxlen);
+    }
+
+    virtual qint64 writeData(const char *data, qint64 len) {
+        return m_store->write(data, len);
+    }
+
 };
 
 #endif

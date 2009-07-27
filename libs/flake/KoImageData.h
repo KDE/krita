@@ -79,7 +79,7 @@ public:
     QPixmap pixmap(const QSize &targetSize = QSize());
 
     /// returns true only if pixmap() would return immediately with a cached pixmap
-    bool hasCachedPixmap();
+    bool hasCachedPixmap() const;
 
     void setImage(const QImage &image, KoImageCollection *collection = 0);
     void setImage(const KUrl &image, KoImageCollection *collection = 0);
@@ -90,6 +90,7 @@ public:
      * @see QImage::isNull(), isValid()
      */
     QImage image() const; // TODO why do we want to expose the image? saveToFile() should be enough, no?
+    bool hasCachedImage() const;
 
     /**
      * Save the image data to the param device.

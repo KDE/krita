@@ -109,9 +109,9 @@ QPixmap KoImageData::pixmap(const QSize &size)
     return d->pixmap;
 }
 
-bool KoImageData::hasCachedPixmap()
+bool KoImageData::hasCachedPixmap() const
 {
-    return !d->pixmap.isNull();
+    return d && !d->pixmap.isNull();
 }
 
 bool KoImageData::saveToFile(QIODevice &device) // TODO why is this public *and* on the private?
@@ -140,10 +140,16 @@ const QSizeF KoImageData::imageSize()
 
 QImage KoImageData::image() const
 {
+    // TODO
     if (d->image.isNull()) {
         d->image.loadFromData( d->rawData );
     }
     return d->image;
+}
+
+bool KoImageData::hasCachedImage() const
+{
+    return d && !d->image.isNull();
 }
 
 void KoImageData::setImage(const QImage &image, KoImageCollection *collection)

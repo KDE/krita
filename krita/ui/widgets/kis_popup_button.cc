@@ -86,6 +86,8 @@ void KisPopupButton::setPopupWidgetWidth(int w)
 void KisPopupButton::showPopupWidget()
 {
     if (m_d->popupWidget) {
+        m_d->frame->raise();
+        m_d->frame->show();
         QSize popSize = m_d->popupWidget->size();
         QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);
 
@@ -97,10 +99,7 @@ void KisPopupButton::showPopupWidget()
             popupRect.translate(screenRect.left() - popupRect.left(), 0);
         if (popupRect.bottom() > screenRect.bottom())
             popupRect.translate(0, -m_d->frame->height());
-
         m_d->frame->setGeometry(popupRect);
-        m_d->frame->raise();
-        m_d->frame->show();
 
     }
 }

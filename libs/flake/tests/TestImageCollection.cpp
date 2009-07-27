@@ -133,6 +133,9 @@ void TestImageCollection::testImageDataAsSharedData()
     QCOMPARE(data.image(), image);
     QCOMPARE(data2.isValid(), true);
     QCOMPARE(data2.image(), image);
+
+    KoImageData empty;
+    KoImageData second(empty);
 }
 
 void TestImageCollection::testPreload1()

@@ -49,7 +49,8 @@ KoImageData::KoImageData(const KoImageData &imageData)
     : KoShapeUserData(),
     d(imageData.d)
 {
-    d->refCount.ref();
+    if (d)
+        d->refCount.ref();
 }
 
 KoImageData::KoImageData(KoImageDataPrivate *priv)
@@ -60,7 +61,7 @@ KoImageData::KoImageData(KoImageDataPrivate *priv)
 
 KoImageData::~KoImageData()
 {
-    if (!d->refCount.deref())
+    if (d && !d->refCount.deref())
         delete d;
 }
 

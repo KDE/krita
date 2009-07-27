@@ -22,6 +22,9 @@
 
 #include "KoImageData.h"
 
+#include "KoImageCollection.h"
+#include "KoImageData_p.h"
+
 #include <KoUnit.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -35,8 +38,6 @@
 #include <QImageWriter>
 #include <QTemporaryFile>
 
-#include "KoImageCollection.h"
-#include "KoImageData_p.h"
 
 /// the maximum amount of bytes the image can be while we store it in memory instead of
 /// spooling it to disk in a temp-file.

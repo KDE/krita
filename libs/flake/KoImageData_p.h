@@ -27,7 +27,6 @@
 #include <QByteArray>
 #include <QImage>
 #include <QPixmap>
-#include <QSize>
 
 #include "KoImageData.h"
 

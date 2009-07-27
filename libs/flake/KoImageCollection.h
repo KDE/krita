@@ -16,20 +16,17 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOIMAGECOLLECTIONNEW_H
-#define KOIMAGECOLLECTIONNEW_H
+#ifndef KOIMAGECOLLECTION_H
+#define KOIMAGECOLLECTION_H
 
 #include "flake_export.h"
 
 #include <KoDataCenter.h>
 
 class QImage;
-class KUrl;
 class QUrl;
 class KoStore;
 class KoImageData;
-class KoImageDataPrivate;
-
 
 /**
  * An collection of KoImageData objects to allow loading and saving them all together to the KoStore.
@@ -107,4 +104,4 @@ private:
     Private * const d;
 };
 
-#endif // KOIMAGECOLLECTIONNEW_H
+#endif // KOIMAGECOLLECTION_H

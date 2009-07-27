@@ -31,7 +31,6 @@ class QIODevice;
 class QPixmap;
 class QImage;
 class QSizeF;
-class KUrl;
 class QUrl;
 class KoImageCollection;
 class KoImageDataPrivate;

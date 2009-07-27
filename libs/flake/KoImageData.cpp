@@ -26,19 +26,20 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
-#include <ktemporaryfile.h>
 #include <kdebug.h>
-#include <kio/netaccess.h>
 
 #include <QBuffer>
 #include <QTimer>
-#include <QCryptographicHash>
-#include <QTemporaryFile>
-#include <QFileInfo>
 #include <QPainter>
+#include <QImageWriter>
+#include <QTemporaryFile>
 
 #include "KoImageCollection.h"
 #include "KoImageData_p.h"
+
+/// the maximum amount of bytes the image can be while we store it in memory instead of
+/// spooling it to disk in a temp-file.
+#define MAX_MEMORY_IMAGESIZE 90000
 
 KoImageData::KoImageData()
     : d(0)
@@ -157,6 +158,7 @@ bool KoImageData::hasCachedImage() const
 
 void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
 {
+    Q_ASSERT(!image.isNull());
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and we'll go to the other clause
@@ -168,8 +170,27 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             d = new KoImageDataPrivate();
             d->refCount.ref();
         }
+        delete d->temporaryFile;
+        d->errorCode = Success;
         d->suffix = "png"; // good default for non-lossy storage.
-        d->image = image;
+        if (image.numBytes() > MAX_MEMORY_IMAGESIZE) {
+            d->image = QImage();
+            // store image
+            QBuffer buffer;
+            buffer.open(QIODevice::WriteOnly);
+            QImageWriter writer(&buffer, d->suffix.toLatin1());
+            if (!writer.write(image)) {
+                // TODO kWarning
+                d->errorCode = StorageFailed;
+                delete d->temporaryFile;
+                return;
+            }
+            buffer.close();
+            d->copyToTemporary(buffer);
+            return;
+        } else {
+            d->image = image;
+        }
         d->imageLocation.clear();
         d->key = QString::number(image.cacheKey()).toLatin1();
         d->dataStoreState = KoImageDataPrivate::StateImageOnly;
@@ -190,6 +211,7 @@ void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *coll
             d->refCount.ref();
         }
         d->image = QImage();
+        d->errorCode = Success;
         d->imageLocation = location;
         d->setSuffix(location.toEncoded());
         d->key = location.toEncoded();
@@ -213,41 +235,25 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             d->imageLocation.clear();
             d->key.clear();
             d->image = QImage();
+            d->errorCode = Success;
         }
         d->setSuffix(url);
 
         if (store->open(url)) {
             KoStoreDevice device(store);
+            if (device.size() > MAX_MEMORY_IMAGESIZE) {
+                // TODO test also if the file is lossy, then we should store the bytes too
+                if (d->image.load(&device, d->suffix.toLatin1())) {
+                    d->dataStoreState = KoImageDataPrivate::StateImageOnly;
+                    return;
+                }
+            }
             if (!device.open(QIODevice::ReadOnly)) {
                 kWarning(30006) << "open file from store " << url << "failed";
                 d->errorCode = OpenFailed;
                 return;
             }
-            delete d->temporaryFile;
-            d->temporaryFile = new QTemporaryFile("KoImageDataXXXXXX");
-            if (!d->temporaryFile->open()) {
-                kWarning(30006) << "open temporary file for writing failed";
-                d->errorCode = StorageFailed;
-                return;
-            }
-            QCryptographicHash md5(QCryptographicHash::Md5);
-            char buf[8096];
-            while (true) {
-                device.waitForReadyRead(-1);
-                qint64 bytes = device.read(buf, sizeof(buf));
-                if (bytes <= 0)
-                    break; // done!
-                md5.addData(buf, bytes);
-                do {
-                    bytes -= d->temporaryFile->write(buf, bytes);
-                } while (bytes > 0);
-            }
-            d->key = md5.result();
-            d->temporaryFile->close();
-
-            QFileInfo fi(*d->temporaryFile);
-            d->imageLocation = KUrl::fromPath(fi.absoluteFilePath());
-            d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
+            d->copyToTemporary(device);
         } else {
             kWarning(30006) << "Find file in store " << url << "failed";
             d->errorCode = OpenFailed;

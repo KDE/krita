@@ -51,6 +51,9 @@ public:
     /// store the suffix based on the full filename.
     void setSuffix(const QString &fileName);
 
+    /// take the data from \a device and store it in the temporaryFile
+    void copyToTemporary(QIODevice &device);
+
     enum DataStoreState {
         StateEmpty,     ///< No image data, either as url or as QImage
         StateNotLoaded, ///< Image data is set as Url

@@ -25,6 +25,8 @@
 
 #include <QTemporaryFile>
 #include <QImageWriter>
+#include <QCryptographicHash>
+#include <QFileInfo>
 #include <KDebug>
 
 KoImageDataPrivate::KoImageDataPrivate()
@@ -86,4 +88,34 @@ void KoImageDataPrivate::setSuffix(const QString &name)
     if (rx.indexIn(name) != -1) {
         suffix = rx.cap(1);
     }
+}
+
+
+void KoImageDataPrivate::copyToTemporary(QIODevice &device)
+{
+    delete temporaryFile;
+    temporaryFile = new QTemporaryFile("KoImageDataXXXXXX");
+    if (!temporaryFile->open()) {
+        kWarning(30006) << "open temporary file for writing failed";
+        errorCode = KoImageData::StorageFailed;
+        return;
+    }
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    char buf[8096];
+    while (true) {
+        device.waitForReadyRead(-1);
+        qint64 bytes = device.read(buf, sizeof(buf));
+        if (bytes <= 0)
+            break; // done!
+        md5.addData(buf, bytes);
+        do {
+            bytes -= temporaryFile->write(buf, bytes);
+        } while (bytes > 0);
+    }
+    key = md5.result();
+    temporaryFile->close();
+
+    QFileInfo fi(*temporaryFile);
+    imageLocation = QUrl(fi.absoluteFilePath());
+    dataStoreState = StateNotLoaded;
 }

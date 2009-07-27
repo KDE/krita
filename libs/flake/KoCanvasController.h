@@ -69,7 +69,6 @@ public:
      */
     explicit KoCanvasController(QWidget *parent = 0);
     virtual ~KoCanvasController();
-
     /**
      * Reimplemented from QAbstractScrollArea.
      */
@@ -135,6 +134,9 @@ public:
 
     /// Returns the current canvas mode
     CanvasMode canvasMode() const;
+
+    /// Returns true if canvas uses QGLWidget (OpenGL can be used for painting on canvas)
+    bool isCanvasOpenGL() const;
 
     /// Reimplemented from QObject
     virtual bool eventFilter(QObject* watched, QEvent* event);
@@ -369,7 +371,6 @@ private:
     void setDocumentOffset();
 
     void resetScrollBars();
-    bool canvasIsOpenGL() const;
     void emitPointerPositionChangedSignals(QEvent *event);
 
     friend class KoToolManager;

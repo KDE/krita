@@ -458,7 +458,7 @@ void KoCanvasController::setDocumentOffset()
     QWidget *canvasWidget = d->canvas->canvasWidget();
 
     if (canvasWidget) {
-        if (!canvasIsOpenGL()) {
+        if (!isCanvasOpenGL()) {
             QPoint diff = d->documentOffset - pt;
             canvasWidget->scroll(diff.x(), diff.y());
         }
@@ -467,7 +467,7 @@ void KoCanvasController::setDocumentOffset()
     d->documentOffset = pt;
 }
 
-bool KoCanvasController::canvasIsOpenGL() const
+bool KoCanvasController::isCanvasOpenGL() const
 {
     QWidget *canvasWidget = d->canvas->canvasWidget();
 

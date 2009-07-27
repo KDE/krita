@@ -306,8 +306,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                     QTextTableCell cell = tbl->cellAt(currentRow, currentCell);
                                                     
                                                     // store spans until entire table have been loaded
-                                                    int rowsSpanned = tblTag.attributeNS(KoXmlNS::table, "number-rows-spanned", "1").toInt();
-                                                    int columnsSpanned = tblTag.attributeNS(KoXmlNS::table, "number-columns-spanned", "1").toInt();
+                                                    int rowsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-rows-spanned", "1").toInt();
+                                                    int columnsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-columns-spanned", "1").toInt();
                                                     spanStore.append(QRect(currentCell, currentRow, columnsSpanned, rowsSpanned));
 
                                                     QString cellStyleName = rowTag.attributeNS(KoXmlNS::table, "style-name", "");
@@ -324,6 +324,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                     } else
                                                         kDebug(32500) << "Invalid table-cell row=" << currentRow << " column=" << currentCell;
                                                     currentCell++;
+                                                } else if (rowLocalName == "covered-table-cell") {
+                                                    currentCell++;
                                                 }
                                             }
                                         }
@@ -336,7 +338,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                     foreach (const QRect &span, spanStore) {
                         tbl->mergeCells(span.y(), span.x(), span.height(), span.width()); // for some reason Qt takes row, column
                     }
-
                     cursor = tbl->lastCursorPosition();
                     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
                 } else {

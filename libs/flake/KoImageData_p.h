@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
@@ -25,6 +25,8 @@
 
 #include <QSharedData>
 
+#include <KUrl>
+
 #include <QByteArray>
 #include <QImage>
 #include <QPixmap>
@@ -39,19 +41,31 @@ class KoImageDataPrivate : public QSharedData
 {
 public:
     KoImageDataPrivate();
-    ~KoImageDataPrivate();
+    virtual ~KoImageDataPrivate();
 
-    bool saveToFile(QIODevice & device);
+    bool saveToFile(QIODevice &device);
+
+    enum DataStoreState {
+        StateEmpty,     ///< No image data, either as url or as QImage
+        StateNotLoaded, ///< Image data is set as Url
+        StateImageLoaded,///< Image data is loaded from Url, so both are present.
+        StateImageOnly  ///< Image data is stored in a QImage. There is no external storage.
+    };
 
     KoImageCollection *collection;
     KoImageData::ImageQuality quality; // TODO remove
     KoImageData::ErrorCode errorCode;
     QSizeF imageSize;
-    QPixmap pixmap;
-    QImage image; // this member holds the data in case the image is embedded.
-    QByteArray key; // key to identify the picture
-    QByteArray rawData; // the raw data of the picture either from the file or store
+    QByteArray key; // key to identify the picture // TODO make a qint64
+    QByteArray rawData; // the raw data of the picture either from the file or store // TODO remove
     QString suffix; // the suffix of the picture e.g. png
+
+    // Image data store.
+    DataStoreState dataStoreState;
+    KUrl imageLocation;
+    QImage image;
+    /// screen optimized cached version.
+    QPixmap pixmap;
 };
 
 #endif /* KOIMAGEDATA_P_H */

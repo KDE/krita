@@ -209,13 +209,28 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
         if (d.data() == 0)
             d = new KoImageDataPrivate();
         d->image = image;
+        d->imageLocation.clear();
         d->key = QString::number(image.cacheKey()).toLatin1();
+        d->dataStoreState = KoImageDataPrivate::StateImageOnly;
     }
 }
 
 void KoImageData::setImage(const KUrl &url, KoImageCollection *collection)
 {
-    // TODO
+    if (collection) {
+        // let the collection first check if it already has one. If it doesn't it'll call this method
+        // again and we'll go to the other clause
+        KoImageData other = collection->getImage(url);
+        delete d.data();
+        d = other.d;
+    } else {
+        if (d.data() == 0)
+            d = new KoImageDataPrivate();
+        d->image = QImage();
+        d->imageLocation = url;
+        d->key = url.toEncoded();
+        d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
+    }
 }
 
 void KoImageData::setImage(const QString &url, KoImageCollection *collection)

@@ -63,6 +63,7 @@ public:
         HighQuality     ///< upto 150ppi
     };
 
+#if 0
     /**
      * The storate location
      */
@@ -72,6 +73,7 @@ public:
         SaveInStore,            ///< Save the image in the ODF store
         SaveInline              ///< Save the image serialized in the content.xml
     };
+#endif
 
     /// Various error codes representing what has gone wrong
     enum ErrorCode {

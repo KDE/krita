@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
@@ -27,9 +27,10 @@
 #include <KDebug>
 
 KoImageDataPrivate::KoImageDataPrivate()
-    :collection(0),
+    : collection(0),
     quality(KoImageData::HighQuality),
-    errorCode(KoImageData::Success)
+    errorCode(KoImageData::Success),
+    dataStoreState(StateEmpty)
 {
 }
 
@@ -41,10 +42,12 @@ KoImageDataPrivate::~KoImageDataPrivate()
 
 bool KoImageDataPrivate::saveToFile(QIODevice & device)
 {
+#if 0
     if (!rawData.isEmpty()) {
         return device.write(rawData) == rawData.size();
     }
     else {
         return image.save(&device, "PNG"); // if we only have a image save it as png
     }
+#endif
 }

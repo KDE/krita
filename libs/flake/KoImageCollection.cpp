@@ -123,16 +123,17 @@ KoImageData KoImageCollection::getImage(const QImage &image)
 
 KoImageData KoImageCollection::getImage(const KUrl &url)
 {
-/*
-    KoImageData * data = new KoImageData(this, url);
-    if ( data->errorCode() == KoImageData::Success ) {
-        lookup( data );
-    }
-    else {
-        data = 0;
-    }
+    Q_ASSERT(!url.isEmpty() && url.isValid());
+
+    QByteArray key = url.toEncoded();
+    if (d->images.contains(key))
+        return d->images.value(key);
+    KoImageData data;
+    data.setImage(url);
+    data.priv()->collection = this;
+    Q_ASSERT(data.key() == key);
+    d->images.insert(key, data.priv());
     return data;
-*/
 }
 
 KoImageData KoImageCollection::getImage(const QString &href, KoStore *store)

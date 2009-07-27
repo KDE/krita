@@ -35,7 +35,7 @@
 #include "KoImageData.h"
 
 class KoImageCollection;
-
+class QTemporaryFile;
 
 class KoImageDataPrivate : public QSharedData
 {
@@ -66,6 +66,8 @@ public:
     QImage image;
     /// screen optimized cached version.
     QPixmap pixmap;
+
+    QTemporaryFile *temporaryFile;
 };
 
 #endif /* KOIMAGEDATA_P_H */

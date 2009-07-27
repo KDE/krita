@@ -23,14 +23,15 @@
 #include "KoImageData_p.h"
 #include "KoImageCollection.h"
 
-#include <QIODevice>
+#include <QTemporaryFile>
 #include <KDebug>
 
 KoImageDataPrivate::KoImageDataPrivate()
     : collection(0),
     quality(KoImageData::HighQuality),
     errorCode(KoImageData::Success),
-    dataStoreState(StateEmpty)
+    dataStoreState(StateEmpty),
+    temporaryFile(0)
 {
 }
 
@@ -38,6 +39,7 @@ KoImageDataPrivate::~KoImageDataPrivate()
 {
     if (collection)
         collection->removeOnKey(key);
+    delete temporaryFile;
 }
 
 bool KoImageDataPrivate::saveToFile(QIODevice & device)

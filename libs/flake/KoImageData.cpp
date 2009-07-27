@@ -32,7 +32,8 @@
 
 #include <QBuffer>
 #include <QCryptographicHash>
-#include <QIODevice>
+#include <QTemporaryFile>
+#include <QFileInfo>
 #include <QPainter>
 
 #include "KoImageCollection.h"
@@ -151,12 +152,12 @@ QPixmap KoImageData::pixmap()
     return d->pixmap;
 }
 
-bool KoImageData::saveToFile(QIODevice &device)
+bool KoImageData::saveToFile(QIODevice &device) // TODO why is this public *and* on the private?
 {
     return d->saveToFile(device);
 }
 
-bool KoImageData::loadFromFile(QIODevice &device)
+bool KoImageData::loadFromFile(QIODevice &device) // TODO remove
 {
     d->rawData = device.readAll();
     bool loaded = d->image.loadFromData(d->rawData);
@@ -233,10 +234,68 @@ void KoImageData::setImage(const KUrl &url, KoImageCollection *collection)
     }
 }
 
+void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection *collection)
+{
+    if (collection) {
+        // let the collection first check if it already has one. If it doesn't it'll call this method
+        // again and we'll go to the other clause
+        KoImageData other = collection->getImage(url, store);
+        delete d.data();
+        d = other.d;
+    } else {
+        if (d.data() == 0) {
+            d = new KoImageDataPrivate();
+        } else {
+            d->imageLocation.clear();
+            d->key.clear();
+            d->image = QImage();
+        }
+
+        if (store->open(url)) {
+            KoStoreDevice device(store);
+            if (!device.open(QIODevice::ReadOnly)) {
+                kWarning(30006) << "open file from store " << url << "failed";
+                d->errorCode = OpenFailed;
+                return;
+            }
+            delete d->temporaryFile;
+            d->temporaryFile = new QTemporaryFile("KoImageDataXXXXXX");
+            if (!d->temporaryFile->open()) {
+                kWarning(30006) << "open temporary file for writing failed";
+                d->errorCode = StorageFailed;
+                return;
+            }
+            QCryptographicHash md5(QCryptographicHash::Md5);
+            char buf[8096];
+            while (true) {
+                device.waitForReadyRead(-1);
+                qint64 bytes = device.readData(buf, sizeof(buf));
+                if (bytes <= 0)
+                    break; // done!
+                md5.addData(buf, bytes);
+                do {
+                    bytes -= d->temporaryFile->write(buf, bytes);
+                } while (bytes > 0);
+            }
+            d->key = md5.result();
+            d->temporaryFile->close();
+
+            QFileInfo fi(*d->temporaryFile);
+            d->imageLocation = KUrl::fromPath(fi.absoluteFilePath());
+            d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
+        } else {
+            kWarning(30006) << "Find file in store " << url << "failed";
+            d->errorCode = OpenFailed;
+            return;
+        }
+    }
+}
+#if 0
 void KoImageData::setImage(const QString &url, KoImageCollection *collection)
 {
     // TODO
 }
+#endif
 
 bool KoImageData::isValid() const
 {

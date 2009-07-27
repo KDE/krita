@@ -79,6 +79,7 @@ public:
     enum ErrorCode {
         Success,
         OpenFailed,
+        StorageFailed, ///< This is set if the image data has to be stored on disk in a temporary file, but we failed to do so
         LoadFailed
     };
 
@@ -115,7 +116,8 @@ public:
 
     void setImage(const QImage &image, KoImageCollection *collection = 0);
     void setImage(const KUrl &image, KoImageCollection *collection = 0);
-    void setImage(const QString &image, KoImageCollection *collection = 0); // TODO can I get rid of this one due to it auto-converting to KUrl ?
+    void setImage(const QString &location, KoStore *store, KoImageCollection *collection = 0);
+    //void setImage(const QString &image, KoImageCollection *collection = 0); // TODO can I get rid of this one due to it auto-converting to KUrl ?
 
     /**
      * Return the internal store of the image.
@@ -138,6 +140,7 @@ public:
 
     KoImageData &operator=(const KoImageData &other);
 
+    bool operator!=(const KoImageData &other) const { return !operator==(other); }
     bool operator==(const KoImageData &other) const;
 
     /**

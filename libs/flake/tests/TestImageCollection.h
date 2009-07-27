@@ -11,7 +11,6 @@ private slots:
     void testGetImageImage();
     void testGetImageKUrl();
     void testGetImageStore();
-    void testGetImageMixed();
 
     // imageData tests
     void testImageDataAsSharedData();

@@ -21,13 +21,13 @@
  */
 
 #include "KoImageData_p.h"
-
-#include <QIODevice>
-
 #include "KoImageCollection.h"
 
-KoImageDataPrivate::KoImageDataPrivate(KoImageCollection *c)
-    :collection(c),
+#include <QIODevice>
+#include <KDebug>
+
+KoImageDataPrivate::KoImageDataPrivate()
+    :collection(0),
     quality(KoImageData::HighQuality),
     errorCode(KoImageData::Success)
 {
@@ -36,7 +36,7 @@ KoImageDataPrivate::KoImageDataPrivate(KoImageCollection *c)
 KoImageDataPrivate::~KoImageDataPrivate()
 {
     if (collection)
-        collection->removeImage(this);
+        collection->removeOnKey(key);
 }
 
 bool KoImageDataPrivate::saveToFile(QIODevice & device)

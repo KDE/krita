@@ -37,7 +37,7 @@
 
 #include "KoImageCollection.h"
 #include "KoImageData_p.h"
-
+#if 0
 KoImageData::KoImageData(KoImageCollection *collection, const QImage &image)
     : d(new KoImageDataPrivate(collection))
 {
@@ -81,6 +81,11 @@ KoImageData::KoImageData(KoImageCollection *collection, const QString &href, KoS
         d->errorCode = OpenFailed;
     }
 }
+#endif
+
+KoImageData::KoImageData()
+{
+}
 
 KoImageData::KoImageData(const KoImageData &imageData)
     : KoShapeUserData(),
@@ -88,10 +93,16 @@ KoImageData::KoImageData(const KoImageData &imageData)
 {
 }
 
+KoImageData::KoImageData(KoImageDataPrivate *priv)
+    : d(priv)
+{
+}
+
 KoImageData::~KoImageData()
 {
 }
 
+#if 0
 void KoImageData::setImageQuality(KoImageData::ImageQuality quality)
 {
     if (d->quality == quality) return;
@@ -103,6 +114,7 @@ KoImageData::ImageQuality KoImageData::imageQuality() const
 {
     return d->quality;
 }
+#endif
 
 QPixmap KoImageData::pixmap()
 {
@@ -177,12 +189,43 @@ const QSizeF KoImageData::imageSize()
     return d->imageSize;
 }
 
-const QImage KoImageData::image() const
+QImage KoImageData::image() const
 {
     if (d->image.isNull()) {
         d->image.loadFromData( d->rawData );
     }
     return d->image;
+}
+
+void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
+{
+    if (collection) {
+        // let the collection first check if it already has one. If it doesn't it'll call this method
+        // again and we'll go to the other clause
+        KoImageData other = collection->getImage(image);
+        delete d.data();
+        d = other.d;
+    } else {
+        if (d.data() == 0)
+            d = new KoImageDataPrivate();
+        d->image = image;
+        d->key = QString::number(image.cacheKey()).toLatin1();
+    }
+}
+
+void KoImageData::setImage(const KUrl &url, KoImageCollection *collection)
+{
+    // TODO
+}
+
+void KoImageData::setImage(const QString &url, KoImageCollection *collection)
+{
+    // TODO
+}
+
+bool KoImageData::isValid() const
+{
+    return d;
 }
 
 bool KoImageData::operator==(const KoImageData &other) const
@@ -217,4 +260,10 @@ void KoImageData::setSuffix(const QString & name)
     if (rx.indexIn(name) != -1) {
         d->suffix = rx.cap(1);
     }
+}
+
+// TODO maybe make inline?
+KoImageDataPrivate *KoImageData::priv()
+{
+    return d.data();
 }

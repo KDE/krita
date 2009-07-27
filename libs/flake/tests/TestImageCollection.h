@@ -12,6 +12,9 @@ private slots:
     void testGetImageKUrl();
     void testGetImageStore();
     void testGetImageMixed();
+
+    // imageData tests
+    void testImageDataAsSharedData();
 };
 
 #endif /* TESTIMAGECOLLECTION_H */

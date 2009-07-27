@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -32,16 +32,17 @@
 class KoImageCollection::Private
 {
 public:
-    QMap<QByteArray, KoImageDataPrivate *> images;
     ~Private()
     {
-        foreach(KoImageDataPrivate * image, images)
-            image->collection = 0;
+        foreach(KoImageDataPrivate *id, images)
+            id->collection = 0;
     }
+
+    QMap<QByteArray, KoImageDataPrivate*> images;
 };
 
 KoImageCollection::KoImageCollection()
-: d(new Private())
+    : d(new Private())
 {
 }
 
@@ -58,6 +59,7 @@ bool KoImageCollection::completeLoading(KoStore *store)
 
 bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context)
 {
+/*
     QMap<QByteArray, QString> images(context->imagesToSave());
     QMap<QByteArray, QString>::iterator it(images.begin());
 
@@ -100,18 +102,28 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWri
         }
     }
 
+*/
     return true;
 }
 
-KoImageData * KoImageCollection::getImage(const QImage & image)
+KoImageData KoImageCollection::getImage(const QImage &image)
 {
-    KoImageData * data = new KoImageData(this, image);
-    lookup( data );
+    Q_ASSERT(!image.isNull());
+    const qint64 key = image.cacheKey();
+    QByteArray key2 = QString::number(key).toLatin1();
+    if (d->images.contains(key2))
+        return d->images.value(key2);
+    KoImageData data;
+    data.setImage(image);
+    data.priv()->collection = this;
+    Q_ASSERT(data.key() == key2);
+    d->images.insert(key2, data.priv());
     return data;
 }
 
-KoImageData * KoImageCollection::getImage(const KUrl & url)
+KoImageData KoImageCollection::getImage(const KUrl &url)
 {
+/*
     KoImageData * data = new KoImageData(this, url);
     if ( data->errorCode() == KoImageData::Success ) {
         lookup( data );
@@ -120,10 +132,12 @@ KoImageData * KoImageCollection::getImage(const KUrl & url)
         data = 0;
     }
     return data;
+*/
 }
 
-KoImageData * KoImageCollection::getImage(const QString & href, KoStore * store)
+KoImageData KoImageCollection::getImage(const QString &href, KoStore *store)
 {
+/*
     KoImageData * data = 0;
     if (KUrl::isRelativeUrl(href)) {
         data = new KoImageData(this, href, store);
@@ -138,14 +152,21 @@ KoImageData * KoImageCollection::getImage(const QString & href, KoStore * store)
         data = getImage(KUrl(href));
     }
     return data;
+*/
 }
 
 int KoImageCollection::size() const
 {
-    return d->images.size();
+    return d->images.count();
 }
 
-void KoImageCollection::lookup( KoImageData * image )
+int KoImageCollection::count() const
+{
+    return d->images.count();
+}
+
+#if 0
+void KoImageCollection::lookup(KoImageData image)
 {
     KoImageDataPrivate * found = d->images.value(image->key(), 0);
     if (found != 0) {
@@ -155,13 +176,9 @@ void KoImageCollection::lookup( KoImageData * image )
         d->images.insert(image->key(), image->d.data());
     }
 }
+#endif
 
-void KoImageCollection::removeImage(KoImageDataPrivate * image)
+void KoImageCollection::removeOnKey(const QByteArray &imageDataKey)
 {
-    QMap<QByteArray, KoImageDataPrivate *>::iterator it( d->images.find(image->key) );
-    if ( it != d->images.end() ) {
-        if ( it.value() == image ) {
-            d->images.erase(it);
-        }
-    }
+    d->images.remove(imageDataKey);
 }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,9 +39,9 @@ class FLAKE_EXPORT KoImageCollection : public KoDataCenter
 public:
     /// constructor
     KoImageCollection();
-    ~KoImageCollection();
+    virtual ~KoImageCollection();
 
-    /// reimplmented
+    /// reimplemented
     bool completeLoading(KoStore *store);
 
     /**
@@ -50,19 +50,21 @@ public:
      */
     bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context);
 
-    KoImageData * getImage(const QImage & image);
-    KoImageData * getImage(const KUrl & url);
-    KoImageData * getImage(const QString & href, KoStore * store);
+    // TODO rename 'getImage' to something more sane
+    // return or create a data object for the image data
+    KoImageData getImage(const QImage &image);
+    KoImageData getImage(const KUrl &url);
+    KoImageData getImage(const QString &href, KoStore *store);
+
+    void add(const KoImageData &data);
+    void remove(const KoImageData &data);
+    void removeOnKey(const QByteArray &imageDataKey);
 
     /**
      * Get the number of images inside the collection
      */
     int size() const;
-
-protected:
-    void lookup(KoImageData * image);
-    friend class KoImageDataPrivate;
-    void removeImage(KoImageDataPrivate * image);
+    int count() const;
 
 private:
     class Private;

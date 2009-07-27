@@ -38,13 +38,13 @@ class KoImageCollection;
 class KoImageDataPrivate : public QSharedData
 {
 public:
-    KoImageDataPrivate(KoImageCollection *c);
+    KoImageDataPrivate();
     ~KoImageDataPrivate();
 
     bool saveToFile(QIODevice & device);
 
     KoImageCollection *collection;
-    KoImageData::ImageQuality quality;
+    KoImageData::ImageQuality quality; // TODO remove
     KoImageData::ErrorCode errorCode;
     QSizeF imageSize;
     QPixmap pixmap;

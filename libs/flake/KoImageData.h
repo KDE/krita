@@ -80,22 +80,28 @@ public:
         LoadFailed
     };
 
+    /// default constructor, creates an invalid imageData object
+    KoImageData();
+
     /**
      * copy constructor
      * @param imageData the other one.
      */
     KoImageData(const KoImageData &imageData);
     /// destructor
-    ~KoImageData();
+    virtual ~KoImageData();
 
+#if 0
     /**
      * Alter the image quality rendered by this data object, will also remove the cached data.
      */
     void setImageQuality(ImageQuality quality);
+    // TODO remove ImageQuality
     /**
      * Return the current image quality
      */
     ImageQuality imageQuality() const;
+#endif
 
     /**
      * Renders a pixmap the first time you request it is called and returns it.
@@ -105,11 +111,15 @@ public:
      */
     QPixmap pixmap();
 
+    void setImage(const QImage &image, KoImageCollection *collection = 0);
+    void setImage(const KUrl &image, KoImageCollection *collection = 0);
+    void setImage(const QString &image, KoImageCollection *collection = 0); // TODO can I get rid of this one due to it auto-converting to KUrl ?
+
     /**
      * Return the internal store of the image.
-     * @see QImage::isNull()
+     * @see QImage::isNull(), isValid()
      */
-    const QImage image() const;
+    QImage image() const;
 
     /**
      * Save the image data to the param device.
@@ -129,15 +139,20 @@ public:
     bool operator==(const KoImageData &other) const;
 
     /**
-     * Get a unique key of the image
-     *
-     * This is the md5sum of the file 
+     * Get a unique key of the image data
      */
+    // TODO make this a qint64
     QByteArray key() const;
 
     QString suffix() const;
 
     ErrorCode errorCode() const;
+
+    /// returns if this is a valid imageData with actual image data present on it.
+    bool isValid() const;
+
+    /// \internal
+    KoImageDataPrivate *priv();
 
 private:
     /**
@@ -146,7 +161,8 @@ private:
      * and reuse it.
      */
     friend class KoImageCollection;
-
+#if 0
+    // TODO get rid of these and just have setters.
     /**
      * constructor
      * This is private to only allow the KoImageCollection to create new KoImageData objects
@@ -164,7 +180,11 @@ private:
      * This is private to only allow the KoImageCollection to create new KoImageData objects
      */
     KoImageData(KoImageCollection *collection, const QString &href, KoStore *store);
+#endif
 
+    KoImageData(KoImageDataPrivate *priv);
+
+    // TODO move these to the private
     /**
      * Load the image data from the \a device.
      * Note that if the file is bigger than 250Kb instead of loading the full file into memory it will
@@ -174,6 +194,7 @@ private:
      */
     bool loadFromFile(QIODevice &device);
 
+    // TODO move these to the private
     void setSuffix(const QString &name);
 
     QExplicitlySharedDataPointer<KoImageDataPrivate> d;

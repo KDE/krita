@@ -88,10 +88,19 @@ public:
     void setImage(const QString &location, KoStore *store, KoImageCollection *collection = 0);
 
     /**
+     * Save the image data to the param device.
+     * The full file is saved.
+     * @param device the device that is used to get the data from.
+     * @return returns true if load was successful.
+     */
+    bool saveData(QIODevice &device);
+
+    /**
      * Return the internal store of the image.
      * @see isValid(), hasCachedImage()
      */
     QImage image() const;
+    /// returns true only if image() would return immediately with a cached image
     bool hasCachedImage() const;
 
     /**

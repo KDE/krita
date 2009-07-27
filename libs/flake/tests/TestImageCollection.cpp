@@ -16,18 +16,18 @@ void TestImageCollection::testGetImageImage()
     KoImageCollection collection;
     QImage image(KDESRCDIR "/logo-koffice.png");
 
-    KoImageData *id1 = collection.getImage(image);
+    KoImageData *id1 = collection.createImageData(image);
     QCOMPARE(id1->hasCachedImage(), true);
     QCOMPARE(id1->suffix(), QString("png"));
-    KoImageData *id2 = collection.getImage(image);
+    KoImageData *id2 = collection.createImageData(image);
     QCOMPARE(id2->hasCachedImage(), true);
     QCOMPARE(id1->priv(), id2->priv());
-    KoImageData *id3 = collection.getImage(image);
+    KoImageData *id3 = collection.createImageData(image);
     QCOMPARE(id3->hasCachedImage(), true);
     QCOMPARE(id1->key(), id3->key());
     QCOMPARE(id1->priv(), id3->priv());
     QImage image2(KDESRCDIR "/logo-kpresenter.png");
-    KoImageData *id4 = collection.getImage(image2);
+    KoImageData *id4 = collection.createImageData(image2);
     QCOMPARE(id4->hasCachedImage(), true);
     QVERIFY(id1->key() != id4->key());
     QCOMPARE(collection.count(), 2);
@@ -51,17 +51,17 @@ void TestImageCollection::testGetExternalImage()
 {
     KoImageCollection collection;
     QUrl url(KDESRCDIR "/logo-koffice.png");
-    KoImageData *id1 = collection.getExternalImage(url);
+    KoImageData *id1 = collection.createExternalImageData(url);
     QCOMPARE(id1->suffix(), QString("png"));
     QCOMPARE(id1->hasCachedImage(), false);
-    KoImageData *id2 = collection.getExternalImage(url);
+    KoImageData *id2 = collection.createExternalImageData(url);
     QCOMPARE(id2->hasCachedImage(), false);
     QCOMPARE(id1->priv(), id2->priv());
-    KoImageData *id3 = collection.getExternalImage(url);
+    KoImageData *id3 = collection.createExternalImageData(url);
     QCOMPARE(id1->key(), id3->key());
     QCOMPARE(id1->priv(), id3->priv());
     KUrl url2(KDESRCDIR "/logo-kpresenter.png");
-    KoImageData *id4 = collection.getExternalImage(url2);
+    KoImageData *id4 = collection.createExternalImageData(url2);
     QCOMPARE(id4->hasCachedImage(), false);
     QVERIFY(id1->key() != id4->key());
     QCOMPARE(collection.size(), 2);
@@ -74,10 +74,10 @@ void TestImageCollection::testGetImageStore()
     KoImageCollection collection;
     KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
     QString image("logo-koffice.png");
-    KoImageData *id1 = collection.getImage(image, store);
+    KoImageData *id1 = collection.createImageData(image, store);
     QCOMPARE(id1->suffix(), QString("png"));
     QCOMPARE(id1->hasCachedImage(), false);
-    KoImageData *id2 = collection.getImage(image, store);
+    KoImageData *id2 = collection.createImageData(image, store);
     QCOMPARE(id2->hasCachedImage(), false);
     QCOMPARE(id1->priv(), id2->priv());
     QCOMPARE(id1->key(), id2->key());
@@ -91,12 +91,12 @@ void TestImageCollection::testGetImageStore()
     // Opening a KoStore based file we only have the content, and we always have to
     // read the full content anyway due to the store being deleted soon after.
     // So the key is based on the image data.
-    KoImageData *id3 = collection.getExternalImage(image);
+    KoImageData *id3 = collection.createExternalImageData(image);
     QCOMPARE(collection.count(), 2);
     QVERIFY(id1->key() != id3->key());
     QVERIFY(id1->priv() != id3->priv());
     QString image2("logo-kpresenter.png");
-    KoImageData *id4 = collection.getExternalImage(image2);
+    KoImageData *id4 = collection.createExternalImageData(image2);
     QCOMPARE(id4->hasCachedImage(), false);
     QVERIFY(id1->key() != id4->key());
     QCOMPARE(collection.count(), 3);

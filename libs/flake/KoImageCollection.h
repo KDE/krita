@@ -51,11 +51,33 @@ public:
      */
     bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context);
 
-    // TODO rename 'getImage' to createImage
-    /// return or create a data object for the image data
-    KoImageData *getImage(const QImage &image);
-    KoImageData *getExternalImage(const QUrl &url);
-    KoImageData *getImage(const QString &href, KoStore *store);
+    /**
+     * Create a data object for the image data.
+     * The collection will create an image data in a way that if there is an
+     * existing data object with the same image the returned KoImageData will
+     * share its data.
+     * @param image a valid image which will be represented by the imageData.
+     */
+    KoImageData *createImageData(const QImage &image);
+
+    /**
+     * Create a data object for the image data.
+     * The collection will create an image data in a way that if there is an
+     * existing data object with the same image the returned KoImageData will
+     * share its data.
+     * @param url a valid, local url to point to an image on the filesystem.
+     */
+    KoImageData *createExternalImageData(const QUrl &url);
+
+    /**
+     * Create a data object for the image data.
+     * The collection will create an image data in a way that if there is an
+     * existing data object with the same image the returned KoImageData will
+     * share its data.
+     * @param href the name of the image inside the store.
+     * @param store the KoStore object.
+     */
+    KoImageData *createImageData(const QString &href, KoStore *store);
 
     void add(const KoImageData &data);
     void remove(const KoImageData &data);

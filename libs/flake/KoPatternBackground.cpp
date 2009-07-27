@@ -148,7 +148,7 @@ void KoPatternBackground::setPattern(const QImage &pattern)
     if (d->imageData)
         delete d->imageData;
 
-    d->imageData = d->imageCollection->getImage(pattern);
+    d->imageData = d->imageCollection->createImageData(pattern);
 }
 
 QImage KoPatternBackground::pattern()
@@ -372,7 +372,7 @@ bool KoPatternBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF 
         return false;
 
     delete d->imageData;
-    d->imageData = d->imageCollection->getImage(href,context.store());
+    d->imageData = d->imageCollection->createImageData(href,context.store());
     if (! d->imageData)
         return false;
 

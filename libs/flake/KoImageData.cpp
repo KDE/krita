@@ -162,7 +162,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and we'll go to the other clause
-        KoImageData *other = collection->getImage(image);
+        KoImageData *other = collection->createImageData(image);
         this->operator=(*other);
         delete other;
     } else {
@@ -202,7 +202,7 @@ void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *coll
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and we'll go to the other clause
-        KoImageData *other = collection->getExternalImage(location);
+        KoImageData *other = collection->createExternalImageData(location);
         this->operator=(*other);
         delete other;
     } else {
@@ -224,7 +224,7 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and we'll go to the other clause
-        KoImageData *other = collection->getImage(url, store);
+        KoImageData *other = collection->createImageData(url, store);
         this->operator=(*other);
         delete other;
     } else {
@@ -304,4 +304,9 @@ void KoImageData::cleanupImageCache()
         d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
     }
     d->cleanupTriggered = false;
+}
+
+bool KoImageData::saveData(QIODevice &device)
+{
+    return d->saveData(device);
 }

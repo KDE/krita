@@ -46,6 +46,7 @@ KoImageDataPrivate::~KoImageDataPrivate()
     delete temporaryFile;
 }
 
+// called from the collection
 bool KoImageDataPrivate::saveData(QIODevice &device)
 {
     switch (dataStoreState) {

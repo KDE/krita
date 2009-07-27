@@ -107,7 +107,7 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
     return true;
 }
 
-KoImageData *KoImageCollection::getImage(const QImage &image)
+KoImageData *KoImageCollection::createImageData(const QImage &image)
 {
     Q_ASSERT(!image.isNull());
     const qint64 key = image.cacheKey();
@@ -122,7 +122,7 @@ KoImageData *KoImageCollection::getImage(const QImage &image)
     return data;
 }
 
-KoImageData *KoImageCollection::getExternalImage(const QUrl &url)
+KoImageData *KoImageCollection::createExternalImageData(const QUrl &url)
 {
     Q_ASSERT(!url.isEmpty() && url.isValid());
 
@@ -137,7 +137,7 @@ KoImageData *KoImageCollection::getExternalImage(const QUrl &url)
     return data;
 }
 
-KoImageData *KoImageCollection::getImage(const QString &href, KoStore *store)
+KoImageData *KoImageCollection::createImageData(const QString &href, KoStore *store)
 {
     // the tricky thing with a 'store' is that we need to read the data now
     // as the store will no longer be readable after the loading completed.

@@ -63,6 +63,7 @@ void KisPresetWidget::paintEvent(QPaintEvent *)
     }
     p.setPen(Qt::gray);
     p.drawRect(0, 0, cw + 1, ch + 1);
+    paintPopupArrow();
 }
 
 

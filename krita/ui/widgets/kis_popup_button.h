@@ -62,7 +62,8 @@ public slots:
     void showPopupWidget();
 
     void hidePopupWidget();
-
+protected:
+    void paintPopupArrow();
 private:
     struct Private;
     Private* const m_d;

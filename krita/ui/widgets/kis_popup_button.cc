@@ -28,6 +28,10 @@
 
 #include <kis_debug.h>
 
+#include <QStyleOption>
+#include <QStylePainter>
+
+
 struct KisPopupButton::Private {
     Private() : frame(0), frameLayout(0), popupWidget(0) {}
     QFrame* frame;
@@ -109,6 +113,19 @@ void KisPopupButton::hidePopupWidget()
     if (m_d->popupWidget) {
         m_d->frame->setVisible(false);
     }
+}
+
+void KisPopupButton::paintPopupArrow()
+{
+    QStylePainter p(this);
+    QStyleOption option;
+    option.rect = QRect( rect().right() - 15, rect().bottom() - 15, 14, 14 );
+    option.palette = palette();
+    option.palette.setBrush(QPalette::ButtonText, Qt::black); // Force color to black
+    option.state = QStyle::State_Enabled;
+    p.setBrush(Qt::black); // work around some theme that don't use QPalette::ButtonText like they  should, but instead the QPainter brushes and pen
+    p.setPen(Qt::black);
+    p.drawPrimitive(QStyle::PE_IndicatorArrowDown, option );
 }
 
 #include "kis_popup_button.moc"

@@ -117,7 +117,8 @@ QSizeF KoImageData::imageSize()
 {
     if (!d->imageSize.isValid()) {
         // The imagesize have not yet been calculated
-        image(); // make sure the image is loaded
+        if (image().isNull()) // auto loads the image
+            return QSizeF(100, 100);
 
         if (d->image.dotsPerMeterX())
             d->imageSize.setWidth(DM_TO_POINT(d->image.width() / (qreal) d->image.dotsPerMeterX() * 10.0));
@@ -172,6 +173,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
         }
         delete d->temporaryFile;
         d->errorCode = Success;
+        d->imageSize = QSizeF();
         d->suffix = "png"; // good default for non-lossy storage.
         if (image.numBytes() > MAX_MEMORY_IMAGESIZE) {
             d->image = QImage();
@@ -186,6 +188,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
                 return;
             }
             buffer.close();
+            buffer.open(QIODevice::ReadOnly);
             d->copyToTemporary(buffer);
             return;
         } else {
@@ -211,6 +214,7 @@ void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *coll
             d->refCount.ref();
         }
         d->image = QImage();
+        d->imageSize = QSizeF();
         d->errorCode = Success;
         d->imageLocation = location;
         d->setSuffix(location.toEncoded());
@@ -236,6 +240,7 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             d->key.clear();
             d->image = QImage();
             d->errorCode = Success;
+            d->imageSize = QSizeF();
         }
         d->setSuffix(url);
 
@@ -279,10 +284,13 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         d->errorCode = Success;
         d->suffix = "png"; // good default for non-lossy storage.
         d->imageLocation.clear();
+        d->imageSize = QSizeF();
         if (imageData.size() > MAX_MEMORY_IMAGESIZE) {
             d->image = QImage();
             // store image
             QBuffer buffer;
+            buffer.setData(imageData);
+            buffer.open(QIODevice::ReadOnly);
             d->copyToTemporary(buffer);
         } else {
             QImage image;

@@ -91,12 +91,10 @@ QPixmap KoImageData::pixmap(const QSize &size)
             // fall through
         case KoImageDataPrivate::StateImageLoaded:
         case KoImageDataPrivate::StateImageOnly:
-            if (! d->image.isNull()) {
+            if (!d->image.isNull()) {
                 // create pixmap from image.
-                d->pixmap = QPixmap(wantedSize.width(), wantedSize.height());
-                QPainter p(&d->pixmap);
-                p.drawImage(0, 0, d->image, 0, 0, wantedSize.width(), wantedSize.height());
-                p.end();
+                // this is the highest quality and lowest memory usage way of doing the conversion.
+                d->pixmap = QPixmap::fromImage(d->image.scaled(wantedSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
             }
         }
 

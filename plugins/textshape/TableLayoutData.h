@@ -23,6 +23,7 @@
 #include <QtGlobal>
 #include <QVector>
 #include <QPointF>
+#include <QRectF>
 
 /**
  * @brief Table layout data class.
@@ -47,6 +48,7 @@ private:
     QVector<qreal> m_rowPositions;     /**< Row positions along Y axis. */
 
     QVector<QVector<qreal> > m_contentHeights;  /**< Cell content heights. */
+    QList<QRectF> m_tableRects; /**< Rects occupied by table, one per shape the table is in. */
 
     qreal m_width;       /**< Table width. */
     qreal m_height;      /**< Table height. */

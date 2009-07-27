@@ -211,20 +211,26 @@ public:
     void draw(QPainter *painter) const;
 
     /**
-     * Get the bounding rectangle of the table.
+     * Get the list of rectangles that the table occupies.
      *
-     * @return the bounding rectangle of the table.
+     * The table should have one rectangle for each shape it is in after
+     * layout.
+     *
+     * @return the list of rectangles.
      */
-    QRectF boundingRect() const;
+    QList<QRectF> tableRects() const;
 
     /**
-     * Get the content rectangle of the table.
+     * Append a rectangle to the list of rectangles for the table.
      *
-     * The rectangle returned is relative to the table layout position.
-     *
-     * @return the content rectangle of the table.
+     * @param tableRect the rectangle to append.
      */
-    QRectF contentRect() const;
+    void appendTableRect(QRectF tableRect);
+
+    /**
+     * Clear the list of rectangles for the table.
+     */
+    void clearTableRects();
 
     /**
      * Get the bounding rectangle of a given cell.
@@ -276,6 +282,24 @@ public:
      * \sa setPosition()
      */
     QPointF position() const;
+
+    /**
+     * Get the width of the current table.
+     *
+     * @return the width of the current table.
+     *
+     * \sa height()
+     */
+    qreal width() const;
+
+    /**
+     * Get the height of the current table.
+     *
+     * @return the height of the current table.
+     *
+     * \sa width()
+     */
+    qreal height() const;
 
     /**
      * Set the position of the table layout.

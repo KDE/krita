@@ -294,11 +294,12 @@ void TableLayout::draw(QPainter *painter) const
     painter->save();
 
     // Draw table background.
-    QRectF tableRect = boundingRect();
-    painter->fillRect(tableRect, m_table->format().background());
+    foreach (QRectF rect, tableRects()) {
+        painter->fillRect(rect, m_table->format().background());
+    }
 
     // Draw cells using their styles.
-    painter->translate(tableRect.topLeft());
+    painter->translate(position());
     for (int row = 0; row < m_table->rows(); ++row) {
         for (int column = 0; column < m_table->columns(); ++column) {
             QTextTableCell tableCell = m_table->cellAt(row, column);
@@ -318,25 +319,34 @@ void TableLayout::draw(QPainter *painter) const
     painter->restore();
 }
 
-QRectF TableLayout::boundingRect() const
+QList<QRectF> TableLayout::tableRects() const
 {
     Q_ASSERT(isValid());
 
-    qreal horizontalMargins = m_table->format().leftMargin() + m_table->format().rightMargin();
-    qreal verticalMargins = m_table->format().topMargin() + m_table->format().bottomMargin();
+    if (!isValid()) {
+        return QList<QRectF>();
+    }
 
-    return QRectF(m_tableLayoutData->m_position.x(), m_tableLayoutData->m_position.y(),
-            m_tableLayoutData->m_width + horizontalMargins, m_tableLayoutData->m_height + verticalMargins);
+    return m_tableLayoutData->m_tableRects;
 }
 
-QRectF TableLayout::contentRect() const
+void TableLayout::appendTableRect(QRectF tableRect)
+{
+    Q_ASSERT(isValid());
+    Q_ASSERT(tableRect.isValid());
+
+    if (!isValid() || !tableRect.isValid()) {
+        return;
+    }
+
+    m_tableLayoutData->m_tableRects.append(tableRect);
+}
+
+void TableLayout::clearTableRects()
 {
     Q_ASSERT(isValid());
 
-    QTextTableFormat tableFormat = m_table->format();
-
-    return QRectF(tableFormat.leftMargin(), tableFormat.topMargin(),
-            m_tableLayoutData->m_width, m_tableLayoutData->m_height);
+    m_tableLayoutData->m_tableRects.clear();
 }
 
 QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
@@ -431,6 +441,21 @@ QPointF TableLayout::position() const
     Q_ASSERT(isValid());
 
     return m_tableLayoutData->m_position;
+}
+
+
+qreal TableLayout::width() const
+{
+    Q_ASSERT(isValid());
+
+    return m_tableLayoutData->m_width;
+}
+
+qreal TableLayout::height() const
+{
+    Q_ASSERT(isValid());
+
+    return m_tableLayoutData->m_height;
 }
 
 void TableLayout::setPosition(QPointF position)

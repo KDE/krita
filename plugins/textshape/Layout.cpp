@@ -509,22 +509,11 @@ void Layout::handleTable()
 
         if (!previousCell.isValid()) {
             // The previous cell is invalid, which means we have entered a
-            // table, so set the current table on the table layout and position
-            // the table layout at the current layout position, then perform
-            // an initial layout of the table.
+            // table, so set the current table on the table layout, clear the
+            // list of table rectangles, position the table layout at the current
+            // layout position, then perform an initial layout of the table.
             m_tableLayout.setTable(table);
-
-            // FIXME-BREAK-BEFORE
-            /*KoTableStyle tableStyle(table->format());
-            if (!m_newShape && tableStyle.breakBefore() && m_block.position() > m_data->position()) {
-                qDebug() << "break-before";
-                m_data->setEndPosition(m_block.position() - 1);
-                nextShape();
-                if (m_data)
-                    m_data->setPosition(m_block.position());
-            }*/
-            // END FIXME-BREAK-BEFORE
-
+            m_tableLayout.clearTableRects();
             m_tableLayout.setPosition(QPointF(x(), y())); // FIXME?
             m_tableLayout.layout();
         }
@@ -552,20 +541,51 @@ void Layout::handleTable()
         QTextTable *previousTable = lookBehind.currentTable();
 
         if (previousTable) {
-            // We just left a table, so make sure the table layout updates
-            // the height of the last cell in it, and reset the table state.
+            /*
+             * We just left a table, so make sure the table layout updates
+             * the height of the last cell in it, and reset the table state.
+             */
             QTextTableCell previousCell = previousTable->cellAt(m_block.previous().position());
+            QTextTableFormat previousFormat = previousTable->format();
             if (previousCell.isValid()) {
-                //We left the last cell of the table, so tell the table layout
-                //to calculate its height.
+                // Tell the table layout to calculate height of last cell.
                 m_tableLayout.calculateCellContentHeight(previousCell);
             }
-            // Perform a layout of the table, and position the layout process after the
-            // table, as all the table content should now have been laid out.
+
+            // Perform a final layout of the table, as all the table content should
+            // now have been laid out.
             m_tableLayout.layout();
+
+            /*
+             * Determine the last rectangle of the table.
+             */
+            Q_ASSERT(m_data);
+            QRectF lastRect = QRectF(m_tableLayout.position().x() + previousFormat.leftMargin(),
+                    qMax(m_data->documentOffset(), m_tableLayout.position().y() + previousFormat.topMargin()),
+                    m_tableLayout.width(), 0);
+            if (m_data->documentOffset() > m_tableLayout.position().y() &&
+                    m_data->documentOffset() < (m_tableLayout.position().y() + m_tableLayout.height())) {
+                // The last rectangle sticks out into this page.
+                lastRect.setHeight((m_tableLayout.position().y() + m_tableLayout.height()) - m_data->documentOffset());
+            } else {
+                lastRect.setHeight(m_tableLayout.height());
+            }
+            if (previousFormat.alignment() == Qt::AlignRight) {
+                // Table is right-aligned, so add all of the remaining space.
+                lastRect.translate(shape->size().width() - m_tableLayout.width(), 0);
+            } else if (previousFormat.alignment() == Qt::AlignHCenter) {
+                // Table is centered, so add half of the remaining space.
+                lastRect.translate((shape->size().width() - m_tableLayout.width()) / 2, 0);
+            }
+
+            // Append the last rectangle of the table.
+            m_tableLayout.appendTableRect(lastRect);
+
+            // Position the layout process after the table.
+            m_y = lastRect.bottom() + previousFormat.bottomMargin();
+
             m_inTable = false; // Reset table state.
             m_tableCell = QTextTableCell(); // Set the current cell to an invalid one.
-            m_y = m_tableLayout.position().y() + m_tableLayout.boundingRect().height();
         }
     }
 }

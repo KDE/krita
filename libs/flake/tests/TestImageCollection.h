@@ -14,6 +14,9 @@ private slots:
 
     // imageData tests
     void testImageDataAsSharedData();
+    void testPreload1();
+    void testPreload2();
+    void testPreload3();
 };
 
 #endif /* TESTIMAGECOLLECTION_H */

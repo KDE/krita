@@ -5,6 +5,7 @@
 #include <KoStore.h>
 
 #include <QImage>
+#include <QPixmap>
 #include <kurl.h>
 #include <kdebug.h>
 
@@ -114,6 +115,72 @@ void TestImageCollection::testImageDataAsSharedData()
     QCOMPARE(data.image(), image);
     QCOMPARE(data2.isValid(), true);
     QCOMPARE(data2.image(), image);
+}
+
+void TestImageCollection::testPreload1()
+{
+    KoImageData data;
+    QImage image(100, 102, QImage::Format_RGB32);
+    data.setImage(image);
+
+    QCOMPARE(data.hasCachedPixmap(), false);
+    QPixmap pixmap = data.pixmap(QSize(40, 41));
+    QCOMPARE(pixmap.width(), 40);
+    QCOMPARE(pixmap.height(), 41);
+    QCOMPARE(data.hasCachedPixmap(), true);
+    QPixmap pixmap2 = data.pixmap(QSize(40, 41));
+    QCOMPARE(pixmap.cacheKey(), pixmap2.cacheKey());
+
+    QPixmap pixmap3 = data.pixmap();
+    QCOMPARE(pixmap.cacheKey(), pixmap3.cacheKey());
+}
+
+void TestImageCollection::testPreload2()
+{
+    KoImageData data;
+    KUrl url(KDESRCDIR "/logo-koffice.png");
+    data.setImage(url);
+
+    QCOMPARE(data.hasCachedPixmap(), false);
+    QPixmap pixmap = data.pixmap(QSize(40, 41));
+    QCOMPARE(pixmap.width(), 40);
+    QCOMPARE(pixmap.height(), 41);
+    QCOMPARE(data.hasCachedPixmap(), true);
+    QPixmap pixmap2 = data.pixmap(QSize(40, 41));
+    QCOMPARE(pixmap.cacheKey(), pixmap2.cacheKey());
+
+    QPixmap pixmap3 = data.pixmap();
+    QCOMPARE(pixmap.cacheKey(), pixmap3.cacheKey());
+}
+
+void TestImageCollection::testPreload3()
+{
+    KoImageData data;
+    KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
+    QString image("logo-koffice.png");
+    data.setImage(image, store);
+
+    QCOMPARE(data.hasCachedPixmap(), false);
+    QPixmap pixmap = data.pixmap(QSize(40, 41));
+    QCOMPARE(pixmap.width(), 40);
+    QCOMPARE(pixmap.height(), 41);
+    QCOMPARE(data.hasCachedPixmap(), true);
+    QPixmap pixmap2 = data.pixmap(QSize(40, 41));
+    QCOMPARE(pixmap.cacheKey(), pixmap2.cacheKey());
+
+    QPixmap pixmap3 = data.pixmap();
+    QCOMPARE(pixmap.cacheKey(), pixmap3.cacheKey());
+
+    // now get a differen size;
+    QPixmap pixmap4 = data.pixmap(QSize(10, 12));
+    QCOMPARE(pixmap.width(), 40);
+    QCOMPARE(pixmap.height(), 41);
+    QCOMPARE(pixmap4.width(), 10);
+    QCOMPARE(pixmap4.height(), 12);
+    QVERIFY(pixmap.cacheKey() != pixmap4.cacheKey());
+
+    QPixmap pixmap5 = data.pixmap();
+    QCOMPARE(pixmap5.cacheKey(), pixmap4.cacheKey());
 }
 
 QTEST_KDEMAIN(TestImageCollection, GUI)

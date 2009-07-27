@@ -24,6 +24,7 @@
 #include "flake_export.h"
 
 #include <QExplicitlySharedDataPointer>
+#include <QSize>
 
 #include <KoShapeUserData.h>
 
@@ -108,11 +109,12 @@ public:
 
     /**
      * Renders a pixmap the first time you request it is called and returns it.
-     * The rendering will use the ImageQuality set on this KoImageData object to determine how
-     * much memory to spent on the pixmap.
      * @returns the cached pixmap
      */
-    QPixmap pixmap();
+    QPixmap pixmap(const QSize &targetSize = QSize());
+
+    /// returns true only if pixmap() would return immediately with a cached pixmap
+    bool hasCachedPixmap();
 
     void setImage(const QImage &image, KoImageCollection *collection = 0);
     void setImage(const KUrl &image, KoImageCollection *collection = 0);
@@ -123,7 +125,7 @@ public:
      * Return the internal store of the image.
      * @see QImage::isNull(), isValid()
      */
-    QImage image() const;
+    QImage image() const; // TODO why do we want to expose the image? saveToFile() should be enough, no?
 
     /**
      * Save the image data to the param device.
@@ -146,8 +148,7 @@ public:
     /**
      * Get a unique key of the image data
      */
-    // TODO make this a qint64
-    QByteArray key() const;
+    QByteArray key() const; // TODO make this a qint64
 
     QString suffix() const;
 
@@ -158,6 +159,9 @@ public:
 
     /// \internal
     KoImageDataPrivate *priv();
+
+signals:
+    void imageLoaded();
 
 private:
     /**

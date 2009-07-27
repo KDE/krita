@@ -117,39 +117,60 @@ KoImageData::ImageQuality KoImageData::imageQuality() const
 }
 #endif
 
-QPixmap KoImageData::pixmap()
+QPixmap KoImageData::pixmap(const QSize &size)
 {
-    if (d->pixmap.isNull()) {
-        if (d->quality == NoPreviewImage) {
-            d->image = QImage(); // free memory
+    QSize wantedSize = size;
+    if (! wantedSize.isValid()) {
+        if (d->pixmap.isNull()) // we have a problem, Houston..
+            wantedSize = QSize(100, 100);
+        else
+            wantedSize = d->pixmap.size();
+    }
+    if (d->pixmap.isNull() || d->pixmap.size() != wantedSize) {
+        switch (d->dataStoreState) {
+        case KoImageDataPrivate::StateEmpty: {
             d->pixmap = QPixmap(1, 1);
             QPainter p(&d->pixmap);
             p.setPen(QPen(Qt::gray));
             p.drawPoint(0, 0);
             p.end();
-            return d->pixmap;
+            break;
         }
-        image(); // force loading if only present if only present as raw data
-
-        if (!d->image.isNull()) {
-            int multiplier = 150; // max 150 ppi
-            if (d->quality == LowQuality)
-                multiplier = 50;
-            else if (d->quality == MediumQuality)
-                multiplier = 100;
-            int width = qMin(d->image.width(), qRound(imageSize().width() * multiplier / 72.));
-            int height = qMin(d->image.height(), qRound(imageSize().height() * multiplier / 72.));
-            // kDebug(30006)() <<"  image:" << width <<"x" << height;
-
-            QImage scaled = d->image.scaled(width, height);
-            if (!d->rawData.isEmpty()) { // free memory
-                d->image = QImage();
+        case KoImageDataPrivate::StateNotLoaded:
+            // load image
+            if (d->temporaryFile) {
+                d->temporaryFile->open();
+                if (d->errorCode == Success && !d->image.load(d->temporaryFile, 0))
+                    d->errorCode = OpenFailed;
+                d->temporaryFile->close();
+            } else {
+                if (d->errorCode == Success && !d->image.load(d->imageLocation.toLocalFile()))
+                    d->errorCode = OpenFailed;
             }
+            if (d->errorCode == Success)
+                d->dataStoreState = KoImageDataPrivate::StateImageLoaded;
+            // fall through
+        case KoImageDataPrivate::StateImageLoaded:
+        case KoImageDataPrivate::StateImageOnly:
+            if (! d->image.isNull()) {
+                // create pixmap from image.
+                d->pixmap = QPixmap(wantedSize.width(), wantedSize.height());
+                QPainter p(&d->pixmap);
+                p.drawImage(0, 0, d->image, 0, 0, wantedSize.width(), wantedSize.height());
+                p.end();
+            }
+        }
 
-            d->pixmap = QPixmap::fromImage(scaled);
+        if (d->dataStoreState == KoImageDataPrivate::StateImageLoaded) {
+            // TODO schedule an auto-unload of the big QImage in a couple of seconds.
         }
     }
     return d->pixmap;
+}
+
+bool KoImageData::hasCachedPixmap()
+{
+    return !d->pixmap.isNull();
 }
 
 bool KoImageData::saveToFile(QIODevice &device) // TODO why is this public *and* on the private?

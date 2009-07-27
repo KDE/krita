@@ -64,6 +64,7 @@ public:
     QSizeF imageSize;
     QByteArray key; // key to identify the picture // TODO make a qint64
     QString suffix; // the suffix of the picture e.g. png  TODO use a QByteArray ?
+    bool cleanupTriggered;
 
     // Image data store.
     DataStoreState dataStoreState;

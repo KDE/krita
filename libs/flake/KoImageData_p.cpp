@@ -31,7 +31,8 @@ KoImageDataPrivate::KoImageDataPrivate()
     : collection(0),
     errorCode(KoImageData::Success),
     dataStoreState(StateEmpty),
-    temporaryFile(0)
+    temporaryFile(0),
+    cleanupTriggered(false)
 {
 }
 

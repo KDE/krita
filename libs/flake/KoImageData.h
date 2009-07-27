@@ -53,6 +53,7 @@ class KoStore;
  */
 class FLAKE_EXPORT KoImageData : public KoShapeUserData
 {
+    Q_OBJECT
 public:
     /// Various error codes representing what has gone wrong
     enum ErrorCode {
@@ -122,6 +123,9 @@ public:
 protected:
     friend class KoImageCollection;
     KoImageData(KoImageDataPrivate *priv);
+
+private slots:
+    void cleanupImageCache();
 
 private:
     QExplicitlySharedDataPointer<KoImageDataPrivate> d;

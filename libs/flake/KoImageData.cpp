@@ -31,6 +31,7 @@
 #include <kio/netaccess.h>
 
 #include <QBuffer>
+#include <QTimer>
 #include <QCryptographicHash>
 #include <QTemporaryFile>
 #include <QFileInfo>
@@ -91,8 +92,10 @@ QPixmap KoImageData::pixmap(const QSize &size)
             }
         }
 
-        if (d->dataStoreState == KoImageDataPrivate::StateImageLoaded) {
-            // TODO schedule an auto-unload of the big QImage in a couple of seconds.
+        if (!d->cleanupTriggered && d->dataStoreState == KoImageDataPrivate::StateImageLoaded) {
+            // schedule an auto-unload of the big QImage in a second.
+            QTimer::singleShot(1000, this, SLOT(cleanupImageCache()));
+            d->cleanupTriggered = true;
         }
     }
     return d->pixmap;
@@ -271,4 +274,13 @@ QString KoImageData::suffix() const
 KoImageData::ErrorCode KoImageData::errorCode() const
 {
     return d->errorCode;
+}
+
+void KoImageData::cleanupImageCache()
+{
+    if (d->dataStoreState == KoImageDataPrivate::StateImageLoaded) {
+        d->image = QImage();
+        d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
+    }
+    d->cleanupTriggered = false;
 }

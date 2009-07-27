@@ -23,7 +23,6 @@
 
 #include "flake_export.h"
 
-#include <QExplicitlySharedDataPointer>
 #include <QSize>
 
 #include <KoShapeUserData.h>
@@ -98,11 +97,11 @@ public:
     /**
      * The size of the image in points
      */
-    const QSizeF imageSize();
+    QSizeF imageSize();
 
     KoImageData &operator=(const KoImageData &other);
 
-    bool operator!=(const KoImageData &other) const { return !operator==(other); }
+    inline bool operator!=(const KoImageData &other) const { return !operator==(other); }
     bool operator==(const KoImageData &other) const;
 
     /**
@@ -118,17 +117,19 @@ public:
     bool isValid() const;
 
     /// \internal
-    KoImageDataPrivate *priv() { return d.data(); }
+    KoImageDataPrivate *priv() { return d; }
 
 protected:
     friend class KoImageCollection;
+
+    /// \internal
     KoImageData(KoImageDataPrivate *priv);
 
 private slots:
-    void cleanupImageCache();
+    void cleanupImageCache(); // TODO make macro
 
 private:
-    QExplicitlySharedDataPointer<KoImageDataPrivate> d;
+    KoImageDataPrivate *d;
 };
 
 #endif

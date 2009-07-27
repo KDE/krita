@@ -51,11 +51,11 @@ public:
      */
     bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context);
 
-    // TODO rename 'getImage' to something more sane
-    // return or create a data object for the image data
-    KoImageData getImage(const QImage &image);
-    KoImageData getExternalImage(const QUrl &url);
-    KoImageData getImage(const QString &href, KoStore *store);
+    // TODO rename 'getImage' to createImage
+    /// return or create a data object for the image data
+    KoImageData *getImage(const QImage &image);
+    KoImageData *getExternalImage(const QUrl &url);
+    KoImageData *getImage(const QString &href, KoStore *store);
 
     void add(const KoImageData &data);
     void remove(const KoImageData &data);

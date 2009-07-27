@@ -23,7 +23,6 @@
 #ifndef KOIMAGEDATA_P_H
 #define KOIMAGEDATA_P_H
 
-#include <QSharedData>
 #include <QUrl>
 #include <QByteArray>
 #include <QImage>
@@ -35,7 +34,7 @@
 class KoImageCollection;
 class QTemporaryFile;
 
-class KoImageDataPrivate : public QSharedData
+class KoImageDataPrivate
 {
 public:
     KoImageDataPrivate();
@@ -65,6 +64,8 @@ public:
     QByteArray key; // key to identify the picture // TODO make a qint64
     QString suffix; // the suffix of the picture e.g. png  TODO use a QByteArray ?
     bool cleanupTriggered;
+
+    QAtomicInt refCount;
 
     // Image data store.
     DataStoreState dataStoreState;

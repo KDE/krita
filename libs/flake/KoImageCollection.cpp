@@ -107,37 +107,37 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
     return true;
 }
 
-KoImageData KoImageCollection::getImage(const QImage &image)
+KoImageData *KoImageCollection::getImage(const QImage &image)
 {
     Q_ASSERT(!image.isNull());
     const qint64 key = image.cacheKey();
     QByteArray key2 = QString::number(key).toLatin1();
     if (d->images.contains(key2))
-        return d->images.value(key2);
-    KoImageData data;
-    data.setImage(image);
-    data.priv()->collection = this;
-    Q_ASSERT(data.key() == key2);
-    d->images.insert(key2, data.priv());
+        return new KoImageData(d->images.value(key2));
+    KoImageData *data = new KoImageData();
+    data->setImage(image);
+    data->priv()->collection = this;
+    Q_ASSERT(data->key() == key2);
+    d->images.insert(key2, data->priv());
     return data;
 }
 
-KoImageData KoImageCollection::getExternalImage(const QUrl &url)
+KoImageData *KoImageCollection::getExternalImage(const QUrl &url)
 {
     Q_ASSERT(!url.isEmpty() && url.isValid());
 
     QByteArray key = url.toEncoded();
     if (d->images.contains(key))
-        return d->images.value(key);
-    KoImageData data;
-    data.setExternalImage(url);
-    data.priv()->collection = this;
-    Q_ASSERT(data.key() == key);
-    d->images.insert(key, data.priv());
+        return new KoImageData(d->images.value(key));
+    KoImageData *data = new KoImageData();
+    data->setExternalImage(url);
+    data->priv()->collection = this;
+    Q_ASSERT(data->key() == key);
+    d->images.insert(key, data->priv());
     return data;
 }
 
-KoImageData KoImageCollection::getImage(const QString &href, KoStore *store)
+KoImageData *KoImageCollection::getImage(const QString &href, KoStore *store)
 {
     // the tricky thing with a 'store' is that we need to read the data now
     // as the store will no longer be readable after the loading completed.
@@ -148,13 +148,13 @@ KoImageData KoImageCollection::getImage(const QString &href, KoStore *store)
     // image data he can find this data and share (warm fuzzy feeling here)
     QByteArray storeKey = (QString::number((qint64) store) + href).toLatin1();
     if (d->storeImages.contains(storeKey))
-        return d->storeImages.value(storeKey);
+        return new KoImageData(d->storeImages.value(storeKey));
 
-    KoImageData data;
-    data.setImage(href, store);
-    data.priv()->collection = this;
-    d->storeImages.insert(storeKey, data.priv());
-    d->images.insert(data.key(), data.priv());
+    KoImageData *data = new KoImageData();
+    data->setImage(href, store);
+    data->priv()->collection = this;
+    d->storeImages.insert(storeKey, data->priv());
+    d->images.insert(data->key(), data->priv());
     return data;
 }
 

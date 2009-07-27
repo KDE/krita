@@ -41,6 +41,7 @@
 #include "KoImageData_p.h"
 
 KoImageData::KoImageData()
+    : d(0)
 {
 }
 
@@ -48,15 +49,19 @@ KoImageData::KoImageData(const KoImageData &imageData)
     : KoShapeUserData(),
     d(imageData.d)
 {
+    d->refCount.ref();
 }
 
 KoImageData::KoImageData(KoImageDataPrivate *priv)
     : d(priv)
 {
+    d->refCount.ref();
 }
 
 KoImageData::~KoImageData()
 {
+    if (!d->refCount.deref())
+        delete d;
 }
 
 QPixmap KoImageData::pixmap(const QSize &size)
@@ -106,7 +111,7 @@ bool KoImageData::hasCachedPixmap() const
     return d && !d->pixmap.isNull();
 }
 
-const QSizeF KoImageData::imageSize()
+QSizeF KoImageData::imageSize()
 {
     if (!d->imageSize.isValid()) {
         // The imagesize have not yet been calculated
@@ -154,12 +159,14 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and we'll go to the other clause
-        KoImageData other = collection->getImage(image);
-        delete d.data();
-        d = other.d;
+        KoImageData *other = collection->getImage(image);
+        this->operator=(*other);
+        delete other;
     } else {
-        if (d.data() == 0)
+        if (d == 0) {
             d = new KoImageDataPrivate();
+            d->refCount.ref();
+        }
         d->suffix = "png"; // good default for non-lossy storage.
         d->image = image;
         d->imageLocation.clear();
@@ -173,12 +180,14 @@ void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *coll
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and we'll go to the other clause
-        KoImageData other = collection->getExternalImage(location);
-        delete d.data();
-        d = other.d;
+        KoImageData *other = collection->getExternalImage(location);
+        this->operator=(*other);
+        delete other;
     } else {
-        if (d.data() == 0)
+        if (d == 0) {
             d = new KoImageDataPrivate();
+            d->refCount.ref();
+        }
         d->image = QImage();
         d->imageLocation = location;
         d->setSuffix(location.toEncoded());
@@ -192,12 +201,13 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and we'll go to the other clause
-        KoImageData other = collection->getImage(url, store);
-        delete d.data();
-        d = other.d;
+        KoImageData *other = collection->getImage(url, store);
+        this->operator=(*other);
+        delete other;
     } else {
-        if (d.data() == 0) {
+        if (d == 0) {
             d = new KoImageDataPrivate();
+            d->refCount.ref();
         } else {
             d->imageLocation.clear();
             d->key.clear();
@@ -257,6 +267,10 @@ bool KoImageData::operator==(const KoImageData &other) const
 
 KoImageData &KoImageData::operator=(const KoImageData &other)
 {
+    if (other.d)
+        other.d->refCount.ref();
+    if (d && !d->refCount.deref())
+        delete d;
     d = other.d;
     return *this;
 }

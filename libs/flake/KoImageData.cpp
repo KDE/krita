@@ -78,18 +78,7 @@ QPixmap KoImageData::pixmap(const QSize &size)
             break;
         }
         case KoImageDataPrivate::StateNotLoaded:
-            // load image
-            if (d->temporaryFile) {
-                d->temporaryFile->open();
-                if (d->errorCode == Success && !d->image.load(d->temporaryFile, 0))
-                    d->errorCode = OpenFailed;
-                d->temporaryFile->close();
-            } else {
-                if (d->errorCode == Success && !d->image.load(d->imageLocation.toLocalFile()))
-                    d->errorCode = OpenFailed;
-            }
-            if (d->errorCode == Success)
-                d->dataStoreState = KoImageDataPrivate::StateImageLoaded;
+            image(); // forces load
             // fall through
         case KoImageDataPrivate::StateImageLoaded:
         case KoImageDataPrivate::StateImageOnly:
@@ -140,9 +129,19 @@ const QSizeF KoImageData::imageSize()
 
 QImage KoImageData::image() const
 {
-    // TODO
-    if (d->image.isNull()) {
-        d->image.loadFromData( d->rawData );
+    if (d->dataStoreState == KoImageDataPrivate::StateNotLoaded) {
+        // load image
+        if (d->temporaryFile) {
+            d->temporaryFile->open();
+            if (d->errorCode == Success && !d->image.load(d->temporaryFile, 0))
+                d->errorCode = OpenFailed;
+            d->temporaryFile->close();
+        } else {
+            if (d->errorCode == Success && !d->image.load(d->imageLocation.toLocalFile()))
+                d->errorCode = OpenFailed;
+        }
+        if (d->errorCode == Success)
+            d->dataStoreState = KoImageDataPrivate::StateImageLoaded;
     }
     return d->image;
 }

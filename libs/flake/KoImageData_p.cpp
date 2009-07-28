@@ -128,3 +128,13 @@ void KoImageDataPrivate::cleanupImageCache()
     }
     cleanupTriggered = false;
 }
+
+void KoImageDataPrivate::clear()
+{
+    errorCode = KoImageData::Success;
+    dataStoreState = StateEmpty;
+    imageLocation.clear();
+    imageSize = QSizeF();
+    key.clear();
+    image = QImage();
+}

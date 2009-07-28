@@ -56,6 +56,8 @@ public:
     /// clean the image cache.
     void cleanupImageCache();
 
+    void clear();
+
     enum DataStoreState {
         StateEmpty,     ///< No image data, either as url or as QImage
         StateNotLoaded, ///< Image data is set as Url

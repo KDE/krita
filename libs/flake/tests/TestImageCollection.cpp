@@ -211,5 +211,19 @@ void TestImageCollection::testPreload3()
     QCOMPARE(pixmap5.cacheKey(), pixmap4.cacheKey());
 }
 
+void TestImageCollection::testIsValid()
+{
+    KoImageData data;
+    QCOMPARE(data.isValid(), false);
+
+    QImage image(100, 102, QImage::Format_RGB32);
+    data.setImage(image);
+    QCOMPARE(data.isValid(), true);
+
+    QByteArray bytes("foo");
+    data.setImage(bytes); // obviously not a correct image.
+    QCOMPARE(data.isValid(), false);
+}
+
 QTEST_KDEMAIN(TestImageCollection, GUI)
 #include "TestImageCollection.moc"

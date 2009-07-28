@@ -17,6 +17,7 @@ private slots:
     void testPreload1();
     void testPreload2();
     void testPreload3();
+    void testIsValid();
 };
 
 #endif /* TESTIMAGECOLLECTION_H */

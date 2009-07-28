@@ -211,10 +211,9 @@ void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *coll
         if (d == 0) {
             d = new KoImageDataPrivate();
             d->refCount.ref();
+        } else {
+            d->clear();
         }
-        d->image = QImage();
-        d->imageSize = QSizeF();
-        d->errorCode = Success;
         d->imageLocation = location;
         d->setSuffix(location.toEncoded());
         d->key = location.toEncoded();
@@ -235,11 +234,7 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             d = new KoImageDataPrivate();
             d->refCount.ref();
         } else {
-            d->imageLocation.clear();
-            d->key.clear();
-            d->image = QImage();
-            d->errorCode = Success;
-            d->imageSize = QSizeF();
+            d->clear();
         }
         d->setSuffix(url);
 
@@ -280,10 +275,8 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
             d->refCount.ref();
         }
         delete d->temporaryFile;
-        d->errorCode = Success;
+        d->clear();
         d->suffix = "png"; // good default for non-lossy storage.
-        d->imageLocation.clear();
-        d->imageSize = QSizeF();
         if (imageData.size() > MAX_MEMORY_IMAGESIZE) {
             d->image = QImage();
             // store image
@@ -308,7 +301,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
 
 bool KoImageData::isValid() const
 {
-    return d;
+    return d && d->dataStoreState != KoImageDataPrivate::StateEmpty;
 }
 
 bool KoImageData::operator==(const KoImageData &other) const

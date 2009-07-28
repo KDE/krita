@@ -116,6 +116,12 @@ void KoFilterEffect::insertInput(int index, const QString &input)
         d->inputs.insert(index, input);
 }
 
+void KoFilterEffect::setInput(int index, const QString &input)
+{
+    if (index < d->inputs.count())
+        d->inputs[index] = input;
+}
+
 void KoFilterEffect::removeInput(int index)
 {
     d->inputs.removeAt(index);

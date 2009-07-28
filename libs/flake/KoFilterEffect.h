@@ -99,6 +99,9 @@ public:
     /// Inserts an input at the giben position in the input list
     void insertInput(int index, const QString &input);
     
+    /// Sets an existing input to a new value
+    void setInput(int index, const QString &input);
+    
     /// Removes an input from the given position in the input list
     void removeInput(int index);
     

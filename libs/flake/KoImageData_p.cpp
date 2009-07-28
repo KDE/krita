@@ -91,7 +91,6 @@ void KoImageDataPrivate::setSuffix(const QString &name)
     }
 }
 
-
 void KoImageDataPrivate::copyToTemporary(QIODevice &device)
 {
     delete temporaryFile;
@@ -119,4 +118,13 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
     QFileInfo fi(*temporaryFile);
     imageLocation = QUrl(fi.absoluteFilePath());
     dataStoreState = StateNotLoaded;
+}
+
+void KoImageDataPrivate::cleanupImageCache()
+{
+    if (dataStoreState == KoImageDataPrivate::StateImageLoaded) {
+        image = QImage();
+        dataStoreState = KoImageDataPrivate::StateNotLoaded;
+    }
+    cleanupTriggered = false;
 }

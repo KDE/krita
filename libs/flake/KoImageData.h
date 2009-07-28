@@ -134,11 +134,9 @@ protected:
     /// \internal
     KoImageData(KoImageDataPrivate *priv);
 
-private slots:
-    void cleanupImageCache(); // TODO make macro
-
 private:
     KoImageDataPrivate *d;
+    Q_PRIVATE_SLOT(d, void cleanupImageCache())
 };
 
 #endif

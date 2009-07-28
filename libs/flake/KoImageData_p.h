@@ -53,6 +53,9 @@ public:
     /// take the data from \a device and store it in the temporaryFile
     void copyToTemporary(QIODevice &device);
 
+    /// clean the image cache.
+    void cleanupImageCache();
+
     enum DataStoreState {
         StateEmpty,     ///< No image data, either as url or as QImage
         StateNotLoaded, ///< Image data is set as Url

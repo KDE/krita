@@ -38,7 +38,6 @@
 #include <QImageWriter>
 #include <QTemporaryFile>
 
-
 /// the maximum amount of bytes the image can be while we store it in memory instead of
 /// spooling it to disk in a temp-file.
 #define MAX_MEMORY_IMAGESIZE 90000
@@ -342,16 +341,9 @@ KoImageData::ErrorCode KoImageData::errorCode() const
     return d->errorCode;
 }
 
-void KoImageData::cleanupImageCache()
-{
-    if (d->dataStoreState == KoImageDataPrivate::StateImageLoaded) {
-        d->image = QImage();
-        d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
-    }
-    d->cleanupTriggered = false;
-}
-
 bool KoImageData::saveData(QIODevice &device)
 {
     return d->saveData(device);
 }
+
+#include <KoImageData.moc>

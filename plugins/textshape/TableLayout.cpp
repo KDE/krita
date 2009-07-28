@@ -416,7 +416,7 @@ void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)
     // Content height is the difference between bottomLine and topLine.
     qreal contentHeight = (bottomLine.y() + bottomLine.height()) - topLine.y();
     Q_ASSERT(contentHeight >= 0); // Sanity check.
-    contentHeight = qMax(contentHeight, 0.);
+    contentHeight = qMax(contentHeight, (qreal)0.);
 
     // Update content height value of the cell.
     m_tableLayoutData->m_contentHeights[cell.row()][cell.column()] = contentHeight;

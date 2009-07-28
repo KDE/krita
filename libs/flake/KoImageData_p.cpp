@@ -32,6 +32,7 @@
 KoImageDataPrivate::KoImageDataPrivate()
     : collection(0),
     errorCode(KoImageData::Success),
+    key(0),
     cleanupTriggered(false),
     refCount(0),
     dataStoreState(StateEmpty),
@@ -112,7 +113,7 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
             bytes -= temporaryFile->write(buf, bytes);
         } while (bytes > 0);
     }
-    key = md5.result();
+    key = KoImageDataPrivate::generateKey(md5.result());
     temporaryFile->close();
 
     QFileInfo fi(*temporaryFile);
@@ -135,6 +136,15 @@ void KoImageDataPrivate::clear()
     dataStoreState = StateEmpty;
     imageLocation.clear();
     imageSize = QSizeF();
-    key.clear();
+    key = 0;
     image = QImage();
+}
+
+qint64 KoImageDataPrivate::generateKey(const QByteArray &bytes)
+{
+    qint64 answer = 1;
+    const int max = qMin(8, bytes.count());
+    for (int x = 0; x < max; ++x)
+        answer += bytes[x] << (8 * x);
+    return answer;
 }

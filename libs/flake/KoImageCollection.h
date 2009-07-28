@@ -91,7 +91,7 @@ public:
 
     void add(const KoImageData &data);
     void remove(const KoImageData &data);
-    void removeOnKey(const QByteArray &imageDataKey);
+    void removeOnKey(qint64 imageDataKey);
 
     /**
      * Get the number of images inside the collection

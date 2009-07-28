@@ -142,7 +142,7 @@ void KoShapeSavingContext::saveLayerSet(KoXmlWriter * xmlWriter) const
 
 QString KoShapeSavingContext::imageHref(KoImageData * image)
 {
-    QMap<QByteArray, QString>::iterator it(m_imageNames.find(image->key()));
+    QMap<qint64, QString>::iterator it(m_imageNames.find(image->key()));
     if (it == m_imageNames.end()) {
         QString suffix = image->suffix();
         if ( suffix.isEmpty() ) {
@@ -165,7 +165,7 @@ QString KoShapeSavingContext::imageHref(QImage & image)
     return href;
 }
 
-QMap<QByteArray, QString> KoShapeSavingContext::imagesToSave()
+QMap<qint64, QString> KoShapeSavingContext::imagesToSave()
 {
     return m_imageNames;
 }

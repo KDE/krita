@@ -58,6 +58,8 @@ public:
 
     void clear();
 
+    static qint64 generateKey(const QByteArray &bytes);
+
     enum DataStoreState {
         StateEmpty,     ///< No image data, either as url or as QImage
         StateNotLoaded, ///< Image data is set as Url
@@ -68,7 +70,7 @@ public:
     KoImageCollection *collection;
     KoImageData::ErrorCode errorCode;
     QSizeF imageSize;
-    QByteArray key; // key to identify the picture // TODO make a qint64
+    qint64 key;
     QString suffix; // the suffix of the picture e.g. png  TODO use a QByteArray ?
     bool cleanupTriggered;
 

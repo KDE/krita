@@ -116,7 +116,7 @@ public:
     /**
      * Get a unique key of the image data
      */
-    QByteArray key() const; // TODO make this a qint64
+    qint64 key() const;
 
     QString suffix() const;
 

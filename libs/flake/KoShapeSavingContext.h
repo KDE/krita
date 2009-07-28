@@ -190,7 +190,7 @@ public:
     /**
      * Get the images that needs to be saved to the store
      */
-    QMap<QByteArray, QString> imagesToSave();
+    QMap<qint64, QString> imagesToSave();
 
     /**
      * Add data center
@@ -268,7 +268,7 @@ private:
     QSet<KoDataCenter *> m_dataCenter;
     int m_drawId;
     QMap<QString, KoSharedSavingData*> m_sharedData;
-    QMap<QByteArray, QString> m_imageNames;
+    QMap<qint64, QString> m_imageNames;
     int m_imageId;
     QMap<QString, QImage> m_images;
     QHash<const KoShape *, QMatrix> m_shapeOffsets;

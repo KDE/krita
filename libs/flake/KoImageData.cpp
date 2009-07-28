@@ -181,7 +181,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             buffer.open(QIODevice::WriteOnly);
             QImageWriter writer(&buffer, d->suffix.toLatin1());
             if (!writer.write(image)) {
-                // TODO kWarning
+                kWarning(30006) << "Write temporary file failed";
                 d->errorCode = StorageFailed;
                 delete d->temporaryFile;
                 return;
@@ -194,7 +194,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             d->image = image;
         }
         d->imageLocation.clear();
-        d->key = QString::number(image.cacheKey()).toLatin1();
+        d->key = image.cacheKey();
         d->dataStoreState = KoImageDataPrivate::StateImageOnly;
     }
 }
@@ -216,7 +216,7 @@ void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *coll
         }
         d->imageLocation = location;
         d->setSuffix(location.toEncoded());
-        d->key = location.toEncoded();
+        d->key = KoImageDataPrivate::generateKey(location.toEncoded());
         d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
     }
 }
@@ -295,7 +295,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         }
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(imageData);
-        d->key = md5.result();
+        d->key = KoImageDataPrivate::generateKey(md5.result());
     }
 }
 
@@ -319,7 +319,7 @@ KoImageData &KoImageData::operator=(const KoImageData &other)
     return *this;
 }
 
-QByteArray KoImageData::key() const
+qint64 KoImageData::key() const
 {
     return d->key;
 }

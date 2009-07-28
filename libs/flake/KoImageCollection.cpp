@@ -39,9 +39,9 @@ public:
             id->collection = 0;
     }
 
-    QMap<QByteArray, KoImageDataPrivate*> images;
+    QMap<qint64, KoImageDataPrivate*> images;
     // an extra map to find all dataObjects based on the key of a store.
-    QMap<QByteArray, KoImageDataPrivate*> storeImages;
+    QMap<qint64, KoImageDataPrivate*> storeImages;
 };
 
 KoImageCollection::KoImageCollection()
@@ -63,10 +63,10 @@ bool KoImageCollection::completeLoading(KoStore *store)
 
 bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context)
 {
-    QMap<QByteArray, QString> images(context->imagesToSave());
-    QMap<QByteArray, QString>::iterator it(images.begin());
+    QMap<qint64, QString> images(context->imagesToSave());
+    QMap<qint64, QString>::iterator it(images.begin());
 
-    QMap<QByteArray, KoImageDataPrivate *>::iterator dataIt(d->images.begin());
+    QMap<qint64, KoImageDataPrivate *>::iterator dataIt(d->images.begin());
 
     while (it != images.end()) {
         if (dataIt == d->images.end()) {
@@ -112,14 +112,13 @@ KoImageData *KoImageCollection::createImageData(const QImage &image)
 {
     Q_ASSERT(!image.isNull());
     const qint64 key = image.cacheKey();
-    QByteArray key2 = QString::number(key).toLatin1();
-    if (d->images.contains(key2))
-        return new KoImageData(d->images.value(key2));
+    if (d->images.contains(key))
+        return new KoImageData(d->images.value(key));
     KoImageData *data = new KoImageData();
     data->setImage(image);
     data->priv()->collection = this;
-    Q_ASSERT(data->key() == key2);
-    d->images.insert(key2, data->priv());
+    Q_ASSERT(data->key() == key);
+    d->images.insert(key, data->priv());
     return data;
 }
 
@@ -127,7 +126,7 @@ KoImageData *KoImageCollection::createExternalImageData(const QUrl &url)
 {
     Q_ASSERT(!url.isEmpty() && url.isValid());
 
-    QByteArray key = url.toEncoded();
+    qint64 key = KoImageDataPrivate::generateKey(url.toEncoded());
     if (d->images.contains(key))
         return new KoImageData(d->images.value(key));
     KoImageData *data = new KoImageData();
@@ -147,7 +146,7 @@ KoImageData *KoImageCollection::createImageData(const QString &href, KoStore *st
     // This leads to having two keys, one for the store and one for the
     // actual image data. We need the latter so if someone else gets the same
     // image data he can find this data and share (warm fuzzy feeling here)
-    QByteArray storeKey = (QString::number((qint64) store) + href).toLatin1();
+    qint64 storeKey = KoImageDataPrivate::generateKey(href.toLatin1()) + ((qint64) store);
     if (d->storeImages.contains(storeKey))
         return new KoImageData(d->storeImages.value(storeKey));
 
@@ -163,7 +162,7 @@ KoImageData *KoImageCollection::createImageData(const QByteArray &imageData)
 {
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(imageData);
-    QByteArray key = md5.result();
+    qint64 key = KoImageDataPrivate::generateKey(md5.result());
     if (d->images.contains(key))
         return new KoImageData(d->images.value(key));
     KoImageData *data = new KoImageData();
@@ -184,7 +183,7 @@ int KoImageCollection::count() const
     return d->images.count();
 }
 
-void KoImageCollection::removeOnKey(const QByteArray &imageDataKey)
+void KoImageCollection::removeOnKey(qint64 imageDataKey)
 {
     d->images.remove(imageDataKey);
 }

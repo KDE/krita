@@ -34,7 +34,7 @@ class QPixmap;
  * The API is similar to QPixmpaCache. The only addition is that you need to 
  * specify the size of the pixmap when you search it.
  *
- * The implementation uses QPixmpaCache.
+ * The implementation uses QPixmapCache.
  *
  * This class is a singleton.
  */

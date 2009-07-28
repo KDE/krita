@@ -27,6 +27,7 @@ class KoXmlWriter;
 class KoTextDocumentLayout;
 class KoStyleManager;
 class QTextDocument;
+class QTextTable;
 
 class KoChangeTracker;
 
@@ -60,6 +61,9 @@ private:
     QString saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
     void saveParagraph(const QTextBlock &block, int from, int to);
+    void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
+
+    void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0);
 
     class Private;
     Private* const d;

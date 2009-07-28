@@ -22,6 +22,7 @@
 #include "KoTextWriter.h"
 
 #include <QTextDocument>
+#include <QTextTable>
 
 #include "KoInlineObject.h"
 #include "KoInlineTextObjectManager.h"
@@ -297,25 +298,49 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
     d->writer->endElement();
 }
 
-void KoTextWriter::write(QTextDocument *document, int from, int to)
+void KoTextWriter::saveTable (QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
-    d->styleManager = KoTextDocument(document).styleManager();
-    d->layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
+    d->writer->startElement("table:table");
+    for (int c = 0 ; c < table->columns() ; c++) {
+        d->writer->startElement("table:table-column");
+        d->writer->endElement(); // table:table-column
+    }
+    for (int r = 0 ; r < table->rows() ; r++) {
+        d->writer->startElement("table:table-row");
+        for (int c = 0 ; c < table->columns() ; c++) {
+            QTextTableCell cell = table->cellAt(r, c);
+            if ((cell.row() == r) && (cell.column() == c)) {
+                d->writer->startElement("table:table-cell");
+                d->writer->addAttribute("rowSpan", cell.rowSpan());
+                d->writer->addAttribute("columnSpan", cell.columnSpan());
+                writeBlocks(table->document(), cell.firstPosition(), cell.lastPosition(), listStyles, table);
+            } else {
+                d->writer->startElement("table:covered-table-cell");
+            }
+            d->writer->endElement(); // table:table-cell
+        }
+        d->writer->endElement(); // table:table-row
+    }
+    d->writer->endElement(); // table:table
+}
 
-    d->changeTracker = KoTextDocument(document).changeTracker();
-//    Q_ASSERT(d->changeTracker);
-
-    Q_ASSERT(d->layout);
-    Q_ASSERT(d->layout->inlineTextObjectManager());
-
-    QTextBlock block = document->findBlock(from);
+void KoTextWriter::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable)
+{
     KoTextDocument textDocument(document);
-
-    QHash<QTextList *, QString> listStyles = saveListStyles(block, to);
+    QTextBlock block = document->findBlock(from);
     QList<QTextList*> textLists; // Store the current lists being stored.
     KoList *currentList = 0;
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
+        QTextCursor cursor(block);
+        if (cursor.currentTable() != currentTable) {
+            // Call the code to save the table....
+            saveTable(cursor.currentTable(), listStyles);
+            // We skip to the end of the table.
+            block = cursor.currentTable()->lastCursorPosition().block();
+            block = block.next();
+            continue;
+        }
         QTextBlockFormat blockFormat = block.blockFormat();
         QTextList *textList = block.textList();
         int headingLevel = 0, numberedParagraphLevel = 0;
@@ -407,4 +432,20 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
             d->writer->endElement(); // </text:list-element>
         }
     }
+}
+
+void KoTextWriter::write(QTextDocument *document, int from, int to)
+{
+    d->styleManager = KoTextDocument(document).styleManager();
+    d->layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
+
+    d->changeTracker = KoTextDocument(document).changeTracker();
+
+    Q_ASSERT(d->layout);
+    Q_ASSERT(d->layout->inlineTextObjectManager());
+
+    QTextBlock block = document->findBlock(from);
+
+    QHash<QTextList *, QString> listStyles = saveListStyles(block, to);
+    writeBlocks(document, from, to, listStyles);
 }

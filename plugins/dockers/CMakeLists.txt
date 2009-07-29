@@ -2,7 +2,6 @@ project(kofficedockers)
 
 include_directories( ${KDE4_INCLUDE_DIR}
 		     ${QT_INCLUDES}
-		      
 		     ${FLAKE_INCLUDES} 
 		     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets)
 
@@ -22,40 +21,36 @@ set(kofficedockers_SRCS
     Plugin.cpp
 )
 
-IF (NOT TINY)
-    set( kofficedockers_SRCS ${kofficedockers_SRCS}
-        shadowdocker/ShadowDocker.cpp
-        shadowdocker/ShadowDockerFactory.cpp
-    )
+set( kofficedockers_SRCS ${kofficedockers_SRCS}
+    shadowdocker/ShadowDocker.cpp
+    shadowdocker/ShadowDockerFactory.cpp
+)
 
-    set(kofficedockers_SRCS ${kofficedockers_SRCS}
-        shapeselector/Canvas.cpp
-        shapeselector/DragCanvasStrategy.cpp
-        shapeselector/FolderBorder.cpp
-        shapeselector/FolderShape.cpp
-        shapeselector/FolderShapeModel.cpp
-        shapeselector/GroupShape.cpp
-        shapeselector/IconShape.cpp
-        shapeselector/ItemStore.cpp
-        shapeselector/MoveFolderStrategy.cpp
-        shapeselector/RightClickStrategy.cpp
-        shapeselector/SelectStrategy.cpp
-        shapeselector/ShapeSelector.cpp
-        shapeselector/ShapeSelectorFactory.cpp
-        shapeselector/TemplateShape.cpp
-        shapeselector/ZoomHandler.cpp
-        shapeselector/ClipboardProxyShape.cpp
-        shapeselector/ResizeFolderStrategy.cpp
-    )
-ENDIF(NOT TINY)
+set(kofficedockers_SRCS ${kofficedockers_SRCS}
+    shapeselector/Canvas.cpp
+    shapeselector/DragCanvasStrategy.cpp
+    shapeselector/FolderBorder.cpp
+    shapeselector/FolderShape.cpp
+    shapeselector/FolderShapeModel.cpp
+    shapeselector/GroupShape.cpp
+    shapeselector/IconShape.cpp
+    shapeselector/ItemStore.cpp
+    shapeselector/MoveFolderStrategy.cpp
+    shapeselector/RightClickStrategy.cpp
+    shapeselector/SelectStrategy.cpp
+    shapeselector/ShapeSelector.cpp
+    shapeselector/ShapeSelectorFactory.cpp
+    shapeselector/TemplateShape.cpp
+    shapeselector/ZoomHandler.cpp
+    shapeselector/ClipboardProxyShape.cpp
+    shapeselector/ResizeFolderStrategy.cpp
+)
 
 add_subdirectory( strokedocker/pics )
 
 kde4_add_plugin(kofficedockers ${kofficedockers_SRCS})
 
-IF (NOT TINY)
-    set(EXTRA_LIBS koresources pigmentcms kocolorwidgets)
-ENDIF (NOT TINY)
+set(EXTRA_LIBS koresources pigmentcms kocolorwidgets)
 
 target_link_libraries(
     kofficedockers

@@ -52,7 +52,6 @@ KoTableColumnAndRowStyleManager::~KoTableColumnAndRowStyleManager()
 
 void KoTableColumnAndRowStyleManager::setColumnStyle(int column, KoTableColumnStyle *columnStyle)
 {
-    Q_ASSERT(columnStyle);
     Q_ASSERT(column >= 0);
 
     if (column < 0) {
@@ -81,7 +80,6 @@ KoTableColumnStyle *KoTableColumnAndRowStyleManager::columnStyle(int column)
 
 void KoTableColumnAndRowStyleManager::setRowStyle(int row, KoTableRowStyle *rowStyle)
 {
-    Q_ASSERT(rowStyle);
     Q_ASSERT(row >= 0);
 
     if (row < 0) {

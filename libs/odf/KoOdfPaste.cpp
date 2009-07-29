@@ -39,26 +39,26 @@ KoOdfPaste::~KoOdfPaste()
 {
 }
 
-bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QMimeData * data)
+bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QMimeData *data)
 {
     QByteArray arr = data->data(KoOdf::mimeType(documentType));
     return paste(documentType, arr);
 }
 
-bool KoOdfPaste::paste(KoOdf::DocumentType documentType, QByteArray &arr)
+bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QByteArray &bytes)
 {
-    if (arr.isEmpty())
+    if (bytes.isEmpty())
         return false;
 
-    QByteArray *bytes = &arr;
-    QBuffer buffer(bytes);
+    QBuffer buffer;
+    buffer.setData(bytes);
     KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
     store->disallowNameExpansion();
     KoOdfReadStore odfStore(store);
 
     QString errorMessage;
     if (! odfStore.loadAndParse(errorMessage)) {
-        kError() << "loading and parsing failed:" << errorMessage << endl;
+        kWarning(30002) << "loading and parsing failed:" << errorMessage;
         return false;
     }
 
@@ -66,14 +66,14 @@ bool KoOdfPaste::paste(KoOdf::DocumentType documentType, QByteArray &arr)
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
 
     if (realBody.isNull()) {
-        kError() << "No body tag found!" << endl;
+        kWarning(30002) << "No body tag found";
         return false;
     }
 
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, KoOdf::bodyContentElement(documentType, false));
 
     if (body.isNull()) {
-        kError() << "No" << KoOdf::bodyContentElement(documentType, true) << "tag found!" << endl;
+        kWarning(30002) << "No" << KoOdf::bodyContentElement(documentType, true) << "tag found";
         return false;
     }
 

@@ -261,6 +261,8 @@ void KoPACanvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>
 {
     d->view->unplugActionList( "toolproxy_action_list" );
     d->view->plugActionList( "toolproxy_action_list", actionList );
+    if( !d->view->factory() ) return;
+
     QMenu *menu = dynamic_cast<QMenu*>( d->view->factory()->container( "default_canvas_popup", d->view ) );
 
     if( menu )

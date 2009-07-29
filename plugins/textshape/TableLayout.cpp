@@ -112,22 +112,24 @@ void TableLayout::layout()
     QTextTableFormat tableFormat = m_table->format();
 
     // Table width.
-    switch (tableFormat.width().type()) {
-        case QTextLength::VariableLength: // Unused.
-        case QTextLength::FixedLength:
+    Q_ASSERT(m_parentLayout->shape);
+    qreal parentWidth = m_parentLayout->shape->size().width(); // FIXME: Nested tables?
+    if (tableFormat.width().rawValue() == 0) {
+        // We got a zero width value, so use 100% of parent.
+        m_tableLayoutData->m_width = parentWidth;
+    } else {
+        if (tableFormat.width().type() == QTextLength::FixedLength) {
+            // Fixed length value, so use the raw value directly.
             m_tableLayoutData->m_width = tableFormat.width().rawValue();
-            break;
-        case QTextLength::PercentageLength: {
-            // FIXME: Nested tables?
-            qreal parentWidth = m_parentLayout->shape->size().width();
+        } else if (tableFormat.width().type() == QTextLength::PercentageLength) {
+            // Percentage length value, so use a percentage of parent width.
             m_tableLayoutData->m_width = tableFormat.width().rawValue() * (parentWidth / 100)
                 - tableFormat.leftMargin() - tableFormat.rightMargin();
-            break;
-        }
-        default:
+        } else {
+            // Unknown length type, so use 100% of parent.
             kWarning(32600) << "Unknown table width type";
-            m_tableLayoutData->m_width = 0;
-            break;
+            m_tableLayoutData->m_width = parentWidth;
+        }
     }
 
     // Get the column and row style manager.

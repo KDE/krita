@@ -29,11 +29,12 @@
 class KoImageData;
 class KoImageCollection;
 class KUrl;
+class RenderQueue;
 
 class PictureShape : public KoShape, public KoFrameShape
 {
 public:
-    explicit PictureShape();
+    PictureShape();
     virtual ~PictureShape();
 
     // reimplemented
@@ -56,7 +57,23 @@ protected:
 
 private:
     KoImageCollection *m_imageCollection;
+    RenderQueue *m_renderQueue;
 };
 
+class RenderQueue : public QObject
+{
+    Q_OBJECT
+public:
+    RenderQueue(PictureShape *shape) : m_pictureShape(shape) { }
+
+    void addSize(const QSize &size) { m_wantedImageSize << size; }
+
+public slots:
+    void renderImage();
+
+private:
+    KoShape *m_pictureShape;
+    QList<QSize> m_wantedImageSize;
+};
 
 #endif

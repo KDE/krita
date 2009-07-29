@@ -33,10 +33,30 @@
 #include <KoUnit.h>
 
 #include <QPainter>
+#include <QTimer>
+#include <QPixmapCache>
 #include <kdebug.h>
 
+void RenderQueue::renderImage()
+{
+    KoImageData *imageData = qobject_cast<KoImageData*>(m_pictureShape->userData());
+    if (m_wantedImageSize.isEmpty() || imageData == 0)
+        return;
+    QSize size = m_wantedImageSize.takeFirst();
+    QString key = QString::number(imageData->key() + size.width() * size.height());
+    if (QPixmapCache::find(key) == 0) {
+        QPixmap pixmap = imageData->pixmap(size);
+        QPixmapCache::insert(key, pixmap);
+        m_pictureShape->update();
+    }
+    if (! m_wantedImageSize.isEmpty())
+        QTimer::singleShot(0, this, SLOT(renderImage()));
+}
+
+//////////////
 PictureShape::PictureShape()
-    : KoFrameShape(KoXmlNS::draw, "image")
+    : KoFrameShape(KoXmlNS::draw, "image"),
+    m_renderQueue(new RenderQueue(this))
 {
     setKeepAspectRatio(true);
 }
@@ -47,22 +67,53 @@ PictureShape::~PictureShape()
 
 void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    QRectF pixels = converter.documentToView(QRectF(QPointF(0,0), size()));
+    QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
 
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());
     if (imageData == 0) {
-        painter.fillRect(pixels, QColor(Qt::gray));
+        painter.fillRect(pixelsF, QColor(Qt::gray));
         return;
     }
+    const QRect pixels = pixelsF.toRect();
+    QSize pixmapSize = pixels.size();
 
+    QString key = QString::number(imageData->key() + pixmapSize.width() * pixmapSize.height());
     QPixmap pixmap;
-    if (! imageData->hasCachedPixmap()) {
-        pixmap = imageData->pixmap(pixels.size().toSize());
-    } else {
+    if (!QPixmapCache::find(key, pixmap)) { // first check cache.
+        // no? Does the imageData have it then?
+        if (!(imageData->hasCachedPixmap() && imageData->pixmap().size() == pixmapSize)) {
+            // ok, not what we want.
+            // before asking to render it, make sure the image doesn't get too big
+            QSize imageSize = imageData->image().size();
+            if (imageSize.width() < pixmapSize.width() || imageSize.height() < pixmapSize.height()) {
+                // kDebug() << "clipping size to orig image size" << imageSize;
+                pixmapSize.setWidth(imageSize.width());
+                pixmapSize.setHeight(imageSize.height());
+                key = QString::number(imageData->key() + pixmapSize.width() * pixmapSize.height());
+            }
+
+            const int MaxSize = 1000; // TODO set the number as a KoImageCollection size
+            // make sure our pixmap doesn't get too slow.
+            // In future we may want to make this action cause a multi-threaded rescale of the pixmap.
+            if (pixmapSize.width() > MaxSize) { // resize to max size.
+                pixmapSize.setHeight(qRound(pixelsF.height() / pixelsF.width() * MaxSize));
+                pixmapSize.setWidth(MaxSize);
+            }
+            if (pixmapSize.height() > MaxSize) {
+                pixmapSize.setWidth(qRound(pixelsF.width() / pixelsF.height() * MaxSize));
+                pixmapSize.setHeight(MaxSize);
+            }
+        }
+    }
+    if (!QPixmapCache::find(key, pixmap)) {
+        m_renderQueue->addSize(pixmapSize);
+        QTimer::singleShot(0, m_renderQueue, SLOT(renderImage()));
+        if (! imageData->hasCachedPixmap())
+            return; // TODO draw outline or something?
         pixmap = imageData->pixmap();
     }
     // TODO only paint the rect that is visible
-    painter.drawPixmap(pixels.toRect(), pixmap, QRect(0, 0, pixmap.width(), pixmap.height()));
+    painter.drawPixmap(pixels, pixmap, QRect(0, 0, pixmap.width(), pixmap.height()));
 }
 
 void PictureShape::saveOdf(KoShapeSavingContext &context) const

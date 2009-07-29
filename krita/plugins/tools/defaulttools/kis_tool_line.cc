@@ -4,6 +4,7 @@
  *  Copyright (c) 2000 John Califf <jwcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,6 +45,22 @@
 #include <recorder/kis_recorded_polyline_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
+#include <config-opengl.h>
+#include <config-glew.h>
+
+#ifdef HAVE_OPENGL
+
+#ifdef HAVE_GLEW
+#include <GL/glew.h>
+#endif
+
+#include <QtOpenGL>
+
+#endif
+
+#include <KoCanvasController.h>
+
+
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
         m_dragging(false)
@@ -68,8 +85,11 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 
     gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
     if (m_dragging)
+    {
         paintLine(gc, QRect());
+    }
 }
+
 
 void KisToolLine::mousePressEvent(KoPointerEvent *e)
 {
@@ -195,6 +215,24 @@ QPointF KisToolLine::straightLine(QPointF point)
 
 void KisToolLine::paintLine(QPainter& gc, const QRect&)
 {
+
+#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+    if (m_canvas->canvasController()->isCanvasOpenGL()){
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_COLOR_LOGIC_OP);
+        glLogicOp(GL_XOR);
+
+        glBegin(GL_LINES);
+            glColor3f(0.501961,1.0, 0.501961);
+            glVertex2f( m_startPos.x(), m_startPos.y() );
+            glVertex2f( m_endPos.x(), m_endPos.y() );
+        glEnd();
+
+        glDisable(GL_COLOR_LOGIC_OP);
+        glDisable(GL_LINE_SMOOTH);
+    }else
+#endif
+
     if (m_canvas) {
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
@@ -203,7 +241,6 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         gc.setPen(old);
     }
 }
-
 
 QString KisToolLine::quickHelp() const
 {

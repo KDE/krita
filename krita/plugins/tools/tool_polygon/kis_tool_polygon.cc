@@ -2,6 +2,7 @@
  *  kis_tool_polygon.cc -- part of Krita
  *
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com> 
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,12 +33,26 @@
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 
 #include <kis_selection.h>
 #include "kis_painter.h"
 #include <kis_paint_device.h>
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
+
+#include <config-opengl.h>
+#include <config-glew.h>
+
+#ifdef HAVE_OPENGL
+
+#ifdef HAVE_GLEW
+#include <GL/glew.h>
+#endif
+
+#include <QtOpenGL>
+
+#endif
 
 
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
@@ -170,35 +185,78 @@ void KisToolPolygon::paint(QPainter& gc, const KoViewConverter &converter)
     if (!m_canvas || !currentImage())
         return;
 
-    gc.save();
-
-    QPen pen(Qt::SolidLine);
-    pen.setWidth(PREVIEW_LINE_WIDTH);
-    gc.setPen(pen);
-
     QPointF start, end;
     QPointF startPos;
     QPointF endPos;
 
-    if (m_dragging) {
-        startPos = pixelToView(m_dragStart);
-        endPos = pixelToView(m_dragEnd);
-        gc.drawLine(startPos, endPos);
-    }
-    for (vQPointF::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+    if ( m_canvas->canvasController()->isCanvasOpenGL() ){
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_COLOR_LOGIC_OP);
+        glLogicOp(GL_XOR);
+        glColor3f(0.501961,1.0, 0.501961);
 
-        if (it == m_points.begin()) {
-            start = (*it);
-        } else {
-            end = (*it);
-
-            startPos = pixelToView(start);
-            endPos = pixelToView(end);
-            gc.drawLine(startPos, endPos);
-            start = end;
+        if (m_dragging) {
+            startPos = pixelToView(m_dragStart);
+            endPos = pixelToView(m_dragEnd);
+            glBegin(GL_LINES);
+                glVertex2f(startPos.x(), startPos.y() );
+                glVertex2f(endPos.x(), endPos.y() );
+            glEnd();
         }
+
+        glBegin(GL_LINES);
+        for (vQPointF::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+
+            if (it == m_points.begin()) {
+                start = (*it);
+            } else {
+                end = (*it);
+
+                startPos = pixelToView(start);
+                endPos = pixelToView(end);
+
+                glVertex2f(startPos.x(), startPos.y() );
+                glVertex2f(endPos.x(), endPos.y() );
+
+                start = end;
+            }
+        }
+        glEnd();
+
+        glDisable(GL_COLOR_LOGIC_OP);
+        glDisable(GL_LINE_SMOOTH);
+
+    }else
+#endif
+    {
+        QPen old = gc.pen();
+        QPen pen(Qt::SolidLine);
+        pen.setWidth(PREVIEW_LINE_WIDTH);
+        gc.setPen(pen);
+
+        if (m_dragging) {
+            startPos = pixelToView(m_dragStart);
+            endPos = pixelToView(m_dragEnd);
+            gc.drawLine(startPos, endPos);
+        }
+
+        for (vQPointF::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+
+            if (it == m_points.begin()) {
+                start = (*it);
+            } else {
+                end = (*it);
+
+                startPos = pixelToView(start);
+                endPos = pixelToView(end);
+                gc.drawLine(startPos, endPos);
+                start = end;
+            }
+        }
+        gc.setPen(old);
+
     }
-    gc.restore();
 }
 
 QRectF KisToolPolygon::dragBoundingRect()

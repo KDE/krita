@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com> 
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,12 +35,26 @@
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
+#include <KoCanvasController.h>
 
 #include <kis_selection.h>
 #include <kis_painter.h>
 #include <kis_cursor.h>
 #include <kis_paint_information.h>
 #include <kis_paintop_preset.h>
+
+#include <config-opengl.h>
+#include <config-glew.h>
+
+#ifdef HAVE_OPENGL
+
+#ifdef HAVE_GLEW
+#include <GL/glew.h>
+#endif
+
+#include <QtOpenGL>
+#endif
+
 
 KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_polyline_cursor.png", 6, 6)),
@@ -169,41 +184,84 @@ void KisToolPolyline::mouseDoubleClickEvent(KoPointerEvent *)
 
 void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
     if (!m_canvas || !currentImage())
         return;
-
-    qreal sx, sy;
-    converter.zoom(&sx, &sy);
-
-    gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
-
-
-    QPen pen(Qt::SolidLine);
-    gc.setPen(pen);
-    //gc.setRasterOp(Qt::XorROP);
 
     QPointF start, end;
     QPointF startPos;
     QPointF endPos;
 
-    if (m_dragging) {
-        startPos = m_dragStart;
-        endPos = m_dragEnd;
-        gc.drawLine(startPos, endPos);
-    }
-    for (KoPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+    if ( m_canvas->canvasController()->isCanvasOpenGL() ){
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_COLOR_LOGIC_OP);
+        glLogicOp(GL_XOR);
+        glColor3f(0.501961,1.0, 0.501961);
 
-        if (it == m_points.begin()) {
-            start = (*it);
-        } else {
-            end = (*it);
+        if (m_dragging) {
+            startPos = pixelToView(m_dragStart);
+            endPos = pixelToView(m_dragEnd);
+            glBegin(GL_LINES);
+                glVertex2f(startPos.x(), startPos.y() );
+                glVertex2f(endPos.x(), endPos.y() );
+            glEnd();
+        }
 
-            startPos = start;
-            endPos = end;
+        glBegin(GL_LINES);
+        for (KoPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
+            if (it == m_points.begin()) {
+                start = (*it);
+            } else {
+                end = (*it);
+
+                startPos = pixelToView(start);
+                endPos = pixelToView(end);
+
+                glVertex2f(startPos.x(), startPos.y() );
+                glVertex2f(endPos.x(), endPos.y() );
+
+                start = end;
+            }
+        }
+        glEnd();
+
+        glDisable(GL_COLOR_LOGIC_OP);
+        glDisable(GL_LINE_SMOOTH);
+
+    }else
+#endif
+    {
+/*        qreal sx, sy;
+        converter.zoom(&sx, &sy);
+
+        gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
+*/
+
+        QPen pen(Qt::SolidLine);
+        gc.setPen(pen);
+        //gc.setRasterOp(Qt::XorROP);
+
+        if (m_dragging) {
+            startPos = pixelToView(m_dragStart);
+            endPos = pixelToView(m_dragEnd);
             gc.drawLine(startPos, endPos);
+        }
+        for (KoPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
-            start = end;
+            if (it == m_points.begin()) {
+                start = (*it);
+            } else {
+                end = (*it);
+
+                startPos = pixelToView(start);
+                endPos = pixelToView(end);
+
+                gc.drawLine(startPos, endPos);
+
+                start = end;
+            }
         }
     }
 }

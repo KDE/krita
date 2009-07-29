@@ -55,7 +55,6 @@ public:
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 private:
-    void paintRectangle();
     void paintRectangle(QPainter& gc, const QRect& rc);
 
 protected:

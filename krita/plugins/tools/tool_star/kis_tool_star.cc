@@ -2,6 +2,7 @@
  *  kis_tool_star.cc -- part of Krita
  *
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>  
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +33,7 @@
 
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
+#include <KoCanvasController.h>
 
 #include <kis_debug.h>
 #include <canvas/kis_canvas2.h>
@@ -41,6 +43,19 @@
 #include <kis_paint_device.h>
 
 #include "kis_selection.h"
+
+#include <config-opengl.h>
+#include <config-glew.h>
+
+#ifdef HAVE_OPENGL
+
+#ifdef HAVE_GLEW
+#include <GL/glew.h>
+#endif
+
+#include <QtOpenGL>
+#endif
+
 
 KisToolStar::KisToolStar(KoCanvasBase * canvas)
         : KisToolShape(canvas, KisCursor::load("tool_star_cursor.png", 6, 6)),
@@ -126,23 +141,49 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
     if (!m_dragging)
         return;
 
-    qreal sx, sy;
-    converter.zoom(&sx, &sy);
-
-    gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
-
     if (!m_canvas)
         return;
 
-    QPen pen(Qt::SolidLine);
-    gc.setPen(pen);
-
     vQPointF points = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
-    for (int i = 0; i < points.count() - 1; i++) {
-        gc.drawLine(points[i], points[i + 1]);
+#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+    if ( m_canvas->canvasController()->isCanvasOpenGL() ){
+        QPointF begin, end;
+
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_COLOR_LOGIC_OP);
+        glLogicOp(GL_XOR);
+        glColor3f(0.501961,1.0, 0.501961);
+
+        glBegin(GL_LINE_LOOP);
+        for (int i = 0; i < points.count() - 1; i++) {
+                begin = pixelToView(points[i]);
+                end = pixelToView(points[i + 1]);
+            
+                glVertex2f( begin.x(),begin.y());
+                glVertex2f( end.x(), end.y() );
+        
+        }
+        glEnd();
+
+        glDisable(GL_COLOR_LOGIC_OP);
+        glDisable(GL_LINE_SMOOTH);
     }
-    gc.drawLine(points[points.count() - 1], points[0]);
+    else
+#endif
+    {
+        qreal sx, sy;
+        converter.zoom(&sx, &sy);
+        gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
+
+        QPen pen(Qt::SolidLine);
+        gc.setPen(pen);
+
+        for (int i = 0; i < points.count() - 1; i++) {
+            gc.drawLine(points[i], points[i + 1]);
+        }
+        gc.drawLine(points[points.count() - 1], points[0]);
+    }
 }
 
 vQPointF KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)

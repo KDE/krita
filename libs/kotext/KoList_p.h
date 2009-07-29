@@ -33,7 +33,7 @@
 #include <QVariant>
 #include <QTextList>
 
-class KOTEXT_EXPORT KoListPrivate
+class KoListPrivate
 {
 public:
     KoListPrivate(KoList *q, const QTextDocument *document)
@@ -50,7 +50,7 @@ public:
         if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(block.userData()))
             userData->setCounterWidth(-1.0);
     }
-    
+
     static void invalidateList(const QTextBlock &block)
     {
         for (int i = 0; i < block.textList()->count(); i++) {

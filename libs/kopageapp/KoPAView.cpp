@@ -796,22 +796,22 @@ void KoPAView::partActivateEvent(KParts::PartActivateEvent* event)
 
 void KoPAView::goToPreviousPage()
 {
-    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier));
+    navigatePage( KoPageApp::PagePrevious );
 }
 
 void KoPAView::goToNextPage()
 {
-    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier));
+    navigatePage( KoPageApp::PageNext );
 }
 
 void KoPAView::goToFirstPage()
 {
-    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_Home, Qt::NoModifier));
+    navigatePage( KoPageApp::PageFirst );
 }
 
 void KoPAView::goToLastPage()
 {
-    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_End, Qt::NoModifier));
+    navigatePage( KoPageApp::PageLast );
 }
 
 void KoPAView::findDocumentSetNext( QTextDocument * document )

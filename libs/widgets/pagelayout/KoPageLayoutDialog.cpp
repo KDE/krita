@@ -22,8 +22,6 @@
 #include "KoPageLayoutWidget.h"
 #include "KoPagePreviewWidget.h"
 
-#include <KoLayoutVisitor.h>
-
 #include <klocale.h>
 
 #include <QCheckBox>
@@ -36,7 +34,6 @@ class KoPageLayoutDialog::Private
 public:
     KoPageLayout layout;
     KoPageLayoutWidget *pageLayoutWidget;
-    bool visited;
     QCheckBox* documentCheckBox;
 };
 
@@ -46,7 +43,6 @@ KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout& layo
     , d(new Private)
 {
     d->layout = layout;
-    d->visited = false;
 
     setWindowTitle(i18n("Page Layout"));
     setFaceType(KPageDialog::Tabbed);
@@ -105,19 +101,6 @@ void KoPageLayoutDialog::accept() {
 void KoPageLayoutDialog::reject() {
     KPageDialog::reject();
     deleteLater();
-}
-
-void KoPageLayoutDialog::showEvent (QShowEvent *e) {
-    KDialog::showEvent(e);
-    if(d->visited) return;
-    d->visited = true;
-    QTimer::singleShot(0, this, SLOT(visit()));
-}
-
-void KoPageLayoutDialog::visit() {
-    KoLayoutVisitor visitor;
-    visitor.visit(d->pageLayoutWidget);
-    visitor.relayout();
 }
 
 bool KoPageLayoutDialog::applyToDocument() const

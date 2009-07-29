@@ -19,7 +19,6 @@ set(kotext_LIB_SRCS
     KoTextDocument.cpp
     KoList.cpp
     KoPageFormat.cpp
-    KoLayoutVisitor.cpp
 
     KoTextEditingRegistry.cpp
     KoTextEditingFactory.cpp

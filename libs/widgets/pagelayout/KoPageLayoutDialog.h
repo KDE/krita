@@ -44,7 +44,6 @@ public:
 
 private slots:
     void setPageLayout(const KoPageLayout &layout);
-    void visit();
 
 protected:
     bool applyToDocument() const;
@@ -52,7 +51,6 @@ protected:
 protected slots:
     void accept();
     void reject();
-    void showEvent(QShowEvent *e);
 
 private:
     class Private;

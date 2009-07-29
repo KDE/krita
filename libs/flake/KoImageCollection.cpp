@@ -76,7 +76,7 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
             break;
         }
         else if (dataIt.key() == it.key()) {
-            KoImageDataPrivate *imageData;
+            KoImageDataPrivate *imageData = dataIt.value();
             if (imageData->imageLocation.isValid()) {
                 // TODO store url
                 Q_ASSERT(0); // not impleented yet

@@ -63,9 +63,9 @@ bool KoImageDataPrivate::saveData(QIODevice &device)
             }
             char buf[4096];
             while (true) {
-                device.waitForReadyRead(-1);
+                temporaryFile->waitForReadyRead(-1);
                 qint64 bytes = temporaryFile->read(buf, sizeof(buf));
-                if (bytes == -1)
+                if (bytes <= 0)
                     break; // done!
                 do {
                     bytes -= device.write(buf, bytes);
@@ -117,7 +117,6 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
     temporaryFile->close();
 
     QFileInfo fi(*temporaryFile);
-    imageLocation = QUrl(fi.absoluteFilePath());
     dataStoreState = StateNotLoaded;
 }
 

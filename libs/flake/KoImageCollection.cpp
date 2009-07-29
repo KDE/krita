@@ -41,7 +41,7 @@ public:
 
     QMap<qint64, KoImageDataPrivate*> images;
     // an extra map to find all dataObjects based on the key of a store.
-    QMap<qint64, KoImageDataPrivate*> storeImages;
+    QMap<QByteArray, KoImageDataPrivate*> storeImages;
 };
 
 KoImageCollection::KoImageCollection()
@@ -146,7 +146,7 @@ KoImageData *KoImageCollection::createImageData(const QString &href, KoStore *st
     // This leads to having two keys, one for the store and one for the
     // actual image data. We need the latter so if someone else gets the same
     // image data he can find this data and share (warm fuzzy feeling here)
-    qint64 storeKey = KoImageDataPrivate::generateKey(href.toLatin1()) + ((qint64) store);
+    QByteArray storeKey = (QString::number((qint64) store) + href).toLatin1();
     if (d->storeImages.contains(storeKey))
         return new KoImageData(d->storeImages.value(storeKey));
 

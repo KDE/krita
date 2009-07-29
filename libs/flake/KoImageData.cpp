@@ -239,6 +239,12 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
         d->setSuffix(url);
 
         if (store->open(url)) {
+            struct Finalizer {
+                ~Finalizer() { store->close(); }
+                KoStore *store;
+            };
+            Finalizer closer;
+            closer.store = store;
             KoStoreDevice device(store);
             if (device.size() > MAX_MEMORY_IMAGESIZE) {
                 // TODO test also if the file is lossy, then we should store the bytes too

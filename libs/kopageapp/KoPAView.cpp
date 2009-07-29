@@ -207,8 +207,6 @@ void KoPAView::initGUI()
 
         KoToolManager::instance()->requestToolActivation( m_canvasController );
     }
-
-    show();
 }
 
 void KoPAView::initActions()

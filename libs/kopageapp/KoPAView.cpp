@@ -575,6 +575,9 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     if ( shell() && pageChanged ) {
         m_documentStructureDocker->setActivePage(m_activePage);
     }
+    
+    // Set the current page number in the canvas resource provider
+    m_canvas->resourceProvider()->setResource( KoCanvasResource::CurrentPage, m_doc->pageIndex(m_activePage)+1 );
 }
 
 void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )

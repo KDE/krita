@@ -76,7 +76,7 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
 
     m_filterList->setFocus();
 
-    connect(m_filterList, SIGNAL(selected(int)), this, SLOT(accept()));
+    connect(m_filterList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(accept()));
     resize(QSize(520, 400));//.expandedTo(minimumSizeHint()));
 }
 

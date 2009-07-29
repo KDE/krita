@@ -98,6 +98,28 @@ install(
     KoTextEditingPlugin.h
     KoTextEditingRegistry.h
     KoPageFormat.h
+    KoBookmark.h
+    KoBookmarkManager.h
+    KoInlineTextObjectManager.h
+    KoTextAnchor.h
+    KoTextBlockBorderData.h
+    KoTextBlockData.h
+    KoTextDocument.h
+    KoText.h
+    KoTextLocator.h
+    KoTextPage.h
+    KoTextPaste.h
+    KoTextShapeData.h
+    KoVariableFactory.h
+    KoVariable.h
+    KoVariableManager.h
+    KoVariableRegistry.h
+    styles/KoCharacterStyle.h
+    styles/KoListLevelProperties.h
+    styles/KoListStyle.h
+    styles/KoParagraphStyle.h
+    styles/KoStyleManager.h
+
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

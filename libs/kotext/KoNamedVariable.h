@@ -26,7 +26,7 @@
  * This inlineObject shows the curent value of a variable as registered in the KoVariableManager.
  * The proper way to create a new class is to use KoVariableManager::createVariable()
  */
-class KOTEXT_EXPORT KoNamedVariable : public KoVariable
+class KoNamedVariable : public KoVariable
 {
 public:
     /// return the name of this named variable

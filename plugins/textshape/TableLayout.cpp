@@ -141,10 +141,15 @@ void TableLayout::layout()
     qreal availableWidth = m_tableLayoutData->m_width; // Width available for columns.
     QList<int> relativeWidthColumns; // List of relative width columns.
     qreal relativeWidthSum; // Sum of relative column width values.
+    int numNonStyleColumns = 0;
     for (int col = 0; col < m_tableLayoutData->m_columnPositions.size(); ++col) {
         KoTableColumnStyle *columnStyle = carsManager->columnStyle(col);
-        Q_ASSERT(columnStyle); // Can there be no style?
-        if (columnStyle->hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
+        if (!columnStyle) {
+            // No style so neither width nor relative width specified. Can this happen?
+            m_tableLayoutData->m_columnWidths[col] = 0.0;
+            relativeWidthColumns.append(col); // handle it as a relative width column without asking for anything
+            ++numNonStyleColumns;
+        } else if (columnStyle->hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
             // Relative width specified. Will be handled in the next loop.
             relativeWidthColumns.append(col);
             relativeWidthSum += columnStyle->relativeColumnWidth();
@@ -158,12 +163,22 @@ void TableLayout::layout()
             m_tableLayoutData->m_columnWidths[col] = 0.0;
         }
     }
+
+    // Calculate width to those columns that don't actually request it
+    qreal widthForNonStyleColumn = ((1.0 - qMin<qreal>(relativeWidthSum, 1.0)) * availableWidth);
+    availableWidth -= widthForNonStyleColumn; // might as well do this calc before dividing by numNonStyleColumns
+    if(numNonStyleColumns)
+        widthForNonStyleColumn /= numNonStyleColumns;
+
     // Relative column widths have now been summed up and can be distributed.
-    foreach (qreal col, relativeWidthColumns) {
+    foreach (int col, relativeWidthColumns) {
         KoTableColumnStyle *columnStyle = carsManager->columnStyle(col);
-        Q_ASSERT(columnStyle);
-        m_tableLayoutData->m_columnWidths[col] =
-            qMax<qreal>(columnStyle->relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
+        if (columnStyle) {
+            m_tableLayoutData->m_columnWidths[col] =
+                qMax<qreal>(columnStyle->relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
+        } else {
+            m_tableLayoutData->m_columnWidths[col] = widthForNonStyleColumn;
+        }
     }
 
     // Column positions.

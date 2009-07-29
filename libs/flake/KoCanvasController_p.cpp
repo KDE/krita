@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -29,6 +29,7 @@
 #include "KoSelection.h"
 #include "KoCanvasBase.h"
 #include "KoShapeLayer.h"
+#include "KoShapePaste.h"
 
 #include <KoProperties.h>
 
@@ -99,22 +100,23 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
     // we have a canvas in all the support methods.
     if (!(m_parent->canvas() && m_parent->canvas()->canvasWidget()))
         return;
-    if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
-            event->mimeData()->hasFormat(SHAPEID_MIMETYPE)) {
 
-        // only allow dropping when active layer is editable
-        KoSelection * selection = m_parent->canvas()->shapeManager()->selection();
-        KoShapeLayer * activeLayer = selection->activeLayer();
-        if( activeLayer && (!activeLayer->isEditable() || activeLayer->isGeometryProtected() ) )
-            return;
-    
+    // only allow dropping when active layer is editable
+    KoSelection *selection = m_parent->canvas()->shapeManager()->selection();
+    KoShapeLayer *activeLayer = selection->activeLayer();
+    if (activeLayer && (!activeLayer->isEditable() || activeLayer->isGeometryProtected()))
+        return;
+
+    const QMimeData *data = event->mimeData();
+    if (data->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
+            data->hasFormat(SHAPEID_MIMETYPE)) {
         QByteArray itemData;
         bool isTemplate = true;
-        if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE))
-            itemData = event->mimeData()->data(SHAPETEMPLATE_MIMETYPE);
+        if (data->hasFormat(SHAPETEMPLATE_MIMETYPE))
+            itemData = data->data(SHAPETEMPLATE_MIMETYPE);
         else {
             isTemplate = false;
-            itemData = event->mimeData()->data(SHAPEID_MIMETYPE);
+            itemData = data->data(SHAPEID_MIMETYPE);
         }
         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
         QString id;
@@ -154,6 +156,21 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         m_draggedShape->setZIndex(KoFlake::maxZIndex());
 
         m_parent->canvas()->shapeManager()->add(m_draggedShape);
+    }
+    else if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
+        KoShapeManager *sm = m_parent->canvas()->shapeManager();
+        KoShapePaste paste(m_parent->canvas(), sm->selection()->activeLayer());
+        if (paste.paste(KoOdf::Text, data)) {
+            QList<KoShape *> shapes = paste.pastedShapes();
+            Q_ASSERT(!shapes.isEmpty());
+            if (shapes.count() > 1) {
+                Q_ASSERT(0); // hmm hmm, when does this happen?
+            }
+            m_draggedShape = shapes.first();
+            m_draggedShape->setZIndex(KoFlake::maxZIndex());
+            event->setDropAction(Qt::CopyAction);
+            event->accept();
+        }
     }
 }
 

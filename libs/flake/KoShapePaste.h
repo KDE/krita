@@ -24,8 +24,11 @@
 #include <KoOdfPaste.h>
 #include "flake_export.h"
 
+#include <QList>
+
 class KoCanvasBase;
 class KoShapeLayer;
+class KoShape;
 
 /**
  * Class for pasting shapes to the document
@@ -42,6 +45,8 @@ public:
      */
     KoShapePaste(KoCanvasBase *canvas, KoShapeLayer *parentLayer);
     virtual ~KoShapePaste();
+
+    QList<KoShape*> pastedShapes() const;
 
 protected:
     /// reimplemented

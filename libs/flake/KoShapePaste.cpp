@@ -41,6 +41,7 @@ struct KoShapePaste::Private {
 
     KoCanvasBase *canvas;
     KoShapeLayer *layer;
+    QList<KoShape*> pastedShapes;
 };
 
 KoShapePaste::KoShapePaste(KoCanvasBase *canvas, KoShapeLayer *layer)
@@ -55,6 +56,7 @@ KoShapePaste::~KoShapePaste()
 
 bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
 {
+    d->pastedShapes.clear();
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
     KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->dataCenterMap());
 
@@ -109,9 +111,15 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
             shape->setZIndex(maxZIndex+1);
 
             d->canvas->shapeController()->addShapeDirect(shape, cmd);
+            d->pastedShapes << shape;
         }
     }
     if (cmd)
         d->canvas->addCommand(cmd);
     return true;
+}
+
+QList<KoShape*> KoShapePaste::pastedShapes() const
+{
+    return d->pastedShapes;
 }

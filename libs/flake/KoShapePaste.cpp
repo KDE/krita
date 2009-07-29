@@ -62,7 +62,7 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
 
     context.setZIndex(d->zIndex);
 
-    QUndoCommand * cmd = new QUndoCommand(i18n("Paste Shapes"));
+    QUndoCommand * cmd = 0;
 
     // TODO if this is a text create a text shape and load the text inside the new shape.
     KoXmlElement element;
@@ -71,14 +71,15 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
 
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(element, context);
         if (shape) {
+            if (!cmd)
+                cmd = new QUndoCommand(i18n("Paste Shapes"));
             if (! shape->parent()) {
                 shape->setParent(d->parent);
             }
             d->canvas->shapeController()->addShapeDirect(shape, cmd);
         }
     }
-
-    d->canvas->addCommand(cmd);
-
+    if (cmd)
+        d->canvas->addCommand(cmd);
     return true;
 }

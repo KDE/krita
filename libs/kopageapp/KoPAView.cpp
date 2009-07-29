@@ -47,6 +47,7 @@
 #include <KoMainWindow.h>
 #include <KoDockerManager.h>
 #include <KoShapeLayer.h>
+#include <KoRuler.h>
 #include <KoRulerController.h>
 #include <KoDrag.h>
 #include <KoShapeDeleteCommand.h>

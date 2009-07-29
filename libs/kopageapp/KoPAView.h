@@ -24,7 +24,6 @@
 
 #include <KoView.h>
 #include <KoZoomHandler.h>
-#include <KoRuler.h>
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
@@ -32,13 +31,14 @@ class KoCanvasController;
 class KoFind;
 class KoPACanvas;
 class KoPADocument;
-class KToggleAction;
 class KoPAPageBase;
 class KoPAViewMode;
 class KoPADocumentStructureDocker;
+class KoRuler;
 class KoShapeManager;
 class KoZoomAction;
 class KoZoomController;
+class KToggleAction;
 class KUrl;
 class QTextDocument;
 class QLabel;

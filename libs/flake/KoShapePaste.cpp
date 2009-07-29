@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,25 +29,22 @@
 #include "KoCanvasBase.h"
 #include "KoShapeController.h"
 #include "KoShape.h"
-#include "KoShapeContainer.h"
+#include "KoShapeLayer.h"
 #include "KoShapeLoadingContext.h"
+#include "KoShapeManager.h"
 #include "KoShapeControllerBase.h"
 #include "KoShapeRegistry.h"
 #include "commands/KoShapeCreateCommand.h"
 
 struct KoShapePaste::Private {
-    Private(KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent)
-            : canvas(canvas)
-            , zIndex(zIndex)
-            , parent(parent) {}
+    Private(KoCanvasBase *cb, KoShapeLayer *l) : canvas(cb), layer(l) {}
 
-    KoCanvasBase * canvas;
-    int zIndex;
-    KoShapeContainer * parent;
+    KoCanvasBase *canvas;
+    KoShapeLayer *layer;
 };
 
-KoShapePaste::KoShapePaste(KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent)
-        : d(new Private(canvas, zIndex, parent))
+KoShapePaste::KoShapePaste(KoCanvasBase *canvas, KoShapeLayer *layer)
+        : d(new Private(canvas, layer))
 {
 }
 
@@ -60,9 +58,9 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
     KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->dataCenterMap());
 
-    context.setZIndex(d->zIndex);
+    context.setZIndex(0);
 
-    QUndoCommand * cmd = 0;
+    QUndoCommand *cmd = 0;
 
     // TODO if this is a text create a text shape and load the text inside the new shape.
     KoXmlElement element;
@@ -74,8 +72,42 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
             if (!cmd)
                 cmd = new QUndoCommand(i18n("Paste Shapes"));
             if (! shape->parent()) {
-                shape->setParent(d->parent);
+                shape->setParent(d->layer);
             }
+            KoShapeManager *sm = d->canvas->shapeManager();
+            Q_ASSERT(sm);
+            bool done = true;
+            int maxZIndex;
+            do {
+                // find a nice place for our shape.
+                done = true;
+                maxZIndex = -100;
+                foreach (const KoShape *s, sm->shapesAt(shape->boundingRect())) {
+                    if (d->layer && s->parent() != d->layer)
+                        continue;
+                    maxZIndex = qMax(s->zIndex(), maxZIndex);
+                    if (s->name() != shape->name())
+                        continue;
+                    if (qAbs(s->position().x() - shape->position().x()) > 0.001)
+                        continue;
+                    if (qAbs(s->position().y() - shape->position().y()) > 0.001)
+                        continue;
+                    if (qAbs(s->size().width() - shape->size().width()) > 0.001)
+                        continue;
+                    if (qAbs(s->size().height() - shape->size().height()) > 0.001)
+                        continue;
+                    // move it and redo our iteration.
+                    QPointF move(10, 10);
+                    d->canvas->clipToDocument(shape, move);
+                    if (move.x() != 0 || move.y() != 0) {
+                        shape->setPosition(shape->position() + move);
+                        done = false;
+                        break;
+                    }
+                }
+            } while (!done);
+            shape->setZIndex(maxZIndex+1);
+
             d->canvas->shapeController()->addShapeDirect(shape, cmd);
         }
     }

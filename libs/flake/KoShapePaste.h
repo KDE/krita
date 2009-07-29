@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +25,7 @@
 #include "flake_export.h"
 
 class KoCanvasBase;
-class KoShapeContainer;
+class KoShapeLayer;
 
 /**
  * Class for pasting shapes to the document
@@ -37,9 +38,9 @@ public:
      *
      * @param canvas The canvas on which the paste is done
      * @param zIndex The highest currently existing zIndex.
-     * @param parent The parent under which the shapes will be pasted
+     * @param parentLayer The layer on which the shapes will be pasted
      */
-    KoShapePaste(KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent);
+    KoShapePaste(KoCanvasBase *canvas, KoShapeLayer *parentLayer);
     virtual ~KoShapePaste();
 
 protected:

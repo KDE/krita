@@ -794,13 +794,7 @@ bool DefaultTool::paste()
     bool success = false;
     if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
         KoShapeManager * shapeManager = m_canvas->shapeManager();
-        int zIndex = 0;
-        foreach (KoShape *shape, shapeManager->shapes())
-        {
-            zIndex = qMax(zIndex, shape->zIndex());
-        }
-
-        KoShapePaste paste(m_canvas, zIndex + 1, shapeManager->selection()->activeLayer());
+        KoShapePaste paste(m_canvas, shapeManager->selection()->activeLayer());
         success = paste.paste(KoOdf::Text, data);
     }
     return success;

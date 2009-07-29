@@ -684,11 +684,7 @@ void KoPADocumentStructureDocker::editPaste()
         // Paste Shapes or Layers
         KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
         KoShapeManager * shapeManager = canvas->shapeManager();
-        int zIndex = 0;
-        foreach (KoShape *shape, shapeManager->shapes()) {
-            zIndex = qMax(zIndex, shape->zIndex());
-        }
-        KoShapePaste paste(canvas, zIndex + 1, shapeManager->selection()->activeLayer());
+        KoShapePaste paste(canvas, shapeManager->selection()->activeLayer());
         paste.paste(KoOdf::Text, data);
 
     } else {

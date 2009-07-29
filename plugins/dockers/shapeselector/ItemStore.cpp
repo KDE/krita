@@ -352,17 +352,10 @@ KoShape *ItemStore::createShapeFromPaste(QByteArray &bytes)
         KoShapeControllerBase *m_shapeController;
     };
 
-    // TODO
-    // this is responsible for crashes when you copy objects with pattern backgounds or images
-    // you get a crash when you copy 2 times a picture or a shape with a pattern background 
-    // the data center need to stay around as long there are shapes using it.
-#if 0 // disable until the problem is fixed
     DummyShapeController dsc;
     Paster paster(&dsc);
     paster.paste(KoOdf::Text, bytes);
     return paster.shape();
-#endif
-    return 0;
 }
 
 #include "ItemStore.moc"

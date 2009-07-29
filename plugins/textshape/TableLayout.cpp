@@ -163,7 +163,7 @@ void TableLayout::layout()
         KoTableColumnStyle *columnStyle = carsManager->columnStyle(col);
         Q_ASSERT(columnStyle);
         m_tableLayoutData->m_columnWidths[col] =
-            qMax(columnStyle->relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
+            qMax<qreal>(columnStyle->relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
     }
 
     // Column positions.

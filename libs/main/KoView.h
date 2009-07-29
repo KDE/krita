@@ -101,6 +101,18 @@ public:
     virtual QAction *action(const QDomElement &element) const;
 
     /**
+     * Returns the action with the given name. The method searches in the
+     * KActionCollection of this view.
+     *
+     * Please notice that KoView indirectly inherits KXMLGUIClient.
+     *
+     * @see KXMLGUIClient
+     * @see KXMLGUIClient::actionCollection
+     * @see KoDocument::action
+     */
+    virtual QAction *action(const char* name) const;
+
+    /**
      *  Retrieves the document that is hit. This can be an embedded document.
      *
      *  The default implementation asks @ref KoDocument::hitTest. This

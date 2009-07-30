@@ -242,8 +242,8 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             Finalizer closer;
             closer.store = store;
             KoStoreDevice device(store);
-            if (device.size() > MAX_MEMORY_IMAGESIZE) {
-                // TODO test also if the file is lossy, then we should store the bytes too
+            const bool lossy =url.toLower().endsWith(".jpg");
+            if (!lossy && device.size() < MAX_MEMORY_IMAGESIZE) {
                 if (d->image.load(&device, d->suffix.toLatin1())) {
                     d->dataStoreState = KoImageDataPrivate::StateImageOnly;
                     return;

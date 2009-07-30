@@ -178,11 +178,9 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 {
     const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
     const QTextCharFormat defaultCharFormat = cursor.charFormat();
-
     const QTextDocument *document = cursor.block().document();
-    d->styleManager = KoTextDocument(document).styleManager();
-    Q_ASSERT(d->styleManager);
 
+    d->styleManager = KoTextDocument(document).styleManager();
     d->changeTracker = KoTextDocument(document).changeTracker();
 //    if (!d->changeTracker)
 //        d->changeTracker = dynamic_cast<KoChangeTracker *>(d->context.dataCenterMap().value("ChangeTracker"));
@@ -367,7 +365,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
 
     KoParagraphStyle *paragraphStyle = d->textSharedData->paragraphStyle(styleName, d->stylesDotXml);
 
-    if (!paragraphStyle && d->styleManager) {
+    Q_ASSERT(d->styleManager);
+    if (!paragraphStyle) {
         // Either the paragraph has no style or the style-name could not be found.
         // Fix up the paragraphStyle to be our default paragraph style in either case.
         if (!styleName.isEmpty())
@@ -395,6 +394,7 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
 
 void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 {
+    Q_ASSERT(d->styleManager);
     int level = qMax(1, element.attributeNS(KoXmlNS::text, "outline-level", "1").toInt());
     // TODO: fallback to default-outline-level from the style, if specified?
 
@@ -404,7 +404,7 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 
     // Set the paragraph-style on the block
     KoParagraphStyle *paragraphStyle = d->textSharedData->paragraphStyle(styleName, d->stylesDotXml);
-    if (!paragraphStyle && d->styleManager) {
+    if (!paragraphStyle) {
         paragraphStyle = d->styleManager->defaultParagraphStyle();
     }
     if (paragraphStyle) {
@@ -419,9 +419,7 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
     cursor.mergeBlockFormat(blockFormat);
 
     if (!d->currentList) { // apply <text:outline-style> (if present) only if heading is not within a <text:list>
-        KoListStyle *outlineStyle = 0;
-        if (d->styleManager)
-            outlineStyle = d->styleManager->outlineStyle();
+        KoListStyle *outlineStyle = d->styleManager->outlineStyle();
         if (outlineStyle) {
             KoList *list = d->list(block.document(), outlineStyle);
             list->applyStyle(block, outlineStyle, level);

@@ -74,7 +74,7 @@ public:
         StyleOpacity,                ///< draw:opacity as in odf 14.14.5 Opacity Gradient not used
         StyleMarker,                 ///< draw:marker as in odf 14.14.6 Marker
         StylePresentationPageLayout, ///< style:presentation-page-layout as in odf 14.15 Presentation Page Layouts
-        StyleAutoTable,              ///< style:table-properties as in odf 15.8 Table Formatting Propertie (office:automatic-styles)
+        StyleAutoTable,              ///< style:table-properties as in odf 15.8 Table Formatting Properties (office:automatic-styles)
 // office:style needed?
         StyleTableColumn,            ///< style:table-column-properties as in odf 15.9 Column Formatting Properties (office:style)
         StyleAutoTableColumn,        ///< style:table-column-properties as in odf 15.9 Column Formatting Properties (office:automatic-styles)
@@ -82,7 +82,7 @@ public:
         StyleAutoTableRow,           ///< style:table-row-properties as in odf 15.10 Table Row Formatting Properties (office:automatic-styles)
         StyleTableCell,              ///< style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:style)
         StyleAutoTableCell,          ///< style:table-cell-properties as in odf 15.11 Table Cell Formatting Properties (office:automatic-styles)
-        StyleTable,               ///< style:table-properties as in odf1.2 16.9 Table Formatting Properties (office:style)
+        StyleTable,                  ///< style:table-properties as in odf1.2 16.9 Table Formatting Properties (office:style)
         //   TODO differently
         StyleMaster                  ///< 14.4 Master Pages
         /// style:default-style as in odf 14.2 Default Styles

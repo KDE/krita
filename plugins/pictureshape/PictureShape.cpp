@@ -89,7 +89,6 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
                 // kDebug() << "clipping size to orig image size" << imageSize;
                 pixmapSize.setWidth(imageSize.width());
                 pixmapSize.setHeight(imageSize.height());
-                key = QString::number(imageData->key() + pixmapSize.width() * pixmapSize.height());
             }
 
             const int MaxSize = 1000; // TODO set the number as a KoImageCollection size
@@ -103,16 +102,17 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
                 pixmapSize.setWidth(qRound(pixelsF.width() / pixelsF.height() * MaxSize));
                 pixmapSize.setHeight(MaxSize);
             }
+            key = QString::number(imageData->key() + pixmapSize.width() * pixmapSize.height());
         }
     }
     if (!QPixmapCache::find(key, pixmap)) {
         m_renderQueue->addSize(pixmapSize);
         QTimer::singleShot(0, m_renderQueue, SLOT(renderImage()));
-        if (! imageData->hasCachedPixmap())
-            return; // TODO draw outline or something?
+        if (!imageData->hasCachedPixmap()
+                || imageData->pixmap().size().width() > pixmapSize.width()) // dont scale down
+            return;
         pixmap = imageData->pixmap();
     }
-    // TODO only paint the rect that is visible
     painter.drawPixmap(pixels, pixmap, QRect(0, 0, pixmap.width(), pixmap.height()));
 }
 

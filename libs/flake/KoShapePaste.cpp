@@ -83,8 +83,8 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
             do {
                 // find a nice place for our shape.
                 done = true;
-                maxZIndex = -100;
-                foreach (const KoShape *s, sm->shapesAt(shape->boundingRect())) {
+                maxZIndex = 0;
+                foreach (const KoShape *s, sm->shapesAt(shape->boundingRect()) + d->pastedShapes) {
                     if (d->layer && s->parent() != d->layer)
                         continue;
                     maxZIndex = qMax(s->zIndex(), maxZIndex);

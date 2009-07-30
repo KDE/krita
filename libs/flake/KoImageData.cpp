@@ -34,7 +34,6 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 #include <KTemporaryFile>
-#include <QTimer>
 #include <QPainter>
 #include <QImageWriter>
 
@@ -98,10 +97,11 @@ QPixmap KoImageData::pixmap(const QSize &size)
             }
         }
 
-        if (!d->cleanupTriggered && d->dataStoreState == KoImageDataPrivate::StateImageLoaded) {
+        if (d->dataStoreState == KoImageDataPrivate::StateImageLoaded) {
+            if (d->cleanCacheTimer.isActive())
+                d->cleanCacheTimer.stop();
             // schedule an auto-unload of the big QImage in a second.
-            QTimer::singleShot(1000, this, SLOT(cleanupImageCache()));
-            d->cleanupTriggered = true;
+            d->cleanCacheTimer.start();
         }
     }
     return d->pixmap;
@@ -135,6 +135,7 @@ QSizeF KoImageData::imageSize()
 QImage KoImageData::image() const
 {
     if (d->dataStoreState == KoImageDataPrivate::StateNotLoaded) {
+kDebug() << "xxxxxxxxxxxxxxxxxxxx";
         // load image
         if (d->temporaryFile) {
             d->temporaryFile->open();
@@ -167,7 +168,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
         delete other;
     } else {
         if (d == 0) {
-            d = new KoImageDataPrivate();
+            d = new KoImageDataPrivate(this);
             d->refCount.ref();
         }
         delete d->temporaryFile;
@@ -205,7 +206,7 @@ void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *coll
         delete other;
     } else {
         if (d == 0) {
-            d = new KoImageDataPrivate();
+            d = new KoImageDataPrivate(this);
             d->refCount.ref();
         } else {
             d->clear();
@@ -227,7 +228,7 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
         delete other;
     } else {
         if (d == 0) {
-            d = new KoImageDataPrivate();
+            d = new KoImageDataPrivate(this);
             d->refCount.ref();
         } else {
             d->clear();
@@ -273,7 +274,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         delete other;
     } else {
         if (d == 0) {
-            d = new KoImageDataPrivate();
+            d = new KoImageDataPrivate(this);
             d->refCount.ref();
         }
         delete d->temporaryFile;

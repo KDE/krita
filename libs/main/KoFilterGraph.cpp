@@ -81,7 +81,7 @@ KoFilterChain::Ptr Graph::chain(const KoFilterManager* manager, QByteArray& to) 
             return KoFilterChain::Ptr();
     }
 
-    const Vertex* vertex = m_vertices[ to ];
+    const Vertex* vertex = m_vertices.value(to);
     if (!vertex || vertex->key() == UINT_MAX)
         return KoFilterChain::Ptr();
 
@@ -137,7 +137,7 @@ void Graph::buildGraph()
         foreach (const QString& import, filter->import) {
             const QByteArray key = import.toLatin1();    // latin1 is okay here (werner)
             // already there?
-            if (!m_vertices[ key ])
+            if (!m_vertices.contains(key))
                 m_vertices.insert(key, new Vertex(key));
         }
 
@@ -148,7 +148,7 @@ void Graph::buildGraph()
 
                 // First make sure the export vertex is in place
                 const QByteArray key = exportIt.toLatin1();    // latin1 is okay here
-                Vertex* exp = m_vertices[ key ];
+                Vertex* exp = m_vertices.value(key);
                 if (!exp) {
                     exp = new Vertex(key);
                     m_vertices.insert(key, exp);
@@ -174,7 +174,7 @@ void Graph::buildGraph()
 void Graph::shortestPaths()
 {
     // Is the requested start mime type valid?
-    Vertex* from = m_vertices[ m_from ];
+    Vertex* from = m_vertices.value(m_from);
     if (!from)
         return;
 
@@ -211,7 +211,7 @@ QByteArray Graph::findKOfficePart() const
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; !v && it != end; ++it)
             if (!(*it).isEmpty())
-                v = m_vertices[(*it).toLatin1()];
+                v = m_vertices.value((*it).toLatin1());
         ++partIt;
     }
     if (!v)
@@ -226,7 +226,7 @@ QByteArray Graph::findKOfficePart() const
         for (; !v && it != end; ++it) {
             QString key = *it;
             if (!key.isEmpty()) {
-                Vertex* tmp = m_vertices[ key.toLatin1()];
+                Vertex* tmp = m_vertices.value(key.toLatin1());
                 if (!v || (tmp && tmp->key() < v->key()))
                     v = tmp;
             }

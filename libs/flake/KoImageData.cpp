@@ -135,7 +135,6 @@ QSizeF KoImageData::imageSize()
 QImage KoImageData::image() const
 {
     if (d->dataStoreState == KoImageDataPrivate::StateNotLoaded) {
-kDebug() << "xxxxxxxxxxxxxxxxxxxx";
         // load image
         if (d->temporaryFile) {
             d->temporaryFile->open();

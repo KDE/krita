@@ -26,8 +26,6 @@
 #include <QWidget>
 
 class KoInteractionTool;
-class KoPositionSelector;
-class QRadioButton;
 
 class DefaultToolWidget : public QWidget, Ui::DefaultToolWidget {
     Q_OBJECT

@@ -29,7 +29,6 @@
 #include <Qt>
 
 class QPainter;
-class KoViewConverter;
 
 /* simple label for displaying text */
 class Label : public QObject

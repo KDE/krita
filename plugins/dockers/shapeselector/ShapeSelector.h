@@ -27,7 +27,6 @@
 
 class FolderShape;
 class Canvas;
-class KoShape;
 class KUrl;
 class QFile;
 

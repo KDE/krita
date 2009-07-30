@@ -29,10 +29,8 @@
 
 #include <QList>
 
-class ClipboardProxyShape;
 class ShapeSelector;
 class InteractionStrategy;
-class FolderShape;
 class KoShapeManager;
 class QUndoCommand;
 class QPointF;

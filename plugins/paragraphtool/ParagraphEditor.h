@@ -31,6 +31,7 @@
 
 class KoParagraphStyle;
 class KoCanvasBase;
+class KoViewConverter;
 
 class QObject;
 class QPainter;

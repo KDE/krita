@@ -41,7 +41,6 @@ class KoShapeCollectionDockerFactory : public KoDockFactory
 
 class KoCollectionItemModel;
 class KoShape;
-class KComboBox;
 class QListView;
 class QListWidget;
 class QListWidgetItem;

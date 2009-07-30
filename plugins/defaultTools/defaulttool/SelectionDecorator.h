@@ -26,7 +26,6 @@
 #include <KoFlake.h>
 #include <QPainter>
 
-class KoInteractionStrategy;
 class KoSelection;
 
 /**

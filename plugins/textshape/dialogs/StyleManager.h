@@ -25,7 +25,6 @@
 #include <QWidget>
 
 class KoStyleManager;
-class QListWidgetItem;
 class KoParagraphStyle;
 class KoCharacterStyle;
 

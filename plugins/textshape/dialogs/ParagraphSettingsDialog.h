@@ -26,7 +26,6 @@
 
 class TextTool;
 class ParagraphGeneral;
-class KoParagraphStyle;
 
 /// A dialog to show the settings for a paragraph
 class ParagraphSettingsDialog : public KDialog

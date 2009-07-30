@@ -21,7 +21,6 @@
 
 #include <QPointF>
 
-class KoPointerEvent;
 
 class InteractionStrategy
 {

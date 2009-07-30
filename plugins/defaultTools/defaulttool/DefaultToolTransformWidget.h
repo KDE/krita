@@ -26,7 +26,6 @@
 #include <QMenu>
 
 class KoInteractionTool;
-class QRadioButton;
 
 class DefaultToolTransformWidget : public QMenu, Ui::DefaultToolTransformWidget {
     Q_OBJECT

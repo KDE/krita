@@ -29,7 +29,6 @@
 class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
-class QListWidgetItem;
 class StylesModel;
 
 class StylesWidget : public QWidget

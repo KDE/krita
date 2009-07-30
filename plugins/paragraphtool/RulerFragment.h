@@ -27,7 +27,6 @@ class Ruler;
 
 class QPainter;
 class QPointF;
-class KoViewConverter;
 
 /* The RulerFragment class represents a Ruler on a specific shape. This class
  * takes care of mapping input and output between the ruler coordinates to

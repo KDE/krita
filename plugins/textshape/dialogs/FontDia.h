@@ -28,7 +28,6 @@
 
 #include <QTextCursor>
 
-class QFont;
 
 class CharacterGeneral;
 

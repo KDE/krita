@@ -23,7 +23,6 @@
 #include <KoCanvasObserver.h>
 #include <QtGui/QDockWidget>
 
-class KoUnit;
 
 /// A docker for setting properties of a shape shadow
 class ShadowDocker : public QDockWidget, public KoCanvasObserver

@@ -25,6 +25,7 @@
 
 class Canvas;
 class FolderShape;
+class KoPointerEvent;
 
 class ResizeFolderStrategy : public InteractionStrategy
 {

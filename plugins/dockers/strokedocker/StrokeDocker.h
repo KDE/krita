@@ -33,7 +33,6 @@
 #include <QtGui/QDockWidget>
 
 class KoShapeBorderModel;
-class KoCanvasController;
 
 /// A docker for setting properties of a line border
 class StrokeDocker : public QDockWidget, public KoCanvasObserver

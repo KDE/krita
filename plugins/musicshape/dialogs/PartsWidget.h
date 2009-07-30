@@ -23,7 +23,6 @@
 
 #include <QWidget>
 
-class QListWidgetItem;
 class MusicTool;
 class MusicShape;
 namespace MusicCore {

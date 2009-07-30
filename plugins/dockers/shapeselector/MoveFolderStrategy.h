@@ -23,6 +23,7 @@
 
 class Canvas;
 class FolderShape;
+class KoPointerEvent;
 
 class MoveFolderStrategy : public InteractionStrategy
 {

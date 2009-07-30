@@ -26,9 +26,7 @@
 
 #define PICTURESHAPEID "PictureShape"
 
-class KoImageData;
 class KoImageCollection;
-class KUrl;
 class RenderQueue;
 
 class PictureShape : public KoShape, public KoFrameShape

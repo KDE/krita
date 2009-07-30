@@ -22,6 +22,7 @@
 #include "InteractionStrategy.h"
 
 class Canvas;
+class KoPointerEvent;
 
 class DragCanvasStrategy : public InteractionStrategy
 {

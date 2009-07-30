@@ -23,7 +23,7 @@
 
 class Canvas;
 class KoShape;
-class QMouseEvent;
+class KoPointerEvent;
 
 class RightClickStrategy : public InteractionStrategy
 {

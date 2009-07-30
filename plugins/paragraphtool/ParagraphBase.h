@@ -34,7 +34,6 @@
 
 class KoCanvasBase;
 class KoShape;
-class KoViewConverter;
 
 class QTextDocument;
 class QTextLayout;

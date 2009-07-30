@@ -171,11 +171,9 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             d->refCount.ref();
         }
         delete d->temporaryFile;
-        d->errorCode = Success;
-        d->imageSize = QSizeF();
+        d->clear();
         d->suffix = "png"; // good default for non-lossy storage.
         if (image.numBytes() > MAX_MEMORY_IMAGESIZE) {
-            d->image = QImage();
             // store image
             QBuffer buffer;
             buffer.open(QIODevice::WriteOnly);
@@ -189,13 +187,11 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             buffer.close();
             buffer.open(QIODevice::ReadOnly);
             d->copyToTemporary(buffer);
-            return;
         } else {
             d->image = image;
+            d->dataStoreState = KoImageDataPrivate::StateImageOnly;
         }
-        d->imageLocation.clear();
         d->key = image.cacheKey();
-        d->dataStoreState = KoImageDataPrivate::StateImageOnly;
     }
 }
 

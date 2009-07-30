@@ -103,7 +103,7 @@ void KritaShape::paint(QPainter& painter, const KoViewConverter& converter)
         painter.drawImage(paintRect.toRect(), qimg);
 
     } else if (m_d->doc == 0)
-        tryLoadFromImageData(dynamic_cast<KoImageData*>(KoShape::userData()));
+        tryLoadFromImageData(qobject_cast<KoImageData*>(KoShape::userData()));
 }
 
 void KritaShape::setDisplayProfile(const QString & profileName)
@@ -129,7 +129,7 @@ void KritaShape::waitUntilReady() const
     if (m_d && m_d->doc && m_d->doc->image())   // all done
         return;
 
-    KoImageData *data = dynamic_cast<KoImageData*>(KoShape::userData());
+    KoImageData *data = qobject_cast<KoImageData*>(KoShape::userData());
     if (data == 0 || data->image().isNull())
         return; // no data available at all, so don't try to wait later on.
 

@@ -32,7 +32,7 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImag
 , m_newImageData(newImageData)
 {
     Q_ASSERT( shape );
-    KoImageData * oldImageData = dynamic_cast<KoImageData *>(m_shape->userData());
+    KoImageData *oldImageData = qobject_cast<KoImageData*>(m_shape->userData());
     // we need new here as setUserData deletes the old data
     m_oldImageData = oldImageData ? new KoImageData( *oldImageData ): 0;
     setText(i18n("Change image"));

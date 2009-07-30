@@ -1,4 +1,11 @@
-@operation(compose, inputs=2)
+@operation(compose, inputs=2, arg=float blend)
 {
-  @allchannels( @out = ( ( @in(0) - @in(1)) * @alpha + @in(1) ) / @unit; )
+  if(blend == 1.0 )
+  {
+    @colorchannels( @out = @in(0) ; )
+  } else {
+    @colorchannels( @out = ( ( @in(0) - @in(1)) * blend + @in(1) ); )
+  }
 }
+
+@include(alphabase)

@@ -65,11 +65,11 @@ public:
     ~KoViewPrivate() {
     }
 
-    QPointer<KoDocument> m_doc; // our KoDocument
+    QPointer<KoDocument> document; // our KoDocument
     QPointer<KParts::PartManager> manager;
     QWidget *tempActiveWidget;
     bool registered;  // are we registered at the part manager?
-    bool documentDeleted; // true when m_doc gets deleted [can't use m_doc==0
+    bool documentDeleted; // true when document gets deleted [can't use document==0
     // since this only happens in ~QObject, and views
     // get deleted by ~KoDocument].
     QTimer *scrollTimer;
@@ -140,7 +140,7 @@ KoView::KoView(KoDocument *document, QWidget *parent)
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 
     //kDebug(30003) <<"KoView::KoView" << this;
-    d->m_doc = document;
+    d->document = document;
     KParts::PartBase::setPartObject(this);
 
     setFocusPolicy(Qt::StrongFocus);
@@ -160,12 +160,12 @@ KoView::KoView(KoDocument *document, QWidget *parent)
                 this, SLOT(slotClearStatusText()));
 #endif
 
-        connect(d->m_doc, SIGNAL(statusBarMessage(const QString&)),
+        connect(d->document, SIGNAL(statusBarMessage(const QString&)),
                 this, SLOT(slotActionStatusText(const QString&)));
-        connect(d->m_doc, SIGNAL(clearStatusBarMessage()),
+        connect(d->document, SIGNAL(clearStatusBarMessage()),
                 this, SLOT(slotClearStatusText()));
     }
-    d->m_doc->setCurrent();
+    d->document->setCurrent();
 
     d->scrollTimer = new QTimer(this);
     connect(d->scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
@@ -190,8 +190,8 @@ KoView::~KoView()
         if (koDocument() && !koDocument()->isSingleViewMode()) {
             if (d->manager && d->registered)   // if we aren't registered we mustn't unregister :)
                 d->manager->removePart(koDocument());
-            d->m_doc->removeView(this);
-            d->m_doc->setCurrent(false);
+            d->document->removeView(this);
+            d->document->setCurrent(false);
         }
     }
     delete d;
@@ -199,7 +199,7 @@ KoView::~KoView()
 
 KoDocument *KoView::koDocument() const
 {
-    return d->m_doc;
+    return d->document;
 }
 
 void KoView::setDocumentDeleted()
@@ -236,7 +236,7 @@ QAction *KoView::action(const QDomElement &element) const
     QAction *act = KXMLGUIClient::action(name.toUtf8());
 
     if (!act)
-        act = d->m_doc->KXMLGUIClient::action(name.toUtf8());
+        act = d->document->KXMLGUIClient::action(name.toUtf8());
 
     // last resort, try to get action from the main window if there is one
     if (!act && shell())
@@ -250,7 +250,7 @@ QAction *KoView::action(const char* name) const
     QAction *act = KXMLGUIClient::action(name);
 
     if (!act)
-        act = d->m_doc->KXMLGUIClient::action(name);
+        act = d->document->KXMLGUIClient::action(name);
 
     // last resort, try to get action from the main window if there is one
     if (!act && shell())
@@ -438,9 +438,9 @@ void KoView::setupGlobalActions()
 
 void KoView::newView()
 {
-    Q_ASSERT((d != 0L && d->m_doc));
+    Q_ASSERT((d != 0L && d->document));
 
-    KoDocument *thisDocument = d->m_doc;
+    KoDocument *thisDocument = d->document;
     KoMainWindow *shell = new KoMainWindow(thisDocument->componentData());
     shell->setRootDocument(thisDocument);
     shell->show();
@@ -527,13 +527,13 @@ QToolBar* KoView::viewBar()
 QList<QAction*> KoView::createChangeUnitActions()
 {
     QList<QAction*> answer;
-    answer.append(new UnitChangeAction(KoUnit::Millimeter, this, d->m_doc));
-    answer.append(new UnitChangeAction(KoUnit::Centimeter, this, d->m_doc));
-    answer.append(new UnitChangeAction(KoUnit::Decimeter, this, d->m_doc));
-    answer.append(new UnitChangeAction(KoUnit::Inch, this, d->m_doc));
-    answer.append(new UnitChangeAction(KoUnit::Pica, this, d->m_doc));
-    answer.append(new UnitChangeAction(KoUnit::Cicero, this, d->m_doc));
-    answer.append(new UnitChangeAction(KoUnit::Point, this, d->m_doc));
+    answer.append(new UnitChangeAction(KoUnit::Millimeter, this, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Centimeter, this, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Decimeter, this, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Inch, this, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Pica, this, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Cicero, this, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Point, this, d->document));
 
     return answer;
 }

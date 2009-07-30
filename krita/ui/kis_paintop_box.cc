@@ -82,7 +82,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
 #ifdef Q_WS_MAC
     m_cmbPaintops->setAttribute(Qt::WA_MacSmallSize, true);
-    m_cmbPaintopPresets->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
 
     m_presetWidget = new KisPresetWidget(this, "presetwidget");

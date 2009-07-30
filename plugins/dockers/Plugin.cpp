@@ -19,8 +19,10 @@
 #include "Plugin.h"
 #include "strokedocker/StrokeDockerFactory.h"
 #include "shapeproperties/ShapePropertiesDockerFactory.h"
-#include "shadowdocker/ShadowDockerFactory.h"
-#include "shapeselector/ShapeSelectorFactory.h"
+#ifndef TINY_KOFFICE
+#   include "shadowdocker/ShadowDockerFactory.h"
+#   include "shapeselector/ShapeSelectorFactory.h"
+#endif
 #include "shapecollection/KoShapeCollectionDocker.h"
 
 #include <KoDockRegistry.h>
@@ -35,8 +37,10 @@ Plugin::Plugin( QObject *parent, const QStringList& )
     Q_UNUSED(parent);
     KoDockRegistry::instance()->add( new StrokeDockerFactory() );
     KoDockRegistry::instance()->add( new ShapePropertiesDockerFactory() );
+#ifndef TINY_KOFFICE
     KoDockRegistry::instance()->add( new ShadowDockerFactory() );
     KoDockRegistry::instance()->add( new ShapeSelectorFactory() );
+#endif
     KoDockRegistry::instance()->add( new KoShapeCollectionDockerFactory() );
 }
 

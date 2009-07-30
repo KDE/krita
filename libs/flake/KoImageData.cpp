@@ -33,10 +33,10 @@
 
 #include <QBuffer>
 #include <QCryptographicHash>
+#include <KTemporaryFile>
 #include <QTimer>
 #include <QPainter>
 #include <QImageWriter>
-#include <QTemporaryFile>
 
 /// the maximum amount of bytes the image can be while we store it in memory instead of
 /// spooling it to disk in a temp-file.

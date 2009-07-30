@@ -17,7 +17,7 @@ kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})
 target_link_libraries(
     pictureshape
     flake
-    
+    komain
     kostore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}

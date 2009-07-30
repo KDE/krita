@@ -24,10 +24,8 @@
 #include <kurl.h>
 #include <QtGui/QWidget>
 
-class KFileWidget;
-class KImageFilePreview;
 class PictureShape;
-class QStackedWidget;
+class KoImageSelectionWidget;
 
 class PictureShapeConfigWidget : public KoShapeConfigWidgetBase
 {
@@ -45,14 +43,9 @@ public:
     /// reimplemented from KoShapeConfigWidgetBase
     virtual bool showOnShapeSelect();
 
-private slots:
-    void onAccepted();
-
 private:
-    KFileWidget* m_fileWidget;
-    KImageFilePreview * m_filePreview;
-    PictureShape * m_shape;
-    QStackedWidget * m_stack;
+    PictureShape *m_shape;
+    KoImageSelectionWidget *m_selectionWidget;
 };
 
 #endif //PICTURESHAPECONFIGWIDGET_H

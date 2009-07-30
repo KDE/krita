@@ -57,6 +57,7 @@ set(komain_LIB_SRCS
     KoFilterEdge.cpp
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
+    KoImageSelectionWidget.cpp
 )
 
 if (NOT NO_PIGMENT)
@@ -81,6 +82,7 @@ target_link_libraries(komain ${extra_libs}
                       kodocumentsectionbox koinput kolinestyleselector koodf koopenpane kopicture koplugin koprogress
                       kostore kozoomaction kotext kopagelayout
     ${KDE4_KPARTS_LIBS}
+    ${KDE4_KFILE_LIBRARY}
     ${KDE4_KABC_LIBS}
     ${KDE4_THREADWEAVER_LIBRARIES}
 )
@@ -131,6 +133,7 @@ install( FILES
     KoVersionDialog.h
     KoView.h
     KoViewAdaptor.h
+    KoImageSelectionWidget.h
     kofficeversion.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)

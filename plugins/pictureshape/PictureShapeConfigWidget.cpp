@@ -20,70 +20,42 @@
 #include "PictureShapeConfigWidget.h"
 #include "PictureShape.h"
 
-#include <kfilewidget.h>
-#include <kimagefilepreview.h>
-#include <KLocale>
-#include <KDialog>
+#include <KoImageData.h>
+#include <KoImageSelectionWidget.h>
+
 #include <KDebug>
 #include <QGridLayout>
-#include <QtGui/QStackedWidget>
 
 PictureShapeConfigWidget::PictureShapeConfigWidget()
+    : m_shape(0),
+    m_selectionWidget(0)
 {
-    QGridLayout* layout = new QGridLayout(this);
-    layout->setSpacing(KDialog::spacingHint());
-    layout->setMargin(0);
-
-    m_stack = new QStackedWidget(this);
-
-    m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
-    m_fileWidget->setOperationMode(KFileWidget::Opening);
-    m_fileWidget->setFilter( "image/png image/jpeg image/gif" );
-    m_fileWidget->setMinimumSize( QSize(640,480) );
-    m_filePreview = new KImageFilePreview(this);
-
-    m_stack->addWidget( m_fileWidget );
-    m_stack->addWidget( m_filePreview );
-
-    layout->addWidget(m_stack, 0, 0, 1, -1);
-    layout->setColumnStretch(0, 10);
-
-    connect(m_fileWidget, SIGNAL(accepted()),
-            this, SLOT(onAccepted()));
 }
 
 PictureShapeConfigWidget::~PictureShapeConfigWidget()
 {
 }
 
-void PictureShapeConfigWidget::onAccepted()
-{
-    m_fileWidget->accept();
-    m_stack->setCurrentIndex(1);
-    m_filePreview->showPreview( m_fileWidget->selectedUrl() );
-    emit propertyChanged();
-}
-
 void PictureShapeConfigWidget::open(KoShape *shape)
 {
     m_shape = dynamic_cast<PictureShape*>(shape);
-    m_filePreview->clearPreview();
-    if( ! m_shape->userData() )
-        return;
+    Q_ASSERT(m_shape);
+    delete m_selectionWidget;
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    m_selectionWidget = new KoImageSelectionWidget(m_shape->imageCollection(), this);
+    layout->addWidget(m_selectionWidget);
+    setLayout(layout);
 }
- 
+
 void PictureShapeConfigWidget::save()
 {
     if (!m_shape)
         return;
-/*
-    KUrl url = m_fileWidget->selectedUrl();
-    if (!url.isEmpty())
-        m_shape->loadFromUrl(url);
-
-    kDebug(31000) << "image url =" << url;
-    m_shape->setKeepAspectRatio(true);
-*/
+    KoImageData *data = m_selectionWidget->imageData();
+    if (data) {
+        m_shape->setUserData(data);
+        m_shape->setSize(data->imageSize());
+    }
 }
 
 bool PictureShapeConfigWidget::showOnShapeCreate()

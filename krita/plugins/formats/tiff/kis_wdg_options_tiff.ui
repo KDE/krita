@@ -197,7 +197,7 @@ You can uncheck the box if you are not using transparency and you want to make t
         <number>0</number>
        </property>
        <item>
-        <widget class="Q3Frame" name="frame4" >
+        <widget class="QFrame" name="frame4" >
          <property name="frameShape" >
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -651,9 +651,9 @@ You can uncheck the box if you are not using transparency and you want to make t
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Q3Frame</class>
+   <class>QFrame</class>
    <extends>QFrame</extends>
-   <header>Qt3Support/Q3Frame</header>
+   <header>Qt3Support/QFrame</header>
    <container>1</container>
   </customwidget>
   <customwidget>

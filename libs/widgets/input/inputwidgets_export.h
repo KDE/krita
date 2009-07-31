@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOWIDGETS_EXPORT_H
-#define KOWIDGETS_EXPORT_H
+#ifndef INPUTWIDGETS_EXPORT_H
+#define INPUTWIDGETS_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
@@ -26,30 +26,21 @@
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined _WIN32 || defined _WIN64
 
-#ifndef KOWIDGETS_EXPORT
-# if defined(MAKE_KOPROGRESS_LIB) || \
-     defined(MAKE_KOASPECTBUTTON_LIB) || \
-     defined(MAKE_KOCHARACTERSELECTIONDIALOG_LIB) || \
-     defined(MAKE_KOLINESTYLESELECTOR_LIB) || \
-     defined(MAKE_KODOCUMENTSECTIONBOX_LIB) || \
-     defined(MAKE_KOOPENPANE_LIB) || \
-     defined(MAKE_KOPAGELAYOUT_LIB) || \
-     defined(MAKE_KOCOLORWIDGETS_LIB) || \
-     defined(MAKE_KOCVSIMPORT_LIB) || \
-     defined(MAKE_KORESOURCEWIDGET_LIB) || \
-     defined(MAKE_KOZOOMACTION_LIB)
+#ifndef INPUTWIDGETS_EXPORT
+# if defined(MAKE_KOINPUT_LIB)
 /* We are building this library */
-#  define KOWIDGETS_EXPORT KDE_EXPORT
+#  define INPUTWIDGETS_EXPORT KDE_EXPORT
 # else
 /* We are using this library */
-#  define KOWIDGETS_EXPORT KDE_IMPORT
+#  define INPUTWIDGETS_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #else /* UNIX */
 
-#define KOWIDGETS_EXPORT KDE_EXPORT
+#define INPUTWIDGETS_EXPORT KDE_EXPORT
 
 #endif
 
-#endif
+#endif // INPUTWIDGETS_EXPORT_H
+

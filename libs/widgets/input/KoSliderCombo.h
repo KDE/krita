@@ -22,7 +22,7 @@
 
 #include <QComboBox>
 
-#include "kowidgets_export.h"
+#include "inputwidgets_export.h"
 
 /**
  * @short A widget for qreal values with a popup slider
@@ -38,7 +38,7 @@
  * 
  * The input of the numerical line edit is constrained to numbers and decimal signs.
  */
-class KOWIDGETS_EXPORT KoSliderCombo : public QComboBox
+class INPUTWIDGETS_EXPORT KoSliderCombo : public QComboBox
 {
 
     Q_OBJECT

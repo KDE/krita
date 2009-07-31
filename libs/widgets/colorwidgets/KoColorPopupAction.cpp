@@ -33,6 +33,7 @@
 #include <QGridLayout>
 
 #include <KColorDialog>
+#include <KDebug>
 #include <klocale.h>
 #include <kicon.h>
 
@@ -106,8 +107,14 @@ KoColorPopupAction::~KoColorPopupAction()
     delete d;
 }
 
-void KoColorPopupAction::setCurrentColor( const QColor &color )
+void KoColorPopupAction::setCurrentColor( const QColor &_color )
 {
+    const QColor color(_color.isValid() ? _color : QColor(0,0,0,255));
+#ifndef NDEBUG
+    if (!_color.isValid()) {
+        kWarning(30004) << "Invalid color given, defaulting to black";
+    }
+#endif
     d->colorChooser->setQColor( color );
 
     KoColor minColor( color, KoColorSpaceRegistry::instance()->rgb8() );

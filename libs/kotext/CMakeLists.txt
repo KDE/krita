@@ -114,12 +114,18 @@ install(
     KoVariable.h
     KoVariableManager.h
     KoVariableRegistry.h
+
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+)
+
+install(
+    FILES
     styles/KoCharacterStyle.h
     styles/KoListLevelProperties.h
     styles/KoListStyle.h
     styles/KoParagraphStyle.h
     styles/KoStyleManager.h
-
     DESTINATION
-    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+    ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
 )

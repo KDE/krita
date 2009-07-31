@@ -42,16 +42,9 @@
 #include "kis_cursor.h"
 
 #include <config-opengl.h>
-#include <config-glew.h>
 
 #ifdef HAVE_OPENGL
-
-#ifdef HAVE_GLEW
-#include <GL/glew.h>
-#endif
-
-#include <QtOpenGL>
-
+#include <GL/gl.h>
 #endif
 
 
@@ -189,7 +182,7 @@ void KisToolPolygon::paint(QPainter& gc, const KoViewConverter &converter)
     QPointF startPos;
     QPointF endPos;
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
     if ( m_canvas->canvasController()->isCanvasOpenGL() ){
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);

@@ -45,15 +45,9 @@
 #include "kis_selection.h"
 
 #include <config-opengl.h>
-#include <config-glew.h>
 
 #ifdef HAVE_OPENGL
-
-#ifdef HAVE_GLEW
-#include <GL/glew.h>
-#endif
-
-#include <QtOpenGL>
+#include <GL/gl.h>
 #endif
 
 
@@ -146,7 +140,7 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
 
     vQPointF points = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
     if ( m_canvas->canvasController()->isCanvasOpenGL() ){
         QPointF begin, end;
 

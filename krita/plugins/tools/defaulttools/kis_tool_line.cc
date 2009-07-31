@@ -45,17 +45,11 @@
 #include <recorder/kis_recorded_polyline_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
+
 #include <config-opengl.h>
-#include <config-glew.h>
 
 #ifdef HAVE_OPENGL
-
-#ifdef HAVE_GLEW
-#include <GL/glew.h>
-#endif
-
-#include <QtOpenGL>
-
+#include <GL/gl.h>
 #endif
 
 #include <KoCanvasController.h>
@@ -216,7 +210,7 @@ QPointF KisToolLine::straightLine(QPointF point)
 void KisToolLine::paintLine(QPainter& gc, const QRect&)
 {
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
     if (m_canvas->canvasController()->isCanvasOpenGL()){
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);

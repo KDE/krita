@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006, 2009 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
@@ -618,6 +618,33 @@ void KoCanvasController::setMargin(int margin)
     d->margin = margin;
     Q_ASSERT(d->viewportWidget);
     d->viewportWidget->setMargin(margin);
+}
+
+QPoint KoCanvasController::scrollBarValue() const
+{
+    QScrollBar * hBar = horizontalScrollBar();
+    QScrollBar * vBar = verticalScrollBar();
+    QPoint value;
+    if (hBar && hBar->isVisible()) {
+        value.setX(hBar->value());
+    }
+    if (vBar && vBar->isVisible()) {
+        value.setY(vBar->value());
+    }
+
+    return value;
+}
+
+void KoCanvasController::setScrollBarValue(const QPoint & value)
+{
+    QScrollBar * hBar = horizontalScrollBar();
+    QScrollBar * vBar = verticalScrollBar();
+    if (hBar && hBar->isVisible()) {
+        hBar->setValue(value.x());
+    }
+    if (vBar && vBar->isVisible()) {
+        vBar->setValue(value.y());
+    }
 }
 
 int KoCanvasController::margin() const

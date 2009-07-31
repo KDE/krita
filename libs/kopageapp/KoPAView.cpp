@@ -455,9 +455,15 @@ void KoPAView::formatPageLayout()
 
 void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
 {
-    Q_UNUSED(mode);
     Q_UNUSED(zoom);
-    kopaCanvas()->update();
+    if (m_activePage) {
+        if (mode == KoZoomMode::ZOOM_PAGE) {
+            KoPageLayout &layout = m_activePage->pageLayout();
+            QRectF pageRect( 0, 0, layout.width, layout.height );
+            m_canvasController->ensureVisible( pageRect );
+        }
+        kopaCanvas()->update();
+    }
 }
 
 void KoPAView::setMasterMode( bool master )
@@ -513,6 +519,9 @@ void KoPAView::reinitDocumentDocker()
 
 void KoPAView::doUpdateActivePage( KoPAPageBase * page )
 {
+    // save the old offset into the page so we can use it also on the new page
+    QPoint scrollValue(m_canvasController->scrollBarValue());
+
     bool pageChanged = page != m_activePage;
     setActivePage( page );
 
@@ -524,8 +533,10 @@ void KoPAView::doUpdateActivePage( KoPAPageBase * page )
     m_verticalRuler->setActiveRange(layout.top, layout.height - layout.bottom);
 
     QSizeF pageSize( layout.width, layout.height );
-    m_zoomController->setPageSize( pageSize );
-    m_zoomController->setDocumentSize( pageSize );
+    m_canvas->setDocumentOrigin(QPointF(layout.width, layout.height));
+    // the page is in the center of the canvas
+    m_zoomController->setDocumentSize(pageSize * 3);
+    m_zoomController->setPageSize(pageSize);
     m_canvas->resourceProvider()->setResource( KoCanvasResource::PageSize, pageSize );
 
     m_canvas->update();
@@ -534,6 +545,7 @@ void KoPAView::doUpdateActivePage( KoPAPageBase * page )
 
     if ( pageChanged ) {
         emit activePageChanged();
+        m_canvasController->setScrollBarValue(scrollValue);
     }
 }
 

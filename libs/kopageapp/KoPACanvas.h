@@ -63,7 +63,13 @@ public:
     KoUnit unit() const;
     const QPoint & documentOffset() const;
 
+    /// reimplemented in view coordinates
+    virtual QPoint documentOrigin() const;
+    /// Set the origin of the page inside the canvas in document coordinates
+    void setDocumentOrigin(const QPointF & origin);
+
     KoPAView* koPAView () const;
+
 
 public slots:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
@@ -117,6 +123,12 @@ protected:
      * @param actionList action list to be inserted into the menu
      */
     void showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList );
+
+    /// translate widget coordinates to view coordinates
+    QPoint widgetToView(const QPoint& p) const;
+    QRect widgetToView(const QRect& r) const;
+    QPoint viewToWidget(const QPoint& p) const;
+    QRect viewToWidget(const QRect& r) const;
 
 private:
     class Private;

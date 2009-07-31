@@ -58,6 +58,7 @@ public:
     KoShapeManager * masterShapeManager;
     KoToolProxy * toolProxy;
     QPoint documentOffset;
+    QPointF origin;  ///< the origin of the page rect inside the canvas in document points
 };
 
 KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
@@ -123,6 +124,16 @@ void KoPACanvas::setDocumentOffset(const QPoint &offset) {
     d->documentOffset = offset;
 }
 
+QPoint KoPACanvas::documentOrigin() const
+{
+    return viewConverter()->documentToView(d->origin).toPoint();
+}
+
+void KoPACanvas::setDocumentOrigin(const QPointF & origin)
+{
+    d->origin = origin;
+}
+
 void KoPACanvas::gridSize( qreal *horizontal, qreal *vertical ) const
 {
     *horizontal = d->doc->gridData().gridX();
@@ -151,7 +162,7 @@ KoShapeManager * KoPACanvas::masterShapeManager() const
 
 void KoPACanvas::updateCanvas( const QRectF& rc )
 {
-    QRect clipRect( viewConverter()->documentToView( rc ).toRect() );
+    QRect clipRect(viewToWidget(viewConverter()->documentToView(rc).toRect()));
     clipRect.adjust( -2, -2, 2, 2 ); // Resize to fit anti-aliasing
     clipRect.moveTopLeft( clipRect.topLeft() - d->documentOffset);
     update( clipRect );
@@ -181,12 +192,12 @@ void KoPACanvas::paintEvent( QPaintEvent *event )
 
 void KoPACanvas::tabletEvent( QTabletEvent *event )
 {
-    d->view->viewMode()->tabletEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
+    d->view->viewMode()->tabletEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + d->documentOffset)));
 }
 
 void KoPACanvas::mousePressEvent( QMouseEvent *event )
 {
-    d->view->viewMode()->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
+    d->view->viewMode()->mousePressEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + d->documentOffset)));
 
     if(!event->isAccepted() && event->button() == Qt::RightButton)
     {
@@ -197,17 +208,17 @@ void KoPACanvas::mousePressEvent( QMouseEvent *event )
 
 void KoPACanvas::mouseDoubleClickEvent( QMouseEvent *event )
 {
-    d->view->viewMode()->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
+    d->view->viewMode()->mouseDoubleClickEvent( event, viewConverter()->viewToDocument(widgetToView(event->pos() + d->documentOffset)));
 }
 
 void KoPACanvas::mouseMoveEvent( QMouseEvent *event )
 {
-    d->view->viewMode()->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
+    d->view->viewMode()->mouseMoveEvent( event, viewConverter()->viewToDocument(widgetToView(event->pos() + d->documentOffset)));
 }
 
 void KoPACanvas::mouseReleaseEvent( QMouseEvent *event )
 {
-    d->view->viewMode()->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
+    d->view->viewMode()->mouseReleaseEvent( event, viewConverter()->viewToDocument(widgetToView(event->pos() + d->documentOffset)));
 }
 
 void KoPACanvas::keyPressEvent( QKeyEvent *event )
@@ -229,7 +240,7 @@ void KoPACanvas::keyReleaseEvent( QKeyEvent *event )
 
 void KoPACanvas::wheelEvent ( QWheelEvent * event )
 {
-    d->view->viewMode()->wheelEvent( event, viewConverter()->viewToDocument( event->pos() + d->documentOffset ) );
+    d->view->viewMode()->wheelEvent( event, viewConverter()->viewToDocument(widgetToView(event->pos() + d->documentOffset)));
 }
 
 void KoPACanvas::closeEvent( QCloseEvent * event )
@@ -267,6 +278,26 @@ void KoPACanvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>
 
     if( menu )
         menu->exec( globalPos );
+}
+
+QPoint KoPACanvas::widgetToView(const QPoint& p) const
+{
+    return p - viewConverter()->documentToView(d->origin).toPoint();
+}
+
+QRect KoPACanvas::widgetToView(const QRect& r) const
+{
+    return r.translated(viewConverter()->documentToView(-d->origin).toPoint());
+}
+
+QPoint KoPACanvas::viewToWidget(const QPoint& p) const
+{
+    return p + viewConverter()->documentToView(d->origin).toPoint();
+}
+
+QRect KoPACanvas::viewToWidget(const QRect& r) const
+{
+    return r.translated(viewConverter()->documentToView(d->origin).toPoint());
 }
 
 KoGuidesData * KoPACanvas::guidesData()

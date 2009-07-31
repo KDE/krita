@@ -3,6 +3,7 @@
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2007-2008 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -249,6 +250,17 @@ public:
      * Set the new margin to pad the canvas with.
      */
     void setMargin(int margin);
+
+    /**
+     * Get the position of the scrollbar
+     */
+    QPoint scrollBarValue() const;
+
+    /**
+     * Set the position of the scrollbar
+     * @param the new values of the sroll bars
+     */
+    void setScrollBarValue(const QPoint & value);
 
 signals:
     /**

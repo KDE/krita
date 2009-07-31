@@ -25,6 +25,7 @@
 #include <KDebug>
 
 #include <KoZoomHandler.h>
+#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 
 class KoZoomController::Private
@@ -163,7 +164,6 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
     }
 
     d->zoomHandler->setZoom(zoom);
-    emit zoomChanged(mode, zoom);
 
     // Tell the canvasController that the zoom has changed
     // Actually canvasController doesn't know about zoom, but the document in pixels
@@ -179,6 +179,8 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
 
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();
+
+    emit zoomChanged(mode, zoom);
 }
 
 #include "KoZoomController.moc"

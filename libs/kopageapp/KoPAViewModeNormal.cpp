@@ -53,6 +53,8 @@ void KoPAViewModeNormal::paintEvent( KoPACanvas *canvas, QPaintEvent* event )
     QRectF clipRect = event->rect().translated( m_canvas->documentOffset() );
     painter.setClipRect( clipRect );
 
+    painter.translate( m_canvas->documentOrigin().x(), m_canvas->documentOrigin().y() );
+
     KoViewConverter * converter = m_view->viewConverter( m_canvas );
     m_view->activePage()->paintBackground( painter, *converter );
     if ( m_view->activePage()->displayMasterShapes() ) {

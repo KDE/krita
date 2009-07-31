@@ -597,7 +597,7 @@ void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
     KoPAPageBase * newPage = m_doc->pageByNavigation( m_activePage, pageNavigation );
 
     if ( newPage != m_activePage ) {
-        doUpdateActivePage( newPage );
+        updateActivePage( newPage );
     }
 }
 

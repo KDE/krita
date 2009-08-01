@@ -15,3 +15,8 @@ set(TestListStyly_test_SRCS TestListStyle.cpp)
 kde4_add_unit_test(TestListStyle TESTNAME libs-kotext-styles-TestListStyle  ${TestListStyly_test_SRCS})
 target_link_libraries(TestListStyle kotext ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestTableCellStyle_test_SRCS TestTableCellStyle.cpp)
+kde4_add_unit_test(TestTableCellStyle TESTNAME libs-kotext-styles-TestTableCellStyle ${TestTableCellStyle_test_SRCS})
+target_link_libraries(TestTableCellStyle kotext ${QT_QTTEST_LIBRARY})

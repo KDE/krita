@@ -43,7 +43,6 @@ struct Edge {
     QPen innerPen;
     QPen outerPen;
     qreal spacing;
-    qreal padding;
 };
 
 class KoTableCellStyle::Private
@@ -83,11 +82,6 @@ KoTableCellStyle::KoTableCellStyle(QObject *parent)
     //d->edges[Right].outerPen = format.penProperty(RightBorderOuterPen);
     d->edges[Right].spacing = 0;
     //d->edges[Right].innerPen = format.penProperty(RightBorderInnerPen);
-
-    d->edges[Top].padding = 0;
-    d->edges[Left].padding = 0;
-    d->edges[Right].padding = 0;
-    d->edges[Bottom].padding = 0;
 }
 
 KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *parent)
@@ -110,11 +104,6 @@ KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *
     d->edges[Right].outerPen = format.penProperty(RightBorderOuterPen);
     d->edges[Right].spacing = format.doubleProperty(RightBorderSpacing);
     d->edges[Right].innerPen = format.penProperty(RightBorderInnerPen);
-
-    d->edges[Top].padding = format.topPadding();
-    d->edges[Left].padding = format.leftPadding();
-    d->edges[Right].padding = format.rightPadding();
-    d->edges[Bottom].padding = format.bottomPadding();
 }
 
 KoTableCellStyle *KoTableCellStyle::fromTableCell(const QTextTableCell &tableCell, QObject *parent)
@@ -131,20 +120,20 @@ KoTableCellStyle::~KoTableCellStyle()
 QRectF KoTableCellStyle::contentRect(const QRectF &boundingRect) const
 {
     return boundingRect.adjusted(
-                d->edges[Left].outerPen.widthF() + d->edges[Left].spacing + d->edges[Left].innerPen.widthF() + d->edges[Left].padding,
-                d->edges[Top].outerPen.widthF() + d->edges[Top].spacing + d->edges[Top].innerPen.widthF() + d->edges[Top].padding,
-                - d->edges[Right].outerPen.widthF() - d->edges[Right].spacing - d->edges[Right].innerPen.widthF() - d->edges[Right].padding,
-                - d->edges[Bottom].outerPen.widthF() - d->edges[Bottom].spacing - d->edges[Bottom].innerPen.widthF() - d->edges[Bottom].padding
+                d->edges[Left].outerPen.widthF() + d->edges[Left].spacing + d->edges[Left].innerPen.widthF() + propertyDouble(QTextFormat::TableCellLeftPadding),
+                d->edges[Top].outerPen.widthF() + d->edges[Top].spacing + d->edges[Top].innerPen.widthF() + propertyDouble(QTextFormat::TableCellTopPadding),
+                - d->edges[Right].outerPen.widthF() - d->edges[Right].spacing - d->edges[Right].innerPen.widthF() - propertyDouble(QTextFormat::TableCellRightPadding),
+                - d->edges[Bottom].outerPen.widthF() - d->edges[Bottom].spacing - d->edges[Bottom].innerPen.widthF() - propertyDouble(QTextFormat::TableCellBottomPadding)
    );
 }
 
 QRectF KoTableCellStyle::boundingRect(const QRectF &contentRect) const
 {
     return contentRect.adjusted(
-                - d->edges[Left].outerPen.widthF() - d->edges[Left].spacing - d->edges[Left].innerPen.widthF() - d->edges[Left].padding,
-                - d->edges[Top].outerPen.widthF() - d->edges[Top].spacing - d->edges[Top].innerPen.widthF() - d->edges[Top].padding,
-                d->edges[Right].outerPen.widthF() + d->edges[Right].spacing + d->edges[Right].innerPen.widthF() + d->edges[Right].padding,
-                d->edges[Bottom].outerPen.widthF() + d->edges[Bottom].spacing + d->edges[Bottom].innerPen.widthF() + d->edges[Bottom].padding
+                - d->edges[Left].outerPen.widthF() - d->edges[Left].spacing - d->edges[Left].innerPen.widthF() - propertyDouble(QTextFormat::TableCellLeftPadding),
+                - d->edges[Top].outerPen.widthF() - d->edges[Top].spacing - d->edges[Top].innerPen.widthF() - propertyDouble(QTextFormat::TableCellTopPadding),
+                d->edges[Right].outerPen.widthF() + d->edges[Right].spacing + d->edges[Right].innerPen.widthF() + propertyDouble(QTextFormat::TableCellRightPadding),
+                d->edges[Bottom].outerPen.widthF() + d->edges[Bottom].spacing + d->edges[Bottom].innerPen.widthF() + propertyDouble(QTextFormat::TableCellBottomPadding)
    );
 }
 
@@ -398,11 +387,6 @@ void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
     format.setProperty(RightBorderOuterPen, d->edges[Right].outerPen);
     format.setProperty(RightBorderSpacing,  d->edges[Right].spacing);
     format.setProperty(RightBorderInnerPen, d->edges[Right].innerPen);
-
-    format.setTopPadding(d->edges[Top].padding);
-    format.setLeftPadding(d->edges[Left].padding);
-    format.setRightPadding(d->edges[Right].padding);
-    format.setBottomPadding(d->edges[Bottom].padding);
 }
 
 void KoTableCellStyle::setBackground(const QBrush &brush)

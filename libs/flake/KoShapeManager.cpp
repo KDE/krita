@@ -34,6 +34,7 @@
 #include "KoShapeShadow.h"
 #include "KoShapeLayer.h"
 #include "KoFilterEffect.h"
+#include "KoFilterEffectStack.h"
 
 #include <KoRTree.h>
 
@@ -222,7 +223,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         shape->shadow()->paint(shape, painter, converter);
         painter.restore();
     }
-    if(shape->filterEffectStack().empty()) {
+    if(!shape->filterEffectStack() || shape->filterEffectStack()->filterEffects().isEmpty()) {
         painter.save();
         shape->paint(painter, converter);
         painter.restore();
@@ -235,10 +236,8 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         // There are filter effets, then we need to prerender the shape on an image, to filter it
         QRectF shapeBound(QPointF(), shape->size());
         // First step, compute the rectangle used for the image
-        QRectF clipRegion;
-        foreach(KoFilterEffect* filterEffect, shape->filterEffectStack()) {
-            clipRegion |= filterEffect->clipRectForBoundingRect(shapeBound);
-        }
+        QRectF clipRegion = shape->filterEffectStack()->clipRectForBoundingRect(shapeBound);
+        // convert clip region to view coordinates
         QRectF zoomedClipRegion = converter.documentToView(clipRegion);
         // determine the offset of the clipping rect from the shapes origin
         QPointF clippingOffset = zoomedClipRegion.topLeft();
@@ -274,8 +273,9 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         imageBuffers.insert(QString(), sourceGraphic);
         imageBuffers.insert("SourceAlpha", sourceAlpha);
         
+        QList<KoFilterEffect*> filterEffects = shape->filterEffectStack()->filterEffects();
         // Filter
-        foreach(KoFilterEffect* filterEffect, shape->filterEffectStack()) {
+        foreach(KoFilterEffect* filterEffect, filterEffects) {
             QRectF filterRegion = filterEffect->filterRectForBoundingRect(clipRegion);
             filterRegion = converter.documentToView(filterRegion);
             QPointF filterOffset = filterRegion.topLeft()-2*clippingOffset;
@@ -302,7 +302,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
             }
         }
 
-        KoFilterEffect * lastEffect = shape->filterEffectStack().last();
+        KoFilterEffect * lastEffect = filterEffects.last();
         
         // Paint the result
         painter.save();

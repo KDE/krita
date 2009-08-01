@@ -49,15 +49,6 @@ public:
     /// Returns the unique id of the filter
     QString id() const;
     
-    /// Sets the clipping rectangle used for this filter in bounding box units
-    void setClipRect(const QRectF &clipRect);
-    
-    /// Returns the clipping rectangle used for this filter in bounding box units
-    QRectF clipRect() const;
-    
-    /// Returns the clipping rectangle for the given bounding rect
-    QRectF clipRectForBoundingRect(const QRectF &boundingRect) const;
-    
     /// Sets the region the filter is applied to in bounding box units
     void setFilterRect(const QRectF &filterRect);
     

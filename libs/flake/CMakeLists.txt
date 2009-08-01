@@ -101,6 +101,7 @@ set(flake_SRCS
     KoZoomMode.cpp
     KoDpi.cpp
     KoFilterEffect.cpp
+    KoFilterEffectStack.cpp
     KoFilterEffectFactory.cpp
     KoFilterEffectRegistry.cpp
     KoFilterEffectConfigWidgetBase.cpp

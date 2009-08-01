@@ -45,7 +45,7 @@
 #include "KoEventAction.h"
 #include "KoEventActionRegistry.h"
 #include "KoOdfWorkaround.h"
-#include "KoFilterEffect.h"
+#include "KoFilterEffectStack.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -77,6 +77,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
     border(0),
     q(shape),
     shadow(0),
+    filterEffectStack(0),
     zIndex(0),
     visible(true),
     printable(true),
@@ -108,8 +109,9 @@ KoShapePrivate::~KoShapePrivate()
         delete shadow;
     if (fill && ! fill->removeUser())
         delete fill;
+    if (filterEffectStack && ! filterEffectStack->removeUser())
+        delete filterEffectStack;
     qDeleteAll(eventActions);
-    qDeleteAll(filterEffects);
 }
 
 void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
@@ -1387,20 +1389,20 @@ void KoShape::removeAdditionalStyleAttribute(const char * name)
     d->additionalStyleAttributes.remove(name);
 }
 
-QList<KoFilterEffect*> KoShape::filterEffectStack() const
+KoFilterEffectStack * KoShape::filterEffectStack() const
 {
     Q_D(const KoShape);
-    return d->filterEffects;
+    return d->filterEffectStack;
 }
 
-void KoShape::insertFilterEffect(int index, KoFilterEffect * filter)
+void KoShape::setFilterEffectStack(KoFilterEffectStack * filterEffectStack)
 {
     Q_D(KoShape);
-    d->filterEffects.insert(index, filter);
-}
-
-void KoShape::removeFilterEffect(int index)
-{
-    Q_D(KoShape);
-    d->filterEffects.removeAt(index);
+    if (d->filterEffectStack)
+        d->filterEffectStack->removeUser();
+    d->filterEffectStack = filterEffectStack;
+    if (d->filterEffectStack) {
+        d->filterEffectStack->addUser();
+    }
+    notifyChanged();
 }

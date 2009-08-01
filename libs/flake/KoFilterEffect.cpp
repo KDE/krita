@@ -26,14 +26,12 @@
 
 struct KoFilterEffect::Private {
     Private()
-        : clipRect(-0.1, -0.1, 1.2, 1.2)
-        , filterRect(0, 0, 1, 1)
+        : filterRect(0, 0, 1, 1)
         , requiredInputCount(1), maximalInputCount(1)
     {}
     
     QString id;
     QString name;
-    QRectF clipRect;
     QRectF filterRect;
     QList<QString> inputs;
     QString output;
@@ -61,25 +59,6 @@ QString KoFilterEffect::name() const
 QString KoFilterEffect::id() const
 {
     return d->id;
-}
-
-void KoFilterEffect::setClipRect(const QRectF &clipRect)
-{
-    d->clipRect = clipRect;
-}
-
-QRectF KoFilterEffect::clipRect() const
-{
-    return d->clipRect;
-}
-
-QRectF KoFilterEffect::clipRectForBoundingRect(const QRectF &boundingRect) const
-{
-    qreal x = boundingRect.x() + d->clipRect.x() * boundingRect.width();
-    qreal y = boundingRect.y() + d->clipRect.y() * boundingRect.height();
-    qreal w = d->clipRect.width() * boundingRect.width();
-    qreal h = d->clipRect.height() * boundingRect.height();
-    return QRectF(x, y, w, h);
 }
 
 void KoFilterEffect::setFilterRect(const QRectF &filterRect)

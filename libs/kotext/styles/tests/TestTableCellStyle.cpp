@@ -3,6 +3,7 @@
 #include "styles/KoTableCellStyle.h"
 
 #include <QTextTableCellFormat>
+#include <QRectF>
 
 void TestTableCellStyle::testTableCellStyle()
 {
@@ -27,7 +28,6 @@ void TestTableCellStyle::testTableCellStyle()
 
     KoTableCellStyle *style = new KoTableCellStyle(format1);
     QVERIFY(style);
-
     QTextTableCellFormat format2;
     style->applyStyle(format2);
 
@@ -47,6 +47,23 @@ void TestTableCellStyle::testTableCellStyle()
     QCOMPARE(format2.penProperty(KoTableCellStyle::RightBorderOuterPen), QPen(Qt::red, 14.0));
     QCOMPARE(format2.doubleProperty(KoTableCellStyle::RightBorderSpacing), 15.0);
     QCOMPARE(format2.penProperty(KoTableCellStyle::RightBorderInnerPen), QPen(Qt::red, 16.0));
+
+    // Test contentRect() with a (0,0 100x100) rect.
+    // Rules:
+    //   x = 1+8+9+10 = 28
+    //   y = 3+5+6+7 = 21
+    //   width = 100-(1+8+9+10)-(2+14+15+16) = 25
+    //   height = 100-(3+5+6+7)-(4+11+12+13) = 39
+    QRectF rect(0.0, 0.0, 100.0, 100.0);
+    QCOMPARE(style->contentRect(rect), QRectF(28.0, 21.0, 25.0, 39.0));
+
+    // Test boundingRect() with a (0,0 100x100) rect.
+    // Rules:
+    //   x = -1-8-9-10 = -28
+    //   y = -3-5-6-7 = -21
+    //   width = 100+(1+8+9+10)-(2+14+15+16) = 175
+    //   height = 100+(3+5+6+7)-(4+11+12+13) = 161
+    QCOMPARE(style->boundingRect(rect), QRectF(-28.0, -21.0, 175.0, 161.0));
 }
 
 QTEST_MAIN(TestTableCellStyle)

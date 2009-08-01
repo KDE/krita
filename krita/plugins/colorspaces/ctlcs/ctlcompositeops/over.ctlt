@@ -1,4 +1,4 @@
-@operation(compose, inputs=2, arg=float blend)
+@operation(compose, inputs=2, arguments=float blend)
 {
   if(blend == 1.0 )
   {

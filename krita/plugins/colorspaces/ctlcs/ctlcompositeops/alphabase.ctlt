@@ -1,4 +1,4 @@
-@operation(compositeWithmask, inputs=2, arg=int mask, arg=int opacity = 255)
+@operation(compositeWithmask, inputs=2, arguments=int mask, optional_arguments=int opacity = 255)
 {
   @alphachannel( float blend = @in(1) / @unit; )
   if(mask != 255)
@@ -21,7 +21,7 @@
   }
 }
 
-@operation(compositeWithoutmask, inputs=2, arg=int opacity = 255)
+@operation(compositeWithoutmask, inputs=2, optional_arguments=int opacity = 255)
 {
   @alphachannel( float blend = @in(1) / @unit; )
   if( @alphachannel( @in(1) != 0 ) )

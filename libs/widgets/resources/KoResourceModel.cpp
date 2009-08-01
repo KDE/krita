@@ -49,6 +49,14 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
 
     switch( role )
     {
+        case Qt::DisplayRole:
+        {
+            KoResource * resource = static_cast<KoResource*>(index.internalPointer());
+            if( ! resource )
+                return QVariant();
+
+            return QVariant( resource->name() );
+        }
         case Qt::DecorationRole:
         {
             KoResource * resource = static_cast<KoResource*>(index.internalPointer());

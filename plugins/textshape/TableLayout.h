@@ -126,49 +126,25 @@ public:
     /**
      * @brief Constructor.
      *
-     * Create a new table layout and set it up with the given parent layout
-     * and table.
+     * Create a new table layout and set it up with the given
+     * table.
      *
-     * @param parentLayout the parent layout.
      * @param table a pointer to the table.
      */
-    TableLayout(KoTextDocumentLayout::LayoutState *parentLayout, QTextTable *table);
+    TableLayout(QTextTable *table);
 
     /**
      * @brief Constructor.
      *
      * Create a new, empty table layout.
      *
-     * The table layout will be in an invalid state until a parent layout and
-     * table has been set using setTable() and setParentLayout(). Calls to
-     * layout() will return immediately until this has been done.
+     * The table layout will be in an invalid state until a table has
+     * been set using setTable(). Calls to layout will return
+     * immediately until this has been done.
      * 
-     * \sa setTable(), setParentLayout()
-     *
-     * @param parentLayout a pointer to the parent layout.
-     */
-    TableLayout();
-
-    /**
-     * Set the parent layout.
-     * 
-     * It is the caller's responsibility to delete the table object that is
-     * passed in.
-     *
-     * @param parentLayout a pointer the parentLayout.
-     *
-     * \sa parentLayout()
-     */
-    void setParentLayout(KoTextDocumentLayout::LayoutState *parentLayout);
-
-    /**
-     * Get the current parent layout.
-     *
-     * @return a pointer to the parent layout.
-     *
      * \sa setTable()
      */
-    KoTextDocumentLayout::LayoutState *parentLayout() const;
+    TableLayout();
 
     /**
      * Set the table to be laid out.
@@ -192,16 +168,23 @@ public:
     QTextTable *table() const;
 
     /**
-     * Trigger a full layout of the table.
+     * Create a new tableRect starting at a specific row
+     * All the following tableRects are removed as the are no longer valid
+     * The caller should now layout from this row onward
+     * @param position The position where layout can happen. Table margins will be subtracted
+     * @param width The width available from the surrounding shape or table or what not
+     * @param fromRow The first row in this rect
      */
-    void layout();
+    void startNewTableRect(QPointF position, qreal parentWidth, int fromRow);
 
     /**
-     * Trigger a layout of the table, starting at row \fromRow.
+     * Layout the row \row.
+     * You need to have layed out the contents of this row before calling
+     * This method only updates the row position and size
      *
-     * @param from the row from which to start calculating.
+     * @param row the row that is to be layed out.
      */
-    void layoutFromRow(int fromRow);
+    void layoutRow(int row);
 
     /**
      * Draw the table using the given QPainter.
@@ -212,6 +195,8 @@ public:
 
     /**
      * Get the list of rectangles that the table occupies.
+     * This is the the effective areas so table margins have been subtracted,
+     * and they are placed according to alignment etc
      *
      * The table should have one rectangle for each shape it is in after
      * layout.
@@ -221,21 +206,7 @@ public:
     QList<QRectF> tableRects() const;
 
     /**
-     * Append a rectangle to the list of rectangles for the table.
-     *
-     * @param tableRect the rectangle to append.
-     */
-    void appendTableRect(QRectF tableRect);
-
-    /**
-     * Clear the list of rectangles for the table.
-     */
-    void clearTableRects();
-
-    /**
      * Get the bounding rectangle of a given cell.
-     *
-     * The rectangle returned is relative to the table layout position.
      *
      * @param cell the cell.
      * @return the bounding rectangle of the cell.
@@ -244,8 +215,6 @@ public:
 
     /**
      * Get the content rectangle of a given cell.
-     *
-     * The rectangle returned is relative to the table layout position.
      *
      * @param cell the cell.
      * @return the rectangle of the cell.
@@ -275,40 +244,12 @@ public:
     QTextTableCell cellAt(int position) const;
 
     /**
-     * Get the position of the table layout.
+     * Get the y position after the table.
      *
-     * @return the position of the table layout.
-     *
-     * \sa setPosition()
+     * Adds the table bottom margin too
+     * @return the y position usable for layout after the table.
      */
-    QPointF position() const;
-
-    /**
-     * Get the width of the current table.
-     *
-     * @return the width of the current table.
-     *
-     * \sa height()
-     */
-    qreal width() const;
-
-    /**
-     * Get the height of the current table.
-     *
-     * @return the height of the current table.
-     *
-     * \sa width()
-     */
-    qreal height() const;
-
-    /**
-     * Set the position of the table layout.
-     *
-     * @param position the position of the table layout.
-     *
-     * \sa position()
-     */
-    void setPosition(QPointF position);
+    qreal yAfterTable() const;
 
     /**
      * Check the dirty state.

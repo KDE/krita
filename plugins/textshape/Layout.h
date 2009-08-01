@@ -121,6 +121,13 @@ private:
      */
     void handleTable();
 
+    /**
+     * Handle table breaking both forced and if cell is too high.
+     *
+     * This function is called from handleTable().
+     */
+    void handleTableBreak(QTextTableCell &previousCell, QTextTable *table);
+
 private:
     KoStyleManager *m_styleManager;
 
@@ -154,6 +161,8 @@ private:
 
     TableLayout m_tableLayout;   /**< Table layout. */
     QTextTableCell m_tableCell;  /**< Current table cell. */
+    bool m_restartingAfterTableBreak; /** We are in a re-layout that was a result of a break in a table. */
+    bool m_restartingFirstCellAfterTableBreak; /** We are in a re-layout that was a result of a break in a table. only true first cell after */
 };
 
 #endif

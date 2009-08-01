@@ -437,6 +437,9 @@ void KoTextSelectionHandler::insertTable(int rows, int columns)
     for (int row = 0; row < rows; ++row) {
         tableColumnAndRowStyleManager->setRowStyle(row, rowStyle);
     }
+    rowStyle = new KoTableRowStyle();
+    rowStyle->setBreakBefore(true);
+        tableColumnAndRowStyleManager->setRowStyle(2, rowStyle);
 
     QTextTable *table = d->caret->insertTable(rows, columns, tableFormat);
 

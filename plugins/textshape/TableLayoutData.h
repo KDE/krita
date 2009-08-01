@@ -26,6 +26,19 @@
 #include <QRectF>
 
 /**
+ * @brief Table Rect struct.
+ *
+ * This struct holds layout helper data for table layout.
+ *
+ * \sa TableLayout
+ */
+struct TableRect
+{
+    int fromRow; /** First row in this table rect */
+    QRectF rect; /** Rect occupied by table rect. */
+};
+
+/**
  * @brief Table layout data class.
  *
  * This class holds layout helper data for table layout.
@@ -43,17 +56,12 @@ private:
     friend class TableLayout;     // To allow direct manipulation during layout.
 
     QVector<qreal> m_columnWidths;     /**< Column widths. */
-    QVector<qreal> m_columnPositions;  /**< Column positions along X axis. */
+    QVector<qreal> m_columnPositions;  /**< Column positions along X axis. Absolute positions */
     QVector<qreal> m_rowHeights;       /**< Row heights. */
-    QVector<qreal> m_rowPositions;     /**< Row positions along Y axis. */
+    QVector<qreal> m_rowPositions;     /**< Row positions along Y axis. Absolute positions */
 
     QVector<QVector<qreal> > m_contentHeights;  /**< Cell content heights. */
-    QList<QRectF> m_tableRects; /**< Rects occupied by table, one per shape the table is in. */
-
-    qreal m_width;       /**< Table width. */
-    qreal m_height;      /**< Table height. */
-
-    QPointF m_position;  /**< The global position of the table. */
+    QList<TableRect> m_tableRects; /**< Rects occupied by table, typically one per shape the table is in. */
 };
 
 #endif // TABLELAYOUTDATA_H

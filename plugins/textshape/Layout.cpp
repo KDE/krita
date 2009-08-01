@@ -32,6 +32,8 @@
 #include <KoCharacterStyle.h>
 #include <KoListStyle.h>
 #include <KoTableStyle.h>
+#include <KoTableRowStyle.h>
+#include <KoTableColumnAndRowStyleManager.h>
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
 #include <KoTextBlockBorderData.h>
@@ -67,9 +69,9 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_currentTabStop(0),
         m_dropCapsNChars(0), m_dropCapsAffectsNMoreLines(0),
         m_dropCapsAffectedLineWidthAdjust(0),
-        m_y_justBelowDropCaps(0)
+        m_y_justBelowDropCaps(0),
+        m_restartingAfterTableBreak(false)
 {
-    m_tableLayout.setParentLayout(this);
 }
 
 bool Layout::start()
@@ -501,6 +503,7 @@ void Layout::handleTable()
     if (table) {
         // Save the current table cell.
         m_tableCell = table->cellAt(m_block.position());
+         Q_ASSERT(m_tableCell.isValid());
 
         // previousCell is the cell that the previous blocks is in. It can be
         // the same as the current cell, or it can be different, or it can be
@@ -509,29 +512,57 @@ void Layout::handleTable()
 
         if (!previousCell.isValid()) {
             // The previous cell is invalid, which means we have entered a
-            // table, so set the current table on the table layout, clear the
-            // list of table rectangles, position the table layout at the current
-            // layout position, then perform an initial layout of the table.
+            // table, so set the current table on the table layout, and initialize
+            // a layout from the beginning positioning the first new
+            // rect at the current position
             m_tableLayout.setTable(table);
-            m_tableLayout.clearTableRects();
-            m_tableLayout.setPosition(QPointF(x(), y())); // FIXME?
-            m_tableLayout.layout();
+            qDebug() << "initial layout about to start at " << x() << " " << y();
+            m_tableLayout.startNewTableRect(QPointF(x(), y()), shape->size().width(), 0);
+            m_restartingAfterTableBreak = false; // You never know
+            m_restartingFirstCellAfterTableBreak = false; // You never know
         }
 
+        qDebug() << "working on cell row" << m_tableCell.row() << "col" << m_tableCell.column();
         if (m_tableCell != previousCell) {
             // The current cell is not the same as the one the previous block
-            // was in. This means the layout processed stepped out of or into
+            // was in. This means the layout processed stepped into
             // a cell.
+            qDebug() << "into cell row" << m_tableCell.row() << "col" << m_tableCell.column();
             if (previousCell.isValid()) {
                 // The previous cell was valid, which means we just left a cell,
                 // so tell the table layout to calculate its height.
-                m_tableLayout.calculateCellContentHeight(previousCell);
+                // however don't do it if the cell has already been treated once
+                if (!m_restartingFirstCellAfterTableBreak) {
+                    m_tableLayout.calculateCellContentHeight(previousCell);
+                }
+
+                if (m_tableCell.row() != previousCell.row()) {
+                    // The row of the current and previous cell is different,
+                    // which means that not only did we leave a cell; we also
+                    // left a row.
+
+                    if (m_restartingFirstCellAfterTableBreak) {
+                        // In a previous run we have detected that current row should not be on the shape it was placed.
+                        // A new shape was ordered and the Y have already been roughly set.
+                        // Now is the time to set the Y correctly, but we shouldn't do any detecting of breaks
+                        qDebug() << "[re-layout run after break]" << "  offset row " << m_tableCell.row() << " y " << m_y;
+                        m_tableLayout.startNewTableRect(QPointF(0.0, y()), shape->size().width(), m_tableCell.row());
+                        m_restartingFirstCellAfterTableBreak= false;
+                    } else {
+                        m_tableLayout.layoutRow(previousCell.row());
+                        qDebug() << "layouted row" << previousCell.row() << " y " << m_y;
+
+                        handleTableBreak(previousCell, table);
+                    }
+                }
             }
-            if (m_tableCell.isValid()) {
-                // The current cell is valid, which means we just entered a
-                // cell, so adjust the Y position of the layout to the Y
+
+            if (!m_restartingFirstCellAfterTableBreak) {
+                // No break was scheduled so lets just get on with the layouting
+                // Since we have just stepped into this cell lets
+                // adjust the Y position of the layout to the Y
                 // position of the cell content rectangle.
-                m_y = m_tableLayout.position().y() + m_tableLayout.cellContentRect(m_tableCell).y();
+                m_y = m_tableLayout.cellContentRect(m_tableCell).y();
             }
         }
         m_inTable = true; // We are inside a table.
@@ -550,43 +581,91 @@ void Layout::handleTable()
             if (previousCell.isValid()) {
                 // Tell the table layout to calculate height of last cell.
                 m_tableLayout.calculateCellContentHeight(previousCell);
+                m_tableLayout.layoutRow(previousCell.row());
+                    qDebug() << "layouted row" << previousCell.row() << " y " << m_y;
             }
 
-            // Perform a final layout of the table, as all the table content should
-            // now have been laid out.
-            m_tableLayout.layout();
+            handleTableBreak(previousCell, previousTable);
 
-            /*
-             * Determine the last rectangle of the table.
-             */
-            Q_ASSERT(m_data);
-            QRectF lastRect = QRectF(m_tableLayout.position().x() + previousFormat.leftMargin(),
-                    qMax(m_data->documentOffset(), m_tableLayout.position().y() + previousFormat.topMargin()),
-                    m_tableLayout.width(), 0);
-            if (m_data->documentOffset() > m_tableLayout.position().y() &&
-                    m_data->documentOffset() < (m_tableLayout.position().y() + m_tableLayout.height())) {
-                // The last rectangle sticks out into this page.
-                lastRect.setHeight((m_tableLayout.position().y() + m_tableLayout.height()) - m_data->documentOffset());
-            } else {
-                lastRect.setHeight(m_tableLayout.height());
+            if (!m_restartingFirstCellAfterTableBreak) {
+                // No break was needed before the final row so finish of the table layout
+                // Position the layout process after the table.
+                m_y = m_tableLayout.yAfterTable();
+
+                m_inTable = false; // Reset table state.
+                m_tableCell = QTextTableCell(); // Set the current cell to an invalid one.
             }
-            if (previousFormat.alignment() == Qt::AlignRight) {
-                // Table is right-aligned, so add all of the remaining space.
-                lastRect.translate(shape->size().width() - m_tableLayout.width(), 0);
-            } else if (previousFormat.alignment() == Qt::AlignHCenter) {
-                // Table is centered, so add half of the remaining space.
-                lastRect.translate((shape->size().width() - m_tableLayout.width()) / 2, 0);
-            }
-
-            // Append the last rectangle of the table.
-            m_tableLayout.appendTableRect(lastRect);
-
-            // Position the layout process after the table.
-            m_y = lastRect.bottom() + previousFormat.bottomMargin();
-
-            m_inTable = false; // Reset table state.
-            m_tableCell = QTextTableCell(); // Set the current cell to an invalid one.
         }
+    }
+}
+
+void Layout::handleTableBreak(QTextTableCell &previousCell, QTextTable *table)
+{
+    // Get the column and row style manager.
+    QTextTableFormat tableFormat = table->format();
+    Q_ASSERT(tableFormat.hasProperty(KoTableStyle::ColumnAndRowStyleManager));
+    KoTableColumnAndRowStyleManager *carsManager =
+    reinterpret_cast<KoTableColumnAndRowStyleManager *>(
+            tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
+    Q_ASSERT(carsManager);
+
+    // Implementation note about break handling:
+    // There are a break and 3 rows in play:  some row, [break], previous row, current row
+    if (m_restartingAfterTableBreak) {
+        // In a previous run we have detected that previous row should not be on the shape it was placed.
+        // A new shape was ordered and the Y have already been set.
+        // Furthermore, the text in that row have been layouted again and we are now in current row again
+        // There is not much for us to do except make sure we don't detect the break again
+        m_restartingAfterTableBreak = false;
+    } else {
+        // Figure out if we should break before previous row
+        // This could happen if the previous row was too high
+        // TODO
+
+        // It could also be that the previous row had a breakBefore property
+        KoTableRowStyle *rowStyle = carsManager->rowStyle(previousCell.row());
+        if (rowStyle && rowStyle->breakBefore() ) {
+            m_restartingAfterTableBreak = true;
+        }
+
+        // It could even be that the row before the previous row had a breakAfter property
+        // We handle that here too (detecting late) because then we do all breaking in one place (simpler code)
+        int row= previousCell.row()-1;
+        if (row >= 0) {
+            rowStyle = carsManager->rowStyle(row);
+            if (rowStyle && rowStyle->breakAfter() ) {
+                m_restartingAfterTableBreak = true;
+            }
+        }
+        m_restartingFirstCellAfterTableBreak = m_restartingAfterTableBreak;
+    }
+    
+    // at this point m_restartingAfterTableBreak is an indication if we should order a new shape
+    if (m_restartingAfterTableBreak) {
+        qDebug() << "[row " << previousCell.row() << "should be moved to new shape and re layouted]";
+        layout->endLayout();
+        //Find the first block in the previous row
+        QTextCursor cur = previousCell.firstCursorPosition();
+        cur = table->rowStart(cur);
+        m_block = cur.block();
+        if (!m_newShape && m_block.position() > m_data->position()) {
+        qDebug() << "pos" << m_data->position() << " and block position" << m_block.position();
+            m_data->setEndPosition(m_block.position() - 1);
+            nextShape();
+            if (m_data) {
+                m_data->setPosition(m_block.position());
+            }
+            qDebug() << "  requested new shape at " << y();
+        }
+        layout = m_block.layout();
+
+        m_format = m_block.blockFormat();
+        m_blockData = dynamic_cast<KoTextBlockData*>(m_block.userData());
+        m_isRtl = m_block.text().isRightToLeft();
+        m_fragmentIterator = m_block.begin();
+        //m_newParag = true;
+        //updateBorders(); // fill the border inset member vars.
+        layout->beginLayout();
     }
 }
 

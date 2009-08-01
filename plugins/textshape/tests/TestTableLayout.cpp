@@ -94,7 +94,7 @@ void TestTableLayout::debugTableLayout(const TableLayout& layout) const
 {
     Q_ASSERT(layout.m_table);
     Q_ASSERT(layout.m_tableLayoutData);
-    qDebug() << qPrintable(QString("<table width=%1 height=%2>").arg(layout.m_tableLayoutData->m_width).arg(layout.m_tableLayoutData->m_height));
+    qDebug() << qPrintable(QString("<table width=%1 height=%2>").arg(layout.m_tableLayoutData->m_tableRects.last().rect.width()).arg(layout.m_tableLayoutData->m_tableRects.last().rect.height()));
     for (int row = 0; row < layout.m_table->rows(); ++row) {
         qDebug() << " <row>";
         for (int col = 0; col < layout.m_table->columns(); ++col) {

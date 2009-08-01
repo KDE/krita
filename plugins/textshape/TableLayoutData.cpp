@@ -19,10 +19,7 @@
 
 #include "TableLayoutData.h"
 
-TableLayoutData::TableLayoutData() :
-    m_width(0),
-    m_height(0),
-    m_position(QPointF(0, 0))
+TableLayoutData::TableLayoutData()
 {
 }
 

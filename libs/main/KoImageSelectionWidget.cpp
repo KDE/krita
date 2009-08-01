@@ -22,6 +22,9 @@
 
 #include <KoImageData.h>
 #include <KoImageCollection.h>
+#include <KoShapeFactory.h>
+#include <KoShapeRegistry.h>
+#include <KoShape.h>
 
 #include <kfilewidget.h>
 #include <KIO/Job>
@@ -127,7 +130,7 @@ void KoImageSelectionWidget::Private::setImageData(KJob *job)
     delete imageData;
     imageData = collection->createImageData(transferJob->data());
     filePreview->showPreview(imageData);
-    emit q->imageAvailable();
+    emit q->imageAvailable(imageData->isValid());
 }
 
 
@@ -155,7 +158,6 @@ KoImageSelectionWidget::KoImageSelectionWidget(KoImageCollection *collection, QW
     layout->setColumnStretch(0, 10);
 
     connect(d->fileWidget, SIGNAL(accepted()), this, SLOT(acceptFileSelection()));
-    connect(this, SLOT(acceptImage()), this, SIGNAL(imageSelected()));
 }
 
 KoImageSelectionWidget::~KoImageSelectionWidget()
@@ -171,6 +173,42 @@ bool KoImageSelectionWidget::hasValidImage() const
 KoImageData *KoImageSelectionWidget::imageData() const
 {
     return d->imageData;
+}
+
+// static
+KoImageData *KoImageSelectionWidget::selectImage(KoImageCollection *collection, QWidget *parent)
+{
+    KDialog *dialog = new KDialog(parent);
+    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
+    KoImageSelectionWidget *widget = new KoImageSelectionWidget(collection, dialog);
+    dialog->setMainWidget(widget);
+    connect(widget, SIGNAL(imageAvailable(bool)), dialog, SLOT(enableButtonOk(bool)));
+
+    if (dialog->exec() == KDialog::Accepted)
+        return widget->imageData();
+    return 0;
+}
+
+// static
+KoShape *KoImageSelectionWidget::selectImageShape(const QMap<QString,KoDataCenter*> &dc, QWidget *parent)
+{
+    Q_ASSERT(dc.contains("ImageCollection")); // its called wrong.
+    if (!dc.contains("ImageCollection"))
+        return 0;
+    KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape");
+    if (!factory) {
+        kWarning(30003) << "No picture shape found, installation problem";
+        return 0;
+    }
+    KoImageData *data = selectImage(dynamic_cast<KoImageCollection*>(dc.value("ImageCollection")),
+            parent);
+    if (data) {
+        KoShape *shape = factory->createDefaultShapeAndInit(dc);
+        shape->setUserData(data);
+        shape->setSize(data->imageSize());
+        return shape;
+    }
+    return 0;
 }
 
 #include <KoImageSelectionWidget.moc>

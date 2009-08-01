@@ -23,9 +23,12 @@
 #include "komain_export.h"
 
 #include <QtGui/QWidget>
+#include <QtCore/QMap>
 
 class KoImageCollection;
 class KoImageData;
+class KoShape;
+class KoDataCenter;
 
 class KOMAIN_EXPORT KoImageSelectionWidget : public QWidget
 {
@@ -39,15 +42,15 @@ public:
     /// return the image data resulting from the users choice
     KoImageData *imageData() const;
 
-    // TODO
-    //static KoImageData *selectImage(KoImageCollection *collection, QWidget *parent);
+    static KoImageData *selectImage(KoImageCollection *collection, QWidget *parent);
+    static KoShape *selectImageShape(const QMap<QString,KoDataCenter*> &dc, QWidget *parent);
 
 signals:
     /**
      * Emitted when the image object has successfully been created.
-     * The user should not be allowed to press Ok until this signal has been emitted.
+     * The user should not be allowed to press Ok the image became available.
      */
-    void imageAvailable();
+    void imageAvailable(bool);
 
 private:
     class Private;

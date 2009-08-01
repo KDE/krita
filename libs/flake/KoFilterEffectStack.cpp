@@ -19,6 +19,7 @@
 
 #include "KoFilterEffectStack.h"
 #include "KoFilterEffect.h"
+#include "KoXmlWriter.h"
 
 #include <QtCore/QAtomicInt>
 
@@ -104,4 +105,22 @@ bool KoFilterEffectStack::removeUser()
 int KoFilterEffectStack::useCount() const
 {
     return d->refCount;
+}
+
+void KoFilterEffectStack::save(KoXmlWriter &writer, const QString &filterId)
+{
+    writer.startElement("filter");
+    writer.addAttribute("id", filterId);
+    writer.addAttribute("filterUnits", "objectBoundingBox");
+    writer.addAttribute("primitiveUnits", "objectBoundingBox");
+    writer.addAttribute("x", d->clipRect.x() );
+    writer.addAttribute("y", d->clipRect.y() );
+    writer.addAttribute("width", d->clipRect.width() );
+    writer.addAttribute("height", d->clipRect.height() );
+    
+    foreach(KoFilterEffect *effect, d->filterEffects) {
+        effect->save(writer);
+    }
+    
+    writer.endElement();
 }

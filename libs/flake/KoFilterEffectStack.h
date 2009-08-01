@@ -26,6 +26,7 @@
 #include <QtCore/QRectF>
 
 class KoFilterEffect;
+class KoXmlWriter;
 
 class FLAKE_EXPORT KoFilterEffectStack
 {
@@ -74,6 +75,13 @@ public:
     bool removeUser();
     /// Return reference counter
     int useCount() const;
+    
+    /**
+    * Saves filter stack using given xml writer.
+    * @param writer the xml writer to write data to
+    * @param id the filter id to write, used for referencing the filter
+    */
+    void save(KoXmlWriter &writer, const QString &filterId);
     
 private:
     class Private;

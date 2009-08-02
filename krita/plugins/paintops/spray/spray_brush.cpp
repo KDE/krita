@@ -30,38 +30,54 @@
 #include "kis_painter.h"
 #include "kis_paint_information.h"
 
+#include "kis_spray_paintop_settings.h"
+
 #include "metaball.h"
 
 #include <cmath>
 
+// this is wrong drand48 gives 0.0 - 1.0, rand on WIN32 gives MAX_RAND 
 #ifdef _WIN32
 #define srand48 srand
 #define drand48 rand
 #endif
 
-SprayBrush::SprayBrush(const KoColor &inkColor)
-{
-    m_inkColor = inkColor;
-    m_counter = 0;
-    srand48(time(0));
-}
-
 SprayBrush::SprayBrush()
 {
     m_radius = 0;
     m_counter = 0;
+    m_randomOpacity = false;
+
+    srand48( time(0) );
 }
 
 
 
 void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, const KoColor &color)
 {
+    
     qreal x = info.pos().x();
     qreal y = info.pos().y();
 
     // initializing painter
     KisPainter drawer(dev);
-    drawer.setPaintColor(color);
+    KisRandomAccessor accessor = dev->createRandomAccessor( qRound(x), qRound(y) );
+    m_pixelSize = dev->colorSpace()->pixelSize();
+    m_inkColor = color;
+
+if (m_settings->useRandomHue()){
+    QHash<QString, QVariant> params;
+    params["h"] = (m_settings->hue() / 180.0) * drand48();
+    params["s"] = (m_settings->saturation() / 100.0) * drand48();
+    params["v"] = (m_settings->value() / 100.0) * drand48();
+
+    KoColorTransformation* transfo;
+    transfo = dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
+    transfo->transform(color.data(), m_inkColor.data() , 1);
+}
+
+    drawer.setPaintColor(m_inkColor);
+    m_counter++;
 
     // jitter radius
     int tmpRadius = m_radius;
@@ -74,11 +90,6 @@ void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, co
         x = x + (( 2 * m_radius * drand48() ) - m_radius) * m_amount;
         y = y + (( 2 * m_radius * drand48() ) - m_radius) * m_amount;
     }
-
-    KisRandomAccessor accessor = dev->createRandomAccessor( qRound(x), qRound(y) );
-    m_pixelSize = dev->colorSpace()->pixelSize();
-    m_inkColor = color;
-    m_counter++;
 
     // coverage: adaptively select how many objects are sprayed per paint
     if (m_useDensity){
@@ -152,6 +163,10 @@ void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, co
             }    
         // it is pixel particle
         }else if (m_object == 1){
+            if (m_randomOpacity)
+            {
+                m_inkColor.setOpacity( OPACITY_OPAQUE * drand48() );
+            }
             paintParticle(accessor,m_inkColor,nx + x, ny + y);
         }
         // it is pixel
@@ -160,6 +175,10 @@ void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, co
             ix = qRound(nx + x);
             iy = qRound(ny + y);
             accessor.moveTo(ix, iy);
+            if (m_randomOpacity)
+            {
+                m_inkColor.setOpacity( OPACITY_OPAQUE * drand48() );
+            }
             memcpy(accessor.rawData(), m_inkColor.data(), m_pixelSize);
         }
     }
@@ -170,8 +189,10 @@ void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, co
     //m_inkColor.setOpacity(128);
     //paintOutline(dev,m_inkColor,x, y, m_radius * 2);
 
-    // recover from jittering of color
+    // recover from jittering of color,
+    // m_inkColor.opacity is recovered with every paint
     m_radius = tmpRadius;
+    
 }
 
 SprayBrush::~SprayBrush()
@@ -182,16 +203,17 @@ SprayBrush::~SprayBrush()
 void SprayBrush::paintParticle(KisRandomAccessor &writeAccessor,const KoColor &color,qreal rx, qreal ry){
     // opacity top left, right, bottom left, right
     KoColor pcolor(color);
+    int opacity = pcolor.opacity();
 
     int ipx = int ( rx );
     int ipy = int ( ry );   
     qreal fx = rx - ipx;
     qreal fy = ry - ipy;
 
-    int btl = qRound( ( 1-fx ) * ( 1-fy ) * OPACITY_OPAQUE );
-    int btr = qRound( ( fx )  * ( 1-fy ) * OPACITY_OPAQUE );
-    int bbl = qRound( ( 1-fx ) * ( fy )  * OPACITY_OPAQUE );
-    int bbr = qRound( ( fx )  * ( fy )  * OPACITY_OPAQUE );
+    int btl = qRound( ( 1-fx ) * ( 1-fy ) * opacity );
+    int btr = qRound( ( fx )  * ( 1-fy ) * opacity );
+    int bbl = qRound( ( 1-fx ) * ( fy )  * opacity );
+    int bbr = qRound( ( fx )  * ( fy )  * opacity );
 
     // this version overwrite pixels, e.g. when it sprays two particle next
     // to each other, the pixel with lower opacity can override other pixel.
@@ -233,7 +255,12 @@ void SprayBrush::paintCircle(KisPainter& painter, qreal x, qreal y, int radius, 
 
         points.append( QPointF(cx, cy) );
     }
-    painter.setOpacity( qRound(  OPACITY_OPAQUE * drand48()  ) );
+
+    if (m_randomOpacity)
+    {
+        painter.setOpacity( qRound(  OPACITY_OPAQUE * drand48()  ) );
+    }
+
     painter.setFillStyle( KisPainter::FillStyleForegroundColor );
     painter.paintPolygon( points );
 }
@@ -257,7 +284,12 @@ void SprayBrush::paintEllipse(KisPainter& painter, qreal x, qreal y, int a, int 
  
         points.append( QPointF(X, Y) );
    }
-    painter.setOpacity( int( ( 255 * drand48() ) + 0.5 ) );
+
+    if (m_randomOpacity)
+    {
+        painter.setOpacity( int( ( OPACITY_OPAQUE * drand48() ) + 0.5 ) );
+    }
+
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
     painter.paintPolygon( points );
 }
@@ -285,11 +317,13 @@ void SprayBrush::paintRectangle(KisPainter& painter, qreal x, qreal y, int width
     transform.map( - halfWidth,  + halfHeight, &tx, &ty);
     points.append(QPointF(tx + x,ty + y));
 
+    if (m_randomOpacity)
+    {
+        painter.setOpacity( int( ( OPACITY_OPAQUE * drand48() ) + 0.5 ) );
+    }
 
-    painter.setOpacity( int( ( 255 * drand48() ) + 0.5 ) );
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
     painter.paintPolygon( points );
-
 }
 
 void SprayBrush::paintDistanceMap(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor){
@@ -322,12 +356,8 @@ void SprayBrush::paintDistanceMap(KisPaintDeviceSP dev, const KisPaintInformatio
 }
 
 void SprayBrush::paintMetaballs(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor) {
-    // TODO: make adjustable?
     qreal MIN_TRESHOLD = m_mintresh;
     qreal MAX_TRESHOLD = m_maxtresh;
-
-//    dbgPlugins << "MAX " << MAX_TRESHOLD;
-//    dbgPlugins << "MIN " << MIN_TRESHOLD;
 
     KoColor color = painterColor;
     qreal posX = info.pos().x();

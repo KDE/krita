@@ -20,13 +20,15 @@
 #define _SPRAY_BRUSH_H_
 
 #include <QVector>
+#include <qrect.h>
 
 #include <KoColor.h>
 
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_paint_information.h"
-#include <qrect.h>
+
+#include "kis_spray_paintop_settings.h"
 
 class QRect;
 
@@ -107,6 +109,8 @@ public:
         return m_height;
     }
 
+    // setters
+
     void setUseDensity(bool useDensity){
         m_useDensity = useDensity;
     }
@@ -136,6 +140,15 @@ public:
         m_computeArea = area;
     }
 
+    // set true if the particles should have random opacity
+    void setUseRandomOpacity(bool isRandom){
+        m_randomOpacity = isRandom;
+    }
+
+    void setSettingsObject(const KisSprayPaintOpSettings* settings){
+        m_settings = settings;
+    }
+
 private:
     KoColor m_inkColor;
     int m_counter;
@@ -149,6 +162,7 @@ private:
     bool m_jitterMovement;
 
     qreal m_coverage;
+
     // amount of jitter for movement
     qreal m_amount;
 
@@ -168,12 +182,18 @@ private:
     qreal m_maxtresh;
     qreal m_mintresh;
 
+    // color options
+    bool m_randomOpacity;
+
     int m_radiusX;
     int m_radiusY;
 
     bool m_highQuality;
 
     QRect m_computeArea;
+
+private:
+    const KisSprayPaintOpSettings* m_settings;
     
 };
 

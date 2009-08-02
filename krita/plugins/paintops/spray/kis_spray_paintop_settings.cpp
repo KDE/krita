@@ -34,6 +34,7 @@
 #include "kis_spray_paintop_settings_widget.h"
 #include "kis_sprayop_option.h"
 #include "kis_spray_shape_option.h"
+#include "kis_spray_color_option.h"
 
 KisSprayPaintOpSettings::KisSprayPaintOpSettings(KisSprayPaintOpSettingsWidget* settingsWidget)
         : KisPaintOpSettings(settingsWidget)
@@ -185,3 +186,50 @@ bool KisSprayPaintOpSettings::highRendering() const
 {
     return m_options->m_sprayShapeOption->highRendering();
 }
+
+
+
+bool KisSprayPaintOpSettings::useRandomOpacity() const
+{
+    return m_options->m_sprayColorOption->useRandomOpacity();
+}
+
+
+int KisSprayPaintOpSettings::hue() const
+{
+    return m_options->m_sprayColorOption->hue();
+}
+
+
+int KisSprayPaintOpSettings::saturation() const
+{
+    return m_options->m_sprayColorOption->saturation();
+}
+
+int KisSprayPaintOpSettings::value() const
+{
+    return m_options->m_sprayColorOption->value();
+}
+
+
+bool KisSprayPaintOpSettings::useRandomHue() const
+{
+    return m_options->m_sprayColorOption->useRandomHue();
+}
+
+
+bool KisSprayPaintOpSettings::useRandomSaturation() const
+{
+    return m_options->m_sprayColorOption->useRandomSaturation();
+}
+
+
+bool KisSprayPaintOpSettings::useRandomValue() const
+{
+    return m_options->m_sprayColorOption->useRandomValue();
+}
+
+
+
+
+

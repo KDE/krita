@@ -69,6 +69,18 @@ public:
     // metaballs
     qreal maxTresh() const;
     qreal minTresh() const;
+    // color options
+    bool useRandomOpacity() const;
+    bool useRandomHue() const;
+    bool useRandomSaturation() const;
+    bool useRandomValue() const;
+
+    // TODO: these should be intervals like 20..180 
+    int hue() const;
+    int saturation() const;
+    int value() const;
+
+
 
 
     bool highRendering() const;

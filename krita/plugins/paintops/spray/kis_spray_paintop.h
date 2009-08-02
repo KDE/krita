@@ -20,15 +20,11 @@
 #ifndef KIS_SPRAY_PAINTOP_H_
 #define KIS_SPRAY_PAINTOP_H_
 
-#include <QColor>
-//#include <QMutex>
-
 #include <klocale.h>
 #include <kis_paintop.h>
 #include <kis_types.h>
 
 #include "spray_brush.h"
-
 #include "kis_spray_paintop_settings.h"
 
 class QPointF;

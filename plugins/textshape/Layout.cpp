@@ -645,7 +645,7 @@ void Layout::handleTableBreak(QTextTableCell &previousCell, QTextTable *table)
         //Find the first block in the previous row
         QTextCursor cur = previousCell.firstCursorPosition();
         cur = table->rowStart(cur);
-        m_block = cur.block();
+        m_block = cur.block().next();
         if (!m_newShape && m_block.position() > m_data->position()) {
         qDebug() << "pos" << m_data->position() << " and block position" << m_block.position();
             m_data->setEndPosition(m_block.position() - 1);

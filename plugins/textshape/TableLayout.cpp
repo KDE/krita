@@ -72,8 +72,6 @@ void TableLayout::setTable(QTextTable *table)
     // Resize geometry vectors for the table.
     m_tableLayoutData->m_rowPositions.resize(m_table->rows());
     m_tableLayoutData->m_rowHeights.resize(m_table->rows());
-    m_tableLayoutData->m_columnPositions.resize(m_table->columns());
-    m_tableLayoutData->m_columnWidths.resize(m_table->columns());
     m_tableLayoutData->m_contentHeights.resize(m_table->rows());
     for (int row = 0; row < m_table->rows(); ++row) {
         m_tableLayoutData->m_contentHeights[row].resize(m_table->columns());
@@ -132,9 +130,8 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     tableRect.fromRow = fromRow;
     tableRect.rect = QRectF(position.x() + tableFormat.leftMargin(), position.y() + tableFormat.topMargin(),
                     tableWidth, 1); // the 1 is to make sure it's valid
-
-    m_tableLayoutData->m_tableRects.append(tableRect);
-    m_tableLayoutData->m_rowPositions[fromRow] = tableRect.rect.top(); //Initialize the position of first row of tableRect
+    tableRect.columnPositions.resize(m_table->columns());
+    tableRect.columnWidths.resize(m_table->columns());
 
     /* should do this somewhere
             if (tableFormat.alignment() == Qt::AlignRight) {
@@ -155,11 +152,11 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     QList<int> relativeWidthColumns; // List of relative width columns.
     qreal relativeWidthSum; // Sum of relative column width values.
     int numNonStyleColumns = 0;
-    for (int col = 0; col < m_tableLayoutData->m_columnPositions.size(); ++col) {
+    for (int col = 0; col < tableRect.columnPositions.size(); ++col) {
         KoTableColumnStyle *columnStyle = carsManager ? carsManager->columnStyle(col) : 0;
         if (!columnStyle) {
             // No style so neither width nor relative width specified. Can this happen?
-            m_tableLayoutData->m_columnWidths[col] = 0.0;
+           tableRect.columnWidths[col] = 0.0;
             relativeWidthColumns.append(col); // handle it as a relative width column without asking for anything
             ++numNonStyleColumns;
         } else if (columnStyle->hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
@@ -168,12 +165,12 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
             relativeWidthSum += columnStyle->relativeColumnWidth();
         } else if (columnStyle->hasProperty(KoTableColumnStyle::ColumnWidth)) {
             // Only width specified, so use it.
-            m_tableLayoutData->m_columnWidths[col] = columnStyle->columnWidth();
+            tableRect.columnWidths[col] = columnStyle->columnWidth();
             availableWidth -= columnStyle->columnWidth();
         } else {
             // Neither width nor relative width specified. Can this happen?
             kWarning(32600) << "Neither column-width nor rel-column-width specified";
-            m_tableLayoutData->m_columnWidths[col] = 0.0;
+            tableRect.columnWidths[col] = 0.0;
         }
     }
 
@@ -187,10 +184,10 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     foreach (int col, relativeWidthColumns) {
         KoTableColumnStyle *columnStyle = carsManager ? carsManager->columnStyle(col) : 0;
         if (columnStyle) {
-            m_tableLayoutData->m_columnWidths[col] =
+            tableRect.columnWidths[col] =
                 qMax<qreal>(columnStyle->relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
         } else {
-            m_tableLayoutData->m_columnWidths[col] = widthForNonStyleColumn;
+            tableRect.columnWidths[col] = widthForNonStyleColumn;
         }
     }
 
@@ -205,12 +202,14 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
         // Table is centered, so add half of the remaining space.
         columnOffset += (parentWidth - tableWidth) / 2;
     }
-    for (int col = 0; col < m_tableLayoutData->m_columnPositions.size(); ++col) {
-        m_tableLayoutData->m_columnPositions[col] = columnPosition + columnOffset;
+    for (int col = 0; col < tableRect.columnPositions.size(); ++col) {
+        tableRect.columnPositions[col] = columnPosition + columnOffset;
         // Increment by this column's width.
-        columnPosition += m_tableLayoutData->m_columnWidths[col];
+        columnPosition += tableRect.columnWidths[col];
     }
 
+    m_tableLayoutData->m_tableRects.append(tableRect);
+    m_tableLayoutData->m_rowPositions[fromRow] = tableRect.rect.top(); //Initialize the position of first row of tableRect
 
     m_dirty = false;
 }
@@ -354,8 +353,6 @@ QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
 {
     Q_ASSERT(isValid());
     Q_ASSERT(cell.isValid());
-    Q_ASSERT(cell.row() < m_tableLayoutData->m_rowPositions.size());
-    Q_ASSERT(cell.column() < m_tableLayoutData->m_columnPositions.size());
 
     /*
      * Get the cell style and return the bounding rect adjusted for
@@ -369,22 +366,27 @@ QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell) const
 {
     Q_ASSERT(isValid());
     Q_ASSERT(cell.row() < m_tableLayoutData->m_rowPositions.size());
-    Q_ASSERT(cell.column() < m_tableLayoutData->m_columnPositions.size());
+    TableRect tableRect = m_tableLayoutData->m_tableRects.last(); 
+    while(tableRect.fromRow > cell.row()) {
+        tableRect =  m_tableLayoutData->m_tableRects.first();
+    }
+    Q_ASSERT(cell.column() + cell.columnSpan() <=  tableRect.columnPositions.size());
 
     // Cell width.
     qreal width = 0;
     for (int col = 0; col < cell.columnSpan(); ++col) {
-        width += m_tableLayoutData->m_columnWidths[cell.column() + col];
+        width += tableRect.columnWidths[cell.column() + col];
     }
 
     // Cell height.
     qreal height = 0;
     for (int r = 0; r < cell.rowSpan(); ++r) {
         height += m_tableLayoutData->m_rowHeights[cell.row() + r];
+        // TODO  when breaking within a row the tableRect needs to be switched at some point
     }
 
     return QRectF(
-            m_tableLayoutData->m_columnPositions[cell.column()], m_tableLayoutData->m_rowPositions[cell.row()],
+            tableRect.columnPositions[cell.column()], m_tableLayoutData->m_rowPositions[cell.row()],
             width, height);
 }
 

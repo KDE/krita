@@ -176,8 +176,8 @@ void TestTableLayout::testBasicLayout()
     // Check table dimensions are correct.
     QCOMPARE(tableLayoutData->m_rowPositions.size(), 2);
     QCOMPARE(tableLayoutData->m_rowHeights.size(), 2);
-    QCOMPARE(tableLayoutData->m_columnPositions.size(), 2);
-    QCOMPARE(tableLayoutData->m_columnWidths.size(), 2);
+    QCOMPARE(tableLayoutData->m_tableRects.last().columnPositions.size(), 2);
+    QCOMPARE(tableLayoutData->m_tableRects.last().columnWidths.size(), 2);
 
     // Check cell bounding rectangles.
 

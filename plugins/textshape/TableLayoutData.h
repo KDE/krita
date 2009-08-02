@@ -36,6 +36,8 @@ struct TableRect
 {
     int fromRow; /** First row in this table rect */
     QRectF rect; /** Rect occupied by table rect. */
+    QVector<qreal> columnWidths;     /**< Column widths. */
+    QVector<qreal> columnPositions;  /**< Column positions along X axis. Absolute positions */
 };
 
 /**
@@ -55,8 +57,6 @@ private:
     friend class TestTableLayout; // To allow direct testing.
     friend class TableLayout;     // To allow direct manipulation during layout.
 
-    QVector<qreal> m_columnWidths;     /**< Column widths. */
-    QVector<qreal> m_columnPositions;  /**< Column positions along X axis. Absolute positions */
     QVector<qreal> m_rowHeights;       /**< Row heights. */
     QVector<qreal> m_rowPositions;     /**< Row positions along Y axis. Absolute positions */
 

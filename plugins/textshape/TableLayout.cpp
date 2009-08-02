@@ -147,19 +147,16 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
 */
 
     // Get the column and row style manager.
-    Q_ASSERT(tableFormat.hasProperty(KoTableStyle::ColumnAndRowStyleManager));
     KoTableColumnAndRowStyleManager *carsManager =
     reinterpret_cast<KoTableColumnAndRowStyleManager *>(
             tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
-    Q_ASSERT(carsManager);
-
     // Column widths.
     qreal availableWidth = tableWidth; // Width available for columns.
     QList<int> relativeWidthColumns; // List of relative width columns.
     qreal relativeWidthSum; // Sum of relative column width values.
     int numNonStyleColumns = 0;
     for (int col = 0; col < m_tableLayoutData->m_columnPositions.size(); ++col) {
-        KoTableColumnStyle *columnStyle = carsManager->columnStyle(col);
+        KoTableColumnStyle *columnStyle = carsManager ? carsManager->columnStyle(col) : 0;
         if (!columnStyle) {
             // No style so neither width nor relative width specified. Can this happen?
             m_tableLayoutData->m_columnWidths[col] = 0.0;
@@ -188,7 +185,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
 
     // Relative column widths have now been summed up and can be distributed.
     foreach (int col, relativeWidthColumns) {
-        KoTableColumnStyle *columnStyle = carsManager->columnStyle(col);
+        KoTableColumnStyle *columnStyle = carsManager ? carsManager->columnStyle(col) : 0;
         if (columnStyle) {
             m_tableLayoutData->m_columnWidths[col] =
                 qMax<qreal>(columnStyle->relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
@@ -241,11 +238,9 @@ void TableLayout::layoutRow(int row)
     QTextTableFormat tableFormat = m_table->format();
 
     // Get the column and row style manager.
-    Q_ASSERT(tableFormat.hasProperty(KoTableStyle::ColumnAndRowStyleManager));
     KoTableColumnAndRowStyleManager *carsManager =
     reinterpret_cast<KoTableColumnAndRowStyleManager *>(
             tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
-    Q_ASSERT(carsManager);
 
     /*
      * Implementation Note:
@@ -269,7 +264,7 @@ void TableLayout::layoutRow(int row)
      * cells that should contribute to the row height.
      */
 
-    KoTableRowStyle *rowStyle = carsManager->rowStyle(row);
+    KoTableRowStyle *rowStyle = carsManager ? carsManager->rowStyle(row) : 0;
 
     // Adjust row height.
     qreal rowHeight = rowStyle ? rowStyle->minimumRowHeight() : 0.0;

@@ -603,11 +603,9 @@ void Layout::handleTableBreak(QTextTableCell &previousCell, QTextTable *table)
 {
     // Get the column and row style manager.
     QTextTableFormat tableFormat = table->format();
-    Q_ASSERT(tableFormat.hasProperty(KoTableStyle::ColumnAndRowStyleManager));
     KoTableColumnAndRowStyleManager *carsManager =
     reinterpret_cast<KoTableColumnAndRowStyleManager *>(
             tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
-    Q_ASSERT(carsManager);
 
     // Implementation note about break handling:
     // There are a break and 3 rows in play:  some row, [break], previous row, current row
@@ -623,7 +621,7 @@ void Layout::handleTableBreak(QTextTableCell &previousCell, QTextTable *table)
         // TODO
 
         // It could also be that the previous row had a breakBefore property
-        KoTableRowStyle *rowStyle = carsManager->rowStyle(previousCell.row());
+        KoTableRowStyle *rowStyle = carsManager ? carsManager->rowStyle(previousCell.row()) : 0;
         if (rowStyle && rowStyle->breakBefore() ) {
             m_restartingAfterTableBreak = true;
         }
@@ -632,7 +630,7 @@ void Layout::handleTableBreak(QTextTableCell &previousCell, QTextTable *table)
         // We handle that here too (detecting late) because then we do all breaking in one place (simpler code)
         int row= previousCell.row()-1;
         if (row >= 0) {
-            rowStyle = carsManager->rowStyle(row);
+            rowStyle = carsManager ? carsManager->rowStyle(row) : 0;
             if (rowStyle && rowStyle->breakAfter() ) {
                 m_restartingAfterTableBreak = true;
             }

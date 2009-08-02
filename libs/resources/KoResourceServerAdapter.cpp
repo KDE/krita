@@ -19,7 +19,8 @@
 
 #include "KoResourceServerAdapter.h"
 
-KoAbstractResourceServerAdapter::KoAbstractResourceServerAdapter()
+KoAbstractResourceServerAdapter::KoAbstractResourceServerAdapter(QObject *parent)
+: QObject(parent)
 {
 }
 

@@ -30,7 +30,7 @@ class KORESOURCES_EXPORT KoAbstractResourceServerAdapter : public QObject
 {
     Q_OBJECT
 public:
-    KoAbstractResourceServerAdapter();
+    KoAbstractResourceServerAdapter(QObject *parent = 0);
     virtual ~KoAbstractResourceServerAdapter();
 
     virtual void connectToResourceServer() = 0;
@@ -56,8 +56,8 @@ protected:
 template <class T> class KoResourceServerAdapter : public KoAbstractResourceServerAdapter, public KoResourceServerObserver<T>
 {
 public:
-    KoResourceServerAdapter(KoResourceServer<T>* resourceServer)
-        : KoAbstractResourceServerAdapter()
+    KoResourceServerAdapter(KoResourceServer<T>* resourceServer, QObject *parent = 0)
+        : KoAbstractResourceServerAdapter(parent)
         , m_resourceServer(resourceServer)
     {
     }

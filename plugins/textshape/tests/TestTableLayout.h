@@ -2,6 +2,10 @@
 #define TESTTABLELAYOUT_H
 
 #include <QObject>
+#include <QHash>
+#include <QList>
+#include <QPoint>
+#include <QString>
 #include <qtest_kde.h>
 
 #include "../Layout.h"
@@ -9,6 +13,10 @@
 
 class MockTextShape;
 class KoTextDocumentLayout;
+class KoTableStyle;
+class KoTableColumnStyle;
+class KoTableRowStyle;
+class KoTableCellStyle;
 class KoStyleManager;
 class KoTableColumnAndRowStyleManager;
 class QTextDocument;
@@ -24,17 +32,44 @@ public:
 private:
     /// Initialize for a new test.
     void initTest(QTextTableFormat &format, QStringList &cellTexts, int rows = 1, int columns = 1);
+
+    /**
+     * Initialize for a new test.
+     *
+     * @param rows the number of rows in the table.
+     * @param columns the number of columns in the table.
+     * @param tableStyle the table style to use.
+     * @param columnStyles a list of column styles to use.
+     * @param rowStyles a list of row styles to use.
+     * @param cellStyles a map of cell styles to use, key is QPair<row, col>.
+     * @param cellTexts a map of strings to put in the cells, key is QPair<row, col>.
+     */
+    void initTest(int rows, int columns, KoTableStyle *tableStyle,
+            const QList<KoTableColumnStyle *> &columnStyles,
+            const QList<KoTableRowStyle *> &rowStyles,
+            const QMap<QPair<int, int>, KoTableCellStyle *> &cellStyles,
+            const QMap<QPair<int, int>, QString> &cellTexts);
+
+    /**
+     * Initialize for a new test. Simplified version.
+     *
+     * If no arguments are given, the following will be set up:
+     *
+     * - 2x2 table with no margins and 200 pt fixed width.
+     * - Columns get equal width.
+     *
+     * @param rows the number of rows in the table.
+     * @param columns the number of columns in the table.
+     * @param tableStyle the table style to use.
+     */
+    void initTestSimple(int rows = 2, int columns = 2, KoTableStyle *tableStyle = 0);
+
     /// Clean up after a test.
     void cleanupTest();
-    /// Table layout debug function.
-    void debugTableLayout(const TableLayout& layout) const;
 
 private slots:
-    /// Initialize test case.
-    void initTestCase();
-
-    /// Test table bounding rect.
-    void testBoundingRect();
+    /// Common initialization for all tests.
+    void init();
     /// Test very basic layout functionality.
     void testBasicLayout();
     /// Test table padding.
@@ -48,7 +83,7 @@ private slots:
     /// Test cell row and column spanning.
     void testCellRowAndColumnSpanning();
     /*
-     * Test that the height of the right row is updated when the span
+     * Tests that the height of the right row is updated when the span
      * area of a cell with row spanning gets its content changed from
      * a text insertion.
      */
@@ -62,6 +97,21 @@ private:
     KoTableColumnAndRowStyleManager *m_tableColumnAndRowStyleManager;
     Layout *m_textLayout;
     MockTextShape *m_shape;
+
+    // Default styles for the test table.
+    KoTableStyle *m_defaultTableStyle;
+    KoTableColumnStyle *m_defaultColumnStyle;
+    KoTableRowStyle *m_defaultRowStyle;
+    KoTableCellStyle *m_defaultCellStyle;
+
+    /*
+     * This offset variable is used in tests below to compensate
+     * for the empty blocks around tables.
+     *
+     * We should remove it completely once we have proper behavior
+     * of blocks around tables, a la Qt.
+     */
+    static const qreal Y = 14.4;
 };
 
 class MockTextShape : public TextShape

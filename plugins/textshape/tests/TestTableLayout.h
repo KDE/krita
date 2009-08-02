@@ -30,9 +30,6 @@ public:
     TestTableLayout() {}
 
 private:
-    /// Initialize for a new test.
-    void initTest(QTextTableFormat &format, QStringList &cellTexts, int rows = 1, int columns = 1);
-
     /**
      * Initialize for a new test.
      *

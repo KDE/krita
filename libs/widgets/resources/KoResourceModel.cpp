@@ -20,6 +20,7 @@
 #include "KoResourceModel.h"
 
 #include <KoResourceServerAdapter.h>
+#include <math.h>
 
 KoResourceModel::KoResourceModel( KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent )
     : QAbstractTableModel( parent ), m_resourceAdapter(resourceAdapter), m_columnCount(4)
@@ -34,7 +35,11 @@ KoResourceModel::KoResourceModel( KoAbstractResourceServerAdapter * resourceAdap
 
 int KoResourceModel::rowCount( const QModelIndex &/*parent*/ ) const
 {
-    return m_resourceAdapter->resources().count() / m_columnCount + 1;
+    int resourceCount = m_resourceAdapter->resources().count();
+    if (!resourceCount)
+        return 0;
+
+    return static_cast<int>(ceil(static_cast<qreal>(resourceCount) / m_columnCount));
 }
 
 int KoResourceModel::columnCount ( const QModelIndex & ) const
@@ -96,11 +101,11 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
 QModelIndex KoResourceModel::index ( int row, int column, const QModelIndex & ) const
 {
     int index = row * m_columnCount + column;
-    if( index >= m_resourceAdapter->resources().count() || index < 0)
+    const QList<KoResource*> resources = m_resourceAdapter->resources();
+    if( index >= resources.count() || index < 0)
         return QModelIndex();
 
-    KoResource * resource = m_resourceAdapter->resources()[index];
-    return createIndex( row, column, resource );
+    return createIndex( row, column, resources[index] );
 }
 
 void KoResourceModel::setColumnCount( int columnCount )

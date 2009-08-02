@@ -81,6 +81,10 @@ private slots:
     void testCellRowAndColumnSpanning();
     /// Test minimum row height.
     void testMinimumRowHeight();
+    /// Test column width.
+    void testColumnWidth();
+    /// Test variable column width.
+    void testVariableColumnWidth();
     /// Test table width and relative width.
     void testTableWidth();
     /*

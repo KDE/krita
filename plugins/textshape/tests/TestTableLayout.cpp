@@ -542,6 +542,86 @@ void TestTableLayout::testMinimumRowHeight()
     QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(100, 0+Y, 100, 30));
 }
 
+void TestTableLayout::testVariableColumnWidth()
+{
+    QList<KoTableRowStyle *> rowStyles;
+    QMap<QPair<int, int>, KoTableCellStyle *> cellStyles;
+    QMap<QPair<int, int>, QString> cellTexts;
+    QList<KoTableColumnStyle *> columnStyles;
+    // Give column 0 20% width.
+    KoTableColumnStyle *columnStyle1 = new KoTableColumnStyle();
+    QVERIFY(columnStyle1);
+    columnStyle1->setRelativeColumnWidth(20.0);
+    columnStyles.append(columnStyle1);
+    // And column 1 80% width.
+    KoTableColumnStyle *columnStyle2 = new KoTableColumnStyle();
+    QVERIFY(columnStyle2);
+    columnStyle2->setRelativeColumnWidth(80.0);
+    columnStyles.append(columnStyle2);
+    initTest(2, 2, 0, columnStyles, rowStyles, cellStyles, cellTexts);
+    m_layout->layout();
+
+    /*
+     * Cell 0,0 rules:
+     *   x = 0 (no borders/margins/paddings)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 40 (20% of width of shape (200 pt))
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    QTextTableCell cell1 = m_table->cellAt(0, 0);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0+Y, 40, 16));
+
+    /*
+     * Cell 0,1 rules:
+     *   x = 40 (width of column 0)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 160 (80% of width of shape (200 pt))
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    QTextTableCell cell2 = m_table->cellAt(0, 1);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(40, 0+Y, 160, 16));
+}
+
+void TestTableLayout::testColumnWidth()
+{
+    QList<KoTableRowStyle *> rowStyles;
+    QMap<QPair<int, int>, KoTableCellStyle *> cellStyles;
+    QMap<QPair<int, int>, QString> cellTexts;
+    QList<KoTableColumnStyle *> columnStyles;
+    // Give column 0 20 pt width.
+    KoTableColumnStyle *columnStyle1 = new KoTableColumnStyle();
+    QVERIFY(columnStyle1);
+    columnStyle1->setColumnWidth(20.0);
+    columnStyles.append(columnStyle1);
+    // And column 1 180 pt width.
+    KoTableColumnStyle *columnStyle2 = new KoTableColumnStyle();
+    columnStyle2->setColumnWidth(180.0);
+    QVERIFY(columnStyle2);
+    columnStyles.append(columnStyle2);
+    initTest(2, 2, 0, columnStyles, rowStyles, cellStyles, cellTexts);
+    m_layout->layout();
+
+    /*
+     * Cell 0,0 rules:
+     *   x = 0 (no borders/margins/paddings)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 20 (fixed width)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    QTextTableCell cell1 = m_table->cellAt(0, 0);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0+Y, 20, 16));
+
+    /*
+     * Cell 0,1 rules:
+     *   x = 20 (width of column 0)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 180 (fixed width)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    QTextTableCell cell2 = m_table->cellAt(0, 1);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(20, 0+Y, 180, 16));
+}
+
 QTEST_KDEMAIN(TestTableLayout, GUI)
 
 #include <TestTableLayout.moc>

@@ -80,6 +80,7 @@
 #include <QAbstractTextDocumentLayout>
 #include <KAction>
 #include <QBuffer>
+#include <QTextTable>
 #include <QKeyEvent>
 #include <QPointer>
 #include <QTabWidget>
@@ -1068,12 +1069,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             moveOperation = QTextCursor::WordRight;
 #ifndef NDEBUG
         else if (event->key() == Qt::Key_F12) {
-            KoInlineNote *fn = new KoInlineNote(KoInlineNote::Footnote);
-            fn->setText("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy");
-            fn->setLabel("1");
-            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-            Q_ASSERT(lay);
-            lay->inlineTextObjectManager()->insertInlineObject(m_caret, fn);
+            m_selectionHandler.insertTable(3, 2);
+            QTextTable *table = m_caret.currentTable();
+            QTextCursor c = table->cellAt(1,1).firstCursorPosition();
+            c.insertText("foo bar baz");
+            m_caret.setPosition(c.position());
         }
 #endif
         else if ((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {

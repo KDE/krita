@@ -127,15 +127,7 @@ void KoResourceModel::resourceAdded(KoResource *resource)
     if (newIndex < 0)
         return;
     
-    int row = newIndex / m_columnCount;
-    int col = newIndex % m_columnCount;
-    if (col == 0 || m_columnCount == 1 ) {
-        beginInsertRows(QModelIndex(), row, row);
-        endInsertRows();
-    } else {
-        QModelIndex modelIndex = index(row, col, QModelIndex());
-        emit dataChanged(modelIndex, modelIndex);
-    }
+    reset();
 }
 
 void KoResourceModel::resourceRemoved(KoResource *resource)

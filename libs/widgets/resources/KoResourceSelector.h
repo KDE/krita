@@ -34,6 +34,17 @@ class KOWIDGETS_EXPORT KoResourceSelector : public QComboBox
 {
     Q_OBJECT
 public:
+    enum DisplayMode {
+        ImageMode,  ///< Displays image of resources (default)
+        TextMode   ///< Displays name of resources
+    };
+    
+    /**
+     * Constructs a new resource selector.
+     * @param parent the parent widget
+     */
+    explicit KoResourceSelector(QWidget *parent = 0);
+
     /**
      * Constructs a new resource selector showing the resources of the given resource adapter.
      * @param resourceAdapter the resource adapter providing the resources to display
@@ -43,9 +54,16 @@ public:
     
     /// Destroys the resource selector
     virtual ~KoResourceSelector();
-    
+
+    /// Sets the resource adaptor to get resources from
+    void setResourceAdapter(KoAbstractResourceServerAdapter *resourceAdapter);
+
+    /// Sets the display mode
+    void setDisplayMode(DisplayMode mode);
+
     /// Sets number of columns to display in the popup view
     void setColumnCount( int columnCount );
+
     /// Sets the height of the popup view rows
     void setRowHeight( int rowHeight );
 
@@ -66,7 +84,7 @@ protected:
 
 private slots:
     void indexChanged( int index );
-
+    void resourceAdded(KoResource*);
 private:
     class Private;
     Private * const d;

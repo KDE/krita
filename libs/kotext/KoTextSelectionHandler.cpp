@@ -417,6 +417,7 @@ QString KoTextSelectionHandler::selectedText() const
 
 void KoTextSelectionHandler::insertTable(int rows, int columns)
 {
+    emit startMacro(i18n("Insert Table"));
     QTextTableFormat tableFormat;
     tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
 
@@ -459,6 +460,7 @@ void KoTextSelectionHandler::insertTable(int rows, int columns)
             cell.setFormat(format);
         }
     }
+    emit stopMacro();
 }
 
 void KoTextSelectionHandler::insert(const QString &text)

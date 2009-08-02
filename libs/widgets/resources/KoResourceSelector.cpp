@@ -50,8 +50,10 @@ public:
         QModelIndex currentModelIndex = me->view()->currentIndex();
 
         if (currentIndex < 0 || !currentModelIndex.isValid()) {
+            me->blockSignals(true);
             me->view()->setCurrentIndex( resourceModel->index( 0, 0 ) );
             me->setCurrentIndex(0);
+            me->blockSignals(false);
             me->update();
         }
     }

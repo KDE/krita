@@ -28,7 +28,10 @@ struct KoFilterEffect::Private {
     Private()
         : filterRect(0, 0, 1, 1)
         , requiredInputCount(1), maximalInputCount(1)
-    {}
+    {
+        // add the default input
+        inputs.append(QString());
+    }
     
     QString id;
     QString name;
@@ -42,8 +45,8 @@ struct KoFilterEffect::Private {
 KoFilterEffect::KoFilterEffect( const QString& id, const QString& name ) 
     : d(new Private)
 {
-  d->id = id;
-  d->name = name;
+    d->id = id;
+    d->name = name;
 }
 
 KoFilterEffect::~KoFilterEffect()
@@ -105,7 +108,8 @@ void KoFilterEffect::setInput(int index, const QString &input)
 
 void KoFilterEffect::removeInput(int index)
 {
-    d->inputs.removeAt(index);
+    if (d->inputs.count() > d->requiredInputCount)
+        d->inputs.removeAt(index);
 }
 
 void KoFilterEffect::setOutput(const QString &output)
@@ -125,7 +129,7 @@ int KoFilterEffect::requiredInputCount() const
 
 int KoFilterEffect::maximalInputCount() const
 {
-    return d->maximalInputCount;
+    return qMax(d->maximalInputCount, d->requiredInputCount);
 }
 
 QImage KoFilterEffect::processImages(const QList<QImage> &images, const QRect &filterRegion, const KoViewConverter &/*converter*/) const
@@ -141,11 +145,18 @@ QImage KoFilterEffect::processImages(const QList<QImage> &images, const QRect &f
 void KoFilterEffect::setRequiredInputCount(int count)
 {
     d->requiredInputCount = qMax(1,count);
+    for (int i = d->inputs.count(); i < d->requiredInputCount; ++i)
+        d->inputs.append(QString());
 }
 
 void KoFilterEffect::setMaximalInputCount(int count)
 {
     d->maximalInputCount = qMax(1,count);
+    if (d->inputs.count() > maximalInputCount()) {
+        int removeCount = maximalInputCount()-d->inputs.count();
+        for (int i = 0; i < removeCount; ++i)
+            d->inputs.pop_back();
+    }
 }
 
 void KoFilterEffect::saveCommonAttributes(KoXmlWriter &writer)

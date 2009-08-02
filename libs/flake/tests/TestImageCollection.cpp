@@ -78,9 +78,9 @@ void TestImageCollection::testGetImageStore()
 {
     KoImageCollection collection;
     KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
-    QString image("logo-koffice.png");
+    QString image("logo-koffice.jpg");
     KoImageData *id1 = collection.createImageData(image, store);
-    QCOMPARE(id1->suffix(), QString("png"));
+    QCOMPARE(id1->suffix(), QString("jpg"));
     QCOMPARE(id1->hasCachedImage(), false);
     KoImageData *id2 = collection.createImageData(image, store);
     QCOMPARE(id2->hasCachedImage(), false);
@@ -191,7 +191,7 @@ void TestImageCollection::testPreload3()
     QString image("logo-koffice.png");
     data.setImage(image, store);
 
-    QCOMPARE(data.hasCachedImage(), false);
+    QCOMPARE(data.hasCachedImage(), true); // the png is tiny.. Its kept in memory.
     QCOMPARE(data.hasCachedPixmap(), false);
     QPixmap pixmap = data.pixmap(QSize(40, 41));
     QCOMPARE(pixmap.width(), 40);

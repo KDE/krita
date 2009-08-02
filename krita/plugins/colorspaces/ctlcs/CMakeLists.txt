@@ -11,7 +11,10 @@ add_subdirectory(ctlcompositeops)
 configure_file(config-openctl910.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openctl910.h )
 
 if( HAVE_OPENCTL_910 )
-  set( SRCS_910 KoCtlTemplatesRegistry.cpp )
+  set( SRCS_910
+      KoCtlCompositeOp.cpp
+      KoCtlTemplatesRegistry.cpp
+  )
 endif( HAVE_OPENCTL_910 )
 
 set( CTLCS_SRCS

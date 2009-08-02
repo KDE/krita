@@ -19,10 +19,17 @@
 
 #include "TableDialog.h"
 
+#include <klocale.h>
+
 TableDialog::TableDialog(QWidget *parent)
-        : QDialog(parent)
+        : KDialog(parent)
 {
-    widget.setupUi(this);
+    setCaption(i18n("Insert Table"));
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    showButtonSeparator(true);
+    QWidget *form = new QWidget;
+    widget.setupUi(form);
+    setMainWidget(form);
 }
 
 int TableDialog::columns()

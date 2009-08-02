@@ -22,10 +22,10 @@
 
 #include "ui_TableDialog.h"
 
-#include <QDialog>
+#include <KDialog>
 
 
-class TableDialog : public QDialog
+class TableDialog : public KDialog
 {
     Q_OBJECT
 public:

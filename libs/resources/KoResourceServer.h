@@ -126,7 +126,7 @@ public:
                         resource->setName( fname );
                     }
                     m_resourcesByName[resource->name()] = resource;
-
+                    m_resources.append(resource);
 
                     notifyResourceAdded(resource);
                     Q_CHECK_PTR(resource);
@@ -162,6 +162,7 @@ public:
 
         m_resourcesByFilename[resource->filename()] = resource;
         m_resourcesByName[resource->name()] = resource;
+        m_resources.append(resource);
 
         notifyResourceAdded(resource);
 
@@ -194,6 +195,7 @@ public:
         if (removedFromDisk) {
             m_resourcesByName.remove(resource->name());
             m_resourcesByFilename.remove(resource->filename());
+            m_resources.removeAt(m_resources.indexOf(resource));
             delete resource;
         } else {
             // TODO: save blacklist to config file and load it again on next start
@@ -205,7 +207,7 @@ public:
 
     QList<T*> resources() {
         loadLock.lock();
-        QList<T*> resourceList = m_resourcesByFilename.values();
+        QList<T*> resourceList = m_resources;
         foreach(T* r, m_resourceBlackList) {
             resourceList.removeOne(r);
         }
@@ -324,6 +326,7 @@ private:
     QHash<QString, T*> m_resourcesByName;
     QHash<QString, T*> m_resourcesByFilename;
     QList<T*> m_resourceBlackList;
+    QList<T*> m_resources; ///< list of resources in order of addition
     QList<KoResourceServerObserver<T>*> m_observers;
 
 };

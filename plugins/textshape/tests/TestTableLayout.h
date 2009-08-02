@@ -79,6 +79,10 @@ private slots:
     void testCellRowSpanning();
     /// Test cell row and column spanning.
     void testCellRowAndColumnSpanning();
+    /// Test minimum row height.
+    void testMinimumRowHeight();
+    /// Test table width and relative width.
+    void testTableWidth();
     /*
      * Tests that the height of the right row is updated when the span
      * area of a cell with row spanning gets its content changed from

@@ -27,7 +27,7 @@ class KoFilterEffectStack::Private
 {
 public:
     Private()
-    : clipRect(-0.1, -0.1, 1.2, 1.2)
+    : clipRect(-0.1, -0.1, 1.2, 1.2) // initialize as per svg spec
     {
     }
 
@@ -70,7 +70,8 @@ void KoFilterEffectStack::appendFilterEffect(KoFilterEffect *filter)
 
 void KoFilterEffectStack::removeFilterEffect(int index)
 {
-    d->filterEffects.removeAt(index);
+    KoFilterEffect * filter = d->filterEffects.takeAt(index);
+    delete filter;
 }
 
 void KoFilterEffectStack::setClipRect(const QRectF &clipRect)

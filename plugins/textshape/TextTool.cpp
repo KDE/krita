@@ -1158,6 +1158,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         editingPluginEvents();
         ensureCursorVisible();
     }
+    if (m_caretTimer.isActive()) { // make the caret not blink but decide on the action if its visible or not.
+        m_caretTimer.stop();
+        m_caretTimer.start();
+        m_caretTimerState = moveOperation != QTextCursor::NoMove;
+    }
 
     updateSelectionHandler();
 }

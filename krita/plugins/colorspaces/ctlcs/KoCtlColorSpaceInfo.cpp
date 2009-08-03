@@ -317,3 +317,8 @@ quint32 KoCtlColorSpaceInfo::pixelSize() const
 {
     return d->pixelSize;
 }
+
+const GTLCore::PixelDescription& KoCtlColorSpaceInfo::pixelDescription() const
+{
+  return *d->pixelDescription;
+}

@@ -24,6 +24,10 @@
 
 class KoID;
 
+namespace GTLCore {
+  class PixelDescription;
+}
+
 class KoCtlColorSpaceInfo {
     public:
         class ChannelInfo {
@@ -59,6 +63,7 @@ class KoCtlColorSpaceInfo {
         bool isHdr() const;
         quint32 colorChannelCount() const;
         quint32 pixelSize() const;
+        const GTLCore::PixelDescription& pixelDescription() const;
     private:
         struct Private;
         Private* const d;

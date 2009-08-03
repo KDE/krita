@@ -22,6 +22,8 @@
 #include <qtest_kde.h>
 #include "../KoCtlColorSpaceInfo.h"
 #include <KoID.h>
+#include <GTLCore/PixelDescription.h>
+#include <GTLCore/Type.h>
 
 void KoCtlColorSpaceInfoTest::testCreation()
 {
@@ -57,6 +59,15 @@ void KoCtlColorSpaceInfoTest::testCreation()
     QCOMPARE(alphaChannel->valueType(), KoChannelInfo::FLOAT32);
     QCOMPARE(alphaChannel->size(), 4);
     QCOMPARE(alphaChannel->color(), QColor(0,0,0));
+    
+    const GTLCore::PixelDescription& pd = info.pixelDescription();
+    QCOMPARE(qint32(pd.channels()), 4);
+    QCOMPARE(qint32(pd.alphaPos()), 3);
+    QCOMPARE(pd.channelTypes()[0], GTLCore::Type::Float32);
+    QCOMPARE(pd.channelTypes()[1], GTLCore::Type::Float32);
+    QCOMPARE(pd.channelTypes()[2], GTLCore::Type::Float32);
+    QCOMPARE(pd.channelTypes()[3], GTLCore::Type::Float32);
+    QCOMPARE(pd.sameTypeChannels(), true);
 }
 
 

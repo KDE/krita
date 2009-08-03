@@ -280,7 +280,7 @@ extern int qt_defaultDpiX();
 bool Layout::nextParag()
 {
     m_inlineObjectHeights.clear();
-    if (layout) { // guard against first time
+    if (layout && !m_restartingFirstCellAfterTableBreak) { // guard against first time or first time after table relayout
         layout->endLayout();
         m_block = m_block.next();
         if (m_endOfDemoText) {
@@ -545,12 +545,12 @@ void Layout::handleTable()
                         // In a previous run we have detected that current row should not be on the shape it was placed.
                         // A new shape was ordered and the Y have already been roughly set.
                         // Now is the time to set the Y correctly, but we shouldn't do any detecting of breaks
-                        qDebug() << "[re-layout run after break]" << "  offset row " << m_tableCell.row() << " y " << m_y;
+                        qDebug() << "[re-layout run] break after row" << previousCell.row() << "and next row at y " << m_y;
                         m_tableLayout.startNewTableRect(QPointF(0.0, y()), shape->size().width(), m_tableCell.row());
                         m_restartingFirstCellAfterTableBreak= false;
                     } else {
                         m_tableLayout.layoutRow(previousCell.row());
-                        qDebug() << "layouted row" << previousCell.row() << " y " << m_y;
+                        qDebug() << "layouted row" << previousCell.row() << "and next row at y" << m_y;
 
                         handleTableBreak(previousCell, table);
                     }
@@ -582,7 +582,7 @@ void Layout::handleTable()
                 // Tell the table layout to calculate height of last cell.
                 m_tableLayout.calculateCellContentHeight(previousCell);
                 m_tableLayout.layoutRow(previousCell.row());
-                    qDebug() << "layouted row" << previousCell.row() << " y " << m_y;
+                    qDebug() << "layouted row" << previousCell.row() <<"and next row at y" << m_y;
             }
 
             handleTableBreak(previousCell, previousTable);

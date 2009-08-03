@@ -23,6 +23,8 @@
 #include <kis_debug.h>
 #include "KoCtlParser.h"
 #include <KoID.h>
+#include <GTLCore/PixelDescription.h>
+#include <GTLCore/Type.h>
 
 struct KoCtlColorSpaceInfo::ChannelInfo::Private {
     Private() : color(0,0,0) {}
@@ -76,6 +78,8 @@ const QColor& KoCtlColorSpaceInfo::ChannelInfo::color() const {
 }
 
 struct KoCtlColorSpaceInfo::Private {
+    Private() : pixelDescription(0) {}
+    ~Private() { delete pixelDescription; }
     QString fileName;
     KoID colorDepthID;
     KoID colorModelId;
@@ -87,6 +91,7 @@ struct KoCtlColorSpaceInfo::Private {
     quint32 colorChannelCount;
     QList<const KoCtlColorSpaceInfo::ChannelInfo*> channels;
     quint32 pixelSize;
+    GTLCore::PixelDescription* pixelDescription;
 };
 
 KoCtlColorSpaceInfo::KoCtlColorSpaceInfo(const QString& _xmlfile) : d(new Private)
@@ -165,7 +170,10 @@ bool KoCtlColorSpaceInfo::load()
             } else if( e.tagName() == "isHdr" ) {
                 d->isHdr = true;
             } else if( e.tagName() == "channels" ) {
+                std::vector<const GTLCore::Type* > channelTypes;
+                int alphapos = -1;
                 QDomNode n = e.firstChild();
+                int pos = 0;
                 while( !n.isNull())
                 {
                     QDomElement e = n.toElement();
@@ -189,6 +197,7 @@ bool KoCtlColorSpaceInfo::load()
                         } else if( channelType == "Alpha" )
                         {
                             info->d->channelType = KoChannelInfo::ALPHA;
+                            alphapos = pos;
                         } else {
                             dbgPlugins << "Invalid channel type: " << channelType;
                             return false;
@@ -200,15 +209,19 @@ bool KoCtlColorSpaceInfo::load()
                         if( valueType == "float32" )
                         {
                             info->d->valueType = KoChannelInfo::FLOAT32;
+                            channelTypes.push_back(GTLCore::Type::Float);
                         } else if( valueType == "float16" )
                         {
                             info->d->valueType = KoChannelInfo::FLOAT16;
+                            channelTypes.push_back(GTLCore::Type::Half);
                         } else if( valueType == "uint8" )
                         {
                             info->d->valueType = KoChannelInfo::UINT8;
+                            channelTypes.push_back(GTLCore::Type::UnsignedInteger8);
                         } else if( valueType == "uint16" )
                         {
                             info->d->valueType = KoChannelInfo::UINT16;
+                            channelTypes.push_back(GTLCore::Type::UnsignedInteger16);
                         } else {
                             dbgPlugins << "Invalid value type: " << valueType;
                             return false;
@@ -226,9 +239,11 @@ bool KoCtlColorSpaceInfo::load()
                             info->d->color = QColor( colorlist[0].toInt(), colorlist[1].toInt(), colorlist[2].toInt() );
                         }
                         d->channels.push_back(info);
+                        ++pos;
                     }
                     n = n.nextSibling();
                 }
+                d->pixelDescription = new GTLCore::PixelDescription( channelTypes, alphapos);
             }
         }
         n = n.nextSibling();

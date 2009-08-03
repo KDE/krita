@@ -70,7 +70,8 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_dropCapsNChars(0), m_dropCapsAffectsNMoreLines(0),
         m_dropCapsAffectedLineWidthAdjust(0),
         m_y_justBelowDropCaps(0),
-        m_restartingAfterTableBreak(false)
+        m_restartingAfterTableBreak(false),
+        m_restartingFirstCellAfterTableBreak(false)
 {
 }
 

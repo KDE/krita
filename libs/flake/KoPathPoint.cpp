@@ -162,7 +162,7 @@ void KoPathPoint::setProperties(KoPointProperties properties)
         d->properties &= ~IsSmooth;
         d->properties &= ~IsSymmetric;
     }
-    
+
     if (d->shape)
         d->shape->notifyChanged();
 }

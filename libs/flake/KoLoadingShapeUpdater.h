@@ -25,13 +25,13 @@
 class KoShape;
 
 /**
- * Reimplement this class when you depend on a shape during loading that is 
+ * Reimplement this class when you depend on a shape during loading that is
  * not yet loaded.
  *
  * As soon as the shape you depend on is loaded the method update is called.
- * Then you can setup the data you need. 
+ * Then you can setup the data you need.
  *
- * @see KoConnectionShape 
+ * @see KoConnectionShape
  * @see KoShapeLoadingContext::updateShape
  */
 class FLAKE_EXPORT KoLoadingShapeUpdater

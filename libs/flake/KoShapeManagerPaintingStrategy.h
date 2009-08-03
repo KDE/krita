@@ -61,7 +61,7 @@ public:
 
     /**
      * Set the shape manager
-     * 
+     *
      * This is needed in case you cannot set the shape manager when creating the paiting strategy.
      * It needs to be set before you paint otherwise nothing will be painted.
      *

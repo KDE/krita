@@ -69,15 +69,15 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
 
     // calculate the shadow offset independent of shape transformation
     QMatrix tm;
-    tm.translate(d->offset.x(), d->offset.y());   
-    QMatrix tr = shape->absoluteTransformation(&converter);   
+    tm.translate(d->offset.x(), d->offset.y());
+    QMatrix tr = shape->absoluteTransformation(&converter);
     QMatrix offsetMatrix = tr * tm * tr.inverted();
-    
+
     if (shape->background()) {
         painter.save();
-        
+
         KoShape::applyConversion(painter, converter);
-        
+
         // the shadow direction is independent of the shapes transformation
         // please only change if you know what you are doing
         painter.setMatrix(offsetMatrix * painter.matrix());
@@ -95,15 +95,15 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
         QMatrix oldPainterMatrix = painter.matrix();
         KoShape::applyConversion(painter, converter);
         QMatrix newPainterMatrix = painter.matrix();
-        
+
         // the shadow direction is independent of the shapes transformation
         // please only change if you know what you are doing
         painter.setMatrix(offsetMatrix * painter.matrix());
-        
+
         // compensate applyConversion call in paintBorder
         QMatrix scaleMatrix = newPainterMatrix * oldPainterMatrix.inverted();
         painter.setMatrix(scaleMatrix.inverted() * painter.matrix());
-        
+
         shape->border()->paintBorder(shape, painter, converter, d->color);
     }
 }

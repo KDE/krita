@@ -35,21 +35,21 @@ public:
                 delete border;
         }
     }
-    
+
     void addOldBorder( KoShapeBorderModel * oldBorder )
     {
         if (oldBorder)
             oldBorder->addUser();
         oldBorders.append(oldBorder);
     }
-    
+
     void addNewBorder( KoShapeBorderModel * newBorder )
     {
         if (newBorder)
             newBorder->addUser();
         newBorders.append(newBorder);
     }
-    
+
     QList<KoShape*> shapes;                ///< the shapes to set border for
     QList<KoShapeBorderModel*> oldBorders; ///< the old borders, one for each shape
     QList<KoShapeBorderModel*> newBorders; ///< the new borders to set
@@ -85,7 +85,7 @@ KoShapeBorderCommand::KoShapeBorderCommand(const QList<KoShape*> &shapes,
         d->addOldBorder(shape->border());
     foreach(KoShapeBorderModel * border, borders )
         d->addNewBorder(border);
-    
+
     setText(i18n("Set border"));
 }
 

@@ -84,7 +84,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
 {
     context.xmlWriter().startElement("draw:connector");
     saveOdfAttributes( context, OdfMandatories | OdfAdditionalAttributes );
-    
+
     switch( d->connectionType )
     {
         case Lines:
@@ -100,7 +100,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
             context.xmlWriter().addAttribute( "draw:type", "standard" );
             break;
     }
-    
+
     if (d->shape1) {
         context.xmlWriter().addAttribute( "draw:start-shape", context.drawId(d->shape1) );
         context.xmlWriter().addAttribute( "draw:start-glue-point", d->connectionPointIndex1 );
@@ -121,7 +121,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
     }
 
     saveOdfCommonChildElements(context);
-    
+
     context.xmlWriter().endElement();
 }
 
@@ -291,19 +291,19 @@ bool KoConnectionShape::setConnection1(KoShape * shape1, int connectionPointInde
     // refuse to connect to a shape that depends on us (e.g. a artistic text shape)
     if (hasDependee(shape1))
         return false;
-    
+
     // check if the connection point does exist
     if (shape1 && connectionPointIndex1 >= shape1->connectionPoints().count())
         return false;
-    
+
     if (d->shape1)
         d->shape1->removeDependee(this);
     d->shape1 = shape1;
     if (d->shape1)
         d->shape1->addDependee(this);
-    
+
     d->connectionPointIndex1 = connectionPointIndex1;
-    
+
     return true;
 }
 
@@ -312,19 +312,19 @@ bool KoConnectionShape::setConnection2(KoShape * shape2, int connectionPointInde
     // refuse to connect to a shape that depends on us (e.g. a artistic text shape)
     if (hasDependee(shape2))
         return false;
-    
+
     // check if the connection point does exist
     if (shape2 && connectionPointIndex2 >= shape2->connectionPoints().count())
         return false;
-    
+
     if (d->shape2)
         d->shape2->removeDependee(this);
     d->shape2 = shape2;
     if (d->shape2)
         d->shape2->addDependee(this);
-    
+
     d->connectionPointIndex2 = connectionPointIndex2;
-    
+
     return true;
 }
 

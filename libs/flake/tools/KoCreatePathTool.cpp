@@ -56,7 +56,7 @@ public:
     : KoSnapStrategy(KoSnapStrategy::Custom), m_angleStep(angleStep), m_active(false)
     {
     }
-    
+
     void setStartPoint(const QPointF &startPoint)
     {
         m_startPoint = startPoint;
@@ -67,25 +67,25 @@ public:
     {
         m_angleStep = qAbs(angleStep);
     }
-    
+
     virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
     {
         Q_UNUSED(proxy);
-        
+
         if (!m_active)
             return false;
-        
+
         QLineF line(m_startPoint, mousePosition);
         qreal currentAngle = line.angle();
         int prevStep = qAbs(currentAngle / m_angleStep);
         int nextStep = prevStep + 1;
         qreal prevAngle = prevStep*m_angleStep;
         qreal nextAngle = nextStep*m_angleStep;
-        
+
         if (qAbs(currentAngle - prevAngle) <= qAbs(currentAngle - nextAngle)) {
-            line.setAngle(prevAngle); 
+            line.setAngle(prevAngle);
         } else {
-            line.setAngle(nextAngle); 
+            line.setAngle(nextAngle);
         }
 
         qreal maxSquareSnapDistance = maxSnapDistance*maxSnapDistance;
@@ -96,17 +96,17 @@ public:
         setSnappedPosition(line.p2());
         return true;
     }
-    
+
     virtual QPainterPath decoration(const KoViewConverter &converter) const
     {
         Q_UNUSED(converter);
-        
+
         QPainterPath decoration;
         decoration.moveTo(m_startPoint);
         decoration.lineTo(snappedPosition());
         return decoration;
     }
-    
+
 private:
     QPointF m_startPoint;
     qreal m_angleStep;
@@ -236,7 +236,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         m_shape->setBorder(border);
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
         QPointF point = m_canvas->snapGuide()->snap(event->point, event->modifiers());
-        
+
         // check whether we hit an start/end node of an existing path
         m_existingStartPoint = endPointAtPosition(point);
         if (m_existingStartPoint) {
@@ -255,11 +255,11 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
 
         m_canvas->snapGuide()->setEditedShape(m_shape);
-        
+
         m_angleSnapStrategy = new AngleSnapStrategy(m_angleSnappingDelta);
         m_canvas->snapGuide()->addCustomSnapStrategy(m_angleSnapStrategy);
     }
-    
+
     if (m_angleSnapStrategy)
         m_angleSnapStrategy->setStartPoint(m_activePoint->point());
 }
@@ -290,7 +290,7 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
             m_canvas->updateCanvas(handlePaintRect(nodePos));
         }
     }
-    
+
     if (! m_shape) {
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
         m_canvas->snapGuide()->snap(event->point, event->modifiers());
@@ -305,7 +305,7 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
     m_canvas->updateCanvas(m_shape->boundingRect());
     m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
     QPointF snappedPosition = m_canvas->snapGuide()->snap(event->point, event->modifiers());
-    
+
     repaintActivePoint();
     if (event->buttons() & Qt::LeftButton) {
         m_pointIsDragged = true;
@@ -356,7 +356,7 @@ void KoCreatePathTool::activate(bool temporary)
 
     // retrieve the actual global handle radius
     m_handleRadius = m_canvas->resourceProvider()->handleRadius();
-    
+
     // reset snap guide
     m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
     m_canvas->snapGuide()->reset();
@@ -367,7 +367,7 @@ void KoCreatePathTool::deactivate()
     // reset snap guide
     m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
     m_canvas->snapGuide()->reset();
-    
+
     if (m_shape) {
         m_canvas->updateCanvas(handlePaintRect(m_firstPoint->point()));
         m_canvas->updateCanvas(m_shape->boundingRect());
@@ -402,21 +402,21 @@ void KoCreatePathTool::addPathShape()
     m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
     m_canvas->snapGuide()->reset();
     m_angleSnapStrategy = 0;
-    
+
     // this is done so that nothing happens when the mouseReleaseEvent for the this event is received
     KoPathShape *pathShape = m_shape;
     m_shape = 0;
 
     KoPathShape * startShape = 0;
     KoPathShape * endShape = 0;
-    
+
     if (connectPaths(pathShape, m_existingStartPoint, m_existingEndPoint)) {
         if (m_existingStartPoint)
             startShape = m_existingStartPoint->parent();
         if (m_existingEndPoint && m_existingEndPoint != m_existingStartPoint)
             endShape = m_existingEndPoint->parent();
     }
-    
+
     QUndoCommand * cmd = m_canvas->shapeController()->addShape(pathShape);
     if (cmd) {
         KoSelection *selection = m_canvas->shapeManager()->selection();
@@ -473,7 +473,7 @@ QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets()
     QMap<QString, QWidget *> map;
     SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(m_canvas->snapGuide());
     map.insert(i18n("Snapping"), widget);
-    
+
     QWidget * angleWidget = new QWidget();
     angleWidget->setObjectName("Angle Constrains");
     QGridLayout * layout = new QGridLayout(angleWidget);
@@ -483,9 +483,9 @@ QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets()
     angleEdit->setSuffix(" °");
     layout->addWidget( angleEdit, 0, 1);
     map.insert(i18n("Angle Constrains"), angleWidget);
-    
+
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
-    
+
     return map;
 }
 
@@ -500,12 +500,12 @@ KoPathPoint* KoCreatePathTool::endPointAtPosition( const QPointF &position )
 {
     QRectF roi = handleGrabRect(position);
     QList<KoShape *> shapes = m_canvas->shapeManager()->shapesAt(roi);
-    
+
     KoPathPoint * nearestPoint = 0;
     qreal minDistance = HUGE_VAL;
     uint grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
     qreal maxDistance = m_canvas->viewConverter()->viewToDocumentX(grabSensitivity);
-    
+
     foreach(KoShape *shape, shapes) {
         KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
         if (!path)
@@ -513,7 +513,7 @@ KoPathPoint* KoCreatePathTool::endPointAtPosition( const QPointF &position )
         KoParameterShape *paramShape = dynamic_cast<KoParameterShape*>(shape);
         if (paramShape && paramShape->isParametricShape())
             continue;
-        
+
         KoPathPoint * p = 0;
         uint subpathCount = path->subpathCount();
         for (uint i = 0; i < subpathCount; ++i) {
@@ -535,7 +535,7 @@ KoPathPoint* KoCreatePathTool::endPointAtPosition( const QPointF &position )
             }
         }
     }
-    
+
     return nearestPoint;
 }
 
@@ -547,21 +547,21 @@ bool KoCreatePathTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointA
     // do not allow connecting to the same point twice
     if (pointAtStart == pointAtEnd)
         pointAtEnd = 0;
-    
+
     // we have hit an existing path point on start/finish
     // what we now do is:
     // 1. combine the new created path with the ones we hit on start/finish
     // 2. merge the endpoints of the corresponding subpaths
-    
+
     uint newPointCount = pathShape->pointCountSubpath(0);
     KoPathPointIndex newStartPointIndex(0, 0);
     KoPathPointIndex newEndPointIndex(0, newPointCount-1);
     KoPathPoint * newStartPoint = pathShape->pointByIndex(newStartPointIndex);
     KoPathPoint * newEndPoint = pathShape->pointByIndex(newEndPointIndex);
-    
+
     KoPathShape * startShape = pointAtStart ? pointAtStart->parent() : 0;
     KoPathShape * endShape = pointAtEnd ? pointAtEnd->parent() : 0;
-    
+
     // combine with the path we hit on start
     KoPathPointIndex startIndex(-1,-1);
     if (pointAtStart) {
@@ -580,7 +580,7 @@ bool KoCreatePathTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointA
     }
     // do we connect twice to a single subpath ?
     bool connectToSingleSubpath = (startShape == endShape && startIndex.first == endIndex.first);
-    
+
     if (startIndex.second == 0 && !connectToSingleSubpath) {
         pathShape->reverseSubpath(startIndex.first);
         startIndex.second = pathShape->pointCountSubpath(startIndex.first)-1;
@@ -589,18 +589,18 @@ bool KoCreatePathTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointA
         pathShape->reverseSubpath(endIndex.first);
         endIndex.second = 0;
     }
-    
+
     // after combining we have a path where with the subpaths in the follwing
     // order:
     // 1. the subpaths of the pathshape we started the new path at
     // 2. the subpath we just created
     // 3. the subpaths of the pathshape we finished the new path at
-    
+
     // get the path points we want to merge, as these are not going to
     // change while merging
     KoPathPoint * existingStartPoint = pathShape->pointByIndex(startIndex);
     KoPathPoint * existingEndPoint = pathShape->pointByIndex(endIndex);
-    
+
     // merge first two points
     if (existingStartPoint) {
         KoPathPointData pd1(pathShape, pathShape->pathPointIndex(existingStartPoint));
@@ -615,6 +615,6 @@ bool KoCreatePathTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointA
         KoPathPointMergeCommand cmd2(pd3, pd4);
         cmd2.redo();
     }
-    
+
     return true;
 }

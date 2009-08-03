@@ -42,7 +42,7 @@ public:
 
     /// Sets the background color
     void setColor( const QColor &color );
-    
+
     /// Returns the background style
     Qt::BrushStyle style() const;
 

@@ -69,7 +69,7 @@ public:
         return m_shapeManager;
     };
 
-    virtual void updateCanvas(const QRectF& rc) 
+    virtual void updateCanvas(const QRectF& rc)
     {
         Q_UNUSED( rc );
     };

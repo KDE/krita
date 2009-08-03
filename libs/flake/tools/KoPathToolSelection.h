@@ -150,7 +150,7 @@ signals:
 
 private:
     typedef QMap<KoPathShape *, QSet<KoPathPoint *> > PathShapePointMap;
-    
+
     QSet<KoPathPoint *> m_selectedPoints;
     PathShapePointMap m_shapePointMap;
     KoPathTool * m_tool;

@@ -44,15 +44,15 @@ class KoCanvasBase;
  * The snap guide does not know anything about the specific snapping target. This
  * is handled by the different snapping strategies which are derived from KoSnapStrategy.
  * Snapping strategies can be enabled/disabled by passing a mask of corresponding
- * snapping ids to KoSnapGuide::enableSnapStrategies. There can be one or more snapping 
- * strategies enabled at the same time. The best result (with the nearest distance to the 
+ * snapping ids to KoSnapGuide::enableSnapStrategies. There can be one or more snapping
+ * strategies enabled at the same time. The best result (with the nearest distance to the
  * original position) is then returned to the caller of KoSnapGuide::snap.
  *
  * The snap guide is part of the KoCanvasBase class and thus can be accessed by any tool
  * or application via the canvas pointer.
  * For letting the user manage which snap stratgies to enable, there is a snap guide config
  * widget in guiutils.
- * 
+ *
  */
 class FLAKE_EXPORT KoSnapGuide
 {
@@ -91,7 +91,7 @@ public:
      * are destroyed when calling reset().
      */
     bool addCustomSnapStrategy(KoSnapStrategy * customStrategy);
-    
+
     /// enables the snapping guides
     void enableSnapping(bool on);
 

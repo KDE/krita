@@ -38,19 +38,19 @@ public:
     , usedStrategies(0), active(true), snapDistance(10)
     {
     }
-    
+
     ~Private()
     {
         qDeleteAll( strategies );
         strategies.clear();
     }
-    
+
     KoCanvasBase * canvas;
     KoShape * editedShape;
-    
+
     QList<KoSnapStrategy*> strategies;
     KoSnapStrategy * currentStrategy;
-    
+
     int usedStrategies;
     bool active;
     int snapDistance;
@@ -99,7 +99,7 @@ bool KoSnapGuide::addCustomSnapStrategy(KoSnapStrategy * customStrategy)
 {
     if (!customStrategy || customStrategy->type() != KoSnapStrategy::Custom)
         return false;
-    
+
     d->strategies.append(customStrategy);
     return true;
 }
@@ -138,7 +138,7 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
     qreal maxSnapDistance = d->canvas->viewConverter()->viewToDocument(QSizeF(d->snapDistance, d->snapDistance)).width();
 
     foreach(KoSnapStrategy * strategy, d->strategies) {
-        if (d->usedStrategies & strategy->type() 
+        if (d->usedStrategies & strategy->type()
             || strategy->type() == KoSnapStrategy::Grid
             || strategy->type() == KoSnapStrategy::Custom) {
             if (! strategy->snap(mousePosition, &proxy, maxSnapDistance))

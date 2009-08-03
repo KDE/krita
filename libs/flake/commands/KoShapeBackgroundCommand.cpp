@@ -39,7 +39,7 @@ public:
                 delete fill;
         }
     }
-    
+
     void addOldFill( KoShapeBackground * oldFill )
     {
         if (oldFill)
@@ -80,7 +80,7 @@ KoShapeBackgroundCommand::KoShapeBackgroundCommand(KoShape * shape, KoShapeBackg
     d->shapes.append(shape);
     d->addOldFill(shape->background());
     d->addNewFill(fill);
-    
+
     setText(i18n("Set background"));
 }
 
@@ -95,7 +95,7 @@ KoShapeBackgroundCommand::KoShapeBackgroundCommand(const QList<KoShape*> &shapes
     foreach(KoShapeBackground * fill, fills ) {
         d->addNewFill(fill);
     }
-        
+
     setText(i18n("Set background"));
 }
 

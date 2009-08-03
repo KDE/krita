@@ -137,7 +137,7 @@ public:
      * @return the parameter of the curve point nearest to the given point
      */
     qreal nearestPoint( const QPointF &point ) const;
-    
+
     /// Returns ordered list of control points
     QList<QPointF> controlPoints() const;
 
@@ -149,11 +149,11 @@ public:
 
     /// Converts to cubic segment
     KoPathSegment convertToCubic() const;
-    
+
     void printDebug() const;
 
 private:
-    
+
     /// calculates signed distance of given point from segment chord
     qreal distanceFromChord(const QPointF &point) const;
 
@@ -168,7 +168,7 @@ private:
 
     /// Returns parameters for curve roots
     QList<qreal> roots() const;
-    
+
     /**
      * The DeCasteljau algorithm for parameter t.
      * @param t the parameter to evaluate at

@@ -48,7 +48,7 @@ class QUndoCommand;
 class FLAKE_EXPORT KoShapeConfigWidgetBase : public QWidget
 {
     Q_OBJECT
-public:    
+public:
     /**
      * Default constructor
      */
@@ -84,7 +84,7 @@ public:
 
     /// Return true if the shape config panel should be shown when the shape is selected
     virtual bool showOnShapeSelect();
-    
+
     /// Creates a command which applies all changes to the opened shape
     virtual QUndoCommand * createCommand();
 

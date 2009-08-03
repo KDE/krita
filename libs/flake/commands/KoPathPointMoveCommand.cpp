@@ -42,9 +42,9 @@ KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &poi
     , m_undoCalled(true)
 {
     Q_ASSERT(pointData.count() == offsets.count());
-    
+
     setText(i18n("Move points"));
-    
+
     uint dataCount = pointData.count();
     for (uint i = 0; i < dataCount; ++i) {
         const KoPathPointData & data = pointData[i];
@@ -60,9 +60,9 @@ void KoPathPointMoveCommand::redo()
     QUndoCommand::redo();
     if (! m_undoCalled)
         return;
-    
+
     applyOffset( 1.0 );
-    
+
     m_undoCalled = false;
 }
 
@@ -71,7 +71,7 @@ void KoPathPointMoveCommand::undo()
     QUndoCommand::undo();
     if (m_undoCalled)
         return;
-    
+
     applyOffset( -1.0 );
 
     m_undoCalled = true;
@@ -83,7 +83,7 @@ void KoPathPointMoveCommand::applyOffset( qreal factor )
         // repaint old bounding rect
         path->update();
     }
-    
+
     QMap<KoPathPointData, QPointF>::iterator it(m_points.begin());
     for (; it != m_points.end(); ++it) {
         KoPathShape * path = it.key().pathShape;
@@ -96,7 +96,7 @@ void KoPathPointMoveCommand::applyOffset( qreal factor )
         if ( p )
             p->map(matrix, true);
     }
-    
+
     foreach(KoPathShape * path, m_paths) {
         path->normalize();
         // repaint new bounding rect

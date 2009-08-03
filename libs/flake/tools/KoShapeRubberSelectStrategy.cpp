@@ -37,7 +37,7 @@ KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoTool *tool, KoCanvasB
         , m_snapGuide( new KoSnapGuide( canvas ) )
 {
     m_snapGuide->enableSnapStrategies( KoSnapStrategy::Grid );
-    m_snapGuide->enableSnapping( useSnapToGrid ); 
+    m_snapGuide->enableSnapping( useSnapToGrid );
 
     m_selectRect = QRectF( m_snapGuide->snap(clicked, 0 ), QSizeF(0, 0) );
 }

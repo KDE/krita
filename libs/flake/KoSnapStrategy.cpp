@@ -228,7 +228,7 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
                         minDistances[1] = minDistances[0];
                         snappedPoints[1] = snappedPoints[0];
                         startPoints[1] = startPoints[0];
-                        
+
                         minDistances[0] = distance;
                         snappedPoints[0] = lastSnapPosition;
                         startPoints[0] = matrix.map(last->point());

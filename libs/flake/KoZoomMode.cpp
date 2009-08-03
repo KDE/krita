@@ -20,7 +20,7 @@
 #include "KoZoomMode.h"
 #include <klocale.h>
 
-const char* KoZoomMode::modes[] = 
+const char* KoZoomMode::modes[] =
 {
     I18N_NOOP("%1%"),
     I18N_NOOP("Fit Page Width"),
@@ -41,14 +41,14 @@ KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
     else
     if(mode == i18n(modes[ZOOM_PAGE]))
         return ZOOM_PAGE;
-    else 
+    else
      if(mode == i18n(modes[ZOOM_PIXELS]))
         return ZOOM_PIXELS;
-    else 
+    else
        return ZOOM_CONSTANT;
     // we return ZOOM_CONSTANT else because then we can pass '10%' or '15%'
-    // or whatever, it's automatically converted. ZOOM_CONSTANT is 
-    // changeable, whereas all other zoom modes (non-constants) are normal 
-    // text like "Fit to xxx". they let the view grow/shrink according 
+    // or whatever, it's automatically converted. ZOOM_CONSTANT is
+    // changeable, whereas all other zoom modes (non-constants) are normal
+    // text like "Fit to xxx". they let the view grow/shrink according
     // to windowsize, hence the term 'non-constant'
 }

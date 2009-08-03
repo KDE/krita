@@ -89,7 +89,7 @@ void TestShapeAt::test()
 void TestShapeAt::testShadow()
 {
     QRectF bbox(20, 30, 50, 70);
-    
+
     MockShape shape;
     shape.setPosition(bbox.topLeft());
     shape.setSize(bbox.size());

@@ -29,7 +29,7 @@ public:
     Private(KoShapeControllerBase *c, const QList<KoPathShape*> &p)
         : controller(c), paths(p)
         , combinedPath(0), combinedPathParent(0)
-        , isCombined(false) 
+        , isCombined(false)
     {
         foreach( KoPathShape * path, paths )
             oldParents.append( path->parent() );
@@ -76,7 +76,7 @@ KoPathCombineCommand::~KoPathCombineCommand()
 void KoPathCombineCommand::redo()
 {
     QUndoCommand::redo();
-    
+
     if (! d->paths.size())
         return;
 
@@ -89,7 +89,7 @@ void KoPathCombineCommand::redo()
             if (*parentIt)
                 (*parentIt)->removeChild(p);
             parentIt++;
-            
+
         }
         if (d->combinedPathParent)
             d->combinedPathParent->addChild(d->combinedPath);

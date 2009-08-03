@@ -132,7 +132,7 @@ void TestPathSegment::segmentSplitAt()
     p1.moveTo( QPoint(0, 0) );
     p1.lineTo( QPointF(100, 0) );
     QCOMPARE( parts1.first.second()->point(), p1.pointAtPercent( 0.5 ) );
-    
+
     KoPathSegment s2(QPointF(0, 0), QPointF(100, 100), QPointF(200, 0));
     QPair<KoPathSegment, KoPathSegment> parts2 = s2.splitAt( 0.5 );
     QCOMPARE(parts2.first.first()->point(), QPointF(0, 0));
@@ -146,7 +146,7 @@ void TestPathSegment::segmentSplitAt()
     p2.moveTo( QPoint(0, 0) );
     p2.quadTo( QPointF(100, 100), QPointF(200, 0) );
     QCOMPARE( parts2.first.second()->point(), p2.pointAtPercent( 0.5 ) );
-    
+
     KoPathSegment s3(QPointF(0, 0), QPointF(100, 100), QPointF(200, 100), QPointF(300, 0));
     QPair<KoPathSegment, KoPathSegment> parts3 = s3.splitAt( 0.5 );
     QCOMPARE(parts3.first.first()->point(), QPointF(0, 0));

@@ -29,7 +29,7 @@ public:
     class Relation
     {
     public:
-        explicit Relation(KoShape *child) 
+        explicit Relation(KoShape *child)
         : m_inside(false)
         , m_child(child)
         {}

@@ -45,7 +45,7 @@ void TestImageCollection::testGetImageImage()
     QCOMPARE(collection.size(), 1);
     delete id3;
     QCOMPARE(collection.size(), 0);
-    
+
     // add an image bigger than the allowed size to be held in memory
     QImage hugeImage(500, 500, QImage::Format_RGB32);
     KoImageData *id5 = collection.createImageData(hugeImage);

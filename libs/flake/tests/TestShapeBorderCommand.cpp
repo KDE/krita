@@ -29,20 +29,20 @@ void TestShapeBorderCommand::refCounting()
     KoShapeBorderModel * whiteBorder = new KoLineBorder(1.0, QColor(Qt::white));
     KoShapeBorderModel * blackBorder = new KoLineBorder(1.0, QColor(Qt::black));
     KoShapeBorderModel * redBorder = new KoLineBorder(1.0, QColor(Qt::red));
-    
+
     shape1->setBorder(whiteBorder);
     QVERIFY(shape1->border() == whiteBorder);
     QCOMPARE(whiteBorder->useCount(), 1);
-    
+
     // old border is white, new border is black
     QUndoCommand *cmd1 = new KoShapeBorderCommand(shape1, blackBorder);
     cmd1->redo();
     QVERIFY(shape1->border() == blackBorder);
-    
+
     // change border back to white border
     cmd1->undo();
     QVERIFY(shape1->border() == whiteBorder);
-    
+
     // old border is white, new border is red
     QUndoCommand *cmd2 = new KoShapeBorderCommand(shape1, redBorder);
     cmd2->redo();
@@ -50,14 +50,14 @@ void TestShapeBorderCommand::refCounting()
 
     // this command has the white border as the old border
     delete cmd1;
-    
+
     // set border back to white border
     cmd2->undo();
     QVERIFY(shape1->border() == whiteBorder);
 
     // if white is deleted when deleting cmd1 this will crash
     whiteBorder->borderInsets(shape1);
-    
+
     delete cmd2;
     delete shape1;
 }

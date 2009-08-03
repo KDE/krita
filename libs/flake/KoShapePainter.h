@@ -40,7 +40,7 @@ class FLAKE_EXPORT KoShapePainter
 public:
     KoShapePainter(KoShapeManagerPaintingStrategy * strategy = 0);
     ~KoShapePainter();
-    
+
     /**
      * Sets the shapes to be painted.
      * @param shape the shapes to paint
@@ -57,7 +57,7 @@ public:
     /**
      * Paints the shapes on the given painter.
      * The given document rectangle is painted to fit into the given painter rectangle.
-     * 
+     *
      * @param painter the painter to paint on
      * @param painterRect the destination rectangle on the painter
      * @param documentRect the document region to paint

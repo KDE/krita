@@ -28,7 +28,7 @@ class QPen;
 class QString;
 
 /**
- * This class should contain all workarounds to correct problems with differenet ODF 
+ * This class should contain all workarounds to correct problems with differenet ODF
  * implementations. If you need to access application specifc things please create a
  * new namespace in the app you need it
  * All calls to methods of this class should be wrapped into ifndefs like e.g.
@@ -40,7 +40,7 @@ class QString;
 namespace KoOdfWorkaround
 {
     /**
-     * OpenOffice handels a line with the width of 0 as a cosmetic line but in svg it makes the line invisible. 
+     * OpenOffice handels a line with the width of 0 as a cosmetic line but in svg it makes the line invisible.
      * To show it in koffice use a very small line width. However this is not a cosmetic line.
      */
     FLAKE_EXPORT void fixPenWidth(QPen & pen, KoShapeLoadingContext &context);

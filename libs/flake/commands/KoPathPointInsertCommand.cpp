@@ -43,9 +43,9 @@ KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> 
             continue;
 
         m_pointDataList.append(*it);
-        
+
         QPair<KoPathSegment, KoPathSegment> splitSegments = segment.splitAt( insertPosition );
-        
+
         KoPathPoint * split1 = splitSegments.first.second();
         KoPathPoint * split2 = splitSegments.second.first();
         KoPathPoint * splitPoint = new KoPathPoint( pathShape, split1->point() );
@@ -53,7 +53,7 @@ KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> 
             splitPoint->setControlPoint1(split1->controlPoint1());
         if( split2->activeControlPoint2() )
             splitPoint->setControlPoint2(split2->controlPoint2());
-        
+
         m_points.append(splitPoint);
         QPointF cp1 = splitSegments.first.first()->controlPoint2();
         QPointF cp2 = splitSegments.second.second()->controlPoint1();

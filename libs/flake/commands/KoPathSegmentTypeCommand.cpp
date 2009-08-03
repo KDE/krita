@@ -86,7 +86,7 @@ void KoPathSegmentTypeCommand::undo()
             segment.first()->removeControlPoint2();
             segment.second()->removeControlPoint1();
         }
-        
+
         segment.first()->setProperties(segmentData.m_properties2);
         segment.second()->setProperties(segmentData.m_properties1);
 
@@ -110,12 +110,12 @@ void KoPathSegmentTypeCommand::initialize(const QList<KoPathPointData> & pointDa
                 if (! segment.first()->activeControlPoint2() && ! segment.second()->activeControlPoint1())
                     continue;
             }
-            
+
             m_pointDataList.append(*it);
             SegmentTypeData segmentData;
-            
+
             KoPathShape * pathShape = segment.first()->parent();
-            
+
             // we are changing a curve to a line -> save control point positions
             if (m_segmentType == Line) {
                 segmentData.m_controlPoint2 = pathShape->shapeToDocument(segment.first()->controlPoint2());
@@ -127,7 +127,7 @@ void KoPathSegmentTypeCommand::initialize(const QList<KoPathPointData> & pointDa
             m_segmentData.append(segmentData);
         }
     }
-    
+
     if (m_segmentType == Curve) {
         setText(i18n("Change segments to curves"));
     } else {

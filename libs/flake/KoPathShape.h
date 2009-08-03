@@ -107,7 +107,7 @@ public:
     virtual void setSize(const QSizeF &size);
     /// reimplemented
     virtual bool hitTest(const QPointF &position) const;
-    
+
     // reimplemented
     virtual void saveOdf(KoShapeSavingContext & context) const;
     // reimplemented
@@ -498,7 +498,7 @@ protected:
      * @brief Saves the node types
      *
      * This is inspired by inkscape and uses the same mechanism as they do.
-     * The only difference is that they use sodipodi:nodeTypes as element and 
+     * The only difference is that they use sodipodi:nodeTypes as element and
      * we use koffice:nodeTyes as attribute.
      * This attribute contains of a string which has the node type of each point
      * in it. The following node types exist:
@@ -509,10 +509,10 @@ protected:
      *
      * The first point of a path is always of the type c.
      * If the path is closed the type of the first point is saved in the last elemeent
-     * E.g. you have a closed path with 2 points in it. The first one (start/end of path) 
+     * E.g. you have a closed path with 2 points in it. The first one (start/end of path)
      * is symetric and the second one is smooth that will result in the nodeType="czs"
-     * So if there is a closed sub path the nodeTypes contain one more entry then there 
-     * are points. That is due to the first and the last pojnt of a closed sub path get 
+     * So if there is a closed sub path the nodeTypes contain one more entry then there
+     * are points. That is due to the first and the last pojnt of a closed sub path get
      * merged into one when they are on the same position.
      *
      * @return The node types as string

@@ -28,20 +28,20 @@ void TestShapeBackgroundCommand::refCounting()
     KoShapeBackground * whiteFill = new KoColorBackground(QColor(Qt::white));
     KoShapeBackground * blackFill = new KoColorBackground(QColor(Qt::black));
     KoShapeBackground * redFill = new KoColorBackground(QColor(Qt::red));
-    
+
     shape1->setBackground(whiteFill);
     QVERIFY(shape1->background() == whiteFill);
     QCOMPARE(whiteFill->useCount(), 1);
-    
+
     // old fill is white, new fill is black
     QUndoCommand *cmd1 = new KoShapeBackgroundCommand(shape1, blackFill);
     cmd1->redo();
     QVERIFY(shape1->background() == blackFill);
-    
+
     // change fill back to white fill
     cmd1->undo();
     QVERIFY(shape1->background() == whiteFill);
-    
+
     // old fill is white, new fill is red
     QUndoCommand *cmd2 = new KoShapeBackgroundCommand(shape1, redFill);
     cmd2->redo();
@@ -49,7 +49,7 @@ void TestShapeBackgroundCommand::refCounting()
 
     // this command has the white fill as the old fill
     delete cmd1;
-    
+
     // set fill back to white fill
     cmd2->undo();
     QVERIFY(shape1->background() == whiteFill);
@@ -59,7 +59,7 @@ void TestShapeBackgroundCommand::refCounting()
     QPainterPath path;
     path.addRect( QRectF(0,0,100,100) );
     whiteFill->paint( p, path );
-    
+
     delete cmd2;
     delete shape1;
 }

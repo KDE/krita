@@ -54,7 +54,7 @@ public:
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) = 0;
 
     /// load background from odf styles
-    virtual bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize) = 0;
+    virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) = 0;
 
     /// refcounting
     void addUser();

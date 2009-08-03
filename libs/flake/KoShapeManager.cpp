@@ -3,7 +3,7 @@
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -241,7 +241,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         QRectF zoomedClipRegion = converter.documentToView(clipRegion);
         // determine the offset of the clipping rect from the shapes origin
         QPointF clippingOffset = zoomedClipRegion.topLeft();
-        
+
         // Init the buffer image
         QImage sourceGraphic(zoomedClipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
         sourceGraphic.fill(qRgba(0,0,0,0));
@@ -252,7 +252,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         imagePainter.setPen(Qt::NoPen);
         imagePainter.setBrush(Qt::NoBrush);
         imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
-        
+
         // Paint the shape on the image
         imagePainter.save();
         shape->paint(imagePainter, converter);
@@ -267,12 +267,12 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         QImage sourceAlpha = sourceGraphic;
         sourceAlpha.fill(qRgba(0,0,0,255));
         sourceAlpha.setAlphaChannel(sourceGraphic.alphaChannel());
-        
+
         QHash<QString, QImage> imageBuffers;
         imageBuffers.insert("SourceGraphic", sourceGraphic);
         imageBuffers.insert(QString(), sourceGraphic);
         imageBuffers.insert("SourceAlpha", sourceAlpha);
-        
+
         QList<KoFilterEffect*> filterEffects = shape->filterEffectStack()->filterEffects();
         // Filter
         foreach(KoFilterEffect* filterEffect, filterEffects) {
@@ -280,7 +280,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
             filterRegion = converter.documentToView(filterRegion);
             QPointF filterOffset = filterRegion.topLeft()-2*clippingOffset;
             QRect subRegion = filterRegion.translated(filterOffset).toRect();
-            
+
             if (filterEffect->maximalInputCount() == 1) {
                 QList<QString> inputs = filterEffect->inputs();
                 QString input = inputs.count() ? inputs.first() : QString();
@@ -303,7 +303,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         }
 
         KoFilterEffect * lastEffect = filterEffects.last();
-        
+
         // Paint the result
         painter.save();
         painter.drawImage(clippingOffset, imageBuffers.value(lastEffect->output()));

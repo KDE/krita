@@ -49,7 +49,7 @@ public:
     * @param parent the parent command used for macro commands
     */
     KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QList<QPointF> &offsets, QUndoCommand *parent = 0);
-    
+
     /// redo the command
     void redo();
     /// revert the actions done in redo
@@ -57,7 +57,7 @@ public:
 
 private:
     void applyOffset( qreal factor );
-    
+
     bool m_undoCalled; // this command stores diffs; so calling undo twice will give wrong results. Guard against that.
     QMap<KoPathPointData, QPointF > m_points;
     QSet<KoPathShape*> m_paths;

@@ -66,7 +66,7 @@ public:
 
     /// Maximal possible shape z-index
     static int maxZIndex() { return 0x2000-1; }
-    
+
 private:
     KoFlake();
 };

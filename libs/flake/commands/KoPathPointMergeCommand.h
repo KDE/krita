@@ -48,7 +48,7 @@ public:
     void undo();
 
 private:
-    
+
     class Private;
     Private * const d;
 };

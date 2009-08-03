@@ -336,7 +336,7 @@ const QPainterPath KoPathShape::outline() const
                 else if(currPoint->activeControlPoint2() || firstPoint->activeControlPoint1()) {
                     path.quadTo(
                         currPoint->activeControlPoint2() ? currPoint->controlPoint2() : firstPoint->controlPoint1(),
-                        firstPoint->point());                
+                        firstPoint->point());
                 }
                 path.closeSubpath();
             }
@@ -360,7 +360,7 @@ QRectF KoPathShape::boundingRect() const
     if (border()) {
         KoInsets inset;
         border()->borderInsets(this, inset);
-        
+
         // calculate transformed border insets
         QPointF center = transform.map(QPointF());
         QPointF tl = transform.map(QPointF(-inset.left,-inset.top)) - center;
@@ -742,7 +742,7 @@ bool KoPathShape::isClosedSubpath(int subpathIndex)
 
     const bool firstClosed = subpath->first()->properties() & KoPathPoint::CloseSubpath;
     const bool lastClosed = subpath->last()->properties() & KoPathPoint::CloseSubpath;
-    
+
     return firstClosed && lastClosed;
 }
 
@@ -849,7 +849,7 @@ bool KoPathShape::join(int subpathIndex)
     KoSubpath * subpath = subPath(subpathIndex);
     KoSubpath * nextSubpath = subPath(subpathIndex + 1);
 
-    if (!subpath || !nextSubpath || isClosedSubpath(subpathIndex) 
+    if (!subpath || !nextSubpath || isClosedSubpath(subpathIndex)
             || isClosedSubpath(subpathIndex+1))
         return false;
 
@@ -880,7 +880,7 @@ bool KoPathShape::moveSubpath(int oldSubpathIndex, int newSubpathIndex)
 
     if (oldSubpathIndex == newSubpathIndex)
         return true;
-    
+
     m_subpaths.removeAt(oldSubpathIndex);
     m_subpaths.insert(newSubpathIndex, subpath);
 
@@ -1286,7 +1286,7 @@ bool KoPathShape::hitTest(const QPointF &position) const
         if( outlinePath.contains( point ) )
             return true;
     }
-    
+
     // if there is no shadow we can as well just leave
     if (! shadow())
         return false;

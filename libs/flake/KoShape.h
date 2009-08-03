@@ -805,7 +805,7 @@ public:
 
     /// Sets the new filter effect stack, removing the old one
     void setFilterEffectStack(KoFilterEffectStack * filterEffectStack);
-    
+
 protected:
     /// constructor
     KoShape(KoShapePrivate &);

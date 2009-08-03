@@ -1,17 +1,17 @@
 /* This file is part of the KDE project
  * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2009 Jan Hambrecht <jaham@gmx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -42,22 +42,22 @@ class FLAKE_EXPORT KoFilterEffect
 public:
     KoFilterEffect( const QString& id, const QString& name );
     virtual ~KoFilterEffect();
-    
+
     /// Returns the user visible name of the filter
     QString name() const;
-    
+
     /// Returns the unique id of the filter
     QString id() const;
-    
+
     /// Sets the region the filter is applied to in bounding box units
     void setFilterRect(const QRectF &filterRect);
-    
+
     /// Returns the region this filter is applied to in bounding box units
     QRectF filterRect() const;
 
     /// Returns the region this filter is applied to for the given bounding rect
     QRectF filterRectForBoundingRect(const QRectF &boundingRect) const;
-    
+
     /**
     * Sets the name of the output image
     *
@@ -67,35 +67,35 @@ public:
     * @param output the output image name
     */
     void setOutput(const QString &output);
-    
+
     /// Returns the name of the output image
     QString output() const;
-    
+
     /**
      * Returns list of named input images of this filter effect.
      *
      * These names identify the input images for this filter effect.
      * These can be one of the keywords SourceGraphic, SourceAlpha,
-     * BackgroundImage, BackgroundAlpha, FillPaint or StrokePaint, 
+     * BackgroundImage, BackgroundAlpha, FillPaint or StrokePaint,
      * as well as a named output of another filter effect in the stack.
      * An empty input list of the first effect in the stack default to
      * SourceGraphic, whereas on subsequent effects it defaults to the
      * result of the previous filter effect.
      */
     QList<QString> inputs() const;
-    
+
     /// Adds a new input at the end of the input list
     void addInput(const QString &input);
-    
+
     /// Inserts an input at the giben position in the input list
     void insertInput(int index, const QString &input);
-    
+
     /// Sets an existing input to a new value
     void setInput(int index, const QString &input);
-    
+
     /// Removes an input from the given position in the input list
     void removeInput(int index);
-    
+
     /**
      * Return the required number of input images.
      * The default required number of input images is 1.
@@ -103,7 +103,7 @@ public:
      * a different number.
      */
     int requiredInputCount() const;
-    
+
     /**
      * Returns the maximal number of input images.
      * The default maximal number of input images is 1.
@@ -116,7 +116,7 @@ public:
      * Apply the effect on an image.
      * @param image the image the filter should be applied to
      * @param filterRegion the region of the image corresponding to the filter region
-     * @param converter to convert between document and view coordinates 
+     * @param converter to convert between document and view coordinates
      */
     virtual QImage processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const = 0;
 
@@ -124,27 +124,27 @@ public:
     * Apply the effect on a list of images.
     * @param images the images the filter should be applied to
     * @param filterRegion the region of the image corresponding to the filter region
-    * @param converter to convert between document and view coordinates 
+    * @param converter to convert between document and view coordinates
     */
     virtual QImage processImages(const QList<QImage> &images, const QRect &filterRegion, const KoViewConverter &converter) const;
-    
+
     /**
      * Loads data from given xml element.
      * @param element the xml element to load data from
      * @return true if loading was successful, else false
      */
     virtual bool load(const QDomElement &element) = 0;
-    
+
     /**
      * Writes custom data to given xml element.
      * @param writer the xml writer to write data to
      */
     virtual void save(KoXmlWriter &writer) = 0;
-    
+
 protected:
     /// Sets the required number of input images
     void setRequiredInputCount(int count);
-    
+
     /// Sets the maximal number of input images
     void setMaximalInputCount(int count);
 
@@ -156,7 +156,7 @@ protected:
      * All other filters have to write inputs on their own.
      */
     void saveCommonAttributes(KoXmlWriter &writer);
-    
+
 private:
     struct Private;
     Private* const d;

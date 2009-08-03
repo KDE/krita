@@ -80,7 +80,7 @@ KoShapeShadowCommand::KoShapeShadowCommand(const QList<KoShape*> &shapes, const 
         d->addOldShadow(shape->shadow());
     foreach(KoShapeShadow * shadow, shadows)
         d->addNewShadow(shadow);
-    
+
     setText(i18n("Set Shadow"));
 }
 

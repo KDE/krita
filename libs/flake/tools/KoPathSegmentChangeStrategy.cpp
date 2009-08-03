@@ -51,28 +51,28 @@ void KoPathSegmentChangeStrategy::handleMouseMove( const QPointF &mouseLocation,
     m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
     QPointF snappedPosition = m_tool->canvas()->snapGuide()->snap(mouseLocation, modifiers);
     m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
-    
+
     QPointF localPos = m_path->documentToShape(snappedPosition);
-    
+
     if (m_segment.degree() == 1) {
         // line segment is converted to a curve
         KoPathSegmentTypeCommand cmd(m_pointData1, KoPathSegmentTypeCommand::Curve);
         cmd.redo();
     }
-    
+
     QPointF move1, move2;
-    
+
     if (m_segment.degree() == 2) {
         // interpolate quadratic segment between segment start, mouse position and segment end
-        KoPathSegment ipol = KoPathSegment::interpolate( m_segment.first()->point(), 
-                                                         localPos, 
+        KoPathSegment ipol = KoPathSegment::interpolate( m_segment.first()->point(),
+                                                         localPos,
                                                          m_segment.second()->point(),
                                                          m_segmentParam );
         move1 = move2 = ipol.controlPoints()[1] - m_segment.controlPoints()[1];
     }
     else if (m_segment.degree() == 3) {
         /*
-        * method from inkscape, original method and idea borrowed from Simon Budig  
+        * method from inkscape, original method and idea borrowed from Simon Budig
         * <simon@gimp.org> and the GIMP
         * cf. app/vectors/gimpbezierstroke.c, gimp_bezier_stroke_point_move_relative()
         *
@@ -90,7 +90,7 @@ void KoPathSegmentChangeStrategy::handleMouseMove( const QPointF &mouseLocation,
             feel_good = (1 - pow((6 * (1-t) - 1) / 2.0, 3)) / 2 + 0.5;
         else
             feel_good = 1;
-        
+
         QPointF lastLocalPos = m_path->documentToShape(m_lastPosition);
         QPointF delta = localPos - lastLocalPos;
         move2 = ((1-feel_good)/(3*t*(1-t)*(1-t))) * delta;
@@ -111,7 +111,7 @@ void KoPathSegmentChangeStrategy::handleMouseMove( const QPointF &mouseLocation,
 
     m_ctrlPoint1Move += move1;
     m_ctrlPoint2Move += move2;
-    
+
     // save last mouse position
     m_lastPosition = mouseLocation;
 }
@@ -124,17 +124,17 @@ void KoPathSegmentChangeStrategy::finishInteraction(Qt::KeyboardModifiers modifi
 QUndoCommand* KoPathSegmentChangeStrategy::createCommand()
 {
     m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
-    
+
     bool hasControlPoint1 = m_segment.second()->activeControlPoint1();
     bool hasControlPoint2 = m_segment.first()->activeControlPoint2();
-    
+
     QUndoCommand * cmd = new QUndoCommand(i18n("Change Segment"));
     if (m_originalSegmentDegree == 1) {
         m_segment.first()->removeControlPoint2();
         m_segment.second()->removeControlPoint1();
         new KoPathSegmentTypeCommand(m_pointData1, KoPathSegmentTypeCommand::Curve, cmd);
     }
-    
+
     if (hasControlPoint2) {
         QPointF oldCtrlPointPos = m_segment.first()->controlPoint2()-m_ctrlPoint2Move;
         m_segment.first()->setControlPoint2(oldCtrlPointPos);
@@ -145,6 +145,6 @@ QUndoCommand* KoPathSegmentChangeStrategy::createCommand()
         m_segment.second()->setControlPoint1(oldCtrlPointPos);
         new KoPathControlPointMoveCommand(m_pointData2, m_ctrlPoint1Move, KoPathPoint::ControlPoint1, cmd);
     }
-    
+
     return cmd;
 }

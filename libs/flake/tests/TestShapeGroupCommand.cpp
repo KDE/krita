@@ -67,15 +67,15 @@ void TestShapeGroupCommand::init()
 
     toplevelGroup = new KoShapeGroup();
     sublevelGroup = new KoShapeGroup();
-    
+
     strokeShape1 = new MockShape();
     strokeShape1->setSize( QSizeF(50,50) );
     strokeShape1->setPosition( QPointF(0,0) );
-    
+
     strokeShape2 = new MockShape();
     strokeShape2->setSize( QSizeF(50,50) );
     strokeShape2->setPosition( QPointF(25,25) );
-    
+
     strokeGroup = new KoShapeGroup();
     strokeGroup->setBorder( new KoLineBorder( 2.0f ) );
     strokeGroup->setShadow( new KoShapeShadow() );
@@ -249,7 +249,7 @@ void TestShapeGroupCommand::testGroupStrokeShapes()
         strokeGroup->shadow()->insets(strokeGroup, insets);
         bound.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
-    
+
     QList<KoShape*> strokeShapes;
     strokeShapes << strokeShape2 << strokeShape1;
     strokeCmd = new KoShapeGroupCommand(strokeGroup, strokeShapes);

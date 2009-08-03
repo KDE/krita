@@ -56,7 +56,7 @@ public:
     QMap<QByteArray, QString> additionalStyleAttributes;
     QList<KoEventAction *> eventActions; ///< list of event actions the shape has
     KoFilterEffectStack *filterEffectStack; ///< stack of filter effects applied to the shape
-    
+
     int zIndex : 14; // should be enough ;)
     int visible : 1;
     int printable : 1;

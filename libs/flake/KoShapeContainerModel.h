@@ -118,7 +118,7 @@ public:
      * When a child shape is rotated, moved or scaled/skewed this method will be called
      * to inform the container of such a change.  The change has already happened at the
      * time this method is called.
-     * The base implementation notifies the grand parent of the child that there was a 
+     * The base implementation notifies the grand parent of the child that there was a
      * change in a child. A reimplentation if this function should call this method when
      * overwriding the function.
      *

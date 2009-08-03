@@ -1,17 +1,17 @@
 /* This file is part of the KDE project
  * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2009 Jan Hambrecht <jaham@gmx.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -32,7 +32,7 @@ struct KoFilterEffect::Private {
         // add the default input
         inputs.append(QString());
     }
-    
+
     QString id;
     QString name;
     QRectF filterRect;
@@ -42,7 +42,7 @@ struct KoFilterEffect::Private {
     int maximalInputCount;
 };
 
-KoFilterEffect::KoFilterEffect( const QString& id, const QString& name ) 
+KoFilterEffect::KoFilterEffect( const QString& id, const QString& name )
     : d(new Private)
 {
     d->id = id;
@@ -135,10 +135,10 @@ int KoFilterEffect::maximalInputCount() const
 QImage KoFilterEffect::processImages(const QList<QImage> &images, const QRect &filterRegion, const KoViewConverter &/*converter*/) const
 {
     Q_ASSERT(images.count());
-    
+
     Q_UNUSED(images);
     Q_UNUSED(filterRegion);
-    
+
     return images.first();
 }
 

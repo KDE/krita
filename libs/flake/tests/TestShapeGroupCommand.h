@@ -40,7 +40,7 @@ private slots:
     void testAddToToplevelGroup();
     void testAddToSublevelGroup();
     void testGroupStrokeShapes();
-    
+
 private:
     KoShapeGroup *toplevelGroup, *sublevelGroup, *strokeGroup;
     QUndoCommand *cmd1, *cmd2, *strokeCmd;

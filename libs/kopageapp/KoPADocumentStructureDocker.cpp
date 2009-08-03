@@ -54,6 +54,7 @@
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <KConfigGroup>
+#include <KDebug>
 
 #include <QtGui/QGridLayout>
 #include <QtGui/QToolButton>

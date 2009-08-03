@@ -100,7 +100,7 @@ public:
 
     /**
      * this checks if there is an updater for this shape if yes it calls it
-     * this needs to be done via the shape id and 
+     * this needs to be done via the shape id and
      */
     void shapeLoaded(KoShape * shape);
 

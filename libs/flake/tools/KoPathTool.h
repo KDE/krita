@@ -87,7 +87,7 @@ protected:
 private:
     void updateOptionsWidget();
     bool segmentAtPoint( const QPointF &point, KoPathShape* &shape, KoPathPoint* &segmentStart, qreal &pointParam );
-    
+
 private slots:
     void pointTypeChanged(QAction *type);
     void insertPoints();
@@ -114,7 +114,7 @@ private:
     KoPathToolSelection m_pointSelection;
     // needed for interaction strategy
     QPointF m_lastPoint;
-    
+
     // make a frind so that it can test private member/methods
     friend class TestPathTool;
 

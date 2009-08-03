@@ -397,7 +397,7 @@ protected:
     * @return the handle rectangle in document coordinates
     */
     QRectF handleGrabRect(const QPointF &position);
-    
+
     /**
     * Returns a handle paint rect at the given position.
     *
@@ -407,7 +407,7 @@ protected:
     * @return the handle rectangle in document coordinates
     */
     QRectF handlePaintRect(const QPointF &position);
-    
+
 protected:
     KoCanvasBase * const m_canvas; ///< the canvas interface this tool will work for.
     friend class KoToolProxy;

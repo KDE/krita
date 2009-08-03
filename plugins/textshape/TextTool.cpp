@@ -363,7 +363,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         Q_ASSERT(factory);
         if (m_textEditingPlugins.contains(factory->id())) {
-            kWarning(32500) << "Duplicate id for textEditingPlugin, ignoring one! (" << factory->id() << ")\n";
+            kWarning(32500) << "Duplicate id for textEditingPlugin, ignoring one! (" << factory->id() << ")";
             continue;
         }
         QString factoryId = factory->id();
@@ -894,7 +894,7 @@ int TextTool::pointToPosition(const QPointF & point) const
     int caretPos = m_caret.block().document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
     caretPos = qMax(caretPos, m_textShapeData->position());
     if (m_textShapeData->endPosition() == -1) {
-        kWarning(32500) << "Clicking in not fully laid-out textframe\n";
+        kWarning(32500) << "Clicking in not fully laid-out textframe";
         m_textShapeData->fireResizeEvent(); // requests a layout run ;)
     }
     caretPos = qMin(caretPos, m_textShapeData->endPosition());

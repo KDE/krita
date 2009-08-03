@@ -386,7 +386,7 @@ void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
     if (button)
         button->setChecked(true);
     else
-        kWarning(30004) << "KoToolBox::setActiveTool(" << id << "): no such button found\n";
+        kWarning(30004) << "KoToolBox::setActiveTool(" << id << "): no such button found";
 }
 
 void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes)

@@ -104,7 +104,7 @@ quint8 * KisTiledRandomAccessor::rawData() const
 const quint8 * KisTiledRandomAccessor::oldRawData() const
 {
 #ifdef DEBUG
-    kWarning(!m_ktm->hasCurrentMemento(), 41004) << "Accessing oldRawData() when no transaction is in progress.\n";
+    kWarning(!m_ktm->hasCurrentMemento(), 41004) << "Accessing oldRawData() when no transaction is in progress.";
 #endif
     return m_oldData;
 }

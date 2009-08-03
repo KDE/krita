@@ -48,7 +48,7 @@ void InsertVariableActionBase::activated()
         if (variable)
             handler->insertInlineObject(variable);
     } else
-        kWarning(32500) << "InsertVariableAction: No texttool selected while trying to insert variable\n";
+        kWarning(32500) << "InsertVariableAction: No texttool selected while trying to insert variable";
 }
 
 #include "InsertVariableActionBase_p.moc"

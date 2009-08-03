@@ -170,7 +170,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
     // has change as a result of the zoom change
 #ifdef DEBUG
     if(! d->documentSize.isValid())
-        kWarning(30004) << "Setting zoom while there is no document size set, this will fail\n";
+        kWarning(30004) << "Setting zoom while there is no document size set, this will fail";
     else if(d->pageSize.width() > d->documentSize.width() || d->pageSize.height() > d->documentSize.height())
         kWarning(30004) << "ZoomController; Your page size is larger than your document size (" << 
             d->pageSize << " > " << d->documentSize << ")\n";

@@ -249,7 +249,7 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
     setup();
 
     if (! d->canvasses.contains(controller)) {
-        kWarning(30006) << "registerTools called on a canvasController that has not been registered (yet)!\n";
+        kWarning(30006) << "registerTools called on a canvasController that has not been registered (yet)!";
         return;
     }
     CanvasData *cd = d->canvasses.value(controller).first();
@@ -299,7 +299,7 @@ void KoToolManager::switchTool(const QString &id, bool temporary)
     d->canvasData->activeToolId = id;
     KoTool *tool = d->canvasData->allTools.value(id);
     if (! tool) {
-        kWarning(30006) << "KoToolManager::switchTool() " << (temporary ? "temporary" : "") << " got request to unknown tool: '" << id << "'\n";
+        kWarning(30006) << "KoToolManager::switchTool() " << (temporary ? "temporary" : "") << " got request to unknown tool: '" << id << "'";
         return;
     }
 

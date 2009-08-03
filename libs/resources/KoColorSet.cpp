@@ -142,7 +142,7 @@ bool KoColorSet::init()
     QString s = QString::fromUtf8(m_data.data(), m_data.count());
 
     if (s.isEmpty() || s.isNull() || s.length() < 50) {
-        kWarning(30009) << "Illegal Gimp palette file: " << filename() << "\n";
+        kWarning(30009) << "Illegal Gimp palette file: " << filename();
         return false;
     }
 
@@ -173,7 +173,7 @@ bool KoColorSet::init()
         // Read name
         if (!lines[1].startsWith("Name: ") || !lines[0].startsWith("GIMP") )
         {
-            kWarning(30009) << "Illegal Gimp palette file: " << filename() << "\n";
+            kWarning(30009) << "Illegal Gimp palette file: " << filename();
             return false;
         }
 
@@ -229,7 +229,7 @@ bool KoColorSet::init()
         return true;
     }
     else if (s.length() == 768) {
-        kWarning(30009) << "Photoshop format palette file. Not implemented yet\n";
+        kWarning(30009) << "Photoshop format palette file. Not implemented yet";
         format = FORMAT_ACT;
     }
     return false;

@@ -435,9 +435,9 @@ void KoCanvasController::setDocumentSize(const QSize & sz, bool recalculateCente
     d->ignoreScrollSignals = oldIgnoreScrollSignals;
 
     // in case the document got so small a slider dissapeared; emit the new offset.
-    if (!horizontalScrollBar()->isVisible())
+    if (horizontalScrollBar()->isHidden())
         updateCanvasOffsetX();
-    if (!verticalScrollBar()->isVisible())
+    if (verticalScrollBar()->isHidden())
         updateCanvasOffsetY();
 }
 
@@ -525,10 +525,10 @@ void KoCanvasController::resetScrollBars()
 void KoCanvasController::pan(const QPoint &distance)
 {
     QScrollBar *hBar = horizontalScrollBar();
-    if (hBar && hBar->isVisible())
+    if (hBar && !hBar->isHidden())
         hBar->setValue(hBar->value() + distance.x());
     QScrollBar *vBar = verticalScrollBar();
-    if (vBar && vBar->isVisible())
+    if (vBar && !vBar->isHidden())
         vBar->setValue(vBar->value() + distance.y());
 }
 
@@ -625,10 +625,10 @@ QPoint KoCanvasController::scrollBarValue() const
     QScrollBar * hBar = horizontalScrollBar();
     QScrollBar * vBar = verticalScrollBar();
     QPoint value;
-    if (hBar && hBar->isVisible()) {
+    if (hBar && !hBar->isHidden()) {
         value.setX(hBar->value());
     }
-    if (vBar && vBar->isVisible()) {
+    if (vBar && !vBar->isHidden()) {
         value.setY(vBar->value());
     }
 
@@ -639,10 +639,10 @@ void KoCanvasController::setScrollBarValue(const QPoint & value)
 {
     QScrollBar * hBar = horizontalScrollBar();
     QScrollBar * vBar = verticalScrollBar();
-    if (hBar && hBar->isVisible()) {
+    if (hBar && !hBar->isHidden()) {
         hBar->setValue(value.x());
     }
-    if (vBar && vBar->isVisible()) {
+    if (vBar && !vBar->isHidden()) {
         vBar->setValue(value.y());
     }
 }

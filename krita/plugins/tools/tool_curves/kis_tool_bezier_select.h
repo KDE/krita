@@ -45,7 +45,7 @@ public:
 
 protected:
 
-    virtual Q3ValueVector<QPointF> convertCurve();
+    virtual QVector<QPointF> convertCurve();
 
 
 };

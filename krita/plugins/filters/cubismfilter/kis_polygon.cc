@@ -24,7 +24,7 @@
 #include "kis_polygon.h"
 
 #include <math.h>
-#include <q3valuevector.h>
+#include <QVector>
 
 void KisPolygon::addPoint(double x, double y)
 {

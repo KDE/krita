@@ -18,7 +18,7 @@
 #ifndef KIS_TILEDDATAMANAGER_H_
 #define KIS_TILEDDATAMANAGER_H_
 
-#include <Q3ValueVector>
+#include <QVector>
 #include <QVector>
 #include <QMutex>
 

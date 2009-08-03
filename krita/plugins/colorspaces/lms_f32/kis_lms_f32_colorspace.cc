@@ -306,7 +306,7 @@ void KisLmsF32ColorSpace::mixColors(const quint8 **colors, const quint8 *weights
     dstPixel->shortWave = totalShort;
 }
 
-Q3ValueVector<KoChannelInfo *> KisLmsF32ColorSpace::channels() const
+QVector<KoChannelInfo *> KisLmsF32ColorSpace::channels() const
 {
     return m_channels;
 }

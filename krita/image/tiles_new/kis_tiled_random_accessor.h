@@ -19,7 +19,7 @@
 #define KIS_TILED_RANDOM_ACCESSOR_H
 
 #include <QRect>
-#include <q3valuelist.h>
+#include <QList>
 
 #include <kis_shared.h>
 

@@ -81,8 +81,8 @@ void KisImageRasteredCache::imageUpdated(QRect rc)
         for (; x < x2; x++) {
             for (int i = y; i < y2; i++) {
                 if (x < m_raster.size()) {
-                    if (i < m_raster.at(x).size()) {
-                        Element* e = m_raster.at(x).at(i);
+                    if (i < m_raster[x].size()) {
+                        Element* e = m_raster[x][i];
                         if (e && e->valid) {
                             e->valid = false;
                             m_queue.push_back(e);
@@ -118,11 +118,11 @@ void KisImageRasteredCache::imageSizeChanged(qint32 w, qint32 h)
     for (int i = 0; i < m_width *  m_rasterSize; i += m_rasterSize) {
         int rasterY = 0;
 
-        m_raster.at(rasterX).resize(m_height + 1);
+        m_raster[rasterX].resize(m_height + 1);
 
         for (int j = 0; j < m_height * m_rasterSize; j += m_rasterSize) {
             Element* e = new Element(m_observer->createNew(i, j, m_rasterSize, m_rasterSize));
-            m_raster.at(rasterX).at(rasterY) = e;
+            m_raster[rasterX][rasterY] = e;
             rasterY++;
         }
         rasterX++;
@@ -160,10 +160,10 @@ void KisImageRasteredCache::timeOut()
 void KisImageRasteredCache::cleanUpElements()
 {
     for (int i = 0; i < m_raster.count(); i++) {
-        for (int j = 0; j < m_raster.at(i).count(); j++) {
-            delete m_raster.at(i).at(j);
+        for (int j = 0; j < m_raster[i].count(); j++) {
+            delete m_raster[i][j];
         }
-        m_raster.at(i).clear();
+        m_raster[i].clear();
     }
     m_raster.clear();
     m_queue.clear();

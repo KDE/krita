@@ -106,7 +106,7 @@ public:
     virtual quint8 difference(const quint8 *src1, const quint8 *src2);
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
-    virtual Q3ValueVector<KoChannelInfo *> channels() const;
+    virtual QVector<KoChannelInfo *> channels() const;
     virtual quint32 channelCount() const;
     virtual quint32 colorChannelCount() const;
     virtual quint32 pixelSize() const;

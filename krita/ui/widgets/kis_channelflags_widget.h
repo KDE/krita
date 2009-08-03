@@ -23,7 +23,7 @@
 #include "krita_export.h"
 
 #include <QScrollArea>
-#include <Q3ValueVector>
+#include <QVector>
 
 class QBitArray;
 class KoColorSpace;

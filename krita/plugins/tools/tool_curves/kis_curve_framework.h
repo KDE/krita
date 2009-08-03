@@ -19,7 +19,7 @@
 #ifndef KIS_CURVE_FRAMEWORK_H_
 #define KIS_CURVE_FRAMEWORK_H_
 
-#include <Q3ValueList>
+#include <QList>
 #include <QPointF>
 #include <QList>
 #include <algorithm>
@@ -104,7 +104,7 @@ public:
     }
 };
 
-typedef Q3ValueList<CurvePoint> PointList;
+typedef QList<CurvePoint> PointList;
 typedef PointList::iterator BaseIterator;
 
 class CurveIterator;

@@ -475,9 +475,9 @@ KisCurve::iterator KisToolCurve::paintPoint(KisPainter& painter, KisCurve::itera
     return point;
 }
 
-Q3ValueVector<QPointF> KisToolCurve::convertCurve()
+QVector<QPointF> KisToolCurve::convertCurve()
 {
-    Q3ValueVector<QPointF> points;
+    QVector<QPointF> points;
 
     for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); i++)
         if ((*i).hint() != NOHINTS)

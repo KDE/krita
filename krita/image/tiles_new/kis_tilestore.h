@@ -22,8 +22,8 @@
 
 #include <qglobal.h>
 #include <QHash>
-#include <q3valuelist.h>
-#include <q3valuevector.h>
+#include <QList>
+#include <QVector>
 #include <QMutex>
 
 #include "krita_export.h"
@@ -103,6 +103,6 @@ typedef KisSharedPtr<KisTileStore> KisTileStoreSP;
 KisTileStoreSP defaultTileStore(); // ### Do this in a better way!
 
 //typedef QHash<const KisTile*, KisTileStore::TileInfo*> TileMap;
-//typedef Q3ValueList<KisTileStore::TileInfo*> TileList;
+//typedef QList<KisTileStore::TileInfo*> TileList;
 
 #endif // KIS_TILESTORE_H_

@@ -30,7 +30,7 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QPointF>
-#include <Q3ValueList>
+#include <QList>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -166,9 +166,9 @@ public:
         return m_tCost > n2.tCost();
     }
 
-    Q3ValueList<Node> getNeighbor(const GrayMatrix& src, const Node& end) {
+    QList<Node> getNeighbor(const GrayMatrix& src, const Node& end) {
         QPoint tmpdist;
-        Q3ValueList<Node> temp;
+        QList<Node> temp;
         int dcol, drow;
         int g, h;
         bool malus;
@@ -283,8 +283,8 @@ void KisCurveMagnetic::calculateCurve(KisCurve::iterator p1, KisCurve::iterator 
         openSet.erase(openSet.begin());
         openMatrix[current.col()][current.row()].clear();
 
-        Q3ValueList<Node> successors = current.getNeighbor(dst, endNode);
-        for (Q3ValueList<Node>::iterator i = successors.begin(); i != successors.end(); i++) {
+        QList<Node> successors = current.getNeighbor(dst, endNode);
+        for (QList<Node>::iterator i = successors.begin(); i != successors.end(); i++) {
             int col = (*i).col();
             int row = (*i).row();
             if ((*i) == endNode) {

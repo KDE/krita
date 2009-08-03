@@ -18,7 +18,7 @@
 
 #include "kis_tileddatamanager.h"
 
-#include <q3valuevector.h>
+#include <QVector>
 
 #include <kis_debug.h>
 

@@ -24,7 +24,7 @@
 #include <QSlider>
 #include <QString>
 #include <QBitArray>
-#include <q3valuevector.h>
+#include <QVector>
 #include <QGroupBox>
 #include <QVBoxLayout>
 

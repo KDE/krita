@@ -28,7 +28,7 @@
 
 #include <QPoint>
 #include <QSpinBox>
-#include <q3valuevector.h>
+#include <QVector>
 
 #include <klocale.h>
 #include <kiconloader.h>

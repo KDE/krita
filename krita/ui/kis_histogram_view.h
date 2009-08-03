@@ -21,7 +21,7 @@
 
 #include <QLabel>
 #include <QPixmap>
-#include <q3valuevector.h>
+#include <QVector>
 #include <QStringList>
 //Added by qt3to4:
 #include <QMouseEvent>
@@ -114,14 +114,14 @@ private:
         KoChannelInfo * channel;
     } ComboboxInfo;
 
-    Q3ValueVector<ComboboxInfo> m_comboInfo;
+    QVector<ComboboxInfo> m_comboInfo;
     QPixmap m_pix;
     KisHistogramSP m_histogram;
     const KoColorSpace* m_cs;
     KoHistogramProducerSP m_currentProducer;
     QList<KoChannelInfo *> m_channels;
     // Maps the channels in m_channels to a real channel offset in the producer->channels()
-    Q3ValueVector<qint32> m_channelToOffset;
+    QVector<qint32> m_channelToOffset;
     QStringList m_channelStrings;
     bool m_color;
     double m_from;

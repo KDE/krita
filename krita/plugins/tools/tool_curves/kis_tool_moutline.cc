@@ -31,7 +31,7 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QPointF>
-#include <Q3ValueList>
+#include <QList>
 
 #include <kis_debug.h>
 #include <klocale.h>

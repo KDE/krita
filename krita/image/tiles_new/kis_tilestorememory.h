@@ -23,7 +23,7 @@
 #include <qglobal.h>
 #include <QHash>
 #include <QLinkedList>
-#include <q3valuevector.h>
+#include <QVector>
 #include <QMutex>
 
 #include <ktemporaryfile.h>
@@ -111,7 +111,7 @@ private:
         bool compressedOnFile; // Tile's structure on-disk is compressed
     };
 
-    typedef Q3ValueList<quint8*> PoolFreeList;
+    typedef QList<quint8*> PoolFreeList;
 
     qint32 m_maxInMem;
     qint32 m_currentInMem;

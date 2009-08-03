@@ -29,10 +29,10 @@ class QSlider;
 class KisToolMagnetic;
 class Node;
 
-typedef Q3ValueVector<Node> NodeCol;
-typedef Q3ValueVector<NodeCol> NodeMatrix;
-typedef Q3ValueVector<qint16> GrayCol;
-typedef Q3ValueVector<GrayCol> GrayMatrix;
+typedef QVector<Node> NodeCol;
+typedef QVector<NodeCol> NodeMatrix;
+typedef QVector<qint16> GrayCol;
+typedef QVector<GrayCol> GrayMatrix;
 
 class KisToolMagnetic : public KisToolCurve
 {

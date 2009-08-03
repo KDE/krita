@@ -30,7 +30,7 @@
 #include <QPoint>
 #include <QSpinBox>
 //Added by qt3to4:
-#include <Q3MemArray>
+#include <QVector>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -88,7 +88,7 @@ void KisPixelizeFilter::process(KisConstProcessingInformation srcInfo,
     if (pixelHeight == 0) pixelHeight = 1;
 
     qint32 pixelSize = src->pixelSize();
-    Q3MemArray<qint32> average(pixelSize);
+    QVector<qint32> average(pixelSize);
 
     qint32 count;
 

@@ -126,7 +126,7 @@ KisPaintOpSettingsSP KisCPaintOpFactory::settings(KisImageSP image)
 
 //=================
 
-KisCPaintOpSettings::KisCPaintOpSettings(QWidget * parent,  Q3ValueVector<Brush*> brushes)
+KisCPaintOpSettings::KisCPaintOpSettings(QWidget * parent,  QVector<Brush*> brushes)
         : KisPaintOpSettings()
 {
     m_brushes = brushes;

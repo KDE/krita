@@ -22,7 +22,7 @@
 #define KIS_CURVE_MAGNETIC_H_
 
 #include "kis_curve_framework.h"
-#include <Q3ValueVector>
+#include <QVector>
 #include <QRect>
 
 #include <kis_types.h>
@@ -31,10 +31,10 @@ class QSlider;
 class KisToolMagnetic;
 class Node;
 
-typedef Q3ValueVector<Node> NodeCol;
-typedef Q3ValueVector<NodeCol> NodeMatrix;
-typedef Q3ValueVector<qint16> GrayCol;
-typedef Q3ValueVector<GrayCol> GrayMatrix;
+typedef QVector<Node> NodeCol;
+typedef QVector<NodeCol> NodeMatrix;
+typedef QVector<qint16> GrayCol;
+typedef QVector<GrayCol> GrayMatrix;
 
 class KisCurveMagnetic : public KisCurve
 {

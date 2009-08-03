@@ -20,7 +20,7 @@
 
 #include <QString>
 #include <QFile>
-#include <Q3MemArray>
+#include <QVector>
 
 #include <kgenericfactory.h>
 #include <KoDocument.h>
@@ -118,7 +118,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
         return KoFilter::CreationError;
     }
 
-    Q3MemArray<Rgba> pixels(dataWidth);
+    QVector<Rgba> pixels(dataWidth);
 
     for (int y = 0; y < dataHeight; ++y) {
 

@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_POLYLINE_H_
 #define KIS_TOOL_POLYLINE_H_
 
-#include <q3valuevector.h>
+#include <QVector>
 #include <QString>
 //Added by qt3to4:
 #include <QKeyEvent>
@@ -62,7 +62,7 @@ protected:
 
     bool m_dragging;
 private:
-    typedef Q3ValueVector<QPointF> KoPointVector;
+    typedef QVector<QPointF> KoPointVector;
     KoPointVector m_points;
     QRectF m_boundingRect;
 };

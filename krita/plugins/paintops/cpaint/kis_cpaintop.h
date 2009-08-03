@@ -21,7 +21,7 @@
 
 #include <QImage>
 
-#include <q3valuevector.h>
+#include <QVector>
 
 #include <KoColor.h>
 #include <kis_paintop.h>
@@ -53,7 +53,7 @@ public:
 
 private:
 
-    Q3ValueVector<Brush*> m_brushes;
+    QVector<Brush*> m_brushes;
 };
 
 
@@ -64,7 +64,7 @@ class KisCPaintOpSettings : public QObject, public KisPaintOpSettings
     Q_OBJECT
 
 public:
-    KisCPaintOpSettings(QWidget * parent,  Q3ValueVector<Brush*> m_brushes);
+    KisCPaintOpSettings(QWidget * parent,  QVector<Brush*> m_brushes);
     virtual ~KisCPaintOpSettings() {}
 
     virtual KisPaintOpSettingsSP clone() const;
@@ -90,7 +90,7 @@ private slots:
 
 private:
 
-    Q3ValueVector<Brush*> m_brushes;
+    QVector<Brush*> m_brushes;
     Ui::WdgCPaintOptions * m_options;
     KisConfigWidget * m_optionsWidget;
 };

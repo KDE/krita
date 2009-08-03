@@ -22,8 +22,8 @@
 #define _KIS_IMAGE_RASTERED_CACHE_H_
 
 #include <QObject>
-#include <q3valuevector.h>
-#include <q3valuelist.h>
+#include <QVector>
+#include <QList>
 #include <QTimer>
 #include <QDockWidget>
 
@@ -76,8 +76,8 @@ private:
         Observer* observer;
         bool valid;
     };
-    typedef Q3ValueVector< Q3ValueVector<Element*> > Raster;
-    typedef Q3ValueList<Element*> Queue;
+    typedef QVector< QVector<Element*> > Raster;
+    typedef QList<Element*> Queue;
 
     void cleanUpElements();
 

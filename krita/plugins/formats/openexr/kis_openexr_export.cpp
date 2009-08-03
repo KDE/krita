@@ -19,7 +19,7 @@
 #include "kis_openexr_export.h"
 
 #include <QFile>
-#include <Q3MemArray>
+#include <QVector>
 
 #include <kmessagebox.h>
 
@@ -120,7 +120,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
     RgbaOutputFile file(QFile::encodeName(filename), displayWindow, dataWindow, WRITE_RGBA);
 
-    Q3MemArray<Rgba> pixels(dataWidth);
+    QVector<Rgba> pixels(dataWidth);
 
     for (int y = 0; y < dataHeight; ++y) {
 

@@ -19,7 +19,7 @@
 #define KIS_TILEDDATAMANAGER_H_
 
 #include <QtGlobal>
-#include <Q3ValueVector>
+#include <QVector>
 #include <QVector>
 
 #include <kis_shared.h>

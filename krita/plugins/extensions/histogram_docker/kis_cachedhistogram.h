@@ -21,7 +21,7 @@
 #ifndef _CACHED_HISTOGRAM_H_
 #define _CACHED_HISTOGRAM_H_
 
-#include <q3valuevector.h>
+#include <QVector>
 #include <KoHistogramProducer.h>
 
 #include "kis_imagerasteredcache.h"
@@ -29,7 +29,7 @@
 class KisCachedHistogramObserver : public KisImageRasteredCache::Observer
 {
 public:
-    typedef Q3ValueVector<KoHistogramProducer*> Producers;
+    typedef QVector<KoHistogramProducer*> Producers;
     KisCachedHistogramObserver(Producers* p, KoHistogramProducerFactory* f,
                                int x, int y, int w, int h, bool add = true)
             : m_producers(p), m_factory(f), m_x(x), m_y(y), m_w(w), m_h(h) {

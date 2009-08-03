@@ -22,8 +22,8 @@
 
 #include <qglobal.h>
 #include <QHash>
-#include <q3valuelist.h>
-#include <q3valuevector.h>
+#include <QList>
+#include <QVector>
 #include <QMutex>
 
 #include <ktemporaryfile.h>
@@ -103,7 +103,7 @@ private:
         off_t filePos;
         int size;
         int fsize;
-        Q3ValueList<TileInfo*>::iterator node;
+        QList<TileInfo*>::iterator node;
         bool inMem;
         bool onFile;
         bool mmapped;
@@ -114,11 +114,11 @@ private:
         KTemporaryFile* file; off_t filePos; int size;
     } FreeInfo;
     typedef QHash<const KisTile*, TileInfo*> TileMap;
-    typedef Q3ValueList<TileInfo*> TileList;
-    typedef Q3ValueList<FreeInfo*> FreeList;
-    typedef Q3ValueVector<FreeList> FreeListList;
-    typedef Q3ValueList<quint8*> PoolFreeList;
-    typedef Q3ValueList<TempFile> FileList;
+    typedef QList<TileInfo*> TileList;
+    typedef QList<FreeInfo*> FreeList;
+    typedef QVector<FreeList> FreeListList;
+    typedef QList<quint8*> PoolFreeList;
+    typedef QList<TempFile> FileList;
 
 
     TileMap m_tileMap;

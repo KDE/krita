@@ -28,7 +28,7 @@
 #include <kis_fill_painter.h>
 
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 namespace Scripting
 {
@@ -261,10 +261,10 @@ protected:
     }
 
 private:
-    inline vQPointF createPointsVector(Q3ValueList<QVariant> xs, Q3ValueList<QVariant> ys) {
+    inline vQPointF createPointsVector(QList<QVariant> xs, QList<QVariant> ys) {
         vQPointF a;
-        Q3ValueList<QVariant>::iterator itx = xs.begin();
-        Q3ValueList<QVariant>::iterator ity = ys.begin();
+        QList<QVariant>::iterator itx = xs.begin();
+        QList<QVariant>::iterator ity = ys.begin();
         for (; itx != xs.end(); ++itx, ++ity) {
             a.push_back(QPointF((*itx).toDouble(), (*ity).toDouble()));
         }

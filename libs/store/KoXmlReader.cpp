@@ -86,10 +86,6 @@
 #include <QStringList>
 #include <QVector>
 
-
-
-
-
 /*
  Use more compact representation of in-memory nodes.
 

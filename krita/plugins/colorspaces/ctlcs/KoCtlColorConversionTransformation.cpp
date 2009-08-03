@@ -26,6 +26,7 @@
 #include "KoColorSpace.h"
 #include "KoCtlColorProfile.h"
 #include "DebugPigment.h"
+#include "KoCtlBuffer.h"
 
 #include <QString>
 
@@ -56,20 +57,6 @@ KoCtlColorConversionTransformation::~KoCtlColorConversionTransformation()
 {
     delete d;
 }
-
-class KoCtlBuffer : public GTLCore::Buffer {
-    public:
-        KoCtlBuffer(char* _buffer, int _size) : m_buffer(_buffer), m_size(_size)
-        {
-        }
-        virtual ~KoCtlBuffer() {}
-        virtual char * rawData() { return m_buffer; }
-        virtual const char * rawData() const { return m_buffer; }
-        virtual int size() const  { return m_size; }
-    private:
-        char * m_buffer;
-        int m_size;
-};
 
 void KoCtlColorConversionTransformation::transform(const quint8 *src8, quint8 *dst8, qint32 nPixels) const
 {

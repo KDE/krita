@@ -18,6 +18,7 @@ if( HAVE_OPENCTL_910 )
 endif( HAVE_OPENCTL_910 )
 
 set( CTLCS_SRCS
+    KoCtlBuffer.cpp
     KoCtlChannel.cpp
     KoCtlColorProfile.cpp
     KoCtlColorConversionTransformation.cpp

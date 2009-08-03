@@ -41,6 +41,8 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    // reimplemented
+    virtual void waitUntilReady(const KoViewConverter &converter) const;
 
     /// reimplemented
     void init(const QMap<QString, KoDataCenter*> &dataCenterMap);
@@ -56,6 +58,7 @@ protected:
 private:
     KoImageCollection *m_imageCollection;
     RenderQueue *m_renderQueue;
+    mutable QImage m_printQualityImage;
 };
 
 class RenderQueue : public QObject

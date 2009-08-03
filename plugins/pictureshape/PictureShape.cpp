@@ -68,7 +68,6 @@ PictureShape::~PictureShape()
 void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
-
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());
     if (imageData == 0) {
         painter.fillRect(pixelsF, QColor(Qt::gray));
@@ -91,20 +90,29 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
                 pixmapSize.setHeight(imageSize.height());
             }
 
-            const int MaxSize = 1000; // TODO set the number as a KoImageCollection size
-            // make sure our pixmap doesn't get too slow.
-            // In future we may want to make this action cause a multi-threaded rescale of the pixmap.
-            if (pixmapSize.width() > MaxSize) { // resize to max size.
-                pixmapSize.setHeight(qRound(pixelsF.height() / pixelsF.width() * MaxSize));
-                pixmapSize.setWidth(MaxSize);
-            }
-            if (pixmapSize.height() > MaxSize) {
-                pixmapSize.setWidth(qRound(pixelsF.width() / pixelsF.height() * MaxSize));
-                pixmapSize.setHeight(MaxSize);
+            if (m_printQualityImage.isNull()) {
+                const int MaxSize = 1000; // TODO set the number as a KoImageCollection size
+                // make sure our pixmap doesn't get too slow.
+                // In future we may want to make this action cause a multi-threaded rescale of the pixmap.
+                if (pixmapSize.width() > MaxSize) { // resize to max size.
+                    pixmapSize.setHeight(qRound(pixelsF.height() / pixelsF.width() * MaxSize));
+                    pixmapSize.setWidth(MaxSize);
+                }
+                if (pixmapSize.height() > MaxSize) {
+                    pixmapSize.setWidth(qRound(pixelsF.width() / pixelsF.height() * MaxSize));
+                    pixmapSize.setHeight(MaxSize);
+                }
             }
             key = QString::number(imageData->key() + pixmapSize.width() * pixmapSize.height());
         }
     }
+
+    if (!m_printQualityImage.isNull() && pixmapSize == m_printQualityImage.size()) { // painting the image as prepared in waitUntilReady()
+        painter.drawImage(pixels, m_printQualityImage, QRect(0, 0, pixmapSize.width(), pixmapSize.height()));
+        m_printQualityImage = QImage(); // free memory
+        return;
+    }
+
     if (!QPixmapCache::find(key, pixmap)) {
         m_renderQueue->addSize(pixmapSize);
         QTimer::singleShot(0, m_renderQueue, SLOT(renderImage()));
@@ -114,6 +122,22 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
         pixmap = imageData->pixmap();
     }
     painter.drawPixmap(pixels, pixmap, QRect(0, 0, pixmap.width(), pixmap.height()));
+}
+
+void PictureShape::waitUntilReady(const KoViewConverter &converter) const
+{
+    // get pixmap and schedule it if not
+    KoImageData *imageData = qobject_cast<KoImageData*>(userData());
+    if (imageData == 0)
+        return;
+
+    QSize pixels = converter.documentToView(QRectF(QPointF(0,0), size())).size().toSize();
+    QImage image = imageData->image();
+    if (image.isNull())
+        return;
+    if (image.size().width() < pixels.width()) // don't scale up.
+        pixels = image.size();
+    m_printQualityImage = image.scaled(pixels, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 void PictureShape::saveOdf(KoShapeSavingContext &context) const

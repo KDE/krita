@@ -582,7 +582,7 @@ void Layout::handleTable()
                 // Tell the table layout to calculate height of last cell.
                 m_tableLayout.calculateCellContentHeight(previousCell);
                 m_tableLayout.layoutRow(previousCell.row());
-                    qDebug() << "layouted row" << previousCell.row() <<"and next row at y" << m_y;
+                qDebug() << "layouted row" << previousCell.row() <<"and next row at y" << m_y;
             }
 
             handleTableBreak(previousCell, previousTable);
@@ -656,13 +656,13 @@ void Layout::handleTableBreak(QTextTableCell &previousCell, QTextTable *table)
             qDebug() << "  requested new shape at " << y();
         }
         layout = m_block.layout();
+        //since the height of m_block will unwantedly be added to m_y after we leave, lets just subtract it to counter that
+        m_y -= layout->lineAt(layout->lineCount() - 1).y() + layout->lineAt(layout->lineCount() - 1).height() - layout->lineAt(0).y();
 
         m_format = m_block.blockFormat();
         m_blockData = dynamic_cast<KoTextBlockData*>(m_block.userData());
         m_isRtl = m_block.text().isRightToLeft();
         m_fragmentIterator = m_block.begin();
-        //m_newParag = true;
-        //updateBorders(); // fill the border inset member vars.
         layout->beginLayout();
     }
 }

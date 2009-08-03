@@ -128,8 +128,9 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
 
     TableRect tableRect;
     tableRect.fromRow = fromRow;
-    tableRect.rect = QRectF(position.x() + tableFormat.leftMargin(), position.y() + tableFormat.topMargin(),
-                    tableWidth, 1); // the 1 is to make sure it's valid
+    tableRect.rect = QRectF(position.x() + tableFormat.leftMargin(),
+                                            position.y() + (fromRow==0 ? tableFormat.topMargin() : 0.0),
+                                            tableWidth, 1); // the 1 is to make sure it's valid
     tableRect.columnPositions.resize(m_table->columns());
     tableRect.columnWidths.resize(m_table->columns());
 

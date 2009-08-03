@@ -27,10 +27,23 @@
 
 #include "KoCtlColorSpace.h"
 
-KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace * cs) : KoCompositeOp(cs, idForFile(_template->fileName()), descriptionForFile(_template->fileName()), categoryForFile(_template->fileName()))
+KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace * cs, const GTLCore::PixelDescription& _pd) : KoCompositeOp(cs, idForFile(_template->fileName()), descriptionForFile(_template->fileName()), categoryForFile(_template->fileName())), m_withMaskProgram(0), m_withoutMaskProgram(0)
 {
   
-  
+}
+
+void KoCTLCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
+            const quint8 *srcRowStart, qint32 srcRowStride,
+            const quint8 *maskRowStart, qint32 maskRowStride,
+            qint32 rows, qint32 numColumns,
+            quint8 opacity,
+            const QBitArray & channelFlags) const
+{
+}
+
+bool KoCTLCompositeOp::isValid() const
+{
+  return m_withoutMaskProgram && m_withMaskProgram;
 }
 
 QString KoCTLCompositeOp::idForFile( const std::string& _file )

@@ -24,6 +24,10 @@
 
 class KoCtlColorSpace;
 
+namespace GTLCore {
+  class PixelDescription;
+}
+
 namespace OpenCTL {
   class Program;
   class Template;
@@ -31,7 +35,15 @@ namespace OpenCTL {
 
 class KoCTLCompositeOp : public KoCompositeOp {
   public:
-    KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace* cs);
+    KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace* cs, const GTLCore::PixelDescription& _pd);
+  public:
+    virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
+               const quint8 *srcRowStart, qint32 srcRowStride,
+               const quint8 *maskRowStart, qint32 maskRowStride,
+               qint32 rows, qint32 numColumns,
+               quint8 opacity,
+               const QBitArray & channelFlags) const;
+    bool isValid() const;
   private:
     // Those three functions are hack and aren't supposed to stay
     QString idForFile( const std::string& _file );

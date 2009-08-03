@@ -31,6 +31,12 @@
 #include "config-openctl910.h"
 #include "KoCtlTemplatesRegistry.h"
 
+#ifdef HAVE_OPENCTL_910
+#if HAVE_OPENCTL_910
+#include "KoCtlCompositeOp.h"
+#endif
+#endif
+
 struct KoCtlColorSpace::Private
 {
     Private() : alphaCtlChannel(0) {}
@@ -97,7 +103,14 @@ KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlCol
     }
 #ifdef HAVE_OPENCTL_910
 #if HAVE_OPENCTL_910
-    KoCtlTemplatesRegistry::instance();
+    foreach( OpenCTL::Template* templat,  KoCtlTemplatesRegistry::instance()->compositeOps())
+    {
+      KoCTLCompositeOp* cop = new KoCTLCompositeOp(templat, this, d->info->pixelDescription());
+      if(cop->isValid())
+      {
+        addCompositeOp(cop);
+      }
+    }
 #endif
 #endif
 }

@@ -25,7 +25,7 @@
 
 #include <QtCore/QObject>
 #include <QtDBus/qdbusabstractadaptor.h>
-#include <q3valuelist.h>
+#include <QList>
 #include "komain_export.h"
 class KoDocument;
 

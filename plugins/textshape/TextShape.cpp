@@ -130,7 +130,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(doc->documentLayout());
     if (m_textShapeData->endPosition() < 0) { // not layouted yet.
         if (lay == 0)
-            kWarning(32500) << "Painting shape that doesn't have a kotext doc-layout, which can't work\n";
+            kWarning(32500) << "Painting shape that doesn't have a kotext doc-layout, which can't work";
         else if (! lay->hasLayouter())
             lay->setLayout(new Layout(lay));
         return;

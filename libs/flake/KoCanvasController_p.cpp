@@ -134,7 +134,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
         if (! factory) {
             kWarning(30006) << "Application requested a shape that is not registered '" <<
-            id << "', Ignoring" << endl;
+            id << "', Ignoring";
             event->ignore();
             return;
         }

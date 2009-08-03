@@ -239,7 +239,7 @@ protected:
     virtual QPixmap generateThumbnail( const QSize& size = QSize( 512, 512 ) ) = 0;
 
     /**
-     * Get the key used for for caching the tumbnail pixmap
+     * Get the key used for for caching the thumbnail pixmap
      */
     QString thumbnailKey() const;
 

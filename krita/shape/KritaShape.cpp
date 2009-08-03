@@ -124,7 +124,7 @@ bool KritaShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &co
     return false; // TODO
 }
 
-void KritaShape::waitUntilReady() const
+void KritaShape::waitUntilReady(const KoViewConverter &) const
 {
     if (m_d && m_d->doc && m_d->doc->image())   // all done
         return;

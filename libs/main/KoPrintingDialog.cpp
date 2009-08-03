@@ -107,7 +107,7 @@ public:
             foreach(KoShape *shape, shapes) {
                 kDebug(30004) <<"Calling waitUntilReady on shape (" << shape <<")";
                 if(! stop)
-                    shape->waitUntilReady();
+                    shape->waitUntilReady(zoomer);
                 kDebug(30004) <<"  done";
                 updater->setProgress(updater->progress() + progressPart);
             }

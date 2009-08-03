@@ -360,7 +360,7 @@ void TextShape::markLayoutDone()
     }
 }
 
-void TextShape::waitUntilReady() const
+void TextShape::waitUntilReady(const KoViewConverter &) const
 {
     synchronized(m_mutex) {
         if (m_textShapeData->isDirty()) {

@@ -715,7 +715,7 @@ public:
      * method returned.
      * Warning!  This method can be blocking for a long time, never call it on the gui-thread!
      */
-    virtual void waitUntilReady() const {}
+    virtual void waitUntilReady(const KoViewConverter &converter) const { Q_UNUSED(converter); }
 
     /**
      * Schedule the shape for thread-safe deletion.

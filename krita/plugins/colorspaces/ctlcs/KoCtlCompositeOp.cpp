@@ -26,6 +26,8 @@
 #include <klocale.h>
 
 #include "KoCtlColorSpace.h"
+#include "KoCtlBuffer.h"
+#include <OpenCTL/Program.h>
 
 KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace * cs, const GTLCore::PixelDescription& _pd) : KoCompositeOp(cs, idForFile(_template->fileName()), descriptionForFile(_template->fileName()), categoryForFile(_template->fileName())), m_withMaskProgram(0), m_withoutMaskProgram(0)
 {
@@ -39,6 +41,28 @@ void KoCTLCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
             quint8 opacity,
             const QBitArray & channelFlags) const
 {
+  Q_ASSERT(m_withMaskProgram);
+  Q_ASSERT(m_withoutMaskProgram);
+  while (rows > 0)
+  {
+    KoCtlBuffer src( reinterpret_cast<char*>(const_cast<quint8*>(srcRowStart) ), numColumns * colorSpace()->pixelSize());
+    KoCtlBuffer dst( reinterpret_cast<char*>(dstRowStart), numColumns * colorSpace()->pixelSize());
+    std::list< GTLCore::Buffer* > ops;
+    ops.push_back(&src);
+    ops.push_back(&dst);
+    if(maskRowStart)
+    {
+      KoCtlBuffer mask( reinterpret_cast<char*>(const_cast<quint8*>(maskRowStart)), numColumns * sizeof(quint8));
+      ops.push_back(&mask);
+      m_withMaskProgram->apply(ops, dst);
+      maskRowStart += maskRowStride;
+    } else {
+      m_withoutMaskProgram->apply(ops, dst);
+    }
+    srcRowStart += srcRowStride;
+    dstRowStart += dstRowStride;
+    --rows;
+  }
 }
 
 bool KoCTLCompositeOp::isValid() const

@@ -87,6 +87,8 @@ public:
     KisPaintDeviceSP projection() const;
     KisPaintDeviceSP paintDevice() const;
 
+    QImage createThumbnail(qint32 w, qint32 h);
+
     qint32 x() const;
     void setX(qint32);
 

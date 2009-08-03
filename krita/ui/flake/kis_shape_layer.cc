@@ -404,6 +404,14 @@ bool KisShapeLayer::loadLayer( KoStore* store )
 
 }
 
+QImage KisShapeLayer::createThumbnail(qint32 w, qint32 h)
+{
+    if (projection())
+        return projection()->createThumbnail(w, h);
+    else
+        return QImage();
+}
+
 
 KisPaintDeviceSP KisShapeLayer::paintDevice() const
 {

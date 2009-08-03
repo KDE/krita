@@ -28,10 +28,14 @@
 class KoFilterEffect;
 class KoXmlWriter;
 
+/// This class manages a stack of filter effects
 class FLAKE_EXPORT KoFilterEffectStack
 {
 public:
+    /// Creates an empty filter effect stack
     KoFilterEffectStack();
+    
+    /// Destroys the filter effect stack, deleting all filter effects
     ~KoFilterEffectStack();
 
     /**
@@ -43,6 +47,9 @@ public:
 
     /**
     * Inserts a new filter at the given position in the filter list.
+    *
+    * The filter stack take ownership of the inserted filter effect.
+    *
     * @param index the list index to insert the new filter at
     * @param filter the new filter to insert
     */
@@ -50,12 +57,18 @@ public:
 
     /**
     * Appends a new filter at the end of the filter list.
+    *
+    * The filter stack take ownership of the appended filter effect.
+    *
     * @param filter the new filter to append
     */
     void appendFilterEffect(KoFilterEffect *filter);
 
     /**
     * Removes the filter with the given index from the filter list.
+    *
+    * The filter gets deleted after removal from the list.
+    *
     * @param index the index of the filter to remove
     */
     void removeFilterEffect(int index);

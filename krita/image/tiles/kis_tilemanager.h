@@ -25,9 +25,11 @@
 #include <QList>
 #include <QVector>
 #include <QMutex>
+#include <QLinkedList>
 
 #include <ktemporaryfile.h>
 #include <krita_export.h>
+
 
 class KisTile;
 
@@ -103,7 +105,7 @@ private:
         off_t filePos;
         int size;
         int fsize;
-        QList<TileInfo*>::iterator node;
+        QLinkedList<TileInfo*>::iterator node;
         bool inMem;
         bool onFile;
         bool mmapped;
@@ -113,8 +115,9 @@ private:
     typedef struct {
         KTemporaryFile* file; off_t filePos; int size;
     } FreeInfo;
+
     typedef QHash<const KisTile*, TileInfo*> TileMap;
-    typedef QList<TileInfo*> TileList;
+    typedef QLinkedList<TileInfo*> TileList;
     typedef QList<FreeInfo*> FreeList;
     typedef QVector<FreeList> FreeListList;
     typedef QList<quint8*> PoolFreeList;

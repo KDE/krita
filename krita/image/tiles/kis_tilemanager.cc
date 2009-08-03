@@ -143,7 +143,7 @@ void KisTileManager::registerTile(KisTile* tile)
 
     m_tileMap[tile] = info;
     m_swappableList.push_back(info);
-    info->node = -- m_swappableList.end();
+    info->node = --m_swappableList.end();
 
     m_currentInMem++;
     m_bytesTotal += info->size;

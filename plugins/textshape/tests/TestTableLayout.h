@@ -108,15 +108,6 @@ private:
     KoTableColumnStyle *m_defaultColumnStyle;
     KoTableRowStyle *m_defaultRowStyle;
     KoTableCellStyle *m_defaultCellStyle;
-
-    /*
-     * This offset variable is used in tests below to compensate
-     * for the empty blocks around tables.
-     *
-     * We should remove it completely once we have proper behavior
-     * of blocks around tables, a la Qt.
-     */
-    static const qreal Y = 14.4;
 };
 
 class MockTextShape : public TextShape

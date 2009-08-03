@@ -128,6 +128,15 @@ private:
      */
     void handleTableBreak(QTextTableCell &previousCell, QTextTable *table);
 
+    /**
+     * Returns true if the table follwing the given block should be kept with
+     * it. This function returns true if the given block is:
+     *
+     * 1) An empty block between two tables.
+     * 2) An empty block between a table and beginning of document.
+     */
+    bool keepTableWithBlock(QTextBlock &block);
+
 private:
     KoStyleManager *m_styleManager;
 

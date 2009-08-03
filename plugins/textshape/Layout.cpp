@@ -495,6 +495,18 @@ qreal Layout::documentOffsetInShape()
     return m_data->documentOffset();
 }
 
+bool Layout::keepTableWithBlock(QTextBlock &block)
+{
+    QTextCursor nextCursor(block.next());
+    QTextCursor previousCursor(block.previous());
+
+    return (block.isValid() && block.length() == 1 &&
+            // Block is between table and beginning of document.
+            ((block.position() == 0 && nextCursor.currentTable()) ||
+            // Block is between two tables.
+            (nextCursor.currentTable() && previousCursor.currentTable())));
+}
+
 void Layout::handleTable()
 {
     // Check if we are inside a table.
@@ -514,10 +526,18 @@ void Layout::handleTable()
             // The previous cell is invalid, which means we have entered a
             // table, so set the current table on the table layout, and initialize
             // a layout from the beginning positioning the first new
-            // rect at the current position
+            // rect at the current position, or at the position of the previous
+            // block if it's an empty block between this table and the document
+            // start or another table.
+            QPointF startPos = QPointF(x(), y());
+            QTextBlock previousBlock = m_block.previous();
+            if (keepTableWithBlock(previousBlock)) {
+                // We should keep the table with the previous block.
+                startPos = previousBlock.layout()->lineAt(0).position();
+            }
             m_tableLayout.setTable(table);
             qDebug() << "initial layout about to start at " << x() << " " << y();
-            m_tableLayout.startNewTableRect(QPointF(x(), y()), shape->size().width(), 0);
+            m_tableLayout.startNewTableRect(startPos, shape->size().width(), 0);
             m_restartingAfterTableBreak = false; // You never know
             m_restartingFirstCellAfterTableBreak = false; // You never know
         }

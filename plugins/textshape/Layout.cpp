@@ -776,6 +776,8 @@ void Layout::resetPrivate()
     m_newParag = true;
     m_block = m_parent->document()->begin();
     m_currentMasterPage.clear();
+    m_restartingAfterTableBreak = false;
+    m_restartingFirstCellAfterTableBreak = false;
 
     shapeNumber = 0;
     int lastPos = -1;

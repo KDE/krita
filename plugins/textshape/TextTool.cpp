@@ -282,22 +282,21 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_actionFormatBullet->setDelayed( false );
         QActionGroup* counterStyleActionGroup = new QActionGroup( this );
         counterStyleActionGroup->setExclusive( true );
-        Q3PtrList<KoCounterStyleWidget::StyleRepresenter> stylesList;
+        QList<KoCounterStyleWidget::StyleRepresenter*> stylesList;
         KoCounterStyleWidget::makeCounterRepresenterList( stylesList );
-        Q3PtrListIterator<KoCounterStyleWidget::StyleRepresenter> styleIt( stylesList );
-        for ( ; styleIt.current() ; ++styleIt ) {
+        foreach(KoCounterStyleWidget::StyleRepresenter* styleRepresenter, stylesList) {
             // Dynamically create toggle-actions for each list style.
             // This approach allows to edit toolbars and extract separate actions from this menu
-            KToggleAction* act = new KToggleAction( styleIt.current()->name(), // TODO icon
+            KToggleAction* act = new KToggleAction( styleRepresenter->name(), // TODO icon
                     actionCollection(),
-                    QString("counterstyle_%1").arg( styleIt.current()->style() ) );
+                    QString("counterstyle_%1").arg( styleRepresenter->style() ) );
             connect( act, SIGNAL( triggered(bool) ), this, SLOT( slotCounterStyleSelected() ) );
             act->setActionGroup( counterStyleActionGroup );
             // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
-            if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {
+            if ( styleRepresenter->style() == KoParagCounter::STYLE_NONE ) {
                 m_actionFormatBullet->insert( act );
                 m_actionFormatNumber->insert( act );
-            } else if ( styleIt.current()->isBullet() )
+            } else if ( styleRepresenter->isBullet() )
                 m_actionFormatBullet->insert( act );
             else
                 m_actionFormatNumber->insert( act );

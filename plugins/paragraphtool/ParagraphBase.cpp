@@ -61,7 +61,7 @@ void ParagraphBase::activateTextBlockAt(const QPointF &point)
         return;
     }
 
-    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+    KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(shape->userData());
     if (textShapeData == NULL) {
         // the shape below the mouse position is not a text shape
         deactivateTextBlock();
@@ -176,7 +176,7 @@ bool ParagraphBase::shapeContainsBlock(const KoShape *shape)
 
 qreal ParagraphBase::shapeTop(const KoShape *shape) const
 {
-    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+    KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(shape->userData());
     assert(textShapeData != NULL);
 
     return textShapeData->documentOffset();

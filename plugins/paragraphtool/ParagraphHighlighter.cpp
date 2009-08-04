@@ -45,7 +45,7 @@ void ParagraphHighlighter::paint(QPainter &painter, const KoViewConverter &conve
 
     foreach (const ParagraphFragment &fragment, fragments()) {
         KoShape *shape = fragment.shape();
-        KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+        KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(shape->userData());
         assert(textShapeData != NULL);
 
         painter.save();

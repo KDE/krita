@@ -114,7 +114,7 @@ void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType
     if (type == KoShape::RotationChanged || type == KoShape::ScaleChanged ||
             type == KoShape::ShearChanged || type == KoShape::SizeChanged) {
 
-        KoTextShapeData *data  = dynamic_cast<KoTextShapeData*>(child->parent()->userData());
+        KoTextShapeData *data  = qobject_cast<KoTextShapeData*>(child->parent()->userData());
         Q_ASSERT(data);
         data->foul();
 
@@ -175,7 +175,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
         QTextBlock block = relation->anchor->document()->findBlock(relation->anchor->positionInDocument());
         QTextLayout *layout = block.layout();
         if (layout->lineCount() > 0) {
-            KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(child->parent()->userData());
+            KoTextShapeData *data = qobject_cast<KoTextShapeData*>(child->parent()->userData());
             Q_ASSERT(data);
             QTextLine tl = layout->lineAt(0);
             qreal y = tl.y() - data->documentOffset() - newPosition.y();

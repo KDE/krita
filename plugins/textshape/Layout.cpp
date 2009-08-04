@@ -690,7 +690,7 @@ void Layout::nextShape()
     QList<KoShape *> shapes = m_parent->shapes();
     for (shapeNumber++; shapeNumber < shapes.count(); shapeNumber++) {
         shape = shapes[shapeNumber];
-        m_data = dynamic_cast<KoTextShapeData*>(shape->userData());
+        m_data = qobject_cast<KoTextShapeData*>(shape->userData());
         if (m_data != 0)
             break;
         shape = 0;
@@ -726,7 +726,7 @@ void Layout::cleanupShape(KoShape *daShape)
     TextShape *ts = dynamic_cast<TextShape*>(daShape);
     if (ts)
         ts->markLayoutDone();
-    KoTextShapeData *textData = dynamic_cast<KoTextShapeData*>(daShape->userData());
+    KoTextShapeData *textData = qobject_cast<KoTextShapeData*>(daShape->userData());
     if (textData == 0)
         return;
     if (textData->position() == -1)
@@ -769,7 +769,7 @@ void Layout::resetPrivate()
     int lastPos = -1;
     QList<KoShape *> shapes = m_parent->shapes();
     foreach(KoShape *shape, shapes) {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(shape->userData());
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
         Q_ASSERT(data);
         if (data->isDirty()) {
             // this shape needs to be recalculated.
@@ -796,7 +796,7 @@ void Layout::resetPrivate()
                     // since we only recalc whole parags; we need to go back a little.
                     shapeNumber--;
                     shape = shapes[shapeNumber];
-                    data = dynamic_cast<KoTextShapeData*>(shape->userData());
+                    data = qobject_cast<KoTextShapeData*>(shape->userData());
                     m_newShape = false;
                 }
                 if (m_y > data->documentOffset() + shape->size().height()) {
@@ -835,7 +835,7 @@ void Layout::resetPrivate()
         cursor.removeSelectedText();
     }
     m_demoText = m_textShape->demoText();
-    m_data = dynamic_cast<KoTextShapeData*>(shape->userData());
+    m_data = qobject_cast<KoTextShapeData*>(shape->userData());
     m_shapeBorder = shape->borderInsets();
     if (m_y == 0)
         m_y = m_shapeBorder.top;
@@ -1578,7 +1578,7 @@ bool Layout::setFollowupShape(KoShape *followupShape)
     Q_ASSERT(shape == 0);
     Q_ASSERT(followupShape);
 
-    m_data = dynamic_cast<KoTextShapeData*>(followupShape->userData());
+    m_data = qobject_cast<KoTextShapeData*>(followupShape->userData());
     if (m_data == 0)
         return false;
 
@@ -1637,7 +1637,7 @@ bool Layout::previousParag()
         QList<KoShape *> shapes = m_parent->shapes();
         for (--shapeNumber; shapeNumber >= 0; shapeNumber--) {
             shape = shapes[shapeNumber];
-            m_data = dynamic_cast<KoTextShapeData*>(shape->userData());
+            m_data = qobject_cast<KoTextShapeData*>(shape->userData());
             if (m_data != 0)
                 break;
         }

@@ -80,7 +80,7 @@ void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *docu
         break;
     case PageNumber:
         if (value().isEmpty() || ! m_fixed) {
-            if (KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
+            if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
                 KoTextPage* page = shapeData->page();
                 int pagenumber = 0;
                 if (page) {
@@ -91,7 +91,7 @@ void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *docu
         }
         break;
     case PageContinuation:
-        if (KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
+        if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
             KoTextPage* page = shapeData->page();
             int pagenumber = 0;
             if (page) {

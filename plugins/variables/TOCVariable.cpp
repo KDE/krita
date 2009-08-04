@@ -132,7 +132,7 @@ void TOCSource::buildFromDocument(const QTextDocument *source, QTextCursor *targ
         if (outlineLevel > 0) {
             KoShape *shape = docLayout->shapeForPosition(block.position());
             if (shape) {
-                KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
+                KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape->userData());
                 Q_ASSERT( shapeData );
                 if( shapeData )
                 {

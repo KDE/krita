@@ -872,6 +872,8 @@ protected:
      *  Applies a filter if necessary, and calls loadNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
      *
+     * NOTE: this method also creates a new KoView instance!
+     *
      * This method is called from the KReadOnlyPart::openUrl method.
      */
     virtual bool openFile();

@@ -108,8 +108,8 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
 
     // Table width.
     qreal tableWidth = 0;
-    if (tableFormat.width().rawValue() == 0) {
-        // We got a zero width value, so use 100% of parent.
+    if (tableFormat.width().rawValue() == 0 || tableFormat.alignment() == Qt::AlignJustify) {
+        // We got a zero width value or alignment is justify, so use 100% of parent.
         tableWidth = parentWidth;
     } else {
         if (tableFormat.width().type() == QTextLength::FixedLength) {
@@ -133,16 +133,6 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
                                             tableWidth, 1); // the 1 is to make sure it's valid
     tableRect.columnPositions.resize(m_table->columns());
     tableRect.columnWidths.resize(m_table->columns());
-
-    /* should do this somewhere
-            if (tableFormat.alignment() == Qt::AlignRight) {
-                // Table is right-aligned, so add all of the remaining space.
-                tableRect.translate(shape->size().width() - m_tableLayout.width(), 0);
-            } else if (tableFormat.alignment() == Qt::AlignHCenter) {
-                // Table is centered, so add half of the remaining space.
-                tableRect.translate((shape->size().width() - m_tableLayout.width()) / 2, 0);
-            }
-*/
 
     // Get the column and row style manager.
     KoTableColumnAndRowStyleManager *carsManager =

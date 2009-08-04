@@ -21,6 +21,7 @@
 
 #include "KoTextShapeData.h"
 #include "KoTextDocument.h"
+#include "KoTextDocumentLayout.h"
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"
 
@@ -216,6 +217,19 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext &context, int from, int to) c
 {
     KoTextWriter writer(context);
     writer.write(d->document, from, to);
+}
+
+void KoTextShapeData::relayoutFor(KoTextPage &textPage)
+{
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
+    if (layout == 0)
+        return;
+    KoTextPage *oldPage = d->textpage;
+    d->dirty = true;
+    d->textpage = &textPage;
+    layout->interruptLayout();
+    layout->layout();
+    d->textpage = oldPage;
 }
 
 #include "KoTextShapeData.moc"

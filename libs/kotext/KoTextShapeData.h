@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -120,6 +120,17 @@ public:
      * returns the currently set margins for the shape.
      */
     KoInsets shapeMargins() const;
+
+    /**
+     * Calling this method will do a layout run of the text for this shape using the
+     * provided textPage. The currently set page() will not be touched.
+     * This is a special method designed for small texts that are used on more than
+     * one page and have page-specific variables.
+     * In this case the text has to be re-layed out for each shape showing the
+     * document using a different textPage variable.
+     * @param textPage the page to layout the text for.
+     */
+    void relayoutFor(KoTextPage &textPage);
 
     /// Set the provider that provides us the number of the \p page this shape is on.
     void setPage(KoTextPage* textpage);

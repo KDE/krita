@@ -44,15 +44,15 @@ class KisImportCatcher : QObject
 public:
 
     KisImportCatcher(const KUrl & url, KisView2* view);
-
+    ~KisImportCatcher();
 public slots:
 
     void slotLoadingFinished();
 
 private:
-    KisDoc2 * m_doc;
-    KisView2 * m_view;
-    KUrl m_url;
+
+    class Private;
+    Private* const m_d;
 };
 
 #endif

@@ -19,9 +19,21 @@
 #include "kis_import_catcher.h"
 #include <kis_debug.h>
 
+#include <kaboutdata.h>
+#include <kimageio.h>
+#include <kcmdlineargs.h>
+#include <klocale.h>
+#include <kglobal.h>
+#include <kmimetype.h>
+#include <kapplication.h>
+#include <kdebug.h>
+#include <kio/netaccess.h>
+#include <kio/job.h>
 
+#include <KoFilterManager.h>
+
+#include "kis_node_manager.h"
 #include "kis_types.h"
-
 #include "kis_count_visitor.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
@@ -29,22 +41,38 @@
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 
+// Importing logic copied from KoConverter, which was copied from KoDocument, which we cannot
+// use directly since it creates a view. KoDocument needs refactoring!
+
+class KisImportCatcher::Private {
+public:
+    KisDoc2* doc;
+    KisView2* view;
+    KUrl url;
+};
+
 KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
-        : m_doc(new KisDoc2())
-        , m_view(view)
-        , m_url(url)
+        : m_d(new Private)
 {
-    m_doc->openUrl(url);
-    if (!m_doc->isLoading()) {
-        slotLoadingFinished();
-    } else {
-        connect(m_doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
-    }
+    m_d->doc = new KisDoc2(0);
+    m_d->view = view;
+    m_d->url = url;
+    KoFilterManager manager( m_d->doc );
+    QByteArray nativeFormat = m_d->view->document()->nativeFormatMimeType();
+    KoFilter::ConversionStatus status;
+    QString s = manager.importDocument(url.path(), status);
+    qDebug() << "result:" << s << "status" << status;
+    slotLoadingFinished();
+}
+
+KisImportCatcher::~KisImportCatcher()
+{
+    delete m_d;
 }
 
 void KisImportCatcher::slotLoadingFinished()
 {
-    KisImageSP importedImage = m_doc->image();
+    KisImageSP importedImage = m_d->doc->image();
 
     if (importedImage) {
         KisLayerSP importedImageLayer = KisLayerSP(importedImage->rootLayer().data());
@@ -64,25 +92,26 @@ void KisImportCatcher::slotLoadingFinished()
                     importedImage->removeNode(importedImageLayer.data());
             }
 
-            importedImageLayer->setName(m_url.prettyUrl());
-            importedImageLayer->setImage(m_view->image());
+            importedImageLayer->setName(m_d->url.prettyUrl());
+            importedImageLayer->setImage(m_d->view->image());
 
             KisNodeSP parent = 0;
-            KisLayerSP currentActiveLayer = m_view->activeLayer();
+            KisLayerSP currentActiveLayer = m_d->view->activeLayer();
 
             if (currentActiveLayer) {
                 parent = currentActiveLayer->parent();
             }
 
             if (parent.isNull()) {
-                parent = m_view->image()->rootLayer();
+                parent = m_d->view->image()->rootLayer();
             }
 
-            m_view->image()->addNode(importedImageLayer.data(), parent, currentActiveLayer.data());
+            m_d->view->image()->addNode(importedImageLayer.data(), parent, currentActiveLayer.data());
+            m_d->view->nodeManager()->activateNode(importedImageLayer.data());
             importedImageLayer->setDirty();
         }
     }
-    m_doc->deleteLater();
+    m_d->doc->deleteLater();
     deleteLater();
 }
 

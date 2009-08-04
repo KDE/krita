@@ -29,10 +29,10 @@
 #include <kis_debug.h>
 
 #include "config-openctl910.h"
-#include "KoCtlTemplatesRegistry.h"
 
 #ifdef HAVE_OPENCTL_910
 #if HAVE_OPENCTL_910
+#include "KoCtlTemplatesRegistry.h"
 #include "KoCtlCompositeOp.h"
 #endif
 #endif

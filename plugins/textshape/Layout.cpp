@@ -923,10 +923,10 @@ qreal Layout::topMargin()
 
 void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    drawFrame(m_parent->document()->rootFrame(), painter, context);
+    drawFrame(m_parent->document()->rootFrame(), painter, context, 0);
 }
 
-void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
+void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumentLayout::PaintContext &context, int inTable)
 {
     painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
     const QRegion clipRegion = painter->clipRegion();
@@ -949,7 +949,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
         if (table) {
             m_tableLayout.setTable(table);
             m_tableLayout.draw(painter);
-            drawFrame(table, painter, context); // this actually only draws the text inside
+            drawFrame(table, painter, context, inTable+1); // this actually only draws the text inside
             continue;
         } else {
             if (!block.isValid())
@@ -1007,8 +1007,11 @@ selection.format.property(KoCharacterStyle::ChangeTrackerId);
                 painter->restore();
             }
             lastBorder = border;
-        } else if (started) // when out of the cliprect, then we are done drawing.
+        } else if (started && inTable==0) {
+            // when out of the cliprect and no longer in a table, then we are done drawing.
+            // The reason we need to put the table condition on is because we might reenter the cliprect later
             break;
+        }
     }
     if (lastBorder)
         lastBorder->paint(*painter);

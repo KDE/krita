@@ -30,6 +30,8 @@ void TestTableFormats::testTableColumnFormat()
     QCOMPARE(columnFormat.relativeColumnWidth(), 5.0);
     columnFormat.setRelativeColumnWidth(10.0);
     QCOMPARE(columnFormat.relativeColumnWidth(), 10.0);
+
+    QCOMPARE(columnFormat.properties().count(), 4);
 }
 
 void TestTableFormats::testTableRowFormat()
@@ -62,6 +64,8 @@ void TestTableFormats::testTableRowFormat()
     QCOMPARE(rowFormat.keepTogether(), true);
     rowFormat.setKeepTogether(false);
     QCOMPARE(rowFormat.keepTogether(), false);
+
+    QCOMPARE(rowFormat.properties().count(), 5);
 }
 
 QTEST_MAIN(TestTableFormats)

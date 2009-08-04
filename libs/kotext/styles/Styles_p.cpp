@@ -97,7 +97,7 @@ void StylePrivate::removeDuplicates(const QMap<int, QVariant> &other)
     }
 }
 
-QList<int> StylePrivate::keys()
+QList<int> StylePrivate::keys() const
 {
     return m_properties.keys();
 }

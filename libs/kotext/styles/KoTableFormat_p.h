@@ -22,6 +22,7 @@
 
 #include <QSharedData>
 #include <QVariant>
+#include <QMap>
 
 /**
  * Shared data class for KoTableFormat.
@@ -45,6 +46,8 @@ public:
     bool hasProperty(int propertyId) const;
     /// Clear the property \a propertyId.
     void clearProperty(int propertyId);
+    /// Return a map of all properties.
+    QMap<int, QVariant> properties() const;
 private:
     StylePrivate m_stylesPrivate;
 };

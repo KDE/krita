@@ -43,7 +43,7 @@ public:
     void clearAll() {
         m_properties.clear();
     }
-    QList<int> keys();
+    QList<int> keys() const;
     bool operator==(const StylePrivate &other) const;
     bool operator!=(const StylePrivate &other) const;
     bool isEmpty() const;

@@ -19,6 +19,7 @@
 #include "KoTableFormat_p.h"
 
 #include <QVariant>
+#include <QMap>
 
 KoTableFormatPrivate::KoTableFormatPrivate()
 {
@@ -49,3 +50,11 @@ void KoTableFormatPrivate::clearProperty(int propertyId)
     m_stylesPrivate.remove(propertyId);
 }
 
+QMap<int, QVariant> KoTableFormatPrivate::properties() const
+{
+    QMap<int, QVariant> map;
+    foreach (int key, m_stylesPrivate.keys()) {
+        map.insert(key, m_stylesPrivate.value(key));
+    }
+    return map;
+}

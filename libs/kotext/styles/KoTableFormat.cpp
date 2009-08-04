@@ -77,6 +77,11 @@ bool KoTableFormat::hasProperty(int propertyId) const
     return d->hasProperty(propertyId);
 }
 
+QMap<int, QVariant> KoTableFormat::properties() const
+{
+    return d->properties();
+}
+
 bool KoTableFormat::boolProperty(int propertyId) const
 {
     const QVariant prop = d->property(propertyId);

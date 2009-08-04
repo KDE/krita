@@ -21,6 +21,7 @@
 #include "kotext_export.h"
 
 #include <QSharedDataPointer>
+#include <QMap>
 
 class KoTableFormatPrivate;
 
@@ -66,6 +67,8 @@ public:
     void clearProperty(int propertyId);
     /// Returns true if this format has property \a propertyId, otherwise false.
     bool hasProperty(int propertyId) const;
+    /// Returns a map with all properties of this format.
+    QMap<int, QVariant> properties() const;
 
     /// Get bool property \a propertyId.
     bool boolProperty(int propertyId) const;

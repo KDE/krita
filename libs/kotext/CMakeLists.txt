@@ -65,6 +65,10 @@ set(kotext_LIB_SRCS
     styles/KoTableColumnStyle.cpp
     styles/KoTableRowStyle.cpp
     styles/KoTableCellStyle.cpp
+    styles/KoTableFormat.cpp
+    styles/KoTableFormat_p.cpp
+    styles/KoTableColumnFormat.cpp
+    styles/KoTableRowFormat.cpp
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextSharedSavingData.cpp
     opendocument/KoTextLoader.cpp
@@ -126,6 +130,12 @@ install(
     styles/KoListLevelProperties.h
     styles/KoListStyle.h
     styles/KoParagraphStyle.h
+    styles/KoTableColumnStyle.h
+    styles/KoTableRowStyle.h
+    styles/KoTableCellStyle.h
+    styles/KoTableFormat.h
+    styles/KoTableColumnFormat.h
+    styles/KoTableRowFormat.h
     styles/KoStyleManager.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel

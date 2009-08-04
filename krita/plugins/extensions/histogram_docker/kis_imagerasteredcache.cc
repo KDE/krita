@@ -135,7 +135,10 @@ void KisImageRasteredCache::timeOut()
 {
     m_busy = true;
     KisImageSP img = m_view->image();
-
+    if (!img) {
+        kWarning() << "m_view->image() is empty!";
+        return;
+    }
     // Temporary cache: while we are busy, we won't get the mergeImage time and again.
     if (!m_imageProjection)
         m_imageProjection = img->mergedImage();

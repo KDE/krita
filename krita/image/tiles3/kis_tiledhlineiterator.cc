@@ -148,6 +148,7 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
 	     * FIXME: most unlikely case. Think over unlikely(...) here
 	     */
 	    m_xInTile += n;
+	    m_offset += n * m_pixelSize;
 	}
 	else {
 	    qint32 xInTile = calcXInTile(m_x, col);

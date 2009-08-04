@@ -82,11 +82,6 @@ namespace
 
             QRect rc = dev->extent() & m_rc;
 
-/*        if( !(*dev->colorSpace() == *m_projection->colorSpace() ) )
-          {
-          dev->convertTo( m_projection->colorSpace() );
-          }*/
-
             KisPainter gc(m_projection);
             gc.setChannelFlags(layer->channelFlags());
             gc.setCompositeOp(layer->compositeOp());

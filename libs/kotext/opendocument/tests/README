@@ -1,37 +1,62 @@
 This test suite automates the test cases at 
 http://develop.opendocumentfellowship.com/testsuite/.
 
-How to run:
-The ODF test suite requires QScript bindings of Qt. 
-1. git clone git://labs.trolltech.com/qtscriptgenerator
-2. Please read the README in the generator package. Once you have done that
-   * Create the generator by compiling inside generator/
-   * Run the generator. This will create bindings for qt-copy. This will
-     take quite a bit of time since Qt 4.4 is massive. Unfortunately, there
-     seems to be no way to customize what needs to be generated.
-   * Now we have to compile the C++ code generated in the above step.
-     We need only only QtCore and QtGui bindings, so modify the qtbindings.pro 
-     to read something like
-         TEMPLATE = subdirs
-         SUBDIRS = qtscript_core \
-                   qtscript_gui \
-                   qs_eval
-    * Compile bindings!
+How to run the test suite - 3 steps
+-----------------------------------
 
-Now compile the test suite here. Since the code relies on the bindings, it
-needs to find the location of the bindings generated above. This is done by
-setting an environment variable QSCRIPT_PLUGIN_PATH.
-    QSCRIPT_PLUGIN_PATH=~/generator/plugins ./TestLoading
+1) Install QtScript bindings generator:
+
+  The ODF test suite requires QScript bindings for Qt. Clone the repository
+  of the QtScript bindings generator from Gitorious by running:
+
+    $ git clone git://gitorious.org/qt-labs/qtscriptgenerator.git
+
+  (The created directory is called $QTSCRIPTGENERATOR from now on).
+
+  Please read the README in the generator package. Once you have done that,
+  create the generator by compiling inside the 'generator' directory:
+
+    $ cd $QTSCRIPTGENERATOR/generator && qmake && make
+
+  Run the generator:
+
+    $ ./generator
+
+  Make sure that the QTDIR environment variable points to the Qt that you
+  compiled KOffice against, and that the right qmake command is in your PATH
+  This will create bindings for Qt.
+
+2) Compile QtScript bindings for Qt:
+
+  Now we have to compile the C++ code generated in the above step. We need
+  only QtCore and QtGui bindings, so modify the qtbindings/qtbindings.pro to
+  read something like:
+
+  TEMPLATE = subdirs
+  SUBDIRS = qtscript_core \
+          qtscript_gui \
+          qs_eval
+
+  And then compile the bindings in the 'qtbindings' directory:
+
+    $ cd $QTSCRIPTGENERATOR/qtbindings && qmake && make
+
+3) Run the test suite:
+
+  Now it's time to run the test suite. Since the code relies on the bindings,
+  it needs to find the location of the bindings generated above. This is done by
+  setting an environment variable QSCRIPT_PLUGIN_PATH.
+
+    $ QSCRIPT_PLUGIN_PATH=$QTSCRIPTGENERATOR/plugins ./TestLoading
 
 Girish Ramakrishnan (girish@forwardbias.in)
 
-################################################################
+Or in short:
+------------
 
-or in short;
-
-GENERATOR_PATH=~/generator
-[ -f $GENERATOR_PATH/generator/generator ] || exit
-(cd $GENERATOR_PATH/generator && qmake && make && ./generator) || exit
+QTSCRIPTGENERATOR=~/qtscriptgenerator
+[ -f $QTSCRIPTGENERATOR/generator/generator ] || exit
+(cd $QTSCRIPTGENERATOR/generator && qmake && make && ./generator) || exit
 (cd ../qtbindings && echo -e "TEMPLATE=subdirs\nSUBDIRS=qtscript_core qtscript_gui qs_eval" > qtbindings.pro && qmake && make) || exit
-export QSCRIPT_PLUGIN_PATH=$GENERATOR_PATH/plugins
-cd ~/svn/_builddir/koffice/libs/kotext/opendocument/tests && ./TestLoading
+export QSCRIPT_PLUGIN_PATH=$QTSCRIPTGENERATOR/plugins
+cd $YOUR_KOFFICE_BUILDDIR/libs/kotext/opendocument/tests && ./TestLoading

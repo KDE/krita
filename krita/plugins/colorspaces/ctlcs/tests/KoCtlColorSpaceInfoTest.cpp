@@ -25,6 +25,8 @@
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/Type.h>
 
+#include "config-openctl910.h"
+
 void KoCtlColorSpaceInfoTest::testCreation()
 {
     KoCtlColorSpaceInfo info(FILES_DATA_DIR + QString("rgba32f.ctlcs"));
@@ -60,6 +62,9 @@ void KoCtlColorSpaceInfoTest::testCreation()
     QCOMPARE(alphaChannel->size(), 4);
     QCOMPARE(alphaChannel->color(), QColor(0,0,0));
     
+    
+#ifdef HAVE_OPENCTL_910
+#if HAVE_OPENCTL_910
     const GTLCore::PixelDescription& pd = info.pixelDescription();
     QCOMPARE(qint32(pd.channels()), 4);
     QCOMPARE(qint32(pd.alphaPos()), 3);
@@ -68,6 +73,8 @@ void KoCtlColorSpaceInfoTest::testCreation()
     QCOMPARE(pd.channelTypes()[2], GTLCore::Type::Float32);
     QCOMPARE(pd.channelTypes()[3], GTLCore::Type::Float32);
     QCOMPARE(pd.sameTypeChannels(), true);
+#endif
+#endif
 }
 
 

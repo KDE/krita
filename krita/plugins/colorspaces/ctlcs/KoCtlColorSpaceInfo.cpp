@@ -26,6 +26,8 @@
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/Type.h>
 
+#include "config-openctl910.h"
+
 struct KoCtlColorSpaceInfo::ChannelInfo::Private {
     Private() : color(0,0,0) {}
     QString name;
@@ -243,7 +245,11 @@ bool KoCtlColorSpaceInfo::load()
                     }
                     n = n.nextSibling();
                 }
+#ifdef HAVE_OPENCTL_910
+#if HAVE_OPENCTL_910
                 d->pixelDescription = new GTLCore::PixelDescription( channelTypes, alphapos);
+#endif
+#endif
             }
         }
         n = n.nextSibling();

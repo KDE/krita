@@ -319,7 +319,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
 }
 
 void KoColorSpace::bitBlt(quint8 *dst,
-                          qint32 dststride,
+                          qint32 dstRowStride,
                           const KoColorSpace * srcSpace,
                           const quint8 *src,
                           qint32 srcRowStride,
@@ -338,29 +338,27 @@ void KoColorSpace::bitBlt(quint8 *dst,
 
     if (!(*this == *srcSpace)) {
 
-        quint32 len = pixelSize() * rows * cols;
+	quint32 conversionBufferStride = cols * pixelSize();
+        QVector<quint8> * conversionCache = 
+	    threadLocalConversionCache(rows * conversionBufferStride);
 
-        QVector<quint8> * conversionCache = threadLocalConversionCache(len);
-        quint8* conversionData = conversionCache->data();
+	quint8* conversionData = conversionCache->data();
 
         for (qint32 row = 0; row < rows; row++) {
             srcSpace->convertPixelsTo(src + row * srcRowStride,
-                                      conversionData + row * cols * pixelSize(), this,
-                                      cols);
+                                      conversionData + row * conversionBufferStride,
+				      this, cols);
         }
 
-        // The old srcRowStride is no longer valid because we converted to the current cs
-        srcRowStride = (srcRowStride / srcSpace->pixelSize()) * pixelSize();
-
-        op->composite( dst, dststride,
-                       conversionData, srcRowStride,
+        op->composite( dst, dstRowStride,
+                       conversionData, conversionBufferStride,
                        srcAlphaMask, maskRowStride,
                        rows,  cols,
                        opacity, channelFlags );
 
     }
     else {
-        op->composite( dst, dststride,
+        op->composite( dst, dstRowStride,
                        src, srcRowStride,
                        srcAlphaMask, maskRowStride,
                        rows,  cols,
@@ -372,7 +370,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
 //      extra function call in this critical section of code. What to
 //      do?
 void KoColorSpace::bitBlt(quint8 *dst,
-                          qint32 dststride,
+                          qint32 dstRowStride,
                           const KoColorSpace * srcSpace,
                           const quint8 *src,
                           qint32 srcRowStride,
@@ -389,32 +387,30 @@ void KoColorSpace::bitBlt(quint8 *dst,
         return;
 
     if (this != srcSpace) {
-        quint32 len = pixelSize() * rows * cols;
+	quint32 conversionBufferStride = cols * pixelSize();
+        QVector<quint8> * conversionCache = 
+	    threadLocalConversionCache(rows * conversionBufferStride);
 
-        QVector<quint8> * conversionCache = threadLocalConversionCache(len);
         quint8* conversionData = conversionCache->data();
 
         for (qint32 row = 0; row < rows; row++) {
             srcSpace->convertPixelsTo(src + row * srcRowStride,
-                                      conversionData + row * cols * pixelSize(), this,
+                                      conversionData + row * conversionBufferStride, this,
                                       cols);
         }
 
-        // The old srcRowStride is no longer valid because we converted to the current cs
-        srcRowStride = cols * pixelSize();
-
-        op->composite( dst, dststride,
-                       conversionData, srcRowStride,
+        op->composite( dst, dstRowStride,
+                       conversionData, conversionBufferStride,
                        srcAlphaMask, maskRowStride,
                        rows,  cols,
                        opacity);
 
     }
     else {
-        op->composite( dst, dststride,
-                       src,srcRowStride,
+        op->composite( dst, dstRowStride,
+                       src, srcRowStride,
                        srcAlphaMask, maskRowStride,
-                       rows,  cols,
+                       rows, cols,
                        opacity);
     }
 }

@@ -49,8 +49,6 @@ KisPopupButton::KisPopupButton(QWidget* parent)
 
 KisPopupButton::~KisPopupButton()
 {
-    m_d->frameLayout->removeWidget(m_d->popupWidget);
-    m_d->popupWidget->hide();
     delete m_d;
 }
 

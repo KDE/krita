@@ -9,7 +9,6 @@ void TestTableFormats::testTableColumnFormat()
 {
     // Basic functionality testing.
     KoTableColumnFormat columnFormat;
-    QVERIFY(columnFormat.isValid());
 
     columnFormat.setBreakAfter(true);
     QCOMPARE(columnFormat.breakAfter(), true);
@@ -38,7 +37,6 @@ void TestTableFormats::testTableRowFormat()
 {
     // Basic functionality testing.
     KoTableRowFormat rowFormat;
-    QVERIFY(rowFormat.isValid());
 
     rowFormat.setBreakAfter(true);
     QCOMPARE(rowFormat.breakAfter(), true);

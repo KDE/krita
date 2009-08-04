@@ -19,7 +19,7 @@
 
 #include "KoTableColumnFormat.h"
 
-KoTableColumnFormat::KoTableColumnFormat() : KoTableFormat(ColumnFormat)
+KoTableColumnFormat::KoTableColumnFormat() : KoTableFormat()
 {
 }
 
@@ -61,10 +61,5 @@ void KoTableColumnFormat::setRelativeColumnWidth(qreal relativeColumnWidth)
 qreal KoTableColumnFormat::relativeColumnWidth() const
 {
     return doubleProperty(RelativeColumnWidth);
-}
-
-bool KoTableColumnFormat::isValid() const
-{
-    return isColumnFormat();
 }
 

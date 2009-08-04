@@ -21,7 +21,7 @@
 
 #include <QBrush>
 
-KoTableRowFormat::KoTableRowFormat() : KoTableFormat(RowFormat)
+KoTableRowFormat::KoTableRowFormat() : KoTableFormat()
 {
 }
 
@@ -73,10 +73,5 @@ void KoTableRowFormat::setBreakBefore(bool breakBefore)
 bool KoTableRowFormat::breakBefore() const
 {
     return boolProperty(BreakBefore);
-}
-
-bool KoTableRowFormat::isValid() const
-{
-    return isRowFormat();
 }
 

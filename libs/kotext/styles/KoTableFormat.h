@@ -43,16 +43,8 @@ class QBrush;
 class KOTEXT_EXPORT KoTableFormat
 {
 public:
-    enum FormatType {
-        InvalidFormat = -1,
-        ColumnFormat = 1,
-        RowFormat = 2
-    };
-
     /// Creates a new format of type \c InvalidFormat.
     KoTableFormat();
-    /// Creates a new format of type \a type.
-    explicit KoTableFormat(int type);
     /// Creates a format with the same attributes as \a rhs.
     KoTableFormat(const KoTableFormat &rhs);
     /// Assigns \a rhs to this format and returns a reference to this format.
@@ -82,19 +74,8 @@ public:
     /// Get brush property \a propertyId.
     QBrush brushProperty(int propertyId) const;
 
-    /// Returns true if this format is a column format, otherwise false.
-    bool isColumnFormat() const;
-    /// Returns true if this format is a row format, otherwise false.
-    bool isRowFormat() const;
-    /// Returns true of this format is valid, otherwise false.
-    bool isValid() const;
-    /// Returns the type of this format.
-    int type() const;
-
 private:
     QSharedDataPointer<KoTableFormatPrivate> d; // Shared data pointer.
-
-    qint32 m_formatType; // The format type.
 };
 
 #endif // KOTABLEFORMAT_H

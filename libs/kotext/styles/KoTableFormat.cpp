@@ -25,27 +25,18 @@
 #include <QBrush>
 
 KoTableFormat::KoTableFormat() :
-    d(new KoTableFormatPrivate()),
-    m_formatType(InvalidFormat)
-{
-}
-
-KoTableFormat::KoTableFormat(int type) :
-    d(new KoTableFormatPrivate()),
-    m_formatType(type)
+    d(new KoTableFormatPrivate())
 {
 }
 
 KoTableFormat::KoTableFormat(const KoTableFormat &rhs) :
-    d(rhs.d),
-    m_formatType(rhs.m_formatType)
+    d(rhs.d)
 {
 }
 
 KoTableFormat& KoTableFormat::operator=(const KoTableFormat &rhs)
 {
     d = rhs.d;
-    m_formatType = rhs.m_formatType;
     return *this;
 }
 
@@ -126,25 +117,5 @@ QBrush KoTableFormat::brushProperty(int propertyId) const
         return QBrush(Qt::NoBrush);
     }
     return qvariant_cast<QBrush>(prop);
-}
-
-bool KoTableFormat::isColumnFormat() const
-{
-    return type() == ColumnFormat;
-}
-
-bool KoTableFormat::isRowFormat() const
-{
-    return type() == RowFormat;
-}
-
-bool KoTableFormat::isValid() const
-{
-    return type() != InvalidFormat;
-}
-
-int KoTableFormat::type() const
-{
-    return m_formatType;
 }
 

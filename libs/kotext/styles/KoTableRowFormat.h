@@ -37,8 +37,6 @@ class QBrush;
  * <pre>
  * [ODF] OASIS Open Document Format for Office Applications v1.2 part 1
  *       http://www.oasis-open.org/committees/office/
- * [XSL] Extensible Stylesheet Language (XSL)
- *       http://www.w3.org/TR/2001/REC-xsl-20011015/
  * </pre>
  *
  * \sa KoTableFormat, KoTableColumnFormat
@@ -49,11 +47,11 @@ class KOTEXT_EXPORT KoTableRowFormat : public KoTableFormat
     Q_ENUMS(Property)
 public:
     enum Property {
-        Background,         /**< See 18.174 of [ODF]. */
-        MinimumHeight,      /**< See 18.310 of [ODF]. */
-        KeepTogether,       /**< See 18.192 of [ODF] and §7.19.3 of [XSL]. */
-        BreakAfter,         /**< See 18.176 of [ODF] and §7.19.2 of [XSL]. */
-        BreakBefore,        /**< See 18.177 of [ODF] and §7.19.2 of [XSL]. */
+        Background,    /**< Row background. See fo:background-color in [ODF]. */
+        MinimumHeight, /**< Minumum row height. See style:min-row-height in [ODF]. */
+        KeepTogether,  /**< Keep rows together. See fo:keep-together in [ODF]. */
+        BreakAfter,    /**< Break after row. See fo:break-after in [ODF]. */
+        BreakBefore,   /**< Break before row. See fo:break-before in [ODF]. */
     };
 
     /// Creates a row format with default row properties.
@@ -148,9 +146,6 @@ public:
      * \sa setBreakBefore()
      */
     bool breakBefore() const;
-
-    /// Returns \c true if this format is valid, otherwise \c false.
-    bool isValid() const;
 };
 
 #endif // KOTABLEROWFORMAT_H

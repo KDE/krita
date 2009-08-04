@@ -35,8 +35,6 @@
  * <pre>
  * [ODF] OASIS Open Document Format for Office Applications v1.2 part 1
  *       http://www.oasis-open.org/committees/office/
- * [XSL] Extensible Stylesheet Language (XSL)
- *       http://www.w3.org/TR/2001/REC-xsl-20011015/
  * </pre>
  *
  * \sa KoTableFormat, KoTableRowFormat
@@ -47,10 +45,10 @@ class KOTEXT_EXPORT KoTableColumnFormat : public KoTableFormat
     Q_ENUMS(Property)
 public:
     enum Property {
-        BreakAfter,         /**< See 18.176 of [ODF] and §7.19.2 of [XSL]. */
-        BreakBefore,        /**< See 18.177 of [ODF] and §7.19.2 of [XSL]. */
-        ColumnWidth,        /**< See 18.245 of [ODF]. */
-        RelativeColumnWidth /**< See 18.328 of [ODF]. */
+        BreakAfter,         /**< Break after column. See fo:break-after in [ODF]. */
+        BreakBefore,        /**< Break before column. See fo:break-before in [ODF]. */
+        ColumnWidth,        /**< Fixed width of column. See style:column-width in [ODF]. */
+        RelativeColumnWidth /**< Relative width of column. See style:relative-column-width in [ODF]. */
     };
 
     /// Creates a column format with default column properties.
@@ -127,9 +125,6 @@ public:
      * \sa setRelativeColumnWidth()
      */
     qreal relativeColumnWidth() const;
-
-    /// Returns \c true if this format is valid, otherwise \c false.
-    bool isValid() const;
 };
 
 #endif // KOTABLECOLUMNFORMAT_H

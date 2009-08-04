@@ -256,7 +256,7 @@ void KisView2::dropEvent(QDropEvent *event)
     {
         QImage qimg = qvariant_cast<QImage>(event->mimeData()->imageData());
         KisImageSP img = image();
-        
+
         if (img) {
             KisPaintDeviceSP device = new KisPaintDevice( KoColorSpaceRegistry::instance()->rgb8() );
             device->convertFromQImage(qimg,"");
@@ -277,7 +277,7 @@ void KisView2::dropEvent(QDropEvent *event)
                 layer->setDirty();
                 canvas()->update();
                 layerBox()->setCurrentNode( layer );
-            } 
+            }
         }
         return;
     }
@@ -340,7 +340,10 @@ KoZoomController *KisView2::zoomController() const
 
 KisImageSP KisView2::image()
 {
-    return m_d->doc->image();
+    if (m_d && m_d->doc) {
+        return m_d->doc->image();
+    }
+    return 0;
 }
 
 KisCanvasResourceProvider * KisView2::resourceProvider()

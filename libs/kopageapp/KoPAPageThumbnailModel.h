@@ -32,6 +32,8 @@ class KoPAPageBase;
  * Model class for the page thumbnails widget. This class is intented as a simple model to
  * create a list view of available pages. Example usage is widget for choosing master page
  * and slide/page sorter widget.
+ *
+ * XXX: Isn't that duplicating the model for the document section box? (boud)
  */
 class KOPAGEAPP_EXPORT KoPAPageThumbnailModel : public QAbstractListModel
 {

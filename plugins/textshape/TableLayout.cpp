@@ -56,6 +56,9 @@ void TableLayout::setTable(QTextTable *table)
     Q_ASSERT(table);
     TableLayoutData *tableLayoutData;
 
+    if(table == m_table)
+        return; // we are already set
+
     if (!m_tableLayoutDataMap.contains(table)) {
         // Set up new table layout data.
         tableLayoutData = new TableLayoutData();
@@ -223,7 +226,7 @@ void TableLayout::layoutRow(int row)
     while(m_tableLayoutData->m_tableRects.back().fromRow > row) {
         m_tableLayoutData->m_tableRects.removeLast();
     }
-    // Now the following calls to back() are hitting the right table rect
+    // Now the following calls to m_tableRects.back() are hitting the right table rect
 
     QTextTableFormat tableFormat = m_table->format();
 
@@ -379,6 +382,17 @@ QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell) const
     return QRectF(
             tableRect.columnPositions[cell.column()], m_tableLayoutData->m_rowPositions[cell.row()],
             width, height);
+}
+
+QRectF TableLayout::rowBoundingRect(int row) const
+{
+    Q_ASSERT(row < m_tableLayoutData->m_rowPositions.size());
+    TableRect tableRect = m_tableLayoutData->m_tableRects.last(); 
+    while(tableRect.fromRow > row) {
+        tableRect =  m_tableLayoutData->m_tableRects.first();
+    }
+    return QRectF(tableRect.rect.left(), m_tableLayoutData->m_rowPositions[row],
+                tableRect.rect.width(),  m_tableLayoutData->m_rowHeights[row]);
 }
 
 void TableLayout::calculateCellContentHeight(const QTextTableCell &cell)

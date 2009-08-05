@@ -503,6 +503,9 @@ void Layout::handleTable()
     QTextCursor tableFinder(m_block);
     QTextTable *table = tableFinder.currentTable();
     if (table) {
+        // Set the current table on the table layout.
+        m_tableLayout.setTable(table);
+
         // Save the current table cell.
         m_tableCell = table->cellAt(m_block.position());
          Q_ASSERT(m_tableCell.isValid());
@@ -515,9 +518,6 @@ void Layout::handleTable()
         if (!previousCell.isValid()) {
             // The previous cell is invalid, which means we have entered a table.
 
-            // Set the current table on the table layout.
-            m_tableLayout.setTable(table);
-
             // Position the table. Use position of previous block if it's empty.
             QTextBlock prevBlock = m_block.previous();
             QPointF pos = prevBlock.length() == 1 ? prevBlock.layout()->lineAt(0).position() : QPointF(x(), y());
@@ -529,7 +529,7 @@ void Layout::handleTable()
             m_restartingFirstCellAfterTableBreak = false; // You never know
         }
 
-        qDebug() << "working on cell row" << m_tableCell.row() << "col" << m_tableCell.column();
+        qDebug() << "working on cell row" << m_tableCell.row() << "col" << m_tableCell.column() << m_y;
         if (m_tableCell != previousCell) {
             // The current cell is not the same as the one the previous block
             // was in. This means the layout processed stepped into
@@ -557,7 +557,8 @@ void Layout::handleTable()
                         m_restartingFirstCellAfterTableBreak= false;
                     } else {
                         m_tableLayout.layoutRow(previousCell.row());
-                        qDebug() << "layouted row" << previousCell.row() << "and next row at y" << m_y;
+                        shape->update(m_tableLayout.rowBoundingRect(previousCell.row()));
+                        qDebug() << "(in table)layouted row" << previousCell.row() << "and next row at y" << m_y;
 
                         handleTableBreak(previousCell, table);
                     }
@@ -589,7 +590,7 @@ void Layout::handleTable()
                 // Tell the table layout to calculate height of last cell.
                 m_tableLayout.calculateCellContentHeight(previousCell);
                 m_tableLayout.layoutRow(previousCell.row());
-                qDebug() << "layouted row" << previousCell.row() <<"and next row at y" << m_y;
+                qDebug() << "(after table)layouted row" << previousCell.row() <<"and next row at y" << m_y;
             }
 
             handleTableBreak(previousCell, previousTable);
@@ -613,6 +614,8 @@ void Layout::handleTableBreak(QTextTableCell &previousCell, QTextTable *table)
     KoTableColumnAndRowStyleManager *carsManager =
     reinterpret_cast<KoTableColumnAndRowStyleManager *>(
             tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
+        
+    qDebug() << "[in handle TableBreak]" << m_restartingAfterTableBreak;
 
     // Implementation note about break handling:
     // There are a break and 3 rows in play:  some row, [break], previous row, current row
@@ -653,14 +656,17 @@ void Layout::handleTableBreak(QTextTableCell &previousCell, QTextTable *table)
         QTextCursor cur = previousCell.firstCursorPosition();
         cur = table->rowStart(cur);
         m_block = cur.block().next();
+        qDebug() << "pos" << m_data->position() << " and block position" << m_block.position() << "and shape" << shape;
         if (!m_newShape && m_block.position() > m_data->position()) {
-        qDebug() << "pos" << m_data->position() << " and block position" << m_block.position();
             m_data->setEndPosition(m_block.position() - 1);
             nextShape();
             if (m_data) {
                 m_data->setPosition(m_block.position());
             }
             qDebug() << "  requested new shape at " << y();
+        } else {
+            // We already have the correct shape due to earlier layout setting data position and endPosition
+            m_y= m_data->documentOffset();
         }
         layout = m_block.layout();
         //since the height of m_block will unwantedly be added to m_y after we leave, lets just subtract it to counter that
@@ -762,8 +768,6 @@ void Layout::resetPrivate()
     m_newParag = true;
     m_block = m_parent->document()->begin();
     m_currentMasterPage.clear();
-    m_restartingAfterTableBreak = false;
-    m_restartingFirstCellAfterTableBreak = false;
 
     shapeNumber = 0;
     int lastPos = -1;

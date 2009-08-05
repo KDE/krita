@@ -224,6 +224,14 @@ public:
     QRectF cellContentRect(const QTextTableCell &cell) const;
 
     /**
+     * Get the bounding rectangle of a given row.
+     *
+     * @param row the row.
+     * @return the bounding rectangle of the row.
+     */
+    QRectF rowBoundingRect(int row) const;
+
+    /**
      * Calculate the content height of a given cell.
      *
      * Call this when the content of the cell has changed.

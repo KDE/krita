@@ -28,7 +28,8 @@
 #include <QStringList>
 
 KoExistingDocumentPane::KoExistingDocumentPane(QWidget* parent, const QStringList& mimeFilter)
-        : QWidget(parent)
+        : QWidget(parent),
+    m_seen(false)
 {
     QGridLayout* layout = new QGridLayout(this);
     layout->setSpacing(KDialog::spacingHint());
@@ -52,6 +53,8 @@ KoExistingDocumentPane::KoExistingDocumentPane(QWidget* parent, const QStringLis
 
 void KoExistingDocumentPane::onAccepted()
 {
+    if (m_seen) return;
+    m_seen = true;
     m_fileWidget->accept();
     emit openExistingUrl(m_fileWidget->selectedUrl());
 }

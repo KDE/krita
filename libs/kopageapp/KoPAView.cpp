@@ -461,6 +461,15 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
             KoPageLayout &layout = m_activePage->pageLayout();
             QRectF pageRect( 0, 0, layout.width, layout.height );
             m_canvasController->ensureVisible( pageRect );
+        } else if (mode == KoZoomMode::ZOOM_WIDTH) {
+            // horizontally center the page
+            KoPageLayout &layout = m_activePage->pageLayout();
+            QRectF pageRect( 0, 0, layout.width, layout.height );
+            QRect viewRect = m_canvas->viewConverter()->documentToView(pageRect).toRect();
+            viewRect.translate(m_canvas->documentOrigin());
+            QRect currentVisible(qMax(0, -m_canvasController->canvasOffsetX()), qMax(0, -m_canvasController->canvasOffsetY()), m_canvasController->visibleWidth(), m_canvasController->visibleHeight());
+            int horizontalMove = viewRect.center().x() - currentVisible.center().x();
+            m_canvasController->pan(QPoint(horizontalMove, 0));
         }
         kopaCanvas()->update();
     }

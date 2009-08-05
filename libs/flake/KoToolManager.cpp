@@ -807,4 +807,10 @@ KoToolManager* KoToolManager::instance()
     return s_instance;
 }
 
+QString KoToolManager::activeToolId() const
+{
+    if (!d->canvasData) return QString();
+    return d->canvasData->activeToolId;
+}
+
 #include "KoToolManager.moc"

@@ -180,6 +180,8 @@ public:
     /// Injects an input event from a plugin based input device
     void injectDeviceEvent(KoDeviceEvent * event);
 
+    /// Returns the toolId of the currently active tool
+    QString activeToolId() const;
 public slots:
     /**
      * Request switching tool

@@ -31,6 +31,7 @@
 #include "KoShapeShadow.h"
 #include "KoShapeBackground.h"
 #include "KoShapeContainer.h"
+#include "KoFilterEffectStack.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -375,6 +376,10 @@ QRectF KoPathShape::boundingRect() const
         KoInsets insets;
         shadow()->insets(this, insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+    }
+    if (filterEffectStack()) {
+        QRectF clipRect = filterEffectStack()->clipRectForBoundingRect(QRectF(QPointF(), size()));
+        bb |= transform.mapRect(clipRect);
     }
     return bb;
 }

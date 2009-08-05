@@ -300,18 +300,25 @@ bool KoShape::hitTest(const QPointF &position) const
 QRectF KoShape::boundingRect() const
 {
     Q_D(const KoShape);
-    QRectF bb(QPointF(0, 0), size());
+    QSizeF mySize = size();
+    QMatrix transform = absoluteTransformation(0);
+    QRectF bb(QPointF(0, 0), mySize);
     if (d->border) {
         KoInsets insets;
         d->border->borderInsets(this, insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
-    bb = absoluteTransformation(0).mapRect(bb);
+    bb = transform.mapRect(bb);
     if (d->shadow) {
         KoInsets insets;
         d->shadow->insets(this, insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
+    if (d->filterEffectStack) {
+        QRectF clipRect = d->filterEffectStack->clipRectForBoundingRect(QRectF(QPointF(), mySize));
+        bb |= transform.mapRect(clipRect);
+    }
+    
     return bb;
 }
 

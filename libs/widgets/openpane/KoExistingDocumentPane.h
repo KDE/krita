@@ -41,7 +41,7 @@ signals:
 private:
     KFileWidget* m_fileWidget;
     KPushButton* m_openButton;
-    bool seen;
+    bool m_seen;
 };
 
 #endif //KOEXISTINGDOCUMENTPANE_H

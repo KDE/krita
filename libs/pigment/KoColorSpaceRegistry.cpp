@@ -48,6 +48,7 @@
 #include "colorspaces/KoLabColorSpace.h"
 #include "colorspaces/KoRgbU16ColorSpace.h"
 #include "colorspaces/KoRgbU8ColorSpace.h"
+#include "KoColorSpace_p.h"
 
 struct KoColorSpaceRegistry::Private {
     QHash<QString, KoColorProfile * > profileMap;
@@ -167,6 +168,7 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
     }
     d->profileMap.clear();
     foreach( const KoColorSpace * cs, d->csMap) {
+        cs->d->ownedByRegistry = false;
         delete cs;
     }
     d->csMap.clear();
@@ -311,6 +313,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         }
 
         d->csMap[name] = cs;
+        cs->d->ownedByRegistry = true;
         dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;
     }
 
@@ -352,6 +355,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
             QString name = csID + "<comb>" + profile->name();
             d->csMap[name] = cs;
+            cs->d->ownedByRegistry = true;
             dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;
         }
 

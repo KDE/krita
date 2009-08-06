@@ -124,7 +124,7 @@ public:
  *
  */
 class PIGMENTCMS_EXPORT KoColorSpace {
-
+    friend class KoColorSpaceRegistry;
 protected:
     /// Only for use by classes that serve as baseclass for real color spaces
     KoColorSpace();

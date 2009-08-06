@@ -16,12 +16,13 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
+#include "KoColorSpace.h"
+
 #include <QThreadStorage>
 #include <QByteArray>
 #include <QBitArray>
 
-
-#include "KoColorSpace.h"
 #include "KoChannelInfo.h"
 #include "DebugPigment.h"
 #include "KoCompositeOp.h"
@@ -36,23 +37,7 @@
 #include "KoFallBackColorTransformation.h"
 #include "KoUniqueNumberForIdServer.h"
 
-struct KoColorSpace::Private {
-    QString id;
-    quint32 idNumber;
-    QString name;
-    QHash<QString, KoCompositeOp *> compositeOps;
-    QList<KoChannelInfo *> channels;
-    KoMixColorsOp* mixColorsOp;
-    KoConvolutionOp* convolutionOp;
-    QThreadStorage< QVector<quint8>* > conversionCache;
-
-
-    mutable KoColorConversionTransformation* transfoToRGBA16;
-    mutable KoColorConversionTransformation* transfoFromRGBA16;
-    mutable KoColorConversionTransformation* transfoToLABA16;
-    mutable KoColorConversionTransformation* transfoFromLABA16;
-
-};
+#include "KoColorSpace_p.h"
 
 KoColorSpace::KoColorSpace()
     : d (new Private())
@@ -75,6 +60,7 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
 
 KoColorSpace::~KoColorSpace()
 {
+    Q_ASSERT(!d->ownedByRegistry);
     qDeleteAll(d->compositeOps);
     foreach(KoChannelInfo * channel, d->channels)
     {

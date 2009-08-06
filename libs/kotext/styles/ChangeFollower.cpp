@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -49,6 +49,11 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles)
         return;
     }
 
+    // optimisation strategy;  store the formatid of the formats we checked into
+    // a qset for 'hits' and 'ignores' and avoid the copying of the format
+    // (fragment.charFormat() / block.blockFormat()) when the formatId is
+    // already checked previosly
+
     QTextCursor cursor(m_document);
     QTextBlock block = cursor.block();
     while (block.isValid()) {
@@ -81,26 +86,6 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles)
         }
         block = block.next();
     }
-    /*  I think we want to look at Qt to see if this _much_ faster way can ever work.
-        foreach(QTextFormat format, m_document->allFormats()) {
-            int id = format.intProperty(KoParagraphStyle::StyleId);
-            if(id <= 0)
-                continue;
-            if(changedStyles.contains(id)) {
-                if(format.isBlockFormat()) { // aka parag
-                    KoParagraphStyle *style = m_styleManager->paragraphStyle(id);
-                    Q_ASSERT(style);
-                    QTextBlockFormat bf = format.toBlockFormat();
-                    style->applyStyle(bf);
-                }
-                else if(format.isCharFormat()) {
-                    KoCharacterStyle *style = m_styleManager->characterStyle(id);
-                    Q_ASSERT(style);
-                    QTextCharFormat cf = format.toCharFormat();
-                    style->applyStyle(cf);
-                }
-            }
-        } */
 }
 
 #include "ChangeFollower.moc"

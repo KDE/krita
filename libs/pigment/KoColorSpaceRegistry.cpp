@@ -499,3 +499,9 @@ KoColorConversionCache* KoColorSpaceRegistry::colorConversionCache() const
 {
     return d->colorConversionCache;
 }
+
+const KoColorSpace* KoColorSpaceRegistry::permanentColorspace( const KoColorSpace* _colorSpace )
+{
+  if(_colorSpace->d->ownedByRegistry) return _colorSpace;
+  else return colorSpace(_colorSpace->id(), _colorSpace->profile());
+}

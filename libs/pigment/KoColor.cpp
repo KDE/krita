@@ -57,7 +57,7 @@ KoColor::KoColor(const KoColorSpace * colorSpace)
     : d(new Private())
 {
     Q_ASSERT(colorSpace);
-    d->colorSpace = colorSpace;
+    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
     d->data = new quint8[d->colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
 }
@@ -73,7 +73,7 @@ KoColor::KoColor(const QColor & color, const KoColorSpace * colorSpace)
 {
     Q_ASSERT(color.isValid());
     Q_ASSERT(colorSpace);
-    d->colorSpace = colorSpace;
+    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
 
     d->data = new quint8[colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
@@ -86,7 +86,7 @@ KoColor::KoColor(const quint8 * data, const KoColorSpace * colorSpace)
 {
     Q_ASSERT(colorSpace);
     Q_ASSERT(data);
-    d->colorSpace = colorSpace;
+    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
     d->data = new quint8[colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
     memmove(d->data, data, colorSpace->pixelSize());
@@ -97,7 +97,7 @@ KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
     : d(new Private())
 {
     Q_ASSERT(colorSpace);
-    d->colorSpace = colorSpace;
+    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
     d->data = new quint8[colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
 
@@ -108,6 +108,7 @@ KoColor::KoColor(const KoColor & rhs)
     : d(new Private())
 {
     d->colorSpace = rhs.colorSpace();
+    Q_ASSERT(d->colorSpace == KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace));
     if(d->colorSpace && rhs.d->data)
     {
         d->data = new quint8[d->colorSpace->pixelSize()];
@@ -122,6 +123,7 @@ KoColor & KoColor::operator=(const KoColor & rhs)
     delete [] d->data;
     d->data = 0;
     d->colorSpace = rhs.colorSpace();
+    Q_ASSERT(d->colorSpace == KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace));
 
     if (rhs.d->colorSpace && rhs.d->data) {
         d->data = new quint8[d->colorSpace->pixelSize()];
@@ -163,7 +165,7 @@ void KoColor::setColor(quint8 * data, const KoColorSpace * colorSpace)
     delete [] d->data;
     d->data = new quint8[colorSpace->pixelSize()];
     memcpy(d->data, data, colorSpace->pixelSize());
-    d->colorSpace = colorSpace;
+    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
 }
 
 // To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a, profile

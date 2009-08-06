@@ -238,6 +238,11 @@ public:
      */
     KoColorConversionCache* colorConversionCache() const;
     
+    /**
+     * @return a permanent colorspace owned by the registry, of the same type and profile
+     *         as the one given in argument
+     */
+    const KoColorSpace* permanentColorspace( const KoColorSpace* _colorSpace );
 private:
 
     bool isCached(const QString & csId, const QString & profileName) const;

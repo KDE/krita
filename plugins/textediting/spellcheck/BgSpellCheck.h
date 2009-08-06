@@ -37,7 +37,8 @@ public:
     void startRun(QTextDocument *document, int startPosition, int endPosition);
 
 protected:
-    virtual QString fetchMoreText(); /// reimplemented from super
+    /// reimplemented
+    virtual QString fetchMoreText();
 
 private slots:
     void foundMisspelling(const QString &word, int start);

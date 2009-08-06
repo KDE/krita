@@ -37,8 +37,10 @@ void BgSpellCheck::startRun(QTextDocument *document, int startPosition, int endP
     m_cursor.setPosition(startPosition);
     m_currentPosition = -1;
     m_endPosition = endPosition;
-    // kDebug(31000) << "Starting BgSpellCheck: " << startPosition;
-    BackgroundChecker::start();
+    if (m_currentPosition < m_endPosition) {
+        kDebug(31000) << "Starting:" << m_currentPosition << m_endPosition;
+        BackgroundChecker::start();
+    }
 }
 
 QString BgSpellCheck::fetchMoreText()

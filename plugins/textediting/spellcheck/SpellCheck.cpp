@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2008 Fredy Yanardi <fyanardi@gmail.com>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -61,11 +61,23 @@ SpellCheck::SpellCheck()
 void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
 {
     setDocument(document);
-    if (m_documentIsLoading || !m_enableSpellCheck) return;
+    if (m_documentIsLoading || !m_enableSpellCheck)
+        return;
 
-    QTextCursor cursor(document);
-    selectWord(cursor, cursorPosition);
-    m_bgSpellCheck->startRun(m_document, cursor.anchor(), cursor.position());
+    QTextBlock block = document->findBlock(cursorPosition);
+    if (!block.isValid())
+        return;
+    QList<QTextLayout::FormatRange> ranges = block.layout()->additionalFormats();
+    QList<QTextLayout::FormatRange> newRanges;
+    QList<QTextLayout::FormatRange>::Iterator iter = ranges.begin();
+    while (iter != ranges.end()) {
+        QTextLayout::FormatRange r = *(iter);
+        if (r.format != m_defaultMisspelledFormat) // any ranges in the block at higher cursor pos can be removed.
+            newRanges.append(r);
+        ++iter;
+    }
+    block.layout()->setAdditionalFormats(newRanges);
+    m_bgSpellCheck->startRun(m_document, block.position(), block.position() + block.length());
 }
 
 void SpellCheck::finishedParagraph(QTextDocument *document, int cursorPosition)
@@ -158,18 +170,6 @@ void SpellCheck::highlightMisspelled(const QString &word, int startPosition, boo
     range.length = word.trimmed().length();
 
     QList<QTextLayout::FormatRange> ranges = layout->additionalFormats();
-    QList<QTextLayout::FormatRange>::Iterator iter = ranges.begin();
-    const int rangeEnd = range.start + range.length;
-    while (iter != ranges.end()) {
-        QTextLayout::FormatRange r = *(iter);
-        const int rEnd = r.start + r.length;
-        if ((rEnd >= range.start && rEnd <= rangeEnd) || (rangeEnd >= r.start && rangeEnd <= rEnd // intersect
-                && r.format == m_defaultMisspelledFormat)) {
-            ranges.erase(iter);
-            break;
-        }
-        ++iter;
-    }
     range.format = m_defaultMisspelledFormat;
     ranges.append(range);
     m_allowSignals = false;
@@ -236,10 +236,8 @@ void SpellCheck::checkDocument(int position, int charsRemoved, int charsAdded)
         m_document->markContentsDirty(changeStart, changeEnd);
     m_allowSignals = true;
 
-    if (recheck) {
-        QTextCursor cursor(m_document);
+    if (recheck)
         m_bgSpellCheck->startRun(m_document, changeStart, changeEnd);
-    }
 }
 
 void SpellCheck::setDocument(QTextDocument *document)

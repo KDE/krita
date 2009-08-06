@@ -554,8 +554,8 @@ void KoPAView::doUpdateActivePage( KoPAPageBase * page )
 
     if ( pageChanged ) {
         emit activePageChanged();
-        m_canvasController->setScrollBarValue(scrollValue);
     }
+    m_canvasController->setScrollBarValue(scrollValue);
 }
 
 void KoPAView::setActivePage( KoPAPageBase* page )

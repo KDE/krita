@@ -29,11 +29,14 @@
 
 #include "KoCtlColorSpace.h"
 #include "KoCtlBuffer.h"
+#include "KoCtlMutex.h"
+
 #include <OpenCTL/Program.h>
 #include <OpenCTL/Module.h>
 
 KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace * cs, const GTLCore::PixelDescription& _pd) : KoCompositeOp(cs, idForFile(_template->fileName()), descriptionForFile(_template->fileName()), categoryForFile(_template->fileName())), m_withMaskProgram(0), m_withoutMaskProgram(0)
 {
+  QMutexLocker lock(ctlMutex);
   OpenCTL::Module* module = _template->generateModule(_pd);
   module->compile();
   if(module->isCompiled())
@@ -56,6 +59,7 @@ KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColo
       delete m_withMaskProgram;
       m_withMaskProgram = 0;
     }
+    dbgPlugins << "m_withoutMaskProgram = " << m_withoutMaskProgram << " m_withMaskProgram = " << m_withMaskProgram;
   } else {
     dbgPlugins << "Composite op compilation failure";
   }

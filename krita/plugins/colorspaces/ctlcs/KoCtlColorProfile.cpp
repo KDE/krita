@@ -26,6 +26,7 @@
 
 #include <QDomDocument>
 #include <QFile>
+#include <QMutexLocker>
 
 #include <QString>
 
@@ -42,7 +43,7 @@
 #include <GTLCore/Value.h>
 #include <OpenCTL/Program.h>
 #include <OpenCTL/Module.h>
-
+#include "KoCtlMutex.h"
 #include "KoCtlParser.h"
 
 struct ConversionInfo {
@@ -304,6 +305,7 @@ bool KoCtlColorProfile::load()
                 QDomNode nCDATA = e.firstChild();
                 if( not nCDATA.isNull())
                 {
+                    QMutexLocker lock(ctlMutex);
                     QDomCDATASection CDATA = nCDATA.toCDATASection();
                     dbgPigment << CDATA.data();
                     d->module = new OpenCTL::Module(name().toAscii().data());

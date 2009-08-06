@@ -19,6 +19,8 @@
 
 #include "ctl_cs_plugin.h"
 
+#include <QMutex>
+
 #include <kcomponentdata.h>
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
@@ -30,6 +32,9 @@
 #include "kis_debug.h"
 #include "KoCtlColorSpaceInfo.h"
 #include "KoCtlColorSpaceFactory.h"
+#include "KoCtlMutex.h"
+
+QMutex* ctlMutex = 0;
 
 // #include "kis_lms_f32_colorspace.h"
 
@@ -48,7 +53,8 @@ K_EXPORT_COMPONENT_FACTORY(krita_ctlcs_plugin, CTLCSPluginPluginFactory("krita")
 CTLCSPlugin::CTLCSPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-
+    Q_ASSERT(ctlMutex == 0);
+    ctlMutex = new QMutex;
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     {
         // Set PigmentCMS's ctl module directory

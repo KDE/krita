@@ -57,3 +57,16 @@ set_target_properties(kopageapp PROPERTIES
 )
 install(TARGETS kopageapp  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+install(FILES
+    kopageapp_export.h
+    KoPACanvas.h
+    KoPADocument.h
+    KoPageApp.h
+    KoPALoadingContext.h
+    KoPAPageBase.h
+    KoPAPageContainerModel.h
+    KoPAUtil.h
+    KoPAView.h
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+)

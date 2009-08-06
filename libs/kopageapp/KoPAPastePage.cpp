@@ -29,6 +29,7 @@
 #include "KoPALoadingContext.h"
 #include "KoPADocument.h"
 #include "KoPAMasterPage.h"
+#include "KoPASavingContext.h"
 #include "commands/KoPAPageInsertCommand.h"
 
 #include <kdebug.h>

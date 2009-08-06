@@ -28,7 +28,6 @@
 #include <KoXmlReader.h>
 
 #include "KoPageApp.h"
-#include "KoPASavingContext.h"
 #include "kopageapp_export.h"
 
 #define CACHE_PAGE_THUMBNAILS
@@ -40,6 +39,7 @@ class KoShape;
 class KoPALoadingContext;
 class KoShapeManagerPaintingStrategy;
 class KoZoomHandler;
+class KoPASavingContext;
 
 /**
  * Base class used for KoPAMasterPage and KoPAPage

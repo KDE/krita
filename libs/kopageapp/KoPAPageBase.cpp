@@ -22,6 +22,7 @@
 #include "KoPALoadingContext.h"
 #include "KoPAPixmapCache.h"
 #include "KoPAPageContainerModel.h"
+#include "KoPASavingContext.h"
 
 #include <QPainter>
 

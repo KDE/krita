@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
+
    Copyright (C) 2006-2009 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2009 Inge Wallin            <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -68,14 +70,13 @@ public:
 
     void updateReadWrite( bool readwrite );
 
-    virtual KoViewConverter * viewConverter( KoPACanvas * canvas ) { Q_UNUSED( canvas ); return &m_zoomHandler; }
+    virtual KoViewConverter * viewConverter( KoPACanvas * canvas );
 
-    KoZoomHandler* zoomHandler() { return &m_zoomHandler; }
+    KoZoomHandler    *zoomHandler()    const;
+    KoZoomController *zoomController() const;
 
-    KoZoomController *zoomController() const { return m_zoomController; }
-
-    KoRuler *horizontalRuler() { return m_horizontalRuler; }
-    KoRuler *verticalRuler() { return m_verticalRuler; }
+    KoRuler *horizontalRuler();
+    KoRuler *verticalRuler();
 
     KoPACanvas * kopaCanvas() { return m_canvas; }
     KoPACanvas * kopaCanvas() const { return m_canvas; }
@@ -247,44 +248,13 @@ protected slots:
 
 protected:
     KoPADocument *m_doc;
-    KoPACanvas *m_canvas;
+    KoPACanvas   *m_canvas;
     KoPAPageBase *m_activePage;
     KoPAViewMode *m_viewMode;
 
 private:
-
-    KoPADocumentStructureDocker * m_documentStructureDocker;
-
-    KoCanvasController * m_canvasController;
-    KoZoomController * m_zoomController;
-    KoZoomHandler m_zoomHandler;
-
-    KAction *m_editPaste;
-    KAction *m_deleteSelectionAction;
-
-    KToggleAction *m_actionViewSnapToGrid;
-    KToggleAction *m_actionViewShowGuides;
-    KToggleAction *m_actionViewShowMasterPages;
-
-    KAction * m_actionInsertPage;
-    KAction * m_actionCopyPage;
-    KAction * m_actionDeletePage;
-
-    KAction *m_actionMasterPage;
-    KAction *m_actionPageLayout;
-
-    KoRuler *m_horizontalRuler;
-    KoRuler *m_verticalRuler;
-    KToggleAction* m_viewRulers;
-
-    KoZoomAction *m_zoomAction;
-
-    KoFind * m_find;
-
-    KoPAViewMode *m_viewModeNormal;
-
-    // status bar
-    QLabel * m_status;       ///< ordinary status
+    class Private;
+    Private * const d;
 };
 
 #endif /* KOPAVIEW_H */

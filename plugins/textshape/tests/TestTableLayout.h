@@ -77,6 +77,8 @@ private slots:
     void testCellColumnSpanning();
     /// Test cell row spanning.
     void testCellRowSpanning();
+    /// Test row spanning when content is inserted in spanning row.
+    void testCellRowSpanningCellHeight();
     /// Test cell row and column spanning.
     void testCellRowAndColumnSpanning();
     /// Test minimum row height.
@@ -87,12 +89,8 @@ private slots:
     void testVariableColumnWidth();
     /// Test table width and relative width.
     void testTableWidth();
-    /*
-     * Tests that the height of the right row is updated when the span
-     * area of a cell with row spanning gets its content changed from
-     * a text insertion.
-     */
-    void testCellRowSpanningCellHeight();
+    /// Test table alignment.
+    void testTableAlignment();
 
 private:
     QTextDocument *m_doc;

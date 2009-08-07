@@ -622,6 +622,122 @@ void TestTableLayout::testColumnWidth()
     QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(20, 0, 180, 16));
 }
 
+void TestTableLayout::testTableAlignment()
+{
+    KoTableStyle *tableStyle = new KoTableStyle();
+    QVERIFY(tableStyle);
+    tableStyle->setWidth(QTextLength(QTextLength::FixedLength, 50.0));
+    tableStyle->setAlignment(Qt::AlignRight);
+    initTestSimple(1, 2, tableStyle);
+    m_layout->layout();
+
+    // Right aligned.
+
+    /*
+     * Cell 0,0 rules:
+     *   x = 150 = 200 - 50 (shape width - table width)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 50 / 2 = 25 (table width / number of columns)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    QTextTableCell cell1 = m_table->cellAt(0, 0);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(150, 0, 25, 16));
+
+    /*
+     * Cell 0,1 rules:
+     *   x = 175 = (200 - 50) + 25 ((shape width - table width) + column width)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 50 / 2 = 25 (table width / number of columns)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    QTextTableCell cell2 = m_table->cellAt(0, 1);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(175, 0, 25, 16));
+
+    // Centered.
+
+    tableStyle->setAlignment(Qt::AlignHCenter);
+    QTextTableFormat tableFormat = m_table->format();
+    tableStyle->applyStyle(tableFormat);
+    m_table->setFormat(tableFormat);
+    m_layout->layout();
+
+    /*
+     * Cell 0,0 rules:
+     *   x = 75 = (200 - 50) / 2 ((shape width - table width) / 2)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 50 / 2 = 25 (table width / number of columns)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    cell1 = m_table->cellAt(0, 0);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(75, 0, 25, 16));
+
+    /*
+     * Cell 0,1 rules:
+     *   x = 100 = ((200 - 50) / 2) + 25 (((shape width - table width) / 2) + column width)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 50 / 2 = 25 (table width / number of columns)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    cell2 = m_table->cellAt(0, 1);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(100, 0, 25, 16));
+
+    // Left aligned.
+
+    tableStyle->setAlignment(Qt::AlignLeft);
+    tableFormat = m_table->format();
+    tableStyle->applyStyle(tableFormat);
+    m_table->setFormat(tableFormat);
+    m_layout->layout();
+
+    /*
+     * Cell 0,0 rules:
+     *   x = 0 (no borders/margins/paddings)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 50 / 2 = 25 (table width / number of columns)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    cell1 = m_table->cellAt(0, 0);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0, 25, 16));
+
+    /*
+     * Cell 0,1 rules:
+     *   x = 50 / 2 = 25 (table width / number of columns)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 50 / 2 = 25 (table width / number of columns)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    cell2 = m_table->cellAt(0, 1);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(25, 0, 25, 16));
+
+    // Justify aligned.
+
+    tableStyle->setAlignment(Qt::AlignJustify); // Will overrule the explicitly set table width.
+    tableFormat = m_table->format();
+    tableStyle->applyStyle(tableFormat);
+    m_table->setFormat(tableFormat);
+    m_layout->layout();
+
+    /*
+     * Cell 0,0 rules:
+     *   x = 0 (no borders/margins/paddings)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 200 / 2 = 100 (shape width / number of columns)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    cell1 = m_table->cellAt(0, 0);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell1), QRectF(0, 0, 100, 16));
+
+    /*
+     * Cell 0,1 rules:
+     *   x = 200 / 2 = 100 (shape width / number of columns)
+     *   y = 0 (no borders/margins/paddings)
+     *   width = 200 / 2 = 100 (shape width / number of columns)
+     *   height = 1 * 16 = 16 (number of lines * line height)
+     */
+    cell2 = m_table->cellAt(0, 1);
+    QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(100, 0, 100, 16));
+}
+
 QTEST_KDEMAIN(TestTableLayout, GUI)
 
 #include <TestTableLayout.moc>

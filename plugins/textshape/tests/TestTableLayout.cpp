@@ -221,12 +221,54 @@ void TestTableLayout::testBasicLayout()
     QTextTableCell cell4 = m_table->cellAt(1, 1);
     QCOMPARE(m_textLayout->m_tableLayout.cellBoundingRect(cell4), QRectF(100, 16, 100, 16));
 
+    // Check position of blocks in cells.
+
     /*
-     * TODO:
-     *   - Check that block positions are correct after inital layout.
-     *   - ... and after new blocks are inserted.
-     *   - ... and after new lines are inserted as a result of a line break.
-     *   - ... and after table rows / columns are added.
+     * Blocks in cell 0,0 rules:
+     *   Position      Content      Layout bounding rect
+     *   1             "Cell 1"     0, 0 100x16
+     */
+    QTextBlock block1 = cell1.firstCursorPosition().block();
+    QCOMPARE(block1.position(), 1);
+    QVERIFY(block1.layout());
+    QCOMPARE(block1.layout()->lineCount(), 1);
+    QCOMPARE(block1.layout()->boundingRect(), QRectF(0, 0, 100, 16));
+
+    /*
+     * Blocks in cell 0,1 rules:
+     *   Position      Content      Layout bounding rect
+     *   8             "Cell 2"     100, 0 100x16
+     */
+    QTextBlock block2 = cell2.firstCursorPosition().block();
+    QCOMPARE(block2.position(), 8);
+    QVERIFY(block2.layout());
+    QCOMPARE(block2.layout()->lineCount(), 1);
+    QCOMPARE(block2.layout()->boundingRect(), QRectF(100, 0, 100, 16));
+
+    /*
+     * Blocks in cell 1,0 rules:
+     *   Position      Content      Layout bounding rect
+     *   15            "Cell 3"     0, 16 100x16
+     */
+    QTextBlock block3 = cell3.firstCursorPosition().block();
+    QCOMPARE(block3.position(), 15);
+    QVERIFY(block3.layout());
+    QCOMPARE(block3.layout()->lineCount(), 1);
+    QCOMPARE(block3.layout()->boundingRect(), QRectF(0, 16, 100, 16));
+
+    /*
+     * Blocks in cell 1,1 rules:
+     *   Position      Content      Layout bounding rect
+     *   22            "Cell 4"     100, 16 100x16
+     */
+    QTextBlock block4 = cell4.firstCursorPosition().block();
+    QCOMPARE(block4.position(), 22);
+    QVERIFY(block4.layout());
+    QCOMPARE(block4.layout()->lineCount(), 1);
+    QCOMPARE(block4.layout()->boundingRect(), QRectF(100, 16, 100, 16));
+
+    /*
+     * TODO: Insert/remove rows/columns.
      */
 
     cleanupTest();

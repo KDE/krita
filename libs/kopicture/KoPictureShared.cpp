@@ -386,7 +386,7 @@ QMimeData* KoPictureShared::dragObject(QWidget *dragSource, const char *name)
 {
     if (m_base)
         return m_base->dragObject(dragSource, name);
-    return 0L;
+    return 0;
 }
 
 QImage KoPictureShared::generateImage(const QSize& size)

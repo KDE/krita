@@ -39,7 +39,7 @@ class KOMAIN_EXPORT KoFilterEntry : public KShared
 public:
     typedef KSharedPtr<KoFilterEntry> Ptr;
 
-    //KoFilterEntry() : weight( 0 ) { m_service = 0L; } // for QList
+    //KoFilterEntry() : weight( 0 ) { m_service = 0; } // for QList
     explicit KoFilterEntry(const KService::Ptr& service);
     ~KoFilterEntry() { }
 

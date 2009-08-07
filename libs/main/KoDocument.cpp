@@ -74,7 +74,7 @@
 #define INTERNAL_PREFIX "intern:/"
 // Warning, keep it sync in koStore.cc
 
-QList<KoDocument*> *KoDocument::s_documentList = 0L;
+QList<KoDocument*> *KoDocument::s_documentList = 0;
 
 using namespace std;
 class KoViewWrapperWidget;
@@ -100,7 +100,7 @@ class KoDocument::Private
 {
 public:
     Private() :
-            filterManager(0L),
+            filterManager(0),
             specialOutputFlag(0),   // default is native format
             isImporting(false),
             isExporting(false),
@@ -187,7 +187,7 @@ public:
         KGlobal::locale()->insertCatalog("koffice");
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
-        m_view = 0L;
+        m_view = 0;
         // Avoid warning from KParts - we'll have the KoView as focus proxy anyway
         setFocusPolicy(Qt::ClickFocus);
     }
@@ -204,7 +204,7 @@ public:
 
     virtual void childEvent(QChildEvent *ev) {
         if (ev->type() == QEvent::ChildAdded)
-            resizeEvent(0L);
+            resizeEvent(0);
     }
 
     // Called by openFile()
@@ -246,7 +246,7 @@ KoDocument::KoDocument(QWidget * parentWidget, QObject* parent, bool singleViewM
         : KParts::ReadWritePart(parent)
         , d(new Private)
 {
-    if (s_documentList == 0L)
+    if (s_documentList == 0)
         s_documentList = new QList<KoDocument*>;
     s_documentList->append(this);
 
@@ -591,7 +591,7 @@ QAction *KoDocument::action(const QDomElement &element) const
     if (!d->views.isEmpty())
         return d->views.first()->action(element);
     else
-        return 0L;
+        return 0;
 }
 
 QDomDocument KoDocument::domDocument() const
@@ -1147,7 +1147,7 @@ bool KoDocument::openFile()
         QApplication::restoreOverrideCursor();
         if (d->autoErrorHandlingEnabled)
             // Maybe offer to create a new document with that name ?
-            KMessageBox::error(0L, i18n("The file %1 does not exist.", localFilePath()));
+            KMessageBox::error(0, i18n("The file %1 does not exist.", localFilePath()));
         d->bLoading = false;
         return false;
     }
@@ -1306,7 +1306,7 @@ bool KoDocument::openFile()
     if (ok && d->bSingleViewMode) {
         // See addClient below
         KXMLGUIFactory* guiFactory = factory();
-        if (guiFactory)  // 0L when splitting views in konq, for some reason
+        if (guiFactory)  // 0 when splitting views in konq, for some reason
             guiFactory->removeClient(this);
 
         if (!d->views.isEmpty()) {
@@ -1445,7 +1445,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
         if (doc.setContent(&in, &errorMsg, &errorLine, &errorColumn)) {
             res = loadXML(doc, 0);
             if (res)
-                res = completeLoading(0L);
+                res = completeLoading(0);
         } else {
             kError(30003) << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (QFile))" << endl
             << "  Line: " << errorLine << " Column: " << errorColumn << endl
@@ -1756,7 +1756,7 @@ int KoDocument::queryCloseDia()
     if (name.isEmpty())
         name = i18n("Untitled");
 
-    int res = KMessageBox::warningYesNoCancel(0L,
+    int res = KMessageBox::warningYesNoCancel(0,
               i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name));
 
     switch (res) {
@@ -2032,18 +2032,18 @@ QString KoDocument::errorMessage() const
 void KoDocument::showSavingErrorDialog()
 {
     if (d->lastErrorMessage.isEmpty()) {
-        KMessageBox::error(0L, i18n("Could not save\n%1", localFilePath()));
+        KMessageBox::error(0, i18n("Could not save\n%1", localFilePath()));
     } else if (d->lastErrorMessage != "USER_CANCELED") {
-        KMessageBox::error(0L, i18n("Could not save %1\nReason: %2", localFilePath(), d->lastErrorMessage));
+        KMessageBox::error(0, i18n("Could not save %1\nReason: %2", localFilePath(), d->lastErrorMessage));
     }
 }
 
 void KoDocument::showLoadingErrorDialog()
 {
     if (d->lastErrorMessage.isEmpty()) {
-        KMessageBox::error(0L, i18n("Could not open\n%1", url().pathOrUrl()));
+        KMessageBox::error(0, i18n("Could not open\n%1", url().pathOrUrl()));
     } else if (d->lastErrorMessage != "USER_CANCELED") {
-        KMessageBox::error(0L, i18n("Could not open %1\nReason: %2", url().pathOrUrl(), d->lastErrorMessage));
+        KMessageBox::error(0, i18n("Could not open %1\nReason: %2", url().pathOrUrl(), d->lastErrorMessage));
     }
 }
 

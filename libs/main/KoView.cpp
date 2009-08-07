@@ -56,11 +56,11 @@ class KoViewPrivate
 {
 public:
     KoViewPrivate() {
-        manager = 0L;
-        tempActiveWidget = 0L;
+        manager = 0;
+        tempActiveWidget = 0;
         registered = false;
         documentDeleted = false;
-        viewBar = 0L;
+        viewBar = 0;
     }
     ~KoViewPrivate() {
     }
@@ -438,7 +438,7 @@ void KoView::setupGlobalActions()
 
 void KoView::newView()
 {
-    Q_ASSERT((d != 0L && d->document));
+    Q_ASSERT((d != 0 && d->document));
 
     KoDocument *thisDocument = d->document;
     KoMainWindow *shell = new KoMainWindow(thisDocument->componentData());
@@ -473,7 +473,7 @@ KXmlGuiWindow * KoView::mainWindow() const
 KStatusBar * KoView::statusBar() const
 {
     KoMainWindow *mw = shell();
-    return mw ? mw->statusBar() : 0L;
+    return mw ? mw->statusBar() : 0;
 }
 
 void KoView::slotActionStatusText(const QString &text)

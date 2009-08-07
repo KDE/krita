@@ -98,9 +98,9 @@ public:
     /**
      * Create a dragobject containing this picture.
      * @param dragSource must be 0 when copying to the clipboard
-     * @return 0L if the picture is null!
+     * @return 0 if the picture is null!
      */
-    QMimeData* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
+    QMimeData* dragObject(QWidget *dragSource = 0, const char *name = 0);
 
     bool load(QIODevice* io, const QString& extension);
     bool loadFromBase64(const QByteArray& str);

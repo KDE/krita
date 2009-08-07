@@ -367,7 +367,7 @@ void KoPADocumentStructureDocker::deleteItem()
         }
         else
         {
-            KMessageBox::error( 0L, i18n( "Could not delete all layers. At least one layer is required."), i18n( "Error deleting layers") );
+            KMessageBox::error(0, i18n("Could not delete all layers. At least one layer is required."), i18n("Error deleting layers"));
         }
     }
     else if( selectedShapes.count() )

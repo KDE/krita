@@ -35,7 +35,7 @@ static bool check(const QString& a, const QString& b)
     return true;
 }
 
-KoHyphenator * hypher = 0L;
+KoHyphenator *hypher = 0;
 
 void check_hyphenation(const QStringList& tests, const QStringList& results, const char* lang)
 {

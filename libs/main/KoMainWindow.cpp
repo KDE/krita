@@ -117,7 +117,7 @@ public:
         m_sendfile = 0;
         m_exportPdf = 0;
         m_paCloseFile = 0;
-        m_reloadfile = 0L;
+        m_reloadfile = 0;
         m_versionsfile = 0;
         m_importFile = 0;
         m_exportFile = 0;
@@ -390,7 +390,7 @@ KoMainWindow::~KoMainWindow()
 
     if (d->m_rootViews.indexOf(d->m_activeView) == -1) {
         delete d->m_activeView;
-        d->m_activeView = 0L;
+        d->m_activeView = 0;
     }
     while(!d->m_rootViews.isEmpty()) {
         delete d->m_rootViews.takeFirst();
@@ -634,7 +634,7 @@ KParts::PartManager *KoMainWindow::partManager()
 bool KoMainWindow::openDocument(const KUrl & url)
 {
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
-        KMessageBox::error(0L, i18n("The file %1 does not exist.", url.url()));
+        KMessageBox::error(0, i18n("The file %1 does not exist.", url.url()));
         d->recent->removeUrl(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();
         return false;
@@ -1042,7 +1042,7 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
 {
     if (queryClose()) {
         saveWindowSettings();
-        setRootDocument(0L);
+        setRootDocument(0);
         if (!d->m_dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
             foreach(QDockWidget* dockWidget, d->m_dockWidgetMap)
                 dockWidget->setVisible(d->m_dockWidgetVisibilityMap.value(dockWidget));
@@ -1450,7 +1450,7 @@ void KoMainWindow::slotCloseAllViews()
         }
         // not embedded -> destroy the document and all shells/views ;)
         else {
-            setRootDocument(0L);
+            setRootDocument(0);
         }
         close();  // close this window (and quit the app if necessary)
     }
@@ -1479,7 +1479,7 @@ void KoMainWindow::slotRemoveView()
     d->m_manager->setActivePart(0, 0);
 
     delete view;
-    view = 0L;
+    view = 0;
 
     d->m_rootViews.first()->setPartManager(d->m_manager);
     d->m_manager->setActivePart(d->m_rootDoc, d->m_rootViews.first());
@@ -1511,7 +1511,7 @@ void KoMainWindow::slotProgress(int value)
         if (d->m_progress) {
             statusBar()->removeWidget(d->m_progress);
             delete d->m_progress;
-            d->m_progress = 0L;
+            d->m_progress = 0;
         }
         d->m_firstTime = true;
         return;
@@ -1528,7 +1528,7 @@ void KoMainWindow::slotProgress(int value)
         if (d->m_progress) {
             statusBar()->removeWidget(d->m_progress);
             delete d->m_progress;
-            d->m_progress = 0L;
+            d->m_progress = 0;
         }
 
         d->m_progress = new QProgressBar(statusBar());
@@ -1626,8 +1626,8 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         QApplication::sendEvent(d->m_activePart, &ev);
         QApplication::sendEvent(d->m_activeView, &ev);
     } else {
-        d->m_activeView = 0L;
-        d->m_activePart = 0L;
+        d->m_activeView = 0;
+        d->m_activePart = 0;
     }
 // ###  setUpdatesEnabled( true );
 }
@@ -1721,11 +1721,11 @@ void KoMainWindow::slotReloadFile()
 
     KUrl url = pDoc->url();
     if (pDoc && !pDoc->isEmpty()) {
-        setRootDocument(0L);   // don't delete this shell when deleting the document
+        setRootDocument(0);   // don't delete this shell when deleting the document
         if(d->m_rootDoc)
             d->m_rootDoc->clearUndoHistory();
         delete d->m_rootDoc;
-        d->m_rootDoc = 0L;
+        d->m_rootDoc = 0;
     }
     openDocument(url);
     return;

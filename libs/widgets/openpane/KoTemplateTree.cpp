@@ -43,8 +43,8 @@
 
 KoTemplateTree::KoTemplateTree(const QByteArray &templateType,
                                const KComponentData &componentData, bool readTree) :
-        m_templateType(templateType), m_componentData(componentData), m_defaultGroup(0L),
-        m_defaultTemplate(0L)
+        m_templateType(templateType), m_componentData(componentData), m_defaultGroup(0),
+        m_defaultTemplate(0)
 {
     if (readTree)
         readTemplateTree();

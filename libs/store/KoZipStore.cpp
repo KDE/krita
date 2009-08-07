@@ -120,14 +120,14 @@ bool KoZipStore::openWrite(const QString& name)
     m_stream->open(QIODevice::WriteOnly);
     return true;
 #endif
-    m_stream = 0L; // Don't use!
+    m_stream = 0; // Don't use!
     return m_pZip->prepareWriting(name, "", "" /*m_pZip->rootDir()->user(), m_pZip->rootDir()->group()*/, 0);
 }
 
 bool KoZipStore::openRead(const QString& name)
 {
     const KArchiveEntry * entry = m_pZip->directory()->entry(name);
-    if (entry == 0L) {
+    if (entry == 0) {
         //kWarning(s_area) << "Unknown filename " << name;
         //return KIO::ERR_DOES_NOT_EXIST;
         return false;
@@ -147,22 +147,22 @@ bool KoZipStore::openRead(const QString& name)
 
 qint64 KoZipStore::write(const char* _data, qint64 _len)
 {
-    if (_len == 0L) return 0;
+    if (_len == 0) return 0;
     //kDebug(s_area) <<"KoZipStore::write" << _len;
 
     if (!m_bIsOpen) {
         kError(s_area) << "KoStore: You must open before writing" << endl;
-        return 0L;
+        return 0;
     }
     if (m_mode != Write) {
         kError(s_area) << "KoStore: Can not write to store that is opened for reading" << endl;
-        return 0L;
+        return 0;
     }
 
     m_iSize += _len;
     if (m_pZip->writeData(_data, _len))     // writeData returns a bool!
         return _len;
-    return 0L;
+    return 0;
 }
 
 bool KoZipStore::closeWrite()

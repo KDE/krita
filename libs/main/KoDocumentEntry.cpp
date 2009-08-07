@@ -67,7 +67,7 @@ KoDocument* KoDocumentEntry::createDoc(QString* errorMsg, KoDocument* parent) co
 
     QObject* obj;
     if (factory->inherits("KParts::Factory"))
-        obj = static_cast<KParts::Factory *>(factory)->createPart(0L, parent, "KoDocument");
+        obj = static_cast<KParts::Factory*>(factory)->createPart(0, parent, "KoDocument");
     else {
         kWarning(30003) << "factory doesn't inherit KParts::Factory ! It is a " << factory->metaObject()->className(); // This shouldn't happen...
         obj = factory->create(parent, "KoDocument");

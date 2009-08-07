@@ -73,7 +73,7 @@ bool KoDirectoryStore::openReadOrWrite(const QString& name, QIODevice::OpenModeF
     m_stream = new QFile(m_basePath + name);
     if (!m_stream->open(iomode)) {
         delete m_stream;
-        m_stream = 0L;
+        m_stream = 0;
         return false;
     }
     if (iomode == QIODevice::ReadOnly)

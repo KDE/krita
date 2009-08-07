@@ -348,7 +348,7 @@ void KoDocumentInfoDlg::slotLoadFromKABC()
 
     KABC::Addressee addr = ab->whoAmI();
     if (addr.isEmpty()) {
-        KMessageBox::sorry(0L, i18n("No personal contact data set, please use the option \
+        KMessageBox::sorry(0, i18n("No personal contact data set, please use the option \
                                     \"Set as Personal Contact Data\" from the \"Edit\"     menu in KAddressbook to set one."));
         return;
     }

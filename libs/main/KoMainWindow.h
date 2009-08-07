@@ -371,7 +371,7 @@ private:
      */
     virtual bool queryClose();
 
-    virtual bool openDocumentInternal(const KUrl & url, KoDocument * newdoc = 0L);
+    virtual bool openDocumentInternal(const KUrl &url, KoDocument *newdoc = 0);
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()

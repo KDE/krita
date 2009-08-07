@@ -46,7 +46,7 @@ KoGlobal* KoGlobal::self()
 }
 
 KoGlobal::KoGlobal()
-        : m_pointSize(-1), m_kofficeConfig(0L)
+        : m_pointSize(-1), m_kofficeConfig(0)
 {
     // XXX: locale() apparently can be 0 when running from unittests
     if (KGlobal::locale()) {

@@ -220,7 +220,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
 
     if (!m_graph.isValid()) {
         kError(30500) << "Couldn't create a valid graph for this source mimetype.";
-        if (!userCancelled) KMessageBox::error(0L, i18n("Could not export file."), i18n("Missing Export Filter"));
+        if (!userCancelled) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
 
@@ -229,7 +229,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
 
     if (!chain) {
         kError(30500) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
-        KMessageBox::error(0L, i18n("Could not export file."), i18n("Missing Export Filter"));
+        KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
 
@@ -514,7 +514,7 @@ void KoFilterManager::importErrorHelper(const QString& mimeType, const bool supp
 {
     QString tmp = i18n("Could not import file of type\n%1", mimeType);
     // ###### FIXME: use KLibLoader::lastErrorMessage() here
-    if (!suppressDialog) KMessageBox::error(0L, tmp, i18n("Missing Import Filter"));
+    if (!suppressDialog) KMessageBox::error(0, tmp, i18n("Missing Import Filter"));
 }
 
 void KoFilterManager::setBatchMode(const bool batch)

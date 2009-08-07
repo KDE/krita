@@ -127,7 +127,7 @@ QMimeData* KoPictureBase::dragObject(QWidget * dragSource, const char * name)
     Q_UNUSED(dragSource);
     QImage image(generateImage(getOriginalSize()));
     if (image.isNull())
-        return 0L;
+        return 0;
     else {
         QMimeData* mimeData = new QMimeData();
         mimeData->setImageData(image);

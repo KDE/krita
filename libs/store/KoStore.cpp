@@ -94,7 +94,7 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
 #endif
     default:
         kWarning(s_area) << "Unsupported backend requested for KoStore : " << backend;
-        return 0L;
+        return 0;
     }
 }
 
@@ -132,7 +132,7 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
 #endif
     default:
         kWarning(s_area) << "Unsupported backend requested for KoStore : " << backend;
-        return 0L;
+        return 0;
     }
 }
 
@@ -181,7 +181,7 @@ KoStore* KoStore::createStore(QWidget* window, const KUrl& url, Mode mode, const
         KMessageBox::sorry(window,
                            i18n("The directory mode is not supported for remote locations."),
                            i18n("KOffice Storage"));
-        return 0L;
+        return 0;
     }
 }
 
@@ -272,7 +272,7 @@ bool KoStore::close()
     bool ret = m_mode == Write ? closeWrite() : closeRead();
 
     delete m_stream;
-    m_stream = 0L;
+    m_stream = 0;
     m_bIsOpen = false;
     return ret;
 }
@@ -323,15 +323,15 @@ qint64 KoStore::read(char *_buffer, qint64 _len)
 
 qint64 KoStore::write(const char* _data, qint64 _len)
 {
-    if (_len == 0L) return 0;
+    if (_len == 0) return 0;
 
     if (!m_bIsOpen) {
         kError(s_area) << "KoStore: You must open before writing" << endl;
-        return 0L;
+        return 0;
     }
     if (m_mode != Write) {
         kError(s_area) << "KoStore: Can not write to store that is opened for reading" << endl;
-        return 0L;
+        return 0;
     }
 
     int nwritten = m_stream->write(_data, _len);

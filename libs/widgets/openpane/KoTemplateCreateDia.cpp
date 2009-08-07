@@ -67,16 +67,16 @@ public:
     KoTemplateCreateDiaPrivate( QWidget* /*parent*/, const KComponentData &componentData)
          : m_componentData( componentData )
     {
-        m_tree=0L;
-        m_name=0L;
-        m_default=0L;
-        m_custom=0L;
-        m_select=0L;
-        m_preview=0L;
-        m_groups=0L;
-        m_add=0L;
-        m_remove=0L;
-        m_defaultTemplate=0L;
+        m_tree=0;
+        m_name=0;
+        m_default=0;
+        m_custom=0;
+        m_select=0;
+        m_preview=0;
+        m_groups=0;
+        m_add=0;
+        m_remove=0;
+        m_defaultTemplate=0;
         m_tempFile.setSuffix(".png");
         m_tempFile.open();
     }
@@ -479,7 +479,7 @@ void KoTemplateCreateDia::slotRemove() {
         }
     }
     delete item;
-    item=0L;
+    item=0;
     enableButtonOk(true);
     d->m_name->setFocus();
     d->m_changed=true;

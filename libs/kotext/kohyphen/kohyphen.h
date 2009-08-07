@@ -120,9 +120,9 @@ private:
     QMap<QString, HyphenDict*> dicts;
     struct EncodingStruct {
         EncodingStruct() // for QMap
-                : encoding(), codec(0L) {}
+                : encoding(), codec(0) {}
         EncodingStruct(const QByteArray& _encoding)
-                : encoding(_encoding), codec(0L) {}
+                : encoding(_encoding), codec(0) {}
         QByteArray encoding;
         QTextCodec* codec;
     };

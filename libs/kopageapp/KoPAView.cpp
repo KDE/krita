@@ -420,11 +420,11 @@ void KoPAView::importDocument()
             data.setData( KoOdf::mimeType( m_doc->documentType() ), ba);
             KoPAPastePage paste( m_doc,m_activePage );
             if ( ! paste.paste( m_doc->documentType(), &data ) ) {
-                KMessageBox::error( 0L, i18n("Could not import\n%1", url.pathOrUrl()));
+                KMessageBox::error(0, i18n("Could not import\n%1", url.pathOrUrl()));
             }
         }
         else {
-            KMessageBox::error( 0L, i18n("Could not import\n%1", url.pathOrUrl()));
+            KMessageBox::error(0, i18n("Could not import\n%1", url.pathOrUrl()));
         }
     }
     delete dialog;

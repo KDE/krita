@@ -46,11 +46,11 @@ class KOWIDGETS_EXPORT KoTemplateCreateDia : public KDialog
 
 public:
     KoTemplateCreateDia( const QByteArray &templateType, const KComponentData &instance,
-                         const QString &file, const QPixmap &pix, QWidget *parent=0L );
+                         const QString &file, const QPixmap &pix, QWidget *parent=0 );
     ~KoTemplateCreateDia();
 
     static void createTemplate( const QByteArray &templateType, const KComponentData &instance,
-                                const QString &file, const QPixmap &pix, QWidget *parent=0L );
+                                const QString &file, const QPixmap &pix, QWidget *parent=0 );
 
 protected slots:
     void slotOk();

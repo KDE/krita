@@ -183,7 +183,7 @@ protected:
      * @param paContext the pageapp saving context
      * @return true on success, false otherwise
      */
-    virtual bool saveOdfAnimations( KoPASavingContext & paContext ) const { Q_UNUSED( paContext ); return true; }
+    virtual bool saveOdfAnimations( KoPASavingContext & paContext ) const;
 
     /**
      * @brief Save presentation notes
@@ -193,7 +193,7 @@ protected:
      * @param paContext the pageapp saving context
      * @return true on success, false otherwise
      */
-    virtual bool saveOdfPresentationNotes(KoPASavingContext &paContext) const { Q_UNUSED( paContext ); return true; }
+    virtual bool saveOdfPresentationNotes(KoPASavingContext &paContext) const;
 
     /**
      * @brief Save the style of the page

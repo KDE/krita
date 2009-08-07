@@ -134,6 +134,18 @@ void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &p
     paContext.mainStyles().lookup( style, paContext.isSet( KoShapeSavingContext::PresentationShape ) ? "pr" : "gr" );
 }
 
+bool KoPAPageBase::saveOdfAnimations( KoPASavingContext & paContext ) const
+{
+    Q_UNUSED( paContext );
+    return true;
+}
+
+bool KoPAPageBase::saveOdfPresentationNotes(KoPASavingContext &paContext) const
+{
+    Q_UNUSED( paContext );
+    return true;
+}
+
 bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext & loadingContext )
 {
     KoPALoadingContext &paContext = static_cast<KoPALoadingContext&>( loadingContext );

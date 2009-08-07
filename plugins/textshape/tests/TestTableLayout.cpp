@@ -736,6 +736,8 @@ void TestTableLayout::testTableAlignment()
      */
     cell2 = m_table->cellAt(0, 1);
     QCOMPARE(m_textLayout->m_tableLayout.cellContentRect(cell2), QRectF(100, 0, 100, 16));
+
+    cleanupTest();
 }
 
 QTEST_KDEMAIN(TestTableLayout, GUI)

@@ -224,6 +224,40 @@ public:
      */
     void insertStyleRelation(const QString &source, const QString &target, const char *tagName);
 
+    /**
+     * Adds extra document styles.
+     *
+     * This adds extra document styles as raw xml within the office:styles tag.
+     * The information is collected and written back when saveOdfDocumentStyles() is called.
+     * This method is useful for testing purposes.
+     *
+     * @param xml the raw xml string
+     */
+    void addRawOdfDocumentStyles(const QByteArray& xml);
+
+    /**
+     * Adds extra master styles.
+     *
+     * This adds extra master styles as raw xml within the office:master-styles tag.
+     * The information is collected and written back when saveOdfMasterStyles() is called.
+     * This method is useful for testing purposes.
+     *
+     * @param xml the raw xml string
+     */
+    void addRawOdfMasterStyles(const QByteArray& xml);
+
+    /**
+     * Adds extra automatic styles.
+     *
+     * This adds extra master automatic as raw xml within the office:automatic-styles tag.
+     * The information is collected and written back when saveOdfAutomaticStyles() is called.
+     * This method is useful for testing purposes.
+     *
+     * @param xml the raw xml string
+     * @param stylesDotXml true if the xml should go to styles.xml instead of content.xml
+     */
+    void addRawOdfAutomaticStyles(const QByteArray& xml, bool stylesDotXml);
+
 private:
     QString makeUniqueName(const QString& base, int flags) const;
 

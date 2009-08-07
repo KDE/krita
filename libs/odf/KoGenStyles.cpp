@@ -84,6 +84,16 @@ static const struct {
 
 static const unsigned int numAutoStyleData = sizeof(autoStyleData) / sizeof(*autoStyleData);
 
+static void addRawOdfStyles(const QByteArray& xml, QByteArray& styles)
+{
+    if (xml.isEmpty())
+        return;
+    if (!styles.isEmpty() && !styles.endsWith('\n') && !xml.startsWith('\n')) {
+        styles.append('\n');
+    }
+    styles.append(xml);
+}
+
 class KoGenStyles::Private
 {
 public:
@@ -113,6 +123,15 @@ public:
         QString attribute; // the attribute name used for the relation
     };
     QHash<QString, RelationTarget> relations; // key is the name of the source style
+
+    QByteArray& rawOdfAutomaticStyles(bool stylesDotXml) {
+        return stylesDotXml ? rawOdfAutomaticStyles_stylesDotXml : rawOdfAutomaticStyles_contentDotXml;
+    }
+
+    QByteArray rawOdfDocumentStyles;
+    QByteArray rawOdfAutomaticStyles_stylesDotXml;
+    QByteArray rawOdfAutomaticStyles_contentDotXml;
+    QByteArray rawOdfMasterStyles;
 
     KoGenStyles *q;
 };
@@ -331,6 +350,11 @@ void KoGenStyles::saveOdfAutomaticStyles(KoXmlWriter* xmlWriter, bool stylesDotX
         }
     }
 
+    const QByteArray &rawOdfAutomaticStyles = d->rawOdfAutomaticStyles(stylesDotXml);
+    if (!rawOdfAutomaticStyles.isEmpty()) {
+        xmlWriter->addCompleteElement(rawOdfAutomaticStyles.constData());
+    }
+
     xmlWriter->endElement(); // office:automatic-styles
 }
 
@@ -364,6 +388,10 @@ void KoGenStyles::saveOdfDocumentStyles(KoXmlWriter* xmlWriter) const
         }
     }
 
+    if (!d->rawOdfDocumentStyles.isEmpty()) {
+        xmlWriter->addCompleteElement(d->rawOdfDocumentStyles.constData());
+    }
+
     xmlWriter->endElement(); // office:styles
 }
 
@@ -377,7 +405,26 @@ void KoGenStyles::saveOdfMasterStyles(KoXmlWriter* xmlWriter) const
         (*it).style->writeStyle(xmlWriter, *this, "style:master-page", (*it).name, 0);
     }
 
-    xmlWriter->endElement(); // office:styles
+    if (!d->rawOdfMasterStyles.isEmpty()) {
+        xmlWriter->addCompleteElement(d->rawOdfMasterStyles.constData());
+    }
+
+    xmlWriter->endElement(); // office:master-styles
+}
+
+void KoGenStyles::addRawOdfDocumentStyles(const QByteArray& xml)
+{
+    addRawOdfStyles(xml, d->rawOdfDocumentStyles);
+}
+
+void KoGenStyles::addRawOdfAutomaticStyles(const QByteArray& xml, bool stylesDotXml)
+{
+    addRawOdfStyles(xml, d->rawOdfAutomaticStyles(stylesDotXml));
+}
+
+void KoGenStyles::addRawOdfMasterStyles(const QByteArray& xml)
+{
+    addRawOdfStyles(xml, d->rawOdfMasterStyles);
 }
 
 void KoGenStyles::saveOdfFontFaceDecls(KoXmlWriter* xmlWriter) const

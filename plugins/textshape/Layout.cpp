@@ -432,7 +432,8 @@ bool Layout::nextParag()
             formatRanges.erase(iter);
         }
     }
-    layout->setAdditionalFormats(formatRanges);
+    if (formatRanges.count() != layout->additionalFormats().count())
+        layout->setAdditionalFormats(formatRanges);
 
     QString blockText = m_block.text();
     int dropCaps = m_format.boolProperty(KoParagraphStyle::DropCaps);

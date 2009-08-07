@@ -76,7 +76,10 @@ void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
             newRanges.append(r);
         ++iter;
     }
-    block.layout()->setAdditionalFormats(newRanges);
+    m_allowSignals = false;
+    if (ranges.count() != newRanges.count())
+        block.layout()->setAdditionalFormats(newRanges);
+    m_allowSignals = true;
     m_bgSpellCheck->startRun(m_document, block.position(), block.position() + block.length());
 }
 
@@ -173,7 +176,10 @@ void SpellCheck::highlightMisspelled(const QString &word, int startPosition, boo
     range.format = m_defaultMisspelledFormat;
     ranges.append(range);
     m_allowSignals = false;
-    layout->setAdditionalFormats(ranges);
+    if (ranges.isEmpty())
+        layout->clearAdditionalFormats();
+    else if (ranges.count() != layout->additionalFormats().count())
+        layout->setAdditionalFormats(ranges);
     if (misspelled)
         m_document->markContentsDirty(startPosition, range.length);
     m_allowSignals = true;
@@ -189,7 +195,8 @@ void SpellCheck::dequeueDocument()
 
 void SpellCheck::checkDocument(int position, int charsRemoved, int charsAdded)
 {
-    if (! m_allowSignals) return;
+    if (! m_allowSignals)
+        return;
 
     int changeStart = position;
     int changeEnd = position;

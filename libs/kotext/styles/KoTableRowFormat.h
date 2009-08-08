@@ -51,7 +51,7 @@ public:
         MinimumHeight, /**< Minumum row height. See style:min-row-height in [ODF]. */
         KeepTogether,  /**< Keep rows together. See fo:keep-together in [ODF]. */
         BreakAfter,    /**< Break after row. See fo:break-after in [ODF]. */
-        BreakBefore,   /**< Break before row. See fo:break-before in [ODF]. */
+        BreakBefore   /**< Break before row. See fo:break-before in [ODF]. */
     };
 
     /// Creates a row format with default row properties.

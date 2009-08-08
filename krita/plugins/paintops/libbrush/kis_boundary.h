@@ -34,7 +34,7 @@
  * Usage: construct a KisBoundary, and then run a generateBoundary(w, h) on it. After that,
  * you can use the KisBoundaryPainter::paint method to let it paint the outline, or get a pixmap.
  **/
-class KRITAIMAGE_EXPORT KisBoundary
+class BRUSH_EXPORT KisBoundary
 {
 public:
     KisBoundary(KisFixedPaintDeviceSP dev);

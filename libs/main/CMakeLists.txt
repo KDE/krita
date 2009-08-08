@@ -58,6 +58,8 @@ set(komain_LIB_SRCS
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
     KoImageSelectionWidget.cpp
+    config/KoConfigDocumentPage.cpp
+    config/KoConfigGridPage.cpp
 )
 
 if (NOT NO_PIGMENT)

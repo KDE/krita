@@ -297,6 +297,7 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/kopicture
                     ${CMAKE_SOURCE_DIR}/libs/koaction
                     ${CMAKE_SOURCE_DIR}/libs/main
+                    ${CMAKE_SOURCE_DIR}/libs/main/config
                     ${CMAKE_SOURCE_DIR}/libs/resources
                     ${CMAKE_SOURCE_DIR}/libs/koplugin
  )

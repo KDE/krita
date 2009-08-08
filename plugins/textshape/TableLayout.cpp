@@ -308,7 +308,7 @@ void TableLayout::layoutRow(int row)
  + m_tableLayoutData->m_rowHeights[row] - m_tableLayoutData->m_rowPositions[m_tableLayoutData->m_tableRects.last().fromRow]);//FIXME review when breaking inside a row
 }
 
-void TableLayout::draw(QPainter *painter) const
+void TableLayout::drawBackground(QPainter *painter) const
 {
     painter->save();
 
@@ -317,7 +317,7 @@ void TableLayout::draw(QPainter *painter) const
         painter->fillRect(tRect.rect, m_table->format().background());
     }
 
-    // Draw cells using their styles.
+    // Draw cell backgrounds using their styles.
     for (int row = 0; row < m_table->rows(); ++row) {
         for (int column = 0; column < m_table->columns(); ++column) {
             QTextTableCell tableCell = m_table->cellAt(row, column);
@@ -329,13 +329,33 @@ void TableLayout::draw(QPainter *painter) const
             if (row == tableCell.row() && column == tableCell.column()) {
                 // This is an actual cell we want to draw, and not a covered one.
 
-                QPen pen(Qt::DotLine);
-                pen.setColor(QColor(Qt::lightGray));
-                painter->setPen(pen);
-                painter->drawRect(cellBoundingRect(tableCell));
+                KoTableCellStyle cellStyle(tableCell.format().toTableCellFormat());
+                cellStyle.paintBackground(*painter, cellBoundingRect(tableCell));
+            }
+        }
+    }
+
+    painter->restore();
+}
+
+void TableLayout::drawBorders(QPainter *painter) const
+{
+    painter->save();
+
+    // Draw cell borders using their styles.
+    for (int row = 0; row < m_table->rows(); ++row) {
+        for (int column = 0; column < m_table->columns(); ++column) {
+            QTextTableCell tableCell = m_table->cellAt(row, column);
+            /*
+             * The following check relies on the fact that QTextTable::cellAt()
+             * will return the cell that has the span when a covered cell is
+             * requested.
+             */
+            if (row == tableCell.row() && column == tableCell.column()) {
+                // This is an actual cell we want to draw, and not a covered one.
 
                 KoTableCellStyle cellStyle(tableCell.format().toTableCellFormat());
-                cellStyle.paint(*painter, cellBoundingRect(tableCell));
+                cellStyle.paintBorders(*painter, cellBoundingRect(tableCell));
             }
         }
     }

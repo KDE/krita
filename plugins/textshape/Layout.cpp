@@ -953,8 +953,9 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
 
         if (table) {
             m_tableLayout.setTable(table);
-            m_tableLayout.draw(painter);
+            m_tableLayout.drawBackground(painter);
             drawFrame(table, painter, context, inTable+1); // this actually only draws the text inside
+            m_tableLayout.drawBorders(painter);
             continue;
         } else {
             if (!block.isValid())

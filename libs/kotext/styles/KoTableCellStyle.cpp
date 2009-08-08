@@ -181,13 +181,18 @@ bool KoTableCellStyle::hasBorders() const
     return false;
 }
 
-void KoTableCellStyle::paint(QPainter &painter, const QRectF &bounds) const
+void KoTableCellStyle::paintBackground(QPainter &painter, const QRectF &bounds) const
 {
     QRectF innerBounds = bounds;
 
     if(hasProperty(QTextFormat::BackgroundBrush)) {
         painter.fillRect(bounds, background());
     }
+}
+
+void KoTableCellStyle::paintBorders(QPainter &painter, const QRectF &bounds) const
+{
+    QRectF innerBounds = bounds;
 
     if (d->edges[Top].outerPen.widthF() > 0) {
         QPen pen = d->edges[Top].outerPen;

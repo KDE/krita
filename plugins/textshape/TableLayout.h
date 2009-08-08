@@ -187,11 +187,18 @@ public:
     void layoutRow(int row);
 
     /**
-     * Draw the table using the given QPainter.
+     * Draw the table background using the given QPainter.
      *
      * @param painter a pointer to the QPainter to draw the table with.
      */
-    void draw(QPainter *painter) const;
+    void drawBackground(QPainter *painter) const;
+
+    /**
+     * Draw the table borders using the given QPainter.
+     *
+     * @param painter a pointer to the QPainter to draw the table with.
+     */
+    void drawBorders(QPainter *painter) const;
 
     /**
      * Get the list of rectangles that the table occupies.

@@ -151,12 +151,20 @@ public:
     bool hasBorders() const;
 
     /**
-     * Paint the background and borders.
+     * Paint the background.
      *
      * @painter the painter to draw with.
      * @bounds the bounding rectangle to draw.
      */
-    void paint(QPainter &painter, const QRectF &bounds) const;
+    void paintBackground(QPainter &painter, const QRectF &bounds) const;
+
+    /**
+     * Paint the borders.
+     *
+     * @painter the painter to draw with.
+     * @bounds the bounding rectangle to draw.
+     */
+    void paintBorders(QPainter &painter, const QRectF &bounds) const;
 
     void setBackground(const QBrush &brush);
     /// See similar named method on QTextBlockFormat

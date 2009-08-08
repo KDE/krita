@@ -346,6 +346,7 @@ endif(NOT EIGEN2_FOUND)
 ### KPresenter: boost
 if(NOT Boost_FOUND)
     set(SHOULD_BUILD_KPRESENTER FALSE)
+    set(SHOULD_BUILD_KRITA FALSE)
 endif(NOT Boost_FOUND)
 
 ### Kexi: bzip2

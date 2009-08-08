@@ -6,7 +6,8 @@ include_directories( ${KOTEXT_INCLUDES}
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
 	${CMAKE_SOURCE_DIR}/krita/image/metadata 
-	${EXIV2_INCLUDE_DIR} )
+	${EXIV2_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIR} )
 
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 

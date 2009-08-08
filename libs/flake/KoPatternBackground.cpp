@@ -256,7 +256,7 @@ void KoPatternBackground::paint(QPainter &painter, const QPainterPath &fillPath)
     if (d->repeat == Tiled) {
         // calculate scaling of pixmap
         QSizeF targetSize = d->targetSize();
-        QSizeF imageSize = d->imageData->pixmap().size();
+        QSizeF imageSize = d->imageData->imageSize();
         qreal scaleX = targetSize.width() / imageSize.width();
         qreal scaleY = targetSize.height() / imageSize.height();
 
@@ -266,7 +266,7 @@ void KoPatternBackground::paint(QPainter &painter, const QPainterPath &fillPath)
         targetRect.setHeight(targetRect.height() / scaleY);
 
         // determine pattern offset
-        QPointF offset = d->offsetFromRect(targetRect, d->imageData->pixmap().size());
+        QPointF offset = d->offsetFromRect(targetRect, imageSize);
 
         // create matrix for pixmap scaling
         QMatrix matrix;
@@ -274,18 +274,18 @@ void KoPatternBackground::paint(QPainter &painter, const QPainterPath &fillPath)
 
         painter.setClipPath(fillPath);
         painter.setWorldMatrix(matrix, true);
-        painter.drawTiledPixmap(targetRect, d->imageData->pixmap(), -offset);
+        painter.drawTiledPixmap(targetRect, d->imageData->pixmap(imageSize.toSize()), -offset);
     } else if (d->repeat == Original) {
-        QRectF sourceRect = QRectF(QPoint(0, 0), d->imageData->pixmap().size());
-        QRectF targetRect = QRectF(QPoint(0, 0), d->targetSize());
+        QRectF sourceRect(QPointF(0, 0), d->imageData->imageSize());
+        QRectF targetRect(QPoint(0, 0), d->targetSize());
         targetRect.moveCenter(fillPath.boundingRect().center());
         painter.setClipPath(fillPath);
-        painter.drawPixmap(targetRect, d->imageData->pixmap(), sourceRect);
+        painter.drawPixmap(targetRect, d->imageData->pixmap(sourceRect.size().toSize()), sourceRect);
     } else if (d->repeat == Stretched) {
-        QRectF sourceRect = QRectF(QPoint(0, 0), d->imageData->pixmap().size());
-        QRectF targetRect = fillPath.boundingRect();
+        QRectF sourceRect(QPointF(0, 0), d->imageData->imageSize());
+        QRectF targetRect(fillPath.boundingRect());
         painter.setClipPath(fillPath);
-        painter.drawPixmap(targetRect, d->imageData->pixmap(), sourceRect);
+        painter.drawPixmap(targetRect, d->imageData->pixmap(sourceRect.size().toSize()), sourceRect);
     }
 
     painter.restore();

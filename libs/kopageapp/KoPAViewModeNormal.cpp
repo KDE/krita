@@ -50,7 +50,7 @@ void KoPAViewModeNormal::paintEvent( KoPACanvas *canvas, QPaintEvent* event )
     QPainter painter( m_canvas );
     painter.translate( -m_canvas->documentOffset() );
     painter.setRenderHint( QPainter::Antialiasing );
-    QRectF clipRect = event->rect().translated( m_canvas->documentOffset() );
+    QRect clipRect = event->rect().translated( m_canvas->documentOffset() );
     painter.setClipRect( clipRect );
 
     painter.translate( m_canvas->documentOrigin().x(), m_canvas->documentOrigin().y() );
@@ -61,14 +61,15 @@ void KoPAViewModeNormal::paintEvent( KoPACanvas *canvas, QPaintEvent* event )
         m_canvas->masterShapeManager()->paint( painter, *converter, false );
     }
     m_canvas->shapeManager()->paint( painter, *converter, false );
-    painter.setRenderHint( QPainter::Antialiasing, false );
-
-    QRectF updateRect = converter->viewToDocument( clipRect );
-    m_canvas->document()->gridData().paintGrid( painter, *converter, updateRect );
-    m_canvas->document()->guidesData().paintGuides( painter, *converter, updateRect );
 
     // paint the page margins
     paintMargins( painter, *converter );
+
+    painter.setRenderHint( QPainter::Antialiasing, false );
+
+    QRectF updateRect = converter->viewToDocument( m_canvas->widgetToView( clipRect ) );
+    m_canvas->document()->gridData().paintGrid( painter, *converter, updateRect );
+    m_canvas->document()->guidesData().paintGuides( painter, *converter, updateRect );
 
     painter.setRenderHint( QPainter::Antialiasing );
     m_toolProxy->paint( painter, *converter );

@@ -45,6 +45,7 @@ set( kopageapp_LIB_SRCS
      commands/KoPADisplayMasterBackgroundCommand.cpp
      dialogs/KoPAMasterPageDialog.cpp
      dialogs/KoPAPageLayoutDialog.cpp
+     dialogs/KoPAConfigureDialog.cpp
 )
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})

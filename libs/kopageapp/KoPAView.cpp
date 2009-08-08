@@ -72,6 +72,7 @@
 #include "commands/KoPAChangePageLayoutCommand.h"
 #include "dialogs/KoPAMasterPageDialog.h"
 #include "dialogs/KoPAPageLayoutDialog.h"
+#include "dialogs/KoPAConfigureDialog.h"
 
 #include <kfiledialog.h>
 #include <kdebug.h>
@@ -98,49 +99,50 @@ public:
     {}
 
     // These were originally private in the .h file
-    KoPADocumentStructureDocker * documentStructureDocker;
+    KoPADocumentStructureDocker *documentStructureDocker;
 
-    KoCanvasController  *canvasController;
-    KoZoomController    *zoomController;
-    KoZoomHandler        zoomHandler;
+    KoCanvasController *canvasController;
+    KoZoomController *zoomController;
+    KoZoomHandler zoomHandler;
 
-    KAction        *editPaste;
-    KAction        *deleteSelectionAction;
+    KAction *editPaste;
+    KAction *deleteSelectionAction;
 
-    KToggleAction  *actionViewSnapToGrid;
-    KToggleAction  *actionViewShowGuides;
-    KToggleAction  *actionViewShowMasterPages;
+    KToggleAction *actionViewSnapToGrid;
+    KToggleAction *actionViewShowGuides;
+    KToggleAction *actionViewShowMasterPages;
 
-    KAction        *actionInsertPage;
-    KAction        *actionCopyPage;
-    KAction        *actionDeletePage;
+    KAction *actionInsertPage;
+    KAction *actionCopyPage;
+    KAction *actionDeletePage;
 
-    KAction        *actionMasterPage;
-    KAction        *actionPageLayout;
+    KAction *actionMasterPage;
+    KAction *actionPageLayout;
 
-    KoRuler        *horizontalRuler;
-    KoRuler        *verticalRuler;
-    KToggleAction  *viewRulers;
+    KAction *actionConfigure;
 
-    KoZoomAction   *zoomAction;
+    KoRuler *horizontalRuler;
+    KoRuler *verticalRuler;
+    KToggleAction *viewRulers;
 
-    KoFind         *find;
+    KoZoomAction *zoomAction;
 
-    KoPAViewMode   *viewModeNormal;
+    KoFind *find;
+
+    KoPAViewMode *viewModeNormal;
 
     // status bar
-    QLabel         *status;       ///< ordinary status
-
+    QLabel *status;       ///< ordinary status
 };
 
 
 
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
-  : KoView( document, parent )
-  , m_doc( document )
-  , m_activePage( 0 )
-  , m_viewMode( 0 )
-  , d( new Private() )
+: KoView( document, parent )
+, m_doc( document )
+, m_activePage( 0 )
+, m_viewMode( 0 )
+, d( new Private() )
 {
     initGUI();
     initActions();
@@ -338,6 +340,10 @@ void KoPAView::initActions()
     KAction * am = new KAction(i18n("Import Document..."), this);
     actionCollection()->addAction("import_document", am);
     connect(am, SIGNAL(triggered()), this, SLOT(importDocument()));
+
+    d->actionConfigure = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    actionCollection()->addAction("configure", d->actionConfigure);
+    connect(d->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
 
     d->find = new KoFind( this, m_canvas->resourceProvider(), actionCollection() );
 }
@@ -556,6 +562,14 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
         }
         kopaCanvas()->update();
     }
+}
+
+void KoPAView::configure()
+{
+    QPointer<KoPAConfigureDialog> dialog(new KoPAConfigureDialog(this));
+    dialog->exec();
+    delete dialog;
+    // TODO update canvas
 }
 
 void KoPAView::setMasterMode( bool master )

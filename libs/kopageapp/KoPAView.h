@@ -146,6 +146,10 @@ public:
     bool exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const QSize& size = QSize( 512, 512 ),
                               const char * format = 0, int quality = -1 );
 
+    /// Update page navigation actions
+    void updatePageNavigationActions();
+
+
 public slots:
     /// Set the active page and updates the UI
     void updateActivePage( KoPAPageBase * page );
@@ -171,9 +175,6 @@ protected:
 
     /// Called when receiving a PartActivateEvent
     virtual void partActivateEvent(KParts::PartActivateEvent* event);
-
-    /// Update page navigation actions
-    void updatePageNavigationActions();
 
     bool isMasterUsed( KoPAPageBase * page );
 
@@ -245,6 +246,11 @@ protected slots:
      * Import slideshow 
      */
     void importDocument();
+
+    /**
+     * Configure kopapage apps
+     */
+    void configure();
 
 protected:
     KoPADocument *m_doc;

@@ -27,7 +27,7 @@ class KisDynamicSensor;
 class QHBoxLayout;
 class KoID;
 
-class KRITAUI_EXPORT KisSensorSelector : public QWidget
+class PAINTOP_EXPORT KisSensorSelector : public QWidget
 {
     Q_OBJECT
 public:

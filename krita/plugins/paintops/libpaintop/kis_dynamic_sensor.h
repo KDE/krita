@@ -44,7 +44,7 @@ const KoID YTiltId("ytilt", i18n("Y-Tilt"));
  * Sensor are used to extract from KisPaintInformation a single
  * double value which can be used to control
  */
-class KRITAUI_EXPORT KisDynamicSensor : public KisSerializableConfiguration
+class PAINTOP_EXPORT KisDynamicSensor : public KisSerializableConfiguration
 {
 public:
     enum ParameterSign {

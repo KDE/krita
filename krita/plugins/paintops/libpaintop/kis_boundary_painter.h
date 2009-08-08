@@ -28,7 +28,7 @@ class KisBoundary;
 class QPainter;
 class KoViewConverter;
 
-class KRITAUI_EXPORT KisBoundaryPainter
+class PAINTOP_EXPORT KisBoundaryPainter
 {
 public:
     static void paint(const KisBoundary* boundary, KisImageSP image, QPainter& painter, const KoViewConverter &converter);

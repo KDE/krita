@@ -50,14 +50,14 @@ KoFilterEffectRegistry* KoFilterEffectRegistry::instance()
     return s_instance;
 }
 
-KoFilterEffect * KoFilterEffectRegistry::createFilterEffectFromXml(const QDomElement & element)
+KoFilterEffect * KoFilterEffectRegistry::createFilterEffectFromXml(const QDomElement & element, const QMatrix &matrix)
 {
     KoFilterEffectFactory * factory = get(element.tagName());
     if (!factory)
         return 0;
 
     KoFilterEffect * filterEffect = factory->createFilterEffect();
-    if (filterEffect->load(element))
+    if (filterEffect->load(element, matrix))
         return filterEffect;
 
     delete filterEffect;

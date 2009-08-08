@@ -24,6 +24,7 @@
 #include <KoFilterEffectFactory.h>
 #include <QtCore/QObject>
 #include <QtXml/QDomElement>
+#include <QtGui/QMatrix>
 
 #include "flake_export.h"
 
@@ -40,8 +41,13 @@ public:
     */
     static KoFilterEffectRegistry * instance();
 
-    /// Creates filter effect from given xml element
-    KoFilterEffect * createFilterEffectFromXml(const QDomElement & element);
+    /**
+     * Creates filter effect from given xml element.
+     * @param element the xml element to load form
+     * @param matrix the matrix for converting number attributes
+     * @return the created filter effect if successful, else 0
+     */
+    KoFilterEffect * createFilterEffectFromXml(const QDomElement & element, const QMatrix &matrix = QMatrix());
 
 private:
     KoFilterEffectRegistry();

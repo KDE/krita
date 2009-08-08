@@ -35,6 +35,7 @@
 #include "KoShapeLayer.h"
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
+#include "KoFilterEffectRenderContext.h"
 
 #include <KoRTree.h>
 
@@ -273,6 +274,10 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         imageBuffers.insert(QString(), sourceGraphic);
         imageBuffers.insert("SourceAlpha", sourceAlpha);
 
+        QMatrix coordTransform = QMatrix().scale(shapeBound.width(), shapeBound.height());
+        KoFilterEffectRenderContext renderContext(converter);
+        renderContext.setCoordinateTransformation(coordTransform);
+        
         QList<KoFilterEffect*> filterEffects = shape->filterEffectStack()->filterEffects();
         // Filter
         foreach(KoFilterEffect* filterEffect, filterEffects) {
@@ -281,13 +286,16 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
             QPointF filterOffset = filterRegion.topLeft()-2*clippingOffset;
             QRect subRegion = filterRegion.translated(filterOffset).toRect();
 
+            // set current filter region
+            renderContext.setFilterRegion(subRegion);
+            
             if (filterEffect->maximalInputCount() == 1) {
                 QList<QString> inputs = filterEffect->inputs();
                 QString input = inputs.count() ? inputs.first() : QString();
                 // get input image from image buffers
                 QImage inputImage = imageBuffers.value(input);
                 // apply the filter effect
-                QImage result = filterEffect->processImage(inputImage, subRegion, converter);
+                QImage result = filterEffect->processImage(inputImage, renderContext);
                 // store result of effect
                 imageBuffers.insert(filterEffect->output(), result);
             } else {
@@ -296,7 +304,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
                     inputImages.append(imageBuffers.value(input));
                 }
                 // apply the filter effect
-                QImage result = filterEffect->processImages(inputImages, subRegion, converter);
+                QImage result = filterEffect->processImages(inputImages, renderContext);
                 // store result of effect
                 imageBuffers.insert(filterEffect->output(), result);
             }

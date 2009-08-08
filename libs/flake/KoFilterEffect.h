@@ -28,6 +28,7 @@ class QRectF;
 class QDomElement;
 class KoViewConverter;
 class KoXmlWriter;
+class KoFilterEffectRenderContext;
 
 #include "flake_export.h"
 #include <QtCore/QList>
@@ -35,7 +36,14 @@ class KoXmlWriter;
 
 /**
  * This is the base for filter effect (blur, invert...) that can be applied on a shape.
- *
+ * All sizes and coordinates of the filter effect are stored in object bounding box
+ * coordinates, where (0,0) refers to the top-left corner of a shapes bounding rect
+ * and (1,1) refers to the bottom-right corner.
+ * When loading, a transformation matrix is given to convert from user space coordinates.
+ * Another transformation matrix is given via the render context to convert back to
+ * user space coordinates when applying the effect.
+ * Using object bounding box coordinates internally makes it easy to share effects
+ * between shapes or even between users via the filter effect resources.
  */
 class FLAKE_EXPORT KoFilterEffect
 {
@@ -115,25 +123,24 @@ public:
     /**
      * Apply the effect on an image.
      * @param image the image the filter should be applied to
-     * @param filterRegion the region of the image corresponding to the filter region
-     * @param converter to convert between document and view coordinates
+     * @param context the render context providing additional data
      */
-    virtual QImage processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const = 0;
+    virtual QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const = 0;
 
     /**
     * Apply the effect on a list of images.
     * @param images the images the filter should be applied to
-    * @param filterRegion the region of the image corresponding to the filter region
-    * @param converter to convert between document and view coordinates
+    * @param context the render context providing additional data
     */
-    virtual QImage processImages(const QList<QImage> &images, const QRect &filterRegion, const KoViewConverter &converter) const;
+    virtual QImage processImages(const QList<QImage> &images, const KoFilterEffectRenderContext &context) const;
 
     /**
      * Loads data from given xml element.
      * @param element the xml element to load data from
+     * @param matrix matrix to transform to bounding box coordinates
      * @return true if loading was successful, else false
      */
-    virtual bool load(const QDomElement &element) = 0;
+    virtual bool load(const QDomElement &element, const QMatrix &matrix = QMatrix()) = 0;
 
     /**
      * Writes custom data to given xml element.

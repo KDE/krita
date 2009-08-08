@@ -187,5 +187,3 @@ void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageSP image, 
     painter.drawLine(rect2.topRight(), rect2.bottomLeft() );
 
 }
-
-#include "kis_duplicateop_settings.moc"

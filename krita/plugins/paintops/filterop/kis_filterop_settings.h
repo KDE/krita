@@ -30,9 +30,8 @@ class QDomElement;
 class KisFilterOpSettingsWidget;
 class KisFilterConfiguration;
 
-class KisFilterOpSettings : public QObject, public KisPaintOpSettings
+class KisFilterOpSettings : public KisPaintOpSettings
 {
-    Q_OBJECT
 
 public:
     using KisPaintOpSettings::fromXML;

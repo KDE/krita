@@ -35,9 +35,7 @@ public:
     KisDynaPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisDynaPaintOpSettingsWidget();
 
-    void setConfiguration( const KisPropertiesConfiguration * config);
     KisPropertiesConfiguration* configuration() const;
-    void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
 public:
     KisPaintActionTypeOption* m_paintActionTypeOption;

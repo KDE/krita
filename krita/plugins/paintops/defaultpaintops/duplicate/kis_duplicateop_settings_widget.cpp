@@ -52,29 +52,13 @@ KisDuplicateOpSettingsWidget::~KisDuplicateOpSettingsWidget()
     delete m_duplicateOption;
 }
 
-void KisDuplicateOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
-{
-    m_brushOption->readOptionSetting(config);
-    m_sizeOption->readOptionSetting(config);
-    m_duplicateOption->readOptionSetting( config );
-}
-
 KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const
 {
     KisDuplicateOpSettings *config =
         new KisDuplicateOpSettings(const_cast<KisDuplicateOpSettingsWidget*>( this ), 0);
-    m_brushOption->writeOptionSetting(config);
-    m_sizeOption->writeOptionSetting(config);
-    m_duplicateOption->writeOptionSetting( config );
-    return config;
-}
-
-void KisDuplicateOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
-{
     config->setProperty("paintop", "duplicate"); // XXX: make this a const id string
-    m_brushOption->writeOptionSetting(config);
-    m_sizeOption->writeOptionSetting(config);
-    m_duplicateOption->writeOptionSetting( config );
+    writeConfiguration(config);
+    return config;
 }
 
 void KisDuplicateOpSettingsWidget::setImage(KisImageSP image)

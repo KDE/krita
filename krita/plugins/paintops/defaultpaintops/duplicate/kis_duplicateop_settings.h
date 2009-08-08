@@ -29,9 +29,8 @@
 
 class QDomElement;
 class KisDuplicateOpSettingsWidget;
-class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings
+class KisDuplicateOpSettings : public KisPaintOpSettings
 {
-    Q_OBJECT
 
 public:
     using KisPaintOpSettings::fromXML;

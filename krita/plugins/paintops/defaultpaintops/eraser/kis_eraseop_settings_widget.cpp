@@ -51,28 +51,12 @@ KisEraseOpSettingsWidget::~KisEraseOpSettingsWidget()
     delete m_opacityOption;
 }
 
-void KisEraseOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
-{
-    m_brushOption->readOptionSetting(config);
-    m_sizeOption->readOptionSetting(config);
-    m_opacityOption->readOptionSetting(config);
-}
-
 KisPropertiesConfiguration* KisEraseOpSettingsWidget::configuration() const
 {
     KisEraseOpSettings *config = new KisEraseOpSettings(const_cast<KisEraseOpSettingsWidget*>( this ));
-    m_brushOption->writeOptionSetting(config);
-    m_sizeOption->writeOptionSetting(config);
-    m_opacityOption->writeOptionSetting(config);
-    return config;
-}
-
-void KisEraseOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
-{
     config->setProperty("paintop", "eraser"); // XXX: make this a const id string
-    m_brushOption->writeOptionSetting(config);
-    m_sizeOption->writeOptionSetting(config);
-    m_opacityOption->writeOptionSetting(config);
+    writeConfiguration(config);
+    return config;
 }
 
 void KisEraseOpSettingsWidget::setImage(KisImageSP image)

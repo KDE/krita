@@ -105,5 +105,3 @@ void KisBrushOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPai
     painter.translate(converter.documentToView( pos - image->pixelToDocument(hotSpot + QPointF(0.5, 0.5) )));
     KisBoundaryPainter::paint( brush->boundary(), image, painter, converter);
 }
-
-#include "kis_brushop_settings.moc"

@@ -109,6 +109,21 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
+void KisPaintOpOptionsWidget::setConfiguration( const KisPropertiesConfiguration * config)
+{
+    Q_ASSERT(!config->getString("paintop").isEmpty());
+    foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
+        option->readOptionSetting(config);
+    }
+}
+
+void KisPaintOpOptionsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
+{
+    foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
+        option->writeOptionSetting(config);
+    }
+}
+
 void KisPaintOpOptionsWidget::changePage(QListWidgetItem *current, QListWidgetItem *previous)
 {
     Q_UNUSED(previous);

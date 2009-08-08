@@ -29,9 +29,8 @@
 class QDomElement;
 class KisEraseOpSettingsWidget;
 
-class KisEraseOpSettings : public QObject, public KisPaintOpSettings
+class KisEraseOpSettings : public KisPaintOpSettings
 {
-    Q_OBJECT
 
 public:
     using KisPaintOpSettings::fromXML;

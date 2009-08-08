@@ -59,24 +59,10 @@ KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()
     delete m_paintActionTypeOption;
 }
 
-void  KisSprayPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
-{
-    m_sprayOption->readOptionSetting(config);
-    m_paintActionTypeOption->readOptionSetting(config);
-}
-
 KisPropertiesConfiguration*  KisSprayPaintOpSettingsWidget::configuration() const
 {
     KisSprayPaintOpSettings* config = new KisSprayPaintOpSettings( const_cast<KisSprayPaintOpSettingsWidget*>( this ) );
-
-    m_sprayOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
-    return config;
-}
-
-void KisSprayPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
-{
     config->setProperty("paintop", "spraybrush"); // XXX: make this a const id string
-    m_sprayOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
+    writeConfiguration(config);
+    return config;
 }

@@ -51,22 +51,12 @@ KisAirbrushOpSettingsWidget::~KisAirbrushOpSettingsWidget()
     delete m_brushOption;
 }
 
-void KisAirbrushOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
-{
-    m_brushOption->readOptionSetting(config);
-}
-
 KisPropertiesConfiguration* KisAirbrushOpSettingsWidget::configuration() const
 {
     KisAirbrushOpSettings *config = new KisAirbrushOpSettings(const_cast<KisAirbrushOpSettingsWidget*>( this ));
-    m_brushOption->writeOptionSetting(config);
-    return config;
-}
-
-void KisAirbrushOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
-{
     config->setProperty("paintop", "airbrush"); // XXX: make this a const id string
-    m_brushOption->writeOptionSetting(config);
+    writeConfiguration(config);
+    return config;
 }
 
 void KisAirbrushOpSettingsWidget::setImage(KisImageSP image)

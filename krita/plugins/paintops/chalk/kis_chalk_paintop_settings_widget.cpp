@@ -52,24 +52,10 @@ KisChalkPaintOpSettingsWidget::~ KisChalkPaintOpSettingsWidget()
     delete m_paintActionTypeOption;
 }
 
-void  KisChalkPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
-{
-    m_chalkOption->readOptionSetting(config);
-    m_paintActionTypeOption->readOptionSetting(config);
-}
-
 KisPropertiesConfiguration*  KisChalkPaintOpSettingsWidget::configuration() const
 {
     KisChalkPaintOpSettings* config = new KisChalkPaintOpSettings( const_cast<KisChalkPaintOpSettingsWidget*>( this ) );
-
-    m_chalkOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
-    return config;
-}
-
-void KisChalkPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
-{
     config->setProperty("paintop", "chalkbrush"); // XXX: make this a const id string
-    m_chalkOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
+    writeConfiguration(config);
+    return config;
 }

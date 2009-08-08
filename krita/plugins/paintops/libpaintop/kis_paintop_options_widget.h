@@ -49,6 +49,11 @@ public:
 
     void addPaintOpOption(KisPaintOpOption * option);
 
+    /// Reimplemented
+    virtual void setConfiguration(const KisPropertiesConfiguration * config);
+
+    /// Reimplemented
+    virtual void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
 private slots:
 

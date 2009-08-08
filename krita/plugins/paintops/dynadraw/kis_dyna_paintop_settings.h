@@ -19,7 +19,6 @@
 #ifndef KIS_DYNA_PAINTOP_SETTINGS_H_
 #define KIS_DYNA_PAINTOP_SETTINGS_H_
 
-#include <QObject>
 #include <QList>
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
@@ -30,9 +29,8 @@ class QDomElement;
 class QDomDocument;
 
 
-class KisDynaPaintOpSettings : public QObject, public KisPaintOpSettings
+class KisDynaPaintOpSettings : public KisPaintOpSettings
 {
-    Q_OBJECT
 
 public:
 

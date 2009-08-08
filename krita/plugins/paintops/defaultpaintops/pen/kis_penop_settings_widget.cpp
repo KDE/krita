@@ -58,34 +58,12 @@ KisPenOpSettingsWidget::~KisPenOpSettingsWidget()
     delete m_paintActionTypeOption;
 }
 
-void KisPenOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
-{
-    m_brushOption->readOptionSetting(config);
-    m_sizeOption->readOptionSetting(config);
-    m_opacityOption->readOptionSetting(config);
-    m_darkenOption->readOptionSetting(config);
-    m_paintActionTypeOption->readOptionSetting(config);
-}
-
 KisPropertiesConfiguration* KisPenOpSettingsWidget::configuration() const
 {
     KisPenOpSettings *config = new KisPenOpSettings(const_cast<KisPenOpSettingsWidget*>( this ));
-    m_brushOption->writeOptionSetting(config);
-    m_sizeOption->writeOptionSetting(config);
-    m_opacityOption->writeOptionSetting(config);
-    m_darkenOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
-    return config;
-}
-
-void KisPenOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
-{
     config->setProperty("paintop", "pencil"); // XXX: make this a const id string
-    m_brushOption->writeOptionSetting(config);
-    m_sizeOption->writeOptionSetting(config);
-    m_opacityOption->writeOptionSetting(config);
-    m_darkenOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
+    writeConfiguration(config);
+    return config;
 }
 
 void KisPenOpSettingsWidget::setImage(KisImageSP image)

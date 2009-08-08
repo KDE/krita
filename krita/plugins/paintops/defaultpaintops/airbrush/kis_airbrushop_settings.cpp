@@ -78,5 +78,3 @@ KisPaintOpSettingsSP KisAirbrushOpSettings::clone() const {
     return settings;
 
 }
-
-#include "kis_airbrushop_settings.moc"

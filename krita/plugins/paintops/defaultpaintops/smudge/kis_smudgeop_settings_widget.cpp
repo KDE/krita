@@ -58,34 +58,12 @@ KisSmudgeOpSettingsWidget::~KisSmudgeOpSettingsWidget()
     delete m_rateOption;
 }
 
-void KisSmudgeOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
-{
-    m_brushOption->readOptionSetting(config);
-    m_sizeOption->readOptionSetting(config);
-    m_opacityOption->readOptionSetting(config);
-    m_darkenOption->readOptionSetting(config);
-    m_rateOption->readOptionSetting(config);
-}
-
 KisPropertiesConfiguration* KisSmudgeOpSettingsWidget::configuration() const
 {
     KisSmudgeOpSettings *config = new KisSmudgeOpSettings(const_cast<KisSmudgeOpSettingsWidget*>( this ));
-    m_brushOption->writeOptionSetting(config);
-    m_sizeOption->writeOptionSetting(config);
-    m_opacityOption->writeOptionSetting(config);
-    m_darkenOption->writeOptionSetting(config);
-    m_rateOption->writeOptionSetting(config);
-    return config;
-}
-
-void KisSmudgeOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
-{
     config->setProperty("paintop", "smudge"); // XXX: make this a const id string
-    m_brushOption->writeOptionSetting(config);
-    m_sizeOption->writeOptionSetting(config);
-    m_opacityOption->writeOptionSetting(config);
-    m_darkenOption->writeOptionSetting(config);
-    m_rateOption->writeOptionSetting(config);
+    writeConfiguration(config);
+    return config;
 }
 
 void KisSmudgeOpSettingsWidget::setImage(KisImageSP image)

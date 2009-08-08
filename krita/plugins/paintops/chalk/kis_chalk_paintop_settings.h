@@ -30,9 +30,8 @@ class QDomElement;
 class QDomDocument;
 
 
-class KisChalkPaintOpSettings : public QObject, public KisPaintOpSettings
+class KisChalkPaintOpSettings : public KisPaintOpSettings
 {
-    Q_OBJECT
 
 public:
 

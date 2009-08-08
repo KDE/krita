@@ -38,9 +38,7 @@ public:
     KisSprayPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisSprayPaintOpSettingsWidget();
 
-    void setConfiguration( const KisPropertiesConfiguration * config);
     KisPropertiesConfiguration* configuration() const;
-    void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
 public:
     KisPaintActionTypeOption* m_paintActionTypeOption;

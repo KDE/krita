@@ -42,11 +42,7 @@ public:
 
     ~KisAirbrushOpSettingsWidget();
 
-    void setConfiguration( const KisPropertiesConfiguration * config);
-
     KisPropertiesConfiguration* configuration() const;
-
-    void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
     void setImage(KisImageSP image);
 

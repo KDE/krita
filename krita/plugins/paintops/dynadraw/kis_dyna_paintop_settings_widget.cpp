@@ -52,24 +52,11 @@ KisDynaPaintOpSettingsWidget::~ KisDynaPaintOpSettingsWidget()
     delete m_paintActionTypeOption;
 }
 
-void  KisDynaPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
-{
-    m_dynaOption->readOptionSetting(config);
-    m_paintActionTypeOption->readOptionSetting(config);
-}
-
 KisPropertiesConfiguration*  KisDynaPaintOpSettingsWidget::configuration() const
 {
     KisDynaPaintOpSettings* config = new KisDynaPaintOpSettings( const_cast<KisDynaPaintOpSettingsWidget*>( this ) );
 
-    m_dynaOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
-    return config;
-}
-
-void KisDynaPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
-{
     config->setProperty("paintop", "dynabrush"); // XXX: make this a const id string
-    m_dynaOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
+    writeConfiguration(config);
+    return config;
 }

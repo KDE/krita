@@ -77,5 +77,3 @@ KisPaintOpSettingsSP KisSmudgeOpSettings::clone() const {
     return settings;
 
 }
-
-#include "kis_smudgeop_settings.moc"

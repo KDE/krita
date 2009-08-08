@@ -78,5 +78,3 @@ KisPaintOpSettingsSP KisEraseOpSettings::clone() const {
     return settings;
 
 }
-
-#include "kis_eraseop_settings.moc"

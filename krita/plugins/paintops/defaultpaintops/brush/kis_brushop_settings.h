@@ -29,9 +29,8 @@
 class QDomElement;
 class KisBrushOpSettingsWidget;
 
-class KisBrushOpSettings : public QObject, public KisPaintOpSettings
+class KisBrushOpSettings : public KisPaintOpSettings
 {
-    Q_OBJECT
 
 public:
     using KisPaintOpSettings::fromXML;

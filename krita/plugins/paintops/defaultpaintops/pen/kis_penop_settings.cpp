@@ -77,5 +77,3 @@ KisPaintOpSettingsSP KisPenOpSettings::clone() const {
     return settings;
 
 }
-
-#include "kis_penop_settings.moc"

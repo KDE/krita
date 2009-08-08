@@ -55,26 +55,12 @@ KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()
     delete m_filterOption;
 }
 
-void KisFilterOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
-{
-    m_brushOption->readOptionSetting(config);
-    m_sizeOption->readOptionSetting(config);
-    m_filterOption->readOptionSetting(config);
-}
-
 KisPropertiesConfiguration* KisFilterOpSettingsWidget::configuration() const
 {
     KisFilterOpSettings *config = new KisFilterOpSettings(const_cast<KisFilterOpSettingsWidget*>( this ));
+    config->setProperty("paintop", "filter"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
-}
-
-void KisFilterOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
-{
-    config->setProperty("paintop", "filter"); // XXX: make this a const id string
-    m_brushOption->writeOptionSetting(config);
-    m_sizeOption->writeOptionSetting(config);
-    m_filterOption->writeOptionSetting(config);
 }
 
 void KisFilterOpSettingsWidget::setImage(KisImageSP image)

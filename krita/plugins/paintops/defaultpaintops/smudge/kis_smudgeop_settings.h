@@ -29,9 +29,8 @@
 class QDomElement;
 class KisSmudgeOpSettingsWidget;
 
-class KisSmudgeOpSettings : public QObject, public KisPaintOpSettings
+class KisSmudgeOpSettings : public KisPaintOpSettings
 {
-    Q_OBJECT
 
 public:
     using KisPaintOpSettings::fromXML;

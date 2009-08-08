@@ -109,5 +109,3 @@ bool KisFilterOpSettings::ignoreAlpha() const
 {
     return m_optionsWidget->m_filterOption->ignoreAlpha();
 }
-
-#include "kis_filterop_settings.moc"

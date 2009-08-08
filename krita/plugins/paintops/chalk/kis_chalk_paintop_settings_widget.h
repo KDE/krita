@@ -35,9 +35,7 @@ public:
     KisChalkPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisChalkPaintOpSettingsWidget();
 
-    void setConfiguration( const KisPropertiesConfiguration * config);
     KisPropertiesConfiguration* configuration() const;
-    void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
 public:
     KisPaintActionTypeOption* m_paintActionTypeOption;

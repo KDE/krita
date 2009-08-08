@@ -35,7 +35,7 @@
 #include <QTime>
 
 const qreal radToDeg = 57.29578;
-const int POINTS = 4;
+const int _POINTS = 4;
 #ifdef _WIN32
 #define srand48 srand
 #define drand48 rand
@@ -43,7 +43,7 @@ const int POINTS = 4;
 
 CurveBrush::CurveBrush() : m_head( 0 ), m_counter ( 1 ),m_incr ( 1 )
 {
-    for (int i=0;i<POINTS;i++){
+    for (int i=0;i<_POINTS;i++){
         m_points[i] = QPointF(0,0);
     }
 
@@ -377,7 +377,7 @@ void CurveBrush::paintLine ( KisPaintDeviceSP dab,KisPaintDeviceSP layer, const 
 
 
 void CurveBrush::addPoint(QPointF p){
-    if ((m_head) == POINTS){
+    if ((m_head) == _POINTS){
         removeLast();
     }
     m_points[m_head] = p; 
@@ -385,7 +385,7 @@ void CurveBrush::addPoint(QPointF p){
 }
 
 void CurveBrush::removeLast(){
-    for (int i = 1;i<POINTS; i++){
+    for (int i = 1;i<_POINTS; i++){
         m_points[i-1] = m_points[i];
     }
     m_head--;

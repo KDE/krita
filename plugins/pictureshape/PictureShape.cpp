@@ -37,13 +37,18 @@
 #include <QPixmapCache>
 #include <kdebug.h>
 
+QString generate_key(qint64 key, const QSize & size)
+{
+    return QString("%1-%2-%3").arg(key).arg(size.width()).arg(size.height());
+}
+
 void RenderQueue::renderImage()
 {
     KoImageData *imageData = qobject_cast<KoImageData*>(m_pictureShape->userData());
     if (m_wantedImageSize.isEmpty() || imageData == 0)
         return;
     QSize size = m_wantedImageSize.takeFirst();
-    QString key = QString::number(imageData->key() + size.width() * size.height());
+    QString key(generate_key(imageData->key(), size));
     if (QPixmapCache::find(key) == 0) {
         QPixmap pixmap = imageData->pixmap(size);
         QPixmapCache::insert(key, pixmap);
@@ -76,7 +81,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
     const QRect pixels = pixelsF.toRect();
     QSize pixmapSize = pixels.size();
 
-    QString key = QString::number(imageData->key() + pixmapSize.width() * pixmapSize.height());
+    QString key(generate_key(imageData->key(), pixmapSize));
     QPixmap pixmap;
     if (!QPixmapCache::find(key, pixmap)) { // first check cache.
         // no? Does the imageData have it then?
@@ -103,7 +108,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
                     pixmapSize.setHeight(MaxSize);
                 }
             }
-            key = QString::number(imageData->key() + pixmapSize.width() * pixmapSize.height());
+            key = generate_key(imageData->key(), pixmapSize);
         }
     }
 

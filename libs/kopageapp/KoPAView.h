@@ -78,12 +78,14 @@ public:
     KoRuler *horizontalRuler();
     KoRuler *verticalRuler();
 
-    KoPACanvas * kopaCanvas() { return m_canvas; }
-    KoPACanvas * kopaCanvas() const { return m_canvas; }
-
-    KoPADocument * kopaDocument() { return m_doc; }
+    /// @return the canvas for the application
+    KoPACanvas * kopaCanvas() const;
+    /// @return the document for the application
+    KoPADocument * kopaDocument() const;
     /// @return Page that is shown in the canvas
     KoPAPageBase* activePage() const;
+    /// @return the acvive viewMode
+    KoPAViewMode* viewMode() const;
 
     /// Set page shown in the canvas to @p page
     void setActivePage( KoPAPageBase * page );
@@ -95,9 +97,6 @@ public:
 
     /// @return the master shape manager used for this view
     KoShapeManager* masterShapeManager() const;
-
-    /// @return the acvive viewMode
-    KoPAViewMode* viewMode() const;
 
     /**
      * @brief Set the view mode
@@ -251,12 +250,6 @@ protected slots:
      * Configure kopapage apps
      */
     void configure();
-
-protected:
-    KoPADocument *m_doc;
-    KoPACanvas   *m_canvas;
-    KoPAPageBase *m_activePage;
-    KoPAViewMode *m_viewMode;
 
 private:
     class Private;

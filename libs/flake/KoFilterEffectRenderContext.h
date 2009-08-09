@@ -31,22 +31,23 @@ class FLAKE_EXPORT KoFilterEffectRenderContext
 {
 public:
     KoFilterEffectRenderContext(const KoViewConverter &converter);
-    
+    ~KoFilterEffectRenderContext();
+
     /// Returns the filter region the filter is applied to
     QRectF filterRegion() const;
-    
+
     /// Sets the filter region the filter is applied to
     void setFilterRegion(const QRectF &filterRegion);
-    
+
     /// Transformation used to transform to document coordinates
     QMatrix coordinateTransformation() const;
-    
+
     /// Sets the coordinate transformation matrix
     void setCoordinateTransformation(const QMatrix &transform);
-    
+
     /// Returns the view converter
     const KoViewConverter * viewConverter() const;
-    
+
 private:
     class Private;
     Private * const d;

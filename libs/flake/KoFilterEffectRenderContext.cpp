@@ -29,7 +29,7 @@ public:
     Private(const KoViewConverter &viewConverter)
         : converter(viewConverter)
     {}
-    
+
     QRectF filterRegion;
     QMatrix transform;
     const KoViewConverter & converter;
@@ -38,6 +38,11 @@ public:
 KoFilterEffectRenderContext::KoFilterEffectRenderContext(const KoViewConverter &converter)
 : d(new Private(converter))
 {
+}
+
+KoFilterEffectRenderContext::~KoFilterEffectRenderContext()
+{
+    delete d;
 }
 
 QRectF KoFilterEffectRenderContext::filterRegion() const

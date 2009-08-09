@@ -93,10 +93,10 @@ class KoPAView::Private
 {
 public:
     Private( KoPADocument *document )
-        : doc( document )
-        , canvas( 0 )
-        , activePage( 0 )
-        , viewMode( 0 )
+    : doc( document )
+    , canvas( 0 )
+    , activePage( 0 )
+    , viewMode( 0 )
     {}
 
     ~Private()
@@ -109,24 +109,24 @@ public:
     KoZoomController *zoomController;
     KoZoomHandler zoomHandler;
 
-    KAction       *editPaste;
-    KAction       *deleteSelectionAction;
+    KAction *editPaste;
+    KAction *deleteSelectionAction;
 
     KToggleAction *actionViewSnapToGrid;
     KToggleAction *actionViewShowGuides;
     KToggleAction *actionViewShowMasterPages;
 
-    KAction       *actionInsertPage;
-    KAction       *actionCopyPage;
-    KAction       *actionDeletePage;
+    KAction *actionInsertPage;
+    KAction *actionCopyPage;
+    KAction *actionDeletePage;
 
-    KAction       *actionMasterPage;
-    KAction       *actionPageLayout;
+    KAction *actionMasterPage;
+    KAction *actionPageLayout;
 
-    KAction       *actionConfigure;
+    KAction *actionConfigure;
 
-    KoRuler       *horizontalRuler;
-    KoRuler       *verticalRuler;
+    KoRuler *horizontalRuler;
+    KoRuler *verticalRuler;
     KToggleAction *viewRulers;
 
     KoZoomAction  *zoomAction;
@@ -139,18 +139,18 @@ public:
     QLabel *status;       ///< ordinary status
 
     // These used to be protected.
-    KoPADocument  *doc;
-    KoPACanvas    *canvas;
-    KoPAPageBase  *activePage;
-    KoPAViewMode  *viewMode;
+    KoPADocument *doc;
+    KoPACanvas *canvas;
+    KoPAPageBase *activePage;
+    KoPAViewMode *viewMode;
 
 };
 
 
 
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
-  : KoView( document, parent )
-  , d( new Private( document ) )
+: KoView( document, parent )
+, d( new Private( document ) )
 {
     initGUI();
     initActions();

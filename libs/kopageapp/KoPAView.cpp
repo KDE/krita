@@ -138,11 +138,12 @@ public:
 
 
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
-: KoView( document, parent )
-, m_doc( document )
-, m_activePage( 0 )
-, m_viewMode( 0 )
-, d( new Private() )
+  : KoView( document, parent )
+  , m_doc( document )
+  , m_canvas( 0 )
+  , m_activePage( 0 )
+  , m_viewMode( 0 )
+  , d( new Private() )
 {
     initGUI();
     initActions();
@@ -159,6 +160,8 @@ KoPAView::~KoPAView()
     // Delete only the view mode normal, let the derived class delete
     // the currently active view mode if it is not view mode normal
     delete d->viewModeNormal;
+
+    delete d;
 }
 
 void KoPAView::initGUI()
@@ -194,7 +197,7 @@ void KoPAView::initGUI()
     d->viewModeNormal = new KoPAViewModeNormal( this, m_canvas );
     m_viewMode = d->viewModeNormal;
 
-    //Ruler
+    // The rulers
     d->horizontalRuler = new KoRuler(this, Qt::Horizontal, viewConverter( m_canvas ));
     d->horizontalRuler->setShowMousePosition(true);
     d->horizontalRuler->setUnit(m_doc->unit());
@@ -204,22 +207,24 @@ void KoPAView::initGUI()
 
     new KoRulerController(d->horizontalRuler, m_canvas->resourceProvider());
 
-    connect(m_doc, SIGNAL(unitChanged(KoUnit)), d->horizontalRuler, SLOT(setUnit(KoUnit)));
-    connect(m_doc, SIGNAL(unitChanged(KoUnit)), d->verticalRuler, SLOT(setUnit(KoUnit)));
+    connect(m_doc,              SIGNAL(unitChanged(KoUnit)),
+            d->horizontalRuler, SLOT(setUnit(KoUnit)));
+    connect(m_doc,              SIGNAL(unitChanged(KoUnit)),
+            d->verticalRuler,   SLOT(setUnit(KoUnit)));
 
     gridLayout->addWidget(d->horizontalRuler, 0, 1);
     gridLayout->addWidget(d->verticalRuler, 1, 0);
     gridLayout->addWidget( d->canvasController, 1, 1 );
 
     connect(d->canvasController, SIGNAL(canvasOffsetXChanged(int)),
-            d->horizontalRuler, SLOT(setOffset(int)));
+            d->horizontalRuler,  SLOT(setOffset(int)));
     connect(d->canvasController, SIGNAL(canvasOffsetYChanged(int)),
-            d->verticalRuler, SLOT(setOffset(int)));
+            d->verticalRuler,    SLOT(setOffset(int)));
     connect(d->canvasController, SIGNAL(sizeChanged(const QSize&)),
-             this, SLOT(canvasControllerResized()));
+            this,                SLOT(canvasControllerResized()));
     connect(d->canvasController, SIGNAL(canvasMousePositionChanged(const QPoint&)),
-             this, SLOT(updateMousePosition(const QPoint&)));
-    connect(d->verticalRuler,   SIGNAL(guideLineCreated(Qt::Orientation, int)),
+            this,                SLOT(updateMousePosition(const QPoint&)));
+    connect(d->verticalRuler,    SIGNAL(guideLineCreated(Qt::Orientation, int)),
             d->canvasController, SLOT(addGuideLine(Qt::Orientation, int)));
     connect(d->horizontalRuler,  SIGNAL(guideLineCreated(Qt::Orientation, int)),
             d->canvasController, SLOT(addGuideLine(Qt::Orientation, int)));

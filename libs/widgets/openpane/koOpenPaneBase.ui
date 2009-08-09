@@ -27,7 +27,7 @@
        <bool>false</bool>
       </property>
       <property name="uniformRowHeights">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="sortingEnabled">
        <bool>true</bool>
@@ -35,9 +35,6 @@
       <property name="allColumnsShowFocus">
        <bool>true</bool>
       </property>
-      <attribute name="headerVisible">
-       <bool>false</bool>
-      </attribute>
       <attribute name="headerVisible">
        <bool>false</bool>
       </attribute>

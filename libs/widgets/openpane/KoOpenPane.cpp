@@ -28,6 +28,7 @@
 #include <QSize>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QStyledItemDelegate>
 
 #include <klocale.h>
 #include <kcomponentdata.h>
@@ -69,17 +70,6 @@ public:
         return ((item->sortWeight() - sortWeight()) < 0);
     }
 
-//    virtual void paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int align) {
-//        if (widgetIndex() >= 0) {
-//            Q3ListViewItem::paintCell(p, cg, column, width, align);
-//        } else {
-//            int ypos = (height() - 2) / 2;
-//            QPen pen(cg.windowText(), 2);
-//            p->setPen(pen);
-//            p->drawLine(0, ypos, width, ypos);
-//        }
-//    }
-
     int sortWeight() const {
         return m_sortWeight;
     }
@@ -92,6 +82,28 @@ private:
     int m_sortWeight;
     int m_widgetIndex;
 };
+
+
+class KoSectionListDelegate : public QStyledItemDelegate
+{
+public:
+    KoSectionListDelegate(QObject* parent = 0) : QStyledItemDelegate(parent) { }
+
+    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+    {
+        QStyledItemDelegate::paint(painter, option, index);
+
+        if(option.state == QStyle::State_None)
+        {
+            QRect rect = option.rect;
+            int ypos = rect.y() + ((rect.height() - 2) / 2);
+            QPen pen(option.palette.windowText(), 2);
+            painter->setPen(pen);
+            painter->drawLine(rect.x(), ypos, rect.width(), ypos);
+        }
+    }
+};
+
 
 class KoOpenPanePrivate : public Ui_KoOpenPaneBase
 {
@@ -114,6 +126,9 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
 {
     d->m_componentData = componentData;
     d->setupUi(this);
+
+    KoSectionListDelegate* delegate = new KoSectionListDelegate(d->m_sectionList);
+    d->m_sectionList->setItemDelegate(delegate);
 
     connect(d->m_sectionList, SIGNAL(itemSelectionChanged()),
             this, SLOT(updateSelectedWidget()));

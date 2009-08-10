@@ -74,6 +74,11 @@ void KoFilterEffectStack::removeFilterEffect(int index)
     delete filter;
 }
 
+KoFilterEffect* KoFilterEffectStack::takeFilterEffect(int index)
+{
+    return d->filterEffects.takeAt(index);
+}
+
 void KoFilterEffectStack::setClipRect(const QRectF &clipRect)
 {
     d->clipRect = clipRect;

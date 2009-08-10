@@ -73,6 +73,13 @@ public:
     */
     void removeFilterEffect(int index);
 
+    /**
+     * Take filter effect with given index from the stack and returns it.
+     * @param index the index of the filter to take
+     * @return the filter effect, of 0 if no filter effect with the given index exists
+     */
+    KoFilterEffect* takeFilterEffect(int index);
+    
     /// Sets the clipping rectangle used for this filter in bounding box units
     void setClipRect(const QRectF &clipRect);
 

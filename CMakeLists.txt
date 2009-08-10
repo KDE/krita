@@ -26,8 +26,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 # doesn't build, but rather add the following line:
 # option(BUILD_app "Build directory app" OFF)
 #
-
-option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
+#eg:
+#option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
 
 option(TINY "compile a tiny KOffice" OFF)
 

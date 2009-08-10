@@ -21,6 +21,14 @@ set(GENERIC_KOFFICE_LIB_SOVERSION "5")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
+#
+# WARNING: don't change the SHOULD_BUILD_app if an application
+# doesn't build, but rather add the following line:
+# option(BUILD_app "Build directory app" OFF)
+#
+
+option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
+
 option(TINY "compile a tiny KOffice" OFF)
 
 IF (TINY)
@@ -45,7 +53,7 @@ ELSE(TINY)
     set(SHOULD_BUILD_PIGMENT TRUE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
-    set(SHOULD_BUILD_KEXI FALSE)
+    set(SHOULD_BUILD_KEXI TRUE)
     set(SHOULD_BUILD_KIVIO TRUE)
     set(SHOULD_BUILD_KPLATO TRUE)
     set(SHOULD_BUILD_KFORMULA TRUE)

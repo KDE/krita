@@ -196,8 +196,8 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     // updates, so no need to prescale!
     QRect vRect = viewRectFromDoc(rc);
     if (!vRect.isEmpty()) {
-        //m_d->canvasWidget->widget()->update(vRect);
-        m_d->canvasWidget->widget()->update();
+        m_d->canvasWidget->widget()->update(vRect);
+        //m_d->canvasWidget->widget()->update();
     }
 }
 
@@ -315,14 +315,11 @@ void KisCanvas2::updateCanvasProjection(const QRect & rc)
     Q_ASSERT(m_d->openGLImageTextures.isNull());
 #endif
 
-    QRect vRect = m_d->prescaledProjection->viewRectFromImagePixels(rc);
-    vRect.translate( m_d->canvasWidget->documentOrigin() );
-
-    if (!vRect.isEmpty()) {
-        m_d->prescaledProjection->updateCanvasProjection(rc);
-        // Regardless, the actual
-        //m_d->canvasWidget->widget()->update(vRect);
-        m_d->canvasWidget->widget()->update();
+    QRect vRect = m_d->prescaledProjection->updateCanvasProjection(rc);
+    if(!vRect.isEmpty()) {
+	vRect.translate(m_d->canvasWidget->documentOrigin());
+	m_d->canvasWidget->widget()->update(vRect);
+        //m_d->canvasWidget->widget()->update();
     }
 }
 

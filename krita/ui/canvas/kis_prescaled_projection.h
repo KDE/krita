@@ -27,13 +27,14 @@ class QPixmap;
 class QImage;
 class QPoint;
 class QRect;
+class QRectF;
 class QSize;
 class QPainter;
 
 class KoViewConverter;
 class KoColorProfile;
 
-class KisProjectionCache;
+class KisProjectionBackend;
 
 #include <kis_types.h>
 
@@ -121,12 +122,6 @@ public:
      * Return the intersection of the widget size and the given rect
      * in image pixels converted to widget pixels.
      */
-    QRect viewRectFromImagePixels(const QRect & imageRect);
-
-    /**
-     * Return the intersection of the widget size and the given rect
-     * in image pixels converted to widget pixels.
-     */
     void updateDocumentOrigin(const QPoint &documentOrigin);
 
 public slots:
@@ -135,6 +130,12 @@ public slots:
      * Called whenever the configuration settings change.
      */
     void updateSettings();
+
+    /**
+     * Called from updateSettings to set up chosen backend:
+     * KisProjectionCache or KisImagePyramidBased
+     */
+    void initBackend(bool useMipmapping, bool cacheKisImageAsQImage);
 
     /**
      * Called whenever the view widget needs to show a different part of
@@ -149,8 +150,9 @@ public slots:
      * representation of it.
      *
      * @param rc the are to be updated in image pixels
+     * @return a rect to be updated in widget pixels
      */
-    void updateCanvasProjection(const QRect & rc);
+    QRect updateCanvasProjection(const QRect & rc);
 
     /**
      * Called whenever the size of the KisImage changes
@@ -192,7 +194,7 @@ public slots:
      * preScale and draw onto the scaled projection the specified rect,
      * in canvas view pixels.
      */
-    void preScale(const QRect & rc);
+    QRect preScale(const QRect & rc);
 
 
 signals:
@@ -204,22 +206,11 @@ signals:
      *
      * @param rc the updated area in image pixels
      */
-    void sigPrescaledProjectionUpdated(const QRect & rc);
+    // FIXME: seems to be not used
+    //void sigPrescaledProjectionUpdated(const QRect & rc);
 
 private:
-
-
     friend class KisPrescaledProjectionTest;
-
-    void setSettingsForTests(bool updateAllQPainterCanvas,
-                             bool useNearestNeighbour,
-                             bool useQtScaling,
-                             bool useSampling,
-                             bool smoothBetween100And200Percent,
-                             bool drawCheckers,
-                             bool drawMaskVisualisationOnUnscaledCanvasCache,
-                             bool cacheKisImageAsQImage,
-                             bool showMask);
 
     KisPrescaledProjection(const KisPrescaledProjection &);
     KisPrescaledProjection operator=(const KisPrescaledProjection &);
@@ -227,29 +218,70 @@ private:
     /**
      * Draw the prescaled image onto the painter.
      *
-     * @param rc The desired rect in KisImage pixels
+     * @param rc The desired rect (NOT in KisImage pixels)
+     * It's in viewport pixels
      * @param gc The painter we draw on
      * directly to the blitz code
+     * @return a rect actually updated during drawing
+     * it can be greater that @rc do to KisImage alignment
      */
-    void drawScaledImage(const QRect & rc,  QPainter & gc);
+    QRect drawScaledImage(const QRect & rc,  QPainter & gc);
+
 
     /**
-     * Return the aligned rect in image pixels.
+     * Actual drawing is done here
+     * @param imageRect - region of the KisImage to read from
+     * (in KisImage pixels)
+     * @param viewportRect - region of @gc to draw to. Of course
+     * it is in @gc's pixels. Actual image will be scaled down to
+     * fit viewportRect
      */
-    QRect imageRectFromViewPortPixels(const QRect & viewportRect);
+    void drawUsingBackend(KisProjectionBackend *backend,
+                          QPainter &gc,
+                          qreal &scaleX, qreal &scaleY,
+                          const QRect   &imageRect,
+                          const QRectF  &viewportRect);
 
     /**
-     * Update the internal unscaled canvas cache from the kisimage, if
-     * the settings allow that.
-     *
-     * @param imageRect the rect to be updated in image pixels
+     * Converts image pixels into widget pixels
+     * viewRect will always correspond to imageRect (no border
+     * adjustment is done)
+     * Note: caller should check whether viewRect is inside
+     *       canvas area himself
      */
-    void updateUnscaledCache(const QRect & imageRect);
+    QRectF viewRectFromImagePixels(const QRect& imageRect);
+
+    /**
+     * Converts widget pixels into image pixels
+     * Note1: imageRect will always be adjusted to be inside
+     *        an image, so it _may not_ correspond viewportRect
+     * Note2: caller should check whether viewportRect is inside
+     *        canvas area himself before calling.
+     */
+    QRect imageRectFromViewPortPixels(const QRectF& viewportRect);
 
     struct Private;
     Private * const m_d;
-
 };
+
+/**
+ * A workaroung for Qt's strange behavior of QRect::toAlignedRect()
+ */
+KRITAUI_EXPORT QRect toAlignedRectWorkaround(const QRectF& rc);
+
+/**
+ * Heh.. "Due to hitory reasons" [1] Qt's QRect::right() doesn't return
+ * the coordinate of rightmost side of the rect, it returns
+ * the position of the last (rightmost) pixel owned by the rect.
+ * However QRectF implements the former case.
+ * We workaround it here AND help rounding process a bit.
+ * Returned QRectF is ~2e-10 pixels smaller, than original @rc.
+ * It doesn't play any role in drawing, but it helps to round up
+ * back to @rc afterwards.
+ *
+ * [1] - see Qt documentation for more
+ */
+KRITAUI_EXPORT QRectF toFloatRectWorkaround(const QRect& rc);
 
 
 #endif

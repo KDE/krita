@@ -179,16 +179,29 @@ void KisPrescaledProjectionTest::testCoordinateConversionRoundTrip()
     projection.setImage(image);
     projection.resizePrescaledImage(QSize(100, 100));
 
-    QRect viewRect = projection.viewRectFromImagePixels(QRect(0, 0, 100, 100));
+    QRect viewRect = toAlignedRectWorkaround(projection.viewRectFromImagePixels(QRect(0, 0, 100, 100)));
+
+    /**
+     * FIXME:
+     * Actually, we compare with wrong rect here, i think.
+     * Right rect here is QRect(0,0,40,40) as
+     * 100 / 300 * 120 == 40
+     * Current value '41', i guess, is a legacy of
+     * "hystory reasons" caused QRect::right() to be
+     * one pixel smaller than QRectF::right()
+     */
     QCOMPARE(viewRect, QRect(0, 0, 41, 41));
 
-    QRect viewRect2 = projection.viewRectFromImagePixels(QRect(0, 0, 200, 200));
+    QRect viewRect2 = toAlignedRectWorkaround(projection.viewRectFromImagePixels(QRect(0, 0, 200, 200)));
+    /**
+     * Here too
+     */
     QCOMPARE(viewRect2, QRect(0, 0, 81, 81));
 
     QRect imageRect = projection.imageRectFromViewPortPixels(viewRect);
     QCOMPARE(imageRect, QRect(0, 0, 100, 100));
 
-    QRect viewRect3 = projection.viewRectFromImagePixels(imageRect);
+    QRect viewRect3 = toAlignedRectWorkaround(projection.viewRectFromImagePixels(imageRect));
     QCOMPARE(viewRect3, viewRect);
 }
 

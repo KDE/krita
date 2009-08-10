@@ -22,6 +22,10 @@
 #include "kis_config.h"
 #include <kis_image.h>
 
+// for toAlignedRectWorkaround()
+#include "kis_prescaled_projection.h"
+
+
 KisProjectionCache::KisProjectionCache()
     : m_cacheKisImageAsQImage( true )
     , m_monitorProfile( 0 )
@@ -33,12 +37,19 @@ void KisProjectionCache::setImage( KisImageSP image )
     m_image = image;
 }
 
+// This is a workaround against border effects
+// and indirect painting support
+#define ALWAYS_CACHE_AS_QIMAGE
+
 void KisProjectionCache::setCacheKisImageAsQImage( bool toggle )
 {
+#ifdef ALWAYS_CACHE_AS_QIMAGE
+    toggle = true;
+#endif
     if ( toggle != m_cacheKisImageAsQImage ) {
         if ( toggle ) {
             m_cacheKisImageAsQImage = true;
-            updateUnscaledCache( QRect( 0, 0, m_imageSize.width(), m_imageSize.height() ) );
+            setDirty( QRect( 0, 0, m_imageSize.width(), m_imageSize.height() ) );
         }
         else {
             m_cacheKisImageAsQImage = false;
@@ -56,6 +67,7 @@ void KisProjectionCache::setImageSize( qint32 w,  qint32 h )
 
     if ( !m_cacheKisImageAsQImage ) return;
 
+#ifndef ALWAYS_CACHE_AS_QIMAGE
     KisConfig cfg;
     quint32 maxCachedImageSize = cfg.maxCachedImageSize();
 
@@ -63,9 +75,14 @@ void KisProjectionCache::setImageSize( qint32 w,  qint32 h )
         setCacheKisImageAsQImage( false );
     }
     else {
+#endif
+
         m_unscaledCache = QImage(w, h, QImage::Format_ARGB32);
-        updateUnscaledCache(QRect(0, 0, w, h));
+        setDirty(QRect(0, 0, w, h));
+
+#ifndef ALWAYS_CACHE_AS_QIMAGE
     }
+#endif
 }
 
 void KisProjectionCache::setMonitorProfile( const KoColorProfile* monitorProfile )
@@ -73,7 +90,7 @@ void KisProjectionCache::setMonitorProfile( const KoColorProfile* monitorProfile
     m_monitorProfile = monitorProfile;
 }
 
-void KisProjectionCache::updateUnscaledCache(const QRect & rc)
+void KisProjectionCache::setDirty(const QRect & rc)
 {
 
 
@@ -118,27 +135,55 @@ void KisProjectionCache::updateUnscaledCache(const QRect & rc)
     p.end();
 
 }
-
-QImage KisProjectionCache::image( const QRect& alignedImageRect )
+#include <QtDebug>
+KisImagePatch KisProjectionCache::getNearestPatch(qreal scaleX, qreal scaleY,
+                                                  const QRect& requestedRect,
+                                                  qint32 borderWidth)
 {
+    KisImagePatch patch;
 
-    if ( m_cacheKisImageAsQImage ) {
-        return m_unscaledCache.copy( alignedImageRect );
+    patch.m_scaleX = 1.;
+    patch.m_scaleY = 1.;
+
+    patch.m_interestRect = toFloatRectWorkaround(
+        QRect(borderWidth, borderWidth,
+              requestedRect.width(),
+              requestedRect.height())
+        );
+
+    QRect adjustedRect = requestedRect.adjusted(-borderWidth, -borderWidth,
+                                                borderWidth, borderWidth);
+    patch.m_patchRect = adjustedRect;
+
+    if (m_cacheKisImageAsQImage) {
+        patch.m_image = m_unscaledCache.copy(patch.m_patchRect);
     }
     else {
-        return m_image->convertToQImage( alignedImageRect.x(), alignedImageRect.y(),
-                                         alignedImageRect.width(), alignedImageRect.height(),
-                                         m_monitorProfile );
+        qint32 x, y, w, h;
+        patch.m_patchRect.getRect(&x, &y, &w, &h);
+
+        patch.m_image = m_image->convertToQImage(x, y, w, h,
+                                                 m_monitorProfile);
     }
+
+    return patch;
 }
 
-void KisProjectionCache::drawImage( QPainter& gc, const QPointF& topLeftUnscaled, const QRect& alignedImageRect )
+void KisProjectionCache::drawFromOriginalImage(QPainter& gc,
+                                               const QRect& imageRect,
+                                               const QRectF& viewportRect,
+                                               qint32 borderWidth,
+                                               QPainter::RenderHints renderHints)
 {
-    if ( m_cacheKisImageAsQImage ) {
-        gc.drawImage( topLeftUnscaled, m_unscaledCache, alignedImageRect );
+    if (m_cacheKisImageAsQImage) {
+        gc.save();
+        gc.setCompositionMode(QPainter::CompositionMode_Source);
+        gc.setRenderHints(renderHints, true);
+        gc.drawImage(viewportRect, m_unscaledCache, imageRect);
+        gc.restore();
     }
     else {
-        QImage img = image( alignedImageRect );
-        gc.drawImage( topLeftUnscaled, img );
+        KisImagePatch patch = getNearestPatch(1, 1, imageRect, borderWidth);
+        patch.drawMe(gc, viewportRect, renderHints);
     }
 }

@@ -25,8 +25,7 @@
 #include <QRect>
 #include <kis_types.h>
 
-class KoColorProfile;
-
+#include "kis_projection_backend.h"
 
 /**
  * The projection cache papers over the option
@@ -34,25 +33,29 @@ class KoColorProfile;
  * to not cache it as a qimage at all, or in any
  * other way we have not invented yet.
  */
-class KisProjectionCache {
-
+class KisProjectionCache : public KisProjectionBackend
+{
 public:
-
     KisProjectionCache();
+    virtual ~KisProjectionCache(){}
 
     void setImage( KisImageSP image );
-
     void setImageSize( qint32 w, qint32 h );
+    void setMonitorProfile( const KoColorProfile* monitorProfile );
+    void setDirty(const QRect& rc);
+
+    KisImagePatch getNearestPatch(qreal scaleX, qreal scaleY,
+                                  const QRect& requestedRect,
+                                  qint32 borderWidth);
+
+    void drawFromOriginalImage(QPainter& gc,
+                               const QRect& imageRect,
+                               const QRectF& viewportRect,
+                               qint32 borderWidth,
+                               QPainter::RenderHints renderHints);
 
     void setCacheKisImageAsQImage( bool toggle );
 
-    void setMonitorProfile( const KoColorProfile* monitorProfile );
-
-    QImage image( const QRect& alignedImageRect );
-
-    void drawImage( QPainter& gc, const QPointF& topleftUnscaled, const QRect& alignedImageRect );
-
-    void updateUnscaledCache(const QRect& rc);
 
 private:
 

@@ -144,6 +144,10 @@ public:
     bool useNearestNeighbour();
     void setUseNearestNeighbour(bool useNearestNeigbour);
 
+    // Use Mipmapping (KisImagePyramid) in KisPrescaledProjection
+    bool useMipmapping();
+    void setUseMipmapping(bool useMipmapping);
+
     // Use Blitz sampling on a QImage
     bool useSampling();
     void setSampling(bool sampling);

@@ -448,6 +448,15 @@ void KisConfig::setUseNearestNeighbour(bool useNearestNeigbour)
     m_cfg.writeEntry("fast_zoom", useNearestNeigbour);
 }
 
+bool KisConfig::useMipmapping()
+{
+    return m_cfg.readEntry("useMipmapping", false);
+}
+
+void KisConfig::setUseMipmapping(bool useMipmapping)
+{
+    m_cfg.writeEntry("useMipmapping", useMipmapping);
+}
 
 bool KisConfig::useSampling()
 {

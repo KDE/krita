@@ -27,6 +27,8 @@ set(kritaui_LIB_SRCS
     canvas/kis_prescaled_projection.cpp
     canvas/kis_projection_cache.cpp
     canvas/kis_qpainter_canvas.cpp
+    canvas/kis_projection_backend.cpp
+    canvas/kis_image_pyramid.cpp
     dialogs/kis_dlg_adj_layer_props.cc 
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_apply_profile.cc 

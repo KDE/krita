@@ -334,6 +334,12 @@ set(KOPROPERTIES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kobase ${CMAKE_BINARY_DIR}/li
 ##############################################
 #############################################
 
+#
+# WARNING: when adding a dependency if there is allready a line
+# containing SHOULD_BUILD_app, don't add a new one, just add
+# the test to the if construct
+#
+
 ### Karbon: pigment
 if (NOT BUILD_pigment)
     set(SHOULD_BUILD_KARBON FALSE)
@@ -347,7 +353,6 @@ endif(NOT EIGEN2_FOUND)
 ### KPresenter: boost
 if(NOT Boost_FOUND)
     set(SHOULD_BUILD_KPRESENTER FALSE)
-    set(SHOULD_BUILD_KRITA FALSE)
 endif(NOT Boost_FOUND)
 
 ### Kexi: bzip2

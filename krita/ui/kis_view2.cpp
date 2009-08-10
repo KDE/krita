@@ -103,7 +103,6 @@
 #include "kis_selection.h"
 #include "kis_print_job.h"
 #include "kis_painting_assistants_manager.h"
-#include <boost/concept_check.hpp>
 #include <kis_paint_layer.h>
 
 #include "kis_node_commands_adapter.h"

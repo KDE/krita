@@ -116,7 +116,7 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
     for (int row = 0; row < size.height(); ++row) {
         while (! srcIt.isDone()) {
             int srcItConseq = srcIt.nConseqHPixels();
-            int dstItConseq = srcIt.nConseqHPixels();
+            int dstItConseq = dstIt.nConseqHPixels();
             int conseqPixels = qMin(srcItConseq, dstItConseq);
 
             int pixels = 0;

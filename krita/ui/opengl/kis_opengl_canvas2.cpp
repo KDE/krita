@@ -51,6 +51,9 @@
 #include "kis_debug.h"
 #include "kis_selection_manager.h"
 
+#define NEAR_VAL -10.0
+#define FAR_VAL 10.0
+
 class KisOpenGLCanvas2::Private
 {
 public:
@@ -103,7 +106,6 @@ void KisOpenGLCanvas2::initializeGL()
 {
     qglClearColor(QColor::fromCmykF(0.40, 0.0, 1.0, 0.0));
     glShadeModel(GL_FLAT);
-    //glEnable(GL_DEPTH_TEST);
     //glEnable(GL_CULL_FACE);
 }
 
@@ -141,7 +143,7 @@ void KisOpenGLCanvas2::paintGL()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, width(), height());
-    glOrtho(0, width(), height(), 0, -1, 1);
+    glOrtho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
 
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
@@ -293,7 +295,7 @@ void KisOpenGLCanvas2::setPixelToViewTransformation(void)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, width(), height());
-    glOrtho(0, width(), height(), 0, -1, 1);
+    glOrtho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -309,6 +311,7 @@ void KisOpenGLCanvas2::enterEvent(QEvent* e)
 
 void KisOpenGLCanvas2::leaveEvent(QEvent* e)
 {
+    updateGL();
     QWidget::leaveEvent(e);
 }
 

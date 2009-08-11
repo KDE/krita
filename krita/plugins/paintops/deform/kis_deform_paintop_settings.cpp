@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <kis_deform_paintop_settings.h>
+#include <kis_deform_paintop_settings_widget.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoViewConverter.h>
@@ -29,9 +30,14 @@
 #include <kis_paint_information.h>
 
 #include <KoColor.h>
-#include <qdebug.h>
 
-#include <kis_deform_paintop_settings_widget.h>
+#include <config-opengl.h>
+
+#ifdef HAVE_OPENGL
+#include <GL/gl.h>
+#include <kis_model.h>
+#endif
+
 
 KisDeformPaintOpSettings::KisDeformPaintOpSettings(KisDeformPaintOpSettingsWidget* settingsWidget)
         : KisPaintOpSettings(settingsWidget)
@@ -129,3 +135,31 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image
     painter.setPen(Qt::black);
     painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos) ) );
 }
+
+#if defined(HAVE_OPENGL)
+GLuint KisDeformPaintOpSettings::displayList() const
+{
+    KisModel *  model = new KisModel("deform_brush.obj");
+    
+    GLuint brushModel = glGenLists(1);
+    glNewList(brushModel, GL_COMPILE);
+    glBegin(GL_LINES);
+        glVertex2f(0,0);
+        glVertex2f( 0, radius() );
+
+        glVertex2f(0,0);
+        glVertex2f( 0, -radius() );
+
+        glVertex2f(0,0);
+        glVertex2f( -radius(), 0);
+
+        glVertex2f(0,0);
+        glVertex2f( radius(), 0);
+    glEnd();
+    glEndList();
+    
+    delete model;
+    
+    return brushModel;
+}
+#endif

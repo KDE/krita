@@ -12,3 +12,5 @@ add_subdirectory( deform )
 add_subdirectory( curvebrush )
 add_subdirectory( spray )
 add_subdirectory( filterop )
+add_subdirectory( experiment ) 
+

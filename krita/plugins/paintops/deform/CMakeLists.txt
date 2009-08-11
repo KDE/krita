@@ -11,7 +11,7 @@ kde4_add_ui_files(kritadeformpaintop_PART_SRCS wdgdeformoptions.ui )
 
 kde4_add_plugin(kritadeformpaintop ${kritadeformpaintop_PART_SRCS})
 
-target_link_libraries(kritadeformpaintop kritaui)
+target_link_libraries(kritadeformpaintop kritaui kritalibpaintop)
 
 install(TARGETS kritadeformpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 

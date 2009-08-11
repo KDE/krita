@@ -36,6 +36,12 @@
 #include "kis_paint_information.h"
 #include "kis_paintop_settings_widget.h"
 
+#include <config-opengl.h>
+
+#ifdef HAVE_OPENGL
+#include <GL/gl.h>
+#endif
+
 struct KisPaintOpSettings::Private {
     KisNodeSP node;
     KisPaintOpSettingsWidget *settingsWidget;
@@ -131,3 +137,10 @@ void KisPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPai
     Q_UNUSED(converter);
     Q_UNUSED(_mode);
 }
+
+#if defined(HAVE_OPENGL)
+GLuint KisPaintOpSettings::displayList() const
+{
+    return 0;
+}
+#endif

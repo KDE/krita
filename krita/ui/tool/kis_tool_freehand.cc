@@ -4,6 +4,7 @@
  *  Copyright (c) 2003-2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
  *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -65,7 +66,18 @@
 #include <kis_view2.h>
 #include <kis_painting_assistants_manager.h>
 
+// OpenGL 
+#include <config-opengl.h>
+
+#ifdef HAVE_OPENGL
+#include <GL/gl.h>
+#include <GL/glut.h>
+#endif
+
+
 #define ENABLE_RECORDING
+#include <KoCanvasController.h>
+#include <GL/glu.h>
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
         : KisToolPaint(canvas, cursor)
@@ -202,10 +214,21 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     } else {
       outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
     }
+
     if(!oldOutlineRect.isEmpty()) {
         m_canvas->updateCanvas(oldOutlineRect); // erase the old guy
     }
+
     mousePos = e->point;
+
+#if defined(HAVE_OPENGL)
+    if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL){
+        if (m_canvas->canvasController()->isCanvasOpenGL()){
+            m_canvas->updateCanvas(     QRect( QPoint(0,0),QSize(320,240) ) );
+        }
+    }
+#endif
+
     oldOutlineRect = currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage(), outlineMode);
     if(!oldOutlineRect.isEmpty()) {
         m_canvas->updateCanvas(oldOutlineRect); // erase the old guy
@@ -461,13 +484,107 @@ void KisToolFreehand::setAssistant(bool assistant)
 void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 {
     KisConfig cfg;
-    KisPaintOpSettings::OutlineMode outlineMode;
-    if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-      outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
-    } else {
-      outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
+#if defined(HAVE_OPENGL)
+    if (m_canvas->canvasController()->isCanvasOpenGL()){
+        if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL){
+            qreal sx, sy;
+            converter.zoom(&sx, &sy);
+            sx /= currentImage()->xRes();
+            sy /= currentImage()->yRes();
+
+// JUST TEST HERE 
+    glDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    static int angle = 0;
+
+                QPointF pos1 = converter.documentToView( mousePos );
+                glPushMatrix();
+                    angle++;
+                    glTranslatef( pos1.x(), pos1.y(),0 );
+                    glRotated(angle,0.56,0.31,0.2);
+                    glScalef(100,100,100);
+                
+                    glBegin(GL_QUADS);
+                    glColor3f(0.0,1.0,0.0);
+
+                    //bottom
+                    glVertex3f(0,0,0);
+                    glVertex3f(1,0,0);
+                    glVertex3f(1,1,0);
+                    glVertex3f(0,1,0);
+    
+                    //top
+                    glVertex3f(0,0,1);
+                    glVertex3f(1,0,1);
+                    glVertex3f(1,1,1);
+                    glVertex3f(0,1,1);
+
+                    glColor3f(1.0,0.0,0.0);
+                    //left
+                    glVertex3f(0,0,0);
+                    glVertex3f(0,0,1);
+                    glVertex3f(0,1,1);
+                    glVertex3f(0,1,0);
+
+                    // right
+                    glVertex3f(1,0,0);
+                    glVertex3f(1,0,1);
+                    glVertex3f(1,1,1);
+                    glVertex3f(1,1,0);
+
+                    glColor3f(0.0,0.0,1.0);                    
+                    // front
+                    glVertex3f(0,0,0);
+                    glVertex3f(0,0,1);
+                    glVertex3f(1,0,1);
+                    glVertex3f(1,0,0);
+                   
+                    // back
+                    glVertex3f(0,1,0);
+                    glVertex3f(0,1,1);
+                    glVertex3f(1,1,1);
+                    glVertex3f(1,1,0);
+
+                    glEnd();
+
+                glPopMatrix();
+// END TEST HERE
+
+            GLuint list  =  currentPaintOpPreset()->settings()->displayList();
+            if (glIsList( list )){
+                QPointF pos = converter.documentToView( mousePos );
+                glEnable(GL_LINE_SMOOTH);
+                glEnable(GL_COLOR_LOGIC_OP);
+
+                glLogicOp(GL_XOR);
+                glColor3f(0.501961,1.0, 0.501961);
+
+                    glPushMatrix();
+                        glTranslatef( pos.x(), pos.y(),0 );
+                        glScalef( sx,sy,1);
+                            glCallList( list );
+                        glScalef(1.0 / sx,1.0 / sy ,1);
+                    glPopMatrix();
+
+                glDisable(GL_COLOR_LOGIC_OP);
+                glDisable(GL_LINE_SMOOTH);
+            }
+        }
     }
-    currentPaintOpPreset()->settings()->paintOutline(mousePos, currentImage(), gc, converter, outlineMode);
+#endif
+
+    {
+        KisPaintOpSettings::OutlineMode outlineMode;
+        if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
+          outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
+        } else {
+          outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
+        } 
+        currentPaintOpPreset()->settings()->paintOutline(mousePos, currentImage(), gc, converter, outlineMode);
+
+    }
 }
 
 QPointF KisToolFreehand::adjustPosition(const QPointF& point)

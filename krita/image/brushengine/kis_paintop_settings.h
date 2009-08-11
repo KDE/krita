@@ -28,6 +28,13 @@
 #include "kis_properties_configuration.h"
 
 
+#include <config-opengl.h>
+
+#ifdef HAVE_OPENGL
+#include <GL/gl.h>
+#endif
+
+
 class KisPaintOpSettingsWidget;
 class KoPointerEvent;
 class KoViewConverter;
@@ -133,6 +140,11 @@ public:
      * when using a tablet. How does XXX works with the duplicate op ? List of images ? With a center ?
      */
     virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
+
+#if defined(HAVE_OPENGL)
+    virtual GLuint displayList() const;
+#endif 
+    
 private:
 
     struct Private;

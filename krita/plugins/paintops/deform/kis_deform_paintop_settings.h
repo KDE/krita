@@ -24,6 +24,13 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
+#include <config-opengl.h>
+
+#ifdef HAVE_OPENGL
+#include <GL/gl.h>
+#endif
+
+
 class QWidget;
 class KisDeformPaintOpSettingsWidget;
 class QDomElement;
@@ -57,6 +64,10 @@ public:
     bool useCounter() const;
     bool useOldData() const;
     qreal spacing() const;
+
+#if defined(HAVE_OPENGL)
+    GLuint displayList() const;
+#endif
 
 private:
     KisDeformPaintOpSettingsWidget* m_options;

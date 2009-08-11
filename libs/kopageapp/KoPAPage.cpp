@@ -20,6 +20,7 @@
 #include "KoPAPage.h"
 
 #include <QPainter>
+#include <KDebug>
 
 #include <KoShapePainter.h>
 #include <KoShapeSavingContext.h>
@@ -40,6 +41,7 @@ KoPAPage::KoPAPage( KoPAMasterPage * masterPage )
 , m_masterPage( masterPage )
 , m_pageProperties( UseMasterBackground | DisplayMasterBackground | DisplayMasterShapes )
 {
+    Q_ASSERT(masterPage);
 }
 
 KoPAPage::~KoPAPage()
@@ -79,7 +81,13 @@ const KoPageLayout & KoPAPage::pageLayout() const
 void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
 {
     QString master = element.attributeNS (KoXmlNS::draw, "master-page-name" );
-    setMasterPage( loadingContext.masterPageByName( master ) );
+    KoPAMasterPage *masterPage = loadingContext.masterPageByName(master);
+    if (masterPage)
+        setMasterPage(masterPage);
+#ifndef NDEBUG
+    else
+        kWarning(30010) << "Loading didn't provide a page under name; " << master;
+#endif
     KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
     int pageProperties = UseMasterBackground | DisplayMasterShapes | DisplayMasterBackground;
     if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
@@ -100,6 +108,7 @@ void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &
 
 void KoPAPage::setMasterPage( KoPAMasterPage * masterPage )
 {
+    Q_ASSERT(masterPage);
     m_masterPage = masterPage;
 }
 

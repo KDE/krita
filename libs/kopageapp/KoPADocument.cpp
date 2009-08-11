@@ -245,12 +245,16 @@ QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoX
 
 QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoPALoadingContext & context )
 {
+    if (d->masterPages.isEmpty()) { // we require at least one master page. Auto create one if the doc was faulty.
+        d->masterPages << newMasterPage();
+    }
+
     QList<KoPAPageBase *> pages;
     KoXmlElement element;
     forEachElement( element, body )
     {
         if ( element.tagName() == "page" && element.namespaceURI() == KoXmlNS::draw ) {
-            KoPAPage* page = newPage();
+            KoPAPage *page = newPage(static_cast<KoPAMasterPage*>(d->masterPages.first()));
             page->loadOdf( element, context );
             pages.append( page );
         }

@@ -182,7 +182,7 @@ public:
      *
      * Reimplement when you need a derivered class in your kopageapplication 
      */
-    virtual KoPAPage * newPage( KoPAMasterPage * masterPage = 0 );
+    virtual KoPAPage *newPage(KoPAMasterPage *masterPage);
 
     /**
      * Get a new master page for inserting into the document

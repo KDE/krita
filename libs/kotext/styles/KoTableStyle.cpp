@@ -216,6 +216,16 @@ bool KoTableStyle::breakAfter()
     return propertyBoolean(BreakAfter);
 }
 
+void KoTableStyle::setCollapsingBorderModel(bool on)
+{
+    setProperty(CollapsingBorders, on);
+}
+
+bool KoTableStyle::collapsingBorderModel()
+{
+    return propertyBoolean(CollapsingBorders);
+}
+
 void KoTableStyle::setTopMargin(qreal topMargin)
 {
     setProperty(QTextFormat::FrameTopMargin, topMargin);
@@ -447,6 +457,13 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
         }
         setBackground(brush);
     }
+    
+    // border-model 
+    if (styleStack.hasProperty(KoXmlNS::style, "border-model")) {
+        // OASIS spec says it's "auto"/"always", not a boolean.
+        QString val = styleStack.property(KoXmlNS::style, "border-model");
+        setCollapsingBorderModel(val =="collapsing");
+    }
 }
 
 void KoTableStyle::copyProperties(const KoTableStyle *style)
@@ -511,6 +528,9 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
         } else if (key == KoTableStyle::BreakAfter) {
             if (breakAfter())
                 style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
+        } else if (key == KoTableStyle::CollapsingBorders) {
+            if (collapsingBorderModel())
+                style.addProperty("style:border-bodel", "collapsing", KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)

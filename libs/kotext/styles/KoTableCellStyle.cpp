@@ -89,6 +89,7 @@ KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *
         d(new Private())
 {
     d->stylesPrivate = format.properties();
+      
     d->edges[Top].outerPen = format.penProperty(TopBorderOuterPen);
     d->edges[Top].spacing = format.doubleProperty(TopBorderSpacing);
     d->edges[Top].innerPen = format.penProperty(TopBorderInnerPen);
@@ -185,7 +186,7 @@ void KoTableCellStyle::paintBackground(QPainter &painter, const QRectF &bounds) 
 {
     QRectF innerBounds = bounds;
 
-    if(hasProperty(QTextFormat::BackgroundBrush)) {
+    if(hasProperty(CellBackgroundBrush)) {
         painter.fillRect(bounds, background());
     }
 }
@@ -247,6 +248,180 @@ void KoTableCellStyle::paintBorders(QPainter &painter, const QRectF &bounds) con
         painter.setPen(pen);
         const qreal r = innerBounds.right() - pen.widthF() / 2.0;
         painter.drawLine(QLineF(r, innerBounds.top() + d->edges[Top].innerPen.widthF(), r, innerBounds.bottom() - d->edges[Bottom].innerPen.widthF()));
+    }
+}
+
+void KoTableCellStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w) const
+{
+    qreal t=y;
+    if (d->edges[Top].outerPen.widthF() > 0) {
+        QPen pen = d->edges[Top].outerPen;
+
+        painter.setPen(pen);
+        t += pen.widthF() / 2.0;
+        painter.drawLine(QLineF(x, t, x+w, t));
+        t = y + d->edges[Top].spacing + pen.widthF();
+    }
+    // inner line
+    if (d->edges[Top].innerPen.widthF() > 0) {
+        QPen pen = d->edges[Top].innerPen;
+        painter.setPen(pen);
+        t += pen.widthF() / 2.0;
+        painter.drawLine(QLineF(x, t, x+w, t));
+    }
+}
+
+void KoTableCellStyle::drawSharedHorizontalBorder(QPainter &painter, const KoTableCellStyle &styleBelow,  qreal x, qreal y, qreal w) const
+{
+    // First determine which style "wins" by comparing total width
+    qreal thisWidth = d->edges[Bottom].outerPen.widthF() + d->edges[Bottom].spacing + d->edges[Bottom].innerPen.widthF();
+    qreal thatWidth = styleBelow.d->edges[Top].outerPen.widthF() + styleBelow.d->edges[Top].spacing
+                                    + styleBelow.d->edges[Top].innerPen.widthF();
+                                    
+    if(thisWidth >= thatWidth) {
+        // top style wins
+       qreal t=y;
+        if (d->edges[Bottom].outerPen.widthF() > 0) {
+            QPen pen = d->edges[Bottom].outerPen;
+
+            painter.setPen(pen);
+            t += pen.widthF() / 2.0;
+            painter.drawLine(QLineF(x, t, x+w, t));
+            t = y + d->edges[Bottom].spacing + pen.widthF();
+        }
+        // inner line
+        if (d->edges[Bottom].innerPen.widthF() > 0) {
+            QPen pen = d->edges[Bottom].innerPen;
+            painter.setPen(pen);
+            t += pen.widthF() / 2.0;
+            painter.drawLine(QLineF(x, t, x+w, t));
+        }
+    } else {
+        // bottom style wins
+        qreal t=y;
+        if (styleBelow.d->edges[Top].outerPen.widthF() > 0) {
+            QPen pen = styleBelow.d->edges[Top].outerPen;
+
+            painter.setPen(pen);
+            t += pen.widthF() / 2.0;
+            painter.drawLine(QLineF(x, t, x+w, t));
+            t = y + styleBelow.d->edges[Top].spacing + pen.widthF();
+        }
+        // inner line
+        if (styleBelow.d->edges[Top].innerPen.widthF() > 0) {
+            QPen pen = styleBelow.d->edges[Top].innerPen;
+            painter.setPen(pen);
+            t += pen.widthF() / 2.0;
+            painter.drawLine(QLineF(x, t, x+w, t));
+        }
+    }                               
+}
+
+void KoTableCellStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w) const
+{
+    qreal t=y;
+    if (d->edges[Bottom].outerPen.widthF() > 0) {
+        QPen pen = d->edges[Bottom].outerPen;
+
+        painter.setPen(pen);
+        t -= pen.widthF() / 2.0;
+        painter.drawLine(QLineF(x, t, x+w, t));
+        t = y - d->edges[Bottom].spacing - pen.widthF();
+    }
+    // inner line
+    if (d->edges[Bottom].innerPen.widthF() > 0) {
+        QPen pen = d->edges[Bottom].innerPen;
+        painter.setPen(pen);
+        t -= pen.widthF() / 2.0;
+        painter.drawLine(QLineF(x, t, x+w, t));
+    }
+}
+
+void KoTableCellStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h) const
+{
+    qreal l=x;
+    if (d->edges[Left].outerPen.widthF() > 0) {
+        QPen pen = d->edges[Left].outerPen;
+
+        painter.setPen(pen);
+        l += pen.widthF() / 2.0;
+        painter.drawLine(QLineF(l, y, l, y+h));
+        l = x + d->edges[Left].spacing + pen.widthF();
+    }
+    // inner line
+    if (d->edges[Left].innerPen.widthF() > 0) {
+        QPen pen = d->edges[Left].innerPen;
+        painter.setPen(pen);
+        l += pen.widthF() / 2.0;
+        painter.drawLine(QLineF(l, y, l, y+h));
+    }
+}
+
+void KoTableCellStyle::drawSharedVerticalBorder(QPainter &painter, const KoTableCellStyle &styleRight,  qreal x, qreal y, qreal h) const
+{
+    // First determine which style "wins" by comparing total width
+    qreal thisWidth = d->edges[Right].outerPen.widthF() + d->edges[Right].spacing + d->edges[Right].innerPen.widthF();
+    qreal thatWidth = styleRight.d->edges[Left].outerPen.widthF() + styleRight.d->edges[Left].spacing
+                                    + styleRight.d->edges[Left].innerPen.widthF();
+                                    
+    qreal l=x;
+    
+    if(thisWidth >= thatWidth) {
+        // left style wins
+        l -= thisWidth / 2.0;
+        if (d->edges[Right].outerPen.widthF() > 0) {
+            QPen pen = d->edges[Right].outerPen;
+
+            painter.setPen(pen);
+            l += pen.widthF() / 2.0;
+            painter.drawLine(QLineF(l, y, l, y+h));
+            l += d->edges[Right].spacing + pen.widthF() / 2.0;
+        }
+        // inner line
+        if (d->edges[Right].innerPen.widthF() > 0) {
+            QPen pen = d->edges[Right].innerPen;
+            painter.setPen(pen);
+            l += pen.widthF() / 2.0;
+            painter.drawLine(QLineF(l, y, l, y+h));
+        }
+    } else {
+        // right style wins
+        l -= thatWidth/2.0;
+        if (styleRight.d->edges[Left].outerPen.widthF() > 0) {
+            QPen pen = styleRight.d->edges[Left].outerPen;
+
+            painter.setPen(pen);
+            l += pen.widthF() / 2.0;
+            painter.drawLine(QLineF(l, y, l, y+h));
+            l += styleRight.d->edges[Left].spacing + pen.widthF() / 2.0;
+        }
+        // inner line
+        if (styleRight.d->edges[Left].innerPen.widthF() > 0) {
+            QPen pen = styleRight.d->edges[Left].innerPen;
+            painter.setPen(pen);
+            l += pen.widthF() / 2.0;
+            painter.drawLine(QLineF(l, y, l, y+h));
+        }
+    }                               
+}
+
+void KoTableCellStyle::drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h) const
+{
+    qreal l=x;
+    if (d->edges[Right].outerPen.widthF() > 0) {
+        QPen pen = d->edges[Right].outerPen;
+
+        painter.setPen(pen);
+        l -= pen.widthF() / 2.0;
+        painter.drawLine(QLineF(l, y, l, y+h));
+        l = x - d->edges[Right].spacing - pen.widthF();
+    }
+    // inner line
+    if (d->edges[Right].innerPen.widthF() > 0) {
+        QPen pen = d->edges[Right].innerPen;
+        painter.setPen(pen);
+        l -= pen.widthF() / 2.0;
+        painter.drawLine(QLineF(l, y, l, y+h));
     }
 }
 
@@ -370,10 +545,10 @@ QColor KoTableCellStyle::propertyColor(int key) const
 }
 
 void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
-{/*
+{
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
-    }*/
+    }
     QList<int> keys = d->stylesPrivate.keys();
     for (int i = 0; i < keys.count(); i++) {
         QVariant variant = d->stylesPrivate.value(keys[i]);
@@ -396,17 +571,17 @@ void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
 
 void KoTableCellStyle::setBackground(const QBrush &brush)
 {
-    d->setProperty(QTextFormat::BackgroundBrush, brush);
+    setProperty(CellBackgroundBrush, brush);
 }
 
 void KoTableCellStyle::clearBackground()
 {
-    d->stylesPrivate.remove(QTextCharFormat::BackgroundBrush);
+    d->stylesPrivate.remove(CellBackgroundBrush);
 }
 
 QBrush KoTableCellStyle::background() const
 {
-    QVariant variant = d->stylesPrivate.value(QTextFormat::BackgroundBrush);
+    QVariant variant = d->stylesPrivate.value(CellBackgroundBrush);
 
     if (variant.isNull()) {
         QBrush brush;
@@ -630,7 +805,7 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
                 if (!direction.isEmpty())
                     style.addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
             }
-        } else if (key == QTextFormat::BackgroundBrush) {
+        } else if (key == CellBackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::ParagraphType);

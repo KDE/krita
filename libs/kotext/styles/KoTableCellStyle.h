@@ -56,7 +56,7 @@ class KOTEXT_EXPORT KoTableCellStyle : public QObject
     Q_OBJECT
 public:
     enum Property {
-        StyleId = QTextTableCellFormat::UserProperty + 1,
+        StyleId = QTextTableCellFormat::UserProperty + 7001,
         TopBorderOuterPen, ///< the top border pen
         TopBorderSpacing,          ///< the top border spacing between inner and outer border
         TopBorderInnerPen,       ///< the top border inner pen
@@ -69,6 +69,7 @@ public:
         RightBorderOuterPen,     ///< the right border outer pen
         RightBorderSpacing,        ///< the right border spacing between inner and outer border
         RightBorderInnerPen,     ///< the right border inner pen
+        CellBackgroundBrush,     ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
         MasterPageName         ///< Optional name of the master-page
     };
 
@@ -165,6 +166,68 @@ public:
      * @bounds the bounding rectangle to draw.
      */
     void paintBorders(QPainter &painter, const QRectF &bounds) const;
+    
+    /**
+     * Paint the top border.
+     *
+     * @painter the painter to draw with.
+     * @x the x position.
+     * @y the y position.
+     * @w the width.
+     */
+    void drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w) const;
+    
+    /**
+     * Paint the border that is shared.
+     * It only draws the thickest and it always draws it below the y position.
+     *
+     * @painter the painter to draw with.
+     * @x the x position.
+     * @y the y position.
+     * @w the width.
+     */
+    void drawSharedHorizontalBorder(QPainter &painter, const KoTableCellStyle &styleBelow,  qreal x, qreal y, qreal w) const;
+    
+    /**
+     * Paint the bottom border.
+     *
+     * @painter the painter to draw with.
+     * @x the x position.
+     * @y the y position.
+     * @w the width.
+     */
+    void drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w) const;
+
+    /**
+     * Paint the leftmost border.
+     *
+     * @painter the painter to draw with.
+     * @x the x position.
+     * @y the y position.
+     * @h the height.
+     */
+    void drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h) const;
+    
+    /**
+     * Paint the border that is shared.
+     * It only draws the thickest and it always draws it below the y position.
+     *
+     * @painter the painter to draw with.
+     * @x the x position.
+     * @y the y position.
+     * @h the height.
+     */
+    void drawSharedVerticalBorder(QPainter &painter, const KoTableCellStyle &styleRight,  qreal x, qreal y, qreal h) const;
+    
+    /**
+     * Paint the rightmost border.
+     *
+     * @painter the painter to draw with.
+     * @x the x position.
+     * @y the y position.
+     * @h the height.
+     */
+    void drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h) const;
 
     void setBackground(const QBrush &brush);
     /// See similar named method on QTextBlockFormat

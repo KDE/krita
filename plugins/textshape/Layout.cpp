@@ -509,7 +509,7 @@ void Layout::handleTable()
 
         // Save the current table cell.
         m_tableCell = table->cellAt(m_block.position());
-         Q_ASSERT(m_tableCell.isValid());
+        Q_ASSERT(m_tableCell.isValid());
 
         // previousCell is the cell that the previous blocks is in. It can be
         // the same as the current cell, or it can be different, or it can be

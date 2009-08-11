@@ -250,7 +250,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                     QTextTableFormat tableFormat;
                     QString tableStyleName = tag.attributeNS(KoXmlNS::table, "style-name", "");
                     if (!tableStyleName.isEmpty()) {
-                        KoTableStyle *tblStyle = d->textSharedData->tableStyle(tag.attributeNS(KoXmlNS::table, "style-name", ""), d->stylesDotXml);
+                        KoTableStyle *tblStyle = d->textSharedData->tableStyle(tableStyleName, d->stylesDotXml);
                         tblStyle->applyStyle(tableFormat);
                     }
                     KoTableColumnAndRowStyleManager *tcarManager = new KoTableColumnAndRowStyleManager;
@@ -259,7 +259,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                     int rows = 0;
                     int columns = 0;
                     QList<QRect> spanStore; //temporary list to store spans until the entire table have been created
-                    kDebug(32500) << "Table inserted";
                     KoXmlElement tblTag;
                     forEachElement(tblTag, tag) {
                         if (! tblTag.isNull()) {

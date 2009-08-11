@@ -310,7 +310,6 @@ bool TextShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &con
         if (!style) {
             kDebug(32500) << "presentation style not found:" << element.attributeNS(KoXmlNS::presentation, "style-name");
         }
-        Q_ASSERT(style);
     }
 
     if (style) {

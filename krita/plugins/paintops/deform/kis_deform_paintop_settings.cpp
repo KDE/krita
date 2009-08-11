@@ -139,7 +139,7 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image
 #if defined(HAVE_OPENGL)
 GLuint KisDeformPaintOpSettings::displayList() const
 {
-    KisModel model("deform_brush.obj");
+    KisModel model("3d-deform-brush.obj");
     return model.displayList();   
 /*    GLuint brushModel = glGenLists(1);
     glNewList(brushModel, GL_COMPILE);

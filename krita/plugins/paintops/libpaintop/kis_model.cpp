@@ -26,21 +26,27 @@
 #include "kis_vec.h"
 #include "kis_debug.h"
 
+#include <kglobal.h>
+#include <kstandarddirs.h>
 
 #include <config-opengl.h>
 
 #ifdef HAVE_OPENGL
 #include <GL/gl.h>
 #endif
+#include <kcomponentdata.h>
 
 
 KisModel::KisModel(const QString& fileName)
 {
+    KGlobal::mainComponent().dirs()->addResourceType("kis_brushmodels", "data", "krita/brushmodels/");
+    QString path = KGlobal::mainComponent().dirs()->findResource("kis_brushmodels",fileName);
+    
     m_cached = false;
 
-    QFile file(fileName);
+    QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        kDebug() << "File Not Found";
+        kDebug() << "File " + fileName +" Not Found";
         return;
     }
     

@@ -65,10 +65,13 @@ void KisSprayColorOption::readOptionSetting(const KisPropertiesConfiguration* se
 
 bool KisSprayColorOption::useRandomOpacity() const
 {
-    return m_options->m_randomOpacity->isChecked();
+    return m_options->randomOpacityCHBox->isChecked();
 }
 
-
+bool KisSprayColorOption::useRandomHSV() const
+{
+    return m_options->randomHSVCHBox->isChecked();
+}
 
 int KisSprayColorOption::hue() const
 {
@@ -87,23 +90,6 @@ int KisSprayColorOption::value() const
     return m_options->valueSlider->value();
 }
 
-
-bool KisSprayColorOption::useRandomHue() const
-{
-    return m_options->hueChBox->isChecked();
-}
-
-
-bool KisSprayColorOption::useRandomSaturation() const
-{
-    return m_options->saturationChBox->isChecked();
-}
-
-
-bool KisSprayColorOption::useRandomValue() const
-{
-    return m_options->valueChBox->isChecked();
-}
 
 
 

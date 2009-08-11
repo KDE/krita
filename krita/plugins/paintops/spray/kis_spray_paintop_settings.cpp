@@ -212,24 +212,10 @@ int KisSprayPaintOpSettings::value() const
 }
 
 
-bool KisSprayPaintOpSettings::useRandomHue() const
+bool KisSprayPaintOpSettings::useRandomHSV() const
 {
-    return m_options->m_sprayColorOption->useRandomHue();
+    return m_options->m_sprayColorOption->useRandomHSV();
 }
-
-
-bool KisSprayPaintOpSettings::useRandomSaturation() const
-{
-    return m_options->m_sprayColorOption->useRandomSaturation();
-}
-
-
-bool KisSprayPaintOpSettings::useRandomValue() const
-{
-    return m_options->m_sprayColorOption->useRandomValue();
-}
-
-
 
 
 

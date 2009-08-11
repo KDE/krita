@@ -22,134 +22,160 @@
     <height>200</height>
    </size>
   </property>
-  <widget class="QCheckBox" name="m_randomOpacity">
+  <widget class="QWidget" name="widget" native="true">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>140</y>
-     <width>141</width>
-     <height>23</height>
+     <y>20</y>
+     <width>401</width>
+     <height>151</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Random opacity</string>
-   </property>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>401</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Hue</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSlider" name="hueSlider">
+       <property name="minimum">
+        <number>-180</number>
+       </property>
+       <property name="maximum">
+        <number>180</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+       <property name="tickInterval">
+        <number>20</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QSpinBox" name="hueBox">
+       <property name="minimum">
+        <number>-180</number>
+       </property>
+       <property name="maximum">
+        <number>180</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Saturation</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSlider" name="saturationSlider">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+       <property name="tickInterval">
+        <number>11</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QSpinBox" name="saturationBox">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Value</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSlider" name="valueSlider">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+       <property name="tickInterval">
+        <number>11</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QSpinBox" name="valueBox">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>40</y>
-     <width>381</width>
-     <height>94</height>
+     <y>180</y>
+     <width>130</width>
+     <height>52</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QCheckBox" name="hueChBox">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QCheckBox" name="randomHSVCHBox">
       <property name="text">
-       <string>Hue</string>
+       <string>Random HSV</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QSlider" name="hueSlider">
-      <property name="minimum">
-       <number>-180</number>
-      </property>
-      <property name="maximum">
-       <number>180</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TicksAbove</enum>
-      </property>
-      <property name="tickInterval">
-       <number>20</number>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QSpinBox" name="hueBox">
-      <property name="minimum">
-       <number>-180</number>
-      </property>
-      <property name="maximum">
-       <number>180</number>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QCheckBox" name="saturationChBox">
+    <item>
+     <widget class="QCheckBox" name="randomOpacityCHBox">
       <property name="text">
-       <string>Saturation</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QSlider" name="saturationSlider">
-      <property name="minimum">
-       <number>-100</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TicksAbove</enum>
-      </property>
-      <property name="tickInterval">
-       <number>11</number>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="QSpinBox" name="saturationBox">
-      <property name="minimum">
-       <number>-100</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QCheckBox" name="valueChBox">
-      <property name="text">
-       <string>Value</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QSlider" name="valueSlider">
-      <property name="minimum">
-       <number>-100</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TicksAbove</enum>
-      </property>
-      <property name="tickInterval">
-       <number>11</number>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QSpinBox" name="valueBox">
-      <property name="minimum">
-       <number>-100</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
+       <string>Random opacity</string>
       </property>
      </widget>
     </item>
@@ -157,7 +183,7 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>m_randomOpacity</tabstop>
+  <tabstop>randomOpacityCHBox</tabstop>
   <tabstop>hueSlider</tabstop>
   <tabstop>saturationSlider</tabstop>
   <tabstop>valueSlider</tabstop>
@@ -171,12 +197,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>254</x>
-     <y>44</y>
+     <x>323</x>
+     <y>50</y>
     </hint>
     <hint type="destinationlabel">
-     <x>376</x>
-     <y>58</y>
+     <x>396</x>
+     <y>42</y>
     </hint>
    </hints>
   </connection>
@@ -187,8 +213,8 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>381</x>
-     <y>44</y>
+     <x>409</x>
+     <y>51</y>
     </hint>
     <hint type="destinationlabel">
      <x>298</x>
@@ -207,8 +233,8 @@
      <y>83</y>
     </hint>
     <hint type="destinationlabel">
-     <x>377</x>
-     <y>81</y>
+     <x>429</x>
+     <y>97</y>
     </hint>
    </hints>
   </connection>
@@ -235,12 +261,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>298</x>
-     <y>116</y>
+     <x>347</x>
+     <y>139</y>
     </hint>
     <hint type="destinationlabel">
-     <x>370</x>
-     <y>122</y>
+     <x>390</x>
+     <y>114</y>
     </hint>
    </hints>
   </connection>
@@ -251,12 +277,28 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>376</x>
-     <y>115</y>
+     <x>429</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
-     <x>302</x>
-     <y>119</y>
+     <x>347</x>
+     <y>139</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>randomHSVCHBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>widget</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>117</x>
+     <y>191</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>123</x>
+     <y>160</y>
     </hint>
    </hints>
   </connection>

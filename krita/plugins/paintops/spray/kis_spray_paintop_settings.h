@@ -69,9 +69,7 @@ public:
     qreal minTresh() const;
     // color options
     bool useRandomOpacity() const;
-    bool useRandomHue() const;
-    bool useRandomSaturation() const;
-    bool useRandomValue() const;
+    bool useRandomHSV() const;
 
     // TODO: these should be intervals like 20..180 
     int hue() const;

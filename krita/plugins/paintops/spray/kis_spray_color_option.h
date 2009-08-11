@@ -28,10 +28,8 @@ public:
     KisSprayColorOption();
     ~KisSprayColorOption();
 
+    bool useRandomHSV() const;
     bool useRandomOpacity() const;
-    bool useRandomHue() const;
-    bool useRandomSaturation() const;
-    bool useRandomValue() const;
 
     // TODO: these should be intervals like 20..180 
     int hue() const;

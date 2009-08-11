@@ -65,7 +65,7 @@ void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, co
     m_pixelSize = dev->colorSpace()->pixelSize();
     m_inkColor = color;
 
-if (m_settings->useRandomHue()){
+if (m_settings->useRandomHSV()){
     QHash<QString, QVariant> params;
     params["h"] = (m_settings->hue() / 180.0) * drand48();
     params["s"] = (m_settings->saturation() / 100.0) * drand48();

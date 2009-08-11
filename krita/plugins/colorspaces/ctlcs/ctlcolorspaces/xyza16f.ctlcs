@@ -1,0 +1,11 @@
+<ctlcolorspace>
+    <info  colorModelId="XYZA" colorModelName="XYZ" type="float" depth="16" name="XYZ (16-bit float/channel) for High Dynamic Range imaging" id="XyzAF16" />
+    <channels>
+        <channel name="X"   shortName="r" index="0" channelType="Color" valueType="float16" size="2" color="255,0,0" />
+        <channel name="Y" shortName="g" index="1" channelType="Color" valueType="float16" size="2" color="0,255,0" />
+        <channel name="Z"  shortName="b" index="2" channelType="Color" valueType="float16" size="2" color="0,0,255" />
+        <channel name="Alpha" shortName="a" index="3" channelType="Alpha" valueType="float16" size="2" />
+    </channels>
+    <isHdr />
+    <defaultProfile name="Standard XYZ" />
+</ctlcolorspace>

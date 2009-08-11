@@ -1,0 +1,11 @@
+<ctlcolorspace>
+    <info  colorModelId="YCbCrA" colorModelName="YCbCr" type="integer" depth="16" name="YCbCr (16-bit integer/channel" id="YCbCrAU16" />
+    <channels>
+        <channel name="Y"   shortName="Y" index="0" channelType="Color" valueType="integer16" size="2" color="255,0,0" />
+        <channel name="Cb" shortName="Cb" index="1" channelType="Color" valueType="integer16" size="2" color="0,255,0" />
+        <channel name="Cr"  shortName="Cr" index="2" channelType="Color" valueType="integer16" size="2" color="0,0,255" />
+        <channel name="Alpha" shortName="a" index="3" channelType="Alpha" valueType="integer16" size="2" />
+    </channels>
+    <isHdr />
+    <defaultProfile name="Standard YCbCr (16-bits)" />
+</ctlcolorspace>

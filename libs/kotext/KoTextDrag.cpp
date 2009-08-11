@@ -119,14 +119,14 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     }
 
     if (!context->saveDataCenter(store, manifestWriter)) {
-        kDebug(30006) << "save data centers failed";
+        kDebug(32500) << "save data centers failed";
         return false;
     }
 
     // Save embedded objects
     KoOdfDocument::SavingContext documentContext(odfStore, embeddedSaver);
     if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
-        kDebug(30006) << "save embedded documents failed";
+        kDebug(32500) << "save embedded documents failed";
         return false;
     }
 

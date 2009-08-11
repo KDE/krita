@@ -95,50 +95,50 @@ class KoMainWindowPrivate
 public:
     KoMainWindowPrivate(KoMainWindow *w) {
         parent = w;
-        m_rootDoc = 0;
-        m_docToOpen = 0;
-        m_manager = 0;
-        bMainWindowGUIBuilt = false;
-        m_forQuit = false;
-        m_splitted = false;
-        m_activePart = 0;
-        m_activeView = 0;
-        m_splitter = 0;
-        m_orientation = 0;
-        m_removeView = 0;
-        m_firstTime = true;
-        m_progress = 0;
-        m_paDocInfo = 0;
-        m_paSave = 0;
-        m_paSaveAs = 0;
-        m_paPrint = 0;
-        m_paPrintPreview = 0;
+        rootDoc = 0;
+        docToOpen = 0;
+        manager = 0;
+        mainWindowGuiIsBuilt = false;
+        forQuit = false;
+        splitted = false;
+        activePart = 0;
+        activeView = 0;
+        splitter = 0;
+        orientation = 0;
+        removeView = 0;
+        firstTime = true;
+        progress = 0;
+        showDocumentInfo = 0;
+        saveAction = 0;
+        saveActionAs = 0;
+        printAction = 0;
+        printActionPreview = 0;
         statusBarLabel = 0;
-        m_sendfile = 0;
-        m_exportPdf = 0;
-        m_paCloseFile = 0;
-        m_reloadfile = 0;
-        m_versionsfile = 0;
-        m_importFile = 0;
-        m_exportFile = 0;
-        m_isImporting = false;
-        m_isExporting = false;
-        m_windowSizeDirty = false;
-        m_lastExportSpecialOutputFlag = 0;
-        m_readOnly = false;
-        m_dockWidgetMenu = 0;
-        m_dockerManager = 0;
+        sendFileAction = 0;
+        exportPdf = 0;
+        closeFile = 0;
+        reloadFile = 0;
+        showFileVersions = 0;
+        importFile = 0;
+        exportFile = 0;
+        isImporting = false;
+        isExporting = false;
+        windowSizeDirty = false;
+        lastExportSpecialOutputFlag = 0;
+        readOnly = false;
+        dockWidgetMenu = 0;
+        dockerManager = 0;
     }
     ~KoMainWindowPrivate() {
-        qDeleteAll(m_toolbarList);
+        qDeleteAll(toolbarList);
     }
 
     void applyDefaultSettings(QPrinter &printer) {
-        QString title = m_rootDoc->documentInfo()->aboutInfo("title");
+        QString title = rootDoc->documentInfo()->aboutInfo("title");
         if (title.isEmpty()) {
-            title = m_rootDoc->url().fileName();
+            title = rootDoc->url().fileName();
             // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
-            KMimeType::Ptr mime = KMimeType::mimeType(m_rootDoc->outputMimeType());
+            KMimeType::Ptr mime = KMimeType::mimeType(rootDoc->outputMimeType());
             if (mime) {
                 QString extension = mime->property("X-KDE-NativeExtension").toString();
 
@@ -158,60 +158,60 @@ public:
     }
 
     KoMainWindow *parent;
-    KoDocument *m_rootDoc;
-    KoDocument *m_docToOpen;
-    QList<KoView*> m_rootViews;
-    KParts::PartManager *m_manager;
+    KoDocument *rootDoc;
+    KoDocument *docToOpen;
+    QList<KoView*> rootViews;
+    KParts::PartManager *manager;
 
-    KParts::Part *m_activePart;
-    KoView *m_activeView;
+    KParts::Part *activePart;
+    KoView *activeView;
 
     QLabel * statusBarLabel;
-    QProgressBar *m_progress;
+    QProgressBar *progress;
 
-    QList<QAction *> m_splitViewActionList;
+    QList<QAction *> splitViewActionList;
     // This additional list is needed, because we don't plug
     // the first list, when an embedded view gets activated (Werner)
-    QList<QAction *> m_veryHackyActionList;
-    QSplitter *m_splitter;
-    KSelectAction *m_orientation;
-    QAction *m_removeView;
+    QList<QAction *> veryHackyActionList;
+    QSplitter *splitter;
+    KSelectAction *orientation;
+    QAction *removeView;
 
-    QList<QAction *> m_toolbarList;
+    QList<QAction *> toolbarList;
 
-    bool bMainWindowGUIBuilt;
-    bool m_splitted;
-    bool m_forQuit;
-    bool m_firstTime;
-    bool m_windowSizeDirty;
-    bool m_readOnly;
+    bool mainWindowGuiIsBuilt;
+    bool splitted;
+    bool forQuit;
+    bool firstTime;
+    bool windowSizeDirty;
+    bool readOnly;
 
-    KAction *m_paDocInfo;
-    KAction *m_paSave;
-    KAction *m_paSaveAs;
-    KAction *m_paPrint;
-    KAction *m_paPrintPreview;
-    KAction *m_sendfile;
-    KAction *m_exportPdf;
-    KAction *m_paCloseFile;
-    KAction *m_reloadfile;
-    KAction *m_versionsfile;
-    KAction *m_importFile;
-    KAction *m_exportFile;
+    KAction *showDocumentInfo;
+    KAction *saveAction;
+    KAction *saveActionAs;
+    KAction *printAction;
+    KAction *printActionPreview;
+    KAction *sendFileAction;
+    KAction *exportPdf;
+    KAction *closeFile;
+    KAction *reloadFile;
+    KAction *showFileVersions;
+    KAction *importFile;
+    KAction *exportFile;
     KRecentFilesAction *recent;
 
-    bool m_isImporting;
-    bool m_isExporting;
+    bool isImporting;
+    bool isExporting;
 
-    KUrl m_lastExportURL;
-    QByteArray m_lastExportFormat;
-    int m_lastExportSpecialOutputFlag;
+    KUrl lastExportUrl;
+    QByteArray lastExportedFormat;
+    int lastExportSpecialOutputFlag;
 
-    QMap<QString, QDockWidget*> m_dockWidgetMap;
-    KActionMenu* m_dockWidgetMenu;
-    QMap<QDockWidget*, bool> m_dockWidgetVisibilityMap;
-    KoDockerManager *m_dockerManager;
-    QList<QDockWidget*> m_dockWidgets;
+    QMap<QString, QDockWidget*> dockWidgetsMap;
+    KActionMenu* dockWidgetMenu;
+    QMap<QDockWidget*, bool> dockWidgetVisibilityMap;
+    KoDockerManager *dockerManager;
+    QList<QDockWidget*> dockWidgets;
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
@@ -225,9 +225,9 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
-    d->m_manager = new KoPartManager(this);
+    d->manager = new KoPartManager(this);
 
-    connect(d->m_manager, SIGNAL(activePartChanged(KParts::Part *)),
+    connect(d->manager, SIGNAL(activePartChanged(KParts::Part *)),
             this, SLOT(slotActivePartChanged(KParts::Part *)));
 
     if (componentData.isValid()) {
@@ -245,109 +245,109 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
     actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
     d->recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
-    d->m_paSave = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
-    d->m_paSaveAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT(slotFileSaveAs()));
-    d->m_paPrint = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT(slotFilePrint()));
-    d->m_paPrintPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT(slotFilePrintPreview()));
+    d->saveAction = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
+    d->saveActionAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT(slotFileSaveAs()));
+    d->printAction = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT(slotFilePrint()));
+    d->printActionPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT(slotFilePrintPreview()));
 
-    d->m_exportPdf  = new KAction(i18n("Export as PDF..."), this);
-    d->m_exportPdf->setIcon(KIcon("application-pdf"));
-    actionCollection()->addAction("file_export_pdf", d->m_exportPdf);
-    connect(d->m_exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
+    d->exportPdf  = new KAction(i18n("Export as PDF..."), this);
+    d->exportPdf->setIcon(KIcon("application-pdf"));
+    actionCollection()->addAction("file_export_pdf", d->exportPdf);
+    connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
-    d->m_sendfile = actionCollection()->addAction(KStandardAction::Mail,  "file_send_file", this, SLOT(slotEmailFile()));
+    d->sendFileAction = actionCollection()->addAction(KStandardAction::Mail,  "file_send_file", this, SLOT(slotEmailFile()));
 
-    d->m_paCloseFile = actionCollection()->addAction(KStandardAction::Close,  "file_close", this, SLOT(slotFileClose()));
+    d->closeFile = actionCollection()->addAction(KStandardAction::Close,  "file_close", this, SLOT(slotFileClose()));
     actionCollection()->addAction(KStandardAction::Quit,  "file_quit", this, SLOT(slotFileQuit()));
 
-    d->m_reloadfile  = new KAction(i18n("Reload"), this);
-    actionCollection()->addAction("file_reload_file", d->m_reloadfile);
-    connect(d->m_reloadfile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
+    d->reloadFile  = new KAction(i18n("Reload"), this);
+    actionCollection()->addAction("file_reload_file", d->reloadFile);
+    connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
-    d->m_versionsfile  = new KAction(i18n("Versions..."), this);
-    actionCollection()->addAction("file_versions_file", d->m_versionsfile);
-    connect(d->m_versionsfile, SIGNAL(triggered(bool)), this, SLOT(slotVersionsFile()));
+    d->showFileVersions  = new KAction(i18n("Versions..."), this);
+    actionCollection()->addAction("file_versions_file", d->showFileVersions);
+    connect(d->showFileVersions, SIGNAL(triggered(bool)), this, SLOT(slotVersionsFile()));
 
-    d->m_importFile  = new KAction(KIcon("document-import"), i18n("I&mport..."), this);
-    actionCollection()->addAction("file_import_file", d->m_importFile);
-    connect(d->m_importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
+    d->importFile  = new KAction(KIcon("document-import"), i18n("I&mport..."), this);
+    actionCollection()->addAction("file_import_file", d->importFile);
+    connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
-    d->m_exportFile  = new KAction(KIcon("document-export"), i18n("E&xport..."), this);
-    actionCollection()->addAction("file_export_file", d->m_exportFile);
-    connect(d->m_exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
+    d->exportFile  = new KAction(KIcon("document-export"), i18n("E&xport..."), this);
+    actionCollection()->addAction("file_export_file", d->exportFile);
+    connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->m_paDocInfo  = new KAction(KIcon("document-properties"), i18n("Document Information"), this);
-    actionCollection()->addAction("file_documentinfo", d->m_paDocInfo);
-    connect(d->m_paDocInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
+    d->showDocumentInfo  = new KAction(KIcon("document-properties"), i18n("Document Information"), this);
+    actionCollection()->addAction("file_documentinfo", d->showDocumentInfo);
+    connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 
     KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actionCollection());
     KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbars()), actionCollection());
 
-    d->m_paDocInfo->setEnabled(false);
-    d->m_paSaveAs->setEnabled(false);
-    d->m_reloadfile->setEnabled(false);
-    d->m_versionsfile->setEnabled(false);
-    d->m_importFile->setEnabled(true);    // always enabled like File --> Open
-    d->m_exportFile->setEnabled(false);
-    d->m_paSave->setEnabled(false);
-    d->m_paPrint->setEnabled(false);
-    d->m_paPrintPreview->setEnabled(false);
-    d->m_sendfile->setEnabled(false);
-    d->m_exportPdf->setEnabled(false);
-    d->m_paCloseFile->setEnabled(false);
+    d->showDocumentInfo->setEnabled(false);
+    d->saveActionAs->setEnabled(false);
+    d->reloadFile->setEnabled(false);
+    d->showFileVersions->setEnabled(false);
+    d->importFile->setEnabled(true);    // always enabled like File --> Open
+    d->exportFile->setEnabled(false);
+    d->saveAction->setEnabled(false);
+    d->printAction->setEnabled(false);
+    d->printActionPreview->setEnabled(false);
+    d->sendFileAction->setEnabled(false);
+    d->exportPdf->setEnabled(false);
+    d->closeFile->setEnabled(false);
 
-    d->m_splitter = new QSplitter(Qt::Horizontal, this);
-    d->m_splitter->setObjectName("mw-splitter");
-    setCentralWidget(d->m_splitter);
+    d->splitter = new QSplitter(Qt::Horizontal, this);
+    d->splitter->setObjectName("mw-splitter");
+    setCentralWidget(d->splitter);
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     KAction *closeAllViews  = new KAction(KIcon("window-close"), i18n("&Close All Views"), this);
     actionCollection()->addAction("view_closeallviews", closeAllViews);
     closeAllViews->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_W));
     connect(closeAllViews, SIGNAL(triggered(bool)), this, SLOT(slotCloseAllViews()));
-    d->m_veryHackyActionList.append(closeAllViews);
+    d->veryHackyActionList.append(closeAllViews);
 
     // set up the action list for the splitter stuff
     KAction * splitView  = new KAction(KIcon("view_split"), i18n("&Split View"), this);
     actionCollection()->addAction("view_split", splitView);
     connect(splitView, SIGNAL(triggered(bool)), this, SLOT(slotSplitView()));
-    d->m_splitViewActionList.append(splitView);
+    d->splitViewActionList.append(splitView);
 
-    d->m_removeView  = new KAction(KIcon("view-close"), i18n("&Remove View"), this);
-    actionCollection()->addAction("view_rm_splitter", d->m_removeView);
-    connect(d->m_removeView, SIGNAL(triggered(bool)), this, SLOT(slotRemoveView()));
-    d->m_splitViewActionList.append(d->m_removeView);
-    d->m_removeView->setEnabled(false);
+    d->removeView  = new KAction(KIcon("view-close"), i18n("&Remove View"), this);
+    actionCollection()->addAction("view_rsplitter", d->removeView);
+    connect(d->removeView, SIGNAL(triggered(bool)), this, SLOT(slotRemoveView()));
+    d->splitViewActionList.append(d->removeView);
+    d->removeView->setEnabled(false);
 
     KToggleAction *fullscreenAction  = new KToggleAction(KIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
     actionCollection()->addAction("view_fullscreen", fullscreenAction);
     fullscreenAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
     connect(fullscreenAction, SIGNAL(toggled(bool)), this, SLOT(viewFullscreen(bool)));
 
-    d->m_orientation  = new KSelectAction(KIcon("view_orientation"), i18n("Splitter &Orientation"), this);
-    actionCollection()->addAction("view_splitter_orientation", d->m_orientation);
-    connect(d->m_orientation, SIGNAL(triggered(int)), this, SLOT(slotSetOrientation()));
+    d->orientation  = new KSelectAction(KIcon("view_orientation"), i18n("Splitter &Orientation"), this);
+    actionCollection()->addAction("view_splitter_orientation", d->orientation);
+    connect(d->orientation, SIGNAL(triggered(int)), this, SLOT(slotSetOrientation()));
     QStringList items;
     items << i18n("&Horizontal") << i18n("&Vertical");
-    d->m_orientation->setItems(items);
-    d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()-1));
-    d->m_splitViewActionList.append(d->m_orientation);
+    d->orientation->setItems(items);
+    d->orientation->setCurrentItem(static_cast<int>(d->splitter->orientation()-1));
+    d->splitViewActionList.append(d->orientation);
     QAction *sep = new QAction(this);
     sep->setSeparator(true);
-    d->m_splitViewActionList.append(sep);
+    d->splitViewActionList.append(sep);
 
-    d->m_dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
-    actionCollection()->addAction("settings_dockers_menu", d->m_dockWidgetMenu);
-    d->m_dockWidgetMenu->setVisible(false);
+    d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
+    actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
+    d->dockWidgetMenu->setVisible(false);
 
     // Load list of recent files
     KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() : KGlobal::config();
     d->recent->loadEntries(configPtr->group("RecentFiles"));
 
     createShellGUI();
-    d->bMainWindowGUIBuilt = true;
+    d->mainWindowGuiIsBuilt = true;
 
     // Get screen geometry
     const int scnum = QApplication::desktop()->screenNumber(parentWidget());
@@ -377,107 +377,107 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 KoMainWindow::~KoMainWindow()
 {
     // The doc and view might still exist (this is the case when closing the window)
-    if (d->m_rootDoc)
-        d->m_rootDoc->removeShell(this);
+    if (d->rootDoc)
+        d->rootDoc->removeShell(this);
 
-    if (d->m_docToOpen) {
-        d->m_docToOpen->removeShell(this);
-        delete d->m_docToOpen;
+    if (d->docToOpen) {
+        d->docToOpen->removeShell(this);
+        delete d->docToOpen;
     }
 
     // safety first ;)
-    d->m_manager->setActivePart(0);
+    d->manager->setActivePart(0);
 
-    if (d->m_rootViews.indexOf(d->m_activeView) == -1) {
-        delete d->m_activeView;
-        d->m_activeView = 0;
+    if (d->rootViews.indexOf(d->activeView) == -1) {
+        delete d->activeView;
+        d->activeView = 0;
     }
-    while(!d->m_rootViews.isEmpty()) {
-        delete d->m_rootViews.takeFirst();
+    while(!d->rootViews.isEmpty()) {
+        delete d->rootViews.takeFirst();
     }
 
     // We have to check if this was a root document.
     // -> We aren't allowed to delete the (embedded) document!
     // This has to be checked from queryClose, too :)
-    if (d->m_rootDoc && d->m_rootDoc->viewCount() == 0 &&
-            !d->m_rootDoc->isEmbedded()) {
-        //kDebug(30003) <<"Destructor. No more views, deleting old doc" << d->m_rootDoc;
-        delete d->m_rootDoc;
+    if (d->rootDoc && d->rootDoc->viewCount() == 0 &&
+            !d->rootDoc->isEmbedded()) {
+        //kDebug(30003) <<"Destructor. No more views, deleting old doc" << d->rootDoc;
+        delete d->rootDoc;
     }
 
-    delete d->m_manager;
+    delete d->manager;
     delete d;
 }
 
 void KoMainWindow::setRootDocument(KoDocument *doc)
 {
-    if (d->m_rootDoc == doc)
+    if (d->rootDoc == doc)
         return;
 
-    if (d->m_docToOpen && d->m_docToOpen != doc) {
-        d->m_docToOpen->removeShell(this);
-        delete d->m_docToOpen;
-        d->m_docToOpen = 0;
+    if (d->docToOpen && d->docToOpen != doc) {
+        d->docToOpen->removeShell(this);
+        delete d->docToOpen;
+        d->docToOpen = 0;
     } else {
-        d->m_docToOpen = 0;
+        d->docToOpen = 0;
     }
 
-    if (d->m_dockerManager) { // All the views will be deleted, so lets remove this one too
-        delete d->m_dockerManager;
-        d->m_dockerManager = 0;
+    if (d->dockerManager) { // All the views will be deleted, so lets remove this one too
+        delete d->dockerManager;
+        d->dockerManager = 0;
     }
 
     //kDebug(30003) <<"KoMainWindow::setRootDocument this =" << this <<" doc =" << doc;
-    QList<KoView*> oldRootViews = d->m_rootViews;
-    d->m_rootViews.clear();
-    KoDocument *oldRootDoc = d->m_rootDoc;
+    QList<KoView*> oldRootViews = d->rootViews;
+    d->rootViews.clear();
+    KoDocument *oldRootDoc = d->rootDoc;
 
     if (oldRootDoc) {
         oldRootDoc->removeShell(this);
 
         // Hide all dockwidgets and remember their old state
-        d->m_dockWidgetVisibilityMap.clear();
+        d->dockWidgetVisibilityMap.clear();
 
-        foreach(QDockWidget* dockWidget, d->m_dockWidgetMap) {
-            d->m_dockWidgetVisibilityMap.insert(dockWidget, dockWidget->isVisible());
+        foreach(QDockWidget* dockWidget, d->dockWidgetsMap) {
+            d->dockWidgetVisibilityMap.insert(dockWidget, dockWidget->isVisible());
             dockWidget->setVisible(false);
         }
 
-        d->m_dockWidgetMenu->setVisible(false);
+        d->dockWidgetMenu->setVisible(false);
     }
 
-    d->m_rootDoc = doc;
+    d->rootDoc = doc;
 
     if (doc) {
-        d->m_dockWidgetMenu->setVisible(true);
+        d->dockWidgetMenu->setVisible(true);
         doc->setSelectable(false);
-        //d->m_manager->addPart( doc, false ); // done by KoView::setPartManager
-        KoView *view = doc->createView(d->m_splitter);
-        d->m_rootViews.append(view);
-        view->setPartManager(d->m_manager);
+        //d->manager->addPart( doc, false ); // done by KoView::setPartManager
+        KoView *view = doc->createView(d->splitter);
+        d->rootViews.append(view);
+        view->setPartManager(d->manager);
         view->show();
         view->setFocus();
         // The addShell has been done already if using openUrl
-        if (!d->m_rootDoc->shells().contains(this))
-            d->m_rootDoc->addShell(this);
-        d->m_removeView->setEnabled(false);
-        d->m_orientation->setEnabled(false);
+        if (!d->rootDoc->shells().contains(this))
+            d->rootDoc->addShell(this);
+        d->removeView->setEnabled(false);
+        d->orientation->setEnabled(false);
     }
 
-    bool enable = d->m_rootDoc != 0 ? true : false;
-    d->m_paDocInfo->setEnabled(enable);
-    d->m_paSave->setEnabled(enable);
-    d->m_paSaveAs->setEnabled(enable);
-    d->m_importFile->setEnabled(enable);
-    d->m_exportFile->setEnabled(enable);
-    d->m_paPrint->setEnabled(enable);
-    d->m_paPrintPreview->setEnabled(enable);
-    d->m_sendfile->setEnabled(enable);
-    d->m_exportPdf->setEnabled(enable);
-    d->m_paCloseFile->setEnabled(enable);
+    bool enable = d->rootDoc != 0 ? true : false;
+    d->showDocumentInfo->setEnabled(enable);
+    d->saveAction->setEnabled(enable);
+    d->saveActionAs->setEnabled(enable);
+    d->importFile->setEnabled(enable);
+    d->exportFile->setEnabled(enable);
+    d->printAction->setEnabled(enable);
+    d->printActionPreview->setEnabled(enable);
+    d->sendFileAction->setEnabled(enable);
+    d->exportPdf->setEnabled(enable);
+    d->closeFile->setEnabled(enable);
     updateCaption();
 
-    d->m_manager->setActivePart(d->m_rootDoc, currentView());
+    d->manager->setActivePart(d->rootDoc, currentView());
 
     emit restoringDone();
 
@@ -490,29 +490,29 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
         delete oldRootDoc;
     }
 
-    if (doc && !d->m_dockWidgetVisibilityMap.isEmpty()) {
-        foreach(QDockWidget* dockWidget, d->m_dockWidgetMap) {
-            dockWidget->setVisible(d->m_dockWidgetVisibilityMap.value(dockWidget));
+    if (doc && !d->dockWidgetVisibilityMap.isEmpty()) {
+        foreach(QDockWidget* dockWidget, d->dockWidgetsMap) {
+            dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
         }
     }
 }
 
 void KoMainWindow::updateReloadFileAction(KoDocument *doc)
 {
-    d->m_reloadfile->setEnabled(doc && !doc->url().isEmpty());
+    d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
 }
 
 void KoMainWindow::updateVersionsFileAction(KoDocument *doc)
 {
     //TODO activate it just when we save it in oasis file format
-    d->m_versionsfile->setEnabled(doc && !doc->url().isEmpty() && (doc->outputMimeType() == doc->nativeOasisMimeType() || doc->outputMimeType() == doc->nativeOasisMimeType() + "-template"));
+    d->showFileVersions->setEnabled(doc && !doc->url().isEmpty() && (doc->outputMimeType() == doc->nativeOasisMimeType() || doc->outputMimeType() == doc->nativeOasisMimeType() + "-template"));
 }
 
 void KoMainWindow::setReadWrite(bool readwrite)
 {
-    d->m_paSave->setEnabled(readwrite);
-    d->m_importFile->setEnabled(readwrite);
-    d->m_readOnly =  !readwrite;
+    d->saveAction->setEnabled(readwrite);
+    d->importFile->setEnabled(readwrite);
+    d->readOnly =  !readwrite;
     updateCaption();
 }
 
@@ -570,7 +570,7 @@ KoDocument* KoMainWindow::createDoc() const
 void KoMainWindow::updateCaption()
 {
     kDebug(30003) << "KoMainWindow::updateCaption()";
-    if (!d->m_rootDoc)
+    if (!d->rootDoc)
         updateCaption(QString(), false);
     else if (rootDocument()->isCurrent()) {
         QString caption;
@@ -584,14 +584,14 @@ void KoMainWindow::updateCaption()
         else if (caption.isEmpty())
             caption = url;
 
-        if (d->m_readOnly)
+        if (d->readOnly)
             caption += i18n("(write protected)");
 
         updateCaption(caption, rootDocument()->isModified());
         if (!rootDocument()->url().fileName(KUrl::ObeyTrailingSlash).isEmpty())
-            d->m_paSave->setToolTip(i18n("Save as %1", rootDocument()->url().fileName(KUrl::ObeyTrailingSlash)));
+            d->saveAction->setToolTip(i18n("Save as %1", rootDocument()->url().fileName(KUrl::ObeyTrailingSlash)));
         else
-            d->m_paSave->setToolTip(i18n("Save"));
+            d->saveAction->setToolTip(i18n("Save"));
     }
 }
 
@@ -616,19 +616,19 @@ void KoMainWindow::updateCaption(const QString & caption, bool mod)
 
 KoDocument *KoMainWindow::rootDocument() const
 {
-    return d->m_rootDoc;
+    return d->rootDoc;
 }
 
 KoView *KoMainWindow::rootView() const
 {
-    if (d->m_rootViews.indexOf(d->m_activeView) != -1)
-        return d->m_activeView;
-    return d->m_rootViews.first();
+    if (d->rootViews.indexOf(d->activeView) != -1)
+        return d->activeView;
+    return d->rootViews.first();
 }
 
 KParts::PartManager *KoMainWindow::partManager()
 {
-    return d->m_manager;
+    return d->manager;
 }
 
 bool KoMainWindow::openDocument(const KUrl & url)
@@ -673,7 +673,7 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoDocument *newdoc)
     if (!newdoc)
         return false;
 
-    d->m_firstTime = true;
+    d->firstTime = true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
@@ -859,8 +859,8 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         bool justChangingFilterOptions = false;
 
         KoFileDialog *dialog = new KoFileDialog(
-            (isExporting() && !d->m_lastExportURL.isEmpty()) ?
-            d->m_lastExportURL.url() : suggestedURL.url(), this);
+            (isExporting() && !d->lastExportUrl.isEmpty()) ?
+            d->lastExportUrl.url() : suggestedURL.url(), this);
 
         if (!isExporting())
             dialog->setCaption(i18n("Save Document As"));
@@ -870,8 +870,8 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         dialog->setOperationMode(KFileDialog::Saving);
         dialog->setMode(KFile::File);
         dialog->setSpecialMimeFilter(mimeFilter,
-                                     isExporting() ? d->m_lastExportFormat : pDoc->mimeType(),
-                                     isExporting() ? d->m_lastExportSpecialOutputFlag : oldSpecialOutputFlag,
+                                     isExporting() ? d->lastExportedFormat : pDoc->mimeType(),
+                                     isExporting() ? d->lastExportSpecialOutputFlag : oldSpecialOutputFlag,
                                      _native_format,
                                      pDoc->supportedSpecialFormats());
 
@@ -892,9 +892,9 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
                                                 (outputFormat == pDoc->mimeType()) &&
                                                 (specialOutputFlag == oldSpecialOutputFlag);
                 else
-                    justChangingFilterOptions = (newURL == d->m_lastExportURL) &&
-                                                (outputFormat == d->m_lastExportFormat) &&
-                                                (specialOutputFlag == d->m_lastExportSpecialOutputFlag);
+                    justChangingFilterOptions = (newURL == d->lastExportUrl) &&
+                                                (outputFormat == d->lastExportedFormat) &&
+                                                (specialOutputFlag == d->lastExportSpecialOutputFlag);
             } else {
                 bOk = false;
                 break;
@@ -978,9 +978,9 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
                     if (ret) {
                         // a few file dialog convenience things
-                        d->m_lastExportURL = newURL;
-                        d->m_lastExportFormat = outputFormat;
-                        d->m_lastExportSpecialOutputFlag = specialOutputFlag;
+                        d->lastExportUrl = newURL;
+                        d->lastExportedFormat = outputFormat;
+                        d->lastExportSpecialOutputFlag = specialOutputFlag;
                     }
 
                     // always restore output format
@@ -1043,9 +1043,9 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
     if (queryClose()) {
         saveWindowSettings();
         setRootDocument(0);
-        if (!d->m_dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
-            foreach(QDockWidget* dockWidget, d->m_dockWidgetMap)
-                dockWidget->setVisible(d->m_dockWidgetVisibilityMap.value(dockWidget));
+        if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
+            foreach(QDockWidget* dockWidget, d->dockWidgetsMap)
+                dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
         }
         KParts::MainWindow::closeEvent(e);
     } else
@@ -1056,13 +1056,13 @@ void KoMainWindow::saveWindowSettings()
 {
     KSharedConfigPtr config = componentData().config();
 
-    if (d->m_windowSizeDirty ) {
+    if (d->windowSizeDirty ) {
 
         // Save window size into the config file of our componentData
         kDebug(30003) << "KoMainWindow::saveWindowSettings";
         saveWindowSize(config->group("MainWindow"));
         config->sync();
-        d->m_windowSizeDirty = false;
+        d->windowSizeDirty = false;
     }
 
     if ( rootDocument()) {
@@ -1073,8 +1073,8 @@ void KoMainWindow::saveWindowSettings()
         saveMainWindowSettings(group);
 
         // Save collapsable state of dock widgets
-        for (QMap<QString, QDockWidget*>::const_iterator i = d->m_dockWidgetMap.constBegin();
-                i != d->m_dockWidgetMap.constEnd(); ++i) {
+        for (QMap<QString, QDockWidget*>::const_iterator i = d->dockWidgetsMap.constBegin();
+                i != d->dockWidgetsMap.constEnd(); ++i) {
             if (i.value()->widget()) {
                 KConfigGroup dockGroup = group.group(QString("DockWidget ") + i.key());
                 dockGroup.writeEntry("Collapsed", i.value()->widget()->isHidden());
@@ -1091,7 +1091,7 @@ void KoMainWindow::saveWindowSettings()
 
 void KoMainWindow::resizeEvent(QResizeEvent * e)
 {
-    d->m_windowSizeDirty = true;
+    d->windowSizeDirty = true;
     KParts::MainWindow::resizeEvent(e);
 }
 
@@ -1101,16 +1101,16 @@ bool KoMainWindow::queryClose()
         return true;
     //kDebug(30003) <<"KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
     //               << " shellcount=" << rootDocument()->shellCount() << endl;
-    if (!d->m_forQuit && rootDocument()->shellCount() > 1)
+    if (!d->forQuit && rootDocument()->shellCount() > 1)
         // there are more open, and we are closing just one, so no problem for closing
         return true;
 
     // see DTOR for a descr. of the test
-    if (d->m_rootDoc->isEmbedded())
+    if (d->rootDoc->isEmbedded())
         return true;
 
     // main doc + internally stored child documents
-    if (d->m_rootDoc->isModified()) {
+    if (d->rootDoc->isModified()) {
         QString name;
         if (rootDocument()->documentInfo()) {
             name = rootDocument()->documentInfo()->aboutInfo("title");
@@ -1129,7 +1129,7 @@ bool KoMainWindow::queryClose()
 
         switch (res) {
         case KMessageBox::Yes : {
-            bool isNative = (d->m_rootDoc->outputMimeType() == d->m_rootDoc->nativeFormatMimeType());
+            bool isNative = (d->rootDoc->outputMimeType() == d->rootDoc->nativeFormatMimeType());
             if (! saveDocument(!isNative))
                 return false;
             break;
@@ -1167,10 +1167,10 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
 
     if (doc) {
         setRootDocument(0);
-        if(d->m_rootDoc)
-            d->m_rootDoc->clearUndoHistory();
-        delete d->m_rootDoc;
-        d->m_rootDoc = 0;
+        if(d->rootDoc)
+            d->rootDoc->clearUndoHistory();
+        delete d->rootDoc;
+        d->rootDoc = 0;
     }
 
     newdoc->addShell(this);
@@ -1257,10 +1257,10 @@ void KoMainWindow::slotFileClose()
     if (queryClose()) {
         saveWindowSettings();
         setRootDocument(0);   // don't delete this shell when deleting the document
-        if(d->m_rootDoc)
-            d->m_rootDoc->clearUndoHistory();
-        delete d->m_rootDoc;
-        d->m_rootDoc = 0;
+        if(d->rootDoc)
+            d->rootDoc->clearUndoHistory();
+        delete d->rootDoc;
+        d->rootDoc = 0;
         chooseNewDocument(InitDocFileClose);
     }
 }
@@ -1359,18 +1359,18 @@ void KoMainWindow::slotNewToolbarConfig()
     KXMLGUIFactory *factory = guiFactory();
 
     // Check if there's an active view
-    if (!d->m_activeView)
+    if (!d->activeView)
         return;
 
     // This gets plugged in even for embedded views
-    factory->plugActionList(d->m_activeView, "view_closeallviews",
-                            d->m_veryHackyActionList);
+    factory->plugActionList(d->activeView, "view_closeallviews",
+                            d->veryHackyActionList);
 
     // This one only for root views
-    if (d->m_rootViews.indexOf(d->m_activeView) != -1)
-        factory->plugActionList(d->m_activeView, "view_split",
-                                d->m_splitViewActionList);
-    plugActionList("toolbarlist", d->m_toolbarList);
+    if (d->rootViews.indexOf(d->activeView) != -1)
+        factory->plugActionList(d->activeView, "view_split",
+                                d->splitViewActionList);
+    plugActionList("toolbarlist", d->toolbarList);
 }
 
 void KoMainWindow::slotToolbarToggled(bool toggle)
@@ -1409,7 +1409,7 @@ void KoMainWindow::showToolbar(const char * tbName, bool shown)
         tb->hide();
 
     // Update the action appropriately
-    foreach(QAction* action, d->m_toolbarList) {
+    foreach(QAction* action, d->toolbarList) {
         if (action->objectName() != tbName) {
             //kDebug(30003) <<"KoMainWindow::showToolbar setChecked" << shown;
             static_cast<KToggleAction *>(action)->setChecked(shown);
@@ -1420,32 +1420,32 @@ void KoMainWindow::showToolbar(const char * tbName, bool shown)
 
 void KoMainWindow::slotSplitView()
 {
-    d->m_splitted = true;
+    d->splitted = true;
     KoView *current = currentView();
-    KoView *newView = d->m_rootDoc->createView(d->m_splitter);
-    d->m_rootViews.append(newView);
+    KoView *newView = d->rootDoc->createView(d->splitter);
+    d->rootViews.append(newView);
     current->show();
-    current->setPartManager(d->m_manager);
-    d->m_manager->setActivePart(d->m_rootDoc, current);
-    d->m_removeView->setEnabled(true);
-    d->m_orientation->setEnabled(true);
+    current->setPartManager(d->manager);
+    d->manager->setActivePart(d->rootDoc, current);
+    d->removeView->setEnabled(true);
+    d->orientation->setEnabled(true);
 }
 
 void KoMainWindow::slotCloseAllViews()
 {
     // Attention: Very touchy code... you know what you're doing? Goooood :)
-    d->m_forQuit = true;
+    d->forQuit = true;
     if (queryClose()) {
         // In case the document is embedded we close all open "extra-shells"
-        if (d->m_rootDoc && d->m_rootDoc->isEmbedded()) {
+        if (d->rootDoc && d->rootDoc->isEmbedded()) {
             hide();
-            d->m_rootDoc->removeShell(this);
-            QList<KoMainWindow*> shells = d->m_rootDoc->shells();
+            d->rootDoc->removeShell(this);
+            QList<KoMainWindow*> shells = d->rootDoc->shells();
             while (!shells.isEmpty()) {
                 KoMainWindow* window = shells.takeFirst();
                 window->hide();
                 delete window;
-                d->m_rootDoc = 0;
+                d->rootDoc = 0;
             }
         }
         // not embedded -> destroy the document and all shells/views ;)
@@ -1454,38 +1454,38 @@ void KoMainWindow::slotCloseAllViews()
         }
         close();  // close this window (and quit the app if necessary)
     }
-    d->m_forQuit = false;
+    d->forQuit = false;
 }
 
 void KoMainWindow::slotRemoveView()
 {
     KoView *view;
-    if (d->m_rootViews.indexOf(d->m_activeView) != -1)
+    if (d->rootViews.indexOf(d->activeView) != -1)
         view = currentView();
     else
-        view = d->m_rootViews.first();
+        view = d->rootViews.first();
 
     view->hide();
 
-    if (d->m_rootViews.indexOf(view) == -1) {
-        kWarning() << "view not found in d->m_rootViews!";
+    if (d->rootViews.indexOf(view) == -1) {
+        kWarning() << "view not found in d->rootViews!";
     }
 
-    if (d->m_rootViews.count() == 1) {
-        d->m_removeView->setEnabled(false);
-        d->m_orientation->setEnabled(false);
+    if (d->rootViews.count() == 1) {
+        d->removeView->setEnabled(false);
+        d->orientation->setEnabled(false);
     }
     // Prevent the view's destroyed() signal from triggering GUI rebuilding (too early)
-    d->m_manager->setActivePart(0, 0);
+    d->manager->setActivePart(0, 0);
 
     delete view;
     view = 0;
 
-    d->m_rootViews.first()->setPartManager(d->m_manager);
-    d->m_manager->setActivePart(d->m_rootDoc, d->m_rootViews.first());
+    d->rootViews.first()->setPartManager(d->manager);
+    d->manager->setActivePart(d->rootDoc, d->rootViews.first());
 
-    if (d->m_rootViews.count() == 1)
-        d->m_splitted = false;
+    if (d->rootViews.count() == 1)
+        d->splitted = false;
 }
 
 void KoMainWindow::viewFullscreen(bool fullScreen)
@@ -1500,23 +1500,23 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
 
 void KoMainWindow::slotSetOrientation()
 {
-    d->m_splitter->setOrientation(static_cast<Qt::Orientation>
-                                  (d->m_orientation->currentItem()+1));
+    d->splitter->setOrientation(static_cast<Qt::Orientation>
+                                  (d->orientation->currentItem()+1));
 }
 
 void KoMainWindow::slotProgress(int value)
 {
     //kDebug(30003) <<"KoMainWindow::slotProgress" << value;
     if (value <= -1) {
-        if (d->m_progress) {
-            statusBar()->removeWidget(d->m_progress);
-            delete d->m_progress;
-            d->m_progress = 0;
+        if (d->progress) {
+            statusBar()->removeWidget(d->progress);
+            delete d->progress;
+            d->progress = 0;
         }
-        d->m_firstTime = true;
+        d->firstTime = true;
         return;
     }
-    if (d->m_firstTime) {
+    if (d->firstTime) {
         // The statusbar might not even be created yet.
         // So check for that first, and create it if necessary
         QStatusBar* bar = qFindChild<QStatusBar *>(this);
@@ -1525,19 +1525,19 @@ void KoMainWindow::slotProgress(int value)
             QApplication::sendPostedEvents(this, QEvent::ChildAdded);
         }
 
-        if (d->m_progress) {
-            statusBar()->removeWidget(d->m_progress);
-            delete d->m_progress;
-            d->m_progress = 0;
+        if (d->progress) {
+            statusBar()->removeWidget(d->progress);
+            delete d->progress;
+            d->progress = 0;
         }
 
-        d->m_progress = new QProgressBar(statusBar());
-        d->m_progress->setMaximumHeight(statusBar()->fontMetrics().height());
-        statusBar()->addPermanentWidget(d->m_progress);
-        d->m_progress->show();
-        d->m_firstTime = false;
+        d->progress = new QProgressBar(statusBar());
+        d->progress->setMaximumHeight(statusBar()->fontMetrics().height());
+        statusBar()->addPermanentWidget(d->progress);
+        d->progress->show();
+        d->firstTime = false;
     }
-    d->m_progress->setValue(value);
+    d->progress->setValue(value);
     qApp->processEvents();
 }
 
@@ -1550,9 +1550,9 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
     // with an active view _and_ an active part, depending for what.
     // Both are KXMLGUIClients, but e.g. the plugin query needs a QObject.
     //kDebug(30003) <<"KoMainWindow::slotActivePartChanged( Part * newPart) newPart =" << newPart;
-    //kDebug(30003) <<"current active part is" << d->m_activePart;
+    //kDebug(30003) <<"current active part is" << d->activePart;
 
-    if (d->m_activePart && d->m_activePart == newPart && !d->m_splitted) {
+    if (d->activePart && d->activePart == newPart && !d->splitted) {
         //kDebug(30003) <<"no need to change the GUI";
         return;
     }
@@ -1561,44 +1561,44 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
 
 // ###  setUpdatesEnabled( false );
 
-    if (d->m_activeView) {
+    if (d->activeView) {
         KParts::GUIActivateEvent ev(false);
-        QApplication::sendEvent(d->m_activePart, &ev);
-        QApplication::sendEvent(d->m_activeView, &ev);
+        QApplication::sendEvent(d->activePart, &ev);
+        QApplication::sendEvent(d->activeView, &ev);
 
 
-        factory->removeClient(d->m_activeView);
+        factory->removeClient(d->activeView);
 
         unplugActionList("toolbarlist");
-        qDeleteAll(d->m_toolbarList);
-        d->m_toolbarList.clear();
+        qDeleteAll(d->toolbarList);
+        d->toolbarList.clear();
     }
 
-    if (!d->bMainWindowGUIBuilt) {
+    if (!d->mainWindowGuiIsBuilt) {
         // Load mainwindow plugins
         KParts::Plugin::loadPlugins(this, this, componentData(), true);
         createShellGUI();
     }
 
-    if (newPart && d->m_manager->activeWidget() && d->m_manager->activeWidget()->inherits("KoView")) {
-        d->m_activeView = (KoView *)d->m_manager->activeWidget();
-        d->m_activePart = newPart;
-        //kDebug(30003) <<"new active part is" << d->m_activePart;
+    if (newPart && d->manager->activeWidget() && d->manager->activeWidget()->inherits("KoView")) {
+        d->activeView = (KoView *)d->manager->activeWidget();
+        d->activePart = newPart;
+        //kDebug(30003) <<"new active part is" << d->activePart;
 
-        factory->addClient(d->m_activeView);
+        factory->addClient(d->activeView);
 
 
         // This gets plugged in even for embedded views
-        factory->plugActionList(d->m_activeView, "view_closeallviews",
-                                d->m_veryHackyActionList);
+        factory->plugActionList(d->activeView, "view_closeallviews",
+                                d->veryHackyActionList);
         // This one only for root views
-        if (d->m_rootViews.indexOf(d->m_activeView) != -1)
-            factory->plugActionList(d->m_activeView, "view_split", d->m_splitViewActionList);
+        if (d->rootViews.indexOf(d->activeView) != -1)
+            factory->plugActionList(d->activeView, "view_split", d->splitViewActionList);
 
         // Position and show toolbars according to user's preference
         setAutoSaveSettings(newPart->componentData().componentName(), false);
 
-        foreach (QDockWidget *wdg, d->m_dockWidgets) {
+        foreach (QDockWidget *wdg, d->dockWidgets) {
             if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
                 wdg->setVisible(true);
             }
@@ -1614,20 +1614,20 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
                 act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", tb->windowTitle())));
                 connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
                 act->setChecked(!tb->isHidden());
-                d->m_toolbarList.append(act);
+                d->toolbarList.append(act);
             } else
                 kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
         }
-        plugActionList("toolbarlist", d->m_toolbarList);
+        plugActionList("toolbarlist", d->toolbarList);
 
         // Send the GUIActivateEvent only now, since it might show/hide toolbars too
         // (and this has priority over applyMainWindowSettings)
         KParts::GUIActivateEvent ev(true);
-        QApplication::sendEvent(d->m_activePart, &ev);
-        QApplication::sendEvent(d->m_activeView, &ev);
+        QApplication::sendEvent(d->activePart, &ev);
+        QApplication::sendEvent(d->activeView, &ev);
     } else {
-        d->m_activeView = 0;
-        d->m_activePart = 0;
+        d->activeView = 0;
+        d->activePart = 0;
     }
 // ###  setUpdatesEnabled( true );
 }
@@ -1722,10 +1722,10 @@ void KoMainWindow::slotReloadFile()
     KUrl url = pDoc->url();
     if (pDoc && !pDoc->isEmpty()) {
         setRootDocument(0);   // don't delete this shell when deleting the document
-        if(d->m_rootDoc)
-            d->m_rootDoc->clearUndoHistory();
-        delete d->m_rootDoc;
-        d->m_rootDoc = 0;
+        if(d->rootDoc)
+            d->rootDoc->clearUndoHistory();
+        delete d->rootDoc;
+        d->rootDoc = 0;
     }
     openDocument(url);
     return;
@@ -1736,46 +1736,46 @@ void KoMainWindow::slotImportFile()
 {
     kDebug(30003) << "slotImportFile()";
 
-    d->m_isImporting = true;
+    d->isImporting = true;
     slotFileOpen();
-    d->m_isImporting = false;
+    d->isImporting = false;
 }
 
 void KoMainWindow::slotExportFile()
 {
     kDebug(30003) << "slotExportFile()";
 
-    d->m_isExporting = true;
+    d->isExporting = true;
     slotFileSaveAs();
-    d->m_isExporting = false;
+    d->isExporting = false;
 }
 
 bool KoMainWindow::isImporting() const
 {
-    return d->m_isImporting;
+    return d->isImporting;
 }
 
 bool KoMainWindow::isExporting() const
 {
-    return d->m_isExporting;
+    return d->isExporting;
 }
 
 void KoMainWindow::setDocToOpen(KoDocument *doc)
 {
-    d->m_docToOpen = doc;
+    d->docToOpen = doc;
 }
 
 QDockWidget* KoMainWindow::createDockWidget(KoDockFactory* factory)
 {
     QDockWidget* dockWidget = 0;
 
-    if (!d->m_dockWidgetMap.contains(factory->id())) {
+    if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
 
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
         if (!dockWidget) return 0;
-        d->m_dockWidgets.push_back(dockWidget);
+        d->dockWidgets.push_back(dockWidget);
 
         KoDockWidgetTitleBar *titleBar = 0;
         // Check if the dock widget is supposed to be collapsable
@@ -1819,7 +1819,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactory* factory)
 
         addDockWidget(side, dockWidget);
         if (dockWidget->features() & QDockWidget::DockWidgetClosable) {
-            d->m_dockWidgetMenu->addAction(dockWidget->toggleViewAction());
+            d->dockWidgetMenu->addAction(dockWidget->toggleViewAction());
             if (!visible)
                 dockWidget->hide();
         }
@@ -1831,9 +1831,9 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactory* factory)
         }
         if (titleBar && collapsed)
             titleBar->setCollapsed(true);
-        d->m_dockWidgetMap.insert(factory->id(), dockWidget);
+        d->dockWidgetsMap.insert(factory->id(), dockWidget);
     } else {
-        dockWidget = d->m_dockWidgetMap[ factory->id()];
+        dockWidget = d->dockWidgetsMap[ factory->id()];
     }
 
     KConfigGroup group(KGlobal::config(), "GUI");
@@ -1866,7 +1866,7 @@ void KoMainWindow::forceDockTabFonts()
 
 QList<QDockWidget*> KoMainWindow::dockWidgets()
 {
-    return d->m_dockWidgetMap.values();
+    return d->dockWidgetsMap.values();
 }
 
 QList<KoCanvasObserver*> KoMainWindow::canvasObservers()
@@ -1886,12 +1886,12 @@ QList<KoCanvasObserver*> KoMainWindow::canvasObservers()
 
 KoDockerManager * KoMainWindow::dockerManager() const
 {
-    return d->m_dockerManager;
+    return d->dockerManager;
 }
 
 void KoMainWindow::setDockerManager(KoDockerManager *dm)
 {
-    d->m_dockerManager = dm;
+    d->dockerManager = dm;
     if (dm) {
         QObject *manager = static_cast<QObject*> (dm);
         manager->setParent(this); // make sure that the dockerManager is deleted by us.
@@ -1906,11 +1906,11 @@ KRecentFilesAction *KoMainWindow::recentAction() const
 KoView* KoMainWindow::currentView() const
 {
     // XXX
-    if (d->m_activeView) {
-        return d->m_activeView;
+    if (d->activeView) {
+        return d->activeView;
     }
     else {
-        return d->m_rootViews.first();
+        return d->rootViews.first();
     }
 }
 

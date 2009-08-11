@@ -119,14 +119,14 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
     KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
 
     if ( realBody.isNull() ) {
-        kError() << "No body tag found!" << endl;
+        kError(30010) << "No body tag found!" << endl;
         return false;
     }
 
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, odfTagName( false ));
 
     if ( body.isNull() ) {
-        kError() << "No office:" << odfTagName( false ) << " tag found!" << endl;
+        kError(30010) << "No office:" << odfTagName( false ) << " tag found!" << endl;
         return false;
     }
 

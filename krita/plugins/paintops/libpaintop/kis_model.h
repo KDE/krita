@@ -27,6 +27,12 @@
 #include <QString>
 #include <QVector>
 
+#include <config-opengl.h>
+
+#ifdef HAVE_OPENGL
+#include <GL/gl.h>
+#endif
+
 
 class PAINTOP_EXPORT KisModel
 {
@@ -34,11 +40,17 @@ public:
     
     KisModel(){}
     KisModel(const QString &fileName);
-    
+    GLuint displayList();
+
 private:
     QString m_fileName;
     QVector<KisVector3D> m_vertex;
     QVector<KisVector3D> m_normal;
+    QVector<int> m_vertexIndex;
+    QVector<int> m_normalIndex;
+    
+    bool m_cached;
+    GLuint m_displayList;
 };
 
 #endif // KIS_MODEL_H

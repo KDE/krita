@@ -71,7 +71,7 @@
 
 #ifdef HAVE_OPENGL
 #include <GL/gl.h>
-#include <GL/glut.h>
+#include <GL/glu.h>
 #endif
 
 
@@ -224,6 +224,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 #if defined(HAVE_OPENGL)
     if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL){
         if (m_canvas->canvasController()->isCanvasOpenGL()){
+            // TODO rethink this as I need to update whole canvas
             m_canvas->updateCanvas(     QRect( QPoint(0,0),QSize(320,240) ) );
         }
     }
@@ -481,6 +482,7 @@ void KisToolFreehand::setAssistant(bool assistant)
     m_assistant = assistant;
 }
 
+#define ZET 10
 void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 {
     KisConfig cfg;
@@ -492,12 +494,68 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             sx /= currentImage()->xRes();
             sy /= currentImage()->yRes();
 
-// JUST TEST HERE 
-    glDepthFunc(GL_LESS);
-    glEnable(GL_DEPTH_TEST);
-    glClear(GL_DEPTH_BUFFER_BIT);
+            GLuint list  =  currentPaintOpPreset()->settings()->displayList();
+            if (glIsList( list )){
+                kDebug() << "I have list to draw!";
+                QPointF pos = converter.documentToView( mousePos );
+/*                glEnable(GL_LINE_SMOOTH);
+                glEnable(GL_COLOR_LOGIC_OP);
 
-    static int angle = 0;
+                glLogicOp(GL_XOR);*/
+
+                //glColor3f(0.501961,1.0, 0.501961);
+
+/*        glDepthFunc(GL_LESS);
+        glShadeModel(GL_SMOOTH);
+
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_COLOR_MATERIAL);
+
+        glClear(GL_DEPTH_BUFFER_BIT);
+        
+        KisImageSP img = currentImage();
+        glEnable(GL_LIGHT0);
+        glEnable(GL_LIGHT1);
+        glEnable(GL_LIGHT2);
+        glEnable(GL_LIGHT3);
+        glEnable(GL_LIGHT4);
+
+        QPointF pos0(0,0); pos0 = converter.documentToView( pos0 );
+        QPointF pos1(0,img->height()); pos1 = converter.documentToView( pos1 );
+        QPointF pos2(img->width(),img->height()); pos2 = converter.documentToView( pos2 );
+        QPointF pos3(img->width(),0); pos3 = converter.documentToView( pos3 );
+
+        GLfloat position[] = { 0.0f, 0.0f, ZET };
+        position[0] = pos.x();
+        position[1] = pos.y();
+        glLightfv(GL_LIGHT0, GL_POSITION, position);
+        position[0] = pos1.x();
+        position[1] = pos1.y();
+        glLightfv(GL_LIGHT1, GL_POSITION, position);
+        position[0] = pos2.x();
+        position[1] = pos2.y();
+        glLightfv(GL_LIGHT2, GL_POSITION, position);
+        position[0] = pos3.x();
+        position[1] = pos3.y();
+        glLightfv(GL_LIGHT3, GL_POSITION, position);*/
+        
+            glColor3f(0.0,1.0,0.0);
+                glPushMatrix();
+                        glTranslatef( pos.x(), pos.y(),0 );
+                        glScalef( sx,sy,1);
+                        glRotatef(90, 0.8,0.7,0.6);
+                            glCallList( list );
+                        glScalef(1.0 / sx,1.0 / sy ,1);
+                glPopMatrix();
+            }else{
+                kDebug() << "_No_ list to draw!";
+// JUST TEST HERE 
+                glDepthFunc(GL_LESS);
+                glEnable(GL_DEPTH_TEST);
+                glClear(GL_DEPTH_BUFFER_BIT);
+
+                static int angle = 0;
 
                 QPointF pos1 = converter.documentToView( mousePos );
                 glPushMatrix();
@@ -540,7 +598,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
                     glVertex3f(0,0,1);
                     glVertex3f(1,0,1);
                     glVertex3f(1,0,0);
-                   
+                
                     // back
                     glVertex3f(0,1,0);
                     glVertex3f(0,1,1);
@@ -550,27 +608,9 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
                     glEnd();
 
                 glPopMatrix();
-// END TEST HERE
+        // END TEST HERE
 
-            GLuint list  =  currentPaintOpPreset()->settings()->displayList();
-            if (glIsList( list )){
-                QPointF pos = converter.documentToView( mousePos );
-                glEnable(GL_LINE_SMOOTH);
-                glEnable(GL_COLOR_LOGIC_OP);
-
-                glLogicOp(GL_XOR);
-                glColor3f(0.501961,1.0, 0.501961);
-
-                    glPushMatrix();
-                        glTranslatef( pos.x(), pos.y(),0 );
-                        glScalef( sx,sy,1);
-                            glCallList( list );
-                        glScalef(1.0 / sx,1.0 / sy ,1);
-                    glPopMatrix();
-
-                glDisable(GL_COLOR_LOGIC_OP);
-                glDisable(GL_LINE_SMOOTH);
-            }
+            }// else
         }
     }
 #endif

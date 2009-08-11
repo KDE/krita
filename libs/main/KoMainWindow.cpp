@@ -1433,24 +1433,16 @@ void KoMainWindow::slotSplitView()
 
 void KoMainWindow::slotCloseAllViews()
 {
-    // Attention: Very touchy code... you know what you're doing? Goooood :)
     d->forQuit = true;
     if (queryClose()) {
-        // In case the document is embedded we close all open "extra-shells"
-        if (d->rootDoc && d->rootDoc->isEmbedded()) {
-            hide();
-            d->rootDoc->removeShell(this);
-            QList<KoMainWindow*> shells = d->rootDoc->shells();
-            while (!shells.isEmpty()) {
-                KoMainWindow* window = shells.takeFirst();
-                window->hide();
-                delete window;
-                d->rootDoc = 0;
-            }
-        }
-        // not embedded -> destroy the document and all shells/views ;)
-        else {
-            setRootDocument(0);
+        hide();
+        d->rootDoc->removeShell(this);
+        QList<KoMainWindow*> shells = d->rootDoc->shells();
+        d->rootDoc = 0;
+        while (!shells.isEmpty()) {
+            KoMainWindow* window = shells.takeFirst();
+            window->hide();
+            delete window;
         }
         close();  // close this window (and quit the app if necessary)
     }

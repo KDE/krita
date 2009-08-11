@@ -5,6 +5,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
+ *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,14 +30,23 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
-#include "KoPointerEvent.h"
+#include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 
 #include <kis_selection.h>
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>
 #include <kis_cursor.h>
 #include <kis_layer.h>
+
+#include <config-opengl.h>
+
+#ifdef HAVE_OPENGL
+#include <GL/gl.h>
+#endif
+
+
 
 KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
         : KisToolShape(canvas, KisCursor::load("tool_ellipse_cursor.png", 6, 6)),
@@ -177,6 +187,67 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolEllipse::paintEllipse(QPainter& gc, const QRect&)
 {
+#if defined(HAVE_OPENGL)
+    if (m_canvas->canvasController()->isCanvasOpenGL()){
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_COLOR_LOGIC_OP);
+        glLogicOp(GL_XOR);
+        glColor3f(0.501961,1.0, 0.501961);
+
+        int steps = 72; 
+        qreal x = ( m_dragEnd.x() - m_dragStart.x() ) * 0.5;
+        qreal a = qAbs( x );
+        qreal y = ( m_dragEnd.y() - m_dragStart.y() ) * 0.5;
+        qreal b = qAbs( y );
+        
+        x += m_dragStart.x();
+        y += m_dragStart.y();
+
+// useful for debuging
+#if 0        
+        glPointSize(20);
+        glBegin(GL_POINTS);
+            glVertex2d(x,y);
+        glEnd();
+        
+        glBegin(GL_LINES);
+            glVertex2d( m_dragStart.x(), m_dragStart.y() );
+            glVertex2d( m_dragEnd.x(), m_dragEnd.y() );
+
+            glVertex2d( x,y );
+            glVertex2d( x + a,y );
+            
+            glVertex2d( x,y );
+            glVertex2d( x,y + b);
+            
+        glEnd();
+#endif         
+        
+        qreal angle = 0;
+        qreal beta = -angle;
+        qreal sinbeta = sin(beta);
+        qreal cosbeta = cos(beta);
+
+        glBegin(GL_LINE_LOOP);
+        for (int i = 0; i < 360; i += 360.0 / steps)
+        {
+            qreal alpha = i * (M_PI / 180) ;
+            qreal sinalpha = sin(alpha);
+            qreal cosalpha = cos(alpha);
+    
+            qreal X = x + (a * cosalpha * cosbeta - b * sinalpha * sinbeta);
+            qreal Y = y + (a * cosalpha * sinbeta + b * sinalpha * cosbeta);
+    
+            glVertex2d(X,Y);
+        }
+        glEnd();
+
+            
+        glDisable(GL_COLOR_LOGIC_OP);
+        glDisable(GL_LINE_SMOOTH);
+
+    }else
+#endif
     if (m_canvas) {
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);

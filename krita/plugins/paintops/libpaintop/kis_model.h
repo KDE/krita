@@ -26,6 +26,7 @@
 
 #include <QString>
 #include <QVector>
+#include <QHash>
 
 #include <config-opengl.h>
 
@@ -33,13 +34,25 @@
 #include <GL/gl.h>
 #endif
 
+struct Material{
+    KisVector3D Ka; // ambient
+    KisVector3D Kd; // diffuse
+    KisVector3D Ks; // specularity
+    qreal Ns; // hardness ??? [from Blender import script]
+    qreal Ni; // index of refraction
+    qreal d; // alpha
+};
 
 class PAINTOP_EXPORT KisModel
 {
 public:
     
     KisModel(){}
-    KisModel(const QString &fileName);
+    KisModel(const QString &model, const QString &material);
+    //void parseModel();
+    void parseMaterial(const QString &fileName);
+    
+    
     GLuint displayList();
 
 private:
@@ -48,6 +61,11 @@ private:
     QVector<KisVector3D> m_normal;
     QVector<int> m_vertexIndex;
     QVector<int> m_normalIndex;
+    QHash<QString, QVector<int> > m_vertexHash;
+    QHash<QString, QVector<int> > m_normalHash;
+    QHash<QString, Material> m_material;
+    
+    void debug(Material m);
     
     bool m_cached;
     GLuint m_displayList;

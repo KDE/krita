@@ -541,8 +541,14 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         glLightfv(GL_LIGHT3, GL_POSITION, position);*/
         
             glColor3f(0.0,1.0,0.0);
+            glEnable(GL_COLOR_MATERIAL);
+            glDepthFunc(GL_LESS);
+            glShadeModel(GL_SMOOTH);
+            //glEnable(GL_DEPTH_TEST);
+            glEnable(GL_LINE_SMOOTH);
+
                 glPushMatrix();
-                        glTranslatef( pos.x(), pos.y(),0 );
+                        glTranslatef( pos.x(), pos.y(),3 );
                         glScalef( sx,sy,1);
                         glRotatef(90, 0.8,0.7,0.6);
                             glCallList( list );

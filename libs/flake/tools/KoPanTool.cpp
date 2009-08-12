@@ -25,6 +25,7 @@
 #include "KoViewConverter.h"
 
 #include <QKeyEvent>
+#include <QScrollBar>
 #include <kdebug.h>
 
 KoPanTool::KoPanTool(KoCanvasBase *canvas)
@@ -70,7 +71,20 @@ void KoPanTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KoPanTool::keyPressEvent(QKeyEvent *event)
 {
-    // TODO use arrow bottons to scroll.
+    switch (event->key()) {
+        case Qt::Key_Up:
+            m_controller->pan(QPoint(0, -m_controller->verticalScrollBar()->singleStep()));
+            break;
+        case Qt::Key_Down:
+            m_controller->pan(QPoint(0, m_controller->verticalScrollBar()->singleStep()));
+            break;
+        case Qt::Key_Left:
+            m_controller->pan(QPoint(-m_controller->horizontalScrollBar()->singleStep(), 0));
+            break;
+        case Qt::Key_Right:
+            m_controller->pan(QPoint(m_controller->horizontalScrollBar()->singleStep(), 0));
+            break;
+    }
     event->accept();
 }
 

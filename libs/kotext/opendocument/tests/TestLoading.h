@@ -36,8 +36,6 @@ class KoStore;
 class KoTextShapeData;
 class KComponentData;
 
-typedef KoText::Tab KoTextTab;
-
 class TestLoading : public QObject
 {
     Q_OBJECT

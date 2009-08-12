@@ -124,14 +124,17 @@ install( FILES
     KoDocumentEntry.h
     KoDocumentInfo.h
     KoDocumentInfoDlg.h
+    KoEmbeddingFilter.h
     KoFactory.h
     KoFilter.h
     KoFilterChain.h
+    KoFilterChainLinkList.h
     KoFilterEntry.h
     KoFilterManager.h
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
+    KoOdfExporter.h
     KoVersionDialog.h
     KoView.h
     KoViewAdaptor.h

@@ -29,6 +29,7 @@ install(TARGETS kopicture ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES
     KoPictureKey.h 
-    KoPicture.h 
+    KoPicture.h
+    kopicture_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

@@ -2,7 +2,6 @@ include("common.qs");
 
 var tf_plain = QTextCharFormat.clone(defaultTextFormat);
 setFormatProperty(tf_plain, KoCharacterStyle.StrikeOutStyle, KoCharacterStyle.NoLineStyle);
-setFormatProperty(tf_plain, KoCharacterStyle.StrikeOutType, KoCharacterStyle.SingleLine);
 setFormatProperty(tf_plain, KoCharacterStyle.StrikeOutText, "/");
 
 var tf = QTextCharFormat.clone(defaultTextFormat);

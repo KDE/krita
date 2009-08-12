@@ -36,6 +36,8 @@
 #include "KoCtlCompositeOp.h"
 #endif
 #endif
+#include "KoCtlMixColorsOp.h"
+#include "KoCtlConvolutionOp.h"
 
 struct KoCtlColorSpace::Private
 {
@@ -47,7 +49,7 @@ struct KoCtlColorSpace::Private
     KoCtlChannel* alphaCtlChannel;
 };
 
-KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlColorProfile* profile) : KoColorSpace( info->colorSpaceId(), info->name(), 0,0), d(new Private)
+KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlColorProfile* profile) : KoColorSpace( info->colorSpaceId(), info->name(), new KoCtlMixColorsOp(this), new KoCtlConvolutionOp(this)), d(new Private)
 {
     Q_ASSERT(profile);
     d->info = info;

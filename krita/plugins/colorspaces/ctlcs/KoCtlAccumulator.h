@@ -28,6 +28,7 @@ class KoCtlAccumulator {
     virtual void mix(const quint8* _pixel, double _weight) const = 0;
     virtual void reset() = 0;
     virtual void affect(quint8* _pixel, double _alpha) const = 0;
+    virtual void affect(quint8* _pixel, qint32 factor, qint32 offset) const = 0;
 };
 
 template<typename _type_>
@@ -52,6 +53,18 @@ class KoCtlAccumulatorImpl : public KoCtlAccumulator {
     virtual void affect(quint8* _pixel, double _alpha) const
     {
       typename KoColorSpaceMathsTraits< _type_ >::compositetype v = m_value * _alpha;
+
+      if(v > KoColorSpaceMathsTraits<_type_>::max) {
+        v = KoColorSpaceMathsTraits<_type_>::max;
+      }
+      if(v < KoColorSpaceMathsTraits<_type_>::min) {
+        v = KoColorSpaceMathsTraits<_type_>::min;
+      }
+      *ptr(_pixel) = v;
+    }
+    virtual void affect(quint8* _pixel, qint32 factor, qint32 offset) const
+    {
+      typename KoColorSpaceMathsTraits< _type_ >::compositetype v = m_value / factor + offset;
 
       if(v > KoColorSpaceMathsTraits<_type_>::max) {
         v = KoColorSpaceMathsTraits<_type_>::max;

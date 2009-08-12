@@ -149,7 +149,7 @@ private:
     // === API for KoFilterChains === (internal)
     // The friend methods are private in KoFilterChain and
     // just forward calls to the methods here. Should be
-    // pretty save.
+    // pretty safe.
     friend QString KoFilterChain::filterManagerImportFile() const;
     QString importFile() const {
         return m_importUrl;

@@ -1410,6 +1410,8 @@ void TextTool::repaintSelection()
 
 void TextTool::repaintSelection(int startPosition, int endPosition)
 {
+    if (startPosition == endPosition)
+        return;
     if (startPosition > endPosition)
         qSwap(startPosition, endPosition);
     QList<TextShape *> shapes;
@@ -1417,7 +1419,8 @@ void TextTool::repaintSelection(int startPosition, int endPosition)
     Q_ASSERT(lay);
     foreach(KoShape* shape, lay->shapes()) {
         TextShape *textShape = dynamic_cast<TextShape*>(shape);
-        Q_ASSERT(textShape);
+        if (textShape == 0) // when the shape is being deleted its no longer a TextShape but a KoShape
+            continue;
 
         const int from = textShape->textShapeData()->position();
         const int end = textShape->textShapeData()->endPosition();

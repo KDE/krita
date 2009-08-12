@@ -68,6 +68,7 @@ class KoCtlColorSpace : public KoColorSpace {
         virtual void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const;
         virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const;
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
+        int alphaPos() const;
     private:
         struct Private;
         Private* const d;

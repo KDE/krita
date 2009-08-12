@@ -94,6 +94,7 @@ struct KoCtlColorSpaceInfo::Private {
     QList<const KoCtlColorSpaceInfo::ChannelInfo*> channels;
     quint32 pixelSize;
     GTLCore::PixelDescription* pixelDescription;
+    int alphaPos;
 };
 
 KoCtlColorSpaceInfo::KoCtlColorSpaceInfo(const QString& _xmlfile) : d(new Private)
@@ -173,7 +174,7 @@ bool KoCtlColorSpaceInfo::load()
                 d->isHdr = true;
             } else if( e.tagName() == "channels" ) {
                 std::vector<const GTLCore::Type* > channelTypes;
-                int alphapos = -1;
+                d->alphaPos = -1;
                 QDomNode n = e.firstChild();
                 int pos = 0;
                 while( !n.isNull())
@@ -199,7 +200,7 @@ bool KoCtlColorSpaceInfo::load()
                         } else if( channelType == "Alpha" )
                         {
                             info->d->channelType = KoChannelInfo::ALPHA;
-                            alphapos = pos;
+                            d->alphaPos = pos;
                         } else {
                             dbgPlugins << "Invalid channel type: " << channelType;
                             return false;
@@ -247,7 +248,7 @@ bool KoCtlColorSpaceInfo::load()
                 }
 #ifdef HAVE_OPENCTL_910
 #if HAVE_OPENCTL_910
-                d->pixelDescription = new GTLCore::PixelDescription( channelTypes, alphapos);
+                d->pixelDescription = new GTLCore::PixelDescription( channelTypes, d->alphaPos);
 #endif
 #endif
             }
@@ -327,4 +328,9 @@ quint32 KoCtlColorSpaceInfo::pixelSize() const
 const GTLCore::PixelDescription& KoCtlColorSpaceInfo::pixelDescription() const
 {
   return *d->pixelDescription;
+}
+
+int KoCtlColorSpaceInfo::alphaPos() const
+{
+  return d->alphaPos;
 }

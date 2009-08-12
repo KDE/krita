@@ -339,3 +339,8 @@ bool KoCtlColorSpace::willDegrade(ColorSpaceIndependence /*independence*/) const
     // colorspaces images.
     return true;
 }
+
+int KoCtlColorSpace::alphaPos() const
+{
+    return d->info->alphaPos();
+}

@@ -64,6 +64,7 @@ class KoCtlColorSpaceInfo {
         quint32 colorChannelCount() const;
         quint32 pixelSize() const;
         const GTLCore::PixelDescription& pixelDescription() const;
+        int alphaPos() const;
     private:
         struct Private;
         Private* const d;

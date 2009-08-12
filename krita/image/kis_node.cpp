@@ -35,6 +35,20 @@
 #include "kis_top_down_update_strategy.h"
 #include "kis_node_progress_proxy.h"
 
+
+/**
+ * The link between KisProjection ans KisImageUpdater
+ * uses queued signals with an argument of KisNodeSP type,
+ * so we should register it beforehand
+ */
+struct KisNodeSPStaticRegistrar {
+    KisNodeSPStaticRegistrar() {
+        qRegisterMetaType<KisNodeSP>("KisNodeSP");
+    }
+};
+static KisNodeSPStaticRegistrar __registrar;
+
+
 class KisNode::Private
 {
 public:

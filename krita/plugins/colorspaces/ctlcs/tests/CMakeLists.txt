@@ -3,7 +3,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/../ctlcolorspaces/\\"")
 
 ########### next target ###############
-set(ko_ctl_color_space_info_test_SRCS KoCtlColorSpaceInfoTest.cpp ../KoCtlColorSpaceInfo.cpp ../KoCtlParser.cpp )
+set(ko_ctl_color_space_info_test_SRCS KoCtlColorSpaceInfoTest.cpp ../KoCtlColorSpaceInfo.cpp ../KoCtlParser.cpp ../KoCtlAccumulator.cpp )
 
 kde4_add_unit_test(ko_ctl_color_space_info_test TESTNAME krita-cs-ko_ctl_color_space_info_test ${ko_ctl_color_space_info_test_SRCS})
 

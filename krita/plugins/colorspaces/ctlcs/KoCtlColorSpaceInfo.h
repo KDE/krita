@@ -22,6 +22,7 @@
 
 #include <KoChannelInfo.h>
 
+class KoCtlAccumulator;
 class KoID;
 
 namespace GTLCore {
@@ -65,6 +66,7 @@ class KoCtlColorSpaceInfo {
         quint32 pixelSize() const;
         const GTLCore::PixelDescription& pixelDescription() const;
         int alphaPos() const;
+        QList<KoCtlAccumulator*> accumulators() const;
     private:
         struct Private;
         Private* const d;

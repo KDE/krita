@@ -20,9 +20,11 @@
 #include "KoCtlConvolutionOp.h"
 #include "KoCtlColorSpace.h"
 #include "KoCtlAccumulator.h"
+#include "KoCtlColorSpaceInfo.h"
 
-KoCtlConvolutionOp::KoCtlConvolutionOp(KoCtlColorSpace* _colorSpace) : m_colorSpace(_colorSpace)
+KoCtlConvolutionOp::KoCtlConvolutionOp(KoCtlColorSpace* _colorSpace, const KoCtlColorSpaceInfo* _info) : m_colorSpace(_colorSpace)
 {
+  m_accumulators = _info->accumulators();
 }
 
 KoCtlConvolutionOp::~KoCtlConvolutionOp()

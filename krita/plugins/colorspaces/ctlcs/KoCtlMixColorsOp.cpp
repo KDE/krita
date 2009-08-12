@@ -20,9 +20,11 @@
 #include "KoCtlMixColorsOp.h"
 #include "KoCtlColorSpace.h"
 #include "KoCtlAccumulator.h"
+#include "KoCtlColorSpaceInfo.h"
 
-KoCtlMixColorsOp::KoCtlMixColorsOp( const KoCtlColorSpace* _colorSpace) : m_colorSpace(_colorSpace)
+KoCtlMixColorsOp::KoCtlMixColorsOp( const KoCtlColorSpace* _colorSpace, const KoCtlColorSpaceInfo* _info) : m_colorSpace(_colorSpace)
 {
+  m_accumulators = _info->accumulators();
 }
 
 KoCtlMixColorsOp::~KoCtlMixColorsOp()

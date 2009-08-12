@@ -24,11 +24,12 @@
 
 class KoCtlColorSpace;
 class KoCtlAccumulator;
+class KoCtlColorSpaceInfo;
 
 class KoCtlMixColorsOp : public KoMixColorsOp
 {
   public:
-    KoCtlMixColorsOp( const KoCtlColorSpace* _colorSpace);
+    KoCtlMixColorsOp( const KoCtlColorSpace* _colorSpace, const KoCtlColorSpaceInfo* _info);
     virtual ~KoCtlMixColorsOp();
     virtual void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const;
   private:

@@ -27,6 +27,7 @@
 #include <GTLCore/Type.h>
 
 #include "config-openctl910.h"
+#include "KoCtlAccumulator.h"
 
 struct KoCtlColorSpaceInfo::ChannelInfo::Private {
     Private() : color(0,0,0) {}
@@ -333,4 +334,30 @@ const GTLCore::PixelDescription& KoCtlColorSpaceInfo::pixelDescription() const
 int KoCtlColorSpaceInfo::alphaPos() const
 {
   return d->alphaPos;
+}
+
+QList<KoCtlAccumulator*> KoCtlColorSpaceInfo::accumulators() const
+{
+  QList<KoCtlAccumulator*> accs;
+  foreach( const KoCtlColorSpaceInfo::ChannelInfo* info, d->channels)
+  {
+    switch(info->channelType())
+    {
+      case KoChannelInfo::UINT8:
+        accs.push_back(new KoCtlAccumulatorImpl<quint8>(info->position()));
+        break;
+      case KoChannelInfo::UINT16:
+        accs.push_back(new KoCtlAccumulatorImpl<quint16>(info->position()));
+        break;
+      case KoChannelInfo::FLOAT16:
+        accs.push_back(new KoCtlAccumulatorImpl<half>(info->position()));
+        break;
+      case KoChannelInfo::FLOAT32:
+        accs.push_back(new KoCtlAccumulatorImpl<float>(info->position()));
+        break;
+      default:
+        qFatal("unsupported");
+    }
+  }
+  return accs;
 }

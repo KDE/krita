@@ -2,7 +2,6 @@ include("common.qs");
 
 var noLineFormat = QTextCharFormat.clone(defaultTextFormat);
 setFormatProperty(noLineFormat, KoCharacterStyle.StrikeOutStyle, KoCharacterStyle.NoLineStyle);
-setFormatProperty(noLineFormat, KoCharacterStyle.StrikeOutType, KoCharacterStyle.SingleLine);
 
 var solidLineFormat = QTextCharFormat.clone(defaultTextFormat);
 setFormatProperty(solidLineFormat, KoCharacterStyle.StrikeOutStyle, KoCharacterStyle.SolidLine);

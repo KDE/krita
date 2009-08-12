@@ -1901,9 +1901,10 @@ KoView* KoMainWindow::currentView() const
     if (d->activeView) {
         return d->activeView;
     }
-    else {
+    else if (!d->rootViews.isEmpty()) {
         return d->rootViews.first();
     }
+    return 0;
 }
 
 #include "KoMainWindow.moc"

@@ -25,9 +25,18 @@
 class QScriptEngine;
 class QTextDocument;
 class QTextEdit;
+class QTextFragment;
+class QTextFrame;
+class QTextBlock;
+class QTextTable;
+class QTextTableCell;
+class QTextBlockFormat;
+class QTextListFormat;
 class KoStore;
 class KoTextShapeData;
 class KComponentData;
+
+typedef KoText::Tab KoTextTab;
 
 class TestLoading : public QObject
 {
@@ -53,6 +62,17 @@ private:
     QTextDocument *documentFromOdt(const QString &odt);
     QString documentToOdt(QTextDocument *);
     void addData();
+
+    // Functions that help compare two QTextDocuments.
+    bool compareFragments(const QTextFragment &actualFragment, const QTextFragment &expectedFragment);
+    bool compareTabProperties(QVariant actualTabs, QVariant expectedTabs);
+    bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTextBlockFormat &expectedFormat);
+    bool compareListFormats(const QTextListFormat &actualFormat, const QTextListFormat &expectedFormat);
+    bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expectedBlock);
+    bool compareTableCells(QTextTableCell actualCell, QTextTableCell expectedCell);
+    bool compareTables(QTextTable *actualTable, QTextTable *expectedTable);
+    bool compareFrames(QTextFrame *actualFrame, QTextFrame *expectedFrame);
+    bool compareDocuments(QTextDocument *actualDocument, QTextDocument *expectedDocument);
 
     KComponentData *componentData;
     QScriptEngine *engine;

@@ -73,7 +73,7 @@ static void showDocument(QTextDocument *document)
 }
 
 // Functions that help compare two QTextDocuments
-static bool compareFragments(const QTextFragment &actualFragment, const QTextFragment &expectedFragment)
+bool TestLoading::compareFragments(const QTextFragment &actualFragment, const QTextFragment &expectedFragment)
 {
     if (actualFragment.text() != expectedFragment.text()) {
         qDebug() << "compareFragments: text not equal " << actualFragment.text() << expectedFragment.text();
@@ -150,7 +150,7 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
     return equal;
 }
 
-static bool compareTabProperties(QVariant actualTabs, QVariant expectedTabs)
+bool TestLoading::compareTabProperties(QVariant actualTabs, QVariant expectedTabs)
 {
     QList<QVariant> actualTabList = qvariant_cast<QList<QVariant> >(actualTabs);
     QList<QVariant> expectedTabList = qvariant_cast<QList<QVariant> >(expectedTabs);
@@ -175,7 +175,7 @@ static bool compareTabProperties(QVariant actualTabs, QVariant expectedTabs)
     return true;
 }
 
-static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTextBlockFormat &expectedFormat)
+bool TestLoading::compareBlockFormats(const QTextBlockFormat &actualFormat, const QTextBlockFormat &expectedFormat)
 {
     if (actualFormat.background() != expectedFormat.background()
             || actualFormat.alignment() != expectedFormat.alignment()
@@ -243,7 +243,7 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
     return match;
 }
 
-static bool compareListFormats(const QTextListFormat &actualFormat, const QTextListFormat &expectedFormat)
+bool TestLoading::compareListFormats(const QTextListFormat &actualFormat, const QTextListFormat &expectedFormat)
 {
     QMap<int, QVariant> actualProperties = actualFormat.properties();
     actualProperties.remove(KoListStyle::StyleId);
@@ -259,7 +259,7 @@ static bool compareListFormats(const QTextListFormat &actualFormat, const QTextL
     return actualProperties == expectedProperties;
 }
 
-static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expectedBlock)
+bool TestLoading::compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expectedBlock)
 {
     QTextList *actualList = actualBlock.textList();
     QTextList *expectedList = expectedBlock.textList();
@@ -319,14 +319,67 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
     return equal;
 }
 
-static bool compareTables(QTextTable * /*actualTable*/, QTextTable * /*expectedTable*/)
+bool TestLoading::compareTableCells(QTextTableCell actualCell, QTextTableCell expectedCell)
 {
-    // FIXME: Cells of Tables are QTextTableCell's which contain QTextFrames
-    // KWord does not implement tables, yet.
-    return false;
+    QTextFrame::iterator actualIterator = actualCell.begin();
+    QTextFrame::iterator expectedIterator = expectedCell.begin();
+
+    for (; !actualIterator.atEnd() && !expectedIterator.atEnd(); ++actualIterator, ++expectedIterator) {
+        QTextFrame *actualChildFrame = actualIterator.currentFrame();
+        QTextBlock actualTextBlock = actualIterator.currentBlock();
+
+        if (actualChildFrame) {
+            QTextFrame *expectedChildFrame = expectedIterator.currentFrame();
+            if (!expectedChildFrame) {
+                qDebug() << "compareTableCells: Unexpected frame at " << actualTextBlock.text();
+                return false;
+            }
+            QTextTable *actualTable = qobject_cast<QTextTable *>(actualChildFrame);
+            QTextTable *expectedTable = qobject_cast<QTextTable *>(expectedChildFrame);
+            if (actualTable) {
+                if (!expectedTable) {
+                    qDebug() << "compareTableCells: Unexpected table at " << actualTextBlock.text();
+                    return false;
+                }
+                if (!compareTables(actualTable, expectedTable))
+                    return false;
+            } else {
+                if (expectedTable) {
+                    qDebug() << "compareTableCells: Expecting table at " << actualTextBlock.text();
+                    return false;
+                }
+                if (!compareFrames(actualChildFrame, expectedChildFrame))
+                    return false;
+            }
+        } else if (actualTextBlock.isValid()) {
+            QTextBlock expectedTextBlock = expectedIterator.currentBlock();
+            if (!expectedTextBlock.isValid()) {
+                qDebug() << "compareTableCells: Unexpected text block at " << actualTextBlock.text();
+                return false;
+            }
+            if (!compareBlocks(actualTextBlock, expectedTextBlock))
+                return false;
+        } else {
+            qDebug() << "compareTableCells: neither frame nor block! - internal error!";
+            return false;
+        }
+    }
+    return actualIterator.atEnd() == expectedIterator.atEnd();
 }
 
-static bool compareFrames(QTextFrame *actualFrame, QTextFrame *expectedFrame)
+bool TestLoading::compareTables(QTextTable *actualTable, QTextTable *expectedTable)
+{
+    for (int row = 0; row < expectedTable->rows(); ++row) {
+        for (int col = 0; col < expectedTable->columns(); ++col) {
+            if (!compareTableCells(actualTable->cellAt(row, col), expectedTable->cellAt(row, col))) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool TestLoading::compareFrames(QTextFrame *actualFrame, QTextFrame *expectedFrame)
 {
     QTextFrame::iterator actualIterator = actualFrame->begin();
     QTextFrame::iterator expectedIterator = expectedFrame->begin();
@@ -374,7 +427,7 @@ static bool compareFrames(QTextFrame *actualFrame, QTextFrame *expectedFrame)
     return actualIterator.atEnd() == expectedIterator.atEnd();
 }
 
-static bool compareDocuments(QTextDocument *actualDocument, QTextDocument *expectedDocument)
+bool TestLoading::compareDocuments(QTextDocument *actualDocument, QTextDocument *expectedDocument)
 {
     QTextFrame *actualFrame = actualDocument->rootFrame();
     QTextFrame *expectedFrame = expectedDocument->rootFrame();
@@ -619,6 +672,22 @@ void TestLoading::addData()
     QTest::newRow("fontSize1") << "TextContents/TextFormatting/fontSize";
 
     QTest::newRow("fontColors") << "TextContents/TextFormatting/fontColors";
+
+    QTest::newRow("tableWidth") << "FormattingProperties/TableFormattingProperties/tableWidth";
+
+    // TODO: Write tests for these.
+    //QTest::newRow("borderModelProperty") << "FormattingProperties/TableFormattingProperties/borderModelProperty";
+    //QTest::newRow("breakBeforeAndBreakAfter") << "FormattingProperties/TableFormattingProperties/breakBeforeAndBreakAfter";
+    //QTest::newRow("display") << "FormattingProperties/TableFormattingProperties/display";
+    //QTest::newRow("mayBreakBetweenRows") << "FormattingProperties/TableFormattingProperties/mayBreakBetweenRows";
+    //QTest::newRow("pageNumber") << "FormattingProperties/TableFormattingProperties/pageNumber";
+    //QTest::newRow("tableAlignment") << "FormattingProperties/TableFormattingProperties/tableAlignment";
+    //QTest::newRow("tableBackgroundAndBackgroundImage") << "FormattingProperties/TableFormattingProperties/tableBackgroundAndBackgroundImage";
+    //QTest::newRow("tableLeftAndRightMargin") << "FormattingProperties/TableFormattingProperties/tableLeftAndRightMargin";
+    //QTest::newRow("tableMargins") << "FormattingProperties/TableFormattingProperties/tableMargins";
+    //QTest::newRow("tableShadow") << "FormattingProperties/TableFormattingProperties/tableShadow";
+    //QTest::newRow("tableTopAndBottomMargin") << "FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin";
+    //QTest::newRow("writingMode") << "FormattingProperties/TableFormattingProperties/writingMode";
 
     QTest::newRow("color") << "FormattingProperties/TextFormattingProperties/color";
 

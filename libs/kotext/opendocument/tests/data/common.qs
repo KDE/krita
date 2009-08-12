@@ -211,3 +211,12 @@ var defaultListItemFormat = QTextCharFormat.clone(defaultTextFormat); // new QTe
 
 var defaultListFormat = new QTextListFormat;
 setFormatProperty(defaultListFormat, KoListStyle.Level, 1);
+
+// Default table formatting
+QTextTableFormat.clone = function(fmt) {
+    var newFormat = new QTextTableFormat;
+    copyFormatProperties(newFormat, fmt);
+    return newFormat;
+};
+
+var defaultTableFormat = new QTextTableFormat;

@@ -108,6 +108,12 @@ public slots:
    */
     void setSelectedZoomMode( KoZoomMode::Mode mode );
 
+  /**
+   * Change status of "Use same aspect as pixels" button
+   * (emits aspectModeChanged(bool) after the change, ALWAYS)
+   */
+    void setAspectMode(bool status);
+
 protected slots:
 
     void triggered( const QString& text );

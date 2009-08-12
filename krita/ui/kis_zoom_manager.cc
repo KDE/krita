@@ -170,15 +170,7 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
     else
         m_zoomHandler->setResolutionToStandard();
 
-    m_view->canvasBase()->preScale();
-    m_view->canvas()->update();
-
-    QSize sz = QSize(int(0.5 + m_zoomHandler->documentToViewX(img->width() / img->xRes())),
-                     int(0.5 + m_zoomHandler->documentToViewY(img->height() / img->yRes())));
-    m_canvasController->setDocumentSize(sz);
-
-    // Finally ask the canvasController to recenter
-    m_canvasController->recenterPreferred();
+    m_zoomController->setZoom(m_zoomHandler->zoomMode(), m_zoomHandler->zoom());
 }
 
 

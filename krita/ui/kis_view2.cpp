@@ -472,7 +472,11 @@ void KisView2::slotLoadingFinished()
         m_d->nodeManager->activateNode(node);
     }
 
-    m_d->zoomManager->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    /**
+     * Dirty hack alert
+     */
+    m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    m_d->zoomManager->zoomController()->setAspectMode(true);
 
     updateGUI();
 //     dbgUI <<"image finished loading, active layer:" << img->activeLayer() <<", root layer:" << img->rootLayer();

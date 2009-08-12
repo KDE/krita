@@ -88,6 +88,11 @@ public:
      */
     void setZoom(KoZoomMode::Mode mode, qreal zoom);
 
+  /**
+   * Set Aspect Mode button status and begin a chain of signals
+   */
+    void setAspectMode(bool status);
+
 public slots:
     /**
     * Set the size of the current page in document coordinates which allows zoom modes that use the pageSize

@@ -53,6 +53,7 @@ public:
     QSlider *slider;
     qreal sliderLookup[33];
     KoZoomInput* input;
+    QToolButton* aspectButton;
 
     qreal effectiveZoom;
 
@@ -255,14 +256,14 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     layout->addWidget(d->slider);
 
     if (d->specialButtons & AspectMode) {
-        QToolButton * aspectButton = new QToolButton(group);
-        aspectButton->setIcon(KIcon("zoom-pixels").pixmap(22));
-        aspectButton->setCheckable(true);
-        aspectButton->setChecked(true);
-        aspectButton->setAutoRaise(true);
-        aspectButton->setToolTip(i18n("Use same aspect as pixels"));
-        connect(aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));
-        layout->addWidget(aspectButton);
+        d->aspectButton = new QToolButton(group);
+        d->aspectButton->setIcon(KIcon("zoom-pixels").pixmap(22));
+        d->aspectButton->setCheckable(true);
+        d->aspectButton->setChecked(true);
+        d->aspectButton->setAutoRaise(true);
+        d->aspectButton->setToolTip(i18n("Use same aspect as pixels"));
+        connect(d->aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));
+        layout->addWidget(d->aspectButton);
     }
     if (d->specialButtons & ZoomToSelection) {
         QToolButton * zoomToSelectionButton = new QToolButton(group);
@@ -315,6 +316,21 @@ void KoZoomAction::setSelectedZoomMode( KoZoomMode::Mode mode )
 void KoZoomAction::setSpecialButtons( SpecialButtons buttons )
 {
     d->specialButtons = buttons;
+}
+
+void KoZoomAction::setAspectMode(bool status)
+{
+    /**
+     * In the first case, the signal will be emitted
+     * by the button itself, in the second we help it a bit
+     *
+     * It means that the result of this function is
+     * ALWAYS an emitted signal
+     */
+    if(d->aspectButton->isChecked() != status)
+        d->aspectButton->setChecked(status);
+    else
+        emit aspectModeChanged(status);
 }
 
 #include "KoZoomAction.moc"

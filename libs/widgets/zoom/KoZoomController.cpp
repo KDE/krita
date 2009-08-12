@@ -136,8 +136,9 @@ void KoZoomController::setDocumentSize( const QSizeF &documentSize )
 
 void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
 {
-    if (d->zoomHandler->zoomMode() == mode && d->zoomHandler->zoom() == zoom)
-        return; // no change
+    // Seems to be unused
+//    if (d->zoomHandler->zoomMode() == mode && d->zoomHandler->zoom() == zoom)
+//        return; // no change
     d->zoomHandler->setZoomMode(mode);
 
     if(mode == KoZoomMode::ZOOM_CONSTANT)
@@ -181,6 +182,11 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
     d->canvasController->recenterPreferred();
 
     emit zoomChanged(mode, zoom);
+}
+
+void KoZoomController::setAspectMode(bool status)
+{
+    d->action->setAspectMode(status);
 }
 
 #include "KoZoomController.moc"

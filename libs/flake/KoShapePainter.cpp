@@ -136,8 +136,6 @@ void KoShapePainter::setShapes( const QList<KoShape*> &shapes )
 
 void KoShapePainter::paintShapes( QPainter & painter, KoViewConverter & converter )
 {
-    foreach (KoShape *shape, d->canvas->shapeManager()->shapes())
-        shape->waitUntilReady(converter);
     d->canvas->shapeManager()->paint( painter, converter, true );
 }
 

@@ -1,0 +1,51 @@
+<
+  parameters: <
+    cellWidth: <
+      label: "Cell width";
+      type: int;
+      minValue: 1;
+      maxValue: 50;
+      defaultValue: 10;
+    >;
+    cellHeight: <
+      label: "Cell height";
+      type: int;
+      minValue: 1;
+      maxValue: 50;
+      defaultValue: 10;
+    >;
+  >;
+>;  
+kernel Seamlesser
+{  
+  float4 mix(float4 a, float4 b, float c)
+  {
+    return a * c + b * (1 - c);
+  }
+  float max(float a, float b)
+  {
+    if( a < b) return b;
+    return a;
+  }
+  float clamp(float a, float min, float max)
+  {
+    if( a < min ) return min;
+    if( a > max ) return max;
+    return a;
+  }
+  void evaluatePixel(image img, out pixel result)
+  {
+    float ax = result.coord.x / IMAGE_WIDTH;
+    float ay = result.coord.y / IMAGE_HEIGHT;
+    float x1 = max(0, ax - ay);
+    float y1 = max(0, ay - ax);
+    float x2 = min(1, ax + (1 - ay));
+    float y2 = min(1, ay + (1 - ax));
+    float weight = 0.5; //clamp(1 - (ax - x1) / (x2 - x1), 0, 1);
+    result = mix(img.sampleNearest( result.coord ), img.sampleNearest( IMAGE_SIZE - result.coord ), weight);
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

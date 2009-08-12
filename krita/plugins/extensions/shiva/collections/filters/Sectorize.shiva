@@ -1,0 +1,48 @@
+<
+  parameters: <
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+    rho: <
+      label: "Rho";
+      type: int;
+      minValue: 0;
+      defaultValue: 10;
+      maxValue: 64;
+    >;
+    theta: <
+      label: "Theta";
+      type: int;
+      minValue: 0;
+      defaultValue: 10;
+      maxValue: 64;
+    >;
+  >;
+>;  
+kernel Sectorize
+{  
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  void evaluatePixel(image img, out pixel result)
+  {
+    float2 vec = result.coord - center;
+    int vec_length = length( vec );
+    int angle = atan2(vec.y, vec.x) * 512 / 3.14;
+    if(angle < 0 ) angle = -angle;
+
+    float mvt = vec_length % rho + angle % theta;
+    float2 displacement;
+    displacement[0] = mvt;
+    displacement[1] = mvt;
+
+    result = img.sampleNearest( result.coord + displacement );
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

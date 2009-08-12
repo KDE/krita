@@ -1,0 +1,34 @@
+<
+  parameters: <
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+    lightLengthP:  <
+      label: "Zoom";
+      type: float;
+      minValue: 0.01;
+    >;
+  >;
+>;  
+kernel Bullify
+{
+  const float2 center = { xcenter * IMAGE_WIDTH, ycenter * IMAGE_HEIGHT };
+  const float lightLength = lightLengthP * 0.5 * (IMAGE_WIDTH + IMAGE_HEIGHT );
+  
+  void evaluatePixel(image img, out pixel result)
+  {
+    float2 vec = result.coord - center;
+    float factor = length( vec ) / lightLength;
+    factor *= factor;
+    result = img.sampleNearest( vec * factor + center );
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

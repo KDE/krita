@@ -1,0 +1,464 @@
+<
+  parameters: <
+    Spiral: <
+      innerRadius:
+      <
+          type: float;
+          minValue:0.000001;
+          maxValue:1.0;
+          defaultValue:0.25;
+          description: "The inner radius of the repeating annular";
+      >;
+      
+      outerRadius:
+      <
+          type: float;
+          minValue:0.000001;
+          maxValue:1.0;
+          defaultValue:1.0;
+          description: "The outer radius of the repeating annular";
+      >;
+    
+      periodicity:
+      <
+          type: float;
+          minValue:-6.0;
+          maxValue: 6.0;
+          defaultValue:1.0;
+          description: "The number of image the image is repeated on each level";
+      >;
+      
+      strands:
+      <
+          type: float;
+          minValue:-6.0;
+          maxValue: 6.0;
+          defaultValue:1.0;
+          description: "The number of strands of the spiral";
+      >;
+    
+      strandMirror:
+      <
+          type: int;
+          minValue:0;
+          maxValue:1;
+          defaultValue:0;
+          description: "Activate for smoother repeating when using more than one strand";
+      >;
+    >;
+    
+    Position: <
+      zoom:
+      <
+          type: float;
+          minValue:0.0;
+          maxValue:30.0;
+          defaultValue:0.0;
+          description: "Overall image magnification";
+      >;
+
+      rotate: <
+          type: float;
+          minValue: -360.0;
+          maxValue: 360.0;
+          defaultValue: 0.0;
+          description: "Overall image rotation";
+      >;
+      xcenter: <
+        label: "Input Panning x";
+        type: float;
+        minValue:-1.0;
+        defaultValue: 0.5;
+        maxValue:1.0;
+      >;
+      ycenter: <
+        label: "Input Panning y";
+        type: float;
+        minValue:-1.0;
+        defaultValue: 0.5;
+        maxValue:1.0;
+      >;
+      xcenterShift: <
+        label: "Spiral Center x";
+        type: float;
+        minValue:-1.0;
+        maxValue:1.0;
+        defaultValue:0.0;
+      >;
+      ycenterShift: <
+        label: "Spiral Center y";
+        type: float;
+        minValue:-1.0;
+        maxValue:1.0;
+        defaultValue:0.0;
+      >;
+    >;
+    levels: <
+      numberOfLevels:
+      <
+          type: int;
+          minValue:1;
+          maxValue:20;
+          defaultValue:9;
+          description: "The number of repeating levels of the spiral";
+      >;
+      
+      startLevel:
+      <
+          type: int;
+          minValue:1;
+          maxValue:20;
+          defaultValue:3;
+          description: "The starting spiral level";
+      >;
+    >;
+    
+    enableTransparencyInside:
+    <
+        type: int;
+        minValue:0;
+        maxValue:1;
+        defaultValue:0;
+        description: "Enable for images with transparent middle areas (such as a picture frame).";
+    >;
+    
+    enableTransparencyOutside:
+    <
+        type: int;
+        minValue:0;
+        maxValue:1;
+        defaultValue:0;
+        description: "Enable for images with transparent areas around the outside.";
+    >;
+    
+    untwist:
+    <
+        type: int;
+        minValue:0;
+        maxValue:1;
+        defaultValue:0;
+        description: "Unroll the circular annular of the image.";
+    >;
+    
+    setAutoPeriodicity:
+    <
+        type: int;
+        minValue:0;
+        maxValue:1;
+        defaultValue:0;
+        description: "Automatically set the ideal periodicity for the current radius settings.";
+    >;
+
+    enablePoles:
+    <
+        type: int;
+        minValue:0;
+        maxValue:1;
+        defaultValue:0;
+        description: "Show both poles";
+    >;
+    
+    enableHyperDroste:
+    <
+        type: int;
+        minValue:0;
+        maxValue:1;
+        defaultValue:0;
+        description: "Enable hyper droste effect. Applies when enablePoles active.";
+    >;
+
+    tilePoles:
+    <
+        type: int;
+        minValue:0;
+        maxValue:1;
+        defaultValue:0;
+        description: "Enable for hyper droste option.";
+    >;
+    
+    fractalPoints: <
+        type: int;
+        minValue:1;
+        maxValue:10;
+        defaultValue:1;
+        description: "Used by hyper droste option.";
+    >;
+  >;
+>;  
+
+//     float3 polarCoordinates
+//     <
+//         minValue: float3(-180, -100, -100);
+//         maxValue: float3(180, 100, 100);
+//         defaultValue: float3(90, 0, 0);
+//         description: "Polar rotation, latitude and longitude";
+//     >;
+
+kernel Droste
+{  
+  const float pi = 3.14159265358979323846;
+  const float2 I = { 0.0, 1.0};
+  const float3 polarCoordinates = { 90, 0, 0 };
+  const float2 center = { xcenter, ycenter };
+  const float2 centerShift = { xcenterShift + 1.0, ycenterShift + 1.0 };
+  dependent float     r1, r2, p1, p2, alphaThreshold;
+  dependent float2    _rotate, xBounds, yBounds, xyMiddle, minDimension, _zoom;
+  dependent bool      showPoles, hyperDroste, tileBasedOnTransparency, transparentPointsIn, twist;
+  
+  float2 complexMult(float2 a, float2 b)
+  {
+    return float2(a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x);
+  }  
+  float complexMag( float2 z)
+  {
+    z *= z;
+    return z[0] + z[1];
+  }
+  float2 complexReciprocal(float2 z)
+  {
+    return float2(z.x / complexMag(z), -z.y / complexMag(z));
+  }
+  float2 complexDivision(float2 a, float2 b)
+  {
+    return complexMult(a, complexReciprocal(b));
+  }
+  float complexArg(float2 z)
+  {
+    return atan2(z.y, z.x);
+  }
+  float2 complexLog(float2 z)
+  {
+    return float2(log(length(z)), complexArg(z));
+  }
+  float2 complexExp(float2 z)
+  {
+    return float2(exp(z.x) * cos(z.y), exp(z.x) * sin(z.y));
+  }
+  float sinh(float x)
+  {
+    return (exp(x) - exp(-x)) / 2.0;
+  }
+  float cosh(float x)
+  {
+    return (exp(x) + exp(-x)) / 2.0;
+  }
+  float2 complexSin(float2 z)
+  {
+    return float2(sin(z.x) * cosh(z.y), cos(z.x) * sinh(z.y));
+  }
+  float2 complexCos(float2 z)
+  {
+    return float2(cos(z.x) * cosh(z.y), -sin(z.x) * sinh(z.y));
+  }
+  float2 complexTan(float2 z)
+  {
+    return float2(sin(2.0 * z.x)/(cos(2.0 * z.x) + cosh(2.0 * z.y)), sinh(2.0 * z.y)/(cos(2.0 * z.x) + cosh(2.0 * z.y)));
+  }
+  float2 complexSinh(float2 z)
+  {
+    return float2(sinh(z.x) * cos(z.y), cosh(z.x) * sin(z.y));
+  }
+  float2 complexCosh(float2 z)
+  {
+    return float2(cosh(z.x) * cos(z.y), sinh(z.x) * sin(z.y));
+  }
+  float2 complexTanh(float2 z)
+  {
+    return float2(sinh(2.0 * z.x)/(cosh(2.0 * z.a) + cos(2.0 * z.y)), sin(2.0 * z.y)/(cosh(2.0 * z.x) + cos(2.0 * z.y)));
+  }
+  float2 polar(float r, float a)
+  {
+    return float2(cos(a) * r, sin(a) * r);
+  }
+  float2 power(float2 z, float p)
+  {
+    return polar(pow(length(z), float(p)), float(p) * complexArg(z));
+  }
+
+  void evaluateDependents()
+  {
+    // Set code variables
+    r1 = innerRadius;
+    r2 = outerRadius;
+    p1 = periodicity;
+    if (p1 == 0.0) p1 = 0.001;              // Prevent divide by zero
+    p2 = strands;
+    transparentPointsIn = ( enableTransparencyOutside == 0 );
+    tileBasedOnTransparency = (enableTransparencyInside == 1 or not transparentPointsIn);
+    twist = (untwist == 0);
+    alphaThreshold = 0.01;
+    
+    float mdF = min(IMAGE_WIDTH, IMAGE_HEIGHT) / 2.0;
+    minDimension = float2(mdF, mdF);
+    
+    // Autoset periodicity
+    if (setAutoPeriodicity == 1) {
+        p1 = p2/2.0 * (1.0 + sqrt(1.0 - pow(log(r2/r1)/pi, 2.0)));
+    }
+    
+    // Set rotation
+    _rotate = float2((pi/180.0) * rotate, 0.0);
+    // Set zoom
+    _zoom = float2(exp(zoom) + innerRadius - 1.0, 0.0);
+    
+    // Scale viewport pixels to complex plane
+    if (twist) {
+        xBounds = float2(-r2, r2);
+        yBounds = float2(-r2, r2);
+    } else {
+        xBounds = float2(-log(r2/r1), log(r2/r1));
+        yBounds = float2(0.0, 2.1 * pi);
+    }
+    
+    xyMiddle = float2(0.5 * (xBounds.x + xBounds.y), 0.5 * (yBounds.x + yBounds.y) );
+    float2 xyRange  = float2(xBounds.y - xBounds.x, yBounds.y - yBounds.x);
+    xyRange.x = xyRange.y * (IMAGE_WIDTH / IMAGE_HEIGHT);
+    xBounds = float2(xyMiddle.x - 0.5 * xyRange.x, xyMiddle.x + 0.5 * xyRange.x);
+    
+    // Polar options
+    showPoles = (enablePoles == 1);
+    hyperDroste = (enableHyperDroste == 1);
+    
+  }
+  void evaluatePixel(image img, out pixel result)
+  {
+        float2 s = result.coord;
+        float2 z; float2 ratio; float2 polar;
+        float radius; float theta; float div;
+        int iteration;
+        
+        float2 sbis = s / IMAGE_SIZE - center + 0.5;
+        z = float2(( xBounds.x + (xBounds.y - xBounds.x) *  sbis.x),
+                   ( yBounds.x + (yBounds.y - yBounds.x) *  sbis.y));
+        // Only allow for procedural zooming/scaling in the standard coordinates
+        if (twist) {
+            z = xyMiddle + complexMult( complexDivision((z - xyMiddle), _zoom), complexExp(complexMult(-I, _rotate)));
+        }
+        
+       // Extra options
+       
+        polar = (float2(polarCoordinates.y, polarCoordinates.z) * IMAGE_WIDTH / s.x) / 100.0;
+        
+        if (showPoles) {
+            theta = (pi/180.0) * polarCoordinates.x;
+            
+            div = (1.0 + pow(z.x, 2.0) + pow(z.y, 2.0) + ((1.0 - pow(z.x, 2.0) - pow(z.y, 2.0)) * cos(theta)) - (2.0 * z.x * sin(theta))) / 2.0;
+            z.x = z.x * cos(theta) + ((1.0 - pow(z.x, 2.0) - pow(z.y, 2.0)) * sin(theta) / 2.0);
+            z = complexDivision(z, float2(div, 0.0));
+        } else {
+            if (hyperDroste) {
+                z = complexSin(z);
+            }
+            
+            if (tilePoles == 1) {
+                z = power(z, fractalPoints);
+                z = complexTan(complexMult(z, float2(2.0, 0.0)));
+            }
+        }
+        
+        z += polar; 
+        if (twist) {
+            z = complexLog(complexDivision(z, float2(r1, 0.0)));
+        }
+        
+        // Start Droste-effect code
+        float2 alpha = float2(atan((p2/p1) * (log(r2/r1) / (2.0*pi))), 0.0);
+        float2 f = float2(cos(alpha.x), 0.0);
+        float2 beta = complexMult(f, complexExp(complexMult(alpha, I)));
+        
+        //The angle of rotation between adjacent annular levels
+        float2 angle = float2(-2.0 * pi * p1, 0.0);
+        
+        if (p2 > 0.0) angle = -angle;
+        if (strandMirror == 1) angle /= strands;
+        
+        z = complexDivision(complexMult(float2(p1,0), z), beta);
+        z = complexMult(float2(r1,0), complexExp(z));
+        // End Droste-effect code
+
+        if (tileBasedOnTransparency && startLevel > 0) {
+            if (!transparentPointsIn) ratio = complexMult(float2(r2/r1, 0.0), complexExp(complexMult(angle, I)));
+            if ( transparentPointsIn) ratio = complexMult(float2(r1/r2, 0.0), complexExp(complexMult(angle,-I)));
+            z = complexMult(z, power(ratio, startLevel));
+        }
+
+        // When tiling based on transparency, color is accumulated into the colorSoFar variable, 
+        // while alphaRemaining tells how much remains for lower layers to contribute (initially 1, 
+        // finally 0).
+        float alphaRemaining = 1.0;
+        float2 d = (z + centerShift) * minDimension ;
+        pixel src = img.sampleNearest(d);
+        float alphasrc = src.alpha();
+        float4 colorSoFar = (src * (alphasrc * alphaRemaining));
+        alphaRemaining *= (1.0 - alphasrc);
+
+        // do we need to look inward from the current point, or outward?
+        int sign = 0;
+
+        if(tileBasedOnTransparency)
+        {
+          if(alphaRemaining > alphaThreshold)
+          {
+            if ( transparentPointsIn ) {
+              sign=-1;
+            } else {
+              sign= 1;
+            }
+          }
+        } else {
+          radius = length( z );
+          if (radius < r1) {
+            sign = -1;
+          } else if (radius > r2) {
+            sign= 1;
+          }
+        }
+        ratio = 1.0;  
+        if (sign < 0) ratio = complexMult(float2(r2/r1, 0.0), complexExp(complexMult(angle, I)));
+        else ratio = complexMult(float2(r1/r2, 0.0), complexExp(complexMult(angle, -I)));
+        
+        iteration = startLevel;
+        int maxIteration = numberOfLevels + startLevel - 1;
+
+        // Iteratively move inward or outward, until
+        // the point has radius r in [r1, r2), if tileBasedOnTransparency=false
+        // or until alphaRemaining=0, if tileBasedOnTransparency=true
+        // In the latter case, we accumulate color at each step
+
+        while (sign != 0 && iteration < maxIteration) {
+          z = complexMult(z, ratio);
+          float2 d = (z + centerShift) * minDimension ;
+          pixel src = img.sampleNearest(d);
+          float alphasrc = src.alpha();
+          colorSoFar += (src * (alphasrc * alphaRemaining));
+          alphaRemaining *= ( 1 - alphasrc );
+          radius = length( z );
+          sign=0;
+          if(tileBasedOnTransparency )
+          {
+            if(alphaRemaining > alphaThreshold)
+            {
+              if ( transparentPointsIn ) {
+                sign=-1;
+              } else {
+                sign= 1;
+              }
+            }
+          } else {
+            radius = length( z );
+            if (radius < r1) {
+              sign = -1;
+            } else if (radius > r2) {
+              sign= 1;
+            }
+          }
+          ++iteration;
+        }
+        
+        result = colorSoFar;
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

@@ -1,0 +1,28 @@
+<
+  parameters: <
+    cellsize: <
+      label: "Size";
+      type: float;
+      minValue: 0.0001;
+      maxValue: 100.0;
+      defaultValue: 0.05;
+    >;
+  >;
+>;  
+kernel Mosaic
+{  
+  const float2 imsize = { 1000.0, 800.0 };
+  float2 fmod2( float2 f, float v )
+  {
+    return float2( fmod(f.x,v), fmod(f.y,v) );
+  }
+  void evaluatePixel(image img, out pixel result)
+  {
+    float2 vec = result.coord - fmod2( result.coord + imsize, cellsize );
+    result = img.sampleNearest( vec );
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

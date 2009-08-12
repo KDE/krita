@@ -1,0 +1,45 @@
+<
+  parameters: <
+    t: <
+      label: "Time";
+      type: float;
+    >;
+    amp1: <
+      label: "Horizontal amplitude";
+      type: float;
+      minValue: 0;
+      maxValue: 100;
+      defaultValue: 5;
+    >;
+    amp2: <
+      label: "Vertical amplitude";
+      type: float;
+      minValue: 0;
+      maxValue: 100;
+      defaultValue: 10;
+    >;
+    wv: <
+      label: "Wave length";
+      type: float;
+      minValue: 0;
+      maxValue: 100;
+      defaultValue: 10;
+    >;
+  >;
+>;
+kernel Sea
+{
+  const float2 center = { IMAGE_WIDTH * 0.5, IMAGE_HEIGHT * 0.5 };
+  const float PI2 = 2 * 3.14159265;
+  const float q = t * PI2;
+  void evaluatePixel(image img, out pixel result)
+  {
+    float s = sin(q + wv * IMAGE_HEIGHT / ( IMAGE_HEIGHT - result.coord.y + 0.1) );
+    float2 displacement = float2( s * amp1, s * amp2);
+    result = img.sampleNearest( result.coord + displacement );
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

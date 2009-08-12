@@ -1,0 +1,85 @@
+
+<
+  parameters: <
+    colors: <
+      color1: <
+        type: rgba;
+        defaultValue: { 0.1, 0.1, 0.2, 1.0 };
+      >;
+      color2: <
+        type: rgba;
+        defaultValue: { 0.2, 0.2, 0.4, 1.0 };
+      >;
+      colorCenter: <
+        type: rgba;
+        defaultValue: { 0.9, 0.9, 1.0, 1.0 };
+      >;
+    >;
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+    phase: <
+      label: "Phase";
+      type: float;
+      minValue: 0.1;
+      defaultValue: 30.0;
+      maxValue: 100.0;
+    >;
+    radiusp: <
+      label: "Inner Radius";
+      type: float;
+      defaultValue: 0.01;
+    >;
+    color2radiusp: <
+      label: "Outter Radius";
+      type: float;
+      defaultValue: 0.02;
+    >;
+  >;
+>;
+
+kernel SuperNova
+{
+  const float wh = 0.25 * (IMAGE_WIDTH + IMAGE_HEIGHT);
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  const float PI = 3.14159265;
+  const float radius = radiusp * wh;
+  const float color2radius = color2radiusp * wh;
+  
+  void evaluatePixel(out pixel4 result)
+  {
+    float2 vec = result.coord - center;
+    float vec_length = length( vec );
+    float angle = atan2( vec.x, vec.y);
+    float coef = 0.9 * (cos( angle * phase) * cos( angle * 0.5 * phase ) * cos( angle * 0.1 * phase ) * cos( angle * 0.01 * phase )) + 0.1;
+    if( coef < 0.0 ) coef = - coef;
+    float adjRadius = radius  * ( 1.0 + 2.0 * coef ); //( 0.5 + 0.5 * cos(angle) );
+    if( vec_length > adjRadius )
+    {
+      if( vec_length < adjRadius )
+      {
+        coef = pow((radius - vec_length) / adjRadius , 1.0 ) * ( 1.0 - coef) + coef;
+      }
+      float coef2 = 1.0;
+      if( vec_length < color2radius * radius )
+      {
+        coef2 = (vec_length - radius) / ( (color2radius - 1.0) * radius );
+      }
+      result = ( 1 - coef ) * (  coef2 * color1 + (1 - coef2) *  color2) + coef * colorCenter;
+      
+      for( int i = 0; i < 3; ++i)
+      {
+        if(result[i] < 0) result[i] = 0.0;
+        else if(result[i] > 1) result[i] = 1.0;
+      }
+      result[3] = 1.0;
+    } else {
+      result = colorCenter;
+    }
+  }
+}

@@ -1,0 +1,116 @@
+// Inspired from http://www.gimptalk.com/forum/topic/Mathmap-Codes-17481-2.html
+<
+  parameters: <
+    xcenter: <
+      label: "X center";
+      type: float;
+      minValue: 0;
+      maxValue: 1;
+      defaultValue: 0.5;
+    >;
+    ycenter: <
+      label: "Y center";
+      type: float;
+      minValue: 0;
+      maxValue: 1;
+      defaultValue: 0.5;
+    >;
+    zoom: <
+      label: "Zoom";
+      type: float;
+      minValue: 0;
+      maxValue: 5;
+      defaultValue: 1;
+    >;
+    scale: <
+      label: "Scale";
+      type: float;
+      minValue: 0;
+      maxValue: 5;
+      defaultValue: 1;
+    >;
+    radius: <
+      label: "Radius";
+      type: float;
+      minValue: 0;
+      maxValue: 100;
+      defaultValue: 70;
+    >;
+    turn: <
+      label: "Turn";
+      type: float;
+      minValue: 0;
+      maxValue: 1;
+      defaultValue: 1;
+    >;
+    warp: <
+      label: "Warp";
+      type: float;
+      minValue: 0;
+      maxValue: 3.14159265;
+      defaultValue: 2.3;
+    >;
+    background: <
+      label: "Background";
+      type: rgba;
+      defaultValue: {0.5,0.5,0.5,1.0};
+    >;
+  >;
+>;  
+kernel StereographicProjection
+{  
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  const float2 xy0 = { center.x - IMAGE_WIDTH, -center.y + IMAGE_HEIGHT };
+  const float2 xy_replication = {IMAGE_WIDTH * 0.5, IMAGE_HEIGHT * 0.5};
+  const float PI = 3.14159265;
+  const float PI2 = 2 * PI;
+  void evaluatePixel(image img, out pixel result)
+  {
+// filter StereoNdeG (image in, float turn: 0-1 (0.00), float zoom: 0-5 
+// (1.00), float sc: 0-4 (1), float warp: 0-3.141592, color back) 
+// 
+// // // zeta=-sin(warp)*1+cos(warp); 
+// // // rho=sc*r; 
+// // radius=Y*zoom; 
+// // if r>radius then 
+// // back; 
+// // else 
+// // maxpi=2*atan(sc); 
+// // colat=2*atan(rho/radius); 
+// // long=(a+2*pi*turn)%(2*pi);
+// ny=((Y)*(2*colat/maxpi)-(Y)); 
+// nx=(X-1)*long/pi-X; 
+// in(xy:[nx,ny*zeta]); 
+// end 
+// end
+    // Comput polar coordinate
+    float2 pos = result.coord - center;
+    float r = length( pos );
+    float theta = atan2( pos.y, pos.x );
+    // Compute radius
+    float radius = xy_replication.y * zoom;
+    float zeta     = -sin( warp ) + cos( warp ); 
+    if( r > radius / fabs(zeta) )
+//     if( r > 0.5 * radius )
+    {
+      result = background;
+    } else {
+      // Spectral radius
+      float rho = scale * r;
+      // Damping
+      float maxpi    = 2.0 * atan( scale );
+      float colat    = 2.0 * atan( rho / radius );
+      float meridian     = fmod(theta + PI2 * turn, PI2);
+      // Adjust coordinates
+      float ny = (  xy_replication.y ) * ( 2.0 * colat / maxpi ) - (  xy_replication.y );
+      float nx = (  xy_replication.x - 1.0 )* meridian / PI - (  xy_replication.x );
+      float2 pos = center + float2(nx, ny * zeta );
+      result = img.sampleNearest( pos );
+    }
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}
+ 

@@ -1,0 +1,63 @@
+<
+  parameters: <
+    t: <
+      label: "Time";
+      type: float;
+    >;
+    xcenter: <                                                          
+      label: "Center x";                                                
+      type: float;                                                      
+    >;                                                                  
+    ycenter: <                                                          
+      label: "Center y";                                                
+      type: float;                                                      
+    >;
+    zoom: <
+      label: "Zoom";
+      type: float;
+      minValue: 0.0;
+      maxValue: 10000.0;
+      defaultValue: 1000.0;
+    >;
+    Wavelength: <
+      rl: <
+        label: "Red";
+        type: int;
+        minValue: 1;
+        maxValue: 100;
+        defaultValue: 10;
+      >;
+      gl: <
+        label: "Green";
+        type: int;
+        minValue: 1;
+        maxValue: 100;
+        defaultValue: 14;
+      >;
+      bl: <
+        label: "Blue";
+        type: int;
+        minValue: 1;
+        maxValue: 100;
+        defaultValue: 20;
+      >;
+    >;
+  >;
+>;  
+kernel Disco
+{
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  const float PI2 = 2 * 3.14159265;
+  const float q = t * PI2;
+  void evaluatePixel(out pixel4 result)
+  {
+    float2 vec = result.coord - center;
+    float angle = atan2( vec.x, vec.y);
+    float r = length(vec);
+    float rz=r*zoom;
+    
+    result = float4( fabs( sin( rz / rl + q ) + sin( angle * rl + q ) ),
+                     fabs( sin( rz / gl + q ) + sin( angle * gl + q ) ),
+                     fabs( sin( rz / bl + q ) + sin( angle * bl + q ) ), 2 ) * 0.5;
+  }
+}

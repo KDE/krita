@@ -1,0 +1,40 @@
+kernel Oilify
+{
+  int intensity( float4 px )
+  {
+     int v = (0.5 * px[1] + 0.3 * px[2] + 0.2 * px[0]) * 255;
+     if( v < 0 ) return 0;
+     if( v > 255) return 255;
+     return v;
+  }
+  void evaluatePixel(image4 img, out pixel4 result)
+  {
+    int xc = result.coord.x;
+    int yc = result.coord.y;
+    int histogram[256];
+    for(int i = 0; i < 255; ++i)
+    {
+      histogram[i] = 0;
+    }
+    float4 max_px;
+    int max = 0;
+    for( int y = yc - 4; y < yc + 4; ++y)
+    {
+      for( int x = xc - 4; x < xc + 4; ++x)
+       {
+          float4 px = img.sampleNearest( float2(x,y ) );
+          int hv = ++histogram[ intensity( px ) ];
+          if( hv > max )
+          {
+             max_px = px;
+             max = hv;
+          }
+       }
+    }
+    result = max_px;
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

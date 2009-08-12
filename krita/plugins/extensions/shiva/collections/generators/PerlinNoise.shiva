@@ -1,0 +1,112 @@
+<
+  parameters: <
+    amount: <
+      label: "Amount";
+      type: float;
+    >;
+    offset: <
+      label: "Offset";
+      type: float;
+    >;
+    factor: <
+      label: "Factor";
+      type: float;
+      defaultValue: 1.0;
+      maxValue: 10.0;
+    >;
+    xscale: <
+      label: "Horizontal scale";
+      type: float;
+      defaultValue: 4.0;
+      maxValue: 100.0;
+    >;
+    yscale: <
+      label: "Vertical scale";
+      type: float;
+      defaultValue: 4.0;
+      maxValue: 100.0;
+    >;
+    octaves: <
+      label: "Octaves";
+      type: int;
+      defaultValue: 2;
+      maxValue:10;
+    >;
+  >;
+>;
+kernel PerlinNoise
+{
+  const int RAND_MAX  = 2147483647;
+
+  dependent float grad_x[64];
+  dependent float grad_y[64];
+  dependent int permutation[64];
+  
+  float fade(float t)
+  {
+    return ((2.0*fabs(t)-3.0)*(t)*(t)+1.0);
+  }
+  
+  // Pregenerate grad_x, grad_y and permuation
+  void evaluateDependents()
+  {
+    // Init permutations
+    for(int i = 0; i < 64; ++i)
+    {
+       permutation[i] = i;
+    }
+    for (int i = 0; i < 1000; ++i) {
+      int j = rand() % 64;
+      int k = rand() % 64;
+      int t = permutation[j];
+      permutation[j] = permutation[k];
+      permutation[k] = t;
+    }
+    // Initialize the gradient table
+    for(int i = 0; i < 64; ++i)
+    {
+      grad_x[i] = rand() / float(RAND_MAX) - 0.5;
+      grad_y[i] = rand() / float(RAND_MAX) - 0.5;
+      float norm = 1.0 / sqrt(grad_x[i] * grad_x[i] + grad_y[i] * grad_y[i]);
+      grad_x[i] *= norm;
+      grad_y[i] *= norm;
+    }
+  }
+  
+  void evaluatePixel(out pixel4 result)
+  {
+    float total = 0.0;
+    int frequency = 1;
+    float x = (result.coord.x ) / IMAGE_WIDTH;
+    float y = (result.coord.y ) / IMAGE_HEIGHT;
+    x *= xscale;
+    y *= yscale;
+    for(int oct = 0; oct < octaves; ++oct)
+    {
+      float xs = x * frequency;
+      float ys = y * frequency;
+      int xs_frac = int(xs);
+      int ys_frac = int(ys);
+      float intermtotal = 0.0;
+      for(int i = 0; i < 2; ++i)
+      {
+        for(int j = 0; j < 2; ++j)
+        {
+          int n = permutation[(xs_frac + i + permutation[(ys_frac + j) % 64]) % 64];
+          float vx = xs - xs_frac - i;
+          float vy = ys - ys_frac - j;
+          intermtotal += fade(vx) * fade(vy) * (grad_x[n] * vx + grad_y[n] * vy );
+        }
+      }
+      
+      total += intermtotal / frequency;
+      frequency *= 2;
+    }
+    total += offset;
+    total *= factor;
+    if( total > 1.0) total = 1.0;
+    if( total < 0) total = 0;
+    result = float4(total,total,total,1.0);
+  }
+  
+}

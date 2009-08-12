@@ -1,0 +1,48 @@
+kernel MandelbrotSet
+{
+  void evaluatePixel(out pixel result)
+  {
+    // Parameters
+    float xaxis = 700.0;
+    float yaxis = 500.0;
+    float scale = 1 / 400.0;
+    int max_iteration = 25;
+    // Do it
+    float x = (result.coord[0] - xaxis) * scale;
+    float x0 = x;
+    float y = (result.coord[1] - yaxis) * scale;
+    float y0 = y;
+
+    int iteration = 0;
+    while(  (x*x + y*y) <= (2*2)  and iteration < max_iteration)
+    {
+      float xtemp = x*x - y*y + x0;
+      y = 2*x*y + y0;
+      x = xtemp;
+      ++iteration;
+    }
+    int v = (765 * iteration)/max_iteration;
+    if( iteration == max_iteration)
+    {
+      result[0] = 0.0;
+      result[1] = 0.0;
+      result[2] = 0.0;
+    } if ( v >= 510 )
+    {
+      result[0] = 1.0;
+      result[1] = 1.0;
+      result[2] = (v - 510 ) / 255.0;
+    }
+    else if( v > 255 )
+    {
+      result[0] = 1.0;
+      result[1] = 1.0;
+      result[2] = (v - 255) / 255.0;
+    } else {
+      result[0] = v;
+      result[1] = 0.0;
+      result[2] = 0.0;
+    }
+    result.setAlpha(1.0);
+  }
+}

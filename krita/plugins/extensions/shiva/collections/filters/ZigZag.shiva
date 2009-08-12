@@ -1,0 +1,43 @@
+<
+  parameters: <
+    cellWidth: <
+      label: "Cell width";
+      type: int;
+      minValue: 1;
+      maxValue: 50;
+      defaultValue: 10;
+    >;
+    cellHeight: <
+      label: "Cell height";
+      type: int;
+      minValue: 1;
+      maxValue: 50;
+      defaultValue: 10;
+    >;
+  >;
+>;  
+kernel ZigZag
+{  
+  const float2 center = { IMAGE_WIDTH * 0.5, IMAGE_HEIGHT * 0.5 };
+  void evaluatePixel(image img, out pixel result)
+  {
+    float2 vec = result.coord - center;
+    float dx = vec.x;
+    if(dx < 0 ) dx = -dx;
+    float dy = vec.y;
+    if(dy < 0 ) dy = -dy;
+
+    float2 displacement;
+    int iy = dy * result.coord.y;
+    int ix = dx * result.coord.x;
+    displacement[0] = iy % cellWidth;
+    displacement[1] = ix % cellHeight;
+// R=src(x+((abs(y-Y/2))*y%val(0,0,X/2)),y+((abs(x-X/2))*x%val(1,0,Y/2)),z)
+
+    result = img.sampleNearest( result.coord + displacement );
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

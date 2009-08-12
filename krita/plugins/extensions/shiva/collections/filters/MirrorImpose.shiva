@@ -1,0 +1,23 @@
+kernel MirrorImpose
+{  
+  const float2 imsize = { IMAGE_WIDTH, IMAGE_HEIGHT };
+  float4 mix(float4 a, float4 b, float c)
+  {
+    return a * c + b * (1 - c);
+  }
+  void evaluatePixel(image img, out pixel result)
+  {
+    float ax = result.coord.x / IMAGE_WIDTH;
+    float ay = result.coord.y / IMAGE_HEIGHT;
+    float x1 = max(0, ax - ay);
+    float y1 = max(0, ay - ax);
+    float x2 = min(1, ax + (1 - ay));
+    float y2 = min(1, ay + (1 - ax));
+    float weight = clamp(1 - (ax - x1) / (x2 - x1), 0, 1);
+    result = mix(img.sampleNearest( result.coord ), img.sampleNearest( imsize - result.coord ), weight);
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

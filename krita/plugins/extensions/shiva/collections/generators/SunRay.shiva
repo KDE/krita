@@ -1,0 +1,51 @@
+<
+  parameters: <
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+    fluctuation: <
+      label: "Fluctuation";
+      type: float;
+    >;
+    phase: <
+      label: "Phase";
+      type:float;
+      minValue: 0.1;
+      maxValue: 100.0;
+      defaultValue: 30.0;
+    >;
+    colorrgb: <
+      label: "Color";
+      type: rgb;
+      defaultValue: { 0.3, 0.05, 0.01 };
+    >;
+  >;
+>;
+
+kernel SunRay
+{
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  const float PI = 3.14159265;
+  const float4 color = { colorrgb[0], colorrgb[1], colorrgb[2], 1.0 };
+  
+  void evaluatePixel(out pixel4 result)
+  {
+    float2 vec = result.coord - center;
+    float angle = atan2( vec.x, vec.y);
+    float coef = cos(angle * phase);
+    if( coef < 0.0 ) coef = - coef;
+    result = color + fluctuation * coef;
+    
+    for( int i = 0; i < 3; ++i)
+    {
+      if(result[i] < 0) result[i] = 0.0;
+      else if(result[i] > 1) result[i] = 1.0;
+    }
+    result[3] = 1.0;
+  }
+}

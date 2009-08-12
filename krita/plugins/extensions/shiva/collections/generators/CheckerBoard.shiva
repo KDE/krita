@@ -1,0 +1,42 @@
+<
+  parameters: <
+    hcount: <
+      label: "Horizontal";
+      type: int;
+      defaultValue: 10;
+    >;
+    vcount: <
+      label: "Vertical";
+      type: int;
+      defaultValue: 10;
+    >;
+    color1: <
+      label: "Color 1";
+      type: rgba;
+      defaultValue: { 0.0, 0.0, 0.0, 1.0 };
+    >;
+    color2: <
+      label: "Color 2";
+      type: rgba;
+      defaultValue: { 1.0, 1.0, 1.0, 1.0 };
+    >;
+  >;
+>;  
+kernel Moire
+{
+  const int hsize = IMAGE_WIDTH / hcount;
+  const int vsize = IMAGE_HEIGHT / vcount;
+  void evaluatePixel(out pixel4 result)
+  {
+    int ix = int(result.coord.x) / hsize & 1;
+    int iy = int(result.coord.y) / vsize & 1;
+    float4 r;
+    if( ( ix == 1 and iy  == 1 ) or ( ix == 0 and iy == 0 ) )
+    {
+      r = color1;
+    } else {
+      r = color2;
+    }
+    result = r;
+  }
+}

@@ -1,0 +1,35 @@
+<
+  parameters: <
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+    ripplesLength: <
+      label: "Ripples length";
+      type: float;
+      minValue: 0.01;
+      maxValue: 1000.0;
+    >;
+  >;
+>;  
+kernel Ripples
+{
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  const float waveslengthInv = 1.0 / 50.0;
+  
+  void evaluatePixel(image img, out pixel result)
+  {
+    float2 vec = result.coord - center;
+    float vec_length = length( vec );
+    float displacement = cos( vec_length * waveslengthInv ) * ripplesLength / vec_length;
+    result = img.sampleNearest( vec * ( 1.0 + displacement  ) + center );
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

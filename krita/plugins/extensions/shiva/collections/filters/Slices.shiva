@@ -1,0 +1,34 @@
+<
+  parameters: <
+    sliceWidth: <
+      label: "Slice width";
+      type: int;
+      minValue: 1;
+      defaultValue: 10;
+      maxValue: 100;
+    >;
+    sliceHeight: <
+      label: "Slice height";
+      type: int;
+      minValue: 1;
+      defaultValue: 10;
+      maxValue: 100;
+    >;
+  >;
+>;
+kernel Slices
+{
+  void evaluatePixel(image img, out pixel result)
+  {
+    float x = result.coord.x;
+    float y = result.coord.y;
+    float2 displacement;
+    displacement[0] = 5 * sign( cos( y / sliceWidth ) );
+    displacement[1] = 5 * sign( sin( x / sliceHeight ) );
+    result = img.sampleNearest( result.coord + displacement );
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

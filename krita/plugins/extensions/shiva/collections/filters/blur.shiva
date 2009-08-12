@@ -1,0 +1,7 @@
+kernel Blur
+{
+  void evaluatePixel(image img, out pixel result)
+  {
+    result = ( img.sampleNearest( result.coord ) + img.sampleNearest( result.coord - 1.0 ) + img.sampleNearest( result.coord + 1.0 ) ) / 3.0;
+  }
+}

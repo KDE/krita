@@ -1,0 +1,48 @@
+<
+  parameters: <
+    count: <
+      label: "Count";
+      type: int;
+      minValue:1;
+      maxValue:20;
+      defaultValue:5;
+    >;
+    direction: <
+      label: "Direction";
+      type: float;
+      minValue:0.0;
+      maxValue:6.28;
+      defaultValue:0.0.;
+    >;
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+  >;
+>;  
+kernel Caleidoscope
+{  
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  const float pi = 3.14159265358979323846;
+  const float angle = pi / count;
+  void evaluatePixel(image img, out pixel result)
+  {
+    float2 vec = result.coord - center;
+    float vec_length = length( vec );
+    float vec_angle = atan2(vec.y, vec.x) - direction;
+    while( vec_angle < 0 ) { vec_angle = 6.28 + vec_angle; }
+    float angle2 = fmod(vec_angle, angle);
+    float section = floor(vec_angle/angle);
+    if (fmod(section,2.0)>0.5) angle2 = angle-angle2;
+
+    result = img.sampleNearest(center+ vec_length * float2(cos(angle2 += direction), sin(angle2)));
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

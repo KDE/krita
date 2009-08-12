@@ -1,0 +1,47 @@
+<
+  parameters: <
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+    rho: <
+      label: "Rho";
+      type: double;
+      minValue: 0;
+      defaultValue: 10;
+      maxValue: 64;
+    >;
+    theta: <
+      label: "Theta";
+      type: float;
+      minValue: 0;
+      defaultValue: 10;
+      maxValue: 64;
+    >;
+  >;
+>;  
+kernel Roundify
+{  
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  void evaluatePixel(image img, out pixel result)
+  {
+    float2 vec = result.coord - center;
+    float vec_length = length( vec );
+    float angle = atan2(vec.y, vec.x);
+
+    float mvt = vec_length * rho + fabs(angle) * theta;
+    float2 displacement;
+    displacement[0] = mvt;
+    displacement[1] = mvt;
+
+    result = img.sampleNearest( result.coord + displacement );
+  }
+  region changed(region changed_input_region, int input_index, region input_DOD[])
+  {
+    return changed_input_region;
+  }
+}

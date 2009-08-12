@@ -1,0 +1,25 @@
+<
+  parameters: <
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+  >;
+>;  
+kernel RadialGradient
+{
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  const float PI = 3.14159265;
+  void evaluatePixel(out pixel4 result)
+  {
+    float2 vec = result.coord - center;
+    float angle = atan2( vec.x, vec.y);
+    float coef = angle / PI;
+    if( coef < 0.0 ) coef = - coef;
+    result = float4(coef, coef, coef, 1.0);
+  }
+}

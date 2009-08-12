@@ -24,6 +24,7 @@
 #include <generator/kis_generator_registry.h>
 #include <filter/kis_filter_registry.h>
 
+#include <GTLCore/String.h>
 #include <OpenShiva/SourcesCollection.h>
 
 #include "shivagenerator.h"
@@ -37,6 +38,14 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QStringList &)
 {
     setComponentData( ShivaPluginFactory::componentData());
     m_sourceCollection = new OpenShiva::SourcesCollection();
+    
+    QStringList kernelModulesDirs = KGlobal::mainComponent().dirs()->findDirs( "data", "krita/shiva/kernels/");
+    dbgPlugins << kernelModulesDirs;
+    foreach(const QString & dir, kernelModulesDirs)
+    {
+        dbgPlugins << "Append : " << dir << " to the list of CTL modules";
+        m_sourceCollection->addDirectory( dir.toAscii().data());
+    }
     {
         KisGeneratorRegistry * manager = KisGeneratorRegistry::instance();
         Q_ASSERT(manager);

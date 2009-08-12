@@ -1,3 +1,5 @@
+add_subdirectory(collections)
+
 include_directories(${OPENSHIVA_INCLUDE_DIR})
 
 set(kritashiva_PART_SRCS

@@ -1,0 +1,37 @@
+<
+  parameters: <
+    t: <
+      label: "Time";
+      type: float;
+    >;
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+  >;
+>;
+kernel Moire
+{
+  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  const float PI2 = 2 * 3.14159265;
+  const float q = t * PI2;
+  void evaluatePixel(out pixel4 result)
+  {
+    float2 vec = result.coord - center;
+    float angle = atan2( vec.x, vec.y);
+    float r = length(vec);
+    
+    result = float4(sin( r * 0.25 + q) + sin(15 * angle +q),
+                    sin( r / 3.5 + q) + sin(17 * angle + q),
+                    sin(r / 3+q) + sin(19*angle + q), 2.0 ) * 0.5;
+  }
+  region generated()
+  {
+    region reg = { 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT};
+    return reg;
+  }
+}

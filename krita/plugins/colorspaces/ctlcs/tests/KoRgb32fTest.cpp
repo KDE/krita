@@ -25,6 +25,15 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 
+template<typename _T_>
+void randomizator( typename KoRgbTraits<_T_>::Pixel& p)
+{
+  p.red = rand();
+  p.green = rand();
+  p.blue = rand();
+  p.alpha = rand();
+}
+
 void KoRgb32fTest::testConversion()
 {
   const KoColorSpace* rgb32f = KoColorSpaceRegistry::instance()->colorSpace("RgbAF32", 0);
@@ -33,15 +42,39 @@ void KoRgb32fTest::testConversion()
   quint8* p32fPtr = reinterpret_cast<quint8*>(&p32f);
   KoRgbU16Traits::Pixel p16u;
   quint8* p16uPtr = reinterpret_cast<quint8*>(&p16u);
+  
+  // Test conversion of black from 32f to 16u back to 32f
   p32f.red = 0.0;
   p32f.green = 0.0;
   p32f.blue = 0.0;
   p32f.alpha = 1.0;
+  randomizator<quint16>(p16u);
   rgb32f->toRgbA16(p32fPtr, p16uPtr, 1);
+  QCOMPARE(p16u.red, quint16(0));
+  QCOMPARE(p16u.green, quint16(0));
+  QCOMPARE(p16u.blue, quint16(0));
+  QCOMPARE(p16u.alpha, quint16(65535));
   rgb32f->fromRgbA16(p16uPtr, p32fPtr, 1);
   QCOMPARE(p32f.red, 0.0f);
   QCOMPARE(p32f.green, 0.0f);
   QCOMPARE(p32f.blue, 0.0f);
+  QCOMPARE(p32f.alpha, 1.0f);
+
+  // Test conversion of white from 32f to 16u back to 32f
+  p32f.red = 1.0;
+  p32f.green = 1.0;
+  p32f.blue = 1.0;
+  p32f.alpha = 1.0;
+  randomizator<quint16>(p16u);
+  rgb32f->toRgbA16(p32fPtr, p16uPtr, 1);
+  QCOMPARE(p16u.red, quint16(47803));
+  QCOMPARE(p16u.green, quint16(47803));
+  QCOMPARE(p16u.blue, quint16(47803));
+  QCOMPARE(p16u.alpha, quint16(65535));
+  rgb32f->fromRgbA16(p16uPtr, p32fPtr, 1);
+  QCOMPARE(p32f.red, 1.0f);
+  QCOMPARE(p32f.green, 1.0f);
+  QCOMPARE(p32f.blue, 1.0f);
   QCOMPARE(p32f.alpha, 1.0f);
 }
 

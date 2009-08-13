@@ -472,10 +472,10 @@ bool TestLoading::compareTableFormats(QTextTableFormat &actualFormat, QTextTable
                 match = false;
             break;
         // double properties
-        case QTextFormat::BlockLeftMargin:
-        case QTextFormat::BlockRightMargin:
-        case QTextFormat::BlockTopMargin:
-        case QTextFormat::BlockBottomMargin:
+        case QTextFormat::FrameLeftMargin:
+        case QTextFormat::FrameRightMargin:
+        case QTextFormat::FrameTopMargin:
+        case QTextFormat::FrameBottomMargin:
             if (abs(actualProperty[id].toDouble() - expectedProperty[id].toDouble()) > 1e-10)
                 match = false;
             break;
@@ -488,7 +488,7 @@ bool TestLoading::compareTableFormats(QTextTableFormat &actualFormat, QTextTable
         if (!match) {
             qDebug() << "Actual property:   " << KoTextDebug::tableAttributes(actualFormat);
             qDebug() << "Expected property: " << KoTextDebug::tableAttributes(expectedFormat);
-            qDebug() << "At index: QTextTableFormat::UserProperty + " << id - QTextFormat::UserProperty;
+            qDebug() << "At index: QTextTableFormat::UserProperty + " << id - QTextTableFormat::UserProperty;
             return false;
         }
     }
@@ -812,6 +812,7 @@ void TestLoading::addData()
     QTest::newRow("fontColors") << "TextContents/TextFormatting/fontColors";
 
     QTest::newRow("tableWidth") << "FormattingProperties/TableFormattingProperties/tableWidth";
+    QTest::newRow("tableTopAndBottomMargin") << "FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin";
 
     // TODO: Write tests for these.
     //QTest::newRow("borderModelProperty") << "FormattingProperties/TableFormattingProperties/borderModelProperty";
@@ -824,7 +825,6 @@ void TestLoading::addData()
     //QTest::newRow("tableLeftAndRightMargin") << "FormattingProperties/TableFormattingProperties/tableLeftAndRightMargin";
     //QTest::newRow("tableMargins") << "FormattingProperties/TableFormattingProperties/tableMargins";
     //QTest::newRow("tableShadow") << "FormattingProperties/TableFormattingProperties/tableShadow";
-    //QTest::newRow("tableTopAndBottomMargin") << "FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin";
     //QTest::newRow("writingMode") << "FormattingProperties/TableFormattingProperties/writingMode";
 
     QTest::newRow("color") << "FormattingProperties/TextFormattingProperties/color";

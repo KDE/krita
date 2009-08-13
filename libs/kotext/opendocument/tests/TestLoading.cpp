@@ -813,6 +813,7 @@ void TestLoading::addData()
 
     QTest::newRow("tableWidth") << "FormattingProperties/TableFormattingProperties/tableWidth";
     QTest::newRow("tableTopAndBottomMargin") << "FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin";
+    QTest::newRow("tableLeftAndRightMargin") << "FormattingProperties/TableFormattingProperties/tableLeftAndRightMargin";
 
     // TODO: Write tests for these.
     //QTest::newRow("borderModelProperty") << "FormattingProperties/TableFormattingProperties/borderModelProperty";
@@ -822,7 +823,6 @@ void TestLoading::addData()
     //QTest::newRow("pageNumber") << "FormattingProperties/TableFormattingProperties/pageNumber";
     //QTest::newRow("tableAlignment") << "FormattingProperties/TableFormattingProperties/tableAlignment";
     //QTest::newRow("tableBackgroundAndBackgroundImage") << "FormattingProperties/TableFormattingProperties/tableBackgroundAndBackgroundImage";
-    //QTest::newRow("tableLeftAndRightMargin") << "FormattingProperties/TableFormattingProperties/tableLeftAndRightMargin";
     //QTest::newRow("tableMargins") << "FormattingProperties/TableFormattingProperties/tableMargins";
     //QTest::newRow("tableShadow") << "FormattingProperties/TableFormattingProperties/tableShadow";
     //QTest::newRow("writingMode") << "FormattingProperties/TableFormattingProperties/writingMode";

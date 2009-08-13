@@ -41,6 +41,9 @@ public:
     virtual void applyInverseU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const = 0;
 };
 
+#include<iostream>
+#include<cstdlib>
+
 template<typename _ChannelType_>
 class KoCtlChannelImpl : public KoCtlChannel {
 public:

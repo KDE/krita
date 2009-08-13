@@ -47,7 +47,7 @@ void KoRgb32fTest::testConversion()
   p32f.alpha = 1.0;
   QCOMPARE( qint32(rgb32f->alpha(p32fPtr)), 255);
   p32f.alpha = 0.5;
-  QCOMPARE( qint32(rgb32f->alpha(p32fPtr)), 125);
+  QCOMPARE( qint32(rgb32f->alpha(p32fPtr)), 127);
   
   // Test conversion of black from 32f to 16u back to 32f
   p32f.red = 0.0;

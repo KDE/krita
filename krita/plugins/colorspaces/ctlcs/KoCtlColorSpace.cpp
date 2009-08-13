@@ -62,34 +62,34 @@ KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlCol
     }
     foreach( const KoCtlColorSpaceInfo::ChannelInfo* cinfo, info->channels() )
     {
-        addChannel( new KoChannelInfo( cinfo->name(), cinfo->position(), cinfo->channelType(), cinfo->valueType(), cinfo->size(), cinfo->color() ) );
+        addChannel( new KoChannelInfo( cinfo->name(), cinfo->index(), cinfo->channelType(), cinfo->valueType(), cinfo->size(), cinfo->color() ) );
         KoCtlChannel* ctlchannel = 0;
         
         switch(cinfo->valueType())
         {
             case KoChannelInfo::UINT8:
-                ctlchannel = new KoCtlChannelImpl<quint8>( cinfo->index(), info->pixelSize() );
+                ctlchannel = new KoCtlChannelImpl<quint8>( cinfo->position(), info->pixelSize() );
                 break;
             case KoChannelInfo::UINT16:
-                ctlchannel = new KoCtlChannelImpl<quint16>( cinfo->index(), info->pixelSize() );
+                ctlchannel = new KoCtlChannelImpl<quint16>( cinfo->position(), info->pixelSize() );
                 break;
 /*            case KoChannelInfo::UINT32:
-                ctlchannel = new KoCtlChannelImpl<quint32>( cinfo->index(), info->pixelSize() );
+                ctlchannel = new KoCtlChannelImpl<quint32>( cinfo->position(), info->pixelSize() );
                 break;
             case KoChannelInfo::INT8:
-                ctlchannel = new KoCtlChannelImpl<qint8>( cinfo->index(), info->pixelSize() );
+                ctlchannel = new KoCtlChannelImpl<qint8>( cinfo->position(), info->pixelSize() );
                 break;
             case KoChannelInfo::INT16:
-                ctlchannel = new KoCtlChannelImpl<qint16>( cinfo->index(), info->pixelSize() );
+                ctlchannel = new KoCtlChannelImpl<qint16>( cinfo->position(), info->pixelSize() );
                 break;*/
             case KoChannelInfo::FLOAT16:
-                ctlchannel = new KoCtlChannelImpl<half>( cinfo->index(), info->pixelSize() );
+                ctlchannel = new KoCtlChannelImpl<half>( cinfo->position(), info->pixelSize() );
                 break;
             case KoChannelInfo::FLOAT32:
-                ctlchannel = new KoCtlChannelImpl<float>( cinfo->index(), info->pixelSize() );
+                ctlchannel = new KoCtlChannelImpl<float>( cinfo->position(), info->pixelSize() );
                 break;
 /*            case KoChannelInfo::FLOAT64:
-                ctlchannel = new KoCtlChannelImpl<double>( cinfo->index(), info->pixelSize() );
+                ctlchannel = new KoCtlChannelImpl<double>( cinfo->position(), info->pixelSize() );
                 break;*/
             default:
                 qFatal("Unimplemented");
@@ -103,6 +103,7 @@ KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlCol
             d->alphaCtlChannel = ctlchannel;
         }
     }
+    Q_ASSERT(d->info->alphaPos() == -1 || d->alphaCtlChannel != 0 );
 #ifdef HAVE_OPENCTL_910
 #if HAVE_OPENCTL_910
     foreach( OpenCTL::Template* templat,  KoCtlTemplatesRegistry::instance()->compositeOps())

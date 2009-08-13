@@ -46,6 +46,7 @@
 #include <KoTextDebug.h>
 #include <KoListStyle.h>
 #include <KoTableStyle.h>
+#include <KoTableCellStyle.h>
 #include <KoTextDocumentLayout.h>
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
@@ -320,8 +321,84 @@ bool TestLoading::compareBlocks(const QTextBlock &actualBlock, const QTextBlock 
     return equal;
 }
 
-bool TestLoading::compareTableCells(QTextTableCell actualCell, QTextTableCell expectedCell)
+bool TestLoading::compareTableCellFormats(QTextTableCellFormat &actualFormat, QTextTableCellFormat &expectedFormat)
 {
+    if (actualFormat.background() != expectedFormat.background()
+            || actualFormat.leftPadding() != expectedFormat.leftPadding()
+            || actualFormat.rightPadding() != expectedFormat.rightPadding()
+            || actualFormat.topPadding() != expectedFormat.topPadding()
+            || actualFormat.bottomPadding() != expectedFormat.bottomPadding()) {
+        return false;
+    }
+
+    // check custom properties
+    const QMap<int, QVariant> actualProperty = actualFormat.properties();
+    const QMap<int, QVariant> expectedProperty = expectedFormat.properties();
+    QList<int> allPropertyIds = actualProperty.keys();
+    allPropertyIds << expectedProperty.keys();
+    bool match = true;
+    foreach(int id, allPropertyIds) {
+        QString key, value;
+        switch (id) {
+        // double properties
+        case KoTableCellStyle::LeftBorderSpacing:
+        case KoTableCellStyle::RightBorderSpacing:
+        case KoTableCellStyle::TopBorderSpacing:
+        case KoTableCellStyle::BottomBorderSpacing:
+            if (abs(actualProperty[id].toDouble() - expectedProperty[id].toDouble()) > 1e-10)
+                match = false;
+            break;
+        // string properties
+        case KoTableCellStyle::MasterPageName:
+            if (actualProperty[id].toString() != expectedProperty[id].toString())
+                match = false;
+            break;
+        // pen properties
+        case KoTableCellStyle::LeftBorderOuterPen:
+        case KoTableCellStyle::LeftBorderInnerPen:
+        case KoTableCellStyle::RightBorderOuterPen:
+        case KoTableCellStyle::RightBorderInnerPen:
+        case KoTableCellStyle::TopBorderOuterPen:
+        case KoTableCellStyle::TopBorderInnerPen:
+        case KoTableCellStyle::BottomBorderOuterPen:
+        case KoTableCellStyle::BottomBorderInnerPen: {
+            QPen actualPen = qvariant_cast<QPen>(actualProperty[id]);
+            QPen expectedPen = qvariant_cast<QPen>(expectedProperty[id]);
+            if (actualPen != expectedPen)
+                match = false;
+            break;
+        }
+        // brush properties
+        case KoTableCellStyle::CellBackgroundBrush: {
+            QBrush actualBrush = qvariant_cast<QBrush>(actualProperty[id]);
+            QBrush expectedBrush = qvariant_cast<QBrush>(expectedProperty[id]);
+            if (actualBrush != expectedBrush)
+                match = false;
+            break;
+        }
+        }
+        if (!match) {
+            qDebug() << "Actual property:   " << KoTextDebug::tableCellAttributes(actualFormat);
+            qDebug() << "Expected property: " << KoTextDebug::tableCellAttributes(expectedFormat);
+            qDebug() << "At index: QTextTableFormat::UserProperty + " << id + 7001 - QTextFormat::UserProperty;
+            return false;
+        }
+    }
+    return match;
+}
+
+bool TestLoading::compareTableCells(QTextTableCell &actualCell, QTextTableCell &expectedCell)
+{
+    // compare cell formats
+    QTextTableCellFormat actualFormat = actualCell.format().toTableCellFormat();
+    QTextTableCellFormat expectedFormat = expectedCell.format().toTableCellFormat();
+
+    if (!compareTableCellFormats(actualFormat, expectedFormat)) {
+        qDebug() << "compareTableCells: table cell properties mismatch at " << actualCell.firstCursorPosition().block().text();
+        return false;
+    }
+
+    // compare cell content
     QTextFrame::iterator actualIterator = actualCell.begin();
     QTextFrame::iterator expectedIterator = expectedCell.begin();
 
@@ -430,7 +507,9 @@ bool TestLoading::compareTables(QTextTable *actualTable, QTextTable *expectedTab
 
     for (int row = 0; row < expectedTable->rows(); ++row) {
         for (int col = 0; col < expectedTable->columns(); ++col) {
-            if (!compareTableCells(actualTable->cellAt(row, col), expectedTable->cellAt(row, col))) {
+            QTextTableCell actualCell = actualTable->cellAt(row, col);
+            QTextTableCell expectedCell = expectedTable->cellAt(row, col);
+            if (!compareTableCells(actualCell, expectedCell)) {
                 return false;
             }
         }

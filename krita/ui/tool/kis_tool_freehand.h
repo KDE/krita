@@ -25,6 +25,15 @@
 
 #include "krita_export.h"
 
+// OpenGL 
+#include <config-opengl.h>
+
+#ifdef HAVE_OPENGL
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+
+
 class KoPointerEvent;
 class KoCanvasBase;
 
@@ -107,6 +116,10 @@ protected:
     double m_magnetism;
 
 private:
+#if defined(HAVE_OPENGL)
+    qreal m_xTilt;
+    qreal m_yTilt;
+#endif
 
     QPointF mousePos;
     QRectF oldOutlineRect;

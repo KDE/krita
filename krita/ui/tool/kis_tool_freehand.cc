@@ -96,6 +96,11 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_assistant = false;
     m_smoothness = 0.5;
     m_magnetism = 1.0;
+
+#if defined(HAVE_OPENGL)
+    m_xTilt = 0.0;
+    m_yTilt = 0.0;
+#endif    
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -149,7 +154,7 @@ inline double angle(const QPointF& p1, const QPointF& p2)
 
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
-//    dbgUI << "mouseMoveEvent " << m_mode << " " << e->button() << " " << e->buttons();
+    //    dbgUI << "mouseMoveEvent " << m_mode << " " << e->button() << " " << e->buttons();
     if (m_mode == PAINT) {
         QPointF pos = convertToPixelCoord(e);
 
@@ -224,8 +229,10 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 #if defined(HAVE_OPENGL)
     if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL){
         if (m_canvas->canvasController()->isCanvasOpenGL()){
-            // TODO rethink this as I need to update whole canvas
-            m_canvas->updateCanvas(     QRect( QPoint(0,0),QSize(320,240) ) );
+            m_xTilt = e->xTilt();
+            m_yTilt = e->yTilt();
+            // TODO : optimize? but you need to know the size of the 3d brush?
+            m_canvas->updateCanvas(QRect( QPoint(0,0), QSize( currentImage()->width(),currentImage()->height()) ));
         }
     }
 #endif
@@ -482,7 +489,7 @@ void KisToolFreehand::setAssistant(bool assistant)
     m_assistant = assistant;
 }
 
-#define ZET 10
+#define ZET 7
 void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 {
     KisConfig cfg;
@@ -498,23 +505,8 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             if (glIsList( list )){
                 kDebug() << "I have list to draw!";
                 QPointF pos = converter.documentToView( mousePos );
-/*                glEnable(GL_LINE_SMOOTH);
-                glEnable(GL_COLOR_LOGIC_OP);
-
-                glLogicOp(GL_XOR);*/
-
-                //glColor3f(0.501961,1.0, 0.501961);
-
-/*        glDepthFunc(GL_LESS);
-        glShadeModel(GL_SMOOTH);
-
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_COLOR_MATERIAL);
-
-        glClear(GL_DEPTH_BUFFER_BIT);
         
-        KisImageSP img = currentImage();
+/*        KisImageSP img = currentImage();
         glEnable(GL_LIGHT0);
         glEnable(GL_LIGHT1);
         glEnable(GL_LIGHT2);
@@ -539,25 +531,35 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         position[0] = pos3.x();
         position[1] = pos3.y();
         glLightfv(GL_LIGHT3, GL_POSITION, position);*/
-        
+
             glColor3f(0.0,1.0,0.0);
-            glEnable(GL_COLOR_MATERIAL);
-            glDepthFunc(GL_LESS);
             glShadeModel(GL_SMOOTH);
-            //glEnable(GL_DEPTH_TEST);
+
+            glEnable(GL_DEPTH_TEST);
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            
             glEnable(GL_LINE_SMOOTH);
+            glEnable(GL_COLOR_MATERIAL);
 
                 glPushMatrix();
-                        glTranslatef( pos.x(), pos.y(),3 );
-                        glScalef( sx,sy,1);
-                        glRotatef(90, 0.8,0.7,0.6);
+                            glTranslatef( pos.x(), pos.y(), 1 );
+                            glScalef( sx,sy,1);                          
+                            glRotated( 90.0, 1.0, 0.0, 0.0 );
+                            glRotated( -m_xTilt , 0.0, 0.0, 1.0);
+                            glRotated( -m_yTilt , 1.0, 0.0, 0.0);
+
                             glCallList( list );
                         glScalef(1.0 / sx,1.0 / sy ,1);
                 glPopMatrix();
+
+            glDisable(GL_DEPTH_TEST);
+            glDisable(GL_LINE_SMOOTH);
+            glDisable(GL_COLOR_MATERIAL);
+
             }else{
                 kDebug() << "_No_ list to draw!";
 // JUST TEST HERE 
-                glDepthFunc(GL_LESS);
                 glEnable(GL_DEPTH_TEST);
                 glClear(GL_DEPTH_BUFFER_BIT);
 

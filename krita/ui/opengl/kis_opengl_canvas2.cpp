@@ -122,7 +122,8 @@ void KisOpenGLCanvas2::paintGL()
 
     glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, widgetBackgroundColor.blue() / 255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
-
+    glShadeModel(GL_FLAT);
+    
     KisImageSP img = m_d->canvas->image();
 
     if (!img) return;
@@ -261,16 +262,19 @@ void KisOpenGLCanvas2::paintGL()
     glBindTexture(GL_TEXTURE_2D, 0);
 
 
+    glShadeModel(GL_SMOOTH);
     // XXX: make settable
     bool drawTools = true;
 
     QPainter gc(this);
+    
     drawDecorations(gc, drawTools,
                     m_d->documentOffset,
                     QRect(QPoint(0, 0), QSize(width(), height() )),
                     m_d->canvas);
 
     gc.end();
+    
 }
 
 void KisOpenGLCanvas2::setPixelToViewTransformation(void)

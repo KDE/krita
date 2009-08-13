@@ -32,6 +32,14 @@
 #include "kis_chalk_paintop_settings_widget.h"
 #include "kis_chalkop_option.h"
 
+#include <config-opengl.h>
+
+#ifdef HAVE_OPENGL
+#include <GL/gl.h>
+#include <kis_model.h>
+#endif
+
+
 KisChalkPaintOpSettings::KisChalkPaintOpSettings(KisChalkPaintOpSettingsWidget* settingsWidget)
         : KisPaintOpSettings(settingsWidget)
 {
@@ -72,3 +80,10 @@ int KisChalkPaintOpSettings::radius() const
     return m_options->m_chalkOption->radius();
 }
 
+#if defined(HAVE_OPENGL)
+GLuint KisChalkPaintOpSettings::displayList() const
+{
+    KisModel model("3d-pencil.obj","3d-pencil.mtl");
+    return model.displayList();   
+}
+#endif

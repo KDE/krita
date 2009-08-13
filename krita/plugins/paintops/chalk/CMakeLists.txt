@@ -25,5 +25,7 @@ install(TARGETS kritachalkpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kritachalkpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES
     krita-chalk.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+install( FILES  3d-pencil.obj DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
+install( FILES  3d-pencil.mtl DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
 
 

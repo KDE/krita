@@ -16,7 +16,7 @@ fiveInchTableFormat.setWidth(new QTextLength(QTextLength.FixedLength, 360.0));
 fiveInchTableFormat.setAlignment(Qt.AlignLeft);
 
 var seventyFivePercentTableFormat = QTextTableFormat.clone(defaultTableFormat);
-seventyFivePercentTableFormat.setWidth(new QTextLength(QTextLength.RelativeLength, 75.0));
+seventyFivePercentTableFormat.setWidth(new QTextLength(QTextLength.PercentageLength, 75.0));
 seventyFivePercentTableFormat.setAlignment(Qt.AlignLeft);
 
 cursor.insertText("this is an example of table with fixed table width of 2 inch.", defaultTextFormat);

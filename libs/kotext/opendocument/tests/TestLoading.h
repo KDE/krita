@@ -30,6 +30,7 @@ class QTextFrame;
 class QTextBlock;
 class QTextTable;
 class QTextTableCell;
+class QTextTableFormat;
 class QTextBlockFormat;
 class QTextListFormat;
 class KoStore;
@@ -68,6 +69,7 @@ private:
     bool compareListFormats(const QTextListFormat &actualFormat, const QTextListFormat &expectedFormat);
     bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expectedBlock);
     bool compareTableCells(QTextTableCell actualCell, QTextTableCell expectedCell);
+    bool compareTableFormats(QTextTableFormat &actualFormat, QTextTableFormat &expectedFormat);
     bool compareTables(QTextTable *actualTable, QTextTable *expectedTable);
     bool compareFrames(QTextFrame *actualFrame, QTextFrame *expectedFrame);
     bool compareDocuments(QTextDocument *actualDocument, QTextDocument *expectedDocument);

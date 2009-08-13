@@ -45,6 +45,7 @@
 #include <kcomponentdata.h>
 #include <KoTextDebug.h>
 #include <KoListStyle.h>
+#include <KoTableStyle.h>
 #include <KoTextDocumentLayout.h>
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
@@ -367,8 +368,66 @@ bool TestLoading::compareTableCells(QTextTableCell actualCell, QTextTableCell ex
     return actualIterator.atEnd() == expectedIterator.atEnd();
 }
 
+bool TestLoading::compareTableFormats(QTextTableFormat &actualFormat, QTextTableFormat &expectedFormat)
+{
+    if (actualFormat.background() != expectedFormat.background()
+            || actualFormat.alignment() != expectedFormat.alignment()
+            || actualFormat.width() != expectedFormat.width()) {
+        return false;
+    }
+
+    // check custom properties
+    const QMap<int, QVariant> actualProperty = actualFormat.properties();
+    const QMap<int, QVariant> expectedProperty = expectedFormat.properties();
+    QList<int> allPropertyIds = actualProperty.keys();
+    allPropertyIds << expectedProperty.keys();
+    bool match = true;
+    foreach(int id, allPropertyIds) {
+        QString key, value;
+        switch (id) {
+        // bool properties
+        case KoTableStyle::BreakBefore:
+        case KoTableStyle::BreakAfter:
+        case KoTableStyle::KeepWithNext:
+        case KoTableStyle::MayBreakBetweenRows:
+        case KoTableStyle::CollapsingBorders:
+            if (actualProperty[id].toBool() != expectedProperty[id].toBool())
+                match = false;
+            break;
+        // double properties
+        case QTextFormat::BlockLeftMargin:
+        case QTextFormat::BlockRightMargin:
+        case QTextFormat::BlockTopMargin:
+        case QTextFormat::BlockBottomMargin:
+            if (abs(actualProperty[id].toDouble() - expectedProperty[id].toDouble()) > 1e-10)
+                match = false;
+            break;
+        // string properties
+        case KoTableStyle::MasterPageName:
+            if (actualProperty[id].toString() != expectedProperty[id].toString())
+                match = false;
+            break;
+        }
+        if (!match) {
+            qDebug() << "Actual property:   " << KoTextDebug::tableAttributes(actualFormat);
+            qDebug() << "Expected property: " << KoTextDebug::tableAttributes(expectedFormat);
+            qDebug() << "At index: QTextTableFormat::UserProperty + " << id - QTextFormat::UserProperty;
+            return false;
+        }
+    }
+    return match;
+}
+
 bool TestLoading::compareTables(QTextTable *actualTable, QTextTable *expectedTable)
 {
+    QTextTableFormat actualFormat = actualTable->format();
+    QTextTableFormat expectedFormat = expectedTable->format();
+
+    if (!compareTableFormats(actualFormat, expectedFormat)) {
+        qDebug() << "compareTables: table properties mismatch at " << actualTable->cellAt(0, 0).firstCursorPosition().block().text();
+        return false;
+    }
+
     for (int row = 0; row < expectedTable->rows(); ++row) {
         for (int col = 0; col < expectedTable->columns(); ++col) {
             if (!compareTableCells(actualTable->cellAt(row, col), expectedTable->cellAt(row, col))) {

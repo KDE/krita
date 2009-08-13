@@ -43,6 +43,12 @@ void KoRgb32fTest::testConversion()
   KoRgbU16Traits::Pixel p16u;
   quint8* p16uPtr = reinterpret_cast<quint8*>(&p16u);
   
+  // Test alpha function
+  p32f.alpha = 1.0;
+  QCOMPARE(rgb32f->alpha(p32fPtr), 255);
+  p32f.alpha = 0.5;
+  QCOMPARE(rgb32f->alpha(p32fPtr), 125);
+  
   // Test conversion of black from 32f to 16u back to 32f
   p32f.red = 0.0;
   p32f.green = 0.0;
@@ -60,6 +66,19 @@ void KoRgb32fTest::testConversion()
   QCOMPARE(p32f.blue, 0.0f);
   QCOMPARE(p32f.alpha, 1.0f);
 
+  // Test conversion to QColor
+  QColor color;
+  rgb32f->toQColor(p32fPtr, &color, 0);
+  QCOMPARE(color.red(), 0);
+  QCOMPARE(color.green(), 0);
+  QCOMPARE(color.blue(), 0);
+  QCOMPARE(color.alpha(), 255);
+  rgb32f->fromQColor(color, p32fPtr, 0);
+  QCOMPARE(p32f.red, 0.0f);
+  QCOMPARE(p32f.green, 0.0f);
+  QCOMPARE(p32f.blue, 0.0f);
+  QCOMPARE(p32f.alpha, 1.0f);
+  
   // Test conversion of white from 32f to 16u back to 32f
   p32f.red = 1.0;
   p32f.green = 1.0;

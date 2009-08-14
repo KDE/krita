@@ -34,17 +34,17 @@ Label::Label(QObject *parent)
 Label::~Label()
 {}
 
-void Label::setColor(QColor color)
+void Label::setColor(const QColor& color)
 {
     m_color = color;
 }
 
-void Label::setText(QString text)
+void Label::setText(const QString& text)
 {
     m_text = text;
 }
 
-void Label::setPosition(QPointF position, Qt::Alignment alignment)
+void Label::setPosition(const QPointF& position, Qt::Alignment alignment)
 {
     m_position = position;
     m_alignment = alignment;

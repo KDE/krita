@@ -38,9 +38,9 @@ public:
     Label(QObject *parent = NULL);
     ~Label();
 
-    void setColor(QColor color);
-    void setText(QString text);
-    void setPosition(QPointF position, Qt::Alignment alignment = 0x0);
+    void setColor(const QColor& color);
+    void setText(const QString& text);
+    void setPosition(const QPointF& position, Qt::Alignment alignment = 0x0);
 
     QRectF boundingRect() const;
     void paint(QPainter &painter) const;

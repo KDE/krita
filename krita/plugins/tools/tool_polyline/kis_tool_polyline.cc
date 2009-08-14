@@ -49,6 +49,7 @@
 #include <GL/gl.h>
 #endif
 
+#define PREVIEW_LINE_WIDTH 1
 
 KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_polyline_cursor.png", 6, 6)),
@@ -148,13 +149,14 @@ void KisToolPolyline::cancel()
 void KisToolPolyline::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
-        //Erase old lines
-        m_canvas->updateCanvas(m_boundingRect.unite(QRectF(m_dragStart.x(), m_dragStart.y(), m_dragEnd.x() - m_dragStart.x(), m_dragEnd.y() - m_dragStart.y())));
-
+        // erase old lines on canvas
+        QRectF updateRect = dragBoundingRect();
         // get current mouse position
         m_dragEnd = convertToPixelCoord(event);
+        // draw new lines on canvas
+        updateRect |= dragBoundingRect();
+        updateCanvasViewRect(updateRect);
     }
-    m_canvas->updateCanvas(m_boundingRect.unite(QRectF(m_dragStart.x(), m_dragStart.y(), m_dragEnd.x() - m_dragStart.x(), m_dragEnd.y() - m_dragStart.y())));
 }
 
 void KisToolPolyline::mouseReleaseEvent(KoPointerEvent *event)
@@ -227,16 +229,13 @@ void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
     }else
 #endif
     {
-/*        qreal sx, sy;
-        converter.zoom(&sx, &sy);
-
-        gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
-*/
 
         QPen pen(Qt::SolidLine);
+        pen.setWidth( PREVIEW_LINE_WIDTH );
         gc.setPen(pen);
-        //gc.setRasterOp(Qt::XorROP);
-
+        // TODO uncomment this when the canvas is ready
+        //gc.setCompositionMode(QPainter::CompositionMode_Exclusion);
+        
         if (m_dragging) {
             startPos = pixelToView(m_dragStart);
             endPos = pixelToView(m_dragEnd);
@@ -269,6 +268,13 @@ void KisToolPolyline::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape)
         cancel();
+}
+
+QRectF KisToolPolyline::dragBoundingRect()
+{
+    QRectF rect = pixelToView(QRectF(m_dragStart, m_dragEnd).normalized());
+    rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
+    return rect;
 }
 
 #include "kis_tool_polyline.moc"

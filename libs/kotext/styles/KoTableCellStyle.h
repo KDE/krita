@@ -84,6 +84,8 @@ public:
     enum BorderStyle {
         BorderNone = 0, ///< No line border
         BorderSolid,    ///< Solid line border
+        BorderDotted,    ///< Dotted single border
+        BorderDashed,    ///< Dashed single border
         BorderDouble    ///< Double lined border
     };
 

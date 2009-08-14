@@ -143,22 +143,30 @@ void KoTableCellStyle::setEdge(Side side, BorderStyle style, qreal width, QColor
     Edge edge;
     qreal innerWidth = 0.0, space = 0.0;
     switch (style) {
+    case BorderNone:
+        width = 0.0;
+        break;
     case BorderDouble:
         innerWidth = space = width/4; //some nice default look
         width -= (space + innerWidth);
         edge.outerPen.setStyle(Qt::SolidLine);
         break;
-//    case Dotted: edge.innerPen.setStyle(Qt::DotLine); break;
+    case BorderDotted:
+        edge.outerPen.setStyle(Qt::DotLine);
+        break;
+    case BorderDashed:
+        edge.outerPen.setStyle(Qt::DashLine);
+        break;
     default:
         edge.outerPen.setStyle(Qt::SolidLine);
     }
-    edge.innerPen.setColor(color);
-    edge.innerPen.setJoinStyle(Qt::MiterJoin);
-    edge.innerPen.setCapStyle(Qt::FlatCap);
-    edge.outerPen = edge.innerPen;
+    edge.outerPen.setColor(color);
+    edge.outerPen.setJoinStyle(Qt::MiterJoin);
+    edge.outerPen.setCapStyle(Qt::FlatCap);
     edge.outerPen.setWidthF(width);
 
-    edge.spacing = space; // set the spacing between to be the same as the outer width
+    edge.spacing = space;
+    edge.innerPen = edge.outerPen;
     edge.innerPen.setWidthF(innerWidth);
 
     d->edges[side] = edge;
@@ -339,14 +347,16 @@ void KoTableCellStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, qr
 
 void KoTableCellStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h) const
 {
-    qreal l=x;
+    qreal thisWidth = d->edges[Left].outerPen.widthF() + d->edges[Left].spacing + d->edges[Left].innerPen.widthF();
+    qreal l = x - thisWidth / 2.0;
+    
     if (d->edges[Left].outerPen.widthF() > 0) {
         QPen pen = d->edges[Left].outerPen;
 
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
         painter.drawLine(QLineF(l, y, l, y+h));
-        l = x + d->edges[Left].spacing + pen.widthF();
+        l += d->edges[Left].spacing + pen.widthF() / 2.0;
     }
     // inner line
     if (d->edges[Left].innerPen.widthF() > 0) {
@@ -407,20 +417,22 @@ void KoTableCellStyle::drawSharedVerticalBorder(QPainter &painter, const KoTable
 
 void KoTableCellStyle::drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h) const
 {
-    qreal l=x;
+    qreal thisWidth = d->edges[Right].outerPen.widthF() + d->edges[Right].spacing + d->edges[Right].innerPen.widthF();
+    qreal l = x - thisWidth / 2.0;
+    
     if (d->edges[Right].outerPen.widthF() > 0) {
         QPen pen = d->edges[Right].outerPen;
 
         painter.setPen(pen);
-        l -= pen.widthF() / 2.0;
+        l += pen.widthF() / 2.0;
         painter.drawLine(QLineF(l, y, l, y+h));
-        l = x - d->edges[Right].spacing - pen.widthF();
+        l += d->edges[Right].spacing - pen.widthF() / 2.0;
     }
     // inner line
     if (d->edges[Right].innerPen.widthF() > 0) {
         QPen pen = d->edges[Right].innerPen;
         painter.setPen(pen);
-        l -= pen.widthF() / 2.0;
+        l += pen.widthF() / 2.0;
         painter.drawLine(QLineF(l, y, l, y+h));
     }
 }
@@ -431,6 +443,10 @@ KoTableCellStyle::BorderStyle KoTableCellStyle::oasisBorderStyle(const QString &
         return BorderNone;
     if (borderstyle == "double")
         return BorderDouble;
+    if (borderstyle == "dotted")
+        return BorderDotted;
+    if (borderstyle == "dashed")
+        return BorderDashed;
     return BorderSolid; // not needed to handle "solid" since it's the default
 }
 
@@ -441,6 +457,10 @@ QString KoTableCellStyle::odfBorderStyleString(const KoTableCellStyle::BorderSty
         return QString("double");
     case BorderSolid:
         return QString("solid");
+    case BorderDashed:
+        return QString("dashed");
+    case BorderDotted:
+        return QString("dotted");
     default:
     case BorderNone:
         return QString("none");
@@ -708,28 +728,28 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "left");
         if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setEdgeDoubleBorderValues(Left, KoUnit::parseValue(blw[1], 1.0), KoUnit::parseValue(blw[2], 0.1));
+            setEdgeDoubleBorderValues(Left, KoUnit::parseValue(blw[0], 1.0), KoUnit::parseValue(blw[1], 0.1));
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "top")) {
         QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "top");
         if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setEdgeDoubleBorderValues(Top, KoUnit::parseValue(blw[1], 1.0), KoUnit::parseValue(blw[2], 0.1));
+            setEdgeDoubleBorderValues(Top, KoUnit::parseValue(blw[0], 1.0), KoUnit::parseValue(blw[1], 0.1));
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "right")) {
         QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "right");
         if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setEdgeDoubleBorderValues(Right, KoUnit::parseValue(blw[1], 1.0), KoUnit::parseValue(blw[2], 0.1));
+            setEdgeDoubleBorderValues(Right, KoUnit::parseValue(blw[0], 1.0), KoUnit::parseValue(blw[1], 0.1));
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "bottom")) {
         QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "bottom");
         if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setEdgeDoubleBorderValues(Bottom, KoUnit::parseValue(blw[1], 1.0), KoUnit::parseValue(blw[2], 0.1));
+            setEdgeDoubleBorderValues(Bottom, KoUnit::parseValue(blw[0], 1.0), KoUnit::parseValue(blw[1], 0.1));
         }
     }
 

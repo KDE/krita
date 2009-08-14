@@ -120,9 +120,10 @@ void TextShape::setDemoText(bool on)
 
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
+    applyConversion(painter, converter);
     if (background()) {
         QPainterPath p;
-        p.addRect(converter.documentToView(QRectF(QPointF(), size())));
+        p.addRect(QRectF(QPointF(), size()));
         background()->paint(painter, p);
     }
     QTextDocument *doc = m_textShapeData->document();
@@ -136,7 +137,6 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         return;
     }
     Q_ASSERT(lay);
-    applyConversion(painter, converter);
     QAbstractTextDocumentLayout::PaintContext pc;
     KoTextDocumentLayout::PaintContext context;
     context.textContext = pc;

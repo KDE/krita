@@ -321,6 +321,7 @@ bool Layout::nextParag()
         const qreal offsetInShape = m_y - m_data->documentOffset();
         shape->update(QRectF(0.0, offsetInShape, shape->size().width(), shape->size().height() - offsetInShape));
         // cleanup and repaint rest of shapes.
+        m_data->wipe();
         m_textShape->markLayoutDone();
         cleanupShapes();
         return false;

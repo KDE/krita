@@ -51,7 +51,7 @@ public:
     /// reimplemented
     void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
     /// reimplemented
-    virtual void waitUntilReady(const KoViewConverter &converter) const;
+    virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
 
     /// helper method.
     QPointF convertScreenPos(const QPointF &point);

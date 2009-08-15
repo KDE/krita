@@ -28,6 +28,7 @@
 #include <KoShape.h>
 #include <KoShapeBorderModel.h>
 #include <KoShapeGroup.h>
+#include <KoShapeContainer.h>
 
 #include <QtGui/QImage>
 
@@ -136,6 +137,10 @@ void KoShapePainter::setShapes( const QList<KoShape*> &shapes )
 
 void KoShapePainter::paintShapes( QPainter & painter, KoViewConverter & converter )
 {
+    foreach (KoShape *shape, d->canvas->shapeManager()->shapes()) {
+        shape->waitUntilReady(converter, false);
+    }
+
     d->canvas->shapeManager()->paint( painter, converter, true );
 }
 

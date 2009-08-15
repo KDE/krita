@@ -848,9 +848,10 @@ void KoShape::setName(const QString & name)
     d->name = name;
 }
 
-void KoShape::waitUntilReady(const KoViewConverter &converter) const
+void KoShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
     Q_UNUSED(converter);
+    Q_UNUSED(asynchronous);
 }
 
 void KoShape::deleteLater()

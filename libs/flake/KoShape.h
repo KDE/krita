@@ -708,14 +708,17 @@ public:
 
     /**
      * A shape can be in a state that it is doing processing data like loading or text layout.
-     * In which case
-     * it can be shown on screen just fine (probably partially) but it should really not be printed
+     * In this case it can be shown on screen probably partially but it should really not be printed
      * until it is fully done processing.
-     * Flake will call this method from a non-main thread and only start printing it when the
-     * method returned.
-     * Warning!  This method can be blocking for a long time, never call it on the gui-thread!
+     * Warning! This method can be blocking for a long time
+     * @param asynchronous If set to true the processing will can take place in a different thread and the 
+     *                     function will not block until the shape is finised. 
+     *                     In case of printing Flake will call this method from a non-main thread and only 
+     *                     start printing it when the in case of printing method returned.
+     *                     If set to false the processing needs to be done synchronously and will 
+     *                     block until the result is finished.
      */
-    virtual void waitUntilReady(const KoViewConverter &converter) const;
+    virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const;
 
     /**
      * Schedule the shape for thread-safe deletion.

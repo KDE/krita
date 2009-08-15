@@ -359,17 +359,26 @@ void TextShape::markLayoutDone()
     }
 }
 
-void TextShape::waitUntilReady(const KoViewConverter &) const
+void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
 {
-    synchronized(m_mutex) {
-        if (m_textShapeData->isDirty()) {
-            m_textShapeData->fireResizeEvent(); // triggers a relayout
-            if (QThread::currentThread() != QApplication::instance()->thread()) {
-                // only wait if this is called in the non-main thread.
-                // this avoids locks due to the layout code expecting the GUI thread to be free while layouting.
-                m_waiter.wait(&m_mutex);
+    if (asynchronous) {
+        synchronized(m_mutex) {
+            if (m_textShapeData->isDirty()) {
+                m_textShapeData->fireResizeEvent(); // triggers a relayout
+                if (QThread::currentThread() != QApplication::instance()->thread()) {
+                    // only wait if this is called in the non-main thread.
+                    // this avoids locks due to the layout code expecting the GUI thread to be free while layouting.
+                    m_waiter.wait(&m_mutex);
+                }
+            }
+        }
+    }
+    else {
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        if ( lay ) {
+            while (m_textShapeData->isDirty()){
+                lay->layout();
             }
         }
     }
 }
-

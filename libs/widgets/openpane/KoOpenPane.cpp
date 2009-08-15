@@ -29,6 +29,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QStyledItemDelegate>
+#include <QLinearGradient>
 
 #include <klocale.h>
 #include <kcomponentdata.h>
@@ -95,11 +96,13 @@ public:
 
         if(option.state == QStyle::State_None)
         {
-            QRect rect = option.rect;
-            int ypos = rect.y() + ((rect.height() - 2) / 2);
-            QPen pen(option.palette.windowText(), 2);
-            painter->setPen(pen);
-            painter->drawLine(rect.x(), ypos, rect.width(), ypos);
+            int ypos = option.rect.y() + ((option.rect.height() - 2) / 2);
+            QRect lineRect(option.rect.left(), ypos, option.rect.width(), 2);
+            QLinearGradient gradient(option.rect.topLeft(), option.rect.bottomRight());
+            gradient.setColorAt(option.direction == Qt::LeftToRight ? 0 : 1, option.palette.color(QPalette::Text));
+            gradient.setColorAt(option.direction == Qt::LeftToRight ? 1 : 0, Qt::transparent);
+
+            painter->fillRect(lineRect, gradient);
         }
     }
 };

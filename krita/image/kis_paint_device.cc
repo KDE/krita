@@ -172,6 +172,11 @@ void KisPaintDevice::setDirty()
         m_d->parent->setDirty();
 }
 
+void KisPaintDevice::setParentNode(KisNodeWSP parent)
+{
+    m_d->parent = parent;
+}
+
 void KisPaintDevice::move(qint32 x, qint32 y)
 {
     QRect dirtyRegion = extent();

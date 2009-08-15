@@ -102,6 +102,11 @@ public:
 public:
 
     /**
+     * set the parent node of the paint device
+     */
+    void setParentNode(KisNodeWSP parent);
+
+    /**
      * Moves the device to these new coordinates (so no incremental move or so)
      */
     virtual void move(qint32 x, qint32 y);

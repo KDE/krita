@@ -90,6 +90,7 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
     , m_d(new Private)
 {
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
+    m_d->paintDevice->setParentNode(this);
 }
 
 KisPaintLayer::~KisPaintLayer()

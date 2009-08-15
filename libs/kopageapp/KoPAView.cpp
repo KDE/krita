@@ -191,7 +191,7 @@ void KoPAView::initGUI()
     d->zoomAction = d->zoomController->zoomAction();
 
     // set up status bar message
-    d->status = new QLabel( QString(), statusBar() );
+    d->status = new QLabel( QString() );
     d->status->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
     d->status->setMinimumWidth( 300 );
     addStatusBarItem( d->status, 1 );
@@ -214,26 +214,26 @@ void KoPAView::initGUI()
 
     new KoRulerController(d->horizontalRuler, d->canvas->resourceProvider());
 
-    connect(d->doc,              SIGNAL(unitChanged(KoUnit)),
+    connect(d->doc, SIGNAL(unitChanged(KoUnit)),
             d->horizontalRuler, SLOT(setUnit(KoUnit)));
-    connect(d->doc,              SIGNAL(unitChanged(KoUnit)),
-            d->verticalRuler,   SLOT(setUnit(KoUnit)));
+    connect(d->doc, SIGNAL(unitChanged(KoUnit)),
+            d->verticalRuler, SLOT(setUnit(KoUnit)));
 
     gridLayout->addWidget(d->horizontalRuler, 0, 1);
     gridLayout->addWidget(d->verticalRuler, 1, 0);
     gridLayout->addWidget( d->canvasController, 1, 1 );
 
     connect(d->canvasController, SIGNAL(canvasOffsetXChanged(int)),
-            d->horizontalRuler,  SLOT(setOffset(int)));
+            this, SLOT(pageOffsetChanged()));
     connect(d->canvasController, SIGNAL(canvasOffsetYChanged(int)),
-            d->verticalRuler,    SLOT(setOffset(int)));
+            this, SLOT(pageOffsetChanged()));
     connect(d->canvasController, SIGNAL(sizeChanged(const QSize&)),
-            this,                SLOT(canvasControllerResized()));
+            this, SLOT(canvasControllerResized()));
     connect(d->canvasController, SIGNAL(canvasMousePositionChanged(const QPoint&)),
-            this,                SLOT(updateMousePosition(const QPoint&)));
-    connect(d->verticalRuler,    SIGNAL(guideLineCreated(Qt::Orientation, int)),
+            this, SLOT(updateMousePosition(const QPoint&)));
+    connect(d->verticalRuler, SIGNAL(guideLineCreated(Qt::Orientation, int)),
             d->canvasController, SLOT(addGuideLine(Qt::Orientation, int)));
-    connect(d->horizontalRuler,  SIGNAL(guideLineCreated(Qt::Orientation, int)),
+    connect(d->horizontalRuler, SIGNAL(guideLineCreated(Qt::Orientation, int)),
             d->canvasController, SLOT(addGuideLine(Qt::Orientation, int)));
 
     KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools") );
@@ -674,6 +674,8 @@ void KoPAView::doUpdateActivePage( KoPAPageBase * page )
     if ( pageChanged ) {
         emit activePageChanged();
     }
+
+    pageOffsetChanged();
     d->canvasController->setScrollBarValue(scrollValue);
 }
 
@@ -732,6 +734,13 @@ void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
 KoPrintJob * KoPAView::createPrintJob()
 {
     return new KoPAPrintJob(this);
+}
+
+void KoPAView::pageOffsetChanged()
+{
+    QPoint documentOrigin(d->canvas->documentOrigin());
+    d->horizontalRuler->setOffset(d->canvasController->canvasOffsetX() + documentOrigin.x());
+    d->verticalRuler->setOffset(d->canvasController->canvasOffsetY() + documentOrigin.y());
 }
 
 void KoPAView::canvasControllerResized()

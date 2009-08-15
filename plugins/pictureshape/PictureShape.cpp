@@ -129,20 +129,30 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
     painter.drawPixmap(pixels, pixmap, QRect(0, 0, pixmap.width(), pixmap.height()));
 }
 
-void PictureShape::waitUntilReady(const KoViewConverter &converter) const
+void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
-    // get pixmap and schedule it if not
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());
     if (imageData == 0)
         return;
 
+    if (asynchronous) {
+        // get pixmap and schedule it if not
+        QSize pixels = converter.documentToView(QRectF(QPointF(0,0), size())).size().toSize();
+        QImage image = imageData->image();
+        if (image.isNull())
+            return;
+        if (image.size().width() < pixels.width()) // don't scale up.
+            pixels = image.size();
+        m_printQualityImage = image.scaled(pixels, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    }
+    else {
     QSize pixels = converter.documentToView(QRectF(QPointF(0,0), size())).size().toSize();
-    QImage image = imageData->image();
-    if (image.isNull())
-        return;
-    if (image.size().width() < pixels.width()) // don't scale up.
-        pixels = image.size();
-    m_printQualityImage = image.scaled(pixels, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        QString key(generate_key(imageData->key(), pixels));
+        if (QPixmapCache::find(key) == 0) {
+            QPixmap pixmap = imageData->pixmap(pixels);
+            QPixmapCache::insert(key, pixmap);
+        }
+    }
 }
 
 void PictureShape::saveOdf(KoShapeSavingContext &context) const

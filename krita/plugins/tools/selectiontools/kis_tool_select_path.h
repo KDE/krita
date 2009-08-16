@@ -39,13 +39,16 @@ public:
     virtual ~KisToolSelectPath();
 
     virtual QWidget * createOptionWidget();
-    virtual QWidget* optionWidget();
 
     void addPathShape();
 public slots:
     virtual void slotSetAction(int);
     virtual void slotSetSelectionMode(int);
     virtual void activate(bool);
+
+protected:
+    /// reimplemented
+    virtual QMap<QString, QWidget *> createOptionWidgets();
 
 private:
     KisSelectionOptions * m_optWidget;

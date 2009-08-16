@@ -105,9 +105,11 @@ QWidget* KisToolSelectPath::createOptionWidget()
     return m_optWidget;
 }
 
-QWidget* KisToolSelectPath::optionWidget()
+QMap<QString, QWidget *> KisToolSelectPath::createOptionWidgets()
 {
-    return m_optWidget;
+    QMap<QString, QWidget *> map = KoCreatePathTool::createOptionWidgets();
+    map.insert(i18n("Tool Options"), createOptionWidget());
+    return map;
 }
 
 void KisToolSelectPath::addPathShape()

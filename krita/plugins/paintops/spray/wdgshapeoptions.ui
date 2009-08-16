@@ -168,7 +168,7 @@
    <property name="geometry">
     <rect>
      <x>190</x>
-     <y>130</y>
+     <y>150</y>
      <width>175</width>
      <height>60</height>
     </rect>
@@ -210,73 +210,84 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QCheckBox" name="gaussBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>130</y>
-     <width>158</width>
-     <height>58</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="MetaballLbl">
-      <property name="text">
-       <string>Min treshold</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QDoubleSpinBox" name="minTreshSpin">
-      <property name="decimals">
-       <number>1</number>
-      </property>
-      <property name="minimum">
-       <double>-100.000000000000000</double>
-      </property>
-      <property name="value">
-       <double>-1.000000000000000</double>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="MetaballLbl2">
-      <property name="text">
-       <string>Max treshold</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QDoubleSpinBox" name="maxTreshSpin">
-      <property name="decimals">
-       <number>1</number>
-      </property>
-      <property name="minimum">
-       <double>-100.000000000000000</double>
-      </property>
-      <property name="maximum">
-       <double>1000.000000000000000</double>
-      </property>
-      <property name="value">
-       <double>6.000000000000000</double>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QCheckBox" name="renderBox">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>200</y>
-     <width>181</width>
+     <x>30</x>
+     <y>110</y>
+     <width>141</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>High quality rendering</string>
+    <string>gauss distribution</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>150</y>
+     <width>164</width>
+     <height>87</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_5">
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="MetaballLbl">
+        <property name="text">
+         <string>Min treshold</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="minTreshSpin">
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="minimum">
+         <double>-100.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>-1.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="MetaballLbl2">
+        <property name="text">
+         <string>Max treshold</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="maxTreshSpin">
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="minimum">
+         <double>-100.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>6.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="renderBox">
+      <property name="text">
+       <string>High quality rendering</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

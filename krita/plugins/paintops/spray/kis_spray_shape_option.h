@@ -41,6 +41,8 @@ public:
 
     bool highRendering() const;
     bool proportional() const;
+    bool gaussian() const;
+    
     qreal widthPerc() const;
     qreal heightPerc() const;
 

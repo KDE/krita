@@ -42,6 +42,8 @@
 #define drand48 rand
 #endif
 
+#include "random_gauss.h"
+
 SprayBrush::SprayBrush()
 {
     m_radius = 0;
@@ -49,8 +51,13 @@ SprayBrush::SprayBrush()
     m_randomOpacity = false;
 
     srand48( time(0) );
+    rand = new RandomGauss( time(0) );
 }
 
+SprayBrush::~SprayBrush()
+{
+    delete rand;
+}
 
 
 void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, const KoColor &color)
@@ -112,8 +119,13 @@ if (m_settings->useRandomHSV()){
     for (int i = 0; i < m_particlesCount; i++){
         // generate random angle
         angle = drand48() * M_PI * 2;
-        // different X and Y length??
-        lengthY = lengthX = drand48();
+
+        if (m_settings->gaussian()){
+            lengthY = lengthX = qBound(-1.0, rand->nextGaussian(0.0, 0.50) , 1.0 );
+        }else{
+            lengthY = lengthX = drand48();
+        }
+        
         // I hope we live the era where sin and cos is not slow for spray
         nx = (sin(angle) * m_radius * lengthX);
         ny = (cos(angle) * m_radius * lengthY);
@@ -195,9 +207,6 @@ if (m_settings->useRandomHSV()){
     
 }
 
-SprayBrush::~SprayBrush()
-{
-}
 
 
 void SprayBrush::paintParticle(KisRandomAccessor &writeAccessor,const KoColor &color,qreal rx, qreal ry){

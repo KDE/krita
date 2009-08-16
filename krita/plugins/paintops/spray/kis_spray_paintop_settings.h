@@ -34,7 +34,8 @@ class KisSprayPaintOpSettings : public KisPaintOpSettings
 {
 
 public:
-
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode ) const;
+    virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
     KisSprayPaintOpSettings(KisSprayPaintOpSettingsWidget* widget);
     virtual ~KisSprayPaintOpSettings() {}
@@ -64,9 +65,12 @@ public:
     int width() const;
     int height() const;
     bool jitterShapeSize() const;
+
+    
     // metaballs
     qreal maxTresh() const;
     qreal minTresh() const;
+
     // color options
     bool useRandomOpacity() const;
     bool useRandomHSV() const;
@@ -90,6 +94,8 @@ public:
     bool useDensity() const;
     int particleCount() const;
  
+    bool gaussian() const;
+    
 private:
 
     KisSprayPaintOpSettingsWidget* m_options;

@@ -217,5 +217,25 @@ bool KisSprayPaintOpSettings::useRandomHSV() const
     return m_options->m_sprayColorOption->useRandomHSV();
 }
 
+QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode) const
+{
+    if(_mode != CURSOR_IS_OUTLINE) return QRectF();
+    qreal size = diameter();
+    size += 10;
+    return image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos);
+}
+
+void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
+{
+    if(_mode != CURSOR_IS_OUTLINE) return;
+    qreal size = diameter();
+    painter.setPen(Qt::black);
+    painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos) ) );
+}
 
 
+
+bool KisSprayPaintOpSettings::gaussian() const
+{
+    return m_options->m_sprayShapeOption->gaussian();
+}

@@ -30,6 +30,8 @@
 
 #include "kis_spray_paintop_settings.h"
 
+#include "random_gauss.h"
+
 class QRect;
 
 class SprayBrush
@@ -192,6 +194,8 @@ private:
 
     QRect m_computeArea;
 
+    RandomGauss * rand;
+    
 private:
     const KisSprayPaintOpSettings* m_settings;
     

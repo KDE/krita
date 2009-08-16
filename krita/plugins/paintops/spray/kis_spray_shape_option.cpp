@@ -117,3 +117,8 @@ bool KisSprayShapeOption::highRendering() const
     return m_options->renderBox->isChecked();
 }
 
+
+bool KisSprayShapeOption::gaussian() const
+{
+    return m_options->gaussBox->isChecked();
+}

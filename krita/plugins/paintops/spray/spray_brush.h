@@ -194,7 +194,7 @@ private:
 
     QRect m_computeArea;
 
-    RandomGauss * rand;
+    RandomGauss * m_rand;
     
 private:
     const KisSprayPaintOpSettings* m_settings;

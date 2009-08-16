@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>426</width>
-    <height>260</height>
+    <width>425</width>
+    <height>264</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,9 +26,9 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>10</y>
+     <y>0</y>
      <width>331</width>
-     <height>247</height>
+     <height>253</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -38,16 +38,6 @@
        <widget class="QLabel" name="diameterLabel">
         <property name="text">
          <string>diameter</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="diameterSpinBox">
-        <property name="maximum">
-         <number>999</number>
-        </property>
-        <property name="value">
-         <number>100</number>
         </property>
        </widget>
       </item>
@@ -62,6 +52,22 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksAbove</enum>
+        </property>
+        <property name="tickInterval">
+         <number>30</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="diameterSpinBox">
+        <property name="maximum">
+         <number>999</number>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
        </widget>
       </item>
      </layout>
@@ -70,6 +76,9 @@
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="coverageSpin">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="decimals">
          <number>1</number>
         </property>
@@ -109,6 +118,9 @@
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="coverageLabel">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>density</string>
         </property>
@@ -175,12 +187,18 @@
          </widget>
         </item>
         <item>
-         <widget class="KDoubleNumInput" name="spacingKDNumInp">
-          <property name="value">
-           <double>0.250000000000000</double>
+         <widget class="QDoubleSpinBox" name="spacingSpin">
+          <property name="decimals">
+           <number>2</number>
           </property>
           <property name="maximum">
            <double>5.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.250000000000000</double>
           </property>
          </widget>
         </item>
@@ -218,13 +236,6 @@
    </layout>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KDoubleNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -272,6 +283,70 @@
     <hint type="destinationlabel">
      <x>134</x>
      <y>33</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>densityChBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>coverageSpin</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>96</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>242</x>
+     <y>61</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>densityChBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>particlesSpinBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>163</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>255</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>densityChBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>particlesLbl</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>146</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>78</x>
+     <y>94</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>densityChBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>coverageLabel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>53</x>
+     <y>112</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>56</x>
+     <y>56</y>
     </hint>
    </hints>
   </connection>

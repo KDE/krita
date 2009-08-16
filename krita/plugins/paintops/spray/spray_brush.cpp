@@ -51,12 +51,12 @@ SprayBrush::SprayBrush()
     m_randomOpacity = false;
 
     srand48( time(0) );
-    rand = new RandomGauss( time(0) );
+    m_rand = new RandomGauss( time(0) );
 }
 
 SprayBrush::~SprayBrush()
 {
-    delete rand;
+    delete m_rand;
 }
 
 
@@ -121,7 +121,7 @@ if (m_settings->useRandomHSV()){
         angle = drand48() * M_PI * 2;
 
         if (m_settings->gaussian()){
-            lengthY = lengthX = qBound(-1.0, rand->nextGaussian(0.0, 0.50) , 1.0 );
+            lengthY = lengthX = qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0 );
         }else{
             lengthY = lengthX = drand48();
         }
@@ -141,8 +141,6 @@ if (m_settings->useRandomHSV()){
             int steps = 36;
             qreal random = drand48();       
 
-            drawer.setFillColor(m_inkColor);
-            drawer.setBackgroundColor(m_inkColor);
             drawer.setPaintColor(m_inkColor);
             // it is ellipse
             if (m_shape == 0){

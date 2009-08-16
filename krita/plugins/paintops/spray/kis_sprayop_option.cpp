@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ qreal KisSprayOpOption::amount() const
 
 qreal KisSprayOpOption::spacing() const
 {
-    return m_options->spacingKDNumInp->value();
+    return m_options->spacingSpin->value();
 }
 
 qreal KisSprayOpOption::scale() const
@@ -108,7 +108,7 @@ void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_options->diameterSpinBox->setValue( setting->getInt("Spray/diameter") );
     m_options->coverageSpin->setValue( setting->getDouble("Spray/coverage") );
     m_options->amountSpin->setValue( setting->getDouble("Spray/amount") );
-    m_options->spacingKDNumInp->setValue( setting->getDouble("Spray/spacing") );
+    m_options->spacingSpin->setValue( setting->getDouble("Spray/spacing") );
     m_options->jitterSizeBox->setChecked( setting->getBool("Spray/jitterSize") );
     m_options->jitterMoveBox->setChecked( setting->getBool("Spray/jitterMovement") );
 }

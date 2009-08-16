@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,13 +41,10 @@ public:
     bool jitterSize() const;
     bool useDensity() const;
 
-
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-
 private:
-
    KisSprayOpOptionsWidget * m_options;
 
 };

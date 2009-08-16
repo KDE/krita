@@ -24,7 +24,7 @@
 
 class KoPADocument;
 class KoPAPageThumbnailModel;
-class KoPageLayout;
+struct KoPageLayout;
 
 class KoPAPageLayoutDialog : public KoPageLayoutDialog
 {

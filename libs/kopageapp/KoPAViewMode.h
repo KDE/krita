@@ -24,7 +24,7 @@
 
 #include <QObject>
 
-class KoPageLayout;
+struct KoPageLayout;
 class KoPAView;
 class KoPACanvas;
 class KoPAPageBase;

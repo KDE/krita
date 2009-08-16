@@ -34,6 +34,7 @@ class KoVariableRegistry::Singleton
 public:
     Singleton()
             : initDone(false) {}
+    ~Singleton() {}
 
     KoVariableRegistry q;
     bool initDone;

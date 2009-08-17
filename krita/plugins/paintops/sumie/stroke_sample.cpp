@@ -51,7 +51,7 @@ float StrokeSample::y()
 
 float StrokeSample::pressure()
 {
-    return pressure();
+    return m_pressure;
 }
 
 float StrokeSample::tiltX()

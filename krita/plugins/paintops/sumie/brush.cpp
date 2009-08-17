@@ -570,16 +570,6 @@ void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &colo
 //     }
 }
 
-void Brush::addStrokeSample(StrokeSample sample)
-{
-    Q_UNUSED(sample);
-}
-void Brush::addStrokeSample(float x, float y, float pressure, float tiltX, float tiltY, float rotation)
-{
-    StrokeSample sample(x, y, pressure, tiltX, tiltY, rotation);
-    m_stroke.append(sample);
-}
-
 void Brush::setRadius(int radius)
 {
     m_radius = radius;

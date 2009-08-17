@@ -27,7 +27,6 @@
 
 #include "bristle.h"
 #include "brush_shape.h"
-#include "stroke_sample.h"
 
 #include <kis_paint_device.h>
 #include <kis_paint_information.h>
@@ -44,8 +43,6 @@ public:
     void paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
     void setInkDepletion(const QList<float>& curveData);
     void setInkColor(const KoColor &color);
-    void addStrokeSample(StrokeSample sample);
-    void addStrokeSample(float x, float y, float pressure, float tiltX, float tiltY, float rotation);
 
     void repositionBristles(double angle, double slope);
     void rotateBristles(double angle);
@@ -102,7 +99,6 @@ public:
 
 private:
     QVector<Bristle> m_bristles;
-    QVector<StrokeSample> m_stroke;
     QList<float> m_inkDepletion; // array
     QTransform m_transform;
 

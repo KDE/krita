@@ -194,14 +194,14 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     if (dev->write(name, len) == -1)
         return false;
 
-    if (dev->putChar('\n') == -1)
+    if (!dev->putChar('\n'))
         return false;
 
     // Write the parasite (also writes number of brushes)
     if (!m_d->parasite.saveToDevice(dev))
         return false;
 
-    if (dev->putChar('\n') == -1)
+    if (!dev->putChar('\n'))
         return false;
 
     // <gbr brushes>

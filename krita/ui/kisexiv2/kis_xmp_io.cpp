@@ -233,7 +233,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 }
                 if( valTxt == "type=\"Struct\"" )
                 {
-                    if( !typeInfo or typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType )
+                    if( !typeInfo || typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType )
                     {
                         ignoreValue = true;
                     }

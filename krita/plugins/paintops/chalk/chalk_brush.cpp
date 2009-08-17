@@ -29,9 +29,9 @@
 #include "kis_random_accessor.h"
 #include <cmath>
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
-#define drand48 rand
+inline double drand48() { return double(rand()) / RAND_MAX; }
 #endif
 
 ChalkBrush::ChalkBrush(const BrushShape &initialShape, KoColor inkColor)

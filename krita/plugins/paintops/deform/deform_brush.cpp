@@ -37,9 +37,9 @@
 const qreal radToDeg = 57.29578;
 const qreal degToRad = M_PI/180.0;
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
-#define drand48 rand
+inline double drand48() { return double(rand()) / RAND_MAX; }
 #endif
 
 DeformBrush::DeformBrush()

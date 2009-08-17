@@ -28,11 +28,6 @@
 
 #include <QVector>
 
-#ifdef _WIN32
-#define srand48 srand
-#define drand48 rand
-#endif
-
 
 DynaBrush::DynaBrush()
 {

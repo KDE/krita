@@ -21,6 +21,10 @@
 
 #include <cstdlib>
 
+#if defined(_WIN32) || defined(_WIN64)
+#define srand48 srand
+#endif
+
 class RandomGauss{
 
 public:

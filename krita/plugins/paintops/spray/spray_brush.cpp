@@ -36,12 +36,6 @@
 
 #include <cmath>
 
-// this is wrong drand48 gives 0.0 - 1.0, rand on WIN32 gives MAX_RAND 
-#ifdef _WIN32
-#define srand48 srand
-#define drand48 rand
-#endif
-
 #include "random_gauss.h"
 
 SprayBrush::SprayBrush()

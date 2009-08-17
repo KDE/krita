@@ -36,9 +36,10 @@
 
 const qreal radToDeg = 57.29578;
 const int _POINTS = 4;
-#ifdef _WIN32
+
+#if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
-#define drand48 rand
+inline double drand48() { return double(rand()) / RAND_MAX; }
 #endif
 
 CurveBrush::CurveBrush() : m_head( 0 ), m_counter ( 1 ),m_incr ( 1 )

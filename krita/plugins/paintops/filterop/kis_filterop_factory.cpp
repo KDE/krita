@@ -30,6 +30,8 @@
 #include "kis_filterop_settings.h"
 #include "kis_filterop.h"
 
+#include <KoInputDevice.h>
+
 KisFilterOpFactory::KisFilterOpFactory()
     : m_widget( new KisFilterOpSettingsWidget )
 {

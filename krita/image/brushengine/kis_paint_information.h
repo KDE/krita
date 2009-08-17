@@ -63,7 +63,7 @@ public:
 			double pressure = PRESSURE_DEFAULT,
                         double xTilt = 0.0,
 			double yTilt = 0.0,
-                        KisVector2D movement = nullKisVector2D(),
+                        const KisVector2D& movement = nullKisVector2D(),
                         double rotation = 0.0,
                         double tangentialPressure = 0.0
                        );

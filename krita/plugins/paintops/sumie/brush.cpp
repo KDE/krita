@@ -35,7 +35,7 @@
 #include <cmath>
 #include <ctime>
 
-const float radToDeg = 57.29578;
+const float radToDeg = 57.29578f;
 
 #ifdef _WIN32
 #define srand48 srand

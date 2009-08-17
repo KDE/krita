@@ -31,12 +31,6 @@
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
-#include <config-opengl.h>
-
-#ifdef HAVE_OPENGL
-#include <GL/gl.h>
-#endif
-
 KisModel::KisModel(const QString& model, const QString& material)
 {
     KGlobal::mainComponent().dirs()->addResourceType("kis_brushmodels", "data", "krita/brushmodels/");
@@ -148,7 +142,8 @@ GLuint KisModel::displayList()
 
 
     glEnd();
-    glScalef( 1.0/MODEL_SCALE,1.0/MODEL_SCALE,1.0/MODEL_SCALE);
+    const GLfloat _1_MODEL_SCALE = GLfloat(1.0/MODEL_SCALE);
+    glScalef(_1_MODEL_SCALE, _1_MODEL_SCALE, _1_MODEL_SCALE);
     glEndList();    
 /*        glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);

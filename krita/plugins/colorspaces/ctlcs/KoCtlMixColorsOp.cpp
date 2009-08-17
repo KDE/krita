@@ -75,7 +75,7 @@ void KoCtlMixColorsOp::mixColors(const quint8 * const* colors, const qint16 *wei
         m_accumulators[i]->affect(dst, inv);
       }
     }
-    m_colorSpace->setAlpha(dst, 1, totalAlpha);
+    m_colorSpace->setAlpha(dst, totalAlpha, 1);
   } else {
     memset(dst, 0, m_colorSpace->pixelSize());
   }

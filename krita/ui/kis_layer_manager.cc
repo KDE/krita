@@ -343,15 +343,6 @@ void KisLayerManager::layerToggleVisible()
     if (!layer) return;
 
     layer->setVisible(!layer->visible());
-    if (!layer->visible()) {
-        if (layer->nextSibling()) {
-            m_view->nodeManager()->activateNode(layer->nextSibling());
-        }
-        else if ( layer->parentLayer() ) {
-            m_view->nodeManager()->activateNode(layer->parent());
-        }
-
-    }
     layer->setDirty();
 }
 

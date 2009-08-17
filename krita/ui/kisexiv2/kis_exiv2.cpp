@@ -140,7 +140,7 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
     }
     case KisMetaData::Value::Rational:
         Q_ASSERT(type == Exiv2::signedRational || type == Exiv2::unsignedRational);
-        if( type == type == Exiv2::signedRational )
+        if( type == Exiv2::signedRational )
         {
             return new Exiv2::ValueType<Exiv2::Rational>(Exiv2::Rational(value.asRational().numerator, value.asRational().denominator));
         } else {

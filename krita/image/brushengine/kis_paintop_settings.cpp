@@ -26,6 +26,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoViewConverter.h>
 
 #include "kis_node.h"
 #include "kis_paint_layer.h"
@@ -37,10 +38,6 @@
 #include "kis_paintop_settings_widget.h"
 
 #include <config-opengl.h>
-
-#ifdef HAVE_OPENGL
-#include <GL/gl.h>
-#endif
 
 struct KisPaintOpSettings::Private {
     KisNodeSP node;

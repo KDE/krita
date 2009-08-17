@@ -31,6 +31,10 @@
 #include "kis_paint_device.h"
 #include <new>
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4290) // disable "C++ exception specification ignored" warning
+#endif
+
 class KRITAIMAGE_EXPORT KisMathToolbox : public QObject
 {
 
@@ -41,7 +45,7 @@ public:
     struct KisFloatRepresentation {
 
         KisFloatRepresentation(uint nsize, uint ndepth)
-        throw(std::bad_alloc)
+        throw(std::bad_alloc)   
                 : coeffs(new float[nsize*nsize*ndepth])
                 , size(nsize)
                 , depth(ndepth) {

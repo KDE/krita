@@ -341,7 +341,7 @@ QList<KoCtlAccumulator*> KoCtlColorSpaceInfo::accumulators() const
   QList<KoCtlAccumulator*> accs;
   foreach( const KoCtlColorSpaceInfo::ChannelInfo* info, d->channels)
   {
-    switch(info->channelType())
+    switch(info->valueType())
     {
       case KoChannelInfo::UINT8:
         accs.push_back(new KoCtlAccumulatorImpl<quint8>(info->position()));

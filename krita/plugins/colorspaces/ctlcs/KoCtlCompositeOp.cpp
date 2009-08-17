@@ -31,6 +31,7 @@
 #include "KoCtlBuffer.h"
 #include "KoCtlMutex.h"
 
+#include <GTLCore/Value.h>
 #include <OpenCTL/Program.h>
 #include <OpenCTL/Module.h>
 
@@ -85,9 +86,11 @@ void KoCTLCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
     {
       KoCtlBuffer mask( reinterpret_cast<char*>(const_cast<quint8*>(maskRowStart)), numColumns * sizeof(quint8));
       ops.push_back(&mask);
+      m_withMaskProgram->setVarying("opacity", GTLCore::Value(opacity));
       m_withMaskProgram->apply(ops, dst);
       maskRowStart += maskRowStride;
     } else {
+      m_withoutMaskProgram->setVarying("opacity", GTLCore::Value(opacity));
       m_withoutMaskProgram->apply(ops, dst);
     }
     srcRowStart += srcRowStride;

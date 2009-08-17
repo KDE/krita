@@ -11,7 +11,7 @@
     {
       blend = (blend * opacity) / 255;
     }
-    @alphachannel( @type newalpha = (( @unit - @in(0)) * blend) / @unit;
+    @alphachannel( @type newalpha = @in(0) + (( @unit - @in(0)) * blend) / @unit;
     @out = newalpha;
     if(newalpha > 0 )
     {
@@ -30,7 +30,7 @@
     {
       blend = (blend * opacity) / 255;
     }
-    @alphachannel( @type newalpha = (( @unit - @in(0)) * blend) / @unit;
+    @alphachannel( @type newalpha = @in(0) + (( @unit - @in(0)) * blend) / @unit;
     @out = newalpha;
     if(newalpha > 0 )
     {

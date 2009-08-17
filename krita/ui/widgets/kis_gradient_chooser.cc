@@ -50,8 +50,9 @@ KisCustomGradientDialog::KisCustomGradientDialog(KisView2 * view, QWidget * pare
 }
 
 KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const char *name)
-    : QFrame(parent, name)
+    : QFrame(parent)
 {
+    setObjectName(name);
     m_lbName = new QLabel();
 
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();

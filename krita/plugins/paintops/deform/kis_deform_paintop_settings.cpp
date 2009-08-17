@@ -31,10 +31,7 @@
 
 #include <KoColor.h>
 
-#include <config-opengl.h>
-
 #ifdef HAVE_OPENGL
-#include <GL/gl.h>
 #include <kis_model.h>
 #endif
 

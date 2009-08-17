@@ -32,10 +32,7 @@
 #include "kis_chalk_paintop_settings_widget.h"
 #include "kis_chalkop_option.h"
 
-#include <config-opengl.h>
-
 #ifdef HAVE_OPENGL
-#include <GL/gl.h>
 #include <kis_model.h>
 #endif
 

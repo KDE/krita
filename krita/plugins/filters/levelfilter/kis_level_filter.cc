@@ -197,7 +197,7 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
         for (int i = 0; i < wWidth; i++) {
             int binNo = (int)round((double)i / wWidth * (bins - 1)) ;
             if ((int)histogram->getValue(binNo) != 0)
-              p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - log(histogram->getValue(binNo)) * factor);
+              p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - log((double)histogram->getValue(binNo)) * factor);
         }
     }
 

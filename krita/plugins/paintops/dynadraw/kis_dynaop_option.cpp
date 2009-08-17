@@ -92,7 +92,7 @@ int KisDynaOpOption::action() const
         return 2;
     if ( m_options->linesRBox->isChecked() )
         return 3;
-
+    return 0;
 }
 
 int KisDynaOpOption::circleRadius() const

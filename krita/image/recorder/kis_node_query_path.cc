@@ -127,6 +127,7 @@ KisNodeQueryPath::KisNodeQueryPath(const KisNodeQueryPath& nqp) : d(new Private(
 KisNodeQueryPath& KisNodeQueryPath::operator=(const KisNodeQueryPath& nqp)
 {
     *d = *nqp.d;
+    return *this;
 }
 
 bool KisNodeQueryPath::isRelative() const

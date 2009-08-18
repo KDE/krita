@@ -18,6 +18,7 @@
 #ifndef KIS_NODE_GRAPH_LISTENER_H_
 #define KIS_NODE_GRAPH_LISTENER_H_
 
+#include "krita_export.h"
 class KisNode;
 
 /**

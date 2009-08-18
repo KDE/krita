@@ -32,7 +32,6 @@
 #include "kis_shared.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
-#include <krita_export.h>
 
 class KoColorSpace;
 class KoCompositeOp;

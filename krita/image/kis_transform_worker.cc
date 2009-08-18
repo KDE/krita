@@ -559,6 +559,7 @@ bool KisTransformWorker::run()
     if (m_progressUpdater) m_progressUpdater->setProgress(100);
 
     if (m_progressUpdater) return m_progressUpdater->interrupted();
+    return true;
 }
 
 QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* selection)

@@ -41,6 +41,8 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
+#include <KoCanvasController.h>
+#include <KoViewConverter.h>
 
 // Krita/image
 #include <recorder/kis_action_recorder.h>
@@ -62,7 +64,6 @@
 #include "kis_cursor.h"
 #include "kis_painting_assistant.h"
 #include <recorder/kis_node_query_path.h>
-#include <KoViewConverter.h>
 #include <kis_view2.h>
 #include <kis_painting_assistants_manager.h>
 
@@ -76,8 +77,6 @@
 
 
 #define ENABLE_RECORDING
-#include <KoCanvasController.h>
-#include <GL/glu.h>
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
         : KisToolPaint(canvas, cursor)

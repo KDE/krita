@@ -26,7 +26,7 @@
 
 #include <tiffio.h>
 
-class KisTIFFOptions;
+struct KisTIFFOptions;
 
 /**
    @author Cyrille Berger <cberger@cberger.net>

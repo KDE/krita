@@ -1336,6 +1336,7 @@ bool KoDocument::openFile()
         notify->setText(i18n("Document <i>%1</i> loaded", url().url()));
         notify->addContext("url", url().url());
         QTimer::singleShot(0, notify, SLOT(sendEvent()));
+        deleteOpenPane();
     }
     d->bLoading = false;
     return ok;
@@ -2233,11 +2234,8 @@ void KoDocument::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
 
 void KoDocument::openExistingFile(const KUrl& url)
 {
-    bool ok = openUrl(url);
+    openUrl(url);
     setModified(false);
-
-    if (ok)
-        deleteOpenPane();
 }
 
 void KoDocument::openTemplate(const KUrl& url)

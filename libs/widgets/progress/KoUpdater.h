@@ -24,8 +24,6 @@
 #include "KoProgressProxy.h"
 #include <QPointer>
 
-#include "kowidgets_export.h"
-
 class KoProgressUpdater;
 class KoUpdaterPrivate;
 

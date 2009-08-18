@@ -30,7 +30,7 @@ class KisNode;
  * be QObjects, nor to have sig-slot connections between every node
  * and every mode.
  */
-class KisNodeGraphListener
+class KRITAIMAGE_EXPORT KisNodeGraphListener
 {
 
 public:

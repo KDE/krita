@@ -39,7 +39,7 @@
 
 #include "ui_wdgtonemappingdialog.h"
 
-struct KisToneMappingOperatorConfigurationWidget;
+class KisToneMappingOperatorConfigurationWidget;
 
 struct KisToneMappingDialog::Private {
     KisLayerSP layer;

@@ -32,10 +32,8 @@ class KisShapeSelectionCanvas;
 /**
  *
  */
-class KRITAUI_EXPORT KisShapeSelection : public QObject, public KoShapeLayer, public KisSelectionComponent
+class KRITAUI_EXPORT KisShapeSelection : public KoShapeLayer, public KisSelectionComponent
 {
-    Q_OBJECT
-
 public:
 
     KisShapeSelection(KisImageSP image, KisSelectionSP selection);

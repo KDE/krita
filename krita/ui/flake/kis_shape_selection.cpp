@@ -252,7 +252,6 @@ bool KisShapeSelection::loadSelection( KoStore* store )
     KoXmlElement layerElement;
     forEachElement( layerElement, context.stylesReader().layerSet() )
     {
-        KoShapeLayer * l = new KoShapeLayer();
         if( !loadOdf( layerElement, shapeContext ) ) {
             kWarning() << "Could not load shape layer!";
             return false;

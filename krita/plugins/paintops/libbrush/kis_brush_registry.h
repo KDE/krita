@@ -27,11 +27,10 @@
 #include <krita_export.h>
 
 #include "kis_brush.h"
+#include "kis_brush_factory.h"
 
 class QString;
 class QDomElement;
-
-class KisBrushFactory;
 
 class BRUSH_EXPORT KisBrushRegistry : public QObject, public KoGenericRegistry<KisBrushFactory*>
 {

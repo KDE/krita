@@ -37,7 +37,7 @@ SelectStrategy::SelectStrategy(Canvas *canvas, KoShape *clickedShape, KoPointerE
     : m_canvas(canvas), m_clickedShape(clickedShape)
 {
     const bool deselectAll = event.button() == Qt::LeftButton
-        || event.button() == Qt::RightButton && clickedShape;
+        || (event.button() == Qt::RightButton && clickedShape);
     if (deselectAll) {
         foreach(KoShape *shape, canvas->shapeManager()->selection()->selectedShapes())
             shape->update();

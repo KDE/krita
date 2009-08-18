@@ -28,7 +28,7 @@ class KisBufferStreamBase {
         virtual uint32 nextValue() =0;
         virtual void restart() =0;
         virtual void moveToLine(uint32 lineNumber) =0;
-		virtual ~KisBufferStreamBase(){}
+        virtual ~KisBufferStreamBase(){}
     protected:
         uint16 m_depth;
 };
@@ -38,7 +38,7 @@ class KisBufferStreamContigBase : public KisBufferStreamBase {
         KisBufferStreamContigBase( uint8* src, uint16 depth, uint32 lineSize );
         virtual void restart();
         virtual void moveToLine(uint32 lineNumber);
-		virtual ~KisBufferStreamContigBase() {}
+        virtual ~KisBufferStreamContigBase() {}
     protected:
         uint8* m_src;
         uint8* m_srcit;
@@ -50,7 +50,7 @@ class KisBufferStreamContigBelow16 : public KisBufferStreamContigBase {
     public:
         KisBufferStreamContigBelow16( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
     public:
-		virtual ~KisBufferStreamContigBelow16() {}
+        virtual ~KisBufferStreamContigBelow16() {}
         virtual uint32 nextValue();
 };
 
@@ -58,7 +58,7 @@ class KisBufferStreamContigBelow32 : public KisBufferStreamContigBase {
     public:
         KisBufferStreamContigBelow32( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
     public:
-		virtual ~KisBufferStreamContigBelow32() {}
+        virtual ~KisBufferStreamContigBelow32() {}
         virtual uint32 nextValue();
 };
 
@@ -66,7 +66,7 @@ class KisBufferStreamContigAbove32 : public KisBufferStreamContigBase {
     public:
         KisBufferStreamContigAbove32( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
     public:
-		virtual ~KisBufferStreamContigAbove32(){}
+        virtual ~KisBufferStreamContigAbove32(){}
         virtual uint32 nextValue();
 };
 

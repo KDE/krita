@@ -453,7 +453,7 @@ if( BUILD_${_appName} AND ${_shouldBuild} MATCHES "[Tt][Rr][Uu][Ee]" )
 endif( BUILD_${_appName} AND ${_shouldBuild} MATCHES "[Tt][Rr][Uu][Ee]" )
 endmacro(macro_display_application_enabled)
 
-message(STATUS "---------------- The following applications will be build ----------------" )
+message(STATUS "---------------- The following applications will be built ----------------" )
 
 macro_display_application_enabled(kword ${SHOULD_BUILD_KWORD})
 macro_display_application_enabled(kspread ${SHOULD_BUILD_KSPREAD})

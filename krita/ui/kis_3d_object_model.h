@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_MODEL_H
-#define KIS_MODEL_H
+#ifndef KIS_3D_OBJECT_MODEL_H
+#define KIS_3D_OBJECT_MODEL_H
 
 #include "kis_vec.h"
 
@@ -46,12 +46,12 @@ struct Material{
     qreal d; // alpha
 };
 
-class PAINTOP_EXPORT KisModel
+class KRITAUI_EXPORT Kis3DObjectModel
 {
 public:
     
-    KisModel(){}
-    KisModel(const QString &model, const QString &material);
+    Kis3DObjectModel(){}
+    Kis3DObjectModel(const QString &model, const QString &material);
     //void parseModel();
     void parseMaterial(const QString &fileName);
     
@@ -74,4 +74,4 @@ private:
     GLuint m_displayList;
 };
 
-#endif // KIS_MODEL_H
+#endif // KIS_3D_OBJECT_MODEL_H

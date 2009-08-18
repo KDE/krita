@@ -32,7 +32,6 @@
 #include <KoColor.h>
 
 #ifdef HAVE_OPENGL
-#include <kis_model.h>
 #endif
 
 
@@ -132,32 +131,3 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image
     painter.setPen(Qt::black);
     painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos) ) );
 }
-
-#if defined(HAVE_OPENGL)
-GLuint KisDeformPaintOpSettings::displayList() const
-{
-    KisModel model("3d-deform-brush.obj","3d-deform-brush.mtl");
-    return model.displayList();   
-/*    GLuint brushModel = glGenLists(1);
-    glNewList(brushModel, GL_COMPILE);
-    glBegin(GL_LINES);
-        glVertex2f(0,0);
-        glVertex2f( 0, radius() );
-
-        glVertex2f(0,0);
-        glVertex2f( 0, -radius() );
-
-        glVertex2f(0,0);
-        glVertex2f( -radius(), 0);
-
-        glVertex2f(0,0);
-        glVertex2f( radius(), 0);
-    glEnd();
-    glEndList();
-    
-    delete model;
-    
-    return brushModel;*/
- 
-}
-#endif

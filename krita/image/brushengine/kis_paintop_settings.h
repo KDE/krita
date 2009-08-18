@@ -145,7 +145,7 @@ public:
     virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
 #if defined(HAVE_OPENGL)
-    virtual GLuint displayList() const;
+    virtual QString modelName() const;
 #endif 
     
 private:

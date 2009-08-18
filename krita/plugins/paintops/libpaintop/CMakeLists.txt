@@ -12,7 +12,6 @@ set(kritalibpaintop_LIB_SRCS
     kis_custom_brush_widget.cpp
     kis_dynamic_sensor.cc
     kis_filter_option.cpp
-    kis_model.cpp
     kis_paint_action_type_option.cpp
     kis_paintop_option.cpp
     kis_paintop_options_widget.cpp

@@ -35,6 +35,8 @@
 
 
 class QWidget;
+class QString;
+
 class KisChalkPaintOpSettingsWidget;
 class QDomElement;
 class QDomDocument;
@@ -62,7 +64,7 @@ public:
     int radius() const;
 
 #if defined(HAVE_OPENGL)
-    GLuint displayList() const;
+    QString modelName() const;
 #endif
 
     

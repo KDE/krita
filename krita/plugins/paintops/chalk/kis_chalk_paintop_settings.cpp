@@ -33,7 +33,7 @@
 #include "kis_chalkop_option.h"
 
 #ifdef HAVE_OPENGL
-#include <kis_model.h>
+//#include <kis_model.h>
 #endif
 
 
@@ -78,9 +78,8 @@ int KisChalkPaintOpSettings::radius() const
 }
 
 #if defined(HAVE_OPENGL)
-GLuint KisChalkPaintOpSettings::displayList() const
+QString KisChalkPaintOpSettings::modelName() const
 {
-    KisModel model("3d-pencil.obj","3d-pencil.mtl");
-    return model.displayList();   
+    return "3d-pencil";
 }
 #endif

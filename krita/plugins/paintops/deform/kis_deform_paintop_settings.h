@@ -69,7 +69,10 @@ public:
     qreal spacing() const;
 
 #if defined(HAVE_OPENGL)
-    GLuint displayList() const;
+    //GLuint displayList() const;
+    inline QString modelName() const{
+        return "3d-deform-brush";
+    }
 #endif
 
 private:

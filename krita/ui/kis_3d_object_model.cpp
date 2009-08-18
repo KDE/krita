@@ -23,7 +23,7 @@
 #include <QStringList>
 #include <QHash>
 
-#include "kis_model.h"
+#include "kis_3d_object_model.h"
 #include "kis_vec.h"
 #include "kis_debug.h"
 
@@ -31,7 +31,7 @@
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
-KisModel::KisModel(const QString& model, const QString& material)
+Kis3DObjectModel::Kis3DObjectModel(const QString& model, const QString& material)
 {
     KGlobal::mainComponent().dirs()->addResourceType("kis_brushmodels", "data", "krita/brushmodels/");
     QString path = KGlobal::mainComponent().dirs()->findResource("kis_brushmodels",model);
@@ -95,7 +95,7 @@ KisModel::KisModel(const QString& model, const QString& material)
 }
 
 #define MODEL_SCALE 30
-GLuint KisModel::displayList()
+GLuint Kis3DObjectModel::displayList()
 {
     if (m_cached){ 
         return m_displayList; 
@@ -164,7 +164,7 @@ GLuint KisModel::displayList()
 }
 
 
-void KisModel::parseMaterial(const QString& fileName){
+void Kis3DObjectModel::parseMaterial(const QString& fileName){
 
     QString path = KGlobal::mainComponent().dirs()->findResource("kis_brushmodels",fileName);
 
@@ -234,7 +234,7 @@ void KisModel::parseMaterial(const QString& fileName){
 }
 
 
-void KisModel::debug(Material m)
+void Kis3DObjectModel::debug(Material m)
 {
     kDebug() << "Ka:" << m.Ka[0] << " " << m.Ka[1] << " " << m.Ka[2];
     kDebug() << "Kd:" << m.Kd[0] << " " << m.Kd[1] << " " << m.Kd[2];

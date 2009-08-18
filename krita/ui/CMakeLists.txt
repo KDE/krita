@@ -151,6 +151,7 @@ if(HAVE_OPENGL AND HAVE_GLEW)
         opengl/kis_opengl_program.cpp
         opengl/kis_opengl_hdr_exposure_program.cpp
         opengl/kis_opengl_gradient_program.cpp
+        kis_3d_object_model.cpp
         )
 endif(HAVE_OPENGL AND HAVE_GLEW)
 

@@ -136,8 +136,8 @@ void KisPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPai
 }
 
 #if defined(HAVE_OPENGL)
-GLuint KisPaintOpSettings::displayList() const
+QString KisPaintOpSettings::modelName() const
 {
-    return 0;
+    return "";
 }
 #endif

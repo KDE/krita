@@ -125,6 +125,9 @@ private:
     
     qreal m_prevxTilt;
     qreal m_prevyTilt;
+
+    GLuint m_displayList;
+    
 #endif
 
     QPointF mousePos;

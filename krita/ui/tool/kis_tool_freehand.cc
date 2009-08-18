@@ -66,6 +66,7 @@
 #include <recorder/kis_node_query_path.h>
 #include <kis_view2.h>
 #include <kis_painting_assistants_manager.h>
+#include "kis_3d_object_model.h"
 
 // OpenGL 
 #include <config-opengl.h>
@@ -502,8 +503,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             sx /= currentImage()->xRes();
             sy /= currentImage()->yRes();
 
-            GLuint list  =  currentPaintOpPreset()->settings()->displayList();
-            if (glIsList( list )){
+            if (glIsList( m_displayList )){
                 kDebug() << "I have list to draw!";
                 QPointF pos = converter.documentToView( mousePos );
         
@@ -544,13 +544,13 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             glEnable(GL_COLOR_MATERIAL);
 
                 glPushMatrix();
-                            glTranslatef( pos.x(), pos.y(), 1 );
+                            glTranslatef( pos.x(), pos.y(), 0.0 );
                             glScalef( sx,sy,1);                          
                             glRotated( 90.0, 1.0, 0.0, 0.0 );
                             glRotated( -(m_xTilt*0.5 + m_prevxTilt*0.5) , 0.0, 0.0, 1.0);
                             glRotated( -(m_yTilt*0.5 + m_prevyTilt*0.5) , 1.0, 0.0, 0.0);
 
-                            glCallList( list );
+                            glCallList( m_displayList );
                         glScalef(1.0 / sx,1.0 / sy ,1);
                 glPopMatrix();
 
@@ -563,66 +563,13 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             
             }else{
                 kDebug() << "_No_ list to draw!";
-// JUST TEST HERE 
-                glEnable(GL_DEPTH_TEST);
-                glClear(GL_DEPTH_BUFFER_BIT);
+                QString fileName = currentPaintOpPreset()->settings()->modelName();
 
-                static int angle = 0;
-
-                QPointF pos1 = converter.documentToView( mousePos );
-                glPushMatrix();
-                    angle++;
-                    glTranslatef( pos1.x(), pos1.y(),0 );
-                    glRotated(angle,0.56,0.31,0.2);
-                    glScalef(100,100,100);
-                
-                    glBegin(GL_QUADS);
-                    glColor3f(0.0,1.0,0.0);
-
-                    //bottom
-                    glVertex3f(0,0,0);
-                    glVertex3f(1,0,0);
-                    glVertex3f(1,1,0);
-                    glVertex3f(0,1,0);
-    
-                    //top
-                    glVertex3f(0,0,1);
-                    glVertex3f(1,0,1);
-                    glVertex3f(1,1,1);
-                    glVertex3f(0,1,1);
-
-                    glColor3f(1.0,0.0,0.0);
-                    //left
-                    glVertex3f(0,0,0);
-                    glVertex3f(0,0,1);
-                    glVertex3f(0,1,1);
-                    glVertex3f(0,1,0);
-
-                    // right
-                    glVertex3f(1,0,0);
-                    glVertex3f(1,0,1);
-                    glVertex3f(1,1,1);
-                    glVertex3f(1,1,0);
-
-                    glColor3f(0.0,0.0,1.0);                    
-                    // front
-                    glVertex3f(0,0,0);
-                    glVertex3f(0,0,1);
-                    glVertex3f(1,0,1);
-                    glVertex3f(1,0,0);
-                
-                    // back
-                    glVertex3f(0,1,0);
-                    glVertex3f(0,1,1);
-                    glVertex3f(1,1,1);
-                    glVertex3f(1,1,0);
-
-                    glEnd();
-
-                glPopMatrix();
-        // END TEST HERE
-
-            }// else
+                // here is the default 3d model filename for brushes
+                if ( fileName.isEmpty() ) fileName = "3d-deform-brush";
+                Kis3DObjectModel model(fileName + ".obj" ,fileName + ".mtl");
+                m_displayList = model.displayList();
+            }
         }
     }
 #endif

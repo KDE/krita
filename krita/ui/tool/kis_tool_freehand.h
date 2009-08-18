@@ -122,6 +122,9 @@ private:
 #if defined(HAVE_OPENGL)
     qreal m_xTilt;
     qreal m_yTilt;
+    
+    qreal m_prevxTilt;
+    qreal m_prevyTilt;
 #endif
 
     QPointF mousePos;

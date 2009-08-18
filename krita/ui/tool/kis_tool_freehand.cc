@@ -99,6 +99,8 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 #if defined(HAVE_OPENGL)
     m_xTilt = 0.0;
     m_yTilt = 0.0;
+    m_prevxTilt = 0.0;
+    m_prevyTilt = 0.0;
 #endif    
 }
 
@@ -545,8 +547,8 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
                             glTranslatef( pos.x(), pos.y(), 1 );
                             glScalef( sx,sy,1);                          
                             glRotated( 90.0, 1.0, 0.0, 0.0 );
-                            glRotated( -m_xTilt , 0.0, 0.0, 1.0);
-                            glRotated( -m_yTilt , 1.0, 0.0, 0.0);
+                            glRotated( -(m_xTilt*0.5 + m_prevxTilt*0.5) , 0.0, 0.0, 1.0);
+                            glRotated( -(m_yTilt*0.5 + m_prevyTilt*0.5) , 1.0, 0.0, 0.0);
 
                             glCallList( list );
                         glScalef(1.0 / sx,1.0 / sy ,1);
@@ -556,6 +558,9 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             glDisable(GL_LINE_SMOOTH);
             glDisable(GL_COLOR_MATERIAL);
 
+            m_prevxTilt = m_xTilt;
+            m_prevyTilt = m_yTilt;
+            
             }else{
                 kDebug() << "_No_ list to draw!";
 // JUST TEST HERE 

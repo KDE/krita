@@ -144,7 +144,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     // Column widths.
     qreal availableWidth = tableWidth; // Width available for columns.
     QList<int> relativeWidthColumns; // List of relative width columns.
-    qreal relativeWidthSum; // Sum of relative column width values.
+    qreal relativeWidthSum = 0; // Sum of relative column width values.
     int numNonStyleColumns = 0;
     for (int col = 0; col < tableRect.columnPositions.size(); ++col) {
         KoTableColumnStyle *columnStyle = carsManager ? carsManager->columnStyle(col) : 0;

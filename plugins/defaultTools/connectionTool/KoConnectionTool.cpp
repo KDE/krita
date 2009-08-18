@@ -54,9 +54,6 @@ KoConnectionTool::~KoConnectionTool()
 
 void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
-    float x = 0;
-    float y = 0;
-
     // get the correctly sized rect for painting handles
     QRectF handleRect = handlePaintRect(QPointF());
 
@@ -234,7 +231,7 @@ void KoConnectionTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KoConnectionTool::activate( bool temporary )
+void KoConnectionTool::activate(bool)
 {
     m_canvas->canvasWidget()->setCursor( Qt::PointingHandCursor );
 }

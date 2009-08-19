@@ -140,6 +140,7 @@ void KoColorSpaceRegistry::init()
 
     // Create the built-in colorspaces
     d->alphaCs = new KoAlphaColorSpace();
+    d->alphaCs->d->ownedByRegistry = true;
 
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "ColorSpacePlugins";
@@ -175,6 +176,7 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
     // deleting colorspaces calls a function in the cache
     delete d->colorConversionCache;
     d->colorConversionCache = 0;
+    d->alphaCs->d->ownedByRegistry = false;
     delete d->alphaCs;
     delete d->rgbU8sRGB;
     delete d->lab16sLAB;
@@ -503,5 +505,11 @@ KoColorConversionCache* KoColorSpaceRegistry::colorConversionCache() const
 const KoColorSpace* KoColorSpaceRegistry::permanentColorspace( const KoColorSpace* _colorSpace )
 {
   if(_colorSpace->d->ownedByRegistry) return _colorSpace;
-  else return colorSpace(_colorSpace->id(), _colorSpace->profile());
+  else if(*_colorSpace == *d->alphaCs) return d->alphaCs;
+  else {
+    const KoColorSpace* cs = colorSpace(_colorSpace->id(), _colorSpace->profile());
+    Q_ASSERT(cs);
+    Q_ASSERT(*cs == *_colorSpace);
+    return cs;
+  }
 }

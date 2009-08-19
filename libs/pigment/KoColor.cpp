@@ -123,7 +123,7 @@ KoColor & KoColor::operator=(const KoColor & rhs)
     delete [] d->data;
     d->data = 0;
     d->colorSpace = rhs.colorSpace();
-    Q_ASSERT(d->colorSpace == KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace));
+    Q_ASSERT(*d->colorSpace == *KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace));
 
     if (rhs.d->colorSpace && rhs.d->data) {
         d->data = new quint8[d->colorSpace->pixelSize()];

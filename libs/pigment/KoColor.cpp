@@ -108,7 +108,7 @@ KoColor::KoColor(const KoColor & rhs)
     : d(new Private())
 {
     d->colorSpace = rhs.colorSpace();
-    Q_ASSERT(d->colorSpace == KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace));
+    Q_ASSERT(*d->colorSpace == *KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace));
     if(d->colorSpace && rhs.d->data)
     {
         d->data = new quint8[d->colorSpace->pixelSize()];

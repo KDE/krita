@@ -64,7 +64,7 @@ public:
      * request a repaint of the decorations to be made. This triggers
      * an update call on the canvas, but does not paint directly.
      */
-    virtual void repaintDecorations() {}
+    virtual void repaintDecorations();
 
 public:
     /**
@@ -97,9 +97,7 @@ public:
      * Each tool can have a selection which is private to that tool and the specified shape that it comes with.
      * The default returns 0.
      */
-    virtual KoToolSelection* selection() {
-        return 0;
-    }
+    virtual KoToolSelection* selection();
 
     /**
      * Retrieves the entire collection of actions for the tool.
@@ -161,7 +159,7 @@ public:
      * Implementors should call event->ignore() if they do not actually use the event
      * @param event state of this wheel event
      */
-    virtual void wheelEvent(KoPointerEvent * event);
+    virtual void wheelEvent(KoPointerEvent *event);
 
     /**
      * This method is used to query a set of properties of the tool to be
@@ -181,28 +179,28 @@ public:
      * default implementation forwards the typed text as key pressed events.
      * @param event the input method event.
      */
-    virtual void inputMethodEvent(QInputMethodEvent * event);
+    virtual void inputMethodEvent(QInputMethodEvent *event);
 
     /**
      * Called when (one of) a custom device buttons is pressed.
      * Implementors should call event->ignore() if they do not actually use the event.
      * @param event state and reason of this custom device press
      */
-    virtual void customPressEvent(KoPointerEvent * event);
+    virtual void customPressEvent(KoPointerEvent *event);
 
     /**
      * Called when (one of) a custom device buttons is released.
      * Implementors should call event->ignore() if they do not actually use the event.
      * @param event state and reason of this custom device release
      */
-    virtual void customReleaseEvent(KoPointerEvent * event);
+    virtual void customReleaseEvent(KoPointerEvent *event);
 
     /**
      * Called when a custom device moved over the canvas.
      * Implementors should call event->ignore() if they do not actually use the event.
      * @param event state and reason of this custom device move
      */
-    virtual void customMoveEvent(KoPointerEvent * event);
+    virtual void customMoveEvent(KoPointerEvent *event);
 
     /**
      * Set the identifier code from the KoToolFactory that created this tool.
@@ -210,6 +208,7 @@ public:
      * @see KoToolFactory::id()
      */
     void setToolId(const QString &id);
+
     /**
      * get the identifier code from the KoToolFactory that created this tool.
      * @return the toolId.
@@ -225,7 +224,7 @@ public:
      * The default implementation is empty to aid tools that don't have any selection.
      * @see selection()
      */
-    virtual void copy() const { }
+    virtual void copy() const;
 
     /**
      * Delete the tools selection.
@@ -249,17 +248,13 @@ public:
      * If you reimplement this function make sure to also reimplement supportedPasteMimeTypes().
      * @return will return true if pasting succeeded. False if nothing happened.
      */
-    virtual bool paste() {
-        return false;
-    }
+    virtual bool paste();
 
     /**
      * Returns the mimetypes that this tool's paste() function can handle
      * @return QStringList containing the mimetypes that's supported by paste()
      */
-    virtual QStringList supportedPasteMimeTypes() const {
-        return QStringList();
-    }
+    virtual QStringList supportedPasteMimeTypes() const;
 
     /**
      * @return A list of actions to be used for a popup.
@@ -301,7 +296,7 @@ public slots:
      * provider associated with the canvas this tool belongs to
      * changes. An example is currently selected foreground color.
      */
-    virtual void resourceChanged(int key, const QVariant & res);
+    virtual void resourceChanged(int key, const QVariant &res);
 
     /**
      * This method just relays the given text via the tools statusTextChanged signal.
@@ -338,7 +333,7 @@ signals:
      * Emitted by useCursor() when the cursor to display on the canvas is changed.
      * The KoToolManager should connect to this signal to handle cursors further.
      */
-    void cursorChanged(QCursor cursor);
+    void cursorChanged(const QCursor &cursor);
 
     /**
      * A tool can have a selection that is copy-able, this signal is emitted when that status changes.
@@ -361,7 +356,7 @@ protected:
      *   this call will not do anything.
      * @param force if true the cursor will be set no matter what.
      */
-    void useCursor(QCursor cursor, bool force = false);
+    void useCursor(const QCursor &cursor, bool force = false);
 
     /**
      * Reimplement this if your tool actually has an option widget.

@@ -268,7 +268,7 @@ private slots:
     void detachCanvas(KoCanvasController *controller);
     void attachCanvas(KoCanvasController *controller);
     void movedFocus(QWidget *from, QWidget *to);
-    void updateCursor(QCursor cursor);
+    void updateCursor(const QCursor &cursor);
     void switchBackRequested();
     void selectionChanged(QList<KoShape*> shapes);
     void currentLayerChanged(const KoShapeLayer *layer);

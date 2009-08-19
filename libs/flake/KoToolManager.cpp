@@ -343,8 +343,8 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
         // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
         d->canvasData->activeTool->deactivate();
-        disconnect(d->canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
-                   this, SLOT(updateCursor(QCursor)));
+        disconnect(d->canvasData->activeTool, SIGNAL(cursorChanged(const QCursor&)),
+                   this, SLOT(updateCursor(const QCursor&)));
         disconnect(d->canvasData->activeTool, SIGNAL(activateTool(const QString &)),
                    this, SLOT(switchToolRequested(const QString &)));
         disconnect(d->canvasData->activeTool, SIGNAL(activateTemporary(const QString &)),
@@ -357,8 +357,8 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
     d->canvasData->activeTool = tool;
 
 
-    connect(d->canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
-            this, SLOT(updateCursor(QCursor)));
+    connect(d->canvasData->activeTool, SIGNAL(cursorChanged(const QCursor &)),
+            this, SLOT(updateCursor(const QCursor &)));
     connect(d->canvasData->activeTool, SIGNAL(activateTool(const QString &)),
             this, SLOT(switchToolRequested(const QString &)));
     connect(d->canvasData->activeTool, SIGNAL(activateTemporary(const QString &)),
@@ -565,7 +565,7 @@ void KoToolManager::detachCanvas(KoCanvasController *controller)
     emit changedCanvas(d->canvasData ? d->canvasData->canvas->canvas() : 0);
 }
 
-void KoToolManager::updateCursor(QCursor cursor)
+void KoToolManager::updateCursor(const QCursor &cursor)
 {
     Q_ASSERT(d->canvasData);
     Q_ASSERT(d->canvasData->canvas);

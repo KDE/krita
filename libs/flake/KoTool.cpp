@@ -138,8 +138,9 @@ void KoTool::customMoveEvent(KoPointerEvent * event)
     event->ignore();
 }
 
-void KoTool::useCursor(QCursor cursor, bool force)
+void KoTool::useCursor(const QCursor &cursor, bool force)
 {
+// KOffice 2.2: remove the 'force' bool. Its a premature optimisation. (TZander)
     if (!force && cursor.shape() != Qt::BitmapCursor && cursor.shape() == d->previousCursor.shape())
         return;
 
@@ -252,6 +253,29 @@ QRectF KoTool::handlePaintRect(const QPointF &position)
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
+}
+
+QStringList KoTool::supportedPasteMimeTypes() const
+{
+    return QStringList();
+}
+
+bool KoTool::paste()
+{
+    return false;
+}
+
+void KoTool::copy() const
+{
+}
+
+KoToolSelection *KoTool::selection()
+{
+    return 0;
+}
+
+void KoTool::repaintDecorations()
+{
 }
 
 #include "KoTool.moc"

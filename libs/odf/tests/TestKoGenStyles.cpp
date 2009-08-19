@@ -2,10 +2,12 @@
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License version 2 as published by the Free Software Foundation.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -39,15 +41,15 @@
             writer.startElement( "r" )
 
 #define TEST_END_QTTEST(expected) \
-    writer.endElement(); \
-    writer.endDocument(); \
-    } \
-    buffer.putChar( '\0' ); /*null-terminate*/ \
-    QString expectedFull = QString::fromLatin1( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" ); \
-                           expectedFull += QString::fromLatin1( expected ); \
-                                           QString s1 = QString::fromLatin1( cstr ); \
-                                                        QCOMPARE( expectedFull, s1 ); \
-                                                        }
+            writer.endElement(); \
+            writer.endDocument(); \
+        } \
+        buffer.putChar( '\0' ); /*null-terminate*/ \
+        QString expectedFull = QString::fromLatin1( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" ); \
+        expectedFull += expected; \
+        QString s1 = QString::fromLatin1( cstr ); \
+        QCOMPARE( expectedFull, s1 ); \
+    }
 
 
 void TestKoGenStyles::testLookup()
@@ -79,7 +81,7 @@ void TestKoGenStyles::testLookup()
 
     QString firstName = coll.lookup(first);
     kDebug() << "The first style got assigned the name" << firstName;
-    QCOMPARE(firstName, QString("A1"));     // it's fine if it's something else, but the koxmlwriter tests require a known name
+    QVERIFY(!firstName.isEmpty());
     QCOMPARE(first.type(), KoGenStyle::StyleAuto);
 
     KoGenStyle second(KoGenStyle::StyleAuto, "paragraph");
@@ -110,7 +112,8 @@ void TestKoGenStyles::testLookup()
 
     QString thirdName = coll.lookup(third, "P");
     kDebug() << "The third style got assigned the name" << thirdName;
-    QCOMPARE(thirdName, QString("P1"));
+    QVERIFY(thirdName != firstName);
+    QVERIFY(!thirdName.isEmpty());
 
     KoGenStyle user(KoGenStyle::StyleUser, "paragraph");   // differs from third since it doesn't inherit second, and has a different type
     user.addProperty("style:margin-left", "1.249cm");
@@ -155,12 +158,21 @@ void TestKoGenStyles::testLookup()
     // XML for first/second style
     TEST_BEGIN(0, 0);
     first.writeStyle(&writer, coll, "style:style", firstName, "style:paragraph-properties");
-    TEST_END_QTTEST("<r>\n <style:style style:name=\"A1\" style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\">\n   <child test:foo=\"bar\"/>\n  </style:paragraph-properties>\n  <style:text-properties style:foobar=\"2\"/>\n  <style:map map1key=\"map1value\"/>\n  <style:map map2key1=\"map2value1\" map2key2=\"map2value2\"/>\n </style:style>\n</r>\n");
+
+
+    TEST_END_QTTEST("<r>\n <style:style style:name=\"" + firstName + "\" style:family=\"paragraph\" "
+        "style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\">\n"
+        "   <child test:foo=\"bar\"/>\n  </style:paragraph-properties>\n  <style:text-properties style:foobar=\"2\"/>\n"
+        "  <style:map map1key=\"map1value\"/>\n  <style:map map2key1=\"map2value1\" map2key2=\"map2value2\"/>\n"
+        " </style:style>\n</r>\n");
 
     // XML for third style
     TEST_BEGIN(0, 0);
     third.writeStyle(&writer, coll, "style:style", thirdName, "style:paragraph-properties");
-    TEST_END_QTTEST("<r>\n <style:style style:name=\"P1\" style:parent-style-name=\"A1\" style:family=\"paragraph\">\n  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n  <style:text-properties style:foobar=\"3\"/>\n </style:style>\n</r>\n");
+    TEST_END_QTTEST("<r>\n <style:style style:name=\"" + thirdName + "\""
+        " style:parent-style-name=\"" + firstName + "\" style:family=\"paragraph\">\n"
+        "  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n"
+        "  <style:text-properties style:foobar=\"3\"/>\n </style:style>\n</r>\n");
 
     coll.markStyleForStylesXml(firstName);
     {

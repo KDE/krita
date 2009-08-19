@@ -345,10 +345,9 @@ void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
     KoViewPrivate::StatusBarItem item(widget, stretch, permanent);
     d->statusBarItems.append(item);
-    item = d->statusBarItems.last();
     KStatusBar * sb = statusBar();
     if (sb) {
-        item.ensureItemShown(sb);
+        d->statusBarItems.last().ensureItemShown(sb);
     }
 }
 

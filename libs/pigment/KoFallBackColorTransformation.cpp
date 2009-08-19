@@ -25,6 +25,8 @@
 #include "KoColorConversionCache.h"
 #include "KoColorSpaceRegistry.h"
 
+#include "DebugPigment.h"
+
 struct KoFallBackColorTransformation::Private {
     const KoColorSpace* fallBackColorSpace;
     KoCachedColorConversionTransformation* csToFallBackCache;
@@ -52,7 +54,7 @@ KoFallBackColorTransformation::KoFallBackColorTransformation(KoColorConversionTr
 {
     Q_ASSERT(*_csToFallBack->srcColorSpace() == *_fallBackToCs->dstColorSpace());
     Q_ASSERT(*_fallBackToCs->srcColorSpace() == *_csToFallBack->dstColorSpace());
-    d->fallBackColorSpace = _fallBackToCs->dstColorSpace();
+    d->fallBackColorSpace = _fallBackToCs->srcColorSpace();
     d->csToFallBack = _csToFallBack;
     d->fallBackToCs = _fallBackToCs;
     d->csToFallBackCache = 0;
@@ -92,5 +94,4 @@ void KoFallBackColorTransformation::transform(const quint8 *src, quint8 *dst, qi
     d->csToFallBack->transform(src, d->buff, nPixels);
     d->colorTransformation->transform(d->buff, d->buff, nPixels);
     d->fallBackToCs->transform(d->buff, dst, nPixels);
-
 }

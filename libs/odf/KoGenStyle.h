@@ -50,6 +50,7 @@ public:
         StyleAuto,                   ///< style:style with style:paragraph-properties as in odf 14.1 Style Element (office:automatic-styles)
         StyleText,                   ///< style:style with style:text-properties as in odf 14.8.1 Text Styles (office:styles)
         StyleTextAuto,               ///< style:style with style:text-properties as in odf 14.8.1 Text Styles (office:automatic-styles)
+        StyleChart,                  ///< style:style with style:chart-properties
         StyleList,                   ///< text:list-style as in odf 14.10 List Style (office:styles)
         StyleListAuto,               ///< text:list-style as in odf 14.10 List Style (office:automatic-styles)
         StyleSectionAuto,            ///< style:style with style:section-properties as in odf 14.8.3 Section Styles (office:automatic-styles)

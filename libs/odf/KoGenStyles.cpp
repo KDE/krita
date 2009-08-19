@@ -3,6 +3,7 @@
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+   Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,6 +37,7 @@ static const struct {
 } styleData[] = {
     { KoGenStyle::StyleUser, "style:style", "style:paragraph-properties", false  },
     { KoGenStyle::StyleText, "style:style", "style:text-properties", false  },
+    { KoGenStyle::StyleChart, "style:style", "style:chart-properties", false  },
     { KoGenStyle::StyleTableColumn, "style:style", "style:table-column-properties", false  },
     { KoGenStyle::StyleTableRow, "style:style", "style:table-row-properties", false  },
     { KoGenStyle::StyleTableCell, "style:style", "style:table-cell-properties", false  },

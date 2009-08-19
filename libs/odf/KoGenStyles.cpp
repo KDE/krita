@@ -64,6 +64,7 @@ static const struct {
     { KoGenStyle::StyleAuto, "style:style", "style:paragraph-properties", false  },
     { KoGenStyle::StyleTextAuto, "style:style", "style:text-properties", false  },
     { KoGenStyle::StyleGraphicAuto, "style:style", "style:graphic-properties", false  },
+    { KoGenStyle::StyleChartAuto, "style:style", "style:chart-properties", false  },
     { KoGenStyle::StylePresentationAuto, "style:style", "style:graphic-properties", false  },
     { KoGenStyle::StyleDrawingPage, "style:style", "style:drawing-page-properties", false  },
     { KoGenStyle::StyleAutoTable, "style:style", "style:table-properties", false  },

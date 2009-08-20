@@ -18,9 +18,9 @@ How to run the test suite - 3 steps
 
     $ cd $QTSCRIPTGENERATOR/generator && qmake && make
 
-  Run the generator:
+  Run the generator passing in the path to the headers:
 
-    $ ./generator
+    $ ./generator --include-paths=/usr/include/qt4
 
   Make sure that the QTDIR environment variable points to the Qt that you
   compiled KOffice against, and that the right qmake command is in your PATH

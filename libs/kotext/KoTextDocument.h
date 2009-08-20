@@ -52,8 +52,6 @@ public:
     /// Destructor
     ~KoTextDocument();
 
-    /// Setup the ressuorces in the QTextDocument
-
     /// Returns the document that was passed in the constructor
     QTextDocument *document() const;
 
@@ -110,9 +108,6 @@ public:
      * function does not clear the resources of the QTextDocument.
      */
     void clearText();
-
-    /// Tells the document it's frame is set-up.
-    void setFrameSetUp(bool done);
 
     /// Enum (type) used to add resources using QTextDocument::addResource()
     enum ResourceType {

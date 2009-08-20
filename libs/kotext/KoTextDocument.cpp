@@ -187,11 +187,6 @@ void KoTextDocument::clearText()
     cursor.removeSelectedText();
 }
 
-void KoTextDocument::setFrameSetUp(bool done)
-{
-    textEditor()->setupFinished(done);
-}
-
 KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
 {
     QVariant resource = m_document->resource(KoTextDocument::InlineTextManager,

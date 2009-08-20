@@ -123,9 +123,9 @@ KoColor & KoColor::operator=(const KoColor & rhs)
     delete [] d->data;
     d->data = 0;
     d->colorSpace = rhs.colorSpace();
-    Q_ASSERT(*d->colorSpace == *KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace));
 
     if (rhs.d->colorSpace && rhs.d->data) {
+        Q_ASSERT(d->colorSpace == KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace)); // here we want to do a check on pointer, since d->colorSpace is supposed to already be a permanent one
         d->data = new quint8[d->colorSpace->pixelSize()];
         memcpy(d->data, rhs.d->data, d->colorSpace->pixelSize());
     }
@@ -154,7 +154,7 @@ void KoColor::convertTo(const KoColorSpace * cs)
 
     delete [] d->data;
     d->data = data;
-    d->colorSpace = cs;
+    d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(cs);
 }
 
 

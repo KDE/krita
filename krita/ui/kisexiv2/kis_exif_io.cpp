@@ -570,7 +570,7 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 }
                 v = exivValueToKMDValue(it->getValue(), forceSeq, arrayType);
             }
-            if( it->key() == "Exif.Photo.InteroperabilityTag" )
+            if( it->key() == "Exif.Photo.InteroperabilityTag" || it->key() == "Exif.Photo.0xea1d" ) // InteroperabilityTag isn't useful for XMP, 0xea1d isn't a valid Exif tag
             {
                 dbgFile << "Ignoring " << it->key().c_str();
             } else {

@@ -182,14 +182,12 @@ kde4_add_ui_files(flake_SRCS
 kde4_add_library(flake SHARED ${flake_SRCS})
 
 if(NOT NO_PIGMENT)
-	set(EXTRA_LIBS pigmentcms)
+    set(EXTRA_LIBS pigmentcms)
 endif(NOT NO_PIGMENT)
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS}
-                        ${EXTRA_LIBS}
-		        koodf kobase koplugin)
+target_link_libraries(flake ${KDE4_KDEUI_LIBS} ${EXTRA_LIBS} koodf koplugin)
 
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES ${EXTRA_LIBS} koodf kobase koplugin)
+target_link_libraries(flake LINK_INTERFACE_LIBRARIES ${EXTRA_LIBS} koodf koplugin)
 
 if(HAVE_OPENGL)
     target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})

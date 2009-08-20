@@ -83,7 +83,7 @@ set(kotext_LIB_SRCS
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
 target_link_libraries(kotext flake ${KDE4_KDEUI_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KUTILS_LIBS} )
-target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake koplugin)
+target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake)
 
 set_target_properties(kotext PROPERTIES
    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

@@ -80,9 +80,9 @@ if (NOT NO_PIGMENT)
 endif (NOT NO_PIGMENT)
 
 target_link_libraries(komain ${extra_libs}
-                      flake koaction koaspectbutton kobase kocharacterselectiondialog kocvsimport
-                      kodocumentsectionbox koinput kolinestyleselector koodf koopenpane kopicture koplugin koprogress
-                      kostore kozoomaction kotext kopagelayout
+                      flake koaction koaspectbutton kocharacterselectiondialog kocvsimport
+                      kodocumentsectionbox koinput kolinestyleselector koopenpane koprogress
+                      kozoomaction kotext kopagelayout
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KFILE_LIBRARY}
     ${KDE4_KABC_LIBS}

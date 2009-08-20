@@ -9,16 +9,9 @@ set(kobase_LIB_SRCS
 
 kde4_add_library(kobase SHARED ${kobase_LIB_SRCS})
 
-target_link_libraries(kobase 
-                      ${KDE4_KDECORE_LIBS} 
-                      ${QT_QTCORE_LIBRARY}
-				      ${QT_QTXML_LIBRARY}
-)
+target_link_libraries(kobase ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY})
 
-target_link_libraries(kobase LINK_INTERFACE_LIBRARIES
-                   ${KDE4_KDECORE_LIBS}
-				   ${QT_QTCORE_LIBRARY} 
-				   ${QT_QTXML_LIBRARY} )
+target_link_libraries(kobase LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY})
 
 set_target_properties(kobase PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

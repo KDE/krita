@@ -24,15 +24,14 @@ set(kostore_LIB_SRCS
 kde4_add_library(kostore SHARED ${kostore_LIB_SRCS})
 
 target_link_libraries(kostore ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} ${QT_QTCORE_LIBRARY})
-target_link_libraries(kostore LINK_INTERFACE_LIBRARIES  ${KDE4_KIO_LIBS}  ${KDE4_KDECORE_LIBS} ${QT_QTXML_LIBRARY} ${QT_QTCORE_LIBRARY})
+target_link_libraries(kostore LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS}  ${KDE4_KDECORE_LIBS} ${QT_QTXML_LIBRARY} ${QT_QTCORE_LIBRARY})
 
 if( QCA2_FOUND )
 target_link_libraries(kostore ${QCA2_LIBRARIES})
 endif( QCA2_FOUND )
 
-set_target_properties(kostore PROPERTIES 
-   VERSION ${GENERIC_KOFFICE_LIB_VERSION} 
-   SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} 
+set_target_properties(kostore PROPERTIES
+   VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
 )
 install(TARGETS kostore  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -295,12 +295,20 @@ bool Autocorrect::autoBoldUnderline()
         m_cursor.setPosition(startPos + replacement.length(), QTextCursor::KeepAnchor);
 
         QTextCharFormat format;
-        format.setFontUnderline(underline);
-        format.setFontWeight(bold ? QFont::Bold : QFont::Normal);
+        format.setFontUnderline(underline ? true : m_cursor.charFormat().fontUnderline());
+        format.setFontWeight(bold ? QFont::Bold : m_cursor.charFormat().fontWeight());
         m_cursor.mergeCharFormat(format);
 
         // to avoid the selection being replaced by m_word
         m_word = m_cursor.selectedText();
+
+        // don't do this again if the text is already underlined and bold
+        if(m_cursor.charFormat().fontUnderline()
+            && m_cursor.charFormat().fontWeight() == QFont::Bold) {
+            return true;
+        } else {
+            return autoBoldUnderline();
+        }
     }
     else
         return false;

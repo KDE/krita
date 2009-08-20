@@ -22,12 +22,12 @@
 class KisView2;
 
 #include <kis_types.h>
-
+#include <krita_export.h>
 /**
  * This class allow to manipulate nodes in a KisImage
  * and to creates commands as needed.
  */
-class KisNodeCommandsAdapter
+class KRITAUI_EXPORT KisNodeCommandsAdapter
 {
 public:
     KisNodeCommandsAdapter( KisView2 * view );

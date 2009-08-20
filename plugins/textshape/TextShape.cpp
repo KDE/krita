@@ -42,38 +42,40 @@ struct Finalizer {
 
 #include "Layout.h"
 
-#include <KoTextDocumentLayout.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoTextShapeContainerModel.h>
-#include <KoViewConverter.h>
-#include <KoPostscriptPaintDevice.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
-#include <KoShapeManager.h>
-#include <KoText.h>
-#include <KoSelection.h>
-#include <KoStyleManager.h>
+#include <KoChangeTracker.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfStylesReader.h>
 #include <KoParagraphStyle.h>
+#include <KoPostscriptPaintDevice.h>
+#include <KoSelection.h>
+#include <KoShapeBackground.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeManager.h>
 #include <KoShapeSavingContext.h>
+#include <KoStyleManager.h>
+#include <KoText.h>
+#include <KoTextDocument.h>
+#include <KoTextDocumentLayout.h>
+#include <KoTextEditor.h>
+#include <KoTextShapeContainerModel.h>
+#include <KoUndoStack.h>
+#include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <KoShapeBackground.h>
-#include <KoTextDocument.h>
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
 
-#include <QTextLayout>
-#include <QFont>
-#include <QPen>
-#include <QThread>
-#include <QApplication>
-#include <QPainter>
 #include <QAbstractTextDocumentLayout>
-#include <kdebug.h>
+#include <QApplication>
+#include <QFont>
+#include <QPainter>
+#include <QPen>
+#include <QTextLayout>
+#include <QThread>
 
-#include <KoChangeTracker.h>
+#include <kdebug.h>
 
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         : KoShapeContainer(new KoTextShapeContainerModel())
@@ -336,6 +338,12 @@ void TextShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
     KoTextDocument(m_textShapeData->document()).setStyleManager(styleManager);
     KoInlineTextObjectManager *tom = dynamic_cast<KoInlineTextObjectManager *>(dataCenterMap["InlineTextObjectManager"]);
     KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(tom);
+    KoUndoStack *undoStack = dynamic_cast<KoUndoStack *>(dataCenterMap["UndoStack"]);
+    if (!undoStack)
+        undoStack = new KoUndoStack();
+    KoTextDocument(m_textShapeData->document()).setUndoStack(undoStack);
+    KoTextEditor *editor = new KoTextEditor(m_textShapeData->document());
+    KoTextDocument(m_textShapeData->document()).setTextEditor(editor);
 //    KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(dataCenterMap["ChangeTracker"]);
 //    KoTextDocument(m_textShapeData->document()).setChangeTracker(changeTracker);
 }

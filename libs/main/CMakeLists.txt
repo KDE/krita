@@ -38,6 +38,7 @@ set(komain_LIB_SRCS
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     KoToolDockerFactory.cpp
+    KoUndoStack.cpp
     KoVersionDialog.cpp
     KoViewAdaptor.cpp
     KoView.cpp
@@ -137,6 +138,7 @@ install( FILES
     KoViewAdaptor.h
     KoImageSelectionWidget.h
     kofficeversion.h
+    KoUndoStack.h 
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

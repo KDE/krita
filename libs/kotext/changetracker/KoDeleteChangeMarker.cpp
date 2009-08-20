@@ -74,6 +74,7 @@ int KoDeleteChangeMarker::changeId() const
 
 bool KoDeleteChangeMarker::loadOdf (const KoXmlElement& element)
 {
+    Q_UNUSED(element)
     return false;
 }
 
@@ -145,5 +146,6 @@ void KoDeleteChangeMarker::updatePosition(const QTextDocument* document, QTextIn
 
 void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext& context)
 {
+    Q_UNUSED(context)
 //KoInlineObject::saveOdf(context);
 }

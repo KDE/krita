@@ -31,10 +31,12 @@
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
+class KoUndoStack;
+class KoTextEditor;
 
 /**
- * KoTextDocument provides an easy mechanism to set and access to the
- * meta data of a QTextDocument. The meta data are stored as resources
+ * KoTextDocument provides an easy mechanism to set and access the
+ * editing members of a QTextDocument. The meta data are stored as resources
  * in the QTextDocument using QTextDocument::addResource() and fetched
  * using QTextDocument::resource().
  *
@@ -50,8 +52,16 @@ public:
     /// Destructor
     ~KoTextDocument();
 
+    /// Setup the ressuorces in the QTextDocument
+
     /// Returns the document that was passed in the constructor
     QTextDocument *document() const;
+
+    ///Returns the text editor for that document
+    KoTextEditor *textEditor();
+
+    ///Sets the text editor for the document
+    void setTextEditor(KoTextEditor *textEditor);
 
     /// Sets the style manager that defines the named styles in the document
     void setStyleManager(KoStyleManager *styleManager);
@@ -65,8 +75,11 @@ public:
     ///Returns the change tracker of the document
     KoChangeTracker *changeTracker() const;
 
-    ///Returns true if a changeTracker is already assigned to the document
-    bool changeTrackerAssigned();
+    ///Sets the global undo stack
+    void setUndoStack(KoUndoStack *undoStack);
+
+    ///Returns the global undo stack
+    KoUndoStack *undoStack() const;
 
     /// Sets the lists of the document
     void setLists(const QList<KoList *> &lists);
@@ -98,21 +111,27 @@ public:
      */
     void clearText();
 
+    /// Tells the document it's frame is set-up.
+    void setFrameSetUp(bool done);
+
     /// Enum (type) used to add resources using QTextDocument::addResource()
     enum ResourceType {
         StyleManager = QTextDocument::UserResource,
         Lists,
         InlineTextManager,
-        ChangeTrackerResource
+        ChangeTrackerResource,
+        UndoStack,
+        TextEditor
     };
     static const QUrl StyleManagerURL;
     static const QUrl ListsURL;
     static const QUrl InlineObjectTextManagerURL;
     static const QUrl ChangeTrackerURL;
+    static const QUrl UndoStackURL;
+    static const QUrl TextEditorURL;
 
 private:
     QTextDocument *m_document;
-    bool m_changeTrackerAssigned;
 };
 
 #endif // KOTEXTDOCUMENT_H

@@ -28,7 +28,7 @@ if(NOT NO_PIGMENT)
     set(EXTRA_LIBS kocolorwidgets)
 endif(NOT NO_PIGMENT)
 
-target_link_libraries(TestDocumentLayout ${EXTRA_LIBS} kotext koaction ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestDocumentLayout ${EXTRA_LIBS} komain kotext koaction ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -38,6 +38,8 @@ set(TestChangeListCommand_test_SRCS
     ../commands/ChangeListLevelCommand.cpp
     ../commands/ListItemNumberingCommand.cpp
     ../commands/TextCommandBase.cpp
+    ../commands/TextPasteCommand.cpp
+    ../commands/TextCutCommand.cpp
     ../TextTool.cpp
     ../ChangeTracker.cpp
     ../dialogs/FontDia.cpp
@@ -66,7 +68,7 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/TableDialog.cpp
     ../ListItemsHelper.cpp
     ../TextShape.cpp
-    ../Layout.cpp    
+    ../Layout.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
 )
@@ -105,4 +107,4 @@ set(TestTableLayout_test_SRCS
     ../ListItemsHelper.cpp
 )
 kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
-target_link_libraries(TestTableLayout kotext ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
+target_link_libraries(TestTableLayout kotext komain ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})

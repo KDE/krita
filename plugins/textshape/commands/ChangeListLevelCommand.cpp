@@ -32,7 +32,7 @@
 #include <QHash>
 #include <QList>
 
-ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, ChangeListLevelCommand::CommandType type, 
+ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, ChangeListLevelCommand::CommandType type,
                                                int coef, QUndoCommand *parent)
     : TextCommandBase(parent),
       m_type(type),
@@ -40,14 +40,14 @@ ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, Change
       m_first(true)
 {
     setText(i18n("Change List Level"));
-    
+
     int selectionStart = qMin(cursor.anchor(), cursor.position());
     int selectionEnd = qMax(cursor.anchor(), cursor.position());
-    
+
     QTextBlock block = cursor.block().document()->findBlock(selectionStart);
-    
+
     bool oneOf = (selectionStart == selectionEnd); //ensures the block containing the cursor is selected in that case
-    
+
     while (block.isValid() && ((block.position() < selectionEnd) || oneOf)) {
         m_blocks.append(block);
         if (block.textList()) {
@@ -90,7 +90,6 @@ void ChangeListLevelCommand::redo()
         }
     }
     else {
-        m_tool->startEditing(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
             if (!m_lists.value(i)->style()->hasLevelProperties(m_levels.value(i))) {
                 KoListLevelProperties llp = m_lists.value(i)->style()->levelProperties(m_levels.value(i));
@@ -99,7 +98,6 @@ void ChangeListLevelCommand::redo()
             }
             m_lists.value(i)->add(m_blocks.at(i), m_levels.value(i));
         }
-        m_tool->stopEditing();
     }
     m_first = false;
 }

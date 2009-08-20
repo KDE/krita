@@ -9,12 +9,12 @@ set(kotext_LIB_SRCS
     KoTextShapeData.cpp
     KoText.cpp
     KoTextBlockData.cpp
-    KoTextSelectionHandler.cpp
     KoTextBlockBorderData.cpp
     KoTextDocumentLayout.cpp
     KoTextOdfSaveHelper.cpp
     KoTextPaste.cpp
     KoTextDocument.cpp
+    KoTextEditor.cpp
     KoList.cpp
     KoPageFormat.cpp
 
@@ -96,7 +96,7 @@ install(
     FILES
     kotext_export.h
     KoInlineObject.h
-    KoTextSelectionHandler.h
+    KoTextEditor.h
     KoTextEditingFactory.h
     KoTextEditingPlugin.h
     KoTextEditingRegistry.h

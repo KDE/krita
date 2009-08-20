@@ -37,6 +37,7 @@ class KoXmlElement;
 #include <QMetaType>
 //#include <QTextCharFormat>
 //#include <QTextFormat>
+class QTextCursor;
 class QTextFormat;
 //#include <QHash>
 class QString;
@@ -57,6 +58,9 @@ public:
     void setDisplayDeleted(bool enabled);
     bool displayDeleted();
 
+    /// returns the changeId of the changeElement registered for the given change. This may be an already existing changeId, if the change could be merged.
+    int getChangeId(QString &title, KoGenChange::Type type, QTextCursor &selection, QTextFormat &newFormat, int prevCharChangeId, int nextCharChangeId);
+
     int getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId);
     int getInsertChangeId(QString title, int existingChangeId);
     int getDeleteChangeId(QString title, QTextDocumentFragment selection, int existingChangeId);
@@ -64,6 +68,9 @@ public:
     KoChangeTrackerElement* elementById(int id);
 
     bool containsInlineChanges(const QTextFormat &format);
+    int mergeableId(KoGenChange::Type type, QString &title, int existingId);
+
+    /// Load/save methods
     bool saveInlineChange(int changeId, KoGenChange &change);
 
     void loadOdfChanges(const KoXmlElement& element);

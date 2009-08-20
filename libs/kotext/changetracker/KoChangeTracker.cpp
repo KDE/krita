@@ -33,6 +33,7 @@
 #include <QList>
 #include <QString>
 #include <QHash>
+#include <QTextCursor>
 #include <QTextFormat>
 #include <QTextCharFormat>
 #include <QTextDocumentFragment>
@@ -91,6 +92,17 @@ bool KoChangeTracker::displayDeleted()
     return d->m_displayDeleted;
 }
 
+int KoChangeTracker::getChangeId (QString& title, KoGenChange::Type type, QTextCursor& selection, QTextFormat& newFormat, int prevCharChangeId, int nextCharChangeId)
+{
+    Q_UNUSED(title)
+    Q_UNUSED(type)
+    Q_UNUSED(selection)
+    Q_UNUSED(newFormat)
+    Q_UNUSED(prevCharChangeId)
+    Q_UNUSED(nextCharChangeId)
+    return 0;
+}
+
 int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId)
 {
     if ( existingChangeId ) {
@@ -100,7 +112,7 @@ int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QText
 
     KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::formatChange);
     changeElement->setChangeFormat(format);
-    changeElement->setPrevFormat(format);
+    changeElement->setPrevFormat(prevFormat);
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
     changeElement->setCreator(QString("essai format"));
@@ -164,6 +176,17 @@ bool KoChangeTracker::containsInlineChanges(const QTextFormat &format)
         return true;
 
     return false;
+}
+
+int KoChangeTracker::mergeableId(KoGenChange::Type type, QString& title, int existingId)
+{
+    if (!existingId || !d->m_changes.value(existingId))
+        return 0;
+
+    if (d->m_changes.value(existingId)->getChangeType() == type && d->m_changes.value(existingId)->getChangeTitle() == title && !d->m_parents.contains(existingId))
+        return existingId;
+    else
+        return mergeableId(type, title, d->m_parents.value(existingId));
 }
 
 bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)

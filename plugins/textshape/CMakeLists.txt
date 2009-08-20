@@ -3,9 +3,10 @@ project( textPlugin)
 add_subdirectory( pics )
 add_subdirectory( tests )
 
-include_directories(  
-    ${KOTEXT_INCLUDES} 
-    ${FLAKE_INCLUDES} 
+include_directories(
+    ${KOTEXT_INCLUDES}
+    ${FLAKE_INCLUDES}
+    ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets/
     ${KDE4_INCLUDE_DIR}/threadweaver/)
 
@@ -56,6 +57,8 @@ SET ( textshape_SRCS
     commands/ChangeListLevelCommand.cpp
     commands/ListItemNumberingCommand.cpp
     commands/TextCommandBase.cpp
+    commands/TextPasteCommand.cpp
+    commands/TextCutCommand.cpp
 )
 
 kde4_add_ui_files(textshape_SRCS

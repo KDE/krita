@@ -349,12 +349,14 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 
 void KoTextLoader::loadChangedRegion(const KoXmlElement &element, QTextCursor &cursor)
 {
+    Q_UNUSED(cursor)
     QString id = element.attributeNS(KoXmlNS::text,"change-id");
     int changeId = d->changeTracker->getLoadedChangeId(id);
     d->currentChangeId = changeId;
 
     //debug
     KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+    Q_UNUSED(changeElement)
 }
 
 void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &cursor)

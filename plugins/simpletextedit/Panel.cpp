@@ -24,7 +24,7 @@
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 #include <KoCanvasResourceProvider.h>
-#include <KoTextSelectionHandler.h>
+#include <KoTextEditor.h>
 #include <KoText.h>
 
 #include <KDebug>
@@ -136,7 +136,7 @@ void Panel::toolChangeDetected(const QString &toolId)
 
     m_handler = 0;
     if (m_canvas)
-        m_handler = qobject_cast<KoTextSelectionHandler*> (m_canvas->toolProxy()->selection());
+        m_handler = qobject_cast<KoTextEditor*> (m_canvas->toolProxy()->selection());
     m_style1->setEnabled(m_handler);
     m_style2->setEnabled(m_handler);
     m_style3->setEnabled(m_handler);

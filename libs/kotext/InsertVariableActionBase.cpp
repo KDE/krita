@@ -21,7 +21,7 @@
 #include "InsertVariableActionBase_p.h"
 #include "KoVariable.h"
 #include "KoVariableFactory.h"
-#include "KoTextSelectionHandler.h"
+#include "KoTextEditor.h"
 
 #include <KoToolProxy.h>
 #include <KoCanvasBase.h>
@@ -42,7 +42,7 @@ InsertVariableActionBase::~InsertVariableActionBase()
 void InsertVariableActionBase::activated()
 {
     Q_ASSERT(m_canvas->toolProxy());
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (m_canvas->toolProxy()->selection());
+    KoTextEditor *handler = qobject_cast<KoTextEditor*> (m_canvas->toolProxy()->selection());
     if (handler) {
         KoVariable *variable = createVariable();
         if (variable)

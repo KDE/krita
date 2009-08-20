@@ -27,27 +27,29 @@
 #include <kdebug.h>
 
 #include "KoTextDocument.h"
+#include "KoTextEditor.h"
 #include "styles/KoStyleManager.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoTextDocumentLayout.h"
 #include "styles/KoParagraphStyle.h"
 #include "KoList.h"
+#include <KoUndoStack.h>
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
 const QUrl KoTextDocument::InlineObjectTextManagerURL = QUrl("kotext://inlineObjectTextManager");
-
+const QUrl KoTextDocument::UndoStackURL = QUrl("komain://undoStack");
 const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
+const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
-    ,m_changeTrackerAssigned(false)
 {
     Q_ASSERT(m_document);
 }
 
 KoTextDocument::KoTextDocument(const QTextDocument *document)
-: m_document(const_cast<QTextDocument *>(document))
+    : m_document(const_cast<QTextDocument *>(document))
 {
     Q_ASSERT(m_document);
 }
@@ -59,6 +61,19 @@ KoTextDocument::~KoTextDocument()
 QTextDocument *KoTextDocument::document() const
 {
     return m_document;
+}
+
+void KoTextDocument::setTextEditor (KoTextEditor* textEditor)
+{
+    QVariant v;
+    v.setValue(textEditor);
+    m_document->addResource(KoTextDocument::TextEditor, TextEditorURL, v);
+}
+
+KoTextEditor* KoTextDocument::textEditor()
+{
+    QVariant resource = m_document->resource(KoTextDocument::TextEditor, TextEditorURL);
+    return resource.value<KoTextEditor *>();
 }
 
 void KoTextDocument::setStyleManager(KoStyleManager *sm)
@@ -92,7 +107,6 @@ void KoTextDocument::setChangeTracker(KoChangeTracker *changeTracker)
     QVariant v;
     v.setValue(changeTracker);
     m_document->addResource(KoTextDocument::ChangeTrackerResource, ChangeTrackerURL, v);
-    m_changeTrackerAssigned = true;
 }
 
 KoChangeTracker *KoTextDocument::changeTracker() const
@@ -101,9 +115,17 @@ KoChangeTracker *KoTextDocument::changeTracker() const
     return resource.value<KoChangeTracker *>();
 }
 
-bool KoTextDocument::changeTrackerAssigned()
+void KoTextDocument::setUndoStack(KoUndoStack* undoStack)
 {
-    return m_changeTrackerAssigned;
+    QVariant v;
+    v.setValue(undoStack);
+    m_document->addResource(KoTextDocument::UndoStack, UndoStackURL, v);
+}
+
+KoUndoStack* KoTextDocument::undoStack() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::UndoStack, UndoStackURL);
+    return resource.value<KoUndoStack *>();
 }
 
 void KoTextDocument::setLists(const QList<KoList *> &lists)
@@ -163,6 +185,11 @@ void KoTextDocument::clearText()
     QTextCursor cursor(m_document);
     cursor.select(QTextCursor::Document);
     cursor.removeSelectedText();
+}
+
+void KoTextDocument::setFrameSetUp(bool done)
+{
+    textEditor()->setupFinished(done);
 }
 
 KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const

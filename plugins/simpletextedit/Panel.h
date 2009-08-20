@@ -27,7 +27,7 @@
 #include <ui_Panel.h>
 
 class KAction;
-class KoTextSelectionHandler;
+class KoTextEditor;
 
 class Panel : public QDockWidget, public KoCanvasObserver {
     Q_OBJECT
@@ -52,7 +52,7 @@ private:
     KoCanvasBase *m_canvas;
     QObject *m_parent;
     KAction *m_style1, *m_style2, *m_style3;
-    KoTextSelectionHandler *m_handler;
+    KoTextEditor *m_handler;
 
     Ui::Panel widget;
 };

@@ -24,30 +24,33 @@
 
 #include "TextShape.h"
 
-#include <KoTextSelectionHandler.h>
 #include <KoTool.h>
 
-#include <QTextCursor>
+#include <QClipboard>
 #include <QHash>
 #include <QTextBlock>
+#include <QTextCursor>
 #include <QTimer>
-#include <QClipboard>
 
-class KAction;
+class InsertCharacter;
 class KoAction;
-class KoStyleManager;
-class KoTextEditingPlugin;
+class KoChangeTracker;
+class KoCharacterStyle;
 class KoColor;
 #ifndef NO_PIGMENT
 class KoColorPopupAction;
 #endif
+class KoParagraphStyle;
+class KoStyleManager;
+class KoTextEditingPlugin;
+class KoTextEditor;
 class UndoTextCommand;
-class InsertCharacter;
-class KoChangeTracker;
 
-class QUndoCommand;
+class KAction;
 class KFontSizeAction;
 class KFontAction;
+
+class QUndoCommand;
 
 class MockCanvas;
 
@@ -85,6 +88,8 @@ public:
     virtual void copy() const;
     ///reimplemented
     virtual void deleteSelection();
+    /// reimplemented from superclass
+    virtual void cut();
     /// reimplemented from superclass
     virtual bool paste();
     /// reimplemented from superclass
@@ -132,6 +137,14 @@ signals:
     void blockChanged(const QTextBlock &block);
 
 private slots:
+    /// make the selected text bold or not
+    void bold(bool);
+    /// make the selected text italic or not
+    void italic(bool);
+    /// underline of the selected text
+    void underline(bool underline);
+    /// strikethrough of the selected text
+    void strikeOut(bool strikeOut);
     /// insert a non breaking space at the caret position
     void nonbreakingSpace();
     /// insert a non breaking hyphen at the caret position
@@ -156,6 +169,14 @@ private slots:
     void decreaseIndent();
     /// move the paragraph indent of the selected text to be more (right on LtR text)
     void increaseIndent();
+    /// Increase the font size. This will preserve eventual difference in font size within the selection.
+    void increaseFontSize();
+    /// Decrease font size. See above.
+    void decreaseFontSize();
+    /// Set font family
+    void setFontFamily(const QString &);
+    /// Set Font size
+    void setFontSize(int size);
     /// Default Format
     void setDefaultFormat();
     /// see KoTextSelectionHandler::insertIndexMarker
@@ -174,6 +195,10 @@ private slots:
     void setTextColor(const KoColor &color);
     /// change background color of a selected text
     void setBackgroundColor(const KoColor &color);
+    /// set Paragraph style of current selection. Exisiting style will be completly overridden.
+    void setStyle(KoParagraphStyle *syle);
+    /// set the characterStyle of the current selection. see above.
+    void setStyle(KoCharacterStyle *style);
 
     /// add a KoDocument wide undo command which will call undo on the qtextdocument.
     void addUndoCommand();
@@ -185,6 +210,8 @@ private slots:
 
     /// show the insert special character docker.
     void insertSpecialCharacter();
+    /// insert string
+    void insertString(QString &string);
 
     /// method that will be called in an alternative thread for updating the paragraph direction at a character pos
     void updateParagraphDirection(const QVariant &variant);
@@ -216,19 +243,17 @@ protected:
 #endif
 
 private:
-    bool pasteHelper(QClipboard::Mode mode);
     void repaintCaret();
     void repaintSelection();
     void repaintSelection(int from, int to);
     void ensureCursorVisible();
     QRectF textRect(int startPosition, int endPosition) const;
     int pointToPosition(const QPointF & point) const;
-    void updateSelectionHandler();
     void updateActions();
     void updateStyleManager();
     void setShapeData(KoTextShapeData *data);
     void updateSelectedShape(const QPointF &point);
-
+    void updateSelectionHandler();
     void editingPluginEvents();
     void finishedWord();
     void finishedParagraph();
@@ -237,11 +262,12 @@ private:
     friend class UndoTextCommand;
     friend class TextCommandBase;
     friend class ChangeTracker;
+    friend class TextPasteCommand;
+    friend class TextCutCommand;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
-    QTextCursor m_caret;
+    KoTextEditor *m_textEditor;
     KoChangeTracker *m_changeTracker;
-    KoTextSelectionHandler m_selectionHandler;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
     bool m_trackChanges;

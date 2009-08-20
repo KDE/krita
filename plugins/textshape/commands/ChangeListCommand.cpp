@@ -38,7 +38,7 @@ ChangeListCommand::ChangeListCommand( const QTextCursor &cursor, KoListStyle::St
     extractTextBlocks(cursor, level);
     QSet<int> levels = m_levels.values().toSet();
     KoListStyle listStyle;
-    
+
     foreach (int lev, levels) {
         KoListLevelProperties llp;
         llp.setLevel(lev);
@@ -49,7 +49,7 @@ ChangeListCommand::ChangeListCommand( const QTextCursor &cursor, KoListStyle::St
         }
         if (lev > 1)
             llp.setIndent((lev-1) * 20); // make this configurable
-    
+
         listStyle.setLevelProperties(llp);
     }
 
@@ -78,11 +78,11 @@ void ChangeListCommand::extractTextBlocks(const QTextCursor &cursor, int level)
 {
     int selectionStart = qMin(cursor.anchor(), cursor.position());
     int selectionEnd = qMax(cursor.anchor(), cursor.position());
-    
+
     QTextBlock block = cursor.block().document()->findBlock(selectionStart);
-    
+
     bool oneOf = (selectionStart == selectionEnd); //ensures the block containing the cursor is selected in that case
-    
+
     while (block.isValid() && ((block.position() < selectionEnd) || oneOf)) {
         m_blocks.append(block);
         if (block.textList()) {
@@ -127,7 +127,7 @@ bool ChangeListCommand::formatsEqual(const KoListLevelProperties &llp, const QTe
 void ChangeListCommand::initList(KoListStyle *listStyle)
 {
     KoTextDocument document(m_blocks.first().document());
-    
+
     KoList *mergeableList = 0;
     KoList *newList = 0;
     //First check if we could merge with previous or next list
@@ -143,7 +143,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
         }
         if (isMergeable)
             mergeableList = document.list(prev);
-        
+
         if (!mergeableList) {
             // attempt to merge with next block if previous failed
             isMergeable = true;
@@ -156,7 +156,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
                 mergeableList = document.list(next);
         }
     }
-    // Now iterates over the blocks and set-up the various lists 
+    // Now iterates over the blocks and set-up the various lists
     for (int i = 0; i < m_blocks.size(); ++i) {
         m_list.insert(i, 0);
         m_oldList.insert(i, document.list(m_blocks.at(i)));
@@ -223,7 +223,6 @@ void ChangeListCommand::redo()
         }
     }
     else {
-        m_tool->startEditing(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
             if (m_actions.value(i) == ChangeListCommand::removeList) {
                 KoList::remove(m_blocks.at(i));
@@ -246,7 +245,6 @@ void ChangeListCommand::redo()
                 cursor.setBlockFormat(format);
             }
         }
-        m_tool->stopEditing();
     }
     m_first = false;
 }
@@ -255,7 +253,7 @@ void ChangeListCommand::undo()
 {
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this, m_tool);
-    
+
     for (int i = 0; i < m_blocks.size(); ++i) {
         // command to undo:
         if (m_actions.value(i) == ChangeListCommand::removeList) {
@@ -289,7 +287,7 @@ void ChangeListCommand::undo()
         else {
             //(ChangeListCommand::createNew)
             //(ChangeListCommand::mergeList)
-            
+
             //if the new/merged list replaced an existing list, the pointer to QTextList in oldList needs updating.
             if ((m_oldList.value(i))) {
                 m_oldList.value(i)->updateStoredList(m_blocks.at(i));
@@ -302,7 +300,7 @@ void ChangeListCommand::undo()
                 }
             }
         }
-        
+
         if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
             userData->setCounterWidth(-1.0);
     }

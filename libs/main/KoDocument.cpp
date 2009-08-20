@@ -35,6 +35,7 @@
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
 #include "KoApplication.h"
+#include "KoUndoStack.h"
 
 #include <KoXmlWriter.h>
 
@@ -49,7 +50,6 @@
 #include <ksavefile.h>
 #include <kxmlguifactory.h>
 #include <KIconLoader>
-#include <kundostack.h>
 #include <kdebug.h>
 #include <kdeprintdialog.h>
 #include <knotification.h>
@@ -166,7 +166,7 @@ public:
     QString templateType;
     QList<KoVersionInfo> versionInfo;
 
-    KUndoStack* undoStack;
+    KoUndoStack* undoStack;
 
     KoGridData gridData;
     KoGuidesData guidesData;
@@ -284,7 +284,7 @@ KoDocument::KoDocument(QWidget * parentWidget, QObject* parent, bool singleViewM
     d->pageLayout.left = 0;
     d->pageLayout.right = 0;
 
-    d->undoStack = new KUndoStack(this);
+    d->undoStack = new KoUndoStack(this);
     d->undoStack->createUndoAction(actionCollection());
     d->undoStack->createRedoAction(actionCollection());
     connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(setDocumentClean(bool)));
@@ -2340,6 +2340,11 @@ bool KoDocument::showEmbedInitDialog(QWidget* parent)
 QList<KoVersionInfo> & KoDocument::versionList()
 {
     return d->versionInfo;
+}
+
+KoUndoStack* KoDocument::undoStack()
+{
+    return d->undoStack;
 }
 
 void KoDocument::addCommand(QUndoCommand* command)

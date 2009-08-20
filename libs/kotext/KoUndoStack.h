@@ -22,20 +22,18 @@
 
 #include <QMetaType>
 
-#include "kundostack.h"
+#include <kundostack.h>
 
-#include <komain_export.h>
+#include "kotext_export.h"
 
 #include <KoDataCenter.h>
 
-class KOMAIN_EXPORT KoUndoStack : public KUndoStack, public KoDataCenter
+class KOTEXT_EXPORT KoUndoStack : public KUndoStack, public KoDataCenter
 {
     Q_OBJECT
 public:
 
     KoUndoStack(QObject *parent = 0);
-
-//    ~KoUndoStack();
 
 private:
 

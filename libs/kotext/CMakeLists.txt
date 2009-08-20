@@ -51,6 +51,7 @@ set(kotext_LIB_SRCS
     KoTextDebug.cpp
     KoTextPage.cpp
     KoTableColumnAndRowStyleManager.cpp
+    KoUndoStack.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
@@ -117,6 +118,7 @@ install(
     KoVariable.h
     KoVariableManager.h
     KoVariableRegistry.h
+    KoUndoStack.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

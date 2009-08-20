@@ -20,7 +20,6 @@
 #include "KoTextEditor.h"
 
 #include "KoBookmark.h"
-#include "KoDocument.h"
 #include "KoInlineTextObjectManager.h"
 #include <KoOdf.h>
 #include "KoTextDocument.h"
@@ -38,6 +37,7 @@
 #include "styles/KoStyleManager.h"
 #include "styles/KoTableCellStyle.h"
 
+#include <KLocale>
 #include <QFontDatabase>
 #include <QTextBlock>
 #include <QTextBlockFormat>
@@ -79,7 +79,6 @@ public:
     QTextDocument *document;
     QUndoCommand *headCommand;
     QString commandTitle;
-    KoDocument *undoStackOwner;
     bool setupDone;
     KoText::Direction direction;
 
@@ -88,8 +87,7 @@ public:
 
 KoTextEditor::Private::Private(QTextDocument *document)
     : document (document),
-    headCommand(0),
-    undoStackOwner(0)
+    headCommand(0)
 {
     caret = QTextCursor(document);
     editorState = NoOp;

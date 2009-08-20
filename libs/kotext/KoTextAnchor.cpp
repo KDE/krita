@@ -54,7 +54,7 @@ public:
     void relayout()
     {
         if (document) {
-            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
+            KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
             if (lay)
                 lay->documentChanged(position, 0, 0);
         }

@@ -69,7 +69,7 @@ void KoVariable::setValue(const QString &value)
     d->value = value;
     d->modified = true;
     if (d->document) {
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(d->document->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
         if (lay)
             lay->documentChanged(d->lastPositionInDocument, 0, 0);
     }

@@ -468,7 +468,7 @@ void KoTextSelectionHandler::insert(const QString &text)
 void KoTextSelectionHandler::insertInlineObject(KoInlineObject *inliner)
 {
     emit startMacro(i18n("Insert"));
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineTextObjectManager());
     layout->inlineTextObjectManager()->insertInlineObject(*d->caret, inliner);
@@ -576,7 +576,7 @@ bool KoTextSelectionHandler::insertIndexMarker()
         return false; // can't insert one on a whitespace as that does not indicate a word.
 
     emit startMacro(i18n("Insert Index"));
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineTextObjectManager());
     KoTextLocator *tl = new KoTextLocator();
@@ -591,7 +591,7 @@ void KoTextSelectionHandler::addBookmark(const QString &name)
     KoBookmark *bookmark = new KoBookmark(name, document);
     int startPos = -1, endPos = -1, caretPos = -1;
 
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineTextObjectManager());
     if (d->caret->hasSelection()) {
@@ -631,7 +631,7 @@ bool KoTextSelectionHandler::deleteInlineObjects(bool backward)
     // Also note that the below code needs unit testing since I found some issues already
 /*
     QTextCursor cursor(*d->caret);
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
     KoInlineTextObjectManager *manager = layout->inlineObjectTextManager();
     KoInlineObject *object;

@@ -555,7 +555,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (selectEnd < selectStart)
         qSwap(selectStart, selectEnd);
     QList<TextShape *> shapesToPaint;
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     if (lay) {
         foreach(KoShape *shape, lay->shapes()) {
             TextShape *ts = dynamic_cast<TextShape*>(shape);
@@ -1076,7 +1076,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent * event)
 void TextTool::ensureCursorVisible()
 {
     if (m_textShapeData->endPosition() < m_textEditor->position() || m_textShapeData->position() > m_textEditor->position()) {
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         Q_ASSERT(lay);
         foreach(KoShape* shape, lay->shapes()) {
             TextShape *textShape = dynamic_cast<TextShape*>(shape);
@@ -1280,7 +1280,7 @@ void TextTool::repaintSelection(int startPosition, int endPosition)
     if (startPosition > endPosition)
         qSwap(startPosition, endPosition);
     QList<TextShape *> shapes;
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
     foreach(KoShape* shape, lay->shapes()) {
         TextShape *textShape = dynamic_cast<TextShape*>(shape);
@@ -1850,7 +1850,7 @@ void TextTool::shapeDataRemoved()
     if (! m_textEditor->cursor()->isNull()) {
         const QTextDocument *doc = m_textEditor->document();
         Q_ASSERT(doc);
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(doc->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
         if (lay == 0 || lay->shapes().isEmpty()) {
             emit done();
             return;

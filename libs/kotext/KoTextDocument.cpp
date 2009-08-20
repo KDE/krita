@@ -91,7 +91,7 @@ void KoTextDocument::setInlineTextObjectManager(KoInlineTextObjectManager *manag
     v.setValue(manager);
     m_document->addResource(KoTextDocument::InlineTextManager, InlineObjectTextManagerURL, v);
 
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
     if (lay)
         lay->setInlineTextObjectManager(manager);
 }

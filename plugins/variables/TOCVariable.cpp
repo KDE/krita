@@ -121,7 +121,7 @@ void TOCSource::buildFromDocument(const QTextDocument *source, QTextCursor *targ
         m_titleStyle->applyStyle(block, true);
     }
     // Ok, look in the document, find the title... :)
-    KoTextDocumentLayout *docLayout = dynamic_cast<KoTextDocumentLayout*>(source->documentLayout());
+    KoTextDocumentLayout *docLayout = qobject_cast<KoTextDocumentLayout*>(source->documentLayout());
     if (!docLayout) {
         kWarning(31000) << "No layout for the document ??? I cancel.";
         return;

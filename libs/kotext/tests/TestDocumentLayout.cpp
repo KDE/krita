@@ -20,7 +20,7 @@ void TestDocumentLayout::initForNewTest()
     // this leaks memory like mad, but who cares ;)
     doc = shape1->layout->document();
     Q_ASSERT(doc);
-    layout = dynamic_cast<KoTextDocumentLayout*>(doc->documentLayout());
+    layout = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
     Q_ASSERT(layout);
 }
 

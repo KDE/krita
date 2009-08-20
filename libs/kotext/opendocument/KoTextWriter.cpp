@@ -437,7 +437,7 @@ void KoTextWriter::writeBlocks(QTextDocument *document, int from, int to, QHash<
 void KoTextWriter::write(QTextDocument *document, int from, int to)
 {
     d->styleManager = KoTextDocument(document).styleManager();
-    d->layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
+    d->layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
 
     d->changeTracker = KoTextDocument(document).changeTracker();
 

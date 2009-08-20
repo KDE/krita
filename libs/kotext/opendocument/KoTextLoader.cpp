@@ -226,7 +226,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                     KoVariable *var = KoVariableRegistry::instance()->createFromOdf(tag, d->context);
 
                     if (var) {
-                        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+                        KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
                         if (layout) {
                             KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                             if (textObjectManager) {
@@ -553,7 +553,7 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
 void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
     kDebug(32500) << "Loading a text:note element.";
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
     if (layout) {
         KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
         if (note->loadOdf(noteElem)) {
@@ -699,7 +699,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         // text:bookmark, text:bookmark-start and text:bookmark-end
         else if (isTextNS && (localName == "bookmark" || localName == "bookmark-start" || localName == "bookmark-end")) {
             QString bookmarkName = ts.attribute("name");
-            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
             if (layout) {
                 const QTextDocument *document = cursor.block().document();
                 KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
@@ -727,7 +727,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoVariable *var = KoVariableRegistry::instance()->createFromOdf(ts, d->context);
 
             if (var) {
-                KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+                KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
                 if (layout) {
                     KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                     if (textObjectManager) {
@@ -771,7 +771,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
         return;
     }
 
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
     if (layout) {
         KoTextAnchor *anchor = new KoTextAnchor(shape);
         anchor->loadOdfFromShape(tableElem);
@@ -800,7 +800,7 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
             anchor->loadOdfFromShape(element);
             d->textSharedData->shapeInserted(shape, element, d->context);
 
-            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
             if (layout) {
                 KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                 if (textObjectManager) {

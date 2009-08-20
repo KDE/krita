@@ -130,7 +130,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     }
     QTextDocument *doc = m_textShapeData->document();
     Q_ASSERT(doc);
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(doc->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
     if (m_textShapeData->endPosition() < 0) { // not layouted yet.
         if (lay == 0)
             kWarning(32500) << "Painting shape that doesn't have a kotext doc-layout, which can't work";
@@ -169,7 +169,7 @@ void TextShape::shapeChanged(ChangeType type, KoShape *shape)
     Q_UNUSED(shape);
     if (type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->foul();
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         if (lay)
             lay->interruptLayout();
         m_textShapeData->fireResizeEvent();
@@ -205,7 +205,7 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
 
     if (m_demoText) return;
     if (m_textShapeData->endPosition() < 0) return;
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     if (showTextFrames && lay) {
         QList< KoShape * > shapes = lay->shapes();
         // Get the bottom of the text.
@@ -268,7 +268,7 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const
     writer.startElement("draw:text-box");
     if (! textHeight.isEmpty())
         writer.addAttribute("fo:min-height", textHeight);
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     int index = -1;
     if (lay) {
         int i = 0;
@@ -382,7 +382,7 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
         }
     }
     else {
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         if ( lay ) {
             while (m_textShapeData->isDirty()){
                 lay->layout();

@@ -988,7 +988,7 @@ QString TestLoading::documentToOdt(QTextDocument *document)
 
     KoTextShapeData *textShapeData = new KoTextShapeData;
     textShapeData->setDocument(document, false /* ownership */);
-    if (dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) == 0) {
+    if (qobject_cast<KoTextDocumentLayout *>(document->documentLayout()) == 0) {
         // Setup layout and managers just like kotext
         KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
         textShapeData->document()->setDocumentLayout(layout);

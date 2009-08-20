@@ -118,7 +118,7 @@ void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType
         Q_ASSERT(data);
         data->foul();
 
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
         if (lay)
             lay->interruptLayout();
         data->fireResizeEvent();

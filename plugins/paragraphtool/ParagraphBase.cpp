@@ -152,7 +152,7 @@ void ParagraphBase::addFragments()
 {
     m_fragments.clear();
 
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
     assert(layout != NULL);
 
     QList<KoShape*> shapes = layout->shapes();

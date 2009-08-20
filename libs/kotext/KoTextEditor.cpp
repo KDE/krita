@@ -49,7 +49,7 @@
 #include <QString>
 #include <QUndoCommand>
 
-#include "kdebug.h"
+#include <kdebug.h>
 
 
 /*Private*/
@@ -118,21 +118,21 @@ void KoTextEditor::Private::documentCommandAdded()
 
         QPointer<QTextDocument> m_document;
     };
-kDebug() << "received QTextDoc signal. setupDone: " << setupDone;
+//kDebug() << "received QTextDoc signal. setupDone: " << setupDone;
     if (!setupDone)
         return;
-kDebug() << "editor state: " << editorState << " headcommand: " << headCommand;
+//kDebug() << "editor state: " << editorState << " headcommand: " << headCommand;
     if (!headCommand || editorState == NoOp) {
         headCommand = new QUndoCommand(commandTitle);
         if (KoTextDocument(document).undoStack()) {
-            kDebug() << "pushing head: " << headCommand->text();
+            //kDebug() << "pushing head: " << headCommand->text();
             KoTextDocument(document).undoStack()->push(headCommand);
         }
     }
     else if ((editorState == KeyPress || editorState == Delete) && headCommand->childCount()) {
         headCommand = new QUndoCommand(commandTitle);
         if (KoTextDocument(document).undoStack()) {
-            kDebug() << "pushing head: " << headCommand->text();
+            //kDebug() << "pushing head: " << headCommand->text();
             KoTextDocument(document).undoStack()->push(headCommand);
         }
     }
@@ -144,10 +144,10 @@ void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, Q
 {
     if (editorState == Custom && newState !=NoOp)
         return;
-    kDebug() << "updateState from: " << editorState << " to: " << newState;
+    //kDebug() << "updateState from: " << editorState << " to: " << newState;
     if (editorState != newState || commandTitle != title) {
         if (headCommand /*&& headCommand->childCount() && KoTextDocument(document).undoStack()*/) {
-            kDebug() << "reset headCommand";
+            //kDebug() << "reset headCommand";
             //            KoTextDocument(document).undoStack()->push(headCommand);
             headCommand = 0;
         }
@@ -157,7 +157,7 @@ void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, Q
         commandTitle = title;
     else
         commandTitle = i18n("Text");
-    kDebug() << "commandTitle is now: " << commandTitle;
+    //kDebug() << "commandTitle is now: " << commandTitle;
 }
 
 bool KoTextEditor::Private::deleteInlineObjects (bool backwards)
@@ -218,10 +218,10 @@ void KoTextEditor::Private::deleteSelection()
     if (!delText.hasSelection())
         delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
     QString text = delText.selectedText();
-    kDebug() << "delText: " << text;
+    //kDebug() << "delText: " << text;
     QTextDocumentFragment selection = delText.selection();
     caret.deleteChar();
-    kDebug() << "inlineObject property: " << caret.charFormat().intProperty(KoCharacterStyle::InlineInstanceId);
+    //kDebug() << "inlineObject property: " << caret.charFormat().intProperty(KoCharacterStyle::InlineInstanceId);
     if (KoTextDocument(document).changeTracker() && KoTextDocument(document).changeTracker()->isEnabled()) {
         //            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         //            Q_ASSERT(layout);
@@ -393,10 +393,10 @@ QTextCursor* KoTextEditor::cursor()
 void KoTextEditor::addCommand (QUndoCommand *command)
 {
     d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():i18n("Text"));
-    kDebug() << "will push the custom command: " << command->text();
+    //kDebug() << "will push the custom command: " << command->text();
     d->headCommand = command;
     KoTextDocument(d->document).undoStack()->push(command);
-    kDebug() << "custom command pushed";
+    //kDebug() << "custom command pushed";
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
@@ -451,14 +451,15 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
     f.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     selection.mergeCharFormat(f);
 
-/*            if (KoTextDocument(m_textShapeData->document()).changeTracker() && KoTextDocument(m_textShapeData->document()).changeTracker()->isEnabled()) {
-                -                if ( !m_changeRegistered ) {
-                    -                    int changeId = KoTextDocument(m_textShapeData->document()).changeTracker()->getInsertChangeId(i18n("Key Press"), m_caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
-                    -                    QTextCharFormat format;
-                    -                    format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-                    -                    m_caret.mergeCharFormat(format);
-                    -                }
-                    -            }*/
+/* // old code...
+   if (KoTextDocument(m_textShapeData->document()).changeTracker() && KoTextDocument(m_textShapeData->document()).changeTracker()->isEnabled()) {
+        if ( !m_changeRegistered ) {
+            int changeId = KoTextDocument(m_textShapeData->document()).changeTracker()->getInsertChangeId(i18n("Key Press"), m_caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+            QTextCharFormat format;
+            format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+            m_caret.mergeCharFormat(format);
+        }
+    }*/
 }
 
 void KoTextEditor::bold(bool bold)
@@ -920,7 +921,7 @@ void KoTextEditor::deleteChar()
 
 //TODO this should not be needed. this case should be handled by the generic code. neighbouring dels should be merged
     if (!d->caret.hasSelection() && dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(d->caret))) {
-    kDebug() << "move over existing del";
+    //kDebug() << "move over existing del";
     d->caret.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor);
     return;
     }

@@ -57,6 +57,7 @@
 #include <kis_paint_device.h>
 #include <KoChannelInfo.h>
 #include <kis_layer_manager.h>
+#include <kis_node_commands_adapter.h>
 
 KisChannelSeparator::KisChannelSeparator(KisView2 * view)
         : m_view(view)
@@ -208,7 +209,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
     if (!progressUpdater->interrupted()) {
 
         KisUndoAdapter * undo = 0;
-        if ((undo = image->undoAdapter()) && undo->undo()) {
+        if ( outputOps == TO_LAYERS && (undo = image->undoAdapter()) && undo->undo()) {
             undo->beginMacro(i18n("Separate Image"));
         }
 
@@ -220,6 +221,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         default:
             break;
         }
+        KisNodeCommandsAdapter adapter(m_view);
 
         for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it) {
 
@@ -232,7 +234,12 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
             if (outputOps == TO_LAYERS) {
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
-                image->addNode(l.data(), image->rootLayer().data());
+                if (undo && undo->undo())
+                {
+                    adapter.addNode(l.data(), image->rootLayer(), 0);
+                } else {
+                    image->addNode(l.data(), image->rootLayer());
+                }
             } else {
                 QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
                 QString mimelist = listMimeFilter.join(" ");
@@ -259,7 +266,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
                 KisImageSP dst = KisImageSP(new KisImage(d.undoAdapter(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
                 d.setCurrentImage(dst);
-                dst->addNode(l->clone().data(), dst->rootLayer().data());
+                dst->addNode(l->clone().data(), dst->rootLayer());
 
                 d.setOutputMimeType(mimefilter.toLatin1());
                 d.exportDocument(url);
@@ -269,7 +276,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
             ++deviceIt;
         }
 
-        if (undo && undo->undo()) {
+        if (outputOps == TO_LAYERS && undo && undo->undo()) {
             undo->endMacro();
         }
 

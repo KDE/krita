@@ -72,13 +72,13 @@ int KoDeleteChangeMarker::changeId() const
     return d->id;
 }
 
-bool KoDeleteChangeMarker::loadOdf (const KoXmlElement& element)
+bool KoDeleteChangeMarker::loadOdf(const KoXmlElement &element)
 {
     Q_UNUSED(element)
     return false;
 }
 
-void KoDeleteChangeMarker::paint(QPainter& painter, QPaintDevice* pd, const QTextDocument* document, const QRectF& rect, QTextInlineObject object, int posInDocument, const QTextCharFormat& format)
+void KoDeleteChangeMarker::paint(QPainter& painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(posInDocument);
 
@@ -113,7 +113,7 @@ void KoDeleteChangeMarker::paint(QPainter& painter, QPaintDevice* pd, const QTex
         painter.fillRect(rect,Qt::red);
 }
 
-void KoDeleteChangeMarker::resize(const QTextDocument* document, QTextInlineObject object, int posInDocument, const QTextCharFormat& format, QPaintDevice* pd)
+void KoDeleteChangeMarker::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     Q_UNUSED(posInDocument);
 
@@ -136,7 +136,7 @@ void KoDeleteChangeMarker::resize(const QTextDocument* document, QTextInlineObje
     }
 }
 
-void KoDeleteChangeMarker::updatePosition(const QTextDocument* document, QTextInlineObject object, int posInDocument, const QTextCharFormat& format)
+void KoDeleteChangeMarker::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document);
     Q_UNUSED(object);
@@ -144,7 +144,7 @@ void KoDeleteChangeMarker::updatePosition(const QTextDocument* document, QTextIn
     Q_UNUSED(format);
 }
 
-void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext& context)
+void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
 {
     Q_UNUSED(context)
 //KoInlineObject::saveOdf(context);

@@ -731,9 +731,9 @@ void TextTool::setShapeData(KoTextShapeData *data)
 
 void TextTool::updateSelectionHandler()
 {/*
-    m_-----selectionHandler.setShape(m_textShape);
-    m_-----selectionHandler.setShapeData(m_textShapeData);
-    m_-----selectionHandler.setCaret(&m_caret);
+    m_selectionHandler.setShape(m_textShape);
+    m_selectionHandler.setShapeData(m_textShapeData);
+    m_selectionHandler.setCaret(&m_caret);
     emit selectionChanged(m_caret.hasSelection());
 
     if (m_caret.hasSelection()) {
@@ -782,7 +782,7 @@ bool TextTool::paste()
 {
     const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
 
-// on windows we do not have data if we try to paste this selection
+    // on windows we do not have data if we try to paste this selection
     if (!data) return false;
 
     m_textEditor->addCommand(new TextPasteCommand(QClipboard::Clipboard, this));
@@ -1478,31 +1478,31 @@ void TextTool::strikeOut(bool strikeOut)
 
 void TextTool::nonbreakingSpace()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->insertText(QString(QChar(Qt::Key_nobreakspace)));
 }
 
 void TextTool::nonbreakingHyphen()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->insertText(QString(QChar(0x2013)));
 }
 
 void TextTool::softHyphen()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->insertText(QString(QChar(Qt::Key_hyphen)));
 }
 
 void TextTool::lineBreak()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->insertText(QString(QChar(0x2028)));
 }
 
 void TextTool::alignLeft()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     Qt::Alignment align = Qt::AlignLeading;
     if (m_textEditor->block().layout()->textOption().textDirection() != Qt::LeftToRight)
         align |= Qt::AlignTrailing;
@@ -1511,7 +1511,7 @@ void TextTool::alignLeft()
 
 void TextTool::alignRight()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     Qt::Alignment align = Qt::AlignTrailing;
     if (m_textEditor->block().layout()->textOption().textDirection() == Qt::RightToLeft)
         align = Qt::AlignLeading;
@@ -1520,19 +1520,19 @@ void TextTool::alignRight()
 
 void TextTool::alignCenter()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->setHorizontalTextAlignment(Qt::AlignHCenter);
 }
 
 void TextTool::alignBlock()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->setHorizontalTextAlignment(Qt::AlignJustify);
 }
 
 void TextTool::superScript(bool on)
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     if (on)
         m_actionFormatSub->setChecked(false);
     m_textEditor->setVerticalTextAlignment(on ? Qt::AlignTop : Qt::AlignVCenter);
@@ -1540,7 +1540,7 @@ void TextTool::superScript(bool on)
 
 void TextTool::subScript(bool on)
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     if (on)
         m_actionFormatSuper->setChecked(false);
     m_textEditor->setVerticalTextAlignment(on ? Qt::AlignBottom : Qt::AlignVCenter);
@@ -1548,39 +1548,39 @@ void TextTool::subScript(bool on)
 
 void TextTool::increaseIndent()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->increaseIndent();
     m_actionFormatDecreaseIndent->setEnabled(m_textEditor->blockFormat().leftMargin() > 0.);
 }
 
 void TextTool::decreaseIndent()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->decreaseIndent();
     m_actionFormatDecreaseIndent->setEnabled(m_textEditor->blockFormat().leftMargin() > 0.);
 }
 
 void TextTool::decreaseFontSize()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->decreaseFontSize();
 }
 
 void TextTool::increaseFontSize()
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->increaseFontSize();
 }
 
-void TextTool::setFontFamily (const QString &font)
+void TextTool::setFontFamily(const QString &font)
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->setFontFamily(font);
 }
 
 void TextTool::setFontSize (int size)
 {
-    if (! m_allowActions) return;
+    if (!m_allowActions) return;
     m_textEditor->setFontSize(size);
 }
 
@@ -1595,12 +1595,12 @@ void TextTool::insertIndexMarker()
     m_textEditor->insertIndexMarker();
 }
 
-void TextTool::setStyle (KoCharacterStyle* style)
+void TextTool::setStyle(KoCharacterStyle *style)
 {
     m_textEditor->setStyle(style);
 }
 
-void TextTool::setStyle (KoParagraphStyle* style)
+void TextTool::setStyle(KoParagraphStyle *style)
 {
     m_textEditor->setStyle(style);
 }

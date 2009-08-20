@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 
-TextCutCommand::TextCutCommand (TextTool* tool, QUndoCommand* parent) :
+TextCutCommand::TextCutCommand(TextTool *tool, QUndoCommand *parent) :
     QUndoCommand (parent),
     m_tool(tool),
     m_first(true)
@@ -39,9 +39,9 @@ void TextCutCommand::undo()
 
 void TextCutCommand::redo()
 {
-    if (!m_first)
+    if (!m_first) {
         QUndoCommand::redo();
-    else {
+    } else {
         m_first = false;
         m_tool->copy();
         m_tool->m_textEditor->deleteChar();

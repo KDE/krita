@@ -115,14 +115,14 @@ KoChangeTracker *KoTextDocument::changeTracker() const
     return resource.value<KoChangeTracker *>();
 }
 
-void KoTextDocument::setUndoStack(KoUndoStack* undoStack)
+void KoTextDocument::setUndoStack(KoUndoStack *undoStack)
 {
     QVariant v;
     v.setValue(undoStack);
     m_document->addResource(KoTextDocument::UndoStack, UndoStackURL, v);
 }
 
-KoUndoStack* KoTextDocument::undoStack() const
+KoUndoStack *KoTextDocument::undoStack() const
 {
     QVariant resource = m_document->resource(KoTextDocument::UndoStack, UndoStackURL);
     return resource.value<KoUndoStack *>();

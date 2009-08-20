@@ -28,7 +28,7 @@ class TextCutCommand : public QUndoCommand
 {
 public:
 
-    TextCutCommand (TextTool *tool, QUndoCommand* parent = 0);
+    TextCutCommand(TextTool *tool, QUndoCommand* parent = 0);
 
     virtual void undo();
     virtual void redo();

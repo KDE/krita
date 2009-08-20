@@ -21,15 +21,17 @@
 
 #include <kdebug.h>
 
-KoUndoStack::KoUndoStack (QObject* parent) : KUndoStack (parent)
+KoUndoStack::KoUndoStack (QObject *parent) : KUndoStack (parent)
 {
 }
+
 /*
 KoUndoStack::~KoUndoStack()
 {
 }
 */
-bool KoUndoStack::completeSaving(KoStore* store, KoXmlWriter* manifestWriter, KoShapeSavingContext* context)
+
+bool KoUndoStack::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context)
 {
     Q_UNUSED(store)
     Q_UNUSED(manifestWriter)
@@ -37,7 +39,7 @@ bool KoUndoStack::completeSaving(KoStore* store, KoXmlWriter* manifestWriter, Ko
     return true;
 }
 
-bool KoUndoStack::completeLoading(KoStore* store)
+bool KoUndoStack::completeLoading(KoStore *store)
 {
     Q_UNUSED(store)
     return true;

@@ -138,7 +138,7 @@ install( FILES
     KoViewAdaptor.h
     KoImageSelectionWidget.h
     kofficeversion.h
-    KoUndoStack.h 
+    KoUndoStack.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

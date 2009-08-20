@@ -31,7 +31,7 @@
 #include <QApplication>
 #include <QMimeData>
 
-TextPasteCommand::TextPasteCommand (QClipboard::Mode mode, TextTool *tool, QUndoCommand* parent)
+TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, QUndoCommand *parent)
     : QUndoCommand (parent),
     m_tool(tool),
     m_first(true),

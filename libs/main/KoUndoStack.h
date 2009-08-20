@@ -33,14 +33,14 @@ class KOMAIN_EXPORT KoUndoStack : public KUndoStack, public KoDataCenter
     Q_OBJECT
 public:
 
-    KoUndoStack(QObject* parent = 0);
+    KoUndoStack(QObject *parent = 0);
 
 //    ~KoUndoStack();
 
 private:
 
-    virtual bool completeSaving(KoStore* store, KoXmlWriter* manifestWriter, KoShapeSavingContext* context);
-    virtual bool completeLoading(KoStore* store);
+    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
+    virtual bool completeLoading(KoStore *store);
 };
 
 Q_DECLARE_METATYPE(KoUndoStack*)

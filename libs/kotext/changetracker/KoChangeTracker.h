@@ -82,7 +82,7 @@ private:
     virtual bool completeLoading(KoStore *store);
 
     /// reimplemented
-    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context);
+    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
 
     class Private;
     Private* const d;

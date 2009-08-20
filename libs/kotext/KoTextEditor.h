@@ -59,17 +59,17 @@ QTextCursor ( const QTextCursor & cursor )
 */
     void updateDefaultTextDirection(KoText::Direction direction);
 
-    bool operator!= ( const QTextCursor & other ) const;
+    bool operator!=(const QTextCursor &other) const;
 
-    bool operator< ( const QTextCursor & other ) const;
+    bool operator<(const QTextCursor &other) const;
 
-    bool operator<= ( const QTextCursor & other ) const;
+    bool operator<=(const QTextCursor &other) const;
 
-    bool operator== ( const QTextCursor & other ) const;
+    bool operator==(const QTextCursor &other) const;
 
-    bool operator> ( const QTextCursor & other ) const;
+    bool operator>(const QTextCursor &other) const;
 
-    bool operator>= ( const QTextCursor & other ) const;
+    bool operator>=(const QTextCursor &other) const;
 
 public slots:
     ///This should be used only as read-only cursor or within a QUndoCommand sub-class which will be added to the textEditor with addCommand. For examples of proper implementation of such undoCommands, see the TextShape commands.
@@ -77,7 +77,7 @@ public slots:
 
     void addCommand(QUndoCommand *command);
 
-    void registerTrackedChange(QTextCursor& selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock = false);
+    void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
 
     /// Call this when the initialisation (set default styles, ...) on the QTextDocument is done. Undo/redo as well as changeTracking will kick in.
     void setupFinished(bool done);
@@ -112,9 +112,9 @@ public slots:
 
     void setDefaultFormat();
 
-    void setStyle(KoParagraphStyle* style);
+    void setStyle(KoParagraphStyle *style);
 
-    void setStyle(KoCharacterStyle* style);
+    void setStyle(KoCharacterStyle *style);
 
     /**
     * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
@@ -142,52 +142,52 @@ public slots:
 
 
 /// QTextCursor methods
-    int anchor () const;
+    int anchor() const;
 
-    bool atBlockEnd () const;
+    bool atBlockEnd() const;
 
-    bool atBlockStart () const;
+    bool atBlockStart() const;
 
-    bool atEnd () const;
+    bool atEnd() const;
 
-    bool atStart () const;
+    bool atStart() const;
 
 //    void beginEditBlock ();
 
-    QTextBlock block () const;
+    QTextBlock block() const;
 
-    QTextCharFormat blockCharFormat () const;
+    QTextCharFormat blockCharFormat() const;
 
-    QTextBlockFormat blockFormat () const;
+    QTextBlockFormat blockFormat() const;
 
-    int blockNumber () const;
+    int blockNumber() const;
 
-    QTextCharFormat charFormat () const;
+    QTextCharFormat charFormat() const;
 
-    void clearSelection ();
+    void clearSelection();
 
-    int columnNumber () const;
+    int columnNumber() const;
 
-    void deleteChar ();
+    void deleteChar();
 
-    void deletePreviousChar ();
+    void deletePreviousChar();
 
-    QTextDocument *document () const;
+    QTextDocument *document() const;
 
 //    void endEditBlock ();
 
-    bool hasComplexSelection () const;
+    bool hasComplexSelection() const;
 
-    bool hasSelection ();
+    bool hasSelection();
 
-    void insertBlock ();
+    void insertBlock();
 
-    void insertBlock ( const QTextBlockFormat & format );
+    void insertBlock(const QTextBlockFormat &format);
 
-    void insertBlock ( const QTextBlockFormat & format, const QTextCharFormat & charFormat );
+    void insertBlock(const QTextBlockFormat &format, const QTextCharFormat &charFormat);
 
-    void insertFragment ( const QTextDocumentFragment & fragment );
-    
+    void insertFragment(const QTextDocumentFragment &fragment);
+
      /**
      * Insert a table at the current cursor position.
      * @param rows the number of rows in the created table.
@@ -195,47 +195,47 @@ public slots:
      */
     void insertTable(int rows, int columns);
 
-    void insertText ( const QString & text );
+    void insertText(const QString &text);
 
-    void insertText ( const QString & text, const QTextCharFormat & format );
+    void insertText (const QString &text, const QTextCharFormat &format);
 
 //    void joinPreviousEditBlock ();
 
-    void mergeBlockCharFormat ( const QTextCharFormat & modifier );
+    void mergeBlockCharFormat( const QTextCharFormat &modifier);
 
-    void mergeBlockFormat ( const QTextBlockFormat & modifier );
+    void mergeBlockFormat( const QTextBlockFormat &modifier);
 
-    void mergeCharFormat ( const QTextCharFormat & modifier );
+    void mergeCharFormat(const QTextCharFormat &modifier);
 
-    bool movePosition ( QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1 );
+    bool movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1);
 
     void newLine();
 
-    int position () const;
+    int position() const;
 
-    void removeSelectedText ();
+    void removeSelectedText();
 
-    void select ( QTextCursor::SelectionType selection );
+    void select(QTextCursor::SelectionType selection);
 
-    QString selectedText () const;
+    QString selectedText() const;
 
-    QTextDocumentFragment selection () const;
+    QTextDocumentFragment selection() const;
 
-    int selectionEnd () const;
+    int selectionEnd() const;
 
-    int selectionStart () const;
+    int selectionStart() const;
 
-    void setBlockCharFormat ( const QTextCharFormat & format );
+    void setBlockCharFormat(const QTextCharFormat &format);
 
-    void setBlockFormat ( const QTextBlockFormat & format );
+    void setBlockFormat(const QTextBlockFormat &format);
 
-    void setCharFormat ( const QTextCharFormat & format );
+    void setCharFormat(const QTextCharFormat &format);
 
-    void setPosition ( int pos, QTextCursor::MoveMode m = QTextCursor::MoveAnchor );
+    void setPosition(int pos, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
-    void setVisualNavigation ( bool b );
+    void setVisualNavigation(bool on);
 
-    bool visualNavigation () const;
+    bool visualNavigation() const;
 
 private:
     Q_PRIVATE_SLOT(d, void documentCommandAdded())

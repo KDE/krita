@@ -29,7 +29,7 @@ class TextPasteCommand : public QUndoCommand
 {
 public:
 
-    TextPasteCommand (QClipboard::Mode mode, TextTool *tool, QUndoCommand* parent = 0);
+    TextPasteCommand(QClipboard::Mode mode, TextTool *tool, QUndoCommand *parent = 0);
 
     virtual void undo();
 

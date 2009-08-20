@@ -772,7 +772,7 @@ public slots:
     /**
      * Returns the global undo stack
      */
-    KoUndoStack* undoStack();
+    KoUndoStack *undoStack();
     /**
      * Adds a command to the undo stack and executes it by calling the redo() function.
      * @param command command to add to the undo stack

@@ -62,7 +62,7 @@ public:
 
 KoChangeTracker::KoChangeTracker(QObject *parent)
     : QObject(parent),
-	d(new Private())
+    d(new Private())
 {
     d->m_changeId = 1;
 }
@@ -92,7 +92,7 @@ bool KoChangeTracker::displayDeleted()
     return d->m_displayDeleted;
 }
 
-int KoChangeTracker::getChangeId (QString& title, KoGenChange::Type type, QTextCursor& selection, QTextFormat& newFormat, int prevCharChangeId, int nextCharChangeId)
+int KoChangeTracker::getChangeId(QString &title, KoGenChange::Type type, QTextCursor &selection, QTextFormat& newFormat, int prevCharChangeId, int nextCharChangeId)
 {
     Q_UNUSED(title)
     Q_UNUSED(type)
@@ -178,7 +178,7 @@ bool KoChangeTracker::containsInlineChanges(const QTextFormat &format)
     return false;
 }
 
-int KoChangeTracker::mergeableId(KoGenChange::Type type, QString& title, int existingId)
+int KoChangeTracker::mergeableId(KoGenChange::Type type, QString &title, int existingId)
 {
     if (!existingId || !d->m_changes.value(existingId))
         return 0;

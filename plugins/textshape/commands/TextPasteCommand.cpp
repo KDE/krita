@@ -52,7 +52,7 @@ void TextPasteCommand::redo()
         QUndoCommand::redo();
     }
     else {
-        kDebug() << "begin paste command";
+        //kDebug() << "begin paste command";
         editor->cursor()->beginEditBlock();
         m_first = false;
         if (editor->hasSelection()) {//TODO
@@ -63,18 +63,18 @@ void TextPasteCommand::redo()
         const QMimeData *data = QApplication::clipboard()->mimeData(m_mode);
 
         if (data->hasFormat("application/vnd.oasis.opendocument.text")) {
-            kDebug() << "pasting odf text";
+            //kDebug() << "pasting odf text";
             KoTextPaste paste(m_tool->m_textShapeData, *editor->cursor(), m_tool->m_canvas);
             paste.paste(KoOdf::Text, data);
-            kDebug() << "done with pasting odf";
+            //kDebug() << "done with pasting odf";
         } else if (data->hasHtml()) {
-            kDebug() << "pasting html";
+            //kDebug() << "pasting html";
             editor->cursor()->insertHtml(data->html());
-            kDebug() << "done with pasting";
+            //kDebug() << "done with pasting";
         } else if (data->hasText()) {
-            kDebug() << "pasting text";
+            //kDebug() << "pasting text";
             editor->cursor()->insertText(data->text());
-            kDebug() << "done with pasting";
+            //kDebug() << "done with pasting";
         }
         editor->cursor()->endEditBlock();
     }

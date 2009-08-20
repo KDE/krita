@@ -70,6 +70,7 @@
 
 // OpenGL 
 #include <config-opengl.h>
+#include <config-glew.h>
 
 #ifdef HAVE_OPENGL
 #include <GL/gl.h>

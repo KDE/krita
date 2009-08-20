@@ -1,6 +1,4 @@
-include_directories( ${KOODF_INCLUDES} ${KOPROPERTIES_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/koplugin)
-
-include_directories(${PIGMENT_INCLUDES})
+include_directories(${KOTEXT_INCLUDES})
 
 add_subdirectory( tests )
 add_subdirectory( styles/tests )

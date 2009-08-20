@@ -5,10 +5,7 @@ if (KdepimLibs_FOUND)
    add_definitions(-DKDEPIMLIBS_FOUND)
 endif (KdepimLibs_FOUND)
 
-include_directories( ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/widgets
-    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
-)
+include_directories( ${KOMAIN_INCLUDES})
 
 ########### next target ###############
 

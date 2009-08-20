@@ -62,7 +62,7 @@ if (SHOULD_BUILD_KRITA)
         ${LCMS_INCLUDE_DIR}
         ${PIGMENT_INCLUDES}
         ${KORESOURCES_INCLUDES}
-        ${KOPROPERTIES_INCLUDES}
+        ${KOBASE_INCLUDES}
         ${KOTEXT_INCLUDES}
         ${KOMAIN_INCLUDES}
 	    ${CMAKE_SOURCE_DIR}/libs/widgets/resources

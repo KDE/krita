@@ -1,6 +1,6 @@
 add_subdirectory( tests )
 
-include_directories( ${KOPICTURE_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kobase)
+include_directories( ${KOODF_INCLUDES} )
 
 ########### libkoodf ###############
 

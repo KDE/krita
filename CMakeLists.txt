@@ -256,39 +256,55 @@ set(KOACTION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koaction ${CMAKE_BINARY_DIR}/libs
 # kostore is at the bottom of stack, so it has the dependency on the kde4 includes.
 set(KOSTORE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/store ${CMAKE_BINARY_DIR}/libs/store ${KDE4_INCLUDES})
 
+# koplugin is at the bottom of the stack
+set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
+
+# kobase is at the bottom of the stack
+set(KOBASE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kobase)
+
 # kopicture depends on kostore
 set(KOPICTURE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopicture ${CMAKE_BINARY_DIR}/libs/kopicture ${KOSTORE_INCLUDES})
 
-# koodf depends on kostore and kopicture
-set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf ${CMAKE_BINARY_DIR}/libs/odf ${KOPICTURE_INCLUDES})
+# koodf depends on kostore, kobase and kopicture
+set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
+                   ${CMAKE_BINARY_DIR}/libs/odf
+                   ${KOBASE_INCLUDES}
+                   ${KOPICTURE_INCLUDES})
 
 # flake depends on koodf
-set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake 
+set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${KOODF_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/kobase 
-                   ${CMAKE_SOURCE_DIR}/libs/flake/commands 
-                   ${CMAKE_SOURCE_DIR}/libs/flake/tools 
+                   ${CMAKE_SOURCE_DIR}/libs/flake/commands
+                   ${CMAKE_SOURCE_DIR}/libs/flake/tools
                    ${CMAKE_BINARY_DIR}/libs/flake)
 
 if (NOT NO_PIGMENT)
 # pigment depends on koplugin and lcms
-    set(PIGMENT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin 
-                     ${CMAKE_SOURCE_DIR}/libs/pigment 
-                     ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops 
-                     ${LCMS_INCLUDE_DIR} 
-                     ${KDE4_INCLUDES} )
+    set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/pigment
+                   ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
+                   ${LCMS_INCLUDE_DIR}
+                   ${KDE4_INCLUDES} )
 endif (NOT NO_PIGMENT)
 
-# komain depends on kostore, koplugin, flake and koodf
+if(BUILD_pigment)
+    set(FLAKE_INCLUDES ${FLAKE_INCLUDES} ${PIGMENT_INCLUDES})
+endif(BUILD_pigment)
+
+# KoText depends on koplugin, odf
+set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
+                   ${CMAKE_BINARY_DIR}/libs/kotext
+                   ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
+                   ${CMAKE_SOURCE_DIR}/libs/kotext/styles
+                   ${CMAKE_SOURCE_DIR}/libs/kotext/kohyphen
+                   ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
+                   ${KOPLUGIN_INCLUDES}
+                   ${FLAKE_INCLUDES}
+                   ${KOODF_INCLUDES})
+
+# komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
-                    ${FLAKE_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/koproperties
-                    ${CMAKE_SOURCE_DIR}/libs/store
-                    ${CMAKE_SOURCE_DIR}/libs/kotext
-                    ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
-                    ${CMAKE_SOURCE_DIR}/libs/kotext/styles
-                    ${CMAKE_SOURCE_DIR}/libs/kotext/kohyphen
-                    ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
+                    ${KOTEXT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/widgets/progress
                     ${CMAKE_SOURCE_DIR}/libs/widgets/linestyleselector
@@ -306,35 +322,18 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/koaction
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config
-                    ${CMAKE_SOURCE_DIR}/libs/resources
-                    ${CMAKE_SOURCE_DIR}/libs/koplugin
- )
-
-if(BUILD_pigment)
-    set(KOMAIN_INCLUDES ${KOMAIN_INCLUDES}
-                    ${PIGMENT_INCLUDES}
-    )
-endif(BUILD_pigment)
+                    ${CMAKE_SOURCE_DIR}/libs/resources)
 
 # koresources depends on pigment
 set(KORESOURCES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/resources
- 			 ${CMAKE_BINARY_DIR}/libs/resources 
- 			 ${PIGMENT_INCLUDES} 
-			 ${KDE4_INCLUDES})
-
-# KoText depends on store, odf
-set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext/styles
-                    ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
-                    ${CMAKE_SOURCE_DIR}/libs/kotext
-                    ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
-                    ${CMAKE_BINARY_DIR}/libs/kotext)
+                    ${CMAKE_BINARY_DIR}/libs/resources
+                    ${PIGMENT_INCLUDES}
+                    ${KDE4_INCLUDES})
 
 set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/kokross)
 
 # kopageapp
 set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
-
-set(KOPROPERTIES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kobase ${CMAKE_BINARY_DIR}/libs/kobase)
 
  #############################################
 ##############################################

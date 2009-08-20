@@ -1,4 +1,4 @@
-include_directories( ${PIGMENT_INCLUDES} )
+include_directories( ${KORESOURCES_INCLUDES} )
 
 ########### next target ###############
 

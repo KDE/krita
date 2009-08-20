@@ -1,13 +1,8 @@
-include_directories(${KDE4_INCLUDES} 
+include_directories(${KDE4_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/pagelayout
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${CMAKE_SOURCE_DIR}/libs/widgets/input
-    ${CMAKE_SOURCE_DIR}/libs/store
-    ${CMAKE_SOURCE_DIR}/libs/kotext
-    ${CMAKE_SOURCE_DIR}/libs/odf
-    ${CMAKE_SOURCE_DIR}/libs/kobase
-    ${CMAKE_SOURCE_DIR}/libs/flake
-)
+    ${KOTEXT_INCLUDES})
 
 ########### next target ###############
 

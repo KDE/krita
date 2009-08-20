@@ -1,4 +1,4 @@
-include_directories( ${KOSTORE_INCLUDES} )
+include_directories( ${KOPICTURE_INCLUDES} )
 
 ########### next target ###############
 

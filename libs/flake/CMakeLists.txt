@@ -1,8 +1,6 @@
 project(flake)
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOPROPERTIES_INCLUDES} ${KOODF_INCLUDES} ${KOPICTURE_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/koplugin
-)
+include_directories(${FLAKE_INCLUDES} ${QT_INCLUDES})
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FLAKE_TEST_EXPORT macro do something

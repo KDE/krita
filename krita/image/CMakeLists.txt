@@ -64,7 +64,7 @@ endif(USE_TILESYSTEM EQUAL 1)
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
                      ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
-                     ${KOPROPERTIES_INCLUDES}
+                     ${KOBASE_INCLUDES}
 )
 
 set(kritaimage_LIB_SRCS

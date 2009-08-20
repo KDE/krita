@@ -1,10 +1,10 @@
 project(textvariables)
 
-include_directories( ${KDE4_INCLUDE_DIR} 
-    ${QT_INCLUDES} 
-    ${KOTEXT_INCLUDES} 
-    ${KOPROPERTIES_INCLUDES}
-     
+include_directories(
+    ${KDE4_INCLUDE_DIR}
+    ${QT_INCLUDES}
+    ${KOTEXT_INCLUDES}
+    ${KOBASE_INCLUDES}
     ${KOMAIN_INCLUDES} )
 
 set(textvariables_SRCS

@@ -1,8 +1,7 @@
 project(pigmentcms)
 
-include_directories( ${PIGMENT_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
+include_directories( ${PIGMENT_INCLUDES} ${QT_INCLUDES} )
 
-include_directories( ${LCMS_INCLUDE_DIR} )
 add_subdirectory( colorprofiles )
 
 set(FILE_OPENEXR_SOURCES)

@@ -129,17 +129,17 @@ void KisOpenGLCanvas2::paintGL()
     if (!img) return;
 
     // Zoom factor
-    double sx, sy;
+    qreal sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
 
     // Resolution
-    double pppx, pppy;
+    qreal pppx, pppy;
     pppx = img->xRes();
     pppy = img->yRes();
 
     // Compute the scale factors
-    double scaleX = sx / pppx;
-    double scaleY = sy / pppy;
+    qreal scaleX = sx / pppx;
+    qreal scaleY = sy / pppy;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -284,17 +284,17 @@ void KisOpenGLCanvas2::setPixelToViewTransformation(void)
     if (!img) return;
 
     // Zoom factor
-    double sx, sy;
+    qreal sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
 
     // Resolution
-    double pppx, pppy;
+    qreal pppx, pppy;
     pppx = img->xRes();
     pppy = img->yRes();
 
     // Compute the scale factors
-    double scaleX = sx / pppx;
-    double scaleY = sy / pppy;
+    qreal scaleX = sx / pppx;
+    qreal scaleY = sy / pppy;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

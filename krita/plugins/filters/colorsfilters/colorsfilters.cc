@@ -225,7 +225,7 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
             // adjust, but since it's partially selected we also only partially adjust
             adj->transform(iter.oldRawData(), iter.rawData(), 1);
             const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
-            qint16 weights[2] = {MAX_SELECTED - selectedness, selectedness};
+            qint16 weights[2] = { qint16(MAX_SELECTED - selectedness), selectedness};
             mixOp->mixColors(pixels, weights, 2, iter.rawData());
             ++iter;
             pixelsProcessed++;

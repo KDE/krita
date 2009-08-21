@@ -127,7 +127,7 @@ private:
     qreal m_prevyTilt;
 
     GLuint m_displayList;
-    
+    QString m_brushModelName;
 #endif
 
     QPointF mousePos;

@@ -130,6 +130,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         }
     }
 
+
     if (e->button() == Qt::LeftButton) {
         initPaint(e);
         m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
@@ -504,6 +505,13 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             sx /= currentImage()->xRes();
             sy /= currentImage()->yRes();
 
+            // check if the paintop has been changed
+            // TODO: maybe find a better way -- signal from paintop to ui/freehand that paintop has been changed
+            if ( m_brushModelName.compare(currentPaintOpPreset()->settings()->modelName()) != 0){
+                glDeleteLists( m_displayList,1 );
+                m_displayList = 0;
+            }
+            
             if (glIsList( m_displayList )){
                 kDebug() << "I have list to draw!";
                 QPointF pos = converter.documentToView( mousePos );
@@ -563,13 +571,20 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             m_prevyTilt = m_yTilt;
             
             }else{
-                kDebug() << "_No_ list to draw!";
-                QString fileName = currentPaintOpPreset()->settings()->modelName();
+                kDebug() << "Default model will be used";
+                Kis3DObjectModel * model;
+                m_brushModelName = currentPaintOpPreset()->settings()->modelName();
 
                 // here is the default 3d model filename for brushes
-                if ( fileName.isEmpty() ) fileName = "3d-deform-brush";
-                Kis3DObjectModel model(fileName + ".obj" ,fileName + ".mtl");
-                m_displayList = model.displayList();
+                if ( m_brushModelName.isEmpty() ) {
+                    model = new Kis3DObjectModel("3d-deform-brush.obj" ,"3d-deform-brush.mtl");
+                    kDebug() << "isEmpty()";
+                }else{
+                    model = new Kis3DObjectModel(m_brushModelName + ".obj" ,m_brushModelName + ".mtl");
+                }
+                m_displayList = model->displayList();
+                delete model;
+                
             }
         }
     }

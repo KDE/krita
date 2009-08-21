@@ -1338,6 +1338,7 @@ bool KoDocument::openFile()
         deleteOpenPane();
     }
     d->bLoading = false;
+    undoStack()->clear();
     return ok;
 }
 
@@ -2241,6 +2242,7 @@ void KoDocument::openTemplate(const KUrl& url)
 {
     bool ok = loadNativeFormat(url.toLocalFile());
     setModified(false);
+    undoStack()->clear();
 
     if (ok) {
         QString mimeType = KMimeType::findByUrl( url, 0, true )->name();

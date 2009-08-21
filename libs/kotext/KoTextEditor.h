@@ -79,9 +79,6 @@ public slots:
 
     void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
 
-    /// Call this when the initialisation (set default styles, ...) on the QTextDocument is done. Undo/redo as well as changeTracking will kick in.
-    void setupFinished(bool done);
-
     void bold(bool bold);
 
     void italic(bool italic);

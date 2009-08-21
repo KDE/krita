@@ -79,7 +79,6 @@ public:
     QTextDocument *document;
     QUndoCommand *headCommand;
     QString commandTitle;
-    bool setupDone;
     KoText::Direction direction;
 
     State editorState;
@@ -91,7 +90,6 @@ KoTextEditor::Private::Private(QTextDocument *document)
 {
     caret = QTextCursor(document);
     editorState = NoOp;
-    setupDone = false;
 }
 
 void KoTextEditor::Private::documentCommandAdded()
@@ -118,9 +116,6 @@ void KoTextEditor::Private::documentCommandAdded()
 
         QPointer<QTextDocument> m_document;
     };
-//kDebug() << "received QTextDoc signal. setupDone: " << setupDone;
-    if (!setupDone)
-        return;
 //kDebug() << "editor state: " << editorState << " headcommand: " << headCommand;
     if (!headCommand || editorState == NoOp) {
         headCommand = new QUndoCommand(commandTitle);
@@ -390,7 +385,7 @@ QTextCursor* KoTextEditor::cursor()
     return &(d->caret);
 }
 
-void KoTextEditor::addCommand (QUndoCommand *command)
+void KoTextEditor::addCommand(QUndoCommand *command)
 {
     d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():i18n("Text"));
     //kDebug() << "will push the custom command: " << command->text();
@@ -398,11 +393,6 @@ void KoTextEditor::addCommand (QUndoCommand *command)
     KoTextDocument(d->document).undoStack()->push(command);
     //kDebug() << "custom command pushed";
     d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::setupFinished(bool done)
-{
-    d->setupDone = done;
 }
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat& prevFormat, bool applyToWholeBlock)

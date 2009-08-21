@@ -257,7 +257,7 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
     }
 }
 
-void TextShape::saveOdf(KoShapeSavingContext & context) const
+void TextShape::saveOdf(KoShapeSavingContext &context) const
 {
     KoXmlWriter & writer = context.xmlWriter();
 
@@ -290,7 +290,7 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const
     writer.endElement(); // draw:frame
 }
 
-bool TextShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     loadOdfAttributes(element, context, OdfAllAttributes);
 
@@ -327,25 +327,28 @@ bool TextShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &con
     return loadOdfFrame(element, context);
 }
 
-bool TextShape::loadOdfFrameElement(const KoXmlElement & element, KoShapeLoadingContext & context)
+bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     return m_textShapeData->loadOdf(element, context);
 }
 
-void TextShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
+void TextShape::init(const QMap<QString, KoDataCenter*> &dataCenterMap)
 {
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap["StyleManager"]);
-    KoTextDocument(m_textShapeData->document()).setStyleManager(styleManager);
+    KoTextDocument document(m_textShapeData->document());
+    document.setStyleManager(styleManager);
     KoInlineTextObjectManager *tom = dynamic_cast<KoInlineTextObjectManager *>(dataCenterMap["InlineTextObjectManager"]);
-    KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(tom);
+    document.setInlineTextObjectManager(tom);
     KoUndoStack *undoStack = dynamic_cast<KoUndoStack *>(dataCenterMap["UndoStack"]);
-    if (!undoStack)
+    if (!undoStack) {
+        kWarning(32500) << "No KoUndoStack found in the dataCenterMap, creating a new one";
         undoStack = new KoUndoStack();
-    KoTextDocument(m_textShapeData->document()).setUndoStack(undoStack);
+    }
+    document.setUndoStack(undoStack);
     KoTextEditor *editor = new KoTextEditor(m_textShapeData->document());
-    KoTextDocument(m_textShapeData->document()).setTextEditor(editor);
+    document.setTextEditor(editor);
 //    KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(dataCenterMap["ChangeTracker"]);
-//    KoTextDocument(m_textShapeData->document()).setChangeTracker(changeTracker);
+//    document.setChangeTracker(changeTracker);
 }
 
 QTextDocument *TextShape::footnoteDocument()

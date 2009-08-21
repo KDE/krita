@@ -1259,8 +1259,7 @@ bool KoDocument::openFile()
             return false;
         }
         d->bEmpty = false;
-        kDebug(30003) << "importedFile" << importedFile
-        << "status:" << static_cast<int>(status) << endl;
+        kDebug(30003) << "importedFile" << importedFile << "status:" << static_cast<int>(status);
     }
 
     QApplication::restoreOverrideCursor();

@@ -369,8 +369,8 @@ public:
 };
 
 KoTextEditor::KoTextEditor(QTextDocument *document)
-    : KoToolSelection(),
-    d (new Private (document))
+    : KoToolSelection(document),
+    d (new Private(document))
 {
     connect (d->document, SIGNAL (undoCommandAdded()), this, SLOT (documentCommandAdded()));
 }

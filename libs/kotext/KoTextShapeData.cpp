@@ -21,6 +21,7 @@
 
 #include "KoTextShapeData.h"
 #include "KoTextDocument.h"
+#include "KoTextEditor.h"
 #include "KoTextDocumentLayout.h"
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"
@@ -109,6 +110,10 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
             }
         }
     }
+
+    KoTextDocument kodoc(d->document);
+    if (kodoc.textEditor() == 0)
+        kodoc.setTextEditor(new KoTextEditor(d->document));
 }
 
 QTextDocument *KoTextShapeData::document()

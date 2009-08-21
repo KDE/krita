@@ -345,8 +345,6 @@ void TextShape::init(const QMap<QString, KoDataCenter*> &dataCenterMap)
         undoStack = new KoUndoStack();
     }
     document.setUndoStack(undoStack);
-    KoTextEditor *editor = new KoTextEditor(m_textShapeData->document());
-    document.setTextEditor(editor);
 //    KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(dataCenterMap["ChangeTracker"]);
 //    document.setChangeTracker(changeTracker);
 }

@@ -274,6 +274,7 @@ set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
 # flake depends on koodf
 set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${KOODF_INCLUDES}
+                   ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/flake/commands
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools
                    ${CMAKE_BINARY_DIR}/libs/flake)
@@ -298,7 +299,6 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_SOURCE_DIR}/libs/kotext/styles
                    ${CMAKE_SOURCE_DIR}/libs/kotext/kohyphen
                    ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
-                   ${KOPLUGIN_INCLUDES}
                    ${FLAKE_INCLUDES}
                    ${KOODF_INCLUDES})
 

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Text Editing plugin for the KOffice text tool
+Name[de]=Modul zur Textbearbeitung für das KOffice-Textwerkzeug
 Name[es]=Complemento de edición de texto para la herramienta de texto de KOffice
 Name[et]=KOffice'i tekstitööriista teksti redigeerimise plugin
 Name[it]=Estensione di modifica di testo per lo strumento di testo di KOffice
@@ -39,6 +40,7 @@ Comment[sv]=Definition av ett Insticksprogram för textredigering
 Comment[ta]=உரை-தொகுப்பானின் சொருகல் வரையறை
 Comment[tr]=Metin düzenleme eklentisi tanımı
 Comment[uk]=Визначення втулка для зміни тексту
+Comment[wa]=Definixha d' on tchôke-divins d' aspougnaedje di tecse
 Comment[x-test]=xxDefinition of a text-editing pluginxx
 Comment[zh_TW]=文字編輯外掛程式定義
 [PropertyDef::X-KoText-MinVersion]

@@ -18,6 +18,7 @@ Name[pt_BR]=Plug-in de Ação do Evento do Programa
 Name[sv]=Insticksprogram med skripthändelseåtgärd
 Name[tr]=Betik Olay Durumu Eklentisi
 Name[uk]=Додаток сценаріїв реакцій на події
+Name[wa]=Tchôke-divins faitindje d' evenmint do scripe
 Name[x-test]=xxScript Event Action Pluginxx
 Name[zh_CN]=脚本事件动作插件
 Name[zh_TW]=文稿事件動作外掛程式
@@ -42,6 +43,7 @@ Comment[pt_BR]=Um plug-in que contém uma ação de evento do programa
 Comment[sv]=Ett insticksprogram som innehåller en skripthändelseåtgärd
 Comment[tr]=Betik olay durumunu içeren bir eklenti
 Comment[uk]=Додаток, що містить сценарій реакції на подію
+Comment[wa]=On tchôke-divins k' a ene accion d' envenmint do scripe
 Comment[x-test]=xxA plugin that contains a script event actionxx
 Comment[zh_TW]=包含文稿事件動作的外掛程式
 [PropertyDef::X-ScriptEventAction-MinVersion]

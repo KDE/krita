@@ -573,19 +573,9 @@ void KoMainWindow::updateCaption()
     if (!d->rootDoc)
         updateCaption(QString(), false);
     else if (rootDocument()->isCurrent()) {
-        QString caption;
-        // Get caption from document info (title(), in about page)
-        if (rootDocument()->documentInfo()) {
-            caption = rootDocument()->documentInfo()->aboutInfo("title");
-        }
-        const QString url = rootDocument()->url().pathOrUrl();
-        if (!caption.isEmpty() && !url.isEmpty())
-            caption = QString("%1 - %2").arg(caption).arg(url);
-        else if (caption.isEmpty())
-            caption = url;
-
+        QString caption( rootDocument()->caption() );
         if (d->readOnly)
-            caption += i18n("(write protected)");
+            caption += " " + i18n("(write protected)");
 
         updateCaption(caption, rootDocument()->isModified());
         if (!rootDocument()->url().fileName(KUrl::ObeyTrailingSlash).isEmpty())

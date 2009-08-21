@@ -1250,8 +1250,7 @@ bool KoDocument::openFile()
             }
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
-                QString docUrl = url().pathOrUrl();
-                QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, docUrl));
+                QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, prettyPathOrUrl()));
                 KMessageBox::error(0, errorMsg);
             }
 
@@ -1791,30 +1790,46 @@ void KoDocument::setTitleModified(const QString &caption, bool mod)
     }
 }
 
+QString KoDocument::prettyPathOrUrl() const
+{
+    QString url( this->url().pathOrUrl() );
+#ifdef Q_WS_WIN
+    if (this->url().isLocalFile()) {
+        url = QDir::convertSeparators(url);
+    }
+#endif
+    return url;
+}
+
+// Get caption from document info (title(), in about page)
+QString KoDocument::caption() const
+{
+    QString c;
+    if (documentInfo()) {
+        c = documentInfo()->aboutInfo("title");
+    }
+    const QString url(prettyPathOrUrl());
+    if (!c.isEmpty() && !url.isEmpty()) {
+        c = QString("%1 - %2").arg(c).arg(url);
+    }
+    else if (c.isEmpty()) {
+        c = url; // Fall back to document URL
+    }
+    return c;
+}
+
 void KoDocument::setTitleModified()
 {
     //kDebug(30003)<<" url:"<<url().url()<<" extern:"<<isStoredExtern()<<" current:"<<d->current;
     KoDocument *doc = dynamic_cast<KoDocument *>(parent());
-    QString caption;
     if ((url().isEmpty() || isStoredExtern()) && d->current) {
-        // Get caption from document info (title(), in about page)
-        if (documentInfo()) {
-            caption = documentInfo()->aboutInfo("title");
-        }
-        if (!caption.isEmpty() && !url().pathOrUrl().isEmpty())
-            caption = QString("%1 - %2").arg(caption).arg(url().pathOrUrl());
-        else if (caption.isEmpty())
-            caption = url().pathOrUrl(); // Fall back to document URL
-
-        //kDebug(30003)<<" url:"<<url().url()<<" caption:"<<caption;
         if (doc) {
-            doc->setTitleModified(caption, isModified());
-            return;
-        } else {
-            // we must be root doc so update caption in all related windows
-            setTitleModified(caption, isModified());
+            doc->setTitleModified(caption(), isModified());
             return;
         }
+        // we must be root doc so update caption in all related windows
+        setTitleModified(caption(), isModified());
+        return;
     }
     if (doc) {
         // internal doc or not current doc, so pass on the buck
@@ -2042,9 +2057,9 @@ void KoDocument::showSavingErrorDialog()
 void KoDocument::showLoadingErrorDialog()
 {
     if (d->lastErrorMessage.isEmpty()) {
-        KMessageBox::error(0, i18n("Could not open\n%1", url().pathOrUrl()));
+        KMessageBox::error(0, i18n("Could not open\n%1", prettyPathOrUrl()));
     } else if (d->lastErrorMessage != "USER_CANCELED") {
-        KMessageBox::error(0, i18n("Could not open %1\nReason: %2", url().pathOrUrl(), d->lastErrorMessage));
+        KMessageBox::error(0, i18n("Could not open %1\nReason: %2", prettyPathOrUrl(), d->lastErrorMessage));
     }
 }
 

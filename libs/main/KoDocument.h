@@ -665,6 +665,16 @@ public:
     void setTitleModified(const QString &caption, bool mod);
 
     /**
+     * @return caption of the document
+     *
+     * Caption is of the form "[title] - [url]",
+     * built out of the document info (title) and pretty-printed
+     * document URL.
+     * If the title is not present, only the URL it returned.
+     */
+    QString caption() const;
+
+    /**
      * Sets the document URL to empty URL
      * KParts doesn't allow this, but %KOffice apps have e.g. templates
      * After using loadNativeFormat on a template, one wants
@@ -988,6 +998,8 @@ private:
 
     bool savePreview(KoStore* store);
     bool saveOasisPreview(KoStore* store, KoXmlWriter* manifestWriter);
+
+    QString prettyPathOrUrl() const;
 
     class Private;
     Private * const d;

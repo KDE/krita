@@ -22,6 +22,7 @@
 #include <klocale.h>
 
 #include <KoShape.h>
+#include <KoUndoStack.h>
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
@@ -112,6 +113,8 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
     foreach(KoShapeFactory* shapeFactory, shapeFactories) {
          shapeFactory->populateDataCenterMap(m_d->dataCenterMap);
     }
+
+    m_d->dataCenterMap["UndoStack"] = doc->undoStack();
 }
 
 

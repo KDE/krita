@@ -21,6 +21,7 @@
 #include "KoPADocument.h"
 
 #include <KoStore.h>
+#include <KoUndoStack.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoOdfStylesReader.h>
@@ -79,6 +80,8 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
         KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
         shapeFactory->populateDataCenterMap(d->dataCenterMap);
     }
+
+    d->dataCenterMap["UndoStack"] = undoStack();
 
     loadConfig();
 }

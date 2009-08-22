@@ -465,10 +465,10 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCursorStyle(dialog->m_general->cursorStyle());
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         // Color settings
-        cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->currentText());
+        cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted());
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentText());
         cfg.setPrinterColorSpace(dialog->m_colorSettings->m_page->cmbPrintingColorSpace->currentText());
-        cfg.setPrinterProfile(dialog->m_colorSettings->m_page->cmbPrintProfile->currentText());
+        cfg.setPrinterProfile(dialog->m_colorSettings->m_page->cmbPrintProfile->itemHighlighted());
 
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());

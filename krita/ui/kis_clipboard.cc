@@ -212,6 +212,11 @@ KisPaintDeviceSP KisClipboard::clip()
             profileName = cfg.monitorProfile();
 
         cs = KoColorSpaceRegistry::instance() ->colorSpace("RGBA", profileName);
+        if(!cs) {
+            cs = KoColorSpaceRegistry::instance()->rgb8();
+            profileName = cs->profile()->name();
+        }
+
         m_clip = new KisPaintDevice(cs);
         Q_CHECK_PTR(m_clip);
         m_clip->convertFromQImage(qimg, profileName);

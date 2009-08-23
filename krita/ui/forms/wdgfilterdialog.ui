@@ -33,7 +33,7 @@
    <item row="1" column="1">
     <widget class="QPushButton" name="pushButtonOk">
      <property name="text">
-      <string>Apply And Close</string>
+      <string>Apply and Close</string>
      </property>
      <property name="default">
       <bool>true</bool>

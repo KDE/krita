@@ -201,9 +201,9 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP img, const QString
     location = external ? QString::null : uri;
     location += m_d->imageName + ICC_PATH;
     if (store->hasFile(location)) {
-        QByteArray data;
         store->open(location);
-        data = store->read(store->size());
+        QByteArray data; data.resize(store->size());
+        int read = store->read( data.data(), store->size());
         store->close();
         img->setProfile(new KoIccColorProfile(data));
     }

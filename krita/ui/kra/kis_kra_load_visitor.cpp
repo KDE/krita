@@ -279,9 +279,11 @@ bool KisKraLoadVisitor::loadProfile( KisPaintDeviceSP device, const QString& loc
 {
 
     if (m_store->hasFile(location)) {
-        QByteArray data;
         m_store->open(location);
-        data = m_store->read(m_store->size());
+        QByteArray data; data.resize(m_store->size());
+        dbgFile << "Data to load: " << m_store->size();
+        int read = m_store->read( data.data(), m_store->size());
+        dbgFile << "Profile size: " << data.size() << " " << m_store->atEnd() << " " << m_store->device()->bytesAvailable() << " " << read;
         m_store->close();
         // Create a colorspace with the embedded profile
         const KoColorSpace * cs =

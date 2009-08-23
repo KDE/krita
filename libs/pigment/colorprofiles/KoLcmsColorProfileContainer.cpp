@@ -156,6 +156,11 @@ bool KoLcmsColorProfileContainer::init()
 
     d->profile = cmsOpenProfileFromMem((void*)d->data->rawData().constData(), (DWORD)d->data->rawData().size());
 
+    if(d->data->rawData().size() == 4096)
+    {
+      warnPigment << "Profile has a size of 4096, which is suspicious and indicates a possible misuse of QIODevice::read(int), check your code.";
+    }
+
     if (d->profile) {
         d->colorSpaceSignature = cmsGetColorSpace(d->profile);
         d->deviceClass = cmsGetDeviceClass(d->profile);

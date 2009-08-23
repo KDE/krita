@@ -1,4 +1,4 @@
 install(FILES
     CMY.icm 
-    cmyk.icm 
+    fogra27l.icm
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/color/icc/pigment)

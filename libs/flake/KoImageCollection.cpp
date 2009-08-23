@@ -126,7 +126,9 @@ KoImageData *KoImageCollection::createExternalImageData(const QUrl &url)
 {
     Q_ASSERT(!url.isEmpty() && url.isValid());
 
-    qint64 key = KoImageDataPrivate::generateKey(url.toEncoded());
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(url.toEncoded());
+    qint64 key = KoImageDataPrivate::generateKey(md5.result());
     if (d->images.contains(key))
         return new KoImageData(d->images.value(key));
     KoImageData *data = new KoImageData();

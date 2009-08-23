@@ -212,7 +212,9 @@ void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *coll
         }
         d->imageLocation = location;
         d->setSuffix(location.toEncoded());
-        d->key = KoImageDataPrivate::generateKey(location.toEncoded());
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(location.toEncoded());
+        d->key = KoImageDataPrivate::generateKey(md5.result());
         d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
     }
 }

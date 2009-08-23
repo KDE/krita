@@ -57,13 +57,8 @@ install( FILES
     KoStyleStack.h
     KoOdfGraphicStyles.h
     KoOdfDocument.h
-    KoEmbeddedDocumentSaver.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-
-if(CHANGETRK)
-  install( FILES ${FILES}
     KoGenChange.h
     KoGenChanges.h
+    KoEmbeddedDocumentSaver.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-endif(CHANGETRK)
 

@@ -235,6 +235,8 @@ install(
     KoPointerEvent.h
     KoSelection.h
     KoShape.h
+    KoShapeBorderModel.h
+    KoToolSelection.h
     KoShapeContainer.h
     KoShapeContainerModel.h
     KoChildrenData.h

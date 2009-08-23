@@ -110,6 +110,7 @@ install(
     KoTextBlockData.h
     KoTextDocument.h
     KoText.h
+    KoList.h
     KoTextLocator.h
     KoTextPage.h
     KoTextPaste.h
@@ -139,4 +140,13 @@ install(
     styles/KoStyleManager.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
+)
+
+install(
+    FILES
+    changetracker/KoChangeTracker.h
+    changetracker/KoChangeTrackerElement.h
+    changetracker/KoDeleteChangeMarker.h
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR}/changetracker COMPONENT Devel
 )

@@ -809,7 +809,7 @@ bool KoTextEditor::insertIndexMarker()
 
 void KoTextEditor::insertInlineObject (KoInlineObject *inliner)
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Index"));
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Variable"));
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineTextObjectManager());

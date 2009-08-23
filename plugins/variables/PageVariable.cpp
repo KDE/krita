@@ -32,7 +32,7 @@
 
 PageVariable::PageVariable()
         : KoVariable(true),
-        m_type(PageCount),
+        m_type(PageNumber),
         m_pageselect(KoTextPage::CurrentPage),
         m_pageadjust(0)
 {

@@ -262,11 +262,38 @@ install(
     KoToolRegistry.h
     KoZoomHandler.h
     KoZoomMode.h
+    commands/KoEventActionAddCommand.h
+    commands/KoEventActionRemoveCommand.h
+    commands/KoParameterToPathCommand.h
+    commands/KoPathCombineCommand.h
+    commands/KoPathControlPointMoveCommand.h
+    commands/KoPathFillRuleCommand.h
+    commands/KoPathPointInsertCommand.h
+    commands/KoPathPointMergeCommand.h
+    commands/KoPathPointMoveCommand.h
+    commands/KoPathPointRemoveCommand.h
+    commands/KoPathPointTypeCommand.h
+    commands/KoPathReverseCommand.h
+    commands/KoPathSegmentTypeCommand.h
+    commands/KoPathSeparateCommand.h
+    commands/KoShapeAlignCommand.h
+    commands/KoShapeBackgroundCommand.h
+    commands/KoShapeBorderCommand.h
     commands/KoShapeCreateCommand.h
-    commands/KoShapeGroupCommand.h
-    commands/KoShapeUngroupCommand.h
-    commands/KoShapeRenameCommand.h
     commands/KoShapeDeleteCommand.h
+    commands/KoShapeDistributeCommand.h
+    commands/KoShapeGroupCommand.h
+    commands/KoShapeKeepAspectRatioCommand.h
+    commands/KoShapeLockCommand.h
+    commands/KoShapeMoveCommand.h
+    commands/KoShapeRenameCommand.h
+    commands/KoShapeReorderCommand.h
+    commands/KoShapeShadowCommand.h
+    commands/KoShapeShearCommand.h
+    commands/KoShapeSizeCommand.h
+    commands/KoShapeTransformCommand.h
+    commands/KoShapeUngroupCommand.h
+    commands/KoSubpathRemoveCommand.h
     tools/KoInteractionTool.h
     KoViewConverter.h
     DESTINATION

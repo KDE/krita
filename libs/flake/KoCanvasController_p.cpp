@@ -45,7 +45,7 @@
 #include <stdlib.h>
 
 // ********** Viewport **********
-Viewport::Viewport(KoCanvasController* parent)
+Viewport::Viewport(KoCanvasController *parent)
         : QWidget(parent)
         , m_draggedShape(0)
         , m_drawShadow(false)
@@ -245,7 +245,7 @@ void Viewport::handleDragLeaveEvent(QDragLeaveEvent *)
     }
 }
 
-void Viewport::handlePaintEvent(QPainter & painter, QPaintEvent *event)
+void Viewport::handlePaintEvent(QPainter &painter, QPaintEvent *event)
 {
     Q_UNUSED(event);
     // Draw the shadow around the canvas.

@@ -29,18 +29,18 @@ class PictureTool : public KoTool
 {
     Q_OBJECT
 public:
-    explicit PictureTool( KoCanvasBase* canvas );
+    explicit PictureTool(KoCanvasBase* canvas);
 
     /// reimplemented from KoTool
-    virtual void paint( QPainter& , const KoViewConverter& ) {}
+    virtual void paint(QPainter&, const KoViewConverter&) {}
     /// reimplemented from KoTool
-    virtual void mousePressEvent( KoPointerEvent* ) {}
+    virtual void mousePressEvent(KoPointerEvent*) {}
     /// reimplemented from superclass
-    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented from KoTool
-    virtual void mouseMoveEvent( KoPointerEvent* ) {}
+    virtual void mouseMoveEvent(KoPointerEvent*) {}
     /// reimplemented from KoTool
-    virtual void mouseReleaseEvent( KoPointerEvent* ) {}
+    virtual void mouseReleaseEvent(KoPointerEvent*) {}
 
     /// reimplemented from KoTool
     virtual void activate (bool temporary=false);
@@ -49,7 +49,7 @@ public:
 
 protected:
     /// reimplemented from KoTool
-    virtual QWidget * createOptionWidget();
+    virtual QWidget *createOptionWidget();
 
 private slots:
     void changeUrlPressed();
@@ -59,4 +59,4 @@ private:
     PictureShape *m_pictureshape;
 };
 
-#endif 
+#endif

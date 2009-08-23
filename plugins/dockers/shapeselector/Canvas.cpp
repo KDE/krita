@@ -76,11 +76,11 @@ Canvas::Canvas(ShapeSelector *parent)
         this, SLOT(focusChanged(QWidget*, QWidget*)));
 }
 
-void Canvas::gridSize (qreal *, qreal *) const
+void Canvas::gridSize(qreal *, qreal *) const
 {
 }
 
-void Canvas::updateCanvas (const QRectF &rc)
+void Canvas::updateCanvas(const QRectF &rc)
 {
     QRectF zoomedRect = rc;
     zoomedRect.moveTopLeft(zoomedRect.topLeft() - m_displayOffset);
@@ -89,7 +89,7 @@ void Canvas::updateCanvas (const QRectF &rc)
     update(clipRect.toRect());
 }
 
-void  Canvas::addCommand (QUndoCommand *command)
+void  Canvas::addCommand(QUndoCommand *command)
 {
     command->redo();
     delete command;
@@ -352,7 +352,7 @@ bool Canvas::event(QEvent *e)
     return QWidget::event(e);
 }
 
-void Canvas::resizeEvent (QResizeEvent *event)
+void Canvas::resizeEvent(QResizeEvent *event)
 {
     emit resized(event->size());
 }
@@ -369,7 +369,7 @@ void Canvas::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void Canvas::keyReleaseEvent (QKeyEvent *event)
+void Canvas::keyReleaseEvent(QKeyEvent *event)
 {
     if (m_currentStrategy == 0) { // catch all cases where no current strategy is needed
     }
@@ -401,7 +401,7 @@ KoShapeManager * Canvas::shapeManager() const
     return m_itemStore.shapeManager();
 }
 
-QWidget *Canvas::canvasWidget ()
+QWidget *Canvas::canvasWidget()
 {
     return m_parent;
 }

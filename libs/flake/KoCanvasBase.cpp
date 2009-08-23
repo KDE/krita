@@ -44,7 +44,7 @@ public:
     KoSnapGuide * snapGuide;
 };
 
-KoCanvasBase::KoCanvasBase(KoShapeControllerBase * shapeControllerBase)
+KoCanvasBase::KoCanvasBase(KoShapeControllerBase *shapeControllerBase)
         : d(new Private())
 {
     d->resourceProvider = new KoCanvasResourceProvider();
@@ -58,12 +58,12 @@ KoCanvasBase::~KoCanvasBase()
 }
 
 
-KoShapeController * KoCanvasBase::shapeController() const
+KoShapeController *KoCanvasBase::shapeController() const
 {
     return d->shapeController;
 }
 
-KoCanvasResourceProvider * KoCanvasBase::resourceProvider() const
+KoCanvasResourceProvider *KoCanvasBase::resourceProvider() const
 {
     return d->resourceProvider;
 }
@@ -79,7 +79,7 @@ void KoCanvasBase::setCanvasController(KoCanvasController *controller)
     d->controller = controller;
 }
 
-KoCanvasController * KoCanvasBase::canvasController() const
+KoCanvasController *KoCanvasBase::canvasController() const
 {
     return d->controller;
 }

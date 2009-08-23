@@ -20,7 +20,6 @@
 #ifndef PICTURE_TOOL_FACTORY
 #define PICTURE_TOOL_FACTORY
 
-
 #include <KoToolFactory.h>
 
 class PictureToolFactory : public KoToolFactory
@@ -30,7 +29,7 @@ public:
     PictureToolFactory( QObject* parent);
     ~PictureToolFactory();
 
-    KoTool* createTool( KoCanvasBase* canvas );
+    KoTool *createTool(KoCanvasBase *canvas);
 };
 
 

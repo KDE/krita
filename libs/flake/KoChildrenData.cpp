@@ -81,15 +81,15 @@ void KoChildrenData::add(KoShape *child)
     d->relations.append(r);
 }
 
-void KoChildrenData::proposeMove( KoShape *shape, QPointF &move )
+void KoChildrenData::proposeMove(KoShape *shape, QPointF &move)
 {
     KoShapeContainer *parent = shape->parent();
     bool allowedToMove = true;
-    while ( allowedToMove && parent ) {
+    while (allowedToMove && parent) {
         allowedToMove = parent->isEditable();
         parent = parent->parent();
     }
-    if ( ! allowedToMove ) {
+    if (! allowedToMove) {
         move.setX( 0 );
         move.setY( 0 );
     }
@@ -99,12 +99,10 @@ void KoChildrenData::proposeMove( KoShape *shape, QPointF &move )
 void KoChildrenData::setClipping(const KoShape *child, bool clipping)
 {
     Private::Relation *relation = d->findRelation(child);
-    if (relation == 0) {
+    if (relation == 0)
         return;
-    }
-    if (relation->m_inside == clipping) {
+    if (relation->m_inside == clipping)
         return;
-    }
     relation->m_inside = clipping;
     relation->child()->update();
     relation->child()->notifyChanged();

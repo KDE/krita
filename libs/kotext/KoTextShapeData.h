@@ -49,7 +49,7 @@ class KOTEXT_EXPORT KoTextShapeData : public KoShapeUserData
 public:
     /// constructor
     KoTextShapeData();
-    ~KoTextShapeData();
+    virtual ~KoTextShapeData();
 
     /**
      * Replace the QTextDocument this shape will render.

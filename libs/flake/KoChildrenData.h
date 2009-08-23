@@ -25,17 +25,20 @@
 
 #include "flake_export.h"
 
+/**
+ * A default implementation of the KoShapeContainerModel.
+ */
 class FLAKE_EXPORT KoChildrenData : public KoShapeContainerModel
 {
 public:
     KoChildrenData();
-    ~KoChildrenData();
+    virtual ~KoChildrenData();
 
     /// reimplemented
     virtual void add(KoShape *child);
 
-    /// reimplemented
-    void proposeMove( KoShape *shape, QPointF &move );
+    /// Only allows free movement of non-locked shapes.
+    void proposeMove(KoShape *shape, QPointF &move);
 
     /// reimplemented
     virtual void setClipping(const KoShape *child, bool clipping);
@@ -55,8 +58,8 @@ public:
     /// reimplemented
     virtual bool isChildLocked(const KoShape *child) const;
 
-    /// reimplemented
-    virtual void containerChanged(KoShapeContainer *);
+    /// empty implementation.
+    virtual void containerChanged(KoShapeContainer *container);
 
 private:
     class Private;

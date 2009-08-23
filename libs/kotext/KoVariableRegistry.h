@@ -57,7 +57,7 @@ public:
      *
      * @returns the variable or 0 if no variable could be created
      */
-    KoVariable *createFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const;
+    KoVariable *createFromOdf(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 
     /**
      * Create a list of actions that can be used to plug into a menu, for example.

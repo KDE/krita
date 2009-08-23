@@ -27,15 +27,15 @@ class KoShape;
 class PictureShapeFactory : public KoShapeFactory
 {
 public:
-    PictureShapeFactory( QObject* parent);
+    PictureShapeFactory(QObject *parent);
     ~PictureShapeFactory() {}
 
-    virtual KoShape* createDefaultShape() const;
-    virtual KoShape* createShape( const KoProperties* params ) const;
-    virtual bool supports(const KoXmlElement & e) const;
+    virtual KoShape *createDefaultShape() const;
+    virtual KoShape *createShape(const KoProperties *params) const;
+    virtual bool supports(const KoXmlElement &e) const;
 
     /// reimplemented
-    virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap);
+    virtual void populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap);
     /// reimplemented
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };

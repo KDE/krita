@@ -54,7 +54,7 @@ public:
     void handleDropEvent(QDropEvent *event);
     void handleDragMoveEvent(QDragMoveEvent *event);
     void handleDragLeaveEvent(QDragLeaveEvent *event);
-    void handlePaintEvent(QPainter & gc, QPaintEvent *event);
+    void handlePaintEvent(QPainter &gc, QPaintEvent *event);
     void setMargin(int margin) { m_margin = margin; resetLayout(); }
 
 private:
@@ -76,7 +76,7 @@ private:
     KoShape *m_draggedShape;
 
     bool m_drawShadow;
-    QWidget * m_canvas;
+    QWidget *m_canvas;
     QSize m_documentSize; // Size in pixels of the document
     QPoint m_documentOffset; // Place where the canvas widget should
     int m_margin; // The viewport margin around the document

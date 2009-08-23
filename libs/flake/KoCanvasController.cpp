@@ -252,7 +252,7 @@ void KoCanvasController::updateCanvasOffsetY()
     d->preferredCenterFractionY = (verticalScrollBar()->value() + verticalScrollBar()->pageStep() / 2.0) / d->documentSize.height();
 }
 
-bool KoCanvasController::eventFilter(QObject* watched, QEvent* event)
+bool KoCanvasController::eventFilter(QObject *watched, QEvent *event)
 {
     if (d->canvas && d->canvas->canvasWidget() && (watched == d->canvas->canvasWidget())) {
         if ((event->type() == QEvent::Resize) || event->type() == QEvent::Move) {
@@ -419,7 +419,7 @@ void KoCanvasController::setToolOptionWidgets(const QMap<QString, QWidget *>&wid
     emit toolOptionWidgetsChanged(widgetMap);
 }
 
-void KoCanvasController::setDocumentSize(const QSize & sz, bool recalculateCenter)
+void KoCanvasController::setDocumentSize(const QSize &sz, bool recalculateCenter)
 {
     if (!recalculateCenter) {
         // assume the distance from the top stays equal and recalculate the center.
@@ -547,13 +547,13 @@ QPoint KoCanvasController::preferredCenter() const
     return center;
 }
 
-void KoCanvasController::paintEvent(QPaintEvent * event)
+void KoCanvasController::paintEvent(QPaintEvent *event)
 {
     QPainter gc(viewport());
     d->viewportWidget->handlePaintEvent(gc, event);
 }
 
-void KoCanvasController::dragEnterEvent(QDragEnterEvent * event)
+void KoCanvasController::dragEnterEvent(QDragEnterEvent *event)
 {
     d->viewportWidget->handleDragEnterEvent(event);
 }
@@ -635,7 +635,7 @@ QPoint KoCanvasController::scrollBarValue() const
     return value;
 }
 
-void KoCanvasController::setScrollBarValue(const QPoint & value)
+void KoCanvasController::setScrollBarValue(const QPoint &value)
 {
     QScrollBar * hBar = horizontalScrollBar();
     QScrollBar * vBar = verticalScrollBar();

@@ -60,7 +60,7 @@ public:
      * @param shapeControllerBase the implementation of the shapeController that the
      *   application provides to allow shapes to be added in multiple views.
      */
-    explicit KoCanvasBase(KoShapeControllerBase * shapeControllerBase);
+    explicit KoCanvasBase(KoShapeControllerBase *shapeControllerBase);
     virtual ~KoCanvasBase();
 
 public:
@@ -102,14 +102,14 @@ public:
      * Tell the canvas to repaint the specified rectangle. The coordinates
      * are document coordinates, not view coordinates.
      */
-    virtual void updateCanvas(const QRectF& rc) = 0;
+    virtual void updateCanvas(const QRectF &rc) = 0;
 
     /**
      * Return the proxy to the active tool (determining which tool
      * is really, really active is hard when tablets are involved,
      * so leave that to others.
      */
-    virtual KoToolProxy * toolProxy() const = 0;
+    virtual KoToolProxy *toolProxy() const = 0;
 
     /**
      * Return the viewConverter for this view.
@@ -120,12 +120,12 @@ public:
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual QWidget* canvasWidget() = 0;
+    virtual QWidget *canvasWidget() = 0;
 
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual const QWidget* canvasWidget() const = 0;
+    virtual const QWidget *canvasWidget() const = 0;
 
     /**
      * Return the unit of the current document for initialization of the widgets created
@@ -164,18 +164,18 @@ public:
      * canvas. The resource provider contains per-canvas settings such
      * as current foreground and background color.
      */
-    KoCanvasResourceProvider * resourceProvider() const;
+    KoCanvasResourceProvider *resourceProvider() const;
 
     /**
      * Return the shape controller for this canvas.
      * A shape controller is used to create or delete shapes and show the relevant dialogs to the user.
      */
-    KoShapeController * shapeController() const;
+    KoShapeController *shapeController() const;
 
     /**
      * Return the canvas controller for this canvas.
      */
-    KoCanvasController * canvasController() const;
+    KoCanvasController *canvasController() const;
 
     /**
      * @brief Scrolls the content of the canvas so that the given rect is visible.
@@ -189,7 +189,7 @@ public:
     /**
      * Returns the snap guide of the canvas
      */
-    KoSnapGuide * snapGuide() const;
+    KoSnapGuide *snapGuide() const;
 
     /**
      * Returns the guides data.
@@ -200,7 +200,7 @@ public:
      *
      * @return pointer to the guide data or zero if there is none
      */
-    virtual KoGuidesData * guidesData();
+    virtual KoGuidesData *guidesData();
 
 protected:
     friend class KoCanvasController;

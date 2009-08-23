@@ -140,7 +140,7 @@ public:
     bool isCanvasOpenGL() const;
 
     /// Reimplemented from QObject
-    virtual bool eventFilter(QObject* watched, QEvent* event);
+    virtual bool eventFilter(QObject *watched, QEvent *event);
 
     /**
      * @brief Scrolls the content of the canvas so that the given rect is visible.
@@ -260,19 +260,19 @@ public:
      * Set the position of the scrollbar
      * @param the new values of the sroll bars
      */
-    void setScrollBarValue(const QPoint & value);
+    void setScrollBarValue(const QPoint &value);
 
 signals:
     /**
      * Emitted when a previously added canvas is about to be removed.
      * @param cv this object
      */
-    void canvasRemoved(KoCanvasController* cv);
+    void canvasRemoved(KoCanvasController *cv);
     /**
      * Emitted when a canvas is set on this widget
      * @param cv this object
      */
-    void canvasSet(KoCanvasController* cv);
+    void canvasSet(KoCanvasController *cv);
 
     /**
      * Emitted when canvasOffsetX() changes
@@ -290,19 +290,19 @@ signals:
      * Emitted when the cursor is moved over the canvas widget.
      * @param pos the position in widget pixels.
      */
-    void canvasMousePositionChanged(const QPoint & pos);
+    void canvasMousePositionChanged(const QPoint &pos);
 
     /**
      * Emitted when the cursor is moved over the canvas widget.
      * @param pos the position in document coordinates.
      */
-    void documentMousePositionChanged(const QPointF & pos);
+    void documentMousePositionChanged(const QPointF &pos);
 
     /**
      * Emitted when the entire controller size changes
      * @param size the size in widget pixels.
      */
-    void sizeChanged(const QSize & size);
+    void sizeChanged(const QSize &size);
 
     /**
      * Emit the new tool option widgets to be used with this canvas.
@@ -359,11 +359,11 @@ protected slots:
 
 protected:
     /// reimplemented from QWidget
-    virtual void paintEvent(QPaintEvent * event);
+    virtual void paintEvent(QPaintEvent *event);
     /// reimplemented from QWidget
-    virtual void resizeEvent(QResizeEvent * resizeEvent);
+    virtual void resizeEvent(QResizeEvent *resizeEvent);
     /// reimplemented from QWidget
-    virtual void dragEnterEvent(QDragEnterEvent * event);
+    virtual void dragEnterEvent(QDragEnterEvent *event);
     /// reimplemented from QWidget
     virtual void dropEvent(QDropEvent *event);
     /// reimplemented from QWidget

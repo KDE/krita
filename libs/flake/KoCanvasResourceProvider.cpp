@@ -31,7 +31,7 @@ public:
     QHash<int, QVariant> resources;
 };
 
-KoCanvasResourceProvider::KoCanvasResourceProvider(QObject * parent)
+KoCanvasResourceProvider::KoCanvasResourceProvider(QObject *parent)
         : QObject(parent),
         d(new Private())
 {
@@ -45,7 +45,7 @@ KoCanvasResourceProvider::~KoCanvasResourceProvider()
     delete d;
 }
 
-void KoCanvasResourceProvider::setResource(int key, const QVariant & value)
+void KoCanvasResourceProvider::setResource(int key, const QVariant &value)
 {
     if (d->resources.contains(key)) {
         if (d->resources.value(key) == value)
@@ -66,21 +66,21 @@ QVariant KoCanvasResourceProvider::resource(int key)
         return d->resources.value(key);
 }
 
-void KoCanvasResourceProvider::setResource(int key, const KoColor & color)
+void KoCanvasResourceProvider::setResource(int key, const KoColor &color)
 {
     QVariant v;
     v.setValue(color);
     setResource(key, v);
 }
 
-void KoCanvasResourceProvider::setResource(int key, const KoID & id)
+void KoCanvasResourceProvider::setResource(int key, const KoID &id)
 {
     QVariant v;
     v.setValue(id);
     setResource(key, v);
 }
 
-void KoCanvasResourceProvider::setResource(int key, KoShape* shape)
+void KoCanvasResourceProvider::setResource(int key, KoShape *shape)
 {
     QVariant v;
     v.setValue(shape);
@@ -97,7 +97,7 @@ KoColor KoCanvasResourceProvider::koColorResource(int key)
 }
 
 
-void KoCanvasResourceProvider::setForegroundColor(const KoColor & color)
+void KoCanvasResourceProvider::setForegroundColor(const KoColor &color)
 {
     setResource(KoCanvasResource::ForegroundColor, color);
 }
@@ -108,7 +108,7 @@ KoColor KoCanvasResourceProvider::foregroundColor()
 }
 
 
-void KoCanvasResourceProvider::setBackgroundColor(const KoColor & color)
+void KoCanvasResourceProvider::setBackgroundColor(const KoColor &color)
 {
     setResource(KoCanvasResource::BackgroundColor, color);
 }

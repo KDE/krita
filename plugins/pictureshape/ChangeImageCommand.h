@@ -38,9 +38,9 @@ public:
     virtual void undo();
 
 private:
-    PictureShape * m_shape;
-    KoImageData * m_oldImageData;
-    KoImageData * m_newImageData;
+    PictureShape *m_shape;
+    KoImageData *m_oldImageData;
+    KoImageData *m_newImageData;
     QSizeF m_oldSize;
     QSizeF m_newSize;
 };

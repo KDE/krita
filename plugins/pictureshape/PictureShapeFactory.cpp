@@ -30,37 +30,37 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-PictureShapeFactory::PictureShapeFactory( QObject* parent)
-    : KoShapeFactory( parent, PICTURESHAPEID, i18n( "Image" ) )
+PictureShapeFactory::PictureShapeFactory(QObject *parent)
+    : KoShapeFactory(parent, PICTURESHAPEID, i18n("Image"))
 {
-    setToolTip( i18n( "Image shape that can display jpg, png etc." ) );
-    setIcon( "x-shape-image" );
-    setOdfElementNames( KoXmlNS::draw, QStringList( "image" ) );
-    setLoadingPriority( 1 );
+    setToolTip(i18n("Image shape that can display jpg, png etc."));
+    setIcon("x-shape-image");
+    setOdfElementNames(KoXmlNS::draw, QStringList("image"));
+    setLoadingPriority(1);
 }
 
 KoShape* PictureShapeFactory::createDefaultShape() const
 {
     PictureShape * defaultShape = new PictureShape();
-    defaultShape->setShapeId( PICTURESHAPEID );
+    defaultShape->setShapeId(PICTURESHAPEID);
     return defaultShape;
 }
 
-KoShape* PictureShapeFactory::createShape( const KoProperties* params ) const
+KoShape* PictureShapeFactory::createShape(const KoProperties *params) const
 {
     Q_UNUSED(params);
     return createDefaultShape();
 }
 
-bool PictureShapeFactory::supports(const KoXmlElement & e) const
+bool PictureShapeFactory::supports(const KoXmlElement &e) const
 {
-    return ( e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw );
+    return e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw;
 }
 
-void PictureShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap) 
+void PictureShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap)
 {
     // only add image collection if none exist already
-    if( ! dataCenterMap.contains( "ImageCollection" ) )
+    if (!dataCenterMap.contains("ImageCollection"))
     {
         KoImageCollection *imgCol = new KoImageCollection();
         dataCenterMap["ImageCollection"] = imgCol;

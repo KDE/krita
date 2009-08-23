@@ -56,14 +56,14 @@ class Canvas : public QWidget, public KoCanvasBase
     Q_OBJECT
 public:
     Canvas(ShapeSelector *parent);
-    void gridSize (qreal *horizontal, qreal *vertical) const;
+    void gridSize(qreal *horizontal, qreal *vertical) const;
     bool snapToGrid() const { return false; }
-    void addCommand (QUndoCommand *command);
+    void addCommand(QUndoCommand *command);
     KoShapeManager * shapeManager() const;
-    void updateCanvas (const QRectF &rc);
-    KoToolProxy *toolProxy () const { return 0; }
+    void updateCanvas(const QRectF &rc);
+    KoToolProxy *toolProxy() const { return 0; }
     const KoViewConverter * viewConverter() const { return &m_converter; }
-    QWidget *canvasWidget ();
+    QWidget *canvasWidget();
     KoUnit unit() const { return KoUnit(KoUnit::Millimeter); }
     void updateInputMethodInfo() {}
     ItemStore *itemStore() { return &m_itemStore; }
@@ -104,9 +104,9 @@ protected: // event handlers
     virtual void dragEnterEvent(QDragEnterEvent *e);
     virtual void dropEvent(QDropEvent *e);
     virtual bool event(QEvent *e);
-    virtual void resizeEvent (QResizeEvent *e);
+    virtual void resizeEvent(QResizeEvent *e);
     virtual void keyPressEvent( QKeyEvent *e );
-    virtual void keyReleaseEvent (QKeyEvent *e);
+    virtual void keyReleaseEvent(QKeyEvent *e);
 
 private:
     DummyShapeController m_shapeController;

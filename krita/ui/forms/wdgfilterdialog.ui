@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>FilterDialog</class>
- <widget class="QDialog" name="FilterDialog" >
-  <property name="geometry" >
+ <widget class="QDialog" name="FilterDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,19 +10,19 @@
     <height>359</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" colspan="5" >
-    <widget class="KisFilterSelectorWidget" native="1" name="filterSelection" />
+  <layout class="QGridLayout">
+   <item row="0" column="0" colspan="5">
+    <widget class="KisFilterSelectorWidget" name="filterSelection" native="true"/>
    </item>
-   <item row="1" column="0" >
+   <item row="1" column="0">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>40</width>
        <height>20</height>
@@ -29,36 +30,36 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="1" >
-    <widget class="QPushButton" name="pushButtonOk" >
-     <property name="text" >
-      <string>Ok</string>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="pushButtonOk">
+     <property name="text">
+      <string>Apply and close</string>
      </property>
-     <property name="default" >
+     <property name="default">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="1" column="2" >
-    <widget class="QPushButton" name="pushButtonApply" >
-     <property name="text" >
+   <item row="1" column="2">
+    <widget class="QPushButton" name="pushButtonApply">
+     <property name="text">
       <string>Apply</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="3" >
-    <widget class="QPushButton" name="pushButtonCreateMaskEffect" >
-     <property name="enabled" >
+   <item row="1" column="3">
+    <widget class="QPushButton" name="pushButtonCreateMaskEffect">
+     <property name="enabled">
       <bool>true</bool>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>Create mask effect</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="4" >
-    <widget class="QPushButton" name="pushButtonCancel" >
-     <property name="text" >
+   <item row="1" column="4">
+    <widget class="QPushButton" name="pushButtonCancel">
+     <property name="text">
       <string>Cancel</string>
      </property>
     </widget>

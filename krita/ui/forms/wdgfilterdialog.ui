@@ -33,7 +33,7 @@
    <item row="1" column="1">
     <widget class="QPushButton" name="pushButtonOk">
      <property name="text">
-      <string>Apply and close</string>
+      <string>Apply And Close</string>
      </property>
      <property name="default">
       <bool>true</bool>
@@ -53,7 +53,7 @@
       <bool>true</bool>
      </property>
      <property name="text">
-      <string>Create mask effect</string>
+      <string>Create Mask Effect</string>
      </property>
     </widget>
    </item>

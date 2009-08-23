@@ -120,7 +120,7 @@ void KisFilterDialog::apply()
     KisFilterConfiguration* config = d->uiFilterDialog.filterSelection->configuration();
     emit(sigPleaseApplyFilter(d->node, config));
     d->uiFilterDialog.pushButtonOk->setEnabled(false);
-    d->uiFilterDialog.pushButtonApply->setText(i18n("Apply again"));
+    d->uiFilterDialog.pushButtonApply->setText(i18n("Apply Again"));
 }
 
 void KisFilterDialog::close()

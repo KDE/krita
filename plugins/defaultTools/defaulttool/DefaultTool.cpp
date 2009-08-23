@@ -1093,7 +1093,7 @@ void DefaultTool::resourceChanged(int key, const QVariant & res)
 
 KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 {
-    // reset the move by keys when a new strategy is created otherwise we might change the 
+    // reset the move by keys when a new strategy is created otherwise we might change the
     // command after a new command was added. This happend when you where faster than the timer.
     m_moveCommand = 0;
 
@@ -1164,9 +1164,9 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
     if ((event->buttons() & Qt::LeftButton) == 0)
         return 0;  // Nothing to do for middle/right mouse button
 
-    KoShape * object(shapeManager->shapeAt(event->point, selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop));
+    KoShape *shape(shapeManager->shapeAt(event->point, selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop));
 
-    if (!object && handle == KoFlake::NoHandle) {
+    if (!shape && handle == KoFlake::NoHandle) {
         // check if we have hit a guide
         if (m_guideLine->isValid()) {
             m_guideLine->select();
@@ -1179,17 +1179,17 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         return new KoShapeRubberSelectStrategy(this, m_canvas, event->point);
     }
 
-    if (select->isSelected(object)) {
+    if (select->isSelected(shape)) {
         if (selectMultiple) {
             repaintDecorations();
-            select->deselect(object);
+            select->deselect(shape);
         }
     }
-    else if (handle == KoFlake::NoHandle) { // clicked on object which is not selected
+    else if (handle == KoFlake::NoHandle) { // clicked on shape which is not selected
         repaintDecorations();
         if (! selectMultiple)
             shapeManager->selection()->deselectAll();
-        select->select(object, selectNextInStack ? false : true);
+        select->select(shape, selectNextInStack ? false : true);
         repaintDecorations();
         return new ShapeMoveStrategy(this, m_canvas, event->point);
     }

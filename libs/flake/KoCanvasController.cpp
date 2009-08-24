@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
  * Copyright (C) 2006, 2009 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
@@ -35,6 +35,7 @@
 #include "KoToolManager.h"
 
 #include <ksharedconfig.h>
+#include <KDebug>
 #include <kconfiggroup.h>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
@@ -106,8 +107,7 @@ void KoCanvasController::setDrawShadow(bool drawShadow)
     d->viewportWidget->setDrawShadow(drawShadow);
 }
 
-
-void KoCanvasController::resizeEvent(QResizeEvent * resizeEvent)
+void KoCanvasController::resizeEvent(QResizeEvent *resizeEvent)
 {
     emit sizeChanged(resizeEvent->size());
 
@@ -241,7 +241,11 @@ void KoCanvasController::updateCanvasOffsetX()
     emit canvasOffsetXChanged(canvasOffsetX());
     if (d->ignoreScrollSignals)
         return;
-    d->preferredCenterFractionX = (horizontalScrollBar()->value() + horizontalScrollBar()->pageStep() / 2.0) / d->documentSize.width();
+    if (horizontalScrollBar()->isVisible())
+        d->preferredCenterFractionX = (horizontalScrollBar()->value()
+                + horizontalScrollBar()->pageStep() / 2.0) / d->documentSize.width();
+    else
+        d->preferredCenterFractionX = 0;
 }
 
 void KoCanvasController::updateCanvasOffsetY()
@@ -249,7 +253,11 @@ void KoCanvasController::updateCanvasOffsetY()
     emit canvasOffsetYChanged(canvasOffsetY());
     if (d->ignoreScrollSignals)
         return;
-    d->preferredCenterFractionY = (verticalScrollBar()->value() + verticalScrollBar()->pageStep() / 2.0) / d->documentSize.height();
+    if (verticalScrollBar()->isVisible())
+        d->preferredCenterFractionY = (verticalScrollBar()->value()
+                + verticalScrollBar()->pageStep() / 2.0) / d->documentSize.height();
+    else
+        d->preferredCenterFractionY = 0;
 }
 
 bool KoCanvasController::eventFilter(QObject *watched, QEvent *event)
@@ -271,11 +279,11 @@ void KoCanvasController::emitPointerPositionChangedSignals(QEvent *event)
     if (!d->canvas->viewConverter()) return;
 
     QPoint pointerPos;
-    QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
     if (mouseEvent) {
         pointerPos = mouseEvent->pos();
     } else {
-        QTabletEvent * tabletEvent = dynamic_cast<QTabletEvent*>(event);
+        QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event);
         if (tabletEvent) {
             pointerPos = tabletEvent->pos();
         }
@@ -301,7 +309,7 @@ void KoCanvasController::ensureVisible(const QRectF &rect, bool smooth)
     // convert the document based rect into a canvas based rect
     QRect viewRect = d->canvas->viewConverter()->documentToView(rect).toRect();
     viewRect.translate(d->canvas->documentOrigin());
-    if (! viewRect.isValid() || currentVisible.contains(viewRect))
+    if (!viewRect.isValid() || currentVisible.contains(viewRect))
         return; // its visible. Nothing to do.
 
     // if we move, we move a little more so the amount of times we have to move is less.
@@ -410,7 +418,7 @@ void KoCanvasController::setToolOptionWidgets(const QMap<QString, QWidget *>&wid
     QWidget *w = this;
     while (w->parentWidget()) {
         // XXX: This is an ugly hidden dependency
-        if (w->inherits( "KoView" )) {
+        if (w->inherits("KoView")) {
             emit toolOptionWidgetsChanged(widgetMap, w);
             break;
         }
@@ -658,7 +666,7 @@ void KoCanvasController::activate()
     while (parent->parentWidget())
         parent = parent->parentWidget();
 
-    KoCanvasObserverProvider* observerProvider = dynamic_cast<KoCanvasObserverProvider*>(parent);
+    KoCanvasObserverProvider *observerProvider = dynamic_cast<KoCanvasObserverProvider*>(parent);
     if (!observerProvider)
         return;
 
@@ -672,11 +680,11 @@ void KoCanvasController::activate()
 
 void KoCanvasController::addGuideLine(Qt::Orientation orientation, int viewPosition)
 {
-    KoGuidesTool * guidesTool = KoToolManager::instance()->guidesTool(d->canvas);
-    if (! guidesTool)
+    KoGuidesTool *guidesTool = KoToolManager::instance()->guidesTool(d->canvas);
+    if (!guidesTool)
         return;
     // check if the canvas does provide access to guides data
-    if (! d->canvas->guidesData())
+    if (!d->canvas->guidesData())
         return;
 
     if (orientation == Qt::Horizontal)

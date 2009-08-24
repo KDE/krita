@@ -33,9 +33,11 @@ class ParagraphIndentSpacing : public QWidget
     Q_OBJECT
 public:
     ParagraphIndentSpacing(QWidget *parent);
+    // open and display the style
     void setDisplay(KoParagraphStyle *style);
     void setUnit(const KoUnit &unit);
 
+    // save widget state to style
     void save(KoParagraphStyle *style);
 
 signals:

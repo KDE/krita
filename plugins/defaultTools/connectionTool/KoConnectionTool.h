@@ -82,13 +82,6 @@ public:
      */
     bool isInRoi();
     /**
-     * @brief If the shape asked is a connection shape, return what is under this shape
-     *
-     * @param shape which has to be tested
-     * @return A good shape or 0 for the background
-     */
-    KoShape * secondShape( KoShape * shape );
-    /**
      * @brief Permit to activate the connection with a comand
      */
     void command();
@@ -98,7 +91,9 @@ private:
     KoShape * m_lastShapeOn;
     QPointF * m_pointSelected;
     QPointF m_mouse;
+    int m_activeHandle;
     KoConnectionShape * m_connectionShape;
+    KoConnectionShape * m_lastConnectionShapeOn;
     QPair<bool,bool> * m_isTied;
 };
 

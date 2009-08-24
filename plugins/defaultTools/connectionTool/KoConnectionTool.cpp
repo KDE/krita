@@ -44,8 +44,10 @@ KoConnectionTool::KoConnectionTool( KoCanvasBase * canvas )
     , m_shapeOn(0)
     , m_lastShapeOn(0)
     , m_connectionShape(0)
+    , m_lastConnectionShapeOn(0)
 {
     m_isTied = new QPair<bool, bool>(false,false);
+    m_activeHandle = -1;
 }
 
 KoConnectionTool::~KoConnectionTool()
@@ -54,6 +56,9 @@ KoConnectionTool::~KoConnectionTool()
 
 void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
+    float x = 0;
+    float y = 0;
+
     // get the correctly sized rect for painting handles
     QRectF handleRect = handlePaintRect(QPointF());
 
@@ -85,20 +90,35 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
         painter.restore();
     }
     
-    if( m_connectionShape != 0 ) {
+    KoConnectionShape * tempShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
+    if( tempShape ){
         painter.save();
 
+        painter.setPen(Qt::blue);
+        painter.setBrush(Qt::white);
+        int radius = m_canvas->resourceProvider()->handleRadius();
         // Apply the conversion make by the matrix transformation
-        painter.setMatrix(m_connectionShape->absoluteTransformation(&converter) * painter.matrix());
-        m_connectionShape->paint( painter, converter );
-        if ( m_connectionShape->border() ) {
-            painter.save();
-            m_connectionShape->border()->paintBorder( m_connectionShape, painter, converter );
-            painter.restore();
-        }
+        painter.setMatrix(tempShape->absoluteTransformation(&converter) * painter.matrix());
+        tempShape->paintHandles(painter, converter, radius);
 
         painter.restore();
-    }    
+        
+        int grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
+        QRectF rec(m_mouse.x(), m_mouse.y(), grabSensitivity, grabSensitivity);
+        int handleId = tempShape->handleIdAt(tempShape->documentToShape(rec));
+
+        if(handleId != -1) {
+            painter.save();
+
+            painter.setPen(Qt::blue);
+            painter.setBrush(Qt::red);
+            // Apply the conversion make by the matrix transformation
+            painter.setMatrix(tempShape->absoluteTransformation(&converter) * painter.matrix());
+            tempShape->paintHandle(painter, converter, handleId, radius);
+
+            painter.restore();
+        }
+    }
 }
 
 void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
@@ -110,11 +130,9 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         tempShape = m_lastShapeOn;
     else
         tempShape = m_canvas->shapeManager()->shapeAt( event->point );
-
-    tempShape = secondShape( tempShape );
+    if(dynamic_cast<KoConnectionShape*>(m_shapeOn))
+        return;
     
-    if( dynamic_cast<KoSelection*>( tempShape ) )
-        tempShape = 0;
     // First click
     if( m_connectionShape == 0 ) {
         // All sizes and positions are hardcoded for now
@@ -128,6 +146,7 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
                 m_isTied->first = true;
             } else {
                 m_connectionShape->setConnection1( tempShape, 0 );
+                m_isTied->first = false;
             }
             m_connectionShape->moveHandle( 1, event->point );
         } else {
@@ -142,12 +161,11 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         
         // The connection is now done, so update for apply
         m_connectionShape->updateConnections();
-        m_canvas->updateCanvas(m_connectionShape->boundingRect());
+
+        m_canvas->shapeManager()->add(m_connectionShape);
 
     } else { 
     // Second click
-        // Apply the connection shape for now
-        command();
         // If the shape selected is not the background
         if( tempShape != 0 ) {
             if( isInRoi() ) {
@@ -167,12 +185,16 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         }
         // Will find the nearest point and update the connection shape
         updateConnections();
+
+        // Apply the connection shape for now
+        command();
+        
         m_connectionShape = 0;
     }
 }
 
 void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
-{
+{    
     // Record the last shape
     if( m_shapeOn != 0 )
         m_lastShapeOn = m_shapeOn;
@@ -181,13 +203,23 @@ void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
     // Look at the new shape under the mouse
     m_shapeOn = m_canvas->shapeManager()->shapeAt( event->point );
 
-    // forgot the selections
-    if( dynamic_cast<KoSelection*>( m_shapeOn ) )
-        m_shapeOn = 0;
+    if(event->buttons() != Qt::LeftButton) {
+        m_activeHandle = -1;
+        m_lastConnectionShapeOn = 0;
+    }
 
-    m_shapeOn = secondShape( m_shapeOn );
-        
-    if( m_connectionShape != 0 ) {
+    KoConnectionShape * tempShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
+    if( tempShape ) {
+        if(event->buttons() == Qt::LeftButton && m_activeHandle == -1){
+
+            int grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
+            QRectF rec(m_mouse.x(), m_mouse.y(), grabSensitivity, grabSensitivity);
+            m_activeHandle = tempShape->handleIdAt(tempShape->documentToShape(rec));
+            
+            m_lastConnectionShapeOn = tempShape;
+        }
+    }
+    else if( m_connectionShape != 0 ) {
         if( isInRoi() ) {
             // Make the connection
             m_connectionShape->setConnection2( m_lastShapeOn, getConnectionIndex( m_lastShapeOn, m_mouse ));
@@ -195,7 +227,6 @@ void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
         } else if( m_shapeOn != 0 ) {
             // Make the connection
             m_connectionShape->setConnection2( m_shapeOn, 0);
-            
             updateConnections();
         } else {
             m_connectionShape->setConnection2( 0, 0);
@@ -203,6 +234,15 @@ void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
 
             updateConnections();
         }
+    }
+    if( m_activeHandle != -1 ) {// && handleIndex != 0 && handleIndex != tempShape->getHandles().count()) {
+        if( m_activeHandle == 0 )
+            m_lastConnectionShapeOn->setConnection1( 0, 0 );
+        /*if( m_activeHandle == tempShape->() - 1 )
+            m_lastConnectionShapeOn->setConnection2( 0, 0 );
+            */
+        m_lastConnectionShapeOn->moveHandle( m_activeHandle, m_mouse );
+        updateConnections();
     }
     m_canvas->updateCanvas(QRectF( 0, 0, m_canvas->canvasWidget()->width(), m_canvas->canvasWidget()->height() ));
 }
@@ -217,8 +257,7 @@ void KoConnectionTool::mouseReleaseEvent( KoPointerEvent *event )
             // add a connection Point
             m_shapeOn = m_canvas->shapeManager()->shapeAt( event->point );
             QPointF point = m_shapeOn->documentToShape(event->point);
-            if( dynamic_cast<KoSelection*>( m_shapeOn ) )
-                m_shapeOn = 0;
+            
             m_shapeOn->addConnectionPoint( point );
         }
     }
@@ -231,16 +270,21 @@ void KoConnectionTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KoConnectionTool::activate(bool)
+void KoConnectionTool::activate( bool temporary )
 {
     m_canvas->canvasWidget()->setCursor( Qt::PointingHandCursor );
 }
 
 void KoConnectionTool::deactivate()
 {
-    repaint(QRectF( 0, 0, m_canvas->canvasWidget()->x(), m_canvas->canvasWidget()->y() ));
-    m_canvas->updateCanvas(QRectF( 0, 0, m_canvas->canvasWidget()->x(), m_canvas->canvasWidget()->y() ));
-    m_connectionShape = 0;
+    
+    if(m_connectionShape != 0) {
+        QRectF rec(m_connectionShape->boundingRect());
+        m_canvas->shapeManager()->remove(m_connectionShape);
+        repaint( rec );
+        m_canvas->updateCanvas( rec );
+        m_connectionShape = 0;
+    }
 }
 
 void KoConnectionTool::updateConnections()
@@ -251,7 +295,7 @@ void KoConnectionTool::updateConnections()
     KoConnection connection1 = m_connectionShape->connection1();
     KoConnection connection2 = m_connectionShape->connection2();
     // If two shapes are connected
-    if( connection1.first != 0 and connection2.first != 0 ) {
+    if( connection1.first != 0 && connection2.first != 0 ) {
         KoShape* shape1 = connection1.first;
         KoShape* shape2 = connection2.first;
         if( !m_isTied->first ){
@@ -280,19 +324,19 @@ void KoConnectionTool::updateConnections()
 
 int KoConnectionTool::getConnectionIndex( KoShape * shape, QPointF point )
 {
-    float MAX_DISTANCE = m_canvas->canvasWidget()->width()*m_canvas->canvasWidget()->width();
-    MAX_DISTANCE += m_canvas->canvasWidget()->height()*m_canvas->canvasWidget()->height();
-    int nearestPointIndex, i;
+    float minDistance = HUGE_VAL;
+    int nearestPointIndex = -1, i;
     // Get all the points
     QList<QPointF> connectionPoints = shape->connectionPoints();
+    int connectionPointsCount = connectionPoints.count();
 
     point = shape->documentToShape( point );
     // Find the nearest point and stock the index
-    for( i = 0; i < connectionPoints.count(); i++)
+    for( i = 0; i < connectionPointsCount; i++)
     {
         float distance = distanceSquare( connectionPoints[i], point);
-        if( distance < MAX_DISTANCE ) {
-            MAX_DISTANCE = distance;
+        if( distance < minDistance ) {
+            minDistance = distance;
             nearestPointIndex =  i;
         }
     }
@@ -315,29 +359,10 @@ bool KoConnectionTool::isInRoi()
     if( m_lastShapeOn == 0 )
         return false;
     QPointF mouse = m_lastShapeOn->documentToShape( m_mouse );
-    foreach( QPointF point, m_lastShapeOn->connectionPoints() )
+    foreach( const QPointF& point, m_lastShapeOn->connectionPoints() )
         if( distanceSquare( mouse, point) <= grabSensitivity )
             return true;
     return false;
-}
-
-KoShape * KoConnectionTool::secondShape( KoShape * shape )
-{
-    KoShape * returnShape = shape;
-    // Find the none connection shape on the background
-    if( dynamic_cast<KoConnectionShape*>( shape ) ){
-        QList<KoShape*> listOfShape = m_canvas->shapeManager()->shapesAt( QRectF(m_mouse, QSize(1,1)) );
-
-        foreach(KoShape * shapeOn, listOfShape){
-            if( dynamic_cast<KoConnectionShape*>( shapeOn ) ){
-                returnShape = 0;
-            } else {
-                returnShape = shapeOn;
-                break;
-            }
-        }
-    }
-    return returnShape;
 }
 
 void KoConnectionTool::command()

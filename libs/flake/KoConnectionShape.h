@@ -120,9 +120,15 @@ protected:
     /// reimplemented
     virtual void shapeChanged(ChangeType type, KoShape * shape);
 
+    /// Populate the path list by a normal way
+    void normalPath( const qreal MinimumEscapeLength );
+
 private:
     qreal scalarProd(const QPointF &v1, const QPointF &v2);
     qreal crossProd(const QPointF &v1, const QPointF &v2);
+
+    QList<QPointF> m_path;
+    bool m_hasMoved;
 
     struct Private;
     Private * const d;

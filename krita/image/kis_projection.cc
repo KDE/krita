@@ -67,7 +67,7 @@ void KisProjection::run()
 {
     m_d->updater = new KisImageUpdater();
     connect(this, SIGNAL(sigUpdateProjection(KisNodeSP,QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP,QRect)));
-    connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
+//    connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
 
     exec(); // start the event loop
 }
@@ -155,8 +155,15 @@ void KisProjection::setRootLayer(KisGroupLayerSP rootLayer)
 
 void KisImageUpdater::startUpdate(KisNodeSP node, const QRect& rc)
 {
+    /**
+     * KisImage::slotProjectionUpdated will be called directly out of
+     * updateStategy at the end of an update
+     *
+     * FIXME: We need to break this circle
+     * layer->image->projection->updater->upd.startegy->layer
+     */
     node->updateStrategy()->setDirty(rc);
-    emit updateDone(rc);
+//    emit updateDone(rc);
 }
 
 #include "kis_projection.moc"

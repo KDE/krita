@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (c) 2003 David Faure <faure@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -65,7 +65,13 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
     widget.autoTextIndent->setChecked(style->autoTextIndent());
 
     int index;
-    if (style->lineHeightPercent() != 0) {
+    if (style->hasProperty(KoParagraphStyle::FixedLineHeight) && style->lineHeightAbsolute() != 0) {
+        // this is the strongest; if this is set we don't care what other properties there are.
+        index = 5;
+    } else if (style->hasProperty(KoParagraphStyle::LineSpacing) && style->lineSpacing() != 0) {
+        // if LineSpacing is set then percent is ignored.
+        index = 4;
+    } else if (style->hasProperty(KoParagraphStyle::PercentLineHeight) && style->lineHeightPercent() != 0) {
         int percent = style->lineHeightPercent();
         if (percent == 120)
             index = 0; // single
@@ -75,10 +81,9 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
             index = 2; // double
         else
             index = 3; // proportional
-    } else if (style->lineSpacing() > 0.0)
-        index = 4; // Additional
-    else
-        index = 5;
+    } else {
+        index = 0; // nothing set, default is 'single' just like for geeks.
+    }
     widget.lineSpacing->setCurrentIndex(index);
     widget.minimumLineSpacing->changeValue(style->minimumLineHeight());
     widget.useFont->setChecked(style->lineSpacingFromFont());
@@ -179,11 +184,15 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
     case 1: style->setLineHeightPercent(180); break;
     case 2: style->setLineHeightPercent(240); break;
     case 3: style->setLineHeightPercent(widget.proportional->value()); break;
-    case 4: style->setLineHeightPercent(0);
-        style->setLineSpacing(widget.custom->value());
+    case 4:
+        if (widget.custom->value() == 0.0) { // then we need to save it differently.
+            style->setLineHeightPercent(100);
+        } else {
+            style->setLineHeightPercent(0);
+            style->setLineSpacing(widget.custom->value());
+        }
         break;
     case 5: style->setLineHeightPercent(0);
-        style->setLineSpacing(0);
         style->setLineHeightAbsolute(widget.custom->value());
         break;
     }

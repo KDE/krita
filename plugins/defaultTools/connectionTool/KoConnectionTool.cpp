@@ -209,40 +209,23 @@ void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
     }
 
     KoConnectionShape * tempShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
-    if( tempShape ) {
-        if(event->buttons() == Qt::LeftButton && m_activeHandle == -1){
+    if( !tempShape ) {
+        if( m_connectionShape != 0 ) {
+            if( isInRoi() ) {
+                // Make the connection
+                m_connectionShape->setConnection2( m_lastShapeOn, getConnectionIndex( m_lastShapeOn, m_mouse ));
+                m_connectionShape->updateConnections();
+            } else if( m_shapeOn != 0 ) {
+                // Make the connection
+                m_connectionShape->setConnection2( m_shapeOn, 0);
+                updateConnections();
+            } else {
+                m_connectionShape->setConnection2( 0, 0);
+                m_connectionShape->moveHandle( 1, m_mouse );
 
-            int grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
-            QRectF rec(m_mouse.x(), m_mouse.y(), grabSensitivity, grabSensitivity);
-            m_activeHandle = tempShape->handleIdAt(tempShape->documentToShape(rec));
-            
-            m_lastConnectionShapeOn = tempShape;
+                updateConnections();
+            }
         }
-    }
-    else if( m_connectionShape != 0 ) {
-        if( isInRoi() ) {
-            // Make the connection
-            m_connectionShape->setConnection2( m_lastShapeOn, getConnectionIndex( m_lastShapeOn, m_mouse ));
-            m_connectionShape->updateConnections();
-        } else if( m_shapeOn != 0 ) {
-            // Make the connection
-            m_connectionShape->setConnection2( m_shapeOn, 0);
-            updateConnections();
-        } else {
-            m_connectionShape->setConnection2( 0, 0);
-            m_connectionShape->moveHandle( 1, m_mouse );
-
-            updateConnections();
-        }
-    }
-    if( m_activeHandle != -1 ) {// && handleIndex != 0 && handleIndex != tempShape->getHandles().count()) {
-        if( m_activeHandle == 0 )
-            m_lastConnectionShapeOn->setConnection1( 0, 0 );
-        /*if( m_activeHandle == tempShape->() - 1 )
-            m_lastConnectionShapeOn->setConnection2( 0, 0 );
-            */
-        m_lastConnectionShapeOn->moveHandle( m_activeHandle, m_mouse );
-        updateConnections();
     }
     m_canvas->updateCanvas(QRectF( 0, 0, m_canvas->canvasWidget()->width(), m_canvas->canvasWidget()->height() ));
 }

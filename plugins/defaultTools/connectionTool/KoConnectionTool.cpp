@@ -72,7 +72,7 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
         foreach( const QPointF &point, m_shapeOn->connectionPoints() )
         { // Draw all the connection point of the shape
             handleRect.moveCenter(transform.map(point));
-            painter.fillRect( handleRect, QColor(Qt::green) );
+            painter.fillRect( handleRect, QColor(Qt::darkGreen) );
         }
         painter.restore();
     }

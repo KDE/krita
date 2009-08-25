@@ -130,7 +130,9 @@ KisShapeController::~KisShapeController()
                           // clipboard? And how about undo information?
         }
         m_d->nodeShapes.clear();
+    // XXX: deleting the undoStack of the document while the document is being deleted is dangerous
     */
+    m_d->dataCenterMap.remove("UndoStack");
     qDeleteAll(m_d->dataCenterMap);
 
     delete m_d;

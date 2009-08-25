@@ -1,1 +1,17 @@
-* Currently, all profiles are loaded at startup (ICC and CTL), even if they are never use, this has a significant impact on the memory footprint (mostly for ICC) and on the CPU time (mostly for CTL). Since they are not necesseraly used, loading them is a lost of ressource, so loading them as needed would be a better option. *But* the problem is that, the only way to know if the profiles are valid (and usuable by the application) is to load the profile... So the idea is to cache some information (validity, isSuitableForOutput, isSuitableForPrinting and isSuitableForDisplay), using MD5/modification date it would be possible to check if the profile informations are up-to-date, and then the profile data would only be loaded when needed by a color space.
+* Currently, all profiles are loaded at startup (ICC and CTL), even if
+they are never use, this has a significant impact on the memory footprint
+(mostly for ICC) and on the CPU time (mostly for CTL). Since they are not
+necesseraly used, loading them is a lost of ressource, so loading them as
+needed would be a better option. *But* the problem is that, the only way
+to know if the profiles are valid (and usuable by the application) is to
+load the profile... So the idea is to cache some information (validity,
+isSuitableForOutput, isSuitableForPrinting and isSuitableForDisplay),
+using MD5/modification date it would be possible to check if the profile
+informations are up-to-date, and then the profile data would only be
+loaded when needed by a color space.
+
+* for embedded/mobile purposes, even lcms and loading or creating one
+or two profiles can be too memory-consuming, so it would be good if
+lcms could become an optional dependency of pigment, like ctl -- for instance
+by making lcms and ctl plugins and having a small core set of colorspaces 
+for minimal functionality (rgb, lab, hsv)

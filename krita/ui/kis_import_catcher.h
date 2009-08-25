@@ -31,7 +31,8 @@ class KisDoc2;
 /**
  * This small helper class takes an url and an image; tries to import
  * the image at the url and shove the layers of the imported image
- * into the first image after loading is done.
+ * into the first image after loading is done. This is a separate class
+ * because loading can be asynchronous.
  *
  * Caveat: this class calls "delete this", which means that you new
  * it and then never touch it again. Thank you very much.
@@ -45,9 +46,6 @@ public:
 
     KisImportCatcher(const KUrl & url, KisView2* view);
     ~KisImportCatcher();
-public slots:
-
-    void slotLoadingFinished();
 
 private:
 

@@ -56,22 +56,9 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     m_d->view = view;
     m_d->url = url;
     KoFilterManager manager( m_d->doc );
-    QByteArray nativeFormat = m_d->view->document()->nativeFormatMimeType();
+    QByteArray nativeFormat = m_d->doc->nativeFormatMimeType();
     KoFilter::ConversionStatus status;
     QString s = manager.importDocument(url.path(), status);
-    if (!s.isEmpty()) {
-        QMessageBox::warning(view, "Krita", QString("Could not open file %1. The error was %2").arg(url.path()).arg(s));
-    }
-    slotLoadingFinished();
-}
-
-KisImportCatcher::~KisImportCatcher()
-{
-    delete m_d;
-}
-
-void KisImportCatcher::slotLoadingFinished()
-{
     KisImageSP importedImage = m_d->doc->image();
 
     if (importedImage) {
@@ -113,6 +100,11 @@ void KisImportCatcher::slotLoadingFinished()
     }
     m_d->doc->deleteLater();
     deleteLater();
+}
+
+KisImportCatcher::~KisImportCatcher()
+{
+    delete m_d;
 }
 
 #include "kis_import_catcher.moc"

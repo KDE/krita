@@ -45,17 +45,25 @@
 class KoShapeManager::Private
 {
 public:
-    Private(KoShapeManager * shapeManager, KoCanvasBase *c)
-            : selection(new KoSelection())
-            , canvas(c)
-            , tree(4, 2)
-            , strategy(new KoShapeManagerPaintingStrategy(shapeManager)) {
+    Private(KoShapeManager *shapeManager, KoCanvasBase *c)
+        : selection(new KoSelection()),
+          canvas(c),
+          tree(4, 2),
+          strategy(new KoShapeManagerPaintingStrategy(shapeManager)),
+          q(shapeManager)
+    {
     }
 
     ~Private() {
         delete selection;
         delete strategy;
     }
+
+    /**
+     * Update the tree when there are shapes in m_aggregate4update. This is done so not all
+     * updates to the tree are done when they are asked for but when they are needed.
+     */
+    void updateTree();
 
     QList<KoShape *> shapes;
     QList<KoShape *> additionalShapes; // these are shapes that are only handled for updates
@@ -65,7 +73,71 @@ public:
     QSet<KoShape *> aggregate4update;
     QHash<KoShape*, int> shapeIndexesBeforeUpdate;
     KoShapeManagerPaintingStrategy * strategy;
+    KoShapeManager *q;
 };
+
+void KoShapeManager::Private::updateTree()
+{
+    // for detecting collisions between shapes.
+    class DetectCollision
+    {
+    public:
+        DetectCollision() {}
+        void detect(KoRTree<KoShape *> &tree, KoShape *s, int prevZIndex) {
+            foreach(KoShape *shape, tree.intersects(s->boundingRect())) {
+                bool isChild = false;
+                KoShapeContainer *parent = s->parent();
+                while (parent && !isChild) {
+                    if (parent == shape)
+                        isChild = true;
+                    parent = parent->parent();
+                }
+                if (isChild)
+                    continue;
+                if (s->zIndex() <= shape->zIndex() && prevZIndex <= shape->zIndex())
+                    // Moving a shape will only make it collide with shapes below it.
+                    continue;
+                if (shape->collisionDetection() && !shapesWithCollisionDetection.contains(shape))
+                    shapesWithCollisionDetection.append(shape);
+            }
+        }
+
+        void fireSignals() {
+            foreach(KoShape *shape, shapesWithCollisionDetection)
+                shape->shapeChanged(KoShape::CollisionDetected);
+        }
+
+    private:
+        QList<KoShape*> shapesWithCollisionDetection;
+    };
+    DetectCollision detector;
+    bool selectionModified = false;
+    foreach(KoShape *shape, aggregate4update) {
+        if (shapeIndexesBeforeUpdate.contains(shape))
+            detector.detect(tree, shape, shapeIndexesBeforeUpdate[shape]);
+        selectionModified = selectionModified || selection->isSelected(shape);
+    }
+
+    foreach(KoShape * shape, aggregate4update) {
+        tree.remove(shape);
+        QRectF br(shape->boundingRect());
+        strategy->adapt(shape, br);
+        tree.insert(br, shape);
+    }
+
+    // do it again to see which shapes we intersect with _after_ moving.
+    foreach(KoShape *shape, aggregate4update)
+        detector.detect(tree, shape, shapeIndexesBeforeUpdate[shape]);
+    aggregate4update.clear();
+    shapeIndexesBeforeUpdate.clear();
+
+    detector.fireSignals();
+    if (selectionModified) {
+        selection->updateSizeAndPosition();
+        emit q->selectionContentChanged();
+    }
+}
+
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &shapes)
         : d(new Private(this, canvas))
@@ -173,7 +245,7 @@ void KoShapeManager::removeAdditional(KoShape *shape)
 
 void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, bool forPrint)
 {
-    updateTree();
+    d->updateTree();
     painter.setPen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.
     painter.setBrush(Qt::NoBrush);
 
@@ -328,7 +400,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
 
 KoShape * KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelection selection, bool omitHiddenShapes)
 {
-    updateTree();
+    d->updateTree();
     QList<KoShape*> sortedShapes(d->tree.contains(position));
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     KoShape *firstUnselectedShape = 0;
@@ -377,7 +449,7 @@ KoShape * KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelecti
 
 QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes)
 {
-    updateTree();
+    d->updateTree();
 
     QList<KoShape*> intersectedShapes(d->tree.intersects(rect));
     for (int count = intersectedShapes.count() - 1; count >= 0; count--) {
@@ -417,68 +489,6 @@ void KoShapeManager::notifyShapeChanged(KoShape * shape)
     if (container) {
         foreach(KoShape *child, container->childShapes())
             d->aggregate4update.insert(child);
-    }
-}
-
-void KoShapeManager::updateTree()
-{
-    // for detecting collisions between shapes.
-    class DetectCollision
-    {
-    public:
-        DetectCollision() {}
-        void detect(KoRTree<KoShape *> &tree, KoShape *s, int prevZIndex) {
-            foreach(KoShape *shape, tree.intersects(s->boundingRect())) {
-                bool isChild = false;
-                KoShapeContainer *parent = s->parent();
-                while (parent && !isChild) {
-                    if (parent == shape)
-                        isChild = true;
-                    parent = parent->parent();
-                }
-                if (isChild)
-                    continue;
-                if (s->zIndex() <= shape->zIndex() && prevZIndex <= shape->zIndex())
-                    // Moving a shape will only make it collide with shapes below it.
-                    continue;
-                if (shape->collisionDetection() && !shapesWithCollisionDetection.contains(shape))
-                    shapesWithCollisionDetection.append(shape);
-            }
-        }
-
-        void fireSignals() {
-            foreach(KoShape *shape, shapesWithCollisionDetection)
-                shape->shapeChanged(KoShape::CollisionDetected);
-        }
-
-    private:
-        QList<KoShape*> shapesWithCollisionDetection;
-    };
-    DetectCollision detector;
-    bool selectionModified = false;
-    foreach(KoShape *shape, d->aggregate4update) {
-        if (d->shapeIndexesBeforeUpdate.contains(shape))
-            detector.detect(d->tree, shape, d->shapeIndexesBeforeUpdate[shape]);
-        selectionModified = selectionModified || d->selection->isSelected(shape);
-    }
-
-    foreach(KoShape * shape, d->aggregate4update) {
-        d->tree.remove(shape);
-        QRectF br(shape->boundingRect());
-        d->strategy->adapt(shape, br);
-        d->tree.insert(br, shape);
-    }
-
-    // do it again to see which shapes we intersect with _after_ moving.
-    foreach(KoShape *shape, d->aggregate4update)
-        detector.detect(d->tree, shape, d->shapeIndexesBeforeUpdate[shape]);
-    d->aggregate4update.clear();
-    d->shapeIndexesBeforeUpdate.clear();
-
-    detector.fireSignals();
-    if (selectionModified) {
-        d->selection->updateSizeAndPosition();
-        emit selectionContentChanged();
     }
 }
 

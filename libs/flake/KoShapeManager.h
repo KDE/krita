@@ -110,7 +110,7 @@ public:
     void removeAdditional(KoShape *shape);
 
     /// return the selection shapes for this shapeManager
-    KoSelection * selection() const;
+    KoSelection *selection() const;
 
     /**
      * Paint all shapes and their selection handles etc.
@@ -128,7 +128,7 @@ public:
      * @param selection controls which shape is returned when more than one shape is at the specific point
      * @param omitHiddenShapes if true, only visible shapes are considered
      */
-    KoShape * shapeAt(const QPointF &position, KoFlake::ShapeSelection selection = KoFlake::ShapeOnTop, bool omitHiddenShapes = true);
+    KoShape *shapeAt(const QPointF &position, KoFlake::ShapeSelection selection = KoFlake::ShapeOnTop, bool omitHiddenShapes = true);
 
     /**
      * Returns the shapes which intersects the specific rect in the document.
@@ -158,7 +158,7 @@ public:
      * will be merged into one.
      * @param shape the shape to updated its position in the tree.
      */
-    void notifyShapeChanged(KoShape * shape);
+    void notifyShapeChanged(KoShape *shape);
 
     /**
      * Switch to editing the shape that is at the position of the event.
@@ -176,26 +176,16 @@ public:
      * @param converter to convert between document and view coordinates.
      * @param forPrint if true, make sure only actual content is drawn and no decorations.
      */
-    void paintShape(KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint);
+    void paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, bool forPrint);
 
     /**
      * Set the strategy of the KoShapeManager
      *
      * This can be used to change the behaviour of the painting of the shapes.
-     * @param strategy the new strategy. The given strategy has to be allocared
-     *        on the stack and you the ownership will be taken by the shape manager.
-     *        The shape manager will delete the last set strategy when you set a
-     *        new one.
+     * @param strategy the new strategy. The ownership of the argument \p
+     *    strategy will be taken by the shape manager.
      */
-    void setPaintingStrategy(KoShapeManagerPaintingStrategy * strategy);
-
-private:
-
-    /**
-     * Update the tree when there are shapes in m_aggregate4update. This is done so not all
-     * updates to the tree are done when they are asked for but when they are needed.
-     */
-    void updateTree();
+    void setPaintingStrategy(KoShapeManagerPaintingStrategy *strategy);
 
 signals:
     /// emitted when the selection is changed

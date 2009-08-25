@@ -40,9 +40,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
-
-// Importing logic copied from KoConverter, which was copied from KoDocument, which we cannot
-// use directly since it creates a view. KoDocument needs refactoring!
+#include <QMessageBox>
 
 class KisImportCatcher::Private {
 public:
@@ -61,7 +59,9 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     QByteArray nativeFormat = m_d->view->document()->nativeFormatMimeType();
     KoFilter::ConversionStatus status;
     QString s = manager.importDocument(url.path(), status);
-    qDebug() << "result:" << s << "status" << status;
+    if (!s.isEmpty()) {
+        QMessageBox::warning(view, "Krita", QString("Could not open file %1. The error was %2").arg(url.path()).arg(s));
+    }
     slotLoadingFinished();
 }
 

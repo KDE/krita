@@ -127,6 +127,14 @@ public:
         }
     }
 
+    /*
+    Boud: I think it's a design mistake that the model owns the view(s); actually,
+    I think the model shouldn't even know about the view, but just emit signals and
+    expose slots. The application (as controller) should own the list of views/mainwindows
+    and the list of docs and connect them together. That way, we can have KoDocument-based
+    documents that do not depend on anything gui-related.
+    */
+
     QList<KoView*> views;
     QList<KoMainWindow*> shells;
 

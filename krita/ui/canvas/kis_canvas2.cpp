@@ -79,7 +79,6 @@ public:
 
     ~KisCanvas2Private() {
         delete shapeManager;
-        delete monitorProfile;
         delete toolProxy;
     }
 

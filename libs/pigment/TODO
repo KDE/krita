@@ -1,7 +1,7 @@
 * Currently, all profiles are loaded at startup (ICC and CTL), even if
 they are never use, this has a significant impact on the memory footprint
 (mostly for ICC) and on the CPU time (mostly for CTL). Since they are not
-necesseraly used, loading them is a lost of ressource, so loading them as
+necessarily used, loading them is a lost of resources, so loading them as
 needed would be a better option. *But* the problem is that, the only way
 to know if the profiles are valid (and usuable by the application) is to
 load the profile... So the idea is to cache some information (validity,
@@ -19,3 +19,7 @@ for minimal functionality (rgb, lab, hsv)
 * the previous would need the possibility to define "priority" between
 colorspaces, for instance the minimal RGB colorspace provided in pigment would
 need to be overriden by the more functional lcms one when it is available.
+
+(Note: I was just counting on overwriting the entries with the same ID's, so 
+when loading a plugin that loads colorspaces, the embedded colorspaces are 
+no longer available from the registry)

@@ -45,7 +45,6 @@
 #include <KoZoomController.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoSelection.h>
-#include <KoToolDocker.h>
 #include <KoMainWindow.h>
 #include <KoDockerManager.h>
 #include <KoShapeLayer.h>

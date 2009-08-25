@@ -297,7 +297,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     menu.addSeparator();
     menu.addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
     menu.addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
-    menu.addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
+//    menu.addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
     menu.addAction(KIcon("edit-paste"), i18n("&Local Selection"), this, SLOT(slotNewSelectionMask()));
 
     menu.exec(pos);

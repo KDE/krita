@@ -1791,15 +1791,16 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactory* factory)
         case KoDockFactory::DockRight:
             side = Qt::RightDockWidgetArea; break;
         case KoDockFactory::DockMinimized:
-            visible = false; break;
-        default:;
+        default:
+            side = Qt::RightDockWidgetArea;
+            visible = false;
         }
 
         if (rootDocument()) {
             KConfigGroup group = KGlobal::config()->group(rootDocument()->componentData().componentName()).group("DockWidget " + factory->id());
             side = static_cast<Qt::DockWidgetArea>(group.readEntry("DockArea", static_cast<int>(side)));
+            if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
         }
-
         addDockWidget(side, dockWidget);
         if (dockWidget->features() & QDockWidget::DockWidgetClosable) {
             d->dockWidgetMenu->addAction(dockWidget->toggleViewAction());

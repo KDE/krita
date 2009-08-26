@@ -194,7 +194,7 @@ public slots:
 
     void insertText(const QString &text);
 
-    void insertText (const QString &text, const QTextCharFormat &format);
+    void insertText(const QString &text, const QTextCharFormat &format);
 
 //    void joinPreviousEditBlock ();
 

@@ -38,6 +38,8 @@
 // krita/ui
 #include "kis_filter_handler.h"
 #include "kis_view2.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceRegistry.h>
 
 struct KisFilterManager::Private {
     Private() : reapplyAction(0), actionCollection(0) {
@@ -110,18 +112,23 @@ void KisFilterManager::insertFilter(const QString & name)
 void KisFilterManager::updateGUI()
 {
     if (!d->view) return;
-    if (!d->view->activeLayer()) return;
 
-    KisLayerSP layer = d->view->activeLayer();
-    KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer.data()));
-
-    bool enable = player && (!layer->userLocked()) && layer->visible() && (!layer->systemLocked());
+    bool enable = false;
+    KisPaintLayerSP player = 0;
+    if (d->view->activeLayer())
+    {
+        KisNodeSP layer = d->view->activeNode();
+        player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer.data()));
+        if ( player && !(*player->colorSpace() == *KoColorSpaceRegistry::instance()->alpha8()))
+        {
+            enable = (!layer->userLocked()) && layer->visible() && (!layer->systemLocked());
+        }
+    }
 
     d->reapplyAction->setEnabled(enable);
-
     for (QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
             it != d->filters2Action.end(); ++it) {
-        if (player && it.key()->workWith(player->paintDevice()->colorSpace())) {
+        if (enable && player && it.key()->workWith(player->paintDevice()->colorSpace())) {
             it.value()->setEnabled(enable);
         } else {
             it.value()->setEnabled(false);

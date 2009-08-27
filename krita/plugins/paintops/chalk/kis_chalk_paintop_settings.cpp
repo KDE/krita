@@ -83,3 +83,4 @@ QString KisChalkPaintOpSettings::modelName() const
     return "3d-pencil";
 }
 #endif
+

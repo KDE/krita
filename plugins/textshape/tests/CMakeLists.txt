@@ -75,7 +75,7 @@ set(TestChangeListCommand_test_SRCS
 
 
 kde4_add_unit_test(TestChangeListCommand TESTNAME shapes-text-TestChangeListCommand ${TestChangeListCommand_test_SRCS})
-target_link_libraries(TestChangeListCommand ${EXTRA_LIBS} kocharacterselectiondialog komain ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestChangeListCommand ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

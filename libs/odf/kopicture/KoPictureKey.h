@@ -22,7 +22,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
-#include "kopicture_export.h"
+#include "koodf_export.h"
 /**
  * \file KoPictureKey.h
  * \todo correct documentation (for example: sed "s/image/picture/g")
@@ -70,7 +70,7 @@ enum Type {
  * @note In case of a remote path, the "original path" is the name of the temporary file that was
  *  used to download the file.
  */
-class KOPICTURE_EXPORT KoPictureKey
+class KOODF_EXPORT KoPictureKey
 {
 public:
     /**

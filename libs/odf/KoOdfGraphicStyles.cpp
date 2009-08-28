@@ -38,7 +38,7 @@
 
 #include "KoOdfLoadingContext.h"
 #include "KoOdfStylesReader.h"
-#include "KoPictureShared.h"
+#include "kopicture/KoPictureShared.h"
 
 void KoOdfGraphicStyles::saveOdfFillStyle(KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush)
 {

@@ -41,12 +41,12 @@ struct Shared
     uint count;
 };
 
-#include "kopicture_export.h"
+#include "koodf_export.h"
 /**
  * @internal
  * KoPictureShared is the class that contains the shared part for KoPicture
  */
-class KOPICTURE_EXPORT KoPictureShared : public Shared
+class KOODF_EXPORT KoPictureShared : public Shared
 {
 public:
     /**

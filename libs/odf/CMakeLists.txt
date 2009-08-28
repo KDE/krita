@@ -27,12 +27,21 @@ set(koodf_LIB_SRCS
     KoGenChanges.cpp
     KoOdfDocument.cpp
     KoEmbeddedDocumentSaver.cpp
+
+    # depracated classes, have to have a home which for now is here.
+    kopicture/KoPictureKey.cpp
+    kopicture/KoPictureBase.cpp
+    kopicture/KoPicture.cpp
+    kopicture/KoPictureShared.cpp
+    kopicture/KoPictureImage.cpp
+    kopicture/KoPictureClipart.cpp
+    kopicture/KoPictureEps.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
 
-target_link_libraries(koodf kostore kopicture kobase)
-target_link_libraries(koodf LINK_INTERFACE_LIBRARIES kostore kopicture kobase)
+target_link_libraries(koodf kostore kobase)
+target_link_libraries(koodf LINK_INTERFACE_LIBRARIES kostore kobase)
 
 set_target_properties(koodf PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

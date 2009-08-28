@@ -23,7 +23,7 @@
 #include <QtCore/QString>
 #include <QtCore/QIODevice>
 #include <QtGui/QPixmap>
-#include "kopicture_export.h"
+#include "../koodf_export.h"
 
 #include "KoPictureKey.h"
 
@@ -40,7 +40,7 @@ class KoPictureShared;
  *
  * @short A picture container class
  */
-class KOPICTURE_EXPORT KoPicture
+class KOODF_EXPORT KoPicture
 {
 public:
     /**

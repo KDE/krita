@@ -1815,7 +1815,7 @@ void TextTool::insertSpecialCharacter()
     m_specialCharacterDocker->show();
 }
 
-void TextTool::insertString(QString& string)
+void TextTool::insertString(const QString& string)
 {
     m_textEditor->insertText(string);
 }

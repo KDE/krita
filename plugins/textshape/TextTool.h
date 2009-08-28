@@ -211,7 +211,7 @@ private slots:
     /// show the insert special character docker.
     void insertSpecialCharacter();
     /// insert string
-    void insertString(QString &string);
+    void insertString(const QString &string);
 
     /// method that will be called in an alternative thread for updating the paragraph direction at a character pos
     void updateParagraphDirection(const QVariant &variant);

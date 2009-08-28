@@ -1,7 +1,6 @@
 include_directories( ${CMAKE_SOURCE_DIR}/libs/widgets )
 add_subdirectory( progress )
 add_subdirectory( aspectbutton )
-add_subdirectory( characterselectiondialog )
 if(NOT TINY)
     add_subdirectory( colorwidgets )
     add_subdirectory( resources )

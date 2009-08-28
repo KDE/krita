@@ -3,6 +3,7 @@
    Copyright (C) 2002 - 2005, Rob Buis <buis@kde.org>
    Copyright (C) 2006 Jan Hambecht <jaham@gmx.net>
    Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,13 +21,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KO_COLOR_DOCKER_H__
-#define __KO_COLOR_DOCKER_H__
+#ifndef COLOR_DOCKER_H
+#define COLOR_DOCKER_H
 
 #include <QDockWidget>
 
 #include "KoDockFactory.h"
-#include "komain_export.h"
 
 class KoUniColorChooser;
 
@@ -36,34 +36,16 @@ class KoUniColorChooser;
    just a band of colors -- and have the unified color selector popup.
    This just takes a tad too much place.
 */
-class KOMAIN_EXPORT KoColorDocker : public QDockWidget
+class ColorDocker : public QDockWidget
 {
     Q_OBJECT
 
 public:
-    KoColorDocker(bool showOpacitySlider);
-    virtual ~KoColorDocker();
+    ColorDocker(bool showOpacitySlider);
+    virtual ~ColorDocker();
 
 private:
     KoUniColorChooser *m_colorChooser;
-};
-
-
-class KOMAIN_EXPORT KoColorDockerFactory : public KoDockFactory
-{
-public:
-    KoColorDockerFactory(bool showOpacitySlider = false)
-        : m_showOpacitySlider( showOpacitySlider )
-        {}
-    ~KoColorDockerFactory() {}
-
-    QString id() const;
-    QDockWidget * createDockWidget();
-    virtual KoDockFactory::DockPosition defaultDockPosition() const;
-    
-private:
-
-    bool m_showOpacitySlider;
 };
 
 #endif

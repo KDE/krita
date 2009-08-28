@@ -2,6 +2,8 @@
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
    Copyright (C) 2002 - 2005, Rob Buis <buis@kde.org>
    Copyright (C) 2006 Jan Hambecht <jaham@gmx.net>
+   Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,49 +18,28 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+ * Boston, MA 02110-1301, USA.
 */
-#include "KoColorDocker.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#ifndef COLORDOCKERFACTORY_H
+#define COLORDOCKERFACTORY_H
 
-#include <KoUniColorChooser.h>
+#include <QDockWidget>
 
+#include "KoDockFactory.h"
 
-KoColorDocker::KoColorDocker(bool showOpacitySlider)
-    : QDockWidget()
+class ColorDockerFactory : public KoDockFactory
 {
-    setWindowTitle( i18n( "Color Chooser" ) );
+public:
+    ColorDockerFactory() {}
+    virtual ~ColorDockerFactory() {}
 
-    m_colorChooser = new KoUniColorChooser( this, showOpacitySlider );
-    m_colorChooser->changeLayout(KoUniColorChooser::SimpleLayout);
-    setWidget( m_colorChooser );
-    setMinimumWidth( 194 );
-}
+    virtual QString id() const;
+    virtual QDockWidget *createDockWidget();
+    virtual KoDockFactory::DockPosition defaultDockPosition() const;
 
-KoColorDocker::~KoColorDocker()
-{
-}
+private:
+};
 
-QString KoColorDockerFactory::id() const
-{
-    return QString("KoColorDocker");
-}
-
-QDockWidget* KoColorDockerFactory::createDockWidget()
-{
-    KoColorDocker* widget = new KoColorDocker(m_showOpacitySlider);
-    widget->setObjectName(id());
-
-    return widget;
-}
-
-KoDockFactory::DockPosition KoColorDockerFactory::defaultDockPosition() const
-{
-    return DockMinimized;
-}
-
-
-#include "KoColorDocker.moc"
+#endif
 

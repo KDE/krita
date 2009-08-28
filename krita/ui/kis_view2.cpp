@@ -59,7 +59,6 @@
 #include <KoZoomHandler.h>
 #include <KoViewConverter.h>
 #include <KoView.h>
-#include <KoColorDocker.h>
 #include "KoColorSpaceRegistry.h"
 #include <KoDockerManager.h>
 #include <KoDockRegistry.h>
@@ -506,9 +505,6 @@ void KisView2::createGUI()
 
     KisPaletteDockerFactory paletteDockerFactory(this);
     createDockWidget(&paletteDockerFactory);
-
-    KoColorDockerFactory colorDockerFactory;
-    createDockWidget(&colorDockerFactory);
 
     KisLayerBoxFactory layerboxFactory;
     m_d->layerBox = qobject_cast<KisLayerBox*>(createDockWidget(&layerboxFactory));

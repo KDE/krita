@@ -59,22 +59,12 @@ set(komain_LIB_SRCS
     config/KoConfigGridPage.cpp
 )
 
-if (NOT NO_PIGMENT)
-    set(komain_LIB_SRCS ${komain_LIB_SRCS}
-        KoColorDocker.cpp
-    )
-endif (NOT NO_PIGMENT)
-
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
    koDocumentInfoAuthorWidget.ui
 )
 
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
-
-if (NOT NO_PIGMENT)
-    set (extra_libs kocolorwidgets koresources pigmentcms koresourcewidget)
-endif (NOT NO_PIGMENT)
 
 target_link_libraries(komain ${extra_libs}
     ${KDE4_KPARTS_LIBS}

@@ -19,9 +19,10 @@
 #include "Plugin.h"
 #include "strokedocker/StrokeDockerFactory.h"
 #include "shapeproperties/ShapePropertiesDockerFactory.h"
-#ifndef TINY_KOFFICE
+#ifndef NO_PIGMENT
 #   include "shadowdocker/ShadowDockerFactory.h"
 #   include "shapeselector/ShapeSelectorFactory.h"
+#   include "colordocker/ColorDockerFactory.h"
 #endif
 #include "shapecollection/KoShapeCollectionDocker.h"
 
@@ -29,19 +30,20 @@
 
 #include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(kofficedockers, KGenericFactory<Plugin>( "koffice-dockers" ) )
+K_EXPORT_COMPONENT_FACTORY(kofficedockers, KGenericFactory<Plugin>("koffice-dockers"))
 
-Plugin::Plugin( QObject *parent, const QStringList& )
+Plugin::Plugin(QObject *parent, const QStringList&)
     : QObject(parent)
 {
     Q_UNUSED(parent);
-    KoDockRegistry::instance()->add( new StrokeDockerFactory() );
-    KoDockRegistry::instance()->add( new ShapePropertiesDockerFactory() );
-#ifndef TINY_KOFFICE
-    KoDockRegistry::instance()->add( new ShadowDockerFactory() );
-    KoDockRegistry::instance()->add( new ShapeSelectorFactory() );
+    KoDockRegistry::instance()->add(new StrokeDockerFactory() );
+    KoDockRegistry::instance()->add(new ShapePropertiesDockerFactory());
+#ifndef NO_PIGMENT
+    KoDockRegistry::instance()->add(new ShadowDockerFactory());
+    KoDockRegistry::instance()->add(new ShapeSelectorFactory());
+    KoDockRegistry::instance()->add(new ColorDockerFactory());
 #endif
-    KoDockRegistry::instance()->add( new KoShapeCollectionDockerFactory() );
+    KoDockRegistry::instance()->add(new KoShapeCollectionDockerFactory());
 }
 
 #include "Plugin.moc"

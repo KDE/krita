@@ -1,6 +1,6 @@
 project( artistictextshape )
 
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} )
+include_directories( ${FLAKE_INCLUDES} )
 
 SET ( ArtisticTextShape_SRCS
     ArtisticTextShapePlugin.cpp
@@ -21,7 +21,7 @@ kde4_add_ui_files( ArtisticTextShape_SRCS
 
 kde4_add_plugin( artistictextshape ${ArtisticTextShape_SRCS} )
 
-target_link_libraries(artistictextshape komain)
+target_link_libraries(artistictextshape flake)
 
 install( TARGETS artistictextshape DESTINATION ${PLUGIN_INSTALL_DIR} )
 

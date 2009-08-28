@@ -22,6 +22,7 @@
 #define ARTISTICTEXTSHAPE_H
 
 #include <KoShape.h>
+#include <KoPostscriptPaintDevice.h>
 
 #include <QtGui/QFont>
 
@@ -140,6 +141,7 @@ private:
     void createOutline();
     QRectF nullBoundBox() const;
 
+    KoPostscriptPaintDevice m_paintDevice;
     QString m_text; ///< the text content
     QFont m_font; ///< the font to use for drawing
     KoPathShape * m_path; ///< the path shape we are attached to

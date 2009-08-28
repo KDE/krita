@@ -21,7 +21,6 @@
 #include "ArtisticTextShape.h"
 
 #include <KoPathShape.h>
-#include <KoGlobal.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
@@ -39,14 +38,13 @@
 
 #include "ArtisticTextShapeLoadingUpdater.h"
 
-#define FROM_PS_SIZE(x) (72.0 / KoGlobal::dpiY() * x)
-#define TO_PS_SIZE(x) ( KoGlobal::dpiY() / 72.0 * x)
-
 ArtisticTextShape::ArtisticTextShape()
-    : m_text( i18n( "Artistic Text" ) ), m_font( "ComicSans", FROM_PS_SIZE(20) )
+    : m_text( i18n( "Artistic Text" ) )
+    , m_font(QFont("ComicSans", 20), &m_paintDevice)
     , m_path(0), m_startOffset(0.0), m_baselineOffset(0.0)
     , m_textAnchor( AnchorStart )
 {
+
     setShapeId( ArtisticTextShapeID );
     cacheGlyphOutlines();
     updateSizeAndPosition();
@@ -81,7 +79,7 @@ void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
     // create the data attribute
     QString drawData = "text:" + m_text +';';
     drawData += "font-family:" + m_font.family() + ';';
-    drawData += QString("font-size:%1pt;").arg( TO_PS_SIZE(m_font.pointSize()) );
+    drawData += QString("font-size:%1pt;").arg(m_font.pointSizeF());
     if( m_font.bold() )
         drawData += "font-weight:bold;";
     if( m_font.italic() )
@@ -161,7 +159,7 @@ bool ArtisticTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
         }
         else if( pair[0] == "font-size" )
         {
-            m_font.setPointSizeF( FROM_PS_SIZE( KoUnit::parseValue( pair[1], 12 ) ) );
+            m_font.setPointSizeF(KoUnit::parseValue(pair[1], 12));
         }
         else if( pair[0] == "font-weight" && pair[1] == "bold" )
         {
@@ -333,8 +331,7 @@ void ArtisticTextShape::setFont( const QFont & font )
         return;
 
     update();
-    m_font = font;
-    m_font.setPointSizeF( FROM_PS_SIZE( font.pointSizeF() ) );
+    m_font = QFont(font, &m_paintDevice);
     cacheGlyphOutlines();
     updateSizeAndPosition();
     update();
@@ -342,9 +339,7 @@ void ArtisticTextShape::setFont( const QFont & font )
 
 QFont ArtisticTextShape::font() const
 {
-    QFont font( m_font );
-    font.setPointSizeF( TO_PS_SIZE( font.pointSizeF() ) );
-    return font;
+    return m_font;
 }
 
 void ArtisticTextShape::setStartOffset( qreal offset )

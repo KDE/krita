@@ -23,7 +23,6 @@
 
 #include <QString>
 #include <QChar>
-#include <QSharedData>
 
 #include <KoXmlReader.h>
 

@@ -57,6 +57,11 @@ set(komain_LIB_SRCS
     KoImageSelectionWidget.cpp
     config/KoConfigDocumentPage.cpp
     config/KoConfigGridPage.cpp
+
+    KoDocumentSectionDelegate.cpp
+    KoDocumentSectionToolTip.cpp
+    KoDocumentSectionView.cpp
+    KoItemToolTip.cpp
 )
 
 kde4_add_ui_files( komain_LIB_SRCS

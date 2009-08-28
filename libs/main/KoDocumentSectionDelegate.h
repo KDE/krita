@@ -21,7 +21,7 @@
 #define KO_DOCUMENT_SECTION_DELEGATE_H
 
 #include <QAbstractItemDelegate>
-#include "kowidgets_export.h"
+#include "komain_export.h"
 #include "KoDocumentSectionView.h"
 
 class KoDocumentSectionModel;
@@ -31,7 +31,7 @@ class KoDocumentSectionModel;
  * KoDocumentSectionModel: the graphical representation of one item in
  * a KoDocumentSectionView.
  */
-class KOWIDGETS_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
+class KOMAIN_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
 {
     typedef QAbstractItemDelegate super;
     Q_OBJECT

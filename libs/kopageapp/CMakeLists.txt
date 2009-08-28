@@ -50,9 +50,7 @@ set( kopageapp_LIB_SRCS
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
 
-target_link_libraries(kopageapp kodocumentsectionbox komain
-    kozoomaction kopagelayout
-    )
+target_link_libraries(kopageapp komain kozoomaction kopagelayout)
 target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES komain kozoomaction)
 
 set_target_properties(kopageapp PROPERTIES

@@ -194,7 +194,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} ${BLITZ_LIBRARIES} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage kozoomaction kopagelayout kodocumentsectionbox komain koaspectbutton koresourcewidget ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} ${BLITZ_LIBRARIES} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage kozoomaction kopagelayout komain koaspectbutton koresourcewidget ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})

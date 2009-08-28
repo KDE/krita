@@ -21,7 +21,7 @@
 #define KO_DOCUMENT_SECTION_TOOLTIP_H
 
 #include "KoItemToolTip.h"
-#include "kowidgets_export.h"
+#include "komain_export.h"
 
 class KoDocumentSectionModel;
 
@@ -29,7 +29,7 @@ class KoDocumentSectionModel;
  * A default tooltip for a KoDocumentSection that shows a thumbnail
  * image and the list of properties associated with the document model.
  */
-class KOWIDGETS_EXPORT KoDocumentSectionToolTip: public KoItemToolTip
+class KOMAIN_EXPORT KoDocumentSectionToolTip: public KoItemToolTip
 {
     Q_OBJECT
 

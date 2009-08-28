@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,21 +18,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KOLINESTYLESELECTOR_H_
-#define _KOLINESTYLESELECTOR_H_
+#ifndef _LINESTYLESELECTOR_H_
+#define _LINESTYLESELECTOR_H_
 
-#include "kowidgets_export.h"
 #include <QComboBox>
 
 /**
  * A custom combobox widget for selecting line styles.
  */
-class KOWIDGETS_EXPORT KoLineStyleSelector : public QComboBox
+class LineStyleSelector : public QComboBox
 {
     Q_OBJECT
 public:
-    KoLineStyleSelector( QWidget * parent = 0 );
-    virtual ~KoLineStyleSelector();
+    LineStyleSelector( QWidget * parent = 0 );
+    virtual ~LineStyleSelector();
 
     /**
      * Adds a new line style to the combobox.
@@ -68,4 +68,4 @@ private:
     Private * const d;
 };
 
-#endif // _KOLINESTYLESELECTOR_H_
+#endif // _LINESTYLESELECTOR_H_

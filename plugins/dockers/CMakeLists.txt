@@ -39,6 +39,13 @@ set(kofficedockers_SRCS
     shapeselector/ClipboardProxyShape.cpp
     shapeselector/ResizeFolderStrategy.cpp
 
+    linestyleselector/LineStyleItemDelegate.h
+    linestyleselector/LineStyleModel.h
+    linestyleselector/LineStyleSelector.h
+    linestyleselector/LineStyleItemDelegate.cpp
+    linestyleselector/LineStyleModel.cpp
+    linestyleselector/LineStyleSelector.cpp
+
     Plugin.cpp
 )
 
@@ -56,7 +63,7 @@ endif (NOT NO_PIGMENT)
 
 kde4_add_plugin(kofficedockers ${kofficedockers_SRCS})
 
-target_link_libraries(kofficedockers komain ${EXTRA_LIBS} kolinestyleselector)
+target_link_libraries(kofficedockers komain ${EXTRA_LIBS})
 
 install(TARGETS kofficedockers DESTINATION ${PLUGIN_INSTALL_DIR})
 

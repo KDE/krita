@@ -27,17 +27,7 @@ kde4_add_ui_files( textvariables_SRCS
 
 kde4_add_plugin(textvariables ${textvariables_SRCS})
 
-target_link_libraries(
-    textvariables
-    kotext
-    kostore
-    koodf
-    komain 
-    flake
-    kobase
-    ${KDE4_KDEUI_LIBRARY}
-    ${QT_QTCORE_LIBRARY}
-    )
+target_link_libraries(textvariables kotext)
 
 install(TARGETS textvariables DESTINATION ${PLUGIN_INSTALL_DIR})
 

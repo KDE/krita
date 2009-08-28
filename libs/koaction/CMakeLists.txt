@@ -17,7 +17,7 @@ target_link_libraries(koaction
     ${KDE4_THREADWEAVER_LIBRARIES}
 )
 
-target_link_libraries(koaction LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY})
+#target_link_libraries(koaction LINK_INTERFACE_LIBRARIES)
 
 set_target_properties(koaction PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

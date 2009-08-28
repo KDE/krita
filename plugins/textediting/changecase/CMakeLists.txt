@@ -10,7 +10,7 @@ set(changecase_SRCS
 
 kde4_add_plugin(changecase ${changecase_SRCS})
 
-target_link_libraries(changecase kotext ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}  ${KDE4_KDECORE_LIBS}  ${KDE4_KDEUI_LIBS})
+target_link_libraries(changecase kotext)
 
 install(TARGETS changecase DESTINATION ${PLUGIN_INSTALL_DIR})
 

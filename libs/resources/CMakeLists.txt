@@ -15,7 +15,7 @@ set(koresources_LIB_SRCS
 
 kde4_add_library(koresources SHARED ${koresources_LIB_SRCS})
 
-target_link_libraries(koresources pigmentcms ${QT_QTXML_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+target_link_libraries(koresources pigmentcms ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY})
 target_link_libraries(koresources LINK_INTERFACE_LIBRARIES pigmentcms)
 
 set_target_properties(koresources PROPERTIES

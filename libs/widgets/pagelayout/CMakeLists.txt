@@ -20,12 +20,7 @@ kde4_add_ui_files( kopagelayout_LIB_SRCS
 
 kde4_add_library(kopagelayout SHARED ${kopagelayout_LIB_SRCS})
 
-target_link_libraries(kopagelayout kotext koodf kostore kobase koinput flake
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KFILE_LIBRARY}
-)
+target_link_libraries(kopagelayout kotext koinput)
 
 set_target_properties(kopagelayout PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

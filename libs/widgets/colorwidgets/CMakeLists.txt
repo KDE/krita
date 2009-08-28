@@ -27,9 +27,9 @@ kde4_add_ui_files( kocolorwidgets_LIB_SRCS
 
 kde4_add_library(kocolorwidgets SHARED ${kocolorwidgets_LIB_SRCS})
 
-target_link_libraries(kocolorwidgets koresources koinput)
+target_link_libraries(kocolorwidgets koresources koinput ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
 
-target_link_libraries(kocolorwidgets LINK_INTERFACE_LIBRARIES koresources koinput)
+target_link_libraries(kocolorwidgets LINK_INTERFACE_LIBRARIES koresources koinput ${KDE4_KDEUI_LIBS})
 
 set_target_properties(kocolorwidgets PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

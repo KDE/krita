@@ -17,7 +17,7 @@ kde4_add_ui_files( autocorrect_SRCS
 
 kde4_add_plugin(autocorrect ${autocorrect_SRCS})
 
-target_link_libraries(autocorrect kotext ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} kostore ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} komain)
+target_link_libraries(autocorrect komain)
 
 install(TARGETS autocorrect DESTINATION ${PLUGIN_INSTALL_DIR})
 

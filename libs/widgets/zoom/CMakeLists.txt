@@ -11,8 +11,8 @@ set(kozoomaction_LIB_SRCS
 
 kde4_add_library(kozoomaction SHARED ${kozoomaction_LIB_SRCS})
 
-target_link_libraries(kozoomaction  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} flake )
-target_link_libraries(kozoomaction LINK_INTERFACE_LIBRARIES  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} flake  koaction )
+target_link_libraries(kozoomaction flake)
+target_link_libraries(kozoomaction LINK_INTERFACE_LIBRARIES flake)
 
 set_target_properties(kozoomaction PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

@@ -14,7 +14,7 @@ kde4_add_plugin(kritablurfilter ${kritablurfilter_PART_SRCS})
 
 
 
-target_link_libraries(kritablurfilter kritaui)
+target_link_libraries(kritablurfilter kritaui koaspectbutton)
 
 install(TARGETS kritablurfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 

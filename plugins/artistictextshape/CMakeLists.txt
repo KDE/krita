@@ -21,15 +21,7 @@ kde4_add_ui_files( ArtisticTextShape_SRCS
 
 kde4_add_plugin( artistictextshape ${ArtisticTextShape_SRCS} )
 
-target_link_libraries(
-    artistictextshape
-    flake
-    komain
-    kostore
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    )
+target_link_libraries(artistictextshape komain)
 
 install( TARGETS artistictextshape DESTINATION ${PLUGIN_INSTALL_DIR} )
 

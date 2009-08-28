@@ -13,14 +13,7 @@ set(koinput_LIB_SRCS
 
 kde4_add_library(koinput SHARED ${koinput_LIB_SRCS})
 
-target_link_libraries(koinput     
-    koodf
-    kobase
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KFILE_LIBRARY}
-)
+target_link_libraries(koinput kobase ${QT_QTGUI_LIBRARY})
 
 set_target_properties(koinput PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

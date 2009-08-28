@@ -6,7 +6,7 @@ kde4_add_ui_files(kritabumpmap_PART_SRCS wdgbumpmap.ui)
 
 kde4_add_plugin(kritabumpmap ${kritabumpmap_PART_SRCS})
 
-target_link_libraries(kritabumpmap kritaui)
+target_link_libraries(kritabumpmap kritaui kodocumentsectionbox)
 
 install(TARGETS kritabumpmap  DESTINATION ${PLUGIN_INSTALL_DIR})
 

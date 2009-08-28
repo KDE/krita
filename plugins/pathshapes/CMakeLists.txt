@@ -38,17 +38,7 @@ kde4_add_ui_files(pathshapes_PART_SRCS
 )
 kde4_add_plugin(pathshapes ${pathshapes_PART_SRCS})
 
-target_link_libraries(
-    pathshapes
-    flake
-    
-    komain
-    kostore
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    )
+target_link_libraries(pathshapes flake koinput)
 
 install(TARGETS pathshapes  DESTINATION ${PLUGIN_INSTALL_DIR})
 

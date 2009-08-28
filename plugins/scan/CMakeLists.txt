@@ -12,7 +12,7 @@ kde4_add_plugin(kofficescan ${kofficescan_PART_SRCS})
 
 
 
-target_link_libraries(kofficescan komain ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
+target_link_libraries(kofficescan komain  ${QT_QT3SUPPORT_LIBRARY} )
 
 install(TARGETS kofficescan  DESTINATION ${PLUGIN_INSTALL_DIR})
 

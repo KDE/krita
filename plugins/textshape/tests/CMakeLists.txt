@@ -28,7 +28,7 @@ if(NOT NO_PIGMENT)
     set(EXTRA_LIBS kocolorwidgets)
 endif(NOT NO_PIGMENT)
 
-target_link_libraries(TestDocumentLayout ${EXTRA_LIBS} komain kotext koaction ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestDocumentLayout ${EXTRA_LIBS} komain koaction ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -75,7 +75,7 @@ set(TestChangeListCommand_test_SRCS
 
 
 kde4_add_unit_test(TestChangeListCommand TESTNAME shapes-text-TestChangeListCommand ${TestChangeListCommand_test_SRCS})
-target_link_libraries(TestChangeListCommand  ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY}  ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS})
+target_link_libraries(TestChangeListCommand ${EXTRA_LIBS} kocharacterselectiondialog komain ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -85,7 +85,7 @@ set(TestChangesDatabase_test_SRCS
     ../TextChange.cpp
 )
 kde4_add_unit_test(TestChangesDatabase TESTNAME shapes-text-TestChangesDatabase ${TestChangesDatabase_test_SRCS})
-target_link_libraries(TestChangesDatabase ${QT_QTTEST_LIBRARY} ${QT_QTCORE_LIBRARY})
+target_link_libraries(TestChangesDatabase ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -94,7 +94,7 @@ set(TestStylesModel_test_SRCS
     ../dialogs/StylesModel.cpp
 )
 kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
-target_link_libraries(TestStylesModel kotext koaction ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
+target_link_libraries(TestStylesModel kotext koaction ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -107,4 +107,4 @@ set(TestTableLayout_test_SRCS
     ../ListItemsHelper.cpp
 )
 kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
-target_link_libraries(TestTableLayout kotext komain ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
+target_link_libraries(TestTableLayout kotext komain ${QT_QTTEST_LIBRARY})

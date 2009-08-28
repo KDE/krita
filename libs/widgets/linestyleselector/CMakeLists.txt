@@ -9,8 +9,8 @@ set(kolinestyleselector_LIB_SRCS
 kde4_add_library(kolinestyleselector SHARED ${kolinestyleselector_LIB_SRCS})
 
 target_link_libraries(kolinestyleselector
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
 )
 
 set_target_properties(kolinestyleselector PROPERTIES

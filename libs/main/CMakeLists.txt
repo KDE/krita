@@ -73,24 +73,22 @@ kde4_add_ui_files( komain_LIB_SRCS
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
 if (NOT NO_PIGMENT)
-    set (extra_libs kocolorwidgets koresources pigmentcms koresourcewidget )
+    set (extra_libs kocolorwidgets koresources pigmentcms koresourcewidget)
 endif (NOT NO_PIGMENT)
 
 target_link_libraries(komain ${extra_libs}
-                      flake koaction koaspectbutton kocharacterselectiondialog kocvsimport
-                      kodocumentsectionbox koinput kolinestyleselector koopenpane koprogress
-                      kozoomaction kotext kopagelayout
     ${KDE4_KPARTS_LIBS}
-    ${KDE4_KFILE_LIBRARY}
     ${KDE4_KABC_LIBS}
-    ${KDE4_THREADWEAVER_LIBRARIES}
+    ${KDE4_KFILE_LIBRARY}
+    koprogress
+    koinput
+    koaspectbutton
+    kotext
+    koaction
+    koopenpane
 )
 
-target_link_libraries(komain LINK_INTERFACE_LIBRARIES ${extra_libs}
-                      flake koaction koaspectbutton kobase kocharacterselectiondialog kocvsimport
-                      kodocumentsectionbox koinput kolinestyleselector koodf koopenpane kopicture koplugin koprogress
-                      kostore kozoomaction kotext kopagelayout
-                      ${QT_QTGUI_LIBRARY})
+target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext ${KDE4_KPARTS_LIBS})
 
 set_target_properties(komain PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

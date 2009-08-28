@@ -11,8 +11,8 @@ set(koaspectbutton_LIB_SRCS
 kde4_add_library(koaspectbutton SHARED ${koaspectbutton_LIB_SRCS})
 
 target_link_libraries(koaspectbutton
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
 )
 
 set_target_properties(koaspectbutton PROPERTIES

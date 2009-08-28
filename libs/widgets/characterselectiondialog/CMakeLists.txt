@@ -9,7 +9,6 @@ set(kocharacterselectiondialog_LIB_SRCS
 kde4_add_library(kocharacterselectiondialog SHARED ${kocharacterselectiondialog_LIB_SRCS})
 
 target_link_libraries(kocharacterselectiondialog
-    ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
 )
 

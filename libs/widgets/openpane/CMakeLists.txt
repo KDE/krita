@@ -24,11 +24,9 @@ kde4_add_ui_files( koopenpane_LIB_SRCS
 
 kde4_add_library(koopenpane SHARED ${koopenpane_LIB_SRCS})
 
-target_link_libraries(koopenpane     
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
+target_link_libraries(koopenpane
     ${KDE4_KFILE_LIBRARY}
+    ${KDE4_KIO_LIBRARY}
 )
 
 set_target_properties(koopenpane PROPERTIES

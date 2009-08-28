@@ -3,14 +3,7 @@ add_subdirectory( templates )
 set(kritacmykplugin_PART_SRCS cmyk_plugin.cc kis_cmyk_colorspace.cc )
 kde4_add_plugin(kritacmykplugin ${kritacmykplugin_PART_SRCS})
 
-target_link_libraries(
-    kritacmykplugin
-    pigmentcms
-    ${LCMS_LIBRARIES}
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTXML_LIBRARY}
-    )
+target_link_libraries(kritacmykplugin pigmentcms)
 
 install(TARGETS kritacmykplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kritacmykplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

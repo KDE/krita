@@ -39,16 +39,7 @@ kde4_add_ui_files(defaulttools_SRCS
 )
 
 kde4_add_plugin(defaulttools ${defaulttools_SRCS})
-target_link_libraries(
-    defaulttools
-    flake
-    
-    kotext
-    komain
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
-    )
+target_link_libraries(defaulttools flake koinput koaspectbutton)
 install(TARGETS defaulttools DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

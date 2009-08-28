@@ -24,7 +24,7 @@ set(SheetTest_test_SRCS
 )
 
 kde4_add_unit_test(SheetTest TESTNAME shapes-musicshape-SheetTest ${SheetTest_test_SRCS})
-target_link_libraries(SheetTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(SheetTest ${QT_QTTEST_LIBRARY})
 
 
 ########### next target ###############
@@ -50,7 +50,7 @@ set(VoiceBarTest_test_SRCS
 )
 
 kde4_add_unit_test(VoiceBarTest TESTNAME shapes-musicshape-VoiceBarTest ${VoiceBarTest_test_SRCS})
-target_link_libraries(VoiceBarTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(VoiceBarTest ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -76,7 +76,7 @@ set(MusicXmlWriterTest_test_SRCS
 )
 
 kde4_add_unit_test(MusicXmlWriterTest TESTNAME shapes-musicshape-MusicXmlWriterTest ${MusicXmlWriterTest_test_SRCS})
-target_link_libraries(MusicXmlWriterTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kostore)
+target_link_libraries(MusicXmlWriterTest ${QT_QTTEST_LIBRARY} kostore)
 
 
 

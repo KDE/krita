@@ -57,19 +57,7 @@ IF (NOT TINY)
     set(EXTRA_LIBS koresources pigmentcms kocolorwidgets)
 ENDIF (NOT TINY)
 
-target_link_libraries(
-    kofficedockers
-    komain
-    flake
-    kostore
-    ${EXTRA_LIBS}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
-    )
+target_link_libraries(kofficedockers komain ${EXTRA_LIBS} kolinestyleselector)
 
 install(TARGETS kofficedockers DESTINATION ${PLUGIN_INSTALL_DIR})
 

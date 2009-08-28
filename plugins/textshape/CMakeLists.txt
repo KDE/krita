@@ -89,16 +89,7 @@ set(EXTRA_LIBS
 )
 endif (NOT NO_PIGMENT)
 
-target_link_libraries(textshape
-    komain
-    koaction
-    ${EXTRA_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
-)
-
-target_link_libraries(textshape LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(textshape kotext kocharacterselectiondialog koinput komain koaction ${EXTRA_LIBS})
 
 install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
 

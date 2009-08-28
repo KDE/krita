@@ -14,16 +14,7 @@ set(thesaurustool_SRCS
 
 kde4_add_plugin(thesaurustool ${thesaurustool_SRCS})
 
-target_link_libraries(
-    thesaurustool
-    kotext
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KUTILS_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    )
+target_link_libraries(thesaurustool kotext)
 
 install(TARGETS thesaurustool  DESTINATION ${PLUGIN_INSTALL_DIR})
 

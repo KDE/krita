@@ -50,8 +50,10 @@ set( kopageapp_LIB_SRCS
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
 
-target_link_libraries(kopageapp koodf flake kodocumentsectionbox komain kostore ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} kozoomaction  kotext)
-target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES flake komain )
+target_link_libraries(kopageapp kodocumentsectionbox komain
+    kozoomaction kopagelayout
+    )
+target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES komain kozoomaction)
 
 set_target_properties(kopageapp PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

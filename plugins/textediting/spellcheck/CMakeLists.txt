@@ -16,7 +16,7 @@ kde4_add_ui_files( spellcheck_SRCS
 
 kde4_add_plugin(spellcheck ${spellcheck_SRCS})
 
-target_link_libraries(spellcheck kotext ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}  ${KDE4_KDECORE_LIBS}  ${KDE4_KDEUI_LIBS})
+target_link_libraries(spellcheck kotext)
 
 install(TARGETS spellcheck DESTINATION ${PLUGIN_INSTALL_DIR})
 

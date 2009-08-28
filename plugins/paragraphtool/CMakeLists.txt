@@ -26,17 +26,7 @@ kde4_add_ui_files(
 
 kde4_add_plugin(paragraphtool ${paragraphtool_SRCS})
 
-target_link_libraries(
-    paragraphtool
-    flake
-    
-    kotext
-    komain
-    kostore
-    pigmentcms
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    )
+target_link_libraries(paragraphtool komain)
 install(TARGETS paragraphtool DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

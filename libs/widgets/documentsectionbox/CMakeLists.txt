@@ -12,11 +12,9 @@ set(kodocumentsectionbox_LIB_SRCS
 
 kde4_add_library(kodocumentsectionbox SHARED ${kodocumentsectionbox_LIB_SRCS})
 
-target_link_libraries(kodocumentsectionbox     
+target_link_libraries(kodocumentsectionbox
     ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KFILE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
 )
 
 set_target_properties(kodocumentsectionbox PROPERTIES

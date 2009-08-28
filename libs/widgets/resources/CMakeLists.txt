@@ -13,12 +13,9 @@ set(koresourcewidget_LIB_SRCS
 
 kde4_add_library(koresourcewidget SHARED ${koresourcewidget_LIB_SRCS})
 
-target_link_libraries(koresourcewidget koresources  
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-)
+target_link_libraries(koresourcewidget koresources ${KDE4_KIO_LIBS})
 
-target_link_libraries(koresourcewidget LINK_INTERFACE_LIBRARIES koresources  )
+target_link_libraries(koresourcewidget LINK_INTERFACE_LIBRARIES koresources ${KDE4_KDEUI_LIBS})
 
 set_target_properties(koresourcewidget PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

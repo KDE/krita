@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -22,12 +22,13 @@
 
 #include <KoParagraphStyle.h>
 #include <KoListLevelProperties.h>
-#include <KoCharSelectDia.h>
 
 #include <KDebug>
+#include <KCharSelect>
+#include <KDialog>
 
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
-        : QWidget(parent)//,
+        : QWidget(parent)
 {
     widget.setupUi(this);
 
@@ -123,7 +124,7 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     llp.setListItemSuffix(widget.suffix->text());
     llp.setLetterSynchronization(widget.letterSynchronization->isVisible() && widget.letterSynchronization->isChecked());
     if (style == KoListStyle::CustomCharItem)
-        llp.setBulletCharacter(currentRow == m_blankCharIndex ? QChar() : widget.customCharacter->text().at(0));
+        llp.setBulletCharacter(currentRow == m_blankCharIndex ? QChar() : widget.customCharacter->text().remove('&').at(0));
 
     Qt::Alignment align;
     switch (widget.alignment->currentIndex()) {
@@ -174,19 +175,29 @@ void ParagraphBulletsNumbers::styleChanged(int index)
 
 void ParagraphBulletsNumbers::customCharButtonPressed()
 {
-    QString font;
-    QChar character;
-    if (KoCharSelectDia::selectChar(font, character, this)) {
+    KDialog *dialog = new KDialog(this);
+    dialog->setModal(true);
+    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
+    dialog->setDefaultButton(KDialog::Ok);
+
+    KCharSelect *kcs = new KCharSelect(dialog, 0,
+            KCharSelect::SearchLine | KCharSelect::FontCombo | KCharSelect::BlockCombos
+            | KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
+
+    dialog->setMainWidget(kcs);
+    if (dialog->exec() == KDialog::Accepted) {
+        QChar character = kcs->currentChar();
         widget.customCharacter->setText(character);
-        widget.customCharacter->setFont(QFont(font));
-    }
-    // also switch to the custom list style.
-    foreach(int row, m_mapping.keys()) {
-        if (m_mapping[row] == KoListStyle::CustomCharItem) {
-            widget.listTypes->setCurrentRow(row);
-            break;
+
+        // also switch to the custom list style.
+        foreach(int row, m_mapping.keys()) {
+            if (m_mapping[row] == KoListStyle::CustomCharItem) {
+                widget.listTypes->setCurrentRow(row);
+                break;
+            }
         }
     }
+    delete dialog;
 }
 
 #include "ParagraphBulletsNumbers.moc"

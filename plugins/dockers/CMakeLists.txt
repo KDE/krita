@@ -51,10 +51,10 @@ if (NOT NO_PIGMENT)
         colordocker/ColorDocker.cpp
         colordocker/ColorDockerFactory.cpp
     )
+    set(EXTRA_LIBS koresources pigmentcms kocolorwidgets)
 endif (NOT NO_PIGMENT)
 
 kde4_add_plugin(kofficedockers ${kofficedockers_SRCS})
-set(EXTRA_LIBS koresources pigmentcms kocolorwidgets)
 
 target_link_libraries(kofficedockers komain ${EXTRA_LIBS} kolinestyleselector)
 

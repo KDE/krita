@@ -88,11 +88,11 @@ private:
     Identifier m_identifier; ///< the identifier type
 };
 
-/// A referencing parameter, one that refrences another formula or a modifier
+/// A referencing parameter, one that references another formula or a modifier
 class KoEnhancedPathReferenceParameter : public KoEnhancedPathParameter
 {
 public:
-    /// Constructs reference paramater from the fiven reference string
+    /// Constructs reference parameter from the given reference string
     explicit KoEnhancedPathReferenceParameter( const QString &reference, KoEnhancedPathShape * parent );
     qreal evaluate();
     virtual void modify( qreal value );

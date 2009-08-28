@@ -178,7 +178,7 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
     d->colorConversionCache = 0;
     d->alphaCs->d->ownedByRegistry = false;
     delete d->alphaCs;
-    // Do not explicitely delete d->rgbU8sRGB and d->lab16sLAB, since they are contained in the d->csMap
+    // Do not explicitly delete d->rgbU8sRGB and d->lab16sLAB, since they are contained in the d->csMap
     delete d;
 }
 

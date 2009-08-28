@@ -29,7 +29,7 @@ class QString;
 
 /**
  * This class should contain all workarounds to correct problems with differenet ODF
- * implementations. If you need to access application specifc things please create a
+ * implementations. If you need to access application specific things please create a
  * new namespace in the app you need it
  * All calls to methods of this class should be wrapped into ifndefs like e.g.
  *

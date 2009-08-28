@@ -49,7 +49,7 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles)
         return;
     }
 
-    // optimisation strategy;  store the formatid of the formats we checked into
+    // optimization strategy;  store the formatid of the formats we checked into
     // a qset for 'hits' and 'ignores' and avoid the copying of the format
     // (fragment.charFormat() / block.blockFormat()) when the formatId is
     // already checked previosly

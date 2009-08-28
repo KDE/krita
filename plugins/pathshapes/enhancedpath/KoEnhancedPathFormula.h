@@ -42,7 +42,7 @@ public:
     enum Operator {
         OperatorInvalid,   ///< invalid operator
         OperatorAdd,       ///< + addition
-        OperatorSub,       ///< - substraction
+        OperatorSub,       ///< - subtraction
         OperatorMul,       ///< * multiplication
         OperatorDiv,       ///< / division
         OperatorLeftPar,   ///< ( left parentheses

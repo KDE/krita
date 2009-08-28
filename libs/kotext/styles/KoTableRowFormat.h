@@ -48,7 +48,7 @@ class KOTEXT_EXPORT KoTableRowFormat : public KoTableFormat
 public:
     enum Property {
         Background,    /**< Row background. See fo:background-color in [ODF]. */
-        MinimumHeight, /**< Minumum row height. See style:min-row-height in [ODF]. */
+        MinimumHeight, /**< Minimum row height. See style:min-row-height in [ODF]. */
         KeepTogether,  /**< Keep rows together. See fo:keep-together in [ODF]. */
         BreakAfter,    /**< Break after row. See fo:break-after in [ODF]. */
         BreakBefore   /**< Break before row. See fo:break-before in [ODF]. */

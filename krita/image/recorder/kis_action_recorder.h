@@ -42,7 +42,7 @@ public slots:
 
 signals:
     /**
-     * This signal is emited each time an action is added to this recorder.
+     * This signal is emitted each time an action is added to this recorder.
      */
     void addedAction(const KisRecordedAction& action);
 };

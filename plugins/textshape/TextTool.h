@@ -195,7 +195,7 @@ private slots:
     void setTextColor(const KoColor &color);
     /// change background color of a selected text
     void setBackgroundColor(const KoColor &color);
-    /// set Paragraph style of current selection. Exisiting style will be completly overridden.
+    /// set Paragraph style of current selection. Exisiting style will be completely overridden.
     void setStyle(KoParagraphStyle *syle);
     /// set the characterStyle of the current selection. see above.
     void setStyle(KoCharacterStyle *style);

@@ -93,3 +93,4 @@ KisCanvasDecoration* KisAbstractCanvasWidget::decoration(const QString& id)
     }
     return 0;
 }
+

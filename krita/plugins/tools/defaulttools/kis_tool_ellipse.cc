@@ -203,7 +203,7 @@ void KisToolEllipse::paintEllipse(QPainter& gc, const QRect&)
         x += m_dragStart.x();
         y += m_dragStart.y();
 
-// useful for debuging
+// useful for debugging
 #if 0        
         glPointSize(20);
         glBegin(GL_POINTS);

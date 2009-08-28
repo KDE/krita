@@ -127,7 +127,7 @@ protected:
     void resizeGL(int w, int h);
     void paintGL();
 
-    /// these methods take origin coordinate into account, basicly it means (point - origin)
+    /// these methods take origin coordinate into account, basically it means (point - origin)
     QPoint widgetToView( const QPoint& p ) const;
     QRect widgetToView( const QRect& r ) const;
     QPoint viewToWidget( const QPoint& p ) const;

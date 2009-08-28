@@ -131,7 +131,7 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator++ ()
 KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
 {
     // XXX what if outside the valid range of this iterator?
-    // AAA two ways: int overflow is catched in assert or 
+    // AAA two ways: int overflow is caught in assert or 
     //               borders are checked below
 
     Q_ASSERT_X(! (m_x>0 && (m_x+n)<0),"hlineIt+=", "Integer overflow");

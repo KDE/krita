@@ -140,7 +140,7 @@ void KoTool::customMoveEvent(KoPointerEvent * event)
 
 void KoTool::useCursor(const QCursor &cursor, bool force)
 {
-// KOffice 2.2: remove the 'force' bool. Its a premature optimisation. (TZander)
+// KOffice 2.2: remove the 'force' bool. Its a premature optimization. (TZander)
     if (!force && cursor.shape() != Qt::BitmapCursor && cursor.shape() == d->previousCursor.shape())
         return;
 

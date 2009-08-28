@@ -161,7 +161,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
         m_list.insert(i, 0);
         m_oldList.insert(i, document.list(m_blocks.at(i)));
         m_newProperties.insert(i, listStyle->levelProperties(m_levels.value(i)));
-        // First check if we wnat to remove a list
+        // First check if we want to remove a list
         if (m_newProperties.value(i).style() == KoListStyle::None) {
             m_actions.insert(i, ChangeListCommand::removeList);
             continue;

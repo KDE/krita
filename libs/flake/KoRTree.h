@@ -530,7 +530,7 @@ QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::spli
     marker[seeds.second] = true;
 
     // There is one more in a node to split than the capacity and as we
-    // already put the seeds in the new nodes substract them.
+    // already put the seeds in the new nodes subtract them.
     int remaining = m_capacity + 1 - 2;
 
     while (remaining > 0) {

@@ -131,3 +131,4 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image
     painter.setPen(Qt::black);
     painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos) ) );
 }
+

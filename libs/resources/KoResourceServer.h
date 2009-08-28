@@ -52,7 +52,7 @@ public:
     /**
     * Constructs a KoResourceServerBase
     * @param resource type, has to be the same as used by KStandardDirs
-    * @param extensions the file extensions seperate by ':', e.g. "*.kgr:*.svg:*.ggr"
+    * @param extensions the file extensions separate by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
     KoResourceServerBase(const QString& type, const QString& extensions)
         : m_type(type), m_extensions(extensions) {}
@@ -63,7 +63,7 @@ public:
 
     /**
     * File extensions for resources of the server
-    * @returns the file extensions seperated by ':', e.g. "*.kgr:*.svg:*.ggr"
+    * @returns the file extensions separated by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
     QString extensions() { return m_extensions; }
 

@@ -201,7 +201,7 @@ public:
      * Save the data centers
      *
      * This calls KoDataCenter::completeSaving()
-     * @returns false if an error occured, which typically cancels the save.
+     * @returns false if an error occurred, which typically cancels the save.
      */
     bool saveDataCenter(KoStore *store, KoXmlWriter* manifestWriter);
 

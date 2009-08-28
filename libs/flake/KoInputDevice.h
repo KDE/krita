@@ -50,7 +50,7 @@ public:
      */
     explicit KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer, qint64 uniqueTabletId = -1);
     /**
-     * Constuctor for the mouse as input device.
+     * Constructor for the mouse as input device.
      */
     KoInputDevice();
 

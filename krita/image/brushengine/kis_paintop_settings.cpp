@@ -141,3 +141,4 @@ QString KisPaintOpSettings::modelName() const
     return "";
 }
 #endif
+

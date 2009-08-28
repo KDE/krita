@@ -590,7 +590,7 @@ bool KoCreatePathTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointA
         endIndex.second = 0;
     }
 
-    // after combining we have a path where with the subpaths in the follwing
+    // after combining we have a path where with the subpaths in the following
     // order:
     // 1. the subpaths of the pathshape we started the new path at
     // 2. the subpath we just created

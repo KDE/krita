@@ -905,7 +905,7 @@ protected:
      * Override this method in your derived class to show a widget in the startup 'dialog'.
      * This widget should allow the user to set settings for a custom document (i.e. one
      * not based on a template).
-     * The returned widget should provide its own button (preferrably 'Create') and
+     * The returned widget should provide its own button (preferably 'Create') and
      * implement the logic to implement the document instance correctly.
      * After initializing the widget should emit a signal called 'documentSelected()' which
      * will remove the startupWidget and show the document.

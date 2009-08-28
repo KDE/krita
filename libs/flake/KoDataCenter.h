@@ -45,13 +45,13 @@ public:
 
     /**
      * Load any remaining binary blobs needed
-     * @returns false if an error occured, which typically cancels the load.
+     * @returns false if an error occurred, which typically cancels the load.
      */
     virtual bool completeLoading(KoStore *store) = 0;
 
     /**
      * Save any remaining binary blobs
-     * @returns false if an error occured, which typically cancels the save.
+     * @returns false if an error occurred, which typically cancels the save.
      */
     virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context) = 0;
 };

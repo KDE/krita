@@ -94,7 +94,7 @@ public:
 
 protected:
     /**
-     * INDEX of tiles to be commited with next commit()
+     * INDEX of tiles to be committed with next commit()
      */
     KisMementoItemList m_index;
 

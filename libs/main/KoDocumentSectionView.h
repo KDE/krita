@@ -42,44 +42,41 @@ class KoDocumentSectionModel;
  */
 class KOMAIN_EXPORT KoDocumentSectionView: public QTreeView
 {
-    typedef QTreeView super;
     Q_OBJECT
-
 signals:
     /**
      * Emitted whenever the user clicks with the secondary mouse
      * button on an item. It is up to the application to design the
      * contents of the context menu and show it.
      */
-    void contextMenuRequested( const QPoint &globalPos, const QModelIndex &index );
+    void contextMenuRequested(const QPoint &globalPos, const QModelIndex &index);
 
 public:
 
     /**
      * Create a new KoDocumentSectionView.
      */
-    KoDocumentSectionView( QWidget *parent = 0 );
+    KoDocumentSectionView(QWidget *parent = 0);
     virtual ~KoDocumentSectionView();
 
     /// how items should be displayed
-    enum DisplayMode
-        {
-            /// large fit-to-width thumbnails, with only titles or page numbers
-            ThumbnailMode,
+    enum DisplayMode {
+        /// large fit-to-width thumbnails, with only titles or page numbers
+        ThumbnailMode,
 
-            /// smaller thumbnails, with titles and property icons in two rows
-            DetailedMode,
+        /// smaller thumbnails, with titles and property icons in two rows
+        DetailedMode,
 
-            /// no thumbnails, with titles and property icons in a single row
-            MinimalMode
-        };
+        /// no thumbnails, with titles and property icons in a single row
+        MinimalMode
+    };
 
     /**
      * Set the display mode of the view to one of the options.
      *
      * @param mode The KoDocumentSectionView::DisplayMode mode
      */
-    void setDisplayMode( DisplayMode mode );
+    void setDisplayMode(DisplayMode mode);
 
     /**
      * @return the currently active display mode
@@ -102,10 +99,9 @@ public:
      QMenu menu;
      if (index.isValid()) {
          sectionView->addPropertyActions(&menu, index);
-      }
-      else {
+     } else {
          menu.addAction(...); // Something to create a new document section, for example.
-      }
+     }
 
      @endcode
      *
@@ -114,22 +110,22 @@ public:
      * @param index The model index associated with the document
      * section that may or may not provide a number of toggle actions.
      */
-    void addPropertyActions( QMenu *menu, const QModelIndex &index );
+    void addPropertyActions(QMenu *menu, const QModelIndex &index);
 
 protected:
-    virtual bool viewportEvent( QEvent *event );
-    virtual void contextMenuEvent( QContextMenuEvent *event );
-    virtual void showContextMenu( const QPoint &globalPos, const QModelIndex &index );
+    virtual bool viewportEvent(QEvent *event);
+    virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void showContextMenu(const QPoint &globalPos, const QModelIndex &index);
 
 protected slots:
-    virtual void currentChanged( const QModelIndex &current, const QModelIndex &previous );
-    virtual void dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight );
+    virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
+    virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
 private slots:
-    void slotActionToggled( bool on, const QPersistentModelIndex &index, int property );
+    void slotActionToggled(bool on, const QPersistentModelIndex &index, int property);
 
 private:
-    QStyleOptionViewItem optionForIndex( const QModelIndex &index ) const;
+    QStyleOptionViewItem optionForIndex(const QModelIndex &index) const;
     typedef KoDocumentSectionModel Model;
     class PropertyAction;
     class Private;

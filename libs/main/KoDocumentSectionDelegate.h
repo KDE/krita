@@ -22,7 +22,7 @@
 
 #include <QAbstractItemDelegate>
 #include "komain_export.h"
-#include "KoDocumentSectionView.h"
+class KoDocumentSectionView;
 
 class KoDocumentSectionModel;
 
@@ -33,46 +33,45 @@ class KoDocumentSectionModel;
  */
 class KOMAIN_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
 {
-    typedef QAbstractItemDelegate super;
     Q_OBJECT
 
-    public:
-        explicit KoDocumentSectionDelegate( KoDocumentSectionView *view, QObject *parent = 0 );
-        virtual ~KoDocumentSectionDelegate();
+public:
+    explicit KoDocumentSectionDelegate(KoDocumentSectionView *view, QObject *parent = 0);
+    virtual ~KoDocumentSectionDelegate();
 
-        virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        virtual QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        virtual bool editorEvent( QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index );
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    virtual bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);
 
-        virtual QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        virtual void setEditorData( QWidget *editor, const QModelIndex &index ) const;
-        virtual void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
-        virtual void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index ) const;
+    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index) const;
 
-    protected:
-        virtual bool eventFilter( QObject *object, QEvent *event );
+protected:
+    virtual bool eventFilter(QObject *object, QEvent *event);
 
 
-    private:
-        typedef KoDocumentSectionModel Model;
-        typedef KoDocumentSectionView View;
-        class Private;
-        Private* const d;
+private:
+    typedef KoDocumentSectionModel Model;
+    typedef KoDocumentSectionView View;
+    class Private;
+    Private* const d;
 
-        static QStyleOptionViewItem getOptions( const QStyleOptionViewItem &option, const QModelIndex &index );
-        int thumbnailHeight( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        int availableWidth( const QModelIndex &index ) const;
-        int textBoxHeight( const QStyleOptionViewItem &option ) const;
-        QRect textRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        QRect iconsRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        QRect thumbnailRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        QRect decorationRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        QRect progressBarRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        void drawText( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        void drawIcons( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        void drawThumbnail( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        void drawDecoration( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        void drawProgressBar( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+    static QStyleOptionViewItem getOptions(const QStyleOptionViewItem &option, const QModelIndex &index);
+    int thumbnailHeight(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    int availableWidth(const QModelIndex &index) const;
+    int textBoxHeight(const QStyleOptionViewItem &option) const;
+    QRect textRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QRect iconsRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QRect thumbnailRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QRect decorationRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QRect progressBarRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void drawText(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void drawIcons(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void drawThumbnail(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void drawDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 #endif

@@ -27,21 +27,21 @@
 #include "KoUpdater.h"
 #include "KoProgressProxy.h"
 
-class KoProgressUpdater::Private {
-
+class KoProgressUpdater::Private
+{
 public:
 
-    Private(KoProgressUpdater* _parent, KoProgressProxy* p)
-        : parent( _parent )
+    Private(KoProgressUpdater *_parent, KoProgressProxy *p)
+        : parent(_parent)
         , progressBar(p)
         , totalWeight(0)
         , currentProgress(0)
-        , updated( false )
+        , updated(false)
     {
     }
 
-    KoProgressUpdater* parent;
-    KoProgressProxy* progressBar;
+    KoProgressUpdater *parent;
+    KoProgressProxy *progressBar;
     int totalWeight;
     int currentProgress;
     bool updated;          // is true whe
@@ -54,11 +54,10 @@ public:
 
 
 KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar)
-    : d ( new Private(this, progressBar) )
+    : d (new Private(this, progressBar))
 {
     Q_ASSERT(d->progressBar);
-    connect( &d->updateGuiTimer, SIGNAL( timeout() ), SLOT( updateUi() ));
-
+    connect(&d->updateGuiTimer, SIGNAL(timeout()), SLOT(updateUi()));
 }
 
 KoProgressUpdater::~KoProgressUpdater()
@@ -67,7 +66,7 @@ KoProgressUpdater::~KoProgressUpdater()
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
 
-    qDeleteAll( d->subTaskWrappers );
+    qDeleteAll(d->subTaskWrappers);
     d->subTaskWrappers.clear();
 
     delete d;
@@ -75,18 +74,18 @@ KoProgressUpdater::~KoProgressUpdater()
 
 void KoProgressUpdater::start(int range, const QString &text)
 {
-    d->updateGuiTimer.start( 100 ); // 10 updates/second should be enough?
+    d->updateGuiTimer.start(100); // 10 updates/second should be enough?
 
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
 
-    qDeleteAll( d->subTaskWrappers );
+    qDeleteAll(d->subTaskWrappers);
     d->subTaskWrappers.clear();
 
     d->progressBar->setRange(0, range-1);
     d->progressBar->setValue(0);
 
-    if(! text.isEmpty()) {
+    if(!text.isEmpty()) {
         d->progressBar->setFormat(text);
     }
     d->totalWeight = 0;
@@ -97,10 +96,10 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight)
     KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight);
     d->totalWeight += weight;
     d->subtasks.append(p);
-    connect( p, SIGNAL( sigUpdated() ), SLOT( update() ) );
+    connect(p, SIGNAL(sigUpdated()), SLOT(update()));
 
-    QPointer<KoUpdater> updater = new KoUpdater( p );
-    d->subTaskWrappers.append( updater );
+    QPointer<KoUpdater> updater = new KoUpdater(p);
+    d->subTaskWrappers.append(updater);
 
     return updater;
 }
@@ -119,8 +118,8 @@ void KoProgressUpdater::update()
     d->updated = true;
 }
 
-void KoProgressUpdater::updateUi() {
-
+void KoProgressUpdater::updateUi()
+{
     // This function runs in the app main thread. All the progress
     // updates arrive at the KoUpdaterPrivate instances through
     // queued connections, so until we relinguish control to the
@@ -128,20 +127,16 @@ void KoProgressUpdater::updateUi() {
     // won't happen until we return from this function (which is
     // triggered by a timer)
 
-    if ( d->updated ) {
-
+    if (d->updated) {
         int totalProgress = 0;
-
         foreach(QPointer<KoUpdaterPrivate> updater, d->subtasks) {
-
-            if(updater->interrupted()) {
+            if (updater->interrupted()) {
                 d->currentProgress = -1;
                 return;
             }
 
             int progress = updater->progress();
-
-            if(progress > 100 || progress < 0) {
+            if (progress > 100 || progress < 0) {
                 progress = updater->progress();
             }
 
@@ -150,23 +145,20 @@ void KoProgressUpdater::updateUi() {
 
         d->currentProgress = totalProgress / d->totalWeight;
         d->updated = false;
-
     }
 
-    if( d->currentProgress == -1 ) {
-
+    if (d->currentProgress == -1) {
         d->progressBar->setValue( d->progressBar->maximum() );
         // should we hide the progressbar after a little while?
         return;
     }
 
-    if ( d->currentProgress >= d->progressBar->maximum()) {
+    if (d->currentProgress >= d->progressBar->maximum()) {
         // we're done
         d->updateGuiTimer.stop(); // 10 upd ates/second should be enough?
     }
     d->progressBar->setValue(d->currentProgress);
 }
-
 
 
 #include <KoProgressUpdater.moc>

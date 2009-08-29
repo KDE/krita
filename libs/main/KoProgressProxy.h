@@ -28,18 +28,17 @@
  * a widget such as a KoProgressProxy childclass that also inherits this
  * interface, or something that prints progress to stdout.
  */
-class KOMAIN_EXPORT KoProgressProxy {
+class KOMAIN_EXPORT KoProgressProxy
+{
 
 public:
 
-    virtual ~KoProgressProxy()
-        {
-        }
+    virtual ~KoProgressProxy() { }
 
     virtual int maximum() const = 0;
-    virtual void setValue( int value ) = 0;
-    virtual void setRange( int minimum, int maximum ) = 0;
-    virtual void setFormat( const QString & format ) = 0;
+    virtual void setValue(int value) = 0;
+    virtual void setRange(int minimum, int maximum) = 0;
+    virtual void setFormat(const QString &format) = 0;
 };
 
 

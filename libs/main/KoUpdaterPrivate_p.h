@@ -38,7 +38,8 @@
  * from the threads will only arrive when the eventloop in the gui
  * thread has a chance to deliver them.
  */
-class KoUpdaterPrivate : public QObject {
+class KoUpdaterPrivate : public QObject
+{
 
     Q_OBJECT
 

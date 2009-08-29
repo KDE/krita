@@ -33,16 +33,15 @@ class KOMAIN_EXPORT KoDocumentSectionToolTip: public KoItemToolTip
 {
     Q_OBJECT
 
-    public:
-        KoDocumentSectionToolTip();
-        virtual ~KoDocumentSectionToolTip();
+public:
+    KoDocumentSectionToolTip();
+    virtual ~KoDocumentSectionToolTip();
 
-    protected:
-        virtual QTextDocument *createDocument( const QModelIndex &index );
+protected:
+    virtual QTextDocument *createDocument(const QModelIndex &index);
 
-    private:
-        typedef KoItemToolTip super;
-        typedef KoDocumentSectionModel Model;
+private:
+    typedef KoDocumentSectionModel Model;
 };
 
 #endif

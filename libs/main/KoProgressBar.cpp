@@ -19,8 +19,8 @@
 
 #include "KoProgressBar.h"
 
-KoProgressBar::KoProgressBar( QWidget * parent )
- : QProgressBar( parent )
+KoProgressBar::KoProgressBar(QWidget *parent)
+ : QProgressBar(parent)
 {
 }
 
@@ -33,24 +33,22 @@ int KoProgressBar::maximum() const
     return QProgressBar::maximum();
 }
 
-void KoProgressBar::setValue( int value )
+void KoProgressBar::setValue(int value)
 {
-    if( value >= minimum() && value < maximum() )
-    {
-        QProgressBar::setValue( value );
+    if (value >= minimum() && value < maximum()) {
+        QProgressBar::setValue(value);
         setVisible( true );
     } else {
         setVisible( false );
     }
 }
 
-void KoProgressBar::setRange( int minimum, int maximum )
+void KoProgressBar::setRange(int minimum, int maximum)
 {
-    QProgressBar::setRange( minimum, maximum );
+    QProgressBar::setRange(minimum, maximum);
 }
 
-void KoProgressBar::setFormat( const QString & format )
+void KoProgressBar::setFormat(const QString &format)
 {
-    QProgressBar::setFormat( format );
+    QProgressBar::setFormat(format);
 }
-

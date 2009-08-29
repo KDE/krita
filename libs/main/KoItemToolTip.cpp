@@ -38,17 +38,17 @@ class KoItemToolTip::Private
         QPoint pos;
         QBasicTimer timer;
 
-        Private(): document( 0 ) { }
+        Private(): document(0) { }
 };
 
 KoItemToolTip::KoItemToolTip()
-    : d( new Private )
+    : d(new Private)
 {
-    d->document = new QTextDocument( this );
-    setWindowFlags( Qt::FramelessWindowHint  | Qt::Tool
-                  | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint );
-    setPalette( QToolTip::palette() );
-    QApplication::instance()->installEventFilter( this );
+    d->document = new QTextDocument(this);
+    setWindowFlags(Qt::FramelessWindowHint  | Qt::Tool
+                  | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
+    setPalette(QToolTip::palette());
+    QApplication::instance()->installEventFilter(this);
 }
 
 KoItemToolTip::~KoItemToolTip()
@@ -56,50 +56,50 @@ KoItemToolTip::~KoItemToolTip()
     delete d;
 }
 
-void KoItemToolTip::showTip( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index )
+void KoItemToolTip::showTip(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
-    QTextDocument *doc = createDocument( index );
+    QTextDocument *doc = createDocument(index);
 
-    QPoint p = ( isVisible() && index == d->index ) ? d->pos : pos;
+    QPoint p = (isVisible() && index == d->index) ? d->pos : pos;
 
-    if( !isVisible() || index != d->index || doc->toHtml() != d->document->toHtml() )
+    if (!isVisible() || index != d->index || doc->toHtml() != d->document->toHtml())
     {
         d->pos = p;
         d->index = index;
         delete d->document;
         d->document = doc;
-        updatePosition( widget, p, option );
-        if( !isVisible() )
+        updatePosition(widget, p, option);
+        if (!isVisible())
             show();
         else
             update();
-        d->timer.start( 10000, this );
+        d->timer.start(10000, this);
     }
     else
         delete doc;
 }
 
-void KoItemToolTip::updatePosition( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option )
+void KoItemToolTip::updatePosition(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option)
 {
-    const QRect drect = QApplication::desktop()->availableGeometry( widget );
+    const QRect drect = QApplication::desktop()->availableGeometry(widget);
     const QSize size = sizeHint();
     const int width = size.width(), height = size.height();
-    const QPoint gpos = widget->mapToGlobal( pos );
-    const QRect irect( widget->mapToGlobal( option.rect.topLeft() ), option.rect.size() );
+    const QPoint gpos = widget->mapToGlobal(pos);
+    const QRect irect(widget->mapToGlobal(option.rect.topLeft()), option.rect.size());
 
     int y = gpos.y() + 20;
-    if( y + height > drect.bottom() )
-        y = qMax( drect.top(), irect.top() - height );
+    if (y + height > drect.bottom())
+        y = qMax(drect.top(), irect.top() - height);
 
     int x;
-    if( gpos.x() + width < drect.right() )
+    if (gpos.x() + width < drect.right())
         x = gpos.x();
     else
-        x = qMax( drect.left(), gpos.x() - width );
+        x = qMax(drect.left(), gpos.x() - width);
 
-    move( x, y );
+    move(x, y);
 
-    resize( sizeHint() );
+    resize(sizeHint());
  }
 
 QSize KoItemToolTip::sizeHint() const
@@ -107,25 +107,24 @@ QSize KoItemToolTip::sizeHint() const
     return d->document->size().toSize();
 }
 
-void KoItemToolTip::paintEvent( QPaintEvent* )
+void KoItemToolTip::paintEvent(QPaintEvent*)
 {
-    QPainter p( this );
-    p.initFrom( this );
-    d->document->drawContents( &p, rect() );
-    p.drawRect( 0, 0, width() - 1, height() - 1 );
+    QPainter p(this);
+    p.initFrom(this);
+    d->document->drawContents(&p, rect());
+    p.drawRect(0, 0, width() - 1, height() - 1);
 }
 
-void KoItemToolTip::timerEvent( QTimerEvent *e )
+void KoItemToolTip::timerEvent(QTimerEvent *e)
 {
-    if( e->timerId() == d->timer.timerId() )
-    {
+    if (e->timerId() == d->timer.timerId()) {
         hide();
     }
 }
 
-bool KoItemToolTip::eventFilter( QObject *object, QEvent *event )
+bool KoItemToolTip::eventFilter(QObject *object, QEvent *event)
 {
-    switch( event->type() )
+    switch(event->type())
     {
         case QEvent::KeyPress:
         case QEvent::KeyRelease:
@@ -139,7 +138,7 @@ bool KoItemToolTip::eventFilter( QObject *object, QEvent *event )
         default: break;
     }
 
-    return super::eventFilter( object, event );
+    return QFrame::eventFilter(object, event);
 }
 
 #include "KoItemToolTip.moc"

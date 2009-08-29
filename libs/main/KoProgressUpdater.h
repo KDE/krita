@@ -59,10 +59,9 @@ class KoProgressProxy;
  * main thread. The other objects can be created in whatever thread
  * one wants.
  */
-class KOMAIN_EXPORT KoProgressUpdater : public QObject {
-
+class KOMAIN_EXPORT KoProgressUpdater : public QObject
+{
     Q_OBJECT
-
 public:
 
     /**
@@ -86,7 +85,7 @@ public:
      * @see KoProgressProxy::setRange()
      * @see KoProgressProxy::setFormat()
      */
-    void start(int range = 100, const QString &text = "%p%");
+    void start(int range = 100, const QString &text = QLatin1String("%p%"));
 
     /**
      * After calling start() you can create any number of Updaters,

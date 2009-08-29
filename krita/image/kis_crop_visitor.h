@@ -109,6 +109,7 @@ private:
         if (undoAdapter && undoAdapter->undo())
             t = new KisSelectedTransaction(i18n("Crop"), layer);
 
+        layer->setDirty();
         dev->crop(m_rect);
 
         if (undoAdapter && undoAdapter->undo()) {
@@ -123,7 +124,6 @@ private:
                 undoAdapter->addCommand(cmd);
             }
         }
-        layer->setDirty();
         return true;
     }
 

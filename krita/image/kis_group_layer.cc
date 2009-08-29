@@ -120,6 +120,8 @@ void KisGroupLayer::resetProjection(KisPaintDeviceSP to)
 {
     if (to)
         m_d->projection = new KisPaintDevice(*to); /// XXX ### look into Copy on Write here (CoW)
+    else if( *m_d->projection->colorSpace() == *image()->colorSpace())
+        m_d->projection->clear();
     else
         m_d->projection = new KisPaintDevice(this, image()->colorSpace());
 }

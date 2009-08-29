@@ -125,7 +125,10 @@ KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties(
 
 void KisAdjustmentLayer::resetCache()
 {
-    m_d->cachedPaintDevice = new KisPaintDevice(image()->colorSpace());
+    if( *m_d->cachedPaintDevice->colorSpace() == *image()->colorSpace())
+        m_d->cachedPaintDevice->clear();
+    else
+        m_d->cachedPaintDevice = new KisPaintDevice(image()->colorSpace());
 }
 
 KisFilterConfiguration * KisAdjustmentLayer::filter() const

@@ -39,6 +39,7 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include <kis_config.h>
 #include <kis_image.h>
@@ -203,7 +204,7 @@ void ImageSize::slotSelectionScale()
     dlgSize->setHeight(rc.height());
 
     KoProgressUpdater pu(m_view->statusBar()->progress());
-    KoUpdaterPtr u = pu.startSubtask();
+    QPointer<KoUpdater> u = pu.startSubtask();
 
     if (dlgSize->exec() == QDialog::Accepted) {
         qint32 w = dlgSize->width();

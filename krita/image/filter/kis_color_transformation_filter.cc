@@ -21,6 +21,7 @@
 
 #include <KoColorTransformation.h>
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include <kis_iterators_pixel.h>
 #include <kis_processing_information.h>
@@ -30,6 +31,8 @@
 #ifndef NDEBUG
 #include <QTime>
 #endif
+
+typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 KisColorTransformationFilter::KisColorTransformationFilter(const KoID& id, const KoID & category, const QString & entry) : KisFilter(id, category, entry)
 {

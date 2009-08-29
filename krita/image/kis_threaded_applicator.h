@@ -28,6 +28,8 @@
 
 #include <KoProgressUpdater.h>
 
+typedef QPointer<KoUpdater> KoUpdaterPtr;
+
 /**
  * A threadweaver job that knows about paint devices and rects. Note
  * that it is the task of the job implementation to handle the margin!

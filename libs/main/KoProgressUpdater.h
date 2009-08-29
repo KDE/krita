@@ -19,14 +19,13 @@
 #ifndef KOPROGRESSUPDATER_H
 #define KOPROGRESSUPDATER_H
 
-#include "kowidgets_export.h"
+#include "komain_export.h"
 
 #include <QString>
 #include <QObject>
+#include <QPointer>
 
-#include "KoUpdater.h" // replace with class KoUpdater when all koffice is ported;
-#include "KoProgressProxy.h" // replace with class KoProgressUpdaterPrivate ditto;
-
+class KoUpdater;
 class KoProgressProxy;
 
 /**
@@ -60,7 +59,7 @@ class KoProgressProxy;
  * main thread. The other objects can be created in whatever thread
  * one wants.
  */
-class KOWIDGETS_EXPORT KoProgressUpdater : public QObject {
+class KOMAIN_EXPORT KoProgressUpdater : public QObject {
 
     Q_OBJECT
 
@@ -99,7 +98,7 @@ public:
      * are packed in a QPointer so you can check whether they have
      * been deleted before dereferencing.
      */
-    KoUpdaterPtr startSubtask(int weight=1);
+    QPointer<KoUpdater> startSubtask(int weight=1);
 
     /**
      * Cancelling the action will make each subtask be marked as 'interrupted' and

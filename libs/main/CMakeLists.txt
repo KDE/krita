@@ -62,6 +62,11 @@ set(komain_LIB_SRCS
     KoDocumentSectionToolTip.cpp
     KoDocumentSectionView.cpp
     KoItemToolTip.cpp
+
+    KoProgressBar.cpp
+    KoProgressUpdater.cpp
+    KoUpdater.cpp
+    KoUpdaterPrivate_p.cpp
 )
 
 kde4_add_ui_files( komain_LIB_SRCS
@@ -75,7 +80,6 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KABC_LIBS}
     ${KDE4_KFILE_LIBRARY}
-    koprogress
     koinput
     koaspectbutton
     kotext
@@ -130,6 +134,9 @@ install( FILES
     KoViewAdaptor.h
     KoImageSelectionWidget.h
     kofficeversion.h
+    KoProgressUpdater.h
+    KoProgressBar.h
+    KoUpdater.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

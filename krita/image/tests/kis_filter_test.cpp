@@ -29,6 +29,8 @@
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 
+#include <KoUpdater.h>
+
 class TestFilter : public KisFilter
 {
 public:

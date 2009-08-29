@@ -34,6 +34,7 @@
 #include <kstandarddirs.h>
 
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>

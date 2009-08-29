@@ -34,6 +34,7 @@
 #include <kstandarddirs.h>
 
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include <kis_image.h>
 #include <kis_paint_device.h>

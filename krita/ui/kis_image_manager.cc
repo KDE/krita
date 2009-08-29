@@ -29,6 +29,8 @@
 
 #include <KoFilterManager.h>
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
+typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 #include <kis_types.h>
 #include <kis_image.h>

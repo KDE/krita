@@ -24,7 +24,7 @@
 #include <QApplication>
 
 #include "KoProgressUpdater.h"
-#include "KoUpdaterPrivate.h"
+#include "KoUpdaterPrivate_p.h"
 
 KoUpdater::KoUpdater(KoUpdaterPrivate *p)
     : m_progressPercent(0)

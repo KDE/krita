@@ -24,6 +24,7 @@
 
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include <kis_doc2.h>
 #include <filter/kis_filter_registry.h>

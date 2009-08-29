@@ -25,6 +25,7 @@
 
 #include <KoColorSpace.h>
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include <recorder/kis_action_recorder.h>
 #include <kis_bookmarked_configuration_manager.h>

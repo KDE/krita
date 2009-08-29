@@ -32,7 +32,7 @@ class TestWeaverJob : public ThreadWeaver::Job
 {
 public:
 
-    TestWeaverJob( QObject * parent, KoUpdaterPtr updater, int steps = 10 )
+    TestWeaverJob( QObject * parent, QPointer<KoUpdater> updater, int steps = 10 )
         : ThreadWeaver::Job( parent )
         , m_updater(updater)
         , m_steps(steps)
@@ -54,7 +54,7 @@ public:
 
 
 protected:
-    KoUpdaterPtr m_updater;
+    QPointer<KoUpdater> m_updater;
     int m_steps;
 };
 
@@ -63,7 +63,7 @@ class TestJob : public QThread {
 
 public:
 
-    TestJob( KoUpdaterPtr updater, int steps = 10 )
+    TestJob( QPointer<KoUpdater> updater, int steps = 10 )
         : QThread()
         , m_updater( updater )
         , m_steps( steps )
@@ -85,7 +85,7 @@ public:
 
 private:
 
-    KoUpdaterPtr m_updater;
+    QPointer<KoUpdater> m_updater;
     int m_steps;
 };
 
@@ -133,7 +133,7 @@ void KoProgressUpdaterTest::testCreation()
 {
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
-    KoUpdaterPtr updater = pu.startSubtask();
+    QPointer<KoUpdater> updater = pu.startSubtask();
     QCOMPARE(bar.min, 0);
     QCOMPARE(bar.max, 0);
     QCOMPARE(bar.value, 0);
@@ -149,7 +149,7 @@ void KoProgressUpdaterTest::testSimpleProgress()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdaterPtr updater = pu.startSubtask();
+    QPointer<KoUpdater> updater = pu.startSubtask();
     updater->setProgress(50);
     QTest::qSleep(250); // allow the action to do its job.
     QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
@@ -163,7 +163,7 @@ void KoProgressUpdaterTest::testSimpleThreadedProgress()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdaterPtr u = pu.startSubtask();
+    QPointer<KoUpdater> u = pu.startSubtask();
     TestJob t(u);
     t.start();
     while (!t.isFinished()) {
@@ -178,8 +178,8 @@ void KoProgressUpdaterTest::testSubUpdaters()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdaterPtr u1 = pu.startSubtask(4);
-    KoUpdaterPtr u2 = pu.startSubtask(6);
+    QPointer<KoUpdater> u1 = pu.startSubtask(4);
+    QPointer<KoUpdater> u2 = pu.startSubtask(6);
     u1->setProgress(100);
     QTest::qSleep(250); // allow the action to do its job.
     QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
@@ -195,8 +195,8 @@ void KoProgressUpdaterTest::testThreadedSubUpdaters()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdaterPtr u1 = pu.startSubtask(4);
-    KoUpdaterPtr u2= pu.startSubtask(6);
+    QPointer<KoUpdater> u1 = pu.startSubtask(4);
+    QPointer<KoUpdater> u2= pu.startSubtask(6);
 
     TestJob t1(u1, 4);
     TestJob t2(u2, 6);
@@ -214,11 +214,11 @@ void KoProgressUpdaterTest::testRecursiveProgress()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdaterPtr u1 = pu.startSubtask();
+    QPointer<KoUpdater> u1 = pu.startSubtask();
 
     KoProgressUpdater pu2(u1);
     pu2.start();
-    KoUpdaterPtr u2 = pu2.startSubtask();
+    QPointer<KoUpdater> u2 = pu2.startSubtask();
     u2->setProgress(50);
     u2->setProgress(100);
     while(bar.value < 100) {
@@ -233,11 +233,11 @@ void KoProgressUpdaterTest::testThreadedRecursiveProgress()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdaterPtr u1 = pu.startSubtask();
+    QPointer<KoUpdater> u1 = pu.startSubtask();
 
     KoProgressUpdater pu2(u1);
     pu2.start();
-    KoUpdaterPtr u2 = pu2.startSubtask();
+    QPointer<KoUpdater> u2 = pu2.startSubtask();
 
     TestJob t1(u2);
     t1.start();
@@ -265,7 +265,7 @@ void KoProgressUpdaterTest::testFromWeaver()
     weaver->setMaximumNumberOfThreads( 4 );
     connect( weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( jobDone( ThreadWeaver::Job* ) ) );
     for (int i = 0; i < 10; ++i) {
-        KoUpdaterPtr up = pu.startSubtask();
+        QPointer<KoUpdater> up = pu.startSubtask();
         ThreadWeaver::Job * job = new TestWeaverJob(this, up, 10);
         weaver->enqueue(job);
     }

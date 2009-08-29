@@ -38,6 +38,7 @@
 
 #include <KoColorSpace.h>
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include "kis_dropshadow.h"
 #include "dlg_dropshadow.h"
@@ -84,7 +85,7 @@ void KisDropshadowPlugin::slotDropshadow()
         KisDropshadow dropshadow(m_view);
         KoProgressUpdater pu(m_view->statusBar()->progress());
         pu.start();
-        KoUpdaterPtr u = pu.startSubtask();
+        QPointer<KoUpdater> u = pu.startSubtask();
         dropshadow.dropshadow(u,
                               dlgDropshadow->getXOffset(),
                               dlgDropshadow->getYOffset(),

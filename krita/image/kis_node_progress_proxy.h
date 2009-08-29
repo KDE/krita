@@ -20,6 +20,7 @@
 #define _KIS_NODE_PROGRESS_PROXY_H_
 
 #include <KoProgressUpdater.h>
+#include <KoProgressProxy.h>
 #include <QObject>
 
 #include <kis_types.h>

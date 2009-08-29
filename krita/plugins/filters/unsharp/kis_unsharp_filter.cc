@@ -32,6 +32,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 #include <kis_paint_device.h>
 
 #include "kis_wdg_unsharp.h"
@@ -68,8 +69,8 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
                               ) const
 {
 
-    KoUpdaterPtr filterUpdater = 0;
-    KoUpdaterPtr convolutionUpdater = 0;
+    QPointer<KoUpdater> filterUpdater = 0;
+    QPointer<KoUpdater> convolutionUpdater = 0;
     KoProgressUpdater* updater = 0;
 
     if (progressUpdater) {

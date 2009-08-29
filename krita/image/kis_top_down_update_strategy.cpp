@@ -22,6 +22,7 @@
 #include <QDebug>
 
 #include <KoCompositeOp.h>
+#include <KoUpdater.h>
 
 #include "kis_types.h"
 #include "kis_paint_device.h"
@@ -219,7 +220,7 @@ namespace
             Q_ASSERT( layer->nodeProgressProxy() );
             KoProgressUpdater updater( layer->nodeProgressProxy() );
             updater.start( 100, f->name() );
-            KoUpdaterPtr up = updater.startSubtask();
+            QPointer<KoUpdater> up = updater.startSubtask();
             // Some filters will require usage of oldRawData, which is not available without
             // a transaction!
             KisTransaction* cmd = new KisTransaction("", layerProjection);

@@ -21,14 +21,14 @@
 
 #include <QProgressBar>
 #include <KoProgressProxy.h>
-#include "kowidgets_export.h"
+#include "komain_export.h"
 
 /**
  * KoProgressBar is a thin wrapper around QProgressBar that also implements
  * the abstract base class KoProgressProxy. Use this class, not QProgressBar
  * to pass to KoProgressUpdater.
  */
-class KOWIDGETS_EXPORT KoProgressBar : public QProgressBar, public KoProgressProxy
+class KOMAIN_EXPORT KoProgressBar : public QProgressBar, public KoProgressProxy
 {
 public:
 

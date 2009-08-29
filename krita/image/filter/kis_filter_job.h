@@ -31,6 +31,8 @@ class KisFilterConfiguration;
 class QObject;
 class QRect;
 
+typedef QPointer<KoUpdater> KoUpdaterPtr;
+
 class KRITAIMAGE_EXPORT KisFilterJob : public KisJob
 {
 public:

@@ -23,7 +23,7 @@
 #include <QString>
 #include <QTimer>
 
-#include "KoUpdaterPrivate.h"
+#include "KoUpdaterPrivate_p.h"
 #include "KoUpdater.h"
 #include "KoProgressProxy.h"
 
@@ -48,7 +48,7 @@ public:
                            // never the progress needs to be recomputed
     QTimer updateGuiTimer; // fires regulary to update the progress bar widget
     QList<QPointer<KoUpdaterPrivate> > subtasks;
-    QList<KoUpdaterPtr> subTaskWrappers; // We delete these
+    QList<QPointer<KoUpdater> > subTaskWrappers; // We delete these
 
 };
 
@@ -99,7 +99,7 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight)
     d->subtasks.append(p);
     connect( p, SIGNAL( sigUpdated() ), SLOT( update() ) );
 
-    KoUpdaterPtr updater = new KoUpdater( p );
+    QPointer<KoUpdater> updater = new KoUpdater( p );
     d->subTaskWrappers.append( updater );
 
     return updater;

@@ -25,6 +25,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoProgressUpdater.h>
+#include <KoProgressProxy.h>
 #include "kis_paint_device.h"
 #include "kis_node.h"
 

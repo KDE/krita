@@ -28,6 +28,8 @@
 #include "kis_node_progress_proxy.h"
 #include "kis_transaction.h"
 
+#include <KoUpdater.h>
+
 class KRITAIMAGE_EXPORT KisFilterMask::Private
 {
 public:
@@ -111,7 +113,7 @@ void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 
     KoProgressUpdater updater( nodeProgressProxy() );
     updater.start( 100, filter->name() );
-    KoUpdaterPtr up = updater.startSubtask();
+    QPointer<KoUpdater> up = updater.startSubtask();
 
     filter->process(src, dst, rc.size(), m_d->filterConfig,  up);
     nodeProgressProxy()->setValue( nodeProgressProxy()->maximum() );

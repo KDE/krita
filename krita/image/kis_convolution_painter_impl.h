@@ -22,6 +22,8 @@
 
 #include "kis_repeat_iterators_pixel.h"
 
+#include <KoUpdater.h>
+
 struct StandardIteratorFactory {
     typedef KisHLineIteratorPixel HLineIterator;
     typedef KisHLineConstIteratorPixel HLineConstIterator;

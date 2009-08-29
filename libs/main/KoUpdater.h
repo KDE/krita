@@ -44,7 +44,7 @@ class KoUpdaterPrivate;
  *
  * @see KoProgressUpdater::startSubtask()
  */
-class KOWIDGETS_EXPORT KoUpdater : public QObject, public KoProgressProxy {
+class KOMAIN_EXPORT KoUpdater : public QObject, public KoProgressProxy {
 
     Q_OBJECT
 
@@ -114,8 +114,5 @@ private:
     bool m_interrupted;
     int  m_progressPercent;
 };
-
-
-typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 #endif

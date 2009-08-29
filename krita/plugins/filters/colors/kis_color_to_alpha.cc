@@ -25,6 +25,7 @@
 #include <kcolorbutton.h>
 
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>

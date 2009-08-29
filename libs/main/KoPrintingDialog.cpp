@@ -72,7 +72,7 @@ public:
     void preparePage(const QVariant &page) {
         const int pageNumber = page.toInt();
 
-        KoUpdaterPtr updater = updaters.at(index-1);
+        QPointer<KoUpdater> updater = updaters.at(index-1);
 
         if (painter) {
             painter->save(); // state before page preparation
@@ -185,7 +185,7 @@ public:
     QPushButton *button;
     QList<int> pageRange; ///< user requested list of pages
     QList<int> pages; ///< effecive list of pages
-    QList< KoUpdaterPtr > updaters;
+    QList< QPointer<KoUpdater> > updaters;
     QDialog *dialog;
     KoPrintJob::RemovePolicy removePolicy;
 };

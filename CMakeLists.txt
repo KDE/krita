@@ -306,7 +306,6 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/progress
                     ${CMAKE_SOURCE_DIR}/libs/widgets/linestyleselector
                     ${CMAKE_SOURCE_DIR}/libs/widgets/aspectbutton
                     ${CMAKE_SOURCE_DIR}/libs/widgets/openpane
@@ -315,7 +314,6 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets/pagelayout
                     ${CMAKE_SOURCE_DIR}/libs/widgets/characterselectiondialog
                     ${CMAKE_SOURCE_DIR}/libs/widgets/csvimportdialog
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/documentsectionbox
                     ${CMAKE_SOURCE_DIR}/libs/widgets/zoom
                     ${CMAKE_SOURCE_DIR}/libs/widgets/input
                     ${CMAKE_SOURCE_DIR}/libs/kopicture

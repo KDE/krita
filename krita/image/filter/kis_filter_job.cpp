@@ -24,6 +24,7 @@
 #include <kis_debug.h>
 
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 

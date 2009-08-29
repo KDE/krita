@@ -44,6 +44,7 @@
 #include <KoCompositeOp.h>
 #include <KoShapeManager.h>
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include <kis_global.h>
 #include <canvas/kis_canvas2.h>
@@ -641,7 +642,7 @@ void KisToolTransform::transform()
     QPointF t = m_translate - rot(m_originalCenter.x() * m_scaleX, m_originalCenter.y() * m_scaleY);
     KoProgressUpdater updater(canvas->view()->statusBar()->progress());
     updater.start( 100, i18n("Transform") );
-    KoUpdaterPtr progress = updater.startSubtask();
+    QPointer<KoUpdater> progress = updater.startSubtask();
 
     // This mementoes the current state of the active device.
     TransformCmd * transaction = new TransformCmd(this, currentNode(), m_scaleX,

@@ -21,12 +21,13 @@
 #include <qtest_kde.h>
 #include <kis_rotate_visitor.h>
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 #include "testutil.h"
 void KisRotateVisitorTest::testCreation()
 {
     TestUtil::TestProgressBar bar;
     KoProgressUpdater pu(&bar);
-    KoUpdaterPtr updater = pu.startSubtask();
+    QPointer<KoUpdater> updater = pu.startSubtask();
     KisRotateVisitor test(updater);
 }
 

@@ -51,6 +51,7 @@
 #include <KoColorTransformation.h>
 #include <KoIntegerMaths.h>
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 #include <KoDocumentSectionView.h>
 
 #include <kis_debug.h>

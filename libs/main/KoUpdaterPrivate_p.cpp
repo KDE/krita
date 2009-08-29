@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -17,30 +18,31 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KO_PROGRESS_PROXY
-#define KO_PROGRESS_PROXY
+#include "KoUpdaterPrivate_p.h"
 
-#include "kowidgets_export.h"
-#include <QString>
+KoUpdaterPrivate::~KoUpdaterPrivate()
+{
+    interrupt();
+}
 
-/**
- * A proxy interface for a real progress status reporting thing, either
- * a widget such as a KoProgressProxy childclass that also inherits this
- * interface, or something that prints progress to stdout.
- */
-class KOWIDGETS_EXPORT KoProgressProxy {
+void KoUpdaterPrivate::cancel()
+{
+    m_parent->cancel();
+}
 
-public:
+void KoUpdaterPrivate::interrupt()
+{
+    m_interrupted = true;
+    emit sigInterrupted();
+}
 
-    virtual ~KoProgressProxy()
-        {
-        }
+void KoUpdaterPrivate::setProgress(int percent)
+{
+    if(m_progress >= percent) {
+        return;
+    }
+    m_progress = percent;
+    emit sigUpdated();
+}
 
-    virtual int maximum() const = 0;
-    virtual void setValue( int value ) = 0;
-    virtual void setRange( int minimum, int maximum ) = 0;
-    virtual void setFormat( const QString & format ) = 0;
-};
-
-
-#endif
+#include "KoUpdaterPrivate_p.moc"

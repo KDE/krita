@@ -30,6 +30,7 @@
 #include <kactioncollection.h>
 
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 #include <KoColorSpace.h>
 
 #include <kis_view2.h>
@@ -89,7 +90,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     if (dlgSeparate->exec() == QDialog::Accepted) {
 
         KoProgressUpdater pu(m_view->statusBar()->progress());
-        KoUpdaterPtr u = pu.startSubtask();
+        QPointer<KoUpdater> u = pu.startSubtask();
 
         KisChannelSeparator separator(m_view);
         separator.separate(u,

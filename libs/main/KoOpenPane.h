@@ -23,7 +23,7 @@
 #include <QPixmap>
 #include <QList>
 
-#include "kowidgets_export.h"
+#include "komain_export.h"
 
 class KConfig;
 class KoOpenPanePrivate;
@@ -34,7 +34,7 @@ class KoDetailsPane;
 class KUrl;
 class QTreeWidgetItem;
 
-class KOWIDGETS_EXPORT KoOpenPane : public QWidget
+class KOMAIN_EXPORT KoOpenPane : public QWidget
 {
     Q_OBJECT
 

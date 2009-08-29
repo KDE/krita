@@ -20,6 +20,7 @@
 #include "KoDetailsPane.h"
 
 #include <QStandardItemModel>
+#include <QKeyEvent>
 
 #include <kcomponentdata.h>
 #include <kglobalsettings.h>
@@ -120,9 +121,9 @@ void KoDetailsPane::openFile()
 
 void KoDetailsPane::changePalette()
 {
-    QPalette p = qApp ? qApp->palette() : palette();
-    p.setBrush(QColorGroup::Base, QColor(Qt::transparent));
-    p.setColor(QColorGroup::Text, p.color(QPalette::Normal, QColorGroup::Foreground));
+    QPalette p = palette();
+    p.setBrush(QPalette::Base, QColor(Qt::transparent));
+    p.setColor(QPalette::Text, p.color(QPalette::Normal, QPalette::Foreground));
     m_detailsLabel->setPalette(p);
 }
 

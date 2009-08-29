@@ -19,7 +19,7 @@
 #ifndef KODETAILSPANE_H
 #define KODETAILSPANE_H
 
-#include "ui_koDetailsPaneBase.h"
+#include "ui_KoDetailsPaneBase.h"
 
 class QEvent;
 class KComponentData;

@@ -23,11 +23,11 @@
 
 #include <QStringList>
 #include <QPixmap>
-#include "kowidgets_export.h"
+#include "komain_export.h"
 #include <kcomponentdata.h>
 
 /** @internal */
-class KOWIDGETS_EXPORT  KoTemplate
+class KOMAIN_EXPORT  KoTemplate
 {
 
 public:

@@ -67,11 +67,24 @@ set(komain_LIB_SRCS
     KoProgressUpdater.cpp
     KoUpdater.cpp
     KoUpdaterPrivate_p.cpp
+
+    KoDetailsPane.cpp
+    KoExistingDocumentPane.cpp
+    KoOpenPane.cpp
+    KoRecentDocumentsPane.cpp
+    KoTemplate.cpp
+    KoTemplateCreateDia.cpp
+    KoTemplateGroup.cpp
+    KoTemplates.cpp
+    KoTemplatesPane.cpp
+    KoTemplateTree.cpp
 )
 
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
    koDocumentInfoAuthorWidget.ui
+   KoOpenPaneBase.ui
+   KoDetailsPaneBase.ui
 )
 
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
@@ -84,7 +97,6 @@ target_link_libraries(komain ${extra_libs}
     koaspectbutton
     kotext
     koaction
-    koopenpane
 )
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext ${KDE4_KPARTS_LIBS})

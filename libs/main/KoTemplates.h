@@ -21,7 +21,7 @@
 #ifndef KO_TEMPLATES_H
 #define KO_TEMPLATES_H
 
-#include "kowidgets_export.h"
+#include "komain_export.h"
 
 class QString;
 
@@ -32,7 +32,7 @@ namespace KoTemplates
      * Removes all spaces from the given string, not just from
      * start and end.
      */
-     KOWIDGETS_EXPORT QString trimmed(const QString &string);
+     KOMAIN_EXPORT QString trimmed(const QString &string);
 }
 
 #endif

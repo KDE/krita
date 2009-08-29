@@ -23,7 +23,7 @@
 #define koTemplateCreateDia_h
 
 #include <kdialog.h>
-#include "kowidgets_export.h"
+#include "komain_export.h"
 //Added by qt3to4:
 #include <QPixmap>
 #include <QByteArray>
@@ -40,7 +40,7 @@ class KoTemplateCreateDiaPrivate;
  *
  ****************************************************************************/
 
-class KOWIDGETS_EXPORT KoTemplateCreateDia : public KDialog
+class KOMAIN_EXPORT KoTemplateCreateDia : public KDialog
 {
     Q_OBJECT
 

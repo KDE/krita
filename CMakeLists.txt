@@ -308,7 +308,6 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/widgets/linestyleselector
                     ${CMAKE_SOURCE_DIR}/libs/widgets/aspectbutton
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/openpane
                     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
                     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
                     ${CMAKE_SOURCE_DIR}/libs/widgets/pagelayout

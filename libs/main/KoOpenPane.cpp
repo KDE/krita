@@ -43,7 +43,7 @@
 #include "KoDetailsPane.h"
 #include "KoTemplatesPane.h"
 #include "KoRecentDocumentsPane.h"
-#include "ui_koOpenPaneBase.h"
+#include "ui_KoOpenPaneBase.h"
 #include "KoExistingDocumentPane.h"
 
 #include <limits.h>

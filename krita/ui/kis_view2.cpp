@@ -122,7 +122,6 @@ public:
             , selectionManager(0)
             , controlFrame(0)
             , birdEyeBox(0)
-            , layerBox(0)
             , nodeManager(0)
             , zoomManager(0)
             , imageManager(0)
@@ -158,7 +157,6 @@ public:
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisBirdEyeBox * birdEyeBox;
-    KisLayerBox * layerBox;
     KisNodeManager * nodeManager;
     KisZoomManager * zoomManager;
     KisImageManager * imageManager;
@@ -274,7 +272,7 @@ void KisView2::dropEvent(QDropEvent *event)
                 }
                 layer->setDirty();
                 canvas()->update();
-                layerBox()->setCurrentNode( layer );
+                nodeManager()->activateNode( layer );
             }
         }
         return;
@@ -467,7 +465,6 @@ void KisView2::slotLoadingFinished()
     }
 
     if (KisNodeSP node = img->rootLayer()->firstChild()) {
-        m_d->layerBox->setCurrentNode(node);
         m_d->nodeManager->activateNode(node);
     }
 
@@ -507,7 +504,7 @@ void KisView2::createGUI()
     createDockWidget(&paletteDockerFactory);
 
     KisLayerBoxFactory layerboxFactory;
-    m_d->layerBox = qobject_cast<KisLayerBox*>(createDockWidget(&layerboxFactory));
+    createDockWidget(&layerboxFactory);
 
     m_d->statusBar = new KisStatusBar(this);
     connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),
@@ -516,18 +513,6 @@ void KisView2::createGUI()
     m_d->controlFrame = new KisControlFrame(this);
 
     show();
-
-    connect(m_d->layerBox, SIGNAL(sigRequestNewNode(const QString &)),
-            m_d->nodeManager, SLOT(createNode(const QString &)));
-
-    connect(m_d->layerBox, SIGNAL(sigRequestNodeProperties(KisNodeSP)),
-            m_d->nodeManager, SLOT(nodeProperties(KisNodeSP)));
-
-    connect(m_d->layerBox, SIGNAL(sigOpacityChanged(qreal, bool)),
-            m_d->nodeManager, SLOT(nodeOpacityChanged(qreal, bool)));
-
-    connect(m_d->layerBox, SIGNAL(sigItemComposite(const KoCompositeOp*)),
-            m_d->nodeManager, SLOT(nodeCompositeOpChanged(const KoCompositeOp*)));
 
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->resourceProvider, SLOT(slotNodeActivated(KisNodeSP)));
@@ -595,7 +580,6 @@ void KisView2::updateGUI()
     m_d->imageManager->updateGUI();
     m_d->gridManager->updateGUI();
     m_d->perspectiveGridManager->updateGUI();
-    m_d->layerBox->updateUI();
 }
 
 
@@ -620,11 +604,8 @@ void KisView2::connectCurrentImage()
 
     m_d->canvas->connectCurrentImage();
 
-    if (m_d->layerBox) {
-        m_d->layerBox->setImage(m_d->nodeManager, img, m_d->doc->nodeModel());
-        connect(m_d->doc->nodeModel(), SIGNAL(nodeActivated(KisNodeSP)),
-                m_d->nodeManager, SLOT(activateNode(KisNodeSP)));
-    }
+    connect(m_d->doc->nodeModel(), SIGNAL(nodeActivated(KisNodeSP)),
+            m_d->nodeManager, SLOT(activateNode(KisNodeSP)));
 
     if (m_d->birdEyeBox)
         m_d->birdEyeBox->setImage(img);
@@ -643,8 +624,6 @@ void KisView2::disconnectCurrentImage()
         if (m_d->statusBar)
             img->disconnect(m_d->statusBar);
 
-        if (m_d->layerBox)
-            m_d->layerBox->setImage(0, KisImageSP(0), 0);
         if (m_d->birdEyeBox)
             m_d->birdEyeBox->setImage(KisImageSP(0));
         m_d->canvas->disconnectCurrentImage();
@@ -766,11 +745,6 @@ KisPaintingAssistantsManager* KisView2::paintingAssistantManager()
 void KisView2::slotTotalRefresh()
 {
     m_d->canvas->resetCanvas();
-}
-
-KisLayerBox* KisView2::layerBox()
-{
-    return m_d->layerBox;
 }
 
 #include "kis_view2.moc"

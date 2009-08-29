@@ -491,7 +491,7 @@ void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
             layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
             m_view->canvas()->update();
-            m_view->layerBox()->setCurrentNode( layer );
+            m_view->nodeManager()->activateNode(layer);
         } else {
             KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
         }

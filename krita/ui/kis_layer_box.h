@@ -32,6 +32,7 @@
 
 #include <KoColorSpace.h>
 #include <KoDockFactory.h>
+#include <KoCanvasObserver.h>
 
 #include <kis_types.h>
 
@@ -51,7 +52,7 @@ class Ui_WdgLayerBox;
  * A widget that visualized the layer structure.
  *
  */
-class KisLayerBox : public QDockWidget
+class KisLayerBox : public QDockWidget, public KoCanvasObserver
 {
 
     Q_OBJECT
@@ -65,6 +66,8 @@ public:
 
     virtual bool eventFilter(QObject *object, QEvent *event);
 
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
 public slots:
 
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);

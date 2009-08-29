@@ -95,7 +95,6 @@ void KisNodeManager::updateGUI()
     // enable/disable all relevant actions
     m_d->layerManager->updateGUI();
     m_d->maskManager->updateGUI();
-    m_d->view->layerBox()->updateUI();
 }
 
 

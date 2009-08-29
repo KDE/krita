@@ -67,12 +67,15 @@
 #include "kis_view2.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
+#include "canvas/kis_canvas2.h"
+#include "kis_doc2.h"
 
 #include "ui_wdglayerbox.h"
 
 KisLayerBox::KisLayerBox()
         : QDockWidget(i18n("Layers"))
         , m_image(0)
+        , m_nodeModel(0)
         , m_nodeManager(0)
         , m_wdgLayerBox(new Ui_WdgLayerBox)
 {
@@ -165,12 +168,15 @@ KisLayerBox::~KisLayerBox()
 
 void KisLayerBox::setImage(KisNodeManager * nodeManager, KisImageSP img, KisNodeModel * nodeModel)
 {
-
-    if (m_image == img)
-        return;
-
+    if(m_nodeModel)
+        m_nodeModel->disconnect(this);
     m_nodeModel = nodeModel;
+
+    if(m_nodeManager)
+        m_nodeManager->disconnect(this);
     m_nodeManager = nodeManager;
+    connect(nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            this, SLOT(setCurrentNode(KisNodeSP)));
 
     if (m_image)
         m_image->disconnect(this);
@@ -213,6 +219,33 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
     return QDockWidget::eventFilter(o, e);
 }
 
+void KisLayerBox::setCanvas( KoCanvasBase * canvas )
+{
+    disconnect();
+    KisCanvas2* kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
+    if(kiscanvas) {
+        KisView2* view = kiscanvas->view();
+        KisNodeManager* nodeManager = view->nodeManager();
+
+        connect(this, SIGNAL(sigRequestNewNode(const QString &)),
+                nodeManager, SLOT(createNode(const QString &)));
+
+        connect(this, SIGNAL(sigRequestNodeProperties(KisNodeSP)),
+                nodeManager, SLOT(nodeProperties(KisNodeSP)));
+
+        connect(this, SIGNAL(sigOpacityChanged(qreal, bool)),
+                nodeManager, SLOT(nodeOpacityChanged(qreal, bool)));
+
+        connect(this, SIGNAL(sigItemComposite(const KoCompositeOp*)),
+                nodeManager, SLOT(nodeCompositeOpChanged(const KoCompositeOp*)));
+
+        setImage(nodeManager, view->image(), view->document()->nodeModel());
+
+        if(nodeManager->activeNode())
+            setCurrentNode(nodeManager->activeNode());
+    }
+}
+
 void KisLayerBox::updateUI()
 {
     Q_ASSERT(! m_image.isNull());
@@ -249,6 +282,7 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
 {
     if (node && m_nodeModel) {
         m_wdgLayerBox->listLayers->setCurrentIndex(m_nodeModel->indexFromNode(node));
+        updateUI();
     }
 
 }

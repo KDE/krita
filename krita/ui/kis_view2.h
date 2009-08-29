@@ -47,7 +47,6 @@ class KisMaskManager;
 class KisPerspectiveGridManager;
 class KisPaintingAssistantsManager;
 class KisGridManager;
-class KisLayerBox;
 
 /**
  * Krita view class
@@ -170,8 +169,6 @@ public:  // Krita specific interfaces
     KisPerspectiveGridManager* perspectiveGridManager();
     KisPaintingAssistantsManager* paintingAssistantManager();
 
-    /// @return the layer box for this view
-    KisLayerBox* layerBox();
 private slots:
 
     void slotLoadingFinished();

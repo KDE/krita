@@ -101,6 +101,11 @@ KisBrushSP KisBrushSelectionWidget::brush()
     default:
         ;
     }
+    // Fallback to auto brush if no brush selected
+    // Can happen if there is no predefined brush found
+    if(!theBrush)
+        theBrush = m_autoBrushWidget->brush();
+
     return theBrush;
 
 }

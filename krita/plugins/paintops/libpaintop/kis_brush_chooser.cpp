@@ -107,6 +107,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
+    m_itemChooser->setCurrentItem(0, 0);
 
     connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
              this, SLOT( update( KoResource * ) ) );
@@ -127,6 +128,8 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     spacingLayout->addWidget(m_slSpacing, 0, 1);
 
     spacingLayout->addWidget(m_chkColorMask, 1, 0, 1, 2);
+
+    slotActivatedBrush(m_itemChooser->currentResource());
 }
 
 KisBrushChooser::~KisBrushChooser()

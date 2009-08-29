@@ -513,7 +513,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             }
             
             if (glIsList( m_displayList )){
-                kDebug() << "I have list to draw!";
+                dbgUI << "I have list to draw!";
                 QPointF pos = converter.documentToView( mousePos );
         
 /*        KisImageSP img = currentImage();
@@ -571,14 +571,14 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             m_prevyTilt = m_yTilt;
             
             }else{
-                kDebug() << "Default model will be used";
+                dbgUI << "Default model will be used";
                 Kis3DObjectModel * model;
                 m_brushModelName = currentPaintOpPreset()->settings()->modelName();
 
                 // here is the default 3d model filename for brushes
                 if ( m_brushModelName.isEmpty() ) {
                     model = new Kis3DObjectModel("3d-deform-brush.obj" ,"3d-deform-brush.mtl");
-                    kDebug() << "isEmpty()";
+                    dbgUI << "isEmpty()";
                 }else{
                     model = new Kis3DObjectModel(m_brushModelName + ".obj" ,m_brushModelName + ".mtl");
                 }

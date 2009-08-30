@@ -60,7 +60,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
     m_d->uiWdgPaintOpPresets.setupUi(this);
 
     // TODO 2.2 Disables preset collections
+    QWidget * collectionWidget = m_d->uiWdgPaintOpPresets.tabPresets->widget(1);
     m_d->uiWdgPaintOpPresets.tabPresets->removeTab(1);
+    delete collectionWidget;
     m_d->uiWdgPaintOpPresets.bnSave->setEnabled(false);
 
     m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);

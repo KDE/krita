@@ -60,6 +60,7 @@
 #include "dlg_canvassize.h"
 #include "dlg_layersize.h"
 #include "kis_filter_strategy.h"
+#include "kis_canvas_resource_provider.h"
 
 typedef KGenericFactory<ImageSize> ImageSizeFactory;
 K_EXPORT_COMPONENT_FACTORY(kritaimagesize, ImageSizeFactory("krita"))
@@ -80,9 +81,9 @@ ImageSize::ImageSize(QObject *parent, const QStringList &)
         actionCollection()->addAction("canvassize", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotCanvasSize()));
 
-        action  = new KAction(i18n("Scale &Layer..."), this);
-        actionCollection()->addAction("layersize", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
+        m_scaleLayerAction = new KAction(i18n("Scale &Layer..."), this);
+        actionCollection()->addAction("layersize", m_scaleLayerAction);
+        connect(m_scaleLayerAction, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
         m_view = (KisView2*) parent;
         // Selection manager takes ownership?
@@ -92,6 +93,7 @@ ImageSize::ImageSize(QObject *parent, const QStringList &)
         connect(action, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
 
         m_view ->selectionManager()->addSelectionAction(action);
+        connect(m_view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), SLOT(slotNodeChanged(KisNodeSP)));
     }
 }
 
@@ -162,6 +164,7 @@ void ImageSize::slotLayerSize()
     KisConfig cfg;
 
     KisPaintDeviceSP dev = m_view->activeDevice();
+    Q_ASSERT(dev);
     QRect rc = dev->exactBounds();
 
     dlgLayerSize->setWidth(rc.width());
@@ -220,6 +223,12 @@ void ImageSize::slotSelectionScale()
         layer->setDirty();
     }
     delete dlgSize;
+}
+
+
+void ImageSize::slotNodeChanged(const KisNodeSP node)
+{
+    m_scaleLayerAction->setEnabled( m_view->activeDevice());
 }
 
 #include "imagesize.moc"

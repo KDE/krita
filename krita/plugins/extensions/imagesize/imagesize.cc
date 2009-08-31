@@ -122,6 +122,7 @@ void ImageSize::slotImageSize()
         if (w != image->width() || h != image->height())
             m_view->imageManager()->scaleCurrentImage((double)w / ((double)(image->width())),
                     (double)h / ((double)(image->height())), dlgImageSize->filterType());
+        image->rootLayer()->setDirty();
     }
 
     delete dlgImageSize;
@@ -216,6 +217,7 @@ void ImageSize::slotSelectionScale()
                                   dlgSize->filterType()
                                  );
         worker.run();
+        layer->setDirty();
     }
     delete dlgSize;
 }

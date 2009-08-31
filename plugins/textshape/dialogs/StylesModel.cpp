@@ -77,8 +77,16 @@ void StylesModel::recalculate()
         Q_ASSERT(root);
         Q_ASSERT(root->characterStyle());
         characterStyles << root->characterStyle()->styleId();
-        if (! paragraphStyles.contains(root->styleId()))
-            treeRoot << root->styleId();
+        if (!paragraphStyles.contains(root->styleId())) {
+            int index = 0;
+            foreach (int styleId, treeRoot) { // sort in sorting
+                // default style is 100 and should be sorted at the top.
+                if (styleId != 100 && m_styleManager->paragraphStyle(styleId)->name() > root->name())
+                    break;
+                index++;
+            }
+            treeRoot.insert(index, root->styleId());
+        }
         paragraphStyles << root->styleId();
     }
 

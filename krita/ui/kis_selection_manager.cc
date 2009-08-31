@@ -387,10 +387,11 @@ void KisSelectionManager::cut()
     Q_CHECK_PTR(t);
 
     layer->paintDevice()->clearSelection(m_view->selection());
-
+    QRect rect = m_view->selection()->selectedRect();
     deselect();
 
     m_view->document()->addCommand(t);
+    layer->setDirty(rect);
 }
 
 void KisSelectionManager::copy()

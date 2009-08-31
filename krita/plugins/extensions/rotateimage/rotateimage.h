@@ -21,6 +21,7 @@
 #define ROTATEIMAGE_H
 
 #include <kparts/plugin.h>
+#include "kis_types.h"
 
 class KisView2;
 class KisPainter;
@@ -38,11 +39,16 @@ private slots:
     void slotRotateImage180();
     void slotRotateImage270();
     void slotRotateLayer();
+    void slotNodeChanged(const KisNodeSP);
 
 private:
 
     KisView2 * m_view;
     KisPainter * m_painter;
+    KAction* m_rotateLayerAction;
+    KAction* m_rotate90LayerAction;
+    KAction* m_rotate180LayerAction;
+    KAction* m_rotate270LayerAction;
 
 };
 

@@ -138,6 +138,7 @@ public:
         m_type = type;
     }
     inline void setProducer(KoHistogramProducerSP producer) {
+        m_channel = 0;
         m_producer = producer;
     }
     inline void setChannel(qint32 channel) {

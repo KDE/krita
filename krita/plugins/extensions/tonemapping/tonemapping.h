@@ -20,6 +20,8 @@
 
 #include <kparts/plugin.h>
 
+#include "kis_types.h"
+
 class KisView2;
 
 /**
@@ -35,6 +37,7 @@ public:
 private slots:
 
     void slotToneMapping();
+    void slotNodeChanged(const KisNodeSP);
 
 private:
 

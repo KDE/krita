@@ -34,6 +34,7 @@
 
 #include "kis_tone_mapping_operators_registry.h"
 #include "kis_tonemapping_dialog.h"
+#include <kis_canvas_resource_provider.h>
 
 typedef KGenericFactory<tonemappingPlugin> tonemappingPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kritatonemapping, tonemappingPluginFactory("krita"))
@@ -52,6 +53,7 @@ tonemappingPlugin::tonemappingPlugin(QObject *parent, const QStringList &)
         m_toneMappingAction  = new KAction(i18n("Tonemapping..."), this);
         actionCollection()->addAction("tonemapping", m_toneMappingAction);
         connect(m_toneMappingAction, SIGNAL(triggered()), this, SLOT(slotToneMapping()));
+        connect(m_view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), SLOT(slotNodeChanged(KisNodeSP)));
     }
 }
 
@@ -66,6 +68,11 @@ void tonemappingPlugin::slotToneMapping()
     dialog->setVisible(true);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
 
+}
+
+void tonemappingPlugin::slotNodeChanged(const KisNodeSP node)
+{
+    m_toneMappingAction->setEnabled( node->inherits("KisPaintLayer"));
 }
 
 #include "tonemapping.moc"

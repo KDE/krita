@@ -1,3 +1,3 @@
 #! /bin/sh
-$XGETTEXT *.cpp shapeselector/*.cpp shadowdocker/*.cpp shapeproperties/*.cpp shapecollection/*.cpp strokedocker/*.cpp -o $podir/koffice-dockers.pot
+$XGETTEXT *.cpp colordocker/*cpp shapeselector/*.cpp shadowdocker/*.cpp shapeproperties/*.cpp shapecollection/*.cpp strokedocker/*.cpp -o $podir/koffice-dockers.pot
 

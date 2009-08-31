@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>StyleManager</class>
- <widget class="QWidget" name="StyleManager" >
-  <property name="geometry" >
+ <widget class="QWidget" name="StyleManager">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,50 +10,50 @@
     <height>318</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>1</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" colspan="2" >
-    <widget class="StylesWidget" name="styles" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-       <horstretch>1</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="2" row="0" column="2" >
-    <widget class="QStackedWidget" name="stackedWidget" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+  <layout class="QGridLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="StylesWidget" name="styles">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="currentIndex" >
-      <number>0</number>
-     </property>
-     <widget class="StyleManagerWelcome" name="welcomePage" />
-     <widget class="ParagraphGeneral" name="paragraphStylePage" />
-     <widget class="CharacterGeneral" name="characterStylePage" />
-     <widget class="NewStyleWidget" name="createPage" />
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QPushButton" name="bNew" >
-     <property name="text" >
+   <item row="0" column="2" rowspan="2">
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="StyleManagerWelcome" name="welcomePage"/>
+     <widget class="ParagraphGeneral" name="paragraphStylePage"/>
+     <widget class="CharacterGeneral" name="characterStylePage"/>
+     <widget class="NewStyleWidget" name="createPage"/>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="bNew">
+     <property name="text">
       <string>&amp;New</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QPushButton" name="bDelete" >
-     <property name="text" >
+   <item row="1" column="1">
+    <widget class="QPushButton" name="bDelete">
+     <property name="text">
       <string>Delete</string>
      </property>
     </widget>

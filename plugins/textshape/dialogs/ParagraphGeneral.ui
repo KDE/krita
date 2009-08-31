@@ -1,93 +1,97 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>ParagraphGeneral</class>
- <widget class="QWidget" name="ParagraphGeneral" >
-  <property name="geometry" >
+ <widget class="QWidget" name="ParagraphGeneral">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>508</width>
+    <width>512</width>
     <height>363</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QTabWidget" name="tabs" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+    <widget class="QTabWidget" name="tabs">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>99</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <widget class="QWidget" name="generalTab" >
-      <attribute name="title" >
+     <widget class="QWidget" name="generalTab">
+      <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QGridLayout" >
-       <item row="0" column="0" colspan="3" >
-        <widget class="QLabel" name="label_5" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+      <layout class="QGridLayout">
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="label_5">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text" >
-          <string>&lt;b>Paragraph style properties&lt;/b></string>
+         <property name="text">
+          <string>&lt;b&gt;Paragraph style properties&lt;/b&gt;</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2" >
-        <widget class="QLabel" name="label" >
-         <property name="text" >
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="label">
+         <property name="text">
           <string>Name:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="2" >
-        <widget class="QLineEdit" name="name" />
+       <item row="1" column="2">
+        <widget class="QLineEdit" name="name"/>
        </item>
-       <item row="2" column="0" colspan="2" >
-        <widget class="QLabel" name="label_2" >
-         <property name="text" >
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
           <string>Next style:</string>
          </property>
-         <property name="buddy" >
+         <property name="buddy">
           <cstring>nextStyle</cstring>
          </property>
         </widget>
        </item>
-       <item row="2" column="2" >
-        <widget class="QComboBox" name="nextStyle" />
+       <item row="2" column="2">
+        <widget class="QComboBox" name="nextStyle"/>
        </item>
-       <item row="3" column="0" colspan="2" >
-        <widget class="QLabel" name="label_3" >
-         <property name="text" >
+       <item row="3" column="0" colspan="2">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
           <string>Inherit style:</string>
          </property>
-         <property name="buddy" >
+         <property name="buddy">
           <cstring>inheritStyle</cstring>
          </property>
         </widget>
        </item>
-       <item row="3" column="2" >
-        <widget class="QComboBox" name="inheritStyle" />
+       <item row="3" column="2">
+        <widget class="QComboBox" name="inheritStyle"/>
        </item>
-       <item row="4" column="0" colspan="3" >
-        <widget class="QCheckBox" name="useCharacterStyle" >
-         <property name="text" >
+       <item row="4" column="0" colspan="3">
+        <widget class="QCheckBox" name="useCharacterStyle">
+         <property name="text">
           <string>Use named character style</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0" >
+       <item row="5" column="0">
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeType" >
+         <property name="sizeType">
           <enum>QSizePolicy::Fixed</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>16</width>
            <height>22</height>
@@ -95,32 +99,32 @@
          </property>
         </spacer>
        </item>
-       <item row="5" column="1" >
-        <widget class="QLabel" name="label_4" >
-         <property name="text" >
+       <item row="5" column="1">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
           <string>Style:</string>
          </property>
-         <property name="buddy" >
+         <property name="buddy">
           <cstring>characterStyle</cstring>
          </property>
         </widget>
        </item>
-       <item row="5" column="2" >
-        <widget class="QComboBox" name="characterStyle" />
+       <item row="5" column="2">
+        <widget class="QComboBox" name="characterStyle"/>
        </item>
-       <item row="6" column="0" colspan="3" >
-        <widget class="QCheckBox" name="inToc" >
-         <property name="text" >
+       <item row="6" column="0" colspan="3">
+        <widget class="QCheckBox" name="inToc">
+         <property name="text">
           <string>Include in table of contents</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0" >
-        <spacer name="verticalSpacer" >
-         <property name="orientation" >
+       <item row="7" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>40</height>
@@ -133,17 +137,17 @@
     </widget>
    </item>
    <item>
-    <widget class="FormattingPreview" name="preview" >
-     <property name="minimumSize" >
+    <widget class="FormattingPreview" name="preview">
+     <property name="minimumSize">
       <size>
        <width>500</width>
        <height>100</height>
       </size>
      </property>
-     <property name="frameShape" >
+     <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="frameShadow" >
+     <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
     </widget>

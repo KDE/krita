@@ -26,6 +26,7 @@ StyleManagerDialog::StyleManagerDialog(QWidget *parent)
     setButtons(Ok | Cancel | Apply);
     m_styleManagerWidget = new StyleManager(this);
     setMainWidget(m_styleManagerWidget);
+    setWindowTitle(i18n("Style Manager"));
 
     connect(this, SIGNAL(applyClicked()), m_styleManagerWidget, SLOT(save()));
 }

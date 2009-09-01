@@ -126,6 +126,8 @@ public slots:
     /// reimplemented from KoTool
     virtual void resourceChanged(int key, const QVariant &res);
 
+    void isBidiUpdated();
+
 signals:
     /// emitted every time a different styleManager is set.
     void styleManagerChanged(KoStyleManager *manager);
@@ -213,11 +215,6 @@ private slots:
     /// insert string
     void insertString(const QString &string);
 
-    /// method that will be called in an alternative thread for updating the paragraph direction at a character pos
-    void updateParagraphDirection(const QVariant &variant);
-    /// method that will be called in the UI thread directly after the one above
-    void updateParagraphDirectionUi();
-
     /// returns the focus to canvas when styles are selected in the optionDocker
     void returnFocusToCanvas();
 
@@ -302,14 +299,6 @@ private:
     QUndoCommand *m_currentCommand; //this command will be the direct parent of undoCommands generated as the result of QTextDocument changes
 
     bool m_currentCommandHasChildren;
-
-    // update Parag direction will be multi-threaded.
-    struct UpdatePageDirection {
-        KoAction *action;
-        QTextBlock block;
-        KoText::Direction direction;
-    };
-    UpdatePageDirection m_updateParagDirection;
 
     /// structure that allows us to remember the text position and selection of previously edited documents.
     struct TextSelection {

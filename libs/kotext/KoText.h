@@ -49,7 +49,6 @@ enum Options {
     ShowTabs,           ///< boolean that enables painting of tabs
     ShowEnters,         ///< boolean that enables painting of enters (linefeed chars)
     ShowSpecialCharacters,  ///< boolean that enables painting of special characters (nbsp etc)
-    BidiDocument = 493038196,
     CurrentTextDocument = 382490375, ///< set by the text plugin whenever the document is changed
     CurrentTextPosition = 183523,   ///<  used by the text plugin whenever the position is changed
     CurrentTextAnchor = 341899485,   ///<  used by the text plugin whenever the anchor-position is changed

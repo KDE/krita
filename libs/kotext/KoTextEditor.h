@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+* Copyright (C) 2009 Thomas Zander <zander@kde.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public
@@ -234,8 +235,14 @@ public slots:
 
     bool visualNavigation() const;
 
+    bool isBidiDocument() const;
+
+signals:
+    void isBidiUpdated();
+
 private:
     Q_PRIVATE_SLOT(d, void documentCommandAdded())
+    Q_PRIVATE_SLOT(d, void runDirectionUpdater())
 
     class Private;
     Private* const d;

@@ -110,31 +110,6 @@ static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut s
     return false;
 }
 
-static bool isRightToLeft(const QString &text)
-{
-    int ltr = 0, rtl = 0;
-
-    QString::const_iterator iter = text.begin();
-    while (iter != text.end()) {
-        switch (QChar::direction((*iter).unicode())) {
-        case QChar::DirL:
-        case QChar::DirLRO:
-        case QChar::DirLRE:
-            ltr++;
-            break;
-        case QChar::DirR:
-        case QChar::DirAL:
-        case QChar::DirRLO:
-        case QChar::DirRLE:
-            rtl++;
-        default:
-            break;
-        }
-        ++iter;
-    }
-    return ltr < rtl;
-}
-
 TextTool::TextTool(KoCanvasBase *canvas)
         : KoTool(canvas),
         m_textShape(0),
@@ -429,13 +404,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setWhatsThis(i18n("Insert one or more symbols or characters not found on the keyboard."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertSpecialCharacter()));
 
-    m_updateParagDirection.action = new KoAction(this);
-    m_updateParagDirection.action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
-    connect(m_updateParagDirection.action, SIGNAL(triggered(const QVariant &)),
-            this, SLOT(updateParagraphDirection(const QVariant&)), Qt::DirectConnection);
-    connect(m_updateParagDirection.action, SIGNAL(updateUi(const QVariant &)),
-            this, SLOT(updateParagraphDirectionUi()));
-
 #ifndef NDEBUG
     action = new KAction("Paragraph Debug", this); // do NOT add i18n!
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
@@ -712,7 +680,10 @@ void TextTool::setShapeData(KoTextShapeData *data)
         return;
     connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     if (docChanged) {
+        if (m_textEditor)
+            disconnect(m_textEditor, SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
+        connect(m_textEditor, SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
 
         if (m_textShape->demoText()) {
             m_textShapeData->document()->setUndoRedoEnabled(false); // removes undo history
@@ -990,7 +961,6 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             ensureCursorVisible();
         } else if (event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint())) { // insert the text
             m_textEditor->insertText(event->text());
-            m_updateParagDirection.action->execute(m_textEditor->position());
             ensureCursorVisible();
         }
     }
@@ -1746,61 +1716,9 @@ void TextTool::startTextEditingPlugin(const QString &pluginId)
 
 bool TextTool::isBidiDocument() const
 {
-    if (m_canvas->resourceProvider())
-        return m_canvas->resourceProvider()->boolResource(KoText::BidiDocument);
+    if (m_textEditor)
+        return m_textEditor->isBidiDocument();
     return false;
-}
-
-void TextTool::updateParagraphDirection(const QVariant &variant)
-{
-    int position = variant.toInt();
-    KoTextShapeData *data = m_textShapeData;
-    if (data == 0) // tool is deactivated already
-        return;
-    m_updateParagDirection.block = data->document()->findBlock(position);
-    m_updateParagDirection.direction = KoText::AutoDirection;
-    if (! m_updateParagDirection.block.isValid())
-        return;
-    QTextBlockFormat format = m_updateParagDirection.block.blockFormat();
-
-    KoText::Direction dir =
-        static_cast<KoText::Direction>(format.intProperty(KoParagraphStyle::TextProgressionDirection));
-
-    if (dir == KoText::AutoDirection || dir == KoText::PerhapsLeftRightTopBottom ||
-            dir == KoText::PerhapsRightLeftTopBottom) {
-        bool rtl = isRightToLeft(m_updateParagDirection.block.text());
-        if (rtl && (dir != KoText::AutoDirection || QApplication::isLeftToRight()))
-            m_updateParagDirection.direction = KoText::PerhapsRightLeftTopBottom;
-        else if (!rtl && (dir != KoText::AutoDirection || QApplication::isRightToLeft())) // remove previously set one if needed.
-            m_updateParagDirection.direction = KoText::PerhapsLeftRightTopBottom;
-    } else
-        m_updateParagDirection.block = QTextBlock();
-}
-//TODO
-void TextTool::updateParagraphDirectionUi()
-{
-    if (! m_updateParagDirection.block.isValid())
-        return;
-    QTextCursor cursor(m_updateParagDirection.block);
-    QTextBlockFormat format = cursor.blockFormat();
-    if (format.property(KoParagraphStyle::TextProgressionDirection).toInt() != m_updateParagDirection.direction) {
-        format.setProperty(KoParagraphStyle::TextProgressionDirection, m_updateParagDirection.direction);
-        cursor.setBlockFormat(format); // note that setting this causes a re-layout.
-    }
-
-    if (m_canvas->resourceProvider() && ! isBidiDocument()) {
-        if ((QApplication::isLeftToRight() &&
-                (m_updateParagDirection.direction == KoText::RightLeftTopBottom ||
-                 m_updateParagDirection.direction == KoText::PerhapsRightLeftTopBottom)) ||
-                (QApplication::isRightToLeft() &&
-                 (m_updateParagDirection.direction == KoText::LeftRightTopBottom ||
-                  m_updateParagDirection.direction == KoText::PerhapsLeftRightTopBottom))) {
-            m_canvas->resourceProvider()->setResource(KoText::BidiDocument, true);
-
-            emit blockChanged(m_textEditor->block()); // make sure that the dialogs follow this change
-        }
-    }
-    updateActions();
 }
 
 void TextTool::resourceChanged(int key, const QVariant &var)
@@ -1819,6 +1737,11 @@ void TextTool::resourceChanged(int key, const QVariant &var)
     } else return;
 
     repaintSelection();
+}
+
+void TextTool::isBidiUpdated()
+{
+    emit blockChanged(m_textEditor->block()); // make sure that the dialogs follow this change
 }
 
 void TextTool::insertSpecialCharacter()

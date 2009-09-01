@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,6 +40,7 @@
 
 #include <KLocale>
 
+#include <QApplication>
 #include <QFontDatabase>
 #include <QTextBlock>
 #include <QTextBlockFormat>
@@ -47,10 +49,36 @@
 #include <QTextDocumentFragment>
 #include <QTextFormat>
 #include <QTextTable>
+#include <QTimer>
 #include <QString>
 #include <QUndoCommand>
 
 #include <kdebug.h>
+
+static bool isRightToLeft(const QString &text)
+{
+    int ltr = 0, rtl = 0;
+
+    QString::const_iterator iter = text.begin();
+    while (iter != text.end()) {
+        switch (QChar::direction((*iter).unicode())) {
+        case QChar::DirL:
+        case QChar::DirLRO:
+        case QChar::DirLRE:
+            ltr++;
+            break;
+        case QChar::DirR:
+        case QChar::DirAL:
+        case QChar::DirRLO:
+        case QChar::DirRLE:
+            rtl++;
+        default:
+            break;
+        }
+        ++iter;
+    }
+    return ltr < rtl;
+}
 
 /*Private*/
 
@@ -65,7 +93,7 @@ public:
         Custom
     };
 
-    explicit Private(QTextDocument *document);
+    explicit Private(KoTextEditor *qq, QTextDocument *document);
 
     ~Private() {}
 
@@ -74,22 +102,33 @@ public:
 
     bool deleteInlineObjects(bool backwards = false);
     void deleteSelection();
+    void runDirectionUpdater();
 
+    KoTextEditor *q;
     QTextCursor caret;
     QTextDocument *document;
     QUndoCommand *headCommand;
     QString commandTitle;
     KoText::Direction direction;
+    bool isBidiDocument;
 
     State editorState;
+
+    QTimer updateRtlTimer;
+    QList<int> dirtyBlocks;
 };
 
-KoTextEditor::Private::Private(QTextDocument *document)
-    : document (document),
-    headCommand(0)
+KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
+    : q(qq),
+    document (document),
+    headCommand(0),
+    isBidiDocument(false)
 {
     caret = QTextCursor(document);
     editorState = NoOp;
+    updateRtlTimer.setSingleShot(true);
+    updateRtlTimer.setInterval(250);
+    QObject::connect(&updateRtlTimer, SIGNAL(timeout()), q, SLOT(runDirectionUpdater()));
 }
 
 void KoTextEditor::Private::documentCommandAdded()
@@ -234,6 +273,45 @@ void KoTextEditor::Private::deleteSelection()
     }
 }
 
+void KoTextEditor::Private::runDirectionUpdater()
+{
+    while (! dirtyBlocks.isEmpty()) {
+        const int blockNumber = dirtyBlocks.first();
+        dirtyBlocks.removeAll(blockNumber);
+        QTextBlock block = document->findBlockByNumber(blockNumber);
+        if (block.isValid()) {
+            KoText::Direction newDirection = KoText::AutoDirection;
+            QTextBlockFormat format = block.blockFormat();
+            KoText::Direction dir =
+                static_cast<KoText::Direction>(format.intProperty(KoParagraphStyle::TextProgressionDirection));
+
+            if (dir == KoText::AutoDirection || dir == KoText::PerhapsLeftRightTopBottom ||
+                    dir == KoText::PerhapsRightLeftTopBottom) {
+                bool rtl = isRightToLeft(block.text());
+                if (rtl && (dir != KoText::AutoDirection || QApplication::isLeftToRight()))
+                    newDirection = KoText::PerhapsRightLeftTopBottom;
+                else if (!rtl && (dir != KoText::AutoDirection || QApplication::isRightToLeft())) // remove previously set one if needed.
+                    newDirection = KoText::PerhapsLeftRightTopBottom;
+
+                QTextCursor cursor(block);
+                if (format.property(KoParagraphStyle::TextProgressionDirection).toInt() != newDirection) {
+                    format.setProperty(KoParagraphStyle::TextProgressionDirection, newDirection);
+                    cursor.setBlockFormat(format); // note that setting this causes a re-layout.
+                }
+                if (!isBidiDocument) {
+                    if ((QApplication::isLeftToRight() && (newDirection == KoText::RightLeftTopBottom
+                                    || newDirection == KoText::PerhapsRightLeftTopBottom))
+                            || (QApplication::isRightToLeft() && (newDirection == KoText::LeftRightTopBottom
+                                    || newDirection == KoText::PerhapsLeftRightTopBottom))) {
+                        isBidiDocument = true;
+                        emit q->isBidiUpdated();
+                    }
+                }
+            }
+        }
+    }
+}
+
 /*KoTextEditor*/
 
 //TODO factor out the changeTracking charFormat setting from all individual slots to a public slot, which will be available for external commands (TextShape)
@@ -357,7 +435,7 @@ public:
 
 KoTextEditor::KoTextEditor(QTextDocument *document)
     : KoToolSelection(document),
-    d (new Private(document))
+    d (new Private(this, document))
 {
     connect (d->document, SIGNAL (undoCommandAdded()), this, SLOT (documentCommandAdded()));
 }
@@ -981,7 +1059,15 @@ void KoTextEditor::insertText(const QString &text)
         QTextCharFormat format = d->caret.charFormat();
         registerTrackedChange(d->caret, KoGenChange::insertChange, i18n("Key Press"), format, format, false);
     }
+    int blockNumber = d->caret.blockNumber();
     d->caret.insertText(text);
+
+    while (blockNumber <= d->caret.blockNumber()) {
+        d->dirtyBlocks << blockNumber;
+        ++blockNumber;
+    }
+    d->updateRtlTimer.stop();
+    d->updateRtlTimer.start();
 }
 
 void KoTextEditor::insertText(const QString &text, const QTextCharFormat &format)
@@ -1136,6 +1222,11 @@ void KoTextEditor::setVisualNavigation(bool b)
 bool KoTextEditor::visualNavigation() const
 {
     return d->caret.visualNavigation();
+}
+
+bool KoTextEditor::isBidiDocument() const
+{
+    return d->isBidiDocument;
 }
 
 #include "KoTextEditor.moc"

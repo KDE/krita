@@ -711,22 +711,21 @@ void TextTool::setShapeData(KoTextShapeData *data)
 }
 
 void TextTool::updateSelectionHandler()
-{/*
-    m_selectionHandler.setShape(m_textShape);
-    m_selectionHandler.setShapeData(m_textShapeData);
-    m_selectionHandler.setCaret(&m_caret);
-    emit selectionChanged(m_caret.hasSelection());
-
-    if (m_caret.hasSelection()) {
-        QClipboard *clipboard = QApplication::clipboard();
-        if (clipboard->supportsSelection())
-            clipboard->setText(m_caret.selectedText(), QClipboard::Selection);
+{
+    if (m_textEditor) {
+        emit selectionChanged(m_textEditor->hasSelection());
+        if (m_textEditor->hasSelection()) {
+            QClipboard *clipboard = QApplication::clipboard();
+            if (clipboard->supportsSelection())
+                clipboard->setText(m_textEditor->selectedText(), QClipboard::Selection);
+        }
     }
+
     KoCanvasResourceProvider *p = m_canvas->resourceProvider();
     m_allowResourceProviderUpdates = false;
     if (m_textShapeData) {
-        p->setResource(KoText::CurrentTextPosition, m_caret.position());
-        p->setResource(KoText::CurrentTextAnchor, m_caret.anchor());
+        p->setResource(KoText::CurrentTextPosition, m_textEditor->position());
+        p->setResource(KoText::CurrentTextAnchor, m_textEditor->anchor());
         QVariant variant;
         variant.setValue<void*>(m_textShapeData->document());
         p->setResource(KoText::CurrentTextDocument, variant);
@@ -736,7 +735,7 @@ void TextTool::updateSelectionHandler()
         p->clearResource(KoText::CurrentTextDocument);
     }
     m_allowResourceProviderUpdates = true;
-*/}
+}
 
 void TextTool::copy() const
 {

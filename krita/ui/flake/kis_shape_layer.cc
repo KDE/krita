@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2006-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -70,6 +71,10 @@
 #include <kis_painter.h>
 #include "kis_node_visitor.h"
 #include "kis_effect_mask.h"
+#include <KoShapeOdfSaveHelper.h>
+#include <KoDrag.h>
+#include <KoOdf.h>
+#include <KoOdfPaste.h>
 
 class KisShapeLayer::Private
 {
@@ -92,17 +97,56 @@ KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
         , m_d(new Private())
 {
     KoShapeContainer::setParent(parent);
-    setShapeId(KIS_SHAPE_LAYER_ID);
+    initShapeLayer(controller);
+}
 
-    m_d->converter = new KisImageViewConverter(image());
-    m_d->x = 0;
-    m_d->y = 0;
-    m_d->projection = new KisPaintDevice(img->colorSpace());
-    m_d->canvas = new KisShapeLayerCanvas(this, m_d->converter);
-    m_d->canvas->setProjection(m_d->projection);
-    m_d->controller = controller;
 
-    connect(m_d->canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+
+class KisShapeLayerShapePaste : public KoOdfPaste
+{
+  public:
+    KisShapeLayerShapePaste(KisShapeLayer* _container, KoShapeControllerBase* _controller) : m_container(_container), m_controller(_controller) {}
+    virtual ~KisShapeLayerShapePaste() {}
+    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore)
+    {
+      KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
+      KoShapeLoadingContext context(loadingContext, m_controller->dataCenterMap());
+      KoXmlElement child;
+      forEachElement(child, body) {
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
+        if (shape) {
+          m_container->addChild(shape);
+        }
+      }
+      return true;
+    }
+  private:
+    KisShapeLayer* m_container;
+    KoShapeControllerBase* m_controller;
+};
+
+
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs) : KisExternalLayer(_rhs), m_d(new Private())
+{
+    KoShapeContainer::setParent(_rhs.KoShapeContainer::parent());
+    initShapeLayer(_rhs.m_d->controller);
+
+    KoShapeOdfSaveHelper saveHelper(_rhs.childShapes());
+    KoDrag drag;
+    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+    QMimeData* mimeData = drag.mimeData();
+  
+    Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
+  
+    KisShapeLayerShapePaste paste(this, m_d->controller);
+    bool success = paste.paste(KoOdf::Text, mimeData);
+    Q_ASSERT(success);
+    
+/*    KisShapeLayer* rhs = const_cast<KisShapeLayer*>(&_rhs);
+    foreach(KoShape* shape, childShapes())
+    {
+        rhs->removeChild(shape);
+    }*/
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -110,6 +154,21 @@ KisShapeLayer::~KisShapeLayer()
     delete m_d->converter;
     delete m_d->canvas;
     delete m_d;
+}
+
+void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller)
+{
+    setShapeId(KIS_SHAPE_LAYER_ID);
+
+    m_d->converter = new KisImageViewConverter(image());
+    m_d->x = 0;
+    m_d->y = 0;
+    m_d->projection = new KisPaintDevice(image()->colorSpace());
+    m_d->canvas = new KisShapeLayerCanvas(this, m_d->converter);
+    m_d->canvas->setProjection(m_d->projection);
+    m_d->controller = controller;
+
+    connect(m_d->canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const

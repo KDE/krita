@@ -21,8 +21,6 @@
 #include "TextShapeFactory.h"
 #include "TextShape.h"
 
-#include <klocale.h>
-
 #include <KoProperties.h>
 #include <KoShape.h>
 #include <KoTextShapeData.h>
@@ -30,6 +28,9 @@
 #include <KoStyleManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <changetracker/KoChangeTracker.h>
+
+#include <klocale.h>
+#include <QTextCursor>
 
 TextShapeFactory::TextShapeFactory(QObject *parent)
         : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text")),
@@ -55,11 +56,17 @@ KoShape *TextShapeFactory::createDefaultShape() const
     return text;
 }
 
-KoShape *TextShapeFactory::createShape(const KoProperties * params) const
+KoShape *TextShapeFactory::createShape(const KoProperties *params) const
 {
     TextShape *shape = new TextShape(m_inlineTextObjectManager);
     shape->setSize(QSizeF(300, 200));
     shape->setDemoText(params->boolProperty("demo"));
+    QString text("text");
+    if (params->contains(text)) {
+        KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(shape->userData());
+        QTextCursor cursor(shapeData->document());
+        cursor.insertText(params->stringProperty(text));
+    }
     return shape;
 }
 

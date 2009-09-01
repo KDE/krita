@@ -77,7 +77,9 @@ KisNode::KisNode(const KisNode & rhs)
     m_d->parent = 0;
     m_d->graphListener = rhs.m_d->graphListener;
     foreach(const KisNodeSP & node, rhs.m_d->nodes) {
-        m_d->nodes.append(node.data()->clone());
+        KisNodeSP children = node.data()->clone();
+        children->createNodeProgressProxy();
+        m_d->nodes.append(children);
     }
     init();
 }

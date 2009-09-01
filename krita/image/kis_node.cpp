@@ -80,6 +80,8 @@ KisNode::KisNode(const KisNode & rhs)
         KisNodeSP children = node.data()->clone();
         children->createNodeProgressProxy();
         m_d->nodes.append(children);
+        children->setParent(this);
+        children->setGraphListener(m_d->graphListener);
     }
     init();
 }

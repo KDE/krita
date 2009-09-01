@@ -1,107 +1,81 @@
+<!DOCTYPE KrossScripting SYSTEM "kpartgui.dtd">
 <KrossScripting>
 
-	<script
+	<script text="Python Imaging Library Import" comment="Import images with the Python Imaging Library (PIL)" 
 		name="pilimport"
-		text="Python Imaging Library Import"
-		comment="Import images with the Python Imaging Library (PIL)"
 		interpreter="python"
 		file="extensions/pilimport.py" />
 
-  <script
+  <script text="Draw a sky" comment="Draw a sky"
     name="rbsky"
-    text="Draw a sky"
-    comment="Draw a sky"
     interpreter="ruby"
     file="extensions/sky.rb" />
   
-	<script
+	<script text="Python Imaging Library Export" comment="Export images with the Python Imaging Library (PIL)"
+
 		name="pilexport"
-		text="Python Imaging Library Export"
-		comment="Export images with the Python Imaging Library (PIL)"
 		interpreter="python"
 		file="extensions/pilexport.py" />
 
     <collection name="samples" text="Samples">
 
-		<script
+		<script text="Invert with Ruby" comment="Invert the pixel of an image with Ruby"
 			name="rbinvert"
-			text="Invert with Ruby"
-			comment="Invert the pixel of an image with Ruby"
 			interpreter="ruby"
 			file="extensions/invert.rb" />
 
-		<script
+		<script text="Invert with Python" comment="Invert the pixel of an image with Python" 
 			name="pyinvert"
-			text="Invert with Python"
-			comment="Invert the pixel of an image with Python"
 			interpreter="python"
 			file="extensions/invert.py" />
 
-		<script
+		<script text="Invert with JavaScript" comment="Invert the pixel of an image with JavaScript"
 			name="jsinvert"
-			text="Invert with JavaScript"
-			comment="Invert the pixel of an image with JavaScript"
 			interpreter="javascript"
 			file="extensions/invert.js" />
 
-		<script
+		<script text="Random painting" comment="Demonstrate how to use the Painter scripting API and paint random shape on screen" 
 			name="rbrandompaint"
-			text="Random painting"
-			comment="Demonstrate how to use the Painter scripting API and paint random shape on screen"
 			interpreter="ruby"
 			file="extensions/randompaint.rb" />
 
-		<script
+		<script text="Filters test" comment="Test of filters in a ruby-scripting"
 			name="rbfilterstest"
-			text="Filters test"
-			comment="Test of filters in a ruby-scripting"
 			interpreter="ruby"
 			file="extensions/filterstest.rb" />
 
-		<script
+		<script text="Change colorspace" comment="Demonstrate how to change the colorspace in a script"
 			name="rbchangecs"
-			text="Change colorspace"
-			comment="Demonstrate how to change the colorspace in a script"
 			interpreter="ruby"
 			file="extensions/changecs.rb" />
 
-		<script
+		<script text="Reshape Histogram" comment="An experimental script to try to reshape histogram, while the results are far to be convincing yet it is still an example on how to use histogram in a script."
 			name="pyreshapehisto"
-			text="Reshape Histogram"
-			comment="An experimental script to try to reshape histogram, while the results are far to be convincing yet it is still an example on how to use histogram in a script."
 			interpreter="python"
 			file="extensions/reshapehisto.py" />
 
-		<script
+		<script text="Torture Krita with painting" comment="Paint on an image and create multiple layers"
 			name="rbtorturepainting"
-			text="Torture Krita with painting"
-			comment="Paint on an image and create multiple layers"
 			interpreter="ruby"
 			file="extensions/torture-painting.rb" />
 
-		<script
+		<script text="Torture Krita with filters" comment="Test all filters with all colorspaces"
 			name="rbtorturefilters"
-			text="Torture Krita with filters"
-			comment="Test all filters with all colorspaces"
 			interpreter="ruby"
 			file="extensions/torture-filters.rb" />
 
 	</collection>
     <collection name="filters" text="Filters" comment="Scripting filters for Krita" enabled="false">
-        <script
+        <script text="Invert Filter with Ruby" comment="Invert the pixel of an image with Ruby as a filter" 
             name="rbinvertfilter"
-            text="Invert Filter with Ruby"
-            comment="Invert the pixel of an image with Ruby as a filter"
             interpreter="ruby"
             file="filters/invert.rb">
             <property name="categoryId">adjust_filters</property>
             <property name="categoryName">Adjust</property>
             <property name="supportsPainting">false</property>
         </script>
-        <script
+        <script text="Random" comment="Generate a completely random image" 
             name="rbrandomfilter"
-            text="Random"
-            comment="Generate a completely random image"
             interpreter="ruby"
             file="filters/random.rb">
             <property name="categoryId">other_filters</property>
@@ -111,28 +85,22 @@
     </collection>
 
     <collection name="dockers" text="Dockers" comment="Dockers for Krita" enabled="true">
-<!--        <script
+<!--        <script text="Palette Docker" comment="Show a palette docker"
             name="Palette Docker"
-            text="Palette Docker"
-            comment="Show a palette docker"
             interpreter="ruby"
             file="dockers/palettedocker.rb">
             <property name="defaultDockPosition">Qt::DockBottom</property>
         </script>
-        <script
+        <script text="Flipbook Docker" comment="Show the flipbook docker"
             name="Flipbook Docker"
-            text="Flipbook Docker"
-            comment="Show the flipbook docker"
             interpreter="ruby"
             file="dockers/flipbookdocker.rb">
             <property name="defaultDockPosition">Qt::DockRight</property>
         </script>-->
     </collection>
     <collection name="decorations" text="Canvas decorations" comment="Decorations for the canvas of Krita" enabled="true">
-<!--        <script
+<!--        <script text="Vanishing Point Decoration" comment="Show some vanishing point"
             name="VanishingPointDecoration"
-            text="Vanishing Point Decoration"
-            comment="Show some vanishing point"
             interpreter="ruby"
             file="decorations/VanishingPoints.rb" /> -->
     </collection>

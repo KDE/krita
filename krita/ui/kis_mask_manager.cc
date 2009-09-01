@@ -386,7 +386,7 @@ void KisMaskManager::maskToLayer()
 void KisMaskManager::duplicateMask()
 {
     if (!m_activeMask) return;
-    if (!!m_view->image()) return;
+    if (!m_view->image()) return;
     if (m_activeMask->inherits("KisSelectionMask")) return; // Cannot duplicate selection masks
     KisNodeSP dup = m_activeMask->clone();
     m_commandsAdapter->addNode(dup, m_activeMask->parent(), m_activeMask);

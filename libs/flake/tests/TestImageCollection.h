@@ -11,6 +11,7 @@ private slots:
     void testGetImageImage();
     void testGetExternalImage();
     void testGetImageStore();
+    void testInvalidImageData();
 
     // imageData tests
     void testImageDataAsSharedData();

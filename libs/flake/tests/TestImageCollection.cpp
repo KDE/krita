@@ -110,6 +110,18 @@ void TestImageCollection::testGetImageStore()
     delete store;
 }
 
+void TestImageCollection::testInvalidImageData()
+{
+    KoImageCollection collection;
+    QByteArray invalidImageData(100, '^');
+    KoImageData *data = collection.createImageData(invalidImageData);
+    QVERIFY(data);
+    QVERIFY(!data->isValid());
+    QVERIFY(data->errorCode() == KoImageData::OpenFailed);
+    QCOMPARE(collection.count(), 1);
+    delete data;
+}
+
 void TestImageCollection::testImageDataAsSharedData()
 {
     KoImageData data;

@@ -1472,10 +1472,10 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block)
                 filled = true;
             }
         }
-        if (! filled) {
-            // use first char of block.
-            QTextCursor cursor(block); // I know this is longwinded, but just using the blocks
-            // charformat does not work, apparantly
+        if (!filled) {
+            // use first char of first block.
+            QTextBlock firstBlockOfList = list->item(0);
+            QTextCursor cursor(firstBlockOfList);
             cf = cursor.charFormat();
         }
 

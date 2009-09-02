@@ -90,7 +90,7 @@ void KoPABackgroundToolWidget::setBackgroundImage()
         if ( KIO::NetAccess::download(  url, tmpFile, 0 ) ) {
             QImage image( tmpFile );
             if ( !image.isNull() ) {
-                QUndoCommand * cmd = new QUndoCommand( i18n( "Change backgound image" ) );
+                QUndoCommand * cmd = new QUndoCommand( i18n( "Change background image" ) );
                 KoPatternBackground * bg = new KoPatternBackground( collection );
                 bg->setPattern( image );
                 QSizeF imageSize = bg->patternOriginalSize();

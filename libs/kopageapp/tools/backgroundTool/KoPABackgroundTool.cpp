@@ -103,7 +103,7 @@ QMap<QString, QWidget *> KoPABackgroundTool::createOptionWidgets()
     KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget( this );
     QMap<QString, QWidget *> widgets;
     widgets.insert( i18n("Background Tool"), widget );
-    QLabel dummy4( i18n("Use the styles docker to manipulate the backgound.") );
+    QLabel dummy4( i18n("Use the styles docker to manipulate the background.") );
 #if 0
     KoPAMasterPageDocker *masterPageDocker = new KoPAMasterPageDocker();
     masterPageDocker->setView( static_cast<KoPACanvas *>(m_canvas)->koPAView() );

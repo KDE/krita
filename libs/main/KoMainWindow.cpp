@@ -1453,10 +1453,6 @@ void KoMainWindow::slotRemoveView()
         kWarning() << "view not found in d->rootViews!";
     }
 
-    if (d->rootViews.count() == 1) {
-        d->removeView->setEnabled(false);
-        d->orientation->setEnabled(false);
-    }
     // Prevent the view's destroyed() signal from triggering GUI rebuilding (too early)
     d->manager->setActivePart(0, 0);
 
@@ -1468,6 +1464,8 @@ void KoMainWindow::slotRemoveView()
     d->manager->setActivePart(d->rootDoc, d->rootViews.first());
 
     if (d->rootViews.count() == 1)
+        d->removeView->setEnabled(false);
+        d->orientation->setEnabled(false);
         d->splitted = false;
 }
 

@@ -291,8 +291,10 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         } else {
             QImage image;
             if (!image.loadFromData(imageData)) {
+                // mark the image as invalid, but keep the data in memory
+                // even if KOffice cannot handle the format, the data should
+                // be retained
                 d->errorCode = OpenFailed;
-                return;
             }
             d->image = image;
             d->dataStoreState = KoImageDataPrivate::StateImageOnly;

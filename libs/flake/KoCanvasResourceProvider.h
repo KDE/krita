@@ -29,7 +29,7 @@
 #include <KoID.h>
 #include "flake_export.h"
 
-#include "FlakeColor.h"
+#include "FlakeColor.h" // For KoColor
 
 class KoShape;
 class KoLineBorder;
@@ -99,7 +99,7 @@ public:
     void setResource(int key, const QVariant & value);
 
     /**
-     * Set a resource of type FlakeColor.
+     * Set a resource of type KoColor.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param color the new value for the key.
      */

@@ -950,7 +950,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
     QTextFrame::iterator it;
     for (it = frame->begin(); !(it.atEnd()); ++it) {
         QTextBlock block = it.currentBlock();
-        QTextTable *table = qobject_cast<QTextTable *>( it.currentFrame());
+        QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
 
         if (table) {
             m_tableLayout.setTable(table);
@@ -990,14 +990,14 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                     || !m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
                     || (m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::deleteChange)) {
                     QTextLayout::FormatRange fr;
-selection.format.property(KoCharacterStyle::ChangeTrackerId);
+                    selection.format.property(KoCharacterStyle::ChangeTrackerId);
                     fr.start = begin - block.position();
                     fr.length = end - begin;
                     fr.format = selection.format;
                     selections.append(fr);
+                } else {
+                    selection.format.property(KoCharacterStyle::ChangeTrackerId);
                 }
-                else
-selection.format.property(KoCharacterStyle::ChangeTrackerId);
             }
             drawTrackedChangeItem(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
             layout->draw(painter, QPointF(0, 0), selections);
@@ -1024,8 +1024,20 @@ selection.format.property(KoCharacterStyle::ChangeTrackerId);
         lastBorder->paint(*painter);
 }
 
+/**
+ * Draw a line. Typically meant to underline text or similar.
+ * @param painter the painter to paint on.
+ * @painter color the pen color to for the decoratoin line
+ * @param type The type
+ * @param style the type of line to draw.
+ * @param width The thickness of the line, in pixels (the painter will be prescaled to points coordinate system).
+ * @param x1 we are always drawing horizontal lines, this is the start point.
+ * @param x2 we are always drawing horizontal lines, this is the end point.
+ * @param y the y-offset to paint on.
+ */
 static void drawDecorationLine(QPainter *painter, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, qreal width, const qreal x1, const qreal x2, const qreal y)
 {
+qDebug() << "drawDecorationLine ("<< x1 <<","<< y <<") w:" << x2-x1;
     QPen penBackup = painter->pen();
     QPen pen = painter->pen();
     pen.setColor(color);
@@ -1229,7 +1241,8 @@ void Layout::decorateTabs(QPainter *painter, const QVariantList& tabList, const 
     }
 }
 
-void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter) {
+void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter)
+{
     Q_UNUSED(selectionStart);
     Q_UNUSED(selectionEnd);
     Q_UNUSED(converter);
@@ -1382,7 +1395,8 @@ static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragme
                           fmt.doubleProperty(KoCharacterStyle::UnderlineWidth),
                           painter->font());
         if (underlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
-            drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType, fontUnderLineStyle, QString(), width, y);
+            drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType,
+                    fontUnderLineStyle, QString(), width, y);
         } else {
             drawDecorationLine(painter, color, fontUnderLineType, fontUnderLineStyle, width, x1, x2, y);
         }
@@ -1413,7 +1427,8 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
             if (startOfBlock == -1)
                 startOfBlock = currentFragment.position(); // start of this block w.r.t. the document
             int firstLine = layout->lineForTextPosition(currentFragment.position() - startOfBlock).lineNumber();
-            int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length() - startOfBlock).lineNumber();
+            int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length()
+                    - startOfBlock).lineNumber();
             for (int i = firstLine ; i <= lastLine ; i++) {
                 QTextLine line = layout->lineAt(i);
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
@@ -1427,7 +1442,8 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                     bool misspelled = fmt.boolProperty(KoCharacterStyle::Spelling);
                     if (misspelled) {
                         qreal y = line.position().y() + line.ascent() + painter->fontMetrics().underlinePos();
-                        drawDecorationLine(painter, QColor(255, 0, 0), KoCharacterStyle::SingleLine, KoCharacterStyle::WaveLine, painter->fontMetrics().lineWidth(), x1, x2, y);
+                        drawDecorationLine(painter, QColor(255, 0, 0), KoCharacterStyle::SingleLine,
+                                KoCharacterStyle::WaveLine, painter->fontMetrics().lineWidth(), x1, x2, y);
                     }
                 }
             }

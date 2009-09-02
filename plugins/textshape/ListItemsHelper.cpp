@@ -433,7 +433,6 @@ void ListItemsHelper::recalculate()
 
     qreal counterSpacing = m_fm.width(' ');
     width += counterSpacing + m_fm.width(prefix + suffix); // same for all
-    // FIXME: Should we take alignment into consideration? The code below works only for 'left'
     width = qMax(format.doubleProperty(KoListStyle::MinimumDistance), width);
     for (int i = 0; i < m_textList->count(); i++) {
         QTextBlock tb = m_textList->item(i);

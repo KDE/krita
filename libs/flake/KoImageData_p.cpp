@@ -70,7 +70,12 @@ bool KoImageDataPrivate::saveData(QIODevice &device)
                 if (bytes <= 0)
                     break; // done!
                 do {
-                    bytes -= device.write(buf, bytes);
+                    qint64 nWritten = device.write(buf, bytes);
+                    if (nWritten == -1) {
+                        temporaryFile->close();
+                        return false;
+                    }
+                    bytes -= nWritten;
                 } while (bytes > 0);
             }
             temporaryFile->close();

@@ -42,7 +42,6 @@ KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisNodeSP no
 //     if(! m_hadSelection) {
 //         m_device->deselect(); // let us not be the cause of select
 //     }
-    m_firstRedo = true;
 }
 
 KisSelectedTransaction::~KisSelectedTransaction()
@@ -52,15 +51,7 @@ KisSelectedTransaction::~KisSelectedTransaction()
 
 void KisSelectedTransaction::redo()
 {
-    //QUndoStack calls redo(), so the first call needs to be blocked
-    if (m_firstRedo) {
-        m_firstRedo = false;
-
-        if (m_selTransaction)
-            m_selTransaction->redo();
-        return;
-    }
-
+    // Both transactions will block on the first redo
     KisTransaction::redo();
 
     if (m_selTransaction)

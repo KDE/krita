@@ -44,7 +44,6 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoColorBackground.h>
-#include <FlakeColor.h>
 #ifndef NO_PIGMENT
 #include <KoColorPopupAction.h>
 #endif

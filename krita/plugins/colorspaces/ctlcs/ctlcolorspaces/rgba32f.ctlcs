@@ -1,3 +1,4 @@
+<!DOCTYPE foobar>
 <ctlcolorspace>
     <info  colorModelId="RGBA" colorModelName="Red Green Blue" type="float" depth="32" name="RGB (32-bit float/channel) for High Dynamic Range imaging" id="RgbAF32" />
     <channels>

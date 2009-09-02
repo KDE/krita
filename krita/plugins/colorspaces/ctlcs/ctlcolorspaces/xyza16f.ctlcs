@@ -1,3 +1,4 @@
+<!DOCTYPE foobar>
 <ctlcolorspace>
     <info  colorModelId="XYZA" colorModelName="XYZ" type="float" depth="16" name="XYZ (16-bit float/channel) for High Dynamic Range imaging" id="XyzAF16" />
     <channels>

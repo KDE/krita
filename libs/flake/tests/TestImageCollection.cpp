@@ -119,6 +119,10 @@ void TestImageCollection::testInvalidImageData()
     QVERIFY(!data->isValid());
     QVERIFY(data->errorCode() == KoImageData::OpenFailed);
     QCOMPARE(collection.count(), 1);
+    QBuffer storedData;
+    storedData.open(QIODevice::WriteOnly);
+    QVERIFY(data->saveData(storedData));
+    QCOMPARE(invalidImageData, storedData.buffer());
     delete data;
 }
 

@@ -482,7 +482,7 @@ bool Layout::nextParag()
         // Also after we account for indents etc so the y() pos is correct.
         if (m_isRtl)
             m_blockData->setCounterPosition(QPointF(shape->size().width() - m_borderInsets.right -
-                                                    m_shapeBorder.right - m_format.leftMargin() - listIndent(), y()));
+                        m_blockData->counterWidth() - m_shapeBorder.right - m_format.leftMargin() - listIndent(), y()));
         else
             m_blockData->setCounterPosition(QPointF(m_borderInsets.left + m_shapeBorder.left +
                                                     m_format.textIndent() + m_format.leftMargin() +

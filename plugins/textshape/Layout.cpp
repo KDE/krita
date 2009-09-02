@@ -1505,7 +1505,13 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block)
             QTextLine line = layout.createLine();
             line.setLineWidth(data->counterWidth() - data->counterSpacing());
             layout.endLayout();
-            layout.draw(painter, data->counterPosition());
+            QPointF counterPosition = data->counterPosition();
+            if (block.layout()->lineCount() > 0) {
+                // if there is text, then baseline align the counter.
+                QTextLine firstParagLine = block.layout()->lineAt(0);
+                counterPosition += QPointF(0, firstParagLine.ascent() - layout.lineAt(0).ascent());
+            }
+            layout.draw(painter, counterPosition);
         }
 
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());

@@ -97,7 +97,7 @@ void KoTextBlockData::setPartialCounterText(const QString &text)
     d->partialCounterText = text;
 }
 
-const QString &KoTextBlockData::partialCounterText() const
+QString KoTextBlockData::partialCounterText() const
 {
     return d->partialCounterText;
 }
@@ -112,12 +112,12 @@ int KoTextBlockData::counterIndex() const
     return d->counterIndex;
 }
 
-void KoTextBlockData::setCounterPosition(QPointF position)
+void KoTextBlockData::setCounterPosition(const QPointF &position)
 {
     d->counterPos = position;
 }
 
-const QPointF &KoTextBlockData::counterPosition() const
+QPointF KoTextBlockData::counterPosition() const
 {
     return d->counterPos;
 }

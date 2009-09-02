@@ -52,7 +52,7 @@ public:
     };
 
     KoTextBlockData();
-    ~KoTextBlockData();
+    virtual ~KoTextBlockData();
 
     /// return if this block has up-to-date counter data
     bool hasCounterData() const;
@@ -87,18 +87,18 @@ public:
      */
     void setPartialCounterText(const QString &text);
     /// return the partial text for this paragraphs counter
-    const QString &partialCounterText() const;
+    QString partialCounterText() const;
 
     /**
      * The actual position of the counter can be set, in actual (text) document coordinates.
      * @param position the location of the top/left of the counter text line.
      */
-    void setCounterPosition(QPointF position);
+    void setCounterPosition(const QPointF &position);
     /**
      * Return the counter position.
      * @see setCounterPosition
      */
-    const QPointF &counterPosition() const;
+    QPointF counterPosition() const;
 
     /**
      * When a paragraph has a border, it will have a KoTextBlockBorderData instance.

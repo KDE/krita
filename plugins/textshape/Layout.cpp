@@ -156,6 +156,13 @@ qreal Layout::docOffsetInShape() const
 
 bool Layout::addLine(QTextLine &line)
 {
+    if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {
+        // first line, lets check where the line ended up and adjust the positioning of the counter.
+        if (!m_isRtl && x() < line.x())  // move the counter more left.
+            m_blockData->setCounterPosition(m_blockData->counterPosition() + QPointF(line.x() - x(), 0));
+        else if (m_isRtl && width() > line.width())
+            m_blockData->setCounterPosition(m_blockData->counterPosition() - QPointF(width() - line.width(), 0));
+    }
     qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     qreal objectHeight = 0.0;
     bool useFixedLineHeight = height != 0.0;

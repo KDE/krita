@@ -120,6 +120,7 @@ void TestImageCollection::testInvalidImageData()
     QVERIFY(data->errorCode() == KoImageData::OpenFailed);
     QCOMPARE(collection.count(), 1);
     QBuffer storedData;
+    QVERIFY(!data->saveData(storedData)); // should fail if QIODevice is closed
     storedData.open(QIODevice::WriteOnly);
     QVERIFY(data->saveData(storedData));
     QCOMPARE(invalidImageData, storedData.buffer());

@@ -37,7 +37,6 @@
 #include "commands/ChangeListLevelCommand.h"
 #include "commands/ListItemNumberingCommand.h"
 
-#include <KoAction.h>
 #include <KoExecutePolicy.h>
 #include <KoCanvasBase.h>
 #include <KoSelection.h>

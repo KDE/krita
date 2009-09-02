@@ -33,7 +33,6 @@
 #include <QTimer>
 
 class InsertCharacter;
-class KoAction;
 class KoChangeTracker;
 class KoCharacterStyle;
 class KoColor;

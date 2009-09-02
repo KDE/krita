@@ -1463,10 +1463,11 @@ void KoMainWindow::slotRemoveView()
     d->rootViews.first()->setPartManager(d->manager);
     d->manager->setActivePart(d->rootDoc, d->rootViews.first());
 
-    if (d->rootViews.count() == 1)
+    if (d->rootViews.count() == 1) {
         d->removeView->setEnabled(false);
         d->orientation->setEnabled(false);
         d->splitted = false;
+    }
 }
 
 void KoMainWindow::viewFullscreen(bool fullScreen)

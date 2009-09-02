@@ -1434,6 +1434,7 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
                     qreal x1 = line.cursorToX(currentFragment.position() - startOfBlock);
                     qreal x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
+                    x2 = qMin(line.naturalTextWidth() + line.x(), x2);
 
                     drawStrikeOuts(painter, currentFragment, line, x1, x2);
                     drawUnderlines(painter, currentFragment, line, x1, x2);

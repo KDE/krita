@@ -1,0 +1,5 @@
+because KoUpdater was moved to komain, Krita/Image now
+depends on komain again -- this is not right, since it
+makes it impossible to use krita/image outside a koffice
+mvc application framework, so KoUpdater must be moved out
+again.

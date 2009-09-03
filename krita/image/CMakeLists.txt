@@ -6,7 +6,6 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 # Chose a tiles backend 
 # 1 - image/tiles
-# 2 - image/tiles_new
 # 3 - image/tiles3
 
 set(USE_TILESYSTEM 1)
@@ -41,24 +40,6 @@ set(libkritatile_SRCS
 	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_random_accessor.cc
 )
 add_subdirectory( tiles3 )
-elseif(USE_TILESYSTEM EQUAL 2)
-set(libkritatile_SRCS
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tiled_random_accessor.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tiledvlineiterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tiledhlineiterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tileddatamanager.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tile.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tilediterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tiledrectiterator.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_memento.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tile_compressor.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tilestore.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tilestorememory.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tileswapper.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_sharedtiledata.cc
-	${CMAKE_SOURCE_DIR}/krita/image/tiles_new/kis_tilesourcefile.cc
-)
-add_subdirectory( tiles_new )
 endif(USE_TILESYSTEM EQUAL 1)
 
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
@@ -198,8 +179,8 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} komain koresources pigmentcms kocolorwidgets koresourcewidget ${KDE4_THREADWEAVER_LIBRARIES} )
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kobase koresources pigmentcms kocolorwidgets koresourcewidget ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
+target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} kobase komain koresources pigmentcms ${KDE4_THREADWEAVER_LIBRARIES} )
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kobase koresources pigmentcms ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})

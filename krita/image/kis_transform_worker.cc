@@ -83,7 +83,7 @@ KisTransformWorker::~KisTransformWorker()
         m_progressStep += r.width();
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            if (!m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
+            if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(m_lastProgressReport);
         }
         if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
             break;

@@ -214,6 +214,9 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     cursor.removeSelectedText();
 #endif
     loader.loadBody(element, cursor);   // now let's load the body from the ODF KoXmlElement.
+    KoTextEditor *editor = KoTextDocument(document()).textEditor();
+    if (editor) // at one point we have to get the position from the odf doc instead.
+        editor->setPosition(0);
 
     return true;
 }

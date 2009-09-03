@@ -1044,7 +1044,6 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
  */
 static void drawDecorationLine(QPainter *painter, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, qreal width, const qreal x1, const qreal x2, const qreal y)
 {
-qDebug() << "drawDecorationLine ("<< x1 <<","<< y <<") w:" << x2-x1;
     QPen penBackup = painter->pen();
     QPen pen = painter->pen();
     pen.setColor(color);

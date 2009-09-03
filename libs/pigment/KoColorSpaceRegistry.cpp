@@ -32,8 +32,6 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 
-#include <lcms.h>
-
 #include "KoPluginLoader.h"
 
 #include "DebugPigment.h"

@@ -27,10 +27,10 @@ set(libkritatile_SRCS
 add_subdirectory( tiles )
 elseif(USE_TILESYSTEM EQUAL 3)
 set(libkritatile_SRCS
-        ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile.cc
-        ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data.cc
-        ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_store.cc
-        ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_pooler.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_store.cc
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_pooler.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_data_manager.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_memento_manager.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tilediterator.cc

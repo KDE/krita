@@ -83,9 +83,9 @@ KisTransformWorker::~KisTransformWorker()
         m_progressStep += r.width();
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            if (m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
+            if (!m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if (m_progressUpdater && m_progressUpdater->interrupted()) {
+        if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -116,7 +116,7 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
             if (m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if (m_progressUpdater && m_progressUpdater->interrupted()) {
+        if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -151,7 +151,7 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
             if (m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if ( m_progressUpdater && m_progressUpdater->interrupted()) {
+        if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -184,7 +184,7 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
             if (m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if ( m_progressUpdater && m_progressUpdater->interrupted()) {
+        if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -413,9 +413,9 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         m_progressStep += dstLen;
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            if (m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
+            if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if ( m_progressUpdater && m_progressUpdater->interrupted()) {
+        if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -519,19 +519,19 @@ bool KisTransformWorker::run()
             rotateNone(srcdev, m_dev); //copy it back
         }
         //progress info
-        if (m_progressUpdater) m_progressUpdater->setProgress(100);
+        if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(100);
         return false;
 
     }
 
-        if ( m_progressUpdater && m_progressUpdater->interrupted()) {
-            if (m_progressUpdater) m_progressUpdater->setProgress(100);
+        if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
+            if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(100);
             return false;
         }
 
     transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale*xshear, 0, m_filter, m_fixBorderAlpha);
 
-    if ( m_progressUpdater && m_progressUpdater->interrupted()) {
+    if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
         m_progressUpdater->setProgress(100);
         return false;
     }
@@ -539,7 +539,7 @@ bool KisTransformWorker::run()
     // Now do the second pass
     transformPass <KisVLineIteratorPixel>(srcdev.data(), srcdev.data(), yscale, yshear, ytranslate, m_filter, m_fixBorderAlpha);
 
-    if ( m_progressUpdater && m_progressUpdater->interrupted()) {
+    if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
         m_progressUpdater->setProgress(100);
         return false;
     }
@@ -556,9 +556,9 @@ bool KisTransformWorker::run()
     //CBRm_dev->setDirty();
 
     //progress info
-    if (m_progressUpdater) m_progressUpdater->setProgress(100);
+    if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(100);
 
-    if (m_progressUpdater) return m_progressUpdater->interrupted();
+    if (!m_progressUpdater.isNull()) return m_progressUpdater->interrupted();
     return true;
 }
 

@@ -186,13 +186,21 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
         if (qAbs(rotation()) > 1)
             painter.setRenderHint(QPainter::Antialiasing);
 
+        // Make the border not overwrite already drawn things like
+        // paragraph borders. DestinationOver and DestinationAtop
+        // gives slightly different results, but non are really good
+        // at low zooms.
+        painter.setCompositionMode(QPainter::CompositionMode_DestinationAtop);
+        //painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+
         QPen pen(QColor(210, 210, 210));
         QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
-        pen.setWidthF(onePixel.y());
-        painter.setPen(pen);
 
         QPointF tl(0.0, 0.0);
         QRectF rect(tl, size());
+
+        pen.setWidthF(onePixel.y());
+        painter.setPen(pen);
         painter.drawLine(tl, rect.topRight());
         painter.drawLine(rect.bottomLeft(), rect.bottomRight());
 
@@ -201,6 +209,9 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
         painter.drawLine(rect.topRight(), rect.bottomRight());
         painter.drawLine(tl, rect.bottomLeft());
         painter.restore();
+
+        // Reset the painter to its original state.
+        painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     }
 
     if (m_demoText) return;

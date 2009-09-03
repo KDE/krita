@@ -462,7 +462,6 @@ void TestDocumentLayout::testRestartNumbering()
 void TestDocumentLayout::testRightToLeftList()
 {
     initForNewTest("a\nb\nc");
-
     KoParagraphStyle h1;
     h1.setTextProgressionDirection(KoText::RightLeftTopBottom);
     m_styleManager->add(&h1);
@@ -486,7 +485,12 @@ void TestDocumentLayout::testRightToLeftList()
     while (block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
         QVERIFY(data);
+        QVERIFY(data->counterWidth() > 2);
         QVERIFY(data->counterPosition().x() > 100);
+        QTextLine line = block.layout()->lineAt(0);
+        QVERIFY(line.isValid());
+        QCOMPARE(line.x(), (qreal)0);
+        QCOMPARE(line.width() + data->counterWidth() + data->counterSpacing(), (qreal)200);
         block = block.next();
     }
 }

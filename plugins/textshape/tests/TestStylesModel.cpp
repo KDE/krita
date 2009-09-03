@@ -60,10 +60,10 @@ void TestStylesModel::testPrecalcCache()
     KoParagraphStyle *s = manager->paragraphStyle(model.rootStyleIds().at(0));
     QVERIFY(s);
     QCOMPARE(s->name(), QString("Default"));
-    KoParagraphStyle *code = manager->paragraphStyle(model.rootStyleIds().at(1));
+    KoParagraphStyle *code = manager->paragraphStyle(model.rootStyleIds().at(2));
     QVERIFY(code);
     QCOMPARE(code->name(), QString("code"));
-    KoParagraphStyle *altered = manager->paragraphStyle(model.rootStyleIds().at(2));
+    KoParagraphStyle *altered = manager->paragraphStyle(model.rootStyleIds().at(1));
     QVERIFY(altered);
     QCOMPARE(altered->name(), QString("altered"));
     KoParagraphStyle *headers = manager->paragraphStyle(model.rootStyleIds().at(3));

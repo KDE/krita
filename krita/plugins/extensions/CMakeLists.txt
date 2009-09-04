@@ -10,7 +10,9 @@ add_subdirectory( imagesize )
 add_subdirectory( metadataeditor )
 add_subdirectory( modify_selection )
 add_subdirectory( rotateimage )
-add_subdirectory( scripting ) # TODO: port it to the change of KisFilter, KisPaintOpPreset
+if(SHOULD_BUILD_SCRIPTING)
+  add_subdirectory( scripting ) # TODO: port it to the change of KisFilter, KisPaintOpPreset
+endif(SHOULD_BUILD_SCRIPTING)
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( smallcolorselector )

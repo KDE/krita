@@ -263,14 +263,11 @@ set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 # kobase is at the bottom of the stack
 set(KOBASE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kobase)
 
-# kopicture depends on kostore
-set(KOPICTURE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopicture ${CMAKE_BINARY_DIR}/libs/kopicture ${KOSTORE_INCLUDES})
-
-# koodf depends on kostore, kobase and kopicture
+# koodf depends on kostore, kobase and koodf
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
                    ${KOBASE_INCLUDES}
-                   ${KOPICTURE_INCLUDES})
+                   ${KOSTORE_INCLUDES})
 
 # flake depends on koodf
 set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
@@ -307,16 +304,12 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/linestyleselector
                     ${CMAKE_SOURCE_DIR}/libs/widgets/aspectbutton
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/resources
+                    ${CMAKE_SOURCE_DIR}/libs/kocolorwidgets
                     ${CMAKE_SOURCE_DIR}/libs/widgets/pagelayout
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/characterselectiondialog
                     ${CMAKE_SOURCE_DIR}/libs/widgets/csvimportdialog
                     ${CMAKE_SOURCE_DIR}/libs/widgets/zoom
                     ${CMAKE_SOURCE_DIR}/libs/widgets/input
-                    ${CMAKE_SOURCE_DIR}/libs/kopicture
                     ${CMAKE_SOURCE_DIR}/libs/koaction
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config

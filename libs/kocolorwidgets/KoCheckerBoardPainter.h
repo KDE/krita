@@ -22,11 +22,11 @@
 
 #include <QtGui/QPixmap>
 #include <QtGui/QColor>
-#include <kowidgets_export.h>
+#include "kocolorwidgets_export.h"
 
 class QPainter;
 
-class KOWIDGETS_EXPORT KoCheckerBoardPainter
+class KOCOLORWIDGETS_EXPORT KoCheckerBoardPainter
 {
 public:
     KoCheckerBoardPainter( int checkerSize );

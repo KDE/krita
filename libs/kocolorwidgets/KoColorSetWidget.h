@@ -24,7 +24,7 @@
 #include <QWidgetAction>
 #include <QFrame>
 
-#include "kowidgets_export.h"
+#include "kocolorwidgets_export.h"
 
 class KoColor;
 class KoColorSet;
@@ -36,7 +36,7 @@ class KoColorSet;
  * set plus optionally a checkbox to filter away bad matching colors.
  * Some ways to add and remove plus choose another colorset will be added in the future.
  */
-class KOWIDGETS_EXPORT KoColorSetWidget : public QFrame
+class KOCOLORWIDGETS_EXPORT KoColorSetWidget : public QFrame
 {
 
     Q_OBJECT

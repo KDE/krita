@@ -1,8 +1,5 @@
-include_directories( ${PIGMENT_INCLUDES} 
-                     ${KORESOURCES_INCLUDES} 
+include_directories( ${KORESOURCES_INCLUDES}
                      ${CMAKE_SOURCE_DIR}/libs/widgets/input
-                     ${CMAKE_SOURCE_DIR}/libs/widgets
-                     ${CMAKE_SOURCE_DIR}/libs/kobase
 )
 
 set(kocolorwidgets_LIB_SRCS
@@ -17,7 +14,14 @@ set(kocolorwidgets_LIB_SRCS
     KoUniColorDialog.cpp
     KoXYColorSelector.cpp
     KoShadowConfigWidget.cpp
-    ../KoCheckerBoardPainter.cpp
+    KoIconToolTip.cpp
+    KoResourceItemChooser.cpp
+    KoResourceSelector.cpp
+    KoResourceModel.cpp
+    KoResourceItemDelegate.cpp
+    KoResourceItemView.cpp
+    KoItemToolTip.cpp
+    KoCheckerBoardPainter.cpp
 )
 
 kde4_add_ui_files( kocolorwidgets_LIB_SRCS
@@ -49,6 +53,8 @@ install(
     KoUniColorChooser.h
     KoUniColorDialog.h
     KoXYColorSelector.h
+    KoResourceItemChooser.h
+    KoResourceSelector.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
 COMPONENT Devel)

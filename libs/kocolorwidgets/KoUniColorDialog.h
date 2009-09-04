@@ -1,5 +1,6 @@
-/* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+/**
+ * Copyright (c) 2006 Casper Boemann (cbr@boemann.dk)
+ * Copyright (c) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -15,26 +16,36 @@
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
+*/
+#ifndef KOUNICOLORDIALOG_H
+#define KOUNICOLORDIALOG_H
+
+#include "KoColor.h"
+
+#include <kpagedialog.h>
+#include "kocolorwidgets_export.h"
+
+class KoUniColorDialogPrivate;
+
+/**
+ * @short A colormanaged dialog for selecting a colors.
+ *
+ * KoUniColorDialog is simply the dialog'ification of KoUniColorChooser.
  */
-
-#ifndef KORESOURCEITEMDELEGATE_H
-#define KORESOURCEITEMDELEGATE_H
-
-#include <QAbstractItemDelegate>
-#include <../KoCheckerBoardPainter.h>
-
-/// The resource item delegate for rendering the resource preview
-class KoResourceItemDelegate : public QAbstractItemDelegate
+class KOCOLORWIDGETS_EXPORT KoUniColorDialog : public KPageDialog
 {
+    Q_OBJECT
 public:
-    KoResourceItemDelegate( QObject * parent = 0 );
-    virtual ~KoResourceItemDelegate() {}
-    /// reimplemented
-    virtual void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const;
-    /// reimplemented
-    QSize sizeHint ( const QStyleOptionViewItem &, const QModelIndex & ) const;
+    explicit KoUniColorDialog(KoColor &initialColor, QWidget *parent = 0);
+    virtual ~KoUniColorDialog();
+
+    /**
+      * @return the selected color
+      */
+    KoColor color() const;
+
 private:
-    KoCheckerBoardPainter m_checkerPainter;
+    KoUniColorDialogPrivate *d;
 };
 
-#endif // KORESOURCEITEMDELEGATE_H
+#endif

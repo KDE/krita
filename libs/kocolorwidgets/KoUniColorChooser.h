@@ -23,7 +23,7 @@
 
 #include "KoColor.h"
 
-#include "kowidgets_export.h"
+#include "kocolorwidgets_export.h"
 
 class KoColor;
 class KoXYColorSelector;
@@ -33,7 +33,7 @@ class QLabel;
 class QSpinBox;
 class QRadioButton;
 
-class KOWIDGETS_EXPORT KoUniColorChooser
+class KOCOLORWIDGETS_EXPORT KoUniColorChooser
      : public QWidget
 {
     Q_OBJECT

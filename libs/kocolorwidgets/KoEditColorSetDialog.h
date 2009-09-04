@@ -20,11 +20,11 @@
 #ifndef KOEDITCOLORSET_H
 #define KOEDITCOLORSET_H
 
-#include "ui_KoEditColorSet.h"
+#include <ui_KoEditColorSet.h>
 
 #include <KDialog>
 
-#include "kowidgets_export.h"
+#include "kocolorwidgets_export.h"
 
 class QGridLayout;
 class QScrollArea;
@@ -72,7 +72,7 @@ private:
  * - Save changes to the file
  * @see KoColorSetWidget
  */
-class KOWIDGETS_EXPORT KoEditColorSetDialog : public KDialog
+class KOCOLORWIDGETS_EXPORT KoEditColorSetDialog : public KDialog
 {
     Q_OBJECT
 

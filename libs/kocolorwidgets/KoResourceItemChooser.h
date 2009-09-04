@@ -25,7 +25,7 @@
 #include <QWidget>
 #include <QModelIndex>
 
-#include "kowidgets_export.h"
+#include "kocolorwidgets_export.h"
 
 class QButtonGroup;
 class QAbstractItemDelegate;
@@ -37,7 +37,7 @@ class KoResource;
  * A widget that contains a KoResourceChooser as well
  * as an import/export button
  */
-class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
+class KOCOLORWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 {
   Q_OBJECT
 public:

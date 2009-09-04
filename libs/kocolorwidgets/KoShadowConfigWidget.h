@@ -20,14 +20,14 @@
 #ifndef SHADOWCONFIGWIDGET_H
 #define SHADOWCONFIGWIDGET_H
 
-#include "kowidgets_export.h"
+#include "kocolorwidgets_export.h"
 #include <QtGui/QWidget>
 
 class KoUnit;
 class KoColor;
 
 /// A widget for configuring the shadow of a shape
-class KOWIDGETS_EXPORT KoShadowConfigWidget : public QWidget
+class KOCOLORWIDGETS_EXPORT KoShadowConfigWidget : public QWidget
 {
     Q_OBJECT
 public:

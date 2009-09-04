@@ -21,9 +21,7 @@
 #ifndef KORESOURCECHOOSER_H
 #define KORESOURCECHOOSER_H
 
-#include "kowidgets_export.h"
-
-#include "../KoItemToolTip.h"
+#include "KoItemToolTip.h"
 
 class KoIconToolTip: public KoItemToolTip
 {

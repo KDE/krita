@@ -20,9 +20,9 @@
 
 #include <QWidget>
 
-#include "kowidgets_export.h"
+#include "kocolorwidgets_export.h"
 
-class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
+class KOCOLORWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
     Q_OBJECT
     public:
         KoTriangleColorSelector(QWidget* parent);

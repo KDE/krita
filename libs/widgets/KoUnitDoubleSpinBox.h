@@ -22,7 +22,7 @@
 #ifndef KOUNITDOUBLESPINBOX_H
 #define KOUNITDOUBLESPINBOX_H
 
-#include "inputwidgets_export.h"
+#include "kowidgets_export.h"
 
 #include <KoUnit.h>
 #include <QDoubleSpinBox>
@@ -39,7 +39,7 @@
  * It is adviced to use a QDoubleSpinBox in QtDesigner and then use the context-menu item: 'Promote to Custom Widget' and use the values: 'classname=KoUnitDoubleSpinBox', 'headerfile=KoUnitDoubleSpinBox.h'
  * This will generate code that uses this spinbox in the correct manner.
  */
-class INPUTWIDGETS_EXPORT KoUnitDoubleSpinBox : public QDoubleSpinBox
+class KOWIDGETS_EXPORT KoUnitDoubleSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
 public:

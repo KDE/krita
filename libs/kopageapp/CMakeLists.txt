@@ -1,6 +1,5 @@
 include_directories( 
     ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/widgets/documentsectionbox
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${PIGMENT_INCLUDES}
 )
@@ -50,8 +49,8 @@ set( kopageapp_LIB_SRCS
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
 
-target_link_libraries(kopageapp komain kozoomaction kopagelayout)
-target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES komain kozoomaction)
+target_link_libraries(kopageapp komain)
+target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(kopageapp PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

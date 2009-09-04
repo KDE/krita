@@ -295,7 +295,6 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_BINARY_DIR}/libs/kotext
                    ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
                    ${CMAKE_SOURCE_DIR}/libs/kotext/styles
-                   ${CMAKE_SOURCE_DIR}/libs/kotext/kohyphen
                    ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
                    ${FLAKE_INCLUDES}
                    ${KOODF_INCLUDES})
@@ -304,12 +303,7 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/aspectbutton
                     ${CMAKE_SOURCE_DIR}/libs/kocolorwidgets
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/pagelayout
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/csvimportdialog
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/zoom
-                    ${CMAKE_SOURCE_DIR}/libs/widgets/input
                     ${CMAKE_SOURCE_DIR}/libs/koaction
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config

@@ -38,8 +38,8 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
 
 kde4_add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )
 
-target_link_libraries(kritalibpaintop kritalibbrush kritaui koresourcewidget koaspectbutton)
-target_link_libraries(kritalibpaintop LINK_INTERFACE_LIBRARIES koresourcewidget kritalibbrush kritaui)
+target_link_libraries(kritalibpaintop kritalibbrush kritaui)
+target_link_libraries(kritalibpaintop LINK_INTERFACE_LIBRARIES kritalibbrush kritaui)
 
 set_target_properties(kritalibpaintop PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

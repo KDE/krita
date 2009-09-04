@@ -18,7 +18,7 @@ kde4_add_plugin(kritaimagesize ${kritaimagesize_PART_SRCS})
 
 
 
-target_link_libraries(kritaimagesize kritaui koaspectbutton)
+target_link_libraries(kritaimagesize kritaui)
 
 install(TARGETS kritaimagesize  DESTINATION ${PLUGIN_INSTALL_DIR})
 

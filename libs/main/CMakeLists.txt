@@ -93,13 +93,12 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KABC_LIBS}
     ${KDE4_KFILE_LIBRARY}
-    koinput
-    koaspectbutton
+    kowidgets
     kotext
     koaction
 )
 
-target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext ${KDE4_KPARTS_LIBS})
+target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 
 set_target_properties(komain PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

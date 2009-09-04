@@ -89,7 +89,7 @@ set(EXTRA_LIBS
 )
 endif (NOT NO_PIGMENT)
 
-target_link_libraries(textshape kotext koinput komain ${EXTRA_LIBS})
+target_link_libraries(textshape kotext komain ${EXTRA_LIBS})
 
 install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
 

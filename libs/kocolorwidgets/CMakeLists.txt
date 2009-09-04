@@ -1,5 +1,6 @@
 include_directories( ${KORESOURCES_INCLUDES}
                      ${CMAKE_SOURCE_DIR}/libs/widgets
+                     ${CMAKE_SOURCE_DIR}/libs/kobase
 )
 
 set(kocolorwidgets_LIB_SRCS

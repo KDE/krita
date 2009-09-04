@@ -112,6 +112,8 @@ qreal Layout::width()
         ptWidth -= resolveTextIndent();
     if (m_blockData)
         ptWidth -= listIndent();
+    if (m_blockData && m_isRtl)
+        ptWidth -= m_blockData->counterWidth() + m_blockData->counterSpacing();
     ptWidth -= m_format.leftMargin() + m_format.rightMargin();
     ptWidth -= m_borderInsets.left + m_borderInsets.right + m_shapeBorder.right;
     ptWidth -= m_dropCapsAffectedLineWidthAdjust;
@@ -124,8 +126,7 @@ qreal Layout::x()
     if (m_inTable) {
         result += m_tableLayout.cellContentRect(m_tableCell).x();
     }
-    result += m_isRtl ? m_format.rightMargin() : m_format.leftMargin();
-    result += listIndent();
+    result += m_isRtl ? m_format.rightMargin() : (m_format.leftMargin() + listIndent());
     result += m_borderInsets.left + m_shapeBorder.left;
     result += m_dropCapsAffectedLineWidthAdjust;
     return result;

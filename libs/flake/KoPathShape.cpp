@@ -301,7 +301,7 @@ QRectF KoPathShape::handleRect(const QPointF &p, qreal radius) const
     return QRectF(p.x() - radius, p.y() - radius, 2*radius, 2*radius);
 }
 
-const QPainterPath KoPathShape::outline() const
+QPainterPath KoPathShape::outline() const
 {
     QPainterPath path;
     foreach(KoSubpath * subpath, m_subpaths) {

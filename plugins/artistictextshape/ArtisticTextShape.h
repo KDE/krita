@@ -58,7 +58,7 @@ public:
     /// reimplemented
     virtual void setSize( const QSizeF &size );
     /// reimplemented
-    virtual const QPainterPath outline() const;
+    virtual QPainterPath outline() const;
 
     /// Sets the text to display
     void setText( const QString & text );

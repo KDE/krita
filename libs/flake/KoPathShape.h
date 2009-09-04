@@ -88,7 +88,7 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
     virtual void paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius);
     /// reimplemented
-    virtual const QPainterPath outline() const;
+    virtual QPainterPath outline() const;
     /// reimplemented
     virtual QRectF boundingRect() const;
     /// reimplemented

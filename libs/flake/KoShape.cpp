@@ -447,7 +447,7 @@ void KoShape::update(const QRectF &shape) const
     }
 }
 
-const QPainterPath KoShape::outline() const
+QPainterPath KoShape::outline() const
 {
     Q_D(const KoShape);
     QPainterPath path;
@@ -747,7 +747,7 @@ bool KoShape::keepAspectRatio() const
     return d->keepAspect;
 }
 
-const QString &KoShape::shapeId() const
+QString KoShape::shapeId() const
 {
     Q_D(const KoShape);
     return d->shapeId;
@@ -823,7 +823,7 @@ KoShapeShadow * KoShape::shadow() const
     return d->shadow;
 }
 
-const QMatrix& KoShape::matrix() const
+QMatrix KoShape::matrix() const
 {
     Q_D(const KoShape);
     return d->localMatrix;

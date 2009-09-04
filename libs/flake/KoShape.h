@@ -171,7 +171,7 @@ public:
      *
      * @return false if loading failed
      */
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) = 0;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
 
     /**
      * @brief store the shape data as ODF XML.
@@ -179,7 +179,7 @@ public:
      * OpenDocument 9.2 Drawing Shapes.
      * @see saveOdfAttributes
      */
-    virtual void saveOdf(KoShapeSavingContext & context) const = 0;
+    virtual void saveOdf(KoShapeSavingContext &context) const = 0;
 
     /**
      * This method can be used while saving the shape as ODF to add the data
@@ -203,7 +203,7 @@ public:
      * might want.
      * The default implementation does nothing.
      */
-    virtual void init(const QMap<QString, KoDataCenter *> & dataCenterMap);
+    virtual void init(const QMap<QString, KoDataCenter*> &dataCenterMap);
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -311,12 +311,12 @@ public:
     /**
      * Add a event action
      */
-    void addEventAction(KoEventAction * action);
+    void addEventAction(KoEventAction *action);
 
     /**
      * Remove a event action
      */
-    void removeEventAction(KoEventAction * action);
+    void removeEventAction(KoEventAction *action);
 
     /**
      * Get all event actions
@@ -331,7 +331,8 @@ public:
      * if it is transparent or not.
      * @param background the new shape background.
      */
-    void setBackground(KoShapeBackground * background);
+    void setBackground(KoShapeBackground *background);
+
     /**
      * return the brush used to paint te background of this shape with.
      * A QBrush can have a plain color, be fully transparent or have a complex fill.
@@ -339,7 +340,7 @@ public:
      * will be able to tell if its transparent or not.
      * @return the background-brush
      */
-    KoShapeBackground * background() const;
+    KoShapeBackground *background() const;
 
     /**
      * Returns true if there is some transparency, false if the shape is fully opaque.
@@ -415,6 +416,7 @@ public:
      * @see setGeometryProtected(), setContentProtected(), setVisible()
      */
     void setSelectable(bool selectable);
+
     /**
      * Returns if this shape can be selected by the user.
      * @return true only when the object is selectable.
@@ -430,6 +432,7 @@ public:
      * @see setContentProtected(), setSelectable(), setVisible()
      */
     void setGeometryProtected(bool on);
+
     /**
      * Returns current geometry protection state of this shape.
      * The geometry being protected means the user can not change shape or position of the
@@ -446,6 +449,7 @@ public:
      * @see setGeometryProtected(), setSelectable(), setVisible()
      */
     void setContentProtected(bool protect);
+
     /**
      * Returns current content protection state of this shape.
      * Content protection is a hint for tools to disallow the user editing the content.
@@ -500,7 +504,7 @@ public:
      * on, for example.
      * @returns the outline of the shape in the form of a path.
      */
-    virtual const QPainterPath outline() const;
+    virtual QPainterPath outline() const;
 
     /**
      * Returns the currently set border, or 0 if there is no border.
@@ -521,10 +525,10 @@ public:
     KoInsets borderInsets() const;
 
     /// Sets the new shadow, removing the old one
-    void setShadow(KoShapeShadow * shadow);
+    void setShadow(KoShapeShadow *shadow);
 
     /// Returns the currently set shadow or 0 if there is now shadow set
-    KoShapeShadow * shadow() const;
+    KoShapeShadow *shadow() const;
 
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
@@ -585,6 +589,7 @@ public:
      * @param applicationData the new application data, or 0 to delete the current one.
      */
     void setApplicationData(KoShapeApplicationData *applicationData);
+
     /**
      * Return the current applicationData.
      */
@@ -595,7 +600,8 @@ public:
      * @see KoShapeFactory::shapeId()
      * @return the id of the shape-type
      */
-    const QString & shapeId() const;
+    QString shapeId() const;
+
     /**
      * Set the Id of this shape.  A shapeFactory is expected to set the Id at creation
      * so applications can find out what kind of shape this is.
@@ -699,7 +705,7 @@ public:
      * Sets the name of the shape.
      * @param name the new shape name
      */
-    void setName(const QString & name);
+    void setName(const QString &name);
 
     /**
      * Update the position of the shape in the tree of the KoShapeManager.
@@ -748,13 +754,13 @@ public:
      * @param shape the shape which depends on this shape
      * @return true if dependency could be established, else false
      */
-    bool addDependee(KoShape * shape);
+    bool addDependee(KoShape *shape);
 
     /// Removes as shape depending on this shape
-    void removeDependee(KoShape * shape);
+    void removeDependee(KoShape *shape);
 
     /// Returns if the given shape is dependent on this shape
-    bool hasDependee(KoShape * shape) const;
+    bool hasDependee(KoShape *shape) const;
 
     /// Returns additional snap data the shape wants to have snapping to
     virtual KoSnapData snapData() const;
@@ -768,14 +774,14 @@ public:
      * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
      * @param value The value of the attribute
      */
-    void setAdditionalAttribute(const char * name, const QString & value);
+    void setAdditionalAttribute(const char *name, const QString &value);
 
     /**
      * Remove additional attribute
      *
      * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
      */
-    void removeAdditionalAttribute(const char * name);
+    void removeAdditionalAttribute(const char *name);
 
     /**
      * Check if additional attribute is set
@@ -784,7 +790,7 @@ public:
      *
      * @return true if there is a attribute with prefix:tag set, false otherwise
      */
-    bool hasAdditionalAttribute(const char * name) const;
+    bool hasAdditionalAttribute(const char *name) const;
 
     /**
      * Get additional attribute
@@ -793,21 +799,21 @@ public:
      *
      * @return The value of the attribute if it exists or a null string if not found.
      */
-    QString additionalAttribute(const char * name) const;
+    QString additionalAttribute(const char *name) const;
 
-    void setAdditionalStyleAttribute(const char * name, const QString & value);
+    void setAdditionalStyleAttribute(const char *name, const QString &value);
 
-    void removeAdditionalStyleAttribute(const char * name);
+    void removeAdditionalStyleAttribute(const char *name);
 
     /**
      * Returns the filter effect stack of the shape
      *
      * @return the list of filter effects applied on the shape when rendering.
      */
-    KoFilterEffectStack * filterEffectStack() const;
+    KoFilterEffectStack *filterEffectStack() const;
 
     /// Sets the new filter effect stack, removing the old one
-    void setFilterEffectStack(KoFilterEffectStack * filterEffectStack);
+    void setFilterEffectStack(KoFilterEffectStack *filterEffectStack);
 
 protected:
     /// constructor
@@ -843,7 +849,7 @@ protected:
      * @param element element which represents the shape in odf
      * @param attributes a number of OdfAttribute items to state which attributes to load.
      */
-    bool loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingContext &context, int attributes);
+    bool loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingContext &context, int attributes);
 
     /**
      * Parses the transformation attribute from the given string
@@ -871,22 +877,22 @@ protected:
      * @param element the xml element to  load the style from
      * @param context the loading context used for loading
      */
-    virtual void loadStyle(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// Loads the fill style
     //QBrush loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context );
-    KoShapeBackground * loadOdfFill(const KoXmlElement & element, KoShapeLoadingContext & context);
+    KoShapeBackground *loadOdfFill(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// Loads the stroke style
-    KoShapeBorderModel * loadOdfStroke(const KoXmlElement & element, KoShapeLoadingContext & context);
+    KoShapeBorderModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// Loads the shadow style
-    KoShapeShadow * loadOdfShadow(const KoXmlElement & element, KoShapeLoadingContext & context);
+    KoShapeShadow *loadOdfShadow(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /**
      * Fills the style stack and returns the value of the given style property (e.g fill, stroke).
      */
-    QString getStyleProperty(const char *property, const KoXmlElement & element, KoShapeLoadingContext & context);
+    QString getStyleProperty(const char *property, const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /* ** end loading saving */
 
@@ -913,14 +919,14 @@ protected:
     bool collisionDetection();
 
     /// return the current matrix that contains the rotation/scale/position of this shape
-    const QMatrix& matrix() const;
+    QMatrix matrix() const;
 
     KoShapePrivate *d_ptr;
 
 private:
     friend class KoShapeManager;
-    void addShapeManager(KoShapeManager * manager);
-    void removeShapeManager(KoShapeManager * manager);
+    void addShapeManager(KoShapeManager *manager);
+    void removeShapeManager(KoShapeManager *manager);
 
     Q_DECLARE_PRIVATE(KoShape)
 };

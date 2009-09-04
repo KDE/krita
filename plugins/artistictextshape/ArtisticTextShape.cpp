@@ -234,7 +234,7 @@ void ArtisticTextShape::setSize( const QSizeF &newSize )
     }
 }
 
-const QPainterPath ArtisticTextShape::outline() const
+QPainterPath ArtisticTextShape::outline() const
 {
     return m_outline;
 }

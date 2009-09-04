@@ -577,3 +577,61 @@ void TestDocumentLayout::testInvalidateLists()
 
     QCOMPARE(data->hasCounterData(), false); // inserting a new block on this list made the list be invalidated
 }
+
+void TestDocumentLayout::testCenteredItems()
+{
+    initForNewTest("ListItem\nListItem\nListItem");
+
+    KoListStyle listStyle;
+    KoListLevelProperties llp;
+    llp.setStyle(KoListStyle::DecimalItem);
+    listStyle.setLevelProperties(llp);
+
+    QTextBlock block = m_doc->begin(); // normal block
+    QVERIFY(block.isValid());
+    listStyle.applyStyle(block);
+    block = block.next(); // centered block
+    QVERIFY(block.isValid());
+    listStyle.applyStyle(block);
+    QTextBlockFormat fmt;
+    fmt.setAlignment(Qt::AlignHCenter);
+    QTextCursor cursor(block);
+    cursor.mergeBlockFormat(fmt);
+    block = block.next(); // centered RTL text.
+    listStyle.applyStyle(block);
+    cursor = QTextCursor(block);
+    fmt.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::RightLeftTopBottom);
+    cursor.mergeBlockFormat(fmt);
+
+    m_layout->layout();
+
+    block = m_doc->begin();
+    QTextLayout *layout = block.layout();
+    QTextLine line1 = layout->lineAt(0);
+    KoTextBlockData *data1 = dynamic_cast<KoTextBlockData*>(block.userData());
+    QVERIFY(line1.isValid());
+    QVERIFY(line1.width() < 200); // the counter takes some space.
+
+    block = block.next();
+    layout = block.layout();
+    QTextLine line2 = layout->lineAt(0);
+    KoTextBlockData *data2 = dynamic_cast<KoTextBlockData*>(block.userData());
+    QVERIFY(line2.isValid());
+    QVERIFY(line2.width() < 200); // the counter takes some space.
+    QCOMPARE(line1.width(), line2.width());
+
+    const qreal width1 = line1.naturalTextWidth() + data1->counterWidth() + data1->counterSpacing();
+    const qreal width2 = line2.naturalTextWidth() + data2->counterWidth() + data2->counterSpacing();
+    QCOMPARE(width1, width2);
+    QVERIFY(data1->counterPosition().x() < data2->counterPosition().x());
+    const qreal padding = (200 - width2) / 2;
+    QVERIFY(padding > 0);// not really a layout test, but the rest will be bogus otherwise.
+    QCOMPARE(data2->counterPosition().x(), padding); // close to the centered text.
+
+    // right to left parag places the counter on the right. Its centered, so not the far right.
+    block = block.next();
+    layout = block.layout();
+    QTextLine line = layout->lineAt(0);
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+    QCOMPARE(data->counterPosition().x(), 200 - padding - data->counterWidth());
+}

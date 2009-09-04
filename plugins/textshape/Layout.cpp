@@ -159,11 +159,24 @@ bool Layout::addLine(QTextLine &line)
 {
     if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
-        if (!m_isRtl && x() < line.x())  // move the counter more left.
+        QTextBlockFormat fmt = m_block.blockFormat();
+        if ((fmt.alignment() & Qt::AlignHCenter) == Qt::AlignHCenter) {
+            const qreal padding = (line.width() - line.naturalTextWidth() ) / 2;
+            qreal newX;
+            if (m_isRtl)
+                newX = line.x() + line.width() - padding + m_blockData->counterSpacing();
+            else
+                newX = line.x() + padding - m_blockData->counterWidth() - m_blockData->counterSpacing();
+            m_blockData->setCounterPosition(QPointF(newX, m_blockData->counterPosition().y()));
+        }
+        else if (!m_isRtl && x() < line.x()) {// move the counter more left.
             m_blockData->setCounterPosition(m_blockData->counterPosition() + QPointF(line.x() - x(), 0));
-        else if (m_isRtl && width() > line.width())
-            m_blockData->setCounterPosition(m_blockData->counterPosition() - QPointF(width() - line.width(), 0));
+        } else if (m_isRtl && x() + width() > line.x() + line.width() + 0.1) { // 0.1 to account for qfixed rounding
+           const qreal newX = line.x() + line.width() - m_blockData->counterWidth();
+           m_blockData->setCounterPosition(QPointF(newX, m_blockData->counterPosition().y()));
+        }
     }
+
     qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     qreal objectHeight = 0.0;
     bool useFixedLineHeight = height != 0.0;
@@ -762,7 +775,7 @@ qreal Layout::listIndent()
         indent = m_block.textList()->format().doubleProperty(KoListStyle::Indent);
     if (m_isRtl)
         return indent;
-    return m_blockData->counterWidth() + indent;
+    return m_blockData->counterSpacing() + m_blockData->counterWidth() + indent;
 }
 
 void Layout::resetPrivate()

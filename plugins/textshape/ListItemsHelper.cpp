@@ -432,7 +432,7 @@ void ListItemsHelper::recalculate()
     }
 
     qreal counterSpacing = m_fm.width(' ');
-    width += counterSpacing + m_fm.width(prefix + suffix); // same for all
+    width += m_fm.width(prefix + suffix); // same for all
     width = qMax(format.doubleProperty(KoListStyle::MinimumDistance), width);
     for (int i = 0; i < m_textList->count(); i++) {
         QTextBlock tb = m_textList->item(i);

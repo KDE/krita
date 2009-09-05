@@ -54,7 +54,7 @@ QIcon KisTransparencyMask::icon() const
 
 void KisTransparencyMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 {
-    selection()->updateProjection();
+    selection()->updateProjection(rc);
 
     const KoColorSpace * cs = projection->colorSpace();
 

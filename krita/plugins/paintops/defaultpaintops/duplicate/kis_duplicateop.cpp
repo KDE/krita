@@ -158,7 +158,6 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     Q_CHECK_PTR(m_srcdev);
 
     // Perspective correction ?
-    KisPainter copyPainter(m_srcdev);
     KisImageSP image = settings->m_image;
     if (settings->perspectiveCorrection() && image && image->perspectiveGrid()->countSubGrids() == 1) {
         Matrix3qreal startM = Matrix3qreal::Identity();
@@ -199,10 +198,27 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
 
     } else {
+        // TODO make it a mode to get the behaviour where the source is rawData
         // Or, copy the source data on the temporary device:
-        copyPainter.setCompositeOp(COMPOSITE_COPY);
-        copyPainter.bitBlt(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
-        copyPainter.end();
+//         KisPainter copyPainter(m_srcdev);
+//         copyPainter.setCompositeOp(COMPOSITE_COPY);
+//         copyPainter.bitBlt(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
+//         copyPainter.end();
+       // Do the copy manually to access old raw data
+        KisHLineIteratorPixel dstIt = m_srcdev->createHLineIterator(0, 0, sw);
+        KisHLineConstIteratorPixel srcIt = source()->createHLineConstIterator(srcPoint.x(), srcPoint.y(), sw);
+        int pixelSize = m_srcdev->pixelSize();
+        for (int i = 0; i < sh; ++i)
+        {
+            while(!dstIt.isDone())
+            {
+                memcpy(dstIt.rawData(), srcIt.oldRawData(), pixelSize);
+                ++dstIt;
+                ++srcIt;
+            }
+            dstIt.nextRow();
+            srcIt.nextRow();
+        }
     }
 
     // heal ?

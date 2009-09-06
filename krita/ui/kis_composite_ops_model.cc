@@ -30,7 +30,7 @@ KisCompositeOpsModel::KisCompositeOpsModel(const QList<KoCompositeOp*>& list)
     {
         if(op->userVisible())
         {
-            m_list.push_back(op);
+            m_list.push_back( CompositeOpInfo(op->id(), op->description(), op->category() ) );
         }
     }
     if (opsInOrder.isEmpty()) {
@@ -79,7 +79,7 @@ KisCompositeOpsModel::~KisCompositeOpsModel()
 {
 }
 
-int KisCompositeOpsModel::rowCount( const QModelIndex & parent ) const
+int KisCompositeOpsModel::rowCount( const QModelIndex & /*parent*/ ) const
 {
     return m_list.count();
 }
@@ -92,26 +92,26 @@ QVariant KisCompositeOpsModel::data( const QModelIndex & index, int role ) const
         {
             case Qt::DisplayRole:
             {
-                return m_list[index.row()]->description();
+                return m_list[index.row()].description;
             }
             case CompositeOpSortRole:
             {
-                int idx = opsInOrder.indexOf( m_list[index.row()]->id() );
+                int idx = opsInOrder.indexOf( m_list[index.row()].id );
                 if( idx == -1 ) return opsInOrder.count();
                 return idx;
             }
             case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
             case KCategorizedSortFilterProxyModel::CategorySortRole:
-                return m_list[index.row()]->category();
+                return m_list[index.row()].category;
         }
     }
     return QVariant();
 }
 
-KoCompositeOp* KisCompositeOpsModel::itemAt(const QModelIndex & index) const
+const QString& KisCompositeOpsModel::itemAt(const QModelIndex & index) const
 {
-    if (!index.isValid()) return 0;
-    return m_list[index.row()];
+    if (!index.isValid()) return COMPOSITE_OVER;
+    return m_list[index.row()].id;
 }
 
 QModelIndex KisCompositeOpsModel::indexOf( const KoCompositeOp* op) const
@@ -122,8 +122,8 @@ QModelIndex KisCompositeOpsModel::indexOf( const KoCompositeOp* op) const
 QModelIndex KisCompositeOpsModel::indexOf( const QString& id) const
 {
     int index = 0;
-    foreach(KoCompositeOp * op2, m_list) {
-        if (id == op2->id())
+    foreach(const CompositeOpInfo&  op2, m_list) {
+        if (id == op2.id)
             break;
         ++index;
     }

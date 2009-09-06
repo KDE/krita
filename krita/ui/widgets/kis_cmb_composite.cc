@@ -57,12 +57,12 @@ void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
     m_lastModel = model;
 }
 
-KoCompositeOp* KisCmbComposite::itemAt(int idx) const
+const QString& KisCmbComposite::itemAt(int idx) const
 {
     return m_lastModel->itemAt(m_sortModel->mapToSource( m_sortModel->index( idx, 0 ) ) );
 }
 
-KoCompositeOp * KisCmbComposite::currentItem() const
+const QString& KisCmbComposite::currentItem() const
 {
     return itemAt(currentIndex());
 }

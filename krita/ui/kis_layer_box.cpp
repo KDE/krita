@@ -159,7 +159,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
     connect(m_wdgLayerBox->bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal, bool)), SIGNAL(sigOpacityChanged(qreal, bool)));
-    connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(const KoCompositeOp*)), SIGNAL(sigItemComposite(const KoCompositeOp*)));
+    connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(const QString&)), SLOT(slotCompositeOpChanged(const QString&)));
 }
 
 KisLayerBox::~KisLayerBox()
@@ -463,6 +463,11 @@ QModelIndexList KisLayerBox::selectedNodes() const
         l.append(m_wdgLayerBox->listLayers->currentIndex());
     }
     return l;
+}
+
+void KisLayerBox::slotCompositeOpChanged(const QString& _compositeOp)
+{
+  emit( sigItemComposite(m_nodeManager->activeColorSpace()->compositeOp(_compositeOp) ) );
 }
 
 #include "kis_layer_box.moc"

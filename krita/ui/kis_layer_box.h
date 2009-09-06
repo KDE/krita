@@ -83,7 +83,7 @@ signals:
     void sigRequestNewNode(const QString & nodetype);
     void sigRequestNodeProperties(KisNodeSP node);
     void sigOpacityChanged(qreal opacity, bool final);
-    void sigItemComposite(const KoCompositeOp*);
+    void sigItemComposite(const KoCompositeOp* _compositeOp);
 
 private slots:
 
@@ -109,6 +109,7 @@ private slots:
     void slotNewEffectMask();
     void slotNewTransformationMask();
     void slotNewSelectionMask();
+    void slotCompositeOpChanged(const QString&);
 
     void slotNodeActivated(const QModelIndex &);
 

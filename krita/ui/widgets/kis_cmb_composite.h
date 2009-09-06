@@ -43,7 +43,7 @@ public:
     KisCmbComposite(QWidget * parent = 0, const char * name = 0);
     virtual ~KisCmbComposite();
 
-    KoCompositeOp * currentItem() const;
+    const QString& currentItem() const;
 
     void setCompositeOpList(const QList<KoCompositeOp*>& list);
     void setCurrent(const KoCompositeOp* op);
@@ -51,8 +51,8 @@ public:
 
 signals:
 
-    void activated(const KoCompositeOp*);
-    void highlighted(const KoCompositeOp*);
+    void activated(const QString&);
+    void highlighted(const QString&);
 
 private slots:
 
@@ -62,7 +62,7 @@ private slots:
 private:
     // Prevent deprectated Qt3 method from being called. Use setCurrent instead.
     void setCurrentText(const QString & s);
-    KoCompositeOp* itemAt(int idx) const;
+    const QString& itemAt(int idx) const;
 
     KisCompositeOpsModel* m_lastModel;
     KCategorizedSortFilterProxyModel* m_sortModel;

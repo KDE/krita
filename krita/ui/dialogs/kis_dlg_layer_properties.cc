@@ -125,7 +125,7 @@ int KisDlgLayerProperties::getOpacity() const
     return opacity;
 }
 
-KoCompositeOp * KisDlgLayerProperties::getCompositeOp() const
+const QString& KisDlgLayerProperties::getCompositeOp() const
 {
     return m_page->cmbComposite->currentItem();
 }

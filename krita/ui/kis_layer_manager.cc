@@ -454,13 +454,13 @@ void KisLayerManager::layerProperties()
 
             if (layer->name() != dlg.getName() ||
                     layer->opacity() != dlg.getOpacity() ||
-                    layer->compositeOp() != dlg.getCompositeOp() ||
+                    layer->compositeOp()->id() != dlg.getCompositeOp() ||
                     oldChannelFlags != newChannelFlags
                ) {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 m_view->undoAdapter()->addCommand(new KisLayerPropsCommand(layer,
                                                   layer->opacity(), dlg.getOpacity(),
-                                                  layer->compositeOpId(), dlg.getCompositeOp()->id(),
+                                                  layer->compositeOpId(), dlg.getCompositeOp(),
                                                   layer->name(), dlg.getName(),
                                                   oldChannelFlags, newChannelFlags));
                 QApplication::restoreOverrideCursor();

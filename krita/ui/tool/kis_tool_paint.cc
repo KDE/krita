@@ -144,7 +144,7 @@ QWidget * KisToolPaint::createOptionWidget()
     m_lbComposite = new QLabel(i18n("Mode: "), optionWidget);
     m_cmbComposite = new KisCmbComposite(optionWidget);
     updateCompositeOpComboBox();
-    connect(m_cmbComposite, SIGNAL(activated(const KoCompositeOp*)), this, SLOT(slotSetCompositeMode(const KoCompositeOp*)));
+    connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotSetCompositeMode(const KoCompositeOp*)));
 
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setMargin(0);
@@ -199,9 +199,9 @@ void KisToolPaint::slotSetOpacity(qreal opacityPerCent, bool final)
     m_opacity = (int)(opacityPerCent * OPACITY_OPAQUE / 100);
 }
 
-void KisToolPaint::slotSetCompositeMode(const KoCompositeOp* compositeOp)
+void KisToolPaint::slotSetCompositeMode(const QString& compositeOp)
 {
-    m_compositeOp = compositeOp;
+    m_compositeOp = currentNode()->paintDevice()->colorSpace()->compositeOp( compositeOp );
 }
 
 

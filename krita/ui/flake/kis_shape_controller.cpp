@@ -57,6 +57,8 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
 #include <KoDataCenter.h>
+#include <commands/kis_image_layer_add_command.h>
+#include <kis_undo_adapter.h>
 
 typedef QMap<KisNodeSP, KoShape*> KisNodeMap;
 
@@ -296,8 +298,8 @@ void KisShapeController::addShape(KoShape* shape)
                 // a signal that is caught by us (the document) and the
                 // layerbox and makes sure the new layer is in the
                 // layer-shape map and in the layerbox
+                m_d->image->undoAdapter()->addCommand( new KisImageLayerAddCommand( m_d->image, shapeLayer, m_d->image->rootLayer(), 0) );
 
-                m_d->image->addNode(shapeLayer, m_d->image->rootLayer());
                 if (canvas) {
                     canvas->view()->nodeManager()->activateNode(shapeLayer);
                 }

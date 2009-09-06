@@ -258,12 +258,8 @@ void KisQPainterCanvas::tabletEvent(QTabletEvent *e)
 {
     setFocus(Qt::OtherFocusReason);
     m_d->blockMouseEvent.start(100);
-    qreal subpixelX = e->hiResGlobalX();
-    subpixelX = subpixelX - ((int) subpixelX); // leave only part behind the dot
-    qreal subpixelY = e->hiResGlobalY();
-    subpixelY = subpixelY - ((int) subpixelY); // leave only part behind the dot
-    QPointF pos(e->x() + subpixelX + m_d->documentOffset.x() - m_d->origin.x(), e->y() + subpixelY + m_d->documentOffset.y() - m_d->origin.y());
-    m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(pos));
+    
+    m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument( e->hiResGlobalPos() - mapToGlobal(QPoint(0,0)) + m_d->documentOffset - m_d->origin ) );
 }
 
 void KisQPainterCanvas::wheelEvent(QWheelEvent *e)

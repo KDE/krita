@@ -162,6 +162,7 @@ void KisPainter::begin(KisPaintDeviceSP device, KisSelectionSP selection)
 
     if (d->transaction) {
         delete d->transaction;
+        d->transaction = 0;
     }
 
     d->device = device;

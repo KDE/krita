@@ -160,10 +160,8 @@ void KisPainter::begin(KisPaintDeviceSP device, KisSelectionSP selection)
     d->selection = selection;
     Q_ASSERT(device->colorSpace());
 
-    if (d->transaction) {
-        delete d->transaction;
-        d->transaction = 0;
-    }
+    delete d->transaction;
+    d->transaction = 0;
 
     d->device = device;
     d->colorSpace = device->colorSpace();
@@ -177,9 +175,7 @@ QUndoCommand *KisPainter::end()
 
 void KisPainter::beginTransaction(const QString& customName)
 {
-    if (d->transaction) {
-        delete d->transaction;
-    }
+    delete d->transaction;
     d->transaction = new KisTransaction(customName, d->device);
     Q_CHECK_PTR(d->transaction);
     d->device->connect(d->device.data(), SIGNAL(painterlyOverlayCreated()), d->transaction, SLOT(painterlyOverlayAdded()));
@@ -187,9 +183,7 @@ void KisPainter::beginTransaction(const QString& customName)
 
 void KisPainter::beginTransaction(KisTransaction* command)
 {
-    if (d->transaction) {
-        delete d->transaction;
-    }
+    delete d->transaction;
     d->transaction = command;
     d->device->connect(d->device.data(), SIGNAL(painterlyOverlayCreated()), d->transaction, SLOT(painterlyOverlayAdded()));
 }

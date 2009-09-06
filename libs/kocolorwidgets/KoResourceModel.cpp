@@ -19,6 +19,8 @@
 
 #include "KoResourceModel.h"
 
+#include <klocale.h>
+
 #include <KoResourceServerAdapter.h>
 #include <math.h>
 
@@ -60,7 +62,7 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
             if( ! resource )
                 return QVariant();
 
-            return QVariant( resource->name() );
+            return QVariant( i18n( resource->name().toUtf8().data() ) );
         }
         case Qt::DecorationRole:
         {

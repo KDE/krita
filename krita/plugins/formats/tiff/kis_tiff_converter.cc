@@ -606,7 +606,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP i
         TIFFSetField(image, TIFFTAG_ARTIST, author.toAscii().data());
     }
 
-    dbgFile << "xres: " << img->xRes()*72;
+    dbgFile << "xres: " << img->xRes()*72 << " yres: " << img->yRes()*72;
     TIFFSetField(image, TIFFTAG_XRESOLUTION, img->xRes()*72);
     TIFFSetField(image, TIFFTAG_YRESOLUTION, img->yRes()*72);
 

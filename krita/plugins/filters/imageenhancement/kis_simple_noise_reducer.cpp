@@ -51,7 +51,7 @@ KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* pare
     Q_UNUSED(dev);
     Q_UNUSED(image);
     vKisIntegerWidgetParam param;
-    param.push_back(KisIntegerWidgetParam(0, 255, 50, i18n("Threshold"), "threshold"));
+    param.push_back(KisIntegerWidgetParam(0, 255, 15, i18n("Threshold"), "threshold"));
     param.push_back(KisIntegerWidgetParam(0, 10, 1, i18n("Window size"), "windowsize"));
     return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
 }
@@ -59,7 +59,7 @@ KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* pare
 KisFilterConfiguration * KisSimpleNoiseReducer::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
-    config->setProperty("threshold", 50);
+    config->setProperty("threshold", 15);
     config->setProperty("windowsize", 1);
     return config;
 }
@@ -93,7 +93,7 @@ void KisSimpleNoiseReducer::process(KisConstProcessingInformation srcInfo,
     }
     int count = 0;
 
-    threshold = config->getInt("threshold", 50);
+    threshold = config->getInt("threshold", 15);
     windowsize = config->getInt("windowsize", 1);
 
     const KoColorSpace* cs = src->colorSpace();

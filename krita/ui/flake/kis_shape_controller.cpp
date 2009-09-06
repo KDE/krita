@@ -70,6 +70,7 @@ public:
     KisDoc2 * doc;
     KisNameServer * nameServer;
     QMap<QString, KoDataCenter *>  dataCenterMap;
+    bool selectionShapeToBeAdded;
     
     void removeShapeFromMap( KoShape* );
     void removeShapeAndChildrenFromMap( KoShape* );
@@ -110,6 +111,7 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
     m_d->doc = doc;
     m_d->nameServer = nameServer;
     m_d->image = 0;
+    m_d->selectionShapeToBeAdded = false;
     // Ask every shapefactory to populate the dataCenterMap
     QList<KoShapeFactory*> shapeFactories = KoShapeRegistry::instance()->values();
     foreach(KoShapeFactory* shapeFactory, shapeFactories) {
@@ -231,6 +233,11 @@ void KisShapeController::removeShape(KoShape* shape)
     m_d->doc->setModified(true);
 }
 
+void KisShapeController::prepareAddingSelectionShape()
+{
+    m_d->selectionShapeToBeAdded = true;
+}
+
 void KisShapeController::addShape(KoShape* shape)
 {
     if (!m_d->image) return;
@@ -247,20 +254,24 @@ void KisShapeController::addShape(KoShape* shape)
             shape->shapeId() != KIS_SHAPE_LAYER_ID  &&
             shape->shapeId() != KIS_LAYER_CONTAINER_ID ) {
 
-        // There's a selection active. that means that all shapes get added to the active selection,
-        // instead of to a shape layer or a newly created shape layer.
-        KisSelectionSP selection;
-        if (canvas && (selection = canvas->view()->selection())) {
-            if (!selection->shapeSelection()) {
-                selection->setShapeSelection(new KisShapeSelection(m_d->image, selection));
+        if (m_d->selectionShapeToBeAdded) {
+            // There's a selection active. that means that all shapes get added to the active selection,
+            // instead of to a shape layer or a newly created shape layer.
+            KisSelectionSP selection;
+            if (canvas && (selection = canvas->view()->selection())) {
+                if (!selection->shapeSelection()) {
+                    selection->setShapeSelection(new KisShapeSelection(m_d->image, selection));
+                }
+                KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
+                shapeSelection->addChild(shape);
+                /*
+                            foreach( KoView *view, m_d->doc->views() ) {
+                                KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
+                                canvas->globalShapeManager()->add(shape);
+                            }*/
             }
-            KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
-            shapeSelection->addChild(shape);
-            /*
-                        foreach( KoView *view, m_d->doc->views() ) {
-                            KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
-                            canvas->globalShapeManager()->add(shape);
-                        }*/
+            m_d->selectionShapeToBeAdded = false;
+
         } else {
             // An ordinary shape, if the active layer is a KisShapeLayer,
             // add it there, otherwise, create a new KisShapeLayer on top

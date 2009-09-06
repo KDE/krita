@@ -53,6 +53,8 @@ public:
     void setInitialShapeForView(KisView2 * view);
     virtual QMap<QString, KoDataCenter *> dataCenterMap() const;
 
+    // Prepares the shape controller to add the next shape to a shape selection
+    void prepareAddingSelectionShape();
 private:
 
     void addShape(KoShape* shape);

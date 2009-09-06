@@ -33,6 +33,7 @@
 #include "kis_selection_manager.h"
 #include "kis_selection_transaction.h"
 #include "commands/kis_selection_commands.h"
+#include "kis_shape_controller.h"
 
 KisSelectionToolHelper::KisSelectionToolHelper(KisCanvas2* canvas, KisNodeSP node, const QString& name)
         : m_canvas(canvas)
@@ -105,6 +106,11 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
     } else {
         shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
     }
+    KoShapeControllerBase* controller = m_canvas->view()->document()->shapeController();
+    KisShapeController* kiscontroller = dynamic_cast<KisShapeController*>(controller);
+    if(kiscontroller)
+        kiscontroller->prepareAddingSelectionShape();
+
     QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
     m_canvas->addCommand(cmd);
 

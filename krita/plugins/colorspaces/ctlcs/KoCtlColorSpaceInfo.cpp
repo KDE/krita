@@ -25,6 +25,7 @@
 #include <KoID.h>
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/Type.h>
+#include <klocale.h>
 
 #include "config-openctl910.h"
 #include "KoCtlAccumulator.h"
@@ -127,6 +128,10 @@ const QString& KoCtlColorSpaceInfo::fileName() const
     CHECK_AVAILABILITY(attributeName) \
     info->d->member = e.attribute(attributeName);
 
+#define FILL_CI_MEMBER_I18N(attributeName, member) \
+    CHECK_AVAILABILITY(attributeName) \
+    info->d->member = i18n(e.attribute(attributeName).toUtf8().data());
+
 bool KoCtlColorSpaceInfo::load()
 {
     QDomDocument doc;
@@ -166,7 +171,7 @@ bool KoCtlColorSpaceInfo::load()
                 d->referenceDepth = e.attribute("depth").toInt();
                 CHECK_AVAILABILITY("colorModelId");
                 CHECK_AVAILABILITY("colorModelName");
-                d->colorModelId = KoID(e.attribute("colorModelId"), e.attribute("colorModelName"));
+                d->colorModelId = KoID(e.attribute("colorModelId"), i18n(e.attribute("colorModelName").toUtf8().data()));
                 FILL_MEMBER("name", name);
                 FILL_MEMBER("id", id);
             } else if( e.tagName() == "defaultProfile" ) {
@@ -186,7 +191,7 @@ bool KoCtlColorSpaceInfo::load()
                         dbgPlugins << e.tagName();
                         if( e.tagName() != "channel") return false;
                         ChannelInfo* info = new ChannelInfo;
-                        FILL_CI_MEMBER("name", name);
+                        FILL_CI_MEMBER_I18N("name", name);
                         FILL_CI_MEMBER("shortName", shortName);
                         CHECK_AVAILABILITY("index");
                         info->d->index = e.attribute("index").toInt();

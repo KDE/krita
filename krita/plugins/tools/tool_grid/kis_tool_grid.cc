@@ -61,7 +61,7 @@ void KisToolGrid::deactivate()
 void KisToolGrid::mousePressEvent(KoPointerEvent *event)
 {
     m_dragging = true;
-    m_dragStart = event->pos();
+    m_dragStart = convertToPixelCoord(event);
     KisConfig cfg;
     if (event->modifiers() == Qt::ControlModifier) {
         m_currentMode = SCALE;
@@ -82,13 +82,13 @@ void KisToolGrid::mouseMoveEvent(KoPointerEvent *event)
     if (m_dragging) {
         KisConfig cfg;
         int subdivisions = cfg.getGridSubdivisions();
-        m_dragEnd = event->pos();
+        m_dragEnd = convertToPixelCoord(event);
         if (m_currentMode == TRANSLATION) {
-            QPoint newoffset = m_initialOffset + viewToPixel(m_dragEnd - m_dragStart).toPoint();
+            QPoint newoffset = m_initialOffset + (m_dragEnd - m_dragStart).toPoint();
             cfg.setGridOffsetX(newoffset.x() % (cfg.getGridHSpacing() * subdivisions));
             cfg.setGridOffsetY(newoffset.y() % (cfg.getGridVSpacing() * subdivisions));
         } else { // SCALE
-            QPoint newSize = m_initialSpacing + viewToPixel(m_dragEnd - m_dragStart).toPoint();
+            QPoint newSize = m_initialSpacing + (m_dragEnd - m_dragStart).toPoint();
             if (newSize.x() >= 1) cfg.setGridHSpacing(newSize.x());
             if (newSize.y() >= 1) cfg.setGridVSpacing(newSize.y());
         }

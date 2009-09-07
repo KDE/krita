@@ -46,7 +46,8 @@ public:
     void redo();
     void undo();
     void undoNoUpdate();
-
+protected:
+    KisLayerSP layer();
 private:
     KisLayerSP m_layer;
     KisTransaction *m_selTransaction;

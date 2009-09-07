@@ -93,3 +93,8 @@ void KisSelectedTransaction::undoNoUpdate()
 //     else
 //         m_device->deselect();
 }
+
+KisLayerSP KisSelectedTransaction::layer()
+{
+    return m_layer;
+}

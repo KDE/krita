@@ -83,7 +83,7 @@ public:
     virtual void undo();
     void transformArgs(double &sx, double &sy, QPointF &translate, double &a) const;
     KisSelectionSP origSelection(QPoint &startPos, QPoint &endPos) const;
-
+    void setNewPosition(int x, int y);
 private:
     double m_scaleX;
     double m_scaleY;
@@ -93,6 +93,7 @@ private:
     KisSelectionSP m_origSelection;
     QPoint m_originalTopLeft;
     QPoint m_originalBottomRight;
+    QPoint m_newPosition;
 };
 
 TransformCmd::TransformCmd(KisToolTransform *tool, KisNodeSP node, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint originalTopLeft, QPoint originalBottomRight)
@@ -130,12 +131,21 @@ KisSelectionSP TransformCmd::origSelection(QPoint &originalTopLeft, QPoint &orig
 void TransformCmd::redo()
 {
     KisSelectedTransaction::redo();
+    layer()->paintDevice()->move( m_newPosition );
 }
 
 void TransformCmd::undo()
 {
     KisSelectedTransaction::undo();
+    layer()->paintDevice()->move(m_originalTopLeft);
 }
+
+void TransformCmd::setNewPosition(int x, int y)
+{
+    m_newPosition.setX(x);
+    m_newPosition.setY(y);
+}
+
 }
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
@@ -181,10 +191,10 @@ void KisToolTransform::activate(bool temporary)
     if (currentNode() && currentNode()->paintDevice()) {
         image()->undoAdapter()->setCommandHistoryListener( this );
 
-        TransformCmd * cmd = 0;
+        const TransformCmd * cmd = 0;
 
         if (image()->undoAdapter()->presentCommand())
-            cmd = dynamic_cast<TransformCmd*>(image()->undoAdapter()->presentCommand());
+            cmd = dynamic_cast<const TransformCmd*>(image()->undoAdapter()->presentCommand());
 
         if (cmd == 0) {
             initHandles();
@@ -741,6 +751,7 @@ void KisToolTransform::transform()
     // and the transformed state from the original device we cached in our activated()
     // method.
     if (transaction) {
+        transaction->setNewPosition( currentNode()->paintDevice()->x(), currentNode()->paintDevice()->y() );
         if (image()->undo())
             image()->undoAdapter()->addCommand(transaction);
         else

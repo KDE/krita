@@ -120,23 +120,23 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
         m_dragging = true;
 
         if (m_points.isEmpty()) {
-            m_dragStart = event->pos();
-            m_dragEnd = event->pos();
+            m_dragStart = event->point;
+            m_dragEnd = event->point;
             m_points.append(m_dragStart);
             m_hasMoveAfterFirstTime = false;
         } else {
             m_dragStart = m_dragEnd;
-            m_dragEnd = event->pos();
+            m_dragEnd = event->point;
             m_hasMoveAfterFirstTime = true;
         }
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
     } else if (m_mode == MODE_EDITING && event->button() == Qt::LeftButton) {
         // Look for the handle which was pressed
-        QPointF mousep = event->pos();
+        QPointF mousep = m_canvas->viewConverter()->documentToView(event->point);
         for (QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it) {
             KisSubPerspectiveGrid* grid = *it;
             QPointF gridCenter = grid->center();
-            dbgKrita << "click at " << event->pos() << " top left at " << *grid->topLeft();
+            dbgKrita << "click at " << event->point << " top left at " << *grid->topLeft();
             if (m_selectedNode1 = nodeNearPoint(grid, mousep)) {
                 m_mode = MODE_DRAGING_NODE;
                 break;
@@ -146,7 +146,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 m_selectedNode1 = new KisPerspectiveGridNode(*grid->topLeft());
                 m_selectedNode2 = new KisPerspectiveGridNode(*grid->bottomLeft());
                 KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid(m_selectedNode1, grid->topLeft() , grid->bottomLeft(), m_selectedNode2);
-                m_dragEnd = event->pos();
+                m_dragEnd = convertToPixelCoord(event->point);
                 pGrid->addNewSubGrid(newsubgrid);
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
@@ -156,7 +156,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 m_selectedNode1 = new KisPerspectiveGridNode(*grid->topRight());
                 m_selectedNode2 = new KisPerspectiveGridNode(*grid->bottomRight());
                 KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid(grid->topRight(), m_selectedNode1, m_selectedNode2, grid->bottomRight());
-                m_dragEnd = event->pos();
+                m_dragEnd = convertToPixelCoord(event->point);
                 pGrid->addNewSubGrid(newsubgrid);
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
@@ -166,7 +166,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 m_selectedNode1 = new KisPerspectiveGridNode(*grid->topLeft());
                 m_selectedNode2 = new KisPerspectiveGridNode(*grid->topRight());
                 KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid(m_selectedNode1, m_selectedNode2,  grid->topRight(), grid->topLeft());
-                m_dragEnd = event->pos();
+                m_dragEnd = convertToPixelCoord(event->point);
                 pGrid->addNewSubGrid(newsubgrid);
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
@@ -176,7 +176,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 m_selectedNode1 = new KisPerspectiveGridNode(*grid->bottomLeft());
                 m_selectedNode2 = new KisPerspectiveGridNode(*grid->bottomRight());
                 KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid(grid->bottomLeft(), grid->bottomRight(), m_selectedNode2, m_selectedNode1);
-                m_dragEnd = event->pos();
+                m_dragEnd = convertToPixelCoord(event->point);
                 pGrid->addNewSubGrid(newsubgrid);
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 break;
@@ -200,28 +200,28 @@ void KisToolPerspectiveGrid::mouseMoveEvent(KoPointerEvent *event)
     if (m_mode == MODE_CREATION) {
         if (m_dragging) {
             // get current mouse position
-            m_dragEnd = event->pos();
+            m_dragEnd = event->point;
             // draw new lines on canvas
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
             m_hasMoveAfterFirstTime = true;
         }
     } else {
         if (m_mode == MODE_DRAGING_NODE) {
-            QPointF pos = viewToPixel(event->pos());
+            QPointF pos = convertToPixelCoord(event);
             m_selectedNode1->setX(pos.x());
             m_selectedNode1->setY(pos.y());
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
         }
         if (m_mode == MODE_DRAGING_TRANSLATING_TWONODES) {
-            QPointF translate = event->pos() - m_dragEnd;
-            m_dragEnd = event->pos();
+            QPointF translate = convertToPixelCoord(event->point) - m_dragEnd;
+            m_dragEnd = convertToPixelCoord(event->point);
             *m_selectedNode1 += translate;;
             *m_selectedNode2 += translate;;
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
         }
     }
     bool wasHiglightedNode = m_higlightedNode != 0;
-    QPointF mousep = event->pos();
+    QPointF mousep = m_canvas->viewConverter()->documentToView(event->point);
     KisPerspectiveGrid* pGrid = m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid();
     for (QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it) {
         KisSubPerspectiveGrid* grid = *it;
@@ -248,10 +248,10 @@ void KisToolPerspectiveGrid::mouseReleaseEvent(KoPointerEvent *event)
             if (m_points.size() == 4) { // wow we have a grid, isn't that cool ?
                 m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid()->addNewSubGrid(
                     new KisSubPerspectiveGrid(
-                        KisPerspectiveGridNodeSP(new KisPerspectiveGridNode(viewToPixel(m_points[0]))),
-                        KisPerspectiveGridNodeSP(new KisPerspectiveGridNode(viewToPixel(m_points[1]))),
-                        KisPerspectiveGridNodeSP(new KisPerspectiveGridNode(viewToPixel(m_points[2]))),
-                        KisPerspectiveGridNodeSP(new KisPerspectiveGridNode(viewToPixel(m_points[3])))));
+                        new KisPerspectiveGridNode(convertToPixelCoord(m_points[0])),
+                        new KisPerspectiveGridNode(convertToPixelCoord(m_points[1])),
+                        new KisPerspectiveGridNode(convertToPixelCoord(m_points[2])),
+                        new KisPerspectiveGridNode(convertToPixelCoord(m_points[3]))));
                 m_canvas->view()->perspectiveGridManager()->setVisible(true);
                 m_mode = MODE_EDITING;
             }
@@ -296,16 +296,16 @@ void KisToolPerspectiveGrid::drawGridCreation(QPainter& gc)
     QPointF endPos;
 
     if (m_dragging) {
-        startPos = m_dragStart.toPoint();
-        endPos = m_dragEnd.toPoint();
+        startPos = m_canvas->viewConverter()->documentToView(m_dragStart.toPoint());
+        endPos = m_canvas->viewConverter()->documentToView(m_dragEnd.toPoint());
         gc.drawLine(startPos, endPos);
     } else {
         for (QPointFVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
             if (it == m_points.begin()) {
-                start = (*it);
+                start = m_canvas->viewConverter()->documentToView(*it);
             } else {
-                end = (*it);
+                end = m_canvas->viewConverter()->documentToView(*it);
 
                 startPos = start;
                 endPos = end;

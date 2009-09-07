@@ -172,7 +172,7 @@ bool Layout::addLine(QTextLine &line)
         else if (!m_isRtl && x() < line.x()) {// move the counter more left.
             m_blockData->setCounterPosition(m_blockData->counterPosition() + QPointF(line.x() - x(), 0));
         } else if (m_isRtl && x() + width() > line.x() + line.width() + 0.1) { // 0.1 to account for qfixed rounding
-           const qreal newX = line.x() + line.width() - m_blockData->counterWidth();
+           const qreal newX = line.x() + line.width() + m_blockData->counterSpacing();
            m_blockData->setCounterPosition(QPointF(newX, m_blockData->counterPosition().y()));
         }
     }
@@ -503,7 +503,7 @@ bool Layout::nextParag()
         // Also after we account for indents etc so the y() pos is correct.
         if (m_isRtl)
             m_blockData->setCounterPosition(QPointF(shape->size().width() - m_borderInsets.right -
-                        m_blockData->counterWidth() - m_shapeBorder.right - m_format.leftMargin() - listIndent(), y()));
+                        m_blockData->counterWidth() - m_shapeBorder.right - m_format.leftMargin(), y()));
         else
             m_blockData->setCounterPosition(QPointF(m_borderInsets.left + m_shapeBorder.left +
                                                     m_format.textIndent() + m_format.leftMargin() +

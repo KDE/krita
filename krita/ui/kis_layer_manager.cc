@@ -1019,7 +1019,8 @@ void KisLayerManager::saveLayerAsImage()
     KisDoc2 d;
     d.prepareForImport();
 
-    KisImageSP dst = KisImageSP(new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name()));
+    KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name());
+    dst->setResolution(img->xRes(), img->yRes());
     d.setCurrentImage(dst);
     dst->addNode(l->clone(), dst->rootLayer(), KisLayerSP(0));
 

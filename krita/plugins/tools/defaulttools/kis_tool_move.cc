@@ -229,7 +229,8 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
                 Q_CHECK_PTR(cmd);
 
                 m_canvas->addCommand(cmd);
-            }
+                currentImage()->undoAdapter()->endMacro();
+             }
             currentImage()->setModified();
         }
     }

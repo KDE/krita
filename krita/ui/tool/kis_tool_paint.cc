@@ -132,7 +132,7 @@ QWidget * KisToolPaint::createOptionWidget()
 
     QWidget * optionWidget = new QWidget();
     optionWidget->setObjectName(toolId());
-    
+
     m_lbOpacity = new QLabel(i18n("Opacity: "), optionWidget);
     m_slOpacity = new KoSliderCombo(optionWidget);
     m_slOpacity->setMinimum(0);
@@ -144,9 +144,10 @@ QWidget * KisToolPaint::createOptionWidget()
     m_lbComposite = new QLabel(i18n("Mode: "), optionWidget);
     m_cmbComposite = new KisCmbComposite(optionWidget);
     updateCompositeOpComboBox();
-    connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotSetCompositeMode(const KoCompositeOp*)));
+    connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotSetCompositeMode(const QString&)));
 
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
+    verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
     verticalLayout->setMargin(0);
     verticalLayout->setSpacing(3);
 

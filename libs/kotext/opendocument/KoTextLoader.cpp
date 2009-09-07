@@ -307,15 +307,15 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                     int columnsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-columns-spanned", "1").toInt();
                                                     spanStore.append(QRect(currentCell, currentRow, columnsSpanned, rowsSpanned));
 
-                                                    QString cellStyleName = rowTag.attributeNS(KoXmlNS::table, "style-name", "");
-                                                    if (!cellStyleName.isEmpty()) {
-                                                        KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(cellStyleName, d->stylesDotXml);
-                                                        QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                                                        cellStyle->applyStyle(cellFormat);
-                                                        cell.setFormat(cellFormat);
-                                                    }
-
                                                     if (cell.isValid()) {
+                                                        QString cellStyleName = rowTag.attributeNS(KoXmlNS::table, "style-name", "");
+                                                        if (!cellStyleName.isEmpty()) {
+                                                            KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(cellStyleName, d->stylesDotXml);
+                                                            QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+                                                            cellStyle->applyStyle(cellFormat);
+                                                            cell.setFormat(cellFormat);
+                                                        }
+
                                                         cursor = cell.firstCursorPosition();
                                                         loadBody(rowTag, cursor);
                                                     } else

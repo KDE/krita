@@ -20,6 +20,7 @@
 
 
 #include "KoDocument.h"
+#include <KoUndoStack.h>
 
 KisUndoAdapter::KisUndoAdapter(KoDocument* doc): m_doc(doc)
 {
@@ -42,7 +43,7 @@ void KisUndoAdapter::removeCommandHistoryListener(KisCommandHistoryListener * l)
         m_undoListeners.remove(index);
 }
 
-void KisUndoAdapter::notifyCommandExecuted(QUndoCommand *command)
+void KisUndoAdapter::notifyCommandExecuted(const QUndoCommand *command)
 {
     foreach(KisCommandHistoryListener*  l, m_undoListeners) {
         l->notifyCommandExecuted(command);
@@ -50,14 +51,17 @@ void KisUndoAdapter::notifyCommandExecuted(QUndoCommand *command)
 
 }
 
-QUndoCommand * KisUndoAdapter::presentCommand()
+const QUndoCommand * KisUndoAdapter::presentCommand()
 {
-    return 0;
+    return m_doc->undoStack()->command(m_doc->undoStack()->index() - 1);
 }
 
 void KisUndoAdapter::addCommand(QUndoCommand *command)
 {
     m_doc->addCommand(command);
+    foreach(KisCommandHistoryListener*  l, m_undoListeners) {
+        l->notifyCommandAdded(command);
+    }
 }
 
 void KisUndoAdapter::setUndo(bool undo)

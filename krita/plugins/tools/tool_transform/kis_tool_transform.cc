@@ -81,8 +81,8 @@ public:
 public:
     virtual void redo();
     virtual void undo();
-    void transformArgs(double &sx, double &sy, QPointF &translate, double &a);
-    KisSelectionSP origSelection(QPoint &startPos, QPoint &endPos);
+    void transformArgs(double &sx, double &sy, QPointF &translate, double &a) const;
+    KisSelectionSP origSelection(QPoint &startPos, QPoint &endPos) const;
 
 private:
     double m_scaleX;
@@ -112,7 +112,7 @@ TransformCmd::~TransformCmd()
 {
 }
 
-void TransformCmd::transformArgs(double &sx, double &sy, QPointF &translate, double &a)
+void TransformCmd::transformArgs(double &sx, double &sy, QPointF &translate, double &a) const
 {
     sx = m_scaleX;
     sy = m_scaleY;
@@ -120,7 +120,7 @@ void TransformCmd::transformArgs(double &sx, double &sy, QPointF &translate, dou
     a = m_a;
 }
 
-KisSelectionSP TransformCmd::origSelection(QPoint &originalTopLeft, QPoint &originalBottomRight)
+KisSelectionSP TransformCmd::origSelection(QPoint &originalTopLeft, QPoint &originalBottomRight) const
 {
     originalTopLeft = m_originalTopLeft;
     originalBottomRight = m_originalBottomRight;
@@ -179,8 +179,7 @@ void KisToolTransform::activate(bool temporary)
     Q_UNUSED(temporary);
 
     if (currentNode() && currentNode()->paintDevice()) {
-        //connect(m_subject, commandExecuted(K3Command *c), this, notifyCommandAdded( KCommand * c));
-        //m_subject->undoAdapter()->setCommandHistoryListener( this );
+        image()->undoAdapter()->setCommandHistoryListener( this );
 
         TransformCmd * cmd = 0;
 
@@ -749,9 +748,9 @@ void KisToolTransform::transform()
     }
 }
 
-void KisToolTransform::notifyCommandAdded(QUndoCommand * command)
+void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)
 {
-    TransformCmd * cmd = dynamic_cast<TransformCmd*>(command);
+    const TransformCmd * cmd = dynamic_cast<const TransformCmd*>(command);
     if (cmd == 0) {
         // The last added command wasn't one of ours;
         // we should reset to the new state of the canvas.
@@ -760,13 +759,13 @@ void KisToolTransform::notifyCommandAdded(QUndoCommand * command)
     }
 }
 
-void KisToolTransform::notifyCommandExecuted(QUndoCommand * command)
+void KisToolTransform::notifyCommandExecuted(const QUndoCommand * command)
 {
     Q_UNUSED(command);
-    TransformCmd * cmd = 0;
+    const TransformCmd * cmd = 0;
 
     if (image()->undoAdapter()->presentCommand())
-        cmd = dynamic_cast<TransformCmd*>(image()->undoAdapter()->presentCommand());
+        cmd = dynamic_cast<const TransformCmd*>(image()->undoAdapter()->presentCommand());
 
     if (cmd == 0) {
         // The command now on the top of the stack isn't one of ours

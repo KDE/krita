@@ -41,8 +41,8 @@ public:
 
     KisCommandHistoryListener() {}
     virtual ~KisCommandHistoryListener() {}
-    virtual void notifyCommandAdded(QUndoCommand * cmd) = 0;
-    virtual void notifyCommandExecuted(QUndoCommand * cmd) = 0;
+    virtual void notifyCommandAdded(const QUndoCommand * cmd) = 0;
+    virtual void notifyCommandExecuted(const QUndoCommand * cmd) = 0;
 };
 
 class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject
@@ -57,9 +57,9 @@ public:
 
     virtual void setCommandHistoryListener(KisCommandHistoryListener * l);
     virtual void removeCommandHistoryListener(KisCommandHistoryListener * l);
-    virtual void notifyCommandExecuted(QUndoCommand *command);
+    virtual void notifyCommandExecuted(const QUndoCommand *command);
 
-    virtual QUndoCommand * presentCommand();
+    virtual const QUndoCommand * presentCommand();
     virtual void addCommand(QUndoCommand *cmd);
     virtual void setUndo(bool undo);
     virtual bool undo() const;

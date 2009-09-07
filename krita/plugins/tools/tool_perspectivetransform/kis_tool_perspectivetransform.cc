@@ -556,7 +556,7 @@ void KisToolPerspectiveTransform::transform()
     }
 }
 
-void KisToolPerspectiveTransform::notifyCommandAdded(K3Command * command)
+void KisToolPerspectiveTransform::notifyCommandAdded(const QUndoCommand * command)
 {
     PerspectiveTransformCmd * cmd = dynamic_cast<PerspectiveTransformCmd*>(command);
     if (cmd == 0) {
@@ -567,7 +567,7 @@ void KisToolPerspectiveTransform::notifyCommandAdded(K3Command * command)
     }
 }
 
-void KisToolPerspectiveTransform::notifyCommandExecuted(K3Command * command)
+void KisToolPerspectiveTransform::notifyCommandExecuted(const QUndoCommand * command)
 {
     Q_UNUSED(command);
     PerspectiveTransformCmd * cmd = 0;

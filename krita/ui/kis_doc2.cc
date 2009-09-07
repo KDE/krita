@@ -85,6 +85,8 @@
 #include "kis_node_model.h"
 #include "kra/kis_kra_loader.h"
 #include "kra/kis_kra_saver.h"
+#include <KoUndoStack.h>
+#include <KoUndoStack.h>
 
 static const char *CURRENT_DTD_VERSION = "2.0";
 
@@ -128,6 +130,7 @@ public:
 
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
+    
 };
 
 
@@ -183,6 +186,7 @@ bool KisDoc2::init()
     }
 
     m_d->undoAdapter = new KisUndoAdapter(this);
+    connect(undoStack(), SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
     Q_CHECK_PTR(m_d->undoAdapter);
 
     setUndo(true);
@@ -560,4 +564,12 @@ KisUndoAdapter* KisDoc2::undoAdapter() const
 {
     return m_d->undoAdapter;
 }
+
+void KisDoc2::undoIndexChanged(int idx)
+{
+    m_d->undoAdapter->notifyCommandExecuted(undoStack()->command(idx));
+}
+
+
 #include "kis_doc2.moc"
+

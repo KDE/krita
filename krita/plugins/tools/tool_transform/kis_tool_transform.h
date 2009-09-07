@@ -71,8 +71,8 @@ public:
 
 public:
 
-    void notifyCommandAdded(QUndoCommand *);
-    void notifyCommandExecuted(QUndoCommand *);
+    void notifyCommandAdded(const QUndoCommand *);
+    void notifyCommandExecuted(const QUndoCommand *);
 
 public slots:
     virtual void activate(bool temporary);

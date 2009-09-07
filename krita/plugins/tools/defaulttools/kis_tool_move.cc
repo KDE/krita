@@ -44,6 +44,8 @@
 #include "kis_group_layer.h"
 #include "kis_types.h"
 #include "kis_painter.h"
+#include <commands/kis_image_layer_add_command.h>
+#include <kis_transaction.h>
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
@@ -169,6 +171,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
                 gc.end();
 
                 // clear the old layer
+                currentImage()->undoAdapter()->addCommand( new KisTransaction("cut", oldLayer->paintDevice()) );
                 oldLayer->paintDevice()->clearSelection(m_selection);
 
                 // XXX: clear away the selection???
@@ -179,7 +182,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
                                                         oldLayer->opacity(),
                                                         dev);
                 layer->setTemporary(true);
-                currentImage()->addNode(layer, node->parent(), node);
+                currentImage()->undoAdapter()->addCommand( new KisImageLayerAddCommand( currentImage(), layer, node->parent(), node ) );
 
                 m_targetLayer = node;
                 m_selectedNode = layer;

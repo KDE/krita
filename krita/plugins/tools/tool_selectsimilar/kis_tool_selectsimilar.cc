@@ -238,7 +238,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
-
+    m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
     return m_optWidget;
 }
 

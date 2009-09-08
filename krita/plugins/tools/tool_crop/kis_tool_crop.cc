@@ -600,6 +600,8 @@ QWidget* KisToolCrop::createOptionWidget()
     connect(m_optWidget->intHeight, SIGNAL(valueChanged(int)), this, SLOT(setCropHeight(int)));
     connect(m_optWidget->doubleRatio, SIGNAL(valueChanged(double)), this, SLOT(setRatio(double)));
 
+    m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
+    
     return m_optWidget;
 }
 

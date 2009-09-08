@@ -243,13 +243,12 @@ QWidget* KisToolSelectElliptical::createOptionWidget()
     connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
     connect(m_optWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
 
-
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);
     if (l) {
         l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
     }
-
+    m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
     return m_optWidget;
 }
 

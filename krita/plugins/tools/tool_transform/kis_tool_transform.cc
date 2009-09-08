@@ -826,6 +826,7 @@ QWidget* KisToolTransform::createOptionWidget()
     m_optWidget->textLabel2->hide();
     m_optWidget->textLabel3->hide();
     m_optWidget->textLabel4->hide();
+    m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
     return m_optWidget;
 }
 

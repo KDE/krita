@@ -224,7 +224,9 @@ QWidget* KisToolFill::createOptionWidget()
     addOptionWidgetOption(m_checkFillSelection);
     addOptionWidgetOption(m_checkSampleMerged);
     addOptionWidgetOption(m_checkUsePattern);
-
+    
+    widget->setFixedHeight(widget->sizeHint().height());
+    
     return widget;
 }
 

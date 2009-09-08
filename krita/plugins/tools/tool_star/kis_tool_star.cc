@@ -231,7 +231,7 @@ QWidget* KisToolStar::createOptionWidget()
     KisToolShape::addOptionWidgetLayout(optionLayout);
 
     optionLayout->addWidget(m_optWidget, 0, 0);
-
+    widget->setFixedHeight(widget->sizeHint().height());
     return widget;
 }
 

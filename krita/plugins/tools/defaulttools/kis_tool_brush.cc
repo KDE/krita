@@ -201,6 +201,9 @@ QWidget * KisToolBrush::createOptionWidget()
     m_optionLayout->addWidget(m_chkAssistant, 4, 0);
     m_optionLayout->addWidget(labelMagnetism, 5, 0);
     m_optionLayout->addWidget(m_sliderMagnetism, 5, 1, 1, 2);
+    
+    optionWidget->setFixedHeight(optionWidget->sizeHint().height());
+    
     return optionWidget;
 }
 

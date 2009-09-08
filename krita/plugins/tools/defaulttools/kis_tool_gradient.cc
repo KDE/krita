@@ -380,7 +380,7 @@ QWidget* KisToolGradient::createOptionWidget()
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
 #endif
-
+    widget->setFixedHeight(widget->sizeHint().height());
     return widget;
 }
 

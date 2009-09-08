@@ -176,7 +176,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
         l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
     }
-
+    m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
     return m_optWidget;
 }
 

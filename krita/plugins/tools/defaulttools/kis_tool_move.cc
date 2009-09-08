@@ -268,6 +268,7 @@ void KisToolMove::drag(const QPoint& original)
 QWidget* KisToolMove::createOptionWidget()
 {
     m_optionsWidget = new MoveToolOptionsWidget(0);
+    m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
     return m_optionsWidget;
 }
 

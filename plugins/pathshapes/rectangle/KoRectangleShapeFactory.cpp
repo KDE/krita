@@ -28,7 +28,7 @@
 #include <klocale.h>
 
 KoRectangleShapeFactory::KoRectangleShapeFactory( QObject *parent )
-: KoShapeFactory( parent, KoRectangleShapeId, i18n( "A rectangle shape" ) )
+: KoShapeFactory( parent, KoRectangleShapeId, i18n( "Rectangle" ) )
 {
     setToolTip( i18n( "A rectangle" ) );
     setIcon("rectangle-shape");

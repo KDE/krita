@@ -36,7 +36,6 @@
 #include <kparts/event.h>
 #include <kstatusbar.h>
 #include <kdebug.h>
-#include <kconfiggroup.h>
 #include <QTimer>
 #include <QtGui/QDockWidget>
 #include <QToolBar>

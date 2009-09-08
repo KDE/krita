@@ -105,6 +105,7 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
 
 #endif
 
+
     bool hasSelection = srcInfo.selection();
 
 // Method two: check the number of consecutive pixels the iterators
@@ -113,8 +114,8 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
 // quite a bit speedier, with the speed improvement more noticeable
 // the less happens inside the color transformation.
 
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
 
     for (int row = 0; row < size.height(); ++row) {
         while (! srcIt.isDone()) {
@@ -123,19 +124,24 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
             int conseqPixels = qMin(srcItConseq, dstItConseq);
 
             int pixels = 0;
+            int pixelsSrc = 0;
 
             if (hasSelection) {
                 // Get largest horizontal row of selected pixels
-
+                const quint8* oldRawData = srcIt.oldRawData();
                 while (srcIt.isSelected() && pixels < conseqPixels) {
                     ++pixels;
+                    ++srcIt;
+                    ++pixelsSrc;
                 }
-                inverter->transform(srcIt.oldRawData(), dstIt.rawData(), pixels);
+                inverter->transform(oldRawData, dstIt.rawData(), pixels);
 
                 // We apparently found a non-selected pixels, or the row
                 // was done; get the stretch of non-selected pixels
                 while (!srcIt.isSelected() && pixels < conseqPixels) {
                     ++ pixels;
+                    ++srcIt;
+                    ++pixelsSrc;
                 }
             } else {
                 pixels = conseqPixels;
@@ -143,7 +149,7 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
             }
 
             // Update progress
-            srcIt += pixels;
+            srcIt += (pixels - pixelsSrc);
             dstIt += pixels;
         }
         srcIt.nextRow();

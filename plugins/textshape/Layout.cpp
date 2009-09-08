@@ -301,6 +301,7 @@ extern int qt_defaultDpiX();
 
 bool Layout::nextParag()
 {
+    Q_ASSERT(shape);
     m_inlineObjectHeights.clear();
     if (layout && !m_restartingFirstCellAfterTableBreak) { // guard against first time or first time after table relayout
         layout->endLayout();

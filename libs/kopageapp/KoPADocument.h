@@ -309,6 +309,9 @@ protected:
     /// Save the configuration
     void saveConfig();
 
+    /// set the page count so it gets shown correctly in variables
+    void updatePageCount();
+
 private:
     class Private;
     Private * const d;

@@ -153,6 +153,8 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
         setActionEnabled( KoPAView::ActionDeletePage, false );
     }
 
+    updatePageCount();
+
     emit sigProgress( -1 );
     return true;
 }
@@ -570,6 +572,7 @@ void KoPADocument::insertPage( KoPAPageBase* page, int index )
     }
 
     pages.insert( index, page );
+    updatePageCount();
 
     setActionEnabled( KoPAView::ActionDeletePage, pages.size() > 1 );
 
@@ -595,6 +598,7 @@ void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
     }
 
     pages.insert( index, page );
+    updatePageCount();
 
     setActionEnabled( KoPAView::ActionDeletePage, pages.size() > 1 );
 
@@ -625,6 +629,7 @@ int KoPADocument::takePage( KoPAPageBase *page )
                 kopaView->updateActivePage( newActivePage );
             }
         }
+        updatePageCount();
     }
 
     if ( pages.size() == 1 ) {
@@ -738,10 +743,18 @@ bool KoPADocument::rulersVisible() const
     return d->rulersVisible;
 }
 
-
 int KoPADocument::pageCount() const
 {
     return d->pages.count();
+}
+
+void KoPADocument::updatePageCount()
+{
+    KoInlineTextObjectManager * om = dynamic_cast<KoInlineTextObjectManager*>( dataCenterMap()["InlineTextObjectManager"] );
+
+    if ( om ) {
+        om->setProperty( KoInlineObject::PageCount, pageCount() );
+    }
 }
 
 void KoPADocument::insertIntoDataCenterMap(QString key, KoDataCenter *dc)

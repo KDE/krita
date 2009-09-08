@@ -762,7 +762,7 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
     // The fo:color attribute specifies the foreground color of text.
     if (styleStack.hasProperty(KoXmlNS::fo, "color")) {     // 3.10.3
-        if (styleStack.property(KoXmlNS::style, "use-window-font-color") != "true") {
+        if (styleStack.property(KoXmlNS::style, "use-window-font-color") == "true") {
             QColor color(styleStack.property(KoXmlNS::fo, "color"));   // #rrggbb format
             if (color.isValid()) {
                 setForeground(QBrush(color));

@@ -187,7 +187,9 @@ const QPoint & KoPACanvas::documentOffset() const
 
 void KoPACanvas::paintEvent( QPaintEvent *event )
 {
-    d->view->viewMode()->paintEvent( this, event );
+    if (d->view->activePage()) {
+        d->view->viewMode()->paintEvent( this, event );
+    }
 }
 
 void KoPACanvas::tabletEvent( QTabletEvent *event )

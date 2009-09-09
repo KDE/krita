@@ -310,9 +310,10 @@ void TableLayout::layoutRow(int row)
 
 void TableLayout::drawBackground(QPainter *painter) const
 {
-    if(m_tableLayoutData->m_tableRects.isEmpty())
+    if (m_tableLayoutData->m_tableRects.isEmpty()) {
         return;
-
+    }
+    
     painter->save();
 
     // Draw table background.
@@ -343,8 +344,9 @@ void TableLayout::drawBackground(QPainter *painter) const
 
 void TableLayout::drawBorders(QPainter *painter) const
 {
-    if(m_tableLayoutData->m_tableRects.isEmpty())
+    if (m_tableLayoutData->m_tableRects.isEmpty()) {
         return;
+    }
 
     painter->save();
     

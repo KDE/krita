@@ -69,7 +69,14 @@ public:
     double height() const;
 
 protected:
-    struct Private;
+    struct Private {
+        double m_radius, m_ratio;
+        double m_fh, m_fv;
+        int m_spikes;
+        double cs, ss;
+        bool m_empty;
+    };
+
     Private* const d;
 };
 

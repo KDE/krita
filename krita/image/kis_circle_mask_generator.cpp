@@ -21,6 +21,11 @@
 #include <math.h>
 #include <QDomDocument>
 
+struct KisCircleMaskGenerator::Private {
+    double m_xcoef, m_ycoef;
+    double m_xfadecoef, m_yfadecoef;
+};
+
 KisCircleMaskGenerator::KisCircleMaskGenerator(double w, double h, double fh, double fv)
         : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv), d(new Private)
 {

@@ -26,14 +26,6 @@
 #include "kis_circle_mask_generator.h"
 #include "kis_rect_mask_generator.h"
 
-struct KisMaskGenerator::Private {
-    double m_radius, m_ratio;
-    double m_fh, m_fv;
-    int m_spikes;
-    double cs, ss;
-    bool m_empty;
-};
-
 KisMaskGenerator::KisMaskGenerator(double width, double height, double fh, double fv) : d(new Private)
 {
     d->m_radius = width;

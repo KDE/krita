@@ -49,7 +49,7 @@ public:
     /**
      * @return the alpha value at the position (x,y)
      */
-    virtual quint8 valueAt(double x, double y) = 0;
+    virtual quint8 valueAt(double x, double y) const = 0;
 
     quint8 interpolatedValueAt(double x, double y);
 
@@ -81,13 +81,13 @@ public:
     KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
     virtual ~KisCircleMaskGenerator();
 
-    virtual quint8 valueAt(double x, double y);
+    virtual quint8 valueAt(double x, double y) const;
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
 private:
 
-    double norme(double a, double b) {
+    double norme(double a, double b) const {
         return a*a + b * b;
     }
 
@@ -108,7 +108,7 @@ public:
     KisRectangleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
     virtual ~KisRectangleMaskGenerator();
 
-    virtual quint8 valueAt(double x, double y);
+    virtual quint8 valueAt(double x, double y) const;
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
 

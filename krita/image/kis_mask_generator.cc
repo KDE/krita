@@ -161,12 +161,12 @@ KisCircleMaskGenerator::~KisCircleMaskGenerator()
     delete d;
 }
 
-quint8 KisCircleMaskGenerator::valueAt(double x, double y)
+quint8 KisCircleMaskGenerator::valueAt(double x, double y) const
 {
     if( KisMaskGenerator::d->m_empty ) return 255;
     double xr = (x /*- m_xcenter*/);
     double yr = fabs(y /*- m_ycenter*/);
-    
+
     if( KisMaskGenerator::d->m_spikes > 2 )
     {
         double angle = (atan2 (yr, xr));
@@ -183,7 +183,7 @@ quint8 KisCircleMaskGenerator::valueAt(double x, double y)
     }
 
     double n = norme(xr * d->m_xcoef, yr * d->m_ycoef);
-    
+
     if (n > 1) {
         return 255;
     } else {
@@ -239,7 +239,7 @@ KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
     delete d;
 }
 
-quint8 KisRectangleMaskGenerator::valueAt(double x, double y)
+quint8 KisRectangleMaskGenerator::valueAt(double x, double y) const
 {
     if( KisMaskGenerator::d->m_empty ) return 255;
     double xr = qAbs(x /*- m_xcenter*/) / width();

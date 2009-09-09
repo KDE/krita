@@ -408,6 +408,10 @@ bool Layout::nextParag()
         nextShape();
         if (m_data)
             m_data->setPosition(m_block.position());
+        
+        // in case there are no more shapes to layout on we should stop now - and prevent subsequent crashes
+        if(shape==0)
+            return true;
     }
 
     m_y += topMargin();

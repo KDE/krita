@@ -23,6 +23,18 @@
 #include "kis_mask_generator.h"
 
 #include <QDomDocument>
+#include <QImage>
+
+QImage createQImageFromMask(const KisMaskGenerator& generator) {
+    QImage img(10, 10, QImage::Format_ARGB32);
+    for (int i = 0; i < 10; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            quint8 c = generator.valueAt(i, j);
+            img.setPixel(i, j, qRgb(c, c, c));
+        }
+    }
+    return img;
+}
 
 void KisMaskGeneratorTest::testCircleSerialisation()
 {
@@ -32,6 +44,9 @@ void KisMaskGeneratorTest::testCircleSerialisation()
     doc.appendChild(root);
     cmg.toXML(doc, root);
     KisMaskGenerator* cmg2 = KisMaskGenerator::fromXML(root);
+    createQImageFromMask(cmg).save("circle1.png");
+    createQImageFromMask(*cmg2).save("circle2.png");
+
     for (int i = 0; i < 10; ++i) {
         for (int j = 0; j < 10; ++j) {
             QVERIFY(cmg.valueAt(i, j) == cmg2->valueAt(i, j));
@@ -42,12 +57,42 @@ void KisMaskGeneratorTest::testCircleSerialisation()
 
 void KisMaskGeneratorTest::testSquareSerialisation()
 {
-    KisRectangleMaskGenerator cmg(10.0 * rand() / RAND_MAX, 10.0 * rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX);
+
+    // check consistency
+    KisRectangleMaskGenerator cmg_1(5, 5, 5, 5, 5);
+    KisRectangleMaskGenerator cmg_2(5, 5, 5, 5, 5);
+    for (int i = 0; i < 10; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            QVERIFY(cmg_1.valueAt(i, j) == cmg_2.valueAt(i, j));
+        }
+    }
+
+    KisRectangleMaskGenerator cmg(10.0 * rand() / RAND_MAX,
+                                  10.0 * rand() / RAND_MAX,
+                                  rand() / RAND_MAX,
+                                  rand() / RAND_MAX);
     QDomDocument doc = QDomDocument("cmg");
     QDomElement root = doc.createElement("cmg");
     doc.appendChild(root);
     cmg.toXML(doc, root);
+
+    // check consistency with itself
+    for (int i = 0; i < 10; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            QVERIFY(cmg.valueAt(i, j) == cmg.valueAt(i, j));
+        }
+    }
+
     KisMaskGenerator* cmg2 = KisMaskGenerator::fromXML(root);
+    QDomDocument doc2 = QDomDocument("cmg");
+    QDomElement root2 = doc2.createElement("cmg");
+    doc2.appendChild(root2);
+    cmg.toXML(doc2, root2);
+
+    // check serialization
+    QCOMPARE(doc.toString(), doc2.toString());
+    createQImageFromMask(cmg).save("square1.png");
+    createQImageFromMask(*cmg2).save("square2.png");
     for (int i = 0; i < 10; ++i) {
         for (int j = 0; j < 10; ++j) {
             QVERIFY(cmg.valueAt(i, j) == cmg2->valueAt(i, j));

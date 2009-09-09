@@ -21,7 +21,6 @@
 #include <math.h>
 
 #include <QDomDocument>
-#include <QDebug>
 
 #include "kis_circle_mask_generator.h"
 #include "kis_rect_mask_generator.h"
@@ -60,13 +59,13 @@ void KisMaskGenerator::init()
 
 void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
+
     e.setAttribute("autobrush_radius", d->m_radius);
     e.setAttribute("autobrush_ratio", d->m_ratio);
-    e.setAttribute("autobrush_hfade", d->m_fh);
-    e.setAttribute("autobrush_vfade", d->m_fv);
+    e.setAttribute("autobrush_hfade", d->m_fh * 2); // 'cause in init we divide it again
+    e.setAttribute("autobrush_vfade", d->m_fv * 2); // 'cause in init we divide it again
     e.setAttribute("autobrush_spikes", d->m_spikes);
 
-    qDebug() << doc.toString();
 }
 
 KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)

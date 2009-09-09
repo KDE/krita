@@ -29,13 +29,15 @@ struct KisRectangleMaskGenerator::Private {
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(double w, double h, double fh, double fv)
         : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv), d(new Private)
 {
-    d->m_c = (fv / fh);
+    d->m_c = (KisMaskGenerator::d->m_fv / KisMaskGenerator::d->m_fh);
+    Q_ASSERT(!isnan(d->mc));
 }
 
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
         : KisMaskGenerator(radius, ratio, fh, fv, spikes), d(new Private)
 {
     d->m_c = (KisMaskGenerator::d->m_fv / KisMaskGenerator::d->m_fh);
+    Q_ASSERT(!isnan(d->mc));
 }
 
 KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
@@ -45,6 +47,7 @@ KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
 
 quint8 KisRectangleMaskGenerator::valueAt(double x, double y) const
 {
+
     if( KisMaskGenerator::d->m_empty ) return 255;
     double xr = qAbs(x /*- m_xcenter*/) / width();
     double yr = qAbs(y /*- m_ycenter*/) / height();

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008-2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,107 +15,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_MASK_GENERATOR
+#define KIS_MASK_GENERATOR
 
-#ifndef _KIS_MASK_GENERATOR_H_
-#define _KIS_MASK_GENERATOR_H_
-
-#include "krita_export.h"
-
-class QDomElement;
-class QDomDocument;
-
-/**
- * This is the base class for mask shapes
- * You should subclass it if you want to create a new
- * shape.
- */
-class KRITAIMAGE_EXPORT KisMaskGenerator
-{
-public:
-
-    KDE_DEPRECATED KisMaskGenerator(double width, double height, double fh, double fv);
-    /**
-     * This function creates an auto brush shape with the following value :
-     * @param w width
-     * @param h height
-     * @param fh horizontal fade (fh \< w / 2 )
-     * @param fv vertical fade (fv \< h / 2 )
-     */
-    KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
-    virtual ~KisMaskGenerator();
-private:
-    void init();
-public:
-    /**
-     * @return the alpha value at the position (x,y)
-     */
-    virtual quint8 valueAt(double x, double y) const = 0;
-
-    quint8 interpolatedValueAt(double x, double y);
-
-    virtual void toXML(QDomDocument& , QDomElement&) const;
-
-    /**
-     * Unserialise a \ref KisMaskGenerator
-     */
-    static KisMaskGenerator* fromXML(const QDomElement&);
-
-    double width() const;
-
-    double height() const;
-
-protected:
-    struct Private;
-    Private* const d;
-};
-
-/**
- * This class allows to create circular shapes.
- */
-class KRITAIMAGE_EXPORT KisCircleMaskGenerator : public KisMaskGenerator
-{
-
-public:
-
-    KDE_DEPRECATED KisCircleMaskGenerator(double w, double h, double fh, double fv);
-    KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
-    virtual ~KisCircleMaskGenerator();
-
-    virtual quint8 valueAt(double x, double y) const;
-
-    virtual void toXML(QDomDocument& , QDomElement&) const;
-
-private:
-
-    double norme(double a, double b) const {
-        return a*a + b * b;
-    }
-
-private:
-    struct Private;
-    Private* const d;
-};
-
-/**
- * This class allows to create rectangular shapes.
- */
-class KRITAIMAGE_EXPORT KisRectangleMaskGenerator : public KisMaskGenerator
-{
-
-public:
-
-    KDE_DEPRECATED KisRectangleMaskGenerator(double w, double h, double fh, double fv);
-    KisRectangleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
-    virtual ~KisRectangleMaskGenerator();
-
-    virtual quint8 valueAt(double x, double y) const;
-
-    virtual void toXML(QDomDocument& , QDomElement&) const;
-
-private:
-    struct Private;
-    Private* const d;
-};
-
+#include "kis_base_mask_generator.h"
+#include "kis_circle_mask_generator.h"
+#include "kis_rect_mask_generator.h"
 
 #endif

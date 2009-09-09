@@ -112,7 +112,9 @@ set(kritaimage_LIB_SRCS
    kis_iterator.cc
    kis_layer.cc
    kis_mask.cc
-   kis_mask_generator.cc
+   kis_base_mask_generator.cpp
+   kis_rect_mask_generator.cpp
+   kis_circle_mask_generator.cpp
    kis_math_toolbox.cpp
    kis_name_server.cpp
    kis_node.cpp

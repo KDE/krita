@@ -24,13 +24,20 @@
 #include <KoColorSpaceRegistry.h>
 #include "kis_colorspace_convert_visitor.h"
 
+#include "kis_paint_layer.h"
 #include "kis_image.h"
 
 void KisColorSpaceConvertVisitorTest::testCreation()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("CMYK", 0);
-    QVERIFY(colorSpace);
-    KisColorSpaceConvertVisitor test(colorSpace, KoColorConversionTransformation::IntentPerceptual);
+    const KoColorSpace * rgb = KoColorSpaceRegistry::instance()->rgb16();
+    QVERIFY(rgb);
+    const KoColorSpace * lab = KoColorSpaceRegistry::instance()->lab16();
+    QVERIFY(lab);
+    KisColorSpaceConvertVisitor test(rgb, KoColorConversionTransformation::IntentPerceptual);
+    KisImageSP img = new KisImage(0, 100, 100, lab, "test");
+    KisPaintLayerSP layer = new KisPaintLayer(img, "test", OPACITY_OPAQUE, lab);
+    layer->accept(test);
+    QVERIFY(layer->colorSpace()->colorModelId() == rgb->colorModelId());
 }
 
 

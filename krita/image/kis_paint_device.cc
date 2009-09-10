@@ -448,7 +448,7 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
     }
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
     if (srcProfileName.isEmpty() && colorSpace()->id() == "RGBA") {
-        writeBytes(img.bits(), 0, 0, img.width(), img.height());
+        writeBytes(img.bits(), offsetX, offsetY, img.width(), img.height());
     } else {
         quint8 * dstData = new quint8[img.width() * img.height() * pixelSize()];
         KoColorSpaceRegistry::instance()

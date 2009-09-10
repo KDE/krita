@@ -60,9 +60,7 @@
 #include "kis_config_notifier.h"
 
 //#define DEBUG_REPAINT
-#include <QtGui/qpainter.h>
 #include <KoCanvasController.h>
-
 
 class KisQPainterCanvas::Private
 {
@@ -127,11 +125,20 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     if (image == 0) return;
 
     setAutoFillBackground(false);
-
-    //QPoint documentOffset = m_d->documentOffset + m_d->origin;
+#ifdef INDEPENDENT_CANVAS    
+    if (m_buffer.size() != size()){
+        m_buffer = QImage(size(), QImage::Format_ARGB32_Premultiplied);
+    }
+#endif
+    
     QPoint documentOffset = m_d->documentOffset;
 
-    QPainter gc(this);
+#ifdef INDEPENDENT_CANVAS    
+    QPainter gc( &m_buffer );
+#else
+    QPainter gc( this );
+#endif
+
     gc.setCompositionMode(QPainter::CompositionMode_Source);
     gc.fillRect(QRect(QPoint(0,0),size()), Qt::gray );
 
@@ -180,6 +187,10 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     drawDecorations(gc, true, m_d->documentOffset, fillRect.translated(-m_d->origin), m_d->canvas);
     gc.end();
 
+#ifdef INDEPENDENT_CANVAS
+    QPainter painter(this);
+    painter.drawImage(ev->rect(), m_buffer, ev->rect() );
+#endif
 }
 
 

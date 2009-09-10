@@ -31,7 +31,6 @@ private slots:
 
     void testCreation();
     void testProjectionNotSelected();
-    void testInImage();
     void testProjectionSelected();
 
 };

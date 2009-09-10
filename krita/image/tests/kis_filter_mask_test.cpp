@@ -98,47 +98,5 @@ void KisFilterMaskTest::testProjectionSelected()
 
 }
 
-void KisFilterMaskTest::testInImage()
-{
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-
-    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
-
-    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
-    Q_ASSERT(f);
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
-    Q_ASSERT(kfc);
-
-    KisFilterMaskSP mask = new KisFilterMask();
-    mask->createNodeProgressProxy();
-    mask->setFilter(kfc);
-    mask->select(qimg.rect(), MAX_SELECTED);
-
-    // Check in image stack
-    KisImageSP image = new KisImage(0, qimg.width(), qimg.height(), cs, "merge test");
-
-    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
-    layer->paintDevice()->convertFromQImage(qimg, 0, 0, 0);
-
-    image->addNode(layer.data());
-    image->addNode(mask.data(), layer.data());
-    layer->setDirty(qimg.rect());
-
-    QTest::qSleep(250); // allow the action to do its job.
-    QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
-
-    KisPaintDeviceSP pd = image->projection();
-
-    QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, inverted,
-                                  pd->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
-        pd->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest3.png");
-        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
-    }
-
-    delete kfc;
-}
-
 QTEST_KDEMAIN(KisFilterMaskTest, GUI)
 #include "kis_filter_mask_test.moc"

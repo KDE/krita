@@ -1879,7 +1879,7 @@ void TextTool::debugTextDocument()
             if (!fragment.isValid())
                 continue;
             QTextCharFormat fmt = fragment.charFormat();
-            kDebug() << "changeId: " << fmt.property(KoCharacterStyle::ChangeTrackerId);
+            kDebug(32500) << "changeId: " << fmt.property(KoCharacterStyle::ChangeTrackerId);
             const int fragmentStart = fragment.position() - block.position();
             for (int i = fragmentStart; i < fragmentStart + fragment.length(); i += CHARSPERLINE) {
                 if (lastPrintedChar == fragmentStart-1)

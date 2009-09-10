@@ -34,8 +34,6 @@
 #include "kis_tool_select_rectangular.h"
 #include "kis_tool_select_contiguous.h"
 #include "kis_tool_select_elliptical.h"
-#include "kis_tool_select_eraser.h"
-#include "kis_tool_select_brush.h"
 #include "kis_tool_select_path.h"
 
 typedef KGenericFactory<SelectionTools> SelectionToolsFactory;
@@ -52,8 +50,6 @@ SelectionTools::SelectionTools(QObject *parent, const QStringList &)
     r->add(new KisToolSelectOutlineFactory(r, QStringList()));
     r->add(new KisToolSelectPolygonalFactory(r, QStringList()));
     r->add(new KisToolSelectRectangularFactory(r, QStringList()));
-    //r->add(new KisToolSelectBrushFactory(r, QStringList()));
-    //r->add(new KisToolSelectEraserFactory(r, QStringList()));
     r->add(new KisToolSelectEllipticalFactory(r, QStringList()));
     r->add(new KisToolSelectContiguousFactory(r, QStringList()));
     r->add(new KisToolSelectPathFactory(r, QStringList()));

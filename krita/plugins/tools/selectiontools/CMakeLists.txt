@@ -3,8 +3,6 @@
 set(kritaselectiontools_PART_SRCS
     selection_tools.cc
     kis_tool_select_rectangular.cc
-    kis_tool_select_brush.cc
-    kis_tool_select_eraser.cc
     kis_tool_select_polygonal.cc
     kis_tool_select_elliptical.cc
     kis_tool_select_contiguous.cc

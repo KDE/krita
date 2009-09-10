@@ -134,10 +134,21 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
     // XXX: we might want to have some code to determine which is the
     // "best" of the creatable shapes.
     if (e.tagName() == "frame" && e.namespaceURI() == KoXmlNS::draw) {
-
         KoXmlElement element;
         forEachElement(element, e) {
-            shape = createShapeInternal(e, context, element);
+            if (element.tagName() == "object" && element.namespaceURI() == KoXmlNS::draw && element.hasChildNodes()) {
+                // find first element
+                KoXmlNode n = element.firstChild();
+                for (; !n.isNull(); n = n.nextSibling()) {
+                    if (n.isElement()) {
+                        shape = createShapeInternal(e, context, n.toElement());
+                        break;
+                    }
+                }
+            }
+            else {
+                shape = createShapeInternal(e, context, element);
+            }
             if (shape) {
                 break;
             }

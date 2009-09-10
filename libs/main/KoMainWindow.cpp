@@ -478,7 +478,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
     updateCaption();
 
     d->manager->setActivePart(d->rootDoc, currentView());
-
+    connect(this, SIGNAL(restoringDone()), d->dockerManager, SLOT(removeUnusedOptionWidgets()));
     emit restoringDone();
 
     while(!oldRootViews.isEmpty()) {

@@ -17,12 +17,15 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KO_DOCKER_MANAGER_H
-#define KO_DOCKER_MANAGER_H
+#ifndef DOCKER_MANAGER_H
+#define DOCKER_MANAGER_H
 
 #include "komain_export.h"
 
-#include <KoView.h>
+#include <QObject>
+#include <QMap>
+
+class KoView;
 
 /**
    The docker manager makes sure that tool option widgets are shown at the right time.
@@ -31,16 +34,15 @@ class KOMAIN_EXPORT KoDockerManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit KoDockerManager(KoView *view);
+    explicit KoDockerManager(KoView* mainWindow);
     ~KoDockerManager();
 
 public slots:
+    void removeUnusedOptionWidgets();
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
     void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap, QWidget *callingView);
-
-    void removeUnusedOptionWidgets();
 
 
 private:

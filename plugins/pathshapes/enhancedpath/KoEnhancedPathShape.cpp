@@ -133,7 +133,7 @@ qreal KoEnhancedPathShape::evaluateReference( const QString &reference )
         {
             bool success = false;
             int modifierIndex = reference.mid( 1 ).toInt( &success );
-            res = m_modifiers[modifierIndex];
+            res = m_modifiers.value(modifierIndex);
         }
         break;
         // referenced formula

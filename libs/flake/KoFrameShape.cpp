@@ -45,7 +45,7 @@ bool KoFrameShape::loadOdfFrame(const KoXmlElement & element, KoShapeLoadingCont
 {
     const KoXmlElement & frameElement(KoXml::namedItemNS(element, d->ns, d->tag));
     if (frameElement.isNull()) {
-        kError() << "frame element" << d->tag << "not found" << endl;
+        kError(30006) << "frame element" << d->tag << "not found" << endl;
         return false;
     }
 

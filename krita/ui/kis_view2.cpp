@@ -747,15 +747,4 @@ void KisView2::slotTotalRefresh()
     m_d->canvas->resetCanvas();
 }
 
-void KisView2::resizeEvent ( QResizeEvent * event )
-{
-//    qDebug() << "resize: " << event->oldSize() << " to " << event->size() << "main window" << mainWindow()->size();
-    
-    if (mainWindow()->size().height() > QApplication::desktop()->availableGeometry(this).height()) {
-        mainWindow()->resize(mainWindow()->width(), 
-                             QApplication::desktop()->availableGeometry(this).height());
-    }
-  
-}
-
 #include "kis_view2.moc"

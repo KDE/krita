@@ -181,7 +181,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     const QTextDocument *document = cursor.block().document();
 
     d->styleManager = KoTextDocument(document).styleManager();
-    Q_ASSERT(d->styleManager);
     d->changeTracker = KoTextDocument(document).changeTracker();
 //    if (!d->changeTracker)
 //        d->changeTracker = dynamic_cast<KoChangeTracker *>(d->context.dataCenterMap().value("ChangeTracker"));

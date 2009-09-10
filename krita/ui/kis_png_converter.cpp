@@ -22,6 +22,10 @@
 // documentation of libpng available at
 // http://www.libpng.org/pub/png/libpng-1.2.5-manual.html
 
+#ifndef PNG_MAX_UINT // Removed in libpng 1.4
+#define PNG_MAX_UINT UINT_MAX
+#endif
+
 #include <config-endian.h> // WORDS_BIGENDIAN
 
 #include <limits.h>
@@ -406,7 +410,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     // Initialize the internal structures
-    png_structp png_ptr =  png_create_read_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
+    png_structp png_ptr =  png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
     if (!png_ptr) {
         iod->close();
         return (KisImageBuilder_RESULT_FAILURE);
@@ -783,7 +787,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
     int height = img->height();
     int width = img->width();
     // Initialize structures
-    png_structp png_ptr =  png_create_write_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
+    png_structp png_ptr =  png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
     if (!png_ptr) {
         return (KisImageBuilder_RESULT_FAILURE);
     }

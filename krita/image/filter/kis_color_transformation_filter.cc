@@ -63,8 +63,8 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
 
     const KoColorSpace * cs = src->colorSpace();
 
-    KoColorTransformation* inverter = createTransformation(cs, config);
-    if(!inverter) return;
+    KoColorTransformation* colorTransformation = createTransformation(cs, config);
+    if(!colorTransformation) return;
 
 #ifndef NDEBUG
     QTime t;
@@ -83,7 +83,7 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
     for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
         while (!srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted())) {
             if (srcIt.isSelected()) {
-                inverter->transform(srcIt.oldRawData(), dstIt.rawData(), 1);
+                colorTransformation->transform(srcIt.oldRawData(), dstIt.rawData(), 1);
             }
             ++srcIt;
             ++dstIt;
@@ -134,7 +134,7 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
                     ++srcIt;
                     ++pixelsSrc;
                 }
-                inverter->transform(oldRawData, dstIt.rawData(), pixels);
+                colorTransformation->transform(oldRawData, dstIt.rawData(), pixels);
 
                 // We apparently found a non-selected pixels, or the row
                 // was done; get the stretch of non-selected pixels
@@ -145,7 +145,7 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
                 }
             } else {
                 pixels = conseqPixels;
-                inverter->transform(srcIt.oldRawData(), dstIt.rawData(), pixels);
+                colorTransformation->transform(srcIt.oldRawData(), dstIt.rawData(), pixels);
             }
 
             // Update progress
@@ -159,7 +159,7 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
     dbgPlugins << "Consecutive pixels:" << t.elapsed() << " ms";
 #endif
 
-    delete inverter;
+    delete colorTransformation;
     //if(progressUpdater) progressUpdater->setProgress( 100 );
 
     // Two inversions make no inversion? No -- because we're reading

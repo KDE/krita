@@ -25,7 +25,7 @@ kde4_add_ui_files( kowidgets_LIB_SRCS
 
 kde4_add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 
-target_link_libraries(kowidgets flake kotext)
+target_link_libraries(kowidgets kotext)
 
 set_target_properties(kowidgets PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

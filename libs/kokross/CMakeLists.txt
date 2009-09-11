@@ -19,7 +19,6 @@ kde4_add_library(kokross SHARED ${kokross_LIB_SRCS})
 target_link_libraries(kokross
     komain
     ${KDE4_KFILE_LIBRARY}
-    ${KDE4_KPARTS_LIBS}
     ${KDE4_KROSSCORE_LIBRARY}
     ${KDE4_KNEWSTUFF2_LIBRARY}
     ${KDE4_KROSSUI_LIBS}

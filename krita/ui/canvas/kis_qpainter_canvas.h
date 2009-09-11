@@ -20,8 +20,6 @@
 #define KIS_QPAINTER_CANVAS_H
 
 #include <QWidget>
-// if defined, QImage is used as buffer for painting
-#define INDEPENDENT_CANVAS
 
 #include "kis_abstract_canvas_widget.h"
 #include "kis_prescaled_projection.h"

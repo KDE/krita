@@ -2,6 +2,9 @@ project(krita)
 
 if (SHOULD_BUILD_KRITA)
 
+    # turn on QImage as buffer for QPainter based canvas
+    add_definition(-DINDEPENDENT_CANVAS)
+
     if(GCC)
         set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-operator-names")
     endif(GCC)

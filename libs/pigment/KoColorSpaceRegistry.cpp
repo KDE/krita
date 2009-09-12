@@ -88,6 +88,7 @@ void KoColorSpaceRegistry::init()
     profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.ICM",  KStandardDirs::Recursive);
     profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.ICC",  KStandardDirs::Recursive);
     profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icc",  KStandardDirs::Recursive);
+    qDebug() << profileFilenames;
     // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.
     cmsErrorAction(LCMS_ERROR_SHOW);
 
@@ -100,10 +101,10 @@ void KoColorSpaceRegistry::init()
 
             profile->load();
             if (profile->valid()) {
-                dbgPigmentCSRegistry << "Valid profile : " << profile->name();
+                dbgPigmentCSRegistry << "Valid profile : " << profile->fileName() << profile->name();
                 d->profileMap[profile->name()] = profile;
             } else {
-                dbgPigmentCSRegistry << "Invalid profile : " << profile->name();
+                dbgPigmentCSRegistry << "Invalid profile : "<< profile->fileName() << profile->name();
                 delete profile;
             }
         }
@@ -298,11 +299,17 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             return 0;
         }
 
+        // last attempt at getting a profile, sometimes the default profile, like adobe cmyk isn't available.
         const KoColorProfile *p = profileByName(profileName);
         if(!p && !profileName.isEmpty())
         {
-            dbgPigmentCSRegistry <<"Profile not found :" << profileName;
-            return 0;
+            dbgPigmentCSRegistry << "Profile not found :" << profileName;
+            QList<const KoColorProfile *> profiles = profilesFor(csID);
+            if (profiles.isEmpty()) {
+                dbgPigmentCSRegistry << "No profile at all available for " << csf;
+                return 0;
+            }
+            p = profiles[0];
         }
         const KoColorSpace *cs = csf->createColorSpace( p);
         if(!cs)

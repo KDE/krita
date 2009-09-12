@@ -45,41 +45,33 @@ bool KisPrescaledProjectionTest::testProjectionScenario(KisPrescaledProjection &
         const QString & name)
 {
 
-    qDebug() << 1;
     projection.resizePrescaledImage(QSize(1000, 1000));
     projection.prescaledQImage().save(name + "_prescaled_projection_01.png");
 
-    qDebug() << 21;
     viewConverter->setZoom(0.5);
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_021.png");
 
-    qDebug() << 22;
     viewConverter->setZoom(0.6);
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_022.png");
 
-    qDebug() << 23;
     viewConverter->setZoom(0.71);
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_023.png");
 
-    qDebug() << 24;
     viewConverter->setZoom(0.84);
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_024.png");
 
-    qDebug() << 25;
     viewConverter->setZoom(0.9);
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_025.png");
 
-    qDebug() << 3;
     viewConverter->setZoom(1.9);
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_03.png");
 
-    qDebug() << 4;
     viewConverter->setZoom(2.0);
     projection.preScale();
     projection.prescaledQImage().save(name + "_prescaled_projection_04.png");
@@ -181,22 +173,10 @@ void KisPrescaledProjectionTest::testCoordinateConversionRoundTrip()
 
     QRect viewRect = toAlignedRectWorkaround(projection.viewRectFromImagePixels(QRect(0, 0, 100, 100)));
 
-    /**
-     * FIXME:
-     * Actually, we compare with wrong rect here, i think.
-     * Right rect here is QRect(0,0,40,40) as
-     * 100 / 300 * 120 == 40
-     * Current value '41', i guess, is a legacy of
-     * "hystory reasons" caused QRect::right() to be
-     * one pixel smaller than QRectF::right()
-     */
-    QCOMPARE(viewRect, QRect(0, 0, 41, 41));
+    QCOMPARE(viewRect, QRect(0, 0, 40, 40));
 
     QRect viewRect2 = toAlignedRectWorkaround(projection.viewRectFromImagePixels(QRect(0, 0, 200, 200)));
-    /**
-     * Here too
-     */
-    QCOMPARE(viewRect2, QRect(0, 0, 81, 81));
+    QCOMPARE(viewRect2, QRect(0, 0, 80, 80));
 
     QRect imageRect = projection.imageRectFromViewPortPixels(viewRect);
     QCOMPARE(imageRect, QRect(0, 0, 100, 100));

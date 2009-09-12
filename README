@@ -20,7 +20,7 @@ Office productivity:
 - KSpread    -  Spreadsheet calculator
 - KPresenter -  Presentation program
 
-Grapics:
+Graphics:
 - Karbon     -  Vector graphics 
 - Krita      -  Advanced drawing and image manipulation
 
@@ -64,7 +64,7 @@ programmers around the world.  All developers give their time/code to
 the community for everyone to benefit.
 
 If you have found a bug or missing feature you can always contact the
-developers of KOffice (via http://www.koffice.org ) or dwelve into the
+developers of KOffice (via http://www.koffice.org ) or dwell into the
 software yourself.
 
 The parts that are shared between all KOffice applications can be found
@@ -84,7 +84,7 @@ Here follows a short overview of the source code.
 cmake/       files to help cmake do it's job configuring
 doc/         user documentation.  
 
-karbon/      source code of the different applictions
+karbon/      source code of the different applications
 kexi/
 kplato/
 kpresenter/  
@@ -111,7 +111,7 @@ tools/       tools used internally (e.g. for testing) and released
 interfaces/  simplified external interfaces to some advanced data types
              such as charts.
 
-servicetypes/ desktop files for some service types provided by koffice
+servicetypes/ desktop files for some service types provided by KOffice
 
 templates/   templates for new documents.
              NOTE: Out of date since they use the old KOffice file formats

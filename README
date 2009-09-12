@@ -81,10 +81,10 @@ The KOffice source tree
 
 Here follows a short overview of the source code.
 
-cmake/       Files to help cmake do it's job configuring
-doc/         User documentation.  
+cmake/       files to help cmake do it's job configuring
+doc/         user documentation.  
 
-karbon/      Source code of the different applictions
+karbon/      source code of the different applictions
 kexi/
 kplato/
 kpresenter/  
@@ -93,14 +93,14 @@ kspread/
 kword/
 kivio/
 
-kchart/      Source code of two applications who are now available as shapes.
+kchart/      source code of two applications who are now available as shapes.
 kformula/
 
-kounavail    A shape that is used when an application that handles a
+kounavail    a shape that is used when an application that handles a
              certain embedded datatype is not available
 
-libs/        The common libraries
-plugins/     Some plugins, both flake shapes and other types.
+libs/        the common libraries
+plugins/     some plugins, both flake shapes and other types.
 
 filters/     import and export filters for foreign file formats
 

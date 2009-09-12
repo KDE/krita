@@ -1,72 +1,141 @@
-KOffice is based on KDE libraries ( http://www.kde.org ) which are needed to
-run KOffice.  It is important to make clear you don't have to actually run
-the KDE desktop in order to use KOffice.
-You need kdelibs, kdepimlibs and kdebase installed if you want to compile and run
-KOffice.
-See http://wiki.koffice.org/index.php?title=Build_KOffice
+                          README for KOffice
 
-KOffice is a collection of office applications linked together by a common
-basis. This common basis assures that all office application can work
-together. You can, for instance, insert a spreadsheet in your thesis without
-leaving your document. Editing the spreadsheet happens _inside_ your thesis.
-
-The applications currently included in KOffice are:
-- KWord
-  Professional text editing 
-- KSpread
-  Professional number cruncher/spreadsheet
-- KPresenter
-  Professional presentation program
-- KChart
-  Graphing of your abstract data
-- Karbon
-  Vector graphics tool
-- Kivio
-  Flowcharting program
-- Kexi
-  Integrated data management
-- Krita
-  A pixel graphics tool
-- KFormula
-  A mathematical formula editor
-- KPlato
-  Project planning
-
-More information can be found at http://koffice.org
-
-Developers:
-===========
-
-KOffice is created by Open Source programmers around the world. All developers
-give their time/code to the community for everyone to benefit. The major reason
-this is done is because those developers want to have a good office suite, and
-they don't mind sharing it with you.
-
-If you feel you found a bug or missing feature you can always contact the
-developers of KOffice (via http://www.koffice.org ) or delve into the software
-yourself.
-
-The part that is shared between all KOffice applications can be found in the libs
-directory. There classes like KoDocument can be found; these classes are
-extended in the project directories.
-
-Read the .h files in the respective directories for more info or read the online
-API docs which you can find at http://www.koffice.org/developer/apidocmain.php
+KOffice is a collection of office applications linked together by a
+common base.  This common base assures that all office application can
+work together and also share a common look and feel.
 
 
-Contacts:
-=========
+KOffice is free software, mostly under LGPL 2+ but also under the GPL.
+See COPYING and COPYING.LIB for the details.  See also copyright and
+licensing notices in individual files.
 
-User mailing list: mailto:koffice@kde.org
+
+Contents
+--------
+
+The applications currently included in KOffice (version 2.1) are:
+
+Office productivity:
+- KWord      -  Word processor
+- KSpread    -  Spreadsheet calculator
+- KPresenter -  Presentation program
+
+Grapics:
+- Karbon     -  Vector graphics 
+- Krita      -  Advanced drawing and image manipulation
+
+Management:
+- KPlato     -  Project planning
+
+Advanced plugins:
+- KChart     -  Graphic data visualization
+- KFormula   -  Mathematical formulas
+
+Applications that are not yet part of the official release, but will
+be included in the next version:
+
+- Kexi       -  Integrated data management
+- Kivio      -  Flowcharting program
+
+More information can be found at http://www.koffice.org
+
+
+Building and running
+--------------------
+
+KOffice is based on the KDE libraries ( http://www.kde.org ) which are
+needed to run KOffice.  Note that you don't have to actually run the
+KDE desktop environment in order to use KOffice.  KOffice works fine
+on any desktop based on X11, and at this point also on Windows and Mac
+OS X, although with some glitches.
+
+You will need kdesupport, kdelibs, kdepimlibs and kdebase/runtime
+installed if you want to compile and run KOffice.  For importing some
+external file formats or other plugins, you may also need some other
+dependencies.  For more details on how to build KOffice from the
+sources, see http://wiki.koffice.org/index.php?title=Build_KOffice
+
+
+Developers
+----------
+
+KOffice is created by the KDE team, consisting of Open Source
+programmers around the world.  All developers give their time/code to
+the community for everyone to benefit.
+
+If you have found a bug or missing feature you can always contact the
+developers of KOffice (via http://www.koffice.org ) or dwelve into the
+software yourself.
+
+The parts that are shared between all KOffice applications can be found
+in the libs/ subdirectory.  There classes like KoDocument can be found;
+these classes are extended in the project directories.
+
+Read the .h files in the respective directories for more info or read
+the online API docs which you can find at
+http://www.koffice.org/developer/apidocmain.php
+
+
+The KOffice source tree
+-----------------------
+
+Here follows a short overview of the source code.
+
+cmake/       Files to help cmake do it's job configuring
+doc/         User documentation.  
+
+karbon/      Source code of the different applictions
+kexi/
+kplato/
+kpresenter/  
+krita/
+kspread/
+kword/
+kivio/
+
+kchart/      Source code of two applications who are now available as shapes.
+kformula/
+
+kounavail    A shape that is used when an application that handles a
+             certain embedded datatype is not available
+
+libs/        The common libraries
+plugins/     Some plugins, both flake shapes and other types.
+
+filters/     import and export filters for foreign file formats
+
+tools/       tools used internally (e.g. for testing) and released
+             with koffice, such as the koconverter file format 
+             conversion tool.
+
+interfaces/  simplified external interfaces to some advanced data types
+             such as charts.
+
+servicetypes/ desktop files for some service types provided by koffice
+
+templates/   templates for new documents.
+             NOTE: Out of date since they use the old KOffice file formats
+
+kdgantt/     and advanced gantt chart library provided by an external vendor.
+
+pics/        icons
+
+
+Contact info
+------------
+
+User mailing list:      mailto:koffice@kde.org
 Developer mailing list: mailto:koffice-devel@kde.org
 
 Subscribing and list information: http://www.kde.org/mailinglists
 Archives: http://lists.kde.org
 
+IRC channel for developers:  #koffice on irc.freenode.org
+
 If you have questions about this README file or about KOffice in general,
 please mail to the KOffice mailing list: mailto:koffice@kde.org
 
 
-
 Thomas Zander
 Chris Lee
+Inge Wallin

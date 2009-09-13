@@ -220,7 +220,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                 } else if (localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
                            || localName == "list" || localName == "numbered-paragraph") {  // OASIS
                     loadList(tag, cursor);
-                } else if (localName == "section") {  // Temporary support (###TODO)
+                } else if (localName == "section") {  // Temporary support (TODO)
                     loadSection(tag, cursor);
                 } else {
                     KoVariable *var = KoVariableRegistry::instance()->createFromOdf(tag, d->context);
@@ -548,6 +548,7 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
 {
     Q_UNUSED(sectionElem);
     Q_UNUSED(cursor);
+    loadBody(sectionElem,cursor);
 }
 
 void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)

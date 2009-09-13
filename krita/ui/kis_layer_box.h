@@ -27,6 +27,7 @@
 #include <QFrame>
 #include <QList>
 #include <QDockWidget>
+#include <QPointer>
 
 #include <kis_debug.h>
 
@@ -119,8 +120,8 @@ private:
     KMenu *m_viewModeMenu;
     KMenu *m_newLayerMenu;
     KisImageSP m_image;
-    KisNodeModel * m_nodeModel;
-    KisNodeManager * m_nodeManager;
+    QPointer<KisNodeModel> m_nodeModel;
+    QPointer<KisNodeManager> m_nodeManager;
     Ui_WdgLayerBox* m_wdgLayerBox;
 
 };

@@ -75,8 +75,6 @@
 KisLayerBox::KisLayerBox()
         : QDockWidget(i18n("Layers"))
         , m_image(0)
-        , m_nodeModel(0)
-        , m_nodeManager(0)
         , m_wdgLayerBox(new Ui_WdgLayerBox)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -168,11 +166,11 @@ KisLayerBox::~KisLayerBox()
 
 void KisLayerBox::setImage(KisNodeManager * nodeManager, KisImageSP img, KisNodeModel * nodeModel)
 {
-    if(m_nodeModel)
+    if(!m_nodeModel.isNull())
         m_nodeModel->disconnect(this);
     m_nodeModel = nodeModel;
 
-    if(m_nodeManager)
+    if(!m_nodeManager.isNull())
         m_nodeManager->disconnect(this);
     m_nodeManager = nodeManager;
     connect(nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),

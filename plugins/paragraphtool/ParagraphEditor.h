@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Florian Merz <florianmerz@gmx.de>
+ * Copyright (C) 2009 Carlos Licea <carlos.licea@kdemail.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -65,7 +66,7 @@ public:
 
     void paint(QPainter &painter, const KoViewConverter &converter);
 
-    QRectF dirtyRectangle();
+    QRectF dirtyRectangle(bool updateWholeRegion = false);
 
     void loadRulers();
 

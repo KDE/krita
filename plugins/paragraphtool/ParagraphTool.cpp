@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Florian Merz <florianmerz@gmx.de>
+ * Copyright (C) 2009 Carlos Licea <carlos.licea@kdemail.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -64,6 +65,15 @@ void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
 void ParagraphTool::repaintDecorations()
 {
     QRectF repaintRectangle;
+    repaintRectangle |= m_paragraphEditor.dirtyRectangle(true); //true: update the whole region not just the dirty part
+    repaintRectangle |= m_paragraphHighlighter.dirtyRectangle();
+
+    canvas()->updateCanvas(repaintRectangle);
+}
+
+void ParagraphTool::repaintDecorationsInternal()
+{
+    QRectF repaintRectangle;
     if (m_paragraphEditor.needsRepaint()) {
         repaintRectangle |= m_paragraphEditor.dirtyRectangle();
     }
@@ -103,7 +113,7 @@ void ParagraphTool::mousePressEvent(KoPointerEvent *event)
         m_paragraphEditor.highlightRulerAt(m_mousePosition);
     }
 
-    repaintDecorations();
+    repaintDecorationsInternal();
 }
 
 void ParagraphTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -115,7 +125,7 @@ void ParagraphTool::mouseReleaseEvent(KoPointerEvent *event)
         m_paragraphEditor.deactivateRuler();
     }
 
-    repaintDecorations();
+    repaintDecorationsInternal();
 }
 
 void ParagraphTool::mouseMoveEvent(KoPointerEvent *event)
@@ -133,7 +143,7 @@ void ParagraphTool::mouseMoveEvent(KoPointerEvent *event)
 
     }
 
-    repaintDecorations();
+    repaintDecorationsInternal();
 }
 
 void ParagraphTool::keyPressEvent(QKeyEvent *event)
@@ -189,7 +199,7 @@ void ParagraphTool::keyPressEvent(QKeyEvent *event)
         }
     }
 
-    repaintDecorations();
+    repaintDecorationsInternal();
 }
 
 void ParagraphTool::keyReleaseEvent(QKeyEvent *event)

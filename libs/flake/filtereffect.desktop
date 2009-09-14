@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Filter effect definition
+Name[ca]=Definició d'efecte de filtre
 Name[de]=Filtereffekt-Definition
 Name[es]=Definición de los efectos del filtro
 Name[gl]=Definición do filtro de efecto
@@ -14,6 +15,7 @@ Name[zh_TW]=過濾器效果定義
 Type=ServiceType
 X-KDE-ServiceType=KOffice/FilterEffect
 Comment=Definition of a flake filter effect
+Comment[ca]=Definició d'un efecte de filtre de floc
 Comment[de]=Definition eines Flake-Filtereffekts
 Comment[es]=Definición del efecto de un filtro de Flake
 Comment[gl]=Definición do efecto de filtro dun flake

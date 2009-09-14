@@ -22,6 +22,8 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <QUndoStack>
+
 #include "kis_types.h"
 #include "kis_transform_worker.h"
 #include "kis_paint_device.h"
@@ -29,6 +31,8 @@
 
 void KisTransactionTest::testUndo()
 {
+    QUndoStack stack;
+
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
@@ -39,19 +43,24 @@ void KisTransactionTest::testUndo()
     cs->fromQColor(Qt::black, pixel);
     dev->fill(512, 0, 512, 512, pixel);
 
-    QColor c1;
+    QColor c1, c2;
     dev->pixel(5, 5, &c1);
-
-    QColor c2;
     dev->pixel(517, 5, &c2);
 
     QVERIFY(c1 == Qt::white);
     QVERIFY(c2 == Qt::black);
 
-    KisTransaction t("mirror", dev, 0);
+    KisTransaction* t = new KisTransaction("mirror", dev, 0);
     KisTransformWorker::mirrorX(dev);
+    stack.push(t);
 
-    t.undo();
+    dev->pixel(5, 5, &c1);
+    dev->pixel(517, 5, &c2);
+
+    QVERIFY(c1 == Qt::black);
+    QVERIFY(c2 == Qt::white);
+
+    t->undo();
 
     dev->pixel(5, 5, &c1);
     dev->pixel(517, 5, &c2);
@@ -63,6 +72,8 @@ void KisTransactionTest::testUndo()
 
 void KisTransactionTest::testRedo()
 {
+    QUndoStack stack;
+
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
@@ -73,20 +84,32 @@ void KisTransactionTest::testRedo()
     cs->fromQColor(Qt::black, pixel);
     dev->fill(512, 0, 512, 512, pixel);
 
-    QColor c1;
+    QColor c1, c2;
     dev->pixel(5, 5, &c1);
-
-    QColor c2;
     dev->pixel(517, 5, &c2);
 
     QVERIFY(c1 == Qt::white);
     QVERIFY(c2 == Qt::black);
 
-    KisTransaction t("mirror", dev, 0);
-    KisTransformWorker::mirrorY(dev);
+    KisTransaction* t = new KisTransaction("mirror", dev, 0);
+    KisTransformWorker::mirrorX(dev);
+    stack.push(t);
 
-    t.undo();
-    t.redo();
+    dev->pixel(5, 5, &c1);
+    dev->pixel(517, 5, &c2);
+
+    QVERIFY(c1 == Qt::black);
+    QVERIFY(c2 == Qt::white);
+
+    t->undo();
+
+    dev->pixel(5, 5, &c1);
+    dev->pixel(517, 5, &c2);
+
+    QVERIFY(c1 == Qt::white);
+    QVERIFY(c2 == Qt::black);
+
+    t->redo();
 
     dev->pixel(5, 5, &c1);
     dev->pixel(517, 5, &c2);

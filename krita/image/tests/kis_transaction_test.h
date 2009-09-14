@@ -25,6 +25,8 @@ class KisTransactionTest : public QObject
 {
     Q_OBJECT
 
+private slots:
+    
     void testUndo();
     void testRedo();
 };

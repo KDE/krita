@@ -26,6 +26,7 @@
 class TestNode : public KisNode
 {
     Q_OBJECT
+
 public:
     KisNodeSP clone() {
         return new TestNode(*this);

@@ -809,7 +809,6 @@ void KisLayerManager::mirrorLayerX()
 
     m_doc->setModified(true);
     layersUpdated();
-
     m_view->canvas()->update();
 }
 

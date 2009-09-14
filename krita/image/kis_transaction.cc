@@ -24,7 +24,7 @@
 #include "kis_paint_device.h"
 #include "kis_painterly_overlay.h"
 #include "kis_datamanager.h"
- 
+
 #include "config-tiles.h" // For the next define
 #include KIS_MEMENTO_HEADER
 

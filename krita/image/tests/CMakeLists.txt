@@ -168,14 +168,6 @@ target_link_libraries(KisPaintLayerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTE
 
 ########### next target ###############
 
-#set(kis_merge_visitor_test_SRCS kis_merge_visitor_test.cpp )
-
-#kde4_add_unit_test(KisMergeVisitorTest TESTNAME krita-image-KisMergeVisitorTest ${kis_merge_visitor_test_SRCS})
-
-#target_link_libraries(KisMergeVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_action_recorder_test_SRCS kis_action_recorder_test.cpp )
 kde4_add_unit_test(KisActionRecorderTest TESTNAME krita-image-KisActionRecorderTest ${kis_action_recorder_test_SRCS})
 target_link_libraries(KisActionRecorderTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -546,8 +538,3 @@ set(kis_mask_generator_test_SRCS kis_mask_generator_test.cpp )
 kde4_add_unit_test(KisMaskGeneratorTest TESTNAME krita-image-KisMaskGeneratorTest ${kis_mask_generator_test_SRCS})
 target_link_libraries(KisMaskGeneratorTest ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
-########### next target ###############
-
-#set(kis_paintop_preset_test_SRCS kis_paintop_preset_test.cpp )
-#kde4_add_unit_test(KisPaintopPresetTest TESTNAME krita-image-KisPaintopPresetTest ${kis_paintop_preset_test_SRCS})
-#target_link_libraries(KisPaintopPresetTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

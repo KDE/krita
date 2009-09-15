@@ -282,8 +282,9 @@ if (NOT NO_PIGMENT)
     set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
-                   ${LCMS_INCLUDE_DIR}
-                   ${KDE4_INCLUDES} )
+                   ${QT_INCLUDES}
+                   ${KDE4_INCLUDES}
+                   ${LCMS_INCLUDE_DIR} )
 endif (NOT NO_PIGMENT)
 
 if(BUILD_pigment)

@@ -143,6 +143,14 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
     d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );
     d->pages = loadOdfPages( body, paContext );
 
+    // create pages if there are none
+    if (d->masterPages.empty()) {
+        d->masterPages.append(newMasterPage());
+    }
+    if (d->pages.empty()) {
+        d->pages.append(newPage(static_cast<KoPAMasterPage*>(d->masterPages.first())));
+    }
+
     if ( !loadOdfEpilogue( body, paContext ) ) {
         return false;
     }

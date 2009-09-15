@@ -34,7 +34,8 @@ PageVariable::PageVariable()
         : KoVariable(true),
         m_type(PageNumber),
         m_pageselect(KoTextPage::CurrentPage),
-        m_pageadjust(0)
+        m_pageadjust(0),
+        m_fixed(false)
 {
 }
 

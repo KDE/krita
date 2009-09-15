@@ -208,7 +208,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
         normalPath(MinimumEscapeLength);
         if( m_path.count() != 0 ){
             moveTo( m_path[0] );
-            for(uint index = 1; index < m_path.count(); ++index )
+            for(int index = 1; index < m_path.count(); ++index )
                 lineTo( m_path[index] );
         }
 

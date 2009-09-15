@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ExtensionsManager
 Name[ca]=GestorExtensions
+Name[da]=Håndtering af udvidelser
 Name[de]=Erweiterungsverwaltung
 Name[es]=Gestor de extensiones
 Name[et]=Laienduste haldur
@@ -15,6 +16,7 @@ Name[x-test]=xxExtensionsManagerxx
 Name[zh_TW]=延伸管理員
 Comment=ExtensionsManager
 Comment[ca]=GestorExtensions
+Comment[da]=Håndtering af udvidelser
 Comment[de]=Erweiterungsverwaltung
 Comment[es]=Gestor de extensiones
 Comment[et]=Laienduste haldur

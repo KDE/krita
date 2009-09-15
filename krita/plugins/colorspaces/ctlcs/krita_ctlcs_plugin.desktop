@@ -19,6 +19,7 @@ Name[x-test]=xxCTL Color Spacesxx
 Name[zh_TW]=CTL 色彩空間
 Comment=Color model written using the Color Transformation Language.
 Comment[ca]=Model de color escrit usant el Color Transformation Language.
+Comment[da]=Farvemodel skrevet med brug af farvetransformeringssproget (CTL).
 Comment[de]=Unter Verwendung der „Color Transformation Language“ geschriebenes Farbmodell.
 Comment[en_GB]=Colour model written using the Colour Transformation Language.
 Comment[es]=Modelo de color escrito usado el Lenguaje de Transformación de Colores.

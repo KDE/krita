@@ -77,7 +77,7 @@ int KoParameterShape::handleIdAt(const QRectF & rect) const
 
 QPointF KoParameterShape::handlePosition(int handleId)
 {
-    return m_handles[handleId];
+    return m_handles.value(handleId);
 }
 
 void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & converter, int handleRadius)

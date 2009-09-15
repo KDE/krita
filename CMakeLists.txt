@@ -248,6 +248,9 @@ configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h
 #####################
 ####################
 
+# WARNING: make sure that QT_INCLUDES is the first directory to be added to include_directory before
+#          any other include directory
+
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 

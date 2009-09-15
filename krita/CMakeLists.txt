@@ -61,13 +61,12 @@ set(KRITA_INCLUDES
     # For generated files from .ui
     ${CMAKE_BINARY_DIR}/krita/ui
     
-    ${LCMS_INCLUDE_DIR}
     ${PIGMENT_INCLUDES}
     ${KORESOURCES_INCLUDES}
     ${KOBASE_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
-        ${CMAKE_SOURCE_DIR}/libs/widgets/resources
+    ${CMAKE_SOURCE_DIR}/libs/widgets/resources
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
     
     ${EIGEN2_INCLUDE_DIR}

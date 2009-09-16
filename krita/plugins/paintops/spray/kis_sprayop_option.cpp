@@ -38,6 +38,14 @@ KisSprayOpOption::KisSprayOpOption()
 {
     m_checkable = false;
     m_options = new KisSprayOpOptionsWidget();
+    connect(m_options->diameterSpinBox,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
+    connect(m_options->coverageSpin,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->amountSpin,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->spacingSpin,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->scaleSpin,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->particlesSpinBox,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
+    connect(m_options->densityChBox,SIGNAL(stateChanged(int)),SIGNAL( sigSettingChanged()));
+
     setConfigurationPage(m_options);
 }
 

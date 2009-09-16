@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>916</width>
-    <height>359</height>
+    <width>444</width>
+    <height>112</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,14 @@
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0" colspan="5">
-    <widget class="KisFilterSelectorWidget" name="filterSelection" native="true"/>
+    <widget class="KisFilterSelectorWidget" name="filterSelection" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
    <item row="1" column="0">
     <spacer>

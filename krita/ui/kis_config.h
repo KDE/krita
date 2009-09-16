@@ -177,6 +177,9 @@ public:
     quint32 maxCachedImageSize();
     void setMaxCachedImageSize( quint32 );
 
+    bool showFilterGallery();
+    void setShowFilterGallery(bool showFilterGallery);
+
 
 private:
     KisConfig(const KisConfig&);

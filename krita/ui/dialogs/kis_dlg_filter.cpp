@@ -31,7 +31,6 @@
 #include <kis_paint_device.h>
 #include "commands/kis_image_layer_add_command.h"
 #include "kis_undo_adapter.h"
-
 #include "ui_wdgfilterdialog.h"
 
 struct KisFilterDialog::Private {
@@ -83,7 +82,6 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP ima
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
 
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(updatePreview()));
-
 }
 
 KisFilterDialog::~KisFilterDialog()
@@ -95,7 +93,6 @@ void KisFilterDialog::setFilter(KisFilterSP f)
 {
     Q_ASSERT(f);
     setWindowTitle(f->name());
-    dbgKrita << "setFilter: " << f;
     d->currentFilter = f;
     d->uiFilterDialog.filterSelection->setFilter(f);
     updatePreview();

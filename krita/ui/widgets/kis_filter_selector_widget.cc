@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,10 +25,8 @@
 
 #include "ui_wdgfilterselector.h"
 
-#include "kis_layer.h"
-
+#include <kis_layer.h>
 #include <kis_paint_device.h>
-
 #include <filter/kis_filter.h>
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
@@ -37,7 +36,7 @@
 #include "kis_bookmarked_configurations_editor.h"
 #include "kis_bookmarked_filter_configurations_model.h"
 #include "kis_filters_model.h"
-
+#include "kis_config.h"
 
 struct KisFilterSelectorWidget::Private {
     QWidget* currentCentralWidget;
@@ -65,7 +64,6 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
 
     d->widgetLayout = new QGridLayout(d->uiFilterSelector.centralWidgetHolder);
 
-
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(entered(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(clicked(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
@@ -73,10 +71,17 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     connect(d->uiFilterSelector.comboBoxPresets, SIGNAL(activated(int)),
             SLOT(slotBookmarkedFilterConfigurationSelected(int)));
     connect(d->uiFilterSelector.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
+
+
+
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
 {
+    KisConfig cfg;
+    QList<int> sizes = d->uiFilterSelector.splitter->sizes();
+    qDebug() << "saving gallery state" << sizes;
+    cfg.setShowFilterGallery(sizes[0] > 0);
     delete d->filtersModel;
     delete d->currentCentralWidget;
     delete d->widgetLayout;
@@ -99,6 +104,17 @@ void KisFilterSelectorWidget::setImage(KisImageSP _image)
     d->image = _image;
 }
 
+void KisFilterSelectorWidget::showSelector(bool visible)
+{
+    QList<int> sizes;
+    if (visible) {
+        sizes << 200;
+    }
+    else {
+        sizes << 0;
+    }
+    d->uiFilterSelector.splitter->setSizes(sizes);
+}
 
 void KisFilterSelectorWidget::setFilter(KisFilterSP f)
 {
@@ -116,7 +132,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     }
 
     KisConfigWidget* widget =
-        d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice, d->image);
+            d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice, d->image);
 
     if (!widget) { // No widget, so display a label instead
         d->currentFilterConfigurationWidget = 0;
@@ -126,16 +142,35 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->currentFilterConfigurationWidget = widget;
         d->currentCentralWidget = widget;
         d->currentFilterConfigurationWidget->setConfiguration(
-            d->currentFilter->defaultConfiguration(d->paintDevice));
+                d->currentFilter->defaultConfiguration(d->paintDevice));
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigPleaseUpdatePreview()), this, SIGNAL(configurationChanged()));
     }
+
     // Change the list of presets
     delete d->currentBookmarkedFilterConfigurationsModel;
     d->currentBookmarkedFilterConfigurationsModel = new KisBookmarkedFilterConfigurationsModel(d->thumb, f);
     d->uiFilterSelector.comboBoxPresets->setModel(d->currentBookmarkedFilterConfigurationsModel);
+
     // Add the widget to the layout
+    d->currentCentralWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->widgetLayout->addWidget(d->currentCentralWidget, 0 , 0);
-    d->uiFilterSelector.centralWidgetHolder->setMinimumSize(d->currentCentralWidget->minimumSize());
+    qDebug() << "minimum" << d->currentCentralWidget->minimumSize() << "min" << d->currentCentralWidget->sizeHint() << "max" << d->currentCentralWidget->maximumSize();
+
+
+    KisConfig cfg;
+    QList<int> sizes;
+    qDebug() << "show gallery" << cfg.showFilterGallery() << "sizes" << sizes;
+    if (cfg.showFilterGallery()) {
+
+        sizes << d->uiFilterSelector.filtersSelector->sizeHint().width()
+              << d->currentCentralWidget->sizeHint().width();
+    }
+    else {
+        sizes << 0 << d->currentCentralWidget->sizeHint().width();
+    }
+    d->uiFilterSelector.splitter->setSizes(sizes);
+
+    //d->uiFilterSelector.centralWidgetHolder->setMinimumSize(d->currentCentralWidget->minimumSize());
 }
 
 void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)
@@ -168,7 +203,7 @@ void KisFilterSelectorWidget::slotBookmarkedFilterConfigurationSelected(int inde
 void KisFilterSelectorWidget::editConfigurations()
 {
     KisSerializableConfiguration* config =
-        d->currentFilterConfigurationWidget ? d->currentFilterConfigurationWidget->configuration() : 0;
+            d->currentFilterConfigurationWidget ? d->currentFilterConfigurationWidget->configuration() : 0;
     KisBookmarkedConfigurationsEditor editor(this, d->currentBookmarkedFilterConfigurationsModel, config);
     editor.exec();
 }
@@ -177,7 +212,7 @@ KisFilterConfiguration* KisFilterSelectorWidget::configuration()
 {
     if (d->currentFilterConfigurationWidget) {
         KisFilterConfiguration * config
-            = dynamic_cast<KisFilterConfiguration*>(d->currentFilterConfigurationWidget->configuration());
+                = dynamic_cast<KisFilterConfiguration*>(d->currentFilterConfigurationWidget->configuration());
         if (config) {
             return config;
         }

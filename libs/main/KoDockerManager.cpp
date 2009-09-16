@@ -75,7 +75,7 @@ void KoDockerManager::Private::removeDockers()
           }
         }
         toolDockerRaisedMap[j.key()] = isOnTop;
-        kDebug() << j.value() << " " << j.value()->isVisible() << j.key();
+        //kDebug() << j.value() << " " << j.value()->isVisible() << j.key();
         j.value()->toggleViewAction()->setVisible(false);
         toolDockerVisibillityMap[j.key()] = j.value()->isVisible();
         j.value()->setVisible(false);
@@ -96,9 +96,9 @@ KoDockerManager::KoDockerManager(KoView *view)
     QStringListIterator j(visibleList);
     while (j.hasNext()) {
       QString name = j.next();
-      kDebug() << "name = " << name;
+      //kDebug() << "name = " << name;
       d->loadDocker(name, true);
-      kDebug() << "visible = " << d->toolDockerVisibillityMap[name];
+      //kDebug() << "visible = " << d->toolDockerVisibillityMap[name];
    }
   QStringList hiddenList = cfg.readEntry("HiddenToolDockers", QStringList());
 
@@ -124,8 +124,8 @@ KoDockerManager::~KoDockerManager()
           hiddenList += j.key();
         }
     }
-    kDebug() << "visibleList = " << visibleList;
-    kDebug() << "hiddenList = " << hiddenList;
+    //kDebug() << "visibleList = " << visibleList;
+    //kDebug() << "hiddenList = " << hiddenList;
     cfg.writeEntry("VisibleToolDockers", visibleList);
     cfg.writeEntry("HiddenToolDockers", hiddenList);
     cfg.sync();
@@ -138,7 +138,7 @@ void KoDockerManager::removeUnusedOptionWidgets()
   while (j.hasNext()) {
     j.next();
     if (not d->activeToolDockerMap.contains(j.key())) {
-        kDebug(/*30004*/) << "removing" << j.key() << ((void*) j.value());
+        //kDebug(30004) << "removing" << j.key() << ((void*) j.value());
         j.value()->setVisible(false);
         j.value()->setEnabled(false);
         j.value()->toggleViewAction()->setVisible(false);
@@ -178,9 +178,9 @@ void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWi
         td->setWindowTitle(i.key());
         td->newOptionWidget(i.value());
         d->view->restoreDockWidget(td);
-        kDebug() << i.value()->objectName() << " " << d->toolDockerVisibillityMap[i.value()->objectName()];
+        //kDebug() << i.value()->objectName() << " " << d->toolDockerVisibillityMap[i.value()->objectName()];
         td->setVisible(d->toolDockerVisibillityMap[i.value()->objectName()]);
-        kDebug() << td->isVisible();
+        //kDebug() << td->isVisible();
         td->toggleViewAction()->setVisible(true);
         d->activeToolDockerMap[i.value()->objectName()] = td;
         if(d->toolDockerRaisedMap[i.value()->objectName()]) {

@@ -72,8 +72,7 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
             SLOT(slotBookmarkedFilterConfigurationSelected(int)));
     connect(d->uiFilterSelector.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
 
-
-
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
@@ -170,7 +169,6 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     }
     d->uiFilterSelector.splitter->setSizes(sizes);
 
-    //d->uiFilterSelector.centralWidgetHolder->setMinimumSize(d->currentCentralWidget->minimumSize());
 }
 
 void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)

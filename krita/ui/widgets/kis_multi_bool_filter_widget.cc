@@ -54,6 +54,7 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWi
         widgetLayout->addWidget(cb);
         m_boolWidgets.append(cb);
     }
+    widgetLayout->addSpacerItem(new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
     widgetLayout->addStretch();
 }
 

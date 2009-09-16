@@ -100,8 +100,6 @@ void KisFilterDialog::setFilter(KisFilterSP f)
 
 void KisFilterDialog::updatePreview()
 {
-    dbgKrita << ">>>>  KisFilterDialog::updatePreview() " << d->currentFilter->name();
-
     if (!d->currentFilter) return;
 
     d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());

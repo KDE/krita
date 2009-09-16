@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008-2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,6 +39,13 @@ KisSprayColorOption::KisSprayColorOption()
 {
     m_checkable = false;
     m_options = new KisColorOptionsWidget();
+    
+    connect(m_options->randomOpacityCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->hueSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
+    connect(m_options->saturationSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
+    connect(m_options->valueSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
+    
     setConfigurationPage(m_options);
 }
 

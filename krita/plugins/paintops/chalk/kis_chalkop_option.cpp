@@ -38,6 +38,8 @@ KisChalkOpOption::KisChalkOpOption()
 {
     m_checkable = false;
     m_options = new KisChalkOpOptionsWidget();
+    connect(m_options->radiusSpinBox,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
+
     setConfigurationPage(m_options);
 }
 

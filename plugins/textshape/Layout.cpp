@@ -552,18 +552,18 @@ void Layout::handleTable()
             QPointF pos = prevBlock.length() == 1 ? prevBlock.layout()->lineAt(0).position() : QPointF(x(), y());
 
             // Start the first rect of the table.
-            qDebug() << "initial layout about to start at " << pos;
+            kDebug(32500) << "initial layout about to start at " << pos;
             m_tableLayout.startNewTableRect(pos, shape->size().width(), 0);
             m_restartingAfterTableBreak = false; // You never know
             m_restartingFirstCellAfterTableBreak = false; // You never know
         }
 
-        qDebug() << "working on cell row" << m_tableCell.row() << "col" << m_tableCell.column() << m_y;
+        kDebug(32500) << "working on cell row" << m_tableCell.row() << "col" << m_tableCell.column() << m_y;
         if (m_tableCell != previousCell) {
             // The current cell is not the same as the one the previous block
             // was in. This means the layout processed stepped into
             // a cell.
-            qDebug() << "into cell row" << m_tableCell.row() << "col" << m_tableCell.column();
+            kDebug(32500) << "into cell row" << m_tableCell.row() << "col" << m_tableCell.column();
             if (previousCell.isValid()) {
                 // The previous cell was valid, which means we just left a cell,
                 // so tell the table layout to calculate its height.
@@ -581,13 +581,13 @@ void Layout::handleTable()
                         // In a previous run we have detected that current row should not be on the shape it was placed.
                         // A new shape was ordered and the Y have already been roughly set.
                         // Now is the time to set the Y correctly, but we shouldn't do any detecting of breaks
-                        qDebug() << "[re-layout run] break after row" << previousCell.row() << "and next row at y " << m_y;
+                        kDebug(32500) << "[re-layout run] break after row" << previousCell.row() << "and next row at y " << m_y;
                         m_tableLayout.startNewTableRect(QPointF(0.0, y()), shape->size().width(), m_tableCell.row());
                         m_restartingFirstCellAfterTableBreak= false;
                     } else {
                         m_tableLayout.layoutRow(previousCell.row());
                         shape->update(m_tableLayout.rowBoundingRect(previousCell.row()));
-                        qDebug() << "(in table)layouted row" << previousCell.row() << "and next row at y" << m_y;
+                        kDebug(32500) << "(in table)layouted row" << previousCell.row() << "and next row at y" << m_y;
 
                         handleTableBreak(previousCell, table);
                     }
@@ -619,7 +619,7 @@ void Layout::handleTable()
                 // Tell the table layout to calculate height of last cell.
                 m_tableLayout.calculateCellContentHeight(previousCell);
                 m_tableLayout.layoutRow(previousCell.row());
-                qDebug() << "(after table)layouted row" << previousCell.row() <<"and next row at y" << m_y;
+                kDebug(32500) << "(after table)layouted row" << previousCell.row() <<"and next row at y" << m_y;
             }
 
             handleTableBreak(previousCell, previousTable);
@@ -643,8 +643,8 @@ void Layout::handleTableBreak(QTextTableCell &previousCell, QTextTable *table)
     KoTableColumnAndRowStyleManager *carsManager =
     reinterpret_cast<KoTableColumnAndRowStyleManager *>(
             tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
-        
-    qDebug() << "[in handle TableBreak]" << m_restartingAfterTableBreak;
+
+    kDebug(32500) << "[in handle TableBreak]" << m_restartingAfterTableBreak;
 
     // Implementation note about break handling:
     // There are a break and 3 rows in play:  some row, [break], previous row, current row
@@ -676,23 +676,23 @@ void Layout::handleTableBreak(QTextTableCell &previousCell, QTextTable *table)
         }
         m_restartingFirstCellAfterTableBreak = m_restartingAfterTableBreak;
     }
-    
+
     // at this point m_restartingAfterTableBreak is an indication if we should order a new shape
     if (m_restartingAfterTableBreak) {
-        qDebug() << "[row " << previousCell.row() << "should be moved to new shape and re layouted]";
+        kDebug(32500) << "[row " << previousCell.row() << "should be moved to new shape and re layouted]";
         layout->endLayout();
         //Find the first block in the previous row
         QTextCursor cur = previousCell.firstCursorPosition();
         cur = table->rowStart(cur);
         m_block = cur.block().next();
-        qDebug() << "pos" << m_data->position() << " and block position" << m_block.position() << "and shape" << shape;
+        kDebug(32500) << "pos" << m_data->position() << " and block position" << m_block.position() << "and shape" << shape;
         if (!m_newShape && m_block.position() > m_data->position()) {
             m_data->setEndPosition(m_block.position() - 1);
             nextShape();
             if (m_data) {
                 m_data->setPosition(m_block.position());
             }
-            qDebug() << "  requested new shape at " << y();
+            kDebug(32500) << "  requested new shape at " << y();
         } else {
             // We already have the correct shape due to earlier layout setting data position and endPosition
             m_y= m_data->documentOffset();

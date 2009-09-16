@@ -58,3 +58,9 @@ install( FILES
     krita-pencil.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 
 
+install( FILES  
+    smudge/smudge-finger.obj 
+    smudge/smudge-finger.mtl
+    airbrush/airbrush.obj
+    airbrush/airbrush.mtl DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
+

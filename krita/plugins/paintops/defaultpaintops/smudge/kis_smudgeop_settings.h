@@ -46,6 +46,13 @@ public:
 
     KisPaintOpSettingsSP clone() const;
 
+#if defined(HAVE_OPENGL)
+    inline QString modelName() const{
+        return "smudge-finger";
+    }
+#endif
+    
+    
 public:
 
     KisSmudgeOpSettingsWidget *m_optionsWidget;

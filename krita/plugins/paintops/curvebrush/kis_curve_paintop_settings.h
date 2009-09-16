@@ -50,6 +50,13 @@ public:
     int curveAction() const;
     int interval() const;
 
+#if defined(HAVE_OPENGL)
+    inline QString modelName() const{
+        return "stylus";
+    }
+#endif
+
+    
 private:
     KisCurvePaintOpSettingsWidget* m_options;
 };

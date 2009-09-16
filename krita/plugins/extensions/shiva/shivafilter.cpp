@@ -17,6 +17,8 @@
 
 #include "shivafilter.h"
 
+#include <QMutex>
+
 #include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
@@ -27,6 +29,8 @@
 #include <OpenShiva/Source.h>
 #include <OpenShiva/Metadata.h>
 #include <GTLCore/Region.h>
+
+extern QMutex* shivaMutex;
 
 ShivaFilter::ShivaFilter(OpenShiva::Source* kernel) : KisFilter(KoID( kernel->name().c_str(), kernel->name().c_str() ), categoryOther(), kernel->name().c_str()), m_source(kernel)
 {
@@ -77,16 +81,18 @@ void ShivaFilter::process( KisConstProcessingInformation srcInfo,
         }
       }
     }
-    
-    kernel.compile();
-    if(kernel.isCompiled())
     {
-      ConstPaintDeviceImage pdisrc(src);
-      PaintDeviceImage pdi(dst);
-      std::list< GTLCore::AbstractImage* > inputs;
-      inputs.push_back(&pdisrc);
-      GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
-      dbgPlugins << dstTopLeft << " " << size;
-      kernel.evaluatePixeles(region, inputs, &pdi);
+      QMutexLocker l(shivaMutex);
+      kernel.compile();
+      if(kernel.isCompiled())
+      {
+        ConstPaintDeviceImage pdisrc(src);
+        PaintDeviceImage pdi(dst);
+        std::list< GTLCore::AbstractImage* > inputs;
+        inputs.push_back(&pdisrc);
+        GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
+        dbgPlugins << dstTopLeft << " " << size;
+        kernel.evaluatePixeles(region, inputs, &pdi);
+      }
     }
 }

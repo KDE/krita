@@ -17,6 +17,8 @@
 
 #include "shivagenerator.h"
 
+#include <QMutex>
+
 #include <KoProgressUpdater.h>
 
 #include <kis_paint_device.h>
@@ -32,6 +34,8 @@
 
 #include "PaintDeviceImage.h"
 #include "QVariantValue.h"
+
+extern QMutex* shivaMutex;
 
 ShivaGenerator::ShivaGenerator(OpenShiva::Source* kernel) : KisGenerator(KoID( kernel->name().c_str(), kernel->name().c_str() ), KoID("basic"), kernel->name().c_str()), m_source(kernel)
 {
@@ -74,13 +78,15 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
         }
       }
     }
-    
-    kernel.compile();
-    if(kernel.isCompiled())
     {
-      PaintDeviceImage pdi(dst);
-      std::list< GTLCore::AbstractImage* > inputs;
-      GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
-      kernel.evaluatePixeles(region, inputs, &pdi);
+      QMutexLocker l(shivaMutex);
+      kernel.compile();
+      if(kernel.isCompiled())
+      {
+        PaintDeviceImage pdi(dst);
+        std::list< GTLCore::AbstractImage* > inputs;
+        GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
+        kernel.evaluatePixeles(region, inputs, &pdi);
+      }
     }
 }

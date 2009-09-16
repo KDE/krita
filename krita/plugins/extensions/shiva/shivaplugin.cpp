@@ -17,6 +17,8 @@
 
 #include "shivaplugin.h"
 
+#include <QMutex>
+
 #include <kis_debug.h>
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
@@ -29,6 +31,8 @@
 
 #include "shivagenerator.h"
 #include "shivafilter.h"
+
+QMutex* shivaMutex;
 
 typedef KGenericFactory<ShivaPlugin> ShivaPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kritashiva, ShivaPluginFactory("krita"))
@@ -73,6 +77,7 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QStringList &)
             }
         }
     }
+    shivaMutex = new QMutex;
 }
 
 ShivaPlugin::~ShivaPlugin()

@@ -373,7 +373,7 @@ QWidget* KisToolGradient::createOptionWidget()
     m_slPreviewOpacity = new KoSliderCombo(widget);
     m_slPreviewOpacity->setDecimals(0);
     m_slPreviewOpacity->setValue(m_previewOpacityPercent);
-    connect(m_slPreviewOpacity, SIGNAL(valueChanged(int,bool)), this, SLOT(slotSetPreviewOpacity(int,bool)));
+    connect(m_slPreviewOpacity, SIGNAL(valueChanged(qreal,bool)), this, SLOT(slotSetPreviewOpacity(qreal,bool)));
 
     addOptionWidgetOption(m_slPreviewOpacity, m_lbPreviewOpacity);
 
@@ -404,8 +404,7 @@ void KisToolGradient::slotSetAntiAliasThreshold(double value)
     m_antiAliasThreshold = value;
 }
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-void KisToolGradient::slotSetPreviewOpacity(int value, bool final)
+void KisToolGradient::slotSetPreviewOpacity(qreal value, bool final)
 {
     m_previewOpacityPercent = value;
 }
@@ -418,7 +417,6 @@ void KisToolGradient::slotConfigChanged()
     m_slPreviewOpacity->setEnabled(enablePreviewOpacity);
     m_lbPreviewOpacity->setEnabled(enablePreviewOpacity);
 }
-#endif
 
 #include "kis_tool_gradient.moc"
 

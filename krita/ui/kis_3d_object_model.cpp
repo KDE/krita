@@ -91,7 +91,31 @@ Kis3DObjectModel::Kis3DObjectModel(const QString& model, const QString& material
                 m_normalHash[ key ].append( edgeList.value(2).toInt() - 1 );
             }
         }
+    } // while
+
+// DEBUG CODE
+#if 0
+    kDebug() << "(v) vertex: "<< m_vertex.size();
+    kDebug() << "(vn) normals: "<< m_normal.size();
+    kDebug() << "(usemtl) keys (v): "<< m_vertexHash.keys();
+    kDebug() << "(usemtl) keys (vn): "<< m_normalHash.keys();
+
+    int vSize = 0;
+    int nSize = 0;
+    QList<QString> keyList = m_vertexHash.keys();
+    for (int i = 0;i < keyList.size(); i++){
+        vSize += m_vertexHash[ keyList[i] ].size();
     }
+    keyList = m_normalHash.keys();
+    for (int i = 0;i < keyList.size(); i++){
+        nSize += m_normalHash[ keyList[i] ].size();
+    }
+    kDebug() << "(f) faces-vertex: " << vSize;
+    kDebug() << "(f) faces-normal: " << nSize;
+    kDebug() << "(f) faces-vertex/3.0: "<< vSize / 3.0;
+    kDebug() << "(f) faces-normal/3.0: " << nSize / 3.0;
+    
+#endif
 }
 
 #define MODEL_SCALE 30
@@ -126,7 +150,7 @@ GLuint Kis3DObjectModel::displayList()
         debug(m);
 #endif
 
-        for (int i = 0; i < m_vertexIndex.size() - 3; i += 3){
+        for (int i = 0; i < m_vertexIndex.size(); i += 3){
             for (int j = 0; j < 3; j++){
                 int vi = m_vertexIndex[i+j];
                 int ni = m_normalIndex[i+j];

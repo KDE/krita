@@ -37,24 +37,7 @@ KisSprayOpOption::KisSprayOpOption()
         : KisPaintOpOption(i18n("Brush size"), false)
 {
     m_checkable = false;
-    m_options = new KisShapeOptionsWidget();
-    connect(m_options->shapeBtn,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->particleBtn,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->pixelBtn,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->shapeBox,SIGNAL(currentIndexChanged(int)),SIGNAL( sigSettingChanged()));
-    connect(m_options->widthSpin,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
-    connect(m_options->heightSpin,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
-    connect(m_options->jitterShape,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->heightPro,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->widthPro,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->proportionalBox,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->gaussBox,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-
-// turn off those
-//     connect(m_options->maxTreshSpin,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-//     connect(m_options->minTreshSpin,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-//     connect(m_options->renderBox,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-
+    m_options = new KisSprayOpOptionsWidget();
     setConfigurationPage(m_options);
 }
 

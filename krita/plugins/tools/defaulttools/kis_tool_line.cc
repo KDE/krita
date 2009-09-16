@@ -76,8 +76,6 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 {
     qreal sx, sy;
     converter.zoom(&sx, &sy);
-
-    gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
     if (m_dragging)
     {
         paintLine(gc, QRect());
@@ -209,17 +207,21 @@ QPointF KisToolLine::straightLine(QPointF point)
 
 void KisToolLine::paintLine(QPainter& gc, const QRect&)
 {
-
+    QPointF viewStartPos = pixelToView(m_startPos);
+    QPointF viewStartEnd = pixelToView(m_endPos);
+    
 #if defined(HAVE_OPENGL)
     if (m_canvas->canvasController()->isCanvasOpenGL()){
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
 
+        
+        
         glBegin(GL_LINES);
             glColor3f(0.501961,1.0, 0.501961);
-            glVertex2f( m_startPos.x(), m_startPos.y() );
-            glVertex2f( m_endPos.x(), m_endPos.y() );
+            glVertex2f( viewStartPos.x(), viewStartPos.y() );
+            glVertex2f( viewStartEnd.x(), viewStartEnd.y() );
         glEnd();
 
         glDisable(GL_COLOR_LOGIC_OP);
@@ -231,7 +233,7 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
         gc.setPen(pen);
-        gc.drawLine(m_startPos, m_endPos);
+        gc.drawLine(viewStartPos, viewStartEnd);
         gc.setPen(old);
     }
 }

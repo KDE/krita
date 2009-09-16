@@ -189,9 +189,7 @@ public:
      * Returns the dynamic toolType
      * Each tool has a toolType which it uses to be grouped in the toolbox.
      * The predefined areas are main and dynamic. Dynamic tools are hidden
-     * until the shape they belong to is activated. XXX: hiding and showing
-     * buttons is a no-no from a usability pov, so we should discuss this
-     * with KDE's usability group.
+     * until the shape they belong to is activated.
      *
      * @see toolType()
      * @see setToolType()
@@ -199,6 +197,11 @@ public:
     static QString dynamicToolType() {
         return "dynamic";
     }
+
+    /**
+     * Set the default shortcut for activation of this tool.
+     */
+    void setShortcut(const KShortcut & shortcut);
 
 protected:
     /**
@@ -232,11 +235,6 @@ protected:
      * @see activationShapeId()
      */
     void setActivationShapeId(const QString &activationShapeId);
-
-    /**
-     * Set the default shortcut for activation of this tool.
-     */
-    void setShortcut(const KShortcut & shortcut);
 
     /**
      * set if the tools instance this factory creates can be reused between input devices.

@@ -70,8 +70,6 @@ Functionality that _should_ be in KOffice
 * UI
 
     * show both selection mask and global selection
-    * Categorize the composite ops (show categories in combobox with a separator,
-      require KDE4.1 for KCategorizedView(to be embedded in the combo box))
     * Add apply button to layer and image properties dialogs
     * Set a good default the default texture, gradient and brush and make the selector
       look good:
@@ -85,9 +83,7 @@ Functionality that _should_ be in KOffice
 BR  * Implement a primary, secundary and tertiary paintop that get activated by mouse,
        ctrl+mouse and ctrl+shift+mouse
 BR  * Fix flake layers: deletion of shapes
-    * Divide the QPainter canvas' cached QImage into pyramided tiles.
     * Review "Scale to new Size" dialog. Add a keep aspect ratio switch
-    * Create a "Change canvas size" dialog
 BR  * make it possible to save and load masks (krita/ui/kra)
     * check if edit->clear and edit->delete can the combined
 
@@ -99,7 +95,6 @@ BR  * make it possible to save and load masks (krita/ui/kra)
       depends on usability review)
     * The KOffice toolbox may need to become an ordinary toolbar: propose to KOffice ML.a (???
       -- depends on usability review)
-BR  * Show no cursor option
     * Check painting of tool overlays (rubber bands, control points, temporary shapes etc)
       for all tools
     * Add icon for the measure tool

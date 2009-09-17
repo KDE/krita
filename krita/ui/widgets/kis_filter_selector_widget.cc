@@ -73,6 +73,9 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     connect(d->uiFilterSelector.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
 
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+    d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 1, 0, 0, 2);
+    d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 1, 2, 1);
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
@@ -153,8 +156,6 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     // Add the widget to the layout
     d->currentCentralWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->widgetLayout->addWidget(d->currentCentralWidget, 0 , 0);
-    qDebug() << "minimum" << d->currentCentralWidget->minimumSize() << "min" << d->currentCentralWidget->sizeHint() << "max" << d->currentCentralWidget->maximumSize();
-
 
     KisConfig cfg;
     QList<int> sizes;

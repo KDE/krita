@@ -128,7 +128,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
         shadowDev->move(xoffset, yoffset);
 
         KisGroupLayerSP parent = image->rootLayer();
-        if (m_view->activeLayer())
+        if (m_view)
             parent = dynamic_cast<KisGroupLayer*>(m_view->activeLayer()->parent().data());
 
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), i18n("Drop Shadow"), opacity, shadowDev));
@@ -162,6 +162,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
                 }
             }
         }
+        l->setDirty();
         m_view->image()->setModified();
     }
 

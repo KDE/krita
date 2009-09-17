@@ -13,6 +13,7 @@ Cyrille     CY
 Emanuele    EM
 Sven        SV
 Lukas       LT
+Dmitry      DM
 
 Regressions from 1.x
 =======================================================================
@@ -20,17 +21,9 @@ Regressions from 1.x
 * Image
 
 
-* UI
-
-    * Progress reporting ( per layer )
-    * Split view crashes
-
-* Tools
-
 * Filters
 
-    Run filter test to see which filters are broken (or need a fixed test)
-
+    * Run filter test to see which filters are broken (or need a fixed test)
 BR  * Make the bumpmap filter get the right layer on loading as adj. layer or filter mask.
     * all filters are extremely slow
 
@@ -42,7 +35,6 @@ BR  * Smudge op
 
     * Histogram Docker needs to be reimplemented
     * Select all Opaque Pixels
-    * Drop shadow crashes Krita in the tile manager
 
 * Brushes
 
@@ -64,14 +56,9 @@ Functionality that _should_ be in KOffice
 * Bugs
 
     * Filters that need access to the whole image do not work correctly with masks.
-BR  * When changing the image size, the canvas doesn't realize that (change document
-      size on canvas controller when image size changes)
-    * Fix QPainter::restore: Unbalanced save/restore messages
 
 * Image
 
-    * Make recomposition threaded again
-    * Make BCoppens' tile manager work (and without a global lock!)
     * Fix working with selected subset of channels everywhere
     * ??? A possible cause for the threadpool crashing issue is the fact that we throw
       QStrings across threads, and kDebug in threaded filters. Possible fix: use std::string

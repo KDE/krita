@@ -404,6 +404,8 @@ void KisToolGradient::slotSetAntiAliasThreshold(double value)
     m_antiAliasThreshold = value;
 }
 
+#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+
 void KisToolGradient::slotSetPreviewOpacity(qreal value, bool final)
 {
     m_previewOpacityPercent = value;
@@ -417,6 +419,8 @@ void KisToolGradient::slotConfigChanged()
     m_slPreviewOpacity->setEnabled(enablePreviewOpacity);
     m_lbPreviewOpacity->setEnabled(enablePreviewOpacity);
 }
+
+#endif
 
 #include "kis_tool_gradient.moc"
 

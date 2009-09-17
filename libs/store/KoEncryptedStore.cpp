@@ -19,7 +19,7 @@
 #ifdef QCA2
 
 #include "KoEncryptedStore.h"
-
+#include "KoEncryptionChecker.h"
 #include "KoXmlReader.h"
 
 #include <QString>
@@ -123,7 +123,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
     }
     m_mode = mode;
     if (mode == Write) {
-        m_bGood = QCA::isSupported("sha1") && QCA::isSupported("pbkdf2(sha1)") && QCA::isSupported("blowfish-cfb");
+        m_bGood = KoEncryptionChecker::isEncryptionSupported();
         if (m_bGood) {
             if (!m_pZip->open(QIODevice::WriteOnly)) {
                 m_bGood = false;

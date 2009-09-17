@@ -22,12 +22,18 @@
 
 #include "ui_koDocumentInfoAboutWidget.h"
 #include "ui_koDocumentInfoAuthorWidget.h"
+
 #include "KoDocumentInfo.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
+
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <kmessagebox.h>
+#include <kstdguiitem.h>
+#include <kconfiggroup.h>
 
 #ifdef KDEPIMLIBS_FOUND
 #include <kabc/addressee.h>
@@ -35,16 +41,14 @@
 #endif
 
 #include <KoGlobal.h>
-#include <kiconloader.h>
-#include <kmessagebox.h>
-#include <kstdguiitem.h>
+#include <KoEncryptionChecker.h>
 
 #include <QLabel>
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QPixmap>
 #include <QDateTime>
-#include <kconfiggroup.h>
+
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
@@ -80,6 +84,12 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->m_aboutUi = new Ui::KoDocumentInfoAboutWidget();
     QWidget *infodlg = new QWidget();
     d->m_aboutUi->setupUi(infodlg);
+    if (!KoEncryptionChecker::isEncryptionSupported()) {
+        d->m_aboutUi->lblEncryptedDesc->setVisible(false);
+        d->m_aboutUi->lblEncrypted->setVisible(false);
+        d->m_aboutUi->pbEncrypt->setVisible(false);
+        d->m_aboutUi->lblEncryptedPic->setVisible(false);
+    }
     KPageWidgetItem *page = new KPageWidgetItem(infodlg, i18n("General"));
     page->setHeader(i18n("General"));
     KoDocument* doc = dynamic_cast< KoDocument* >(d->m_info->parent());

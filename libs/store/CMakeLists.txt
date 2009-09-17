@@ -1,8 +1,8 @@
 include_directories( ${KOSTORE_INCLUDES} )
 
 if( QCA2_FOUND )
-include_directories( ${QCA2_INCLUDE_DIR} )
-add_definitions( -DQCA2 )
+    include_directories( ${QCA2_INCLUDE_DIR} )
+    add_definitions( -DQCA2 )
 endif( QCA2_FOUND )
 
 add_subdirectory( tests )
@@ -18,6 +18,7 @@ set(kostore_LIB_SRCS
    KoXmlReader.cpp
    KoXmlWriter.cpp
    KoEncryptedStore.cpp
+   KoEncryptionChecker.cpp
    )
 
 kde4_add_library(kostore SHARED ${kostore_LIB_SRCS})

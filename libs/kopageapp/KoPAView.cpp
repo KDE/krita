@@ -744,8 +744,7 @@ void KoPAView::pageOffsetChanged()
 
 void KoPAView::canvasControllerResized()
 {
-    d->horizontalRuler->setOffset( d->canvasController->canvasOffsetX() );
-    d->verticalRuler->setOffset( d->canvasController->canvasOffsetY() );
+    pageOffsetChanged();
 }
 
 void KoPAView::updateMousePosition(const QPoint& position)

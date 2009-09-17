@@ -53,7 +53,7 @@ void KoDockerManager::Private::loadDocker(const QString& _name, bool _visible)
   toolDockerVisibillityMap[_name] = _visible;
   toolDockerRaisedMap[_name] = false;
   td->setVisible(false);
-  td->setEnabled(false);    
+  td->setEnabled(false);
   td->toggleViewAction()->setVisible(false);
 }
 
@@ -63,7 +63,7 @@ void KoDockerManager::Private::removeDockers()
     QMapIterator<QString, KoToolDocker *> j(activeToolDockerMap);
     while (j.hasNext()) {
         j.next();
-        
+
         // Check if the dock is raised or not
         QList<QDockWidget*> tabedDocks = view->shell()->tabifiedDockWidgets(j.value());
         bool isOnTop = true;
@@ -79,7 +79,7 @@ void KoDockerManager::Private::removeDockers()
         j.value()->toggleViewAction()->setVisible(false);
         toolDockerVisibillityMap[j.key()] = j.value()->isVisible();
         j.value()->setVisible(false);
-        j.value()->setEnabled(false);    
+        j.value()->setEnabled(false);
     }
     activeToolDockerMap.clear();
 }
@@ -152,6 +152,7 @@ void KoDockerManager::removeUnusedOptionWidgets()
 
 void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap, QWidget *callingView)
 {
+    Q_UNUSED(callingView);
     d->removeDockers();
 
     // Now show new active dockers (maybe even create) and show in docker menu

@@ -43,11 +43,11 @@ KisColorTransformationFilter::~KisColorTransformationFilter()
 }
 
 void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo,
-                        KisProcessingInformation dstInfo,
-                        const QSize& size,
-                        const KisFilterConfiguration* config,
-                        KoUpdater* progressUpdater
-                    ) const
+                                           KisProcessingInformation dstInfo,
+                                           const QSize& size,
+                                           const KisFilterConfiguration* config,
+                                           KoUpdater* progressUpdater
+                                           ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
@@ -66,54 +66,7 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
     KoColorTransformation* colorTransformation = createTransformation(cs, config);
     if(!colorTransformation) return;
 
-#ifndef NDEBUG
-    QTime t;
-    t.start();
-#endif
-
-#if 0
-// Method one: iterate and check every pixel for selectedness. It is
-// only slightly slower than the next method and the code is very
-// clear. Note that using nextRow() instead of recreating the iterators
-// for every row makes a huge difference.
-
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
-
-    for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
-        while (!srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted())) {
-            if (srcIt.isSelected()) {
-                colorTransformation->transform(srcIt.oldRawData(), dstIt.rawData(), 1);
-            }
-            ++srcIt;
-            ++dstIt;
-        }
-        srcIt.nextRow();
-        dstIt.nextRow();
-        if (progressUpdater) progressUpdater->setValue(row);
-    }
-#ifndef NDEBUG
-    dbgPlugins << "Per-pixel isSelected():" << t.elapsed() << " ms";
-#endif
-
-
-
-
-#ifndef NDEBUG
-    t.restart();
-#endif
-
-#endif
-
-
     bool hasSelection = srcInfo.selection();
-
-// Method two: check the number of consecutive pixels the iterators
-// points to. Take as large stretches of unselected pixels as possible
-// and pass those to the color space transform object in one go. It's
-// quite a bit speedier, with the speed improvement more noticeable
-// the less happens inside the color transformation.
-
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
 
@@ -155,14 +108,7 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
         srcIt.nextRow();
         dstIt.nextRow();
     }
-#ifndef NDEBUG
-    dbgPlugins << "Consecutive pixels:" << t.elapsed() << " ms";
-#endif
-
     delete colorTransformation;
-    //if(progressUpdater) progressUpdater->setProgress( 100 );
 
-    // Two inversions make no inversion? No -- because we're reading
-    // from the oldData in both loops without saving the transaction
-    // in between, both inversion loops invert the original image.
+
 }

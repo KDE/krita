@@ -1,3 +1,6 @@
+[Undo]
+UndoLimit=0
+
 [KoDockerManager]
 StatusOfTheseToolDockers=KisRulerAssistantTool Option Widget,KisToolTransform option widget,KritaSelected/KisToolColorPicker option widget,KritaShape/KisToolBrushoption widget,KritaShape/KisToolLine,KritaShape/KisToolMeasure option widget,KritaShape/KisToolRectangle
 

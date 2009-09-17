@@ -295,7 +295,10 @@ KoDocument::KoDocument(QWidget * parentWidget, QObject* parent, bool singleViewM
     d->undoStack = new KoUndoStack(this);
     d->undoStack->createUndoAction(actionCollection());
     d->undoStack->createRedoAction(actionCollection());
-    d->undoStack->setUndoLimit(1000); // at least have *some* limit
+
+    KConfigGroup cfgGrp(componentData().config(), "Undo");
+    d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
+
     connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(setDocumentClean(bool)));
 
     // A way to 'fix' the job's window, since we have no widget known to KParts
@@ -2200,7 +2203,7 @@ KoPageLayout KoDocument::pageLayout(int /*pageNumber*/) const
     return d->pageLayout;
 }
 
-void KoDocument::setPageLayout(const KoPageLayout &pageLayout) 
+void KoDocument::setPageLayout(const KoPageLayout &pageLayout)
 {
     d->pageLayout = pageLayout;
 }

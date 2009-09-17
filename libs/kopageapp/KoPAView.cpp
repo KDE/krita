@@ -227,7 +227,7 @@ void KoPAView::initGUI()
     connect(d->canvasController, SIGNAL(canvasOffsetYChanged(int)),
             this, SLOT(pageOffsetChanged()));
     connect(d->canvasController, SIGNAL(sizeChanged(const QSize&)),
-            this, SLOT(canvasControllerResized()));
+            this, SLOT(pageOffsetChanged()));
     connect(d->canvasController, SIGNAL(canvasMousePositionChanged(const QPoint&)),
             this, SLOT(updateMousePosition(const QPoint&)));
     connect(d->verticalRuler, SIGNAL(guideLineCreated(Qt::Orientation, int)),
@@ -740,11 +740,6 @@ void KoPAView::pageOffsetChanged()
     QPoint documentOrigin(d->canvas->documentOrigin());
     d->horizontalRuler->setOffset(d->canvasController->canvasOffsetX() + documentOrigin.x());
     d->verticalRuler->setOffset(d->canvasController->canvasOffsetY() + documentOrigin.y());
-}
-
-void KoPAView::canvasControllerResized()
-{
-    pageOffsetChanged();
 }
 
 void KoPAView::updateMousePosition(const QPoint& position)

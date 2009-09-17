@@ -194,9 +194,6 @@ protected slots:
     /// Change the current view mode to work on master pages
     void setMasterMode( bool master );
 
-    /// Called when the canvas controller is resized
-    virtual void canvasControllerResized();
-    
     // update the rulers
     void pageOffsetChanged();
 

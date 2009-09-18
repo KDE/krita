@@ -25,7 +25,8 @@
 
 #include <QLayout>
 #include <QWidget>
-#include "QPainter"
+#include <QPainter>
+#include <QPainterPath>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -215,11 +216,9 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
-
-        
         
         glBegin(GL_LINES);
-            glColor3f(0.501961,1.0, 0.501961);
+            glColor3i(128,255,128);
             glVertex2f( viewStartPos.x(), viewStartPos.y() );
             glVertex2f( viewStartEnd.x(), viewStartEnd.y() );
         glEnd();
@@ -230,11 +229,24 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
 #endif
 
     if (m_canvas) {
-        QPen old = gc.pen();
+        QPainterPath path;
+        path.moveTo(viewStartPos);
+        path.lineTo(viewStartEnd);
+        paintToolOutline(&gc,path);
+        
+/*        QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
+
+        QColor color;
+        color.setRgbF(0.501961,1.0, 0.501961);
+        pen.setColor(color);
         gc.setPen(pen);
+        gc.setCompositionMode(QPainter::CompositionMode_Exclusion);
+
         gc.drawLine(viewStartPos, viewStartEnd);
         gc.setPen(old);
+*/
+
     }
 }
 

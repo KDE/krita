@@ -33,6 +33,10 @@ class KisPattern;
 class KoAbstractGradient;
 class KisFilterConfiguration;
 class KisPainter;
+class QPainter;
+class QPainterPath;
+
+enum PaintMode { XOR_MODE, BW_MODE };
 
 /// Definitions of the toolgroups of Krita
 static const QString TOOL_TYPE_SHAPE = "0 Krita/Shape";         // Geometric shapes like ellipses and lines
@@ -41,7 +45,6 @@ static const QString TOOL_TYPE_TRANSFORM = "2 Krita/Transform"; // Tools that tr
 static const QString TOOL_TYPE_FILL = "3 Krita/Fill";                // Tools that fill parts of the canvas
 static const QString TOOL_TYPE_VIEW = "4 Krita/View";                // Tools that affect the canvas: pan, zoom, etc.
 static const QString TOOL_TYPE_SELECTED = "5 Krita/Select";          // Tools that select pixels
-
 
 class  KRITAUI_EXPORT KisTool
             : public KoTool
@@ -131,11 +134,16 @@ protected:
 
     /// convenience method to fill the painter's settings with all the current resources
     virtual void setupPainter(KisPainter * painter);
+    
+    /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
+    void paintToolOutline(QPainter * painter,QPainterPath &path,  PaintMode = XOR_MODE);
 
 private:
     struct Private;
     Private* const d;
 };
+
+
 
 #endif // KIS_TOOL_H_
 

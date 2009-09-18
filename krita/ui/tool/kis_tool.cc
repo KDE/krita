@@ -365,5 +365,35 @@ QWidget* KisTool::optionWidget()
     return d->optionWidget;
 }
 
+
+void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path, PaintMode mode)
+{
+    switch (mode){
+        case XOR_MODE:
+        {
+            painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
+            painter->setPen(QColor(128,255,128));
+            painter->drawPath(path);
+            break;
+        }
+        case BW_MODE:
+        {
+            QPen pen = painter->pen();
+            pen.setWidth(3);
+            pen.setColor( QColor(0,0,0,100) );
+            painter->setPen(pen);
+            painter->drawPath(path);
+            pen.setWidth(1);
+            pen.setColor(Qt::white);
+            painter->setPen(pen);
+            painter->drawPath(path);
+            break;
+        }
+        default: 
+            break;
+    }
+}
+
+
 #include "kis_tool.moc"
 

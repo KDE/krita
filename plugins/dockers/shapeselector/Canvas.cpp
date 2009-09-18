@@ -46,10 +46,15 @@
 
 DummyShapeController::DummyShapeController()
 {
+    foreach (const QString &id, KoShapeRegistry::instance()->keys()) {
+        KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+        shapeFactory->populateDataCenterMap(m_dataCenterMap);
+    }
 }
 
 DummyShapeController::~DummyShapeController()
 {
+    qDeleteAll(m_dataCenterMap);
 }
 
 Canvas::Canvas(ShapeSelector *parent)

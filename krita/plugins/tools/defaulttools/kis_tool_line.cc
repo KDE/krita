@@ -218,7 +218,7 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         glLogicOp(GL_XOR);
         
         glBegin(GL_LINES);
-            glColor3i(128,255,128);
+            glColor3f(0.5,1.0,0.5);
             glVertex2f( viewStartPos.x(), viewStartPos.y() );
             glVertex2f( viewStartEnd.x(), viewStartEnd.y() );
         glEnd();
@@ -233,20 +233,12 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         path.moveTo(viewStartPos);
         path.lineTo(viewStartEnd);
         paintToolOutline(&gc,path);
-        
-/*        QPen old = gc.pen();
+/*      
+        QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
-
-        QColor color;
-        color.setRgbF(0.501961,1.0, 0.501961);
-        pen.setColor(color);
-        gc.setPen(pen);
-        gc.setCompositionMode(QPainter::CompositionMode_Exclusion);
-
         gc.drawLine(viewStartPos, viewStartEnd);
         gc.setPen(old);
 */
-
     }
 }
 

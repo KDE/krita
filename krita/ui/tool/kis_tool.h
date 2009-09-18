@@ -113,6 +113,10 @@ public:
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
+    inline void setOutlineStyle(PaintMode mode){
+        m_mode = mode;
+    }
+
 protected:
 
     KisImageSP image() const;
@@ -136,9 +140,11 @@ protected:
     virtual void setupPainter(KisPainter * painter);
     
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
-    void paintToolOutline(QPainter * painter,QPainterPath &path,  PaintMode = XOR_MODE);
+    void paintToolOutline(QPainter * painter,QPainterPath &path);
 
 private:
+    PaintMode m_mode;
+
     struct Private;
     Private* const d;
 };

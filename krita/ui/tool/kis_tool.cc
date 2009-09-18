@@ -81,7 +81,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
         , d(new Private)
 {
     d->cursor = cursor;
-
+    m_mode = XOR_MODE;
 }
 
 KisTool::~KisTool()
@@ -366,9 +366,9 @@ QWidget* KisTool::optionWidget()
 }
 
 
-void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path, PaintMode mode)
+void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path)
 {
-    switch (mode){
+    switch (m_mode){
         case XOR_MODE:
         {
             painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);

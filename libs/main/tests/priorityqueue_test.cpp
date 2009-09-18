@@ -22,6 +22,7 @@
 #include <PriorityQueue_p.h>
 #include <kdebug.h>
 #include <QList>
+#include <ctime>
 
 struct Node
 {

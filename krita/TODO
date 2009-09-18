@@ -273,15 +273,11 @@ Post 2.0
 
 * Import/Export
 
-    * ORA filter
     * XCF filter
     * PSD filter (there is a GPL library now, but the legal status of that
       library is uncertain)
     * Import photoshop brushes and palettes
     * CREATE swatch spec support
-    * Saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale
-      (actually saving to both 8bits and 16bits jpeg with the same build is
-      impossible with libjpeg)
     * OpenEXR:
         * Implement layers
         * Implement support for Blender multichannel, including full 32-bit float/int support

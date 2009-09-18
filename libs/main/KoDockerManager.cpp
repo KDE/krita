@@ -69,7 +69,7 @@ void KoDockerManager::Private::removeDockers()
         bool isOnTop = true;
         int idx = view->children().indexOf(j.value());
         foreach(QDockWidget* dock, tabedDocks) {
-          if(view->shell()->children().indexOf(dock) > idx and dock->isVisible() and dock->isEnabled()) {
+          if(view->shell()->children().indexOf(dock) > idx && dock->isVisible() && dock->isEnabled()) {
             isOnTop = false;
             break;
           }
@@ -137,7 +137,7 @@ void KoDockerManager::removeUnusedOptionWidgets()
   QMapIterator<QString, KoToolDocker *> j(d->toolDockerMap);
   while (j.hasNext()) {
     j.next();
-    if (not d->activeToolDockerMap.contains(j.key())) {
+    if (! d->activeToolDockerMap.contains(j.key())) {
         //kDebug(30004) << "removing" << j.key() << ((void*) j.value());
         j.value()->setVisible(false);
         j.value()->setEnabled(false);

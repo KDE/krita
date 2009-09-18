@@ -155,7 +155,7 @@ void KoProgressUpdater::updateUi()
 
     if (d->currentProgress >= d->progressBar->maximum()) {
         // we're done
-        d->updateGuiTimer.stop(); // 10 upd ates/second should be enough?
+        d->updateGuiTimer.stop(); // 10 updates/second should be enough?
     }
     d->progressBar->setValue(d->currentProgress);
 }

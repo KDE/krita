@@ -65,13 +65,11 @@ KisToolRectangle::~KisToolRectangle()
 
 void KisToolRectangle::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    qreal sx, sy;
-    converter.zoom(&sx, &sy);
     if (!currentImage()) {
         warnKrita << "No currentImage!";
         return;
     }
-    gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
+
     if (m_dragging)
         paintRectangle(gc, QRect());
 }
@@ -188,6 +186,9 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
 {
+    QPointF viewDragStart = pixelToView(m_dragStart);
+    QPointF viewDragEnd = pixelToView(m_dragEnd);
+    
 #if defined(HAVE_OPENGL)
     if (m_canvas->canvasController()->isCanvasOpenGL()){
         glEnable(GL_LINE_SMOOTH);
@@ -195,13 +196,13 @@ void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
         glLogicOp(GL_XOR);
 
         glBegin(GL_LINE_LOOP);
-            glColor3f(0.501961,1.0, 0.501961);
+            glColor3f(0.5,1.0, 0.5);
 
-            glVertex2f( m_dragStart.x(), m_dragStart.y() );
-            glVertex2f( m_dragEnd.x(), m_dragStart.y() );
+            glVertex2f( viewDragStart.x(), viewDragStart.y() );
+            glVertex2f( viewDragEnd.x(), viewDragStart.y() );
 
-            glVertex2f( m_dragEnd.x(), m_dragEnd.y() );
-            glVertex2f( m_dragStart.x(), m_dragEnd.y() );
+            glVertex2f( viewDragEnd.x(), viewDragEnd.y() );
+            glVertex2f( viewDragStart.x(), viewDragEnd.y() );
 
         glEnd();
 
@@ -213,8 +214,7 @@ void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
         gc.setPen(pen);
-
-        gc.drawRect(QRectF(m_dragStart, m_dragEnd));
+        gc.drawRect(QRectF( viewDragStart, viewDragEnd ));
         gc.setPen(old);
     }
 }

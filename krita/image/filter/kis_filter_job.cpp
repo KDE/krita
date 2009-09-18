@@ -40,10 +40,9 @@ KisFilterJob::KisFilterJob(const KisFilter* filter,
                            const KisFilterConfiguration * config,
                            QObject * parent, KisPaintDeviceSP dev,
                            const QRect & rc,
-                           int margin,
                            KoUpdaterPtr updater,
                            KisSelectionSP selection)
-        : KisJob(parent, dev, rc, margin)
+        : KisJob(parent, dev, rc)
         , m_filter(filter)
         , m_config(config)
         , m_updater(updater)
@@ -54,10 +53,10 @@ KisFilterJob::KisFilterJob(const KisFilter* filter,
 
 void KisFilterJob::run()
 {
-    // XXX: Is it really necessary to output the filter on a second paint device and
-    //      then blit it back? (boud)
     KisPaintDeviceSP dst = new KisPaintDevice(m_dev->colorSpace());
-    QRect marginRect = m_rc.adjusted(-m_margin, -m_margin, m_margin, m_margin);
+    QRect marginRect = m_filter->neededRect(m_rc, m_config);
+
+    // some filters only write out selected or affected pixels to dst, so copy
     KisPainter p1(dst);
     p1.setCompositeOp(dst->colorSpace()->compositeOp(COMPOSITE_COPY));
     p1.bitBlt(m_rc.topLeft(), m_dev, m_rc);
@@ -68,11 +67,16 @@ void KisFilterJob::run()
                       marginRect.size(),
                       m_config,
                       m_updater);
+
+    // blt back onto the original
     KisPainter p2(m_dev);
-    p2.setCompositeOp(m_dev->colorSpace()->compositeOp(COMPOSITE_COPY));
+    p2.setCompositeOp(m_dev->colorSpace()->compositeOp(COMPOSITE_OVER));
+    p2.setSelection(m_selection);
     p2.bitBlt(m_rc.topLeft(), dst, m_rc);
     p2.end();
+
     m_updater->setProgress(100);
+    m_interrupted = m_updater->interrupted();
 }
 
 KisFilterJobFactory::KisFilterJobFactory(const KisFilter* filter, const KisFilterConfiguration * config, KisSelectionSP selection)
@@ -82,8 +86,8 @@ KisFilterJobFactory::KisFilterJobFactory(const KisFilter* filter, const KisFilte
 {
 }
 
-ThreadWeaver::Job * KisFilterJobFactory::createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdaterPtr updater)
+ThreadWeaver::Job * KisFilterJobFactory::createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, KoUpdaterPtr updater)
 {
-    return new KisFilterJob(m_filter, m_config, parent, dev, rc, margin, updater, m_selection);
+    return new KisFilterJob(m_filter, m_config, parent, dev, rc, updater, m_selection);
 }
 

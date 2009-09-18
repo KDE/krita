@@ -31,18 +31,20 @@
 typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 /**
- * A threadweaver job that knows about paint devices and rects. Note
- * that it is the task of the job implementation to handle the margin!
+ * A threadweaver job that knows about paint devices and rects.
+ *
+ * Any subclass of KisJob is responsible for setting the interrupted
+ * status when applicable.
  */
 class KRITAIMAGE_EXPORT KisJob : public ThreadWeaver::Job
 {
 public:
 
-    KisJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin)
+    KisJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc)
             : ThreadWeaver::Job(parent)
             , m_dev(dev)
             , m_rc(rc)
-            , m_margin(margin) {
+    {
     }
 
 
@@ -54,14 +56,25 @@ public:
      */
     virtual void jobDone() {}
 
+    /**
+     * return the area affected by the job
+     */
     QRect area() {
         return m_rc;
     }
+
+    /**
+     * @return true if the job got cancelled.
+     */
+    bool interrupted() {
+        return m_interrupted;
+    }
+
 protected:
 
     KisPaintDeviceSP m_dev;
-    QRect m_rc; // the area we execute on without the margin
-    int m_margin; // we will execute on m_rc enlarged by the margin
+    QRect m_rc;
+    bool m_interrupted;
 };
 
 /**
@@ -76,7 +89,7 @@ public:
     virtual ~KisJobFactory() {}
 
 
-    virtual ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdaterPtr updater) = 0;
+    virtual ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, KoUpdaterPtr updater) = 0;
 };
 
 /**
@@ -107,15 +120,10 @@ public:
      *         specialized jobs
      *  @param updater The master KoProgressUpdater that will track updates for
      *         all threads.
-     *  @param margin. If present, the rects parcelled out to the jobs
-     *                 will have the specified margin. When the results
-     *                 are put together again, the margin is cut off.
-     *                 Use this for convolutions, for instance.
-     *
      */
     KisThreadedApplicator(KisPaintDeviceSP dev, const QRect & rc,
                           KisJobFactory * jobFactory, KoProgressUpdater * updater,
-                          int margin = 0, ApplicatorMode mode = TILED);
+                          ApplicatorMode mode = TILED);
     ~KisThreadedApplicator();
 
     /**
@@ -124,9 +132,24 @@ public:
      */
     void execute();
 
+    /**
+     * Queue all the subtasks;
+     */
+    void start();
+
 signals:
 
+    /// emitted whenever an area is done
     void areaDone(const QRect& rc);
+
+    /**
+     * emitted when all the subtasks are done.
+     * If interrupted is true, a subtask got cancelled. Note that if the updater
+     * is interrupted, all subtasks will be interrupted. This signal is emitted
+     * only after all subtasks have definitely stopped.
+     */
+    void finished(bool interrupted);
+
 
 private slots:
 

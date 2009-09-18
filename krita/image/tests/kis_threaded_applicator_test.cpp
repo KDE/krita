@@ -33,8 +33,8 @@
 class TestJob : public KisJob
 {
 public:
-    TestJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin)
-            : KisJob(parent, dev, rc, margin) {
+    TestJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc)
+            : KisJob(parent, dev, rc) {
     }
 
     virtual void run() {
@@ -45,7 +45,7 @@ public:
         quint8 * newBytes = m_dev->colorSpace()->allocPixelBuffer(1);
         memset(newBytes, 255, m_dev->colorSpace()->pixelSize());
 
-        QRect rc = m_rc.adjusted(-m_margin, -m_margin, m_margin, m_margin);
+        QRect rc = m_rc;
 
         {
             KisRectIteratorPixel it = m_dev->createRectIterator(rc.x(), rc.y(), rc.width(), rc.height());
@@ -70,9 +70,9 @@ public:
 class TestJobFactory : public KisJobFactory
 {
 public:
-    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdaterPtr updater) {
+    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, KoUpdaterPtr updater) {
         Q_UNUSED(updater);
-        return new TestJob(parent, dev, rc, margin);
+        return new TestJob(parent, dev, rc);
     }
 
     KisLayerSP layer() const { return 0; }

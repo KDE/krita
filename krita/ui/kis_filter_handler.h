@@ -30,7 +30,7 @@ class KisView2;
 class QRect;
 
 /**
- * Show the dialog for a certain filter and apply the filters
+ * XXX: this class is way too confusing.
  */
 class KisFilterHandler : public QObject
 {
@@ -49,7 +49,11 @@ public slots:
     void showDialog();
     void reapply();
     void apply(KisNodeSP, KisFilterConfiguration*);
+
+private slots:
+
     void areaDone(const QRect & rc);
+    void filterDone(bool interrupted);
 
 private:
     struct Private;

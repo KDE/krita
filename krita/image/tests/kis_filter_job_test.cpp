@@ -50,7 +50,7 @@ void KisFilterJobTest::testCreation()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     KisFilterJobFactory factory(f, kfc);
-    ThreadWeaver::Job * job = factory.createJob(0, dev, QRect(0, 0, 2000, 2000), f->overlapMarginNeeded(kfc), up);
+    ThreadWeaver::Job* job = factory.createJob(0, dev, QRect(0, 0, 2000, 2000), up);
     Q_ASSERT(job);
 }
 
@@ -74,7 +74,7 @@ void KisFilterJobTest::testInWeaver()
 
     KisFilterJobFactory factory(f, kfc);
 
-    KisThreadedApplicator applicator(dev, QRect(0, 0, 2000, 2000), &factory, pu, f->overlapMarginNeeded(kfc));
+    KisThreadedApplicator applicator(dev, QRect(0, 0, 2000, 2000), &factory, pu);
     applicator.execute();
 
 

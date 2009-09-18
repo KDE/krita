@@ -349,11 +349,15 @@ void Viewport::resetLayout()
         moveY = qMin(m_margin, moveY);
     }
     if (m_canvas) {
+        QRect geom;
         if (m_parent->canvasMode() == KoCanvasController::Infinite)
-            m_canvas->setGeometry(0, 0, viewW, viewH);
+            geom = QRect(0, 0, viewW, viewH);
         else
-            m_canvas->setGeometry(moveX, moveY, resizeW, resizeH);
-        m_canvas->update();
+            geom = QRect(moveX, moveY, resizeW, resizeH);
+        if (m_canvas->geometry() != geom) {
+            m_canvas->setGeometry(geom);
+            m_canvas->update();
+        }
     }
 
 #if 0

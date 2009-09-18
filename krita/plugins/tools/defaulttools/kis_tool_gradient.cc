@@ -126,9 +126,9 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
                     m_gradientProgram->activate(normalisedGradientVectorStart,
                                                 normalisedGradientVectorStart + normalisedGradientVector);
 
-//                     glValidateProgramARB(m_gradientProgram->handle());
-//                     dbgTools <<"Validate:";
-//                     dbgTools << m_gradientProgram->getInfoLog();
+                    //                     glValidateProgramARB(m_gradientProgram->handle());
+                    //                     dbgTools <<"Validate:";
+                    //                     dbgTools << m_gradientProgram->getInfoLog();
 
 
                     glBegin(GL_QUADS);
@@ -196,12 +196,12 @@ void KisToolGradient::mousePressEvent(KoPointerEvent *e)
 
             KisOpenGL::makeContextCurrent();
             m_gradientProgram = new KisOpenGLGradientProgram(currentGradient(),
-                    m_shape,
-                    m_repeat,
-                    m_reverse,
-                    currentImage()->colorSpace(),
-                    monitorProfile,
-                    m_previewOpacityPercent / 100.0);
+                                                             m_shape,
+                                                             m_repeat,
+                                                             m_reverse,
+                                                             currentImage()->colorSpace(),
+                                                             monitorProfile,
+                                                             m_previewOpacityPercent / 100.0);
         }
 #endif
     }
@@ -275,21 +275,13 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
                 progress->setSubject(&painter, true, true);
             }*/
 
-            bool painted = painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
-
-            if (painted) {
-                // does whole thing at moment
-                device->setDirty(painter.dirtyRegion());
-
-                notifyModified();
-
-                m_canvas->addCommand(painter.endTransaction());
-            }
+            painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
+            QRect rc = painter.dirtyRegion().boundingRect();
+            currentNode()->setDirty(rc);
+            notifyModified();
+            m_canvas->addCommand(painter.endTransaction());
+            m_canvas->updateCanvas(convertToPt(rc.normalized()));
         }
-        QRectF bound;
-        bound.setTopLeft(m_startPos);
-        bound.setBottomRight(m_endPos);
-        m_canvas->updateCanvas(convertToPt(bound.normalized()));
     }
 }
 

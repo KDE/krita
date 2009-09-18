@@ -59,6 +59,7 @@
 KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Raindrops..."))
 {
     setSupportsPainting(false);
+    setSupportsThreading(false);
     setSupportsPreview(true);
 }
 

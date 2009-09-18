@@ -67,10 +67,6 @@ KisToolEllipse::~KisToolEllipse()
 void KisToolEllipse::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_ASSERT(currentImage());
-    qreal sx, sy;
-    converter.zoom(&sx, &sy);
-
-    gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
     if (m_dragging)
         paintEllipse(gc, QRect());
 }
@@ -187,6 +183,9 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolEllipse::paintEllipse(QPainter& gc, const QRect&)
 {
+    QPointF viewDragStart = pixelToView(m_dragStart);
+    QPointF viewDragEnd = pixelToView(m_dragEnd);
+    
 #if defined(HAVE_OPENGL)
     if (m_canvas->canvasController()->isCanvasOpenGL()){
         glEnable(GL_LINE_SMOOTH);
@@ -195,13 +194,13 @@ void KisToolEllipse::paintEllipse(QPainter& gc, const QRect&)
         glColor3f(0.501961,1.0, 0.501961);
 
         int steps = 72; 
-        qreal x = ( m_dragEnd.x() - m_dragStart.x() ) * 0.5;
+        qreal x = ( viewDragEnd.x() - viewDragStart.x() ) * 0.5;
         qreal a = qAbs( x );
-        qreal y = ( m_dragEnd.y() - m_dragStart.y() ) * 0.5;
+        qreal y = ( viewDragEnd.y() - viewDragStart.y() ) * 0.5;
         qreal b = qAbs( y );
         
-        x += m_dragStart.x();
-        y += m_dragStart.y();
+        x += viewDragStart.x();
+        y += viewDragStart.y();
 
 // useful for debugging
 #if 0        
@@ -211,8 +210,8 @@ void KisToolEllipse::paintEllipse(QPainter& gc, const QRect&)
         glEnd();
         
         glBegin(GL_LINES);
-            glVertex2d( m_dragStart.x(), m_dragStart.y() );
-            glVertex2d( m_dragEnd.x(), m_dragEnd.y() );
+            glVertex2d( viewDragStart.x(), viewDragStart.y() );
+            glVertex2d( viewDragEnd.x(), viewDragEnd.y() );
 
             glVertex2d( x,y );
             glVertex2d( x + a,y );
@@ -248,13 +247,19 @@ void KisToolEllipse::paintEllipse(QPainter& gc, const QRect&)
 
     }else
 #endif
+
     if (m_canvas) {
+#ifdef INDEPENDENT_CANVAS
+        QPainterPath path;
+        path.addEllipse(QRectF( viewDragStart, viewDragEnd ));
+        paintToolOutline(&gc,path);
+#else
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
-
         gc.setPen(pen);
-        gc.drawEllipse(QRectF(m_dragStart, m_dragEnd));
+        gc.drawEllipse(QRectF(viewDragStart, viewDragEnd));
         gc.setPen(old);
+#endif
     }
 }
 

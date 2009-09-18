@@ -211,11 +211,19 @@ void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
     }else
 #endif
     if (m_canvas) {
+
+#ifdef INDEPENDENT_CANVAS
+        QPainterPath path;
+        path.addRect(QRectF( viewDragStart, viewDragEnd ));
+        paintToolOutline(&gc,path);
+#else
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
         gc.setPen(pen);
         gc.drawRect(QRectF( viewDragStart, viewDragEnd ));
         gc.setPen(old);
+#endif        
+        
     }
 }
 

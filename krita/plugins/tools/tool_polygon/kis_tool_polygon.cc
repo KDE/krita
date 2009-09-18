@@ -220,8 +220,36 @@ void KisToolPolygon::paint(QPainter& gc, const KoViewConverter &converter)
         glDisable(GL_COLOR_LOGIC_OP);
         glDisable(GL_LINE_SMOOTH);
 
-    }else
+    }else 
 #endif
+
+#ifdef INDEPENDENT_CANVAS
+    {
+        QPainterPath path;
+        if (m_dragging) {
+            startPos = pixelToView(m_dragStart);
+            endPos = pixelToView(m_dragEnd);
+            path.moveTo(startPos);
+            path.lineTo(endPos);
+        }
+
+        for (vQPointF::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+
+            if (it == m_points.begin()) {
+                start = (*it);
+            } else {
+                end = (*it);
+
+                startPos = pixelToView(start);
+                endPos = pixelToView(end);
+                path.moveTo(startPos);
+                path.lineTo(endPos);
+                start = end;
+            }
+        }
+        paintToolOutline(&gc,path);
+    }
+#else
     {
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
@@ -250,6 +278,9 @@ void KisToolPolygon::paint(QPainter& gc, const KoViewConverter &converter)
         gc.setPen(old);
 
     }
+#endif
+    
+    
 }
 
 QRectF KisToolPolygon::dragBoundingRect()

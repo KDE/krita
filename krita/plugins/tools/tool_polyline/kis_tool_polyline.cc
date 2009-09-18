@@ -228,13 +228,40 @@ void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
 
     }else
 #endif
-    {
 
+#ifdef INDEPENDENT_CANVAS
+    {
+        QPainterPath path;
+        if (m_dragging) {
+            startPos = pixelToView(m_dragStart);
+            endPos = pixelToView(m_dragEnd);
+            path.moveTo(startPos);
+            path.lineTo(endPos);
+        }
+        for (KoPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+
+            if (it == m_points.begin()) {
+                start = (*it);
+            } else {
+                end = (*it);
+
+                startPos = pixelToView(start);
+                endPos = pixelToView(end);
+
+                path.moveTo(startPos);
+                path.lineTo(endPos);
+
+                start = end;
+            }
+        }
+        paintToolOutline(&gc,path);
+
+    }
+#else
+    {
         QPen pen(Qt::SolidLine);
         pen.setWidth( PREVIEW_LINE_WIDTH );
         gc.setPen(pen);
-        // TODO uncomment this when the canvas is ready
-        //gc.setCompositionMode(QPainter::CompositionMode_Exclusion);
         
         if (m_dragging) {
             startPos = pixelToView(m_dragStart);
@@ -257,6 +284,7 @@ void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
             }
         }
     }
+#endif 
 }
 
 QString KisToolPolyline::quickHelp() const

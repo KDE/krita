@@ -229,16 +229,17 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
 #endif
 
     if (m_canvas) {
+#ifdef INDEPENDENT_CANVAS
         QPainterPath path;
         path.moveTo(viewStartPos);
         path.lineTo(viewStartEnd);
         paintToolOutline(&gc,path);
-/*      
+#else
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
         gc.drawLine(viewStartPos, viewStartEnd);
         gc.setPen(old);
-*/
+#endif
     }
 }
 

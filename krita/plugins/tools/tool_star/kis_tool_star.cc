@@ -165,19 +165,31 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
     }
     else
 #endif
-    {
-        qreal sx, sy;
-        converter.zoom(&sx, &sy);
-        gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
 
+#ifdef INDEPENDENT_CANVAS
+    {
+        QPainterPath path;
+        for (int i = 0; i < points.count() - 1; i++) {
+            path.moveTo( pixelToView(points[i]));
+            path.lineTo( pixelToView(points[i + 1]) );
+        }
+        path.moveTo( pixelToView(points[points.count() - 1]));
+        path.lineTo( pixelToView(points[0]));
+        paintToolOutline(&gc,path);
+    }
+#else
+    {
         QPen pen(Qt::SolidLine);
         gc.setPen(pen);
 
         for (int i = 0; i < points.count() - 1; i++) {
-            gc.drawLine(points[i], points[i + 1]);
+            gc.drawLine( pixelToView(points[i]), pixelToView(points[i + 1]) );
         }
-        gc.drawLine(points[points.count() - 1], points[0]);
+        gc.drawLine( pixelToView(points[points.count() - 1]), pixelToView(points[0]));
     }
+#endif
+
+
 }
 
 vQPointF KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)

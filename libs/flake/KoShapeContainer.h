@@ -143,6 +143,7 @@ public:
      */
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter) = 0;
 
+    using KoShape::update;
     /// reimplemented
     virtual void update() const;
 

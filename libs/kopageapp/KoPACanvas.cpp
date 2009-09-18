@@ -27,6 +27,7 @@
 #include "KoPAView.h"
 #include "KoPAViewMode.h"
 #include "KoPAPage.h"
+#include "KoPAPageProvider.h"
 
 #include <kxmlguifactory.h>
 
@@ -188,6 +189,8 @@ const QPoint & KoPACanvas::documentOffset() const
 void KoPACanvas::paintEvent( QPaintEvent *event )
 {
     if (d->view->activePage()) {
+        int pageNumber = d->doc->pageIndex( d->view->activePage() ) + 1;
+        static_cast<KoPAPageProvider*>( d->doc->dataCenterMap()[KoPAPageProvider::ID] )->setMasterPageNumber( pageNumber );
         d->view->viewMode()->paintEvent( this, event );
     }
 }

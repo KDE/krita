@@ -20,8 +20,9 @@
 
 #include "KoPADocumentModel.h"
 
-#include <KoPADocument.h>
-#include <KoPAPageBase.h>
+#include "KoPADocument.h"
+#include "KoPAPageBase.h"
+#include "KoPAPageProvider.h"
 #include <KoShapePainter.h>
 #include <KoShapeManager.h>
 #include <KoShapeBorderModel.h>
@@ -313,6 +314,9 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
 
     KoPAPageBase *page = dynamic_cast<KoPAPageBase*>(shape);
     if (page) { // We create a thumbnail with actual width / height ratio for page
+        int pageNumber = m_document->pageIndex( page ) + 1;
+        static_cast<KoPAPageProvider*>( m_document->dataCenterMap()[KoPAPageProvider::ID] )->setMasterPageNumber( pageNumber );
+
         KoZoomHandler zoomHandler;
         KoPageLayout layout = page->pageLayout();
         qreal ratio = (zoomHandler.resolutionX() * layout.width) / (zoomHandler.resolutionY() * layout.height);

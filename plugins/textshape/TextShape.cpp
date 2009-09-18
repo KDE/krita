@@ -60,7 +60,9 @@ struct Finalizer {
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextEditor.h>
+#include <KoTextPage.h>
 #include <KoTextShapeContainerModel.h>
+#include <KoPageProvider.h>
 #include <KoUndoStack.h>
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
@@ -76,6 +78,7 @@ struct Finalizer {
 #include <QThread>
 
 #include <kdebug.h>
+
 
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         : KoShapeContainer(new KoTextShapeContainerModel())
@@ -131,14 +134,37 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     QTextDocument *doc = m_textShapeData->document();
     Q_ASSERT(doc);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
+
     if (m_textShapeData->endPosition() < 0) { // not layouted yet.
-        if (lay == 0)
+        if (lay == 0) {
             kWarning(32500) << "Painting shape that doesn't have a kotext doc-layout, which can't work";
-        else if (! lay->hasLayouter())
+            return;
+        }
+        else if (! lay->hasLayouter()) {
             lay->setLayout(new Layout(lay));
-        return;
+        }
+        if (!m_pageProvider) {
+            return;
+        }
     }
     Q_ASSERT(lay);
+
+    if (m_pageProvider) {
+        KoTextPage* page = m_pageProvider->page(this);
+        if (page) {
+            // this is used to not trigger repaints if layout during the painting is done
+            // this enbales to use the same shapes on different pages showing different page numbers
+            m_paintRegion = painter.clipRegion();
+
+            m_textShapeData->setPage(page);
+            if ( lay ) {
+                while (m_textShapeData->isDirty()){
+                    lay->layout();
+                }
+            }
+        }
+    }
+
     QAbstractTextDocumentLayout::PaintContext pc;
     KoTextDocumentLayout::PaintContext context;
     context.textContext = pc;
@@ -156,6 +182,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         painter.translate(0, size().height() - m_footnotes->size().height());
         m_footnotes->documentLayout()->draw(&painter, pc);
     }
+    m_paintRegion = QRegion();
 }
 
 QPointF TextShape::convertScreenPos(const QPointF &point)
@@ -354,6 +381,7 @@ void TextShape::init(const QMap<QString, KoDataCenter*> &dataCenterMap)
     document.setUndoStack(undoStack);
 //    KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(dataCenterMap["ChangeTracker"]);
 //    document.setChangeTracker(changeTracker);
+    m_pageProvider = dynamic_cast<KoPageProvider *>(dataCenterMap[KoPageProvider::ID]);
 }
 
 QTextDocument *TextShape::footnoteDocument()
@@ -372,6 +400,19 @@ void TextShape::markLayoutDone()
 {
     synchronized(m_mutex) {
         m_waiter.wakeAll();
+    }
+}
+
+void TextShape::update() const
+{
+    KoShapeContainer::update();
+}
+
+void TextShape::update(const QRectF &shape) const
+{
+    // this is done to avoid updates which are called during the paint event and not needed.
+    if (!m_paintRegion.contains(shape.toRect())) {
+        KoShape::update(shape);
     }
 }
 

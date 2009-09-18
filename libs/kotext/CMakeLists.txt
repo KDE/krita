@@ -50,6 +50,7 @@ set(kotext_LIB_SRCS
     KoFind.cpp
     KoTextDebug.cpp
     KoTextPage.cpp
+    KoPageProvider.cpp
     KoTableColumnAndRowStyleManager.cpp
     KoUndoStack.cpp
 

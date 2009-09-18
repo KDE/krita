@@ -488,7 +488,7 @@ public:
      * will be merged into an appropriate repaint action.
      * @param shape the rectangle (in pt) to queue for repaint.
      */
-    void update(const QRectF &shape) const;
+    virtual void update(const QRectF &shape) const;
 
     /**
      * This is a method used to sort a list using the STL sorting methods.

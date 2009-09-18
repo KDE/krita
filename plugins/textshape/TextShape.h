@@ -34,6 +34,7 @@
 #define TextShape_SHAPEID "TextShapeID"
 
 class KoInlineTextObjectManager;
+class KoPageProvider;
 
 /**
  * A text shape.
@@ -102,6 +103,10 @@ public:
 
     void markLayoutDone();
 
+    virtual void update() const;
+
+    virtual void update(const QRectF &shape) const;
+
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement & element, KoShapeLoadingContext & context);
 
@@ -114,6 +119,9 @@ private:
     bool m_demoText;
     mutable QMutex m_mutex;
     mutable QWaitCondition m_waiter;
+    KoPageProvider * m_pageProvider;
+
+    QRegion m_paintRegion;
 };
 
 #endif

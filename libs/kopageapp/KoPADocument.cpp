@@ -50,6 +50,7 @@
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
 #include "KoPAViewMode.h"
+#include "KoPAPageProvider.h"
 #include "commands/KoPAPageDeleteCommand.h"
 
 #include <kdebug.h>
@@ -83,7 +84,7 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
 
     //Populate the document undoStack in the dataCenterMap. This can be used later by shapes for their undo/redo mechanism.
     d->dataCenterMap["UndoStack"] = undoStack();
-
+    d->dataCenterMap[KoPageProvider::ID] = new KoPAPageProvider();
     loadConfig();
 }
 

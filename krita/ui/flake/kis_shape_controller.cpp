@@ -309,7 +309,7 @@ void KisShapeController::addShape(KoShape* shape)
                 // a signal that is caught by us (the document) and the
                 // layerbox and makes sure the new layer is in the
                 // layer-shape map and in the layerbox
-                m_d->image->undoAdapter()->addCommand( new KisImageLayerAddCommand( m_d->image, shapeLayer, m_d->image->rootLayer(), 0) );
+                m_d->image->undoAdapter()->addCommand( new KisImageLayerAddCommand( m_d->image, shapeLayer, m_d->image->rootLayer(), m_d->image->rootLayer()->childCount() ) );
 
                 if (canvas) {
                     canvas->view()->nodeManager()->activateNode(shapeLayer);

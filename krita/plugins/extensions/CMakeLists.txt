@@ -11,17 +11,17 @@ add_subdirectory( metadataeditor )
 add_subdirectory( modify_selection )
 add_subdirectory( rotateimage )
 if(SHOULD_BUILD_SCRIPTING)
-  add_subdirectory( scripting ) # TODO: port it to the change of KisFilter, KisPaintOpPreset
+#   add_subdirectory( scripting ) # TODO: port it to the change of KisFilter, KisPaintOpPreset
 endif(SHOULD_BUILD_SCRIPTING)
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( smallcolorselector )
 add_subdirectory( specificcolorselector )
-add_subdirectory( together )
+# add_subdirectory( together )
 add_subdirectory( tonemapping )
 add_subdirectory( trianglecolorselector )
 add_subdirectory( histogram_docker )
-add_subdirectory( extensionsmanager )
+# add_subdirectory( extensionsmanager )
 
 macro_optional_find_package(GMM)
 macro_log_feature(GMM_FOUND "Gmm++" "Generic C++ template library for sparse, dense and skyline matrices" "http://home.gna.org/getfem/download.html" FALSE "" "Required by the Krita panorama plugin")
@@ -29,7 +29,7 @@ macro_log_feature(GMM_FOUND "Gmm++" "Generic C++ template library for sparse, de
 
 
 if(GMM_FOUND AND NOT MSVC)
-    add_subdirectory( panorama )
+#     add_subdirectory( panorama )
 endif(GMM_FOUND AND NOT MSVC)
 
 if(HAVE_OPENGL AND HAVE_GLEW)

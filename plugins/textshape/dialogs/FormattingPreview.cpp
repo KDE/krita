@@ -221,7 +221,7 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     displayFont.setCapitalization(m_fontCapitalisation);
 
 //first quickly check if we can draw at least one word
-    QStringList words = m_sampleText.split(" ");
+    QStringList words = m_sampleText.split(' ');
     painter.setFont(displayFont);
     QRectF boundingRect = painter.boundingRect(contentsRect(), Qt::AlignCenter, words.at(0));
     if ((boundingRect.width() > contentsRect().width()) || (boundingRect.height() > contentsRect().height())) {

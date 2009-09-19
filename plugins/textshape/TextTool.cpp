@@ -483,7 +483,7 @@ void TextTool::showChangeTip()
     if (m_changeTracker && m_changeTracker->containsInlineChanges(c.charFormat())) {
         KoChangeTrackerElement *element = m_changeTracker->elementById(c.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt());
         if (element->isEnabled()) {
-            QString change = element->getChangeTitle() + " " + element->getDate() + " " + element->getCreator();
+            QString change = element->getChangeTitle() + ' ' + element->getDate() + ' ' + element->getCreator();
             KPassivePopup *popup = new KPassivePopup();
             popup->setTimeout(5000);
             popup->setAutoDelete(true);

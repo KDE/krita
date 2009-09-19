@@ -67,7 +67,7 @@ KoShape * KoEnhancedPathShapeFactory::createDefaultShape() const
 
     ComplexType handle;
     handle["draw:handle-position"] = "$0 0";
-    handle["draw:handle-range-x-minimum"] = "0";
+    handle["draw:handle-range-x-minimum"] = '0';
     handle["draw:handle-range-x-maximum"] = "?Half";
     shape->addHandle( handle );
     shape->setSize( QSize(100, 100) );
@@ -143,7 +143,7 @@ void KoEnhancedPathShapeFactory::addCross()
     ListType handles;
     ComplexType handle;
     handle["draw:handle-position"] = "$0 0";
-    handle["draw:handle-range-x-minimum"] = "0";
+    handle["draw:handle-range-x-minimum"] = '0';
     handle["draw:handle-range-x-maximum"] = "?Half";
     handles.append( QVariant( handle ) );
 
@@ -176,9 +176,9 @@ void KoEnhancedPathShapeFactory::addArrow()
     ListType handles;
     ComplexType handle;
     handle["draw:handle-position"] = "$0 $1";
-    handle["draw:handle-range-x-minimum"] = "0";
+    handle["draw:handle-range-x-minimum"] = '0';
     handle["draw:handle-range-x-maximum"] = "width";
-    handle["draw:handle-range-y-minimum"] = "0";
+    handle["draw:handle-range-y-minimum"] = '0';
     handle["draw:handle-range-y-maximum"] = "?HalfHeight";
     handles.append( QVariant( handle ) );
 
@@ -384,7 +384,7 @@ void KoEnhancedPathShapeFactory::addCircularArrow()
     handle.clear();
     handle["draw:handle-position"] = "$1 $2";
     handle["draw:handle-polar"] = "10800 10800";
-    handle["draw:handle-radius-range-minimum"] = "0";
+    handle["draw:handle-radius-range-minimum"] = '0';
     handle["draw:handle-radius-range-maximum"] = "10800";
     handles.append( QVariant( handle ) );
 

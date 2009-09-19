@@ -26,6 +26,9 @@
 
 #include "filestest.h"
 
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
+
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
@@ -33,7 +36,11 @@
 
 void KisTiffTest::testFiles()
 {
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources");
+    QStringList excludes;
+    if(!KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces).contains(YCbCrAColorModelID)) {
+        excludes << "ycbcr-cat.tif";
+    }
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes);
 }
 QTEST_KDEMAIN(KisTiffTest, GUI)
 

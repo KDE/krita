@@ -33,7 +33,7 @@
 
 void KisPngTest::testFiles()
 {
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources");
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
 }
 QTEST_KDEMAIN(KisPngTest, GUI)
 

@@ -43,7 +43,7 @@
 namespace TestUtil
 {
 
-    void testFiles(const QString& _dirname)
+    void testFiles(const QString& _dirname, const QStringList& exclusions)
     {
         QDir dirSources(_dirname);
         qDebug() << "There are " << dirSources.entryInfoList().count() << " files in " << _dirname;
@@ -53,8 +53,10 @@ namespace TestUtil
         QStringList failuresCompare;
 
         foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
-
-            if (!sourceFileInfo.isHidden()) {
+            if (exclusions.contains(sourceFileInfo.fileName())) {
+                continue;
+            }
+            if (!sourceFileInfo.isHidden() ) {
                 qDebug() << "handling " << sourceFileInfo.fileName();
                 QFileInfo resultFileInfo(QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + ".png");
 

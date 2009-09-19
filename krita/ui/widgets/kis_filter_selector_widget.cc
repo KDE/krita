@@ -82,7 +82,6 @@ KisFilterSelectorWidget::~KisFilterSelectorWidget()
 {
     KisConfig cfg;
     QList<int> sizes = d->uiFilterSelector.splitter->sizes();
-    qDebug() << "saving gallery state" << sizes;
     cfg.setShowFilterGallery(sizes[0] > 0);
     delete d->filtersModel;
     delete d->currentCentralWidget;
@@ -159,7 +158,6 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
 
     KisConfig cfg;
     QList<int> sizes;
-    qDebug() << "show gallery" << cfg.showFilterGallery() << "sizes" << sizes;
     if (cfg.showFilterGallery()) {
 
         sizes << d->uiFilterSelector.filtersSelector->sizeHint().width()

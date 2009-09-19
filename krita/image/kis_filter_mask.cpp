@@ -117,7 +117,6 @@ void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 
     filter->process(src, dst, rc.size(), m_d->filterConfig,  up);
     nodeProgressProxy()->setValue( nodeProgressProxy()->maximum() );
-
 }
 
 bool KisFilterMask::accept(KisNodeVisitor &v)

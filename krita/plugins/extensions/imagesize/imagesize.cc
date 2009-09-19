@@ -54,7 +54,7 @@
 #include <kis_image_manager.h>
 #include <kis_layer_manager.h>
 #include <kis_transform_visitor.h>
-
+#include <widgets/kis_progress_widget.h>
 
 #include "dlg_imagesize.h"
 #include "dlg_canvassize.h"
@@ -207,8 +207,9 @@ void ImageSize::slotSelectionScale()
     dlgSize->setWidth(rc.width());
     dlgSize->setHeight(rc.height());
 
-    KoProgressUpdater pu(m_view->statusBar()->progress());
-    QPointer<KoUpdater> u = pu.startSubtask();
+
+    KoProgressUpdater* pu = m_view->createProgressUpdater();
+    QPointer<KoUpdater> u = pu->startSubtask();
 
     if (dlgSize->exec() == QDialog::Accepted) {
         qint32 w = dlgSize->width();
@@ -221,6 +222,7 @@ void ImageSize::slotSelectionScale()
                                  );
         worker.run();
         layer->setDirty();
+        pu->deleteLater();
     }
     delete dlgSize;
 }

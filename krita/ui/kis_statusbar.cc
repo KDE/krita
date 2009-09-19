@@ -22,6 +22,8 @@
 
 #include <QLabel>
 #include <QFontMetrics>
+#include <QToolButton>
+
 #include <KoProgressBar.h>
 #include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
@@ -37,6 +39,8 @@
 
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
+#include "kis_progress_widget.h"
+
 #include "KoViewConverter.h"
 
 enum {
@@ -61,8 +65,6 @@ KisStatusBar::KisStatusBar(KisView2 * view)
     m_statusBarProfileLabel = new KSqueezedTextLabel(view);
     view->addStatusBarItem(m_statusBarProfileLabel, 3);
 
-    //int height = m_statusBarProfileLabel->height();
-
     m_imageSizeLabel = new QLabel( QString(), view );
     m_imageSizeLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     m_imageSizeLabel->setMinimumWidth( 100 );
@@ -73,10 +75,9 @@ KisStatusBar::KisStatusBar(KisView2 * view)
     m_pointerPositionLabel->setMinimumWidth( 100 );
     view->addStatusBarItem( m_pointerPositionLabel );
 
-    m_progress = new KoProgressBar(view);
+    m_progress = new KisProgressWidget(view);
     m_progress->setMaximumWidth(225);
     m_progress->setMinimumWidth(225);
-    m_progress->setMaximumHeight(view->fontMetrics().height());
     view->addStatusBarItem(m_progress, 2, true);
 
     m_progress->hide();
@@ -155,5 +156,11 @@ void KisStatusBar::updateStatusBarProfileLabel()
 {
     setProfile(m_view->image());
 }
+
+
+KisProgressWidget* KisStatusBar::progress() {
+    return m_progress;
+}
+
 
 #include "kis_statusbar.moc"

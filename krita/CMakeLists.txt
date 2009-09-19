@@ -57,6 +57,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/krita/ui
     ${CMAKE_SOURCE_DIR}/krita/ui/tool
     ${CMAKE_SOURCE_DIR}/krita/ui/flake
+    ${CMAKE_SOURCE_DIR}/krita/ui/widgets
 
     # For generated files from .ui
     ${CMAKE_BINARY_DIR}/krita/ui

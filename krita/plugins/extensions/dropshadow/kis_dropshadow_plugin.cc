@@ -34,7 +34,8 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_layer.h"
-#include <kis_statusbar.h>
+#include "kis_statusbar.h"
+#include "widgets/kis_progress_widget.h"
 
 #include <KoColorSpace.h>
 #include <KoProgressUpdater.h>
@@ -45,7 +46,7 @@
 
 K_EXPORT_COMPONENT_FACTORY(kritadropshadow, KGenericFactory<KisDropshadowPlugin>("krita"))
 
-KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QStringList &)
+        KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
@@ -74,8 +75,8 @@ void KisDropshadowPlugin::slotDropshadow()
     if (!dev) return;
 
     DlgDropshadow * dlgDropshadow = new DlgDropshadow(dev->colorSpace()->name(),
-            image->colorSpace()->name(),
-            m_view, "Dropshadow");
+                                                      image->colorSpace()->name(),
+                                                      m_view, "Dropshadow");
     Q_CHECK_PTR(dlgDropshadow);
 
     dlgDropshadow->setCaption(i18n("Drop Shadow"));
@@ -83,9 +84,10 @@ void KisDropshadowPlugin::slotDropshadow()
     if (dlgDropshadow->exec() == QDialog::Accepted) {
 
         KisDropshadow dropshadow(m_view);
-        KoProgressUpdater pu(m_view->statusBar()->progress());
-        pu.start();
-        QPointer<KoUpdater> u = pu.startSubtask();
+
+        KoProgressUpdater* updater = m_view->createProgressUpdater();
+        updater->start();
+        QPointer<KoUpdater> u = updater->startSubtask();
         dropshadow.dropshadow(u,
                               dlgDropshadow->getXOffset(),
                               dlgDropshadow->getYOffset(),
@@ -94,8 +96,8 @@ void KisDropshadowPlugin::slotDropshadow()
                               dlgDropshadow->getShadowOpacity(),
                               dlgDropshadow->allowResizingChecked());
 
+        updater->deleteLater();
     }
-
     delete dlgDropshadow;
 
 }

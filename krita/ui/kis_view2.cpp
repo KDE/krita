@@ -103,6 +103,7 @@
 #include "kis_print_job.h"
 #include "kis_painting_assistants_manager.h"
 #include <kis_paint_layer.h>
+#include "kis_progress_widget.h"
 
 #include "kis_node_commands_adapter.h"
 
@@ -360,6 +361,11 @@ QWidget* KisView2::canvas() const
 KisStatusBar * KisView2::statusBar() const
 {
     return m_d->statusBar;
+}
+
+KoProgressUpdater* KisView2::createProgressUpdater()
+{
+    return m_d->statusBar->progress()->createUpdater();
 }
 
 KisSelectionManager * KisView2::selectionManager()

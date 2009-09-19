@@ -46,7 +46,7 @@ typedef QPointer<KoUpdater> KoUpdaterPtr;
 #include "kis_doc2.h"
 #include "dialogs/kis_dlg_image_properties.h"
 #include "commands/kis_image_commands.h"
-
+#include "kis_progress_widget.h"
 
 KisImageManager::KisImageManager(KisView2 * view)
         : m_view(view)
@@ -129,39 +129,46 @@ void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy 
 {
     if (!m_view->image()) return;
 
-    KoProgressUpdater updater(m_view->statusBar()->progress());
-    updater.start( 100, "Scale Image" );
-    KoUpdaterPtr up = updater.startSubtask();
+    KoProgressUpdater* updater = m_view->createProgressUpdater();
+    updater->start( 100, "Scale Image" );
+    KoUpdaterPtr up = updater->startSubtask();
 
     m_view->image()->scale(sx, sy, up, filterStrategy);
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
+    updater->deleteLater();
 }
 
 void KisImageManager::rotateCurrentImage(double radians)
 {
     if (!m_view->image()) return;
 
-    KoProgressUpdater updater(m_view->statusBar()->progress());
-    updater.start( 100, "Rotate Image" );
-    KoUpdaterPtr up = updater.startSubtask();
+    KoProgressUpdater* updater = m_view->statusBar()->progress()->createUpdater();
+    updater->start( 100, "Rotate Image" );
+    KoUpdaterPtr up = updater->startSubtask();
 
     m_view->image()->rotate(radians, up );
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
+
+    m_view->statusBar()->progress()->detachUpdater(updater);
+    updater->deleteLater();
 }
 
 void KisImageManager::shearCurrentImage(double angleX, double angleY)
 {
     if (!m_view->image()) return;
 
-    KoProgressUpdater updater(m_view->statusBar()->progress());
-    updater.start( 100, "Shear Image" );
-    KoUpdaterPtr up = updater.startSubtask();
+    KoProgressUpdater* updater = m_view->statusBar()->progress()->createUpdater();
+    updater->start( 100, "Shear Image" );
+    KoUpdaterPtr up = updater->startSubtask();
 
     m_view->image()->shear(angleX, angleY, up );
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
+
+    m_view->statusBar()->progress()->detachUpdater(updater);
+    updater->deleteLater();
 }
 
 

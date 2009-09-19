@@ -62,12 +62,14 @@
 #include <kis_pixel_selection.h>
 #include <kis_shape_selection.h>
 #include <kis_selection_manager.h>
+
 #include <KoShapeTransformCommand.h>
 
 #include "flake/kis_node_shape.h"
 #include "flake/kis_layer_container_shape.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
+#include "widgets/kis_progress_widget.h"
 
 namespace
 {
@@ -649,9 +651,9 @@ void KisToolTransform::transform()
         return;
 
     QPointF t = m_translate - rot(m_originalCenter.x() * m_scaleX, m_originalCenter.y() * m_scaleY);
-    KoProgressUpdater updater(canvas->view()->statusBar()->progress());
-    updater.start( 100, i18n("Transform") );
-    QPointer<KoUpdater> progress = updater.startSubtask();
+    KoProgressUpdater* updater = canvas->view()->createProgressUpdater();
+    updater->start( 100, i18n("Transform") );
+    KoUpdaterPtr progress = updater->startSubtask();
 
     // This mementoes the current state of the active device.
     TransformCmd * transaction = new TransformCmd(this, currentNode(), m_scaleX,
@@ -757,6 +759,8 @@ void KisToolTransform::transform()
         else
             delete transaction;
     }
+    updater->deleteLater();
+
 }
 
 void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)

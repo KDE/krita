@@ -34,6 +34,7 @@
 #include <kis_processing_information.h>
 #include <kis_layer.h>
 #include <recorder/kis_recorded_filter_action.h>
+#include <recorder/kis_node_query_path.h>
 #include <kis_selection.h>
 #include <kis_image.h>
 
@@ -48,7 +49,7 @@
 #include "filter/kis_filter_job.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_system_locker.h"
-#include <recorder/kis_node_query_path.h>
+#include "kis_progress_widget.h"
 
 struct KisFilterHandler::Private {
 
@@ -162,10 +163,8 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
         rect = rect.intersect(r3);
     }
 
-    if ( m_d->updater == 0 ) {
-        m_d->updater = new KoProgressUpdater(m_d->view->statusBar()->progress());
-    }
-
+    m_d->updater = m_d->view->createProgressUpdater();
+    
     // also deletes all old updaters
     m_d->updater->start( 100, m_d->currentFilter->name() );
 
@@ -231,6 +230,7 @@ void KisFilterHandler::filterDone(bool interrupted)
     }
     delete m_d->locker;
     delete m_d->applicator;
+    m_d->updater->deleteLater();
     m_d->locker = 0;
     m_d->view->document()->setModified(true);
     QApplication::restoreOverrideCursor();

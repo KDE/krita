@@ -21,15 +21,16 @@
 
 #include <QObject>
 
-#include <KoProgressBar.h>
 #include <kis_types.h>
 
 class QLabel;
 class KSqueezedTextLabel;
 class KisView2;
+class KisProgressWidget;
 
-/// XXX: Conform to Karbon in our statusbar
-class KisStatusBar : public QObject
+#include "krita_export.h"
+
+class KRITAUI_EXPORT KisStatusBar : public QObject
 {
     Q_OBJECT
 
@@ -47,13 +48,13 @@ public slots:
     void setProfile(KisImageSP img);
     void setHelp(const QString &t);
     void updateStatusBarProfileLabel();
-    KoProgressBar * progress() {
-        return m_progress;
-    }
+
+    KisProgressWidget * progress();
+
 private:
 
     KisView2 * m_view;
-    KoProgressBar * m_progress;
+    KisProgressWidget * m_progress;
 
     QLabel *m_selectionStatusLabel;
     QLabel *m_statusBarZoomLabel; // Make interactive line edit

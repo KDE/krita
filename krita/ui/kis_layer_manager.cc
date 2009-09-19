@@ -79,6 +79,7 @@
 #include "canvas/kis_canvas2.h"
 #include "widgets/kis_meta_data_merge_strategy_chooser_widget.h"
 #include "widgets/kis_wdg_generator.h"
+#include "kis_progress_widget.h"
 #include "kis_layer_box.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
@@ -846,8 +847,8 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
         Q_CHECK_PTR(t);
     }
 
-    KoProgressUpdater pu(m_view->statusBar()->progress());
-    KoUpdaterPtr u = pu.startSubtask();
+    KoProgressUpdater* updater = m_view->createProgressUpdater();
+    KoUpdaterPtr u = updater->startSubtask();
 
     KisTransformWorker worker(layer->paintDevice(), sx, sy, 0, 0, 0.0, 0, 0, u, filterStrategy);
     worker.run();
@@ -856,6 +857,8 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();
+
+    updater->deleteLater();
 }
 
 void KisLayerManager::rotateLayer(double radians)
@@ -904,9 +907,9 @@ void KisLayerManager::shearLayer(double angleX, double angleY)
         undo->beginMacro(i18n("Shear layer"));
     }
 
-    KoProgressUpdater updater(m_view->statusBar()->progress());
-    updater.start( 100, i18n("Shear layer") );
-    KoUpdaterPtr up = updater.startSubtask();
+    KoProgressUpdater* updater = m_view->statusBar()->progress()->createUpdater();
+    updater->start( 100, i18n("Shear layer") );
+    KoUpdaterPtr up = updater->startSubtask();
 
     KisShearVisitor v(angleX, angleY, up);
     v.setUndoAdapter(undo);
@@ -917,6 +920,9 @@ void KisLayerManager::shearLayer(double angleX, double angleY)
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();
+
+    m_view->statusBar()->progress()->detachUpdater(updater);
+    updater->deleteLater();
 }
 
 void KisLayerManager::flattenImage()

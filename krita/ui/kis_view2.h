@@ -47,6 +47,7 @@ class KisMaskManager;
 class KisPerspectiveGridManager;
 class KisPaintingAssistantsManager;
 class KisGridManager;
+class KoProgressUpdater;
 
 /**
  * Krita view class
@@ -99,6 +100,9 @@ public:  // Krita specific interfaces
 
     /// Return the wrapper class around the statusbar
     KisStatusBar * statusBar() const;
+
+    /// create a new progress updater
+    KoProgressUpdater* createProgressUpdater();
 
     /// The selection manager handles everything action related to
     /// selections.

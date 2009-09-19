@@ -40,7 +40,7 @@
 #include <kis_layer.h>
 #include <kis_statusbar.h>
 #include <kis_layer_manager.h>
-
+#include <widgets/kis_progress_widget.h>
 
 #include "kis_channel_separator.h"
 #include "dlg_separate.h"
@@ -89,8 +89,8 @@ void KisSeparateChannelsPlugin::slotSeparate()
 
     if (dlgSeparate->exec() == QDialog::Accepted) {
 
-        KoProgressUpdater pu(m_view->statusBar()->progress());
-        QPointer<KoUpdater> u = pu.startSubtask();
+        KoProgressUpdater* pu = m_view->createProgressUpdater();
+        QPointer<KoUpdater> u = pu->startSubtask();
 
         KisChannelSeparator separator(m_view);
         separator.separate(u,
@@ -99,7 +99,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
                            dlgSeparate->getOutput(),
                            dlgSeparate->getDownscale(),
                            dlgSeparate->getToColor());
-
+        pu->deleteLater();
     }
 
     delete dlgSeparate;

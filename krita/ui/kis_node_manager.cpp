@@ -143,7 +143,7 @@ KisMaskManager * KisNodeManager::maskManager()
 bool allowAsChild(const QString & parentType, const QString & childType)
 {
     // XXX_NODE: do we want to allow masks to apply on masks etc? Selections on masks?
-    if (parentType == "KisPaintLayer" || parentType == "KisAdjustmentLayer" || parentType == "KisShapeLayer" || parentType == "KisGeneratorLayer") {
+    if (parentType == "KisPaintLayer" || parentType == "KisAdjustmentLayer" || parentType == "KisShapeLayer" || parentType == "KisGeneratorLayer" || parentType == "KisCloneLayer") {
         if (childType == "KisFilterMask" || childType == "KisTransformationMask" || childType == "KisTransparencyMask" || childType == "KisSelectionMask") {
             return true;
         }

@@ -39,6 +39,7 @@ void KoProgressBar::setValue(int value)
         QProgressBar::setValue(value);
         setVisible( true );
     } else {
+        emit done();
         setVisible( false );
     }
 }

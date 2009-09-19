@@ -23,6 +23,10 @@ public:
     void setValue(int value);
     void setRange(int minimum, int maximum);
     void setFormat(const QString &format);
+
+signals:
+
+    void done();
 };
 
 #endif

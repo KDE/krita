@@ -55,6 +55,8 @@
 
 #include <KoCanvasController.h>
 
+// #define ENABLE_RECORDING
+
 
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
@@ -163,13 +165,14 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 m_canvas->updateCanvas(convertToPt(dirtyRegion));
 #endif
 
+#ifdef ENABLE_RECORDING
                 if (image()) {
                     KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction(i18n("Line tool"), KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), false, m_compositeOp);
                     linePaintAction->addPoint(m_startPos);
                     linePaintAction->addPoint(m_endPos);
                     image()->actionRecorder()->addAction(*linePaintAction);
                 }
-
+#endif
                 m_canvas->addCommand(m_painter->endTransaction());
                 delete m_painter;
                 m_painter = 0;

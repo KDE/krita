@@ -78,7 +78,7 @@
 #endif
 
 
-#define ENABLE_RECORDING
+// #define ENABLE_RECORDING
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
         : KisToolPaint(canvas, cursor)

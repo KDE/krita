@@ -194,6 +194,7 @@ void KisPrescaledProjection::initBackend(bool useMipmapping, bool cacheKisImageA
 
         m_d->projectionBackend = cache;
     }
+    m_d->projectionBackend->setImage(m_d->image);
 }
 
 void KisPrescaledProjection::updateSettings()

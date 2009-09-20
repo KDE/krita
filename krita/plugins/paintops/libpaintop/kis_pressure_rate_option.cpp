@@ -43,7 +43,7 @@ KisPressureRateOption::KisPressureRateOption()
     m_rateSlider->setMinimum(0);
     m_rateSlider->setMaximum(100);
     m_rateSlider->setPageStep(1);
-    m_rateSlider->setValue(50);
+    m_rateSlider->setValue(90);
     m_rateSlider->setOrientation(Qt::Horizontal);
     QHBoxLayout* hl = new QHBoxLayout;
     hl->addWidget( rateLabel );
@@ -65,13 +65,13 @@ int KisPressureRateOption::rate() const
 void KisPressureRateOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     KisCurveOption::writeOptionSetting( setting );
-    setting->setProperty( "PressureRate", rate() );
+    setting->setProperty( "PressureRate", m_rateSlider->value() );
 }
 
 void KisPressureRateOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     KisCurveOption::readOptionSetting( setting );
-    m_rateSlider->setValue( setting->getInt( "PressureRate" ) );
+    m_rateSlider->setValue( setting->getInt( "PressureRate"));
 }
 
 

@@ -749,20 +749,22 @@ void KoTextEditor::setStyle(KoCharacterStyle *style)
 }
 
 void KoTextEditor::setStyle(KoParagraphStyle *style)
-{//TODO why a visitor here?
-    class Stylist : public BlockFormatVisitor
-    {
-    public:
-        Stylist(KoParagraphStyle *style) : m_style(style){}
-        void visit(QTextBlockFormat &format) const {
-            m_style->applyStyle(format);
-        }
-        KoParagraphStyle *m_style;
-    };
-
-    Stylist stylist(style);
+{
     d->updateState(KoTextEditor::Private::Format, i18n("Set Paragraph Style"));
-    BlockFormatVisitor::visitSelection(this, stylist, i18n("Set Paragraph Style"), true);
+    const int start = qMin(position(), anchor());
+    const int end = qMax(position(), anchor());
+    QTextBlock block = d->document->findBlock(start);
+    KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
+    while (block.isValid() && block.position() <= end) { // now loop over all blocks
+        QTextBlockFormat bf = block.blockFormat();
+        if (styleManager) {
+            KoParagraphStyle *old = styleManager->paragraphStyle(bf.intProperty(KoParagraphStyle::StyleId));
+            if (old)
+                old->unapplyStyle(block);
+        }
+        style->applyStyle(block);
+        block = block.next();
+    }
     d->updateState(KoTextEditor::Private::NoOp);
 }
 

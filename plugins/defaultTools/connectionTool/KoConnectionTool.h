@@ -87,6 +87,8 @@ public:
     void command();
     
 private:
+    KoShape * m_shape1;
+    int m_firstHandleIndex;
     KoShape * m_shapeOn;
     KoShape * m_lastShapeOn;
     QPointF * m_pointSelected;

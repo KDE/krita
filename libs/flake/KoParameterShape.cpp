@@ -116,6 +116,11 @@ void KoParameterShape::paintHandle(QPainter & painter, const KoViewConverter & c
     painter.drawPolygon(poly);
 }
 
+int KoParameterShape::getHandleCount()
+{
+    return m_handles.count();
+}
+
 void KoParameterShape::setSize(const QSizeF &newSize)
 {
     QMatrix matrix(resizeMatrix(newSize));

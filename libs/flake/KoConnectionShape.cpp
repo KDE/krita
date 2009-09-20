@@ -520,6 +520,7 @@ QPointF KoConnectionShape::perpendicularDirection(const QPointF &p1, const QPoin
 
 void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
 {
+
     m_hasMoved = true;
     switch (type) {
         case PositionChanged:
@@ -544,5 +545,6 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
 
     if (shape && (shape == d->shape1 || shape == d->shape2) && isParametricShape())
         updateConnections();
+
 }
 

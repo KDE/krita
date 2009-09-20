@@ -94,7 +94,14 @@ public:
      * @param handleRadius the radius of the handle used for painting
      */
     virtual void paintHandle(QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius);
-
+  
+    /**
+     * @brief Return the number of handles
+     * 
+     * @return the number of handles
+     */
+    virtual int getHandleCount();
+    
     /// reimplemented from KoShape
     virtual void setSize(const QSizeF &size);
 

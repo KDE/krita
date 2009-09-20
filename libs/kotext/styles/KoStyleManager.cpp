@@ -224,6 +224,7 @@ void KoStyleManager::add(KoParagraphStyle *style)
         if (style->characterStyle()->name().isEmpty())
             style->characterStyle()->setName(style->name());
     }
+    // TODO add the list style too?
 
     emit styleAdded(style);
 }

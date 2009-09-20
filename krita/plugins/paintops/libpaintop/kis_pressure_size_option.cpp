@@ -31,6 +31,6 @@ KisPressureSizeOption::KisPressureSizeOption()
 
 double KisPressureSizeOption::apply(const KisPaintInformation & info) const
 {
-    if (!isChecked()) return 1.0;
+    if (!isChecked()) return 0.5;
     return computeValue(info);
 }

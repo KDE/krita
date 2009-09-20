@@ -478,7 +478,6 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
     updateCaption();
 
     d->manager->setActivePart(d->rootDoc, currentView());
-    connect(this, SIGNAL(restoringDone()), d->dockerManager, SLOT(removeUnusedOptionWidgets()));
     emit restoringDone();
 
     while(!oldRootViews.isEmpty()) {
@@ -1878,6 +1877,7 @@ void KoMainWindow::setDockerManager(KoDockerManager *dm)
     if (dm) {
         QObject *manager = static_cast<QObject*> (dm);
         manager->setParent(this); // make sure that the dockerManager is deleted by us.
+        connect(this, SIGNAL(restoringDone()), d->dockerManager, SLOT(removeUnusedOptionWidgets()));
     }
 }
 

@@ -132,7 +132,9 @@ public:
     }
 
     ~KisView2Private() {
-        KoToolManager::instance()->removeCanvasController(canvasController);
+        if (canvasController) {
+            KoToolManager::instance()->removeCanvasController(canvasController);
+        }
         delete canvas;
         delete filterManager;
         delete selectionManager;

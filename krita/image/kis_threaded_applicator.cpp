@@ -34,6 +34,7 @@
 #include <KoUpdater.h>
 
 #include "kis_paint_device.h"
+#include "kis_progress_updater.h"
 
 using namespace ThreadWeaver;
 
@@ -79,11 +80,13 @@ KisThreadedApplicator::KisThreadedApplicator(KisPaintDeviceSP dev,
     m_d->weaver = new Weaver();
     m_d->weaver->setMaximumNumberOfThreads(m_d->maxThreads);
     connect(m_d->weaver, SIGNAL(jobDone(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
+    connect(qApp, SIGNAL(aboutToQuit()), SLOT(applicationQuit()));
 }
 
 
 KisThreadedApplicator::~KisThreadedApplicator()
 {
+    qDebug() << "waiting for weaver to finish";
     m_d->weaver->finish();
     delete m_d->weaver;
     delete m_d;
@@ -154,6 +157,15 @@ void KisThreadedApplicator::jobDone(Job* job)
     if (m_d->numTasks < 1) {
         emit finished(m_d->interrupted);
     }
+}
+
+void KisThreadedApplicator::applicationQuit()
+{
+    //qDebug() << "applicationQuit";
+    m_d->progressUpdater->cancel();
+    //qDebug() << "cancel done";
+    m_d->weaver->finish();
+    //qDebug() << "weaver finished";
 }
 
 #include "kis_threaded_applicator.moc"

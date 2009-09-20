@@ -55,7 +55,7 @@ KisProgressWidget::KisProgressWidget(QWidget* parent)
     QHBoxLayout* layout = new QHBoxLayout(this);
     m_cancelButton = new EscapeButton(this);
     m_cancelButton->setIcon(SmallIcon("process-stop"));
-    connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(cancelPressed()));
+    connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
 
     m_progressBar = new KoProgressBar(this);
     connect(m_progressBar, SIGNAL(done()), this, SLOT(hide()));
@@ -65,6 +65,7 @@ KisProgressWidget::KisProgressWidget(QWidget* parent)
 
 KisProgressWidget::~KisProgressWidget()
 {
+    cancel();
 }
 
 KoProgressUpdater* KisProgressWidget::createUpdater()
@@ -74,7 +75,7 @@ KoProgressUpdater* KisProgressWidget::createUpdater()
     return updater;
 }
 
-void KisProgressWidget::cancelPressed()
+void KisProgressWidget::cancel()
 {
     foreach(KoProgressUpdater* updater, m_activeUpdaters) {
         updater->cancel();

@@ -58,9 +58,9 @@ public:
     void detachUpdater(KoProgressUpdater* updater);
     void attachUpdater(KoProgressUpdater* updater);
 
-private slots:
+public slots:
 
-    void cancelPressed();
+    void cancel();
 
 
 private:

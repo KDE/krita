@@ -59,6 +59,7 @@
 #include <KoDocumentInfo.h>
 #include <KoShape.h>
 #include <KoToolManager.h>
+#include <KoUndoStack.h>
 
 // Krita Image
 #include <flake/kis_shape_layer.h>
@@ -85,8 +86,9 @@
 #include "kis_node_model.h"
 #include "kra/kis_kra_loader.h"
 #include "kra/kis_kra_saver.h"
-#include <KoUndoStack.h>
-#include <KoUndoStack.h>
+#include "kis_statusbar.h"
+#include "widgets/kis_progress_widget.h"
+
 
 static const char *CURRENT_DTD_VERSION = "2.0";
 

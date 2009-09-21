@@ -35,8 +35,16 @@ namespace KOfficeFilter {
         void deleteAll();
         int count() const;
 
+        /**
+         * Return a pointer to the current position in the chain.
+         * @return pointer to the current ChainLink or 0 if the ChainLinkList is empty.
+         **/
         ChainLink* current() const;
 
+        /**
+         * Move the position to the first position in the chain.
+         * @return pointer to the first ChainLink or 0 if the ChainLinkList is empty.
+         **/
         ChainLink* first();
 
         ChainLink* next();

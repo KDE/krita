@@ -42,7 +42,8 @@ namespace KOfficeFilter {
 
     ChainLink* ChainLinkList::current() const
     {
-        return m_chainLinks.at(m_current);
+        // use value() because m_current might be out of range for m_chainLinks
+        return m_chainLinks.value(m_current);
     }
 
     ChainLink* ChainLinkList::first()
@@ -54,9 +55,6 @@ namespace KOfficeFilter {
     ChainLink* ChainLinkList::next()
     {
         ++m_current;
-        if (m_current >= count()) {
-            return 0;
-        }
         return current();
     }
 

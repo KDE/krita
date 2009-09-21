@@ -48,7 +48,12 @@ void TestKoColor::testForModel(QString model)
         kc.toXML(doc, elt);
         doc.appendChild(elt);
         KoColor kcu = KoColor::fromXML(elt.firstChildElement(), depthId.id(), QHash<QString,QString>());
-        QVERIFY2(*(kc.colorSpace()) == *(kcu.colorSpace()), QString("Not identical color space colorModelId = %1 depthId = %2").arg(model).arg(depthId.id()).toLatin1());
+        QVERIFY2( *(kc.colorSpace()) == *(kcu.colorSpace()),
+                  QString("Not identical color space (colorModelId = %1 depthId = %2) != (colorModelId = %3 depthId = %4) ")
+                  .arg(kc.colorSpace()->colorModelId().id())
+                  .arg(kc.colorSpace()->colorDepthId().id())
+                  .arg(kcu.colorSpace()->colorModelId().id())
+                  .arg(kcu.colorSpace()->colorDepthId().id()).toLatin1() );
         QColor qc2 = kc.toQColor();
         QColor qcu = kcu.toQColor();
         QVERIFY2( nearEqualValue(qcu.red(), qc2.red()), QString("Unserialization failed colorModelId = %1 depthId = %2 red = %3 red = %4").arg(model).arg(depthId.id()).arg(qcu.red()).arg(qc2.red()).toLatin1());

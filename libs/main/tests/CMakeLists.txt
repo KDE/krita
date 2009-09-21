@@ -32,7 +32,7 @@ target_link_libraries(rtreetestapp komain ${QT_QTTEST_LIBRARY} )
 
 set(documentstructuretest_SRCS documentstructuretest.cpp )
 kde4_add_unit_test(DocumentStructureTest TESTNAME libs-komain-DocumentStructureTest  ${documentstructuretest_SRCS})
-target_link_libraries(DocumentStructureTest komain ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(DocumentStructureTest komain ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
 
 ########### next target ###############
 

@@ -176,6 +176,7 @@ KoTextLoader::~KoTextLoader()
 
 void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 {
+    cursor.beginEditBlock();
     const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
     const QTextCharFormat defaultCharFormat = cursor.charFormat();
     const QTextDocument *document = cursor.block().document();
@@ -345,6 +346,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
         processBody();
     }
     endBody();
+    cursor.endEditBlock();
 }
 
 void KoTextLoader::loadChangedRegion(const KoXmlElement &element, QTextCursor &cursor)

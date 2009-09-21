@@ -22,9 +22,8 @@
 /**
  * Flake reference
  */
-class KoFlake
+namespace KoFlake
 {
-public:
     /// the selection type for KoSelection::selectedObjects()
     enum SelectionType {
         FullSelection,      ///< Create a list of all user-shapes in the selection. This excludes KoShapeGroup grouping objects that may be selected.
@@ -65,10 +64,7 @@ public:
     };
 
     /// Maximal possible shape z-index
-    static int maxZIndex() { return 0x2000-1; }
-
-private:
-    KoFlake();
+    int maxZIndex();
 };
 
 #endif

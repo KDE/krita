@@ -11,6 +11,7 @@ add_subdirectory(tests)
 add_subdirectory(pics)
 
 set(flake_SRCS
+    KoFlake.cpp
     KoCanvasBase.cpp
     KoCanvasObserver.cpp
     KoCanvasResourceProvider.cpp

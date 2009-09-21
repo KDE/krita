@@ -33,9 +33,16 @@ public:
     const KoColorSpace* currentColorSpace();
     void setCurrentColorModel(const KoID& id);
     void setCurrentColorDepth(const KoID& id);
+signals:
+    /**
+     * This signal is emited when a new color space is selected.
+     * @param valid indicates if the color space can be used
+     */
+    void selectionChanged(bool valid);
 private slots:
     void fillCmbDepths(const KoID& idd);
     void fillCmbProfiles();
+    void colorSpaceChanged();
 private:
     struct Private;
     Private * const d;

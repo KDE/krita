@@ -41,6 +41,8 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
             this, SLOT(fillCmbProfiles()));
     connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
             this, SLOT(fillCmbProfiles()));
+    connect(d->colorSpaceSelector->cmbProfile, SIGNAL(activated(const QString &)),
+            this, SLOT(colorSpaceChanged()));
     fillCmbProfiles();
 }
 
@@ -68,6 +70,7 @@ void KisColorSpaceSelector::fillCmbProfiles()
         d->colorSpaceSelector->cmbProfile->addSqueezedItem(profile->name());
     }
     d->colorSpaceSelector->cmbProfile->setCurrent(csf->defaultProfile());
+    colorSpaceChanged();
 }
 
 void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
@@ -93,6 +96,13 @@ void KisColorSpaceSelector::setCurrentColorDepth(const KoID& id)
 {
     d->colorSpaceSelector->cmbColorDepth->setCurrent(id);
     fillCmbProfiles();
+}
+
+#include <kdebug.h>
+
+void KisColorSpaceSelector::colorSpaceChanged()
+{
+  emit(selectionChanged(d->colorSpaceSelector->cmbProfile->count() != 0 ));
 }
 
 #include "kis_color_space_selector.moc"

@@ -104,6 +104,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
 
     connect(bnScreenSize, SIGNAL(clicked()), this, SLOT(screenSizeClicked()));
+    connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), m_createButton, SLOT(setEnabled(bool)));
 }
 
 void KisCustomImageWidget::resolutionChanged(double res)

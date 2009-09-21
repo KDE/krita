@@ -1,5 +1,5 @@
 <ctlprofile>
-    <info colorModel="XYZA" depth="32" type="float" name="Standard XYZ" />
+    <info colorModel="XYZA" type="float" name="Standard XYZ" />
     <program>
 <![CDATA[
 
@@ -101,19 +101,19 @@ void XYZAf32_to_LABAi(float xIn, float yIn, float zIn, float alphaIn, output int
     <transformations>
         <conversions>
             <conversion function="RGBAf32_to_XYZAf32">
-                <input colorModel="RGBA" depth="32" type="float" profile="Standard Linear RGB (scRGB/sRGB64)" />
-                <output colorModel="XYZA" depth="32" type="float" />
+                <input colorModel="RGBA" type="float" profile="Standard Linear RGB (scRGB/sRGB64)" />
+                <output colorModel="XYZA" type="float" />
             </conversion>
             <conversion function="XYZAf32_to_RGBAf32">
-                <input colorModel="XYZA" depth="32" type="float" />
-                <output colorModel="RGBA" depth="32" type="float" profile="Standard Linear RGB (scRGB/sRGB64)" />
+                <input colorModel="XYZA" type="float" />
+                <output colorModel="RGBA" type="float" profile="Standard Linear RGB (scRGB/sRGB64)" />
             </conversion>
             <conversion function="LABAi_to_XYZAf32">
                 <input colorModel="LABA" depth="16" type="integer" profile="Lab built-in - (lcms internal)" />
-                <output colorModel="XYZA" depth="32" type="float" />
+                <output colorModel="XYZA" type="float" />
             </conversion>
             <conversion function="XYZAf32_to_LABAi">
-                <input colorModel="XYZA" depth="32" type="float" />
+                <input colorModel="XYZA" type="float" />
                 <output colorModel="LABA" depth="16" type="integer" profile="Lab built-in - (lcms internal)" />
             </conversion>
         </conversions>

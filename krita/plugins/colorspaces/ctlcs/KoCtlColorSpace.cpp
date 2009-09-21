@@ -19,6 +19,8 @@
 
 #include "KoCtlColorSpace.h"
 
+#include <QDomElement>
+
 #include "KoColorSpaceAbstract.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpaceMaths.h"
@@ -38,6 +40,7 @@
 #endif
 #include "KoCtlMixColorsOp.h"
 #include "KoCtlConvolutionOp.h"
+#include <boost/graph/graph_concepts.hpp>
 
 struct KoCtlColorSpace::Private
 {
@@ -282,11 +285,46 @@ KoID KoCtlColorSpace::mathToolboxId() const
 
 void KoCtlColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
 {
+    QString nameOfModel;
+    
+    // TODO should be part of the CTLCS definition
+    if( d->info->colorModelId().id() == "RGBA")
+    {
+      nameOfModel = "RGB";
+    }
+    if( d->info->colorModelId().id() == "XYZA")
+    {
+      nameOfModel = "XYZ";
+    }
+    if( d->info->colorModelId().id() == "YCbCrA")
+    {
+      nameOfModel = "YCbCr";
+    }
+    QDomElement labElt = doc.createElement( nameOfModel );    
+    for(int i = 0; i < d->ctlChannels.size(); ++i)
+    {
+        const KoCtlChannel* channel = d->ctlChannels[i];
+        const KoCtlColorSpaceInfo::ChannelInfo* channelInfo = d->info->channels()[i];
+        if(channelInfo->channelType() == KoChannelInfo::COLOR)
+        {
+            labElt.setAttribute(channelInfo->shortName(), channel->scaleToF32(pixel));
+        }
+    }  
+    labElt.setAttribute("space", profile()->name() );
+    colorElt.appendChild( labElt );
     
 }
 void KoCtlColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
-    
+    for(int i = 0; i < d->ctlChannels.size(); ++i)
+    {
+        const KoCtlChannel* channel = d->ctlChannels[i];
+        const KoCtlColorSpaceInfo::ChannelInfo* channelInfo = d->info->channels()[i];
+        if(channelInfo->channelType() == KoChannelInfo::COLOR)
+        {
+            channel->scaleFromF32(pixel, elt.attribute(channelInfo->shortName()).toDouble());
+        }
+    }
 }
 
 KoID KoCtlColorSpace::colorModelId() const

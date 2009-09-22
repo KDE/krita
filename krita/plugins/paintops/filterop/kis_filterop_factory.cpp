@@ -67,6 +67,7 @@ KisPaintOpSettingsSP KisFilterOpFactory::settings(const KoInputDevice& inputDevi
 KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageSP image)
 {
     KisFilterOpSettings* settings = new KisFilterOpSettings();
+    qDebug() << "XXXXXXXXXX" << settings;
     settings->setImage( image );
     return settings;
 }

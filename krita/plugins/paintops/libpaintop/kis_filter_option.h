@@ -80,7 +80,7 @@ private slots:
 private:
 
     QGridLayout* m_layout;
-    KisFilterOptionWidget* m_optionsWidget;
+    KisFilterOptionWidget* m_options;
     const KisFilterSP m_currentFilter;
     KisConfigWidget* m_currentFilterConfigWidget;
     KisPaintDeviceSP m_paintDevice;

@@ -24,9 +24,8 @@
 #include <QList>
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
-
+#include "kis_sumi_paintop_settings_widget.h"
 class QWidget;
-class KisSumiPaintOpSettingsWidget;
 class QDomElement;
 class QDomDocument;
 
@@ -38,7 +37,7 @@ class KisSumiPaintOpSettings : public QObject, public KisPaintOpSettings
 public:
 
 
-    KisSumiPaintOpSettings(KisSumiPaintOpSettingsWidget* widget);
+    KisSumiPaintOpSettings();
     virtual ~KisSumiPaintOpSettings() {}
 
     bool paintIncremental();
@@ -71,6 +70,20 @@ public:
     double randomFactor() const;
     double scaleFactor() const;
 
+    // XXX: Hack!
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+    {
+        if (m_options != 0) {
+            delete m_options;
+        }
+        if (!widget) {
+            m_options = 0;
+        }
+        else {
+            m_options = qobject_cast<KisSumiPaintOpSettingsWidget*>(widget);
+            m_options->writeConfiguration( this );
+        }
+    }
 
 private:
 

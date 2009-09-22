@@ -25,9 +25,9 @@
 
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
+#include "kis_complexop_settings_widget.h"
 
 class QDomElement;
-class KisComplexOpSettingsWidget;
 
 class KisComplexOpSettings : public QObject, public KisPaintOpSettings
 {
@@ -37,7 +37,7 @@ public:
     using KisPaintOpSettings::fromXML;
     using KisPaintOpSettings::toXML;
 
-    KisComplexOpSettings( KisComplexOpSettingsWidget* widget );
+    KisComplexOpSettings();
     virtual ~KisComplexOpSettings();
 
     bool paintIncremental();
@@ -47,9 +47,24 @@ public:
 
     KisPaintOpSettingsSP clone() const;
 
+    // XXX: Hack!
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+    {
+        if (m_options != 0) {
+            delete m_options;
+        }
+        if (!widget) {
+            m_options = 0;
+        }
+        else {
+            m_options = qobject_cast<KisComplexOpSettingsWidget*>(widget);
+            m_options->writeConfiguration( this );
+        }
+    }
+
 public:
 
-    KisComplexOpSettingsWidget *m_optionsWidget;
+    KisComplexOpSettingsWidget *m_options;
 
 };
 

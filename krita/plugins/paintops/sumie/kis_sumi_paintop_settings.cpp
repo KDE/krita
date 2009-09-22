@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <kis_sumi_paintop_settings.h>
+#include "kis_sumi_paintop_settings.h"
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
@@ -31,12 +31,9 @@
 
 #include "kis_sumi_paintop_settings_widget.h"
 
-KisSumiPaintOpSettings::KisSumiPaintOpSettings(KisSumiPaintOpSettingsWidget* settingsWidget)
-        : KisPaintOpSettings(settingsWidget)
+KisSumiPaintOpSettings::KisSumiPaintOpSettings()
+    : m_options(0)
 {
-    m_options = settingsWidget;
-    // Initialize with the default settings from the widget
-    m_options->writeConfiguration( this );
 }
 
 KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const

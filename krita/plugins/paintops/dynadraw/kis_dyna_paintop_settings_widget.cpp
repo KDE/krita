@@ -54,7 +54,8 @@ KisDynaPaintOpSettingsWidget::~ KisDynaPaintOpSettingsWidget()
 
 KisPropertiesConfiguration*  KisDynaPaintOpSettingsWidget::configuration() const
 {
-    KisDynaPaintOpSettings* config = new KisDynaPaintOpSettings( const_cast<KisDynaPaintOpSettingsWidget*>( this ) );
+    KisDynaPaintOpSettings* config = new KisDynaPaintOpSettings( );
+    config->setOptionsWidget(const_cast<KisDynaPaintOpSettingsWidget*>( this ) );
 
     config->setProperty("paintop", "dynabrush"); // XXX: make this a const id string
     writeConfiguration(config);

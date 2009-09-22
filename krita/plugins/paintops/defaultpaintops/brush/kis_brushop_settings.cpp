@@ -35,14 +35,9 @@
 #include <kis_boundary_painter.h>
 #include <kis_paint_device.h> // TODO remove me when KisBoundary is used as pointers
 
-KisBrushOpSettings::KisBrushOpSettings( KisBrushOpSettingsWidget* widget )
-    : KisPaintOpSettings( widget )
+KisBrushOpSettings::KisBrushOpSettings()
+    : m_options(0)
 {
-    Q_ASSERT( widget );
-    m_optionsWidget = widget;
-    // Initialize with the default settings from the widget
-    m_optionsWidget->writeConfiguration( this );
-
 }
 
 KisBrushOpSettings::~KisBrushOpSettings()
@@ -51,7 +46,7 @@ KisBrushOpSettings::~KisBrushOpSettings()
 
 bool KisBrushOpSettings::paintIncremental()
 {
-    return m_optionsWidget->m_paintActionTypeOption->paintActionType() == BUILDUP;
+    return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
 }
 
 void KisBrushOpSettings::fromXML(const QDomElement& elt)
@@ -61,14 +56,14 @@ void KisBrushOpSettings::fromXML(const QDomElement& elt)
     KisPaintOpSettings::fromXML( elt );
 
     // Then load the properties for all widgets
-    m_optionsWidget->setConfiguration( this );
+    m_options->setConfiguration( this );
 }
 
 void KisBrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
     // First, make sure all the option widgets have saved their state
     // to the property configuration
-    KisPropertiesConfiguration * settings = m_optionsWidget->configuration();
+    KisPropertiesConfiguration * settings = m_options->configuration();
 
     // Then call the parent class fromXML
     settings->KisPropertiesConfiguration::toXML( doc, rootElt );
@@ -80,7 +75,7 @@ void KisBrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 KisPaintOpSettingsSP KisBrushOpSettings::clone() const
 {
 
-    KisPaintOpSettingsSP settings = dynamic_cast<KisPaintOpSettings*>( m_optionsWidget->configuration() );
+    KisPaintOpSettingsSP settings = dynamic_cast<KisPaintOpSettings*>( m_options->configuration() );
     return settings;
 
 }
@@ -88,7 +83,7 @@ KisPaintOpSettingsSP KisBrushOpSettings::clone() const
 QRectF KisBrushOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode) const
 {
     if(_mode != CURSOR_IS_OUTLINE) return QRectF();
-    KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
+    KisBrushSP brush = m_options->m_brushOption->brush();
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     return image->pixelToDocument(
             QRectF(0,0, brush->width() + 1, brush->height() + 1).translated(-(hotSpot + QPointF(0.5, 0.5)) )
@@ -98,7 +93,7 @@ QRectF KisBrushOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image
 void KisBrushOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
     if(_mode != CURSOR_IS_OUTLINE) return;
-    KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
+    KisBrushSP brush = m_options->m_brushOption->brush();
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     painter.setPen(Qt::black);
     painter.setBackground(Qt::black);

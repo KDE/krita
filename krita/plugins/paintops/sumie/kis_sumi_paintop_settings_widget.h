@@ -27,6 +27,8 @@
 
 class KisSumiPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
+    Q_OBJECT
+
 public:
     KisSumiPaintOpSettingsWidget(QWidget* parent = 0);
 

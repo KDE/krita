@@ -60,7 +60,8 @@ KisPenOpSettingsWidget::~KisPenOpSettingsWidget()
 
 KisPropertiesConfiguration* KisPenOpSettingsWidget::configuration() const
 {
-    KisPenOpSettings *config = new KisPenOpSettings(const_cast<KisPenOpSettingsWidget*>( this ));
+    KisPenOpSettings *config = new KisPenOpSettings();
+    config->setOptionsWidget(const_cast<KisPenOpSettingsWidget*>( this ));
     config->setProperty("paintop", "pencil"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

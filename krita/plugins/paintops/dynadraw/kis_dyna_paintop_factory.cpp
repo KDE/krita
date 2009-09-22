@@ -50,7 +50,6 @@ KisPaintOp * KisDynaPaintOpFactory::createOp(const KisPaintOpSettingsSP settings
 
 KisPaintOpSettingsSP KisDynaPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
-    Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
     return new KisDynaPaintOpSettings();

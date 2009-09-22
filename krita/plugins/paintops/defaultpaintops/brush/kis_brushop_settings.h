@@ -26,8 +26,9 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
+#include "kis_brushop_settings_widget.h"
+
 class QDomElement;
-class KisBrushOpSettingsWidget;
 
 class KisBrushOpSettings : public KisPaintOpSettings
 {
@@ -36,7 +37,7 @@ public:
     using KisPaintOpSettings::fromXML;
     using KisPaintOpSettings::toXML;
 
-    KisBrushOpSettings( KisBrushOpSettingsWidget* widget );
+    KisBrushOpSettings();
     virtual ~KisBrushOpSettings();
 
     bool paintIncremental();
@@ -48,9 +49,26 @@ public:
 
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode ) const;
     virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
+
+    // XXX: Hack!
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+    {
+        if (m_options != 0) {
+            delete m_options;
+        }
+        if (!widget) {
+            m_options = 0;
+        }
+        else {
+            m_options = qobject_cast<KisBrushOpSettingsWidget*>(widget);
+            m_options->writeConfiguration( this );
+        }
+    }
+
+
 public:
 
-    KisBrushOpSettingsWidget *m_optionsWidget;
+    KisBrushOpSettingsWidget *m_options;
 
 };
 

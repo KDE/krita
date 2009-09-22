@@ -89,7 +89,6 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 {
     if (m_d->settingsWidget) {
         m_d->layout->removeWidget(m_d->settingsWidget);
-        m_d->settingsWidget->hide();
         m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer->updateGeometry();
     }
     m_d->layout->update();

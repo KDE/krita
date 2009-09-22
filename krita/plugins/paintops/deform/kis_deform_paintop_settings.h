@@ -26,6 +26,8 @@
 
 #include <config-opengl.h>
 
+#include "kis_deform_paintop_settings_widget.h"
+
 #ifdef HAVE_OPENGL
 #if defined(_WIN32) || defined(_WIN64)
 # include <windows.h>
@@ -44,7 +46,7 @@ class KisDeformPaintOpSettings : public QObject, public KisPaintOpSettings
     Q_OBJECT
 
 public:
-    KisDeformPaintOpSettings(KisDeformPaintOpSettingsWidget* widget);
+    KisDeformPaintOpSettings();
     virtual ~KisDeformPaintOpSettings() {}
     KisPaintOpSettingsSP clone() const;
 
@@ -74,6 +76,21 @@ public:
         return "3d-deform-brush";
     }
 #endif
+
+// XXX: Hack!
+void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+{
+    if (m_options) {
+        delete m_options;
+    }
+    if (!widget) {
+        m_options = 0;
+    }
+    else {
+        m_options = qobject_cast<KisDeformPaintOpSettingsWidget*>(widget);
+        m_options->writeConfiguration( this );
+    }
+}
 
 private:
     KisDeformPaintOpSettingsWidget* m_options;

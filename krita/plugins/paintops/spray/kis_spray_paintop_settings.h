@@ -24,8 +24,9 @@
 #include <kis_types.h>
 #include <KoViewConverter.h>
 
+#include "kis_spray_paintop_settings_widget.h"
+
 class QWidget;
-class KisSprayPaintOpSettingsWidget;
 class QDomElement;
 class QDomDocument;
 
@@ -34,11 +35,12 @@ class KisSprayPaintOpSettings : public KisPaintOpSettings
 {
 
 public:
+
+    KisSprayPaintOpSettings();
+    virtual ~KisSprayPaintOpSettings() {}
+
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode ) const;
     virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
-
-    KisSprayPaintOpSettings(KisSprayPaintOpSettingsWidget* widget);
-    virtual ~KisSprayPaintOpSettings() {}
 
     bool paintIncremental();
 
@@ -66,7 +68,7 @@ public:
     int height() const;
     bool jitterShapeSize() const;
 
-    
+
     // metaballs
     qreal maxTresh() const;
     qreal minTresh() const;
@@ -75,7 +77,7 @@ public:
     bool useRandomOpacity() const;
     bool useRandomHSV() const;
 
-    // TODO: these should be intervals like 20..180 
+    // TODO: these should be intervals like 20..180
     int hue() const;
     int saturation() const;
     int value() const;
@@ -90,12 +92,28 @@ public:
 
     bool jitterMovement() const;
     bool jitterSize() const;
-    
+
     bool useDensity() const;
     int particleCount() const;
- 
+
     bool gaussian() const;
-    
+
+    // XXX: Hack!
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+    {
+        if (m_options != 0) {
+            delete m_options;
+        }
+        if (!widget) {
+            m_options = 0;
+        }
+        else {
+            m_options = qobject_cast<KisSprayPaintOpSettingsWidget*>( widget );
+            m_options->writeConfiguration( this );
+        }
+    }
+
+
 private:
 
     KisSprayPaintOpSettingsWidget* m_options;

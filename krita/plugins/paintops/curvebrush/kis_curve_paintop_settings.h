@@ -24,8 +24,9 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
+#include "kis_curve_paintop_settings_widget.h"
+
 class QWidget;
-class KisCurvePaintOpSettingsWidget;
 class QDomElement;
 class QDomDocument;
 
@@ -34,7 +35,7 @@ class KisCurvePaintOpSettings : public QObject, public KisPaintOpSettings
     Q_OBJECT
 
 public:
-    KisCurvePaintOpSettings(KisCurvePaintOpSettingsWidget* widget);
+    KisCurvePaintOpSettings();
     virtual ~KisCurvePaintOpSettings() {}
     KisPaintOpSettingsSP clone() const;
 
@@ -55,8 +56,22 @@ public:
         return "stylus";
     }
 #endif
+// XXX: Hack!
+void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+{
+    if (m_options != 0) {
+        delete m_options;
+    }
+    if (!widget) {
+        m_options = 0;
+    }
+    else {
+        m_options = qobject_cast<KisCurvePaintOpSettingsWidget*>(widget);
+        m_options->writeConfiguration( this );
+    }
+}
 
-    
+
 private:
     KisCurvePaintOpSettingsWidget* m_options;
 };

@@ -38,19 +38,19 @@ KisDynamicOpSettings::KisDynamicOpSettings(KisDynamicOpSettingsWidget* widget, K
     : KisPaintOpSettings( widget )
 {
     Q_ASSERT( widget );
-    m_optionsWidget = widget;
-    m_optionsWidget->writeConfiguration( this );
+    m_options = widget;
+    m_options->writeConfiguration( this );
     m_shapeBookmarksModel = shapeBookmarksManager;
     m_coloringBookmarksModel = coloringBookmarksManager;
 
-    int s = m_optionsWidget->m_uiOptions->comboBoxShapePrograms->currentIndex();
+    int s = m_options->m_uiOptions->comboBoxShapePrograms->currentIndex();
     if( s < 0 ) s = 0;
-    m_optionsWidget->m_uiOptions->comboBoxShapePrograms->setModel(m_shapeBookmarksModel);
-    m_optionsWidget->m_uiOptions->comboBoxShapePrograms->setCurrentIndex(s);
-    int c = m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->currentIndex();
+    m_options->m_uiOptions->comboBoxShapePrograms->setModel(m_shapeBookmarksModel);
+    m_options->m_uiOptions->comboBoxShapePrograms->setCurrentIndex(s);
+    int c = m_options->m_uiOptions->comboBoxColoringPrograms->currentIndex();
     if( c < 0 ) c = 0;
-    m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->setModel(m_coloringBookmarksModel);
-    m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->setCurrentIndex(c);
+    m_options->m_uiOptions->comboBoxColoringPrograms->setModel(m_coloringBookmarksModel);
+    m_options->m_uiOptions->comboBoxColoringPrograms->setCurrentIndex(c);
 }
 
 KisDynamicOpSettings::~KisDynamicOpSettings()
@@ -67,25 +67,25 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
     KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
     // Init shape program
     QModelIndex shapeModelIndex = m_shapeBookmarksModel->index(
-                                      m_optionsWidget->m_uiOptions->comboBoxShapePrograms->currentIndex(), 0);
+                                      m_options->m_uiOptions->comboBoxShapePrograms->currentIndex(), 0);
     KisDynamicShapeProgram* shapeProgram =
                     static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration(shapeModelIndex));
     Q_ASSERT(shapeProgram);
     current->setShapeProgram(shapeProgram);
     // Init coloring program
-    dbgKrita << "Load color programs at: " << m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->currentIndex();
+    dbgKrita << "Load color programs at: " << m_options->m_uiOptions->comboBoxColoringPrograms->currentIndex();
     QModelIndex coloringModelIndex = m_coloringBookmarksModel->index(
-                                         m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->currentIndex(), 0);
+                                         m_options->m_uiOptions->comboBoxColoringPrograms->currentIndex(), 0);
     KisDynamicColoringProgram* coloringProgram = static_cast<KisDynamicColoringProgram*>(m_coloringBookmarksModel->configuration(coloringModelIndex));
     Q_ASSERT(coloringProgram);
     current->setColoringProgram(coloringProgram);
 
 
     // Init shape
-    switch (m_optionsWidget->m_uiOptions->comboBoxShapes->currentIndex()) {
+    switch (m_options->m_uiOptions->comboBoxShapes->currentIndex()) {
     default:
     case 0: {
-        current->setShape(new KisDabShape(m_optionsWidget->m_uiOptions->brushOptions->brush()));
+        current->setShape(new KisDabShape(m_options->m_uiOptions->brushOptions->brush()));
         break;
     }
     case 1:
@@ -94,7 +94,7 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
         break;
     }
     // Init coloring
-    switch (m_optionsWidget->m_uiOptions->comboBoxColoring->currentIndex()) {
+    switch (m_options->m_uiOptions->comboBoxColoring->currentIndex()) {
     case 3:
         current->setColoring(new KisTotalRandomColoring());
         break;
@@ -116,8 +116,8 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
 void KisDynamicOpSettings::fromXML(const QDomElement& elt)
 {
 
-    m_optionsWidget->m_uiOptions->comboBoxShapes->setCurrentIndex(elt.attribute("shapeType", "0").toInt());
-    m_optionsWidget->m_uiOptions->comboBoxColoring->setCurrentIndex(elt.attribute("coloringType", "0").toInt());
+    m_options->m_uiOptions->comboBoxShapes->setCurrentIndex(elt.attribute("shapeType", "0").toInt());
+    m_options->m_uiOptions->comboBoxColoring->setCurrentIndex(elt.attribute("coloringType", "0").toInt());
     #if 0
     // The following is not good, nothing prove that the programs contained in elt are the same as in the registry
     QDomNode nShape = elt.firstChildElement("Shape");
@@ -125,7 +125,7 @@ void KisDynamicOpSettings::fromXML(const QDomElement& elt)
     {
       QDomElement eShape = nShape.toElement();
       QString name = eShape.attribute("name");
-      m_optionsWidget->m_uiOptions->comboBoxShapePrograms->setCurrentIndex(
+      m_options->m_uiOptions->comboBoxShapePrograms->setCurrentIndex(
         m_shapeBookmarksModel->indexFor(name).row() );
       dbgPlugins << name << " " << m_shapeBookmarksModel->indexFor(name).row();
     }
@@ -135,7 +135,7 @@ void KisDynamicOpSettings::fromXML(const QDomElement& elt)
     {
       QDomElement eColoring = nColoring.toElement();
       QString name = eColoring.attribute("name");
-      m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->setCurrentIndex(
+      m_options->m_uiOptions->comboBoxColoringPrograms->setCurrentIndex(
         m_coloringBookmarksModel->indexFor(name).row() );
     }
     #endif
@@ -145,15 +145,15 @@ void KisDynamicOpSettings::fromXML(const QDomElement& elt)
 void KisDynamicOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
 
-    rootElt.setAttribute("shapeType", m_optionsWidget->m_uiOptions->comboBoxShapes->currentIndex());
-    rootElt.setAttribute("coloringType", m_optionsWidget->m_uiOptions->comboBoxColoring->currentIndex());
+    rootElt.setAttribute("shapeType", m_options->m_uiOptions->comboBoxShapes->currentIndex());
+    rootElt.setAttribute("coloringType", m_options->m_uiOptions->comboBoxColoring->currentIndex());
     // Save shape program
     QDomElement shapeElt = doc.createElement("Shape");
     rootElt.appendChild(shapeElt);
 
-    dbgKrita << m_optionsWidget->m_uiOptions->comboBoxShapePrograms->currentIndex();
+    dbgKrita << m_options->m_uiOptions->comboBoxShapePrograms->currentIndex();
     QModelIndex shapeModelIndex = m_shapeBookmarksModel->index(
-                                      m_optionsWidget->m_uiOptions->comboBoxShapePrograms->currentIndex(), 0);
+                                      m_options->m_uiOptions->comboBoxShapePrograms->currentIndex(), 0);
     KisDynamicShapeProgram* shapeProgram = static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration(shapeModelIndex));
     Q_ASSERT(shapeProgram);
 
@@ -166,7 +166,7 @@ void KisDynamicOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     rootElt.appendChild(coloringElt);
 
     QModelIndex coloringModelIndex = m_coloringBookmarksModel->index(
-                                         m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->currentIndex(), 0);
+                                         m_options->m_uiOptions->comboBoxColoringPrograms->currentIndex(), 0);
     KisDynamicColoringProgram* coloringProgram = static_cast<KisDynamicColoringProgram*>(m_coloringBookmarksModel->configuration(coloringModelIndex));
     Q_ASSERT(coloringProgram);
 
@@ -178,7 +178,7 @@ void KisDynamicOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 
 KisPaintOpSettingsSP KisDynamicOpSettings::clone() const
 {
-    return new KisDynamicOpSettings(m_optionsWidget,
+    return new KisDynamicOpSettings(m_options,
                                     m_shapeBookmarksModel,
                                     m_coloringBookmarksModel);
 

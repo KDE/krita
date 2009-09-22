@@ -33,11 +33,9 @@
 #include <kis_curve_paintop_settings_widget.h>
 
 
-KisCurvePaintOpSettings::KisCurvePaintOpSettings(KisCurvePaintOpSettingsWidget* settingsWidget)
-        : KisPaintOpSettings(settingsWidget)
+KisCurvePaintOpSettings::KisCurvePaintOpSettings()
+    : m_options(0)
 {
-    m_options = settingsWidget;
-    m_options->writeConfiguration( this );
 }
 
 

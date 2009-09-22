@@ -65,7 +65,7 @@ KisPaintOpSettingsSP KisEraseOpFactory::settings(const KoInputDevice& inputDevic
 KisPaintOpSettingsSP KisEraseOpFactory::settings(KisImageSP image)
 {
     Q_UNUSED( image );
-    return new KisEraseOpSettings(m_widget);
+    return new KisEraseOpSettings();
 }
 
 KisPaintOpSettingsWidget* KisEraseOpFactory::createSettingsWidget(QWidget* parent)

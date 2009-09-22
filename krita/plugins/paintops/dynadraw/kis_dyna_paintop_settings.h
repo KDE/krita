@@ -23,8 +23,9 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
+#include "kis_dyna_paintop_settings_widget.h"
+
 class QWidget;
-class KisDynaPaintOpSettingsWidget;
 class QDomElement;
 class QDomDocument;
 
@@ -35,7 +36,7 @@ class KisDynaPaintOpSettings : public KisPaintOpSettings
 public:
 
 
-    KisDynaPaintOpSettings(KisDynaPaintOpSettingsWidget* widget);
+    KisDynaPaintOpSettings();
     virtual ~KisDynaPaintOpSettings() {}
 
     bool paintIncremental();
@@ -64,7 +65,22 @@ public:
 
     int lineCount() const;
     qreal lineSpacing() const;
- 
+    
+    // XXX: Hack!
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+    {
+        if (m_options != 0) {
+            delete m_options;
+        }
+        if (!widget) {
+            m_options = 0;
+        }
+        else {
+            m_options = qobject_cast<KisDynaPaintOpSettingsWidget*>(widget);
+            m_options->writeConfiguration(this);
+        }
+    }
+    
 private:
 
     KisDynaPaintOpSettingsWidget* m_options;

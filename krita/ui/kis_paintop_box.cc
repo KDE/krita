@@ -265,17 +265,19 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         m_optionWidget->disconnect(m_presetWidget);
         m_optionWidget->disconnect(m_presetsPopup->presetPreview());
         m_presetsPopup->setPaintOpSettingsWidget(0);
-        m_optionWidget->setParent(0);
-        delete m_optionWidget;
+        // XXX: Hack! -- this will also delete the widget
+        const_cast<KisPaintOpSettings*>( m_activePreset->settings().data() )->setOptionsWidget(0);
     }
 
     m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
 
     KisPaintOpPresetSP preset =
         activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice());
-
     if (preset != 0 && preset->settings()) {
         m_optionWidget = KisPaintOpRegistry::instance()->get(paintop.id())->createSettingsWidget(0);
+        // XXX: Hack!
+        const_cast<KisPaintOpSettings*>( preset->settings().data() )->setOptionsWidget(m_optionWidget);
+
         m_optionWidget->setImage(m_view->image());
         if ( !preset->settings()->getProperties().isEmpty() ) {
             dbgUI << "\t\tSetting configuration on option widget ";
@@ -284,7 +286,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
         Q_ASSERT(m_optionWidget);
         Q_ASSERT(m_presetWidget);
-        connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(updatePreset()));
+        connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotUpdatePreset()));
     } else {
         m_presetsPopup->setPaintOpSettingsWidget(0);
     }

@@ -78,7 +78,8 @@ void  KisSumiPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfigu
 
 KisPropertiesConfiguration*  KisSumiPaintOpSettingsWidget::configuration() const
 {
-    KisSumiPaintOpSettings* settings = new KisSumiPaintOpSettings( const_cast<KisSumiPaintOpSettingsWidget*>( this ) );
+    KisSumiPaintOpSettings* settings = new KisSumiPaintOpSettings();
+    settings->setOptionsWidget( const_cast<KisSumiPaintOpSettingsWidget*>( this ) );
 //     settings->dump();
     return settings;
 }
@@ -90,7 +91,7 @@ void KisSumiPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguratio
     config->setProperty( "curve_count", c.count() );
     for ( int i = 0; i < c.count(); ++i ) {
         config->setProperty( QString("ink_curve_%1").arg( i), c[i] );
-    } 
+    }
     config->setProperty( "radius", radius() );
     config->setProperty( "sigma", sigma() );
     config->setProperty( "brush_dimension", brushDimension() );

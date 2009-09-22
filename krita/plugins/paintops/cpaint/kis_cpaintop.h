@@ -75,7 +75,7 @@ public:
     int water() const;
 
     KisConfigWidget * widget() const {
-        return m_optionsWidget;
+        return m_options;
     }
 
     using KisPaintOpSettings::fromXML;
@@ -93,7 +93,7 @@ private:
 
     QVector<Brush*> m_brushes;
     Ui::WdgCPaintOptions * m_options;
-    KisConfigWidget * m_optionsWidget;
+    KisConfigWidget * m_options;
 };
 
 

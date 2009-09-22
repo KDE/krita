@@ -59,7 +59,7 @@ KisPaintOpSettingsSP KisAirbrushOpFactory::settings(const KoInputDevice& inputDe
 {
     Q_UNUSED( inputDevice );
     Q_UNUSED( image );
-    return new KisAirbrushOpSettings(t);
+    return new KisAirbrushOpSettings();
 }
 
 KisPaintOpSettingsSP KisAirbrushOpFactory::settings(KisImageSP image)

@@ -37,11 +37,9 @@
 #endif
 
 
-KisChalkPaintOpSettings::KisChalkPaintOpSettings(KisChalkPaintOpSettingsWidget* settingsWidget)
-        : KisPaintOpSettings(settingsWidget)
+KisChalkPaintOpSettings::KisChalkPaintOpSettings()
+    : m_options(0)
 {
-    m_options = settingsWidget;
-    m_options->writeConfiguration( this );
 }
 
 KisPaintOpSettingsSP KisChalkPaintOpSettings::clone() const

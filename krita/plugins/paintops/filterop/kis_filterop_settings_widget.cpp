@@ -57,7 +57,8 @@ KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()
 
 KisPropertiesConfiguration* KisFilterOpSettingsWidget::configuration() const
 {
-    KisFilterOpSettings *config = new KisFilterOpSettings(const_cast<KisFilterOpSettingsWidget*>( this ));
+    KisFilterOpSettings *config = new KisFilterOpSettings();
+    config->setOptionsWidget(const_cast<KisFilterOpSettingsWidget*>( this ));
     config->setProperty("paintop", "filter"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

@@ -23,7 +23,7 @@
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_option.h"
-                                                
+
 #include <kis_image.h>
 #include <kis_properties_configuration.h>
 #include <kis_brush_option.h>
@@ -55,7 +55,8 @@ KisDuplicateOpSettingsWidget::~KisDuplicateOpSettingsWidget()
 KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const
 {
     KisDuplicateOpSettings *config =
-        new KisDuplicateOpSettings(const_cast<KisDuplicateOpSettingsWidget*>( this ), 0);
+        new KisDuplicateOpSettings(0);
+    config->setOptionsWidget(const_cast<KisDuplicateOpSettingsWidget*>( this ));
     config->setProperty("paintop", "duplicate"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

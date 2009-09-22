@@ -27,8 +27,9 @@
 #include <kis_types.h>
 #include <QPointF>
 
+#include "kis_duplicateop_settings_widget.h"
+
 class QDomElement;
-class KisDuplicateOpSettingsWidget;
 class KisDuplicateOpSettings : public KisPaintOpSettings
 {
 
@@ -36,7 +37,7 @@ public:
     using KisPaintOpSettings::fromXML;
     using KisPaintOpSettings::toXML;
 
-    KisDuplicateOpSettings( KisDuplicateOpSettingsWidget* widget, KisImageSP image );
+    KisDuplicateOpSettings( KisImageSP image );
 
     virtual ~KisDuplicateOpSettings();
     bool paintIncremental();
@@ -54,9 +55,24 @@ public:
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode ) const;
     virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
+    // XXX: Hack!
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+    {
+        if (m_options != 0) {
+            delete m_options;
+        }
+        if (!widget) {
+            m_options = 0;
+        }
+        else {
+            m_options = qobject_cast<KisDuplicateOpSettingsWidget*>(widget);
+            m_options->writeConfiguration(this);
+        }
+    }
+
 public:
 
-    KisDuplicateOpSettingsWidget *m_optionsWidget;
+    KisDuplicateOpSettingsWidget *m_options;
     QPointF m_offset;
     KisImageSP m_image;
     bool m_isOffsetNotUptodate;

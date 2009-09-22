@@ -33,13 +33,9 @@
 #include <kis_image.h>
 
 
-KisFilterOpSettings::KisFilterOpSettings( KisFilterOpSettingsWidget* widget )
-    : KisPaintOpSettings( widget )
+KisFilterOpSettings::KisFilterOpSettings()
+        : m_options(0)
 {
-    Q_ASSERT( widget );
-    m_optionsWidget = widget;
-    // Initialize with the default settings from the widget
-    m_optionsWidget->writeConfiguration( this );
 }
 
 KisFilterOpSettings::~KisFilterOpSettings() {
@@ -57,7 +53,7 @@ void KisFilterOpSettings::fromXML(const QDomElement& elt)
     KisPaintOpSettings::fromXML( elt );
 
     // Then load the properties for all widgets
-    m_optionsWidget->setConfiguration( this );
+    m_options->setConfiguration( this );
 }
 
 void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
@@ -65,7 +61,7 @@ void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 
     // First, make sure all the option widgets have saved their state
     // to the property configuration
-    KisPropertiesConfiguration * settings = m_optionsWidget->configuration();
+    KisPropertiesConfiguration * settings = m_options->configuration();
 
     // Then call the parent class fromXML
     settings->KisPropertiesConfiguration::toXML( doc, rootElt );
@@ -77,7 +73,7 @@ void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 KisPaintOpSettingsSP KisFilterOpSettings::clone() const
 {
 
-    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>( m_optionsWidget->configuration() );
+    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>( m_options->configuration() );
     return settings;
 
 }
@@ -85,27 +81,29 @@ KisPaintOpSettingsSP KisFilterOpSettings::clone() const
 void KisFilterOpSettings::setNode( KisNodeSP node )
 {
     KisPaintOpSettings::setNode( node );
-    if ( m_optionsWidget ) {
-        m_optionsWidget->m_filterOption->setNode( node );
+    if ( m_options ) {
+        m_options->m_filterOption->setNode( node );
     }
 }
 
 void KisFilterOpSettings::setImage( KisImageSP image )
 {
-    m_optionsWidget->m_filterOption->setImage( image );
+    if (m_options) {
+        m_options->m_filterOption->setImage( image );
+    }
 }
 
 KisFilterSP KisFilterOpSettings::filter() const
 {
-    return m_optionsWidget->m_filterOption->filter();
+    return m_options->m_filterOption->filter();
 }
 
 KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 {
-    return m_optionsWidget->m_filterOption->filterConfig();
+    return m_options->m_filterOption->filterConfig();
 }
 
 bool KisFilterOpSettings::ignoreAlpha() const
 {
-    return m_optionsWidget->m_filterOption->ignoreAlpha();
+    return m_options->m_filterOption->ignoreAlpha();
 }

@@ -22,6 +22,8 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
+#include "kis_dynamicop_settings_widget.h"
+
 class QWidget;
 class QDomElement;
 
@@ -55,10 +57,25 @@ public:
 
     /// @return a brush with the current shapes, coloring and program
     KisDynamicBrush* createBrush(KisPainter *painter) const;
-
+    
+    // XXX: Hack!
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+    {
+        if (m_options != 0) {
+            delete m_options;
+        }
+        if (!widget) {
+            m_options = 0;
+        }
+        else {
+            m_options = qobject_cast<KisDynamicOpSettingsWidget*>(widget);
+            m_options->writeConfiguration( this );
+        }
+    }
+    
 private:
 
-    KisDynamicOpSettingsWidget *m_optionsWidget;
+    KisDynamicOpSettingsWidget *m_options;
     KisBookmarkedConfigurationsModel* m_shapeBookmarksModel;
     KisBookmarkedConfigurationsModel* m_coloringBookmarksModel;
 };

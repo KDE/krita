@@ -135,9 +135,9 @@ KisCPaintOpSettings::KisCPaintOpSettings(QWidget * parent,  QVector<Brush*> brus
         : KisPaintOpSettings()
 {
     m_brushes = brushes;
-    m_optionsWidget = new KisCPaintOpWidget();
+    m_options = new KisCPaintOpWidget();
     m_options = new Ui::WdgCPaintOptions();
-    m_options->setupUi(m_optionsWidget);
+    m_options->setupUi(m_options);
     m_options->intInk->setMinimum(0);
     m_options->intInk->setMaximum(255);
     m_options->intInk->setDecimals(0);

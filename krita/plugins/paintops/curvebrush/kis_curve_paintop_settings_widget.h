@@ -26,6 +26,8 @@
 
 class KisCurvePaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
+    Q_OBJECT
+
 public:
     KisCurvePaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisCurvePaintOpSettingsWidget();

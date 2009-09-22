@@ -67,8 +67,8 @@ KisComplexOp::KisComplexOp(const KisComplexOpSettings *settings, KisPainter *pai
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    Q_ASSERT(settings->m_optionsWidget->m_brushOption);
-    m_brush = settings->m_optionsWidget->m_brushOption->brush();
+    Q_ASSERT(settings->m_options->m_brushOption);
+    m_brush = settings->m_options->m_brushOption->brush();
 }
 
 KisComplexOp::~KisComplexOp()
@@ -87,7 +87,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info))
         return;
 
-    double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
+    double scale = KisPaintOp::scaleForPressure(settings->m_options->m_sizeOption->apply(info));
 
     KisPaintDeviceSP device = painter()->device();
 
@@ -105,8 +105,8 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info);
-    KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info);
+    quint8 origOpacity = settings->m_options->m_opacityOption->apply(painter(), info);
+    KoColor origColor = settings->m_options->m_darkenOption->apply(painter(), info);
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
@@ -133,7 +133,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
-    settings->m_optionsWidget->m_bidiOption->applyFixed(dab, device, painter(), sx, sy, sw, sh, scale, dstRect);
+    settings->m_options->m_bidiOption->applyFixed(dab, device, painter(), sx, sy, sw, sh, scale, dstRect);
 
     painter()->bltFixed(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
 

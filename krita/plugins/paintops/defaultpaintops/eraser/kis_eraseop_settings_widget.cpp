@@ -53,7 +53,8 @@ KisEraseOpSettingsWidget::~KisEraseOpSettingsWidget()
 
 KisPropertiesConfiguration* KisEraseOpSettingsWidget::configuration() const
 {
-    KisEraseOpSettings *config = new KisEraseOpSettings(const_cast<KisEraseOpSettingsWidget*>( this ));
+    KisEraseOpSettings *config = new KisEraseOpSettings();
+    config->setOptionsWidget(const_cast<KisEraseOpSettingsWidget*>( this ));
     config->setProperty("paintop", "eraser"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

@@ -25,9 +25,8 @@
 
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
-
+#include "kis_smudgeop_settings_widget.h"
 class QDomElement;
-class KisSmudgeOpSettingsWidget;
 
 class KisSmudgeOpSettings : public KisPaintOpSettings
 {
@@ -36,7 +35,7 @@ public:
     using KisPaintOpSettings::fromXML;
     using KisPaintOpSettings::toXML;
 
-    KisSmudgeOpSettings( KisSmudgeOpSettingsWidget* widget );
+    KisSmudgeOpSettings();
 
     virtual ~KisSmudgeOpSettings();
     bool paintIncremental();
@@ -51,11 +50,26 @@ public:
         return "smudge-finger";
     }
 #endif
-    
-    
+
+
+    // XXX: Hack!
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+    {
+        if (m_options != 0) {
+            delete m_options;
+        }
+        if (!widget) {
+            m_options = 0;
+        }
+        else {
+            m_options = qobject_cast<KisSmudgeOpSettingsWidget*>(widget);
+            m_options->writeConfiguration( this );
+        }
+    }
+
 public:
 
-    KisSmudgeOpSettingsWidget *m_optionsWidget;
+    KisSmudgeOpSettingsWidget *m_options;
 
 };
 

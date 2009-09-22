@@ -26,8 +26,9 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
+#include "kis_eraseop_settings_widget.h"
+
 class QDomElement;
-class KisEraseOpSettingsWidget;
 
 class KisEraseOpSettings : public KisPaintOpSettings
 {
@@ -36,7 +37,7 @@ public:
     using KisPaintOpSettings::fromXML;
     using KisPaintOpSettings::toXML;
 
-    KisEraseOpSettings( KisEraseOpSettingsWidget* widget );
+    KisEraseOpSettings();
 
     virtual ~KisEraseOpSettings();
     bool paintIncremental();
@@ -46,9 +47,24 @@ public:
 
     KisPaintOpSettingsSP clone() const;
 
+    // XXX: Hack!
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+    {
+        if (m_options != 0) {
+            delete m_options;
+        }
+        if (!widget) {
+            m_options = 0;
+        }
+        else {
+            m_options = qobject_cast<KisEraseOpSettingsWidget*>(widget);
+            m_options->writeConfiguration( this );
+        }
+    }
+
 public:
 
-    KisEraseOpSettingsWidget *m_optionsWidget;
+    KisEraseOpSettingsWidget *m_options;
 
 };
 

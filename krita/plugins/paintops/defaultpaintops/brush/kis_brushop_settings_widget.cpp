@@ -60,7 +60,8 @@ KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()
 
 KisPropertiesConfiguration* KisBrushOpSettingsWidget::configuration() const
 {
-    KisBrushOpSettings *config = new KisBrushOpSettings(const_cast<KisBrushOpSettingsWidget*>( this ));
+    KisBrushOpSettings *config = new KisBrushOpSettings();
+    config->setOptionsWidget(const_cast<KisBrushOpSettingsWidget*>( this ));
     config->setProperty("paintop", "paintbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

@@ -56,6 +56,5 @@ public:
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);
 
-
 };
 #endif // KIS_SUMIPAINTOP_FACTORY_H_

@@ -40,7 +40,7 @@
 
 class KoPointerEvent;
 class KoViewConverter;
-
+class KisPaintOpSettingsWidget;
 
 /**
  * This class is used to cache the settings for a paintop
@@ -59,6 +59,12 @@ public:
     KisPaintOpSettings();
 
     virtual ~KisPaintOpSettings();
+
+    /**
+     * @deprecated give the settings an option widget so the old design keeps working
+     * until the gui and the settings have been disentangled.
+     */
+    virtual void KDE_DEPRECATED setOptionsWidget(KisPaintOpSettingsWidget* widget) = 0;
 
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if

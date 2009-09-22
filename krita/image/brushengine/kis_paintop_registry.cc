@@ -41,6 +41,7 @@
 #include "kis_debug.h"
 #include "kis_layer.h"
 #include "kis_image.h"
+#include "kis_paintop_settings_widget.h"
 
 KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 
@@ -97,8 +98,12 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPai
 KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, const KoInputDevice& inputDevice, KisImageSP image) const
 {
     KisPaintOpFactory* f = value(id.id());
+    Q_ASSERT(f);
     if (f) {
         KisPaintOpSettingsSP settings = f->settings(inputDevice, image);
+        KisPaintOpSettingsWidget* w = f->createSettingsWidget(0);
+        w->hide();
+        settings->setOptionsWidget(w); // XXX Hack! leak!
         settings->setProperty("paintop", id.id());
         return settings;
     }
@@ -109,7 +114,9 @@ KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, const KoInp
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setName(i18n("default"));
+
     KisPaintOpSettingsSP s = settings(id, inputDevice, image);
+
     preset->setSettings(s);
     preset->setPaintOp(id);
     Q_ASSERT(!preset->paintOp().id().isEmpty());

@@ -53,11 +53,11 @@ KisFilterOption::KisFilterOption()
     m_checkable = false;
     m_currentFilterConfigWidget = 0;
 
-    m_optionsWidget = new KisFilterOptionWidget;
-    m_optionsWidget->hide();
-    setConfigurationPage(m_optionsWidget);
+    m_options = new KisFilterOptionWidget;
+    m_options->hide();
+    setConfigurationPage(m_options);
 
-    m_layout = new QGridLayout( m_optionsWidget->grpFilterOptions );
+    m_layout = new QGridLayout( m_options->grpFilterOptions );
 
     // Check which filters support painting
     QList<KoID> l = KisFilterRegistry::instance()->listKeys();
@@ -69,8 +69,8 @@ KisFilterOption::KisFilterOption()
             l2.push_back(*it);
         }
     }
-    m_optionsWidget->filtersList->setIDList(l2);
-    connect(m_optionsWidget->filtersList, SIGNAL(activated(const KoID &)), SLOT(setCurrentFilter(const KoID &)));
+    m_options->filtersList->setIDList(l2);
+    connect(m_options->filtersList, SIGNAL(activated(const KoID &)), SLOT(setCurrentFilter(const KoID &)));
     if (!l2.empty()) {
         setCurrentFilter(l2.first());
     }
@@ -92,7 +92,7 @@ KisFilterConfiguration* KisFilterOption::filterConfig() const
 
 bool KisFilterOption::ignoreAlpha()
 {
-    return m_optionsWidget->checkBoxIgnoreAlpha->isChecked();
+    return m_options->checkBoxIgnoreAlpha->isChecked();
 }
 
 
@@ -138,12 +138,12 @@ void KisFilterOption::updateFilterConfigWidget()
 
     if (m_currentFilter) {
         m_currentFilterConfigWidget =
-            m_currentFilter->createConfigurationWidget(m_optionsWidget->grpFilterOptions,
+            m_currentFilter->createConfigurationWidget(m_options->grpFilterOptions,
                                                        m_paintDevice,
                                                        m_image);
         if (m_currentFilterConfigWidget) {
             m_layout->addWidget(m_currentFilterConfigWidget);
-            m_optionsWidget->grpFilterOptions->updateGeometry();
+            m_options->grpFilterOptions->updateGeometry();
             m_currentFilterConfigWidget->show();
             connect(m_currentFilterConfigWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(sigSettingChanged()));
         }

@@ -50,7 +50,6 @@ KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings
 
 KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
-    Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
     return new KisSumiPaintOpSettings();
@@ -62,7 +61,7 @@ KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(KisImageSP image)
     return new KisSumiPaintOpSettings();
 }
 
-KisPaintOpSettingsWidget* KisSumiPaintOpSettings::createSettingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisSumiPaintOpFactory::createSettingsWidget(QWidget* parent)
 {
     return new KisSumiPaintOpSettingsWidget( parent );
 }

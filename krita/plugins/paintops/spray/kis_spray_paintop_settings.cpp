@@ -36,11 +36,9 @@
 #include "kis_spray_shape_option.h"
 #include "kis_spray_color_option.h"
 
-KisSprayPaintOpSettings::KisSprayPaintOpSettings(KisSprayPaintOpSettingsWidget* settingsWidget)
-        : KisPaintOpSettings(settingsWidget)
+KisSprayPaintOpSettings::KisSprayPaintOpSettings()
+    : m_options(0)
 {
-    m_options = settingsWidget;
-    m_options->writeConfiguration( this );
 }
 
 KisPaintOpSettingsSP KisSprayPaintOpSettings::clone() const

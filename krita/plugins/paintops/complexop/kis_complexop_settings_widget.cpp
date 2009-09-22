@@ -75,8 +75,8 @@ void KisComplexOpSettingsWidget::setConfiguration( const KisPropertiesConfigurat
 
 KisPropertiesConfiguration* KisComplexOpSettingsWidget::configuration() const
 {
-    KisComplexOpSettings *config = new KisComplexOpSettings(const_cast<KisComplexOpSettingsWidget*>( this ));
-    writeConfiguration(config);
+    KisComplexOpSettings *config = new KisComplexOpSettings();
+    config->setOptionsWidget(const_cast<KisComplexOpSettingsWidget*>( this ));
     return config;
 }
 

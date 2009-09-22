@@ -65,10 +65,10 @@ KisEraseOp::KisEraseOp(const KisEraseOpSettings *settings, KisPainter *painter)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    Q_ASSERT(settings->m_optionsWidget->m_brushOption);
-    m_brush = settings->m_optionsWidget->m_brushOption->brush();
-    settings->m_optionsWidget->m_sizeOption->sensor()->reset();
-    settings->m_optionsWidget->m_opacityOption->sensor()->reset();
+    Q_ASSERT(settings->m_options->m_brushOption);
+    m_brush = settings->m_options->m_brushOption->brush();
+    settings->m_options->m_sizeOption->sensor()->reset();
+    settings->m_options->m_opacityOption->sensor()->reset();
 }
 
 KisEraseOp::~KisEraseOp()
@@ -107,7 +107,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info))
         return;
 
-    double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
+    double scale = KisPaintOp::scaleForPressure(settings->m_options->m_sizeOption->apply(info));
     if( (scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01 ) return;
     
     KisPaintDeviceSP device = painter()->device();
@@ -124,7 +124,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
 
-    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info);
+    quint8 origOpacity = settings->m_options->m_opacityOption->apply(painter(), info);
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());

@@ -61,7 +61,8 @@ KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()
 
 KisPropertiesConfiguration*  KisSprayPaintOpSettingsWidget::configuration() const
 {
-    KisSprayPaintOpSettings* config = new KisSprayPaintOpSettings( const_cast<KisSprayPaintOpSettingsWidget*>( this ) );
+    KisSprayPaintOpSettings* config = new KisSprayPaintOpSettings();
+    config->setOptionsWidget( const_cast<KisSprayPaintOpSettingsWidget*>( this ) );
     config->setProperty("paintop", "spraybrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

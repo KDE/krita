@@ -34,11 +34,9 @@
 #include "kis_dyna_paintop_settings_widget.h"
 #include "kis_dynaop_option.h"
 
-KisDynaPaintOpSettings::KisDynaPaintOpSettings(KisDynaPaintOpSettingsWidget* settingsWidget)
-        : KisPaintOpSettings(settingsWidget)
+KisDynaPaintOpSettings::KisDynaPaintOpSettings()
+    : m_options(0)
 {
-    m_options = settingsWidget;
-    m_options->writeConfiguration( this );
 }
 
 KisPaintOpSettingsSP KisDynaPaintOpSettings::clone() const

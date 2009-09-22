@@ -54,7 +54,8 @@ KisChalkPaintOpSettingsWidget::~ KisChalkPaintOpSettingsWidget()
 
 KisPropertiesConfiguration*  KisChalkPaintOpSettingsWidget::configuration() const
 {
-    KisChalkPaintOpSettings* config = new KisChalkPaintOpSettings( const_cast<KisChalkPaintOpSettingsWidget*>( this ) );
+    KisChalkPaintOpSettings* config = new KisChalkPaintOpSettings();
+    config->setOptionsWidget( const_cast<KisChalkPaintOpSettingsWidget*>( this ) );
     config->setProperty("paintop", "chalkbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

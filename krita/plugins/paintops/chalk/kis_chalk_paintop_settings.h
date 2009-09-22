@@ -24,6 +24,8 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
+#include "kis_chalk_paintop_settings_widget.h"
+
 #include <config-opengl.h>
 
 #ifdef HAVE_OPENGL
@@ -37,7 +39,6 @@
 class QWidget;
 class QString;
 
-class KisChalkPaintOpSettingsWidget;
 class QDomElement;
 class QDomDocument;
 
@@ -48,7 +49,7 @@ class KisChalkPaintOpSettings : public KisPaintOpSettings
 public:
 
 
-    KisChalkPaintOpSettings(KisChalkPaintOpSettingsWidget* widget);
+    KisChalkPaintOpSettings();
     virtual ~KisChalkPaintOpSettings() {}
 
     bool paintIncremental();
@@ -67,7 +68,22 @@ public:
     QString modelName() const;
 #endif
 
-    
+
+// XXX: Hack!
+void setOptionsWidget(KisPaintOpSettingsWidget* widget)
+{
+    if (m_options != 0) {
+        delete m_options;
+    }
+    if (!widget) {
+        m_options = 0;
+    }
+    else {
+        m_options = qobject_cast<KisChalkPaintOpSettingsWidget*>(widget);
+        m_options->writeConfiguration( this );
+    }
+}
+
 private:
 
     KisChalkPaintOpSettingsWidget* m_options;

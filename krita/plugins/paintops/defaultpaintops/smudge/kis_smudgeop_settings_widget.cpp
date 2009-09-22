@@ -60,7 +60,8 @@ KisSmudgeOpSettingsWidget::~KisSmudgeOpSettingsWidget()
 
 KisPropertiesConfiguration* KisSmudgeOpSettingsWidget::configuration() const
 {
-    KisSmudgeOpSettings *config = new KisSmudgeOpSettings(const_cast<KisSmudgeOpSettingsWidget*>( this ));
+    KisSmudgeOpSettings *config = new KisSmudgeOpSettings();
+    config->setOptionsWidget(const_cast<KisSmudgeOpSettingsWidget*>( this ));
     config->setProperty("paintop", "smudge"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

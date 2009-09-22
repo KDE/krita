@@ -30,13 +30,9 @@
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
 
-KisPenOpSettings::KisPenOpSettings( KisPenOpSettingsWidget* widget )
-    : KisPaintOpSettings( widget )
+KisPenOpSettings::KisPenOpSettings()
+    : m_options(0)
 {
-    Q_ASSERT( widget );
-    m_optionsWidget = widget;
-    // Initialize with the default settings from the widget
-    m_optionsWidget->writeConfiguration( this );
 }
 
 KisPenOpSettings::~KisPenOpSettings() {
@@ -44,7 +40,7 @@ KisPenOpSettings::~KisPenOpSettings() {
 
 bool KisPenOpSettings::paintIncremental()
 {
-    return m_optionsWidget->m_paintActionTypeOption->paintActionType() == BUILDUP;
+    return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
 }
 
 void KisPenOpSettings::fromXML(const QDomElement& elt)
@@ -54,7 +50,7 @@ void KisPenOpSettings::fromXML(const QDomElement& elt)
     KisPaintOpSettings::fromXML( elt );
 
     // Then load the properties for all widgets
-    m_optionsWidget->setConfiguration( this );
+    m_options->setConfiguration( this );
 }
 
 void KisPenOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
@@ -62,7 +58,7 @@ void KisPenOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 
     // First, make sure all the option widgets have saved their state
     // to the property configuration
-    KisPropertiesConfiguration * settings = m_optionsWidget->configuration();
+    KisPropertiesConfiguration * settings = m_options->configuration();
 
     // Then call the parent class fromXML
     settings->KisPropertiesConfiguration::toXML( doc, rootElt );
@@ -73,7 +69,7 @@ void KisPenOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 
 KisPaintOpSettingsSP KisPenOpSettings::clone() const {
 
-    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>( m_optionsWidget->configuration() );
+    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>( m_options->configuration() );
     return settings;
 
 }

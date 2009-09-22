@@ -65,11 +65,11 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    Q_ASSERT(settings->m_optionsWidget->m_brushOption);
-    m_brush = settings->m_optionsWidget->m_brushOption->brush();
-    settings->m_optionsWidget->m_sizeOption->sensor()->reset();
-    settings->m_optionsWidget->m_opacityOption->sensor()->reset();
-    settings->m_optionsWidget->m_darkenOption->sensor()->reset();
+    Q_ASSERT(settings->m_options->m_brushOption);
+    m_brush = settings->m_options->m_brushOption->brush();
+    settings->m_options->m_sizeOption->sensor()->reset();
+    settings->m_options->m_opacityOption->sensor()->reset();
+    settings->m_options->m_darkenOption->sensor()->reset();
 }
 
 KisBrushOp::~KisBrushOp()
@@ -87,7 +87,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     if (!brush->canPaintFor(info))
         return;
     
-    double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
+    double scale = KisPaintOp::scaleForPressure(settings->m_options->m_sizeOption->apply(info));
     if( (scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01 ) return;
     
     KisPaintDeviceSP device = painter()->device();
@@ -106,8 +106,8 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info);
-    KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info);
+    quint8 origOpacity = settings->m_options->m_opacityOption->apply(painter(), info);
+    KoColor origColor = settings->m_options->m_darkenOption->apply(painter(), info);
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {

@@ -26,6 +26,8 @@
 
 class KisDeformPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
+    Q_OBJECT
+
 public:
     KisDeformPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisDeformPaintOpSettingsWidget();

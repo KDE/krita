@@ -38,13 +38,12 @@
 #endif
 
 
-class KisPaintOpSettingsWidget;
 class KoPointerEvent;
 class KoViewConverter;
 
 
 /**
- * This class is used to cache the settings (and the associated widget) for a paintop
+ * This class is used to cache the settings for a paintop
  * between two creations. There is one KisPaintOpSettings per input device (mouse, tablet,
  * etc...).
  *
@@ -134,8 +133,8 @@ public:
 
 #if defined(HAVE_OPENGL)
     virtual QString modelName() const;
-#endif 
-    
+#endif
+
 private:
 
     struct Private;

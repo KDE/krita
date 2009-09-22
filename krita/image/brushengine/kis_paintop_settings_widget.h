@@ -22,7 +22,7 @@
 #include "krita_export.h"
 
 #include "kis_config_widget.h"
-
+#include "kis_image.h"
 #include <kdebug.h>
 
 /**
@@ -48,6 +48,15 @@ public:
      */
     virtual void writeConfiguration( KisPropertiesConfiguration *config ) const = 0;
 
+    virtual void setImage( KisImageSP image )
+    {
+        m_image = image;
+    }
+
+protected:
+
+
+    KisImageSP m_image;
 
 };
 

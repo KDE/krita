@@ -144,7 +144,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->currentCentralWidget = widget;
         d->currentFilterConfigurationWidget->setConfiguration(
                 d->currentFilter->defaultConfiguration(d->paintDevice));
-        connect(d->currentFilterConfigurationWidget, SIGNAL(sigPleaseUpdatePreview()), this, SIGNAL(configurationChanged()));
+        connect(d->currentFilterConfigurationWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(configurationChanged()));
     }
 
     // Change the list of presets

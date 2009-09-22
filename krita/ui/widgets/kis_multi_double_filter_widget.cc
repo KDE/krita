@@ -81,7 +81,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid,
         m_doubleWidgets[i]->setValue(dwparam[i].initvalue);
         m_doubleWidgets[i]->cancelDelayedSignal();
 
-        connect(m_doubleWidgets[i], SIGNAL(valueChangedDelayed(double)), SIGNAL(sigConfigChanged()));
+        connect(m_doubleWidgets[i], SIGNAL(valueChangedDelayed(double)), SIGNAL(sigConfigurationItemChanged()));
 
         QLabel* lbl = new QLabel(dwparam[i].label + ':', this);
         widgetLayout->addWidget(lbl, i , 0);

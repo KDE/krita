@@ -79,7 +79,7 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString & filteri
         m_integerWidgets[i]->setValue(iwparam[i].initvalue);
         m_integerWidgets[i]->cancelDelayedSignal();
 
-        connect(m_integerWidgets[i], SIGNAL(valueChangedDelayed(int)), SIGNAL(sigConfigChanged()));
+        connect(m_integerWidgets[i], SIGNAL(valueChangedDelayed(int)), SIGNAL(sigConfigurationItemChanged()));
 
         QLabel* lbl = new QLabel(iwparam[i].label + ':', this);
         widgetLayout->addWidget(lbl, i , 0);

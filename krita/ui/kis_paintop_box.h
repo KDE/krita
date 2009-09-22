@@ -77,6 +77,7 @@ private slots:
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCurrentNodeChanged(KisNodeSP node);
     void slotSaveActivePreset();
+    void slotUpdatePreset();
 
 private:
 

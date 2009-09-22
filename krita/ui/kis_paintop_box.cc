@@ -284,9 +284,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
         Q_ASSERT(m_optionWidget);
         Q_ASSERT(m_presetWidget);
-        connect(m_optionWidget, SIGNAL(sigPleaseUpdatePreview()), m_presetWidget, SLOT(updatePreview()));
-        connect(m_optionWidget, SIGNAL(sigPleaseUpdatePreview()),
-                m_presetsPopup->presetPreview(), SLOT(updatePreview()));
+        connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(updatePreset()));
     } else {
         m_presetsPopup->setPaintOpSettingsWidget(0);
     }
@@ -357,5 +355,11 @@ void KisPaintopBox::slotSaveActivePreset()
     rServer->addResource(newPreset);
 }
 
+void KisPaintopBox::slotUpdatePreset()
+{
+    m_optionWidget->writeConfiguration( const_cast<KisPaintOpSettings*>( m_activePreset->settings().data() ) );
+    m_presetWidget->updatePreview();
+    m_presetsPopup->presetPreview()->updatePreview();
+}
 
 #include "kis_paintop_box.moc"

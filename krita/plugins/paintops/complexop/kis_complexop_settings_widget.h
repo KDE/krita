@@ -60,8 +60,6 @@ public:
     KisPaintActionTypeOption * m_paintActionTypeOption;
     KisBidirectionalMixingOption * m_bidiOption;
 
-
-
 };
 
 

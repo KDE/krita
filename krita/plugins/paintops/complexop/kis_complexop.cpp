@@ -58,9 +58,8 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_bidirectional_mixing_option.h>
 
-#include <kis_complexop_settings.h>
-#include <kis_complexop_settings_widget.h>
-
+#include "kis_complexop_settings.h"
+#include "kis_complexop_settings_widget.h"
 
 KisComplexOp::KisComplexOp(const KisComplexOpSettings *settings, KisPainter *painter)
         : KisBrushBasedPaintOp(painter)
@@ -87,7 +86,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
 
     if (! brush->canPaintFor(info))
         return;
-    
+
     double scale = KisPaintOp::scaleForPressure(settings->m_optionsWidget->m_sizeOption->apply(info));
 
     KisPaintDeviceSP device = painter()->device();

@@ -65,6 +65,6 @@ namespace KoFlake
 
     /// Maximal possible shape z-index
     int maxZIndex();
-};
+}
 
 #endif

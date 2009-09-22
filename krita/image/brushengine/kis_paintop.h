@@ -29,8 +29,6 @@
 
 #include <krita_export.h>
 
-class QWidget;
-
 class QPointF;
 class KoColorSpace;
 class KoInputDevice;

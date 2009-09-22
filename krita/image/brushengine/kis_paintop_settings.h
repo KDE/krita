@@ -57,13 +57,7 @@ class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration, 
 
 public:
 
-    /**
-     * Create a new KisPaintOpSettings instance. For historical
-     * reasons (that should be factored out after the 2.0 release
-     * (XXX), a KisPaintopSettings instance has a pointer to the
-     * KisPaintopSettingsWidget.
-     */
-    KisPaintOpSettings( KisPaintOpSettingsWidget* settingsWidget );
+    KisPaintOpSettings();
 
     virtual ~KisPaintOpSettings();
 
@@ -93,11 +87,6 @@ public:
     KisNodeSP node() const;
 
     /**
-     * @return a pointer to the widget displaying the settings
-     */
-    virtual KisPaintOpSettingsWidget* widget() const;
-
-    /**
      * Call this function when the paint op is selected or the tool is activated
      */
     virtual void activate();
@@ -110,7 +99,6 @@ public:
      *      do not support non-incremental.
      */
     virtual bool paintIncremental() { return true; }
-
 
     /**
      * @return a sample stroke that fits in @param size.

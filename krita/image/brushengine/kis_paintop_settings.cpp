@@ -18,7 +18,6 @@
 
 #include "kis_paintop_settings.h"
 
-#include <QWidget>
 #include <QImage>
 #include <QColor>
 
@@ -35,29 +34,21 @@
 #include "kis_paint_device.h"
 #include "kis_paintop_registry.h"
 #include "kis_paint_information.h"
-#include "kis_paintop_settings_widget.h"
 
 #include <config-opengl.h>
 
 struct KisPaintOpSettings::Private {
     KisNodeSP node;
-    KisPaintOpSettingsWidget *settingsWidget;
 };
 
-KisPaintOpSettings::KisPaintOpSettings(KisPaintOpSettingsWidget *settingsWidget)
+KisPaintOpSettings::KisPaintOpSettings()
     : d(new Private)
 {
-    d->settingsWidget = settingsWidget;
 }
 
 KisPaintOpSettings::~KisPaintOpSettings()
 {
     delete d;
-}
-
-KisPaintOpSettingsWidget* KisPaintOpSettings::widget() const
-{
-    return d->settingsWidget;
 }
 
 void KisPaintOpSettings::mousePressEvent(KoPointerEvent *e)

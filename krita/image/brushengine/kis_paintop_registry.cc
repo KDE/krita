@@ -18,7 +18,6 @@
 
 #include "kis_paintop_registry.h"
 #include <QPixmap>
-#include <QWidget>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -38,12 +37,10 @@
 
 #include "kis_paint_device.h"
 #include "kis_paintop.h"
-#include "kis_paintop_settings_widget.h"
 #include "kis_painter.h"
 #include "kis_debug.h"
 #include "kis_layer.h"
 #include "kis_image.h"
-#include "kis_config_widget.h"
 
 KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 
@@ -97,26 +94,23 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPai
     return paintOp(preset->paintOp().id(), preset->settings(), painter, image);
 }
 
-KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image) const
+KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, const KoInputDevice& inputDevice, KisImageSP image) const
 {
     KisPaintOpFactory* f = value(id.id());
     if (f) {
-        KisPaintOpSettingsSP settings = f->settings(parent, inputDevice, image);
+        KisPaintOpSettingsSP settings = f->settings(inputDevice, image);
         settings->setProperty("paintop", id.id());
         return settings;
     }
     return 0;
 }
 
-KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image) const
+KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, const KoInputDevice& inputDevice, KisImageSP image) const
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setName(i18n("default"));
-    KisPaintOpSettingsSP s = settings(id, parent, inputDevice, image);
+    KisPaintOpSettingsSP s = settings(id, inputDevice, image);
     preset->setSettings(s);
-    if (preset->settings() && preset->settings()->widget()) {
-        preset->settings()->widget()->hide();
-    }
     preset->setPaintOp(id);
     Q_ASSERT(!preset->paintOp().id().isEmpty());
     preset->setValid(true);

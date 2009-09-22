@@ -24,9 +24,6 @@
 
 #include <math.h>
 
-#include <QWidget>
-#include <QString>
-
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoPointerEvent.h>

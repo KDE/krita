@@ -70,8 +70,6 @@ public:
         return "kpp";
     }
 
-    // XXX: serialize to/from xml for recording!
-
     void updateImg();
 
 private:

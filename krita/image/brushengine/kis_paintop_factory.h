@@ -29,6 +29,7 @@ class KisPainter;
 class KisPaintOp;
 class KoInputDevice;
 class QWidget;
+class KisPaintOpSettingsWidget;
 
 /**
  * The paintop factory is responsible for creating paintops of the specified class.
@@ -67,10 +68,15 @@ public:
 
     /**
      * Create and return an settings object for this paintop when used with the
-     * specified input device. The settings object knows how to create a widget.
+     * specified input device. 
      */
-    virtual KisPaintOpSettingsSP settings(QWidget* parent, const KoInputDevice& inputDevice, KisImageSP image) = 0;
+    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image) = 0;
     virtual KisPaintOpSettingsSP settings(KisImageSP image) = 0;
+
+    /**
+     * create a widget that can display paintop settings
+     */
+    virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent) = 0;
 
 };
 

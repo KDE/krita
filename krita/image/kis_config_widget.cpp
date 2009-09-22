@@ -24,7 +24,7 @@ KisConfigWidget::KisConfigWidget(QWidget * parent, Qt::WFlags f)
 {
     m_timer.setSingleShot(true);
     connect(&m_timer, SIGNAL(timeout()), SLOT(slotConfigChanged()));
-    connect(this, SIGNAL(sigConfigChanged()), SLOT(kickTimer()));
+    connect(this, SIGNAL(sigConfigurationItemChanged()), SLOT(kickTimer()));
 }
 
 KisConfigWidget::~KisConfigWidget()
@@ -33,7 +33,7 @@ KisConfigWidget::~KisConfigWidget()
 
 void KisConfigWidget::slotConfigChanged()
 {
-    emit sigPleaseUpdatePreview();
+    emit sigConfigurationUpdated();
 }
 
 void KisConfigWidget::kickTimer()

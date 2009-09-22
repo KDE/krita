@@ -29,10 +29,10 @@ class KisPropertiesConfiguration;
 /**
  * Empty base class. Configurable resources like filters, paintops etc.
  * can build their own configuration widgets that inherit this class.
- * The configuration widget should emit sigConfigChanged
+ * The configuration widget should emit sigConfigurationItemChanged
  * when it wants a preview updated; there is a timer that
  * waits a little time to see if there are more changes coming
- * and then emits sigPleaseUpdatePreview.
+ * and then emits sigConfigurationUpdated.
  *
  * Also, this class is designed to have a single instance
  * of a certain configuration widget that can be reset and
@@ -65,7 +65,7 @@ signals:
     /**
      * emitted whenever it makes sense to update the preview
      */
-    void sigPleaseUpdatePreview();
+    void sigConfigurationUpdated();
 
     /**
      * Subclasses should emit this signal whenever the preview should be
@@ -73,7 +73,7 @@ signals:
      * to connect this to the changed signals of the widgets in your configuration
      * widget.
      */
-    void sigConfigChanged();
+    void sigConfigurationItemChanged();
 
 private slots:
 

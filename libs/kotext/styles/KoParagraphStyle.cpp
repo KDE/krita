@@ -991,16 +991,8 @@ void KoParagraphStyle::loadOdfProperties(KoStyleStack &styleStack)
     // in 1.6 this was defined at KoParagLayout::loadOasisParagLayout(KoParagLayout&, KoOasisContext&)
 
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {     // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
-        // LTR is lr-tb. RTL is rl-tb
         QString writingMode = styleStack.property(KoXmlNS::style, "writing-mode");
-        if (writingMode == "lr" || writingMode == "lr-tb")
-            setTextProgressionDirection(KoText::LeftRightTopBottom);
-        else if (writingMode == "rl" || writingMode == "rl-tb")
-            setTextProgressionDirection(KoText::RightLeftTopBottom);
-        else if (writingMode == "tb" || writingMode == "tb-rl")
-            setTextProgressionDirection(KoText::TopBottomRightLeft);
-        else
-            setTextProgressionDirection(KoText::AutoDirection);
+        setTextProgressionDirection(KoText::directionFromString(writingMode));
     }
 
     // Alignment
@@ -1508,13 +1500,15 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             bool ok = false;
             directionValue = d->stylesPrivate.value(key).toInt(&ok);
             if (ok) {
-                QString direction = "";
+                QString direction;
                 if (directionValue == KoText::LeftRightTopBottom)
-                    direction = "lr";
+                    direction = "lr-tb";
                 else if (directionValue == KoText::RightLeftTopBottom)
-                    direction = "rl";
+                    direction = "rl-tb";
                 else if (directionValue == KoText::TopBottomRightLeft)
-                    direction = "tb";
+                    direction = "tb-lr";
+                else if (directionValue == KoText::InheritDirection)
+                    direction = "page";
                 if (!direction.isEmpty())
                     style.addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
             }

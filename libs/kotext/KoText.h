@@ -79,10 +79,13 @@ enum Direction {
     LeftRightTopBottom, ///< Text layout for most western languages
     RightLeftTopBottom, ///< Text layout for langauges like Hebrew
     TopBottomRightLeft,  ///< Vertical text layout.
-    PerhapsLeftRightTopBottom,
-    PerhapsRightLeftTopBottom
+    PerhapsLeftRightTopBottom, ///< \internal
+    PerhapsRightLeftTopBottom, ///< \internal
+    InheritDirection    ///< Direction is unspecified and should come from the container
 };
 
+/// convert the string version of directions (as specified in XSL and ODF) to the Direction enum
+KOTEXT_EXPORT Direction directionFromString(const QString &direction);
 }
 
 Q_DECLARE_METATYPE(KoText::Tab)

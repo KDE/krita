@@ -376,18 +376,7 @@ QString KoTableStyle::alignmentToString(Qt::Alignment alignment)
 void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {     // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
-        // LTR is lr-tb. RTL is rl-tb
-/*
-        QString writingMode = styleStack.property(KoXmlNS::style, "writing-mode");
-        if (writingMode == "lr" || writingMode == "lr-tb")
-            setTextProgressionDirection(KoText::LeftRightTopBottom);
-        else if (writingMode == "rl" || writingMode == "rl-tb")
-            setTextProgressionDirection(KoText::RightLeftTopBottom);
-        else if (writingMode == "tb" || writingMode == "tb-rl")
-            setTextProgressionDirection(KoText::TopBottomRightLeft);
-        else
-            setTextProgressionDirection(KoText::AutoDirection);
-*/
+        // KoText::directionFromString()
     }
 
     // Width

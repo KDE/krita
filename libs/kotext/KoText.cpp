@@ -102,3 +102,16 @@ QString KoText::alignmentToString(Qt::Alignment alignment)
     return align;
 }
 
+KoText::Direction KoText::directionFromString(const QString &writingMode)
+{
+    // LTR is lr-tb. RTL is rl-tb
+    if (writingMode == "lr" || writingMode == "lr-tb")
+        return KoText::LeftRightTopBottom;
+    if (writingMode == "rl" || writingMode == "rl-tb")
+        return KoText::RightLeftTopBottom;
+    if (writingMode == "tb" || writingMode == "tb-rl")
+        return KoText::TopBottomRightLeft;
+    if (writingMode == "page")
+        return KoText::InheritDirection;
+    return KoText::AutoDirection;
+}

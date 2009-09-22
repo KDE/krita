@@ -68,7 +68,7 @@ KisPaintOpSettingsSP KisAirbrushOpFactory::settings(KisImageSP image)
     return new KisAirbrushOpSettings();
 }
 
-KisPaintOpSettingsWidget* KisAirbrushOpFactory::settingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisAirbrushOpFactory::createSettingsWidget(QWidget* parent)
 {
     return new KisAirbrushOpSettingsWidget( parent );
 }

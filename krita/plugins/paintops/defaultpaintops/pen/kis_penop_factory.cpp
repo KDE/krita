@@ -68,7 +68,7 @@ KisPaintOpSettingsSP KisPenOpFactory::settings(KisImageSP image)
     return new KisPenOpSettings();
 }
 
-KisPaintOpSettingsWidget* KisPenOpSettings::settingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisPenOpSettings::createSettingsWidget(QWidget* parent)
 {
     return new KisPenOpSettingsWidget( parent );
 }

@@ -66,7 +66,7 @@ KisPaintOpSettingsSP KisSmudgeOpFactory::settings(KisImageSP image)
     return new KisSmudgeOpSettings();
 }
 
-KisPaintOpSettingsWidget* KisSmudgeOpFactory::settingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisSmudgeOpFactory::createSettingsWidget(QWidget* parent)
 {
     return new KisSmudgeOpSettingsWidget( parent );
 }

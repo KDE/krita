@@ -65,7 +65,7 @@ KisPaintOpSettingsSP KisDynamicOpFactory::settings(KisImageSP image)
     return new KisDynamicOpSettings(m_shapeBookmarksManager, m_coloringBookmarksManager);
 }
 
-KisPaintOpSettingsWidget* KisDynamicOpSettings::settingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisDynamicOpSettings::createSettingsWidget(QWidget* parent)
 {
     return new KisDynamicOpSettingsWidget( parent );
 }

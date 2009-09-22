@@ -62,7 +62,7 @@ KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(KisImageSP image)
     return new KisSumiPaintOpSettings();
 }
 
-KisPaintOpSettingsWidget* KisSumiPaintOpSettings::settingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisSumiPaintOpSettings::createSettingsWidget(QWidget* parent)
 {
     return new KisSumiPaintOpSettingsWidget( parent );
 }

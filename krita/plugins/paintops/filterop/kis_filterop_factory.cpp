@@ -71,7 +71,7 @@ KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageSP image)
     return settings;
 }
 
-KisPaintOpSettingsWidget* KisFilterOpFactory::settingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisFilterOpFactory::createSettingsWidget(QWidget* parent)
 {
     return new KisFilterOpSettingsWidget( parent );
 }

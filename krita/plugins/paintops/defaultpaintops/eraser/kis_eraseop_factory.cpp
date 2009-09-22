@@ -68,7 +68,7 @@ KisPaintOpSettingsSP KisEraseOpFactory::settings(KisImageSP image)
     return new KisEraseOpSettings(m_widget);
 }
 
-KisPaintOpSettingsWidget* KisEraseOpFactory::settingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisEraseOpFactory::createSettingsWidget(QWidget* parent)
 {
     return new KisEraseOpSettingsWidget( parent );
 }

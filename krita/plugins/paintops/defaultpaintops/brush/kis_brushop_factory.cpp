@@ -68,7 +68,7 @@ KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
     return new KisBrushOpSettings();
 }
 
-KisPaintOpSettingsWidget* KisBrushOpFactory::settingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisBrushOpFactory::createSettingsWidget(QWidget* parent)
 {
     return new KisBrushOpSettingsWidget( parent );
 }

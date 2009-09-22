@@ -68,7 +68,7 @@ public:
 
     /**
      * Create and return an settings object for this paintop when used with the
-     * specified input device. 
+     * specified input device.
      */
     virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image) = 0;
     virtual KisPaintOpSettingsSP settings(KisImageSP image) = 0;
@@ -76,7 +76,7 @@ public:
     /**
      * create a widget that can display paintop settings
      */
-    virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent) = 0;
+    virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent) = 0;
 
 };
 

@@ -66,7 +66,7 @@ KisPaintOpSettingsSP KisDuplicateOpFactory::settings(KisImageSP image)
     return new KisDuplicateOpSettings(image);
 }
 
-KisPaintOpSettingsWidget* KisDuplicateOpFactory::settingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisDuplicateOpFactory::createSettingsWidget(QWidget* parent)
 {
     return new KisDuplicateOpSettingsWidget( parent );
 }

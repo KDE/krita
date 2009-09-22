@@ -53,6 +53,6 @@ public:
 
     virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
-    virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
+    virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);
 };
 #endif // KIS_CHALK_PAINTOP_FACTORY_H_

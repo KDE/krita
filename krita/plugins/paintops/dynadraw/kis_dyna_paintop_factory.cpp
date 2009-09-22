@@ -62,7 +62,7 @@ KisPaintOpSettingsSP KisDynaPaintOpFactory::settings(KisImageSP image)
     return new KisDynaPaintOpSettings();
 }
 
-KisPaintOpSettingsWidget* KisDynaPaintOpFactory::settingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisDynaPaintOpFactory::createSettingsWidget(QWidget* parent)
 {
     return new KisDynaPaintOpSettingsWidget( parent );
 }

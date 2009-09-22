@@ -54,7 +54,7 @@ KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(KisImageSP image)
     return new KisDeformPaintOpSettings();
 }
 
-KisPaintOpSettingsWidget* KisDeformPaintOpFactory::settingsWidget(QWidget* parent)
+KisPaintOpSettingsWidget* KisDeformPaintOpFactory::createSettingsWidget(QWidget* parent)
 {
     return new KisDeformPaintOpSettingsWidget( parent );
 }

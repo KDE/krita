@@ -125,7 +125,7 @@ int Staff::line(qreal y) const
 {
     y = (lineCount()-1) * lineSpacing() - y;
     y /= lineSpacing() / 2;
-    return (int) round(y);
+    return qRound(y);
 }
 
 Clef* Staff::lastClefChange(int bar, int time, Clef* oldClef)

@@ -19,6 +19,7 @@
 #include "kis_recorded_action_test.h"
 
 #include <qtest_kde.h>
+#include <kis_node.h>
 #include "recorder/kis_recorded_action.h"
 #include <recorder/kis_node_query_path.h>
 

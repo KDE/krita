@@ -43,12 +43,12 @@ class KRITAIMAGE_EXPORT KisPropertiesConfiguration : public KisSerializableConfi
 public:
 
     /**
-     * Create a new filter config.
+     * Create a new properties  config.
      */
     KisPropertiesConfiguration();
 
     /**
-     * Deep copy the filter configFile
+     * Deep copy the properties  configFile
      */
     KisPropertiesConfiguration(const KisPropertiesConfiguration& rhs);
 
@@ -58,24 +58,24 @@ public:
 
 
     /**
-     * Fill the filter configuration object from the XML encoded representation in s.
+     * Fill the properties  configuration object from the XML encoded representation in s.
      * This function use the "Legacy" style XML of the 1.x .kra file format.
      */
     virtual void fromXML(const QString&);
     /**
-     * Fill the filter configuration object from the XML encoded representation in s.
+     * Fill the properties  configuration object from the XML encoded representation in s.
      * This function use the "Legacy" style XML  of the 1.x .kra file format.
      */
     virtual void fromXML(const QDomElement&);
 
     /**
-     * Create a serialized version of this filter config
+     * Create a serialized version of this properties  config
      * This function use the "Legacy" style XML  of the 1.x .kra file format.
      */
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
     /**
-     * Create a serialized version of this filter config
+     * Create a serialized version of this properties  config
      * This function use the "Legacy" style XML  of the 1.x .kra file format.
      */
     virtual QString toXML() const;
@@ -138,4 +138,4 @@ private:
     Private* const d;
 };
 
-#endif // _KIS_FILTER_CONFIGURATION_H_
+#endif 

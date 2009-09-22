@@ -50,8 +50,9 @@ public:
         return "krita-deform.png";
     }
 
-    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
+    virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
 
 private:
     KisDeformPaintOpSettingsWidget* const m_widget;

@@ -48,8 +48,9 @@ public:
     virtual QString name() const {
         return i18n("Chinese Brush");
     }
-    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
+    virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
 
 private:
 

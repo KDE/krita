@@ -94,7 +94,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 {
     Q_ASSERT(!m_d->settings->getString("paintop", "").isEmpty());
-    
+
     return m_d->settings;
 }
 
@@ -123,7 +123,7 @@ bool KisPaintOpPreset::load()
     KoID id(paintopid, "");
     KoInputDevice input = KoInputDevice::mouse(); // TODO: Load inputdevice?
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0, input, 0);
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, input, 0);
     if( !settings )
         return false;
     settings->fromXML( element );

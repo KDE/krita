@@ -31,7 +31,7 @@ namespace KisMetaData {
      */
     class KRITAIMAGE_EXPORT Validator {
         public:
-            class Reason {
+            class KRITAIMAGE_EXPORT Reason {
                 friend class Validator;
                 friend class QMap<QString, Reason>;
                 public:

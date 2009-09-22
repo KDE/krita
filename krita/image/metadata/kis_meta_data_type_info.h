@@ -44,7 +44,7 @@ namespace KisMetaData {
                 OpenedChoice,
                 ClosedChoice
             };
-            class Choice {
+            class KRITAIMAGE_EXPORT Choice {
                 public:
                     Choice( const Value&, const QString& hint);
                     Choice( const Choice& );

@@ -29,9 +29,7 @@
 
 
 KisSprayPaintOpFactory::KisSprayPaintOpFactory()
-    :  m_widget( new KisSprayPaintOpSettingsWidget )
 {
-
 }
 
 KisSprayPaintOpFactory::~KisSprayPaintOpFactory()
@@ -40,7 +38,6 @@ KisSprayPaintOpFactory::~KisSprayPaintOpFactory()
 
 KisPaintOp * KisSprayPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0)
 {
-    Q_ASSERT( settings->widget() );
     const KisSprayPaintOpSettings *spraySettings =
         dynamic_cast<const KisSprayPaintOpSettings *>(settings.data());
     Q_ASSERT(settings == 0 || spraySettings != 0);
@@ -50,16 +47,21 @@ KisPaintOp * KisSprayPaintOpFactory::createOp(const KisPaintOpSettingsSP setting
     return op;
 }
 
-KisPaintOpSettingsSP KisSprayPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisSprayPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
-    return new KisSprayPaintOpSettings(m_widget);
+    return new KisSprayPaintOpSettings();
 }
 
 KisPaintOpSettingsSP KisSprayPaintOpFactory::settings(KisImageSP image)
 {
     Q_UNUSED(image);
-    return new KisSprayPaintOpSettings(m_widget);
+    return new KisSprayPaintOpSettings();
+}
+
+KisPaintOpSettingsWidget* KisSprayPaintOpSettings::settingsWidget(QWidget* parent)
+{
+    return new KisSprayPaintOpSettings( parent );
 }

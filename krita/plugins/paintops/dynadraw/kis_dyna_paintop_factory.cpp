@@ -29,7 +29,6 @@
 
 
 KisDynaPaintOpFactory::KisDynaPaintOpFactory()
-    :  m_widget( new KisDynaPaintOpSettingsWidget )
 {
 
 }
@@ -40,7 +39,6 @@ KisDynaPaintOpFactory::~KisDynaPaintOpFactory()
 
 KisPaintOp * KisDynaPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0)
 {
-    Q_ASSERT( settings->widget() );
     const KisDynaPaintOpSettings *dynaSettings =
         dynamic_cast<const KisDynaPaintOpSettings *>(settings.data());
     Q_ASSERT(settings == 0 || dynaSettings != 0);
@@ -50,16 +48,21 @@ KisPaintOp * KisDynaPaintOpFactory::createOp(const KisPaintOpSettingsSP settings
     return op;
 }
 
-KisPaintOpSettingsSP KisDynaPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisDynaPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
-    return new KisDynaPaintOpSettings(m_widget);
+    return new KisDynaPaintOpSettings();
 }
 
 KisPaintOpSettingsSP KisDynaPaintOpFactory::settings(KisImageSP image)
 {
     Q_UNUSED(image);
-    return new KisDynaPaintOpSettings(m_widget);
+    return new KisDynaPaintOpSettings();
+}
+
+KisPaintOpSettingsWidget* KisDynaPaintOpFactory::settingsWidget(QWidget* parent)
+{
+    return new KisDynaPaintOpSettingsWidget( parent );
 }

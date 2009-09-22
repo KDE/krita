@@ -32,9 +32,8 @@
 
 KisDynamicOpFactory::KisDynamicOpFactory(KisBookmarkedConfigurationsModel* shapeBookmarksManager,
                                          KisBookmarkedConfigurationsModel* coloringBookmarksManager)
-        : m_widget( new KisDynamicOpSettingsWidget )
-        , m_shapeBookmarksManager(shapeBookmarksManager)
-        , m_coloringBookmarksManager(coloringBookmarksManager)
+    : m_shapeBookmarksManager(shapeBookmarksManager)
+    , m_coloringBookmarksManager(coloringBookmarksManager)
 {
 }
 
@@ -53,15 +52,20 @@ KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettingsSP settings, 
     return op;
 }
 
-KisPaintOpSettingsSP KisDynamicOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisDynamicOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED(image);
     Q_UNUSED(inputDevice);
-    return new KisDynamicOpSettings(m_widget, m_shapeBookmarksManager, m_coloringBookmarksManager);
+    return new KisDynamicOpSettings(m_shapeBookmarksManager, m_coloringBookmarksManager);
 }
 
 KisPaintOpSettingsSP KisDynamicOpFactory::settings(KisImageSP image)
 {
     Q_UNUSED(image);
-    return new KisDynamicOpSettings(m_widget, m_shapeBookmarksManager, m_coloringBookmarksManager);
+    return new KisDynamicOpSettings(m_shapeBookmarksManager, m_coloringBookmarksManager);
+}
+
+KisPaintOpSettingsWidget* KisDynamicOpSettings::settingsWidget(QWidget* parent)
+{
+    return new KisDynamicOpSettingsWidget( parent );
 }

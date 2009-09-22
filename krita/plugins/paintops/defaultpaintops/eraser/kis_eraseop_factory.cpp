@@ -32,14 +32,12 @@
 #include "kis_eraseop.h"
 
 KisEraseOpFactory::KisEraseOpFactory()
-    : m_widget( new KisEraseOpSettingsWidget)
 {
 }
 
 
 KisEraseOpFactory::~KisEraseOpFactory()
 {
-    // XXX? Delete our widget?
 }
 
 
@@ -48,7 +46,6 @@ KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                          KisImageSP image)
 {
     Q_UNUSED(image);
-    Q_ASSERT( settings->widget() );
 
     const KisEraseOpSettings *eraseopSettings = dynamic_cast<const KisEraseOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && eraseopSettings != 0);
@@ -58,17 +55,20 @@ KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisEraseOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisEraseOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
-    // XXX: store widgets per inputDevice?
-    Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
-    m_widget->setImage(image);
-    return new KisEraseOpSettings(m_widget);
+    Q_UNUSED( image );
+    return new KisEraseOpSettings();
 }
 
 KisPaintOpSettingsSP KisEraseOpFactory::settings(KisImageSP image)
 {
-    m_widget->setImage(image);
+    Q_UNUSED( image );
     return new KisEraseOpSettings(m_widget);
+}
+
+KisPaintOpSettingsWidget* KisEraseOpFactory::settingsWidget(QWidget* parent)
+{
+    return new KisEraseOpSettingsWidget( parent );
 }

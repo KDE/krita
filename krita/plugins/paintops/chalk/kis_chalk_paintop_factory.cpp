@@ -29,9 +29,7 @@
 
 
 KisChalkPaintOpFactory::KisChalkPaintOpFactory()
-    :  m_widget( new KisChalkPaintOpSettingsWidget )
 {
-
 }
 
 KisChalkPaintOpFactory::~KisChalkPaintOpFactory()
@@ -40,7 +38,6 @@ KisChalkPaintOpFactory::~KisChalkPaintOpFactory()
 
 KisPaintOp * KisChalkPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0)
 {
-    Q_ASSERT( settings->widget() );
     const KisChalkPaintOpSettings *chalkSettings =
         dynamic_cast<const KisChalkPaintOpSettings *>(settings.data());
     Q_ASSERT(settings == 0 || chalkSettings != 0);
@@ -50,16 +47,20 @@ KisPaintOp * KisChalkPaintOpFactory::createOp(const KisPaintOpSettingsSP setting
     return op;
 }
 
-KisPaintOpSettingsSP KisChalkPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisChalkPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
-    Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
-    return new KisChalkPaintOpSettings(m_widget);
+    return new KisChalkPaintOpSettings();
 }
 
 KisPaintOpSettingsSP KisChalkPaintOpFactory::settings(KisImageSP image)
 {
     Q_UNUSED(image);
-    return new KisChalkPaintOpSettings(m_widget);
+    return new KisChalkPaintOpSettings();
+}
+
+KisPaintOpSettingsWidget* KisChalkPaintOpFactory::settingsWidget(QWidget* parent)
+{
+    return new KisChalkPaintOpSettingsWidget( parent );
 }

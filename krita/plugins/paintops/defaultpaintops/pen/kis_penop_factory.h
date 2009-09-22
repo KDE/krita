@@ -32,7 +32,6 @@ class KisPaintOp;
 class KisPainter;
 class QWidget;
 class KoInputDevice;
-class KisPenOpSettingsWidget;
 
 class KisPenOpFactory : public KisPaintOpFactory
 {
@@ -59,9 +58,6 @@ public:
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
     virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
 
-private:
-
-    KisPenOpSettingsWidget* m_widget;
 };
 
 #endif // KIS_PENOP_FACTORY_H_

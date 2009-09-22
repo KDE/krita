@@ -28,7 +28,6 @@
 
 class KisPainter;
 class KisSprayPaintOpSettings;
-class KisSprayPaintOpSettingsWidget;
 
 class KisSprayPaintOpFactory : public KisPaintOpFactory
 {
@@ -55,9 +54,5 @@ public:
     virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
     virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
-
-private:
-
-    KisSprayPaintOpSettingsWidget* const m_widget;
 };
 #endif // KIS_SPRAY_PAINTOP_FACTORY_H_

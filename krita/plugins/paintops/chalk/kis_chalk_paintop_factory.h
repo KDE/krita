@@ -28,7 +28,6 @@
 
 class KisPainter;
 class KisChalkPaintOpSettings;
-class KisChalkPaintOpSettingsWidget;
 
 class KisChalkPaintOpFactory : public KisPaintOpFactory
 {
@@ -55,9 +54,5 @@ public:
     virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
     virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
-
-private:
-
-    KisChalkPaintOpSettingsWidget* const m_widget;
 };
 #endif // KIS_CHALK_PAINTOP_FACTORY_H_

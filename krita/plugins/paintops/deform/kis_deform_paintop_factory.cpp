@@ -29,9 +29,7 @@
 #include "kis_deform_paintop.h"
 
 KisDeformPaintOpFactory::KisDeformPaintOpFactory()
-    :  m_widget( new KisDeformPaintOpSettingsWidget )
 {
-    //
 }
 
 KisPaintOp * KisDeformPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0)
@@ -43,16 +41,20 @@ KisPaintOp * KisDeformPaintOpFactory::createOp(const KisPaintOpSettingsSP settin
     return op;
 }
 
-KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
-    Q_UNUSED(parent);
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
-    return new KisDeformPaintOpSettings(m_widget);
+    return new KisDeformPaintOpSettings();
 }
 
 KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(KisImageSP image)
 {
     Q_UNUSED(image);
-    return new KisDeformPaintOpSettings(0);
+    return new KisDeformPaintOpSettings();
+}
+
+KisPaintOpSettingsWidget* KisDeformPaintOpFactory::settingsWidget(QWidget* parent)
+{
+    return new KisDeformPaintOpSettingsWidget( parent );
 }

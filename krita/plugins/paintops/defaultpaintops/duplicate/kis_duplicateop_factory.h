@@ -32,7 +32,6 @@ class KisPaintOp;
 class KisPainter;
 class QWidget;
 class KoInputDevice;
-class KisDuplicateOpSettingsWidget;
 
 class KisDuplicateOpFactory : public KisPaintOpFactory
 {
@@ -58,10 +57,6 @@ public:
     virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
     virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
-
-private:
-
-    KisDuplicateOpSettingsWidget* m_widget;
 };
 
 #endif // KIS_DUPLICATEOP_FACTORY_H_

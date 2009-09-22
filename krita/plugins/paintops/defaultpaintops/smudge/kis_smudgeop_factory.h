@@ -32,7 +32,6 @@ class KisPaintOp;
 class KisPainter;
 class QWidget;
 class KoInputDevice;
-class KisSmudgeOpSettingsWidget;
 
 class KisSmudgeOpFactory : public KisPaintOpFactory
 {
@@ -58,10 +57,6 @@ public:
     virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
     virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
-
-private:
-
-    KisSmudgeOpSettingsWidget* m_widget;
 };
 
 #endif // KIS_SMUDGEOP_FACTORY_H_

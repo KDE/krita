@@ -55,9 +55,5 @@ public:
     virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
     virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
-
-private:
-
-    KisDynaPaintOpSettingsWidget* const m_widget;
 };
 #endif // KIS_DYNA_PAINTOP_FACTORY_H_

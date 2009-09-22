@@ -28,9 +28,7 @@
 #include "kis_curve_paintop.h"
 
 KisCurvePaintOpFactory::KisCurvePaintOpFactory()
-    :  m_widget( new KisCurvePaintOpSettingsWidget )
 {
-    //
 }
 
 KisPaintOp * KisCurvePaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0)
@@ -42,16 +40,20 @@ KisPaintOp * KisCurvePaintOpFactory::createOp(const KisPaintOpSettingsSP setting
     return op;
 }
 
-KisPaintOpSettingsSP KisCurvePaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisCurvePaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
-    Q_UNUSED(parent);
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
-    return new KisCurvePaintOpSettings(m_widget);
+    return new KisCurvePaintOpSettings();
 }
 
 KisPaintOpSettingsSP KisCurvePaintOpFactory::settings(KisImageSP image)
 {
     Q_UNUSED(image);
-    return new KisCurvePaintOpSettings(0);
+    return new KisCurvePaintOpSettings();
+}
+
+KisPaintOpSettingsWidget* KisCurvePaintOpFactory::settingsWidget(QWidget* parent)
+{
+    return new KisCurvePaintOpSettingsWidget( parent );
 }

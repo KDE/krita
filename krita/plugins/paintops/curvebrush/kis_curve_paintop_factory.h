@@ -27,9 +27,6 @@ class KisPaintOp;
 class KisPainter;
 class QWidget;
 class KoInputDevice;
-class KisCurveSettingsWidget;
-class KisCurvePaintOpSettingsWidget;
-
 
 class KisCurvePaintOpFactory : public KisPaintOpFactory
 {
@@ -53,9 +50,6 @@ public:
     virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
     virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
-
-private:
-    KisCurvePaintOpSettingsWidget* const m_widget;
 };
 
 #endif

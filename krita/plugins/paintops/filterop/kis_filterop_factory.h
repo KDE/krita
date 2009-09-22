@@ -59,9 +59,6 @@ public:
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
     virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
 
-private:
-
-    KisFilterOpSettingsWidget* const m_widget;
 };
 
 #endif // KIS_FILTEROP_FACTORY_H_

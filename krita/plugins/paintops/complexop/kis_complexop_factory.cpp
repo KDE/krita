@@ -32,23 +32,20 @@
 #include "kis_complexop.h"
 
 KisComplexOpFactory::KisComplexOpFactory()
-    : m_widget( new KisComplexOpSettingsWidget )
 {
 }
 
 
 KisComplexOpFactory::~KisComplexOpFactory()
 {
-    // XXX? Delete our widget?
 }
 
 
 KisPaintOp * KisComplexOpFactory::createOp(const KisPaintOpSettingsSP settings,
-                                         KisPainter * painter,
-                                         KisImageSP image)
+                                           KisPainter * painter,
+                                           KisImageSP image)
 {
     Q_UNUSED(image);
-    Q_ASSERT( settings->widget() );
 
     const KisComplexOpSettings *complexopSettings = dynamic_cast<const KisComplexOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && complexopSettings != 0);
@@ -58,17 +55,20 @@ KisPaintOp * KisComplexOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisComplexOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisComplexOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
-    // XXX: store widgets per inputDevice?
-    Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
-    m_widget->setImage(image);
-    return new KisComplexOpSettings(m_widget);
+    Q_UNUSED( image );
+    return new KisComplexOpSettings();
 }
 
 KisPaintOpSettingsSP KisComplexOpFactory::settings(KisImageSP image)
 {
-    m_widget->setImage(image);
-    return new KisComplexOpSettings(m_widget);
+    Q_UNUSED( image );
+    return new KisComplexOpSettings();
+}
+
+KisPaintOpSettingsWidget* KisComplexOpFactory::settingsWidget(QWidget* parent)
+{
+    return new KisComplexOpSettingsWidget( parent );
 }

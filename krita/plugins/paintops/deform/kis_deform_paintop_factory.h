@@ -28,8 +28,6 @@ class KisPainter;
 class QWidget;
 class KoInputDevice;
 class KisDeformSettingsWidget;
-class KisDeformPaintOpSettingsWidget;
-
 
 class KisDeformPaintOpFactory : public KisPaintOpFactory
 {
@@ -54,8 +52,6 @@ public:
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
     virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
 
-private:
-    KisDeformPaintOpSettingsWidget* const m_widget;
 };
 
 #endif

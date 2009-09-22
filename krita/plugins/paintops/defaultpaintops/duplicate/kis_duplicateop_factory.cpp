@@ -32,14 +32,12 @@
 #include "kis_duplicateop.h"
 
 KisDuplicateOpFactory::KisDuplicateOpFactory()
-    : m_widget( new KisDuplicateOpSettingsWidget)
 {
 }
 
 
 KisDuplicateOpFactory::~KisDuplicateOpFactory()
 {
-    // XXX? Delete our widget?
 }
 
 
@@ -48,7 +46,6 @@ KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettingsSP settings
                                          KisImageSP image)
 {
     Q_UNUSED(image);
-    Q_ASSERT( settings->widget() );
 
     const KisDuplicateOpSettings *duplicateopSettings = dynamic_cast<const KisDuplicateOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && duplicateopSettings != 0);
@@ -58,16 +55,18 @@ KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettingsSP settings
     return op;
 }
 
-KisPaintOpSettingsSP KisDuplicateOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisDuplicateOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
-    // XXX: store widgets per inputDevice?
-    Q_UNUSED( parent );
-    m_widget->setImage(image);
-    return new KisDuplicateOpSettings(m_widget, image);
+    Q_UNUSED(inputDevice);
+    return new KisDuplicateOpSettings(image);
 }
 
 KisPaintOpSettingsSP KisDuplicateOpFactory::settings(KisImageSP image)
 {
-    m_widget->setImage(image);
-    return new KisDuplicateOpSettings(m_widget, image);
+    return new KisDuplicateOpSettings(image);
+}
+
+KisPaintOpSettingsWidget* KisDuplicateOpFactory::settingsWidget(QWidget* parent)
+{
+    return new KisDuplicateOpSettingsWidget( parent );
 }

@@ -111,18 +111,23 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisCPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisCPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
-    return new KisCPaintOpSettings(parent,  m_brushes);
+    return new KisCPaintOpSettings(m_brushes);
 }
 
 KisPaintOpSettingsSP KisCPaintOpFactory::settings(KisImageSP image)
 {
     Q_UNUSED(image);
-    return new KisCPaintOpSettings(0,  m_brushes);
+    return new KisCPaintOpSettings(m_brushes);
 }
+KisPaintOpSettingsWidget* KisCPaintOpFactory::settingsWidget(QWidget* parent)
+{
+    return new KisCPaintOpWidget( parent );
+}
+
 
 //=================
 

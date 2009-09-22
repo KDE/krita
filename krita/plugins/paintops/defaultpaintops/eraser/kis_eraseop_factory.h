@@ -32,7 +32,6 @@ class KisPaintOp;
 class KisPainter;
 class QWidget;
 class KoInputDevice;
-class KisEraseOpSettingsWidget;
 
 class KisEraseOpFactory : public KisPaintOpFactory
 {
@@ -58,10 +57,6 @@ public:
     virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
     virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
-
-private:
-
-    KisEraseOpSettingsWidget* m_widget;
 };
 
 #endif // KIS_ERASEOP_FACTORY_H_

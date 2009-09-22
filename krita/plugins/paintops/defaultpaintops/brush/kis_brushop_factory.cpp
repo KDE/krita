@@ -32,14 +32,12 @@
 #include "kis_brushop.h"
 
 KisBrushOpFactory::KisBrushOpFactory()
-    : m_widget( new KisBrushOpSettingsWidget )
 {
 }
 
 
 KisBrushOpFactory::~KisBrushOpFactory()
 {
-    // XXX? Delete our widget?
 }
 
 
@@ -48,7 +46,6 @@ KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                          KisImageSP image)
 {
     Q_UNUSED(image);
-    Q_ASSERT( settings->widget() );
 
     const KisBrushOpSettings *brushopSettings = dynamic_cast<const KisBrushOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && brushopSettings != 0);
@@ -57,17 +54,21 @@ KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisBrushOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisBrushOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
     // XXX: store widgets per inputDevice?
-    Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
-    m_widget->setImage(image);
-    return new KisBrushOpSettings(m_widget);
+    Q_UNUSED( image );
+    return new KisBrushOpSettings();
 }
 
 KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
 {
-    m_widget->setImage(image);
-    return new KisBrushOpSettings(m_widget);
+    Q_UNUSED( image );
+    return new KisBrushOpSettings();
+}
+
+KisPaintOpSettingsWidget* KisBrushOpFactory::settingsWidget(QWidget* parent)
+{
+    return new KisBrushOpSettingsWidget( parent );
 }

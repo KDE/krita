@@ -33,7 +33,6 @@
 #include <KoInputDevice.h>
 
 KisFilterOpFactory::KisFilterOpFactory()
-    : m_widget( new KisFilterOpSettingsWidget )
 {
 }
 
@@ -47,7 +46,6 @@ KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                          KisImageSP image)
 {
     Q_UNUSED(image);
-    Q_ASSERT( settings->widget() );
 
     // XXX: make all this casting go away!
 
@@ -60,18 +58,20 @@ KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisFilterOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisFilterOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
-    // XXX: store widgets per inputDevice?
-    Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
     return settings( image );
 }
 
 KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageSP image)
 {
-    m_widget->setImage(image);
-    KisFilterOpSettings* settings = new KisFilterOpSettings(m_widget);
+    KisFilterOpSettings* settings = new KisFilterOpSettings();
     settings->setImage( image );
     return settings;
+}
+
+KisPaintOpSettingsWidget* KisFilterOpFactory::settingsWidget(QWidget* parent)
+{
+    return new KisFilterOpSettingsWidget( parent );
 }

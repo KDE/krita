@@ -32,14 +32,12 @@
 #include "kis_penop.h"
 
 KisPenOpFactory::KisPenOpFactory()
-    : m_widget( new KisPenOpSettingsWidget )
 {
 }
 
 
 KisPenOpFactory::~KisPenOpFactory()
 {
-    // XXX? Delete our widget?
 }
 
 
@@ -48,7 +46,6 @@ KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                          KisImageSP image)
 {
     Q_UNUSED(image);
-    Q_ASSERT( settings->widget() );
 
     const KisPenOpSettings *penopSettings = dynamic_cast<const KisPenOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && penopSettings != 0);
@@ -58,17 +55,20 @@ KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisPenOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisPenOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
-    // XXX: store widgets per inputDevice?
     Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
-    m_widget->setImage(image);
-    return new KisPenOpSettings(m_widget);
+    return new KisPenOpSettings();
 }
 
 KisPaintOpSettingsSP KisPenOpFactory::settings(KisImageSP image)
 {
-    m_widget->setImage(image);
-    return new KisPenOpSettings(m_widget);
+    Q_UNUSED( image );
+    return new KisPenOpSettings();
+}
+
+KisPaintOpSettingsWidget* KisPenOpSettings::settingsWidget(QWidget* parent)
+{
+    return new KisPenOpSettingsWidget( parent );
 }

@@ -72,7 +72,7 @@ public:
     }
 
 private:
-    KisDynamicOpSettingsWidget* const m_widget;
+
     KisBookmarkedConfigurationsModel* m_shapeBookmarksManager;
     KisBookmarkedConfigurationsModel* m_coloringBookmarksManager;
 };

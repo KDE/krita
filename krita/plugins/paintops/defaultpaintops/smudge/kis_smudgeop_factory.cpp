@@ -32,14 +32,12 @@
 #include "kis_smudgeop.h"
 
 KisSmudgeOpFactory::KisSmudgeOpFactory()
-    : m_widget( new KisSmudgeOpSettingsWidget )
 {
 }
 
 
 KisSmudgeOpFactory::~KisSmudgeOpFactory()
 {
-    // XXX? Delete our widget?
 }
 
 
@@ -48,7 +46,6 @@ KisPaintOp * KisSmudgeOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                          KisImageSP image)
 {
     Q_UNUSED(image);
-    Q_ASSERT( settings->widget() );
 
     const KisSmudgeOpSettings *smudgeopSettings = dynamic_cast<const KisSmudgeOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && smudgeopSettings != 0);
@@ -58,17 +55,18 @@ KisPaintOp * KisSmudgeOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisSmudgeOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisSmudgeOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
 {
-    // XXX: store widgets per inputDevice?
-    Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
-    m_widget->setImage(image);
-    return new KisSmudgeOpSettings(m_widget);
+    return new KisSmudgeOpSettings();
 }
 
 KisPaintOpSettingsSP KisSmudgeOpFactory::settings(KisImageSP image)
 {
-    m_widget->setImage(image);
-    return new KisSmudgeOpSettings(m_widget);
+    return new KisSmudgeOpSettings();
+}
+
+KisPaintOpSettingsWidget* KisSmudgeOpFactory::settingsWidget(QWidget* parent)
+{
+    return new KisSmudgeOpSettingsWidget( parent );
 }

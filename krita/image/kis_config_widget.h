@@ -33,10 +33,6 @@ class KisPropertiesConfiguration;
  * when it wants a preview updated; there is a timer that
  * waits a little time to see if there are more changes coming
  * and then emits sigConfigurationUpdated.
- *
- * Also, this class is designed to have a single instance
- * of a certain configuration widget that can be reset and
- * unset
  */
 class KRITAIMAGE_EXPORT KisConfigWidget : public QWidget
 {

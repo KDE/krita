@@ -71,7 +71,7 @@
 /* Now the same for Krita*_TEST_EXPORT, if compiling with unit tests enabled */
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_KRITAUI_LIB)
+# if defined(MAKE_KRITAUI_LIB) || defined(MAKE_KRITAIMAGE_LIB)
 #       define KRITAIMAGE_TEST_EXPORT KDE_EXPORT
 #       define KRITAUI_TEST_EXPORT KDE_EXPORT
 #   else

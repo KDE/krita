@@ -99,7 +99,6 @@ private:
 
     QList<KoID> m_paintops;
     QList<KoID> m_displayedOps;
-
     KisPaintOpPresetSP m_activePreset;
 
     typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;

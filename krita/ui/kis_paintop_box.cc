@@ -264,17 +264,19 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         m_optionWidget->writeConfiguration( const_cast<KisPaintOpSettings*>( m_activePreset->settings().data() ) );
         m_optionWidget->disconnect(m_presetWidget);
         m_optionWidget->disconnect(m_presetsPopup->presetPreview());
+        m_presetsPopup->setPaintOpSettingsWidget(0);
+        m_optionWidget->setParent(0);
+        delete m_optionWidget;
     }
 
     m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
 
     KisPaintOpPresetSP preset =
         activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice());
-    dbgUI << "\t\tactive preset for paintop " << paintop.id() << " is " << preset;
-    dbgUI << "XXXX" << preset->paintOp() << ", " << preset->settings()->toXML();
 
-    if (preset != 0 && preset->settings() && preset->settings()->widget()) {
-        m_optionWidget = preset->settings()->widget();
+    if (preset != 0 && preset->settings()) {
+        m_optionWidget = KisPaintOpRegistry::instance()->get(paintop.id())->createSettingsWidget(0);
+        m_optionWidget->setImage(m_view->image());
         if ( !preset->settings()->getProperties().isEmpty() ) {
             dbgUI << "\t\tSetting configuration on option widget ";
             m_optionWidget->setConfiguration( preset->settings() );
@@ -315,7 +317,7 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInp
     if ( !m_inputDevicePresets.contains( inputDevice ) ) {
         foreach( const KoID& paintop, KisPaintOpRegistry::instance()->listKeys() ) {
             settingsArray[paintop.id()] =
-                KisPaintOpRegistry::instance()->defaultPreset(paintop, 0, inputDevice, m_view->image());
+                KisPaintOpRegistry::instance()->defaultPreset(paintop, inputDevice, m_view->image());
         }
         m_inputDevicePresets[inputDevice] = settingsArray;
     }
@@ -329,7 +331,7 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInp
     }
     else {
         warnKrita << "Could not get paintop preset for paintop " << paintop.name() << ", return default";
-        return KisPaintOpRegistry::instance()->defaultPreset(paintop, 0, inputDevice, m_view->image());
+        return KisPaintOpRegistry::instance()->defaultPreset(paintop, inputDevice, m_view->image());
     }
 }
 

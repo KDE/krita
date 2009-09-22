@@ -351,6 +351,8 @@ bool Layout::nextParag()
     m_format = m_block.blockFormat();
     m_blockData = dynamic_cast<KoTextBlockData*>(m_block.userData());
     KoText::Direction dir = static_cast<KoText::Direction>(m_format.intProperty(KoParagraphStyle::TextProgressionDirection));
+    if (dir == KoText::InheritDirection)
+        dir = m_data->pageDirection();
     if (dir == KoText::AutoDirection)
         m_isRtl = m_block.text().isRightToLeft();
     else

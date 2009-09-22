@@ -170,6 +170,7 @@ void SimpleStyleWidget::directionChangeRequested()
         format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::RightLeftTopBottom);
         updateDirection(RTL);
         break;
+    case KoText::InheritDirection:
     case KoText::AutoDirection:
         updateDirection(LTR);
         format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);

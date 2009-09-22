@@ -145,7 +145,7 @@ void KisFilterOption::updateFilterConfigWidget()
             m_layout->addWidget(m_currentFilterConfigWidget);
             m_optionsWidget->grpFilterOptions->updateGeometry();
             m_currentFilterConfigWidget->show();
-            connect(m_currentFilterConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SIGNAL(sigSettingChanged()));
+            connect(m_currentFilterConfigWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(sigSettingChanged()));
         }
             
     }

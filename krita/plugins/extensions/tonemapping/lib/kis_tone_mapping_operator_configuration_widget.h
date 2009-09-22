@@ -50,7 +50,7 @@ signals:
     * Subclasses should emit this signal whenever the preview should be
     * be recalculated.
     */
-    void sigConfigChanged();
+    void sigConfigurationItemChanged();
 
 };
 

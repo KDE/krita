@@ -245,7 +245,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
 
     l->addWidget(m_page, 0, Qt::AlignTop);
     height = 256;
-    connect(m_page->curveWidget, SIGNAL(modified()), SIGNAL(sigConfigChanged()));
+    connect(m_page->curveWidget, SIGNAL(modified()), SIGNAL(sigConfigurationItemChanged()));
 
     // Create the horizontal gradient label
     QPixmap hgradientpix(256, 1);

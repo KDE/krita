@@ -35,9 +35,9 @@ KisWdgRandomPick::KisWdgRandomPick(KisFilter* /*nfilter*/, QWidget* parent)
     m_widget = new Ui_WdgRandomPickOptions();
     m_widget->setupUi(this);
 
-    connect(widget()->intLevel, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(widget()->intWindowSize, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(widget()->intOpacity, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
+    connect(widget()->intLevel, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->intWindowSize, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->intOpacity, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     m_seedH = rand();
     m_seedV = rand();
     m_seedThreshold = rand();

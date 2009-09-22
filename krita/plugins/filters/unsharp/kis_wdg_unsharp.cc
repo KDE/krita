@@ -36,9 +36,9 @@ KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisConfigWidget(parent)
     m_widget = new Ui_WdgUnsharp();
     m_widget->setupUi(this);
 
-    connect(widget()->intHalfSize, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(widget()->doubleAmount, SIGNAL(valueChanged(double)), SIGNAL(sigConfigChanged()));
-    connect(widget()->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
+    connect(widget()->intHalfSize, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->doubleAmount, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
 void KisWdgUnsharp::setConfiguration(const KisPropertiesConfiguration* config)

@@ -78,7 +78,7 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 
     m_d->paintOpOptions << option;
 
-    connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigChanged()));
+    connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
     
     if ( option->isCheckable() ) {
         QWidget* w = new QWidget;

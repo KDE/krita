@@ -31,7 +31,7 @@ KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisConfigWi
 {
     m_widget = new Ui_WdgFastColorTransfer();
     m_widget->setupUi(this);
-    connect(m_widget->fileNameURLRequester, SIGNAL(textChanged(const QString&)), this, SIGNAL(sigConfigChanged()));
+    connect(m_widget->fileNameURLRequester, SIGNAL(textChanged(const QString&)), this, SIGNAL(sigConfigurationItemChanged()));
 }
 
 

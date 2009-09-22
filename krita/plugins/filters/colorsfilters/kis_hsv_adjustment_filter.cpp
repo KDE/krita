@@ -67,9 +67,9 @@ KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConf
 {
     m_page = new Ui_WdgHSVAdjustment();
     m_page->setupUi(this);
-    connect(m_page->hue, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(m_page->value, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(m_page->saturation, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
+    connect(m_page->hue, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->value, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->saturation, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
 KisHSVConfigWidget::~KisHSVConfigWidget()

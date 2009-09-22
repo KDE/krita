@@ -32,14 +32,14 @@ KisWdgWave::KisWdgWave(KisFilter* /*nfilter*/, QWidget* parent)
     m_widget = new Ui_WdgWaveOptions();
     m_widget->setupUi(this);
 
-    connect(widget()->intHWavelength, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(widget()->intHShift, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(widget()->intHAmplitude, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(widget()->cbHShape, SIGNAL(activated(int)), SIGNAL(sigConfigChanged()));
-    connect(widget()->intVWavelength, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(widget()->intVShift, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(widget()->intVAmplitude, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(widget()->cbVShape, SIGNAL(activated(int)), SIGNAL(sigConfigChanged()));
+    connect(widget()->intHWavelength, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->intHShift, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->intHAmplitude, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->cbHShape, SIGNAL(activated(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->intVWavelength, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->intVShift, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->intVAmplitude, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->cbVShape, SIGNAL(activated(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
 KisWdgWave::~KisWdgWave()

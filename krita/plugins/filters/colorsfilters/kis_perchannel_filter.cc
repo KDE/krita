@@ -86,7 +86,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0).id());
     m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
 
-    connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
+    connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->cbPreview, SIGNAL(stateChanged(int)), this, SLOT(setPreview(int)));
 
     m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100);
@@ -97,11 +97,11 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 void KisPerChannelConfigWidget::setPreview(int state)
 {
     if(state) {
-        connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
-        emit sigConfigChanged();
+        connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
+        emit sigConfigurationItemChanged();
     }
     else
-        disconnect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
+        disconnect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
 }
 
 

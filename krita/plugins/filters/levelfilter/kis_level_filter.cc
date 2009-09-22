@@ -117,9 +117,9 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     m_page.outblackspin->setValue(0);
     m_page.outwhitespin->setValue(255);
 
-    connect(m_page.blackspin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(m_page.whitespin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(m_page.ingradient, SIGNAL(sigModifiedGamma(double)), SIGNAL(sigConfigChanged()));
+    connect(m_page.blackspin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page.whitespin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page.ingradient, SIGNAL(sigModifiedGamma(double)), SIGNAL(sigConfigurationItemChanged()));
 
     connect(m_page.blackspin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(slotModifyBlack(int)));
     connect(m_page.whitespin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(slotModifyWhite(int)));
@@ -133,8 +133,8 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect(m_page.ingradient, SIGNAL(sigModifiedGamma(double)), m_page.gammaspin, SLOT(setValue(double)));
 
 
-    connect(m_page.outblackspin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(m_page.outwhitespin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
+    connect(m_page.outblackspin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page.outwhitespin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 
     connect(m_page.outblackspin, SIGNAL(valueChanged(int)), m_page.outgradient, SLOT(slotModifyBlack(int)));
     connect(m_page.outwhitespin, SIGNAL(valueChanged(int)), m_page.outgradient, SLOT(slotModifyWhite(int)));

@@ -643,9 +643,9 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     if (canMoveCaret) {
         bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
         if (m_textEditor->hasSelection() && !shiftPressed)
-                repaintSelection(); // will erase selection
+            repaintSelection(); // will erase selection
         else if (! m_textEditor->hasSelection())
-                repaintCaret();
+            repaintCaret();
         int prevPosition = m_textEditor->position();
         int position = pointToPosition(event->point);
         m_textEditor->setPosition(position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);

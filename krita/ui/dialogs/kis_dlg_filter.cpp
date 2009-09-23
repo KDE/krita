@@ -20,6 +20,8 @@
 
 #include "kis_dlg_filter.h"
 
+#include <KoCompositeOp.h>
+
 // From krita/image
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
@@ -29,6 +31,7 @@
 #include <kis_selection.h>
 #include <kis_pixel_selection.h>
 #include <kis_paint_device.h>
+#include <kis_painter.h>
 #include "commands/kis_image_layer_add_command.h"
 #include "kis_undo_adapter.h"
 #include "ui_wdgfilterdialog.h"
@@ -46,7 +49,7 @@ struct KisFilterDialog::Private {
     KisImageSP image;
 };
 
-KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP image) :
+KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP image, KisSelectionSP selection) :
         QDialog(parent),
         d(new Private)
 {
@@ -59,7 +62,15 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP ima
     d->mask = new KisFilterMask();
 
     KisPixelSelectionSP psel = d->mask->selection()->getOrCreatePixelSelection();
-    psel->select(rc);
+    if (selection) {
+        QRect extent = selection->selectedRect();
+        KisPainter painter(psel);
+        painter.setCompositeOp(selection->colorSpace()->compositeOp(COMPOSITE_COPY));
+        painter.bitBlt(extent.topLeft(), selection, extent);
+        painter.end();
+    } else {
+        psel->select(rc);
+    }
     d->mask->selection()->updateProjection();
 
     if (d->node->inherits("KisLayer")) {

@@ -126,7 +126,7 @@ void KisFilterHandler::showDialog()
     }
 
 
-    KisFilterDialog* dialog = new KisFilterDialog(m_d->view , m_d->view->activeNode(), m_d->view->image());
+    KisFilterDialog* dialog = new KisFilterDialog(m_d->view , m_d->view->activeNode(), m_d->view->image(), m_d->view->selection());
     dialog->setFilter(m_d->filter);
     connect(dialog, SIGNAL(sigPleaseApplyFilter(KisNodeSP, KisFilterConfiguration*)),
             SLOT(apply(KisNodeSP, KisFilterConfiguration*)));

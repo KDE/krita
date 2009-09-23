@@ -83,6 +83,8 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
         return;
     }
 
+    if (!settings->m_options) return;
+
     KisFilterSP filter = settings->filter();
     if (!filter) {
         return;

@@ -46,8 +46,8 @@ public:
 };
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
-        : QWidget(parent)
-        , m_d(new Private())
+    : QWidget(parent)
+    , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
     KConfigGroup group(KGlobal::config(), "GUI");
@@ -94,17 +94,17 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     m_d->layout->update();
     updateGeometry();
 
-    if (!widget) return;
+    if (widget) {
 
-    widget->setFont(m_d->smallFont);
+        widget->setFont(m_d->smallFont);
 
-    m_d->settingsWidget = widget;
-    m_d->settingsWidget->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-    m_d->layout->addWidget(widget);
+        m_d->settingsWidget = widget;
+        m_d->settingsWidget->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+        m_d->layout->addWidget(widget);
 
-    m_d->layout->update();
-    widget->show();
-
+        m_d->layout->update();
+        widget->show();
+    }
 }
 
 KisPresetWidget* KisPaintOpPresetsPopup::presetPreview()

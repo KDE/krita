@@ -80,7 +80,7 @@ public:
 // XXX: Hack!
 void setOptionsWidget(KisPaintOpSettingsWidget* widget)
 {
-    if (m_options) {
+    if (m_options && m_options->property("owned by settings").toBool()) {
         delete m_options;
     }
     if (!widget) {

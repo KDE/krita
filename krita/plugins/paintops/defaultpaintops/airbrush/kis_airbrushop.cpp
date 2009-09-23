@@ -51,8 +51,10 @@ KisAirbrushOp::KisAirbrushOp(const KisAirbrushOpSettings *settings, KisPainter *
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    Q_ASSERT(settings->m_options->m_brushOption);
-    m_brush = settings->m_options->m_brushOption->brush();
+    if (settings->m_options) {
+      Q_ASSERT(settings->m_options->m_brushOption);
+      m_brush = settings->m_options->m_brushOption->brush();
+    }
 }
 
 KisAirbrushOp::~KisAirbrushOp()
@@ -97,9 +99,15 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     if (!painter()->device()) return;
 
     KisBrushSP brush = m_brush;
-
-    Q_ASSERT(brush);
-    if (!brush) return;
+    if (!brush) {
+      if (settings->m_options) {
+	m_brush = settings->m_options->m_brushOption->brush();
+	brush = m_brush;
+      }
+      else {
+	return;
+      }
+    }
 
     if (! brush->canPaintFor(info))
         return;

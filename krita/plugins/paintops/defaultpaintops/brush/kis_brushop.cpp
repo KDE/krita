@@ -65,11 +65,13 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    Q_ASSERT(settings->m_options->m_brushOption);
-    m_brush = settings->m_options->m_brushOption->brush();
-    settings->m_options->m_sizeOption->sensor()->reset();
-    settings->m_options->m_opacityOption->sensor()->reset();
-    settings->m_options->m_darkenOption->sensor()->reset();
+    if (settings && settings->m_options) {
+        Q_ASSERT(settings->m_options->m_brushOption);
+        m_brush = settings->m_options->m_brushOption->brush();
+        settings->m_options->m_sizeOption->sensor()->reset();
+        settings->m_options->m_opacityOption->sensor()->reset();
+        settings->m_options->m_darkenOption->sensor()->reset();
+    }
 }
 
 KisBrushOp::~KisBrushOp()
@@ -79,10 +81,18 @@ KisBrushOp::~KisBrushOp()
 void KisBrushOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()->device()) return;
-
+    if (!settings->m_options) return;
+    
     KisBrushSP brush = m_brush;
     Q_ASSERT(brush);
-    if (!brush) return;
+    if (!brush) {
+        if (settings->m_options) {
+            m_brush = settings->m_options->m_brushOption->brush();
+            brush = m_brush;
+        } else {
+            return;
+        }
+    }
 
     if (!brush->canPaintFor(info))
         return;

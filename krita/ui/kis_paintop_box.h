@@ -98,6 +98,7 @@ private:
     KisPaintOpPresetsPopup * m_presetsPopup;
     KisView2 * m_view;
 
+    QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     QList<KoID> m_paintops;
     QList<KoID> m_displayedOps;
     KisPaintOpPresetSP m_activePreset;

@@ -70,8 +70,10 @@ KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainte
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    Q_ASSERT(settings->m_options->m_brushOption);
-    m_brush = settings->m_options->m_brushOption->brush();
+    if (settings && settings->m_options) {
+        Q_ASSERT(settings->m_options->m_brushOption);
+        m_brush = settings->m_options->m_brushOption->brush();
+    }
 }
 
 KisDuplicateOp::~KisDuplicateOp()
@@ -119,7 +121,16 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     if (!source()) return;
 
     KisBrushSP brush = m_brush;
-    if (!brush) return;
+    if (!m_brush) {
+        if (settings->m_options) {
+          m_brush = settings->m_options->m_brushOption->brush();
+          brush = m_brush;
+        }
+        else {
+             return;
+        }
+    }
+
     if (! brush->canPaintFor(info))
         return;
 

@@ -67,8 +67,10 @@ KisComplexOp::KisComplexOp(const KisComplexOpSettings *settings, KisPainter *pai
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    Q_ASSERT(settings->m_options->m_brushOption);
-    m_brush = settings->m_options->m_brushOption->brush();
+    if (settings && settings->m_options) {
+        Q_ASSERT(settings->m_options->m_brushOption);
+        m_brush = settings->m_options->m_brushOption->brush();
+    }
 }
 
 KisComplexOp::~KisComplexOp()
@@ -80,9 +82,15 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     if (!painter()->device()) return;
 
     KisBrushSP brush = m_brush;
-
-    Q_ASSERT(brush);
-    if (!brush) return;
+    if (!m_brush) {
+        if (settings->m_options) {
+          m_brush = settings->m_options->m_brushOption->brush();
+          brush = m_brush;
+        }
+        else {
+             return;
+        }
+    }
 
     if (! brush->canPaintFor(info))
         return;

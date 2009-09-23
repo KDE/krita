@@ -42,12 +42,14 @@
 KoConnectionTool::KoConnectionTool( KoCanvasBase * canvas )
     : KoPathTool(canvas)
     , m_shapeOn(0)
+    , m_shape1(0)
     , m_lastShapeOn(0)
     , m_connectionShape(0)
     , m_lastConnectionShapeOn(0)
 {
     m_isTied = new QPair<bool, bool>(false,false);
     m_activeHandle = -1;
+    m_firstHandleIndex = 0;
 }
 
 KoConnectionTool::~KoConnectionTool()
@@ -141,12 +143,8 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         m_connectionShape = dynamic_cast<KoConnectionShape*>( shape );
         // If the shape selected is not the background
         if( tempShape != 0 ) {
+            
             if( isInRoi() ) {
-                m_shape1 = tempShape;
-                m_firstHandleIndex = getConnectionIndex( tempShape, m_mouse );
-                
-                m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
-                m_isTied->first = true;
             } else {                
                 m_shape1 = tempShape;
                 m_firstHandleIndex = 0;
@@ -154,14 +152,21 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
                 m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
                 m_isTied->first = false;
             }
+            
             m_connectionShape->moveHandle( m_connectionShape->getHandleCount(), event->point );
         } else {
             // If the cursor points the background
             if( isInRoi() ) {
-                m_connectionShape->setConnection1( tempShape, getConnectionIndex( tempShape, m_mouse ));
+                m_shape1 = tempShape;
+                m_firstHandleIndex = getConnectionIndex( tempShape, m_mouse );
+                
+                m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
                 m_isTied->first = true;
-            } else
+            } else {
+                m_shape1 = 0;
+                m_firstHandleIndex = 0;
                 m_connectionShape->moveHandle( 0, event->point );
+            }
             m_connectionShape->moveHandle( m_connectionShape->getHandleCount(), event->point );
         }
         
@@ -175,21 +180,25 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         // If the shape selected is not the background
         if( tempShape != 0 ) {
             if( isInRoi() ) {
-                m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
+                if( m_shape1 != 0 )
+                    m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
                 m_connectionShape->setConnection2( tempShape, getConnectionIndex( tempShape, m_mouse ));
                 m_isTied->second = true;
             } else {
-                m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
+                if( m_shape1 != 0 )
+                    m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
                 m_connectionShape->setConnection2( tempShape, 0 );
             }
         } else { 
         // If the cursor points the background
             if( isInRoi() ) {
-                m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
+                if( m_shape1 != 0 )
+                    m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
                 m_connectionShape->setConnection2( tempShape, getConnectionIndex( tempShape, m_mouse ));
                 m_isTied->second = true;
             } else {
-                m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
+                if( m_shape1 != 0 )
+                    m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
                 m_connectionShape->moveHandle( m_connectionShape->getHandleCount(), event->point );
             }
         }
@@ -270,7 +279,7 @@ void KoConnectionTool::activate( bool temporary )
 
 void KoConnectionTool::deactivate()
 {
-    
+    m_shape1 = 0;
     if(m_connectionShape != 0) {
         QRectF rec(m_connectionShape->boundingRect());
         m_canvas->shapeManager()->remove(m_connectionShape);

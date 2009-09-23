@@ -296,6 +296,7 @@ void KoPageLayoutWidget::setTextDirection(KoText::Direction direction )
         index = 2;
         break;
     case KoText::TopBottomRightLeft: // unused for now.
+    case KoText::InheritDirection:
     case KoText::AutoDirection:
         index = 0;
     }

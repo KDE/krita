@@ -1135,7 +1135,6 @@ void TextTool::updateActions()
     m_actionFormatDecreaseIndent->setEnabled(m_textEditor->blockFormat().leftMargin() > 0.);
     m_allowActions = true;
 
-
     emit charFormatChanged(cf);
     emit blockFormatChanged(bf);
     emit blockChanged(m_textEditor->block());
@@ -1585,11 +1584,14 @@ void TextTool::insertIndexMarker()
 void TextTool::setStyle(KoCharacterStyle *style)
 {
     m_textEditor->setStyle(style);
+    emit charFormatChanged(m_textEditor->charFormat());
 }
 
 void TextTool::setStyle(KoParagraphStyle *style)
 {
     m_textEditor->setStyle(style);
+    emit blockFormatChanged(m_textEditor->blockFormat());
+    emit charFormatChanged(m_textEditor->charFormat());
 }
 
 void TextTool::insertTable()

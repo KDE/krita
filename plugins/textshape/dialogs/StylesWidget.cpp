@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -87,6 +87,8 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
         foreach(int property, m_currentBlockFormat.properties().keys()) {
             if (property == QTextFormat::ObjectIndex)
                 continue;
+            if (property == KoParagraphStyle::ListStyleId)
+                continue;
             if (m_currentBlockFormat.property(property) != usedStyle->value(property)) {
                 unchanged = false;
                 break;
@@ -111,10 +113,13 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
     if (m_styleManager)
         usedStyle = m_styleManager->characterStyle(id);
     if (usedStyle) {
+        QTextCharFormat defaultFormat;
+        usedStyle->unapplyStyle(defaultFormat); // sets the default properties.
         foreach(int property, m_currentCharFormat.properties().keys()) {
             if (property == QTextFormat::ObjectIndex)
                 continue;
-            if (m_currentCharFormat.property(property) != usedStyle->value(property)) {
+            if (m_currentCharFormat.property(property) != usedStyle->value(property)
+                    && m_currentCharFormat.property(property) != defaultFormat.property(property)) {
                 unchanged = false;
                 break;
             }

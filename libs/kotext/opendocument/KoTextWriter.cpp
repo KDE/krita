@@ -212,15 +212,16 @@ QHash<QTextList *, QString> KoTextWriter::saveListStyles(QTextBlock block, int t
 
 void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
 {
-    QString changeName = QString();
+    QString changeName;
 
     QTextBlockFormat blockFormat = block.blockFormat();
-    int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
+    const int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
     if (outlineLevel > 0) {
         d->writer->startElement("text:h", false);
         d->writer->addAttribute("text:outline-level", outlineLevel);
-    } else 
+    } else {
         d->writer->startElement("text:p", false);
+    }
 
     QString styleName = saveParagraphStyle(block);
     if (!styleName.isEmpty())
@@ -248,7 +249,8 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
             else
                 identical = false;
 
-            if ( d->changeTracker && d->changeTracker->containsInlineChanges(charFormat) && d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()) {
+            if (d->changeTracker && d->changeTracker->containsInlineChanges(charFormat)
+                    && d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()) {
                 KoGenChange change;
                 d->changeTracker->saveInlineChange(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt(), change);
                 changeName = d->sharedData->genChanges().insert(change);
@@ -293,7 +295,7 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
             }
             previousCharFormat = charFormat;
         } // if (fragment.valid())
-    } // foeach(fragment)
+    } // foreach(fragment)
 
     d->writer->endElement();
 }

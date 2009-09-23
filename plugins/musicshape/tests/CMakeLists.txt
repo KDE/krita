@@ -28,4 +28,4 @@ set( musicwidgettest_SRCS
 )
 
 kde4_add_executable(musicwidgettest TEST ${musicwidgettest_SRCS})
-target_link_libraries(musicwidgettest ${QT_QTGUI_LIBRARY})
+target_link_libraries(musicwidgettest ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})

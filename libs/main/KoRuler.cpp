@@ -478,7 +478,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
             if (adjustMillimeters)
                 number /= 10;
             QString numberText = QString::number(number);
-            painter.drawText(QPointF(-fontMetrics.width(numberText) / 2.0, -2), numberText);
+            painter.drawText(QPointF(-fontMetrics.width(numberText) / 2.0, 1), numberText);
             painter.restore();
 
             ++stepCount;

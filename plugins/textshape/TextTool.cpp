@@ -609,7 +609,10 @@ void TextTool::updateSelectedShape(const QPointF &point)
 {
     if (! m_textShape->boundingRect().contains(point)) {
         QRectF area(point, QSizeF(1, 1));
-        repaintSelection();
+        if (m_textEditor->hasSelection())
+            repaintSelection();
+        else
+            repaintCaret();
         foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(area, true)) {
             TextShape *textShape = dynamic_cast<TextShape*>(shape);
             if (textShape) {

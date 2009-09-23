@@ -865,7 +865,7 @@ void KoTextEditor::insertFrameBreak()
     //               bf.pageBreakPolicy() != QTextFormat::PageBreak_Auto) // end of parag or already a pagebreak
     newLine();
     bf = d->caret.blockFormat();
-    bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+    bf.setProperty(KoParagraphStyle::BreakBefore, true);
     d->caret.setBlockFormat(bf);
     //}
     d->updateState(KoTextEditor::Private::NoOp);

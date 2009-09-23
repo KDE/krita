@@ -1512,6 +1512,12 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 if (!direction.isEmpty())
                     style.addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
             }
+        } else if (key == QTextFormat::PageBreakPolicy) {
+            QTextFormat::PageBreakFlag pageBreak = static_cast<QTextFormat::PageBreakFlag>(d->stylesPrivate.value(key).toInt());
+            if (pageBreak == QTextFormat::PageBreak_AlwaysBefore)
+                style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
+            else if (pageBreak == QTextFormat::PageBreak_AlwaysAfter)
+                style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::BreakBefore) {
             if (breakBefore())
                 style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);

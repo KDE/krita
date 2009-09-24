@@ -225,6 +225,7 @@ install(
     KoDataCenter.h
     KoDpi.h
     KoDockFactory.h
+    KoDockRegistry.h
     KoDrag.h
     KoDragOdfSaveHelper.h
     KoFlake.h

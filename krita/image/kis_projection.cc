@@ -92,6 +92,8 @@ void KisProjection::setRegionOfInterest(const QRect & roi)
 
 void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
 {
+    if (!m_d->image)return;
+
     if (!m_d->useThreading) {
         node->updateStrategy()->setDirty(rc);
         m_d->image->slotProjectionUpdated(rc);

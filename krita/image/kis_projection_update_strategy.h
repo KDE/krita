@@ -55,7 +55,7 @@ public:
      * If a KisImage is set on the update strategy, the image will
      * be notified if the update is done.
      */
-    virtual void setImage(KisImageSP image) = 0;
+    virtual void setImage(KisImageWSP image) = 0;
 
     /**
        Lock the projection: we will add new rects to the dirty region,

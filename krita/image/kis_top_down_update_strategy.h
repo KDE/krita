@@ -40,7 +40,7 @@ public:
 
     void setDirty(const QRect & rc);
 
-    void setImage(KisImageSP image);
+    void setImage(KisImageWSP image);
 
     void lock();
 

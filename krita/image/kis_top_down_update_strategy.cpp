@@ -138,7 +138,7 @@ namespace
 
             KisPaintDeviceSP source = layer->projection();
             gc.setOpacity(layer->opacity());
-            
+
             if (first) {
                 gc.setCompositeOp(m_projection->colorSpace()->compositeOp(COMPOSITE_COPY));
                 gc.bitBlt(rc.topLeft(), source, rc);
@@ -168,7 +168,7 @@ namespace
             gc.setCompositeOp(layer->compositeOp());
             gc.setOpacity(layer->opacity());
             gc.bitBlt(rc.topLeft(), dev, rc);
-            
+
             return true;
         }
 
@@ -292,7 +292,7 @@ public:
 
     KisNodeWSP node;
     KisNodeWSP filthyNode;
-    KisImageSP image;
+    KisImageWSP image;
 };
 
 KisTopDownUpdateStrategy::KisTopDownUpdateStrategy(KisNodeWSP node)
@@ -332,7 +332,7 @@ void KisTopDownUpdateStrategy::setDirty(const QRect & rc)
     }
 }
 
-void KisTopDownUpdateStrategy::setImage(KisImageSP image)
+void KisTopDownUpdateStrategy::setImage(KisImageWSP image)
 {
     m_d->image = image;
 }

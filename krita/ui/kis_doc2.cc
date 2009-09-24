@@ -117,7 +117,7 @@ public:
     ~KisDocPrivate() {
         // Don't delete m_d->shapeController or m_d->nodeModel because it's in a QObject hierarchy.
         //delete undoAdapter;
-        //delete nserver;
+        delete nserver;
     }
 
     KisUndoAdapter *undoAdapter;
@@ -132,7 +132,7 @@ public:
 
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
-    
+
 };
 
 

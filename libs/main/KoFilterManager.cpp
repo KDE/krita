@@ -427,7 +427,10 @@ QStringList KoFilterManager::mimeFilter(const QByteArray &mimetype, Direction di
                 lst.append(mit);
         }
     }
-
+    foreach(Vertex* vertex, vertices) {
+        delete vertex;
+    }
+    vertices.clear();
     return lst;
 }
 

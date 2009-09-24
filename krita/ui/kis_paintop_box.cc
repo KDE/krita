@@ -123,6 +123,12 @@ KisPaintopBox::~KisPaintopBox()
 {
     // Do not delete the widget, since it it is global to the application, not owned by the view
     m_presetsPopup->setPaintOpSettingsWidget(0);
+
+    foreach(const PresetMap& h, m_inputDevicePresets.values()) {
+        foreach(KisPaintOpPresetSP preset, h.values()) {
+            preset.clear();
+        }
+    }
 }
 
 void KisPaintopBox::addItem(const KoID & paintop, const QString & /*category*/)

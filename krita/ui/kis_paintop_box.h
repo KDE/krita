@@ -106,7 +106,8 @@ private:
     typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;
 
-    typedef QHash<KoInputDevice, QHash<QString, KisPaintOpPresetSP> > InputDevicePresetsMap;
+    typedef QHash<QString, KisPaintOpPresetSP> PresetMap;
+    typedef QHash<KoInputDevice, PresetMap > InputDevicePresetsMap;
     InputDevicePresetsMap m_inputDevicePresets;
 };
 

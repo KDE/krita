@@ -48,7 +48,11 @@
 #define MAXIMUM_SCALE 2
 
 struct KisPaintOp::Private {
-    Private() : dab(0) {}
+    Private()
+        : dab(0)
+    {
+    }
+
     KisFixedPaintDeviceSP dab;
     KoColor color;
     KoColor previousPaintColor;
@@ -63,6 +67,7 @@ KisPaintOp::KisPaintOp(KisPainter * painter) : d(new Private)
 
 KisPaintOp::~KisPaintOp()
 {
+    d->dab.clear();
     delete d;
 }
 

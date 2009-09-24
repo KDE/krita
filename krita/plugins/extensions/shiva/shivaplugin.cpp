@@ -58,7 +58,7 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QStringList &)
         foreach( OpenShiva::Source* kernel, kernels )
         {
         // kDebug() << kernel->metadataCompilationErrors().c_str() << " " << kernel->isCompiled() ;
-            if( kernel->outputImageType() == OpenShiva::Source::Image )
+            if( kernel->outputImageType() == OpenShiva::Source::Image || kernel->outputImageType() == OpenShiva::Source::Image4 )
             {
                 manager->add(new ShivaGenerator( kernel ));
             }

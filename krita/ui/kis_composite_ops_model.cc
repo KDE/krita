@@ -116,6 +116,8 @@ const QString& KisCompositeOpsModel::itemAt(const QModelIndex & index) const
 
 QModelIndex KisCompositeOpsModel::indexOf( const KoCompositeOp* op) const
 {
+    if (!op) return QModelIndex();
+
     return indexOf(op->id());
 }
 

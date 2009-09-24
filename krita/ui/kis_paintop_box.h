@@ -90,13 +90,13 @@ private:
 private:
 
     KisCanvasResourceProvider *m_resourceProvider;
-    QComboBox * m_cmbPaintops;
+    QComboBox* m_cmbPaintops;
 
-    QHBoxLayout * m_layout;
-    KisPaintOpSettingsWidget * m_optionWidget;
-    KisPresetWidget * m_presetWidget;
-    KisPaintOpPresetsPopup * m_presetsPopup;
-    KisView2 * m_view;
+    QHBoxLayout* m_layout;
+    KisPaintOpSettingsWidget* m_optionWidget;
+    KisPresetWidget* m_presetWidget;
+    KisPaintOpPresetsPopup* m_presetsPopup;
+    KisView2* m_view;
 
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     QList<KoID> m_paintops;

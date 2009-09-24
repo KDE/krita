@@ -70,7 +70,7 @@ KisZoomManager::~KisZoomManager()
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
     KisConfig cfg;
-    m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, KoZoomAction::AspectMode);
+    m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, KoZoomAction::AspectMode, this);
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
 
     KisImageSP img = m_view->image();

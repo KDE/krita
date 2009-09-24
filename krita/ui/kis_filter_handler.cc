@@ -143,7 +143,9 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
 {
     // XXX: if the layer only had a preview mask and is a paint layer, then use flatten instead of applying the filter again
     if (!layer) return;
-
+    while (layer->systemLocked()) {
+        qApp->processEvents();
+    }
     m_d->node = layer;
     m_d->currentConfiguration = config;
     m_d->locker = new KisSystemLocker( layer );
@@ -164,7 +166,7 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
     }
 
     m_d->updater = m_d->view->createProgressUpdater();
-    
+
     // also deletes all old updaters
     m_d->updater->start( 100, m_d->currentFilter->name() );
 

@@ -31,7 +31,7 @@
 
 KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
         : KoInteractionTool(canvas),
-        m_temporary(false)
+        m_temporary(false), m_zoomInMode(true)
 {
     QPixmap inPixmap, outPixmap;
     inPixmap.load(KStandardDirs::locate("data", "koffice/icons/zoom_in_cursor.png"));
@@ -49,46 +49,40 @@ void KoZoomTool::wheelEvent(KoPointerEvent * event)
 void KoZoomTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
-    if (m_temporary)
+    if (m_temporary) {
         emit KoTool::done();
+    }
 }
 
 void KoZoomTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (event->modifiers() & Qt::ControlModifier)
-        useCursor(m_outCursor);
-    else
-        useCursor(m_inCursor);
+    updateCursor(event->modifiers() & Qt::ControlModifier);
 
-    if (m_currentStrategy)
+    if (m_currentStrategy) {
         m_currentStrategy->handleMouseMove(event->point, event->modifiers());
+    }
 }
 
 void KoZoomTool::keyPressEvent(QKeyEvent *event)
 {
     event->ignore();
 
-    if (event->modifiers() & Qt::ControlModifier)
-        useCursor(m_outCursor);
-    else
-        useCursor(m_inCursor);
+    updateCursor(event->modifiers() & Qt::ControlModifier);
 }
 
 void KoZoomTool::keyReleaseEvent(QKeyEvent *event)
 {
     event->ignore();
 
-    if (event->modifiers() & Qt::ControlModifier)
-        useCursor(m_outCursor);
-    else
-        useCursor(m_inCursor);
+    updateCursor(event->modifiers() & Qt::ControlModifier);
+
     KoInteractionTool::keyReleaseEvent(event);
 }
 
 void KoZoomTool::activate(bool temporary)
 {
     m_temporary = temporary;
-    useCursor(m_inCursor, true);
+    updateCursor(false);
 }
 
 void KoZoomTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -99,14 +93,44 @@ void KoZoomTool::mouseDoubleClickEvent(KoPointerEvent *event)
 KoInteractionStrategy *KoZoomTool::createStrategy(KoPointerEvent *event)
 {
     KoZoomStrategy *zs = new KoZoomStrategy(this, m_controller, event->point);
-    if (event->button() == Qt::RightButton)
-        zs->forceZoomOut();
+    if (event->button() == Qt::RightButton) {
+        if (m_zoomInMode) {
+            zs->forceZoomOut();
+        } else {
+            zs->forceZoomIn();
+        }
+    } else {
+        if (m_zoomInMode) {
+            zs->forceZoomIn();
+        } else {
+            zs->forceZoomOut();
+        }
+    }
     return zs;
 }
 
 QWidget* KoZoomTool::createOptionWidget()
 {
-    //return new KoZoomToolWidget(this);
-    return 0;
+    return new KoZoomToolWidget(this);
+    //return 0;
 }
 
+void KoZoomTool::setZoomInMode(bool zoomIn)
+{
+    m_zoomInMode = zoomIn;
+    updateCursor(false);
+}
+
+void KoZoomTool::updateCursor(bool swap)
+{
+    bool setZoomInCursor = m_zoomInMode;
+    if (swap) {
+        setZoomInCursor = !setZoomInCursor;
+    }
+
+    if (setZoomInCursor) {
+        useCursor(m_inCursor);
+    } else {
+        useCursor(m_outCursor);
+    }
+}

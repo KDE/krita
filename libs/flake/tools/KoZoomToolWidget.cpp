@@ -21,6 +21,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <kicon.h>
+#include "KoZoomTool.h"
 
 KoZoomToolWidget::KoZoomToolWidget(KoZoomTool* tool, QWidget* parent)
         : QWidget(parent), m_tool(tool)
@@ -28,9 +29,15 @@ KoZoomToolWidget::KoZoomToolWidget(KoZoomTool* tool, QWidget* parent)
     setupUi(this);
     m_dirtyThumbnail = true;
     birdEyeLabel->installEventFilter(this);
+    birdEyeLabel->hide(); //remove this when coding on the birdEyeLabel
 
     zoomInButton->setIcon(KIcon("zoom-in"));
     zoomOutButton->setIcon(KIcon("zoom-out"));
+
+    connect(zoomInButton, SIGNAL(toggled(bool)), this, SLOT(changeZoomMode()));
+    connect(zoomOutButton, SIGNAL(toggled(bool)), this, SLOT(changeZoomMode()));
+
+    zoomInButton->click();
 }
 
 KoZoomToolWidget::~KoZoomToolWidget()
@@ -78,6 +85,7 @@ bool KoZoomToolWidget::eventFilter(QObject* object, QEvent* event)
 
 void KoZoomToolWidget::changeZoomMode()
 {
+    m_tool->setZoomInMode(zoomInButton->isChecked());
 }
 
 #include <KoZoomToolWidget.moc>

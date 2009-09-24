@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>ZoomToolWidget</class>
- <widget class="QWidget" name="ZoomToolWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="ZoomToolWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,24 +10,30 @@
     <height>261</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QRadioButton" name="zoomInButton" >
-     <property name="text" >
+  <layout class="QGridLayout">
+   <item row="0" column="0">
+    <widget class="QRadioButton" name="zoomInButton">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
       <string>Zoom In</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="QRadioButton" name="zoomOutButton" >
-     <property name="text" >
+   <item row="0" column="1">
+    <widget class="QRadioButton" name="zoomOutButton">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
       <string>Zoom Out</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2" >
-    <widget class="QLabel" name="birdEyeLabel" >
-     <property name="text" >
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="birdEyeLabel">
+     <property name="text">
       <string/>
      </property>
     </widget>

@@ -36,12 +36,18 @@ void KoZoomStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     QRect pixelRect = m_controller->canvas()->viewConverter()->documentToView(selectRect()).toRect();
     pixelRect.translate(m_controller->canvas()->documentOrigin());
-    if (m_forceZoomOut || modifiers & Qt::ControlModifier)
+
+    bool m_zoomOut = m_forceZoomOut;
+    if (modifiers & Qt::ControlModifier) {
+        m_zoomOut = !m_zoomOut;
+    }
+    if (m_zoomOut) {
         m_controller->zoomOut(pixelRect.center());
-    else if (pixelRect.width() > 5 && pixelRect.height() > 5)
+    } else if (pixelRect.width() > 5 && pixelRect.height() > 5) {
         m_controller->zoomTo(pixelRect);
-    else
+    } else {
         m_controller->zoomIn(pixelRect.center());
+    }
 }
 
 void KoZoomStrategy::cancelInteraction()
@@ -53,4 +59,9 @@ void KoZoomStrategy::cancelInteraction()
 void KoZoomStrategy::forceZoomOut()
 {
     m_forceZoomOut = true;
+}
+
+void KoZoomStrategy::forceZoomIn()
+{
+    m_forceZoomOut = false;
 }

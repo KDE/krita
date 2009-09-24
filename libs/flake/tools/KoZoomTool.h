@@ -57,16 +57,21 @@ public:
         m_controller = controller;
     }
 
+    void setZoomInMode(bool zoomIn);
+
 protected:
     QWidget* createOptionWidget();
 
 private:
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
 
+    void updateCursor(bool swap);
+
     KoCanvasController *m_controller;
     QCursor m_inCursor;
     QCursor m_outCursor;
     bool m_temporary;
+    bool m_zoomInMode;
 };
 
 #endif

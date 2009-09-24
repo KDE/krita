@@ -41,6 +41,7 @@ public:
     KoZoomStrategy(KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked);
 
     void forceZoomOut();
+    void forceZoomIn();
 
     /// Execute the zoom
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);

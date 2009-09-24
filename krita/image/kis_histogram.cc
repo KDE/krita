@@ -62,6 +62,8 @@ KisHistogram::~KisHistogram()
 
 void KisHistogram::updateHistogram()
 {
+    if (!m_producer) return;
+
     QRect r;
     r = m_dev->exactBounds();
     KisRectConstIteratorPixel srcIt = m_dev->createRectConstIterator(r.x(), r.y(), r.width(), r.height());
@@ -87,8 +89,10 @@ void KisHistogram::updateHistogram()
 
 void KisHistogram::computeHistogram()
 {
+    if (!m_producer) return;
+
     m_completeCalculations = calculateForRange(m_producer->viewFrom(),
-                             m_producer->viewFrom() + m_producer->viewWidth());
+                                               m_producer->viewFrom() + m_producer->viewWidth());
 
     if (m_selection) {
         m_selectionCalculations = calculateForRange(m_selFrom, m_selTo);
@@ -114,12 +118,13 @@ KisHistogram::Calculations KisHistogram::selectionCalculations()
 QVector<KisHistogram::Calculations> KisHistogram::calculateForRange(double from, double to)
 {
     QVector<Calculations> calculations;
-    uint count = m_producer->channels().count();
+    if (m_producer ) {
+        uint count = m_producer->channels().count();
 
-    for (uint i = 0; i < count; i++) {
-        calculations.append(calculateSingleRange(i, from, to));
+        for (uint i = 0; i < count; i++) {
+            calculations.append(calculateSingleRange(i, from, to));
+        }
     }
-
     return calculations;
 }
 
@@ -212,9 +217,9 @@ void KisHistogram::dump()
     dbgMath << "Low:" << QString().setNum(c.getLowest()) << "";
     dbgMath << "Mean:" << m_producer->positionToString(c.getMean()) << "";
     dbgMath << "Total:" << QString().setNum(c.getTotal()) << "";
-//    dbgMath <<"Median:" << QString().setNum(m_median) <<"";
-//    dbgMath <<"Stddev:" << QString().setNum(m_stddev) <<"";
-//    dbgMath <<"percentile:" << QString().setNum(m_percentile) <<"";
+    //    dbgMath <<"Median:" << QString().setNum(m_median) <<"";
+    //    dbgMath <<"Stddev:" << QString().setNum(m_stddev) <<"";
+    //    dbgMath <<"percentile:" << QString().setNum(m_percentile) <<"";
 
     dbgMath << "";
 }

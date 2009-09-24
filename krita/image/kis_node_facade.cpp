@@ -24,7 +24,7 @@
 class KisNodeFacade::Private
 {
 public:
-    KisNodeSP root;
+    KisNodeWSP root;
 };
 
 KisNodeFacade::KisNodeFacade()

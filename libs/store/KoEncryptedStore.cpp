@@ -448,6 +448,8 @@ KoEncryptedStore::~KoEncryptedStore()
     } else if (m_fileMode == RemoteRead) {
         KIO::NetAccess::removeTempFile(m_localFileName);
     }
+
+    delete m_stream;
 }
 
 bool KoEncryptedStore::isEncrypted()

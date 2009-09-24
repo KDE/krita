@@ -48,6 +48,7 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
 
 KisColorSpaceSelector::~KisColorSpaceSelector()
 {
+    delete d->colorSpaceSelector;
     delete d;
 }
 

@@ -44,8 +44,8 @@ DlgRotateImage::DlgRotateImage(QWidget *  parent,
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(okClicked()));
-    connect(m_page->doubleCustom, SIGNAL(valueChanged(int)),
-            this, SLOT(slotAngleValueChanged(int)));
+    connect(m_page->doubleCustom, SIGNAL(valueChanged(double)),
+            this, SLOT(slotAngleValueChanged(double)));
 
 }
 
@@ -54,7 +54,7 @@ DlgRotateImage::~DlgRotateImage()
     delete m_page;
 }
 
-void DlgRotateImage::slotAngleValueChanged(int)
+void DlgRotateImage::slotAngleValueChanged(double)
 {
     m_page->radioCustom->setChecked(true);
 }

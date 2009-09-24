@@ -18,7 +18,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
- 
+
 #include "KoConnectionTool.h"
 
 #include <KoCanvasBase.h>
@@ -54,6 +54,7 @@ KoConnectionTool::KoConnectionTool( KoCanvasBase * canvas )
 
 KoConnectionTool::~KoConnectionTool()
 {
+    delete m_isTied;
 }
 
 void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converter)
@@ -78,10 +79,10 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
         }
         painter.restore();
     }
-    
+
     if( isInRoi() ){
         // save the painter to restore it later
-        painter.save();   
+        painter.save();
         // Apply the conversion make by the matrix transformation
         QMatrix transform = m_lastShapeOn->absoluteTransformation(0);
         KoShape::applyConversion(painter, converter);
@@ -91,7 +92,7 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
 
         painter.restore();
     }
-    
+
     KoConnectionShape * tempShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
     if( tempShape ){
         painter.save();
@@ -104,7 +105,7 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
         tempShape->paintHandles(painter, converter, radius);
 
         painter.restore();
-        
+
         int grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
         QRectF rec(m_mouse.x(), m_mouse.y(), grabSensitivity, grabSensitivity);
         int handleId = tempShape->handleIdAt(tempShape->documentToShape(rec));
@@ -134,7 +135,7 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         tempShape = m_canvas->shapeManager()->shapeAt( event->point );
     if(dynamic_cast<KoConnectionShape*>(m_shapeOn))
         return;
-    
+
     // First click
     if( m_connectionShape == 0 ) {
         // All sizes and positions are hardcoded for now
@@ -143,23 +144,23 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         m_connectionShape = dynamic_cast<KoConnectionShape*>( shape );
         // If the shape selected is not the background
         if( tempShape != 0 ) {
-            
+
             if( isInRoi() ) {
-            } else {                
+            } else {
                 m_shape1 = tempShape;
                 m_firstHandleIndex = 0;
-                
+
                 m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
                 m_isTied->first = false;
             }
-            
+
             m_connectionShape->moveHandle( m_connectionShape->getHandleCount(), event->point );
         } else {
             // If the cursor points the background
             if( isInRoi() ) {
                 m_shape1 = tempShape;
                 m_firstHandleIndex = getConnectionIndex( tempShape, m_mouse );
-                
+
                 m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
                 m_isTied->first = true;
             } else {
@@ -169,13 +170,13 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
             }
             m_connectionShape->moveHandle( m_connectionShape->getHandleCount(), event->point );
         }
-        
+
         // The connection is now done, so update for apply
         m_connectionShape->updateConnections();
 
         m_canvas->shapeManager()->add(m_connectionShape);
 
-    } else { 
+    } else {
     // Second click
         // If the shape selected is not the background
         if( tempShape != 0 ) {
@@ -189,7 +190,7 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
                     m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
                 m_connectionShape->setConnection2( tempShape, 0 );
             }
-        } else { 
+        } else {
         // If the cursor points the background
             if( isInRoi() ) {
                 if( m_shape1 != 0 )
@@ -207,13 +208,13 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
 
         // Apply the connection shape for now
         command();
-        
+
         m_connectionShape = 0;
     }
 }
 
 void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
-{    
+{
     // Record the last shape
     if( m_shapeOn != 0 )
         m_lastShapeOn = m_shapeOn;
@@ -259,7 +260,7 @@ void KoConnectionTool::mouseReleaseEvent( KoPointerEvent *event )
             // add a connection Point
             m_shapeOn = m_canvas->shapeManager()->shapeAt( event->point );
             QPointF point = m_shapeOn->documentToShape(event->point);
-            
+
             m_shapeOn->addConnectionPoint( point );
         }
     }
@@ -293,10 +294,10 @@ void KoConnectionTool::updateConnections()
 {
     if( m_connectionShape == 0 )
         return;
-    
+
     KoConnection connection1 = m_connectionShape->connection1();
     KoConnection connection2 = m_connectionShape->connection2();
-    
+
     // If two shapes are connected
     if( connection1.first != 0 && connection2.first != 0 ) {
         KoShape* shape1 = connection1.first;

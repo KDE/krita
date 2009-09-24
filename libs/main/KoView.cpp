@@ -524,15 +524,20 @@ QToolBar* KoView::viewBar()
 
 QList<QAction*> KoView::createChangeUnitActions()
 {
+    QActionGroup *unitGroup = new QActionGroup(this);
     QList<QAction*> answer;
-    answer.append(new UnitChangeAction(KoUnit::Millimeter, this, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Centimeter, this, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Decimeter, this, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Inch, this, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Pica, this, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Cicero, this, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Point, this, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Millimeter, unitGroup, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Centimeter, unitGroup, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Decimeter, unitGroup, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Inch, unitGroup, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Pica, unitGroup, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Cicero, unitGroup, d->document));
+    answer.append(new UnitChangeAction(KoUnit::Point, unitGroup, d->document));
 
+    const int currentUnit = d->document.data()->unit().indexInList();
+    Q_ASSERT(currentUnit < answer.count());
+    if (currentUnit >= 0)
+        answer.value(currentUnit)->setChecked(true);
     return answer;
 }
 

@@ -33,6 +33,7 @@ public:
             : QAction(KoUnit::unitDescription(KoUnit(unit)), parent),
             m_document(document),
             m_unit(unit) {
+        setCheckable(true);
         connect(this, SIGNAL(triggered(bool)), SLOT(activated()));
     }
 

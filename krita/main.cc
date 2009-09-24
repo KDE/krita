@@ -18,6 +18,7 @@
  *  along with this program; if not, write to the Free Software
  */
 
+#include <stdlib.h> 
 #include <kcmdlineargs.h>
 #include <KoApplication.h>
 #include <krita_export.h>
@@ -27,6 +28,10 @@
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
+#ifdef Q_WS_X11
+    setenv("QT_NO_GLIB", "1", true);
+#endif
+
     int state;
     KAboutData * aboutData=newKritaAboutData();
 

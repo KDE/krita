@@ -162,6 +162,7 @@ KisLayerBox::KisLayerBox()
 
 KisLayerBox::~KisLayerBox()
 {
+    delete m_wdgLayerBox;
 }
 
 void KisLayerBox::setImage(KisNodeManager * nodeManager, KisImageSP img, KisNodeModel * nodeModel)

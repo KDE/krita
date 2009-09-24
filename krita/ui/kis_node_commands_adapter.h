@@ -23,15 +23,20 @@ class KisView2;
 
 #include <kis_types.h>
 #include <krita_export.h>
+
+#include <QObject>
+
 /**
  * This class allow to manipulate nodes in a KisImage
  * and to creates commands as needed.
  */
-class KRITAUI_EXPORT KisNodeCommandsAdapter
+class KRITAUI_EXPORT KisNodeCommandsAdapter : public QObject
 {
+    Q_OBJECT
+
 public:
     KisNodeCommandsAdapter( KisView2 * view );
-    ~KisNodeCommandsAdapter();
+    virtual ~KisNodeCommandsAdapter();
 public:
     void beginMacro(const QString& macroName);
     void endMacro();

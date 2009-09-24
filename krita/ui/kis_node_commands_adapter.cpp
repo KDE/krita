@@ -29,14 +29,15 @@
 #include "commands/kis_image_node_to_top_command.h"
 #include "kis_view2.h"
 
-KisNodeCommandsAdapter::KisNodeCommandsAdapter( KisView2 * view ) : m_view( view )
+KisNodeCommandsAdapter::KisNodeCommandsAdapter( KisView2 * view )
+    : QObject(view)
+    , m_view(view)
 {
-    
+
 }
 
 KisNodeCommandsAdapter::~KisNodeCommandsAdapter()
 {
-    
 }
 
 void KisNodeCommandsAdapter::beginMacro(const QString& macroName)

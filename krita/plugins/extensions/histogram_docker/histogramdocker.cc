@@ -148,6 +148,8 @@ KritaHistogramDocker::~KritaHistogramDocker()
 
     if (m_cache)
         m_cache->deleteLater();
+
+    m_docker->deleteLater();
 }
 
 void KritaHistogramDocker::setChannels() {

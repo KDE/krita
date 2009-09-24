@@ -149,6 +149,8 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
 
 KisDoc2::~KisDoc2()
 {
+    m_d->image.clear();
+
     delete m_d;
 }
 

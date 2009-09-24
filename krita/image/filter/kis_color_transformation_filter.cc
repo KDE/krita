@@ -62,7 +62,6 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
     }
 
     const KoColorSpace * cs = src->colorSpace();
-
     KoColorTransformation* colorTransformation = createTransformation(cs, config);
     if(!colorTransformation) return;
 
@@ -105,6 +104,8 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
             srcIt += (pixels - pixelsSrc);
             dstIt += pixels;
         }
+        if (progressUpdater) progressUpdater->setValue(row);
+
         srcIt.nextRow();
         dstIt.nextRow();
     }

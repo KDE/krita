@@ -108,6 +108,9 @@ namespace
 
             KisPainter gc(m_projection);
             gc.setChannelFlags(layer->channelFlags());
+            gc.setCompositeOp(layer->compositeOp());
+            gc.setOpacity(layer->opacity());
+            gc.bitBlt(rc.topLeft(), dev, rc);
 
 
             return true;

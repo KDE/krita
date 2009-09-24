@@ -68,7 +68,7 @@
 #include <kis_painting_assistants_manager.h>
 #include "kis_3d_object_model.h"
 
-// OpenGL 
+// OpenGL
 #include <config-opengl.h>
 #include <config-glew.h>
 
@@ -103,11 +103,12 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_yTilt = 0.0;
     m_prevxTilt = 0.0;
     m_prevyTilt = 0.0;
-#endif    
+#endif
 }
 
 KisToolFreehand::~KisToolFreehand()
 {
+    delete m_painter;
 }
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
@@ -374,8 +375,8 @@ void KisToolFreehand::endPaint()
         KisLayerSP layer = dynamic_cast<KisLayer*>(currentNode().data());
 
         if (layer && !m_paintIncremental) {
-            KisTransaction *incrementalTransaction = 
-		dynamic_cast<KisTransaction*>(m_painter->endTransaction());
+            KisTransaction *incrementalTransaction =
+                dynamic_cast<KisTransaction*>(m_painter->endTransaction());
 
             KisPainter painter(m_source, currentSelection());
             painter.setCompositeOp(m_compositeOp);
@@ -389,10 +390,10 @@ void KisToolFreehand::endPaint()
 
             painter.setCompositeOp(m_compositeOp);
             painter.setOpacity(m_opacity);
-            
+
             while (it != end) {
-                
-                painter.bitBlt(it->x(), it->y(), 
+
+                painter.bitBlt(it->x(), it->y(),
                                m_target,
                                it->x(), it->y(),
                                it->width(), it->height());
@@ -403,8 +404,8 @@ void KisToolFreehand::endPaint()
             if (indirect)
                 indirect->setTemporaryTarget(0);
             //m_source->setDirty(painter.dirtyRegion());
-	    
-	    delete incrementalTransaction;
+
+            delete incrementalTransaction;
 
             m_canvas->addCommand(painter.endTransaction());
         } else {
@@ -511,11 +512,11 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
                 glDeleteLists( m_displayList,1 );
                 m_displayList = 0;
             }
-            
+
             if (glIsList( m_displayList )){
                 dbgUI << "I have list to draw!";
                 QPointF pos = converter.documentToView( mousePos );
-        
+
 /*        KisImageSP img = currentImage();
         glEnable(GL_LIGHT0);
         glEnable(GL_LIGHT1);
@@ -548,13 +549,13 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             glEnable(GL_DEPTH_TEST);
             glClear(GL_DEPTH_BUFFER_BIT);
 
-            
+
             glEnable(GL_LINE_SMOOTH);
             glEnable(GL_COLOR_MATERIAL);
 
                 glPushMatrix();
                             glTranslatef( pos.x(), pos.y(), 0.0 );
-                            glScalef( sx,sy,1);                          
+                            glScalef( sx,sy,1);
                             glRotated( 90.0, 1.0, 0.0, 0.0 );
                             glRotated( -(m_xTilt*0.5 + m_prevxTilt*0.5) , 0.0, 0.0, 1.0);
                             glRotated( -(m_yTilt*0.5 + m_prevyTilt*0.5) , 1.0, 0.0, 0.0);
@@ -569,7 +570,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 
             m_prevxTilt = m_xTilt;
             m_prevyTilt = m_yTilt;
-            
+
             }else{
                 dbgUI << "Default model will be used";
                 Kis3DObjectModel * model;
@@ -584,7 +585,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
                 }
                 m_displayList = model->displayList();
                 delete model;
-                
+
             }
         }
     }
@@ -596,7 +597,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
           outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
         } else {
           outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
-        } 
+        }
         currentPaintOpPreset()->settings()->paintOutline(mousePos, currentImage(), gc, converter, outlineMode);
 
     }

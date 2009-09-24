@@ -29,6 +29,7 @@ struct KisCategorizedItemDelegate::Private {
 };
 
 bool KisCategorizedItemDelegate::Private::isFirstOfCategory(const QModelIndex& index) {
+
     if(index.row() == 0 ) return true;
     QModelIndex idx = index.model()->index(index.row() -1, index.column(), index.parent());
     const QString category1 = index.model()->data(index, KCategorizedSortFilterProxyModel::CategorySortRole).toString();
@@ -36,12 +37,20 @@ bool KisCategorizedItemDelegate::Private::isFirstOfCategory(const QModelIndex& i
     return category1 != category2;
 }
 
-KisCategorizedItemDelegate::KisCategorizedItemDelegate(QAbstractItemDelegate* _fallback, QObject* parent ) : QAbstractItemDelegate(parent), d(new Private) {
+KisCategorizedItemDelegate::KisCategorizedItemDelegate(QAbstractItemDelegate* _fallback, QObject* parent )
+    : QAbstractItemDelegate(parent)
+    , d(new Private)
+{
     _fallback->setParent(this);
     d->fallback = _fallback;
     d->categoryDrawer = new KCategoryDrawer;
 }
+
 KisCategorizedItemDelegate::~KisCategorizedItemDelegate() {
+
+    delete d->fallback;
+    delete d->categoryDrawer;
+    delete d;
 }
 
 QWidget * KisCategorizedItemDelegate::createEditor( QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
@@ -71,7 +80,7 @@ void KisCategorizedItemDelegate::paint ( QPainter * painter, const QStyleOptionV
         // Prepare the rectangle for drawing the category
         int h = d->categoryDrawer->categoryHeight(index, *option);
         QRect rect = option->rect;
-        
+
         // Make sure the categroy isn't drawned as selected
         option->state &= (~QStyle::State_Selected);
         Q_ASSERT( !(option->state & QStyle::State_Selected) );
@@ -80,10 +89,10 @@ void KisCategorizedItemDelegate::paint ( QPainter * painter, const QStyleOptionV
         option->state &= (~QStyle::State_MouseOver);
         Q_ASSERT( !(option->state & QStyle::State_MouseOver) );
         option->rect.setHeight(h);
-        
+
         // draw the cateogry
         d->categoryDrawer->drawCategory(index, 0, *option, painter );
-        
+
         // Prepare the rectangle for the item
         option->rect = rect;
         option->rect.setY(rect.y() + h);
@@ -114,7 +123,7 @@ QSize KisCategorizedItemDelegate::sizeHint ( const QStyleOptionViewItem & option
 
 void KisCategorizedItemDelegate::updateEditorGeometry ( QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
     d->fallback->updateEditorGeometry(editor, option, index);
-    
+
     // If it's the first category, then the editor need to be moved
     if( d->isFirstOfCategory(index) )
     {

@@ -47,6 +47,7 @@ KisPaintingAssistantsManager::KisPaintingAssistantsManager(KisView2* parent) :
 KisPaintingAssistantsManager::~KisPaintingAssistantsManager()
 {
     qDeleteAll(d->assistants.begin(), d->assistants.end());
+    delete d;
 }
 
 void KisPaintingAssistantsManager::addAssistant(KisPaintingAssistant* assistant) {

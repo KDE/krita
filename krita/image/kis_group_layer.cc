@@ -90,18 +90,17 @@ bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 
 const KoColorSpace * KisGroupLayer::colorSpace() const
 {
-    // Due to virtual void resetProjection(KisPaintDeviceSP to =
-    // 0), the colorspace of the group layer can be different from the
-    // colorspace of the image. (XXX: is that desirable? BSAR)
     return m_d->projection->colorSpace();
 }
 
 KoColorSpace * KisGroupLayer::colorSpace()
 {
-    // Due to virtual void resetProjection(KisPaintDeviceSP to =
-    // 0), the colorspace of the group layer can be different from the
-    // colorspace of the image. (XXX: is that desirable? BSAR)
     return m_d->projection->colorSpace();
+}
+
+void KisGroupLayer::setColorSpace(const KoColorSpace* colorSpace, KoColorConversionTransformation::Intent renderingIntent) const
+{
+    m_d->projection->convertTo(colorSpace, renderingIntent);
 }
 
 QIcon KisGroupLayer::icon() const
@@ -234,9 +233,9 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         KoProperties props;
         props.setProperty("visible", true);
         QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
-        
+
         KisPaintDeviceSP source;
-        
+
         if( masks.isEmpty() ) {
             source = m_d->projection;
             m_d->projectionUnfiltered = 0; // No masks, make sure this projection memory is freed
@@ -253,10 +252,10 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             }
             source = m_d->projectionUnfiltered;
         }
-        
+
         source->clear(currentNeededRc); // needed when layers in the group aren't fully opaque
         source = updateStrategy()->updateGroupLayerProjection(currentNeededRc, m_d->projection);
-    
+
         if (masks.size() > 0 ) {
             applyEffectMasks(source, m_d->projection, rc);
         }

@@ -35,6 +35,7 @@ bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
 {
     // Clear the projection, we will have to re-render everything.
     // The image is already set to the new colorspace, so this'll work.
+    layer->setColorSpace(m_dstColorSpace, m_renderingIntent);
     layer->resetProjection();
     layer->setChannelFlags(m_emptyChannelFlags);
     KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
@@ -77,7 +78,9 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
     return true;
 }
 
-bool KisColorSpaceConvertVisitor::visit(KisExternalLayer *layer) {
+bool KisColorSpaceConvertVisitor::visit(KisExternalLayer *layer) 
+{
+    Q_UNUSED(layer)
     return true;
 }
 

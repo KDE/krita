@@ -23,6 +23,7 @@
 
 #include "kis_layer.h"
 #include "kis_types.h"
+#include <KoColorConversionTransformation.h>
 
 class KoColorSpace;
 
@@ -61,6 +62,8 @@ public:
      */
     const KoColorSpace * colorSpace() const;
     KoColorSpace * colorSpace();
+
+    void setColorSpace(const KoColorSpace* colorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
 
     /**
        Return the united extents of all layers in this group layer;

@@ -258,11 +258,12 @@ namespace {
                             mask++;
                         }
 
-                        if (d[PIXEL_MASK] < s[PIXEL_MASK]) {
+                        quint8 srcAlpha = KoColorSpaceMathsTraits<quint8>::unitValue - s[PIXEL_MASK];
+                        if (d[PIXEL_MASK] < srcAlpha) {
                             continue;
                         }
                         else {
-                            d[PIXEL_MASK] = s[PIXEL_MASK];
+                            d[PIXEL_MASK] = srcAlpha;
                         }
 
                     }

@@ -76,8 +76,6 @@ public slots:
 
     void layerCompositeOp(const KoCompositeOp* compositeOp);
     void layerOpacity(double opacity, bool final);
-    void layerToggleVisible();
-    void layerToggleLocked();
     void actLayerVisChanged(int show);
     void layerProperties();
 
@@ -139,20 +137,7 @@ private:
 
     KAction *m_imgFlatten;
     KAction *m_imgMergeLayer;
-    KAction *m_actionAdjustmentLayer;
-    KAction *m_actionGeneratorLayer;
-    KAction *m_layerAdd;
-    KAction *m_layerAddCloneLayer;
-    KAction *m_layerAddShapeLayer;
-    KAction *m_layerBottom;
-    KAction *m_layerDup;
-    KToggleAction *m_layerHide;
-    KAction *m_layerLower;
-    KAction *m_layerProperties;
-    KAction *m_layerRaise;
-    KAction *m_layerRm;
     KAction *m_layerSaveAs;
-    KAction *m_layerTop;
     bool m_actLayerVis;
     KAction *m_imgResizeToLayer;
     KAction *m_flattenLayer;

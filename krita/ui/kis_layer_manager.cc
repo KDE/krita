@@ -89,20 +89,7 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         , m_doc(doc)
         , m_imgFlatten(0)
         , m_imgMergeLayer(0)
-        , m_actionAdjustmentLayer(0)
-        , m_actionGeneratorLayer(0)
-        , m_layerAdd(0)
-        , m_layerAddCloneLayer(0)
-        , m_layerAddShapeLayer(0)
-        , m_layerBottom(0)
-        , m_layerDup(0)
-        , m_layerHide(0)
-        , m_layerLower(0)
-        , m_layerProperties(0)
-        , m_layerRaise(0)
-        , m_layerRm(0)
         , m_layerSaveAs(0)
-        , m_layerTop(0)
         , m_actLayerVis(false)
         , m_imgResizeToLayer(0)
         , m_flattenLayer(0)
@@ -157,66 +144,6 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
-    m_layerAdd  = new KAction(KIcon("document-new"), i18n("&Paint Layer"), this);
-    actionCollection->addAction("insert_layer", m_layerAdd);
-    m_layerAdd->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
-    connect(m_layerAdd, SIGNAL(triggered()), this, SLOT(layerAdd()));
-
-    m_actionAdjustmentLayer  = new KAction(KIcon("view-filter"), i18n("&Filter Layer..."), this);
-    actionCollection->addAction("insert_adjustment_layer", m_actionAdjustmentLayer);
-    connect(m_actionAdjustmentLayer, SIGNAL(triggered()), this, SLOT(addAdjustmentLayer()));
-
-    m_actionGeneratorLayer  = new KAction(KIcon("view-filter"), i18n("&Generator Layer..."), this);
-    actionCollection->addAction("insert_generator_layer", m_actionGeneratorLayer);
-    connect(m_actionGeneratorLayer, SIGNAL(triggered()), this, SLOT(addGeneratorLayer()));
-
-    m_layerAddCloneLayer  = new KAction(KIcon("edit-copy"), i18n("&Clone Layer"), this);
-    actionCollection->addAction("insert_clone_layer", m_layerAddCloneLayer);
-    connect(m_layerAddCloneLayer, SIGNAL(triggered()), this, SLOT(addCloneLayer()));
-
-    m_layerAddShapeLayer  = new KAction(KIcon("bookmark-new"), i18n("&Shape Layer"), this);
-    actionCollection->addAction("insert_shape_layer", m_layerAddShapeLayer);
-    connect(m_layerAddShapeLayer, SIGNAL(triggered()), this, SLOT(addShapeLayer()));
-
-    m_layerRm  = new KAction(KIcon("edit-delete"), i18n("&Remove"), this);
-    actionCollection->addAction("remove_layer", m_layerRm);
-    connect(m_layerRm, SIGNAL(triggered()), this, SLOT(layerRemove()));
-
-    m_layerDup  = new KAction(KIcon("edit-copy"), i18n("Duplicate current Layer"), this);
-    actionCollection->addAction("duplicate_layer", m_layerDup);
-    connect(m_layerDup, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
-
-    m_layerHide  = new KToggleAction(i18n("&Hide"), this);
-    actionCollection->addAction("hide_layer", m_layerHide);
-    connect(m_layerHide, SIGNAL(triggered()), this,  SLOT(layerToggleVisible()));
-
-    m_layerHide->setCheckedState(KGuiItem(i18n("&Show")));
-    m_layerHide->setChecked(false);
-
-    m_layerRaise  = new KAction(KIcon("go-up"), i18n("Raise"), this);
-    actionCollection->addAction("raiselayer", m_layerRaise);
-    m_layerRaise->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_BracketRight));
-    connect(m_layerRaise, SIGNAL(triggered()), this, SLOT(layerRaise()));
-
-    m_layerLower  = new KAction(KIcon("go-down"), i18n("Lower"), this);
-    actionCollection->addAction("lowerlayer", m_layerLower);
-    m_layerLower->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_BracketLeft));
-    connect(m_layerLower, SIGNAL(triggered()), this, SLOT(layerLower()));
-
-    m_layerTop  = new KAction(KIcon("go-top"), i18n("To Top"), this);
-    actionCollection->addAction("toplayer", m_layerTop);
-    m_layerTop->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketRight));
-    connect(m_layerTop, SIGNAL(triggered()), this, SLOT(layerFront()));
-
-    m_layerBottom  = new KAction(KIcon("go-bottom"), i18n("To Bottom"), this);
-    actionCollection->addAction("bottomlayer", m_layerBottom);
-    m_layerBottom->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketLeft));
-    connect(m_layerBottom, SIGNAL(triggered()), this, SLOT(layerBack()));
-
-    m_layerProperties  = new KAction(KIcon("document-properties"), i18n("Properties..."), this);
-    actionCollection->addAction("layer_properties", m_layerProperties);
-    connect(m_layerProperties, SIGNAL(triggered()), this, SLOT(layerProperties()));
-
     m_layerSaveAs  = new KAction(KIcon("document-save"), i18n("Save Layer as Image..."), this);
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
@@ -257,15 +184,7 @@ void KisLayerManager::updateGUI()
 
     bool enable = img && layer && layer->visible() && !layer->userLocked() && !layer->systemLocked();
 
-    m_layerDup->setEnabled(enable);
-    m_layerRm->setEnabled(enable);
-    m_layerHide->setEnabled(img && layer);
-    m_layerProperties->setEnabled(enable);
     m_layerSaveAs->setEnabled(enable);
-    m_layerRaise->setEnabled(enable && layer->prevSibling());
-    m_layerLower->setEnabled(enable && layer->nextSibling());
-    m_layerTop->setEnabled(enable && nlayers > 1 && layer.data() != img->rootLayer()->firstChild().data());
-    m_layerBottom->setEnabled(enable && nlayers > 1 && layer.data() != img->rootLayer()->lastChild().data());
 
     // XXX these should be named layer instead of img
     m_imgFlatten->setEnabled(nlayers > 1);
@@ -336,23 +255,6 @@ void KisLayerManager::layerOpacity(double opacity, bool final)
     } else {
         m_doc->addCommand(new KisLayerOpacityCommand(layer, layer->opacity(), static_cast<int>(opacity)));
     }
-}
-
-void KisLayerManager::layerToggleVisible()
-{
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    layer->setVisible(!layer->visible());
-    layer->setDirty();
-}
-
-void KisLayerManager::layerToggleLocked()
-{
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    layer->setUserLocked(!layer->userLocked());
 }
 
 void KisLayerManager::actLayerVisChanged(int show)

@@ -45,16 +45,17 @@ public:
     void removeDockers();
 };
 
-void KoDockerManager::Private::loadDocker(const QString& _name, bool _visible)
+void KoDockerManager::Private::loadDocker(const QString& name, bool visible)
 {
-  KoToolDockerFactory toolDockerFactory(_name);
-  KoToolDocker *td = qobject_cast<KoToolDocker *>(view->createDockWidget(&toolDockerFactory));
-  toolDockerMap[_name] = td;
-  toolDockerVisibillityMap[_name] = _visible;
-  toolDockerRaisedMap[_name] = false;
-  td->setVisible(false);
-  td->setEnabled(false);
-  td->toggleViewAction()->setVisible(false);
+    KoToolDockerFactory toolDockerFactory(name);
+    KoToolDocker *td = qobject_cast<KoToolDocker *>(view->createDockWidget(&toolDockerFactory));
+    if (td == 0) return;
+    toolDockerMap[name] = td;
+    toolDockerVisibillityMap[name] = visible;
+    toolDockerRaisedMap[name] = false;
+    td->setVisible(false);
+    td->setEnabled(false);
+    td->toggleViewAction()->setVisible(false);
 }
 
 void KoDockerManager::Private::removeDockers()

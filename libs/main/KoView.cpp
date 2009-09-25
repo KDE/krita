@@ -331,14 +331,16 @@ void KoView::showAllStatusBarItems(bool show)
     KStatusBar * sb = statusBar();
     if (!sb)
         return;
-    foreach(KoViewPrivate::StatusBarItem sbItem, d->statusBarItems) {
-        if (show)
+    int itemCount = d->statusBarItems.count();
+    for (int i = 0; i < itemCount; ++i) {
+        KoViewPrivate::StatusBarItem &sbItem = d->statusBarItems[i];
+        if (show) {
             sbItem.ensureItemShown(sb);
-        else
+        } else {
             sbItem.ensureItemHidden(sb);
+        }
     }
 }
-
 
 void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
@@ -354,7 +356,9 @@ void KoView::removeStatusBarItem(QWidget *widget)
 {
     KStatusBar *sb = statusBar();
 
-    foreach(KoViewPrivate::StatusBarItem sbItem, d->statusBarItems) {
+    int itemCount = d->statusBarItems.count();
+    for (int i = itemCount-1; i >= 0; --i) {
+        KoViewPrivate::StatusBarItem &sbItem = d->statusBarItems[i];
         if (sbItem.widget() == widget) {
             if (sb) {
                 sbItem.ensureItemHidden(sb);

@@ -1412,6 +1412,8 @@ void KoMainWindow::slotSplitView()
     d->splitted = true;
     KoView *current = currentView();
     KoView *newView = d->rootDoc->createView(d->splitter);
+    // hide status bar widgets of new view
+    newView->showAllStatusBarItems(false);
     d->rootViews.append(newView);
     current->show();
     current->setPartManager(d->manager);

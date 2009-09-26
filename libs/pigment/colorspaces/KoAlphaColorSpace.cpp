@@ -31,8 +31,9 @@
 #include "KoChannelInfo.h"
 #include "KoID.h"
 #include "KoIntegerMaths.h"
-#include "compositeops/KoCompositeOpOver.h"
-#include "compositeops/KoCompositeOpErase.h"
+#include "KoCompositeOpOver.h"
+#include "KoCompositeOpErase.h"
+#include "KoCompositeOpAlphaDarken.h"
 
 namespace {
     const quint8 PIXEL_MASK = 0;
@@ -192,6 +193,7 @@ KoAlphaColorSpace::KoAlphaColorSpace() :
     addCompositeOp( new CompositeClear( this ) );
     addCompositeOp( new KoCompositeOpErase<AlphaU8Traits>( this ) );
     addCompositeOp( new CompositeSubtract( this ) );
+    addCompositeOp( new KoCompositeOpAlphaDarken<AlphaU8Traits>( this ) );
 }
 
 KoAlphaColorSpace::~KoAlphaColorSpace()

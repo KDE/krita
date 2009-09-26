@@ -223,8 +223,7 @@ KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
     cfg->setCurves(m_curves);
 
     /* Cached version */
-    cfg->updateTransfersCached(*m_page->curveWidget);
-    //cfg->updateTransfers();
+    cfg->updateTransfers();
 
     return cfg;
 }
@@ -326,22 +325,6 @@ void KisPerChannelFilterConfiguration::updateTransfers()
             m_transfers[ch][i] = val;
         }
 
-    }
-}
-
-void KisPerChannelFilterConfiguration::updateTransfersCached(KisCurveWidget &cacheCurveWidget)
-{
-    for (int ch = 0; ch < m_nTransfers; ++ch) {
-        if (!m_transfers[ch])
-            m_transfers[ch] = new quint16[256];
-
-        qint32 val;
-        for (int i = 0; i < 256; ++i) {
-            /* Cached version of the cycle */
-            val = int(0xFFFF * cacheCurveWidget.getCurveValue(i / 255.0));
-            val = bounds(val, 0, 0xFFFF);
-            m_transfers[ch][i] = val;
-        }
     }
 }
 

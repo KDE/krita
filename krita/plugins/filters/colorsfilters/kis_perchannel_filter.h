@@ -63,7 +63,6 @@ public:
     void setCurves(QList<KisCurve> &curves);
     static inline void initDefaultCurves(QList<KisCurve> &curves, int nCh);
     void updateTransfers();
-    void updateTransfersCached(KisCurveWidget &cacheCurveWidget);
     bool isCompatible(const KisPaintDeviceSP) const;
 
 public:

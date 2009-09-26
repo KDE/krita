@@ -42,6 +42,7 @@
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "KoViewConverter.h"
+#include "KoUpdater.h"
 
 #include "widgets/kis_cmb_composite.h"
 #include "kis_cursor.h"
@@ -53,6 +54,9 @@
 #include "kis_config.h"
 #include "kis_layer.h"
 #include <kis_selection.h>
+//Added for the progress updater
+#include "canvas/kis_canvas2.h"
+#include "kis_view2.h"
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
 #include "opengl/kis_opengl.h"
@@ -268,13 +272,19 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             painter.setGradient(currentGradient());
             painter.setOpacity(m_opacity);
             painter.setCompositeOp(m_compositeOp);
-
-            /* KoUpdater *progress = m_subject->progressDisplay();
-
-            if (progress) {
-                progress->setSubject(&painter, true, true);
-            }*/
-
+            
+            //BEGIN ---------------Added by hskott 090926
+            //TODO Add threading or something so it actually shows the progress updater
+            KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+            if(canvas)
+            {
+                KoProgressUpdater * updater = canvas->view()->createProgressUpdater();
+                // also deletes all old updaters
+                updater->start( 100, i18n("Gradient") );
+                painter.setProgress(updater->startSubtask());
+            }
+            //END -----------------Added by hskott 090926
+           
             painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
             QRect rc = painter.dirtyRegion().boundingRect();
             currentNode()->setDirty(rc);

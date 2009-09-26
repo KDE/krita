@@ -1,4 +1,4 @@
-
+add_subdirectory(tests)
 
 include_directories(  ${CMAKE_BINARY_DIR}/filters/)
 

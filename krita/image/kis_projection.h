@@ -58,6 +58,7 @@ public:
     void setRegionOfInterest(const QRect & roi);
     void updateSettings();
     void setRootLayer(KisGroupLayerSP rootLayer);
+    void stop();
 
 signals:
 

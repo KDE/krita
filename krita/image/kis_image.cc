@@ -145,6 +145,7 @@ KisImage::KisImage(const KisImage& rhs)
 }
 KisImage::~KisImage()
 {
+    m_d->projection->stop();
     delete m_d->projection;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
@@ -319,8 +320,9 @@ bool KisImage::locked() const
 void KisImage::lock()
 {
     if (!locked()) {
-        if (m_d->rootLayer)
+        if (m_d->rootLayer) {
             m_d->rootLayer->updateStrategy()->lock();
+        }
         m_d->sizeChangedWhileLocked = false;
 //         blockSignals(true);
     }

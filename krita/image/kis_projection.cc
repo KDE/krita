@@ -22,6 +22,7 @@
 #include <QRect>
 #include <QThread>
 #include <QMutex>
+#include <QApplication>
 
 #include <kis_debug.h>
 #include <kglobal.h>
@@ -58,9 +59,18 @@ KisProjection::KisProjection(KisImageWSP image)
 
 KisProjection::~KisProjection()
 {
-    exit(); // stop the event loop
     delete m_d->updater;
     delete m_d;
+}
+
+void KisProjection::stop()
+{
+    quit();
+    while(isRunning()) {
+        qApp->processEvents();
+    }
+    setTerminationEnabled(true);
+    terminate();
 }
 
 void KisProjection::run()

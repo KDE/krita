@@ -103,11 +103,11 @@ void TestShapePainting::testPaintOrder()
 {
     // the stacking order determines the painting order so things on top
     // get their paint called last.
-    // Each shape has a zIndex and withing the list of shapes a container has
-    // this determines the stacking order.  Its important to realize that
+    // Each shape has a zIndex and within the children a container has
+    // it determines the stacking order. Its important to realize that
     // the zIndex is thus local to a container, if you have layer1 and layer2
     // with both various child shapes the stacking order of the layer shapes
-    // is most important, then withing this the child shapes index is used.
+    // is most important, then within this the child shape index is used.
 
     class OrderedMockShape : public MockShape {
     public:

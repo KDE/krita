@@ -201,6 +201,15 @@ public:
     void drawBorders(QPainter *painter) const;
 
     /**
+     * Figures outDraw the table borders using the given QPainter.
+     *
+     * @param point the point that needs to be within the returned cell
+     *
+     * @return the cell that is hit (can be invalid if no hit).
+     */
+    QTextTableCell hitTestTable(const QPointF &point) const;
+    
+    /**
      * Get the list of rectangles that the table occupies.
      * This is the the effective areas so table margins have been subtracted,
      * and they are placed according to alignment etc

@@ -33,6 +33,8 @@
 
 #include <kdebug.h>
 #include <QTextBlock>
+#include <QTextTable>
+#include <QTextTableCell>
 #include <QTextList>
 #include <QTimer>
 
@@ -85,6 +87,9 @@ public:
         return 0;
     }
     void registerInlineObject(const QTextInlineObject &) {}
+    QTextTableCell hitTestTable(QTextTable *, const QPointF &) {
+        return QTextTableCell();
+    }
 };
 
 class KoTextDocumentLayout::Private
@@ -202,14 +207,33 @@ QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const
 
 int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
-    // kDebug(32500) <<"hitTest[" << point.x() <<"," << point.y() <<"]";
-    QTextBlock block = document()->begin();
+    return hitTestIterated(document()->rootFrame()->begin(), 
+                        document()->rootFrame()->end(), point, accuracy);
+}
+
+int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame::iterator end, const QPointF &point, Qt::HitTestAccuracy accuracy) const
+{
     int position = -1;
-    while (block.isValid()) {
+    QTextFrame::iterator it = begin;
+    for (it = begin; it != end; ++it) {
+        QTextBlock block = it.currentBlock();
+        QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+
+        if (table) {
+            QTextTableCell cell = m_state->hitTestTable(table, point);
+            if (cell.isValid()) {
+                return hitTestIterated(cell.begin(), cell.end(), point,
+                                accuracy);
+            }
+            continue;
+        } else {
+            if (!block.isValid())
+                continue;
+        }
+        // kDebug(32500) <<"hitTest[" << point.x() <<"," << point.y() <<"]";
         QTextLayout *layout = block.layout();
         if (point.y() > layout->boundingRect().bottom()) {
             position = block.position() + block.length() - 1;
-            block = block.next();
             continue;
         }
         for (int i = 0; i < layout->lineCount(); i++) {
@@ -230,7 +254,7 @@ int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accu
             }
             return block.position() + line.xToCursor(point.x());
         }
-        block = block.next();
+        
     }
     if (accuracy == Qt::ExactHit)
         return -1;

@@ -68,6 +68,7 @@ public:
     virtual bool setFollowupShape(KoShape *shape);
     /// called by the KoTextDocumentLayout to notify the LayoutState of a successfully resized inline object
     virtual void registerInlineObject(const QTextInlineObject &inlineObject);
+    virtual QTextTableCell hitTestTable(QTextTable *table, const QPointF &point);
 
     /// paint the document
     virtual void draw(QPainter *painter, const KoTextDocumentLayout::PaintContext & context);

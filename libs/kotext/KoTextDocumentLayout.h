@@ -26,6 +26,8 @@
 #include <QRectF>
 #include <QSizeF>
 #include <QList>
+#include <QTextFrame>
+#include <QTextTableCell>
 
 class KoTextDocumentLayout;
 class KoShape;
@@ -174,6 +176,8 @@ public:
         virtual void clearTillEnd() = 0;
         /// called by the KoTextDocumentLayout to notify the LayoutState of a successfully resized inline object
         virtual void registerInlineObject(const QTextInlineObject &inlineObject) = 0;
+        /// called by the KoTextDocumentLayout to find out which if any table cell is hit. Returns 0 when no hit
+        virtual QTextTableCell hitTestTable(QTextTable *table, const QPointF &point) = 0;
 
         /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;
@@ -215,6 +219,10 @@ protected:
     /// make sure we start a layout run (returns immediately)
     /// This method keeps the state data and does not interrupt a runnign layout.
     void scheduleLayoutWithoutInterrupt();
+
+    /// same as hitTest but for a range specified by an iterator
+    int hitTestIterated(QTextFrame::iterator begin, QTextFrame::iterator end, const QPointF & point, Qt::HitTestAccuracy accuracy) const;
+
 
 private:
     Q_PRIVATE_SLOT(d, void relayoutPrivate())

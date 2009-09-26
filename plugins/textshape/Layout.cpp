@@ -1759,3 +1759,9 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
         return m_textShape->footnoteDocument()->size().height();
     return 0;
 }
+
+QTextTableCell Layout::hitTestTable(QTextTable *table, const QPointF &point)
+{
+    m_tableLayout.setTable(table);
+    return m_tableLayout.hitTestTable(point);
+}

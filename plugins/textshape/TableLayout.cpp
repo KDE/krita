@@ -425,6 +425,30 @@ void TableLayout::drawBorders(QPainter *painter) const
     painter->restore();
 }
 
+QTextTableCell TableLayout::hitTestTable(const QPointF &point) const
+{
+    
+    foreach (TableRect tableRect, m_tableLayoutData->m_tableRects) {
+        if (tableRect.rect.contains(point)) {
+            int col;
+            for (col = 1; col < m_table->columns(); ++col) {
+                if(point.x() < tableRect.columnPositions[col])
+                    break;
+            }
+            --col;
+            int row;
+            for (row = tableRect.fromRow; row < m_table->rows(); ++row) {
+                if(point.y() < m_tableLayoutData->m_rowPositions[row])
+                    break;
+            }
+            --row;
+            return m_table->cellAt(row, col);
+        }
+    }
+
+    return QTextTableCell();
+}
+
 QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
 {
     Q_ASSERT(isValid());

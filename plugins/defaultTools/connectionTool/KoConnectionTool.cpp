@@ -142,35 +142,26 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         KoShapeFactory *factory = KoShapeRegistry::instance()->value("KoConnectionShape");
         KoShape *shape = factory->createDefaultShapeAndInit( m_canvas->shapeController()->dataCenterMap() );
         m_connectionShape = dynamic_cast<KoConnectionShape*>( shape );
+        if( isInRoi() ) {
+            m_shape1 = tempShape;
+            m_firstHandleIndex = getConnectionIndex( tempShape, m_mouse );
+            
+            m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
+            m_isTied->first = true;
         // If the shape selected is not the background
-        if( tempShape != 0 ) {
+        }else if( tempShape != 0 ) {
+            m_shape1 = tempShape;
+            m_firstHandleIndex = 0;
 
-            if( isInRoi() ) {
-            } else {
-                m_shape1 = tempShape;
-                m_firstHandleIndex = 0;
-
-                m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
-                m_isTied->first = false;
-            }
-
-            m_connectionShape->moveHandle( m_connectionShape->getHandleCount(), event->point );
+            m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
+            m_isTied->first = false;
         } else {
-            // If the cursor points the background
-            if( isInRoi() ) {
-                m_shape1 = tempShape;
-                m_firstHandleIndex = getConnectionIndex( tempShape, m_mouse );
-
-                m_connectionShape->setConnection1( m_shape1, m_firstHandleIndex);
-                m_isTied->first = true;
-            } else {
-                m_shape1 = 0;
-                m_firstHandleIndex = 0;
-                m_connectionShape->moveHandle( 0, event->point );
-            }
-            m_connectionShape->moveHandle( m_connectionShape->getHandleCount(), event->point );
+            m_shape1 = 0;
+            m_firstHandleIndex = 0;
+            m_connectionShape->moveHandle( 0, event->point );
         }
-
+        
+        m_connectionShape->moveHandle( m_connectionShape->getHandleCount(), event->point );
         // The connection is now done, so update for apply
         m_connectionShape->updateConnections();
 

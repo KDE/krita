@@ -70,6 +70,8 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
 
     connect(brushPreview, SIGNAL(clicked()), SLOT(paramChanged()));
 
+    brushPreview->setIconSize(QSize(100,100));
+
     paramChanged();
 
 }
@@ -118,7 +120,6 @@ void KisAutoBrushWidget::paramChanged()
     }
 
     QPixmap p = QPixmap::fromImage(pi);
-    brushPreview->setIconSize(p.size());
     brushPreview->setIcon(QIcon(p));
 
     emit sigBrushChanged();

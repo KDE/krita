@@ -99,5 +99,86 @@ void TestShapePainting::testPaintHiddenShape()
     QCOMPARE(shape.paintedCount, 0);
 }
 
+void TestShapePainting::testPaintOrder()
+{
+    // the stacking order determines the painting order so things on top
+    // get their paint called last.
+    // Each shape has a zIndex and withing the list of shapes a container has
+    // this determines the stacking order.  Its important to realize that
+    // the zIndex is thus local to a container, if you have layer1 and layer2
+    // with both various child shapes the stacking order of the layer shapes
+    // is most important, then withing this the child shapes index is used.
+
+    class OrderedMockShape : public MockShape {
+    public:
+        OrderedMockShape(QList<MockShape*> &list) : order(list) {}
+        void paint(QPainter &painter, const KoViewConverter &converter) {
+            order.append(this);
+            MockShape::paint(painter, converter);
+        }
+        QList<MockShape*> &order;
+    };
+
+    QList<MockShape*> order;
+
+    MockContainer top;
+    top.setZIndex(2);
+    OrderedMockShape shape1(order);
+    shape1.setZIndex(5);
+    OrderedMockShape shape2(order);
+    shape2.setZIndex(0);
+    top.addChild(&shape1);
+    top.addChild(&shape2);
+
+    MockContainer bottom;
+    bottom.setZIndex(1);
+    OrderedMockShape shape3(order);
+    shape3.setZIndex(-1);
+    OrderedMockShape shape4(order);
+    shape4.setZIndex(9);
+    bottom.addChild(&shape3);
+    bottom.addChild(&shape4);
+
+    MockCanvas canvas;
+    KoShapeManager manager(&canvas);
+    manager.add(&top);
+    manager.add(&bottom);
+    QCOMPARE(manager.shapes().count(), 6);
+
+    QImage image(100, 100,  QImage::Format_Mono);
+    QPainter painter(&image);
+    MockViewConverter vc;
+    manager.paint(painter, vc, false);
+    QCOMPARE(top.paintedCount, 1);
+    QCOMPARE(bottom.paintedCount, 1);
+    QCOMPARE(shape1.paintedCount, 1);
+    QCOMPARE(shape2.paintedCount, 1);
+    QCOMPARE(shape3.paintedCount, 1);
+    QCOMPARE(shape4.paintedCount, 1);
+
+    QCOMPARE(order.count(), 4);
+    QVERIFY(order[0] == &shape3); // lowest first
+    QVERIFY(order[1] == &shape4);
+    QVERIFY(order[2] == &shape2);
+    QVERIFY(order[3] == &shape1);
+
+    // again, with clipping.
+    order.clear();
+    painter.setClipRect(0, 0, 100, 100);
+    manager.paint(painter, vc, false);
+    QCOMPARE(top.paintedCount, 2);
+    QCOMPARE(bottom.paintedCount, 2);
+    QCOMPARE(shape1.paintedCount, 2);
+    QCOMPARE(shape2.paintedCount, 2);
+    QCOMPARE(shape3.paintedCount, 2);
+    QCOMPARE(shape4.paintedCount, 2);
+
+    QCOMPARE(order.count(), 4);
+    QVERIFY(order[0] == &shape3); // lowest first
+    QVERIFY(order[1] == &shape4);
+    QVERIFY(order[2] == &shape2);
+    QVERIFY(order[3] == &shape1);
+}
+
 QTEST_MAIN(TestShapePainting)
 #include "TestShapePainting.moc"

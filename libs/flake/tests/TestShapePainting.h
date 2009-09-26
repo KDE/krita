@@ -10,6 +10,7 @@ private slots:
 
     void testPaintShape();
     void testPaintHiddenShape();
+    void testPaintOrder();
 };
 
 #endif

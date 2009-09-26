@@ -35,9 +35,7 @@ public:
     virtual ~KisSumiPaintOpSettingsWidget();
 
     void setConfiguration( const KisPropertiesConfiguration * config);
-
     KisPropertiesConfiguration* configuration() const;
-
     void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
     QList<float> curve() const;

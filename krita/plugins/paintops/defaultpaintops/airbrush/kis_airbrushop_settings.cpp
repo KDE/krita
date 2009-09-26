@@ -43,6 +43,13 @@ bool KisAirbrushOpSettings::paintIncremental()
     return true;
 }
 
+KisPaintOpSettingsSP KisAirbrushOpSettings::clone() const {
+
+    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>( m_options->configuration() );
+    return settings;
+
+}
+
 void KisAirbrushOpSettings::fromXML(const QDomElement& elt)
 {
     // First, call the parent class fromXML to make sure all the
@@ -64,12 +71,4 @@ void KisAirbrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     settings->KisPropertiesConfiguration::toXML( doc, rootElt );
 
     delete settings;
-}
-
-
-KisPaintOpSettingsSP KisAirbrushOpSettings::clone() const {
-
-    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>( m_options->configuration() );
-    return settings;
-
 }

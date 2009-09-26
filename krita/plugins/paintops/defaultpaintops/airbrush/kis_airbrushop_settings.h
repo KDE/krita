@@ -33,18 +33,19 @@ class KisAirbrushOpSettings : public KisPaintOpSettings
 {
 
 public:
-    using KisPaintOpSettings::fromXML;
-    using KisPaintOpSettings::toXML;
 
     KisAirbrushOpSettings();
-
     virtual ~KisAirbrushOpSettings();
+    KisPaintOpSettingsSP clone() const;
+
     bool paintIncremental();
+
+    using KisPaintOpSettings::fromXML;
+    using KisPaintOpSettings::toXML;
 
     void fromXML(const QDomElement& elt);
     void toXML(QDomDocument& doc, QDomElement& rootElt) const;
 
-    KisPaintOpSettingsSP clone() const;
 
 #if defined(HAVE_OPENGL)
     inline QString modelName() const{

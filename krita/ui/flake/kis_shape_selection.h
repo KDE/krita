@@ -95,6 +95,8 @@ public:
 
     KoShape* createDefaultShape() const;
     KoShape* createShape(const KoProperties* params) const;
+
+    bool hidden() const { return true; }
 };
 
 #endif

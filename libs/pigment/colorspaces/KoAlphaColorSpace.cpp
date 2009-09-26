@@ -31,6 +31,7 @@
 #include "KoChannelInfo.h"
 #include "KoID.h"
 #include "KoIntegerMaths.h"
+#include "compositeops/KoCompositeOpErase.h"
 
 namespace {
     const quint8 PIXEL_MASK = 0;
@@ -209,72 +210,6 @@ namespace {
 
     };
 
-    class CompositeErase : public KoCompositeOp {
-
-    public:
-
-        CompositeErase(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_ERASE, i18n("Erase" ), KoCompositeOp::categoryMix() )
-            {
-            }
-
-    public:
-
-        using KoCompositeOp::composite;
-
-        void composite(quint8 *dst,
-                       qint32 dststride,
-                       const quint8 *src,
-                       qint32 srcstride,
-                       const quint8 *maskRowStart,
-                       qint32 maskstride,
-                       qint32 rows,
-                       qint32 cols,
-                       quint8 opacity,
-                       const QBitArray & channelFlags) const
-            {
-
-                Q_UNUSED( opacity );
-                Q_UNUSED( channelFlags );
-
-                quint8 *d;
-                const quint8 *s;
-                qint32 i;
-                if (rows <= 0 || cols <= 0)
-                    return;
-
-                while (rows-- > 0) {
-                    const quint8 *mask = maskRowStart;
-                    d = dst;
-                    s = src;
-
-                    for (i = cols; i > 0; i--, d ++, s ++) {
-
-                        if ( mask != 0 ) {
-                            if ( mask[0] == OPACITY_TRANSPARENT ) {
-                                mask++;
-                                continue;
-                            }
-                            mask++;
-                        }
-
-                        quint8 srcAlpha = KoColorSpaceMathsTraits<quint8>::unitValue - s[PIXEL_MASK];
-                        if (d[PIXEL_MASK] < srcAlpha) {
-                            continue;
-                        }
-                        else {
-                            d[PIXEL_MASK] = srcAlpha;
-                        }
-
-                    }
-
-                    dst += dststride;
-                    src += srcstride;
-                    if ( maskRowStart ) maskRowStart += maskstride;
-                }
-            }
-    };
-
     class CompositeSubtract : public KoCompositeOp {
 
     public:
@@ -353,7 +288,7 @@ KoAlphaColorSpace::KoAlphaColorSpace() :
     addChannel(new KoChannelInfo(i18n("Alpha"), 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
     addCompositeOp( new CompositeOver( this ) );
     addCompositeOp( new CompositeClear( this ) );
-    addCompositeOp( new CompositeErase( this ) );
+    addCompositeOp( new KoCompositeOpErase<AlphaU8Traits>( this ) );
     addCompositeOp( new CompositeSubtract( this ) );
 }
 

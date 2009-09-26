@@ -323,7 +323,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         pixelIt += x;
         quint8 diff = devColorSpace->difference(source, pixelIt.rawData());
 
-        if (diff >= m_threshold
+        if (diff > m_threshold
                 || (hasSelection && srcSel->selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {
             delete segment;
             continue;
@@ -369,7 +369,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             while (!stop && x >= 0 && (map[m_width * y + x] != Checked)) { // FIXME optimizeable?
                 map[m_width * y + x] = Checked;
                 diff = devColorSpace->difference(source, pixelIt.rawData());
-                if (diff >= m_threshold
+                if (diff > m_threshold
                         || (hasSelection && srcSel->selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {
                     stop = true;
                     continue;
@@ -428,7 +428,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             diff = devColorSpace->difference(source, pixelIt.rawData());
             map[m_width * y + x] = Checked;
 
-            if (diff >= m_threshold
+            if (diff > m_threshold
                     || (hasSelection && srcSel->selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {
                 stop = true;
                 continue;

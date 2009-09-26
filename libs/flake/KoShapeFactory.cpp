@@ -68,14 +68,18 @@ KoShapeFactory::~KoShapeFactory()
 KoShape * KoShapeFactory::createDefaultShapeAndInit(const QMap<QString, KoDataCenter *> & dataCenterMap) const
 {
     KoShape * shape = createDefaultShape();
-    shape->init(dataCenterMap);
+    if (shape) {
+        shape->init(dataCenterMap);
+    }
     return shape;
 }
 
 KoShape * KoShapeFactory::createShapeAndInit(const KoProperties * params, const QMap<QString, KoDataCenter *> & dataCenterMap) const
 {
     KoShape * shape = createShape(params);
-    shape->init(dataCenterMap);
+    if (shape) {
+        shape->init(dataCenterMap);
+    }
     return shape;
 }
 

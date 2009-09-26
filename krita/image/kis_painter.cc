@@ -542,7 +542,8 @@ double KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
                                     const KisPaintInformation &pi2,
                                     const double savedDist)
 {
-    return d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, savedDist);
+    if (d->paintOp)
+        return d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, savedDist);
 }
 
 void KisPainter::paintRect(const QRectF &rect)
@@ -1696,7 +1697,6 @@ void KisPainter::setPaintOpPreset(KisPaintOpPresetSP preset, KisImageSP image)
     d->paintOpPreset = preset;
     delete d->paintOp;
     d->paintOp = KisPaintOpRegistry::instance()->paintOp(preset, this, image);
-    Q_ASSERT( d->paintOp );
 }
 
 KisPaintOpPresetSP KisPainter::preset() const

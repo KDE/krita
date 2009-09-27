@@ -133,8 +133,10 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         tempShape = m_lastShapeOn;
     else
         tempShape = m_canvas->shapeManager()->shapeAt( event->point );
-    if(dynamic_cast<KoConnectionShape*>(m_shapeOn))
+    if(dynamic_cast<KoConnectionShape*>(m_shapeOn) && m_connectionShape == 0)
         return;
+    else
+        tempShape = m_lastShapeOn;
 
     // First click
     if( m_connectionShape == 0 ) {

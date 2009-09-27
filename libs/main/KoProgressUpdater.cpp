@@ -116,6 +116,7 @@ void KoProgressUpdater::cancel()
 void KoProgressUpdater::update()
 {
     d->updated = true;
+    qApp->processEvents();
 }
 
 void KoProgressUpdater::updateUi()

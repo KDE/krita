@@ -178,6 +178,49 @@ void TestShapePainting::testPaintOrder()
     QVERIFY(order[1] == &shape4);
     QVERIFY(order[2] == &shape2);
     QVERIFY(order[3] == &shape1);
+
+    order.clear();
+    
+    MockContainer root;
+    root.setZIndex(0);
+    
+    MockContainer branch1;
+    branch1.setZIndex(1);
+    OrderedMockShape child1_1(order);
+    child1_1.setZIndex(1);
+    OrderedMockShape child1_2(order);
+    child1_2.setZIndex(2);
+    branch1.addChild(&child1_1);
+    branch1.addChild(&child1_2);
+    
+    MockContainer branch2;
+    branch2.setZIndex(2);
+    OrderedMockShape child2_1(order);
+    child2_1.setZIndex(1);
+    OrderedMockShape child2_2(order);
+    child2_2.setZIndex(2);
+    branch2.addChild(&child2_1);
+    branch2.addChild(&child2_2);
+ 
+    root.addChild(&branch1);
+    root.addChild(&branch2);
+    
+    QList<KoShape*> sortedShapes;
+    sortedShapes.append(&root);
+    sortedShapes.append(&branch1);
+    sortedShapes.append(&branch2);
+    sortedShapes.append(branch1.childShapes());
+    sortedShapes.append(branch2.childShapes());
+    
+    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    QCOMPARE(sortedShapes.count(), 7);
+    QVERIFY(sortedShapes[0] == &root);
+    QVERIFY(sortedShapes[1] == &branch1);
+    QVERIFY(sortedShapes[2] == &child1_1);
+    QVERIFY(sortedShapes[3] == &child1_2);
+    QVERIFY(sortedShapes[4] == &branch2);
+    QVERIFY(sortedShapes[5] == &child2_1);
+    QVERIFY(sortedShapes[6] == &child2_2);
 }
 
 QTEST_MAIN(TestShapePainting)

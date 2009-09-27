@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,19 +17,6 @@
  */
 #include "kis_spray_paintop_settings_widget.h"
 
-#include <KoViewConverter.h>
-#include <KoColorSpaceRegistry.h>
-
-#include <kis_image.h>
-#include <kis_debug.h>
-
-#include <kis_paintop_registry.h>
-#include <kis_painter.h>
-#include <kis_paint_device.h>
-#include <kis_paint_information.h>
-
-#include <KoColor.h>
-
 #include "kis_sprayop_option.h"
 #include "kis_spray_paintop_settings.h"
 #include "kis_spray_shape_option.h"
@@ -41,11 +28,10 @@
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpOptionsWidget(parent)
 {
-    m_paintActionTypeOption = new KisPaintActionTypeOption();
     m_sprayOption =  new KisSprayOpOption();
-
     m_sprayShapeOption = new KisSprayShapeOption();
     m_sprayColorOption = new KisSprayColorOption();
+    m_paintActionTypeOption = new KisPaintActionTypeOption();
 
     addPaintOpOption(m_sprayOption);
     addPaintOpOption(m_sprayShapeOption);
@@ -56,6 +42,8 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
 KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()
 {
     delete m_sprayOption;
+    delete m_sprayShapeOption;
+    delete m_sprayColorOption;
     delete m_paintActionTypeOption;
 }
 

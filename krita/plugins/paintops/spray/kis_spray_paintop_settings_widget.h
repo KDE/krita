@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,10 +20,6 @@
 #define KIS_SPRAYPAINTOP_SETTINGS_WIDGET_H_
 
 #include <kis_paintop_options_widget.h>
-
-#include "ui_wdgsprayoptions.h"
-#include "ui_wdgshapeoptions.h"
-#include "widgets/kis_popup_button.h"
 
 class KisPaintActionTypeOption;
 class KisSprayOpOption;

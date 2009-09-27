@@ -68,6 +68,7 @@ PictureShape::PictureShape()
 
 PictureShape::~PictureShape()
 {
+    delete m_renderQueue;
 }
 
 void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)

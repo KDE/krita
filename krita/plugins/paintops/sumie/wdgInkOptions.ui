@@ -19,7 +19,7 @@
   <property name="minimumSize">
    <size>
     <width>425</width>
-    <height>200</height>
+    <height>476</height>
    </size>
   </property>
   <widget class="QWidget" name="layoutWidget">

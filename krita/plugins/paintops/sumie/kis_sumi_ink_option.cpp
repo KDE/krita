@@ -38,6 +38,16 @@ KisSumiInkOption::KisSumiInkOption()
 {
     m_checkable = false;
     m_options = new KisInkOptionsWidget();
+
+    connect(m_options->inkAmountSpinBox,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
+    connect(m_options->saturationCBox,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
+    connect(m_options->opacityCBox,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
+    connect(m_options->weightSaturationCBox,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
+    connect(m_options->pressureSlider,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
+    connect(m_options->bristleLengthSlider,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
+    connect(m_options->bristleInkAmountSlider,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
+    connect(m_options->inkDepletionSlider,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
+    
     setConfigurationPage(m_options);
 }
 

@@ -46,9 +46,9 @@ public:
 
     /// loads the resources
     void run();
+    void cancel();
 private:
     QStringList getFileNames( const QString & extensions);
-
     KoResourceServerBase * m_server;
     QStringList m_fileNames;
 

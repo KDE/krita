@@ -67,13 +67,16 @@ public:
     */
     QString extensions() { return m_extensions; }
 
+    void cancel() { m_cancelled = true; }
+
 private:
     QString m_type;
     QString m_extensions;
 
 protected:
 
-    QMutex loadLock;
+    bool   m_cancelled;
+    QMutex m_loadLock;
 
 };
 
@@ -103,7 +106,7 @@ public:
         kDebug(30009) << "loading  resources for type " << type();
         QStringList uniqueFiles;
 
-        while (!filenames.empty())
+        while (!filenames.empty() && !m_cancelled)
         {
             QString front = filenames.first();
             filenames.pop_front();
@@ -115,7 +118,7 @@ public:
             //      the resource to find out whether they are really the same, but for now this
             //      will prevent the same brush etc. showing up twice.
             if (uniqueFiles.empty() || uniqueFiles.indexOf(fname) == -1) {
-                loadLock.lock();
+                m_loadLock.lock();
                 uniqueFiles.append(fname);
                 T* resource = createResource(front);
                 if (resource->load() && resource->valid())
@@ -134,7 +137,7 @@ public:
                 else {
                     delete resource;
                 }
-                loadLock.unlock();
+                m_loadLock.unlock();
             }
         }
         kDebug(30009) << "done loading  resources for type " << type();
@@ -206,12 +209,12 @@ public:
     }
 
     QList<T*> resources() {
-        loadLock.lock();
+        m_loadLock.lock();
         QList<T*> resourceList = m_resources;
         foreach(T* r, m_resourceBlackList) {
             resourceList.removeOne(r);
         }
-        loadLock.unlock();
+        m_loadLock.unlock();
         return resourceList;
     }
 
@@ -258,7 +261,7 @@ public:
      */
     void addObserver(KoResourceServerObserver<T>* observer, bool notifyLoadedResources = true)
     {
-        loadLock.lock();
+        m_loadLock.lock();
         if(observer && !m_observers.contains(observer)) {
             m_observers.append(observer);
 
@@ -268,7 +271,7 @@ public:
                 }
             }
         }
-        loadLock.unlock();
+        m_loadLock.unlock();
     }
 
     /**

@@ -73,6 +73,11 @@ void KoResourceLoaderThread::run()
     m_server->loadResources(m_fileNames);
 }
 
+void KoResourceLoaderThread::cancel()
+{
+    m_server->cancel();
+}
+
 QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)
 {
     QStringList extensionList = extensions.split(':');

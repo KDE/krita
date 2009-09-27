@@ -25,18 +25,15 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 #include "kis_sumi_paintop_settings_widget.h"
+
 class QWidget;
 class QDomElement;
 class QDomDocument;
 
-
-class KisSumiPaintOpSettings : public QObject, public KisPaintOpSettings
+class KisSumiPaintOpSettings : public KisPaintOpSettings
 {
-    Q_OBJECT
 
 public:
-
-
     KisSumiPaintOpSettings();
     virtual ~KisSumiPaintOpSettings() {}
 

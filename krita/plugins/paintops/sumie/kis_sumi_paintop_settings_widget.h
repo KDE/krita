@@ -20,48 +20,34 @@
 #ifndef KIS_SUMIPAINTOP_SETTINGS_WIDGET_H_
 #define KIS_SUMIPAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_options_widget.h>
 
-#include "ui_wdgsumieoptions.h"
-#include "widgets/kis_popup_button.h"
+class KisSumiInkOption;
+class KisSumiShapeOption;
 
-class KisSumiPaintOpSettingsWidget : public KisPaintOpSettingsWidget
+class KisSumiPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
     Q_OBJECT
 
 public:
     KisSumiPaintOpSettingsWidget(QWidget* parent = 0);
-
     virtual ~KisSumiPaintOpSettingsWidget();
 
-    void setConfiguration( const KisPropertiesConfiguration * config);
     KisPropertiesConfiguration* configuration() const;
+    
+/*    void setConfiguration( const KisPropertiesConfiguration * config);
     void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
-    QList<float> curve() const;
-    int radius() const;
-    double sigma() const;
-    int brushDimension() const;
-    int inkAmount() const;
-    bool mousePressure() const;
+*/
 
-    bool useSaturation() const;
-    bool useOpacity() const;
-    bool useWeights() const;
-
-    int pressureWeight() const;
-    int bristleLengthWeight() const;
-    int bristleInkAmountWeight() const;
-    int inkDepletionWeight() const;
-
-    double shearFactor() const;
-    double randomFactor() const;
-    double scaleFactor() const;
-
-private:
-    Ui::WdgSumieOptions* m_options;
-    int m_curveSamples;
-    QList<QPointF> m_curveData;
+public:
+    KisSumiShapeOption * m_sumiShapeOption;
+    KisSumiInkOption * m_sumiInkOption;
 };
 
 #endif
+
+
+
+
+

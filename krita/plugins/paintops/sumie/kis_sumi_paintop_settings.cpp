@@ -18,18 +18,9 @@
  */
 #include "kis_sumi_paintop_settings.h"
 
-#include <KoColorSpaceRegistry.h>
-#include <KoColor.h>
-
-#include <kis_image.h>
-#include <kis_debug.h>
-
-#include <kis_paintop_registry.h>
-#include <kis_painter.h>
-#include <kis_paint_device.h>
-#include <kis_paint_information.h>
-
 #include "kis_sumi_paintop_settings_widget.h"
+#include "kis_sumi_ink_option.h"
+#include "kis_sumi_shape_option.h"
 
 KisSumiPaintOpSettings::KisSumiPaintOpSettings()
     : m_options(0)
@@ -74,81 +65,81 @@ void KisSumiPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) cons
 
 QList<float> KisSumiPaintOpSettings::curve() const
 {
-    return m_options->curve();
+    return m_options->m_sumiInkOption->curve();
 }
 
 int KisSumiPaintOpSettings::radius() const
 {
-    return m_options->radius();
+    return m_options->m_sumiShapeOption->radius();
 }
 
 double KisSumiPaintOpSettings::sigma() const
 {
-    return m_options->sigma();
+    return m_options->m_sumiShapeOption->sigma();
 }
 
 bool KisSumiPaintOpSettings::mousePressure() const
 {
-    return m_options->mousePressure();
+    return m_options->m_sumiShapeOption->mousePressure();
 }
 
 int KisSumiPaintOpSettings::brushDimension() const
 {
-    return m_options->brushDimension();
+    return m_options->m_sumiShapeOption->brushDimension();
 }
 
 int KisSumiPaintOpSettings::inkAmount() const
 {
-    return m_options->inkAmount();
+    return m_options->m_sumiInkOption->inkAmount();
 }
 
 double KisSumiPaintOpSettings::shearFactor() const
 {
-    return m_options->shearFactor();
+    return m_options->m_sumiShapeOption->shearFactor();
 }
 
 double KisSumiPaintOpSettings::randomFactor() const
 {
-    return m_options->randomFactor();
+    return m_options->m_sumiShapeOption->randomFactor();
 }
 
 double KisSumiPaintOpSettings::scaleFactor() const
 {
-    return m_options->scaleFactor();
+    return m_options->m_sumiShapeOption->scaleFactor();
 }
 
 bool KisSumiPaintOpSettings::useSaturation() const
 {
-    return m_options->useSaturation();
+    return m_options->m_sumiInkOption->useSaturation();
 }
 
 bool KisSumiPaintOpSettings::useOpacity() const
 {
-    return m_options->useOpacity();
+    return m_options->m_sumiInkOption->useOpacity();
 }
 
 bool KisSumiPaintOpSettings::useWeights() const
 {
-    return m_options->useWeights();
+    return m_options->m_sumiInkOption->useWeights();
 }
 
 int KisSumiPaintOpSettings::pressureWeight() const
 {
-    return m_options->pressureWeight();
+    return m_options->m_sumiInkOption->pressureWeight();
 }
 
 int KisSumiPaintOpSettings::bristleLengthWeight() const
 {
-    return m_options->bristleLengthWeight();
+    return m_options->m_sumiInkOption->bristleLengthWeight();
 }
 
 int KisSumiPaintOpSettings::bristleInkAmountWeight() const
 {
-    return m_options->bristleInkAmountWeight();
+    return m_options->m_sumiInkOption->bristleInkAmountWeight();
 }
 
 int KisSumiPaintOpSettings::inkDepletionWeight() const
 {
-    return m_options->inkDepletionWeight();
+    return m_options->m_sumiInkOption->inkDepletionWeight();
 }
 

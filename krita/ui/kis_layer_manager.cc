@@ -148,14 +148,6 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 
-    KAction * action  = new KAction(KIcon("view-split-left-right"), i18n("Mirror Horizontally"), this);
-    actionCollection->addAction("mirrorLayerX", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerX()));
-
-    action  = new KAction(KIcon("view-split-top-bottom"), i18n("Mirror Vertically"), this);
-    actionCollection->addAction("mirrorLayerY", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerY()));
-
     m_imgResizeToLayer  = new KAction(i18n("Size Canvas to Size of Current Layer"), this);
     actionCollection->addAction("resizeimgtolayer", m_imgResizeToLayer);
     connect(m_imgResizeToLayer, SIGNAL(triggered()), this, SLOT(imgResizeToActiveLayer()));

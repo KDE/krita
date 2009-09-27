@@ -20,6 +20,7 @@
 
 
 #include <kactioncollection.h>
+#include <kaction.h>
 
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -88,6 +89,13 @@ void KisNodeManager::setup(KActionCollection * actionCollection)
     m_d->layerManager->setup(actionCollection);
     m_d->maskManager->setup(actionCollection);
 
+    KAction * action  = new KAction(KIcon("view-split-left-right"), i18n("Mirror Horizontally"), this);
+    actionCollection->addAction("mirrorX", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
+
+    action  = new KAction(KIcon("view-split-top-bottom"), i18n("Mirror Vertically"), this);
+    actionCollection->addAction("mirrorY", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeY()));
 }
 
 void KisNodeManager::updateGUI()
@@ -414,6 +422,24 @@ void KisNodeManager::removeNode(KisNodeSP node)
 //     QRect bounds = node->exactBounds();
     m_d->commandsAdapter->removeNode( node );
 //     m_image->rootLayer()->setDirty(bounds);
+}
+
+void KisNodeManager::mirrorNodeX()
+{
+    if (m_d->maskManager->activeMask()) {
+        return m_d->maskManager->mirrorMaskX();
+    } else {
+        return m_d->layerManager->mirrorLayerX();
+    }
+}
+
+void KisNodeManager::mirrorNodeY()
+{
+    if (m_d->maskManager->activeMask()) {
+        return m_d->maskManager->mirrorMaskY();
+    } else {
+        return m_d->layerManager->mirrorLayerY();
+    }
 }
 
 #include "kis_node_manager.moc"

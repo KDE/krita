@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="24">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="25">
 
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
@@ -75,34 +75,19 @@
 
 <Menu name="Layer"><text>&amp;Layer</text>
   <Menu name="LayerNew"><text>New</text>
-  	<Action name="insert_layer"/>
-  	<Action name="insert_clone_layer"/>
-  	<Action name="insert_shape_layer"/>
-    <Action name="insert_adjustment_layer"/>
-    <Action name="insert_generator_layer"/>
-    <Separator/>
     <Action name="duplicate_layer"/>
   	<Action name="insert_image_as_layer"/>
   	<Action name="cut_selection_to_new_layer"/>
   	<Action name="copy_selection_to_new_layer"/>
 	<Action name="create_layer_from_mask"/>
   </Menu>
-  <Action name="remove_layer"/>
-  <Action name="hide_layer"/>
-  <Action name="layer_properties"/>
-  <Separator/>
-  <Action name="raiselayer"/>
-  <Action name="lowerlayer"/>
-  <Action name="toplayer"/>
-  <Action name="bottomlayer"/>
-  <Separator/>
   <Action name="resizelayertoowner"/>
   <Separator/>
   <Action name="save_layer_as_image"/>
   <Action name="layer_to_image"/>
   <Separator/>
-  <Action name="mirrorLayerX"/>
-  <Action name="mirrorLayerY"/>
+  <Action name="mirrorX"/>
+  <Action name="mirrorY"/>
   <DefineGroup name="layer_transform_merge" append="layer_transform_merge"/>
   <Separator/>
   <DefineGroup name="layer_properties_merge" />
@@ -111,28 +96,6 @@
   <Action name="flatten_layer"/>
   <Action name="merge_all_shape_layers"/>
   <Action name="flatten_image"/>
-</Menu>
-
-<Menu name="Mask"><text>&amp;Mask</text>
-    <Menu name="MaskNew"><text>New</text>
-        <Action name="create_transparency_mask"/>
-        <Action name="create_filter_mask"/>
-        <Action name="create_transformation_mask"/>
-        <Action name="create_selection_mask"/>
-        <Separator/>
-        <Action name="duplicate_mask"/>
-    </Menu>
-    <Action name="remove_mask"/>
-    <Action name="show_mask"/>
-    <Action name="mask_properties"/>
-    <Separator/>
-    <Action name="raise_mask"/>
-    <Action name="lower_mask"/>
-    <Action name="mask_to_top"/>
-    <Action name="mask_to_bottom"/>
-    <Separator/>
-    <Action name="mirror_mask_x"/>
-    <Action name="mirror_mask_y"/>
 </Menu>
 
 <Menu name="Select"><text>&amp;Select</text>

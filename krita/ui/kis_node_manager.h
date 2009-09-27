@@ -93,6 +93,8 @@ public slots:
     void nodeCompositeOpChanged(const KoCompositeOp* op);
     void duplicateActiveNode(KisNodeSP node);
     void removeNode(KisNodeSP node);
+    void mirrorNodeX();
+    void mirrorNodeY();
 
     /**
      * move the active node up the nodestack.

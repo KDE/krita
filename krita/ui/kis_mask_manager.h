@@ -184,27 +184,8 @@ private:
     KisView2 * m_view;
 
     KisMaskSP m_activeMask;
-
-    KAction *m_createTransparencyMask;
-    KAction *m_createFilterMask;
-    KAction *m_createTransformationMask;
-    KAction *m_createSelectionMask;
     KAction *m_maskToSelection;
     KAction *m_maskToLayer;
-    KAction *m_duplicateMask;
-
-    KToggleAction *m_showMask;
-    KAction *m_removeMask;
-
-    KAction *m_raiseMask;
-    KAction *m_lowerMask;
-    KAction *m_maskToTop;
-    KAction *m_maskToBottom;
-
-    KAction *m_mirrorMaskX;
-    KAction *m_mirrorMaskY;
-
-    KAction *m_maskProperties;
     KisNodeCommandsAdapter* m_commandsAdapter;
 
 };

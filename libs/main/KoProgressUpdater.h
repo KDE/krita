@@ -64,11 +64,16 @@ class KOMAIN_EXPORT KoProgressUpdater : public QObject
     Q_OBJECT
 public:
 
+    enum Mode {
+        Threaded,
+        Unthreaded
+    };
+
     /**
      * Constructor.
      * @param progressBar the progress bar to update.
      */
-    KoProgressUpdater(KoProgressProxy *progressBar);
+    KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded);
 
     /// destructor
     virtual ~KoProgressUpdater();

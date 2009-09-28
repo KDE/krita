@@ -31,9 +31,10 @@ class KoProgressUpdater::Private
 {
 public:
 
-    Private(KoProgressUpdater *_parent, KoProgressProxy *p)
+    Private(KoProgressUpdater *_parent, KoProgressProxy *p, Mode _mode)
         : parent(_parent)
         , progressBar(p)
+        , mode(_mode)
         , totalWeight(0)
         , currentProgress(0)
         , updated(false)
@@ -42,6 +43,7 @@ public:
 
     KoProgressUpdater *parent;
     KoProgressProxy *progressBar;
+    Mode mode;
     int totalWeight;
     int currentProgress;
     bool updated;          // is true whe
@@ -53,8 +55,8 @@ public:
 };
 
 
-KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar)
-    : d (new Private(this, progressBar))
+KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar, Mode mode)
+    : d (new Private(this, progressBar, mode))
 {
     Q_ASSERT(d->progressBar);
     connect(&d->updateGuiTimer, SIGNAL(timeout()), SLOT(updateUi()));
@@ -116,7 +118,9 @@ void KoProgressUpdater::cancel()
 void KoProgressUpdater::update()
 {
     d->updated = true;
-    qApp->processEvents();
+    if (d->mode == Unthreaded) {
+        qApp->processEvents();
+    }
 }
 
 void KoProgressUpdater::updateUi()

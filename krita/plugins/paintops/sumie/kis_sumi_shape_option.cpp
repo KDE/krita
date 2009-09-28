@@ -18,8 +18,6 @@
 #include "kis_sumi_shape_option.h"
 #include <klocale.h>
 
-#include <QWidget>
-
 #include "ui_wdgshapeoptions.h"
 
 class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions

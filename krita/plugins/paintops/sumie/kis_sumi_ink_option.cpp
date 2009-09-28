@@ -18,9 +18,6 @@
 #include "kis_sumi_ink_option.h"
 #include <klocale.h>
 
-#include <QWidget>
-#include <QList>
-
 #include "ui_wdgInkOptions.h"
 
 class KisInkOptionsWidget: public QWidget, public Ui::WdgInkOptions

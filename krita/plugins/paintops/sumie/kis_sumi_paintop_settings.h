@@ -20,8 +20,6 @@
 #ifndef KIS_SUMIPAINTOP_SETTINGS_H_
 #define KIS_SUMIPAINTOP_SETTINGS_H_
 
-#include <QObject>
-#include <QList>
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 #include "kis_sumi_paintop_settings_widget.h"

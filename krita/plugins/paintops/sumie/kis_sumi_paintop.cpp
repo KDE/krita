@@ -22,26 +22,16 @@
 #include <cmath>
 
 #include <QRect>
-#include <QList>
-#include <QColor>
-//#include <QMutexLocker>
-
-#include <KoColor.h>
-#include <KoColorSpace.h>
-#include <KoInputDevice.h>
-#include <KoCompositeOp.h>
 
 #include <kis_image.h>
 #include <kis_debug.h>
 
-#include "kis_brush.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include <kis_vec.h>
 
 #include "brush.h"
 #include "brush_shape.h"
-
 
 KisSumiPaintOp::KisSumiPaintOp(const
                                KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageSP image)

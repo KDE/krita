@@ -19,9 +19,6 @@
 #include "stroke.h"
 #include <math.h>
 
-#include <QPainter>
-#include <QRect>
-
 #include <kis_debug.h>
 
 #include <KoColor.h>

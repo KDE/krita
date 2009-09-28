@@ -106,6 +106,7 @@ set(kritaimage_LIB_SRCS
    kis_filter_mask.cpp
    kis_filter_strategy.cc
    kis_gradient_painter.cc
+   kis_gradient_job.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc

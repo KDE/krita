@@ -783,6 +783,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         progressUpdater()->setProgress(100);
         return !progressUpdater()->interrupted();
     } else {
+
         return true;
     }
 }

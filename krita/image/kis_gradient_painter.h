@@ -18,16 +18,16 @@
 #ifndef KIS_GRADIENT_PAINTER_H_
 #define KIS_GRADIENT_PAINTER_H_
 
+#include <KoColor.h>
+
 #include "kis_global.h"
 #include "kis_types.h"
-
 #include "kis_painter.h"
+
 #include <krita_export.h>
 
 class KoAbstractGradient;
 
-
-// XXX: Need to set dirtyRegion in KisPainter
 /**
  *  XXX: Docs!
  */
@@ -55,10 +55,30 @@ public:
         GradientRepeatAlternate
     };
 
+    class Configuration {
+
+    public:
+        KoAbstractGradient* gradient;
+
+        KoColor fgColor;
+        quint8 opacity;
+        const KoCompositeOp* compositeOp;
+
+        QPointF vectorStart;
+        QPointF vectorEnd;
+
+        KisGradientPainter::enumGradientShape shape;
+        KisGradientPainter::enumGradientRepeat repeat;
+
+        double antiAliasThreshold;
+        bool reverse;
+    };
+
+
+
+
     /**
      * Paint a gradient in the rect between startx, starty, width and height.
-     * XXX: What does the returned bool mean?
-     * XXX: Make cs-independent
      */
     bool paintGradient(const QPointF& gradientVectorStart,
                        const QPointF& gradientVectorEnd,

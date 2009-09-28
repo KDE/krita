@@ -365,9 +365,9 @@ KisStatusBar * KisView2::statusBar() const
     return m_d->statusBar;
 }
 
-KoProgressUpdater* KisView2::createProgressUpdater()
+KoProgressUpdater* KisView2::createProgressUpdater(KoProgressUpdater::Mode mode)
 {
-    return m_d->statusBar->progress()->createUpdater();
+    return m_d->statusBar->progress()->createUpdater(mode);
 }
 
 KisSelectionManager * KisView2::selectionManager()

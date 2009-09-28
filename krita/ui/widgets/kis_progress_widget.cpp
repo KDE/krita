@@ -68,10 +68,10 @@ KisProgressWidget::~KisProgressWidget()
     cancel();
 }
 
-KoProgressUpdater* KisProgressWidget::createUpdater()
+KoProgressUpdater* KisProgressWidget::createUpdater(KoProgressUpdater::Mode mode)
 {
     setVisible(this);
-    KoProgressUpdater* updater = new KisProgressUpdater(this, m_progressBar);
+    KoProgressUpdater* updater = new KisProgressUpdater(this, m_progressBar, mode);
     return updater;
 }
 

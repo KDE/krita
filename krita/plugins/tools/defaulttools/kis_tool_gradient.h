@@ -76,7 +76,16 @@ public slots:
     void slotConfigChanged();
 #endif
 
+private slots:
+
+    void areaDone(const QRect & rc)
+    {
+        currentNode()->setDirty(rc); // Starts computing the projection for the area we've done.
+
+    }
+
 private:
+
     void paintLine(QPainter& gc);
 
     QPointF straightLine(QPointF point);

@@ -54,7 +54,7 @@ public:
      * Note: it is _your_ duty to call deleteLater on the
      * koprogressupdater when you are done!
      */
-    KoProgressUpdater* createUpdater();
+    KoProgressUpdater* createUpdater(KoProgressUpdater::Mode mode = KoProgressUpdater::Threaded);
     void detachUpdater(KoProgressUpdater* updater);
     void attachUpdater(KoProgressUpdater* updater);
 

@@ -22,6 +22,7 @@
 #include <QDockWidget>
 
 #include <KoView.h>
+#include <KoProgressUpdater.h>
 #include <KoToolManager.h>
 #include <krita_export.h>
 #include <kis_types.h>
@@ -47,7 +48,6 @@ class KisMaskManager;
 class KisPerspectiveGridManager;
 class KisPaintingAssistantsManager;
 class KisGridManager;
-class KoProgressUpdater;
 
 /**
  * Krita view class
@@ -102,7 +102,7 @@ public:  // Krita specific interfaces
     KisStatusBar * statusBar() const;
 
     /// create a new progress updater
-    KoProgressUpdater* createProgressUpdater();
+    KoProgressUpdater* createProgressUpdater(KoProgressUpdater::Mode mode = KoProgressUpdater::Threaded);
 
     /// The selection manager handles everything action related to
     /// selections.

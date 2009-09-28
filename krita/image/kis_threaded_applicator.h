@@ -150,11 +150,11 @@ signals:
      */
     void finished(bool interrupted);
 
-
 private slots:
 
     void jobDone(ThreadWeaver::Job*);
     void applicationQuit();
+
 private:
 
     class Private;

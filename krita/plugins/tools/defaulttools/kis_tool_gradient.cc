@@ -34,37 +34,40 @@
 #include <QLayout>
 #include <QCheckBox>
 
+#include <kis_transaction.h>
 #include <kis_debug.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kcombobox.h>
 
-#include "KoPointerEvent.h"
-#include "KoCanvasBase.h"
-#include "KoViewConverter.h"
-#include "KoUpdater.h"
+#include <KoPointerEvent.h>
+#include <KoCanvasBase.h>
+#include <KoViewConverter.h>
+#include <KoUpdater.h>
+#include <KoProgressUpdater.h>
 
-#include "widgets/kis_cmb_composite.h"
-#include "kis_cursor.h"
-#include "widgets/kis_double_widget.h"
-#include "kis_gradient_painter.h"
-#include "kis_painter.h"
-#include "KoProgressUpdater.h"
-#include "kis_canvas_resource_provider.h"
-#include "kis_config.h"
-#include "kis_layer.h"
+#include <kis_gradient_painter.h>
+#include <kis_gradient_job.h>
+#include <kis_painter.h>
+#include <kis_canvas_resource_provider.h>
+#include <kis_layer.h>
 #include <kis_selection.h>
-//Added for the progress updater
-#include "canvas/kis_canvas2.h"
-#include "kis_view2.h"
+#include <kis_threaded_applicator.h>
+
+#include <canvas/kis_canvas2.h>
+#include <kis_view2.h>
+#include <widgets/kis_cmb_composite.h>
+#include <widgets/kis_double_widget.h>
+#include <kis_cursor.h>
+#include <kis_config.h>
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-#include "opengl/kis_opengl.h"
-#include "opengl/kis_opengl_gradient_program.h"
-#include "opengl/kis_opengl_canvas2.h"
-#include "canvas/kis_canvas2.h"
-#include "KoSliderCombo.h"
-#include "kis_config_notifier.h"
+#include <opengl/kis_opengl.h>
+#include <opengl/kis_opengl_gradient_program.h>
+#include <opengl/kis_opengl_canvas2.h>
+#include <canvas/kis_canvas2.h>
+#include <KoSliderCombo.h>
+#include <kis_config_notifier.h>
 #endif
 
 KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
@@ -264,6 +267,8 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
         if (currentImage() && (device = currentNode()->paintDevice())) {
 
+#if 1 // unthreaded
+
             KisGradientPainter painter(device, currentSelection());
 
             painter.beginTransaction(i18n("Gradient"));
@@ -272,25 +277,53 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             painter.setGradient(currentGradient());
             painter.setOpacity(m_opacity);
             painter.setCompositeOp(m_compositeOp);
-            
+
             //BEGIN ---------------Added by hskott 090926
             //TODO Add threading or something so it actually shows the progress updater
             KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
             if(canvas)
             {
-                KoProgressUpdater * updater = canvas->view()->createProgressUpdater();
+                KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
                 // also deletes all old updaters
                 updater->start( 100, i18n("Gradient") );
                 painter.setProgress(updater->startSubtask());
             }
             //END -----------------Added by hskott 090926
-           
+
             painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
-            QRect rc = painter.dirtyRegion().boundingRect();
-            currentNode()->setDirty(rc);
+            currentNode()->setDirty();
             notifyModified();
             m_canvas->addCommand(painter.endTransaction());
-            m_canvas->updateCanvas(convertToPt(rc.normalized()));
+            m_canvas->updateCanvas(convertToPt(currentImage()->bounds()));
+#else
+            KisTransaction* transaction = new KisTransaction(i18n("Gradient"), device);
+
+            KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+            KoProgressUpdater * updater = canvas->view()->createProgressUpdater();
+            updater->start( 100, i18n("Gradient") );
+
+            KisGradientPainter::Configuration config;
+            config.gradient = currentGradient();
+            config.fgColor = currentFgColor();
+            config.opacity = m_opacity;
+            config.compositeOp = m_compositeOp;
+            config.vectorStart = m_startPos;
+            config.vectorEnd = m_endPos;
+            config.shape = m_shape;
+            config.repeat = m_repeat;
+            config.antiAliasThreshold = m_antiAliasThreshold;
+            config.reverse = m_reverse;
+
+            KisGradientJobFactory factory(&config, currentSelection());
+            KisThreadedApplicator applicator(device, currentImage()->bounds(), &factory, updater, KisThreadedApplicator::UNTILED);
+            connect(&applicator, SIGNAL(areaDone(const QRect&)), this, SLOT(areaDone(const QRect&)));
+
+            applicator.execute();
+
+            notifyModified();
+            m_canvas->addCommand(transaction);
+            m_canvas->updateCanvas(convertToPt(currentImage()->bounds()));
+#endif
         }
     }
 }
@@ -410,6 +443,7 @@ void KisToolGradient::slotSetAntiAliasThreshold(double value)
 
 void KisToolGradient::slotSetPreviewOpacity(qreal value, bool final)
 {
+    Q_UNUSED(final);
     m_previewOpacityPercent = value;
 }
 

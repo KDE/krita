@@ -137,7 +137,7 @@ void KisThreadedApplicator::execute() {
     start();
 
     while (!m_d->weaver->isIdle()) {
-        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+        QCoreApplication::processEvents();
     }
     m_d->weaver->finish();
 }
@@ -161,11 +161,8 @@ void KisThreadedApplicator::jobDone(Job* job)
 
 void KisThreadedApplicator::applicationQuit()
 {
-    //qDebug() << "applicationQuit";
     m_d->progressUpdater->cancel();
-    //qDebug() << "cancel done";
     m_d->weaver->finish();
-    //qDebug() << "weaver finished";
 }
 
 #include "kis_threaded_applicator.moc"

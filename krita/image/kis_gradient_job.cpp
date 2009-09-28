@@ -50,19 +50,24 @@ KisGradientJob::KisGradientJob( const KisGradientPainter::Configuration* config,
 
 void KisGradientJob::run()
 {
-    KisGradientPainter painter;
+    KisGradientPainter painter(m_dev);
 
     painter.setSelection(m_selection);
     painter.setOpacity(m_config->opacity);
     painter.setCompositeOp(m_config->compositeOp);
     painter.setGradient(m_config->gradient);
     painter.setPaintColor(m_config->fgColor);
+    painter.beginTransaction(m_config->transaction);
 
     painter.paintGradient(m_config->vectorStart, m_config->vectorEnd,
                           m_config->shape, m_config->repeat,
                           m_config->antiAliasThreshold,
                           m_config->reverse,
                           m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height());
+
+    painter.endTransaction();
+
+    m_updater->setProgress(100);
 }
 
 KisGradientJobFactory::KisGradientJobFactory(const KisGradientPainter::Configuration * config, KisSelectionSP selection)

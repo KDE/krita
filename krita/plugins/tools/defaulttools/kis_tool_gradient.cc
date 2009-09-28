@@ -278,24 +278,16 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             painter.setOpacity(m_opacity);
             painter.setCompositeOp(m_compositeOp);
 
-            //BEGIN ---------------Added by hskott 090926
-            //TODO Add threading or something so it actually shows the progress updater
             KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
-            if(canvas)
-            {
-                KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
-                // also deletes all old updaters
-                updater->start( 100, i18n("Gradient") );
-                painter.setProgress(updater->startSubtask());
-            }
-            //END -----------------Added by hskott 090926
+            KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
+            // also deletes all old updaters
+            updater->start( 100, i18n("Gradient") );
+            painter.setProgress(updater->startSubtask());
 
             painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
-            currentNode()->setDirty();
-            notifyModified();
             m_canvas->addCommand(painter.endTransaction());
-            m_canvas->updateCanvas(convertToPt(currentImage()->bounds()));
 #else
+            // XXX: figure out why threaded gradients give weird noise
             KisTransaction* transaction = new KisTransaction(i18n("Gradient"), device);
 
             KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
@@ -304,6 +296,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
             KisGradientPainter::Configuration config;
             config.gradient = currentGradient();
+            config.transaction = transaction;
             config.fgColor = currentFgColor();
             config.opacity = m_opacity;
             config.compositeOp = m_compositeOp;
@@ -315,16 +308,19 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             config.reverse = m_reverse;
 
             KisGradientJobFactory factory(&config, currentSelection());
-            KisThreadedApplicator applicator(device, currentImage()->bounds(), &factory, updater, KisThreadedApplicator::UNTILED);
+            KisThreadedApplicator applicator(device, currentImage()->bounds(), &factory, updater);
             connect(&applicator, SIGNAL(areaDone(const QRect&)), this, SLOT(areaDone(const QRect&)));
 
             applicator.execute();
 
-            notifyModified();
             m_canvas->addCommand(transaction);
-            m_canvas->updateCanvas(convertToPt(currentImage()->bounds()));
 #endif
+            currentNode()->setDirty();
+            notifyModified();
+            delete updater;
         }
+        m_canvas->updateCanvas(convertToPt(currentImage()->bounds()));
+
     }
 }
 

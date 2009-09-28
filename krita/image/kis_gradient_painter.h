@@ -63,6 +63,7 @@ public:
         KoColor fgColor;
         quint8 opacity;
         const KoCompositeOp* compositeOp;
+        KisTransaction* transaction;
 
         QPointF vectorStart;
         QPointF vectorEnd;

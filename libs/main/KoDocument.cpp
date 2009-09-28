@@ -37,6 +37,7 @@
 #include "KoApplication.h"
 #include "KoUndoStack.h"
 
+#include <KoDpi.h>
 #include <KoXmlWriter.h>
 
 #include <kdialog.h>
@@ -989,9 +990,8 @@ QPixmap KoDocument::generatePreview(const QSize& size)
     int pixmapSize = qMax(size.width(), size.height());
 
     if (d->pageLayout.width > 1.0) {
-        docWidth = d->pageLayout.width / 72 * KoGlobal::dpiX();
-        docHeight = d->pageLayout.height / 72 * KoGlobal::dpiY();
-
+        docWidth = d->pageLayout.width / 72 * KoDpi::dpiX();
+        docHeight = d->pageLayout.height / 72 * KoDpi::dpiY();
     } else {
         // If we don't have a page layout, just draw the top left hand corner
         docWidth = 500.0;

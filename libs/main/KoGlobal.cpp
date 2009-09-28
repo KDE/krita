@@ -48,7 +48,6 @@ KoGlobal* KoGlobal::self()
 KoGlobal::KoGlobal()
         : m_pointSize(-1), m_kofficeConfig(0)
 {
-    // XXX: locale() apparently can be 0 when running from unittests
     if (KGlobal::locale()) {
         // Install the libkoffice* translations
         KGlobal::locale()->insertCatalog("koffice");
@@ -59,18 +58,6 @@ KoGlobal::KoGlobal()
         // Tell KStandardDirs about the koffice prefix
         KGlobal::dirs()->addPrefix(KOFFICEPREFIX);
     }
-
-
-    // Another way to get the DPI of the display would be QPaintDeviceMetrics,
-    // but we have no widget here (and moving this to KoView wouldn't allow
-    // using this from the document easily).
-#ifdef Q_WS_X11
-    m_dpiX = QX11Info::appDpiX();
-    m_dpiY = QX11Info::appDpiY();
-#else
-    m_dpiX = 75;
-    m_dpiY = 75;
-#endif
 }
 
 KoGlobal::~KoGlobal()
@@ -189,12 +176,4 @@ KConfig* KoGlobal::_kofficeConfig()
         m_kofficeConfig = new KConfig("kofficerc");
     }
     return m_kofficeConfig;
-}
-
-void KoGlobal::setDPI(int x, int y)
-{
-    //kDebug( 30003 ) << x <<"," << y;
-    KoGlobal* s = self();
-    s->m_dpiX = x;
-    s->m_dpiY = y;
 }

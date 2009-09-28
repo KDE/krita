@@ -57,15 +57,6 @@ public:
         return self()->_kofficeConfig();
     }
 
-    static int dpiX() {
-        return self()->m_dpiX;
-    }
-    static int dpiY() {
-        return self()->m_dpiY;
-    }
-    /// @internal, for KoApplication
-    static void setDPI(int x, int y);
-
     /// Return the list of available languages, in their displayable form
     /// (translated names)
     static QStringList listOfLanguages() {
@@ -96,8 +87,6 @@ private:
     typedef QMap<QString, QString> LanguageMap;
     LanguageMap m_langMap; // display-name -> language tag
     KConfig* m_kofficeConfig;
-    int m_dpiX;
-    int m_dpiY;
     // No BC problem here, constructor is private, feel free to add members
 
     friend class this_is_a_singleton; // work around gcc warning

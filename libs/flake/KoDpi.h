@@ -29,20 +29,25 @@
 #include "flake_export.h"
 
 
+/**
+ * Singleton to store user-overwritten DPI information.
+ */
 class FLAKE_EXPORT KoDpi
 {
 public:
     /// For KoApplication
     static void initialize()  {
-        (void)self(); // I don't want to make KGlobal instances public, so self() is private
+        (void)self(); // I don't want to make KoDpi instances public, so self() is private
     }
 
     static int dpiX() {
         return self()->m_dpiX;
     }
+
     static int dpiY() {
         return self()->m_dpiY;
     }
+
     /// @internal, for KoApplication
     static void setDPI(int x, int y);
 
@@ -54,8 +59,6 @@ private:
 
     int m_dpiX;
     int m_dpiY;
-
-    friend class this_is_a_singleton; // work around gcc warning
 };
 
 #endif // KO_DPI

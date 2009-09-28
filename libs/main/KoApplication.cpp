@@ -27,6 +27,8 @@
 #include "KoDocument.h"
 #include "KoMainWindow.h"
 
+#include <KoDpi.h>
+
 #include <klocale.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
@@ -119,7 +121,7 @@ bool KoApplication::start()
             dpiX = dpiValues.toInt(&ok);
             if (ok) {
                 if (!dpiY) dpiY = dpiX;
-                KoGlobal::setDPI(dpiX, dpiY);
+                KoDpi::setDPI(dpiX, dpiY);
             }
         }
     }

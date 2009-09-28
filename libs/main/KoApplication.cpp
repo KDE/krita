@@ -37,8 +37,6 @@
 #include <QtDBus/QtDBus>
 #include <QFile>
 
-void qt_generate_epsf(bool b);
-
 bool KoApplication::m_starting = true;
 
 class KoApplicationPrivate

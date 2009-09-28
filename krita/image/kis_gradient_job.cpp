@@ -53,6 +53,7 @@ void KisGradientJob::run()
     KisGradientPainter painter(m_dev);
 
     painter.setSelection(m_selection);
+
     painter.setOpacity(m_config->opacity);
     painter.setCompositeOp(m_config->compositeOp);
     painter.setGradient(m_config->gradient);

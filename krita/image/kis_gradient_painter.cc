@@ -545,15 +545,17 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     Q_ASSERT(repeatStrategy != 0);
 
 
-    //If the device has a selection only iterate over that selection
+    //If the device has a selection only iterate over that selection united with our area of interest
     QRect r;
+    QRect r2(startx, starty, width, height);
     if (selection()) {
         r = selection()->selectedExactRect();
-        startx = r.x();
-        starty = r.y();
-        width = r.width();
-        height = r.height();
+        r2 &= r;
     }
+    startx = r2.x();
+    starty = r2.y();
+    width = r2.width();
+    height = r2.height();
 
     qint32 endx = startx + width - 1;
     qint32 endy = starty + height - 1;

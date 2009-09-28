@@ -450,8 +450,8 @@ public:
      */
     KisSelectionSP selection();
 
-    void setGradient(KoAbstractGradient* gradient);
-    KoAbstractGradient* gradient();
+    void setGradient(const KoAbstractGradient* gradient);
+    const KoAbstractGradient* gradient();
 
 
 protected:

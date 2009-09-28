@@ -58,7 +58,7 @@ public:
     class Configuration {
 
     public:
-        KoAbstractGradient* gradient;
+        const KoAbstractGradient* gradient;
 
         KoColor fgColor;
         quint8 opacity;
@@ -74,9 +74,6 @@ public:
         double antiAliasThreshold;
         bool reverse;
     };
-
-
-
 
     /**
      * Paint a gradient in the rect between startx, starty, width and height.

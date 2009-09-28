@@ -96,7 +96,7 @@ struct KisPainter::Private {
     const KoCompositeOp*        compositeOp;
     QBitArray                   channelFlags;
     bool                        useBoundingDirtyRect;
-    KoAbstractGradient*         gradient;
+    const KoAbstractGradient*   gradient;
     KisPaintOpPresetSP          paintOpPreset;
 };
 
@@ -542,8 +542,10 @@ double KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
                                     const KisPaintInformation &pi2,
                                     const double savedDist)
 {
-    if (d->paintOp)
+    if (d->paintOp) {
         return d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, savedDist);
+    }
+    return 0.5;
 }
 
 void KisPainter::paintRect(const QRectF &rect)
@@ -1683,11 +1685,12 @@ KoUpdater * KisPainter::progressUpdater()
     return d->progressUpdater;
 }
 
-void KisPainter::setGradient(KoAbstractGradient* gradient)
+void KisPainter::setGradient(const KoAbstractGradient* gradient)
 {
     d->gradient = gradient;
 }
-KoAbstractGradient* KisPainter::gradient()
+
+const KoAbstractGradient* KisPainter::gradient()
 {
     return d->gradient;
 }

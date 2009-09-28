@@ -51,8 +51,10 @@ KisProjection::KisProjection(KisImageWSP image)
         : QThread()
         , m_d(new Private)
 {
-    m_d->updater = 0;
     m_d->image = image;
+    m_d->updater = new KisImageUpdater();
+    connect(this, SIGNAL(sigUpdateProjection(KisNodeSP,QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP,QRect)));
+
     updateSettings();
 }
 
@@ -75,10 +77,7 @@ void KisProjection::stop()
 
 void KisProjection::run()
 {
-    m_d->updater = new KisImageUpdater();
-    connect(this, SIGNAL(sigUpdateProjection(KisNodeSP,QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP,QRect)));
-//    connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
-
+    // connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
     exec(); // start the event loop
 }
 

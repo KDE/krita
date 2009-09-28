@@ -70,6 +70,8 @@
 #include "kis_projection_update_strategy.h"
 #include "kis_meta_data_merge_strategy.h"
 
+#include "kis_refresh_visitor.h"
+
 class KisImage::KisImagePrivate
 {
 public:
@@ -1133,6 +1135,12 @@ KisPerspectiveGrid* KisImage::perspectiveGrid()
     if (m_d->perspectiveGrid == 0)
         m_d->perspectiveGrid = new KisPerspectiveGrid();
     return m_d->perspectiveGrid;
+}
+
+void KisImage::refreshGraph()
+{
+    KisRefreshVisitor refresher(this);
+    rootLayer()->accept(refresher);
 }
 
 void KisImage::slotProjectionUpdated(const QRect & rc)

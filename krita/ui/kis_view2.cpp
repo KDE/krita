@@ -454,6 +454,9 @@ KisUndoAdapter * KisView2::undoAdapter()
 void KisView2::slotLoadingFinished()
 {
     KisImageSP img = image();
+
+    img->refreshGraph();
+
     slotImageSizeChanged();
 
     if (m_d->statusBar) {

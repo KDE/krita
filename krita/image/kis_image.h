@@ -506,6 +506,7 @@ public slots:
 
     void slotProjectionUpdated(const QRect & rc);
     void updateProjection(KisNodeSP node, const QRect& rc);
+    void refreshGraph();
 
 private:
     KisImage& operator=(const KisImage& rhs);

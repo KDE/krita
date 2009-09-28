@@ -405,6 +405,7 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection(const QRec
 
     while (child) {
         child->accept(visitor);
+        // FIXME: No dynamic_cast needed
         child = dynamic_cast<KisLayer*>(child->nextSibling().data());
     }
 

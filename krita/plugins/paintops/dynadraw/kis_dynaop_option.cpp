@@ -18,9 +18,6 @@
 #include "kis_dynaop_option.h"
 #include <klocale.h>
 
-#include <QWidget>
-#include <QRadioButton>
-
 #include "ui_wdgdynaoptions.h"
 
 class KisDynaOpOptionsWidget: public QWidget, public Ui::WdgDynaOptions
@@ -43,7 +40,7 @@ KisDynaOpOption::KisDynaOpOption()
 
 KisDynaOpOption::~KisDynaOpOption()
 {
-    // delete m_options; 
+    delete m_options; 
 }
 
 qreal KisDynaOpOption::initWidth() const

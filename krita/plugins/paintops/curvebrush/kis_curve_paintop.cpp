@@ -22,30 +22,14 @@
 #include <cmath>
 
 #include <QRect>
-#include <QList>
-#include <QColor>
-//#include <QMutexLocker>
-
-#include <qdebug.h>
-
-#include <KoColor.h>
-#include <KoColorSpace.h>
-#include <KoInputDevice.h>
-#include <KoCompositeOp.h>
 
 #include <kis_image.h>
 #include <kis_debug.h>
-
-#include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_paintop.h"
-#include "kis_selection.h"
-#include "kis_random_accessor.h"
-
-#include "kis_datamanager.h"
 
 
 KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisImageSP image)

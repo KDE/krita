@@ -19,8 +19,6 @@
 #ifndef KIS_CURVE_PAINTOP_SETTINGS_H_
 #define KIS_CURVE_PAINTOP_SETTINGS_H_
 
-#include <QObject>
-#include <QList>
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 

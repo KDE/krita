@@ -268,10 +268,11 @@ void CurveBrush::paintLine ( KisPaintDeviceSP dab,KisPaintDeviceSP layer, const 
 
     qreal clen;
 
+/*
     dbgPlugins << "mode:" << m_mode;
     dbgPlugins << "min:" << m_minimalDistance;
     dbgPlugins << "interval:" << m_interval;
-
+*/
 
     switch (m_mode){
     case 1: clen = ((drand48() * m_interval) - m_interval); 

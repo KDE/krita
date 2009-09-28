@@ -16,22 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <kis_curve_paintop_settings.h>
-
-#include <KoColorSpaceRegistry.h>
-
-#include <kis_image.h>
-#include <kis_debug.h>
-
-#include <kis_paintop_registry.h>
-#include <kis_painter.h>
-#include <kis_paint_device.h>
-#include <kis_paint_information.h>
-
-#include <KoColor.h>
-#include <qdebug.h>
-
 #include <kis_curve_paintop_settings_widget.h>
-
 
 KisCurvePaintOpSettings::KisCurvePaintOpSettings()
     : m_options(0)

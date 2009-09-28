@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <KoViewConverter.h>
+
 #include <kis_paint_action_type_option.h>
 
 #include "kis_spray_paintop_settings.h"

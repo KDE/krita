@@ -22,15 +22,6 @@
 #include <cmath>
 
 #include <QRect>
-#include <QList>
-#include <QColor>
-
-#include <qdebug.h>
-
-#include <KoColor.h>
-#include <KoColorSpace.h>
-#include <KoInputDevice.h>
-#include <KoCompositeOp.h>
 
 #include <kis_image.h>
 #include <kis_debug.h>
@@ -42,9 +33,6 @@
 #include "kis_paintop.h"
 #include "kis_selection.h"
 #include "kis_random_accessor.h"
-
-#include "kis_datamanager.h"
-
 
 KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
         : KisPaintOp(painter)

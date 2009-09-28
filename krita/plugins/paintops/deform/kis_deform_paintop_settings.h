@@ -19,8 +19,6 @@
 #ifndef KIS_DEFORM_PAINTOP_SETTINGS_H_
 #define KIS_DEFORM_PAINTOP_SETTINGS_H_
 
-#include <QObject>
-#include <QList>
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
@@ -28,13 +26,9 @@
 
 #include "kis_deform_paintop_settings_widget.h"
 
-#ifdef HAVE_OPENGL
 #if defined(_WIN32) || defined(_WIN64)
 # include <windows.h>
 #endif
-#include <GL/gl.h>
-#endif
-
 
 class QWidget;
 class KisDeformPaintOpSettingsWidget;

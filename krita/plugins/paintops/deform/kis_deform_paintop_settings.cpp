@@ -15,25 +15,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <kis_deform_paintop_settings.h>
-#include <kis_deform_paintop_settings_widget.h>
-
-#include <KoColorSpaceRegistry.h>
 #include <KoViewConverter.h>
 
-#include <kis_image.h>
-#include <kis_debug.h>
-
-#include <kis_paintop_registry.h>
-#include <kis_painter.h>
-#include <kis_paint_device.h>
-#include <kis_paint_information.h>
-
-#include <KoColor.h>
-
-#ifdef HAVE_OPENGL
-#endif
-
+#include <kis_deform_paintop_settings.h>
+#include <kis_deform_paintop_settings_widget.h>
 
 KisDeformPaintOpSettings::KisDeformPaintOpSettings()
     : m_options(0)
@@ -125,7 +110,24 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image
 {
     if(_mode != CURSOR_IS_OUTLINE) return;
     qreal size = radius() * 2;
+
+#if 0
+//     painter.setPen( QColor(128,255,128) );
+//     painter.setCompositionMode(QPainter::CompositionMode_Exclusion);
+    painter.setRenderHint(QPainter::Antialiasing,true);
+    QRectF sizerc = converter.documentToView( image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos) );
+    QPen pen = painter.pen();
+    pen.setColor(QColor(3,3,3,150));
+    pen.setWidth(5);
+    painter.setPen(pen);
+    painter.drawEllipse( sizerc );
+    pen.setColor(Qt::white);
+    pen.setWidth(1);
+    painter.setPen(pen);
+    painter.drawEllipse( sizerc );
+#else
     painter.setPen(Qt::black);
+#endif
     painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos) ) );
 }
 

@@ -32,27 +32,29 @@
 #include <QRect>
 #include <QColor>
 
-#include "knuminput.h"
+#include <knuminput.h>
 
-#include "kis_layer.h"
-#include "kis_cursor.h"
-#include "kis_painter.h"
-#include "kis_tool_brush.h"
-#include "widgets/kis_cmb_composite.h"
+#include <KoUpdater.h>
+#include <KoColorSpace.h>
+#include <KoCanvasBase.h>
+#include <KoPointerEvent.h>
+#include <KoProgressUpdater.h>
 
-#include "KoColorSpace.h"
-#include "KoCanvasBase.h"
-#include "KoPointerEvent.h"
-#include "kis_pattern.h"
-#include "kis_fill_painter.h"
-#include "KoProgressUpdater.h"
-#include "kis_selection.h"
+#include <kis_layer.h>
+#include <kis_painter.h>
+#include <kis_pattern.h>
+#include <kis_fill_painter.h>
+#include <kis_selection.h>
+
+#include <kis_view2.h>
+#include <canvas/kis_canvas2.h>
+#include <widgets/kis_cmb_composite.h>
+#include <kis_cursor.h>
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
-        : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
+    : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
 {
     setObjectName("tool_fill");
-    m_fillPainter = 0;
     m_painter = 0;
     m_oldColor = 0;
     m_threshold = 15;
@@ -73,6 +75,12 @@ bool KisToolFill::flood(int startX, int startY)
     if (!device) return false;
     KisSelectionSP selection = currentSelection();
 
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+    KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
+    updater->start( 100, i18n("Flood Fill") );
+
+    QRegion dirty;
+
     if (m_fillOnlySelection && selection) {
 #ifdef __GNUC__
 #warning Port the fixes for filling the selection from 1.6!
@@ -80,32 +88,25 @@ bool KisToolFill::flood(int startX, int startY)
 
         QRect rc = selection->selectedRect();
         KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace());
-        delete m_fillPainter;
-        m_fillPainter = new KisFillPainter(filled);
-        Q_CHECK_PTR(m_fillPainter);
+        KisFillPainter fillPainter(filled);
+        fillPainter.setProgress(updater->startSubtask());
 
-        //KisFillPainter painter(filled);
-        // really filled.
         if (m_usePattern)
-            m_fillPainter->fillRect(0, 0,
-                                    currentImage()->width(),
-                                    currentImage()->height(),
-                                    currentPattern());
+            fillPainter.fillRect(0, 0,
+                                 currentImage()->width(),
+                                 currentImage()->height(),
+                                 currentPattern());
         else
-            m_fillPainter->fillRect(0, 0,
-                                    currentImage()->width(),
-                                    currentImage()->height(),
-                                    currentFgColor(),
-                                    m_opacity);
+            fillPainter.fillRect(0, 0,
+                                 currentImage()->width(),
+                                 currentImage()->height(),
+                                 currentFgColor(),
+                                 m_opacity);
 
-        QRegion dirty = m_fillPainter->dirtyRegion();
-
-        delete m_fillPainter;
-        m_fillPainter = 0;
+        dirty = fillPainter.dirtyRegion();
 
         m_painter = new KisPainter(device, currentSelection());
         Q_CHECK_PTR(m_painter);
-
 
         m_painter->beginTransaction(i18n("Fill"));
 
@@ -116,50 +117,42 @@ bool KisToolFill::flood(int startX, int startY)
 
         m_painter->setCompositeOp(m_compositeOp);
         m_painter->setOpacity(m_opacity);
-        
+
         while (it != end) {
             QRect rc = *it;
             m_painter->bitBlt(rc.topLeft(), filled, rc);
             ++it;
         }
 
-        device->setDirty(dirty);
-
         m_canvas->addCommand(m_painter->endTransaction());
+
     } else {
 
-        delete m_fillPainter;
-        m_fillPainter = new KisFillPainter(device, currentSelection());
-        Q_CHECK_PTR(m_fillPainter);
+        KisFillPainter fillPainter(device, currentSelection());
+        setupPainter(&fillPainter);
+        fillPainter.beginTransaction(i18n("Flood Fill"));
 
-        m_fillPainter->beginTransaction(i18n("Flood Fill"));
-        setupPainter(m_fillPainter);
-        m_fillPainter->setOpacity(m_opacity);
-        m_fillPainter->setFillThreshold(m_threshold);
-        m_fillPainter->setCompositeOp(m_compositeOp);
-        m_fillPainter->setSampleMerged(!m_unmerged);
-        m_fillPainter->setCareForSelection(true);
-        m_fillPainter->setWidth(currentImage()->width());
-        m_fillPainter->setHeight(currentImage()->height());
-        // Enable this code again when I know how progress works
-        //  KoUpdater *progress = ??
-//     if (progress) {
-//  progress->setSubject(m_fillPainter, true, true);
-//     }
+        fillPainter.setProgress(updater->startSubtask());
+        fillPainter.setOpacity(m_opacity);
+        fillPainter.setFillThreshold(m_threshold);
+        fillPainter.setCompositeOp(m_compositeOp);
+        fillPainter.setSampleMerged(!m_unmerged);
+        fillPainter.setCareForSelection(true);
+        fillPainter.setWidth(currentImage()->width());
+        fillPainter.setHeight(currentImage()->height());
 
         if (m_usePattern)
-            m_fillPainter->fillPattern(startX, startY, currentImage()->mergedImage());
+            fillPainter.fillPattern(startX, startY, currentImage()->mergedImage());
         else
-            m_fillPainter->fillColor(startX, startY, currentImage()->mergedImage());
+            fillPainter.fillColor(startX, startY, currentImage()->mergedImage());
 
-        QRegion dirtyRegion = m_fillPainter->dirtyRegion();
-        device->setDirty(dirtyRegion);
-
-        m_canvas->addCommand(m_fillPainter->endTransaction());
-
-        delete m_fillPainter;
-        m_fillPainter = 0;
+        dirty = fillPainter.dirtyRegion();
+        m_canvas->addCommand(fillPainter.endTransaction());
     }
+    device->setDirty(dirty);
+    delete updater;
+
+
     return true;
 }
 
@@ -224,9 +217,9 @@ QWidget* KisToolFill::createOptionWidget()
     addOptionWidgetOption(m_checkFillSelection);
     addOptionWidgetOption(m_checkSampleMerged);
     addOptionWidgetOption(m_checkUsePattern);
-    
+
     widget->setFixedHeight(widget->sizeHint().height());
-    
+
     return widget;
 }
 

@@ -2,7 +2,7 @@
  *  kis_tool_star.cc -- part of Krita
  *
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>  
+ *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -132,6 +132,8 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
+
     if (!m_dragging)
         return;
 
@@ -153,10 +155,10 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
         for (int i = 0; i < points.count() - 1; i++) {
                 begin = pixelToView(points[i]);
                 end = pixelToView(points[i + 1]);
-            
+
                 glVertex2f( begin.x(),begin.y());
                 glVertex2f( end.x(), end.y() );
-        
+
         }
         glEnd();
 
@@ -236,7 +238,7 @@ QWidget* KisToolStar::createOptionWidget()
     m_optWidget = new WdgToolStar(widget);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setObjectName(toolId() + " option widget");
-    
+
     m_optWidget->ratioSpinBox->setValue(m_innerOuterRatio);
 
     QGridLayout *optionLayout = new QGridLayout(widget);

@@ -68,7 +68,6 @@ private:
     qint32 m_depth;
     quint8* m_oldColor, *m_color;
     KisPainter *m_painter;
-    KisFillPainter *m_fillPainter;
 
     bool *m_map, m_unmerged, m_usePattern, m_fillOnlySelection;
     KisSelectionSP m_selection;
@@ -91,7 +90,7 @@ public:
             : KoToolFactory(parent, "KritaFill/KisToolFill", i18n("Contiguous Fill")) {
         setToolTip(i18n("Fill a contiguous area of color with a color, or fill a selection."));
         setToolType(TOOL_TYPE_FILL);
-	//setActivationShapeId( KIS_NODE_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setIcon("krita_tool_color_fill");
         //setShortcut( QKeySequence( Qt::Key_F ) );
         setPriority(14);

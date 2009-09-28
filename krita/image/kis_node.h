@@ -100,6 +100,23 @@ public:
      */
     virtual void setDirty(const QRegion & region) { Q_UNUSED(region); }
 
+    /**
+     * Some filters will cause a change of pixels those are outside
+     * a requested rect. E.g. we change a rect of 2x2, then we want to
+     * apply a convolution filter with kernel 4x4 (changeRect is
+     * (2+2*3)x(2+2*3)=8x8) to that area. The rect that should be updated
+     * on the layer will be exaclty 8x8. More than that the needRect for
+     * that update will be 14x14. See \ref needeRect.
+     */
+    virtual QRect changeRect(const QRect &rect) const;
+
+    /**
+     * Some filters need pixels outside the current processing rect to
+     * compute the new value (for instance, convolution filters)
+     * See \ref changeRect
+     */
+    virtual QRect needRect(const QRect &rect) const;
+
 public: // Graph methods
 
     /**

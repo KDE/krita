@@ -18,26 +18,26 @@
 
 #include "kis_transparency_mask.h"
 
+#include "kis_debug.h"
+
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 #include "kis_paint_device.h"
-#include "kis_iterators_pixel.h"
-#include "KoColorSpace.h"
-#include "kis_selection.h"
+#include "kis_painter.h"
 #include "kis_node_visitor.h"
 
-#include "kis_debug.h"
 
 KisTransparencyMask::KisTransparencyMask()
         : KisEffectMask()
-{
-    dbgImage << "Creating a transparency mask";
-}
-
-KisTransparencyMask::~KisTransparencyMask()
 {
 }
 
 KisTransparencyMask::KisTransparencyMask(const KisTransparencyMask& rhs)
         : KisEffectMask(rhs)
+{
+}
+
+KisTransparencyMask::~KisTransparencyMask()
 {
 }
 
@@ -47,42 +47,49 @@ bool KisTransparencyMask::allowAsChild(KisNodeSP node) const
     return false;
 }
 
+QRect KisTransparencyMask::decorateRect(KisPaintDeviceSP &src,
+                                        KisPaintDeviceSP &dst,
+                                        const QRect & rc) const
+{
+    if(src != dst) {
+        //dst = new KisPaintDevice(*src);
+        KisPainter gc(dst);
+        gc.setCompositeOp(src->colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc.bitBlt(rc.topLeft(), src, rc);
+        src->clear(rc);
+    }
+
+    return rc;
+}
+
+QRect KisTransparencyMask::changeRect(const QRect &rect) const
+{
+    /**
+     * Selection on transparency masks have special meaning:
+     * They do not crop change area, they crop need area.
+     * It doesn't need any area outside a selection
+     */
+    return rect;
+}
+
+QRect KisTransparencyMask::needRect(const QRect &rect) const
+{
+    /**
+     * Selection on transparency masks have special meaning:
+     * They do not crop change area, they crop need area.
+     * It doesn't need any area outside a selection
+     */
+    return KisMask::needRect(rect);
+}
+
 QIcon KisTransparencyMask::icon() const
 {
     return KIcon("view-filter");
 }
 
-void KisTransparencyMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
-{
-    if(!selection()->hasPixelSelection()) return;
-    selection()->updateProjection(rc);
-
-    const KoColorSpace * cs = projection->colorSpace();
-
-    KisHLineIteratorPixel projectionIt = projection->createHLineIterator(rc.x(), rc.y(), rc.width());
-    KisHLineConstIteratorPixel maskIt = selection()->createHLineConstIterator(rc.x(), rc.y(), rc.width());
-
-    for (int row = rc.y(); row < rc.bottom() + 1; ++row) {
-        while (!projectionIt.isDone()) {
-
-            int pixels = qMin(projectionIt.nConseqHPixels(), maskIt.nConseqHPixels());
-            cs->applyInverseAlphaU8Mask(projectionIt.rawData(), maskIt.rawData(), pixels);
-
-            projectionIt += pixels;
-            maskIt += pixels;
-        }
-        projectionIt.nextRow();
-        maskIt.nextRow();
-    }
-
-}
-
 bool KisTransparencyMask::accept(KisNodeVisitor &v)
 {
-    dbgKrita << name() << " accepts visitor ";
-    bool b = v.visit(this);
-    dbgKrita << "result: " << b;
-    return b;
+    return v.visit(this);
 }
 
 

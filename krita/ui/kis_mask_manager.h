@@ -75,25 +75,23 @@ public slots:
      * Create a new transparency mask.
      */
     void createTransparencyMask();
-    void createTransparencyMask(KisNodeSP parent, KisNodeSP above);
+
     /**
      * Create a new filter mask.
      */
     void createFilterMask();
-    void createFilterMask(KisNodeSP parent, KisNodeSP above);
+
     /**
      * create a new transformation mask. If the transform tool is
      * active, get the current transformation and selection and create
      * the mask from that.
      */
     void createTransformationMask();
-    void createTransformationMask(KisNodeSP parent, KisNodeSP above);
 
     /**
      * Create a local, i.e., per-layer selection object.
      */
     void createSelectionmask();
-    void createSelectionMask(KisNodeSP parent, KisNodeSP above);
 
     /**
      * Create a new local selection from the active mask.
@@ -179,6 +177,12 @@ private:
      */
     void activateMask(KisMaskSP mask);
 
+    void initMaskSelection(KisMask* mask);
+
+    void createSelectionMask(KisNodeSP parent, KisNodeSP above);
+    void createTransformationMask(KisNodeSP parent, KisNodeSP above);
+    void createFilterMask(KisNodeSP parent, KisNodeSP above);
+    void createTransparencyMask(KisNodeSP parent, KisNodeSP above);
 
 private:
     KisView2 * m_view;

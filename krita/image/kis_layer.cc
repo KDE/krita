@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,13 +26,14 @@
 #include <QIcon>
 #include <QImage>
 #include <QBitArray>
+#include <QStack>
 
 #include <KoProperties.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpace.h>
 
 #include "kis_debug.h"
-#include "kis_group_layer.h"
+//#include "kis_group_layer.h"
 #include "kis_image.h"
 
 #include "kis_painter.h"
@@ -52,6 +54,7 @@ public:
     QString compositeOp;
     KisEffectMaskSP previewMask;
     KisMetaData::Store* metaDataStore;
+    KisPaintDeviceSP projection;
 };
 
 
@@ -106,12 +109,6 @@ void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyL
 //     setOpacity( properties.at( 2 ).state.toInt() );
 //     setCompositeOp( const_cast<KoCompositeOp*>( image()->colorSpace()->compositeOp( properties.at( 3 ).state.toString() ) ) );
 }
-
-KisPaintDeviceSP KisLayer::original() const
-{
-    return projection();
-}
-
 
 void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
@@ -203,13 +200,7 @@ void KisLayer::setDirty()
 
 void KisLayer::setDirty(const QRect & rect)
 {
-    QRect dr = rect;
-    QList<KisMaskSP> masks = effectMasks();
-    foreach( const KisMaskSP& mask, masks)
-    {
-        dr |= mask->adjustedDirtyRect( dr );
-    }
-    m_d->image->updateProjection( this, dr );
+    m_d->image->updateProjection(this, rect);
 }
 
 void KisLayer::setDirty(const QRegion & region)
@@ -243,89 +234,263 @@ KisSelectionSP KisLayer::selection() const
         return 0;
 }
 
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
+QList<KisEffectMaskSP> KisLayer::effectMasks() const
+{
+    KoProperties properties;
+    properties.setProperty("visible", true);
+    QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
+    QList<KisEffectMaskSP> masks;
+
+    if(m_d->previewMask)
+        masks.append(m_d->previewMask);
+
+    foreach(const KisNodeSP& node,  nodes) {
+        KisEffectMaskSP mask = dynamic_cast<KisEffectMask*>(const_cast<KisNode*>(node.data()));
+        if (mask)
+            masks.append(mask);
+    }
+    return masks;
+}
+
 bool KisLayer::hasEffectMasks() const
 {
     if (m_d->previewMask) return true;
 
-    QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), KoProperties());
+    KoProperties properties;
+    properties.setProperty("visible", true);
+
+    QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), properties);
     if (!masks.isEmpty()) return true;
 
     return false;
 }
 
-void KisLayer::applyEffectMasks(const KisPaintDeviceSP original, const KisPaintDeviceSP projection, const QRect & rc)
+QRect KisLayer::masksChangeRect(const QList<KisEffectMaskSP> &masks,
+                                const QRect &requestedRect,
+                                bool &rectVariesFlag) const
 {
-    Q_ASSERT(original);
-    Q_ASSERT(projection);
-    KoProperties props;
-    props.setProperty("visible", true);
+    rectVariesFlag = false;
 
-    QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
-    masks.push_front(m_d->previewMask);
+    QRect prevChangeRect = requestedRect;
+    QRect changeRect;
 
-    // Compute the needed area
+    foreach(const KisEffectMaskSP& mask, masks) {
+        changeRect = mask->changeRect(prevChangeRect);
 
-    QRect currentNeededRc = rc;
+        if(changeRect != prevChangeRect)
+            rectVariesFlag = true;
 
-    QList< QRect > neededRects;
-
-    neededRects.push_front( rc );
-    for( int i = masks.size() - 1; i >= 0 ; --i )
-    {
-        const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>(masks.at(i).data());
-        if (effectMask) {
-            dbgImage << i << " " << effectMask->neededRect( currentNeededRc );
-            currentNeededRc |= effectMask->neededRect( currentNeededRc );
-            dbgImage << i << currentNeededRc;
-            if( i > 0 )
-            {
-                neededRects.push_front( currentNeededRc );
-            }
-        }
+        prevChangeRect = changeRect;
     }
-    dbgImage << "Apply effects on " << rc << " with a total needed rect of " << currentNeededRc;
 
-    if (masks.size() > 0) {
-        KisPaintDeviceSP tmp = new KisPaintDevice( projection->colorSpace());
-        KisPainter gc(tmp);
-        gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-        gc.bitBlt(currentNeededRc.topLeft(), original, currentNeededRc);
+    return changeRect;
+}
 
-        // Then loop through the effect masks and apply them
-        for (int i = 0; i < masks.size(); ++i) {
+QRect KisLayer::masksNeedRect(const QList<KisEffectMaskSP> &masks,
+                              const QRect &changeRect,
+                              QStack<QRect> &applyRects,
+                              bool &rectVariesFlag) const
+{
+    rectVariesFlag = false;
 
-            const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>(masks.at(i).data());
+    QRect prevNeedRect = changeRect;
+    QRect needRect;
 
-            if (effectMask) {
-                dbgImage << " layer " << name() << " has effect mask " << effectMask->name() << " on " << neededRects[i];
-                effectMask->apply(tmp, neededRects[i]);
-            }
+    for(qint32 i = masks.size()-1; i>=0; i--) {
+        applyRects.push(prevNeedRect);
+
+        needRect = masks[i]->needRect(prevNeedRect);
+
+        if(prevNeedRect != needRect)
+            rectVariesFlag = true;
+
+        prevNeedRect = needRect;
+    }
+
+    return needRect;
+}
+
+
+QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
+                           const KisPaintDeviceSP destination,
+                           const QRect &requestedRect) const
+{
+    Q_ASSERT(source);
+    Q_ASSERT(destination);
+
+    QList<KisEffectMaskSP> masks = effectMasks();
+    QRect changeRect;
+    QRect needRect;
+
+    if(masks.isEmpty()) {
+        changeRect = requestedRect;
+        if(source != destination) {
+            copyOriginalToProjection(source, destination, requestedRect);
         }
-
-        KisPainter gc2(projection);
-        gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-        gc2.bitBlt(rc.topLeft(), tmp, rc);
     }
     else {
-        KisPainter gc2(projection);
-        gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-        gc2.bitBlt(rc.topLeft(), original, rc);
+        QStack<QRect> applyRects;
+        bool changeRectVaries;
+        bool needRectVaries;
+
+        changeRect = masksChangeRect(masks, requestedRect,
+                                       changeRectVaries);
+
+        needRect = masksNeedRect(masks, changeRect,
+                                 applyRects, needRectVaries);
+
+        if(!changeRectVaries && !needRectVaries) {
+            /**
+             * A bit of optimization:
+             * All filters will read/write exactly from/to the requested
+             * rect so we needn't create temporary paint device,
+             * just apply it onto destination
+             */
+            Q_ASSERT(needRect == requestedRect);
+
+            if(source != destination) {
+                copyOriginalToProjection(source, destination, needRect);
+            }
+
+            foreach(const KisEffectMaskSP& mask, masks) {
+                mask->apply(destination, applyRects.pop());
+            }
+            Q_ASSERT(applyRects.isEmpty());
+        }
+        else {
+            /**
+             * We can't eliminate additional copy-op
+             * as filters' behaviour may be quite insane here,
+             * so let them work on their own paintDevice =)
+             */
+
+            KisPaintDeviceSP tempDevice = new KisPaintDevice(colorSpace());
+            copyOriginalToProjection(source, tempDevice, needRect);
+
+            foreach(const KisEffectMaskSP& mask, masks) {
+                mask->apply(tempDevice, applyRects.pop());
+            }
+            Q_ASSERT(applyRects.isEmpty());
+
+            KisPainter gc2(destination);
+            gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+            gc2.bitBlt(changeRect.topLeft(), tempDevice, changeRect);
+        }
     }
+
+    return changeRect;
 }
 
-
-QList<KisMaskSP> KisLayer::effectMasks() const
+QRect KisLayer::updateProjection(const QRect& rect)
 {
-    QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), KoProperties());
-    QList<KisMaskSP> masks;
-    foreach(const KisNodeSP& node,  nodes) {
-        KisMaskSP mask = dynamic_cast<KisMask*>(const_cast<KisNode*>(node.data()));
-        if (mask)
-            masks.append(mask);
-    }
-    return masks;
+    QRect updatedRect = rect;
+    KisPaintDeviceSP originalDevice = original();
 
+    //qDebug()<<name()<<"::updateProjection("<< rect<<") is called";
+
+    if (!rect.isValid() ||
+        !visible() ||
+        !originalDevice) return QRect();
+
+    if(!needProjection() && !hasEffectMasks()) {
+        updatedRect = repaintOriginal(originalDevice, updatedRect);
+        m_d->projection = 0;
+    }
+    else {
+        updatedRect = repaintOriginal(originalDevice, updatedRect);
+
+        if(!updatedRect.isEmpty()) {
+
+            if (!m_d->projection ||
+                !(*m_d->projection->colorSpace() == *originalDevice->colorSpace())) {
+
+                /**
+                 * If it's needed to create a new projection paint device
+                 * let's do it now! (content will be shared)
+                 */
+                m_d->projection = new KisPaintDevice(*originalDevice);
+
+            } else {
+                m_d->projection->setX(originalDevice->x());
+                m_d->projection->setY(originalDevice->y());
+            }
+            updatedRect = applyMasks(originalDevice, m_d->projection,
+                                     updatedRect);
+        }
+        /**
+         * FIXME: else { m_d->projection = 0;}
+         */
+    }
+
+    return updatedRect;
 }
+
+bool KisLayer::needProjection() const
+{
+    return false;
+}
+
+void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
+                                        KisPaintDeviceSP projection,
+                                        const QRect& rect) const
+{
+    KisPainter gc(projection);
+    gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+    gc.bitBlt(rect.topLeft(), original, rect);
+}
+
+
+KisPaintDeviceSP KisLayer::projection() const
+{
+    return m_d->projection ? m_d->projection : original();
+}
+
+QImage KisLayer::createThumbnail(qint32 w, qint32 h)
+{
+    KisPaintDeviceSP originalDevice = original();
+
+    return originalDevice ?
+        originalDevice->createThumbnail(w, h) : QImage();
+}
+
+qint32 KisLayer::x() const
+{
+    KisPaintDeviceSP originalDevice = original();
+    return originalDevice ? originalDevice->x() : 0;
+}
+qint32 KisLayer::y() const
+{
+    KisPaintDeviceSP originalDevice = original();
+    return originalDevice ? originalDevice->y() : 0;
+}
+void KisLayer::setX(qint32 x)
+{
+    KisPaintDeviceSP originalDevice = original();
+    if (originalDevice)
+        originalDevice->setX(x);
+}
+void KisLayer::setY(qint32 y)
+{
+    KisPaintDeviceSP originalDevice = original();
+    if (originalDevice)
+        originalDevice->setY(y);
+}
+
+QRect KisLayer::extent() const
+{
+    KisPaintDeviceSP originalDevice = original();
+    return originalDevice ? originalDevice->extent() : QRect();
+}
+
+QRect KisLayer::exactBounds() const
+{
+    KisPaintDeviceSP originalDevice = original();
+    return originalDevice ? originalDevice->exactBounds() : QRect();
+}
+
 
 void KisLayer::setPreviewMask(KisEffectMaskSP mask)
 {

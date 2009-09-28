@@ -508,7 +508,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     return image;
 }
 
-KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
+KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection) const
 {
     KisPaintDeviceSP thumbnail = new KisPaintDevice(colorSpace());
     thumbnail->clear();
@@ -533,8 +533,8 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
     else if (srcHeight > srcWidth)
         w = qint32(double(srcWidth) / srcHeight * h);
 
-    KisRandomConstAccessorPixel iter = createRandomConstAccessor(0, 0);
-    KisRandomAccessorPixel dstIter = thumbnail->createRandomAccessor( 0, 0 );
+    KisRandomConstAccessorPixel iter = createRandomConstAccessor(0, 0, selection);
+    KisRandomAccessorPixel dstIter = thumbnail->createRandomAccessor(0, 0);
 
     for (qint32 y = 0; y < h; ++y) {
         qint32 iY = srcY0 + (y * srcHeight) / h;
@@ -570,9 +570,9 @@ void KisPaintDevice::removePainterlyOverlay()
 }
 
 
-QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h)
+QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, const KisSelection *selection)
 {
-    KisPaintDeviceSP dev = createThumbnailDevice(w, h);
+    KisPaintDeviceSP dev = createThumbnailDevice(w, h, selection);
     return dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
 }
 

@@ -62,6 +62,7 @@ void KisImageLayerAddCommand::redo()
 
 void KisImageLayerAddCommand::undo()
 {
+    KisNodeSP parentNode = m_layer->parent();
     m_image->removeNode(m_layer);
-    m_layer->setDirty();
+    parentNode->setDirty();
 }

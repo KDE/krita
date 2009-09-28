@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ *           (C) Dmitry Kazakov <dimula73@gmail.com>, 2009
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,6 +48,7 @@
 #include "kis_projection.h"
 #include "kis_node_progress_proxy.h"
 
+
 namespace
 {
 /**
@@ -70,209 +72,114 @@ namespace
 
     public:
 
-        bool visit(KisExternalLayer * layer) {
-            if (m_projection.isNull()) {
-                return false;
-            }
-            if (!layer->visible())
-                return true;
+        bool generalCopy(KisLayer *layer, const QRect &rect) {
+            Q_ASSERT(m_projection);
+            if(!layer->visible()) return true;
 
-            KisPaintDeviceSP dev = layer->projection();
-            if (!dev)
-                return true;
+            KisPaintDeviceSP device = layer->projection();
+            if (!device) return true;
 
-            QRect rc = dev->extent() & m_rc;
+            QRect needRect = rect & device->extent();
 
             KisPainter gc(m_projection);
             gc.setChannelFlags(layer->channelFlags());
             gc.setCompositeOp(layer->compositeOp());
             gc.setOpacity(layer->opacity());
-            gc.bitBlt(rc.topLeft(), dev, rc);
+            gc.bitBlt(needRect.topLeft(), device, needRect);
 
             return true;
+        }
+
+        bool visit(KisExternalLayer *layer) {
+            return generalCopy(layer, m_rc);
         }
 
         bool visit(KisGeneratorLayer * layer) {
-            if (m_projection.isNull()) {
-                return false;
-            }
-            if (!layer->visible())
-                return true;
-
-            layer->updateProjection(m_rc);
-            KisPaintDeviceSP dev = layer->projection();
-            if (!dev)
-                return true;
-
-            QRect rc = dev->extent() & m_rc;
-
-            KisPainter gc(m_projection);
-            gc.setChannelFlags(layer->channelFlags());
-            gc.setCompositeOp(layer->compositeOp());
-            gc.setOpacity(layer->opacity());
-            gc.bitBlt(rc.topLeft(), dev, rc);
-
-
-            return true;
+            /**
+             * FIXME: Pay attention to selection
+             * AAA: seems to be done, check it please
+             */
+            return generalCopy(layer, m_rc);
         }
 
         bool visit(KisPaintLayer *layer) {
-
-            if (m_projection.isNull()) {
-                return false;
-            }
-
-            bool first = false;
-            if (layer->prevSibling() == 0 && layer->parent() == layer->image()->root())
-                first = true;
-
-            if (!layer->visible()) {
-                if (first) {
-                    m_projection->clear(m_rc);
-                }
-                return true;
-            }
-
-            QRect rc = layer->extent() & m_rc;
-
-            KisPainter gc(m_projection);
-            QBitArray flags = layer->channelFlags();
-            gc.setChannelFlags(flags);
-
-            KisPaintDeviceSP source = layer->projection();
-            gc.setOpacity(layer->opacity());
-
-            if (first) {
-                gc.setCompositeOp(m_projection->colorSpace()->compositeOp(COMPOSITE_COPY));
-                gc.bitBlt(rc.topLeft(), source, rc);
-            }
-            else {
-                gc.setCompositeOp(layer->compositeOp());
-                gc.bitBlt(rc.topLeft(), source, rc);
-            }
-            return true;
+            return generalCopy(layer, m_rc);
         }
 
         bool visit(KisGroupLayer *layer) {
-
-            if (m_projection.isNull()) {
-                return false;
-            }
-
-            if (!layer->visible())
-                return true;
-
-            KisPaintDeviceSP dev = layer->projection();
-
-            QRect rc = dev->extent() & m_rc;
-
-            KisPainter gc(m_projection);
-            gc.setChannelFlags(layer->channelFlags());
-            gc.setCompositeOp(layer->compositeOp());
-            gc.setOpacity(layer->opacity());
-            gc.bitBlt(rc.topLeft(), dev, rc);
-
-            return true;
+            return generalCopy(layer, m_rc);
         }
 
         bool visit(KisAdjustmentLayer* layer) {
+            Q_ASSERT(m_projection);
+            if(!layer->visible()) return true;
 
-            Q_ASSERT(layer);
+            KisFilterConfiguration *filterConfig = layer->filter();
+            if(!filterConfig) return true;
 
-            if (m_projection.isNull()) {
-                return true;
-            }
+            KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
+            if(!filter) return false;
 
-            if (!layer->visible())
-                return true;
+            /**
+             * FIXME: A set of crutches, until bottom-up
+             * merging strategy is ready
+             */
+            QRect needRect = m_rc;
+            QRect changeRect = m_rc;
+            QRect applyRect = m_rc;
 
-            QRect tmpRc = m_rc;
+            /**
+             * FIXME: make this like in KisLayer::applyMasks
+             */
+            KisPaintDeviceSP originalDevice = layer->original();
+            KisPaintDeviceSP tempDevice =
+                new KisPaintDevice(originalDevice->colorSpace());
 
-            KisPaintDeviceSP tempTarget = layer->temporaryTarget();
+            /**
+             * Assume that needRect has already been prepared for
+             * us by bottom-up update strategy
+             */
 
-            if (tempTarget) {
-                tmpRc = (layer->extent() | tempTarget->extent()) & tmpRc;
-            }
+            /**
+             * FIXME: check whether it's right to leave a selection to
+             * a projection mechanism, not for the filter
+             */
+            KisConstProcessingInformation srcCfg(m_projection, applyRect.topLeft(), 0);
+            KisProcessingInformation dstCfg(tempDevice, applyRect.topLeft(), 0);
 
-            if (tmpRc.width() == 0 || tmpRc.height() == 0) // Don't even try
-                return true;
+            Q_ASSERT(layer->nodeProgressProxy());
 
+            KoProgressUpdater updater(layer->nodeProgressProxy());
+            updater.start(100, filter->name());
+            QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
-            KisFilterConfiguration * cfg = layer->filter();
-            if (!cfg) return true;
+            KisTransaction* transaction =
+                new KisTransaction("", tempDevice);
+            filter->process(srcCfg, dstCfg, applyRect.size(),
+                            filterConfig, updaterPtr);
+            delete transaction;
 
-            KisFilterSP f = KisFilterRegistry::instance()->value(cfg->name());
-            if (!f) return false;
+            updaterPtr->setProgress(100);
 
-            // Possibly enlarge the rect that changed (like for convolution filters)
-            tmpRc = f->changedRect(tmpRc, cfg);
-
-            KisSelectionSP selection = layer->selection();
-            KisPaintDeviceSP layerProjection = layer->projection();
-
-            // It's necessary to copy the unselected pixels to the projection cache inside
-            // the adjustment layer to make the merge optimization in the grouplayer work.
-            KisPainter gc1(layerProjection);
-            gc1.setCompositeOp(layerProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
-            gc1.bitBlt(m_rc.topLeft(), m_projection, m_rc);
-            gc1.end();
-
-            KisConstProcessingInformation srcCfg(m_projection, tmpRc .topLeft(), 0);
-            KisProcessingInformation dstCfg(layerProjection, tmpRc .topLeft(), 0);
-
-            Q_ASSERT( layer->nodeProgressProxy() );
-            KoProgressUpdater updater( layer->nodeProgressProxy() );
-            updater.start( 100, f->name() );
-            QPointer<KoUpdater> up = updater.startSubtask();
-            // Some filters will require usage of oldRawData, which is not available without
-            // a transaction!
-            KisTransaction* cmd = new KisTransaction("", layerProjection);
-            f->process(srcCfg, dstCfg, tmpRc.size(), cfg, up);
-            delete cmd;
-            layer->nodeProgressProxy()->setValue( layer->nodeProgressProxy()->maximum() );
-
-            // Copy the filtered bits onto the projection
-            KisPainter gc(m_projection);
-            if (selection) {
-                gc.setSelection(selection);
-                gc.setCompositeOp(layer->compositeOp());
-                gc.setOpacity(layer->opacity());
-                gc.bitBlt(tmpRc.topLeft(), layerProjection, tmpRc);
-            }
-            else {
-                gc.setCompositeOp(layer->compositeOp());
-                gc.setOpacity(layer->opacity());
-                gc.bitBlt(tmpRc.topLeft(), layerProjection, tmpRc);
-            }
+            KisPainter gc(originalDevice);
+            gc.setCompositeOp(originalDevice->colorSpace()->compositeOp(COMPOSITE_COPY));
+            gc.bitBlt(changeRect.topLeft(), tempDevice, changeRect);
             gc.end();
 
-            return true;
+            /**
+             * FIXME: Pay attention to this change rect too
+             */
+            changeRect = layer->updateProjection(changeRect);
+
+            /**
+             * FIXME: another crutch (changeRect)
+             */
+            return generalCopy(layer, changeRect);
         }
 
 
         bool visit(KisCloneLayer * layer) {
-
-            if (m_projection.isNull()) {
-                return false;
-            }
-
-            if (!layer->visible())
-                return true;
-            KisPaintDeviceSP dev = layer->projection();
-
-            if (!dev) return false;
-
-            QRect rc = dev->extent() & m_rc;
-
-            KisPainter gc(m_projection);
-            gc.setCompositeOp(layer->compositeOp());
-            gc.setOpacity(layer->opacity());
-            gc.setChannelFlags(layer->channelFlags());
-
-            gc.bitBlt(rc.topLeft(), dev, rc);
-
-            return true;
-
+            return generalCopy(layer, m_rc);
         }
 
         bool visit(KisNode*) { return true; }
@@ -324,14 +231,16 @@ void KisTopDownUpdateStrategy::setDirty(const QRect & rc)
     if (m_d->node && m_d->node->parent())
         static_cast<KisTopDownUpdateStrategy*>(m_d->node->parent()->updateStrategy())->setFilthyNode(m_d->node);
 
+    QRect dirtyRect = rc;
+
     if (KisLayer* layer = dynamic_cast<KisLayer*>(m_d->node.data())) {
-        layer->updateProjection(rc);
+        dirtyRect |= layer->updateProjection(rc);
     }
     if (m_d->node->parent()) {
-        m_d->node->parent()->setDirty(rc);
+        m_d->node->parent()->setDirty(dirtyRect);
     }
     if (m_d->image) {
-        m_d->image->slotProjectionUpdated(rc);
+        m_d->image->slotProjectionUpdated(dirtyRect);
     }
 }
 
@@ -386,6 +295,7 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection(const QRec
       else
       start recomposition from the bottom
     */
+
     KisNodeSP startWith = m_d->node->firstChild();
     if (m_d->filthyNode) {
         KisNodeSP node = m_d->node->firstChild();
@@ -408,8 +318,6 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection(const QRec
         // FIXME: No dynamic_cast needed
         child = dynamic_cast<KisLayer*>(child->nextSibling().data());
     }
-
-//     return projection;
 
     m_d->filthyNode = 0;
     return projection;

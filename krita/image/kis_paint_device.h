@@ -312,14 +312,14 @@ public:
      * won't exceed \p maxw and \p maxw, but they may be smaller.
      */
 
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h) const;
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
      * The width and height of the returned QImage won't exceed \p maxw and \p maxw, but they may be smaller.
      * The colors are not corrected for display!
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh);
+    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection = 0);
 
     /**
      * Fill c and opacity with the values found at x and y.

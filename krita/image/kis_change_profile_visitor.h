@@ -59,7 +59,7 @@ public:
 
     bool visit(KisGroupLayer * layer) {
         // Clear the projection, we will have to re-render everything.
-        layer->resetProjection();
+        layer->resetCache();
 
         KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
         while (child) {

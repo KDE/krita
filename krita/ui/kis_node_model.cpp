@@ -294,9 +294,6 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
 
         m_d->image->undoAdapter()->addCommand( new KisNodePropertyListCommand( node, proplist ) );
         emit dataChanged(index, index);
-        if (wasVisible != visible) {
-            node->setDirty();
-        }
         return true;
     case ActiveRole:
         if (value.toBool()) {

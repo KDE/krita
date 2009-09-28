@@ -80,27 +80,18 @@ public:
     // KisExternalLayer implementation
     QIcon icon() const;
 
-    /**
-     * Keep the projection up to date.
-     *
-     * @param r the rect that needs to be updated in pixel coordinates
-     */
-    void updateProjection(const QRect& r);
-
-    // Retrieve the projection for
-    KisPaintDeviceSP projection() const;
+    KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;
 
-    QImage createThumbnail(qint32 w, qint32 h);
+    QRect repaintOriginal(KisPaintDeviceSP original,
+                          const QRect& rect);
 
     qint32 x() const;
-    void setX(qint32);
-
     qint32 y() const;
+    void setX(qint32);
     void setY(qint32);
 
     QRect extent() const;
-
     QRect exactBounds() const;
 
     bool accept(KisNodeVisitor&);
@@ -117,10 +108,8 @@ signals:
     void selectionChanged(QList<KoShape*> shape);
 
 private:
-
     class Private;
     Private * const m_d;
-
 };
 
 #endif

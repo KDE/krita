@@ -169,6 +169,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
         bound.setBottomRight(m_endPos);
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
 
+        // FIXME: check this!?
         if (m_startPos == m_endPos) {
             clearSelection();
             m_selecting = false;

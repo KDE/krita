@@ -41,22 +41,21 @@ class KRITAIMAGE_EXPORT KisTransparencyMask : public KisEffectMask
 public:
 
     KisTransparencyMask();
-
+    KisTransparencyMask(const KisTransparencyMask& rhs);
     virtual ~KisTransparencyMask();
 
     KisNodeSP clone() const {
         return KisNodeSP(new KisTransparencyMask(*this));
     }
 
-    KisTransparencyMask(const KisTransparencyMask& rhs);
-
-    QIcon icon() const;
-
     bool allowAsChild(KisNodeSP) const;
-
-    virtual void apply(KisPaintDeviceSP projection, const QRect & rc) const;
-
+    QRect decorateRect(KisPaintDeviceSP &src, KisPaintDeviceSP &dst,
+                       const QRect & rc) const;
+    QIcon icon() const;
     bool accept(KisNodeVisitor &v);
+
+    QRect changeRect(const QRect &rect) const;
+    QRect needRect(const QRect &rect) const;
 };
 
 #endif //_KIS_TRANSPARENCY_MASK_

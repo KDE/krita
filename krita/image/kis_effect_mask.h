@@ -50,10 +50,8 @@ public:
         return KIcon("bookmarks");
     }
 
-    /**
-     * Apply the effect the projection using the mask as a selection.
-     */
-    virtual void apply(KisPaintDeviceSP projection, const QRect & rc) const = 0;
+    using KisMask::apply;
+
 
 };
 

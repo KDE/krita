@@ -78,7 +78,7 @@ public:
     }
 
     bool visit(KisGroupLayer *layer) {
-        layer->resetProjection();
+        layer->resetCache();
 
         KisNodeSP child = layer->firstChild();
         while (child) {

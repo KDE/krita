@@ -252,6 +252,12 @@ target_link_libraries(KisFilterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_L
 
 ########### next target ###############
 
+set(kis_filter_selections_benchmark_SRCS kis_filter_selections_benchmark.cpp )
+kde4_add_unit_test(KisFilterSelectionsBenchmark TESTNAME krita-image-KisFilterSelectionsBenchmark ${kis_filter_selections_benchmark_SRCS})
+target_link_libraries(KisFilterSelectionsBenchmark  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_filter_processing_information_test_SRCS kis_filter_processing_information_test.cpp )
 kde4_add_unit_test(KisFilterProcessingInformationTest TESTNAME krita-image-KisFilterProcessingInformationTest ${kis_filter_processing_information_test_SRCS})
 target_link_libraries(KisFilterProcessingInformationTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

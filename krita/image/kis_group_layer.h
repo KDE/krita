@@ -19,8 +19,6 @@
 #ifndef KIS_GROUP_LAYER_H_
 #define KIS_GROUP_LAYER_H_
 
-#include <ksharedptr.h>
-
 #include "kis_layer.h"
 #include "kis_types.h"
 #include <KoColorConversionTransformation.h>
@@ -35,7 +33,6 @@ class KoColorSpace;
  **/
 class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer
 {
-
     Q_OBJECT
 
 public:
@@ -51,8 +48,10 @@ public:
 
     QIcon icon() const;
 
-    /// override from KisBaseNode
-    void updateSettings();
+    /**
+     * Clear the projection
+     */
+    void resetCache(const KoColorSpace *colorSpace = 0);
 
     /**
      * XXX: make the colorspace of a layergroup user-settable: we want
@@ -61,7 +60,12 @@ public:
      * rgb image stack.
      */
     const KoColorSpace * colorSpace() const;
-    KoColorSpace * colorSpace();
+
+    KisPaintDeviceSP original() const;
+    KisPaintDeviceSP paintDevice() const;
+    QRect repaintOriginal(KisPaintDeviceSP original,
+                          const QRect& rect);
+
 
     void setColorSpace(const KoColorSpace* colorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
 
@@ -69,19 +73,18 @@ public:
        Return the united extents of all layers in this group layer;
        this function is _recursive_.
      */
-    QRect extent() const;
+//    QRect extent() const;
 
     /**
        Return the exact bounding rect of all layers in this group
        layer; this function is _recursive_ and can therefore be really
        slow.
      */
-    QRect exactBounds() const;
+//    QRect exactBounds() const;
 
     qint32 x() const;
-    void setX(qint32 x);
-
     qint32 y() const;
+    void setX(qint32 x);
     void setY(qint32 y);
 
     /**
@@ -89,59 +92,18 @@ public:
        @return true if the operation succeeded, false if it failed.
     */
     bool accept(KisNodeVisitor &v);
-
-    /**
-       Clear the projection or create a projection from the specified
-       paint divide.
-
-       Warning: will copy from to, if !0,
-
-       Note for hackers: implement CoW!
-     */
-    void resetProjection(KisPaintDeviceSP to = 0);
-
-    /**
-       Retrieve the projection for this group layer. Note that
-       The projection is _not_ guaranteed to be up to date with
-       the latest actions, and that you cannot discover whether it
-       is!
-
-       Note the second: this _may_ return the paint device of a paint
-       layer if that paint layer is the only child of this group layer.
-    */
-    KisPaintDeviceSP projection() const;
-
-    /**
-     * @return 0 since there is no paint device associated with a group
-     * layer.
-     */
-    KisPaintDeviceSP paintDevice() const;
-
-    /**
-     *  Update the given rect of the projection paint device.
-     *
-     * Note for hackers: keep this method thread-safe!
-     */
-    void updateProjection(const QRect & rc);
-
-    QImage createThumbnail(qint32 w, qint32 h);
-
 signals:
 
-    void regionDirtied(const QRegion &);
-    void rectDirtied(const QRect &);
-    void settingsUpdated();
+//    void regionDirtied(const QRegion &);
+//    void rectDirtied(const QRect &);
+//    void settingsUpdated();
+
+protected:
+    KisPaintDeviceSP tryObligeChild() const;
 
 private:
-
-
-    /// Returns if the layer will induce the projection hack (if the only layer in this group)
-    bool paintLayerInducesProjectionOptimization(KisPaintLayerSP l) const;
-
     class Private;
     Private * const m_d;
-
-
 };
 
 #endif // KIS_GROUP_LAYER_H_

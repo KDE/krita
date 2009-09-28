@@ -1050,7 +1050,7 @@ const KoColorSpace * KisImage::colorSpace() const
 void KisImage::setColorSpace(const KoColorSpace * colorSpace)
 {
     m_d->colorSpace = colorSpace;
-    m_d->rootLayer->resetProjection();
+    m_d->rootLayer->resetCache();
     emit sigColorSpaceChanged(colorSpace);
 }
 

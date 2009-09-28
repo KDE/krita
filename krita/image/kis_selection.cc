@@ -90,7 +90,11 @@ KisSelection::KisSelection(KisPaintDeviceSP parent, KisMaskSP mask)
     gc.bitBlt(extent.topLeft(), mask->selection(), extent);
     gc.end();
 
-    // Share the data manager with the pixel selection until we get an additional selection component
+    /**
+     * Share the data manager (the one inherited from KisPaintDevice)
+     * with the pixel selection until we get an additional
+     * selection component
+     */
     m_datamanager = m_d->pixelSelection->dataManager();
 }
 

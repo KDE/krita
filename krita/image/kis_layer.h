@@ -2,6 +2,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +32,9 @@
 
 #include "kis_types.h"
 #include "kis_node.h"
+
+template <class T>
+class QStack;
 
 class QIcon;
 class QBitArray;
@@ -73,19 +77,28 @@ public:
      * Ask the layer to assemble its data & apply all the effect masks
      * to it.
      */
-    virtual void updateProjection(const QRect& r) = 0;
+    virtual QRect updateProjection(const QRect& rect);
+
+    virtual QRect repaintOriginal(KisPaintDeviceSP original,
+                                  const QRect& rect) = 0;
+
+    virtual bool needProjection() const;
+
+    virtual void copyOriginalToProjection(const KisPaintDeviceSP original,
+                                          KisPaintDeviceSP projection,
+                                          const QRect& rect) const;
 
     /**
      * Return the fully rendered representation of this layer: its
      * data and its effect masks
      */
-    virtual KisPaintDeviceSP projection() const = 0;
+    virtual KisPaintDeviceSP projection() const;
 
     /**
      * Return the layer data before the effect masks have had their go
      * at it.
      */
-    virtual KisPaintDeviceSP original() const;
+    virtual KisPaintDeviceSP original() const = 0;
 
     /**
      * @return the selection associated with this layer, if there is
@@ -181,11 +194,30 @@ public:
      * Set the image this layer belongs to.
      */
     void setImage(KisImageSP image);
+public:
+    qint32 x() const;
+    qint32 y() const;
 
+    void setX(qint32 x);
+    void setY(qint32 y);
+
+    /**
+     * Returns an approximation of where the bounds
+     * of actual data of this layer are
+     */
+    QRect extent() const;
+
+    /**
+     * Returns the exact bounds of where the actual data
+     * of this layer resides
+     */
+    QRect exactBounds() const;
+
+    QImage createThumbnail(qint32 w, qint32 h);
 public:
 
     virtual void setDirty();
-    
+
     virtual void setDirty(const QRect & rect);
 
     virtual void setDirty(const QRegion & region);
@@ -197,7 +229,7 @@ public:
     /**
      * @return the list of effect masks
      */
-    QList<KisMaskSP> effectMasks() const;
+    QList<KisEffectMaskSP> effectMasks() const;
 
     /**
      * Set a temporary effect mask on this layer for filter previews.
@@ -226,16 +258,41 @@ public:
 
 protected:
 
+
     /**
-     * Apply the effect masks to the given projection, producing
-     * finally the dst paint device.
+     * @param rectVariesFlag (out param) a flag, showing whether
+     *        a rect varies from mask to mask
+     * @return an area that should be updated because of
+     *         the change of @requestedRect of the layer
      */
-    void applyEffectMasks(const KisPaintDeviceSP original, KisPaintDeviceSP projection, const QRect & rc);
+    QRect masksChangeRect(const QList<KisEffectMaskSP> &masks,
+                          const QRect &requestedRect,
+                          bool &rectVariesFlag) const;
+
+    /**
+     * Get needRects for all masks
+     * @param changeRect requested rect to be updated on final
+     *        projection. Should be a return value
+     *        of @ref masksChangedRect()
+     * @param applyRects (out param) a stack of the rects where filters
+     *        should be applied
+     * @param rectVariesFlag (out param) a flag, showing whether
+     *        a rect varies from mask to mask
+     * @return a needRect that should be prepared on the layer's
+     *         paintDevice for all masks to succeed
+     */
+    QRect masksNeedRect(const QList<KisEffectMaskSP> &masks,
+                        const QRect &changeRect,
+                        QStack<QRect> &applyRects,
+                        bool &rectVariesFlag) const;
+
+    QRect applyMasks(const KisPaintDeviceSP source,
+                     const KisPaintDeviceSP destination,
+                     const QRect &requestedRect) const;
 
 private:
     class Private;
     Private * const m_d;
-
 };
 
 /**

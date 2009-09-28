@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *            (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -129,21 +130,22 @@ public:
      */
     void setY(qint32 y);
 
-    /**
-     * Adjust the dirty to rect to check which values need to be recomputed
-     */
-    virtual QRect adjustedDirtyRect( const QRect& _rect ) const;
-
-    /**
-     * @return the rect that is needed to compute the corresponding values
-     */
-    virtual QRect neededRect( const QRect& _rect ) const;
-
     virtual void setDirty();
-
     virtual void setDirty(const QRect & rect);
-
     virtual void setDirty(const QRegion & region);
+
+    QRect needRect(const QRect &rect) const;
+    QRect changeRect(const QRect &rect) const;
+
+protected:
+    /**
+     * Apply the effect the projection using the mask as a selection.
+     * Made public in KisEffectMask
+     */
+    virtual void apply(KisPaintDeviceSP projection, const QRect & rc) const;
+    virtual QRect decorateRect(KisPaintDeviceSP &src,
+                               KisPaintDeviceSP &dst,
+                               const QRect & rc) const;
 
 private:
 

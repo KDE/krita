@@ -61,6 +61,7 @@ public:
 
     virtual const QUndoCommand * presentCommand();
     virtual void addCommand(QUndoCommand *cmd);
+    virtual void undoLastCommand();
     virtual void setUndo(bool undo);
     virtual bool undo() const;
     virtual void beginMacro(const QString& macroName);

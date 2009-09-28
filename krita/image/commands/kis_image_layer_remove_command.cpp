@@ -45,8 +45,9 @@ KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageSP image, KisNode
 
 void KisImageLayerRemoveCommand::redo()
 {
+    KisNodeSP parentNode = m_layer->parent();
     m_image->removeNode(m_layer);
-    m_layer->setDirty();
+    parentNode->setDirty();
 }
 
 void KisImageLayerRemoveCommand::undo()

@@ -105,3 +105,9 @@ void KisNodeCommandsAdapter::toTop(KisNodeSP node)
     Q_ASSERT(m_view->image()->undoAdapter());
     m_view->image()->undoAdapter()->addCommand( new KisImageNodeToTopCommand( m_view->image(), node ) );
 }
+
+void KisNodeCommandsAdapter::undoLastCommand()
+{
+    Q_ASSERT(m_view->image()->undoAdapter());
+    m_view->image()->undoAdapter()->undoLastCommand();
+}

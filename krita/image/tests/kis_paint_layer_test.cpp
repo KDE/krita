@@ -57,12 +57,6 @@ void KisPaintLayerTest::testProjection()
     // Now there are masks. Verify that
     Q_ASSERT(layer->hasEffectMasks());
 
-    // Which also means that the projection is no longer the paint device
-    QVERIFY(layer->paintDevice().data() != layer->projection().data());
-
-    // And the projection is still 0, because we've updated it
-    QVERIFY(layer->projection().data() == 0);
-
     // And now we're going to update the projection, but nothing is dirty yet
     layer->updateProjection(qimg.rect());
 
@@ -88,7 +82,7 @@ void KisPaintLayerTest::testProjection()
     // By default a new transparency mask blanks out the entire layer (photoshop mode "hide all")
     KisRectConstIterator it = layer->projection()->createRectConstIterator(0, 0, qimg.width(), qimg.height());
     while (!it.isDone()) {
-        QVERIFY(cs->alpha(it.rawData()) == OPACITY_TRANSPARENT);
+        QVERIFY(cs->alpha(it.rawData()) == OPACITY_OPAQUE);
         ++it;
     }
 

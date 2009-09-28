@@ -91,6 +91,7 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator_layer.cpp
    generator/kis_generator_registry.cpp
    kis_adjustment_layer.cc
+   kis_selection_based_layer.cpp
    kis_background.cpp
    kis_base_node.cpp
    kis_base_processor.cpp

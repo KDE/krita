@@ -82,8 +82,7 @@ public:
     KoViewConverter * converter;
     qint32 x;
     qint32 y;
-    KisPaintDeviceSP projection;
-    KisPaintDeviceSP filteredProjection;
+    KisPaintDeviceSP paintDevice;
     KisShapeLayerCanvas * canvas;
     KoShapeControllerBase* controller;
 };
@@ -93,8 +92,8 @@ KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
                              KisImageSP img,
                              const QString &name,
                              quint8 opacity)
-        : KisExternalLayer(img, name, opacity)
-        , m_d(new Private())
+    : KisExternalLayer(img, name, opacity)
+    , m_d(new Private())
 {
     KoShapeContainer::setParent(parent);
     initShapeLayer(controller);
@@ -163,9 +162,9 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller)
     m_d->converter = new KisImageViewConverter(image());
     m_d->x = 0;
     m_d->y = 0;
-    m_d->projection = new KisPaintDevice(image()->colorSpace());
+    m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
     m_d->canvas = new KisShapeLayerCanvas(this, m_d->converter);
-    m_d->canvas->setProjection(m_d->projection);
+    m_d->canvas->setProjection(m_d->paintDevice);
     m_d->controller = controller;
 
     connect(m_d->canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
@@ -173,24 +172,27 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller)
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
 {
-    if (node->inherits("KisMask"))
-        return true;
-    else
-        return false;
+    return node->inherits("KisMask");
 }
 
 void KisShapeLayer::addChild(KoShape *object)
 {
+    QRect updatedRect = m_d->converter->documentToView(object->boundingRect()).toRect();
+
     KoShapeLayer::addChild(object);
     m_d->canvas->shapeManager()->add(object);
 
-    setDirty(m_d->converter->documentToView(object->boundingRect()).toRect());
+    setDirty(updatedRect);
 }
 
 void KisShapeLayer::removeChild(KoShape *object)
 {
+    QRect updatedRect = m_d->converter->documentToView(object->boundingRect()).toRect();
+
     m_d->canvas->shapeManager()->remove(object);
     KoShapeLayer::removeChild(object);
+
+    setDirty(updatedRect);
 }
 
 QIcon KisShapeLayer::icon() const
@@ -198,34 +200,21 @@ QIcon KisShapeLayer::icon() const
     return KIcon("bookmark-new");
 }
 
-void KisShapeLayer::updateProjection(const QRect& rc)
+KisPaintDeviceSP KisShapeLayer::original() const
 {
-    dbgImage << "KisShapeLayer::updateProjection()" << rc;
-
-    KoProperties props;
-    props.setProperty("visible", true);
-    QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
-
-    if(masks.empty()) {
-        m_d->filteredProjection = 0; // Don't use the filtered projection anymore
-    } else {
-        if( !m_d->filteredProjection || !(*m_d->filteredProjection->colorSpace() == *m_d->projection->colorSpace() ) ) {
-            m_d->filteredProjection = new KisPaintDevice(m_d->projection->colorSpace());
-        } else {
-            m_d->filteredProjection->clear(rc);
-        }
-        applyEffectMasks(m_d->projection, m_d->filteredProjection, rc);
-    }
+    return m_d->paintDevice;
 }
 
-KisPaintDeviceSP KisShapeLayer::projection() const
+KisPaintDeviceSP KisShapeLayer::paintDevice() const
 {
-    if(m_d->filteredProjection)
-    {
-        return m_d->filteredProjection;
-    } else {
-        return m_d->projection;
-    }
+    return 0;
+}
+
+QRect KisShapeLayer::repaintOriginal(KisPaintDeviceSP original,
+                                     const QRect& rect)
+{
+    Q_UNUSED(original);
+    return rect;
 }
 
 qint32 KisShapeLayer::x() const
@@ -233,35 +222,33 @@ qint32 KisShapeLayer::x() const
     return m_d->x;
 }
 
-void KisShapeLayer::setX(qint32 x)
-{
-    if (x == m_d->x) return;
-    m_d->x = x;
-    setDirty();
-}
-
 qint32 KisShapeLayer::y() const
 {
     return m_d->y;
 }
 
+void KisShapeLayer::setX(qint32 x)
+{
+    m_d->x = x;
+    // FIXME: setDirty();
+}
+
 void KisShapeLayer::setY(qint32 y)
 {
-    if (y == m_d->y) return;
     m_d->y = y;
-    setDirty();
+    //FIXME: setDirty();
 }
 
 QRect KisShapeLayer::extent() const
 {
     QRect rc = boundingRect().toRect();
-    return QRectF(rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes()).toRect();
+    return QRectF(rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes()).toAlignedRect();
 }
 
 QRect KisShapeLayer::exactBounds() const
 {
     QRect rc = boundingRect().toRect();
-    return QRectF(rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes()).toRect();
+    return QRectF(rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes()).toAlignedRect();
 }
 
 bool KisShapeLayer::accept(KisNodeVisitor& visitor)
@@ -443,7 +430,8 @@ bool KisShapeLayer::loadLayer( KoStore* store )
     KoXmlElement layerElement;
     forEachElement( layerElement, context.stylesReader().layerSet() )
     {
-        KoShapeLayer * l = new KoShapeLayer();
+// FIXME: investigate what is this
+//        KoShapeLayer * l = new KoShapeLayer();
         if( !loadOdf( layerElement, shapeContext ) ) {
             kWarning() << "Could not load shape layer!";
             return false;
@@ -461,20 +449,6 @@ bool KisShapeLayer::loadLayer( KoStore* store )
 
     return true;
 
-}
-
-QImage KisShapeLayer::createThumbnail(qint32 w, qint32 h)
-{
-    if (projection())
-        return projection()->createThumbnail(w, h);
-    else
-        return QImage();
-}
-
-
-KisPaintDeviceSP KisShapeLayer::paintDevice() const
-{
-    return 0;
 }
 
 void KisShapeLayer::selectionChanged()

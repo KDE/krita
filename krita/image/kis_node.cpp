@@ -99,6 +99,16 @@ KisNode::~KisNode()
     delete m_d;
 }
 
+QRect KisNode::needRect(const QRect &rect) const
+{
+    return rect;
+}
+
+QRect KisNode::changeRect(const QRect &rect) const
+{
+    return rect;
+}
+
 bool KisNode::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
@@ -256,8 +266,6 @@ bool KisNode::remove(quint32 index)
         removedNode->setParent(0);   // after calling aboutToRemoveANode or then the model get broken according to TT's modeltest
 
         m_d->nodes.removeAt(index);
-
-        setDirty( removedNode->extent() );
 
         if (m_d->graphListener) m_d->graphListener->nodeHasBeenRemoved(this, index);
 

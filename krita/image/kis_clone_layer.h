@@ -59,17 +59,24 @@ public:
 
     bool allowAsChild(KisNodeSP) const;
 
-    void updateProjection(const QRect& r);
-    KisPaintDeviceSP projection() const;
+    KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;
+    bool needProjection() const;
+
+    QRect repaintOriginal(KisPaintDeviceSP original,
+                          const QRect& rect);
+
+    void copyOriginalToProjection(const KisPaintDeviceSP original,
+                                  KisPaintDeviceSP projection,
+                                  const QRect& rect) const;
 
     QIcon icon() const;
     KoDocumentSectionModel::PropertyList sectionModelProperties() const;
 
     qint32 x() const;
-    void setX(qint32);
-
     qint32 y() const;
+
+    void setX(qint32);
     void setY(qint32);
 
     /// Returns an approximation of where the bounds on actual data are in this layer
@@ -80,26 +87,25 @@ public:
 
     bool accept(KisNodeVisitor &);
 
-    QImage createThumbnail(qint32 w, qint32 h);
-
-    // KisIndirectPaintingSupport
-    KisLayer* layer() {
-        return this;
-    }
-
-    void setCopyFrom(KisLayerSP layer, CopyLayerType type);
-    KisLayerSP copyFrom() const;
-
     /**
      * Used when loading: loading is done in two passes, and the copy
      * from layer is set when all layers have been created, not during
      * loading.
      */
     void setCopyFromName( const QString& layerName );
-    QString copyFromName();
+    QString copyFromName() const;
+
+    void setCopyFrom(KisLayerSP layer, CopyLayerType type);
+    KisLayerSP copyFrom() const;
 
     void setCopyType(CopyLayerType type);
     CopyLayerType copyType() const;
+
+public slots:
+    // KisIndirectPaintingSupport
+    KisLayer* layer() {
+        return this;
+    }
 
 private:
 

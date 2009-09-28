@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *            (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,16 +21,15 @@
 
 
 #include <kis_debug.h>
-#include <klocale.h>
 
+#include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoProperties.h>
+#include <KoCompositeOp.h>
 
-#include "kis_types.h"
 #include "kis_paint_device.h"
-#include "kis_layer.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
+#include "kis_painter.h"
 
 struct KisMask::Private {
     KisSelectionSP selection;
@@ -40,7 +40,6 @@ KisMask::KisMask(const QString & name)
         , m_d(new Private())
 {
     setName(name);
-    m_d->selection = new KisSelection();
 }
 
 KisMask::KisMask(const KisMask& rhs)
@@ -48,7 +47,9 @@ KisMask::KisMask(const KisMask& rhs)
         , m_d(new Private())
 {
     setName(rhs.name());
-    m_d->selection = new KisSelection(*rhs.m_d->selection.data());
+
+    if(rhs.m_d->selection)
+        m_d->selection = new KisSelection(*rhs.m_d->selection.data());
 }
 
 KisMask::~KisMask()
@@ -58,12 +59,23 @@ KisMask::~KisMask()
 
 KisSelectionSP KisMask::selection() const
 {
+    if(!m_d->selection) {
+        m_d->selection = new KisSelection();
+        /**
+         * FIXME: Add default pixel choice
+         * e.g. "Selected by default" or "Deselected by default"
+         */
+        if(parent())
+            m_d->selection->getOrCreatePixelSelection()->select(parent()->extent(), MAX_SELECTED);
+        m_d->selection->updateProjection();
+    }
+
     return m_d->selection;
 }
 
 KisPaintDeviceSP KisMask::paintDevice() const
 {
-    return m_d->selection->getOrCreatePixelSelection();
+    return selection()->getOrCreatePixelSelection();
 }
 
 void KisMask::setSelection(KisSelectionSP selection)
@@ -73,56 +85,100 @@ void KisMask::setSelection(KisSelectionSP selection)
 
 void KisMask::select(const QRect & rc, quint8 selectedness)
 {
-    Q_ASSERT(m_d->selection);
-    KisPixelSelectionSP psel = m_d->selection->getOrCreatePixelSelection();
+    KisSelectionSP sel = selection();
+    KisPixelSelectionSP psel = sel->getOrCreatePixelSelection();
     psel->select(rc, selectedness);
-    m_d->selection->updateProjection(rc);
+    sel->updateProjection(rc);
+}
+
+
+QRect KisMask::decorateRect(KisPaintDeviceSP &src,
+                            KisPaintDeviceSP &dst,
+                            const QRect & rc) const
+{
+    Q_UNUSED(src);
+    Q_UNUSED(dst);
+    Q_ASSERT_X(0,"KisMask::decorateRect", "Should be overriden by successors");
+    return rc;
+}
+
+void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
+{
+    if(m_d->selection) {
+
+        m_d->selection->updateProjection(rc);
+
+        KisPaintDeviceSP cacheDevice =
+            new KisPaintDevice(projection->colorSpace());
+
+        KisPainter gc(projection);
+        //gc.beginTransaction("");
+        QRect updatedRect = decorateRect(projection, cacheDevice, rc);
+
+        /**
+         * FIXME: ALPHA_DARKEN vs OVER
+         */
+        gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_OVER));
+        gc.setSelection(m_d->selection);
+        gc.bitBlt(updatedRect.topLeft(), cacheDevice, updatedRect);
+    }
+    else {
+        decorateRect(projection, projection, rc);
+    }
+}
+
+QRect KisMask::needRect(const QRect &rect) const
+{
+    QRect resultRect = rect;
+    if(m_d->selection)
+        resultRect &= m_d->selection->selectedRect();
+
+    return resultRect;
+}
+
+QRect KisMask::changeRect(const QRect &rect) const
+{
+    QRect resultRect = rect;
+    if(m_d->selection)
+        resultRect &= m_d->selection->selectedRect();
+
+    return resultRect;
 }
 
 QRect KisMask::extent() const
 {
-    Q_ASSERT(m_d->selection);
-    return m_d->selection->selectedRect();
+    return m_d->selection ? m_d->selection->selectedRect() :
+        parent() ? parent()->extent() : QRect();
 }
 
 QRect KisMask::exactBounds() const
 {
-    Q_ASSERT(m_d->selection);
-    return m_d->selection->selectedExactRect();
+    return m_d->selection ? m_d->selection->selectedExactRect() :
+        parent() ? parent()->exactBounds() : QRect();
 }
 
 qint32 KisMask::x() const
 {
-    Q_ASSERT(m_d->selection);
-    return m_d->selection->x();
-}
-
-void KisMask::setX(qint32 x)
-{
-    Q_ASSERT(m_d->selection);
-    m_d->selection->setX(x);
+    return m_d->selection ? m_d->selection->x() :
+        parent() ? parent()->x() : 0;
 }
 
 qint32 KisMask::y() const
 {
-    Q_ASSERT(m_d->selection);
-    return m_d->selection->y();
+    return m_d->selection ? m_d->selection->y() :
+        parent() ? parent()->y() : 0;
+}
+
+void KisMask::setX(qint32 x)
+{
+    if(m_d->selection)
+        m_d->selection->setX(x);
 }
 
 void KisMask::setY(qint32 y)
 {
-    Q_ASSERT(m_d->selection);
-    m_d->selection->setY(y);
-}
-
-QRect KisMask::adjustedDirtyRect( const QRect& _rect ) const
-{
-    return _rect;
-}
-
-QRect KisMask::neededRect( const QRect& _rect ) const
-{
-    return _rect;
+    if(m_d->selection)
+        m_d->selection->setY(y);
 }
 
 void KisMask::setDirty()

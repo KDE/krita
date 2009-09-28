@@ -66,9 +66,26 @@ KisTransformationMask::KisTransformationMask(const KisTransformationMask& rhs)
 void KisTransformationMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 {
     Q_UNUSED(rc);
+
+    /**
+     * FIXME: What about current selection of the mask?
+     */
+
     // Transform
     KisTransformWorker worker(projection, m_xscale, m_yscale, m_xshear, m_yshear, m_rotation, m_xtranslate, m_ytranslate, 0, m_filter);
     worker.run();
+}
+
+QRect KisTransformationMask::changeRect(const QRect &rect) const
+{
+    //FIXME: selections?
+    return rect;
+}
+
+QRect KisTransformationMask::needRect(const QRect &rect) const
+{
+    //FIXME: selections?
+    return rect;
 }
 
 KisTransformationSettingsCommand::KisTransformationSettingsCommand(KisTransformationMaskSP mask,

@@ -18,7 +18,6 @@
 
 #include "kis_undo_adapter.h"
 
-
 #include "KoDocument.h"
 #include <KoUndoStack.h>
 
@@ -62,6 +61,24 @@ void KisUndoAdapter::addCommand(QUndoCommand *command)
     foreach(KisCommandHistoryListener*  l, m_undoListeners) {
         l->notifyCommandAdded(command);
     }
+}
+
+void KisUndoAdapter::undoLastCommand()
+{
+    /**
+     * FIXME: Added as a workaround for being able to cancel creation
+     * of the new adjustment mask (or any other mask whose
+     * creation can be cancelled).
+     * 
+     * Ideally, we should use "addToIndex-commit" technique like git does.
+     * When a user presses Create button, we call command->redo()
+     * and save this command in a cache. When the user confirms creation
+     * of the layer with "OK" button, we "commit" the command to the undoStack.
+     * If the user changes his mind and presses Cancel, we just call
+     * command->undo() and remove the cache without committing it
+     * to the undoStack
+     */
+    m_doc->undoLastCommand();
 }
 
 void KisUndoAdapter::setUndo(bool undo)

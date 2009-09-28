@@ -53,33 +53,21 @@ public:
 
     const KoColorSpace * colorSpace() const;
 
-    /**
-     * Update the projection for the specified rect r, whether that rect is dirty
-     * or not.
-     */
-    void updateProjection(const QRect& r);
+    QRect repaintOriginal(KisPaintDeviceSP original,
+                          const QRect& rect);
 
-    /**
-     * Return the projection paint device, or 0 if the projection does
-     * not exist yet. (For instance, because it hasn't been updated yet.)
-     */
-    KisPaintDeviceSP projection() const;
+    bool needProjection() const;
+
+    void copyOriginalToProjection(const KisPaintDeviceSP original,
+                                  KisPaintDeviceSP projection,
+                                  const QRect& rect) const;
 
     QIcon icon() const;
     KoDocumentSectionModel::PropertyList sectionModelProperties() const;
 
 public:
-
-    qint32 x() const;
-    void setX(qint32 x);
-
-    qint32 y() const;
-    void setY(qint32 y);
-
     QRect extent() const;
     QRect exactBounds() const;
-
-    QImage createThumbnail(qint32 w, qint32 h);
 
     bool accept(KisNodeVisitor &v);
 
@@ -99,13 +87,13 @@ public:
      * through the physics process. This may be 0. The physics process
      * will automatically set this paint device when it becomes needed.
      */
-    KisPaintDeviceSP driedPaintDevice();
+    //KisPaintDeviceSP driedPaintDevice();
 
     /**
      * Sets the dried paint device associated with this paint layer to
      * 0.
      */
-    void removeDriedPaintDevice();
+    //void removeDriedPaintDevice();
 
 public slots:
 

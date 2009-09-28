@@ -80,43 +80,40 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
     m_d->filterConfig = filterConfig;
 }
 
-void KisFilterMask::setDirty()
+QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
+                                  KisPaintDeviceSP &dst,
+                                  const QRect & rc) const
 {
-    if(selection())
-    {
-        KisEffectMask::setDirty(selection()->selectedExactRect());
-    } else {
-        KisEffectMask::setDirty();
-    }
-}
+    Q_ASSERT(nodeProgressProxy());
 
-void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
-{
-    dbgImage << "Applying filter mask on projection  " << projection << " with rect " << rc
-    << " and filter config " << m_d->filterConfig;
-
-    if (!m_d->filterConfig) return;
-
-    selection()->updateProjection(rc);
-
-    KisTransaction transac("", projection, 0 );
-    KisConstProcessingInformation src(projection,  rc.topLeft(), selection());
-    KisProcessingInformation dst(projection, rc.topLeft(), selection());
-
-    KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
-    if (!filter) {
-        warnKrita << "Could not retrieve filter with name " <<  m_d->filterConfig->name();
-        return;
+    if(!m_d->filterConfig) {
+        warnKrita << "No filter configuration present";
+        return QRect();
     }
 
-    Q_ASSERT( nodeProgressProxy() );
+    KisFilterSP filter =
+        KisFilterRegistry::instance()->value(m_d->filterConfig->name());
 
-    KoProgressUpdater updater( nodeProgressProxy() );
-    updater.start( 100, filter->name() );
-    QPointer<KoUpdater> up = updater.startSubtask();
+    if(!filter) {
+        warnKrita << "Could not retrieve filter \"" << m_d->filterConfig->name() << "\"";
+        return QRect();
+    }
 
-    filter->process(src, dst, rc.size(), m_d->filterConfig,  up);
-    nodeProgressProxy()->setValue( nodeProgressProxy()->maximum() );
+    KisConstProcessingInformation srcInfo(src,  rc.topLeft(), selection());
+    KisProcessingInformation dstInfo(dst, rc.topLeft(), 0);
+
+    KoProgressUpdater updater(nodeProgressProxy());
+    updater.start(100, filter->name());
+
+    QPointer<KoUpdater> updaterPtr = updater.startSubtask();
+
+    KisTransaction transaction("", dst);
+    filter->process(srcInfo, dstInfo, rc.size(),
+                    m_d->filterConfig, updaterPtr);
+
+    updaterPtr->setProgress(100);
+
+    return filter->changedRect(rc, m_d->filterConfig);
 }
 
 bool KisFilterMask::accept(KisNodeVisitor &v)
@@ -124,18 +121,46 @@ bool KisFilterMask::accept(KisNodeVisitor &v)
     return v.visit(this);
 }
 
-QRect KisFilterMask::adjustedDirtyRect( const QRect& _rect ) const
+/**
+ * FIXME: try to cache filter pointer inside a Private block
+ */
+QRect KisFilterMask::changeRect(const QRect& rect) const
 {
-    if( !m_d->filterConfig) return _rect;
-    KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
-    return filter->changedRect( _rect, m_d->filterConfig );
+    QRect filteredRect = rect;
+
+    if(m_d->filterConfig) {
+        KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
+        filteredRect = filter->changedRect(rect, m_d->filterConfig);
+    }
+
+    /**
+     * We can't paint outside a selection, that is why we call
+     * KisMask::changeRect to crop actual change area in the end
+     */
+    filteredRect = KisMask::changeRect(filteredRect);
+
+    /**
+     * FIXME: Think over this solution
+     * Union of rects means that changeRect returns NOT the rect
+     * changed by this very layer, but an accumulated rect changed
+     * by all underlying layers. Just take into account and change
+     * documentation accordingly
+     */
+    return rect | filteredRect;
 }
 
-QRect KisFilterMask::neededRect( const QRect& _rect ) const
+QRect KisFilterMask::needRect(const QRect& rect) const
 {
-    if( !m_d->filterConfig) return _rect;
+    if(!m_d->filterConfig) return rect;
     KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
-    return filter->neededRect( _rect, m_d->filterConfig );
+
+    /**
+     * If we need some additional pixels even outside of a selection
+     * for accurate layer filtering, we'll get them!
+     * And no KisMask::needRect will prevent us from doing this! ;)
+     * That's why simply we do not call KisMask::needRect here :)
+     */
+    return filter->neededRect(rect, m_d->filterConfig);
 }
 
 #include "kis_filter_mask.moc"

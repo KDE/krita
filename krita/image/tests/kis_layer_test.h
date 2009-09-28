@@ -47,10 +47,13 @@ public:
         return "TEST";
     }
 
-    void updateProjection(const QRect&) {
+    QRect repaintOriginal(KisPaintDeviceSP original, const QRect& rect) {
+        Q_UNUSED(original);
+        Q_UNUSED(rect);
     }
 
-    KisPaintDeviceSP projection() const {
+    KisPaintDeviceSP original() const {
+        // This test doesn't use updateProjection so just return 0
         return 0;
     }
 

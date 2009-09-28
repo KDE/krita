@@ -49,6 +49,8 @@ public:
     void raise(KisNodeSP node);
     void toBottom(KisNodeSP node);
     void toTop(KisNodeSP node);
+
+    void undoLastCommand();
 private:
     KisView2* m_view;
 };

@@ -128,6 +128,9 @@ public:
      */
     virtual void apply(KisPaintDeviceSP projection, const QRect & rc) const;
 
+    QRect changeRect(const QRect &rect) const;
+    QRect needRect(const QRect &rect) const;
+
     bool accept(KisNodeVisitor &v);
 private:
 

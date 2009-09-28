@@ -60,13 +60,12 @@ public:
     KisFilterConfiguration * filter() const;
     void setFilter(KisFilterConfiguration * filterConfig);
 
-    void apply(KisPaintDeviceSP projection, const QRect & rc) const;
+    QRect decorateRect(KisPaintDeviceSP &src,
+                       KisPaintDeviceSP &dst,
+                       const QRect & rc) const;
 
-    using KisNode::setDirty;
-    virtual void setDirty();
-
-    virtual QRect adjustedDirtyRect( const QRect& _rect ) const;
-    virtual QRect neededRect( const QRect& _rect ) const;
+    QRect changeRect(const QRect &rect) const;
+    QRect needRect(const QRect &rect) const;
 
 private:
 

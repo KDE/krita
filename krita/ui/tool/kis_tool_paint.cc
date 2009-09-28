@@ -54,6 +54,8 @@
 #include <kis_layer.h>
 
 #include "kis_config.h"
+#include "kis_config_notifier.h"
+
 #include "kis_cursor.h"
 #include "widgets/kis_cmb_composite.h"
 #include "KoSliderCombo.h"
@@ -72,6 +74,8 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     m_opacity = OPACITY_OPAQUE;
     m_compositeOp = 0;
+    
+    m_supportOutline = false;
 }
 
 
@@ -104,7 +108,18 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
     default:
         ; // Do nothing
     }
+    
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT( slotSelectCursorStyle() ));
+    
 }
+
+
+void KisToolPaint::activate(bool temporary)
+{
+    KisTool::activate(temporary);
+    slotSelectCursorStyle();
+}
+
 
 
 void KisToolPaint::paint(QPainter&, const KoViewConverter &)
@@ -227,5 +242,21 @@ void KisToolPaint::slotPopupQuickHelp()
 {
     QWhatsThis::showText(QCursor::pos(), quickHelp());
 }
+
+
+void KisToolPaint::slotSelectCursorStyle()
+{
+    KisConfig cfg;
+    if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE){
+        if (m_supportOutline){
+            // do not show cursor, tool will paint outline
+            useCursor(KisCursor::blankCursor(), true);
+        }else{
+            // if the tool does not support outline, use tool icon cursor
+            useCursor(cursor(), true);
+        }
+    }
+}
+
 
 #include "kis_tool_paint.moc"

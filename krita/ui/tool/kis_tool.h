@@ -120,7 +120,8 @@ public:
 protected:
 
     KisImageSP image() const;
-
+    QCursor cursor() const;
+    
     /// @return the currently active selection
     KisSelectionSP currentSelection() const;
     
@@ -142,6 +143,13 @@ protected:
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
     void paintToolOutline(QPainter * painter,QPainterPath &path);
 
+private slots:
+    /**
+     * Called whenever the configuration settings change.
+     */
+    void slotSelectCursorStyle();
+
+    
 private:
     PaintMode m_mode;
 

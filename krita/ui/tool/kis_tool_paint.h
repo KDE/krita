@@ -81,6 +81,14 @@ public:
 
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
+    /** If the paint tool support outline like brushes, set to true.
+    *   If not (e.g. gradient tool), set to false. Default is false.
+    */
+    void setSupportOutline(bool supportOutline){
+        m_supportOutline = supportOutline;
+    }
+    
+    
 protected:
 
     /// Add the tool-specific layout to the default option widget layout.
@@ -99,13 +107,18 @@ protected:
     }
 
 
+public slots:
+    virtual void activate(bool temporary = false);
+
 private slots:
 
     void updateCompositeOpComboBox();
     void slotPopupQuickHelp();
     void slotSetOpacity(qreal opacityPerCent, bool final);
     void slotSetCompositeMode(const QString& compositeOp);
-
+    void slotSelectCursorStyle();
+    
+    
 protected:
 
     quint8 m_opacity;
@@ -121,6 +134,8 @@ private:
     QLabel *m_lbComposite;
     KisCmbComposite *m_cmbComposite;
     KisNodeSP m_previousNode;
+    
+    bool m_supportOutline;
 };
 
 #endif // KIS_TOOL_PAINT_H_

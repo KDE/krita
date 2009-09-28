@@ -53,7 +53,10 @@
 #include "canvas/kis_canvas2.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "kis_cursor.h"
+
+#include <config-opengl.h>
 
 struct KisTool::Private {
     Private() : currentPattern(0),
@@ -82,6 +85,9 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
 {
     d->cursor = cursor;
     m_mode = XOR_MODE;
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotSelectCursorStyle()) );
+    
 }
 
 KisTool::~KisTool()
@@ -91,22 +97,9 @@ KisTool::~KisTool()
 
 void KisTool::activate(bool)
 {
-    KisConfig cfg;
-    switch(cfg.cursorStyle()) {
-        case CURSOR_STYLE_TOOLICON:
-            useCursor(d->cursor, true);
-            break;
-        case CURSOR_STYLE_CROSSHAIR:
-            useCursor(KisCursor::crossCursor(), true);
-            break;
-        case CURSOR_STYLE_POINTER:
-            useCursor(KisCursor::upArrowCursor(), true);
-            break;
-        case CURSOR_STYLE_OUTLINE:
-        default:
-            useCursor(KisCursor::blankCursor(), true);
-    }
 
+    slotSelectCursorStyle();
+    
     d->currentFgColor = m_canvas->resourceProvider()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
     d->currentBgColor = m_canvas->resourceProvider()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
     d->currentPattern = static_cast<KisPattern *>(m_canvas->resourceProvider()->
@@ -262,6 +255,11 @@ KisImageSP KisTool::image() const
 
 }
 
+QCursor KisTool::cursor() const
+{
+    return d->cursor;
+}
+
 KisSelectionSP KisTool::currentSelection() const
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
@@ -392,6 +390,33 @@ void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path)
         default: 
             break;
     }
+}
+
+
+void KisTool::slotSelectCursorStyle()
+{
+        KisConfig cfg;
+        switch(cfg.cursorStyle()) {
+            case CURSOR_STYLE_TOOLICON:
+                useCursor(d->cursor, true);
+                break;
+            case CURSOR_STYLE_CROSSHAIR:
+                useCursor(KisCursor::crossCursor(), true);
+                break;
+            case CURSOR_STYLE_POINTER:
+                useCursor(KisCursor::upArrowCursor(), true);
+                break;
+            case CURSOR_STYLE_NO_CURSOR:
+    #if defined(HAVE_OPENGL)
+            case CURSOR_STYLE_3D_MODEL:
+    #endif
+                useCursor(KisCursor::blankCursor(), true);
+                break;
+            case CURSOR_STYLE_OUTLINE:
+            default:
+                // use tool cursor as default, if the tool support outline, it will set the cursor to blank and show outline
+                useCursor(d->cursor, true);
+        }
 }
 
 

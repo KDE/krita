@@ -98,6 +98,8 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_smoothness = 0.5;
     m_magnetism = 1.0;
 
+    setSupportOutline(true);
+    
 #if defined(HAVE_OPENGL)
     m_xTilt = 0.0;
     m_yTilt = 0.0;

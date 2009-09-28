@@ -55,7 +55,12 @@ public:
     * @param extensions the file extensions separate by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
     KoResourceServerBase(const QString& type, const QString& extensions)
-        : m_type(type), m_extensions(extensions) {}
+        : m_type(type)
+        , m_extensions(extensions)
+        , m_cancelled(false)
+    {
+    }
+
     virtual ~KoResourceServerBase() {}
 
     virtual void loadResources(QStringList filenames) = 0;
@@ -89,6 +94,7 @@ template <class T> class KoResourceServer : public KoResourceServerBase {
 public:
     KoResourceServer(const QString& type, const QString& extensions)
         : KoResourceServerBase(type, extensions)
+
         {
         }
 

@@ -18,18 +18,6 @@
 
 #include "kis_chalk_paintop_settings_widget.h"
 
-#include <KoColorSpaceRegistry.h>
-
-#include <kis_image.h>
-#include <kis_debug.h>
-
-#include <kis_paintop_registry.h>
-#include <kis_painter.h>
-#include <kis_paint_device.h>
-#include <kis_paint_information.h>
-
-#include <KoColor.h>
-
 #include "kis_chalkop_option.h"
 #include "kis_chalk_paintop_settings.h"
 

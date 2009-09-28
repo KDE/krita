@@ -19,9 +19,6 @@
 #include "kis_spray_color_option.h"
 #include <klocale.h>
 
-#include <QWidget>
-#include <QRadioButton>
-
 #include "ui_wdgcoloroptions.h"
 
 class KisColorOptionsWidget: public QWidget, public Ui::WdgColorOptions

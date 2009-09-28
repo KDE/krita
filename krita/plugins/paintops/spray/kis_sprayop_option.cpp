@@ -18,9 +18,6 @@
 #include "kis_sprayop_option.h"
 #include <klocale.h>
 
-#include <QWidget>
-#include <QRadioButton>
-
 #include "ui_wdgsprayoptions.h"
 
 class KisSprayOpOptionsWidget: public QWidget, public Ui::WdgSprayOptions

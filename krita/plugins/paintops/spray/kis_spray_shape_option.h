@@ -18,7 +18,6 @@
 #define KIS_SPRAY_SHAPE_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 class KisShapeOptionsWidget;
 

@@ -18,9 +18,6 @@
 #include "kis_spray_shape_option.h"
 #include <klocale.h>
 
-#include <QWidget>
-#include <QRadioButton>
-
 #include "ui_wdgshapeoptions.h"
 
 class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions

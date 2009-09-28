@@ -19,10 +19,8 @@
 #ifndef KIS_SPRAY_PAINTOP_SETTINGS_H_
 #define KIS_SPRAY_PAINTOP_SETTINGS_H_
 
-#include <QList>
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
-#include <KoViewConverter.h>
 
 #include "kis_spray_paintop_settings_widget.h"
 
@@ -81,9 +79,6 @@ public:
     int hue() const;
     int saturation() const;
     int value() const;
-
-
-
 
     bool highRendering() const;
     bool proportional() const;

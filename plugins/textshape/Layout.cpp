@@ -392,9 +392,6 @@ bool Layout::nextParag()
         m_blockData->setCounterWidth(0.0);
     }
 
-    updateBorders(); // fill the border inset member vars.
-    m_y += m_borderInsets.top;
-
     bool pagebreak = m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore ||
                       m_format.boolProperty(KoParagraphStyle::BreakBefore);
 
@@ -501,10 +498,15 @@ bool Layout::nextParag()
         m_dropCapsNChars = 0;
     }
 
-
     layout->beginLayout();
     m_fragmentIterator = m_block.begin();
     m_newParag = true;
+
+    handleTable();
+
+    //Now once we know the physical context we can work on the borders of the paragraph
+    updateBorders(); // fill the border inset member vars.
+    m_y += m_borderInsets.top;
 
     if (textList) {
         // if list set list-indent. Do this after borders init to we can account for them.
@@ -517,8 +519,6 @@ bool Layout::nextParag()
                                                     m_format.textIndent() + m_format.leftMargin() +
                                                     textList->format().doubleProperty(KoListStyle::Indent), y()));
     }
-
-    handleTable();
 
     return true;
 }
@@ -611,6 +611,7 @@ void Layout::handleTable()
         QTextTable *previousTable = lookBehind.currentTable();
 
         if (previousTable) {
+            m_tableLayout.setTable(previousTable);
             /*
              * We just left a table, so make sure the table layout updates
              * the height of the last cell in it, and reset the table state.

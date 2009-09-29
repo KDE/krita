@@ -98,6 +98,8 @@ struct KisPainter::Private {
     bool                        useBoundingDirtyRect;
     const KoAbstractGradient*   gradient;
     KisPaintOpPresetSP          paintOpPreset;
+    QImage                      polygonMaskImage;
+    QPainter*                   maskPainter;
 };
 
 KisPainter::KisPainter()
@@ -137,6 +139,7 @@ void KisPainter::init()
     d->bounds = QRect();
     d->progressUpdater = 0;
     d->gradient = 0;
+    d->maskPainter = 0;
 
     KConfigGroup cfg = KGlobal::config()->group("");
     d->useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);
@@ -146,6 +149,7 @@ KisPainter::~KisPainter()
 {
     end();
     delete d->paintOp;
+    if (d->maskPainter != 0)    delete d->maskPainter;
     delete d;
 }
 
@@ -757,9 +761,12 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
 
-    QImage polygonMaskImage(MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT, QImage::Format_ARGB32);
-    QPainter maskPainter(&polygonMaskImage);
-    maskPainter.setRenderHint(QPainter::Antialiasing, antiAliasPolygonFill());
+    if ( d->polygonMaskImage.isNull() || (d->maskPainter == 0) ){
+        d->polygonMaskImage = QImage(MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT, QImage::Format_ARGB32);
+        d->maskPainter = new QPainter(&d->polygonMaskImage);
+        d->maskPainter->setRenderHint(QPainter::Antialiasing, antiAliasPolygonFill());
+    }
+   
 
     // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
     QColor opaqueColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255);
@@ -767,18 +774,19 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += MASK_IMAGE_WIDTH) {
         for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += MASK_IMAGE_HEIGHT) {
 
-            maskPainter.fillRect(polygonMaskImage.rect(), transparentColor);
-            maskPainter.translate(-x, -y);
-            maskPainter.fillPath(path, opaqueColor);
-            maskPainter.translate(x, y);
+            d->maskPainter->fillRect(d->polygonMaskImage.rect(), transparentColor);
+            d->maskPainter->translate(-x, -y);
+            d->maskPainter->fillPath(path, opaqueColor);
+            d->maskPainter->translate(x, y);
 
             qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, MASK_IMAGE_WIDTH);
             qint32 rectHeight = qMin(fillRect.y() + fillRect.height() - y, MASK_IMAGE_HEIGHT);
 
             KisRectIterator rectIt = polygonMask->createRectIterator(x, y, rectWidth, rectHeight);
 
+            
             while (!rectIt.isDone()) {
-                (*rectIt.rawData()) = qRed(polygonMaskImage.pixel(rectIt.x() - x, rectIt.y() - y));
+                (*rectIt.rawData()) = qRed(d->polygonMaskImage.pixel(rectIt.x() - x, rectIt.y() - y));
                 ++rectIt;
             }
         }

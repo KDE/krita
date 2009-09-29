@@ -20,22 +20,12 @@
 
 #include "KoDpi.h"
 
-#include <config-prefix.h>
-
-#include <QtGui/QPaintDevice>
-#include <QtGui/QFont>
 #include <QtGui/QFontInfo>
 #ifdef Q_WS_X11
 #include <QtGui/QX11Info>
 #endif
 
-#include <kdebug.h>
-#include <kconfiggroup.h>
-#include <kglobalsettings.h>
 #include <kglobal.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
 
 KoDpi* KoDpi::self()
 {
@@ -63,7 +53,7 @@ KoDpi::~KoDpi()
 
 void KoDpi::setDPI(int x, int y)
 {
-    //kDebug( 30003 ) << x <<"," << y;
+    //kDebug(30006) << x <<"," << y;
     KoDpi* s = self();
     s->m_dpiX = x;
     s->m_dpiY = y;

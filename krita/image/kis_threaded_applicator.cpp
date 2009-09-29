@@ -86,7 +86,6 @@ KisThreadedApplicator::KisThreadedApplicator(KisPaintDeviceSP dev,
 
 KisThreadedApplicator::~KisThreadedApplicator()
 {
-    qDebug() << "waiting for weaver to finish";
     m_d->weaver->finish();
     delete m_d->weaver;
     delete m_d;

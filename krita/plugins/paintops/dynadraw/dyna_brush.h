@@ -101,6 +101,7 @@ public:
     }
 
     void initMouse(const QPointF &point){
+        if (!m_image) return;
         m_mousePos.setX( point.x() / m_image->width() );
         //m_fmouse.setY( (m_image->height() - point.y()) / (qreal)m_image->height() );
         m_mousePos.setY( point.y() / m_image->height() );

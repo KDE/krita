@@ -537,7 +537,7 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
         double deltaY = height() * qAbs(tan(angleX * pi / 180) * tan(angleY * pi / 180));
         w = (qint32)(width() + qAbs(height() * tan(angleX * pi / 180)));
         //ugly fix for the problem of having two extra pixels if only a shear along one
-        //axis is done. This has to be fixed in the cropping code in KisRotateVisitor!
+        //axis is done.
         if (angleX == 0 || angleY == 0)
             h = (qint32)(height() + qAbs(w * tan(angleY * pi / 180)));
         else if (angleX > 0 && angleY > 0)

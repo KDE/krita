@@ -4,71 +4,53 @@ include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/metada
 
 
 set(kis_base_node_test_SRCS kis_base_node_test.cpp )
-
 kde4_add_unit_test(KisBaseNodeTest TESTNAME krita-image-BaseNodeTest ${kis_base_node_test_SRCS})
-
 target_link_libraries(KisBaseNodeTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_node_test_SRCS kis_node_test.cpp )
-
 kde4_add_unit_test(KisNodeTest TESTNAME krita-image-Node-Test ${kis_node_test_SRCS})
-
 target_link_libraries(KisNodeTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_node_facade_test_SRCS kis_node_facade_test.cpp )
-
 kde4_add_unit_test(KisNodeFacadeTest TESTNAME krita-image-NodeFacadeTest ${kis_node_facade_test_SRCS})
-
 target_link_libraries(KisNodeFacadeTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
-
 set(kis_paint_device_test_SRCS kis_paint_device_test.cpp )
-
 kde4_add_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
-
 target_link_libraries(KisPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage kostore ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
-
 set(kis_fixed_paint_device_test_SRCS kis_fixed_paint_device_test.cpp )
-
 kde4_add_unit_test(KisFixedPaintDeviceTest TESTNAME krita-image-KisFixedPaintDeviceTest ${kis_fixed_paint_device_test_SRCS})
-
 target_link_libraries(KisFixedPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 
 ########### next target ###############
 
 set(kis_layer_test_SRCS kis_layer_test.cpp )
-
 kde4_add_unit_test(KisLayerTest TESTNAME krita-image-KisLayerTest  ${kis_layer_test_SRCS})
-
 target_link_libraries(KisLayerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_effect_mask_test_SRCS kis_effect_mask_test.cpp )
-
 kde4_add_unit_test(KisEffectMaskTest TESTNAME krita-image-KisEffectMaskTest  ${kis_effect_mask_test_SRCS})
-
 target_link_libraries(KisEffectMaskTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
+
 set(kis_iterator_test_SRCS kis_iterator_test.cpp )
-
 kde4_add_unit_test(KisIteratorTest TESTNAME krita-image-KisIteratorTest  ${kis_iterator_test_SRCS})
-
 target_link_libraries(KisIteratorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
 
 ########### next target ###############
 
@@ -435,12 +417,6 @@ target_link_libraries(KisRecordedActionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_
 set(kis_recorded_filter_action_test_SRCS kis_recorded_filter_action_test.cpp )
 kde4_add_unit_test(KisRecordedFilterActionTest TESTNAME krita-image-KisRecordedFilterActionTest ${kis_recorded_filter_action_test_SRCS})
 target_link_libraries(KisRecordedFilterActionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_rotate_visitor_test_SRCS kis_rotate_visitor_test.cpp )
-kde4_add_unit_test(KisRotateVisitorTest TESTNAME krita-image-KisRotateVisitorTest ${kis_rotate_visitor_test_SRCS})
-target_link_libraries(KisRotateVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

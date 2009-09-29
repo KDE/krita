@@ -25,7 +25,6 @@
 #include "kis_filter_strategy.h"
 #include "kis_undo_adapter.h"
 #include "kis_transaction.h"
-#include "kis_rotate_visitor.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
@@ -42,7 +41,7 @@ public:
     using KisNodeVisitor::visit;
 
     KisShearVisitor(double xshear, double yshear, KoUpdater *progress)
-            : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {}
+        : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {}
 
     void setStrategy(KisFilterStrategy* strategy) {
         m_strategy = strategy;
@@ -76,9 +75,7 @@ public:
         //KisTransformWorker w(dev, 1.0, 1.0, m_xshear, m_yshear, 0, 0, 0, m_progress, strategy);
         //w.run();
 
-        KisRotateVisitor v(m_progress);
-        v.visitKisPaintDevice(dev.data());
-        v.shear(m_xshear, m_yshear, m_progress);
+        shear(dev, m_xshear, m_yshear, m_progress);
 
         if (m_undo && m_undo->undo())
             m_undo->addCommand(t);
@@ -111,6 +108,11 @@ public:
     bool visit(KisSelectionMask*) { return true; }
 
 private:
+
+    void shear(KisPaintDeviceSP dev, double angleX, double angleY, KoUpdater *progress);
+    KisPaintDeviceSP xShear(KisPaintDeviceSP src, double shearX, KoUpdater *progress);
+    KisPaintDeviceSP yShear(KisPaintDeviceSP src, double shearY, KoUpdater *progress);
+
     double m_xshear;
     double m_yshear;
     KoUpdater* m_progress;

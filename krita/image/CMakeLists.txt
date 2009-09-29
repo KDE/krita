@@ -139,7 +139,7 @@ set(kritaimage_LIB_SRCS
    kis_random_accessor.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
-   kis_rotate_visitor.cc
+   kis_shear_visitor.cpp
    kis_selected_transaction.cc
    kis_selection.cc
    kis_selection_mask.cpp

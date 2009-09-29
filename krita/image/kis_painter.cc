@@ -756,8 +756,6 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         break;
     }
 
-    KisSelectionSP polygonMask = new KisSelection(polygon);
-
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
 
@@ -767,14 +765,12 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         d->maskPainter->setRenderHint(QPainter::Antialiasing, antiAliasPolygonFill());
     }
    
-
     // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
     QColor opaqueColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255);
-    QColor transparentColor(OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, 255);
     for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += MASK_IMAGE_WIDTH) {
         for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += MASK_IMAGE_HEIGHT) {
 
-            d->maskPainter->fillRect(d->polygonMaskImage.rect(), transparentColor);
+            d->polygonMaskImage.fill(qRgba(OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, 255));
             d->maskPainter->translate(-x, -y);
             d->maskPainter->fillPath(path, opaqueColor);
             d->maskPainter->translate(x, y);
@@ -782,12 +778,15 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
             qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, MASK_IMAGE_WIDTH);
             qint32 rectHeight = qMin(fillRect.y() + fillRect.height() - y, MASK_IMAGE_HEIGHT);
 
-            KisHLineIterator lineIt = polygonMask->createHLineIterator(x,y,rectWidth);
+            KisHLineIterator lineIt = polygon->createHLineIterator(x,y,rectWidth);
 
+            quint8 tmp;
             for (int row = y; row < y + rectHeight; row++) {
             QRgb* line = reinterpret_cast<QRgb*>(d->polygonMaskImage.scanLine(row - y));
                 while (!lineIt.isDone()) {
-                    (*lineIt.rawData()) = qRed(line[lineIt.x() - x]);
+                    tmp = qRed(line[lineIt.x() - x]);
+                    polygon->colorSpace()->applyAlphaU8Mask(lineIt.rawData(), 
+                    &tmp, 1);                    
                     ++lineIt;
                 }
                 lineIt.nextRow();
@@ -795,8 +794,6 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
             
         }
     }
-
-    polygon->applySelectionMask(polygonMask);
 
     QRect r = polygon->extent();
 

@@ -762,13 +762,14 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     maskPainter.setRenderHint(QPainter::Antialiasing, antiAliasPolygonFill());
 
     // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
-
+    QColor opaqueColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255);
+    QColor transparentColor(OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, 255);
     for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += MASK_IMAGE_WIDTH) {
         for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += MASK_IMAGE_HEIGHT) {
 
-            maskPainter.fillRect(polygonMaskImage.rect(), QColor(OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, 255));
+            maskPainter.fillRect(polygonMaskImage.rect(), transparentColor);
             maskPainter.translate(-x, -y);
-            maskPainter.fillPath(path, QColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255));
+            maskPainter.fillPath(path, opaqueColor);
             maskPainter.translate(x, y);
 
             qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, MASK_IMAGE_WIDTH);

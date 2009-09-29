@@ -29,7 +29,6 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
-#include "kis_merge_visitor.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
 

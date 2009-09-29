@@ -338,6 +338,8 @@ bool Layout::nextParag()
     if (! m_block.isValid()) {
         QTextBlock block = m_block.previous(); // last correct one.
         m_data->setEndPosition(block.position() + block.length());
+        if (m_data->position() > m_data->endPosition()) // we have no text for this shape
+            m_data->setEndPosition(-1);
 
         // repaint till end of shape.
         const qreal offsetInShape = m_y - m_data->documentOffset();

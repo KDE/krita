@@ -790,11 +790,6 @@ public slots:
     virtual void addCommand(QUndoCommand* command);
 
     /**
-     * Undo the command that is stored at the top of the stack
-     */
-    virtual void undoLastCommand();
-
-    /**
      * Begins recording of a macro command. At the end endMacro needs to be called.
      * @param text command description
      */

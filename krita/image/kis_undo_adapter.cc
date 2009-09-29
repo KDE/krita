@@ -78,7 +78,7 @@ void KisUndoAdapter::undoLastCommand()
      * command->undo() and remove the cache without committing it
      * to the undoStack
      */
-    m_doc->undoLastCommand();
+    m_doc->undoStack()->undo();
 }
 
 void KisUndoAdapter::setUndo(bool undo)

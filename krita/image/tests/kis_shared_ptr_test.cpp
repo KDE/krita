@@ -136,6 +136,16 @@ void KisSharedPtrTest::testCopy0()
     QVERIFY(null3 == null);
 }
 
+void KisSharedPtrTest::testClear()
+{
+    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClassSP instance = new TestClass(tcw);
+    TestClassSP instance2 = instance;
+    instance.clear();
+    QVERIFY(tcw->deleted = true);
+    QVERIFY(instance.data() == 0);
+}
+
 void KisSharedPtrTest::testWeakSP()
 {
 

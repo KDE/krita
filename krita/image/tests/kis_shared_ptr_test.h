@@ -31,6 +31,7 @@ private slots:
     void testCopy();
     void testCopy2();
     void testCopy0();
+    void testClear();
     void testWeakSP();
 
 

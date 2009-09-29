@@ -19,7 +19,8 @@
 #ifndef KORULER_P_H
 #define KORULER_P_H
 
-class RulerTabChooser : public QWidget {
+class RulerTabChooser : public QWidget
+{
 public:
     RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(QTextOption::LeftTab) {}
     virtual ~RulerTabChooser() {}
@@ -33,7 +34,8 @@ private:
     QTextOption::TabType m_type;
 };
 
-class PaintingStrategy {
+class PaintingStrategy
+{
 public:
     /// constructor
     PaintingStrategy() {}
@@ -75,7 +77,8 @@ public:
     virtual QSize sizeHint() = 0;
 };
 
-class HorizontalPaintingStrategy : public PaintingStrategy {
+class HorizontalPaintingStrategy : public PaintingStrategy
+{
 public:
     HorizontalPaintingStrategy() : lengthInPixel(1) {}
 
@@ -89,7 +92,8 @@ private:
     qreal lengthInPixel;
 };
 
-class VerticalPaintingStrategy : public PaintingStrategy {
+class VerticalPaintingStrategy : public PaintingStrategy
+{
 public:
     VerticalPaintingStrategy() : lengthInPixel(1) {}
 
@@ -103,7 +107,8 @@ private:
     qreal lengthInPixel;
 };
 
-class HorizontalDistancesPaintingStrategy : public HorizontalPaintingStrategy {
+class HorizontalDistancesPaintingStrategy : public HorizontalPaintingStrategy
+{
 public:
     HorizontalDistancesPaintingStrategy() {}
 
@@ -113,7 +118,8 @@ private:
     void drawDistanceLine(const KoRulerPrivate *d, QPainter &painter, const qreal start, const qreal end);
 };
 
-class KoRulerPrivate {
+class KoRulerPrivate
+{
 public:
     KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::Orientation orientation);
     ~KoRulerPrivate();

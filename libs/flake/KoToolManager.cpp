@@ -246,6 +246,9 @@ KoInputDevice KoToolManager::currentInputDevice() const
 
 void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *controller)
 {
+    Q_ASSERT(controller);
+    Q_ASSERT(ac);
+
     setup();
 
     if (! d->canvasses.contains(controller)) {
@@ -262,6 +265,7 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
 
 void KoToolManager::addController(KoCanvasController *controller)
 {
+    Q_ASSERT(controller);
     if (d->canvasses.keys().contains(controller))
         return;
     setup();
@@ -272,6 +276,7 @@ void KoToolManager::addController(KoCanvasController *controller)
 
 void KoToolManager::removeCanvasController(KoCanvasController *controller)
 {
+    Q_ASSERT(controller);
     detachCanvas(controller);
     disconnect(controller, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
     disconnect(controller, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
@@ -279,6 +284,7 @@ void KoToolManager::removeCanvasController(KoCanvasController *controller)
 
 void KoToolManager::toolActivated(ToolHelper *tool)
 {
+    Q_ASSERT(tool);
     if (!d->toolCanBeUsed(tool->activationShapeId()))
         return;
 
@@ -438,6 +444,7 @@ void KoToolManager::postSwitchTool(bool temporary)
 
 void KoToolManager::attachCanvas(KoCanvasController *controller)
 {
+    Q_ASSERT(controller);
     CanvasData *cd = d->createCanvasData(controller, KoInputDevice::mouse());
     // switch to new canvas as the active one.
     d->canvasData = cd;
@@ -528,6 +535,7 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to)
 
 void KoToolManager::detachCanvas(KoCanvasController *controller)
 {
+    Q_ASSERT(controller);
     // check if we are removing the active canvas controller
     if (d->canvasData && d->canvasData->canvas == controller) {
         KoCanvasController *newCanvas = 0;
@@ -611,6 +619,7 @@ KoCreateShapesTool * KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const
 
 KoGuidesTool * KoToolManager::guidesTool(KoCanvasBase * canvas) const
 {
+    Q_ASSERT(canvas);
     foreach(KoCanvasController *controller, d->canvasses.keys()) {
         if (controller->canvas() == canvas) {
             KoGuidesTool * guidesTool = dynamic_cast<KoGuidesTool*>

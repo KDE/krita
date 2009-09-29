@@ -135,7 +135,7 @@ const KoColorProfile * KisCanvasResourceProvider::currentDisplayProfile() const
 
 }
 
-KisImageSP KisCanvasResourceProvider::currentImage() const
+KisImageWSP KisCanvasResourceProvider::currentImage() const
 {
     return m_view->image();
 }
@@ -227,7 +227,7 @@ void KisCanvasResourceProvider::slotNodeActivated(const KisNodeSP node)
 
 void KisCanvasResourceProvider::slotImageSizeChanged()
 {
-    if (KisImageSP image = m_view->image()) {
+    if (KisImageWSP image = m_view->image()) {
         float fw = image->width() / image->xRes();
         float fh = image->height() / image->yRes();
 

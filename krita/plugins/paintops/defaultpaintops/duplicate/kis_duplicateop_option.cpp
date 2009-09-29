@@ -33,7 +33,7 @@ public:
     {
         setupUi(this);
     }
-    KisImageSP m_image;
+    KisImageWSP m_image;
 protected:
     void showEvent(QShowEvent* event)
     {
@@ -92,7 +92,7 @@ void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration* s
     emit sigSettingChanged();
 }
 
-void KisDuplicateOpOption::setImage( KisImageSP image )
+void KisDuplicateOpOption::setImage( KisImageWSP image )
 {
     m_optionWidget->m_image = image;
 }

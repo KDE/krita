@@ -448,7 +448,7 @@ KisPerChannelFilter::KisPerChannelFilter() : KisColorTransformationFilter(id(), 
     setColorSpaceIndependence(TO_LAB16);
 }
 
-KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
 {
     Q_UNUSED(image);
     return new KisPerChannelConfigWidget(parent, dev);

@@ -69,7 +69,7 @@ Histogram::Histogram(QObject *parent, const QStringList &)
         connect(m_action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
 
         m_view = (KisView2*) parent;
-        if (KisImageSP img = m_view->image()) {
+        if (KisImageWSP img = m_view->image()) {
             connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged()));
             connect(img.data(), SIGNAL(sigNodeHasBeenAdded(KisNode *, int)), SLOT(slotLayersChanged()));
             connect(m_view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(slotLayersChanged()));

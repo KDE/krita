@@ -119,7 +119,7 @@ public:
 
 protected:
 
-    KisImageSP image() const;
+    KisImageWSP image() const;
     QCursor cursor() const;
     
     /// @return the currently active selection
@@ -128,7 +128,7 @@ protected:
     /// Call this to set the document modified
     void notifyModified() const;
 
-    KisImageSP currentImage();
+    KisImageWSP currentImage();
     KisPattern* currentPattern();
     KoAbstractGradient * currentGradient();
     KisNodeSP currentNode();

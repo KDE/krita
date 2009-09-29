@@ -43,8 +43,8 @@ public:
      * @param image The image the command will be working on.
      * @param layer the layer to add
      */
-    KisImageLayerAddCommand(KisImageSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis);
-    KisImageLayerAddCommand(KisImageSP image, KisNodeSP layer, KisNodeSP parent, quint32 index );
+    KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis);
+    KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, quint32 index );
 
     virtual void redo();
     virtual void undo();

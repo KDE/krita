@@ -39,7 +39,7 @@ void KisLayerTest::testCreation()
 {
 
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
     KisLayerSP layer = new TestLayer(image, "test", OPACITY_OPAQUE);
@@ -76,7 +76,7 @@ void KisLayerTest::testCreation()
 void KisLayerTest::testOrdering()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
     KisLayerSP layer1 = new TestLayer(image, "layer1", OPACITY_OPAQUE);
@@ -161,7 +161,7 @@ void KisLayerTest::testOrdering()
 void KisLayerTest::testMoveNode()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
     KisLayerSP node1 = new TestLayer(image, "layer1", OPACITY_OPAQUE);
@@ -192,7 +192,7 @@ void KisLayerTest::testMoveNode()
 void KisLayerTest::testMoveLayer()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
     KisLayerSP node1 = new TestLayer(image, "layer1", OPACITY_OPAQUE);

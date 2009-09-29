@@ -34,7 +34,7 @@
 #include "kis_selection.h"
 #include "kis_random_accessor.h"
 
-KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
+KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
 {
     Q_ASSERT(settings);

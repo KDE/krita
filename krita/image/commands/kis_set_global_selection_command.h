@@ -33,14 +33,14 @@ public:
      * @param parent the parent command
      * @param selection the selection that will be set a global selection, if 0 a new selection will be created
      */
-    KisSetGlobalSelectionCommand(KisImageSP image, QUndoCommand * parent, KisSelectionSP selection = 0);
+    KisSetGlobalSelectionCommand(KisImageWSP image, QUndoCommand * parent, KisSelectionSP selection = 0);
     virtual ~KisSetGlobalSelectionCommand();
 
     virtual void redo();
     virtual void undo();
 
 private:
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisSelectionSP m_newSelection;
     KisSelectionSP m_oldSelection;
 };

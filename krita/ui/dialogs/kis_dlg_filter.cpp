@@ -46,10 +46,10 @@ struct KisFilterDialog::Private {
     Ui_FilterDialog uiFilterDialog;
     KisFilterMaskSP mask;
     KisNodeSP node;
-    KisImageSP image;
+    KisImageWSP image;
 };
 
-KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP image, KisSelectionSP selection) :
+KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP image, KisSelectionSP selection) :
         QDialog(parent),
         d(new Private)
 {

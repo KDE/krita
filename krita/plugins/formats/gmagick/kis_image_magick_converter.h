@@ -71,7 +71,7 @@ public slots:
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
     KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd);
-    KisImageSP image();
+    KisImageWSP image();
 
 public:
     static QString readFilters();
@@ -89,7 +89,7 @@ private:
     KisImageBuilder_Result decode(const KUrl& uri, bool isBlob);
 
 private:
-    KisImageSP m_img;
+    KisImageWSP m_img;
     KisDoc2 *m_doc;
     KisUndoAdapter *m_adapter;
     QVector<quint8> m_data;

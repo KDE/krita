@@ -79,7 +79,7 @@ void KisImageManager::slotInsertImageAsLayer()
 
 qint32 KisImageManager::importImage(const KUrl& urlArg)
 {
-    KisImageSP currentImage = m_view->image();
+    KisImageWSP currentImage = m_view->image();
 
     if (!currentImage) {
         return 0;
@@ -174,7 +174,7 @@ void KisImageManager::shearCurrentImage(double angleX, double angleY)
 
 void KisImageManager::slotImageProperties()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
 
     if (!img) return;
 

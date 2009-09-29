@@ -35,7 +35,7 @@ class KisImageConvertTypeCommand : public KisImageCommand
 {
 
 public:
-    KisImageConvertTypeCommand(KisImageSP image, const KoColorSpace * beforeColorSpace, const KoColorSpace * afterColorSpace);
+    KisImageConvertTypeCommand(KisImageWSP image, const KoColorSpace * beforeColorSpace, const KoColorSpace * afterColorSpace);
 
     virtual void redo();
     virtual void undo();

@@ -74,7 +74,7 @@ metadataeditorPlugin::~metadataeditorPlugin()
 
 void metadataeditorPlugin::slotEditLayerMetaData()
 {
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
     if (!image) return;
 
     KisMetaDataEditor editor(m_view, m_view->layerManager()->activeLayer()->metaData());

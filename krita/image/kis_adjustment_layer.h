@@ -61,7 +61,7 @@ public:
      * @param selection is a mask used by the adjustment layer to 
      * know where to apply the filter.
      */
-    KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
+    KisAdjustmentLayer(KisImageWSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
 

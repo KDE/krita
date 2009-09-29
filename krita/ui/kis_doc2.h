@@ -107,9 +107,9 @@ public:
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    KisImageSP newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace);
+    KisImageWSP newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace);
 
-    KisImageSP image() const;
+    KisImageWSP image() const;
 
     /**
      * Adds the specified child document to this document; this
@@ -126,7 +126,7 @@ public:
     /**
      * Set the current image to the specified image and turn undo on.
      */
-    void setCurrentImage(KisImageSP image);
+    void setCurrentImage(KisImageWSP image);
 
     KisUndoAdapter * undoAdapter() const;
 

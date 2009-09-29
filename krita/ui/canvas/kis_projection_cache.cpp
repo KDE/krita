@@ -32,7 +32,7 @@ KisProjectionCache::KisProjectionCache()
 {
 }
 
-void KisProjectionCache::setImage( KisImageSP image )
+void KisProjectionCache::setImage( KisImageWSP image )
 {
     m_image = image;
 }

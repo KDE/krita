@@ -62,7 +62,7 @@ KisSelectionSP createPixelSelection( KisPaintDeviceSP paintDevice )
     return pixelSelection;
 }
 
-KisSelectionSP createVectorSelection( KisPaintDeviceSP paintDevice, KisImageSP image )
+KisSelectionSP createVectorSelection( KisPaintDeviceSP paintDevice, KisImageWSP image )
 {
     KisSelectionSP vectorSelection = new KisSelection(paintDevice);
     KoPathShape* path = new KoPathShape();
@@ -83,7 +83,7 @@ KisSelectionSP createVectorSelection( KisPaintDeviceSP paintDevice, KisImageSP i
 
 KisDoc2* createCompleteDocument()
 {
-    KisImageSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
+    KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
     KisDoc2* doc = new KisDoc2;
     doc->setCurrentImage( image );
     doc->documentInfo()->setAboutInfo("title", image->name());

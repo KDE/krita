@@ -43,7 +43,7 @@ KisBrushOpFactory::~KisBrushOpFactory()
 
 KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                          KisPainter * painter,
-                                         KisImageSP image)
+                                         KisImageWSP image)
 {
     Q_UNUSED(image);
 
@@ -54,7 +54,7 @@ KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisBrushOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisBrushOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
 {
     // XXX: store widgets per inputDevice?
     Q_UNUSED(inputDevice);
@@ -62,7 +62,7 @@ KisPaintOpSettingsSP KisBrushOpFactory::settings(const KoInputDevice& inputDevic
     return new KisBrushOpSettings();
 }
 
-KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageWSP image)
 {
     Q_UNUSED( image );
     return new KisBrushOpSettings();

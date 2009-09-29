@@ -63,7 +63,7 @@ public:
     virtual ~KisLayerBox();
 
     void setUpdatesAndSignalsEnabled(bool enable);
-    void setImage(KisNodeManager * nodeManager, KisImageSP image, KisNodeModel * nodeModel);
+    void setImage(KisNodeManager * nodeManager, KisImageWSP image, KisNodeModel * nodeModel);
 
     virtual bool eventFilter(QObject *object, QEvent *event);
 
@@ -119,7 +119,7 @@ private:
 
     KMenu *m_viewModeMenu;
     KMenu *m_newLayerMenu;
-    KisImageSP m_image;
+    KisImageWSP m_image;
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeManager> m_nodeManager;
     Ui_WdgLayerBox* m_wdgLayerBox;

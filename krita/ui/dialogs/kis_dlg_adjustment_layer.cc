@@ -40,7 +40,7 @@
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
         KisNodeFilterInterface* nfi,
         KisPaintDeviceSP paintDevice,
-        KisImageSP image,
+        KisImageWSP image,
         const QString & layerName,
         const QString & caption,
         QWidget *parent,

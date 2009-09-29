@@ -329,7 +329,7 @@ void KisCanvas2::updateCanvas()
 }
 
 
-KisImageSP KisCanvas2::image()
+KisImageWSP KisCanvas2::image()
 {
     return m_d->view->image();
 
@@ -340,7 +340,7 @@ KoColorProfile *  KisCanvas2::monitorProfile()
     return m_d->monitorProfile;
 }
 
-KisImageSP KisCanvas2::currentImage()
+KisImageWSP KisCanvas2::currentImage()
 {
     return m_d->view->image();
 }

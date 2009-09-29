@@ -41,7 +41,7 @@ KisDynamicOpFactory::~KisDynamicOpFactory()
 {
 }
 
-KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
+KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image)
 {
     Q_UNUSED(image);
     const KisDynamicOpSettings *dosettings = dynamic_cast<const KisDynamicOpSettings *>(settings.data());
@@ -52,14 +52,14 @@ KisPaintOp * KisDynamicOpFactory::createOp(const KisPaintOpSettingsSP settings, 
     return op;
 }
 
-KisPaintOpSettingsSP KisDynamicOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisDynamicOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
 {
     Q_UNUSED(image);
     Q_UNUSED(inputDevice);
     return new KisDynamicOpSettings(m_shapeBookmarksManager, m_coloringBookmarksManager);
 }
 
-KisPaintOpSettingsSP KisDynamicOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisDynamicOpFactory::settings(KisImageWSP image)
 {
     Q_UNUSED(image);
     return new KisDynamicOpSettings(m_shapeBookmarksManager, m_coloringBookmarksManager);

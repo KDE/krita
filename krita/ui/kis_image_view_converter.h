@@ -40,7 +40,7 @@ public:
      * constructor
      * @param image the image this viewConver works for.
      */
-    KisImageViewConverter(const KisImageSP image);
+    KisImageViewConverter(const KisImageWSP image);
 
     /// convert from flake to krita units
     QPointF documentToView(const QPointF &documentPoint) const;
@@ -84,7 +84,7 @@ public:
     void zoom(qreal *zoomX, qreal *zoomY) const;
 
 private:
-    const KisImageSP m_image;
+    const KisImageWSP m_image;
 };
 
 #endif

@@ -32,7 +32,7 @@
 
 #include <kis_image.h>
 
-DlgCompose::DlgCompose(KisImageSP image, QWidget *  parent)
+DlgCompose::DlgCompose(KisImageWSP image, QWidget *  parent)
         : KDialog(parent),
         m_image(image)
 {

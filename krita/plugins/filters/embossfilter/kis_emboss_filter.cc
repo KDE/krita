@@ -170,7 +170,7 @@ int KisEmbossFilter::Lim_Max(int Now, int Up, int Max) const
     return (Up);
 }
 
-KisConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
 {
     Q_UNUSED(dev);
     Q_UNUSED(image);

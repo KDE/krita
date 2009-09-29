@@ -73,7 +73,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, KoZoomAction::AspectMode, this);
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
 
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     m_zoomController->setPageSize(QSizeF(img->width() / img->xRes(), img->height() / img->yRes()));
     m_zoomController->setDocumentSize(QSizeF(img->width() / img->xRes(), img->height() / img->yRes()));
 
@@ -144,7 +144,7 @@ void KisZoomManager::toggleShowRulers(bool show)
 
 void KisZoomManager::updateGUI()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
 
     m_horizontalRuler->setRulerLength(img->width() / img->xRes());
     m_verticalRuler->setRulerLength(img->height() / img->yRes());
@@ -154,7 +154,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 {
     Q_UNUSED(mode);
     Q_UNUSED(zoom);
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
 
     m_view->canvasBase()->preScale();
     m_view->canvasBase()->adjustOrigin();
@@ -163,7 +163,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 
 void KisZoomManager::changeAspectMode(bool aspectMode)
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
 
     if (aspectMode)
         m_zoomHandler->setResolution(img->xRes(), img->yRes());

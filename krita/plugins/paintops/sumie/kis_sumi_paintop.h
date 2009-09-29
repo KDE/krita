@@ -36,7 +36,7 @@ class KisSumiPaintOp : public KisPaintOp
 {
 
 public:
-    KisSumiPaintOp(const KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    KisSumiPaintOp(const KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisSumiPaintOp();
 
     void paintAt(const KisPaintInformation& info);
@@ -56,7 +56,7 @@ private:
 
     const KisSumiPaintOpSettings* m_settings;
     QPointF m_previousPoint;
-    KisImageSP m_image;
+    KisImageWSP m_image;
     bool newStrokeFlag;
 
     KisPaintDeviceSP m_dab;

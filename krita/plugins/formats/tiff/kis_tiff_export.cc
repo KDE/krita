@@ -90,7 +90,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     KUrl url;
     url.setPath(filename);
 
-    KisImageSP img;
+    KisImageWSP img;
 
     if (options.flatten) {
         img = new KisImage(0, output->image()->width(), output->image()->height(), output->image()->colorSpace(), "");

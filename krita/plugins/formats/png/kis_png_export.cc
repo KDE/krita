@@ -85,7 +85,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     kdb->setCaption(i18n("PNG Export Options"));
     kdb->setModal(false);
 
-    KisImageSP img = output->image();
+    KisImageWSP img = output->image();
     KisPaintDeviceSP pd;
     pd = new KisPaintDevice(*img->projection());
     KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);

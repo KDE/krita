@@ -526,7 +526,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         transform = KoColorSpaceRegistry::instance()->colorSpace(csName, profile)->createColorConverter( cs );
     }
 
-    // Creating the KisImageSP
+    // Creating the KisImageWSP
     if (m_img == 0) {
         m_img = new KisImage(m_adapter, width, height, cs, "built image");
         Q_CHECK_PTR(m_img);
@@ -747,13 +747,13 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
 }
 
 
-KisImageSP KisPNGConverter::image()
+KisImageWSP KisPNGConverter::image()
 {
     return m_img;
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageWSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
     dbgFile << "Start writing PNG File " << uri;
     if (uri.isEmpty())
@@ -770,7 +770,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageSP im
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageWSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
     if (!iodevice->open(QIODevice::WriteOnly)) {
         dbgFile << "Failed to open PNG File for writing";

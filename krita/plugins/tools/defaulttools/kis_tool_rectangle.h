@@ -69,7 +69,7 @@ protected:
 
     KisPainter *m_painter;
 
-    //KisImageSP m_currentImage;
+    //KisImageWSP m_currentImage;
 };
 
 class KisToolRectangleFactory : public KoToolFactory

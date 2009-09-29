@@ -23,11 +23,12 @@
 
 struct KisPlayInfo::Private
 {
-    KisImageSP image;
+    KisImageWSP image;
     KisNodeSP currentNode;
 };
 
-KisPlayInfo::KisPlayInfo(KisImageSP image, KisNodeSP currentNode) : d(new Private)
+KisPlayInfo::KisPlayInfo(KisImageWSP image, KisNodeSP currentNode)
+    : d(new Private)
 {
     d->image = image;
     d->currentNode = currentNode;
@@ -43,7 +44,7 @@ KisUndoAdapter* KisPlayInfo::undoAdapter() const
     return d->image->undoAdapter();
 }
 
-KisImageSP KisPlayInfo::image() const
+KisImageWSP KisPlayInfo::image() const
 {
     return d->image;
 }

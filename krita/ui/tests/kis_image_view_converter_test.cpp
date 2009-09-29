@@ -34,7 +34,7 @@
 void KisImageViewConverterTest::testDocumentToView()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP img = new KisImage(0, 512, 512, colorSpace, "test");
+    KisImageWSP img = new KisImage(0, 512, 512, colorSpace, "test");
     KisImageViewConverter viewConverter(img);
 
     img->setResolution(1.38888888, 1.38888888);
@@ -64,7 +64,7 @@ void KisImageViewConverterTest::testDocumentToView()
 void KisImageViewConverterTest::testViewToDocument()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP img = new KisImage(0, 512, 512, colorSpace, "test");
+    KisImageWSP img = new KisImage(0, 512, 512, colorSpace, "test");
     KisImageViewConverter viewConverter(img);
 
     img->setResolution(1.38888888, 1.38888888);
@@ -94,7 +94,7 @@ void KisImageViewConverterTest::testViewToDocument()
 void KisImageViewConverterTest::testZoom()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP img = new KisImage(0, 512, 512, colorSpace, "test");
+    KisImageWSP img = new KisImage(0, 512, 512, colorSpace, "test");
     KisImageViewConverter viewConverter(img);
 
     img->setResolution(1.38888888, 5.38888888);

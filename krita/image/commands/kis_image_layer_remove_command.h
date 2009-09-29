@@ -46,7 +46,7 @@ public:
      * @param wasParent the parent of the layer
      * @param wasAbove the layer above the layer
      */
-    KisImageLayerRemoveCommand(KisImageSP image, KisNodeSP layer);
+    KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP layer);
 
     virtual void redo();
     virtual void undo();

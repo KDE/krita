@@ -241,7 +241,7 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     KoXmlElement root;
     QString attr;
     KoXmlNode node;
-    KisImageSP img;
+    KisImageWSP img;
 
     if (!init())
         return false;
@@ -354,14 +354,14 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
 
 
 
-KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace)
+KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace)
 {
     if (!init())
-        return KisImageSP(0);
+        return KisImageWSP(0);
 
     setUndo(false);
 
-    KisImageSP img = KisImageSP(new KisImage(m_d->undoAdapter, width, height, colorspace, name));
+    KisImageWSP img = KisImageWSP(new KisImage(m_d->undoAdapter, width, height, colorspace, name));
     img->lock();
 
     Q_CHECK_PTR(img);
@@ -393,7 +393,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     KisConfig cfg;
 
     quint8 opacity = OPACITY_OPAQUE;//bgColor.alpha();
-    KisImageSP img;
+    KisImageWSP img;
     KisPaintLayerSP layer;
 
     if (!cs) return false;
@@ -410,7 +410,6 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     img->setProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
     documentInfo()->setAboutInfo("comments", description);
-
 
     layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, cs);
     Q_CHECK_PTR(layer);
@@ -535,15 +534,14 @@ void KisDoc2::prepareForImport()
     setUndo(false);
 }
 
-KisImageSP KisDoc2::image() const
+KisImageWSP KisDoc2::image() const
 {
     return m_d->image;
 }
 
 
-void KisDoc2::setCurrentImage(KisImageSP image)
+void KisDoc2::setCurrentImage(KisImageWSP image)
 {
-
     if (m_d->image) {
         // Disconnect existing sig/slot connections
         m_d->image->disconnect(this);

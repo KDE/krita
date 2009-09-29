@@ -32,7 +32,7 @@ KisDeformPaintOpFactory::KisDeformPaintOpFactory()
 {
 }
 
-KisPaintOp * KisDeformPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0)
+KisPaintOp * KisDeformPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image = 0)
 {
     const KisDeformPaintOpSettings *deformSettings = dynamic_cast<const KisDeformPaintOpSettings *>(settings.data());
     Q_ASSERT(settings == 0 || deformSettings != 0);
@@ -41,14 +41,14 @@ KisPaintOp * KisDeformPaintOpFactory::createOp(const KisPaintOpSettingsSP settin
     return op;
 }
 
-KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
 {
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
     return new KisDeformPaintOpSettings();
 }
 
-KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(KisImageWSP image)
 {
     Q_UNUSED(image);
     return new KisDeformPaintOpSettings();

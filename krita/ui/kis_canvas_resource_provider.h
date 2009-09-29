@@ -81,7 +81,7 @@ public:
     void resetDisplayProfile();
     const KoColorProfile * currentDisplayProfile() const;
 
-    KisImageSP currentImage() const;
+    KisImageWSP currentImage() const;
 
     KisNodeSP currentNode() const;
 

@@ -54,7 +54,7 @@
 
 #include <kis_debug.h>
 
-KisShapeSelection::KisShapeSelection(KisImageSP image, KisSelectionSP selection)
+KisShapeSelection::KisShapeSelection(KisImageWSP image, KisSelectionSP selection)
         : KoShapeLayer(new KisShapeSelectionModel(image, selection, this))
         , m_image(image)
 {

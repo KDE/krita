@@ -45,7 +45,7 @@ void KisShapeControllerTest::testSetImage()
     KisNameServer * nameServer = new KisNameServer();
     KisShapeController * shapeController = new KisShapeController(doc, nameServer);
 
-    KisImageSP image = new KisImage(0, 512, 512, 0, "shape controller test");
+    KisImageWSP image = new KisImage(0, 512, 512, 0, "shape controller test");
     connect(image, SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(testLayerAdded(KisLayerSP)));
     KisLayerSP layer = new KisPaintLayer(image, "test1", OPACITY_OPAQUE);
     image->addLayer(layer);

@@ -199,7 +199,7 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
     setColorSpaceIndependence(TO_LAB16);
 }
 
-KisConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
 {
     Q_UNUSED(image);
     return new KisBrightnessContrastConfigWidget(parent, dev);

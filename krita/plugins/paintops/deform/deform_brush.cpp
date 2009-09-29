@@ -645,7 +645,7 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
 }
 
 
-bool DeformBrush::point_interpolation( qreal* x, qreal* y, KisImageSP image ) {
+bool DeformBrush::point_interpolation( qreal* x, qreal* y, KisImageWSP image ) {
     if ( *x >= 0 && *x < image->width()-1 && *y >= 0 && *y < image->height()-1){
         *x = *x + 0.5; // prepare for typing to int
         *y = *y + 0.5;

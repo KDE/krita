@@ -48,27 +48,27 @@ public:
      * Loading is done in two steps: first all xml is loaded, then, in finishLoading,
      * the actual layer data is loaded.
      */
-    KisImageSP loadXML(const KoXmlElement& elem);
+    KisImageWSP loadXML(const KoXmlElement& elem);
 
-    void loadBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external);
+    void loadBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external);
 
 private:
 
-    KisNode* loadNodes(const KoXmlElement& element, KisImageSP img, KisNode* parent);
+    KisNode* loadNodes(const KoXmlElement& element, KisImageWSP img, KisNode* parent);
 
-    KisNode* loadNode(const KoXmlElement& elem, KisImageSP img);
+    KisNode* loadNode(const KoXmlElement& elem, KisImageWSP img);
 
-    KisNode* loadPaintLayer(const KoXmlElement& elem, KisImageSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadPaintLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadGroupLayer(const KoXmlElement& elem, KisImageSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadGroupLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadAdjustmentLayer(const KoXmlElement& elem, KisImageSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadAdjustmentLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadShapeLayer(const KoXmlElement& elem, KisImageSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadShapeLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadGeneratorLayer(const KoXmlElement& elem, KisImageSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadGeneratorLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadCloneLayer(const KoXmlElement& elem, KisImageSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadCloneLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
     KisNode* loadFilterMask(const KoXmlElement& elem );
 
@@ -76,7 +76,7 @@ private:
 
     KisNode* loadTransformationMask(const KoXmlElement& elem );
 
-    KisNode* loadSelectionMask(KisImageSP img, const KoXmlElement& elem );
+    KisNode* loadSelectionMask(KisImageWSP img, const KoXmlElement& elem );
 
 
 private:

@@ -152,7 +152,7 @@ void KisCustomPattern::slotUsePattern()
 
 void KisCustomPattern::createPattern()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
 
     if (!img)
         return;

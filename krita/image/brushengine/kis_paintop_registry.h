@@ -53,7 +53,7 @@ public:
      * Create and return a paintop based on the given preset. A preset defines
      * a paintop, a settings object and possible a brush tip.
      */
-    KisPaintOp * paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageSP image) const;
+    KisPaintOp * paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageWSP image) const;
 
     /**
      * Create and return an (abstracted) configuration widget
@@ -61,12 +61,12 @@ public:
      * with the specified parent as widget parent. Returns 0 if there
      * are no settings available for the given device.
      */
-    KisPaintOpSettingsSP settings(const KoID& id, const KoInputDevice& inputDevice, KisImageSP image = 0) const;
+    KisPaintOpSettingsSP settings(const KoID& id, const KoInputDevice& inputDevice, KisImageWSP image = 0) const;
 
     /**
      * @return a default preset for the given paintop.
      */
-    KisPaintOpPresetSP defaultPreset(const KoID& id, const KoInputDevice& inputDevice, KisImageSP image = 0) const;
+    KisPaintOpPresetSP defaultPreset(const KoID& id, const KoInputDevice& inputDevice, KisImageWSP image = 0) const;
 
     // Whether we should show this paintop in the toolchest
     bool userVisible(const KoID & id, const KoColorSpace* cs) const;
@@ -90,7 +90,7 @@ private:
     /**
      * Return a newly created paintop. You are responsible for deleting
      */
-    KisPaintOp * paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0) const;
+    KisPaintOp * paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image = 0) const;
 
 
 private:

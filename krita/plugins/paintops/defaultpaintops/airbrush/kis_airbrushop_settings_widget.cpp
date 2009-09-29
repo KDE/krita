@@ -60,7 +60,7 @@ KisPropertiesConfiguration* KisAirbrushOpSettingsWidget::configuration() const
     return config;
 }
 
-void KisAirbrushOpSettingsWidget::setImage(KisImageSP image)
+void KisAirbrushOpSettingsWidget::setImage(KisImageWSP image)
 {
     m_brushOption->setImage(image);
 }

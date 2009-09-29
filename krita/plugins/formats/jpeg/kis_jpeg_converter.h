@@ -89,13 +89,13 @@ class KisJPEGConverter : public QObject {
         KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
         /** Retrieve the constructed image
         */
-        KisImageSP image();
+        KisImageWSP image();
     public slots:
         virtual void cancel();
     private:
         KisImageBuilder_Result decode(const KUrl& uri);
     private:
-        KisImageSP m_img;
+        KisImageWSP m_img;
         KisDoc2 *m_doc;
         KisUndoAdapter *m_adapter;
         bool m_stop;

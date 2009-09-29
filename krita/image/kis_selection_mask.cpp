@@ -78,7 +78,7 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
     setDirty();
 }
 
-KisImageSP KisSelectionMask::image() const
+KisImageWSP KisSelectionMask::image() const
 {
     return m_d->image;
 }

@@ -251,7 +251,7 @@ void KisSelectionManager::updateGUI()
         return;
     }
 
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     KisLayerSP l;
     KisPaintDeviceSP dev;
 
@@ -373,7 +373,7 @@ void KisSelectionManager::selectionChanged()
 
 void KisSelectionManager::cut()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisLayerSP layer = m_view->activeLayer();
@@ -404,7 +404,7 @@ void KisSelectionManager::copy()
         m_view->canvasBase()->toolProxy()->copy();
     } else {
 
-        KisImageSP img = m_view->image();
+        KisImageWSP img = m_view->image();
         if (!img) return;
 
         KisPaintDeviceSP dev = m_view->activeDevice();
@@ -458,7 +458,7 @@ void KisSelectionManager::copy()
 
 void KisSelectionManager::paste()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisPaintDeviceSP clip = m_clipboard->clip();
@@ -529,13 +529,13 @@ void KisSelectionManager::pasteNew()
     const QByteArray mimetype = KoDocument::readNativeFormatMimeType();
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimetype);
 
-    KisDoc2 * doc = dynamic_cast<KisDoc2*>(entry.createDoc());
+    KisDoc2* doc = dynamic_cast<KisDoc2*>(entry.createDoc());
     if (!doc) return;
 
     Q_ASSERT(doc->undoAdapter() != 0);
     doc->undoAdapter()->setUndo(false);
 
-    KisImageSP img = new KisImage(doc->undoAdapter(), r.width(), r.height(),
+    KisImageWSP img = new KisImage(doc->undoAdapter(), r.width(), r.height(),
                                   KoColorSpaceRegistry::instance()->colorSpace( clip->colorSpace()->id(), clip->colorSpace()->profile() ), "Pasted" ); // TODO should be translated ?
     KisPaintLayerSP layer = new KisPaintLayer(img.data(), clip->objectName(), OPACITY_OPAQUE, clip->colorSpace());
 
@@ -556,7 +556,7 @@ void KisSelectionManager::pasteNew()
 
 void KisSelectionManager::selectAll()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     QUndoCommand* selectionCmd = new QUndoCommand(i18n("Select All"));
@@ -575,7 +575,7 @@ void KisSelectionManager::selectAll()
 
 void KisSelectionManager::deselect()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisSelectionSP sel = m_view->selection();
@@ -598,7 +598,7 @@ void KisSelectionManager::deselect()
 
 void KisSelectionManager::clear()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisPaintDeviceSP dev = m_view->activeDevice();
@@ -628,7 +628,7 @@ void KisSelectionManager::deleteSelection()
 
 void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const QString& transactionText)
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisPaintDeviceSP dev = m_view->activeDevice();
@@ -679,7 +679,7 @@ void KisSelectionManager::fillPattern()
 
 void KisSelectionManager::reselect()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisLayerSP layer = m_view->activeLayer();
@@ -699,7 +699,7 @@ void KisSelectionManager::reselect()
 
 void KisSelectionManager::invert()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisSelectionSP selection = m_view->selection();
@@ -719,7 +719,7 @@ void KisSelectionManager::invert()
 
 void KisSelectionManager::copySelectionToNewLayer()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisLayerSP layer = m_view->activeLayer();
@@ -731,7 +731,7 @@ void KisSelectionManager::copySelectionToNewLayer()
 
 void KisSelectionManager::cutToNewLayer()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisPaintDeviceSP dev = m_view->activeDevice();
@@ -744,7 +744,7 @@ void KisSelectionManager::cutToNewLayer()
 
 void KisSelectionManager::feather()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
     if (!m_view->selection())
         return;
@@ -802,7 +802,7 @@ bool KisSelectionManager::displaySelection()
 
 void KisSelectionManager::grow(qint32 xradius, qint32 yradius)
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     if (!m_view->selection()) return;
@@ -927,7 +927,7 @@ void KisSelectionManager::grow(qint32 xradius, qint32 yradius)
 void KisSelectionManager::shrink(qint32 xradius, qint32 yradius, bool edge_lock)
 {
 
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     if (!m_view->selection()) return;
@@ -1079,7 +1079,7 @@ void KisSelectionManager::shrink(qint32 xradius, qint32 yradius, bool edge_lock)
 
 void KisSelectionManager::smooth()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     if (!m_view->selection()) return;
@@ -1141,7 +1141,7 @@ void KisSelectionManager::smooth()
 
 void KisSelectionManager::erode()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisSelectionSP selection = m_view->selection();
@@ -1209,7 +1209,7 @@ void KisSelectionManager::erode()
 
 void KisSelectionManager::dilate()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisSelectionSP selection = m_view->selection();
@@ -1274,7 +1274,7 @@ void KisSelectionManager::dilate()
 
 void KisSelectionManager::border(qint32 xradius, qint32 yradius)
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     if (!m_view->selection()) return;

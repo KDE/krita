@@ -165,7 +165,7 @@ KisLayerBox::~KisLayerBox()
     delete m_wdgLayerBox;
 }
 
-void KisLayerBox::setImage(KisNodeManager * nodeManager, KisImageSP img, KisNodeModel * nodeModel)
+void KisLayerBox::setImage(KisNodeManager * nodeManager, KisImageWSP img, KisNodeModel * nodeModel)
 {
     if(!m_nodeModel.isNull())
         m_nodeModel->disconnect(this);

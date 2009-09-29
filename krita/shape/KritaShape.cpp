@@ -93,7 +93,7 @@ void KritaShape::paint(QPainter& painter, const KoViewConverter& converter)
         // XXX: Only convert the bit the painter needs for painting?
         //      Or should we keep a converted qimage in readiness,
         //      just as with KisCanvas2?
-        KisImageSP kimage = m_d->doc->image();
+        KisImageWSP kimage = m_d->doc->image();
 
         QImage qimg = kimage->convertToQImage(0, 0, kimage->width(), kimage->height(),
                                               m_d->displayProfile); // XXX: How about exposure?
@@ -159,7 +159,7 @@ void KritaShape::tryLoadFromImageData(KoImageData *data)
     connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
 
     // Create an empty image
-    KisImageSP img = m_d->doc->newImage(i18n("Converted from KoImageData"), image.width(), image.height(), 0);
+    KisImageWSP img = m_d->doc->newImage(i18n("Converted from KoImageData"), image.width(), image.height(), 0);
 
     // Convert the QImage to a paint device
     KisPaintLayer * layer = dynamic_cast<KisPaintLayer*>(img->root()->firstChild().data());
@@ -173,7 +173,7 @@ void KritaShape::tryLoadFromImageData(KoImageData *data)
 QImage KritaShape::convertToQImage()
 {
     if (m_d->doc && m_d->doc->image()) {
-        KisImageSP img = m_d->doc->image();
+        KisImageWSP img = m_d->doc->image();
         return img->convertToQImage(0, 0, img->width(), img->height(), m_d->displayProfile);
     }
     return QImage();

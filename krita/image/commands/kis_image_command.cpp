@@ -34,7 +34,7 @@
 #include "kis_group_layer.h"
 #include "kis_undo_adapter.h"
 
-KisImageCommand::KisImageCommand(const QString& name, KisImageSP image)
+KisImageCommand::KisImageCommand(const QString& name, KisImageWSP image)
         : QUndoCommand(name)
         , m_image(image)
 {

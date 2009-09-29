@@ -105,7 +105,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
 
     doc -> undoAdapter() -> setUndo(false);
 
-    KisImageSP image = new KisImage(doc->undoAdapter(), imageWidth, imageHeight, cs, imageName);
+    KisImageWSP image = new KisImage(doc->undoAdapter(), imageWidth, imageHeight, cs, imageName);
 
     if (!image) {
         return KoFilter::CreationError;

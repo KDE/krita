@@ -39,7 +39,7 @@ public:
 
     void paintLine(KisPaintDeviceSP dab,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 
-    void setImage( KisImageSP image ){
+    void setImage( KisImageWSP image ){
         m_image = image;
     }
 
@@ -77,7 +77,7 @@ private:
     void normalizePoint(QPointF &p);
     void rotatePoints(int *x, int *y, qreal centerX, qreal centerY,qreal angle);
     // width and height for interpolation
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KoColor m_inkColor;
 
     // temporary device

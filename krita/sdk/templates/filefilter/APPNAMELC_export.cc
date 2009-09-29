@@ -48,7 +48,7 @@ KoFilter::ConversionStatus %{APPNAME}Export::convert(const QByteArray& from, con
     KUrl url;
     url.setPath(filename);
 
-    KisImageSP img = output->image();
+    KisImageWSP img = output->image();
     Q_CHECK_PTR(img);
 
     %{APPNAME}Converter kpc(output, output->undoAdapter());

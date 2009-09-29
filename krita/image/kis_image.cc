@@ -148,7 +148,6 @@ KisImage::KisImage(const KisImage& rhs)
 
 KisImage::~KisImage()
 {
-    qDebug() << ">>>>>>>>>>>>>>>> deleting KisImage";
     m_d->projection->stop();
     m_d->projection->deleteLater();
     delete m_d->perspectiveGrid;
@@ -382,8 +381,8 @@ void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
             else
                 m_d->adapter->beginMacro(i18n("Resize Image"));
 
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
-            m_d->adapter->addCommand(new KisImageResizeCommand(KisImageSP(this), w, h, width(), height()));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
+            m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), w, h, width(), height()));
         }
 
         m_d->width = w;
@@ -399,7 +398,7 @@ void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
         unlock();
 
         if (undo()) {
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
             m_d->adapter->endMacro();
         }
     }
@@ -413,8 +412,8 @@ void KisImage::resizeWithOffset(qint32 w, qint32 h, qint32 xOffset, qint32 yOffs
     lock();
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Size Canvas"));
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
-        m_d->adapter->addCommand(new KisImageResizeCommand(KisImageSP(this), w, h, width(), height()));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
+        m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), w, h, width(), height()));
     }
 
     KisCropVisitor v(QRect(-xOffset, -yOffset, w, h), m_d->adapter);
@@ -425,7 +424,7 @@ void KisImage::resizeWithOffset(qint32 w, qint32 h, qint32 xOffset, qint32 yOffs
     unlock();
 
     if (undo()) {
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
         m_d->adapter->endMacro();
     }
 
@@ -462,16 +461,16 @@ void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrateg
 
         if (undo()) {
             m_d->adapter->beginMacro(i18n("Scale Image"));
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
         }
 
         {
-            KisTransformVisitor visitor(KisImageSP(this), sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy);
+            KisTransformVisitor visitor(KisImageWSP(this), sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy);
             m_d->rootLayer->accept(visitor);
         }
 
         if (undo()) {
-            m_d->adapter->addCommand(new KisImageResizeCommand(KisImageSP(this), w, h, width(), height()));
+            m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), w, h, width(), height()));
         }
 
         m_d->width = w;
@@ -482,7 +481,7 @@ void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrateg
         unlock();
 
         if (undo()) {
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
             m_d->adapter->endMacro();
         }
     }
@@ -503,14 +502,14 @@ void KisImage::rotate(double radians, KoUpdater *progress)
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Rotate Image"));
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
     }
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
-    KisTransformVisitor visitor(KisImageSP(this), 1.0, 1.0, 0, 0, radians, -tx, -ty, progress, filter);
+    KisTransformVisitor visitor(KisImageWSP(this), 1.0, 1.0, 0, 0, radians, -tx, -ty, progress, filter);
     m_d->rootLayer->accept(visitor);
 
-    if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageSP(this), w, h, width(), height()));
+    if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), w, h, width(), height()));
 
     m_d->width = w;
     m_d->height = h;
@@ -520,7 +519,7 @@ void KisImage::rotate(double radians, KoUpdater *progress)
     unlock();
 
     if (undo()) {
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
         m_d->adapter->endMacro();
     }
 }
@@ -555,14 +554,14 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
 
         if (undo()) {
             m_d->adapter->beginMacro(i18n("Shear Image"));
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
         }
 
         KisShearVisitor v(angleX, angleY, progress);
         v.setUndoAdapter(m_d->adapter);
         rootLayer()->accept(v);
 
-        if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageSP(this), w, h, width(), height()));
+        if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), w, h, width(), height()));
 
         m_d->width = w;
         m_d->height = h;
@@ -572,7 +571,7 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
         unlock();
 
         if (undo()) {
-            m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
+            m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
             m_d->adapter->endMacro();
         }
     }
@@ -590,7 +589,7 @@ void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTr
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Convert Image Type"));
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
     }
 
     setColorSpace(dstColorSpace);
@@ -602,8 +601,8 @@ void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTr
 
     if (undo()) {
 
-        m_d->adapter->addCommand(new KisImageConvertTypeCommand(KisImageSP(this), oldCs, dstColorSpace));
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
+        m_d->adapter->addCommand(new KisImageConvertTypeCommand(KisImageWSP(this), oldCs, dstColorSpace));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
         m_d->adapter->endMacro();
     }
 }
@@ -750,8 +749,8 @@ void KisImage::flatten()
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Flatten Image"));
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
-        m_d->adapter->addCommand(new KisImageChangeLayersCommand(KisImageSP(this), oldRootLayer, m_d->rootLayer, ""));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
+        m_d->adapter->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, m_d->rootLayer, ""));
     }
 
     lock();
@@ -763,7 +762,7 @@ void KisImage::flatten()
     notifyLayersChanged();
 
     if (undo()) {
-        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
         m_d->adapter->endMacro();
     }
 }
@@ -1144,13 +1143,11 @@ void KisImage::refreshGraph()
 
 void KisImage::slotProjectionUpdated(const QRect & rc)
 {
-    qDebug() << "slotProjectionUpdated" << rc;
     emit sigImageUpdated(rc);
 }
 
 void KisImage::updateProjection(KisNodeSP node, const QRect& rc)
 {
-    qDebug() << "updateProjection" << node << rc;
     if (!locked()) {
         m_d->projection->updateProjection(node, rc);
     }

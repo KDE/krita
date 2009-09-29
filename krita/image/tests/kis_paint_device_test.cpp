@@ -52,7 +52,7 @@ void KisPaintDeviceTest::testCreation()
     QVERIFY(dev->channelCount() == cs->channelCount());
     QVERIFY(dev->dataManager() != 0);
 
-    KisImageSP image = new KisImage(0, 1000, 1000, cs, "merge test");
+    KisImageWSP image = new KisImage(0, 1000, 1000, cs, "merge test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "bla", 125);
 
     dev = new KisPaintDevice(layer.data(), cs);
@@ -348,7 +348,7 @@ void KisPaintDeviceTest::testDirty()
 {
 #if 0
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP image = new KisImage(0, 512, 512, cs, "merge test");
+    KisImageWSP image = new KisImage(0, 512, 512, cs, "merge test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
     KisPaintDeviceSP dev = layer->paintDevice();
     QVERIFY(dev != 0);

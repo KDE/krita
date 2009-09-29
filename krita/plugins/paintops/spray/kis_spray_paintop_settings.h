@@ -37,8 +37,8 @@ public:
     KisSprayPaintOpSettings();
     virtual ~KisSprayPaintOpSettings() {}
 
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode ) const;
-    virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode ) const;
+    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
     bool paintIncremental();
 
@@ -48,8 +48,8 @@ public:
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
-    QRectF paintOutlineRect(const QPointF& pos, KisImageSP image) const;
-    void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const;
+    QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image) const;
+    void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter) const;
 
     KisPaintOpSettingsSP clone() const;
 

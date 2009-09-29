@@ -41,15 +41,15 @@ public:
     KisCPaintOpFactory();
     virtual ~KisCPaintOpFactory();
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image);
     virtual QString id() const {
         return "paintCPaint";
     }
     virtual QString name() const {
         return i18n("Chinese Brush");
     }
-    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettingsSP settings(KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageWSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageWSP image);
     virtual KisPaintOpSettingsWidget* settingsWidget(QWidget* parent);
 
 private:

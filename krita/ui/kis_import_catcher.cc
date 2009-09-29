@@ -59,7 +59,7 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     QByteArray nativeFormat = m_d->doc->nativeFormatMimeType();
     KoFilter::ConversionStatus status;
     QString s = manager.importDocument(url.path(), status);
-    KisImageSP importedImage = m_d->doc->image();
+    KisImageWSP importedImage = m_d->doc->image();
 
     if (importedImage) {
         KisLayerSP importedImageLayer = KisLayerSP(importedImage->rootLayer().data());

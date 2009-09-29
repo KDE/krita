@@ -144,7 +144,7 @@ protected:
 
 protected:
 
-    KisImageSP m_currentImage;
+    KisImageWSP m_currentImage;
 
     KisCurve *m_curve;
     KisCurve::iterator m_current;

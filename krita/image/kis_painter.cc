@@ -1695,7 +1695,7 @@ const KoAbstractGradient* KisPainter::gradient()
     return d->gradient;
 }
 
-void KisPainter::setPaintOpPreset(KisPaintOpPresetSP preset, KisImageSP image)
+void KisPainter::setPaintOpPreset(KisPaintOpPresetSP preset, KisImageWSP image)
 {
     d->paintOpPreset = preset;
     delete d->paintOp;

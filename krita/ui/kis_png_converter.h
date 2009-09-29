@@ -110,19 +110,19 @@ public:
      * @param interlace set to true if you want to generate an interlaced png
      * @param alpha set to true if you want to save the alpha channel
      */
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
-    KisImageBuilder_Result buildFile(QIODevice*, KisImageSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
+    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
+    KisImageBuilder_Result buildFile(QIODevice*, KisImageWSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
     /**
      * Retrieve the constructed image
      */
-    KisImageSP image();
+    KisImageWSP image();
 public slots:
     virtual void cancel();
 private:
     void progress(png_structp png_ptr, png_uint_32 row_number, int pass);
 private:
     png_uint_32 m_max_row;
-    KisImageSP m_img;
+    KisImageWSP m_img;
     KisDoc2 *m_doc;
     KisUndoAdapter *m_adapter;
     bool m_stop;

@@ -46,11 +46,11 @@ class KisCustomBrushWidget : public KisWdgCustomBrush
 {
     Q_OBJECT
 public:
-    KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageSP image);
+    KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image);
     virtual ~KisCustomBrushWidget();
     KisBrushSP brush();
 
-    void setImage(KisImageSP image);
+    void setImage(KisImageWSP image);
 
 protected:
     virtual void showEvent(QShowEvent *);
@@ -67,7 +67,7 @@ signals:
 private:
     void createBrush();
 
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisBrushSP m_brush;
     KoResourceServerAdapter<KisBrush>* m_rServerAdapter;
 };

@@ -67,7 +67,7 @@ KisLayerSP KisLayerContainerShape::groupLayer()
 
 QSizeF KisLayerContainerShape::size() const
 {
-    KisImageSP image = m_d->groupLayer->image();
+    KisImageWSP image = m_d->groupLayer->image();
     if (!image) return QSize(0, 0);
 
     QSize br = image->size();
@@ -76,7 +76,7 @@ QSizeF KisLayerContainerShape::size() const
 
 QRectF KisLayerContainerShape::boundingRect() const
 {
-    KisImageSP image = m_d->groupLayer->image();
+    KisImageWSP image = m_d->groupLayer->image();
     if (!image) return QRect();
 
     QRect br = QRect(0, 0, image->size().width(), image->size().height());

@@ -41,7 +41,7 @@ public:
      * @param name The name that will be shown in the ui
      * @param image The image the command will be working on.
      */
-    KisImageCommand(const QString& name, KisImageSP image);
+    KisImageCommand(const QString& name, KisImageWSP image);
     virtual ~KisImageCommand();
 
 protected:
@@ -52,7 +52,7 @@ protected:
      */
     void setUndo(bool undo);
 
-    KisImageSP m_image;
+    KisImageWSP m_image;
 };
 
 #endif // KIS_IMAGE_COMMAND_H_

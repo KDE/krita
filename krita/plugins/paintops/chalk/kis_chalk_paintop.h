@@ -39,7 +39,7 @@ class KisChalkPaintOp : public KisPaintOp
 
 public:
 
-    KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisChalkPaintOp();
 
     void paintAt(const KisPaintInformation& info);
@@ -60,7 +60,7 @@ public:
 
 private:
     const KisChalkPaintOpSettings* m_settings;
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
     ChalkBrush m_chalkBrush;
 };

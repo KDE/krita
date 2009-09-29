@@ -61,7 +61,7 @@ KoFilter::ConversionStatus MagickExport::convert(const QByteArray& from, const Q
     KUrl url;
     url.setPath(filename);
 
-    KisImageSP img = output->image();
+    KisImageWSP img = output->image();
 
     KisImageMagickConverter ib(output, output->undoAdapter());
 

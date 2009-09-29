@@ -34,7 +34,7 @@ class KisDeformPaintOp : public KisPaintOp
 {
 
 public:
-    KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisDeformPaintOp();
 
     // Do we want to spray even when no movement?

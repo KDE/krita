@@ -36,7 +36,7 @@ class KRITAUI_EXPORT KisShapeSelection : public KoShapeLayer, public KisSelectio
 {
 public:
 
-    KisShapeSelection(KisImageSP image, KisSelectionSP selection);
+    KisShapeSelection(KisImageWSP image, KisSelectionSP selection);
 
     virtual ~KisShapeSelection();
 
@@ -73,7 +73,7 @@ private:
 
     void renderSelection(KisSelection* projection, const QRect& r);
 
-    KisImageSP m_image;
+    KisImageWSP m_image;
     QPainterPath m_outline;
     bool m_dirty;
     KisShapeSelectionCanvas* m_canvas;

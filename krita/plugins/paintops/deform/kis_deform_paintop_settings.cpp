@@ -98,7 +98,7 @@ void KisDeformPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) co
     delete settings;
 }
 
-QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode) const
+QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
     if(_mode != CURSOR_IS_OUTLINE) return QRectF();
     qreal size = radius() * 2;
@@ -106,7 +106,7 @@ QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP
     return image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos);
 }
 
-void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
+void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
     if(_mode != CURSOR_IS_OUTLINE) return;
     qreal size = radius() * 2;

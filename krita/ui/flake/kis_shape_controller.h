@@ -48,7 +48,7 @@ public:
     KisShapeController(KisDoc2 * doc, KisNameServer *nameServer);
     ~KisShapeController();
 
-    void setImage(KisImageSP image);
+    void setImage(KisImageWSP image);
     KoShape * shapeForNode(KisNodeSP layer) const;
     void setInitialShapeForView(KisView2 * view);
     virtual QMap<QString, KoDataCenter *> dataCenterMap() const;

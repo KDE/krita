@@ -131,7 +131,7 @@ void KisBrushSelectionWidget::setTextBrush( bool on )
     m_textBrushWidget->setVisible( on );
 }
 
-void KisBrushSelectionWidget::setImage(KisImageSP image)
+void KisBrushSelectionWidget::setImage(KisImageWSP image)
 {
     m_customBrushWidget->setImage(image);
 }

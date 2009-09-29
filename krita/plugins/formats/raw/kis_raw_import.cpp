@@ -115,7 +115,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
         // Init the image
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA16", "");
-        KisImageSP image = new KisImage(doc->undoAdapter(), width, height, cs, filename);
+        KisImageWSP image = new KisImage(doc->undoAdapter(), width, height, cs, filename);
         if (image.isNull()) return KoFilter::CreationError;
         image->lock();
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
@@ -125,9 +125,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         KisPaintDeviceSP device = layer->paintDevice();
         if (device.isNull()) return KoFilter::CreationError;
 
-
-        // Copy the date
-
+        // Copy the data
         KisHLineIterator it = device->createHLineIterator(0, 0, width);
         for (int y = 0; y < height; ++y) {
             while (!it.isDone()) {

@@ -86,7 +86,7 @@ void KisFilterOpSettings::setNode( KisNodeSP node )
     }
 }
 
-void KisFilterOpSettings::setImage( KisImageSP image )
+void KisFilterOpSettings::setImage( KisImageWSP image )
 {
     if (m_options) {
         m_options->m_filterOption->setImage( image );

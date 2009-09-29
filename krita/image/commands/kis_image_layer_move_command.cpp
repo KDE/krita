@@ -35,7 +35,7 @@
 #include "kis_undo_adapter.h"
 
 
-KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP newParent, KisNodeSP newAbove)
+KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP newParent, KisNodeSP newAbove)
         : KisImageCommand(i18n("Move Layer"), image)
 {
     m_layer = layer;
@@ -46,7 +46,7 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP l
     m_index = -1;
 }
 
-KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP node, KisNodeSP newParent, quint32 index)
+KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP node, KisNodeSP newParent, quint32 index)
         : KisImageCommand(i18n("Move Layer"), image)
 {
     m_layer = node;

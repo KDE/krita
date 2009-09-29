@@ -258,7 +258,7 @@ void KisMaskManager::maskToSelection()
     // XXX: should we remove the mask when setting the mask as selection?
     // XXX: should the selection be layer-local, or global?
     if (!m_activeMask) return;
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
     if (!image) return;
     m_commandsAdapter->beginMacro(i18n("Mask to Selection"));
     QUndoCommand* cmd = new KisSetGlobalSelectionCommand(image, 0, m_activeMask->selection());
@@ -276,7 +276,7 @@ void KisMaskManager::maskToLayer()
     // XXX: Right now, I create black pixels with the alpha channel set to the selection,
     //      should we create grayscale pixels?
     if (!m_activeMask) return;
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
     if (!image) return;
     KisLayerSP activeLayer = m_view->activeLayer();
     if (!activeLayer) return;

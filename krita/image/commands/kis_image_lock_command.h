@@ -46,7 +46,7 @@ public:
      * @param image The image the command will be working on.
      * @param lockImage Locking state of the image, while redo.
      */
-    KisImageLockCommand(KisImageSP image, bool lockImage);
+    KisImageLockCommand(KisImageWSP image, bool lockImage);
 
     virtual void redo();
     virtual void undo();

@@ -34,7 +34,7 @@
 #include "kis_group_layer.h"
 #include "kis_undo_adapter.h"
 
-KisImageConvertTypeCommand::KisImageConvertTypeCommand(KisImageSP image, const KoColorSpace * beforeColorSpace, const KoColorSpace * afterColorSpace)
+KisImageConvertTypeCommand::KisImageConvertTypeCommand(KisImageWSP image, const KoColorSpace * beforeColorSpace, const KoColorSpace * afterColorSpace)
         : KisImageCommand(i18n("Convert Image Type"), image)
 {
     m_beforeColorSpace = beforeColorSpace;

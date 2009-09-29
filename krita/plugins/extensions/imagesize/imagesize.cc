@@ -104,7 +104,7 @@ ImageSize::~ImageSize()
 
 void ImageSize::slotImageSize()
 {
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
 
     if (!image) return;
 
@@ -132,7 +132,7 @@ void ImageSize::slotImageSize()
 
 void ImageSize::slotCanvasSize()
 {
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
 
     if (!image) return;
 
@@ -152,7 +152,7 @@ void ImageSize::slotCanvasSize()
 
 void ImageSize::slotLayerSize()
 {
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
 
     if (!image) return;
 
@@ -183,7 +183,7 @@ void ImageSize::slotLayerSize()
 
 void ImageSize::slotSelectionScale()
 {
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
 
     if (!image) return;
 

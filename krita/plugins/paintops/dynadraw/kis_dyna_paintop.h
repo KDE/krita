@@ -36,7 +36,7 @@ class KisDynaPaintOp : public KisPaintOp
 
 public:
 
-    KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisDynaPaintOp();
 
     void paintAt(const KisPaintInformation& info);
@@ -58,7 +58,7 @@ public:
 
 private:
     const KisDynaPaintOpSettings* m_settings;
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
     DynaBrush m_dynaBrush;
 };

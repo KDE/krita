@@ -34,7 +34,7 @@
 #include "kis_group_layer.h"
 #include "kis_undo_adapter.h"
 
-KisImagePropsCommand::KisImagePropsCommand(KisImageSP image, const KoColorSpace* newColorSpace)
+KisImagePropsCommand::KisImagePropsCommand(KisImageWSP image, const KoColorSpace* newColorSpace)
         : KisImageCommand(i18n("Property Changes"), image)
         , m_newColorSpace(newColorSpace)
 {

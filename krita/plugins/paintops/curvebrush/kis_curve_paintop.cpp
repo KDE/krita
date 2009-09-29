@@ -32,7 +32,7 @@
 #include "kis_paintop.h"
 
 
-KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisImageSP image)
+KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
 {
     Q_ASSERT(settings);

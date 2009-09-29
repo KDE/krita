@@ -78,7 +78,7 @@ public:
     KisPrescaledProjection();
     virtual ~KisPrescaledProjection();
 
-    void setImage(KisImageSP image);
+    void setImage(KisImageWSP image);
 
     /**
      * @return true if the prescaled projection is set to draw the

@@ -65,7 +65,7 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
     KUrl url;
     url.setPath(filename);
 
-    KisImageSP img = output->image();
+    KisImageWSP img = output->image();
     Q_CHECK_PTR(img);
 
     OraConverter kpc(output, output->undoAdapter());

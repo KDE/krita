@@ -49,7 +49,7 @@ public:
 
     void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
-    void setImage(KisImageSP image);
+    void setImage(KisImageWSP image);
 
 public:
 

@@ -64,7 +64,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
     return KisPaintOpRegistry::m_singleton;
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image) const
+KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image) const
 {
     if (painter == 0) {
         warnKrita << " KisPaintOpRegistry::paintOp painter is null";
@@ -84,7 +84,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
     return 0;
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageSP image) const
+KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageWSP image) const
 {
     Q_ASSERT( preset );
     Q_ASSERT( painter );
@@ -95,7 +95,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPai
     return paintOp(preset->paintOp().id(), preset->settings(), painter, image);
 }
 
-KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, const KoInputDevice& inputDevice, KisImageSP image) const
+KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, const KoInputDevice& inputDevice, KisImageWSP image) const
 {
     KisPaintOpFactory* f = value(id.id());
     Q_ASSERT(f);
@@ -111,7 +111,7 @@ KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, const KoInputD
     return 0;
 }
 
-KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, const KoInputDevice& inputDevice, KisImageSP image) const
+KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, const KoInputDevice& inputDevice, KisImageWSP image) const
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setName(i18n("default"));

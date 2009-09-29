@@ -80,7 +80,7 @@ KisPaintOpSettingsSP KisBrushOpSettings::clone() const
 
 }
 
-QRectF KisBrushOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode) const
+QRectF KisBrushOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
     if(_mode != CURSOR_IS_OUTLINE) return QRectF();
     KisBrushSP brush = m_options->m_brushOption->brush();
@@ -90,7 +90,7 @@ QRectF KisBrushOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image
         ).translated( pos );
 }
 
-void KisBrushOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
+void KisBrushOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
     if(_mode != CURSOR_IS_OUTLINE) return;
     KisBrushSP brush = m_options->m_brushOption->brush();

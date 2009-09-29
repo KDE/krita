@@ -320,7 +320,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         TIFFClose(image);
         return KisImageBuilder_RESULT_INVALID_ARG;
     }
-    // Creating the KisImageSP
+    // Creating the KisImageWSP
     if (! m_img) {
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
         m_img->setResolution(xres / 72.0, yres / 72.0);
@@ -568,13 +568,13 @@ KisImageBuilder_Result KisTIFFConverter::buildImage(const KUrl& uri)
 }
 
 
-KisImageSP KisTIFFConverter::image()
+KisImageWSP KisTIFFConverter::image()
 {
     return m_img;
 }
 
 
-KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP img, KisTIFFOptions options)
+KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP img, KisTIFFOptions options)
 {
     dbgFile << "Start writing TIFF File";
     if (!img)

@@ -52,7 +52,7 @@ KisPerspectiveGridManager::~KisPerspectiveGridManager()
 
 void KisPerspectiveGridManager::updateGUI()
 {
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
 
 
     if (image) {
@@ -78,7 +78,7 @@ void KisPerspectiveGridManager::setup(KActionCollection * collection)
 
 void KisPerspectiveGridManager::clearPerspectiveGrid()
 {
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
     if (image) {
         image->perspectiveGrid()->clearSubGrids();
         m_view->canvas()->update();
@@ -112,7 +112,7 @@ void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QPoint& docum
     Q_UNUSED(documentOffset);
     Q_UNUSED(area);
 
-    KisImageSP image = m_view->resourceProvider()->currentImage();
+    KisImageWSP image = m_view->resourceProvider()->currentImage();
 
 
     if (image && !m_toggleEdition) {

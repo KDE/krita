@@ -30,7 +30,7 @@
 
 void KisProjectionTest::testDirty()
 {
-    KisImageSP image = new KisImage(0, 1000, 1000, 0, "layer tests");
+    KisImageWSP image = new KisImage(0, 1000, 1000, 0, "layer tests");
 
     // Two layers so the single-layer-is-rootlayer optimization doesn't kick in
     KisLayerSP layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);

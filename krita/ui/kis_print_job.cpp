@@ -30,7 +30,7 @@
 
 #include <QPainter>
 
-KisPrintJob::KisPrintJob(KisImageSP image)
+KisPrintJob::KisPrintJob(KisImageWSP image)
         : KoPrintJob(image.data())
         , m_image(image)
 {

@@ -89,7 +89,7 @@ Qt::PenStyle KisGridDrawer::gs2style(quint32 s)
     m_viewConverter->documentToView(image->pixelToDocument(point))
 
 
-void KisGridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisSubPerspectiveGrid* grid)
+void KisGridDrawer::drawPerspectiveGrid(KisImageWSP image, const QRect& wr, const KisSubPerspectiveGrid* grid)
 {
     Q_UNUSED(wr);
 

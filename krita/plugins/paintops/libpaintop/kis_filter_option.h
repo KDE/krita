@@ -65,7 +65,7 @@ public:
     /**
      * XXX
      */
-    void setImage( KisImageSP image );
+    void setImage( KisImageWSP image );
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
@@ -84,7 +84,7 @@ private:
     const KisFilterSP m_currentFilter;
     KisConfigWidget* m_currentFilterConfigWidget;
     KisPaintDeviceSP m_paintDevice;
-    KisImageSP m_image;
+    KisImageWSP m_image;
 };
 
 #endif

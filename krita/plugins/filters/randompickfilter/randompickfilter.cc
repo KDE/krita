@@ -144,7 +144,7 @@ void KisFilterRandomPick::process(KisConstProcessingInformation srcInfo,
 
 }
 
-KisConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
 {
     Q_UNUSED(image);
     Q_UNUSED(dev);

@@ -40,7 +40,7 @@ private slots:
 
 private:
     KisView2 * m_view;
-    KisImageSP m_image;
+    KisImageWSP m_image;
 
 };
 

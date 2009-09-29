@@ -65,7 +65,7 @@ KisKraSaver::~KisKraSaver()
     delete m_d;
 }
 
-QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageSP img )
+QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageWSP img )
 {
     QDomElement image = doc.createElement("IMAGE"); // Legacy!
 
@@ -90,7 +90,7 @@ QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageSP img )
     return image;
 }
 
-bool KisKraSaver::saveBinaryData( KoStore* store, KisImageSP img, const QString & uri, bool external )
+bool KisKraSaver::saveBinaryData( KoStore* store, KisImageWSP img, const QString & uri, bool external )
 {
     QString location;
 

@@ -50,7 +50,7 @@ public:
      * @param settings the settings associated with the input device
      * @param painter the painter used to draw
      */
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image) = 0;
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image) = 0;
     virtual QString id() const = 0;
     virtual QString name() const = 0;
 
@@ -70,8 +70,8 @@ public:
      * Create and return an settings object for this paintop when used with the
      * specified input device.
      */
-    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image) = 0;
-    virtual KisPaintOpSettingsSP settings(KisImageSP image) = 0;
+    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageWSP image) = 0;
+    virtual KisPaintOpSettingsSP settings(KisImageWSP image) = 0;
 
     /**
      * create a widget that can display paintop settings

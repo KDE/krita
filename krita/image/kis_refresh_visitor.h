@@ -33,7 +33,7 @@ public:
 
     using KisNodeVisitor::visit;
 
-    KisRefreshVisitor(KisImageSP image)
+    KisRefreshVisitor(KisImageWSP image)
         : KisNodeVisitor()
     {
         m_image = image;
@@ -92,7 +92,7 @@ public:
 
 
 private:
-    KisImageSP m_image;
+    KisImageWSP m_image;
 };
 
 

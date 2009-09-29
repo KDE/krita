@@ -37,7 +37,7 @@ public:
     KisChalkPaintOpFactory();
     virtual ~KisChalkPaintOpFactory();
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image);
 
     virtual QString id() const {
         return "chalkbrush";
@@ -51,8 +51,8 @@ public:
         return "krita-chalk.png";
     }
 
-    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettingsSP settings(KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageWSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageWSP image);
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);
 };
 #endif // KIS_CHALK_PAINTOP_FACTORY_H_

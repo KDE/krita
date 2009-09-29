@@ -124,7 +124,7 @@ void KisImagePyramid::clearPyramid()
         m_pyramid[i]->clear();
 }
 
-void KisImagePyramid::setImage(KisImageSP newImage)
+void KisImagePyramid::setImage(KisImageWSP newImage)
 {
     if(newImage) {
         m_originalImage = newImage;

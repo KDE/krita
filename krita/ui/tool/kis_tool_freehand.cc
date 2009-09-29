@@ -519,7 +519,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
                 dbgUI << "I have list to draw!";
                 QPointF pos = converter.documentToView( mousePos );
 
-/*        KisImageSP img = currentImage();
+/*        KisImageWSP img = currentImage();
         glEnable(GL_LIGHT0);
         glEnable(GL_LIGHT1);
         glEnable(GL_LIGHT2);

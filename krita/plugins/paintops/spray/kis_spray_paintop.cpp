@@ -42,7 +42,7 @@
 #include "metaball.h"
 #include <qapplication.h>
 
-KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
+KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp( painter )
     , m_settings( settings )
     , m_image ( image )

@@ -67,7 +67,7 @@ class KisUndoAdapterDummy : public KisUndoAdapter
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KisUndoAdapterDummy* undoAdapterDummy = new KisUndoAdapterDummy();
-    KisImageSP img = new KisImage(undoAdapterDummy, 300, 300, cs, "test");
+    KisImageWSP img = new KisImage(undoAdapterDummy, 300, 300, cs, "test");
     img->lock();
     KisPaintLayerSP layer = new KisPaintLayer(img, "testlayer", OPACITY_OPAQUE);
     KisPaintDeviceSP dev = layer->paintDevice();

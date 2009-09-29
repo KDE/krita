@@ -59,7 +59,7 @@ public:
 public:
 
     void drawGrid(const QRectF& area);
-    void drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisSubPerspectiveGrid* grid);
+    void drawPerspectiveGrid(KisImageWSP image, const QRect& wr, const KisSubPerspectiveGrid* grid);
 
     virtual void setPen(const QPen& pen) = 0;
     virtual void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2) = 0;

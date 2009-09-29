@@ -32,14 +32,14 @@ public:
      * @param image the image
      * @param parent the parent command
      */
-    KisReselectGlobalSelectionCommand(KisImageSP image, QUndoCommand * parent = 0);
+    KisReselectGlobalSelectionCommand(KisImageWSP image, QUndoCommand * parent = 0);
     virtual ~KisReselectGlobalSelectionCommand();
 
     virtual void redo();
     virtual void undo();
 
 private:
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisSelectionSP m_oldSelection;
 };
 

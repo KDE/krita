@@ -180,7 +180,7 @@ void KisCustomImageWidget::buttonClicked()
     height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
     m_doc->newImage(txtName->text(), width, height, cs, KoColor(qc, cs), txtDescription->toPlainText(), resolution);
 
-    KisImageSP img = m_doc->image();
+    KisImageWSP img = m_doc->image();
     if (img && img->root() && img->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(img->root()->firstChild().data());
         if (layer) {

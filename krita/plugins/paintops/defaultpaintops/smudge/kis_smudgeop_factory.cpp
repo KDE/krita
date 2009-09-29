@@ -43,7 +43,7 @@ KisSmudgeOpFactory::~KisSmudgeOpFactory()
 
 KisPaintOp * KisSmudgeOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                          KisPainter * painter,
-                                         KisImageSP image)
+                                         KisImageWSP image)
 {
     Q_UNUSED(image);
 
@@ -55,13 +55,13 @@ KisPaintOp * KisSmudgeOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisSmudgeOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisSmudgeOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
 {
     Q_UNUSED(inputDevice);
     return new KisSmudgeOpSettings();
 }
 
-KisPaintOpSettingsSP KisSmudgeOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisSmudgeOpFactory::settings(KisImageWSP image)
 {
     return new KisSmudgeOpSettings();
 }

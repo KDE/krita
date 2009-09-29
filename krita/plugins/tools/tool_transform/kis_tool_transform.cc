@@ -247,7 +247,7 @@ void KisToolTransform::initHandles()
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *e)
 {
-    KisImageSP img = image();
+    KisImageWSP img = image();
 
     if (!currentNode())
         return;
@@ -355,7 +355,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
     QPointF bottomleft = m_bottomleft;
     QPointF bottomright = m_bottomright;
 
-    KisImageSP img = image();
+    KisImageWSP img = image();
     QPointF mousePos = QPointF(e->point.x() * img->xRes(), e->point.y() * img->yRes());
 
     if (m_selecting) {
@@ -614,7 +614,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     pen.setWidth(0);
 
     recalcOutline();
-    KisImageSP img = image();
+    KisImageWSP img = image();
     QPointF topleft = converter.documentToView(QPointF(m_topleft.x() / img->xRes(), m_topleft.y() / img->yRes()));
     QPointF topright = converter.documentToView(QPointF(m_topright.x() / img->xRes(), m_topright.y() / img->yRes()));
     QPointF bottomleft = converter.documentToView(QPointF(m_bottomleft.x() / img->xRes(), m_bottomleft.y() / img->yRes()));

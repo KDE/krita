@@ -49,7 +49,7 @@ public:
     void setCustomBrush( bool on );
     void setTextBrush( bool on );
 
-    void setImage(KisImageSP image);
+    void setImage(KisImageWSP image);
 
     void setCurrentBrush( KisBrushSP brush);
 

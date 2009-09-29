@@ -37,7 +37,7 @@ KisSumiPaintOpFactory::~KisSumiPaintOpFactory()
 {
 }
 
-KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0)
+KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image = 0)
 {
     const KisSumiPaintOpSettings *sumiSettings =
         dynamic_cast<const KisSumiPaintOpSettings *>(settings.data());
@@ -48,14 +48,14 @@ KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings
     return op;
 }
 
-KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
 {
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
     return new KisSumiPaintOpSettings();
 }
 
-KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(KisImageWSP image)
 {
     Q_UNUSED(image);
     return new KisSumiPaintOpSettings();

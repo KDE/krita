@@ -32,7 +32,7 @@ void KisKraLoaderTest::testLoading()
 {
     KisDoc2 doc;
     doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
-    KisImageSP image = doc.image();
+    KisImageWSP image = doc.image();
     image->lock();
     QCOMPARE(image->nlayers(), 12);
     QCOMPARE(doc.documentInfo()->aboutInfo("title"), QString("test image for loading"));

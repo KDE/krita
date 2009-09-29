@@ -43,7 +43,7 @@ class KisDlgImageProperties : public KDialog
     Q_OBJECT
 
 public:
-    KisDlgImageProperties(KisImageSP image,
+    KisDlgImageProperties(KisImageWSP image,
                           QWidget *parent = 0,
                           const char *name = 0);
     virtual ~KisDlgImageProperties();
@@ -58,7 +58,7 @@ private slots:
 private:
 
     WdgImageProperties * m_page;
-    KisImageSP m_image;
+    KisImageWSP m_image;
 };
 
 

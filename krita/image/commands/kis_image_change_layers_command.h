@@ -36,7 +36,7 @@ class KisImageChangeLayersCommand : public KisImageCommand
 {
 
 public:
-    KisImageChangeLayersCommand(KisImageSP image, KisNodeSP oldRootLayer, KisNodeSP newRootLayer, const QString& name);
+    KisImageChangeLayersCommand(KisImageWSP image, KisNodeSP oldRootLayer, KisNodeSP newRootLayer, const QString& name);
 
     virtual void redo();
     virtual void undo();

@@ -34,7 +34,7 @@
 #include "kis_group_layer.h"
 #include "kis_undo_adapter.h"
 
-KisImageResizeCommand::KisImageResizeCommand(KisImageSP image, qint32 width, qint32 height, qint32 oldWidth, qint32 oldHeight)
+KisImageResizeCommand::KisImageResizeCommand(KisImageWSP image, qint32 width, qint32 height, qint32 oldWidth, qint32 oldHeight)
         : KisImageCommand(i18n("Resize Image"), image)
 {
     m_before = QSize(oldWidth, oldHeight);

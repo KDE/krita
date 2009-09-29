@@ -71,7 +71,7 @@ public:
         m_action = deformAction;
     }
 
-    void setImage( KisImageSP image ){
+    void setImage( KisImageWSP image ){
         m_image = image;
     }
 
@@ -97,13 +97,13 @@ private:
     void movePixel(qreal newX, qreal newY, quint8 *dst);
     void myMovePixel(qreal newX, qreal newY, quint8 *dst);
 
-    bool point_interpolation( qreal* x, qreal* y, KisImageSP image );
+    bool point_interpolation( qreal* x, qreal* y, KisImageWSP image );
     void debugColor(const quint8* data);
     void precomputeDistances(int radius);
     void fastScale(qreal cursorX,qreal cursorY, qreal factor);
 
     // width and height for interpolation
-    KisImageSP m_image;
+    KisImageWSP m_image;
 
     // temporary device
     KisPaintDeviceSP m_dev;

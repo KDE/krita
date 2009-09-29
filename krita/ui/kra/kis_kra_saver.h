@@ -34,9 +34,9 @@ public:
 
     ~KisKraSaver();
 
-    QDomElement saveXML( QDomDocument& doc,  KisImageSP img );
+    QDomElement saveXML( QDomDocument& doc,  KisImageWSP img );
 
-    bool saveBinaryData( KoStore* store, KisImageSP image, const QString & uri, bool external );
+    bool saveBinaryData( KoStore* store, KisImageWSP image, const QString & uri, bool external );
 
 private:
 

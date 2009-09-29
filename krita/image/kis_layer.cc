@@ -177,12 +177,12 @@ void KisLayer::setCompositeOp(const QString& compositeOp)
     m_d->compositeOp = compositeOp;
 }
 
-KisImageSP KisLayer::image() const
+KisImageWSP KisLayer::image() const
 {
     return m_d->image;
 }
 
-void KisLayer::setImage(KisImageSP image)
+void KisLayer::setImage(KisImageWSP image)
 {
     m_d->image = image;
     for (uint i = 0; i < childCount(); ++i) {

@@ -42,7 +42,7 @@ public: // from QAbstractItemModel
     KisNodeModel(QObject * parent);
     ~KisNodeModel();
 
-    void setImage(KisImageSP image);
+    void setImage(KisImageWSP image);
 
     KisNodeSP nodeFromIndex(const QModelIndex &index);
     vKisNodeSP nodesFromIndexes(const QModelIndexList &list);

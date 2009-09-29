@@ -136,7 +136,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
 
     KisPainter painter(target);
 
-    KisImageSP image;
+    KisImageWSP image;
     KisNodeSP parent = node;
     while (image == 0 && parent->parent()) {
         // XXX: ugly!
@@ -185,7 +185,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
 }
 
 
-KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image)
+KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QString& paintOpId, const QDomElement& elt, KisImageWSP image)
 {
     Q_UNUSED(paintOpId);
     Q_UNUSED(elt);

@@ -42,7 +42,7 @@
 #include <kis_random_accessor.h>
 
 
-KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
+KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp( painter )
     , m_settings( settings )
     , m_image ( image )

@@ -37,7 +37,7 @@ class Image : public QObject
 {
     Q_OBJECT
 public:
-    Image(Module* module, KisImageSP image, KisDoc2* doc = 0);
+    Image(Module* module, KisImageWSP image, KisDoc2* doc = 0);
     ~Image();
 
 public slots:
@@ -143,7 +143,7 @@ public slots:
     QObject* createPaintLayer(const QString& name, int opacity, const QString& colorspacename);
 
 private:
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisDoc2* m_doc;
 };
 

@@ -70,7 +70,7 @@ public:
 
 private:
 
-    KisImageSP image() const;
+    KisImageWSP image() const;
 
     class Private;
     Private * const m_d;

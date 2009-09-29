@@ -114,7 +114,7 @@ void KisFilterOption::setNode(KisNodeSP node)
         m_paintDevice = 0;
 }
 
-void KisFilterOption::setImage( KisImageSP image )
+void KisFilterOption::setImage( KisImageWSP image )
 {
     m_image = image;
 }

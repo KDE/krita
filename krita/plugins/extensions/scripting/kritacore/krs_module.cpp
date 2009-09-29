@@ -220,7 +220,7 @@ QObject* Module::createImage(int width, int height, const QString& colorspace, c
         warnScript << i18n("ColorSpace %1 is not available, please check your installation.", colorspace);
         return 0;
     }
-    return new Image(this, KisImageSP(new KisImage(0, width, height, cs, name)));
+    return new Image(this, KisImageWSP(new KisImage(0, width, height, cs, name)));
 }
 
 QWidget* Module::view()

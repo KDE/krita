@@ -35,7 +35,7 @@ public:
 };
 
 
-KisGeneratorLayer::KisGeneratorLayer(KisImageSP img,
+KisGeneratorLayer::KisGeneratorLayer(KisImageWSP img,
                                      const QString &name,
                                      KisFilterConfiguration *kfc,
                                      KisSelectionSP selection)

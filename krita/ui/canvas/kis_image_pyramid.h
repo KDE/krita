@@ -37,7 +37,7 @@ public:
     KisImagePyramid(qint32 pyramidHeight);
     virtual ~KisImagePyramid();
 
-    void setImage(KisImageSP newImage);
+    void setImage(KisImageWSP newImage);
     void setImageSize(qint32 w, qint32 h);
     void setMonitorProfile(const KoColorProfile* monitorProfile);
     void setDirty(const QRect& rc);
@@ -80,7 +80,7 @@ public:
 private:
     QVector<KisPaintDeviceSP> m_pyramid;
     //QThreadPool m_pyramidUpdater;
-    KisImageSP  m_originalImage;
+    KisImageWSP  m_originalImage;
     const KoColorProfile* m_monitorProfile;
     const KoColorSpace* m_monitorColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;

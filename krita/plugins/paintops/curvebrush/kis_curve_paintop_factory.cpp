@@ -31,7 +31,7 @@ KisCurvePaintOpFactory::KisCurvePaintOpFactory()
 {
 }
 
-KisPaintOp * KisCurvePaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0)
+KisPaintOp * KisCurvePaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image = 0)
 {
     const KisCurvePaintOpSettings *curveSettings = dynamic_cast<const KisCurvePaintOpSettings *>(settings.data());
     Q_ASSERT(settings == 0 || curveSettings != 0);
@@ -40,14 +40,14 @@ KisPaintOp * KisCurvePaintOpFactory::createOp(const KisPaintOpSettingsSP setting
     return op;
 }
 
-KisPaintOpSettingsSP KisCurvePaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisCurvePaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
 {
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
     return new KisCurvePaintOpSettings();
 }
 
-KisPaintOpSettingsSP KisCurvePaintOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisCurvePaintOpFactory::settings(KisImageWSP image)
 {
     Q_UNUSED(image);
     return new KisCurvePaintOpSettings();

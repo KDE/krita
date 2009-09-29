@@ -45,7 +45,7 @@ public:
      * @param newColorSpace the new image color space
      * @param newResolution the new image resolution which will be used for xRes and yRes
      */
-    KisImagePropsCommand(KisImageSP image, const KoColorSpace* newColorSpace);
+    KisImagePropsCommand(KisImageWSP image, const KoColorSpace* newColorSpace);
 
     virtual void redo();
     virtual void undo();

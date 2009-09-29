@@ -18,7 +18,7 @@
 
 #include "kis_image_view_converter.h"
 
-KisImageViewConverter::KisImageViewConverter(const KisImageSP image)
+KisImageViewConverter::KisImageViewConverter(const KisImageWSP image)
         : m_image(image)
 {
     Q_ASSERT(image);

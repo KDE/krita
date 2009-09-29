@@ -254,7 +254,7 @@ void KisView2::dropEvent(QDropEvent *event)
     if (event->mimeData()->hasImage())
     {
         QImage qimg = qvariant_cast<QImage>(event->mimeData()->imageData());
-        KisImageSP img = image();
+        KisImageWSP img = image();
 
         if (img) {
             KisPaintDeviceSP device = new KisPaintDevice( KoColorSpaceRegistry::instance()->rgb8() );
@@ -337,7 +337,7 @@ KoZoomController *KisView2::zoomController() const
     return m_d->zoomManager->zoomController();
 }
 
-KisImageSP KisView2::image()
+KisImageWSP KisView2::image()
 {
     if (m_d && m_d->doc) {
         return m_d->doc->image();
@@ -453,7 +453,7 @@ KisUndoAdapter * KisView2::undoAdapter()
 
 void KisView2::slotLoadingFinished()
 {
-    KisImageSP img = image();
+    KisImageWSP img = image();
 
     img->refreshGraph();
 
@@ -596,7 +596,7 @@ void KisView2::updateGUI()
 
 void KisView2::connectCurrentImage()
 {
-    KisImageSP img = image();
+    KisImageWSP img = image();
     if (img) {
 //         dbgUI <<"Going to connect current image";
 
@@ -625,7 +625,7 @@ void KisView2::connectCurrentImage()
 
 void KisView2::disconnectCurrentImage()
 {
-    KisImageSP img = image();
+    KisImageWSP img = image();
 
     if (img) {
 
@@ -636,7 +636,7 @@ void KisView2::disconnectCurrentImage()
             img->disconnect(m_d->statusBar);
 
         if (m_d->birdEyeBox)
-            m_d->birdEyeBox->setImage(KisImageSP(0));
+            m_d->birdEyeBox->setImage(KisImageWSP(0));
         m_d->canvas->disconnectCurrentImage();
     }
 }

@@ -81,7 +81,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
         return KoFilter::FileNotFound;
     }
 
-    KisImageSP img = KisImageSP(new KisImage(*doc->image()));
+    KisImageWSP img = KisImageWSP(new KisImage(*doc->image()));
     Q_CHECK_PTR(img);
 
     // Don't store this information in the document's undo adapter

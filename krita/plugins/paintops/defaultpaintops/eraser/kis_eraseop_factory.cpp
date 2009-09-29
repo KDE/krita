@@ -43,7 +43,7 @@ KisEraseOpFactory::~KisEraseOpFactory()
 
 KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                          KisPainter * painter,
-                                         KisImageSP image)
+                                         KisImageWSP image)
 {
     Q_UNUSED(image);
 
@@ -55,14 +55,14 @@ KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisEraseOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisEraseOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
 {
     Q_UNUSED(inputDevice);
     Q_UNUSED( image );
     return new KisEraseOpSettings();
 }
 
-KisPaintOpSettingsSP KisEraseOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisEraseOpFactory::settings(KisImageWSP image)
 {
     Q_UNUSED( image );
     return new KisEraseOpSettings();

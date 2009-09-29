@@ -38,7 +38,7 @@ public:
     ~KisFilterSelectorWidget();
     void setFilter(KisFilterSP f);
     void setPaintDevice(KisPaintDeviceSP);
-    void setImage(KisImageSP);
+    void setImage(KisImageWSP);
     KisFilterConfiguration* configuration();
     void showSelector(bool visible);
 protected slots:

@@ -27,7 +27,7 @@
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
 
-KisShapeSelectionModel::KisShapeSelectionModel(KisImageSP image, KisSelectionSP selection, KisShapeSelection* shapeSelection)
+KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionSP selection, KisShapeSelection* shapeSelection)
         : m_image(image)
         , m_parentSelection(selection)
         , m_shapeSelection(shapeSelection)

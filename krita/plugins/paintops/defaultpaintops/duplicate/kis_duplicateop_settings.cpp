@@ -40,7 +40,7 @@
 #include <KoViewConverter.h>
 
 
-KisDuplicateOpSettings::KisDuplicateOpSettings(KisImageSP image )
+KisDuplicateOpSettings::KisDuplicateOpSettings(KisImageWSP image )
     : m_image( image )
     , m_options(0)
     , m_isOffsetNotUptodate( true )
@@ -142,7 +142,7 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const {
 
 }
 
-QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImageSP image) const
+QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImageWSP image) const
 {
     // Compute the rectangle for the offset
     QRectF rect2 = QRectF( -5, -5, 10, 10);
@@ -155,7 +155,7 @@ QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImage
     return image->pixelToDocument(rect2);
 }
 
-QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode) const
+QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
     QRectF dubRect = duplicateOutlineRect(pos, image);
     if(_mode == CURSOR_IS_OUTLINE ) {
@@ -169,7 +169,7 @@ QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP i
     return dubRect;
 }
 
-void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
+void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
     KisBrushSP brush = m_options->m_brushOption->brush();
     painter.setPen(Qt::black);

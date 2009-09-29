@@ -39,7 +39,7 @@ public:
     KisProjectionCache();
     virtual ~KisProjectionCache(){}
 
-    void setImage( KisImageSP image );
+    void setImage( KisImageWSP image );
     void setImageSize( qint32 w, qint32 h );
     void setMonitorProfile( const KoColorProfile* monitorProfile );
     void setDirty(const QRect& rc);
@@ -62,7 +62,7 @@ private:
     bool m_cacheKisImageAsQImage;
 
     QImage m_unscaledCache;
-    KisImageSP m_image;
+    KisImageWSP m_image;
     QSize m_imageSize;
     const KoColorProfile * m_monitorProfile;
 };

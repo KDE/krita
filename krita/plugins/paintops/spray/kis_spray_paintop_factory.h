@@ -37,7 +37,7 @@ public:
     KisSprayPaintOpFactory();
     virtual ~KisSprayPaintOpFactory();
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image);
 
     virtual QString id() const {
         return "spraybrush";
@@ -51,8 +51,8 @@ public:
         return "krita-spray.png";
     }
 
-    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettingsSP settings(KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageWSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageWSP image);
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);
 };
 #endif // KIS_SPRAY_PAINTOP_FACTORY_H_

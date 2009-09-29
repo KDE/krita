@@ -132,7 +132,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(KoID("RGBA"), "");
     int width = wdg->intWidth->value();
     int height = wdg->intHeight->value();
-    KisImageSP img = new KisImage(doc->undoAdapter(), width, height, cs, "built image");
+    KisImageWSP img = new KisImage(doc->undoAdapter(), width, height, cs, "built image");
     img->lock();
     // create a layer
     QList<int> pages = wdg->pages();

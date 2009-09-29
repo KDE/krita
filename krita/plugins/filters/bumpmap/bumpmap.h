@@ -96,7 +96,7 @@ public:
         return false;
     }
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
@@ -106,7 +106,7 @@ class KisBumpmapConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageSP image, QWidget * parent, Qt::WFlags f = 0);
+    KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageWSP image, QWidget * parent, Qt::WFlags f = 0);
     virtual ~KisBumpmapConfigWidget() {}
 
     void setConfiguration(const KisPropertiesConfiguration* config);
@@ -117,7 +117,7 @@ public:
 private:
 
     KisPaintDeviceSP m_device;
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisNodeModel * m_model;
 };
 

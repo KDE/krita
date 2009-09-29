@@ -35,7 +35,7 @@ class KisWeakSharedPtr;
  * constructor is not explicit.
  *
  * A shared pointer is a wrapper around a real pointer. The shared
- * pointer keeps a reference count, and when the refernece count drops
+ * pointer keeps a reference count, and when the reference count drops
  * to 0 the contained pointer is deleted. You can use the shared
  * pointer just as you would use a real pointer.
  *

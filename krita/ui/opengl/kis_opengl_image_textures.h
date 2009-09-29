@@ -64,7 +64,7 @@ public:
      * @param image The image
      * @param monitorProfile The profile of the display device
      */
-    static KisOpenGLImageTexturesSP getImageTextures(KisImageSP image, KoColorProfile *monitorProfile);
+    static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile);
 
     /**
      * Default constructor.
@@ -168,7 +168,7 @@ signals:
     void sigSizeChanged(qint32 width, qint32 height);
 
 protected:
-    KisOpenGLImageTextures(KisImageSP image, KoColorProfile *monitorProfile);
+    KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile);
 
     void createImageTextureTiles();
     void destroyImageTextureTiles();
@@ -178,8 +178,8 @@ protected:
     void setImageTextureFormat();
 
     static void createHDRExposureProgramIfCan();
-    static bool imageCanUseHDRExposureProgram(KisImageSP image);
-    static bool imageCanShareTextures(KisImageSP image);
+    static bool imageCanUseHDRExposureProgram(KisImageWSP image);
+    static bool imageCanShareTextures(KisImageWSP image);
     static bool haveHDRTextureFormat(const KoColorSpace *colorSpace);
 
 protected slots:
@@ -187,7 +187,7 @@ protected slots:
     void slotImageSizeChanged(qint32 w, qint32 h);
 
 private:
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KoColorProfile *m_monitorProfile;
     float m_exposure;
     bool m_displaySelection;
@@ -205,7 +205,7 @@ private:
     GLint m_imageTextureInternalFormat;
     GLenum m_imageTextureType;
 
-    typedef std::map<KisImageSP, KisOpenGLImageTextures*> ImageTexturesMap;
+    typedef std::map<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;
 
     static ImageTexturesMap imageTexturesMap;
 

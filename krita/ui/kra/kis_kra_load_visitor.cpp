@@ -55,7 +55,7 @@
 
 using namespace KRA;
 
-KisKraLoadVisitor::KisKraLoadVisitor( KisImageSP img,
+KisKraLoadVisitor::KisKraLoadVisitor( KisImageWSP img,
                                       KoStore *store,
                                       QMap<KisNode *, QString> &layerFilenames,
                                       const QString & name,

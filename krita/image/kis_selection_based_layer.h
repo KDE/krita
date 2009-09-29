@@ -49,7 +49,7 @@ public:
      * @param selection is a mask used by the layer to know
      * where to apply the filter/generator.
      */
-    KisSelectionBasedLayer(KisImageSP img, const QString &name, KisSelectionSP selection);
+    KisSelectionBasedLayer(KisImageWSP img, const QString &name, KisSelectionSP selection);
     KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs);
     virtual ~KisSelectionBasedLayer();
 

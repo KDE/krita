@@ -38,7 +38,7 @@
 
 #include "filter.h"
 
-KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
+KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp( painter )
     , m_settings( settings )
     , m_image ( image )

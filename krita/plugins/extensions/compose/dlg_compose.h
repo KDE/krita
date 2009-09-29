@@ -42,7 +42,7 @@ class DlgCompose: public KDialog
 
 public:
 
-    DlgCompose(KisImageSP image, QWidget * parent = 0);
+    DlgCompose(KisImageWSP image, QWidget * parent = 0);
     ~DlgCompose();
 
 private slots:
@@ -52,7 +52,7 @@ private slots:
 private:
 
     WdgCompose * m_page;
-    KisImageSP m_image;
+    KisImageWSP m_image;
 
 };
 

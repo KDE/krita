@@ -44,7 +44,7 @@ ShivaFilter::~ShivaFilter()
 {
 }
 
-KisConfigWidget* ShivaFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget* ShivaFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
 {
     Q_UNUSED(dev);
     Q_UNUSED(image);

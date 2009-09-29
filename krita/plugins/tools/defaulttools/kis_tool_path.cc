@@ -57,7 +57,7 @@ void KisToolPath::addPathShape()
     if(!canvas)
         return;
 
-    KisImageSP image = canvas->view()->image();
+    KisImageWSP image = canvas->view()->image();
     KisSelectionSP selection = canvas->view()->selection();
 
     KisPainter painter(dev, selection);

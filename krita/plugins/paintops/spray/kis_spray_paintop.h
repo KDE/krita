@@ -35,7 +35,7 @@ class KisSprayPaintOp : public KisPaintOp
 
 public:
 
-    KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisSprayPaintOp();
 
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
@@ -47,7 +47,7 @@ public:
 
 private:
     const KisSprayPaintOpSettings* m_settings;
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
     SprayBrush m_sprayBrush;
     double m_xSpacing, m_ySpacing, m_spacing;

@@ -188,12 +188,12 @@ public:
     void setCompositeOp(const QString& compositeOpId);
 
 
-    KisImageSP image() const;
+    KisImageWSP image() const;
 
     /**
      * Set the image this layer belongs to.
      */
-    void setImage(KisImageSP image);
+    void setImage(KisImageWSP image);
 public:
     qint32 x() const;
     qint32 y() const;

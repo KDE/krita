@@ -31,7 +31,7 @@ public:
     ~KisNodeQueryPath();
     KisNodeQueryPath(const KisNodeQueryPath& );
     KisNodeQueryPath& operator=(const KisNodeQueryPath& );
-    QList<KisNodeSP> queryNodes(KisImageSP image, KisNodeSP currentNode) const;
+    QList<KisNodeSP> queryNodes(KisImageWSP image, KisNodeSP currentNode) const;
     bool isRelative() const;
     // Use "///" style because of the needed "/*"
     /// This function return a string representing this path. Which is a list separated by '\' of:

@@ -205,7 +205,7 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
 }
 
 
-KisConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP) const
+KisConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
 {
     vKisBoolWidgetParam param;
     param.push_back(KisBoolWidgetParam(true, i18n("Sobel horizontally"), "doHorizontally"));

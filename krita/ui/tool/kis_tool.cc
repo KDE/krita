@@ -243,7 +243,7 @@ void KisTool::updateCanvasViewRect(const QRectF &viewRect)
     m_canvas->updateCanvas(m_canvas->viewConverter()->viewToDocument(viewRect));
 }
 
-KisImageSP KisTool::image() const
+KisImageWSP KisTool::image() const
 {
     // For now, krita tools only work in krita, not for a krita shape. Krita shapes are for 2.1
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
@@ -274,7 +274,7 @@ KisSelectionSP KisTool::currentSelection() const
 
 void KisTool::notifyModified() const
 {
-    KisImageSP img = image();
+    KisImageWSP img = image();
     if (img) {
         img->setModified();
     }
@@ -310,7 +310,7 @@ KoColor KisTool::currentBgColor()
     return d->currentBgColor;
 }
 
-KisImageSP KisTool::currentImage()
+KisImageWSP KisTool::currentImage()
 {
     return image();
 }

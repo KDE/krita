@@ -42,7 +42,7 @@ struct KisFilterSelectorWidget::Private {
     QWidget* currentCentralWidget;
     KisConfigWidget* currentFilterConfigurationWidget;
     KisFilterSP currentFilter;
-    KisImageSP image;
+    KisImageWSP image;
     KisPaintDeviceSP paintDevice;
     Ui_FilterSelector uiFilterSelector;
     KisPaintDeviceSP thumb;
@@ -100,7 +100,7 @@ void KisFilterSelectorWidget::setPaintDevice(KisPaintDeviceSP _paintDevice)
     d->uiFilterSelector.filtersSelector->header()->setVisible(false);
 }
 
-void KisFilterSelectorWidget::setImage(KisImageSP _image)
+void KisFilterSelectorWidget::setImage(KisImageWSP _image)
 {
     d->image = _image;
 }

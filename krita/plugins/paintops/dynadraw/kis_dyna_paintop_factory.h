@@ -38,7 +38,7 @@ public:
     KisDynaPaintOpFactory();
     virtual ~KisDynaPaintOpFactory();
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image);
 
     virtual QString id() const {
         return "dynabrush";
@@ -52,8 +52,8 @@ public:
         return "krita-dyna.png";
     }
 
-    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettingsSP settings(KisImageSP image);
+    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageWSP image);
+    virtual KisPaintOpSettingsSP settings(KisImageWSP image);
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);
 };
 #endif // KIS_DYNA_PAINTOP_FACTORY_H_

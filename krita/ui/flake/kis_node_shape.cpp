@@ -87,7 +87,7 @@ QSizeF KisNodeShape::size() const
 
     QRect br = m_d->node->extent();
 
-    KisImageSP image = getImage();
+    KisImageWSP image = getImage();
 
     if (!image) return QSizeF(0.0, 0.0);
 
@@ -100,7 +100,7 @@ QRectF KisNodeShape::boundingRect() const
 {
     QRect br = m_d->node->extent();
 
-    KisImageSP image = getImage();
+    KisImageWSP image = getImage();
 
     return QRectF(int(br.left()) / image->xRes(), int(br.top()) / image->yRes(),
                   int(1 + br.right()) / image->xRes(), int(1 + br.bottom()) / image->yRes());
@@ -112,7 +112,7 @@ void KisNodeShape::setPosition(const QPointF & position)
     Q_ASSERT(m_d);
     Q_ASSERT(m_d->node);
 
-    KisImageSP image = getImage();
+    KisImageWSP image = getImage();
 
     if (image) {
         // XXX: Does flake handle undo for us?
@@ -165,7 +165,7 @@ void KisNodeShape::editabilityChanged( )
     }
 }
 
-KisImageSP KisNodeShape::getImage() const
+KisImageWSP KisNodeShape::getImage() const
 {
 
     if ( m_d->node->inherits( "KisLayer" ) ) {

@@ -43,7 +43,7 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 
-KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageSP image)
+KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image)
         : KisWdgCustomBrush(parent)
         , m_image(image)
 {
@@ -167,7 +167,7 @@ void KisCustomBrushWidget::createBrush()
         static_cast<KisGbrBrush*>( m_brush.data() )->makeMaskImage();
 }
 
-void KisCustomBrushWidget::setImage(KisImageSP image)
+void KisCustomBrushWidget::setImage(KisImageWSP image)
 {
     m_image = image;
 }

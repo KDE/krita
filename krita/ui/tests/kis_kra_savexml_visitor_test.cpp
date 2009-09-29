@@ -63,7 +63,7 @@ void KisKraSaveXmlVisitorTest::testCreateDomDocument()
     QDomElement image = dom.createElement("IMAGE"); // Legacy!
     KisSaveXmlVisitor visitor(dom, image, count, true);
 
-    KisImageSP img = doc->image();
+    KisImageWSP img = doc->image();
     Q_ASSERT(img);
 
     QStringList list;

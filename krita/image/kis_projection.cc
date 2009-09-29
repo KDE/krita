@@ -57,7 +57,6 @@ KisProjection::KisProjection(KisImageWSP image)
 
 KisProjection::~KisProjection()
 {
-    qDebug() << ">>>>>>>>>>>>>>>> deleting KisProjection";
     m_d->updater->deleteLater();
     delete m_d;
 }
@@ -154,7 +153,6 @@ void KisProjection::updateSettings()
 
 void KisImageUpdater::startUpdate(KisNodeSP node, const QRect& rc)
 {
-    qDebug() << "updating projection for " << node << " rect" << rc;
     update(node, 0, rc);
     emit updateDone(rc);
 }

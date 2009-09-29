@@ -35,7 +35,7 @@
 class KisNodeModel::Private
 {
 public:
-    KisImageSP image;
+    KisImageWSP image;
     bool showRootLayer;
 };
 
@@ -52,7 +52,7 @@ KisNodeModel::~KisNodeModel()
     delete m_d;
 }
 
-void KisNodeModel::setImage(KisImageSP image)
+void KisNodeModel::setImage(KisImageWSP image)
 {
     dbgUI <<"KisNodeModel::setImage " << image << ": number of layers " << image->nlayers();
     if (m_d->image) {

@@ -39,7 +39,7 @@
 void KisAdjustmentLayerTest::testCreation()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
@@ -52,7 +52,7 @@ void KisAdjustmentLayerTest::testSetSelection()
 {
     KisSelectionSP sel = new KisSelection();
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
@@ -65,7 +65,7 @@ void KisAdjustmentLayerTest::testSetSelection()
 void KisAdjustmentLayerTest::testInverted()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);

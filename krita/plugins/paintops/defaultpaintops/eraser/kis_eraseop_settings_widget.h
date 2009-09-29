@@ -42,7 +42,7 @@ public:
 
     KisPropertiesConfiguration* configuration() const;
 
-    void setImage(KisImageSP image);
+    void setImage(KisImageWSP image);
 
 public:
 

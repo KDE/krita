@@ -48,7 +48,7 @@ public:
      */
     virtual void writeConfiguration( KisPropertiesConfiguration *config ) const = 0;
 
-    virtual void setImage( KisImageSP image )
+    virtual void setImage( KisImageWSP image )
     {
         m_image = image;
     }
@@ -56,7 +56,7 @@ public:
 protected:
 
 
-    KisImageSP m_image;
+    KisImageWSP m_image;
 
 };
 

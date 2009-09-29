@@ -34,7 +34,7 @@
 #include "kis_group_layer.h"
 #include "kis_undo_adapter.h"
 
-KisImageLockCommand::KisImageLockCommand(KisImageSP image, bool lockImage)
+KisImageLockCommand::KisImageLockCommand(KisImageWSP image, bool lockImage)
         : KisImageCommand("lock image", image)  // Not for translation, this is only ever used inside a macro command.
 {
     m_lockImage = lockImage;

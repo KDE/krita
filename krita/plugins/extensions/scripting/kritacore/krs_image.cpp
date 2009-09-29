@@ -36,7 +36,7 @@
 
 using namespace Scripting;
 
-Image::Image(Module* module, KisImageSP image, KisDoc2* doc)
+Image::Image(Module* module, KisImageWSP image, KisDoc2* doc)
         : QObject(module)
         , m_image(image)
         , m_doc(doc)

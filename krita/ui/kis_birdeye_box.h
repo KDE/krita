@@ -43,7 +43,7 @@ public:
     KisBirdEyeBox(KisView2 * view);
     ~KisBirdEyeBox();
 
-    void setImage(KisImageSP image);
+    void setImage(KisImageWSP image);
 
 public slots:
     void slotDocCommandExecuted();
@@ -64,7 +64,7 @@ private:
     KisView2 * m_view;
     bool m_draggingExposureSlider;
     KoZoomAdapter * m_zoomAdapter;
-    KisImageSP m_image;
+    KisImageWSP m_image;
     QRect m_dirtyRegion;
 };
 

@@ -93,7 +93,7 @@ void Bracketing2HDRPlugin::addImage(const QString& filename)
 #if 1
     KisDoc2 d;
     d.importDocument(filename);
-    KisImageSP importedImage = d.image();
+    KisImageWSP importedImage = d.image();
     KisPaintLayerSP projection = 0;
     if (importedImage) {
         projection = dynamic_cast<KisPaintLayer*>(importedImage->rootLayer()->firstChild().data());
@@ -156,7 +156,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
         if (!m_cameraResponseIsComputed) {
             computeCameraResponse();
         }
-        KisImageSP img = m_view->image();
+        KisImageWSP img = m_view->image();
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBAF32", 0);
         if (!cs) {
             KMessageBox::error(m_view, i18n("HDR colorspace RGBAF32 not found, please check your installation."), i18n("Layer Creation Error"));

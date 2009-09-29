@@ -47,7 +47,7 @@ void KisShapeControllerTest::testSetImage()
     KisNameServer nameServer;
     KisShapeController shapeController(&doc, &nameServer);
 
-    KisImageSP image = new KisImage(0, 512, 512, 0, "shape controller test");
+    KisImageWSP image = new KisImage(0, 512, 512, 0, "shape controller test");
     QCOMPARE((int)image->rootLayer()->childCount(), 0);
 
     KisLayerSP layer = new KisPaintLayer(image, "test1", OPACITY_OPAQUE);
@@ -69,7 +69,7 @@ void KisShapeControllerTest::testAddShape()
     KisNameServer nameServer;
     KisShapeController shapeController(&doc, &nameServer);
 
-    KisImageSP image = new KisImage(0, 512, 512, 0, "shape controller test");
+    KisImageWSP image = new KisImage(0, 512, 512, 0, "shape controller test");
     QCOMPARE((int)image->rootLayer()->childCount(), 0);
 
     KisLayerSP layer = new KisPaintLayer(image, "test1", OPACITY_OPAQUE);
@@ -107,7 +107,7 @@ void KisShapeControllerTest::testRemoveShape()
     KisNameServer nameServer;
     KisShapeController shapeController(&doc, &nameServer);
 
-    KisImageSP image = new KisImage(0, 512, 512, 0, "shape controller test");
+    KisImageWSP image = new KisImage(0, 512, 512, 0, "shape controller test");
     QCOMPARE((int)image->rootLayer()->childCount(), 0);
 
     KisLayerSP layer = new KisPaintLayer(image, "test1", OPACITY_OPAQUE);

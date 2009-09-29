@@ -41,7 +41,7 @@
 #include "kis_open_raster_load_context.h"
 
 struct KisOpenRasterStackLoadVisitor::Private {
-    KisImageSP image;
+    KisImageWSP image;
     KisDoc2* doc;
     KisOpenRasterLoadContext* loadContext;
 };
@@ -58,7 +58,7 @@ KisOpenRasterStackLoadVisitor::~KisOpenRasterStackLoadVisitor()
     delete d;
 }
 
-KisImageSP KisOpenRasterStackLoadVisitor::image()
+KisImageWSP KisOpenRasterStackLoadVisitor::image()
 {
     return d->image;
 }

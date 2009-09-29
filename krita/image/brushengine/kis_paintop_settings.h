@@ -125,7 +125,7 @@ public:
      * to brushOutlineRect, and perhaps just return the brushSize and let the caller handle the x,y
      * location. If one wants to use QImage, then one use something else
      */
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode) const;
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
 
     /**
      * This function allow the paintop to draw an outline at a given position.
@@ -135,7 +135,7 @@ public:
      * And we need a lot of caching here, since no matter what we do, it is utterly slow, especially
      * when using a tablet. How does XXX works with the duplicate op ? List of images ? With a center ?
      */
-    virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
+    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
 #if defined(HAVE_OPENGL)
     virtual QString modelName() const;

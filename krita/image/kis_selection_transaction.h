@@ -40,7 +40,7 @@ class KRITAIMAGE_EXPORT KisSelectionTransaction : public KisTransaction
 {
 
 public:
-    KisSelectionTransaction(const QString& name, KisImageSP image, KisSelectionSP selection, QUndoCommand* parent = 0);
+    KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, QUndoCommand* parent = 0);
     virtual ~KisSelectionTransaction();
 
 public:
@@ -48,7 +48,7 @@ public:
     void undo();
 
 private:
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisSelectionSP m_selection;
     bool m_wasDeselected;
 };

@@ -64,7 +64,7 @@ KisPropertiesConfiguration* KisFilterOpSettingsWidget::configuration() const
     return config;
 }
 
-void KisFilterOpSettingsWidget::setImage(KisImageSP image)
+void KisFilterOpSettingsWidget::setImage(KisImageWSP image)
 {
     m_brushOption->setImage(image);
 }

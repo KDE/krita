@@ -331,7 +331,7 @@ public:
      * Some paintops really want to know about the image they work
      * for, e.g. the duplicate paintop.
      */
-    void setPaintOpPreset(KisPaintOpPresetSP preset, KisImageSP image);
+    void setPaintOpPreset(KisPaintOpPresetSP preset, KisImageWSP image);
 
     /// Return the paintop preset
     KisPaintOpPresetSP preset() const;

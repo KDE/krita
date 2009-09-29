@@ -25,7 +25,7 @@
 #include "kis_boundary.h"
 #include <kis_image.h>
 
-void KisBoundaryPainter::paint(const KisBoundary* boundary, KisImageSP image, QPainter& painter, const KoViewConverter &converter)
+void KisBoundaryPainter::paint(const KisBoundary* boundary, KisImageWSP image, QPainter& painter, const KoViewConverter &converter)
 {
     KisBoundary::PointPairListList::const_iterator it = boundary->horizontalSegment().constBegin();
     KisBoundary::PointPairListList::const_iterator end = boundary->horizontalSegment().constEnd();

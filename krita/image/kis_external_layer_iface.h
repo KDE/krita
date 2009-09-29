@@ -38,7 +38,7 @@ class KisExternalLayer : public KisLayer
 {
 
 public:
-    KisExternalLayer(KisImageSP img, const QString &name, quint8 opacity)
+    KisExternalLayer(KisImageWSP img, const QString &name, quint8 opacity)
             : KisLayer(img, name, opacity) {}
     virtual QIcon icon() const {
         return KIcon("system-run");

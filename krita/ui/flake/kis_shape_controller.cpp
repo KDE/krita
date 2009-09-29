@@ -65,7 +65,7 @@ typedef QMap<KisNodeSP, KoShape*> KisNodeMap;
 class KisShapeController::Private
 {
 public:
-    KisImageSP image;
+    KisImageWSP image;
     KisNodeMap nodeShapes; // maps from krita/image layers to shapes
     KisDoc2 * doc;
     KisNameServer * nameServer;
@@ -142,7 +142,7 @@ KisShapeController::~KisShapeController()
     delete m_d;
 }
 
-void KisShapeController::setImage(KisImageSP image)
+void KisShapeController::setImage(KisImageWSP image)
 {
     dbgUI << ppVar( image );
     if (m_d->image) {

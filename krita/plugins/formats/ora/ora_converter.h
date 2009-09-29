@@ -55,15 +55,15 @@ class OraConverter : public QObject {
         virtual ~OraConverter();
     public:
         KisImageBuilder_Result buildImage(const KUrl& uri);
-        KisImageBuilder_Result buildFile(const KUrl& uri, KisImageSP image);
+        KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP image);
         /**
          * Retrieve the constructed image
          */
-        KisImageSP image();
+        KisImageWSP image();
     public slots:
         virtual void cancel();
     private:
-        KisImageSP m_img;
+        KisImageWSP m_img;
         KisDoc2 *m_doc;
         KisUndoAdapter *m_adapter;
         bool m_stop;

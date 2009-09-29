@@ -59,7 +59,7 @@ KisLayerComposePlugin::~KisLayerComposePlugin()
 
 void KisLayerComposePlugin::slotCompose()
 {
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
     if (!image) return;
 
     DlgCompose dlgCompose(image, m_view);

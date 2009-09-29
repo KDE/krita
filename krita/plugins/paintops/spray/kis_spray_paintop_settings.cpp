@@ -59,7 +59,7 @@ void KisSprayPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) con
     delete settings;
 }
 
-QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image) const
+QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image) const
 {
     qreal size = diameter();
     size += 2;
@@ -68,7 +68,7 @@ QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP 
         ).translated( pos - QPointF( size * 0.5 , size * 0.5 ) );
 }
 
-void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const
+void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter) const
 {
     qreal size = diameter();
     QRectF brushSize(0,0, size, size );
@@ -205,7 +205,7 @@ bool KisSprayPaintOpSettings::useRandomHSV() const
     return m_options->m_sprayColorOption->useRandomHSV();
 }
 
-QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode) const
+QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
     if(_mode != CURSOR_IS_OUTLINE) return QRectF();
     qreal size = diameter();
@@ -213,7 +213,7 @@ QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP 
     return image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos);
 }
 
-void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
+void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
     if(_mode != CURSOR_IS_OUTLINE) return;
     qreal size = diameter();

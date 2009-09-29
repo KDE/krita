@@ -89,7 +89,7 @@ public:
 
 KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
                              KoShapeControllerBase* controller,
-                             KisImageSP img,
+                             KisImageWSP img,
                              const QString &name,
                              quint8 opacity)
     : KisExternalLayer(img, name, opacity)

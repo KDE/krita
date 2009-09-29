@@ -43,7 +43,7 @@
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
-KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, const char *name)
+KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent, const char *name)
         : KDialog(parent)
 {
     setButtons(Ok | Cancel);

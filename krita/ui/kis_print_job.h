@@ -27,7 +27,7 @@
 class KisPrintJob : public KoPrintJob
 {
 public:
-    KisPrintJob(KisImageSP image);
+    KisPrintJob(KisImageWSP image);
 
 protected:
     virtual QPrinter &printer() {
@@ -37,7 +37,7 @@ protected:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
 private:
-    KisImageSP m_image;
+    KisImageWSP m_image;
     QPrinter m_printer;
 };
 

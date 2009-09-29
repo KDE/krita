@@ -164,7 +164,7 @@ KoColorProfile * profile(const Image * image)
 #endif
 }
 
-void setAnnotationsForImage(const Image * src, KisImageSP image)
+void setAnnotationsForImage(const Image * src, KisImageWSP image)
 {
     size_t length;
 
@@ -673,7 +673,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildImage(const KUrl& uri) {
 }
 
 
-KisImageSP KisImageMagickConverter::image() {
+KisImageWSP KisImageMagickConverter::image() {
     return m_img;
 }
 
@@ -691,7 +691,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KUrl& uri, KisPa
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageSP img = layer->image();
+    KisImageWSP img = layer->image();
     if (!img)
         return KisImageBuilder_RESULT_EMPTY;
 

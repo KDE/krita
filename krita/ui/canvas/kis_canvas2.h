@@ -124,11 +124,11 @@ public: // KoCanvasBase implementation
     // Temporary! Either get the current layer and image from the
     // resource provider, or use this, which gets them from the
     // current shape selection.
-    KisImageSP currentImage();
+    KisImageWSP currentImage();
 
 public: // KisCanvas2 methods
 
-    KisImageSP image();
+    KisImageWSP image();
     KisView2* view();
 
     bool usingHDRExposureProgram();

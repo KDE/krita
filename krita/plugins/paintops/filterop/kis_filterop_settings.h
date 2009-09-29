@@ -50,7 +50,7 @@ public:
 
     void setNode( KisNodeSP node );
 
-    void setImage( KisImageSP image );
+    void setImage( KisImageWSP image );
 
     KisFilterSP filter() const;
     KisFilterConfiguration* filterConfig() const;

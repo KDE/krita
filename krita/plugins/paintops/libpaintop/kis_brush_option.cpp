@@ -64,7 +64,7 @@ void KisBrushOption::setTextBrush( bool on )
     m_brushSelectionWidget->setTextBrush( on );
 }
 
-void KisBrushOption::setImage(KisImageSP image)
+void KisBrushOption::setImage(KisImageWSP image)
 {
     m_brushSelectionWidget->setImage(image);
 }

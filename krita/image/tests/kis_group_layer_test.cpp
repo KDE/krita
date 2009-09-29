@@ -28,7 +28,7 @@
 void KisGroupLayerTest::testProjection()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "merge test");
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "merge test");
 
 }
 

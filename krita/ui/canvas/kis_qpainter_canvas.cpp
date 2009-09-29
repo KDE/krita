@@ -121,7 +121,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 {
     KisConfig cfg;
 
-    KisImageSP image = m_d->canvas->image();
+    KisImageWSP image = m_d->canvas->image();
     if (image == 0) return;
 
     setAutoFillBackground(false);
@@ -313,7 +313,7 @@ void KisQPainterCanvas::slotConfigChanged()
 
 void KisQPainterCanvas::adjustOrigin()
 {
-    KisImageSP image = m_d->canvas->image();
+    KisImageWSP image = m_d->canvas->image();
     if (image == 0) return;
 
     QRect documentRect = QRect( QPoint(0,0), documentSize() );
@@ -371,7 +371,7 @@ QRect KisQPainterCanvas::viewToWidget(const QRect& r) const
 
 QSize KisQPainterCanvas::documentSize()
 {
-    KisImageSP image = m_d->canvas->image();
+    KisImageWSP image = m_d->canvas->image();
     return QSize(int(ceil(m_d->viewConverter->documentToViewX(image->width()  / image->xRes()))),
                  int(ceil(m_d->viewConverter->documentToViewY(image->height() / image->yRes()))));
 }

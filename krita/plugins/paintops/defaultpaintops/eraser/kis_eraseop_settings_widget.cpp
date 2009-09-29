@@ -60,7 +60,7 @@ KisPropertiesConfiguration* KisEraseOpSettingsWidget::configuration() const
     return config;
 }
 
-void KisEraseOpSettingsWidget::setImage(KisImageSP image)
+void KisEraseOpSettingsWidget::setImage(KisImageWSP image)
 {
     m_brushOption->setImage(image);
 }

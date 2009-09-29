@@ -40,7 +40,7 @@ public:
     //KisPaintDeviceSP driedPaintDevice;
 };
 
-KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
+KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
     : KisLayer(img, name, opacity)
     , m_d(new Private())
 {
@@ -51,7 +51,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 }
 
 
-KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity)
+KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity)
     : KisLayer(img, name, opacity)
     , m_d(new Private())
 {
@@ -59,7 +59,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     m_d->paintDevice = new KisPaintDevice(this, img->colorSpace());
 }
 
-KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
+KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
     : KisLayer(img, name, opacity)
     , m_d(new Private())
 {

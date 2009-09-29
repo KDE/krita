@@ -97,7 +97,7 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& info) cons
     QRect r1 = dev->extent();
 
     // Ugly hack to get at the image without bloating the node interface
-    KisImageSP image;
+    KisImageWSP image;
     KisNodeSP parent = nodeQueryPath().queryNodes(info.image(), info.currentNode())[0];
     while (image == 0 && parent->parent()) {
         // XXX: ugly!

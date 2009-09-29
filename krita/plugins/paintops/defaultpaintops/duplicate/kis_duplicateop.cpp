@@ -169,7 +169,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     Q_CHECK_PTR(m_srcdev);
 
     // Perspective correction ?
-    KisImageSP image = settings->m_image;
+    KisImageWSP image = settings->m_image;
     if (settings->perspectiveCorrection() && image && image->perspectiveGrid()->countSubGrids() == 1) {
         Matrix3qreal startM = Matrix3qreal::Identity();
         Matrix3qreal endM = Matrix3qreal::Identity();

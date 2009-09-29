@@ -44,7 +44,7 @@ public:
 };
 
 
-KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageSP img,
+KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP img,
                                                const QString &name,
                                                KisSelectionSP selection)
     : KisLayer(img.data(), name, OPACITY_OPAQUE),

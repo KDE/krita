@@ -196,7 +196,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         transform = KoColorSpaceRegistry::instance()->colorSpace(csName, profile)->createColorConverter( cs );
     }
 
-    // Creating the KisImageSP
+    // Creating the KisImageWSP
     if (! m_img) {
         m_img = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_img);
@@ -407,7 +407,7 @@ KisImageBuilder_Result KisJPEGConverter::buildImage(const KUrl& uri)
 }
 
 
-KisImageSP KisJPEGConverter::image()
+KisImageWSP KisJPEGConverter::image()
 {
     return m_img;
 }
@@ -418,7 +418,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageSP img = KisImageSP(layer -> image());
+    KisImageWSP img = KisImageWSP(layer -> image());
     if (!img)
         return KisImageBuilder_RESULT_EMPTY;
 

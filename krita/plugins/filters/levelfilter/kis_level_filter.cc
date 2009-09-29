@@ -58,7 +58,7 @@ KisLevelFilter::~KisLevelFilter()
 {
 }
 
-KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
 {
     Q_UNUSED(image);
     return new KisLevelConfigWidget(parent, dev);

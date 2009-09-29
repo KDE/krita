@@ -91,7 +91,7 @@ void KisComplexOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration 
     m_bidiOption->writeOptionSetting(config);
 }
 
-void KisComplexOpSettingsWidget::setImage(KisImageSP image)
+void KisComplexOpSettingsWidget::setImage(KisImageWSP image)
 {
     m_brushOption->setImage(image);
 }

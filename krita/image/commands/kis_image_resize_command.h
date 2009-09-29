@@ -37,7 +37,7 @@ class KisImageResizeCommand : public KisImageCommand
 {
 
 public:
-    KisImageResizeCommand(KisImageSP image, qint32 width, qint32 height, qint32 oldWidth, qint32 oldHeight);
+    KisImageResizeCommand(KisImageWSP image, qint32 width, qint32 height, qint32 oldWidth, qint32 oldHeight);
 
     virtual void redo();
     virtual void undo();

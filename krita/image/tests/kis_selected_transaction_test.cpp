@@ -32,7 +32,7 @@ void KisSelectedTransactionTest::testCreation()
 {
 
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     KisNodeSP node = new KisPaintLayer(image, "bla", 0);
     QUndoCommand * cmd = new QUndoCommand();
     KisSelectedTransaction test("bla", node, cmd);

@@ -25,7 +25,7 @@
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
 
-KisSelectionTransaction::KisSelectionTransaction(const QString& name, KisImageSP image, KisSelectionSP selection, QUndoCommand* parent) :
+KisSelectionTransaction::KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, QUndoCommand* parent) :
         KisTransaction(name, selection->getOrCreatePixelSelection().data(), parent)
         , m_image(image)
         , m_selection(selection)

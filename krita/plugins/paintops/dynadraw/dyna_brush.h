@@ -47,7 +47,7 @@ public:
     int applyFilter(qreal mx, qreal my);
 
     //setters
-    void setImage( KisImageSP image ){
+    void setImage( KisImageWSP image ){
         m_image = image;
     }
 
@@ -129,7 +129,7 @@ void drawLines(KisPainter &painter,
         int count);
 
     KoColor m_inkColor;
-    KisImageSP m_image;
+    KisImageWSP m_image;
 
     int m_counter;
     int m_pixelSize;

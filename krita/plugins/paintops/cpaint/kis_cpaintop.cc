@@ -87,7 +87,7 @@ KisCPaintOpFactory::~KisCPaintOpFactory()
 
 KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettingsSP settings,
         KisPainter * painter,
-        KisImageSP image)
+        KisImageWSP image)
 {
     Q_UNUSED(image);
     dbgKrita << settings;
@@ -111,14 +111,14 @@ KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisCPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisCPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
 {
     Q_UNUSED(inputDevice);
     Q_UNUSED(image);
     return new KisCPaintOpSettings(m_brushes);
 }
 
-KisPaintOpSettingsSP KisCPaintOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisCPaintOpFactory::settings(KisImageWSP image)
 {
     Q_UNUSED(image);
     return new KisCPaintOpSettings(m_brushes);

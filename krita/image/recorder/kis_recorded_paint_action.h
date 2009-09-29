@@ -72,7 +72,7 @@ public:
     virtual ~KisRecordedPaintActionFactory() {}
 protected:
 
-    KisPaintOpPresetSP paintOpPresetFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image);
+    KisPaintOpPresetSP paintOpPresetFromXML(const QString& paintOpId, const QDomElement& elt, KisImageWSP image);
 };
 
 

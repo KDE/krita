@@ -136,7 +136,7 @@ bool KisNodeQueryPath::isRelative() const
 }
 
 
-QList<KisNodeSP> KisNodeQueryPath::queryNodes(KisImageSP image, KisNodeSP currentNode) const
+QList<KisNodeSP> KisNodeQueryPath::queryNodes(KisImageWSP image, KisNodeSP currentNode) const
 {
     KisNodeSP _node;
     if( d->relative )

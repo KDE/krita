@@ -64,7 +64,7 @@ KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), categ
 }
 
 
-KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
 {
     Q_UNUSED(dev);
     Q_UNUSED(image);
@@ -110,7 +110,7 @@ void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
     dbgPlugins << "Use as reference file : " << fileName;
     KisDoc2 d;
     d.importDocument(fileName);
-    KisImageSP importedImage = d.image();
+    KisImageWSP importedImage = d.image();
 
     if (importedImage) {
         ref = importedImage->projection();

@@ -88,7 +88,7 @@ ColorSpaceConversion::~ColorSpaceConversion()
 
 void ColorSpaceConversion::slotImgColorSpaceConversion()
 {
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
 
     if (!image) return;
 
@@ -114,7 +114,7 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
 void ColorSpaceConversion::slotLayerColorSpaceConversion()
 {
 
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
     if (!image) return;
 
     KisPaintDeviceSP dev = m_view->activeDevice();

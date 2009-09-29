@@ -118,7 +118,7 @@ struct KisPrescaledProjection::Private {
 
     QSize canvasSize; // in view pixels
     QSize imageSize; // in kisimage pixels
-    KisImageSP image;
+    KisImageWSP image;
     KoViewConverter * viewConverter;
     KisNodeSP currentNode;
     QRegion rectsToSmooth;
@@ -144,7 +144,7 @@ KisPrescaledProjection::~KisPrescaledProjection()
 }
 
 
-void KisPrescaledProjection::setImage(KisImageSP image)
+void KisPrescaledProjection::setImage(KisImageWSP image)
 {
     Q_ASSERT(image);
     m_d->image = image;

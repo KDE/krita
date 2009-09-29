@@ -34,7 +34,7 @@
 #include "brush_shape.h"
 
 KisSumiPaintOp::KisSumiPaintOp(const
-                               KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
+                               KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp( painter )
     , m_settings( settings )
     , m_image( image )

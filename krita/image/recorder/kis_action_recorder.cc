@@ -18,7 +18,6 @@
 
 #include "recorder/kis_action_recorder.h"
 
-#include "kis_image.h"
 #include "recorder/kis_recorded_action.h"
 
 KisActionRecorder::KisActionRecorder()

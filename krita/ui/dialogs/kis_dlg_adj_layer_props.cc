@@ -40,7 +40,7 @@
 
 
 KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
-        const KisImageSP image,
+        const KisImageWSP image,
         KisFilterConfiguration * configuration,
         const QString & layerName,
         const QString & caption,

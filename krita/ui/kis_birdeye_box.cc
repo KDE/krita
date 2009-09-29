@@ -123,7 +123,7 @@ class ThumbnailProvider : public KoThumbnailAdapter
 {
 
 public:
-    ThumbnailProvider(KisImageSP image, KisCanvasSubject* canvasSubject)
+    ThumbnailProvider(KisImageWSP image, KisCanvasSubject* canvasSubject)
             : KoThumbnailAdapter()
             , m_image(image)
             , m_canvasSubject(canvasSubject) {}
@@ -176,12 +176,12 @@ public:
                                              m_canvasSubject->HDRExposure());
     }
 
-    void setImage(KisImageSP image) {
+    void setImage(KisImageWSP image) {
         m_image = image;
     }
 private:
 
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisCanvasSubject * m_canvasSubject;
 
 };
@@ -247,7 +247,7 @@ KisBirdEyeBox::~KisBirdEyeBox()
 {
 }
 
-void KisBirdEyeBox::setImage(KisImageSP image)
+void KisBirdEyeBox::setImage(KisImageWSP image)
 {
     if (m_image) {
         m_image->disconnect(this);

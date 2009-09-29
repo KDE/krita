@@ -119,7 +119,7 @@ void KisToolSelectPath::addPathShape()
     if (!currentNode)
         return;
 
-    KisImageSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
+    KisImageWSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
     KisPaintDeviceSP dev = currentNode->paintDevice();
 
     m_shape->normalize();

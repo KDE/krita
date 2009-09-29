@@ -37,7 +37,7 @@ public:
     using KisPaintOpSettings::fromXML;
     using KisPaintOpSettings::toXML;
 
-    KisDuplicateOpSettings( KisImageSP image );
+    KisDuplicateOpSettings( KisImageWSP image );
 
     virtual ~KisDuplicateOpSettings();
     bool paintIncremental();
@@ -52,8 +52,8 @@ public:
     void toXML(QDomDocument& doc, QDomElement& rootElt) const;
 
     KisPaintOpSettingsSP clone() const;
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image, OutlineMode _mode ) const;
-    virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode ) const;
+    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
     // XXX: Hack!
     void setOptionsWidget(KisPaintOpSettingsWidget* widget)
@@ -74,11 +74,11 @@ public:
 
     KisDuplicateOpSettingsWidget *m_options;
     QPointF m_offset;
-    KisImageSP m_image;
+    KisImageWSP m_image;
     bool m_isOffsetNotUptodate;
     QPointF m_position; // Give the position of the last alt-click
 private:
-    QRectF duplicateOutlineRect(const QPointF& pos, KisImageSP image) const;
+    QRectF duplicateOutlineRect(const QPointF& pos, KisImageWSP image) const;
 };
 
 

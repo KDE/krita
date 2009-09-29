@@ -35,7 +35,7 @@ class KisCurvePaintOp : public KisPaintOp
 {
 
 public:
-    KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisCurvePaintOp();
 
     virtual bool incremental() const {
@@ -56,7 +56,7 @@ public:
 
 
 private:
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
     CurveBrush m_curveBrush;

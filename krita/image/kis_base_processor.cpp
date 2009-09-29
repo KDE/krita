@@ -106,7 +106,7 @@ KisFilterConfiguration * KisBaseProcessor::defaultConfiguration(const KisPaintDe
     return fc;
 }
 
-KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP, const KisImageSP) const
+KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP, const KisImageWSP) const
 {
     return 0;
 }

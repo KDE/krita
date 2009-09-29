@@ -161,7 +161,7 @@ void KisLayerManager::addAction(QAction * action)
 void KisLayerManager::updateGUI()
 {
 
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
 
     KisLayerSP layer;
     qint32 nlayers = 0;
@@ -200,7 +200,7 @@ void KisLayerManager::imgResizeToActiveLayer()
     KisLayerSP layer;
     KisUndoAdapter * undoAdapter = m_view->undoAdapter();
 
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
 
     if (img && (layer = activeLayer())) {
 
@@ -368,7 +368,7 @@ void KisLayerManager::layerProperties()
 
 void KisLayerManager::layerAdd()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (img && activeLayer()) {
         addLayer(activeLayer()->parent(), activeLayer());
     } else if (img)
@@ -377,7 +377,7 @@ void KisLayerManager::layerAdd()
 
 void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (img) {
         KisConfig cfg;
         QString profilename;
@@ -395,7 +395,7 @@ void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
 
 void KisLayerManager::addGroupLayer(KisNodeSP parent, KisNodeSP above)
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (img) {
         KisLayerSP layer = KisLayerSP(new KisGroupLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE));
         if (layer) {
@@ -411,7 +411,7 @@ void KisLayerManager::addGroupLayer(KisNodeSP parent, KisNodeSP above)
 
 void KisLayerManager::addCloneLayer()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (img && activeLayer()) {
         addCloneLayer(activeLayer()->parent(), activeLayer());
     } else if (img)
@@ -420,7 +420,7 @@ void KisLayerManager::addCloneLayer()
 
 void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (img) {
         // Check whether we are not cloning a parent layer
         if (KisGroupLayer * from = dynamic_cast<KisGroupLayer*>(m_activeLayer.data())) {
@@ -453,7 +453,7 @@ void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
 
 void KisLayerManager::addShapeLayer()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (img && activeLayer()) {
         addShapeLayer(activeLayer()->parent(), activeLayer());
     } else if (img)
@@ -463,7 +463,7 @@ void KisLayerManager::addShapeLayer()
 
 void KisLayerManager::addShapeLayer(KisNodeSP parent, KisNodeSP above)
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (img) {
         // XXX: Make work with nodes!
         KisLayer * parentLayer = dynamic_cast<KisLayer*>(parent.data());
@@ -492,7 +492,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
 {
     Q_ASSERT(parent);
 
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisLayerSP l = activeLayer();
@@ -522,7 +522,7 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNo
 {
     Q_ASSERT(parent);
 
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return 0;
 
     KisAdjustmentLayerSP l = new KisAdjustmentLayer(img, name, filter, selection);
@@ -540,7 +540,7 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above)
 {
     Q_ASSERT(parent);
 
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisDlgGeneratorLayer dlg(img->nextLayerName(), m_view);
@@ -560,7 +560,7 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const
     Q_ASSERT(parent);
     Q_ASSERT(generator);
 
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisGeneratorLayerSP l = new KisGeneratorLayer(img, name, generator, selection);
@@ -575,7 +575,7 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const
 
 void KisLayerManager::layerRemove()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
 
     if (img) {
         KisLayerSP layer = activeLayer();
@@ -596,7 +596,7 @@ void KisLayerManager::layerRemove()
 
 void KisLayerManager::layerDuplicate()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
 
     if (!img)
         return;
@@ -620,7 +620,7 @@ void KisLayerManager::layerDuplicate()
 
 void KisLayerManager::layerRaise()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     KisLayerSP layer;
 
     if (!img)
@@ -634,7 +634,7 @@ void KisLayerManager::layerRaise()
 
 void KisLayerManager::layerLower()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     KisLayerSP layer;
 
     if (!img)
@@ -648,7 +648,7 @@ void KisLayerManager::layerLower()
 
 void KisLayerManager::layerFront()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     KisLayerSP layer;
 
     if (!img)
@@ -661,7 +661,7 @@ void KisLayerManager::layerFront()
 
 void KisLayerManager::layerBack()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisLayerSP layer;
@@ -821,7 +821,7 @@ void KisLayerManager::shearLayer(double angleX, double angleY)
 
 void KisLayerManager::flattenImage()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
 
     if (img) {
         bool doIt = true;
@@ -846,7 +846,7 @@ void KisLayerManager::flattenImage()
 
 void KisLayerManager::mergeLayer()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisLayerSP layer = activeLayer();
@@ -866,7 +866,7 @@ void KisLayerManager::mergeLayer()
 
 void KisLayerManager::flattenLayer()
 {
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisLayerSP layer = activeLayer();
@@ -907,7 +907,7 @@ void KisLayerManager::saveLayerAsImage()
         return;
 
 
-    KisImageSP img = m_view->image();
+    KisImageWSP img = m_view->image();
     if (!img) return;
 
     KisLayerSP l = activeLayer();
@@ -918,7 +918,7 @@ void KisLayerManager::saveLayerAsImage()
     KisDoc2 d;
     d.prepareForImport();
 
-    KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name());
+    KisImageWSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name());
     dst->setResolution(img->xRes(), img->yRes());
     d.setCurrentImage(dst);
     dst->addNode(l->clone(), dst->rootLayer(), KisLayerSP(0));

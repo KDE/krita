@@ -35,7 +35,7 @@
 void KisShapeSelectionTest::testAddChild()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP img = new KisImage(new KisUndoAdapter(0), 300, 300, cs, "test");
+    KisImageWSP img = new KisImage(new KisUndoAdapter(0), 300, 300, cs, "test");
 
     KisSelectionSP selection = new KisSelection();
     QVERIFY(selection->hasPixelSelection() == false);

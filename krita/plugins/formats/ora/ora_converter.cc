@@ -75,13 +75,13 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
 }
 
 
-KisImageSP OraConverter::image()
+KisImageWSP OraConverter::image()
 {
     return m_img;
 }
 
 
-KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageSP image)
+KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP image)
 {
 
     if (uri.isEmpty())

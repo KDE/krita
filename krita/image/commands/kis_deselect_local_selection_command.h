@@ -33,14 +33,14 @@ public:
      * @param selectionMask the the selection mask which will get deselected
      * @param parent the parent command
      */
-    KisDeselectLocalSelectionCommand(KisImageSP image, KisSelectionMaskSP selectionMask, QUndoCommand * parent = 0);
+    KisDeselectLocalSelectionCommand(KisImageWSP image, KisSelectionMaskSP selectionMask, QUndoCommand * parent = 0);
     virtual ~KisDeselectLocalSelectionCommand();
 
     virtual void redo();
     virtual void undo();
 
 private:
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisSelectionMaskSP m_selectionMask;
     KisSelectionSP m_newSelection;
     KisSelectionSP m_oldDeselectedSelection;

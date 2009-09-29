@@ -39,7 +39,7 @@ void KisActionRecorderTest::testCreation()
 {
 
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "paintop registry test");
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "paintop registry test");
 
     KisActionRecorder test();
 }
@@ -57,7 +57,7 @@ void KisActionRecorderTest::testFiles()
             // Create an image and the document
             QDomDocument domDoc;
 
-            KisImageSP image = new KisImage(0, 200, 200, KoColorSpaceRegistry::instance()->rgb8(), "");
+            KisImageWSP image = new KisImage(0, 200, 200, KoColorSpaceRegistry::instance()->rgb8(), "");
 
             // Load recorded action
             QString err;

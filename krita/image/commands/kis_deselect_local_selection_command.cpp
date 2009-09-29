@@ -25,7 +25,7 @@
 #include "kis_selection_mask.h"
 #include "kis_pixel_selection.h"
 
-KisDeselectLocalSelectionCommand::KisDeselectLocalSelectionCommand(KisImageSP image, KisSelectionMaskSP selectionMask, QUndoCommand * parent) :
+KisDeselectLocalSelectionCommand::KisDeselectLocalSelectionCommand(KisImageWSP image, KisSelectionMaskSP selectionMask, QUndoCommand * parent) :
         QUndoCommand(i18n("Deselect"), parent)
         , m_image(image)
         , m_selectionMask(selectionMask)

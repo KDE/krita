@@ -161,7 +161,7 @@ void KisPrescaledProjectionTest::testCoordinateConversionRoundTrip()
     KisPrescaledProjection projection;
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 100, 100, cs, "projection test");
+    KisImageWSP image = new KisImage(0, 100, 100, cs, "projection test");
     image->setResolution(300, 300);
 
     KoZoomHandler * viewConverter = new KoZoomHandler();
@@ -193,7 +193,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
 
     // Undo adapter not necessary
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, qimage.width(), qimage.height(), cs, "projection test");
+    KisImageWSP image = new KisImage(0, qimage.width(), qimage.height(), cs, "projection test");
 
     // 300 dpi recalculated to pixels per point (of which there are 72
     // to the inch)
@@ -223,7 +223,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
 
     // Undo adapter not necessary
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, qimage.width(), qimage.height(), cs, "projection test");
+    KisImageWSP image = new KisImage(0, qimage.width(), qimage.height(), cs, "projection test");
 
     // 300 dpi recalculated to pixels per point (of which there are 72
     // to the inch)

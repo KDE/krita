@@ -34,7 +34,7 @@ class KisKraLoadVisitor : public KisNodeVisitor
 public:
 
 
-    KisKraLoadVisitor( KisImageSP img,
+    KisKraLoadVisitor( KisImageWSP img,
                        KoStore *store,
                        QMap<KisNode *, QString> &layerFilenames,
                        const QString & name,
@@ -66,7 +66,7 @@ private:
     QString getLocation( KisNode* node, const QString& suffix = "" );
 
 private:
-    KisImageSP m_img;
+    KisImageWSP m_img;
     KoStore *m_store;
     bool m_external;
     QString m_uri;

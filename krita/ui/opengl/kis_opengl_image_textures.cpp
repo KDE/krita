@@ -77,7 +77,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     m_exposure = 0;
 }
 
-KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageSP image, KoColorProfile *monitorProfile)
+KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile)
 {
     dbgUI << "Creating KisOpenGLImageTextures";
 
@@ -124,7 +124,7 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
     glDeleteTextures(1, &m_backgroundTexture);
 }
 
-KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageSP image, KoColorProfile *monitorProfile)
+KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile)
 {
     KisOpenGL::makeContextCurrent();
 
@@ -158,7 +158,7 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageSP ima
     }
 }
 
-bool KisOpenGLImageTextures::imageCanShareTextures(KisImageSP image)
+bool KisOpenGLImageTextures::imageCanShareTextures(KisImageWSP image)
 {
     return !image->colorSpace()->hasHighDynamicRange() || imageCanUseHDRExposureProgram(image);
 }
@@ -545,7 +545,7 @@ void KisOpenGLImageTextures::setImageTextureFormat()
 #endif
 }
 
-bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageSP image)
+bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
 {
 #ifdef HAVE_GLEW
     if (!image->colorSpace()->hasHighDynamicRange()) {

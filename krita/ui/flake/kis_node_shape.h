@@ -75,7 +75,7 @@ private slots:
 
     void editabilityChanged( );
 
-    KisImageSP getImage() const;
+    KisImageWSP getImage() const;
 
 private:
 

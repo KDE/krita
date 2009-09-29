@@ -124,7 +124,7 @@ void KisOpenGLCanvas2::paintGL()
     glClear(GL_COLOR_BUFFER_BIT);
     glShadeModel(GL_FLAT);
     
-    KisImageSP img = m_d->canvas->image();
+    KisImageWSP img = m_d->canvas->image();
 
     if (!img) return;
 
@@ -279,7 +279,7 @@ void KisOpenGLCanvas2::paintGL()
 
 void KisOpenGLCanvas2::setPixelToViewTransformation(void)
 {
-    KisImageSP img = m_d->canvas->image();
+    KisImageWSP img = m_d->canvas->image();
 
     if (!img) return;
 
@@ -409,7 +409,7 @@ void KisOpenGLCanvas2::documentOffsetMoved(const QPoint & pt)
 }
 
 void KisOpenGLCanvas2::adjustOrigin(){
-    KisImageSP image = m_d->canvas->image();
+    KisImageWSP image = m_d->canvas->image();
     if (image == 0) return;
 
     QSize documentSize(int(ceil(m_d->viewConverter->documentToViewX(image->width()  / image->xRes()))),

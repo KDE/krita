@@ -31,7 +31,7 @@
 void KisCloneLayerTest::testCreation()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisImageWSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     KisLayerSP layer = new KisPaintLayer(image, "clone test", OPACITY_OPAQUE);
 
     KisCloneLayer test(layer, image, "clonetest", OPACITY_OPAQUE

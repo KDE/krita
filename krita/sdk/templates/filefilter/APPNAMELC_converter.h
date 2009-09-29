@@ -42,13 +42,13 @@ class %{APPNAME}Converter : public QObject {
         /**
          * Retrieve the constructed image
          */
-        KisImageSP image();
+        KisImageWSP image();
     private:
         KisImageBuilder_Result decode(const KUrl& uri);
     public slots:
         virtual void cancel();
     private:
-        KisImageSP m_img;
+        KisImageWSP m_img;
         KisDoc2 *m_doc;
         KisUndoAdapter *m_adapter;
         bool m_stop;

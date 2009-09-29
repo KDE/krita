@@ -67,7 +67,7 @@ KisChannelSeparator::KisChannelSeparator(KisView2 * view)
 
 void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
 {
-    KisImageSP image = m_view->image();
+    KisImageWSP image = m_view->image();
     if (!image) return;
 
     KisPaintDeviceSP src = m_view->activeDevice();
@@ -265,7 +265,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 KisDoc2 d;
                 d.prepareForImport();
 
-                KisImageSP dst = KisImageSP(new KisImage(d.undoAdapter(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
+                KisImageWSP dst = KisImageWSP(new KisImage(d.undoAdapter(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
                 d.setCurrentImage(dst);
                 dst->addNode(l->clone().data(), dst->rootLayer());
 

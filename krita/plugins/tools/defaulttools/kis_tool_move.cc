@@ -113,7 +113,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
         QPointF pos = convertToPixelCoord(e);
 
         KisNodeSP node;
-        KisImageSP image = currentImage();
+        KisImageWSP image = currentImage();
         if (!image || !image->rootLayer() || image->rootLayer()->childCount() == 0 ) {
             return;
         }

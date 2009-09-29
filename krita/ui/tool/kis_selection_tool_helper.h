@@ -42,7 +42,7 @@ public:
 
 private:
     KisCanvas2* m_canvas;
-    KisImageSP m_image;
+    KisImageWSP m_image;
     KisLayerSP m_layer;
     QString m_name;
 };

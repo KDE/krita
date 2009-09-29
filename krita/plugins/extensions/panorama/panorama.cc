@@ -188,7 +188,7 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
             KisDoc2 d;
             d.importDocument(fileName);
             KisImageAlignment::ImageInfo pi;
-            KisImageSP img = d.image();
+            KisImageWSP img = d.image();
             if (!img) break;
             pi.bigDevice = new KisPaintDevice(*img->projection());
             pi.bigRect = QRect(0, 0, img->width(), img->height());
@@ -227,7 +227,7 @@ void PanoramaPlugin::slotPreview()
         KisDoc2 d;
         d.importDocument(fileName);
         KisImageAlignment::ImageInfo pi;
-        KisImageSP img = d.image();
+        KisImageWSP img = d.image();
         if (!img) break;
         img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisBoxFilterStrategy);
         pi.bigDevice = img->projection();

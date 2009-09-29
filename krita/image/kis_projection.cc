@@ -29,9 +29,9 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
+#include "kis_merge_visitor.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
-#include "kis_projection_update_strategy.h"
 
 class KisProjection::Private {
     public:
@@ -43,8 +43,6 @@ class KisProjection::Private {
     QRect roi; // Region of interest
     bool useRegionOfInterest; // If false, update all dirty bits, if
     // true, update only region of interest.
-    bool useThreading;
-
 };
 
 KisProjection::KisProjection(KisImageWSP image)
@@ -52,32 +50,30 @@ KisProjection::KisProjection(KisImageWSP image)
         , m_d(new Private)
 {
     m_d->image = image;
-    m_d->updater = new KisImageUpdater();
-    connect(this, SIGNAL(sigUpdateProjection(KisNodeSP,QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP,QRect)));
-
+    m_d->updater = 0;
     updateSettings();
 }
 
 
 KisProjection::~KisProjection()
 {
-    delete m_d->updater;
+    qDebug() << ">>>>>>>>>>>>>>>> deleting KisProjection";
+    m_d->updater->deleteLater();
     delete m_d;
 }
 
 void KisProjection::stop()
 {
     quit();
-    while(isRunning()) {
-        qApp->processEvents();
-    }
-    setTerminationEnabled(true);
-    terminate();
 }
 
 void KisProjection::run()
 {
-    // connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
+    // The image updater is created in the run() method so it lives in the thread, otherwise
+    // startUpdate will be executed in gui thread.
+    m_d->updater = new KisImageUpdater();
+    connect(this, SIGNAL(sigUpdateProjection(KisNodeSP,QRect)), m_d->updater, SLOT(startUpdate(KisNodeSP,QRect)));
+    connect(m_d->updater, SIGNAL(updateDone(QRect)), m_d->image, SLOT(slotProjectionUpdated(QRect)));
     exec(); // start the event loop
 }
 
@@ -102,11 +98,6 @@ void KisProjection::setRegionOfInterest(const QRect & roi)
 void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
 {
     if (!m_d->image)return;
-
-    if (!m_d->useThreading) {
-        node->updateStrategy()->setDirty(rc);
-        m_d->image->slotProjectionUpdated(rc);
-    }
 
     // The chunks do not run concurrently (there is only one KisImageUpdater and only
     // one event loop), but it is still useful, since intermediate results are passed
@@ -155,26 +146,42 @@ void KisProjection::updateSettings()
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->updateRectSize = cfg.readEntry("updaterectsize", 512);
     m_d->useRegionOfInterest = cfg.readEntry("use_region_of_interest", false);
-    m_d->useThreading = cfg.readEntry("use_threading", true);
-}
-
-
-void KisProjection::setRootLayer(KisGroupLayerSP rootLayer)
-{
-    connect(rootLayer, SIGNAL(settingsUpdated()), this, SLOT(updateSettings()));
 }
 
 void KisImageUpdater::startUpdate(KisNodeSP node, const QRect& rc)
 {
-    /**
-     * KisImage::slotProjectionUpdated will be called directly out of
-     * updateStategy at the end of an update
-     *
-     * FIXME: We need to break this circle
-     * layer->image->projection->updater->upd.startegy->layer
-     */
-    node->updateStrategy()->setDirty(rc);
-//    emit updateDone(rc);
+    qDebug() << "updating projection for " << node << " rect" << rc;
+    update(node, 0, rc);
+    emit updateDone(rc);
 }
+
+void KisImageUpdater::update(KisNodeSP node, KisNodeSP child, const QRect & rc)
+{
+    if (!node->visible()) return; // invisible nodes cannot have an effect on the projection
+    QRect dirtyRect = rc;
+
+    // group layers get special treatment so we can optimize if there
+    // are clean adjustmentlayers in the stack
+    KisGroupLayer* grouplayer = dynamic_cast<KisGroupLayer*>(node.data());
+
+    if (grouplayer && child) {
+        grouplayer->setDirtyNode(child);
+    }
+
+    // update the projection of the layer: this may increase the dirty rect
+    if (KisLayer* layer = dynamic_cast<KisLayer*>(node.data())) {
+       dirtyRect |= layer->updateProjection(dirtyRect);
+    }
+
+    if (grouplayer) {
+        grouplayer->setDirtyNode(0);
+    }
+
+    // go up in the stack, recursively.
+    if (node->parent()) {
+        update(node->parent(), node, dirtyRect);
+    }
+}
+
 
 #include "kis_projection.moc"

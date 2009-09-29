@@ -147,7 +147,6 @@ set(kritaimage_LIB_SRCS
    kis_serializable_configuration.cc
    kis_shared.cc
    kis_threaded_applicator.cpp
-   kis_top_down_update_strategy.cpp
    kis_transaction.cc
    kis_transform_worker.cc
    kis_transformation_mask.cpp

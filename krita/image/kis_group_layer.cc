@@ -27,8 +27,7 @@
 #include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
-#include "kis_projection_update_strategy.h"
-
+#include "kis_merge_visitor.h"
 
 class KisGroupLayer::Private
 {
@@ -42,6 +41,7 @@ public:
     KisPaintDeviceSP paintDevice;
     qint32 x;
     qint32 y;
+    KisNodeSP dirtyNode;
 };
 
 KisGroupLayer::KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacity) :
@@ -68,7 +68,6 @@ bool KisGroupLayer::allowAsChild(KisNodeSP node) const
     Q_UNUSED(node);
     return true;
 }
-
 
 const KoColorSpace * KisGroupLayer::colorSpace() const
 {
@@ -137,31 +136,43 @@ KisPaintDeviceSP KisGroupLayer::original() const
     return childOriginal ? childOriginal : m_d->paintDevice;
 }
 
+void KisGroupLayer::setDirtyNode(KisNodeSP node)
+{
+    m_d->dirtyNode = node;
+}
+
 QRect KisGroupLayer::repaintOriginal(KisPaintDeviceSP original,
                                      const QRect& rect)
 {
-    /**
-     * FIXME: A bit of dirty hack
-     */
-    if(original == tryObligeChild())
+    if (original == tryObligeChild()) {
         return rect;
+    }
 
-    /**
-     * FIXME: A temporary crunch for being able to work with
-     * a top-down update strategy
-     */
     original->clear(rect);
-    (void) updateStrategy()->updateGroupLayerProjection(rect, original);
+
+    // find the first adjustmentlayer under the dirty child,
+    // if there is one
+    KisNodeSP startWith = firstChild();
+    if (m_d->dirtyNode) {
+        KisNodeSP node = firstChild();
+        while (node) {
+            if (node.data() == m_d->dirtyNode.data())
+                break;
+            if (node->inherits("KisAdjustmentLayer")) {
+                startWith = node;
+            }
+            node = node->nextSibling();
+        }
+    }
+    KisMergeVisitor visitor(original, rect);
+
+    while (startWith) {
+        startWith->accept(visitor);
+        startWith = startWith->nextSibling();
+    }
 
     return rect;
 
-
-    /**
-     * Everything should have been prepared by KisBottomUpUpdateStrategy,
-     * so do nothing
-     */
-//    Q_UNUSED(original);
-//    return rect;
 }
 
 bool KisGroupLayer::accept(KisNodeVisitor &v)
@@ -203,71 +214,5 @@ void KisGroupLayer::setY(qint32 y)
     }
     m_d->y = y;
 }
-
-/* we can measure the same value with m_d->paintDevice->extent(), right? *
-Then it's better to use KisLayer's implementation
-
-QRect KisGroupLayer::extent() const
-{
-    QRect groupExtent;
-
-    qint32 numChidren = childCount();
-
-    for (qint32 i = 0; i < numChildren; ++i) {
-        groupExtent |= (at(i))->extent();
-    }
-
-    return groupExtent;
-}
-
-QRect KisGroupLayer::exactBounds() const
-{
-<<<<<<< HEAD:krita/image/kis_group_layer.cc
-
-    QRect groupExactBounds;
-
-    for (uint i = 0; i < childCount(); ++i) {
-        groupExactBounds |= (at(i))->exactBounds();
-=======
-    QRect currentNeededRc = rc;
-    if( childCount() == 0 )
-    {
-        m_d->projection->clear();
-    } else {
-        KoProperties props;
-        props.setProperty("visible", true);
-        QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
-
-        KisPaintDeviceSP source;
-
-        if( masks.isEmpty() ) {
-            source = m_d->projection;
-            m_d->projectionUnfiltered = 0; // No masks, make sure this projection memory is freed
-        } else {
-            for( int i = masks.size() - 1; i >= 0 ; --i )
-            {
-                const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>(masks.at(i).data());
-                if (effectMask) {
-                    currentNeededRc |= effectMask->neededRect( currentNeededRc );
-                }
-            }
-            if( !m_d->projectionUnfiltered || !(*m_d->projectionUnfiltered->colorSpace() == *m_d->projection->colorSpace() ) ) {
-                m_d->projectionUnfiltered = new KisPaintDevice(m_d->projection->colorSpace());
-            }
-            source = m_d->projectionUnfiltered;
-        }
-
-        source->clear(currentNeededRc); // needed when layers in the group aren't fully opaque
-        source = updateStrategy()->updateGroupLayerProjection(currentNeededRc, m_d->projection);
-
-        if (masks.size() > 0 ) {
-            applyEffectMasks(source, m_d->projection, rc);
-        }
->>>>>>> master:krita/image/kis_group_layer.cc
-    }
-
-    return groupExactBounds;
-}
-*/
 
 #include "kis_group_layer.moc"

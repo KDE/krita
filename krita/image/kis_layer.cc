@@ -389,7 +389,7 @@ QRect KisLayer::updateProjection(const QRect& rect)
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
 
-    //qDebug()<<name()<<"::updateProjection("<< rect<<") is called";
+qDebug() << name() << "::updateProjection(" << rect << ") is called";
 
     if (!rect.isValid() ||
         !visible() ||

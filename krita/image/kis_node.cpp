@@ -31,8 +31,6 @@
 #include "kis_global.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_visitor.h"
-#include "kis_projection_update_strategy.h"
-#include "kis_top_down_update_strategy.h"
 #include "kis_node_progress_proxy.h"
 
 
@@ -52,11 +50,15 @@ static KisNodeSPStaticRegistrar __registrar;
 class KisNode::Private
 {
 public:
-    Private() : graphListener(0), updateStrategy(0), nodeProgressProxy(0) {}
+    Private()
+        : graphListener(0)
+        , nodeProgressProxy(0)
+    {
+    }
+
     KisNodeWSP parent;
     KisNodeGraphListener * graphListener;
     QList<KisNodeSP> nodes;
-    KisProjectionUpdateStrategy * updateStrategy;
     KisNodeProgressProxy* nodeProgressProxy;
 };
 
@@ -65,8 +67,6 @@ KisNode::KisNode()
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
-
-    init();
 }
 
 
@@ -83,18 +83,11 @@ KisNode::KisNode(const KisNode & rhs)
         children->setParent(this);
         children->setGraphListener(m_d->graphListener);
     }
-    init();
-}
-
-void KisNode::init()
-{
-    m_d->updateStrategy = new KisTopDownUpdateStrategy(this);
 }
 
 KisNode::~KisNode()
 {
     delete m_d->nodeProgressProxy;
-    delete m_d->updateStrategy;
     m_d->nodes.clear();
     delete m_d;
 }
@@ -122,11 +115,6 @@ KisNodeGraphListener * KisNode::graphListener() const
 void KisNode::setGraphListener(KisNodeGraphListener * graphListener)
 {
     m_d->graphListener = graphListener;
-}
-
-KisProjectionUpdateStrategy * KisNode::updateStrategy() const
-{
-    return m_d->updateStrategy;
 }
 
 KisNodeSP KisNode::parent() const

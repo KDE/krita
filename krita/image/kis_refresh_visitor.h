@@ -23,7 +23,9 @@
 #include "kis_node_visitor.h"
 #include "kis_image.h"
 
-
+/**
+ * Update the projections of all nodes in the image.
+ */
 class KisRefreshVisitor : public KisNodeVisitor
 {
 
@@ -38,22 +40,27 @@ public:
     }
 
 public:
+
     bool visit(KisExternalLayer *layer) {
         layer->updateProjection(layer->extent());
         return true;
     }
+
     bool visit(KisGeneratorLayer * layer) {
         layer->updateProjection(layer->extent());
         return true;
     }
+
     bool visit(KisPaintLayer *layer) {
         layer->updateProjection(layer->extent());
         return true;
     }
+
     bool visit(KisAdjustmentLayer* layer) {
         layer->updateProjection(layer->extent());
         return true;
     }
+
     bool visit(KisCloneLayer * layer) {
         layer->updateProjection(layer->extent());
         return true;

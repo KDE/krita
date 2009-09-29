@@ -109,10 +109,6 @@ KisPaintDeviceSP KisSelectionBasedLayer::paintDevice() const
 QRect KisSelectionBasedLayer::repaintOriginal(KisPaintDeviceSP original,
                                               const QRect& rect)
 {
-    /**
-     * Everything should have been prepared by KisTopDownUpdateStrategy
-     * or by a generator so do nothing
-     */
     Q_UNUSED(original);
     return rect;
 }
@@ -141,7 +137,6 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
             KisPainter gc2(tempSelection);
             gc2.setOpacity(temporaryOpacity());
             gc2.setCompositeOp(temporaryCompositeOp());
-            //gc2.setCompositeOp(tempSelection->colorSpace()->compositeOp(COMPOSITE_COPY));
             gc2.bitBlt(rect.topLeft(), temporaryTarget(), rect);
         }
 
@@ -161,7 +156,6 @@ QRect KisSelectionBasedLayer::changeRect(const QRect &rect) const
     /**
      * Warn: we won't call KisNode's copy of changeRect as it's dummy
      */
-
     return m_d->selection ?
         rect & m_d->selection->selectedRect() :
         rect;

@@ -63,24 +63,19 @@ public:
 
     KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;
-    QRect repaintOriginal(KisPaintDeviceSP original,
-                          const QRect& rect);
 
+    /**
+     * If a dirty node is set, repaintOriginal can optimize by checking
+     * whether there is an adjustment layer in the stack, under the dirty
+     * node.
+     *
+     * XXX: protect by a mutex?
+     */
+    void setDirtyNode(KisNodeSP node);
+
+    QRect repaintOriginal(KisPaintDeviceSP original, const QRect& rect);
 
     void setColorSpace(const KoColorSpace* colorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
-
-    /**
-       Return the united extents of all layers in this group layer;
-       this function is _recursive_.
-     */
-//    QRect extent() const;
-
-    /**
-       Return the exact bounding rect of all layers in this group
-       layer; this function is _recursive_ and can therefore be really
-       slow.
-     */
-//    QRect exactBounds() const;
 
     qint32 x() const;
     qint32 y() const;
@@ -92,11 +87,6 @@ public:
        @return true if the operation succeeded, false if it failed.
     */
     bool accept(KisNodeVisitor &v);
-signals:
-
-//    void regionDirtied(const QRegion &);
-//    void rectDirtied(const QRect &);
-//    void settingsUpdated();
 
 protected:
     KisPaintDeviceSP tryObligeChild() const;

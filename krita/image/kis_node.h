@@ -27,7 +27,6 @@ class KoProperties;
 
 class KisNodeVisitor;
 class KisNodeGraphListener;
-class KisProjectionUpdateStrategy;
 class KisNodeProgressProxy;
 
 /**
@@ -72,12 +71,6 @@ public:
      * this node
      */
     virtual bool allowAsChild(KisNodeSP) const = 0;
-
-    /**
-     * @return the update strategy
-     */
-    KisProjectionUpdateStrategy * updateStrategy() const;
-
 
     /**
      * Set the entire node extent dirty; this percolates up to parent
@@ -239,8 +232,6 @@ protected:
 
 
 private:
-
-    void init();
 
     friend class KisNodeFacade;
     friend class KisNodeTest;

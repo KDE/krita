@@ -28,6 +28,7 @@
 class QRegion;
 class QRect;
 
+
 /**
  * A thread that owns an updater object; the object is
  * connected to a KisImage instance. Every time we need
@@ -57,7 +58,6 @@ public:
     void updateProjection(KisNodeSP node, const QRect& rc);
     void setRegionOfInterest(const QRect & roi);
     void updateSettings();
-    void setRootLayer(KisGroupLayerSP rootLayer);
     void stop();
 
 signals:
@@ -74,7 +74,10 @@ private:
 
 };
 
-
+/**
+ * while travelling down to the rootlayer, we update the projection
+ * of every node.
+ */
 class KisImageUpdater : public QObject
 {
     Q_OBJECT
@@ -86,6 +89,10 @@ public slots:
 signals:
 
     void updateDone(const QRect& rc);
+
+private:
+
+    void update(KisNodeSP node, KisNodeSP child, const QRect& rc);
 
 };
 

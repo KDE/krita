@@ -67,7 +67,6 @@
 #include "kis_transform_visitor.h"
 #include "kis_types.h"
 #include "kis_crop_visitor.h"
-#include "kis_projection_update_strategy.h"
 #include "kis_meta_data_merge_strategy.h"
 
 #include "kis_refresh_visitor.h"
@@ -143,12 +142,15 @@ KisImage::KisImage(const KisImage& rhs)
         Q_CHECK_PTR(m_d->nserver);
 
         m_d->projection = new KisProjection(this);
+        m_d->projection->start();
     }
 }
+
 KisImage::~KisImage()
 {
+    qDebug() << ">>>>>>>>>>>>>>>> deleting KisImage";
     m_d->projection->stop();
-    delete m_d->projection;
+    m_d->projection->deleteLater();
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;
@@ -312,6 +314,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
     m_d->recorder = new KisActionRecorder();
 
     m_d->projection = new KisProjection(this);
+    m_d->projection->start();
 }
 
 bool KisImage::locked() const
@@ -322,11 +325,10 @@ bool KisImage::locked() const
 void KisImage::lock()
 {
     if (!locked()) {
-        if (m_d->rootLayer) {
-            m_d->rootLayer->updateStrategy()->lock();
+        if (m_d->projection) {
+            m_d->projection->lock();
         }
         m_d->sizeChangedWhileLocked = false;
-//         blockSignals(true);
     }
     m_d->lockCount++;
 }
@@ -339,15 +341,13 @@ void KisImage::unlock()
         m_d->lockCount--;
 
         if (m_d->lockCount == 0) {
-//             blockSignals(false);
-
             if (m_d->sizeChangedWhileLocked) {
                 emit sigSizeChanged(m_d->width, m_d->height);
             }
 
-            if (m_d->rootLayer)
-                m_d->rootLayer->updateStrategy()->unlock();
-
+            if (m_d->projection) {
+                m_d->projection->unlock();
+            }
         }
     }
 }
@@ -1059,7 +1059,6 @@ void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
     m_d->rootLayer = rootLayer;
     m_d->rootLayer->disconnect();
     m_d->rootLayer->setGraphListener(this);
-    m_d->rootLayer->updateStrategy()->setImage(this);
     setRoot(m_d->rootLayer.data());
 }
 
@@ -1145,15 +1144,14 @@ void KisImage::refreshGraph()
 
 void KisImage::slotProjectionUpdated(const QRect & rc)
 {
+    qDebug() << "slotProjectionUpdated" << rc;
     emit sigImageUpdated(rc);
 }
 
 void KisImage::updateProjection(KisNodeSP node, const QRect& rc)
 {
+    qDebug() << "updateProjection" << node << rc;
     if (!locked()) {
-        if (!m_d->projection->isRunning()) {
-            m_d->projection->start();
-        }
         m_d->projection->updateProjection(node, rc);
     }
 }

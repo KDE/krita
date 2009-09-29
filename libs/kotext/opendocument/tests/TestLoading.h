@@ -61,7 +61,8 @@ private:
     QTextDocument *documentFromScript(const QString &script);
     QTextDocument *documentFromOdt(const QString &odt);
     QString documentToOdt(QTextDocument *);
-    void addData();
+    enum LoadSave { TestSavingData, TestLoadingData };
+    void addData(LoadSave loadSave);
 
     // Functions that help compare two QTextDocuments.
     bool compareFragments(const QTextFragment &actualFragment, const QTextFragment &expectedFragment);

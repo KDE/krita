@@ -788,7 +788,7 @@ void TestLoading::cleanup()
 {
 }
 
-void TestLoading::addData()
+void TestLoading::addData(LoadSave loadSave)
 {
     QTest::newRow("bulletedList") << "TextContents/Lists/bulletedList";
     QTest::newRow("continueNumbering") << "TextContents/Lists/continueNumbering";
@@ -811,9 +811,11 @@ void TestLoading::addData()
 
     QTest::newRow("fontColors") << "TextContents/TextFormatting/fontColors";
 
-    QTest::newRow("tableWidth") << "FormattingProperties/TableFormattingProperties/tableWidth";
-    QTest::newRow("tableTopAndBottomMargin") << "FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin";
-    QTest::newRow("tableLeftAndRightMargin") << "FormattingProperties/TableFormattingProperties/tableLeftAndRightMargin";
+    if (loadSave == TestLoadingData) {
+        QTest::newRow("tableWidth") << "FormattingProperties/TableFormattingProperties/tableWidth";
+        QTest::newRow("tableTopAndBottomMargin") << "FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin";
+        QTest::newRow("tableLeftAndRightMargin") << "FormattingProperties/TableFormattingProperties/tableLeftAndRightMargin";
+    }
 
     // TODO: Write tests for these.
     //QTest::newRow("borderModelProperty") << "FormattingProperties/TableFormattingProperties/borderModelProperty";
@@ -1038,7 +1040,7 @@ void TestLoading::testLoading_data()
 {
     QTest::addColumn<QString>("testcase");
 
-    addData();
+    addData(TestLoadingData);
 }
 
 void TestLoading::testLoading()
@@ -1069,7 +1071,7 @@ void TestLoading::testSaving_data()
 {
     QTest::addColumn<QString>("testcase");
 
-    addData();
+    addData(TestSavingData);
 }
 
 void TestLoading::testSaving()

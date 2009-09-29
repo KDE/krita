@@ -297,7 +297,7 @@ bool Layout::addLine(QTextLine &line)
     return false;
 }
 
-extern int qt_defaultDpiX();
+extern int qt_defaultDpiY();
 
 bool Layout::nextParag()
 {
@@ -420,7 +420,7 @@ bool Layout::nextParag()
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     qreal tabStopDistance =  m_format.property(KoParagraphStyle::TabStopDistance).toDouble();
     if (tabStopDistance > 0)
-        option.setTabStop(tabStopDistance * qt_defaultDpiX() / 72.);
+        option.setTabStop(tabStopDistance * qt_defaultDpiY() / 72.);
     else
         option.setTabStop(m_defaultTabSizing);
 
@@ -431,7 +431,7 @@ bool Layout::nextParag()
         foreach(const QVariant &tv, qvariant_cast<QList<QVariant> >(variant)) {
             KoText::Tab koTab = tv.value<KoText::Tab>();
             QTextOption::Tab tab;
-            tab.position = koTab.position * qt_defaultDpiX() / 72.; // convertion here is required because Qt thinks in device units and we don't
+            tab.position = koTab.position * qt_defaultDpiY() / 72.; // convertion here is required because Qt thinks in device units and we don't
             tab.type = koTab.type;
             tab.delimiter = koTab.delimiter;
             tabs.append(tab);

@@ -149,7 +149,7 @@ KisPainter::~KisPainter()
 {
     end();
     delete d->paintOp;
-    if (d->maskPainter != 0)    delete d->maskPainter;
+    delete d->maskPainter;
     delete d;
 }
 
@@ -782,13 +782,17 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
             qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, MASK_IMAGE_WIDTH);
             qint32 rectHeight = qMin(fillRect.y() + fillRect.height() - y, MASK_IMAGE_HEIGHT);
 
-            KisRectIterator rectIt = polygonMask->createRectIterator(x, y, rectWidth, rectHeight);
+            KisHLineIterator lineIt = polygonMask->createHLineIterator(x,y,rectWidth);
 
-            
-            while (!rectIt.isDone()) {
-                (*rectIt.rawData()) = qRed(d->polygonMaskImage.pixel(rectIt.x() - x, rectIt.y() - y));
-                ++rectIt;
+            for (int row = y; row < y + rectHeight; row++) {
+            QRgb* line = reinterpret_cast<QRgb*>(d->polygonMaskImage.scanLine(row - y));
+                while (!lineIt.isDone()) {
+                    (*lineIt.rawData()) = qRed(line[lineIt.x() - x]);
+                    ++lineIt;
+                }
+                lineIt.nextRow();
             }
+            
         }
     }
 

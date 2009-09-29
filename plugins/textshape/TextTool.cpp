@@ -1013,7 +1013,9 @@ void TextTool::keyPressEvent(QKeyEvent *event)
     if (m_caretTimer.isActive()) { // make the caret not blink but decide on the action if its visible or not.
         m_caretTimer.stop();
         m_caretTimer.start();
-        m_caretTimerState = moveOperation != QTextCursor::NoMove;
+        m_caretTimerState = moveOperation != QTextCursor::NoMove; // turn caret off while typing
+        if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) // except the enter key
+            m_caretTimerState = true;
     }
 
     updateSelectionHandler();

@@ -79,13 +79,17 @@ void KisProjection::run()
 
 void KisProjection::lock()
 {
-    m_d->updater->blockSignals(true);
+    if (m_d->updater) {
+        m_d->updater->blockSignals(true);
+    }
     blockSignals(true);
 }
 
 void KisProjection::unlock()
 {
-    m_d->updater->blockSignals(false);
+    if (m_d->updater) {
+        m_d->updater->blockSignals(false);
+    }
     blockSignals(false);
 }
 

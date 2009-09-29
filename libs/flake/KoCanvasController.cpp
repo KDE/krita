@@ -70,6 +70,7 @@ KoCanvasController::KoCanvasController(QWidget *parent)
         : QAbstractScrollArea(parent),
         d(new Private())
 {
+    setCanvasMode(AlignTop);
     setFrameShape(NoFrame);
     d->viewportWidget = new Viewport(this);
     setViewport(d->viewportWidget);

@@ -269,12 +269,14 @@ void SprayBrush::paintCircle(KisPainter& painter, qreal x, qreal y, int radius, 
 
 
 void SprayBrush::paintEllipse(KisPainter& painter, qreal x, qreal y, int a, int b, qreal angle, int steps) {
-    QVector <QPointF> points;
+    QPainterPath path;
     qreal beta = -angle;
     qreal sinbeta = sin(beta);
     qreal cosbeta = cos(beta);
 
-    for (int i = 0; i < 360; i += 360.0 / steps)
+    path.moveTo(x + a * cosbeta, y + a * sinbeta);
+    qreal step = 360.0 / steps;
+    for (int i = step; i < 360; i += step)
     {
         qreal alpha = i * (M_PI / 180) ;
         qreal sinalpha = sin(alpha);
@@ -283,8 +285,9 @@ void SprayBrush::paintEllipse(KisPainter& painter, qreal x, qreal y, int a, int 
         qreal X = x + (a * cosalpha * cosbeta - b * sinalpha * sinbeta);
         qreal Y = y + (a * cosalpha * sinbeta + b * sinalpha * cosbeta);
  
-        points.append( QPointF(X, Y) );
+        path.lineTo(X,Y);
    }
+   //path.closeSubpath();
 
     if (m_randomOpacity)
     {
@@ -292,11 +295,11 @@ void SprayBrush::paintEllipse(KisPainter& painter, qreal x, qreal y, int a, int 
     }
 
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-    painter.paintPolygon( points );
+    painter.fillPainterPath(path);
 }
 
 void SprayBrush::paintRectangle(KisPainter& painter, qreal x, qreal y, int width, int height, qreal angle, int steps) {
-    QVector <QPointF> points;
+    QPainterPath path;
     QTransform transform;
 
     qreal halfWidth = width / 2.0;
@@ -307,16 +310,16 @@ void SprayBrush::paintRectangle(KisPainter& painter, qreal x, qreal y, int width
     transform.rotateRadians( angle );
     // top left
     transform.map( - halfWidth,  - halfHeight, &tx, &ty);
-    points.append(QPointF(tx + x,ty + y));
+    path.moveTo(QPointF(tx + x,ty + y));
     // top right
     transform.map( + halfWidth,  - halfHeight, &tx, &ty);
-    points.append(QPointF(tx + x,ty + y));
+    path.lineTo(QPointF(tx + x,ty + y));
     // bottom right
     transform.map( + halfWidth,  + halfHeight, &tx, &ty);
-    points.append(QPointF(tx + x,ty + y));
+    path.lineTo(QPointF(tx + x,ty + y));
     // botom left 
     transform.map( - halfWidth,  + halfHeight, &tx, &ty);
-    points.append(QPointF(tx + x,ty + y));
+    path.lineTo(QPointF(tx + x,ty + y));
 
     if (m_randomOpacity)
     {
@@ -324,7 +327,7 @@ void SprayBrush::paintRectangle(KisPainter& painter, qreal x, qreal y, int width
     }
 
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-    painter.paintPolygon( points );
+    painter.fillPainterPath( path );
 }
 
 void SprayBrush::paintDistanceMap(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor){

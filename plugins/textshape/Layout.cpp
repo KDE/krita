@@ -426,10 +426,9 @@ bool Layout::nextParag()
 
     // tabs
     QList<QTextOption::Tab> tabs;
-    QList<KoText::Tab> koTabs;
     QVariant variant = m_format.property(KoParagraphStyle::TabPositions);
-    if (! variant.isNull()) {
-        foreach(const QVariant & tv, qvariant_cast<QList<QVariant> >(variant)) {
+    if (!variant.isNull()) {
+        foreach(const QVariant &tv, qvariant_cast<QList<QVariant> >(variant)) {
             KoText::Tab koTab = tv.value<KoText::Tab>();
             QTextOption::Tab tab;
             tab.position = koTab.position * qt_defaultDpiX() / 72.; // convertion here is required because Qt thinks in device units and we don't

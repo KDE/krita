@@ -85,6 +85,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         , KoFrameShape(KoXmlNS::draw, "text-box")
         , m_footnotes(0)
         , m_demoText(false)
+        ,m_pageProvider(0)
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();

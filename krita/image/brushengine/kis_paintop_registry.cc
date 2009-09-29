@@ -88,7 +88,6 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPai
 {
     Q_ASSERT( preset );
     Q_ASSERT( painter );
-    Q_ASSERT( image );
 
     if (!preset) return 0;
 

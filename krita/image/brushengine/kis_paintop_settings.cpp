@@ -76,17 +76,16 @@ QImage KisPaintOpSettings::sampleStroke(const QSize& size )
     int width = size.width();
     int height = size.height();
 
-    KisImageSP img = new KisImage(0, width, height, cs, "temporary for stroke sample");
-    KisLayerSP layer = new KisPaintLayer(img, "temporary for stroke sample", OPACITY_OPAQUE, cs);
-    
+    KisLayerSP layer = new KisPaintLayer(0, "temporary for stroke sample", OPACITY_OPAQUE, cs);
+
     KisPainter painter(layer->paintDevice());
     painter.setPaintColor(KoColor(Qt::black, cs) );
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setSettings( this ); // This clones
     preset->settings()->setNode( layer );
-    
-    painter.setPaintOpPreset( preset, img);
+
+    painter.setPaintOpPreset(preset, 0);
 
     QPointF p1(0                , 7.0/12.0 * height);
     QPointF p2(1.0/2.0 * width  , 7.0/12.0 * height);

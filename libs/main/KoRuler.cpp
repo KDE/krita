@@ -156,10 +156,10 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
         qreal x;
         if (d->rightToLeft)
             x = d->viewConverter->documentToViewX(d->activeRangeEnd - t.position)
-                    + qMin(0, d->offset);
+                    + d->offset;
         else
             x = d->viewConverter->documentToViewX(d->activeRangeStart + t.position)
-                    + qMin(0, d->offset);
+                    + d->offset;
 
         polygon.clear();
         switch (t.type) {

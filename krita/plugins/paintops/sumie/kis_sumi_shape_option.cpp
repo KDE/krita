@@ -39,7 +39,7 @@ KisSumiShapeOption::KisSumiShapeOption()
     connect(m_options->oneDimBrushBtn,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
     connect(m_options->twoDimBrushBtn,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
     connect(m_options->mousePressureCBox,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->radiusSpinBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->radiusSpinBox,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
     connect(m_options->sigmaSpinBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
     connect(m_options->rndBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
     connect(m_options->scaleBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));

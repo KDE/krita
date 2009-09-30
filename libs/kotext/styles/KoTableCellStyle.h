@@ -168,7 +168,7 @@ public:
      * @bounds the bounding rectangle to draw.
      */
     void paintBorders(QPainter &painter, const QRectF &bounds) const;
-    
+
     /**
      * Paint the top border.
      *
@@ -178,7 +178,7 @@ public:
      * @w the width.
      */
     void drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w) const;
-    
+
     /**
      * Paint the border that is shared.
      * It only draws the thickest and it always draws it below the y position.
@@ -189,7 +189,7 @@ public:
      * @w the width.
      */
     void drawSharedHorizontalBorder(QPainter &painter, const KoTableCellStyle &styleBelow,  qreal x, qreal y, qreal w) const;
-    
+
     /**
      * Paint the bottom border.
      *
@@ -209,7 +209,7 @@ public:
      * @h the height.
      */
     void drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h) const;
-    
+
     /**
      * Paint the border that is shared.
      * It only draws the thickest and it always draws it below the y position.
@@ -220,7 +220,7 @@ public:
      * @h the height.
      */
     void drawSharedVerticalBorder(QPainter &painter, const KoTableCellStyle &styleRight,  qreal x, qreal y, qreal h) const;
-    
+
     /**
      * Paint the rightmost border.
      *
@@ -242,11 +242,6 @@ public:
     void setRightPadding(qreal padding);
     void setBottomPadding(qreal padding);
     void setPadding(qreal padding);
-
-    /// duplicated property from QTextBlockFormat
-    void setAlignment(Qt::Alignment alignment);
-    /// duplicated property from QTextBlockFormat
-    Qt::Alignment alignment() const;
 
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);

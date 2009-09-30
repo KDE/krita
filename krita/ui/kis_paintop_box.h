@@ -68,9 +68,9 @@ public:
 
 private slots:
 
-    void addItem(const KoID & paintop, const QString & category = "");
+    void updatePaintops();
 
-private slots:
+public slots:
 
     void slotItemSelected(int index);
     void colorSpaceChanged(const KoColorSpace *cs);
@@ -88,6 +88,8 @@ private:
     KisPaintOpPresetSP activePreset(const KoID & paintop, const KoInputDevice & inputDevice);
 
 private:
+
+    const KoColorSpace* m_colorspace;
 
     KisCanvasResourceProvider *m_resourceProvider;
     QComboBox* m_cmbPaintops;

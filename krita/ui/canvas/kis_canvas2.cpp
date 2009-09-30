@@ -169,18 +169,14 @@ KoShapeManager* KisCanvas2::shapeManager() const
     if (activeLayer) {
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(activeLayer.data());
         if (shapeLayer) {
-            dbgUI << "Current shape manager belongs to a shape layer " << shapeLayer->shapeManager();
             return shapeLayer->shapeManager();
         }
         if (activeLayer->selection() && activeLayer->selection()->hasShapeSelection()) {
             KoShapeManager* m = static_cast<KisShapeSelection*>(activeLayer->selection()->shapeSelection())->shapeManager();
-            dbgUI << "Current shape manager belongs to a shape selection " << m;
             return m;
 
         }
     }
-    dbgUI << "current shape manager belongs to the main canvas " << m_d->shapeManager;
-
     return m_d->shapeManager;
 }
 
@@ -259,7 +255,7 @@ void KisCanvas2::createOpenGLCanvas()
         setCanvasWidget( canvasWidget );
         m_d->currentCanvasIsOpenGL = true;
         m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
-   
+
         connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&) ), this, SLOT(updateRulers()));
 
     } else {
@@ -316,8 +312,8 @@ void KisCanvas2::updateCanvasProjection(const QRect & rc)
 
     QRect vRect = m_d->prescaledProjection->updateCanvasProjection(rc);
     if(!vRect.isEmpty()) {
-	vRect.translate(m_d->canvasWidget->documentOrigin());
-	m_d->canvasWidget->widget()->update(vRect);
+        vRect.translate(m_d->canvasWidget->documentOrigin());
+        m_d->canvasWidget->widget()->update(vRect);
         //m_d->canvasWidget->widget()->update();
     }
 }

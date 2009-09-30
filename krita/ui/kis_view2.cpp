@@ -82,6 +82,7 @@
 #include "kis_selection_manager.h"
 #include "kis_image_manager.h"
 #include "kis_control_frame.h"
+#include "kis_paintop_box.h"
 #include "kis_birdeye_box.h"
 #include "kis_layer_box.h"
 #include "kis_layer_manager.h"
@@ -510,7 +511,6 @@ void KisView2::createGUI()
     KisBirdEyeBoxFactory birdeyeFactory(this);
     m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>(createDockWidget(&birdeyeFactory));
 
-
     KisPaletteDockerFactory paletteDockerFactory(this);
     createDockWidget(&paletteDockerFactory);
 
@@ -521,12 +521,22 @@ void KisView2::createGUI()
     connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),
             m_d->statusBar, SLOT(documentMousePositionChanged(const QPointF &)));
 
+    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            m_d->resourceProvider, SLOT(slotNodeActivated(KisNodeSP)));
+
     m_d->controlFrame = new KisControlFrame(this);
+
+    connect(layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
+            m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
+
+    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
+
+    connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
+            m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(const KoInputDevice &)));
 
     show();
 
-    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
-            m_d->resourceProvider, SLOT(slotNodeActivated(KisNodeSP)));
 }
 
 
@@ -620,6 +630,12 @@ void KisView2::connectCurrentImage()
 
     if (m_d->birdEyeBox)
         m_d->birdEyeBox->setImage(img);
+
+    if (m_d->controlFrame) {
+        dbgUI << "connecting image colorchanged to paintopbox";
+        connect(img.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
+    }
+
 
 }
 

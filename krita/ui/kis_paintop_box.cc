@@ -98,25 +98,16 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     for (QList<KoID>::Iterator it = keys.begin(); it != keys.end(); ++it) {
         // add all paintops, and show/hide them afterwards
-        addItem(*it);
+        m_paintops.append(*it);
     }
+    m_colorspace = view->image()->colorSpace();
+    updatePaintops();
 
     setCurrentPaintop(defaultPaintop(KoToolManager::instance()->currentInputDevice()));
 
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
-    connect(view->layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
-            this, SLOT(colorSpaceChanged(const KoColorSpace*)));
-
-    connect(view->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)),
-            SLOT(slotCurrentNodeChanged(KisNodeSP)));
-
-    connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
-            SLOT(slotInputDeviceChanged(const KoInputDevice &)));
-
-
-    connect(m_presetsPopup, SIGNAL( savePresetClicked()),
-            this, SLOT( slotSaveActivePreset()));
+    connect(m_presetsPopup, SIGNAL( savePresetClicked()), this, SLOT( slotSaveActivePreset()));
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -131,48 +122,34 @@ KisPaintopBox::~KisPaintopBox()
     }
 }
 
-void KisPaintopBox::addItem(const KoID & paintop, const QString & /*category*/)
-{
-    dbgUI << "KisPaintopBox::addItem " << paintop;
-    m_paintops.append(paintop);
-}
-
 void KisPaintopBox::slotItemSelected(int index)
 {
     dbgUI << "KisPaintopBox::slotItemSelected " << index;
-
-
     if (index < m_displayedOps.count()) {
         KoID paintop = m_displayedOps.at(index);
         dbgUI << "\t\t selected " << paintop;
         setCurrentPaintop(paintop);
-
-        /*
-        m_cmbPaintopPresets->clear();
-        KisPaintOpPresetSP preset =
-            activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice());
-        m_cmbPaintopPresets->addItem(preset->name(), QVariant::fromValue<KisPaintOpPresetSP>(preset));
-
-
-        foreach(KisPaintOpPreset* preset,
-                KisResourceServerProvider::instance()->paintOpPresetServer()->resources()) {
-            dbgUI << "\t\t " << preset << ", " << preset->paintOp();
-            if (preset->paintOp() == paintop) {
-                m_cmbPaintopPresets->addItem(preset->name(), QVariant::fromValue<KisPaintOpPresetSP>(preset));
-            }
-        }
-        */
     }
 }
 
 void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)
 {
-    dbgUI << "KisPaintopBox::colorSpaceChanged " << cs;
+    dbgUI << "KisPaintopBox::colorSpaceChanged " << m_colorspace << "to" << cs;
+    if (cs != m_colorspace) {
+        m_colorspace = cs;
+        updatePaintops();
+    }
+}
+
+void KisPaintopBox::updatePaintops()
+{
+
+    dbgUI << "updating paintop list";
     m_displayedOps.clear();
     m_cmbPaintops->clear();
 
     foreach(const KoID & paintopId, m_paintops) {
-        if (KisPaintOpRegistry::instance()->userVisible(paintopId, cs)) {
+        if (KisPaintOpRegistry::instance()->userVisible(paintopId, m_colorspace)) {
             QPixmap pm = paintopPixmap(paintopId);
 
             if (pm.isNull()) {
@@ -302,6 +279,15 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 
     preset->settings()->setNode( m_resourceProvider->currentNode() );
     m_resourceProvider->slotPaintOpPresetActivated(preset);
+
+    int index = m_displayedOps.indexOf(paintop);
+
+    if (index == -1) {
+        // Must change the paintop as the current one is not supported
+        // by the new colorspace.
+        index = 0;
+    }
+    m_cmbPaintops->setCurrentIndex(index);
 
     m_activePreset = preset;
     m_presetWidget->setPreset(m_activePreset);

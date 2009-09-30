@@ -87,7 +87,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     m_mode = XOR_MODE;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotSelectCursorStyle()) );
-    
+
 }
 
 KisTool::~KisTool()
@@ -99,7 +99,7 @@ void KisTool::activate(bool)
 {
 
     slotSelectCursorStyle();
-    
+
     d->currentFgColor = m_canvas->resourceProvider()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
     d->currentBgColor = m_canvas->resourceProvider()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
     d->currentPattern = static_cast<KisPattern *>(m_canvas->resourceProvider()->
@@ -117,10 +117,6 @@ void KisTool::activate(bool)
 
     d->currentNode = m_canvas->resourceProvider()->
                      resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    if (d->currentNode)
-        dbgUI << "Activating tool " << toolId() << " with node " << d->currentNode->name();
-    else
-        dbgUI << "Activating tool " << toolId() << " with no node ";
     d->currentExposure = static_cast<float>(m_canvas->resourceProvider()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(m_canvas->resourceProvider()->
@@ -157,8 +153,6 @@ void KisTool::resourceChanged(int key, const QVariant & v)
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>());
     case(KisCanvasResourceProvider::CurrentKritaNode):
         d->currentNode = (v.value<KisNodeSP>());
-        if (d->currentNode)
-            dbgUI << " node changed to " << d->currentNode->name();
     default:
         ;
         // Do nothing
@@ -387,7 +381,7 @@ void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path)
             painter->drawPath(path);
             break;
         }
-        default: 
+        default:
             break;
     }
 }

@@ -25,10 +25,10 @@ class QImage;
 class QString;
 class QRect;
 class QRectF;
-class QDomElement;
 class KoViewConverter;
 class KoXmlWriter;
 class KoFilterEffectRenderContext;
+class KoXmlElement;
 
 #include "flake_export.h"
 #include <QtCore/QList>
@@ -140,7 +140,7 @@ public:
      * @param matrix matrix to transform to bounding box coordinates
      * @return true if loading was successful, else false
      */
-    virtual bool load(const QDomElement &element, const QMatrix &matrix = QMatrix()) = 0;
+    virtual bool load(const KoXmlElement &element, const QMatrix &matrix = QMatrix()) = 0;
 
     /**
      * Writes custom data to given xml element.

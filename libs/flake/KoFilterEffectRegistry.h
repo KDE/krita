@@ -23,10 +23,11 @@
 #include <KoGenericRegistry.h>
 #include <KoFilterEffectFactory.h>
 #include <QtCore/QObject>
-#include <QtXml/QDomElement>
 #include <QtGui/QMatrix>
 
 #include "flake_export.h"
+
+class KoXmlElement;
 
 class FLAKE_EXPORT KoFilterEffectRegistry : public QObject, public KoGenericRegistry<KoFilterEffectFactory*>
 {
@@ -47,7 +48,7 @@ public:
      * @param matrix the matrix for converting number attributes
      * @return the created filter effect if successful, else 0
      */
-    KoFilterEffect * createFilterEffectFromXml(const QDomElement & element, const QMatrix &matrix = QMatrix());
+    KoFilterEffect * createFilterEffectFromXml(const KoXmlElement & element, const QMatrix &matrix = QMatrix());
 
 private:
     KoFilterEffectRegistry();

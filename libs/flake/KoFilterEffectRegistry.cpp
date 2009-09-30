@@ -21,6 +21,7 @@
 #include "KoFilterEffect.h"
 #include <KoPluginLoader.h>
 #include <KGlobal>
+#include <KoXmlReader.h>
 
 KoFilterEffectRegistry::KoFilterEffectRegistry()
 {
@@ -50,7 +51,7 @@ KoFilterEffectRegistry* KoFilterEffectRegistry::instance()
     return s_instance;
 }
 
-KoFilterEffect * KoFilterEffectRegistry::createFilterEffectFromXml(const QDomElement & element, const QMatrix &matrix)
+KoFilterEffect * KoFilterEffectRegistry::createFilterEffectFromXml(const KoXmlElement & element, const QMatrix &matrix)
 {
     KoFilterEffectFactory * factory = get(element.tagName());
     if (!factory)

@@ -141,6 +141,7 @@ QWidget *DateVariable::createOptionsWidget()
     switch (m_type) {
     case Fixed:
         return new FixedDateFormat(this);
+    default:;
     }
     return 0;
 }

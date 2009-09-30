@@ -29,8 +29,9 @@ ActionHelper::ActionHelper(QObject *parent, QAction *original, QAction *shadow, 
 }
 
 void ActionHelper::originalTriggered(bool on) {
-    if (m_blockSignals) return;
-    if (m_shadow->isCheckable() && m_shadow->isChecked() == on || !on && m_partOfGroup)
+    if (m_blockSignals)
+        return;
+    if ((m_shadow->isCheckable() && m_shadow->isChecked() == on) || (!on && m_partOfGroup))
         return;
     m_blockSignals = true;
     m_shadow->trigger();

@@ -487,8 +487,6 @@ void KisView2::slotLoadingFinished()
     m_d->zoomManager->zoomController()->setAspectMode(true);
 
     updateGUI();
-//     dbgUI <<"image finished loading, active layer:" << img->activeLayer() <<", root layer:" << img->rootLayer();
-
 }
 
 void KisView2::createGUI()
@@ -608,8 +606,6 @@ void KisView2::connectCurrentImage()
 {
     KisImageWSP img = image();
     if (img) {
-//         dbgUI <<"Going to connect current image";
-
         if (m_d->statusBar) {
             connect(img.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
             connect(img.data(), SIGNAL(sigProfileChanged(KoColorProfile *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
@@ -632,10 +628,8 @@ void KisView2::connectCurrentImage()
         m_d->birdEyeBox->setImage(img);
 
     if (m_d->controlFrame) {
-        dbgUI << "connecting image colorchanged to paintopbox";
         connect(img.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
     }
-
 
 }
 

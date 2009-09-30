@@ -1149,6 +1149,7 @@ void KisImage::slotProjectionUpdated(const QRect & rc)
 void KisImage::updateProjection(KisNodeSP node, const QRect& rc)
 {
     if (!locked()) {
+        dbgImage << "Updating node " << node << "rect" << rc;
         m_d->projection->updateProjection(node, rc);
     }
 }

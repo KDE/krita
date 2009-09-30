@@ -18,7 +18,6 @@
 
 #include "kis_node_manager.h"
 
-
 #include <kactioncollection.h>
 #include <kaction.h>
 
@@ -275,25 +274,29 @@ void KisNodeManager::activateNode(KisNodeSP node)
     Q_ASSERT(m_d->view);
     Q_ASSERT(m_d->view->canvasBase());
     Q_ASSERT(m_d->view->canvasBase()->globalShapeManager());
+
+    if (node && m_d->activeNode) {
+        if (node == m_d->activeNode) {
+            return;
+        }
+    }
+
     // Set the selection on the shape manager to the active layer
     // and set call KoSelection::setActiveLayer( KoShapeLayer* layer )
     // with the parent of the active layer.
-
     KoSelection * selection = m_d->view->canvasBase()->globalShapeManager()->selection();
     Q_ASSERT(selection);
     selection->deselectAll();
 
     if(! node )
     {
-        dbgUI << " activate null node";
         selection->setActiveLayer(0);
         emit sigNodeActivated(0);
         m_d->activeNode = 0;
         m_d->maskManager->activateMask(0);
         m_d->layerManager->activateLayer(0);
     } else {
-        dbgUI << " activated node: " << node->name() ;
-
+        dbgUI << " activated node: " << node->name();
 
         KoShape * shape = m_d->view->document()->shapeForNode(node);
         if (!shape) {

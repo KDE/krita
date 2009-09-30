@@ -66,10 +66,6 @@ public:
 
     ~KisPaintopBox();
 
-private slots:
-
-    void updatePaintops();
-
 public slots:
 
     void slotItemSelected(int index);
@@ -86,6 +82,10 @@ private:
     void setCurrentPaintop(const KoID & paintop);
     KoID defaultPaintop(const KoInputDevice & inputDevice);
     KisPaintOpPresetSP activePreset(const KoID & paintop, const KoInputDevice & inputDevice);
+
+private slots:
+
+    void updatePaintops();
 
 private:
 

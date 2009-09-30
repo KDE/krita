@@ -160,7 +160,6 @@ void KisLayerManager::addAction(QAction * action)
 
 void KisLayerManager::updateGUI()
 {
-
     KisImageWSP img = m_view->image();
 
     KisLayerSP layer;
@@ -182,11 +181,6 @@ void KisLayerManager::updateGUI()
     m_imgFlatten->setEnabled(nlayers > 1);
     m_imgMergeLayer->setEnabled(nlayers > 1 && layer && layer->prevSibling());
     m_flattenLayer->setEnabled(nlayers > 1 && layer && layer->firstChild());
-
-//    // XXX: Check whether the colorspace was really changed
-//    if (activeDevice()) {
-//        emit currentColorSpaceChanged(activeDevice()->colorSpace());
-//    }
 
     m_imgResizeToLayer->setEnabled(activeLayer());
 

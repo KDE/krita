@@ -158,7 +158,6 @@ void KisImageUpdater::startUpdate(KisNodeSP node, const QRect& rc)
 
 void KisImageUpdater::update(KisNodeSP node, KisNodeSP child, const QRect & rc)
 {
-    if (!node->visible()) return; // invisible nodes cannot have an effect on the projection
     QRect dirtyRect = rc;
 
     // group layers get special treatment so we can optimize if there

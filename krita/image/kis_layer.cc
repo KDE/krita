@@ -160,8 +160,6 @@ const QString& KisLayer::compositeOpId() const
 
 const KoCompositeOp * KisLayer::compositeOp() const
 {
-    dbgImage << m_d->compositeOp;
-
     KisLayerSP parent = parentLayer();
     if( !parent )
     {

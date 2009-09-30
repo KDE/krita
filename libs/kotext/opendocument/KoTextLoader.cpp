@@ -252,7 +252,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                     QString tableStyleName = tag.attributeNS(KoXmlNS::table, "style-name", "");
                     if (!tableStyleName.isEmpty()) {
                         KoTableStyle *tblStyle = d->textSharedData->tableStyle(tableStyleName, d->stylesDotXml);
-                        tblStyle->applyStyle(tableFormat);
+                        if(tblStyle)
+                            tblStyle->applyStyle(tableFormat);
                     }
                     KoTableColumnAndRowStyleManager *tcarManager = new KoTableColumnAndRowStyleManager;
                     tableFormat.setProperty(KoTableStyle::ColumnAndRowStyleManager, QVariant::fromValue(reinterpret_cast<void *>(tcarManager)));
@@ -302,7 +303,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                     // Ok, it's a cell...
                                                     const int currentRow = tbl->rows() - 1;
                                                     QTextTableCell cell = tbl->cellAt(currentRow, currentCell);
-                                                    
+
                                                     // store spans until entire table have been loaded
                                                     int rowsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-rows-spanned", "1").toInt();
                                                     int columnsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-columns-spanned", "1").toInt();
@@ -313,7 +314,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                         if (!cellStyleName.isEmpty()) {
                                                             KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(cellStyleName, d->stylesDotXml);
                                                             QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                                                            cellStyle->applyStyle(cellFormat);
+                                                            if(cellStyle)
+                                                                cellStyle->applyStyle(cellFormat);
                                                             cell.setFormat(cellFormat);
                                                         }
 

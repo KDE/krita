@@ -441,6 +441,12 @@ KoView* KisDoc2::createViewInstance(QWidget* parent)
 
     m_d->shapeController->setInitialShapeForView(v);
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+
+    // XXX: this prevents a crash when opening a new document after opening a
+    // a document that has not been touched! I have no clue why, though.
+    setModified(true);
+    setModified(false);
+
     return v;
 }
 

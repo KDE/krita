@@ -119,7 +119,7 @@ void KisMaskManager::createTransparencyMask()
 
     if(layer) {
         KisNodeSP above = m_activeMask ?
-            static_cast<KisNode*>(m_activeMask.data()) : layer->firstChild();
+            static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
         createTransparencyMask(layer, above);
     }
 }
@@ -130,7 +130,7 @@ void KisMaskManager::createFilterMask()
 
     if(layer) {
         KisNodeSP above = m_activeMask ?
-            static_cast<KisNode*>(m_activeMask.data()) : layer->firstChild();
+            static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
         createFilterMask(layer, above);
     }
 }
@@ -141,7 +141,7 @@ void KisMaskManager::createTransformationMask()
 
     if(layer) {
         KisNodeSP above = m_activeMask ?
-            static_cast<KisNode*>(m_activeMask.data()) : layer->firstChild();
+            static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
         createTransformationMask(layer, above);
     }
 }
@@ -152,7 +152,7 @@ void KisMaskManager::createSelectionmask()
 
     if(layer) {
         KisNodeSP above = m_activeMask ?
-            static_cast<KisNode*>(m_activeMask.data()) : layer->firstChild();
+            static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
         createSelectionMask(layer, above);
     }
 }

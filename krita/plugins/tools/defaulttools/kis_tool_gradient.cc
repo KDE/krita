@@ -282,7 +282,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
             KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
             KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
-            // also deletes all old updaters
+
             updater->start( 100, i18n("Gradient") );
             painter.setProgress(updater->startSubtask());
 

@@ -58,7 +58,7 @@ public:
 
     /// refcounting
     void addUser();
-    /// refcounting
+    /// decrements the usecount. Returns true if the new value is non-zero, false otherwise.
     bool removeUser();
     /// refcounting
     int useCount() const;

@@ -101,13 +101,13 @@ KoShapeBackgroundCommand::KoShapeBackgroundCommand(const QList<KoShape*> &shapes
 
 void KoShapeBackgroundCommand::redo()
 {
+    QUndoCommand::redo();
     QList<KoShapeBackground*>::iterator brushIt = d->newFills.begin();
     foreach(KoShape *shape, d->shapes) {
         shape->setBackground(*brushIt);
         shape->update();
         brushIt++;
     }
-    QUndoCommand::redo();
 }
 
 void KoShapeBackgroundCommand::undo()

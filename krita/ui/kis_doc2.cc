@@ -568,7 +568,13 @@ KisUndoAdapter* KisDoc2::undoAdapter() const
 
 void KisDoc2::undoIndexChanged(int idx)
 {
-    m_d->undoAdapter->notifyCommandExecuted(undoStack()->command(idx));
+    const QUndoCommand* command = undoStack()->command(idx);
+    if (command) {
+       m_d->undoAdapter->notifyCommandExecuted(undoStack()->command(idx));
+    }
+    else {
+        kWarning() << "trying to clear undo stack to index" << idx << ": no command at that index";
+    }
 }
 
 

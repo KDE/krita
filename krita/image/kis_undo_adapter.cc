@@ -18,6 +18,7 @@
 
 #include "kis_undo_adapter.h"
 
+#include "kis_debug.h"
 #include "KoDocument.h"
 #include <KoUndoStack.h>
 
@@ -44,6 +45,10 @@ void KisUndoAdapter::removeCommandHistoryListener(KisCommandHistoryListener * l)
 
 void KisUndoAdapter::notifyCommandExecuted(const QUndoCommand *command)
 {
+    if (!command) {
+        kWarning() << "Empty command!";
+        return;
+    }
     foreach(KisCommandHistoryListener*  l, m_undoListeners) {
         l->notifyCommandExecuted(command);
     }
@@ -69,7 +74,7 @@ void KisUndoAdapter::undoLastCommand()
      * FIXME: Added as a workaround for being able to cancel creation
      * of the new adjustment mask (or any other mask whose
      * creation can be cancelled).
-     * 
+     *
      * Ideally, we should use "addToIndex-commit" technique like git does.
      * When a user presses Create button, we call command->redo()
      * and save this command in a cache. When the user confirms creation

@@ -27,8 +27,8 @@ class KisView2;
 #include <QObject>
 
 /**
- * This class allow to manipulate nodes in a KisImage
- * and to creates commands as needed.
+ * This class allows the manipulation of nodes in a KisImage
+ * and creates commands as needed.
  */
 class KRITAUI_EXPORT KisNodeCommandsAdapter : public QObject
 {

@@ -109,7 +109,7 @@ public:
 
 private:
 
-    void shear(KisPaintDeviceSP dev, double angleX, double angleY, KoUpdater *progress);
+    void KRITAIMAGE_EXPORT shear(KisPaintDeviceSP dev, double angleX, double angleY, KoUpdater *progress);
     KisPaintDeviceSP xShear(KisPaintDeviceSP src, double shearX, KoUpdater *progress);
     KisPaintDeviceSP yShear(KisPaintDeviceSP src, double shearY, KoUpdater *progress);
 

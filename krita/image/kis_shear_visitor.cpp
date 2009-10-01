@@ -38,7 +38,7 @@
 #include "kis_image.h"
 #include "krita_export.h"
 
-void KRITAIMAGE_EXPORT KisShearVisitor::shear(KisPaintDeviceSP dev, double angleX, double angleY, KoUpdater *progress)
+void KisShearVisitor::shear(KisPaintDeviceSP dev, double angleX, double angleY, KoUpdater *progress)
 {
     const double pi = 3.1415926535897932385;
     double thetaX = angleX * pi / 180;

@@ -29,6 +29,7 @@
 
 #include <cfloat>
 
+#include <QApplication>
 #include <QPainter>
 #include <QLabel>
 #include <QLayout>
@@ -268,6 +269,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
         if (currentImage() && (device = currentNode()->paintDevice())) {
 
 #if 1 // unthreaded
+            qApp->setOverrideCursor(Qt::BusyCursor);
 
             KisGradientPainter painter(device, currentSelection());
 
@@ -286,6 +288,8 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
             painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
             m_canvas->addCommand(painter.endTransaction());
+
+            qApp->restoreOverrideCursor();
 #else
             // XXX: figure out why threaded gradients give weird noise
             KisTransaction* transaction = new KisTransaction(i18n("Gradient"), device);

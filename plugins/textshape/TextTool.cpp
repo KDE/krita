@@ -961,8 +961,10 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             editingPluginEvents();
             ensureCursorVisible();
         } else if (event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint())) { // insert the text
+            m_prevCursorPosition = m_textEditor->position();
             m_textEditor->insertText(event->text());
             ensureCursorVisible();
+            editingPluginEvents();
         }
     }
     if (moveOperation != QTextCursor::NoMove || destinationPosition != -1) {

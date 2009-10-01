@@ -86,9 +86,6 @@ class KoViewWrapperWidget;
  *
  **********************************************************/
 
-const int KoDocument::s_defaultAutoSave = 300; // 5 minutes
-
-
 //static
 QString KoDocument::newObjectName()
 {
@@ -261,7 +258,7 @@ KoDocument::KoDocument(QWidget * parentWidget, QObject* parent, bool singleViewM
 
     d->bEmpty = true;
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
-    setAutoSave(s_defaultAutoSave);
+    setAutoSave(defaultAutoSave());
     d->bSingleViewMode = singleViewMode;
 
     setObjectName(newObjectName());
@@ -2428,14 +2425,21 @@ KoMainWindow* KoDocument::currentShell()
     return shell;
 }
 
-bool KoDocument::isEmpty() const {
+bool KoDocument::isEmpty() const
+{
     return d->bEmpty;
 }
 
-void KoDocument::setEmpty() {
+void KoDocument::setEmpty()
+{
     d->bEmpty = true;
 }
 
+// static
+int KoDocument::defaultAutoSave()
+{
+    return 300;
+}
 
 #include "KoDocument_p.moc"
 #include "KoDocument.moc"

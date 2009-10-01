@@ -553,9 +553,7 @@ public:
      * Retrieve the default value for autosave in seconds.
      * Called by the applications to use the correct default in their config
      */
-    static int defaultAutoSave() {
-        return s_defaultAutoSave;
-    }
+    static int defaultAutoSave();
 
     /**
      * @return the information concerning this document.
@@ -1006,8 +1004,6 @@ private:
 
 
     static QList<KoDocument*> *s_documentList;
-
-    static const int s_defaultAutoSave;
 };
 
 #endif

@@ -112,13 +112,6 @@ public:
     KisImageWSP image() const;
 
     /**
-     * Adds the specified child document to this document; this
-     * is not done with KoDocument::insertChild() because that
-     * is protected and cannot be called from KisView2.
-     */
-    KisChildDoc * createChildDoc(const QRect& rect, KoDocument* childDoc);
-
-    /**
      * Makes an otherwise empty document ready for import/export
      */
     void prepareForImport();

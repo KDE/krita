@@ -514,19 +514,6 @@ void KisDoc2::slotIOProgress(qint8 percentage)
     emitProgress(totalPercentage);
 }
 
-KisChildDoc * KisDoc2::createChildDoc(const QRect & rect, KoDocument* childDoc)
-{
-    Q_UNUSED(rect);
-    Q_UNUSED(childDoc);
-#if 0
-    KisChildDoc * ch = new KisChildDoc(this, rect, childDoc);
-    insertChild(ch);
-    ch->document()->setStoreInternal(true);
-    return ch;
-#endif
-    return 0;
-}
-
 void KisDoc2::prepareForImport()
 {
     if (m_d->nserver == 0)

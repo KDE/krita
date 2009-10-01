@@ -36,10 +36,6 @@ BR  * Smudge op
     * Histogram Docker needs to be reimplemented
     * Select all Opaque Pixels
 
-* Brushes
-
-    * Sometimes not all brushes are loaded
-
 Functionality that _should_ be in KOffice
 =======================================================================
 
@@ -52,10 +48,6 @@ Functionality that _should_ be in KOffice
 
 2.0
 =======================================================================
-
-* Bugs
-
-    * Filters that need access to the whole image do not work correctly with masks.
 
 * Image
 

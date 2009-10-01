@@ -516,9 +516,7 @@ bool Layout::nextParag()
             m_blockData->setCounterPosition(QPointF(shape->size().width() - m_borderInsets.right -
                         m_blockData->counterWidth() - m_shapeBorder.right - m_format.leftMargin(), y()));
         else
-            m_blockData->setCounterPosition(QPointF(m_borderInsets.left + m_shapeBorder.left +
-                                                    m_format.textIndent() + m_format.leftMargin() +
-                                                    textList->format().doubleProperty(KoListStyle::Indent), y()));
+            m_blockData->setCounterPosition(QPointF(x() - m_blockData->counterSpacing() - m_blockData->counterWidth(), y()));
     }
 
     return true;
@@ -637,6 +635,7 @@ void Layout::handleTable()
                 m_tableCell = QTextTableCell(); // Set the current cell to an invalid one.
             }
         }
+        m_inTable = false;
     }
 }
 
@@ -885,7 +884,7 @@ void Layout::updateBorders()
 {
     Q_ASSERT(m_data);
     m_borderInsets = m_data->shapeMargins();
-    KoTextBlockBorderData border(QRectF(this->x() - listIndent(), m_y + m_borderInsets.top + topMargin(), width(), 1.));
+    KoTextBlockBorderData border(QRectF(this->x() - listIndent(), m_y + m_borderInsets.top, width(), 1.));
     border.setEdge(border.Left, m_format, KoParagraphStyle::LeftBorderStyle,
                    KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
                    KoParagraphStyle::LeftBorderSpacing, KoParagraphStyle::LeftInnerBorderWidth);

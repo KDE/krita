@@ -106,12 +106,12 @@ class KisDoc2::KisDocPrivate
 public:
 
     KisDocPrivate()
-            : undoAdapter(0)
-            , nserver(0)
-            , macroNestDepth(0)
-            , ioProgressTotalSteps(0)
-            , ioProgressBase(0)
-            , kraLoader(0) {
+        : undoAdapter(0)
+        , nserver(0)
+        , macroNestDepth(0)
+        , ioProgressTotalSteps(0)
+        , ioProgressBase(0)
+        , kraLoader(0) {
     }
 
     ~KisDocPrivate() {
@@ -137,8 +137,8 @@ public:
 
 
 KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-        : KoDocument(parentWidget, parent, singleViewMode)
-        , m_d(new KisDocPrivate())
+    : KoDocument(parentWidget, parent, singleViewMode)
+    , m_d(new KisDocPrivate())
 {
 
     setComponentData(KisFactory2::componentData(), false);
@@ -162,18 +162,18 @@ QByteArray KisDoc2::mimeType() const
 void KisDoc2::openExistingFile(const KUrl& url)
 {
     setUndo(false);
-
+    qApp->setOverrideCursor(Qt::BusyCursor);
     KoDocument::openExistingFile(url);
-
+    qApp->restoreOverrideCursor();
     setUndo(true);
 }
 
 void KisDoc2::openTemplate(const KUrl& url)
 {
     setUndo(false);
-
+    qApp->setOverrideCursor(Qt::BusyCursor);
     KoDocument::openTemplate(url);
-
+    qApp->restoreOverrideCursor();
     setUndo(true);
 }
 
@@ -356,6 +356,7 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
 
 KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace)
 {
+    qApp->setOverrideCursor(Qt::BusyCursor);
     if (!init())
         return KisImageWSP(0);
 
@@ -381,6 +382,7 @@ KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, 
     layer->setDirty();
     setUndo(true);
     img->unlock();
+    qApp->restoreOverrideCursor();
 
     return img;
 }
@@ -397,6 +399,8 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     KisPaintLayerSP layer;
 
     if (!cs) return false;
+
+    qApp->setOverrideCursor(Qt::BusyCursor);
 
     setUndo(false);
 
@@ -431,6 +435,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     layer->setDirty();
     img->unlock();
 
+    qApp->restoreOverrideCursor();
     return true;
 }
 
@@ -444,6 +449,7 @@ KoView* KisDoc2::createViewInstance(QWidget* parent)
 
     // XXX: this prevents a crash when opening a new document after opening a
     // a document that has not been touched! I have no clue why, though.
+    // see: https://bugs.kde.org/show_bug.cgi?id=208239.
     setModified(true);
     setModified(false);
 

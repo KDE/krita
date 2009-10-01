@@ -205,7 +205,7 @@ public:
      * Reading from areas not previously initialized will read the default
      * pixel value into data but not initialize that region.
      */
-    void readBytes(quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h);
+    void readBytes(quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Read the bytes representing the rectangle rect into
@@ -294,7 +294,7 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h);
+    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -304,7 +304,7 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile);
+    virtual QImage convertToQImage(const KoColorProfile *  dstProfile) const;
 
     /**
      * Creates a paint device thumbnail of the paint device, retaining

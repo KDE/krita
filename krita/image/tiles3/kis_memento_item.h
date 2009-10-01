@@ -44,13 +44,13 @@ public:
 
     KisMementoItem(const KisMementoItem& rhs)
         : KisShared(rhs),
-        m_tileData(rhs.m_tileData), 
-        m_commitedFlag(rhs.m_commitedFlag),
-        m_type(rhs.m_type),
-        m_col(rhs.m_col),
-        m_row(rhs.m_row),
-        m_next(0),
-        m_parent(0)
+          m_tileData(rhs.m_tileData),
+          m_commitedFlag(rhs.m_commitedFlag),
+          m_type(rhs.m_type),
+          m_col(rhs.m_col),
+          m_row(rhs.m_row),
+          m_next(0),
+          m_parent(0)
     {
         if(m_tileData) {
             if(m_commitedFlag)
@@ -60,7 +60,7 @@ public:
         }
     }
 
-    /** 
+    /**
      * Automatically called by Kis..HashTable. It means that this mementoItem
      * is a root item of parental hierarchy. So m_parent should be NULL.
      */
@@ -107,7 +107,7 @@ public:
         m_row = tile->row();
         m_type = DELETED;
     }
-    
+
     void changeTile(KisTile* tile) {
         m_tileData = tile->tileData();
         /* Setting counter: m_refCount++ */
@@ -146,7 +146,7 @@ public:
     inline KisMementoItemSP parent() {
         return m_parent;
     }
-    
+
     // Stuff for Kis..HashTable
     inline void setNext(KisMementoItemSP next) {
         m_next = next;
@@ -160,20 +160,20 @@ public:
     inline qint32 row() {
         return m_row;
     }
-    
+
     void debugPrintInfo() {
         printf("------\n");
-        printf("Memento item:\t\t0x%X (0x%X)\n", 
+        printf("Memento item:\t\t0x%X (0x%X)\n",
                (quintptr)this, (quintptr) m_tileData);
         printf("   status:\t(%d,%d) %c%c\n", m_col, m_row,
                (m_type==CHANGED)?'W':'D', m_commitedFlag?'C':'-');
 
-        printf("   parent:\t0x%X (0x%X)\n", 
+        printf("   parent:\t0x%X (0x%X)\n",
                (quintptr)m_parent.data(), m_parent ? (quintptr)m_parent->m_tileData : 0);
-        printf("   next:\t0x%X (0x%X)\n", 
+        printf("   next:\t0x%X (0x%X)\n",
                (quintptr)m_next.data(), m_next ? (quintptr)m_next->m_tileData : 0);
     }
-    
+
 protected:
     KisTileData *m_tileData;
     bool m_commitedFlag;

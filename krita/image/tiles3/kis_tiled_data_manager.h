@@ -49,7 +49,7 @@ public:
         READ,
         WRITE
     };
-    KisTileDataWrapper(KisTileSP tile, qint32 offset, accessType type) 
+    KisTileDataWrapper(KisTileSP tile, qint32 offset, accessType type)
         : m_tile(tile), m_offset (offset)
     {
         if(type == READ)
@@ -63,7 +63,7 @@ public:
     }
 
     inline KisTileSP& tile() {
-      return m_tile;
+        return m_tile;
     }
 
     inline quint8* data() const {
@@ -119,11 +119,11 @@ protected:
 public:
 
     inline KisTileSP getTile(qint32 col, qint32 row) {
-         bool newTile;
-         KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
-         if(newTile)
-             updateExtent(tile->col(), tile->row());
-         return tile;
+        bool newTile;
+        KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
+        if(newTile)
+            updateExtent(tile->col(), tile->row());
+        return tile;
     }
 
     inline KisTileSP getOldTile(qint32 col, qint32 row) {
@@ -158,7 +158,7 @@ public:
 
 protected:
     /**
-     * Reads and writes the tiles from/onto a KoStore 
+     * Reads and writes the tiles from/onto a KoStore
      * (which is simply a file within a zip file)
      */
     bool write(KoStore *store);
@@ -197,7 +197,7 @@ public:
      */
     void readBytes(quint8 * bytes,
                    qint32 x, qint32 y,
-                   qint32 w, qint32 h);
+                   qint32 w, qint32 h) const;
     /**
      * Copy the bytes in the vector to the specified rect. If there are bytes left
      * in the vector after filling the rect, they will be ignored. If there are
@@ -267,18 +267,18 @@ private:
     qint32 xToCol(qint32 x) const;
     qint32 yToRow(qint32 y) const;
     qint32 divideRoundDown(qint32 x, const qint32 y) const;
-    KisTileDataWrapper pixelPtr(qint32 x, qint32 y, 
+    KisTileDataWrapper pixelPtr(qint32 x, qint32 y,
                                 enum KisTileDataWrapper::accessType type);
 
     void updateExtent(qint32 col, qint32 row);
     void recalculateExtent();
 
-    quint8* duplicatePixel(qint32 num, const quint8 *pixel);    
+    quint8* duplicatePixel(qint32 num, const quint8 *pixel);
 
     void writeBytesBody(const quint8 *data,
                         qint32 x, qint32 y, qint32 width, qint32 height);
     void readBytesBody(quint8 *data,
-                       qint32 x, qint32 y, qint32 width, qint32 height);
+                       qint32 x, qint32 y, qint32 width, qint32 height) const;
     void writePlanarBytesBody(QVector<quint8*> planes,
                               QVector<qint32> channelsizes,
                               qint32 x, qint32 y, qint32 w, qint32 h);
@@ -299,7 +299,7 @@ inline qint32 KisTiledDataManager::divideRoundDown(qint32 x, const qint32 y) con
      * -(( -x + (y-1) ) / y)
      */
 
-    return x >= 0 ? 
+    return x >= 0 ?
         x / y :
         -(( (-x - 1) / y) + 1);
 }

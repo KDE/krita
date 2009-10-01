@@ -31,17 +31,17 @@ const qint32 KisTileDataPooler::TIMEOUT_FACTOR = 2;
 //#define DEBUG_POOLER
 
 #ifdef DEBUG_POOLER
-    #define DEBUG_CLONE_ACTION(td, numClones)				        \
-        printf("Cloned (%d):\t\t\t\t0x%X (clones: %d, users: %d, refs: %d)\n",	\
-	       numClones, td, td->m_clonesList.size(),			        \
-	       (int)td->m_usersCount, (int)td->m_refCount)
-    #define DEBUG_SIMPLE_ACTION(action)		\
-        printf("pooler: %s\n", action)
-    
+#define DEBUG_CLONE_ACTION(td, numClones)                               \
+    printf("Cloned (%d):\t\t\t\t0x%X (clones: %d, users: %d, refs: %d)\n", \
+           numClones, td, td->m_clonesList.size(),                      \
+           (int)td->m_usersCount, (int)td->m_refCount)
+#define DEBUG_SIMPLE_ACTION(action)		\
+    printf("pooler: %s\n", action)
+
 
 #else
-    #define DEBUG_CLONE_ACTION(td, numClones)
-    #define DEBUG_SIMPLE_ACTION(action)
+#define DEBUG_CLONE_ACTION(td, numClones)
+#define DEBUG_SIMPLE_ACTION(action)
 #endif
 
 KisTileDataPooler::KisTileDataPooler(KisTileDataStore *store)
@@ -63,35 +63,35 @@ void KisTileDataPooler::kick() {
 void KisTileDataPooler::terminatePooler() {
     m_shouldExitFlag = 1;
     kick();
-    wait();    
+    wait();
 }
 
-qint32 KisTileDataPooler::numClonesNeeded(KisTileData *td) const 
+qint32 KisTileDataPooler::numClonesNeeded(KisTileData *td) const
 {
     qint32 numUsers = td->m_usersCount;
     qint32 numPresentClones = td->m_clonesList.size();
     qint32 totalClones = qMin(numUsers-1, MAX_NUM_CLONES);
-    
+
     return totalClones - numPresentClones;
 }
 
-void KisTileDataPooler::cloneTileData(KisTileData *td, qint32 numClones) const 
+void KisTileDataPooler::cloneTileData(KisTileData *td, qint32 numClones) const
 {
     if(numClones > 0) {
-	for(qint32 i=0; i < numClones; i++) 
+	for(qint32 i=0; i < numClones; i++)
 	    td->m_clonesList.prepend(new KisTileData(*td));
     }
     else {
 	qint32 numUnnededClones = qAbs(numClones);
-	for(qint32 i=0; i < numUnnededClones; i++) 
+	for(qint32 i=0; i < numUnnededClones; i++)
 	    td->m_clonesList.removeFirst();
     }
 
     DEBUG_CLONE_ACTION(td, numClones);
 }
 
-#define tileListForEach(iter, first, last) for(iter=first; iter; iter=(iter==last ? 0 : iter->m_nextTD)) 
-#define tileListForEachReverse(iter, last, first) for(iter=last; iter; iter=(iter==first ? 0 : iter->m_prevTD)) 
+#define tileListForEach(iter, first, last) for(iter=first; iter; iter=(iter==last ? 0 : iter->m_nextTD))
+#define tileListForEachReverse(iter, last, first) for(iter=last; iter; iter=(iter==first ? 0 : iter->m_prevTD))
 #define tileListHead() (m_store->m_tileDataListHead)
 #define tileListTail() (m_store->m_tileDataListHead->m_prevTD)
 #define tileListEmpty() (!m_store->m_tileDataListHead)
@@ -128,13 +128,13 @@ inline bool KisTileDataPooler::interestingTileData(KisTileData* td)
 	(td->m_usersCount > 1 || !td->m_clonesList.isEmpty());
 }
 
-void KisTileDataPooler::run() 
+void KisTileDataPooler::run()
 {
     while (1) {
-      DEBUG_SIMPLE_ACTION("went to bed... Zzz...");
+        DEBUG_SIMPLE_ACTION("went to bed... Zzz...");
 
 	waitForWork();
-    
+
 	if(m_shouldExitFlag)
 	    return;
 
@@ -143,7 +143,7 @@ void KisTileDataPooler::run()
 
 	m_store->m_listRWLock.lockForRead();
 	KisTileData *iter;
-	
+
 	if(!tileListEmpty()) {
 	    tileListForEachReverse(iter, tileListTail(), tileListHead()) {
 		if(interestingTileData(iter)) {
@@ -157,7 +157,7 @@ void KisTileDataPooler::run()
 	    }
 	}
 	m_store->m_listRWLock.unlock();
-	
+
 	DEBUG_SIMPLE_ACTION("cycle finished");
     }
 }

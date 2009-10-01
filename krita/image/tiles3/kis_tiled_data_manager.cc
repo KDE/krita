@@ -34,13 +34,13 @@
 
 /* The data area is divided into tiles each say 64x64 pixels (defined at compiletime)
  * The tiles are laid out in a matrix that can have negative indexes.
- * The matrix grows automatically if needed (a call for writeacces to a tile 
+ * The matrix grows automatically if needed (a call for writeacces to a tile
  * outside the current extent)
  * Even though the matrix has grown it may still not contain tiles at specific positions.
  * They are created on demand
  */
 
-KisTiledDataManager::KisTiledDataManager(quint32 pixelSize, 
+KisTiledDataManager::KisTiledDataManager(quint32 pixelSize,
                                          const quint8 *defaultPixel)
     : m_lock(QReadWriteLock::NonRecursive)
 {
@@ -58,7 +58,7 @@ KisTiledDataManager::KisTiledDataManager(quint32 pixelSize,
     m_extentMaxY = qint32_MIN;
 }
 
-KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm) 
+KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
     : KisShared(dm),
       m_lock(QReadWriteLock::NonRecursive)
 {
@@ -69,7 +69,7 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
     m_pixelSize = dm.m_pixelSize;
     m_defaultPixel = new quint8[m_pixelSize];
     /**
-     * We won't call setDefaultTileData here, as defaultTileDatas 
+     * We won't call setDefaultTileData here, as defaultTileDatas
      * has already been made shared in m_hashTable(dm->m_hashTable)
      */
     memcpy(m_defaultPixel, dm.m_defaultPixel, m_pixelSize);
@@ -102,8 +102,8 @@ void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
 
     KisTileData *td = globalTileDataStore.createDefaultTileData(pixelSize(),
                                                                 defaultPixel);
-    m_hashTable->setDefaultTileData(td);    
-    m_mementoManager->setDefaultTileData(td);    
+    m_hashTable->setDefaultTileData(td);
+    m_mementoManager->setDefaultTileData(td);
 
     memcpy(m_defaultPixel, defaultPixel, pixelSize());
 }
@@ -113,13 +113,13 @@ bool KisTiledDataManager::write(KoStore *store)
 {
     QReadLocker locker(&m_lock);
     if (!store) return false;
-    
+
     char str[80];
 
     sprintf(str, "%d\n", m_hashTable->numTiles());
     store->write(str, strlen(str));
-    
-    
+
+
     KisTileHashTableIterator iter(m_hashTable);
     KisTileSP tile;
     qint32 x, y;
@@ -131,7 +131,7 @@ bool KisTiledDataManager::write(KoStore *store)
 	tile->extent().getRect(&x, &y, &width, &height);
 	sprintf(str, "%d,%d,%d,%d\n", x,y, width,height);
 	store->write(str, strlen(str));
-	
+
 	tile->lockForRead();
 	store->write((char *)tile->data(), tileDataSize);
 	tile->unlock();
@@ -146,7 +146,7 @@ bool KisTiledDataManager::read(KoStore *store)
 {
     QWriteLocker locker(&m_lock);
     if (!store) return false;
-    
+
     //clear(); - needed?
 
     /*nothing*/ m_mementoManager->getMemento();
@@ -164,7 +164,7 @@ bool KisTiledDataManager::read(KoStore *store)
     stream->readLine(str, 79);
     sscanf(str, "%u", &numTiles);
 
-     for (quint32 i = 0; i < numTiles; i++) {
+    for (quint32 i = 0; i < numTiles; i++) {
         stream->readLine(str, 79);
         sscanf(str, "%d,%d,%d,%d", &x, &y, &width, &height);
 
@@ -176,7 +176,7 @@ bool KisTiledDataManager::read(KoStore *store)
 	bool created;
 
 	tile = m_hashTable->getTileLazy(col, row, created);
-        if(created) 
+        if(created)
 	    updateExtent(col, row);
 
 	tile->lockForWrite();
@@ -225,23 +225,23 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
 
     qint32 firstColumn = xToCol(clearRect.left());
     qint32 lastColumn = xToCol(clearRect.right());
-    
+
     qint32 firstRow = yToRow(clearRect.top());
     qint32 lastRow = yToRow(clearRect.bottom());
-    
+
     const quint32 rowStride = KisTileData::WIDTH * pixelSize;
-    
+
     // Generate one row
     quint8 *clearPixelData = 0;
     quint32 maxRunLength = qMin(clearRect.width(), KisTileData::WIDTH);
     clearPixelData = duplicatePixel(maxRunLength, clearPixel);
-    
+
     KisTileData *td = 0;
-    if (clearRect.width() >= KisTileData::WIDTH && 
+    if (clearRect.width() >= KisTileData::WIDTH &&
 	clearRect.height() >= KisTileData::HEIGHT) {
 	if(pixelBytesAreDefault)
 	    /**
-	     * FIXME: Theoretical race condition 
+	     * FIXME: Theoretical race condition
 	     *        if setDefaultPixel has been called first
 	     */
 	    td = m_hashTable->defaultTileData();
@@ -249,29 +249,29 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
 	    td = globalTileDataStore.createDefaultTileData(pixelSize,
 							   clearPixel);
 	globalTileDataStore.acquireTileData(td);
-    } 
-    
+    }
+
     for (qint32 row = firstRow; row <= lastRow; ++row) {
 	for (qint32 column = firstColumn; column <= lastColumn; ++column) {
-	    
+
 	    QRect tileRect(column*KisTileData::WIDTH, row*KisTileData::HEIGHT,
 			   KisTileData::WIDTH, KisTileData::WIDTH);
 	    QRect clearTileRect = clearRect & tileRect;
-	    
+
 	    KisTileDataWrapper tw = pixelPtr(clearTileRect.left(),
 					     clearTileRect.top(),
 					     KisTileDataWrapper::WRITE);
 	    quint8* tileIt = tw.data();
-	    
+
 	    if (clearTileRect == tileRect) {
 		// Clear whole tile
 		m_hashTable->deleteTile(column, row);
 		m_hashTable->addTile(new KisTile(column,row,td, m_mementoManager));
-	    } 
+	    }
 	    else {
 		const qint32 lineSize = clearTileRect.width() * pixelSize;
 		qint32 rowsRemaining = clearTileRect.height();
-		
+
 		if(pixelBytesAreTheSame) {
 		    while (rowsRemaining > 0) {
 			memset(tileIt, *clearPixelData, lineSize);
@@ -313,7 +313,7 @@ void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 c
 void KisTiledDataManager::clear()
 {
     QWriteLocker locker(&m_lock);
-    
+
     m_hashTable->clear();
 
     m_extentMinX = qint32_MAX;
@@ -333,7 +333,7 @@ void KisTiledDataManager::setExtent(QRect newRect)
     QRect oldRect = extent();
     newRect = newRect.normalized();
 
-    // Do nothing if the desired size is bigger than we currently are: 
+    // Do nothing if the desired size is bigger than we currently are:
     // that is handled by the autoextending automatically
     if (newRect.contains(oldRect)) return;
 
@@ -345,16 +345,16 @@ void KisTiledDataManager::setExtent(QRect newRect)
 
     while(!iter.isDone()) {
 	tile=iter.tile();
-	
+
 	tileRect = tile->extent();
 	if(newRect.contains(tileRect)) {
 	    //do nothing
 	    ++iter;
-	} 
+	}
 	else if(newRect.intersects(tileRect)) {
 	    QRect intersection = newRect & tileRect;
 	    intersection.translate(- tileRect.topLeft());
-	    
+
 	    const qint32 pixelSize = this->pixelSize();
 
 	    tile->lockForWrite();
@@ -387,10 +387,10 @@ void KisTiledDataManager::recalculateExtent()
     m_extentMinY = qint32_MAX;
     m_extentMaxX = qint32_MIN;
     m_extentMaxY = qint32_MIN;
-    
+
     KisTileHashTableIterator iter(m_hashTable);
     KisTileSP tile;
-    
+
     while(! (tile = iter.tile()) ) {
 	updateExtent(tile->col(), tile->row());
 	++iter;
@@ -430,12 +430,12 @@ QRect KisTiledDataManager::extent() const
 
 
 
-KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y, 
-			    enum KisTileDataWrapper::accessType type)
+KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y,
+                                                 enum KisTileDataWrapper::accessType type)
 {
     const qint32 col = xToCol(x);
     const qint32 row = yToRow(y);
-    
+
     /* FIXME: Always positive? */
     const qint32 xInTile = x - col * KisTileData::WIDTH;
     const qint32 yInTile = y - row * KisTileData::HEIGHT;
@@ -443,9 +443,9 @@ KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y,
     const qint32 pixelIndex = xInTile + yInTile * KisTileData::WIDTH;
 
 /*    bool newTile;
-    KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
-    if(newTile)
-	updateExtent(tile->col(), tile->row());
+      KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
+      if(newTile)
+      updateExtent(tile->col(), tile->row());
 */
     KisTileSP tile = getTile(col,row);
 
@@ -466,26 +466,26 @@ void KisTiledDataManager::writeBytes(const quint8 *data,
 				     qint32 width, qint32 height)
 {
     QWriteLocker locker(&m_lock);
-    // Actial bytes reading/writing is done in private header 
+    // Actial bytes reading/writing is done in private header
     writeBytesBody(data, x, y, width, height);
 }
 
 void KisTiledDataManager::readBytes(quint8 *data,
                                     qint32 x, qint32 y,
-                                    qint32 width, qint32 height)
+                                    qint32 width, qint32 height) const
 {
     QReadLocker locker(&m_lock);
-    // Actial bytes reading/writing is done in private header 
+    // Actial bytes reading/writing is done in private header
     readBytesBody(data, x, y, width, height);
 }
 
-QVector<quint8*> 
+QVector<quint8*>
 KisTiledDataManager::readPlanarBytes(QVector<qint32> channelSizes,
 				     qint32 x, qint32 y,
 				     qint32 width, qint32 height)
 {
     QReadLocker locker(&m_lock);
-    // Actial bytes reading/writing is done in private header 
+    // Actial bytes reading/writing is done in private header
     return readPlanarBytesBody(channelSizes, x, y, width, height);
 }
 
@@ -496,7 +496,7 @@ void KisTiledDataManager::writePlanarBytes(QVector<quint8*> planes,
 					   qint32 width, qint32 height)
 {
     QWriteLocker locker(&m_lock);
-    // Actial bytes reading/writing is done in private header 
+    // Actial bytes reading/writing is done in private header
     writePlanarBytesBody(planes, channelSizes, x, y, width, height);
 }
 

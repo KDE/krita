@@ -16,15 +16,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "kis_tilediterator.h"
 #include "kis_debug.h"
 
-KisTiledRectIterator::KisTiledRectIterator(KisTiledDataManager *dataManager,  
+KisTiledRectIterator::KisTiledRectIterator(KisTiledDataManager *dataManager,
                                            qint32 left, qint32 top,
-                                           qint32 width, qint32 height, 
-                                           bool writable) 
+                                           qint32 width, qint32 height,
+                                           bool writable)
     : KisTiledIterator(dataManager),
       m_left(left),
       m_top(top),
@@ -71,7 +71,7 @@ KisTiledRectIterator::KisTiledRectIterator(KisTiledDataManager *dataManager,
 }
 
 KisTiledRectIterator::KisTiledRectIterator(const KisTiledRectIterator& rhs)
-        : KisTiledIterator(rhs)
+    : KisTiledIterator(rhs)
 {
     if (this != &rhs) {
         m_left = rhs.m_left;
@@ -134,7 +134,7 @@ KisTiledRectIterator & KisTiledRectIterator::operator+=(int n)
     remainInTile = (m_bottomInTile - m_yInTile) * (m_rightInTile - m_leftInTile + 1);
     remainInTile += m_rightInTile - m_xInTile + 1;
 
-    // This while loop may not bet the fastest, but usually 
+    // This while loop may not bet the fastest, but usually
     // it's not entered more than once.
     while (n >= remainInTile) {
         n -= remainInTile;
@@ -226,8 +226,8 @@ void KisTiledRectIterator::nextTile()
 }
 
 /*
-KisTiledRectIterator & KisTiledRectIterator::operator -- ()
-{
-    return *this;
-}
+  KisTiledRectIterator & KisTiledRectIterator::operator -- ()
+  {
+  return *this;
+  }
 */

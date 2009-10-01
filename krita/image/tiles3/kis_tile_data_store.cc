@@ -35,11 +35,11 @@ KisTileDataStore globalTileDataStore;
 #define tileListHead() (m_tileDataListHead)
 #define tileListTail() (m_tileDataListHead->m_prevTD)
 #define tileListEmpty() (!m_tileDataListHead)
-#define tileListForEach(iter, first, last) for(iter=first; iter; iter=(iter==last ? 0 : iter->m_nextTD)) 
+#define tileListForEach(iter, first, last) for(iter=first; iter; iter=(iter==last ? 0 : iter->m_nextTD))
 
 /* TODO: _|_ */
 /*#define tileListForEachSafe(iter, first, last)        \
-    for(iter=first; iter!=last ;iter=iter->nextTD;) 
+  for(iter=first; iter!=last ;iter=iter->nextTD;)
 */
 
 void KisTileDataStore::tileListAppend(KisTileData *td)
@@ -115,7 +115,7 @@ KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *def
 #define DEBUG_PRECLONE_ACTION(action, oldTD, newTD)	\
     printf("!!! %s:\t\t\t  0x%X -> 0x%X    \t\t!!!\n",	\
 	   action, (quintptr)oldTD, (quintptr) newTD)
-#define DEBUG_FREE_ACTION(td) \
+#define DEBUG_FREE_ACTION(td)                   \
     printf("Tile data free'd \t(0x%X)\n", td)
 #else
 #define DEBUG_PRECLONE_ACTION(action, oldTD, newTD)
@@ -135,7 +135,7 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
 	td = new KisTileData(*rhs);
 	DEBUG_PRECLONE_ACTION("- Pre-clone #MISS#", rhs, td);
     }
-	
+
     tileListAppend(td);
     return td;
 }

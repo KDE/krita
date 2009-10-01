@@ -460,7 +460,7 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
     }
 }
 
-QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile)
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile) const
 {
     qint32 x1;
     qint32 y1;
@@ -479,7 +479,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile)
     return convertToQImage(dstProfile, x1, y1, w, h);
 }
 
-QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h)
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h) const
 {
 
     if (w < 0)
@@ -819,7 +819,7 @@ void KisPaintDevice::setY(qint32 y)
 }
 
 
-void KisPaintDevice::readBytes(quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h)
+void KisPaintDevice::readBytes(quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h) const
 {
     m_datamanager->readBytes(data, x - m_d->x, y - m_d->y, w, h);
 }

@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "kis_tilediterator.h"
 #include "kis_debug.h"
@@ -24,7 +24,7 @@
 KisTiledVLineIterator::KisTiledVLineIterator(KisTiledDataManager *dataManager,
                                              qint32 x,  qint32 y,
                                              qint32 h, bool writable) :
-        KisTiledIterator(dataManager)
+    KisTiledIterator(dataManager)
 {
     m_lineStride = m_pixelSize * KisTileData::WIDTH;
     m_writable = writable;
@@ -52,7 +52,7 @@ KisTiledVLineIterator::KisTiledVLineIterator(KisTiledDataManager *dataManager,
 }
 
 KisTiledVLineIterator::KisTiledVLineIterator(const KisTiledVLineIterator& rhs)
-        : KisTiledIterator(rhs)
+    : KisTiledIterator(rhs)
 {
     if (this != &rhs) {
         m_top = rhs.m_top;
@@ -140,14 +140,14 @@ void KisTiledVLineIterator::nextCol()
 	m_xInTile = 0;
     }
 
-    switchToTile(m_topRow, topInTopmostTile);   
- 
+    switchToTile(m_topRow, topInTopmostTile);
+
     m_isDoneFlag = false;
 }
 
 /*
-KisTiledVLineIterator & KisTiledVLineIterator::operator -- ()
-{
-    return *this;
-}
+  KisTiledVLineIterator & KisTiledVLineIterator::operator -- ()
+  {
+  return *this;
+  }
 */

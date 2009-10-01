@@ -33,10 +33,10 @@
     printf("### MementoManager (0x%X): %s\n", (quintptr)this, action)
 
 #define DEBUG_DUMP_MESSAGE(action) do {                                 \
-      printf("\n### MementoManager (0x%X): %s \t\t##########\n",	\
-             (quintptr)this, action);                                   \
-      debugPrintInfo();                                                 \
-      printf("##################################################################\n\n"); \
+        printf("\n### MementoManager (0x%X): %s \t\t##########\n",	\
+               (quintptr)this, action);                                 \
+        debugPrintInfo();                                               \
+        printf("##################################################################\n\n"); \
     } while(0)
 
 #else
@@ -58,7 +58,7 @@ KisMementoManager::KisMementoManager(const KisMementoManager& rhs)
      m_revisions(rhs.m_revisions),
      m_cancelledRevisions(rhs.m_cancelledRevisions),
      m_headsHashTable(rhs.m_headsHashTable, 0),
-     m_currentMemento(0) 
+     m_currentMemento(0)
 {
 }
 
@@ -71,7 +71,7 @@ KisMementoManager::~KisMementoManager()
 
 /**
  *  TODO: We assume that a tile won't be COWed until commit.
- *        So to  say,  we assume  that  registerTileChange() 
+ *        So to  say,  we assume  that  registerTileChange()
  *        will be called once a commit
  */
 void KisMementoManager::registerTileChange(KisTile *tile)
@@ -131,7 +131,7 @@ KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row)
     return mi ? mi->tile(0) : 0;
 }
 
-KisMementoSP KisMementoManager::getMemento() 
+KisMementoSP KisMementoManager::getMemento()
 {
     commit();
     m_currentMemento = new KisMemento(this);

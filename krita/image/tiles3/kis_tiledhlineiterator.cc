@@ -16,15 +16,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include <QtGlobal>
 
 #include "kis_tilediterator.h"
 #include "kis_debug.h"
 
-KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager, 
-                                             qint32 x, qint32 y, 
+KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager,
+                                             qint32 x, qint32 y,
                                              qint32 w, bool writable)
     : KisTiledIterator(dataManager)
 {
@@ -53,7 +53,7 @@ KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager,
 }
 
 KisTiledHLineIterator::KisTiledHLineIterator(const KisTiledHLineIterator& rhs)
-        : KisTiledIterator(rhs)
+    : KisTiledIterator(rhs)
 {
     if (this != &rhs) {
         m_left = rhs.m_left;
@@ -131,7 +131,7 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator++ ()
 KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
 {
     // XXX what if outside the valid range of this iterator?
-    // AAA two ways: int overflow is caught in assert or 
+    // AAA two ways: int overflow is caught in assert or
     //               borders are checked below
 
     Q_ASSERT_X(! (m_x>0 && (m_x+n)<0),"hlineIt+=", "Integer overflow");
@@ -142,7 +142,7 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
     }
     else {
 	qint32 col = xToCol(m_x);
-	
+
 	if(col == m_col) {
 	    /**
 	     * FIXME: most unlikely case. Think over unlikely(...) here
@@ -194,6 +194,6 @@ void KisTiledHLineIterator::nextRow()
     }
 
     switchToTile(m_leftCol, leftInLeftmostTile);
-    
+
     m_isDoneFlag = false;
 }

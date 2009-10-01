@@ -80,17 +80,17 @@ KisTile::~KisTile()
 //#define DEBUG_TILE_COWING
 
 #ifdef DEBUG_TILE_LOCKING
-    #define DEBUG_LOG_ACTION(action)                                        \
-         printf("### %s \ttile:\t0x%X (%d, %d) (0x%X) ###\n", action, (quintptr)this, m_col, m_row, (quintptr)m_tileData)
+#define DEBUG_LOG_ACTION(action)                                        \
+    printf("### %s \ttile:\t0x%X (%d, %d) (0x%X) ###\n", action, (quintptr)this, m_col, m_row, (quintptr)m_tileData)
 #else
-    #define DEBUG_LOG_ACTION(action)
+#define DEBUG_LOG_ACTION(action)
 #endif
 
 #ifdef DEBUG_TILE_COWING
-    #define DEBUG_COWING(newTD) \
-         printf("### COW done \ttile:\t0x%X (%d, %d) (0x%X -> 0x%X) [mm: 0x%X] ###\n", (quintptr)this, m_col, m_row, (quintptr)m_tileData, (quintptr)newTD, m_mementoManager);
+#define DEBUG_COWING(newTD)                                             \
+    printf("### COW done \ttile:\t0x%X (%d, %d) (0x%X -> 0x%X) [mm: 0x%X] ###\n", (quintptr)this, m_col, m_row, (quintptr)m_tileData, (quintptr)newTD, m_mementoManager);
 #else
-    #define DEBUG_COWING(newTD)
+#define DEBUG_COWING(newTD)
 #endif
 
 
@@ -149,6 +149,6 @@ void KisTile::debugDumpTile()
             printf("%4d ", data[ (i*KisTileData::WIDTH+j)*pixelSize() ]);
         }
         printf("\n");
-     }
-     unlock();
+    }
+    unlock();
 }

@@ -25,13 +25,16 @@
 #include "kis_tile.h"
 #include "kis_tiled_data_manager.h"
 #include "krita_export.h"
+
 /**
- * The KisIterator class iterates through the pixels of a KisPaintDevice hiding the tile structure
+ * The KisIterator class iterates through the pixels of a
+ * KisPaintDevice hiding the tile structure
  */
 class KisTiledIterator : public KisShared
 {
 
 protected:
+
     KisTiledDataManager *m_dataManager;
     qint32 m_pixelSize;        // bytes per pixel
     qint32 m_x;        // current x position
@@ -74,7 +77,7 @@ protected:
     inline qint32 calcXInTile(qint32 x, qint32 col) const {
 	return x - col * KisTileData::WIDTH;
     }
-    
+
     inline qint32 calcYInTile(qint32 y, qint32 row) const {
 	return y - row * KisTileData::HEIGHT;
     }
@@ -217,13 +220,13 @@ private:
 	return (col > m_leftCol) ? 0
 	    : m_left - m_leftCol * KisTileData::WIDTH;
     }
-    
+
     inline qint32 calcRightInTile(qint32 col) const {
-	return (col < m_rightCol) 
+	return (col < m_rightCol)
 	    ? KisTileData::WIDTH - 1
 	    : m_right - m_rightCol * KisTileData::WIDTH;
     }
-    
+
     void switchToTile(qint32 col, qint32 xInTile);
 };
 
@@ -273,13 +276,13 @@ private:
 	return (row > m_topRow) ? 0
 	    : m_top - m_topRow * KisTileData::HEIGHT;
     }
-    
+
     inline qint32 calcBottomInTile(qint32 row) const {
-	return (row < m_bottomRow) 
+	return (row < m_bottomRow)
 	    ? KisTileData::HEIGHT - 1
 	    : m_bottom - m_bottomRow * KisTileData::HEIGHT;
     }
-    
+
     void switchToTile(qint32 col, qint32 xInTile);
 };
 

@@ -126,7 +126,7 @@ protected:
      */
     void readBytes(quint8 * bytes,
                    qint32 x, qint32 y,
-                   qint32 w, qint32 h);
+                   qint32 w, qint32 h) const;
     /**
      * Copy the bytes in the vector to the specified rect. If there are bytes left
      * in the vector after filling the rect, they will be ignored. If there are
@@ -201,7 +201,8 @@ private:
     qint32 xToCol(qint32 x) const;
     qint32 yToRow(qint32 y) const;
     void getContiguousColumnsAndRows(qint32 x, qint32 y, qint32 *columns, qint32 *rows);
-    KisTileDataWrapper* pixelPtrSafe(qint32 x, qint32 y, bool writable);
+    KisTileDataWrapper* pixelPtrSafe(qint32 x, qint32 y);
+    KisTileDataWrapper* pixelPtrSafe(qint32 x, qint32 y) const;
 };
 
 

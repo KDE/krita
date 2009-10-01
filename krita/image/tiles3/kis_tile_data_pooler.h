@@ -15,8 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-
 #ifndef KIS_TILE_DATA_POOLER_H_
 #define KIS_TILE_DATA_POOLER_H_
 
@@ -31,7 +29,9 @@ class KisTileData;
 class KisTileDataPooler : public QThread
 {
     Q_OBJECT
+
 public:
+
     KisTileDataPooler(KisTileDataStore *store);
     virtual ~KisTileDataPooler();
 
@@ -39,6 +39,7 @@ public:
     void terminatePooler();
 
 protected:
+
     static const qint32 MAX_NUM_CLONES;
     static const qint32 MAX_TIMEOUT;
     static const qint32 MIN_TIMEOUT;
@@ -48,7 +49,7 @@ protected:
     qint32 numClonesNeeded(KisTileData *td) const;
     void cloneTileData(KisTileData *td, qint32 numClones) const;
     void run();
- private:
+private:
     bool interestingTileData(KisTileData* td);
 
 protected:

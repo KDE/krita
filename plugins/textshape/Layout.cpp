@@ -182,7 +182,20 @@ bool Layout::addLine(QTextLine &line)
     bool useFixedLineHeight = height != 0.0;
     if (m_dropCapsNChars > 0)
         height = line.ascent();
-    if (! useFixedLineHeight) {
+    if (useFixedLineHeight) {
+        // QTextLine has its position at the top of the line. So if the ascent changes between lines in a parag
+        // because of different font sizes, for example, we have to adjust the position to make the fixed
+        // line height be from baseline to baseline instead of from top-of-line to top-of-line
+        QTextLayout *layout = m_block.layout();
+        if (layout->lineCount() > 1) {
+            QTextLine prevLine = layout->lineAt(layout->lineCount()-2);
+            Q_ASSERT(prevLine.isValid());
+            if (qAbs(prevLine.y() + height - line.y()) < 0.15) { // don't adjust when the line is not where we expect it.
+                const qreal prevBaseline = prevLine.y() + prevLine.ascent();
+                line.setPosition(QPointF(line.x(), prevBaseline + height - line.ascent()));
+            }
+        }
+    } else { // not fixed lineheight
         const bool useFontProperties = m_format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
         if (useFontProperties)
             height = line.height();

@@ -35,6 +35,7 @@
 #include "metaball.h"
 
 #include <cmath>
+#include <ctime>
 
 #include "random_gauss.h"
 
@@ -43,13 +44,14 @@ SprayBrush::SprayBrush()
     m_radius = 0;
     m_counter = 0;
     m_randomOpacity = false;
-
+    m_painter = 0;
     srand48( time(0) );
     m_rand = new RandomGauss( time(0) );
 }
 
 SprayBrush::~SprayBrush()
 {
+    delete m_painter;
     delete m_rand;
 }
 
@@ -61,9 +63,12 @@ void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, co
     qreal y = info.pos().y();
 
     // initializing painter
-    KisPainter drawer(dev);
+    if (!m_painter){ 
+        m_painter = new KisPainter(dev);
+        m_pixelSize = dev->colorSpace()->pixelSize();    
+    }
+
     KisRandomAccessor accessor = dev->createRandomAccessor( qRound(x), qRound(y) );
-    m_pixelSize = dev->colorSpace()->pixelSize();
     m_inkColor = color;
 
 if (m_settings->useRandomHSV()){
@@ -77,7 +82,7 @@ if (m_settings->useRandomHSV()){
     transfo->transform(color.data(), m_inkColor.data() , 1);
 }
 
-    drawer.setPaintColor(m_inkColor);
+    m_painter->setPaintColor(m_inkColor);
     m_counter++;
 
     // jitter radius
@@ -135,7 +140,7 @@ if (m_settings->useRandomHSV()){
             int steps = 36;
             qreal random = drand48();       
 
-            drawer.setPaintColor(m_inkColor);
+            m_painter->setPaintColor(m_inkColor);
             // it is ellipse
             if (m_shape == 0){
                 //  
@@ -145,24 +150,24 @@ if (m_settings->useRandomHSV()){
                 if (m_width == m_height)
                 {
                     if (m_jitterShapeSize){
-                        paintCircle(drawer, nx + x, ny + y, int((random * ellipseA) + 1.5) , steps);
+                        paintCircle(m_painter, nx + x, ny + y, int((random * ellipseA) + 1.5) , steps);
                     } else{
-                        paintCircle(drawer, nx + x, ny + y, qRound(ellipseA)  , steps);
+                        paintCircle(m_painter, nx + x, ny + y, qRound(ellipseA)  , steps);
                     }
                 } else 
                 {
                     if (m_jitterShapeSize){
-                        paintEllipse(drawer, nx + x, ny + y,int((random * ellipseA) + 1.5) ,int((random * ellipseB) + 1.5), angle , steps);
+                        paintEllipse(m_painter, nx + x, ny + y,int((random * ellipseA) + 1.5) ,int((random * ellipseB) + 1.5), angle , steps);
                     } else{
-                        paintEllipse(drawer, nx + x, ny + y, qRound(ellipseA), qRound(ellipseB), angle , steps);
+                        paintEllipse(m_painter, nx + x, ny + y, qRound(ellipseA), qRound(ellipseB), angle , steps);
                     }
                 }
             } else if (m_shape == 1)
             {
                 if (m_jitterShapeSize){
-                    paintRectangle(drawer, nx + x, ny + y,int((random * m_width) + 1.5) ,int((random * m_height) + 1.5), angle , steps);
+                    paintRectangle(m_painter, nx + x, ny + y,int((random * m_width) + 1.5) ,int((random * m_height) + 1.5), angle , steps);
                 } else{
-                    paintRectangle(drawer, nx + x, ny + y, qRound(m_width), qRound(m_height), angle , steps);
+                    paintRectangle(m_painter, nx + x, ny + y, qRound(m_width), qRound(m_height), angle , steps);
                 }
             }    
         // it is pixel particle
@@ -237,7 +242,7 @@ void SprayBrush::paintParticle(KisRandomAccessor &writeAccessor,const KoColor &c
     memcpy ( writeAccessor.rawData(), pcolor.data(), m_pixelSize );
 }
 
-void SprayBrush::paintCircle(KisPainter& painter, qreal x, qreal y, int radius, int steps) {
+void SprayBrush::paintCircle(KisPainter * painter, qreal x, qreal y, int radius, int steps) {
     QPainterPath path;
     // circle x, circle y
     qreal cx, cy;
@@ -261,17 +266,17 @@ void SprayBrush::paintCircle(KisPainter& painter, qreal x, qreal y, int radius, 
 
     if (m_randomOpacity)
     {
-        painter.setOpacity( qRound(  OPACITY_OPAQUE * drand48()  ) );
+        painter->setOpacity( qRound(  OPACITY_OPAQUE * drand48()  ) );
     }
 
     
-    painter.setFillStyle( KisPainter::FillStyleForegroundColor );
-    painter.fillPainterPath(path);
+    painter->setFillStyle( KisPainter::FillStyleForegroundColor );
+    painter->fillPainterPath(path);
 }
 
 
 
-void SprayBrush::paintEllipse(KisPainter& painter, qreal x, qreal y, int a, int b, qreal angle, int steps) {
+void SprayBrush::paintEllipse(KisPainter* painter, qreal x, qreal y, int a, int b, qreal angle, int steps) {
     QPainterPath path;
     qreal beta = -angle;
     qreal sinbeta = sin(beta);
@@ -294,14 +299,14 @@ void SprayBrush::paintEllipse(KisPainter& painter, qreal x, qreal y, int a, int 
 
     if (m_randomOpacity)
     {
-        painter.setOpacity( int( ( OPACITY_OPAQUE * drand48() ) + 0.5 ) );
+        painter->setOpacity( int( ( OPACITY_OPAQUE * drand48() ) + 0.5 ) );
     }
 
-    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-    painter.fillPainterPath(path);
+    painter->setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter->fillPainterPath(path);
 }
 
-void SprayBrush::paintRectangle(KisPainter& painter, qreal x, qreal y, int width, int height, qreal angle, int steps) {
+void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, int width, int height, qreal angle, int steps) {
     QPainterPath path;
     QTransform transform;
 
@@ -327,11 +332,11 @@ void SprayBrush::paintRectangle(KisPainter& painter, qreal x, qreal y, int width
     
     if (m_randomOpacity)
     {
-        painter.setOpacity( int( ( OPACITY_OPAQUE * drand48() ) + 0.5 ) );
+        painter->setOpacity( int( ( OPACITY_OPAQUE * drand48() ) + 0.5 ) );
     }
 
-    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-    painter.fillPainterPath( path );
+    painter->setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter->fillPainterPath( path );
 }
 
 void SprayBrush::paintDistanceMap(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor){

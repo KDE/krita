@@ -46,9 +46,9 @@ public:
     
     /// Paints Wu Particle
     void paintParticle(KisRandomAccessor &writeAccessor,const KoColor &color,qreal rx, qreal ry);
-    void paintCircle(KisPainter &painter,qreal x, qreal y, int radius, int steps);
-    void paintEllipse(KisPainter &painter,qreal x, qreal y, int a, int b, qreal angle, int steps);
-    void paintRectangle(KisPainter &painter,qreal x, qreal y, int width, int height, qreal angle, int steps);
+    void paintCircle(KisPainter * painter,qreal x, qreal y, int radius, int steps);
+    void paintEllipse(KisPainter * painter,qreal x, qreal y, int a, int b, qreal angle, int steps);
+    void paintRectangle(KisPainter * painter,qreal x, qreal y, int width, int height, qreal angle, int steps);
 
     void paintMetaballs(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor);
     void paintDistanceMap(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor);
@@ -195,7 +195,7 @@ private:
     QRect m_computeArea;
 
     RandomGauss * m_rand;
-    
+    KisPainter * m_painter;
 private:
     const KisSprayPaintOpSettings* m_settings;
     

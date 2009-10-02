@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgSeparations</class>
- <widget class="QWidget" name="WdgSeparations" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgSeparations">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,46 +10,52 @@
     <height>350</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="textLabel1" >
-     <property name="text" >
+  <layout class="QGridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="textLabel1">
+     <property name="text">
       <string>Current color model:</string>
      </property>
-     <property name="wordWrap" >
+     <property name="wordWrap">
       <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" colspan="2" >
-    <widget class="QLabel" name="lblColormodel" >
-     <property name="text" >
+   <item row="0" column="1" colspan="2">
+    <widget class="QLabel" name="lblColormodel">
+     <property name="text">
       <string/>
      </property>
-     <property name="wordWrap" >
+     <property name="wordWrap">
       <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2" >
-    <widget class="Q3ButtonGroup" name="grpSource" >
-     <property name="title" >
+   <item row="1" column="0" colspan="2">
+    <widget class="Q3ButtonGroup" name="grpSource">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
       <string>Source</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="radioCurrentLayer" >
-        <property name="text" >
+     <layout class="QGridLayout">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="radioCurrentLayer">
+        <property name="text">
          <string>Current layer</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="radioAllLayers" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="radioAllLayers">
+        <property name="text">
          <string>Flatten all layers before separation</string>
         </property>
        </widget>
@@ -56,25 +63,25 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="2" >
-    <widget class="Q3ButtonGroup" name="grpOutput" >
-     <property name="title" >
+   <item row="1" column="2">
+    <widget class="Q3ButtonGroup" name="grpOutput">
+     <property name="title">
       <string>Output</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="radioLayers" >
-        <property name="text" >
+     <layout class="QGridLayout">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="radioLayers">
+        <property name="text">
          <string>To layers</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="radioImages" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="radioImages">
+        <property name="text">
          <string>To images</string>
         </property>
        </widget>
@@ -82,32 +89,32 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" colspan="3" >
-    <widget class="Q3ButtonGroup" name="grpAlpha" >
-     <property name="title" >
+   <item row="2" column="0" colspan="3">
+    <widget class="Q3ButtonGroup" name="grpAlpha">
+     <property name="title">
       <string>Alpha Options</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="radioCopyAlpha" >
-        <property name="text" >
+     <layout class="QGridLayout">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="radioCopyAlpha">
+        <property name="text">
          <string>Copy alpha channel to each separated channel as an alpha channel</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="radioDiscardAlpha" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="radioDiscardAlpha">
+        <property name="text">
          <string>Discard alpha channel</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="radioSeparateAlpha" >
-        <property name="text" >
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="radioSeparateAlpha">
+        <property name="text">
          <string>Create separate separation from alpha channel</string>
         </property>
        </widget>
@@ -115,29 +122,29 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" colspan="3" >
-    <widget class="QCheckBox" name="chkDownscale" >
-     <property name="text" >
+   <item row="3" column="0" colspan="3">
+    <widget class="QCheckBox" name="chkDownscale">
+     <property name="text">
       <string>Downscale to 8-bit before separating</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="3" >
-    <widget class="QCheckBox" name="chkColors" >
-     <property name="text" >
+   <item row="4" column="0" colspan="3">
+    <widget class="QCheckBox" name="chkColors">
+     <property name="text">
       <string>Output to color, not grayscale</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="1" >
+   <item row="5" column="1">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType" >
+     <property name="sizeType">
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>16</height>
@@ -147,8 +154,14 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
-  <customwidgets>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>Q3GroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>Qt3Support/Q3GroupBox</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>Q3ButtonGroup</class>
    <extends>Q3GroupBox</extends>

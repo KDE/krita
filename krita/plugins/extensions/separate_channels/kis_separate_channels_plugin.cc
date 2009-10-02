@@ -20,6 +20,8 @@
 
 #include "kis_separate_channels_plugin.h"
 
+#include <QApplication>
+
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -89,7 +91,9 @@ void KisSeparateChannelsPlugin::slotSeparate()
 
     if (dlgSeparate->exec() == QDialog::Accepted) {
 
-        KoProgressUpdater* pu = m_view->createProgressUpdater();
+        qApp->setOverrideCursor(Qt::BusyCursor);
+        KoProgressUpdater* pu = m_view->createProgressUpdater(KoProgressUpdater::Unthreaded);
+        pu->start(100, i18n("Separate Image"));
         QPointer<KoUpdater> u = pu->startSubtask();
 
         KisChannelSeparator separator(m_view);
@@ -100,6 +104,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
                            dlgSeparate->getDownscale(),
                            dlgSeparate->getToColor());
         pu->deleteLater();
+        qApp->restoreOverrideCursor();
     }
 
     delete dlgSeparate;

@@ -73,32 +73,29 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
     KisPaintDeviceSP src = m_view->activeDevice();
     if (!src) return;
 
-    progressUpdater->setProgress(0);
+    progressUpdater->setProgress(1);
 
     const KoColorSpace * dstCs = 0;
 
     quint32 numberOfChannels = src->channelCount();
     const KoColorSpace * srcCs  = src->colorSpace();
     QList<KoChannelInfo *> channels = srcCs->channels();
-
     // Use the flattened image, if required
     switch (sourceOps) {
-
     case(ALL_LAYERS):
         src = image->mergedImage();
         break;
     default:
         break;
     }
-
     vKisPaintDeviceSP layers;
 
     QList<KoChannelInfo *>::const_iterator begin = channels.constBegin();
     QList<KoChannelInfo *>::const_iterator end = channels.constEnd();
 
-
     QRect rect = src->exactBounds();
 
+    m_view->image()->lock();
     int i = 0;
     quint32 channelIndex = 0;
     for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it, ++channelIndex) {
@@ -280,7 +277,8 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         if (outputOps == TO_LAYERS && undo && undo->undo()) {
             undo->endMacro();
         }
-
+        m_view->image()->unlock();
         image->setModified();
     }
+
 }

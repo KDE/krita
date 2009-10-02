@@ -229,6 +229,13 @@ public:
      */
     virtual KoPageApp::PageType pageType() const;
 
+    /**
+     * Get the thumbnail for the page. 
+     *
+     * Us this method instead the on in the pages directly
+     */
+    QPixmap pageThumbnail(KoPAPageBase* page, const QSize& size);
+
 public slots:
     /// reimplemented
     virtual void initEmpty();

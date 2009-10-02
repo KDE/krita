@@ -101,7 +101,7 @@ void KoPADocument::paintContent( QPainter &painter, const QRect &rect)
 {
     KoPAPageBase * page = pageByIndex( 0, false );
     Q_ASSERT( page );
-    QPixmap thumbnail = page->thumbnail( rect.size() );
+    QPixmap thumbnail( pageThumbnail( page, rect.size() ) );
     painter.drawPixmap( rect, thumbnail );
 }
 
@@ -546,6 +546,13 @@ void KoPADocument::updateViews(KoPAPageBase *page)
 KoPageApp::PageType KoPADocument::pageType() const
 {
     return KoPageApp::Page;
+}
+
+QPixmap KoPADocument::pageThumbnail(KoPAPageBase* page, const QSize& size)
+{
+    int pageNumber = pageIndex(page) + 1;
+    static_cast<KoPAPageProvider*>(d->dataCenterMap[KoPAPageProvider::ID])->setMasterPageNumber(pageNumber);
+    return page->thumbnail(size);
 }
 
 void KoPADocument::initEmpty()

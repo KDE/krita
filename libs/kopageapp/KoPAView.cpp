@@ -852,11 +852,16 @@ void KoPAView::setActionEnabled( int actions, bool enable )
     }
 }
 
+QPixmap KoPAView::pageThumbnail(KoPAPageBase* page, const QSize& size)
+{
+    return d->doc->pageThumbnail(page, size);
+}
+
 bool KoPAView::exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const QSize& size,
                                     const char * format, int quality )
 {
     bool res = false;
-    QPixmap pix = page->thumbnail( size );
+    QPixmap pix = d->doc->pageThumbnail( page, size );
     if ( !pix.isNull() ) {
         // Depending on the desired target size due to rounding
         // errors during zoom the resulting pixmap *might* be

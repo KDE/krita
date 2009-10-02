@@ -119,7 +119,7 @@ public:
      * Set the active page and updates the UI
      */
     void doUpdateActivePage( KoPAPageBase * page );
-    
+
     /**
      * Paste the page if everything is ok
      */
@@ -127,6 +127,13 @@ public:
 
     /// reimplemented
     virtual KoPrintJob * createPrintJob();
+
+    /**
+     * Get the thumbnail for the page. 
+     *
+     * Us this method instead the on in the pages directly
+     */
+    QPixmap pageThumbnail(KoPAPageBase* page, const QSize& size);
 
     /**
      * Save thumbnail to an image file.

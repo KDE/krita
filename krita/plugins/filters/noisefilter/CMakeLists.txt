@@ -1,7 +1,7 @@
 
 
 set(kritanoisefilter_PART_SRCS
-    noisefilter.cc
+    noisefilter.cpp
     kis_wdg_noise.cpp
     )
 

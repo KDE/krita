@@ -1,5 +1,5 @@
 
-set(kritapixelizefilter_PART_SRCS kis_pixelize_filter_plugin.cc kis_pixelize_filter.cc )
+set(kritapixelizefilter_PART_SRCS kis_pixelize_filter_plugin.cpp kis_pixelize_filter.cpp )
 
 
 kde4_add_plugin(kritapixelizefilter ${kritapixelizefilter_PART_SRCS})

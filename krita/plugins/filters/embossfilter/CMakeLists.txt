@@ -1,5 +1,5 @@
 
-set(kritaembossfilter_PART_SRCS kis_emboss_filter_plugin.cc kis_emboss_filter.cc )
+set(kritaembossfilter_PART_SRCS kis_emboss_filter_plugin.cpp kis_emboss_filter.cpp )
 
 
 kde4_add_plugin(kritaembossfilter ${kritaembossfilter_PART_SRCS})

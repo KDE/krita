@@ -1,7 +1,7 @@
 
 
 set(kritafastcolortransferfilter_PART_SRCS
-    fastcolortransfer.cc
+    fastcolortransfer.cpp
     kis_wdg_fastcolortransfer.cpp
     )
 

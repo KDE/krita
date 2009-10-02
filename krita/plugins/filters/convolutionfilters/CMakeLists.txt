@@ -1,7 +1,7 @@
 
 set(kritaconvolutionfilters_PART_SRCS
-   convolutionfilters.cc
-   kis_convolution_filter.cc )
+   convolutionfilters.cpp
+   kis_convolution_filter.cpp )
 
 
 kde4_add_plugin(kritaconvolutionfilters ${kritaconvolutionfilters_PART_SRCS})

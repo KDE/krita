@@ -5,7 +5,7 @@
 
 ########### next target ###############
 
-set(kritacubismfilter_PART_SRCS kis_cubism_filter_plugin.cc kis_cubism_filter.cc kis_polygon.cc )
+set(kritacubismfilter_PART_SRCS kis_cubism_filter_plugin.cpp kis_cubism_filter.cpp kis_polygon.cpp )
 
 
 kde4_add_plugin(kritacubismfilter ${kritacubismfilter_PART_SRCS})

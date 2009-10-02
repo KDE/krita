@@ -5,7 +5,7 @@
 
 ########### next target ###############
 
-set(kritasobelfilter_PART_SRCS kis_sobel_filter_plugin.cc kis_sobel_filter.cc )
+set(kritasobelfilter_PART_SRCS kis_sobel_filter_plugin.cpp kis_sobel_filter.cpp )
 
 
 kde4_add_plugin(kritasobelfilter ${kritasobelfilter_PART_SRCS})

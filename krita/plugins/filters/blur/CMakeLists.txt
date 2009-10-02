@@ -1,9 +1,9 @@
 
 
 set(kritablurfilter_PART_SRCS
-    blur.cc
-    kis_blur_filter.cc
-    kis_wdg_blur.cc
+    blur.cpp
+    kis_blur_filter.cpp
+    kis_wdg_blur.cpp
     )
 
 kde4_add_ui_files(kritablurfilter_PART_SRCS

@@ -1,9 +1,9 @@
 
 
 set(kritaunsharpfilter_PART_SRCS
-    unsharp.cc
-    kis_wdg_unsharp.cc
-    kis_unsharp_filter.cc
+    unsharp.cpp
+    kis_wdg_unsharp.cpp
+    kis_unsharp_filter.cpp
     )
 
 kde4_add_ui_files(kritaunsharpfilter_PART_SRCS

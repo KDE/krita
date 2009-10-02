@@ -1,7 +1,7 @@
 
 
 set(kritawavefilter_PART_SRCS
-    wavefilter.cc
+    wavefilter.cpp
     kis_wdg_wave.cpp
     )
 

@@ -1,10 +1,10 @@
 
 
 set(kritacolorsfilters_PART_SRCS
-    colorsfilters.cc
+    colorsfilters.cpp
     kis_hsv_adjustment_filter.cpp
-    kis_perchannel_filter.cc
-    kis_brightness_contrast_filter.cc
+    kis_perchannel_filter.cpp
+    kis_brightness_contrast_filter.cpp
     )
 
 kde4_add_ui_files(kritacolorsfilters_PART_SRCS

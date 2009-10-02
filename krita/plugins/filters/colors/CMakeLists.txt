@@ -1,10 +1,10 @@
 
 
 set(kritaextensioncolorsfilters_PART_SRCS
-    colors.cc
-    kis_wdg_color_to_alpha.cc
-    kis_color_to_alpha.cc
-    kis_minmax_filters.cc
+    colors.cpp
+    kis_wdg_color_to_alpha.cpp
+    kis_color_to_alpha.cpp
+    kis_minmax_filters.cpp
     )
 
 

@@ -1,6 +1,6 @@
 
 
-set(kritaexample_PART_SRCS example.cc )
+set(kritaexample_PART_SRCS example.cpp )
 
 kde4_add_plugin(kritaexample ${kritaexample_PART_SRCS})
 

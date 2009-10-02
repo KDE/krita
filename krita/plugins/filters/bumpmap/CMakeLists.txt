@@ -1,5 +1,5 @@
 set(kritabumpmap_PART_SRCS
-    bumpmap.cc
+    bumpmap.cpp
     )
 
 kde4_add_ui_files(kritabumpmap_PART_SRCS wdgbumpmap.ui)

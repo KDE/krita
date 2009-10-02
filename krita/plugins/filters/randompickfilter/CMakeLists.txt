@@ -1,7 +1,7 @@
 
 
 set(kritarandompickfilter_PART_SRCS
-    randompickfilter.cc
+    randompickfilter.cpp
     kis_wdg_random_pick.cpp
     )
 

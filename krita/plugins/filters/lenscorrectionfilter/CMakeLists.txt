@@ -1,7 +1,7 @@
 
 
 set(kritalenscorrectionfilter_PART_SRCS
-    lenscorrectionfilter.cc
+    lenscorrectionfilter.cpp
     kis_wdg_lens_correction.cpp
     )
 

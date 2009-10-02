@@ -87,8 +87,6 @@ bool DlgSeparate::getToColor()
     return m_page->chkColors->isChecked();
 }
 
-// SLOTS
-
 void DlgSeparate::okClicked()
 {
     accept();

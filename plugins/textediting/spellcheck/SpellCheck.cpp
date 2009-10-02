@@ -28,12 +28,12 @@
 #include <KLocale>
 #include <KDebug>
 #include <KAction>
+#include <sonnet/configdialog.h>
 
 #include <KoCharacterStyle.h>
 #include <KoCanvasResourceProvider.h>
 
 #include "BgSpellCheck.h"
-#include "SpellCheckConfigDialog.h"
 
 SpellCheck::SpellCheck()
     : m_document(0),
@@ -47,7 +47,8 @@ SpellCheck::SpellCheck()
     connect(configureAction, SIGNAL(triggered()), this, SLOT(configureSpellCheck()));
     addAction("tool_configure_spellcheck", configureAction);
 
-    m_speller = Sonnet::Speller("en_US"); // TODO: make it configurable
+    KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
+    m_speller = Sonnet::Speller(spellConfig.readEntry("defaultLanguage", "en_US"));
     m_bgSpellCheck = new BgSpellCheck(m_speller, this);
 
     m_defaultMisspelledFormat.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
@@ -120,11 +121,17 @@ QStringList SpellCheck::availableLanguages() const
 void SpellCheck::setDefaultLanguage(const QString &language)
 {
     m_speller.setDefaultLanguage(language);
+    m_bgSpellCheck->setDefaultLanguage(language);
 }
 
 void SpellCheck::setBackgroundSpellChecking(bool on)
 {
+    if (m_enableSpellCheck == on)
+        return;
     m_enableSpellCheck = on;
+    if (!m_enableSpellCheck) {
+        // TODO remove all misspellings.
+    }
 }
 
 void SpellCheck::setSkipAllUppercaseWords(bool on)
@@ -258,10 +265,10 @@ void SpellCheck::setDocument(QTextDocument *document)
 
 void SpellCheck::configureSpellCheck()
 {
-    SpellCheckConfigDialog *cfgDlg = new SpellCheckConfigDialog(this);
-    if (cfgDlg->exec()) {
-        // TODO
-    }
+    Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(KGlobal::config().data(), 0);
+    connect (dialog, SIGNAL(languageChanged(const QString&)), this, SLOT(setDefaultLanguage(const QString&)));
+    dialog->exec();
+    delete dialog;
 }
 
 void SpellCheck::resourceChanged( int key, const QVariant &resource )

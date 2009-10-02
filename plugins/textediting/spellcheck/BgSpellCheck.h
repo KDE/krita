@@ -41,6 +41,9 @@ protected:
     /// reimplemented
     virtual QString fetchMoreText();
 
+public slots:
+    void setDefaultLanguage(const QString &language);
+
 private slots:
     void foundMisspelling(const QString &word, int start);
 

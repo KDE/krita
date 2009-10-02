@@ -30,13 +30,18 @@
 BgSpellCheck::BgSpellCheck(const Speller &speller, QObject *parent):
     BackgroundChecker(speller, parent)
 {
-    m_defaultLanguage = speller.language();
+    connect(this, SIGNAL(misspelling(const QString &, int)), this, SLOT(foundMisspelling(const QString &, int)));
+    setDefaultLanguage(speller.language());
+}
+
+void BgSpellCheck::setDefaultLanguage(const QString &language)
+{
+    m_defaultLanguage = language;
     int index = m_defaultLanguage.indexOf('_');
     if (index > 0) {
         m_defaultCountry = m_defaultLanguage.mid(index+1);
         m_defaultLanguage = m_defaultLanguage.left(index);
     }
-    connect(this, SIGNAL(misspelling(const QString &, int)), this, SLOT(foundMisspelling(const QString &, int)));
 }
 
 void BgSpellCheck::startRun(QTextDocument *document, int startPosition, int endPosition)

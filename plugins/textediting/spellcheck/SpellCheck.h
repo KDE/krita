@@ -44,7 +44,6 @@ public:
     QStringList availableLanguages() const;
 
     // void setDefaultClient(const QString &client);
-    void setDefaultLanguage(const QString &lang);
     void setBackgroundSpellChecking(bool b);
     void setSkipAllUppercaseWords(bool b);
     void setSkipRunTogetherWords(bool b);
@@ -58,6 +57,7 @@ public:
 
 public slots:
     void resourceChanged( int key, const QVariant & res );
+    void setDefaultLanguage(const QString &lang);
 
 private slots:
     void highlightMisspelled(const QString &word, int startPosition, bool misspelled = true);

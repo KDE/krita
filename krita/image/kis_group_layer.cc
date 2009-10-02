@@ -107,6 +107,7 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
         const KisLayer *child = dynamic_cast<KisLayer*>(firstChild().data());
 
         if(child &&
+           child->channelFlags().isEmpty() &&
            child->projection() &&
            child->visible() &&
            child->opacity() == OPACITY_OPAQUE &&

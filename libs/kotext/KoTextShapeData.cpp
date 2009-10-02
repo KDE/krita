@@ -92,12 +92,14 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
     Q_ASSERT(document);
     if (d->ownsDocument && document != d->document)
         delete d->document;
+    d->ownsDocument = transferOwnership;
+    if (d->document == document)
+        return;
     d->document = document;
     // The following avoids the normal case where the glyph metrices are rounded to integers and
     // hinted to the screen by freetype, which you of course don't want for WYSIWYG
     if (! d->document->useDesignMetrics())
         d->document->setUseDesignMetrics(true);
-    d->ownsDocument = transferOwnership;
 
     if (d->document->isEmpty()) { // apply app default style for first parag
         KoTextDocument doc(d->document);

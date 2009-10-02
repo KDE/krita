@@ -22,12 +22,17 @@
 #include <cmath>
 
 #include <QRect>
-
 #include <kis_global.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_types.h>
 #include <kis_paintop.h>
+
+
+#ifdef BENCHMARK
+    #include <QTime>
+#endif
+
 
 KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp( painter )
@@ -82,6 +87,11 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sprayBrush.setUseRandomOpacity(settings->useRandomOpacity());
     m_sprayBrush.setSettingsObject(m_settings);
 
+    
+#ifdef BENCHMARK
+    m_count = m_total = 0;
+#endif
+    
 }
 
 KisSprayPaintOp::~KisSprayPaintOp()
@@ -100,6 +110,11 @@ double KisSprayPaintOp::spacing(double & xSpacing, double & ySpacing, double pre
 
 void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 {
+#ifdef BENCHMARK
+    QTime time;
+    time.start();
+#endif
+    
     if (!painter()) return;
 
     if (!m_dab) {
@@ -112,8 +127,13 @@ void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     m_sprayBrush.paint(m_dab, info, painter()->paintColor());
 
     QRect rc = m_dab->extent();
-
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
 
+#ifdef BENCHMARK
+    int msec = time.elapsed();
+    kDebug() << msec << " ms/dab " << "[average: " << m_total / (qreal)m_count << "]";
+    m_total += msec;
+    m_count++;
+#endif
 }
 

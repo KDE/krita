@@ -81,7 +81,8 @@ KoParagraphStyle::KoParagraphStyle(QObject *parent)
 
 KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &blockCharFormat, QObject *parent)
         : QObject(parent),
-        d(new Private())
+        d(new Private()),
+        normalLineHeight(false)
 {
     d->stylesPrivate = blockFormat.properties();
     d->charStyle = new KoCharacterStyle(blockCharFormat, this);

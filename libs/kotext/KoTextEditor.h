@@ -49,7 +49,7 @@ class KOTEXT_EXPORT KoTextEditor: public KoToolSelection
 public:
     KoTextEditor(QTextDocument *document);
 
-    ~KoTextEditor();
+    virtual ~KoTextEditor();
 
 /*    QTextCursor ()
 QTextCursor ( QTextDocument * document )

@@ -40,20 +40,22 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "kis_annotation.h"
-#include "kis_config.h"
-#include "kis_cursor.h"
-#include "kis_global.h"
-#include "kis_image.h"
-#include "kis_node_manager.h"
-#include "kis_layer.h"
-#include "kis_types.h"
+#include <kis_undo_adapter.h>
+#include <kis_transaction.h>
+#include <kis_annotation.h>
+#include <kis_config.h>
+#include <kis_cursor.h>
+#include <kis_global.h>
+#include <kis_image.h>
+#include <kis_node_manager.h>
+#include <kis_layer.h>
+#include <kis_types.h>
 
-#include "kis_view2.h"
-#include "kis_paint_device.h"
-#include "widgets/kis_cmb_idlist.h"
-#include "widgets/squeezedcombobox.h"
-#include "kis_group_layer.h"
+#include <kis_view2.h>
+#include <kis_paint_device.h>
+#include <widgets/kis_cmb_idlist.h>
+#include <widgets/squeezedcombobox.h>
+#include <kis_group_layer.h>
 
 #include "dlg_colorspaceconversion.h"
 
@@ -126,6 +128,12 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From") + dev->colorSpace()->name());
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
+
+        KisTransaction* t = 0;
+        if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
+            t = new KisTransaction(i18n("Convert Layer Tye"), dev);
+        }
+
         KoID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
         const KoColorSpace * cs = KoColorSpaceRegistry::instance() ->
                                   colorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
@@ -133,6 +141,12 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         dev->convertTo(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
         dev->setDirty();
+
+        if (t) {
+            m_view->undoAdapter()->addCommand(t);
+        }
+
+
         QApplication::restoreOverrideCursor();
         m_view->nodeManager()->nodesUpdated();
     }

@@ -33,6 +33,7 @@
 #include <kpushbutton.h>
 #include <knuminput.h>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 
@@ -47,13 +48,13 @@
 #include "widgets/kis_channelflags_widget.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
-        qint32 opacity,
-        const KoCompositeOp* compositeOp,
-        const KoColorSpace * colorSpace,
-        const QBitArray & channelFlags,
-        QWidget *parent, const char *name, Qt::WFlags f)
-        : KDialog(parent)
-        , m_colorSpace(colorSpace)
+                                             qint32 opacity,
+                                             const KoCompositeOp* compositeOp,
+                                             const KoColorSpace * colorSpace,
+                                             const QBitArray & channelFlags,
+                                             QWidget *parent, const char *name, Qt::WFlags f)
+    : KDialog(parent)
+    , m_colorSpace(colorSpace)
 {
     Q_UNUSED(f);
     setCaption(i18n("Layer Properties"));
@@ -62,7 +63,6 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
 
     setObjectName(name);
     m_page = new WdgLayerProperties(this);
-//     m_page->layout()->setMargin(0);
 
     opacity = int((opacity * 100.0) / 255 + 0.5);
 
@@ -71,14 +71,11 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->editName->setText(deviceName);
     connect(m_page->editName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
 
-    m_page->cmbColorSpaces->setCurrent(colorSpace->id());
-    m_page->cmbColorSpaces->setEnabled(false);
+    m_page->lblColorSpace->setText(colorSpace->name());
 
-    QString profilename;
-    if (const KoColorProfile* profile = colorSpace->profile())
-        profilename = profile->name();
-    m_page->cmbProfile->addSqueezedItem(profilename);
-    m_page->cmbProfile->setEnabled(false);
+    if (const KoColorProfile* profile = colorSpace->profile()) {
+        m_page->lblProfile->setText(profile->name());
+    }
 
     m_page->intOpacity->setMinimum(0);
     m_page->intOpacity->setMaximum(100);
@@ -95,6 +92,8 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     vbox->addStretch(1);
     m_page->grpActiveChannels->setLayout(vbox);
     m_channelFlags->setChannelFlags(channelFlags);
+
+    setMinimumSize(m_page->sizeHint());
 
 }
 
@@ -134,7 +133,7 @@ QBitArray KisDlgLayerProperties::getChannelFlags() const
 {
     QBitArray flags = m_channelFlags->channelFlags();
     for (int i = 0; i < flags.size(); ++i) {
-       dbgUI << "Received flag from channelFlags widget, flag " << i << " is " << flags.testBit(i);
+        dbgUI << "Received flag from channelFlags widget, flag " << i << " is " << flags.testBit(i);
     }
     return flags;
 }

@@ -64,8 +64,6 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     m_page->lblResolutionValue->setText(KGlobal::locale()->formatNumber(image->xRes()*72, 2)); // XXX: separate values for x & y?
 
-    //m_page->cmbColorSpaces->hide();
-    //m_page->lblColorSpaces->setText(image->colorSpace()->id().name());
     QList<KoID> colorSpaces = KoColorSpaceRegistry::instance()->listKeys();
     qint32 i = colorSpaces.indexOf(KoID("WET", ""));
     if (i >= 0) {

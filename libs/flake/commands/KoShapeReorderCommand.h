@@ -58,6 +58,7 @@ public:
      * @param manager the shapeManager that contains all the shapes that could have their indexes changed.
      * @param move the moving type.
      * @param parent the parent command for grouping purposes.
+     * @return command for reording the shapes or 0 if no reordering happend
      */
     static KoShapeReorderCommand *createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager,
             MoveShapeType move, QUndoCommand *parent = 0);
@@ -68,6 +69,8 @@ public:
     void undo();
 
 private:
+    static void prepare(KoShape * s, QMap<KoShape*, QList<KoShape*> > & newOrder, KoShapeManager * manager, MoveShapeType move);
+
     QList<KoShape*> m_shapes;
     QList<int> m_previousIndexes, m_newIndexes;
 };

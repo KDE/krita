@@ -1071,7 +1071,9 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
         return;
 
     QUndoCommand * cmd = KoShapeReorderCommand::createCommand(editableShapes, m_canvas->shapeManager(), order);
-    m_canvas->addCommand(cmd);
+    if (cmd) {
+        m_canvas->addCommand(cmd);
+    }
 }
 
 QMap<QString, QWidget *> DefaultTool::createOptionWidgets()

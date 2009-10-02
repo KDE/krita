@@ -333,6 +333,11 @@ void KoPADocumentStructureDocker::addLayer()
         if ( canvas ) {
             layer->setParent( canvas->koPAView()->activePage() );
             layer->setName( name );
+            QList<KoShape*> layers( canvas->koPAView()->activePage()->childShapes() );
+            if ( !layers.isEmpty() ) {
+                qSort( layers.begin(), layers.end(), KoShape::compareShapeZIndex );
+                layer->setZIndex( layers.last()->zIndex() + 1 );
+            }
             QUndoCommand *cmd = new KoShapeCreateCommand( m_doc, layer, 0 );
             cmd->setText( i18n( "Create Layer") );
             m_doc->addCommand( cmd );

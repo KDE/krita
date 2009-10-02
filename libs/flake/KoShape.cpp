@@ -383,22 +383,35 @@ QMatrix KoShape::transformation() const
 
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 {
-    int diff = s1->zIndex() - s2->zIndex();
-    if (diff == 0) {
-        KoShape *s = s1->parent();
-        while (s) {
-            if (s == s2) // s1 is a child of s2
-                return false; // children are always on top of their parents.
-            s = s->parent();
+    bool foundCommonParent = false;
+    KoShape *parentShapeS1 = s1;
+    KoShape *parentShapeS2 = s2;
+    int index1 = parentShapeS1->zIndex();
+    int index2 = parentShapeS2->zIndex();
+    while (parentShapeS1 && !foundCommonParent) {
+        parentShapeS2 = s2;
+        index2 = parentShapeS2->zIndex();
+        while (parentShapeS2) {
+            if (parentShapeS2 == parentShapeS1) {
+                foundCommonParent = true;
+                break;
+            }
+            index2 = parentShapeS2->zIndex();
+            parentShapeS2 = parentShapeS2->parent();
         }
-        s = s2->parent();
-        while (s) {
-            if (s == s1) // s2 is a child of s1
-                return true;
-            s = s->parent();
+
+        if (!foundCommonParent) {
+            index1 = parentShapeS1->zIndex();
+            parentShapeS1 = parentShapeS1->parent();
         }
     }
-    return diff < 0;
+    if (s1 == parentShapeS2) {
+        return true;
+    }
+    else if (s2 == parentShapeS1) {
+        return false;
+    }
+    return index1 < index2;
 }
 
 void KoShape::setParent(KoShapeContainer *parent)
@@ -421,8 +434,6 @@ void KoShape::setParent(KoShapeContainer *parent)
 int KoShape::zIndex() const
 {
     Q_D(const KoShape);
-    if (parent()) // we can't be under our parent...
-        return qMax((int) d->zIndex, parent()->zIndex());
     return d->zIndex;
 }
 

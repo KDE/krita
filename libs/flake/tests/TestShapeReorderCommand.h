@@ -36,6 +36,7 @@ private slots:
     void testMoveUpOverlapping();
     void testMoveDownOverlapping();
     void testSendToBackChildren();
+    void testNoCommand();
 };
 
 #endif // TESTSHAPEREORDERCOMMAND_H

@@ -741,6 +741,7 @@ void Layout::nextShape()
     m_data->foul(); // make dirty since this one needs relayout at this point.
     m_textShape = dynamic_cast<TextShape*>(shape);
     Q_ASSERT(m_textShape);
+    m_textShape->setDemoText(m_demoText);
     if (m_textShape->hasFootnoteDocument()) {
         QTextCursor cursor(m_textShape->footnoteDocument());
         cursor.select(QTextCursor::Document);
@@ -762,8 +763,10 @@ void Layout::cleanupShapes()
 void Layout::cleanupShape(KoShape *daShape)
 {
     TextShape *ts = dynamic_cast<TextShape*>(daShape);
-    if (ts)
+    if (ts) {
         ts->markLayoutDone();
+        ts->setDemoText(m_demoText);
+    }
     KoTextShapeData *textData = qobject_cast<KoTextShapeData*>(daShape->userData());
     if (textData == 0)
         return;

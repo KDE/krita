@@ -673,7 +673,6 @@ const QTextCursor TextTool::cursor()
 void TextTool::setShapeData(KoTextShapeData *data)
 {
     bool docChanged = data == 0 || m_textShapeData == 0 || m_textShapeData->document() != data->document();
-    if (m_textShapeData && docChanged)
     if (m_textShapeData)
         disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     m_textShapeData = data;
@@ -684,12 +683,36 @@ void TextTool::setShapeData(KoTextShapeData *data)
         if (m_textEditor)
             disconnect(m_textEditor, SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
+        Q_ASSERT(m_textEditor);
         connect(m_textEditor, SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
 
-        if (m_textShape->demoText()) {
-            m_textShapeData->document()->setUndoRedoEnabled(false); // removes undo history
-            m_textShape->setDemoText(false); // remove demo text
-            m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        if (lay) { // check and remove the demo text.
+            bool demoTextOn = true;
+            foreach (KoShape *shape, lay->shapes()) {
+                TextShape *ts = dynamic_cast<TextShape*>(shape);
+                if (ts && !ts->demoText()) { // if any shape in the series has it turned off, we don't have it anymore.
+                    demoTextOn = false;
+                    break;
+                }
+            }
+
+            if (demoTextOn) {
+                QTextDocument *doc = m_textShapeData->document();
+                doc->setUndoRedoEnabled(false); // removes undo history
+                KoTextDocument document(doc);
+                document.clearText();
+                KoStyleManager *styleManager = document.styleManager();
+                if (styleManager) {
+                    QTextBlock block = doc->begin();
+                    styleManager->defaultParagraphStyle()->applyStyle(block);
+                }
+                m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
+                foreach (KoShape *shape, lay->shapes()) {
+                    TextShape *ts = dynamic_cast<TextShape*>(shape);
+                    if (ts) ts->setDemoText(false);
+                }
+            }
         }
     }
     m_textEditor->updateDefaultTextDirection(m_textShapeData->pageDirection());

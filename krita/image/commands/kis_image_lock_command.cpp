@@ -42,23 +42,30 @@ KisImageLockCommand::KisImageLockCommand(KisImageWSP image, bool lockImage)
 
 void KisImageLockCommand::redo()
 {
+    kDebug() << "redo";
     setUndo(false);
     if (m_lockImage) {
         m_image->lock();
     } else {
         m_image->unlock();
     }
+    m_image->rootLayer()->setDirty();
+    m_image->refreshGraph();
+
     setUndo(true);
 }
 
 void KisImageLockCommand::undo()
 {
+    kDebug() << "undo";
     setUndo(false);
     if (m_lockImage) {
         m_image->unlock();
     } else {
         m_image->lock();
     }
+    m_image->rootLayer()->setDirty();
+    m_image->refreshGraph();
     setUndo(true);
 }
 

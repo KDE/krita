@@ -184,11 +184,18 @@ void DynaBrush::drawSegment(KisPainter &painter)
     if (m_enableLine)
     painter.drawLine( prev, now );
 
+    qreal screenX = m_mouse.velx * m_image->width(); 
+    qreal screenY = m_mouse.vely * m_image->height(); 
+    qreal speed = sqrt(screenX*screenX + screenY*screenY);
+    
     if (m_action == 0){
-        drawCircle(painter, prev.x(), prev.y() , m_circleRadius * nx , 2 * m_circleRadius  * nx );
+        drawCircle(painter, prev.x(), prev.y() , m_circleRadius + speed, 2 * m_circleRadius  + speed);
+        //painter.paintEllipse(prevl.x(), prevl.y(), qAbs((prevl - prevr).x()), qAbs((prevl - prevr).y()) );
         if (m_twoCircles)
         {
-            drawCircle(painter, now.x(), now.y() , m_circleRadius * ny , 2 * m_circleRadius * ny );
+            drawCircle(painter, now.x(), now.y() , m_circleRadius + speed, 2 * m_circleRadius + speed);
+            //drawCircle(painter, now.x(), now.y() , m_circleRadius * m_mouse.vel , 2 * m_circleRadius * m_mouse.vel );
+          //  painter.paintEllipse(nowl.x(), nowl.y(), qAbs((nowl - nowr).x()), qAbs((nowl - nowr).y()) );
         }
     }else
     if (m_action == 1)

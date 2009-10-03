@@ -45,7 +45,7 @@
 #include "kis_selection.h"
 #include "kis_node.h"
 #include "kis_painterly_overlay.h"
-
+#include "commands/kis_paintdevice_convert_type_command.h"
 #include "kis_datamanager.h"
 
 #include "kis_selection_component.h"
@@ -364,16 +364,16 @@ bool KisPaintDevice::read(KoStore *store)
     return retval;
 }
 
-void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+QUndoCommand* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
 {
+    dbgImage << this << colorSpace()->id() << dstColorSpace->id() << renderingIntent;
     if (*colorSpace() == *dstColorSpace) {
-        return;
+        return 0;
     }
 
     KisPaintDevice dst(dstColorSpace);
     dst.setX(x());
     dst.setY(y());
-
 
     qint32 x, y, w, h;
     QRect rc = exactBounds();
@@ -412,10 +412,18 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
     KisDataManagerSP oldData = m_datamanager;
     const KoColorSpace *oldColorSpace = m_d->colorSpace;
 
+    KisPaintDeviceConvertTypeCommand* cmd = new KisPaintDeviceConvertTypeCommand(this,
+                                                                                 oldData,
+                                                                                 oldColorSpace,
+                                                                                 dst.m_datamanager,
+                                                                                 dstColorSpace);
+
     setDataManager(dst.m_datamanager, dstColorSpace);
 
     emit colorSpaceChanged(dstColorSpace);
     delete oldColorSpace;
+
+    return cmd;
 }
 
 void KisPaintDevice::setProfile(const KoColorProfile * profile)
@@ -432,10 +440,10 @@ void KisPaintDevice::setProfile(const KoColorProfile * profile)
 void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * colorSpace)
 {
     m_datamanager = data;
+    //delete m_d->colorSpace;
     m_d->colorSpace = colorSpace->clone();
     m_d->pixelSize = m_d->colorSpace->pixelSize();
     m_d->nChannels = m_d->colorSpace->channelCount();
-
 }
 
 void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcProfileName,

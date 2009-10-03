@@ -594,10 +594,8 @@ void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTr
 
     setColorSpace(dstColorSpace);
 
-    KisColorSpaceConvertVisitor visitor(dstColorSpace, renderingIntent);
+    KisColorSpaceConvertVisitor visitor(this, dstColorSpace, renderingIntent);
     m_d->rootLayer->accept(visitor);
-
-    unlock();
 
     if (undo()) {
 
@@ -605,6 +603,9 @@ void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTr
         m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
         m_d->adapter->endMacro();
     }
+
+    unlock();
+    refreshGraph();
 }
 
 const KoColorProfile * KisImage::profile() const

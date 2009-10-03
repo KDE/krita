@@ -32,6 +32,7 @@
 
 #include <krita_export.h>
 
+class QUndoCommand;
 class QRect;
 class QImage;
 class QPoint;
@@ -267,9 +268,11 @@ public:
     void writePlanarBytes(QVector<quint8*> planes, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /**
-     *   Converts the paint device to a different colorspace
+     * Converts the paint device to a different colorspace
+     *
+     * @return a command that can be used to undo the conversion.
      */
-    void convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    QUndoCommand* convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given

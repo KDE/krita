@@ -74,11 +74,6 @@ const KoColorSpace * KisGroupLayer::colorSpace() const
     return m_d->paintDevice->colorSpace();
 }
 
-void KisGroupLayer::setColorSpace(const KoColorSpace* colorSpace, KoColorConversionTransformation::Intent renderingIntent) const
-{
-    m_d->paintDevice->convertTo(colorSpace, renderingIntent);
-}
-
 QIcon KisGroupLayer::icon() const
 {
     return KIcon("folder");
@@ -86,10 +81,10 @@ QIcon KisGroupLayer::icon() const
 
 void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 {
-    if(!colorSpace)
+    if (!colorSpace)
         colorSpace = image()->colorSpace();
 
-    if(!m_d->paintDevice ||
+    if (!m_d->paintDevice ||
        !(*m_d->paintDevice->colorSpace() == *colorSpace)) {
 
         m_d->paintDevice = new KisPaintDevice(colorSpace);
@@ -103,26 +98,21 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
 {
     KisPaintDeviceSP retval;
 
-    if(parent().isNull() && childCount() == 1) {
+    if (parent().isNull() && childCount() == 1) {
         const KisLayer *child = dynamic_cast<KisLayer*>(firstChild().data());
 
-        if(child &&
-           child->channelFlags().isEmpty() &&
-           child->projection() &&
-           child->visible() &&
-           child->opacity() == OPACITY_OPAQUE &&
-           *child->projection()->colorSpace() == *colorSpace()) {
+        if (child &&
+            child->channelFlags().isEmpty() &&
+            child->projection() &&
+            child->visible() &&
+            child->opacity() == OPACITY_OPAQUE &&
+            *child->projection()->colorSpace() == *colorSpace()) {
 
             retval = child->projection();
         }
     }
 
     return retval;
-}
-
-KisPaintDeviceSP KisGroupLayer::paintDevice() const
-{
-    return 0;
 }
 
 KisPaintDeviceSP KisGroupLayer::original() const
@@ -132,7 +122,6 @@ KisPaintDeviceSP KisGroupLayer::original() const
      * Try to use children's paintDevice if it's the only
      * one in stack and meets some conditions
      */
-
     KisPaintDeviceSP childOriginal = tryObligeChild();
     return childOriginal ? childOriginal : m_d->paintDevice;
 }

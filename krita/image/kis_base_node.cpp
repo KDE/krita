@@ -64,6 +64,17 @@ KisPaintDeviceSP KisBaseNode::paintDevice() const
     return 0;
 }
 
+KisPaintDeviceSP KisBaseNode::original() const
+{
+    return 0;
+}
+
+KisPaintDeviceSP KisBaseNode::projection() const
+{
+    return 0;
+}
+
+
 KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l;

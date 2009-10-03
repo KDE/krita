@@ -53,6 +53,7 @@ public:
                            const QString&  oldCompositeOp, const QString& newCompositeOp,
                            const QString& oldName, const QString& newName,
                            const QBitArray oldChannelFlags, const QBitArray newChannelFlags );
+
     virtual ~KisLayerPropsCommand();
     virtual void redo();
     virtual void undo();
@@ -60,7 +61,7 @@ public:
 private:
     QString m_oldName;
     QString m_newName;
-    
+
     qint32 m_oldOpacity;
     qint32 m_newOpacity;
 
@@ -71,4 +72,4 @@ private:
     QBitArray m_newChannelFlags;
 };
 
-#endif 
+#endif

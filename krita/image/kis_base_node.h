@@ -75,6 +75,19 @@ public:
     virtual KisPaintDeviceSP paintDevice() const;
 
     /**
+     * @return the rendered representation of a node
+     * before the effect masks have had their go at it. Can be 0.
+     */
+    virtual KisPaintDeviceSP original() const;
+
+    /**
+     * @return the fully rendered representation of this layer: its
+     * rendered original and its effect masks. Can be 0.
+     */
+    virtual KisPaintDeviceSP projection() const;
+
+
+    /**
      * return the name of this node. This is the same as the
      * QObject::objectName.
      */
@@ -217,14 +230,14 @@ public:
      * algorithm need to wait before accessing it.
      */
     void setSystemLocked(bool l);
-    
+
     /**
      * @return true if the node can be edited: if it's visible and neither locked
      *         by the user nor by the system.
      *         It's equivalent to ( visible() and not userLocked() and not systemLocked() ).
      */
     bool isEditable() const;
-    
+
     /**
      * @return the x-offset of this layer in the image plane.
      */

@@ -38,82 +38,10 @@
 #include "filter/kis_filter.h"
 #include "generator/kis_generator_layer.h"
 
-// XXX: Make undoable (used to be in KisPaintDevice, should be in
-// KisLayer)
-#if 0
-namespace
-{
-
-class KisPaintDeviceCommand : public QUndoCommand
-{
-public:
-    KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice);
-    virtual ~KisPaintDeviceCommand() {}
-
-protected:
-    void setUndo(bool undo);
-
-    KisPaintDeviceSP m_paintDevice;
-};
-
-KisPaintDeviceCommand::KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice) :
-        QUndoCommand(name), m_paintDevice(paintDevice)
-{
-}
-
-void KisPaintDeviceCommand::setUndo(bool undo)
-{
-    if (m_paintDevice->undoAdapter()) {
-        m_paintDevice->undoAdapter()->setUndo(undo);
-    }
-}
-
-class KisConvertLayerTypeCmd : public KisPaintDeviceCommand
-{
-
-public:
-    KisConvertLayerTypeCmd(KisPaintDeviceSP paintDevice,
-                           KisDataManagerSP beforeData, const KoColorSpace * beforeColorSpace,
-                           KisDataManagerSP afterData, const KoColorSpace * afterColorSpace)
-            : KisPaintDeviceCommand(i18n("Convert Layer Type"), paintDevice) {
-        m_beforeData = beforeData;
-        m_beforeColorSpace = beforeColorSpace;
-        m_afterData = afterData;
-        m_afterColorSpace = afterColorSpace;
-    }
-
-    virtual ~KisConvertLayerTypeCmd() {
-    }
-
-public:
-    virtual void redo() {
-        setUndo(false);
-        m_paintDevice->setDataManager(m_afterData, m_afterColorSpace);
-        setUndo(true);
-    }
-
-    virtual void undo() {
-        setUndo(false);
-        m_paintDevice->setDataManager(m_beforeData, m_beforeColorSpace);
-        setUndo(true);
-    }
-
-private:
-    KisDataManagerSP m_beforeData;
-    const KoColorSpace * m_beforeColorSpace;
-
-    KisDataManagerSP m_afterData;
-    const KoColorSpace * m_afterColorSpace;
-};
-
-}
-#endif
-
-
 class KRITAIMAGE_EXPORT KisColorSpaceConvertVisitor : public KisNodeVisitor
 {
 public:
-    KisColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);
+    KisColorSpaceConvertVisitor(KisImageWSP image, const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);
     virtual ~KisColorSpaceConvertVisitor();
 
 public:
@@ -131,8 +59,11 @@ public:
     bool visit(KisTransformationMask*) { return true; }
     bool visit(KisSelectionMask*) { return true; }
 
-
 private:
+
+    bool convertPaintDevice(KisLayer* layer);
+
+    KisImageWSP m_image;
     const KoColorSpace *m_dstColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;
     QBitArray m_emptyChannelFlags;

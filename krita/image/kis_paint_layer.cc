@@ -94,6 +94,7 @@ KisPaintDeviceSP KisPaintLayer::original() const
 {
     return m_d->paintDevice;
 }
+
 KisPaintDeviceSP KisPaintLayer::paintDevice() const
 {
     return m_d->paintDevice;

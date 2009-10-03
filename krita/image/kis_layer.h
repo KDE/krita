@@ -258,7 +258,6 @@ public:
 
 protected:
 
-
     /**
      * @param rectVariesFlag (out param) a flag, showing whether
      *        a rect varies from mask to mask

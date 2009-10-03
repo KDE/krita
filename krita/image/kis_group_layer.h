@@ -61,8 +61,8 @@ public:
      */
     const KoColorSpace * colorSpace() const;
 
+    /// @return the projection of the layers in the group before the masks are applied.
     KisPaintDeviceSP original() const;
-    KisPaintDeviceSP paintDevice() const;
 
     /**
      * If a dirty node is set, repaintOriginal can optimize by checking
@@ -74,8 +74,6 @@ public:
     void setDirtyNode(KisNodeSP node);
 
     QRect repaintOriginal(KisPaintDeviceSP original, const QRect& rect);
-
-    void setColorSpace(const KoColorSpace* colorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
 
     qint32 x() const;
     qint32 y() const;

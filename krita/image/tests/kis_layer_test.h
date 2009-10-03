@@ -49,7 +49,7 @@ public:
 
     QRect repaintOriginal(KisPaintDeviceSP original, const QRect& rect) {
         Q_UNUSED(original);
-        Q_UNUSED(rect);
+        return rect;
     }
 
     KisPaintDeviceSP original() const {

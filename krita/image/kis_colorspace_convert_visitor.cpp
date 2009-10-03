@@ -17,13 +17,18 @@
  */
 
 #include "kis_colorspace_convert_visitor.h"
+#include "kis_transaction.h"
+#include "kis_image.h"
+#include "kis_undo_adapter.h"
+#include "commands/kis_layer_props_command.h"
 
-
-KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace,
-                                                         KoColorConversionTransformation::Intent renderingIntent) :
-        KisNodeVisitor(),
-        m_dstColorSpace(dstColorSpace),
-        m_renderingIntent(renderingIntent)
+KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(KisImageWSP image,
+                                                         const KoColorSpace *dstColorSpace,
+                                                         KoColorConversionTransformation::Intent renderingIntent)
+                                                             : KisNodeVisitor()
+                                                             , m_image(image)
+                                                             , m_dstColorSpace(dstColorSpace)
+                                                             , m_renderingIntent(renderingIntent)
 {
 }
 
@@ -33,38 +38,31 @@ KisColorSpaceConvertVisitor::~KisColorSpaceConvertVisitor()
 
 bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
 {
-    // Clear the projection, we will have to re-render everything.
-    // The image is already set to the new colorspace, so this'll work.
-    layer->setColorSpace(m_dstColorSpace, m_renderingIntent);
-    layer->resetCache();
-    layer->setChannelFlags(m_emptyChannelFlags);
+    convertPaintDevice(layer);
     KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
     while (child) {
         child->accept(*this);
         child = dynamic_cast<KisLayer*>(child->nextSibling().data());
     }
+
+    layer->resetCache();
+
     return true;
 }
 
 bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 {
-    layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
-    layer->setChannelFlags(m_emptyChannelFlags);
-    Q_ASSERT(!layer->temporaryTarget() );
-    return true;
+    return convertPaintDevice(layer);
 }
 
 bool KisColorSpaceConvertVisitor::visit(KisGeneratorLayer *layer)
 {
-    layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
-    layer->setChannelFlags(m_emptyChannelFlags);
-    return true;
+    return convertPaintDevice(layer);
 }
-
-
 
 bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
 {
+    // XXX: Make undoable!
     if (layer->filter()->name() == "perchannel") {
         // Per-channel filters need to be reset because of different number
         // of channels. This makes undo very tricky, but so be it.
@@ -73,14 +71,52 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
         KisFilterSP f = KisFilterRegistry::instance()->value("perchannel");
         layer->setFilter(f->defaultConfiguration(0));
     }
-    layer->setChannelFlags(m_emptyChannelFlags);
+
+    KisLayerPropsCommand* propsCommand = new KisLayerPropsCommand(layer,
+                                                                  layer->opacity(), layer->opacity(),
+                                                                  layer->compositeOpId(), layer->compositeOpId(),
+                                                                  layer->name(), layer->name(),
+                                                                  layer->channelFlags(), m_emptyChannelFlags);
+    m_image->undoAdapter()->addCommand(propsCommand);
+
     layer->resetCache();
     return true;
 }
 
-bool KisColorSpaceConvertVisitor::visit(KisExternalLayer *layer) 
+bool KisColorSpaceConvertVisitor::visit(KisExternalLayer *layer)
 {
     Q_UNUSED(layer)
     return true;
 }
 
+bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
+{
+
+    if (layer->original()) {
+        QUndoCommand* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent);
+        m_image->undoAdapter()->addCommand(cmd);
+    }
+
+    if (layer->paintDevice() ) {
+        QUndoCommand* cmd = layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
+        m_image->undoAdapter()->addCommand(cmd);
+    }
+
+    if (layer->projection()) {
+        QUndoCommand* cmd = layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent);
+        m_image->undoAdapter()->addCommand(cmd);
+    }
+
+
+    KisLayerPropsCommand* propsCommand = new KisLayerPropsCommand(layer,
+                                                                  layer->opacity(), layer->opacity(),
+                                                                  layer->compositeOpId(), layer->compositeOpId(),
+                                                                  layer->name(), layer->name(),
+                                                                  layer->channelFlags(), m_emptyChannelFlags);
+    m_image->undoAdapter()->addCommand(propsCommand);
+
+    layer->setDirty();
+
+    return true;
+
+}

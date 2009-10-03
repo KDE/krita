@@ -441,6 +441,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
 
 KoView* KisDoc2::createViewInstance(QWidget* parent)
 {
+    qApp->setOverrideCursor(Qt::WaitCursor);
     KisView2 * v = new KisView2(this, parent);
     Q_CHECK_PTR(v);
 
@@ -452,7 +453,7 @@ KoView* KisDoc2::createViewInstance(QWidget* parent)
     // see: https://bugs.kde.org/show_bug.cgi?id=208239.
     setModified(true);
     setModified(false);
-
+    qApp->restoreOverrideCursor();
     return v;
 }
 

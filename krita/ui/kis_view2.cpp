@@ -181,7 +181,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
 
-
     setComponentData(KisFactory2::componentData(), false);
 
     if (!doc->isReadWrite()) {
@@ -197,6 +196,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     m_d->doc = doc;
     m_d->viewConverter = new KoZoomHandler();
+
     m_d->canvasController = new KoCanvasController(this);
     m_d->canvasController->setDrawShadow(false);
     m_d->canvasController->setMargin(10);
@@ -208,12 +208,58 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->setCanvasResourceProvider(m_d->canvas->resourceProvider());
 
+    Q_ASSERT(m_d->canvasController);
+    KoToolManager::instance()->addController(m_d->canvasController);
+    KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
+
+
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 
     createManagers();
-
     createActions();
-    createGUI();
+
+
+    KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
+    createDockWidget(&toolBoxFactory);
+
+    KoDockerManager *dockerMng = dockerManager();
+    if (!dockerMng) {
+        dockerMng = new KoDockerManager(this);
+        setDockerManager(dockerMng);
+    }
+
+    connect( m_d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
+             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
+
+    KisBirdEyeBoxFactory birdeyeFactory(this);
+    m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>(createDockWidget(&birdeyeFactory));
+
+    KisPaletteDockerFactory paletteDockerFactory(this);
+    createDockWidget(&paletteDockerFactory);
+
+    KisLayerBoxFactory layerboxFactory;
+    createDockWidget(&layerboxFactory);
+
+    m_d->statusBar = new KisStatusBar(this);
+    connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),
+            m_d->statusBar, SLOT(documentMousePositionChanged(const QPointF &)));
+
+    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            m_d->resourceProvider, SLOT(slotNodeActivated(KisNodeSP)));
+
+    m_d->controlFrame = new KisControlFrame(this);
+
+    connect(layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
+            m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
+
+    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
+
+    connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
+            m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(const KoInputDevice &)));
+
+    show();
+
 
     loadPlugins();
 
@@ -487,54 +533,6 @@ void KisView2::slotLoadingFinished()
     m_d->zoomManager->zoomController()->setAspectMode(true);
 
     updateGUI();
-}
-
-void KisView2::createGUI()
-{
-    KoToolManager::instance()->addController(m_d->canvasController);
-    KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
-
-    KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
-    createDockWidget(&toolBoxFactory);
-
-    KoDockerManager *dockerMng = dockerManager();
-    if (!dockerMng) {
-        dockerMng = new KoDockerManager(this);
-        setDockerManager(dockerMng);
-    }
-
-    connect( m_d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
-             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
-
-    KisBirdEyeBoxFactory birdeyeFactory(this);
-    m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>(createDockWidget(&birdeyeFactory));
-
-    KisPaletteDockerFactory paletteDockerFactory(this);
-    createDockWidget(&paletteDockerFactory);
-
-    KisLayerBoxFactory layerboxFactory;
-    createDockWidget(&layerboxFactory);
-
-    m_d->statusBar = new KisStatusBar(this);
-    connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),
-            m_d->statusBar, SLOT(documentMousePositionChanged(const QPointF &)));
-
-    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
-            m_d->resourceProvider, SLOT(slotNodeActivated(KisNodeSP)));
-
-    m_d->controlFrame = new KisControlFrame(this);
-
-    connect(layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
-            m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
-
-    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
-            m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
-
-    connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
-            m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(const KoInputDevice &)));
-
-    show();
-
 }
 
 

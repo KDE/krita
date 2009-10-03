@@ -181,10 +181,9 @@ private slots:
     void slotEditPalette();
     void slotImageSizeChanged();
     void slotTotalRefresh();
+
 private:
 
-
-    void createGUI();
     void createActions();
     void createManagers();
 

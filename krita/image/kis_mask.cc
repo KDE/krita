@@ -111,18 +111,12 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
         KisPaintDeviceSP cacheDevice =
             new KisPaintDevice(projection->colorSpace());
 
-        // some filters only write out selected or affected pixels to dst, so copy
-        KisPainter p1(cacheDevice);
-        p1.setCompositeOp(cacheDevice->colorSpace()->compositeOp(COMPOSITE_COPY));
-        p1.bitBlt(rc.topLeft(), projection, rc);
-        p1.end();
-
-        KisPainter gc(projection);
         QRect updatedRect = decorateRect(projection, cacheDevice, rc);
 
         /**
          * FIXME: ALPHA_DARKEN vs OVER
          */
+        KisPainter gc(projection);
         gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_OVER));
         gc.setSelection(m_d->selection);
         gc.bitBlt(updatedRect.topLeft(), cacheDevice, updatedRect);

@@ -17,6 +17,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoCompositeOp.h>
+
 #include "kis_filter_mask.h"
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
@@ -27,6 +31,7 @@
 #include "kis_node_visitor.h"
 #include "kis_node_progress_proxy.h"
 #include "kis_transaction.h"
+#include "kis_painter.h"
 
 #include <KoUpdater.h>
 
@@ -98,6 +103,13 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
         warnKrita << "Could not retrieve filter \"" << m_d->filterConfig->name() << "\"";
         return QRect();
     }
+
+    // some filters only write out selected or affected pixels to dst, so copy
+    KisPainter p1(dst);
+    p1.setCompositeOp(src->colorSpace()->compositeOp(COMPOSITE_COPY));
+    p1.bitBlt(rc.topLeft(), src, rc);
+    p1.end();
+
 
     KisConstProcessingInformation srcInfo(src,  rc.topLeft(), selection());
     KisProcessingInformation dstInfo(dst, rc.topLeft(), 0);

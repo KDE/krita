@@ -104,7 +104,7 @@ public:
     void setResource(int key, const KoColor & color);
 
     /**
-     * Set a resource of type KoId.
+     * Set a resource of type KoID.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param id the new value for the key.
      */

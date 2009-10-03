@@ -50,6 +50,7 @@
 #include <kis_node_manager.h>
 #include <kis_layer.h>
 #include <kis_types.h>
+#include <kis_colorspace_convert_visitor.h>
 
 #include <kis_view2.h>
 #include <kis_paint_device.h>
@@ -101,7 +102,7 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
     dlgColorSpaceConversion->setCaption(i18n("Convert All Layers From ") + image->colorSpace()->name());
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
-        // XXX: Do the rest of the stuff
+
         KoID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
 
@@ -119,33 +120,32 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisPaintDeviceSP dev = m_view->activeDevice();
-    if (!dev) return;
+    KisLayerSP layer = m_view->activeLayer();
+    if (!layer) return;
 
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
-    dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From") + dev->colorSpace()->name());
+    dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From") + layer->colorSpace()->name());
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
 
-        KisTransaction* t = 0;
-        if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-            t = new KisTransaction(i18n("Convert Layer Tye"), dev);
-        }
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         KoID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
         const KoColorSpace * cs = KoColorSpaceRegistry::instance() ->
                                   colorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
 
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
-        dev->convertTo(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
-        dev->setDirty();
-
-        if (t) {
-            m_view->undoAdapter()->addCommand(t);
+        if (image->undo()) {
+            image->undoAdapter()->beginMacro(i18n("Convert Layer Type"));
         }
 
+        KisColorSpaceConvertVisitor visitor(image, cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
+        layer->accept(visitor);
+
+        if (image->undo()) {
+            image->undoAdapter()->endMacro();
+        }
 
         QApplication::restoreOverrideCursor();
         m_view->nodeManager()->nodesUpdated();

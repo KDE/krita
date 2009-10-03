@@ -126,6 +126,7 @@ public slots:
     /// reimplemented from KoTool
     virtual void resourceChanged(int key, const QVariant &res);
 
+    /// call this when the 'is-bidi' boolean has been changed.
     void isBidiUpdated();
 
 signals:

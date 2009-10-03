@@ -36,8 +36,7 @@
 #include "BgSpellCheck.h"
 
 SpellCheck::SpellCheck()
-    : m_document(0),
-    m_bgSpellCheck(0),
+    : m_bgSpellCheck(0),
     m_enableSpellCheck(true),
     m_allowSignals(true),
     m_documentIsLoading(false)
@@ -256,8 +255,8 @@ void SpellCheck::checkDocument(int position, int charsRemoved, int charsAdded)
 
 void SpellCheck::setDocument(QTextDocument *document)
 {
-    if (m_document == document) return;
-    if (m_document)
+    if (m_document.data() == document) return;
+    if (!m_document.isNull())
         disconnect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(checkDocument(int,int,int)));
     m_document = document;
     connect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(checkDocument(int,int,int)), Qt::DirectConnection);

@@ -27,6 +27,7 @@
 
 #include <sonnet/speller.h>
 #include <QTextCharFormat>
+#include <QPointer>
 class QTextDocument;
 class BgSpellCheck;
 
@@ -68,7 +69,7 @@ private slots:
 
 private:
     Sonnet::Speller m_speller;
-    QTextDocument *m_document;
+    QPointer<QTextDocument> m_document;
     QString m_word;
     BgSpellCheck *m_bgSpellCheck;
     QQueue<QTextDocument *> m_documentsQueue;

@@ -118,7 +118,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_allowAddUndoCommand(true),
         m_trackChanges(false),
         m_allowResourceProviderUpdates(true),
-        m_needSpellChecking(true),
         m_prevCursorPosition(-1),
         m_caretTimer(this),
         m_caretTimerState(true),
@@ -350,7 +349,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
             kDebug(32500) << "KOffice SpellCheck plugin found";
             m_spellcheckPlugin = plugin;
             connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
-                    m_spellcheckPlugin, SLOT(resourceChanged(int, const QVariant &)));
+                    plugin, SLOT(resourceChanged(int, const QVariant &)));
         }
         m_textEditingPlugins.insert(factory->id(), plugin);
     }
@@ -454,7 +453,6 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_allowAddUndoCommand(true),
     m_trackChanges(false),
     m_allowResourceProviderUpdates(true),
-    m_needSpellChecking(true),
     m_prevCursorPosition(-1),
     m_caretTimer(this),
     m_caretTimerState(true),
@@ -1211,17 +1209,6 @@ void TextTool::activate(bool temporary)
             m_previousSelections.removeAt(i);
             break;
         }
-    }
-
-    if (m_needSpellChecking && m_spellcheckPlugin) {
-        foreach(KoShape *shape, m_canvas->shapeManager()->shapes()) {
-            TextShape *textShape = dynamic_cast<TextShape*>(shape);
-            if (textShape) {
-                KoTextShapeData *textShapeData = static_cast<KoTextShapeData*>(textShape->userData());
-                m_spellcheckPlugin->checkSection(textShapeData->document(), 0, -1);
-            }
-        }
-        m_needSpellChecking = false;
     }
 
     m_textShape->update();

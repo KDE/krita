@@ -270,7 +270,6 @@ private:
     bool m_allowAddUndoCommand;
     bool m_trackChanges;
     bool m_allowResourceProviderUpdates;
-    bool m_needSpellChecking;
     int m_prevCursorPosition; /// used by editingPluginEvents
 
     QTimer m_caretTimer;

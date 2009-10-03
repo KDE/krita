@@ -31,6 +31,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTimer>
+#include <QPointer>
 
 class InsertCharacter;
 class KoChangeTracker;
@@ -262,7 +263,7 @@ private:
     friend class TextCutCommand;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
-    KoTextEditor *m_textEditor;
+    QPointer<KoTextEditor> m_textEditor;
     KoChangeTracker *m_changeTracker;
     bool m_allowActions;
     bool m_allowAddUndoCommand;

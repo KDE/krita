@@ -33,4 +33,5 @@ add_subdirectory( defaultTools )
 add_subdirectory( pathshapes )
 add_subdirectory( pictureshape )
 add_subdirectory( textshape )
+#add_subdirectory( emfshape )
 

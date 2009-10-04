@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Enhanced Metafile Shape
+Name[sv]=Enhanced Metafileform
+X-KDE-ServiceTypes=KOffice/Flake
+Type=Service
+X-KDE-Library=emfshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

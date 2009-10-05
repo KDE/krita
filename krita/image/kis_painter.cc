@@ -100,6 +100,9 @@ struct KisPainter::Private {
     KisPaintOpPresetSP          paintOpPreset;
     QImage                      polygonMaskImage;
     QPainter*                   maskPainter;
+    KisFillPainter*             fillPainter;
+    qint32                      maskImageWidth;
+    qint32                      maskImageHeight;
 };
 
 KisPainter::KisPainter()
@@ -140,6 +143,9 @@ void KisPainter::init()
     d->progressUpdater = 0;
     d->gradient = 0;
     d->maskPainter = 0;
+    d->fillPainter = 0;
+    d->maskImageWidth = 255;
+    d->maskImageHeight = 255;
 
     KConfigGroup cfg = KGlobal::config()->group("");
     d->useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);
@@ -150,6 +156,7 @@ KisPainter::~KisPainter()
     end();
     delete d->paintOp;
     delete d->maskPainter;
+    delete d->fillPainter;
     delete d;
 }
 
@@ -714,7 +721,12 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     KisPaintDeviceSP polygon = new KisPaintDevice(d->device->colorSpace());
     Q_CHECK_PTR(polygon);
 
-    KisFillPainter fillPainter(polygon);
+    if (!d->fillPainter){
+        d->fillPainter = new KisFillPainter(polygon);
+    }else{
+        d->fillPainter->begin(polygon);
+    }
+    
 
     QRectF boundingRect = path.boundingRect();
     QRect fillRect;
@@ -741,42 +753,40 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         // Currently unsupported, fall through
         warnImage << "Unknown or unsupported fill style in fillPolygon\n";
     case FillStyleForegroundColor:
-        fillPainter.fillRect(fillRect, paintColor(), OPACITY_OPAQUE);
+        d->fillPainter->fillRect(fillRect, paintColor(), OPACITY_OPAQUE);
         break;
     case FillStyleBackgroundColor:
-        fillPainter.fillRect(fillRect, backgroundColor(), OPACITY_OPAQUE);
+        d->fillPainter->fillRect(fillRect, backgroundColor(), OPACITY_OPAQUE);
         break;
     case FillStylePattern:
         Q_ASSERT(d->pattern != 0);
-        fillPainter.fillRect(fillRect, d->pattern);
+        d->fillPainter->fillRect(fillRect, d->pattern);
         break;
     case FillStyleGenerator:
         Q_ASSERT(d->generator != 0);
-        fillPainter.fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), generator());
+        d->fillPainter->fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), generator());
         break;
     }
 
-    const qint32 MASK_IMAGE_WIDTH = 256;
-    const qint32 MASK_IMAGE_HEIGHT = 256;
-
     if ( d->polygonMaskImage.isNull() || (d->maskPainter == 0) ){
-        d->polygonMaskImage = QImage(MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT, QImage::Format_ARGB32);
+        d->polygonMaskImage = QImage(d->maskImageWidth, d->maskImageHeight, QImage::Format_ARGB32);
         d->maskPainter = new QPainter(&d->polygonMaskImage);
         d->maskPainter->setRenderHint(QPainter::Antialiasing, antiAliasPolygonFill());
     }
    
     // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
-    QColor opaqueColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255);
-    for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += MASK_IMAGE_WIDTH) {
-        for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += MASK_IMAGE_HEIGHT) {
+    const QColor opaqueColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255);
+    const QBrush brush(opaqueColor);
+    for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += d->maskImageWidth) {
+        for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += d->maskImageHeight) {
 
             d->polygonMaskImage.fill(qRgba(OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, OPACITY_TRANSPARENT, 255));
             d->maskPainter->translate(-x, -y);
-            d->maskPainter->fillPath(path, opaqueColor);
+            d->maskPainter->fillPath(path, brush);
             d->maskPainter->translate(x, y);
 
-            qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, MASK_IMAGE_WIDTH);
-            qint32 rectHeight = qMin(fillRect.y() + fillRect.height() - y, MASK_IMAGE_HEIGHT);
+            qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, d->maskImageWidth);
+            qint32 rectHeight = qMin(fillRect.y() + fillRect.height() - y, d->maskImageHeight);
 
             KisHLineIterator lineIt = polygon->createHLineIterator(x,y,rectWidth);
 
@@ -1720,4 +1730,14 @@ KisPaintOpPresetSP KisPainter::preset() const
 KisPaintOp* KisPainter::paintOp() const
 {
     return d->paintOp;
+}
+
+
+void KisPainter::setMaskImageSize(qint32 width, qint32 height)
+{
+    
+    d->maskImageWidth = qBound(1,width,256);
+    d->maskImageHeight= qBound(1,height,256);
+    d->fillPainter = 0;
+    d->polygonMaskImage = QImage();
 }

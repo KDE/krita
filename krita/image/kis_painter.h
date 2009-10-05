@@ -378,7 +378,6 @@ public:
     /// @return the current generator configuration
     KisFilterConfiguration * generator() const;
 
-
     /// This enum contains the styles with which we can fill things like polygons and ellipses
     enum FillStyle {
         FillStyleNone,
@@ -453,7 +452,14 @@ public:
     void setGradient(const KoAbstractGradient* gradient);
     const KoAbstractGradient* gradient();
 
-
+    /**
+    * Set the size of the tile in fillPainterPath, useful when optimizing the use of fillPainterPath 
+    * e.g. Spray paintop uses more small tiles, although selections uses bigger tiles. QImage::fill 
+    * is quite expensive so with smaller images you can save instructions 
+    * Default and maximum size is 256x256 image
+    */
+    void setMaskImageSize(qint32 width,qint32 height);
+    
 protected:
     /// Initialize, set everything to '0' or defaults
     void init();

@@ -65,6 +65,7 @@ void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, co
     // initializing painter
     if (!m_painter){ 
         m_painter = new KisPainter(dev);
+        m_painter->setMaskImageSize(m_width, m_height);
         m_pixelSize = dev->colorSpace()->pixelSize();    
     }
 

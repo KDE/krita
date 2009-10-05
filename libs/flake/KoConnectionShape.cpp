@@ -201,7 +201,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     Q_UNUSED(size);
 
     QPointF dst = 0.3 * ( m_handles[0] - m_handles[m_handles.count() - 1]);
-    const qreal MinimumEscapeLength = qMax((qreal)0.01, qMin(qAbs(dst.x()), qMin(qAbs(dst.y()), (qreal)20.)));
+    const qreal MinimumEscapeLength = (qreal)20.;
     clear();
     switch (d->connectionType) {
     case Standard: {
@@ -271,7 +271,7 @@ void KoConnectionShape::normalPath( const qreal MinimumEscapeLength )
 
         QPointF direction1 = escapeDirection(0);
         QPointF direction2 = escapeDirection(m_handles.count() - 1);
-
+        
         QPointF edgePoint1 = m_handles[0] + MinimumEscapeLength * direction1;
         QPointF edgePoint2 = m_handles[m_handles.count() - 1] + MinimumEscapeLength * direction2;
 
@@ -312,18 +312,6 @@ void KoConnectionShape::normalPath( const qreal MinimumEscapeLength )
         m_path.append(edges2);
 
         m_path.append( m_handles[m_handles.count() - 1] );
-
-        firstHandle = m_handles[0];
-        lastHandle = m_handles[m_handles.count() - 1];
-        m_handles.clear();
-        m_handles.append(firstHandle);
-
-        for(int i = 1; i<edges1.count() - 1; i++)
-            m_handles.append(edges1[i] + (edges1[i+1] - edges1[i])/2);
-        for(int i = 1; i<edges2.count() - 1; i++)
-            m_handles.append(edges2[i] + (edges2[i+1] - edges2[i])/2);
-
-        m_handles.append(lastHandle);
     }
 }
 

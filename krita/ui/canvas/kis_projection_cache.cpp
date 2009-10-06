@@ -140,6 +140,8 @@ KisImagePatch KisProjectionCache::getNearestPatch(qreal scaleX, qreal scaleY,
                                                   const QRect& requestedRect,
                                                   qint32 borderWidth)
 {
+    Q_UNUSED(scaleX);
+    Q_UNUSED(scaleY);
     KisImagePatch patch;
 
     patch.m_scaleX = 1.;

@@ -176,6 +176,8 @@ void KisSelectionDecoration::updateSimpleOutline()
 
 void KisSelectionDecoration::drawDecoration(QPainter& painter, const QPoint& documentOffset, const QRect& area, const KoViewConverter& converter)
 {
+
+    Q_UNUSED(documentOffset)
     Q_UNUSED(area);
     KisSelectionSP selection = view()->selection();
 
@@ -273,6 +275,7 @@ void KisSelectionDecoration::updateMaskVisualisation(const QRect & r)
 
 void KisSelectionDecoration::resourceChanged(int key, const QVariant & v)
 {
+    Q_UNUSED(v);
     if(key == KoCanvasResource::PageSize) {
         int width = KisSelectionDecoration::view()->image()->bounds().width();
         int height = KisSelectionDecoration::view()->image()->bounds().height();

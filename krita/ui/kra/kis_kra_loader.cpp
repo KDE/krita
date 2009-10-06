@@ -203,7 +203,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP img, const QStrin
     if (store->hasFile(location)) {
         store->open(location);
         QByteArray data; data.resize(store->size());
-        int read = store->read( data.data(), store->size());
+        store->read( data.data(), store->size());
         store->close();
         img->setProfile(new KoIccColorProfile(data));
     }

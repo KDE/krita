@@ -909,7 +909,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 ChangeListCommand *clc = new ChangeListCommand(*m_textEditor->cursor(), KoListStyle::None, 0 /* level */);
                 addCommand(clc);
             }
-        } else if (m_textEditor->position() > 0) {
+        } else if (m_textEditor->position() > 0 || m_textEditor->hasSelection()) {
             if (!m_textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
                 m_textEditor->movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
             m_textEditor->deletePreviousChar();

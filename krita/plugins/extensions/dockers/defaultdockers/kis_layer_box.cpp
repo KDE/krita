@@ -73,12 +73,11 @@
 #include "ui_wdglayerbox.h"
 
 KisLayerBox::KisLayerBox()
-        : QDockWidget(i18n("Layers"))
-        , m_image(0)
-        , m_wdgLayerBox(new Ui_WdgLayerBox)
+    : QDockWidget(i18n("Layers"))
+    , m_canvas(0)
+    , m_wdgLayerBox(new Ui_WdgLayerBox)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -149,6 +148,7 @@ KisLayerBox::KisLayerBox()
 #endif
     m_newLayerMenu->addAction(KIcon("edit-paste"), i18n("&Local Selection"), this, SLOT(slotNewSelectionMask()));
     connect(m_wdgLayerBox->bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
+
     // NOTE: this is _not_ a mistake. The layerbox shows the layers in the reverse order
     connect(m_wdgLayerBox->bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked()));
     connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
@@ -163,41 +163,6 @@ KisLayerBox::KisLayerBox()
 KisLayerBox::~KisLayerBox()
 {
     delete m_wdgLayerBox;
-}
-
-void KisLayerBox::setImage(KisNodeManager * nodeManager, KisImageWSP img, KisNodeModel * nodeModel)
-{
-    if(!m_nodeModel.isNull())
-        m_nodeModel->disconnect(this);
-    m_nodeModel = nodeModel;
-
-    if(!m_nodeManager.isNull())
-        m_nodeManager->disconnect(this);
-    m_nodeManager = nodeManager;
-    connect(nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
-            this, SLOT(setCurrentNode(KisNodeSP)));
-
-    if (m_image)
-        m_image->disconnect(this);
-
-    if (img) {
-
-        connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), this, SLOT(updateUI()));
-        connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(updateUI()));
-        connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(updateUI()));
-        connect(m_nodeModel, SIGNAL(modelReset()), this, SLOT(updateUI()));
-
-        m_wdgLayerBox->listLayers->setModel(nodeModel);
-
-        m_image = img;
-
-        updateUI();
-
-        m_wdgLayerBox->listLayers->expandAll();
-        m_wdgLayerBox->listLayers->scrollToBottom();
-    } else {
-        m_wdgLayerBox->listLayers->setModel(0);
-    }
 }
 
 bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
@@ -221,29 +186,48 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
 void KisLayerBox::setCanvas( KoCanvasBase * canvas )
 {
     disconnect();
-    KisCanvas2* kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
-    if(kiscanvas) {
-        KisView2* view = kiscanvas->view();
-        KisNodeManager* nodeManager = view->nodeManager();
+    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    connect(m_canvas, SIGNAL(imageChanged(KisImageWSP)), SLOT(setImage(KisImageWSP)));
+}
 
-        connect(this, SIGNAL(sigRequestNewNode(const QString &)),
-                nodeManager, SLOT(createNode(const QString &)));
+void KisLayerBox::setImage(KisImageWSP image)
+{
+    qDebug() << image;
+    if (!image) return;
+    m_image = image;
+    if (m_canvas && m_canvas->view()) {
+        KisView2* view = m_canvas->view();
 
-        connect(this, SIGNAL(sigRequestNodeProperties(KisNodeSP)),
-                nodeManager, SLOT(nodeProperties(KisNodeSP)));
+        if (!m_nodeManager.isNull()) {
+            m_nodeManager->disconnect(this);
+        }
+        m_nodeManager = view->nodeManager();
+        connect(this, SIGNAL(sigOpacityChanged(qreal, bool)), m_nodeManager, SLOT(nodeOpacityChanged(qreal, bool)));
+        connect(m_nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), this, SLOT(setCurrentNode(KisNodeSP)));
 
-        connect(this, SIGNAL(sigOpacityChanged(qreal, bool)),
-                nodeManager, SLOT(nodeOpacityChanged(qreal, bool)));
+        if (!m_nodeModel.isNull()) {
+            m_nodeModel->disconnect(this);
+        }
+        m_nodeModel = view->document()->nodeModel();
+        m_wdgLayerBox->listLayers->setModel(m_nodeModel);
+        connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), this, SLOT(updateUI()));
+        connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(updateUI()));
+        connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(updateUI()));
+        connect(m_nodeModel, SIGNAL(modelReset()), this, SLOT(updateUI()));
 
-        connect(this, SIGNAL(sigItemComposite(const KoCompositeOp*)),
-                nodeManager, SLOT(nodeCompositeOpChanged(const KoCompositeOp*)));
+        if (m_nodeManager->activeNode()) {
+            setCurrentNode(m_nodeManager->activeNode());
+        }
 
-        setImage(nodeManager, view->image(), view->document()->nodeModel());
+        m_image = view->image();
 
-        if(nodeManager->activeNode())
-            setCurrentNode(nodeManager->activeNode());
+        updateUI();
+
+        m_wdgLayerBox->listLayers->expandAll();
+        m_wdgLayerBox->listLayers->scrollToBottom();
     }
 }
+
 
 void KisLayerBox::updateUI()
 {
@@ -330,7 +314,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     menu.addSeparator();
     menu.addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
     menu.addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
-//    menu.addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
+    //    menu.addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
     menu.addAction(KIcon("edit-paste"), i18n("&Local Selection"), this, SLOT(slotNewSelectionMask()));
 
     menu.exec(pos);
@@ -353,62 +337,66 @@ void KisLayerBox::slotThumbnailView()
 
 void KisLayerBox::slotNewPaintLayer()
 {
-    emit sigRequestNewNode("KisPaintLayer");
+    m_nodeManager->createNode("KisPaintLayer");
 }
 
 void KisLayerBox::slotNewGroupLayer()
 {
-    emit sigRequestNewNode("KisGroupLayer");
+    m_nodeManager->createNode("KisGroupLayer");
 }
 
 void KisLayerBox::slotNewCloneLayer()
 {
-    emit sigRequestNewNode("KisCloneLayer");
+    m_nodeManager->createNode("KisCloneLayer");
 }
 
 
 void KisLayerBox::slotNewShapeLayer()
 {
-    emit sigRequestNewNode("KisShapeLayer");
+    m_nodeManager->createNode("KisShapeLayer");
 }
 
 
 void KisLayerBox::slotNewAdjustmentLayer()
 {
-    emit sigRequestNewNode("KisAdjustmentLayer");
+    m_nodeManager->createNode("KisAdjustmentLayer");
 }
 
 void KisLayerBox::slotNewGeneratorLayer()
 {
-    emit sigRequestNewNode("KisGeneratorLayer");
+    m_nodeManager->createNode("KisGeneratorLayer");
 }
 
 void KisLayerBox::slotNewTransparencyMask()
 {
-    emit sigRequestNewNode("KisTransparencyMask");
+    m_nodeManager->createNode("KisTransparencyMask");
 }
 
 void KisLayerBox::slotNewEffectMask()
 {
-    emit sigRequestNewNode("KisFilterMask");
+    m_nodeManager->createNode("KisFilterMask");
 }
 
 
 void KisLayerBox::slotNewTransformationMask()
 {
-    emit sigRequestNewNode("KisTransformationMask");
+    m_nodeManager->createNode("KisTransformationMask");
 }
 
 
 void KisLayerBox::slotNewSelectionMask()
 {
-    emit sigRequestNewNode("KisSelectionMask");
+    m_nodeManager->createNode("KisSelectionMask");
 }
 
 
 void KisLayerBox::slotRmClicked()
 {
-    QModelIndexList l = selectedNodes();
+    QModelIndexList l = m_wdgLayerBox->listLayers->selectionModel()->selectedIndexes();
+    if (l.count() < 2 && m_nodeManager->activeNode() && !l.contains(m_wdgLayerBox->listLayers->currentIndex())) {
+        l.clear();
+        l.append(m_wdgLayerBox->listLayers->currentIndex());
+    }
 
     for (int i = 0, n = l.count(); i < n; ++i)
     {
@@ -430,8 +418,9 @@ void KisLayerBox::slotLowerClicked()
 
 void KisLayerBox::slotPropertiesClicked()
 {
-    if (KisNodeSP active = m_nodeManager->activeNode())
-        emit sigRequestNodeProperties(active);
+    if (KisNodeSP active = m_nodeManager->activeNode()) {
+        m_nodeManager->nodeProperties(active);
+    }
 }
 
 void KisLayerBox::slotDuplicateClicked()
@@ -445,28 +434,10 @@ void KisLayerBox::slotNodeActivated(const QModelIndex & node)
     m_nodeManager->activateNode(m_nodeModel->nodeFromIndex(node));
 }
 
-void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
-{
-    setUpdatesEnabled(enable);
-    m_wdgLayerBox->cmbComposite->setUpdatesEnabled(enable);
-
-    m_wdgLayerBox->doubleOpacity->blockSignals(!enable);
-    m_wdgLayerBox->cmbComposite->blockSignals(!enable);
-}
-
-QModelIndexList KisLayerBox::selectedNodes() const
-{
-    QModelIndexList l = m_wdgLayerBox->listLayers->selectionModel()->selectedIndexes();
-    if (l.count() < 2 && m_nodeManager->activeNode() && !l.contains(m_wdgLayerBox->listLayers->currentIndex())) {
-        l.clear();
-        l.append(m_wdgLayerBox->listLayers->currentIndex());
-    }
-    return l;
-}
 
 void KisLayerBox::slotCompositeOpChanged(const QString& _compositeOp)
 {
-  emit( sigItemComposite(m_nodeManager->activeColorSpace()->compositeOp(_compositeOp) ) );
+    m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(_compositeOp));
 }
 
 #include "kis_layer_box.moc"

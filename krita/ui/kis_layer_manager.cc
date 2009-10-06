@@ -80,7 +80,6 @@
 #include "widgets/kis_meta_data_merge_strategy_chooser_widget.h"
 #include "widgets/kis_wdg_generator.h"
 #include "kis_progress_widget.h"
-#include "kis_layer_box.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
 

@@ -120,7 +120,6 @@ public: // KoCanvasBase implementation
 
     void disconnectCurrentImage();
 
-
     // Temporary! Either get the current layer and image from the
     // resource provider, or use this, which gets them from the
     // current shape selection.
@@ -135,9 +134,11 @@ public: // KisCanvas2 methods
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
 
-
 signals:
+
     void documentOriginChanged();
+
+    void imageChanged(KisImageWSP image);
 
 public slots:
 

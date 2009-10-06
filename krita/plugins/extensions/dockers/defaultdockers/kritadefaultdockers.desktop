@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Default Dockers
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritadefaultdockers
+X-Krita-Version=3

@@ -365,6 +365,7 @@ void KisCanvas2::connectCurrentImage()
 #ifdef HAVE_OPENGL
     }
 #endif
+    emit imageChanged(m_d->view->image());
 }
 
 void KisCanvas2::disconnectCurrentImage()

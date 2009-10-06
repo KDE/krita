@@ -92,41 +92,53 @@ KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
                              KisImageWSP img,
                              const QString &name,
                              quint8 opacity)
-    : KisExternalLayer(img, name, opacity)
-    , m_d(new Private())
+                                 : KisExternalLayer(img, name, opacity)
+                                 , m_d(new Private())
 {
     KoShapeContainer::setParent(parent);
     initShapeLayer(controller);
 }
 
-
-
 class KisShapeLayerShapePaste : public KoOdfPaste
 {
-  public:
-    KisShapeLayerShapePaste(KisShapeLayer* _container, KoShapeControllerBase* _controller) : m_container(_container), m_controller(_controller) {}
-    virtual ~KisShapeLayerShapePaste() {}
+public:
+    KisShapeLayerShapePaste(KisShapeLayer* _container, KoShapeControllerBase* _controller)
+        : m_container(_container)
+        , m_controller(_controller)
+    {
+    }
+
+    virtual ~KisShapeLayerShapePaste()
+    {
+    }
+
     virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore)
     {
-      KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-      KoShapeLoadingContext context(loadingContext, m_controller->dataCenterMap());
-      KoXmlElement child;
-      forEachElement(child, body) {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
-        if (shape) {
-          m_container->addChild(shape);
+        KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
+        KoShapeLoadingContext context(loadingContext, m_controller->dataCenterMap());
+        KoXmlElement child;
+        forEachElement(child, body) {
+            KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
+            if (shape) {
+                kDebug() << "Adding " << shape << "with parent" << shape->parent() << "to container" << m_container;
+                m_container->addChild(shape);
+            }
         }
-      }
-      return true;
+        return true;
     }
-  private:
+private:
     KisShapeLayer* m_container;
     KoShapeControllerBase* m_controller;
 };
 
 
-KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs) : KisExternalLayer(_rhs), m_d(new Private())
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
+    : KisExternalLayer(_rhs)
+    , KoShapeLayer(_rhs)
+    , m_d(new Private())
 {
+    kDebug() << "copying rhs" << &_rhs << "to" << this;
+
     KoShapeContainer::setParent(_rhs.KoShapeContainer::parent());
     initShapeLayer(_rhs.m_d->controller);
 
@@ -134,18 +146,13 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs) : KisExternalLayer(_rhs)
     KoDrag drag;
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QMimeData* mimeData = drag.mimeData();
-  
+
     Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
-  
+
     KisShapeLayerShapePaste paste(this, m_d->controller);
     bool success = paste.paste(KoOdf::Text, mimeData);
     Q_ASSERT(success);
-    
-/*    KisShapeLayer* rhs = const_cast<KisShapeLayer*>(&_rhs);
-    foreach(KoShape* shape, childShapes())
-    {
-        rhs->removeChild(shape);
-    }*/
+
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -289,7 +296,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
         page.orientation = KoPageFormat::Landscape;
     }
     else {
-         page.orientation = KoPageFormat::Portrait;
+        page.orientation = KoPageFormat::Portrait;
     }
 
     KoGenStyles mainStyles;
@@ -370,10 +377,10 @@ bool KisShapeLayer::loadLayer( KoStore* store )
 
     KoXmlElement contents = odfStore.contentDoc().documentElement();
 
-//    qDebug() <<"Start loading OASIS document..." << contents.text();
-//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().localName();
-//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().isElement();
+    //    qDebug() <<"Start loading OASIS document..." << contents.text();
+    //    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().localName();
+    //    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+    //    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().isElement();
 
     KoXmlElement body( KoXml::namedItemNS( contents, KoXmlNS::office, "body" ) );
 
@@ -411,7 +418,7 @@ bool KisShapeLayer::loadLayer( KoStore* store )
     if( master )
     {
         const KoXmlElement *style = odfStore.styles().findStyle(
-            master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
+                master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
         KoPageLayout pageLayout;
         pageLayout.loadOdf( *style );
         setSize( QSizeF( pageLayout.width, pageLayout.height ) );
@@ -430,8 +437,8 @@ bool KisShapeLayer::loadLayer( KoStore* store )
     KoXmlElement layerElement;
     forEachElement( layerElement, context.stylesReader().layerSet() )
     {
-// FIXME: investigate what is this
-//        KoShapeLayer * l = new KoShapeLayer();
+        // FIXME: investigate what is this
+        //        KoShapeLayer * l = new KoShapeLayer();
         if( !loadOdf( layerElement, shapeContext ) ) {
             kWarning() << "Could not load shape layer!";
             return false;

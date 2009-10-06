@@ -34,6 +34,7 @@
 #include "KoBasicHistogramProducers.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoID.h"
+#include <KoCanvasObserver.h>
 
 #include "kis_global.h"
 #include "kis_types.h"
@@ -44,49 +45,8 @@
 #include "kis_imagerasteredcache.h"
 #include "kis_accumulating_producer.h"
 
-namespace
-{
-
-class KisHistogramDock : public QDockWidget
-{
-
-public:
-    KisHistogramDock(KisHistogramView *view) : QDockWidget(i18n("Histogram")) {
-        setWidget(view);
-    }
-};
-
-class KisHistogramDockFactory : public KoDockFactory
-{
-public:
-    KisHistogramDockFactory(KisHistogramView* view)
-            : m_view(view) {
-    }
-
-    virtual QString id() const {
-        return QString("KisHistogramDock");
-    }
-
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
-        return Qt::RightDockWidgetArea;
-    }
-
-    virtual QDockWidget* createDockWidget() {
-        KisHistogramDock * dockWidget = new KisHistogramDock(m_view);
-        dockWidget->setObjectName(id());
-
-        return dockWidget;
-    }
-
-    DockPosition defaultDockPosition() const {
-        return DockMinimized;
-    }
-
-private:
-    KisHistogramView * m_view;
-
-};
-}
+#include "histogramdock.h"
+#include "histogramdock_factory.h"
 
 typedef KGenericFactory<KritaHistogramDocker> KritaHistogramDockerFactory;
 K_EXPORT_COMPONENT_FACTORY(kritahistogramdocker, KritaHistogramDockerFactory("krita"))
@@ -111,7 +71,6 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
         m_cache = 0; // we try to delete it in producerChanged
         colorSpaceChanged(img->colorSpace()); // calls producerChanged(0)
 
-
         m_hview = new KisHistogramView(m_view);
         m_hview->setHistogram(m_histogram);
         m_hview->setColor(true);
@@ -134,6 +93,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
         // Add it to the control palette
         m_docker = m_view->createDockWidget(new KisHistogramDockFactory(m_hview));
         m_cache->setDocker(m_docker);
+
     } else {
         m_cache = 0;
     }
@@ -148,8 +108,6 @@ KritaHistogramDocker::~KritaHistogramDocker()
 
     if (m_cache)
         m_cache->deleteLater();
-
-    m_docker->deleteLater();
 }
 
 void KritaHistogramDocker::setChannels() {
@@ -230,26 +188,6 @@ void KritaHistogramDocker::colorSpaceChanged(const KoColorSpace* cs)
     }
 
     producerChanged(m_popup.actions().at(0));
-}
-
-HistogramDockerUpdater::HistogramDockerUpdater(QObject* /*parent*/, KisHistogramSP h, KisHistogramView* v,
-        KisAccumulatingHistogramProducer* p)
-        : m_histogram(h), m_view(v), m_producer(p)
-{
-    connect(p, SIGNAL(completed()), this, SLOT(completed()));
-}
-
-void HistogramDockerUpdater::updated()
-{
-    // We don't [!] do m_histogram->updateHistogram();, because that will try to compute
-    // the histogram synchronously, while we want it asynchronously.
-    m_producer->addRegionsToBinAsync();
-}
-
-void HistogramDockerUpdater::completed()
-{
-    m_histogram->computeHistogram();
-    m_view->updateHistogram();
 }
 
 #include "histogramdocker.moc"

@@ -24,6 +24,7 @@
 
 #include <KoDockFactory.h>
 #include <KoColorSet.h>
+#include <KoCanvasObserver.h>
 
 class KoColor;
 class KisView2;
@@ -35,43 +36,41 @@ class KisView2;
  *  @author was Waldo Bastian <bastian@kde.org> -- much has changed, though,
  * to work with KisPalettes and the resource server.
  */
-class KisPaletteDocker : public QDockWidget
+class KisPaletteDocker : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 public:
-    KisPaletteDocker(KisView2 * view);
+    KisPaletteDocker();
     virtual ~KisPaletteDocker();
 
     QString palette() const;
+    
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
 
-protected slots:
+private slots:
+
     void colorSelected(const KoColor& color, bool final);
 
-protected:
+private:
     void readNamedColor(void);
 
 protected:
-    KoColorSet *m_currentPalette;
-    KisView2 * m_view;
+    KoColorSet* m_currentPalette;
+    KoCanvasBase* m_canvas;
 };
 
 class KisPaletteDockerFactory : public KoDockFactory
 {
 public:
-    KisPaletteDockerFactory(KisView2 * view) {
-        m_view = view;
-    }
+    KisPaletteDockerFactory() {}
     ~KisPaletteDockerFactory() {}
 
     virtual QString id() const;
     QDockWidget * createDockWidget();
 
-    DockPosition defaultDockPosition() const {
-        return DockMinimized;
-    }
+    DockPosition defaultDockPosition() const { return DockMinimized; }
 
-private:
-    KisView2 * m_view;
 };
 
 #endif

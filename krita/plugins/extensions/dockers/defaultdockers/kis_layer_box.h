@@ -4,7 +4,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
  *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (C) 2007-2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #ifndef KIS_LAYERBOX_H
 #define KIS_LAYERBOX_H
 
@@ -45,6 +44,7 @@ typedef QList<QModelIndex> QModelIndexList;
 
 class KMenu;
 class KoCompositeOp;
+class KisCanvas2;
 class KisNodeModel;
 class KisLayerManager;
 class Ui_WdgLayerBox;
@@ -59,34 +59,29 @@ class KisLayerBox : public QDockWidget, public KoCanvasObserver
     Q_OBJECT
 
 public:
+
     KisLayerBox();
     virtual ~KisLayerBox();
-
-    void setUpdatesAndSignalsEnabled(bool enable);
-    void setImage(KisNodeManager * nodeManager, KisImageWSP image, KisNodeModel * nodeModel);
 
     virtual bool eventFilter(QObject *object, QEvent *event);
 
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
-public slots:
+
+signals:
+
+    void sigOpacityChanged(qreal opacity, bool final);
+    void sigItemComposite(const KoCompositeOp* _compositeOp);
+
+private slots:
+
+    void setImage(KisImageWSP image);
 
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);
     void slotSetOpacity(double opacity);
     void slotFillCompositeOps(const KoColorSpace * colorSpace);
     void updateUI();
     void setCurrentNode(KisNodeSP node);
-
-signals:
-
-    // XXX: create a node factory and a node factory registry in for now just
-    //      use strings
-    void sigRequestNewNode(const QString & nodetype);
-    void sigRequestNodeProperties(KisNodeSP node);
-    void sigOpacityChanged(qreal opacity, bool final);
-    void sigItemComposite(const KoCompositeOp* _compositeOp);
-
-private slots:
 
     void slotContextMenuRequested(const QPoint &pos, const QModelIndex &index);
 
@@ -115,8 +110,8 @@ private slots:
     void slotNodeActivated(const QModelIndex &);
 
 private:
-    QModelIndexList selectedNodes() const;
 
+    KisCanvas2* m_canvas;
     KMenu *m_viewModeMenu;
     KMenu *m_newLayerMenu;
     KisImageWSP m_image;

@@ -25,73 +25,73 @@
 #include <QDockWidget>
 
 #include <KoDockFactory.h>
+#include <KoCanvasObserver.h>
 
-#include "kis_types.h"
+#include <kis_types.h>
 
+class KisCanvas2;
 class KoBirdEyePanel;
 class KisDoubleWidget;
 class KisView2;
 class KoZoomAdapter;
 class KoColorSpace;
 
-class KisBirdEyeBox : public QDockWidget
+/**
+ * Image overview docker
+ *
+ * _Should_ provide an image thumbnail with a pan rect and a zoom slider, as well
+ * as some pertinent information and the exposure slider. Apart from the exposure
+ * slider, this has been broken since 2006 :-(
+ */
+class KisBirdEyeBox : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 
 public:
 
-    KisBirdEyeBox(KisView2 * view);
+    KisBirdEyeBox();
     ~KisBirdEyeBox();
 
-    void setImage(KisImageWSP image);
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
 
-public slots:
-    void slotDocCommandExecuted();
-    void slotImageUpdated(const QRect & r);
-    void slotImageSizeChanged(qint32 w, qint32 h);
+private slots:
+
     void slotImageColorSpaceChanged(const KoColorSpace *cs);
-
-protected slots:
     void exposureValueChanged(double exposure);
     void exposureSliderPressed();
     void exposureSliderReleased();
 
 private:
 
+    KisCanvas2* m_canvas;
+
     KoBirdEyePanel * m_birdEyePanel;
     KisDoubleWidget * m_exposureDoubleWidget;
     QLabel *m_exposureLabel;
-    KisView2 * m_view;
     bool m_draggingExposureSlider;
-    KoZoomAdapter * m_zoomAdapter;
-    KisImageWSP m_image;
-    QRect m_dirtyRegion;
 };
 
 
 class KisBirdEyeBoxFactory : public KoDockFactory
 {
 public:
-    KisBirdEyeBoxFactory(KisView2 * view)
-            : m_view(view) {
-    }
+    KisBirdEyeBoxFactory() {}
 
-    virtual QString id() const {
-        return QString("KisBirdeyeBox");
-    }
+    virtual QString id() const { return QString("KisBirdeyeBox"); }
 
-    virtual QDockWidget* createDockWidget() {
-        KisBirdEyeBox * dockWidget = new KisBirdEyeBox(m_view);
+    virtual QDockWidget* createDockWidget()
+    {
+        KisBirdEyeBox * dockWidget = new KisBirdEyeBox();
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const
+    {
         return DockMinimized;
     }
-private:
-    KisView2 * m_view;
 };
 
 #endif // KIS_BIRDEYE_BOX_H

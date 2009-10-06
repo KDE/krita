@@ -25,7 +25,9 @@
 
 #include <KoColorSpaceRegistry.h>
 
-SmallColorSelectorDock::SmallColorSelectorDock() : QDockWidget(), m_canvas(0)
+SmallColorSelectorDock::SmallColorSelectorDock() 
+    : QDockWidget()
+    , m_canvas(0)
 {
     m_smallColorWidget = new KisSmallColorWidget(this);
     setWidget(m_smallColorWidget);
@@ -46,14 +48,15 @@ void SmallColorSelectorDock::setCanvas( KoCanvasBase * canvas )
 
 void SmallColorSelectorDock::colorChangedProxy(const QColor& c)
 {
-    if(m_canvas)
+    if (m_canvas)
         m_canvas->resourceProvider()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
 }
 
 void SmallColorSelectorDock::resourceChanged(int key, const QVariant& v)
 {
-    if(key == KoCanvasResource::ForegroundColor)
+    if (key == KoCanvasResource::ForegroundColor) {
         m_smallColorWidget->setQColor(v.value<KoColor>().toQColor());
+    }
 }
 
 #include "smallcolorselector_dock.moc"

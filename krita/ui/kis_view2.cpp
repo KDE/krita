@@ -83,8 +83,6 @@
 #include "kis_image_manager.h"
 #include "kis_control_frame.h"
 #include "kis_paintop_box.h"
-#include "kis_birdeye_box.h"
-#include "kis_layer_box.h"
 #include "kis_layer_manager.h"
 #include "kis_zoom_manager.h"
 #include "canvas/kis_grid_manager.h"
@@ -93,9 +91,7 @@
 #include "dialogs/kis_dlg_preferences.h"
 #include "kis_group_layer.h"
 #include "kis_custom_palette.h"
-#include "ui_wdgpalettechooser.h"
 #include "kis_resource_server_provider.h"
-#include "kis_palette_docker.h"
 #include "kis_node_model.h"
 #include "kis_projection.h"
 #include "kis_node.h"
@@ -123,7 +119,6 @@ public:
             , statusBar(0)
             , selectionManager(0)
             , controlFrame(0)
-            , birdEyeBox(0)
             , nodeManager(0)
             , zoomManager(0)
             , imageManager(0)
@@ -160,7 +155,6 @@ public:
     KAction * totalRefresh;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
-    KisBirdEyeBox * birdEyeBox;
     KisNodeManager * nodeManager;
     KisZoomManager * zoomManager;
     KisImageManager * imageManager;
@@ -230,15 +224,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     connect( m_d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
              dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
-
-    KisBirdEyeBoxFactory birdeyeFactory(this);
-    m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>(createDockWidget(&birdeyeFactory));
-
-    KisPaletteDockerFactory paletteDockerFactory(this);
-    createDockWidget(&paletteDockerFactory);
-
-    KisLayerBoxFactory layerboxFactory;
-    createDockWidget(&layerboxFactory);
 
     m_d->statusBar = new KisStatusBar(this);
     connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),
@@ -622,9 +607,6 @@ void KisView2::connectCurrentImage()
     connect(m_d->doc->nodeModel(), SIGNAL(nodeActivated(KisNodeSP)),
             m_d->nodeManager, SLOT(activateNode(KisNodeSP)));
 
-    if (m_d->birdEyeBox)
-        m_d->birdEyeBox->setImage(img);
-
     if (m_d->controlFrame) {
         connect(img.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
     }
@@ -643,8 +625,6 @@ void KisView2::disconnectCurrentImage()
         if (m_d->statusBar)
             img->disconnect(m_d->statusBar);
 
-        if (m_d->birdEyeBox)
-            m_d->birdEyeBox->setImage(KisImageWSP(0));
         m_d->canvas->disconnectCurrentImage();
     }
 }

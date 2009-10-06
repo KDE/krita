@@ -21,24 +21,21 @@
 #include <QComboBox>
 #include <QVBoxLayout>
 
-#include <kis_debug.h>
+#include <KoCanvasBase.h>
+#include <KoResource.h>
+#include <KoColorSet.h>
+#include <KoColorSetWidget.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoColorSpaceRegistry.h>
 
-#include "kis_view2.h"
-
-#include "KoResource.h"
-#include "KoColorSet.h"
-#include "KoColorSetWidget.h"
-#include "kis_canvas_resource_provider.h"
-
-KisPaletteDocker::KisPaletteDocker(KisView2 * view)
+KisPaletteDocker::KisPaletteDocker()
         : QDockWidget(i18n("Palettes"))
+        , m_currentPalette(0)
+        , m_canvas(0)
 {
-    m_view = view;
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
-
-    m_currentPalette = 0;
 
     QVBoxLayout *layout = new QVBoxLayout(mainWidget);
 
@@ -46,20 +43,23 @@ KisPaletteDocker::KisPaletteDocker(KisView2 * view)
     layout->addWidget(chooser);
     mainWidget->setLayout(layout);
 
-    //setFixedSize(sizeHint());
-
-    connect(chooser, SIGNAL(colorChanged(const KoColor&, bool)),
-            this, SLOT(colorSelected(const KoColor&, bool)));
+    connect(chooser, SIGNAL(colorChanged(const KoColor&, bool)), SLOT(colorSelected(const KoColor&, bool)));
 }
 
 KisPaletteDocker::~KisPaletteDocker()
 {
 }
 
-void KisPaletteDocker::colorSelected(const KoColor& color, bool final)
+void KisPaletteDocker::setCanvas( KoCanvasBase * canvas )
 {
-    if (final)
-        m_view->resourceProvider()->setFGColor(color);
+    m_canvas = canvas;
+}
+
+void KisPaletteDocker::colorSelected(const KoColor& c, bool final)
+{
+    if (final && m_canvas) {
+       m_canvas->resourceProvider()->setForegroundColor(c);
+    }
 }
 
 QString KisPaletteDockerFactory::id() const
@@ -69,7 +69,7 @@ QString KisPaletteDockerFactory::id() const
 
 QDockWidget* KisPaletteDockerFactory::createDockWidget()
 {
-    KisPaletteDocker* dockWidget = new KisPaletteDocker(m_view);
+    KisPaletteDocker* dockWidget = new KisPaletteDocker();
     dockWidget->setObjectName(id());
 
     return dockWidget;

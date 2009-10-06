@@ -19,8 +19,6 @@
 #ifndef KIS_VIEW_2
 #define KIS_VIEW_2
 
-#include <QDockWidget>
-
 #include <KoView.h>
 #include <KoProgressUpdater.h>
 #include <KoToolManager.h>

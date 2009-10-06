@@ -61,21 +61,4 @@ private:
     QDockWidget* m_docker;
 };
 
-
-class HistogramDockerUpdater : public QObject
-{
-    Q_OBJECT
-public:
-    HistogramDockerUpdater(QObject* parent, KisHistogramSP h, KisHistogramView* v,
-                           KisAccumulatingHistogramProducer* p);
-public slots:
-    void updated();
-private slots:
-    void completed();
-private:
-    KisHistogramSP m_histogram;
-    KisHistogramView* m_view;
-    KisAccumulatingHistogramProducer* m_producer;
-};
-
 #endif //_HISTOGRAMDOCKER_H_

@@ -49,7 +49,6 @@ set(kritaui_LIB_SRCS
     flake/kis_layermap_visitor.cpp
     kis_autogradient.cc
     kis_autogradient_resource.cc
-    kis_birdeye_box.cc 
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
@@ -61,7 +60,7 @@ set(kritaui_LIB_SRCS
     kis_control_frame.cpp
     kis_composite_ops_model.cc
     kis_cursor.cc
-    kis_custom_palette.cc 
+    kis_custom_palette.cc
     kis_custom_pattern.cc
     kis_doc2.cc 
     kis_exposure_visitor.cc 
@@ -73,7 +72,6 @@ set(kritaui_LIB_SRCS
     kis_image_manager.cc
     kis_image_view_converter.cpp
     kis_import_catcher.cc 
-    kis_layer_box.cpp 
     kis_layer_manager.cc
     kis_mask_manager.cc
     kis_node_commands_adapter.cpp
@@ -82,7 +80,6 @@ set(kritaui_LIB_SRCS
     kis_painting_assistant.cc 
     kis_painting_assistants_manager.cc 
     kis_paintop_box.cc 
-    kis_palette_docker.cc
     kis_png_converter.cpp
     kis_print_job.cpp 
     kis_resource_server_provider.cpp 
@@ -164,8 +161,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui
     forms/wdggridsettings.ui
-    forms/wdgbirdeye.ui 
     forms/wdggenerators.ui
+    forms/wdgcustompalette.ui
     forms/wdgbookmarkedconfigurationseditor.ui
     forms/wdgapplyprofile.ui
     forms/wdgcustompattern.ui
@@ -175,11 +172,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgdisplaysettings.ui
     forms/kis_previewwidgetbase.ui
     forms/kis_matrix_widget.ui
-    forms/wdglayerbox.ui
-    forms/wdgpalettechooser.ui
     forms/wdgselectionoptions.ui
     forms/wdgshapeoptions.ui
-    forms/wdgcustompalette.ui
     forms/wdgnewimage.ui
     forms/wdgimageproperties.ui
     forms/wdgtransformationeffect.ui
@@ -235,13 +229,11 @@ install( FILES
 #    kis_iconwidget.h
 #    kis_itemchooser.h
 #    kis_label_zoom.h
-#    kis_layerbox.h
 #    kis_move_event.h
 #    kis_multi_bool_filter_widget.h
 #    kis_multi_double_filter_widget.h
 #    kis_multi_integer_filter_widget.h
 #    kis_paintop_box.h
-#    kis_palette_widget.h
 #    kis_previewwidget.h
 #    kis_tool_non_paint.h
 #    kis_tool_paint.h
@@ -250,7 +242,6 @@ install( FILES
 #    kis_tool_manager.h
 #    kis_tool_types.h
 #    kis_view2.h
-#    kobirdeyepanel.h
 #    KoInputDevice.h
 #    canvas/kis_perspective_grid_manager.h
    DESTINATION ${INCLUDE_INSTALL_DIR})

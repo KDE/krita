@@ -42,7 +42,6 @@
 #include "kis_layer_manager.h"
 #include "kis_selection_manager.h"
 #include "kis_node_commands_adapter.h"
-#include "kis_layer_box.h"
 
 struct KisNodeManager::Private {
 
@@ -185,7 +184,6 @@ void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &par
         }
         active = active->parent();
     }
-    dbgUI << "Nothing found, add in the root layer above the first child";
     parent = root;
     above = parent->firstChild();
 }
@@ -209,25 +207,16 @@ void KisNodeManager::insertNode(KisNodeSP node, KisNodeSP parent, int index)
 
 void KisNodeManager::moveNode(KisNodeSP node, KisNodeSP activeNode)
 {
-
-    if (activeNode)
-        dbgUI << " move node " << node->name() << " toward " << activeNode->name();
-    else
-        dbgUI << " move node " << node->name() << " toward root";
     KisNodeSP parent;
     KisNodeSP above;
 
     getNewNodeLocation(node->metaObject()->className(), parent, above, activeNode);
-    dbgUI << " move node " << node->name() << " for parent " << parent->name();
-    if (above)
-        dbgUI << " above " << above->name();
     m_d->commandsAdapter->moveNode(node, parent, above);
     node->setDirty(node->extent());
 }
 
 void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
 {
-    dbgUI << "Move node " << node << " to " << parent << " at " << index;
     if (allowAsChild(parent->metaObject()->className(), node->metaObject()->className())) {
         m_d->commandsAdapter->moveNode(node, parent, index);
     }
@@ -296,8 +285,6 @@ void KisNodeManager::activateNode(KisNodeSP node)
         m_d->maskManager->activateMask(0);
         m_d->layerManager->activateLayer(0);
     } else {
-        dbgUI << " activated node: " << node->name();
-
         KoShape * shape = m_d->view->document()->shapeForNode(node);
         if (!shape) {
             shape = m_d->view->document()->addShape(node);

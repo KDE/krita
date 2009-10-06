@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Enhanced Metafile Shape
+Name[pt]=Forma de Meta-Ficheiro Melhorado
+Name[uk]=Форма EMF
+Name[x-test]=xxEnhanced Metafile Shapexx
 X-KDE-ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=emfshape

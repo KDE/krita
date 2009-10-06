@@ -110,6 +110,8 @@ void CharacterGeneral::save(KoCharacterStyle *style)
     m_characterHighlighting->save(savingStyle);
     m_layoutTab->save(savingStyle);
     m_languageTab->save(savingStyle);
+
+    emit styleAltered(savingStyle);
 }
 
 void CharacterGeneral::switchToGeneralTab()

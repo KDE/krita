@@ -172,6 +172,7 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     m_paragraphDecorations->save(savingStyle);
 
     savingStyle->setNextStyle(widget.nextStyle->itemData(widget.nextStyle->currentIndex()).toInt());
+    emit styleAltered(savingStyle);
 /*    int parentStyleId = widget.inheritStyle->itemData(widget.inheritStyle->currentIndex()).toInt();
     if (parentStyleId == 0)
         m_style->setParentStyle(0);

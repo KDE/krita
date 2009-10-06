@@ -47,6 +47,7 @@ public slots:
 
 signals:
     void nameChanged(const QString &name);
+    void styleAltered(const KoCharacterStyle *style);
 
 private slots:
     void setName(const QString &name);

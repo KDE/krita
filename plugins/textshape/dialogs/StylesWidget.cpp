@@ -191,26 +191,25 @@ void StylesWidget::editStyle()
     QModelIndex index = widget.stylesView->currentIndex();
     Q_ASSERT(index.isValid());
     KoParagraphStyle *paragraphStyle = m_stylesModel->paragraphStyleForIndex(index);
-    KoCharacterStyle *characterStyle = 0;
-    KoParagraphStyle *paragStyleClone = 0;
-    KoCharacterStyle *characStyleClone = 0;
-
-    if (paragraphStyle == 0)
-        characterStyle = m_stylesModel->characterStyleForIndex(index);
 
     QWidget *widget = 0;
     if (paragraphStyle) {
-        paragStyleClone = paragraphStyle->clone();
         ParagraphGeneral *p = new ParagraphGeneral;
         p->setParagraphStyles(m_styleManager->paragraphStyles());
         p->setStyle(paragraphStyle);
+        connect(p, SIGNAL(styleAltered(const KoParagraphStyle*)),
+                m_styleManager, SLOT(alteredStyle(const KoParagraphStyle*)));
         // TODO get KoUnit from somewhere and set that on p
         widget = p;
-    } else if (characterStyle) {
-        characStyleClone = characterStyle->clone();
-        CharacterGeneral *c = new CharacterGeneral;
-        c->setStyle(characterStyle);
-        widget = c;
+    } else {
+        KoCharacterStyle *characterStyle = m_stylesModel->characterStyleForIndex(index);
+        if (characterStyle) {
+            CharacterGeneral *c = new CharacterGeneral;
+            c->setStyle(characterStyle);
+            connect(c, SIGNAL(styleAltered(const KoCharacterStyle*)),
+                    m_styleManager, SLOT(alteredStyle(const KoCharacterStyle*)));
+            widget = c;
+        }
     }
 
     if (widget) {
@@ -221,10 +220,6 @@ void StylesWidget::editStyle()
         dialog->exec();
         delete dialog;
     }
-    delete paragStyleClone;
-    delete characStyleClone;
-    paragStyleClone = 0;
-    characStyleClone = 0;
 }
 
 void StylesWidget::applyStyle()

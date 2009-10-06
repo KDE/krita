@@ -31,9 +31,9 @@
 #include <kis_image.h>
 #include <kis_view2.h>
 
-KisImageRasteredCache::KisImageRasteredCache(KisView2* view, Observer* o)
-        : m_observer(o->createNew(0, 0, 0, 0)), m_view(view)
-        , m_docker(0)
+KisImageRasteredCache::KisImageRasteredCache(Observer* o)
+    : m_observer(o->createNew(0, 0, 0, 0))
+    , m_docker(0)
 {
     m_busy = false;
     m_imageProjection = 0;
@@ -41,21 +41,6 @@ KisImageRasteredCache::KisImageRasteredCache(KisView2* view, Observer* o)
     m_timeOutMSec = 1000;
 
     m_timer.setSingleShot(true);
-
-    KisImageWSP img = view->image();
-
-    if (!img) {
-        return;
-    }
-
-    imageSizeChanged(img->width(), img->height());
-
-    connect(img.data(), SIGNAL(sigImageUpdated(QRect)),
-            this, SLOT(imageUpdated(QRect)));
-
-    connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)),
-            this, SLOT(imageSizeChanged(qint32, qint32)));
-
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
 }
 
@@ -64,10 +49,37 @@ KisImageRasteredCache::~KisImageRasteredCache()
     cleanUpElements();
 }
 
+void KisImageRasteredCache::setDocker(QDockWidget* docker)
+{
+    m_docker = docker;
+    m_visible = docker->isVisible();
+    connect(m_docker, SIGNAL(visibilityChanged(bool)), SLOT(setDockerVisible(bool)));
+}
+
+void KisImageRasteredCache::setImage(KisImageWSP image)
+{
+    m_image = image;
+    if (image) {
+        imageSizeChanged(image->width(), image->height());
+    }
+}
+
+void KisImageRasteredCache::setDockerVisible(bool visible)
+{
+    m_visible = visible;
+    if (visible) {
+        connect(m_image, SIGNAL(sigImageUpdated(QRect)), this, SLOT(imageUpdated(QRect)));
+        connect(m_image, SIGNAL(sigSizeChanged(qint32, qint32)),  this, SLOT(imageSizeChanged(qint32, qint32)));
+    }
+    else {
+        disconnect();
+    }
+}
+
 void KisImageRasteredCache::imageUpdated(QRect rc)
 {
     // Do our but against global warming: don't waste cpu if the histogram isn't visible anyway.
-    if (m_docker && !m_docker->isVisible()) return;
+    if (!m_visible) return;
 
     QRect r(0, 0, m_width * m_rasterSize, m_height * m_rasterSize);
     r &= rc;
@@ -102,9 +114,6 @@ void KisImageRasteredCache::imageUpdated(QRect rc)
 
 void KisImageRasteredCache::imageSizeChanged(qint32 w, qint32 h)
 {
-
-    KisImageWSP image = m_view->image();
-
     cleanUpElements();
     m_busy = false;
 
@@ -128,21 +137,19 @@ void KisImageRasteredCache::imageSizeChanged(qint32 w, qint32 h)
         rasterX++;
     }
 
-    imageUpdated(QRect(0, 0, image->width(), image->height()));
+    imageUpdated(QRect(0, 0, m_image->width(), m_image->height()));
 }
 
 void KisImageRasteredCache::timeOut()
 {
     m_busy = true;
-    KisImageWSP img = m_view->image();
-    if (!img) {
-        kWarning() << "m_view->image() is empty!";
+    if (!m_image) {
         return;
     }
     // Temporary cache: while we are busy, we won't get the mergeImage time and again.
-    if (!m_imageProjection)
-        m_imageProjection = img->mergedImage();
-
+    if (!m_imageProjection) {
+        m_imageProjection = m_image->mergedImage();
+    }
     // Pick one element of the cache, and update it
     if (!m_queue.isEmpty()) {
         m_queue.front()->observer->regionUpdated(m_imageProjection);

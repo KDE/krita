@@ -4,13 +4,11 @@ set(kritadefaultdockers_PART_SRCS
     kis_palette_docker.cc
     kis_birdeye_box.cc
     kis_layer_box.cpp
-    #histogramdock.cpp
-    #histogramdock_factory.cpp
-    #histogram_updater.cpp
-    #histogramdocker.cc
-    #kis_accumulating_producer.cc
-    #kis_cachedhistogram.cc
-    #kis_imagerasteredcache.cc
+    histogramdock.cpp
+    histogram_updater.cpp
+    kis_accumulating_producer.cc
+    kis_cachedhistogram.cc
+    kis_imagerasteredcache.cc
     defaultdockers.cpp
 )
 
@@ -18,13 +16,12 @@ set(kritadefaultdockers_PART_HEADERS
     kis_palette_docker.h
     kis_birdeye_box.h
     kis_layer_box.h
-    #histogramdocker.h
-    #histogramdock_factory.h
-    #histogramdock.h
-    #histogram_updater.h
-    #kis_accumulating_producer.h
-    #kis_cachedhistogram.h
-    #kis_imagerasteredcache.h
+    histogramdock_factory.h
+    histogramdock.h
+    histogram_updater.h
+    kis_accumulating_producer.h
+    kis_cachedhistogram.h
+    kis_imagerasteredcache.h
     defaultdockers.h
 )
 

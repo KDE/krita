@@ -21,14 +21,56 @@
 #define HISTOGRAM_DOCK_H
 
 #include <QDockWidget>
+#include <QMenu>
 
 #include <KoCanvasObserver.h>
 
-class KisHistogramDock : public QDockWidget
+#include <kis_types.h>
+#include "kis_cachedhistogram.h"
+
+class KoColorSpace;
+class KoHistogramProducerFactory;
+class KisAccumulatingHistogramProducer;
+class KisCanvas2;
+class KisHistogramView;
+class KisImagerasteredCache;
+
+class KisHistogramDocker : public QDockWidget, public KoCanvasObserver
 {
 
+    Q_OBJECT
+
 public:
-    KisHistogramDock(KisHistogramView *view) : QDockWidget(i18n("Histogram"));
+    KisHistogramDocker();
+    virtual ~KisHistogramDocker();
+
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
+
+private slots:
+
+    void setImage(KisImageWSP image);
+    void producerChanged(QAction *action);
+    void popupMenu(const QPoint & pos);
+    void colorSpaceChanged(const KoColorSpace* cs);
+
+private:
+
+    void setChannels();
+
+    KisCanvas2* m_canvas;
+    KisImageWSP m_image;
+    KoHistogramProducerFactory* m_factory;
+    KisCachedHistogramObserver::Producers m_producers;
+    KisAccumulatingHistogramProducer* m_producer;
+    const KoColorSpace* m_cs;
+    KisHistogramView* m_hview;
+    KisImageRasteredCache* m_cache;
+    QMenu m_popup;
+    KisHistogramSP m_histogram;
+    int m_currentProducerPos;
+
+
 };
 
 #endif

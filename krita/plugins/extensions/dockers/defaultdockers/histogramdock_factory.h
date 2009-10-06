@@ -21,15 +21,15 @@
 #define HISTOGRAM_DOCK_FACTORY_H
 
 #include "histogramdock.h"
-
-#include "KoDockFactory.h"
+#include <KoDockFactory.h>
 
 class KisHistogramDockFactory : public KoDockFactory
 {
 public:
-    KisHistogramDockFactory(KisHistogramView* view)
+    KisHistogramDockFactory() {}
 
     virtual QString id() const {
+        return QString("KisHistogramDocker");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
@@ -37,19 +37,16 @@ public:
     }
 
     virtual QDockWidget* createDockWidget() {
-        KisHistogramDock * dockWidget = new KisHistogramDock(m_view);
+
+        KisHistogramDocker* dockWidget = new KisHistogramDocker();
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
     DockPosition defaultDockPosition() const {
-        return DockMinimized;
+        return DockRight;
     }
-
-private:
-    KisHistogramView * m_view;
-
 };
 
 #endif

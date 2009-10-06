@@ -27,6 +27,7 @@
 #include <QTimer>
 #include <QDockWidget>
 
+#include <kis_image.h>
 #include <kis_paint_device.h>
 
 class KisView2;
@@ -47,6 +48,7 @@ class KisImageRasteredCache : public QObject
     Q_OBJECT
 
 public:
+
     class Observer
     {
     public:
@@ -55,20 +57,24 @@ public:
         virtual ~Observer() {}
     };
 
-    KisImageRasteredCache(KisView2* view, Observer* o);
+    KisImageRasteredCache(Observer* o);
     virtual ~KisImageRasteredCache();
 
-    void setDocker(QDockWidget* docker) { m_docker = docker; }
+    void setDocker(QDockWidget* docker);
+    void setImage(KisImageWSP image);
 
 signals:
+
     void cacheUpdated();
 
 private slots:
+    void setDockerVisible(bool visible);
     void imageUpdated(QRect rc);
     void imageSizeChanged(qint32 w, qint32 h);
     void timeOut();
 
 private:
+
     class Element
     {
     public:
@@ -76,6 +82,7 @@ private:
         Observer* observer;
         bool valid;
     };
+
     typedef QVector< QVector<Element*> > Raster;
     typedef QList<Element*> Queue;
 
@@ -88,11 +95,11 @@ private:
     int m_timeOutMSec;
     int m_rasterSize;
     int m_width, m_height;
-    KisView2 * m_view;
     bool m_busy;
     QDockWidget* m_docker;
-
+    bool m_visible;
     KisPaintDeviceSP m_imageProjection;
+    KisImageWSP m_image;
 };
 
 #endif // _KIS_IMAGE_RASTERED_CACHE_H_

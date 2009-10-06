@@ -37,6 +37,7 @@ KisPresetChooser::~KisPresetChooser()
 
 void KisPresetChooser::update(QTableWidgetItem* i)
 {
+    Q_UNUSED(i);
 //    KoResourceItem *item = dynamic_cast<KoResourceItem *>(i);
 //
 //    if (item) {

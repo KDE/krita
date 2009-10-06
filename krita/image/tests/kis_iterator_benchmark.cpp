@@ -91,7 +91,7 @@ void KisIteratorBenchmark::hLineIter(const KoColorSpace * colorSpace)
 
     for(int i=0; i<3; i++) {
         KisHLineIteratorPixel it = dev.createHLineIterator(0, 0, TEST_WIDTH);
-        for(int i=0; i<TEST_HEIGHT; i++){
+        for(int j=0; j<TEST_HEIGHT; j++){
             while (!it.isDone()) {
                 //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
                 ++it;
@@ -105,7 +105,7 @@ void KisIteratorBenchmark::hLineIter(const KoColorSpace * colorSpace)
 
     for(int i=0; i<3; i++) {
         KisHLineIteratorPixel it = dev.createHLineIterator(0, 0, TEST_WIDTH);
-        for(int i=0; i<TEST_HEIGHT; i++){
+        for(int j=0; j<TEST_HEIGHT; j++){
             while (!it.isDone()) {
                 int pixels = it.nConseqHPixels();
                 //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
@@ -142,7 +142,7 @@ void KisIteratorBenchmark::vLineIter(const KoColorSpace * colorSpace)
 
     for(int i=0; i<3; i++) {
         KisVLineIteratorPixel it = dev.createVLineIterator(0, 0, TEST_HEIGHT);
-        for(int i=0; i<TEST_WIDTH; i++){
+        for(int j=0; j<TEST_WIDTH; j++){
             while (!it.isDone()) {
                 //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
                 ++it;
@@ -156,8 +156,9 @@ void KisIteratorBenchmark::vLineIter(const KoColorSpace * colorSpace)
 
     KisVLineConstIteratorPixel cit = dev.createVLineConstIterator(0, 0, TEST_HEIGHT);
     for(int i=0; i<TEST_WIDTH; i++){
-        while (!cit.isDone())
+        while (!cit.isDone()) {
             ++cit;
+        }
         cit.nextCol();
     }
     qDebug() << "const VLineIterator took" << t.elapsed();

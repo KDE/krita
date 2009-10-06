@@ -797,25 +797,29 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
         return;
     }
 
-    if (shape->hasAdditionalAttribute("text:anchor-type")) {
-        QString anchorType = shape->additionalAttribute("text:anchor-type");
-        // page anchored shapes are handled differently
-        if (anchorType != "page") {
-            KoTextAnchor *anchor = new KoTextAnchor(shape);
-            anchor->loadOdfFromShape(element);
-            d->textSharedData->shapeInserted(shape, element, d->context);
+    QString anchorType;
+    if (shape->hasAdditionalAttribute("text:anchor-type"))
+        anchorType = shape->additionalAttribute("text:anchor-type");
+    else if (element.hasAttributeNS(KoXmlNS::text, "anchor-type"))
+        anchorType = element.attributeNS(KoXmlNS::text, "anchor-type");
+    else
+        anchorType = "as-char"; // default value
 
-            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-            if (layout) {
-                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-                if (textObjectManager) {
-                    textObjectManager->insertInlineObject(cursor, anchor);
-                }
+    // page anchored shapes are handled differently
+    if (anchorType != "page") {
+        KoTextAnchor *anchor = new KoTextAnchor(shape);
+        anchor->loadOdfFromShape(element);
+        d->textSharedData->shapeInserted(shape, element, d->context);
+
+        KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+        if (layout) {
+            KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+            if (textObjectManager) {
+                textObjectManager->insertInlineObject(cursor, anchor);
             }
         }
-        else {
-            d->textSharedData->shapeInserted(shape, element, d->context);
-        }
+    } else {
+        d->textSharedData->shapeInserted(shape, element, d->context);
     }
 }
 

@@ -55,6 +55,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
     ${CMAKE_SOURCE_DIR}/krita/image/tiles
     ${CMAKE_SOURCE_DIR}/krita/ui
+    ${CMAKE_SOURCE_DIR}/krita/ui/canvas
     ${CMAKE_SOURCE_DIR}/krita/ui/tool
     ${CMAKE_SOURCE_DIR}/krita/ui/flake
     ${CMAKE_SOURCE_DIR}/krita/ui/widgets

@@ -34,9 +34,9 @@ class QUndoCommand;
  * When the user types text into the text shape text editing plugins will be notified of
  * changes in the text document.  The plugin is meant to be for altering or checking text as the user
  * types it,
- * and to ensure a good user experience this plugin will only be called when it makes sense from
+ * To ensure a good user experience this plugin will only be called when it makes sense from
  * a users perspective.
- * The finishedWord() method will be called when the user makes at least one  change to
+ * The finishedWord() method will be called when the user makes at least one change to
  * a word and then moves the cursor out of the word, a similar approach happens with the
  * finishedParagraph(), it will only be called after the cursor has been moved out of the paragraph.
  */

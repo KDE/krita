@@ -219,14 +219,6 @@ void StylesWidget::editStyle()
         dialog->setMainWidget(widget);
         connect(dialog, SIGNAL(okClicked()), widget, SLOT(save()));
         dialog->exec();
-        if (paragraphStyle) {
-            if (paragraphStyle != paragStyleClone)
-                applyStyle();
-        }
-        else if (characterStyle) {
-            if (characterStyle != characStyleClone)
-                applyStyle();
-        }
         delete dialog;
     }
     delete paragStyleClone;

@@ -300,6 +300,7 @@ void KoToolManager::toolActivated(ToolHelper *tool)
 
 void KoToolManager::switchTool(const QString &id, bool temporary)
 {
+    Q_ASSERT(d->canvasData);
     if (!d->canvasData) return;
 
     if (d->canvasData->activeTool && temporary)
@@ -365,7 +366,6 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
 
     d->canvasData->activeTool = tool;
 
-
     connect(d->canvasData->activeTool, SIGNAL(cursorChanged(const QCursor &)),
             this, SLOT(updateCursor(const QCursor &)));
     connect(d->canvasData->activeTool, SIGNAL(activateTool(const QString &)),
@@ -403,6 +403,7 @@ void KoToolManager::postSwitchTool(bool temporary)
         }
     }
 #endif
+    Q_ASSERT(d->canvasData);
     if (!d->canvasData) return;
 
     if (d->canvasData->canvas->canvas()) {
@@ -594,6 +595,9 @@ void KoToolManager::updateCursor(const QCursor &cursor)
 
 void KoToolManager::switchToolRequested(const QString & id)
 {
+    Q_ASSERT(d->canvasData);
+    if (!d->canvasData) return;
+
     while (!d->canvasData->stack.isEmpty()) // switching means to flush the stack
         d->canvasData->stack.pop();
     switchTool(id, false);
@@ -606,6 +610,9 @@ void KoToolManager::switchToolTemporaryRequested(const QString &id)
 
 void KoToolManager::switchBackRequested()
 {
+    Q_ASSERT(d->canvasData);
+    if (!d->canvasData) return;
+
     if (d->canvasData->stack.isEmpty()) {
         // default to changing to the interactionTool
         switchTool(KoInteractionTool_ID, false);
@@ -616,6 +623,7 @@ void KoToolManager::switchBackRequested()
 
 KoCreateShapesTool * KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const
 {
+    Q_ASSERT(canvas);
     foreach(KoCanvasController *controller, d->canvasses.keys()) {
         if (controller->canvas() == canvas) {
             KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>
@@ -727,6 +735,7 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
 
 void KoToolManager::switchInputDevice(const KoInputDevice &device)
 {
+    Q_ASSERT(d->canvasData);
     if (!d->canvasData) return;
     if (!device.isMouse()) {
         d->tabletEventTimer.start(MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED);

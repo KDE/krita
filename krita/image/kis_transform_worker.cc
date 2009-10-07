@@ -58,7 +58,9 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
 
 KisTransformWorker::~KisTransformWorker()
 {
-}void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+}
+
+void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     qint32 pixelSize = src->pixelSize();
     QRect r;

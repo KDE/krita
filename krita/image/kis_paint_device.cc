@@ -233,7 +233,7 @@ QRect KisPaintDevice::exactBounds() const
     y = boundY2 = rc.y();
     w = boundW2 = rc.width();
     h = boundH2 = rc.height();
-
+    
     const quint8* defaultPixel = m_datamanager->defaultPixel();
     bool found = false;
     {

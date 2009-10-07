@@ -1,4 +1,3 @@
-
 /*
  *  kis_tool_select_rectangular.cc -- part of Krita
  *
@@ -169,14 +168,11 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
         bound.setBottomRight(m_endPos);
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
 
-        // FIXME: check this!?
         if (m_startPos == m_endPos) {
             clearSelection();
             m_selecting = false;
             return;
         }
-
-        //                 QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         if (!currentImage())
             return;
@@ -195,12 +191,14 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
 
             // We don't want the border of the 'rectangle' to be included in our selection
             rc.setSize(rc.size() - QSize(1, 1));
+            rc = rc.normalized();
+            if (rc.width() > 0 && rc.height() > 0 ) {
+                KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+                tmpSel->select(rc);
 
-            KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-            tmpSel->select(rc);
-
-            QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
-            m_canvas->addCommand(cmd);
+                QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
+                m_canvas->addCommand(cmd);
+            }
         } else {
             QRectF documentRect = convertToPt(bound);
 

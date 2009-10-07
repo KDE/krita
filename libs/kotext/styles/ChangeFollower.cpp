@@ -67,10 +67,18 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles)
             style->applyStyle(bf);
             cursor.setBlockFormat(bf);
         }
+        QTextCharFormat cf = block.charFormat();
+        id = cf.intProperty(KoCharacterStyle::StyleId);
+        if (id > 0 && changedStyles.contains(id)) {
+            KoCharacterStyle *style = m_styleManager->characterStyle(id);
+            Q_ASSERT(style);
+            style->applyStyle(block);
+        }
+
         QTextBlock::iterator iter = block.begin();
         while (! iter.atEnd()) {
             QTextFragment fragment = iter.fragment();
-            QTextCharFormat cf = fragment.charFormat();
+            cf = fragment.charFormat();
             id = cf.intProperty(KoCharacterStyle::StyleId);
             if (id > 0 && changedStyles.contains(id)) {
                 // create selection

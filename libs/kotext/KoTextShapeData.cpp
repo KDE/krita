@@ -195,17 +195,8 @@ KoText::Direction KoTextShapeData::pageDirection() const
 
 void KoTextShapeData::setPage(KoTextPage* textpage)
 {
-    int oldPageNumber = d->textpage ? d->textpage->pageNumber(): -1;
     delete d->textpage;
     d->textpage = textpage;
-    if ( d->textpage && d->textpage->pageNumber() != oldPageNumber ) {
-        foul();
-        KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
-        if ( layout ) {
-            layout->interruptLayout();
-        }
-        fireResizeEvent();
-    }
 }
 
 KoTextPage* KoTextShapeData::page() const

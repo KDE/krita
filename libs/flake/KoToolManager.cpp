@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2005-2009 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
@@ -171,7 +171,6 @@ KoToolManager::KoToolManager()
 {
     connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*, QWidget*)),
             this, SLOT(movedFocus(QWidget*, QWidget*)));
-    QApplication::instance()->installEventFilter(this);
 }
 
 KoToolManager::~KoToolManager()
@@ -289,6 +288,7 @@ void KoToolManager::toolActivated(ToolHelper *tool)
         return;
 
     Q_ASSERT(d->canvasData);
+    if (!d->canvasData) return;
     KoTool *t = d->canvasData->allTools.value(tool->id());
     Q_ASSERT(t);
 
@@ -300,6 +300,8 @@ void KoToolManager::toolActivated(ToolHelper *tool)
 
 void KoToolManager::switchTool(const QString &id, bool temporary)
 {
+    if (!d->canvasData) return;
+
     if (d->canvasData->activeTool && temporary)
         d->canvasData->stack.push(d->canvasData->activeToolId);
     d->canvasData->activeToolId = id;
@@ -325,6 +327,7 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
     Q_ASSERT(tool);
     if (d->canvasData == 0)
         return;
+
     if (d->canvasData->activeTool == tool && tool->toolId() != KoInteractionTool_ID)
         return;
 
@@ -400,6 +403,8 @@ void KoToolManager::postSwitchTool(bool temporary)
         }
     }
 #endif
+    if (!d->canvasData) return;
+
     if (d->canvasData->canvas->canvas()) {
         KoCanvasBase *canvas = d->canvasData->canvas->canvas();
         // Caller of postSwitchTool expect this to be called to update the selected tool
@@ -447,6 +452,9 @@ void KoToolManager::attachCanvas(KoCanvasController *controller)
     Q_ASSERT(controller);
     CanvasData *cd = d->createCanvasData(controller, KoInputDevice::mouse());
     // switch to new canvas as the active one.
+    if (d->canvasData == 0) {
+        QApplication::instance()->installEventFilter(this);
+    }
     d->canvasData = cd;
     d->inputDevice = cd->inputDevice;
     QList<CanvasData*> canvasses;
@@ -481,6 +489,7 @@ void KoToolManager::attachCanvas(KoCanvasController *controller)
             this, SLOT(currentLayerChanged(const KoShapeLayer*)));
 
     d->canvasData->canvas->activate();
+
     emit changedCanvas(d->canvasData ? d->canvasData->canvas->canvas() : 0);
 }
 
@@ -555,6 +564,8 @@ void KoToolManager::detachCanvas(KoCanvasController *controller)
         } else {
             // as a last resort just set a blank one
             d->canvasData = 0;
+            // and stop the event filter
+            QApplication::instance()->removeEventFilter(this);
         }
     }
 
@@ -674,8 +685,7 @@ void KoToolManager::currentLayerChanged(const KoShapeLayer *layer)
 
 KoCanvasController *KoToolManager::activeCanvasController() const
 {
-    if (! d->canvasData)
-        return 0;
+    if (! d->canvasData) return 0;
     return d->canvasData->canvas;
 }
 
@@ -717,6 +727,7 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
 
 void KoToolManager::switchInputDevice(const KoInputDevice &device)
 {
+    if (!d->canvasData) return;
     if (!device.isMouse()) {
         d->tabletEventTimer.start(MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED);
     }
@@ -800,7 +811,7 @@ void KoToolManager::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas)
 
 void KoToolManager::injectDeviceEvent(KoDeviceEvent * event)
 {
-    if (d->canvasData->canvas->canvas()) {
+    if (d->canvasData && d->canvasData->canvas->canvas()) {
         if (static_cast<KoDeviceEvent::Type>(event->type()) == KoDeviceEvent::ButtonPressed)
             d->canvasData->activeTool->customPressEvent(event->pointerEvent());
         else if (static_cast<KoDeviceEvent::Type>(event->type()) == KoDeviceEvent::ButtonReleased)

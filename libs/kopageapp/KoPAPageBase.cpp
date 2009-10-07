@@ -82,24 +82,14 @@ void KoPAPageBase::saveOdfPageContent( KoPASavingContext & paContext ) const
     saveOdfShapes( paContext );
     saveOdfAnimations( paContext );
     saveOdfPresentationNotes( paContext );
+    paContext.saveLayerSet( paContext.xmlWriter() );
+    paContext.clearLayers();
 }
 
 void KoPAPageBase::saveOdfShapes( KoShapeSavingContext &context ) const
 {
     QList<KoShape*> shapes( childShapes() );
-    QList<KoShape*> tlshapes;
-
-    foreach( KoShape *shape, shapes ) {
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>( shape );
-
-        Q_ASSERT( layer );
-        if ( layer ) {
-            QList<KoShape*> layerShapes( layer->childShapes() );
-            foreach( KoShape *layerShape, layerShapes ) {
-                tlshapes.append( layerShape );
-            }
-        }
-    }
+    QList<KoShape*> tlshapes( shapes );
 
     qSort( tlshapes.begin(), tlshapes.end(), KoShape::compareShapeZIndex );
 
@@ -156,17 +146,30 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
     styleStack.setTypeProperties( "drawing-page" );
 
     loadOdfPageTag(element, paContext);
-
     styleStack.restore();
 
     // load layers and shapes 
-    // This needs some work as this is only for layers which are the same for all pages
+    const KoXmlElement & pageLayerSet = KoXml::namedItemNS( element, KoXmlNS::draw, "layer-set" );
+
+    const KoXmlElement & usedPageLayerSet = pageLayerSet.isNull() ? loadingContext.odfLoadingContext().stylesReader().layerSet(): pageLayerSet;
+
+    int layerZIndex = 0;
+    bool first = true;
     KoXmlElement layerElement;
-    forEachElement( layerElement, loadingContext.odfLoadingContext().stylesReader().layerSet() )
-    {
-        KoShapeLayer * layer = new KoShapeLayer();
-        if ( layer->loadOdf( layerElement, loadingContext ) ) {
+    forEachElement( layerElement, usedPageLayerSet ) {
+        KoShapeLayer * layer = 0;
+        if ( first ) {
+            first = false;
+            layer = dynamic_cast<KoShapeLayer *>( childShapes().first() );
+            Q_ASSERT( layer );
+        }
+        else {
+            layer = new KoShapeLayer();
             addChild( layer );
+        }
+        if ( layer ) {
+            layer->setZIndex( layerZIndex++ );
+            layer->loadOdf( layerElement, loadingContext );
         }
     }
 

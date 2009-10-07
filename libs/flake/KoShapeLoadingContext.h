@@ -87,6 +87,13 @@ public:
     /// Adds a new layer to be referenced by the given name later
     void addLayer(KoShapeLayer * layer, const QString & layerName);
 
+    /**
+     * remove all layers
+     *
+     * This can be used for loading different layer sets per page.
+     */
+    void clearLayers();
+
     /// register the id for a specific shape
     void addShapeId(KoShape * shape, const QString & id);
     /// return the shape formerly registered using addShapeId()

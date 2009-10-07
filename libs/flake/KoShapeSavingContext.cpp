@@ -123,21 +123,24 @@ void KoShapeSavingContext::addLayerForSaving(const KoShapeLayer * layer)
         m_layers.append(layer);
 }
 
-void KoShapeSavingContext::saveLayerSet(KoXmlWriter * xmlWriter) const
+void KoShapeSavingContext::saveLayerSet(KoXmlWriter & xmlWriter) const
 {
-    Q_ASSERT(xmlWriter);
-
-    xmlWriter->startElement("draw:layer-set");
+    xmlWriter.startElement("draw:layer-set");
     foreach(const KoShapeLayer * layer, m_layers) {
-        xmlWriter->startElement("draw:layer");
-        xmlWriter->addAttribute("draw:name", layer->name());
+        xmlWriter.startElement("draw:layer");
+        xmlWriter.addAttribute("draw:name", layer->name());
         if (layer->isGeometryProtected())
-            xmlWriter->addAttribute("draw:protected", "true");
+            xmlWriter.addAttribute("draw:protected", "true");
         if (! layer->isVisible())
-            xmlWriter->addAttribute("draw:display", "none");
-        xmlWriter->endElement();  // draw:layer
+            xmlWriter.addAttribute("draw:display", "none");
+        xmlWriter.endElement();  // draw:layer
     }
-    xmlWriter->endElement();  // draw:layer-set
+    xmlWriter.endElement();  // draw:layer-set
+}
+
+void KoShapeSavingContext::clearLayers()
+{
+    m_layers.clear();
 }
 
 QString KoShapeSavingContext::imageHref(KoImageData * image)

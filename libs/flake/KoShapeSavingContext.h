@@ -172,7 +172,14 @@ public:
     /**
      * Saves the layers added with addLayerForSaving to the xml writer
      */
-    void saveLayerSet(KoXmlWriter * xmlWriter) const;
+    void saveLayerSet(KoXmlWriter & xmlWriter) const;
+
+    /**
+     * remove all layers
+     *
+     * This can be used for saving different layer sets per page.
+     */
+    void clearLayers();
 
     /**
      * Get the image href under which the image will be saved in the store

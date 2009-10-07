@@ -492,14 +492,13 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
         if (!numberedParagraph && e.tagName() != "list-item" && !listHeader)
             continue;
 
-        if (!firstTime) {
+        if (!firstTime && !numberedParagraph) {
             // use empty formats to not inherit from the prev parag
             QTextBlockFormat bf;
             QTextCharFormat cf;
             cursor.insertBlock(bf, cf);
-        } else {
-            firstTime = false;
         }
+        firstTime = false;
 
         QTextBlock current = cursor.block();
 

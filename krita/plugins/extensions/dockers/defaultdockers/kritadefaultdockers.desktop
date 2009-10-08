@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Default Dockers
+Name[pt]=Áreas de Ferramentas Predefinidas
+Name[uk]=Типові панелі швартування
+Name[x-test]=xxDefault Dockersxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritadefaultdockers

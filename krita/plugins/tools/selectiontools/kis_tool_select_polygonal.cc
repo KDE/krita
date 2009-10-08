@@ -143,7 +143,7 @@ void KisToolSelectPolygonal::keyPressEvent(QKeyEvent *e)
 
 void KisToolSelectPolygonal::finish()
 {
-    if (currentImage()) {
+    if (currentImage() && m_points.count() > 2) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
@@ -174,7 +174,6 @@ void KisToolSelectPolygonal::finish()
             m_canvas->addCommand(cmd);
         } else {
 
-            if (m_points.count() > 1) {
                 KoPathShape* path = new KoPathShape();
                 path->setShapeId(KoPathShapeId);
 
@@ -187,7 +186,6 @@ void KisToolSelectPolygonal::finish()
                 path->normalize();
 
                 helper.addSelectionShape(path);
-            }
         }
         QApplication::restoreOverrideCursor();
     }

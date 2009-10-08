@@ -249,8 +249,12 @@ void StylesWidget::setCurrent(const QModelIndex &index)
     bool canDelete = index.isValid();
     if (canDelete) {
         canDelete = !index.parent().isValid();
+        KoParagraphStyle *paragraphStyle = m_stylesModel->paragraphStyleForIndex(index);
         if (!canDelete) // there is one other way its deletable, if its a parag style
-            canDelete = m_stylesModel->paragraphStyleForIndex(index);
+            canDelete = paragraphStyle;
+        // but not if its the default paragraph style.
+        if (canDelete && (paragraphStyle && paragraphStyle->styleId() == 100))
+            canDelete = false;
     }
     widget.deleteStyle->setEnabled(canDelete);
 

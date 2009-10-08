@@ -403,10 +403,10 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
 
         //The style:num-prefix and style:num-suffix attributes specify what to display before and after the number.
         const QString prefix = style.attributeNS(KoXmlNS::style, "num-prefix", QString());
-        if (! prefix.isNull())
+        if (! prefix.isEmpty())
             setListItemPrefix(prefix);
         const QString suffix = style.attributeNS(KoXmlNS::style, "num-suffix", QString());
-        if (! suffix.isNull())
+        if (! suffix.isEmpty())
             setListItemSuffix(suffix);
         const QString startValue = style.attributeNS(KoXmlNS::text, "start-value", QString("1"));
         setStartValue(startValue.toInt());
@@ -423,7 +423,7 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
     }
 
     setLevel(level);
-    if (!displayLevel.isNull())
+    if (!displayLevel.isEmpty())
         setDisplayLevel(displayLevel.toInt());
 
     KoXmlElement property;

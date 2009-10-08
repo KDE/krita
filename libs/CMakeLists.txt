@@ -16,8 +16,3 @@ if (SHOULD_BUILD_SCRIPTING)
     add_subdirectory( kokross )
 endif (SHOULD_BUILD_SCRIPTING)
 add_subdirectory( kopageapp )
-
-# Generic libraries
-
-# Used by the emfshape and in the future also some filter(s)
-#add_subdirectory( qemf )

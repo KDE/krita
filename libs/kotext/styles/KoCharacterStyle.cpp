@@ -1108,13 +1108,13 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
             bool ok = false;
             int boldness = d->stylesPrivate.value(key).toInt(&ok);
             if (ok) {
-                if (boldness == 50) {
+                if (boldness == QFont::Normal) {
                     style.addProperty("fo:font-weight", "normal", KoGenStyle::TextType);
-                } else if (boldness == 75) {
+                } else if (boldness == QFont::Bold) {
                     style.addProperty("fo:font-weight", "bold", KoGenStyle::TextType);
                 } else {
-                    // Remember : Qt and CSS/XSL doesn't have the same scale...
-                    style.addProperty("fo:font-weight", boldness*10, KoGenStyle::TextType);
+                    // Remember : Qt and CSS/XSL doesn't have the same scale. Its 100-900 instead of Qts 0-100
+                    style.addProperty("fo:font-weight", qBound(10, boldness, 90) * 10, KoGenStyle::TextType);
                 }
             }
         } else if (key == QTextFormat::FontItalic) {

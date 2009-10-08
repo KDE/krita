@@ -255,17 +255,17 @@ void StylesWidget::setCurrent(const QModelIndex &index)
     widget.deleteStyle->setEnabled(canDelete);
 
     if (index.isValid() && m_isEmbedded) {
-	KoParagraphStyle *paragraphStyle = m_stylesModel->paragraphStyleForIndex(index);
-	if (paragraphStyle) {
-	    emit paragraphStyleSelected(paragraphStyle, canDelete);
-	    return;
-	}
+        KoParagraphStyle *paragraphStyle = m_stylesModel->paragraphStyleForIndex(index);
+        if (paragraphStyle) {
+            emit paragraphStyleSelected(paragraphStyle, canDelete);
+            return;
+        }
 
-	KoCharacterStyle *characterStyle = m_stylesModel->characterStyleForIndex(index);
-	if (characterStyle) {
-	    emit characterStyleSelected(characterStyle, canDelete);
-	    return;
-	}
+        KoCharacterStyle *characterStyle = m_stylesModel->characterStyleForIndex(index);
+        if (characterStyle) {
+            emit characterStyleSelected(characterStyle, canDelete);
+            return;
+        }
     }
 }
 

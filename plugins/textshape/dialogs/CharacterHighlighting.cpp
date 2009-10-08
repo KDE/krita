@@ -84,10 +84,10 @@ int CharacterHighlighting::lineTypeToIndex(KoCharacterStyle::LineType type)
 {
     int index;
     switch (type) {
-	case KoCharacterStyle::NoLineType: index = 0; break;
-	case KoCharacterStyle::SingleLine: index = 1; break;
-	case KoCharacterStyle::DoubleLine: index = 2; break;
-	default: index = 0; break;
+    case KoCharacterStyle::NoLineType: index = 0; break;
+    case KoCharacterStyle::SingleLine: index = 1; break;
+    case KoCharacterStyle::DoubleLine: index = 2; break;
+    default: index = 0; break;
     }
     return index;
 }
@@ -96,13 +96,13 @@ int CharacterHighlighting::lineStyleToIndex(KoCharacterStyle::LineStyle type)
 {
     int index;
     switch (type) {
-	case KoCharacterStyle::SolidLine: index = 0; break;
-	case KoCharacterStyle::DashLine: index = 1; break;
-	case KoCharacterStyle::DottedLine: index = 2; break;
-	case KoCharacterStyle::DotDashLine: index = 3; break;
-	case KoCharacterStyle::DotDotDashLine: index = 4; break;
-	case KoCharacterStyle::WaveLine: index = 5; break;
-	default: index = 0; break;
+    case KoCharacterStyle::SolidLine: index = 0; break;
+    case KoCharacterStyle::DashLine: index = 1; break;
+    case KoCharacterStyle::DottedLine: index = 2; break;
+    case KoCharacterStyle::DotDashLine: index = 3; break;
+    case KoCharacterStyle::DotDotDashLine: index = 4; break;
+    case KoCharacterStyle::WaveLine: index = 5; break;
+    default: index = 0; break;
     }
     return index;
 }
@@ -175,7 +175,7 @@ void CharacterHighlighting::setDisplay(KoCharacterStyle *style)
         widget.underlineStyle->setCurrentIndex(lineTypeToIndex(style->underlineType()));
     else
         widget.underlineStyle->setCurrentIndex(-1);
-        
+
     underlineTypeChanged(widget.underlineStyle->currentIndex());
     widget.underlineColor->setColor(style->underlineColor());
 
@@ -183,7 +183,7 @@ void CharacterHighlighting::setDisplay(KoCharacterStyle *style)
     widget.strikethroughStyle->setCurrentIndex(1);
     widget.strikethroughLineStyle->setCurrentIndex(lineStyleToIndex(style->strikeOutStyle()));
     if (m_uniqueFormat)
-	widget.strikethroughStyle->setCurrentIndex(lineTypeToIndex(style->strikeOutType()));
+        widget.strikethroughStyle->setCurrentIndex(lineTypeToIndex(style->strikeOutType()));
     else
         widget.strikethroughStyle->setCurrentIndex(-1);
     strikethroughTypeChanged(widget.strikethroughStyle->currentIndex());
@@ -197,10 +197,10 @@ void CharacterHighlighting::setDisplay(KoCharacterStyle *style)
     case QFont::AllLowercase: widget.lowercase->setChecked(true); break;
     case QFont::Capitalize: widget.capitalize->setChecked(true); break;
     }
-    
+
     widget.groupBox->setCheckable(!m_uniqueFormat);
     widget.groupBox->setChecked(m_uniqueFormat);
-    
+
     capitalisationChanged();
 }
 

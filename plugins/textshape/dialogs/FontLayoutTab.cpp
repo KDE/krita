@@ -48,7 +48,7 @@ FontLayoutTab::FontLayoutTab(bool withSubSuperScript, bool uniqueFormat, QWidget
 void FontLayoutTab::setDisplay(KoCharacterStyle *style)
 {
     if (!style)
-	return;
+        return;
 
     switch (style->verticalAlignment()) {
     case QTextCharFormat::AlignSuperScript:
@@ -61,7 +61,7 @@ void FontLayoutTab::setDisplay(KoCharacterStyle *style)
         // TODO check if its custom instead.
         widget.normal->setChecked(true);
     }
-    
+
     widget.positionGroup->setCheckable(!m_uniqueFormat);
     widget.positionGroup->setChecked(m_uniqueFormat);
 

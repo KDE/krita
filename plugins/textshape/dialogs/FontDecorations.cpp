@@ -99,7 +99,7 @@ void FontDecorations::setDisplay(KoCharacterStyle *style)
 void FontDecorations::save(KoCharacterStyle *style) const
 {
     if (!style)
-	return;
+        return;
 
     if (widget.enableBackground->isChecked() && m_backgroundColorReset)
         style->setBackground(QBrush(Qt::NoBrush));

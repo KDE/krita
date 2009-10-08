@@ -53,7 +53,7 @@ void FontTab::setDisplay(const KoCharacterStyle* displayStyle)
     QFontDatabase dbase;
     QStringList availableStyles = dbase.styles(font.family());
     if (font.italic() && !(availableStyles.contains(QString("Italic"))) && availableStyles.contains(QString("Oblique")))
-	font.setStyle(QFont::StyleOblique);
+        font.setStyle(QFont::StyleOblique);
 
     m_fontChooser->setFont(font);
 }

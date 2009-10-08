@@ -38,7 +38,12 @@ void KisTiffTest::testFiles()
 {
     QStringList excludes;
     if(!KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces).contains(YCbCrAColorModelID)) {
-        excludes << "ycbcr-cat.tif";
+        excludes << "ycbcr-cat.tif"
+            << "flower-separated-contig-08.tif"
+            << "flower-separated-contig-16.tif"
+            << "flower-separated-planar-08.tif"
+            << "flower-separated-planar-16.tif"
+            << "text.tif";
     }
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes);
 }

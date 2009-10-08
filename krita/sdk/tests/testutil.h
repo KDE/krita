@@ -21,14 +21,16 @@
 
 #include <QList>
 #include <QTime>
+#include <QUndoStack>
+
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoProgressUpdater.h>
 #include <KoProgressProxy.h>
-#include "kis_paint_device.h"
-#include "kis_node.h"
-
+#include <kis_paint_device.h>
+#include <kis_node.h>
+#include <kis_undo_adapter.h>
 /**
  * Routines that are useful for writing efficient tests
  */
@@ -165,6 +167,39 @@ namespace TestUtil
         }
         return colorSpaces;
     }
+
+    class KisUndoAdapterDummy : public KisUndoAdapter
+    {
+        public:
+            KisUndoAdapterDummy() : KisUndoAdapter(0) {}
+            ~KisUndoAdapterDummy() {}
+
+        public:
+            void addCommand(QUndoCommand *cmd) {
+                qDebug() << cmd;
+                undostack.push(cmd);
+            }
+
+            void beginMacro(const QString& s = "Test")
+            {
+                undostack.beginMacro(s);
+            }
+
+            void endMacro()
+            {
+                undostack.endMacro();
+            }
+
+            void doUndo()
+            {
+                undostack.undo();
+            }
+
+        private:
+            QUndoStack undostack;
+        };
+
+
 }
 
 #endif

@@ -63,9 +63,10 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     m_brushesTab->addTab(m_brushChooser, i18n("Predefined Brushes"));
 
     // XXX: pass image!
-    m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom Brush"), 0);
-    connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    m_brushesTab->addTab(m_customBrushWidget, i18n("Custom Brush"));
+//  TODO custom brush doesn't work correctly
+//    m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom Brush"), 0);
+//    connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
+//    m_brushesTab->addTab(m_customBrushWidget, i18n("Custom Brush"));
 
     m_textBrushWidget = new KisTextBrushChooser(0, "textbrush", i18n("Text Brush"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
@@ -93,9 +94,10 @@ KisBrushSP KisBrushSelectionWidget::brush()
         theBrush = m_brushChooser->brush();
         break;
     case 2:
-        theBrush = m_customBrushWidget->brush();
-        break;
-    case 3:
+//  TODO custom brush doesn't work correctly
+//        theBrush = m_customBrushWidget->brush();
+//        break;
+//    case 3:
         theBrush = m_textBrushWidget->brush();
         break;
     default:
@@ -123,7 +125,7 @@ void KisBrushSelectionWidget::setPredefinedBrushes( bool on )
 
 void KisBrushSelectionWidget::setCustomBrush( bool on )
 {
-    m_customBrushWidget->setVisible( on );
+//    m_customBrushWidget->setVisible( on );
 }
 
 void KisBrushSelectionWidget::setTextBrush( bool on )
@@ -133,7 +135,7 @@ void KisBrushSelectionWidget::setTextBrush( bool on )
 
 void KisBrushSelectionWidget::setImage(KisImageWSP image)
 {
-    m_customBrushWidget->setImage(image);
+//    m_customBrushWidget->setImage(image);
 }
 
 void KisBrushSelectionWidget::setCurrentBrush( KisBrushSP brush)

@@ -905,7 +905,7 @@ void KisLayerManager::saveLayerAsImage()
     KisLayerSP l = activeLayer();
     if (!l) return;
 
-    QRect r = l->exactBounds();
+    QRect r = img->bounds();
 
     KisDoc2 d;
     d.prepareForImport();
@@ -914,6 +914,7 @@ void KisLayerManager::saveLayerAsImage()
     dst->setResolution(img->xRes(), img->yRes());
     d.setCurrentImage(dst);
     dst->addNode(l->clone(), dst->rootLayer(), KisLayerSP(0));
+    dst->resize(l->exactBounds(), true);
 
     d.setOutputMimeType(mimefilter.toLatin1());
     d.exportDocument(url);

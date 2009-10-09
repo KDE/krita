@@ -117,6 +117,7 @@ void KisCustomBrushWidget::slotAddPredefined()
 
     // Save it to that file
     m_brush->setFilename(tempFileName);
+    m_brush->setValid(true);
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to

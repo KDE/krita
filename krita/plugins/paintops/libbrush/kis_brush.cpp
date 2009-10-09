@@ -132,6 +132,7 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->width = rhs.d->width;
     d->height = rhs.d->height;
     d->scaledBrushes.clear();
+    setFilename(rhs.filename());
 }
 
 KisBrush::~KisBrush()

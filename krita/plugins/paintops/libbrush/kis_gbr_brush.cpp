@@ -148,6 +148,7 @@ KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
     setName(rhs.name());
     *d = *rhs.d;
     d->data = QByteArray();
+    setValid(rhs.valid());
 }
 
 KisGbrBrush::~KisGbrBrush()

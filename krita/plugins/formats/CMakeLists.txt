@@ -19,7 +19,16 @@ macro_optional_find_package(Kdcraw)
 macro_log_feature( KDCRAW_FOUND "kdcraw" "The KDCraw library" "http://www.digikam.org/" FALSE "" "Required by the Krita RAW filter")
 
 macro_optional_find_package(GraphicsMagick)
-macro_log_feature(GRAPHICSMAGICK_FOUND "GraphicsMagick" "GraphicsMagick Image Processing System" "http://www.graphicsmagick.org" FALSE "1.1" "Required by the Krita GraphicsMagick filter for various file formats (including PSD, XCF)")
+set(BAD_GRAPHICS_MAGICK_VERSION 1.2.5)
+set(BUILD_GRAPHICSMAGICK FALSE)
+set(HAVE_REQUIRED_GM_VERSION FALSE)
+
+if   (GRAPHICSMAGICK_FOUND AND GRAPHICSMAGICK_VERSION VERSION_LESS ${BAD_GRAPHICS_MAGICK_VERSION})
+    set(HAVE_REQUIRED_GM_VERSION TRUE)
+    set(BUILD_GRAPHICSMAGICK TRUE)
+endif(GRAPHICSMAGICK_FOUND AND GRAPHICSMAGICK_VERSION VERSION_LESS ${BAD_GRAPHICS_MAGICK_VERSION})
+
+macro_log_feature(HAVE_REQUIRED_GM_VERSION "GraphicsMagick" "GraphicsMagick Image Processing System" "http://www.graphicsmagick.org" FALSE "1.1" "Required by the Krita GraphicsMagick filter for various file formats (including PSD, XCF). Version 1.2 is broken!")
 
 include_directories(${KRITA_INCLUDES})
 
@@ -44,9 +53,9 @@ if(OPENEXR_FOUND AND OPENCTL_FOUND)
     add_subdirectory(openexr)
 endif(OPENEXR_FOUND AND OPENCTL_FOUND)
 
-if(GRAPHICSMAGICK_FOUND)
+if(BUILD_GRAPHICSMAGICK)
     add_subdirectory(gmagick)
-endif(GRAPHICSMAGICK_FOUND)
+endif(BUILD_GRAPHICSMAGICK)
 
 if(POPPLER_FOUND AND HAVE_POPPLER_0_6)
     add_subdirectory(pdf)

@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -61,9 +61,15 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
 
     QRectF roi(mouseLocation - QPointF(MAX_DISTANCE, MAX_DISTANCE), QSizeF(2*MAX_DISTANCE, 2*MAX_DISTANCE));
     QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt(roi, true);
-    if (shapes.count() < 2)
+    if (shapes.count() < 2) {
+        // we are not near any other shape, so remove the corresponding connection
+        if (m_handleId == 0)
+            m_connectionShape->setConnection1(0, -1);
+        else
+            m_connectionShape->setConnection2(0, -1);
+        
         KoParameterChangeStrategy::handleMouseMove(mouseLocation, modifiers);
-    else {
+    } else {
         qreal minimalDistance = DBL_MAX;
         QPointF nearestPoint;
         KoShape *nearestShape = 0;

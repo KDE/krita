@@ -508,6 +508,8 @@ QPointF KoConnectionShape::perpendicularDirection(const QPointF &p1, const QPoin
 
 void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
 {
+    // check if we are during a forced update
+    const bool updateIsActive = d->forceUpdate;
 
     m_hasMoved = true;
     switch (type) {
@@ -516,7 +518,8 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
         case ShearChanged:
         case ScaleChanged:
         case GenericMatrixChange:
-            if (isParametricShape())
+        case ParameterChanged:
+            if (isParametricShape() && shape == 0)
                 d->forceUpdate = true;
             break;
         case Deleted:
@@ -531,8 +534,15 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
             return;
     }
 
-    if (shape && (shape == d->shape1 || shape == d->shape2) && isParametricShape())
+    // the connection was moved while it is connected to some other shapes
+    const bool connectionChanged = !shape && (d->shape1 || d->shape2);
+    // one of the connected shape has moved
+    const bool connectedShapeChanged = shape && (shape == d->shape1 || shape == d->shape2);
+    
+    if (!updateIsActive && (connectionChanged || connectedShapeChanged) && isParametricShape())
         updateConnections();
-
+    
+    // reset the forced update flag
+    d->forceUpdate = false;
 }
 

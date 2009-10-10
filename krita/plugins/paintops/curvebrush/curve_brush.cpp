@@ -230,6 +230,8 @@ void CurveBrush::paintLine ( KisPaintDeviceSP dab,KisPaintDeviceSP layer, const 
 void CurveBrush::paintLine ( KisPaintDeviceSP dab,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2 )
 {
     // Initialization
+    if (!m_image) return;
+
     int w = m_image->width();
     int h = m_image->height();
 

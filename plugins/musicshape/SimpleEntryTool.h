@@ -27,6 +27,7 @@ class MusicShape;
 class QUndoCommand;
 class AbstractMusicAction;
 class MusicCursor;
+class QMenu;
 
 namespace MusicCore {
     class Staff;
@@ -82,6 +83,7 @@ private:
     MusicCore::Staff *m_selectionStaffStart, *m_selectionStaffEnd;
 
     MusicCursor* m_cursor;
+    QList<QMenu*> m_menus; 
 };
 
 #endif

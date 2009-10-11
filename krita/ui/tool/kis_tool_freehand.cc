@@ -70,7 +70,6 @@
 
 // OpenGL
 #include <config-opengl.h>
-#include <config-glew.h>
 
 #ifdef HAVE_OPENGL
 #include <GL/gl.h>
@@ -500,7 +499,7 @@ void KisToolFreehand::setAssistant(bool assistant)
 void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 {
     KisConfig cfg;
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
     if (m_canvas->canvasController()->isCanvasOpenGL()){
         if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL){
             qreal sx, sy;

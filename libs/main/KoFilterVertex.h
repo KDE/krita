@@ -32,7 +32,7 @@ class Vertex
 
 public:
     Vertex(const QByteArray& mimeType);
-    ~Vertex() {}
+    ~Vertex();
 
     QByteArray mimeType() const {
         return m_mimeType;

@@ -124,7 +124,9 @@ void Graph::buildGraph()
         nativeMimeTypes += part.service()->property("X-KDE-NativeMimeType").toString();
 
         foreach(const QString& nativeMimeType, nativeMimeTypes) {
-            m_vertices[nativeMimeType.toLatin1()] = new Vertex(nativeMimeType.toLatin1());
+            const QByteArray key = nativeMimeType.toLatin1();
+            if (!m_vertices.contains(key)) 
+                m_vertices[key] = new Vertex(key);
         }
     }
 

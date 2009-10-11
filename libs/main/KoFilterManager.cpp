@@ -291,8 +291,11 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)
-            if (!(*it).isEmpty())
-                vertices.insert((*it).toLatin1(), new Vertex((*it).toLatin1()));
+            if (!(*it).isEmpty()) {
+                const QByteArray key = (*it).toLatin1();
+                if (!vertices.contains(key))
+                    vertices.insert(key, new Vertex(key));
+            }
         ++partIt;
     }
 

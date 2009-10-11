@@ -31,6 +31,11 @@ Vertex::Vertex(const QByteArray& mimeType)
 {
 }
 
+Vertex::~Vertex()
+{
+    qDeleteAll(m_edges);
+}
+
 bool Vertex::setKey(unsigned int key)
 {
     if (m_weight > key) {

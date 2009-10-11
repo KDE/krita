@@ -106,8 +106,16 @@ void KisFilterOption::setNode(KisNodeSP node)
         // created before any layer is selected in the view
         if (!m_currentFilterConfigWidget ||
             (m_currentFilterConfigWidget && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice))) {
+
             if (m_currentFilter) {
+                KisPropertiesConfiguration* configuration = 0;
+                if(m_currentFilterConfigWidget)
+                    configuration = m_currentFilterConfigWidget->configuration();
+
                 setCurrentFilter(KoID(m_currentFilter->id()));
+                if(configuration)
+                    m_currentFilterConfigWidget->setConfiguration(configuration);
+                delete configuration;
             }
         }
     } else

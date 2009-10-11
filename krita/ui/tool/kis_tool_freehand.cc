@@ -162,15 +162,15 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
     //    dbgUI << "mouseMoveEvent " << m_mode << " " << e->button() << " " << e->buttons();
     if (m_mode == PAINT) {
-        QPointF pos = convertToPixelCoord(e);
+        QPointF pos = convertToPixelCoord(adjustPosition(e->point));
+        QPointF dragVec = pos - m_previousPaintInformation.pos();
 
-        KisPaintInformation info = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
+        KisPaintInformation info = KisPaintInformation(pos,
                                    e->pressure(), e->xTilt(), e->yTilt(),
-                                   KisVector2D::Zero(),
+                                   toKisVector2D(dragVec),
                                    e->rotation(), e->tangentialPressure());
 
         if (m_smooth) {
-            QPointF dragVec = info.pos() - m_previousPaintInformation.pos();
             QPointF newTangent;
             if (m_previousDrag.y() == 0.0 && m_previousDrag.x() == 0.0) {
                 newTangent = dragVec;

@@ -398,7 +398,7 @@ void KisShapeController::slotNodeAdded(KisNode* parentNode, int index)
 
     foreach(KoView *view, m_d->doc->views()) {
         KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
-        canvas->shapeManager()->add(shape);
+        canvas->globalShapeManager()->add(shape);
         canvas->canvasWidget()->update();
     }
     dbgUI << "Added " << node << " as shape " << shape << " to the document";

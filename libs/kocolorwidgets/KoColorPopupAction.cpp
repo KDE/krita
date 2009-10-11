@@ -48,6 +48,14 @@ public:
         , showFilter(true), applyMode(true)
     {}
 
+    ~KoColorPopupActionPrivate()
+    {
+        delete colorSetWidget;
+        delete colorChooser;
+        delete opacitySlider;
+        delete menu;
+    }
+    
     KoColor currentColor;
     KoColor buddyColor;
 
@@ -101,9 +109,6 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
 
 KoColorPopupAction::~KoColorPopupAction()
 {
-    delete d->colorSetWidget;
-    delete d->colorChooser;
-    delete d->opacitySlider;
     delete d;
 }
 

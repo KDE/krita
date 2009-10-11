@@ -22,6 +22,8 @@
 
 #include <KoCompositeOp.h>
 
+#include <string>
+
 class KoCtlColorSpace;
 
 namespace GTLCore {

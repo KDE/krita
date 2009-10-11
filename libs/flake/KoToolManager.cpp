@@ -257,8 +257,10 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
     CanvasData *cd = d->canvasses.value(controller).first();
     foreach(KoTool *tool, cd->allTools) {
         QHash<QString, KAction*> actions = tool->actions();
-        foreach(const QString & name, actions.keys())
-            ac->addAction(name, actions[name]);
+        QHash<QString, KAction*>::const_iterator it(actions.begin());
+        for (; it != actions.end(); ++it) {
+            ac->addAction(it.key(), it.value());
+        }
     }
 }
 

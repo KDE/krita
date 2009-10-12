@@ -91,7 +91,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     d->thePublic = this;
     d->minimum = 0.0;
     d->maximum = 100.0;
-    d->decimals = 2;
+    d->decimals = 0;
     d->container = new KoSliderComboContainer(this);
     d->container->setAttribute(Qt::WA_WindowPropagation);
     QStyleOptionComboBox opt;
@@ -309,7 +309,7 @@ void KoSliderCombo::setValue(qreal value)
         value = d->minimum;
     if(value > d->maximum)
         value = d->maximum;
-    setEditText(KGlobal::locale()->formatNumber(value));
+    setEditText(KGlobal::locale()->formatNumber(value, d->decimals));
     d->slider->blockSignals(true);
     d->slider->setValue(int((value - d->minimum) * 256 / d->maximum + 0.5));
     d->slider->blockSignals(false);

@@ -91,7 +91,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     d->thePublic = this;
     d->minimum = 0.0;
     d->maximum = 100.0;
-    d->decimals = 0;
+    d->decimals = 2;
     d->container = new KoSliderComboContainer(this);
     d->container->setAttribute(Qt::WA_WindowPropagation);
     QStyleOptionComboBox opt;
@@ -115,6 +115,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     setEditable(true);
+    kDebug() << d->decimals;
     setEditText(KGlobal::locale()->formatNumber(0, d->decimals));
 
     connect(d->slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
@@ -256,7 +257,8 @@ void KoSliderCombo::KoSliderComboPrivate::lineEditFinished()
 
 void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)
 {
-    thePublic->setEditText(KGlobal::locale()->formatNumber(minimum + maximum*slidervalue/256, decimals));
+    kDebug() << sliderValue << d->decimals;
+    thePublic->setEditText(KGlobal::locale()->formatNumber(minimum + maximum*slidervalue/256, d->decimals));
 
     qreal value = thePublic->currentText().toDouble();
     emit thePublic->valueChanged(value, false);
@@ -309,6 +311,10 @@ void KoSliderCombo::setValue(qreal value)
         value = d->minimum;
     if(value > d->maximum)
         value = d->maximum;
+<<<<<<< Updated upstream:libs/widgets/KoSliderCombo.cpp
+=======
+    kDebug() << value << "decimals" << d->decimals;
+>>>>>>> Stashed changes:libs/widgets/KoSliderCombo.cpp
     setEditText(KGlobal::locale()->formatNumber(value, d->decimals));
     d->slider->blockSignals(true);
     d->slider->setValue(int((value - d->minimum) * 256 / d->maximum + 0.5));

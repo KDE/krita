@@ -156,8 +156,9 @@ KisLayerBox::KisLayerBox()
 
     connect(m_wdgLayerBox->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
     connect(m_wdgLayerBox->bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
-    connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal, bool)), SIGNAL(sigOpacityChanged(qreal, bool)));
+    connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal, bool)), SLOT(slotOpacityChanged(qreal, bool)));
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(const QString&)), SLOT(slotCompositeOpChanged(const QString&)));
+
 }
 
 KisLayerBox::~KisLayerBox()
@@ -202,7 +203,6 @@ void KisLayerBox::setImage(KisImageWSP image)
             m_nodeManager->disconnect(this);
         }
         m_nodeManager = view->nodeManager();
-        connect(this, SIGNAL(sigOpacityChanged(qreal, bool)), m_nodeManager, SLOT(nodeOpacityChanged(qreal, bool)));
         connect(m_nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), this, SLOT(setCurrentNode(KisNodeSP)));
 
         if (!m_nodeModel.isNull()) {
@@ -243,6 +243,7 @@ void KisLayerBox::updateUI()
 
     m_wdgLayerBox->doubleOpacity->setEnabled(m_nodeManager->activeNode());
     m_wdgLayerBox->doubleOpacity->setDecimals(0);
+
     m_wdgLayerBox->cmbComposite->setEnabled(m_nodeManager->activeNode());
 
     if (KisNodeSP active = m_nodeManager->activeNode()) {
@@ -438,6 +439,11 @@ void KisLayerBox::slotNodeActivated(const QModelIndex & node)
 void KisLayerBox::slotCompositeOpChanged(const QString& _compositeOp)
 {
     m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(_compositeOp));
+}
+
+void KisLayerBox::slotOpacityChanged(qreal opacity, bool final)
+{
+    m_nodeManager->nodeOpacityChanged(opacity, final);
 }
 
 #include "kis_layer_box.moc"

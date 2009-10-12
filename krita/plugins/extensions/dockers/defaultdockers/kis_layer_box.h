@@ -68,20 +68,9 @@ public:
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
 
-signals:
-
-    void sigOpacityChanged(qreal opacity, bool final);
-    void sigItemComposite(const KoCompositeOp* _compositeOp);
-
 private slots:
 
     void setImage(KisImageWSP image);
-
-    void slotSetCompositeOp(const KoCompositeOp* compositeOp);
-    void slotSetOpacity(double opacity);
-    void slotFillCompositeOps(const KoColorSpace * colorSpace);
-    void updateUI();
-    void setCurrentNode(KisNodeSP node);
 
     void slotContextMenuRequested(const QPoint &pos, const QModelIndex &index);
 
@@ -89,6 +78,15 @@ private slots:
     void slotDetailedView();
     void slotThumbnailView();
 
+    // From the node manager to the layerbox
+    void slotSetCompositeOp(const KoCompositeOp* compositeOp);
+    void slotSetOpacity(double opacity);
+    void slotFillCompositeOps(const KoColorSpace * colorSpace);
+    void updateUI();
+    void setCurrentNode(KisNodeSP node);
+
+
+    // from the layerbox to the node manager
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
@@ -106,7 +104,7 @@ private slots:
     void slotNewTransformationMask();
     void slotNewSelectionMask();
     void slotCompositeOpChanged(const QString&);
-
+    void slotOpacityChanged(qreal opacity, bool final);
     void slotNodeActivated(const QModelIndex &);
 
 private:

@@ -728,7 +728,7 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     if (!layer) return;
 
     KisSelectedTransaction * t = 0;
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo() && layer->selection()) {
+    if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
         t = new KisSelectedTransaction(i18n("Scale Layer"), layer);
         Q_CHECK_PTR(t);
     }

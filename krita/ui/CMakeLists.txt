@@ -140,18 +140,23 @@ set(kritaui_LIB_SRCS
     widgets/squeezedcombobox.cpp
 )
 
-if(HAVE_OPENGL AND HAVE_GLEW)
+if(HAVE_OPENGL)
+    if(HAVE_GLEW)
+        set(kritaui_LIB_SRCS
+            ${kritaui_LIB_SRCS}
+            opengl/kis_opengl_shader.cpp
+            opengl/kis_opengl_fragment_shader.cpp
+            opengl/kis_opengl_vertex_shader.cpp
+            opengl/kis_opengl_program.cpp
+            opengl/kis_opengl_hdr_exposure_program.cpp
+            opengl/kis_opengl_gradient_program.cpp
+            )
+    endif(HAVE_GLEW)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        opengl/kis_opengl_shader.cpp
-        opengl/kis_opengl_fragment_shader.cpp
-        opengl/kis_opengl_vertex_shader.cpp
-        opengl/kis_opengl_program.cpp
-        opengl/kis_opengl_hdr_exposure_program.cpp
-        opengl/kis_opengl_gradient_program.cpp
         kis_3d_object_model.cpp
         )
-endif(HAVE_OPENGL AND HAVE_GLEW)
+endif(HAVE_OPENGL)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 

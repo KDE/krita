@@ -355,7 +355,7 @@ public:
     void setPaintColor(const KoColor& color);
 
     /// Returns the color that will be used to paint with
-    KoColor paintColor() const;
+    const KoColor &paintColor() const;
 
     /**
      * Set the current background color, and convert it
@@ -364,13 +364,13 @@ public:
     void setBackgroundColor(const KoColor& color);
 
     /// Returns the current background color
-    KoColor backgroundColor() const;
+    const KoColor &backgroundColor() const;
 
     /// Set the current fill color
     void setFillColor(const KoColor& color);
 
     /// Returns the current fill color
-    KoColor fillColor() const;
+    const KoColor &fillColor() const;
 
     /// Set the current generator (a generator can be used to fill an area
     void setGenerator(KisFilterConfiguration * generator);

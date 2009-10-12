@@ -1587,7 +1587,7 @@ void KisPainter::setPaintColor(const KoColor& color)
     }
 }
 
-KoColor KisPainter::paintColor() const
+const KoColor &KisPainter::paintColor() const
 {
     return d->paintColor;
 }
@@ -1601,7 +1601,7 @@ void KisPainter::setBackgroundColor(const KoColor& color)
     }
 }
 
-KoColor KisPainter::backgroundColor() const
+const KoColor &KisPainter::backgroundColor() const
 {
     return d->backgroundColor;
 }
@@ -1611,7 +1611,7 @@ void KisPainter::setFillColor(const KoColor& color)
     d->fillColor = color;
 }
 
-KoColor KisPainter::fillColor() const
+const KoColor &KisPainter::fillColor() const
 {
     return d->fillColor;
 }

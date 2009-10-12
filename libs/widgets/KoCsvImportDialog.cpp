@@ -134,7 +134,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
             this, SLOT(genericDelimiterChanged( const QString & ) ));
     connect(d->dialog->m_comboQuote, SIGNAL(activated(const QString &)),
             this, SLOT(textquoteSelected(const QString &)));
-    connect(d->dialog->m_sheet, SIGNAL(currentChanged(int, int)),
+    connect(d->dialog->m_sheet, SIGNAL(currentCellChanged(int, int, int, int)),
             this, SLOT(currentCellChanged(int, int)));
     connect(d->dialog->m_ignoreDuplicates, SIGNAL(stateChanged(int)),
             this, SLOT(ignoreDuplicatesChanged(int)));

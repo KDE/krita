@@ -201,9 +201,12 @@ QString KoCsvImportDialog::text(int row, int col) const
 {
     // Check for overflow.
     if ( row >= rows() || col >= cols())
-	return QString();
+        return QString();
 
-    return d->dialog->m_sheet->item( row - d->startRow, col - d->startCol )->text();
+    QTableWidgetItem* item = d->dialog->m_sheet->item( row - d->startRow, col - d->startCol );
+    if ( !item )
+        return QString();
+    return item->text();
 }
 
 void KoCsvImportDialog::setDataTypes(DataTypes dataTypes)
@@ -592,7 +595,12 @@ void KoCsvImportDialog::Private::setText(int row, int col, const QString& text)
         columnsAdjusted = true;
     }
 
-    dialog->m_sheet->item(row - 1, col - 1)->setText(text);
+    QTableWidgetItem* item = dialog->m_sheet->item(row - 1, col - 1);
+    if (!item) {
+        item = new QTableWidgetItem();
+        dialog->m_sheet->setItem(row - 1, col - 1, item);
+    }
+    item->setText(text);
 }
 
 /*

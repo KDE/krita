@@ -42,7 +42,6 @@ KisImageLockCommand::KisImageLockCommand(KisImageWSP image, bool lockImage)
 
 void KisImageLockCommand::redo()
 {
-    kDebug() << "redo";
     setUndo(false);
     if (m_lockImage) {
         m_image->lock();
@@ -57,7 +56,6 @@ void KisImageLockCommand::redo()
 
 void KisImageLockCommand::undo()
 {
-    kDebug() << "undo";
     setUndo(false);
     if (m_lockImage) {
         m_image->unlock();

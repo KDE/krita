@@ -33,11 +33,11 @@ class KisGroupLayer::Private
 {
 public:
     Private()
-            : paintDevice(0)
-            , x(0)
-            , y(0) {
+        : paintDevice(0)
+        , x(0)
+        , y(0) {
     }
-
+    
     KisPaintDeviceSP paintDevice;
     qint32 x;
     qint32 y;
@@ -83,10 +83,10 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 {
     if (!colorSpace)
         colorSpace = image()->colorSpace();
-
+    
     if (!m_d->paintDevice ||
-       !(*m_d->paintDevice->colorSpace() == *colorSpace)) {
-
+        !(*m_d->paintDevice->colorSpace() == *colorSpace)) {
+        
         m_d->paintDevice = new KisPaintDevice(colorSpace);
     }
     else {
@@ -97,21 +97,21 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
 {
     KisPaintDeviceSP retval;
-
+    
     if (parent().isNull() && childCount() == 1) {
         const KisLayer *child = dynamic_cast<KisLayer*>(firstChild().data());
-
+        
         if (child &&
             child->channelFlags().isEmpty() &&
             child->projection() &&
             child->visible() &&
             child->opacity() == OPACITY_OPAQUE &&
             *child->projection()->colorSpace() == *colorSpace()) {
-
+            
             retval = child->projection();
         }
     }
-
+    
     return retval;
 }
 
@@ -137,11 +137,12 @@ QRect KisGroupLayer::repaintOriginal(KisPaintDeviceSP original,
     if (original == tryObligeChild()) {
         return rect;
     }
-
+    
+    // make the original empty, it will be filled with the children
     original->clear(rect);
 
     // find the first adjustmentlayer under the dirty child,
-    // if there is one
+    // if there is one, we will use its projection as a starting point
     KisNodeSP startWith = firstChild();
     if (m_d->dirtyNode) {
         KisNodeSP node = firstChild();
@@ -154,15 +155,25 @@ QRect KisGroupLayer::repaintOriginal(KisPaintDeviceSP original,
             node = node->nextSibling();
         }
     }
-    KisMergeVisitor visitor(original, rect);
+    
+    // We can optimize, so copy the projection of the filter layer
+    // to the original of the group layer.
+    if (startWith != firstChild()) {
+        KisPainter gc(original);
+        gc.setCompositeOp(original->colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc.bitBlt(rect.topLeft(), startWith->projection(), rect);
+        // move one node beyond the adjustment layer to avoid refiltering
+        startWith = startWith->nextSibling();
+    }
 
+    KisMergeVisitor visitor(original, rect);
     while (startWith) {
         startWith->accept(visitor);
         startWith = startWith->nextSibling();
     }
-
+    
     return rect;
-
+    
 }
 
 bool KisGroupLayer::accept(KisNodeVisitor &v)
@@ -184,7 +195,7 @@ qint32 KisGroupLayer::y() const
 void KisGroupLayer::setX(qint32 x)
 {
     qint32 numChildren = childCount();
-
+    
     qint32 delta = x - m_d->x;
     for (qint32 i = 0; i < numChildren; ++i) {
         KisNodeSP layer = at(i);
@@ -196,7 +207,7 @@ void KisGroupLayer::setX(qint32 x)
 void KisGroupLayer::setY(qint32 y)
 {
     qint32 numChildren = childCount();
-
+    
     qint32 delta = y - m_d->y;
     for (qint32 i = 0; i < numChildren; ++i) {
         KisNodeSP layer = at(i);

@@ -17,7 +17,7 @@ float gammaToLinearFloat( float v)
 }
 
 
-void RGBAu16_to_scRGBAf(int rIn, int gIn, int bIn, int aIn, output float rOut, output float gOut, output float bOut, output float aOut, float exposure = 1.0)
+void RGBAu16_to_scRGBAf(float rIn, float gIn, float bIn, float aIn, output float rOut, output float gOut, output float bOut, output float aOut, float exposure = 1.0)
 {
     rOut = gammaToLinearFloat( int16toFloat( rIn ) ) / exposure;
     gOut = gammaToLinearFloat( int16toFloat( gIn ) ) / exposure;
@@ -25,7 +25,7 @@ void RGBAu16_to_scRGBAf(int rIn, int gIn, int bIn, int aIn, output float rOut, o
     aOut = int16toFloat( aIn );
 }
 
-void sRGBAf_to_scRGBAf(int rIn, int gIn, int bIn, int aIn, output float rOut, output float gOut, output float bOut, output float aOut, float exposure = 1.0)
+void sRGBAf_to_scRGBAf(float rIn, float gIn, float bIn, float aIn, output float rOut, output float gOut, output float bOut, output float aOut, float exposure = 1.0)
 {
     rOut = gammaToLinearFloat( rIn ) / exposure;
     gOut = gammaToLinearFloat( gIn ) / exposure;

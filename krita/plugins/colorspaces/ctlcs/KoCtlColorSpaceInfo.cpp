@@ -136,6 +136,7 @@ bool KoCtlColorSpaceInfo::load()
 {
     QDomDocument doc;
     QFile file(fileName());
+    dbgPlugins << "Loading cs: " << fileName();
     if (not file.open(QIODevice::ReadOnly))
     {
         dbgPlugins << "Can't open file : " << fileName();

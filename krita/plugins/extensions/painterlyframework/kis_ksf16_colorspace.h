@@ -82,6 +82,8 @@ public:
     }
 
     KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+
+        Q_ASSERT(p);
         return new KisKSF16ColorSpace<_N_>(p->clone());
     }
 

@@ -41,8 +41,8 @@
 
 KoConnectionTool::KoConnectionTool( KoCanvasBase * canvas )
     : KoPathTool(canvas)
-    , m_shapeOn(0)
     , m_shape1(0)
+    , m_shapeOn(0)
     , m_lastShapeOn(0)
     , m_connectionShape(0)
     , m_lastConnectionShapeOn(0)
@@ -59,9 +59,6 @@ KoConnectionTool::~KoConnectionTool()
 
 void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
-    float x = 0;
-    float y = 0;
-
     // get the correctly sized rect for painting handles
     QRectF handleRect = handlePaintRect(QPointF());
 
@@ -166,7 +163,6 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         m_connectionShape->moveHandle( m_connectionShape->getHandleCount(), event->point );
         // The connection is now done, so update for apply
         m_connectionShape->updateConnections();
-
         m_canvas->shapeManager()->add(m_connectionShape);
 
     } else {
@@ -268,6 +264,7 @@ void KoConnectionTool::keyPressEvent(QKeyEvent *event)
 
 void KoConnectionTool::activate( bool temporary )
 {
+    Q_UNUSED( temporary );
     m_canvas->canvasWidget()->setCursor( Qt::PointingHandCursor );
 }
 
@@ -365,7 +362,7 @@ bool KoConnectionTool::isInRoi()
 void KoConnectionTool::command()
 {
     // Create the command which will make the connection
-    QUndoCommand * cmd;
+    QUndoCommand * cmd = 0;
     if( m_connectionShape != 0 )
         cmd = m_canvas->shapeController()->addShape( m_connectionShape );
 

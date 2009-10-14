@@ -467,8 +467,11 @@ void KoTextEditor::addCommand(QUndoCommand *command)
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock)
 {
+//    kDebug(31000) << "in registerTrackedChange; enabled tracking: " << (KoTextDocument(d->document).changeTracker() || KoTextDocument(d->document).changeTracker()->isEnabled());
     if (!KoTextDocument(d->document).changeTracker() || !KoTextDocument(d->document).changeTracker()->isEnabled()) {
-        selection.charFormat().clearProperty(KoCharacterStyle::ChangeTrackerId);
+        QTextCharFormat charFormat = selection.charFormat();
+        charFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
+        selection.setCharFormat(charFormat);
         return;
     }
 
@@ -1057,10 +1060,10 @@ void KoTextEditor::insertTable(int rows, int columns)
 void KoTextEditor::insertText(const QString &text)
 {
     d->updateState(KoTextEditor::Private::KeyPress, i18n("Key Press"));
-    if (!d->headCommand){
+//    if (!d->headCommand){//TODO review this
         QTextCharFormat format = d->caret.charFormat();
         registerTrackedChange(d->caret, KoGenChange::insertChange, i18n("Key Press"), format, format, false);
-    }
+//    }
     int blockNumber = d->caret.blockNumber();
     d->caret.insertText(text);
 

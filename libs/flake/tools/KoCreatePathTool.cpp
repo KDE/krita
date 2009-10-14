@@ -475,14 +475,14 @@ QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets()
     map.insert(i18n("Snapping"), widget);
 
     QWidget * angleWidget = new QWidget();
-    angleWidget->setObjectName("Angle Constrains");
+    angleWidget->setObjectName("Angle Constraints");
     QGridLayout * layout = new QGridLayout(angleWidget);
     layout->addWidget( new QLabel(i18n("Angle snapping delta"), angleWidget), 0, 0);
     KIntNumInput * angleEdit = new KIntNumInput(m_angleSnappingDelta, angleWidget);
     angleEdit->setRange(1, 360, 1);
     angleEdit->setSuffix(" °");
     layout->addWidget( angleEdit, 0, 1);
-    map.insert(i18n("Angle Constrains"), angleWidget);
+    map.insert(i18n("Angle Constraints"), angleWidget);
 
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
 

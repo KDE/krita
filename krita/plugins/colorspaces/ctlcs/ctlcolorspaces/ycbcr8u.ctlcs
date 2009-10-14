@@ -1,6 +1,6 @@
 <!DOCTYPE foobar>
 <ctlcolorspace>
-    <info  colorModelId="YCbCrA" colorModelName="YCbCr" type="integer" depth="8" name="YCbCr (8-bit integer/channel" id="YCbCrAU8" />
+    <info  colorModelId="YCbCrA" colorModelName="YCbCr" type="integer" depth="8" name="YCbCr (8-bit integer/channel)" id="YCbCrAU8" />
     <channels>
         <channel name="Y"   shortName="Y" index="0" channelType="Color" valueType="uint8" size="1" color="255,0,0" />
         <channel name="Cb" shortName="Cb" index="1" channelType="Color" valueType="uint8" size="1" color="0,255,0" />

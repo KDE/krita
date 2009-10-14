@@ -935,6 +935,8 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 
 void KoShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
+    Q_D(KoShape);
+    
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
@@ -947,6 +949,18 @@ void KoShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext &con
         styleStack.setTypeProperties("graphic");
     }
 
+    if(d->fill && !d->fill->removeUser()) {
+        delete d->fill;
+        d->fill = 0;
+    }
+    if(d->border && !d->border->removeUser()) {
+        delete d->border;
+        d->border = 0;
+    }
+    if(d->shadow && !d->shadow->removeUser()) {
+        delete d->shadow;
+        d->shadow = 0;
+    }
     setBackground(loadOdfFill(element, context));
     setBorder(loadOdfStroke(element, context));
     setShadow(loadOdfShadow(element, context));

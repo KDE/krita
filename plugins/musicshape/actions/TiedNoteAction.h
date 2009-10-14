@@ -27,6 +27,15 @@ public:
     TiedNoteAction(SimpleEntryTool* tool);
     
     virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos);
+
+    //! To avoid 'mousePress() was hidden' warning
+    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) {
+        AbstractNoteMusicAction::mousePress(staff, bar, pos);
+    }
+    //! To avoid 'mousePress() was hidden' warning
+    virtual void mousePress(MusicCore::StaffElement* se, qreal distance, const QPointF& pos) {
+        AbstractNoteMusicAction::mousePress(se, distance, pos);
+    }
 };
 
 #endif // ERASERACTION_H

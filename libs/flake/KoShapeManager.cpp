@@ -497,6 +497,18 @@ QList<KoShape*> KoShapeManager::shapes() const
     return d->shapes;
 }
 
+QList<KoShape*> KoShapeManager::topLevelShapes() const
+{
+    QList<KoShape*> shapes;
+    // get all toplevel shapes
+    foreach(KoShape *shape, d->shapes) {
+        if (shape->parent() == 0) {
+            shapes.append(shape);
+        }
+    }
+    return shapes;
+}
+
 KoSelection * KoShapeManager::selection() const
 {
     return d->selection;

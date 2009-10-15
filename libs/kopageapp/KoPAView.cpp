@@ -357,6 +357,9 @@ void KoPAView::initActions()
     connect(d->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
 
     d->find = new KoFind( this, d->canvas->resourceProvider(), actionCollection() );
+
+    actionCollection()->action( "object_group" )->setShortcut( QKeySequence( "Ctrl+G" ) );
+    actionCollection()->action( "object_ungroup" )->setShortcut( QKeySequence( "Ctrl+Shift+G" ) );
 }
 
 

@@ -25,6 +25,20 @@
 
 #include <klocale.h>
 
+KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent)
+{
+    QList<KoShape*> orderedShapes(shapes);
+    qSort(orderedShapes.begin(), orderedShapes.end(), KoShape::compareShapeZIndex);
+    if (!orderedShapes.isEmpty()) {
+        KoShape * top = orderedShapes.last();
+        container->setParent(top->parent());
+        container->setZIndex(top->zIndex());
+    }
+
+    return new KoShapeGroupCommand(container, orderedShapes, parent);
+}
+
+
 KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, QList<KoShape *> shapes, QList<bool> clipped,
         QUndoCommand *parent)
         : QUndoCommand(parent)
@@ -33,10 +47,7 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, QList<KoSh
         , m_container(container)
 {
     Q_ASSERT(m_clipped.count() == m_shapes.count());
-    foreach(KoShape* shape, m_shapes)
-        m_oldParents.append(shape->parent());
-
-    setText(i18n("Group shapes"));
+    init();
 }
 
 KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent)
@@ -44,17 +55,31 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, QList<KoShape 
         , m_shapes(shapes)
         , m_container(container)
 {
-    foreach(KoShape* shape, m_shapes) {
+    for (int i = 0; i < shapes.count(); ++i) {
         m_clipped.append(false);
-        m_oldParents.append(shape->parent());
     }
-
-    setText(i18n("Group shapes"));
+    init();
 }
 
 KoShapeGroupCommand::KoShapeGroupCommand(QUndoCommand *parent)
         : QUndoCommand(parent)
 {
+}
+
+void KoShapeGroupCommand::init()
+{
+    foreach(KoShape* shape, m_shapes) {
+        m_oldParents.append(shape->parent());
+        m_oldClipped.append(shape->parent() && shape->parent()->childClipped(shape));
+        m_oldZIndex.append(shape->zIndex());
+    }
+
+    if (m_container->childShapes().isEmpty()) {
+        setText(i18n("Group shapes"));
+    }
+    else {
+        setText(i18n("Group shapes")); // TODO 2.2 replace text with "Add shapes to group"
+    }
 }
 
 void KoShapeGroupCommand::redo()
@@ -78,9 +103,17 @@ void KoShapeGroupCommand::redo()
 
     QMatrix groupTransform = m_container->absoluteTransformation(0).inverted();
 
+    int zIndex=0;
+    QList<KoShape*> childShapes(m_container->childShapes());
+    if (!childShapes.isEmpty()) {
+        qSort(childShapes.begin(), childShapes.end(), KoShape::compareShapeZIndex);
+        zIndex = childShapes.last()->zIndex();
+    }
+
     uint shapeCount = m_shapes.count();
     for (uint i = 0; i < shapeCount; ++i) {
         KoShape * shape = m_shapes[i];
+        shape->setZIndex(zIndex++);
         shape->applyAbsoluteTransformation(groupTransform);
         m_container->addChild(shape);
         m_container->setClipping(shape, m_clipped[i]);
@@ -95,9 +128,12 @@ void KoShapeGroupCommand::undo()
     for (int i = 0; i < m_shapes.count(); i++) {
         KoShape * shape = m_shapes[i];
         m_container->removeChild(shape);
-        if (m_oldParents.at(i))
+        if (m_oldParents.at(i)) {
             m_oldParents.at(i)->addChild(shape);
+            m_oldParents.at(i)->setClipping(shape, m_oldClipped.at(i));
+        }
         shape->applyAbsoluteTransformation(ungroupTransform);
+        shape->setZIndex(m_oldZIndex[i]);
     }
 
     if (dynamic_cast<KoShapeGroup*>(m_container)) {

@@ -117,7 +117,7 @@ void TestShapeGroupCommand::testToplevelGroup()
 {
     QList<KoShape*> toplevelShapes;
     toplevelShapes << toplevelShape1 << toplevelShape2;
-    cmd1 = new KoShapeGroupCommand(toplevelGroup, toplevelShapes);
+    cmd1 = KoShapeGroupCommand::createCommand(toplevelGroup, toplevelShapes);
 
     cmd1->redo();
     QCOMPARE(toplevelShape1->parent(), toplevelGroup);
@@ -142,12 +142,17 @@ void TestShapeGroupCommand::testSublevelGroup()
 {
     QList<KoShape*> toplevelShapes;
     toplevelShapes << toplevelShape1 << toplevelShape2;
-    cmd1 = new KoShapeGroupCommand(toplevelGroup, toplevelShapes);
+    cmd1 = KoShapeGroupCommand::createCommand(toplevelGroup, toplevelShapes);
 
     QList<KoShape*> sublevelShapes;
     sublevelShapes << sublevelShape1 << sublevelShape2;
-    new KoShapeGroupCommand(sublevelGroup, sublevelShapes, cmd1);
-    new KoShapeGroupCommand(toplevelGroup, QList<KoShape*>() << sublevelGroup, cmd1);
+    sublevelShape1->setZIndex(1);
+    sublevelShape2->setZIndex(2);
+    sublevelShape2->setParent(strokeGroup);
+    strokeGroup->setZIndex(-1);
+
+    KoShapeGroupCommand::createCommand(sublevelGroup, sublevelShapes, cmd1);
+    KoShapeGroupCommand::createCommand(toplevelGroup, QList<KoShape*>() << sublevelGroup, cmd1);
 
     cmd1->redo();
 
@@ -169,16 +174,26 @@ void TestShapeGroupCommand::testSublevelGroup()
     QCOMPARE(sublevelGroup->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 150));
     QCOMPARE(sublevelGroup->position(), QPointF(100, 100));
     QCOMPARE(sublevelGroup->size(), QSizeF(150, 50));
+
+    // check that the shapes are added in the correct order
+    QList<KoShape*> childOrder(sublevelGroup->childShapes());
+    qSort(childOrder.begin(), childOrder.end(), KoShape::compareShapeZIndex);
+    QList<KoShape*> expectedOrder;
+    expectedOrder << sublevelShape2 << sublevelShape1;
+    QCOMPARE(childOrder, expectedOrder); 
+    // check that the group has the zIndex/parent of its added top shape 
+    QCOMPARE(toplevelGroup->parent(), static_cast<KoShapeContainer*>(0));
+    QCOMPARE(toplevelGroup->zIndex(), 1);
 }
 
 void TestShapeGroupCommand::testAddToToplevelGroup()
 {
     QList<KoShape*> toplevelShapes;
     toplevelShapes << toplevelShape1 << toplevelShape2;
-    cmd1 = new KoShapeGroupCommand(toplevelGroup, toplevelShapes);
+    cmd1 = KoShapeGroupCommand::createCommand(toplevelGroup, toplevelShapes);
     cmd1->redo();
 
-    cmd2 = new KoShapeGroupCommand(toplevelGroup, QList<KoShape*>() << extraShape1);
+    cmd2 = KoShapeGroupCommand::createCommand(toplevelGroup, QList<KoShape*>() << extraShape1);
     cmd2->redo();
 
     QVERIFY(extraShape1->parent() == toplevelGroup);

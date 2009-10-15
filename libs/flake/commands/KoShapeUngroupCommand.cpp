@@ -23,14 +23,31 @@
 
 #include <klocale.h>
 
-KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, QList<KoShape *> shapes, QUndoCommand *parent)
+KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
+                                             const QList<KoShape*> &topLevelShapes, QUndoCommand *parent)
         : KoShapeGroupCommand(parent)
 {
-    m_shapes = shapes;
+    QList<KoShape*> orderdShapes(shapes);
+    qSort(orderdShapes.begin(), orderdShapes.end(), KoShape::compareShapeZIndex);
+    m_shapes = orderdShapes;
     m_container = container;
+
+    QList<KoShape*> ancestors = m_container->parent()? m_container->parent()->childShapes(): topLevelShapes;
+    qSort(ancestors.begin(), ancestors.end(), KoShape::compareShapeZIndex);
+    QList<KoShape*>::const_iterator it(qFind(ancestors, m_container));
+
+    Q_ASSERT(it != ancestors.end());
+    for ( ; it != ancestors.end(); ++it ) {
+        m_oldAncestorsZIndex.append(QPair<KoShape*, int>(*it, (*it)->zIndex()));
+    }
+
+    int zIndex = m_container->zIndex();
     foreach(KoShape *shape, m_shapes) {
         m_clipped.append(m_container->childClipped(shape));
         m_oldParents.append(m_container->parent());
+        m_oldClipped.append(m_container->childClipped(shape));
+        // TODO this might also need to change the childs of the parent but that is very problematic if the parent is 0
+        m_oldZIndex.append(zIndex++);
     }
 
     setText(i18n("Ungroup shapes"));
@@ -39,9 +56,16 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, QList<
 void KoShapeUngroupCommand::redo()
 {
     KoShapeGroupCommand::undo();
+    int zIndex = m_container->zIndex() + m_oldZIndex.count() - 1;
+    for (QList<QPair<KoShape*, int> >::const_iterator it( m_oldAncestorsZIndex.begin()); it != m_oldAncestorsZIndex.end(); ++it) {
+        it->first->setZIndex(zIndex++);
+    }
 }
 
 void KoShapeUngroupCommand::undo()
 {
     KoShapeGroupCommand::redo();
+    for (QList<QPair<KoShape*, int> >::const_iterator it( m_oldAncestorsZIndex.begin()); it != m_oldAncestorsZIndex.end(); ++it) {
+        it->first->setZIndex(it->second);
+    }
 }

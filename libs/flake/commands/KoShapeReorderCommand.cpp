@@ -69,12 +69,7 @@ void KoShapeReorderCommand::prepare(KoShape * s, QMap<KoShape*, QList<KoShape*> 
         }
         else {
             // get all toplevel shapes
-            QList<KoShape*> shapes( manager->shapes() );
-            foreach(KoShape *shape, shapes) {
-                if (shape->parent() == 0) {
-                    children.append(shape);
-                }
-            }
+            children = manager->topLevelShapes();
         }
         qSort(children.begin(), children.end(), KoShape::compareShapeZIndex);
         // the append and prepend are needed so that the raise/lower of all shapes works as expected.

@@ -36,6 +36,18 @@ class FLAKE_EXPORT KoShapeGroupCommand : public QUndoCommand
 {
 public:
     /**
+     * Create command to group a set of shapes into a predefined container.
+     * This used the KoShapeGroupCommand( KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent = 0 );
+     * constructor.
+     * The createCommand will make sure that the group will have the z-index and the parent of the top most shape in the group.
+     * 
+     * @param container the group to group the shapes under.
+     * @param parent the parent command if the resulting command is a compound undo command.
+     * @param shapes a list of all the shapes that should be grouped.
+     */
+    static KoShapeGroupCommand * createCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent = 0);
+
+    /**
      * Command to group a set of shapes into a predefined container.
      * @param container the container to group the shapes under.
      * @param shapes a list of all the shapes that should be grouped.
@@ -65,7 +77,11 @@ protected:
     QList<bool> m_clipped; ///< list of booleas to specify the shape of the same index to eb clipped
     KoShapeContainer *m_container; ///< the container where the grouping should be for.
     QList<KoShapeContainer*> m_oldParents; ///< the old parents of the shapes
+    QList<bool> m_oldClipped; ///< if the shape was clipped in the old parent
+    QList<int> m_oldZIndex; ///< the old z-index of the shapes
+
 private:
+    void init();
     QRectF containerBoundingRect();
 };
 

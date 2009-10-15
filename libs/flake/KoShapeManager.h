@@ -82,6 +82,11 @@ public:
     QList<KoShape*> shapes() const;
 
     /**
+     * Get a list of all shapes that don't have a parent.
+     */
+    QList<KoShape*> topLevelShapes() const;
+
+    /**
      * Add a KoShape to be displayed and managed by this manager.
      * This will trigger a repaint of the shape.
      * @param shape the shape to add

@@ -52,6 +52,9 @@ public:
     /**
      * Paint at the subpixel point pos using the specified paint
      * information..
+     *
+     * The distance between two calls of the paintAt is always specified by spacing;
+     * xSpacing and ySpacing is 1.0 by default, negative values causes infinite loops (it is checked by Q_ASSERT)
      */
     virtual void paintAt(const KisPaintInformation& info) = 0;
 

@@ -61,6 +61,7 @@
 #include "KoSliderCombo.h"
 #include "kis_canvas_resource_provider.h"
 
+#include "config-opengl.h"
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
         : KisTool(canvas, cursor), m_previousNode(0)
@@ -256,6 +257,20 @@ void KisToolPaint::slotSelectCursorStyle()
             useCursor(cursor(), true);
         }
     }
+    
+#if defined(HAVE_OPENGL)
+    // TODO: maybe m_support 3D outline would be cooler. So far just freehand tool support 3D_MODEL cursor style
+    if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL)
+    {
+        if (m_supportOutline){
+            useCursor(KisCursor::blankCursor(), true);
+        }else{
+            useCursor(cursor(), true);
+        }
+    }
+#endif
+
+    
 }
 
 

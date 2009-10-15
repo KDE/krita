@@ -53,8 +53,16 @@
 class KoCanvasController::Private
 {
 public:
-    Private() : canvas(0), canvasMode(Centered), margin(0)
-            , ignoreScrollSignals(false) {}
+    Private()
+        : canvas(0),
+        canvasMode(Centered),
+        margin(0),
+        preferredCenterFractionX(0.5),
+        preferredCenterFractionY(0.5),
+        ignoreScrollSignals(false)
+    {
+    }
+
     KoCanvasBase * canvas;
     CanvasMode canvasMode;
     int margin; // The viewport margin around the document // TODO can we remove this one? The viewport has a copy...
@@ -70,7 +78,6 @@ KoCanvasController::KoCanvasController(QWidget *parent)
         : QAbstractScrollArea(parent),
         d(new Private())
 {
-    setCanvasMode(AlignTop);
     setFrameShape(NoFrame);
     d->viewportWidget = new Viewport(this);
     setViewport(d->viewportWidget);

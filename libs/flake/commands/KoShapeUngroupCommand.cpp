@@ -57,7 +57,7 @@ void KoShapeUngroupCommand::redo()
 {
     KoShapeGroupCommand::undo();
     int zIndex = m_container->zIndex() + m_oldZIndex.count() - 1;
-    for (QList<QPair<KoShape*, int> >::const_iterator it( m_oldAncestorsZIndex.begin()); it != m_oldAncestorsZIndex.end(); ++it) {
+    for (QList<QPair<KoShape*, int> >::const_iterator it( m_oldAncestorsZIndex.constBegin()); it != m_oldAncestorsZIndex.constEnd(); ++it) {
         it->first->setZIndex(zIndex++);
     }
 }
@@ -65,7 +65,7 @@ void KoShapeUngroupCommand::redo()
 void KoShapeUngroupCommand::undo()
 {
     KoShapeGroupCommand::redo();
-    for (QList<QPair<KoShape*, int> >::const_iterator it( m_oldAncestorsZIndex.begin()); it != m_oldAncestorsZIndex.end(); ++it) {
+    for (QList<QPair<KoShape*, int> >::const_iterator it( m_oldAncestorsZIndex.constBegin()); it != m_oldAncestorsZIndex.constEnd(); ++it) {
         it->first->setZIndex(it->second);
     }
 }

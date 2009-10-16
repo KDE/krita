@@ -114,7 +114,7 @@ KisTileManager::~KisTileManager()
 
     delete [] m_poolPixelSizes;
     delete [] m_pools;
-    // Where did this go to? delete [] m_poolFreeList;
+    delete [] m_poolFreeList;
 }
 
 KisTileManager* KisTileManager::instance()

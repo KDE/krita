@@ -47,14 +47,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoCo
         dbgImage << "Testing with" << csId;
 
         QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csId);
-        if (profiles.size() == 0) {
-            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, 0);
-            if (cs && cs->compositeOp(COMPOSITE_OVER) != 0) {
-                (this->*funcPtr)(cs);
-            } else {
-                dbgImage << "Cannot bitBlt for cs" << csId;
-            }
-        } else {
+        if (profiles.size() > 0) {
             const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, profiles.first());
             if (cs && cs->compositeOp(COMPOSITE_OVER) != 0) {
                 (this->*funcPtr)(cs);
@@ -88,6 +81,8 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
 {
     if (cs->id() == QString("RGBAF16HALF")) return;
     if (cs->id() == QString("RGBAF32")) return;
+
+    qDebug() << cs->id();
 
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
 
@@ -185,6 +180,8 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular()
 
 void KisPainterTest::testPaintDeviceBltSelectionInverted(const KoColorSpace * cs)
 {
+    qDebug() << cs->id();
+
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
     KisPaintDeviceSP src = new KisPaintDevice(cs);
     KisFillPainter gc(src);

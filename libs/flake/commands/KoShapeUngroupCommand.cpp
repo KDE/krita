@@ -36,8 +36,8 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const 
     qSort(ancestors.begin(), ancestors.end(), KoShape::compareShapeZIndex);
     QList<KoShape*>::const_iterator it(qFind(ancestors, m_container));
 
-    Q_ASSERT(it != ancestors.end());
-    for ( ; it != ancestors.end(); ++it ) {
+    Q_ASSERT(it != ancestors.constEnd());
+    for ( ; it != ancestors.constEnd(); ++it ) {
         m_oldAncestorsZIndex.append(QPair<KoShape*, int>(*it, (*it)->zIndex()));
     }
 

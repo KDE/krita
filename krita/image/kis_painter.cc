@@ -189,14 +189,12 @@ void KisPainter::beginTransaction(const QString& customName)
     delete d->transaction;
     d->transaction = new KisTransaction(customName, d->device);
     Q_CHECK_PTR(d->transaction);
-    d->device->connect(d->device.data(), SIGNAL(painterlyOverlayCreated()), d->transaction, SLOT(painterlyOverlayAdded()));
 }
 
 void KisPainter::beginTransaction(KisTransaction* command)
 {
     delete d->transaction;
     d->transaction = command;
-    d->device->connect(d->device.data(), SIGNAL(painterlyOverlayCreated()), d->transaction, SLOT(painterlyOverlayAdded()));
 }
 
 

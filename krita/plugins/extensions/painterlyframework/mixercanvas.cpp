@@ -23,7 +23,6 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
-#include <kis_painterly_overlay.h>
 #include <kis_paint_layer.h>
 #include <kis_paintop_registry.h>
 #include <kis_canvas_resource_provider.h>
@@ -66,11 +65,6 @@ KisPaintLayer *MixerCanvas::layer()
 KisPaintDevice *MixerCanvas::device()
 {
     return m_layer->paintDevice().data();
-}
-
-KisPainterlyOverlay *MixerCanvas::overlay()
-{
-    return m_layer->paintDevice()->painterlyOverlay().data();
 }
 
 void MixerCanvas::setToolProxy(KoToolProxy *proxy)
@@ -146,7 +140,6 @@ void MixerCanvas::setLayer(const KoColorSpace *cs)
 {
     Q_ASSERT(cs);
     m_layer = new KisPaintLayer(0, "Artistic Mixer Layer", 255, cs);
-    m_layer->paintDevice()->createPainterlyOverlay();
 }
 
 void MixerCanvas::mouseDoubleClickEvent(QMouseEvent */*event*/)
@@ -219,7 +212,6 @@ void MixerCanvas::updateCanvas(const QRegion& region)
 void MixerCanvas::slotClear()
 {
     device()->clear();
-    overlay()->clear();
     m_image.fill(0);
     update();
 }

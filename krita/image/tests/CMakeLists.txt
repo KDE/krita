@@ -72,14 +72,6 @@ target_link_libraries(KisThreadedApplicatorTest  ${KDE4_KDEUI_LIBS} ${KDE4_THREA
 
 ########### next target ###############
 
-set(kis_painterly_overlay_test_SRCS kis_painterly_overlay_test.cpp )
-
-kde4_add_unit_test(KisPainterlyOverlayTest TESTNAME krita-image-PainterlyOverlayTest ${kis_painterly_overlay_test_SRCS})
-
-target_link_libraries(KisPainterlyOverlayTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_selection_test_SRCS kis_selection_test.cpp )
 
 kde4_add_unit_test(KisSelectionTest TESTNAME krita-image-SelectionTest ${kis_selection_test_SRCS})
@@ -352,12 +344,6 @@ target_link_libraries(KisNodeVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTT
 set(kis_paint_device_action_test_SRCS kis_paint_device_action_test.cpp )
 kde4_add_unit_test(KisPaintDeviceActionTest TESTNAME krita-image-KisPaintDeviceActionTest ${kis_paint_device_action_test_SRCS})
 target_link_libraries(KisPaintDeviceActionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_painterly_overlay_colorspace_test_SRCS kis_painterly_overlay_colorspace_test.cpp )
-kde4_add_unit_test(KisPainterlyOverlayColorspaceTest TESTNAME krita-image-KisPainterlyOverlayColorspaceTest ${kis_painterly_overlay_colorspace_test_SRCS})
-target_link_libraries(KisPainterlyOverlayColorspaceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

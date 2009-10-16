@@ -26,7 +26,6 @@
 #include <KoCanvasBase.h>
 
 class KisPaintDevice;
-class KisPainterlyOverlay;
 class KisCanvasResourceProvider;
 class KoColorSpace;
 class KoShapeManager;
@@ -54,7 +53,6 @@ public:
 
     KisPaintLayer *layer();
     KisPaintDevice *device();
-    KisPainterlyOverlay *overlay();
     void setToolProxy(KoToolProxy *proxy);
 
     KoToolProxy *toolProxy() const {

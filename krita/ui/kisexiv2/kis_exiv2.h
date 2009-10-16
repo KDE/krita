@@ -21,7 +21,7 @@
 
 class QVariant;
 
-#include <kis_meta_data_value.h>
+#include <metadata/kis_meta_data_value.h>
 #include <exiv2/value.hpp>
 #include "krita_export.h"
 

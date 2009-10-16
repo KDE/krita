@@ -31,7 +31,7 @@
 #include "kis_meta_data_store.h"
 #include "kis_meta_data_validator.h"
 #include "kis_meta_data_value.h"
-
+#include "kisexiv2/kis_exiv2.h"
 #include "filestest.h"
 
 #ifndef FILES_DATA_DIR
@@ -42,6 +42,8 @@ using namespace KisMetaData;
 
 void KisExiv2Test::testExifLoader()
 {
+    KisExiv2::initialize();
+
     IOBackend* exifIO = IOBackendRegistry::instance()->get("exif");
     QVERIFY(exifIO);
     QFile exifFile( QString(FILES_DATA_DIR) + "/metadata/hpim3238.exv" );
@@ -94,7 +96,8 @@ void KisExiv2Test::testExifLoader()
         
     
     const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
-        
+    Q_UNUSED(dcSchema);
+
     const KisMetaData::Schema* xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
     QCOMPARE(store->getEntry( xmpSchema, "CreatorTool" ).value(), Value( "digiKam-0.9.1" ) );
     QCOMPARE(store->getEntry( xmpSchema, "ModifyDate" ).value(), Value( QDateTime(QDate(2007,5,8), QTime(0,19,18) ) ) );

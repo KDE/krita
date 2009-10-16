@@ -43,6 +43,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
         }
         virtual ~KoIncompleteColorSpace()
         {
+          delete m_qcolordata;
           delete m_fallBackColorSpace;
         }
     public:

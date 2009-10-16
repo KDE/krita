@@ -50,10 +50,7 @@
 #include "flake/kis_shape_selection.h"
 #include "kis_doc2.h"
 
-#include "kisexiv2/kis_iptc_io.h"
-#include "kisexiv2/kis_exif_io.h"
-#include "kisexiv2/kis_xmp_io.h"
-
+#include "kisexiv2/kis_exiv2.h"
 
 KAboutData* KisFactory2::s_aboutData = 0;
 KComponentData* KisFactory2::s_instance = 0;
@@ -109,10 +106,8 @@ const KComponentData &KisFactory2::componentData()
             s_instance = new KComponentData(newKritaAboutData());
         Q_CHECK_PTR(s_instance);
 
-        KisMetaData::IOBackendRegistry* ioreg = KisMetaData::IOBackendRegistry::instance();
-        ioreg->add(new KisIptcIO);
-        ioreg->add(new KisExifIO);
-        ioreg->add(new KisXMPIO);
+        // XXX_EXIV: make the exiv io backends real plugins
+        KisExiv2::initialize();
 
         KoShapeRegistry* r = KoShapeRegistry::instance();
         r->add(new KisShapeSelectionFactory(r));

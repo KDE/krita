@@ -507,3 +507,10 @@ set(kis_mask_generator_test_SRCS kis_mask_generator_test.cpp )
 kde4_add_unit_test(KisMaskGeneratorTest TESTNAME krita-image-KisMaskGeneratorTest ${kis_mask_generator_test_SRCS})
 target_link_libraries(KisMaskGeneratorTest ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+#set(kis_cs_conversion_test_SRCS kis_cs_conversion_test.cpp )
+#kde4_add_unit_test(KisCsConversionTest TESTNAME krita-image-KisCsConversionTest ${kis_cs_conversion_test_SRCS})
+#target_link_libraries(KisCsConversionTest ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+

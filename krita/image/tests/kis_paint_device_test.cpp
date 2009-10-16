@@ -79,7 +79,7 @@ void KisPaintDeviceTest::testStore()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     KoStore * readStore =
-        KoStore::createStore(QString(FILES_DATA_DIR) + QDir::separator() + "store_test.kra", KoStore::Read);
+            KoStore::createStore(QString(FILES_DATA_DIR) + QDir::separator() + "store_test.kra", KoStore::Read);
     readStore->open("built image/layers/layer0");
     QVERIFY(dev->read(readStore));
     readStore->close();
@@ -88,7 +88,7 @@ void KisPaintDeviceTest::testStore()
     QVERIFY(dev->exactBounds() == QRect(0, 0, 100, 100));
 
     KoStore * writeStore =
-        KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Write);
+            KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Write);
     writeStore->open("built image/layers/layer0");
     QVERIFY(dev->write(writeStore));
     writeStore->close();
@@ -96,7 +96,7 @@ void KisPaintDeviceTest::testStore()
 
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     readStore =
-        KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Read);
+            KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Read);
     readStore->open("built image/layers/layer0");
     QVERIFY(dev2->read(readStore));
     readStore->close();
@@ -243,51 +243,19 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
 
 void KisPaintDeviceTest::testColorSpaceConversion()
 {
-    QTime t;
-    t.start();
-
-    int counter;
-
-    QList<const KoColorSpace*> colorSpaces = TestUtil::allColorSpaces();
-    int failedColorSpaces = 0;
-
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
+    const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
+    KisPaintDeviceSP dev = new KisPaintDevice(srcCs);
+    dev->convertFromQImage(image, "");
+    dev->move(10, 10);   // Unalign with tile boundaries
+    QUndoCommand* cmd = dev->convertTo(dstCs);
 
-    foreach(const KoColorSpace* srcCs, colorSpaces) {
-        counter++;
-        foreach(const KoColorSpace* dstCs, colorSpaces) {
-            qDebug() << "converting from " << srcCs->id() << "to" << dstCs->id();
-            KisPaintDeviceSP dev = new KisPaintDevice(srcCs);
-            dev->convertFromQImage(image, "");
-            dev->move(10, 10);   // Unalign with tile boundaries
-            QUndoCommand* cmd = dev->convertTo(dstCs);
+    QVERIFY(dev->exactBounds() == QRect(10, 10, image.width(), image.height()));
+    QVERIFY(dev->pixelSize() == dstCs->pixelSize());
+    QVERIFY(*dev->colorSpace() == *dstCs);
 
-            if (dev->exactBounds() != QRect(10, 10, image.width(), image.height())) {
-                logFailure("bounds", srcCs, dstCs);
-                failedColorSpaces++;
-            }
-            if (dev->pixelSize() != dstCs->pixelSize()) {
-                logFailure("pixelsize", srcCs, dstCs);
-                failedColorSpaces++;
-            }
-            if (!(*dev->colorSpace() == *dstCs)) {
-                logFailure("dest cs", srcCs, dstCs);
-                failedColorSpaces++;
-            }
-            delete cmd;
-            break;
-        }
-        if (counter>4) break;
-    }
-    qDebug() << colorSpaces.size() * colorSpaces.size()
-    << "conversions"
-    << " done in "
-    << t.elapsed()
-    << "ms";
-
-    if (failedColorSpaces > 0) {
-        QFAIL(QString("Failed conversions %1, see log for details.").arg(failedColorSpaces).toAscii());
-    }
+    delete cmd;
 }
 
 
@@ -421,10 +389,10 @@ void KisPaintDeviceTest::testBltPerformance()
     }
 
     qDebug() << x
-             << "blits"
-             << " done in "
-             << t.elapsed()
-             << "ms";
+            << "blits"
+            << " done in "
+            << t.elapsed()
+            << "ms";
 
 
 }

@@ -81,45 +81,18 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
 
 void KisFixedPaintDeviceTest::testColorSpaceConversion()
 {
-    QTime t;
-    t.start();
-
-    QList<const KoColorSpace*> colorSpaces = TestUtil::allColorSpaces();
-    int failedColorSpaces = 0;
-
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
+    const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
+    KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(srcCs);
+    dev->convertFromQImage(image, "");
 
-    foreach(const KoColorSpace * srcCs, colorSpaces) {
-        foreach(const KoColorSpace * dstCs,  colorSpaces) {
-            // temporarily, because float colorspaces are broken for me
-            KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(srcCs);
+    dev->convertTo(dstCs);
 
-            dev->convertFromQImage(image, "");
-            dev->convertTo(dstCs);
+    QVERIFY(dev->bounds() == QRect(0, 0, image.width(), image.height()));
+    QVERIFY(dev->pixelSize() == dstCs->pixelSize());
+    QVERIFY(*dev->colorSpace() == *dstCs);
 
-            if (dev->bounds() != QRect(0, 0, image.width(), image.height())) {
-                logFailure("bounds", srcCs, dstCs);
-                failedColorSpaces++;
-            }
-            if (dev->pixelSize() != dstCs->pixelSize()) {
-                logFailure("pixelsize", srcCs, dstCs);
-                failedColorSpaces++;
-            }
-            if (!(*dev->colorSpace() == *dstCs)) {
-                logFailure("dest cs", srcCs, dstCs);
-                failedColorSpaces++;
-            }
-        }
-    }
-    qDebug() << colorSpaces.size() * colorSpaces.size()
-            << "conversions"
-            << " done in "
-            << t.elapsed()
-            << "ms";
-
-    if (failedColorSpaces > 0) {
-        QFAIL(QString("Failed conversions %1, see log for details.").arg(failedColorSpaces).toAscii());
-    }
 }
 
 

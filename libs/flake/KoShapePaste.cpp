@@ -64,8 +64,11 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
 
     int zIndex = 0;
     if (!shapes.isEmpty()) {
-        qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-        zIndex = shapes.last()->zIndex() + 1;
+        zIndex = shapes.first()->zIndex();
+        foreach (KoShape * shape, shapes) {
+            zIndex = qMax(zIndex, shape->zIndex());
+        }
+        ++zIndex;
     }
     context.setZIndex(zIndex);
 

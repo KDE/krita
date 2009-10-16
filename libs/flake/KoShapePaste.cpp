@@ -60,7 +60,14 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
     KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->dataCenterMap());
 
-    context.setZIndex(0);
+    QList<KoShape*> shapes(d->layer ? d->layer->childShapes(): d->canvas->shapeManager()->topLevelShapes());
+
+    int zIndex = 0;
+    if (!shapes.isEmpty()) {
+        qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+        zIndex = shapes.last()->zIndex() + 1;
+    }
+    context.setZIndex(zIndex);
 
     QUndoCommand *cmd = 0;
 
@@ -79,15 +86,12 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
             KoShapeManager *sm = d->canvas->shapeManager();
             Q_ASSERT(sm);
             bool done = true;
-            int maxZIndex;
             do {
                 // find a nice place for our shape.
                 done = true;
-                maxZIndex = 0;
                 foreach (const KoShape *s, sm->shapesAt(shape->boundingRect()) + d->pastedShapes) {
                     if (d->layer && s->parent() != d->layer)
                         continue;
-                    maxZIndex = qMax(s->zIndex(), maxZIndex);
                     if (s->name() != shape->name())
                         continue;
                     if (qAbs(s->position().x() - shape->position().x()) > 0.001)
@@ -108,7 +112,6 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
                     }
                 }
             } while (!done);
-            shape->setZIndex(maxZIndex+1);
 
             d->canvas->shapeController()->addShapeDirect(shape, cmd);
             d->pastedShapes << shape;

@@ -46,9 +46,10 @@ protected:
 
     virtual ~KoIncompleteColorSpace()
     {
-        delete m_qcolordata;
+        delete[] m_qcolordata;
         delete m_fallBackColorSpace;
     }
+
 public:
 
     virtual bool hasHighDynamicRange() const { return false; }

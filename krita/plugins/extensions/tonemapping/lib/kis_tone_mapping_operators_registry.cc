@@ -14,23 +14,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_tone_mapping_operators_registry.h"
 
-struct KisToneMappingOperatorsRegistry::Private {
-    static KisToneMappingOperatorsRegistry* s_instance;
-};
+#include <kglobal.h>
 
-KisToneMappingOperatorsRegistry* KisToneMappingOperatorsRegistry::Private::s_instance = 0;
+#include <kis_debug.h>
 
-KisToneMappingOperatorsRegistry::KisToneMappingOperatorsRegistry() : d(new Private)
+KisToneMappingOperatorsRegistry::KisToneMappingOperatorsRegistry()
 {
+}
+
+KisToneMappingOperatorsRegistry::~KisToneMappingOperatorsRegistry()
+{
+    dbgRegistry << "deleting KisToneMappingOperatorsRegistry";
 }
 
 KisToneMappingOperatorsRegistry* KisToneMappingOperatorsRegistry::instance()
 {
-    if (!Private::s_instance) {
-        Private::s_instance = new KisToneMappingOperatorsRegistry;
-    }
-    return Private::s_instance;
+    K_GLOBAL_STATIC(KisToneMappingOperatorsRegistry, s_instance);
+    return s_instance;
 }

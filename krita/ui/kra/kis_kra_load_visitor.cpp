@@ -53,6 +53,7 @@
 #include "kis_shape_selection.h"
 
 
+
 using namespace KRA;
 
 KisKraLoadVisitor::KisKraLoadVisitor( KisImageWSP img,

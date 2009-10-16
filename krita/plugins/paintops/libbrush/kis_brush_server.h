@@ -50,8 +50,6 @@ private:
     KisBrushServer(const KisBrushServer&);
     KisBrushServer operator=(const KisBrushServer&);
 
-    static KisBrushServer *m_singleton;
-
     KoResourceServer<KisBrush>* m_brushServer;
 
 private slots:

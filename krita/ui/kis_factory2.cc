@@ -39,19 +39,26 @@
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
 
-#include "kis_aboutdata.h"
-#include "filter/kis_filter.h"
-#include "generator/kis_generator.h"
-#include "filter/kis_filter_registry.h"
-#include "generator/kis_generator_registry.h"
-#include "kis_paintop_registry.h"
+#include <metadata/kis_meta_data_io_backend.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_registry.h>
+#include <generator/kis_generator_registry.h>
+#include <generator/kis_generator.h>
+#include <kis_paintop_registry.h>
 
+#include "kis_aboutdata.h"
 #include "flake/kis_shape_selection.h"
 #include "kis_doc2.h"
 
+#include "kisexiv2/kis_iptc_io.h"
+#include "kisexiv2/kis_exif_io.h"
+#include "kisexiv2/kis_xmp_io.h"
+
 
 KAboutData* KisFactory2::s_aboutData = 0;
-KComponentData* KisFactory2::s_instance = 0;KisFactory2::KisFactory2(QObject* parent)
+KComponentData* KisFactory2::s_instance = 0;
+
+KisFactory2::KisFactory2(QObject* parent)
         : KoFactory(parent)
 {
     s_aboutData = newKritaAboutData();
@@ -102,6 +109,11 @@ const KComponentData &KisFactory2::componentData()
             s_instance = new KComponentData(newKritaAboutData());
         Q_CHECK_PTR(s_instance);
 
+        KisMetaData::IOBackendRegistry* ioreg = KisMetaData::IOBackendRegistry::instance();
+        ioreg->add(new KisIptcIO);
+        ioreg->add(new KisExifIO);
+        ioreg->add(new KisXMPIO);
+
         KoShapeRegistry* r = KoShapeRegistry::instance();
         r->add(new KisShapeSelectionFactory(r));
 
@@ -133,7 +145,6 @@ const KComponentData &KisFactory2::componentData()
 
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
-
     }
 
     return *s_instance;

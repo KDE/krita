@@ -48,9 +48,6 @@ private:
     KisBrushRegistry();
     KisBrushRegistry(const KisBrushRegistry&);
     KisBrushRegistry operator=(const KisBrushRegistry&);
-
-private:
-    static KisBrushRegistry *m_singleton;
 };
 
 #endif // KIS_GENERATOR_REGISTRY_H_

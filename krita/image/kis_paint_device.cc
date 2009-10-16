@@ -44,7 +44,6 @@
 #include "kis_random_sub_accessor.h"
 #include "kis_selection.h"
 #include "kis_node.h"
-#include "kis_painterly_overlay.h"
 #include "commands/kis_paintdevice_convert_type_command.h"
 #include "kis_datamanager.h"
 
@@ -63,8 +62,6 @@ public:
     KoColorSpace* colorSpace;
     qint32 pixelSize;
     qint32 nChannels;
-    KisPainterlyOverlaySP painterlyOverlay;
-
 };
 
 KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& name)
@@ -557,26 +554,6 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, const
     return thumbnail;
 
 }
-
-KisPainterlyOverlaySP KisPaintDevice::painterlyOverlay()
-{
-    return m_d->painterlyOverlay;
-}
-
-void KisPaintDevice::createPainterlyOverlay()
-{
-    if (!m_d->painterlyOverlay) {
-        m_d->painterlyOverlay = new KisPainterlyOverlay();
-        emit(painterlyOverlayCreated());
-    }
-
-}
-
-void KisPaintDevice::removePainterlyOverlay()
-{
-    m_d->painterlyOverlay = 0;
-}
-
 
 QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, const KisSelection *selection)
 {

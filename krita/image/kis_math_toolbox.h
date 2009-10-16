@@ -149,8 +149,6 @@ private:
     KisMathToolboxRegistry();
     KisMathToolboxRegistry(const KisMathToolboxRegistry&);
     KisMathToolboxRegistry operator=(const KisMathToolboxRegistry&);
-
-    static KisMathToolboxRegistry * m_singleton;
 };
 
 

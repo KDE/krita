@@ -28,6 +28,9 @@
 
 class QString;
 
+/**
+ * XXX_DOCS
+ */
 class KRITAIMAGE_EXPORT KisGeneratorRegistry : public QObject, public KoGenericRegistry<KisGeneratorSP>
 {
 
@@ -41,14 +44,15 @@ public:
     void add(const QString &id, KisGeneratorSP item);
 
 signals:
+    
     void generatorAdded(QString id);
+
 private:
+    
     KisGeneratorRegistry();
     KisGeneratorRegistry(const KisGeneratorRegistry&);
     KisGeneratorRegistry operator=(const KisGeneratorRegistry&);
 
-private:
-    static KisGeneratorRegistry *m_singleton;
 };
 
 #endif // KIS_GENERATOR_REGISTRY_H_

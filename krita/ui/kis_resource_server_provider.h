@@ -53,8 +53,6 @@ private:
     KisResourceServerProvider(const KisResourceServerProvider&);
     KisResourceServerProvider operator=(const KisResourceServerProvider&);
 
-    static KisResourceServerProvider *m_singleton;
-
     KoResourceServer<KisPattern>* m_patternServer;
     KoResourceServer<KisPaintOpPreset>* m_paintOpPresetServer;
 

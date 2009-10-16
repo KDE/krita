@@ -15,21 +15,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_config_notifier.h"
 
+#include <kglobal.h>
 
-KisConfigNotifier *KisConfigNotifier::s_instance = 0;
+#include <kis_debug.h>
 
 KisConfigNotifier::KisConfigNotifier()
 {
 }
 
+KisConfigNotifier::~KisConfigNotifier()
+{
+    dbgRegistry << "deleting KisConfigNotifier";
+}
+
 KisConfigNotifier *KisConfigNotifier::instance()
 {
-    if (s_instance == 0) {
-        s_instance = new KisConfigNotifier();
-    }
+    K_GLOBAL_STATIC(KisConfigNotifier, s_instance);
     return s_instance;
 }
 

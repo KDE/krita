@@ -17,13 +17,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "filter/kis_filter_registry.h"
 
 #include <math.h>
 
 #include <QString>
 
+#include <kglobal.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kparts/plugin.h>
@@ -39,27 +39,22 @@
 #include "kis_paint_device.h"
 #include "filter/kis_filter.h"
 
-KisFilterRegistry *KisFilterRegistry::m_singleton = 0;
-
 KisFilterRegistry::KisFilterRegistry()
 {
-    Q_ASSERT(KisFilterRegistry::m_singleton == 0);
-    KisFilterRegistry::m_singleton = this;
 }
 
 KisFilterRegistry::~KisFilterRegistry()
 {
+    dbgRegistry << "deleting KisFilterRegistry";
 }
 
 KisFilterRegistry* KisFilterRegistry::instance()
 {
-    if (KisFilterRegistry::m_singleton == 0) {
-        KisFilterRegistry::m_singleton = new KisFilterRegistry();
-        Q_CHECK_PTR( KisFilterRegistry::m_singleton );
+    K_GLOBAL_STATIC(KisFilterRegistry, s_instance);
+    if (!s_instance.exists()) {
         KoPluginLoader::instance()->load( "Krita/Filter", "Type == 'Service' and ([X-Krita-Version] == 3)" );
-
     }
-    return KisFilterRegistry::m_singleton;
+    return s_instance;
 }
 
 void KisFilterRegistry::add(KisFilterSP item)

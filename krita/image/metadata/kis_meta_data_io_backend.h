@@ -53,7 +53,7 @@ public:
 
 public:
 
-    virtual ~IOBackend() {}
+    virtual ~IOBackend() {};
 
     virtual QString id() const = 0;
 
@@ -100,13 +100,15 @@ public:
 
 class KRITAIMAGE_EXPORT IOBackendRegistry : public KoGenericRegistry<IOBackend*>
 {
-    struct Private;
-private:
-    IOBackendRegistry();
+
 public:
+    
     static IOBackendRegistry* instance();
+    
 private:
-    Private* const d;
+    
+    IOBackendRegistry();
+    ~IOBackendRegistry();
 };
 
 }

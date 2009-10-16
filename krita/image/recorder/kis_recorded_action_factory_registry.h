@@ -31,9 +31,6 @@ public:
     KisRecordedActionFactoryRegistry();
     ~KisRecordedActionFactoryRegistry();
     static KisRecordedActionFactoryRegistry* instance();
-private:
-    struct Private;
-    Private* const d;
 };
 
 #endif

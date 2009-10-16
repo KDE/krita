@@ -47,7 +47,6 @@ class KoColorProfile;
 class KisRandomSubAccessorPixel;
 class KisDataManager;
 class KisSelectionComponent;
-class KisPainterlyOverlay;
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
@@ -398,27 +397,6 @@ public:
      */
     virtual quint32 channelCount() const;
 
-    /**
-     * Return the painterly overlay -- a special paint device that
-     * uses the KisPainterlyOverlayColorSpace that defines things
-     * like wetness and canvas height. You need to explicitly create
-     * the painterly overlay before accessing it. Running a physics
-     * filter may also create the painterly overlay.
-     *
-     * Note: this may be 0.
-     */
-    KisPainterlyOverlaySP painterlyOverlay();
-
-    /**
-     * Create a painterly overlay on this paint layer
-     */
-    void createPainterlyOverlay();
-
-    /**
-     * Sets the painterly overlay associated with this paint layer to 0.
-     */
-    void removePainterlyOverlay();
-
 public:
 
     /**
@@ -545,13 +523,6 @@ signals:
     void ioProgress(qint8 percentage);
     void profileChanged(const KoColorProfile *  profile);
     void colorSpaceChanged(const KoColorSpace *colorspace);
-
-    /**
-     * Emitted when the default empty painterly overlay for this paint
-     * device is replaced with a real painterly overlay. Used to
-     * manage the undo system.
-     */
-    void painterlyOverlayCreated();
 
 private:
 

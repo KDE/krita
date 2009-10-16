@@ -26,10 +26,13 @@ class QVariant;
 
 /// Convert an exiv value to a KisMetaData value
 KisMetaData::Value exivValueToKMDValue( const Exiv2::Value::AutoPtr value, bool forceSeq, KisMetaData::Value::ValueType arrayType = KisMetaData::Value::UnorderedArray );
+
 /// Convert a QtVariant to an Exiv value
 Exiv2::Value* variantToExivValue( const QVariant& variant, Exiv2::TypeId type );
+
 /// Convert a KisMetaData to an Exiv value
 Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value, Exiv2::TypeId type );
+
 /**
  * Convert a KisMetaData to an Exiv value, without knowing the targeted Exiv2::TypeId
  * This function should be used for saving to XMP.

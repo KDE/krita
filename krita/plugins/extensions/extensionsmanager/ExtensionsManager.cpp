@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,28 +18,34 @@
 #include "ExtensionsManager.h"
 
 #include <QApplication>
+#include <QFile>
+#include <QDomDocument>
+
+#include <kglobal.h>
 #include <kurl.h>
 #include <kio/netaccess.h>
-#include <QFile>
-#include <KoStore.h>
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
-#include <QDomDocument>
+
+#include <KoStore.h>
+
+#include <kis_debug.h>
+
 #include "Extension.h"
 #include <ui_ExtensionInformationWidget.h>
 
-ExtensionsManager* ExtensionsManager::s_instance = 0;
-
-ExtensionsManager::ExtensionsManager() {
+ExtensionsManager::ExtensionsManager() 
+{
 }
 
-ExtensionsManager::~ExtensionsManager() {
+ExtensionsManager::~ExtensionsManager() 
+{
+    dbgRegistry << "deleting ExtensionsManager";
 }
 
 ExtensionsManager* ExtensionsManager::instance() {
-    if(!s_instance) {
-        s_instance = new ExtensionsManager;
-    }
+    
+    K_GLOBAL_STATIC(ExtensionsManager, s_instance);
     return s_instance;
 }
 

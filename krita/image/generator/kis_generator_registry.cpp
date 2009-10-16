@@ -22,6 +22,7 @@
 
 #include <QString>
 
+#include <kglobal.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kparts/plugin.h>
@@ -36,27 +37,22 @@
 #include "kis_paint_device.h"
 #include "generator/kis_generator.h"
 
-KisGeneratorRegistry *KisGeneratorRegistry::m_singleton = 0;
-
 KisGeneratorRegistry::KisGeneratorRegistry()
 {
-    Q_ASSERT(KisGeneratorRegistry::m_singleton == 0);
-    KisGeneratorRegistry::m_singleton = this;
 }
 
 KisGeneratorRegistry::~KisGeneratorRegistry()
 {
+    dbgRegistry << "deleting KisGeneratorRegistry";
 }
 
 KisGeneratorRegistry* KisGeneratorRegistry::instance()
 {
-    if (KisGeneratorRegistry::m_singleton == 0) {
-        KisGeneratorRegistry::m_singleton = new KisGeneratorRegistry();
-        Q_CHECK_PTR( KisGeneratorRegistry::m_singleton );
+    K_GLOBAL_STATIC(KisGeneratorRegistry, s_instance);
+    if (!s_instance.exists()) {
         KoPluginLoader::instance()->load( "Krita/Generator", "Type == 'Service' and ([X-Krita-Version] == 3)" );
-
     }
-    return KisGeneratorRegistry::m_singleton;
+    return s_instance;
 }
 
 void KisGeneratorRegistry::add(KisGeneratorSP item)

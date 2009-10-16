@@ -18,8 +18,6 @@
 
 #include "kis_tilemanager.h"
 
-#include <kis_debug.h>
-
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -32,29 +30,19 @@
 #include <QMutex>
 #include <qfile.h>
 
-#include <k3staticdeleter.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
+#include "kis_debug.h"
 #include "kis_tileddatamanager.h"
 #include "kis_tile.h"
 
-
 #define DO_NOT_PRINT_INFO
-
-// Note: the cache file doesn't get deleted when we crash and so :(
-
-KisTileManager* KisTileManager::m_singleton = 0;
-
-static K3StaticDeleter<KisTileManager> staticDeleter;
 
 KisTileManager::KisTileManager()
         : m_bigKritaLock(QMutex::Recursive)
 {
-
-    Q_ASSERT(KisTileManager::m_singleton == 0);
-    KisTileManager::m_singleton = this;
     m_bytesInMem = 0;
     m_bytesTotal = 0;
     m_swapForbidden = false;
@@ -86,6 +74,7 @@ KisTileManager::KisTileManager()
 
 KisTileManager::~KisTileManager()
 {
+    dbgRegistry << "delete KisTileManager";
     if (!m_freeLists.empty()) { // See if there are any nonempty freelists
         FreeListList::iterator listsIt = m_freeLists.begin();
         FreeListList::iterator listsEnd = m_freeLists.end();
@@ -119,11 +108,8 @@ KisTileManager::~KisTileManager()
 
 KisTileManager* KisTileManager::instance()
 {
-    if (KisTileManager::m_singleton == 0) {
-        staticDeleter.setObject(KisTileManager::m_singleton, new KisTileManager()); // threadsafe?
-        Q_CHECK_PTR(KisTileManager::m_singleton);
-    }
-    return KisTileManager::m_singleton;
+    K_GLOBAL_STATIC(KisTileManager, s_instance);
+    return s_instance;
 }
 
 void KisTileManager::registerTile(KisTile* tile)

@@ -28,13 +28,11 @@
 #include <qfileinfo.h>
 
 struct KoCtlTemplatesRegistry::Private {
-  static KoCtlTemplatesRegistry* s_instance;
   QList<OpenCTL::Template*> templates;
 };
 
-KoCtlTemplatesRegistry* KoCtlTemplatesRegistry::Private::s_instance = 0;
-
-KoCtlTemplatesRegistry::KoCtlTemplatesRegistry() : d(new Private)
+KoCtlTemplatesRegistry::KoCtlTemplatesRegistry() 
+    : d(new Private)
 {
   KGlobal::mainComponent().dirs()->addResourceType("ctl_compositeops", "data", "pigmentcms/ctlcompositeops/");
   QStringList ctlcompositeopsFilenames;
@@ -59,15 +57,14 @@ KoCtlTemplatesRegistry::KoCtlTemplatesRegistry() : d(new Private)
 
 KoCtlTemplatesRegistry::~KoCtlTemplatesRegistry()
 {
+    dbgRegistry << "deleting KoCtlTemplatesRegistry";
 }
 
 const KoCtlTemplatesRegistry* KoCtlTemplatesRegistry::instance()
 {
-  if( !Private::s_instance )
-  {
-    Private::s_instance = new KoCtlTemplatesRegistry;
-  }
-  return Private::s_instance;
+    K_GLOBAL_STATIC(KoCtlTemplatesRegistry, s_instance);
+    return s_instance;
+    
 }
 
 const QList<OpenCTL::Template*>& KoCtlTemplatesRegistry::compositeOps() const

@@ -21,22 +21,17 @@
 #include "recorder/kis_recorded_bezier_curve_paint_action.h"
 #include "recorder/kis_recorded_polyline_paint_action.h"
 
-struct KisRecordedActionFactoryRegistry::Private {
-    static KisRecordedActionFactoryRegistry* instance;
-};
-
-KisRecordedActionFactoryRegistry* KisRecordedActionFactoryRegistry::Private::instance = 0;
+#include <kglobal.h>
+#include <kis_debug.h>
 
 KisRecordedActionFactoryRegistry* KisRecordedActionFactoryRegistry::instance()
 {
-    if (!Private::instance) {
-        Private::instance = new KisRecordedActionFactoryRegistry;
-    }
-    return Private::instance;
+    K_GLOBAL_STATIC(KisRecordedActionFactoryRegistry, s_instance);
+    return s_instance;
 }
 
 
-KisRecordedActionFactoryRegistry::KisRecordedActionFactoryRegistry() : d(new Private)
+KisRecordedActionFactoryRegistry::KisRecordedActionFactoryRegistry()
 {
     add(new KisRecordedFilterActionFactory);
     add(new KisRecordedPolyLinePaintActionFactory);
@@ -45,5 +40,5 @@ KisRecordedActionFactoryRegistry::KisRecordedActionFactoryRegistry() : d(new Pri
 
 KisRecordedActionFactoryRegistry::~KisRecordedActionFactoryRegistry()
 {
-    delete d;
+    dbgRegistry << "deleting KisRecordedActionFactoryRegistry";
 }

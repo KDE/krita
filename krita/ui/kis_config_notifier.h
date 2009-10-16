@@ -49,10 +49,9 @@ signals:
 
 private:
     KisConfigNotifier();
+    ~KisConfigNotifier();
     KisConfigNotifier(const KisConfigNotifier&);
     KisConfigNotifier operator=(const KisConfigNotifier&);
-
-    static KisConfigNotifier *s_instance;
 };
 
 #endif // KIS_CONFIG_NOTIFIER_H_

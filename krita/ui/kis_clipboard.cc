@@ -18,7 +18,6 @@
 
 #include "kis_clipboard.h"
 
-
 #include <QApplication>
 #include <QClipboard>
 #include <QMimeData>
@@ -28,8 +27,7 @@
 #include <QBuffer>
 
 #include <klocale.h>
-
-#include "kis_debug.h"
+#include <kglobal.h>
 
 #include "KoColorSpace.h"
 #include "KoStore.h"
@@ -39,20 +37,15 @@
 // kritaimage
 #include <kis_types.h>
 #include <kis_paint_device.h>
-
+#include <kis_debug.h>
 #include <kis_annotation.h>
 
 // local
 #include "kis_factory2.h"
 #include "kis_config.h"
 
-KisClipboard *KisClipboard::m_singleton = 0;
-
 KisClipboard::KisClipboard()
 {
-    Q_ASSERT(KisClipboard::m_singleton == 0);
-    KisClipboard::m_singleton = this;
-
     m_pushedClipboard = false;
     m_hasClip = false;
     m_clip = 0;
@@ -67,15 +60,13 @@ KisClipboard::KisClipboard()
 
 KisClipboard::~KisClipboard()
 {
+    dbgRegistry << "deleting KisClipBoard";
 }
 
 KisClipboard* KisClipboard::instance()
 {
-    if (KisClipboard::m_singleton == 0) {
-        KisClipboard::m_singleton = new KisClipboard();
-        Q_CHECK_PTR(KisClipboard::m_singleton);
-    }
-    return KisClipboard::m_singleton;
+    K_GLOBAL_STATIC(KisClipboard, s_instance);
+    return s_instance;
 }
 
 void KisClipboard::setClip(KisPaintDeviceSP selection)

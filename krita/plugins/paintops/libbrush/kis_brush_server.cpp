@@ -27,6 +27,8 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
+#include <kis_debug.h>
+
 #include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
 
@@ -61,8 +63,6 @@ private:
     }
 };
 
-KisBrushServer *KisBrushServer::m_singleton = 0;
-
 KisBrushServer::KisBrushServer()
 {
     KGlobal::mainComponent().dirs()->addResourceType("kis_brushes", "data", "krita/brushes/");
@@ -77,14 +77,13 @@ KisBrushServer::KisBrushServer()
 
 KisBrushServer::~KisBrushServer()
 {
+    dbgRegistry << "deleting KisBrushServer";
 }
 
 KisBrushServer* KisBrushServer::instance()
 {
-    if (KisBrushServer::m_singleton == 0) {
-        KisBrushServer::m_singleton = new KisBrushServer();
-    }
-    return KisBrushServer::m_singleton;
+    K_GLOBAL_STATIC(KisBrushServer, s_instance);
+    return s_instance;
 }
 
 

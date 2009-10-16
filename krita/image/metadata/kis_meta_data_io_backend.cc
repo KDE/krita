@@ -20,22 +20,21 @@
 
 using namespace KisMetaData;
 
+#include <kglobal.h>
+#include "kis_debug.h"
 
-struct IOBackendRegistry::Private {
-    static IOBackendRegistry* s_instance;
-};
-
-IOBackendRegistry* IOBackendRegistry::Private::s_instance = 0;
-
-IOBackendRegistry::IOBackendRegistry() : d(new Private)
+IOBackendRegistry::IOBackendRegistry() 
 {
-
 }
+
+IOBackendRegistry::~IOBackendRegistry() 
+{
+    dbgRegistry << "deleting IOBackendRegistry";
+}
+
 
 IOBackendRegistry* IOBackendRegistry::instance()
 {
-    if (!Private::s_instance) {
-        Private::s_instance = new IOBackendRegistry;
-    }
-    return Private::s_instance;
+    K_GLOBAL_STATIC(IOBackendRegistry, s_instance);
+    return s_instance;
 }

@@ -19,6 +19,8 @@
 
 #include <QtCore/QDateTime>
 
+#include <kglobal.h>
+
 #include "kis_iptc_io.h"
 #include "kis_exif_io.h"
 #include "kis_xmp_io.h"
@@ -246,13 +248,3 @@ Exiv2::Value* kmdValueToExivXmpValue( const KisMetaData::Value& value )
     qFatal( "Unhandled value type" );
     return 0;
 }
-
-struct KisExiv2 {
-    KisExiv2() {
-        KisMetaData::IOBackendRegistry::instance()->add(new KisIptcIO);
-        KisMetaData::IOBackendRegistry::instance()->add(new KisExifIO);
-        KisMetaData::IOBackendRegistry::instance()->add(new KisXMPIO);
-    }
-};
-
-static KisExiv2* exiv2 = new KisExiv2();

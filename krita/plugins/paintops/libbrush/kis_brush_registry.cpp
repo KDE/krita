@@ -20,6 +20,7 @@
 #include <QString>
 
 #include <kaction.h>
+#include <kglobal.h>
 #include <klocale.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
@@ -36,34 +37,26 @@
 #include "kis_gbr_brush_factory.h"
 #include "kis_text_brush_factory.h"
 
-KisBrushRegistry *KisBrushRegistry::m_singleton = 0;
-
 KisBrushRegistry::KisBrushRegistry()
 {
-    Q_ASSERT(KisBrushRegistry::m_singleton == 0);
-    KisBrushRegistry::m_singleton = this;
-
-    // Initialize the brush server. This loads gbr and gih brushes.
     KisBrushServer::instance();
 }
 
 KisBrushRegistry::~KisBrushRegistry()
 {
+    dbgRegistry << "deleting KisBrushRegistry";
 }
 
 KisBrushRegistry* KisBrushRegistry::instance()
 {
-    if (KisBrushRegistry::m_singleton == 0) {
-        KisBrushRegistry::m_singleton = new KisBrushRegistry();
-
-        KisBrushRegistry::m_singleton->add( new KisAutoBrushFactory() );
-        KisBrushRegistry::m_singleton->add( new KisGbrBrushFactory() );
-        KisBrushRegistry::m_singleton->add( new KisTextBrushFactory() );
-
-        Q_CHECK_PTR( KisBrushRegistry::m_singleton );
-        KoPluginLoader::instance()->load( "Krita/brush", "Type == 'Service' and ([X-Krita-Version] == 3)" );
+    K_GLOBAL_STATIC(KisBrushRegistry, s_instance);
+    if (!s_instance.exists()) {
+        s_instance->add( new KisAutoBrushFactory() );
+        s_instance->add( new KisGbrBrushFactory() );
+        s_instance->add( new KisTextBrushFactory() );
+        KoPluginLoader::instance()->load( "Krita/brush", "Type == 'Service' and ([X-Krita-Version] == 3)");
     }
-    return KisBrushRegistry::m_singleton;
+    return s_instance;
 }
 
 

@@ -73,14 +73,10 @@ private:
     KisClipboard(const KisClipboard &);
     KisClipboard operator=(const KisClipboard &);
 
-    static KisClipboard * m_singleton;
-
     KisPaintDeviceSP m_clip;
     bool m_hasClip;
 
     bool m_pushedClipboard;
-
-
 };
 
 #endif // __KIS_CLIPBOARD_H_

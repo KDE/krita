@@ -43,25 +43,23 @@
 #include "kis_image.h"
 #include "kis_paintop_settings_widget.h"
 
-KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
-
 KisPaintOpRegistry::KisPaintOpRegistry()
 {
-    Q_ASSERT(KisPaintOpRegistry::m_singleton == 0);
 }
 
 KisPaintOpRegistry::~KisPaintOpRegistry()
 {
+    dbgRegistry << "Deleting KisPaintOpRegistry";
 }
 
 KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
-    if (KisPaintOpRegistry::m_singleton == 0) {
-        KisPaintOpRegistry::m_singleton = new KisPaintOpRegistry();
+    K_GLOBAL_STATIC(KisPaintOpRegistry, s_instance);
+    if (!s_instance.exists()) {
         KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 3)");
-        Q_CHECK_PTR(KisPaintOpRegistry::m_singleton);
+        
     }
-    return KisPaintOpRegistry::m_singleton;
+    return s_instance;
 }
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image) const

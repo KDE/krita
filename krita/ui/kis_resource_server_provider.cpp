@@ -32,10 +32,9 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
-#include "kis_pattern.h"
-#include "kis_paintop_preset.h"
-
-KisResourceServerProvider *KisResourceServerProvider::m_singleton = 0;
+#include <kis_debug.h>
+#include <kis_pattern.h>
+#include <kis_paintop_preset.h>
 
 KisResourceServerProvider::KisResourceServerProvider()
 {
@@ -61,14 +60,13 @@ KisResourceServerProvider::KisResourceServerProvider()
 
 KisResourceServerProvider::~KisResourceServerProvider()
 {
+    dbgRegistry << "deleting KisResourceServerProvider";
 }
 
 KisResourceServerProvider* KisResourceServerProvider::instance()
 {
-    if (KisResourceServerProvider::m_singleton == 0) {
-        KisResourceServerProvider::m_singleton = new KisResourceServerProvider();
-    }
-    return KisResourceServerProvider::m_singleton;
+    K_GLOBAL_STATIC(KisResourceServerProvider, s_instance);
+    return s_instance;
 }
 
 

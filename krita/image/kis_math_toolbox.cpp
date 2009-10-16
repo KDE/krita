@@ -26,12 +26,15 @@
 #include <half.h>
 #endif
 
-#include "kis_basic_math_toolbox.h"
-#include "kis_iterators_pixel.h"
-//Added by qt3to4:
 #include <QVector>
 
-KisMathToolboxRegistry * KisMathToolboxRegistry::m_singleton = 0;
+#include <kglobal.h>
+
+#include <kis_debug.h>
+
+#include "kis_basic_math_toolbox.h"
+#include "kis_iterators_pixel.h"
+
 
 KisMathToolbox::KisMathToolbox(KoID id) : m_id(id)
 {
@@ -43,10 +46,8 @@ KisMathToolbox::~KisMathToolbox()
 
 KisMathToolboxRegistry * KisMathToolboxRegistry::instance()
 {
-    if (KisMathToolboxRegistry::m_singleton == 0) {
-        KisMathToolboxRegistry::m_singleton = new KisMathToolboxRegistry();
-    }
-    return KisMathToolboxRegistry::m_singleton;
+    K_GLOBAL_STATIC(KisMathToolboxRegistry, s_instance);
+    return s_instance;
 }
 
 KisMathToolboxRegistry::KisMathToolboxRegistry()
@@ -56,6 +57,7 @@ KisMathToolboxRegistry::KisMathToolboxRegistry()
 
 KisMathToolboxRegistry::~KisMathToolboxRegistry()
 {
+    dbgRegistry << "deleting KisMathToolboxRegistry";
 }
 
 template<typename T>

@@ -74,11 +74,12 @@ public:
     // Get the name of the icon to show in the toolchest
     QString pixmap(const KoID & id) const;
 
-
 public:
+
     static KisPaintOpRegistry* instance();
 
 private:
+    
     KisPaintOpRegistry();
     KisPaintOpRegistry(const KisPaintOpRegistry&);
     KisPaintOpRegistry operator=(const KisPaintOpRegistry&);
@@ -92,9 +93,6 @@ private:
      */
     KisPaintOp * paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image = 0) const;
 
-
-private:
-    static KisPaintOpRegistry *m_singleton;
 };
 
 #endif // KIS_PAINTOP_REGISTRY_H_

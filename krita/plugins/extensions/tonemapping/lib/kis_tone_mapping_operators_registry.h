@@ -25,11 +25,13 @@ class KisToneMappingOperator;
 class KisToneMappingOperatorsRegistry : public KoGenericRegistry<KisToneMappingOperator *>
 {
 public:
-    KisToneMappingOperatorsRegistry();
+
     static KisToneMappingOperatorsRegistry* instance();
+    
 private:
-    struct Private;
-    Private* const d;
+
+    KisToneMappingOperatorsRegistry();
+    ~KisToneMappingOperatorsRegistry();
 };
 
 #endif

@@ -50,7 +50,7 @@ public:
     static const KComponentData &componentData();
 
 private:
-    static KComponentData * s_instance;
+    static KComponentData* s_instance;
     static KAboutData * s_aboutData;
 };
 

@@ -18,12 +18,13 @@
  */
 
 #include "kis_filter_strategy.h"
-#include <klocale.h>
-
-#include "kis_debug.h"
 
 #include <math.h>
 
+#include <klocale.h>
+#include <kglobal.h>
+
+#include "kis_debug.h"
 
 double KisHermiteFilterStrategy::valueAt(double t) const
 {
@@ -174,32 +175,29 @@ double KisMitchellFilterStrategy::valueAt(double t) const
     return(0.0);
 }
 
-KisFilterStrategyRegistry *KisFilterStrategyRegistry::m_singleton = 0;
-
 KisFilterStrategyRegistry::KisFilterStrategyRegistry()
 {
-    Q_ASSERT(KisFilterStrategyRegistry::m_singleton == 0);
-    KisFilterStrategyRegistry::m_singleton = this;
 }
 
 KisFilterStrategyRegistry::~KisFilterStrategyRegistry()
 {
+    dbgRegistry << "deleting KisFilterStrategyRegistry";
 }
 
 KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
 {
-    if (KisFilterStrategyRegistry::m_singleton == 0) {
-        KisFilterStrategyRegistry::m_singleton = new KisFilterStrategyRegistry();
-        Q_CHECK_PTR(KisFilterStrategyRegistry::m_singleton);
-//        m_singleton->add(new KisHermiteFilterStrategy);
-        m_singleton->add(new KisBicubicFilterStrategy);
-       m_singleton->add(new KisBoxFilterStrategy);
-        m_singleton->add(new KisTriangleFilterStrategy);
-//        m_singleton->add(new KisBellFilterStrategy);
-//        m_singleton->add(new KisBSplineFilterStrategy);
-//        m_singleton->add(new KisLanczos3FilterStrategy);
-//        m_singleton->add(new KisMitchellFilterStrategy);
+    K_GLOBAL_STATIC(KisFilterStrategyRegistry, s_instance);
+    if (!s_instance.exists()) {
+        // s_instance->add(new KisHermiteFilterStrategy);
+        s_instance->add(new KisBicubicFilterStrategy);
+        s_instance->add(new KisBoxFilterStrategy);
+        s_instance->add(new KisTriangleFilterStrategy);
+        // s_instance->add(new KisBellFilterStrategy);
+        // s_instance->add(new KisBSplineFilterStrategy);
+        // s_instance->add(new KisLanczos3FilterStrategy);
+        // s_instance->add(new KisMitchellFilterStrategy);
+        
     }
-    return KisFilterStrategyRegistry::m_singleton;
+    return s_instance;
 }
 

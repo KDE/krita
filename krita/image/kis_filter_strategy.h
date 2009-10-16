@@ -157,18 +157,18 @@ public:
 
 class KRITAIMAGE_EXPORT KisFilterStrategyRegistry : public KoGenericRegistry<KisFilterStrategy *>
 {
+    
 public:
-    virtual ~KisFilterStrategyRegistry();
-
+    
     static KisFilterStrategyRegistry* instance();
 
 private:
+
     KisFilterStrategyRegistry();
+    ~KisFilterStrategyRegistry();
     KisFilterStrategyRegistry(const KisFilterStrategyRegistry&);
     KisFilterStrategyRegistry operator=(const KisFilterStrategyRegistry&);
 
-private:
-    static KisFilterStrategyRegistry *m_singleton;
 };
 
 #endif // KIS_FILTER_STRATEGY_H_

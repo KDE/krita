@@ -253,11 +253,11 @@ void KisPaintDeviceTest::testColorSpaceConversion()
 
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
 
-    foreach(const KoColorSpace * srcCs, colorSpaces) {
+    foreach(const KoColorSpace* srcCs, colorSpaces) {
         counter++;
-        foreach(const KoColorSpace * dstCs,  colorSpaces) {
-
-            KisPaintDeviceSP dev  = new KisPaintDevice(srcCs);
+        foreach(const KoColorSpace* dstCs, colorSpaces) {
+            qDebug() << "converting from " << srcCs->id() << "to" << dstCs->id();
+            KisPaintDeviceSP dev = new KisPaintDevice(srcCs);
             dev->convertFromQImage(image, "");
             dev->move(10, 10);   // Unalign with tile boundaries
             QUndoCommand* cmd = dev->convertTo(dstCs);
@@ -274,8 +274,8 @@ void KisPaintDeviceTest::testColorSpaceConversion()
                 logFailure("dest cs", srcCs, dstCs);
                 failedColorSpaces++;
             }
-
             delete cmd;
+            break;
         }
         if (counter>4) break;
     }

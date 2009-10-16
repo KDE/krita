@@ -49,10 +49,6 @@ public:
     virtual void undo();
     virtual void undoNoUpdate();
 
-public slots:
-
-    void painterlyOverlayAdded();
-
 private:
     class Private;
     Private * const m_d;

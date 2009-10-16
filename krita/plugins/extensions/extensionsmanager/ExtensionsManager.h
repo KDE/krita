@@ -20,22 +20,30 @@
 #include <QList>
 
 class QIODevice;
-
 class KUrl;
-
 class Extension;
 
+/**
+ * XXX
+ */
 class ExtensionsManager {
+
     ExtensionsManager();
-    ~ExtensionsManager();
-  public:
+    
+    virtual ~ExtensionsManager();
+    
+public:
+    
     static ExtensionsManager* instance();
+    
     QList<Extension*> installedExtension();
+    
     bool installExtension(const KUrl& _file);
+    
     bool installExtension(QIODevice* _device);
-  private:
+
+private:
     QList<Extension*> m_installedExtension;
-    static ExtensionsManager* s_instance;
 };
 
 #endif

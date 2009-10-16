@@ -81,7 +81,6 @@ private:
     KisTileManager operator=(const KisTileManager&);
 
 private:
-    static KisTileManager *m_singleton;
 
     // For use when any swap-allocating function failed; the risk of swap allocating failing
     // again is too big, and we'd clutter the logs with kWarnings otherwise

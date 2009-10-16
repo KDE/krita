@@ -328,11 +328,10 @@ public:
      *
      * The color values will be transformed from the profile of
      * this paint device to the display profile.
-
-     * @deprecated use iterators instead
+     *
      * @return true if the operation was successful.
      */
-    bool KDE_DEPRECATED pixel(qint32 x, qint32 y, QColor *c);
+    bool pixel(qint32 x, qint32 y, QColor *c);
 
     /**
      * Fill kc with the values found at x and y. This method differs
@@ -341,10 +340,9 @@ public:
      * The color values will be transformed from the profile of
      * this paint device to the display profile.
      *
-     * @deprecated use iterators instead
      * @return true if the operation was successful.
      */
-    bool KDE_DEPRECATED pixel(qint32 x, qint32 y, KoColor * kc);
+    bool pixel(qint32 x, qint32 y, KoColor * kc);
 
     /**
      * Set the specified pixel to the specified color. Note that this
@@ -358,14 +356,12 @@ public:
      * Note that this will use 8-bit values and may cause a significant
      * degradation when used on 16-bit or hdr quality images.
      *
-     * @deprecated use iterators instead
      * @return true if the operation was successful
-     *
      */
-    bool KDE_DEPRECATED setPixel(qint32 x, qint32 y, const QColor& c);
+    bool setPixel(qint32 x, qint32 y, const QColor& c);
 
     /// Convience method for the above
-    bool KDE_DEPRECATED setPixel(qint32 x, qint32 y, const KoColor& kc);
+    bool setPixel(qint32 x, qint32 y, const KoColor& kc);
 
     /**
      * @return the colorspace of the pixels in this paint device
@@ -402,23 +398,20 @@ public:
     /**
      * Add the specified rect to the parent layer's set of dirty rects
      * (if there is a parent layer)
-     * @deprecated: call setDirty on the node
      */
-    virtual void KDE_DEPRECATED setDirty(const QRect & rc);
+    virtual void setDirty(const QRect & rc);
 
     /**
      *  Add the specified region to the parent layer's dirty region
      *  (if there is a parent layer)
-     * @deprecated: call setDirty on the node
      */
-    virtual void KDE_DEPRECATED setDirty(const QRegion & region);
+    virtual void setDirty(const QRegion & region);
 
     /**
      *  Set the parent layer completely dirty, if this paint device has
      *  as parent layer.
-     * @deprecated: call setDirty on the node
      */
-    virtual void KDE_DEPRECATED setDirty();
+    virtual void setDirty();
 
 public:
 

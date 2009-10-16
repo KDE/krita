@@ -46,14 +46,12 @@ namespace TestUtil
     void testFiles(const QString& _dirname, const QStringList& exclusions)
     {
         QDir dirSources(_dirname);
-        qDebug() << "There are " << dirSources.entryInfoList().count() << " files in " << _dirname;
-
         QStringList failuresFileInfo;
         QStringList failuresDocImage;
         QStringList failuresCompare;
 
         foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
-            if (exclusions.contains(sourceFileInfo.fileName())) {
+            if (exclusions.indexOf(sourceFileInfo.fileName()) > -1) {
                 continue;
             }
             if (!sourceFileInfo.isHidden() ) {

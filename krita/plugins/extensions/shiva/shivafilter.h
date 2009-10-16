@@ -28,6 +28,8 @@ class ShivaFilter : public KisFilter {
   public:
     ShivaFilter( OpenShiva::Source* source );
     virtual ~ShivaFilter();
+
+    using KisFilter::process;
     
     virtual void process(KisConstProcessingInformation src,
                          KisProcessingInformation dst,

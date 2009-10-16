@@ -42,12 +42,12 @@ KisXMPIO::~KisXMPIO()
 
 inline std::string exiv2Prefix( const KisMetaData::Schema* _schema )
 {
-    std::string prefix = Exiv2::XmpProperties::prefix(_schema->uri().ascii());
+    std::string prefix = Exiv2::XmpProperties::prefix(_schema->uri().toAscii().data());
     if( prefix.empty())
     {
         dbgFile << "Unknown namespace " << ppVar(_schema->uri()) << ppVar(_schema->prefix());
-        prefix = _schema->prefix().ascii();
-        Exiv2::XmpProperties::registerNs(_schema->uri().ascii(), prefix );
+        prefix = _schema->prefix().toAscii().data();
+        Exiv2::XmpProperties::registerNs(_schema->uri().toAscii().data(), prefix );
     }
     return prefix;
 }
@@ -88,12 +88,12 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
             {
                 Q_ASSERT( it.value().type() != KisMetaData::Value::Structure ); // Can't nest structure
                 QString key = QString("%1/%2:%3").arg( entry.name() ).arg( structPrefix.c_str() ).arg( it.key() );
-                Exiv2::XmpKey ekey(prefix, key.ascii());
+                Exiv2::XmpKey ekey(prefix, key.toAscii().data());
                 dbgFile << ppVar(key) << ppVar(ekey.key().c_str());
                 xmpData_.add( ekey, kmdValueToExivXmpValue( it.value() ));
             }
         } else {
-            Exiv2::XmpKey key(prefix, entry.name().ascii());
+            Exiv2::XmpKey key(prefix, entry.name().toAscii().data());
             dbgFile << ppVar(key.key().c_str());
             xmpData_.add( key, kmdValueToExivXmpValue(value));
         }

@@ -23,6 +23,7 @@ class QVariant;
 
 #include <kis_meta_data_value.h>
 #include <exiv2/value.hpp>
+#include "krita_export.h"
 
 /// Convert an exiv value to a KisMetaData value
 KisMetaData::Value exivValueToKMDValue( const Exiv2::Value::AutoPtr value, bool forceSeq, KisMetaData::Value::ValueType arrayType = KisMetaData::Value::UnorderedArray );
@@ -39,4 +40,9 @@ Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value, Exiv2::TypeI
  */
 Exiv2::Value* kmdValueToExivXmpValue( const KisMetaData::Value& value );
 
+struct KRITAUI_EXPORT KisExiv2 {
+
+    static void initialize();
+
+};
 #endif

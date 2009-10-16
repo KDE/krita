@@ -29,7 +29,7 @@ struct KoColorSpace::Private {
     QString id;
     quint32 idNumber;
     QString name;
-    QHash<QString, KoCompositeOp *> compositeOps;
+    QHash<QString, KoCompositeOp*> compositeOps;
     QList<KoChannelInfo *> channels;
     KoMixColorsOp* mixColorsOp;
     KoConvolutionOp* convolutionOp;

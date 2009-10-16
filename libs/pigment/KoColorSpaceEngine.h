@@ -52,9 +52,6 @@ class PIGMENTCMS_EXPORT KoColorSpaceEngineRegistry : public KoGenericRegistry< K
         KoColorSpaceEngineRegistry();
         ~KoColorSpaceEngineRegistry();
         static KoColorSpaceEngineRegistry* instance();
-    private:
-        struct Private;
-        Private* const d;
 };
 
 #endif

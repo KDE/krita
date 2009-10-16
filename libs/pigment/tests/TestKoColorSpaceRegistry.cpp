@@ -9,6 +9,12 @@
 #include "KoRgbU16ColorSpace.h"
 #include "KoLabColorSpace.h"
 
+void TestKoColorSpaceRegistry::testConstruction()
+{
+    KoColorSpaceRegistry* instance = KoColorSpaceRegistry::instance();
+    Q_ASSERT(instance);
+}
+
 void TestKoColorSpaceRegistry::testRgbU8()
 {
     QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,

@@ -55,10 +55,7 @@ KoColorConversionSystem::KoColorConversionSystem() : d(new Private)
 KoColorConversionSystem::~KoColorConversionSystem()
 {
     qDeleteAll(d->graph);
-    foreach(Vertex* vertex, d->vertexes)
-    {
-        delete vertex;
-    }
+    qDeleteAll(d->vertexes);
     delete d;
 }
 

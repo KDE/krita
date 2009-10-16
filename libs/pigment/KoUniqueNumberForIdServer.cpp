@@ -24,43 +24,42 @@
 #include <iso646.h>
 #endif
 
+#include <kglobal.h>
 
 struct KoUniqueNumberForIdServer::Private
 {
-  Private() : currentNumber(0) { }
-  QHash<QString, quint32 > id2Number;
-  quint32 currentNumber;
-  static KoUniqueNumberForIdServer* s_instance;
+    Private()
+        : currentNumber(0)
+    {}
+
+    QHash<QString, quint32 > id2Number;
+    quint32 currentNumber;
 };
 
-KoUniqueNumberForIdServer* KoUniqueNumberForIdServer::Private::s_instance = 0;
-
-KoUniqueNumberForIdServer::KoUniqueNumberForIdServer() : d(new Private)
+KoUniqueNumberForIdServer::KoUniqueNumberForIdServer()
+    : d(new Private)
 {
 }
 
 KoUniqueNumberForIdServer::~KoUniqueNumberForIdServer()
 {
-  delete d;
+    delete d;
 }
 
 KoUniqueNumberForIdServer* KoUniqueNumberForIdServer::instance()
 {
-  if( not KoUniqueNumberForIdServer::Private::s_instance )
-  {
-    KoUniqueNumberForIdServer::Private::s_instance = new KoUniqueNumberForIdServer;
-  }
-  return KoUniqueNumberForIdServer::Private::s_instance;
+    K_GLOBAL_STATIC(KoUniqueNumberForIdServer, s_instance);
+    return s_instance;
 }
 
 quint32 KoUniqueNumberForIdServer::numberForId( const QString& _id )
 {
-  QHash<QString, quint32>::iterator it = d->id2Number.find( _id );
-  if( it != d->id2Number.end() )
-  {
-    return it.value();
-  }
-  quint32 number = ++d->currentNumber;
-  d->id2Number[ _id ] = number;
-  return number;
+    QHash<QString, quint32>::iterator it = d->id2Number.find( _id );
+    if( it != d->id2Number.end() )
+    {
+        return it.value();
+    }
+    quint32 number = ++d->currentNumber;
+    d->id2Number[ _id ] = number;
+    return number;
 }

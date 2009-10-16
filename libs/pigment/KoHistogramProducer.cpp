@@ -18,6 +18,8 @@
 
 #include <QList>
 
+#include <kglobal.h>
+
 #include <KoID.h>
 
 #include "KoHistogramProducer.h"
@@ -25,22 +27,16 @@
 
 #include "KoColorSpace.h"
 
-KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::m_singleton = 0;
-
 KoHistogramProducerFactoryRegistry::KoHistogramProducerFactoryRegistry() {
-    Q_ASSERT(KoHistogramProducerFactoryRegistry::m_singleton == 0);
 }
 
 KoHistogramProducerFactoryRegistry::~KoHistogramProducerFactoryRegistry() {
 }
 
 KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::instance() {
-    if(KoHistogramProducerFactoryRegistry::m_singleton == 0) {
-        KoHistogramProducerFactoryRegistry::m_singleton
-                = new KoHistogramProducerFactoryRegistry();
-        m_singleton->add( new KoGenericLabHistogramProducerFactory() );
-    }
-    return KoHistogramProducerFactoryRegistry::m_singleton;
+    K_GLOBAL_STATIC(KoHistogramProducerFactoryRegistry, s_instance);
+    return s_instance;
+
 }
 
 QList<KoID> KoHistogramProducerFactoryRegistry::listKeysCompatibleWith(

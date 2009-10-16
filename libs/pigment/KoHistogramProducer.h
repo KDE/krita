@@ -123,8 +123,6 @@ private:
    KoHistogramProducerFactoryRegistry();
    KoHistogramProducerFactoryRegistry(const KoHistogramProducerFactoryRegistry&);
    KoHistogramProducerFactoryRegistry operator=(const KoHistogramProducerFactoryRegistry&);
-
-   static KoHistogramProducerFactoryRegistry* m_singleton;
 };
 
 #endif // _KO_HISTOGRAM_PRODUCER

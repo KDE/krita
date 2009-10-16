@@ -65,7 +65,6 @@ struct KoColorConversionCache::Private {
 
 KoColorConversionCache::KoColorConversionCache() : d(new Private)
 {
-    
 }
 
 KoColorConversionCache::~KoColorConversionCache()

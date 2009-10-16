@@ -66,9 +66,11 @@ KoColorSpace::~KoColorSpace()
     {
         delete channel;
     }
-    KoColorConversionCache* cache = KoColorSpaceRegistry::instance()->colorConversionCache();
-    if (cache) {
-        cache->colorSpaceIsDestroyed(this);
+    if (d->ownedByRegistry) {
+        KoColorConversionCache* cache = KoColorSpaceRegistry::instance()->colorConversionCache();
+        if (cache) {
+            cache->colorSpaceIsDestroyed(this);
+        }
     }
     delete d->mixColorsOp;
     delete d->convolutionOp;

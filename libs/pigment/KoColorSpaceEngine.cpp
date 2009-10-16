@@ -18,7 +18,7 @@
  */
 
 #include <KoColorSpaceEngine.h>
-
+#include <kglobal.h>
 #include <QString>
 
 struct KoColorSpaceEngine::Private {
@@ -47,15 +47,8 @@ const QString& KoColorSpaceEngine::name() const
     return d->name;
 }
 
-struct KoColorSpaceEngineRegistry::Private {
-    static KoColorSpaceEngineRegistry* s_instance;
-};
-
-KoColorSpaceEngineRegistry* KoColorSpaceEngineRegistry::Private::s_instance = 0;
-
-KoColorSpaceEngineRegistry::KoColorSpaceEngineRegistry() : d(new Private)
+KoColorSpaceEngineRegistry::KoColorSpaceEngineRegistry()
 {
-    
 }
 
 KoColorSpaceEngineRegistry::~KoColorSpaceEngineRegistry()
@@ -64,9 +57,6 @@ KoColorSpaceEngineRegistry::~KoColorSpaceEngineRegistry()
 
 KoColorSpaceEngineRegistry* KoColorSpaceEngineRegistry::instance()
 {
-    if( not Private::s_instance )
-    {
-        Private::s_instance = new KoColorSpaceEngineRegistry;
-    }
-    return Private::s_instance;
+    K_GLOBAL_STATIC(KoColorSpaceEngineRegistry, s_instance);
+    return s_instance;
 }

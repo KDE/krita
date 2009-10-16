@@ -83,7 +83,8 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
     for (QList<KisImageAlignment::ImageInfo>::iterator it = images.begin(); it != images.end(); ++it) {
         dbgPlugins << "Detection on rectangle : " << it->smallRect;
         KisPaintDeviceSP graydevice = new KisPaintDevice(*(it->smallDevice));
-        graydevice->convertTo(graycs);
+        QUndoCommand* cmd = graydevice->convertTo(graycs);
+        delete cmd;
         it->points = KisInterestPointsDetector::interestPointDetector()->computeInterestPoints(graydevice, it->smallRect);
         width = it->smallRect.width();
         height = it->smallRect.height();

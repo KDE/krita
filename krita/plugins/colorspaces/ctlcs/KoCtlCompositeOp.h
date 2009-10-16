@@ -38,6 +38,7 @@ namespace OpenCTL {
 class KoCTLCompositeOp : public KoCompositeOp {
   public:
     KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace* cs, const GTLCore::PixelDescription& _pd);
+    virtual ~KoCTLCompositeOp();
   public:
     virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
                const quint8 *srcRowStart, qint32 srcRowStride,

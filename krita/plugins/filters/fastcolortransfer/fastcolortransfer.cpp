@@ -22,6 +22,8 @@
 #include <kgenericfactory.h>
 #include <kurlrequester.h>
 
+#include <QUndoCommand>
+
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -130,10 +132,12 @@ void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
     const KoColorSpace* oldCS = src->colorSpace();
     KisPaintDeviceSP srcLAB = new KisPaintDevice(*src.data());
     dbgPlugins << "srcLab : " << srcLAB->extent();
-    srcLAB->convertTo(labCS);
+    QUndoCommand* cmd = srcLAB->convertTo(labCS);
+    delete cmd;
     dbgPlugins << "convert ref to lab";
     dbgPlugins << "ref : " << srcLAB->extent();
-    ref->convertTo(labCS);
+    cmd = ref->convertTo(labCS);
+    delete cmd;
 
     if (progressUpdater) {
         progressUpdater->setRange(0, 2*size.width() * size.height() + importedImage->width() * importedImage->height());

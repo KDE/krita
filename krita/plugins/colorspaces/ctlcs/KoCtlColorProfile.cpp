@@ -93,7 +93,7 @@ bool KoCtlColorProfile::valid() const
 {
     dbgPigment << d->colorModelID.isNull() << " " << d->colorDepthID.isNull();
     return ( d->module and d->module->isCompiled()
-            and not d->colorModelID.isNull() and not d->colorDepthID.isNull());
+             and not d->colorModelID.isNull() and not d->colorDepthID.isNull());
 }
 
 bool KoCtlColorProfile::isSuitableForOutput() const
@@ -121,10 +121,10 @@ OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(const KoColorS
     {
         if(info.sourceColorModelID == srcModelId
            and (info.sourceColorDepthID == srcDepthId or (info.sourceColorDepthID == "F"
-                and ( srcDepthId == Float16BitsColorDepthID.id() or srcDepthId == Float32BitsColorDepthID.id() ) ) )
+                                                          and ( srcDepthId == Float16BitsColorDepthID.id() or srcDepthId == Float32BitsColorDepthID.id() ) ) )
            and info.destinationColorModelID == dstModelId
            and (info.destinationColorDepthID == dstDepthId or (info.destinationColorDepthID == "F"
-                and ( dstDepthId == Float16BitsColorDepthID.id() or dstDepthId == Float32BitsColorDepthID.id() ) ) ) )
+                                                               and ( dstDepthId == Float16BitsColorDepthID.id() or dstDepthId == Float32BitsColorDepthID.id() ) ) ) )
         {
             GTLCore::PixelDescription srcPixelDescription = createPixelDescription( _srcCs );
             GTLCore::PixelDescription dstPixelDescription = createPixelDescription( _dstCs );
@@ -142,43 +142,43 @@ QList<KoColorConversionTransformationFactory*> KoCtlColorProfile::createColorCon
         if( info.sourceColorDepthID == "F" and info.destinationColorDepthID == "F" )
         {
             factories.push_back(
-                new KoCtlColorConversionTransformationFactory(
-                    info.sourceColorModelID, Float16BitsColorDepthID.id(), info.sourceProfile,
-                    info.destinationColorModelID, Float16BitsColorDepthID.id(), info.destinationProfile ) );
+                    new KoCtlColorConversionTransformationFactory(
+                            info.sourceColorModelID, Float16BitsColorDepthID.id(), info.sourceProfile,
+                            info.destinationColorModelID, Float16BitsColorDepthID.id(), info.destinationProfile ) );
             factories.push_back(
-                new KoCtlColorConversionTransformationFactory(
-                    info.sourceColorModelID, Float32BitsColorDepthID.id(), info.sourceProfile,
-                    info.destinationColorModelID, Float32BitsColorDepthID.id(), info.destinationProfile ) );
+                    new KoCtlColorConversionTransformationFactory(
+                            info.sourceColorModelID, Float32BitsColorDepthID.id(), info.sourceProfile,
+                            info.destinationColorModelID, Float32BitsColorDepthID.id(), info.destinationProfile ) );
         } else if( info.sourceColorDepthID == "F" )
         {
             factories.push_back(
-                new KoCtlColorConversionTransformationFactory(
-                    info.sourceColorModelID, Float16BitsColorDepthID.id(),
-                    info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
-                    info.destinationProfile ) );
+                    new KoCtlColorConversionTransformationFactory(
+                            info.sourceColorModelID, Float16BitsColorDepthID.id(),
+                            info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
+                            info.destinationProfile ) );
             factories.push_back(
-                new KoCtlColorConversionTransformationFactory(
-                    info.sourceColorModelID, Float32BitsColorDepthID.id(),
-                    info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
-                    info.destinationProfile ) );
+                    new KoCtlColorConversionTransformationFactory(
+                            info.sourceColorModelID, Float32BitsColorDepthID.id(),
+                            info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
+                            info.destinationProfile ) );
         } else if( info.destinationColorDepthID == "F")
         {
             factories.push_back(
-                new KoCtlColorConversionTransformationFactory(
-                    info.sourceColorModelID, info.sourceColorDepthID,
-                    info.sourceProfile, info.destinationColorModelID, Float16BitsColorDepthID.id(),
-                    info.destinationProfile ) );
+                    new KoCtlColorConversionTransformationFactory(
+                            info.sourceColorModelID, info.sourceColorDepthID,
+                            info.sourceProfile, info.destinationColorModelID, Float16BitsColorDepthID.id(),
+                            info.destinationProfile ) );
             factories.push_back(
-                new KoCtlColorConversionTransformationFactory(
-                    info.sourceColorModelID, info.sourceColorDepthID,
-                    info.sourceProfile, info.destinationColorModelID, Float32BitsColorDepthID.id(),
-                    info.destinationProfile ) );
+                    new KoCtlColorConversionTransformationFactory(
+                            info.sourceColorModelID, info.sourceColorDepthID,
+                            info.sourceProfile, info.destinationColorModelID, Float32BitsColorDepthID.id(),
+                            info.destinationProfile ) );
         } else {
             factories.push_back(
-                new KoCtlColorConversionTransformationFactory(
-                    info.sourceColorModelID, info.sourceColorDepthID,
-                    info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
-                    info.destinationProfile ) );
+                    new KoCtlColorConversionTransformationFactory(
+                            info.sourceColorModelID, info.sourceColorDepthID,
+                            info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
+                            info.destinationProfile ) );
         }
     }
     return factories;
@@ -330,31 +330,31 @@ GTLCore::PixelDescription KoCtlColorProfile::createPixelDescription(const KoColo
     {
         switch( info->channelValueType() )
         {
-            case KoChannelInfo::UINT8:
-                types.push_back( GTLCore::Type::UnsignedInteger8 );
-                break;
-            case KoChannelInfo::UINT16:
-                types.push_back( GTLCore::Type::UnsignedInteger16 );
-                break;
-            case KoChannelInfo::UINT32:
-                types.push_back( GTLCore::Type::UnsignedInteger32 );
-                break;
-            case KoChannelInfo::FLOAT16:
-                types.push_back( GTLCore::Type::Half );
-                break;
-            case KoChannelInfo::FLOAT32:
-                types.push_back( GTLCore::Type::Float );
-                break;
-            case KoChannelInfo::OTHER:
-            case KoChannelInfo::FLOAT64:
-                Q_ASSERT(false);
-                break;
-            case KoChannelInfo::INT8:
-                types.push_back( GTLCore::Type::Integer8 );
-                break;
-            case KoChannelInfo::INT16:
-                types.push_back( GTLCore::Type::Integer16 );
-                break;
+        case KoChannelInfo::UINT8:
+            types.push_back( GTLCore::Type::UnsignedInteger8 );
+            break;
+        case KoChannelInfo::UINT16:
+            types.push_back( GTLCore::Type::UnsignedInteger16 );
+            break;
+        case KoChannelInfo::UINT32:
+            types.push_back( GTLCore::Type::UnsignedInteger32 );
+            break;
+        case KoChannelInfo::FLOAT16:
+            types.push_back( GTLCore::Type::Half );
+            break;
+        case KoChannelInfo::FLOAT32:
+            types.push_back( GTLCore::Type::Float );
+            break;
+        case KoChannelInfo::OTHER:
+        case KoChannelInfo::FLOAT64:
+            Q_ASSERT(false);
+            break;
+        case KoChannelInfo::INT8:
+            types.push_back( GTLCore::Type::Integer8 );
+            break;
+        case KoChannelInfo::INT16:
+            types.push_back( GTLCore::Type::Integer16 );
+            break;
         }
     }
     Q_ASSERT( types.size() == cs->channelCount() );

@@ -16,12 +16,14 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include <QUndoCommand>
 
 #include "kis_reinhard05_operator.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>
 
+#include <kis_types.h>
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 
@@ -78,7 +80,8 @@ void KisReinhard05Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfig
     const KoColorSpace* XYZACs = KoColorSpaceRegistry::instance()->colorSpace(KoColorSpaceRegistry::instance()->colorSpaceId(XYZAColorModelID, Float32BitsColorDepthID), "");
     Q_ASSERT(XYZACs);
     KisPaintDeviceSP deviceXYZ = new KisPaintDevice(*device);
-    deviceXYZ->convertTo(XYZACs);
+    QUndoCommand* cmd = deviceXYZ->convertTo(XYZACs);
+    delete cmd; // XXX: make undo possible?
     dbgKrita << "Tone map using reinhard05";
     pfs::Array2DImpl Y(r, KoXyzTraits<float>::y_pos, device);
     pfs::Array2DImpl R(r, KoRgbTraits<float>::red_pos, device);

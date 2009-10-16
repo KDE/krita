@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
@@ -115,22 +116,22 @@ const QString& KoCtlColorSpaceInfo::fileName() const
 }
 
 #define CHECK_AVAILABILITY(attribute) \
-    if(!e.hasAttribute(attribute)) { \
-        dbgPlugins << "Missing: " << attribute; \
-        return false; \
-    }
+if(!e.hasAttribute(attribute)) { \
+                                 dbgPlugins << "Missing: " << attribute; \
+                                 return false; \
+                             }
 
 #define FILL_MEMBER(attributeName, member) \
-    CHECK_AVAILABILITY(attributeName) \
-    d->member = e.attribute(attributeName);
+CHECK_AVAILABILITY(attributeName) \
+        d->member = e.attribute(attributeName);
 
 #define FILL_CI_MEMBER(attributeName, member) \
-    CHECK_AVAILABILITY(attributeName) \
-    info->d->member = e.attribute(attributeName);
+CHECK_AVAILABILITY(attributeName) \
+        info->d->member = e.attribute(attributeName);
 
 #define FILL_CI_MEMBER_I18N(attributeName, member) \
-    CHECK_AVAILABILITY(attributeName) \
-    info->d->member = i18n(e.attribute(attributeName).toUtf8().data());
+CHECK_AVAILABILITY(attributeName) \
+        info->d->member = i18n(e.attribute(attributeName).toUtf8().data());
 
 bool KoCtlColorSpaceInfo::load()
 {
@@ -334,36 +335,36 @@ quint32 KoCtlColorSpaceInfo::pixelSize() const
 
 const GTLCore::PixelDescription& KoCtlColorSpaceInfo::pixelDescription() const
 {
-  return *d->pixelDescription;
+    return *d->pixelDescription;
 }
 
 int KoCtlColorSpaceInfo::alphaPos() const
 {
-  return d->alphaPos;
+    return d->alphaPos;
 }
 
 QList<KoCtlAccumulator*> KoCtlColorSpaceInfo::accumulators() const
 {
-  QList<KoCtlAccumulator*> accs;
-  foreach( const KoCtlColorSpaceInfo::ChannelInfo* info, d->channels)
-  {
-    switch(info->valueType())
+    QList<KoCtlAccumulator*> accs;
+    foreach( const KoCtlColorSpaceInfo::ChannelInfo* info, d->channels)
     {
-      case KoChannelInfo::UINT8:
-        accs.push_back(new KoCtlAccumulatorImpl<quint8>(info->position()));
-        break;
-      case KoChannelInfo::UINT16:
-        accs.push_back(new KoCtlAccumulatorImpl<quint16>(info->position()));
-        break;
-      case KoChannelInfo::FLOAT16:
-        accs.push_back(new KoCtlAccumulatorImpl<half>(info->position()));
-        break;
-      case KoChannelInfo::FLOAT32:
-        accs.push_back(new KoCtlAccumulatorImpl<float>(info->position()));
-        break;
-      default:
-        qFatal("unsupported");
+        switch(info->valueType())
+        {
+        case KoChannelInfo::UINT8:
+            accs.push_back(new KoCtlAccumulatorImpl<quint8>(info->position()));
+            break;
+        case KoChannelInfo::UINT16:
+            accs.push_back(new KoCtlAccumulatorImpl<quint16>(info->position()));
+            break;
+        case KoChannelInfo::FLOAT16:
+            accs.push_back(new KoCtlAccumulatorImpl<half>(info->position()));
+            break;
+        case KoChannelInfo::FLOAT32:
+            accs.push_back(new KoCtlAccumulatorImpl<float>(info->position()));
+            break;
+        default:
+            qFatal("unsupported");
+        }
     }
-  }
-  return accs;
+    return accs;
 }

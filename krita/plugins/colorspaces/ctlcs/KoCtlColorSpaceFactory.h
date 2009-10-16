@@ -39,6 +39,7 @@ class KoCtlColorSpaceFactory : public KoColorSpaceFactory {
         virtual int referenceDepth() const;
         virtual QString defaultProfile() const;
         virtual bool profileIsCompatible(const KoColorProfile* profile) const;
+        // XXX: are these factories ever deleted? memcheck says not.
         QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
     private:
         KoCtlColorSpaceInfo* m_info;

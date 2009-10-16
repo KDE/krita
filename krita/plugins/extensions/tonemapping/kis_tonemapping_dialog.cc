@@ -83,10 +83,17 @@ void KisToneMappingDialog::apply()
     KisPropertiesConfiguration* config = (d->currentConfigurationWidget) ? d->currentConfigurationWidget->configuration() : new KisPropertiesConfiguration;
     const KoColorSpace* colorSpace = d->currentOperator->colorSpace();
 
-
+    if (d->layer->image()->undo()) {
+        d->layer->image()->undoAdapter()->beginMacro(d->currentOperator->name());
+    }
     if (!(*d->layer->paintDevice()->colorSpace() == *colorSpace)) {
-        d->layer->paintDevice()->convertTo(colorSpace);
-        d->layer->setChannelFlags(QBitArray());
+        QUndoCommand* cmd = d->layer->paintDevice()->convertTo(colorSpace);
+        if (d->layer->image()->undo()) {
+            d->layer->image()->undoAdapter()->addCommand(cmd);
+        }
+        else {
+            delete cmd;
+        }
     }
     KisTransaction * cmd = 0;
 
@@ -95,7 +102,11 @@ void KisToneMappingDialog::apply()
     if (cmd) d->layer->image()->undoAdapter()->addCommand(cmd);
 
     d->currentOperator->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config);
-
+    
+    if (d->layer->image()->undo()) {
+        d->layer->image()->undoAdapter()->endMacro();
+    }
+    
     d->layer->setDirty();
     d->layer->image()->unlock();
     delete config;

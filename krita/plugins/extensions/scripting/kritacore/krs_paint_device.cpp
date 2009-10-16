@@ -59,7 +59,8 @@ bool PaintDevice::convertToColorSpace(const QString& colorspacename)
         warnScript << QString("ColorSpace %1 is not available, please check your installation.").arg(colorspacename) << endl;
         return false;
     }
-    paintDevice()->convertTo(dstCS);
+    QUndoCommand* cmd = paintDevice()->convertTo(dstCS);
+    delete cmd;
     return true;
 }
 

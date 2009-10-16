@@ -64,8 +64,13 @@ public:
     virtual void undoLastCommand();
     virtual void setUndo(bool undo);
     virtual bool undo() const;
+
+    /// XXX: is this actually threadsafe?
     virtual void beginMacro(const QString& macroName);
+
+    /// XXX: is this actually threadsafe?
     virtual void endMacro();
+
     void emitSelectionChanged();
 
 signals:

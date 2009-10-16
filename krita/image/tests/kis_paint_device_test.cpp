@@ -246,18 +246,21 @@ void KisPaintDeviceTest::testColorSpaceConversion()
     QTime t;
     t.start();
 
+    int counter;
+
     QList<const KoColorSpace*> colorSpaces = TestUtil::allColorSpaces();
     int failedColorSpaces = 0;
 
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
 
     foreach(const KoColorSpace * srcCs, colorSpaces) {
+        counter++;
         foreach(const KoColorSpace * dstCs,  colorSpaces) {
 
             KisPaintDeviceSP dev  = new KisPaintDevice(srcCs);
             dev->convertFromQImage(image, "");
             dev->move(10, 10);   // Unalign with tile boundaries
-            dev->convertTo(dstCs);
+            QUndoCommand* cmd = dev->convertTo(dstCs);
 
             if (dev->exactBounds() != QRect(10, 10, image.width(), image.height())) {
                 logFailure("bounds", srcCs, dstCs);
@@ -271,7 +274,10 @@ void KisPaintDeviceTest::testColorSpaceConversion()
                 logFailure("dest cs", srcCs, dstCs);
                 failedColorSpaces++;
             }
+
+            delete cmd;
         }
+        if (counter>4) break;
     }
     qDebug() << colorSpaces.size() * colorSpaces.size()
     << "conversions"
@@ -343,45 +349,6 @@ void KisPaintDeviceTest::testPixel()
 
 }
 
-
-void KisPaintDeviceTest::testDirty()
-{
-#if 0
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageWSP image = new KisImage(0, 512, 512, cs, "merge test");
-    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
-    KisPaintDeviceSP dev = layer->paintDevice();
-    QVERIFY(dev != 0);
-
-    quint8* pixel = cs->allocPixelBuffer(1);
-    cs->fromQColor(Qt::white, pixel);
-    dev->fill(0, 0, 512, 512, pixel);
-
-    dev->setDirty(QRect(10, 10, 10, 10));
-    QVERIFY(layer->isDirty());
-    QVERIFY(layer->isDirty(QRect(12, 12, 20, 20)));
-    QVERIFY(!layer->isDirty(QRect(50, 50, 100, 100)));
-
-    QRegion r;
-    r += QRect(30, 10, 10, 10);
-    r += QRect(40, 10, 10, 10);
-    dev->setDirty(r);
-
-    QVERIFY(layer->isDirty());
-    QVERIFY(layer->isDirty(QRect(12, 12, 20, 20)));
-    QVERIFY(layer->isDirty(QRect(32, 12, 20, 20)));
-    QVERIFY(layer->isDirty(QRect(32, 12, 20, 20)));
-    QVERIFY(!layer->isDirty(QRect(100, 100, 100, 100)));
-    layer->setClean();
-
-    dev->setDirty();
-    QVERIFY(layer->isDirty());
-    QVERIFY(!layer->isDirty(QRect(-10, -10, 5, 5)));
-    QVERIFY(layer->isDirty(QRect(0, 0, 512, 512)));
-#endif
-}
-
-
 void KisPaintDeviceTest::testPlanarReadWrite()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
@@ -390,6 +357,7 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     quint8* pixel = cs->allocPixelBuffer(1);
     cs->fromQColor(QColor(255, 200, 155, 100), pixel);
     dev->fill(0, 0, 5000, 5000, pixel);
+    delete[] pixel;
 
     QColor c1;
     dev->pixel(5, 5, &c1);
@@ -414,6 +382,9 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     dev->writePlanarBytes(swappedPlanes, 0, 0, 100, 100);
 
     dev->convertToQImage(0, 0, 0, 5000, 5000).save("planar.png");
+
+    qDeleteAll(planes);
+    swappedPlanes.clear();
 
     dev->pixel(5, 5, &c1);
 

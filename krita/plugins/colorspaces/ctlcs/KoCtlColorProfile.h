@@ -59,15 +59,20 @@ class PIGMENTCMS_EXPORT KoCtlColorProfile : public KoColorProfile {
          */
         QString colorDepth() const;
     public:
+
         /**
          * This function create a color conversion program between two color spaces.
          */
         OpenCTL::Program* createColorConversionProgram(const KoColorSpace* csSrc, const KoColorSpace* csDst) const;
+
         /**
          * This function will create the list of color conversion transformation factories that
          * are available using this profile.
+         *
+         * XXX: who will deleted these factories? memcheck says they are leaked.
          */
         QList<KoColorConversionTransformationFactory*> createColorConversionTransformationFactories() const;
+
         virtual QVariant property( const QString& _name) const;
         virtual void setProperty( const QString& _name, const QVariant& _variant);
     private:

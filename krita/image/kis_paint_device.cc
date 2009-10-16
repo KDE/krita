@@ -60,7 +60,7 @@ public:
     KisNodeWSP parent;
     qint32 x;
     qint32 y;
-    KoColorSpace * colorSpace;
+    KoColorSpace* colorSpace;
     qint32 pixelSize;
     qint32 nChannels;
     KisPainterlyOverlaySP painterlyOverlay;

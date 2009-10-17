@@ -104,7 +104,7 @@ void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
     // The chunks do not run concurrently (there is only one KisImageUpdater and only
     // one event loop), but it is still useful, since intermediate results are passed
     // back to the main thread where the gui can be updated.
-    QRect interestingRect;
+    QRect interestingRect = rc.intersected(m_d->image->bounds());
 
     if (m_d->useRegionOfInterest) {
         interestingRect = rc.intersected(m_d->roi);

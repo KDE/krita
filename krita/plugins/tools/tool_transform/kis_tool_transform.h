@@ -139,7 +139,7 @@ public:
             : KoToolFactory(parent, "KisToolTransform", i18n("Transform")) {
         setToolTip(i18n("Transform a layer or a selection"));
         setToolType(TOOL_TYPE_TRANSFORM);
-        setIcon("transform-rotate");
+        setIcon("krita_tool_transform");
         setPriority(11);
 
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

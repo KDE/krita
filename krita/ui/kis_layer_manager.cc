@@ -918,8 +918,8 @@ void KisLayerManager::saveLayerAsImage()
     gc.bitBlt(QPoint(0, 0), l->projection(), l->projection()->exactBounds());
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
-    img->resize(paintLayer->exactBounds());
-    img->refreshGraph();
+    dst->resize(paintLayer->exactBounds());
+    dst->refreshGraph();
 
     d.setOutputMimeType(mimefilter.toLatin1());
     d.exportDocument(url);

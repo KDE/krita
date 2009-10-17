@@ -56,6 +56,8 @@ KisClipboard::KisClipboard()
     // Make sure we are notified when clipboard changes
     connect(QApplication::clipboard(), SIGNAL(dataChanged()),
             this, SLOT(clipboardDataChanged()));
+
+
 }
 
 KisClipboard::~KisClipboard()
@@ -66,6 +68,7 @@ KisClipboard::~KisClipboard()
 KisClipboard* KisClipboard::instance()
 {
     K_GLOBAL_STATIC(KisClipboard, s_instance);
+    qAddPostRoutine(s_instance.destroy); // make sure we get destroyed first.
     return s_instance;
 }
 

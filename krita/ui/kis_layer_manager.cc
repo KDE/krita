@@ -913,7 +913,7 @@ void KisLayerManager::saveLayerAsImage()
     KisImageWSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name());
     dst->setResolution(img->xRes(), img->yRes());
     d.setCurrentImage(dst);
-    KisPaintLayer* paintLayer = new KisPaintLayer(img, "projection", l->opacity());
+    KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", l->opacity());
     KisPainter gc(paintLayer->paintDevice());
     gc.bitBlt(QPoint(0, 0), l->projection(), l->projection()->exactBounds());
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));

@@ -59,6 +59,7 @@
 #include <kis_shear_visitor.h>
 #include <kis_transform_worker.h>
 #include <kis_undo_adapter.h>
+#include <kis_painter.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -898,7 +899,6 @@ void KisLayerManager::saveLayerAsImage()
     if (url.isEmpty())
         return;
 
-
     KisImageWSP img = m_view->image();
     if (!img) return;
 
@@ -913,8 +913,13 @@ void KisLayerManager::saveLayerAsImage()
     KisImageWSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name());
     dst->setResolution(img->xRes(), img->yRes());
     d.setCurrentImage(dst);
-    dst->addNode(l->clone(), dst->rootLayer(), KisLayerSP(0));
-    dst->resize(l->exactBounds(), true);
+    KisPaintLayer* paintLayer = new KisPaintLayer(img, "projection", l->opacity());
+    KisPainter gc(paintLayer->paintDevice());
+    gc.bitBlt(QPoint(0, 0), l->projection(), l->projection()->exactBounds());
+    dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
+
+    img->resize(paintLayer->exactBounds());
+    img->refreshGraph();
 
     d.setOutputMimeType(mimefilter.toLatin1());
     d.exportDocument(url);

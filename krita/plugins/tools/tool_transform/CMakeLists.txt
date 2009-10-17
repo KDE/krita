@@ -20,6 +20,6 @@ install(TARGETS kritatooltransform  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  rotate_cursor.xpm  
-                krita_tool_color_fill.png
+                krita_tool_transform.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 install( FILES  kritatooltransform.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

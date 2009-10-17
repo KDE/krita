@@ -1110,7 +1110,7 @@ vKisAnnotationSP_it KisImage::beginAnnotations()
         // XXX productName(), or just "ICC Profile"?
         if (profile->valid()) {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
-            if (!iccprofile->rawData().isEmpty()) {
+            if (iccprofile && !iccprofile->rawData().isEmpty()) {
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
             }
         }

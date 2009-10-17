@@ -19,6 +19,7 @@
  */
 
 #include "KoTextEditor.h"
+#include "KoTextEditor_p.h"
 
 #include "KoBookmark.h"
 #include "KoInlineTextObjectManager.h"
@@ -81,42 +82,6 @@ static bool isRightToLeft(const QString &text)
 }
 
 /*Private*/
-
-class KoTextEditor::Private
-{
-public:
-    enum State {
-        NoOp,
-        KeyPress,
-        Delete,
-        Format,
-        Custom
-    };
-
-    explicit Private(KoTextEditor *qq, QTextDocument *document);
-
-    ~Private() {}
-
-    void documentCommandAdded();
-    void updateState(State newState, QString title = QString());
-
-    bool deleteInlineObjects(bool backwards = false);
-    void deleteSelection();
-    void runDirectionUpdater();
-
-    KoTextEditor *q;
-    QTextCursor caret;
-    QTextDocument *document;
-    QUndoCommand *headCommand;
-    QString commandTitle;
-    KoText::Direction direction;
-    bool isBidiDocument;
-
-    State editorState;
-
-    QTimer updateRtlTimer;
-    QList<int> dirtyBlocks;
-};
 
 KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
     : q(qq),
@@ -312,6 +277,22 @@ void KoTextEditor::Private::runDirectionUpdater()
     }
 }
 
+void KoTextEditor::Private::clearCharFormatProperty(int property)
+{
+    class PropertyWiper : public CharFormatVisitor
+    {
+    public:
+        PropertyWiper(int propertyId) : propertyId(propertyId) {};
+        void visit(QTextCharFormat &format) const {
+            format.clearProperty(propertyId);
+        }
+
+    int propertyId;
+    };
+    PropertyWiper wiper(property);
+    CharFormatVisitor::visitSelection(q, wiper,QString(), false);
+}
+
 /*KoTextEditor*/
 
 //TODO factor out the changeTracking charFormat setting from all individual slots to a public slot, which will be available for external commands (TextShape)
@@ -320,118 +301,6 @@ void KoTextEditor::Private::runDirectionUpdater()
 //The BlockFormatVisitor is also used for the change tracking of a blockFormat. The changeTracker stores the information about the changeId in the charFormat. The BlockFormatVisitor ensures that thd changeId is set on the whole block (even if only a part of the block is actually selected).
 //Should such mechanisms be later provided directly by Qt, we could dispose of these classes.
 
-class BlockFormatVisitor
-{
-public:
-    BlockFormatVisitor() {}
-    virtual ~BlockFormatVisitor() {}
-
-    virtual void visit(QTextBlockFormat &format) const = 0;
-
-    static void visitSelection(KoTextEditor *editor, const BlockFormatVisitor &visitor, QString title = i18n("Format"), bool resetProperties = false) {
-        int start = qMin(editor->position(), editor->anchor());
-        int end = qMax(editor->position(), editor->anchor());
-
-        QTextBlock block = editor->block();
-        if (block.position() > start)
-            block = block.document()->findBlock(start);
-
-        // now loop over all blocks that the selection contains and alter the text fragments where applicable.
-        while (block.isValid() && block.position() <= end) {
-            QTextBlockFormat format = block.blockFormat();
-            if (resetProperties) {
-                if (KoTextDocument(editor->document()).styleManager()) {
-                    KoParagraphStyle *old = KoTextDocument(editor->document()).styleManager()->paragraphStyle(block.blockFormat().intProperty(KoParagraphStyle::StyleId));
-                    if (old)
-                        old->unapplyStyle(block);
-                }
-            }
-            visitor.visit(format);
-            QTextCursor cursor(block);
-            QTextBlockFormat prevFormat = cursor.blockFormat();
-            editor->registerTrackedChange(cursor, KoGenChange::formatChange, title, format, prevFormat, true);
-            cursor.setBlockFormat(format);
-            block = block.next();
-        }
-    }
-};
-
-class CharFormatVisitor
-{
-public:
-    CharFormatVisitor() {}
-    virtual ~CharFormatVisitor() {}
-
-    virtual void visit(QTextCharFormat &format) const = 0;
-
-    static void visitSelection(KoTextEditor *editor, const CharFormatVisitor &visitor, QString title = i18n("Format")) {
-        int start = qMin(editor->position(), editor->anchor());
-        int end = qMax(editor->position(), editor->anchor());
-        if (start == end) { // just set a new one.
-            QTextCharFormat format = editor->charFormat();
-            visitor.visit(format);
-
-            if (KoTextDocument(editor->document()).changeTracker() && KoTextDocument(editor->document()).changeTracker()->isEnabled()) {
-                QTextCharFormat prevFormat(editor->charFormat());
-
-                int changeId = KoTextDocument(editor->document()).changeTracker()->getFormatChangeId(title, format, prevFormat, editor->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
-                format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-            }
-
-            editor->cursor()->setCharFormat(format);
-            return;
-        }
-
-        QTextBlock block = editor->block();
-        if (block.position() > start)
-            block = block.document()->findBlock(start);
-
-        QList<QTextCursor> cursors;
-        QList<QTextCharFormat> formats;
-        // now loop over all blocks that the selection contains and alter the text fragments where applicable.
-        while (block.isValid() && block.position() < end) {
-            QTextBlock::iterator iter = block.begin();
-            while (! iter.atEnd()) {
-                QTextFragment fragment = iter.fragment();
-                if (fragment.position() > end)
-                    break;
-                if (fragment.position() + fragment.length() <= start) {
-                    iter++;
-                    continue;
-                }
-
-                QTextCursor cursor(block);
-                cursor.setPosition(fragment.position() + 1);
-                QTextCharFormat format = cursor.charFormat(); // this gets the format one char after the postion.
-                visitor.visit(format);
-
-                if (KoTextDocument(editor->document()).changeTracker() && KoTextDocument(editor->document()).changeTracker()->isEnabled()) {
-                    QTextCharFormat prevFormat(cursor.charFormat());
-
-                    int changeId = KoTextDocument(editor->document()).changeTracker()->getFormatChangeId(title, format, prevFormat, cursor.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
-                    format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-                }
-
-                cursor.setPosition(qMax(start, fragment.position()));
-                int to = qMin(end, fragment.position() + fragment.length());
-                cursor.setPosition(to, QTextCursor::KeepAnchor);
-                cursors.append(cursor);
-                formats.append(format);
-
-                QTextCharFormat prevFormat(cursor.charFormat());
-                editor->registerTrackedChange(cursor,KoGenChange::formatChange,title, format, prevFormat, false); //this will lead to every fragment having a different change untill the change merging in registerTrackedChange checks also for formatChange or not?
-
-                iter++;
-            }
-            block = block.next();
-        }
-        QList<QTextCharFormat>::Iterator iter = formats.begin();
-        foreach(QTextCursor cursor, cursors) {
-            cursor.mergeCharFormat(*iter);
-            ++iter;
-        }
-    }
-};
 
 KoTextEditor::KoTextEditor(QTextDocument *document)
     : KoToolSelection(document),
@@ -467,11 +336,8 @@ void KoTextEditor::addCommand(QUndoCommand *command)
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock)
 {
-//    kDebug(31000) << "in registerTrackedChange; enabled tracking: " << (KoTextDocument(d->document).changeTracker() || KoTextDocument(d->document).changeTracker()->isEnabled());
     if (!KoTextDocument(d->document).changeTracker() || !KoTextDocument(d->document).changeTracker()->isEnabled()) {
-        QTextCharFormat charFormat = selection.charFormat();
-        charFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
-        selection.setCharFormat(charFormat);
+        d->clearCharFormatProperty(KoCharacterStyle::ChangeTrackerId);
         return;
     }
 

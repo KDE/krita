@@ -896,6 +896,11 @@ void KisLayerManager::saveLayerAsImage()
     KUrl url = fd.selectedUrl();
     QString mimefilter = fd.currentMimeFilter();
 
+    if (mimefilter.isNull()) {
+        KMimeType::Ptr mime = KMimeType::findByUrl(url);
+        mimefilter = mime->name();
+    }
+
     if (url.isEmpty())
         return;
 

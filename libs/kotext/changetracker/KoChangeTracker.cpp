@@ -183,10 +183,13 @@ int KoChangeTracker::mergeableId(KoGenChange::Type type, QString &title, int exi
     if (!existingId || !d->m_changes.value(existingId))
         return 0;
 
-    if (d->m_changes.value(existingId)->getChangeType() == type && d->m_changes.value(existingId)->getChangeTitle() == title && !d->m_parents.contains(existingId))
+    if (d->m_changes.value(existingId)->getChangeType() == type && d->m_changes.value(existingId)->getChangeTitle() == title)
         return existingId;
     else
-        return mergeableId(type, title, d->m_parents.value(existingId));
+        if (d->m_parents.contains(existingId))
+            return mergeableId(type, title, d->m_parents.value(existingId));
+        else
+            return 0;
 }
 
 bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)

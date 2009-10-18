@@ -312,49 +312,58 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         disconnect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
     m_styleManager = sm;
-    recalculate();
-    if (m_styleManager == 0)
+
+    if (m_styleManager == 0) {
+        recalculate();
         return;
+    }
+
     connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
     connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
     connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
 
     foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles())
-        addParagraphStyle(style);
+        addParagraphStyle(style, false);
     foreach(KoCharacterStyle *style, m_styleManager->characterStyles())
-        addCharacterStyle(style);
+        addCharacterStyle(style, false);
+
+    recalculate();
 }
 
 // called when the stylemanager adds a style
-void StylesModel::addParagraphStyle(KoParagraphStyle *style)
+void StylesModel::addParagraphStyle(KoParagraphStyle *style, bool recalc)
 {
     Q_ASSERT(style);
-    recalculate();
+    if (recalc)
+        recalculate();
     m_styleMapper->setMapping(style, style->styleId());
     connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
 }
 
 // called when the stylemanager adds a style
-void StylesModel::addCharacterStyle(KoCharacterStyle *style)
+void StylesModel::addCharacterStyle(KoCharacterStyle *style, bool recalc)
 {
-    recalculate();
+    if (recalc)
+        recalculate();
     m_styleMapper->setMapping(style, style->styleId());
     connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
 }
 
 // called when the stylemanager removes a style
-void StylesModel::removeParagraphStyle(KoParagraphStyle *style)
+void StylesModel::removeParagraphStyle(KoParagraphStyle *style, bool recalc)
 {
-    recalculate();
+    if (recalc)
+        recalculate();
     m_styleMapper->removeMappings(style);
     disconnect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
 }
 
 // called when the stylemanager removes a style
-void StylesModel::removeCharacterStyle(KoCharacterStyle *style)
+void StylesModel::removeCharacterStyle(KoCharacterStyle *style, bool recalc)
 {
-    recalculate();
+    if (recalc)
+        recalculate();
     m_styleMapper->removeMappings(style);
     disconnect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
 }

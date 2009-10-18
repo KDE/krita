@@ -67,10 +67,10 @@ public slots:
     void setCurrentCharacterStyle(int styleId, bool unchanged);
 
 private slots:
-    void addParagraphStyle(KoParagraphStyle*);
-    void addCharacterStyle(KoCharacterStyle*);
-    void removeParagraphStyle(KoParagraphStyle*);
-    void removeCharacterStyle(KoCharacterStyle*);
+    void addParagraphStyle(KoParagraphStyle*, bool recalc = true);
+    void addCharacterStyle(KoCharacterStyle*, bool recalc = true);
+    void removeParagraphStyle(KoParagraphStyle*, bool recalc = true);
+    void removeCharacterStyle(KoCharacterStyle*, bool recalc = true);
     void updateName(int styleId);
 
 protected:

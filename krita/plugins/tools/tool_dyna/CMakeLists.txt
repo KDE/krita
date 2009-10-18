@@ -16,7 +16,7 @@ install(TARGETS kritatooldyna  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 # TODO
-# install( FILES  tool_crop_cursor.png tool_crop.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install( FILES  krita_tool_dyna.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 install( FILES  kritatooldyna.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 

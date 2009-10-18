@@ -57,7 +57,10 @@ void KoPAViewMode::activate( KoPAViewMode * previousViewMode )
 {
     Q_UNUSED( previousViewMode );
     m_canvas->updateSize();
-    m_canvas->canvasController()->scrollContentsBy( 0, 0 );
+    m_view->updateActivePage( m_view->activePage() );
+    // this is done to set the preferred center
+    m_canvas->canvasController()->setCanvasMode( KoCanvasController::Centered );
+    m_canvas->canvasController()->recenterPreferred();
 }
 
 void KoPAViewMode::deactivate()

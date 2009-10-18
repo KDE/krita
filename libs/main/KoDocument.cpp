@@ -2246,6 +2246,8 @@ void KoDocument::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
         }
     }
 
+    parent->factory()->container("mainToolBar", parent)->hide();
+
     if (d->startUpWidget) {
         d->startUpWidget->show();
     } else {
@@ -2253,7 +2255,6 @@ void KoDocument::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
     }
 
     parent->setDocToOpen(this);
-    parent->factory()->container("mainToolBar", parent)->hide();
 }
 
 void KoDocument::openExistingFile(const KUrl& url)

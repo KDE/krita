@@ -26,6 +26,7 @@
 
 class KoPAView;
 class KoPAPageBase;
+class KoPAPageProvider;
 
 /**
  * For now we print to the center of the page honoring the margins.
@@ -46,6 +47,7 @@ public slots:
 private:
     QPrinter m_printer;
     QList<KoPAPageBase*> m_pages;
+    KoPAPageProvider * m_pageProvider;
 };
 
 #endif /* KOPAPRINTJOB_H */

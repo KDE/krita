@@ -23,6 +23,7 @@
 #include "KoPADocument.h"
 #include "KoPAUtil.h"
 #include "KoPAPageBase.h"
+#include "KoPAPageProvider.h"
 
 #include <QPainter>
 #include <kdebug.h>
@@ -30,6 +31,7 @@
 KoPAPrintJob::KoPAPrintJob(KoPAView * view)
 : KoPrintJob(view)
 , m_pages(view->kopaDocument()->pages())
+, m_pageProvider(static_cast<KoPAPageProvider*>(view->kopaDocument()->dataCenterMap()[KoPAPageProvider::ID]))
 {
     // TODO this feels wrong
     printer().setFromTo(1, m_pages.size());
@@ -81,6 +83,7 @@ void KoPAPrintJob::startPrinting(RemovePolicy removePolicy)
         painter.setClipRect( pageRect );
         painter.setRenderHint( QPainter::Antialiasing );
         painter.translate( pageRect.topLeft() );
+        m_pageProvider->setMasterPageNumber(i+1);
         page->paintPage( painter, zoomHandler );
         painter.restore();
     }

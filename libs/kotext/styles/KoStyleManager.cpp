@@ -490,13 +490,15 @@ KoListStyle *KoStyleManager::listStyle(int id, bool *automatic) const
         *automatic = false;
         return style;
     }
-    foreach(KoListStyle *style, d->automaticListStyles) {
-        if (style->styleId() == id) {
-            *automatic = true;
-            return style;
-        }
-    }
-    return 0;
+
+    KoListStyle *style = d->automaticListStyles.value(id);
+
+    if (style)
+        *automatic = true;
+    else
+        ; // *automatic is unchanged
+
+    return style;
 }
 
 KoTableStyle *KoStyleManager::tableStyle(int id) const

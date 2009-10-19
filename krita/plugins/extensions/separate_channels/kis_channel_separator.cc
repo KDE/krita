@@ -255,6 +255,11 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
                 if (url.isEmpty())
                     return;
+                if (mimefilter.isNull()) {
+                    KMimeType::Ptr mime = KMimeType::findByUrl(url);
+                    mimefilter = mime->name();
+                }
+
 
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
                 QRect r = l->exactBounds();

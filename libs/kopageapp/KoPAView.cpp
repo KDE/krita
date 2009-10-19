@@ -136,13 +136,13 @@ public:
 
     // status bar
     QLabel *status;       ///< ordinary status
+    QWidget *zoomActionWidget;
 
     // These used to be protected.
     KoPADocument *doc;
     KoPACanvas *canvas;
     KoPAPageBase *activePage;
     KoPAViewMode *viewMode;
-
 };
 
 
@@ -161,8 +161,11 @@ KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 KoPAView::~KoPAView()
 {
     KoToolManager::instance()->removeCanvasController( d->canvasController );
-    delete d->zoomController;
 
+    removeStatusBarItem(d->status);
+    removeStatusBarItem(d->zoomActionWidget);
+
+    delete d->zoomController;
     // Delete only the view mode normal, let the derived class delete
     // the currently active view mode if it is not view mode normal
     delete d->viewModeNormal;
@@ -196,7 +199,8 @@ void KoPAView::initGUI()
     addStatusBarItem( d->status, 1 );
     connect( KoToolManager::instance(), SIGNAL( changedStatusText( const QString & ) ),
              d->status, SLOT( setText( const QString & ) ) );
-    addStatusBarItem( d->zoomAction->createWidget( statusBar() ), 0, true );
+    d->zoomActionWidget = d->zoomAction->createWidget(  statusBar() );
+    addStatusBarItem( d->zoomActionWidget, 0 );
 
     d->zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 

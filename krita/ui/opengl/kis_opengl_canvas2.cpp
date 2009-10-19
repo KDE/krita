@@ -58,9 +58,9 @@ class KisOpenGLCanvas2::Private
 {
 public:
     Private(const KoViewConverter *vc)
-            : viewConverter(vc)
-            , canvas(0)
-            , toolProxy(0)
+        : viewConverter(vc)
+        , canvas(0)
+        , toolProxy(0)
     {
     }
 
@@ -76,8 +76,8 @@ public:
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
-        : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
-        , m_d(new Private(canvas->viewConverter()))
+    : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
+    , m_d(new Private(canvas->viewConverter()))
 {
     m_d->canvas = canvas;
     m_d->toolProxy = canvas->toolProxy();
@@ -165,7 +165,6 @@ void KisOpenGLCanvas2::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glTranslatef(m_d->origin.x(), m_d->origin.y(), 0.0);
-//    glTranslatef(m_d->documentOffset.x(), m_d->documentOffset.y(), 0.0);
     glScalef(scaleX, scaleY, 1.0);
 
     glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->backgroundTexture());
@@ -215,11 +214,11 @@ void KisOpenGLCanvas2::paintGL()
     makeCurrent();
 
     for (int x = (wr.left() / m_d->openGLImageTextures->imageTextureTileWidth()) * m_d->openGLImageTextures->imageTextureTileWidth();
-            x <= wr.right();
-            x += m_d->openGLImageTextures->imageTextureTileWidth()) {
+    x <= wr.right();
+    x += m_d->openGLImageTextures->imageTextureTileWidth()) {
         for (int y = (wr.top() / m_d->openGLImageTextures->imageTextureTileHeight()) * m_d->openGLImageTextures->imageTextureTileHeight();
-                y <= wr.bottom();
-                y += m_d->openGLImageTextures->imageTextureTileHeight()) {
+        y <= wr.bottom();
+        y += m_d->openGLImageTextures->imageTextureTileHeight()) {
 
             glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->imageTextureTile(x, y));
             if (scaleX > 2.0){
@@ -358,7 +357,7 @@ void KisOpenGLCanvas2::keyPressEvent(QKeyEvent *e)
     m_d->toolProxy->keyPressEvent(e);
     if (! e->isAccepted()) {
         if (e->key() == Qt::Key_Backtab
-                || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier)))
+            || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier)))
             focusNextPrevChild(false);
         else if (e->key() == Qt::Key_Tab)
             focusNextPrevChild(true);
@@ -384,12 +383,18 @@ void KisOpenGLCanvas2::tabletEvent(QTabletEvent *e)
 {
     setFocus(Qt::OtherFocusReason);
     m_d->blockMouseEvent.start(100);
+
+    m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument( e->hiResGlobalPos() - mapToGlobal(QPoint(0,0)) + m_d->documentOffset - m_d->origin ) );
+    /*
+    setFocus(Qt::OtherFocusReason);
+    m_d->blockMouseEvent.start(100);
     qreal subpixelX = e->hiResGlobalX();
     subpixelX = subpixelX - ((int) subpixelX); // leave only part behind the dot
     qreal subpixelY = e->hiResGlobalY();
     subpixelY = subpixelY - ((int) subpixelY); // leave only part behind the dot
     QPointF pos(e->x() + subpixelX + m_d->documentOffset.x() - m_d->origin.x(), e->y() + subpixelY + m_d->documentOffset.y() - m_d->origin.y() );
     m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(pos));
+*/
 }
 
 void KisOpenGLCanvas2::wheelEvent(QWheelEvent *e)

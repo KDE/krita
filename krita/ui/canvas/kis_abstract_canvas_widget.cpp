@@ -61,8 +61,6 @@ void KisAbstractCanvasWidget::drawDecorations(QPainter & gc, bool tools,
         toolProxy()->paint(gc, *canvas->viewConverter());
         gc.restore();
     }
-
-
 }
 
 QImage KisAbstractCanvasWidget::checkImage(qint32 checkSize)

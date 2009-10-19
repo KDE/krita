@@ -476,14 +476,13 @@ bool Layout::nextParag()
     if (formatRanges.count() != layout->additionalFormats().count())
         layout->setAdditionalFormats(formatRanges);
 
-    QString blockText = m_block.text();
     int dropCaps = m_format.boolProperty(KoParagraphStyle::DropCaps);
     int dropCapsLength = m_format.intProperty(KoParagraphStyle::DropCapsLength);
     int dropCapsLines = m_format.intProperty(KoParagraphStyle::DropCapsLines);
     if (dropCaps && dropCapsLength != 0 && dropCapsLines > 1
             && m_dropCapsAffectsNMoreLines == 0 // first line of this para is not affected by a previous drop-cap
-            && !blockText.isEmpty()
-       ) {
+            && m_block.length() > 1) {
+        QString blockText = m_block.text();
         // ok, now we can drop caps for this block
         int firstNonSpace = blockText.indexOf(QRegExp("[^ ]")); // since QTextLine::setNumColumns()
         // skips blankspaces, we will too

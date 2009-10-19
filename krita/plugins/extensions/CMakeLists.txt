@@ -30,7 +30,7 @@ if(GMM_FOUND AND NOT MSVC)
 endif(GMM_FOUND AND NOT MSVC)
 
 if(HAVE_OPENGL AND HAVE_GLEW)
-    add_subdirectory( glsl )
+#    add_subdirectory( glsl )
 endif(HAVE_OPENGL AND HAVE_GLEW)
 
 if(OPENCTL_FOUND AND OPENEXR_FOUND)

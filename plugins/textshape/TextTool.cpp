@@ -583,19 +583,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             }
             painter.setPen(caretPen);
             const int posInParag = m_textEditor->position() - block.position();
-            if (posInParag == 0 && block.length() == 1) { // empty parag, lets check alignment
-                QTextBlockFormat bf = block.blockFormat();
-                Qt::Alignment alignment = bf.alignment();
-                KoText::Direction direction = static_cast<KoText::Direction>(bf.intProperty(KoParagraphStyle::TextProgressionDirection));
-                QTextLine line = block.layout()->lineAt(0);
-                if ((alignment & Qt::AlignHCenter) == Qt::AlignHCenter)
-                    painter.translate(ts->size().width() / 2.0, 0);
-                else if (((alignment & Qt::AlignTrailing) == Qt::AlignTrailing &&
-                            direction == KoText::LeftRightTopBottom)
-                        || ((alignment & Qt::AlignLeading) == Qt::AlignLeading &&
-                            direction == KoText::RightLeftTopBottom))
-                    painter.translate(ts->size().width() - converter.viewToDocumentX(3), 0);
-            }
             block.layout()->drawCursor(&painter, QPointF(), posInParag);
         }
 

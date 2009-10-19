@@ -39,6 +39,10 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     , m_settings( settings )
     , m_image ( image )
 {
+    Q_ASSERT(settings);
+    Q_ASSERT(painter);
+    Q_ASSERT(m_image);
+    
     m_sprayBrush.setDiameter( settings->diameter() );
     m_sprayBrush.setJitterSize( settings->jitterSize() );
     m_sprayBrush.setJitterMovement( settings->jitterMovement() );
@@ -49,7 +53,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
 
     if (settings->proportional()){
         m_sprayBrush.setObjectDimension( settings->widthPerc()  / 100.0 * settings->diameter() * settings->scale(),
-                                          settings->heightPerc() / 100.0 * settings->diameter() * settings->scale());
+                                         settings->heightPerc() / 100.0 * settings->diameter() * settings->scale());
     } else
     {
         m_sprayBrush.setObjectDimension( settings->width(), settings->height() );

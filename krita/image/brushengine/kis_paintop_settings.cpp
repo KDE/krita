@@ -27,6 +27,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoViewConverter.h>
 
+#include "kis_image.h"
 #include "kis_node.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
@@ -77,7 +78,7 @@ QImage KisPaintOpSettings::sampleStroke(const QSize& size )
     int height = size.height();
 
     KisLayerSP layer = new KisPaintLayer(0, "temporary for stroke sample", OPACITY_OPAQUE, cs);
-
+    KisImageSP image = new KisImage(0, width, height, cs, "stroke sample", false);
     KisPainter painter(layer->paintDevice());
     painter.setPaintColor(KoColor(Qt::black, cs) );
 
@@ -85,7 +86,7 @@ QImage KisPaintOpSettings::sampleStroke(const QSize& size )
     preset->setSettings( this ); // This clones
     preset->settings()->setNode( layer );
 
-    painter.setPaintOpPreset(preset, 0);
+    painter.setPaintOpPreset(preset, image);
 
     QPointF p1(0                , 7.0/12.0 * height);
     QPointF p2(1.0/2.0 * width  , 7.0/12.0 * height);

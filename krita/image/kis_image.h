@@ -61,7 +61,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public 
 
 public:
 
-    KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name);
+    KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
 

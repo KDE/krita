@@ -103,13 +103,16 @@ public:
 
     KisProjection* projection;
 
+    bool startProjection;
+
 };
-KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
+KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
         : QObject(0)
         , KisShared()
         , m_d(new KisImagePrivate())
 {
     setObjectName(name);
+    m_d->startProjection = startProjection;
     init(adapter, width, height, colorSpace);
 }
 
@@ -139,10 +142,13 @@ KisImage::KisImage(const KisImage& rhs)
         setRootLayer(static_cast<KisGroupLayer*>(rhs.m_d->rootLayer->clone().data()));
         m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied
         m_d->nserver = new KisNameServer( *rhs.m_d->nserver );
+        m_d->startProjection = rhs.m_d->startProjection;
         Q_CHECK_PTR(m_d->nserver);
 
         m_d->projection = new KisProjection(this);
-        m_d->projection->start();
+        if (m_d->startProjection) {
+            m_d->projection->start();
+        }
     }
 }
 
@@ -313,7 +319,9 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
     m_d->recorder = new KisActionRecorder();
 
     m_d->projection = new KisProjection(this);
-    m_d->projection->start();
+    if (m_d->startProjection) {
+        m_d->projection->start();
+    }
 }
 
 bool KisImage::locked() const
@@ -592,8 +600,6 @@ void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTr
         m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
     }
 
-    setColorSpace(dstColorSpace);
-
     KisColorSpaceConvertVisitor visitor(this, dstColorSpace, renderingIntent);
     m_d->rootLayer->accept(visitor);
 
@@ -602,6 +608,9 @@ void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTr
         m_d->adapter->addCommand(new KisImageConvertTypeCommand(KisImageWSP(this), oldCs, dstColorSpace));
         m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
         m_d->adapter->endMacro();
+    }
+    else {
+        setColorSpace(dstColorSpace);
     }
 
     unlock();

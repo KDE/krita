@@ -49,7 +49,6 @@ class KoCompositeOpSubtract : public KoCompositeOpAlphaBase<_CSTraits, KoComposi
                                                  qint32 pixelSize,
                                                  const QBitArray & channelFlags )
         {
-            Q_ASSERT(1==2);
             Q_UNUSED(pixelSize);
             for(uint i = 0; i < _CSTraits::channels_nb; i++)
             {

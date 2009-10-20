@@ -391,7 +391,7 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
         QDataStream stream(&encoded, QIODevice::ReadOnly);*/
     KisNodeSP activeNode = static_cast<KisNode*>(parent.internalPointer());
     KisNodeSP parentNode = 0;
-    if (activeNode) {
+    if (activeNode && activeNode->parent()) {
         parentNode = activeNode->parent();
     } else {
         parentNode = m_d->image->root();

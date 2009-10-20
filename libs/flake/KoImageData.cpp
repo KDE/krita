@@ -247,6 +247,7 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             const bool lossy =url.toLower().endsWith(".jpg");
             if (!lossy && device.size() < MAX_MEMORY_IMAGESIZE) {
                 if (d->image.load(&device, d->suffix.toLatin1())) {
+                    d->key = d->image.cacheKey();
                     d->dataStoreState = KoImageDataPrivate::StateImageOnly;
                     return;
                 }

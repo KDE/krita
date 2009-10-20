@@ -131,7 +131,7 @@ public:
 
     /**
      * Tests if the the rect is totally outside the selection, but
-     * uses selectedRect instead of selectedRect, and this is faster
+     * uses selectedRect instead of selectedExactRect, and this is faster
      * (but might deliver false positives!)
      */
     bool isProbablyTotallyUnselected(const QRect & r) const;

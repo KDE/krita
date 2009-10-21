@@ -112,6 +112,7 @@ KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height, const K
         , m_d(new KisImagePrivate())
 {
     setObjectName(name);
+    dbgImage << "creating" << name;
     m_d->startProjection = startProjection;
     init(adapter, width, height, colorSpace);
 }
@@ -123,7 +124,10 @@ KisImage::KisImage(const KisImage& rhs)
         , KisShared(rhs)
         , m_d(new KisImagePrivate())
 {
+
     if (this != &rhs) {
+
+        dbgImage << "copying" << objectName() << "from" << rhs.objectName();
 
         if (rhs.m_d->perspectiveGrid)
             m_d->perspectiveGrid = new KisPerspectiveGrid(*rhs.m_d->perspectiveGrid);
@@ -145,8 +149,9 @@ KisImage::KisImage(const KisImage& rhs)
         m_d->startProjection = rhs.m_d->startProjection;
         Q_CHECK_PTR(m_d->nserver);
 
-        m_d->projection = new KisProjection(this);
+        m_d->projection = 0;
         if (m_d->startProjection) {
+            m_d->projection = new KisProjection(this);
             m_d->projection->start();
         }
     }
@@ -154,8 +159,11 @@ KisImage::KisImage(const KisImage& rhs)
 
 KisImage::~KisImage()
 {
-    m_d->projection->stop();
-    m_d->projection->deleteLater();
+    dbgImage << "deleting kisimage" << objectName();
+    if (m_d->projection) {
+        m_d->projection->stop();
+        m_d->projection->deleteLater();
+    }
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;
@@ -169,13 +177,8 @@ void KisImage::aboutToAddANode(KisNode *parent, int index)
 
 void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 {
-    // XXX: Temporarily for compatibility
-
     KisLayer * layer = dynamic_cast<KisLayer*>(parent->at(index).data());
     if (layer) {
-
-        KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer));
-
         // The addition of temporary layers is not interesting
         KoProperties props;
         props.setProperty("temporary", false);
@@ -318,8 +321,9 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
 
     m_d->recorder = new KisActionRecorder();
 
-    m_d->projection = new KisProjection(this);
+    m_d->projection = 0;
     if (m_d->startProjection) {
+        m_d->projection = new KisProjection(this);
         m_d->projection->start();
     }
 }
@@ -1159,7 +1163,7 @@ void KisImage::slotProjectionUpdated(const QRect & rc)
 
 void KisImage::updateProjection(KisNodeSP node, const QRect& rc)
 {
-    if (!locked()) {
+    if (!locked() && m_d->projection) {
         dbgImage << "Updating node " << node << "rect" << rc;
         m_d->projection->updateProjection(node, rc);
     }

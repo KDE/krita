@@ -63,6 +63,8 @@
 #include "KoList.h"
 
 #include "changetracker/KoChangeTracker.h"
+#include "changetracker/KoChangeTrackerElement.h"
+#include "changetracker/KoDeleteChangeMarker.h"
 
 // KDE + Qt includes
 #include <QTextCursor>
@@ -360,7 +362,8 @@ void KoTextLoader::loadChangedRegion(const KoXmlElement &element, QTextCursor &c
 
     //debug
     KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
-    Q_UNUSED(changeElement)
+    changeElement->setEnabled(true);
+//    Q_UNUSED(changeElement)
 }
 
 void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &cursor)
@@ -649,7 +652,20 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         } else if (isTextNS && localName == "change-end") {
             d->currentChangeId = 0;
             //kDebug() << "change-end";
-        } else if (isTextNS && localName == "span") { // text:span
+        }else if(isTextNS && localName == "change") {
+            QString id = ts.attributeNS(KoXmlNS::text,"change-id");
+            int changeId = d->changeTracker->getLoadedChangeId(id);
+            KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker;
+            deleteChangemarker->setChangeId(changeId);
+            KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+            changeElement->setEnabled(true);
+            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+
+            if(layout){
+                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+                textObjectManager->insertInlineObject(cursor, deleteChangemarker);
+            }
+        }else if (isTextNS && localName == "span") { // text:span
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
             kDebug(32500) << "  <span> localName=" << localName;
 #endif

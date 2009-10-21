@@ -228,6 +228,9 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
                             changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::text,"id"),KoGenChange::formatChange);
                         } else if (region.localName() == "deletion") {
                             changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::text,"id"),KoGenChange::deleteChange);
+                            KoXmlElement deletedData = region.namedItemNS(KoXmlNS::text, "p").toElement();
+                            if(!deletedData.isNull())
+                              changeElement->setDeleteData(deletedData.text());
                         }
                         KoXmlElement metadata = region.namedItemNS(KoXmlNS::office,"change-info").toElement();
                         if (!metadata.isNull()) {
@@ -246,6 +249,7 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
                                 changeElement->setCreator(creator.text());
                             }*/
                         }
+                        changeElement->setEnabled(d->m_enabled);
                         d->m_changes.insert( d->m_changeId, changeElement);
                         d->m_loadedChanges.insert(tag.attributeNS(KoXmlNS::text,"id"), d->m_changeId++);
                     }

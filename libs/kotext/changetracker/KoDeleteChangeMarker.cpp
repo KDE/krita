@@ -109,8 +109,7 @@ void KoDeleteChangeMarker::paint(QPainter& painter, QPaintDevice *pd, const QTex
         layout.createLine();
         layout.endLayout();
         layout.draw(&painter, rect.topLeft());
-    } else
-        painter.fillRect(rect,Qt::red);
+    }
 }
 
 void KoDeleteChangeMarker::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
@@ -130,7 +129,7 @@ void KoDeleteChangeMarker::resize(const QTextDocument *document, QTextInlineObje
         object.setAscent(fm.ascent());
         object.setDescent(fm.descent());
     } else {
-        object.setWidth(1);
+        object.setWidth(0);
         object.setAscent(fm.ascent());
         object.setDescent(fm.descent());
     }

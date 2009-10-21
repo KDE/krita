@@ -1029,24 +1029,9 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
 
                 if (end < block.position() || begin > block.position() + block.length())
                     continue; // selection does not intersect this block.
-                if (!m_changeTracker
-                    || m_changeTracker->displayDeleted()
-                    || !m_changeTracker->containsInlineChanges(selection.format)
-                    || !m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
-                    || (m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::deleteChange)) {
-                    QTextLayout::FormatRange fr;
-                    selection.format.property(KoCharacterStyle::ChangeTrackerId);
-                    fr.start = begin - block.position();
-                    fr.length = end - begin;
-                    fr.format = selection.format;
-                    selections.append(fr);
-                } else {
-                    selection.format.property(KoCharacterStyle::ChangeTrackerId);
-                }
             }
             drawTrackedChangeItem(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
             layout->draw(painter, QPointF(0, 0), selections);
-//            drawTrackedChangeItem(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
             decorateParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
 
             KoTextBlockBorderData *border = 0;
@@ -1308,7 +1293,7 @@ void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int sel
                 startOfBlock = currentFragment.position(); // start of this block w.r.t. the document
             if (m_changeTracker->containsInlineChanges(fmt)) {
                 KoChangeTrackerElement *changeElement = m_changeTracker->elementById(fmt.property(KoCharacterStyle::ChangeTrackerId).toInt());
-                if (changeElement->isEnabled()) {
+                if (m_changeTracker->isEnabled() && changeElement->isEnabled()) {
                     int firstLine = layout->lineForTextPosition(currentFragment.position() - startOfBlock).lineNumber();
                     int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length() - startOfBlock).lineNumber();
                     for (int i = firstLine ; i <= lastLine ; i++) {

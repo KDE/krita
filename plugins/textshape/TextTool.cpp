@@ -1632,6 +1632,11 @@ void TextTool::toggleTrackChanges(bool on)//TODO transfer this in KoTextEditor
         QTextCharFormat format = m_textEditor->charFormat();
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
         m_textEditor->setCharFormat(format);
+        const QTextDocument *doc = m_textEditor->document();
+        Q_ASSERT(doc);
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
+        if(lay)
+          lay->scheduleLayout();
     }
     m_textTyping = false;
     m_textDeleting = false;

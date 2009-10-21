@@ -493,11 +493,12 @@ KoListStyle *KoStyleManager::listStyle(int id, bool *automatic) const
 
     KoListStyle *style = d->automaticListStyles.value(id);
 
-    if (style)
+    if (style) {
         *automatic = true;
-    else
-        ; // *automatic is unchanged
-
+    }
+    else {
+        // *automatic is unchanged
+    }
     return style;
 }
 

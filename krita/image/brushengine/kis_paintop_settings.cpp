@@ -78,7 +78,7 @@ QImage KisPaintOpSettings::sampleStroke(const QSize& size )
     int height = size.height();
 
     KisLayerSP layer = new KisPaintLayer(0, "temporary for stroke sample", OPACITY_OPAQUE, cs);
-    KisImageSP image = new KisImage(0, width, height, cs, "stroke sample", false);
+    KisImageSP image = new KisImage(0, width, height, cs, "stroke sample image", false);
     KisPainter painter(layer->paintDevice());
     painter.setPaintColor(KoColor(Qt::black, cs) );
 

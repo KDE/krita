@@ -114,6 +114,8 @@ bool KoXmlWriter::prepareForChild()
 
 void KoXmlWriter::prepareForTextNode()
 {
+    if (d->tags.isEmpty())
+        return;
     Tag& parent = d->tags.top();
     if (!parent.hasChildren) {
         closeStartElement(parent);

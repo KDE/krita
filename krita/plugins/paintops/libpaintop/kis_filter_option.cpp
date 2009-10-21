@@ -50,6 +50,7 @@ public:
 KisFilterOption::KisFilterOption()
         : KisPaintOpOption(i18n("Filter"))
 {
+    m_image = 0;
     m_checkable = false;
     m_currentFilterConfigWidget = 0;
 
@@ -124,7 +125,12 @@ void KisFilterOption::setNode(KisNodeSP node)
 
 void KisFilterOption::setImage( KisImageWSP image )
 {
-    m_image = image;
+    if (image->objectName() == "stroke sample image") {
+        m_image = new KisImage(*image.data());
+    }
+    else {
+        m_image = image;
+    }
 }
 
 void KisFilterOption::setCurrentFilter( const KoID& id)
@@ -144,7 +150,7 @@ void KisFilterOption::updateFilterConfigWidget()
     }
     m_currentFilterConfigWidget = 0;
 
-    if (m_currentFilter) {
+    if (m_currentFilter && m_image) {
         m_currentFilterConfigWidget =
             m_currentFilter->createConfigurationWidget(m_options->grpFilterOptions,
                                                        m_paintDevice,

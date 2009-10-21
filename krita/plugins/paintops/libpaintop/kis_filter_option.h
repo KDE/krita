@@ -84,7 +84,7 @@ private:
     const KisFilterSP m_currentFilter;
     KisConfigWidget* m_currentFilterConfigWidget;
     KisPaintDeviceSP m_paintDevice;
-    KisImageWSP m_image;
+    KisImageSP m_image;
 };
 
 #endif

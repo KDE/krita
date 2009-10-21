@@ -19,7 +19,7 @@
 #include "KoFlake.h"
 
 namespace KoFlake {
-    int maxZIndex() { return 65535; }
+    int maxZIndex() { return 32767; }
 }
 
 

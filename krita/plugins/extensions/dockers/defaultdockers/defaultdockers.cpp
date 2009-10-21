@@ -35,12 +35,12 @@ K_EXPORT_COMPONENT_FACTORY(kritadefaultdockers, KritaDefaultDockersPluginFactory
 KritaDefaultDockersPlugin::KritaDefaultDockersPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setComponentData(KritaDefaultDockersPluginFactory::componentData()); 
+    setComponentData(KritaDefaultDockersPluginFactory::componentData());
     // XXX: re-enable after 2.1 has been released
     //KoDockRegistry::instance()->add( new KisHistogramDockFactory() );
-    KoDockRegistry::instance()->add( new KisLayerBoxFactory() );
-    KoDockRegistry::instance()->add( new KisBirdEyeBoxFactory() );
-    KoDockRegistry::instance()->add( new KisPaletteDockerFactory() );
+    KoDockRegistry::instance()->add(new KisLayerBoxFactory());
+    KoDockRegistry::instance()->add(new KisBirdEyeBoxFactory());
+    KoDockRegistry::instance()->add(new KisPaletteDockerFactory());
 }
 
 KritaDefaultDockersPlugin::~KritaDefaultDockersPlugin()

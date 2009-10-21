@@ -32,12 +32,11 @@ struct KisNodeProgressProxy::Private {
     int percentage;
     bool computePercentage() {
         int old_percentage = percentage;
-        if( value == maximum )
-        {
+        if (value == maximum) {
             percentage = -1;
         } else {
-            percentage = (100 * (value - minimum)) / (maximum - minimum );
-            percentage = qBound( 0, percentage, 100 );
+            percentage = (100 * (value - minimum)) / (maximum - minimum);
+            percentage = qBound(0, percentage, 100);
         }
         return old_percentage != percentage;
     }
@@ -67,27 +66,25 @@ int KisNodeProgressProxy::percentage() const
     return d->percentage;
 }
 
-void KisNodeProgressProxy::setValue( int _value )
+void KisNodeProgressProxy::setValue(int _value)
 {
     QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     d->value = _value;
-    if( d->computePercentage() )
-    {
-        emit(percentageChanged( d->percentage, d->node));
+    if (d->computePercentage()) {
+        emit(percentageChanged(d->percentage, d->node));
     }
 }
 
-void KisNodeProgressProxy::setRange( int _minimum, int _maximum )
+void KisNodeProgressProxy::setRange(int _minimum, int _maximum)
 {
     d->minimum = _minimum;
     d->maximum = _maximum;
-    if( d->computePercentage() )
-    {
-        emit(percentageChanged( d->percentage, d->node));
+    if (d->computePercentage()) {
+        emit(percentageChanged(d->percentage, d->node));
     }
 }
 
-void KisNodeProgressProxy::setFormat( const QString & _format )
+void KisNodeProgressProxy::setFormat(const QString & _format)
 {
-    Q_UNUSED( _format );
+    Q_UNUSED(_format);
 }

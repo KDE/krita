@@ -37,7 +37,7 @@ public:
     ChalkBrush(KoColor inkColor, BrushShape shape);
     void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
 
-    void setRadius(int radius){
+    void setRadius(int radius) {
         m_radius = radius;
         init();
     }

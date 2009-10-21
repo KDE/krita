@@ -140,7 +140,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPatte
 
         while (x < x1 + w) {
             sw = qMin((x1 + w) - x, pattern->width() - sx);
-            
+
             bitBlt(x, y, patternLayer, sx, sy, sw, sh);
             x += sw; sx = 0;
         }
@@ -313,10 +313,10 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
         int x = segment->x;
         int y = segment->y;
-        Q_ASSERT( x >= 0 );
-        Q_ASSERT( x < m_width );
-        Q_ASSERT( y >= 0 );
-        Q_ASSERT( y < m_height );
+        Q_ASSERT(x >= 0);
+        Q_ASSERT(x < m_width);
+        Q_ASSERT(y >= 0);
+        Q_ASSERT(y < m_height);
         /* We need an iterator that is valid in the range (0,y) - (width,y). Therefore,
         it is needed to start the iterator at the first position, and then skip to (x,y). */
         pixelIt = sourceDevice->createHLineIterator(0, y, m_width);
@@ -338,20 +338,20 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         } else
             colorSpace->fromQColor(Qt::white, selIt.rawData());
 
-        if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
-            map[m_width * (y - 1) + x] = Added;
-            Q_ASSERT( x >= 0 );
-            Q_ASSERT( x < m_width );
-            Q_ASSERT( y - 1 >= 0 );
-            Q_ASSERT( y - 1 < m_height );
+        if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
+            map[m_width *(y - 1) + x] = Added;
+            Q_ASSERT(x >= 0);
+            Q_ASSERT(x < m_width);
+            Q_ASSERT(y - 1 >= 0);
+            Q_ASSERT(y - 1 < m_height);
             stack.push(new FillSegment(x, y - 1));
         }
-        if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
-            map[m_width * (y + 1) + x] = Added;
-            Q_ASSERT( x >= 0 );
-            Q_ASSERT( x < m_width );
-            Q_ASSERT( y + 1 >= 0 );
-            Q_ASSERT( y + 1 < m_height );
+        if (y < (m_height - 1) && (map[m_width *(y + 1) + x] == None)) {
+            map[m_width *(y + 1) + x] = Added;
+            Q_ASSERT(x >= 0);
+            Q_ASSERT(x < m_width);
+            Q_ASSERT(y + 1 >= 0);
+            Q_ASSERT(y + 1 < m_height);
             stack.push(new FillSegment(x, y + 1));
         }
 
@@ -363,8 +363,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         --selIt;
         --x;
 
-        if( x > 0 )
-        {
+        if (x > 0) {
             // go to the left
             while (!stop && x >= 0 && (map[m_width * y + x] != Checked)) { // FIXME optimizeable?
                 map[m_width * y + x] = Checked;
@@ -381,20 +380,20 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                 } else
                     colorSpace->fromQColor(Qt::white, selIt.rawData());
 
-                if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
-                    map[m_width * (y - 1) + x] = Added;
-                    Q_ASSERT( x >= 0 );
-                    Q_ASSERT( x < m_width );
-                    Q_ASSERT( y - 1 >= 0 );
-                    Q_ASSERT( y - 1 < m_height );
+                if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
+                    map[m_width *(y - 1) + x] = Added;
+                    Q_ASSERT(x >= 0);
+                    Q_ASSERT(x < m_width);
+                    Q_ASSERT(y - 1 >= 0);
+                    Q_ASSERT(y - 1 < m_height);
                     stack.push(new FillSegment(x, y - 1));
                 }
-                if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
-                    map[m_width * (y + 1) + x] = Added;
-                    Q_ASSERT( x >= 0 );
-                    Q_ASSERT( x < m_width );
-                    Q_ASSERT( y + 1 >= 0 );
-                    Q_ASSERT( y + 1 < m_height );
+                if (y < (m_height - 1) && (map[m_width *(y + 1) + x] == None)) {
+                    map[m_width *(y + 1) + x] = Added;
+                    Q_ASSERT(x >= 0);
+                    Q_ASSERT(x < m_width);
+                    Q_ASSERT(y + 1 >= 0);
+                    Q_ASSERT(y + 1 < m_height);
                     stack.push(new FillSegment(x, y + 1));
                 }
                 ++pixelsDone;
@@ -411,10 +410,10 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         if (x >= m_width) {
             continue;
         }
-        Q_ASSERT( x >= 0 );
-        Q_ASSERT( x < m_width );
-        Q_ASSERT( y >= 0 );
-        Q_ASSERT( y < m_height );
+        Q_ASSERT(x >= 0);
+        Q_ASSERT(x < m_width);
+        Q_ASSERT(y >= 0);
+        Q_ASSERT(y < m_height);
 
         if (map[m_width * y + x] == Checked)
             continue;
@@ -440,20 +439,20 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             } else
                 colorSpace->fromQColor(Qt::white, selIt.rawData());
 
-            if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
-                map[m_width * (y - 1) + x] = Added;
-                Q_ASSERT( x >= 0 );
-                Q_ASSERT( x < m_width );
-                Q_ASSERT( y >= 0 );
-                Q_ASSERT( y - 1 < m_height );
+            if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
+                map[m_width *(y - 1) + x] = Added;
+                Q_ASSERT(x >= 0);
+                Q_ASSERT(x < m_width);
+                Q_ASSERT(y >= 0);
+                Q_ASSERT(y - 1 < m_height);
                 stack.push(new FillSegment(x, y - 1));
             }
-            if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
-                map[m_width * (y + 1) + x] = Added;
-                Q_ASSERT( x >= 0 );
-                Q_ASSERT( x < m_width );
-                Q_ASSERT( y + 1 >= 0 );
-                Q_ASSERT( y + 1 < m_height );
+            if (y < (m_height - 1) && (map[m_width *(y + 1) + x] == None)) {
+                map[m_width *(y + 1) + x] = Added;
+                Q_ASSERT(x >= 0);
+                Q_ASSERT(x < m_width);
+                Q_ASSERT(y + 1 >= 0);
+                Q_ASSERT(y + 1 < m_height);
                 stack.push(new FillSegment(x, y + 1));
             }
             ++pixelsDone;

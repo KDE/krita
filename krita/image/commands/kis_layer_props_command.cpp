@@ -35,10 +35,10 @@
 #include "kis_undo_adapter.h"
 
 KisLayerPropsCommand::KisLayerPropsCommand(KisLayerSP layer,
-                           qint32 oldOpacity, qint32 newOpactiy,
-                           const QString& oldCompositeOp, const QString& newCompositeOp,
-                           const QString& oldName, const QString& newName,
-                           const QBitArray oldChannelFlags, const QBitArray newChannelFlags )
+        qint32 oldOpacity, qint32 newOpactiy,
+        const QString& oldCompositeOp, const QString& newCompositeOp,
+        const QString& oldName, const QString& newName,
+        const QBitArray oldChannelFlags, const QBitArray newChannelFlags)
         : KisLayerCommand(i18n("Property Changes"), layer)
         , m_oldName(oldName)
         , m_newName(newName)

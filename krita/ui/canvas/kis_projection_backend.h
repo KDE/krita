@@ -43,7 +43,7 @@ public:
      * Those methods are related to KisPrescaledProjection's
      * equivalents
      */
-    virtual void setImage(KisImageWSP image ) = 0;
+    virtual void setImage(KisImageWSP image) = 0;
     virtual void setImageSize(qint32 w, qint32 h) = 0;
     virtual void setMonitorProfile(const KoColorProfile* monitorProfile) = 0;
 

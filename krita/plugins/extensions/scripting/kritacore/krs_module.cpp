@@ -57,8 +57,7 @@
 #include "krs_progress.h"
 
 
-extern "C"
-{
+extern "C" {
     KROSSKRITACORE_EXPORT QObject* krossmodule() {
         KisDoc2* doc = new KisDoc2(0, 0, true);
 
@@ -147,9 +146,11 @@ QObject* Module::createHSVColor(int hue, int saturation, int value)
 QObject* Module::pattern(const QString& patternname)
 {
     KoResourceServer<KisPattern>* rServer = KisResourceServerProvider::instance()->patternServer();
-    foreach(KisPattern* pattern, rServer->resources())
-    if (pattern->name() == patternname)
-        return new Pattern(this, pattern, true);
+    foreach(KisPattern* pattern, rServer->resources()) {
+	if (pattern->name() == patternname) {
+		return new Pattern(this, pattern, true); 
+	}
+    }
     warnScript << QString("Unknown pattern \"%1\"").arg(patternname);
     return 0;
 }
@@ -157,9 +158,11 @@ QObject* Module::pattern(const QString& patternname)
 QObject* Module::brush(const QString& brushname)
 {
     KoResourceServer<KisBrush>* rServer = KisResourceServerProvider::instance()->brushServer();
-    foreach(KisBrush* brush, rServer->resources())
-    if (brush->name() == brushname)
-        return new Brush(this, brush, true);
+    foreach(KisBrush* brush, rServer->resources()) {
+        if (brush->name() == brushname) {
+             return new Brush(this, brush, true);
+	}
+    }
     warnScript << QString("Unknown brush \"%1\"").arg(brushname);
     return 0;
 }

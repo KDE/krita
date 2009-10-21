@@ -51,9 +51,8 @@ class KisNode::Private
 {
 public:
     Private()
-        : graphListener(0)
-        , nodeProgressProxy(0)
-    {
+            : graphListener(0)
+            , nodeProgressProxy(0) {
     }
 
     KisNodeWSP parent;
@@ -274,18 +273,18 @@ bool KisNode::remove(KisNodeSP node)
 
 KisNodeProgressProxy* KisNode::nodeProgressProxy() const
 {
-    if( m_d->nodeProgressProxy ) {
+    if (m_d->nodeProgressProxy) {
         return m_d->nodeProgressProxy;
-    } else if( parent() ) {
+    } else if (parent()) {
         return parent()->nodeProgressProxy();
     }
     return 0;
 }
 
-void KisNode::createNodeProgressProxy( )
+void KisNode::createNodeProgressProxy()
 {
-    if( !m_d->nodeProgressProxy ) {
-        m_d->nodeProgressProxy = new KisNodeProgressProxy( this );
+    if (!m_d->nodeProgressProxy) {
+        m_d->nodeProgressProxy = new KisNodeProgressProxy(this);
     }
 }
 

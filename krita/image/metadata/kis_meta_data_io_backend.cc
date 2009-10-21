@@ -23,11 +23,11 @@ using namespace KisMetaData;
 #include <kglobal.h>
 #include "kis_debug.h"
 
-IOBackendRegistry::IOBackendRegistry() 
+IOBackendRegistry::IOBackendRegistry()
 {
 }
 
-IOBackendRegistry::~IOBackendRegistry() 
+IOBackendRegistry::~IOBackendRegistry()
 {
     dbgRegistry << "deleting IOBackendRegistry";
 }

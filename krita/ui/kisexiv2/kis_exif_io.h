@@ -22,21 +22,32 @@
 
 #include <klocale.h>
 
-class KisExifIO : public KisMetaData::IOBackend {
+class KisExifIO : public KisMetaData::IOBackend
+{
     struct Private;
-    public:
-        KisExifIO();
-        virtual ~KisExifIO();
-        virtual QString id() const { return "exif"; }
-        virtual QString name() const { return i18n("Exif"); }
-        virtual BackendType type() const { return Binary; }
-        virtual bool supportSaving() const { return true; }
-        virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const;
-        virtual bool canSaveAllEntries(KisMetaData::Store* store) const;
-        virtual bool supportLoading() const { return true; }
-        virtual bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const;
-    private:
-        Private* const d;
+public:
+    KisExifIO();
+    virtual ~KisExifIO();
+    virtual QString id() const {
+        return "exif";
+    }
+    virtual QString name() const {
+        return i18n("Exif");
+    }
+    virtual BackendType type() const {
+        return Binary;
+    }
+    virtual bool supportSaving() const {
+        return true;
+    }
+    virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const;
+    virtual bool canSaveAllEntries(KisMetaData::Store* store) const;
+    virtual bool supportLoading() const {
+        return true;
+    }
+    virtual bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const;
+private:
+    Private* const d;
 };
 
 #endif

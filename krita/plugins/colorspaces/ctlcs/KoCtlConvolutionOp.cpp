@@ -34,8 +34,7 @@ KoCtlConvolutionOp::~KoCtlConvolutionOp()
 
 void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels, const QBitArray & channelFlags) const
 {
-    foreach( KoCtlAccumulator* accumulator, m_accumulators)
-    {
+    foreach(KoCtlAccumulator* accumulator, m_accumulators) {
         accumulator->reset();
     }
 
@@ -44,17 +43,13 @@ void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qint3
     int channelsNb = m_colorSpace->channelCount();
     int alphaPos = m_colorSpace->alphaPos();
 
-    for (;nPixels--; colors++, kernelValues++)
-    {
+    for (; nPixels--; colors++, kernelValues++) {
         qint32 weight = *kernelValues;
-        if( weight != 0 )
-        {
-            if( m_colorSpace->alpha(*colors) == 0 )
-            {
+        if (weight != 0) {
+            if (m_colorSpace->alpha(*colors) == 0) {
                 totalWeightTransparent += weight;
             } else {
-                for(uint i = 0; i < channelsNb; i++)
-                {
+                for (uint i = 0; i < channelsNb; i++) {
                     m_accumulators[i]->mix(colors[i], weight);
                 }
             }
@@ -63,45 +58,34 @@ void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qint3
     }
 
     bool allChannels = channelFlags.isEmpty();
-    Q_ASSERT( allChannels || channelFlags.size() == channelsNb );
-    if(totalWeightTransparent == 0)
-    {
-        for (uint i = 0; i < channelsNb; i++)
-        {
-            if (   (allChannels and i != (uint)alphaPos )
-                or (not allChannels and channelFlags.testBit( i ) ) )
-                {
-                m_accumulators[i]->affect( dst, factor, offset);
+    Q_ASSERT(allChannels || channelFlags.size() == channelsNb);
+    if (totalWeightTransparent == 0) {
+        for (uint i = 0; i < channelsNb; i++) {
+            if ((allChannels and i != (uint)alphaPos)
+                    or(not allChannels and channelFlags.testBit(i))) {
+                m_accumulators[i]->affect(dst, factor, offset);
             }
         }
-    }
-    else if (totalWeightTransparent != totalWeight ) {
-        if(totalWeight == factor)
-        {
-            qint64 a = ( totalWeight - totalWeightTransparent );
-            for(uint i = 0; i < channelsNb; i++)
-            {
-                if( allChannels || channelFlags.testBit( i ) )
-                {
-                    if( i == (uint)alphaPos )
-                    {
-                        m_accumulators[i]->affect( dst, totalWeight, offset);
+    } else if (totalWeightTransparent != totalWeight) {
+        if (totalWeight == factor) {
+            qint64 a = (totalWeight - totalWeightTransparent);
+            for (uint i = 0; i < channelsNb; i++) {
+                if (allChannels || channelFlags.testBit(i)) {
+                    if (i == (uint)alphaPos) {
+                        m_accumulators[i]->affect(dst, totalWeight, offset);
                     } else {
-                        m_accumulators[i]->affect( dst, a, offset);
+                        m_accumulators[i]->affect(dst, a, offset);
                     }
                 }
             }
         } else {
-            qreal a = totalWeight / ( factor * ( totalWeight - totalWeightTransparent ) ); // use qreal as it easily saturate
-            for(uint i = 0; i < channelsNb; i++)
-            {
-                if( allChannels || channelFlags.testBit( i ) )
-                {
-                    if( i == (uint)alphaPos )
-                    {
-                        m_accumulators[i]->affect( dst, factor, offset);
+            qreal a = totalWeight / (factor * (totalWeight - totalWeightTransparent));     // use qreal as it easily saturate
+            for (uint i = 0; i < channelsNb; i++) {
+                if (allChannels || channelFlags.testBit(i)) {
+                    if (i == (uint)alphaPos) {
+                        m_accumulators[i]->affect(dst, factor, offset);
                     } else {
-                        m_accumulators[i]->affect( dst, a, offset);
+                        m_accumulators[i]->affect(dst, a, offset);
                     }
                 }
             }

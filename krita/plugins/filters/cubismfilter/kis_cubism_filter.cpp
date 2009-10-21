@@ -333,7 +333,7 @@ void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src,
                             weights[1] = 255 - weights[0];
 
                             dstAccessor.moveTo(x, y);
-                            memcpy( buf, dstAccessor.rawData(), sizeof(quint8) * pixelSize );
+                            memcpy(buf, dstAccessor.rawData(), sizeof(quint8) * pixelSize);
 
                             const quint8* colors[2];
                             colors[0] = col;

@@ -26,31 +26,31 @@ class KoCompositeOp;
 /**
  * This model can be use to show a list of visible composite op in a list view.
  */
-class KisCompositeOpsModel : public QAbstractListModel {
-    public:
-        enum AdditionalRoles {
-            CompositeOpSortRole = 0x1FDFDA
-        };
-    public:
-        KisCompositeOpsModel(const QList<KoCompositeOp*>& list);
-        ~KisCompositeOpsModel();
-        int rowCount( const QModelIndex & parent = QModelIndex() ) const;
-        QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
-        const QString& itemAt(const QModelIndex & index) const;
-        QModelIndex indexOf( const KoCompositeOp* ) const;
-        /**
-         * @return the index for the given composite op id
-         */
-        QModelIndex indexOf( const QString& ) const;
-    private:
-        struct CompositeOpInfo {
-          CompositeOpInfo(QString _id, QString _description, QString _category ) : id(_id), description(_description), category(_category)
-          {}
-          QString id;
-          QString description;
-          QString category;
-        };
-        QList< CompositeOpInfo > m_list;
+class KisCompositeOpsModel : public QAbstractListModel
+{
+public:
+    enum AdditionalRoles {
+        CompositeOpSortRole = 0x1FDFDA
+    };
+public:
+    KisCompositeOpsModel(const QList<KoCompositeOp*>& list);
+    ~KisCompositeOpsModel();
+    int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    const QString& itemAt(const QModelIndex & index) const;
+    QModelIndex indexOf(const KoCompositeOp*) const;
+    /**
+     * @return the index for the given composite op id
+     */
+    QModelIndex indexOf(const QString&) const;
+private:
+    struct CompositeOpInfo {
+        CompositeOpInfo(QString _id, QString _description, QString _category) : id(_id), description(_description), category(_category) {}
+        QString id;
+        QString description;
+        QString category;
+    };
+    QList< CompositeOpInfo > m_list;
 };
 
 #endif

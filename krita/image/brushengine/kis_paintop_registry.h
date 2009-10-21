@@ -79,7 +79,7 @@ public:
     static KisPaintOpRegistry* instance();
 
 private:
-    
+
     KisPaintOpRegistry();
     KisPaintOpRegistry(const KisPaintOpRegistry&);
     KisPaintOpRegistry operator=(const KisPaintOpRegistry&);

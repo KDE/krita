@@ -93,7 +93,7 @@ bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, quint32 newIndex)
     if (node->graphListener())
         node->graphListener()->aboutToMoveNode(node.data(), oldIndex, newIndex);
     KisNodeSP aboveThis = parent->at(newIndex - 1);
-    if( aboveThis == node ) return false;
+    if (aboveThis == node) return false;
     if (node->parent()) {
         if (!node->parent()->remove(node)) return false;
     }

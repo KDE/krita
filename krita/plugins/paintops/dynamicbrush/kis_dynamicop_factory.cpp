@@ -31,9 +31,9 @@
 #include "kis_dynamicop_settings_widget.h"
 
 KisDynamicOpFactory::KisDynamicOpFactory(KisBookmarkedConfigurationsModel* shapeBookmarksManager,
-                                         KisBookmarkedConfigurationsModel* coloringBookmarksManager)
-    : m_shapeBookmarksManager(shapeBookmarksManager)
-    , m_coloringBookmarksManager(coloringBookmarksManager)
+        KisBookmarkedConfigurationsModel* coloringBookmarksManager)
+        : m_shapeBookmarksManager(shapeBookmarksManager)
+        , m_coloringBookmarksManager(coloringBookmarksManager)
 {
 }
 
@@ -67,5 +67,5 @@ KisPaintOpSettingsSP KisDynamicOpFactory::settings(KisImageWSP image)
 
 KisPaintOpSettingsWidget* KisDynamicOpSettings::createSettingsWidget(QWidget* parent)
 {
-    return new KisDynamicOpSettingsWidget( parent );
+    return new KisDynamicOpSettingsWidget(parent);
 }

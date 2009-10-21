@@ -32,11 +32,11 @@ public:
 
     virtual ~KisDynamicOpSettingsWidget();
 
-    void setConfiguration( const KisPropertiesConfiguration * config);
+    void setConfiguration(const KisPropertiesConfiguration * config);
 
     KisPropertiesConfiguration* configuration() const;
 
-    void writeConfiguration( KisPropertiesConfiguration *config ) const;
+    void writeConfiguration(KisPropertiesConfiguration *config) const;
 
 public:
 

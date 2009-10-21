@@ -88,7 +88,7 @@ QWidget* KisToolSelectPath::createOptionWidget()
     m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setObjectName(toolId() + " option widget");
-    
+
     m_optWidget->setWindowTitle(i18n("Path Selection"));
     m_optWidget->disableAntiAliasSelectionOption();
 

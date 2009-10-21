@@ -21,13 +21,14 @@
 
 #include <KoFilter.h>
 
-class KisTIFFImport : public KoFilter {
+class KisTIFFImport : public KoFilter
+{
     Q_OBJECT
-    public:
-        KisTIFFImport(QObject* parent, const QStringList&);
-        virtual ~KisTIFFImport();
-    public:
-        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+public:
+    KisTIFFImport(QObject* parent, const QStringList&);
+    virtual ~KisTIFFImport();
+public:
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

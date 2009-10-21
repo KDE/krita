@@ -90,7 +90,7 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString & filteri
     widgetLayout->addItem(sp, m_nbintegerWidgets, 0);
 }
 
-void KisMultiIntegerFilterWidget::setConfiguration( const KisPropertiesConfiguration * config)
+void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     if (!config) return;
 

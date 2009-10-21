@@ -22,14 +22,15 @@
 
 class Ui_ExtensionsManagerWidget;
 
-class ExtensionsManagerWindow : public QWidget {
-  Q_OBJECT
-  public:
+class ExtensionsManagerWindow : public QWidget
+{
+    Q_OBJECT
+public:
     ExtensionsManagerWindow();
     ~ExtensionsManagerWindow();
-  private slots:
+private slots:
     void installFromFile();
-  private:
+private:
     Ui_ExtensionsManagerWidget* m_emWidget;
 };
 

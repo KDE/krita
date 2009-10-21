@@ -23,12 +23,12 @@
 #include "commands/kis_layer_props_command.h"
 
 KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(KisImageWSP image,
-                                                         const KoColorSpace *dstColorSpace,
-                                                         KoColorConversionTransformation::Intent renderingIntent)
-                                                             : KisNodeVisitor()
-                                                             , m_image(image)
-                                                             , m_dstColorSpace(dstColorSpace)
-                                                             , m_renderingIntent(renderingIntent)
+        const KoColorSpace *dstColorSpace,
+        KoColorConversionTransformation::Intent renderingIntent)
+        : KisNodeVisitor()
+        , m_image(image)
+        , m_dstColorSpace(dstColorSpace)
+        , m_renderingIntent(renderingIntent)
 {
 }
 
@@ -73,10 +73,10 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
     }
 
     KisLayerPropsCommand* propsCommand = new KisLayerPropsCommand(layer,
-                                                                  layer->opacity(), layer->opacity(),
-                                                                  layer->compositeOpId(), layer->compositeOpId(),
-                                                                  layer->name(), layer->name(),
-                                                                  layer->channelFlags(), m_emptyChannelFlags);
+            layer->opacity(), layer->opacity(),
+            layer->compositeOpId(), layer->compositeOpId(),
+            layer->name(), layer->name(),
+            layer->channelFlags(), m_emptyChannelFlags);
     m_image->undoAdapter()->addCommand(propsCommand);
 
     layer->resetCache();
@@ -93,10 +93,10 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
 {
 
     KisLayerPropsCommand* propsCommand = new KisLayerPropsCommand(layer,
-                                                                  layer->opacity(), layer->opacity(),
-                                                                  layer->compositeOpId(), layer->compositeOpId(),
-                                                                  layer->name(), layer->name(),
-                                                                  layer->channelFlags(), m_emptyChannelFlags);
+            layer->opacity(), layer->opacity(),
+            layer->compositeOpId(), layer->compositeOpId(),
+            layer->name(), layer->name(),
+            layer->channelFlags(), m_emptyChannelFlags);
 
     if (m_image && m_image->undoAdapter()) {
         m_image->undoAdapter()->addCommand(propsCommand);
@@ -107,17 +107,17 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
         if (m_image->undoAdapter())
             if (cmd)
                 m_image->undoAdapter()->addCommand(cmd);
-        else
-            delete cmd;
+            else
+                delete cmd;
     }
 
-    if (layer->paintDevice() ) {
+    if (layer->paintDevice()) {
         QUndoCommand* cmd = layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
         if (m_image->undoAdapter())
             if (cmd)
                 m_image->undoAdapter()->addCommand(cmd);
-        else
-            delete cmd;
+            else
+                delete cmd;
     }
 
     if (layer->projection()) {
@@ -125,8 +125,8 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
         if (m_image->undoAdapter())
             if (cmd)
                 m_image->undoAdapter()->addCommand(cmd);
-        else
-            delete cmd;
+            else
+                delete cmd;
     }
 
     layer->setDirty();

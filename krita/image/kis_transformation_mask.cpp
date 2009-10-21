@@ -35,8 +35,8 @@ KisTransformationMask::KisTransformationMask()
         , m_xtranslate(0)
         , m_ytranslate(0)
 {
-    Q_ASSERT( KisFilterStrategyRegistry::instance()->keys().count() > 0 );
-    m_filter = KisFilterStrategyRegistry::instance()->get( KisFilterStrategyRegistry::instance()->keys()[0] );
+    Q_ASSERT(KisFilterStrategyRegistry::instance()->keys().count() > 0);
+    m_filter = KisFilterStrategyRegistry::instance()->get(KisFilterStrategyRegistry::instance()->keys()[0]);
 }
 
 KisTransformationMask::~KisTransformationMask()

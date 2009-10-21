@@ -44,24 +44,24 @@ KisBrushSP KisBrushOption::brush() const
     return m_brushSelectionWidget->brush();
 }
 
-void KisBrushOption::setAutoBrush( bool on )
+void KisBrushOption::setAutoBrush(bool on)
 {
-    m_brushSelectionWidget->setAutoBrush( on );
+    m_brushSelectionWidget->setAutoBrush(on);
 }
 
-void KisBrushOption::setPredefinedBrushes( bool on )
+void KisBrushOption::setPredefinedBrushes(bool on)
 {
-    m_brushSelectionWidget->setPredefinedBrushes( on );
+    m_brushSelectionWidget->setPredefinedBrushes(on);
 }
 
-void KisBrushOption::setCustomBrush( bool on )
+void KisBrushOption::setCustomBrush(bool on)
 {
-    m_brushSelectionWidget->setCustomBrush( on );
+    m_brushSelectionWidget->setCustomBrush(on);
 }
 
-void KisBrushOption::setTextBrush( bool on )
+void KisBrushOption::setTextBrush(bool on)
 {
-    m_brushSelectionWidget->setTextBrush( on );
+    m_brushSelectionWidget->setTextBrush(on);
 }
 
 void KisBrushOption::setImage(KisImageWSP image)
@@ -72,23 +72,23 @@ void KisBrushOption::setImage(KisImageWSP image)
 
 void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
 {
-/*
-    KisBrushSP brush = m_brushSelectionWidget->brush();
-    QDomDocument d;
-    QDomElement e = d.createElement( "brush_definition" );
-    brush->toXML( d, e );
-    settings->setProperty( "BrushDefinition", d.toString() );
-*/
+    /*
+        KisBrushSP brush = m_brushSelectionWidget->brush();
+        QDomDocument d;
+        QDomElement e = d.createElement( "brush_definition" );
+        brush->toXML( d, e );
+        settings->setProperty( "BrushDefinition", d.toString() );
+    */
 }
 
 void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-/*
-    QString brushDefinition = setting->getString("brush_definition");
-    QDomDocument d;
-    d.setContent( brushDefinition, false );
-    QDomElement e = d.elementsByTagName("brush_definition" ).at( 0 ).toElement();
-    KisBrushSP brush = KisBrush::fromXML( e );
-    m_brushSelectionWidget->setCurrentBrush(brush);
-*/
+    /*
+        QString brushDefinition = setting->getString("brush_definition");
+        QDomDocument d;
+        d.setContent( brushDefinition, false );
+        QDomElement e = d.elementsByTagName("brush_definition" ).at( 0 ).toElement();
+        KisBrushSP brush = KisBrush::fromXML( e );
+        m_brushSelectionWidget->setCurrentBrush(brush);
+    */
 }

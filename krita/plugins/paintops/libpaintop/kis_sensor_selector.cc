@@ -44,8 +44,9 @@ void KisSensorSelector::setCurrent(KisDynamicSensor* sensor)
     }
 }
 
-KisDynamicSensor* KisSensorSelector::current() {
-  return m_currentSensor;
+KisDynamicSensor* KisSensorSelector::current()
+{
+    return m_currentSensor;
 }
 
 void KisSensorSelector::setSensorId(const KoID& id)

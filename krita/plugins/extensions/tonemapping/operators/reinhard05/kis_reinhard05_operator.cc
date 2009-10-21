@@ -41,7 +41,7 @@ public:
     KisReinhard05OperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg) {
         widget.setupUi(this);
     }
-    virtual void setConfiguration( const KisPropertiesConfiguration* config) {
+    virtual void setConfiguration(const KisPropertiesConfiguration* config) {
         widget.brightness->setValue(config->getDouble("Brightness", 0.0));
         widget.chromatic->setValue(config->getDouble("Chromatic", 0.0));
         widget.light->setValue(config->getDouble("Light", 1.0));

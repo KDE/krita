@@ -98,8 +98,8 @@ public:
 
     KoShapeManager *shapeManager() const;
 
-    bool saveLayer( KoStore * store ) const;
-    bool loadLayer( KoStore* store );
+    bool saveLayer(KoStore * store) const;
+    bool loadLayer(KoStore* store);
 
 public slots:
     void selectionChanged();

@@ -22,14 +22,15 @@ class KoStore;
 
 #include "kis_open_raster_save_context.h"
 
-class OraSaveContext : public KisOpenRasterSaveContext {
-    public:
-        OraSaveContext(KoStore* _store);
-        virtual QString saveDeviceData(KisPaintLayerSP layer);
-        virtual void saveStack(const QDomDocument& doc);
-    private:
-        int m_id;
-        KoStore* m_store;
+class OraSaveContext : public KisOpenRasterSaveContext
+{
+public:
+    OraSaveContext(KoStore* _store);
+    virtual QString saveDeviceData(KisPaintLayerSP layer);
+    virtual void saveStack(const QDomDocument& doc);
+private:
+    int m_id;
+    KoStore* m_store;
 };
 
 #endif

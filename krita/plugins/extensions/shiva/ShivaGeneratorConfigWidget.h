@@ -21,18 +21,20 @@
 #include <kis_config_widget.h>
 #include <QtShiva/SourceParametersWidget.h>
 
-namespace OpenShiva {
-  class Source;
+namespace OpenShiva
+{
+class Source;
 }
 
-class ShivaGeneratorConfigWidget : public KisConfigWidget {
-  public:
-    ShivaGeneratorConfigWidget( const OpenShiva::Source* _source, QWidget* parent = 0);
+class ShivaGeneratorConfigWidget : public KisConfigWidget
+{
+public:
+    ShivaGeneratorConfigWidget(const OpenShiva::Source* _source, QWidget* parent = 0);
     ~ShivaGeneratorConfigWidget();
-    
+
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
-  private:
+private:
     const OpenShiva::Source* m_source;
     QtShiva::SourceParametersWidget* m_widget;
 };

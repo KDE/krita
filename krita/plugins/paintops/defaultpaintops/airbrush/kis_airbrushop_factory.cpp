@@ -42,8 +42,8 @@ KisAirbrushOpFactory::~KisAirbrushOpFactory()
 
 
 KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
-                                         KisPainter * painter,
-                                         KisImageWSP image)
+        KisPainter * painter,
+        KisImageWSP image)
 {
     Q_UNUSED(image);
 
@@ -57,18 +57,18 @@ KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
 
 KisPaintOpSettingsSP KisAirbrushOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
 {
-    Q_UNUSED( inputDevice );
-    Q_UNUSED( image );
+    Q_UNUSED(inputDevice);
+    Q_UNUSED(image);
     return new KisAirbrushOpSettings();
 }
 
 KisPaintOpSettingsSP KisAirbrushOpFactory::settings(KisImageWSP image)
 {
-    Q_UNUSED( image );
+    Q_UNUSED(image);
     return new KisAirbrushOpSettings();
 }
 
 KisPaintOpSettingsWidget* KisAirbrushOpFactory::createSettingsWidget(QWidget* parent)
 {
-    return new KisAirbrushOpSettingsWidget( parent );
+    return new KisAirbrushOpSettingsWidget(parent);
 }

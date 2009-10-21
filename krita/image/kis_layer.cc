@@ -161,12 +161,11 @@ const QString& KisLayer::compositeOpId() const
 const KoCompositeOp * KisLayer::compositeOp() const
 {
     KisLayerSP parent = parentLayer();
-    if( !parent )
-    {
-      return 0;
+    if (!parent) {
+        return 0;
     }
     const KoCompositeOp* op = parent->colorSpace()->compositeOp(m_d->compositeOp);
-    if( op ) return op;
+    if (op) return op;
     return parent->colorSpace()->compositeOp(COMPOSITE_OVER);
 }
 
@@ -242,7 +241,7 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
     QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
     QList<KisEffectMaskSP> masks;
 
-    if(m_d->previewMask)
+    if (m_d->previewMask)
         masks.append(m_d->previewMask);
 
     foreach(const KisNodeSP& node,  nodes) {
@@ -278,7 +277,7 @@ QRect KisLayer::masksChangeRect(const QList<KisEffectMaskSP> &masks,
     foreach(const KisEffectMaskSP& mask, masks) {
         changeRect = mask->changeRect(prevChangeRect);
 
-        if(changeRect != prevChangeRect)
+        if (changeRect != prevChangeRect)
             rectVariesFlag = true;
 
         prevChangeRect = changeRect;
@@ -297,12 +296,12 @@ QRect KisLayer::masksNeedRect(const QList<KisEffectMaskSP> &masks,
     QRect prevNeedRect = changeRect;
     QRect needRect;
 
-    for(qint32 i = masks.size()-1; i>=0; i--) {
+    for (qint32 i = masks.size() - 1; i >= 0; i--) {
         applyRects.push(prevNeedRect);
 
         needRect = masks[i]->needRect(prevNeedRect);
 
-        if(prevNeedRect != needRect)
+        if (prevNeedRect != needRect)
             rectVariesFlag = true;
 
         prevNeedRect = needRect;
@@ -323,24 +322,23 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
     QRect changeRect;
     QRect needRect;
 
-    if(masks.isEmpty()) {
+    if (masks.isEmpty()) {
         changeRect = requestedRect;
-        if(source != destination) {
+        if (source != destination) {
             copyOriginalToProjection(source, destination, requestedRect);
         }
-    }
-    else {
+    } else {
         QStack<QRect> applyRects;
         bool changeRectVaries;
         bool needRectVaries;
 
         changeRect = masksChangeRect(masks, requestedRect,
-                                       changeRectVaries);
+                                     changeRectVaries);
 
         needRect = masksNeedRect(masks, changeRect,
                                  applyRects, needRectVaries);
 
-        if(!changeRectVaries && !needRectVaries) {
+        if (!changeRectVaries && !needRectVaries) {
             /**
              * A bit of optimization:
              * All filters will read/write exactly from/to the requested
@@ -349,7 +347,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
              */
             Q_ASSERT(needRect == requestedRect);
 
-            if(source != destination) {
+            if (source != destination) {
                 copyOriginalToProjection(source, destination, needRect);
             }
 
@@ -357,8 +355,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                 mask->apply(destination, applyRects.pop());
             }
             Q_ASSERT(applyRects.isEmpty());
-        }
-        else {
+        } else {
             /**
              * We can't eliminate additional copy-op
              * as filters' behaviour may be quite insane here,
@@ -388,20 +385,19 @@ QRect KisLayer::updateProjection(const QRect& rect)
     KisPaintDeviceSP originalDevice = original();
 
     if (!rect.isValid() ||
-        !visible() ||
-        !originalDevice) return QRect();
+            !visible() ||
+            !originalDevice) return QRect();
 
-    if(!needProjection() && !hasEffectMasks()) {
+    if (!needProjection() && !hasEffectMasks()) {
         updatedRect = repaintOriginal(originalDevice, updatedRect);
         m_d->projection = 0;
-    }
-    else {
+    } else {
         updatedRect = repaintOriginal(originalDevice, updatedRect);
 
-        if(!updatedRect.isEmpty()) {
+        if (!updatedRect.isEmpty()) {
 
             if (!m_d->projection ||
-                !(*m_d->projection->colorSpace() == *originalDevice->colorSpace())) {
+                    !(*m_d->projection->colorSpace() == *originalDevice->colorSpace())) {
 
                 /**
                  * If it's needed to create a new projection paint device
@@ -449,7 +445,7 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-        originalDevice->createThumbnail(w, h) : QImage();
+           originalDevice->createThumbnail(w, h) : QImage();
 }
 
 qint32 KisLayer::x() const

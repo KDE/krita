@@ -23,7 +23,8 @@
 #include <KoFilter.h>
 #include <half.h>
 
-class KisOpenEXRImport : public KoFilter {
+class KisOpenEXRImport : public KoFilter
+{
     Q_OBJECT
 
 public:

@@ -30,60 +30,57 @@
 
 
 #ifdef BENCHMARK
-    #include <QTime>
+#include <QTime>
 #endif
 
 
 KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-    : KisPaintOp( painter )
-    , m_settings( settings )
-    , m_image ( image )
+        : KisPaintOp(painter)
+        , m_settings(settings)
+        , m_image(image)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     Q_ASSERT(m_image);
-    
-    m_sprayBrush.setDiameter( settings->diameter() );
-    m_sprayBrush.setJitterSize( settings->jitterSize() );
-    m_sprayBrush.setJitterMovement( settings->jitterMovement() );
 
-    m_sprayBrush.setObject( settings->object() );
-    m_sprayBrush.setShape( settings->shape() );
+    m_sprayBrush.setDiameter(settings->diameter());
+    m_sprayBrush.setJitterSize(settings->jitterSize());
+    m_sprayBrush.setJitterMovement(settings->jitterMovement());
+
+    m_sprayBrush.setObject(settings->object());
+    m_sprayBrush.setShape(settings->shape());
     m_sprayBrush.setJitterShapeSize(settings->jitterShapeSize());
 
-    if (settings->proportional()){
-        m_sprayBrush.setObjectDimension( settings->widthPerc()  / 100.0 * settings->diameter() * settings->scale(),
-                                         settings->heightPerc() / 100.0 * settings->diameter() * settings->scale());
-    } else
-    {
-        m_sprayBrush.setObjectDimension( settings->width(), settings->height() );
+    if (settings->proportional()) {
+        m_sprayBrush.setObjectDimension(settings->widthPerc()  / 100.0 * settings->diameter() * settings->scale(),
+                                        settings->heightPerc() / 100.0 * settings->diameter() * settings->scale());
+    } else {
+        m_sprayBrush.setObjectDimension(settings->width(), settings->height());
     }
 
-    m_sprayBrush.setAmount( settings->amount() );
-    m_sprayBrush.setScale( settings->scale() );
+    m_sprayBrush.setAmount(settings->amount());
+    m_sprayBrush.setScale(settings->scale());
 
 
-    m_sprayBrush.setCoverity( settings->coverage() / 100.0 );
-    m_sprayBrush.setUseDensity( settings->useDensity() );
-    m_sprayBrush.setParticleCount( settings->particleCount() );
+    m_sprayBrush.setCoverity(settings->coverage() / 100.0);
+    m_sprayBrush.setUseDensity(settings->useDensity());
+    m_sprayBrush.setParticleCount(settings->particleCount());
 
-    m_sprayBrush.setMaxTreshold( settings->maxTresh() );
-    m_sprayBrush.setMinTreshold( settings->minTresh() );
+    m_sprayBrush.setMaxTreshold(settings->maxTresh());
+    m_sprayBrush.setMinTreshold(settings->minTresh());
 
     QRect area;
-    if ( settings->highRendering() ){
-        area = QRect( 0, 0, m_image->width(), m_image->height() );
-        m_sprayBrush.setComputeArea( area );
-    }else{
-        area = QRect( 0, 0, settings->diameter() * 1.5 , settings->diameter() * 1.5 );
+    if (settings->highRendering()) {
+        area = QRect(0, 0, m_image->width(), m_image->height());
+        m_sprayBrush.setComputeArea(area);
+    } else {
+        area = QRect(0, 0, settings->diameter() * 1.5 , settings->diameter() * 1.5);
     }
-    m_sprayBrush.setComputeArea( area );
-    // spacing 
-    if ( (settings->diameter() * 0.5) > 1)
-    {
+    m_sprayBrush.setComputeArea(area);
+    // spacing
+    if ((settings->diameter() * 0.5) > 1) {
         m_ySpacing = m_xSpacing = settings->diameter() * 0.5 * settings->spacing();
-    } else
-    {
+    } else {
         m_ySpacing = m_xSpacing = 1.0;
     }
     m_spacing = m_xSpacing;
@@ -91,24 +88,25 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sprayBrush.setUseRandomOpacity(settings->useRandomOpacity());
     m_sprayBrush.setSettingsObject(m_settings);
 
-    
+
 #ifdef BENCHMARK
     m_count = m_total = 0;
 #endif
-    
+
 }
 
 KisSprayPaintOp::~KisSprayPaintOp()
 {
 }
 
-double KisSprayPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        xSpacing = m_xSpacing;
-        ySpacing = m_ySpacing;
+double KisSprayPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
+{
+    Q_UNUSED(pressure1);
+    Q_UNUSED(pressure2);
+    xSpacing = m_xSpacing;
+    ySpacing = m_ySpacing;
 
-        return m_spacing;
+    return m_spacing;
 }
 
 
@@ -118,13 +116,12 @@ void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     QTime time;
     time.start();
 #endif
-    
+
     if (!painter()) return;
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
-    }
-    else {
+    } else {
         m_dab->clear();
     }
 

@@ -46,7 +46,7 @@ KisTiledIterator::~KisTiledIterator()
 }
 
 KisTiledIterator::KisTiledIterator(const KisTiledIterator& rhs)
-    : KisShared()
+        : KisShared()
 {
     if (this != &rhs) {
         m_dataManager = rhs.m_dataManager;

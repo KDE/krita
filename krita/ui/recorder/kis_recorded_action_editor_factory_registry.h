@@ -31,7 +31,8 @@ class KisRecordedActionEditorFactory;
  * If two editors can edit the same type of action, then the editor that
  * was added last is used in priority.
  */
-class KRITAUI_EXPORT KisRecordedActionEditorFactoryRegistry {
+class KRITAUI_EXPORT KisRecordedActionEditorFactoryRegistry
+{
 private:
     KisRecordedActionEditorFactoryRegistry();
     ~KisRecordedActionEditorFactoryRegistry();
@@ -40,7 +41,7 @@ public:
     /**
      * Add a factory of action editor.
      */
-    void add( KisRecordedActionEditorFactory* factory );
+    void add(KisRecordedActionEditorFactory* factory);
     /**
      * @return an editor for the given action, or a null pointer if there is
      *         no factory for that action.

@@ -4,10 +4,10 @@
 
 #include <QLabel>
 
-%{APPNAME}Dock::%{APPNAME}Dock( KisView2 *view ) : QDockWidget(i18n("%{APPNAME}")), m_view(view)
+% {APPNAME} Dock:: % {APPNAME} Dock(KisView2 *view) : QDockWidget(i18n("%{APPNAME}")), m_view(view)
 {
     m_label = new QLabel(this);
-    setWidget( m_label );
+    setWidget(m_label);
 }
 
 #include "%{APPNAMELC}_dock.moc"

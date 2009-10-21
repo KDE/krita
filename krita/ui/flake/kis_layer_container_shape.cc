@@ -48,10 +48,10 @@ KisLayerContainerShape::KisLayerContainerShape(KoShapeContainer *parent, KisLaye
 
     KoShape::setParent(parent);
     setShapeId(KIS_LAYER_CONTAINER_ID);
-    
-    connect( groupLayer, SIGNAL(visibilityChanged( bool )), SLOT( setLayerVisible( bool ) ) );
-    connect( groupLayer, SIGNAL(userLockingChanged( bool )), SLOT( editabilityChanged( ) ) );
-    connect( groupLayer, SIGNAL(systemLockingChanged( bool )), SLOT( editabilityChanged( ) ) );
+
+    connect(groupLayer, SIGNAL(visibilityChanged(bool)), SLOT(setLayerVisible(bool)));
+    connect(groupLayer, SIGNAL(userLockingChanged(bool)), SLOT(editabilityChanged()));
+    connect(groupLayer, SIGNAL(systemLockingChanged(bool)), SLOT(editabilityChanged()));
 }
 
 KisLayerContainerShape::~KisLayerContainerShape()
@@ -101,38 +101,34 @@ bool KisLayerContainerShape::loadOdf(const KoXmlElement & /*element*/, KoShapeLo
     return false; // TODO
 }
 
-void KisLayerContainerShape::setLayerVisible( bool v)
+void KisLayerContainerShape::setLayerVisible(bool v)
 {
-    setVisible( v );
+    setVisible(v);
 }
 
-bool recursiveFindActiveLayerInChildren( KoSelection* _selection, KoShapeLayer* _currentLayer )
+bool recursiveFindActiveLayerInChildren(KoSelection* _selection, KoShapeLayer* _currentLayer)
 {
-    if( _selection->activeLayer() == _currentLayer)
-    {
+    if (_selection->activeLayer() == _currentLayer) {
         // The following looks weird but it is needed to update the status of the tools
-        _selection->setActiveLayer( _currentLayer );
+        _selection->setActiveLayer(_currentLayer);
         return true;
     }
-    foreach( KoShape* shape, _currentLayer->childShapes() )
-    {
-        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shape );
-        if(layer && recursiveFindActiveLayerInChildren( _selection, layer ) )
-        {
+    foreach(KoShape* shape, _currentLayer->childShapes()) {
+        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>(shape);
+        if (layer && recursiveFindActiveLayerInChildren(_selection, layer)) {
             return true;
         }
     }
     return false;
 }
 
-void KisLayerContainerShape::editabilityChanged( )
+void KisLayerContainerShape::editabilityChanged()
 {
     dbgKrita << m_d->groupLayer->isEditable();
-    setGeometryProtected( !m_d->groupLayer->isEditable() );
+    setGeometryProtected(!m_d->groupLayer->isEditable());
     KoCanvasController* canvas = KoToolManager::instance()->activeCanvasController();
-    if( canvas )
-    {
-        recursiveFindActiveLayerInChildren( canvas->canvas()->shapeManager()->selection(), this );
+    if (canvas) {
+        recursiveFindActiveLayerInChildren(canvas->canvas()->shapeManager()->selection(), this);
     }
 }
 

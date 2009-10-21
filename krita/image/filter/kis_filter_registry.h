@@ -35,7 +35,7 @@ class KRITAIMAGE_EXPORT KisFilterRegistry : public QObject, public KoGenericRegi
     Q_OBJECT
 
 public:
-    
+
     virtual ~KisFilterRegistry();
 
     static KisFilterRegistry* instance();
@@ -43,11 +43,11 @@ public:
     void add(const QString &id, KisFilterSP item);
 
 signals:
-    
+
     void filterAdded(QString id);
 
 private:
-    
+
     KisFilterRegistry();
     KisFilterRegistry(const KisFilterRegistry&);
     KisFilterRegistry operator=(const KisFilterRegistry&);

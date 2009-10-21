@@ -64,4 +64,4 @@ private:
     QString m_before;
     QString m_after;
 };
-#endif 
+#endif

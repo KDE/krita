@@ -27,13 +27,16 @@ class RulerDecoration;
 class KisCanvas2;
 class ConstraintSolver;
 
-class KisRulerAssistantTool : public KisTool {
+class KisRulerAssistantTool : public KisTool
+{
     Q_OBJECT
 public:
     KisRulerAssistantTool(KoCanvasBase * canvas);
     virtual ~KisRulerAssistantTool();
 
-    virtual quint32 priority() { return 3; }
+    virtual quint32 priority() {
+        return 3;
+    }
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
@@ -54,16 +57,16 @@ protected:
 };
 
 
-class KisRulerAssistantToolFactory : public KoToolFactory {
+class KisRulerAssistantToolFactory : public KoToolFactory
+{
 public:
     KisRulerAssistantToolFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisRulerAssistantTool", i18n( "Ruler Assistant" ))
-        {
-            setToolTip( i18n( "Ruler assistant editor tool" ) );
-            setToolType( TOOL_TYPE_VIEW );
-            setIcon("krita_tool_ruler_assistant");
-            setPriority( 0 );
-        };
+            : KoToolFactory(parent, "KisRulerAssistantTool", i18n("Ruler Assistant")) {
+        setToolTip(i18n("Ruler assistant editor tool"));
+        setToolType(TOOL_TYPE_VIEW);
+        setIcon("krita_tool_ruler_assistant");
+        setPriority(0);
+    };
 
 
     virtual ~KisRulerAssistantToolFactory() {}

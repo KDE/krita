@@ -21,13 +21,14 @@
 
 #include <KoFilter.h>
 
-class KisJPEGImport : public KoFilter {
+class KisJPEGImport : public KoFilter
+{
     Q_OBJECT
-    public:
-        KisJPEGImport(QObject* parent, const QStringList&);
-        virtual ~KisJPEGImport();
-    public:
-        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+public:
+    KisJPEGImport(QObject* parent, const QStringList&);
+    virtual ~KisJPEGImport();
+public:
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

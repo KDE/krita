@@ -32,7 +32,7 @@
 
 extern QMutex* shivaMutex;
 
-ShivaFilter::ShivaFilter(OpenShiva::Source* kernel) : KisFilter(KoID( kernel->name().c_str(), kernel->name().c_str() ), categoryOther(), kernel->name().c_str()), m_source(kernel)
+ShivaFilter::ShivaFilter(OpenShiva::Source* kernel) : KisFilter(KoID(kernel->name().c_str(), kernel->name().c_str()), categoryOther(), kernel->name().c_str()), m_source(kernel)
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
@@ -48,15 +48,15 @@ KisConfigWidget* ShivaFilter::createConfigurationWidget(QWidget* parent, const K
 {
     Q_UNUSED(dev);
     Q_UNUSED(image);
-    return new ShivaGeneratorConfigWidget( m_source, parent);
+    return new ShivaGeneratorConfigWidget(m_source, parent);
 }
 
-void ShivaFilter::process( KisConstProcessingInformation srcInfo,
-                           KisProcessingInformation dstInfo,
-                           const QSize& size,
-                           const KisFilterConfiguration* config,
-                           KoUpdater* progressUpdater
-                          ) const
+void ShivaFilter::process(KisConstProcessingInformation srcInfo,
+                          KisProcessingInformation dstInfo,
+                          const QSize& size,
+                          const KisFilterConfiguration* config,
+                          KoUpdater* progressUpdater
+                         ) const
 {
     Q_UNUSED(progressUpdater);
     KisPaintDeviceSP src = srcInfo.paintDevice();
@@ -69,30 +69,27 @@ void ShivaFilter::process( KisConstProcessingInformation srcInfo,
     // TODO support for selection
     OpenShiva::Kernel kernel;
     kernel.setSource(*m_source);
-    
-    if(config)
-    {
-      QMap<QString, QVariant> map = config->getProperties();
-      for( QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it)
-      {
-        const GTLCore::Metadata::Entry* entry = kernel.metadata()->parameter(it.key().toAscii().data());
-        if(entry and entry->asParameterEntry()) {
-            kernel.setParameter(it.key().toAscii().data(), qvariantToValue(it.value(), entry->asParameterEntry()->valueType()));
+
+    if (config) {
+        QMap<QString, QVariant> map = config->getProperties();
+        for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it) {
+            const GTLCore::Metadata::Entry* entry = kernel.metadata()->parameter(it.key().toAscii().data());
+            if (entry and entry->asParameterEntry()) {
+                kernel.setParameter(it.key().toAscii().data(), qvariantToValue(it.value(), entry->asParameterEntry()->valueType()));
+            }
         }
-      }
     }
     {
-      QMutexLocker l(shivaMutex);
-      kernel.compile();
-      if(kernel.isCompiled())
-      {
-        ConstPaintDeviceImage pdisrc(src);
-        PaintDeviceImage pdi(dst);
-        std::list< GTLCore::AbstractImage* > inputs;
-        inputs.push_back(&pdisrc);
-        GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
-        dbgPlugins << dstTopLeft << " " << size;
-        kernel.evaluatePixeles(region, inputs, &pdi);
-      }
+        QMutexLocker l(shivaMutex);
+        kernel.compile();
+        if (kernel.isCompiled()) {
+            ConstPaintDeviceImage pdisrc(src);
+            PaintDeviceImage pdi(dst);
+            std::list< GTLCore::AbstractImage* > inputs;
+            inputs.push_back(&pdisrc);
+            GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
+            dbgPlugins << dstTopLeft << " " << size;
+            kernel.evaluatePixeles(region, inputs, &pdi);
+        }
     }
 }

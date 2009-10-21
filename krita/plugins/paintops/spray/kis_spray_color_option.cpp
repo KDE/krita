@@ -25,8 +25,7 @@ class KisColorOptionsWidget: public QWidget, public Ui::WdgColorOptions
 {
 public:
     KisColorOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+            : QWidget(parent) {
         setupUi(this);
     }
 };
@@ -36,19 +35,19 @@ KisSprayColorOption::KisSprayColorOption()
 {
     m_checkable = false;
     m_options = new KisColorOptionsWidget();
-    
-    connect(m_options->randomOpacityCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->hueSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
-    connect(m_options->saturationSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
-    connect(m_options->valueSlider,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
-    
+
+    connect(m_options->randomOpacityCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->hueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->saturationSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->valueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+
     setConfigurationPage(m_options);
 }
 
 KisSprayColorOption::~KisSprayColorOption()
 {
-    // delete m_options; 
+    // delete m_options;
 }
 
 // TODO
@@ -60,9 +59,9 @@ void KisSprayColorOption::writeOptionSetting(KisPropertiesConfiguration* setting
 // TODO
 void KisSprayColorOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-/*    m_options->diameterSpinBox->setValue( setting->getInt("Spray/diameter") );
-    m_options->coverageSpin->setValue( setting->getDouble("Spray/coverage") );
-    m_options->jitterSizeBox->setChecked( setting->getBool("Spray/jitterSize") );*/
+    /*    m_options->diameterSpinBox->setValue( setting->getInt("Spray/diameter") );
+        m_options->coverageSpin->setValue( setting->getDouble("Spray/coverage") );
+        m_options->jitterSizeBox->setChecked( setting->getBool("Spray/jitterSize") );*/
 }
 
 

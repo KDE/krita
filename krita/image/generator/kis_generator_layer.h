@@ -58,8 +58,12 @@ public:
      * Convinience functions.
      * FIXME: should be deprecated? (DK)
      */
-    KisFilterConfiguration *generator() const {return filter();};
-    void setGenerator(KisFilterConfiguration * filterConfig) {setFilter(filterConfig);};
+    KisFilterConfiguration *generator() const {
+        return filter();
+    };
+    void setGenerator(KisFilterConfiguration * filterConfig) {
+        setFilter(filterConfig);
+    };
 
     bool accept(KisNodeVisitor &);
 

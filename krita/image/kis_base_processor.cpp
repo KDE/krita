@@ -33,13 +33,12 @@ public:
     KisBaseProcessorConfigurationFactory(KisBaseProcessor* _generator) : m_generator(_generator) {}
     virtual ~KisBaseProcessorConfigurationFactory() {}
     virtual KisSerializableConfiguration* createDefault() {
-      return m_generator->factoryConfiguration(0);
+        return m_generator->factoryConfiguration(0);
     }
-    virtual KisSerializableConfiguration* create(const QDomElement& e)
-    {
-      KisSerializableConfiguration* config = m_generator->factoryConfiguration(0);
-      config->fromXML(e);
-      return config;
+    virtual KisSerializableConfiguration* create(const QDomElement& e) {
+        KisSerializableConfiguration* config = m_generator->factoryConfiguration(0);
+        config->fromXML(e);
+        return config;
     }
 private:
     KisBaseProcessor* m_generator;
@@ -47,14 +46,13 @@ private:
 
 struct KisBaseProcessor::Private {
     Private()
-        : bookmarkManager(0)
-        , supportsPainting(false)
-        , supportsPreview(true)
-        , supportsAdjustmentLayers(false)
-        , supportsIncrementalPainting(true)
-        , supportsThreading(true)
-        , colorSpaceIndependence(FULLY_INDEPENDENT)
-    {
+            : bookmarkManager(0)
+            , supportsPainting(false)
+            , supportsPreview(true)
+            , supportsAdjustmentLayers(false)
+            , supportsIncrementalPainting(true)
+            , supportsThreading(true)
+            , colorSpaceIndependence(FULLY_INDEPENDENT) {
     }
 
     KisBookmarkedConfigurationManager* bookmarkManager;

@@ -39,26 +39,26 @@
 #include "filter.h"
 
 KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-    : KisPaintOp( painter )
-    , m_settings( settings )
-    , m_image ( image )
+        : KisPaintOp(painter)
+        , m_settings(settings)
+        , m_image(image)
 {
-    m_dynaBrush.setImage( image );
+    m_dynaBrush.setImage(image);
 
-    m_dynaBrush.setInitialWidth( settings->initWidth() );
-    m_dynaBrush.setMass( settings->mass() );
-    m_dynaBrush.setDrag( settings->drag() );
-    m_dynaBrush.useFixedAngle( settings->useFixedAngle() );
-    m_dynaBrush.setAngle( settings->xAngle(), settings->yAngle() );
-    m_dynaBrush.setWidthRange( settings->widthRange() );
+    m_dynaBrush.setInitialWidth(settings->initWidth());
+    m_dynaBrush.setMass(settings->mass());
+    m_dynaBrush.setDrag(settings->drag());
+    m_dynaBrush.useFixedAngle(settings->useFixedAngle());
+    m_dynaBrush.setAngle(settings->xAngle(), settings->yAngle());
+    m_dynaBrush.setWidthRange(settings->widthRange());
 
     // primitives
-    m_dynaBrush.setAction( settings->action() );
-    m_dynaBrush.setCircleRadius( settings->circleRadius() );
-    m_dynaBrush.enableLine( settings->enableLine() );
-    m_dynaBrush.enableTwoCircles( settings->twoCircles() );
-    m_dynaBrush.setLineCount ( settings->lineCount() );
-    m_dynaBrush.setLineSpacing ( settings->lineSpacing() );
+    m_dynaBrush.setAction(settings->action());
+    m_dynaBrush.setCircleRadius(settings->circleRadius());
+    m_dynaBrush.enableLine(settings->enableLine());
+    m_dynaBrush.enableTwoCircles(settings->twoCircles());
+    m_dynaBrush.setLineCount(settings->lineCount());
+    m_dynaBrush.setLineSpacing(settings->lineSpacing());
 
 }
 
@@ -73,8 +73,7 @@ double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
-    }
-    else {
+    } else {
         m_dab->clear();
     }
 
@@ -83,7 +82,7 @@ double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     x1 = pi1.pos().x();
     y1 = pi1.pos().y();
 
-    m_dynaBrush.initMouse( pi2.pos() );
+    m_dynaBrush.initMouse(pi2.pos());
     m_dynaBrush.paint(m_dab, x1, y1, painter()->paintColor());
 
     QRect rc = m_dab->extent();

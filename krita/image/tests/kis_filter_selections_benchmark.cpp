@@ -50,8 +50,8 @@
 class KisTimeCounter
 {
 public:
-    KisTimeCounter(){
-        m_factor = double(sysconf(_SC_CLK_TCK))/1000.0;
+    KisTimeCounter() {
+        m_factor = double(sysconf(_SC_CLK_TCK)) / 1000.0;
         restart();
     }
 
@@ -59,10 +59,10 @@ public:
         times(&m_startTime);
     }
 
-    double elapsed(){
+    double elapsed() {
         struct tms endTime;
         times(&endTime);
-        return double(endTime.tms_utime-m_startTime.tms_utime)/m_factor;
+        return double(endTime.tms_utime - m_startTime.tms_utime) / m_factor;
     }
 
 private:
@@ -79,17 +79,17 @@ void KisFilterSelectionsBenchmark::initSelection()
 
 //67.2% deselected
     qDebug() << "Deselected: 67.2%";
-    m_selection->dataManager()->clear(75,75,500,320,255);
-    m_selection->dataManager()->clear(100,100,50,50,quint8(0));
-    m_selection->dataManager()->clear(150,150,50,50,quint8(0));
-    m_selection->dataManager()->clear(200,200,50,50,quint8(0));
+    m_selection->dataManager()->clear(75, 75, 500, 320, 255);
+    m_selection->dataManager()->clear(100, 100, 50, 50, quint8(0));
+    m_selection->dataManager()->clear(150, 150, 50, 50, quint8(0));
+    m_selection->dataManager()->clear(200, 200, 50, 50, quint8(0));
 
-    m_selection->dataManager()->clear(375,195,200,200,quint8(0));
-    m_selection->dataManager()->clear(75,195,200,200,quint8(0));
+    m_selection->dataManager()->clear(375, 195, 200, 200, quint8(0));
+    m_selection->dataManager()->clear(75, 195, 200, 200, quint8(0));
 
-    m_selection->dataManager()->clear(375,75,150,150,quint8(0));
+    m_selection->dataManager()->clear(375, 75, 150, 150, quint8(0));
 
-    m_selection->dataManager()->clear(205,105,50,50,quint8(128));
+    m_selection->dataManager()->clear(205, 105, 50, 50, quint8(128));
 
 // 94.9% deselected
 //    qDebug() << "Deselected: 94.9%";
@@ -163,16 +163,16 @@ void KisFilterSelectionsBenchmark::testUsualSelections(int num)
     KisProcessingInformation dst(projection, filterRect.topLeft(), 0);
 
     timer.restart();
-    for(int i=0; i<num; i++) {
+    for (int i = 0; i < num; i++) {
         KisTransaction transac("", projection, 0);
         m_filter->process(src, dst, filterRect.size(), m_configuration, 0);
     }
-    avTime = double(timer.elapsed())/num;
+    avTime = double(timer.elapsed()) / num;
 
     projection->convertToQImage(0).save("TFS__USUAL_SELECTIONS.png");
 
-    if(num > WARMUP_CYCLES || SHOW_WARMUPS)
-        qDebug()<< "Selections inside filter:\t\t" << avTime;
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+        qDebug() << "Selections inside filter:\t\t" << avTime;
 }
 
 void KisFilterSelectionsBenchmark::testNoSelections(int num)
@@ -184,20 +184,20 @@ void KisFilterSelectionsBenchmark::testNoSelections(int num)
     KisTimeCounter timer;
 
     QRect filterRect = m_selection->selectedExactRect();
-    KisConstProcessingInformation src(m_device,  filterRect.topLeft(),0);
+    KisConstProcessingInformation src(m_device,  filterRect.topLeft(), 0);
     KisProcessingInformation dst(projection, filterRect.topLeft(), 0);
 
     timer.restart();
-    for(int i=0; i<num; i++) {
+    for (int i = 0; i < num; i++) {
         KisTransaction transac("", projection, 0);
         m_filter->process(src, dst, filterRect.size(), m_configuration, 0);
     }
-    avTime = double(timer.elapsed())/num;
+    avTime = double(timer.elapsed()) / num;
 
     projection->convertToQImage(0).save("TFS__NO_SELECTIONS.png");
 
-    if(num > WARMUP_CYCLES || SHOW_WARMUPS)
-        qDebug()<< "No Selections:\t\t\t\t" << avTime;
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+        qDebug() << "No Selections:\t\t\t\t" << avTime;
 }
 
 void KisFilterSelectionsBenchmark::testGoodSelections(int num)
@@ -210,23 +210,23 @@ void KisFilterSelectionsBenchmark::testGoodSelections(int num)
     KisTimeCounter timer;
 
     QRect filterRect = m_selection->selectedExactRect();
-    KisConstProcessingInformation src(m_device,  filterRect.topLeft(),m_selection);
+    KisConstProcessingInformation src(m_device,  filterRect.topLeft(), m_selection);
     KisProcessingInformation dst(projection, filterRect.topLeft(), 0);
 
     timer.restart();
-    for(int i=0; i<num; i++) {
+    for (int i = 0; i < num; i++) {
         KisTransaction transac("", projection, 0);
         m_filter->processSpecial(src, dst, filterRect.size(), m_configuration, 0);
     }
-    avTime = double(timer.elapsed())/num;
+    avTime = double(timer.elapsed()) / num;
 
     projection->convertToQImage(0).save("TFS__GOOD_SELECTIONS.png");
 
-    if(num > WARMUP_CYCLES || SHOW_WARMUPS)
-        qDebug()<< "Selections with alpha (filter):\t" << avTime;
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+        qDebug() << "Selections with alpha (filter):\t" << avTime;
 #else /* if (USE_GOOD_SELECTIONS!=1) */
-    if(num > WARMUP_CYCLES || SHOW_WARMUPS)
-        qDebug()<< "Selections with alpha (filter):\t [Disabled]";
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+        qDebug() << "Selections with alpha (filter):\t [Disabled]";
 #endif
 }
 
@@ -241,10 +241,10 @@ void KisFilterSelectionsBenchmark::testBitBltWOSelections(int num)
     QRect filterRect = m_selection->selectedExactRect();
 
     timer.restart();
-    for(int i=0; i<num; i++) {
+    for (int i = 0; i < num; i++) {
         KisPaintDeviceSP cacheDevice = new KisPaintDevice(projection->colorSpace());
 
-        KisConstProcessingInformation src(m_device,  filterRect.topLeft(),0);
+        KisConstProcessingInformation src(m_device,  filterRect.topLeft(), 0);
         KisProcessingInformation dst(cacheDevice, filterRect.topLeft(), 0);
 
         KisTransaction transac("", cacheDevice, 0);
@@ -255,12 +255,12 @@ void KisFilterSelectionsBenchmark::testBitBltWOSelections(int num)
         gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
         gc.bitBlt(filterRect.topLeft(), cacheDevice, filterRect);
     }
-    avTime = double(timer.elapsed())/num;
+    avTime = double(timer.elapsed()) / num;
 
     projection->convertToQImage(0).save("TFS__BITBLT_WO_SELECTIONS.png");
 
-    if(num > WARMUP_CYCLES || SHOW_WARMUPS)
-        qDebug()<< "bitBlt w/o sel:\t\t\t" << avTime;
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+        qDebug() << "bitBlt w/o sel:\t\t\t" << avTime;
 }
 
 void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
@@ -274,10 +274,10 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
     QRect filterRect = m_selection->selectedExactRect();
 
     timer.restart();
-    for(int i=0; i<num; i++) {
+    for (int i = 0; i < num; i++) {
         KisPaintDeviceSP cacheDevice = new KisPaintDevice(projection->colorSpace());
 
-        KisConstProcessingInformation src(m_device,  filterRect.topLeft(),0);
+        KisConstProcessingInformation src(m_device,  filterRect.topLeft(), 0);
         KisProcessingInformation dst(cacheDevice, filterRect.topLeft(), 0);
 
         KisTransaction transac("", cacheDevice, 0);
@@ -289,12 +289,12 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
         gc.setSelection(m_selection);
         gc.bitBlt(filterRect.topLeft(), cacheDevice, filterRect);
     }
-    avTime = double(timer.elapsed())/num;
+    avTime = double(timer.elapsed()) / num;
 
     projection->convertToQImage(0).save("TFS__BITBLT_WITH_SELECTIONS.png");
 
-    if(num > WARMUP_CYCLES || SHOW_WARMUPS)
-        qDebug()<< "bitBlt with sel:\t\t\t" << avTime;
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+        qDebug() << "bitBlt with sel:\t\t\t" << avTime;
 }
 
 QTEST_KDEMAIN(KisFilterSelectionsBenchmark, GUI)

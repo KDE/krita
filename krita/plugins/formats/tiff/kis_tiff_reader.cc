@@ -38,7 +38,7 @@ uint KisTIFFReaderTarget8bit::copyDataToChannels(quint32 x, quint32 y, quint32 d
             d[poses()[i]] = (quint8)(tiffstream->nextValue() * coeff);
         }
         postProcessor()->postProcess8bit(d);
-        if (transform()) transform()->transform( d, d, 1);
+        if (transform()) transform()->transform(d, d, 1);
         d[poses()[i]] = quint8_MAX;
         for (int k = 0; k < nbExtraSamples(); k++) {
             if (k == alphaPos())
@@ -62,7 +62,7 @@ uint KisTIFFReaderTarget16bit::copyDataToChannels(quint32 x, quint32 y, quint32 
             d[poses()[i]] = (quint16)(tiffstream->nextValue() * coeff);
         }
         postProcessor()->postProcess16bit(d);
-        if (transform()) transform()->transform( (quint8*)d, (quint8*)d, 1);
+        if (transform()) transform()->transform((quint8*)d, (quint8*)d, 1);
         d[poses()[i]] = quint16_MAX;
         for (int k = 0; k < nbExtraSamples(); k++) {
             if (k == alphaPos())
@@ -87,7 +87,7 @@ uint KisTIFFReaderTarget32bit::copyDataToChannels(quint32 x, quint32 y, quint32 
             d[poses()[i]] = (quint32)(tiffstream->nextValue() * coeff);
         }
         postProcessor()->postProcess32bit(d);
-        if (transform()) transform()->transform( (quint8*)d, (quint8*)d, 1);
+        if (transform()) transform()->transform((quint8*)d, (quint8*)d, 1);
         d[poses()[i]] = quint32_MAX;
         for (int k = 0; k < nbExtraSamples(); k++) {
             if (k == alphaPos())

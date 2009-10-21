@@ -62,5 +62,5 @@ KisPaintOpSettingsSP KisChalkPaintOpFactory::settings(KisImageWSP image)
 
 KisPaintOpSettingsWidget* KisChalkPaintOpFactory::createSettingsWidget(QWidget* parent)
 {
-    return new KisChalkPaintOpSettingsWidget( parent );
+    return new KisChalkPaintOpSettingsWidget(parent);
 }

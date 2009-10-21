@@ -86,9 +86,9 @@ inline void alignRectBy2(qint32 &x, qint32 &y, qint32 &w, qint32 &h)
 /************* class KisImagePyramid ********************************/
 
 KisImagePyramid::KisImagePyramid(qint32 pyramidHeight)
-    : m_monitorProfile(0),
-      m_monitorColorSpace(0),
-      m_pyramidHeight(pyramidHeight)
+        : m_monitorProfile(0),
+        m_monitorColorSpace(0),
+        m_pyramidHeight(pyramidHeight)
 {
 }
 
@@ -114,19 +114,19 @@ void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile)
 void KisImagePyramid::rebuildPyramid()
 {
     m_pyramid.clear();
-    for(qint32 i = 0; i < m_pyramidHeight; i++)
+    for (qint32 i = 0; i < m_pyramidHeight; i++)
         m_pyramid.append(new KisPaintDevice(m_monitorColorSpace));
 }
 
 void KisImagePyramid::clearPyramid()
 {
-    for(qint32 i = 0; i < m_pyramidHeight; i++)
+    for (qint32 i = 0; i < m_pyramidHeight; i++)
         m_pyramid[i]->clear();
 }
 
 void KisImagePyramid::setImage(KisImageWSP newImage)
 {
-    if(newImage) {
+    if (newImage) {
         m_originalImage = newImage;
 
         clearPyramid();
@@ -156,7 +156,7 @@ void KisImagePyramid::setDirty(const QRect &rc)
     KisPaintDevice *dst;
     QRect currentSrcRect = rc;
 
-    for(int i = FIRST_NOT_ORIGINAL_INDEX; i < m_pyramidHeight; i++) {
+    for (int i = FIRST_NOT_ORIGINAL_INDEX; i < m_pyramidHeight; i++) {
         src = m_pyramid[i-1].data();
         dst = m_pyramid[i].data();
         currentSrcRect = downsampleByFactor2(currentSrcRect, src, dst);
@@ -177,20 +177,20 @@ void KisImagePyramid::setDirty(const QRect &rc)
 }
 
 QRect KisImagePyramid::downsampleByFactor2(const QRect& srcRect,
-                                           KisPaintDevice* src,
-                                           KisPaintDevice* dst)
+        KisPaintDevice* src,
+        KisPaintDevice* dst)
 {
     qint32 srcX, srcY, srcWidth, srcHeight;
     srcRect.getRect(&srcX, &srcY, &srcWidth, &srcHeight);
     alignRectBy2(srcX, srcY, srcWidth, srcHeight);
 
-    qint32 dstX = srcX/2;
-    qint32 dstY = srcY/2;
-    qint32 dstWidth = srcWidth/2;
-    qint32 dstHeight = srcHeight/2;
+    qint32 dstX = srcX / 2;
+    qint32 dstY = srcY / 2;
+    qint32 dstWidth = srcWidth / 2;
+    qint32 dstHeight = srcHeight / 2;
 
     KisHLineConstIteratorPixel srcIt0 = src->createHLineConstIterator(srcX, srcY, srcWidth);
-    KisHLineConstIteratorPixel srcIt1 = src->createHLineConstIterator(srcX, srcY+1, srcWidth);
+    KisHLineConstIteratorPixel srcIt1 = src->createHLineConstIterator(srcX, srcY + 1, srcWidth);
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstX, dstY, dstWidth);
 
     for (int row = 0; row < dstHeight; ++row) {
@@ -206,7 +206,7 @@ QRect KisImagePyramid::downsampleByFactor2(const QRect& srcRect,
 
             srcIt0 += conseqPixels;
             srcIt1 += conseqPixels;
-            dstIt += conseqPixels/2;
+            dstIt += conseqPixels / 2;
         }
         srcIt0.nextRow();
         srcIt0.nextRow();
@@ -226,14 +226,14 @@ void  KisImagePyramid::downsamplePixels(const quint8 *srcRow0,
      * FIXME (mandatory): Use SSE and friends here.
      */
 
-    qint16 b=0;
-    qint16 g=0;
-    qint16 r=0;
-    qint16 a=0;
+    qint16 b = 0;
+    qint16 g = 0;
+    qint16 r = 0;
+    qint16 a = 0;
 
     static const qint32 pixelSize = 4; // This is preview argb8 mode
 
-    for(qint32 i=0; i<numSrcPixels/2; i++) {
+    for (qint32 i = 0; i < numSrcPixels / 2; i++) {
         b = srcRow0[0] + srcRow1[0] + srcRow0[4] + srcRow1[4];
         g = srcRow0[1] + srcRow1[1] + srcRow0[5] + srcRow1[5];
         r = srcRow0[2] + srcRow1[2] + srcRow0[6] + srcRow1[6];
@@ -251,14 +251,14 @@ void  KisImagePyramid::downsamplePixels(const quint8 *srcRow0,
 }
 
 int KisImagePyramid::findFirstGoodPlaneIndex(qreal scale,
-                                             QSize originalSize)
+        QSize originalSize)
 {
     qint32 nearest = 0;
 
-    for(qint32 i = 0; i<m_pyramidHeight; i++) {
+    for (qint32 i = 0; i < m_pyramidHeight; i++) {
         qreal planeScale = SCALE_FROM_INDEX(i);
-        if(planeScale < scale) {
-            if(originalSize*scale == originalSize*planeScale)
+        if (planeScale < scale) {
+            if (originalSize*scale == originalSize*planeScale)
                 nearest = i;
             break;
         }
@@ -284,7 +284,7 @@ void KisImagePyramid::alignSourceRect(QRect& rect, qreal scale)
      * Assume that KisImage pixels are always positive
      * It allows us to use binary op-s for aligning
      */
-    Q_ASSERT(rect.left()>=0 && rect.top()>=0);
+    Q_ASSERT(rect.left() >= 0 && rect.top() >= 0);
 
     qint32 x1, y1, x2, y2;
     rect.getCoords(&x1, &y1, &x2, &y2);
@@ -305,8 +305,8 @@ void KisImagePyramid::alignSourceRect(QRect& rect, qreal scale)
 }
 
 KisImagePatch KisImagePyramid::getNearestPatch(qreal scaleX, qreal scaleY,
-                                               const QRect& requestedRect,
-                                               qint32 borderWidth)
+        const QRect& requestedRect,
+        qint32 borderWidth)
 {
     qint32 index = findFirstGoodPlaneIndex(qMax(scaleX, scaleY),
                                            requestedRect.size());
@@ -321,13 +321,13 @@ KisImagePatch KisImagePyramid::getNearestPatch(qreal scaleX, qreal scaleY,
     alignByPow2Hi(borderWidth, alignment);
 
     patch.m_interestRect = toFloatRectWorkaround(
-        QRect(borderWidth, borderWidth,
-              requestedRect.width(),
-              requestedRect.height())
-        );
+                               QRect(borderWidth, borderWidth,
+                                     requestedRect.width(),
+                                     requestedRect.height())
+                           );
 
     QRect adjustedRect = requestedRect.adjusted(-borderWidth, -borderWidth,
-                                                borderWidth, borderWidth);
+                         borderWidth, borderWidth);
     patch.m_patchRect = adjustedRect;
 
     scaleRect(patch.m_interestRect, planeScale, planeScale);
@@ -344,17 +344,17 @@ KisImagePatch KisImagePyramid::getNearestPatch(qreal scaleX, qreal scaleY,
 }
 
 void KisImagePyramid::drawFromOriginalImage(QPainter& gc,
-                                            const QRect& imageRect,
-                                            const QRectF& viewportRect,
-                                            qint32 borderWidth,
-                                            QPainter::RenderHints renderHints)
+        const QRect& imageRect,
+        const QRectF& viewportRect,
+        qint32 borderWidth,
+        QPainter::RenderHints renderHints)
 {
     KisImagePatch patch = getNearestPatch(1, 1, imageRect, borderWidth);
     patch.drawMe(gc, viewportRect, renderHints);
 }
 
 QImage KisImagePyramid::convertToQImageFast(KisPaintDeviceSP paintDevice,
-                                            const QRect& unscaledRect)
+        const QRect& unscaledRect)
 {
     qint32 x, y, w, h;
     unscaledRect.getRect(&x, &y, &w, &h);

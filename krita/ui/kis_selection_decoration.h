@@ -24,7 +24,8 @@
 
 #include "canvas/kis_canvas_decoration.h"
 
-class KRITAUI_EXPORT KisSelectionDecoration : public KisCanvasDecoration {
+class KRITAUI_EXPORT KisSelectionDecoration : public KisCanvasDecoration
+{
     Q_OBJECT
 public:
     KisSelectionDecoration(KisView2* view);

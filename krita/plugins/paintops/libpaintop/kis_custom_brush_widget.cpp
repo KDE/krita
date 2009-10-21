@@ -68,7 +68,8 @@ KisCustomBrushWidget::~KisCustomBrushWidget()
 }
 
 
-KisBrushSP KisCustomBrushWidget::brush() {
+KisBrushSP KisCustomBrushWidget::brush()
+{
     return m_brush;
 }
 
@@ -122,7 +123,7 @@ void KisCustomBrushWidget::slotAddPredefined()
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
     if (m_rServerAdapter)
-        m_rServerAdapter->addResource(static_cast<KisGbrBrush*>( m_brush.data() )->clone());
+        m_rServerAdapter->addResource(static_cast<KisGbrBrush*>(m_brush.data())->clone());
 }
 
 void KisCustomBrushWidget::createBrush()
@@ -133,7 +134,7 @@ void KisCustomBrushWidget::createBrush()
     if (brushStyle->currentIndex() == 0) {
         m_brush = new KisGbrBrush(m_image->mergedImage().data(), 0, 0, m_image->width(), m_image->height());
         if (colorAsMask->isChecked())
-            static_cast<KisGbrBrush*>( m_brush.data() )->makeMaskImage();
+            static_cast<KisGbrBrush*>(m_brush.data())->makeMaskImage();
         return;
     }
 
@@ -165,7 +166,7 @@ void KisCustomBrushWidget::createBrush()
 
     m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
     if (colorAsMask->isChecked())
-        static_cast<KisGbrBrush*>( m_brush.data() )->makeMaskImage();
+        static_cast<KisGbrBrush*>(m_brush.data())->makeMaskImage();
 }
 
 void KisCustomBrushWidget::setImage(KisImageWSP image)

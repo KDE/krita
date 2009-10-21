@@ -56,11 +56,11 @@ public:
 
 
 KisThreadedApplicator::KisThreadedApplicator(KisPaintDeviceSP dev,
-                                             const QRect & rc,
-                                             KisJobFactory * jobFactory,
-                                             KoProgressUpdater * progressUpdater,
-                                             ApplicatorMode mode)
-    : m_d(new Private())
+        const QRect & rc,
+        KisJobFactory * jobFactory,
+        KoProgressUpdater * progressUpdater,
+        ApplicatorMode mode)
+        : m_d(new Private())
 {
     m_d->dev = dev;
     m_d->rc = rc;
@@ -70,11 +70,10 @@ KisThreadedApplicator::KisThreadedApplicator(KisPaintDeviceSP dev,
 
     KConfigGroup cfg = KGlobal::config()->group("");
     m_d->maxThreads = cfg.readEntry("maxthreads",  QThread::idealThreadCount());
-    if ( mode == TILED ) {
+    if (mode == TILED) {
         m_d->tileSize = cfg.readEntry("threadingtilesize", 512);
-    }
-    else {
-        m_d->tileSize = qMax( rc.width(), rc.height() );
+    } else {
+        m_d->tileSize = qMax(rc.width(), rc.height());
     }
 
     m_d->weaver = new Weaver();
@@ -131,7 +130,8 @@ void KisThreadedApplicator::start()
     }
 }
 
-void KisThreadedApplicator::execute() {
+void KisThreadedApplicator::execute()
+{
 
     start();
 

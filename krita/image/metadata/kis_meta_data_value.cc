@@ -390,15 +390,14 @@ Value& Value::operator+=(const Value & v)
 
 QMap<QString, KisMetaData::Value> Value::asLangArray() const
 {
-    Q_ASSERT( d->type == LangArray );
+    Q_ASSERT(d->type == LangArray);
     QMap<QString, KisMetaData::Value> langArray;
-    foreach( const KisMetaData::Value& val, *d->value.array )
-    {
-        Q_ASSERT( val.d->propertyQualifiers.contains("xml:lang")); // TODO propably worth to have an assert for this in the constructor as well
+    foreach(const KisMetaData::Value& val, *d->value.array) {
+        Q_ASSERT(val.d->propertyQualifiers.contains("xml:lang"));  // TODO propably worth to have an assert for this in the constructor as well
         KisMetaData::Value valKeyVal = val.d->propertyQualifiers.value("xml:lang");
-        Q_ASSERT( valKeyVal.type() == Variant );
+        Q_ASSERT(valKeyVal.type() == Variant);
         QVariant valKeyVar = valKeyVal.asVariant();
-        Q_ASSERT( valKeyVar.type() == QVariant::String );
+        Q_ASSERT(valKeyVar.type() == QVariant::String);
         langArray[valKeyVar.toString()] = val;
     }
     return langArray;

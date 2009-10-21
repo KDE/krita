@@ -43,7 +43,7 @@ struct KisPaintOpSettings::Private {
 };
 
 KisPaintOpSettings::KisPaintOpSettings()
-    : d(new Private)
+        : d(new Private)
 {
 }
 
@@ -71,7 +71,7 @@ KisNodeSP KisPaintOpSettings::node() const
     return d->node;
 }
 
-QImage KisPaintOpSettings::sampleStroke(const QSize& size )
+QImage KisPaintOpSettings::sampleStroke(const QSize& size)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     int width = size.width();
@@ -80,30 +80,30 @@ QImage KisPaintOpSettings::sampleStroke(const QSize& size )
     KisLayerSP layer = new KisPaintLayer(0, "temporary for stroke sample", OPACITY_OPAQUE, cs);
     KisImageSP image = new KisImage(0, width, height, cs, "stroke sample image", false);
     KisPainter painter(layer->paintDevice());
-    painter.setPaintColor(KoColor(Qt::black, cs) );
+    painter.setPaintColor(KoColor(Qt::black, cs));
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
-    preset->setSettings( this ); // This clones
-    preset->settings()->setNode( layer );
+    preset->setSettings(this);   // This clones
+    preset->settings()->setNode(layer);
 
     painter.setPaintOpPreset(preset, image);
 
-    QPointF p1(0                , 7.0/12.0 * height);
-    QPointF p2(1.0/2.0 * width  , 7.0/12.0 * height);
-    QPointF p3( width - 4.0, height - 4.0);
+    QPointF p1(0                , 7.0 / 12.0 * height);
+    QPointF p2(1.0 / 2.0 * width  , 7.0 / 12.0 * height);
+    QPointF p3(width - 4.0, height - 4.0);
 
     KisPaintInformation pi1(p1, 0.0);
     KisPaintInformation pi2(p2, 0.95);
     KisPaintInformation pi3(p3, 0.0);
 
-    QPointF c1( 1.0/4.0* width , height - 2.0);
+    QPointF c1(1.0 / 4.0* width , height - 2.0);
     QPointF c2(c1);
     painter.paintBezierCurve(pi1, c1, c2, pi2, 0);
 
-    c1.setX( 3.0/4.0 * width);
-    c1.setY( 0);
-    c2.setX( c1.x() );
-    c2.setY( c1.y() );
+    c1.setX(3.0 / 4.0 * width);
+    c1.setY(0);
+    c2.setX(c1.x());
+    c2.setY(c1.y());
     painter.paintBezierCurve(pi2, c1, c2, pi3, 0);
 
     return layer->paintDevice()->convertToQImage(0);

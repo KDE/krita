@@ -47,7 +47,7 @@ double KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
 
 void KisDynamicSensorTime::reset()
 {
-  m_time = 0;
+    m_time = 0;
 }
 
 void KisDynamicSensorTime::setPeriodic(bool periodic)

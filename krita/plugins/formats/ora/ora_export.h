@@ -20,13 +20,14 @@
 
 #include <KoFilter.h>
 
-class OraExport : public KoFilter {
+class OraExport : public KoFilter
+{
     Q_OBJECT
-    public:
-        OraExport(QObject* parent, const QStringList&);
-        virtual ~OraExport();
-    public:
-        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+public:
+    OraExport(QObject* parent, const QStringList&);
+    virtual ~OraExport();
+public:
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

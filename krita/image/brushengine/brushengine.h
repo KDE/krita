@@ -19,7 +19,7 @@
 /**
   @mainpage Brush Engine API
 
-All brush engines in Krita are plugins. The classes in this directory define 
+All brush engines in Krita are plugins. The classes in this directory define
 the way brush engines are to be implemented. Brush engines are also known as paintops.
 
 KisPaintInformation         Information about the painting stroke
@@ -33,7 +33,7 @@ KisPaintOpSettings          A KisPropertiesConfiguration subclass that stores th
 KisPaintOpSettingsWidget    A KisConfigWidget that knows how to display and edit the KisPaintopSettings
 
 These classes are used in the Krita core to handle painting: a further set
-of utility classes for brush engine implementators is available in 
+of utility classes for brush engine implementators is available in
 krita/plugins/paintops/libpaintop.
 
 

@@ -102,11 +102,11 @@ class KRITAIMAGE_EXPORT IOBackendRegistry : public KoGenericRegistry<IOBackend*>
 {
 
 public:
-    
+
     static IOBackendRegistry* instance();
-    
+
 private:
-    
+
     IOBackendRegistry();
     ~IOBackendRegistry();
 };

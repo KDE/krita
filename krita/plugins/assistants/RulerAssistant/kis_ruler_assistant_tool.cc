@@ -35,7 +35,7 @@
 #include <kis_painting_assistants_manager.h>
 
 KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
-    : KisTool(canvas, KisCursor::arrowCursor()), m_canvas( dynamic_cast<KisCanvas2*>(canvas) )
+        : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas))
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_rulerassistanttool");
@@ -46,25 +46,25 @@ KisRulerAssistantTool::~KisRulerAssistantTool()
 {
 }
 
-QPointF adjustPointF( const QPointF& _pt, const QRectF& _rc)
+QPointF adjustPointF(const QPointF& _pt, const QRectF& _rc)
 {
-    return QPointF( qBound( _rc.left(), _pt.x(), _rc.right() ), qBound( _rc.top(), _pt.y(), _rc.bottom() ) );
+    return QPointF(qBound(_rc.left(), _pt.x(), _rc.right()), qBound(_rc.top(), _pt.y(), _rc.bottom()));
 }
 
-void KisRulerAssistantTool::activate(bool )
+void KisRulerAssistantTool::activate(bool)
 {
     // Add code here to initialize your tool when it got activated
     KisTool::activate();
-    
+
     RulerAssistant* m_rulerAssistant = new RulerAssistant();
-    
-    QRectF imageArea = QRectF( pixelToView( QPoint(0,0) ),
-                               m_canvas->image()->pixelToDocument( QPoint( m_canvas->image()->width(), m_canvas->image()->height()) ) );
-    
+
+    QRectF imageArea = QRectF(pixelToView(QPoint(0, 0)),
+                              m_canvas->image()->pixelToDocument(QPoint(m_canvas->image()->width(), m_canvas->image()->height())));
+
     m_canvas->view()->paintingAssistantManager()->addAssistant(m_rulerAssistant);
-    
+
     dbgPlugins << imageArea << *m_rulerAssistant->handles()[0] << *m_rulerAssistant->handles()[1];
-    
+
     m_handles = m_canvas->view()->paintingAssistantManager()->handles();
     m_canvas->view()->paintingAssistantManager()->setVisible(true);
     m_canvas->updateCanvas();
@@ -80,22 +80,20 @@ void KisRulerAssistantTool::deactivate()
 
 inline double norm2(const QPointF& p)
 {
-    return sqrt(p.x() * p.x() + p.y() * p.y() );
+    return sqrt(p.x() * p.x() + p.y() * p.y());
 }
 
 void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
 {
     m_handleDrag = 0;
-    foreach(const KisPaintingAssistantHandleSP handle, m_handles)
-    {
-        if( norm2(event->point - *handle ) < 10)
-        {
+    foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
+        if (norm2(event->point - *handle) < 10) {
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
             m_handleDrag = handle;
             break;
         }
     }
-    if(!m_handleDrag) {
+    if (!m_handleDrag) {
         event->ignore();
     }
 }
@@ -103,7 +101,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
 
 void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if(m_handleDrag) {
+    if (m_handleDrag) {
         *m_handleDrag = event->point;
         m_canvas->updateCanvas();
     } else {
@@ -113,7 +111,7 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if(m_handleDrag) {
+    if (m_handleDrag) {
         m_handleDrag = 0;
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
     } else {
@@ -123,14 +121,13 @@ void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
-    foreach(const KisPaintingAssistantHandleSP handle, m_handles)
-    {
-        if( handle == m_handleDrag ) {
-            _gc.setBrush( QColor(0,0,0,125) );
+    foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
+        if (handle == m_handleDrag) {
+            _gc.setBrush(QColor(0, 0, 0, 125));
         } else {
-            _gc.setBrush( QColor(0,0,0,0) );
+            _gc.setBrush(QColor(0, 0, 0, 0));
         }
-        _gc.drawEllipse( QRectF( _converter.documentToView( *handle ) -  QPointF(5,5), QSizeF(10,10)));
+        _gc.drawEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(5, 5), QSizeF(10, 10)));
     }
 }
 

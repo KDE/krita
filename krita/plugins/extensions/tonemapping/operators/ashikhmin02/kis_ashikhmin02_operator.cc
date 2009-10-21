@@ -38,7 +38,7 @@ public:
     KisAshikhmin02OperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg) {
         widget.setupUi(this);
     }
-    virtual void setConfiguration( const KisPropertiesConfiguration* config) {
+    virtual void setConfiguration(const KisPropertiesConfiguration* config) {
         widget.simple->setChecked(config->getBool("Simple", false));
         widget.localContrast->setValue(config->getDouble("LocalContrastThreshold", 0.5));
         if (config->getInt("Equation", 2) == 2) {

@@ -119,7 +119,7 @@ signals:
      * canvas where the documents origin (0,0) or the top left
      * corner of the page is. Copied from Karbon
      */
-    void documentOriginChanged( const QPoint &origin );
+    void documentOriginChanged(const QPoint &origin);
 
 protected:
 
@@ -128,10 +128,10 @@ protected:
     void paintGL();
 
     /// these methods take origin coordinate into account, basically it means (point - origin)
-    QPoint widgetToView( const QPoint& p ) const;
-    QRect widgetToView( const QRect& r ) const;
-    QPoint viewToWidget( const QPoint& p ) const;
-    QRect viewToWidget( const QRect& r ) const;
+    QPoint widgetToView(const QPoint& p) const;
+    QRect widgetToView(const QRect& r) const;
+    QPoint viewToWidget(const QPoint& p) const;
+    QRect viewToWidget(const QRect& r) const;
 
 public: // KisAbstractCanvasWidget
 
@@ -144,7 +144,7 @@ public: // KisAbstractCanvasWidget
     void documentOffsetMoved(const QPoint & pt);
     virtual QPoint documentOrigin();
     void adjustOrigin();
-    
+
 
 private:
     class Private;

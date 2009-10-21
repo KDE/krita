@@ -27,8 +27,7 @@ class KisChalkOpOptionsWidget: public QWidget, public Ui::WdgChalkOptions
 {
 public:
     KisChalkOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+            : QWidget(parent) {
         setupUi(this);
     }
 };
@@ -38,14 +37,14 @@ KisChalkOpOption::KisChalkOpOption()
 {
     m_checkable = false;
     m_options = new KisChalkOpOptionsWidget();
-    connect(m_options->radiusSpinBox,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
+    connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
 
     setConfigurationPage(m_options);
 }
 
 KisChalkOpOption::~KisChalkOpOption()
 {
-    // delete m_options; 
+    // delete m_options;
 }
 
 int KisChalkOpOption::radius() const
@@ -53,18 +52,18 @@ int KisChalkOpOption::radius() const
     return m_options->radiusSpinBox->value();
 }
 
-void KisChalkOpOption::setRadius( int radius )
+void KisChalkOpOption::setRadius(int radius)
 {
     m_options->radiusSpinBox->setValue(radius);
 }
 
 void KisChalkOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty( "Chalk/radius", radius() );
+    setting->setProperty("Chalk/radius", radius());
 }
 
 void KisChalkOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->radiusSpinBox->setValue( setting->getInt("Chalk/radius") );
+    m_options->radiusSpinBox->setValue(setting->getInt("Chalk/radius"));
 }
 

@@ -51,20 +51,20 @@ KisBrushRegistry* KisBrushRegistry::instance()
 {
     K_GLOBAL_STATIC(KisBrushRegistry, s_instance);
     if (!s_instance.exists()) {
-        s_instance->add( new KisAutoBrushFactory() );
-        s_instance->add( new KisGbrBrushFactory() );
-        s_instance->add( new KisTextBrushFactory() );
-        KoPluginLoader::instance()->load( "Krita/brush", "Type == 'Service' and ([X-Krita-Version] == 3)");
+        s_instance->add(new KisAutoBrushFactory());
+        s_instance->add(new KisGbrBrushFactory());
+        s_instance->add(new KisTextBrushFactory());
+        KoPluginLoader::instance()->load("Krita/brush", "Type == 'Service' and ([X-Krita-Version] == 3)");
     }
     return s_instance;
 }
 
 
-KisBrushSP KisBrushRegistry::getOrCreateBrush( const QDomElement& element )
+KisBrushSP KisBrushRegistry::getOrCreateBrush(const QDomElement& element)
 {
-    QString brushType = element.attribute( "brush_type" );
+    QString brushType = element.attribute("brush_type");
 
-    if ( brushType.isEmpty() ) return 0;
+    if (brushType.isEmpty()) return 0;
 
     KisBrushFactory* factory = get(brushType);
     if (!factory) return 0;

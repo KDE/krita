@@ -26,12 +26,13 @@ class KoCtlColorSpace;
 class KoCtlAccumulator;
 class KoCtlColorSpaceInfo;
 
-class KoCtlConvolutionOp : public KoConvolutionOp {
-  public:
+class KoCtlConvolutionOp : public KoConvolutionOp
+{
+public:
     KoCtlConvolutionOp(KoCtlColorSpace* _colorSpace, const KoCtlColorSpaceInfo* _info);
     virtual ~KoCtlConvolutionOp();
     virtual void convolveColors(const quint8* const* colors, const qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels, const QBitArray & channelFlags) const;
-  private:
+private:
     QList<KoCtlAccumulator*> m_accumulators;
     KoCtlColorSpace* m_colorSpace;
 };

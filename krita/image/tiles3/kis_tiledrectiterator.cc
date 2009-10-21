@@ -22,14 +22,14 @@
 #include "kis_debug.h"
 
 KisTiledRectIterator::KisTiledRectIterator(KisTiledDataManager *dataManager,
-                                           qint32 left, qint32 top,
-                                           qint32 width, qint32 height,
-                                           bool writable)
-    : KisTiledIterator(dataManager),
-      m_left(left),
-      m_top(top),
-      m_width(width),
-      m_height(height)
+        qint32 left, qint32 top,
+        qint32 width, qint32 height,
+        bool writable)
+        : KisTiledIterator(dataManager),
+        m_left(left),
+        m_top(top),
+        m_width(width),
+        m_height(height)
 {
 
     Q_ASSERT(dataManager != 0);
@@ -71,7 +71,7 @@ KisTiledRectIterator::KisTiledRectIterator(KisTiledDataManager *dataManager,
 }
 
 KisTiledRectIterator::KisTiledRectIterator(const KisTiledRectIterator& rhs)
-    : KisTiledIterator(rhs)
+        : KisTiledIterator(rhs)
 {
     if (this != &rhs) {
         m_left = rhs.m_left;
@@ -124,7 +124,7 @@ qint32 KisTiledRectIterator::nConseqPixels() const
     if (m_leftInTile || (m_rightInTile != KisTileData::WIDTH - 1))
         return m_rightInTile - m_xInTile + 1;
     else /* !m_leftInTile && (m_rightInTile == KisTileData::WIDTH - 1) */
-        return KisTileData::WIDTH * (m_bottomInTile - m_yInTile + 1) - m_xInTile;
+        return KisTileData::WIDTH *(m_bottomInTile - m_yInTile + 1) - m_xInTile;
 }
 
 KisTiledRectIterator & KisTiledRectIterator::operator+=(int n)

@@ -27,21 +27,20 @@
 
 KoID KoCtlParser::generateDepthID(const QString& depth, const QString& type)
 {
-    if(type == "integer") {
-        if( depth == "8" )
+    if (type == "integer") {
+        if (depth == "8")
             return Integer8BitsColorDepthID;
-        else if(depth == "16" )
+        else if (depth == "16")
             return Integer16BitsColorDepthID;
-    }
-    else if(type == "float") {
-        if( depth == "16" )
+    } else if (type == "float") {
+        if (depth == "16")
             return Float16BitsColorDepthID;
-        else if(depth == "32" )
+        else if (depth == "32")
             return Float32BitsColorDepthID;
-        else if(depth.isEmpty() )
+        else if (depth.isEmpty())
             return KoID("F", i18n("Float"));
     }
     dbgPlugins << "Invalid type";
-    return KoID("","");
+    return KoID("", "");
 }
 

@@ -254,330 +254,330 @@ void KisMetaDataTest::testFilters()
 
 void KisMetaDataTest::testTypeInfo()
 {
-    QVERIFY( TypeInfo::Private::Boolean->propertyType() == TypeInfo::BooleanType );
-    QVERIFY( TypeInfo::Private::Boolean->embeddedPropertyType() == 0 );
-    QVERIFY( TypeInfo::Private::Boolean->choices().size() == 0 );
-    QVERIFY( TypeInfo::Private::Boolean->hasCorrectType( Value(true) ));
-    QVERIFY( !TypeInfo::Private::Boolean->hasCorrectType( createIntegerValue() ) );
-    QVERIFY( !TypeInfo::Private::Boolean->hasCorrectType( createStringValue() ) );
-    QVERIFY( !TypeInfo::Private::Boolean->hasCorrectType( createListValue() ) );
-    
-    QVERIFY( TypeInfo::Private::Integer->propertyType() == TypeInfo::IntegerType );
-    QVERIFY( TypeInfo::Private::Integer->embeddedPropertyType() == 0 );
-    QVERIFY( TypeInfo::Private::Integer->choices().size() == 0 );
-    QVERIFY( !TypeInfo::Private::Integer->hasCorrectType( Value(true) ));
-    QVERIFY( TypeInfo::Private::Integer->hasCorrectType( createIntegerValue() ) );
-    QVERIFY( !TypeInfo::Private::Integer->hasCorrectType( createStringValue() ) );
-    QVERIFY( !TypeInfo::Private::Integer->hasCorrectType( createListValue() ) );
-    
-    QVERIFY( TypeInfo::Private::Text->propertyType() == TypeInfo::TextType );
-    QVERIFY( TypeInfo::Private::Text->embeddedPropertyType() == 0 );
-    QVERIFY( TypeInfo::Private::Text->choices().size() == 0 );
-    QVERIFY( !TypeInfo::Private::Text->hasCorrectType( Value(true) ));
-    QVERIFY( !TypeInfo::Private::Text->hasCorrectType( createIntegerValue() ) );
-    QVERIFY( TypeInfo::Private::Text->hasCorrectType( createStringValue() ) );
-    QVERIFY( !TypeInfo::Private::Text->hasCorrectType( createListValue() ) );
-    
-    QVERIFY( TypeInfo::Private::Date->propertyType() == TypeInfo::DateType );
-    QVERIFY( TypeInfo::Private::Date->embeddedPropertyType() == 0 );
-    QVERIFY( TypeInfo::Private::Date->choices().size() == 0 );
-    QVERIFY( TypeInfo::Private::Date->hasCorrectType( Value(QDateTime()) ));
-    QVERIFY( !TypeInfo::Private::Date->hasCorrectType( createIntegerValue() ) );
-    QVERIFY( !TypeInfo::Private::Date->hasCorrectType( createStringValue() ) );
-    QVERIFY( !TypeInfo::Private::Date->hasCorrectType( createListValue() ) );
-    
-    QVERIFY( TypeInfo::Private::Rational->propertyType() == TypeInfo::RationalType );
-    QVERIFY( TypeInfo::Private::Rational->embeddedPropertyType() == 0 );
-    QVERIFY( TypeInfo::Private::Rational->choices().size() == 0 );
-    QVERIFY( TypeInfo::Private::Rational->hasCorrectType( createRationalValue() ));
-    QVERIFY( !TypeInfo::Private::Rational->hasCorrectType( createIntegerValue() ) );
-    QVERIFY( !TypeInfo::Private::Rational->hasCorrectType( createStringValue() ) );
-    QVERIFY( !TypeInfo::Private::Rational->hasCorrectType( createListValue() ) );
-    
-    QVERIFY( TypeInfo::Private::GPSCoordinate->propertyType() == TypeInfo::GPSCoordinateType );
-    QVERIFY( TypeInfo::Private::GPSCoordinate->embeddedPropertyType() == 0 );
-    QVERIFY( TypeInfo::Private::GPSCoordinate->choices().size() == 0 );
-    
-    QVERIFY( TypeInfo::Private::LangArray->propertyType() == TypeInfo::LangArrayType );
-    QVERIFY( TypeInfo::Private::LangArray->embeddedPropertyType() == TypeInfo::Private::Text );
-    QVERIFY( TypeInfo::Private::LangArray->choices().size() == 0 );
-    
+    QVERIFY(TypeInfo::Private::Boolean->propertyType() == TypeInfo::BooleanType);
+    QVERIFY(TypeInfo::Private::Boolean->embeddedPropertyType() == 0);
+    QVERIFY(TypeInfo::Private::Boolean->choices().size() == 0);
+    QVERIFY(TypeInfo::Private::Boolean->hasCorrectType(Value(true)));
+    QVERIFY(!TypeInfo::Private::Boolean->hasCorrectType(createIntegerValue()));
+    QVERIFY(!TypeInfo::Private::Boolean->hasCorrectType(createStringValue()));
+    QVERIFY(!TypeInfo::Private::Boolean->hasCorrectType(createListValue()));
+
+    QVERIFY(TypeInfo::Private::Integer->propertyType() == TypeInfo::IntegerType);
+    QVERIFY(TypeInfo::Private::Integer->embeddedPropertyType() == 0);
+    QVERIFY(TypeInfo::Private::Integer->choices().size() == 0);
+    QVERIFY(!TypeInfo::Private::Integer->hasCorrectType(Value(true)));
+    QVERIFY(TypeInfo::Private::Integer->hasCorrectType(createIntegerValue()));
+    QVERIFY(!TypeInfo::Private::Integer->hasCorrectType(createStringValue()));
+    QVERIFY(!TypeInfo::Private::Integer->hasCorrectType(createListValue()));
+
+    QVERIFY(TypeInfo::Private::Text->propertyType() == TypeInfo::TextType);
+    QVERIFY(TypeInfo::Private::Text->embeddedPropertyType() == 0);
+    QVERIFY(TypeInfo::Private::Text->choices().size() == 0);
+    QVERIFY(!TypeInfo::Private::Text->hasCorrectType(Value(true)));
+    QVERIFY(!TypeInfo::Private::Text->hasCorrectType(createIntegerValue()));
+    QVERIFY(TypeInfo::Private::Text->hasCorrectType(createStringValue()));
+    QVERIFY(!TypeInfo::Private::Text->hasCorrectType(createListValue()));
+
+    QVERIFY(TypeInfo::Private::Date->propertyType() == TypeInfo::DateType);
+    QVERIFY(TypeInfo::Private::Date->embeddedPropertyType() == 0);
+    QVERIFY(TypeInfo::Private::Date->choices().size() == 0);
+    QVERIFY(TypeInfo::Private::Date->hasCorrectType(Value(QDateTime())));
+    QVERIFY(!TypeInfo::Private::Date->hasCorrectType(createIntegerValue()));
+    QVERIFY(!TypeInfo::Private::Date->hasCorrectType(createStringValue()));
+    QVERIFY(!TypeInfo::Private::Date->hasCorrectType(createListValue()));
+
+    QVERIFY(TypeInfo::Private::Rational->propertyType() == TypeInfo::RationalType);
+    QVERIFY(TypeInfo::Private::Rational->embeddedPropertyType() == 0);
+    QVERIFY(TypeInfo::Private::Rational->choices().size() == 0);
+    QVERIFY(TypeInfo::Private::Rational->hasCorrectType(createRationalValue()));
+    QVERIFY(!TypeInfo::Private::Rational->hasCorrectType(createIntegerValue()));
+    QVERIFY(!TypeInfo::Private::Rational->hasCorrectType(createStringValue()));
+    QVERIFY(!TypeInfo::Private::Rational->hasCorrectType(createListValue()));
+
+    QVERIFY(TypeInfo::Private::GPSCoordinate->propertyType() == TypeInfo::GPSCoordinateType);
+    QVERIFY(TypeInfo::Private::GPSCoordinate->embeddedPropertyType() == 0);
+    QVERIFY(TypeInfo::Private::GPSCoordinate->choices().size() == 0);
+
+    QVERIFY(TypeInfo::Private::LangArray->propertyType() == TypeInfo::LangArrayType);
+    QVERIFY(TypeInfo::Private::LangArray->embeddedPropertyType() == TypeInfo::Private::Text);
+    QVERIFY(TypeInfo::Private::LangArray->choices().size() == 0);
+
     // Create List of integer Value
     QList< Value > goodIntegerList;
-    goodIntegerList.push_back( createIntegerValue() );
-    goodIntegerList.push_back( createIntegerValue(12) );
+    goodIntegerList.push_back(createIntegerValue());
+    goodIntegerList.push_back(createIntegerValue(12));
     QList< Value > badIntegerList;
-    badIntegerList.push_back( createIntegerValue() );
-    badIntegerList.push_back( createStringValue() );
-    badIntegerList.push_back( createIntegerValue(12) );
-    
+    badIntegerList.push_back(createIntegerValue());
+    badIntegerList.push_back(createStringValue());
+    badIntegerList.push_back(createIntegerValue(12));
+
     // Test OrderedArray
-    const TypeInfo* arrOA1 = TypeInfo::Private::orderedArray( TypeInfo::Private::Integer );
-    QVERIFY( arrOA1->propertyType() == TypeInfo::OrderedArrayType );
-    QVERIFY( arrOA1->embeddedPropertyType() == TypeInfo::Private::Integer );
-    QVERIFY( arrOA1->choices().size() == 0 );
-    QVERIFY( arrOA1 == TypeInfo::Private::orderedArray( TypeInfo::Private::Integer ) );
-    const TypeInfo* arrOA2 = TypeInfo::Private::orderedArray( TypeInfo::Private::Text );
-    QVERIFY( arrOA1 != arrOA2 );
-    QVERIFY( arrOA2->embeddedPropertyType() == TypeInfo::Private::Text );
-    QVERIFY( !arrOA1->hasCorrectType( Value(true) ));
-    QVERIFY( !arrOA1->hasCorrectType( createIntegerValue() ) );
-    QVERIFY( !arrOA1->hasCorrectType( createStringValue() ) );
-    QVERIFY( !arrOA1->hasCorrectType( createListValue() ) );
-    QVERIFY( arrOA1->hasCorrectType( Value(goodIntegerList, Value::OrderedArray ) ) );
-    QVERIFY( !arrOA1->hasCorrectType( Value(badIntegerList, Value::OrderedArray ) ) );
-    
+    const TypeInfo* arrOA1 = TypeInfo::Private::orderedArray(TypeInfo::Private::Integer);
+    QVERIFY(arrOA1->propertyType() == TypeInfo::OrderedArrayType);
+    QVERIFY(arrOA1->embeddedPropertyType() == TypeInfo::Private::Integer);
+    QVERIFY(arrOA1->choices().size() == 0);
+    QVERIFY(arrOA1 == TypeInfo::Private::orderedArray(TypeInfo::Private::Integer));
+    const TypeInfo* arrOA2 = TypeInfo::Private::orderedArray(TypeInfo::Private::Text);
+    QVERIFY(arrOA1 != arrOA2);
+    QVERIFY(arrOA2->embeddedPropertyType() == TypeInfo::Private::Text);
+    QVERIFY(!arrOA1->hasCorrectType(Value(true)));
+    QVERIFY(!arrOA1->hasCorrectType(createIntegerValue()));
+    QVERIFY(!arrOA1->hasCorrectType(createStringValue()));
+    QVERIFY(!arrOA1->hasCorrectType(createListValue()));
+    QVERIFY(arrOA1->hasCorrectType(Value(goodIntegerList, Value::OrderedArray)));
+    QVERIFY(!arrOA1->hasCorrectType(Value(badIntegerList, Value::OrderedArray)));
+
     // Test UnarderedArray
-    const TypeInfo* arrUOA1 = TypeInfo::Private::unorderedArray( TypeInfo::Private::Integer );
-    QVERIFY( arrUOA1->propertyType() == TypeInfo::UnorderedArrayType );
-    QVERIFY( arrUOA1->embeddedPropertyType() == TypeInfo::Private::Integer );
-    QVERIFY( arrUOA1->choices().size() == 0 );
-    QVERIFY( arrUOA1 == TypeInfo::Private::unorderedArray( TypeInfo::Private::Integer ) );
-    const TypeInfo* arrUOA2 = TypeInfo::Private::unorderedArray( TypeInfo::Private::Text );
-    QVERIFY( arrUOA1 != arrUOA2 );
-    QVERIFY( arrUOA2->embeddedPropertyType() == TypeInfo::Private::Text );
-    QVERIFY( arrUOA1 != arrOA1 );
-    QVERIFY( arrUOA2 != arrOA2 );
-    QVERIFY( !arrUOA1->hasCorrectType( Value(true) ));
-    QVERIFY( !arrUOA1->hasCorrectType( createIntegerValue() ) );
-    QVERIFY( !arrUOA1->hasCorrectType( createStringValue() ) );
-    QVERIFY( !arrUOA1->hasCorrectType( createListValue() ) );
-    QVERIFY( arrUOA1->hasCorrectType( Value(goodIntegerList, Value::UnorderedArray ) ) );
-    QVERIFY( !arrUOA1->hasCorrectType( Value(badIntegerList, Value::UnorderedArray ) ) );
-    
+    const TypeInfo* arrUOA1 = TypeInfo::Private::unorderedArray(TypeInfo::Private::Integer);
+    QVERIFY(arrUOA1->propertyType() == TypeInfo::UnorderedArrayType);
+    QVERIFY(arrUOA1->embeddedPropertyType() == TypeInfo::Private::Integer);
+    QVERIFY(arrUOA1->choices().size() == 0);
+    QVERIFY(arrUOA1 == TypeInfo::Private::unorderedArray(TypeInfo::Private::Integer));
+    const TypeInfo* arrUOA2 = TypeInfo::Private::unorderedArray(TypeInfo::Private::Text);
+    QVERIFY(arrUOA1 != arrUOA2);
+    QVERIFY(arrUOA2->embeddedPropertyType() == TypeInfo::Private::Text);
+    QVERIFY(arrUOA1 != arrOA1);
+    QVERIFY(arrUOA2 != arrOA2);
+    QVERIFY(!arrUOA1->hasCorrectType(Value(true)));
+    QVERIFY(!arrUOA1->hasCorrectType(createIntegerValue()));
+    QVERIFY(!arrUOA1->hasCorrectType(createStringValue()));
+    QVERIFY(!arrUOA1->hasCorrectType(createListValue()));
+    QVERIFY(arrUOA1->hasCorrectType(Value(goodIntegerList, Value::UnorderedArray)));
+    QVERIFY(!arrUOA1->hasCorrectType(Value(badIntegerList, Value::UnorderedArray)));
+
     // Test AlternativeArray
-    const TypeInfo* arrAA1 = TypeInfo::Private::alternativeArray( TypeInfo::Private::Integer );
-    QVERIFY( arrAA1->propertyType() == TypeInfo::AlternativeArrayType );
-    QVERIFY( arrAA1->embeddedPropertyType() == TypeInfo::Private::Integer );
-    QVERIFY( arrAA1->choices().size() == 0 );
-    QVERIFY( arrAA1 == TypeInfo::Private::alternativeArray( TypeInfo::Private::Integer ) );
-    const TypeInfo* arrAA2 = TypeInfo::Private::alternativeArray( TypeInfo::Private::Text );
-    QVERIFY( arrAA1 != arrAA2 );
-    QVERIFY( arrAA2->embeddedPropertyType() == TypeInfo::Private::Text );
-    QVERIFY( arrAA1 != arrOA1 );
-    QVERIFY( arrAA1 != arrUOA1 );
-    QVERIFY( arrAA2 != arrOA2 );
-    QVERIFY( arrAA2 != arrUOA2 );
-    QVERIFY( !arrAA1->hasCorrectType( Value(true) ));
-    QVERIFY( !arrAA1->hasCorrectType( createIntegerValue() ) );
-    QVERIFY( !arrAA1->hasCorrectType( createStringValue() ) );
-    QVERIFY( !arrAA1->hasCorrectType( createListValue() ) );
-    QVERIFY( arrAA1->hasCorrectType( Value(goodIntegerList, Value::AlternativeArray ) ) );
-    QVERIFY( !arrAA1->hasCorrectType( Value(badIntegerList, Value::AlternativeArray ) ) );
-    
+    const TypeInfo* arrAA1 = TypeInfo::Private::alternativeArray(TypeInfo::Private::Integer);
+    QVERIFY(arrAA1->propertyType() == TypeInfo::AlternativeArrayType);
+    QVERIFY(arrAA1->embeddedPropertyType() == TypeInfo::Private::Integer);
+    QVERIFY(arrAA1->choices().size() == 0);
+    QVERIFY(arrAA1 == TypeInfo::Private::alternativeArray(TypeInfo::Private::Integer));
+    const TypeInfo* arrAA2 = TypeInfo::Private::alternativeArray(TypeInfo::Private::Text);
+    QVERIFY(arrAA1 != arrAA2);
+    QVERIFY(arrAA2->embeddedPropertyType() == TypeInfo::Private::Text);
+    QVERIFY(arrAA1 != arrOA1);
+    QVERIFY(arrAA1 != arrUOA1);
+    QVERIFY(arrAA2 != arrOA2);
+    QVERIFY(arrAA2 != arrUOA2);
+    QVERIFY(!arrAA1->hasCorrectType(Value(true)));
+    QVERIFY(!arrAA1->hasCorrectType(createIntegerValue()));
+    QVERIFY(!arrAA1->hasCorrectType(createStringValue()));
+    QVERIFY(!arrAA1->hasCorrectType(createListValue()));
+    QVERIFY(arrAA1->hasCorrectType(Value(goodIntegerList, Value::AlternativeArray)));
+    QVERIFY(!arrAA1->hasCorrectType(Value(badIntegerList, Value::AlternativeArray)));
+
     // Test Choice
     QList< TypeInfo::Choice > choices;
-    choices.push_back( TypeInfo::Choice(Value(12), "Hello" ) );
-    choices.push_back( TypeInfo::Choice(Value(42), "World" ) );
-    const TypeInfo* oChoice = TypeInfo::Private::createChoice( TypeInfo::OpenedChoice, TypeInfo::Private::Integer, choices );
-    QVERIFY( oChoice->propertyType() == TypeInfo::OpenedChoice );
-    QVERIFY( oChoice->embeddedPropertyType() == TypeInfo::Private::Integer );
-    QVERIFY( oChoice->choices().size() == 2 );
-    QVERIFY( oChoice->choices()[0].value() == Value(12) );
-    QVERIFY( oChoice->choices()[0].hint() == "Hello" );
-    QVERIFY( oChoice->choices()[1].value() == Value(42) );
-    QVERIFY( oChoice->choices()[1].hint() == "World" );
-    QVERIFY( !oChoice->hasCorrectType( Value(true) ));
-    QVERIFY( oChoice->hasCorrectType( createIntegerValue(12) ) );
-    QVERIFY( oChoice->hasCorrectType( createIntegerValue(-12) ) );
-    QVERIFY( oChoice->hasCorrectType( createIntegerValue(42) ) );
-    QVERIFY( !oChoice->hasCorrectType( createStringValue() ) );
-    QVERIFY( !oChoice->hasCorrectType( createListValue() ) );
-    QVERIFY( !oChoice->hasCorrectType( Value(goodIntegerList, Value::AlternativeArray ) ) );
-    QVERIFY( !oChoice->hasCorrectType( Value(badIntegerList, Value::AlternativeArray ) ) );
-    
-    const TypeInfo* cChoice = TypeInfo::Private::createChoice( TypeInfo::ClosedChoice, TypeInfo::Private::Integer, choices );
-    QVERIFY( cChoice->propertyType() == TypeInfo::ClosedChoice );
-    QVERIFY( !cChoice->hasCorrectType( Value(true) ));
-    QVERIFY( cChoice->hasCorrectType( createIntegerValue(12) ) );
-    QVERIFY( cChoice->hasCorrectType( createIntegerValue(-12) ) );
-    QVERIFY( cChoice->hasCorrectType( createIntegerValue(42) ) );
-    QVERIFY( !cChoice->hasCorrectType( createStringValue() ) );
-    QVERIFY( !cChoice->hasCorrectType( createListValue() ) );
-    QVERIFY( !cChoice->hasCorrectType( Value(goodIntegerList, Value::AlternativeArray ) ) );
-    QVERIFY( !cChoice->hasCorrectType( Value(badIntegerList, Value::AlternativeArray ) ) );
-    QVERIFY( cChoice->hasCorrectValue( createIntegerValue(12) ) );
-    QVERIFY( !cChoice->hasCorrectValue( createIntegerValue(-12) ) );
-    QVERIFY( cChoice->hasCorrectValue( createIntegerValue(42) ) );
-    
+    choices.push_back(TypeInfo::Choice(Value(12), "Hello"));
+    choices.push_back(TypeInfo::Choice(Value(42), "World"));
+    const TypeInfo* oChoice = TypeInfo::Private::createChoice(TypeInfo::OpenedChoice, TypeInfo::Private::Integer, choices);
+    QVERIFY(oChoice->propertyType() == TypeInfo::OpenedChoice);
+    QVERIFY(oChoice->embeddedPropertyType() == TypeInfo::Private::Integer);
+    QVERIFY(oChoice->choices().size() == 2);
+    QVERIFY(oChoice->choices()[0].value() == Value(12));
+    QVERIFY(oChoice->choices()[0].hint() == "Hello");
+    QVERIFY(oChoice->choices()[1].value() == Value(42));
+    QVERIFY(oChoice->choices()[1].hint() == "World");
+    QVERIFY(!oChoice->hasCorrectType(Value(true)));
+    QVERIFY(oChoice->hasCorrectType(createIntegerValue(12)));
+    QVERIFY(oChoice->hasCorrectType(createIntegerValue(-12)));
+    QVERIFY(oChoice->hasCorrectType(createIntegerValue(42)));
+    QVERIFY(!oChoice->hasCorrectType(createStringValue()));
+    QVERIFY(!oChoice->hasCorrectType(createListValue()));
+    QVERIFY(!oChoice->hasCorrectType(Value(goodIntegerList, Value::AlternativeArray)));
+    QVERIFY(!oChoice->hasCorrectType(Value(badIntegerList, Value::AlternativeArray)));
+
+    const TypeInfo* cChoice = TypeInfo::Private::createChoice(TypeInfo::ClosedChoice, TypeInfo::Private::Integer, choices);
+    QVERIFY(cChoice->propertyType() == TypeInfo::ClosedChoice);
+    QVERIFY(!cChoice->hasCorrectType(Value(true)));
+    QVERIFY(cChoice->hasCorrectType(createIntegerValue(12)));
+    QVERIFY(cChoice->hasCorrectType(createIntegerValue(-12)));
+    QVERIFY(cChoice->hasCorrectType(createIntegerValue(42)));
+    QVERIFY(!cChoice->hasCorrectType(createStringValue()));
+    QVERIFY(!cChoice->hasCorrectType(createListValue()));
+    QVERIFY(!cChoice->hasCorrectType(Value(goodIntegerList, Value::AlternativeArray)));
+    QVERIFY(!cChoice->hasCorrectType(Value(badIntegerList, Value::AlternativeArray)));
+    QVERIFY(cChoice->hasCorrectValue(createIntegerValue(12)));
+    QVERIFY(!cChoice->hasCorrectValue(createIntegerValue(-12)));
+    QVERIFY(cChoice->hasCorrectValue(createIntegerValue(42)));
+
     // Test structure
-    
-    
+
+
 }
 
 void KisMetaDataTest::testSchemaParse()
 {
     const Schema* exifSchema = SchemaRegistry::instance()->schemaFromUri(Schema::EXIFSchemaUri);
     QVERIFY(exifSchema);
-    
+
     const TypeInfo* colorSpaceType = exifSchema->propertyType("ColorSpace");
     QVERIFY(colorSpaceType);
     QVERIFY(colorSpaceType->propertyType() == TypeInfo::ClosedChoice);
-    QVERIFY(colorSpaceType->choices().size() == 2 );
-    QVERIFY(colorSpaceType->choices()[0].value() == Value(1) );
-    QVERIFY(colorSpaceType->choices()[0].hint() == "sRGB" );
-    QVERIFY(colorSpaceType->choices()[1].value() == Value(65635) );
-    QVERIFY(colorSpaceType->choices()[1].hint() == "uncalibrated" );
-    
+    QVERIFY(colorSpaceType->choices().size() == 2);
+    QVERIFY(colorSpaceType->choices()[0].value() == Value(1));
+    QVERIFY(colorSpaceType->choices()[0].hint() == "sRGB");
+    QVERIFY(colorSpaceType->choices()[1].value() == Value(65635));
+    QVERIFY(colorSpaceType->choices()[1].hint() == "uncalibrated");
+
     QVERIFY(exifSchema->propertyType("CompressedBitsPerPixel"));
     QVERIFY(exifSchema->propertyType("CompressedBitsPerPixel")->propertyType() == TypeInfo::RationalType);
-    
+
     QVERIFY(exifSchema->propertyType("PixelXDimension"));
     QVERIFY(exifSchema->propertyType("PixelXDimension")->propertyType() == TypeInfo::IntegerType);
-    
+
     QVERIFY(exifSchema->propertyType("UserComment"));
     QVERIFY(exifSchema->propertyType("UserComment")->propertyType() == TypeInfo::LangArrayType);
-    
+
     QVERIFY(exifSchema->propertyType("RelatedSoundFile"));
     QVERIFY(exifSchema->propertyType("RelatedSoundFile")->propertyType() == TypeInfo::TextType);
-    
+
     QVERIFY(exifSchema->propertyType("DateTimeOriginal"));
     QVERIFY(exifSchema->propertyType("DateTimeOriginal")->propertyType() == TypeInfo::DateType);
-    
+
     QVERIFY(exifSchema->propertyType("ISOSpeedRatings"));
     QVERIFY(exifSchema->propertyType("ISOSpeedRatings")->propertyType() == TypeInfo::OrderedArrayType);
-    QVERIFY(exifSchema->propertyType("ISOSpeedRatings")->embeddedPropertyType() == TypeInfo::Private::Integer );
+    QVERIFY(exifSchema->propertyType("ISOSpeedRatings")->embeddedPropertyType() == TypeInfo::Private::Integer);
 
     const TypeInfo* oecfType = exifSchema->propertyType("OECF");
     QVERIFY(oecfType);
-    QVERIFY(oecfType->propertyType() == TypeInfo::StructureType );
+    QVERIFY(oecfType->propertyType() == TypeInfo::StructureType);
     QVERIFY(oecfType == exifSchema->structure("OECFSFR"));
     QVERIFY(oecfType->structureName() == "OECFSFR");
     QVERIFY(oecfType->structureSchema());
-    QVERIFY(oecfType->structureSchema()->propertyType("Columns")->propertyType() == TypeInfo::IntegerType );
-    QVERIFY(oecfType->structureSchema()->propertyType("Rows")->propertyType() == TypeInfo::IntegerType );
-    QVERIFY(oecfType->structureSchema()->propertyType("Names")->propertyType() == TypeInfo::OrderedArrayType );
-    QVERIFY(oecfType->structureSchema()->propertyType("Names")->embeddedPropertyType()->propertyType() == TypeInfo::TextType );
-    QVERIFY(oecfType->structureSchema()->propertyType("Values")->propertyType() == TypeInfo::OrderedArrayType );
-    QVERIFY(oecfType->structureSchema()->propertyType("Values")->embeddedPropertyType()->propertyType() == TypeInfo::RationalType );
+    QVERIFY(oecfType->structureSchema()->propertyType("Columns")->propertyType() == TypeInfo::IntegerType);
+    QVERIFY(oecfType->structureSchema()->propertyType("Rows")->propertyType() == TypeInfo::IntegerType);
+    QVERIFY(oecfType->structureSchema()->propertyType("Names")->propertyType() == TypeInfo::OrderedArrayType);
+    QVERIFY(oecfType->structureSchema()->propertyType("Names")->embeddedPropertyType()->propertyType() == TypeInfo::TextType);
+    QVERIFY(oecfType->structureSchema()->propertyType("Values")->propertyType() == TypeInfo::OrderedArrayType);
+    QVERIFY(oecfType->structureSchema()->propertyType("Values")->embeddedPropertyType()->propertyType() == TypeInfo::RationalType);
 
 }
 
 void KisMetaDataTest::testParser()
 {
     Value intV = TypeInfo::Private::Integer->parser()->parse("1242");
-    QVERIFY( intV.type() == Value::Variant );
-    QVERIFY( intV.asVariant() == 1242 );
-    QVERIFY( intV.asVariant().type() == QVariant::Int );
-    
+    QVERIFY(intV.type() == Value::Variant);
+    QVERIFY(intV.asVariant() == 1242);
+    QVERIFY(intV.asVariant().type() == QVariant::Int);
+
     Value textV = TypeInfo::Private::Text->parser()->parse("Bouh");
-    QVERIFY( textV.type() == Value::Variant );
-    QVERIFY( textV.asVariant() == "Bouh" );
-    QVERIFY( textV.asVariant().type() == QVariant::String );
-    
+    QVERIFY(textV.type() == Value::Variant);
+    QVERIFY(textV.asVariant() == "Bouh");
+    QVERIFY(textV.asVariant().type() == QVariant::String);
+
     Value dateV1 = TypeInfo::Private::Date->parser()->parse("2005-10-31");
-    QVERIFY( dateV1.type() == Value::Variant );
+    QVERIFY(dateV1.type() == Value::Variant);
     QDateTime d1 = dateV1.asVariant().toDateTime();
-    QVERIFY( d1.date().year() == 2005 );
-    QVERIFY( d1.date().month() == 10 );
-    QVERIFY( d1.date().day() == 31 );
-    
+    QVERIFY(d1.date().year() == 2005);
+    QVERIFY(d1.date().month() == 10);
+    QVERIFY(d1.date().day() == 31);
+
     Value dateV2 = TypeInfo::Private::Date->parser()->parse("2005");
-    QVERIFY( dateV2.type() == Value::Variant );
+    QVERIFY(dateV2.type() == Value::Variant);
     QDateTime d2 = dateV2.asVariant().toDateTime();
-    QVERIFY( d2.date().year() == 2005 );
+    QVERIFY(d2.date().year() == 2005);
 
     Value dateV3 = TypeInfo::Private::Date->parser()->parse("2005-12");
-    QVERIFY( dateV3.type() == Value::Variant );
+    QVERIFY(dateV3.type() == Value::Variant);
     QDateTime d3 = dateV3.asVariant().toDateTime();
-    QVERIFY( d3.date().year() == 2005 );
-    QVERIFY( d3.date().month() == 12 );
+    QVERIFY(d3.date().year() == 2005);
+    QVERIFY(d3.date().month() == 12);
 
     Value dateV4 = TypeInfo::Private::Date->parser()->parse("2005-10-31T12:20");
-    QVERIFY( dateV4.type() == Value::Variant );
+    QVERIFY(dateV4.type() == Value::Variant);
     QDateTime d4 = dateV4.asVariant().toDateTime();
-    QVERIFY( d4.date().year() == 2005 );
-    QVERIFY( d4.date().month() == 10 );
-    QVERIFY( d4.date().day() == 31 );
-    QVERIFY( d4.time().hour() == 12 );
-    QVERIFY( d4.time().minute() == 20 );
+    QVERIFY(d4.date().year() == 2005);
+    QVERIFY(d4.date().month() == 10);
+    QVERIFY(d4.date().day() == 31);
+    QVERIFY(d4.time().hour() == 12);
+    QVERIFY(d4.time().minute() == 20);
 
     Value dateV5 = TypeInfo::Private::Date->parser()->parse("2005-10-31T12:20:32");
-    QVERIFY( dateV5.type() == Value::Variant );
+    QVERIFY(dateV5.type() == Value::Variant);
     QDateTime d5 = dateV5.asVariant().toDateTime();
-    QVERIFY( d5.date().year() == 2005 );
-    QVERIFY( d5.date().month() == 10 );
-    QVERIFY( d5.date().day() == 31 );
-    QVERIFY( d5.time().hour() == 12 );
-    QVERIFY( d5.time().minute() == 20 );
-    QVERIFY( d5.time().second() == 32 );
+    QVERIFY(d5.date().year() == 2005);
+    QVERIFY(d5.date().month() == 10);
+    QVERIFY(d5.date().day() == 31);
+    QVERIFY(d5.time().hour() == 12);
+    QVERIFY(d5.time().minute() == 20);
+    QVERIFY(d5.time().second() == 32);
 
     Value dateV6 = TypeInfo::Private::Date->parser()->parse("2005-10-31T12:20:32-06:00");
-    QVERIFY( dateV6.type() == Value::Variant );
+    QVERIFY(dateV6.type() == Value::Variant);
     QDateTime d6 = dateV6.asVariant().toDateTime();
-    QVERIFY( d6.date().year() == 2005 );
-    QVERIFY( d6.date().month() == 10 );
-    QVERIFY( d6.date().day() == 31 );
-    QVERIFY( d6.time().hour() == 18 );
-    QVERIFY( d6.time().minute() == 20 );
-    QVERIFY( d6.time().second() == 32 );
-    
+    QVERIFY(d6.date().year() == 2005);
+    QVERIFY(d6.date().month() == 10);
+    QVERIFY(d6.date().day() == 31);
+    QVERIFY(d6.time().hour() == 18);
+    QVERIFY(d6.time().minute() == 20);
+    QVERIFY(d6.time().second() == 32);
+
     Value rational1 = TypeInfo::Private::Rational->parser()->parse("-10/20");
-    QVERIFY( rational1.type() == Value::Rational );
-    QVERIFY( rational1.asRational().numerator == -10 );
-    QVERIFY( rational1.asRational().denominator == 20 );
+    QVERIFY(rational1.type() == Value::Rational);
+    QVERIFY(rational1.asRational().numerator == -10);
+    QVERIFY(rational1.asRational().denominator == 20);
 
     Value rational2 = TypeInfo::Private::Rational->parser()->parse("10/20");
-    QVERIFY( rational2.type() == Value::Rational );
-    QVERIFY( rational2.asRational().numerator == 10 );
-    QVERIFY( rational2.asRational().denominator == 20 );
+    QVERIFY(rational2.type() == Value::Rational);
+    QVERIFY(rational2.asRational().numerator == 10);
+    QVERIFY(rational2.asRational().denominator == 20);
 }
 
 void KisMetaDataTest::testValidator()
 {
     Store store;
-    const Schema* exif = SchemaRegistry::instance()->schemaFromUri( Schema::EXIFSchemaUri );
-    QVERIFY( exif );
-    store.addEntry( Entry( exif, "PixelXDimension", createIntegerValue() ) );
-    store.addEntry( Entry( exif, "PixelYDimension", createIntegerValue() ) );
-    store.addEntry( Entry( exif, "RelatedSoundFile", createStringValue() ) );
-    store.addEntry( Entry( exif, "ColorSpace", createIntegerValue(1) ) );
-    store.addEntry( Entry( exif, "ExposureTime", createRationalValue() ) );
+    const Schema* exif = SchemaRegistry::instance()->schemaFromUri(Schema::EXIFSchemaUri);
+    QVERIFY(exif);
+    store.addEntry(Entry(exif, "PixelXDimension", createIntegerValue()));
+    store.addEntry(Entry(exif, "PixelYDimension", createIntegerValue()));
+    store.addEntry(Entry(exif, "RelatedSoundFile", createStringValue()));
+    store.addEntry(Entry(exif, "ColorSpace", createIntegerValue(1)));
+    store.addEntry(Entry(exif, "ExposureTime", createRationalValue()));
     Validator validator(&store);
-    QCOMPARE( validator.countInvalidEntries(), 0 );
-    QCOMPARE( validator.countValidEntries(), 5 );
-    QCOMPARE( validator.invalidEntries().size(), 0 );
-    
+    QCOMPARE(validator.countInvalidEntries(), 0);
+    QCOMPARE(validator.countValidEntries(), 5);
+    QCOMPARE(validator.invalidEntries().size(), 0);
+
     // Unknown entry
-    store.addEntry( Entry( exif, "azerty", createIntegerValue() ) );
+    store.addEntry(Entry(exif, "azerty", createIntegerValue()));
     validator.revalidate();
-    QCOMPARE( validator.countInvalidEntries(), 1 );
-    QCOMPARE( validator.countValidEntries(), 5 );
-    QCOMPARE( validator.invalidEntries()[ exif->generateQualifiedName("azerty") ].type(), Validator::Reason::UNKNOWN_ENTRY );
+    QCOMPARE(validator.countInvalidEntries(), 1);
+    QCOMPARE(validator.countValidEntries(), 5);
+    QCOMPARE(validator.invalidEntries()[ exif->generateQualifiedName("azerty")].type(), Validator::Reason::UNKNOWN_ENTRY);
     store.removeEntry(exif, "azerty");
-    
+
     // Invalid type for rational
-    store.addEntry( Entry( exif, "FNumber", createIntegerValue() ) );
+    store.addEntry(Entry(exif, "FNumber", createIntegerValue()));
     validator.revalidate();
-    QCOMPARE( validator.countInvalidEntries(), 1 );
-    QCOMPARE( validator.countValidEntries(), 5 );
-    QCOMPARE( validator.invalidEntries()[ exif->generateQualifiedName("FNumber") ].type(), Validator::Reason::INVALID_TYPE );
+    QCOMPARE(validator.countInvalidEntries(), 1);
+    QCOMPARE(validator.countValidEntries(), 5);
+    QCOMPARE(validator.invalidEntries()[ exif->generateQualifiedName("FNumber")].type(), Validator::Reason::INVALID_TYPE);
     store.removeEntry(exif, "FNumber");
-    
+
     // Invalid type for integer
-    store.addEntry( Entry( exif, "SubjectLocation", createStringValue() ) );
+    store.addEntry(Entry(exif, "SubjectLocation", createStringValue()));
     validator.revalidate();
-    QCOMPARE( validator.countInvalidEntries(), 1 );
-    QCOMPARE( validator.countValidEntries(), 5 );
-    QCOMPARE( validator.invalidEntries()[ exif->generateQualifiedName("SubjectLocation") ].type(), Validator::Reason::INVALID_TYPE );
-    store.removeEntry( exif, "SubjectLocation" );
-    
+    QCOMPARE(validator.countInvalidEntries(), 1);
+    QCOMPARE(validator.countValidEntries(), 5);
+    QCOMPARE(validator.invalidEntries()[ exif->generateQualifiedName("SubjectLocation")].type(), Validator::Reason::INVALID_TYPE);
+    store.removeEntry(exif, "SubjectLocation");
+
     // Invalid type for choice
-    store.addEntry( Entry( exif, "SensingMethod", createStringValue() ) );
+    store.addEntry(Entry(exif, "SensingMethod", createStringValue()));
     validator.revalidate();
-    QCOMPARE( validator.countInvalidEntries(), 1 );
-    QCOMPARE( validator.countValidEntries(), 5 );
-    QCOMPARE( validator.invalidEntries()[ exif->generateQualifiedName("SensingMethod") ].type(), Validator::Reason::INVALID_TYPE );
-    store.removeEntry( exif, "SensingMethod" );
-    
+    QCOMPARE(validator.countInvalidEntries(), 1);
+    QCOMPARE(validator.countValidEntries(), 5);
+    QCOMPARE(validator.invalidEntries()[ exif->generateQualifiedName("SensingMethod")].type(), Validator::Reason::INVALID_TYPE);
+    store.removeEntry(exif, "SensingMethod");
+
     // Invalid value for choice
-    store.addEntry( Entry( exif, "SensingMethod", createIntegerValue(1242) ) );
+    store.addEntry(Entry(exif, "SensingMethod", createIntegerValue(1242)));
     validator.revalidate();
-    QCOMPARE( validator.countInvalidEntries(), 1 );
-    QCOMPARE( validator.countValidEntries(), 5 );
-    QCOMPARE( validator.invalidEntries()[ exif->generateQualifiedName("SensingMethod") ].type(), Validator::Reason::INVALID_VALUE );
-    store.removeEntry( exif, "SensingMethod" );
-    
+    QCOMPARE(validator.countInvalidEntries(), 1);
+    QCOMPARE(validator.countValidEntries(), 5);
+    QCOMPARE(validator.invalidEntries()[ exif->generateQualifiedName("SensingMethod")].type(), Validator::Reason::INVALID_VALUE);
+    store.removeEntry(exif, "SensingMethod");
+
 }
 
 QTEST_KDEMAIN(KisMetaDataTest, GUI)

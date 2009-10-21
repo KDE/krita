@@ -54,15 +54,15 @@ public:
     KisDynamicSensor* sensor();
 protected:
 
-    double computeValue( const KisPaintInformation& info ) const {
-      double v = m_sensor->parameter(info);
-      if(customCurve()) {
-        return scaleToCurve(v);
-      } else {
-        return v;
-      }
+    double computeValue(const KisPaintInformation& info) const {
+        double v = m_sensor->parameter(info);
+        if (customCurve()) {
+            return scaleToCurve(v);
+        } else {
+            return v;
+        }
     }
-    
+
     double scaleToCurve(double pressure) const {
         int offset = int(255.0 * pressure);
         if (offset < 0)

@@ -49,8 +49,7 @@
 
 struct KisPaintOp::Private {
     Private()
-        : dab(0)
-    {
+            : dab(0) {
     }
 
     KisFixedPaintDeviceSP dab;
@@ -168,8 +167,8 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
     double ySpacing = 1.0;
     double sp = spacing(xSpacing, ySpacing, pi1.pressure(), pi2.pressure());
 
-    Q_ASSERT( xSpacing >= 0.0);
-    Q_ASSERT( ySpacing >= 0.0);
+    Q_ASSERT(xSpacing >= 0.0);
+    Q_ASSERT(ySpacing >= 0.0);
 
     KisVector2D scale(1, 1);
 

@@ -86,7 +86,7 @@ KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
     return c;
 }
 
-void KisHSVConfigWidget::setConfiguration( const KisPropertiesConfiguration * config)
+void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     m_page->hue->setValue(config->getInt("h", 0));
     m_page->saturation->setValue(config->getInt("s", 0));

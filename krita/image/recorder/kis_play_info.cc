@@ -21,14 +21,13 @@
 #include "kis_image.h"
 #include "kis_node.h"
 
-struct KisPlayInfo::Private
-{
+struct KisPlayInfo::Private {
     KisImageWSP image;
     KisNodeSP currentNode;
 };
 
 KisPlayInfo::KisPlayInfo(KisImageWSP image, KisNodeSP currentNode)
-    : d(new Private)
+        : d(new Private)
 {
     d->image = image;
     d->currentNode = currentNode;

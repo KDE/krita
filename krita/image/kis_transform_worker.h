@@ -48,7 +48,7 @@ public:
      * Mirror the specified device along the X axis
      */
     static QRect mirrorX(KisPaintDeviceSP dev, const KisSelection* selection = 0);
-    
+
     /**
      * Mirror the specified device along the Y axis
      */

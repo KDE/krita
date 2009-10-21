@@ -35,10 +35,10 @@
 
 KisSumiPaintOp::KisSumiPaintOp(const
                                KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-    : KisPaintOp( painter )
-    , m_settings( settings )
-    , m_image( image )
-    , newStrokeFlag( true )
+        : KisPaintOp(painter)
+        , m_settings(settings)
+        , m_image(image)
+        , newStrokeFlag(true)
 
 {
     Q_ASSERT(settings);
@@ -69,17 +69,17 @@ KisSumiPaintOp::KisSumiPaintOp(const
     m_brush.enableOpacity(settings->useOpacity());
     m_brush.enableSaturation(settings->useSaturation());
 
-    if (settings->useWeights()){
+    if (settings->useWeights()) {
         // TODO : improve the way the weights can be set..
-        m_brush.setBristleInkAmountWeight( settings->bristleInkAmountWeight()/100.0 );
-        m_brush.setBristleLengthWeight( settings->bristleLengthWeight()/100.0 );
-        m_brush.setInkDepletionWeight( settings->inkDepletionWeight()/100.0 );
-        m_brush.setPressureWeight( settings->pressureWeight()/100.0 );
+        m_brush.setBristleInkAmountWeight(settings->bristleInkAmountWeight() / 100.0);
+        m_brush.setBristleLengthWeight(settings->bristleLengthWeight() / 100.0);
+        m_brush.setInkDepletionWeight(settings->inkDepletionWeight() / 100.0);
+        m_brush.setPressureWeight(settings->pressureWeight() / 100.0);
     }
 
-    if ( !settings->node() ){
+    if (!settings->node()) {
         m_dev = 0;
-    }else{
+    } else {
         m_dev = settings->node()->paintDevice();
     }
 
@@ -103,8 +103,7 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
-    }
-    else {
+    } else {
         m_dab->clear();
     }
 

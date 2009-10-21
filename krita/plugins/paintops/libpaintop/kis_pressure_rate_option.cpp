@@ -35,7 +35,7 @@
 #include <KoColorSpace.h>
 
 KisPressureRateOption::KisPressureRateOption()
-    : KisCurveOption(i18n("Rate"), "Rate")
+        : KisCurveOption(i18n("Rate"), "Rate")
 {
     QWidget* w = new QWidget;
     QLabel* rateLabel = new QLabel(i18n("Rate: "));
@@ -46,15 +46,15 @@ KisPressureRateOption::KisPressureRateOption()
     m_rateSlider->setValue(90);
     m_rateSlider->setOrientation(Qt::Horizontal);
     QHBoxLayout* hl = new QHBoxLayout;
-    hl->addWidget( rateLabel );
-    hl->addWidget( m_rateSlider );
+    hl->addWidget(rateLabel);
+    hl->addWidget(m_rateSlider);
 
     QVBoxLayout* vl = new QVBoxLayout;
-    vl->addLayout( hl );
-    vl->addWidget( m_widget );
+    vl->addLayout(hl);
+    vl->addWidget(m_widget);
 
-    w->setLayout( vl );
-    setConfigurationPage( w );
+    w->setLayout(vl);
+    setConfigurationPage(w);
 }
 
 int KisPressureRateOption::rate() const
@@ -64,26 +64,26 @@ int KisPressureRateOption::rate() const
 
 void KisPressureRateOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    KisCurveOption::writeOptionSetting( setting );
-    setting->setProperty( "PressureRate", m_rateSlider->value() );
+    KisCurveOption::writeOptionSetting(setting);
+    setting->setProperty("PressureRate", m_rateSlider->value());
 }
 
 void KisPressureRateOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    KisCurveOption::readOptionSetting( setting );
-    m_rateSlider->setValue( setting->getInt( "PressureRate"));
+    KisCurveOption::readOptionSetting(setting);
+    m_rateSlider->setValue(setting->getInt("PressureRate"));
 }
 
 
 
-quint8 KisPressureRateOption::apply( quint8 opacity, const KisPaintInformation& info) const
+quint8 KisPressureRateOption::apply(quint8 opacity, const KisPaintInformation& info) const
 {
     opacity = rate();
 
     if (isChecked()) {
-        opacity = qBound((qint32)OPACITY_TRANSPARENT, 
+        opacity = qBound((qint32)OPACITY_TRANSPARENT,
                          (qint32)(double(opacity) * computeValue(info) / PRESSURE_DEFAULT),
-                          (qint32)OPACITY_OPAQUE);
+                         (qint32)OPACITY_OPAQUE);
     }
 
     return opacity;

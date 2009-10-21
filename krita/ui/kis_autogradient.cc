@@ -139,7 +139,7 @@ void KisAutogradient::slotChangedLeftOpacity(int value)
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(segment->startColor().toQColor(), segment->startColor().colorSpace());
-        c.setOpacity( (value * OPACITY_OPAQUE) / 100);
+        c.setOpacity((value * OPACITY_OPAQUE) / 100);
         segment->setStartColor(c);
     }
     gradientSlider->repaint();
@@ -152,7 +152,7 @@ void KisAutogradient::slotChangedRightOpacity(int value)
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(segment->endColor().toQColor(), segment->endColor().colorSpace());
-        c.setOpacity( (value *OPACITY_OPAQUE) / 100 );
+        c.setOpacity((value *OPACITY_OPAQUE) / 100);
         segment->setEndColor(c);
     }
     gradientSlider->repaint();

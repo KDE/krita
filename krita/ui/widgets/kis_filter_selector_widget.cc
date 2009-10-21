@@ -110,8 +110,7 @@ void KisFilterSelectorWidget::showSelector(bool visible)
     QList<int> sizes;
     if (visible) {
         sizes << 200;
-    }
-    else {
+    } else {
         sizes << 0;
     }
     d->uiFilterSelector.splitter->setSizes(sizes);
@@ -133,7 +132,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     }
 
     KisConfigWidget* widget =
-            d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice, d->image);
+        d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice, d->image);
 
     if (!widget) { // No widget, so display a label instead
         d->currentFilterConfigurationWidget = 0;
@@ -143,7 +142,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->currentFilterConfigurationWidget = widget;
         d->currentCentralWidget = widget;
         d->currentFilterConfigurationWidget->setConfiguration(
-                d->currentFilter->defaultConfiguration(d->paintDevice));
+            d->currentFilter->defaultConfiguration(d->paintDevice));
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(configurationChanged()));
     }
 
@@ -161,9 +160,8 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     if (cfg.showFilterGallery()) {
 
         sizes << d->uiFilterSelector.filtersSelector->sizeHint().width()
-              << d->currentCentralWidget->sizeHint().width();
-    }
-    else {
+        << d->currentCentralWidget->sizeHint().width();
+    } else {
         sizes << 0 << d->currentCentralWidget->sizeHint().width();
     }
     d->uiFilterSelector.splitter->setSizes(sizes);
@@ -200,7 +198,7 @@ void KisFilterSelectorWidget::slotBookmarkedFilterConfigurationSelected(int inde
 void KisFilterSelectorWidget::editConfigurations()
 {
     KisSerializableConfiguration* config =
-            d->currentFilterConfigurationWidget ? d->currentFilterConfigurationWidget->configuration() : 0;
+        d->currentFilterConfigurationWidget ? d->currentFilterConfigurationWidget->configuration() : 0;
     KisBookmarkedConfigurationsEditor editor(this, d->currentBookmarkedFilterConfigurationsModel, config);
     editor.exec();
 }
@@ -209,7 +207,7 @@ KisFilterConfiguration* KisFilterSelectorWidget::configuration()
 {
     if (d->currentFilterConfigurationWidget) {
         KisFilterConfiguration * config
-                = dynamic_cast<KisFilterConfiguration*>(d->currentFilterConfigurationWidget->configuration());
+        = dynamic_cast<KisFilterConfiguration*>(d->currentFilterConfigurationWidget->configuration());
         if (config) {
             return config;
         }

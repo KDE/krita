@@ -67,7 +67,7 @@ double phi(double r)
 
 double psi(double r)
 {
-    return pow(1.0 -r, 2) / (2.0*r);
+    return pow(1.0 - r, 2) / (2.0*r);
 }
 
 double invphi(double y)

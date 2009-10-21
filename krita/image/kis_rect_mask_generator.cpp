@@ -48,14 +48,14 @@ KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
 quint8 KisRectangleMaskGenerator::valueAt(double x, double y) const
 {
 
-    if( KisMaskGenerator::d->m_empty ) return 255;
+    if (KisMaskGenerator::d->m_empty) return 255;
     double xr = qAbs(x /*- m_xcenter*/) / width();
     double yr = qAbs(y /*- m_ycenter*/) / height();
-    if (xr > KisMaskGenerator::d->m_fh || yr > KisMaskGenerator::d->m_fv ) {
-        if (yr <= ((xr - KisMaskGenerator::d->m_fh ) * d->m_c + KisMaskGenerator::d->m_fv )) {
-            return (uchar)(255 * (xr - 0.5 * KisMaskGenerator::d->m_fh ) / ( 1.0 - 0.5 * KisMaskGenerator::d->m_fh) );
+    if (xr > KisMaskGenerator::d->m_fh || yr > KisMaskGenerator::d->m_fv) {
+        if (yr <= ((xr - KisMaskGenerator::d->m_fh) * d->m_c + KisMaskGenerator::d->m_fv)) {
+            return (uchar)(255 *(xr - 0.5 * KisMaskGenerator::d->m_fh) / (1.0 - 0.5 * KisMaskGenerator::d->m_fh));
         } else {
-            return (uchar)(255 * (yr - 0.5 * KisMaskGenerator::d->m_fv ) /( 1.0 - 0.5 * KisMaskGenerator::d->m_fv) );
+            return (uchar)(255 *(yr - 0.5 * KisMaskGenerator::d->m_fv) / (1.0 - 0.5 * KisMaskGenerator::d->m_fv));
         }
     } else {
         return 0;

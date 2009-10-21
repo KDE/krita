@@ -73,7 +73,7 @@ void KisKraSaveXmlVisitorTest::testCreateDomDocument()
 
     img->rootLayer()->accept(visitor);
 
-    QCOMPARE( ( int )visitor.m_count, ( int )cv.count() );
+    QCOMPARE((int)visitor.m_count, (int)cv.count());
 
     delete doc;
 }

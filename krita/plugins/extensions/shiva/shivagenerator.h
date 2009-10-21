@@ -23,15 +23,16 @@
 
 class KisConfigWidget;
 
-namespace OpenShiva {
-  class Source;
+namespace OpenShiva
+{
+class Source;
 };
 
 class ShivaGenerator : public KisGenerator
 {
 public:
 
-    ShivaGenerator( OpenShiva::Source* source );
+    ShivaGenerator(OpenShiva::Source* source);
 
     using KisGenerator::generate;
 
@@ -42,7 +43,7 @@ public:
                  ) const;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const;
 
-  private:
+private:
     OpenShiva::Source* m_source;
 };
 

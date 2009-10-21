@@ -71,8 +71,9 @@ KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
 
 }
 
-KisSelectionComponent* KisPixelSelection::clone() {
-    return new KisPixelSelection( *this );
+KisSelectionComponent* KisPixelSelection::clone()
+{
+    return new KisPixelSelection(*this);
 }
 
 KisPixelSelection::~KisPixelSelection()

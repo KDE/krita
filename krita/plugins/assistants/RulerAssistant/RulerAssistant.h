@@ -24,12 +24,12 @@ class Ruler;
 
 class RulerAssistant : public KisPaintingAssistant
 {
-    public:
-        RulerAssistant();
-        virtual QPointF adjustPosition( const QPointF& point) const;
-        virtual void drawAssistant(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter) const;
-    private:
-        QPointF project(const QPointF& pt) const;
+public:
+    RulerAssistant();
+    virtual QPointF adjustPosition(const QPointF& point) const;
+    virtual void drawAssistant(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter) const;
+private:
+    QPointF project(const QPointF& pt) const;
 };
 
 #endif

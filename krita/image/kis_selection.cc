@@ -55,8 +55,8 @@ struct KisSelection::Private {
 };
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
-    , m_d(new Private)
+        : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
+        , m_d(new Private)
 {
     Q_ASSERT(dev);
     m_d->parentPaintDevice = dev;
@@ -71,8 +71,8 @@ KisSelection::KisSelection(KisPaintDeviceSP dev)
 
 
 KisSelection::KisSelection(KisPaintDeviceSP parent, KisMaskSP mask)
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
-    , m_d(new Private)
+        : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
+        , m_d(new Private)
 {
     m_d->parentPaintDevice = parent;
     m_d->interestedInDirtyness = false;
@@ -99,8 +99,8 @@ KisSelection::KisSelection(KisPaintDeviceSP parent, KisMaskSP mask)
 }
 
 KisSelection::KisSelection()
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
-    , m_d(new Private)
+        : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
+        , m_d(new Private)
 {
     m_d->parentPaintDevice = 0;
     m_d->interestedInDirtyness = false;
@@ -113,8 +113,8 @@ KisSelection::KisSelection()
 }
 
 KisSelection::KisSelection(const KisSelection& rhs)
-    : KisPaintDevice(rhs)
-    , m_d(new Private)
+        : KisPaintDevice(rhs)
+        , m_d(new Private)
 {
     m_d->parentPaintDevice = rhs.m_d->parentPaintDevice;
     m_d->interestedInDirtyness = false;
@@ -127,9 +127,9 @@ KisSelection::KisSelection(const KisSelection& rhs)
     m_d->isDeselected = rhs.m_d->isDeselected;
 
     if (rhs.m_d->hasShapeSelection) {
-        Q_ASSERT( rhs.m_d->shapeSelection );
+        Q_ASSERT(rhs.m_d->shapeSelection);
         m_d->shapeSelection = rhs.m_d->shapeSelection->clone();
-        Q_ASSERT( m_d->shapeSelection != rhs.m_d->shapeSelection );
+        Q_ASSERT(m_d->shapeSelection != rhs.m_d->shapeSelection);
     } else {
         m_d->shapeSelection = 0;
     }
@@ -320,7 +320,7 @@ void KisSelection::updateProjection()
 {
     // if we share the datamanager with the pixel selection, no updates are necessary
     if (!m_d->hasShapeSelection) return;
-    Q_ASSERT( m_d->shapeSelection );
+    Q_ASSERT(m_d->shapeSelection);
 
     clear();
     if (m_d->hasPixelSelection) {
@@ -337,7 +337,7 @@ void KisSelection::updateProjection(const QRect& r)
 {
     // if we share the datamanager with the pixel selection, no updates are necessary
     if (!m_d->hasShapeSelection) return;
-    Q_ASSERT( m_d->shapeSelection );
+    Q_ASSERT(m_d->shapeSelection);
 
     clear(r);
     if (m_d->hasPixelSelection) {

@@ -45,4 +45,4 @@ private:
     KisSelectionSP m_newSelection;
     KisSelectionSP m_oldDeselectedSelection;
 };
-#endif 
+#endif

@@ -23,23 +23,34 @@
 
 #include <klocale.h>
 
-class KisIptcIO : public KisMetaData::IOBackend {
+class KisIptcIO : public KisMetaData::IOBackend
+{
     struct Private;
-    public:
-        KisIptcIO();
-        virtual ~KisIptcIO();
-        virtual QString id() const { return "iptc"; }
-        virtual QString name() const { return i18n("Iptc"); }
-        virtual BackendType type() const { return Binary; }
-        virtual bool supportSaving() const { return true; }
-        virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const;
-        virtual bool canSaveAllEntries(KisMetaData::Store* store) const;
-        virtual bool supportLoading() const { return true; }
-        virtual bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const;
-    private:
-        void initMappingsTable() const;
-    private:
-        Private* const d;
+public:
+    KisIptcIO();
+    virtual ~KisIptcIO();
+    virtual QString id() const {
+        return "iptc";
+    }
+    virtual QString name() const {
+        return i18n("Iptc");
+    }
+    virtual BackendType type() const {
+        return Binary;
+    }
+    virtual bool supportSaving() const {
+        return true;
+    }
+    virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const;
+    virtual bool canSaveAllEntries(KisMetaData::Store* store) const;
+    virtual bool supportLoading() const {
+        return true;
+    }
+    virtual bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const;
+private:
+    void initMappingsTable() const;
+private:
+    Private* const d;
 };
 
 #endif

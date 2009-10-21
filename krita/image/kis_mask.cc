@@ -48,7 +48,7 @@ KisMask::KisMask(const KisMask& rhs)
 {
     setName(rhs.name());
 
-    if(rhs.m_d->selection)
+    if (rhs.m_d->selection)
         m_d->selection = new KisSelection(*rhs.m_d->selection.data());
 }
 
@@ -59,13 +59,13 @@ KisMask::~KisMask()
 
 KisSelectionSP KisMask::selection() const
 {
-    if(!m_d->selection) {
+    if (!m_d->selection) {
         m_d->selection = new KisSelection();
         /**
          * FIXME: Add default pixel choice
          * e.g. "Selected by default" or "Deselected by default"
          */
-        if(parent())
+        if (parent())
             m_d->selection->getOrCreatePixelSelection()->select(parent()->extent(), MAX_SELECTED);
         m_d->selection->updateProjection();
     }
@@ -98,13 +98,13 @@ QRect KisMask::decorateRect(KisPaintDeviceSP &src,
 {
     Q_UNUSED(src);
     Q_UNUSED(dst);
-    Q_ASSERT_X(0,"KisMask::decorateRect", "Should be overriden by successors");
+    Q_ASSERT_X(0, "KisMask::decorateRect", "Should be overriden by successors");
     return rc;
 }
 
 void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 {
-    if(m_d->selection) {
+    if (m_d->selection) {
 
         m_d->selection->updateProjection(rc);
 
@@ -120,8 +120,7 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
         gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_OVER));
         gc.setSelection(m_d->selection);
         gc.bitBlt(updatedRect.topLeft(), cacheDevice, updatedRect);
-    }
-    else {
+    } else {
         decorateRect(projection, projection, rc);
     }
 }
@@ -129,7 +128,7 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 QRect KisMask::needRect(const QRect &rect) const
 {
     QRect resultRect = rect;
-    if(m_d->selection)
+    if (m_d->selection)
         resultRect &= m_d->selection->selectedRect();
 
     return resultRect;
@@ -138,7 +137,7 @@ QRect KisMask::needRect(const QRect &rect) const
 QRect KisMask::changeRect(const QRect &rect) const
 {
     QRect resultRect = rect;
-    if(m_d->selection)
+    if (m_d->selection)
         resultRect &= m_d->selection->selectedRect();
 
     return resultRect;
@@ -147,36 +146,36 @@ QRect KisMask::changeRect(const QRect &rect) const
 QRect KisMask::extent() const
 {
     return m_d->selection ? m_d->selection->selectedRect() :
-        parent() ? parent()->extent() : QRect();
+           parent() ? parent()->extent() : QRect();
 }
 
 QRect KisMask::exactBounds() const
 {
     return m_d->selection ? m_d->selection->selectedExactRect() :
-        parent() ? parent()->exactBounds() : QRect();
+           parent() ? parent()->exactBounds() : QRect();
 }
 
 qint32 KisMask::x() const
 {
     return m_d->selection ? m_d->selection->x() :
-        parent() ? parent()->x() : 0;
+           parent() ? parent()->x() : 0;
 }
 
 qint32 KisMask::y() const
 {
     return m_d->selection ? m_d->selection->y() :
-        parent() ? parent()->y() : 0;
+           parent() ? parent()->y() : 0;
 }
 
 void KisMask::setX(qint32 x)
 {
-    if(m_d->selection)
+    if (m_d->selection)
         m_d->selection->setX(x);
 }
 
 void KisMask::setY(qint32 y)
 {
-    if(m_d->selection)
+    if (m_d->selection)
         m_d->selection->setY(y);
 }
 

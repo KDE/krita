@@ -43,7 +43,7 @@ public:
 typedef QList<QPointF> KisCurve;
 
 class KisPerChannelFilterConfiguration
-            : public KisFilterConfiguration
+        : public KisFilterConfiguration
 {
 public:
     KisPerChannelFilterConfiguration(int n);
@@ -81,7 +81,7 @@ protected:
  * This class is generic for filters that affect channel separately
  */
 class KisPerChannelFilter
-            : public KisColorTransformationFilter
+        : public KisColorTransformationFilter
 {
 public:
     KisPerChannelFilter();

@@ -84,11 +84,10 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     KisBrushSP brush = m_brush;
     if (!m_brush) {
         if (settings->m_options) {
-          m_brush = settings->m_options->m_brushOption->brush();
-          brush = m_brush;
-        }
-        else {
-             return;
+            m_brush = settings->m_options->m_brushOption->brush();
+            brush = m_brush;
+        } else {
+            return;
         }
     }
 

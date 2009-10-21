@@ -22,15 +22,15 @@
 
 #include "kis_text_brush.h"
 
-KisBrushSP KisTextBrushFactory::getOrCreateBrush( const QDomElement& brushDefinition )
+KisBrushSP KisTextBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
 {
-    QString text = brushDefinition.attribute( "text_brush_text", "The quick brown fox ate your text" );
+    QString text = brushDefinition.attribute("text_brush_text", "The quick brown fox ate your text");
     QFont font;
-    font.fromString( brushDefinition.attribute( "text_brush_font" ) );
+    font.fromString(brushDefinition.attribute("text_brush_font"));
     double spacing = brushDefinition.attribute("brush_spacing", "1.0").toDouble();
 
-    KisBrushSP brush = new KisTextBrush( text, font );
-    brush->setSpacing( spacing );
+    KisBrushSP brush = new KisTextBrush(text, font);
+    brush->setSpacing(spacing);
 
     return brush;
 

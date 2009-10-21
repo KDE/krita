@@ -67,7 +67,8 @@ KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
 }
 
 
-void KisToolDyna::initDyna() {
+void KisToolDyna::initDyna()
+{
     /* dynadraw init */
     m_curmass = 0.5;
     m_curdrag = 0.15;
@@ -105,7 +106,7 @@ void KisToolDyna::initPaint(KoPointerEvent *e)
 {
     //initDyna();
     first = false;
-    initMouse( convertToPixelCoord(e->point) );
+    initMouse(convertToPixelCoord(e->point));
 
     KisToolFreehand::initPaint(e);
 
@@ -132,14 +133,14 @@ void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_mode != PAINT) return;
 
-    initMouse( convertToPixelCoord(e->point)  );
+    initMouse(convertToPixelCoord(e->point));
 
-    qreal mx, my;   
+    qreal mx, my;
     mx = m_mousePos.x();
     my = m_mousePos.y();
 
-    if (!first){
-        m_mouse.init(mx,my);
+    if (!first) {
+        m_mouse.init(mx, my);
         m_odelx = 0.0;
         m_odely = 0.0;
 
@@ -149,12 +150,12 @@ void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
         return;
     }
 
-    if (applyFilter(mx, my)){
+    if (applyFilter(mx, my)) {
         drawSegment(e);
     }
 
     //KisToolFreehand::mouseMoveEvent(e);
-    if ( m_painter && m_painter->paintOp() && m_painter->paintOp()->incremental() ) {
+    if (m_painter && m_painter->paintOp() && m_painter->paintOp()->incremental()) {
         m_timer->start(m_rate);
     }
 }
@@ -252,26 +253,26 @@ QWidget * KisToolDyna::createOptionWidget()
     QLabel* widthRangeLbl = new QLabel(i18n("Width range:"), optionWidget);
 
     m_chkFixedAngle = new QCheckBox(i18n("Fixed angle:"), optionWidget);
-    m_chkFixedAngle->setChecked( false );
+    m_chkFixedAngle->setChecked(false);
     connect(m_chkFixedAngle, SIGNAL(toggled(bool)), this, SLOT(slotSetFixedAngle(bool)));
 
     m_initWidthSPBox = new QDoubleSpinBox(optionWidget);
-    m_initWidthSPBox->setValue( 1.5 );
+    m_initWidthSPBox->setValue(1.5);
     connect(m_initWidthSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDynaWidth(double)));
     m_massSPBox = new QDoubleSpinBox(optionWidget);
-    m_massSPBox->setValue( 0.5 );
+    m_massSPBox->setValue(0.5);
     connect(m_massSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetMass(double)));
     m_dragSPBox = new QDoubleSpinBox(optionWidget);
-    m_dragSPBox->setValue( 0.15 );
+    m_dragSPBox->setValue(0.15);
     connect(m_dragSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDrag(double)));
     m_xAngleSPBox = new QDoubleSpinBox(optionWidget);
-    m_xAngleSPBox->setValue( 0.6 );
+    m_xAngleSPBox->setValue(0.6);
     connect(m_xAngleSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetXangle(double)));
     m_yAngleSPBox = new QDoubleSpinBox(optionWidget);
-    m_yAngleSPBox->setValue( 0.2 );
+    m_yAngleSPBox->setValue(0.2);
     connect(m_yAngleSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetYangle(double)));
     m_widthRangeSPBox = new QDoubleSpinBox(optionWidget);
-    m_widthRangeSPBox->setValue( 0.05 );
+    m_widthRangeSPBox->setValue(0.05);
     connect(m_widthRangeSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWidthRange(double)));
 
     m_optionLayout = new QGridLayout(optionWidget);
@@ -304,7 +305,8 @@ QWidget * KisToolDyna::createOptionWidget()
 }
 
 // dyna algorithm
-int KisToolDyna::applyFilter(qreal mx, qreal my) {
+int KisToolDyna::applyFilter(qreal mx, qreal my)
+{
     qreal mass, drag;
     qreal fx, fy;
 
@@ -318,7 +320,7 @@ int KisToolDyna::applyFilter(qreal mx, qreal my) {
 
     m_mouse.acc = sqrt(fx * fx + fy * fy);
 
-    if(m_mouse.acc < 0.000001){
+    if (m_mouse.acc < 0.000001) {
         return 0;
     }
 
@@ -331,14 +333,14 @@ int KisToolDyna::applyFilter(qreal mx, qreal my) {
     m_mouse.vel = sqrt(m_mouse.velx * m_mouse.velx + m_mouse.vely * m_mouse.vely);
     m_mouse.angx = -m_mouse.vely;
     m_mouse.angy = m_mouse.velx;
-    if(m_mouse.vel < 0.000001){
+    if (m_mouse.vel < 0.000001) {
         return 0;
     }
 
     /* calculate angle of drawing tool */
     m_mouse.angx /= m_mouse.vel;
     m_mouse.angy /= m_mouse.vel;
-    if(m_mouse.fixedangle) {
+    if (m_mouse.fixedangle) {
         m_mouse.angx = m_xangle;
         m_mouse.angy = m_yangle;
     }
@@ -355,7 +357,8 @@ int KisToolDyna::applyFilter(qreal mx, qreal my) {
 }
 
 
-void KisToolDyna::drawSegment(KoPointerEvent* event) {
+void KisToolDyna::drawSegment(KoPointerEvent* event)
+{
     qreal delx, dely;
     qreal wid;
     qreal px, py, nx, ny;
@@ -364,7 +367,7 @@ void KisToolDyna::drawSegment(KoPointerEvent* event) {
 
     wid = wid * m_width;
 
-    if(wid < 0.00001){
+    if (wid < 0.00001) {
         wid = 0.00001;
     }
 
@@ -376,26 +379,26 @@ void KisToolDyna::drawSegment(KoPointerEvent* event) {
     nx = m_mouse.curx;
     ny = m_mouse.cury;
 
-    QPointF prev( px , py );       // previous position
-    QPointF now( nx , ny );         // new position
+    QPointF prev(px , py);         // previous position
+    QPointF now(nx , ny);           // new position
 
-    QPointF prevr( px + m_odelx , py + m_odely );  
-    QPointF prevl( px - m_odelx , py - m_odely );  
+    QPointF prevr(px + m_odelx , py + m_odely);
+    QPointF prevl(px - m_odelx , py - m_odely);
 
-    QPointF nowl( nx - delx , ny - dely);
-    QPointF nowr( nx + delx , ny + dely);
+    QPointF nowl(nx - delx , ny - dely);
+    QPointF nowr(nx + delx , ny + dely);
 
     // transform coords from float points into image points
     prev.rx() *= currentImage()->width();
-    prevr.rx()*= currentImage()->width();
-    prevl.rx()*= currentImage()->width();
+    prevr.rx() *= currentImage()->width();
+    prevl.rx() *= currentImage()->width();
     now.rx()  *= currentImage()->width();
     nowl.rx() *= currentImage()->width();
     nowr.rx() *= currentImage()->width();
 
     prev.ry() *= currentImage()->height();
-    prevr.ry()*= currentImage()->height();
-    prevl.ry()*= currentImage()->height();
+    prevr.ry() *= currentImage()->height();
+    prevl.ry() *= currentImage()->height();
     now.ry()  *= currentImage()->height();
     nowl.ry() *= currentImage()->height();
     nowr.ry() *= currentImage()->height();
@@ -406,7 +409,7 @@ void KisToolDyna::drawSegment(KoPointerEvent* event) {
     qreal m_tangentialPressure;
 
 #if 0
-    // some funny debugging 
+    // some funny debugging
     dbgPlugins << "m_mouse.vel: " << m_mouse.vel;
     dbgPlugins << "m_mouse.velx: " << m_mouse.velx;
     dbgPlugins << "m_mouse.vely: " << m_mouse.vely;
@@ -437,8 +440,9 @@ void KisToolDyna::drawSegment(KoPointerEvent* event) {
     m_odely = dely;
 }
 
-void KisToolDyna::mousePressEvent(KoPointerEvent *e){
-   if (!currentNode())
+void KisToolDyna::mousePressEvent(KoPointerEvent *e)
+{
+    if (!currentNode())
         return;
 
     if (!currentNode()->paintDevice())

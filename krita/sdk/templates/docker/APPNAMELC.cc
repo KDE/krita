@@ -21,37 +21,35 @@
 
 #include "%{APPNAMELC}_dock.h"
 
-typedef KGenericFactory<%{APPNAME}Plugin> %{APPNAME}PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita%{APPNAMELC}, %{APPNAME}PluginFactory( "krita" ) )
+typedef KGenericFactory < % {APPNAME} Plugin > % {APPNAME} PluginFactory;
+K_EXPORT_COMPONENT_FACTORY(krita % {APPNAMELC}, % {APPNAME} PluginFactory("krita"))
 
-class %{APPNAME}DockFactory : public KoDockFactory {
+class %
+{
+    APPNAME
+} DockFactory : public KoDockFactory {
 public:
-    %{APPNAME}DockFactory(KisView2 * view)
-        : m_view( view )
-    {
+    % {APPNAME} DockFactory(KisView2 * view)
+            : m_view(view) {
     }
 
-    virtual QString id() const
-    {
-        return QString( "%{APPNAME}" );
+    virtual QString id() const {
+        return QString("%{APPNAME}");
     }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
-    {
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
-    {
-        %{APPNAME}Dock * dockWidget = new %{APPNAME}Dock(m_view);
-        
+    virtual QDockWidget* createDockWidget() {
+        % {APPNAME} Dock * dockWidget = new % {APPNAME} Dock(m_view);
+
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const
-    {
+    DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
 private:
@@ -60,21 +58,20 @@ private:
 };
 
 
-%{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+% {APPNAME} Plugin:: % {APPNAME} Plugin(QObject *parent, const QStringList &)
+        : KParts::Plugin(parent)
 {
     dbgPlugins << "%{APPNAME}Plugin";
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
-        setComponentData(%{APPNAME}PluginFactory::componentData());
-        %{APPNAME}DockFactory dockFactory( m_view);
-        m_view->createDockWidget( &dockFactory );
+        setComponentData( % {APPNAME} PluginFactory::componentData());
+        % {APPNAME} DockFactory dockFactory(m_view);
+        m_view->createDockWidget(&dockFactory);
     }
 }
 
-%{APPNAME}Plugin::~%{APPNAME}Plugin()
+% {APPNAME} Plugin::~ % {APPNAME} Plugin()
 {
     m_view = 0;
 }

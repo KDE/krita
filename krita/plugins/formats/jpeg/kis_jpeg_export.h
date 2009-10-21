@@ -22,13 +22,14 @@
 
 #include <KoFilter.h>
 
-class KisJPEGExport : public KoFilter {
+class KisJPEGExport : public KoFilter
+{
     Q_OBJECT
-    public:
-        KisJPEGExport(QObject* parent, const QStringList&);
-        virtual ~KisJPEGExport();
-    public:
-        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+public:
+    KisJPEGExport(QObject* parent, const QStringList&);
+    virtual ~KisJPEGExport();
+public:
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

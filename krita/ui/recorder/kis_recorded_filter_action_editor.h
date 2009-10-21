@@ -26,27 +26,29 @@ class KisRecordedFilterAction;
 class QGridLayout;
 class KisConfigWidget;
 
-class KisRecordedFilterActionEditor : public QWidget {
+class KisRecordedFilterActionEditor : public QWidget
+{
     Q_OBJECT
-    public:
-        KisRecordedFilterActionEditor( QWidget* parent, KisRecordedAction* action);
-        ~KisRecordedFilterActionEditor();
-    private slots:
-        void configurationUpdated();
-    signals:
-        void actionEdited();
-    private:
-        KisRecordedFilterAction* m_action;
-        QGridLayout* m_gridLayout;
-        KisConfigWidget* m_configWidget;
+public:
+    KisRecordedFilterActionEditor(QWidget* parent, KisRecordedAction* action);
+    ~KisRecordedFilterActionEditor();
+private slots:
+    void configurationUpdated();
+signals:
+    void actionEdited();
+private:
+    KisRecordedFilterAction* m_action;
+    QGridLayout* m_gridLayout;
+    KisConfigWidget* m_configWidget;
 };
 
-class KisRecordedFilterActionEditorFactory : public KisRecordedActionEditorFactory {
-    public:
-        KisRecordedFilterActionEditorFactory();
-        virtual ~KisRecordedFilterActionEditorFactory();
-        virtual QWidget* createEditor(QWidget* parent, KisRecordedAction* action) const;
-        virtual bool canEdit( const KisRecordedAction* action) const;
+class KisRecordedFilterActionEditorFactory : public KisRecordedActionEditorFactory
+{
+public:
+    KisRecordedFilterActionEditorFactory();
+    virtual ~KisRecordedFilterActionEditorFactory();
+    virtual QWidget* createEditor(QWidget* parent, KisRecordedAction* action) const;
+    virtual bool canEdit(const KisRecordedAction* action) const;
 };
 
 #endif

@@ -20,7 +20,8 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_imagepipe_brush_p.h"
 
-class KisImagePipeBrush::Private {
+class KisImagePipeBrush::Private
+{
 public:
 
     QString name;
@@ -36,8 +37,8 @@ public:
 };
 
 KisImagePipeBrush::KisImagePipeBrush(const QString& filename)
-    : KisGbrBrush(filename)
-    , m_d( new Private() )
+        : KisGbrBrush(filename)
+        , m_d(new Private())
 {
     m_d->brushType = INVALID;
     m_d->numOfBrushes = 0;
@@ -47,8 +48,8 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& filename)
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
                                      QVector< QVector<KisPaintDevice*> > devices,
                                      QVector<KisParasite::SelectionMode > modes)
-    : KisGbrBrush("")
-    , m_d( new Private() )
+        : KisGbrBrush("")
+        , m_d(new Private())
 {
     Q_ASSERT(devices.count() == modes.count());
     Q_ASSERT(devices.count() > 0);
@@ -74,8 +75,8 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
 }
 
 KisImagePipeBrush::KisImagePipeBrush(const KisImagePipeBrush& rhs)
-    : KisGbrBrush(rhs),
-      m_d(new Private)
+        : KisGbrBrush(rhs),
+        m_d(new Private)
 {
     *m_d = *(rhs.m_d);
     m_d->brushes.clear();
@@ -137,8 +138,8 @@ bool KisImagePipeBrush::init()
     qint32 numOfBrushes = 0;
     while (numOfBrushes < m_d->numOfBrushes && i < m_d->data.size()) {
         KisGbrBrush* brush = new KisGbrBrush(name() + '_' + QString().setNum(numOfBrushes),
-                                        m_d->data,
-                                        i);
+                                             m_d->data,
+                                             i);
         Q_CHECK_PTR(brush);
 
         m_d->brushes.append(brush);
@@ -326,7 +327,7 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const
 bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info)
 {
     if (info.movement().isMuchSmallerThan(1) // FIXME the 1 here is completely arbitrary.
-                                             // What is the correct order of magnitude?
+            // What is the correct order of magnitude?
             && m_d->parasite.needsMovement)
         return false;
     return true;
@@ -351,15 +352,16 @@ QString KisImagePipeBrush::defaultFileExtension() const
     return QString(".gih");
 }
 
-void KisImagePipeBrush::sanitize() {
+void KisImagePipeBrush::sanitize()
+{
     for (int i = 0; i < m_d->parasite.dim; i++) {
         // In the 2 listed cases, we'd divide by 0!
-        if (   m_d->parasite.selection[i] == KisParasite::Incremental
-              || m_d->parasite.selection[i] == KisParasite::Angular) {
+        if (m_d->parasite.selection[i] == KisParasite::Incremental
+                || m_d->parasite.selection[i] == KisParasite::Angular) {
             if (m_d->parasite.rank[i] == 0) {
                 warnImage << "Brush" << name() << " has a wrong rank for its selection mode!";
                 m_d->parasite.selection[i] = KisParasite::Constant;
-             }
+            }
         }
     }
 }

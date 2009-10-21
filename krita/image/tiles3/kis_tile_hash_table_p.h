@@ -20,7 +20,7 @@
 
 template<class T>
 KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
-    : m_lock(QReadWriteLock::NonRecursive)
+        : m_lock(QReadWriteLock::NonRecursive)
 {
     m_hashTable = new TileTypeSP [TABLE_SIZE];
     Q_CHECK_PTR(m_hashTable);
@@ -35,8 +35,8 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
 
 template<class T>
 KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T> &ht,
-                                                  KisMementoManager *mm)
-    : m_lock(QReadWriteLock::NonRecursive)
+        KisMementoManager *mm)
+        : m_lock(QReadWriteLock::NonRecursive)
 {
     m_mementoManager = mm;
 
@@ -50,8 +50,8 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T
     TileTypeSP foreignTile;
     TileType* nativeTile;
     TileType* nativeTileHead;
-    for(qint32 i=0; i<TABLE_SIZE; i++) {
-        nativeTileHead=0;
+    for (qint32 i = 0; i < TABLE_SIZE; i++) {
+        nativeTileHead = 0;
 
         foreignTile = ht.m_hashTable[i];
         while (foreignTile) {
@@ -85,12 +85,12 @@ template<class T>
 typename KisTileHashTableTraits<T>::TileTypeSP
 KisTileHashTableTraits<T>::getTile(qint32 col, qint32 row)
 {
-    qint32 idx = calculateHash(col,row);
+    qint32 idx = calculateHash(col, row);
     TileTypeSP tile = m_hashTable[idx];
 
-    for(; tile; tile=tile->next()) {
-        if(tile->col() == col &&
-           tile->row() == row) {
+    for (; tile; tile = tile->next()) {
+        if (tile->col() == col &&
+                tile->row() == row) {
 
             return tile;
         }
@@ -102,11 +102,11 @@ KisTileHashTableTraits<T>::getTile(qint32 col, qint32 row)
 template<class T>
 void KisTileHashTableTraits<T>::linkTile(TileTypeSP tile)
 {
-    qint32 idx = calculateHash(tile->col(),tile->row());
+    qint32 idx = calculateHash(tile->col(), tile->row());
     TileTypeSP firstTile = m_hashTable[idx];
 
     tile->setNext(firstTile);
-    m_hashTable[idx]=tile;
+    m_hashTable[idx] = tile;
     m_numTiles++;
 }
 
@@ -114,24 +114,24 @@ template<class T>
 typename KisTileHashTableTraits<T>::TileTypeSP
 KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row)
 {
-    qint32 idx = calculateHash(col,row);
+    qint32 idx = calculateHash(col, row);
     TileTypeSP tile = m_hashTable[idx];
-    TileTypeSP prevTile=0;
+    TileTypeSP prevTile = 0;
 
-    for(; tile; tile=tile->next()) {
-        if(tile->col() == col &&
-           tile->row() == row) {
+    for (; tile; tile = tile->next()) {
+        if (tile->col() == col &&
+                tile->row() == row) {
 
-            if(prevTile)
+            if (prevTile)
                 prevTile->setNext(tile->next());
             else
-		/* optimize here*/
-		m_hashTable[idx]=tile->next();
+                /* optimize here*/
+                m_hashTable[idx] = tile->next();
 
             m_numTiles--;
             return tile;
         }
-        prevTile=tile;
+        prevTile = tile;
     }
 
     return 0;
@@ -141,7 +141,7 @@ template<class T>
 bool KisTileHashTableTraits<T>::tileExists(qint32 col, qint32 row)
 {
     QReadLocker locker(&m_lock);
-    return getTile(col,row);
+    return getTile(col, row);
 }
 
 template<class T>
@@ -149,7 +149,7 @@ typename KisTileHashTableTraits<T>::TileTypeSP
 KisTileHashTableTraits<T>::getExistedTile(qint32 col, qint32 row)
 {
     QReadLocker locker(&m_lock);
-    return getTile(col,row);
+    return getTile(col, row);
 }
 
 template<class T>
@@ -163,11 +163,11 @@ KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
     QWriteLocker locker(&m_lock);
 
     newTile = false;
-    TileTypeSP tile = getTile(col,row);
-    if(!tile) {
+    TileTypeSP tile = getTile(col, row);
+    if (!tile) {
         tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
         linkTile(tile);
-	newTile = true;
+        newTile = true;
     }
 
     return tile;
@@ -209,17 +209,17 @@ void KisTileHashTableTraits<T>::clear()
 //    KisTile* tmp;
     qint32 i;
 
-    for(i=0; i<TABLE_SIZE; i++) {
-        tile=m_hashTable[i];
+    for (i = 0; i < TABLE_SIZE; i++) {
+        tile = m_hashTable[i];
 
-        while(tile) {
+        while (tile) {
             //tmp = tile;
-            tile=tile->next();
+            tile = tile->next();
             /* done by KisShared */
             //delete tmp;
             m_numTiles--;
         }
-        m_hashTable[i]=0;
+        m_hashTable[i] = 0;
     }
 
     Q_ASSERT(!m_numTiles);
@@ -229,14 +229,14 @@ void KisTileHashTableTraits<T>::clear()
 template<class T>
 void KisTileHashTableTraits<T>::setDefaultTileData(KisTileData *defaultTileData)
 {
-    if(m_defaultTileData) {
+    if (m_defaultTileData) {
         globalTileDataStore.releaseTileData(m_defaultTileData);
-        m_defaultTileData=0;
+        m_defaultTileData = 0;
     }
 
-    if(defaultTileData) {
-	globalTileDataStore.acquireTileData(defaultTileData);
-	m_defaultTileData=defaultTileData;
+    if (defaultTileData) {
+        globalTileDataStore.acquireTileData(defaultTileData);
+        m_defaultTileData = defaultTileData;
     }
 }
 
@@ -260,16 +260,11 @@ void KisTileHashTableTraits<T>::debugPrintInfo()
     printf("==========================\n");
 }
 
-/*#define foreach(it)                                     \
-  for(qint32 i=0; i<TABLE_SIZE; i++, it=m_hashTable[i]) \
-  for(it=m_hashTable[0]; it; it=it->next())
-*/
-
 template<class T>
 qint32 KisTileHashTableTraits<T>::debugChainLen(qint32 idx)
 {
-    qint32 len=0;
-    for(TileTypeSP it=m_hashTable[idx]; it; it=it->next(), len++) ;
+    qint32 len = 0;
+    for (TileTypeSP it = m_hashTable[idx]; it; it = it->next(), len++) ;
     return len;
 }
 
@@ -277,37 +272,37 @@ template<class T>
 void KisTileHashTableTraits<T>::debugMaxListLength(qint32 &min, qint32 &max)
 {
     TileTypeSP tile;
-    qint32 maxLen=0;
-    qint32 minLen=m_numTiles;
-    qint32 tmp=0;
+    qint32 maxLen = 0;
+    qint32 minLen = m_numTiles;
+    qint32 tmp = 0;
 
-    for(qint32 i=0; i<TABLE_SIZE; i++) {
-        tmp=debugChainLen(i);
-        if(tmp>maxLen)
-            maxLen=tmp;
-        if(tmp<minLen)
-            minLen=tmp;
+    for (qint32 i = 0; i < TABLE_SIZE; i++) {
+        tmp = debugChainLen(i);
+        if (tmp > maxLen)
+            maxLen = tmp;
+        if (tmp < minLen)
+            minLen = tmp;
     }
 
-    min=minLen;
-    max=maxLen;
+    min = minLen;
+    max = maxLen;
 }
 
 template<class T>
 void KisTileHashTableTraits<T>::debugListLengthDistibution()
 {
-    qint32 min,max;
+    qint32 min, max;
     qint32 arraySize;
     qint32 tmp;
 
-    debugMaxListLength(min,max);
-    arraySize=max-min+1;
+    debugMaxListLength(min, max);
+    arraySize = max - min + 1;
 
     qint32 *array = new qint32[arraySize];
     memset(array, 0, sizeof(qint32)*arraySize);
 
-    for(qint32 i=0; i<TABLE_SIZE; i++) {
-        tmp=debugChainLen(i);
+    for (qint32 i = 0; i < TABLE_SIZE; i++) {
+        tmp = debugChainLen(i);
         array[tmp-min]++;
     }
 
@@ -315,8 +310,8 @@ void KisTileHashTableTraits<T>::debugListLengthDistibution()
     printf("   maxChain:\t\t%d\n", max);
 
     printf("   Chain size distribution:\n");
-    for(qint32 i=0; i<arraySize; i++)
-        printf("      %3d:\t%4d\n", i+min, array[i]);
+    for (qint32 i = 0; i < arraySize; i++)
+        printf("      %3d:\t%4d\n", i + min, array[i]);
 
     delete[] array;
 }

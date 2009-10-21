@@ -77,7 +77,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbPaintops = new KComboBox(this);
     m_cmbPaintops->setObjectName("KisPaintopBox::m_cmbPaintops");
     m_cmbPaintops->setMinimumWidth(150);
-    m_cmbPaintops->setMaxVisibleItems( 20 );
+    m_cmbPaintops->setMaxVisibleItems(20);
     m_cmbPaintops->setToolTip(i18n("Artist's materials"));
 
 #ifdef Q_WS_MAC
@@ -106,7 +106,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
-    connect(m_presetsPopup, SIGNAL( savePresetClicked()), this, SLOT( slotSaveActivePreset()));
+    connect(m_presetsPopup, SIGNAL(savePresetClicked()), this, SLOT(slotSaveActivePreset()));
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -229,13 +229,13 @@ const KoID& KisPaintopBox::currentPaintop()
 
 void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 {
-    if ( m_activePreset && m_optionWidget ) {
-        m_optionWidget->writeConfiguration( const_cast<KisPaintOpSettings*>( m_activePreset->settings().data() ) );
+    if (m_activePreset && m_optionWidget) {
+        m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
         m_optionWidget->disconnect(m_presetWidget);
         m_optionWidget->disconnect(m_presetsPopup->presetPreview());
         m_presetsPopup->setPaintOpSettingsWidget(0);
         m_optionWidget->hide();
-        const_cast<KisPaintOpSettings*>( m_activePreset->settings().data() )->setOptionsWidget(0);
+        const_cast<KisPaintOpSettings*>(m_activePreset->settings().data())->setOptionsWidget(0);
     }
 
     m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
@@ -248,11 +248,11 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         }
         m_optionWidget = m_paintopOptionWidgets[paintop];
         // XXX: Hack!
-        const_cast<KisPaintOpSettings*>( preset->settings().data() )->setOptionsWidget(m_optionWidget);
+        const_cast<KisPaintOpSettings*>(preset->settings().data())->setOptionsWidget(m_optionWidget);
         m_optionWidget->setImage(m_view->image());
 
-        if ( !preset->settings()->getProperties().isEmpty() ) {
-            m_optionWidget->setConfiguration( preset->settings() );
+        if (!preset->settings()->getProperties().isEmpty()) {
+            m_optionWidget->setConfiguration(preset->settings());
         }
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
         Q_ASSERT(m_optionWidget);
@@ -262,7 +262,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         m_presetsPopup->setPaintOpSettingsWidget(0);
     }
 
-    preset->settings()->setNode( m_resourceProvider->currentNode() );
+    preset->settings()->setNode(m_resourceProvider->currentNode());
     m_resourceProvider->slotPaintOpPresetActivated(preset);
 
     int index = m_displayedOps.indexOf(paintop);
@@ -292,22 +292,20 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInp
 {
     QHash<QString, KisPaintOpPresetSP> settingsArray;
 
-    if ( !m_inputDevicePresets.contains( inputDevice ) ) {
-        foreach( const KoID& paintop, KisPaintOpRegistry::instance()->listKeys() ) {
+    if (!m_inputDevicePresets.contains(inputDevice)) {
+        foreach(const KoID& paintop, KisPaintOpRegistry::instance()->listKeys()) {
             settingsArray[paintop.id()] =
                 KisPaintOpRegistry::instance()->defaultPreset(paintop, inputDevice, m_view->image());
         }
         m_inputDevicePresets[inputDevice] = settingsArray;
-    }
-    else {
+    } else {
         settingsArray = m_inputDevicePresets[inputDevice];
     }
 
-    if ( settingsArray.contains( paintop.id() ) ) {
+    if (settingsArray.contains(paintop.id())) {
         KisPaintOpPresetSP preset = settingsArray[paintop.id()];
         return preset;
-    }
-    else {
+    } else {
         warnKrita << "Could not get paintop preset for paintop " << paintop.name() << ", return default";
         return KisPaintOpRegistry::instance()->defaultPreset(paintop, inputDevice, m_view->image());
     }
@@ -316,7 +314,7 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInp
 void KisPaintopBox::slotSaveActivePreset()
 {
     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
-    if(!preset)
+    if (!preset)
         return;
 
     KisPaintOpPreset* newPreset = preset->clone();
@@ -327,17 +325,17 @@ void KisPaintopBox::slotSaveActivePreset()
     int i = 1;
     QFileInfo fileInfo;
     do {
-        fileInfo.setFile( saveLocation + QString("PaintOpPreset%1.kpp").arg( i ));
+        fileInfo.setFile(saveLocation + QString("PaintOpPreset%1.kpp").arg(i));
         i++;
-    } while( fileInfo.exists() );
-    newPreset->setFilename( fileInfo.filePath() );
+    } while (fileInfo.exists());
+    newPreset->setFilename(fileInfo.filePath());
 
     rServer->addResource(newPreset);
 }
 
 void KisPaintopBox::slotUpdatePreset()
 {
-    m_optionWidget->writeConfiguration( const_cast<KisPaintOpSettings*>( m_activePreset->settings().data() ) );
+    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
     m_presetWidget->updatePreview();
     m_presetsPopup->presetPreview()->updatePreview();
 }

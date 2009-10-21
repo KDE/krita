@@ -6,17 +6,22 @@
 
 class KisCanvas2;
 
-class KisTool%{APPNAME} : public KisTool {
+class KisTool %
+{
+    APPNAME
+} : public KisTool {
     Q_OBJECT
 public:
-    KisTool%{APPNAME}(KoCanvasBase * canvas);
-    virtual ~KisTool%{APPNAME}();
+    KisTool % {APPNAME}(KoCanvasBase * canvas);
+    virtual ~KisTool % {APPNAME}();
 
     //
     // KisToolPaint interface
     //
 
-    virtual quint32 priority() { return 3; }
+    virtual quint32 priority() {
+        return 3;
+    }
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
@@ -30,7 +35,7 @@ public slots:
     void deactivate();
 
 protected:
-    
+
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 protected:
@@ -38,23 +43,25 @@ protected:
 };
 
 
-class KisTool%{APPNAME}Factory : public KoToolFactory {
+class KisTool %
+{
+    APPNAME
+} Factory : public KoToolFactory {
 
 public:
-    KisTool%{APPNAME}Factory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisTool%{APPNAME}", i18n( "%{APPNAME}" ))
-        {
-            setToolTip( i18n( "%{APPNAME}" ) );
-            setToolType( TOOL_TYPE_VIEW );
-            setIcon( "tool_%{APPNAMELC}" );
-            setPriority( 0 );
-        };
+    KisTool % {APPNAME} Factory(QObject *parent, const QStringList&)
+            : KoToolFactory(parent, "KisTool%{APPNAME}", i18n("%{APPNAME}")) {
+        setToolTip(i18n("%{APPNAME}"));
+        setToolType(TOOL_TYPE_VIEW);
+        setIcon("tool_%{APPNAMELC}");
+        setPriority(0);
+    };
 
 
-    virtual ~KisTool%{APPNAME}Factory() {}
+    virtual ~KisTool % {APPNAME} Factory() {}
 
     virtual KoTool * createTool(KoCanvasBase * canvas) {
-        return new KisTool%{APPNAME}(canvas);
+        return new KisTool % {APPNAME}(canvas);
     }
 
 };

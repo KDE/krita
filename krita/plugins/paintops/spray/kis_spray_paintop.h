@@ -58,7 +58,7 @@ private:
     int m_total;
     int m_count;
 #endif
-    
+
 };
 
 #endif // KIS_SPRAY_PAINTOP_H_

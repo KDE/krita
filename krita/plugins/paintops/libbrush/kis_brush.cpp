@@ -112,20 +112,20 @@ struct KisBrush::Private {
 };
 
 KisBrush::KisBrush()
-    : KoResource( "" )
-    , d(new Private)
+        : KoResource("")
+        , d(new Private)
 {
 }
 
-KisBrush::KisBrush( const QString& filename )
-    : KoResource( filename )
-    , d( new Private )
+KisBrush::KisBrush(const QString& filename)
+        : KoResource(filename)
+        , d(new Private)
 {
 }
 
 KisBrush::KisBrush(const KisBrush& rhs)
-    : KoResource( "" )
-    , d( new Private )
+        : KoResource("")
+        , d(new Private)
 {
     m_image = rhs.m_image;
     d->brushType = rhs.d->brushType;
@@ -211,7 +211,7 @@ bool KisBrush::hasColor() const
     return d->hasColor;
 }
 
-void KisBrush::setHasColor( bool hasColor )
+void KisBrush::setHasColor(bool hasColor)
 {
     d->hasColor = hasColor;
 }
@@ -224,7 +224,7 @@ bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
 
 void KisBrush::setImage(const QImage& img)
 {
-    Q_ASSERT( !img.isNull() );
+    Q_ASSERT(!img.isNull());
     m_image = img;
 
     setWidth(img.width());
@@ -244,10 +244,10 @@ enumBrushType KisBrush::brushType() const
     return d->brushType;
 }
 
-KisBrushSP KisBrush::fromXML( const QDomElement& element )
+KisBrushSP KisBrush::fromXML(const QDomElement& element)
 {
 
-    return KisBrushRegistry::instance()->getOrCreateBrush( element );
+    return KisBrushRegistry::instance()->getOrCreateBrush(element);
 
 }
 
@@ -321,10 +321,10 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, doubl
 
 
 void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-                            ColoringInformation* coloringInformation,
-                            double scaleX, double scaleY, double angle,
-                            const KisPaintInformation& info_,
-                            double subPixelX, double subPixelY) const
+        ColoringInformation* coloringInformation,
+        double scaleX, double scaleY, double angle,
+        const KisPaintInformation& info_,
+        double subPixelX, double subPixelY) const
 {
     Q_ASSERT(valid());
     Q_UNUSED(angle);
@@ -351,12 +351,10 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         if (maskWidth * maskHeight <= bounds.width() * bounds.height()) {
             // just clear the data in dst,
             memset(dst->data(), OPACITY_TRANSPARENT, maskWidth * maskHeight * dst->pixelSize());
-        }
-        else {
+        } else {
             dst->initialize();
         }
-    }
-    else {
+    } else {
         if (dst->data() == 0 || dst->bounds().isEmpty()) {
             qWarning() << "Creating a default black dab: no coloring info and no initialized paint device to mask";
             dst->clear(QRect(0, 0, maskWidth, maskHeight));
@@ -371,8 +369,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
             color = const_cast<quint8*>(coloringInformation->color());
         }
-    }
-    else {
+    } else {
         // Mask everything out
         cs->setAlpha(dst->data(), OPACITY_TRANSPARENT, dst->bounds().width() * dst->bounds().height());
     }
@@ -387,8 +384,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
             if (coloringInformation) {
                 if (color) {
                     memcpy(dabPointer, color, pixelSize);
-                }
-                else {
+                } else {
                     memcpy(dabPointer, coloringInformation->color(), pixelSize);
                     coloringInformation->nextColumn();
                 }
@@ -466,8 +462,7 @@ KisFixedPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace,
 
     for (int y = 0; y < outputHeight; y++) {
         const QRgb *scanline = reinterpret_cast<const QRgb *>(outputImage.scanLine(y));
-        for (int x = 0; x < outputWidth; x++)
-        {
+        for (int x = 0; x < outputWidth; x++) {
             QRgb pixel = scanline[x];
 
             int red = qRed(pixel);
@@ -484,8 +479,7 @@ KisFixedPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace,
                 dabPointer[1] = (green * 255) / alpha;
                 dabPointer[0] = (blue * 255) / alpha;
                 dabPointer[3] = alpha;
-            }
-            else {
+            } else {
                 dabPointer[2] = red;
                 dabPointer[1] = green;
                 dabPointer[0] = blue;
@@ -507,7 +501,7 @@ void KisBrush::clearScaledBrushes()
 void KisBrush::createScaledBrushes() const
 {
     if (!d->scaledBrushes.isEmpty()) {
-        const_cast<KisBrush*>( this )->clearScaledBrushes();
+        const_cast<KisBrush*>(this)->clearScaledBrushes();
     }
 
     if (img().isNull()) {
@@ -645,10 +639,9 @@ KisQImagemaskSP KisBrush::scaleMask(const KisScaledBrush *srcBrush, double scale
 
             if (d < OPACITY_TRANSPARENT) {
                 d = OPACITY_TRANSPARENT;
-            } else
-                if (d > OPACITY_OPAQUE) {
-                    d = OPACITY_OPAQUE;
-                }
+            } else if (d > OPACITY_OPAQUE) {
+                d = OPACITY_OPAQUE;
+            }
 
             dstMask->setAlphaAt(dstX, dstY, static_cast<quint8>(d));
         }
@@ -727,31 +720,27 @@ QImage KisBrush::scaleImage(const KisScaledBrush *srcBrush, double scale, double
 
             if (red < 0) {
                 red = 0;
-            } else
-                if (red > 255) {
-                    red = 255;
-                }
+            } else if (red > 255) {
+                red = 255;
+            }
 
             if (green < 0) {
                 green = 0;
-            } else
-                if (green > 255) {
-                    green = 255;
-                }
+            } else if (green > 255) {
+                green = 255;
+            }
 
             if (blue < 0) {
                 blue = 0;
-            } else
-                if (blue > 255) {
-                    blue = 255;
-                }
+            } else if (blue > 255) {
+                blue = 255;
+            }
 
             if (alpha < 0) {
                 alpha = 0;
-            } else
-                if (alpha > 255) {
-                    alpha = 255;
-                }
+            } else if (alpha > 255) {
+                alpha = 255;
+            }
 
             dstImage.setPixel(dstX, dstY, qRgba(red, green, blue, alpha));
         }
@@ -859,31 +848,27 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
 
                 if (red < 0) {
                     red = 0;
-                } else
-                    if (red > 255) {
-                        red = 255;
-                    }
+                } else if (red > 255) {
+                    red = 255;
+                }
 
                 if (green < 0) {
                     green = 0;
-                } else
-                    if (green > 255) {
-                        green = 255;
-                    }
+                } else if (green > 255) {
+                    green = 255;
+                }
 
                 if (blue < 0) {
                     blue = 0;
-                } else
-                    if (blue > 255) {
-                        blue = 255;
-                    }
+                } else if (blue > 255) {
+                    blue = 255;
+                }
 
                 if (alpha < 0) {
                     alpha = 0;
-                } else
-                    if (alpha > 255) {
-                        alpha = 255;
-                    }
+                } else if (alpha > 255) {
+                    alpha = 255;
+                }
 
                 scaledImage.setPixel(dstX, dstY, qRgba(red, green, blue, alpha));
             }
@@ -956,10 +941,9 @@ KisQImagemaskSP KisBrush::scaleSinglePixelMask(double scale, quint8 maskValue, d
 
             if (d < OPACITY_TRANSPARENT) {
                 d = OPACITY_TRANSPARENT;
-            } else
-                if (d > OPACITY_OPAQUE) {
-                    d = OPACITY_OPAQUE;
-                }
+            } else if (d > OPACITY_OPAQUE) {
+                d = OPACITY_OPAQUE;
+            }
 
             outputMask->setAlphaAt(x, y, static_cast<quint8>(d));
         }
@@ -1018,31 +1002,27 @@ QImage KisBrush::scaleSinglePixelImage(double scale, QRgb pixel, double subPixel
 
             if (red < 0) {
                 red = 0;
-            } else
-                if (red > 255) {
-                    red = 255;
-                }
+            } else if (red > 255) {
+                red = 255;
+            }
 
             if (green < 0) {
                 green = 0;
-            } else
-                if (green > 255) {
-                    green = 255;
-                }
+            } else if (green > 255) {
+                green = 255;
+            }
 
             if (blue < 0) {
                 blue = 0;
-            } else
-                if (blue > 255) {
-                    blue = 255;
-                }
+            } else if (blue > 255) {
+                blue = 255;
+            }
 
             if (alpha < 0) {
                 alpha = 0;
-            } else
-                if (alpha > 255) {
-                    alpha = 255;
-                }
+            } else if (alpha > 255) {
+                alpha = 255;
+            }
 
             outputImage.setPixel(x, y, qRgba(red, green, blue, alpha));
         }
@@ -1073,31 +1053,27 @@ QImage KisBrush::interpolate(const QImage& image1, const QImage& image2, double 
 
             if (red < 0) {
                 red = 0;
-            } else
-                if (red > 255) {
-                    red = 255;
-                }
+            } else if (red > 255) {
+                red = 255;
+            }
 
             if (green < 0) {
                 green = 0;
-            } else
-                if (green > 255) {
-                    green = 255;
-                }
+            } else if (green > 255) {
+                green = 255;
+            }
 
             if (blue < 0) {
                 blue = 0;
-            } else
-                if (blue > 255) {
-                    blue = 255;
-                }
+            } else if (blue > 255) {
+                blue = 255;
+            }
 
             if (alpha < 0) {
                 alpha = 0;
-            } else
-                if (alpha > 255) {
-                    alpha = 255;
-                }
+            } else if (alpha > 255) {
+                alpha = 255;
+            }
 
             outputImage.setPixel(x, y, qRgba(red, green, blue, alpha));
         }

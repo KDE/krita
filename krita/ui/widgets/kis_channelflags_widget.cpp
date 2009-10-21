@@ -75,12 +75,12 @@ QBitArray KisChannelFlagsWidget::channelFlags() const
     QBitArray ba(m_channelChecks.size());
 
     for (int i = 0; i < m_channelChecks.size(); ++i) {
-        
+
         bool flag = m_channelChecks.at(i)->isChecked();
         if (!flag) allTrue = false;
-        
+
         ba.setBit(i, flag);
-        dbgUI << " channel " << i << " is " << flag << ", allTrue = " << allTrue << ", so ba.testBit("<<i<<")" << " is " << ba.testBit(i);
+        dbgUI << " channel " << i << " is " << flag << ", allTrue = " << allTrue << ", so ba.testBit(" << i << ")" << " is " << ba.testBit(i);
     }
     if (allTrue)
         return QBitArray();

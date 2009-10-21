@@ -28,70 +28,74 @@ struct KisCategorizedItemDelegate::Private {
     bool isFirstOfCategory(const QModelIndex& index);
 };
 
-bool KisCategorizedItemDelegate::Private::isFirstOfCategory(const QModelIndex& index) {
+bool KisCategorizedItemDelegate::Private::isFirstOfCategory(const QModelIndex& index)
+{
 
-    if(index.row() == 0 ) return true;
-    QModelIndex idx = index.model()->index(index.row() -1, index.column(), index.parent());
+    if (index.row() == 0) return true;
+    QModelIndex idx = index.model()->index(index.row() - 1, index.column(), index.parent());
     const QString category1 = index.model()->data(index, KCategorizedSortFilterProxyModel::CategorySortRole).toString();
     const QString category2 = index.model()->data(idx, KCategorizedSortFilterProxyModel::CategorySortRole).toString();
     return category1 != category2;
 }
 
-KisCategorizedItemDelegate::KisCategorizedItemDelegate(QAbstractItemDelegate* _fallback, QObject* parent )
-    : QAbstractItemDelegate(parent)
-    , d(new Private)
+KisCategorizedItemDelegate::KisCategorizedItemDelegate(QAbstractItemDelegate* _fallback, QObject* parent)
+        : QAbstractItemDelegate(parent)
+        , d(new Private)
 {
     _fallback->setParent(this);
     d->fallback = _fallback;
     d->categoryDrawer = new KCategoryDrawer;
 }
 
-KisCategorizedItemDelegate::~KisCategorizedItemDelegate() {
+KisCategorizedItemDelegate::~KisCategorizedItemDelegate()
+{
 
     delete d->fallback;
     delete d->categoryDrawer;
     delete d;
 }
 
-QWidget * KisCategorizedItemDelegate::createEditor( QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
+QWidget * KisCategorizedItemDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
+{
     return d->fallback->createEditor(parent, option, index);
 }
 
-bool KisCategorizedItemDelegate::editorEvent ( QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index ) {
+bool KisCategorizedItemDelegate::editorEvent(QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index)
+{
     return d->fallback->editorEvent(event, model, option, index);
 }
 
-void KisCategorizedItemDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & _option, const QModelIndex & index ) const {
+void KisCategorizedItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem & _option, const QModelIndex & index) const
+{
     // We will need to edit the option to make sure the header isn't drawned as selected
     QStyleOptionViewItem* option = 0;
-    if( const QStyleOptionViewItemV4 *v4 = qstyleoption_cast<const QStyleOptionViewItemV4*>(&_option) ) {
+    if (const QStyleOptionViewItemV4 *v4 = qstyleoption_cast<const QStyleOptionViewItemV4*>(&_option)) {
         option = new QStyleOptionViewItemV4(*v4);
-    } else if( const QStyleOptionViewItemV3 *v3 = qstyleoption_cast<const QStyleOptionViewItemV3*>(&_option) ) {
+    } else if (const QStyleOptionViewItemV3 *v3 = qstyleoption_cast<const QStyleOptionViewItemV3*>(&_option)) {
         option = new QStyleOptionViewItemV3(*v3);
-    } else if( const QStyleOptionViewItemV2 *v2 = qstyleoption_cast<const QStyleOptionViewItemV2*>(&_option) ) {
+    } else if (const QStyleOptionViewItemV2 *v2 = qstyleoption_cast<const QStyleOptionViewItemV2*>(&_option)) {
         option = new QStyleOptionViewItemV2(*v2);
     } else {
         option = new QStyleOptionViewItem(_option);
     }
     Q_ASSERT(option);
     // If it's a first category then we need to draw it
-    if( d->isFirstOfCategory(index) )
-    {
+    if (d->isFirstOfCategory(index)) {
         // Prepare the rectangle for drawing the category
         int h = d->categoryDrawer->categoryHeight(index, *option);
         QRect rect = option->rect;
 
         // Make sure the categroy isn't drawned as selected
         option->state &= (~QStyle::State_Selected);
-        Q_ASSERT( !(option->state & QStyle::State_Selected) );
+        Q_ASSERT(!(option->state & QStyle::State_Selected));
         option->state &= (~QStyle::State_HasFocus);
-        Q_ASSERT( !(option->state & QStyle::State_HasFocus) );
+        Q_ASSERT(!(option->state & QStyle::State_HasFocus));
         option->state &= (~QStyle::State_MouseOver);
-        Q_ASSERT( !(option->state & QStyle::State_MouseOver) );
+        Q_ASSERT(!(option->state & QStyle::State_MouseOver));
         option->rect.setHeight(h);
 
         // draw the cateogry
-        d->categoryDrawer->drawCategory(index, 0, *option, painter );
+        d->categoryDrawer->drawCategory(index, 0, *option, painter);
 
         // Prepare the rectangle for the item
         option->rect = rect;
@@ -103,30 +107,32 @@ void KisCategorizedItemDelegate::paint ( QPainter * painter, const QStyleOptionV
     delete option;
 }
 
-void KisCategorizedItemDelegate::setEditorData ( QWidget * editor, const QModelIndex & index ) const {
-    d->fallback->setEditorData( editor, index);
+void KisCategorizedItemDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const
+{
+    d->fallback->setEditorData(editor, index);
 }
 
-void KisCategorizedItemDelegate::setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const {
+void KisCategorizedItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const
+{
     d->fallback->setModelData(editor, model, index);
 }
 
-QSize KisCategorizedItemDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const {
+QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const
+{
     QSize size = d->fallback->sizeHint(option, index);
     // If is first of a category, then add the space needed to paint the category
-    if( d->isFirstOfCategory(index) )
-    {
+    if (d->isFirstOfCategory(index)) {
         size.setHeight(d->categoryDrawer->categoryHeight(index, option) + size.height());
     }
     return size;
 }
 
-void KisCategorizedItemDelegate::updateEditorGeometry ( QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
+void KisCategorizedItemDelegate::updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index) const
+{
     d->fallback->updateEditorGeometry(editor, option, index);
 
     // If it's the first category, then the editor need to be moved
-    if( d->isFirstOfCategory(index) )
-    {
+    if (d->isFirstOfCategory(index)) {
         int h = d->categoryDrawer->categoryHeight(index, option);
         editor->move(editor->x(), editor->y() + h);
         editor->resize(editor->width(), editor->height() - h);

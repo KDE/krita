@@ -22,13 +22,14 @@
 
 #include <KoFilter.h>
 
-class KisBMPExport : public KoFilter {
+class KisBMPExport : public KoFilter
+{
     Q_OBJECT
-    public:
-        KisBMPExport(QObject* parent, const QStringList&);
-        virtual ~KisBMPExport();
-    public:
-        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+public:
+    KisBMPExport(QObject* parent, const QStringList&);
+    virtual ~KisBMPExport();
+public:
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

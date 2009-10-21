@@ -54,15 +54,15 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height)
     connect(m_page->bottomLeft, SIGNAL(clicked()), this, SLOT(slotBottomLeftClicked()));
     connect(m_page->bottomCenter, SIGNAL(clicked()), this, SLOT(slotBottomCenterClicked()));
     connect(m_page->bottomRight, SIGNAL(clicked()), this, SLOT(slotBottomRightClicked()));
-    
+
     connect(m_page->comboWidthUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotWidthUnitChanged(QString)));
     connect(m_page->comboHeightUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotHeightUnitChanged(QString)));
 
     connect(m_page->aspectRatio, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
-    
+
     connect(m_page->canvasPreview, SIGNAL(sigModifiedXOffset(int)), m_page->xOffset, SLOT(setValue(int)));
     connect(m_page->canvasPreview, SIGNAL(sigModifiedYOffset(int)), m_page->yOffset, SLOT(setValue(int)));
-    
+
     m_page->xOffset->setMinimum(-width + 1);
     m_page->xOffset->setMaximum(width - 1);
     m_page->yOffset->setMinimum(-height + 1);
@@ -114,16 +114,16 @@ void DlgCanvasSize::slotAspectChanged(bool keep)
 void DlgCanvasSize::slotWidthChanged(int v)
 {
     QString index = m_page->comboWidthUnit->currentText();
-    
+
     m_newWidth = v;
     if (index == i18n("Percent"))
         m_newWidth = m_page->newWidth->value() / 100.0f * m_originalWidth;
-        
+
     m_page->xOffset->setMaximum(m_newWidth - 1);
-    
+
     if (m_keepAspect) {
         m_newHeight = (qint32)round(m_newWidth / m_aspectRatio);
-        
+
         m_page->yOffset->setMaximum(m_newHeight - 1);
 
         m_page->newHeight->blockSignals(true);
@@ -137,14 +137,14 @@ void DlgCanvasSize::slotWidthChanged(int v)
 void DlgCanvasSize::slotHeightChanged(int v)
 {
     QString index = m_page->comboWidthUnit->currentText();
-    
+
     m_newHeight = v;
     if (index == i18n("Percent"))
         m_newHeight = m_page->newHeight->value() / 100.0f * m_originalHeight;
-    
+
     if (m_keepAspect) {
         m_newWidth = (qint32)round(m_newHeight * m_aspectRatio);
-        
+
         m_page->xOffset->setMaximum(m_newWidth - 1);
 
         m_page->newWidth->blockSignals(true);
@@ -243,18 +243,15 @@ void DlgCanvasSize::slotWidthUnitChanged(QString)
 {
     QString index = m_page->comboWidthUnit->currentText();
     m_page->newWidth->blockSignals(true);
-    
-    if (index == i18n("Pixels"))
-    {
+
+    if (index == i18n("Pixels")) {
         m_page->newWidth->setSuffix(QString());
         m_page->newWidth->setValue(m_newWidth);
-    }
-    else if (index == i18n("Percent"))
-    {
+    } else if (index == i18n("Percent")) {
         m_page->newWidth->setSuffix(QString("%"));
         m_page->newWidth->setValue(round((float)m_newWidth / m_originalWidth * 100));
     }
-    
+
     m_page->newWidth->blockSignals(false);
 }
 
@@ -262,18 +259,15 @@ void DlgCanvasSize::slotHeightUnitChanged(QString)
 {
     QString index = m_page->comboHeightUnit->currentText();
     m_page->newHeight->blockSignals(true);
-    
-    if (index == QString("Pixels"))
-    {
+
+    if (index == QString("Pixels")) {
         m_page->newHeight->setSuffix(QString());
         m_page->newHeight->setValue(m_newHeight);
-    }
-    else if (index == QString("Percent"))
-    {
+    } else if (index == QString("Percent")) {
         m_page->newHeight->setSuffix(QString("%"));
         m_page->newHeight->setValue(round((float)m_newHeight / m_originalHeight * 100));
     }
-    
+
     m_page->newHeight->blockSignals(false);
 }
 
@@ -293,14 +287,15 @@ void DlgCanvasSize::loadAnchorIcons()
 void DlgCanvasSize::updateAnchorIcons(anchor enumAnchor)
 {
     anchor iconLayout[9][9] = { {NONE, EAST, NONE, SOUTH, SOUTH_EAST, NONE, NONE, NONE, NONE},
-                                {WEST, NONE, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST, NONE, NONE, NONE},
-                                {NONE, WEST, NONE, NONE, SOUTH_WEST, SOUTH, NONE, NONE, NONE},
-                                {NORTH, NORTH_EAST, NONE, NONE, EAST, NONE, SOUTH, SOUTH_EAST, NONE},
-                                {NORTH_WEST, NORTH, NORTH_EAST, WEST, NONE, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST},
-                                {NONE, NORTH_WEST, NORTH, NONE, WEST, NONE, NONE, SOUTH_WEST, SOUTH},
-                                {NONE, NONE, NONE, NORTH, NORTH_EAST, NONE, NONE, EAST, NONE},
-                                {NONE, NONE, NONE, NORTH_WEST, NORTH, NORTH_EAST, WEST, NONE, EAST},
-                                {NONE, NONE, NONE, NONE, NORTH_WEST, NORTH, NONE, WEST, NONE} };
+        {WEST, NONE, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST, NONE, NONE, NONE},
+        {NONE, WEST, NONE, NONE, SOUTH_WEST, SOUTH, NONE, NONE, NONE},
+        {NORTH, NORTH_EAST, NONE, NONE, EAST, NONE, SOUTH, SOUTH_EAST, NONE},
+        {NORTH_WEST, NORTH, NORTH_EAST, WEST, NONE, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST},
+        {NONE, NORTH_WEST, NORTH, NONE, WEST, NONE, NONE, SOUTH_WEST, SOUTH},
+        {NONE, NONE, NONE, NORTH, NORTH_EAST, NONE, NONE, EAST, NONE},
+        {NONE, NONE, NONE, NORTH_WEST, NORTH, NORTH_EAST, WEST, NONE, EAST},
+        {NONE, NONE, NONE, NONE, NORTH_WEST, NORTH, NONE, WEST, NONE}
+    };
 
     setButtonIcon(m_page->topLeft, iconLayout[enumAnchor][NORTH_WEST]);
     setButtonIcon(m_page->topCenter, iconLayout[enumAnchor][NORTH]);

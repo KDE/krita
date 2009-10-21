@@ -58,8 +58,8 @@ typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
  * when pixels are accessed by an iterator.
  */
 class KRITAIMAGE_EXPORT KisPaintDevice
-            : public QObject
-            , public KisShared
+        : public QObject
+        , public KisShared
 {
 
     Q_OBJECT

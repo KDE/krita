@@ -31,8 +31,8 @@ KisCircleMaskGenerator::KisCircleMaskGenerator(double w, double h, double fh, do
 {
     d->m_xcoef = 2.0 / w;
     d->m_ycoef = 2.0 / h;
-    d->m_xfadecoef = (KisMaskGenerator::d->m_fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fh*width()));
-    d->m_yfadecoef = (KisMaskGenerator::d->m_fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fv*height()));
+    d->m_xfadecoef = (KisMaskGenerator::d->m_fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fh * width()));
+    d->m_yfadecoef = (KisMaskGenerator::d->m_fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fv * height()));
 }
 
 KisCircleMaskGenerator::KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
@@ -51,16 +51,14 @@ KisCircleMaskGenerator::~KisCircleMaskGenerator()
 
 quint8 KisCircleMaskGenerator::valueAt(double x, double y) const
 {
-    if( KisMaskGenerator::d->m_empty ) return 255;
+    if (KisMaskGenerator::d->m_empty) return 255;
     double xr = (x /*- m_xcenter*/);
     double yr = fabs(y /*- m_ycenter*/);
 
-    if( KisMaskGenerator::d->m_spikes > 2 )
-    {
-        double angle = (atan2 (yr, xr));
+    if (KisMaskGenerator::d->m_spikes > 2) {
+        double angle = (atan2(yr, xr));
 
-        while (angle > M_PI / KisMaskGenerator::d->m_spikes)
-        {
+        while (angle > M_PI / KisMaskGenerator::d->m_spikes) {
             double sx = xr, sy = yr;
 
             xr = KisMaskGenerator::d->cs * sx - KisMaskGenerator::d->ss * sy;
@@ -93,7 +91,7 @@ quint8 KisCircleMaskGenerator::valueAt(double x, double y) const
             }
             // On the internal limit of the fade area, normeFade is equal to 1
             double normeFadeLimitE = norme(xle * d->m_xfadecoef, yle * d->m_yfadecoef);
-            return (uchar)(255 * (normeFade - 1) / (normeFadeLimitE - 1));
+            return (uchar)(255 *(normeFade - 1) / (normeFadeLimitE - 1));
         } else {
             return 0;
         }

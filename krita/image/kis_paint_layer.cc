@@ -41,8 +41,8 @@ public:
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
-    : KisLayer(img, name, opacity)
-    , m_d(new Private())
+        : KisLayer(img, name, opacity)
+        , m_d(new Private())
 {
     Q_ASSERT(img);
     Q_ASSERT(dev);
@@ -52,16 +52,16 @@ KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacit
 
 
 KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity)
-    : KisLayer(img, name, opacity)
-    , m_d(new Private())
+        : KisLayer(img, name, opacity)
+        , m_d(new Private())
 {
     Q_ASSERT(img);
     m_d->paintDevice = new KisPaintDevice(this, img->colorSpace());
 }
 
 KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
-    : KisLayer(img, name, opacity)
-    , m_d(new Private())
+        : KisLayer(img, name, opacity)
+        , m_d(new Private())
 {
     if (!colorSpace) {
         Q_ASSERT(img);
@@ -72,9 +72,9 @@ KisPaintLayer::KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacit
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
-    : KisLayer(rhs)
-    , KisIndirectPaintingSupport(rhs)
-    , m_d(new Private)
+        : KisLayer(rhs)
+        , KisIndirectPaintingSupport(rhs)
+        , m_d(new Private)
 {
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
     m_d->paintDevice->setParentNode(this);
@@ -113,14 +113,14 @@ bool KisPaintLayer::needProjection() const
 }
 
 void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
-                                             KisPaintDeviceSP projection,
-                                             const QRect& rect) const
+        KisPaintDeviceSP projection,
+        const QRect& rect) const
 {
     KisPainter gc(projection);
     gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
     gc.bitBlt(rect.topLeft(), original, rect);
 
-    if(hasTemporaryTarget()) {
+    if (hasTemporaryTarget()) {
         gc.setOpacity(temporaryOpacity());
         gc.setCompositeOp(temporaryCompositeOp());
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);

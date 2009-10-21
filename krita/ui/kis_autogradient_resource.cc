@@ -113,7 +113,7 @@ void KisAutogradientResource::splitSegment(KoGradientSegment* segment)
     Q_ASSERT(segment != 0);
     QList<KoGradientSegment*>::iterator it = qFind(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
-        KoColor midleoffsetColor(  segment->endColor().colorSpace() );
+        KoColor midleoffsetColor(segment->endColor().colorSpace());
         segment->colorAt(midleoffsetColor, segment->middleOffset());
         KoGradientSegment* newSegment = new KoGradientSegment(
             segment->interpolation(), segment->colorInterpolation(),

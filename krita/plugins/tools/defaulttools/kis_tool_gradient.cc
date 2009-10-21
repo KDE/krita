@@ -204,12 +204,12 @@ void KisToolGradient::mousePressEvent(KoPointerEvent *e)
 
             KisOpenGL::makeContextCurrent();
             m_gradientProgram = new KisOpenGLGradientProgram(currentGradient(),
-                                                             m_shape,
-                                                             m_repeat,
-                                                             m_reverse,
-                                                             currentImage()->colorSpace(),
-                                                             monitorProfile,
-                                                             m_previewOpacityPercent / 100.0);
+                    m_shape,
+                    m_repeat,
+                    m_reverse,
+                    currentImage()->colorSpace(),
+                    monitorProfile,
+                    m_previewOpacityPercent / 100.0);
         }
 #endif
     }
@@ -283,7 +283,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
             KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
 
-            updater->start( 100, i18n("Gradient") );
+            updater->start(100, i18n("Gradient"));
             painter.setProgress(updater->startSubtask());
 
             painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
@@ -296,7 +296,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
             KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
             KoProgressUpdater * updater = canvas->view()->createProgressUpdater();
-            updater->start( 100, i18n("Gradient") );
+            updater->start(100, i18n("Gradient"));
 
             KisGradientPainter::Configuration config;
             config.gradient = currentGradient();
@@ -408,7 +408,7 @@ QWidget* KisToolGradient::createOptionWidget()
     m_slPreviewOpacity = new KoSliderCombo(widget);
     m_slPreviewOpacity->setDecimals(0);
     m_slPreviewOpacity->setValue(m_previewOpacityPercent);
-    connect(m_slPreviewOpacity, SIGNAL(valueChanged(qreal,bool)), this, SLOT(slotSetPreviewOpacity(qreal,bool)));
+    connect(m_slPreviewOpacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(slotSetPreviewOpacity(qreal, bool)));
 
     addOptionWidgetOption(m_slPreviewOpacity, m_lbPreviewOpacity);
 

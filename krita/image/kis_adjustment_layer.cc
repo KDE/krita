@@ -40,15 +40,15 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP img,
                                        const QString &name,
                                        KisFilterConfiguration * kfc,
                                        KisSelectionSP selection)
-    : KisSelectionBasedLayer(img.data(), name, selection),
-      m_d(new Private())
+        : KisSelectionBasedLayer(img.data(), name, selection),
+        m_d(new Private())
 {
     m_d->filterConfig = kfc;
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
-    : KisSelectionBasedLayer(rhs),
-      m_d(new Private())
+        : KisSelectionBasedLayer(rhs),
+        m_d(new Private())
 {
     m_d->filterConfig = new KisFilterConfiguration(*rhs.m_d->filterConfig);
 }

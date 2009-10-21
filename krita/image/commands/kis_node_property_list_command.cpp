@@ -24,19 +24,19 @@
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
 
-KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KoDocumentSectionModel::PropertyList newPropertyList )
-        : QUndoCommand(i18n("Property Changes")), m_node(node), m_newPropertyList( newPropertyList ), m_oldPropertyList( m_node->sectionModelProperties() ) // TODO instead of "Property Changes" check which property has been changed and display either lock/unlock, visible/hidden or "Property Changes" (this require new strings)
+KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KoDocumentSectionModel::PropertyList newPropertyList)
+        : QUndoCommand(i18n("Property Changes")), m_node(node), m_newPropertyList(newPropertyList), m_oldPropertyList(m_node->sectionModelProperties())     // TODO instead of "Property Changes" check which property has been changed and display either lock/unlock, visible/hidden or "Property Changes" (this require new strings)
 {
 }
 
 void KisNodePropertyListCommand::redo()
 {
-    m_node->setSectionModelProperties( m_newPropertyList );
+    m_node->setSectionModelProperties(m_newPropertyList);
     m_node->setDirty(); // TODO check if visibility was changed or not
 }
 
 void KisNodePropertyListCommand::undo()
 {
-    m_node->setSectionModelProperties( m_oldPropertyList );
+    m_node->setSectionModelProperties(m_oldPropertyList);
     m_node->setDirty(); // TODO check if visibility was changed or not
 }

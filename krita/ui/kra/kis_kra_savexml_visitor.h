@@ -35,7 +35,9 @@ public:
 
 public:
 
-    bool visit( KisNode* ) { return true; }
+    bool visit(KisNode*) {
+        return true;
+    }
     bool visit(KisExternalLayer *);
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
@@ -47,8 +49,7 @@ public:
     bool visit(KisTransformationMask *mask);
     bool visit(KisSelectionMask *mask);
 
-    QMap<const KisNode*, QString> nodeFileNames()
-    {
+    QMap<const KisNode*, QString> nodeFileNames() {
         return m_nodeFileNames;
     }
 

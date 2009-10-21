@@ -69,7 +69,7 @@ public slots:
      * Add a pre-existing mask to the graph; for instance, a preview
      * mask that has been made definitive.
      */
-    void addEffectMask( KisNodeSP parent, KisEffectMaskSP mask );
+    void addEffectMask(KisNodeSP parent, KisEffectMaskSP mask);
 
     /**
      * Create a new transparency mask.

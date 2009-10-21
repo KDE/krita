@@ -47,7 +47,7 @@ public:
     /**
      * Set the configuration, and takes the ownership of the config object.
      */
-    void setFilterConfiguration( KisFilterConfiguration* config);
+    void setFilterConfiguration(KisFilterConfiguration* config);
 private:
     struct Private;
     Private* const d;

@@ -24,7 +24,7 @@
 #include <kis_paint_action_type_option.h>
 
 KisDynaPaintOpSettingsWidget:: KisDynaPaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+        : KisPaintOpOptionsWidget(parent)
 {
     m_paintActionTypeOption = new KisPaintActionTypeOption();
     m_dynaOption =  new KisDynaOpOption();
@@ -41,8 +41,8 @@ KisDynaPaintOpSettingsWidget::~ KisDynaPaintOpSettingsWidget()
 
 KisPropertiesConfiguration*  KisDynaPaintOpSettingsWidget::configuration() const
 {
-    KisDynaPaintOpSettings* config = new KisDynaPaintOpSettings( );
-    config->setOptionsWidget(const_cast<KisDynaPaintOpSettingsWidget*>( this ) );
+    KisDynaPaintOpSettings* config = new KisDynaPaintOpSettings();
+    config->setOptionsWidget(const_cast<KisDynaPaintOpSettingsWidget*>(this));
 
     config->setProperty("paintop", "dynabrush"); // XXX: make this a const id string
     writeConfiguration(config);

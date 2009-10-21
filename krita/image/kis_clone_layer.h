@@ -92,7 +92,7 @@ public:
      * from layer is set when all layers have been created, not during
      * loading.
      */
-    void setCopyFromName( const QString& layerName );
+    void setCopyFromName(const QString& layerName);
     QString copyFromName() const;
 
     void setCopyFrom(KisLayerSP layer, CopyLayerType type);

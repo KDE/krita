@@ -30,13 +30,15 @@ KisPaintingAssistantHandle::KisPaintingAssistantHandle(QPointF p) : QPointF(p), 
 {
 }
 
-KisPaintingAssistantHandle::KisPaintingAssistantHandle(const KisPaintingAssistantHandle& rhs) : QPointF(rhs), d(new Private) {
+KisPaintingAssistantHandle::KisPaintingAssistantHandle(const KisPaintingAssistantHandle& rhs) : QPointF(rhs), d(new Private)
+{
 }
 
-KisPaintingAssistantHandle& KisPaintingAssistantHandle::operator=( const QPointF&  pt) {
-  setX(pt.x());
-  setY(pt.y());
-  return *this;
+KisPaintingAssistantHandle& KisPaintingAssistantHandle::operator=(const QPointF &  pt)
+{
+    setX(pt.x());
+    setY(pt.y());
+    return *this;
 }
 
 KisPaintingAssistantHandle::~KisPaintingAssistantHandle()
@@ -64,11 +66,10 @@ bool KisPaintingAssistantHandle::containsAssistant(KisPaintingAssistant* assista
 
 void KisPaintingAssistantHandle::mergeWith(KisPaintingAssistantHandleSP handle)
 {
-    foreach(KisPaintingAssistant* assistant, handle->d->assistants)
-    {
-      if(!assistant->handles().contains(this)) {
-        assistant->replaceHandle(handle, this);
-      }
+    foreach(KisPaintingAssistant* assistant, handle->d->assistants) {
+        if (!assistant->handles().contains(this)) {
+            assistant->replaceHandle(handle, this);
+        }
     }
 }
 
@@ -85,7 +86,8 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
     d->name = name;
 }
 
-void KisPaintingAssistant::initHandles(QList<KisPaintingAssistantHandleSP> _handles) {
+void KisPaintingAssistant::initHandles(QList<KisPaintingAssistantHandleSP> _handles)
+{
     Q_ASSERT(d->handles.isEmpty());
     d->handles = _handles;
     foreach(KisPaintingAssistantHandleSP handle, _handles) {
@@ -111,18 +113,21 @@ const QString& KisPaintingAssistant::name() const
     return d->name;
 }
 
-void KisPaintingAssistant::replaceHandle( KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with) {
-    Q_ASSERT( d->handles.contains(_handle));
-    d->handles.replace( d->handles.indexOf(_handle), _with);
-    Q_ASSERT( !d->handles.contains(_handle));
+void KisPaintingAssistant::replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with)
+{
+    Q_ASSERT(d->handles.contains(_handle));
+    d->handles.replace(d->handles.indexOf(_handle), _with);
+    Q_ASSERT(!d->handles.contains(_handle));
     _handle->unregisterAssistant(this);
     _with->registerAssistant(this);
 }
 
-const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const {
+const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const
+{
     return d->handles;
 }
 
-QList<KisPaintingAssistantHandleSP> KisPaintingAssistant::handles() {
+QList<KisPaintingAssistantHandleSP> KisPaintingAssistant::handles()
+{
     return d->handles;
 }

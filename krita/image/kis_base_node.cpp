@@ -139,7 +139,7 @@ bool KisBaseNode::visible() const
 void KisBaseNode::setVisible(bool visible)
 {
     m_d->properties.setProperty("visible", visible);
-    emit( visibilityChanged( visible ) );
+    emit(visibilityChanged(visible));
 }
 
 bool KisBaseNode::userLocked() const
@@ -150,7 +150,7 @@ bool KisBaseNode::userLocked() const
 void KisBaseNode::setUserLocked(bool locked)
 {
     m_d->properties.setProperty("locked", locked);
-    emit( userLockingChanged( locked ) );
+    emit(userLockingChanged(locked));
 }
 
 bool KisBaseNode::systemLocked() const
@@ -161,12 +161,12 @@ bool KisBaseNode::systemLocked() const
 void KisBaseNode::setSystemLocked(bool locked)
 {
     m_d->systemLocked = locked;
-    emit( systemLockingChanged( locked ) );
+    emit(systemLockingChanged(locked));
 }
 
 bool KisBaseNode::isEditable() const
 {
-    return ( visible() && !userLocked() && !systemLocked() );
+    return (visible() && !userLocked() && !systemLocked());
 }
 
 #include "kis_base_node.moc"

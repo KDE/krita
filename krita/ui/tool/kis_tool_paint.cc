@@ -75,7 +75,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     m_opacity = OPACITY_OPAQUE;
     m_compositeOp = 0;
-    
+
     m_supportOutline = false;
 }
 
@@ -92,26 +92,23 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
     case(KisCanvasResourceProvider::CurrentKritaNode):
         updateCompositeOpComboBox();
         // Deconnect colorspace change of previous node
-        if(m_previousNode)
-        {
-          if( m_previousNode->paintDevice() )
-          {
-            disconnect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(updateCompositeOpComboBox()));
-          }
+        if (m_previousNode) {
+            if (m_previousNode->paintDevice()) {
+                disconnect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(updateCompositeOpComboBox()));
+            }
         }
         // Reconnect colorspace change of node
         m_previousNode = currentNode();
-        if( m_previousNode && m_previousNode->paintDevice() )
-        {
-          connect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), SLOT(updateCompositeOpComboBox()));
+        if (m_previousNode && m_previousNode->paintDevice()) {
+            connect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), SLOT(updateCompositeOpComboBox()));
         }
         break;
     default:
         ; // Do nothing
     }
-    
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT( slotSelectCursorStyle() ));
-    
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotSelectCursorStyle()));
+
 }
 
 
@@ -218,7 +215,7 @@ void KisToolPaint::slotSetOpacity(qreal opacityPerCent, bool final)
 
 void KisToolPaint::slotSetCompositeMode(const QString& compositeOp)
 {
-    m_compositeOp = currentNode()->paintDevice()->colorSpace()->compositeOp( compositeOp );
+    m_compositeOp = currentNode()->paintDevice()->colorSpace()->compositeOp(compositeOp);
 }
 
 
@@ -248,29 +245,28 @@ void KisToolPaint::slotPopupQuickHelp()
 void KisToolPaint::slotSelectCursorStyle()
 {
     KisConfig cfg;
-    if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE){
-        if (m_supportOutline){
+    if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
+        if (m_supportOutline) {
             // do not show cursor, tool will paint outline
             useCursor(KisCursor::blankCursor(), true);
-        }else{
+        } else {
             // if the tool does not support outline, use tool icon cursor
             useCursor(cursor(), true);
         }
     }
-    
+
 #if defined(HAVE_OPENGL)
     // TODO: maybe m_support 3D outline would be cooler. So far just freehand tool support 3D_MODEL cursor style
-    if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL)
-    {
-        if (m_supportOutline){
+    if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
+        if (m_supportOutline) {
             useCursor(KisCursor::blankCursor(), true);
-        }else{
+        } else {
             useCursor(cursor(), true);
         }
     }
 #endif
 
-    
+
 }
 
 

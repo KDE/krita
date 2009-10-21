@@ -53,7 +53,7 @@ const KoColorSpace * KisGenerator::colorSpace()
     return 0;
 }
 
-QRect KisGenerator::generatedRect( QRect _imageArea, const KisFilterConfiguration*  ) const
+QRect KisGenerator::generatedRect(QRect _imageArea, const KisFilterConfiguration*) const
 {
     return _imageArea;
 }

@@ -24,9 +24,9 @@
 #include "kis_debug.h"
 
 KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager,
-                                             qint32 x, qint32 y,
-                                             qint32 w, bool writable)
-    : KisTiledIterator(dataManager)
+        qint32 x, qint32 y,
+        qint32 w, bool writable)
+        : KisTiledIterator(dataManager)
 {
     m_writable = writable;
 
@@ -37,9 +37,9 @@ KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager,
     m_right = x + w - 1;
 
     m_isDoneFlag = !w;
-    if(m_left > m_right) {
-	m_isDoneFlag = true;
-	return;
+    if (m_left > m_right) {
+        m_isDoneFlag = true;
+        return;
     }
 
     m_leftCol = xToCol(m_left);
@@ -53,7 +53,7 @@ KisTiledHLineIterator::KisTiledHLineIterator(KisTiledDataManager *dataManager,
 }
 
 KisTiledHLineIterator::KisTiledHLineIterator(const KisTiledHLineIterator& rhs)
-    : KisTiledIterator(rhs)
+        : KisTiledIterator(rhs)
 {
     if (this != &rhs) {
         m_left = rhs.m_left;
@@ -64,7 +64,7 @@ KisTiledHLineIterator::KisTiledHLineIterator(const KisTiledHLineIterator& rhs)
         m_yInTile = rhs.m_yInTile;
         m_leftInTile = rhs.m_leftInTile;
         m_rightInTile = rhs.m_rightInTile;
-	m_isDoneFlag = rhs.m_isDoneFlag;
+        m_isDoneFlag = rhs.m_isDoneFlag;
     }
 }
 
@@ -80,7 +80,7 @@ KisTiledHLineIterator& KisTiledHLineIterator::operator=(const KisTiledHLineItera
         m_yInTile = rhs.m_yInTile;
         m_leftInTile = rhs.m_leftInTile;
         m_rightInTile = rhs.m_rightInTile;
-	m_isDoneFlag = rhs.m_isDoneFlag;
+        m_isDoneFlag = rhs.m_isDoneFlag;
     }
     return *this;
 }
@@ -113,16 +113,15 @@ void KisTiledHLineIterator::switchToTile(qint32 col, qint32 xInTile)
 KisTiledHLineIterator & KisTiledHLineIterator::operator++ ()
 {
     // We won't increment m_x here as integer can overflow here
-    if(m_x >= m_right) {
-	m_isDoneFlag = true;
-    }
-    else {
-	m_x++;
-	if(++m_xInTile <= m_rightInTile)
-	    m_offset += m_pixelSize;
-	else
-	    // Switching to the beginning of the next tile
-	    switchToTile(m_col+1, 0);
+    if (m_x >= m_right) {
+        m_isDoneFlag = true;
+    } else {
+        m_x++;
+        if (++m_xInTile <= m_rightInTile)
+            m_offset += m_pixelSize;
+        else
+            // Switching to the beginning of the next tile
+            switchToTile(m_col + 1, 0);
     }
 
     return *this;
@@ -134,26 +133,24 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
     // AAA two ways: int overflow is caught in assert or
     //               borders are checked below
 
-    Q_ASSERT_X(! (m_x>0 && (m_x+n)<0),"hlineIt+=", "Integer overflow");
+    Q_ASSERT_X(!(m_x > 0 && (m_x + n) < 0), "hlineIt+=", "Integer overflow");
 
     // We won't increment m_x here first as integer can overflow
-    if(m_x >= m_right || (m_x += n) > m_right) {
-	m_isDoneFlag = true;
-    }
-    else {
-	qint32 col = xToCol(m_x);
+    if (m_x >= m_right || (m_x += n) > m_right) {
+        m_isDoneFlag = true;
+    } else {
+        qint32 col = xToCol(m_x);
 
-	if(col == m_col) {
-	    /**
-	     * FIXME: most unlikely case. Think over unlikely(...) here
-	     */
-	    m_xInTile += n;
-	    m_offset += n * m_pixelSize;
-	}
-	else {
-	    qint32 xInTile = calcXInTile(m_x, col);
-	    switchToTile(col, xInTile);
-	}
+        if (col == m_col) {
+            /**
+             * FIXME: most unlikely case. Think over unlikely(...) here
+             */
+            m_xInTile += n;
+            m_offset += n * m_pixelSize;
+        } else {
+            qint32 xInTile = calcXInTile(m_x, col);
+            switchToTile(col, xInTile);
+        }
     }
 
     return *this;
@@ -161,18 +158,17 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
 
 KisTiledHLineIterator & KisTiledHLineIterator::operator-- ()
 {
-    if(m_x <= m_left) {
-	/* do nothing */
-    }
-    else {
-	m_x--;
-	if(--m_xInTile >= m_leftInTile)
-	    m_offset -= m_pixelSize;
-	else
-	    // Switching to the end of the previous tile
-	    switchToTile(m_col-1, KisTileData::WIDTH-1);
+    if (m_x <= m_left) {
+        /* do nothing */
+    } else {
+        m_x--;
+        if (--m_xInTile >= m_leftInTile)
+            m_offset -= m_pixelSize;
+        else
+            // Switching to the end of the previous tile
+            switchToTile(m_col - 1, KisTileData::WIDTH - 1);
 
-	m_isDoneFlag = false;
+        m_isDoneFlag = false;
     }
 
     return *this;
@@ -185,12 +181,11 @@ void KisTiledHLineIterator::nextRow()
     m_x = m_left;
     m_y++;
 
-    if(++m_yInTile < KisTileData::HEIGHT) {
-	/* do nothing, usual case */
-    }
-    else {
-	m_row++;
-	m_yInTile = 0;
+    if (++m_yInTile < KisTileData::HEIGHT) {
+        /* do nothing, usual case */
+    } else {
+        m_row++;
+        m_yInTile = 0;
     }
 
     switchToTile(m_leftCol, leftInLeftmostTile);

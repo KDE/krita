@@ -211,7 +211,7 @@ int lzff_decompress(const void* input, int length, void* output, int maxout)
                         *op++ = *ip++;
                         ctrl--;
 
-                        for (;ctrl; ctrl--)
+                        for (; ctrl; ctrl--)
                             *op++ = *ip++;
                     }
                 }

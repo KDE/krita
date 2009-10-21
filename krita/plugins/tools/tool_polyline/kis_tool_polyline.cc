@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com> 
+ *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -189,18 +189,18 @@ void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
     QPointF endPos;
 
 #if defined(HAVE_OPENGL)
-    if ( m_canvas->canvasController()->isCanvasOpenGL() ){
+    if (m_canvas->canvasController()->isCanvasOpenGL()) {
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
-        glColor3f(0.501961,1.0, 0.501961);
+        glColor3f(0.501961, 1.0, 0.501961);
 
         if (m_dragging) {
             startPos = pixelToView(m_dragStart);
             endPos = pixelToView(m_dragEnd);
             glBegin(GL_LINES);
-                glVertex2f(startPos.x(), startPos.y() );
-                glVertex2f(endPos.x(), endPos.y() );
+            glVertex2f(startPos.x(), startPos.y());
+            glVertex2f(endPos.x(), endPos.y());
             glEnd();
         }
 
@@ -215,8 +215,8 @@ void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
                 startPos = pixelToView(start);
                 endPos = pixelToView(end);
 
-                glVertex2f(startPos.x(), startPos.y() );
-                glVertex2f(endPos.x(), endPos.y() );
+                glVertex2f(startPos.x(), startPos.y());
+                glVertex2f(endPos.x(), endPos.y());
 
                 start = end;
             }
@@ -226,7 +226,7 @@ void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
         glDisable(GL_COLOR_LOGIC_OP);
         glDisable(GL_LINE_SMOOTH);
 
-    }else
+    } else
 #endif
 
 #ifdef INDEPENDENT_CANVAS
@@ -254,15 +254,15 @@ void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
                 start = end;
             }
         }
-        paintToolOutline(&gc,path);
+        paintToolOutline(&gc, path);
 
     }
 #else
     {
         QPen pen(Qt::SolidLine);
-        pen.setWidth( PREVIEW_LINE_WIDTH );
+        pen.setWidth(PREVIEW_LINE_WIDTH);
         gc.setPen(pen);
-        
+
         if (m_dragging) {
             startPos = pixelToView(m_dragStart);
             endPos = pixelToView(m_dragEnd);
@@ -284,7 +284,7 @@ void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
             }
         }
     }
-#endif 
+#endif
 }
 
 QString KisToolPolyline::quickHelp() const

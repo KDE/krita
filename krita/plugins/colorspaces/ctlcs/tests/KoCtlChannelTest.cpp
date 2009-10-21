@@ -31,21 +31,21 @@ void KoCtlChannelTest::test()
     QCOMPARE(c8.normalisedChannelValueText(rgbu8), QString("0.196078"));
     QCOMPARE(c8.scaleToU8(rgbu8), quint8(50));
     QCOMPARE(c8.scaleToU16(rgbu8), quint16(12850));
-    QCOMPARE(c8.scaleToF32(rgbu8), 50.0f/255);
+    QCOMPARE(c8.scaleToF32(rgbu8), 50.0f / 255);
     quint8 rgbu81[3];
     c8.singleChannelPixel(rgbu81, rgbu8);
-    QCOMPARE( rgbu81[1], rgbu8[1] );
+    QCOMPARE(rgbu81[1], rgbu8[1]);
     c8.scaleFromF32(rgbu8, 0.5);
-    QCOMPARE( rgbu8[0], quint8(100) );
-    QCOMPARE( rgbu8[1], quint8(127) );
-    QCOMPARE( rgbu8[2], quint8(200) );
+    QCOMPARE(rgbu8[0], quint8(100));
+    QCOMPARE(rgbu8[1], quint8(127));
+    QCOMPARE(rgbu8[2], quint8(200));
     c8.scaleFromU8(rgbu8, 34);
-    QCOMPARE( rgbu8[0], quint8(100) );
-    QCOMPARE( rgbu8[1], quint8(34) );
-    QCOMPARE( rgbu8[2], quint8(200) );
-    
+    QCOMPARE(rgbu8[0], quint8(100));
+    QCOMPARE(rgbu8[1], quint8(34));
+    QCOMPARE(rgbu8[2], quint8(200));
+
     float rgbf32[] = { 1.0, 0.12, -1.0 };
-    quint8* rgbf32_ptr= reinterpret_cast<quint8*>(rgbf32);
+    quint8* rgbf32_ptr = reinterpret_cast<quint8*>(rgbf32);
     KoCtlChannelImpl<float> c32(4, 3 * sizeof(quint8));
     QCOMPARE(c32.channelValueText(rgbf32_ptr), QString("0.12"));
     QCOMPARE(c32.normalisedChannelValueText(rgbf32_ptr), QString("0.12"));
@@ -54,15 +54,15 @@ void KoCtlChannelTest::test()
     QCOMPARE(c32.scaleToF32(rgbf32_ptr), 0.12f);
     float rgbf321[3];
     c32.singleChannelPixel((quint8*)rgbf321, rgbf32_ptr);
-    QCOMPARE( rgbf321[1], rgbf32[1] );
+    QCOMPARE(rgbf321[1], rgbf32[1]);
     c32.scaleFromF32(rgbf32_ptr, 3.0f);
-    QCOMPARE( rgbf32[0], 1.0f );
-    QCOMPARE( rgbf32[1], 3.0f );
-    QCOMPARE( rgbf32[2], -1.0f );
+    QCOMPARE(rgbf32[0], 1.0f);
+    QCOMPARE(rgbf32[1], 3.0f);
+    QCOMPARE(rgbf32[2], -1.0f);
     c32.scaleFromU8(rgbf32_ptr, 100);
-    QCOMPARE( rgbf32[0], 1.0f );
-    QCOMPARE( rgbf32[1], 100 / 255.0f );
-    QCOMPARE( rgbf32[2], -1.0f );
+    QCOMPARE(rgbf32[0], 1.0f);
+    QCOMPARE(rgbf32[1], 100 / 255.0f);
+    QCOMPARE(rgbf32[2], -1.0f);
 }
 
 

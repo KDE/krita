@@ -180,9 +180,9 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
 void KisCanvasResourceProvider::slotPaintOpPresetActivated(const KisPaintOpPresetSP preset)
 {
 
-    Q_ASSERT( preset->valid() );
-    Q_ASSERT( !preset->paintOp().id().isEmpty() );
-    Q_ASSERT( preset->settings() );
+    Q_ASSERT(preset->valid());
+    Q_ASSERT(!preset->paintOp().id().isEmpty());
+    Q_ASSERT(preset->settings());
     if (!preset) return;
 
     dbgUI << "slotPaintOpPresetActivated" << preset->paintOp();

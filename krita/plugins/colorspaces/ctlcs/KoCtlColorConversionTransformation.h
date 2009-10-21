@@ -24,26 +24,28 @@
 #include <KoColorConversionTransformationFactory.h>
 #include "pigment_export.h"
 
-class KoCtlColorConversionTransformation : public KoColorConversionTransformation {
-    public:
-        KoCtlColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs);
-        virtual ~KoCtlColorConversionTransformation();
-        virtual void transform(const quint8 *src8, quint8 *dst8, qint32 nPixels) const;
-    private:
-        struct Private;
-        Private* const d;
+class KoCtlColorConversionTransformation : public KoColorConversionTransformation
+{
+public:
+    KoCtlColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs);
+    virtual ~KoCtlColorConversionTransformation();
+    virtual void transform(const quint8 *src8, quint8 *dst8, qint32 nPixels) const;
+private:
+    struct Private;
+    Private* const d;
 };
 
-class PIGMENTCMS_EXPORT KoCtlColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
-    public:
-        KoCtlColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _srcProfile, QString _dstModelId, QString _dstDepthId, QString _dstProfile);
-        virtual ~KoCtlColorConversionTransformationFactory();
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
-        virtual bool conserveColorInformation() const;
-        virtual bool conserveDynamicRange() const;
-    private:
-        struct Private;
-        Private* const d;
+class PIGMENTCMS_EXPORT KoCtlColorConversionTransformationFactory : public KoColorConversionTransformationFactory
+{
+public:
+    KoCtlColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _srcProfile, QString _dstModelId, QString _dstDepthId, QString _dstProfile);
+    virtual ~KoCtlColorConversionTransformationFactory();
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    virtual bool conserveColorInformation() const;
+    virtual bool conserveDynamicRange() const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

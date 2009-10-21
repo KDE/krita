@@ -21,37 +21,37 @@
 struct KisDynamicTransformableConfigurationWidget::Private {
 };
 
-KisDynamicTransformableConfigurationWidget::KisDynamicTransformableConfigurationWidget( QWidget* parent ) : QWidget(parent), d(new Private)
+KisDynamicTransformableConfigurationWidget::KisDynamicTransformableConfigurationWidget(QWidget* parent) : QWidget(parent), d(new Private)
 {
 }
 
 KisDynamicTransformableConfigurationWidget::~KisDynamicTransformableConfigurationWidget()
 {
-  delete d;
+    delete d;
 }
 
 struct KisDynamicTransformableFactory::Private {
-  QString id;
-  QString name;
+    QString id;
+    QString name;
 };
 
 KisDynamicTransformableFactory::KisDynamicTransformableFactory(const QString& _id, const QString& _name) : d(new Private)
 {
-  d->id = _id;
-  d->name = _name;
+    d->id = _id;
+    d->name = _name;
 }
 
 KisDynamicTransformableFactory::~KisDynamicTransformableFactory()
 {
-  delete d;
+    delete d;
 }
 
 const QString& KisDynamicTransformableFactory::id() const
 {
-  return d->id;
+    return d->id;
 }
 
 const QString& KisDynamicTransformableFactory::name() const
 {
-  return d->name;
+    return d->name;
 }

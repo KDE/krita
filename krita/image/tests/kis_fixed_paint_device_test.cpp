@@ -49,7 +49,7 @@ void KisFixedPaintDeviceTest::testCreation()
     QVERIFY(*dev->colorSpace() == *cs);
     QVERIFY(dev->pixelSize() == cs->pixelSize());
 
-    dev->setRect(QRect(0,0,100,100));
+    dev->setRect(QRect(0, 0, 100, 100));
     QVERIFY(dev->bounds() == QRect(0, 0, 100, 100));
     dev->initialize();
     QVERIFY(dev->data() != 0);
@@ -123,7 +123,7 @@ void KisFixedPaintDeviceTest::testBltFixed()
     // Without opacity
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisPainter gc(dev);
-    gc.bltFixed(QPoint(0,0), fdev, image.rect());
+    gc.bltFixed(QPoint(0, 0), fdev, image.rect());
 
     QImage result = dev->convertToQImage(0, 0, 0, 640, 441);
 
@@ -149,7 +149,7 @@ void KisFixedPaintDeviceTest::testBltFixedOpacity()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
     KisPainter gc(dev);
-    gc.bltFixed(QPoint(0,0), fdev, image.rect());
+    gc.bltFixed(QPoint(0, 0), fdev, image.rect());
 
     QImage result = dev->convertToQImage(0, 0, 0, 640, 441);
     QImage checkResult(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent_result.png");
@@ -206,7 +206,7 @@ void KisFixedPaintDeviceTest::testBltFixedSmall()
     // Without opacity
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisPainter gc(dev);
-    gc.bltFixed(QPoint(0,0), fdev, image.rect());
+    gc.bltFixed(QPoint(0, 0), fdev, image.rect());
 
     QImage result = dev->convertToQImage(0, 0, 0, 51, 51);
 
@@ -236,14 +236,14 @@ void KisFixedPaintDeviceTest::testBltPerformance()
     int x;
     for (x = 0; x < 1000; ++x) {
         KisPainter gc(dev);
-        gc.bltFixed(QPoint(0,0), fdev, image.rect());
+        gc.bltFixed(QPoint(0, 0), fdev, image.rect());
     }
 
     qDebug() << x
-             << "blits"
-             << " done in "
-             << t.elapsed()
-             << "ms";
+    << "blits"
+    << " done in "
+    << t.elapsed()
+    << "ms";
 
 
 }

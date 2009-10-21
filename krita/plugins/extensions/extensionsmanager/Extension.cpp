@@ -19,32 +19,39 @@
 
 #include <QDomElement>
 
-Extension::Extension() {
+Extension::Extension()
+{
 }
 
-Extension::~Extension() {
+Extension::~Extension()
+{
 }
 
-const QString& Extension::name() const {
+const QString& Extension::name() const
+{
     return m_name;
 }
 
-const QString& Extension::description() const {
+const QString& Extension::description() const
+{
     return m_description;
 }
 
-const QString& Extension::version() const {
+const QString& Extension::version() const
+{
     return m_version;
 }
 
 #include <kdebug.h>
 
-QString getChildText(const QDomElement& element) {
+QString getChildText(const QDomElement& element)
+{
     QDomText text = element.firstChild().toText();
     return text.data();
 }
 
-void Extension::parse(const QDomElement& element) {
+void Extension::parse(const QDomElement& element)
+{
     Q_ASSERT(m_name.isEmpty());
     Q_ASSERT(m_description.isEmpty());
     Q_ASSERT(m_version.isEmpty());
@@ -52,15 +59,15 @@ void Extension::parse(const QDomElement& element) {
     while (!n.isNull()) {
         if (n.isElement()) {
             QDomElement e = n.toElement();
-            if(e.tagName() == "name") {
+            if (e.tagName() == "name") {
                 m_name = getChildText(e);
-            } else if(e.tagName() == "description") {
+            } else if (e.tagName() == "description") {
                 m_description = getChildText(e);
-            } else if(e.tagName() == "version") {
+            } else if (e.tagName() == "version") {
                 m_version = getChildText(e);
             }
         }
         n = n.nextSibling();
     }
-    
+
 }

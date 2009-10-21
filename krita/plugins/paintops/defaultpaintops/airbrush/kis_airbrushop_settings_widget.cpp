@@ -31,16 +31,16 @@
 #include <kis_paint_action_type_option.h>
 
 KisAirbrushOpSettingsWidget::KisAirbrushOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+        : KisPaintOpOptionsWidget(parent)
 {
     setObjectName("airbrush option widget");
 
     m_brushOption = new KisBrushOption();
 
-    m_brushOption->setAutoBrush( true );
-    m_brushOption->setPredefinedBrushes( false );
-    m_brushOption->setCustomBrush( false );
-    m_brushOption->setTextBrush( false );
+    m_brushOption->setAutoBrush(true);
+    m_brushOption->setPredefinedBrushes(false);
+    m_brushOption->setCustomBrush(false);
+    m_brushOption->setTextBrush(false);
 
     addPaintOpOption(m_brushOption);
 

@@ -111,10 +111,10 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     layout->addWidget(m_canvasController, 1, 1);
 
     connect(m_canvasController, SIGNAL(canvasOffsetXChanged(int)),
-            this, SLOT( pageOffsetChanged()) );
+            this, SLOT(pageOffsetChanged()));
 
     connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
-            this, SLOT( pageOffsetChanged() ));
+            this, SLOT(pageOffsetChanged()));
 
     connect(m_canvasController,
             SIGNAL(canvasMousePositionChanged(const QPoint &)),
@@ -129,7 +129,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
 void KisZoomManager::mousePositionChanged(const QPoint &pos)
 {
-    QPoint canvasOffset( m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY() );
+    QPoint canvasOffset(m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY());
     QPoint viewPos = pos - m_canvasController->canvas()->documentOrigin() - canvasOffset;
 
     m_horizontalRuler->updateMouseCoordinate(viewPos.x());
@@ -176,8 +176,8 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
 
 void KisZoomManager::pageOffsetChanged()
 {
-    m_horizontalRuler->setOffset( m_canvasController->canvasOffsetX() + m_view->canvasBase()->documentOrigin().x() );
-    m_verticalRuler->setOffset(  m_canvasController->canvasOffsetY() + m_view->canvasBase()->documentOrigin().y()  );
+    m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX() + m_view->canvasBase()->documentOrigin().x());
+    m_verticalRuler->setOffset(m_canvasController->canvasOffsetY() + m_view->canvasBase()->documentOrigin().y());
 }
 
 

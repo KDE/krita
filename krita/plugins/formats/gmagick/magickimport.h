@@ -21,7 +21,8 @@
 
 #include <KoFilter.h>
 
-class MagickImport : public KoFilter {
+class MagickImport : public KoFilter
+{
     Q_OBJECT
 
 public:

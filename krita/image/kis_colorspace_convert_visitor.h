@@ -52,12 +52,24 @@ public:
     bool visit(KisGeneratorLayer * layer);
     bool visit(KisExternalLayer *);
 
-    bool visit(KisNode*) { return true; }
-    bool visit(KisCloneLayer*) { return true; }
-    bool visit(KisFilterMask*) { return true; }
-    bool visit(KisTransparencyMask*) { return true; }
-    bool visit(KisTransformationMask*) { return true; }
-    bool visit(KisSelectionMask*) { return true; }
+    bool visit(KisNode*) {
+        return true;
+    }
+    bool visit(KisCloneLayer*) {
+        return true;
+    }
+    bool visit(KisFilterMask*) {
+        return true;
+    }
+    bool visit(KisTransparencyMask*) {
+        return true;
+    }
+    bool visit(KisTransformationMask*) {
+        return true;
+    }
+    bool visit(KisSelectionMask*) {
+        return true;
+    }
 
 private:
 

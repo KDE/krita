@@ -179,13 +179,12 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     if (!doc->isReadWrite()) {
         setXMLFile("krita_readonly.rc");
-    }
-    else {
+    } else {
         setXMLFile("krita.rc");
     }
 
     if (mainWindow()) {
-         actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
+        actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
     }
 
     m_d->doc = doc;
@@ -222,8 +221,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
         setDockerManager(dockerMng);
     }
 
-    connect( m_d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
-             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
+    connect(m_d->canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
+            dockerMng, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
 
     m_d->statusBar = new KisStatusBar(this);
     connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),
@@ -255,7 +254,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     }
 
     // canvas sends signal that origin is changed
-    connect(m_d->canvas, SIGNAL( documentOriginChanged() ), m_d->zoomManager, SLOT( pageOffsetChanged() ));
+    connect(m_d->canvas, SIGNAL(documentOriginChanged()), m_d->zoomManager, SLOT(pageOffsetChanged()));
 
     setAcceptDrops(true);
 }
@@ -274,7 +273,7 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
     // be showing a progress bar and calling qApp->processEvents().
     if (K3URLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
         event->accept();
-    } else if ( event->mimeData()->hasImage() ){
+    } else if (event->mimeData()->hasImage()) {
         event->accept();
     } else {
         event->ignore();
@@ -283,31 +282,29 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
 
 void KisView2::dropEvent(QDropEvent *event)
 {
-    if (event->mimeData()->hasImage())
-    {
+    if (event->mimeData()->hasImage()) {
         QImage qimg = qvariant_cast<QImage>(event->mimeData()->imageData());
         KisImageWSP img = image();
 
         if (img) {
-            KisPaintDeviceSP device = new KisPaintDevice( KoColorSpaceRegistry::instance()->rgb8() );
-            device->convertFromQImage(qimg,"");
+            KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+            device->convertFromQImage(qimg, "");
             KisLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, device);
 
-            QPointF pos = img->documentToIntPixel( m_d->viewConverter->viewToDocument( event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin() ) );
-            layer->setX( pos.x() );
-            layer->setY( pos.y() );
+            QPointF pos = img->documentToIntPixel(m_d->viewConverter->viewToDocument(event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin()));
+            layer->setX(pos.x());
+            layer->setY(pos.y());
 
             if (layer) {
                 KisNodeCommandsAdapter adapter(this);
-                if (!m_d->nodeManager->layerManager()->activeLayer()){
+                if (!m_d->nodeManager->layerManager()->activeLayer()) {
                     adapter.addNode(layer.data(), img->rootLayer().data() , 0);
-                }else
-                {
+                } else {
                     adapter.addNode(layer.data(), m_d->nodeManager->layerManager()->activeLayer()->parent().data(), m_d->nodeManager->layerManager()->activeLayer().data());
                 }
                 layer->setDirty();
                 canvas()->update();
-                nodeManager()->activateNode( layer );
+                nodeManager()->activateNode(layer);
             }
         }
         return;

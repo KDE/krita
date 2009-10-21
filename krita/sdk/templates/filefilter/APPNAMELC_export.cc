@@ -18,20 +18,20 @@
 
 class KisExternalLayer;
 
-typedef KGenericFactory<%{APPNAME}Export> ExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkrita%{APPNAMELC}export, ExportFactory("kofficefilters"))
+typedef KGenericFactory < % {APPNAME} Export > ExportFactory;
+K_EXPORT_COMPONENT_FACTORY(libkrita % {APPNAMELC} export, ExportFactory("kofficefilters"))
 
-%{APPNAME}Export::%{APPNAME}Export(QObject *parent, const QStringList&) : KoFilter(parent)
+% {APPNAME} Export:: % {APPNAME} Export(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 
-%{APPNAME}Export::~%{APPNAME}Export()
+% {APPNAME} Export::~ % {APPNAME} Export()
 {
 }
 
-KoFilter::ConversionStatus %{APPNAME}Export::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus % {APPNAME} Export::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile <<"%{APPNAMEUC} export! From:" << from <<", To:" << to <<"";
+    dbgFile << "%{APPNAMEUC} export! From:" << from << ", To:" << to << "";
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -51,18 +51,18 @@ KoFilter::ConversionStatus %{APPNAME}Export::convert(const QByteArray& from, con
     KisImageWSP img = output->image();
     Q_CHECK_PTR(img);
 
-    %{APPNAME}Converter kpc(output, output->undoAdapter());
+    % {APPNAME} Converter kpc(output, output->undoAdapter());
 
     KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
     KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
 
     KisImageBuilder_Result res;
 
-    if ( (res = kpc.buildFile(url, l)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success !";
+    if ((res = kpc.buildFile(url, l)) == KisImageBuilder_RESULT_OK) {
+        dbgFile << "success !";
         return KoFilter::OK;
     }
-    dbgFile <<" Result =" << res;
+    dbgFile << " Result =" << res;
     return KoFilter::InternalError;
 }
 

@@ -32,7 +32,8 @@ class KisPressureDarkenOption;
 class KisPressureSizeOption;
 class KisPaintActionTypeOption;
 
-class KisPenOpSettingsWidget : public KisPaintOpOptionsWidget {
+class KisPenOpSettingsWidget : public KisPaintOpOptionsWidget
+{
 
     Q_OBJECT
 

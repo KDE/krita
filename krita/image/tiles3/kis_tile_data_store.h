@@ -62,33 +62,33 @@ public:
 
     /**
      * Only refs shared pointer counter.
-     * Used only by KisMementoManager without 
+     * Used only by KisMementoManager without
      * consideration of COW.
      */
     inline quint32 refTileData(const KisTileData *td) const {
         return td->m_refCount.ref();
     }
-    
+
     /**
      * Only refs shared pointer counter.
-     * Used only by KisMementoManager without 
+     * Used only by KisMementoManager without
      * consideration of COW.
      */
     inline quint32 derefTileData(KisTileData *td) {
-        if( !(td->m_refCount.deref())) {
+        if (!(td->m_refCount.deref())) {
             freeTileData(td);
             return 0;
         }
         return td->m_refCount;
     }
-    
+
     inline KisTileData* createDefaultTileData(qint32 pixelSize, const quint8 *defPixel) {
         return allocTileData(pixelSize, defPixel);
     }
-    
+
     // Called by The Memento Manager after every commit
     inline void kickPooler() {
-	m_pooler.kick();
+        m_pooler.kick();
     }
 
 private:

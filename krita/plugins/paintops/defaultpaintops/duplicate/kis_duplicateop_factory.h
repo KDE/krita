@@ -47,7 +47,7 @@ public:
     }
 
     virtual QString name() const {
-         return i18nc("duplicate paintbrush", "Duplicate");
+        return i18nc("duplicate paintbrush", "Duplicate");
     }
 
     virtual QString pixmap() {

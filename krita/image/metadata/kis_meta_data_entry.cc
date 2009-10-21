@@ -99,18 +99,19 @@ bool Entry::isValid() const
     return d->valid;
 }
 
-bool Entry::isValidName(const QString& _name) {
-    if(_name.length() < 1) {
+bool Entry::isValidName(const QString& _name)
+{
+    if (_name.length() < 1) {
         dbgImage << "Too small";
         return false;
     }
-    if(!_name[0].isLetter()) {
+    if (!_name[0].isLetter()) {
         dbgImage << _name << " doesn't start by a letter";
         return false;
     }
-    for( int i = 1; i < _name.length(); ++i ) {
+    for (int i = 1; i < _name.length(); ++i) {
         QChar c = _name[i];
-        if(!c.isLetterOrNumber()) {
+        if (!c.isLetterOrNumber()) {
             dbgImage << _name << " " << i << "th character isn't a letter or a digit";
             return false;
         }

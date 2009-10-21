@@ -53,7 +53,7 @@ public:
     virtual void setConfiguration(const KisPropertiesConfiguration * config);
 
     /// Reimplemented
-    virtual void writeConfiguration( KisPropertiesConfiguration *config ) const;
+    virtual void writeConfiguration(KisPropertiesConfiguration *config) const;
 
 private slots:
 

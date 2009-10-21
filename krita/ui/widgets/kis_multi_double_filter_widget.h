@@ -62,7 +62,7 @@ class KRITAUI_EXPORT KisMultiDoubleFilterWidget : public KisConfigWidget
     Q_OBJECT
 public:
     KisMultiDoubleFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisDoubleWidgetParam dwparam);
-    virtual void setConfiguration( const KisPropertiesConfiguration * cfg);
+    virtual void setConfiguration(const KisPropertiesConfiguration * cfg);
     virtual KisPropertiesConfiguration* configuration() const;
 public:
     inline qint32 nbValues() const {

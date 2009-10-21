@@ -71,9 +71,9 @@ public:
 
 private slots:
 
-    void setNodeVisible( bool );
+    void setNodeVisible(bool);
 
-    void editabilityChanged( );
+    void editabilityChanged();
 
     KisImageWSP getImage() const;
 

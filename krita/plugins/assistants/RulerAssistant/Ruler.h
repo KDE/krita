@@ -20,18 +20,23 @@
 
 #include <QPointF>
 
-class Ruler {
-    public:
-        Ruler();
-        ~Ruler();
-        QPointF project(const QPointF& );
-        const QPointF& point1() const;
-        void setPoint1(const QPointF& p) { p1 = p; }
-        const QPointF& point2() const;
-        void setPoint2(const QPointF& p) { p2 = p; }
-    private:
-        QPointF p1;
-        QPointF p2;
+class Ruler
+{
+public:
+    Ruler();
+    ~Ruler();
+    QPointF project(const QPointF&);
+    const QPointF& point1() const;
+    void setPoint1(const QPointF& p) {
+        p1 = p;
+    }
+    const QPointF& point2() const;
+    void setPoint2(const QPointF& p) {
+        p2 = p;
+    }
+private:
+    QPointF p1;
+    QPointF p2;
 };
 
 #endif

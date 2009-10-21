@@ -32,37 +32,35 @@ struct KisRecordedActionEditorFactoryRegistry::Private {
     QList< KisRecordedActionEditorFactory* > factories;
 };
 
-KisRecordedActionEditorFactoryRegistry::KisRecordedActionEditorFactoryRegistry() 
-: d(new Private) 
+KisRecordedActionEditorFactoryRegistry::KisRecordedActionEditorFactoryRegistry()
+        : d(new Private)
 {
     add(new KisRecordedFilterActionEditorFactory);
 }
 
-KisRecordedActionEditorFactoryRegistry::~KisRecordedActionEditorFactoryRegistry() 
+KisRecordedActionEditorFactoryRegistry::~KisRecordedActionEditorFactoryRegistry()
 {
     dbgRegistry << "Deleting KisRecordedActionEditorFactoryRegistry";
     qDeleteAll(d->factories);
     delete d;
 }
 
-KisRecordedActionEditorFactoryRegistry* KisRecordedActionEditorFactoryRegistry::instance() 
+KisRecordedActionEditorFactoryRegistry* KisRecordedActionEditorFactoryRegistry::instance()
 {
     K_GLOBAL_STATIC(KisRecordedActionEditorFactoryRegistry, s_instance);
     return s_instance;
 }
 
-void KisRecordedActionEditorFactoryRegistry::add( KisRecordedActionEditorFactory* factory )
+void KisRecordedActionEditorFactoryRegistry::add(KisRecordedActionEditorFactory* factory)
 {
-    if(d->factories.contains(factory)) return;
+    if (d->factories.contains(factory)) return;
     d->factories.push_front(factory);
 }
 
 QWidget* KisRecordedActionEditorFactoryRegistry::createEditor(QWidget* parent, KisRecordedAction* action) const
 {
-    foreach( KisRecordedActionEditorFactory* factory, d->factories )
-    {
-        if(factory->canEdit(action))
-        {
+    foreach(KisRecordedActionEditorFactory* factory, d->factories) {
+        if (factory->canEdit(action)) {
             QWidget* editor = factory->createEditor(parent, action);
             Q_ASSERT(editor);
             Q_ASSERT(editor->metaObject()->indexOfSignal("actionEdited()") != -1);
@@ -74,10 +72,8 @@ QWidget* KisRecordedActionEditorFactoryRegistry::createEditor(QWidget* parent, K
 
 bool KisRecordedActionEditorFactoryRegistry::hasEditor(KisRecordedAction* action) const
 {
-    foreach( KisRecordedActionEditorFactory* factory, d->factories )
-    {
-        if(factory->canEdit(action))
-        {
+    foreach(KisRecordedActionEditorFactory* factory, d->factories) {
+        if (factory->canEdit(action)) {
             return true;
         }
     }

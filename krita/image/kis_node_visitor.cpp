@@ -19,7 +19,8 @@
 
 #include "kis_node_visitor.h"
 
-bool KisNodeVisitor::visitAll(KisNode * node, bool breakOnFail) {
+bool KisNodeVisitor::visitAll(KisNode * node, bool breakOnFail)
+{
     for (uint i = 0; i < node->childCount(); ++i) {
         if (!node->at(i)->accept(*this)) {
             if (breakOnFail)
@@ -40,7 +41,8 @@ bool KisNodeVisitor::visitAll(KisNode * node, bool breakOnFail) {
  * @return true if none of the childnodes returns false on
  * accepting the visitor.
  */
-bool KisNodeVisitor::visitAllInverse(KisNode * node, bool breakOnFail) {
+bool KisNodeVisitor::visitAllInverse(KisNode * node, bool breakOnFail)
+{
     KisNodeSP child = node->lastChild();
     while (child) {
         if (!child->accept(*this)) {

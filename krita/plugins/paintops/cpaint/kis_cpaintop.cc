@@ -52,18 +52,15 @@ class KisCPaintOpWidget : public KisConfigWidget
 {
 public:
     KisCPaintOpWidget()
-        : KisConfigWidget()
-    {
+            : KisConfigWidget() {
     }
 
-    virtual ~KisCPaintOpWidget(){}
+    virtual ~KisCPaintOpWidget() {}
 
-    virtual void setConfiguration( const KisPropertiesConfiguration * config)
-    {
+    virtual void setConfiguration(const KisPropertiesConfiguration * config) {
     }
 
-    virtual KisPropertiesConfiguration* configuration() const
-    {
+    virtual KisPropertiesConfiguration* configuration() const {
         return 0;
     }
 
@@ -125,7 +122,7 @@ KisPaintOpSettingsSP KisCPaintOpFactory::settings(KisImageWSP image)
 }
 KisPaintOpSettingsWidget* KisCPaintOpFactory::settingsWidget(QWidget* parent)
 {
-    return new KisCPaintOpWidget( parent );
+    return new KisCPaintOpWidget(parent);
 }
 
 

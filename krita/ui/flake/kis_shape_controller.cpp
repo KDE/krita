@@ -71,13 +71,13 @@ public:
     KisNameServer * nameServer;
     QMap<QString, KoDataCenter *>  dataCenterMap;
     bool selectionShapeToBeAdded;
-    
-    void removeShapeFromMap( KoShape* );
-    void removeShapeAndChildrenFromMap( KoShape* );
+
+    void removeShapeFromMap(KoShape*);
+    void removeShapeAndChildrenFromMap(KoShape*);
 };
 
 
-void KisShapeController::Private::removeShapeFromMap( KoShape* shape)
+void KisShapeController::Private::removeShapeFromMap(KoShape* shape)
 {
     KisNodeMap::iterator begin = nodeShapes.begin();
     KisNodeMap::iterator end = nodeShapes.end();
@@ -93,7 +93,7 @@ void KisShapeController::Private::removeShapeFromMap( KoShape* shape)
 }
 
 
-void KisShapeController::Private::removeShapeAndChildrenFromMap( KoShape* shape)
+void KisShapeController::Private::removeShapeAndChildrenFromMap(KoShape* shape)
 {
     KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
     if (parent) {
@@ -115,7 +115,7 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
     // Ask every shapefactory to populate the dataCenterMap
     QList<KoShapeFactory*> shapeFactories = KoShapeRegistry::instance()->values();
     foreach(KoShapeFactory* shapeFactory, shapeFactories) {
-         shapeFactory->populateDataCenterMap(m_d->dataCenterMap);
+        shapeFactory->populateDataCenterMap(m_d->dataCenterMap);
     }
 
     m_d->dataCenterMap["UndoStack"] = doc->undoStack();
@@ -144,7 +144,7 @@ KisShapeController::~KisShapeController()
 
 void KisShapeController::setImage(KisImageWSP image)
 {
-    dbgUI << ppVar( image );
+    dbgUI << ppVar(image);
     if (m_d->image) {
         m_d->image->disconnect(this);
         // First clear the current set of shapes away
@@ -171,8 +171,8 @@ void KisShapeController::setImage(KisImageWSP image)
         foreach(KoShape* shape, m_d->nodeShapes) {
             KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(shape);
             if (shapeLayer) {
-                    connect(shapeLayer, SIGNAL(selectionChanged(QList<KoShape*>)),
-                    KoToolManager::instance(), SLOT(selectionChanged(QList<KoShape*>)));
+                connect(shapeLayer, SIGNAL(selectionChanged(QList<KoShape*>)),
+                        KoToolManager::instance(), SLOT(selectionChanged(QList<KoShape*>)));
             }
         }
 
@@ -207,13 +207,13 @@ void KisShapeController::removeShape(KoShape* shape)
     KisCanvas2 * canvas = 0;
     KisSelectionSP selection = 0;
 
-    if ( ( shape->shapeId() == KIS_NODE_SHAPE_ID
+    if ((shape->shapeId() == KIS_NODE_SHAPE_ID
             || shape->shapeId() == KIS_SHAPE_LAYER_ID
             || shape->shapeId() == KIS_LAYER_CONTAINER_ID) // Those shape can be in a selection
-        && (KoToolManager::instance()->activeCanvasController()
+            && (KoToolManager::instance()->activeCanvasController()
                 && KoToolManager::instance()->activeCanvasController()->canvas()) // FIXME don't we check twice for the same thing ?
-        && (canvas =  dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas()) )
-        && (selection = canvas->view()->selection()) ) {
+            && (canvas =  dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas()))
+            && (selection = canvas->view()->selection())) {
         // Has a selection, be in a seclection, remove it from there
         if (selection->hasShapeSelection()) {
             KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
@@ -227,7 +227,7 @@ void KisShapeController::removeShape(KoShape* shape)
         if (shapeLayer)
             shapeLayer->removeChild(shape);
     }
-    
+
     m_d->removeShapeFromMap(shape);
 
     m_d->doc->setModified(true);
@@ -252,7 +252,7 @@ void KisShapeController::addShape(KoShape* shape)
     // slotLayerAdded
     if (shape->shapeId() != KIS_NODE_SHAPE_ID  &&
             shape->shapeId() != KIS_SHAPE_LAYER_ID  &&
-            shape->shapeId() != KIS_LAYER_CONTAINER_ID ) {
+            shape->shapeId() != KIS_LAYER_CONTAINER_ID) {
 
         if (m_d->selectionShapeToBeAdded) {
             // There's a selection active. that means that all shapes get added to the active selection,
@@ -309,7 +309,7 @@ void KisShapeController::addShape(KoShape* shape)
                 // a signal that is caught by us (the document) and the
                 // layerbox and makes sure the new layer is in the
                 // layer-shape map and in the layerbox
-                m_d->image->undoAdapter()->addCommand( new KisImageLayerAddCommand( m_d->image, shapeLayer, m_d->image->rootLayer(), m_d->image->rootLayer()->childCount() ) );
+                m_d->image->undoAdapter()->addCommand(new KisImageLayerAddCommand(m_d->image, shapeLayer, m_d->image->rootLayer(), m_d->image->rootLayer()->childCount()));
 
                 if (canvas) {
                     canvas->view()->nodeManager()->activateNode(shapeLayer);
@@ -382,7 +382,7 @@ void KisShapeController::slotNodeAdded(KisNode* parentNode, int index)
                node->inherits("KisAdjustmentLayer") ||
                node->inherits("KisCloneLayer") ||
                node->inherits("KisGeneratorLayer") ||
-               node->inherits( "KisMask" ) ) {
+               node->inherits("KisMask")) {
         shape = new KisNodeShape(parent, static_cast<KisLayer*>(node.data()));
     } else if (node->inherits("KisShapeLayer")) {
         shape = static_cast<KisShapeLayer*>(node.data());
@@ -436,9 +436,10 @@ int KisShapeController::layerMapSize()
     return m_d->nodeShapes.size();
 }
 
-void KisShapeController::slotNotifySelectionChanged(QList<KoShape*> shapes){
+void KisShapeController::slotNotifySelectionChanged(QList<KoShape*> shapes)
+{
     foreach(KoView *view, m_d->doc->views()) {
-        KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();   
+        KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
         canvas->globalShapeManager()->selection()->deselectAll();
         foreach(KoShape* shape, shapes) {
             canvas->globalShapeManager()->selection()->select(shape);

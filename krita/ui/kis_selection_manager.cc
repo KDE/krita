@@ -115,10 +115,10 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
     Q_ASSERT(selection);
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
-    KisSelectionDecoration* decoration = new KisSelectionDecoration( m_view );
+    KisSelectionDecoration* decoration = new KisSelectionDecoration(m_view);
     connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
     decoration->setVisible(true);
-    m_view->canvasBase()->addDecoration( decoration );
+    m_view->canvasBase()->addDecoration(decoration);
 }
 
 KisSelectionManager::~KisSelectionManager()
@@ -269,9 +269,9 @@ void KisSelectionManager::updateGUI()
                     if (adjLayer) // There's no reselect for adjustment layers
                         m_reselect->setEnabled(false);
 #endif
-    }
+                    }
 
-    m_cut->setEnabled(enable);
+        m_cut->setEnabled(enable);
     m_clear->setEnabled(enable);
     m_fillForegroundColor->setEnabled(enable);
     m_fillBackgroundColor->setEnabled(enable);
@@ -499,11 +499,10 @@ void KisSelectionManager::paste()
           if (dlg->exec() == QDialog::Accepted)
           layer->convertTo(img->colorSpace());
         */
-        if( m_view->activeLayer() )
-        {
+        if (m_view->activeLayer()) {
             m_adapter->addNode(layer , m_view->activeLayer()->parent(), m_view->activeLayer().data());
         } else {
-            m_adapter->addNode(layer , img->rootLayer(), 0 );
+            m_adapter->addNode(layer , img->rootLayer(), 0);
         }
         layer->setDirty();
     } else
@@ -536,7 +535,7 @@ void KisSelectionManager::pasteNew()
     doc->undoAdapter()->setUndo(false);
 
     KisImageWSP img = new KisImage(doc->undoAdapter(), r.width(), r.height(),
-                                  KoColorSpaceRegistry::instance()->colorSpace( clip->colorSpace()->id(), clip->colorSpace()->profile() ), "Pasted" ); // TODO should be translated ?
+                                   KoColorSpaceRegistry::instance()->colorSpace(clip->colorSpace()->id(), clip->colorSpace()->profile()), "Pasted");    // TODO should be translated ?
     KisPaintLayerSP layer = new KisPaintLayer(img.data(), clip->objectName(), OPACITY_OPAQUE, clip->colorSpace());
 
     KisPainter p(layer->paintDevice());
@@ -788,7 +787,7 @@ void KisSelectionManager::feather()
 void KisSelectionManager::toggleDisplaySelection()
 {
     KisCanvasDecoration* decoration = m_view->canvasBase()->decoration("selection");
-    if(decoration)
+    if (decoration)
         decoration->toggleVisibility();
 }
 
@@ -828,7 +827,7 @@ void KisSelectionManager::grow(qint32 xradius, qint32 yradius)
     for (qint32 i = 0; i < yradius + 1; i++) {
         buf[i] = new quint8[layerSize.width()];
     }
-    quint8* buffer = new quint8[(layerSize.width() + 2 * xradius) * (yradius + 1)];
+    quint8* buffer = new quint8[(layerSize.width() + 2 * xradius) *(yradius + 1)];
     for (qint32 i = 0; i < layerSize.width() + 2 * xradius; i++) {
         if (i < xradius)
             max[i] = buffer;
@@ -975,11 +974,10 @@ void KisSelectionManager::shrink(qint32 xradius, qint32 yradius, bool edge_lock)
                 max[i] = &buffer[(yradius + 1) * (layerSize.width() + xradius)];
         else if (i < layerSize.width() + xradius)
             max[i] = &buffer[(yradius + 1) * (i - xradius)];
+        else if (edge_lock)
+            max[i] = &buffer[(yradius + 1) * (layerSize.width() + xradius - 1)];
         else
-            if (edge_lock)
-                max[i] = &buffer[(yradius + 1) * (layerSize.width() + xradius - 1)];
-            else
-                max[i] = &buffer[(yradius + 1) * (layerSize.width() + xradius)];
+            max[i] = &buffer[(yradius + 1) * (layerSize.width() + xradius)];
     }
     if (!edge_lock)
         for (qint32 j = 0 ; j < xradius + 1; j++) max[0][j] = 0;
@@ -1418,13 +1416,12 @@ void KisSelectionManager::border(qint32 xradius, qint32 yradius)
                         max[x] = yradius;
                     else
                         max[x]--;
-                } else
-                    if (transition[-max[x]][x])
-                        max[x] = -max[x];
-                    else if (transition[-max[x] + 1][x])
-                        max[x] = -max[x] + 1;
-                    else
-                        max[x]--;
+                } else if (transition[-max[x]][x])
+                    max[x] = -max[x];
+                else if (transition[-max[x] + 1][x])
+                    max[x] = -max[x] + 1;
+                else
+                    max[x]--;
             } else
                 max[x]--;
             if (max[x] < -yradius - 1)

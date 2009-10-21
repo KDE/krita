@@ -98,7 +98,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_magnetism = 1.0;
 
     setSupportOutline(true);
-    
+
 #if defined(HAVE_OPENGL)
     m_xTilt = 0.0;
     m_yTilt = 0.0;
@@ -221,30 +221,30 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
     if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-      outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
+        outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
     } else {
-      outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
+        outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
     }
 
-    if(!oldOutlineRect.isEmpty()) {
+    if (!oldOutlineRect.isEmpty()) {
         m_canvas->updateCanvas(oldOutlineRect); // erase the old guy
     }
 
     mousePos = e->point;
 
 #if defined(HAVE_OPENGL)
-    if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL){
-        if (m_canvas->canvasController()->isCanvasOpenGL()){
+    if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
+        if (m_canvas->canvasController()->isCanvasOpenGL()) {
             m_xTilt = e->xTilt();
             m_yTilt = e->yTilt();
             // TODO : optimize? but you need to know the size of the 3d brush?
-            m_canvas->updateCanvas(QRect( QPoint(0,0), QSize( currentImage()->width(),currentImage()->height()) ));
+            m_canvas->updateCanvas(QRect(QPoint(0, 0), QSize(currentImage()->width(), currentImage()->height())));
         }
     }
 #endif
 
     oldOutlineRect = currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage(), outlineMode);
-    if(!oldOutlineRect.isEmpty()) {
+    if (!oldOutlineRect.isEmpty()) {
         m_canvas->updateCanvas(oldOutlineRect); // erase the old guy
     }
 }
@@ -310,7 +310,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             layer->setTemporaryOpacity(m_opacity);
         }
     }
-    if( !m_target ) {
+    if (!m_target) {
         m_target = device;
     }
     m_painter = new KisPainter(m_target, currentSelection());
@@ -339,25 +339,25 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
           << endl;
     */
 #ifdef ENABLE_RECORDING // Temporary, to figure out what is going without being
-      // distracted by the recording
+    // distracted by the recording
     if (m_smooth) {
         m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction(i18n("Freehand tool"),
-                                                                         KisNodeQueryPath::absolutePath(currentNode()),
-                                                                         currentPaintOpPreset(),
-                                                                         m_painter->paintColor(),
-                                                                         m_painter->backgroundColor(),
-                                                                         m_painter->opacity(),
-                                                                         m_paintIncremental,
-                                                                         m_compositeOp);
+                KisNodeQueryPath::absolutePath(currentNode()),
+                currentPaintOpPreset(),
+                m_painter->paintColor(),
+                m_painter->backgroundColor(),
+                m_painter->opacity(),
+                m_paintIncremental,
+                m_compositeOp);
     } else {
         m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"),
-                                                                   KisNodeQueryPath::absolutePath(currentNode()),
-                                                                   currentPaintOpPreset(),
-                                                                   m_painter->paintColor(),
-                                                                   m_painter->backgroundColor(),
-                                                                   m_painter->opacity(),
-                                                                   m_paintIncremental,
-                                                                   m_compositeOp);
+                KisNodeQueryPath::absolutePath(currentNode()),
+                currentPaintOpPreset(),
+                m_painter->paintColor(),
+                m_painter->backgroundColor(),
+                m_painter->opacity(),
+                m_paintIncremental,
+                m_compositeOp);
     }
 #endif
 }
@@ -500,8 +500,8 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 {
     KisConfig cfg;
 #if defined(HAVE_OPENGL)
-    if (m_canvas->canvasController()->isCanvasOpenGL()){
-        if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL){
+    if (m_canvas->canvasController()->isCanvasOpenGL()) {
+        if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
             qreal sx, sy;
             converter.zoom(&sx, &sy);
             sx /= currentImage()->xRes();
@@ -509,80 +509,80 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 
             // check if the paintop has been changed
             // TODO: maybe find a better way -- signal from paintop to ui/freehand that paintop has been changed
-            if ( m_brushModelName.compare(currentPaintOpPreset()->settings()->modelName()) != 0){
-                glDeleteLists( m_displayList,1 );
+            if (m_brushModelName.compare(currentPaintOpPreset()->settings()->modelName()) != 0) {
+                glDeleteLists(m_displayList, 1);
                 m_displayList = 0;
             }
 
-            if (glIsList( m_displayList )){
+            if (glIsList(m_displayList)) {
                 dbgUI << "I have list to draw!";
-                QPointF pos = converter.documentToView( mousePos );
+                QPointF pos = converter.documentToView(mousePos);
 
-/*        KisImageWSP img = currentImage();
-        glEnable(GL_LIGHT0);
-        glEnable(GL_LIGHT1);
-        glEnable(GL_LIGHT2);
-        glEnable(GL_LIGHT3);
-        glEnable(GL_LIGHT4);
+                /*        KisImageWSP img = currentImage();
+                        glEnable(GL_LIGHT0);
+                        glEnable(GL_LIGHT1);
+                        glEnable(GL_LIGHT2);
+                        glEnable(GL_LIGHT3);
+                        glEnable(GL_LIGHT4);
 
-        QPointF pos0(0,0); pos0 = converter.documentToView( pos0 );
-        QPointF pos1(0,img->height()); pos1 = converter.documentToView( pos1 );
-        QPointF pos2(img->width(),img->height()); pos2 = converter.documentToView( pos2 );
-        QPointF pos3(img->width(),0); pos3 = converter.documentToView( pos3 );
+                        QPointF pos0(0,0); pos0 = converter.documentToView( pos0 );
+                        QPointF pos1(0,img->height()); pos1 = converter.documentToView( pos1 );
+                        QPointF pos2(img->width(),img->height()); pos2 = converter.documentToView( pos2 );
+                        QPointF pos3(img->width(),0); pos3 = converter.documentToView( pos3 );
 
-        GLfloat position[] = { 0.0f, 0.0f, ZET };
-        position[0] = pos.x();
-        position[1] = pos.y();
-        glLightfv(GL_LIGHT0, GL_POSITION, position);
-        position[0] = pos1.x();
-        position[1] = pos1.y();
-        glLightfv(GL_LIGHT1, GL_POSITION, position);
-        position[0] = pos2.x();
-        position[1] = pos2.y();
-        glLightfv(GL_LIGHT2, GL_POSITION, position);
-        position[0] = pos3.x();
-        position[1] = pos3.y();
-        glLightfv(GL_LIGHT3, GL_POSITION, position);*/
+                        GLfloat position[] = { 0.0f, 0.0f, ZET };
+                        position[0] = pos.x();
+                        position[1] = pos.y();
+                        glLightfv(GL_LIGHT0, GL_POSITION, position);
+                        position[0] = pos1.x();
+                        position[1] = pos1.y();
+                        glLightfv(GL_LIGHT1, GL_POSITION, position);
+                        position[0] = pos2.x();
+                        position[1] = pos2.y();
+                        glLightfv(GL_LIGHT2, GL_POSITION, position);
+                        position[0] = pos3.x();
+                        position[1] = pos3.y();
+                        glLightfv(GL_LIGHT3, GL_POSITION, position);*/
 
-            glColor3f(0.0,1.0,0.0);
-            glShadeModel(GL_SMOOTH);
+                glColor3f(0.0, 1.0, 0.0);
+                glShadeModel(GL_SMOOTH);
 
-            glEnable(GL_DEPTH_TEST);
-            glClear(GL_DEPTH_BUFFER_BIT);
+                glEnable(GL_DEPTH_TEST);
+                glClear(GL_DEPTH_BUFFER_BIT);
 
 
-            glEnable(GL_LINE_SMOOTH);
-            glEnable(GL_COLOR_MATERIAL);
+                glEnable(GL_LINE_SMOOTH);
+                glEnable(GL_COLOR_MATERIAL);
 
                 glPushMatrix();
-                            glTranslatef( pos.x(), pos.y(), 0.0 );
-                            glScalef( sx,sy,1);
-                            glRotated( 90.0, 1.0, 0.0, 0.0 );
-                            glRotated( -(m_xTilt*0.5 + m_prevxTilt*0.5) , 0.0, 0.0, 1.0);
-                            glRotated( -(m_yTilt*0.5 + m_prevyTilt*0.5) , 1.0, 0.0, 0.0);
+                glTranslatef(pos.x(), pos.y(), 0.0);
+                glScalef(sx, sy, 1);
+                glRotated(90.0, 1.0, 0.0, 0.0);
+                glRotated(-(m_xTilt*0.5 + m_prevxTilt*0.5) , 0.0, 0.0, 1.0);
+                glRotated(-(m_yTilt*0.5 + m_prevyTilt*0.5) , 1.0, 0.0, 0.0);
 
-                            glCallList( m_displayList );
-                        glScalef(1.0 / sx,1.0 / sy ,1);
+                glCallList(m_displayList);
+                glScalef(1.0 / sx, 1.0 / sy , 1);
                 glPopMatrix();
 
-            glDisable(GL_DEPTH_TEST);
-            glDisable(GL_LINE_SMOOTH);
-            glDisable(GL_COLOR_MATERIAL);
+                glDisable(GL_DEPTH_TEST);
+                glDisable(GL_LINE_SMOOTH);
+                glDisable(GL_COLOR_MATERIAL);
 
-            m_prevxTilt = m_xTilt;
-            m_prevyTilt = m_yTilt;
+                m_prevxTilt = m_xTilt;
+                m_prevyTilt = m_yTilt;
 
-            }else{
+            } else {
                 dbgUI << "Default model will be used";
                 Kis3DObjectModel * model;
                 m_brushModelName = currentPaintOpPreset()->settings()->modelName();
 
                 // here is the default 3d model filename for brushes
-                if ( m_brushModelName.isEmpty() ) {
-                    model = new Kis3DObjectModel("3d-deform-brush.obj" ,"3d-deform-brush.mtl");
+                if (m_brushModelName.isEmpty()) {
+                    model = new Kis3DObjectModel("3d-deform-brush.obj" , "3d-deform-brush.mtl");
                     dbgUI << "isEmpty()";
-                }else{
-                    model = new Kis3DObjectModel(m_brushModelName + ".obj" ,m_brushModelName + ".mtl");
+                } else {
+                    model = new Kis3DObjectModel(m_brushModelName + ".obj" , m_brushModelName + ".mtl");
                 }
                 m_displayList = model->displayList();
                 delete model;
@@ -595,9 +595,9 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
     {
         KisPaintOpSettings::OutlineMode outlineMode;
         if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-          outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
+            outlineMode = KisPaintOpSettings::CURSOR_IS_OUTLINE;
         } else {
-          outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
+            outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
         }
         currentPaintOpPreset()->settings()->paintOutline(mousePos, currentImage(), gc, converter, outlineMode);
 

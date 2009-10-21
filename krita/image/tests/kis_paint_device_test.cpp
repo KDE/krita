@@ -79,7 +79,7 @@ void KisPaintDeviceTest::testStore()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     KoStore * readStore =
-            KoStore::createStore(QString(FILES_DATA_DIR) + QDir::separator() + "store_test.kra", KoStore::Read);
+        KoStore::createStore(QString(FILES_DATA_DIR) + QDir::separator() + "store_test.kra", KoStore::Read);
     readStore->open("built image/layers/layer0");
     QVERIFY(dev->read(readStore));
     readStore->close();
@@ -88,7 +88,7 @@ void KisPaintDeviceTest::testStore()
     QVERIFY(dev->exactBounds() == QRect(0, 0, 100, 100));
 
     KoStore * writeStore =
-            KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Write);
+        KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Write);
     writeStore->open("built image/layers/layer0");
     QVERIFY(dev->write(writeStore));
     writeStore->close();
@@ -96,7 +96,7 @@ void KisPaintDeviceTest::testStore()
 
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     readStore =
-            KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Read);
+        KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Read);
     readStore->open("built image/layers/layer0");
     QVERIFY(dev2->read(readStore));
     readStore->close();
@@ -385,14 +385,14 @@ void KisPaintDeviceTest::testBltPerformance()
     int x;
     for (x = 0; x < 1000; ++x) {
         KisPainter gc(dev);
-        gc.bitBlt(QPoint(0,0), fdev, image.rect());
+        gc.bitBlt(QPoint(0, 0), fdev, image.rect());
     }
 
     qDebug() << x
-            << "blits"
-            << " done in "
-            << t.elapsed()
-            << "ms";
+    << "blits"
+    << " done in "
+    << t.elapsed()
+    << "ms";
 
 
 }

@@ -44,7 +44,7 @@ void KisCropVisitorTest::testUndo()
     KisPaintDeviceSP dev = layer->paintDevice();
 
     KisFillPainter painter(dev);
-    painter.fillRect( QRect(0, 0, 300, 300), KoColor(Qt::white, cs));
+    painter.fillRect(QRect(0, 0, 300, 300), KoColor(Qt::white, cs));
     QImage image1 = dev->convertToQImage(0, 0, 0, 300, 300);
 
     undoAdapterDummy->beginMacro();

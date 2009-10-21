@@ -37,7 +37,7 @@ public:
     /**
     * @param config the configuration widget for this tonemapping operator.
     */
-    virtual void setConfiguration( const KisPropertiesConfiguration* config) = 0;
+    virtual void setConfiguration(const KisPropertiesConfiguration* config) = 0;
 
     /**
     * @return the tonemapping operator configuration

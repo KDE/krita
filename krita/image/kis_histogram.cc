@@ -92,7 +92,7 @@ void KisHistogram::computeHistogram()
     if (!m_producer) return;
 
     m_completeCalculations = calculateForRange(m_producer->viewFrom(),
-                                               m_producer->viewFrom() + m_producer->viewWidth());
+                             m_producer->viewFrom() + m_producer->viewWidth());
 
     if (m_selection) {
         m_selectionCalculations = calculateForRange(m_selFrom, m_selTo);
@@ -118,7 +118,7 @@ KisHistogram::Calculations KisHistogram::selectionCalculations()
 QVector<KisHistogram::Calculations> KisHistogram::calculateForRange(double from, double to)
 {
     QVector<Calculations> calculations;
-    if (m_producer ) {
+    if (m_producer) {
         uint count = m_producer->channels().count();
 
         for (uint i = 0; i < count; i++) {

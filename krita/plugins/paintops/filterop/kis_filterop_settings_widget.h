@@ -30,7 +30,8 @@ class KisBrushOption;
 class KisFilterOption;
 class KisPressureSizeOption;
 
-class KisFilterOpSettingsWidget : public KisPaintOpOptionsWidget {
+class KisFilterOpSettingsWidget : public KisPaintOpOptionsWidget
+{
 
     Q_OBJECT
 

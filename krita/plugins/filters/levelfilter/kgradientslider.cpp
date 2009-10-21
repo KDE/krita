@@ -150,10 +150,10 @@ void KGradientSlider::mousePressEvent(QMouseEvent * e)
             distance = abs((int)x - m_gammaCursor);
             closest_cursor = GammaCursor;
         } else if (abs(gammaDistance) == distance) {
-            if ( (closest_cursor == BlackCursor) && (gammaDistance > 0) ) {
+            if ((closest_cursor == BlackCursor) && (gammaDistance > 0)) {
                 distance = abs(gammaDistance);
                 closest_cursor = GammaCursor;
-            } else if ( (closest_cursor == WhiteCursor) && (gammaDistance < 0) ) {
+            } else if ((closest_cursor == WhiteCursor) && (gammaDistance < 0)) {
                 distance = abs(gammaDistance);
                 closest_cursor = GammaCursor;
             }
@@ -190,14 +190,14 @@ void KGradientSlider::mousePressEvent(QMouseEvent * e)
         m_leftmost = m_blackCursor;
         m_rightmost = m_whiteCursor;
         {
-          double delta = (double)(m_whiteCursor - m_blackCursor) / 2.0;
-          double mid = (double)m_blackCursor + delta;
-          double tmp = (x - mid) / delta;
-          m_gamma = 1.0 / pow(10, tmp);
+            double delta = (double)(m_whiteCursor - m_blackCursor) / 2.0;
+            double mid = (double)m_blackCursor + delta;
+            double tmp = (x - mid) / delta;
+            m_gamma = 1.0 / pow(10, tmp);
         }
         break;
     default:
-      break;
+        break;
     }
     update();
 }

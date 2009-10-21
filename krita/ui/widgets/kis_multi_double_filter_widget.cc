@@ -93,7 +93,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid,
 
 }
 
-void KisMultiDoubleFilterWidget::setConfiguration( const KisPropertiesConfiguration * config)
+void KisMultiDoubleFilterWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     if (!config) return;
 

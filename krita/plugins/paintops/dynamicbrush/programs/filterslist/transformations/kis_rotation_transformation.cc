@@ -60,7 +60,7 @@ void KisRotationTransformation::fromXML(const QDomElement& rootElt)
     QDomNode n = rootElt.firstChild();
     while (!n.isNull()) {
         QDomElement e = n.toElement();
-        if ( !e.isNull()) {
+        if (!e.isNull()) {
             if (e.tagName() == "sensor") {
                 m_transfoParameter = KisDynamicSensor::createFromXML(e);
             }

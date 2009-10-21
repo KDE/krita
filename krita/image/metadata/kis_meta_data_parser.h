@@ -23,18 +23,20 @@
 
 #include <QString>
 
-namespace KisMetaData {
-  class TypeInfo;
-  class Value;
-  /**
-   * This class allow to parse from a string and return a value.
-   */
-  class KRITAIMAGE_EXPORT Parser {
-      friend class TypeInfo;
-    public:
-      virtual ~Parser();
-      virtual Value parse( const QString& ) const = 0;
-  };
+namespace KisMetaData
+{
+class TypeInfo;
+class Value;
+/**
+ * This class allow to parse from a string and return a value.
+ */
+class KRITAIMAGE_EXPORT Parser
+{
+    friend class TypeInfo;
+public:
+    virtual ~Parser();
+    virtual Value parse(const QString&) const = 0;
+};
 }
 
 #endif

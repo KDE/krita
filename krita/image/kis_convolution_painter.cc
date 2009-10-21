@@ -77,31 +77,27 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelecti
 
 void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, KisConvolutionBorderOp borderOp)
 {
-    
+
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {
-    case BORDER_REPEAT:
-    {
+    case BORDER_REPEAT: {
         QRect dataRect = src->exactBounds();
         applyMatrixImpl<RepeatIteratorFactory>(kernel, src, srcPos, dstPos, areaSize, dataRect);
     }
-        return;
-    case BORDER_DEFAULT_FILL :
-    {
+    return;
+    case BORDER_DEFAULT_FILL : {
         applyMatrixImpl<StandardIteratorFactory>(kernel, src, srcPos, dstPos, areaSize, QRect());
         return;
     }
-    case BORDER_WRAP:
-    {
+    case BORDER_WRAP: {
         qFatal("Not implemented");
     }
     case BORDER_AVOID:
-    default :
-    {
+    default : {
         // TODO should probably be computed from the exactBounds...
         qint32 kw = kernel->width();
         qint32 kh = kernel->height();
-        QPoint tr( (kw - 1 ) / 2, (kh - 1 ) / 2 );
+        QPoint tr((kw - 1) / 2, (kh - 1) / 2);
         srcPos += tr;
         dstPos += tr;
         areaSize -= QSize(kw - 1, kh - 1);

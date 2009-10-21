@@ -35,22 +35,22 @@ void fourn(float data[], unsigned long nn[], int ndim, int isign)
     unsigned long ibit, k1, k2, n, nprev, nrem, ntot;
     float tempi, tempr;
     double theta, wi, wpi, wpr, wr, wtemp; //Double precision for trigonometric recurrences.
-    for (ntot = 1, idim = 1;idim <= ndim;idim++) { //Compute total number of complex values.
+    for (ntot = 1, idim = 1; idim <= ndim; idim++) { //Compute total number of complex values.
         ntot *= nn[idim];
     }
     nprev = 1;
 
-    for (idim = ndim;idim >= 1;idim--) { //Main loop over the dimensions.
+    for (idim = ndim; idim >= 1; idim--) { //Main loop over the dimensions.
         n = nn[idim];
         nrem = ntot / (n * nprev);
         ip1 = nprev << 1;
         ip2 = ip1 * n;
         ip3 = ip2 * nrem;
         i2rev = 1;
-        for (i2 = 1;i2 <= ip2;i2 += ip1) { //This is the bit-reversal section of the routine.
+        for (i2 = 1; i2 <= ip2; i2 += ip1) { //This is the bit-reversal section of the routine.
             if (i2 < i2rev) {
-                for (i1 = i2;i1 <= i2 + ip1 - 2;i1 += 2) {
-                    for (i3 = i1;i3 <= ip3;i3 += ip2) {
+                for (i1 = i2; i1 <= i2 + ip1 - 2; i1 += 2) {
+                    for (i3 = i1; i3 <= ip3; i3 += ip2) {
                         i3rev = i2rev + i3 - i2;
                         SWAP(data[i3], data[i3rev]);
                         SWAP(data[i3+1], data[i3rev+1]);
@@ -74,9 +74,9 @@ void fourn(float data[], unsigned long nn[], int ndim, int isign)
             wpi = sin(theta);
             wr = 1.0;
             wi = 0.0;
-            for (i3 = 1;i3 <= ifp1;i3 += ip1) {
-                for (i1 = i3;i1 <= i3 + ip1 - 2;i1 += 2) {
-                    for (i2 = i1;i2 <= ip3;i2 += ifp2) {
+            for (i3 = 1; i3 <= ifp1; i3 += ip1) {
+                for (i1 = i3; i1 <= i3 + ip1 - 2; i1 += 2) {
+                    for (i2 = i1; i2 <= ip3; i2 += ifp2) {
                         k1 = i2; //Danielson-Lanczos formula:
                         k2 = k1 + ifp1;
 
@@ -118,7 +118,7 @@ void compute_fft(zomplex *array, int width, int height)
     int countim = 0;
     int dummy;
     float *data = (float *) malloc((2 * width * height + 1) * sizeof(float));
-    for (int p = 0;p < ((width)*(height));p++) {
+    for (int p = 0; p < ((width)*(height)); p++) {
         data[(2*p)+1] = (*(array + p)).re;
         data[(2*p)+2] = (*(array + p)).im;
         if (
@@ -139,7 +139,7 @@ void compute_fft(zomplex *array, int width, int height)
     fourn(data, nn, 2, -1);
     countre = 0;
     countim = 0;
-    for (int p = 0;p < ((width)*(height));p++) {
+    for (int p = 0; p < ((width)*(height)); p++) {
         (*(array + p)).re = data[(2*p)+1];
         (*(array + p)).im = data[(2*p)+2];
         if (
@@ -160,7 +160,7 @@ void compute_fft(zomplex *array, int width, int height)
 void compute_inverse_fft(zomplex *array, int width, int height)
 {
     float *data = (float *) malloc((2 * width * height + 1) * sizeof(float));
-    for (int p = 0;p < ((width)*(height));p++) {
+    for (int p = 0; p < ((width)*(height)); p++) {
         data[(2*p)+1] = (*(array + p)).re;
         data[(2*p)+2] = (*(array + p)).im;
     }
@@ -171,7 +171,7 @@ void compute_inverse_fft(zomplex *array, int width, int height)
 
     fourn(data, nn, 2, 1);
 
-    for (int p = 0;p < ((width)*(height));p++) {
+    for (int p = 0; p < ((width)*(height)); p++) {
         (*(array + p)).re = data[(2*p)+1];
         (*(array + p)).im = data[(2*p)+2];
     }

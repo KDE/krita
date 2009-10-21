@@ -28,7 +28,7 @@ class TestAction : public KisRecordedAction
 public:
 
     TestAction(const QString & id, const QString & name, const KisNodeQueryPath& path)
-            : KisRecordedAction(id, name, path ) {
+            : KisRecordedAction(id, name, path) {
     }
 
     void play(KisNodeSP node, const KisPlayInfo&) const {

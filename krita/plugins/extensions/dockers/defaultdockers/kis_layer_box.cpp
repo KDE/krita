@@ -73,9 +73,9 @@
 #include "ui_wdglayerbox.h"
 
 KisLayerBox::KisLayerBox()
-    : QDockWidget(i18n("Layers"))
-    , m_canvas(0)
-    , m_wdgLayerBox(new Ui_WdgLayerBox)
+        : QDockWidget(i18n("Layers"))
+        , m_canvas(0)
+        , m_wdgLayerBox(new Ui_WdgLayerBox)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
@@ -184,7 +184,7 @@ bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
     return QDockWidget::eventFilter(o, e);
 }
 
-void KisLayerBox::setCanvas( KoCanvasBase * canvas )
+void KisLayerBox::setCanvas(KoCanvasBase * canvas)
 {
     disconnect();
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -399,10 +399,9 @@ void KisLayerBox::slotRmClicked()
         l.append(m_wdgLayerBox->listLayers->currentIndex());
     }
 
-    for (int i = 0, n = l.count(); i < n; ++i)
-    {
+    for (int i = 0, n = l.count(); i < n; ++i) {
         KisNodeSP node = m_nodeModel->nodeFromIndex(l.at(i));
-        m_nodeManager->removeNode( node );
+        m_nodeManager->removeNode(node);
     }
     m_nodeManager->updateGUI();
 }

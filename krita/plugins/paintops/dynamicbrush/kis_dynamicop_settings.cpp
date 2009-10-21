@@ -35,20 +35,20 @@
 #include "kis_bristle_shape.h"
 
 KisDynamicOpSettings::KisDynamicOpSettings(KisDynamicOpSettingsWidget* widget, KisBookmarkedConfigurationsModel* shapeBookmarksManager, KisBookmarkedConfigurationsModel* coloringBookmarksManager)
-    : KisPaintOpSettings( widget )
+        : KisPaintOpSettings(widget)
 {
-    Q_ASSERT( widget );
+    Q_ASSERT(widget);
     m_options = widget;
-    m_options->writeConfiguration( this );
+    m_options->writeConfiguration(this);
     m_shapeBookmarksModel = shapeBookmarksManager;
     m_coloringBookmarksModel = coloringBookmarksManager;
 
     int s = m_options->m_uiOptions->comboBoxShapePrograms->currentIndex();
-    if( s < 0 ) s = 0;
+    if (s < 0) s = 0;
     m_options->m_uiOptions->comboBoxShapePrograms->setModel(m_shapeBookmarksModel);
     m_options->m_uiOptions->comboBoxShapePrograms->setCurrentIndex(s);
     int c = m_options->m_uiOptions->comboBoxColoringPrograms->currentIndex();
-    if( c < 0 ) c = 0;
+    if (c < 0) c = 0;
     m_options->m_uiOptions->comboBoxColoringPrograms->setModel(m_coloringBookmarksModel);
     m_options->m_uiOptions->comboBoxColoringPrograms->setCurrentIndex(c);
 }
@@ -69,7 +69,7 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
     QModelIndex shapeModelIndex = m_shapeBookmarksModel->index(
                                       m_options->m_uiOptions->comboBoxShapePrograms->currentIndex(), 0);
     KisDynamicShapeProgram* shapeProgram =
-                    static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration(shapeModelIndex));
+        static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration(shapeModelIndex));
     Q_ASSERT(shapeProgram);
     current->setShapeProgram(shapeProgram);
     // Init coloring program
@@ -118,27 +118,25 @@ void KisDynamicOpSettings::fromXML(const QDomElement& elt)
 
     m_options->m_uiOptions->comboBoxShapes->setCurrentIndex(elt.attribute("shapeType", "0").toInt());
     m_options->m_uiOptions->comboBoxColoring->setCurrentIndex(elt.attribute("coloringType", "0").toInt());
-    #if 0
+#if 0
     // The following is not good, nothing prove that the programs contained in elt are the same as in the registry
     QDomNode nShape = elt.firstChildElement("Shape");
-    if(nShape.isElement())
-    {
-      QDomElement eShape = nShape.toElement();
-      QString name = eShape.attribute("name");
-      m_options->m_uiOptions->comboBoxShapePrograms->setCurrentIndex(
-        m_shapeBookmarksModel->indexFor(name).row() );
-      dbgPlugins << name << " " << m_shapeBookmarksModel->indexFor(name).row();
+    if (nShape.isElement()) {
+        QDomElement eShape = nShape.toElement();
+        QString name = eShape.attribute("name");
+        m_options->m_uiOptions->comboBoxShapePrograms->setCurrentIndex(
+            m_shapeBookmarksModel->indexFor(name).row());
+        dbgPlugins << name << " " << m_shapeBookmarksModel->indexFor(name).row();
     }
     abort();
     QDomNode nColoring = elt.firstChildElement("Coloring");
-    if(nColoring.isElement())
-    {
-      QDomElement eColoring = nColoring.toElement();
-      QString name = eColoring.attribute("name");
-      m_options->m_uiOptions->comboBoxColoringPrograms->setCurrentIndex(
-        m_coloringBookmarksModel->indexFor(name).row() );
+    if (nColoring.isElement()) {
+        QDomElement eColoring = nColoring.toElement();
+        QString name = eColoring.attribute("name");
+        m_options->m_uiOptions->comboBoxColoringPrograms->setCurrentIndex(
+            m_coloringBookmarksModel->indexFor(name).row());
     }
-    #endif
+#endif
     qFatal("Unimplemented");
 }
 

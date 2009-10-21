@@ -48,11 +48,11 @@ public:
      * @param compositeOp the new layer composite op
      * @param name the new layer name
      */
-    KisLayerPropsCommand( KisLayerSP layer,
-                           qint32 oldOpacity, qint32 newOpactiy,
-                           const QString&  oldCompositeOp, const QString& newCompositeOp,
-                           const QString& oldName, const QString& newName,
-                           const QBitArray oldChannelFlags, const QBitArray newChannelFlags );
+    KisLayerPropsCommand(KisLayerSP layer,
+                         qint32 oldOpacity, qint32 newOpactiy,
+                         const QString&  oldCompositeOp, const QString& newCompositeOp,
+                         const QString& oldName, const QString& newName,
+                         const QBitArray oldChannelFlags, const QBitArray newChannelFlags);
 
     virtual ~KisLayerPropsCommand();
     virtual void redo();

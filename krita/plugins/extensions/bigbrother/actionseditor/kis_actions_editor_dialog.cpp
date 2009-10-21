@@ -23,12 +23,12 @@
 #include <klocale.h>
 
 KisActionsEditorDialog::KisActionsEditorDialog(QWidget* parent) : KDialog(parent),
-    m_actionsEditor(new KisActionsEditor(this))
+        m_actionsEditor(new KisActionsEditor(this))
 {
     setMainWidget(m_actionsEditor);
-    setButtons( Cancel | Ok );
-    setButtonText( Ok, i18n("Save macro") );
-    setButtonText( Cancel, i18n("Discard changes") );
+    setButtons(Cancel | Ok);
+    setButtonText(Ok, i18n("Save macro"));
+    setButtonText(Cancel, i18n("Discard changes"));
 }
 
 KisActionsEditorDialog::~KisActionsEditorDialog()

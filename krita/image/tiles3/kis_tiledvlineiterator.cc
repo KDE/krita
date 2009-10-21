@@ -22,9 +22,9 @@
 #include "kis_debug.h"
 
 KisTiledVLineIterator::KisTiledVLineIterator(KisTiledDataManager *dataManager,
-                                             qint32 x,  qint32 y,
-                                             qint32 h, bool writable) :
-    KisTiledIterator(dataManager)
+        qint32 x,  qint32 y,
+        qint32 h, bool writable) :
+        KisTiledIterator(dataManager)
 {
     m_lineStride = m_pixelSize * KisTileData::WIDTH;
     m_writable = writable;
@@ -36,9 +36,9 @@ KisTiledVLineIterator::KisTiledVLineIterator(KisTiledDataManager *dataManager,
     m_bottom = y + h - 1;
 
     m_isDoneFlag = !h;
-    if(m_top > m_bottom) {
-	m_isDoneFlag = true;
-	return;
+    if (m_top > m_bottom) {
+        m_isDoneFlag = true;
+        return;
     }
 
     m_topRow = yToRow(m_top);
@@ -52,7 +52,7 @@ KisTiledVLineIterator::KisTiledVLineIterator(KisTiledDataManager *dataManager,
 }
 
 KisTiledVLineIterator::KisTiledVLineIterator(const KisTiledVLineIterator& rhs)
-    : KisTiledIterator(rhs)
+        : KisTiledIterator(rhs)
 {
     if (this != &rhs) {
         m_top = rhs.m_top;
@@ -63,8 +63,8 @@ KisTiledVLineIterator::KisTiledVLineIterator(const KisTiledVLineIterator& rhs)
         m_yInTile = rhs.m_yInTile;
         m_topInTile = rhs.m_topInTile;
         m_bottomInTile = rhs.m_bottomInTile;
-	m_isDoneFlag = rhs.m_isDoneFlag;
-	m_lineStride = m_pixelSize * KisTileData::WIDTH;
+        m_isDoneFlag = rhs.m_isDoneFlag;
+        m_lineStride = m_pixelSize * KisTileData::WIDTH;
     }
 }
 
@@ -81,8 +81,8 @@ KisTiledVLineIterator& KisTiledVLineIterator::operator=(const KisTiledVLineItera
         m_yInTile = rhs.m_yInTile;
         m_topInTile = rhs.m_topInTile;
         m_bottomInTile = rhs.m_bottomInTile;
-	m_isDoneFlag = rhs.m_isDoneFlag;
-	m_lineStride = m_pixelSize * KisTileData::WIDTH;
+        m_isDoneFlag = rhs.m_isDoneFlag;
+        m_lineStride = m_pixelSize * KisTileData::WIDTH;
     }
     return *this;
 }
@@ -110,16 +110,15 @@ void KisTiledVLineIterator::switchToTile(qint32 row, qint32 yInTile)
 KisTiledVLineIterator & KisTiledVLineIterator::operator ++ ()
 {
     // We won't increment m_y here as integer can overflow here
-    if(m_y >= m_bottom) {
-	m_isDoneFlag = true;
-    }
-    else {
-	m_y++;
-	if(++m_yInTile <= m_bottomInTile)
-	    m_offset += m_lineStride;
-	else
-	    // Switching to the beginning of the next tile
-	    switchToTile(m_row+1, 0);
+    if (m_y >= m_bottom) {
+        m_isDoneFlag = true;
+    } else {
+        m_y++;
+        if (++m_yInTile <= m_bottomInTile)
+            m_offset += m_lineStride;
+        else
+            // Switching to the beginning of the next tile
+            switchToTile(m_row + 1, 0);
     }
 
     return *this;
@@ -132,12 +131,11 @@ void KisTiledVLineIterator::nextCol()
     m_y = m_top;
     m_x++;
 
-    if(++m_xInTile < KisTileData::WIDTH) {
-	/* do nothing, usual case */
-    }
-    else {
-	m_col++;
-	m_xInTile = 0;
+    if (++m_xInTile < KisTileData::WIDTH) {
+        /* do nothing, usual case */
+    } else {
+        m_col++;
+        m_xInTile = 0;
     }
 
     switchToTile(m_topRow, topInTopmostTile);

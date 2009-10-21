@@ -91,7 +91,7 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
     int vFade = (halfHeight * strength) / 100;
 
     KisMaskGenerator* kas;
-    dbgKrita << width <<"" << height <<"" << hFade <<"" << vFade;
+    dbgKrita << width << "" << height << "" << hFade << "" << vFade;
     switch (shape) {
     case 1:
         kas = new KisRectangleMaskGenerator(width, height , hFade, vFade);

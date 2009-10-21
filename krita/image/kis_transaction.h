@@ -26,7 +26,7 @@
 #include <krita_export.h>
 
 /**
- * A tile based undo command. 
+ * A tile based undo command.
  *
  * Ordinary QUndoCommand subclasses store parameters and apply the action in
  * the redo() command, however, Krita doesn't work like this. Undo replaces

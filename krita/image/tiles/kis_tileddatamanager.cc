@@ -36,13 +36,11 @@ class KisTileDataWrapper
     qint32 m_offset;
 public:
     KisTileDataWrapper(KisTile* tile, qint32 offset)
-        : m_tile(tile), m_offset(offset)
-    {
+            : m_tile(tile), m_offset(offset) {
         m_tile->addReader();
     }
 
-    virtual ~KisTileDataWrapper()
-    {
+    virtual ~KisTileDataWrapper() {
         m_tile->removeReader();
     }
 

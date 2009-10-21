@@ -24,8 +24,7 @@ class KisSprayOpOptionsWidget: public QWidget, public Ui::WdgSprayOptions
 {
 public:
     KisSprayOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+            : QWidget(parent) {
         setupUi(this);
     }
 };
@@ -35,20 +34,20 @@ KisSprayOpOption::KisSprayOpOption()
 {
     m_checkable = false;
     m_options = new KisSprayOpOptionsWidget();
-    connect(m_options->diameterSpinBox,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
-    connect(m_options->coverageSpin,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->amountSpin,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->spacingSpin,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->scaleSpin,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->particlesSpinBox,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
-    connect(m_options->densityChBox,SIGNAL(stateChanged(int)),SIGNAL( sigSettingChanged()));
+    connect(m_options->diameterSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->coverageSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->amountSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->spacingSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->scaleSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->particlesSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->densityChBox, SIGNAL(stateChanged(int)), SIGNAL(sigSettingChanged()));
 
     setConfigurationPage(m_options);
 }
 
 KisSprayOpOption::~KisSprayOpOption()
 {
-    // delete m_options; 
+    // delete m_options;
 }
 
 int KisSprayOpOption::diameter() const
@@ -100,22 +99,22 @@ bool KisSprayOpOption::useDensity() const
 
 void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty( "Spray/diameter", diameter() );
-    setting->setProperty( "Spray/coverage", coverage() );
-    setting->setProperty( "Spray/amount", amount() );
-    setting->setProperty( "Spray/spacing", spacing() );
-    setting->setProperty( "Spray/jitterSize", jitterSize() );
-    setting->setProperty( "Spray/jitterMovement", jitterMovement() );
+    setting->setProperty("Spray/diameter", diameter());
+    setting->setProperty("Spray/coverage", coverage());
+    setting->setProperty("Spray/amount", amount());
+    setting->setProperty("Spray/spacing", spacing());
+    setting->setProperty("Spray/jitterSize", jitterSize());
+    setting->setProperty("Spray/jitterMovement", jitterMovement());
 }
 
 void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->diameterSpinBox->setValue( setting->getInt("Spray/diameter") );
-    m_options->coverageSpin->setValue( setting->getDouble("Spray/coverage") );
-    m_options->amountSpin->setValue( setting->getDouble("Spray/amount") );
-    m_options->spacingSpin->setValue( setting->getDouble("Spray/spacing") );
-    m_options->jitterSizeBox->setChecked( setting->getBool("Spray/jitterSize") );
-    m_options->jitterMoveBox->setChecked( setting->getBool("Spray/jitterMovement") );
+    m_options->diameterSpinBox->setValue(setting->getInt("Spray/diameter"));
+    m_options->coverageSpin->setValue(setting->getDouble("Spray/coverage"));
+    m_options->amountSpin->setValue(setting->getDouble("Spray/amount"));
+    m_options->spacingSpin->setValue(setting->getDouble("Spray/spacing"));
+    m_options->jitterSizeBox->setChecked(setting->getBool("Spray/jitterSize"));
+    m_options->jitterMoveBox->setChecked(setting->getBool("Spray/jitterMovement"));
 }
 
 

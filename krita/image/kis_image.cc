@@ -145,7 +145,7 @@ KisImage::KisImage(const KisImage& rhs)
         m_d->deselectedGlobalSelection = 0;
         setRootLayer(static_cast<KisGroupLayer*>(rhs.m_d->rootLayer->clone().data()));
         m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied
-        m_d->nserver = new KisNameServer( *rhs.m_d->nserver );
+        m_d->nserver = new KisNameServer(*rhs.m_d->nserver);
         m_d->startProjection = rhs.m_d->startProjection;
         Q_CHECK_PTR(m_d->nserver);
 
@@ -212,14 +212,14 @@ void KisImage::nodeHasBeenRemoved(KisNode *parent, int index)
     }
 }
 
-void KisImage::aboutToMoveNode(KisNode * parent, int oldIndex, int newIndex)
+void KisImage::aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex)
 {
     Q_UNUSED(parent);
     Q_UNUSED(oldIndex);
     Q_UNUSED(newIndex);
 }
 
-void KisImage::nodeHasBeenMoved(KisNode * parent, int oldIndex, int newIndex)
+void KisImage::nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex)
 {
     Q_UNUSED(oldIndex);
 
@@ -295,7 +295,7 @@ void KisImage::rollBackLayerName()
     m_d->nserver->rollback();
 }
 
-void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace)
+void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const KoColorSpace *colorSpace)
 {
     if (colorSpace == 0) {
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -419,7 +419,7 @@ void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
 void KisImage::resizeWithOffset(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset)
 {
     if (w == width() && h == height() && xOffset == 0 && yOffset == 0)
-      return;
+        return;
 
     lock();
     if (undo()) {
@@ -589,7 +589,7 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
     }
 }
 
-void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+void KisImage::convertTo(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
 {
     if (*m_d->colorSpace == *dstColorSpace) {
         return;
@@ -612,8 +612,7 @@ void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTr
         m_d->adapter->addCommand(new KisImageConvertTypeCommand(KisImageWSP(this), oldCs, dstColorSpace));
         m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
         m_d->adapter->endMacro();
-    }
-    else {
+    } else {
         setColorSpace(dstColorSpace);
     }
 
@@ -626,19 +625,18 @@ const KoColorProfile * KisImage::profile() const
     return colorSpace()->profile();
 }
 
-void KisImage::setProfile(const KoColorProfile * profile)
+void KisImage::setProfile(const KoColorProfile *profile)
 {
     if (profile == 0) return;
 
-    const KoColorSpace * dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->id(),
-                                 profile);
+    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->id(), profile);
     if (dstCs) {
 
         lock();
 
-        const KoColorSpace * oldCs = colorSpace();
+        const KoColorSpace *oldCs = colorSpace();
         setColorSpace(dstCs);
-        emit(sigProfileChanged(const_cast<KoColorProfile *>(profile)));
+        emit(sigProfileChanged(const_cast<KoColorProfile*>(profile)));
 
         KisChangeProfileVisitor visitor(oldCs, dstCs);
         m_d->rootLayer->accept(visitor);
@@ -697,7 +695,7 @@ QPointF KisImage::pixelToDocument(const QPoint &pixelCoord) const
 
 QRectF KisImage::pixelToDocument(const QRectF &pixelCoord) const
 {
-    return QRectF( pixelToDocument( pixelCoord.topLeft() ), pixelToDocument( pixelCoord.bottomRight() ) );
+    return QRectF(pixelToDocument(pixelCoord.topLeft()), pixelToDocument(pixelCoord.bottomRight()));
 }
 
 qint32 KisImage::width() const
@@ -821,13 +819,13 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
     strategy->merge(newLayer->metaData(), srcs, scores);
 
     KisNodeSP parent = layer->parent(); // parent is set to null when the layer is removed from the node
-    dbgImage << ppVar( parent );
+    dbgImage << ppVar(parent);
 
     // XXX: merge the masks!
 
-    undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, parent, layer ));
-    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer->prevSibling() ));
-    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer ));
+    undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, parent, layer));
+    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer->prevSibling()));
+    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer));
 
     undoAdapter()->endMacro();
 
@@ -995,16 +993,16 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, c
 #ifdef __BIG_ENDIAN__
     uchar * data = image.bits();
     for (int i = 0; i < image.width() * image.height(); ++i) {
-      uchar r, g, b, a;
-      a = data[0];
-      b = data[1];
-      g = data[2];
-      r = data[3];
-      data[0] = r;
-      data[1] = g;
-      data[2] = b;
-      data[3] = a;
-      data += 4;
+        uchar r, g, b, a;
+        a = data[0];
+        b = data[1];
+        g = data[2];
+        r = data[3];
+        data[0] = r;
+        data[1] = g;
+        data[2] = b;
+        data[3] = a;
+        data += 4;
     }
 #endif
 

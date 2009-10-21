@@ -157,9 +157,9 @@ public:
 
 class KRITAIMAGE_EXPORT KisFilterStrategyRegistry : public KoGenericRegistry<KisFilterStrategy *>
 {
-    
+
 public:
-    
+
     static KisFilterStrategyRegistry* instance();
 
 private:

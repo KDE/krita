@@ -46,8 +46,8 @@ public:
 };
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
-    : QWidget(parent)
-    , m_d(new Private())
+        : QWidget(parent)
+        , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
     KConfigGroup group(KGlobal::config(), "GUI");
@@ -66,13 +66,13 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
     m_d->uiWdgPaintOpPresets.bnSave->setEnabled(false);
 
     m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);
-    m_d->layout->setSizeConstraint( QLayout::SetFixedSize );
+    m_d->layout->setSizeConstraint(QLayout::SetFixedSize);
 
     m_d->settingsWidget = 0;
-    setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+    setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
-    connect(m_d->uiWdgPaintOpPresets.bnSave, SIGNAL( clicked()),
-            this, SIGNAL( savePresetClicked()));
+    connect(m_d->uiWdgPaintOpPresets.bnSave, SIGNAL(clicked()),
+            this, SIGNAL(savePresetClicked()));
 }
 
 
@@ -99,7 +99,7 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         widget->setFont(m_d->smallFont);
 
         m_d->settingsWidget = widget;
-        m_d->settingsWidget->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+        m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
         m_d->layout->addWidget(widget);
 
         m_d->layout->update();

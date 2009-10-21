@@ -39,16 +39,16 @@ KisGeneratorLayer::KisGeneratorLayer(KisImageWSP img,
                                      const QString &name,
                                      KisFilterConfiguration *kfc,
                                      KisSelectionSP selection)
-    : KisSelectionBasedLayer(img, name, selection),
-      m_d(new Private())
+        : KisSelectionBasedLayer(img, name, selection),
+        m_d(new Private())
 {
     m_d->filterConfig = kfc;
     update();
 }
 
 KisGeneratorLayer::KisGeneratorLayer(const KisGeneratorLayer& rhs)
-    : KisSelectionBasedLayer(rhs),
-      m_d(new Private())
+        : KisSelectionBasedLayer(rhs),
+        m_d(new Private())
 {
     m_d->filterConfig = new KisFilterConfiguration(*rhs.m_d->filterConfig);
 }

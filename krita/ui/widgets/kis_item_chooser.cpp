@@ -38,37 +38,36 @@
 class KisPresetDelegate : public QAbstractItemDelegate
 {
 public:
-    KisPresetDelegate( QObject * parent = 0 ) : QAbstractItemDelegate( parent ) {}
+    KisPresetDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
     virtual ~KisPresetDelegate() {}
     /// reimplemented
-    virtual void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const;
+    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
     /// reimplemented
-    QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & ) const
-    {
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
         return option.decorationSize;
     }
 };
 
-void KisPresetDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
-    if( ! index.isValid() )
+    if (! index.isValid())
         return;
 
-    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>( index.internalPointer() );
-    
+    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
+
     if (option.state & QStyle::State_Selected) {
-        painter->setPen( QPen(option.palette.highlight(), 2.0) );
-        painter->fillRect( option.rect, option.palette.highlight() );
+        painter->setPen(QPen(option.palette.highlight(), 2.0));
+        painter->fillRect(option.rect, option.palette.highlight());
     }
 
-    painter->setPen( Qt::black );
+    painter->setPen(Qt::black);
     QString paintop = preset->settings()->getString("paintop");
-    painter->drawText( option.rect.x() + 5, option.rect.y() + option.rect.height() - 5, paintop );
+    painter->drawText(option.rect.x() + 5, option.rect.y() + option.rect.height() - 5, paintop);
 
     QRect previewRect = option.rect.adjusted(200, 0, -20, 0);
-    QImage preview = preset->settings()->sampleStroke( previewRect.size() );
-    painter->drawImage( previewRect.x(), previewRect.y(),
-                        preview.scaled( previewRect.size(), Qt::KeepAspectRatio) );
+    QImage preview = preset->settings()->sampleStroke(previewRect.size());
+    painter->drawImage(previewRect.x(), previewRect.y(),
+                       preview.scaled(previewRect.size(), Qt::KeepAspectRatio));
 }
 
 KisItemChooser::KisItemChooser(QWidget *parent, const char *name)
@@ -79,10 +78,10 @@ KisItemChooser::KisItemChooser(QWidget *parent, const char *name)
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
     m_chooser = new KoResourceItemChooser(adapter, this);
-    m_chooser->setColumnCount( 1 );
-    m_chooser->setRowHeight( 60 );
+    m_chooser->setColumnCount(1);
+    m_chooser->setRowHeight(60);
     m_chooser->setItemDelegate(new KisPresetDelegate(this));
-    layout->addWidget( m_chooser );
+    layout->addWidget(m_chooser);
 
 }
 

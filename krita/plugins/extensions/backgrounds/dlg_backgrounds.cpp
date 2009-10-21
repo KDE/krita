@@ -53,8 +53,7 @@ KisBackgroundSP DlgBackgrounds::background()
     QString file = item->data(Qt::UserRole + 1).value<QString>();
     if (file.isEmpty()) {
         return 0;
-    }
-    else {
+    } else {
         QImage img = item->data(Qt::DecorationRole).value<QImage>();
         return new KisBackground(img);
     }

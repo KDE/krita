@@ -26,20 +26,21 @@ class Extension;
 /**
  * XXX
  */
-class ExtensionsManager {
+class ExtensionsManager
+{
 
     ExtensionsManager();
-    
+
     virtual ~ExtensionsManager();
-    
+
 public:
-    
+
     static ExtensionsManager* instance();
-    
+
     QList<Extension*> installedExtension();
-    
+
     bool installExtension(const KUrl& _file);
-    
+
     bool installExtension(QIODevice* _device);
 
 private:

@@ -23,7 +23,7 @@
 class DynaFilter
 {
 public:
-    DynaFilter(){
+    DynaFilter() {
         curx = 0;
         cury = 0;
         lastx = 0;
@@ -34,8 +34,7 @@ public:
         accy = 0.0;
     }
 
-    void init(qreal x, qreal y)
-    {
+    void init(qreal x, qreal y) {
         curx = x;
         cury = y;
         lastx = x;
@@ -46,8 +45,8 @@ public:
         accy = 0.0;
     }
 
-    ~DynaFilter(){}
-    
+    ~DynaFilter() {}
+
 public:
     qreal curx, cury;
     qreal velx, vely, vel;

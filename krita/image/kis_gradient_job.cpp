@@ -35,12 +35,12 @@
 #include "kis_painter.h"
 #include "kis_selection.h"
 
-KisGradientJob::KisGradientJob( const KisGradientPainter::Configuration* config,
-                                QObject* parent,
-                                KisPaintDeviceSP dev,
-                                const QRect & rc,
-                                KoUpdaterPtr updater,
-                                KisSelectionSP selection)
+KisGradientJob::KisGradientJob(const KisGradientPainter::Configuration* config,
+                               QObject* parent,
+                               KisPaintDeviceSP dev,
+                               const QRect & rc,
+                               KoUpdaterPtr updater,
+                               KisSelectionSP selection)
         : KisJob(parent, dev, rc)
         , m_config(config)
         , m_updater(updater)

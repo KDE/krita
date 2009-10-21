@@ -72,14 +72,14 @@ quint64 KisRandomGenerator::randomAt(qint64 x, qint64 y)
     quint64 n2 = (quint64(y + 7) * kya) + (d->seed * 1040097393733LL);
     n1 = permuteWhole(n1, 8759824322359LL, 13);
     n2 = permuteWhole(n2, 200560490131LL, 2707);
-    n1 = (n1 >> 32) ^ (n1 << 32);
-    n2 = (n2 >> 32) ^ (n2 << 32);
-    n1 ^= x ^ (quint64(y ^ d->seed) * kyb);
-    n2 ^= y ^ (quint64(x + 13)   * kxb);
+    n1 = (n1 >> 32) ^(n1 << 32);
+    n2 = (n2 >> 32) ^(n2 << 32);
+    n1 ^= x ^(quint64(y ^ d->seed) * kyb);
+    n2 ^= y ^(quint64(x + 13)   * kxb);
 
     // Combine salts
     quint64 v = 0;
-    for(int p = 0; p < 8; ++p)
+    for (int p = 0; p < 8; ++p)
         v |= part(n1, n2, p);
     return v;
 }

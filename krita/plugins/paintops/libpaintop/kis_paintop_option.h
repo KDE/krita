@@ -45,7 +45,9 @@ public:
     virtual ~KisPaintOpOption();
 
     QString & label() const;
-    bool isCheckable() { return m_checkable; }
+    bool isCheckable() {
+        return m_checkable;
+    }
     bool isChecked() const;
 
 public slots:

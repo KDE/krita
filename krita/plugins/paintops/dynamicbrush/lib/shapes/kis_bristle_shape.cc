@@ -67,7 +67,7 @@ struct KisPaintBrush : public KisShared {
 
 KisBristleShape::KisBristleShape(double paintbrushMinRadius, double paintbrushMaxRadius, double bristlesDensity, double bristlesMinRadius, double bristlesMaxRadius) :
         m_paintBrush(new KisPaintBrush(paintbrushMinRadius, paintbrushMaxRadius, bristlesDensity, bristlesMinRadius, bristlesMaxRadius)),
-        m_radius(0.5 * (paintbrushMinRadius + paintbrushMaxRadius)),
+        m_radius(0.5 *(paintbrushMinRadius + paintbrushMaxRadius)),
         m_angle(0.0)
 {
 }

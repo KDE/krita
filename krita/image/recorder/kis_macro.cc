@@ -64,21 +64,19 @@ void KisMacro::removeActions(const QList<KisRecordedAction*>& actions)
     qDeleteAll(actions);
 }
 
-void KisMacro::addAction(const KisRecordedAction& action, const KisRecordedAction* before )
+void KisMacro::addAction(const KisRecordedAction& action, const KisRecordedAction* before)
 {
-    if( before == 0 )
-    {
+    if (before == 0) {
         d->actions.append(action.clone());
     } else {
         d->actions.insert(d->actions.indexOf(const_cast<KisRecordedAction*>(before)), action.clone());
     }
 }
 
-void KisMacro::moveAction( const KisRecordedAction* action, const KisRecordedAction* before)
+void KisMacro::moveAction(const KisRecordedAction* action, const KisRecordedAction* before)
 {
     KisRecordedAction* _action = d->actions.takeAt(d->actions.indexOf(const_cast<KisRecordedAction*>(action)));
-    if( before == 0 )
-    {
+    if (before == 0) {
         d->actions.append(_action);
     } else {
         d->actions.insert(d->actions.indexOf(const_cast<KisRecordedAction*>(before)), _action);
@@ -91,16 +89,15 @@ void KisMacro::moveAction( const KisRecordedAction* action, const KisRecordedAct
 void KisMacro::play(const KisPlayInfo& info) const
 {
     dbgImage << "Start playing macro with " << d->actions.size() << " actions";
-    if ( info.undoAdapter() ) {
+    if (info.undoAdapter()) {
         info.undoAdapter() ->beginMacro(i18n("Play macro"));
     }
 
 
     for (QList<KisRecordedAction*>::iterator it = d->actions.begin(); it != d->actions.end(); ++it) {
-        if ( *it ) {
+        if (*it) {
             QList<KisNodeSP> nodes = (*it)->nodeQueryPath().queryNodes(info.image(), info.currentNode());
-            foreach(const KisNodeSP node, nodes)
-            {
+            foreach(const KisNodeSP node, nodes) {
                 dbgImage << "Play action : " << (*it)->name();
                 (*it)->play(node, info);
             }
@@ -108,7 +105,7 @@ void KisMacro::play(const KisPlayInfo& info) const
         QApplication::processEvents();
     }
 
-    if (info.undoAdapter() ) {
+    if (info.undoAdapter()) {
         info.undoAdapter() ->endMacro();
     }
 }

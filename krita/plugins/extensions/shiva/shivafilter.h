@@ -20,26 +20,28 @@
 
 #include "filter/kis_filter.h"
 
-namespace OpenShiva {
-  class Source;
+namespace OpenShiva
+{
+class Source;
 };
 
-class ShivaFilter : public KisFilter {
-  public:
-    ShivaFilter( OpenShiva::Source* source );
+class ShivaFilter : public KisFilter
+{
+public:
+    ShivaFilter(OpenShiva::Source* source);
     virtual ~ShivaFilter();
 
     using KisFilter::process;
-    
+
     virtual void process(KisConstProcessingInformation src,
                          KisProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater
                         ) const;
-    
+
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const;
-  private:
+private:
     OpenShiva::Source* m_source;
 };
 

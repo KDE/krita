@@ -22,8 +22,9 @@
 
 #include "KoColorSpaceMaths.h"
 
-class KoCtlAccumulator {
-  public:
+class KoCtlAccumulator
+{
+public:
     virtual ~KoCtlAccumulator();
     virtual void mix(const quint8* _pixel, double _weight) = 0;
     virtual void reset() = 0;
@@ -32,49 +33,46 @@ class KoCtlAccumulator {
 };
 
 template<typename _type_>
-class KoCtlAccumulatorImpl : public KoCtlAccumulator {
-  public:
-    KoCtlAccumulatorImpl(int _pos) : m_pos(_pos)
-    {}
+class KoCtlAccumulatorImpl : public KoCtlAccumulator
+{
+public:
+    KoCtlAccumulatorImpl(int _pos) : m_pos(_pos) {}
     virtual ~KoCtlAccumulatorImpl() {}
-    inline const _type_* ptr( const quint8* _pixel)
-    {
-      return reinterpret_cast<const _type_*>(_pixel + m_pos);
+    inline const _type_* ptr(const quint8* _pixel) {
+        return reinterpret_cast<const _type_*>(_pixel + m_pos);
     }
-    inline _type_* ptr( quint8* _pixel)
-    {
-      return reinterpret_cast<_type_*>(_pixel + m_pos);
+    inline _type_* ptr(quint8* _pixel) {
+        return reinterpret_cast<_type_*>(_pixel + m_pos);
     }
-    virtual void mix(const quint8* _pixel, double _weight)
-    {
-      m_value += *ptr(_pixel) * _weight;
+    virtual void mix(const quint8* _pixel, double _weight) {
+        m_value += *ptr(_pixel) * _weight;
     }
-    virtual void reset() { m_value = 0; }
-    virtual void affect(quint8* _pixel, double _alpha)
-    {
-      typename KoColorSpaceMathsTraits< _type_ >::compositetype v = m_value * _alpha;
+    virtual void reset() {
+        m_value = 0;
+    }
+    virtual void affect(quint8* _pixel, double _alpha) {
+        typename KoColorSpaceMathsTraits< _type_ >::compositetype v = m_value * _alpha;
 
-      if(v > KoColorSpaceMathsTraits<_type_>::max) {
-        v = KoColorSpaceMathsTraits<_type_>::max;
-      }
-      if(v < KoColorSpaceMathsTraits<_type_>::min) {
-        v = KoColorSpaceMathsTraits<_type_>::min;
-      }
-      *ptr(_pixel) = v;
+        if (v > KoColorSpaceMathsTraits<_type_>::max) {
+            v = KoColorSpaceMathsTraits<_type_>::max;
+        }
+        if (v < KoColorSpaceMathsTraits<_type_>::min) {
+            v = KoColorSpaceMathsTraits<_type_>::min;
+        }
+        *ptr(_pixel) = v;
     }
-    virtual void affect(quint8* _pixel, qint32 factor, qint32 offset)
-    {
-      typename KoColorSpaceMathsTraits< _type_ >::compositetype v = m_value / factor + offset;
+    virtual void affect(quint8* _pixel, qint32 factor, qint32 offset) {
+        typename KoColorSpaceMathsTraits< _type_ >::compositetype v = m_value / factor + offset;
 
-      if(v > KoColorSpaceMathsTraits<_type_>::max) {
-        v = KoColorSpaceMathsTraits<_type_>::max;
-      }
-      if(v < KoColorSpaceMathsTraits<_type_>::min) {
-        v = KoColorSpaceMathsTraits<_type_>::min;
-      }
-      *ptr(_pixel) = v;
+        if (v > KoColorSpaceMathsTraits<_type_>::max) {
+            v = KoColorSpaceMathsTraits<_type_>::max;
+        }
+        if (v < KoColorSpaceMathsTraits<_type_>::min) {
+            v = KoColorSpaceMathsTraits<_type_>::min;
+        }
+        *ptr(_pixel) = v;
     }
-  private:
+private:
     int m_pos;
     typename KoColorSpaceMathsTraits< _type_ >::compositetype m_value;
 };

@@ -23,7 +23,8 @@
 #include <KoProgressUpdater.h>
 #include <krita_export.h>
 
-class KRITAIMAGE_EXPORT KisProgressInterface {
+class KRITAIMAGE_EXPORT KisProgressInterface
+{
 public:
 
     virtual ~KoProgressInterface();

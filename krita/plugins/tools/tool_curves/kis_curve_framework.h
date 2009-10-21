@@ -264,22 +264,22 @@ public:
     }
 
     CurveIterator operator++() {
-        ++m_position;return *this;
+        ++m_position; return *this;
     }
     CurveIterator operator++(int) {
         CurveIterator temp = *this; m_position++; return temp;
     }
     CurveIterator operator--() {
-        --m_position;return *this;
+        --m_position; return *this;
     }
     CurveIterator operator--(int) {
         CurveIterator temp = *this; m_position--; return temp;
     }
     CurveIterator operator+=(int i) {
-        m_position += i;return *this;
+        m_position += i; return *this;
     }
     CurveIterator operator-=(int i) {
-        m_position -= i;return *this;
+        m_position -= i; return *this;
     }
     CurveIterator operator=(const BaseIterator &it) {
         m_position = it; return *this;

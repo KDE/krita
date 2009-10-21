@@ -37,7 +37,9 @@ public:
 public:
     void setExternalUri(const QString &uri);
 
-    bool visit( KisNode* ) { return true; }
+    bool visit(KisNode*) {
+        return true;
+    }
 
     bool visit(KisExternalLayer *);
 
@@ -65,8 +67,8 @@ private:
     bool saveAnnotations(KisLayer* layer);
     bool saveSelection(KisNode* node);
     bool saveFilterConfiguration(KisNode* node);
-    bool saveMetaData( KisNode* node );
-    QString getLocation( KisNode* node, const QString& suffix = "" );
+    bool saveMetaData(KisNode* node);
+    QString getLocation(KisNode* node, const QString& suffix = "");
 
 private:
     KisImageWSP m_img;

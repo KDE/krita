@@ -44,11 +44,11 @@ public:
     void add(const QString &id, KisGeneratorSP item);
 
 signals:
-    
+
     void generatorAdded(QString id);
 
 private:
-    
+
     KisGeneratorRegistry();
     KisGeneratorRegistry(const KisGeneratorRegistry&);
     KisGeneratorRegistry operator=(const KisGeneratorRegistry&);

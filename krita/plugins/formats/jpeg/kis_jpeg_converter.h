@@ -38,28 +38,29 @@ class KisDoc2;
 class KisUndoAdapter;
 class KisExifInfo;
 
-namespace KisMetaData {
-    class Filter;
+namespace KisMetaData
+{
+class Filter;
 }
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
  */
 enum KisImageBuilder_Result {
-        KisImageBuilder_RESULT_FAILURE = -400,
-        KisImageBuilder_RESULT_NOT_EXIST = -300,
-        KisImageBuilder_RESULT_NOT_LOCAL = -200,
-        KisImageBuilder_RESULT_BAD_FETCH = -100,
-        KisImageBuilder_RESULT_INVALID_ARG = -50,
-        KisImageBuilder_RESULT_OK = 0,
-        KisImageBuilder_RESULT_PROGRESS = 1,
-        KisImageBuilder_RESULT_EMPTY = 100,
-        KisImageBuilder_RESULT_BUSY = 150,
-        KisImageBuilder_RESULT_NO_URI = 200,
-        KisImageBuilder_RESULT_UNSUPPORTED = 300,
-        KisImageBuilder_RESULT_INTR = 400,
-        KisImageBuilder_RESULT_PATH = 500,
-        KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE = 600
+    KisImageBuilder_RESULT_FAILURE = -400,
+    KisImageBuilder_RESULT_NOT_EXIST = -300,
+    KisImageBuilder_RESULT_NOT_LOCAL = -200,
+    KisImageBuilder_RESULT_BAD_FETCH = -100,
+    KisImageBuilder_RESULT_INVALID_ARG = -50,
+    KisImageBuilder_RESULT_OK = 0,
+    KisImageBuilder_RESULT_PROGRESS = 1,
+    KisImageBuilder_RESULT_EMPTY = 100,
+    KisImageBuilder_RESULT_BUSY = 150,
+    KisImageBuilder_RESULT_NO_URI = 200,
+    KisImageBuilder_RESULT_UNSUPPORTED = 300,
+    KisImageBuilder_RESULT_INTR = 400,
+    KisImageBuilder_RESULT_PATH = 500,
+    KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE = 600
 };
 
 struct KisJPEGOptions {
@@ -75,31 +76,33 @@ struct KisJPEGOptions {
     QList<const KisMetaData::Filter*> filters;
 };
 
-namespace KisMetaData {
-    class Store;
+namespace KisMetaData
+{
+class Store;
 }
 
-class KisJPEGConverter : public QObject {
-        Q_OBJECT
-    public:
-        KisJPEGConverter(KisDoc2 *doc, KisUndoAdapter *adapter);
-        virtual ~KisJPEGConverter();
-    public:
-        KisImageBuilder_Result buildImage(const KUrl& uri);
-        KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
-        /** Retrieve the constructed image
-        */
-        KisImageWSP image();
-    public slots:
-        virtual void cancel();
-    private:
-        KisImageBuilder_Result decode(const KUrl& uri);
-    private:
-        KisImageWSP m_img;
-        KisDoc2 *m_doc;
-        KisUndoAdapter *m_adapter;
-        bool m_stop;
-        KIO::TransferJob *m_job;
+class KisJPEGConverter : public QObject
+{
+    Q_OBJECT
+public:
+    KisJPEGConverter(KisDoc2 *doc, KisUndoAdapter *adapter);
+    virtual ~KisJPEGConverter();
+public:
+    KisImageBuilder_Result buildImage(const KUrl& uri);
+    KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
+    /** Retrieve the constructed image
+    */
+    KisImageWSP image();
+public slots:
+    virtual void cancel();
+private:
+    KisImageBuilder_Result decode(const KUrl& uri);
+private:
+    KisImageWSP m_img;
+    KisDoc2 *m_doc;
+    KisUndoAdapter *m_adapter;
+    bool m_stop;
+    KIO::TransferJob *m_job;
 };
 
 #endif

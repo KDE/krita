@@ -54,8 +54,7 @@ private:
 
         if (fileExtension == ".gbr") {
             brush = new KisGbrBrush(filename);
-        }
-        else if (fileExtension == ".gih") {
+        } else if (fileExtension == ".gih") {
             brush = new KisImagePipeBrush(filename);
         }
 

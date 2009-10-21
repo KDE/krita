@@ -84,14 +84,18 @@ public:
      * this percolates up to parent nodes all the way to the root
      * node.
      */
-    virtual void setDirty(const QRect & rect) { Q_UNUSED(rect); }
+    virtual void setDirty(const QRect & rect) {
+        Q_UNUSED(rect);
+    }
 
     /**
      * Add the given region to the set of dirty rects for this node;
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    virtual void setDirty(const QRegion & region) { Q_UNUSED(region); }
+    virtual void setDirty(const QRegion & region) {
+        Q_UNUSED(region);
+    }
 
     /**
      * Some filters will cause a change of pixels those are outside
@@ -208,7 +212,7 @@ private:
      * if the node is going to appear in the layerbox, and it needs to be created before
      * the layer box is made aware of the proxy.
      */
-    void createNodeProgressProxy( );
+    void createNodeProgressProxy();
 
 protected:
 

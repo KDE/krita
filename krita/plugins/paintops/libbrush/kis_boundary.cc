@@ -68,15 +68,14 @@ void KisBoundary::generateBoundary(int w, int h)
 
         d->m_horSegments.append(QList<PointPair>());
 
-        for( int currentX = 0; currentX < w; currentX++) {
+        for (int currentX = 0; currentX < w; currentX++) {
 
             bool darkTop;
             bool darkBot;
 
             if (dataPointerTop < dataPointer) {
                 darkTop = OPACITY_TRANSPARENT;
-            }
-            else {
+            } else {
                 darkTop = cs->alpha(dataPointerTop);
             }
             darkBot = cs->alpha(dataPointerBot);
@@ -101,7 +100,7 @@ void KisBoundary::generateBoundary(int w, int h)
 
         for (int currentY = 0; currentY < h; currentY++) {
 
-            quint8* dataPointerLeft = d->m_device->data() + ( h * pixelSize ) + ( currentX * pixelSize );
+            quint8* dataPointerLeft = d->m_device->data() + (h * pixelSize) + (currentX * pixelSize);
             quint8* dataPointerRight = dataPointerTop - pixelSize;
 
             darkLeft = cs->alpha(dataPointerLeft);

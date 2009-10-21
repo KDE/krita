@@ -24,25 +24,26 @@
 
 class KoCtlColorSpaceInfo;
 
-class KoCtlColorSpaceFactory : public KoColorSpaceFactory {
-    public:
-        KoCtlColorSpaceFactory( KoCtlColorSpaceInfo* );
-        virtual ~KoCtlColorSpaceFactory();
-        virtual QString id() const ;
-        virtual QString name() const;
-        virtual bool userVisible() const;
-        virtual KoID colorModelId() const;
-        virtual KoID colorDepthId() const;
-        virtual KoColorSpace *createColorSpace(const KoColorProfile *) const;
-        virtual QString colorSpaceEngine() const;
-        virtual bool isHdr() const;
-        virtual int referenceDepth() const;
-        virtual QString defaultProfile() const;
-        virtual bool profileIsCompatible(const KoColorProfile* profile) const;
-        // XXX: are these factories ever deleted? memcheck says not.
-        QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
-    private:
-        KoCtlColorSpaceInfo* m_info;
+class KoCtlColorSpaceFactory : public KoColorSpaceFactory
+{
+public:
+    KoCtlColorSpaceFactory(KoCtlColorSpaceInfo*);
+    virtual ~KoCtlColorSpaceFactory();
+    virtual QString id() const ;
+    virtual QString name() const;
+    virtual bool userVisible() const;
+    virtual KoID colorModelId() const;
+    virtual KoID colorDepthId() const;
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const;
+    virtual QString colorSpaceEngine() const;
+    virtual bool isHdr() const;
+    virtual int referenceDepth() const;
+    virtual QString defaultProfile() const;
+    virtual bool profileIsCompatible(const KoColorProfile* profile) const;
+    // XXX: are these factories ever deleted? memcheck says not.
+    QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
+private:
+    KoCtlColorSpaceInfo* m_info;
 };
 
 #endif

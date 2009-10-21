@@ -44,14 +44,14 @@ public:
 
     KisBrushSP brush();
 
-    void setAutoBrush( bool on );
-    void setPredefinedBrushes( bool on );
-    void setCustomBrush( bool on );
-    void setTextBrush( bool on );
+    void setAutoBrush(bool on);
+    void setPredefinedBrushes(bool on);
+    void setCustomBrush(bool on);
+    void setTextBrush(bool on);
 
     void setImage(KisImageWSP image);
 
-    void setCurrentBrush( KisBrushSP brush);
+    void setCurrentBrush(KisBrushSP brush);
 
 signals:
 

@@ -45,4 +45,4 @@ public:
 protected:
     KisLayerSP m_layer;
 };
-#endif 
+#endif

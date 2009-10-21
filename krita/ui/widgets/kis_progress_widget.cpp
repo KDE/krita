@@ -31,17 +31,16 @@
 
 #include <kis_progress_updater.h>
 
-class EscapeButton : public QToolButton {
+class EscapeButton : public QToolButton
+{
 
-    public:
+public:
 
     EscapeButton(QWidget* parent)
-            : QToolButton(parent)
-    {
+            : QToolButton(parent) {
     }
 
-    void keyReleaseEvent(QKeyEvent *e)
-    {
+    void keyReleaseEvent(QKeyEvent *e) {
         if (e->key() == Qt::Key_Escape) {
             emit clicked();
         }

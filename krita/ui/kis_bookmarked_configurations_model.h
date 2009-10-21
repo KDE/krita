@@ -62,7 +62,7 @@ public:
     /**
      * @return the index corresponding to the @p name .
      */
-    QModelIndex indexFor( const QString& name) const;
+    QModelIndex indexFor(const QString& name) const;
     /**
      * @return true if the configuration at the given index can be removed
      */

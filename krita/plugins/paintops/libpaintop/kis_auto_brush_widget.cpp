@@ -62,7 +62,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
 
     inputSpikes->setSliderEnabled(true);
     connect(inputSpikes, SIGNAL(valueChanged(int)), this, SLOT(paramChanged()));
-    
+
     showSlider(inputSpacing, 0.1);
     connect(inputSpacing, SIGNAL(valueChanged(double)), this, SLOT(paramChanged()));
 
@@ -70,7 +70,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
 
     connect(brushPreview, SIGNAL(clicked()), SLOT(paramChanged()));
 
-    brushPreview->setIconSize(QSize(100,100));
+    brushPreview->setIconSize(QSize(100, 100));
 
     paramChanged();
 
@@ -163,7 +163,7 @@ KisBrushSP KisAutoBrushWidget::brush()
     return m_autoBrush;
 }
 
-void KisAutoBrushWidget::setBrush( KisBrushSP brush )
+void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 {
     m_autoBrush = brush;
     m_brush = brush->img();

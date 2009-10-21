@@ -31,7 +31,7 @@ public:
             : KisConfigWidget(0) {
     }
 
-    void setConfiguration( const KisPropertiesConfiguration *) {
+    void setConfiguration(const KisPropertiesConfiguration *) {
     }
 
     KisPropertiesConfiguration * configuration() const {

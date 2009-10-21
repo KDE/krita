@@ -44,8 +44,7 @@ KisScaledBrush::KisScaledBrush(KisQImagemaskSP scaledMask, const QImage& scaledI
             QRgb *imagePixelPtr = reinterpret_cast<QRgb *>(m_image.scanLine(y));
             const QRgb *scanline = reinterpret_cast<const QRgb *>(scaledImage.scanLine(y));
 
-            for (int x = 0; x < m_image.width(); x++)
-            {
+            for (int x = 0; x < m_image.width(); x++) {
                 QRgb pixel = scanline[x];
                 int red = qRed(pixel);
                 int green = qGreen(pixel);

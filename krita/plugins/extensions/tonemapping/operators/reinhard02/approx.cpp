@@ -214,7 +214,7 @@ double V1(int x, int y, int level)
     x01 = (x0 == size - 1 ? x0 : x0 + 1);
     y01 = (y0 == size - 1 ? y0 : y0 + 1);
 
-    return((1 -s)*(1 - t)*Pyramid[level][y0][x0] + s*(1 - t)*Pyramid[level][y0][x01]
+    return((1 - s)*(1 - t)*Pyramid[level][y0][x0] + s*(1 - t)*Pyramid[level][y0][x01]
            + (1 - s)*t*Pyramid[level][y01][x0] + s*t*Pyramid[level][y01][x01]);
 }
 #endif

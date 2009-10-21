@@ -110,7 +110,7 @@ public:
      * Used when threading is used -- the overlap margin is passed to the
      * filter to use to compute pixels, but the margin is not pasted into the
      * resulting image. Use this for convolution filters, for instance.
-     * 
+     *
      * This function is deprecated, use \ref neededRect instead
      */
     KDE_DEPRECATED virtual int overlapMarginNeeded(const KisFilterConfiguration* = 0) const;

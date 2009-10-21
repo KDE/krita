@@ -131,18 +131,18 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 m_canvas->addCommand(cmd);
             } else {
 
-                    KoPathShape* path = new KoPathShape();
-                    path->setShapeId(KoPathShapeId);
+                KoPathShape* path = new KoPathShape();
+                path->setShapeId(KoPathShapeId);
 
-                    QMatrix resolutionMatrix;
-                    resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
-                    path->moveTo(resolutionMatrix.map(m_points[0]));
-                    for (int i = 1; i < m_points.count(); i++)
-                        path->lineTo(resolutionMatrix.map(m_points[i]));
-                    path->close();
-                    path->normalize();
+                QMatrix resolutionMatrix;
+                resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
+                path->moveTo(resolutionMatrix.map(m_points[0]));
+                for (int i = 1; i < m_points.count(); i++)
+                    path->lineTo(resolutionMatrix.map(m_points[i]));
+                path->close();
+                path->normalize();
 
-                    helper.addSelectionShape(path);
+                helper.addSelectionShape(path);
             }
             QApplication::restoreOverrideCursor();
         }
@@ -199,7 +199,7 @@ QWidget* KisToolSelectOutline::createOptionWidget()
     m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setObjectName(toolId() + " option widget");
-    
+
     m_optWidget->setWindowTitle(i18n("Outline Selection"));
 
     connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));

@@ -526,9 +526,8 @@ void KisToolPerspectiveTransform::transform()
         KisPainter sgc(currentNode()->paintDevice()->selection().data());
         sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origSelection.data(), rc.x(), rc.y(), rc.width(), rc.height());
         sgc.end();
-    } else
-        if (currentNode()->paintDevice()->hasSelection())
-            currentNode()->paintDevice()->selection()->clear();
+    } else if (currentNode()->paintDevice()->hasSelection())
+        currentNode()->paintDevice()->selection()->clear();
 
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento

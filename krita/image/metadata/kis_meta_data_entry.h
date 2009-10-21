@@ -78,7 +78,7 @@ public:
     /**
      * @return true if the name in argument is valid entry name.
      */
-    static bool isValidName( const QString& _name );
+    static bool isValidName(const QString& _name);
     /**
      * Affect the content of entry to this entry if entry is valid
      */

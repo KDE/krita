@@ -54,7 +54,7 @@ void KisToolPath::addPathShape()
     KisPaintDeviceSP dev = currentNode->paintDevice();
 
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
-    if(!canvas)
+    if (!canvas)
         return;
 
     KisImageWSP image = canvas->view()->image();
@@ -80,7 +80,7 @@ void KisToolPath::addPathShape()
     image->setModified();
 
     m_canvas->addCommand(painter.endTransaction());
-    
+
     delete m_shape;
     m_shape = 0;
 }

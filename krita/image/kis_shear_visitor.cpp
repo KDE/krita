@@ -61,7 +61,7 @@ void KisShearVisitor::shear(KisPaintDeviceSP dev, double angleX, double angleY, 
     p2.bitBlt(r.x(), r.y(), sheared, r.x(), r.y(), r.width(), r.height());
     p2.end();
 
-    progress->setProgress( progress->maximum() );
+    progress->setProgress(progress->maximum());
 }
 
 

@@ -106,12 +106,12 @@ class KisDoc2::KisDocPrivate
 public:
 
     KisDocPrivate()
-        : undoAdapter(0)
-        , nserver(0)
-        , macroNestDepth(0)
-        , ioProgressTotalSteps(0)
-        , ioProgressBase(0)
-        , kraLoader(0) {
+            : undoAdapter(0)
+            , nserver(0)
+            , macroNestDepth(0)
+            , ioProgressTotalSteps(0)
+            , ioProgressBase(0)
+            , kraLoader(0) {
     }
 
     ~KisDocPrivate() {
@@ -137,8 +137,8 @@ public:
 
 
 KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-    : KoDocument(parentWidget, parent, singleViewMode)
-    , m_d(new KisDocPrivate())
+        : KoDocument(parentWidget, parent, singleViewMode)
+        , m_d(new KisDocPrivate())
 {
 
     setComponentData(KisFactory2::componentData(), false);
@@ -215,8 +215,8 @@ QDomDocument KisDoc2::saveXML()
     root.setAttribute("editor", "Krita");
     root.setAttribute("syntaxVersion", "2");
 
-    Q_ASSERT( m_d->kraSaver == 0 );
-    m_d->kraSaver = new KisKraSaver( this );
+    Q_ASSERT(m_d->kraSaver == 0);
+    m_d->kraSaver = new KisKraSaver(this);
 
     root.appendChild(m_d->kraSaver->saveXML(doc, m_d->image));
 
@@ -257,8 +257,8 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     }
 
     setUndo(false);
-    Q_ASSERT( m_d->kraLoader == 0 );
-    m_d->kraLoader = new KisKraLoader( this, syntaxVersion );
+    Q_ASSERT(m_d->kraLoader == 0);
+    m_d->kraLoader = new KisKraLoader(this, syntaxVersion);
 
     // Legacy from the multi-image .kra file period.
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
@@ -289,7 +289,7 @@ bool KisDoc2::completeSaving(KoStore *store)
 
     setIOSteps(m_d->image->nlayers() + 1);
 
-    m_d->kraSaver->saveBinaryData( store, m_d->image, url().url(), isStoredExtern() );
+    m_d->kraSaver->saveBinaryData(store, m_d->image, url().url(), isStoredExtern());
 
     delete m_d->kraSaver;
     m_d->kraSaver = 0;
@@ -571,9 +571,8 @@ void KisDoc2::undoIndexChanged(int idx)
 {
     const QUndoCommand* command = undoStack()->command(idx);
     if (command) {
-       m_d->undoAdapter->notifyCommandExecuted(undoStack()->command(idx));
-    }
-    else {
+        m_d->undoAdapter->notifyCommandExecuted(undoStack()->command(idx));
+    } else {
         kWarning() << "trying to clear undo stack to index" << idx << ": no command at that index";
     }
 }

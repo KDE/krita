@@ -26,7 +26,7 @@
 #include <kis_paint_action_type_option.h>
 
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+        : KisPaintOpOptionsWidget(parent)
 {
     m_sprayOption =  new KisSprayOpOption();
     m_sprayShapeOption = new KisSprayShapeOption();
@@ -50,7 +50,7 @@ KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()
 KisPropertiesConfiguration*  KisSprayPaintOpSettingsWidget::configuration() const
 {
     KisSprayPaintOpSettings* config = new KisSprayPaintOpSettings();
-    config->setOptionsWidget( const_cast<KisSprayPaintOpSettingsWidget*>( this ) );
+    config->setOptionsWidget(const_cast<KisSprayPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "spraybrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

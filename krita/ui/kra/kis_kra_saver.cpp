@@ -43,20 +43,21 @@
 
 using namespace KRA;
 
-class KisKraSaver::Private {
+class KisKraSaver::Private
+{
 public:
     KisDoc2* doc;
     QMap<const KisNode*, QString> nodeFileNames;
     QString imageName;
 };
 
-KisKraSaver::KisKraSaver( KisDoc2* document )
-    : m_d( new Private )
+KisKraSaver::KisKraSaver(KisDoc2* document)
+        : m_d(new Private)
 {
     m_d->doc = document;
 
     m_d->imageName = m_d->doc->documentInfo()->aboutInfo("title");
-    if(m_d->imageName.isEmpty())
+    if (m_d->imageName.isEmpty())
         m_d->imageName = "Unnamed";
 }
 
@@ -65,7 +66,7 @@ KisKraSaver::~KisKraSaver()
     delete m_d;
 }
 
-QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageWSP img )
+QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP img)
 {
     QDomElement image = doc.createElement("IMAGE"); // Legacy!
 
@@ -90,7 +91,7 @@ QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageWSP img )
     return image;
 }
 
-bool KisKraSaver::saveBinaryData( KoStore* store, KisImageWSP img, const QString & uri, bool external )
+bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP img, const QString & uri, bool external)
 {
     QString location;
 

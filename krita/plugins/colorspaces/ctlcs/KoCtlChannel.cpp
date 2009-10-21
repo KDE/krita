@@ -41,13 +41,13 @@ QString KoCtlChannelImpl<float>::normalisedChannelValueText(const quint8* pixel)
 template<>
 QString KoCtlChannelImpl<half>::channelValueText(const quint8* pixel) const
 {
-return QString::number(double(*channel(pixel)));
+    return QString::number(double(*channel(pixel)));
 }
 
 template<>
 QString KoCtlChannelImpl<half>::normalisedChannelValueText(const quint8* pixel) const
 {
-return QString::number(double(scaleToF32(pixel)));
+    return QString::number(double(scaleToF32(pixel)));
 }
 
 #endif

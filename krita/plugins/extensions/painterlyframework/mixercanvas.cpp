@@ -92,7 +92,7 @@ void MixerCanvas::setResources(KisCanvasResourceProvider *rp)
     internal->setResource(KisCanvasResourceProvider::CurrentPattern, QVariant::fromValue<void*>(rp->currentPattern()));
     internal->setResource(KisCanvasResourceProvider::CurrentGradient, QVariant::fromValue<void*>(rp->currentGradient()));
 
-    internal->setResource(KisCanvasResourceProvider::CurrentKritaNode, QVariant::fromValue<void*>( rp->currentNode().data()) );
+    internal->setResource(KisCanvasResourceProvider::CurrentKritaNode, QVariant::fromValue<void*>(rp->currentNode().data()));
     internal->setResource(KisCanvasResourceProvider::HdrExposure, rp->HDRExposure());
     QVariant v;
     v.setValue(rp->currentPreset());

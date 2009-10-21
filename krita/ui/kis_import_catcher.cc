@@ -42,7 +42,8 @@
 #include "kis_group_layer.h"
 #include <QMessageBox>
 
-class KisImportCatcher::Private {
+class KisImportCatcher::Private
+{
 public:
     KisDoc2* doc;
     KisView2* view;
@@ -55,7 +56,7 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     m_d->doc = new KisDoc2(0);
     m_d->view = view;
     m_d->url = url;
-    KoFilterManager manager( m_d->doc );
+    KoFilterManager manager(m_d->doc);
     QByteArray nativeFormat = m_d->doc->nativeFormatMimeType();
     KoFilter::ConversionStatus status;
     QString s = manager.importDocument(url.path(), status);

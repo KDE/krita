@@ -66,7 +66,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_activeCh = 0;
 
     KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
-                                                        m_dev->colorSpace()->colorChannelCount());
+            m_dev->colorSpace()->colorChannelCount());
 
     /* fill in the channel chooser */
     QList<KoChannelInfo *> channels = dev->colorSpace()->channels();
@@ -96,11 +96,10 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
 void KisPerChannelConfigWidget::setPreview(int state)
 {
-    if(state) {
+    if (state) {
         connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
         emit sigConfigurationItemChanged();
-    }
-    else
+    } else
         disconnect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
 }
 
@@ -110,23 +109,22 @@ inline QPixmap KisPerChannelConfigWidget::createGradient(Qt::Orientation orient 
     int width;
     int height;
     int *i, inc, col;
-    int x=0,y=0;
+    int x = 0, y = 0;
 
-    if(orient == Qt::Horizontal) {
-        i=&x; inc=1; col=0;
-        width=256; height=1;
-    }
-    else {
-        i=&y; inc=-1; col=255;
-        width=1; height=256;
+    if (orient == Qt::Horizontal) {
+        i = &x; inc = 1; col = 0;
+        width = 256; height = 1;
+    } else {
+        i = &y; inc = -1; col = 255;
+        width = 1; height = 256;
     }
 
     QPixmap gradientpix(width, height);
     QPainter p(&gradientpix);
     p.setPen(QPen::QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
-    for (; *i < 256; (*i)++, col+=inc) {
+    for (; *i < 256; (*i)++, col += inc) {
         p.setPen(QColor(col, col, col));
-        p.drawPoint(x,y);
+        p.drawPoint(x, y);
     }
     return gradientpix;
 }
@@ -172,41 +170,40 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
 
     // Getting range accepted by chahhel
     KoChannelInfo *channel = m_dev->colorSpace()->channels()[m_activeCh];
-    int order = BITS_PER_BYTE*channel->size();
+    int order = BITS_PER_BYTE * channel->size();
     int maxValue = pwr2(order);
     int min;
     int max;
 
     m_page->curveWidget->dropInOutControls();
 
-    switch(channel->channelValueType())
-      {
-      case KoChannelInfo::UINT8: 
-      case KoChannelInfo::UINT16: 
-      case KoChannelInfo::UINT32:
+    switch (channel->channelValueType()) {
+    case KoChannelInfo::UINT8:
+    case KoChannelInfo::UINT16:
+    case KoChannelInfo::UINT32:
         m_shift = 0;
         m_scale = double(maxValue);
-        min=0;
-        max=maxValue-1;
+        min = 0;
+        max = maxValue - 1;
         break;
-      case KoChannelInfo::INT8:
-      case KoChannelInfo::INT16:
+    case KoChannelInfo::INT8:
+    case KoChannelInfo::INT16:
         m_shift = 0.5;
         m_scale = double(maxValue);
-        min=-maxValue/2;
-        max=maxValue/2 - 1;
+        min = -maxValue / 2;
+        max = maxValue / 2 - 1;
         break;
-      case KoChannelInfo::FLOAT16:
-      case KoChannelInfo::FLOAT32:
-      case KoChannelInfo::FLOAT64:
-      default:
+    case KoChannelInfo::FLOAT16:
+    case KoChannelInfo::FLOAT32:
+    case KoChannelInfo::FLOAT64:
+    default:
         m_shift = 0;
         m_scale = 100.0;
         //Hack Alert: should be changed to float
-        min=0;
-        max=100;
+        min = 0;
+        max = 100;
         break;
-      }
+    }
 
     m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, min, max);
 }
@@ -234,7 +231,7 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
     if (!cfg)
         return;
 
-    if(!cfg->m_nTransfers) {
+    if (!cfg->m_nTransfers) {
         /**
          * HACK ALERT: our configuration factory generates
          * default configuration with nTransfers==0.
@@ -242,7 +239,7 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
          */
 
         KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
-                                                        m_dev->colorSpace()->colorChannelCount());
+                m_dev->colorSpace()->colorChannelCount());
     } else if (cfg->m_nTransfers != m_dev->colorSpace()->colorChannelCount()) {
         return;
     } else {
@@ -258,7 +255,7 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int nCh)
         : KisFilterConfiguration("perchannel", 1)
 {
-    m_transfers=NULL;
+    m_transfers = NULL;
     createTransfers(nCh);
     initDefaultCurves(m_curves, nCh);
     updateTransfers();
@@ -279,7 +276,7 @@ bool KisPerChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) 
 void KisPerChannelFilterConfiguration::setCurves(QList<KisCurve> &curves)
 {
     m_curves.clear();
-    m_curves=curves;
+    m_curves = curves;
     createTransfers(m_curves.count());
 }
 
@@ -288,8 +285,8 @@ void KisPerChannelFilterConfiguration::initDefaultCurves(QList<KisCurve> &curves
     curves.clear();
     for (int i = 0; i < nCh; i++) {
         curves.append(KisCurve());
-        curves[i].append(QPointF(0,0));
-        curves[i].append(QPointF(1.,1.));
+        curves[i].append(QPointF(0, 0));
+        curves[i].append(QPointF(1., 1.));
     }
 }
 
@@ -298,16 +295,16 @@ void KisPerChannelFilterConfiguration::createTransfers(int nTransfers)
     deleteTransfers();
     m_transfers = new quint16* [nTransfers];
     memset(m_transfers, 0, sizeof(qint16*) * nTransfers);
-    m_nTransfers=nTransfers;
+    m_nTransfers = nTransfers;
 }
 
 void KisPerChannelFilterConfiguration::deleteTransfers()
 {
     if (m_transfers) {
-        for (int i = 0;i < m_nTransfers;i++)
+        for (int i = 0; i < m_nTransfers; i++)
             delete[] m_transfers[i];
         delete[] m_transfers;
-        m_transfers=NULL;
+        m_transfers = NULL;
     }
 }
 
@@ -336,7 +333,7 @@ void KisPerChannelFilterConfiguration::fromLegacyXML(const QDomElement& root)
 void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
 {
     QList<KisCurve> curves;
-    quint16 numTransfers=0;
+    quint16 numTransfers = 0;
     int version;
     version  = root.attribute("version").toInt();
 
@@ -346,8 +343,7 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
     while (!e.isNull()) {
         if ((attributeName = e.attribute("name")) == "nTransfers") {
             numTransfers = e.text().toUShort();
-        } 
-        else {
+        } else {
             QRegExp rx("curve(\\d+)");
             if (rx.indexIn(attributeName, 0) != -1) {
                 KisCurve curve;
@@ -369,10 +365,10 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
                 curves.insert(index, curve);
             }
         }
-        e=e.nextSiblingElement();
+        e = e.nextSiblingElement();
     }
 
-    if(!numTransfers)
+    if (!numTransfers)
         return;
 
     setVersion(version);
@@ -387,7 +383,7 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
 
 void KisPerChannelFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
 {
-    toXML(doc,root);
+    toXML(doc, root);
 }
 
 void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
@@ -398,7 +394,7 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
      *       <param name="curve0">0,0;0.5,0.5;1,1;</param>
      *       <param name="curve1">0,0;1,1;</param>
      *       <param name="curve2">0,0;1,1;</param>
-     *       <!-- for the future 
+     *       <!-- for the future
      *       <param name="commonCurve">0,0;1,1;</param>
      *       -->
      * </params>

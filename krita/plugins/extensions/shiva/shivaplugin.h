@@ -22,11 +22,13 @@
 
 class KisConfigWidget;
 
-namespace OpenShiva {
-    class SourcesCollection;
+namespace OpenShiva
+{
+class SourcesCollection;
 }
 
-class ShivaPlugin : public KParts::Plugin {
+class ShivaPlugin : public KParts::Plugin
+{
 public:
     ShivaPlugin(QObject *parent, const QStringList &);
     virtual ~ShivaPlugin();

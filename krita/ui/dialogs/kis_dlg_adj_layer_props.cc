@@ -113,7 +113,7 @@ KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const
 {
     if (m_currentConfigWidget) {
         KisFilterConfiguration * config
-            = dynamic_cast<KisFilterConfiguration*>(m_currentConfigWidget->configuration());
+        = dynamic_cast<KisFilterConfiguration*>(m_currentConfigWidget->configuration());
         if (config) {
             return config;
         }

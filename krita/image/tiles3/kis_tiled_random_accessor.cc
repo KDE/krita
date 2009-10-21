@@ -25,18 +25,18 @@
 const quint32 KisTiledRandomAccessor::CACHESIZE = 4; // Define the number of tiles we keep in cache
 
 KisTiledRandomAccessor::KisTiledRandomAccessor(KisTiledDataManager *ktm, qint32 x, qint32 y, bool writable) :
-    m_ktm(ktm),
-    m_tilesCache(new KisTileInfo*[CACHESIZE]),
-    m_tilesCacheSize(0),
-    m_pixelSize(m_ktm->pixelSize()),
-    m_writable(writable)
+        m_ktm(ktm),
+        m_tilesCache(new KisTileInfo*[CACHESIZE]),
+        m_tilesCacheSize(0),
+        m_pixelSize(m_ktm->pixelSize()),
+        m_writable(writable)
 {
     Q_ASSERT(ktm != 0);
     moveTo(x, y);
 }
 
 KisTiledRandomAccessor::KisTiledRandomAccessor(const KisTiledRandomAccessor& lhs)
-    : KisShared(lhs)
+        : KisShared(lhs)
 {
     m_ktm = lhs.m_ktm;
     m_tilesCache = new KisTileInfo*[CACHESIZE];
@@ -63,7 +63,7 @@ void KisTiledRandomAccessor::moveTo(qint32 x, qint32 y)
     // Look in the cache if the tile if the data is available
     for (uint i = 0; i < m_tilesCacheSize; i++) {
         if (x >= m_tilesCache[i]->area_x1 && x <= m_tilesCache[i]->area_x2 &&
-            y >= m_tilesCache[i]->area_y1 && y <= m_tilesCache[i]->area_y2) {
+                y >= m_tilesCache[i]->area_y1 && y <= m_tilesCache[i]->area_y2) {
             KisTileInfo* kti = m_tilesCache[i];
             quint32 offset = x - kti->area_x1 + (y - kti->area_y1) * KisTileData::WIDTH;
             offset *= m_pixelSize;

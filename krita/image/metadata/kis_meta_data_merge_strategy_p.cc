@@ -227,14 +227,12 @@ void SmartMergeStrategy::mergeEntry(Store* dst, QList<const Store*> srcs, const 
     bool foundOnce = false;
     Value v(QList<Value>(), Value::OrderedArray);
     foreach(const Store* store, srcs) {
-        if( store->containsEntry(schema, identifier) )
-        {
-          v += store->getEntry(schema, identifier).value();
-          foundOnce = true;
+        if (store->containsEntry(schema, identifier)) {
+            v += store->getEntry(schema, identifier).value();
+            foundOnce = true;
         }
     }
-    if( foundOnce )
-    {
+    if (foundOnce) {
         dst->getEntry(schema, identifier).value() = v;
     }
 }

@@ -48,8 +48,7 @@ void KCanvasPreview::paintEvent(QPaintEvent *)
 
 void KCanvasPreview::mousePressEvent(QMouseEvent *event)
 {
-    if ( isInRegion(event->pos()) )
-    {
+    if (isInRegion(event->pos())) {
         m_dragging = true;
         m_prevDragPoint = event->pos();
     }
@@ -62,30 +61,26 @@ void KCanvasPreview::mouseReleaseEvent(QMouseEvent *)
 
 void KCanvasPreview::mouseMoveEvent(QMouseEvent *event)
 {
-    if (m_dragging)
-    {
+    if (m_dragging) {
         // calculate new image offset
         double scale = scalingFactor();
-        
-        int newXOffset = ( (event->pos().x() - m_prevDragPoint.x()) / scale ) + m_xOffset;
-        int newYOffset = ( (event->pos().y() - m_prevDragPoint.y()) / scale ) + m_yOffset;
-        
+
+        int newXOffset = ((event->pos().x() - m_prevDragPoint.x()) / scale) + m_xOffset;
+        int newYOffset = ((event->pos().y() - m_prevDragPoint.y()) / scale) + m_yOffset;
+
         m_prevDragPoint = event->pos();
-        
+
         emit sigModifiedXOffset(newXOffset);
         emit sigModifiedYOffset(newYOffset);
-    }
-    else
-    {
+    } else {
         QCursor cursor;
-        
-        if ( isInRegion(event->pos()) ) {
+
+        if (isInRegion(event->pos())) {
             cursor.setShape(Qt::SizeAllCursor);
-        }
-        else {
+        } else {
             cursor.setShape(Qt::ArrowCursor);
         }
-        
+
         setCursor(cursor);
     }
 }
@@ -94,12 +89,11 @@ bool KCanvasPreview::isInRegion(QPoint point)
 {
     double scale = scalingFactor();
 
-    if ( (point.x() >= (m_xOffset * scale) + m_xCanvasOffset) && (point.x() < ((m_xOffset + m_imageWidth) * scale) + m_xCanvasOffset) &&
-         (point.y() >= (m_yOffset * scale) + m_yCanvasOffset) && (point.y() < ((m_yOffset + m_imageHeight) * scale) + m_yCanvasOffset) )
-    {
+    if ((point.x() >= (m_xOffset * scale) + m_xCanvasOffset) && (point.x() < ((m_xOffset + m_imageWidth) * scale) + m_xCanvasOffset) &&
+            (point.y() >= (m_yOffset * scale) + m_yCanvasOffset) && (point.y() < ((m_yOffset + m_imageHeight) * scale) + m_yCanvasOffset)) {
         return true;
     }
-    
+
     return false;
 }
 
@@ -107,7 +101,7 @@ double KCanvasPreview::scalingFactor()
 {
     double xScale = (double)(height() - 1) / m_height;
     double yScale = (double)(width() - 1) / m_width;
-    
+
     return (xScale < yScale) ? xScale : yScale;
 }
 

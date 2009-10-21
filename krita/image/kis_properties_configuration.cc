@@ -97,9 +97,9 @@ QString KisPropertiesConfiguration::toXML() const
 }
 
 
-bool KisPropertiesConfiguration::hasProperty( const QString& name )
+bool KisPropertiesConfiguration::hasProperty(const QString& name)
 {
-    return d->properties.contains( name );
+    return d->properties.contains(name);
 }
 
 void KisPropertiesConfiguration::setProperty(const QString & name, const QVariant & value)
@@ -154,7 +154,7 @@ float KisPropertiesConfiguration::getFloat(const QString & name, float def) cons
 {
     QVariant v = getProperty(name);
     if (v.isValid())
-        return ( float )v.toDouble();
+        return (float)v.toDouble();
     else
         return def;
 }
@@ -182,7 +182,7 @@ void KisPropertiesConfiguration::dump()
 {
     QMap<QString, QVariant>::Iterator it;
     for (it = d->properties.begin(); it != d->properties.end(); ++it) {
-      dbgKrita << it.key() << " = " << it.value();
+        dbgKrita << it.key() << " = " << it.value();
     }
 
 }

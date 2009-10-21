@@ -122,7 +122,7 @@ qint32 KisTiledRectIterator::nConseqPixels() const
     if (m_leftInTile || (m_rightInTile != KisTile::WIDTH - 1))
         return m_rightInTile - m_xInTile + 1;
     else
-        return KisTile::WIDTH * (m_bottomInTile - m_yInTile + 1) - m_xInTile;
+        return KisTile::WIDTH *(m_bottomInTile - m_yInTile + 1) - m_xInTile;
 }
 
 KisTiledRectIterator & KisTiledRectIterator::operator+=(int n)

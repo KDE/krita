@@ -131,9 +131,9 @@ inline float TM(float lum_val, float maxLum, float minLum)
 {
     float div = C(maxLum) - C(minLum);
     if (div != 0.0)
-        return (LDMAX * (C(lum_val) - C(minLum)) / div);
+        return (LDMAX *(C(lum_val) - C(minLum)) / div);
     else
-        return (LDMAX * (C(lum_val) - C(minLum)) / EPSILON);
+        return (LDMAX *(C(lum_val) - C(minLum)) / EPSILON);
 }
 
 ////////////////////////////////////////////////////////

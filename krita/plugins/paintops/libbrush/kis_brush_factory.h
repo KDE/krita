@@ -38,14 +38,16 @@ public:
 
     virtual QString id() const = 0;
 
-    virtual QString name() const { return QString(); }
+    virtual QString name() const {
+        return QString();
+    }
 
     /**
      * Create a a new brush from the given data or return an existing KisBrush
      * object. If this call leads to the creation of a resource, it should be
      * added to the resource provider, too.
      */
-    virtual KisBrushSP getOrCreateBrush( const QDomElement& element ) = 0;
+    virtual KisBrushSP getOrCreateBrush(const QDomElement& element) = 0;
 
 };
 

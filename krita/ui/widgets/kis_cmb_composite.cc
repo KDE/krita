@@ -52,14 +52,14 @@ void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
     KisCompositeOpsModel* model = new KisCompositeOpsModel(list);
     m_sortModel->setSourceModel(model);
     m_sortModel->sort(0);
-    
+
     delete m_lastModel;
     m_lastModel = model;
 }
 
 const QString& KisCmbComposite::itemAt(int idx) const
 {
-    return m_lastModel->itemAt(m_sortModel->mapToSource( m_sortModel->index( idx, 0 ) ) );
+    return m_lastModel->itemAt(m_sortModel->mapToSource(m_sortModel->index(idx, 0)));
 }
 
 const QString& KisCmbComposite::currentItem() const
@@ -69,7 +69,7 @@ const QString& KisCmbComposite::currentItem() const
 
 void KisCmbComposite::setCurrent(const KoCompositeOp* op)
 {
-    QModelIndex index = m_sortModel->mapFromSource( m_lastModel->indexOf(op) );
+    QModelIndex index = m_sortModel->mapFromSource(m_lastModel->indexOf(op));
     if (index.isValid()) {
         KComboBox::setCurrentIndex(index.row());
     }
@@ -77,7 +77,7 @@ void KisCmbComposite::setCurrent(const KoCompositeOp* op)
 
 void KisCmbComposite::setCurrent(const QString & s)
 {
-    QModelIndex index = m_sortModel->mapFromSource( m_lastModel->indexOf(s));
+    QModelIndex index = m_sortModel->mapFromSource(m_lastModel->indexOf(s));
     if (index.isValid()) {
         KComboBox::setCurrentIndex(index.row());
     }

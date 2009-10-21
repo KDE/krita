@@ -258,7 +258,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
 
     //TODO
     //connect(srv, SIGNAL(resourceAdded(KoResource*)), this, SLOT(slotAddPalette(KoResource*)));
-    
+
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
     return m_optionsWidget;
 }

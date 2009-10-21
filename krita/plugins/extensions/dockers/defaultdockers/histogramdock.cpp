@@ -38,13 +38,13 @@
 #include "histogram_updater.h"
 
 KisHistogramDocker::KisHistogramDocker()
-    : QDockWidget(i18n("Histogram")) 
-    , m_canvas(0)
-    , m_factory(0)
-    , m_producer(0)
-    , m_cs(0)
-    , m_hview(0)
-    , m_cache(0)
+        : QDockWidget(i18n("Histogram"))
+        , m_canvas(0)
+        , m_factory(0)
+        , m_producer(0)
+        , m_cs(0)
+        , m_hview(0)
+        , m_cache(0)
 {
 }
 
@@ -76,7 +76,7 @@ void KisHistogramDocker::setImage(KisImageWSP image)
 
     m_image = image;
 
-    if (m_canvas && m_canvas->view() ) {
+    if (m_canvas && m_canvas->view()) {
 
         m_hview = 0; // producerChanged wants to setCurrentChannels, prevent that here
         m_cache = 0; // we try to delete it in producerChanged
@@ -101,7 +101,7 @@ void KisHistogramDocker::setImage(KisImageWSP image)
         m_cache->setImage(m_image);
 
         setWidget(m_hview);
-        
+
     } else {
         delete m_cache;
         m_cache = 0;
@@ -109,7 +109,8 @@ void KisHistogramDocker::setImage(KisImageWSP image)
 
 }
 
-void KisHistogramDocker::setChannels() {
+void KisHistogramDocker::setChannels()
+{
     m_hview->setHistogram(m_histogram);
     m_hview->setColor(true);
     QList<KoChannelInfo *> channels;

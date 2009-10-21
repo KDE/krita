@@ -46,7 +46,7 @@ public:
 
 private:
     inline void lockTile(KisTileSP &tile) {
-        if(m_writable)
+        if (m_writable)
             tile->lockForWrite();
         else
             tile->lockForRead();
@@ -67,7 +67,7 @@ private:
     inline quint32 yToRow(quint32 y) const {
         return m_ktm ? m_ktm->yToRow(y) : 0;
     }
-    
+
     KisTileInfo* fetchTileData(qint32 col, qint32 row);
 
 public:

@@ -45,12 +45,12 @@ public:
 
 
 KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP img,
-                                               const QString &name,
-                                               KisSelectionSP selection)
-    : KisLayer(img.data(), name, OPACITY_OPAQUE),
-      m_d(new Private())
+        const QString &name,
+        KisSelectionSP selection)
+        : KisLayer(img.data(), name, OPACITY_OPAQUE),
+        m_d(new Private())
 {
-    if(!selection)
+    if (!selection)
         initSelection();
     else
         setSelection(selection);
@@ -107,7 +107,7 @@ KisPaintDeviceSP KisSelectionBasedLayer::paintDevice() const
 
 
 QRect KisSelectionBasedLayer::repaintOriginal(KisPaintDeviceSP original,
-                                              const QRect& rect)
+        const QRect& rect)
 {
     Q_UNUSED(original);
     return rect;
@@ -119,15 +119,15 @@ bool KisSelectionBasedLayer::needProjection() const
 }
 
 void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
-                                                      KisPaintDeviceSP projection,
-                                                      const QRect& rect) const
+        KisPaintDeviceSP projection,
+        const QRect& rect) const
 {
     m_d->selection->updateProjection();
     KisSelectionSP tempSelection = m_d->selection;
     KisPainter gc(projection);
 
-    if(m_d->selection) {
-        if(hasTemporaryTarget()) {
+    if (m_d->selection) {
+        if (hasTemporaryTarget()) {
             /**
              * Cloning a selection with COW
              * FIXME: check whether it's faster than usual bitBlt'ing
@@ -143,8 +143,7 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
         projection->clear(rect);
         gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_OVER));
         gc.setSelection(tempSelection);
-    }
-    else
+    } else
         gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
 
 
@@ -157,8 +156,8 @@ QRect KisSelectionBasedLayer::changeRect(const QRect &rect) const
      * Warn: we won't call KisNode's copy of changeRect as it's dummy
      */
     return m_d->selection ?
-        rect & m_d->selection->selectedRect() :
-        rect;
+           rect & m_d->selection->selectedRect() :
+           rect;
 }
 
 QRect KisSelectionBasedLayer::needRect(const QRect &rect) const
@@ -168,15 +167,14 @@ QRect KisSelectionBasedLayer::needRect(const QRect &rect) const
 
 void KisSelectionBasedLayer::resetCache(const KoColorSpace *colorSpace)
 {
-    if(!colorSpace)
+    if (!colorSpace)
         colorSpace = image()->colorSpace();
 
-    if(!m_d->paintDevice ||
-       !(*m_d->paintDevice->colorSpace() == *colorSpace)) {
+    if (!m_d->paintDevice ||
+            !(*m_d->paintDevice->colorSpace() == *colorSpace)) {
 
         m_d->paintDevice = new KisPaintDevice(colorSpace);
-    }
-    else {
+    } else {
         m_d->paintDevice->clear();
     }
 }
@@ -188,12 +186,11 @@ KisSelectionSP KisSelectionBasedLayer::selection() const
 
 void KisSelectionBasedLayer::setSelection(KisSelectionSP selection)
 {
-    if(selection) {
+    if (selection) {
         m_d->selection = new KisSelection(*selection.data());
         m_d->selection->updateProjection();
         m_d->selection->setInterestedInDirtyness(true);
-    }
-    else
+    } else
         m_d->selection = 0;
 }
 
@@ -218,7 +215,7 @@ qint32 KisSelectionBasedLayer::y() const
 
 void KisSelectionBasedLayer::setX(qint32 x)
 {
-    if(m_d->selection) {
+    if (m_d->selection) {
         m_d->selection->setX(x);
         resetCache();
     }
@@ -226,7 +223,7 @@ void KisSelectionBasedLayer::setX(qint32 x)
 
 void KisSelectionBasedLayer::setY(qint32 y)
 {
-    if(m_d->selection) {
+    if (m_d->selection) {
         m_d->selection->setY(y);
         resetCache();
     }
@@ -244,7 +241,7 @@ QRect KisSelectionBasedLayer::extent() const
     Q_ASSERT(image());
 
     return m_d->selection ?
-        m_d->selection->selectedRect() : image()->bounds();
+           m_d->selection->selectedRect() : image()->bounds();
 }
 
 QRect KisSelectionBasedLayer::exactBounds() const
@@ -252,7 +249,7 @@ QRect KisSelectionBasedLayer::exactBounds() const
     Q_ASSERT(image());
 
     return m_d->selection ?
-        m_d->selection->selectedExactRect() : image()->bounds();
+           m_d->selection->selectedExactRect() : image()->bounds();
 }
 
 QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)
@@ -261,8 +258,8 @@ QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice && originalSelection ?
-        originalDevice->createThumbnail(w, h, originalSelection) :
-        QImage();
+           originalDevice->createThumbnail(w, h, originalSelection) :
+           QImage();
 }
 
 #include "kis_selection_based_layer.moc"

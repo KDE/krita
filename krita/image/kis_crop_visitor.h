@@ -90,12 +90,24 @@ public:
         return cropPaintDeviceLayer(layer);
     }
 
-    bool visit(KisNode*) { return true; }
-    bool visit( KisCloneLayer* ) {return false;}
-    bool visit(KisFilterMask*) { return true; }
-    bool visit(KisTransparencyMask*) { return true; }
-    bool visit(KisTransformationMask*) { return true; }
-    bool visit(KisSelectionMask*) { return true; }
+    bool visit(KisNode*) {
+        return true;
+    }
+    bool visit(KisCloneLayer*) {
+        return false;
+    }
+    bool visit(KisFilterMask*) {
+        return true;
+    }
+    bool visit(KisTransparencyMask*) {
+        return true;
+    }
+    bool visit(KisTransformationMask*) {
+        return true;
+    }
+    bool visit(KisSelectionMask*) {
+        return true;
+    }
 
 
 private:

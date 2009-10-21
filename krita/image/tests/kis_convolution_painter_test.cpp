@@ -101,7 +101,7 @@ void KisConvolutionPainterTest::testMaskConvolution()
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "mask_conv.png");
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     dev->convertFromQImage(qimg, "", 0, 0);
-    
+
     KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(11, 11, 5, 5);
     KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
 
@@ -121,7 +121,7 @@ void KisConvolutionPainterTest::testMaskConvolutionOnColorChannels()
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "mask_conv_channelflags.png");
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     dev->convertFromQImage(qimg, "", 0, 0);
-    
+
     KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(11, 11, 5, 5);
     KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
 
@@ -142,7 +142,7 @@ void KisConvolutionPainterTest::testMaskConvolutionOnRedChannel()
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "mask_conv_red.png");
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     dev->convertFromQImage(qimg, "", 0, 0);
-    
+
     KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(11, 11, 5, 5);
     KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
 

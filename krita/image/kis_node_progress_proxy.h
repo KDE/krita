@@ -30,40 +30,41 @@
 /**
  * This class implements \ref KoProgressProxy and allows node to report progress.
  */
-class KRITAIMAGE_EXPORT KisNodeProgressProxy : public QObject, public KoProgressProxy {
+class KRITAIMAGE_EXPORT KisNodeProgressProxy : public QObject, public KoProgressProxy
+{
     Q_OBJECT
     friend class KisNode;
-        /**
-         * Create a proxy to report progress when processing, this proxy is associated
-         * with a node, it will report progress in the node progress bar. This proxy
-         * will be deleted when @p _node is deleted.
-         */
-        KisNodeProgressProxy( KisNode* _node);
-        ~KisNodeProgressProxy();
-        
-    public:
-        /**
-         * @return the node associated with this proxy.
-         */
-        const KisNodeSP node() const;
-        virtual int maximum() const ;
-        virtual void setValue( int value );
-        virtual void setRange( int minimum, int maximum );
-        virtual void setFormat( const QString & format );
-        /**
-         * @return the current percentage (return -1 if no progress)
-         */
-        int percentage() const;
-    signals:
-        /**
-         * Emitted when the percentage of the proxy is changed.
-         * @param _percentage is the progress value in percent
-         * @param _node is the node that own this \ref KisNodeProgressProxy
-         */
-        void percentageChanged( int _percentage, const KisNodeSP& _node);
-    private:
-        struct Private;
-        Private* const d;
+    /**
+     * Create a proxy to report progress when processing, this proxy is associated
+     * with a node, it will report progress in the node progress bar. This proxy
+     * will be deleted when @p _node is deleted.
+     */
+    KisNodeProgressProxy(KisNode* _node);
+    ~KisNodeProgressProxy();
+
+public:
+    /**
+     * @return the node associated with this proxy.
+     */
+    const KisNodeSP node() const;
+    virtual int maximum() const ;
+    virtual void setValue(int value);
+    virtual void setRange(int minimum, int maximum);
+    virtual void setFormat(const QString & format);
+    /**
+     * @return the current percentage (return -1 if no progress)
+     */
+    int percentage() const;
+signals:
+    /**
+     * Emitted when the percentage of the proxy is changed.
+     * @param _percentage is the progress value in percent
+     * @param _node is the node that own this \ref KisNodeProgressProxy
+     */
+    void percentageChanged(int _percentage, const KisNodeSP& _node);
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

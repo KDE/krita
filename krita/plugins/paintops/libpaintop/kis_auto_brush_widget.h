@@ -47,7 +47,7 @@ public:
 
     KisBrushSP brush();
 
-    void setBrush( KisBrushSP brush );
+    void setBrush(KisBrushSP brush);
 
 private slots:
 

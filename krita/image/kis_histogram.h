@@ -142,7 +142,7 @@ public:
         m_producer = producer;
     }
     inline void setChannel(qint32 channel) {
-        Q_ASSERT(m_channel < m_completeCalculations.size() );
+        Q_ASSERT(m_channel < m_completeCalculations.size());
         m_channel = channel;
     }
     inline KoHistogramProducerSP producer() {

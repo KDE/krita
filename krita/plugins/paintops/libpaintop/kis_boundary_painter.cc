@@ -39,8 +39,8 @@ void KisBoundaryPainter::paint(const KisBoundary* boundary, KisImageWSP image, Q
             int y = static_cast<int>((*lineIt).first.y());
             int x2 = x1 + (*lineIt).second;
 
-            QPointF p1 = converter.documentToView( image->pixelToDocument( QPoint(x1,y ) ) );
-            QPointF p2 = converter.documentToView( image->pixelToDocument( QPoint(x2,y ) ) );
+            QPointF p1 = converter.documentToView(image->pixelToDocument(QPoint(x1, y)));
+            QPointF p2 = converter.documentToView(image->pixelToDocument(QPoint(x2, y)));
             painter.drawLine(p1, p2);
             painter.drawPoint(p2);
 
@@ -61,8 +61,8 @@ void KisBoundaryPainter::paint(const KisBoundary* boundary, KisImageWSP image, Q
             int y1 = static_cast<int>((*lineIt).first.y());
             int y2 = y1 + (*lineIt).second;
 
-            QPointF p1 = converter.documentToView( image->pixelToDocument( QPoint(x,y1 ) ) );
-            QPointF p2 = converter.documentToView( image->pixelToDocument( QPoint(x,y2 ) ) );
+            QPointF p1 = converter.documentToView(image->pixelToDocument(QPoint(x, y1)));
+            QPointF p2 = converter.documentToView(image->pixelToDocument(QPoint(x, y2)));
             painter.drawLine(p1, p2);
             painter.drawPoint(p2);
 

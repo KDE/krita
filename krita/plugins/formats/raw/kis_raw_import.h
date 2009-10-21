@@ -30,29 +30,31 @@ class WdgRawImport;
 class KoColorProfile;
 class QProgressDialog;
 
-namespace KDcrawIface {
-    class RawDecodingSettings;
+namespace KDcrawIface
+{
+class RawDecodingSettings;
 }
 
-class KisRawImport : public KoFilter {
+class KisRawImport : public KoFilter
+{
     Q_OBJECT
 
-    public:
-        KisRawImport(QObject* parent, const QStringList&);
-        virtual ~KisRawImport();
-    
-    public:
-        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
-    
-    
-    private slots:
-    
-        void slotUpdatePreview();
-    private:
-        KDcrawIface::RawDecodingSettings rawDecodingSettings();
-    private:
-        Ui::WdgRawImport m_rawWidget;
-        KDialog* m_dialog;
+public:
+    KisRawImport(QObject* parent, const QStringList&);
+    virtual ~KisRawImport();
+
+public:
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+
+
+private slots:
+
+    void slotUpdatePreview();
+private:
+    KDcrawIface::RawDecodingSettings rawDecodingSettings();
+private:
+    Ui::WdgRawImport m_rawWidget;
+    KDialog* m_dialog;
 };
 
 #endif // KIS_RAW_IMPORT_H_

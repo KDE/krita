@@ -207,7 +207,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
     if (!progressUpdater->interrupted()) {
 
         KisUndoAdapter * undo = 0;
-        if ( outputOps == TO_LAYERS && (undo = image->undoAdapter()) && undo->undo()) {
+        if (outputOps == TO_LAYERS && (undo = image->undoAdapter()) && undo->undo()) {
             undo->beginMacro(i18n("Separate Image"));
         }
 
@@ -232,8 +232,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
             if (outputOps == TO_LAYERS) {
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
-                if (undo && undo->undo())
-                {
+                if (undo && undo->undo()) {
                     adapter.addNode(l.data(), image->rootLayer(), 0);
                 } else {
                     image->addNode(l.data(), image->rootLayer());

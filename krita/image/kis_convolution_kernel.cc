@@ -74,7 +74,7 @@ qint32 KisConvolutionKernel::factor() const
     return d->factor;
 }
 
-void KisConvolutionKernel::setFactor( qint32 factor)
+void KisConvolutionKernel::setFactor(qint32 factor)
 {
     d->factor = factor;
 }
@@ -165,7 +165,7 @@ if (n > 1)
         }
         // On the internal limit of the fade area, normeFade is equal to 1
         double normeFadeLimitE = norme(xle * m_xfadecoef, yle * m_yfadecoef);
-        return (uchar)(255 * (normeFade - 1) / (normeFadeLimitE - 1));
+        return (uchar)(255 *(normeFade - 1) / (normeFadeLimitE - 1));
     } else {
         return 0;
     }

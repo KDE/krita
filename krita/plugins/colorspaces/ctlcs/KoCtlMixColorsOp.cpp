@@ -22,9 +22,9 @@
 #include "KoCtlAccumulator.h"
 #include "KoCtlColorSpaceInfo.h"
 
-KoCtlMixColorsOp::KoCtlMixColorsOp( const KoCtlColorSpace* _colorSpace, const KoCtlColorSpaceInfo* _info) : m_colorSpace(_colorSpace)
+KoCtlMixColorsOp::KoCtlMixColorsOp(const KoCtlColorSpace* _colorSpace, const KoCtlColorSpaceInfo* _info) : m_colorSpace(_colorSpace)
 {
-  m_accumulators = _info->accumulators();
+    m_accumulators = _info->accumulators();
 }
 
 KoCtlMixColorsOp::~KoCtlMixColorsOp()
@@ -33,50 +33,43 @@ KoCtlMixColorsOp::~KoCtlMixColorsOp()
 
 void KoCtlMixColorsOp::mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const
 {
-  foreach( KoCtlAccumulator* accumulator, m_accumulators)
-  {
-    accumulator->reset();
-  }
-  int alphaPos = m_colorSpace->alphaPos();
-  // Compute the total for each channel by summing each colors multiplied by the weightlabcache
-  double totalAlpha = 0.0;
-  while(nColors--)
-  {
-    const quint8* color = *colors;
-    double alphaTimesWeight;
-    
-    if( alphaPos != -1)
-    {
-      alphaTimesWeight = m_colorSpace->alpha(color) / 255.0;
-    } else {
-      alphaTimesWeight = 1.0;
+    foreach(KoCtlAccumulator* accumulator, m_accumulators) {
+        accumulator->reset();
     }
-    alphaTimesWeight *= *weights;
+    int alphaPos = m_colorSpace->alphaPos();
+    // Compute the total for each channel by summing each colors multiplied by the weightlabcache
+    double totalAlpha = 0.0;
+    while (nColors--) {
+        const quint8* color = *colors;
+        double alphaTimesWeight;
 
-    for(int i = 0; i < m_colorSpace->channelCount(); i++)
-    {
-      if (i != alphaPos)
-      {
-        m_accumulators[i]->mix(color, alphaTimesWeight);
-      }
+        if (alphaPos != -1) {
+            alphaTimesWeight = m_colorSpace->alpha(color) / 255.0;
+        } else {
+            alphaTimesWeight = 1.0;
+        }
+        alphaTimesWeight *= *weights;
+
+        for (int i = 0; i < m_colorSpace->channelCount(); i++) {
+            if (i != alphaPos) {
+                m_accumulators[i]->mix(color, alphaTimesWeight);
+            }
+        }
+        totalAlpha += alphaTimesWeight;
+        ++colors;
+        ++weights;
     }
-    totalAlpha += alphaTimesWeight;
-    ++colors;
-    ++weights;
-  }
-  if(totalAlpha > 255.0) totalAlpha = 255.0;
-  
-  if (totalAlpha > 0) {
-    double inv = 1.0 / totalAlpha;
-    for(int i = 0; i < m_colorSpace->channelCount(); i++)
-    {
-      if (i != alphaPos)
-      {
-        m_accumulators[i]->affect(dst, inv);
-      }
+    if (totalAlpha > 255.0) totalAlpha = 255.0;
+
+    if (totalAlpha > 0) {
+        double inv = 1.0 / totalAlpha;
+        for (int i = 0; i < m_colorSpace->channelCount(); i++) {
+            if (i != alphaPos) {
+                m_accumulators[i]->affect(dst, inv);
+            }
+        }
+        m_colorSpace->setAlpha(dst, totalAlpha, 1);
+    } else {
+        memset(dst, 0, m_colorSpace->pixelSize());
     }
-    m_colorSpace->setAlpha(dst, totalAlpha, 1);
-  } else {
-    memset(dst, 0, m_colorSpace->pixelSize());
-  }
 }

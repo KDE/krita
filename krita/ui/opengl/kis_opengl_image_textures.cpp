@@ -427,7 +427,7 @@ void KisOpenGLImageTextures::createHDRExposureProgramIfCan()
 {
     KisConfig cfg;
     if (!cfg.useOpenGLShaders()) return;
-    
+
 #ifdef HAVE_GLEW
     if (HDRExposureProgram == 0 && KisOpenGL::hasShadingLanguage()) {
         dbgUI << "Creating shared HDR exposure program";
@@ -495,7 +495,7 @@ void KisOpenGLImageTextures::setImageTextureFormat()
     m_imageTextureInternalFormat = GL_RGBA8;
     m_imageTextureType = GL_UNSIGNED_BYTE;
 
-    
+
 #ifdef HAVE_GLEW
     QString colorSpaceId = m_image->colorSpace()->id();
     m_usingHDRExposureProgram = false;

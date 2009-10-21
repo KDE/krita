@@ -27,102 +27,102 @@ class QVariant;
 
 namespace KisMetaData
 {
-    class Schema;
+class Schema;
 
-    struct Rational {
-        explicit Rational(qint32 n = 0, qint32 d = 1) : numerator(n), denominator(d) {}
-        qint32 numerator;
-        qint32 denominator;
-        bool operator==(const Rational& ur) const {
-            return numerator == ur.numerator && denominator == ur.denominator;
-        }
+struct Rational {
+    explicit Rational(qint32 n = 0, qint32 d = 1) : numerator(n), denominator(d) {}
+    qint32 numerator;
+    qint32 denominator;
+    bool operator==(const Rational& ur) const {
+        return numerator == ur.numerator && denominator == ur.denominator;
+    }
+};
+
+/**
+ * Value is build on top of QVariant to extend it to support the various types
+ * and extensions through property qualifiers.
+ */
+class KRITAIMAGE_EXPORT Value
+{
+    struct Private;
+public:
+    /// Define the possible value type
+    enum ValueType {
+        Invalid,
+        Variant,
+        OrderedArray,
+        UnorderedArray,
+        AlternativeArray,
+        LangArray,
+        Structure,
+        Rational
     };
-
+public:
+    Value();
+    Value(const QVariant& value);
     /**
-     * Value is build on top of QVariant to extend it to support the various types
-     * and extensions through property qualifiers.
-     */
-    class KRITAIMAGE_EXPORT Value
-    {
-        struct Private;
-    public:
-        /// Define the possible value type
-        enum ValueType {
-            Invalid,
-            Variant,
-            OrderedArray,
-            UnorderedArray,
-            AlternativeArray,
-            LangArray,
-            Structure,
-            Rational
-        };
-    public:
-        Value();
-        Value(const QVariant& value);
-        /**
-     * @param type is one of OrderedArray, UnorderedArray, AlternativeArray
-     * or LangArray
-     */
-        Value(const QList<Value>& array, ValueType type = OrderedArray);
-        Value(const QMap<QString, Value>& structure);
-        Value(const KisMetaData::Rational& rational);
-        Value(const Value& v);
-        Value& operator=(const Value& v);
-        ~Value();
-    public:
-        void addPropertyQualifier(const QString& _name, const Value&);
-        const QMap<QString, Value>& propertyQualifiers() const;
-    public:
-        /// @return the type of this Value
-        ValueType type() const;
-        /**
-     * @return the value as a double, or null if it's not possible, rationals are evaluated
-     */
-        double asDouble() const;
-        /**
-     * @return the value as an integer, or null if it's not possible, rationals are evaluated
-     */
-        int asInteger() const;
-        /**
-     * @return the Variant hold by this Value, or an empty QVariant if this Value is not a Variant
-     */
-        QVariant asVariant() const;
-        /**
-     * Set this Value to the given variant, or does nothing if this Value is not a Variant.
-     * @return true if the value was changed
-     */
-        bool setVariant(const QVariant& variant);
-        /**
-     * @return the Rational hold by this Value, or a null rational if this Value is not
-     * an Rational
-     */
-        KisMetaData::Rational asRational() const;
-        /**
-     * @return the array hold by this Value, or an empty array if this Value is not either
-     * an OrderedArray, UnorderedArray or AlternativeArray
-     */
-        QList<KisMetaData::Value> asArray() const;
-        /**
-     * @return true if this Value is either an OrderedArray, UnorderedArray or AlternativeArray
-     */
-        bool isArray() const;
-        /**
-     * @return the structure hold by this Value, or an empty structure if this Value is not a Structure
-     */
-        QMap<QString, KisMetaData::Value> asStructure() const;
-        QMap<QString, KisMetaData::Value>* asStructure();
-        /**
-     * It's a convenient function that build a map from a LangArray using the property
-     * qualifier "xml:lang" for the key of the map.
-     */
-        QMap<QString, KisMetaData::Value> asLangArray() const;
-    public:
-        bool operator==(const Value&) const;
-        Value& operator+=(const Value&);
-    private:
-        Private* const d;
-    };
+    * @param type is one of OrderedArray, UnorderedArray, AlternativeArray
+    * or LangArray
+    */
+    Value(const QList<Value>& array, ValueType type = OrderedArray);
+    Value(const QMap<QString, Value>& structure);
+    Value(const KisMetaData::Rational& rational);
+    Value(const Value& v);
+    Value& operator=(const Value& v);
+    ~Value();
+public:
+    void addPropertyQualifier(const QString& _name, const Value&);
+    const QMap<QString, Value>& propertyQualifiers() const;
+public:
+    /// @return the type of this Value
+    ValueType type() const;
+    /**
+    * @return the value as a double, or null if it's not possible, rationals are evaluated
+    */
+    double asDouble() const;
+    /**
+    * @return the value as an integer, or null if it's not possible, rationals are evaluated
+    */
+    int asInteger() const;
+    /**
+    * @return the Variant hold by this Value, or an empty QVariant if this Value is not a Variant
+    */
+    QVariant asVariant() const;
+    /**
+    * Set this Value to the given variant, or does nothing if this Value is not a Variant.
+    * @return true if the value was changed
+    */
+    bool setVariant(const QVariant& variant);
+    /**
+    * @return the Rational hold by this Value, or a null rational if this Value is not
+    * an Rational
+    */
+    KisMetaData::Rational asRational() const;
+    /**
+    * @return the array hold by this Value, or an empty array if this Value is not either
+    * an OrderedArray, UnorderedArray or AlternativeArray
+    */
+    QList<KisMetaData::Value> asArray() const;
+    /**
+    * @return true if this Value is either an OrderedArray, UnorderedArray or AlternativeArray
+    */
+    bool isArray() const;
+    /**
+    * @return the structure hold by this Value, or an empty structure if this Value is not a Structure
+    */
+    QMap<QString, KisMetaData::Value> asStructure() const;
+    QMap<QString, KisMetaData::Value>* asStructure();
+    /**
+    * It's a convenient function that build a map from a LangArray using the property
+    * qualifier "xml:lang" for the key of the map.
+    */
+    QMap<QString, KisMetaData::Value> asLangArray() const;
+public:
+    bool operator==(const Value&) const;
+    Value& operator+=(const Value&);
+private:
+    Private* const d;
+};
 }
 
 

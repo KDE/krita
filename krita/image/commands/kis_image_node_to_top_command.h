@@ -34,7 +34,7 @@ public:
      * @param image The image the command will be working on.
      * @param layer the layer to add
      */
-    KisImageNodeToTopCommand(KisImageWSP image, KisNodeSP node );
+    KisImageNodeToTopCommand(KisImageWSP image, KisNodeSP node);
 
     virtual void redo();
     virtual void undo();

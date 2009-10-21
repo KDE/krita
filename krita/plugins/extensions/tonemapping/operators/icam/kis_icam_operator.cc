@@ -40,7 +40,7 @@ public:
     KisIcamOperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg) {
         widget.setupUi(this);
     }
-    virtual void setConfiguration( const KisPropertiesConfiguration* config) {
+    virtual void setConfiguration(const KisPropertiesConfiguration* config) {
         widget.independence->setChecked(config->getBool("Independence", false));
         widget.variance->setValue(config->getDouble("Variance", -0.10));
         widget.variance2->setValue(config->getDouble("Variance2", -0.30));

@@ -35,7 +35,7 @@ const qint32 KisTileDataPooler::TIMEOUT_FACTOR = 2;
     printf("Cloned (%d):\t\t\t\t0x%X (clones: %d, users: %d, refs: %d)\n", \
            numClones, td, td->m_clonesList.size(),                      \
            (int)td->m_usersCount, (int)td->m_refCount)
-#define DEBUG_SIMPLE_ACTION(action)		\
+#define DEBUG_SIMPLE_ACTION(action)     \
     printf("pooler: %s\n", action)
 
 
@@ -45,7 +45,7 @@ const qint32 KisTileDataPooler::TIMEOUT_FACTOR = 2;
 #endif
 
 KisTileDataPooler::KisTileDataPooler(KisTileDataStore *store)
-    : QThread()
+        : QThread()
 {
     m_shouldExitFlag = 0;
     m_store = store;
@@ -53,14 +53,17 @@ KisTileDataPooler::KisTileDataPooler(KisTileDataStore *store)
     m_lastCycleHadWork = false;
 }
 
-KisTileDataPooler::~KisTileDataPooler() {
+KisTileDataPooler::~KisTileDataPooler()
+{
 }
 
-void KisTileDataPooler::kick() {
+void KisTileDataPooler::kick()
+{
     m_semaphore.release();
 }
 
-void KisTileDataPooler::terminatePooler() {
+void KisTileDataPooler::terminatePooler()
+{
     m_shouldExitFlag = 1;
     kick();
     wait();
@@ -70,21 +73,20 @@ qint32 KisTileDataPooler::numClonesNeeded(KisTileData *td) const
 {
     qint32 numUsers = td->m_usersCount;
     qint32 numPresentClones = td->m_clonesList.size();
-    qint32 totalClones = qMin(numUsers-1, MAX_NUM_CLONES);
+    qint32 totalClones = qMin(numUsers - 1, MAX_NUM_CLONES);
 
     return totalClones - numPresentClones;
 }
 
 void KisTileDataPooler::cloneTileData(KisTileData *td, qint32 numClones) const
 {
-    if(numClones > 0) {
-	for(qint32 i=0; i < numClones; i++)
-	    td->m_clonesList.prepend(new KisTileData(*td));
-    }
-    else {
-	qint32 numUnnededClones = qAbs(numClones);
-	for(qint32 i=0; i < numUnnededClones; i++)
-	    td->m_clonesList.removeFirst();
+    if (numClones > 0) {
+        for (qint32 i = 0; i < numClones; i++)
+            td->m_clonesList.prepend(new KisTileData(*td));
+    } else {
+        qint32 numUnnededClones = qAbs(numClones);
+        for (qint32 i = 0; i < numUnnededClones; i++)
+            td->m_clonesList.removeFirst();
     }
 
     DEBUG_CLONE_ACTION(td, numClones);
@@ -100,20 +102,19 @@ void KisTileDataPooler::waitForWork()
 {
     bool success;
 
-    if(m_lastCycleHadWork)
-	success = m_semaphore.tryAcquire(1, m_timeout);
+    if (m_lastCycleHadWork)
+        success = m_semaphore.tryAcquire(1, m_timeout);
     else {
-	m_semaphore.acquire();
-	success = true;
+        m_semaphore.acquire();
+        success = true;
     }
 
     m_lastCycleHadWork = false;
-    if(success) {
-	m_timeout = MIN_TIMEOUT;
-    }
-    else {
-	m_timeout *= TIMEOUT_FACTOR;
-	m_timeout = qMin(m_timeout, MAX_TIMEOUT);
+    if (success) {
+        m_timeout = MIN_TIMEOUT;
+    } else {
+        m_timeout *= TIMEOUT_FACTOR;
+        m_timeout = qMin(m_timeout, MAX_TIMEOUT);
     }
 }
 
@@ -124,8 +125,8 @@ inline bool KisTileDataPooler::interestingTileData(KisTileData* td)
      * That is why we recheck all tiles with non-empty clones lists
      */
 
-    return td->m_state==KisTileData::NORMAL &&
-	(td->m_usersCount > 1 || !td->m_clonesList.isEmpty());
+    return td->m_state == KisTileData::NORMAL &&
+           (td->m_usersCount > 1 || !td->m_clonesList.isEmpty());
 }
 
 void KisTileDataPooler::run()
@@ -133,31 +134,31 @@ void KisTileDataPooler::run()
     while (1) {
         DEBUG_SIMPLE_ACTION("went to bed... Zzz...");
 
-	waitForWork();
+        waitForWork();
 
-	if(m_shouldExitFlag)
-	    return;
+        if (m_shouldExitFlag)
+            return;
 
-	QThread::msleep(0);
-	DEBUG_SIMPLE_ACTION("cycle started");
+        QThread::msleep(0);
+        DEBUG_SIMPLE_ACTION("cycle started");
 
-	m_store->m_listRWLock.lockForRead();
-	KisTileData *iter;
+        m_store->m_listRWLock.lockForRead();
+        KisTileData *iter;
 
-	if(!tileListEmpty()) {
-	    tileListForEachReverse(iter, tileListTail(), tileListHead()) {
-		if(interestingTileData(iter)) {
+        if (!tileListEmpty()) {
+            tileListForEachReverse(iter, tileListTail(), tileListHead()) {
+                if (interestingTileData(iter)) {
 
-		    qint32 clonesNeeded = numClonesNeeded(iter);
-		    if(clonesNeeded) {
-			m_lastCycleHadWork = true;
-			cloneTileData(iter, clonesNeeded);
-		    }
-		}
-	    }
-	}
-	m_store->m_listRWLock.unlock();
+                    qint32 clonesNeeded = numClonesNeeded(iter);
+                    if (clonesNeeded) {
+                        m_lastCycleHadWork = true;
+                        cloneTileData(iter, clonesNeeded);
+                    }
+                }
+            }
+        }
+        m_store->m_listRWLock.unlock();
 
-	DEBUG_SIMPLE_ACTION("cycle finished");
+        DEBUG_SIMPLE_ACTION("cycle finished");
     }
 }

@@ -177,33 +177,31 @@ void setAnnotationsForImage(const Image * src, KisImageWSP image)
         KisAnnotation* annotation = new KisAnnotation(QString("IPTC"), "", rawdata);
         Q_CHECK_PTR(annotation);
 
-            image -> addAnnotation(annotation);
-        }
+        image -> addAnnotation(annotation);
+    }
 // WARNING Graphics Magick 1.2 has a smaller version number than 1.1
 #if MagickLibVersion >= 0x020000 && MagickLibVersion < 0x0100000
-        {
-          ImageProfileIterator profile_iterator = AllocateImageProfileIterator( src );
-          const char * name;
-          const unsigned char * profile;
-          size_t length;
-          while( NextImageProfile( profile_iterator, &name, &profile, &length ) != MagickFail )
-          {
-              QByteArray rawdata;
-              rawdata.resize(length);
-              memcpy(rawdata.data(), profile, length);
-  
-              KisAnnotation* annotation = new KisAnnotation(QString(name), "", rawdata);
-              Q_CHECK_PTR(annotation);
-  
-              image -> addAnnotation(annotation);
-          }
-        }
-#else
-        for(int i = 0; i < src->generic_profiles; i++)
-        {
+    {
+        ImageProfileIterator profile_iterator = AllocateImageProfileIterator(src);
+        const char * name;
+        const unsigned char * profile;
+        size_t length;
+        while (NextImageProfile(profile_iterator, &name, &profile, &length) != MagickFail) {
             QByteArray rawdata;
-            rawdata.resize(src->generic_profile[i].length);
-            memcpy(rawdata.data(), src->generic_profile[i].info, src->generic_profile[i].length);
+            rawdata.resize(length);
+            memcpy(rawdata.data(), profile, length);
+
+            KisAnnotation* annotation = new KisAnnotation(QString(name), "", rawdata);
+            Q_CHECK_PTR(annotation);
+
+            image -> addAnnotation(annotation);
+        }
+    }
+#else
+    for (int i = 0; i < src->generic_profiles; i++) {
+        QByteArray rawdata;
+        rawdata.resize(src->generic_profile[i].length);
+        memcpy(rawdata.data(), src->generic_profile[i].info, src->generic_profile[i].length);
 
         KisAnnotation* annotation = new KisAnnotation(QString(src->generic_profile[i].name), "", rawdata);
         Q_CHECK_PTR(annotation);
@@ -651,7 +649,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageBuilder_Result KisImageMagickConverter::buildImage(const KUrl& uri) {
+KisImageBuilder_Result KisImageMagickConverter::buildImage(const KUrl& uri)
+{
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
@@ -673,17 +672,20 @@ KisImageBuilder_Result KisImageMagickConverter::buildImage(const KUrl& uri) {
 }
 
 
-KisImageWSP KisImageMagickConverter::image() {
+KisImageWSP KisImageMagickConverter::image()
+{
     return m_img;
 }
 
-void KisImageMagickConverter::init(KisDoc2 *doc, KisUndoAdapter *adapter) {
+void KisImageMagickConverter::init(KisDoc2 *doc, KisUndoAdapter *adapter)
+{
     m_doc = doc;
     m_adapter = adapter;
     m_job = 0;
 }
 
-KisImageBuilder_Result KisImageMagickConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd) {
+KisImageBuilder_Result KisImageMagickConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd)
+{
     Image *image;
     ExceptionInfo ei;
     ImageInfo *ii;
@@ -899,7 +901,8 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KUrl& uri, KisPa
     return KisImageBuilder_RESULT_OK;
 }
 
-void KisImageMagickConverter::ioData(KIO::Job *job, const QByteArray& data) {
+void KisImageMagickConverter::ioData(KIO::Job *job, const QByteArray& data)
+{
     if (data.isNull() || data.isEmpty()) {
 //             emit notifyProgressStage(i18n("Loading..."), 0);
         return;
@@ -937,7 +940,8 @@ void KisImageMagickConverter::ioData(KIO::Job *job, const QByteArray& data) {
         job -> kill();
 }
 
-void KisImageMagickConverter::ioResult(KIO::Job *job) {
+void KisImageMagickConverter::ioResult(KIO::Job *job)
+{
     m_job = 0;
 
 //        if (job -> error())
@@ -946,13 +950,15 @@ void KisImageMagickConverter::ioResult(KIO::Job *job) {
     decode(KUrl(), true);
 }
 
-void KisImageMagickConverter::ioTotalSize(KIO::Job * /*job*/, KIO::filesize_t size) {
+void KisImageMagickConverter::ioTotalSize(KIO::Job * /*job*/, KIO::filesize_t size)
+{
     m_size = size;
     m_data.reserve(size);
 //         emit notifyProgressStage(i18n("Loading..."), 0);
 }
 
-void KisImageMagickConverter::cancel() {
+void KisImageMagickConverter::cancel()
+{
     m_stop = true;
 }
 
@@ -960,7 +966,8 @@ void KisImageMagickConverter::cancel() {
  * @name readFilters
  * @return Provide a list of file formats the application can read.
  */
-QString KisImageMagickConverter::readFilters() {
+QString KisImageMagickConverter::readFilters()
+{
     QString s;
     QString all;
     QString name;
@@ -1033,7 +1040,8 @@ QString KisImageMagickConverter::readFilters() {
     return all + s;
 }
 
-QString KisImageMagickConverter::writeFilters() {
+QString KisImageMagickConverter::writeFilters()
+{
     QString s;
     QString all;
     QString name;

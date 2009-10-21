@@ -32,9 +32,9 @@ public:
     KisCurvePaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisCurvePaintOpSettingsWidget();
 
-    void setConfiguration( const KisPropertiesConfiguration * config);
+    void setConfiguration(const KisPropertiesConfiguration * config);
     KisPropertiesConfiguration* configuration() const;
-    void writeConfiguration( KisPropertiesConfiguration *config ) const;
+    void writeConfiguration(KisPropertiesConfiguration *config) const;
 
     int minimalDistance() const;
     int curveAction() const;

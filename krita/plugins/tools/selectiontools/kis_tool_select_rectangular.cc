@@ -192,7 +192,7 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
             // We don't want the border of the 'rectangle' to be included in our selection
             rc.setSize(rc.size() - QSize(1, 1));
             rc = rc.normalized();
-            if (rc.width() > 0 && rc.height() > 0 ) {
+            if (rc.width() > 0 && rc.height() > 0) {
                 KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
                 tmpSel->select(rc);
 
@@ -248,7 +248,7 @@ QWidget* KisToolSelectRectangular::createOptionWidget()
     m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setObjectName(toolId() + " option widget");
-    
+
     m_optWidget->setWindowTitle(i18n("Rectangular Selection"));
     m_optWidget->disableAntiAliasSelectionOption();
 

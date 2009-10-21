@@ -140,5 +140,5 @@ double build_stack(double **x_grad, double **y_grad,
                 max_stack[k][y][x] = max;
             }
 
-    return beta * (max_grad - min_grad);
+    return beta *(max_grad - min_grad);
 }

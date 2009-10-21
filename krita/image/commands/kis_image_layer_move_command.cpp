@@ -59,8 +59,7 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP 
 
 void KisImageLayerMoveCommand::redo()
 {
-    if( m_newAbove || m_index == quint32(-1) )
-    {
+    if (m_newAbove || m_index == quint32(-1)) {
         m_image->moveNode(m_layer, m_newParent, m_newAbove);
     } else {
         m_image->moveNode(m_layer, m_newParent, m_index);

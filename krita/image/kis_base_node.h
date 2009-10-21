@@ -287,16 +287,16 @@ signals:
     /**
      * This signal is emitted when the visibility of the layer is changed with \ref setVisible.
      */
-    void visibilityChanged( bool );
+    void visibilityChanged(bool);
 
     /**
      * This signal is emitted when the node is locked or unlocked with \ref setUserLocked.
      */
-    void userLockingChanged( bool );
+    void userLockingChanged(bool);
     /**
      * This signal is emitted when the node is locked or unlocked with \ref setSystemLocked.
      */
-    void systemLockingChanged( bool );
+    void systemLockingChanged(bool);
 private:
 
     class Private;

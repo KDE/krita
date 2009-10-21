@@ -8,14 +8,16 @@ class KisView2;
 /**
  * Template of view plugin
  */
-class %{APPNAME}Plugin : public KParts::Plugin
+class %
 {
+    APPNAME
+} Plugin : public KParts::Plugin {
     Q_OBJECT
-    public:
-        %{APPNAME}Plugin(QObject *parent, const QStringList &);
-        virtual ~%{APPNAME}Plugin();
-    private:
-        KisView2* m_view;
+public:
+    % {APPNAME} Plugin(QObject *parent, const QStringList &);
+    virtual ~ % {APPNAME} Plugin();
+private:
+    KisView2* m_view;
 };
 
 #endif

@@ -46,7 +46,7 @@
 
 K_EXPORT_COMPONENT_FACTORY(kritadropshadow, KGenericFactory<KisDropshadowPlugin>("krita"))
 
-        KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QStringList &)
+KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
@@ -75,8 +75,8 @@ void KisDropshadowPlugin::slotDropshadow()
     if (!dev) return;
 
     DlgDropshadow * dlgDropshadow = new DlgDropshadow(dev->colorSpace()->name(),
-                                                      image->colorSpace()->name(),
-                                                      m_view, "Dropshadow");
+            image->colorSpace()->name(),
+            m_view, "Dropshadow");
     Q_CHECK_PTR(dlgDropshadow);
 
     dlgDropshadow->setCaption(i18n("Drop Shadow"));

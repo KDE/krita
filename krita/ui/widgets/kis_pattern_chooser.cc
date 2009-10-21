@@ -34,7 +34,7 @@
 #include "kis_resource_server_provider.h"
 
 KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name)
-    : QFrame(parent)
+        : QFrame(parent)
 {
     setObjectName(name);
     m_lbName = new QLabel(this);
@@ -43,22 +43,22 @@ KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name)
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPattern>(rserver);
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setObjectName(name);
-    m_itemChooser->setFixedSize( 250, 250 );
-    m_itemChooser->setRowHeight( 30 );
+    m_itemChooser->setFixedSize(250, 250);
+    m_itemChooser->setRowHeight(30);
 
-    connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
-             this, SLOT( update( KoResource * ) ) );
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
+            this, SLOT(update(KoResource *)));
 
-    connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
-             this, SIGNAL(resourceSelected( KoResource * ) ) );
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
+            this, SIGNAL(resourceSelected(KoResource *)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
-    mainLayout->setMargin( 2 );
+    mainLayout->setMargin(2);
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
 
-    setLayout( mainLayout );
+    setLayout(mainLayout);
 }
 
 KisPatternChooser::~KisPatternChooser()
@@ -73,15 +73,15 @@ KoResource *  KisPatternChooser::currentResource()
 void KisPatternChooser::setCurrentItem(int row, int column)
 {
     m_itemChooser->setCurrentItem(row, column);
-    if(currentResource())
+    if (currentResource())
         update(currentResource());
 }
 
-void KisPatternChooser::update( KoResource * resource )
+void KisPatternChooser::update(KoResource * resource)
 {
     KisPattern *pattern = static_cast<KisPattern *>(resource);
 
-    QString text = QString("%1 (%2 x %3)").arg( i18n(pattern->name().toUtf8().data()) ).arg(pattern->width()).arg(pattern->height());
+    QString text = QString("%1 (%2 x %3)").arg(i18n(pattern->name().toUtf8().data())).arg(pattern->width()).arg(pattern->height());
     m_lbName->setText(text);
 }
 

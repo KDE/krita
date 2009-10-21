@@ -237,7 +237,7 @@ QWidget* KisToolSelectElliptical::createOptionWidget()
     m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setObjectName(toolId() + " option widget");
-    
+
     m_optWidget->setWindowTitle(i18n("Elliptical Selection"));
 
     connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));

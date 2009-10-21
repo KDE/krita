@@ -25,101 +25,99 @@
 
 GTLCore::PixelDescription csToPD(const KoColorSpace* cs)
 {
-  std::vector<const GTLCore::Type*> types;
-  foreach(KoChannelInfo* channel, cs->channels())
-  {
-    switch(channel->channelValueType())
-    {
-      case KoChannelInfo::UINT8:
-        types.push_back( GTLCore::Type::UnsignedInteger8 );
-        break;
-      case KoChannelInfo::INT8:
-        types.push_back( GTLCore::Type::Integer8 );
-        break;
-      case KoChannelInfo::UINT16:
-        types.push_back( GTLCore::Type::UnsignedInteger16 );
-        break;
-      case KoChannelInfo::INT16:
-        types.push_back( GTLCore::Type::Integer16 );
-        break;
-      case KoChannelInfo::UINT32:
-        types.push_back( GTLCore::Type::UnsignedInteger32 );
-        break;
-      case KoChannelInfo::FLOAT16:
-        types.push_back( GTLCore::Type::Half );
-        break;
-      case KoChannelInfo::FLOAT32:
-        types.push_back( GTLCore::Type::Float );
-        break;
-      case KoChannelInfo::FLOAT64:
-        types.push_back( GTLCore::Type::Double );
-        break;
+    std::vector<const GTLCore::Type*> types;
+    foreach(KoChannelInfo* channel, cs->channels()) {
+        switch (channel->channelValueType()) {
+        case KoChannelInfo::UINT8:
+            types.push_back(GTLCore::Type::UnsignedInteger8);
+            break;
+        case KoChannelInfo::INT8:
+            types.push_back(GTLCore::Type::Integer8);
+            break;
+        case KoChannelInfo::UINT16:
+            types.push_back(GTLCore::Type::UnsignedInteger16);
+            break;
+        case KoChannelInfo::INT16:
+            types.push_back(GTLCore::Type::Integer16);
+            break;
+        case KoChannelInfo::UINT32:
+            types.push_back(GTLCore::Type::UnsignedInteger32);
+            break;
+        case KoChannelInfo::FLOAT16:
+            types.push_back(GTLCore::Type::Half);
+            break;
+        case KoChannelInfo::FLOAT32:
+            types.push_back(GTLCore::Type::Float);
+            break;
+        case KoChannelInfo::FLOAT64:
+            types.push_back(GTLCore::Type::Double);
+            break;
+        }
     }
-  }
-  return GTLCore::PixelDescription(types);
+    return GTLCore::PixelDescription(types);
 }
 
-ConstPaintDeviceImage::ConstPaintDeviceImage( KisPaintDeviceSP device) : GTLCore::AbstractImage( csToPD( device->colorSpace()) ), m_device(device)
+ConstPaintDeviceImage::ConstPaintDeviceImage(KisPaintDeviceSP device) : GTLCore::AbstractImage(csToPD(device->colorSpace())), m_device(device)
 {
-  m_accessor = new KisRandomConstAccessor(device->createRandomConstAccessor(0,0));
+    m_accessor = new KisRandomConstAccessor(device->createRandomConstAccessor(0, 0));
 }
 
 ConstPaintDeviceImage::~ConstPaintDeviceImage()
 {
-  delete m_accessor;
+    delete m_accessor;
 }
 
-char* ConstPaintDeviceImage::data( int _x, int _y )
+char* ConstPaintDeviceImage::data(int _x, int _y)
 {
-  // TODO should return 0, when http://bugs.opengtl.org/index.php?do=details&task_id=24 is fixed
-  m_accessor->moveTo(_x, _y);
-  return const_cast<char*>((const char*)(m_accessor->oldRawData()));
+    // TODO should return 0, when http://bugs.opengtl.org/index.php?do=details&task_id=24 is fixed
+    m_accessor->moveTo(_x, _y);
+    return const_cast<char*>((const char*)(m_accessor->oldRawData()));
 }
 
-const char* ConstPaintDeviceImage::data( int _x, int _y ) const
+const char* ConstPaintDeviceImage::data(int _x, int _y) const
 {
-  m_accessor->moveTo(_x, _y);
-  return (const char*)(m_accessor->oldRawData());
+    m_accessor->moveTo(_x, _y);
+    return (const char*)(m_accessor->oldRawData());
 }
 
 GTLCore::AbstractImage::ConstIterator* ConstPaintDeviceImage::createIterator() const
 {
-  return 0;
+    return 0;
 }
 
 GTLCore::AbstractImage::Iterator* ConstPaintDeviceImage::createIterator()
 {
-  return 0;
+    return 0;
 }
 
-PaintDeviceImage::PaintDeviceImage( KisPaintDeviceSP device) : GTLCore::AbstractImage( csToPD( device->colorSpace()) ), m_device(device)
+PaintDeviceImage::PaintDeviceImage(KisPaintDeviceSP device) : GTLCore::AbstractImage(csToPD(device->colorSpace())), m_device(device)
 {
-  m_accessor = new KisRandomAccessor(device->createRandomAccessor(0,0));
+    m_accessor = new KisRandomAccessor(device->createRandomAccessor(0, 0));
 }
 
 PaintDeviceImage::~PaintDeviceImage()
 {
-  delete m_accessor;
+    delete m_accessor;
 }
 
-char* PaintDeviceImage::data( int _x, int _y )
+char* PaintDeviceImage::data(int _x, int _y)
 {
-  m_accessor->moveTo(_x, _y);
-  return (char*)(m_accessor->rawData());
+    m_accessor->moveTo(_x, _y);
+    return (char*)(m_accessor->rawData());
 }
 
-const char* PaintDeviceImage::data( int _x, int _y ) const
+const char* PaintDeviceImage::data(int _x, int _y) const
 {
-  m_accessor->moveTo(_x, _y);
-  return (const char*)(m_accessor->oldRawData());
+    m_accessor->moveTo(_x, _y);
+    return (const char*)(m_accessor->oldRawData());
 }
 
 GTLCore::AbstractImage::ConstIterator* PaintDeviceImage::createIterator() const
 {
-  return 0;
+    return 0;
 }
 
 GTLCore::AbstractImage::Iterator* PaintDeviceImage::createIterator()
 {
-  return 0;
+    return 0;
 }

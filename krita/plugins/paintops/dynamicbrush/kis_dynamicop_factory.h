@@ -61,13 +61,11 @@ public:
     virtual KisPaintOpSettingsSP settings(KisImageWSP image);
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);
 
-    KisBookmarkedConfigurationsModel* shapeBookmarksManager()
-    {
+    KisBookmarkedConfigurationsModel* shapeBookmarksManager() {
         return m_shapeBookmarksManager;
     }
 
-    KisBookmarkedConfigurationsModel* coloringBookmarksManager()
-    {
+    KisBookmarkedConfigurationsModel* coloringBookmarksManager() {
         return m_coloringBookmarksManager;
     }
 

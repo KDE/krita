@@ -185,11 +185,6 @@ QHash<QString, Entry>::const_iterator Store::end() const
 void Store::debugDump() const
 {
     dbgImage << "=== Dumping MetaData Store ===";
-    /*    dbgImage <<" - Schemas";
-        foreach(Schema* s, d->uri2Schema)
-        {
-            dbgImage << *s;
-        }*/
     dbgImage << " - Metadata (there are" << d->entries.size() << " entries)";
     foreach(const Entry& e, d->entries) {
         if (e.isValid()) {

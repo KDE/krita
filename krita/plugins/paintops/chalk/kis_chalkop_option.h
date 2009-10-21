@@ -30,7 +30,7 @@ public:
     ~KisChalkOpOption();
 
     int radius() const;
-    void setRadius( int radius );
+    void setRadius(int radius);
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
@@ -38,7 +38,7 @@ public:
 
 private:
 
-   KisChalkOpOptionsWidget * m_options;
+    KisChalkOpOptionsWidget * m_options;
 
 };
 

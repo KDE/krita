@@ -61,4 +61,4 @@ private:
     quint32 m_index;
 };
 
-#endif 
+#endif

@@ -68,8 +68,7 @@ public:
     Private(const KoViewConverter *vc)
             : toolProxy(0),
             canvas(0),
-            viewConverter(vc)
-    {
+            viewConverter(vc) {
     }
 
     KisPrescaledProjectionSP prescaledProjection;
@@ -80,7 +79,7 @@ public:
     /// the offset of the view in the document, expressed in the view reference (not in the document reference)
     QPoint documentOffset;
     /// the origin of the image rect
-    QPoint origin;      
+    QPoint origin;
     QTimer blockMouseEvent;
 };
 
@@ -97,9 +96,9 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     setAutoFillBackground(true);
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
-    setAttribute( Qt::WA_InputMethodEnabled, true);
-    setAttribute( Qt::WA_StaticContents );
-    setAttribute( Qt::WA_OpaquePaintEvent );
+    setAttribute(Qt::WA_InputMethodEnabled, true);
+    setAttribute(Qt::WA_StaticContents);
+    setAttribute(Qt::WA_OpaquePaintEvent);
 
     m_d->canvas =  canvas;
     m_d->toolProxy = canvas->toolProxy();
@@ -125,33 +124,33 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     if (image == 0) return;
 
     setAutoFillBackground(false);
-#ifdef INDEPENDENT_CANVAS    
-    if (m_buffer.size() != size()){
+#ifdef INDEPENDENT_CANVAS
+    if (m_buffer.size() != size()) {
         m_buffer = QImage(size(), QImage::Format_ARGB32_Premultiplied);
     }
 #endif
-    
+
     QPoint documentOffset = m_d->documentOffset;
 
-#ifdef INDEPENDENT_CANVAS    
-    QPainter gc( &m_buffer );
+#ifdef INDEPENDENT_CANVAS
+    QPainter gc(&m_buffer);
 #else
-    QPainter gc( this );
+    QPainter gc(this);
 #endif
 
     gc.setCompositionMode(QPainter::CompositionMode_Source);
-    gc.fillRect(QRect(QPoint(0,0),size()), Qt::gray );
+    gc.fillRect(QRect(QPoint(0, 0), size()), Qt::gray);
 
     // Don't draw the checks if we draw a cached pixmap, because we
     // need alpha transparency for checks. The precached pixmap
     // already should contain checks.
-    QRect documentRect = QRect( QPoint(0,0), documentSize() );
+    QRect documentRect = QRect(QPoint(0, 0), documentSize());
     QRect fillRect = documentRect.translated(m_d->origin);
 
     if (!cfg.noXRender()) {
 
         if (cfg.scrollCheckers()) {
-            
+
 
             if (documentOffset.x() > 0) {
                 fillRect.adjust(0, 0, documentOffset.x(), 0);
@@ -164,7 +163,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
                 fillRect.adjust(0, documentOffset.y(), 0, 0);
             }
             gc.save();
-            gc.translate( -documentOffset);
+            gc.translate(-documentOffset);
             gc.fillRect(fillRect, m_d->checkBrush);
             gc.restore();
         } else {
@@ -175,9 +174,9 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
     if (cfg.noXRender()) {
-        gc.drawPixmap(ev->rect(), m_d->prescaledProjection->prescaledPixmap(), ev->rect().translated( -m_d->origin ) );
+        gc.drawPixmap(ev->rect(), m_d->prescaledProjection->prescaledPixmap(), ev->rect().translated(-m_d->origin));
     } else {
-        gc.drawImage(ev->rect(), m_d->prescaledProjection->prescaledQImage(), ev->rect().translated( -m_d->origin ) );
+        gc.drawImage(ev->rect(), m_d->prescaledProjection->prescaledQImage(), ev->rect().translated(-m_d->origin));
     }
 
 #ifdef DEBUG_REPAINT
@@ -189,7 +188,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
 #ifdef INDEPENDENT_CANVAS
     QPainter painter(this);
-    painter.drawImage(ev->rect(), m_buffer, ev->rect() );
+    painter.drawImage(ev->rect(), m_buffer, ev->rect());
 #endif
 }
 
@@ -207,7 +206,7 @@ void KisQPainterCanvas::leaveEvent(QEvent* e)
 void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_d->blockMouseEvent.isActive()) return;
-    m_d->toolProxy->mouseMoveEvent(e, m_d->viewConverter->viewToDocument( widgetToView(e->pos() + m_d->documentOffset) ) );
+    m_d->toolProxy->mouseMoveEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
 }
 
 void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e)
@@ -223,19 +222,19 @@ void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e)
 void KisQPainterCanvas::mousePressEvent(QMouseEvent *e)
 {
     if (m_d->blockMouseEvent.isActive()) return;
-    m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument( widgetToView(e->pos() + m_d->documentOffset) ));
+    m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
 }
 
 void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
     if (m_d->blockMouseEvent.isActive()) return;
-    m_d->toolProxy->mouseReleaseEvent(e, m_d->viewConverter->viewToDocument( widgetToView(e->pos() + m_d->documentOffset) ));
+    m_d->toolProxy->mouseReleaseEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
 }
 
 void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e)
 {
     if (m_d->blockMouseEvent.isActive()) return;
-    m_d->toolProxy->mouseDoubleClickEvent(e, m_d->viewConverter->viewToDocument( widgetToView(e->pos() + m_d->documentOffset) ));
+    m_d->toolProxy->mouseDoubleClickEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
 }
 
 void KisQPainterCanvas::keyPressEvent(QKeyEvent *e)
@@ -269,13 +268,13 @@ void KisQPainterCanvas::tabletEvent(QTabletEvent *e)
 {
     setFocus(Qt::OtherFocusReason);
     m_d->blockMouseEvent.start(100);
-    
-    m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument( e->hiResGlobalPos() - mapToGlobal(QPoint(0,0)) + m_d->documentOffset - m_d->origin ) );
+
+    m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(e->hiResGlobalPos() - mapToGlobal(QPoint(0, 0)) + m_d->documentOffset - m_d->origin));
 }
 
 void KisQPainterCanvas::wheelEvent(QWheelEvent *e)
 {
-    m_d->toolProxy->wheelEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset) ));
+    m_d->toolProxy->wheelEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
 }
 
 KoToolProxy * KisQPainterCanvas::toolProxy()
@@ -296,7 +295,7 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
     if (size.width() <= 0) {
         size.setWidth(1);
     }
-    if (size.height() <= 0) {   
+    if (size.height() <= 0) {
         size.setHeight(1);
     }
     m_d->prescaledProjection->resizePrescaledImage(size);
@@ -316,11 +315,11 @@ void KisQPainterCanvas::adjustOrigin()
     KisImageWSP image = m_d->canvas->image();
     if (image == 0) return;
 
-    QRect documentRect = QRect( QPoint(0,0), documentSize() );
+    QRect documentRect = QRect(QPoint(0, 0), documentSize());
 
     // save the old origin to see if it has changed
     QPoint oldOrigin = m_d->origin;
-    
+
     // set the origin to the zoom document rect origin
     m_d->origin = -documentRect.topLeft();
 
@@ -328,14 +327,14 @@ void KisQPainterCanvas::adjustOrigin()
     // if there are margins left around the zoomed document rect then
     // distribute them evenly on both sides
     int widthDiff = size().width() - documentRect.width();
-    if( widthDiff > 0 )
-        m_d->origin.rx() += qRound( 0.5 * widthDiff );
+    if (widthDiff > 0)
+        m_d->origin.rx() += qRound(0.5 * widthDiff);
     int heightDiff = size().height() - documentRect.height();
-    if( heightDiff > 0 )
-        m_d->origin.ry() += qRound( 0.5 * heightDiff );
+    if (heightDiff > 0)
+        m_d->origin.ry() += qRound(0.5 * heightDiff);
 
 
-    emit documentOriginChanged( m_d->origin );
+    emit documentOriginChanged(m_d->origin);
 }
 
 
@@ -353,7 +352,7 @@ QPoint KisQPainterCanvas::widgetToView(const QPoint& p) const
 
 QRect KisQPainterCanvas::widgetToView(const QRect& r) const
 {
-    return r.translated( - m_d->origin );
+    return r.translated(- m_d->origin);
 }
 
 
@@ -365,7 +364,7 @@ QPoint KisQPainterCanvas::viewToWidget(const QPoint& p) const
 
 QRect KisQPainterCanvas::viewToWidget(const QRect& r) const
 {
-    return r.translated( m_d->origin );
+    return r.translated(m_d->origin);
 }
 
 

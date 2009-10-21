@@ -37,11 +37,11 @@ class KisProjectionCache : public KisProjectionBackend
 {
 public:
     KisProjectionCache();
-    virtual ~KisProjectionCache(){}
+    virtual ~KisProjectionCache() {}
 
-    void setImage( KisImageWSP image );
-    void setImageSize( qint32 w, qint32 h );
-    void setMonitorProfile( const KoColorProfile* monitorProfile );
+    void setImage(KisImageWSP image);
+    void setImageSize(qint32 w, qint32 h);
+    void setMonitorProfile(const KoColorProfile* monitorProfile);
     void setDirty(const QRect& rc);
 
     KisImagePatch getNearestPatch(qreal scaleX, qreal scaleY,
@@ -54,7 +54,7 @@ public:
                                qint32 borderWidth,
                                QPainter::RenderHints renderHints);
 
-    void setCacheKisImageAsQImage( bool toggle );
+    void setCacheKisImageAsQImage(bool toggle);
 
 
 private:

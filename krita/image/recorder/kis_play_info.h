@@ -24,16 +24,17 @@
 
 class KisUndoAdapter;
 
-class KRITAIMAGE_EXPORT KisPlayInfo {
-    public:
-        KisPlayInfo(KisImageWSP image, KisNodeSP currentNodes);
-        ~KisPlayInfo();
-        KisUndoAdapter* undoAdapter() const;
-        KisImageWSP image() const;
-        KisNodeSP currentNode() const;
-    private:
-        struct Private;
-        Private* const d;
+class KRITAIMAGE_EXPORT KisPlayInfo
+{
+public:
+    KisPlayInfo(KisImageWSP image, KisNodeSP currentNodes);
+    ~KisPlayInfo();
+    KisUndoAdapter* undoAdapter() const;
+    KisImageWSP image() const;
+    KisNodeSP currentNode() const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

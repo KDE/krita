@@ -44,9 +44,9 @@ public:
 
     KisSelectionComponent* clone();
 
-    bool saveSelection( KoStore * store) const;
+    bool saveSelection(KoStore * store) const;
 
-    bool loadSelection( KoStore * store );
+    bool loadSelection(KoStore * store);
     /**
      * Renders the shapes to a selection. This method should only be called
      * by KisSelection to update it's projection.
@@ -96,7 +96,9 @@ public:
     KoShape* createDefaultShape() const;
     KoShape* createShape(const KoProperties* params) const;
 
-    bool hidden() const { return true; }
+    bool hidden() const {
+        return true;
+    }
 };
 
 #endif

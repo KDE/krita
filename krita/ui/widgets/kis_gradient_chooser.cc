@@ -50,7 +50,7 @@ KisCustomGradientDialog::KisCustomGradientDialog(KisView2 * view, QWidget * pare
 }
 
 KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const char *name)
-    : QFrame(parent)
+        : QFrame(parent)
 {
     setObjectName(name);
     m_lbName = new QLabel();
@@ -58,14 +58,14 @@ KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const c
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
     m_itemChooser = new KoResourceItemChooser(adapter, this);
-    m_itemChooser->setFixedSize( 250, 250 );
+    m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setColumnCount(1);
 
-    connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
-             this, SLOT( update( KoResource * ) ) );
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
+            this, SLOT(update(KoResource *)));
 
-    connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
-             this, SIGNAL(resourceSelected( KoResource * ) ) );
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
+            this, SIGNAL(resourceSelected(KoResource *)));
 
     m_customGradient = new QPushButton(i18n("Custom Gradient..."));
     m_customGradient->setObjectName("custom gradient button");
@@ -94,14 +94,14 @@ KoResource *  KisGradientChooser::currentResource()
 void KisGradientChooser::setCurrentItem(int row, int column)
 {
     m_itemChooser->setCurrentItem(row, column);
-    if(currentResource())
+    if (currentResource())
         update(currentResource());
 }
 
-void KisGradientChooser::update( KoResource * resource )
+void KisGradientChooser::update(KoResource * resource)
 {
     KoAbstractGradient *gradient = static_cast<KoAbstractGradient *>(resource);
-    m_lbName->setText( i18n(gradient->name().toUtf8().data() ));
+    m_lbName->setText(i18n(gradient->name().toUtf8().data()));
 }
 
 #include "kis_gradient_chooser.moc"

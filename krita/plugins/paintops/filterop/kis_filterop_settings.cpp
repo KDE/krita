@@ -38,7 +38,8 @@ KisFilterOpSettings::KisFilterOpSettings()
 {
 }
 
-KisFilterOpSettings::~KisFilterOpSettings() {
+KisFilterOpSettings::~KisFilterOpSettings()
+{
 }
 
 bool KisFilterOpSettings::paintIncremental()
@@ -50,10 +51,10 @@ void KisFilterOpSettings::fromXML(const QDomElement& elt)
 {
     // First, call the parent class fromXML to make sure all the
     // properties are saved to the map
-    KisPaintOpSettings::fromXML( elt );
+    KisPaintOpSettings::fromXML(elt);
 
     // Then load the properties for all widgets
-    m_options->setConfiguration( this );
+    m_options->setConfiguration(this);
 }
 
 void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
@@ -64,7 +65,7 @@ void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     KisPropertiesConfiguration * settings = m_options->configuration();
 
     // Then call the parent class fromXML
-    settings->KisPropertiesConfiguration::toXML( doc, rootElt );
+    settings->KisPropertiesConfiguration::toXML(doc, rootElt);
 
     delete settings;
 }
@@ -73,23 +74,23 @@ void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 KisPaintOpSettingsSP KisFilterOpSettings::clone() const
 {
 
-    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>( m_options->configuration() );
+    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>(m_options->configuration());
     return settings;
 
 }
 
-void KisFilterOpSettings::setNode( KisNodeSP node )
+void KisFilterOpSettings::setNode(KisNodeSP node)
 {
-    KisPaintOpSettings::setNode( node );
-    if ( m_options ) {
-        m_options->m_filterOption->setNode( node );
+    KisPaintOpSettings::setNode(node);
+    if (m_options) {
+        m_options->m_filterOption->setNode(node);
     }
 }
 
-void KisFilterOpSettings::setImage( KisImageWSP image )
+void KisFilterOpSettings::setImage(KisImageWSP image)
 {
     if (m_options) {
-        m_options->m_filterOption->setImage( image );
+        m_options->m_filterOption->setImage(image);
     }
 }
 

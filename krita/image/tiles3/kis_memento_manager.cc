@@ -25,15 +25,15 @@
 
 #ifdef DEBUG_MM
 #define DEBUG_LOG_TILE_ACTION(action, tile, col, row)                   \
-    printf("### MementoManager (0x%X): %s "				\
-	   "\ttile:\t0x%X (%d, %d) ###\n", (quintptr)this, action,	\
-	   (quintptr)tile, col, row)
+    printf("### MementoManager (0x%X): %s "             \
+           "\ttile:\t0x%X (%d, %d) ###\n", (quintptr)this, action,  \
+           (quintptr)tile, col, row)
 
-#define DEBUG_LOG_SIMPLE_ACTION(action)					\
+#define DEBUG_LOG_SIMPLE_ACTION(action)                 \
     printf("### MementoManager (0x%X): %s\n", (quintptr)this, action)
 
 #define DEBUG_DUMP_MESSAGE(action) do {                                 \
-        printf("\n### MementoManager (0x%X): %s \t\t##########\n",	\
+        printf("\n### MementoManager (0x%X): %s \t\t##########\n",  \
                (quintptr)this, action);                                 \
         debugPrintInfo();                                               \
         printf("##################################################################\n\n"); \
@@ -48,17 +48,17 @@
 
 
 KisMementoManager::KisMementoManager()
-    : m_headsHashTable(0),
-      m_currentMemento(0)
+        : m_headsHashTable(0),
+        m_currentMemento(0)
 {
 }
 
 KisMementoManager::KisMementoManager(const KisMementoManager& rhs)
-    :m_index(rhs.m_index),
-     m_revisions(rhs.m_revisions),
-     m_cancelledRevisions(rhs.m_cancelledRevisions),
-     m_headsHashTable(rhs.m_headsHashTable, 0),
-     m_currentMemento(0)
+        : m_index(rhs.m_index),
+        m_revisions(rhs.m_revisions),
+        m_cancelledRevisions(rhs.m_cancelledRevisions),
+        m_headsHashTable(rhs.m_headsHashTable, 0),
+        m_currentMemento(0)
 {
 }
 
@@ -76,7 +76,7 @@ KisMementoManager::~KisMementoManager()
  */
 void KisMementoManager::registerTileChange(KisTile *tile)
 {
-    if(!m_currentMemento) return;
+    if (!m_currentMemento) return;
     m_cancelledRevisions.clear();
 
     DEBUG_LOG_TILE_ACTION("reg. [C]", tile, tile->col(), tile->row());
@@ -89,7 +89,7 @@ void KisMementoManager::registerTileChange(KisTile *tile)
 
 void KisMementoManager::registerTileDeleted(KisTile *tile)
 {
-    if(!m_currentMemento) return;
+    if (!m_currentMemento) return;
     m_cancelledRevisions.clear();
 
     DEBUG_LOG_TILE_ACTION("reg. [D]", tile, tile->col(), tile->row());
@@ -101,7 +101,7 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 }
 void KisMementoManager::commit()
 {
-    if(!m_index.size()) return;
+    if (!m_index.size()) return;
 
     KisMementoItemSP mi;
     bool newTile;
@@ -148,7 +148,7 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
 {
     commit();
 
-    if(! m_revisions.size()) return;
+    if (! m_revisions.size()) return;
 
     KisMementoItemList changeList = m_revisions.takeLast();
 
@@ -159,9 +159,9 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
     foreach(mi, changeList) {
         parentMI = mi->parent();
 
-        if(mi->type() == KisMementoItem::CHANGED)
+        if (mi->type() == KisMementoItem::CHANGED)
             ht->deleteTile(mi->col(), mi->row());
-        if(parentMI->type() == KisMementoItem::CHANGED)
+        if (parentMI->type() == KisMementoItem::CHANGED)
             ht->addTile(parentMI->tile(this));
 
         m_headsHashTable.deleteTile(parentMI->col(), parentMI->row());
@@ -193,7 +193,7 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
 {
     commit();
 
-    if(! m_cancelledRevisions.size()) return;
+    if (! m_cancelledRevisions.size()) return;
 
     KisMementoItemList changeList = m_cancelledRevisions.takeFirst();
 
@@ -201,9 +201,9 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
 
     saveAndClearMemento(m_currentMemento);
     foreach(mi, changeList) {
-        if(mi->parent()->type() == KisMementoItem::CHANGED)
+        if (mi->parent()->type() == KisMementoItem::CHANGED)
             ht->deleteTile(mi->col(), mi->row());
-        if(mi->type() == KisMementoItem::CHANGED)
+        if (mi->type() == KisMementoItem::CHANGED)
             ht->addTile(mi->tile(this));
     }
     /**
@@ -232,7 +232,8 @@ void KisMementoManager::setDefaultTileData(KisTileData *defaultTileData)
 }
 
 
-void KisMementoManager::debugPrintInfo() {
+void KisMementoManager::debugPrintInfo()
+{
     printf("KisMementoManager stats:\n");
     printf("Index list\n");
     KisMementoItemList changeList;
@@ -242,19 +243,19 @@ void KisMementoManager::debugPrintInfo() {
     }
 
     printf("Revisions list:\n");
-    qint32 i=0;
+    qint32 i = 0;
     foreach(changeList, m_revisions) {
         printf("--- revision #%d ---\n", i++);
-        foreach(mi,changeList) {
+        foreach(mi, changeList) {
             mi->debugPrintInfo();
         }
     }
 
     printf("\nCancelled revisions list:\n");
-    i=0;
+    i = 0;
     foreach(changeList, m_cancelledRevisions) {
         printf("--- revision #%d ---\n", m_revisions.size() + i++);
-        foreach(mi,changeList) {
+        foreach(mi, changeList) {
             mi->debugPrintInfo();
         }
     }

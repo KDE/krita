@@ -26,11 +26,9 @@ static QStringList opsInOrder;
 
 KisCompositeOpsModel::KisCompositeOpsModel(const QList<KoCompositeOp*>& list)
 {
-    foreach(KoCompositeOp* op, list)
-    {
-        if(op->userVisible())
-        {
-            m_list.push_back( CompositeOpInfo(op->id(), op->description(), op->category() ) );
+    foreach(KoCompositeOp* op, list) {
+        if (op->userVisible()) {
+            m_list.push_back(CompositeOpInfo(op->id(), op->description(), op->category()));
         }
     }
     if (opsInOrder.isEmpty()) {
@@ -79,30 +77,26 @@ KisCompositeOpsModel::~KisCompositeOpsModel()
 {
 }
 
-int KisCompositeOpsModel::rowCount( const QModelIndex & /*parent*/ ) const
+int KisCompositeOpsModel::rowCount(const QModelIndex & /*parent*/) const
 {
     return m_list.count();
 }
 
-QVariant KisCompositeOpsModel::data( const QModelIndex & index, int role ) const
+QVariant KisCompositeOpsModel::data(const QModelIndex & index, int role) const
 {
-    if(index.isValid())
-    {
-        switch( role )
-        {
-            case Qt::DisplayRole:
-            {
-                return m_list[index.row()].description;
-            }
-            case CompositeOpSortRole:
-            {
-                int idx = opsInOrder.indexOf( m_list[index.row()].id );
-                if( idx == -1 ) return opsInOrder.count();
-                return idx;
-            }
-            case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
-            case KCategorizedSortFilterProxyModel::CategorySortRole:
-                return m_list[index.row()].category;
+    if (index.isValid()) {
+        switch (role) {
+        case Qt::DisplayRole: {
+            return m_list[index.row()].description;
+        }
+        case CompositeOpSortRole: {
+            int idx = opsInOrder.indexOf(m_list[index.row()].id);
+            if (idx == -1) return opsInOrder.count();
+            return idx;
+        }
+        case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
+        case KCategorizedSortFilterProxyModel::CategorySortRole:
+            return m_list[index.row()].category;
         }
     }
     return QVariant();
@@ -114,14 +108,14 @@ const QString& KisCompositeOpsModel::itemAt(const QModelIndex & index) const
     return m_list[index.row()].id;
 }
 
-QModelIndex KisCompositeOpsModel::indexOf( const KoCompositeOp* op) const
+QModelIndex KisCompositeOpsModel::indexOf(const KoCompositeOp* op) const
 {
     if (!op) return QModelIndex();
 
     return indexOf(op->id());
 }
 
-QModelIndex KisCompositeOpsModel::indexOf( const QString& id) const
+QModelIndex KisCompositeOpsModel::indexOf(const QString& id) const
 {
     int index = 0;
     foreach(const CompositeOpInfo&  op2, m_list) {
@@ -129,8 +123,7 @@ QModelIndex KisCompositeOpsModel::indexOf( const QString& id) const
             break;
         ++index;
     }
-    if(index < m_list.count())
-    {
+    if (index < m_list.count()) {
         return createIndex(index, 0);
     } else {
         return QModelIndex();

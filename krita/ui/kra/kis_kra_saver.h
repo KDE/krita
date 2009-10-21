@@ -27,16 +27,17 @@ class QDomDocument;
 class KoStore;
 class QString;
 
-class KisKraSaver {
+class KisKraSaver
+{
 public:
 
-    KisKraSaver( KisDoc2* document );
+    KisKraSaver(KisDoc2* document);
 
     ~KisKraSaver();
 
-    QDomElement saveXML( QDomDocument& doc,  KisImageWSP img );
+    QDomElement saveXML(QDomDocument& doc,  KisImageWSP img);
 
-    bool saveBinaryData( KoStore* store, KisImageWSP image, const QString & uri, bool external );
+    bool saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external);
 
 private:
 

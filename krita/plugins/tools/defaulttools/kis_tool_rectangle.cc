@@ -188,43 +188,43 @@ void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
 {
     QPointF viewDragStart = pixelToView(m_dragStart);
     QPointF viewDragEnd = pixelToView(m_dragEnd);
-    
+
 #if defined(HAVE_OPENGL)
-    if (m_canvas->canvasController()->isCanvasOpenGL()){
+    if (m_canvas->canvasController()->isCanvasOpenGL()) {
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
 
         glBegin(GL_LINE_LOOP);
-            glColor3f(0.5,1.0, 0.5);
+        glColor3f(0.5, 1.0, 0.5);
 
-            glVertex2f( viewDragStart.x(), viewDragStart.y() );
-            glVertex2f( viewDragEnd.x(), viewDragStart.y() );
+        glVertex2f(viewDragStart.x(), viewDragStart.y());
+        glVertex2f(viewDragEnd.x(), viewDragStart.y());
 
-            glVertex2f( viewDragEnd.x(), viewDragEnd.y() );
-            glVertex2f( viewDragStart.x(), viewDragEnd.y() );
+        glVertex2f(viewDragEnd.x(), viewDragEnd.y());
+        glVertex2f(viewDragStart.x(), viewDragEnd.y());
 
         glEnd();
 
         glDisable(GL_COLOR_LOGIC_OP);
         glDisable(GL_LINE_SMOOTH);
-    }else
+    } else
 #endif
-    if (m_canvas) {
+        if (m_canvas) {
 
 #ifdef INDEPENDENT_CANVAS
-        QPainterPath path;
-        path.addRect(QRectF( viewDragStart, viewDragEnd ));
-        paintToolOutline(&gc,path);
+            QPainterPath path;
+            path.addRect(QRectF(viewDragStart, viewDragEnd));
+            paintToolOutline(&gc, path);
 #else
-        QPen old = gc.pen();
-        QPen pen(Qt::SolidLine);
-        gc.setPen(pen);
-        gc.drawRect(QRectF( viewDragStart, viewDragEnd ));
-        gc.setPen(old);
-#endif        
-        
-    }
+            QPen old = gc.pen();
+            QPen pen(Qt::SolidLine);
+            gc.setPen(pen);
+            gc.drawRect(QRectF(viewDragStart, viewDragEnd));
+            gc.setPen(old);
+#endif
+
+        }
 }
 
 #include "kis_tool_rectangle.moc"

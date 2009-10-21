@@ -25,7 +25,8 @@ class QWidget;
 class KisRecordedAction;
 class QString;
 
-class KRITAUI_EXPORT KisRecordedActionEditorFactory {
+class KRITAUI_EXPORT KisRecordedActionEditorFactory
+{
 public:
     KisRecordedActionEditorFactory();
     virtual ~KisRecordedActionEditorFactory();
@@ -38,7 +39,7 @@ public:
     /**
      * @return true if this factory can create an editor for the given action.
      */
-    virtual bool canEdit( const KisRecordedAction* action) const = 0;
+    virtual bool canEdit(const KisRecordedAction* action) const = 0;
 private:
     struct Private;
     Private* const d;

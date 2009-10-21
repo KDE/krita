@@ -55,7 +55,8 @@ public:
         GradientRepeatAlternate
     };
 
-    class Configuration {
+    class Configuration
+    {
 
     public:
         const KoAbstractGradient* gradient;

@@ -50,9 +50,8 @@ public:
         WRITE
     };
     KisTileDataWrapper(KisTileSP tile, qint32 offset, accessType type)
-        : m_tile(tile), m_offset (offset)
-    {
-        if(type == READ)
+            : m_tile(tile), m_offset(offset) {
+        if (type == READ)
             m_tile->lockForRead();
         else
             m_tile->lockForWrite();
@@ -95,7 +94,7 @@ class KRITAIMAGE_EXPORT KisTiledDataManager : public KisShared
 {
 
 protected:
-/*FIXME:*/
+    /*FIXME:*/
 public:
     KisTiledDataManager(quint32 pixelSize, const quint8 *defPixel);
     ~KisTiledDataManager();
@@ -115,26 +114,26 @@ protected:
         return m_defaultPixel;
     }
 
-/* FIXME:*/
+    /* FIXME:*/
 public:
 
     inline KisTileSP getTile(qint32 col, qint32 row) {
         bool newTile;
         KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
-        if(newTile)
+        if (newTile)
             updateExtent(tile->col(), tile->row());
         return tile;
     }
 
     inline KisTileSP getOldTile(qint32 col, qint32 row) {
-	/**
-	 * FIXME: A kind of optimization
-	 */
-//	if(!hasCurrentMemento())
-//	    return getTile(col, row);
+        /**
+         * FIXME: A kind of optimization
+         */
+//  if(!hasCurrentMemento())
+//      return getTile(col, row);
 
-	KisTileSP tile = m_mementoManager->getCommitedTile(col, row);
-	return tile ? tile : getTile(col, row);
+        KisTileSP tile = m_mementoManager->getCommitedTile(col, row);
+        return tile ? tile : getTile(col, row);
     }
 
     KisMementoSP getMemento() {
@@ -152,8 +151,8 @@ public:
         m_mementoManager->rollforward(m_hashTable);
     }
     bool hasCurrentMemento() const {
-	return m_mementoManager->hasCurrentMemento();
-	//return true;
+        return m_mementoManager->hasCurrentMemento();
+        //return true;
     }
 
 protected:
@@ -168,7 +167,7 @@ protected:
         return m_pixelSize;
     }
 
-/* FIXME:*/
+    /* FIXME:*/
 public:
 
 
@@ -300,8 +299,8 @@ inline qint32 KisTiledDataManager::divideRoundDown(qint32 x, const qint32 y) con
      */
 
     return x >= 0 ?
-        x / y :
-        -(( (-x - 1) / y) + 1);
+           x / y :
+           -(((-x - 1) / y) + 1);
 }
 
 

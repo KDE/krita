@@ -31,7 +31,8 @@
  * Note: this is for things like fixed color, paper patterns,
  * not for transparency checks.
  */
-class KRITAIMAGE_EXPORT KisBackground : public KisShared {
+class KRITAIMAGE_EXPORT KisBackground : public KisShared
+{
 
 public:
 

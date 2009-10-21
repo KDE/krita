@@ -28,31 +28,30 @@
 #include <qfileinfo.h>
 
 struct KoCtlTemplatesRegistry::Private {
-  QList<OpenCTL::Template*> templates;
+    QList<OpenCTL::Template*> templates;
 };
 
-KoCtlTemplatesRegistry::KoCtlTemplatesRegistry() 
-    : d(new Private)
+KoCtlTemplatesRegistry::KoCtlTemplatesRegistry()
+        : d(new Private)
 {
-  KGlobal::mainComponent().dirs()->addResourceType("ctl_compositeops", "data", "pigmentcms/ctlcompositeops/");
-  QStringList ctlcompositeopsFilenames;
-  ctlcompositeopsFilenames += KGlobal::mainComponent().dirs()->findAllResources("ctl_compositeops", "*.ctlt",  KStandardDirs::Recursive);
-  dbgPlugins << "There are " << ctlcompositeopsFilenames.size() << " CTL composite ops";
-  if (!ctlcompositeopsFilenames.empty()) {
-    for( QStringList::Iterator it = ctlcompositeopsFilenames.begin(); it != ctlcompositeopsFilenames.end(); ++it ) {
-      OpenCTL::Template* ctltemplate = new OpenCTL::Template;
-      ctltemplate->loadFromFile(it->toAscii().data());
-      ctltemplate->compile();
-      if( ctltemplate->isCompiled() )
-      {
-        dbgPlugins << "Valid composite ops template: " << *it;
-        d->templates.push_back(ctltemplate);
-      } else {
-        dbgPlugins << "Invalid composite ops template: " << *it;
-        delete ctltemplate;
-      }
+    KGlobal::mainComponent().dirs()->addResourceType("ctl_compositeops", "data", "pigmentcms/ctlcompositeops/");
+    QStringList ctlcompositeopsFilenames;
+    ctlcompositeopsFilenames += KGlobal::mainComponent().dirs()->findAllResources("ctl_compositeops", "*.ctlt",  KStandardDirs::Recursive);
+    dbgPlugins << "There are " << ctlcompositeopsFilenames.size() << " CTL composite ops";
+    if (!ctlcompositeopsFilenames.empty()) {
+        for (QStringList::Iterator it = ctlcompositeopsFilenames.begin(); it != ctlcompositeopsFilenames.end(); ++it) {
+            OpenCTL::Template* ctltemplate = new OpenCTL::Template;
+            ctltemplate->loadFromFile(it->toAscii().data());
+            ctltemplate->compile();
+            if (ctltemplate->isCompiled()) {
+                dbgPlugins << "Valid composite ops template: " << *it;
+                d->templates.push_back(ctltemplate);
+            } else {
+                dbgPlugins << "Invalid composite ops template: " << *it;
+                delete ctltemplate;
+            }
+        }
     }
-  }
 }
 
 KoCtlTemplatesRegistry::~KoCtlTemplatesRegistry()
@@ -64,10 +63,10 @@ const KoCtlTemplatesRegistry* KoCtlTemplatesRegistry::instance()
 {
     K_GLOBAL_STATIC(KoCtlTemplatesRegistry, s_instance);
     return s_instance;
-    
+
 }
 
 const QList<OpenCTL::Template*>& KoCtlTemplatesRegistry::compositeOps() const
 {
-  return d->templates;
+    return d->templates;
 }

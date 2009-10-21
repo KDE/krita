@@ -151,9 +151,9 @@ public:
      * @param sh the height of the region
      */
     void bltFixed(qint32 dx, qint32 dy,
-                const KisFixedPaintDeviceSP src,
-                qint32 sx, qint32 sy,
-                qint32 sw, qint32 sh);
+                  const KisFixedPaintDeviceSP src,
+                  qint32 sx, qint32 sy,
+                  qint32 sw, qint32 sh);
 
     /**
      * Convenience method that uses QPoint and QRect
@@ -453,13 +453,13 @@ public:
     const KoAbstractGradient* gradient();
 
     /**
-    * Set the size of the tile in fillPainterPath, useful when optimizing the use of fillPainterPath 
-    * e.g. Spray paintop uses more small tiles, although selections uses bigger tiles. QImage::fill 
-    * is quite expensive so with smaller images you can save instructions 
+    * Set the size of the tile in fillPainterPath, useful when optimizing the use of fillPainterPath
+    * e.g. Spray paintop uses more small tiles, although selections uses bigger tiles. QImage::fill
+    * is quite expensive so with smaller images you can save instructions
     * Default and maximum size is 256x256 image
     */
-    void setMaskImageSize(qint32 width,qint32 height);
-    
+    void setMaskImageSize(qint32 width, qint32 height);
+
 protected:
     /// Initialize, set everything to '0' or defaults
     void init();

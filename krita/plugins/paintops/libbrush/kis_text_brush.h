@@ -29,13 +29,11 @@ class BRUSH_EXPORT KisTextBrush : public KisBrush
 
 public:
 
-    KisTextBrush()
-    {
+    KisTextBrush() {
         setBrushType(MASK);
     }
 
-    KisTextBrush(const QString& txt, const QFont& font)
-    {
+    KisTextBrush(const QString& txt, const QFont& font) {
         setFont(font);
         setText(txt);
         updateBrush();

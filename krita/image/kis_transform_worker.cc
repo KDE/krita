@@ -49,7 +49,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
     m_xshear = xshear;
     m_yshear = yshear;
     m_rotation = rotation,
-    m_xtranslate = xtranslate;
+                 m_xtranslate = xtranslate;
     m_ytranslate = ytranslate;
     m_progressUpdater = progress;
     m_filter = filter;
@@ -83,7 +83,7 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 
         //progress info
         m_progressStep += r.width();
-        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
+        if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
             if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(m_lastProgressReport);
         }
@@ -114,7 +114,7 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
 
         //progress info
         m_progressStep += r.width();
-        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
+        if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
             if (m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
         }
@@ -149,11 +149,11 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
 
         //progress info
         m_progressStep += r.width();
-        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
+        if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
             if (m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
+        if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -182,11 +182,11 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 
         //progress info
         m_progressStep += r.width();
-        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
+        if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
             if (m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
+        if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -348,7 +348,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         // Build a temporary line
         T srcIt = createIterator <T>(src, srcStart, lineNum, srcLen);
         quint8 *data;
-        qint32 i=0;
+        qint32 i = 0;
         data = srcIt.rawData(); // take the first pixel as source - in effect duplicating the pixel
         while (i < extraLen) {
             memcpy(&tmpLine[i*pixelSize], data, pixelSize);
@@ -359,7 +359,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
             data = srcIt.rawData();
             memcpy(&tmpLine[i*pixelSize], data, pixelSize);
             cs->setAlpha(data, 0, 1);
-            if(i < srcLen + extraLen-1) // duplicate pixels along edge
+            if (i < srcLen + extraLen - 1) // duplicate pixels along edge
                 ++srcIt;
             i++;
         }
@@ -402,22 +402,22 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
             data = dstIt.rawData();
             mixOp->mixColors(colors, filterWeights[center&255].weight, filterWeights[center&255].numWeights, data);
 
-/*
-            //possibly fix the alpha of the border if user wants it
-            if (fixBorderAlpha && (i == 0 || i == dstLen - 1))
-                cs->setAlpha(data, cs->alpha(&tmpLine[(center>>8)*pixelSize]), 1);
-*/
+            /*
+                        //possibly fix the alpha of the border if user wants it
+                        if (fixBorderAlpha && (i == 0 || i == dstLen - 1))
+                            cs->setAlpha(data, cs->alpha(&tmpLine[(center>>8)*pixelSize]), 1);
+            */
             ++dstIt;
             i++;
         }
 
         //progress info
         m_progressStep += dstLen;
-        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
+        if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
             if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(m_lastProgressReport);
         }
-        if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
+        if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
             break;
         }
     }
@@ -526,14 +526,14 @@ bool KisTransformWorker::run()
 
     }
 
-        if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
-            if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(100);
-            return false;
-        }
+    if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
+        if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(100);
+        return false;
+    }
 
     transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale*xshear, 0, m_filter, m_fixBorderAlpha);
 
-    if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
+    if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
         m_progressUpdater->setProgress(100);
         return false;
     }
@@ -541,7 +541,7 @@ bool KisTransformWorker::run()
     // Now do the second pass
     transformPass <KisVLineIteratorPixel>(srcdev.data(), srcdev.data(), yscale, yshear, ytranslate, m_filter, m_fixBorderAlpha);
 
-    if ( !m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
+    if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
         m_progressUpdater->setProgress(100);
         return false;
     }
@@ -571,7 +571,7 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* sele
     int pixelSize = dev->pixelSize();
 
     if (!hasCurrentMemento) {
-            dst = new KisPaintDevice(dev->colorSpace());
+        dst = new KisPaintDevice(dev->colorSpace());
     }
 
     QRect r;
@@ -604,7 +604,7 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* sele
         }
     }
     if (!hasCurrentMemento) {
-        dev->setDataManager( dst->dataManager(), dst->colorSpace() );
+        dev->setDataManager(dst->dataManager(), dst->colorSpace());
     }
 
     return r;
@@ -648,7 +648,7 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* sele
         }
     }
     if (!hasCurrentMemento) {
-        dev->setDataManager( dst->dataManager(), dst->colorSpace() );
+        dev->setDataManager(dst->dataManager(), dst->colorSpace());
     }
 
     return r;

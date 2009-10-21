@@ -40,27 +40,24 @@ K_EXPORT_COMPONENT_FACTORY(kritashiva, ShivaPluginFactory("krita"))
 ShivaPlugin::ShivaPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setComponentData( ShivaPluginFactory::componentData());
+    setComponentData(ShivaPluginFactory::componentData());
     m_sourceCollection = new OpenShiva::SourcesCollection();
-    
-    QStringList kernelModulesDirs = KGlobal::mainComponent().dirs()->findDirs( "data", "krita/shiva/kernels/");
+
+    QStringList kernelModulesDirs = KGlobal::mainComponent().dirs()->findDirs("data", "krita/shiva/kernels/");
     dbgPlugins << kernelModulesDirs;
-    foreach(const QString & dir, kernelModulesDirs)
-    {
+    foreach(const QString & dir, kernelModulesDirs) {
         dbgPlugins << "Append : " << dir << " to the list of CTL modules";
-        m_sourceCollection->addDirectory( dir.toAscii().data());
+        m_sourceCollection->addDirectory(dir.toAscii().data());
     }
     {
         KisGeneratorRegistry * manager = KisGeneratorRegistry::instance();
         Q_ASSERT(manager);
         std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::GeneratorKernel);
-        
-        foreach( OpenShiva::Source* kernel, kernels )
-        {
-        // kDebug() << kernel->metadataCompilationErrors().c_str() << " " << kernel->isCompiled() ;
-            if( kernel->outputImageType() == OpenShiva::Source::Image || kernel->outputImageType() == OpenShiva::Source::Image4 )
-            {
-                manager->add(new ShivaGenerator( kernel ));
+
+        foreach(OpenShiva::Source* kernel, kernels) {
+            // kDebug() << kernel->metadataCompilationErrors().c_str() << " " << kernel->isCompiled() ;
+            if (kernel->outputImageType() == OpenShiva::Source::Image || kernel->outputImageType() == OpenShiva::Source::Image4) {
+                manager->add(new ShivaGenerator(kernel));
             }
         }
     }
@@ -68,12 +65,10 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QStringList &)
         KisFilterRegistry * manager = KisFilterRegistry::instance();
         Q_ASSERT(manager);
         std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::FilterKernel);
-        foreach( OpenShiva::Source* kernel, kernels )
-        {
-        // kDebug() << kernel->metadataCompilationErrors().c_str() << " " << kernel->isCompiled() ;
-            if( kernel->outputImageType() == OpenShiva::Source::Image && kernel->inputImageType(0) == OpenShiva::Source::Image )
-            {
-                manager->add(new ShivaFilter( kernel ));
+        foreach(OpenShiva::Source* kernel, kernels) {
+            // kDebug() << kernel->metadataCompilationErrors().c_str() << " " << kernel->isCompiled() ;
+            if (kernel->outputImageType() == OpenShiva::Source::Image && kernel->inputImageType(0) == OpenShiva::Source::Image) {
+                manager->add(new ShivaFilter(kernel));
             }
         }
     }

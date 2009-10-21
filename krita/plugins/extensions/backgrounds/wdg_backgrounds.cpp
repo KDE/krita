@@ -32,15 +32,15 @@
 #include "kis_config.h"
 
 WdgBackgrounds::WdgBackgrounds(QWidget* parent)
-    : QWidget(parent)
+        : QWidget(parent)
 {
     setupUi(this);
 
     QStringList backgroundFileNames =
-            KisFactory2::componentData().dirs()->findAllResources("kis_backgrounds", "*.png");
+        KisFactory2::componentData().dirs()->findAllResources("kis_backgrounds", "*.png");
 
     KisConfig cfg;
-    QImage none(QSize(64,64), QImage::Format_RGB32);
+    QImage none(QSize(64, 64), QImage::Format_RGB32);
     QPainter pt(&none);
     pt.fillRect(none.rect(), Qt::white);
     pt.fillRect(0, 0, 32, 32, cfg.checkersColor());
@@ -59,22 +59,22 @@ WdgBackgrounds::WdgBackgrounds(QWidget* parent)
         item->setData(Qt::UserRole + 1, fileName);
     }
 
-    lblName->setVisible( false );
+    lblName->setVisible(false);
 
-    bnAdd->setVisible( false );
-    bnAdd->setIcon( SmallIcon( "list-add" ) );
-    bnAdd->setToolTip( i18n("Import existing background") );
-    bnAdd->setEnabled( true );
+    bnAdd->setVisible(false);
+    bnAdd->setIcon(SmallIcon("list-add"));
+    bnAdd->setToolTip(i18n("Import existing background"));
+    bnAdd->setEnabled(true);
 
-    bnRemove->setVisible( false );
-    bnRemove->setIcon( SmallIcon( "list-remove" ) );
-    bnRemove->setToolTip( i18n("Remove currently selected background") );
-    bnRemove->setEnabled( true );
+    bnRemove->setVisible(false);
+    bnRemove->setIcon(SmallIcon("list-remove"));
+    bnRemove->setToolTip(i18n("Remove currently selected background"));
+    bnRemove->setEnabled(true);
 
-    bnReset->setVisible( false );
-    bnReset->setIcon( SmallIcon( "edit-undo" ) );
-    bnReset->setToolTip( i18n("Reset to default") );
-    bnReset->setEnabled( true );
+    bnReset->setVisible(false);
+    bnReset->setIcon(SmallIcon("edit-undo"));
+    bnReset->setToolTip(i18n("Reset to default"));
+    bnReset->setEnabled(true);
 
 }
 

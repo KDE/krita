@@ -53,7 +53,7 @@ protected:
         }
         // Compute t2
 //             dbgPlugins <<"Estimated r2 =" << r2;
-        return (t1 -t1c) / poly(a, b, c, r2) + t2c;
+        return (t1 - t1c) / poly(a, b, c, r2) + t2c;
     }
     inline double derivEnA(double a, double b, double c, double r, double t1c, double t1, double t2c) {
         return (func(a + 1e-12, b, c, r, t1c, t1, t2c) - func(a - 1e-12, b, c, r, t1c, t1, t2c)) / (2e-12);

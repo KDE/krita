@@ -29,30 +29,32 @@ class KisRecordedAction;
 class QModelIndex;
 class QGridLayout;
 
-namespace Ui {
-    class ActionsEditor;
+namespace Ui
+{
+class ActionsEditor;
 }
 
-class KisActionsEditor : public QWidget {
+class KisActionsEditor : public QWidget
+{
     Q_OBJECT
-    public:
-        KisActionsEditor(QWidget* parent);
-        ~KisActionsEditor();
-        void setMacro(KisMacro* );
-    private slots:
-        void slotActionActivated(const QModelIndex&);
-        void slotBtnDelete();
-        void slotBtnDuplicate();
-        void slotBtnRaise();
-        void slotBtnLower();
-    private:
-        void setCurrentAction(KisRecordedAction* _action);
-    private:
-        QWidget* m_currentEditor;
-        Ui::ActionsEditor* m_form;
-        KisMacro* m_macro;
-        KisMacroModel* m_model;
-        QGridLayout* m_widgetLayout;
+public:
+    KisActionsEditor(QWidget* parent);
+    ~KisActionsEditor();
+    void setMacro(KisMacro*);
+private slots:
+    void slotActionActivated(const QModelIndex&);
+    void slotBtnDelete();
+    void slotBtnDuplicate();
+    void slotBtnRaise();
+    void slotBtnLower();
+private:
+    void setCurrentAction(KisRecordedAction* _action);
+private:
+    QWidget* m_currentEditor;
+    Ui::ActionsEditor* m_form;
+    KisMacro* m_macro;
+    KisMacroModel* m_model;
+    QGridLayout* m_widgetLayout;
 };
 
 #endif

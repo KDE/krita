@@ -116,13 +116,11 @@ public:
     * (v)alue in range <-1.0, 1.0> (for user, show -100, 100)
     */
     virtual void setParameter(const QString& name, const QVariant& parameter) {
-        if( name == "h") {
+        if (name == "h") {
             m_adj_h = parameter.toDouble() * 180;
-        }
-        else if (name == "s") {
+        } else if (name == "s") {
             m_adj_s = parameter.toDouble();
-        }
-        else if (name == "v") {
+        } else if (name == "v") {
             m_adj_v = parameter.toDouble();
         }
     }

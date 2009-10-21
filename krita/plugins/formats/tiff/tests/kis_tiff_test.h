@@ -24,8 +24,8 @@
 class KisTiffTest : public QObject
 {
     Q_OBJECT
-    private slots:
-        void testFiles();
+private slots:
+    void testFiles();
 };
 
 #endif

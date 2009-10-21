@@ -38,12 +38,12 @@ void KisRandomGeneratorTest::twoSeeds(quint64 seed1, quint64 seed2)
 
 void KisRandomGeneratorTest::twoSeeds()
 {
-  twoSeeds( 140, 1405);
-  twoSeeds( 140515215, 232351521LL);
-  twoSeeds( 470461, 848256);
-  twoSeeds( 189840, 353395);
-  twoSeeds( 719471126795LL, 566272);
-  twoSeeds( 154349154349LL, 847895847895LL);
+    twoSeeds(140, 1405);
+    twoSeeds(140515215, 232351521LL);
+    twoSeeds(470461, 848256);
+    twoSeeds(189840, 353395);
+    twoSeeds(719471126795LL, 566272);
+    twoSeeds(154349154349LL, 847895847895LL);
 }
 
 

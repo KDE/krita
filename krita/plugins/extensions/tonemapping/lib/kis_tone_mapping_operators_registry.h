@@ -27,7 +27,7 @@ class KisToneMappingOperatorsRegistry : public KoGenericRegistry<KisToneMappingO
 public:
 
     static KisToneMappingOperatorsRegistry* instance();
-    
+
 private:
 
     KisToneMappingOperatorsRegistry();

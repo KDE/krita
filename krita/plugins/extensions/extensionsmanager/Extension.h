@@ -22,20 +22,21 @@
 
 class QDomElement;
 
-class Extension {
-    public:
-        Extension();
-        ~Extension();
-    public:
-        const QString& name() const;
-        const QString& description() const;
-        const QString& version() const;
-    public:
-        void parse(const QDomElement& document);
-    private:
-        QString m_name;
-        QString m_description;
-        QString m_version;
+class Extension
+{
+public:
+    Extension();
+    ~Extension();
+public:
+    const QString& name() const;
+    const QString& description() const;
+    const QString& version() const;
+public:
+    void parse(const QDomElement& document);
+private:
+    QString m_name;
+    QString m_description;
+    QString m_version;
 };
 
 #endif

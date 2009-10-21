@@ -133,7 +133,7 @@ KisSelectionSP TransformCmd::origSelection(QPoint &originalTopLeft, QPoint &orig
 void TransformCmd::redo()
 {
     KisSelectedTransaction::redo();
-    layer()->paintDevice()->move( m_newPosition );
+    layer()->paintDevice()->move(m_newPosition);
 }
 
 void TransformCmd::undo()
@@ -191,7 +191,7 @@ void KisToolTransform::activate(bool temporary)
     Q_UNUSED(temporary);
 
     if (currentNode() && currentNode()->paintDevice()) {
-        image()->undoAdapter()->setCommandHistoryListener( this );
+        image()->undoAdapter()->setCommandHistoryListener(this);
 
         const TransformCmd * cmd = 0;
 
@@ -647,12 +647,12 @@ void KisToolTransform::transform()
         return;
 
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
-    if(!canvas)
+    if (!canvas)
         return;
 
     QPointF t = m_translate - rot(m_originalCenter.x() * m_scaleX, m_originalCenter.y() * m_scaleY);
     KoProgressUpdater* updater = canvas->view()->createProgressUpdater();
-    updater->start( 100, i18n("Transform") );
+    updater->start(100, i18n("Transform"));
     KoUpdaterPtr progress = updater->startSubtask();
 
     // This mementoes the current state of the active device.
@@ -680,9 +680,8 @@ void KisToolTransform::transform()
             sgc.bitBlt(rc.topLeft(), m_origSelection, rc);
             sgc.end();
         }
-    } else
-        if (currentSelection())
-            currentSelection()->clear();
+    } else if (currentSelection())
+        currentSelection()->clear();
 
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
@@ -691,7 +690,7 @@ void KisToolTransform::transform()
         KisPaintDeviceSP tmpDevice = new KisPaintDevice(m_origDevice->colorSpace());
         QRect selectRect = currentSelection()->selectedRect();
         KisPainter gc(tmpDevice, currentSelection());
-        gc.bitBlt(selectRect.topLeft(),m_origDevice, selectRect);
+        gc.bitBlt(selectRect.topLeft(), m_origDevice, selectRect);
         gc.end();
 
         KisTransformWorker worker(tmpDevice, m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), progress, m_filter);
@@ -703,14 +702,14 @@ void KisToolTransform::transform()
         selectionWorker.run();
 
 
-        if(currentSelection()->hasShapeSelection()) {
+        if (currentSelection()->hasShapeSelection()) {
             QMatrix resolutionMatrix;
-            resolutionMatrix.scale(1/image()->xRes(), 1/image()->yRes());
+            resolutionMatrix.scale(1 / image()->xRes(), 1 / image()->yRes());
             QPointF center = resolutionMatrix.map(m_originalCenter);
 
             QMatrix matrix;
             matrix.translate(center.x(), center.y());
-            matrix.rotate(m_a/M_PI*180);
+            matrix.rotate(m_a / M_PI*180);
             matrix.translate(-center.x(), -center.y());
 
             KisShapeSelection* shapeSelection = static_cast<KisShapeSelection*>(currentSelection()->shapeSelection());
@@ -721,7 +720,7 @@ void KisToolTransform::transform()
                 m_oldMatrixList << shape->transformation();
                 m_newMatrixList << shape->transformation()*matrix;
             }
-            KoShapeTransformCommand* cmd = new KoShapeTransformCommand( shapes, m_oldMatrixList, m_newMatrixList, transaction );
+            KoShapeTransformCommand* cmd = new KoShapeTransformCommand(shapes, m_oldMatrixList, m_newMatrixList, transaction);
             cmd->redo();
         }
 
@@ -746,14 +745,14 @@ void KisToolTransform::transform()
     currentNode()->paintDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
 
     canvas->view()->selectionManager()->selectionChanged();
-    if(currentSelection() && currentSelection()->hasShapeSelection())
+    if (currentSelection() && currentSelection()->hasShapeSelection())
         canvas->view()->selectionManager()->shapeSelectionChanged();
 
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()
     // method.
     if (transaction) {
-        transaction->setNewPosition( currentNode()->paintDevice()->x(), currentNode()->paintDevice()->y() );
+        transaction->setNewPosition(currentNode()->paintDevice()->x(), currentNode()->paintDevice()->y());
         if (image()->undo())
             image()->undoAdapter()->addCommand(transaction);
         else

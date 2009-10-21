@@ -13,17 +13,17 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA 02110-1301, USA.
  */
 
 /**
  * @file
- * This file is part of the Krita koffice application. It handles 
+ * This file is part of the Krita koffice application. It handles
  * a contains a KisFilter OR a KisLayer, and this class is created
- * to influence the rendering of layers below this one. Can also 
+ * to influence the rendering of layers below this one. Can also
  * function as a fixating layer.
- * 
+ *
  * @author Boudewijn Rempt
  * @author comments by hscott
  * @since 1.5
@@ -52,13 +52,13 @@ class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisSelectionBasedLayer
 
 public:
     /**
-     * creates a new adjustment layer with the given 
-     * configuration and selection. Note that the selection 
+     * creates a new adjustment layer with the given
+     * configuration and selection. Note that the selection
      * will be _copied_ (with COW, though).
      * @param img the image to set this AdjustmentLayer to
-     * @param name name of the adjustment layer 
+     * @param name name of the adjustment layer
      * @param kfc the configuration for the adjustment layer filter
-     * @param selection is a mask used by the adjustment layer to 
+     * @param selection is a mask used by the adjustment layer to
      * know where to apply the filter.
      */
     KisAdjustmentLayer(KisImageWSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
@@ -82,11 +82,11 @@ public:
     QIcon icon() const;
 
     /**
-     * gets the AdjustmentLayer properties describing whether 
-     * or not the node is locked, visible, and the filter 
-     * name is it is a filter. Overrides sectionModelProperties 
-     * in KisLayer, and KisLayer overrides 
-     * sectionModelProperties in KisBaseNode. 
+     * gets the AdjustmentLayer properties describing whether
+     * or not the node is locked, visible, and the filter
+     * name is it is a filter. Overrides sectionModelProperties
+     * in KisLayer, and KisLayer overrides
+     * sectionModelProperties in KisBaseNode.
      * @return KoDocumentSectionModel::PropertyList returns a list
      * of the properties
      */
@@ -95,21 +95,21 @@ public:
 public:
 
     /**
-     * gets a pointer to the AdjustmentLayer's filter configuration. 
-     * @return a pointer to the AdjustmentLayer's filter configuration 
+     * gets a pointer to the AdjustmentLayer's filter configuration.
+     * @return a pointer to the AdjustmentLayer's filter configuration
      */
     KisFilterConfiguration *filter() const;
 
     /**
-     * sets the AdjustmentLayer's filter configuration 
-     * @param filterConfig a pointer to the filter configuration to set 
+     * sets the AdjustmentLayer's filter configuration
+     * @param filterConfig a pointer to the filter configuration to set
      * @return void
      */
     void setFilter(KisFilterConfiguration *filterConfig);
 
 public slots:
     /**
-     * gets this AdjustmentLayer. Overriddes function in 
+     * gets this AdjustmentLayer. Overriddes function in
      * KisIndirectPaintingSupport
      * @return this AdjustmentLayer
      */

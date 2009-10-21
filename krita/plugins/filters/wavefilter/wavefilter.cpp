@@ -87,11 +87,11 @@ public:
     virtual ~KisTriangleWaveCurve() {}
 
     virtual double valueAt(int x, int y) {
-        return y +  m_amplitude * pow(-1, (m_shift + x) / m_wavelength)  * (0.5 - (double)((m_shift + x) % m_wavelength) / m_wavelength);
+        return y +  m_amplitude * pow(-1, (m_shift + x) / m_wavelength)  *(0.5 - (double)((m_shift + x) % m_wavelength) / m_wavelength);
     }
 private:
     int m_amplitude, m_wavelength, m_shift;
-};KritaWaveFilter::KritaWaveFilter(QObject *parent, const QStringList &)
+}; KritaWaveFilter::KritaWaveFilter(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setComponentData(KritaWaveFilterFactory::componentData());

@@ -98,7 +98,8 @@ void KisAccumulatingHistogramProducer::ThreadedProducer::run()
     }
 }
 
-bool KisAccumulatingHistogramProducer::event(QEvent* e) {
+bool KisAccumulatingHistogramProducer::event(QEvent* e)
+{
     if (e->type() == EmitCompletedType) {
         emit completed();
         return true;

@@ -42,8 +42,8 @@ KisComplexOpFactory::~KisComplexOpFactory()
 
 
 KisPaintOp * KisComplexOpFactory::createOp(const KisPaintOpSettingsSP settings,
-                                           KisPainter * painter,
-                                           KisImageWSP image)
+        KisPainter * painter,
+        KisImageWSP image)
 {
     Q_UNUSED(image);
 
@@ -58,17 +58,17 @@ KisPaintOp * KisComplexOpFactory::createOp(const KisPaintOpSettingsSP settings,
 KisPaintOpSettingsSP KisComplexOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
 {
     Q_UNUSED(inputDevice);
-    Q_UNUSED( image );
+    Q_UNUSED(image);
     return new KisComplexOpSettings();
 }
 
 KisPaintOpSettingsSP KisComplexOpFactory::settings(KisImageWSP image)
 {
-    Q_UNUSED( image );
+    Q_UNUSED(image);
     return new KisComplexOpSettings();
 }
 
 KisPaintOpSettingsWidget* KisComplexOpFactory::createSettingsWidget(QWidget* parent)
 {
-    return new KisComplexOpSettingsWidget( parent );
+    return new KisComplexOpSettingsWidget(parent);
 }

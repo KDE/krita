@@ -50,7 +50,7 @@ protected:
 
 protected:
     inline void lockTile(KisTileSP &tile) {
-        if(m_writable)
+        if (m_writable)
             tile->lockForWrite();
         else
             tile->lockForRead();
@@ -71,15 +71,15 @@ protected:
     }
 
     inline qint32 calcOffset(qint32 x, qint32 y) const {
-	return m_pixelSize * (y * KisTileData::WIDTH + x);
+        return m_pixelSize *(y * KisTileData::WIDTH + x);
     }
 
     inline qint32 calcXInTile(qint32 x, qint32 col) const {
-	return x - col * KisTileData::WIDTH;
+        return x - col * KisTileData::WIDTH;
     }
 
     inline qint32 calcYInTile(qint32 y, qint32 row) const {
-	return y - row * KisTileData::HEIGHT;
+        return y - row * KisTileData::HEIGHT;
     }
 
 
@@ -196,7 +196,7 @@ public:
 
     /// returns true when the iterator has reached the end
     bool isDone() const {
-	return m_isDoneFlag;
+        return m_isDoneFlag;
     }
 
     /// increment to the next row and rewind to the beginning
@@ -217,14 +217,14 @@ protected:
 
 private:
     inline qint32 calcLeftInTile(qint32 col) const {
-	return (col > m_leftCol) ? 0
-	    : m_left - m_leftCol * KisTileData::WIDTH;
+        return (col > m_leftCol) ? 0
+               : m_left - m_leftCol * KisTileData::WIDTH;
     }
 
     inline qint32 calcRightInTile(qint32 col) const {
-	return (col < m_rightCol)
-	    ? KisTileData::WIDTH - 1
-	    : m_right - m_rightCol * KisTileData::WIDTH;
+        return (col < m_rightCol)
+               ? KisTileData::WIDTH - 1
+               : m_right - m_rightCol * KisTileData::WIDTH;
     }
 
     void switchToTile(qint32 col, qint32 xInTile);
@@ -253,7 +253,7 @@ public:
 
     /// returns true when the iterator has reached the end
     bool isDone() const {
-	return m_isDoneFlag;
+        return m_isDoneFlag;
     }
 
     /// increment to the next column and rewind to the beginning
@@ -273,14 +273,14 @@ protected:
 
 private:
     inline qint32 calcTopInTile(qint32 row) const {
-	return (row > m_topRow) ? 0
-	    : m_top - m_topRow * KisTileData::HEIGHT;
+        return (row > m_topRow) ? 0
+               : m_top - m_topRow * KisTileData::HEIGHT;
     }
 
     inline qint32 calcBottomInTile(qint32 row) const {
-	return (row < m_bottomRow)
-	    ? KisTileData::HEIGHT - 1
-	    : m_bottom - m_bottomRow * KisTileData::HEIGHT;
+        return (row < m_bottomRow)
+               ? KisTileData::HEIGHT - 1
+               : m_bottom - m_bottomRow * KisTileData::HEIGHT;
     }
 
     void switchToTile(qint32 col, qint32 xInTile);

@@ -57,17 +57,17 @@ KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettingsSP settings,
 KisPaintOpSettingsSP KisFilterOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
 {
     Q_UNUSED(inputDevice);
-    return settings( image );
+    return settings(image);
 }
 
 KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageWSP image)
 {
     KisFilterOpSettings* settings = new KisFilterOpSettings();
-    settings->setImage( image );
+    settings->setImage(image);
     return settings;
 }
 
 KisPaintOpSettingsWidget* KisFilterOpFactory::createSettingsWidget(QWidget* parent)
 {
-    return new KisFilterOpSettingsWidget( parent );
+    return new KisFilterOpSettingsWidget(parent);
 }

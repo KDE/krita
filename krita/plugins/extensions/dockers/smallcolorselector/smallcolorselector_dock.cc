@@ -25,24 +25,24 @@
 
 #include <KoColorSpaceRegistry.h>
 
-SmallColorSelectorDock::SmallColorSelectorDock() 
-    : QDockWidget()
-    , m_canvas(0)
+SmallColorSelectorDock::SmallColorSelectorDock()
+        : QDockWidget()
+        , m_canvas(0)
 {
     m_smallColorWidget = new KisSmallColorWidget(this);
     setWidget(m_smallColorWidget);
-    m_smallColorWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Maximum );
+    m_smallColorWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
     connect(m_smallColorWidget, SIGNAL(colorChanged(const QColor&)),
             this, SLOT(colorChangedProxy(const QColor&)));
 
     setWindowTitle(i18n("Small Color Selector"));
 }
 
-void SmallColorSelectorDock::setCanvas( KoCanvasBase * canvas )
+void SmallColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 {
     m_canvas = canvas;
-    connect( m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
-             this, SLOT(resourceChanged(int, const QVariant&)));
+    connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+            this, SLOT(resourceChanged(int, const QVariant&)));
     m_smallColorWidget->setQColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
 }
 

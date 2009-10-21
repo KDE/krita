@@ -68,10 +68,9 @@ class KisPipeBrushParasite
 public:
     /// Set some default values
     KisPipeBrushParasite()
-        : ncells(0)
-        , dim(0)
-        , needsMovement(false)
-    {
+            : ncells(0)
+            , dim(0)
+            , needsMovement(false) {
         init();
     }
 

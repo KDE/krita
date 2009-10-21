@@ -31,7 +31,7 @@
 #include <kis_pressure_rate_option.h>
 
 KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+        : KisPaintOpOptionsWidget(parent)
 {
     setObjectName("brush option widget");
 
@@ -61,7 +61,7 @@ KisSmudgeOpSettingsWidget::~KisSmudgeOpSettingsWidget()
 KisPropertiesConfiguration* KisSmudgeOpSettingsWidget::configuration() const
 {
     KisSmudgeOpSettings *config = new KisSmudgeOpSettings();
-    config->setOptionsWidget(const_cast<KisSmudgeOpSettingsWidget*>( this ));
+    config->setOptionsWidget(const_cast<KisSmudgeOpSettingsWidget*>(this));
     config->setProperty("paintop", "smudge"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

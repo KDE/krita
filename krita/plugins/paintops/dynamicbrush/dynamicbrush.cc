@@ -44,9 +44,9 @@ K_EXPORT_COMPONENT_FACTORY(kritadynamicbrushpaintop, DynamicBrushFactory("krita"
 DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
         , m_shapeBookmarksManager(new KisBookmarkedConfigurationManager("dynamicopshape", new KisDynamicShapeProgramsFactory()))
-        , m_shapeBookmarksModel (new KisBookmarkedConfigurationsModel(m_shapeBookmarksManager))
+        , m_shapeBookmarksModel(new KisBookmarkedConfigurationsModel(m_shapeBookmarksManager))
         , m_coloringBookmarksManager(new KisBookmarkedConfigurationManager("dynamicopcoloring", new KisDynamicColoringProgramsFactory()))
-        , m_coloringBookmarksModel (new KisBookmarkedConfigurationsModel(m_coloringBookmarksManager))
+        , m_coloringBookmarksModel(new KisBookmarkedConfigurationsModel(m_coloringBookmarksManager))
 
 {
     setComponentData(DynamicBrushFactory::componentData());

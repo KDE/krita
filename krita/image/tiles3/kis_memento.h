@@ -41,7 +41,7 @@ class KisMemento : public KisShared
 {
 public:
     inline KisMemento(KisMementoManager* mementoManager) {
-	m_mementoManager = mementoManager;
+        m_mementoManager = mementoManager;
 
         m_valid = true;
 
@@ -55,20 +55,20 @@ public:
     }
 
     inline void reportEndTransaction() {
-	if(m_mementoManager)
-	    m_mementoManager->commit();
+        if (m_mementoManager)
+            m_mementoManager->commit();
     }
 
-    inline void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h){
+    inline void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) {
         x = m_extentMinX;
         y = m_extentMinY;
-	w = (m_extentMaxX >= m_extentMinX) ? m_extentMaxX - m_extentMinX + 1 : 0;
-	h = (m_extentMaxY >= m_extentMinY) ? m_extentMaxY - m_extentMinY + 1 : 0;
+        w = (m_extentMaxX >= m_extentMinX) ? m_extentMaxX - m_extentMinX + 1 : 0;
+        h = (m_extentMaxY >= m_extentMinY) ? m_extentMaxY - m_extentMinY + 1 : 0;
     }
 
-    inline QRect extent(){
-        qint32 x,y,w,h;
-        extent(x,y,w,h);
+    inline QRect extent() {
+        qint32 x, y, w, h;
+        extent(x, y, w, h);
         return QRect(x, y, w, h);
     }
 
@@ -91,13 +91,12 @@ public:
 private:
     friend class KisMementoManager;
 
-    inline void updateExtent(qint32 col, qint32 row)
-    {
+    inline void updateExtent(qint32 col, qint32 row) {
         const qint32 tileMinX = col * KisTileData::WIDTH;
         const qint32 tileMinY = row * KisTileData::HEIGHT;
         const qint32 tileMaxX = tileMinX + KisTileData::WIDTH - 1;
         const qint32 tileMaxY = tileMinY + KisTileData::HEIGHT - 1;
-        
+
         m_extentMinX = qMin(m_extentMinX, tileMinX);
         m_extentMaxX = qMax(m_extentMaxX, tileMaxX);
         m_extentMinY = qMin(m_extentMinY, tileMinY);
@@ -110,8 +109,8 @@ private:
     qint32 m_extentMinX;
     qint32 m_extentMaxX;
     qint32 m_extentMinY;
-    qint32 m_extentMaxY;    
-    
+    qint32 m_extentMaxY;
+
     bool m_valid;
 };
 

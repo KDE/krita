@@ -26,7 +26,7 @@ Trajectory::Trajectory()
 
 }
 
-QVector<QPointF> &Trajectory::getLinearTrajectory(const QPointF &start,const QPointF &end, double space)
+QVector<QPointF> &Trajectory::getLinearTrajectory(const QPointF &start, const QPointF &end, double space)
 {
     Q_UNUSED(space);
     m_path.clear();

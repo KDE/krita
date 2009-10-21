@@ -26,11 +26,11 @@ const qint32 KisTileData::HEIGHT = 64;
 
 
 KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
-    :m_state(NORMAL),
-     m_usersCount(0),
-     m_refCount(0), 
-     m_pixelSize(pixelSize),
-     m_store(store)
+        : m_state(NORMAL),
+        m_usersCount(0),
+        m_refCount(0),
+        m_pixelSize(pixelSize),
+        m_store(store)
 {
     m_nextTD = m_prevTD = this;
 
@@ -46,15 +46,15 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
  * + it's unlocked and has refCount==0
  */
 KisTileData::KisTileData(const KisTileData& rhs)
-    :m_state(NORMAL),
-     m_usersCount(0),
-     m_refCount(0),
-     m_pixelSize(rhs.m_pixelSize), 
-     m_store(rhs.m_store)
+        : m_state(NORMAL),
+        m_usersCount(0),
+        m_refCount(0),
+        m_pixelSize(rhs.m_pixelSize),
+        m_store(rhs.m_store)
 {
     m_nextTD = m_prevTD = this;
 
-    const quint32 tileDataSize = m_pixelSize*WIDTH*HEIGHT;
+    const quint32 tileDataSize = m_pixelSize * WIDTH * HEIGHT;
     m_data = new quint8[tileDataSize];
 
     rhs.m_store->ensureTileDataLoaded(&rhs);
@@ -68,13 +68,13 @@ KisTileData::~KisTileData()
     /* FIXME: this _|_ */
     m_store->ensureTileDataLoaded(this);
 
-    if(m_data)
+    if (m_data)
         delete[] m_data;
 
     /* Free clones list */
     KisTileData *td;
     foreach(td, m_clonesList) {
-	delete td;
+        delete td;
     }
 }
 
@@ -82,7 +82,7 @@ void KisTileData::fillWithPixel(const quint8 *defPixel)
 {
     quint8 *it = m_data;
 
-    for (int i=0; i<WIDTH*HEIGHT; i++, it+=m_pixelSize) {
+    for (int i = 0; i < WIDTH*HEIGHT; i++, it += m_pixelSize) {
         memcpy(it, defPixel, m_pixelSize);
     }
 }

@@ -28,12 +28,12 @@
 
 void KisTextBrush::toXML(QDomDocument& doc, QDomElement& e) const
 {
-    Q_UNUSED( doc );
+    Q_UNUSED(doc);
 
-    e.setAttribute( "brush_type", "kis_text_brush" );
-    e.setAttribute( "brush_spacing", spacing() );
-    e.setAttribute( "text_brush_text", m_txt );
-    e.setAttribute( "text_brush_font", m_font.toString() );
+    e.setAttribute("brush_type", "kis_text_brush");
+    e.setAttribute("brush_spacing", spacing());
+    e.setAttribute("text_brush_text", m_txt);
+    e.setAttribute("text_brush_font", m_font.toString());
 }
 
 void KisTextBrush::updateBrush()

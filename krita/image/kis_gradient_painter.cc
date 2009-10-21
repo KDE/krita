@@ -384,10 +384,9 @@ double GradientRepeatNoneStrategy::valueAt(double t) const
 
     if (t < DBL_EPSILON) {
         value = 0;
-    } else
-        if (t > 1 - DBL_EPSILON) {
-            value = 1;
-        }
+    } else if (t > 1 - DBL_EPSILON) {
+        value = 1;
+    }
 
     return value;
 }

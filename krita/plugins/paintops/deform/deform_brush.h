@@ -35,61 +35,60 @@ class DeformBrush
 public:
     DeformBrush();
     ~DeformBrush();
-    void paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &info);
+    void paint(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &info);
 
     void bilinear_interpolation(double x, double y , quint8 *dst);
     void bilinear_interpolation_old(double x, double y , quint8 *dst);
 
-    void scale(qreal cursorX,qreal cursorY, qreal factor);
-    void swirl(qreal cursorX,qreal cursorY, qreal alpha);
-    void move(qreal cursorX,qreal cursorY, qreal dx, qreal dy);
+    void scale(qreal cursorX, qreal cursorY, qreal factor);
+    void swirl(qreal cursorX, qreal cursorY, qreal alpha);
+    void move(qreal cursorX, qreal cursorY, qreal dx, qreal dy);
 
-    void fastMove(qreal cursorX,qreal cursorY, qreal dx, qreal dy);
-    void fastSwirl(qreal cursorX,qreal cursorY, qreal alpha);
-    void fastDeformColor(qreal cursorX,qreal cursorY,qreal amount);
-    void fastLensDistortion(qreal cursorX,qreal cursorY, qreal k1, qreal k2);
+    void fastMove(qreal cursorX, qreal cursorY, qreal dx, qreal dy);
+    void fastSwirl(qreal cursorX, qreal cursorY, qreal alpha);
+    void fastDeformColor(qreal cursorX, qreal cursorY, qreal amount);
+    void fastLensDistortion(qreal cursorX, qreal cursorY, qreal k1, qreal k2);
 
-    void lensDistortion(qreal cursorX,qreal cursorY, qreal k1, qreal k2);
-    void deformColor(qreal cursorX,qreal cursorY,qreal amount);
+    void lensDistortion(qreal cursorX, qreal cursorY, qreal k1, qreal k2);
+    void deformColor(qreal cursorX, qreal cursorY, qreal amount);
 
-    void setRadius( int deformRadius ){
+    void setRadius(int deformRadius) {
         m_radius = deformRadius;
 
-        m_maxdist = sqrt( pow(m_radius,2) );
+        m_maxdist = sqrt(pow(m_radius, 2));
         precomputeDistances(m_radius);
     }
 
-    void setDeformAmount ( qreal deformAmount ){
+    void setDeformAmount(qreal deformAmount) {
         m_amount = deformAmount;
     }
 
-    void setInterpolation( bool useBilinear ){
+    void setInterpolation(bool useBilinear) {
         m_useBilinear = useBilinear;
     }
 
-    void setAction( int deformAction ){
+    void setAction(int deformAction) {
         m_action = deformAction;
     }
 
-    void setImage( KisImageWSP image ){
+    void setImage(KisImageWSP image) {
         m_image = image;
     }
 
-    void setCounter(int value){
+    void setCounter(int value) {
         m_counter = value;
     }
 
-    void setUseCounter(bool useCounter){
+    void setUseCounter(bool useCounter) {
         m_useCounter = useCounter;
     }
 
-    void setUseOldData(bool useOldData){
+    void setUseOldData(bool useOldData) {
         m_useOldData = useOldData;
     }
 
 private:
-    qreal distanceFromCenter(int x, int y)
-    {
+    qreal distanceFromCenter(int x, int y) {
         return m_distanceTable[y*(m_radius+1)+x];
     }
 
@@ -97,10 +96,10 @@ private:
     void movePixel(qreal newX, qreal newY, quint8 *dst);
     void myMovePixel(qreal newX, qreal newY, quint8 *dst);
 
-    bool point_interpolation( qreal* x, qreal* y, KisImageWSP image );
+    bool point_interpolation(qreal* x, qreal* y, KisImageWSP image);
     void debugColor(const quint8* data);
     void precomputeDistances(int radius);
-    void fastScale(qreal cursorX,qreal cursorY, qreal factor);
+    void fastScale(qreal cursorX, qreal cursorY, qreal factor);
 
     // width and height for interpolation
     KisImageWSP m_image;
@@ -112,7 +111,7 @@ private:
     KisRandomConstAccessor * m_readAccessor;
     KisRandomAccessor * m_writeAccessor;
     quint32 m_pixelSize;
-    
+
     KisRandomSubAccessorPixel * m_srcAcc;
 
     //temporary KoColor for optimalization in bilinear interpolation

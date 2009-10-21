@@ -50,13 +50,13 @@ KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & eleme
         m_count(count),
         m_root(root)
 {
-    Q_ASSERT( !element.isNull() );
+    Q_ASSERT(!element.isNull());
     m_elem = element;
 }
 
 bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 {
-    if (layer->inherits( "KisShapeLayer" )) {
+    if (layer->inherits("KisShapeLayer")) {
         QDomElement layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, SHAPE_LAYER, layer);
         m_elem.appendChild(layerElement);
@@ -96,7 +96,7 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     }
 
     QDomElement elem = m_doc.createElement(LAYERS);
-    Q_ASSERT( !layerElement.isNull() );
+    Q_ASSERT(!layerElement.isNull());
     layerElement.appendChild(elem);
     KisSaveXmlVisitor visitor(m_doc, elem, m_count);
     m_count++;
@@ -149,7 +149,7 @@ bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
 
 bool KisSaveXmlVisitor::visit(KisFilterMask *mask)
 {
-    Q_ASSERT( mask );
+    Q_ASSERT(mask);
     QDomElement el = m_doc.createElement(MASK);
     saveMask(el, FILTER_MASK, mask);
     el.setAttribute(FILTER_NAME, mask->filter()->name());
@@ -163,7 +163,7 @@ bool KisSaveXmlVisitor::visit(KisFilterMask *mask)
 
 bool KisSaveXmlVisitor::visit(KisTransparencyMask *mask)
 {
-    Q_ASSERT( mask );
+    Q_ASSERT(mask);
     QDomElement el = m_doc.createElement(MASK);
     saveMask(el, TRANSPARENCY_MASK, mask);
     m_elem.appendChild(el);
@@ -173,7 +173,7 @@ bool KisSaveXmlVisitor::visit(KisTransparencyMask *mask)
 
 bool KisSaveXmlVisitor::visit(KisTransformationMask *mask)
 {
-    Q_ASSERT( mask );
+    Q_ASSERT(mask);
     QDomElement el = m_doc.createElement(MASK);
     saveMask(el, TRANSFORMATION_MASK, mask);
     el.setAttribute(X_SCALE, mask->xScale());
@@ -183,7 +183,7 @@ bool KisSaveXmlVisitor::visit(KisTransformationMask *mask)
     el.setAttribute(ROTATION, mask->rotation());
     el.setAttribute(X_TRANSLATION, mask->xTranslate());
     el.setAttribute(Y_TRANSLATION, mask->yTranslate());
-    Q_ASSERT( mask->filterStrategy() );
+    Q_ASSERT(mask->filterStrategy());
     el.setAttribute(FILTER_STATEGY, mask->filterStrategy()->id());
     m_elem.appendChild(el);
     m_count++;
@@ -192,7 +192,7 @@ bool KisSaveXmlVisitor::visit(KisTransformationMask *mask)
 
 bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 {
-    Q_ASSERT( mask );
+    Q_ASSERT(mask);
 
     QDomElement el = m_doc.createElement(MASK);
     saveMask(el, SELECTION_MASK, mask);
@@ -206,30 +206,30 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
 {
     QString channelFlagsString;
     QBitArray channelFlags = layer->channelFlags();
-    for ( int i = 0; i < channelFlags.count(); ++i ) {
-        if ( channelFlags[i] )
+    for (int i = 0; i < channelFlags.count(); ++i) {
+        if (channelFlags[i])
             channelFlagsString += '1';
         else
             channelFlagsString += '0';
     }
 
-    el.setAttribute( CHANNEL_FLAGS, channelFlagsString );
+    el.setAttribute(CHANNEL_FLAGS, channelFlagsString);
     el.setAttribute(NAME, layer->name());
     el.setAttribute(OPACITY, layer->opacity());
     el.setAttribute(COMPOSITE_OP, layer->compositeOp()->id());
     el.setAttribute(VISIBLE, layer->visible());
     el.setAttribute(LOCKED, layer->userLocked());
     el.setAttribute(NODE_TYPE, layerType);
-    el.setAttribute(FILE_NAME, LAYER + QString::number( m_count ) );
+    el.setAttribute(FILE_NAME, LAYER + QString::number(m_count));
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
 
-    m_nodeFileNames[layer] = LAYER + QString::number( m_count );
+    m_nodeFileNames[layer] = LAYER + QString::number(m_count);
 
     dbgFile << "Saved layer "
-            << layer->name()
-            << " of type " << layerType
-            << " with filename " << LAYER + QString::number( m_count );
+    << layer->name()
+    << " of type " << layerType
+    << " with filename " << LAYER + QString::number(m_count);
 }
 
 void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, const KisMask * mask)
@@ -238,23 +238,23 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     el.setAttribute(VISIBLE, mask->visible());
     el.setAttribute(LOCKED, mask->userLocked());
     el.setAttribute(NODE_TYPE, maskType);
-    el.setAttribute(FILE_NAME, MASK + QString::number( m_count) );
+    el.setAttribute(FILE_NAME, MASK + QString::number(m_count));
     el.setAttribute(X, mask->x());
     el.setAttribute(Y, mask->y());
 
-    m_nodeFileNames[mask] = MASK + QString::number( m_count );
+    m_nodeFileNames[mask] = MASK + QString::number(m_count);
 
     dbgFile << "Saved mask "
-            << mask->name()
-            << " of type " << maskType
-            << " with filename " << MASK + QString::number( m_count );
+    << mask->name()
+    << " of type " << maskType
+    << " with filename " << MASK + QString::number(m_count);
 }
 
 bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
 {
     if (node->childCount() > 0) {
         QDomElement elem = m_doc.createElement(MASKS);
-        Q_ASSERT( !layerElement.isNull() );
+        Q_ASSERT(!layerElement.isNull());
         layerElement.appendChild(elem);
         KisSaveXmlVisitor visitor(m_doc, elem, m_count);
         bool success =  visitor.visitAllInverse(node);

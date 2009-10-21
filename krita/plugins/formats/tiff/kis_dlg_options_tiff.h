@@ -25,21 +25,21 @@
 
 class Ui_KisWdgOptionsTIFF;
 /**
-	@author Cyrille Berger <cberger@cberger.net>
+    @author Cyrille Berger <cberger@cberger.net>
 */
 class KisDlgOptionsTIFF : public KDialog
 {
     Q_OBJECT
-    public:
-        KisDlgOptionsTIFF(QWidget *parent=0);
-        ~KisDlgOptionsTIFF();
-    public slots:
-        void activated ( int index );
-        void flattenToggled(bool);
-        KisTIFFOptions options();
-    public:
-        QWidget* wdg;
-        Ui_KisWdgOptionsTIFF* optionswdg;
+public:
+    KisDlgOptionsTIFF(QWidget *parent = 0);
+    ~KisDlgOptionsTIFF();
+public slots:
+    void activated(int index);
+    void flattenToggled(bool);
+    KisTIFFOptions options();
+public:
+    QWidget* wdg;
+    Ui_KisWdgOptionsTIFF* optionswdg;
 };
 
 #endif

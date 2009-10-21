@@ -29,14 +29,14 @@ KisGbrBrushFactory::KisGbrBrushFactory()
 {
 }
 
-KisBrushSP KisGbrBrushFactory::getOrCreateBrush( const QDomElement& brushDefinition )
+KisBrushSP KisGbrBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
 {
 
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    QString brushFileName = brushDefinition.attribute( "brush_filename", "9circle.gbr" );
-    KisBrushSP brush = rServer->getResourceByFilename( brushFileName );
+    QString brushFileName = brushDefinition.attribute("brush_filename", "9circle.gbr");
+    KisBrushSP brush = rServer->getResourceByFilename(brushFileName);
     double spacing = brushDefinition.attribute("brush_spacing", "1.0").toDouble();
-    brush->setSpacing( spacing );
+    brush->setSpacing(spacing);
 
     return brush;
 

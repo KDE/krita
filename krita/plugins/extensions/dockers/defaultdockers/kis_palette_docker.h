@@ -44,7 +44,7 @@ public:
     virtual ~KisPaletteDocker();
 
     QString palette() const;
-    
+
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
 
@@ -69,7 +69,9 @@ public:
     virtual QString id() const;
     QDockWidget * createDockWidget();
 
-    DockPosition defaultDockPosition() const { return DockMinimized; }
+    DockPosition defaultDockPosition() const {
+        return DockMinimized;
+    }
 
 };
 

@@ -24,20 +24,21 @@
 /**
  * This delegate draw categories using information from a \ref KCategorizedSortFilterProxyModel .
  */
-class KisCategorizedItemDelegate : public QAbstractItemDelegate {
+class KisCategorizedItemDelegate : public QAbstractItemDelegate
+{
 public:
     /**
      * The @p _fallback delegate is used to take care of drawing/editing of the items.
      */
     KisCategorizedItemDelegate(QAbstractItemDelegate* _fallback, QObject* parent = 0);
     ~KisCategorizedItemDelegate();
-    virtual QWidget * createEditor ( QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual bool editorEvent ( QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index );
-    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual void setEditorData ( QWidget * editor, const QModelIndex & index ) const;
-    virtual void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const;
-    virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual void updateEditorGeometry ( QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
+    virtual bool editorEvent(QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index);
+    virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
+    virtual void setEditorData(QWidget * editor, const QModelIndex & index) const;
+    virtual void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const;
+    virtual void updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index) const;
 private:
     struct Private;
     Private* const d;

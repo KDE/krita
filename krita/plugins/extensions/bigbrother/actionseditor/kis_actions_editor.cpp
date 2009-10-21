@@ -30,7 +30,7 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
 
 {
     m_form->setupUi(this);
-    
+
     // Setup buttons
     m_form->bnAdd->setIcon(SmallIcon("list-add"));
 
@@ -71,9 +71,8 @@ void KisActionsEditor::setMacro(KisMacro* _macro)
 
 void KisActionsEditor::slotActionActivated(const QModelIndex& item)
 {
-    if( item.isValid() && m_macro )
-    {
-        setCurrentAction( m_macro->actions()[item.row()] );
+    if (item.isValid() && m_macro) {
+        setCurrentAction(m_macro->actions()[item.row()]);
     } else {
         setCurrentAction(0);
     }
@@ -84,31 +83,27 @@ void KisActionsEditor::setCurrentAction(KisRecordedAction* _action)
     // First change, the editor
     delete m_currentEditor;
     m_currentEditor = 0;
-    if(_action) {
+    if (_action) {
         m_currentEditor = KisRecordedActionEditorFactoryRegistry::instance()->createEditor(this, _action);
     } else {
         m_currentEditor = new QLabel(i18n("No action is selected."), this);
     }
-    if(!m_currentEditor)
-    {
+    if (!m_currentEditor) {
         m_currentEditor = new QLabel(i18n("No editor for current action."), this);
     }
     m_widgetLayout->addWidget(m_currentEditor, 0 , 0);
-    
+
     // Then disable/enalbed button
     m_form->bnDuplicate->setEnabled(_action);
     m_form->bnRaise->setEnabled(_action);
     m_form->bnLower->setEnabled(_action);
     m_form->bnDelete->setEnabled(_action);
-    if(_action)
-    {
+    if (_action) {
         int pos = m_macro->actions().indexOf(_action);
-        if( pos == 0 )
-        {
+        if (pos == 0) {
             m_form->bnRaise->setEnabled(false);
         }
-        if( pos == m_macro->actions().count() - 1 )
-        {
+        if (pos == m_macro->actions().count() - 1) {
             m_form->bnLower->setEnabled(false);
         }
     }
@@ -134,8 +129,8 @@ void KisActionsEditor::slotBtnRaise()
     QModelIndex idx = m_form->actionsList->currentIndex();
     Q_ASSERT(idx.isValid());
     m_model->raise(idx);
-    m_form->actionsList->setCurrentIndex(m_model->index(idx.row()-1));
-    slotActionActivated( m_form->actionsList->currentIndex() );
+    m_form->actionsList->setCurrentIndex(m_model->index(idx.row() - 1));
+    slotActionActivated(m_form->actionsList->currentIndex());
 }
 
 void KisActionsEditor::slotBtnLower()
@@ -143,8 +138,8 @@ void KisActionsEditor::slotBtnLower()
     QModelIndex idx = m_form->actionsList->currentIndex();
     Q_ASSERT(idx.isValid());
     m_model->lower(idx);
-    m_form->actionsList->setCurrentIndex(m_model->index(idx.row()+1));
-    slotActionActivated( m_form->actionsList->currentIndex() );
+    m_form->actionsList->setCurrentIndex(m_model->index(idx.row() + 1));
+    slotActionActivated(m_form->actionsList->currentIndex());
 }
 
 #include "kis_actions_editor.moc"

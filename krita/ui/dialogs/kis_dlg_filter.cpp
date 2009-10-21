@@ -144,7 +144,7 @@ void KisFilterDialog::createMask()
         KisLayer * l = qobject_cast<KisLayer*>(d->node.data());
         mask = l->previewMask();
         l->removePreviewMask();
-        d->image->undoAdapter()->addCommand( new KisImageLayerAddCommand( d->image, mask, l, KisNodeSP(0)) );
+        d->image->undoAdapter()->addCommand(new KisImageLayerAddCommand(d->image, mask, l, KisNodeSP(0)));
         mask->setDirty();
         close();
         accept();

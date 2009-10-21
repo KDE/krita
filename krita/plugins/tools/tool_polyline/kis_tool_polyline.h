@@ -58,7 +58,7 @@ public slots:
 
 protected:
     QRectF dragBoundingRect();
-    
+
     QPointF m_dragStart;
     QPointF m_dragEnd;
 

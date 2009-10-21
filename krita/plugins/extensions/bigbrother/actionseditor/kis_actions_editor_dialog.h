@@ -24,13 +24,14 @@
 
 class KisActionsEditor;
 
-class KisActionsEditorDialog : public KDialog {
-    public:
-        KisActionsEditorDialog(QWidget* parent);
-        ~KisActionsEditorDialog();
-        KisActionsEditor* actionsEditor();
-    private:
-        KisActionsEditor* m_actionsEditor;
+class KisActionsEditorDialog : public KDialog
+{
+public:
+    KisActionsEditorDialog(QWidget* parent);
+    ~KisActionsEditorDialog();
+    KisActionsEditor* actionsEditor();
+private:
+    KisActionsEditor* m_actionsEditor;
 };
 
 #endif

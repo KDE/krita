@@ -50,7 +50,7 @@ KisPaletteDocker::~KisPaletteDocker()
 {
 }
 
-void KisPaletteDocker::setCanvas( KoCanvasBase * canvas )
+void KisPaletteDocker::setCanvas(KoCanvasBase * canvas)
 {
     m_canvas = canvas;
 }
@@ -58,7 +58,7 @@ void KisPaletteDocker::setCanvas( KoCanvasBase * canvas )
 void KisPaletteDocker::colorSelected(const KoColor& c, bool final)
 {
     if (final && m_canvas) {
-       m_canvas->resourceProvider()->setForegroundColor(c);
+        m_canvas->resourceProvider()->setForegroundColor(c);
     }
 }
 

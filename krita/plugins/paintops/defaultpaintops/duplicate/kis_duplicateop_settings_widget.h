@@ -30,7 +30,8 @@ class KisBrushOption;
 class KisPressureSizeOption;
 class KisDuplicateOpOption;
 
-class KisDuplicateOpSettingsWidget : public KisPaintOpOptionsWidget {
+class KisDuplicateOpSettingsWidget : public KisPaintOpOptionsWidget
+{
 
     Q_OBJECT
 

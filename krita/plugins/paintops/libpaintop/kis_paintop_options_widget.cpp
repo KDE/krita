@@ -50,14 +50,14 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     QHBoxLayout * layout = new QHBoxLayout(this);
     m_d->optionsList = new QListWidget(this);
     m_d->optionsList->setFixedWidth(128);
-    QSizePolicy policy =  QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
-    policy.setHorizontalStretch( 0 );
-    m_d->optionsList->setSizePolicy( policy );
+    QSizePolicy policy =  QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    policy.setHorizontalStretch(0);
+    m_d->optionsList->setSizePolicy(policy);
 
     m_d->optionsStack = new QStackedWidget(this);
-    policy = QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
-    policy.setHorizontalStretch( 3 );
-    m_d->optionsStack->setSizePolicy( policy );
+    policy = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    policy.setHorizontalStretch(3);
+    m_d->optionsStack->setSizePolicy(policy);
     layout->addWidget(m_d->optionsList);
     layout->addWidget(m_d->optionsStack);
 
@@ -79,22 +79,21 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
     m_d->paintOpOptions << option;
 
     connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
-    
-    if ( option->isCheckable() ) {
+
+    if (option->isCheckable()) {
         QWidget* w = new QWidget;
         QVBoxLayout* l = new QVBoxLayout;
-        QCheckBox* c = new QCheckBox( i18n( "Active" ) );
-        c->setChecked( option->isChecked() );
-        connect( c, SIGNAL( toggled(bool) ), option, SLOT( setChecked(bool) ) );
-        l->addWidget( c );
-        l->addWidget( option->configurationPage() );
+        QCheckBox* c = new QCheckBox(i18n("Active"));
+        c->setChecked(option->isChecked());
+        connect(c, SIGNAL(toggled(bool)), option, SLOT(setChecked(bool)));
+        l->addWidget(c);
+        l->addWidget(option->configurationPage());
         //option->configurationPage()->setVisible( true );
-        l->addSpacing( 1 );
-        w->setLayout( l );
+        l->addSpacing(1);
+        w->setLayout(l);
 
-        m_d->optionsStack->addWidget( w );
-    }
-    else {
+        m_d->optionsStack->addWidget(w);
+    } else {
         m_d->optionsStack->addWidget(option->configurationPage());
     }
 
@@ -102,14 +101,14 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
     m_d->widgetOptionMap[item] = option;
     item->setText(option->label());
     Qt::ItemFlags flags = item->flags();
-    if ( option->isCheckable() ) {
+    if (option->isCheckable()) {
 
         flags |= Qt::ItemIsUserCheckable;
     }
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
-void KisPaintOpOptionsWidget::setConfiguration( const KisPropertiesConfiguration * config)
+void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     Q_ASSERT(!config->getString("paintop").isEmpty());
     foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
@@ -117,7 +116,7 @@ void KisPaintOpOptionsWidget::setConfiguration( const KisPropertiesConfiguration
     }
 }
 
-void KisPaintOpOptionsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
+void KisPaintOpOptionsWidget::writeConfiguration(KisPropertiesConfiguration *config) const
 {
     foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
         option->writeOptionSetting(config);

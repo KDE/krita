@@ -102,11 +102,11 @@ void KisSmallTilesFilter::process(KisConstProcessingInformation srcInfo,
     if (progressUpdater) {
         progressUpdater->setRange(0, numberOfTiles);
     }
-    
+
     if (srcInfo.selection()) {
         gc.setSelection(srcInfo.selection());
     }
-    
+
     for (uint y = 0; y < numberOfTiles; ++y) {
         for (uint x = 0; x < numberOfTiles; ++x) {
             gc.bitBlt(w * x, h * y, tile, 0, 0, w, h);

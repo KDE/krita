@@ -29,16 +29,14 @@ class KisDuplicateOpOptionsWidget: public QWidget, public Ui::DuplicateOpOptions
 {
 public:
     KisDuplicateOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+            : QWidget(parent) {
         setupUi(this);
     }
     KisImageWSP m_image;
 protected:
-    void showEvent(QShowEvent* event)
-    {
+    void showEvent(QShowEvent* event) {
         QWidget::showEvent(event);
-        cbPerspective->setEnabled( m_image && m_image->perspectiveGrid() && m_image->perspectiveGrid()->countSubGrids() == 1);
+        cbPerspective->setEnabled(m_image && m_image->perspectiveGrid() && m_image->perspectiveGrid()->countSubGrids() == 1);
     }
 };
 
@@ -50,7 +48,7 @@ KisDuplicateOpOption::KisDuplicateOpOption()
     m_optionWidget = new KisDuplicateOpOptionsWidget();
     connect(m_optionWidget->cbHealing, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->cbPerspective, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-        
+
     setConfigurationPage(m_optionWidget);
 }
 
@@ -64,9 +62,9 @@ bool KisDuplicateOpOption::healing() const
     return m_optionWidget->cbHealing->isChecked();
 }
 
-void KisDuplicateOpOption::setHealing( bool healing )
+void KisDuplicateOpOption::setHealing(bool healing)
 {
-    m_optionWidget->cbHealing->setChecked( healing );
+    m_optionWidget->cbHealing->setChecked(healing);
 }
 
 bool KisDuplicateOpOption::correctPerspective() const
@@ -74,25 +72,25 @@ bool KisDuplicateOpOption::correctPerspective() const
     return m_optionWidget->cbPerspective->isChecked();
 }
 
-void KisDuplicateOpOption::setPerspective( bool perspective )
+void KisDuplicateOpOption::setPerspective(bool perspective)
 {
-    m_optionWidget->cbPerspective->setChecked( perspective );
+    m_optionWidget->cbPerspective->setChecked(perspective);
 }
 
 void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty( "Duplicateop/Healing", healing() );
-    setting->setProperty( "Duplicateop/CorrectPerspective", correctPerspective() );
+    setting->setProperty("Duplicateop/Healing", healing());
+    setting->setProperty("Duplicateop/CorrectPerspective", correctPerspective());
 }
 
 void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_optionWidget->cbHealing->setChecked( setting->getBool( "Duplicateop/Healing", false ) );
-    m_optionWidget->cbPerspective->setChecked( setting->getBool( "Duplicateop/CorrectPerspective", false ) );
+    m_optionWidget->cbHealing->setChecked(setting->getBool("Duplicateop/Healing", false));
+    m_optionWidget->cbPerspective->setChecked(setting->getBool("Duplicateop/CorrectPerspective", false));
     emit sigSettingChanged();
 }
 
-void KisDuplicateOpOption::setImage( KisImageWSP image )
+void KisDuplicateOpOption::setImage(KisImageWSP image)
 {
     m_optionWidget->m_image = image;
 }

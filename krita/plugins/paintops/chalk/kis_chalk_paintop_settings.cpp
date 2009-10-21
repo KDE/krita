@@ -23,14 +23,14 @@
 #include <kis_paint_action_type_option.h>
 
 KisChalkPaintOpSettings::KisChalkPaintOpSettings()
-    : m_options(0)
+        : m_options(0)
 {
 }
 
 KisPaintOpSettingsSP KisChalkPaintOpSettings::clone() const
 {
     KisPaintOpSettings* settings =
-        static_cast<KisPaintOpSettings*>( m_options->configuration() );
+        static_cast<KisPaintOpSettings*>(m_options->configuration());
     return settings;
 }
 
@@ -44,14 +44,14 @@ bool KisChalkPaintOpSettings::paintIncremental()
 
 void KisChalkPaintOpSettings::fromXML(const QDomElement& elt)
 {
-    KisPaintOpSettings::fromXML( elt );
-    m_options->setConfiguration( this );
+    KisPaintOpSettings::fromXML(elt);
+    m_options->setConfiguration(this);
 }
 
 void KisChalkPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
     KisPropertiesConfiguration * settings = m_options->configuration();
-    settings->KisPropertiesConfiguration::toXML( doc, rootElt );
+    settings->KisPropertiesConfiguration::toXML(doc, rootElt);
     delete settings;
 }
 

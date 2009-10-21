@@ -90,8 +90,7 @@ void KisToneMappingDialog::apply()
         QUndoCommand* cmd = d->layer->paintDevice()->convertTo(colorSpace);
         if (d->layer->image()->undo()) {
             d->layer->image()->undoAdapter()->addCommand(cmd);
-        }
-        else {
+        } else {
             delete cmd;
         }
     }
@@ -102,11 +101,11 @@ void KisToneMappingDialog::apply()
     if (cmd) d->layer->image()->undoAdapter()->addCommand(cmd);
 
     d->currentOperator->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config);
-    
+
     if (d->layer->image()->undo()) {
         d->layer->image()->undoAdapter()->endMacro();
     }
-    
+
     d->layer->setDirty();
     d->layer->image()->unlock();
     delete config;

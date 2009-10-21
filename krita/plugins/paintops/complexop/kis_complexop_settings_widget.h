@@ -33,7 +33,8 @@ class KisPressureSizeOption;
 class KisPaintActionTypeOption;
 class KisBidirectionalMixingOption;
 
-class KisComplexOpSettingsWidget : public KisPaintOpOptionsWidget {
+class KisComplexOpSettingsWidget : public KisPaintOpOptionsWidget
+{
 
     Q_OBJECT
 
@@ -43,11 +44,11 @@ public:
 
     virtual ~KisComplexOpSettingsWidget();
 
-    void setConfiguration( const KisPropertiesConfiguration * config);
+    void setConfiguration(const KisPropertiesConfiguration * config);
 
     KisPropertiesConfiguration* configuration() const;
 
-    void writeConfiguration( KisPropertiesConfiguration *config ) const;
+    void writeConfiguration(KisPropertiesConfiguration *config) const;
 
     void setImage(KisImageWSP image);
 

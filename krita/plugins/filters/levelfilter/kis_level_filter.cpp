@@ -186,8 +186,7 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
     // use nearest neighbour interpolation
     if (histogram->getHistogramType() == LINEAR) {
         double factor = (double)(wHeight - wHeight / 5.0) / highest;
-        for (int i = 0; i < wWidth; i++)
-        {
+        for (int i = 0; i < wWidth; i++) {
             int binNo = (int)round((double)i / wWidth * (bins - 1));
             if ((int)histogram->getValue(binNo) != 0)
                 p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - (int)histogram->getValue(binNo) * factor);
@@ -197,7 +196,7 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
         for (int i = 0; i < wWidth; i++) {
             int binNo = (int)round((double)i / wWidth * (bins - 1)) ;
             if ((int)histogram->getValue(binNo) != 0)
-              p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - log((double)histogram->getValue(binNo)) * factor);
+                p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - log((double)histogram->getValue(binNo)) * factor);
         }
     }
 

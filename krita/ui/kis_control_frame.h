@@ -57,7 +57,9 @@ public:
     KisControlFrame(KisView2 * view,  const char *name = 0);
     virtual ~KisControlFrame() {}
 
-    KisPaintopBox* paintopBox() { return m_paintopBox; }
+    KisPaintopBox* paintopBox() {
+        return m_paintopBox;
+    }
 
 public slots:
 

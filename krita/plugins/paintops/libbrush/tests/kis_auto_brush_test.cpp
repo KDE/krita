@@ -50,7 +50,7 @@ void KisAutoBrushTest::testMaskGeneration()
     cs->setAlpha(fdev->data(), OPACITY_OPAQUE, 100 * 100);
 
     QPoint errpoint;
-    QImage result (QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_1.png");
+    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_1.png");
     QImage image = fdev->convertToQImage();
 
     if (!TestUtil::compareQImages(errpoint, image, result)) {
@@ -60,7 +60,7 @@ void KisAutoBrushTest::testMaskGeneration()
 
     a->mask(fdev, 1.0, 1.0, 0.0, info);
 
-    result = QImage (QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_2.png");
+    result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_2.png");
     image = fdev->convertToQImage();
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_2.png");

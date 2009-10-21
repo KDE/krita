@@ -50,5 +50,5 @@ private:
     QString m_oldCompositeOp;
     QString m_newCompositeOp;
 };
-#endif 
+#endif
 

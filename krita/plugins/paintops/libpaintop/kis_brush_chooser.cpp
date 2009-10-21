@@ -44,41 +44,40 @@
 class KisBrushDelegate : public QAbstractItemDelegate
 {
 public:
-    KisBrushDelegate( QObject * parent = 0 ) : QAbstractItemDelegate( parent ) {}
+    KisBrushDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
     virtual ~KisBrushDelegate() {}
     /// reimplemented
-    virtual void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const;
+    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
     /// reimplemented
-    QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & ) const
-    {
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
         return option.decorationSize;
     }
 };
 
-void KisBrushDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
-    if( ! index.isValid() )
+    if (! index.isValid())
         return;
 
-    KisBrush * brush = static_cast<KisBrush*>( index.internalPointer() );
+    KisBrush * brush = static_cast<KisBrush*>(index.internalPointer());
     if (!brush)
         return;
 
     QRect itemRect = option.rect;
     QImage thumbnail = brush->img();
 
-    if(thumbnail.height() > itemRect.height() || thumbnail.width() > itemRect.width()) {
-        thumbnail = thumbnail.scaled( itemRect.size() , Qt::KeepAspectRatio );
+    if (thumbnail.height() > itemRect.height() || thumbnail.width() > itemRect.width()) {
+        thumbnail = thumbnail.scaled(itemRect.size() , Qt::KeepAspectRatio);
     }
 
     painter->save();
     int dx = (itemRect.width() - thumbnail.width()) / 2;
     int dy = (itemRect.height() - thumbnail.height()) / 2;
-    painter->drawImage( itemRect.x() + dx, itemRect.y() + dy, thumbnail );
+    painter->drawImage(itemRect.x() + dx, itemRect.y() + dy, thumbnail);
 
     if (option.state & QStyle::State_Selected) {
-        painter->setPen( QPen(option.palette.highlight(), 2.0) );
-        painter->drawRect( option.rect );
+        painter->setPen(QPen(option.palette.highlight(), 2.0));
+        painter->drawRect(option.rect);
     }
 
     painter->restore();
@@ -109,8 +108,8 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
     m_itemChooser->setCurrentItem(0, 0);
 
-    connect( m_itemChooser, SIGNAL(resourceSelected( KoResource * ) ),
-             this, SLOT( update( KoResource * ) ) );
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
+            this, SLOT(update(KoResource *)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
@@ -136,23 +135,23 @@ KisBrushChooser::~KisBrushChooser()
 {
 }
 
-void KisBrushChooser::setBrush( KisBrushSP _brush )
+void KisBrushChooser::setBrush(KisBrushSP _brush)
 {
-/*
-    KisGbrBrush* brush = static_cast<KisGbrBrush*>(_brush.data());
+    /*
+        KisGbrBrush* brush = static_cast<KisGbrBrush*>(_brush.data());
 
-    QString text = QString("%1 (%2 x %3)")
-                   .arg(brush->name())
-                   .arg(brush->width())
-                   .arg(brush->height());
+        QString text = QString("%1 (%2 x %3)")
+                       .arg(brush->name())
+                       .arg(brush->width())
+                       .arg(brush->height());
 
-    m_lbName->setText(text);
-    m_slSpacing->setValue(brush->spacing());
-    m_chkColorMask->setChecked(brush->useColorAsMask());
-    m_chkColorMask->setEnabled(brush->hasColor());
+        m_lbName->setText(text);
+        m_slSpacing->setValue(brush->spacing());
+        m_chkColorMask->setChecked(brush->useColorAsMask());
+        m_chkColorMask->setEnabled(brush->hasColor());
 
-    m_brush = brush;
-*/
+        m_brush = brush;
+    */
 }
 
 void KisBrushChooser::slotSetItemSpacing(double spacingValue)
@@ -186,7 +185,7 @@ void KisBrushChooser::update(KoResource * resource)
     KisGbrBrush* brush = static_cast<KisGbrBrush*>(resource);
 
     QString text = QString("%1 (%2 x %3)")
-                   .arg( i18n(brush->name().toUtf8().data()) )
+                   .arg(i18n(brush->name().toUtf8().data()))
                    .arg(brush->width())
                    .arg(brush->height());
 

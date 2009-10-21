@@ -31,7 +31,7 @@ KisFixedPaintDevice::~KisFixedPaintDevice()
 }
 
 KisFixedPaintDevice::KisFixedPaintDevice(const KisFixedPaintDevice& rhs)
-    : KisShared(rhs)
+        : KisShared(rhs)
 {
     m_bounds = rhs.m_bounds;
     m_colorSpace = rhs.m_colorSpace;
@@ -54,7 +54,7 @@ quint32 KisFixedPaintDevice::pixelSize() const
     return m_colorSpace->pixelSize();
 }
 
-bool KisFixedPaintDevice::initialize( quint8 defaultValue )
+bool KisFixedPaintDevice::initialize(quint8 defaultValue)
 {
     m_data.fill(defaultValue, m_bounds.height() * m_bounds.width() * pixelSize());
 
@@ -104,8 +104,8 @@ void KisFixedPaintDevice::convertFromQImage(const QImage& image, const QString &
         memcpy(data(), img.bits(), img.width() * img.height() * pixelSize());
     } else {
         KoColorSpaceRegistry::instance()
-            ->colorSpace("RGBA", srcProfileName)
-            ->convertPixelsTo(img.bits(), data(), colorSpace(), img.width() * img.height());
+        ->colorSpace("RGBA", srcProfileName)
+        ->convertPixelsTo(img.bits(), data(), colorSpace(), img.width() * img.height());
     }
 }
 
@@ -136,20 +136,19 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
     if (QRect(x1, y1, w, h) == m_bounds) {
         return colorSpace()->convertToQImage(data(), w, h, dstProfile,
                                              KoColorConversionTransformation::IntentPerceptual);
-    }
-    else {
+    } else {
         quint8* newData = new quint8[w * h * pixelSize()];
         quint8* srcPtr = data();
         quint8* dstPtr = newData;
         int pSize = pixelSize();
         // copy the right area out of the paint device into data
         for (int row = y1; row < h; row++) {
-                memcpy(dstPtr, srcPtr, w * pSize);
-                srcPtr += (row * w * pSize) + (y1 * pSize);
-                dstPtr += w * pSize;
+            memcpy(dstPtr, srcPtr, w * pSize);
+            srcPtr += (row * w * pSize) + (y1 * pSize);
+            dstPtr += w * pSize;
         }
         QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile,
-                                                     KoColorConversionTransformation::IntentPerceptual);
+                       KoColorConversionTransformation::IntentPerceptual);
         return image;
     }
 }
@@ -185,8 +184,7 @@ void KisFixedPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const qui
             memcpy(dabPointer, fillPixel, pixelSize);
             dabPointer += pixelSize;
         }
-    }
-    else {
+    } else {
         int y1 = y;
         for (int row = y1; row < h; row++) {
             memcpy(dabPointer, fillPixel, w * pixelSize);

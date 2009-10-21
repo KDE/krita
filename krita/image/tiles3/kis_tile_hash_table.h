@@ -45,7 +45,7 @@ public:
 
     /* virtual? */
     ~KisTileHashTableTraits();
-    
+
     bool tileExists(qint32 col, qint32 row);
     TileTypeSP getTileLazy(qint32 col, qint32 row, bool& newTile);
     TileTypeSP getExistedTile(qint32 col, qint32 row);
@@ -59,7 +59,7 @@ public:
     KisTileData* defaultTileData();
 
     qint32 numTiles() {
-	return m_numTiles;
+        return m_numTiles;
     }
 
     void debugPrintInfo();
@@ -76,11 +76,11 @@ private:
     void debugListLengthDistibution();
 private:
     template<class U> friend class KisTileHashTableIteratorTraits;
-    
+
     static const qint32 TABLE_SIZE = 1024;
     TileTypeSP *m_hashTable;
     qint32 m_numTiles;
-    
+
     KisTileData *m_defaultTileData;
     KisMementoManager *m_mementoManager;
 
@@ -92,70 +92,69 @@ private:
 
 
 /**
- * Walks through all tiles inside hash table 
+ * Walks through all tiles inside hash table
  * Note: You can't work with your hash table in a regular way
  *       during iterating with this iterator, because HT is locked.
  *       The only thing you can do is to delete current tile.
  */
 template<class T>
-class KisTileHashTableIteratorTraits 
+class KisTileHashTableIteratorTraits
 {
 public:
     typedef T               TileType;
     typedef KisSharedPtr<T> TileTypeSP;
 
     KisTileHashTableIteratorTraits(KisTileHashTableTraits<T> *ht) {
-	m_hashTable = ht;
-	m_index = nextNonEmptyList(0);
-	if(m_index < KisTileHashTableTraits<T>::TABLE_SIZE)
-	    m_tile = m_hashTable->m_hashTable[m_index];
+        m_hashTable = ht;
+        m_index = nextNonEmptyList(0);
+        if (m_index < KisTileHashTableTraits<T>::TABLE_SIZE)
+            m_tile = m_hashTable->m_hashTable[m_index];
 
-	m_hashTable->m_lock.lockForWrite();
+        m_hashTable->m_lock.lockForWrite();
     }
 
     ~KisTileHashTableIteratorTraits<T>() {
-	if(m_index!=-1)
+        if (m_index != -1)
             m_hashTable->m_lock.unlock();
     }
 
     KisTileHashTableIteratorTraits<T>& operator++() {
-	next();
-	return *this;
+        next();
+        return *this;
     }
 
     void next() {
-	if(m_tile) {
-	    m_tile = m_tile->next();
-	    if(!m_tile) {
-		qint32 idx = nextNonEmptyList(m_index+1);
-		if(idx < KisTileHashTableTraits<T>::TABLE_SIZE) {
-		    m_index = idx;
-		    m_tile = m_hashTable->m_hashTable[idx];
-		}
-		else {
-		    //EOList reached
-		    destroy();
-		}
-	    }
-	}
+        if (m_tile) {
+            m_tile = m_tile->next();
+            if (!m_tile) {
+                qint32 idx = nextNonEmptyList(m_index + 1);
+                if (idx < KisTileHashTableTraits<T>::TABLE_SIZE) {
+                    m_index = idx;
+                    m_tile = m_hashTable->m_hashTable[idx];
+                } else {
+                    //EOList reached
+                    destroy();
+                }
+            }
+        }
     }
 
     TileTypeSP tile() const {
-	return m_tile;
+        return m_tile;
     }
     bool isDone() const {
-	return !m_tile;
+        return !m_tile;
     }
-    
+
     void deleteCurrent() {
-	TileTypeSP tile = m_tile;
-	next();
-	m_hashTable->unlinkTile(tile->col(), tile->row());
+        TileTypeSP tile = m_tile;
+        next();
+        m_hashTable->unlinkTile(tile->col(), tile->row());
     }
-    
+
     void destroy() {
-	m_index=-1;
-	m_hashTable->m_lock.unlock();
+        m_index = -1;
+        m_hashTable->m_lock.unlock();
     }
 protected:
     TileTypeSP m_tile;
@@ -165,12 +164,12 @@ protected:
 protected:
     qint32 nextNonEmptyList(qint32 startIdx) {
         qint32 idx = startIdx;
-        
-        while(idx < KisTileHashTableTraits<T>::TABLE_SIZE &&
-              !m_hashTable->m_hashTable[idx]) {
+
+        while (idx < KisTileHashTableTraits<T>::TABLE_SIZE &&
+                !m_hashTable->m_hashTable[idx]) {
             idx++;
-        } 
-	
+        }
+
         return idx;
     }
 private:

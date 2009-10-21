@@ -200,9 +200,9 @@ public:
 };
 
 KisConvolutionKernelSP createKernel(qint32 i0, qint32 i1, qint32 i2,
-                         qint32 i3, qint32 i4, qint32 i5,
-                         qint32 i6, qint32 i7, qint32 i8,
-                         qint32 factor, qint32 offset)
+                                    qint32 i3, qint32 i4, qint32 i5,
+                                    qint32 i6, qint32 i7, qint32 i8,
+                                    qint32 factor, qint32 offset)
 {
     KisConvolutionKernelSP kernel = new KisConvolutionKernel(3, 0, offset, factor);
 

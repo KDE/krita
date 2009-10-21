@@ -33,7 +33,7 @@
 #include <kis_bidirectional_mixing_option.h>
 
 KisComplexOpSettingsWidget::KisComplexOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+        : KisPaintOpOptionsWidget(parent)
 {
     setObjectName("mixing brush option widget");
 
@@ -63,7 +63,7 @@ KisComplexOpSettingsWidget::~KisComplexOpSettingsWidget()
     delete m_bidiOption;
 }
 
-void KisComplexOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
+void KisComplexOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     m_brushOption->readOptionSetting(config);
     m_sizeOption->readOptionSetting(config);
@@ -76,11 +76,11 @@ void KisComplexOpSettingsWidget::setConfiguration( const KisPropertiesConfigurat
 KisPropertiesConfiguration* KisComplexOpSettingsWidget::configuration() const
 {
     KisComplexOpSettings *config = new KisComplexOpSettings();
-    config->setOptionsWidget(const_cast<KisComplexOpSettingsWidget*>( this ));
+    config->setOptionsWidget(const_cast<KisComplexOpSettingsWidget*>(this));
     return config;
 }
 
-void KisComplexOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
+void KisComplexOpSettingsWidget::writeConfiguration(KisPropertiesConfiguration *config) const
 {
     config->setProperty("paintop", "complex"); // XXX: make this a const id string
     m_brushOption->writeOptionSetting(config);

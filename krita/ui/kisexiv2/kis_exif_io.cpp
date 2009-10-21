@@ -95,31 +95,29 @@ QDateTime exivValueToDateTime(const Exiv2::Value::AutoPtr value)
 }
 
 template<typename T>
-inline T fixEndianess( T v, Exiv2::ByteOrder order )
+inline T fixEndianess(T v, Exiv2::ByteOrder order)
 {
-    switch( order )
-    {
-        case Exiv2::invalidByteOrder:
-            return v;
-        case Exiv2::littleEndian:
-            return qFromLittleEndian<T>( v );
-        case Exiv2::bigEndian:
-            return qFromBigEndian<T>( v );
+    switch (order) {
+    case Exiv2::invalidByteOrder:
+        return v;
+    case Exiv2::littleEndian:
+        return qFromLittleEndian<T>(v);
+    case Exiv2::bigEndian:
+        return qFromBigEndian<T>(v);
     }
     qFatal("Unknown byte order");
     return v;
 }
 
-Exiv2::ByteOrder invertByteOrder( Exiv2::ByteOrder order )
+Exiv2::ByteOrder invertByteOrder(Exiv2::ByteOrder order)
 {
-    switch( order )
-    {
-        case Exiv2::invalidByteOrder:
-            qFatal("Can't invert Exiv2::invalidByteOrder");
-        case Exiv2::littleEndian:
-            return Exiv2::bigEndian;
-        case Exiv2::bigEndian:
-            return Exiv2::littleEndian;
+    switch (order) {
+    case Exiv2::invalidByteOrder:
+        qFatal("Can't invert Exiv2::invalidByteOrder");
+    case Exiv2::littleEndian:
+        return Exiv2::bigEndian;
+    case Exiv2::bigEndian:
+        return Exiv2::littleEndian;
     }
     return Exiv2::invalidByteOrder;
 }
@@ -135,9 +133,8 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
     int columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
     int rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
 
-    if( (columns * rows + 4) > dvalue->count())
-    { // Sometime byteOrder get messed up (especially if metadata got saved with kexiv2 library, or any library that doesn't save back with the same byte order as the camera)
-        order = invertByteOrder( order );
+    if ((columns * rows + 4) > dvalue->count()) { // Sometime byteOrder get messed up (especially if metadata got saved with kexiv2 library, or any library that doesn't save back with the same byte order as the camera)
+        order = invertByteOrder(order);
         columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
         rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
         Q_ASSERT((columns * rows + 4) > dvalue->count());
@@ -168,7 +165,7 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
     }
     oecfStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
     dbgFile << "OECF: " << ppVar(columns) << ppVar(rows) << ppVar(dvalue->count());
-    return KisMetaData::Value( oecfStructure);
+    return KisMetaData::Value(oecfStructure);
 }
 
 Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
@@ -230,7 +227,7 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
         settings.append(KisMetaData::Value(setting));
     }
     deviceSettingStructure["Settings"] = KisMetaData::Value(settings, KisMetaData::Value::OrderedArray);
-    return KisMetaData::Value( deviceSettingStructure);
+    return KisMetaData::Value(deviceSettingStructure);
 }
 
 Exiv2::Value* deviceSettingDescriptionKMDToExif(const KisMetaData::Value& value)
@@ -262,9 +259,8 @@ KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value, Exiv2:
     dvalue->copy((Exiv2::byte*)array.data());
     int columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
     int rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
-    if( (columns * rows + 4) != dvalue->count())
-    { // Sometime byteOrder get messed up (especially if metadata got saved with kexiv2 library, or any library that doesn't save back with the same byte order as the camera)
-        order = invertByteOrder( order );
+    if ((columns * rows + 4) != dvalue->count()) { // Sometime byteOrder get messed up (especially if metadata got saved with kexiv2 library, or any library that doesn't save back with the same byte order as the camera)
+        order = invertByteOrder(order);
         columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
         rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
         Q_ASSERT((columns * rows + 4) == dvalue->count());
@@ -274,12 +270,12 @@ KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value, Exiv2:
     QList<KisMetaData::Value> values;
     int index = 4;
     for (int i = 0; i < columns * rows; i++) {
-        values.append( KisMetaData::Value( *(array.data() + index) ) );
+        values.append(KisMetaData::Value(*(array.data() + index)));
         index++;
     }
     cfaPatternStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
     dbgFile << "CFAPattern " << ppVar(columns) << " " << ppVar(rows) << ppVar(values.size() << ppVar(dvalue->count()));
-    return KisMetaData::Value( cfaPatternStructure);
+    return KisMetaData::Value(cfaPatternStructure);
 }
 
 Exiv2::Value* cfaPatternKMDToExif(const KisMetaData::Value& value)
@@ -317,7 +313,7 @@ KisMetaData::Value flashExifToKMD(const Exiv2::Value::AutoPtr value)
     flashStructure["Function"] = QVariant(function);
     bool redEye = ((v >> 6) & 0x01);  // bit 7 if function
     flashStructure["RedEyeMode"] = QVariant(redEye);
-    return KisMetaData::Value( flashStructure);
+    return KisMetaData::Value(flashStructure);
 }
 
 Exiv2::Value* flashKMDToExif(const KisMetaData::Value& value)
@@ -420,13 +416,12 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
             } else if (exivKey == "Exif.Photo.Flash") {
                 v = flashKMDToExif(entry.value());
             } else if (exivKey == "Exif.Photo.UserComment") {
-                Q_ASSERT( entry.value().type() == KisMetaData::Value::LangArray );
+                Q_ASSERT(entry.value().type() == KisMetaData::Value::LangArray);
                 QMap<QString, KisMetaData::Value> langArr = entry.value().asLangArray();
-                if( langArr.contains( "x-default") )
-                {
-                    v = kmdValueToExivValue( langArr.value( "x-default" ), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
-                } else if( langArr.size() > 0 ) {
-                    v = kmdValueToExivValue( langArr.begin().value(), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
+                if (langArr.contains("x-default")) {
+                    v = kmdValueToExivValue(langArr.value("x-default"), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
+                } else if (langArr.size() > 0) {
+                    v = kmdValueToExivValue(langArr.begin().value(), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
                 }
             } else {
                 dbgFile << exifKey.tag();
@@ -445,8 +440,8 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
     ioDevice->write((const char*) rawData.pData_, rawData.size_);
 #else
     Exiv2::Blob rawData;
-    Exiv2::ExifParser::encode( rawData, Exiv2::littleEndian, exifData );
-    ioDevice->write((const char*) &*rawData.begin(), rawData.size() );
+    Exiv2::ExifParser::encode(rawData, Exiv2::littleEndian, exifData);
+    ioDevice->write((const char*) &*rawData.begin(), rawData.size());
 #endif
     ioDevice->close();
     return true;
@@ -461,8 +456,7 @@ bool KisExifIO::canSaveAllEntries(KisMetaData::Store* /*store*/) const
 bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
     ioDevice->open(QIODevice::ReadOnly);
-    if(!ioDevice->isOpen())
-    {
+    if (!ioDevice->isOpen()) {
         return false;
     }
     QByteArray arr = ioDevice->readAll();
@@ -472,7 +466,7 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     exifData.load((const Exiv2::byte*)arr.data(), arr.size());
     byteOrder = exifData.byteOrder();
 #else
-    byteOrder = Exiv2::ExifParser::decode( exifData, (const Exiv2::byte*)arr.data(), arr.size());
+    byteOrder = Exiv2::ExifParser::decode(exifData, (const Exiv2::byte*)arr.data(), arr.size());
 #endif
     dbgFile << "Byte order = " << byteOrder << ppVar(Exiv2::bigEndian) << ppVar(Exiv2::littleEndian);
     dbgFile << "There are" << exifData.count() << " entries in the exif section";
@@ -512,11 +506,9 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
         } else if (it->groupName() == "Image") {
             // Tiff tags
             QString fixedTN = it->tagName().c_str();
-            if( it->key() == "Exif.Image.ExifTag" )
-            {
+            if (it->key() == "Exif.Image.ExifTag") {
                 dbgFile << "Ignoring " << it->key().c_str();
-            } else if( KisMetaData::Entry::isValidName(fixedTN) )
-            {
+            } else if (KisMetaData::Entry::isValidName(fixedTN)) {
                 store->addEntry(KisMetaData::Entry(tiffSchema, fixedTN, exivValueToKMDValue(it->getValue(), false))) ;
             } else {
                 dbgFile << "Invalid tag name: " << fixedTN;
@@ -544,23 +536,21 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 v = flashExifToKMD(it->getValue());
             } else if (it->key() == "Exif.Photo.UserComment") {
                 KisMetaData::Value vUC = exivValueToKMDValue(it->getValue(), false);
-                Q_ASSERT( vUC.type() == KisMetaData::Value::Variant );
+                Q_ASSERT(vUC.type() == KisMetaData::Value::Variant);
                 QVariant commentVar = vUC.asVariant();
                 QString comment;
-                if( commentVar.type() == QVariant::String )
-                {
+                if (commentVar.type() == QVariant::String) {
                     comment = commentVar.toString();
-                } else if( commentVar.type() == QVariant::ByteArray )
-                {
-                    comment = QString::fromLatin1( commentVar.toByteArray().data(), commentVar.toByteArray().size() );
+                } else if (commentVar.type() == QVariant::ByteArray) {
+                    comment = QString::fromLatin1(commentVar.toByteArray().data(), commentVar.toByteArray().size());
                 } else {
-                    qFatal( "Unhandled UserComment value type." );
+                    qFatal("Unhandled UserComment value type.");
                 }
-                KisMetaData::Value vcomment( comment );
-                vcomment.addPropertyQualifier( "xml:lang", KisMetaData::Value("x-default") );
+                KisMetaData::Value vcomment(comment);
+                vcomment.addPropertyQualifier("xml:lang", KisMetaData::Value("x-default"));
                 QList<KisMetaData::Value> alt;
                 alt.append(vcomment);
-                v = KisMetaData::Value( alt, KisMetaData::Value::LangArray );
+                v = KisMetaData::Value(alt, KisMetaData::Value::LangArray);
             } else {
                 bool forceSeq = false;
                 KisMetaData::Value::ValueType arrayType = KisMetaData::Value::UnorderedArray;
@@ -570,8 +560,7 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 }
                 v = exivValueToKMDValue(it->getValue(), forceSeq, arrayType);
             }
-            if( it->key() == "Exif.Photo.InteroperabilityTag" || it->key() == "Exif.Photo.0xea1d" ) // InteroperabilityTag isn't useful for XMP, 0xea1d isn't a valid Exif tag
-            {
+            if (it->key() == "Exif.Photo.InteroperabilityTag" || it->key() == "Exif.Photo.0xea1d") { // InteroperabilityTag isn't useful for XMP, 0xea1d isn't a valid Exif tag
                 dbgFile << "Ignoring " << it->key().c_str();
             } else {
                 store->addEntry(KisMetaData::Entry(exifSchema, it->tagName().c_str(), v));

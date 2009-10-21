@@ -42,7 +42,7 @@ void KisTiffTest::testFiles()
     KisExiv2::initialize();
 
     QStringList excludes;
-    if(!KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces).contains(YCbCrAColorModelID)) {
+    if (!KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces).contains(YCbCrAColorModelID)) {
         excludes << "ycbcr-cat.tif";
     }
 

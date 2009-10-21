@@ -19,20 +19,20 @@
 #include "kis_tool_%{APPNAMELC}.h"
 
 
-typedef KGenericFactory<%{APPNAME}Plugin> %{APPNAME}Factory;
-K_EXPORT_COMPONENT_FACTORY( kritatool%{APPNAMELC}, %{APPNAME}Factory( "krita" ) )
+typedef KGenericFactory < % {APPNAME} Plugin > % {APPNAME} Factory;
+K_EXPORT_COMPONENT_FACTORY(kritatool % {APPNAMELC}, % {APPNAME} Factory("krita"))
 
 
-%{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+% {APPNAME} Plugin:: % {APPNAME} Plugin(QObject *parent, const QStringList &)
+        : KParts::Plugin(parent)
 {
-    setComponentData(%{APPNAME}Factory::componentData());
+    setComponentData( % {APPNAME} Factory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisTool%{APPNAME}Factory(r, QStringList()));
+    r->add(new KisTool % {APPNAME} Factory(r, QStringList()));
 }
 
-%{APPNAME}Plugin::~%{APPNAME}Plugin()
+% {APPNAME} Plugin::~ % {APPNAME} Plugin()
 {
 }
 

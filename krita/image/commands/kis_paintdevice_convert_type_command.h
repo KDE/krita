@@ -38,8 +38,7 @@ class KisPaintDeviceConvertTypeCommand : public QUndoCommand
 public:
     KisPaintDeviceConvertTypeCommand(KisPaintDeviceSP paintDevice,
                                      KisDataManagerSP beforeData, const KoColorSpace * beforeColorSpace,
-                                     KisDataManagerSP afterData, const KoColorSpace * afterColorSpace)
-    {
+                                     KisDataManagerSP afterData, const KoColorSpace * afterColorSpace) {
         m_firstRedo = true;
 
         Q_ASSERT(paintDevice);

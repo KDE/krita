@@ -62,8 +62,8 @@ TriangleColorSelectorPlugin::TriangleColorSelectorPlugin(QObject *parent, const 
 {
     dbgPlugins << "TriangleColorSelectorPlugin";
 
-    setComponentData(TriangleColorSelectorPluginFactory::componentData()); 
-    KoDockRegistry::instance()->add( new KisTriangleColorSelectorDockFactory() );
+    setComponentData(TriangleColorSelectorPluginFactory::componentData());
+    KoDockRegistry::instance()->add(new KisTriangleColorSelectorDockFactory());
 }
 
 TriangleColorSelectorPlugin::~TriangleColorSelectorPlugin()

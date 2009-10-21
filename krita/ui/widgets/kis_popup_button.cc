@@ -40,8 +40,8 @@ struct KisPopupButton::Private {
 };
 
 KisPopupButton::KisPopupButton(QWidget* parent)
-    : QPushButton(parent)
-    , m_d(new Private)
+        : QPushButton(parent)
+        , m_d(new Private)
 {
     setObjectName("KisPopupButton");
     connect(this, SIGNAL(released()), SLOT(showPopupWidget()));
@@ -72,8 +72,8 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
         m_d->frame->setWindowFlags(Qt::Popup);
         m_d->frameLayout = new QHBoxLayout(m_d->frame);
         m_d->frameLayout->setMargin(0);
-        m_d->frameLayout->setSizeConstraint( QLayout::SetFixedSize );
-        m_d->frame->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+        m_d->frameLayout->setSizeConstraint(QLayout::SetFixedSize);
+        m_d->frame->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
         m_d->popupWidget = widget;
         m_d->popupWidget->setParent(m_d->frame);
         m_d->frameLayout->addWidget(m_d->popupWidget);
@@ -117,13 +117,13 @@ void KisPopupButton::paintPopupArrow()
 {
     QStylePainter p(this);
     QStyleOption option;
-    option.rect = QRect( rect().right() - 15, rect().bottom() - 15, 14, 14 );
+    option.rect = QRect(rect().right() - 15, rect().bottom() - 15, 14, 14);
     option.palette = palette();
     option.palette.setBrush(QPalette::ButtonText, Qt::black); // Force color to black
     option.state = QStyle::State_Enabled;
     p.setBrush(Qt::black); // work around some theme that don't use QPalette::ButtonText like they  should, but instead the QPainter brushes and pen
     p.setPen(Qt::black);
-    p.drawPrimitive(QStyle::PE_IndicatorArrowDown, option );
+    p.drawPrimitive(QStyle::PE_IndicatorArrowDown, option);
 }
 
 #include "kis_popup_button.moc"

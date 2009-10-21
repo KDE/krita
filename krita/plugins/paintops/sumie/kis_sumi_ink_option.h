@@ -46,7 +46,7 @@ public:
     void writeOptionSetting(KisPropertiesConfiguration* config) const;
     void readOptionSetting(const KisPropertiesConfiguration* config);
 private:
-   KisInkOptionsWidget * m_options;
+    KisInkOptionsWidget * m_options;
 };
 
 #endif // KIS_SUMI_SHAPE_OPTION_H

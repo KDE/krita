@@ -22,21 +22,24 @@
 #include "ExtensionsManager.h"
 #include <kmessagebox.h>
 
-ExtensionsManagerWindow::ExtensionsManagerWindow() : m_emWidget(new Ui_ExtensionsManagerWidget) {
-  m_emWidget->setupUi(this);
-  connect(m_emWidget->pushButtonInstall, SIGNAL(released()), SLOT(installFromFile()));
-  connect(m_emWidget->pushButtonClose, SIGNAL(released()), SLOT(close()));
+ExtensionsManagerWindow::ExtensionsManagerWindow() : m_emWidget(new Ui_ExtensionsManagerWidget)
+{
+    m_emWidget->setupUi(this);
+    connect(m_emWidget->pushButtonInstall, SIGNAL(released()), SLOT(installFromFile()));
+    connect(m_emWidget->pushButtonClose, SIGNAL(released()), SLOT(close()));
 }
 
-ExtensionsManagerWindow::~ExtensionsManagerWindow() {
-  delete m_emWidget;
+ExtensionsManagerWindow::~ExtensionsManagerWindow()
+{
+    delete m_emWidget;
 }
 
-void ExtensionsManagerWindow::installFromFile() {
-  KUrl url = KFileDialog::getOpenFileName(KUrl(), "*.koffice-extension");
-  if( !url.isEmpty() ) {
-    if(ExtensionsManager::instance()->installExtension(url) ) {
-        KMessageBox::information(this, i18n("The installation was successful, you will need to restart Krita to use the extensions"), i18n("Success") );
+void ExtensionsManagerWindow::installFromFile()
+{
+    KUrl url = KFileDialog::getOpenFileName(KUrl(), "*.koffice-extension");
+    if (!url.isEmpty()) {
+        if (ExtensionsManager::instance()->installExtension(url)) {
+            KMessageBox::information(this, i18n("The installation was successful, you will need to restart Krita to use the extensions"), i18n("Success"));
+        }
     }
-  }
 }

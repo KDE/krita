@@ -42,7 +42,7 @@ public:
         return m_brush;
     };
 
-    void setBrush( KisBrushSP );
+    void setBrush(KisBrushSP);
 
 private slots:
 

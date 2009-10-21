@@ -128,7 +128,7 @@ void KisTile::setData(const quint8 *pixel)
 {
     addReader();
     quint8 *dst = m_data;
-    for (int i = 0; i < WIDTH * HEIGHT;i++) {
+    for (int i = 0; i < WIDTH * HEIGHT; i++) {
         memcpy(dst, pixel, m_pixelSize);
         dst += m_pixelSize;
     }

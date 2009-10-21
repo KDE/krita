@@ -35,17 +35,18 @@ class QImage;
  * Velocity won't be supported, atm Angular and Tilt aren't either,
  * but have chances of implementation
  */
-namespace KisParasite {
-    enum SelectionMode {
-        Constant,
-        Incremental,
-        Angular,
-        Velocity,
-        Random,
-        Pressure,
-        TiltX,
-        TiltY
-    };
+namespace KisParasite
+{
+enum SelectionMode {
+    Constant,
+    Incremental,
+    Angular,
+    Velocity,
+    Random,
+    Pressure,
+    TiltX,
+    TiltY
+};
 }
 
 class BRUSH_EXPORT KisImagePipeBrush : public KisGbrBrush
@@ -99,9 +100,9 @@ public:
      *  @return the next mask in the pipe.
      */
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
-                              double scaleX, double scaleY, double angle,
-                              const KisPaintInformation& info,
-                              double subPixelX = 0, double subPixelY = 0) const;
+            double scaleX, double scaleY, double angle,
+            const KisPaintInformation& info,
+            double subPixelX = 0, double subPixelY = 0) const;
 
 
 protected:

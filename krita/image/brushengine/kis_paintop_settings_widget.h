@@ -33,23 +33,20 @@ class KRITAIMAGE_EXPORT KisPaintOpSettingsWidget : public KisConfigWidget
 
 public:
 
-    KisPaintOpSettingsWidget( QWidget * parent = 0, Qt::WFlags f = 0 )
-        : KisConfigWidget( parent, f )
-    {
+    KisPaintOpSettingsWidget(QWidget * parent = 0, Qt::WFlags f = 0)
+            : KisConfigWidget(parent, f) {
     }
 
-    virtual ~KisPaintOpSettingsWidget()
-    {
+    virtual ~KisPaintOpSettingsWidget() {
     }
 
     /**
      * Write the settings in this widget to the given properties
      * configuration, which is cleared first.
      */
-    virtual void writeConfiguration( KisPropertiesConfiguration *config ) const = 0;
+    virtual void writeConfiguration(KisPropertiesConfiguration *config) const = 0;
 
-    virtual void setImage( KisImageWSP image )
-    {
+    virtual void setImage(KisImageWSP image) {
         m_image = image;
     }
 

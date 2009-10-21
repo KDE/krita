@@ -32,7 +32,7 @@ SpecificColorSelectorDock::SpecificColorSelectorDock() : QDockWidget(i18n("Speci
     setWidget(m_colorSelector);
 }
 
-void SpecificColorSelectorDock::setCanvas( KoCanvasBase * canvas )
+void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 {
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(canvas);

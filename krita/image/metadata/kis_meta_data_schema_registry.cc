@@ -49,26 +49,25 @@ SchemaRegistry* SchemaRegistry::instance()
 
 SchemaRegistry::SchemaRegistry() : d(new Private)
 {
-    
+
     KGlobal::mainComponent().dirs()->addResourceType("metadata_schema", "data", "krita/metadata/schemas/");
 
     QStringList schemasFilenames;
     schemasFilenames += KGlobal::mainComponent().dirs()->findAllResources("metadata_schema", "*.schema");
-    
-    foreach( const QString& fileName, schemasFilenames )
-    {
+
+    foreach(const QString& fileName, schemasFilenames) {
         Schema* schema = new Schema();
-        schema->d->load( fileName );
-        if( schemaFromUri( schema->uri()) ) {
+        schema->d->load(fileName);
+        if (schemaFromUri(schema->uri())) {
             errImage << "Schema already exist uri: " << schema->uri();
-        } else if( schemaFromPrefix( schema->prefix() ) ) {
+        } else if (schemaFromPrefix(schema->prefix())) {
             errImage << "Schema already exist prefix: " << schema->prefix();
         } else {
             d->uri2Schema[schema->uri()] = schema;
             d->prefix2Schema[schema->prefix()] = schema;
         }
     }
-    
+
     // DEPRECATED WRITE A SCHEMA FOR EACH OF THEM
     create(Schema::XMPMediaManagementUri, "xmpMM");
     create(Schema::MakerNoteSchemaUri, "mkn");

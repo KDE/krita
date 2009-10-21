@@ -126,7 +126,7 @@ double *lin_histogram(COLOR **rgb_image, int width, int height,
         for (y = 0; y < height; y++) {
             value = lum(rgb_image, x, y);
             if (value > 0.0)
-                hist[(int)(res * (value - lum_min))]++;
+                hist[(int)(res *(value - lum_min))]++;
         }
 
     delta_b = (lum_max - lum_min) / res;
@@ -163,7 +163,7 @@ void perc_luminance_adjust(double *hist, double *lum_min, double *lum_max,
 
     *lum_min = L1;
     *lum_max = L99;
-}void color_convert(COLOR **image, double matrix[][3], int width, int height)
+} void color_convert(COLOR **image, double matrix[][3], int width, int height)
 {
     int       x, y, i, j;
     double    result[3];

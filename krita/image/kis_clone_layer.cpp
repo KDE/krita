@@ -108,8 +108,8 @@ QRect KisCloneLayer::repaintOriginal(KisPaintDeviceSP original,
 }
 
 void KisCloneLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
-                                             KisPaintDeviceSP projection,
-                                             const QRect& rect) const
+        KisPaintDeviceSP projection,
+        const QRect& rect) const
 {
     QRect copyRect = rect;
     copyRect.moveTo(m_d->x, m_d->y);

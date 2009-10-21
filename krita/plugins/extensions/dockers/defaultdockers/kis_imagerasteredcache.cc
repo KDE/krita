@@ -32,8 +32,8 @@
 #include <kis_view2.h>
 
 KisImageRasteredCache::KisImageRasteredCache(Observer* o)
-    : m_observer(o->createNew(0, 0, 0, 0))
-    , m_docker(0)
+        : m_observer(o->createNew(0, 0, 0, 0))
+        , m_docker(0)
 {
     m_busy = false;
     m_imageProjection = 0;
@@ -70,8 +70,7 @@ void KisImageRasteredCache::setDockerVisible(bool visible)
     if (visible) {
         connect(m_image, SIGNAL(sigImageUpdated(QRect)), this, SLOT(imageUpdated(QRect)));
         connect(m_image, SIGNAL(sigSizeChanged(qint32, qint32)),  this, SLOT(imageSizeChanged(qint32, qint32)));
-    }
-    else {
+    } else {
         disconnect();
     }
 }

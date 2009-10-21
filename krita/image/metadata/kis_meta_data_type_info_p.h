@@ -28,21 +28,21 @@ struct KRITAIMAGE_TEST_EXPORT KisMetaData::TypeInfo::Private {
     Schema* structureSchema;
     QString structureName;
     const Parser* parser;
-    private:
-        static QHash< const TypeInfo*, const TypeInfo*> orderedArrays;
-        static QHash< const TypeInfo*, const TypeInfo*> unorderedArrays;
-        static QHash< const TypeInfo*, const TypeInfo*> alternativeArrays;
-    public:
-        static const TypeInfo* Boolean;
-        static const TypeInfo* Integer;
-        static const TypeInfo* Date;
-        static const TypeInfo* Text;
-        static const TypeInfo* Rational;
-        static const TypeInfo* GPSCoordinate;
-        static const TypeInfo* orderedArray( const TypeInfo* );
-        static const TypeInfo* unorderedArray( const TypeInfo* );
-        static const TypeInfo* alternativeArray( const TypeInfo* );
-        static const TypeInfo* createChoice( PropertyType _propertiesType, const TypeInfo* _embedded, const QList< Choice >& );
-        static const TypeInfo* createStructure( Schema* _structureSchema, const QString& name );
-        static const TypeInfo* LangArray;
+private:
+    static QHash< const TypeInfo*, const TypeInfo*> orderedArrays;
+    static QHash< const TypeInfo*, const TypeInfo*> unorderedArrays;
+    static QHash< const TypeInfo*, const TypeInfo*> alternativeArrays;
+public:
+    static const TypeInfo* Boolean;
+    static const TypeInfo* Integer;
+    static const TypeInfo* Date;
+    static const TypeInfo* Text;
+    static const TypeInfo* Rational;
+    static const TypeInfo* GPSCoordinate;
+    static const TypeInfo* orderedArray(const TypeInfo*);
+    static const TypeInfo* unorderedArray(const TypeInfo*);
+    static const TypeInfo* alternativeArray(const TypeInfo*);
+    static const TypeInfo* createChoice(PropertyType _propertiesType, const TypeInfo* _embedded, const QList< Choice >&);
+    static const TypeInfo* createStructure(Schema* _structureSchema, const QString& name);
+    static const TypeInfo* LangArray;
 };

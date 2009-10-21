@@ -22,26 +22,28 @@ class KisDynamicTransformable;
 class QString;
 #include <QWidget>
 
-class KisDynamicTransformableConfigurationWidget : public QWidget {
-  public:
-    KisDynamicTransformableConfigurationWidget( QWidget* parent );
+class KisDynamicTransformableConfigurationWidget : public QWidget
+{
+public:
+    KisDynamicTransformableConfigurationWidget(QWidget* parent);
     ~KisDynamicTransformableConfigurationWidget();
     virtual KisDynamicTransformable* createTransformable() = 0;
     virtual void setTransformable(KisDynamicTransformable*) = 0;
-  private:
+private:
     struct Private;
     Private* const d;
 };
 
 
-class KisDynamicTransformableFactory {
-  public:
+class KisDynamicTransformableFactory
+{
+public:
     KisDynamicTransformableFactory(const QString& _id, const QString& _name);
     virtual ~KisDynamicTransformableFactory();
     const QString& id() const;
     const QString& name() const;
     virtual KisDynamicTransformableConfigurationWidget* createTransformableConfigurationWidget(QWidget* parent) = 0;
-  private:
+private:
     struct Private;
     Private* const d;
 };

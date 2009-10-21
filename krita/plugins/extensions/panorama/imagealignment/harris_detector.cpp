@@ -97,7 +97,7 @@ public:
         } else {
             score += low() / ip2->low();
         }
-        return score * (1. / 3.);
+        return score *(1. / 3.);
     }
     virtual double compare(const KisInterestPoint* ip) const {
         const HarrisPoint* ip2 = dynamic_cast<const HarrisPoint*>(ip);
@@ -431,7 +431,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
     // Compute the curvatures
     {
         KisRectIteratorPixel vitinfoDeviceRect = infoDevice->createRectIterator(2, 0, rect.width() - 2, rect.height() - 2);
-        for (;!vitinfoDeviceRect.isDone(); ++vitinfoDeviceRect) {
+        for (; !vitinfoDeviceRect.isDone(); ++vitinfoDeviceRect) {
             float* infoValue = reinterpret_cast<float*>(vitinfoDeviceRect.rawData());
 
             float det = infoValue[INFO_XX] * infoValue[INFO_YY] - infoValue[INFO_XY] * infoValue[INFO_XY];
@@ -461,7 +461,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                 if (low > THRESHOLD_LAMBDA) {
                     KisRectIteratorPixel vitinfoDeviceRect = infoDevice->createRectIterator(x - 1, y - 1, 3, 3);
                     bool greater = true;
-                    for (;!vitinfoDeviceRect.isDone(); ++vitinfoDeviceRect) {
+                    for (; !vitinfoDeviceRect.isDone(); ++vitinfoDeviceRect) {
                         if (reinterpret_cast<float*>(vitinfoDeviceRect.rawData())[ INFO_LOW ] > low) {
                             greater = false;
                             break;

@@ -31,10 +31,10 @@ public:
     ~KisDuplicateOpOption();
 
     bool healing() const;
-    void setHealing( bool healing );
+    void setHealing(bool healing);
 
     bool correctPerspective() const;
-    void setPerspective( bool perspective );
+    void setPerspective(bool perspective);
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
@@ -44,7 +44,7 @@ public:
 
 private:
 
-   KisDuplicateOpOptionsWidget * m_optionWidget;
+    KisDuplicateOpOptionsWidget * m_optionWidget;
 
 };
 

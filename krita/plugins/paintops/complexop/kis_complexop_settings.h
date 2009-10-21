@@ -48,17 +48,15 @@ public:
     KisPaintOpSettingsSP clone() const;
 
     // XXX: Hack!
-    void setOptionsWidget(KisPaintOpSettingsWidget* widget)
-    {
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget) {
         if (m_options != 0 && m_options->property("owned by settings").toBool()) {
             delete m_options;
         }
         if (!widget) {
             m_options = 0;
-        }
-        else {
+        } else {
             m_options = qobject_cast<KisComplexOpSettingsWidget*>(widget);
-            m_options->writeConfiguration( this );
+            m_options->writeConfiguration(this);
         }
     }
 

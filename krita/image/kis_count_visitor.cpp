@@ -19,7 +19,8 @@
 #include "kis_count_visitor.h"
 #include "kis_image.h"
 
-bool KisCountVisitor::inList(KisNode* node) {
+bool KisCountVisitor::inList(KisNode* node)
+{
     foreach(const QString& nodeType, m_nodeTypes) {
         if (node->inherits(nodeType.toAscii()))
             return true;
@@ -27,7 +28,8 @@ bool KisCountVisitor::inList(KisNode* node) {
     return false;
 }
 
-bool KisCountVisitor::check(KisNode * node) {
+bool KisCountVisitor::check(KisNode * node)
+{
     if (m_nodeTypes.isEmpty() || inList(node)) {
 
         if (m_properties.isEmpty() || node->check(m_properties)) {

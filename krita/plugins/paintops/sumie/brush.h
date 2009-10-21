@@ -36,11 +36,11 @@ class Brush
 {
 
 public:
-    Brush(const BrushShape &initialShape,const KoColor &inkColor);
+    Brush(const BrushShape &initialShape, const KoColor &inkColor);
     Brush();
     ~Brush();
     void paint(KisPaintDeviceSP dev, const KisPaintInformation &info);
-    void paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+    void paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
     void setInkDepletion(const QList<float>& curveData);
     void setInkColor(const KoColor &color);
 
@@ -65,34 +65,33 @@ public:
         m_scaleFactor = scaleFactor;
     }
 
-    void enableWeights(bool useWeights){
+    void enableWeights(bool useWeights) {
         m_useWeights = useWeights;
     }
-    void enableSaturation(bool useSaturation){
+    void enableSaturation(bool useSaturation) {
         m_useSaturation = useSaturation;
     }
-    void enableOpacity(bool useOpacity){
+    void enableOpacity(bool useOpacity) {
         m_useOpacity = useOpacity;
     }
 
 
-    void setPressureWeight(double pressureWeight){
+    void setPressureWeight(double pressureWeight) {
         m_pressureWeight = pressureWeight;
     }
-    void setBristleLengthWeight(double bristleLengthWeight){
+    void setBristleLengthWeight(double bristleLengthWeight) {
         m_bristleLengthWeight = bristleLengthWeight;
     }
-    void setBristleInkAmountWeight(double bristleInkAmountWeight)
-    {
+    void setBristleInkAmountWeight(double bristleInkAmountWeight) {
         m_bristleInkAmountWeight = bristleInkAmountWeight;
     }
-    void setInkDepletionWeight(double inkDepletionWeight){
+    void setInkDepletionWeight(double inkDepletionWeight) {
         m_inkDepletionWeight = inkDepletionWeight;
     }
 
     /// paints single bristle
     void putBristle(Bristle *bristle, float wx, float wy, const KoColor &color);
-    void mixCMY(double x, double y, int cyan, int magenta, int yellow,double weight);
+    void mixCMY(double x, double y, int cyan, int magenta, int yellow, double weight);
     void addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
     void oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
     void initDefaultValues();

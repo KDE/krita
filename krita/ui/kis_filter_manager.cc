@@ -114,12 +114,10 @@ void KisFilterManager::updateGUI()
 
     bool enable = false;
     KisPaintLayerSP player = 0;
-    if (d->view->activeLayer())
-    {
+    if (d->view->activeLayer()) {
         KisNodeSP layer = d->view->activeNode();
         player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer.data()));
-        if ( player && !(*player->colorSpace() == *KoColorSpaceRegistry::instance()->alpha8()))
-        {
+        if (player && !(*player->colorSpace() == *KoColorSpaceRegistry::instance()->alpha8())) {
             enable = (!layer->userLocked()) && layer->visible() && (!layer->systemLocked());
         }
     }

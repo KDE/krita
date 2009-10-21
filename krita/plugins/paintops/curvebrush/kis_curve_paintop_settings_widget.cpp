@@ -20,7 +20,7 @@
 #include "kis_curve_paintop_settings.h"
 
 KisCurvePaintOpSettingsWidget:: KisCurvePaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpSettingsWidget(parent)
+        : KisPaintOpSettingsWidget(parent)
 {
     m_options = new Ui::WdgCurveOptions();
     m_options->setupUi(this);
@@ -30,35 +30,34 @@ KisCurvePaintOpSettingsWidget::~ KisCurvePaintOpSettingsWidget()
 {
 }
 
-void  KisCurvePaintOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
+void  KisCurvePaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
-    m_options->minDistSPBox->setValue( config->getInt( "min_distance" ) );
-    m_options->pulseSPBox->setValue( config->getInt( "interval" ) );
+    m_options->minDistSPBox->setValue(config->getInt("min_distance"));
+    m_options->pulseSPBox->setValue(config->getInt("interval"));
 
-    int curveAction = config->getInt( "curve_action" );
-    if ( curveAction == 1 )
-    {
-        m_options->mode1Btn->setChecked( true );
-    } else if ( curveAction == 2 ){
-        m_options->mode2Btn->setChecked( true );
-    }else if ( curveAction == 3 ){
-        m_options->mode3Btn->setChecked( true );
+    int curveAction = config->getInt("curve_action");
+    if (curveAction == 1) {
+        m_options->mode1Btn->setChecked(true);
+    } else if (curveAction == 2) {
+        m_options->mode2Btn->setChecked(true);
+    } else if (curveAction == 3) {
+        m_options->mode3Btn->setChecked(true);
     }
 }
 
 KisPropertiesConfiguration*  KisCurvePaintOpSettingsWidget::configuration() const
 {
     KisCurvePaintOpSettings* settings = new KisCurvePaintOpSettings();
-    settings->setOptionsWidget( const_cast<KisCurvePaintOpSettingsWidget*>( this ) );
+    settings->setOptionsWidget(const_cast<KisCurvePaintOpSettingsWidget*>(this));
     return settings;
 }
 
-void KisCurvePaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
+void KisCurvePaintOpSettingsWidget::writeConfiguration(KisPropertiesConfiguration* config) const
 {
     config->setProperty("paintop", "curvebrush"); // XXX: make this a const id string
-    config->setProperty( "min_distance", minimalDistance() );
-    config->setProperty( "curve_action", curveAction() );
-    config->setProperty( "interval", interval() );
+    config->setProperty("min_distance", minimalDistance());
+    config->setProperty("curve_action", curveAction());
+    config->setProperty("interval", interval());
 }
 
 int  KisCurvePaintOpSettingsWidget::minimalDistance() const
@@ -74,13 +73,12 @@ int  KisCurvePaintOpSettingsWidget::interval() const
 
 int  KisCurvePaintOpSettingsWidget::curveAction() const
 {
-    if ( m_options->mode1Btn->isChecked() )
-    {
+    if (m_options->mode1Btn->isChecked()) {
         return 1;
-    } else if ( m_options->mode2Btn->isChecked() ){
+    } else if (m_options->mode2Btn->isChecked()) {
         return 2;
-    }else if ( m_options->mode3Btn->isChecked() ){
+    } else if (m_options->mode3Btn->isChecked()) {
         return 3;
-    }else return -1;
+    } else return -1;
 }
 

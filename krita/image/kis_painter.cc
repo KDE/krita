@@ -90,7 +90,7 @@ struct KisPainter::Private {
     KisPattern*                 pattern;
     QPointF                     duplicateOffset;
     quint8                      opacity;
-    qint32                      pixelSize;
+    quint32                     pixelSize;
     const KoColorSpace*         colorSpace;
     KoColorProfile*             profile;
     const KoCompositeOp*        compositeOp;
@@ -106,13 +106,13 @@ struct KisPainter::Private {
 };
 
 KisPainter::KisPainter()
-    : d(new Private)
+        : d(new Private)
 {
     init();
 }
 
 KisPainter::KisPainter(KisPaintDeviceSP device)
-    : d(new Private)
+        : d(new Private)
 {
     init();
     Q_ASSERT(device);
@@ -120,7 +120,7 @@ KisPainter::KisPainter(KisPaintDeviceSP device)
 }
 
 KisPainter::KisPainter(KisPaintDeviceSP device, KisSelectionSP selection)
-    : d(new Private)
+        : d(new Private)
 {
     init();
     Q_ASSERT(device);
@@ -339,8 +339,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
             dstY += rows;
             rowsRemaining -= rows;
         }
-    }
-    else {
+    } else {
 
         while (rowsRemaining > 0) {
 
@@ -452,8 +451,7 @@ void KisPainter::bltFixed(qint32 dx, qint32 dy,
                               d->channelFlags);
 
         delete[] selBytes;
-    }
-    else {
+    } else {
         d->colorSpace->bitBlt(dstBytes,
                               sw * d->device->pixelSize(),
                               srcCs,
@@ -542,7 +540,7 @@ void KisPainter::getBezierCurvePoints(const QPointF &pos1,
                                       const QPointF &pos2,
                                       vQPointF& points) const
 {
-::getBezierCurvePoints(toKisVector2D(pos1), toKisVector2D(control1), toKisVector2D(control2), toKisVector2D(pos2), points);
+    ::getBezierCurvePoints(toKisVector2D(pos1), toKisVector2D(control1), toKisVector2D(control2), toKisVector2D(pos2), points);
 }
 
 double KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
@@ -719,12 +717,12 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     KisPaintDeviceSP polygon = new KisPaintDevice(d->device->colorSpace());
     Q_CHECK_PTR(polygon);
 
-    if (!d->fillPainter){
+    if (!d->fillPainter) {
         d->fillPainter = new KisFillPainter(polygon);
-    }else{
+    } else {
         d->fillPainter->begin(polygon);
     }
-    
+
 
     QRectF boundingRect = path.boundingRect();
     QRect fillRect;
@@ -766,12 +764,12 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         break;
     }
 
-    if ( d->polygonMaskImage.isNull() || (d->maskPainter == 0) ){
+    if (d->polygonMaskImage.isNull() || (d->maskPainter == 0)) {
         d->polygonMaskImage = QImage(d->maskImageWidth, d->maskImageHeight, QImage::Format_ARGB32);
         d->maskPainter = new QPainter(&d->polygonMaskImage);
         d->maskPainter->setRenderHint(QPainter::Antialiasing, antiAliasPolygonFill());
     }
-   
+
     // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
     const QColor opaqueColor(OPACITY_OPAQUE, OPACITY_OPAQUE, OPACITY_OPAQUE, 255);
     const QBrush brush(opaqueColor);
@@ -786,20 +784,20 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
             qint32 rectWidth = qMin(fillRect.x() + fillRect.width() - x, d->maskImageWidth);
             qint32 rectHeight = qMin(fillRect.y() + fillRect.height() - y, d->maskImageHeight);
 
-            KisHLineIterator lineIt = polygon->createHLineIterator(x,y,rectWidth);
+            KisHLineIterator lineIt = polygon->createHLineIterator(x, y, rectWidth);
 
             quint8 tmp;
             for (int row = y; row < y + rectHeight; row++) {
-            QRgb* line = reinterpret_cast<QRgb*>(d->polygonMaskImage.scanLine(row - y));
+                QRgb* line = reinterpret_cast<QRgb*>(d->polygonMaskImage.scanLine(row - y));
                 while (!lineIt.isDone()) {
                     tmp = qRed(line[lineIt.x() - x]);
-                    polygon->colorSpace()->applyAlphaU8Mask(lineIt.rawData(), 
-                    &tmp, 1);                    
+                    polygon->colorSpace()->applyAlphaU8Mask(lineIt.rawData(),
+                                                            &tmp, 1);
                     ++lineIt;
                 }
                 lineIt.nextRow();
             }
-            
+
         }
     }
 
@@ -1014,8 +1012,8 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
         // line have to be paint from left to right
         if (x1 > x2) {
             float tmp;
-            tmp = x1;x1 = x2;x2 = tmp;
-            tmp = y1;y1 = y2;y2 = tmp;
+            tmp = x1; x1 = x2; x2 = tmp;
+            tmp = y1; y1 = y2; y2 = tmp;
             xd = (x2 - x1);
             yd = (y2 - y1);
         }
@@ -1103,8 +1101,8 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
         // line have to be painted from left to right
         if (y1 > y2) {
             float tmp;
-            tmp = x1;x1 = x2;x2 = tmp;
-            tmp = y1;y1 = y2;y2 = tmp;
+            tmp = x1; x1 = x2; x2 = tmp;
+            tmp = y1; y1 = y2; y2 = tmp;
             xd = (x2 - x1);
             yd = (y2 - y1);
         }
@@ -1413,18 +1411,18 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (!(startWidth == 1 && endWidth == 1)) {
                 if (yfa < yfb)
                     for (int i = yfa + 1; i <= yfb; i++) {
-                    accessor.moveTo(x, i);
-                    if (accessor.isSelected()) {
-                        memcpy(accessor.rawData(), c3.data(), pixelSize);
+                        accessor.moveTo(x, i);
+                        if (accessor.isSelected()) {
+                            memcpy(accessor.rawData(), c3.data(), pixelSize);
+                        }
                     }
-                }
                 else
                     for (int i = yfa + 1; i >= yfb; i--) {
-                    accessor.moveTo(x, i);
-                    if (accessor.isSelected()) {
-                        memcpy(accessor.rawData(), c3.data(), pixelSize);
+                        accessor.moveTo(x, i);
+                        if (accessor.isSelected()) {
+                            memcpy(accessor.rawData(), c3.data(), pixelSize);
+                        }
                     }
-                }
 
             }
 
@@ -1514,18 +1512,18 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (!(startWidth == 1 && endWidth == 1)) {
                 if (xfa < xfb)
                     for (int i = (int) xfa + 1; i <= (int) xfb; i++) {
-                    accessor.moveTo(i, y);
-                    if (accessor.isSelected()) {
-                        memcpy(accessor.rawData(), c3.data(), pixelSize);
+                        accessor.moveTo(i, y);
+                        if (accessor.isSelected()) {
+                            memcpy(accessor.rawData(), c3.data(), pixelSize);
+                        }
                     }
-                }
                 else
                     for (int i = (int) xfb; i <= (int) xfa + 1; i++) {
-                    accessor.moveTo(i, y);
-                    if (accessor.isSelected()) {
-                        memcpy(accessor.rawData(), c3.data(), pixelSize);
+                        accessor.moveTo(i, y);
+                        if (accessor.isSelected()) {
+                            memcpy(accessor.rawData(), c3.data(), pixelSize);
+                        }
                     }
-                }
             }
 
             xfa += grada;
@@ -1579,9 +1577,8 @@ KisPattern * KisPainter::pattern() const
 void KisPainter::setPaintColor(const KoColor& color)
 {
     d->paintColor = color;
-    if ( d->device )
-    {
-        d->paintColor.convertTo( d->device->colorSpace() );
+    if (d->device) {
+        d->paintColor.convertTo(d->device->colorSpace());
     }
 }
 
@@ -1593,9 +1590,8 @@ const KoColor &KisPainter::paintColor() const
 void KisPainter::setBackgroundColor(const KoColor& color)
 {
     d->backgroundColor = color;
-    if ( d->device )
-    {
-        d->backgroundColor.convertTo( d->device->colorSpace() );
+    if (d->device) {
+        d->backgroundColor.convertTo(d->device->colorSpace());
     }
 }
 
@@ -1733,9 +1729,9 @@ KisPaintOp* KisPainter::paintOp() const
 
 void KisPainter::setMaskImageSize(qint32 width, qint32 height)
 {
-    
-    d->maskImageWidth = qBound(1,width,256);
-    d->maskImageHeight= qBound(1,height,256);
+
+    d->maskImageWidth = qBound(1, width, 256);
+    d->maskImageHeight = qBound(1, height, 256);
     d->fillPainter = 0;
     d->polygonMaskImage = QImage();
 }

@@ -54,12 +54,12 @@ KisNodeModel::~KisNodeModel()
 
 void KisNodeModel::setImage(KisImageWSP image)
 {
-    dbgUI <<"KisNodeModel::setImage " << image << ": number of layers " << image->nlayers();
+    dbgUI << "KisNodeModel::setImage " << image << ": number of layers " << image->nlayers();
     if (m_d->image) {
         m_d->image->disconnect(this);
     }
     m_d->image = image;
-    connect( m_d->image, SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(layersChanged()));
+    connect(m_d->image, SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(layersChanged()));
 
     connect(m_d->image, SIGNAL(sigAboutToAddANode(KisNode*, int)),
             SLOT(beginInsertNodes(KisNode*, int)));
@@ -228,10 +228,8 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::SizeHintRole: return m_d->image->size();
     case PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
     case AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
-    case ProgressRole:
-    {
-        if( node->nodeProgressProxy() )
-        {
+    case ProgressRole: {
+        if (node->nodeProgressProxy()) {
             return node->nodeProgressProxy()->percentage();
         } else {
             return -1;
@@ -264,11 +262,9 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     //dbgUI <<"KisNodeModel::setData( index=" << index <<", value=" << value <<", role=" << role;
-    if (!index.isValid())
-    {
-        if( role == ActiveRole)
-        {
-           emit nodeActivated(0);
+    if (!index.isValid()) {
+        if (role == ActiveRole) {
+            emit nodeActivated(0);
         }
         return false;
     }
@@ -292,7 +288,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         wasVisible = node->visible();
         visible = proplist.at(0).state.toBool();
 
-        m_d->image->undoAdapter()->addCommand( new KisNodePropertyListCommand( node, proplist ) );
+        m_d->image->undoAdapter()->addCommand(new KisNodePropertyListCommand(node, proplist));
         emit dataChanged(index, index);
         return true;
     case ActiveRole:
@@ -316,10 +312,9 @@ void KisNodeModel::beginInsertNodes(KisNode * parent, int index)
 
 void KisNodeModel::endInsertNodes(KisNode * parent, int index)
 {
-    KisNodeSP node = parent->at( index );
-    if( node->nodeProgressProxy() )
-    {
-        connect( node->nodeProgressProxy(), SIGNAL(percentageChanged(int, const KisNodeSP&)), SLOT(progressPercentageChanged(int, const KisNodeSP&)) );
+    KisNodeSP node = parent->at(index);
+    if (node->nodeProgressProxy()) {
+        connect(node->nodeProgressProxy(), SIGNAL(percentageChanged(int, const KisNodeSP&)), SLOT(progressPercentageChanged(int, const KisNodeSP&)));
 
     }
     //dbgUI <<"KisNodeModel::endInsertNodes";
@@ -436,7 +431,7 @@ void KisNodeModel::updateSettings()
 void KisNodeModel::progressPercentageChanged(int, const KisNodeSP _node)
 {
     QModelIndex index = indexFromNode(_node);
-    emit( dataChanged(index, index) );
+    emit(dataChanged(index, index));
 }
 
 void KisNodeModel::layersChanged()

@@ -91,7 +91,7 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
     quint8* dabPointer = dab->data();
     quint8* canvasPointer = canvas.data();
 
-    QVector<float> cc(channelCount ), dc(channelCount );
+    QVector<float> cc(channelCount), dc(channelCount);
 
     for (int y = 0; y < sh; y++) {
         for (int x = 0; x < sw; x++) {
@@ -118,11 +118,11 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
 
 void KisBidirectionalMixingOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty( "BidirectionalMixing", isChecked() );
+    setting->setProperty("BidirectionalMixing", isChecked());
 }
 
 void KisBidirectionalMixingOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    setChecked( setting->getBool( "BidirectionalMixing", false ) );
+    setChecked(setting->getBool("BidirectionalMixing", false));
 }
 

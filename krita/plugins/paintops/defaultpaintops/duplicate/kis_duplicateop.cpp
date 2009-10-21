@@ -123,11 +123,10 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     KisBrushSP brush = m_brush;
     if (!m_brush) {
         if (settings->m_options) {
-          m_brush = settings->m_options->m_brushOption->brush();
-          brush = m_brush;
-        }
-        else {
-             return;
+            m_brush = settings->m_options->m_brushOption->brush();
+            brush = m_brush;
+        } else {
+            return;
         }
     }
 
@@ -215,14 +214,12 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 //         copyPainter.setCompositeOp(COMPOSITE_COPY);
 //         copyPainter.bitBlt(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
 //         copyPainter.end();
-       // Do the copy manually to access old raw data
+        // Do the copy manually to access old raw data
         KisHLineIteratorPixel dstIt = m_srcdev->createHLineIterator(0, 0, sw);
         KisHLineConstIteratorPixel srcIt = source()->createHLineConstIterator(srcPoint.x(), srcPoint.y(), sw);
         int pixelSize = m_srcdev->pixelSize();
-        for (int i = 0; i < sh; ++i)
-        {
-            while(!dstIt.isDone())
-            {
+        for (int i = 0; i < sh; ++i) {
+            while (!dstIt.isDone()) {
                 memcpy(dstIt.rawData(), srcIt.oldRawData(), pixelSize);
                 ++dstIt;
                 ++srcIt;

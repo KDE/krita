@@ -42,7 +42,7 @@ public:
 signals:
     void sigModifiedXOffset(int);
     void sigModifiedYOffset(int);
-    
+
 protected:
     bool isInRegion(QPoint point);
     double scalingFactor();
@@ -51,10 +51,10 @@ protected:
     qint32 m_width, m_height;
     qint32 m_imageWidth, m_imageHeight;
     qint32 m_xOffset, m_yOffset;
-    
+
     qint16 m_xCanvasOffset, m_yCanvasOffset;
     bool m_dragging;
-    
+
     QImage m_image;
     QPoint m_prevDragPoint;
 };

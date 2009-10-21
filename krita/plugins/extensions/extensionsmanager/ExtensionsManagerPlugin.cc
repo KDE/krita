@@ -34,22 +34,21 @@
 #include "ExtensionsManagerWindow.h"
 
 typedef KGenericFactory<ExtensionsManagerPlugin> ExtensionsManagerPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaextensionsmanager, ExtensionsManagerPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaextensionsmanager, ExtensionsManagerPluginFactory("krita"))
 
 
 ExtensionsManagerPlugin::ExtensionsManagerPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent), m_emWindow(0)
+        : KParts::Plugin(parent), m_emWindow(0)
 {
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
         setComponentData(ExtensionsManagerPluginFactory::componentData());
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/extensionsmanager.rc"), true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/extensionsmanager.rc"), true);
 
         KAction *action  = new KAction(i18n("Extensions manager..."), this);
-        actionCollection()->addAction("ExtensionsManager", action );
+        actionCollection()->addAction("ExtensionsManager", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotMyAction()));
     }
 }
@@ -61,11 +60,10 @@ ExtensionsManagerPlugin::~ExtensionsManagerPlugin()
 
 void ExtensionsManagerPlugin::slotMyAction()
 {
-  if(!m_emWindow)
-  {
-    m_emWindow = new ExtensionsManagerWindow;
-  }
-  m_emWindow->setVisible(true);
+    if (!m_emWindow) {
+        m_emWindow = new ExtensionsManagerWindow;
+    }
+    m_emWindow->setVisible(true);
 }
 
 #include "ExtensionsManagerPlugin.moc"

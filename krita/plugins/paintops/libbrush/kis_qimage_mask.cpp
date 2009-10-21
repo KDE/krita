@@ -79,8 +79,7 @@ void KisQImagemask::copyAlpha(const QImage& img)
 {
     for (int y = 0; y < img.height(); y++) {
         const QRgb *scanline = reinterpret_cast<const QRgb *>(img.scanLine(y));
-        for (int x = 0; x < img.width(); x++)
-        {
+        for (int x = 0; x < img.width(); x++) {
             QRgb c = scanline[x];
             quint8 a = (qGray(c) * qAlpha(c)) / 255;
             m_data.push_back(a);
@@ -99,8 +98,7 @@ void KisQImagemask::computeAlpha(const QImage& img)
     // OPACITY_OPAQUE.
     for (int y = 0; y < img.height(); y++) {
         const QRgb *scanline = reinterpret_cast<const QRgb *>(img.scanLine(y));
-        for (int x = 0; x < img.width(); x++)
-        {
+        for (int x = 0; x < img.width(); x++) {
             m_data.push_back(255 - qRed(scanline[x]));
         }
     }

@@ -43,7 +43,9 @@ public:
 
 public:
 
-    bool visit( KisNode* ) { return true; }
+    bool visit(KisNode*) {
+        return true;
+    }
 
     bool visit(KisExternalLayer * layer);
 

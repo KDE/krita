@@ -47,14 +47,14 @@ public:
     qreal lineSpacing() const;
 
 
-    //TODO add saving 
+    //TODO add saving
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 
 private:
 
-   KisDynaOpOptionsWidget * m_options;
+    KisDynaOpOptionsWidget * m_options;
 
 };
 

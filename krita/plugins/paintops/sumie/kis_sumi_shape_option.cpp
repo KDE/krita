@@ -24,8 +24,7 @@ class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+            : QWidget(parent) {
         setupUi(this);
     }
 };
@@ -36,21 +35,21 @@ KisSumiShapeOption::KisSumiShapeOption()
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();
 
-    connect(m_options->oneDimBrushBtn,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->twoDimBrushBtn,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->mousePressureCBox,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->radiusSpinBox,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
-    connect(m_options->sigmaSpinBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->rndBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->scaleBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->shearBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->oneDimBrushBtn, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->twoDimBrushBtn, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->mousePressureCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->sigmaSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->rndBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->scaleBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->shearBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
 
     setConfigurationPage(m_options);
 }
 
 KisSumiShapeOption::~KisSumiShapeOption()
 {
-    // delete m_options; 
+    // delete m_options;
 }
 
 
@@ -98,31 +97,30 @@ double KisSumiShapeOption::shearFactor() const
 
 void KisSumiShapeOption::readOptionSetting(const KisPropertiesConfiguration* config)
 {
-    m_options->radiusSpinBox->setValue( config->getInt( "radius" ) );
-    m_options->sigmaSpinBox->setValue( config->getDouble( "sigma" ) );
-    int brushDimensions = config->getInt( "brush_dimension" );
-    if ( brushDimensions == 1 ) {
-        m_options->oneDimBrushBtn->setChecked( true );
-    }
-    else {
-        m_options->twoDimBrushBtn->setChecked( true );
+    m_options->radiusSpinBox->setValue(config->getInt("radius"));
+    m_options->sigmaSpinBox->setValue(config->getDouble("sigma"));
+    int brushDimensions = config->getInt("brush_dimension");
+    if (brushDimensions == 1) {
+        m_options->oneDimBrushBtn->setChecked(true);
+    } else {
+        m_options->twoDimBrushBtn->setChecked(true);
     }
 
-    m_options->mousePressureCBox->setChecked( config->getBool( "mouse_pressure" ) );
-    m_options->shearBox->setValue( config->getDouble( "shear_factor" ) );
-    m_options->rndBox->setValue( config->getDouble( "random_factor" ) );
-    m_options->scaleBox->setValue( config->getDouble( "scale_factor" ) );
+    m_options->mousePressureCBox->setChecked(config->getBool("mouse_pressure"));
+    m_options->shearBox->setValue(config->getDouble("shear_factor"));
+    m_options->rndBox->setValue(config->getDouble("random_factor"));
+    m_options->scaleBox->setValue(config->getDouble("scale_factor"));
 }
 
 
 void KisSumiShapeOption::writeOptionSetting(KisPropertiesConfiguration* config) const
 {
-    config->setProperty( "radius", radius() );
-    config->setProperty( "sigma", sigma() );
-    config->setProperty( "brush_dimension", brushDimension() );
-    config->setProperty( "mouse_pressure", mousePressure() );
-    config->setProperty( "shear_factor", shearFactor() );
-    config->setProperty( "random_factor", randomFactor() );
-    config->setProperty( "scale_factor", scaleFactor() );
+    config->setProperty("radius", radius());
+    config->setProperty("sigma", sigma());
+    config->setProperty("brush_dimension", brushDimension());
+    config->setProperty("mouse_pressure", mousePressure());
+    config->setProperty("shear_factor", shearFactor());
+    config->setProperty("random_factor", randomFactor());
+    config->setProperty("scale_factor", scaleFactor());
 }
 

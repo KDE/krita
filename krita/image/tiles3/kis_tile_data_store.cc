@@ -45,15 +45,14 @@ KisTileDataStore globalTileDataStore;
 void KisTileDataStore::tileListAppend(KisTileData *td)
 {
     QWriteLocker lock(&m_listRWLock);
-    if(!tileListEmpty()) {
+    if (!tileListEmpty()) {
         td->m_prevTD = tileListTail();
         td->m_nextTD = tileListHead();
 
         tileListTail()->m_nextTD = td;
         tileListHead()->m_prevTD = td;
-    }
-    else {
-        td->m_prevTD=td->m_nextTD=td;
+    } else {
+        td->m_prevTD = td->m_nextTD = td;
         tileListHead() = td;
     }
 }
@@ -61,24 +60,23 @@ void KisTileDataStore::tileListAppend(KisTileData *td)
 void KisTileDataStore::tileListDetach(KisTileData *td)
 {
     QWriteLocker lock(&m_listRWLock);
-    if(td != td->m_nextTD) {
-        td->m_prevTD->m_nextTD=td->m_nextTD;
-        td->m_nextTD->m_prevTD=td->m_prevTD;
-        if(td == tileListHead())
-            tileListHead()=td->m_nextTD;
-    }
-    else {
+    if (td != td->m_nextTD) {
+        td->m_prevTD->m_nextTD = td->m_nextTD;
+        td->m_nextTD->m_prevTD = td->m_prevTD;
+        if (td == tileListHead())
+            tileListHead() = td->m_nextTD;
+    } else {
         /* List has the only element */
-        tileListHead()=0;
+        tileListHead() = 0;
     }
 }
 
 void KisTileDataStore::tileListClear()
 {
     QWriteLocker lock(&m_listRWLock);
-    if(!tileListEmpty()) {
+    if (!tileListEmpty()) {
         KisTileData *tmp;
-        while(!tileListEmpty()) {
+        while (!tileListEmpty()) {
             tmp = tileListHead();
             tileListDetach(tmp);
             delete tmp;
@@ -87,9 +85,9 @@ void KisTileDataStore::tileListClear()
 }
 
 KisTileDataStore::KisTileDataStore()
-    : m_pooler(this),
-      m_listRWLock(QReadWriteLock::Recursive),
-      m_tileDataListHead(0)
+        : m_pooler(this),
+        m_listRWLock(QReadWriteLock::Recursive),
+        m_tileDataListHead(0)
 {
     m_pooler.start();
 }
@@ -112,9 +110,9 @@ KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *def
 //#define DEBUG_PRECLONE
 
 #ifdef DEBUG_PRECLONE
-#define DEBUG_PRECLONE_ACTION(action, oldTD, newTD)	\
-    printf("!!! %s:\t\t\t  0x%X -> 0x%X    \t\t!!!\n",	\
-	   action, (quintptr)oldTD, (quintptr) newTD)
+#define DEBUG_PRECLONE_ACTION(action, oldTD, newTD) \
+    printf("!!! %s:\t\t\t  0x%X -> 0x%X    \t\t!!!\n",  \
+           action, (quintptr)oldTD, (quintptr) newTD)
 #define DEBUG_FREE_ACTION(td)                   \
     printf("Tile data free'd \t(0x%X)\n", td)
 #else
@@ -127,13 +125,12 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
     KisTileData *td;
 
     /* FIXME: race condition in QList */
-    if(!rhs->m_clonesList.isEmpty()) {
-	td = rhs->m_clonesList.takeFirst();
-	DEBUG_PRECLONE_ACTION("+ Pre-clone HIT", rhs, td);
-    }
-    else {
-	td = new KisTileData(*rhs);
-	DEBUG_PRECLONE_ACTION("- Pre-clone #MISS#", rhs, td);
+    if (!rhs->m_clonesList.isEmpty()) {
+        td = rhs->m_clonesList.takeFirst();
+        DEBUG_PRECLONE_ACTION("+ Pre-clone HIT", rhs, td);
+    } else {
+        td = new KisTileData(*rhs);
+        DEBUG_PRECLONE_ACTION("- Pre-clone #MISS#", rhs, td);
     }
 
     tileListAppend(td);
@@ -142,7 +139,7 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
 
 void KisTileDataStore::freeTileData(KisTileData *td)
 {
-    Q_ASSERT(td->m_store==this);
+    Q_ASSERT(td->m_store == this);
 
     DEBUG_FREE_ACTION(TD);
 
@@ -153,7 +150,7 @@ void KisTileDataStore::freeTileData(KisTileData *td)
 void KisTileDataStore::ensureTileDataLoaded(const KisTileData *td)
 {
     /* Swapping isn't implemented yet */
-    Q_ASSERT(td->m_state==KisTileData::NORMAL);
+    Q_ASSERT(td->m_state == KisTileData::NORMAL);
 }
 
 

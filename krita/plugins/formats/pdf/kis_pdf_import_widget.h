@@ -24,33 +24,36 @@
 #include <QList>
 #include "ui_pdfimportwidgetbase.h"
 
-namespace Poppler {
+namespace Poppler
+{
 class Document;
 }
 
 class KisPDFImportWidget : public QWidget, public Ui_PDFImportWidgetBase
 {
     Q_OBJECT
-    public:
-        KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * parent, const char * name = "");
+public:
+    KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * parent, const char * name = "");
 
-        ~KisPDFImportWidget();
-    public:
-        inline QList<int>  pages() { return m_pages; }
-    private slots:
-        void selectAllPages(bool v);
-        void selectFirstPage(bool v);
-        void selectSelectionOfPages(bool v);
-        void updateSelectionOfPages();
-        void updateWidth();
-        void updateHeight();
-        void updateHRes();
-        void updateHVer();
-        void updateMaxCanvasSize();
-    private:
-        Poppler::Document* m_pdfDoc;
-        QList<int> m_pages;
-        double m_maxWidthInch, m_maxHeightInch;
+    ~KisPDFImportWidget();
+public:
+    inline QList<int>  pages() {
+        return m_pages;
+    }
+private slots:
+    void selectAllPages(bool v);
+    void selectFirstPage(bool v);
+    void selectSelectionOfPages(bool v);
+    void updateSelectionOfPages();
+    void updateWidth();
+    void updateHeight();
+    void updateHRes();
+    void updateHVer();
+    void updateMaxCanvasSize();
+private:
+    Poppler::Document* m_pdfDoc;
+    QList<int> m_pages;
+    double m_maxWidthInch, m_maxHeightInch;
 };
 
 #endif

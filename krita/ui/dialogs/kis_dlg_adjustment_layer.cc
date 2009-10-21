@@ -96,8 +96,7 @@ void KisDlgAdjustmentLayer::slotConfigChanged()
 {
     enableButtonOk(1);
     KisFilterConfiguration * config = filterConfiguration();
-    if( config )
-    { 
+    if (config) {
         m_nodeFilterInterface->setFilter(config);
     }
     m_node->setDirty();

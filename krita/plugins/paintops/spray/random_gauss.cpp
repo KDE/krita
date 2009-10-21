@@ -19,25 +19,23 @@
 #include "random_gauss.h"
 #include <cmath>
 
-double RandomGauss::nextGaussian(double mean, double sigma){
-    if (m_next)
-    {
+double RandomGauss::nextGaussian(double mean, double sigma)
+{
+    if (m_next) {
         m_next = false;
         return (m_gauss + mean) * sigma;
     }
 
     double v1, v2, s;
-    do
-        {
-            v1 = 2.0 * drand48() - 1.0;
-            v2 = 2.0 * drand48() - 1.0;
-            s = v1 * v1 + v2 * v2;
-        }
-    while (s >= 1.0);
+    do {
+        v1 = 2.0 * drand48() - 1.0;
+        v2 = 2.0 * drand48() - 1.0;
+        s = v1 * v1 + v2 * v2;
+    } while (s >= 1.0);
 
     double norm = sqrt(-2.0 * log(s) / s);
     m_gauss = v2 * norm;
     m_next = true;
-    
+
     return (mean + (v1 * norm)) * sigma;
 }

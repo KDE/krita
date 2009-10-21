@@ -108,7 +108,7 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
     }
     KoShapeControllerBase* controller = m_canvas->view()->document()->shapeController();
     KisShapeController* kiscontroller = dynamic_cast<KisShapeController*>(controller);
-    if(kiscontroller)
+    if (kiscontroller)
         kiscontroller->prepareAddingSelectionShape();
 
     QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);

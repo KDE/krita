@@ -38,22 +38,20 @@ public:
 
 public:
     KisMementoItem()
-        : m_tileData(0), m_commitedFlag(false)
-    {
+            : m_tileData(0), m_commitedFlag(false) {
     }
 
     KisMementoItem(const KisMementoItem& rhs)
-        : KisShared(rhs),
-          m_tileData(rhs.m_tileData),
-          m_commitedFlag(rhs.m_commitedFlag),
-          m_type(rhs.m_type),
-          m_col(rhs.m_col),
-          m_row(rhs.m_row),
-          m_next(0),
-          m_parent(0)
-    {
-        if(m_tileData) {
-            if(m_commitedFlag)
+            : KisShared(rhs),
+            m_tileData(rhs.m_tileData),
+            m_commitedFlag(rhs.m_commitedFlag),
+            m_type(rhs.m_type),
+            m_col(rhs.m_col),
+            m_row(rhs.m_row),
+            m_next(0),
+            m_parent(0) {
+        if (m_tileData) {
+            if (m_commitedFlag)
                 globalTileDataStore.acquireTileData(m_tileData);
             else
                 globalTileDataStore.refTileData(m_tileData);
@@ -64,8 +62,7 @@ public:
      * Automatically called by Kis..HashTable. It means that this mementoItem
      * is a root item of parental hierarchy. So m_parent should be NULL.
      */
-    KisMementoItem(qint32 col, qint32 row, KisTileData* defaultTileData, KisMementoManager *mm)
-    {
+    KisMementoItem(qint32 col, qint32 row, KisTileData* defaultTileData, KisMementoManager *mm) {
         Q_UNUSED(mm);
         m_tileData = defaultTileData;
         /* Setting counter: m_refCount++ */
@@ -74,10 +71,9 @@ public:
         m_row = row;
         m_type = CHANGED;
         m_parent = 0;
-        m_commitedFlag=false;
+        m_commitedFlag = false;
     }
-    KisMementoItem(const KisMementoItem &rhs, KisMementoManager *mm)
-    {
+    KisMementoItem(const KisMementoItem &rhs, KisMementoManager *mm) {
         Q_UNUSED(mm);
         m_tileData = rhs.m_tileData;
         /* Setting counter: m_refCount++ */
@@ -86,12 +82,12 @@ public:
         m_row = rhs.m_row;
         m_type = CHANGED;
         m_parent = 0;
-        m_commitedFlag=false;
+        m_commitedFlag = false;
     }
 
     ~KisMementoItem() {
-        if(m_tileData) {
-            if(m_commitedFlag)
+        if (m_tileData) {
+            if (m_commitedFlag)
                 globalTileDataStore.releaseTileData(m_tileData);
             else
                 globalTileDataStore.derefTileData(m_tileData);
@@ -118,8 +114,8 @@ public:
     }
 
     void commit() {
-        if(m_commitedFlag) return;
-        if(m_tileData) {
+        if (m_commitedFlag) return;
+        if (m_tileData) {
             /**
              * Setting counters to proper values:
              * m_refCount++, m_usersCount++;
@@ -128,7 +124,7 @@ public:
             globalTileDataStore.acquireTileData(m_tileData);
             globalTileDataStore.derefTileData(m_tileData);
         }
-        m_commitedFlag=true;
+        m_commitedFlag = true;
     }
 
     inline KisTileSP tile(KisMementoManager *mm) {
@@ -166,7 +162,7 @@ public:
         printf("Memento item:\t\t0x%X (0x%X)\n",
                (quintptr)this, (quintptr) m_tileData);
         printf("   status:\t(%d,%d) %c%c\n", m_col, m_row,
-               (m_type==CHANGED)?'W':'D', m_commitedFlag?'C':'-');
+               (m_type == CHANGED) ? 'W' : 'D', m_commitedFlag ? 'C' : '-');
 
         printf("   parent:\t0x%X (0x%X)\n",
                (quintptr)m_parent.data(), m_parent ? (quintptr)m_parent->m_tileData : 0);

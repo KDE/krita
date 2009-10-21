@@ -22,7 +22,7 @@
 #include <kis_paintop_registry.h>
 
 KisDynamicOpSettingsWidget::KisDynamicOpSettingsWidget(QWidget* parent)
-        : KisPaintOpSettingsWidget( parent )
+        : KisPaintOpSettingsWidget(parent)
 {
     m_uiOptions = new Ui::DynamicBrushOptions();
     m_uiOptions->setupUi(this);
@@ -33,9 +33,9 @@ KisDynamicOpSettingsWidget::~KisDynamicOpSettingsWidget()
 {
 }
 
-void KisDynamicOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
+void KisDynamicOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
-    
+
 }
 
 KisPropertiesConfiguration* KisDynamicOpSettingsWidget::configuration() const
@@ -45,13 +45,13 @@ KisPropertiesConfiguration* KisDynamicOpSettingsWidget::configuration() const
     if (!factory) return 0;
 
     KisDynamicOpSettings *config =
-        new KisDynamicOpSettings(const_cast<KisDynamicOpSettingsWidget*>( this ),
+        new KisDynamicOpSettings(const_cast<KisDynamicOpSettingsWidget*>(this),
                                  factory->shapeBookmarksManager(),
                                  factory->coloringBookmarksManager());
     return config;
 }
 
-void KisDynamicOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
+void KisDynamicOpSettingsWidget::writeConfiguration(KisPropertiesConfiguration *config) const
 {
     config->setProperty("paintop", "dynamicbrush"); // XXX: make this a const id string
 }

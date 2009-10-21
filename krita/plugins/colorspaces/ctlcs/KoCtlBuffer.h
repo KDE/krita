@@ -22,16 +22,17 @@
 
 #include <GTLCore/Buffer.h>
 
-class KoCtlBuffer : public GTLCore::Buffer {
-    public:
-        KoCtlBuffer(char* _buffer, int _size);
-        virtual ~KoCtlBuffer();
-        virtual char * rawData();
-        virtual const char * rawData() const;
-        virtual int size() const;
-    private:
-        char * m_buffer;
-        int m_size;
+class KoCtlBuffer : public GTLCore::Buffer
+{
+public:
+    KoCtlBuffer(char* _buffer, int _size);
+    virtual ~KoCtlBuffer();
+    virtual char * rawData();
+    virtual const char * rawData() const;
+    virtual int size() const;
+private:
+    char * m_buffer;
+    int m_size;
 };
 
 #endif

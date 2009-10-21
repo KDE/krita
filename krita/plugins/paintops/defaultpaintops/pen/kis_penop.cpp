@@ -52,7 +52,7 @@ KisPenOp::KisPenOp(const KisPenOpSettings *settings, KisPainter *painter)
     if (settings && settings->m_options) {
         Q_ASSERT(settings->m_options->m_brushOption);
         m_brush = settings->m_options->m_brushOption->brush();
-        Q_ASSERT( m_brush );
+        Q_ASSERT(m_brush);
         settings->m_options->m_sizeOption->sensor()->reset();
         settings->m_options->m_opacityOption->sensor()->reset();
         settings->m_options->m_darkenOption->sensor()->reset();
@@ -70,11 +70,10 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     KisBrushSP brush = m_brush;
     if (!m_brush) {
         if (settings->m_options) {
-          m_brush = settings->m_options->m_brushOption->brush();
-          brush = m_brush;
-        }
-        else {
-             return;
+            m_brush = settings->m_options->m_brushOption->brush();
+            brush = m_brush;
+        } else {
+            return;
         }
     }
 
@@ -83,8 +82,8 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
         return;
 
     double scale = KisPaintOp::scaleForPressure(settings->m_options->m_sizeOption->apply(info));
-    if( (scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01 ) return;
-    
+    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return;
+
     KisPaintDeviceSP device = painter()->device();
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
@@ -92,8 +91,8 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
-    qint32 x = qRound( pt.x() );
-    qint32 y = qRound( pt.y() );
+    qint32 x = qRound(pt.x());
+    qint32 y = qRound(pt.y());
 
     quint8 origOpacity = settings->m_options->m_opacityOption->apply(painter(), info);
     KoColor origColor = settings->m_options->m_darkenOption->apply(painter(), info);

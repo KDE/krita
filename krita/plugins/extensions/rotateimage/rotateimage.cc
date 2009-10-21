@@ -95,7 +95,7 @@ RotateImage::RotateImage(QObject *parent, const QStringList &)
         m_rotate270LayerAction  = new KAction(KIcon("object-rotate-left"), i18nc("rotate the layer 90 degrees to the left", "Left 90°"), this);
         actionCollection()->addAction("rotateLayerCCW90", m_rotate270LayerAction);
         connect(m_rotate270LayerAction, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerLeft90()));
-        
+
         connect(m_view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), SLOT(slotNodeChanged(KisNodeSP)));
     }
 }
@@ -161,10 +161,10 @@ void RotateImage::slotRotateLayer()
 void RotateImage::slotNodeChanged(const KisNodeSP node)
 {
     Q_UNUSED(node);
-    m_rotateLayerAction->setEnabled( m_view->activeDevice());
-    m_rotate90LayerAction->setEnabled( m_view->activeDevice());
-    m_rotate180LayerAction->setEnabled( m_view->activeDevice());
-    m_rotate270LayerAction->setEnabled( m_view->activeDevice());
+    m_rotateLayerAction->setEnabled(m_view->activeDevice());
+    m_rotate90LayerAction->setEnabled(m_view->activeDevice());
+    m_rotate180LayerAction->setEnabled(m_view->activeDevice());
+    m_rotate270LayerAction->setEnabled(m_view->activeDevice());
 }
 
 #include "rotateimage.moc"

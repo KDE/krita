@@ -25,7 +25,7 @@
 #include <kis_paintop_options_widget.h>
 
 KisSumiPaintOpSettingsWidget:: KisSumiPaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+        : KisPaintOpOptionsWidget(parent)
 {
     m_sumiShapeOption = new KisSumiShapeOption();
     m_sumiInkOption = new KisSumiInkOption();
@@ -43,7 +43,7 @@ KisSumiPaintOpSettingsWidget::~ KisSumiPaintOpSettingsWidget()
 KisPropertiesConfiguration*  KisSumiPaintOpSettingsWidget::configuration() const
 {
     KisSumiPaintOpSettings* config = new KisSumiPaintOpSettings();
-    config->setOptionsWidget( const_cast<KisSumiPaintOpSettingsWidget*>( this ) );
+    config->setOptionsWidget(const_cast<KisSumiPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "sumibrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

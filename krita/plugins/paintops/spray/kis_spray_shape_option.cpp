@@ -24,8 +24,7 @@ class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+            : QWidget(parent) {
         setupUi(this);
     }
 };
@@ -35,17 +34,17 @@ KisSprayShapeOption::KisSprayShapeOption()
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();
-    connect(m_options->shapeBtn,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->particleBtn,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->pixelBtn,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->shapeBox,SIGNAL(currentIndexChanged(int)),SIGNAL( sigSettingChanged()));
-    connect(m_options->widthSpin,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
-    connect(m_options->heightSpin,SIGNAL(valueChanged(int)),SIGNAL( sigSettingChanged()));
-    connect(m_options->jitterShape,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->heightPro,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->widthPro,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->proportionalBox,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-    connect(m_options->gaussBox,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
+    connect(m_options->shapeBtn, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->particleBtn, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->pixelBtn, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterShape, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->heightPro, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->widthPro, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->gaussBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
 
 // turn off those
 //     connect(m_options->maxTreshSpin,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
@@ -57,10 +56,11 @@ KisSprayShapeOption::KisSprayShapeOption()
 
 KisSprayShapeOption::~KisSprayShapeOption()
 {
-    // delete m_options; 
+    // delete m_options;
 }
 
-int KisSprayShapeOption::object() const {
+int KisSprayShapeOption::object() const
+{
     if (m_options->shapeBtn->isChecked())
         return 0;
     if (m_options->particleBtn->isChecked())
@@ -70,31 +70,38 @@ int KisSprayShapeOption::object() const {
     return -1;
 }
 
-int KisSprayShapeOption::shape() const {
+int KisSprayShapeOption::shape() const
+{
     return m_options->shapeBox->currentIndex();
 }
 
-int KisSprayShapeOption::width() const {
+int KisSprayShapeOption::width() const
+{
     return m_options->widthSpin->value();
 }
 
-int KisSprayShapeOption::height() const {
+int KisSprayShapeOption::height() const
+{
     return m_options->heightSpin->value();
 }
 
-bool KisSprayShapeOption::jitterShapeSize() const {
+bool KisSprayShapeOption::jitterShapeSize() const
+{
     return m_options->jitterShape->isChecked();
 }
 
-qreal KisSprayShapeOption::heightPerc() const {
+qreal KisSprayShapeOption::heightPerc() const
+{
     return m_options->heightPro->value();
 }
 
-qreal KisSprayShapeOption::widthPerc() const {
-    return m_options->widthPro->value(); 
+qreal KisSprayShapeOption::widthPerc() const
+{
+    return m_options->widthPro->value();
 }
 
-bool KisSprayShapeOption::proportional() const {
+bool KisSprayShapeOption::proportional() const
+{
     return m_options->proportionalBox->isChecked();
 }
 
@@ -109,9 +116,9 @@ void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting
 // TODO
 void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-/*    m_options->diameterSpinBox->setValue( setting->getInt("Spray/diameter") );
-    m_options->coverageSpin->setValue( setting->getDouble("Spray/coverage") );
-    m_options->jitterSizeBox->setChecked( setting->getBool("Spray/jitterSize") );*/
+    /*    m_options->diameterSpinBox->setValue( setting->getInt("Spray/diameter") );
+        m_options->coverageSpin->setValue( setting->getDouble("Spray/coverage") );
+        m_options->jitterSizeBox->setChecked( setting->getBool("Spray/jitterSize") );*/
 }
 
 

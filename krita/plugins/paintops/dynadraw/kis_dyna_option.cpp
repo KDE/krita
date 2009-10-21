@@ -27,8 +27,7 @@ class KisDynaOpOptionsWidget: public QWidget, public Ui::WdgDynaOptions
 {
 public:
     KisDynaOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+            : QWidget(parent) {
         setupUi(this);
     }
 };
@@ -43,7 +42,7 @@ KisDynaOpOption::KisDynaOpOption()
 
 KisDynaOpOption::~KisDynaOpOption()
 {
-    // delete m_options; 
+    // delete m_options;
 }
 
 int KisDynaOpOption::radius() const
@@ -51,18 +50,18 @@ int KisDynaOpOption::radius() const
     return m_options->radiusSpinBox->value();
 }
 
-void KisDynaOpOption::setRadius( int radius )
+void KisDynaOpOption::setRadius(int radius)
 {
     m_options->radiusSpinBox->setValue(radius);
 }
 
 void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty( "Dyna/radius", radius() );
+    setting->setProperty("Dyna/radius", radius());
 }
 
 void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->radiusSpinBox->setValue( setting->getInt("Dyna/radius") );
+    m_options->radiusSpinBox->setValue(setting->getInt("Dyna/radius"));
 }
 

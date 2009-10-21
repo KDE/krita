@@ -105,11 +105,11 @@ KisSerializableConfiguration* KisBookmarkedConfigurationsModel::configuration(co
     }
 }
 
-QModelIndex KisBookmarkedConfigurationsModel::indexFor( const QString& name) const
+QModelIndex KisBookmarkedConfigurationsModel::indexFor(const QString& name) const
 {
     int idx = d->configsKey.indexOf(name);
-    if(idx == -1) return QModelIndex();
-    return createIndex(idx + 2,0,0);
+    if (idx == -1) return QModelIndex();
+    return createIndex(idx + 2, 0, 0);
 }
 
 bool KisBookmarkedConfigurationsModel::isIndexDeletable(const QModelIndex &index) const

@@ -43,11 +43,11 @@
 
 
 KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-    : KisPaintOp( painter )
-    , m_settings( settings )
-    , m_image ( image )
+        : KisPaintOp(painter)
+        , m_settings(settings)
+        , m_image(image)
 {
-    m_chalkBrush.setRadius( settings->radius() );
+    m_chalkBrush.setRadius(settings->radius());
 }
 
 KisChalkPaintOp::~KisChalkPaintOp()
@@ -60,8 +60,7 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
-    }
-    else {
+    } else {
         m_dab->clear();
     }
 

@@ -28,7 +28,7 @@
 KisMaskGenerator::KisMaskGenerator(double width, double height, double fh, double fv) : d(new Private)
 {
     d->m_radius = width;
-    d->m_ratio = height/width;
+    d->m_ratio = height / width;
     d->m_fh = 2.0 * fh / width;
     d->m_fv = 2.0 * fv / height;
     d->m_spikes = 2;
@@ -52,8 +52,8 @@ KisMaskGenerator::~KisMaskGenerator()
 
 void KisMaskGenerator::init()
 {
-    d->cs = cos ( - 2 * M_PI / d->m_spikes);
-    d->ss = sin ( - 2 * M_PI / d->m_spikes);
+    d->cs = cos(- 2 * M_PI / d->m_spikes);
+    d->ss = sin(- 2 * M_PI / d->m_spikes);
     d->m_empty = (d->m_ratio == 0.0 || d->m_radius == 0.0);
 }
 
@@ -70,8 +70,7 @@ void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 
 KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
 {
-    if( elt.hasAttribute("autobrush_radius") )
-    {
+    if (elt.hasAttribute("autobrush_radius")) {
         double radius = elt.attribute("autobrush_radius", "1.0").toDouble();
         double ratio = elt.attribute("autobrush_ratio", "1.0").toDouble();
         double hfade = elt.attribute("autobrush_hfade", "0.0").toDouble();
@@ -119,11 +118,13 @@ quint8 KisMaskGenerator::interpolatedValueAt(double x, double y)
             x_f   * y_f   * valueAt(x_i + 1,  y_i + 1));
 }
 
-double KisMaskGenerator::width() const {
+double KisMaskGenerator::width() const
+{
     return d->m_radius;
 }
 
-double KisMaskGenerator::height() const {
+double KisMaskGenerator::height() const
+{
     if (d->m_spikes == 2) {
         return d->m_radius * d->m_ratio;
     }

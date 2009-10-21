@@ -44,21 +44,39 @@ public:
 
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
-    bool visit(KisGeneratorLayer* );
+    bool visit(KisGeneratorLayer*);
 
-    bool visit(KisNode*) { return true; }
-    bool visit(KisCloneLayer*) { return true; }
-    bool visit(KisFilterMask*) { return true; }
-    bool visit(KisTransparencyMask*) { return true; }
-    bool visit(KisTransformationMask*) { return true; }
-    bool visit(KisSelectionMask*) { return true; }
-    bool visit(KisExternalLayer*) { return true; }
-    bool visit(KisAdjustmentLayer*) { return true; }
+    bool visit(KisNode*) {
+        return true;
+    }
+    bool visit(KisCloneLayer*) {
+        return true;
+    }
+    bool visit(KisFilterMask*) {
+        return true;
+    }
+    bool visit(KisTransparencyMask*) {
+        return true;
+    }
+    bool visit(KisTransformationMask*) {
+        return true;
+    }
+    bool visit(KisSelectionMask*) {
+        return true;
+    }
+    bool visit(KisExternalLayer*) {
+        return true;
+    }
+    bool visit(KisAdjustmentLayer*) {
+        return true;
+    }
 
 private:
-    inline TIFF* image() { return m_image; }
+    inline TIFF* image() {
+        return m_image;
+    }
     inline bool saveAlpha();
-    bool copyDataToStrips( KisHLineConstIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses);
+    bool copyDataToStrips(KisHLineConstIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses);
     bool saveLayerProjection(KisLayer *);
 private:
     TIFF* m_image;

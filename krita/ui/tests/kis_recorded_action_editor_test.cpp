@@ -34,12 +34,12 @@ void KisRecordedActionEditorTest::testFilterEditorCreation()
     KisRecordedActionEditorFactoryRegistry* reg = KisRecordedActionEditorFactoryRegistry::instance();
     const KisFilter* blurFilter = KisFilterRegistry::instance()->get("blur");
     KisRecordedFilterAction* blurFilterAction = new KisRecordedFilterAction(
-                    "hello", KisNodeQueryPath::fromString(""), blurFilter, blurFilter->defaultConfiguration(0) );
+        "hello", KisNodeQueryPath::fromString(""), blurFilter, blurFilter->defaultConfiguration(0));
     QVERIFY(reg->hasEditor(blurFilterAction));
     QVERIFY(reg->createEditor(0, blurFilterAction));
     const KisFilter* invertFilter = KisFilterRegistry::instance()->get("invert");
     KisRecordedFilterAction* invertFilterAction = new KisRecordedFilterAction(
-                    "hello", KisNodeQueryPath::fromString(""), invertFilter, invertFilter->defaultConfiguration(0) );
+        "hello", KisNodeQueryPath::fromString(""), invertFilter, invertFilter->defaultConfiguration(0));
     QVERIFY(reg->hasEditor(invertFilterAction));
     QVERIFY(reg->createEditor(0, invertFilterAction));
 }

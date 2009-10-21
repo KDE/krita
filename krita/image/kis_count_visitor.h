@@ -104,8 +104,8 @@ public:
         return check(layer);
     }
 
-    bool visit( KisSelectionMask* mask ) {
-        return check( mask );
+    bool visit(KisSelectionMask* mask) {
+        return check(mask);
     }
 
 private:

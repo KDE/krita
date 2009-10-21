@@ -65,15 +65,15 @@ KisStatusBar::KisStatusBar(KisView2 * view)
     m_statusBarProfileLabel = new KSqueezedTextLabel(view);
     view->addStatusBarItem(m_statusBarProfileLabel, 3);
 
-    m_imageSizeLabel = new QLabel( QString(), view );
-    m_imageSizeLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    m_imageSizeLabel->setMinimumWidth( 100 );
-    view->addStatusBarItem( m_imageSizeLabel );
+    m_imageSizeLabel = new QLabel(QString(), view);
+    m_imageSizeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_imageSizeLabel->setMinimumWidth(100);
+    view->addStatusBarItem(m_imageSizeLabel);
 
-    m_pointerPositionLabel = new QLabel( QString(), view );
-    m_pointerPositionLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    m_pointerPositionLabel->setMinimumWidth( 100 );
-    view->addStatusBarItem( m_pointerPositionLabel );
+    m_pointerPositionLabel = new QLabel(QString(), view);
+    m_pointerPositionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_pointerPositionLabel->setMinimumWidth(100);
+    view->addStatusBarItem(m_pointerPositionLabel);
 
     m_progress = new KisProgressWidget(view);
     m_progress->setMaximumWidth(225);
@@ -158,7 +158,8 @@ void KisStatusBar::updateStatusBarProfileLabel()
 }
 
 
-KisProgressWidget* KisStatusBar::progress() {
+KisProgressWidget* KisStatusBar::progress()
+{
     return m_progress;
 }
 

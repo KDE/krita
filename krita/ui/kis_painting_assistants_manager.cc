@@ -32,15 +32,14 @@
 struct KisPaintingAssistantsManager::Private {
     QList<KisPaintingAssistant*> assistants;
     KToggleAction* toggleAssistant;
-    void updateAction()
-    {
+    void updateAction() {
         toggleAssistant->setEnabled(!assistants.isEmpty());
     }
 };
 
 KisPaintingAssistantsManager::KisPaintingAssistantsManager(KisView2* parent) :
-    KisCanvasDecoration("paintingAssistantsManager", i18n("Painting assistants"), parent),
-    d(new Private)
+        KisCanvasDecoration("paintingAssistantsManager", i18n("Painting assistants"), parent),
+        d(new Private)
 {
 }
 
@@ -50,28 +49,29 @@ KisPaintingAssistantsManager::~KisPaintingAssistantsManager()
     delete d;
 }
 
-void KisPaintingAssistantsManager::addAssistant(KisPaintingAssistant* assistant) {
-    if(d->assistants.contains(assistant)) return;
+void KisPaintingAssistantsManager::addAssistant(KisPaintingAssistant* assistant)
+{
+    if (d->assistants.contains(assistant)) return;
     d->assistants.push_back(assistant);
     d->updateAction();
 }
 
-void KisPaintingAssistantsManager::removeAssistant(KisPaintingAssistant* assistant) {
+void KisPaintingAssistantsManager::removeAssistant(KisPaintingAssistant* assistant)
+{
     d->assistants.removeAll(assistant);
     d->updateAction();
 }
 
 QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point) const
 {
-    if(d->assistants.empty()) return point;
-    if(d->assistants.count() == 1) return d->assistants.first()->adjustPosition(point);
+    if (d->assistants.empty()) return point;
+    if (d->assistants.count() == 1) return d->assistants.first()->adjustPosition(point);
     QPointF best;
     double distance = DBL_MAX;
-    foreach(const KisPaintingAssistant* assistant, d->assistants)
-    {
+    foreach(const KisPaintingAssistant* assistant, d->assistants) {
         QPointF pt = assistant->adjustPosition(point);
         double d = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
-        if( d < distance ) {
+        if (d < distance) {
             best = pt;
             distance = d;
         }
@@ -92,21 +92,19 @@ void KisPaintingAssistantsManager::setup(KActionCollection * collection)
 
 void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter)
 {
-    foreach(KisPaintingAssistant* assistant, d->assistants)
-    {
+    foreach(KisPaintingAssistant* assistant, d->assistants) {
         gc.save();
         assistant->drawAssistant(gc, documentOffset, area, converter);
         gc.restore();
     }
 }
 
-QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsManager::handles() {
+QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsManager::handles()
+{
     QList<KisPaintingAssistantHandleSP> hs;
-    foreach(KisPaintingAssistant* assistant, d->assistants)
-    {
-        foreach(const KisPaintingAssistantHandleSP handle, assistant->handles())
-        {
-            if(!hs.contains(handle)) {
+    foreach(KisPaintingAssistant* assistant, d->assistants) {
+        foreach(const KisPaintingAssistantHandleSP handle, assistant->handles()) {
+            if (!hs.contains(handle)) {
                 hs.push_back(handle);
             }
         }

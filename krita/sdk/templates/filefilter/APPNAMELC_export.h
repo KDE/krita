@@ -3,13 +3,16 @@
 
 #include <KoFilter.h>
 
-class %{APPNAME}Export : public KoFilter {
+class %
+{
+    APPNAME
+} Export : public KoFilter {
     Q_OBJECT
-    public:
-        %{APPNAME}Export(QObject* parent, const QStringList&);
-        virtual ~%{APPNAME}Export();
-    public:
-        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+public:
+    % {APPNAME} Export(QObject* parent, const QStringList&);
+    virtual ~ % {APPNAME} Export();
+public:
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

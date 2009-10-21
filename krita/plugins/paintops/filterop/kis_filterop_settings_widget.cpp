@@ -34,7 +34,7 @@
 #include <kis_filter_option.h>
 
 KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+        : KisPaintOpOptionsWidget(parent)
 {
     setObjectName("filter option widget");
 
@@ -58,7 +58,7 @@ KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()
 KisPropertiesConfiguration* KisFilterOpSettingsWidget::configuration() const
 {
     KisFilterOpSettings *config = new KisFilterOpSettings();
-    config->setOptionsWidget(const_cast<KisFilterOpSettingsWidget*>( this ));
+    config->setOptionsWidget(const_cast<KisFilterOpSettingsWidget*>(this));
     config->setProperty("paintop", "filter"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

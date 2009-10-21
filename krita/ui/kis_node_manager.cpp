@@ -62,7 +62,7 @@ struct KisNodeManager::Private {
 
 void KisNodeManager::Private::slotLayersChanged(KisGroupLayerSP layer)
 {
-    self->activateNode( layer->at( 0 ) );
+    self->activateNode(layer->at(0));
 }
 
 KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
@@ -73,8 +73,8 @@ KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
     m_d->layerManager = new KisLayerManager(view, doc);
     m_d->maskManager = new KisMaskManager(view);
     m_d->self = this;
-    m_d->commandsAdapter = new KisNodeCommandsAdapter( view );
-    connect( m_d->view->image(), SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged(KisGroupLayerSP)) );
+    m_d->commandsAdapter = new KisNodeCommandsAdapter(view);
+    connect(m_d->view->image(), SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged(KisGroupLayerSP)));
 }
 
 KisNodeManager::~KisNodeManager()
@@ -277,8 +277,7 @@ void KisNodeManager::activateNode(KisNodeSP node)
     Q_ASSERT(selection);
     selection->deselectAll();
 
-    if(! node )
-    {
+    if (! node) {
         selection->setActiveLayer(0);
         emit sigNodeActivated(0);
         m_d->activeNode = 0;
@@ -298,7 +297,7 @@ void KisNodeManager::activateNode(KisNodeSP node)
 
         selection->select(shape);
         KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
-        Q_ASSERT( shapeLayer );
+        Q_ASSERT(shapeLayer);
         if (shapeLayer) {
             shapeLayer->setGeometryProtected(node->userLocked());
             shapeLayer->setVisible(node->visible());
@@ -410,7 +409,7 @@ void KisNodeManager::nodeToBottom()
 void KisNodeManager::removeNode(KisNodeSP node)
 {
 //     QRect bounds = node->exactBounds();
-    m_d->commandsAdapter->removeNode( node );
+    m_d->commandsAdapter->removeNode(node);
 //     m_image->rootLayer()->setDirty(bounds);
 }
 

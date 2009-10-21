@@ -31,7 +31,7 @@ public:
     bool useRandomHSV() const;
     bool useRandomOpacity() const;
 
-    // TODO: these should be intervals like 20..180 
+    // TODO: these should be intervals like 20..180
     int hue() const;
     int saturation() const;
     int value() const;
@@ -41,7 +41,7 @@ public:
     /// TODO
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
-   KisColorOptionsWidget * m_options;
+    KisColorOptionsWidget * m_options;
 };
 
 #endif // KIS_SPRAY_COLOR_OPTION_H

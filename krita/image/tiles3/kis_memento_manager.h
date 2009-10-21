@@ -84,13 +84,13 @@ public:
     KisMementoSP getMemento();
 
     bool hasCurrentMemento() {
-      	return m_currentMemento;
+        return m_currentMemento;
     }
 
 
     void setDefaultTileData(KisTileData *defaultTileData);
 
-    void debugPrintInfo(); 
+    void debugPrintInfo();
 
 protected:
     /**

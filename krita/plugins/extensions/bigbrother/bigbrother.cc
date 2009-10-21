@@ -94,7 +94,7 @@ void BigBrotherPlugin::slotSave()
 void BigBrotherPlugin::slotOpenPlay()
 {
     KisMacro* m = openMacro();
-    if(!m) return;
+    if (!m) return;
     dbgPlugins << "Play the macro";
     m->play(KisPlayInfo(m_view->image(), m_view->activeNode()));
     dbgPlugins << "Finished";
@@ -106,16 +106,15 @@ void BigBrotherPlugin::slotOpenEdit()
 {
     KUrl url;
     KisMacro* m = openMacro(&url);
-    if(!m) return;
+    if (!m) return;
     KisActionsEditorDialog aed(m_view);
-    
+
     aed.actionsEditor()->setMacro(m);
-    
-    if( aed.exec() == QDialog::Accepted )
-    {
+
+    if (aed.exec() == QDialog::Accepted) {
         saveMacro(m, url);
     }
-    
+
     delete m;
 }
 

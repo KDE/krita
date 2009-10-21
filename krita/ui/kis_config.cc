@@ -33,12 +33,12 @@
 
 namespace
 {
-    const double IMG_DEFAULT_RESOLUTION = 100.0; // dpi
-    const qint32 IMG_DEFAULT_WIDTH = 1600;
-    const qint32 IMG_DEFAULT_HEIGHT = 1200;
-    const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
-    const qint32 DEFAULT_MAX_TILES_MEM = 5000;
-    const qint32 DEFAULT_SWAPPINESS = 100;
+const double IMG_DEFAULT_RESOLUTION = 100.0; // dpi
+const qint32 IMG_DEFAULT_WIDTH = 1600;
+const qint32 IMG_DEFAULT_HEIGHT = 1200;
+const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
+const qint32 DEFAULT_MAX_TILES_MEM = 5000;
+const qint32 DEFAULT_SWAPPINESS = 100;
 }
 
 KisConfig::KisConfig()
@@ -523,12 +523,12 @@ void KisConfig::setShowRootLayer(bool showRootLayer)
 quint32 KisConfig::maxCachedImageSize()
 {
     // Let's say, 5 megapixels
-    return m_cfg.readEntry( "maxCachedImageSize", 5 );
+    return m_cfg.readEntry("maxCachedImageSize", 5);
 }
 
-void KisConfig::setMaxCachedImageSize( quint32 size )
+void KisConfig::setMaxCachedImageSize(quint32 size)
 {
-    m_cfg.writeEntry( "maxCachedImageSize", size );
+    m_cfg.writeEntry("maxCachedImageSize", size);
 }
 
 

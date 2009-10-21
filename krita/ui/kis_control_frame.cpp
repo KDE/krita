@@ -161,7 +161,7 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
             this, SLOT(slotSetPattern(KisPattern *)));
 
     chooser->setCurrentItem(0, 0);
-    if(chooser->currentResource())
+    if (chooser->currentResource())
         view->resourceProvider()->slotPatternActivated(chooser->currentResource());
 }
 
@@ -193,7 +193,7 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
             this, SLOT(slotSetGradient(KoAbstractGradient *)));
 
     m_gradientChooser->setCurrentItem(0, 0);
-    if(m_gradientChooser->currentResource())
+    if (m_gradientChooser->currentResource())
         view->resourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());
 }
 

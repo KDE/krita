@@ -26,33 +26,36 @@
 
 class KoCtlColorSpace;
 
-namespace GTLCore {
-  class PixelDescription;
+namespace GTLCore
+{
+class PixelDescription;
 }
 
-namespace OpenCTL {
-  class Program;
-  class Template;
+namespace OpenCTL
+{
+class Program;
+class Template;
 }
 
-class KoCTLCompositeOp : public KoCompositeOp {
-  public:
+class KoCTLCompositeOp : public KoCompositeOp
+{
+public:
     KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace* cs, const GTLCore::PixelDescription& _pd);
     virtual ~KoCTLCompositeOp();
-  public:
+public:
     virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-               const quint8 *srcRowStart, qint32 srcRowStride,
-               const quint8 *maskRowStart, qint32 maskRowStride,
-               qint32 rows, qint32 numColumns,
-               quint8 opacity,
-               const QBitArray & channelFlags) const;
+                           const quint8 *srcRowStart, qint32 srcRowStride,
+                           const quint8 *maskRowStart, qint32 maskRowStride,
+                           qint32 rows, qint32 numColumns,
+                           quint8 opacity,
+                           const QBitArray & channelFlags) const;
     bool isValid() const;
-  private:
+private:
     // Those three functions are hack and aren't supposed to stay
-    QString idForFile( const std::string& _file );
-    QString descriptionForFile( const std::string& _file );
-    QString categoryForFile( const std::string& _file );
-  private:
+    QString idForFile(const std::string& _file);
+    QString descriptionForFile(const std::string& _file);
+    QString categoryForFile(const std::string& _file);
+private:
     OpenCTL::Program* m_withMaskProgram;
     OpenCTL::Program* m_withoutMaskProgram;
 };

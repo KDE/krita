@@ -31,7 +31,8 @@
 // Declaration
 namespace Optimization
 {
-namespace Methods {
+namespace Methods
+{
 /**
  * Use this class as a template parameter for the gaussNewton function if you want to use
  * the Gauss-Newton method which uses only the jacobian.
@@ -143,7 +144,8 @@ struct Newton {
  *    std::cout \<\< v \<\< f.values(v) \<\< std::endl;
  * @endcode
  */
-namespace Algorithms {
+namespace Algorithms
+{
 /**
  * Perform an optimization following Gauss Newton algorithm
  * @param f functions
@@ -182,7 +184,8 @@ _TType_ levenbergMarquardt(_TFunction_* f, std::vector<_TType_>& parameters, int
 // Implementation
 namespace Optimization
 {
-namespace Details { // Private functions used by the algorithms
+namespace Details   // Private functions used by the algorithms
+{
 // Compute the remain
 template<typename _TType_>
 double computeRemain(const std::vector<_TType_>& values)
@@ -224,7 +227,8 @@ std::vector<double> solve(const gmm::row_matrix< gmm::rsvector<_TType_> >& M, co
     return X;
 }
 }
-namespace Methods {
+namespace Methods
+{
 template< class _TFunction_, typename _TType_ >
 void GaussNewton< _TFunction_, _TType_ >::computeM(const gmm::row_matrix< gmm::rsvector<_TType_> >& jacobian, const _TFunction_* f, std::vector<_TType_>& parameters, std::vector<_TType_>& values, gmm::row_matrix< gmm::rsvector<_TType_> > &M)
 {
@@ -242,7 +246,8 @@ void Newton< _TFunction_, _TType_ >::computeM(const gmm::row_matrix< gmm::rsvect
     }
 }
 }
-namespace Algorithms {
+namespace Algorithms
+{
 // Gradient descent
 template< class _TFunction_, typename _TType_  >
 _TType_ gradientDescent(_TFunction_* f, std::vector<_TType_>& parameters, int iter, _TType_ epsilon, _TType_ gamma)

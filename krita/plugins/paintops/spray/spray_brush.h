@@ -43,111 +43,111 @@ public:
     ~SprayBrush();
     SprayBrush(KoColor inkColor);
     void paint(KisPaintDeviceSP dev, const KisPaintInformation& info, const KoColor &color);
-    
+
     /// Paints Wu Particle
-    void paintParticle(KisRandomAccessor &writeAccessor,const KoColor &color,qreal rx, qreal ry);
-    void paintCircle(KisPainter * painter,qreal x, qreal y, int radius, int steps);
-    void paintEllipse(KisPainter * painter,qreal x, qreal y, int a, int b, qreal angle, int steps);
-    void paintRectangle(KisPainter * painter,qreal x, qreal y, int width, int height, qreal angle, int steps);
+    void paintParticle(KisRandomAccessor &writeAccessor, const KoColor &color, qreal rx, qreal ry);
+    void paintCircle(KisPainter * painter, qreal x, qreal y, int radius, int steps);
+    void paintEllipse(KisPainter * painter, qreal x, qreal y, int a, int b, qreal angle, int steps);
+    void paintRectangle(KisPainter * painter, qreal x, qreal y, int width, int height, qreal angle, int steps);
 
     void paintMetaballs(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor);
     void paintDistanceMap(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor);
 
     void paintOutline(KisPaintDeviceSP dev, const KoColor& painterColor, qreal posX, qreal posY, qreal radius);
 
-    void setDiameter(int diameter){
+    void setDiameter(int diameter) {
         m_diameter = diameter;
         m_radius = diameter * 0.5;
     }
 
-    void setCoverity(qreal coverage){
+    void setCoverity(qreal coverage) {
         m_coverage = coverage;
     }
 
-    void setJitterSize(bool jitterSize){
+    void setJitterSize(bool jitterSize) {
         m_jitterSize = jitterSize;
     }
 
-    void setJitterMovement(bool jitterMovement){
+    void setJitterMovement(bool jitterMovement) {
         m_jitterMovement = jitterMovement;
     }
 
     // set the amount of the jittering brush position
-    void setAmount(qreal amount){
+    void setAmount(qreal amount) {
         m_amount = amount;
     }
 
-    void setScale(qreal scale){
+    void setScale(qreal scale) {
         m_scale = scale;
     }
 
-    void setObject(int object){
+    void setObject(int object) {
         m_object = object;
     }
 
-    void setShape(int shape){
+    void setShape(int shape) {
         m_shape = shape;
     }
 
-    void setJitterShapeSize(bool jitterShapeSize){
+    void setJitterShapeSize(bool jitterShapeSize) {
         m_jitterShapeSize = jitterShapeSize;
     }
 
-    void setObjectDimension(int width, int height){
+    void setObjectDimension(int width, int height) {
         m_width = width;
         m_height = height;
     }
 
     // getters
-    qreal radius(){
+    qreal radius() {
         return m_radius;
     }
 
-    qreal objectWidth(){
+    qreal objectWidth() {
         return m_width;
     }
 
-    qreal objectHeight(){
+    qreal objectHeight() {
         return m_height;
     }
 
     // setters
 
-    void setUseDensity(bool useDensity){
+    void setUseDensity(bool useDensity) {
         m_useDensity = useDensity;
     }
 
-    void setParticleCount(int particleCount){
+    void setParticleCount(int particleCount) {
         m_particlesCount = particleCount;
     }
 
-    void setMaxTreshold(qreal tresh){
+    void setMaxTreshold(qreal tresh) {
         m_maxtresh = tresh;
     }
 
-    void setMinTreshold(qreal tresh){
+    void setMinTreshold(qreal tresh) {
         m_mintresh = tresh;
     }
 
-    void setRendering(bool highQuality){
+    void setRendering(bool highQuality) {
         m_highQuality = highQuality;
     }
 
-    void setRadius(qreal radiusX, qreal radiusY){
+    void setRadius(qreal radiusX, qreal radiusY) {
         m_radiusX = qRound(radiusX);
         m_radiusY = qRound(radiusY);
     }
 
-    void setComputeArea(QRect area){
+    void setComputeArea(QRect area) {
         m_computeArea = area;
     }
 
     // set true if the particles should have random opacity
-    void setUseRandomOpacity(bool isRandom){
+    void setUseRandomOpacity(bool isRandom) {
         m_randomOpacity = isRandom;
     }
 
-    void setSettingsObject(const KisSprayPaintOpSettings* settings){
+    void setSettingsObject(const KisSprayPaintOpSettings* settings) {
         m_settings = settings;
     }
 
@@ -198,7 +198,7 @@ private:
     KisPainter * m_painter;
 private:
     const KisSprayPaintOpSettings* m_settings;
-    
+
 };
 
 #endif

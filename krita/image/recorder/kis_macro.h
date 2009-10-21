@@ -38,7 +38,7 @@ class KRITAIMAGE_EXPORT KisMacro : public QObject, public KisSerializableConfigu
     Q_OBJECT
 public:
     KisMacro();
-    KisMacro( const QList<KisRecordedAction*>& _actions);
+    KisMacro(const QList<KisRecordedAction*>& _actions);
     ~KisMacro();
 public:
     /**
@@ -53,7 +53,7 @@ public:
      * Move the action before an other one.
      * @param before if null, the action is moved to the end
      */
-    void moveAction( const KisRecordedAction* action, const KisRecordedAction* before);
+    void moveAction(const KisRecordedAction* action, const KisRecordedAction* before);
 public:
     /**
      * Play the macro on the image.

@@ -30,7 +30,7 @@ inline uint UINT8_BLEND(uint a, uint b, uint alpha)
 }
 
 KisBackground::KisBackground(const QImage& patternTile)
-    : KisShared()
+        : KisShared()
 {
     m_patternTile = patternTile;
 }
@@ -70,14 +70,12 @@ void KisBackground::paintBackground(QImage& image, const QRect& rc)
 
     int patternY = patternTopY;
 
-    for (int y = 0; y < imageHeight; y++)
-    {
+    for (int y = 0; y < imageHeight; y++) {
         QRgb *imagePixelPtr = reinterpret_cast<QRgb *>(image.scanLine(y));
         const QRgb *patternScanLine = reinterpret_cast<const QRgb *>(m_patternTile.scanLine(patternY));
         int patternX = patternLeftX;
 
-        for (int x = 0; x < imageWidth; x++)
-        {
+        for (int x = 0; x < imageWidth; x++) {
             QRgb imagePixel = *imagePixelPtr;
             quint8 imagePixelAlpha = qAlpha(imagePixel);
 

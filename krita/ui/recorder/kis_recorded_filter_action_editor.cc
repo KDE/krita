@@ -26,19 +26,18 @@
 #include <QLabel>
 #include <kis_paint_device.h>
 
-KisRecordedFilterActionEditor::KisRecordedFilterActionEditor( QWidget* parent, KisRecordedAction* action) :
+KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, KisRecordedAction* action) :
         m_action(dynamic_cast<KisRecordedFilterAction*>(action)),
         m_gridLayout(new QGridLayout(this))
 {
     Q_ASSERT(m_action);
-    m_configWidget = m_action->filter()->createConfigurationWidget(this, 0 ,0);
-    if(m_configWidget)
-    {
+    m_configWidget = m_action->filter()->createConfigurationWidget(this, 0 , 0);
+    if (m_configWidget) {
         m_gridLayout->addWidget(m_configWidget);
         m_configWidget->setConfiguration(m_action->filterConfiguration());
         connect(m_configWidget, SIGNAL(sigConfigurationItemChanged()), SLOT(configurationUpdated()));
     } else {
-        m_gridLayout->addWidget(new QLabel("No configuration option.", this ));
+        m_gridLayout->addWidget(new QLabel("No configuration option.", this));
     }
 }
 
@@ -48,9 +47,8 @@ KisRecordedFilterActionEditor::~KisRecordedFilterActionEditor()
 
 void KisRecordedFilterActionEditor::configurationUpdated()
 {
-    KisFilterConfiguration* config = dynamic_cast<KisFilterConfiguration*>( m_configWidget->configuration() );
-    if(config)
-    {
+    KisFilterConfiguration* config = dynamic_cast<KisFilterConfiguration*>(m_configWidget->configuration());
+    if (config) {
         m_action->setFilterConfiguration(config);
         emit(actionEdited());
     }
@@ -69,7 +67,7 @@ QWidget* KisRecordedFilterActionEditorFactory::createEditor(QWidget* parent, Kis
     return new KisRecordedFilterActionEditor(parent, action);
 }
 
-bool KisRecordedFilterActionEditorFactory::canEdit( const KisRecordedAction* action) const
+bool KisRecordedFilterActionEditorFactory::canEdit(const KisRecordedAction* action) const
 {
     return action->id() == "FilterAction";
 }

@@ -36,7 +36,8 @@ class QDoubleSpinBox;
 
 class KoCanvasBase;
 
-class DynaFilter {
+class DynaFilter
+{
 public:
     DynaFilter() {
         curx = 0;
@@ -60,8 +61,8 @@ public:
         accy = 0.0;
     }
 
-    ~DynaFilter(){}
-    
+    ~DynaFilter() {}
+
 public:
     qreal curx, cury;
     qreal velx, vely, vel;
@@ -99,7 +100,7 @@ private slots:
     void slotSetSmoothness(int smoothness);
     void slotSetMagnetism(int magnetism);
     void slotSetDynaWidth(double width);
-    void slotSetMass(double mass); 
+    void slotSetMass(double mass);
     void slotSetDrag(double drag);
     void slotSetXangle(double angle);
     void slotSetYangle(double angle);
@@ -126,7 +127,7 @@ private:
 
     qreal m_previousPressure;
 
-    // dyna algorithm 
+    // dyna algorithm
     QVector<QPointF> m_prevPosition;
     qreal m_odelx, m_odely;
 
@@ -136,7 +137,7 @@ private:
 
     // settings variables
     qreal m_width;
-    qreal m_curmass; 
+    qreal m_curmass;
     qreal m_curdrag;
     DynaFilter m_mouse;
     qreal m_xangle;
@@ -144,10 +145,12 @@ private:
     qreal m_widthRange;
 
     // methods
-    qreal flerp(qreal f0, qreal f1, qreal p) {    return ((f0 * (1.0 - p)) + (f1 * p));    }
+    qreal flerp(qreal f0, qreal f1, qreal p) {
+        return ((f0 *(1.0 - p)) + (f1 * p));
+    }
     void initMouse(const QPointF &point) {
-        m_mousePos.setX( point.x() / currentImage()->width() );
-        m_mousePos.setY( point.y() / currentImage()->height() );
+        m_mousePos.setX(point.x() / currentImage()->width());
+        m_mousePos.setY(point.y() / currentImage()->height());
     }
 
     void initDyna();
@@ -171,7 +174,7 @@ public:
         setIcon("krita_tool_dyna");
         // TODO
         //setShortcut(KShortcut(Qt::Key_F));
-        setPriority( 10 );
+        setPriority(10);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setInputDeviceAgnostic(false);
     }

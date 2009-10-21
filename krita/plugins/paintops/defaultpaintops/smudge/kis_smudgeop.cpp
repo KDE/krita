@@ -59,11 +59,11 @@
 #include "kis_smudgeop_settings_widget.h"
 
 KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painter)
-    : KisBrushBasedPaintOp(painter)
-    , settings(settings)
-    , m_firstRun( true )
-    , m_target( 0 )
-    , m_srcdev( 0 )
+        : KisBrushBasedPaintOp(painter)
+        , settings(settings)
+        , m_firstRun(true)
+        , m_target(0)
+        , m_srcdev(0)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -76,8 +76,7 @@ KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painte
     }
     if (settings->node()) {
         m_source = settings->node()->paintDevice();
-    }
-    else {
+    } else {
         m_source = painter->device();
     }
     m_srcdev = new KisPaintDevice(m_source->colorSpace());
@@ -98,17 +97,16 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
         if (settings->m_options) {
             m_brush = settings->m_options->m_brushOption->brush();
             brush = m_brush;
-        }
-        else {
+        } else {
             return;
         }
     }
 
     if (! brush->canPaintFor(info))
         return;
-    
+
     double scale = KisPaintOp::scaleForPressure(settings->m_options->m_sizeOption->apply(info));
-    if( (scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01 ) return;
+    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return;
 
     KisPaintDeviceSP device = painter()->device();
     QPointF hotSpot = brush->hotSpot(scale, scale);
@@ -155,11 +153,11 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     */
     int opacity = OPACITY_OPAQUE;
     if (!m_firstRun) {
-        opacity = settings->m_options->m_rateOption->apply( opacity, info );
+        opacity = settings->m_options->m_rateOption->apply(opacity, info);
 
         KisRectIterator it = m_srcdev->createRectIterator(0, 0, sw, sh);
         KoColorSpace* cs = m_srcdev->colorSpace();
-        while(!it.isDone()) {
+        while (!it.isDone()) {
             cs->setAlpha(it.rawData(), (cs->alpha(it.rawData()) * opacity) / OPACITY_OPAQUE, 1);
             ++it;
         }

@@ -196,7 +196,7 @@ void DlgImageSize::slotWidthPixelsChanged(int w)
     // recalculate aspect ratio
     m_aspectRatio = m_width / m_height;
 
-    if (m_page->cmbWidthPixelUnit->currentIndex()==0)
+    if (m_page->cmbWidthPixelUnit->currentIndex() == 0)
         m_page->doublePercentageWidth->setValue(100.0 * m_page->intPixelWidth->value() / m_origW);
     m_page->doublePercentageHeight->setValue(100.0 * m_page->intPixelHeight->value() / m_origH);
 
@@ -231,7 +231,7 @@ void DlgImageSize::slotHeightPixelsChanged(int h)
     m_aspectRatio = m_width / m_height;
 
     m_page->doublePercentageWidth->setValue(100.0 * m_page->intPixelWidth->value() / m_origW);
-    if (m_page->cmbHeightPixelUnit->currentIndex()==0)
+    if (m_page->cmbHeightPixelUnit->currentIndex() == 0)
         m_page->doublePercentageHeight->setValue(100.0 * m_page->intPixelHeight->value() / m_origH);
 
     unblockAll();
@@ -249,24 +249,24 @@ void DlgImageSize::slotHeightPercentageChanged(double h)
 
 void DlgImageSize::slotWidthPixelUnitChanged(int index)
 {
-    m_page->intPixelWidth->setVisible(index==0);
-    m_page->doublePercentageWidth->setVisible(index==1);
+    m_page->intPixelWidth->setVisible(index == 0);
+    m_page->doublePercentageWidth->setVisible(index == 1);
 
     //Make sure the percentage value is correct - which it might not have been have we 1)just entered a value 2)switched to pixel and back
     blockAll();
-    if(index==1)
+    if (index == 1)
         m_page->doublePercentageWidth->setValue(100.0 * m_page->intPixelWidth->value() / m_origW);
     unblockAll();
 }
 
 void DlgImageSize::slotHeightPixelUnitChanged(int index)
 {
-    m_page->intPixelHeight->setVisible(index==0);
-    m_page->doublePercentageHeight->setVisible(index==1);
+    m_page->intPixelHeight->setVisible(index == 0);
+    m_page->doublePercentageHeight->setVisible(index == 1);
 
     //Make sure the percentage value is correct - which it might not have been have we 1)just entered a value 2)switched to pixel and back
     blockAll();
-    if(index==1)
+    if (index == 1)
         m_page->doublePercentageHeight->setValue(100.0 * m_page->intPixelHeight->value() / m_origH);
     unblockAll();
 }

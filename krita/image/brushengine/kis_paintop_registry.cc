@@ -57,7 +57,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
     K_GLOBAL_STATIC(KisPaintOpRegistry, s_instance);
     if (!s_instance.exists()) {
         KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 3)");
-        
+
     }
     return s_instance;
 }
@@ -73,7 +73,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
         painter->setBounds(image->bounds());
     }
 
-    Q_ASSERT( settings );
+    Q_ASSERT(settings);
 
     KisPaintOpFactory* f = value(id);
     if (f) {
@@ -84,8 +84,8 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageWSP image) const
 {
-    Q_ASSERT( preset );
-    Q_ASSERT( painter );
+    Q_ASSERT(preset);
+    Q_ASSERT(painter);
 
     if (!preset) return 0;
 

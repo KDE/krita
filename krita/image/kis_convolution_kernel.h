@@ -41,7 +41,7 @@ public:
     void setSize(quint32 width, quint32 height);
     qint32 offset() const;
     qint32 factor() const;
-    void setFactor( qint32 );
+    void setFactor(qint32);
     qint32 * data();
     const qint32 * data() const;
 

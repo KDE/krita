@@ -52,7 +52,7 @@ KisFilterRegistry* KisFilterRegistry::instance()
 {
     K_GLOBAL_STATIC(KisFilterRegistry, s_instance);
     if (!s_instance.exists()) {
-        KoPluginLoader::instance()->load( "Krita/Filter", "Type == 'Service' and ([X-Krita-Version] == 3)" );
+        KoPluginLoader::instance()->load("Krita/Filter", "Type == 'Service' and ([X-Krita-Version] == 3)");
     }
     return s_instance;
 }

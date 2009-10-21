@@ -64,10 +64,10 @@ void KisTextBrushChooser::rebuildTextBrush()
     emit sigBrushChanged();
 }
 
-void KisTextBrushChooser::setBrush( KisBrushSP brush )
+void KisTextBrushChooser::setBrush(KisBrushSP brush)
 {
     m_textBrush = brush;
-    m_font = static_cast<KisTextBrush*>( brush.data() )->font();
+    m_font = static_cast<KisTextBrush*>(brush.data())->font();
 }
 
 #include "kis_text_brush_chooser.moc"

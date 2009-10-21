@@ -22,7 +22,7 @@
 #include <GTLCore/Value.h>
 #include <GTLCore/Metadata/ParameterEntry.h>
 
-QVariant valueToQVariant( const GTLCore::Value& value );
-GTLCore::Value qvariantToValue( const QVariant& variant, const GTLCore::Type* widgetType );
+QVariant valueToQVariant(const GTLCore::Value& value);
+GTLCore::Value qvariantToValue(const QVariant& variant, const GTLCore::Type* widgetType);
 
 #endif

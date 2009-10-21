@@ -83,7 +83,7 @@ public:
     /**
      * @return true if the map contains a property with the specified name
      */
-    bool hasProperty( const QString& name );
+    bool hasProperty(const QString& name);
 
     /**
      * Set the property with name to value.
@@ -105,7 +105,7 @@ public:
 
     double getDouble(const QString & name, double def = 0.0) const;
 
-    float getFloat( const QString& name, float def = 0.0 ) const;
+    float getFloat(const QString& name, float def = 0.0) const;
 
     bool getBool(const QString & name, bool def = false) const;
 
@@ -138,4 +138,4 @@ private:
     Private* const d;
 };
 
-#endif 
+#endif

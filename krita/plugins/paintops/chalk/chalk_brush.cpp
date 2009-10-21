@@ -31,7 +31,10 @@
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
-inline double drand48() { return double(rand()) / RAND_MAX; }
+inline double drand48()
+{
+    return double(rand()) / RAND_MAX;
+}
 #endif
 
 ChalkBrush::ChalkBrush(const BrushShape &initialShape, KoColor inkColor)
@@ -49,12 +52,13 @@ ChalkBrush::ChalkBrush()
 }
 
 
-void ChalkBrush::init(){
+void ChalkBrush::init()
+{
     BrushShape bs;
-    // some empiric values 
+    // some empiric values
     bs.fromGaussian(m_radius, 1.0f, 0.9f);
     m_bristles = bs.getBristles();
-    srand48( time(0) );
+    srand48(time(0));
 }
 
 void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
@@ -72,7 +76,7 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     qreal dirt, result;
 
     //count decrementing of saturation and alpha
-    result = log( ( qreal )m_counter);
+    result = log((qreal)m_counter);
     result = -(result * 10) / 100.0;
 
     QHash<QString, QVariant> params;
@@ -86,7 +90,7 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     int opacity = static_cast<int>((1.0f + result) * OPACITY_OPAQUE);
     m_inkColor.setOpacity(opacity);
 
-    for (int i = 0;i < m_bristles.size();i++) {
+    for (int i = 0; i < m_bristles.size(); i++) {
         bristle = &m_bristles[i];
 
         // let's call that noise from ground to chalk :)

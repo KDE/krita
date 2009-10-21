@@ -72,7 +72,7 @@ void tonemappingPlugin::slotToneMapping()
 
 void tonemappingPlugin::slotNodeChanged(const KisNodeSP node)
 {
-    m_toneMappingAction->setEnabled( node->inherits("KisPaintLayer"));
+    m_toneMappingAction->setEnabled(node->inherits("KisPaintLayer"));
 }
 
 #include "tonemapping.moc"

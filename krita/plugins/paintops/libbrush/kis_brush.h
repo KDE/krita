@@ -121,7 +121,7 @@ protected:
 public:
 
     KisBrush();
-    KisBrush( const QString& filename );
+    KisBrush(const QString& filename);
 
     virtual ~KisBrush();
 
@@ -250,10 +250,10 @@ public:
      * pixels in the brush.
      */
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-                              ColoringInformation* coloringInfo,
-                              double scaleX, double scaleY, double angle,
-                              const KisPaintInformation& info = KisPaintInformation(),
-                              double subPixelX = 0, double subPixelY = 0) const;
+            ColoringInformation* coloringInfo,
+            double scaleX, double scaleY, double angle,
+            const KisPaintInformation& info = KisPaintInformation(),
+            double subPixelX = 0, double subPixelY = 0) const;
 
 
     /**
@@ -261,7 +261,7 @@ public:
      */
     virtual void toXML(QDomDocument& , QDomElement&) const {};
 
-    static KisBrushSP fromXML( const QDomElement& element );
+    static KisBrushSP fromXML(const QDomElement& element);
 
     virtual const KisBoundary* boundary() const;
 
@@ -290,7 +290,7 @@ protected:
 
     void createScaledBrushes() const;
 
-    void setHasColor( bool hasColor );
+    void setHasColor(bool hasColor);
 
 protected:
 
@@ -313,7 +313,7 @@ private:
     static QImage interpolate(const QImage& image1, const QImage& image2, double t);
 
     static KisQImagemaskSP scaleSinglePixelMask(double scale, quint8 maskValue,
-                                                double subPixelX, double subPixelY);
+            double subPixelX, double subPixelY);
 
     static QImage scaleSinglePixelImage(double scale, QRgb pixel,
                                         double subPixelX, double subPixelY);

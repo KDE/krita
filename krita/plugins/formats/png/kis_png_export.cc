@@ -106,8 +106,8 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     wdg->alpha->setChecked(isThereAlpha);
     wdg->alpha->setVisible(isThereAlpha);
     wdg->tryToSaveAsIndexed->setVisible(!isThereAlpha);
-    if(isThereAlpha) {
-      wdg->tryToSaveAsIndexed->setChecked(false);
+    if (isThereAlpha) {
+        wdg->tryToSaveAsIndexed->setChecked(false);
     }
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();

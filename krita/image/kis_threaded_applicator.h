@@ -43,8 +43,7 @@ public:
     KisJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc)
             : ThreadWeaver::Job(parent)
             , m_dev(dev)
-            , m_rc(rc)
-    {
+            , m_rc(rc) {
     }
 
 

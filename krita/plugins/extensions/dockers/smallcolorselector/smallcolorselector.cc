@@ -61,7 +61,7 @@ SmallColorSelectorPlugin::SmallColorSelectorPlugin(QObject *parent, const QStrin
 {
     setComponentData(SmallColorSelectorPluginFactory::componentData());
 
-    KoDockRegistry::instance()->add( new SmallColorSelectorDockFactory() );
+    KoDockRegistry::instance()->add(new SmallColorSelectorDockFactory());
 }
 
 SmallColorSelectorPlugin::~SmallColorSelectorPlugin()

@@ -21,7 +21,7 @@
 #include <kis_deform_paintop_settings_widget.h>
 
 KisDeformPaintOpSettings::KisDeformPaintOpSettings()
-    : m_options(0)
+        : m_options(0)
 {
 }
 
@@ -29,7 +29,7 @@ KisDeformPaintOpSettings::KisDeformPaintOpSettings()
 KisPaintOpSettingsSP KisDeformPaintOpSettings::clone() const
 {
     KisPaintOpSettings* settings =
-        static_cast<KisPaintOpSettings*>( m_options->configuration() );
+        static_cast<KisPaintOpSettings*>(m_options->configuration());
     return settings;
 }
 
@@ -83,9 +83,9 @@ void KisDeformPaintOpSettings::fromXML(const QDomElement& elt)
 {
     // First, call the parent class fromXML to make sure all the
     // properties are saved to the map
-    KisPaintOpSettings::fromXML( elt );
+    KisPaintOpSettings::fromXML(elt);
     // Then load the properties for all widgets
-    m_options->setConfiguration( this );
+    m_options->setConfiguration(this);
 }
 
 void KisDeformPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
@@ -94,40 +94,40 @@ void KisDeformPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) co
     // to the property configuration
     KisPropertiesConfiguration * settings = m_options->configuration();
     // Then call the parent class fromXML
-    settings->KisPropertiesConfiguration::toXML( doc, rootElt );
+    settings->KisPropertiesConfiguration::toXML(doc, rootElt);
     delete settings;
 }
 
 QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
-    if(_mode != CURSOR_IS_OUTLINE) return QRectF();
+    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
     qreal size = radius() * 2;
     size += 10;
-    return image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos);
+    return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
 }
 
 void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
-    if(_mode != CURSOR_IS_OUTLINE) return;
+    if (_mode != CURSOR_IS_OUTLINE) return;
     qreal size = radius() * 2;
 
 #if 0
 //     painter.setPen( QColor(128,255,128) );
 //     painter.setCompositionMode(QPainter::CompositionMode_Exclusion);
-    painter.setRenderHint(QPainter::Antialiasing,true);
-    QRectF sizerc = converter.documentToView( image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos) );
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    QRectF sizerc = converter.documentToView(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos));
     QPen pen = painter.pen();
-    pen.setColor(QColor(3,3,3,150));
+    pen.setColor(QColor(3, 3, 3, 150));
     pen.setWidth(5);
     painter.setPen(pen);
-    painter.drawEllipse( sizerc );
+    painter.drawEllipse(sizerc);
     pen.setColor(Qt::white);
     pen.setWidth(1);
     painter.setPen(pen);
-    painter.drawEllipse( sizerc );
+    painter.drawEllipse(sizerc);
 #else
     painter.setPen(Qt::black);
 #endif
-    painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRectF(0,0, size, size).translated( - QPoint( size * 0.5, size * 0.5) ) ).translated(pos) ) );
+    painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos)));
 }
 

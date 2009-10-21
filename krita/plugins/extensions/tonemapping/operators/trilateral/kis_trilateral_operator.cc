@@ -40,7 +40,7 @@ public:
     KisTrilateralOperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg) {
         widget.setupUi(this);
     }
-    virtual void setConfiguration( const KisPropertiesConfiguration* config) {
+    virtual void setConfiguration(const KisPropertiesConfiguration* config) {
         widget.saturation->setValue(config->getDouble("Saturation", 1.0));
         widget.sigma->setValue(config->getDouble("Sigma", 21.0));
         widget.contrast->setValue(config->getDouble("Contrast", 5.0));

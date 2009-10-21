@@ -25,7 +25,8 @@
 #include <QDomDocument>
 #include <QImage>
 
-QImage createQImageFromMask(const KisMaskGenerator& generator) {
+QImage createQImageFromMask(const KisMaskGenerator& generator)
+{
     QImage img(10, 10, QImage::Format_ARGB32);
     for (int i = 0; i < 10; ++i) {
         for (int j = 0; j < 10; ++j) {

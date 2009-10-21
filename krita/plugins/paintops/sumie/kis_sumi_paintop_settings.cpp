@@ -23,14 +23,14 @@
 #include "kis_sumi_shape_option.h"
 
 KisSumiPaintOpSettings::KisSumiPaintOpSettings()
-    : m_options(0)
+        : m_options(0)
 {
 }
 
 KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const
 {
     KisPaintOpSettings* settings =
-        static_cast<KisPaintOpSettings*>( m_options->configuration() );
+        static_cast<KisPaintOpSettings*>(m_options->configuration());
     return settings;
 }
 
@@ -44,10 +44,10 @@ void KisSumiPaintOpSettings::fromXML(const QDomElement& elt)
 {
     // First, call the parent class fromXML to make sure all the
     // properties are saved to the map
-    KisPaintOpSettings::fromXML( elt );
+    KisPaintOpSettings::fromXML(elt);
 
     // Then load the properties for all widgets
-    m_options->setConfiguration( this );
+    m_options->setConfiguration(this);
 }
 
 void KisSumiPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
@@ -57,7 +57,7 @@ void KisSumiPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) cons
     KisPropertiesConfiguration * settings = m_options->configuration();
 
     // Then call the parent class fromXML
-    settings->KisPropertiesConfiguration::toXML( doc, rootElt );
+    settings->KisPropertiesConfiguration::toXML(doc, rootElt);
 
     delete settings;
 }

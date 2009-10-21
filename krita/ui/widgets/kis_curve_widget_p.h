@@ -39,66 +39,65 @@ public:
      * @return - vector that is storing x[]
      */
     static
-	QVector<T> calculate(QVector<T> &a,
-			     QVector<T> &b,
-			     QVector<T> &c,
-			     QVector<T> &f)
-    {
-	QVector<T> x;
-	QVector<T> alpha;
-	QVector<T> beta;
+    QVector<T> calculate(QVector<T> &a,
+                         QVector<T> &b,
+                         QVector<T> &c,
+                         QVector<T> &f) {
+        QVector<T> x;
+        QVector<T> alpha;
+        QVector<T> beta;
 
-	int i;
-	int size=b.size();
+        int i;
+        int size = b.size();
 
-	Q_ASSERT(a.size()==size-1 &&
-		 c.size()==size-1 &&
-		 f.size()==size);
+        Q_ASSERT(a.size() == size - 1 &&
+                 c.size() == size - 1 &&
+                 f.size() == size);
 
-	x.resize(size);
+        x.resize(size);
 
-	/**
-	 * Check for special case when
-	 * order of the matrix is equal to 1
-	 */
-	if(size==1) {
-	    x[0]=f[0]/b[0];
-	    return x;
-	}
+        /**
+         * Check for special case when
+         * order of the matrix is equal to 1
+         */
+        if (size == 1) {
+            x[0] = f[0] / b[0];
+            return x;
+        }
 
-	/**
-	 * Common case
-	 */
+        /**
+         * Common case
+         */
 
-	alpha.resize(size);
-	beta.resize(size);
+        alpha.resize(size);
+        beta.resize(size);
 
 
-	alpha[1]= -c[0] / b[0];
-	beta[1] =  f[0] / b[0];
+        alpha[1] = -c[0] / b[0];
+        beta[1] =  f[0] / b[0];
 
-	for(i=1; i<size-1; i++) {
-	    alpha[i+1]=-c[i] /
-		(a[i-1] * alpha[i] + b[i]);
+        for (i = 1; i < size - 1; i++) {
+            alpha[i+1] = -c[i] /
+                         (a[i-1] * alpha[i] + b[i]);
 
-	    beta[i+1] = (f[i] - a[i-1] * beta[i])
-		             /
-		        (a[i-1] * alpha[i] + b[i]);
-	}
+            beta[i+1] = (f[i] - a[i-1] * beta[i])
+                        /
+                        (a[i-1] * alpha[i] + b[i]);
+        }
 
-	x.last()=(f.last() - a.last() * beta.last())
-	                   /
-	         (b.last() + a.last() * alpha.last());
+        x.last() = (f.last() - a.last() * beta.last())
+                   /
+                   (b.last() + a.last() * alpha.last());
 
-	for(i=size-2; i>=0; i--)
-	    x[i]=alpha[i+1] * x[i+1] + beta[i+1];
+        for (i = size - 2; i >= 0; i--)
+            x[i] = alpha[i+1] * x[i+1] + beta[i+1];
 
-	return x;
+        return x;
     }
 };
 
 template <typename T_point, typename T>
-    class KisCubicSpline
+class KisCubicSpline
 {
     /**
      *  s[i](x)=a[i] +
@@ -123,9 +122,8 @@ protected:
 
 public:
     KisCubicSpline() {}
-    KisCubicSpline(const QVector<T_point> &a)
-    {
-	createSpline(a);
+    KisCubicSpline(const QVector<T_point> &a) {
+        createSpline(a);
     }
 
     /**
@@ -134,74 +132,70 @@ public:
      *
      * @a - base points of the spline
      */
-    void createSpline(const QVector<T_point> &a)
-    {
-	int intervals = m_intervals = a.size()-1;
-	int i;
-	m_begin=a.first().x();
-	m_end=a.last().x();
+    void createSpline(const QVector<T_point> &a) {
+        int intervals = m_intervals = a.size() - 1;
+        int i;
+        m_begin = a.first().x();
+        m_end = a.last().x();
 
-	m_a.clear();
-	m_b.resize(intervals);
-	m_c.clear();
-	m_d.resize(intervals);
-	m_h.resize(intervals);
+        m_a.clear();
+        m_b.resize(intervals);
+        m_c.clear();
+        m_d.resize(intervals);
+        m_h.resize(intervals);
 
-	for(i=0; i<intervals; i++) {
-	    m_h[i]=a[i+1].x()-a[i].x();
-	    m_a.append(a[i].y());
-	}
-	m_a.append(a.last().y());
+        for (i = 0; i < intervals; i++) {
+            m_h[i] = a[i+1].x() - a[i].x();
+            m_a.append(a[i].y());
+        }
+        m_a.append(a.last().y());
 
 
-	QVector<T> tri_b;
-	QVector<T> tri_f;
-	QVector<T> tri_a; /* equals to @tri_c */
+        QVector<T> tri_b;
+        QVector<T> tri_f;
+        QVector<T> tri_a; /* equals to @tri_c */
 
-	for(i=0; i<intervals-1; i++) {
-	    tri_b.append(2.*(m_h[i]+m_h[i+1]));
+        for (i = 0; i < intervals - 1; i++) {
+            tri_b.append(2.*(m_h[i] + m_h[i+1]));
 
-	    tri_f.append(6.*( (m_a[i+2] - m_a[i+1])/m_h[i+1] - (m_a[i+1] - m_a[i])/m_h[i]));
-	}
-	for(i=1; i<intervals-1; i++)
-	    tri_a.append(m_h[i]);
+            tri_f.append(6.*((m_a[i+2] - m_a[i+1]) / m_h[i+1] - (m_a[i+1] - m_a[i]) / m_h[i]));
+        }
+        for (i = 1; i < intervals - 1; i++)
+            tri_a.append(m_h[i]);
 
-	if(intervals>1) {
-	    KisTridiagonalSystem<T> tridia;
-	    m_c = tridia.calculate(tri_a, tri_b, tri_a, tri_f);
-	}
-	m_c.prepend(0);
-	m_c.append(0);
+        if (intervals > 1) {
+            KisTridiagonalSystem<T> tridia;
+            m_c = tridia.calculate(tri_a, tri_b, tri_a, tri_f);
+        }
+        m_c.prepend(0);
+        m_c.append(0);
 
-	for(i=0; i<intervals; i++)
-	    m_d[i]= (m_c[i+1] - m_c[i]) / m_h[i];
+        for (i = 0; i < intervals; i++)
+            m_d[i] = (m_c[i+1] - m_c[i]) / m_h[i];
 
-	for(i=0; i<intervals; i++)
-	    m_b[i]= -0.5*(m_c[i] * m_h[i])  - (1/6.0)*(m_d[i] * m_h[i] * m_h[i]) + (m_a[i+1] - m_a[i])/m_h[i];
+        for (i = 0; i < intervals; i++)
+            m_b[i] = -0.5 * (m_c[i] * m_h[i])  - (1 / 6.0) * (m_d[i] * m_h[i] * m_h[i]) + (m_a[i+1] - m_a[i]) / m_h[i];
     }
 
     /**
      * Get value of precalculated spline in the point @x
      */
-    T getValue(T x) const
-    {
-	T x0;
-	int i = findRegion(x, x0);
-	/* TODO: check for asm equivalent */
-	return m_a[i] +
-	       m_b[i] * (x-x0) +
-	 0.5 * m_c[i] * (x-x0) * (x-x0) +
-      (1/6.0)* m_d[i] * (x-x0) * (x-x0) * (x-x0);
+    T getValue(T x) const {
+        T x0;
+        int i = findRegion(x, x0);
+        /* TODO: check for asm equivalent */
+        return m_a[i] +
+               m_b[i] *(x - x0) +
+               0.5 * m_c[i] *(x - x0) *(x - x0) +
+               (1 / 6.0)* m_d[i] *(x - x0) *(x - x0) *(x - x0);
     }
 
-    T begin() const
-    {
-	return m_begin;
+    T begin() const {
+        return m_begin;
     }
 
-    T end() const
-    {
-	return m_end;
+    T end() const {
+        return m_end;
     }
 
 protected:
@@ -211,25 +205,24 @@ protected:
      * @x0 - out parameter, containing beginning of the region
      * @return - index of the region
      */
-    int findRegion(T x, T &x0) const
-    {
-	int i;
-	x0=m_begin;
-	for(i=0; i<m_intervals; i++) {
-	    if(x>=x0 && x<x0+m_h[i])
-		return i;
-	    x0+=m_h[i];
-	}
-	if(x>=m_end) {
-	    x0-=m_h[m_intervals-1];
-	    return m_intervals-1;
-	}
+    int findRegion(T x, T &x0) const {
+        int i;
+        x0 = m_begin;
+        for (i = 0; i < m_intervals; i++) {
+            if (x >= x0 && x < x0 + m_h[i])
+                return i;
+            x0 += m_h[i];
+        }
+        if (x >= m_end) {
+            x0 -= m_h[m_intervals-1];
+            return m_intervals - 1;
+        }
 
-	qDebug("X value: %f\n", x);
-	qDebug("m_end  : %f\n", m_end);
-	Q_ASSERT_X(0, "findRegion", "X value is outside regions");
-	/* **never reached** */
-	return -1;
+        qDebug("X value: %f\n", x);
+        qDebug("m_end  : %f\n", m_end);
+        Q_ASSERT_X(0, "findRegion", "X value is outside regions");
+        /* **never reached** */
+        return -1;
     }
 };
 
@@ -237,7 +230,7 @@ protected:
 class KisCurveWidget;
 
 
-enum enumState{
+enum enumState {
     ST_NORMAL,
     ST_DRAG
 };
@@ -292,7 +285,7 @@ public:
      * State functions.
      * At the moment used only for dragging.
      */
-     enumState m_state;
+    enumState m_state;
 
     inline void setState(enumState st);
     inline enumState state() const;
@@ -359,7 +352,7 @@ public:
 
 KisCurveWidget::Private::Private(KisCurveWidget *parent)
 {
-    m_curveWidget=parent;
+    m_curveWidget = parent;
 }
 
 KisCurveWidget::Private::~Private()
@@ -369,13 +362,13 @@ KisCurveWidget::Private::~Private()
 
 double KisCurveWidget::Private::io2sp(int x)
 {
-    int rangeLen = m_inOutMax-m_inOutMin;
-    return double(x - m_inOutMin)/rangeLen;
+    int rangeLen = m_inOutMax - m_inOutMin;
+    return double(x - m_inOutMin) / rangeLen;
 }
 
 int KisCurveWidget::Private::sp2io(double x)
 {
-    int rangeLen = m_inOutMax-m_inOutMin;
+    int rangeLen = m_inOutMax - m_inOutMin;
     return int(x*rangeLen + 0.5) + m_inOutMin;
 }
 
@@ -383,13 +376,13 @@ int KisCurveWidget::Private::sp2io(double x)
 bool KisCurveWidget::Private::jumpOverExistingPoints(QPointF &pt, int skipIndex)
 {
     foreach(const QPointF &it, m_points) {
-	if(m_points.indexOf(it)==skipIndex)
-	    continue;
-	if(fabs(it.x()-pt.x()) < POINT_AREA)
-	    pt.rx() = pt.x()>=it.x() ?
-		      it.x()+POINT_AREA : it.x()-POINT_AREA;
+        if (m_points.indexOf(it) == skipIndex)
+            continue;
+        if (fabs(it.x() - pt.x()) < POINT_AREA)
+            pt.rx() = pt.x() >= it.x() ?
+                      it.x() + POINT_AREA : it.x() - POINT_AREA;
     }
-    return (pt.x()>=0 && pt.x()<=1.);
+    return (pt.x() >= 0 && pt.x() <= 1.);
 }
 
 int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHeight) const
@@ -400,9 +393,9 @@ int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHe
 
     foreach(const QPointF & point, m_points) {
         double distanceSquared = (pt.x() - point.x()) *
-	                         (pt.x() - point.x()) +
-      	                         (pt.y() - point.y()) *
-	                         (pt.y() - point.y());
+                                 (pt.x() - point.x()) +
+                                 (pt.y() - point.y()) *
+                                 (pt.y() - point.y());
 
         if (distanceSquared < nearestDistanceSquared) {
             nearestIndex = i;
@@ -412,8 +405,8 @@ int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHe
     }
 
     if (nearestIndex >= 0) {
-      if (fabs(pt.x() - m_points[nearestIndex].x()) * (wWidth-1) < 5 &&
-	  fabs(pt.y() - m_points[nearestIndex].y()) * (wHeight-1) < 5) {
+        if (fabs(pt.x() - m_points[nearestIndex].x()) *(wWidth - 1) < 5 &&
+                fabs(pt.y() - m_points[nearestIndex].y()) *(wHeight - 1) < 5) {
             return nearestIndex;
         }
     }
@@ -425,9 +418,9 @@ int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHe
 double KisCurveWidget::Private::checkBounds(const KisCubicSpline<QPointF, double> &spline, double x)
 {
     double y;
-    x=bounds(x, spline.begin(), spline.end());
-    y=spline.getValue(x);
-    y=bounds(y, 0., 1.);
+    x = bounds(x, spline.begin(), spline.end());
+    y = spline.getValue(x);
+    y = bounds(y, 0., 1.);
     return y;
 }
 
@@ -459,33 +452,32 @@ void KisCurveWidget::Private::drawGrid(QPainter &p, int wWidth, int wHeight)
 
 void KisCurveWidget::Private::syncIOControls()
 {
-    if(!m_intIn || !m_intOut)
-	return;
+    if (!m_intIn || !m_intOut)
+        return;
 
-    bool somethingSelected=(m_grab_point_index>=0);
+    bool somethingSelected = (m_grab_point_index >= 0);
 
     m_intIn->setEnabled(somethingSelected);
     m_intOut->setEnabled(somethingSelected);
 
-    if(m_grab_point_index>=0) {
-	m_intIn->blockSignals(true);
-	m_intOut->blockSignals(true);
+    if (m_grab_point_index >= 0) {
+        m_intIn->blockSignals(true);
+        m_intOut->blockSignals(true);
 
-	m_intIn->setValue(sp2io(m_points[m_grab_point_index].x()));
-	m_intOut->setValue(sp2io(m_points[m_grab_point_index].y()));
+        m_intIn->setValue(sp2io(m_points[m_grab_point_index].x()));
+        m_intOut->setValue(sp2io(m_points[m_grab_point_index].y()));
 
-	m_intIn->blockSignals(false);
-	m_intOut->blockSignals(false);
-    }
-    else {
-	/*FIXME: Ideally, these controls should hide away now */
+        m_intIn->blockSignals(false);
+        m_intOut->blockSignals(false);
+    } else {
+        /*FIXME: Ideally, these controls should hide away now */
     }
 }
 
 void KisCurveWidget::Private::setCurveModified()
 {
     syncIOControls();
-    m_splineDirty=true;
+    m_splineDirty = true;
     m_curveWidget->update();
     m_curveWidget->emit modified();
 }
@@ -497,7 +489,7 @@ void KisCurveWidget::Private::setCurveRepaint()
 
 void KisCurveWidget::Private::setState(enumState st)
 {
-    m_state=st;
+    m_state = st;
 }
 
 

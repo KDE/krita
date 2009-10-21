@@ -18,7 +18,7 @@
  *  along with this program; if not, write to the Free Software
  */
 
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <kcmdlineargs.h>
 #include <KoApplication.h>
 #include <krita_export.h>
@@ -33,7 +33,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #endif
 
     int state;
-    KAboutData * aboutData=newKritaAboutData();
+    KAboutData * aboutData = newKritaAboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 
@@ -46,9 +46,9 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     if (!app.start())
         return 1;
 
-    state=app.exec();
+    state = app.exec();
 
-    delete (aboutData);
+    delete(aboutData);
 
     return state;
 }

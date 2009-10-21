@@ -32,24 +32,24 @@ KisTriangleColorSelectorDock::KisTriangleColorSelectorDock() : QDockWidget(i18n(
     connect(m_colorSelector, SIGNAL(colorChanged(const QColor&)), this, SLOT(colorChangedProxy(const QColor&)));
 }
 
-void KisTriangleColorSelectorDock::setCanvas( KoCanvasBase * canvas )
+void KisTriangleColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 {
     m_canvas = canvas;
-    connect( m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
-             this, SLOT(resourceChanged(int, const QVariant&)));
+    connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+            this, SLOT(resourceChanged(int, const QVariant&)));
     m_colorSelector->setQColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
 }
 
 
 void KisTriangleColorSelectorDock::colorChangedProxy(const QColor& c)
 {
-    if(m_canvas)
+    if (m_canvas)
         m_canvas->resourceProvider()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
 }
 
 void KisTriangleColorSelectorDock::resourceChanged(int key, const QVariant& v)
 {
-    if(key == KoCanvasResource::ForegroundColor)
+    if (key == KoCanvasResource::ForegroundColor)
         m_colorSelector->setQColor(v.value<KoColor>().toQColor());
 }
 

@@ -86,7 +86,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     d->cursor = cursor;
     m_mode = XOR_MODE;
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotSelectCursorStyle()) );
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotSelectCursorStyle()));
 
 }
 
@@ -360,59 +360,57 @@ QWidget* KisTool::optionWidget()
 
 void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path)
 {
-    switch (m_mode){
-        case XOR_MODE:
-        {
-            painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-            painter->setPen(QColor(128,255,128));
-            painter->drawPath(path);
-            break;
-        }
-        case BW_MODE:
-        {
-            QPen pen = painter->pen();
-            pen.setWidth(3);
-            pen.setColor( QColor(0,0,0,100) );
-            painter->setPen(pen);
-            painter->drawPath(path);
-            pen.setWidth(1);
-            pen.setColor(Qt::white);
-            painter->setPen(pen);
-            painter->drawPath(path);
-            break;
-        }
-        default:
-            break;
+    switch (m_mode) {
+    case XOR_MODE: {
+        painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
+        painter->setPen(QColor(128, 255, 128));
+        painter->drawPath(path);
+        break;
+    }
+    case BW_MODE: {
+        QPen pen = painter->pen();
+        pen.setWidth(3);
+        pen.setColor(QColor(0, 0, 0, 100));
+        painter->setPen(pen);
+        painter->drawPath(path);
+        pen.setWidth(1);
+        pen.setColor(Qt::white);
+        painter->setPen(pen);
+        painter->drawPath(path);
+        break;
+    }
+    default:
+        break;
     }
 }
 
 
 void KisTool::slotSelectCursorStyle()
 {
-        KisConfig cfg;
-        switch(cfg.cursorStyle()) {
-            case CURSOR_STYLE_TOOLICON:
-                useCursor(d->cursor, true);
-                break;
-            case CURSOR_STYLE_CROSSHAIR:
-                useCursor(KisCursor::crossCursor(), true);
-                break;
-            case CURSOR_STYLE_POINTER:
-                useCursor(KisCursor::upArrowCursor(), true);
-                break;
-            case CURSOR_STYLE_NO_CURSOR:
-                useCursor(KisCursor::blankCursor(), true);
-                break;
+    KisConfig cfg;
+    switch (cfg.cursorStyle()) {
+    case CURSOR_STYLE_TOOLICON:
+        useCursor(d->cursor, true);
+        break;
+    case CURSOR_STYLE_CROSSHAIR:
+        useCursor(KisCursor::crossCursor(), true);
+        break;
+    case CURSOR_STYLE_POINTER:
+        useCursor(KisCursor::upArrowCursor(), true);
+        break;
+    case CURSOR_STYLE_NO_CURSOR:
+        useCursor(KisCursor::blankCursor(), true);
+        break;
 #if defined(HAVE_OPENGL)
-            case CURSOR_STYLE_3D_MODEL:
-                useCursor(d->cursor, true);
-                break;
-#endif          
-            case CURSOR_STYLE_OUTLINE:
-            default:
-                // use tool cursor as default, if the tool support outline, it will set the cursor to blank and show outline
-                useCursor(d->cursor, true);
-        }
+    case CURSOR_STYLE_3D_MODEL:
+        useCursor(d->cursor, true);
+        break;
+#endif
+    case CURSOR_STYLE_OUTLINE:
+    default:
+        // use tool cursor as default, if the tool support outline, it will set the cursor to blank and show outline
+        useCursor(d->cursor, true);
+    }
 }
 
 

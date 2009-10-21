@@ -35,15 +35,15 @@ class KRITAUI_EXPORT KisNodeCommandsAdapter : public QObject
     Q_OBJECT
 
 public:
-    KisNodeCommandsAdapter( KisView2 * view );
+    KisNodeCommandsAdapter(KisView2 * view);
     virtual ~KisNodeCommandsAdapter();
 public:
     void beginMacro(const QString& macroName);
     void endMacro();
-    void addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis );
-    void addNode(KisNodeSP node, KisNodeSP parent, quint32 index );
-    void moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis );
-    void moveNode(KisNodeSP node, KisNodeSP parent, quint32 indexaboveThis );
+    void addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    void addNode(KisNodeSP node, KisNodeSP parent, quint32 index);
+    void moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    void moveNode(KisNodeSP node, KisNodeSP parent, quint32 indexaboveThis);
     void removeNode(KisNodeSP node);
     void lower(KisNodeSP node);
     void raise(KisNodeSP node);

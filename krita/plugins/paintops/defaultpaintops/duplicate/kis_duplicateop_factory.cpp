@@ -42,8 +42,8 @@ KisDuplicateOpFactory::~KisDuplicateOpFactory()
 
 
 KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettingsSP settings,
-                                         KisPainter * painter,
-                                         KisImageWSP image)
+        KisPainter * painter,
+        KisImageWSP image)
 {
     Q_UNUSED(image);
 
@@ -68,5 +68,5 @@ KisPaintOpSettingsSP KisDuplicateOpFactory::settings(KisImageWSP image)
 
 KisPaintOpSettingsWidget* KisDuplicateOpFactory::createSettingsWidget(QWidget* parent)
 {
-    return new KisDuplicateOpSettingsWidget( parent );
+    return new KisDuplicateOpSettingsWidget(parent);
 }

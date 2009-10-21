@@ -55,5 +55,5 @@ KisPaintOpSettingsSP KisCurvePaintOpFactory::settings(KisImageWSP image)
 
 KisPaintOpSettingsWidget* KisCurvePaintOpFactory::createSettingsWidget(QWidget* parent)
 {
-    return new KisCurvePaintOpSettingsWidget( parent );
+    return new KisCurvePaintOpSettingsWidget(parent);
 }

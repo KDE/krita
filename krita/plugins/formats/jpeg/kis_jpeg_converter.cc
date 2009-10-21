@@ -27,8 +27,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-extern "C"
-{
+extern "C" {
 #include <iccjpeg.h>
 }
 
@@ -193,7 +192,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
-        transform = KoColorSpaceRegistry::instance()->colorSpace(csName, profile)->createColorConverter( cs );
+        transform = KoColorSpaceRegistry::instance()->colorSpace(csName, profile)->createColorConverter(cs);
     }
 
     // Creating the KisImageWSP
@@ -219,7 +218,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             while (!it.isDone()) {
                 quint8 *d = it.rawData();
                 d[0] = *(src++);
-                if (transform) transform->transform(d, d, 1 );
+                if (transform) transform->transform(d, d, 1);
                 d[1] = quint8_MAX;
                 ++it;
             }
@@ -230,7 +229,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                 d[2] = *(src++);
                 d[1] = *(src++);
                 d[0] = *(src++);
-                if (transform) transform->transform(d, d, 1 );
+                if (transform) transform->transform(d, d, 1);
                 d[3] = quint8_MAX;
                 ++it;
             }
@@ -242,7 +241,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                 d[1] = quint8_MAX - *(src++);
                 d[2] = quint8_MAX - *(src++);
                 d[3] = quint8_MAX - *(src++);
-                if (transform) transform->transform(d, d, 1 );
+                if (transform) transform->transform(d, d, 1);
                 d[4] = quint8_MAX;
                 ++it;
             }
@@ -277,7 +276,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
         Q_ASSERT(exifIO);
         QByteArray byteArray((const char*)marker->data + 6, marker->data_length - 6);
-	QBuffer buf(&byteArray);
+        QBuffer buf(&byteArray);
         exifIO->loadFrom(layer->metaData(), &buf);
         // Interpret orientation tag
         if (layer->metaData()->containsEntry("http://ns.adobe.com/tiff/1.0/", "Orientation")) {
@@ -554,7 +553,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             }
         }
         // Save XMP
-        if (options.xmp ) {
+        if (options.xmp) {
             dbgFile << "Trying to save XMP information";
             KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
             Q_ASSERT(xmpIO);

@@ -41,20 +41,21 @@ public:
     virtual KisFixedPaintDeviceSP image(const KoColorSpace*,
                                         double, double,
                                         const KisPaintInformation&,
-                                        double = 0, double = 0) const
-    {
+                                        double = 0, double = 0) const {
         return 0; // The autobrush does NOT support images!
     }
 
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-                              KisBrush::ColoringInformation* src,
-                              double scaleX, double scaleY, double angle,
-                              const KisPaintInformation& info = KisPaintInformation(),
-                              double subPixelX = 0, double subPixelY = 0) const;
+            KisBrush::ColoringInformation* src,
+            double scaleX, double scaleY, double angle,
+            const KisPaintInformation& info = KisPaintInformation(),
+            double subPixelX = 0, double subPixelY = 0) const;
 
 public:
 
-    bool load() { return false; }
+    bool load() {
+        return false;
+    }
 
     void toXML(QDomDocument& , QDomElement&) const;
 

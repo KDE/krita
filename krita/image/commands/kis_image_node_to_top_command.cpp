@@ -24,7 +24,7 @@
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
 
-KisImageNodeToTopCommand::KisImageNodeToTopCommand(KisImageWSP image, KisNodeSP node )
+KisImageNodeToTopCommand::KisImageNodeToTopCommand(KisImageWSP image, KisNodeSP node)
         : KisImageCommand(i18n("Lower"), image), m_node(node)
 {
     m_prevParent = m_node->parent();

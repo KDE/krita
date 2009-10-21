@@ -137,14 +137,14 @@ void KisShapeControllerTest::testRemoveShape()
     image->addNode(mask1.data(), layer3.data());
     QCOMPARE(shapeController.layerMapSize(), 6);
 #if 0
-    XXX: Is this really broken?
+XXX: Is this really broken ?
 
     image->removeNode(layer2);
-qDebug() << ">>>>>>>>>> " << shapeController.layerMapSize();
+    qDebug() << ">>>>>>>>>> " << shapeController.layerMapSize();
     QCOMPARE(shapeController.layerMapSize(), 2);
 
     image->removeNode(layer);
-qDebug() << ">>>>>>>>>> " << shapeController.layerMapSize();
+    qDebug() << ">>>>>>>>>> " << shapeController.layerMapSize();
     QCOMPARE(shapeController.layerMapSize(), 1);
 #endif
     shapeController.setImage(0);

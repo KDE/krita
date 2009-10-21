@@ -118,15 +118,15 @@ void KisGradientSliderWidget::mousePressEvent(QMouseEvent * e)
     segment = m_autogradientResource->segmentAt(t);
     if (segment != 0) {
         m_currentSegment = segment;
-        QRect leftHandle(qRound(m_currentSegment->startOffset() * (double)(width() - 2*MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 1)),
+        QRect leftHandle(qRound(m_currentSegment->startOffset() *(double)(width() - 2*MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 1)),
                          height() - HANDLE_SIZE,
                          HANDLE_SIZE - 1,
                          HANDLE_SIZE);
-        QRect middleHandle(qRound(m_currentSegment->middleOffset() * (double)(width() - 2*MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 2)),
+        QRect middleHandle(qRound(m_currentSegment->middleOffset() *(double)(width() - 2*MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 2)),
                            height() - HANDLE_SIZE - MARGIN,
                            HANDLE_SIZE - 1,
                            HANDLE_SIZE);
-        QRect rightHandle(qRound(m_currentSegment->endOffset() * (double)(width() - 2*MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 1)),
+        QRect rightHandle(qRound(m_currentSegment->endOffset() *(double)(width() - 2*MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 1)),
                           height() - HANDLE_SIZE,
                           HANDLE_SIZE - 1,
                           HANDLE_SIZE);

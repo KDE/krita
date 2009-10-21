@@ -237,10 +237,10 @@ void KisCanvas2::createQPainterCanvas()
     KisQPainterCanvas * canvasWidget = new KisQPainterCanvas(this, m_d->view);
     m_d->prescaledProjection = new KisPrescaledProjection();
     m_d->prescaledProjection->setViewConverter(m_d->viewConverter);
-    m_d->prescaledProjection->setMonitorProfile( monitorProfile() );
+    m_d->prescaledProjection->setMonitorProfile(monitorProfile());
     canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
 
-    connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&) ), this, SLOT(updateRulers()));
+    connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&)), this, SLOT(updateRulers()));
 
     setCanvasWidget(canvasWidget);
 }
@@ -252,11 +252,11 @@ void KisCanvas2::createOpenGLCanvas()
         // XXX: The image isn't done loading here!
         m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile);
         KisOpenGLCanvas2 * canvasWidget = new KisOpenGLCanvas2(this, m_d->view, m_d->openGLImageTextures);
-        setCanvasWidget( canvasWidget );
+        setCanvasWidget(canvasWidget);
         m_d->currentCanvasIsOpenGL = true;
         m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
 
-        connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&) ), this, SLOT(updateRulers()));
+        connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&)), this, SLOT(updateRulers()));
 
     } else {
         warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
@@ -268,7 +268,7 @@ void KisCanvas2::createOpenGLCanvas()
 void KisCanvas2::createCanvas()
 {
     KisConfig cfg;
-    slotSetDisplayProfile( KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()) );
+    slotSetDisplayProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
 
     if (cfg.useOpenGL()) {
 #ifdef HAVE_OPENGL
@@ -293,10 +293,10 @@ KisView2* KisCanvas2::view()
 QRect KisCanvas2::viewRectFromDoc(const QRectF & rc)
 {
     QRect viewRect = m_d->viewConverter->documentToView(rc).toAlignedRect();
-    viewRect = viewRect.translated(-m_d->documentOffset );
+    viewRect = viewRect.translated(-m_d->documentOffset);
     // comment out this line if zou want to see the preview outside of the canvas
     // viewRect = viewRect.intersected(QRect(0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height()));
-    viewRect.translate( documentOrigin() );
+    viewRect.translate(documentOrigin());
     return viewRect;
 }
 
@@ -311,7 +311,7 @@ void KisCanvas2::updateCanvasProjection(const QRect & rc)
 #endif
 
     QRect vRect = m_d->prescaledProjection->updateCanvasProjection(rc);
-    if(!vRect.isEmpty()) {
+    if (!vRect.isEmpty()) {
         vRect.translate(m_d->canvasWidget->documentOrigin());
         m_d->canvasWidget->widget()->update(vRect);
         //m_d->canvasWidget->widget()->update();

@@ -143,41 +143,40 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
     vQPointF points = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
 #if defined(HAVE_OPENGL)
-    if ( m_canvas->canvasController()->isCanvasOpenGL() ){
+    if (m_canvas->canvasController()->isCanvasOpenGL()) {
         QPointF begin, end;
 
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
-        glColor3f(0.501961,1.0, 0.501961);
+        glColor3f(0.501961, 1.0, 0.501961);
 
         glBegin(GL_LINE_LOOP);
         for (int i = 0; i < points.count() - 1; i++) {
-                begin = pixelToView(points[i]);
-                end = pixelToView(points[i + 1]);
+            begin = pixelToView(points[i]);
+            end = pixelToView(points[i + 1]);
 
-                glVertex2f( begin.x(),begin.y());
-                glVertex2f( end.x(), end.y() );
+            glVertex2f(begin.x(), begin.y());
+            glVertex2f(end.x(), end.y());
 
         }
         glEnd();
 
         glDisable(GL_COLOR_LOGIC_OP);
         glDisable(GL_LINE_SMOOTH);
-    }
-    else
+    } else
 #endif
 
 #ifdef INDEPENDENT_CANVAS
     {
         QPainterPath path;
         for (int i = 0; i < points.count() - 1; i++) {
-            path.moveTo( pixelToView(points[i]));
-            path.lineTo( pixelToView(points[i + 1]) );
+            path.moveTo(pixelToView(points[i]));
+            path.lineTo(pixelToView(points[i + 1]));
         }
-        path.moveTo( pixelToView(points[points.count() - 1]));
-        path.lineTo( pixelToView(points[0]));
-        paintToolOutline(&gc,path);
+        path.moveTo(pixelToView(points[points.count() - 1]));
+        path.lineTo(pixelToView(points[0]));
+        paintToolOutline(&gc, path);
     }
 #else
     {
@@ -185,9 +184,9 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
         gc.setPen(pen);
 
         for (int i = 0; i < points.count() - 1; i++) {
-            gc.drawLine( pixelToView(points[i]), pixelToView(points[i + 1]) );
+            gc.drawLine(pixelToView(points[i]), pixelToView(points[i + 1]));
         }
-        gc.drawLine( pixelToView(points[points.count() - 1]), pixelToView(points[0]));
+        gc.drawLine(pixelToView(points[points.count() - 1]), pixelToView(points[0]));
     }
 #endif
 
@@ -212,12 +211,12 @@ vQPointF KisToolStar::starCoordinates(int N, double mx, double my, double x, dou
     angle = -atan2((x - mx), (y - my));
 
     //set outer edges
-    for (n = 0;n < N;n++) {
+    for (n = 0; n < N; n++) {
         starCoordinatesArray[2*n] = QPointF(mx + R * cos(n * 2.0 * M_PI / N + angle), my + R * sin(n * 2.0 * M_PI / N + angle));
     }
 
     //set inner edges
-    for (n = 0;n < N;n++) {
+    for (n = 0; n < N; n++) {
         starCoordinatesArray[2*n+1] = QPointF(mx + r * cos((n + 0.5) * 2.0 * M_PI / N + angle), my + r * sin((n + 0.5) * 2.0 * M_PI / N + angle));
     }
 

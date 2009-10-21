@@ -72,14 +72,13 @@ public slots:
     void slotSetAntiAliasThreshold(double);
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-    void slotSetPreviewOpacity(qreal value,bool final);
+    void slotSetPreviewOpacity(qreal value, bool final);
     void slotConfigChanged();
 #endif
 
 private slots:
 
-    void areaDone(const QRect & rc)
-    {
+    void areaDone(const QRect & rc) {
         currentNode()->setDirty(rc); // Starts computing the projection for the area we've done.
 
     }

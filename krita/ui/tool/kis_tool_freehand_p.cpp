@@ -33,7 +33,7 @@ FreehandPaintJob::FreehandPaintJob(KisToolFreehand* toolFreeHand,
                                    const FreehandPaintJob* previousPaintJob) :
         m_toolFreeHand(toolFreeHand),
         m_painter(painter),
-        m_dragDist( -1.0 ),
+        m_dragDist(-1.0),
         m_pi1(pi1),
         m_pi2(pi2),
         m_previousPaintJob(previousPaintJob)

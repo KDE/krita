@@ -27,65 +27,71 @@
 
 #include <tiffio.h>
 
-class KisBufferStreamBase {
-    public:
-       KisBufferStreamBase( uint16 depth ) : m_depth(depth) {}
-        virtual uint32 nextValue() =0;
-        virtual void restart() =0;
-        virtual void moveToLine(uint32 lineNumber) =0;
-        virtual ~KisBufferStreamBase(){}
-    protected:
-        uint16 m_depth;
+class KisBufferStreamBase
+{
+public:
+    KisBufferStreamBase(uint16 depth) : m_depth(depth) {}
+    virtual uint32 nextValue() = 0;
+    virtual void restart() = 0;
+    virtual void moveToLine(uint32 lineNumber) = 0;
+    virtual ~KisBufferStreamBase() {}
+protected:
+    uint16 m_depth;
 };
 
-class KisBufferStreamContigBase : public KisBufferStreamBase {
-    public:
-        KisBufferStreamContigBase( uint8* src, uint16 depth, uint32 lineSize );
-        virtual void restart();
-        virtual void moveToLine(uint32 lineNumber);
-        virtual ~KisBufferStreamContigBase() {}
-    protected:
-        uint8* m_src;
-        uint8* m_srcit;
-        uint8 m_posinc;
-        uint32 m_lineSize;
+class KisBufferStreamContigBase : public KisBufferStreamBase
+{
+public:
+    KisBufferStreamContigBase(uint8* src, uint16 depth, uint32 lineSize);
+    virtual void restart();
+    virtual void moveToLine(uint32 lineNumber);
+    virtual ~KisBufferStreamContigBase() {}
+protected:
+    uint8* m_src;
+    uint8* m_srcit;
+    uint8 m_posinc;
+    uint32 m_lineSize;
 };
 
-class KisBufferStreamContigBelow16 : public KisBufferStreamContigBase {
-    public:
-        KisBufferStreamContigBelow16( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
-    public:
-        virtual ~KisBufferStreamContigBelow16() {}
-        virtual uint32 nextValue();
+class KisBufferStreamContigBelow16 : public KisBufferStreamContigBase
+{
+public:
+    KisBufferStreamContigBelow16(uint8* src, uint16 depth, uint32 lineSize) : KisBufferStreamContigBase(src, depth, lineSize) { }
+public:
+    virtual ~KisBufferStreamContigBelow16() {}
+    virtual uint32 nextValue();
 };
 
-class KisBufferStreamContigBelow32 : public KisBufferStreamContigBase {
-    public:
-        KisBufferStreamContigBelow32( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
-    public:
-        virtual ~KisBufferStreamContigBelow32() {}
-        virtual uint32 nextValue();
+class KisBufferStreamContigBelow32 : public KisBufferStreamContigBase
+{
+public:
+    KisBufferStreamContigBelow32(uint8* src, uint16 depth, uint32 lineSize) : KisBufferStreamContigBase(src, depth, lineSize) { }
+public:
+    virtual ~KisBufferStreamContigBelow32() {}
+    virtual uint32 nextValue();
 };
 
-class KisBufferStreamContigAbove32 : public KisBufferStreamContigBase {
-    public:
-        KisBufferStreamContigAbove32( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
-    public:
-        virtual ~KisBufferStreamContigAbove32(){}
-        virtual uint32 nextValue();
+class KisBufferStreamContigAbove32 : public KisBufferStreamContigBase
+{
+public:
+    KisBufferStreamContigAbove32(uint8* src, uint16 depth, uint32 lineSize) : KisBufferStreamContigBase(src, depth, lineSize) { }
+public:
+    virtual ~KisBufferStreamContigAbove32() {}
+    virtual uint32 nextValue();
 };
 
 
-class KisBufferStreamSeperate : public KisBufferStreamBase {
-    public:
-        KisBufferStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth, uint32* lineSize);
-        virtual ~KisBufferStreamSeperate();
-        virtual uint32 nextValue();
-        virtual void restart();
-        virtual void moveToLine(uint32 lineNumber);
-    private:
-        KisBufferStreamContigBase** streams;
-        uint8 m_current_sample, m_nb_samples;
+class KisBufferStreamSeperate : public KisBufferStreamBase
+{
+public:
+    KisBufferStreamSeperate(uint8** srcs, uint8 nb_samples , uint16 depth, uint32* lineSize);
+    virtual ~KisBufferStreamSeperate();
+    virtual uint32 nextValue();
+    virtual void restart();
+    virtual void moveToLine(uint32 lineNumber);
+private:
+    KisBufferStreamContigBase** streams;
+    uint8 m_current_sample, m_nb_samples;
 };
 
 #endif

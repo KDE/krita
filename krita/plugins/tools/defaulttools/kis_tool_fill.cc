@@ -52,7 +52,7 @@
 #include <kis_cursor.h>
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
-    : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
+        : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
 {
     setObjectName("tool_fill");
     m_painter = 0;
@@ -77,7 +77,7 @@ bool KisToolFill::flood(int startX, int startY)
 
     KisCanvas2* canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
     KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
-    updater->start( 100, i18n("Flood Fill") );
+    updater->start(100, i18n("Flood Fill"));
 
     QRegion dirty;
 

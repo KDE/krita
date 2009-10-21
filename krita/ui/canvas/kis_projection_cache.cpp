@@ -27,12 +27,12 @@
 
 
 KisProjectionCache::KisProjectionCache()
-    : m_cacheKisImageAsQImage( true )
-    , m_monitorProfile( 0 )
+        : m_cacheKisImageAsQImage(true)
+        , m_monitorProfile(0)
 {
 }
 
-void KisProjectionCache::setImage( KisImageWSP image )
+void KisProjectionCache::setImage(KisImageWSP image)
 {
     m_image = image;
 }
@@ -41,40 +41,38 @@ void KisProjectionCache::setImage( KisImageWSP image )
 // and indirect painting support
 #define ALWAYS_CACHE_AS_QIMAGE
 
-void KisProjectionCache::setCacheKisImageAsQImage( bool toggle )
+void KisProjectionCache::setCacheKisImageAsQImage(bool toggle)
 {
 #ifdef ALWAYS_CACHE_AS_QIMAGE
     toggle = true;
 #endif
-    if ( toggle != m_cacheKisImageAsQImage ) {
-        if ( toggle ) {
+    if (toggle != m_cacheKisImageAsQImage) {
+        if (toggle) {
             m_cacheKisImageAsQImage = true;
-            setDirty( QRect( 0, 0, m_imageSize.width(), m_imageSize.height() ) );
-        }
-        else {
+            setDirty(QRect(0, 0, m_imageSize.width(), m_imageSize.height()));
+        } else {
             m_cacheKisImageAsQImage = false;
             m_unscaledCache = QImage();
         }
     }
 }
 
-void KisProjectionCache::setImageSize( qint32 w,  qint32 h )
+void KisProjectionCache::setImageSize(qint32 w,  qint32 h)
 {
     dbgRender << "KisProjectionCache::setImageSize Setting image size from " << m_imageSize << " to " << w << ", " << h;
 
 
     m_imageSize = QSize(w, h);
 
-    if ( !m_cacheKisImageAsQImage ) return;
+    if (!m_cacheKisImageAsQImage) return;
 
 #ifndef ALWAYS_CACHE_AS_QIMAGE
     KisConfig cfg;
     quint32 maxCachedImageSize = cfg.maxCachedImageSize();
 
-    if ((( w * h ) / 1000000 ) > maxCachedImageSize ) {
-        setCacheKisImageAsQImage( false );
-    }
-    else {
+    if (((w * h) / 1000000) > maxCachedImageSize) {
+        setCacheKisImageAsQImage(false);
+    } else {
 #endif
 
         m_unscaledCache = QImage(w, h, QImage::Format_ARGB32);
@@ -85,7 +83,7 @@ void KisProjectionCache::setImageSize( qint32 w,  qint32 h )
 #endif
 }
 
-void KisProjectionCache::setMonitorProfile( const KoColorProfile* monitorProfile )
+void KisProjectionCache::setMonitorProfile(const KoColorProfile* monitorProfile)
 {
     m_monitorProfile = monitorProfile;
 }
@@ -94,8 +92,8 @@ void KisProjectionCache::setDirty(const QRect & rc)
 {
 
 
-    if ( !m_image ) return;
-    if ( !m_cacheKisImageAsQImage ) return;
+    if (!m_image) return;
+    if (!m_cacheKisImageAsQImage) return;
 
     if (m_unscaledCache.isNull()) {
 
@@ -107,7 +105,7 @@ void KisProjectionCache::setDirty(const QRect & rc)
     p.setCompositionMode(QPainter::CompositionMode_Source);
 
     QImage updateImage = m_image->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
-                                                  m_monitorProfile);
+                         m_monitorProfile);
 
 //     if (m_showMask && m_drawMaskVisualisationOnUnscaledCanvasCache) {
 //
@@ -137,8 +135,8 @@ void KisProjectionCache::setDirty(const QRect & rc)
 }
 #include <QtDebug>
 KisImagePatch KisProjectionCache::getNearestPatch(qreal scaleX, qreal scaleY,
-                                                  const QRect& requestedRect,
-                                                  qint32 borderWidth)
+        const QRect& requestedRect,
+        qint32 borderWidth)
 {
     Q_UNUSED(scaleX);
     Q_UNUSED(scaleY);
@@ -148,34 +146,33 @@ KisImagePatch KisProjectionCache::getNearestPatch(qreal scaleX, qreal scaleY,
     patch.m_scaleY = 1.;
 
     patch.m_interestRect = toFloatRectWorkaround(
-        QRect(borderWidth, borderWidth,
-              requestedRect.width(),
-              requestedRect.height())
-        );
+                               QRect(borderWidth, borderWidth,
+                                     requestedRect.width(),
+                                     requestedRect.height())
+                           );
 
     QRect adjustedRect = requestedRect.adjusted(-borderWidth, -borderWidth,
-                                                borderWidth, borderWidth);
+                         borderWidth, borderWidth);
     patch.m_patchRect = adjustedRect;
 
     if (m_cacheKisImageAsQImage) {
         patch.m_image = m_unscaledCache.copy(patch.m_patchRect);
-    }
-    else {
+    } else {
         qint32 x, y, w, h;
         patch.m_patchRect.getRect(&x, &y, &w, &h);
 
         patch.m_image = m_image->convertToQImage(x, y, w, h,
-                                                 m_monitorProfile);
+                        m_monitorProfile);
     }
 
     return patch;
 }
 
 void KisProjectionCache::drawFromOriginalImage(QPainter& gc,
-                                               const QRect& imageRect,
-                                               const QRectF& viewportRect,
-                                               qint32 borderWidth,
-                                               QPainter::RenderHints renderHints)
+        const QRect& imageRect,
+        const QRectF& viewportRect,
+        qint32 borderWidth,
+        QPainter::RenderHints renderHints)
 {
     if (m_cacheKisImageAsQImage) {
         gc.save();
@@ -183,8 +180,7 @@ void KisProjectionCache::drawFromOriginalImage(QPainter& gc,
         gc.setRenderHints(renderHints, true);
         gc.drawImage(viewportRect, m_unscaledCache, imageRect);
         gc.restore();
-    }
-    else {
+    } else {
         KisImagePatch patch = getNearestPatch(1, 1, imageRect, borderWidth);
         patch.drawMe(gc, viewportRect, renderHints);
     }

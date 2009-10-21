@@ -25,12 +25,13 @@
 /**
  * This class represent a path to access a node starting from an other node.
  */
-class KRITAIMAGE_EXPORT KisNodeQueryPath {
+class KRITAIMAGE_EXPORT KisNodeQueryPath
+{
     KisNodeQueryPath();
 public:
     ~KisNodeQueryPath();
-    KisNodeQueryPath(const KisNodeQueryPath& );
-    KisNodeQueryPath& operator=(const KisNodeQueryPath& );
+    KisNodeQueryPath(const KisNodeQueryPath&);
+    KisNodeQueryPath& operator=(const KisNodeQueryPath&);
     QList<KisNodeSP> queryNodes(KisImageWSP image, KisNodeSP currentNode) const;
     bool isRelative() const;
     // Use "///" style because of the needed "/*"

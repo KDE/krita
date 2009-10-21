@@ -34,11 +34,11 @@ public:
     virtual ~KisSumiPaintOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
-    
-/*    void setConfiguration( const KisPropertiesConfiguration * config);
-    void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
-*/
+    /*    void setConfiguration( const KisPropertiesConfiguration * config);
+        void writeConfiguration( KisPropertiesConfiguration *config ) const;
+
+    */
 
 public:
     KisSumiShapeOption * m_sumiShapeOption;

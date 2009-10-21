@@ -57,8 +57,7 @@ void KisDynamicProgramsEditor::setCurrentProgram(const QString& text)
     dbgPlugins << "program changed to" << text;
     delete m_currentEditor;
     m_currentProgram = static_cast<KisDynamicProgram*>(m_bookmarksManager->load(text));
-    if(m_currentProgram)
-    {
+    if (m_currentProgram) {
         m_currentEditor = m_currentProgram->createEditor(m_dynamicProgramsEditor->frame);
         m_frameVBoxLayout->addWidget(m_currentEditor);
         connect(m_currentProgram, SIGNAL(programChanged()), SLOT(saveCurrentProgram()));
@@ -80,7 +79,7 @@ void KisDynamicProgramsEditor::addProgram()
 
 void KisDynamicProgramsEditor::deleteProgram()
 {
-    m_bookmarksModel->deleteIndex(m_bookmarksModel->index(m_dynamicProgramsEditor->comboBoxPrograms->currentIndex(),0));
+    m_bookmarksModel->deleteIndex(m_bookmarksModel->index(m_dynamicProgramsEditor->comboBoxPrograms->currentIndex(), 0));
 }
 
 void KisDynamicProgramsEditor::saveCurrentProgram()

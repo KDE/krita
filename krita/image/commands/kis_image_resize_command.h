@@ -47,4 +47,4 @@ private:
     QSize m_after;
 };
 
-#endif 
+#endif

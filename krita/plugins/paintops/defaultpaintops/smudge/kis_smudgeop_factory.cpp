@@ -42,8 +42,8 @@ KisSmudgeOpFactory::~KisSmudgeOpFactory()
 
 
 KisPaintOp * KisSmudgeOpFactory::createOp(const KisPaintOpSettingsSP settings,
-                                         KisPainter * painter,
-                                         KisImageWSP image)
+        KisPainter * painter,
+        KisImageWSP image)
 {
     Q_UNUSED(image);
 
@@ -68,5 +68,5 @@ KisPaintOpSettingsSP KisSmudgeOpFactory::settings(KisImageWSP image)
 
 KisPaintOpSettingsWidget* KisSmudgeOpFactory::createSettingsWidget(QWidget* parent)
 {
-    return new KisSmudgeOpSettingsWidget( parent );
+    return new KisSmudgeOpSettingsWidget(parent);
 }

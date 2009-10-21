@@ -90,9 +90,9 @@ void tmo_reinhard05(pfs::Array2D* R, pfs::Array2D* G, pfs::Array2D* B,
             if (l != 0.0f) {
                 for (int c = 0 ; c < 3 ; c++) {
                     switch (c) {
-                    case 0: col = (*R)(x,y); break;
-                    case 1: col = (*G)(x,y); break;
-                    case 2: col = (*B)(x,y); break;
+                    case 0: col = (*R)(x, y); break;
+                    case 1: col = (*G)(x, y); break;
+                    case 2: col = (*B)(x, y); break;
                     };
 
                     if (col != 0.0f) {
@@ -110,9 +110,9 @@ void tmo_reinhard05(pfs::Array2D* R, pfs::Array2D* G, pfs::Array2D* B,
                     min_col = (col < min_col) ? col : min_col;
 
                     switch (c) {
-                    case 0: (*R)(x,y) = col; break;
-                    case 1: (*G)(x,y) = col; break;
-                    case 2: (*B)(x,y) = col; break;
+                    case 0: (*R)(x, y) = col; break;
+                    case 1: (*G)(x, y) = col; break;
+                    case 2: (*B)(x, y) = col; break;
                     };
                 }
             }

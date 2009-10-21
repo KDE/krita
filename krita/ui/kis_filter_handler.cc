@@ -57,8 +57,7 @@ struct KisFilterHandler::Private {
             : view(0)
             , manager(0)
             , lastConfiguration(0)
-            , updater( 0 )
-    {
+            , updater(0) {
     }
 
     ~Private() {
@@ -148,7 +147,7 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
     }
     m_d->node = layer;
     m_d->currentConfiguration = config;
-    m_d->locker = new KisSystemLocker( layer );
+    m_d->locker = new KisSystemLocker(layer);
     m_d->currentFilter = KisFilterRegistry::instance()->value(config->name());
     m_d->dev = layer->paintDevice();
 
@@ -168,7 +167,7 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
     m_d->updater = m_d->view->createProgressUpdater();
 
     // also deletes all old updaters
-    m_d->updater->start( 100, m_d->currentFilter->name() );
+    m_d->updater->start(100, m_d->currentFilter->name());
 
     if (m_d->view->image()->undo()) {
         m_d->cmd = new KisTransaction(m_d->currentFilter->name(), m_d->dev);
@@ -212,8 +211,7 @@ void KisFilterHandler::filterDone(bool interrupted)
             delete m_d->cmd;
         }
 
-    }
-    else  {
+    } else  {
         if (m_d->cmd) {
             m_d->view->document()->addCommand(m_d->cmd);
         }
@@ -227,8 +225,8 @@ void KisFilterHandler::filterDone(bool interrupted)
         m_d->lastConfiguration = m_d->currentConfiguration;
         m_d->manager->setLastFilterHandler(this);
         m_d->view->image()->actionRecorder()->addAction(KisRecordedFilterAction(m_d->currentFilter->name(),
-                                                                                KisNodeQueryPath::absolutePath(m_d->node),
-                                                                                m_d->currentFilter, m_d->currentConfiguration));
+                KisNodeQueryPath::absolutePath(m_d->node),
+                m_d->currentFilter, m_d->currentConfiguration));
     }
     delete m_d->locker;
     delete m_d->applicator;

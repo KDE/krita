@@ -211,7 +211,8 @@ QRect KisPaintDevice::extent() const
     return QRect(x, y, w, h);
 }
 
-void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const {
+void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
+{
     QRect rc = exactBounds();
     x = rc.x();
     y = rc.y();
@@ -230,7 +231,7 @@ QRect KisPaintDevice::exactBounds() const
     y = boundY2 = rc.y();
     w = boundW2 = rc.width();
     h = boundH2 = rc.height();
-    
+
     const quint8* defaultPixel = m_datamanager->defaultPixel();
     bool found = false;
     {
@@ -410,10 +411,10 @@ QUndoCommand* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoCo
     const KoColorSpace *oldColorSpace = m_d->colorSpace;
 
     KisPaintDeviceConvertTypeCommand* cmd = new KisPaintDeviceConvertTypeCommand(this,
-                                                                                 oldData,
-                                                                                 oldColorSpace,
-                                                                                 dst.m_datamanager,
-                                                                                 dstColorSpace);
+            oldData,
+            oldColorSpace,
+            dst.m_datamanager,
+            dstColorSpace);
 
     setDataManager(dst.m_datamanager, dstColorSpace);
 
@@ -457,8 +458,8 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
     } else {
         quint8 * dstData = new quint8[img.width() * img.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
-            ->colorSpace("RGBA", srcProfileName)
-            ->convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
+        ->colorSpace("RGBA", srcProfileName)
+        ->convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
 
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
         delete[] dstData;
@@ -507,7 +508,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     //      This copies potentially a lot of data.
     readBytes(data, x1, y1, w, h);
     QImage image = colorSpace()->convertToQImage(data, w, h, dstProfile,
-                                                 KoColorConversionTransformation::IntentPerceptual);
+                   KoColorConversionTransformation::IntentPerceptual);
     delete[] data;
 
     return image;
@@ -546,8 +547,8 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, const
         for (qint32 x = 0; x < w; ++x) {
             qint32 iX = srcX0 + (x * srcWidth) / w;
             iter.moveTo(iX, iY);
-            dstIter.moveTo(x,  y );
-            memcpy( dstIter.rawData(), iter.rawData(), m_d->pixelSize );
+            dstIter.moveTo(x,  y);
+            memcpy(dstIter.rawData(), iter.rawData(), m_d->pixelSize);
         }
     }
 
@@ -603,7 +604,7 @@ KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, q
     return KisHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y);
 }
 
-KisRepeatHLineConstIteratorPixel KisPaintDevice::createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth, const KisSelection * selection ) const
+KisRepeatHLineConstIteratorPixel KisPaintDevice::createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth, const KisSelection * selection) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
@@ -614,7 +615,7 @@ KisRepeatHLineConstIteratorPixel KisPaintDevice::createRepeatHLineConstIterator(
     return KisRepeatHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y, _dataWidth);
 }
 
-KisRepeatVLineConstIteratorPixel KisPaintDevice::createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth, const KisSelection * selection ) const
+KisRepeatVLineConstIteratorPixel KisPaintDevice::createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth, const KisSelection * selection) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;

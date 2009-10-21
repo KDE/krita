@@ -25,51 +25,54 @@
 class KoCtlAccumulator;
 class KoID;
 
-namespace GTLCore {
-  class PixelDescription;
+namespace GTLCore
+{
+class PixelDescription;
 }
 
-class KoCtlColorSpaceInfo {
+class KoCtlColorSpaceInfo
+{
+public:
+    class ChannelInfo
+    {
+        friend class KoCtlColorSpaceInfo;
+        friend class QList<ChannelInfo>;
+        ChannelInfo();
+        ~ChannelInfo();
     public:
-        class ChannelInfo {
-            friend class KoCtlColorSpaceInfo;
-            friend class QList<ChannelInfo>;
-                ChannelInfo();
-                ~ChannelInfo();
-            public:
-                const QString& name() const;
-                const QString& shortName() const;
-                qint32 position() const;
-                qint32 index() const;
-                enum KoChannelInfo::enumChannelType channelType() const;
-                enum KoChannelInfo::enumChannelValueType valueType() const;
-                qint32 size() const;
-                const QColor& color() const;
-            private:
-                struct Private;
-                Private* const d;
-        };
-    public:
-        KoCtlColorSpaceInfo(const QString& _xmlfile);
-        const QString& fileName() const;
-        bool load();
-        ~KoCtlColorSpaceInfo();
-        qint32 referenceDepth() const;
-        const KoID& colorDepthId() const;
-        const KoID& colorModelId() const;
-        const QString& colorSpaceId() const;
         const QString& name() const;
-        const QString& defaultProfile() const;
-        const QList<const ChannelInfo*>& channels() const;
-        bool isHdr() const;
-        quint32 colorChannelCount() const;
-        quint32 pixelSize() const;
-        const GTLCore::PixelDescription& pixelDescription() const;
-        int alphaPos() const;
-        QList<KoCtlAccumulator*> accumulators() const;
+        const QString& shortName() const;
+        qint32 position() const;
+        qint32 index() const;
+        enum KoChannelInfo::enumChannelType channelType() const;
+        enum KoChannelInfo::enumChannelValueType valueType() const;
+        qint32 size() const;
+        const QColor& color() const;
     private:
         struct Private;
         Private* const d;
+    };
+public:
+    KoCtlColorSpaceInfo(const QString& _xmlfile);
+    const QString& fileName() const;
+    bool load();
+    ~KoCtlColorSpaceInfo();
+    qint32 referenceDepth() const;
+    const KoID& colorDepthId() const;
+    const KoID& colorModelId() const;
+    const QString& colorSpaceId() const;
+    const QString& name() const;
+    const QString& defaultProfile() const;
+    const QList<const ChannelInfo*>& channels() const;
+    bool isHdr() const;
+    quint32 colorChannelCount() const;
+    quint32 pixelSize() const;
+    const GTLCore::PixelDescription& pixelDescription() const;
+    int alphaPos() const;
+    QList<KoCtlAccumulator*> accumulators() const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

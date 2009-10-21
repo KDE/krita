@@ -44,7 +44,7 @@ public:
     virtual ~KisDeformPaintOpSettings() {}
     KisPaintOpSettingsSP clone() const;
 
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode ) const;
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
     using KisPropertiesConfiguration::fromXML;
@@ -66,25 +66,23 @@ public:
 
 #if defined(HAVE_OPENGL)
     //GLuint displayList() const;
-    inline QString modelName() const{
+    inline QString modelName() const {
         return "3d-deform-brush";
     }
 #endif
 
 // XXX: Hack!
-void setOptionsWidget(KisPaintOpSettingsWidget* widget)
-{
-    if (m_options && m_options->property("owned by settings").toBool()) {
-        delete m_options;
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget) {
+        if (m_options && m_options->property("owned by settings").toBool()) {
+            delete m_options;
+        }
+        if (!widget) {
+            m_options = 0;
+        } else {
+            m_options = qobject_cast<KisDeformPaintOpSettingsWidget*>(widget);
+            m_options->writeConfiguration(this);
+        }
     }
-    if (!widget) {
-        m_options = 0;
-    }
-    else {
-        m_options = qobject_cast<KisDeformPaintOpSettingsWidget*>(widget);
-        m_options->writeConfiguration( this );
-    }
-}
 
 private:
     KisDeformPaintOpSettingsWidget* m_options;

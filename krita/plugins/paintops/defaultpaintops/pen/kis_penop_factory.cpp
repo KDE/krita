@@ -42,8 +42,8 @@ KisPenOpFactory::~KisPenOpFactory()
 
 
 KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettingsSP settings,
-                                         KisPainter * painter,
-                                         KisImageWSP image)
+                                       KisPainter * painter,
+                                       KisImageWSP image)
 {
     Q_UNUSED(image);
 
@@ -64,11 +64,11 @@ KisPaintOpSettingsSP KisPenOpFactory::settings(const KoInputDevice& inputDevice,
 
 KisPaintOpSettingsSP KisPenOpFactory::settings(KisImageWSP image)
 {
-    Q_UNUSED( image );
+    Q_UNUSED(image);
     return new KisPenOpSettings();
 }
 
 KisPaintOpSettingsWidget* KisPenOpFactory::createSettingsWidget(QWidget* parent)
 {
-    return new KisPenOpSettingsWidget( parent );
+    return new KisPenOpSettingsWidget(parent);
 }

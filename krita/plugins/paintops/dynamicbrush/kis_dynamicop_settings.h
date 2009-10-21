@@ -57,22 +57,20 @@ public:
 
     /// @return a brush with the current shapes, coloring and program
     KisDynamicBrush* createBrush(KisPainter *painter) const;
-    
+
     // XXX: Hack!
-    void setOptionsWidget(KisPaintOpSettingsWidget* widget)
-    {
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget) {
         if (m_options != 0 && m_options->property("owned by settings").toBool()) {
             delete m_options;
         }
         if (!widget) {
             m_options = 0;
-        }
-        else {
+        } else {
             m_options = qobject_cast<KisDynamicOpSettingsWidget*>(widget);
-            m_options->writeConfiguration( this );
+            m_options->writeConfiguration(this);
         }
     }
-    
+
 private:
 
     KisDynamicOpSettingsWidget *m_options;

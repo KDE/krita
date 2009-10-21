@@ -22,13 +22,14 @@
 
 #include <KoFilter.h>
 
-class KisPDFImport : public KoFilter{
+class KisPDFImport : public KoFilter
+{
     Q_OBJECT
-    public:
-        KisPDFImport(QObject *parent, const QStringList&);
-        virtual ~KisPDFImport();
-    public:
-        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+public:
+    KisPDFImport(QObject *parent, const QStringList&);
+    virtual ~KisPDFImport();
+public:
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

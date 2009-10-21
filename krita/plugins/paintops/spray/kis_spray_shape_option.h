@@ -31,7 +31,7 @@ public:
     int height() const;
 
     /// 0 - shape, 1 - particle, 2 - pixel
-    int object() const; 
+    int object() const;
 
     /// 0 - ellipse, 1 - rectangle, 2 - metaball
     int shape() const;
@@ -41,7 +41,7 @@ public:
     bool highRendering() const;
     bool proportional() const;
     bool gaussian() const;
-    
+
     qreal widthPerc() const;
     qreal heightPerc() const;
 
@@ -53,7 +53,7 @@ public:
     /// TODO
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
-   KisShapeOptionsWidget * m_options;
+    KisShapeOptionsWidget * m_options;
 };
 
 #endif // KIS_SPRAY_SHAPE_OPTION_H

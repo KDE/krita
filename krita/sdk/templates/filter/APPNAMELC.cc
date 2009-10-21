@@ -21,30 +21,30 @@
 #include <kis_global.h>
 #include <kis_types.h>
 
-typedef KGenericFactory<%{APPNAME}Plugin> %{APPNAME}PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita%{APPNAMELC}, %{APPNAME}PluginFactory( "krita" ) )
+typedef KGenericFactory < % {APPNAME} Plugin > % {APPNAME} PluginFactory;
+K_EXPORT_COMPONENT_FACTORY(krita % {APPNAMELC}, % {APPNAME} PluginFactory("krita"))
 
-%{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const QStringList &)
+% {APPNAME} Plugin:: % {APPNAME} Plugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setComponentData(%{APPNAME}PluginFactory::componentData());
+    setComponentData( % {APPNAME} PluginFactory::componentData());
 
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new %{APPNAME}Filter()));
+        manager->add(KisFilterSP(new % {APPNAME} Filter()));
     }
 }
 
-%{APPNAME}Plugin::~%{APPNAME}Plugin()
+% {APPNAME} Plugin::~ % {APPNAME} Plugin()
 {
 }
 
-%{APPNAME}Filter::%{APPNAME}Filter() : KisFilter(id(), "adjust", i18n("%{APPNAME}"))
+% {APPNAME} Filter:: % {APPNAME} Filter() : KisFilter(id(), "adjust", i18n("%{APPNAME}"))
 {
 }
 
-void %{APPNAME}Filter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* /*config*/)
+void % {APPNAME} Filter::process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* /*config*/)
 {
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
@@ -57,11 +57,9 @@ void %{APPNAME}Filter::process(const KisPaintDeviceSP src, const QPoint& srcTopL
 
     KoColorSpace * cs = src->colorSpace();
 
-    while( ! srcIt.isDone() )
-    {
-        if(srcIt.isSelected())
-        {
-          // TODO: implement the processing of the pixels
+    while (! srcIt.isDone()) {
+        if (srcIt.isSelected()) {
+            // TODO: implement the processing of the pixels
         }
         setProgress(++pixelsProcessed);
         ++srcIt;

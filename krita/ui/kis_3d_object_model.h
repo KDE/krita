@@ -37,7 +37,7 @@
 #include <GL/gl.h>
 #endif
 
-struct Material{
+struct Material {
     KisVector3D Ka; // ambient
     KisVector3D Kd; // diffuse
     KisVector3D Ks; // specularity
@@ -49,13 +49,13 @@ struct Material{
 class KRITAUI_EXPORT Kis3DObjectModel
 {
 public:
-    
-    Kis3DObjectModel(){}
+
+    Kis3DObjectModel() {}
     Kis3DObjectModel(const QString &model, const QString &material);
     //void parseModel();
     void parseMaterial(const QString &fileName);
-    
-    
+
+
     GLuint displayList();
 
 private:
@@ -67,9 +67,9 @@ private:
     QHash<QString, QVector<int> > m_vertexHash;
     QHash<QString, QVector<int> > m_normalHash;
     QHash<QString, Material> m_material;
-    
+
     void debug(Material m);
-    
+
     bool m_cached;
     GLuint m_displayList;
 };

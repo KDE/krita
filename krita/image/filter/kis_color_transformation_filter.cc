@@ -43,11 +43,11 @@ KisColorTransformationFilter::~KisColorTransformationFilter()
 }
 
 void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo,
-                                           KisProcessingInformation dstInfo,
-                                           const QSize& size,
-                                           const KisFilterConfiguration* config,
-                                           KoUpdater* progressUpdater
-                                           ) const
+        KisProcessingInformation dstInfo,
+        const QSize& size,
+        const KisFilterConfiguration* config,
+        KoUpdater* progressUpdater
+                                          ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
@@ -63,7 +63,7 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
 
     const KoColorSpace * cs = src->colorSpace();
     KoColorTransformation* colorTransformation = createTransformation(cs, config);
-    if(!colorTransformation) return;
+    if (!colorTransformation) return;
 
     bool hasSelection = srcInfo.selection();
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());

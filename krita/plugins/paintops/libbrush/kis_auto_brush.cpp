@@ -37,8 +37,8 @@ struct KisAutoBrush::Private {
 };
 
 KisAutoBrush::KisAutoBrush(KisMaskGenerator* as)
-    : KisBrush()
-    , d( new Private )
+        : KisBrush()
+        , d(new Private)
 {
     d->shape = as;
     QImage img = createBrushPreview();
@@ -53,10 +53,10 @@ KisAutoBrush::~KisAutoBrush()
 }
 
 void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-                                KisBrush::ColoringInformation* coloringInformation,
-                                double scaleX, double scaleY, double angle,
-                                const KisPaintInformation& info,
-                                double subPixelX , double subPixelY) const
+        KisBrush::ColoringInformation* coloringInformation,
+        double scaleX, double scaleY, double angle,
+        const KisPaintInformation& info,
+        double subPixelX , double subPixelY) const
 {
     Q_UNUSED(info);
 
@@ -88,13 +88,11 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         if (dstWidth * dstHeight <= bounds.width() * bounds.height()) {
             // just clear the data in dst,
             memset(dst->data(), OPACITY_TRANSPARENT, dstWidth * dstHeight * dst->pixelSize());
-        }
-        else {
+        } else {
             // enlarge the data
             dst->initialize();
         }
-    }
-    else {
+    } else {
         if (dst->data() == 0 || dst->bounds().isEmpty()) {
             qWarning() << "Creating a default black dab: no coloring info and no initialized paint device to mask";
             dst->clear(QRect(0, 0, dstWidth, dstHeight));
@@ -109,8 +107,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
             color = const_cast<quint8*>(coloringInformation->color());
         }
-    }
-    else {
+    } else {
         // Mask everything out
         cs->setAlpha(dst->data(), OPACITY_TRANSPARENT, dst->bounds().width() * dst->bounds().height());
     }
@@ -128,8 +125,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
             if (coloringInformation) {
                 if (color) {
                     memcpy(dabPointer, color, pixelSize);
-                }
-                else {
+                } else {
                     memcpy(dabPointer, coloringInformation->color(), pixelSize);
                     coloringInformation->nextColumn();
                 }
@@ -151,8 +147,8 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
 void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
 {
     d->shape->toXML(doc, e);
-    e.setAttribute( "brush_type", "kis_auto_brush" );
-    e.setAttribute( "brush_spacing", spacing() );
+    e.setAttribute("brush_type", "kis_auto_brush");
+    e.setAttribute("brush_spacing", spacing());
 }
 
 QImage KisAutoBrush::createBrushPreview()

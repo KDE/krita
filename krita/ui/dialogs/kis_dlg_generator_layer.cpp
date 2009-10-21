@@ -60,7 +60,7 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
     enableButtonOk(m_customName);
 }
 
-void KisDlgGeneratorLayer::setConfiguration( const KisFilterConfiguration * config)
+void KisDlgGeneratorLayer::setConfiguration(const KisFilterConfiguration * config)
 {
     dlgWidget.wdgGenerator->setConfiguration(config);
 }

@@ -24,7 +24,7 @@
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
 
-KisImageNodeLowerCommand::KisImageNodeLowerCommand(KisImageWSP image, KisNodeSP node )
+KisImageNodeLowerCommand::KisImageNodeLowerCommand(KisImageWSP image, KisNodeSP node)
         : KisImageCommand(i18n("Lower"), image), m_node(node)
 {
 }

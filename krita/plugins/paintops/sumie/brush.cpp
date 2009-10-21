@@ -38,15 +38,18 @@ const float radToDeg = 57.29578f;
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
-inline double drand48() { return double(rand()) / RAND_MAX; }
+inline double drand48()
+{
+    return double(rand()) / RAND_MAX;
+}
 #endif
 
-Brush::Brush(const BrushShape &initialShape,const KoColor &inkColor)
+Brush::Brush(const BrushShape &initialShape, const KoColor &inkColor)
 {
     setBrushShape(initialShape);
     setInkColor(inkColor);
     initDefaultValues();
-	srand48(time(0));
+    srand48(time(0));
 }
 
 Brush::Brush()
@@ -73,10 +76,10 @@ void Brush::initDefaultValues()
     m_useWeights = false;
 
     // equally set weights
-    m_bristleLengthWeight = 1.0/4.0;
-    m_bristleInkAmountWeight = 1.0/4.0;
-    m_pressureWeight = 1.0/4.0;
-    m_inkDepletionWeight = 1.0/4.0;
+    m_bristleLengthWeight = 1.0 / 4.0;
+    m_bristleInkAmountWeight = 1.0 / 4.0;
+    m_pressureWeight = 1.0 / 4.0;
+    m_inkDepletionWeight = 1.0 / 4.0;
 }
 
 void Brush::setBrushShape(BrushShape brushShape)
@@ -92,7 +95,7 @@ void Brush::enableMousePressure(bool enable)
 
 void Brush::setInkColor(const KoColor &color)
 {
-    for (int i = 0;i < m_bristles.size();i++) {
+    for (int i = 0; i < m_bristles.size(); i++) {
         m_bristles[i].setColor(color);
     }
     m_inkColor = color;
@@ -103,7 +106,7 @@ void Brush::setInkDepletion(const QList<float>& curveData)
 {
     int count = curveData.size();
 
-    for (int i = 0; i < count ;i++) {
+    for (int i = 0; i < count ; i++) {
         m_inkDepletion.append(curveData.at(i));
     }
 }
@@ -116,7 +119,7 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info)
 }
 
 
-void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2)
+void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2)
 {
 
     m_counter++;
@@ -138,8 +141,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
     qreal pressure = pi2.pressure();
     if (m_mousePressureEnabled && pi2.pressure() == 0.5) { // it is mouse and want pressure from mouse movement
         pressure = 1.0 - computeMousePressure(distance);
-    }else if (pi2.pressure() == 0.5) // if it is mouse
-    {
+    } else if (pi2.pressure() == 0.5) { // if it is mouse
         pressure = 1.0;
     }
 
@@ -229,7 +231,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
         int inkDepletionSize = m_inkDepletion.size();
 
 
-        for (int i = 0;i < brpathSize ; i++) {
+        for (int i = 0; i < brpathSize ; i++) {
             bristleCounter = bristle->increment();
             if (bristleCounter >= inkDepletionSize - 1) {
                 inkDeplation = m_inkDepletion[inkDepletionSize - 1];
@@ -239,23 +241,22 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
 
             // saturation transformation of the bristle ink color
             // add check for hsv transformation
-            if (m_useSaturation && transfo != 0){
-                if (m_useWeights){
+            if (m_useSaturation && transfo != 0) {
+                if (m_useWeights) {
 
                     // new weighted way (experiment)
                     saturationVariant = (
-                        (pressure*m_pressureWeight)+
-                        (bristle->length()*m_bristleLengthWeight)+
-                        (bristle->inkAmount()*m_bristleInkAmountWeight)+
-                        ((1.0 - inkDeplation)*m_inkDepletionWeight))-1.0;
-                }else
-                {
+                                            (pressure * m_pressureWeight) +
+                                            (bristle->length() * m_bristleLengthWeight) +
+                                            (bristle->inkAmount() * m_bristleInkAmountWeight) +
+                                            ((1.0 - inkDeplation) * m_inkDepletionWeight)) - 1.0;
+                } else {
                     // old way of computing saturation
                     saturationVariant = (
-                                         pressure *
-                                         bristle->length() *
-                                         bristle->inkAmount() *
-                                         (1.0 - inkDeplation)) - 1.0;
+                                            pressure *
+                                            bristle->length() *
+                                            bristle->inkAmount() *
+                                            (1.0 - inkDeplation)) - 1.0;
 
                 }
                 transfo->setParameter(saturation, saturationVariant);
@@ -263,16 +264,16 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
             }
 
             // opacity transformation of the bristle color
-            if (m_useOpacity){
+            if (m_useOpacity) {
                 qreal opacity = 255.0;
-                if (m_useWeights){
+                if (m_useWeights) {
                     opacity = (
-                        (pressure*m_pressureWeight)+
-                        (bristle->length()*m_bristleLengthWeight)+
-                        (bristle->inkAmount()*m_bristleInkAmountWeight)+
-                        ((1.0 - inkDeplation)*m_inkDepletionWeight))*255.0;
+                                  (pressure * m_pressureWeight) +
+                                  (bristle->length() * m_bristleLengthWeight) +
+                                  (bristle->inkAmount() * m_bristleInkAmountWeight) +
+                                  ((1.0 - inkDeplation) * m_inkDepletionWeight)) * 255.0;
 
-                }else{
+                } else {
                     opacity =
                         255.0 *
                         /* pressure * */
@@ -313,7 +314,7 @@ void Brush::rotateBristles(double angle)
     m_transform.reset();
     m_transform.rotateRadians(angle);
 
-    for (int i = 0;i < m_bristles.size();i++) {
+    for (int i = 0; i < m_bristles.size(); i++) {
         x = m_bristles[i].x();
         y = m_bristles[i].y();
         m_transform.map(x, y, &tx, &ty);
@@ -329,14 +330,14 @@ void Brush::repositionBristles(double angle, double slope)
 {
     // setX
     srand48((int)slope);
-    for (int i = 0;i < m_bristles.size();i++) {
+    for (int i = 0; i < m_bristles.size(); i++) {
         float x = m_bristles[i].x();
         m_bristles[i].setX(x + drand48());
     }
 
     // setY
     srand48((int)angle);
-    for (int i = 0;i < m_bristles.size();i++) {
+    for (int i = 0; i < m_bristles.size(); i++) {
         float y = m_bristles[i].y();
         m_bristles[i].setY(y + drand48());
     }
@@ -354,9 +355,8 @@ inline void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoC
     int ix = (int)wx;
     int iy = (int)wy;
     m_dabAccessor->moveTo(ix, iy);
-    if ( m_layer->colorSpace()->alpha( m_dabAccessor->rawData() ) < color.opacity() )
-    {
-        memcpy ( m_dabAccessor->rawData(), color.data(), m_pixelSize );
+    if (m_layer->colorSpace()->alpha(m_dabAccessor->rawData()) < color.opacity()) {
+        memcpy(m_dabAccessor->rawData(), color.data(), m_pixelSize);
     }
     bristle->upIncrement();
 }
@@ -371,8 +371,8 @@ void Brush::oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor
 
     qint16 colorWeights[2];
 
-    colorWeights[0] = static_cast<quint8>( color.opacity() );
-    colorWeights[1] = static_cast<quint8>( 255 - color.opacity() );
+    colorWeights[0] = static_cast<quint8>(color.opacity());
+    colorWeights[1] = static_cast<quint8>(255 - color.opacity());
     mixOp->mixColors(colors, colorWeights, 2, m_dabAccessor->rawData());
 
     //memcpy ( m_dabAccessor->rawData(), color.data(), m_pixelSize );
@@ -384,7 +384,8 @@ void Brush::oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor
 // FIXME : 8 bit specific
 // Description: this reads pixel from layer and mix CMY color with weight
 // Here is the question : is this for paintOp or for compositeOp?
-void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double weight){
+void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow, double weight)
+{
     int MAX_CHANNEL_VALUE = 256;
     int nred, ngreen, nblue;
 
@@ -401,34 +402,34 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
 
     QColor layerQColor;
     QColor result;
-    KoColor kcolor( m_dev->colorSpace() );
+    KoColor kcolor(m_dev->colorSpace());
 
     // ============
     double brightness = MAX_CHANNEL_VALUE * nextXdist * nextYdist * weight;
-    m_layerAccessor->moveTo(ix,iy);
+    m_layerAccessor->moveTo(ix, iy);
     m_layer->colorSpace()->toQColor(m_layerAccessor->rawData(), &layerQColor);
 
-    nred = (int)(layerQColor.red()*MAX_CHANNEL_VALUE - brightness * cyan);
-    if(nred < 0)
+    nred = (int)(layerQColor.red() * MAX_CHANNEL_VALUE - brightness * cyan);
+    if (nred < 0)
         nred = 0;
 
-    ngreen = (int)(layerQColor.green()*MAX_CHANNEL_VALUE - brightness * magenta);
-        if(ngreen < 0)
-            ngreen = 0;
+    ngreen = (int)(layerQColor.green() * MAX_CHANNEL_VALUE - brightness * magenta);
+    if (ngreen < 0)
+        ngreen = 0;
 
-    nblue = (int)(layerQColor.blue()*MAX_CHANNEL_VALUE - brightness * yellow);
-    if(nblue < 0)
+    nblue = (int)(layerQColor.blue() * MAX_CHANNEL_VALUE - brightness * yellow);
+    if (nblue < 0)
         nblue = 0;
 
     result.setRgb(
         nred / MAX_CHANNEL_VALUE,
         ngreen / MAX_CHANNEL_VALUE,
         nblue / MAX_CHANNEL_VALUE,
-        MAX_CHANNEL_VALUE -1 );
+        MAX_CHANNEL_VALUE - 1);
 
     kcolor.fromQColor(result);
-    m_dabAccessor->moveTo(ix,iy);
-    memcpy ( m_dabAccessor->rawData(), kcolor.data(), m_pixelSize );
+    m_dabAccessor->moveTo(ix, iy);
+    memcpy(m_dabAccessor->rawData(), kcolor.data(), m_pixelSize);
 
 
     // ============
@@ -436,27 +437,27 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
     m_layerAccessor->moveTo(nextX, iy);
     m_layer->colorSpace()->toQColor(m_layerAccessor->rawData(), &layerQColor);
 
-    nred = (int)(layerQColor.red()*MAX_CHANNEL_VALUE - brightness * cyan);
-        if(nred < 0)
-            nred = 0;
+    nred = (int)(layerQColor.red() * MAX_CHANNEL_VALUE - brightness * cyan);
+    if (nred < 0)
+        nred = 0;
 
-    ngreen = (int)(layerQColor.green()*MAX_CHANNEL_VALUE - brightness * magenta);
-        if(ngreen < 0)
-            ngreen = 0;
+    ngreen = (int)(layerQColor.green() * MAX_CHANNEL_VALUE - brightness * magenta);
+    if (ngreen < 0)
+        ngreen = 0;
 
-    nblue = (int)(layerQColor.blue()*MAX_CHANNEL_VALUE - brightness * yellow);
-        if(nblue < 0)
-            nblue = 0;
+    nblue = (int)(layerQColor.blue() * MAX_CHANNEL_VALUE - brightness * yellow);
+    if (nblue < 0)
+        nblue = 0;
 
     result.setRgb(
         nred / MAX_CHANNEL_VALUE,
         ngreen / MAX_CHANNEL_VALUE,
         nblue / MAX_CHANNEL_VALUE,
-        MAX_CHANNEL_VALUE -1 );
+        MAX_CHANNEL_VALUE - 1);
 
     kcolor.fromQColor(result);
     m_dabAccessor->moveTo(nextX, iy);
-    memcpy ( m_dabAccessor->rawData(), kcolor.data(), m_pixelSize );
+    memcpy(m_dabAccessor->rawData(), kcolor.data(), m_pixelSize);
 
 
     // ============
@@ -464,18 +465,18 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
     m_layerAccessor->moveTo(ix, nextY);
     m_layer->colorSpace()->toQColor(m_layerAccessor->rawData(), &layerQColor);
 
-    nred = (int)(layerQColor.red()*MAX_CHANNEL_VALUE - brightness * cyan);
-    if(nred < 0){
+    nred = (int)(layerQColor.red() * MAX_CHANNEL_VALUE - brightness * cyan);
+    if (nred < 0) {
         nred = 0;
     }
 
-    ngreen = (int)(layerQColor.green()*MAX_CHANNEL_VALUE - brightness * magenta);
-    if(ngreen < 0){
+    ngreen = (int)(layerQColor.green() * MAX_CHANNEL_VALUE - brightness * magenta);
+    if (ngreen < 0) {
         ngreen = 0;
     }
 
-    nblue = (int)(layerQColor.blue()*MAX_CHANNEL_VALUE - brightness * yellow);
-    if(nblue < 0){
+    nblue = (int)(layerQColor.blue() * MAX_CHANNEL_VALUE - brightness * yellow);
+    if (nblue < 0) {
         nblue = 0;
     }
 
@@ -483,41 +484,41 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
         nred / MAX_CHANNEL_VALUE,
         ngreen / MAX_CHANNEL_VALUE,
         nblue / MAX_CHANNEL_VALUE,
-        MAX_CHANNEL_VALUE -1 );
+        MAX_CHANNEL_VALUE - 1);
 
     kcolor.fromQColor(result);
     m_dabAccessor->moveTo(ix, nextY);
-    memcpy ( m_dabAccessor->rawData(), kcolor.data(), m_pixelSize );
+    memcpy(m_dabAccessor->rawData(), kcolor.data(), m_pixelSize);
 
     // ============
     brightness = MAX_CHANNEL_VALUE * xDist * yDist * weight;
     m_layerAccessor->moveTo(nextX, nextY);
     m_layer->colorSpace()->toQColor(m_layerAccessor->rawData(), &layerQColor);
 
-    nred = (int)(layerQColor.red()*MAX_CHANNEL_VALUE - brightness * cyan);
-    if(nred < 0){
+    nred = (int)(layerQColor.red() * MAX_CHANNEL_VALUE - brightness * cyan);
+    if (nred < 0) {
         nred = 0;
     }
 
-    ngreen = (int)(layerQColor.green()*MAX_CHANNEL_VALUE - brightness * magenta);
-    if(ngreen < 0){
+    ngreen = (int)(layerQColor.green() * MAX_CHANNEL_VALUE - brightness * magenta);
+    if (ngreen < 0) {
         ngreen = 0;
     }
 
-    nblue = (int)(layerQColor.blue()*MAX_CHANNEL_VALUE - brightness * yellow);
-    if(nblue< 0){
-        nblue= 0;
+    nblue = (int)(layerQColor.blue() * MAX_CHANNEL_VALUE - brightness * yellow);
+    if (nblue < 0) {
+        nblue = 0;
     }
 
     result.setRgb(
         nred / MAX_CHANNEL_VALUE,
         ngreen / MAX_CHANNEL_VALUE,
         nblue / MAX_CHANNEL_VALUE,
-        MAX_CHANNEL_VALUE -1 );
+        MAX_CHANNEL_VALUE - 1);
 
     kcolor.fromQColor(result);
     m_dabAccessor->moveTo(nextX, nextY);
-    memcpy ( m_dabAccessor->rawData(), kcolor.data(), m_pixelSize );
+    memcpy(m_dabAccessor->rawData(), kcolor.data(), m_pixelSize);
 }
 
 

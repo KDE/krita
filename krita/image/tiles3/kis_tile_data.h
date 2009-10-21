@@ -88,7 +88,7 @@ private:
     mutable EnumTileDataState m_state;
 
     /**
-     * Next and previous tiledata elements in the linked list 
+     * Next and previous tiledata elements in the linked list
      * of parental datastore
      */
     KisTileData *m_nextTD;
@@ -97,16 +97,16 @@ private:
 private:
 
     /**
-     * FIXME: We should be able to work in const environment 
-     * even when actual data is swapped out to disk 
+     * FIXME: We should be able to work in const environment
+     * even when actual data is swapped out to disk
      */
     mutable quint8* m_data;
 
     /**
-     * How many tiles/mementoes use 
+     * How many tiles/mementoes use
      * this tiledata through COW?
      */
-    mutable QAtomicInt m_usersCount;    
+    mutable QAtomicInt m_usersCount;
 
     /**
      * Shared pointer counter

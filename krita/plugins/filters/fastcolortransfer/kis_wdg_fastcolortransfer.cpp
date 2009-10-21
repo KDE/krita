@@ -39,7 +39,7 @@ KisWdgFastColorTransfer::~KisWdgFastColorTransfer()
 {
 }
 
-void KisWdgFastColorTransfer::setConfiguration( const KisPropertiesConfiguration* config)
+void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("filename", value)) {

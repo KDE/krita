@@ -38,11 +38,11 @@
 
 #include "ui_wdgfilteroption.h"
 
-class KisFilterOptionWidget : public QWidget, public Ui::FilterOpOptions {
+class KisFilterOptionWidget : public QWidget, public Ui::FilterOpOptions
+{
 public:
     KisFilterOptionWidget(QWidget* parent = 0)
-        : QWidget(parent)
-    {
+            : QWidget(parent) {
         setupUi(this);
     }
 };
@@ -58,7 +58,7 @@ KisFilterOption::KisFilterOption()
     m_options->hide();
     setConfigurationPage(m_options);
 
-    m_layout = new QGridLayout( m_options->grpFilterOptions );
+    m_layout = new QGridLayout(m_options->grpFilterOptions);
 
     // Check which filters support painting
     QList<KoID> l = KisFilterRegistry::instance()->listKeys();
@@ -106,15 +106,15 @@ void KisFilterOption::setNode(KisNodeSP node)
         // which happens because the first configuration settings is
         // created before any layer is selected in the view
         if (!m_currentFilterConfigWidget ||
-            (m_currentFilterConfigWidget && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice))) {
+                (m_currentFilterConfigWidget && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice))) {
 
             if (m_currentFilter) {
                 KisPropertiesConfiguration* configuration = 0;
-                if(m_currentFilterConfigWidget)
+                if (m_currentFilterConfigWidget)
                     configuration = m_currentFilterConfigWidget->configuration();
 
                 setCurrentFilter(KoID(m_currentFilter->id()));
-                if(configuration)
+                if (configuration)
                     m_currentFilterConfigWidget->setConfiguration(configuration);
                 delete configuration;
             }
@@ -153,15 +153,15 @@ void KisFilterOption::updateFilterConfigWidget()
     if (m_currentFilter && m_image) {
         m_currentFilterConfigWidget =
             m_currentFilter->createConfigurationWidget(m_options->grpFilterOptions,
-                                                       m_paintDevice,
-                                                       m_image);
+                    m_paintDevice,
+                    m_image);
         if (m_currentFilterConfigWidget) {
             m_layout->addWidget(m_currentFilterConfigWidget);
             m_options->grpFilterOptions->updateGeometry();
             m_currentFilterConfigWidget->show();
             connect(m_currentFilterConfigWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(sigSettingChanged()));
         }
-            
+
     }
     m_layout->update();
 }

@@ -31,7 +31,7 @@
 #include <kis_paint_action_type_option.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+        : KisPaintOpOptionsWidget(parent)
 {
     setObjectName("brush option widget");
 
@@ -61,7 +61,7 @@ KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()
 KisPropertiesConfiguration* KisBrushOpSettingsWidget::configuration() const
 {
     KisBrushOpSettings *config = new KisBrushOpSettings();
-    config->setOptionsWidget(const_cast<KisBrushOpSettingsWidget*>( this ));
+    config->setOptionsWidget(const_cast<KisBrushOpSettingsWidget*>(this));
     config->setProperty("paintop", "paintbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

@@ -34,35 +34,30 @@ Parser::~Parser()
 #include <QVariant>
 #include <KDateTime>
 
-Value IntegerParser::parse( const QString& _v) const
+Value IntegerParser::parse(const QString& _v) const
 {
-    return Value( _v.toInt() );
+    return Value(_v.toInt());
 }
 
-Value TextParser::parse( const QString& _v) const
+Value TextParser::parse(const QString& _v) const
 {
-    return Value( _v );
+    return Value(_v);
 }
 
-Value DateParser::parse( const QString& _v) const
+Value DateParser::parse(const QString& _v) const
 {
-    if( _v.length() <= 4 )
-    {
-        return Value( QDateTime::fromString(_v, "yyyy") );
-    } else if( _v.length() <= 7 )
-    {
-        return Value( QDateTime::fromString(_v, "yyyy-MM") );
-    } else if( _v.length() <= 10 )
-    {
-        return Value( QDateTime::fromString(_v, "yyyy-MM-dd") );
-    } else if( _v.length() <= 16 )
-    {
-        return Value( QDateTime::fromString(_v, "yyyy-MM-ddThh:mm") );
-    } else if( _v.length() <= 19 )
-    {
-        return Value( QDateTime::fromString(_v, "yyyy-MM-ddThh:mm:ss") );
+    if (_v.length() <= 4) {
+        return Value(QDateTime::fromString(_v, "yyyy"));
+    } else if (_v.length() <= 7) {
+        return Value(QDateTime::fromString(_v, "yyyy-MM"));
+    } else if (_v.length() <= 10) {
+        return Value(QDateTime::fromString(_v, "yyyy-MM-dd"));
+    } else if (_v.length() <= 16) {
+        return Value(QDateTime::fromString(_v, "yyyy-MM-ddThh:mm"));
+    } else if (_v.length() <= 19) {
+        return Value(QDateTime::fromString(_v, "yyyy-MM-ddThh:mm:ss"));
     } else {
-        return Value( KDateTime::fromString(_v ).toUtc().dateTime() );
+        return Value(KDateTime::fromString(_v).toUtc().dateTime());
     }
 }
 
@@ -70,7 +65,7 @@ Value RationalParser::parse(const QString& _v) const
 {
     QRegExp regexp("(\\-?\\d+)/(\\d+)");
     regexp.indexIn(_v);
-    if( regexp.capturedTexts().size() > 2 )
-        return Value( Rational( regexp.capturedTexts()[1].toInt(), regexp.capturedTexts()[2].toInt() ) );
+    if (regexp.capturedTexts().size() > 2)
+        return Value(Rational(regexp.capturedTexts()[1].toInt(), regexp.capturedTexts()[2].toInt()));
     return Value();
 }

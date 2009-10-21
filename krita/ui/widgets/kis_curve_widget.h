@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -52,7 +52,7 @@ class KRITAUI_EXPORT KisCurveWidget : public QWidget
     Q_OBJECT
 
 public:
-  
+
     /**
      * Create a new curve widget with a default curve, that is a straight
      * line from bottom-left to top-right.
@@ -90,7 +90,7 @@ signals:
      */
     void modified(void);
 
-    protected slots:
+protected slots:
     void inOutChanged(int);
 
 
@@ -134,12 +134,12 @@ public:
     /**
      * Connect/disconnect external spinboxes to the curve
      * @min/@max - is the range for their values
-     */   
+     */
     void setupInOutControls(QSpinBox *in, QSpinBox *out, int min, int max);
     void dropInOutControls();
 
     /**
-     * Handy function that creates new point in the middle 
+     * Handy function that creates new point in the middle
      * of the curve and sets focus on the m_intIn field,
      * so the user can move this point anywhere in a moment
      */

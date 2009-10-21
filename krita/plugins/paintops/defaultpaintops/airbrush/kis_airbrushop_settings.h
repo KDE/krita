@@ -48,26 +48,24 @@ public:
 
 
 #if defined(HAVE_OPENGL)
-    inline QString modelName() const{
+    inline QString modelName() const {
         return "airbrush";
     }
 #endif
 
 
 // XXX: Hack!
-void setOptionsWidget(KisPaintOpSettingsWidget* widget)
-{
-    if (m_options != 0 && m_options->property("owned by settings").toBool()) {
-        delete m_options;
+    void setOptionsWidget(KisPaintOpSettingsWidget* widget) {
+        if (m_options != 0 && m_options->property("owned by settings").toBool()) {
+            delete m_options;
+        }
+        if (!widget) {
+            m_options = 0;
+        } else {
+            m_options = qobject_cast<KisAirbrushOpSettingsWidget*>(widget);
+            m_options->writeConfiguration(this);
+        }
     }
-    if (!widget) {
-        m_options = 0;
-    }
-    else {
-        m_options = qobject_cast<KisAirbrushOpSettingsWidget*>(widget);
-        m_options->writeConfiguration( this );
-    }
-}
 
 public:
 

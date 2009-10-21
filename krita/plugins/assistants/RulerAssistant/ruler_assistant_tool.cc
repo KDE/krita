@@ -37,11 +37,11 @@
 
 
 typedef KGenericFactory<RulerAssistantToolPlugin> RulerAssistantToolFactory;
-K_EXPORT_COMPONENT_FACTORY( kritarulerassistanttool, RulerAssistantToolFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritarulerassistanttool, RulerAssistantToolFactory("krita"))
 
 
 RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(RulerAssistantToolFactory::componentData());
     KoToolRegistry * r = KoToolRegistry::instance();

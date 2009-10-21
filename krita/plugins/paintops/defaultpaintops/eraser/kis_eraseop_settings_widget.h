@@ -30,7 +30,8 @@ class KisBrushOption;
 class KisPressureOpacityOption;
 class KisPressureSizeOption;
 
-class KisEraseOpSettingsWidget : public KisPaintOpOptionsWidget {
+class KisEraseOpSettingsWidget : public KisPaintOpOptionsWidget
+{
 
     Q_OBJECT
 

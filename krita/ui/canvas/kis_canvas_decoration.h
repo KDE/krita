@@ -46,7 +46,7 @@ public:
     bool visible() const;
     /**
      * Will paint the decoration on the QPainter, if the visible is set to true.
-     * 
+     *
      * @param documentOffset the offset of the view in the document, expressed in the view reference (not in the document reference)
      */
     void paint(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter);

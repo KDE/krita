@@ -34,18 +34,18 @@ BrushShape::~BrushShape()
 
 }
 
-void BrushShape::fromDistance(int radius, float scale) {
+void BrushShape::fromDistance(int radius, float scale)
+{
     m_width = m_height = radius * 2 + 1;
     qreal distance = 0.0;
     qreal maxDist = sqrt(radius * radius);
 
-    for (int y = -radius; y <= radius; y++){
-        for (int x = -radius; x <= radius; x++)
-        {
-            if ((x*x + y*y) < radius*radius){
-                distance = sqrt(x*x + y*y);
+    for (int y = -radius; y <= radius; y++) {
+        for (int x = -radius; x <= radius; x++) {
+            if ((x*x + y*y) < radius*radius) {
+                distance = sqrt(x * x + y * y);
                 distance /= maxDist;
-                Bristle b(x, y, 1.0 - distance );
+                Bristle b(x, y, 1.0 - distance);
                 b.setInkAmount(1.0f);
                 m_bristles.append(b);
             }
@@ -71,8 +71,8 @@ void BrushShape::fromGaussian(int radius, float sigma)
 
 
 
-    for (int y = -radius;y <= radius;y++) {
-        for (int x = -radius;x <= radius;x++) {
+    for (int y = -radius; y <= radius; y++) {
+        for (int x = -radius; x <= radius; x++) {
             length = (exp((x * x + y * y) / sigmaSquare) * sigmaConst);
             total += length;
             Bristle b(x, y, length);
@@ -90,8 +90,8 @@ void BrushShape::fromGaussian(int radius, float sigma)
     float result;
     int i = 0;
 
-    for (int x = 0;x < m_width;x++) {
-        for (int y = 0;y < m_height;y++, i++) {
+    for (int x = 0; x < m_width; x++) {
+        for (int y = 0; y < m_height; y++, i++) {
             result = (m_bristles[i].length() - minLen) / dist;
             m_bristles[i].setLength(result);
         }
@@ -99,7 +99,8 @@ void BrushShape::fromGaussian(int radius, float sigma)
 
 }
 
-void BrushShape::fromLine(int radius, float sigma){
+void BrushShape::fromLine(int radius, float sigma)
+{
     m_radius = radius;
     m_sigma = sigma;
 
@@ -112,7 +113,7 @@ void BrushShape::fromLine(int radius, float sigma){
     float sigmaConst = 1.0f / (sigma * 2.506628f); /* sqrt(2.0*pi) */
 
     float length;
-    for (int x = -radius;x <= radius;x++) {
+    for (int x = -radius; x <= radius; x++) {
         length = exp(x * x / sigmaSquare) * sigmaConst;
         Bristle b(x , 0.0f , length);
         m_bristles.append(b);
@@ -125,15 +126,16 @@ void BrushShape::fromLine(int radius, float sigma){
     // normalise lengths
     float result;
 
-    for (int x = 0;x < m_width;x++) {
+    for (int x = 0; x < m_width; x++) {
         result = (m_bristles[x].length() - minLen) / dist;
         m_bristles[x].setLength(result);
     }
 }
 
-void BrushShape::fromBitMap(const char* fileName){
-    QImage image(fileName,0);
-    if ( image.isNull() ){
+void BrushShape::fromBitMap(const char* fileName)
+{
+    QImage image(fileName, 0);
+    if (image.isNull()) {
         return;
     }
 
@@ -143,15 +145,14 @@ void BrushShape::fromBitMap(const char* fileName){
     m_width = image.width();
     m_height = image.height();
 
-    int x_radius = m_width/2;
-    int y_radius = m_height/2;
+    int x_radius = m_width / 2;
+    int y_radius = m_height / 2;
 
     QColor pixelColor;
-    for (int x=-x_radius;x<x_radius;x++){
-        for (int y=-y_radius;y<y_radius;y++)
-        {
-            pixelColor.setRgba( image.pixel(x+x_radius,y+y_radius) );
-            Bristle b(x,y , (float)pixelColor.value()/255.0f); // using value from image as length of bristle
+    for (int x = -x_radius; x < x_radius; x++) {
+        for (int y = -y_radius; y < y_radius; y++) {
+            pixelColor.setRgba(image.pixel(x + x_radius, y + y_radius));
+            Bristle b(x, y , (float)pixelColor.value() / 255.0f); // using value from image as length of bristle
             m_bristles.append(b);
         }
     }
@@ -185,7 +186,7 @@ float BrushShape::sigma()
 
 void BrushShape::tresholdBristles(double treshold)
 {
-    for (int i = 0;i < m_bristles.size();i++) {
+    for (int i = 0; i < m_bristles.size(); i++) {
         if (m_bristles[i].length() < treshold) {
             m_bristles.remove(i);
         }

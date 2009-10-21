@@ -27,13 +27,13 @@
 void KisTile::init(qint32 col, qint32 row,
                    KisTileData *defaultTileData, KisMementoManager* mm)
 {
-    m_col=col;
-    m_row=row;
+    m_col = col;
+    m_row = row;
 
-    m_extent=QRect(m_col * KisTileData::WIDTH, m_row * KisTileData::HEIGHT,
-                   KisTileData::WIDTH, KisTileData::HEIGHT);
+    m_extent = QRect(m_col * KisTileData::WIDTH, m_row * KisTileData::HEIGHT,
+                     KisTileData::WIDTH, KisTileData::HEIGHT);
 
-    m_nextTile=0;
+    m_nextTile = 0;
 
     m_tileData = defaultTileData;
     globalTileDataStore.acquireTileData(m_tileData);
@@ -43,35 +43,35 @@ void KisTile::init(qint32 col, qint32 row,
 
 KisTile::KisTile(qint32 col, qint32 row,
                  KisTileData *defaultTileData, KisMementoManager* mm)
-    :m_lock(QMutex::Recursive)
+        : m_lock(QMutex::Recursive)
 {
     init(col, row, defaultTileData, mm);
 }
 
 KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row, KisMementoManager* mm)
-    : KisShared(rhs),
-      m_lock(QMutex::Recursive)
+        : KisShared(rhs),
+        m_lock(QMutex::Recursive)
 {
     init(col, row, rhs.tileData(), mm);
 }
 
 KisTile::KisTile(const KisTile& rhs, KisMementoManager* mm)
-    : KisShared(rhs),
-      m_lock(QMutex::Recursive)
+        : KisShared(rhs),
+        m_lock(QMutex::Recursive)
 {
     init(rhs.col(), rhs.row(), rhs.tileData(), mm);
 }
 
 KisTile::KisTile(const KisTile& rhs)
-    : KisShared(rhs),
-      m_lock(QMutex::Recursive)
+        : KisShared(rhs),
+        m_lock(QMutex::Recursive)
 {
     init(rhs.col(), rhs.row(), rhs.tileData(), rhs.m_mementoManager);
 }
 
 KisTile::~KisTile()
 {
-    if(m_mementoManager)
+    if (m_mementoManager)
         m_mementoManager->registerTileDeleted(this);
     globalTileDataStore.releaseTileData(m_tileData);
 }
@@ -108,13 +108,13 @@ void KisTile::lockForRead() const
 void KisTile::lockForWrite()
 {
     /* We are doing COW here */
-    if(lazyCopying()) {
+    if (lazyCopying()) {
         KisTileData *tileData = globalTileDataStore.duplicateTileData(m_tileData);
-	DEBUG_COWING(tileData);
+        DEBUG_COWING(tileData);
         globalTileDataStore.releaseTileData(m_tileData);
         m_tileData = tileData;
         globalTileDataStore.acquireTileData(m_tileData);
-        if(m_mementoManager)
+        if (m_mementoManager)
             m_mementoManager->registerTileChange(this);
     }
 
@@ -144,9 +144,9 @@ void KisTile::debugDumpTile()
     lockForRead();
     quint8 *data = this->data();
 
-    for(int i=0; i<KisTileData::HEIGHT; i++) {
-        for(int j=0; j<KisTileData::WIDTH; j++) {
-            printf("%4d ", data[ (i*KisTileData::WIDTH+j)*pixelSize() ]);
+    for (int i = 0; i < KisTileData::HEIGHT; i++) {
+        for (int j = 0; j < KisTileData::WIDTH; j++) {
+            printf("%4d ", data[(i*KisTileData::WIDTH+j)*pixelSize()]);
         }
         printf("\n");
     }

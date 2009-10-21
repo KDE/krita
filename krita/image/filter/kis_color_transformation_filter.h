@@ -27,7 +27,8 @@
  * This is a base class for filters that implement a filter for
  * \ref KoColorTransformation based filters.
  */
-class KRITAIMAGE_EXPORT KisColorTransformationFilter : public KisFilter {
+class KRITAIMAGE_EXPORT KisColorTransformationFilter : public KisFilter
+{
 public:
     KisColorTransformationFilter(const KoID& id, const KoID & category, const QString & entry);
     virtual ~KisColorTransformationFilter();

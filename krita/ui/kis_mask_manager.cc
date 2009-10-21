@@ -57,7 +57,7 @@ KisMaskManager::KisMaskManager(KisView2 * view)
         , m_activeMask(0)
         , m_maskToSelection(0)
         , m_maskToLayer(0)
-        , m_commandsAdapter( new KisNodeCommandsAdapter( m_view ) )
+        , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
 {
 }
 
@@ -90,7 +90,7 @@ KisPaintDeviceSP KisMaskManager::activeDevice()
 
     KisSelectionSP selection;
     return m_activeMask && (selection = m_activeMask->selection()) ?
-        selection->getOrCreatePixelSelection() : 0;
+           selection->getOrCreatePixelSelection() : 0;
 }
 
 void KisMaskManager::activateMask(KisMaskSP mask)
@@ -106,7 +106,7 @@ void KisMaskManager::masksUpdated()
 
 void KisMaskManager::initMaskSelection(KisMask* mask)
 {
-    if(m_view->selection()) {
+    if (m_view->selection()) {
         KisSelectionSP selection =
             new KisSelection(*m_view->selection().data());
         mask->setSelection(selection);
@@ -117,9 +117,9 @@ void KisMaskManager::createTransparencyMask()
 {
     KisLayerSP layer = m_view->activeLayer();
 
-    if(layer) {
+    if (layer) {
         KisNodeSP above = m_activeMask ?
-            static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
+                          static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
         createTransparencyMask(layer, above);
     }
 }
@@ -128,9 +128,9 @@ void KisMaskManager::createFilterMask()
 {
     KisLayerSP layer = m_view->activeLayer();
 
-    if(layer) {
+    if (layer) {
         KisNodeSP above = m_activeMask ?
-            static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
+                          static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
         createFilterMask(layer, above);
     }
 }
@@ -139,9 +139,9 @@ void KisMaskManager::createTransformationMask()
 {
     KisLayerSP layer = m_view->activeLayer();
 
-    if(layer) {
+    if (layer) {
         KisNodeSP above = m_activeMask ?
-            static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
+                          static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
         createTransformationMask(layer, above);
     }
 }
@@ -150,9 +150,9 @@ void KisMaskManager::createSelectionmask()
 {
     KisLayerSP layer = m_view->activeLayer();
 
-    if(layer) {
+    if (layer) {
         KisNodeSP above = m_activeMask ?
-            static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
+                          static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
         createSelectionMask(layer, above);
     }
 }
@@ -169,10 +169,10 @@ void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
     masksUpdated();
 }
 
-void KisMaskManager::addEffectMask( KisNodeSP parent, KisEffectMaskSP mask )
+void KisMaskManager::addEffectMask(KisNodeSP parent, KisEffectMaskSP mask)
 {
-    m_commandsAdapter->addNode( mask, parent, 02110 );
-    activateMask( mask );
+    m_commandsAdapter->addNode(mask, parent, 02110);
+    activateMask(mask);
 }
 
 void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
@@ -346,7 +346,7 @@ void KisMaskManager::mirrorMaskX()
         Q_CHECK_PTR(t);
     }
 
-    QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection() );
+    QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection());
     m_activeMask->setDirty(dirty);
 
     if (t) m_view->undoAdapter()->addCommand(t);
@@ -372,7 +372,7 @@ void KisMaskManager::mirrorMaskY()
         Q_CHECK_PTR(t);
     }
 
-    QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection() );
+    QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection());
     m_activeMask->setDirty(dirty);
 
 

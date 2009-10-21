@@ -34,11 +34,12 @@
  * do is fill the paint device with the right bytes and use it as an argument
  * to KisPainter or use the bytes as an argument to KoColorSpace functions.
  */
-class KRITAIMAGE_EXPORT KisFixedPaintDevice : public KisShared {
+class KRITAIMAGE_EXPORT KisFixedPaintDevice : public KisShared
+{
 
 public:
 
-    KisFixedPaintDevice( const KoColorSpace* colorSpace );
+    KisFixedPaintDevice(const KoColorSpace* colorSpace);
     virtual ~KisFixedPaintDevice();
 
     /**
@@ -65,7 +66,9 @@ public:
      */
     quint32 pixelSize() const;
 
-    const KoColorSpace* colorSpace() const { return m_colorSpace; }
+    const KoColorSpace* colorSpace() const {
+        return m_colorSpace;
+    }
 
     /**
      * initializes the paint device.
@@ -73,7 +76,7 @@ public:
      * @param defaultValue the default byte with which all pixels will be filled.
      * @return false if the allocation failed.
      */
-    bool initialize( quint8 defaultValue = 0 );
+    bool initialize(quint8 defaultValue = 0);
 
     /**
      * @return a pointer to the beginning of the data associated with this fixed paint device.

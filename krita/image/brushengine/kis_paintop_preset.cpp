@@ -86,7 +86,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 {
     Q_ASSERT(!settings->getString("paintop", "").isEmpty());
     m_d->settings = settings->clone();
-    setValid( true );
+    setValid(true);
 }
 
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
@@ -105,7 +105,7 @@ bool KisPaintOpPreset::load()
 
     QDomDocument doc;
     if (!f.open(QIODevice::ReadOnly))
-         return false;
+        return false;
     if (!doc.setContent(&f)) {
         f.close();
         return false;
@@ -115,16 +115,16 @@ bool KisPaintOpPreset::load()
     QDomElement element = doc.documentElement();
     QString paintopid = element.attribute("paintopid");
 
-    if( paintopid.isEmpty() )
+    if (paintopid.isEmpty())
         return false;
 
     KoID id(paintopid, "");
     KoInputDevice input = KoInputDevice::mouse(); // TODO: Load inputdevice?
 
     KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, input, 0);
-    if( !settings )
+    if (!settings)
         return false;
-    settings->fromXML( element );
+    settings->fromXML(element);
     setSettings(settings);
 
     updateImg();
@@ -143,7 +143,7 @@ bool KisPaintOpPreset::save()
     QDomElement root = doc.createElement("preset");
 
     QString paintopid = m_d->settings->getString("paintop", "");
-    if( paintopid.isEmpty() )
+    if (paintopid.isEmpty())
         return false;
 
     root.setAttribute("paintopid", paintopid);
@@ -164,6 +164,6 @@ QImage KisPaintOpPreset::img() const
 
 void KisPaintOpPreset::updateImg()
 {
-    m_d->img = m_d->settings->sampleStroke( QSize( 100, 20 ) );
+    m_d->img = m_d->settings->sampleStroke(QSize(100, 20));
 }
 

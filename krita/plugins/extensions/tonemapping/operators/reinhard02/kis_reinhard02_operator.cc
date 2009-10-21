@@ -40,7 +40,7 @@ public:
     KisReinhard02OperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg) {
         widget.setupUi(this);
     }
-    virtual void setConfiguration( const KisPropertiesConfiguration* config) {
+    virtual void setConfiguration(const KisPropertiesConfiguration* config) {
         widget.scales->setChecked(config->getBool("Scales", false));
         widget.key->setValue(config->getDouble("Key", 0.18));
         widget.phi->setValue(config->getDouble("Phi", 1.0));

@@ -19,13 +19,14 @@
 #include "kis_recorded_action_editor_factory.h"
 
 struct KisRecordedActionEditorFactory::Private {
-    
+
 };
 
 KisRecordedActionEditorFactory::KisRecordedActionEditorFactory() : d(new Private)
 {
 }
 
-KisRecordedActionEditorFactory::~KisRecordedActionEditorFactory(){
+KisRecordedActionEditorFactory::~KisRecordedActionEditorFactory()
+{
     delete d;
 }

@@ -32,9 +32,9 @@ public:
     KisDeformPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisDeformPaintOpSettingsWidget();
 
-    void setConfiguration( const KisPropertiesConfiguration * config);
+    void setConfiguration(const KisPropertiesConfiguration * config);
     KisPropertiesConfiguration* configuration() const;
-    void writeConfiguration( KisPropertiesConfiguration *config ) const;
+    void writeConfiguration(KisPropertiesConfiguration *config) const;
 
     int radius() const;
     double deformAmount() const;

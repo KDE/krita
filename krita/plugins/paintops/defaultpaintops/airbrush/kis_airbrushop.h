@@ -37,7 +37,7 @@ public:
     KisAirbrushOp(const KisAirbrushOpSettings *settings, KisPainter * painter);
     virtual ~KisAirbrushOp();
 
-        // We want to spray even when the pointer doesn't move.
+    // We want to spray even when the pointer doesn't move.
     virtual bool incremental()  const {
         return true;
     }

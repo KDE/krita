@@ -28,17 +28,20 @@ class KisWdgOptionsPNG : public QWidget, public Ui::KisWdgOptionsPNG
 {
     Q_OBJECT
 
-    public:
-        KisWdgOptionsPNG(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    KisWdgOptionsPNG(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class KisPNGExport : public KoFilter {
+class KisPNGExport : public KoFilter
+{
     Q_OBJECT
-    public:
-        KisPNGExport(QObject* parent, const QStringList&);
-        virtual ~KisPNGExport();
-    public:
-        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+public:
+    KisPNGExport(QObject* parent, const QStringList&);
+    virtual ~KisPNGExport();
+public:
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

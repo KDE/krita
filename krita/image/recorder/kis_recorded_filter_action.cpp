@@ -39,10 +39,8 @@ struct KisRecordedFilterAction::Private {
     Private() : kconfig(0) {}
     const KisFilter* filter;
     QRect rect;
-    KisFilterConfiguration* configuration()
-    {
-        if( !kconfig )
-        {
+    KisFilterConfiguration* configuration() {
+        if (!kconfig) {
             kconfig = filter->defaultConfiguration(0);
             if (kconfig) {
                 kconfig->fromXML(configstr);
@@ -50,8 +48,7 @@ struct KisRecordedFilterAction::Private {
         }
         return kconfig;
     }
-    void setConfiguration( KisFilterConfiguration* conf )
-    {
+    void setConfiguration(KisFilterConfiguration* conf) {
         delete kconfig;
         kconfig = conf;
         configstr = conf->toXML();
@@ -64,9 +61,9 @@ struct KisRecordedFilterAction::Private {
     const QString& config() {
         return configstr;
     }
-    private:
-        QString configstr;
-        KisFilterConfiguration* kconfig;
+private:
+    QString configstr;
+    KisFilterConfiguration* kconfig;
 };
 
 KisRecordedFilterAction::KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfiguration* fc) : KisRecordedAction("FilterAction", name, path), d(new Private)
@@ -74,7 +71,7 @@ KisRecordedFilterAction::KisRecordedFilterAction(QString name, const KisNodeQuer
     Q_ASSERT(filter);
     d->filter = filter;
     if (fc) {
-        d->setConfig( fc->toXML());
+        d->setConfig(fc->toXML());
     }
 }
 
@@ -92,7 +89,7 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& info) cons
     KisFilterConfiguration * kfc = d->configuration();
     KisPaintDeviceSP dev = nodeQueryPath().queryNodes(info.image(), info.currentNode())[0]->paintDevice(); // TODO: not good should take the full list into consideration
     KisTransaction * cmd = 0;
-    if ( info.undoAdapter()) cmd = new KisTransaction(d->filter->name(), dev);
+    if (info.undoAdapter()) cmd = new KisTransaction(d->filter->name(), dev);
 
     QRect r1 = dev->extent();
 
@@ -147,7 +144,7 @@ const KisFilterConfiguration* KisRecordedFilterAction::filterConfiguration() con
     return d->configuration();
 }
 
-void KisRecordedFilterAction::setFilterConfiguration( KisFilterConfiguration* config)
+void KisRecordedFilterAction::setFilterConfiguration(KisFilterConfiguration* config)
 {
     d->setConfiguration(config);
 }
@@ -163,7 +160,7 @@ KisRecordedFilterActionFactory::~KisRecordedFilterActionFactory()
 
 }
 
-KisRecordedAction* KisRecordedFilterActionFactory::fromXML( const QDomElement& elt)
+KisRecordedAction* KisRecordedFilterActionFactory::fromXML(const QDomElement& elt)
 {
     QString name = elt.attribute("name");
     KisNodeQueryPath pathnode = KisNodeQueryPath::fromString(elt.attribute("path"));

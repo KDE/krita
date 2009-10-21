@@ -23,7 +23,16 @@ KoCtlBuffer::KoCtlBuffer(char* _buffer, int _size) : m_buffer(_buffer), m_size(_
 {
 }
 KoCtlBuffer::~KoCtlBuffer() {}
-char * KoCtlBuffer::rawData() { return m_buffer; }
-const char * KoCtlBuffer::rawData() const { return m_buffer; }
-int KoCtlBuffer::size() const  { return m_size; }
+char * KoCtlBuffer::rawData()
+{
+    return m_buffer;
+}
+const char * KoCtlBuffer::rawData() const
+{
+    return m_buffer;
+}
+int KoCtlBuffer::size() const
+{
+    return m_size;
+}
 

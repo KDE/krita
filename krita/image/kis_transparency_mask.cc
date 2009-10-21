@@ -51,7 +51,7 @@ QRect KisTransparencyMask::decorateRect(KisPaintDeviceSP &src,
                                         KisPaintDeviceSP &dst,
                                         const QRect & rc) const
 {
-    if(src != dst) {
+    if (src != dst) {
         //dst = new KisPaintDevice(*src);
         KisPainter gc(dst);
         gc.setCompositeOp(src->colorSpace()->compositeOp(COMPOSITE_COPY));

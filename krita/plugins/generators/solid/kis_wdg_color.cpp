@@ -39,7 +39,7 @@ KisWdgColor::~KisWdgColor()
 {
 }
 
-void KisWdgColor::setConfiguration( const KisPropertiesConfiguration* config)
+void KisWdgColor::setConfiguration(const KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("color", value)) {

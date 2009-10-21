@@ -52,14 +52,13 @@ void KisShapeSelectionModel::add(KoShape *child)
     QMatrix matrix;
     matrix.scale(m_image->xRes(), m_image->yRes());
     updateRect = matrix.mapRect(updateRect);
-    
-    if(m_shapeMap.count() == 1) {
+
+    if (m_shapeMap.count() == 1) {
         // The shape is the first one, so the shape selection just got created
         // Pixel selection provides no longer the datamanager of the selection
         // so update the whole selection
         m_parentSelection->updateProjection();
-    }
-    else {
+    } else {
         m_parentSelection->updateProjection(updateRect);
     }
 

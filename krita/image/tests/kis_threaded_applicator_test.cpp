@@ -75,7 +75,9 @@ public:
         return new TestJob(parent, dev, rc);
     }
 
-    KisLayerSP layer() const { return 0; }
+    KisLayerSP layer() const {
+        return 0;
+    }
 };
 
 void KisThreadedApplicatorTest::testApplication()

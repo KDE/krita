@@ -51,10 +51,10 @@ KisNodeShape::KisNodeShape(KoShapeContainer * parent, KisNodeSP node)
     KoShape::setParent(parent);
     parent->addChild(this);
 
-    connect( node, SIGNAL(visibilityChanged( bool )), SLOT( setNodeVisible( bool ) ) );
-    connect( node, SIGNAL(userLockingChanged( bool )), SLOT( editabilityChanged( ) ) );
-    connect( node, SIGNAL(systemLockingChanged( bool )), SLOT( editabilityChanged( ) ) );
-    editabilityChanged( ); // Correctly set the lock at loading
+    connect(node, SIGNAL(visibilityChanged(bool)), SLOT(setNodeVisible(bool)));
+    connect(node, SIGNAL(userLockingChanged(bool)), SLOT(editabilityChanged()));
+    connect(node, SIGNAL(systemLockingChanged(bool)), SLOT(editabilityChanged()));
+    editabilityChanged();  // Correctly set the lock at loading
 }
 
 KisNodeShape::~KisNodeShape()
@@ -126,10 +126,10 @@ void KisNodeShape::setPosition(const QPointF & position)
 
 void KisNodeShape::addChild(KoShape * shape)
 {
-    KisNodeShape* nodeShape = dynamic_cast<KisNodeShape*>( shape );
-    if ( !nodeShape ) return;
+    KisNodeShape* nodeShape = dynamic_cast<KisNodeShape*>(shape);
+    if (!nodeShape) return;
 
-    if ( !m_d->node->allowAsChild( nodeShape->node() ) ) return;
+    if (!m_d->node->allowAsChild(nodeShape->node())) return;
 
     KoShapeContainer::addChild(shape);
 }
@@ -145,34 +145,32 @@ bool KisNodeShape::loadOdf(const KoXmlElement & /*element*/, KoShapeLoadingConte
     return false; // TODO
 }
 
-void KisNodeShape::setNodeVisible( bool v)
+void KisNodeShape::setNodeVisible(bool v)
 {
     // Necessary because shapes are not QObjects
-    setVisible( v );
+    setVisible(v);
 }
 
 // Defined in KisNodeContainerShape... FIXME (2.1) find a better way to share code between those two classes, or even better merge them
-bool recursiveFindActiveLayerInChildren( KoSelection* _selection, KoShapeLayer* _currentLayer );
+bool recursiveFindActiveLayerInChildren(KoSelection* _selection, KoShapeLayer* _currentLayer);
 
-void KisNodeShape::editabilityChanged( )
+void KisNodeShape::editabilityChanged()
 {
     dbgKrita << m_d->node->isEditable();
-    setGeometryProtected( !m_d->node->isEditable() );
+    setGeometryProtected(!m_d->node->isEditable());
     KoCanvasController* canvas = KoToolManager::instance()->activeCanvasController();
-    if( canvas )
-    {
-        recursiveFindActiveLayerInChildren( canvas->canvas()->shapeManager()->selection(), this );
+    if (canvas) {
+        recursiveFindActiveLayerInChildren(canvas->canvas()->shapeManager()->selection(), this);
     }
 }
 
 KisImageWSP KisNodeShape::getImage() const
 {
 
-    if ( m_d->node->inherits( "KisLayer" ) ) {
-        return dynamic_cast<KisLayer*>( m_d->node.data() )->image();
-    }
-    else if ( m_d->node->inherits( "KisMask" ) ) {
-        return dynamic_cast<KisLayer*>( m_d->node->parent().data() )->image();
+    if (m_d->node->inherits("KisLayer")) {
+        return dynamic_cast<KisLayer*>(m_d->node.data())->image();
+    } else if (m_d->node->inherits("KisMask")) {
+        return dynamic_cast<KisLayer*>(m_d->node->parent().data())->image();
     }
 
     return 0;

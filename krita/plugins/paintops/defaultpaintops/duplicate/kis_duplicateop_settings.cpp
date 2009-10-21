@@ -40,14 +40,15 @@
 #include <KoViewConverter.h>
 
 
-KisDuplicateOpSettings::KisDuplicateOpSettings(KisImageWSP image )
-    : m_image( image )
-    , m_options(0)
-    , m_isOffsetNotUptodate( true )
+KisDuplicateOpSettings::KisDuplicateOpSettings(KisImageWSP image)
+        : m_image(image)
+        , m_options(0)
+        , m_isOffsetNotUptodate(true)
 {
 }
 
-KisDuplicateOpSettings::~KisDuplicateOpSettings() {
+KisDuplicateOpSettings::~KisDuplicateOpSettings()
+{
 }
 
 bool KisDuplicateOpSettings::paintIncremental()
@@ -61,7 +62,7 @@ QPointF KisDuplicateOpSettings::offset() const
     return m_offset;
 }
 
-void KisDuplicateOpSettings::mousePressEvent( KoPointerEvent *e )
+void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
 {
     if (e->modifiers() == Qt::ShiftModifier) {
         m_position = m_image->documentToPixel(e->point);
@@ -80,10 +81,10 @@ void KisDuplicateOpSettings::mousePressEvent( KoPointerEvent *e )
 void KisDuplicateOpSettings::activate()
 {
     if (m_image->perspectiveGrid()->countSubGrids() != 1) {
-        m_options->m_duplicateOption->setHealing( false );
-        m_options->m_duplicateOption->setPerspective( false );
+        m_options->m_duplicateOption->setHealing(false);
+        m_options->m_duplicateOption->setPerspective(false);
     } else {
-        m_options->m_duplicateOption->setPerspective( false );;
+        m_options->m_duplicateOption->setPerspective(false);;
     }
 }
 
@@ -101,14 +102,14 @@ void KisDuplicateOpSettings::fromXML(const QDomElement& elt)
 {
     // First, call the parent class fromXML to make sure all the
     // properties are saved to the map
-    KisPaintOpSettings::fromXML( elt );
+    KisPaintOpSettings::fromXML(elt);
 
     m_offset.setX(elt.attribute("OffsetX", "0.0").toDouble());
     m_offset.setY(elt.attribute("OffsetY", "0.0").toDouble());
     m_isOffsetNotUptodate = false;
 
     // Then load the properties for all widgets
-    m_options->setConfiguration( this );
+    m_options->setConfiguration(this);
 }
 
 void KisDuplicateOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
@@ -119,7 +120,7 @@ void KisDuplicateOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) cons
     KisPropertiesConfiguration * settings = m_options->configuration();
 
     // Then call the parent class fromXML
-    settings->KisPropertiesConfiguration::toXML( doc, rootElt );
+    settings->KisPropertiesConfiguration::toXML(doc, rootElt);
 
     rootElt.setAttribute("OffsetX", QString::number(m_offset.x()));
     rootElt.setAttribute("OffsetY", QString::number(m_offset.y()));
@@ -129,10 +130,11 @@ void KisDuplicateOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) cons
 }
 
 
-KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const {
+KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
+{
 
     if (!m_options) return 0;
-    KisDuplicateOpSettings* s = dynamic_cast<KisDuplicateOpSettings*>( m_options->configuration() );
+    KisDuplicateOpSettings* s = dynamic_cast<KisDuplicateOpSettings*>(m_options->configuration());
     s->m_image = m_image;
     s->m_offset = m_offset;
     s->m_isOffsetNotUptodate = m_isOffsetNotUptodate;
@@ -145,12 +147,11 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const {
 QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImageWSP image) const
 {
     // Compute the rectangle for the offset
-    QRectF rect2 = QRectF( -5, -5, 10, 10);
-    if(m_isOffsetNotUptodate)
-    {
+    QRectF rect2 = QRectF(-5, -5, 10, 10);
+    if (m_isOffsetNotUptodate) {
         rect2.translate(m_position);
     } else {
-        rect2.translate(- m_offset + image->documentToPixel( pos) );
+        rect2.translate(- m_offset + image->documentToPixel(pos));
     }
     return image->pixelToDocument(rect2);
 }
@@ -158,12 +159,12 @@ QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImage
 QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
     QRectF dubRect = duplicateOutlineRect(pos, image);
-    if(_mode == CURSOR_IS_OUTLINE ) {
+    if (_mode == CURSOR_IS_OUTLINE) {
         KisBrushSP brush = m_options->m_brushOption->brush();
         QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-        QRectF rect = QRect(0,0, brush->width(), brush->height());
-        rect.translate( pos - hotSpot - QPoint( 0.5, 0.5) );
-        rect = image->pixelToDocument( rect ).translated( pos );
+        QRectF rect = QRect(0, 0, brush->width(), brush->height());
+        rect.translate(pos - hotSpot - QPoint(0.5, 0.5));
+        rect = image->pixelToDocument(rect).translated(pos);
         dubRect |= rect;
     }
     return dubRect;
@@ -174,12 +175,12 @@ void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image,
     KisBrushSP brush = m_options->m_brushOption->brush();
     painter.setPen(Qt::black);
     painter.setBackground(Qt::black);
-    if(_mode == CURSOR_IS_OUTLINE ) {
-      QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-      painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRectF(0,0, brush->width(), brush->height()).translated( - hotSpot - QPoint(1.0,1.0) ) ).translated(pos) ) );
+    if (_mode == CURSOR_IS_OUTLINE) {
+        QPointF hotSpot = brush->hotSpot(1.0, 1.0);
+        painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, brush->width(), brush->height()).translated(- hotSpot - QPoint(1.0, 1.0))).translated(pos)));
     }
-    QRectF rect2 = converter.documentToView( duplicateOutlineRect( pos, image ) );
-    painter.drawLine(rect2.topLeft(), rect2.bottomRight() );
-    painter.drawLine(rect2.topRight(), rect2.bottomLeft() );
+    QRectF rect2 = converter.documentToView(duplicateOutlineRect(pos, image));
+    painter.drawLine(rect2.topLeft(), rect2.bottomRight());
+    painter.drawLine(rect2.topRight(), rect2.bottomLeft());
 
 }

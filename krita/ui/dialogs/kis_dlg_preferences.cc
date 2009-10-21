@@ -79,7 +79,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg;
 
-#if defined(HAVE_OPENGL) 
+#if defined(HAVE_OPENGL)
     m_cmbCursorShape->addItem("3D Brush Model");
 #endif
 

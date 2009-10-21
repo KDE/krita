@@ -46,14 +46,14 @@
 
 
 KisAirbrushOp::KisAirbrushOp(const KisAirbrushOpSettings *settings, KisPainter *painter)
-    : KisBrushBasedPaintOp(painter)
-    , settings(settings)
+        : KisBrushBasedPaintOp(painter)
+        , settings(settings)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     if (settings->m_options) {
-      Q_ASSERT(settings->m_options->m_brushOption);
-      m_brush = settings->m_options->m_brushOption->brush();
+        Q_ASSERT(settings->m_options->m_brushOption);
+        m_brush = settings->m_options->m_brushOption->brush();
     }
 }
 
@@ -100,13 +100,12 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
 
     KisBrushSP brush = m_brush;
     if (!brush) {
-      if (settings->m_options) {
-	m_brush = settings->m_options->m_brushOption->brush();
-	brush = m_brush;
-      }
-      else {
-	return;
-      }
+        if (settings->m_options) {
+            m_brush = settings->m_options->m_brushOption->brush();
+            brush = m_brush;
+        } else {
+            return;
+        }
     }
 
     if (! brush->canPaintFor(info))
@@ -155,7 +154,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, 1.0, 1.0, 0.0, info, xFraction, yFraction);
     }
 
-    painter()->bltFixed( dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
+    painter()->bltFixed(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
 
 
 }

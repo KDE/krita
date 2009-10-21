@@ -23,11 +23,11 @@
 #include "kis_auto_brush.h"
 #include "kis_mask_generator.h"
 
-KisBrushSP KisAutoBrushFactory::getOrCreateBrush( const QDomElement& brushDefinition )
+KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
 {
     KisMaskGenerator* mask = KisMaskGenerator::fromXML(brushDefinition);
-    KisBrushSP brush = new KisAutoBrush( mask );
+    KisBrushSP brush = new KisAutoBrush(mask);
     double spacing = brushDefinition.attribute("brush_spacing", "1.0").toDouble();
-    brush->setSpacing( spacing );
+    brush->setSpacing(spacing);
     return brush;
 }

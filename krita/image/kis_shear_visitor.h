@@ -41,7 +41,7 @@ public:
     using KisNodeVisitor::visit;
 
     KisShearVisitor(double xshear, double yshear, KoUpdater *progress)
-        : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {}
+            : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {}
 
     void setStrategy(KisFilterStrategy* strategy) {
         m_strategy = strategy;
@@ -98,14 +98,30 @@ public:
         return true;
     }
 
-    bool visit(KisAdjustmentLayer *) {return true;}
-    bool visit(KisNode*) { return true; }
-    bool visit(KisGeneratorLayer*) { return true; }
-    bool visit(KisCloneLayer*) { return true; }
-    bool visit(KisFilterMask*) { return true; }
-    bool visit(KisTransparencyMask*) { return true; }
-    bool visit(KisTransformationMask*) { return true; }
-    bool visit(KisSelectionMask*) { return true; }
+    bool visit(KisAdjustmentLayer *) {
+        return true;
+    }
+    bool visit(KisNode*) {
+        return true;
+    }
+    bool visit(KisGeneratorLayer*) {
+        return true;
+    }
+    bool visit(KisCloneLayer*) {
+        return true;
+    }
+    bool visit(KisFilterMask*) {
+        return true;
+    }
+    bool visit(KisTransparencyMask*) {
+        return true;
+    }
+    bool visit(KisTransformationMask*) {
+        return true;
+    }
+    bool visit(KisSelectionMask*) {
+        return true;
+    }
 
 private:
 

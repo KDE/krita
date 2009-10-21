@@ -86,26 +86,26 @@ struct KisGbrBrush::Private {
 #define DEFAULT_SPACING 0.25
 
 KisGbrBrush::KisGbrBrush(const QString& filename)
-    : KisBrush(filename)
-    , d(new Private)
+        : KisBrush(filename)
+        , d(new Private)
 {
     setBrushType(INVALID);
     d->ownData = true;
     d->useColorAsMask = false;
-    setHasColor( false );
+    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 }
 
 KisGbrBrush::KisGbrBrush(const QString& filename,
                          const QByteArray& data,
                          qint32 & dataPos)
-    : KisBrush(filename)
-    , d(new Private)
+        : KisBrush(filename)
+        , d(new Private)
 {
     setBrushType(INVALID);
     d->ownData = false;
     d->useColorAsMask = false;
-    setHasColor( false );
+    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
     d->data = QByteArray::fromRawData(data.data() + dataPos, data.size() - dataPos);
@@ -115,13 +115,13 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
 }
 
 KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
-    : KisBrush()
-    , d(new Private)
+        : KisBrush()
+        , d(new Private)
 {
     setBrushType(INVALID);
     d->ownData = true;
     d->useColorAsMask = false;
-    setHasColor( false );
+    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
     initFromPaintDev(image, x, y, w, h);
@@ -133,7 +133,7 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
 {
     d->ownData = false;
     d->useColorAsMask = false;
-    setHasColor( false );
+    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
     setImage(image);
@@ -142,8 +142,8 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
 }
 
 KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
-    : KisBrush(rhs)
-    , d(new Private)
+        : KisBrush(rhs)
+        , d(new Private)
 {
     setName(rhs.name());
     *d = *rhs.d;
@@ -252,7 +252,7 @@ bool KisGbrBrush::init()
         }
 
         setBrushType(MASK);
-        setHasColor( false );
+        setHasColor(false);
 
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
@@ -268,14 +268,14 @@ bool KisGbrBrush::init()
         }
 
         setBrushType(IMAGE);
-        setHasColor( true );
+        setHasColor(true);
 
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k += 4) {
                 m_image.setPixel(x, y, qRgba(d->data[k],
-                                            d->data[k+1],
-                                            d->data[k+2],
-                                            d->data[k+3]));
+                                             d->data[k+1],
+                                             d->data[k+2],
+                                             d->data[k+3]));
             }
         }
     } else {
@@ -305,7 +305,7 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
     setName(image->objectName());
 
     setBrushType(IMAGE);
-    setHasColor( true );
+    setHasColor(true);
 
     return true;
 }
@@ -395,8 +395,7 @@ QImage KisGbrBrush::img() const
             }
         }
         return image;
-    }
-    else {
+    } else {
         return m_image;
     }
 }
@@ -452,7 +451,7 @@ void KisGbrBrush::makeMaskImage()
     }
 
     setBrushType(MASK);
-    setHasColor( false );
+    setHasColor(false);
     d->useColorAsMask = false;
     resetBoundary();
     clearScaledBrushes();
@@ -467,11 +466,11 @@ void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     Q_UNUSED(d);
     e.setAttribute("type", "brush"); // legacy
-    e.setAttribute( "brush_type", "kis_gbr_brush" );
+    e.setAttribute("brush_type", "kis_gbr_brush");
     e.setAttribute("name", name()); // legacy
     e.setAttribute("filename", filename()); // legacy
-    e.setAttribute( "brush_filename", filename() );
-    e.setAttribute( "brush_spacing", spacing() );
+    e.setAttribute("brush_filename", filename());
+    e.setAttribute("brush_spacing", spacing());
 }
 
 void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)

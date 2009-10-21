@@ -22,17 +22,19 @@
 
 #include <QList>
 
-namespace OpenCTL {
-  class Template;
+namespace OpenCTL
+{
+class Template;
 }
 
-class KoCtlTemplatesRegistry {
+class KoCtlTemplatesRegistry
+{
     KoCtlTemplatesRegistry();
     ~KoCtlTemplatesRegistry();
-  public:
+public:
     static const KoCtlTemplatesRegistry* instance();
     const QList<OpenCTL::Template*>& compositeOps() const;
-  private:
+private:
     struct Private;
     Private* const d;
 };

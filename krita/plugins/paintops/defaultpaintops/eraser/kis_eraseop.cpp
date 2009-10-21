@@ -66,9 +66,9 @@ KisEraseOp::KisEraseOp(const KisEraseOpSettings *settings, KisPainter *painter)
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     if (settings->m_options) {
-	m_brush = settings->m_options->m_brushOption->brush();
-	settings->m_options->m_sizeOption->sensor()->reset();
-	settings->m_options->m_opacityOption->sensor()->reset();
+        m_brush = settings->m_options->m_brushOption->brush();
+        settings->m_options->m_sizeOption->sensor()->reset();
+        settings->m_options->m_opacityOption->sensor()->reset();
     }
 }
 
@@ -103,20 +103,19 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
 
     KisBrushSP brush = m_brush;
     if (!m_brush) {
-	if (settings->m_options) {
-	  m_brush = settings->m_options->m_brushOption->brush();
-	  brush = m_brush;
-	}
-	else {
-	     return;
-	}
+        if (settings->m_options) {
+            m_brush = settings->m_options->m_brushOption->brush();
+            brush = m_brush;
+        } else {
+            return;
+        }
     }
     if (! brush->canPaintFor(info))
         return;
 
     double scale = KisPaintOp::scaleForPressure(settings->m_options->m_sizeOption->apply(info));
-    if( (scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01 ) return;
-    
+    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return;
+
     KisPaintDeviceSP device = painter()->device();
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;

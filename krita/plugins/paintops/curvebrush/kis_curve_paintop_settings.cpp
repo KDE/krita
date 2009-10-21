@@ -19,7 +19,7 @@
 #include <kis_curve_paintop_settings_widget.h>
 
 KisCurvePaintOpSettings::KisCurvePaintOpSettings()
-    : m_options(0)
+        : m_options(0)
 {
 }
 
@@ -27,7 +27,7 @@ KisCurvePaintOpSettings::KisCurvePaintOpSettings()
 KisPaintOpSettingsSP KisCurvePaintOpSettings::clone() const
 {
     KisPaintOpSettings* settings =
-        static_cast<KisPaintOpSettings*>( m_options->configuration() );
+        static_cast<KisPaintOpSettings*>(m_options->configuration());
     return settings;
 }
 
@@ -55,14 +55,14 @@ int KisCurvePaintOpSettings::interval() const
 
 void KisCurvePaintOpSettings::fromXML(const QDomElement& elt)
 {
-    KisPaintOpSettings::fromXML( elt );
-    m_options->setConfiguration( this );
+    KisPaintOpSettings::fromXML(elt);
+    m_options->setConfiguration(this);
 }
 
 void KisCurvePaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
     KisPropertiesConfiguration * settings = m_options->configuration();
-    settings->KisPropertiesConfiguration::toXML( doc, rootElt );
+    settings->KisPropertiesConfiguration::toXML(doc, rootElt);
     delete settings;
 }
 

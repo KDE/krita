@@ -58,22 +58,20 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QStringList &)
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     {
         // Set PigmentCMS's ctl module directory
-        QStringList ctlModulesDirs = KGlobal::mainComponent().dirs()->findDirs( "data", "pigmentcms/ctlmodules/");
+        QStringList ctlModulesDirs = KGlobal::mainComponent().dirs()->findDirs("data", "pigmentcms/ctlmodules/");
         dbgPlugins << ctlModulesDirs;
-        foreach(const QString & dir, ctlModulesDirs)
-        {
+        foreach(const QString & dir, ctlModulesDirs) {
             dbgPlugins << "Append : " << dir << " to the list of CTL modules";
-            OpenCTL::ModulesManager::instance()->addDirectory( dir.toAscii().data());
+            OpenCTL::ModulesManager::instance()->addDirectory(dir.toAscii().data());
         }
 
 #ifdef HAVE_OPENCTL_910
 #if HAVE_OPENCTL_910
-        QStringList ctlTemplatesDirs = KGlobal::mainComponent().dirs()->findDirs( "data", "pigmentcms/ctltemplates/");
+        QStringList ctlTemplatesDirs = KGlobal::mainComponent().dirs()->findDirs("data", "pigmentcms/ctltemplates/");
         dbgPlugins << ctlTemplatesDirs;
-        foreach(const QString & dir, ctlTemplatesDirs)
-        {
+        foreach(const QString & dir, ctlTemplatesDirs) {
             dbgPlugins << "Append : " << dir << " to the list of CTL modules";
-            OpenCTL::Template::addIncludeDirectory( dir.toAscii().data());
+            OpenCTL::Template::addIncludeDirectory(dir.toAscii().data());
         }
 #endif
 #endif
@@ -86,31 +84,30 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QStringList &)
         dbgPlugins << "There are " << ctlprofileFilenames.size() << " CTL profiles";
         if (!ctlprofileFilenames.empty()) {
             KoColorProfile* profile = 0;
-            for( QStringList::Iterator it = ctlprofileFilenames.begin(); it != ctlprofileFilenames.end(); ++it ) {
+            for (QStringList::Iterator it = ctlprofileFilenames.begin(); it != ctlprofileFilenames.end(); ++it) {
                 dbgPlugins << "Load profile : " << *it;
                 profile = new KoCtlColorProfile(*it);
                 profile->load();
                 if (profile->valid()) {
                     dbgPlugins << "Valid profile : " << profile->name();
-                    f->addProfile( profile );
+                    f->addProfile(profile);
                 } else {
                     dbgPlugins << "Invalid profile : " << profile->name();
                     delete profile;
                 }
             }
         }
-        
+
         // Load CTL Color spaces
         KGlobal::mainComponent().dirs()->addResourceType("ctl_colorspaces", "data", "pigmentcms/ctlcolorspaces/");
         QStringList ctlcolorspacesFilenames;
         ctlcolorspacesFilenames += KGlobal::mainComponent().dirs()->findAllResources("ctl_colorspaces", "*.ctlcs",  KStandardDirs::Recursive);
         dbgPlugins << "There are " << ctlcolorspacesFilenames.size() << " CTL colorspaces";
         if (!ctlcolorspacesFilenames.empty()) {
-            for( QStringList::Iterator it = ctlcolorspacesFilenames.begin(); it != ctlcolorspacesFilenames.end(); ++it ) {
+            for (QStringList::Iterator it = ctlcolorspacesFilenames.begin(); it != ctlcolorspacesFilenames.end(); ++it) {
                 dbgPlugins << "Load colorspace : " << *it;
                 KoCtlColorSpaceInfo* info = new KoCtlColorSpaceInfo(*it);
-                if(info->load())
-                {
+                if (info->load()) {
                     f->add(new KoCtlColorSpaceFactory(info));
                 } else {
                     dbgPlugins << "Invalid color space : " << *it;

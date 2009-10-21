@@ -62,5 +62,5 @@ KisPaintOpSettingsSP KisSprayPaintOpFactory::settings(KisImageWSP image)
 
 KisPaintOpSettingsWidget* KisSprayPaintOpFactory::createSettingsWidget(QWidget* parent)
 {
-    return new KisSprayPaintOpSettingsWidget( parent );
+    return new KisSprayPaintOpSettingsWidget(parent);
 }

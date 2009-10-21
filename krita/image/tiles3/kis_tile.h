@@ -39,16 +39,16 @@ class KisMementoManager;
 
 /**
  * Provides abstraction to a tile.
- * + A tile contains a part of a PaintDevice, 
- *   but only the individual pixels are accesable 
+ * + A tile contains a part of a PaintDevice,
+ *   but only the individual pixels are accesable
  *   and that only via iterators.
- * + Actual tile data is stored in KisTileData that can be 
+ * + Actual tile data is stored in KisTileData that can be
  *   shared between many tiles
  */
 class KisTile : public KisShared
 {
 public:
-    KisTile(qint32 col, qint32 row, 
+    KisTile(qint32 col, qint32 row,
             KisTileData *defaultTileData, KisMementoManager* mm);
     KisTile(const KisTile& rhs, qint32 col, qint32 row, KisMementoManager* mm);
     KisTile(const KisTile& rhs, KisMementoManager* mm);
@@ -57,7 +57,7 @@ public:
 
 
 public:
-    
+
     void debugPrintInfo();
     void debugDumpTile();
 
@@ -91,7 +91,7 @@ public:
     }
 
     void setNext(KisTileSP next) {
-        m_nextTile=next;
+        m_nextTile = next;
     }
 
     inline qint32 pixelSize() const {
@@ -104,7 +104,7 @@ public:
     }
 
 private:
-    void init(qint32 col, qint32 row, 
+    void init(qint32 col, qint32 row,
               KisTileData *defaultTileData, KisMementoManager* mm);
 
 private:

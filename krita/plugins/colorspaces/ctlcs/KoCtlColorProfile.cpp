@@ -76,7 +76,7 @@ KoCtlColorProfile::KoCtlColorProfile(QString filename) : KoColorProfile(filename
 
 KoCtlColorProfile::KoCtlColorProfile(const KoCtlColorProfile& rhs) : KoColorProfile(rhs), d(new Private(*rhs.d))
 {
-    
+
 }
 
 KoCtlColorProfile::~KoCtlColorProfile()
@@ -92,8 +92,8 @@ KoColorProfile* KoCtlColorProfile::clone() const
 bool KoCtlColorProfile::valid() const
 {
     dbgPigment << d->colorModelID.isNull() << " " << d->colorDepthID.isNull();
-    return ( d->module and d->module->isCompiled()
-             and not d->colorModelID.isNull() and not d->colorDepthID.isNull());
+    return (d->module and d->module->isCompiled()
+            and not d->colorModelID.isNull() and not d->colorDepthID.isNull());
 }
 
 bool KoCtlColorProfile::isSuitableForOutput() const
@@ -117,18 +117,16 @@ OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(const KoColorS
     QString srcDepthId = _srcCs->colorDepthId().id();
     QString dstModelId = _dstCs->colorModelId().id();
     QString dstDepthId = _dstCs->colorDepthId().id();
-    foreach(ConversionInfo info, d->conversionInfos)
-    {
-        if(info.sourceColorModelID == srcModelId
-           and (info.sourceColorDepthID == srcDepthId or (info.sourceColorDepthID == "F"
-                                                          and ( srcDepthId == Float16BitsColorDepthID.id() or srcDepthId == Float32BitsColorDepthID.id() ) ) )
-           and info.destinationColorModelID == dstModelId
-           and (info.destinationColorDepthID == dstDepthId or (info.destinationColorDepthID == "F"
-                                                               and ( dstDepthId == Float16BitsColorDepthID.id() or dstDepthId == Float32BitsColorDepthID.id() ) ) ) )
-        {
-            GTLCore::PixelDescription srcPixelDescription = createPixelDescription( _srcCs );
-            GTLCore::PixelDescription dstPixelDescription = createPixelDescription( _dstCs );
-            return new OpenCTL::Program(info.function.toAscii().data(), d->module, srcPixelDescription, dstPixelDescription );
+    foreach(ConversionInfo info, d->conversionInfos) {
+        if (info.sourceColorModelID == srcModelId
+                and(info.sourceColorDepthID == srcDepthId or(info.sourceColorDepthID == "F"
+                        and(srcDepthId == Float16BitsColorDepthID.id() or srcDepthId == Float32BitsColorDepthID.id())))
+                and info.destinationColorModelID == dstModelId
+                and(info.destinationColorDepthID == dstDepthId or(info.destinationColorDepthID == "F"
+                        and(dstDepthId == Float16BitsColorDepthID.id() or dstDepthId == Float32BitsColorDepthID.id())))) {
+            GTLCore::PixelDescription srcPixelDescription = createPixelDescription(_srcCs);
+            GTLCore::PixelDescription dstPixelDescription = createPixelDescription(_dstCs);
+            return new OpenCTL::Program(info.function.toAscii().data(), d->module, srcPixelDescription, dstPixelDescription);
         }
     }
     return 0;
@@ -137,48 +135,44 @@ OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(const KoColorS
 QList<KoColorConversionTransformationFactory*> KoCtlColorProfile::createColorConversionTransformationFactories() const
 {
     QList<KoColorConversionTransformationFactory*> factories;
-    foreach(ConversionInfo info, d->conversionInfos)
-    {
-        if( info.sourceColorDepthID == "F" and info.destinationColorDepthID == "F" )
-        {
+    foreach(ConversionInfo info, d->conversionInfos) {
+        if (info.sourceColorDepthID == "F" and info.destinationColorDepthID == "F") {
             factories.push_back(
-                    new KoCtlColorConversionTransformationFactory(
-                            info.sourceColorModelID, Float16BitsColorDepthID.id(), info.sourceProfile,
-                            info.destinationColorModelID, Float16BitsColorDepthID.id(), info.destinationProfile ) );
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, Float16BitsColorDepthID.id(), info.sourceProfile,
+                    info.destinationColorModelID, Float16BitsColorDepthID.id(), info.destinationProfile));
             factories.push_back(
-                    new KoCtlColorConversionTransformationFactory(
-                            info.sourceColorModelID, Float32BitsColorDepthID.id(), info.sourceProfile,
-                            info.destinationColorModelID, Float32BitsColorDepthID.id(), info.destinationProfile ) );
-        } else if( info.sourceColorDepthID == "F" )
-        {
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, Float32BitsColorDepthID.id(), info.sourceProfile,
+                    info.destinationColorModelID, Float32BitsColorDepthID.id(), info.destinationProfile));
+        } else if (info.sourceColorDepthID == "F") {
             factories.push_back(
-                    new KoCtlColorConversionTransformationFactory(
-                            info.sourceColorModelID, Float16BitsColorDepthID.id(),
-                            info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
-                            info.destinationProfile ) );
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, Float16BitsColorDepthID.id(),
+                    info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
+                    info.destinationProfile));
             factories.push_back(
-                    new KoCtlColorConversionTransformationFactory(
-                            info.sourceColorModelID, Float32BitsColorDepthID.id(),
-                            info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
-                            info.destinationProfile ) );
-        } else if( info.destinationColorDepthID == "F")
-        {
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, Float32BitsColorDepthID.id(),
+                    info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
+                    info.destinationProfile));
+        } else if (info.destinationColorDepthID == "F") {
             factories.push_back(
-                    new KoCtlColorConversionTransformationFactory(
-                            info.sourceColorModelID, info.sourceColorDepthID,
-                            info.sourceProfile, info.destinationColorModelID, Float16BitsColorDepthID.id(),
-                            info.destinationProfile ) );
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, info.sourceColorDepthID,
+                    info.sourceProfile, info.destinationColorModelID, Float16BitsColorDepthID.id(),
+                    info.destinationProfile));
             factories.push_back(
-                    new KoCtlColorConversionTransformationFactory(
-                            info.sourceColorModelID, info.sourceColorDepthID,
-                            info.sourceProfile, info.destinationColorModelID, Float32BitsColorDepthID.id(),
-                            info.destinationProfile ) );
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, info.sourceColorDepthID,
+                    info.sourceProfile, info.destinationColorModelID, Float32BitsColorDepthID.id(),
+                    info.destinationProfile));
         } else {
             factories.push_back(
-                    new KoCtlColorConversionTransformationFactory(
-                            info.sourceColorModelID, info.sourceColorDepthID,
-                            info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
-                            info.destinationProfile ) );
+                new KoCtlColorConversionTransformationFactory(
+                    info.sourceColorModelID, info.sourceColorDepthID,
+                    info.sourceProfile, info.destinationColorModelID, info.destinationColorDepthID,
+                    info.destinationProfile));
         }
     }
     return factories;
@@ -187,8 +181,7 @@ QList<KoColorConversionTransformationFactory*> KoCtlColorProfile::createColorCon
 bool KoCtlColorProfile::operator==(const KoColorProfile& p) const
 {
     const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(&p);
-    if(ctlp)
-    {
+    if (ctlp) {
         return ctlp->name() == name() and ctlp->d->colorModelIDNumber == d->colorModelIDNumber and ctlp->d->colorDepthIDNumber == d->colorDepthIDNumber;
     } else {
         return false;
@@ -207,14 +200,11 @@ QString KoCtlColorProfile::colorDepth() const
 
 void KoCtlColorProfile::decodeTransformations(QDomElement& elt)
 {
-    for(QDomNode nt = elt.firstChild(); not nt.isNull(); nt = nt.nextSibling())
-    {
+    for (QDomNode nt = elt.firstChild(); not nt.isNull(); nt = nt.nextSibling()) {
         QDomElement et = nt.toElement();
-        if(not et.isNull())
-        {
+        if (not et.isNull()) {
             dbgPigment << et.tagName();
-            if(et.tagName() == "conversions")
-            {
+            if (et.tagName() == "conversions") {
                 decodeConversions(et);
             }
         }
@@ -223,37 +213,31 @@ void KoCtlColorProfile::decodeTransformations(QDomElement& elt)
 
 void KoCtlColorProfile::decodeConversions(QDomElement& elt)
 {
-    for(QDomNode n = elt.firstChild(); not n.isNull(); n = n.nextSibling())
-    {
+    for (QDomNode n = elt.firstChild(); not n.isNull(); n = n.nextSibling()) {
         QDomElement e = n.toElement();
-        if(not e.isNull())
-        {
+        if (not e.isNull()) {
             dbgPigment << e.tagName();
-            if(e.tagName() == "conversion")
-            {
+            if (e.tagName() == "conversion") {
                 QDomElement eIn = e.firstChildElement("input");
                 QDomElement eOut = e.firstChildElement("output");
-                if(not eIn.isNull() and not eOut.isNull())
-                {
+                if (not eIn.isNull() and not eOut.isNull()) {
                     ConversionInfo ci;
                     ci.function = e.attribute("function");
                     ci.sourceColorModelID = eIn.attribute("colorModel");
                     ci.sourceColorDepthID = KoCtlParser::generateDepthID(eIn.attribute("depth"), eIn.attribute("type")).id();
                     ci.sourceProfile = eIn.attribute("profile");
                     ci.destinationColorModelID = eOut.attribute("colorModel");
-                    ci.destinationColorDepthID = KoCtlParser::generateDepthID(eOut.attribute("depth"), eOut.attribute("type") ).id();
+                    ci.destinationColorDepthID = KoCtlParser::generateDepthID(eOut.attribute("depth"), eOut.attribute("type")).id();
                     ci.destinationProfile = eOut.attribute("profile");
-                    if( ci.sourceColorModelID == colorModel() and ci.sourceColorDepthID == colorDepth() and ci.sourceProfile.isEmpty())
-                    {
+                    if (ci.sourceColorModelID == colorModel() and ci.sourceColorDepthID == colorDepth() and ci.sourceProfile.isEmpty()) {
                         ci.sourceProfile = name();
-                        d->conversionInfos.push_back( ci );
-                    } else if( ci.destinationColorModelID == colorModel() and ci.destinationColorDepthID == colorDepth() and ci.destinationProfile.isEmpty() )
-                    {
+                        d->conversionInfos.push_back(ci);
+                    } else if (ci.destinationColorModelID == colorModel() and ci.destinationColorDepthID == colorDepth() and ci.destinationProfile.isEmpty()) {
                         ci.destinationProfile = name();
-                        d->conversionInfos.push_back( ci );
+                        d->conversionInfos.push_back(ci);
                     } else {
-                        Q_ASSERT( ci.destinationProfile == name() or ci.sourceProfile == name() );
-                        d->conversionInfos.push_back( ci );
+                        Q_ASSERT(ci.destinationProfile == name() or ci.sourceProfile == name());
+                        d->conversionInfos.push_back(ci);
                     }
                 } else {
                     dbgPigment << "Invalid conversion, missing <input> or <output> or both";
@@ -268,8 +252,7 @@ bool KoCtlColorProfile::load()
 {
     QDomDocument doc;
     QFile file(fileName());
-    if (not file.open(QIODevice::ReadOnly))
-    {
+    if (not file.open(QIODevice::ReadOnly)) {
         dbgPigment << "Can't open file : " << fileName();
         return false;
     }
@@ -282,38 +265,33 @@ bool KoCtlColorProfile::load()
     }
     file.close();
     QDomElement docElem = doc.documentElement();
-    if(docElem.tagName() != "ctlprofile")
-    {
+    if (docElem.tagName() != "ctlprofile") {
         dbgPigment << "Not a ctlprofile, root tag was : " << docElem.tagName();
         return false;
     }
     QDomNode n = docElem.firstChild();
-    while(not n.isNull()) {
+    while (not n.isNull()) {
         QDomElement e = n.toElement();
-        if(not e.isNull()) {
+        if (not e.isNull()) {
             dbgPigment << e.tagName();
-            if( e.tagName() == "info")
-            {
+            if (e.tagName() == "info") {
                 setName(e.attribute("name"));
                 d->colorDepthID = KoCtlParser::generateDepthID(e.attribute("depth"), e.attribute("type")).id();
-                d->colorDepthIDNumber = KoUniqueNumberForIdServer::instance()->numberForId( d->colorDepthID );
+                d->colorDepthIDNumber = KoUniqueNumberForIdServer::instance()->numberForId(d->colorDepthID);
                 d->colorModelID = e.attribute("colorModel");
-                d->colorModelIDNumber = KoUniqueNumberForIdServer::instance()->numberForId( d->colorModelID );
+                d->colorModelIDNumber = KoUniqueNumberForIdServer::instance()->numberForId(d->colorModelID);
                 dbgPigment << "colorModel = " << e.attribute("colorModel");;
-            } else if(e.tagName() == "program")
-            {
+            } else if (e.tagName() == "program") {
                 QDomNode nCDATA = e.firstChild();
-                if( not nCDATA.isNull())
-                {
+                if (not nCDATA.isNull()) {
                     QMutexLocker lock(ctlMutex);
                     QDomCDATASection CDATA = nCDATA.toCDATASection();
                     dbgPigment << CDATA.data();
                     d->module = new OpenCTL::Module(name().toAscii().data());
-                    d->module->setSource( CDATA.data().toAscii().data());
+                    d->module->setSource(CDATA.data().toAscii().data());
                     d->module->compile();
                 }
-            } else if(e.tagName() == "transformations")
-            {
+            } else if (e.tagName() == "transformations") {
                 decodeTransformations(e);
             }
         }
@@ -326,45 +304,42 @@ GTLCore::PixelDescription KoCtlColorProfile::createPixelDescription(const KoColo
 {
     QList<KoChannelInfo*> channels = cs->channels();
     std::vector<const GTLCore::Type* > types;
-    foreach( KoChannelInfo* info, channels)
-    {
-        switch( info->channelValueType() )
-        {
+    foreach(KoChannelInfo* info, channels) {
+        switch (info->channelValueType()) {
         case KoChannelInfo::UINT8:
-            types.push_back( GTLCore::Type::UnsignedInteger8 );
+            types.push_back(GTLCore::Type::UnsignedInteger8);
             break;
         case KoChannelInfo::UINT16:
-            types.push_back( GTLCore::Type::UnsignedInteger16 );
+            types.push_back(GTLCore::Type::UnsignedInteger16);
             break;
         case KoChannelInfo::UINT32:
-            types.push_back( GTLCore::Type::UnsignedInteger32 );
+            types.push_back(GTLCore::Type::UnsignedInteger32);
             break;
         case KoChannelInfo::FLOAT16:
-            types.push_back( GTLCore::Type::Half );
+            types.push_back(GTLCore::Type::Half);
             break;
         case KoChannelInfo::FLOAT32:
-            types.push_back( GTLCore::Type::Float );
+            types.push_back(GTLCore::Type::Float);
             break;
         case KoChannelInfo::OTHER:
         case KoChannelInfo::FLOAT64:
             Q_ASSERT(false);
             break;
         case KoChannelInfo::INT8:
-            types.push_back( GTLCore::Type::Integer8 );
+            types.push_back(GTLCore::Type::Integer8);
             break;
         case KoChannelInfo::INT16:
-            types.push_back( GTLCore::Type::Integer16 );
+            types.push_back(GTLCore::Type::Integer16);
             break;
         }
     }
-    Q_ASSERT( types.size() == cs->channelCount() );
-    return GTLCore::PixelDescription( types );
+    Q_ASSERT(types.size() == cs->channelCount());
+    return GTLCore::PixelDescription(types);
 }
 
-QVariant KoCtlColorProfile::property( const QString& _name) const
+QVariant KoCtlColorProfile::property(const QString& _name) const
 {
-    if( _name == "exposure" )
-    {
+    if (_name == "exposure") {
         return d->exposure;
     } else {
         dbgPigment << "Not CTL property " << _name;
@@ -372,10 +347,9 @@ QVariant KoCtlColorProfile::property( const QString& _name) const
     }
 }
 
-void KoCtlColorProfile::setProperty( const QString& _name, const QVariant& _variant)
+void KoCtlColorProfile::setProperty(const QString& _name, const QVariant& _variant)
 {
-    if( _name == "exposure" )
-    {
+    if (_name == "exposure") {
         d->exposure = pow(2, _variant.toDouble() + 2.47393) * d->middleGrayScaleFactor;
     } else {
         dbgPigment << "Not CTL property " << _name;

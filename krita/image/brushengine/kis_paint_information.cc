@@ -33,11 +33,11 @@ struct KisPaintInformation::Private {
 };
 
 KisPaintInformation::KisPaintInformation(const QPointF & pos_, double pressure_,
-                                         double xTilt_, double yTilt_,
-                                         const KisVector2D& movement_,
-                                         double rotation_,
-                                         double tangentialPressure_)
-    : d(new Private)
+        double xTilt_, double yTilt_,
+        const KisVector2D& movement_,
+        double rotation_,
+        double tangentialPressure_)
+        : d(new Private)
 {
     d->pos = pos_;
     d->pressure = pressure_;

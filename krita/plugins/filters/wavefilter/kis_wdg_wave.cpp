@@ -46,7 +46,7 @@ KisWdgWave::~KisWdgWave()
 {
 }
 
-void KisWdgWave::setConfiguration( const KisPropertiesConfiguration* config)
+void KisWdgWave::setConfiguration(const KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("horizontalwavelength", value)) {

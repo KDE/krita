@@ -37,29 +37,29 @@ public:
     CurveBrush();
     ~CurveBrush();
 
-    void paintLine(KisPaintDeviceSP dab,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+    void paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 
-    void setImage( KisImageWSP image ){
+    void setImage(KisImageWSP image) {
         m_image = image;
     }
 
-    void setInkColor(const KoColor &color){
+    void setInkColor(const KoColor &color) {
         m_inkColor = color;
     }
 
-    void setPainter(KisPainter *painter){
+    void setPainter(KisPainter *painter) {
         m_painter = painter;
     }
 
-    void setMinimalDistance(int mininmalDistance){
+    void setMinimalDistance(int mininmalDistance) {
         m_minimalDistance = mininmalDistance;
     }
 
-    void setMode(int mode){
+    void setMode(int mode) {
         m_mode = mode;
     }
 
-    void setInterval(int interval){
+    void setInterval(int interval) {
         m_interval = interval;
     }
 
@@ -67,15 +67,15 @@ private:
 
     QPointF getCubicBezier(const QPointF &p0, const QPointF &p1, const QPointF &p2, const QPointF &p3, qreal u);
     QPointF getQuadraticBezier(const QPointF &p0, const QPointF &p1, const QPointF &p2, qreal u);
-    QPointF getLinearBezier(const QPointF &p1, const QPointF &p2,qreal u);
+    QPointF getLinearBezier(const QPointF &p1, const QPointF &p2, qreal u);
 
     void addPoint(QPointF p);
     void removeLast();
 
     void debugColor(const quint8* data);
- 
+
     void normalizePoint(QPointF &p);
-    void rotatePoints(int *x, int *y, qreal centerX, qreal centerY,qreal angle);
+    void rotatePoints(int *x, int *y, qreal centerX, qreal centerY, qreal angle);
     // width and height for interpolation
     KisImageWSP m_image;
     KoColor m_inkColor;

@@ -45,7 +45,7 @@ public:
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 private:
-   KisSprayOpOptionsWidget * m_options;
+    KisSprayOpOptionsWidget * m_options;
 
 };
 

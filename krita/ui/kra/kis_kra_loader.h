@@ -70,13 +70,13 @@ private:
 
     KisNode* loadCloneLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadFilterMask(const KoXmlElement& elem );
+    KisNode* loadFilterMask(const KoXmlElement& elem);
 
-    KisNode* loadTransparencyMask(const KoXmlElement& elem );
+    KisNode* loadTransparencyMask(const KoXmlElement& elem);
 
-    KisNode* loadTransformationMask(const KoXmlElement& elem );
+    KisNode* loadTransformationMask(const KoXmlElement& elem);
 
-    KisNode* loadSelectionMask(KisImageWSP img, const KoXmlElement& elem );
+    KisNode* loadSelectionMask(KisImageWSP img, const KoXmlElement& elem);
 
 
 private:

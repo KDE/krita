@@ -48,13 +48,13 @@
 #include "widgets/kis_channelflags_widget.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
-                                             qint32 opacity,
-                                             const KoCompositeOp* compositeOp,
-                                             const KoColorSpace * colorSpace,
-                                             const QBitArray & channelFlags,
-                                             QWidget *parent, const char *name, Qt::WFlags f)
-    : KDialog(parent)
-    , m_colorSpace(colorSpace)
+        qint32 opacity,
+        const KoCompositeOp* compositeOp,
+        const KoColorSpace * colorSpace,
+        const QBitArray & channelFlags,
+        QWidget *parent, const char *name, Qt::WFlags f)
+        : KDialog(parent)
+        , m_colorSpace(colorSpace)
 {
     Q_UNUSED(f);
     setCaption(i18n("Layer Properties"));

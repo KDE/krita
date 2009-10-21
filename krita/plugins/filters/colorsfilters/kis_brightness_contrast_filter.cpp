@@ -75,28 +75,27 @@ void KisBrightnessContrastFilterConfiguration::fromLegacyXML(const QDomElement& 
 void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
 {
     KisCurve curve;
-    quint16 numTransfers=0;
+    quint16 numTransfers = 0;
     int version;
     version  = root.attribute("version").toInt();
 
     QDomElement e = root.firstChild().toElement();
     QString attributeName;
 
-     while (!e.isNull()) {
+    while (!e.isNull()) {
         if ((attributeName = e.attribute("name")) == "nTransfers") {
             numTransfers = e.text().toUShort();
-        } 
-        else {
+        } else {
             QRegExp rx("curve(\\d+)");
             if (rx.indexIn(attributeName, 0) != -1) {
                 quint16 index = rx.cap(1).toUShort();
-                
-                if(index == 0 && !e.text().isEmpty()) {
+
+                if (index == 0 && !e.text().isEmpty()) {
                     /**
                      * We are going to use first curve only
                      */
                     QStringList data = e.text().split(';');
-                    
+
                     foreach(const QString & pair, data) {
                         if (pair.indexOf(',') > -1) {
                             QPointF p;
@@ -108,21 +107,21 @@ void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
                 }
             }
         }
-        e=e.nextSiblingElement();
-     }
+        e = e.nextSiblingElement();
+    }
 
-     if(curve.isEmpty())
-         return;
+    if (curve.isEmpty())
+        return;
 
-     setVersion(version);
-     setCurve(curve);
-     updateTransfers();
+    setVersion(version);
+    setCurve(curve);
+    updateTransfers();
 }
 
 void KisBrightnessContrastFilterConfiguration::setCurve(KisCurve &curve)
 {
     m_curve.clear();
-    m_curve=curve;
+    m_curve = curve;
 }
 
 #define bounds(x,a,b) (x<a ? a : (x>b ? b :x))
@@ -145,7 +144,7 @@ void KisBrightnessContrastFilterConfiguration::updateTransfers()
 
 void KisBrightnessContrastFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
 {
-    toXML(doc,root);
+    toXML(doc, root);
 }
 
 void KisBrightnessContrastFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
@@ -159,10 +158,10 @@ void KisBrightnessContrastFilterConfiguration::toXML(QDomDocument& doc, QDomElem
 
     /* This is a constant for Brightness/Contranst filter */
     const qint32 numTransfers = 1;
-    
+
 
     root.setAttribute("version", version());
-    
+
     QDomElement t = doc.createElement("param");
     QDomText text = doc.createTextNode(QString::number(numTransfers));
     t.setAttribute("name", "nTransfers");
@@ -219,8 +218,8 @@ bool KisBrightnessContrastFilter::workWith(const KoColorSpace* cs) const
 
 KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
-    const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>( config );
-    if(!configBC) return 0;
+    const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>(config);
+    if (!configBC) return 0;
 
     KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->m_transfer);
     return adjustment;

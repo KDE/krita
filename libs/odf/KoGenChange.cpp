@@ -71,35 +71,38 @@ void KoGenChange::writeChangeMetaData(KoXmlWriter* writer) const
 
 void KoGenChange::writeChange(KoXmlWriter* writer, const QString& name) const
 {
-  writer->startElement("text:changed-region");
-  writer->addAttribute("text:id", name);
+    writer->startElement("text:changed-region");
+    writer->addAttribute("text:id", name);
 
-  const char* elementName;
-  switch (m_type) {
-    case KoGenChange::deleteChange:
-      elementName = "text:deletion";
-      break;
-    case KoGenChange::formatChange:
-      elementName = "text:format-change";
-      break;
-    case KoGenChange::insertChange:
-      elementName = "text:insertion";
-      break;
-    default:
-      elementName = "text:format-change"; //should not happen, format-change is probably the most harmless of the three.
-  }
-  writer->startElement(elementName);
-  if (!m_changeMetaData.isEmpty()) {
-    writer->startElement("office:change-info");
-    writeChangeMetaData(writer);
-    if (m_literalData.contains("changeMetaData"))
-      writer->addCompleteElement(m_literalData.value("changeMetaData").toUtf8());
-    writer->endElement(); // office:change-info
-  }
-  if ((m_type == KoGenChange::deleteChange) && m_literalData.contains("deletedData"))
-    writer->addCompleteElement(m_literalData.value("deletedData").toUtf8());
-  writer->endElement(); // text:insertion/format/deletion
-  writer->endElement(); // text:change
+    const char* elementName;
+    switch (m_type) {
+        case KoGenChange::deleteChange:
+            elementName = "text:deletion";
+            break;
+        case KoGenChange::formatChange:
+            elementName = "text:format-change";
+            break;
+        case KoGenChange::insertChange:
+            elementName = "text:insertion";
+            break;
+        default:
+            elementName = "text:format-change"; //should not happen, format-change is probably the most harmless of the three.
+    }
+    writer->startElement(elementName);
+    if (!m_changeMetaData.isEmpty()) {
+        writer->startElement("office:change-info");
+        writeChangeMetaData(writer);
+        if (m_literalData.contains("changeMetaData"))
+            writer->addCompleteElement(m_literalData.value("changeMetaData").toUtf8());
+        writer->endElement(); // office:change-info
+    }
+    if ((m_type == KoGenChange::deleteChange) && m_literalData.contains("deletedData")) {
+        QString deletedElement;
+        deletedElement = QString("<text:p>") + m_literalData.value("deletedData") + QString("</text:p>");
+        writer->addCompleteElement(deletedElement.toUtf8());
+    }
+    writer->endElement(); // text:insertion/format/deletion
+    writer->endElement(); // text:change
 }
 
 bool KoGenChange::operator<(const KoGenChange &other) const

@@ -209,7 +209,7 @@ bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
         change.addChildElement("changeMetaData", d->m_changes.value(changeId)->getExtraMetaData());
 
     if (d->m_changes.value(changeId)->hasDeleteData())
-        change.addChildElement("deleteData", d->m_changes.value(changeId)->getDeleteData());
+        change.addChildElement("deletedData", d->m_changes.value(changeId)->getDeleteData());
 
     return true;
 }

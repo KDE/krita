@@ -25,12 +25,13 @@
 #include <KoInlineObject.h>
 
 class KoXmlElement;
+class KoChangeTracker;
 
 class KOTEXT_EXPORT KoDeleteChangeMarker : public KoInlineObject
 {
 public:
 
-    KoDeleteChangeMarker();
+    KoDeleteChangeMarker(KoChangeTracker *changeTracker);
 
     virtual ~KoDeleteChangeMarker();
 

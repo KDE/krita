@@ -43,6 +43,7 @@
 #include <opendocument/KoTextSharedSavingData.h>
 #include <changetracker/KoChangeTracker.h>
 #include <changetracker/KoChangeTrackerElement.h>
+#include <changetracker/KoDeleteChangeMarker.h>
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 
@@ -251,6 +252,10 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
 
             if (d->changeTracker /*&& d->changeTracker->isEnabled()*/ && d->changeTracker->containsInlineChanges(charFormat)
                     && d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()) { //TODO uncomment changeTracker->isEnabled or implement another "security" measure to prevent saving changes at all
+                    if (d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::deleteChange
+                        && dynamic_cast<KoDeleteChangeMarker*>(d->layout->inlineTextObjectManager()->inlineTextObject(charFormat))) {
+                        continue;
+                    }
                 KoGenChange change;
                 d->changeTracker->saveInlineChange(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt(), change);
                 changeName = d->sharedData->genChanges().insert(change);

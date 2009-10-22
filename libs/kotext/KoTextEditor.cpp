@@ -415,7 +415,7 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
 
         QTextDocumentFragment deletedFragment = selection.selection();
         changeId = KoTextDocument(d->document).changeTracker()->getDeleteChangeId(i18n("Delete"), deletedFragment, selection.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
-        deleteChangemarker = new KoDeleteChangeMarker;
+        deleteChangemarker = new KoDeleteChangeMarker(KoTextDocument(d->document).changeTracker());
         deleteChangemarker->setChangeId(changeId);
         if (!sufix.isEmpty()) {
             selection.setPosition(selectionBegin);
@@ -945,10 +945,12 @@ void KoTextEditor::insertTable(int rows, int columns)
 void KoTextEditor::insertText(const QString &text)
 {
     d->updateState(KoTextEditor::Private::KeyPress, i18n("Key Press"));
-//    if (!d->headCommand){//TODO review this
-        QTextCharFormat format = d->caret.charFormat();
-        registerTrackedChange(d->caret, KoGenChange::insertChange, i18n("Key Press"), format, format, false);
-//    }
+
+    //first we make sure that we clear the inlineObject charProperty, if we have no selection
+    if (!d->caret.hasSelection() && d->caret.charFormat().hasProperty(KoCharacterStyle::InlineInstanceId))
+        d->clearCharFormatProperty(KoCharacterStyle::InlineInstanceId);
+    QTextCharFormat format = d->caret.charFormat();
+    registerTrackedChange(d->caret, KoGenChange::insertChange, i18n("Key Press"), format, format, false);
     int blockNumber = d->caret.blockNumber();
     d->caret.insertText(text);
 

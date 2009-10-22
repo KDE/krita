@@ -655,7 +655,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         }else if(isTextNS && localName == "change") {
             QString id = ts.attributeNS(KoXmlNS::text,"change-id");
             int changeId = d->changeTracker->getLoadedChangeId(id);
-            KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker;
+            KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
             deleteChangemarker->setChangeId(changeId);
             KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
             changeElement->setEnabled(true);

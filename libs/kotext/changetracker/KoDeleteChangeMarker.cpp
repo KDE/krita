@@ -22,8 +22,11 @@
 //KOffice includes
 #include <KoTextDocument.h>
 #include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 #include <KoTextShapeSavingContext.h>
+#include <opendocument/KoTextSharedSavingData.h>
 #include "KoChangeTrackerElement.h"
+#include "KoChangeTracker.h"
 
 //KDE includes
 #include <kdebug.h>
@@ -38,13 +41,15 @@ class KoDeleteChangeMarker::Private
 public:
     Private() {}
 
+    KoChangeTracker *changeTracker;
     QString text;
     int id;
 };
 
-KoDeleteChangeMarker::KoDeleteChangeMarker()
+KoDeleteChangeMarker::KoDeleteChangeMarker(KoChangeTracker* changeTracker)
         : d(new Private())
 {
+    d->changeTracker = changeTracker;
 }
 
 KoDeleteChangeMarker::~KoDeleteChangeMarker()
@@ -81,22 +86,21 @@ bool KoDeleteChangeMarker::loadOdf(const KoXmlElement &element)
 void KoDeleteChangeMarker::paint(QPainter& painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(posInDocument);
+    Q_UNUSED(document);
 
-    KoTextDocument doc = KoTextDocument(document);
-
-    if (!doc.changeTracker())
+    if (!d->changeTracker)
         return;
 
     Q_ASSERT(format.isCharFormat());
 
-    if (doc.changeTracker()->isEnabled() && doc.changeTracker()->elementById(d->id)->isEnabled() && doc.changeTracker()->displayDeleted()) {
+    if (d->changeTracker->isEnabled() && d->changeTracker->elementById(d->id)->isEnabled() && d->changeTracker->displayDeleted()) {
         QFont font(format.font(), pd);
-        QTextLayout layout(doc.changeTracker()->elementById(d->id)->getDeleteData(), font, pd);
+        QTextLayout layout(d->changeTracker->elementById(d->id)->getDeleteData(), font, pd);
         layout.setCacheEnabled(true);
         QList<QTextLayout::FormatRange> layouts;
         QTextLayout::FormatRange range;
         range.start = 0;
-        range.length = doc.changeTracker()->elementById(d->id)->getDeleteData().length();
+        range.length = d->changeTracker->elementById(d->id)->getDeleteData().length();
         range.format = format;
         range.format.setBackground(QBrush(Qt::red));
         layouts.append(range);
@@ -115,17 +119,16 @@ void KoDeleteChangeMarker::paint(QPainter& painter, QPaintDevice *pd, const QTex
 void KoDeleteChangeMarker::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     Q_UNUSED(posInDocument);
+    Q_UNUSED(document);
 
-    KoTextDocument doc = KoTextDocument(document);
-
-    if (!doc.changeTracker())
+    if (!d->changeTracker)
         return;
 
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
 
-    if (doc.changeTracker()->isEnabled() && doc.changeTracker()->elementById(d->id)->isEnabled() && doc.changeTracker()->displayDeleted()) {
-        object.setWidth(fm.width(doc.changeTracker()->elementById(d->id)->getDeleteData()));
+    if (d->changeTracker->isEnabled() && d->changeTracker->elementById(d->id)->isEnabled() && d->changeTracker->displayDeleted()) {
+        object.setWidth(fm.width(d->changeTracker->elementById(d->id)->getDeleteData()));
         object.setAscent(fm.ascent());
         object.setDescent(fm.descent());
     } else {
@@ -145,6 +148,20 @@ void KoDeleteChangeMarker::updatePosition(const QTextDocument *document, QTextIn
 
 void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
 {
-    Q_UNUSED(context)
-//KoInlineObject::saveOdf(context);
+    KoGenChange change;
+    QString changeName;
+    KoTextSharedSavingData *sharedData;
+    if (context.sharedData(KOTEXT_SHARED_SAVING_ID)) {
+        sharedData = dynamic_cast<KoTextSharedSavingData*>(context.sharedData(KOTEXT_SHARED_SAVING_ID));
+        if (!sharedData) {
+            kWarning(32500) << "There is no KoTextSharedSavingData in the context. This should not be the case";
+            return;
+        }
+    }
+    d->changeTracker->saveInlineChange(d->id, change);
+    changeName = sharedData->genChanges().insert(change);
+
+    context.xmlWriter().startElement("text:change", false);
+    context.xmlWriter().addAttribute("text:change-id", changeName);
+    context.xmlWriter().endElement();
 }

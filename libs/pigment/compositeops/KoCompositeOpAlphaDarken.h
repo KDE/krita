@@ -56,7 +56,6 @@ public:
                    const QBitArray & channelFlags) const
     {
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
-        Q_UNUSED( channelFlags );
 
         while (rows-- > 0 ) {
 

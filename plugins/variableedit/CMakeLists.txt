@@ -5,7 +5,6 @@ project(MetaData)
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOTEXT_INCLUDES})
 
 set(kofficevariableedit_SRCS
-    ActionHelper.cpp
     Panel.cpp
     Factory.cpp
     Plugin.cpp

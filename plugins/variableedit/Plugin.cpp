@@ -23,12 +23,12 @@
 
 #include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(kofficevariableedit, KGenericFactory<Plugin>( "koffice-variableedit" ) )
+K_EXPORT_COMPONENT_FACTORY(kofficevariableedit, KGenericFactory<Plugin>("koffice-variableedit"))
 
-Plugin::Plugin( QObject *parent, const QStringList& )
-    : QObject(parent)
+Plugin::Plugin(QObject *parent, const QStringList&)
+        : QObject(parent)
 {
-    KoDockRegistry::instance()->add( new Factory() );
+    KoDockRegistry::instance()->add(new Factory());
 }
 
 #include "Plugin.moc"

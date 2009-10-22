@@ -21,11 +21,12 @@
 
 #include <QObject>
 
-class Plugin : public QObject {
+class Plugin : public QObject
+{
     Q_OBJECT
 
 public:
-    Plugin(QObject * parent,  const QStringList & );
+    Plugin(QObject * parent,  const QStringList &);
     ~Plugin() {}
 };
 

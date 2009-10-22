@@ -28,12 +28,12 @@ Factory::Factory()
 
 QString Factory::id() const
 {
-    return QString("Simple Text Editor");
+    return QString("Simple Variable Editor");
 }
 
 KoDockFactory::DockPosition Factory::defaultDockPosition() const
 {
-     return DockMinimized;
+    return DockMinimized;
 }
 
 QDockWidget* Factory::createDockWidget()

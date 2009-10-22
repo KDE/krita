@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 Jos van den Oever <jos@vandenoever.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,132 +18,79 @@
  */
 
 #include "Panel.h"
-#include "ActionHelper.h"
 
-#include <KoDockRegistry.h>
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 #include <KoCanvasResourceProvider.h>
-#include <KoTextEditor.h>
-#include <KoText.h>
-
+#include <KoShapeController.h>
+#include <KoInlineTextObjectManager.h>
 #include <KDebug>
-#include <KLocale>
-#include <KIcon>
-#include <KAction>
-
-#include <QToolButton>
 
 Panel::Panel(QWidget *parent)
-    :QDockWidget(i18n("Variables"), parent),
-    m_canvas(0),
-    m_parent(0),
-    m_handler(0)
+        : QDockWidget(i18n("Variables"), parent),
+        m_canvas(0)
 {
     QWidget *mainWidget = new QWidget(this);
     widget.setupUi(mainWidget);
     setWidget(mainWidget);
-
-    m_style1 = new KAction(i18n("Style Sans Serif"), this);
-    m_style1->setToolTip( i18n("Set the current text to use a Sans Serif style") );
-    m_style1->setCheckable( true );
-    connect (m_style1, SIGNAL(triggered()), this, SLOT(style1ButtonClicked()));
-
-    m_style2 = new KAction(i18n("Style Serif"), this);
-    m_style2->setToolTip( i18n("Set the current text to use a Serif style") );
-    m_style2->setCheckable( true );
-    connect (m_style2, SIGNAL(triggered()), this, SLOT(style2ButtonClicked()));
-
-    m_style3 = new KAction(i18n("Style Script"), this);
-    m_style3->setToolTip( i18n("Set the current text to use a Script style") );
-    m_style3->setCheckable( true );
-    connect (m_style3, SIGNAL(triggered()), this, SLOT(style3ButtonClicked()));
-
 }
 
 Panel::~Panel()
 {
 }
 
-void Panel::setCanvas (KoCanvasBase *canvas)
+KoVariableManager* getVariableManager(KoCanvasBase *canvas) {
+    if (!canvas) return NULL;
+    KoInlineTextObjectManager* inlineManager
+        = dynamic_cast<KoInlineTextObjectManager*>(
+            canvas->shapeController()->dataCenter("InlineTextObjectManager"));
+    if (!inlineManager) {
+        return NULL;
+    }
+
+    return inlineManager->variableManager();
+}
+
+void
+printVars(KoCanvasBase *canvas)
+{
+    KoVariableManager *manager = getVariableManager(canvas);
+    if (!manager) return;
+
+    foreach(const QString& name, manager->variables()) {
+        qDebug() << "variable " << name;
+    }
+}
+
+int countVars(KoCanvasBase *canvas)
+{
+    KoVariableManager *manager = getVariableManager(canvas);
+    if (!manager) return 0;
+    return manager->variables().size();
+}
+
+void Panel::setCanvas(KoCanvasBase *canvas)
 {
     m_canvas = canvas;
     Q_ASSERT(m_canvas);
-    connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(toolChangeDetected(const QString&)));
-    connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int,const QVariant &)),
-            this, SLOT(resourceChanged(int,const QVariant&)));
+    connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)),
+            this, SLOT(toolChangeDetected(const QString&)));
+    connect(m_canvas->resourceProvider(),
+            SIGNAL(resourceChanged(int, const QVariant &)),
+            this, SLOT(resourceChanged(int, const QVariant&)));
+
+    widget.variableCount->setText(QString::number(countVars(canvas)));
 }
 
-void Panel::toolChangeDetected(const QString &toolId)
+void Panel::toolChangeDetected(const QString &/*toolId*/)
 {
-    if (toolId != "TextToolFactory_ID")
-        return;
-    delete m_parent;
-    m_parent = new QObject(this);
-    // current tool is the text tool
-    QHash<QString, KAction *> actions = m_canvas->toolProxy()->actions();
-
-    m_handler = 0;
-    if (m_canvas)
-        m_handler = qobject_cast<KoTextEditor*> (m_canvas->toolProxy()->selection());
-    m_style1->setEnabled(m_handler);
-    m_style2->setEnabled(m_handler);
-    m_style3->setEnabled(m_handler);
+    widget.variableCount->setText(QString::number(countVars(m_canvas)));
 }
 
-void Panel::resourceChanged (int key, const QVariant &value)
+void Panel::resourceChanged(int /*key*/, const QVariant &/*value*/)
 {
-    if (key == KoText::CurrentTextDocument) {
-        if (value.isNull() && m_parent) {
-            delete m_parent;
-            m_parent = 0;
-            // load 'disabled' widgets.
-        }
-    }
+    // initial version: count all variables
+    widget.variableCount->setText(QString::number(countVars(m_canvas)));
 }
-
-void Panel::applyAction(KAction *action, QToolButton *button, const QString &iconName, bool partOfGroup)
-{
-    Q_ASSERT(button);
-    button->setEnabled(action);
-    button->setIconSize(QSize(42, 42));
-    KIcon icon("koffice_simple_format_"+ iconName + (action ? "_active" : "_inactive"));
-    if (action == 0) {
-        button->setIcon(icon);
-        button->setEnabled(false);
-        return;
-    }
-
-    KAction *newAction = new KAction(m_parent);
-    newAction->setToolTip(action->toolTip());
-    newAction->setIcon(icon);
-    newAction->setWhatsThis(action->whatsThis());
-    newAction->setCheckable(action->isCheckable());
-    button->setDefaultAction(newAction);
-    new ActionHelper(m_parent, action, newAction, partOfGroup);
-}
-
-void Panel::style1ButtonClicked()
-{
-    if (m_handler == 0) return;
-    m_handler->setFontFamily("Sans Serif");
-}
-
-void Panel::style2ButtonClicked()
-{
-    if (m_handler == 0) return;
-    m_handler->setFontFamily("Serif");
-}
-
-void Panel::style3ButtonClicked()
-{
-    if (m_handler == 0) return;
-    m_handler->setFontFamily("Script");
-}
-
-
-/* nice to haves
-   Make the icon size 'configurable' using a context menu.
- */
 
 #include "Panel.moc"

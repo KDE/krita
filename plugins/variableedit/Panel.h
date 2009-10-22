@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 Jos van den Oever <jos@vandenoever.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,35 +26,21 @@
 
 #include <ui_Panel.h>
 
-class KAction;
-class KoTextEditor;
-class QToolButton;
-
-class Panel : public QDockWidget, public KoCanvasObserver {
+class Panel : public QDockWidget, public KoCanvasObserver
+{
     Q_OBJECT
 public:
     Panel(QWidget *parent = 0);
     ~Panel();
 
-    virtual void setCanvas (KoCanvasBase *canvas);
+    virtual void setCanvas(KoCanvasBase *canvas);
 
 private slots:
     void toolChangeDetected(const QString &toolId);
-    void resourceChanged (int key, const QVariant &value);
-
-    void style1ButtonClicked();
-    void style2ButtonClicked();
-    void style3ButtonClicked();
+    void resourceChanged(int key, const QVariant &value);
 
 private:
-    void setInitialButtonIcon(QToolButton *button, const QString &name) const;
-    void applyAction(KAction *action, QToolButton *button, const QString &iconName, bool partOfGroup);
-
     KoCanvasBase *m_canvas;
-    QObject *m_parent;
-    KAction *m_style1, *m_style2, *m_style3;
-    KoTextEditor *m_handler;
-
     Ui::Panel widget;
 };
 

@@ -65,7 +65,7 @@ QSize KoDocumentSectionDelegate::sizeHint(const QStyleOptionViewItem &option, co
     switch(d->view->displayMode()) {
     case View::ThumbnailMode: {
         const int height = thumbnailHeight(option, index) + textBoxHeight(option) + d->margin * 2;
-        return QSize(availableWidth(index), height);
+        return QSize(availableWidth(), height);
     }
     case View::DetailedMode:
         return QSize(option.rect.width(),
@@ -250,29 +250,16 @@ int KoDocumentSectionDelegate::thumbnailHeight(const QStyleOptionViewItem &optio
     const QSize size = index.data(Qt::SizeHintRole).toSize();
     int width = option.rect.width();
     if (!option.rect.isValid())
-        width = availableWidth(index);
+        width = availableWidth();
     if (size.width() <= width)
         return size.height();
     else
         return int(width / (qreal(size.width()) / size.height()));
 }
 
-int KoDocumentSectionDelegate::availableWidth(const QModelIndex &index) const
-    //this is such a HACK
+int KoDocumentSectionDelegate::availableWidth() const
 {
-    int dis = 0;
-    if (d->view->rootIndex().isValid()) {
-        QModelIndex i = index;
-        while (i.isValid() && i != d->view->rootIndex()) {
-            i = i.parent();
-            dis++;
-        }
-        Q_ASSERT(i.isValid());
-    }
-    if (d->view->rootIsDecorated())
-        dis++;
-    const int indent = dis * d->view->indentation();
-    return d->view->columnWidth(0) - indent;
+    return d->view->width(); // not viewport()->width(), otherwise we get infinite scrollbar addition/removal!
 }
 
 int KoDocumentSectionDelegate::textBoxHeight(const QStyleOptionViewItem &option) const

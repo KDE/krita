@@ -60,7 +60,7 @@ private:
 
     static QStyleOptionViewItem getOptions(const QStyleOptionViewItem &option, const QModelIndex &index);
     int thumbnailHeight(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    int availableWidth(const QModelIndex &index) const;
+    int availableWidth() const;
     int textBoxHeight(const QStyleOptionViewItem &option) const;
     QRect textRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QRect iconsRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;

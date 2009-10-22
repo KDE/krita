@@ -50,7 +50,6 @@ public slots:
     bool hasOptionWidget();
 
 private:
-    Q_PRIVATE_SLOT(d, void optionWidgetDestroyed(QObject*))
     Q_PRIVATE_SLOT(d, void locationChanged(Qt::DockWidgetArea area))
 
     class Private;

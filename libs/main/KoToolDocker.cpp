@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoToolDocker.h"
+#include <QPointer>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -28,17 +29,11 @@
 class KoToolDocker::Private {
 public:
     Private(KoToolDocker *dock) : currentWidget(0), q(dock) {}
-    QWidget *currentWidget;
+    QPointer<QWidget> currentWidget;
     QWidget *housekeeperWidget;
     QGridLayout *housekeeperLayout;
     QSpacerItem *bottomRightSpacer;
     KoToolDocker *q;
-
-    void optionWidgetDestroyed(QObject* child)
-    {
-        if (child == currentWidget)
-            currentWidget = 0;
-    }
 
     void locationChanged(Qt::DockWidgetArea area)
     {
@@ -95,8 +90,6 @@ void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
         return;
 
     d->currentWidget = optionWidget;
-
-    connect(d->currentWidget, SIGNAL(destroyed(QObject*)), this, SLOT(optionWidgetDestroyed(QObject*)));
 
     d->housekeeperLayout->addWidget(optionWidget, 0, 0);
 

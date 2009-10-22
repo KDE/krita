@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Variable editor
+Comment=Variable editor
+X-KDE-ServiceTypes=KOffice/Dock
+Type=Service
+X-KDE-Library=kofficevariableedit
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

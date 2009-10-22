@@ -115,12 +115,12 @@ const KoGenChange* KoGenChanges::change(const QString& name) const
 void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter) const
 {
     xmlWriter->startElement("text:tracked-changes");
-    
+
     ChangeMap changesList = changes();
     KoGenChanges::ChangeMap::const_iterator it = changesList.constBegin();
     for (; it != changesList.constEnd() ; ++it) {
         it.key().writeChange(xmlWriter, it.value());
     }
-  
+
     xmlWriter->endElement(); // text:tracked-changes
 }

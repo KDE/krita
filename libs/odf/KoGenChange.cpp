@@ -52,17 +52,17 @@ void KoGenChange::writeChangeMetaData(KoXmlWriter* writer) const
   QMap<QString, QString>::const_iterator it = m_changeMetaData.begin();
   const QMap<QString, QString>::const_iterator end = m_changeMetaData.end();
   for (; it != end; ++it) {
-    
+
 //FIXME: if the propName is passed directly as it.key().toUtf8(), the opening tag is correct but the closing tag becomes undefined
 //FIXME: example: <dc-creator>.......</`ok>
 
     if (it.key() == "dc-creator") {
-      writer->startElement("dc-creator");
+      writer->startElement("dc:creator");
       writer->addTextNode(it.value());
       writer->endElement();
     }
     if (it.key() == "dc-date") {
-      writer->startElement("dc-date");
+      writer->startElement("dc:date");
       writer->addTextNode(it.value());
       writer->endElement();
     }

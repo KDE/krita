@@ -249,8 +249,8 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
             else
                 identical = false;
 
-            if (d->changeTracker && d->changeTracker->containsInlineChanges(charFormat)
-                    && d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()) {
+            if (d->changeTracker /*&& d->changeTracker->isEnabled()*/ && d->changeTracker->containsInlineChanges(charFormat)
+                    && d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()) { //TODO uncomment changeTracker->isEnabled or implement another "security" measure to prevent saving changes at all
                 KoGenChange change;
                 d->changeTracker->saveInlineChange(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt(), change);
                 changeName = d->sharedData->genChanges().insert(change);

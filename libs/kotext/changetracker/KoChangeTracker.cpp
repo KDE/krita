@@ -28,6 +28,8 @@
 //KDE includes
 #include <KDebug>
 #include <KDateTime>
+#include <KGlobal>
+#include <KLocale>
 
 //Qt includes
 #include <QList>
@@ -114,7 +116,7 @@ int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QText
     changeElement->setChangeFormat(format);
     changeElement->setPrevFormat(prevFormat);
 
-    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
+    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
     changeElement->setCreator(QString("essai format"));
 
     changeElement->setEnabled(d->m_enabled);
@@ -133,7 +135,8 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
 
     KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::insertChange);
 
-    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
+    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
+//    changeElement->setDate(KDateTime::currentLocalDateTime().toString("Y-m-dTH:M:Sz")); //i must have misunderstood the API doc but it doesn't work.
     changeElement->setCreator(QString("essai insert"));
 
     changeElement->setEnabled(d->m_enabled);
@@ -152,7 +155,7 @@ int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment sele
 
     KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::deleteChange);
 
-    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
+    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
     changeElement->setCreator(QString("essai delete"));
     //TODO preserve formating info there. this will do for now
     changeElement->setDeleteData(selection.toPlainText());
@@ -234,11 +237,11 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
                         }
                         KoXmlElement metadata = region.namedItemNS(KoXmlNS::office,"change-info").toElement();
                         if (!metadata.isNull()) {
-                            KoXmlElement date = metadata.namedItem("dc-date").toElement();
+                            KoXmlElement date = metadata.namedItem("dc:date").toElement();
                             if (!date.isNull()) {
                                 changeElement->setDate(date.text());
                             }
-                            KoXmlElement creator = metadata.namedItem("dc-creator").toElement();
+                            KoXmlElement creator = metadata.namedItem("dc:creator").toElement();
                             if (!date.isNull()) {
                                 changeElement->setCreator(creator.text());
                             }

@@ -1029,6 +1029,20 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
 
                 if (end < block.position() || begin > block.position() + block.length())
                     continue; // selection does not intersect this block.
+                if (!m_changeTracker
+                    || m_changeTracker->displayDeleted()
+                    || !m_changeTracker->containsInlineChanges(selection.format)
+                    || !m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                    || (m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::deleteChange)) {
+                    QTextLayout::FormatRange fr;
+                    selection.format.property(KoCharacterStyle::ChangeTrackerId);
+                    fr.start = begin - block.position();
+                    fr.length = end - begin;
+                    fr.format = selection.format;
+                    selections.append(fr);
+                } else {
+                    selection.format.property(KoCharacterStyle::ChangeTrackerId);
+                }
             }
             drawTrackedChangeItem(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
             layout->draw(painter, QPointF(0, 0), selections);

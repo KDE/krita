@@ -57,6 +57,7 @@ public:
     {
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
 
+        bool testChannelFlags = !channelFlags.isEmpty();
         while (rows-- > 0 ) {
 
             const channels_type *s = reinterpret_cast<const channels_type *>(srcRowStart);
@@ -88,10 +89,18 @@ public:
 
                 // not transparent
                 if (srcAlpha != NATIVE_OPACITY_TRANSPARENT && srcAlpha >= dstAlpha) {
-                    for(uint i = 0; i < _CSTraits::channels_nb; i++) {
-                        if( (int)i != _CSTraits::alpha_pos && ( channelFlags.isEmpty() || channelFlags.testBit( i ) ) )
-                        {
-                            d[i] = s[i];
+                    if (!testChannelFlags) {
+                        for(uint i = 0; i < _CSTraits::channels_nb; i++) {
+                            if( (int)i != _CSTraits::alpha_pos) {
+                                d[i] = s[i];
+                            }
+                        }
+                    }
+                    else {
+                        for(uint i = 0; i < _CSTraits::channels_nb; i++) {
+                            if( (int)i != _CSTraits::alpha_pos && channelFlags.testBit( i ) ) {
+                                d[i] = s[i];
+                            }
                         }
                     }
                     d[_CSTraits::alpha_pos] = srcAlpha;

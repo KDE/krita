@@ -137,7 +137,7 @@ void KoColorSpaceRegistry::init()
 
     // Create the built-in colorspaces
     d->alphaCs = new KoAlphaColorSpace();
-    d->alphaCs->d->ownedByRegistry = true;
+    d->alphaCs->d->deletability = OwnedByRegistryDoNotDelete;
 
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "ColorSpacePlugins";
@@ -160,7 +160,6 @@ KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())
 
 KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
-    d->alphaCs->d->ownedByRegistry = false;
 
     delete d->colorConversionSystem;
     foreach( KoColorProfile* profile, d->profileMap) {
@@ -168,7 +167,7 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
     }
     d->profileMap.clear();
     foreach( const KoColorSpace * cs, d->csMap) {
-        cs->d->ownedByRegistry = false;
+        cs->d->deletability = OwnedByRegistryRegistyDeletes;
         delete cs;
     }
     d->csMap.clear();
@@ -176,6 +175,7 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
     delete d->colorConversionCache;
     d->colorConversionCache = 0;
 
+    d->alphaCs->d->deletability = OwnedByRegistryRegistyDeletes;
     delete d->alphaCs;
     // Do not explicitly delete d->rgbU8sRGB and d->lab16sLAB, since they are contained in the d->csMap
     delete d;
@@ -319,7 +319,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         }
 
         d->csMap[name] = cs;
-        cs->d->ownedByRegistry = true;
+        cs->d->deletability = OwnedByRegistryDoNotDelete;
         dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;
     }
 
@@ -361,7 +361,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
             QString name = csID + "<comb>" + profile->name();
             d->csMap[name] = cs;
-            cs->d->ownedByRegistry = true;
+            cs->d->deletability = OwnedByRegistryDoNotDelete;
             dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;
         }
 
@@ -508,7 +508,7 @@ KoColorConversionCache* KoColorSpaceRegistry::colorConversionCache() const
 
 const KoColorSpace* KoColorSpaceRegistry::permanentColorspace( const KoColorSpace* _colorSpace )
 {
-    if(_colorSpace->d->ownedByRegistry) return _colorSpace;
+    if(_colorSpace->d->deletability != NotOwnedByRegistry) return _colorSpace;
     else if(*_colorSpace == *d->alphaCs) return d->alphaCs;
     else {
         const KoColorSpace* cs = colorSpace(_colorSpace->id(), _colorSpace->profile());

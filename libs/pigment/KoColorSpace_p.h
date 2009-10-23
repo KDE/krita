@@ -23,8 +23,6 @@
 #include "KoColorSpace.h"
 
 struct KoColorSpace::Private {
-    Private() : ownedByRegistry(false)
-    {}
 
     QString id;
     quint32 idNumber;
@@ -35,13 +33,12 @@ struct KoColorSpace::Private {
     KoConvolutionOp* convolutionOp;
     QThreadStorage< QVector<quint8>* > conversionCache;
 
-
     mutable KoColorConversionTransformation* transfoToRGBA16;
     mutable KoColorConversionTransformation* transfoFromRGBA16;
     mutable KoColorConversionTransformation* transfoToLABA16;
     mutable KoColorConversionTransformation* transfoFromLABA16;
 
-    bool ownedByRegistry;
+    Deletability deletability;
 };
 
 #endif

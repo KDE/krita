@@ -42,6 +42,12 @@ class KoColorTransformation;
 class KoColorConversionTransformationFactory;
 class QBitArray;
 
+enum Deletability {
+    OwnedByRegistryDoNotDelete,
+    OwnedByRegistryRegistyDeletes,
+    NotOwnedByRegistry
+};
+
 enum ColorSpaceIndependence {
     FULLY_INDEPENDENT,
     TO_LAB16,

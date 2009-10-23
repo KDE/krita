@@ -56,19 +56,23 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     d->transfoFromRGBA16 = 0;
     d->transfoToLABA16 = 0;
     d->transfoFromLABA16 = 0;
+    d->deletability = NotOwnedByRegistry;
 }
 
 KoColorSpace::~KoColorSpace()
 {
-    Q_ASSERT(!d->ownedByRegistry);
+    Q_ASSERT(d->deletability != OwnedByRegistryDoNotDelete);
+
     qDeleteAll(d->compositeOps);
     foreach(KoChannelInfo * channel, d->channels)
     {
         delete channel;
     }
-    KoColorConversionCache* cache = KoColorSpaceRegistry::instance()->colorConversionCache();
-    if (cache) {
-        cache->colorSpaceIsDestroyed(this);
+    if (d->deletability == NotOwnedByRegistry) {
+        KoColorConversionCache* cache = KoColorSpaceRegistry::instance()->colorConversionCache();
+        if (cache) {
+            cache->colorSpaceIsDestroyed(this);
+        }
     }
     delete d->mixColorsOp;
     delete d->convolutionOp;

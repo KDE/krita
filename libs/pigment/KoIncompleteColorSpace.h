@@ -47,7 +47,8 @@ protected:
     virtual ~KoIncompleteColorSpace()
     {
         delete[] m_qcolordata;
-        delete m_fallBackColorSpace;
+        // XXX: leak this colorspace for now
+        //delete m_fallBackColorSpace;
     }
 
 public:

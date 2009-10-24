@@ -19,4 +19,4 @@ endif (SHOULD_BUILD_SCRIPTING)
 add_subdirectory( kopageapp )
 
 # Generic libraries
-add_subdirectory( qemf )
+#add_subdirectory( qemf )

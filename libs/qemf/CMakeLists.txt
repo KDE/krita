@@ -1,0 +1,52 @@
+PROJECT( EnhMetaFile )
+
+CMAKE_MINIMUM_REQUIRED( VERSION 2.4 )
+
+SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" )
+
+SET( QT4_MIN_VERSION "4.1.0" )
+FIND_PACKAGE(Qt4 REQUIRED )
+
+ADD_DEFINITIONS( ${QT4_DEFINITIONS} )
+
+INCLUDE_DIRECTORIES(
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${QT_INCLUDES}
+)
+
+SET( EnhMetaFile_LIB_SRCS
+     EnhMetaFile.cpp
+     EnhOutput.cpp
+     EnhHeader.cpp
+     EmfRecords.cpp )  
+
+QT4_AUTOMOC( ${EnhMetaFile_LIB_SRCS} )
+
+KDE4_ADD_LIBRARY( EnhMetaFile SHARED ${EnhMetaFile_LIB_SRCS} )
+
+TARGET_LINK_LIBRARIES(EnhMetaFile ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+INSTALL(TARGETS EnhMetaFile ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+## SET_TARGET_PROPERTIES(EnhMetaFile PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+
+ENABLE_TESTING()
+SUBDIRS( demo tests )
+
+FIND_PACKAGE(Doxygen)
+
+if(DOXYGEN_EXECUTABLE)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.cmake ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+  if(EXISTS ${QT_DOC_DIR}/html)
+    set(QTDOCS "${QT_DOC_DIR}/html")
+  else(EXISTS ${QT_DOC_DIR}/html)
+    set(QTDOCS "http://doc.trolltech.com/4.4/")
+  endif(EXISTS ${QT_DOC_DIR}/html)
+
+  add_custom_target(
+    apidox
+    COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
+    COMMAND apidocs/html/installdox -l qt4.tag@${QTDOCS} apidocs/html/*.html
+  )
+endif(DOXYGEN_EXECUTABLE)

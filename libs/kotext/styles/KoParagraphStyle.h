@@ -39,6 +39,7 @@ class KoGenStyle;
 class KoGenStyles;
 #include "KoXmlReaderForward.h"
 class KoOdfLoadingContext;
+#include "KoBorder.h"
 
 /**
  * A container for all properties for the paragraph wide style.
@@ -125,23 +126,6 @@ public:
         OutlineLevel            ///< Outline level for headings
 // do 15.5.24
 // continue at 15.5.28
-    };
-
-    /// The type of paragraph border
-    enum BorderStyle {
-        BorderNone,   ///< no border. This value forces the computed value of 'border-width' to be '0'.
-        BorderDotted,   ///< The border is a series of dots.
-        BorderDashed,   ///< The border is a series of short line segments.
-        BorderSolid,    ///< The border is a single line segment.
-        BorderDouble,   ///< The border is two solid lines. The sum of the two lines and the space between them equals the value of 'border-width'.
-        BorderGroove,   ///< The border looks as though it were carved into the canvas.
-        BorderRidge,    ///< The opposite of 'groove': the border looks as though it were coming out of the canvas.
-        BorderInset,    ///< The border makes the entire box look as though it were embedded in the canvas.
-        BorderOutset,   ///< The opposite of 'inset': the border makes the entire box look as though it were coming out of the canvas.
-
-        // kword legacy
-        BorderDashDotPattern,
-        BorderDashDotDotPattern
     };
 
     /// Constructor
@@ -331,8 +315,8 @@ public:
     qreal leftInnerBorderWidth();
     void setLeftBorderSpacing(qreal width);
     qreal leftBorderSpacing();
-    void setLeftBorderStyle(BorderStyle style);
-    BorderStyle leftBorderStyle();
+    void setLeftBorderStyle(KoBorder::BorderStyle style);
+    KoBorder::BorderStyle leftBorderStyle();
     void setLeftBorderColor(const QColor &color);
     QColor leftBorderColor();
     void setTopBorderWidth(qreal width);
@@ -341,8 +325,8 @@ public:
     qreal topInnerBorderWidth();
     void setTopBorderSpacing(qreal width);
     qreal topBorderSpacing();
-    void setTopBorderStyle(BorderStyle style);
-    BorderStyle topBorderStyle();
+    void setTopBorderStyle(KoBorder::BorderStyle style);
+    KoBorder::BorderStyle topBorderStyle();
     void setTopBorderColor(const QColor &color);
     QColor topBorderColor();
     void setRightBorderWidth(qreal width);
@@ -351,8 +335,8 @@ public:
     qreal rightInnerBorderWidth();
     void setRightBorderSpacing(qreal width);
     qreal rightBorderSpacing();
-    void setRightBorderStyle(BorderStyle style);
-    BorderStyle rightBorderStyle();
+    void setRightBorderStyle(KoBorder::BorderStyle style);
+    KoBorder::BorderStyle rightBorderStyle();
     void setRightBorderColor(const QColor &color);
     QColor rightBorderColor();
     void setBottomBorderWidth(qreal width);
@@ -361,8 +345,8 @@ public:
     qreal bottomInnerBorderWidth();
     void setBottomBorderSpacing(qreal width);
     qreal bottomBorderSpacing();
-    void setBottomBorderStyle(BorderStyle style);
-    BorderStyle bottomBorderStyle();
+    void setBottomBorderStyle(KoBorder::BorderStyle style);
+    KoBorder::BorderStyle bottomBorderStyle();
     void setBottomBorderColor(const QColor &color);
     QColor bottomBorderColor();
 

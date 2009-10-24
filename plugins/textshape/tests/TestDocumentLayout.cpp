@@ -628,10 +628,10 @@ void TestDocumentLayout::testParagraphBorders()
     initForNewTest("Paragraph with Borders\nAnother parag\n");
     QTextCursor cursor(m_doc->begin());
     QTextBlockFormat bf = cursor.blockFormat();
-    bf.setProperty(KoParagraphStyle::LeftBorderStyle, KoParagraphStyle::BorderSolid);
-    bf.setProperty(KoParagraphStyle::TopBorderStyle, KoParagraphStyle::BorderSolid);
-    bf.setProperty(KoParagraphStyle::BottomBorderStyle, KoParagraphStyle::BorderSolid);
-    bf.setProperty(KoParagraphStyle::RightBorderStyle, KoParagraphStyle::BorderSolid);
+    bf.setProperty(KoParagraphStyle::LeftBorderStyle, KoBorder::BorderSolid);
+    bf.setProperty(KoParagraphStyle::TopBorderStyle, KoBorder::BorderSolid);
+    bf.setProperty(KoParagraphStyle::BottomBorderStyle, KoBorder::BorderSolid);
+    bf.setProperty(KoParagraphStyle::RightBorderStyle, KoBorder::BorderSolid);
     bf.setProperty(KoParagraphStyle::LeftBorderWidth, 8.0);
     bf.setProperty(KoParagraphStyle::TopBorderWidth, 9.0);
     bf.setProperty(KoParagraphStyle::BottomBorderWidth, 10.0);
@@ -680,10 +680,10 @@ void TestDocumentLayout::testParagraphBorders()
     QCOMPARE(borderOutline.right(), 200.);
 
     // qreal borders.  Specify an additional width for each side.
-    bf.setProperty(KoParagraphStyle::LeftBorderStyle, KoParagraphStyle::BorderDouble);
-    bf.setProperty(KoParagraphStyle::TopBorderStyle, KoParagraphStyle::BorderDouble);
-    bf.setProperty(KoParagraphStyle::BottomBorderStyle, KoParagraphStyle::BorderDouble);
-    bf.setProperty(KoParagraphStyle::RightBorderStyle, KoParagraphStyle::BorderDouble);
+    bf.setProperty(KoParagraphStyle::LeftBorderStyle, KoBorder::BorderDouble);
+    bf.setProperty(KoParagraphStyle::TopBorderStyle, KoBorder::BorderDouble);
+    bf.setProperty(KoParagraphStyle::BottomBorderStyle, KoBorder::BorderDouble);
+    bf.setProperty(KoParagraphStyle::RightBorderStyle, KoBorder::BorderDouble);
     bf.setProperty(KoParagraphStyle::LeftInnerBorderWidth, 2.0);
     bf.setProperty(KoParagraphStyle::RightInnerBorderWidth, 2.0);
     bf.setProperty(KoParagraphStyle::BottomInnerBorderWidth, 2.0);

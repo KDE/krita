@@ -170,17 +170,17 @@ void KoTextBlockBorderData::setEdge(Side side, const QTextBlockFormat &bf,
 {
 
     Edge edge;
-    KoParagraphStyle::BorderStyle borderStyle;
-    borderStyle = static_cast<KoParagraphStyle::BorderStyle>(bf.intProperty(style));
+    KoBorder::BorderStyle  borderStyle;
+    borderStyle = static_cast<KoBorder::BorderStyle>(bf.intProperty(style));
     switch (borderStyle) {
-    case KoParagraphStyle::BorderDotted: edge.innerPen.setStyle(Qt::DotLine); break;
-    case KoParagraphStyle::BorderDashed: edge.innerPen.setStyle(Qt::DashLine); break;
-    case KoParagraphStyle::BorderDashDotPattern: edge.innerPen.setStyle(Qt::DashDotLine); break;
-    case KoParagraphStyle::BorderDashDotDotPattern: edge.innerPen.setStyle(Qt::DashDotDotLine); break;
-    case KoParagraphStyle::BorderGroove: /* TODO */ break;
-    case KoParagraphStyle::BorderRidge: /* TODO */ break;
-    case KoParagraphStyle::BorderInset: /* TODO */ break;
-    case KoParagraphStyle::BorderOutset: /* TODO */ break;
+    case KoBorder::BorderDotted: edge.innerPen.setStyle(Qt::DotLine); break;
+    case KoBorder::BorderDashed: edge.innerPen.setStyle(Qt::DashLine); break;
+    case KoBorder::BorderDashDotPattern: edge.innerPen.setStyle(Qt::DashDotLine); break;
+    case KoBorder::BorderDashDotDotPattern: edge.innerPen.setStyle(Qt::DashDotDotLine); break;
+    case KoBorder::BorderGroove: /* TODO */ break;
+    case KoBorder::BorderRidge: /* TODO */ break;
+    case KoBorder::BorderInset: /* TODO */ break;
+    case KoBorder::BorderOutset: /* TODO */ break;
     default:
         edge.innerPen.setStyle(Qt::SolidLine);
     }

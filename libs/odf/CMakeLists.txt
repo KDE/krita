@@ -27,6 +27,7 @@ set(koodf_LIB_SRCS
     KoGenChanges.cpp
     KoOdfDocument.cpp
     KoEmbeddedDocumentSaver.cpp
+    KoBorder.cpp
 
     # depracated classes, have to have a home which for now is here.
     kopicture/KoPictureKey.cpp
@@ -69,5 +70,6 @@ install( FILES
     KoGenChange.h
     KoGenChanges.h
     KoEmbeddedDocumentSaver.h
+    KoBorder.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

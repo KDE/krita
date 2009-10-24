@@ -30,6 +30,9 @@ TableDialog::TableDialog(QWidget *parent)
     QWidget *form = new QWidget;
     widget.setupUi(form);
     setMainWidget(form);
+
+    /* disable stuff not done yet */
+    widget.groupPhysical->setVisible(false);
 }
 
 int TableDialog::columns()

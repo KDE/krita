@@ -1601,13 +1601,8 @@ void TextTool::setStyle(KoParagraphStyle *style)
 void TextTool::insertTable()
 {
     TableDialog *dia = new TableDialog(0);
-/*
-    connect(dia, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));
-    connect(dia, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
-*/
-    dia->exec();
-
-    m_textEditor->insertTable(dia->rows(), dia->columns());
+    if (dia->exec() == TableDialog::Accepted)
+        m_textEditor->insertTable(dia->rows(), dia->columns());
 
     delete dia;
 }

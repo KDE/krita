@@ -28,6 +28,10 @@
 #include <klocale.h>
 
 
+// The default EMF.  Contains "static char defaultEMF[]"
+#include "DefaultEmf.h"
+
+
 EmfShapeFactory::EmfShapeFactory(QObject *parent)
     : KoShapeFactory(parent, EmfShape_SHAPEID, i18n("Emf"))
 {
@@ -38,7 +42,8 @@ EmfShapeFactory::EmfShapeFactory(QObject *parent)
 KoShape *EmfShapeFactory::createDefaultShape() const
 {
     EmfShape *emf = new EmfShape();
-    //FIXME: Add more here.
+
+    emf->setEmfBytes( defaultEMF, sizeof( defaultEMF ) );
 
     return emf;
 }

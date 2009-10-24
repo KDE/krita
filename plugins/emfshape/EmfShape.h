@@ -22,8 +22,10 @@
 #ifndef EMFSHAPE_H
 #define EMFSHAPE_H
 
+
 // KOffice
 #include <KoShape.h>
+#include <KoFrameShape.h>
 
 
 class QPainter;
@@ -31,7 +33,7 @@ class QPainter;
 #define EmfShape_SHAPEID "EmfShapeID"
 
 
-class EmfShape : public KoShape {
+class EmfShape : public KoShape, public KoFrameShape {
 public:
     EmfShape();
     virtual ~EmfShape();
@@ -44,6 +46,8 @@ public:
     virtual void saveOdf(KoShapeSavingContext & context) const;
     /// reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    /// Load the real contents of the frame shape.
+    virtual bool loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context);
 
     // Methods (none so far)
     // ...
@@ -51,10 +55,17 @@ public:
     void setPrintable(bool on);
     bool printable() const { return m_printable; }
 
+    void  setEmfBytes( char *bytes, int size );
+    char *emfBytes();
+    int   emfSize();
+
 private:
     void draw(QPainter &painter);
 
-    bool m_printable;
+    char  *m_bytes;       // Use char* instead of void* because of QByteArray
+    int    m_size;
+
+    bool   m_printable;
 };
 
 #endif

@@ -28,27 +28,64 @@
 // Qt
 #include <QPen>
 #include <QPainter>
+#include <QByteArray>
+#include <QBuffer>
+#include <QDataStream>
+#include <QPixmap>
+
 
 // KDE
 #include <KDebug>
 
+// KOffice
+#include "KoUnit.h"
+#include "KoXmlNS.h"
+// FIXME
+#include "../../libs/qemf/EmfParser.h"
+
+// EMF shape
+#include "DefaultEmf.h"
+
 
 EmfShape::EmfShape()
-    : m_printable(false)
+    : KoFrameShape( KoXmlNS::draw, "object" ) // FIXME: Use something else(?)
+    , m_bytes(0)
+    , m_size(0)
+    , m_printable(true)
 {
     setShapeId(EmfShape_SHAPEID);
+
+   // Default size of the shape.
+    KoShape::setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
 }
 
 EmfShape::~EmfShape()
 {
 }
 
+void  EmfShape::setEmfBytes( char *bytes, int size )
+{
+    m_bytes = bytes;
+    m_size  = size;
+}
+
+char *EmfShape::emfBytes()
+{
+    return m_bytes;
+}
+
+int   EmfShape::emfSize()
+{
+    return m_size;
+}
+
+
 void EmfShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (m_printable) {
+    //if (m_printable) {
         applyConversion(painter, converter);
         draw(painter);
-    }
+        //}
 }
 
 void EmfShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
@@ -65,38 +102,43 @@ void EmfShape::paintDecorations(QPainter &painter, const KoViewConverter &conver
 
 void EmfShape::draw(QPainter &painter)
 {
-#if 1
-    QRectF  rect(QPointF(0,0), size());
+    QEmf::Parser         emfParser;
 
-    //painter.setBrush();
+    // FIXME: Make emfOutput use QSizeF
+    QSize  sizeInt( size().width(), size().height() );
+    kDebug() << "-------------------------------------------";
+    kDebug() << "size: " << sizeInt;
+    kDebug() << "-------------------------------------------";
+    QEmf::PainterOutput  emfOutput( painter, sizeInt );
+    emfParser.setOutput( &emfOutput );
+    
+    // FIXME: Use the actual bytes.
+    QByteArray  emfArray( &defaultEMF[0], sizeof(defaultEMF) );
+    QBuffer     emfBuffer( &emfArray );
+    emfBuffer.open( QIODevice::ReadOnly );
+
+    QDataStream  emfStream;
+    emfStream.setDevice( &emfBuffer );
+    emfStream.setByteOrder( QDataStream::LittleEndian );
+
+    emfParser.loadFromStream( emfStream );
+
+    return;
+
+    // Old code, not in use any more.
+    QPixmap pixmap = QPixmap::fromImage( *(emfOutput.image()) );
+    painter.drawPixmap( 0, 0, 
+                        pixmap.scaled( int(size().width()), int(size().height()),
+                                       Qt::KeepAspectRatio,
+                                       Qt::SmoothTransformation ) );
+    return;
 
     // Draw a cross
+    QRectF  rect(QPointF(0,0), size());
     painter.setPen(QPen(QColor(172, 196, 206)));
     painter.drawRect(rect);
     painter.drawLine(rect.topLeft(), rect.bottomRight());
     painter.drawLine(rect.bottomLeft(), rect.topRight());
-
-#else
-    painter.setPen(QPen(QColor(172, 196, 206)));
-    QRectF rect(QPointF(0,0), size());
-    bool top = (m_orientation == TopRight || m_orientation == TopLeft);
-    bool left = (m_orientation == BottomLeft || m_orientation == TopLeft);
-    divideVertical(painter, rect, top, left);
-
-    painter.setPen(QPen(QColor(173, 123, 134)));
-    const qreal x1 = rect.width() / m_divineProportion;
-    const qreal x2 = rect.width() - x1;
-    if ((top && !left) || (!top && left)) {
-        painter.drawLine(rect.bottomLeft(), rect.topRight());
-        painter.drawLine(QPointF(x1, 0), rect.bottomRight());
-        painter.drawLine(QPointF(0,0), QPointF(x2, rect.bottom()));
-    }
-    else {
-        painter.drawLine(rect.topLeft(), rect.bottomRight());
-        painter.drawLine(QPointF(x2, 0), rect.bottomLeft());
-        painter.drawLine(QPointF(x1, rect.bottom()), rect.topRight());
-    }
-#endif
 }
 
 void EmfShape::saveOdf(KoShapeSavingContext & context) const
@@ -108,47 +150,21 @@ void EmfShape::saveOdf(KoShapeSavingContext & context) const
 
 bool EmfShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-
-    // FIXME: NYI
-    return false; 
+    kDebug() <<"Loading ODF frame in the EMF shape";
+    loadOdfAttributes(element, context, OdfAllAttributes);
+    return loadOdfFrame(element, context);
 }
 
-#if 0
-void EmfShape::divideHorizontal(QPainter &painter, const QRectF &rect, bool top, bool left)
+// Load the actual contents within the EMF shape.
+bool EmfShape::loadOdfFrameElement( const KoXmlElement & element,
+                                    KoShapeLoadingContext &/*context*/ )
 {
-    if (rect.height() < 2)
-        return;
-    const qreal y = rect.height() / m_divineProportion;
-    const qreal offset = top ? rect.bottom() - y : rect.top() + y;
+    kDebug() <<"Loading ODF frame contents in the EMF shape";
 
-    // draw horizontal line.
-    painter.drawLine(QPointF(rect.left(), offset), QPointF(rect.right(), offset));
-    divideVertical(painter, QRectF( QPointF(rect.left(), top ? rect.top() : offset),
-                QSizeF(rect.width(), rect.height() - y)), !top, left);
+    // FIXME
+    return false;
 }
 
-void EmfShape::divideVertical(QPainter &painter, const QRectF &rect, bool top, bool left)
-{
-    if (rect.width() < 2)
-        return;
-    const qreal x = rect.width() / m_divineProportion;
-    const qreal offset = left ? rect.right() - x : rect.left() + x;
-    // draw vertical line
-    painter.drawLine(QPointF(offset, rect.top()), QPointF(offset, rect.bottom()));
-    divideHorizontal(painter, QRectF(QPointF( left ? rect.left() : offset, rect.top()),
-                QSizeF(rect.width() - x, rect.height())), top, !left);
-}
-
-void EmfShape::setOrientation(Orientation orientation)
-{
-    if (m_orientation == orientation)
-        return;
-    m_orientation = orientation;
-    update();
-}
-#endif
 
 void EmfShape::setPrintable(bool on)
 {

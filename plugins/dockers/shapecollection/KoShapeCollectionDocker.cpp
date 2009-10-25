@@ -367,7 +367,7 @@ void KoShapeCollectionDocker::activateShapeCollection(QListWidgetItem *item)
         m_collectionView->setModel(m_modelMap[id]);
     }
     else
-        kWarning() << "Didn't find a model with id ==" << id;
+        kWarning(31000) << "Didn't find a model with id ==" << id;
 
     m_closeCollectionButton->setEnabled(id != "default");
 }
@@ -486,7 +486,7 @@ void KoShapeCollectionDocker::onLoadingFinished()
 
     if(!loader)
     {
-        kWarning() << "Not called by a KoOdfCollectionLoader!";
+        kWarning(31000) << "Not called by a KoOdfCollectionLoader!";
         return;
     }
 

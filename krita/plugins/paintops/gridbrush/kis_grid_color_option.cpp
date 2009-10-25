@@ -95,6 +95,11 @@ int KisGridColorOption::value() const
 }
 
 
+bool KisGridColorOption::sampleInputColor() const
+{
+    return m_options->sampleInputCHBox->isChecked();
+}
+
 
 
 

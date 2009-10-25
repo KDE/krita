@@ -52,6 +52,9 @@ public:
     int divisionLevel() const;
     bool pressureDivision() const;
 
+    qreal vertBorder() const;
+    qreal horizBorder() const;
+    bool jitterBorder() const;
     
     int object() const;
     int shape() const;
@@ -67,7 +70,8 @@ public:
     // color options
     bool useRandomOpacity() const;
     bool useRandomHSV() const;
-
+    bool sampleInput() const;
+    
     // TODO: these should be intervals like 20..180
     int hue() const;
     int saturation() const;

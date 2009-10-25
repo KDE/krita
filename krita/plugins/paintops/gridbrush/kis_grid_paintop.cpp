@@ -29,12 +29,15 @@
 #include <kis_types.h>
 #include <kis_paintop.h>
 #include <kis_paint_information.h>
+#include <kis_random_sub_accessor.h>
+
 
 #include <KoColor.h>
 
 #ifdef BENCHMARK
     #include <QTime>
 #endif
+#include <KoColorSpace.h>
 
 
 KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
@@ -51,6 +54,7 @@ KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainte
     m_painter = new KisPainter(m_dab);
     m_painter->setPaintColor( painter->paintColor() );
     m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
+    m_pixelSize = settings->node()->paintDevice()->colorSpace()->pixelSize();
     
 #ifdef BENCHMARK
     m_count = m_total = 0;
@@ -101,10 +105,53 @@ if (!painter()) return;
     qreal yStep = gridHeight / (qreal)divide;
     qreal xStep = gridWidth / (qreal)divide;
 
+    KisRandomSubAccessorPixel acc = m_settings->node()->paintDevice()->createRandomSubAccessor();
+    
+    QRectF tile;
+    KoColor color( painter()->paintColor() );
+    
 
+    
+    qreal vertBorder = m_settings->vertBorder(); 
+    qreal horzBorder = m_settings->horizBorder();
+    if (m_settings->jitterBorder()){
+        if (vertBorder == horzBorder){
+            vertBorder = horzBorder = vertBorder * drand48();
+        }else{
+            vertBorder *= drand48();
+            horzBorder *= drand48();
+        }
+    }
+    
     for (int y = 0; y < divide; y++){
         for (int x = 0; x < divide; x++){
-            m_painter->paintEllipse(dabPosition.x() + x*xStep,dabPosition.y() + y*yStep, xStep, yStep );
+            tile = QRectF(dabPosition.x() + x*xStep,dabPosition.y() + y*yStep, xStep, yStep);
+            tile.adjust(vertBorder,horzBorder,-vertBorder,-horzBorder);
+
+            if (m_settings->sampleInput()){
+                acc.moveTo(tile.center().x(), tile.center().y());
+                acc.sampledOldRawData( color.data() );
+                m_painter->setPaintColor( color );
+            }
+
+            if (m_settings->useRandomHSV()){
+                QHash<QString, QVariant> params;
+                params["h"] = (m_settings->hue() / 180.0) * drand48();
+                params["s"] = (m_settings->saturation() / 100.0) * drand48();
+                params["v"] = (m_settings->value() / 100.0) * drand48();
+
+                KoColorTransformation* transfo;
+                transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
+                transfo->transform(color.data(), color.data() , 1);
+                m_painter->setPaintColor( color );
+            }
+            
+            if (m_settings->useRandomOpacity()){
+                m_painter->setOpacity( qRound(drand48() * OPACITY_OPAQUE) );
+            }
+
+
+            m_painter->paintEllipse( tile );
         }
     }
     

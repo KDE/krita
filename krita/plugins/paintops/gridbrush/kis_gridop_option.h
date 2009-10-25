@@ -33,6 +33,10 @@ public:
     int gridHeight() const;
     int divisionLevel() const;
     bool pressureDivision() const;
+
+    qreal vertBorder() const;
+    qreal horizBorder() const;
+    bool jitterBorder() const;
     
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);

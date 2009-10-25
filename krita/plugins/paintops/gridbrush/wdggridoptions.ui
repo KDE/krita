@@ -22,13 +22,13 @@
     <height>260</height>
    </size>
   </property>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>50</y>
-     <width>161</width>
-     <height>121</height>
+     <x>10</x>
+     <y>14</y>
+     <width>186</width>
+     <height>212</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -39,8 +39,11 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
+    <item row="0" column="1" colspan="2">
      <widget class="QSpinBox" name="gridWidthSPBox">
+      <property name="maximum">
+       <number>999</number>
+      </property>
       <property name="value">
        <number>25</number>
       </property>
@@ -53,8 +56,11 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="1" column="1" colspan="2">
      <widget class="QSpinBox" name="gridHeightSPBox">
+      <property name="maximum">
+       <number>999</number>
+      </property>
       <property name="value">
        <number>25</number>
       </property>
@@ -67,17 +73,55 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="2" column="1" colspan="2">
      <widget class="QSpinBox" name="divisionLevelSPBox">
+      <property name="maximum">
+       <number>999</number>
+      </property>
       <property name="value">
        <number>2</number>
       </property>
      </widget>
     </item>
-    <item row="3" column="0" colspan="2">
+    <item row="3" column="0" colspan="3">
      <widget class="QCheckBox" name="divisionPressureCHBox">
       <property name="text">
        <string>Division by pressure</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="2">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Vertical border</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <widget class="QDoubleSpinBox" name="vertBorderDSPBox">
+      <property name="decimals">
+       <number>1</number>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="2">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Horizontal border</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <widget class="QDoubleSpinBox" name="horizBorderDSPBox">
+      <property name="decimals">
+       <number>1</number>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="3">
+     <widget class="QCheckBox" name="jitterBorderCHBox">
+      <property name="text">
+       <string>Jitter borders</string>
       </property>
      </widget>
     </item>

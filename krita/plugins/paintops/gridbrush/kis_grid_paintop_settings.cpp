@@ -171,3 +171,26 @@ bool KisGridPaintOpSettings::gaussian() const
 {
     return m_options->m_gridShapeOption->gaussian();
 }
+
+bool KisGridPaintOpSettings::sampleInput() const
+{
+    return m_options->m_gridColorOption->sampleInputColor();
+}
+
+
+qreal KisGridPaintOpSettings::horizBorder() const
+{
+    return m_options->m_gridOption->horizBorder();
+}
+
+qreal KisGridPaintOpSettings::vertBorder() const
+{
+    return m_options->m_gridOption->vertBorder();
+}
+
+
+bool KisGridPaintOpSettings::jitterBorder() const
+{
+    return m_options->m_gridOption->jitterBorder();
+}
+

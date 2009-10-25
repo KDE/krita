@@ -30,7 +30,8 @@ public:
 
     bool useRandomHSV() const;
     bool useRandomOpacity() const;
-
+    bool sampleInputColor() const;
+    
     // TODO: these should be intervals like 20..180 
     int hue() const;
     int saturation() const;

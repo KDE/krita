@@ -54,7 +54,8 @@ private:
     double              m_xSpacing;
     double              m_ySpacing;
     double              m_spacing;
-
+    int                 m_pixelSize;
+    
 #ifdef BENCHMARK
     int m_total;
     int m_count;

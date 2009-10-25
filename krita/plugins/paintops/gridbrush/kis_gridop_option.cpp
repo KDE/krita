@@ -87,3 +87,21 @@ void KisGridOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
 }
 
 
+qreal KisGridOpOption::horizBorder() const
+{
+    return m_options->vertBorderDSPBox->value();
+}
+
+
+qreal KisGridOpOption::vertBorder() const
+{
+    return m_options->horizBorderDSPBox->value();
+}
+
+
+
+bool KisGridOpOption::jitterBorder() const
+{
+    return m_options->jitterBorderCHBox->isChecked();
+}
+

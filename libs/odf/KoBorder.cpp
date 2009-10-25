@@ -498,9 +498,9 @@ void KoBorder::loadOdf(const KoXmlElement &style)
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             QStringList borderData = border.split(' ', QString::SkipEmptyParts);
 
-            qreal        borderWidth = KoUnit::parseValue(borderData[0], 1.0);
-            BorderStyle  borderStyle = odfBorderStyle(borderData[1]);
-            QColor       borderColor = QColor(borderData[2]);
+            const qreal borderWidth = KoUnit::parseValue(borderData[0], 1.0);
+            const BorderStyle borderStyle = odfBorderStyle(borderData[1]);
+            const QColor borderColor = QColor(borderData[2]);
 
             setLeftBorderWidth(borderWidth);
             setLeftBorderStyle(borderStyle);
@@ -526,6 +526,7 @@ void KoBorder::loadOdf(const KoXmlElement &style)
             if (!border.isEmpty() && border != "none" && border != "hidden") {
 
                 QStringList borderData = border.split(' ', QString::SkipEmptyParts);
+
                 setLeftBorderWidth(KoUnit::parseValue(borderData[0], 1.0));
                 setLeftBorderStyle(odfBorderStyle(borderData[1]));
                 setLeftBorderColor(QColor(borderData[2]));
@@ -626,22 +627,22 @@ void KoBorder::loadOdf(const KoXmlElement &style)
 void KoBorder::saveOdf(KoGenStyle &style) const
 {
     // Get the strings that describe respective borders.
-    QString leftBorderString = ( QString("%1pt %2 %3")
+    QString leftBorderString = QString("%1pt %2 %3")
                                  .arg(QString::number(leftBorderWidth()),
                                       odfBorderStyleString(leftBorderStyle()),
-                                      leftBorderColor().name()) );
-    QString rightBorderString = ( QString("%1pt %2 %3")
+                                      leftBorderColor().name());
+    QString rightBorderString =  QString("%1pt %2 %3")
                                   .arg(QString::number(rightBorderWidth()),
                                        odfBorderStyleString(rightBorderStyle()),
-                                       rightBorderColor().name()) );
-    QString topBorderString = ( QString("%1pt %2 %3")
+                                       rightBorderColor().name());
+    QString topBorderString = QString("%1pt %2 %3")
                                 .arg(QString::number(topBorderWidth()),
                                      odfBorderStyleString(topBorderStyle()),
-                                     topBorderColor().name()) );
-    QString bottomBorderString = ( QString("%1pt %2 %3")
+                                     topBorderColor().name());
+    QString bottomBorderString = QString("%1pt %2 %3")
                                    .arg(QString::number(bottomBorderWidth()),
                                         odfBorderStyleString(bottomBorderStyle()),
-                                        bottomBorderColor().name()) );
+                                        bottomBorderColor().name());
 
     // Check if we can save all borders in one fo:border attribute, or
     // if we have to use several different ones like fo:border-left, etc.
@@ -665,22 +666,23 @@ void KoBorder::saveOdf(KoGenStyle &style) const
     }
 
     // Handle double borders
-    QString leftBorderLineWidth = ( QString("%1pt %2pt %3pt")
+    QString leftBorderLineWidth = QString("%1pt %2pt %3pt")
                                     .arg(QString::number(leftInnerBorderWidth()),
                                          QString::number(leftBorderSpacing()),
-                                         QString::number(leftBorderWidth())) );
-    QString rightBorderLineWidth = ( QString("%1pt %2pt %3pt")
+                                         QString::number(leftBorderWidth()));
+    QString rightBorderLineWidth = QString("%1pt %2pt %3pt")
                                      .arg(QString::number(rightInnerBorderWidth()),
                                           QString::number(rightBorderSpacing()),
-                                          QString::number(rightBorderWidth())) );
-    QString topBorderLineWidth = ( QString("%1pt %2pt %3pt")
+                                          QString::number(rightBorderWidth()));
+    QString topBorderLineWidth = QString("%1pt %2pt %3pt")
                                    .arg(QString::number(topInnerBorderWidth()),
                                         QString::number(topBorderSpacing()),
-                                        QString::number(topBorderWidth())) );
-    QString bottomBorderLineWidth = ( QString("%1pt %2pt %3pt")
+                                        QString::number(topBorderWidth()));
+    QString bottomBorderLineWidth = QString("%1pt %2pt %3pt")
                                       .arg(QString::number(bottomInnerBorderWidth()),
                                            QString::number(bottomBorderSpacing()),
-                                           QString::number(bottomBorderWidth())) );
+                                           QString::number(bottomBorderWidth()));
+
     if (leftBorderLineWidth == rightBorderLineWidth
         && leftBorderLineWidth == topBorderLineWidth
         && leftBorderLineWidth == bottomBorderLineWidth

@@ -555,6 +555,7 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
                         qint32 dststride,
+                        bool dstAlphaLocked,
                         const KoColorSpace * srcSpace,
                         const quint8 *src,
                         qint32 srcRowStride,
@@ -571,6 +572,7 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
                         qint32 dststride,
+                        bool dstAlphaLocked,
                         const KoColorSpace * srcSpace,
                         const quint8 *src,
                         qint32 srcRowStride,
@@ -586,6 +588,7 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
                         qint32 dststride,
+                        bool dstAlphaLocked,
                         const KoColorSpace * srcSpace,
                         const quint8 *src,
                         qint32 srcRowStride,
@@ -602,6 +605,7 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
                         qint32 dststride,
+                        bool dstAlphaLocked,
                         const KoColorSpace * srcSpace,
                         const quint8 *src,
                         qint32 srcRowStride,
@@ -654,6 +658,13 @@ protected:
     const KoColorConversionTransformation* fromRgbA16Converter() const;
 
 private:
+
+    /// Return a new byte array containing the alpha values for
+    /// the area defined by rows, columns and rowstride in the
+    /// the set of pixels.
+    quint8* getAlphaBytes(quint8* pixels, qint32 rowStride, quint32 rows, quint32 cols) const;
+
+    void applyAlphaBytes(quint8* pixels, quint8* alpha, qint32 rowStride, quint32 rows, quint32 cols) const;
 
     /**
      * Returns the thread-local conversion cache. If it doesn't exist
@@ -744,6 +755,6 @@ public:
       */
      virtual QString defaultProfile() const = 0;
 
- };
+};
 
 #endif // KOCOLORSPACE_H

@@ -78,7 +78,7 @@ class CompositeCopy : public KoCompositeOp {
                     qint32 columns = numColumns;
                     while (columns > 0) {
                       memcpy( dstN, src, bytesPerPixel);
-                      dst += colorSpace()->pixelSize();
+                      dst += bytesPerPixel;
                     }
                 } else {
                     memcpy(dst, src, numColumns * bytesPerPixel);

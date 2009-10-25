@@ -103,6 +103,7 @@ struct KisPainter::Private {
     KisFillPainter*             fillPainter;
     qint32                      maskImageWidth;
     qint32                      maskImageHeight;
+    bool                        alphaLocked;
 };
 
 KisPainter::KisPainter()
@@ -146,6 +147,7 @@ void KisPainter::init()
     d->fillPainter = 0;
     d->maskImageWidth = 255;
     d->maskImageHeight = 255;
+    d->alphaLocked = false;
 
     KConfigGroup cfg = KGlobal::config()->group("");
     d->useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);
@@ -320,6 +322,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
                 d->colorSpace->bitBlt(dstIt.rawData(),
                                       dstRowStride,
+                                      d->alphaLocked,
                                       srcCs,
                                       srcIt.rawData(),
                                       srcRowStride,
@@ -368,6 +371,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
                 d->colorSpace->bitBlt(dstIt.rawData(),
                                       dstRowStride,
+                                      d->alphaLocked,
                                       srcCs,
                                       srcIt.rawData(),
                                       srcRowStride,
@@ -439,6 +443,7 @@ void KisPainter::bltFixed(qint32 dx, qint32 dy,
 
         d->colorSpace->bitBlt(dstBytes,
                               sw * d->device->pixelSize(),
+                              d->alphaLocked,
                               srcCs,
                               srcDev->data() + sx,
                               srcDev->bounds().width() * srcDev->pixelSize(),
@@ -454,6 +459,7 @@ void KisPainter::bltFixed(qint32 dx, qint32 dy,
     } else {
         d->colorSpace->bitBlt(dstBytes,
                               sw * d->device->pixelSize(),
+                              d->alphaLocked,
                               srcCs,
                               srcDev->data() + sx,
                               srcDev->bounds().width() * srcDev->pixelSize(),
@@ -1735,3 +1741,14 @@ void KisPainter::setMaskImageSize(qint32 width, qint32 height)
     d->fillPainter = 0;
     d->polygonMaskImage = QImage();
 }
+
+void KisPainter::setLockAlpha(bool protect)
+{
+    d->alphaLocked = protect;
+}
+
+bool KisPainter::alphaLocked() const
+{
+    return d->alphaLocked;
+}
+

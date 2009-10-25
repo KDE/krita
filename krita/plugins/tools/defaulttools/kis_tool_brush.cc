@@ -93,12 +93,6 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
         return;
     }
 
-#if 0
-    // XXX: TOOL_REFACTOR: how to update all of the canvas? Or how to
-    // find out the cursor area around the cursor so we can remove the
-    // outline?
-    m_canvas->updateCanvas(); // remove the outline
-#endif
     m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
     if (m_painter->paintOp()->incremental()) {
         m_timer->start(m_rate);
@@ -120,14 +114,6 @@ void KisToolBrush::mouseMoveEvent(KoPointerEvent *e)
         m_timer->start(m_rate);
     }
 }
-
-#if 0
-// XXX: TOOL_REFACTOR
-void KisToolBrush::leave(QEvent */*e*/)
-{
-    m_canvs->updateCanvas(); // remove the outline
-}
-#endif
 
 
 void KisToolBrush::slotSetRate(qreal rate)

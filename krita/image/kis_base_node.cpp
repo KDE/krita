@@ -32,7 +32,7 @@ public:
 };
 
 KisBaseNode::KisBaseNode()
-        : m_d(new Private())
+    : m_d(new Private())
 {
     setVisible(true);
     setUserLocked(false);
@@ -42,9 +42,9 @@ KisBaseNode::KisBaseNode()
 
 
 KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
-        : QObject()
-        , KisShared(rhs)
-        ,  m_d(new Private())
+    : QObject()
+    , KisShared(rhs)
+    ,  m_d(new Private())
 {
     QMapIterator<QString, QVariant> iter = rhs.m_d->properties.propertyIterator();
     while (iter.hasNext()) {
@@ -80,14 +80,12 @@ KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
     KoDocumentSectionModel::PropertyList l;
     l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible());
     l << KoDocumentSectionModel::Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), userLocked());
-    // XXX: Add linked!
     return l;
 }
 
 void KisBaseNode::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
 {
     setVisible(properties.at(0).state.toBool());
-    dbgImage << "visible = " << properties.at(0).state.toBool() << " " << visible();
     setUserLocked(properties.at(1).state.toBool());
 }
 

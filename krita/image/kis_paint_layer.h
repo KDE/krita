@@ -63,9 +63,12 @@ public:
                                   const QRect& rect) const;
 
     QIcon icon() const;
+
     KoDocumentSectionModel::PropertyList sectionModelProperties() const;
+    void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
 
 public:
+
     QRect extent() const;
     QRect exactBounds() const;
 
@@ -83,17 +86,14 @@ public:
     KisPaintDeviceSP original() const;
 
     /**
-     * Return the dried pixels -- i.e., pixels that have been fixed
-     * through the physics process. This may be 0. The physics process
-     * will automatically set this paint device when it becomes needed.
+     * @returns true when painting should not affect the alpha channel
      */
-    //KisPaintDeviceSP driedPaintDevice();
+    bool alphaLocked() const;
 
     /**
-     * Sets the dried paint device associated with this paint layer to
-     * 0.
+     * @param l if true, the alpha channel will be protected from modification
      */
-    //void removeDriedPaintDevice();
+    void setAlphaLocked(bool l);
 
 public slots:
 

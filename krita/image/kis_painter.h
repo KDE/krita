@@ -273,6 +273,7 @@ public:
      * specified end position.
      *
      * XXX: this method really should work with subpixel precision for start and end position
+     * XXX: this method does not use the composite op
      */
     void drawLine(const QPointF & start, const QPointF & end);
 
@@ -281,6 +282,7 @@ public:
      * specified end position.
      *
      * XXX: this method really should work with subpixel precision for start and end position
+     * XXX: this method does not use the composite op
      */
     void drawDDALine(const QPointF & start, const QPointF & end);
 
@@ -289,12 +291,15 @@ public:
      * end position.
      *
      * XXX: this method really should work with subpixel precision for start and end position
+     * XXX: this method does not use the composite op
      */
     void drawWobblyLine(const QPointF & start, const QPointF & end);
 
     /**
      * Paint an unstroked, one-pixel wide line from the specified start to the specified
      * end position using the Wu algorithm
+     *
+     * XXX: this method does not use the composite op
      */
     void drawWuLine(const QPointF & start, const QPointF & end);
 
@@ -305,6 +310,7 @@ public:
      *
      * XXX: the width should be set in doubles, not integers.
      * XXX: this method really should work with subpixel precision for start and end position
+     * XXX: this method does not use the composite op
      */
     void drawThickLine(const QPointF & start, const QPointF & end, int startWidth, int endWidth);
 
@@ -459,6 +465,13 @@ public:
     * Default and maximum size is 256x256 image
     */
     void setMaskImageSize(qint32 width, qint32 height);
+
+    /**
+     * If the alpha channel is locked, the alpha values of the paint device we are painting on
+     * will not change.
+     */
+    void setLockAlpha(bool protect);
+    bool alphaLocked() const;
 
 protected:
     /// Initialize, set everything to '0' or defaults

@@ -105,9 +105,6 @@ KoDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
 void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
 {
     KisBaseNode::setSectionModelProperties(properties);
-    /// TODO no nope not at all, the state contains a use-visible string not the actual property
-//     setOpacity( properties.at( 2 ).state.toInt() );
-//     setCompositeOp( const_cast<KoCompositeOp*>( image()->colorSpace()->compositeOp( properties.at( 3 ).state.toString() ) ) );
 }
 
 void KisLayer::setChannelFlags(const QBitArray & channelFlags)

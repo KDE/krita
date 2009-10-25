@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgLayerBox</class>
- <widget class="QWidget" name="WdgLayerBox" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgLayerBox">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,44 +10,35 @@
     <height>542</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+  <layout class="QGridLayout">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout">
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
-      <widget class="KisCmbComposite" native="1" name="cmbComposite" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+      <widget class="KisCmbComposite" name="cmbComposite" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>0</width>
          <height>10</height>
         </size>
        </property>
-       <property name="toolTip" >
+       <property name="toolTip">
         <string>Blending mode</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KoSliderCombo" native="1" name="doubleOpacity" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+      <widget class="KoSliderCombo" name="doubleOpacity" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -54,164 +46,171 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="bnViewMode" />
+      <widget class="QToolButton" name="bnViewMode"/>
      </item>
     </layout>
    </item>
-   <item row="1" column="0" >
-    <widget class="KoDocumentSectionView" native="1" name="listLayers" />
+   <item row="1" column="0">
+    <widget class="KoDocumentSectionView" name="listLayers" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
-   <item row="2" column="0" >
-    <layout class="QHBoxLayout" >
+   <item row="2" column="0">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QToolButton" name="bnAdd" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Minimum" hsizetype="Fixed" >
+      <widget class="QToolButton" name="bnAdd">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>32</width>
          <height>22</height>
         </size>
        </property>
-       <property name="maximumSize" >
+       <property name="maximumSize">
         <size>
          <width>22</width>
          <height>22</height>
         </size>
        </property>
-       <property name="toolTip" >
+       <property name="toolTip">
         <string>Create a new mask or layer</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string/>
        </property>
-       <property name="popupMode" >
+       <property name="popupMode">
         <enum>QToolButton::MenuButtonPopup</enum>
        </property>
-       <property name="autoRaise" >
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="bnDuplicate" >
-       <property name="minimumSize" >
+      <widget class="QToolButton" name="bnDuplicate">
+       <property name="minimumSize">
         <size>
          <width>22</width>
          <height>22</height>
         </size>
        </property>
-       <property name="maximumSize" >
+       <property name="maximumSize">
         <size>
          <width>22</width>
          <height>22</height>
         </size>
        </property>
-       <property name="toolTip" >
+       <property name="toolTip">
         <string>Duplicate layer or mask</string>
        </property>
-       <property name="statusTip" >
+       <property name="statusTip">
         <string>Duplicate layer or mask</string>
        </property>
-       <property name="whatsThis" >
+       <property name="whatsThis">
         <string>Duplicate the currently selected layer or mask</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string/>
        </property>
-       <property name="autoRaise" >
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="bnLower" >
-       <property name="minimumSize" >
+      <widget class="QToolButton" name="bnLower">
+       <property name="minimumSize">
         <size>
          <width>22</width>
          <height>22</height>
         </size>
        </property>
-       <property name="maximumSize" >
+       <property name="maximumSize">
         <size>
          <width>22</width>
          <height>22</height>
         </size>
        </property>
-       <property name="toolTip" >
+       <property name="toolTip">
         <string>Move layer or mask down</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string/>
        </property>
-       <property name="autoRaise" >
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="bnRaise" >
-       <property name="minimumSize" >
+      <widget class="QToolButton" name="bnRaise">
+       <property name="minimumSize">
         <size>
          <width>22</width>
          <height>22</height>
         </size>
        </property>
-       <property name="maximumSize" >
+       <property name="maximumSize">
         <size>
          <width>22</width>
          <height>22</height>
         </size>
        </property>
-       <property name="toolTip" >
+       <property name="toolTip">
         <string>Move layer or mask up</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string/>
        </property>
-       <property name="autoRaise" >
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="bnProperties" >
-       <property name="minimumSize" >
+      <widget class="QToolButton" name="bnProperties">
+       <property name="minimumSize">
         <size>
          <width>22</width>
          <height>22</height>
         </size>
        </property>
-       <property name="maximumSize" >
+       <property name="maximumSize">
         <size>
          <width>22</width>
          <height>22</height>
         </size>
        </property>
-       <property name="toolTip" >
+       <property name="toolTip">
         <string>View or change the layer properties</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>...</string>
        </property>
-       <property name="autoRaise" >
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeType" >
+       <property name="sizeType">
         <enum>QSizePolicy::Expanding</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>151</width>
          <height>22</height>
@@ -220,26 +219,26 @@
       </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="bnDelete" >
-       <property name="minimumSize" >
+      <widget class="QToolButton" name="bnDelete">
+       <property name="minimumSize">
         <size>
          <width>22</width>
          <height>22</height>
         </size>
        </property>
-       <property name="maximumSize" >
+       <property name="maximumSize">
         <size>
          <width>22</width>
          <height>22</height>
         </size>
        </property>
-       <property name="toolTip" >
+       <property name="toolTip">
         <string>Delete the layer or mask</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string/>
        </property>
-       <property name="autoRaise" >
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
@@ -248,22 +247,22 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>KisCmbComposite</class>
-   <extends></extends>
+   <extends>QWidget</extends>
    <header>widgets/kis_cmb_composite.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KoSliderCombo</class>
+   <extends>QWidget</extends>
+   <header>KoSliderCombo.h</header>
   </customwidget>
   <customwidget>
    <class>KoDocumentSectionView</class>
    <extends></extends>
-   <header location="global" >KoDocumentSectionView.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KoSliderCombo</class>
-   <extends></extends>
-   <header location="global" >KoSliderCombo.h</header>
+   <header location="global">KoDocumentSectionView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -80,10 +80,10 @@
 // #define ENABLE_RECORDING
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
-        : KisToolPaint(canvas, cursor)
-        , m_dragDist(0)
-        , m_transactionText(transactionText)
-        , m_mode(HOVER)
+    : KisToolPaint(canvas, cursor)
+    , m_dragDist(0)
+    , m_transactionText(transactionText)
+    , m_mode(HOVER)
 {
     m_painter = 0;
     m_tempLayer = 0;
@@ -114,9 +114,9 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-//    dbgUI << "mousePressEvent" << m_mode;
-//     if (!currentImage())
-//    return;
+    //    dbgUI << "mousePressEvent" << m_mode;
+    //     if (!currentImage())
+    //    return;
 
     if (!currentNode())
         return;
@@ -136,9 +136,9 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     if (e->button() == Qt::LeftButton) {
         initPaint(e);
         m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
-                                     e->pressure(), e->xTilt(), e->yTilt(),
-                                     KisVector2D::Zero(),
-                                     e->rotation(), e->tangentialPressure());
+                                                         e->pressure(), e->xTilt(), e->yTilt(),
+                                                         KisVector2D::Zero(),
+                                                         e->rotation(), e->tangentialPressure());
         paintAt(m_previousPaintInformation);
         if (!m_smooth) {
 #ifdef ENABLE_RECORDING
@@ -166,9 +166,9 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         QPointF dragVec = pos - m_previousPaintInformation.pos();
 
         KisPaintInformation info = KisPaintInformation(pos,
-                                   e->pressure(), e->xTilt(), e->yTilt(),
-                                   toKisVector2D(dragVec),
-                                   e->rotation(), e->tangentialPressure());
+                                                       e->pressure(), e->xTilt(), e->yTilt(),
+                                                       toKisVector2D(dragVec),
+                                                       e->rotation(), e->tangentialPressure());
 
         if (m_smooth) {
             QPointF newTangent;
@@ -179,8 +179,8 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
                 double cosTangent = cos(angleTangent);
                 double sinTangent = sin(angleTangent);
                 newTangent = QPointF(
-                                 cosTangent * dragVec.x() - sinTangent * dragVec.y(),
-                                 sinTangent * dragVec.x() + cosTangent * dragVec.y());
+                        cosTangent * dragVec.x() - sinTangent * dragVec.y(),
+                        sinTangent * dragVec.x() + cosTangent * dragVec.y());
             }
 
             if (norm(newTangent) != 0) {
@@ -251,7 +251,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
-//    dbgUI << "mouseReleaseEvent" << m_mode << " " << e->button() << " " << e->button();
+    //    dbgUI << "mouseReleaseEvent" << m_mode << " " << e->button() << " " << e->button();
     if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();
     } else {
@@ -261,7 +261,7 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
 void KisToolFreehand::initPaint(KoPointerEvent *)
 {
-//    dbgUI << "initPaint";
+    //    dbgUI << "initPaint";
     if (!currentNode() || !currentNode()->paintDevice())
         return;
 
@@ -294,8 +294,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
 #if 0 //XXX: Warning, investigate what this was supposed to do!
             if (l->parentLayer() && (l->parentLayer()->parentLayer() == 0)
-                    && (l->parentLayer()->childCount() == 1)
-                    && l->parentLayer()->paintLayerInducesProjectionOptimization(pl)) {
+                && (l->parentLayer()->childCount() == 1)
+                && l->parentLayer()->paintLayerInducesProjectionOptimization(pl)) {
                 // If there's a mask, device could've been the mask. The induce function
                 // should catch this, but better safe than sorry
 
@@ -319,6 +319,13 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_painter->beginTransaction(m_transactionText);
 
     setupPainter(m_painter);
+
+    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
+        m_painter->setChannelFlags(l->channelFlags());
+        if (l->alphaLocked()) {
+            m_painter->setLockAlpha(l->alphaLocked());
+        }
+    }
 
     // if you're drawing on a temporary layer, the layer already sets this
     if (m_paintIncremental) {
@@ -364,7 +371,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
 void KisToolFreehand::endPaint()
 {
-//    dbgUI << "endPaint";
+    //    dbgUI << "endPaint";
     m_mode = HOVER;
     if (m_painter) {
 
@@ -377,7 +384,7 @@ void KisToolFreehand::endPaint()
 
         if (layer && !m_paintIncremental) {
             KisTransaction *incrementalTransaction =
-                dynamic_cast<KisTransaction*>(m_painter->endTransaction());
+                    dynamic_cast<KisTransaction*>(m_painter->endTransaction());
 
             KisPainter painter(m_source, currentSelection());
             painter.setCompositeOp(m_compositeOp);
@@ -401,7 +408,7 @@ void KisToolFreehand::endPaint()
                 ++it;
             }
             KisIndirectPaintingSupport* indirect =
-                dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
+                    dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
             if (indirect)
                 indirect->setTemporaryTarget(0);
             //m_source->setDirty(painter.dirtyRegion());
@@ -464,7 +471,7 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
 void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*previousJob*/)
 {
     m_paintJobs.append(job);
-//    dbgUI << "Queue length:" << m_executor->queueLength();
+    //    dbgUI << "Queue length:" << m_executor->queueLength();
     m_executor->start(job, -m_paintJobs.size());
 }
 

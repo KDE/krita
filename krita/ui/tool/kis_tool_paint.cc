@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2003-2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  */
 
 #include "kis_tool_paint.h"
-
 
 #include <QWidget>
 #include <QRect>
@@ -84,6 +83,7 @@ KisToolPaint::~KisToolPaint()
 {
 }
 
+
 void KisToolPaint::resourceChanged(int key, const QVariant & v)
 {
     KisTool::resourceChanged(key, v);
@@ -119,10 +119,10 @@ void KisToolPaint::activate(bool temporary)
 }
 
 
-
 void KisToolPaint::paint(QPainter&, const KoViewConverter &)
 {
 }
+
 
 void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
 {
@@ -139,6 +139,7 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
     }
 
 }
+
 
 QWidget * KisToolPaint::createOptionWidget()
 {
@@ -197,6 +198,7 @@ void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
     m_optionWidgetLayout->addLayout(layout, rowCount, 0, 1, 2);
 }
 
+
 void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 {
     Q_ASSERT(m_optionWidgetLayout != 0);
@@ -207,11 +209,13 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount(), 0, 1, 2);
 }
 
+
 void KisToolPaint::slotSetOpacity(qreal opacityPerCent, bool final)
 {
     Q_UNUSED(final);
     m_opacity = (int)(opacityPerCent * OPACITY_OPAQUE / 100);
 }
+
 
 void KisToolPaint::slotSetCompositeMode(const QString& compositeOp)
 {

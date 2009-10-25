@@ -104,30 +104,37 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
 
     if (layer->original()) {
         QUndoCommand* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent);
-        if (m_image->undoAdapter())
-            if (cmd)
+        if (m_image->undoAdapter()) {
+            if (cmd) {
                 m_image->undoAdapter()->addCommand(cmd);
-            else
-                delete cmd;
+            }
+        }
+        else {
+            delete cmd;
+        }
     }
 
     if (layer->paintDevice()) {
         QUndoCommand* cmd = layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
-        if (m_image->undoAdapter())
-            if (cmd)
+        if (m_image->undoAdapter()) {
+            if (cmd) {
                 m_image->undoAdapter()->addCommand(cmd);
-            else
-                delete cmd;
-    }
+            }
+        }
+        else {
+            delete cmd;
+        }    }
 
     if (layer->projection()) {
         QUndoCommand* cmd = layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent);
-        if (m_image->undoAdapter())
-            if (cmd)
+        if (m_image->undoAdapter()) {
+            if (cmd) {
                 m_image->undoAdapter()->addCommand(cmd);
-            else
-                delete cmd;
-    }
+            }
+        }
+        else {
+            delete cmd;
+        }    }
 
     layer->setDirty();
 

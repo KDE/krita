@@ -52,7 +52,7 @@ KoDocumentInfo::KoDocumentInfo(QObject* parent) : QObject(parent)
     setAboutInfo("creation-date", QDateTime::currentDateTime()
                  .toString(Qt::ISODate));
     KUser user(KUser::UseRealUserID);
-    setAuthorInfo("creator", user.property(KUser::FullName));
+    setAuthorInfo("creator", user.property(KUser::FullName).toString());
     m_firstSave = false;
 }
 

@@ -53,25 +53,15 @@ public:
     bool pressureDivision() const;
     qreal scale() const;
     
-    
     qreal vertBorder() const;
     qreal horizBorder() const;
     bool jitterBorder() const;
 
     bool colorPerParticle() const;
     bool fillBackground() const;
-    
-    
-    int object() const;
+
+    /// Ellipse, rectangle, line, pixel, anti-aliased pixel
     int shape() const;
-    int width() const;
-    int height() const;
-    bool jitterShapeSize() const;
-
-
-    // metaballs
-    qreal maxTresh() const;
-    qreal minTresh() const;
 
     // color options
     bool useRandomOpacity() const;
@@ -82,13 +72,6 @@ public:
     int hue() const;
     int saturation() const;
     int value() const;
-
-    bool highRendering() const;
-    bool proportional() const;
-    qreal widthPerc() const;
-    qreal heightPerc() const;
-
-    bool gaussian() const;
 
     // XXX: Hack!
     void setOptionsWidget(KisPaintOpSettingsWidget* widget)
@@ -104,6 +87,10 @@ public:
             m_options->writeConfiguration( this );
         }
     }
+
+
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode ) const;
+    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
 
 private:

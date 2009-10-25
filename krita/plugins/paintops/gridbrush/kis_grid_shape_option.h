@@ -27,26 +27,8 @@ public:
     KisGridShapeOption();
     ~KisGridShapeOption();
 
-    int width() const;
-    int height() const;
-
-    /// 0 - shape, 1 - particle, 2 - pixel
-    int object() const; 
-
-    /// 0 - ellipse, 1 - rectangle, 2 - metaball
+    /// Ellipse, rectangle, line, pixel, anti-aliased pixel
     int shape() const;
-
-    bool jitterShapeSize() const;
-
-    bool highRendering() const;
-    bool proportional() const;
-    bool gaussian() const;
-    
-    qreal widthPerc() const;
-    qreal heightPerc() const;
-
-    qreal minTresh() const;
-    qreal maxTresh() const;
 
     /// TODO
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;

@@ -84,59 +84,9 @@ bool KisGridPaintOpSettings::pressureDivision() const
 }
 
 
-int KisGridPaintOpSettings::width() const {
-    return m_options->m_gridShapeOption->width();
-}
-
-
-int KisGridPaintOpSettings::height() const {
-    return m_options->m_gridShapeOption->height();
-}
-
-int KisGridPaintOpSettings::object() const {
-    return m_options->m_gridShapeOption->object();
-}
-
-
 int KisGridPaintOpSettings::shape() const {
     return m_options->m_gridShapeOption->shape();
 }
-
-bool KisGridPaintOpSettings::jitterShapeSize() const {
-    return m_options->m_gridShapeOption->jitterShapeSize();
-}
-
-qreal KisGridPaintOpSettings::heightPerc() const {
-    return m_options->m_gridShapeOption->heightPerc();
-}
-
-bool KisGridPaintOpSettings::proportional() const {
-    return m_options->m_gridShapeOption->proportional();
-}
-
-qreal KisGridPaintOpSettings::widthPerc() const {
-    return m_options->m_gridShapeOption->widthPerc();
-}
-
-
-
-qreal KisGridPaintOpSettings::maxTresh() const
-{
-    return m_options->m_gridShapeOption->maxTresh();
-}
-
-
-qreal KisGridPaintOpSettings::minTresh() const
-{
-    return m_options->m_gridShapeOption->minTresh();
-}
-
-
-bool KisGridPaintOpSettings::highRendering() const
-{
-    return m_options->m_gridShapeOption->highRendering();
-}
-
 
 
 bool KisGridPaintOpSettings::useRandomOpacity() const
@@ -167,10 +117,6 @@ bool KisGridPaintOpSettings::useRandomHSV() const
     return m_options->m_gridColorOption->useRandomHSV();
 }
 
-bool KisGridPaintOpSettings::gaussian() const
-{
-    return m_options->m_gridShapeOption->gaussian();
-}
 
 bool KisGridPaintOpSettings::sampleInput() const
 {
@@ -211,4 +157,15 @@ bool KisGridPaintOpSettings::fillBackground() const
 qreal KisGridPaintOpSettings::scale() const
 {
     return m_options->m_gridOption->scale();
+}
+
+
+void KisGridPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, OutlineMode _mode) const
+{
+}
+
+
+QRectF KisGridPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
+{
+    KisPaintOpSettings::paintOutlineRect(pos, image, _mode);
 }

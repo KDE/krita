@@ -22,339 +22,42 @@
     <height>200</height>
    </size>
   </property>
-  <widget class="QGroupBox" name="objectBox">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>181</width>
-     <height>111</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Grid Object</string>
-   </property>
-   <property name="checkable">
-    <bool>false</bool>
-   </property>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>30</y>
-      <width>133</width>
-      <height>73</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QRadioButton" name="shapeBtn">
-       <property name="text">
-        <string>Shape</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="particleBtn">
-       <property name="text">
-        <string>Anti-aliased pixel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="pixelBtn">
-       <property name="text">
-        <string>Pixel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>0</y>
-     <width>168</width>
-     <height>123</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_3">
-    <item>
-     <widget class="QComboBox" name="shapeBox">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <item>
-       <property name="text">
-        <string>Ellipse</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Rectangle</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Metaball</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="widthInfoLbl">
-          <property name="text">
-           <string>Width</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="widthSpin">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="value">
-           <number>6</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="heightInfoLbl">
-          <property name="text">
-           <string>Height</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="heightSpin">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="value">
-           <number>6</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="jitterShape">
-      <property name="text">
-       <string>Random size</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>150</y>
-     <width>175</width>
-     <height>60</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
-    <item>
-     <widget class="QCheckBox" name="proportionalBox">
-      <property name="text">
-       <string>Proportional</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
-      <item>
-       <widget class="QDoubleSpinBox" name="widthPro">
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="value">
-         <double>6.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDoubleSpinBox" name="heightPro">
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="value">
-         <double>6.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QCheckBox" name="gaussBox">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>110</y>
-     <width>141</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>gauss distribution</string>
-   </property>
-  </widget>
-  <widget class="QWidget" name="">
+  <widget class="QComboBox" name="shapeCBox">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>150</y>
-     <width>164</width>
-     <height>87</height>
+     <y>10</y>
+     <width>121</width>
+     <height>25</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_5">
-    <item>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="MetaballLbl">
-        <property name="text">
-         <string>Min treshold</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="minTreshSpin">
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>-100.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>-1.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="MetaballLbl2">
-        <property name="text">
-         <string>Max treshold</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="maxTreshSpin">
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>-100.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>6.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="renderBox">
-      <property name="text">
-       <string>High quality rendering</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <item>
+    <property name="text">
+     <string>Ellipse</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Rectangle</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Line</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Pixel</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Anti-aliased pixel</string>
+    </property>
+   </item>
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>proportionalBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>heightPro</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>247</x>
-     <y>164</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>317</x>
-     <y>185</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>proportionalBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>widthPro</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>257</x>
-     <y>156</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>325</x>
-     <y>138</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>proportionalBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>heightSpin</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>217</x>
-     <y>155</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>302</x>
-     <y>86</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>proportionalBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>widthSpin</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>226</x>
-     <y>159</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>283</x>
-     <y>41</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

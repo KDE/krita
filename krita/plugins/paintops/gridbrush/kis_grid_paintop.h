@@ -25,11 +25,13 @@
 #include <klocale.h>
 #include <kis_paintop.h>
 #include <kis_types.h>
+#include <KoColor.h>
 
 #include "kis_grid_paintop_settings.h"
 
 class QPointF;
 class KisPainter;
+
 
 class KisGridPaintOp : public KisPaintOp
 {
@@ -55,6 +57,9 @@ private:
     double              m_ySpacing;
     double              m_spacing;
     int                 m_pixelSize;
+    
+void debugColor(const quint8* data, const QString name = "");
+
     
 #ifdef BENCHMARK
     int m_total;

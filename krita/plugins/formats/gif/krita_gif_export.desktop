@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Krita Gif Export Filter
+X-KDE-Export=image/gif
+X-KDE-ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Import=application/x-krita
+X-KDE-Weight=1
+X-KDE-Library=libkritagifexport
+NoDisplay=true

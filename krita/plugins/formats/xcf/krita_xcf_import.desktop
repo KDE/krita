@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Krita Gimp Import Filter
+X-KDE-Export=application/x-krita
+X-KDE-Import=image/x-xcf-gimp
+X-KDE-Weight=1
+X-KDE-Library=libkritaxcfimport
+X-KDE-ServiceTypes=KOfficeFilter
+NoDisplay=true

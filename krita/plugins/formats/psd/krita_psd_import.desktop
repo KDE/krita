@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=Krita PhotoShop Import Filter
+X-KDE-Import=image/x-vnd.adobe.photoshop,image/x-psd
+X-KDE-Weight=1
+X-KDE-Library=libkritapsdimport
+X-KDE-ServiceTypes=KOfficeFilter
+NoDisplay=true

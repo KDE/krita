@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Krita Encapsulated PostScript Import Filter
+X-KDE-Export=application/x-krita
+X-KDE-Import=image/x-eps
+X-KDE-Weight=1
+X-KDE-Library=libkritaepsimport
+X-KDE-ServiceTypes=KOfficeFilter
+NoDisplay=true

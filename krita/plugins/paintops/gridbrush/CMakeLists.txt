@@ -23,7 +23,7 @@ install(TARGETS kritagridpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kritagridpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES
-    krita-grid.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+# install( FILES
+#    krita-grid.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 
 

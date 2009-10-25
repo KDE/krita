@@ -51,10 +51,16 @@ public:
     int gridHeight() const;
     int divisionLevel() const;
     bool pressureDivision() const;
-
+    qreal scale() const;
+    
+    
     qreal vertBorder() const;
     qreal horizBorder() const;
     bool jitterBorder() const;
+
+    bool colorPerParticle() const;
+    bool fillBackground() const;
+    
     
     int object() const;
     int shape() const;

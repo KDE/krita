@@ -102,6 +102,17 @@ bool KisGridColorOption::sampleInputColor() const
 
 
 
+bool KisGridColorOption::colorPerParticle() const
+{
+    return m_options->colorPerParticleCHBox->isChecked();
+}
+
+
+bool KisGridColorOption::fillBackground() const
+{
+    return m_options->fillBackgroundCHBox->isChecked();
+}
+
 
 
 

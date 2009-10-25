@@ -32,6 +32,9 @@ public:
     bool useRandomOpacity() const;
     bool sampleInputColor() const;
     
+    bool fillBackground() const;
+    bool colorPerParticle() const;
+    
     // TODO: these should be intervals like 20..180 
     int hue() const;
     int saturation() const;

@@ -105,3 +105,8 @@ bool KisGridOpOption::jitterBorder() const
     return m_options->jitterBorderCHBox->isChecked();
 }
 
+
+qreal KisGridOpOption::scale() const
+{
+    return m_options->scaleDSPBox->value();
+}

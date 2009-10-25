@@ -194,3 +194,21 @@ bool KisGridPaintOpSettings::jitterBorder() const
     return m_options->m_gridOption->jitterBorder();
 }
 
+
+bool KisGridPaintOpSettings::colorPerParticle() const
+{
+    return m_options->m_gridColorOption->colorPerParticle();
+}
+
+
+
+bool KisGridPaintOpSettings::fillBackground() const
+{
+    return m_options->m_gridColorOption->fillBackground();
+}
+
+
+qreal KisGridPaintOpSettings::scale() const
+{
+    return m_options->m_gridOption->scale();
+}

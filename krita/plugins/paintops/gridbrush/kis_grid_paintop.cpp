@@ -85,8 +85,8 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
 if (!painter()) return;
     m_dab->clear();
 
-    int gridWidth = m_settings->gridWidth();
-    int gridHeight = m_settings->gridHeight();
+    int gridWidth = m_settings->gridWidth() * m_settings->scale();
+    int gridHeight = m_settings->gridHeight() * m_settings->scale();
 
     int divide;
     if (m_settings->pressureDivision()){
@@ -94,6 +94,7 @@ if (!painter()) return;
     }else{
         divide = m_settings->divisionLevel();
     }
+    divide = qRound(m_settings->scale() * divide);
 
     int posX = qRound( info.pos().x() );
     int posY = qRound( info.pos().y() );
@@ -109,9 +110,7 @@ if (!painter()) return;
     
     QRectF tile;
     KoColor color( painter()->paintColor() );
-    
-
-    
+   
     qreal vertBorder = m_settings->vertBorder(); 
     qreal horzBorder = m_settings->horizBorder();
     if (m_settings->jitterBorder()){
@@ -123,35 +122,61 @@ if (!painter()) return;
         }
     }
     
+    bool shouldColor = true;
+    // fill the tile
+    if (m_settings->fillBackground()){
+        m_dab->fill(dabPosition.x(), dabPosition.y(), gridWidth, gridHeight, painter()->backgroundColor().data());
+    }
+    
     for (int y = 0; y < divide; y++){
         for (int x = 0; x < divide; x++){
+            // determine the tile size
             tile = QRectF(dabPosition.x() + x*xStep,dabPosition.y() + y*yStep, xStep, yStep);
             tile.adjust(vertBorder,horzBorder,-vertBorder,-horzBorder);
 
-            if (m_settings->sampleInput()){
-                acc.moveTo(tile.center().x(), tile.center().y());
-                acc.sampledOldRawData( color.data() );
-                m_painter->setPaintColor( color );
+            // do color transformation
+            if (shouldColor){
+                if (m_settings->sampleInput()){
+                    acc.moveTo(tile.center().x(), tile.center().y());
+                    acc.sampledOldRawData( color.data() );
+                    m_painter->setPaintColor( color );
+                }
+
+                if (m_settings->useRandomHSV()){
+                    QHash<QString, QVariant> params;
+                    params["h"] = (m_settings->hue() / 180.0) * drand48();
+                    params["s"] = (m_settings->saturation() / 100.0) * drand48();
+                    params["v"] = (m_settings->value() / 100.0) * drand48();
+
+                    KoColorTransformation* transfo;
+                    transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
+                    transfo->transform(color.data(), color.data() , 1);
+                    m_painter->setPaintColor( color );
+                }
+                
+                if (m_settings->useRandomOpacity()){
+                    quint8 alpha = qRound(drand48() * OPACITY_OPAQUE);
+                    m_painter->setOpacity( alpha );
+                    // set for KisPaintDevice::fill
+                    color.setOpacity( alpha );
+                }
+
+                if ( !m_settings->colorPerParticle() ){
+                    shouldColor = false;
+                }
             }
 
-            if (m_settings->useRandomHSV()){
-                QHash<QString, QVariant> params;
-                params["h"] = (m_settings->hue() / 180.0) * drand48();
-                params["s"] = (m_settings->saturation() / 100.0) * drand48();
-                params["v"] = (m_settings->value() / 100.0) * drand48();
-
-                KoColorTransformation* transfo;
-                transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
-                transfo->transform(color.data(), color.data() , 1);
-                m_painter->setPaintColor( color );
+            // paint some element
+            int element = 1;
+            switch (element){
+                case 1: {
+                            m_dab->fill(tile.x(), tile.y(), tile.width(), tile.height(), color.data());
+                            break;
+                        }
+                default:{
+                            m_painter->paintEllipse( tile.toRect() ); break;
+                        }
             }
-            
-            if (m_settings->useRandomOpacity()){
-                m_painter->setOpacity( qRound(drand48() * OPACITY_OPAQUE) );
-            }
-
-
-            m_painter->paintEllipse( tile );
         }
     }
     

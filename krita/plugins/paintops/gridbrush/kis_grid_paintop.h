@@ -58,7 +58,7 @@ private:
     double              m_spacing;
     int                 m_pixelSize;
     
-void debugColor(const quint8* data, const QString name = "");
+    
 
     
 #ifdef BENCHMARK

@@ -81,7 +81,8 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
     QTime time;
     time.start();
 #endif
-if (!painter()) return;
+
+    if (!painter()) return;
     m_dab->clear();
 
     int gridWidth = m_settings->gridWidth() * m_settings->scale();
@@ -143,17 +144,18 @@ if (!painter()) return;
                     memcpy(color.data(),painter()->paintColor().data(), m_pixelSize);
                 }
 
-                // mix the final color
-                {
+                // mix the color with background color
+                if (m_settings->mixBgColor())
+                {       
                     KoMixColorsOp * mixOp = source()->colorSpace()->mixColorsOp();
 
                     const quint8 *colors[2];
                     colors[0] = color.data();
-                    colors[1] = painter()->paintColor().data();
+                    colors[1] = painter()->backgroundColor().data();
 
                     qint16 colorWeights[2];
                     int MAX_16BIT = 255;
-                    qreal blend = drand48();
+                    qreal blend = info.pressure();
 
                     colorWeights[0] = static_cast<quint16>( blend * MAX_16BIT); 
                     colorWeights[1] = static_cast<quint16>( (1.0 - blend) * MAX_16BIT); 
@@ -185,7 +187,6 @@ if (!painter()) return;
             }
 
             // paint some element
-            
             switch (m_settings->shape()){
                 case 0:
                 {
@@ -233,16 +234,4 @@ if (!painter()) return;
     m_total += msec;
     m_count++;
 #endif
-}
-
-
-void KisGridPaintOp::debugColor(const quint8* data, const QString name)
-{
-    QColor rgbcolor;
-    m_dab->colorSpace()->toQColor(data, &rgbcolor);
-    dbgPlugins << "("+name+")RGBA: ("
-    << rgbcolor.red() 
-    << ", "<< rgbcolor.green()
-    << ", "<< rgbcolor.blue()
-    << ", "<< rgbcolor.alpha() << ")";
 }

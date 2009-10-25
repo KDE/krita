@@ -59,7 +59,8 @@ public:
 
     bool colorPerParticle() const;
     bool fillBackground() const;
-
+    bool mixBgColor() const;
+    
     /// Ellipse, rectangle, line, pixel, anti-aliased pixel
     int shape() const;
 

@@ -34,6 +34,7 @@ public:
     
     bool fillBackground() const;
     bool colorPerParticle() const;
+    bool mixBgColor() const;
     
     // TODO: these should be intervals like 20..180 
     int hue() const;

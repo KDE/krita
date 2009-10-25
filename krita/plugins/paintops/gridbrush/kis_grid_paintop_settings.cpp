@@ -154,6 +154,14 @@ bool KisGridPaintOpSettings::fillBackground() const
 }
 
 
+
+bool KisGridPaintOpSettings::mixBgColor() const
+{
+    return m_options->m_gridColorOption->mixBgColor();
+}
+
+
+
 qreal KisGridPaintOpSettings::scale() const
 {
     return m_options->m_gridOption->scale();

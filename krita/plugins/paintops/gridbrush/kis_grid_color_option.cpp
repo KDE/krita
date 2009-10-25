@@ -114,6 +114,11 @@ bool KisGridColorOption::fillBackground() const
 }
 
 
+bool KisGridColorOption::mixBgColor() const
+{
+    return m_options->mixBgColorCHBox->isChecked();
+}
+
 
 
 

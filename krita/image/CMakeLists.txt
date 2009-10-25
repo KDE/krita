@@ -8,7 +8,7 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 # 1 - image/tiles
 # 3 - image/tiles3
 
-set(USE_TILESYSTEM 1)
+set(USE_TILESYSTEM 3)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-tiles.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/../config-tiles.h) ### WRONG PLACE???
 
 if(USE_TILESYSTEM EQUAL 1)

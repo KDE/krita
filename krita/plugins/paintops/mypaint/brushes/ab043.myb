@@ -1,0 +1,23 @@
+# mypaint brush file
+color 13 31 109
+painting_time 4583.11378479
+opaque 0.66
+opaque_multiply 0.0 | pressure 1.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0
+radius_logarithmic -0.4 | pressure 0.422839506173 -0.122708333333 1.0 -0.31 0.0 0.0 0.0 0.0 | speed 1.0 0.28 0.0 0.0 0.0 0.0 0.0 0.0 | speed2 1.0 0.35 0.0 0.0 0.0 0.0 0.0 0.0 | random 1.0 1.25 0.0 0.0 0.0 0.0 0.0 0.0
+hardness 0.64
+dabs_per_basic_radius 0.0
+dabs_per_actual_radius 2.0
+dabs_per_second 0.0
+radius_by_random 0.0
+speed1_slowness 0.09
+speed2_slowness 1.0
+offset_by_random 2.0 | pressure 0.126582278481 -2.678125 0.370253164557 -5.80260416667 1.0 -8.57 0.0 0.0
+offset_by_speed 0.17 | pressure 1.0 -0.56 0.0 0.0 0.0 0.0 0.0 0.0
+offset_by_speed_slowness 1.0
+slow_tracking 0.0
+slow_tracking_per_dab 0.0
+color_value 0.0 | pressure 0.231481481481 -0.0447916666667 0.391975308642 -0.165729166667 0.574074074074 -0.340416666667 1.0 -0.43 | speed2 1.0 -0.08 0.0 0.0 0.0 0.0 0.0 0.0 | random 1.0 0.15 0.0 0.0 0.0 0.0 0.0 0.0
+color_saturation 0.0
+color_hue 0.0
+adapt_color_from_image 0.0
+change_radius 0.0

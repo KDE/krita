@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=MyPaint brush
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritamypaintpaintop
+X-Krita-Version=3

@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Name=Krita Gif agick Import Filter
+Name=Krita Gif Import Filter
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/gif
 X-KDE-Weight=1

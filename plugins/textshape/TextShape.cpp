@@ -329,6 +329,7 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
 
 bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    KoTextDocument(m_textShapeData->document()).textEditor()->beginEditBlock();
     loadOdfAttributes(element, context, OdfAllAttributes);
 
     // load the (text) style of the frame
@@ -361,7 +362,9 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
         paragraphStyle.applyStyle(block, false);
     }
 
-    return loadOdfFrame(element, context);
+    bool answer = loadOdfFrame(element, context);
+    KoTextDocument(m_textShapeData->document()).textEditor()->endEditBlock();
+    return answer;
 }
 
 bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)

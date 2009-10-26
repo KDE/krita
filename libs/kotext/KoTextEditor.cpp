@@ -1121,4 +1121,14 @@ bool KoTextEditor::isBidiDocument() const
     return d->isBidiDocument;
 }
 
+void KoTextEditor::beginEditBlock()
+{
+    d->caret.beginEditBlock();
+}
+
+void KoTextEditor::endEditBlock()
+{
+    d->caret.endEditBlock();
+}
+
 #include "KoTextEditor.moc"

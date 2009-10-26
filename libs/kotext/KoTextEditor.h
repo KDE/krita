@@ -150,7 +150,7 @@ public slots:
 
     bool atStart() const;
 
-//    void beginEditBlock ();
+    void beginEditBlock();
 
     QTextBlock block() const;
 
@@ -172,7 +172,7 @@ public slots:
 
     QTextDocument *document() const;
 
-//    void endEditBlock ();
+    void endEditBlock();
 
     bool hasComplexSelection() const;
 

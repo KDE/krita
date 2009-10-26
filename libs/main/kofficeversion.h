@@ -22,15 +22,15 @@
 #ifndef _KOFFICE_VERSION_H_
 #define _KOFFICE_VERSION_H_
 
-#define KOFFICE_VERSION_STRING "2.1 RC 1"
+#define KOFFICE_VERSION_STRING "2.2 Alpha 1"
 #define KOFFICE_VERSION_MAJOR 2
-#define KOFFICE_VERSION_MINOR 0
-#define KOFFICE_VERSION_RELEASE 91
+#define KOFFICE_VERSION_MINOR 1
+#define KOFFICE_VERSION_RELEASE 71
 #define KOFFICE_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
 
-// #define KOFFICE_ALPHA 1
+#define KOFFICE_ALPHA 1
 // #define KOFFICE_BETA 3
-#define KOFFICE_RC 1
+// #define KOFFICE_RC 1
 
 
 #define KOFFICE_VERSION \

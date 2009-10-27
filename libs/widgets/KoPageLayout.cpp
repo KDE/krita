@@ -32,12 +32,31 @@ KoGenStyle KoPageLayout::saveOdf() const
 {
     KoGenStyle style(KoGenStyle::StylePageLayout);
 
+    // Save page dimension.
     style.addPropertyPt("fo:page-width", width);
     style.addPropertyPt("fo:page-height", height);
-    style.addPropertyPt("fo:margin-left", leftMargin);
-    style.addPropertyPt("fo:margin-right", rightMargin);
-    style.addPropertyPt("fo:margin-top", topMargin);
-    style.addPropertyPt("fo:margin-bottom", bottomMargin);
+
+    // Save margins. If all margins are the same, only one value needs to be saved.
+    if (leftMargin == topMargin && leftMargin == rightMargin && leftMargin == bottomMargin) {
+        style.addPropertyPt("fo:margin", leftMargin);
+    }
+    else {
+        style.addPropertyPt("fo:margin-left", leftMargin);
+        style.addPropertyPt("fo:margin-right", rightMargin);
+        style.addPropertyPt("fo:margin-top", topMargin);
+        style.addPropertyPt("fo:margin-bottom", bottomMargin);
+    }
+
+    // Save padding. If all paddings are the same, only one value needs to be saved.
+    if (leftPadding == topPadding && leftPadding == rightPadding && leftPadding == bottomPadding) {
+        style.addPropertyPt("fo:padding", leftPadding);
+    }
+    else {
+        style.addPropertyPt("fo:padding-left", leftPadding);
+        style.addPropertyPt("fo:padding-right", rightPadding);
+        style.addPropertyPt("fo:padding-top", topPadding);
+        style.addPropertyPt("fo:padding-bottom", bottomPadding);
+    }
 
     // If there are any page borders, add them to the style.
     border.saveOdf(style);
@@ -54,26 +73,50 @@ void KoPageLayout::loadOdf(const KoXmlElement &style)
                                                 "page-layout-properties"));
 
     if (!properties.isNull()) {
+        KoPageLayout standard = standardLayout();
 
         // Page dimension -- width / height
-        width = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "page-width"));
-        height = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "page-height"));
-        KoPageLayout standard;
-        standard = standardLayout();
-        if (width == 0)
-            width = standard.width;
-        if (height == 0)
-            height = standard.height;
+        width = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "page-width"),
+                                   standard.width);
+        height = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "page-height"),
+                                    standard.height);
+
+        // Page orientation
         if (properties.attributeNS(KoXmlNS::style, "print-orientation", QString()) == "portrait")
             orientation = KoPageFormat::Portrait;
         else
             orientation = KoPageFormat::Landscape;
 
-        rightMargin  = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-right"));
-        bottomMargin = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-bottom"));
-        leftMargin   = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-left"));
-        topMargin    = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-top"));
+        // Margins.  Check if there is one "margin" attribute and use it for all
+        // margins if there is.  Otherwise load the individual margins.
+        if (properties.hasAttributeNS(KoXmlNS::fo, "margin")) {
+            leftMargin  = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin"));
+            topMargin = leftMargin;
+            rightMargin = leftMargin;
+            bottomMargin = leftMargin;
+        }
+        else {
+            leftMargin   = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-left"));
+            topMargin    = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-top"));
+            rightMargin  = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-right"));
+            bottomMargin = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-bottom"));
+        }
 
+        // Padding.  Same reasoning as for margins
+        if (properties.hasAttributeNS(KoXmlNS::fo, "padding")) {
+            leftPadding  = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "padding"));
+            topPadding = leftPadding;
+            rightPadding = leftPadding;
+            bottomPadding = leftPadding;
+        }
+        else {
+            leftPadding   = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "padding-left"));
+            topPadding    = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "padding-top"));
+            rightPadding  = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "padding-right"));
+            bottomPadding = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "padding-bottom"));
+        }
+
+        // Parse border properties if there are any.
         border.loadOdf(properties);
 
         // guessFormat takes millimeters
@@ -90,7 +133,7 @@ KoPageLayout KoPageLayout::standardLayout()
 
     layout.format = KoPageFormat::defaultFormat();
 
-    // dimensions and 
+    // orientation and dimensions
     layout.orientation = KoPageFormat::Portrait;
     layout.width = MM_TO_POINT(KoPageFormat::width(layout.format, layout.orientation));
     layout.height = MM_TO_POINT(KoPageFormat::height(layout.format, layout.orientation));
@@ -100,6 +143,12 @@ KoPageLayout KoPageLayout::standardLayout()
     layout.rightMargin  = MM_TO_POINT(20.0);
     layout.topMargin    = MM_TO_POINT(20.0);
     layout.bottomMargin = MM_TO_POINT(20.0);
+
+    // padding.  FIXME: Find the best real values.
+    layout.leftPadding   = MM_TO_POINT(20.0);
+    layout.rightPadding  = MM_TO_POINT(20.0);
+    layout.topPadding    = MM_TO_POINT(20.0);
+    layout.bottomPadding = MM_TO_POINT(20.0);
 
     // borders
     layout.border.setLeftBorderStyle(KoBorder::BorderNone);

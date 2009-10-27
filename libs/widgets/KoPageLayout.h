@@ -58,6 +58,17 @@ struct KoPageLayout {
     qreal pageEdge;
     /// margin on page-binding edge
     qreal bindingSide;
+
+    /** Left padding in points */
+    qreal leftPadding;
+    /** Right padding in points */
+    qreal rightPadding;
+    /** Top padding in points */
+    qreal topPadding;
+    /** Bottom padding in points */
+    qreal bottomPadding;
+
+
     /// borders
     KoBorder  border;
 

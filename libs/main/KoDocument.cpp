@@ -285,10 +285,10 @@ KoDocument::KoDocument(QWidget * parentWidget, QObject* parent, bool singleViewM
 
     d->pageLayout.width = 0;
     d->pageLayout.height = 0;
-    d->pageLayout.top = 0;
-    d->pageLayout.bottom = 0;
-    d->pageLayout.left = 0;
-    d->pageLayout.right = 0;
+    d->pageLayout.topMargin = 0;
+    d->pageLayout.bottomMargin = 0;
+    d->pageLayout.leftMargin = 0;
+    d->pageLayout.rightMargin = 0;
 
     d->undoStack = new KoUndoStack(this);
     d->undoStack->createUndoAction(actionCollection());

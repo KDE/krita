@@ -97,20 +97,20 @@ void KoPagePreviewWidget::drawPage(QPainter &painter, qreal zoom, const QRect &d
 
     // draw text areas
     QRect textArea = dimensions;
-    if ((d->pageLayout.top == 0 && d->pageLayout.bottom == 0 &&
-            d->pageLayout.left == 0 && d->pageLayout.right == 0) ||
+    if ((d->pageLayout.topMargin == 0 && d->pageLayout.bottomMargin == 0 &&
+            d->pageLayout.leftMargin == 0 && d->pageLayout.rightMargin == 0) ||
             ( d->pageLayout.pageEdge == 0 && d->pageLayout.bindingSide == 0)) {
         // no margin
         return;
     }
     else {
-        textArea.setTop(textArea.top() + qRound(zoom * d->pageLayout.top));
-        textArea.setBottom(textArea.bottom() - qRound(zoom * d->pageLayout.bottom));
+        textArea.setTop(textArea.top() + qRound(zoom * d->pageLayout.topMargin));
+        textArea.setBottom(textArea.bottom() - qRound(zoom * d->pageLayout.bottomMargin));
 
         qreal leftMargin, rightMargin;
         if(d->pageLayout.bindingSide < 0) { // normal margins.
-            leftMargin = d->pageLayout.left;
-            rightMargin = d->pageLayout.right;
+            leftMargin = d->pageLayout.leftMargin;
+            rightMargin = d->pageLayout.rightMargin;
         }
         else { // margins mirrored for left/right pages
             leftMargin = d->pageLayout.bindingSide;

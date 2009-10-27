@@ -211,7 +211,9 @@ void KoPAViewModeNormal::paintMargins( QPainter &painter, const KoViewConverter 
     KoPageLayout pl = page->pageLayout();
 
     QSizeF pageSize = QSizeF( pl.width, pl.height );
-    QRectF marginRect( pl.left, pl.top, pageSize.width() - pl.left-pl.right, pageSize.height() - pl.top - pl.bottom );
+    QRectF marginRect( pl.leftMargin, pl.topMargin,
+                       pageSize.width() - pl.leftMargin - pl.rightMargin,
+                       pageSize.height() - pl.topMargin - pl.bottomMargin );
 
     QPen pen( Qt::gray );
     painter.setPen( pen );

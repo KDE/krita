@@ -663,8 +663,8 @@ void KoPAView::doUpdateActivePage( KoPAPageBase * page )
     KoPageLayout &layout = d->activePage->pageLayout();
     d->horizontalRuler->setRulerLength(layout.width);
     d->verticalRuler->setRulerLength(layout.height);
-    d->horizontalRuler->setActiveRange(layout.left, layout.width - layout.right);
-    d->verticalRuler->setActiveRange(layout.top, layout.height - layout.bottom);
+    d->horizontalRuler->setActiveRange(layout.leftMargin, layout.width - layout.rightMargin);
+    d->verticalRuler->setActiveRange(layout.topMargin, layout.height - layout.bottomMargin);
 
     QSizeF pageSize( layout.width, layout.height );
     d->canvas->setDocumentOrigin(QPointF(layout.width, layout.height));

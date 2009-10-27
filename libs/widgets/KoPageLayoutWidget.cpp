@@ -144,20 +144,20 @@ void KoPageLayoutWidget::setPageLayout(const KoPageLayout &layout)
         d->widget.facingPages->setChecked(true);
         d->widget.bindingEdgeMargin->changeValue(layout.bindingSide);
         d->widget.pageEdgeMargin->changeValue(layout.pageEdge);
-        d->pageLayout.left = -1;
-        d->pageLayout.right = -1;
+        d->pageLayout.leftMargin = -1;
+        d->pageLayout.rightMargin = -1;
     }
     else {
         d->widget.singleSided->setChecked(true);
-        d->widget.bindingEdgeMargin->changeValue(layout.left);
-        d->widget.pageEdgeMargin->changeValue(layout.right);
+        d->widget.bindingEdgeMargin->changeValue(layout.leftMargin);
+        d->widget.pageEdgeMargin->changeValue(layout.rightMargin);
         d->pageLayout.pageEdge = -1;
         d->pageLayout.bindingSide = -1;
     }
     facingPagesChanged();
 
-    d->widget.topMargin->changeValue(layout.top);
-    d->widget.bottomMargin->changeValue(layout.bottom);
+    d->widget.topMargin->changeValue(layout.topMargin);
+    d->widget.bottomMargin->changeValue(layout.bottomMargin);
     d->allowSignals = true;
     d->widget.sizes->setCurrentIndex(layout.format); // calls sizeChanged()
 }
@@ -183,12 +183,12 @@ void KoPageLayoutWidget::marginsChanged()
 {
     if (! d->allowSignals) return;
     d->allowSignals = false;
-    d->pageLayout.left = -1;
-    d->pageLayout.right = -1;
+    d->pageLayout.leftMargin = -1;
+    d->pageLayout.rightMargin = -1;
     d->pageLayout.bindingSide = -1;
     d->pageLayout.pageEdge = -1;
-    d->pageLayout.top = d->marginsEnabled?d->widget.topMargin->value():0;
-    d->pageLayout.bottom = d->marginsEnabled?d->widget.bottomMargin->value():0;
+    d->pageLayout.topMargin = d->marginsEnabled?d->widget.topMargin->value():0;
+    d->pageLayout.bottomMargin = d->marginsEnabled?d->widget.bottomMargin->value():0;
     qreal left = d->marginsEnabled?d->widget.bindingEdgeMargin->value():0;
     qreal right = d->marginsEnabled?d->widget.pageEdgeMargin->value():0;
     if (left + right > d->pageLayout.width - 10) {
@@ -199,8 +199,8 @@ void KoPageLayoutWidget::marginsChanged()
     }
 
     if (d->widget.singleSided->isChecked()) {
-        d->pageLayout.left = left;
-        d->pageLayout.right = right;
+        d->pageLayout.leftMargin  = left;
+        d->pageLayout.rightMargin = right;
     }
     else {
         d->pageLayout.bindingSide = left;

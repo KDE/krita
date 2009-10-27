@@ -175,5 +175,5 @@ void KisGridPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image,
 
 QRectF KisGridPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
-    KisPaintOpSettings::paintOutlineRect(pos, image, _mode);
+    return KisPaintOpSettings::paintOutlineRect(pos, image, _mode);
 }

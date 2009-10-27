@@ -56,8 +56,6 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
     connect( d->view, SIGNAL(activated( const QModelIndex & ) ),
              this, SLOT(activated ( const QModelIndex & ) ) );
-    connect( d->view, SIGNAL(clicked( const QModelIndex & ) ),
-             this, SLOT(activated ( const QModelIndex & ) ) );
 
     d->buttonGroup = new QButtonGroup( this );
     d->buttonGroup->setExclusive( false );

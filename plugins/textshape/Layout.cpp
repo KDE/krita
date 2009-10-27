@@ -1436,7 +1436,7 @@ static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragme
         qreal width = computeWidth(
                           (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::UnderlineWeight),
                           fmt.doubleProperty(KoCharacterStyle::UnderlineWidth),
-                          painter->font());
+                          fmt.font());
         if (underlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
             drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType,
                     fontUnderLineStyle, QString(), width, y);
@@ -1477,7 +1477,7 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
                     qreal x1 = line.cursorToX(currentFragment.position() - startOfBlock);
                     qreal x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
-                    x2 = qMin(line.naturalTextWidth() + line.x(), x2);
+                    x2 = qMin(line.naturalTextWidth() + line.cursorToX(line.textStart()), x2);
 
                     drawStrikeOuts(painter, currentFragment, line, x1, x2);
                     drawUnderlines(painter, currentFragment, line, x1, x2);

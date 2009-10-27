@@ -355,9 +355,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         foreach(KoFilterEffect* filterEffect, filterEffects) {
             QRectF filterRegion = filterEffect->filterRectForBoundingRect(clipRegion);
             filterRegion = converter.documentToView(filterRegion);
-            QPointF filterOffset = filterRegion.topLeft()-2*clippingOffset;
-            QRect subRegion = filterRegion.translated(filterOffset).toRect();
-
+            QRect subRegion = filterRegion.translated(-clippingOffset).toRect();
             // set current filter region
             renderContext.setFilterRegion(subRegion);
             

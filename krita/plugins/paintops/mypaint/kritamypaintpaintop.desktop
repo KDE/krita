@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=MyPaint brush
+Name[pt]=Pincel do MyPaint
+Name[sv]=Min målarpensel
+Name[uk]=Мій пензель
+Name[x-test]=xxMyPaint brushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritamypaintpaintop

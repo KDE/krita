@@ -1,6 +1,10 @@
 [Desktop Entry]
 Type=Service
 Name=Krita Gimp Import Filter
+Name[pt]=Filtro de Importação de Gimp para o Krita
+Name[sv]=Krita Gimp-importfilter
+Name[uk]=Фільтр імпорту GIMP для Krita
+Name[x-test]=xxKrita Gimp Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-xcf-gimp
 X-KDE-Weight=1

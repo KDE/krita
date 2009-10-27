@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Krita Encapsulated PostScript Export Filter
+Name[pt]=Filtro de Exportação de PostScript Encapsulado para o Krita
+Name[sv]=Krita exportfilter för inkapslad Postscript
+Name[uk]=Фільтр експорту EPS для Krita
+Name[x-test]=xxKrita Encapsulated PostScript Export Filterxx
 X-KDE-Export=x-eps
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service

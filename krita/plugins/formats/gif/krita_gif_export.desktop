@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Krita Gif Export Filter
+Name[pt]=Filtro de Exportação de GIF para o Krita
+Name[sv]=Krita GIF-exportfilter
+Name[uk]=Фільтр експорту GIF для Krita
+Name[x-test]=xxKrita Gif Export Filterxx
 X-KDE-Export=image/gif
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service

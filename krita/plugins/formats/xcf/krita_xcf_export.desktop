@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Krita Gimp Export Filter
+Name[pt]=Filtro de Exportação para Gimp para o Krita
+Name[sv]=Krita Gimp-exportfilter
+Name[uk]=Фільтр експорту GIMP для Krita
+Name[x-test]=xxKrita Gimp Export Filterxx
 X-KDE-Export=image/x-xcf-gimp
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service

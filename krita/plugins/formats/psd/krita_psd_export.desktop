@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Krita Photoshop Export Filter
+Name[pt]=Filtro de Exportação para Photoshop para o Krita
+Name[sv]=Krita Photohop-exportfilter
+Name[uk]=Фільтр експорту Photoshop до Krita
+Name[x-test]=xxKrita Photoshop Export Filterxx
 X-KDE-Export=image/x-vnd.adobe.photoshop,image/x-psd
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service

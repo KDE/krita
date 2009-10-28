@@ -20,7 +20,8 @@
 #include "kis_gridop_option.h"
 #include "kis_grid_paintop_settings.h"
 #include "kis_grid_shape_option.h"
-#include "kis_grid_color_option.h"
+
+#include <kis_color_option.h>
 
 #include <kis_paintop_options_widget.h>
 #include <kis_paint_action_type_option.h>
@@ -30,12 +31,12 @@ KisGridPaintOpSettingsWidget:: KisGridPaintOpSettingsWidget(QWidget* parent)
 {
     m_gridOption =  new KisGridOpOption();
     m_gridShapeOption = new KisGridShapeOption();
-    m_gridColorOption = new KisGridColorOption();
+    m_ColorOption = new KisColorOption();
     m_paintActionTypeOption = new KisPaintActionTypeOption();
 
     addPaintOpOption(m_gridOption);
     addPaintOpOption(m_gridShapeOption);
-    addPaintOpOption(m_gridColorOption);
+    addPaintOpOption(m_ColorOption);
     addPaintOpOption(m_paintActionTypeOption);
 }
 
@@ -43,7 +44,7 @@ KisGridPaintOpSettingsWidget::~ KisGridPaintOpSettingsWidget()
 {
     delete m_gridOption;
     delete m_gridShapeOption;
-    delete m_gridColorOption;
+    delete m_ColorOption;
     delete m_paintActionTypeOption;
 }
 

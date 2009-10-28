@@ -24,7 +24,7 @@
 class KisPaintActionTypeOption;
 class KisGridOpOption;
 class KisGridShapeOption;
-class KisGridColorOption;
+class KisColorOption;
 
 class KisGridPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
@@ -40,7 +40,7 @@ public:
     KisPaintActionTypeOption* m_paintActionTypeOption;
     KisGridOpOption* m_gridOption;
     KisGridShapeOption* m_gridShapeOption;
-    KisGridColorOption* m_gridColorOption;
+    KisColorOption* m_ColorOption;
 };
 
 #endif

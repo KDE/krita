@@ -4,13 +4,12 @@ set(kritagridpaintop_PART_SRCS
     kis_grid_paintop_factory.cpp
     kis_gridop_option.cpp
     kis_grid_shape_option.cpp
-    kis_grid_color_option.cpp
     kis_grid_paintop_settings.cpp
     kis_grid_paintop_settings_widget.cpp
     random_gauss.cpp
     )
 
-kde4_add_ui_files(kritagridpaintop_PART_SRCS wdggridoptions.ui wdgshapeoptions.ui wdgcoloroptions.ui)
+kde4_add_ui_files(kritagridpaintop_PART_SRCS wdggridoptions.ui wdgshapeoptions.ui )
 
 kde4_add_plugin(kritagridpaintop ${kritagridpaintop_PART_SRCS})
 

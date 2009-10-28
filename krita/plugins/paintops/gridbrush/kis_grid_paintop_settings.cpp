@@ -24,7 +24,7 @@
 #include "kis_grid_paintop_settings_widget.h"
 #include "kis_gridop_option.h"
 #include "kis_grid_shape_option.h"
-#include "kis_grid_color_option.h"
+#include <kis_color_option.h>
 
 KisGridPaintOpSettings::KisGridPaintOpSettings()
     : m_options(0)
@@ -91,36 +91,36 @@ int KisGridPaintOpSettings::shape() const {
 
 bool KisGridPaintOpSettings::useRandomOpacity() const
 {
-    return m_options->m_gridColorOption->useRandomOpacity();
+    return m_options->m_ColorOption->useRandomOpacity();
 }
 
 
 int KisGridPaintOpSettings::hue() const
 {
-    return m_options->m_gridColorOption->hue();
+    return m_options->m_ColorOption->hue();
 }
 
 
 int KisGridPaintOpSettings::saturation() const
 {
-    return m_options->m_gridColorOption->saturation();
+    return m_options->m_ColorOption->saturation();
 }
 
 int KisGridPaintOpSettings::value() const
 {
-    return m_options->m_gridColorOption->value();
+    return m_options->m_ColorOption->value();
 }
 
 
 bool KisGridPaintOpSettings::useRandomHSV() const
 {
-    return m_options->m_gridColorOption->useRandomHSV();
+    return m_options->m_ColorOption->useRandomHSV();
 }
 
 
 bool KisGridPaintOpSettings::sampleInput() const
 {
-    return m_options->m_gridColorOption->sampleInputColor();
+    return m_options->m_ColorOption->sampleInputColor();
 }
 
 
@@ -143,21 +143,21 @@ bool KisGridPaintOpSettings::jitterBorder() const
 
 bool KisGridPaintOpSettings::colorPerParticle() const
 {
-    return m_options->m_gridColorOption->colorPerParticle();
+    return m_options->m_ColorOption->colorPerParticle();
 }
 
 
 
 bool KisGridPaintOpSettings::fillBackground() const
 {
-    return m_options->m_gridColorOption->fillBackground();
+    return m_options->m_ColorOption->fillBackground();
 }
 
 
 
 bool KisGridPaintOpSettings::mixBgColor() const
 {
-    return m_options->m_gridColorOption->mixBgColor();
+    return m_options->m_ColorOption->mixBgColor();
 }
 
 

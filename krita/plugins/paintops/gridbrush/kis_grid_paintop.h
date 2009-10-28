@@ -19,7 +19,7 @@
 #ifndef KIS_GRID_PAINTOP_H_
 #define KIS_GRID_PAINTOP_H_
 
-#define BENCHMARK
+//#define BENCHMARK
 
 #include <klocale.h>
 #include <kis_paintop.h>

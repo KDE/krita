@@ -135,6 +135,8 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
             tile.adjust(vertBorder,horzBorder,-vertBorder,-horzBorder);
             tile = tile.normalized();
 
+            if (tile.toRect().isEmpty()) continue;
+
             // do color transformation
             if (shouldColor){
                 if (m_settings->sampleInput()){

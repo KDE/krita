@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>663</width>
-    <height>269</height>
+    <width>472</width>
+    <height>290</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>425</width>
+    <width>460</width>
     <height>200</height>
    </size>
   </property>
@@ -31,7 +31,7 @@
      <x>30</x>
      <y>20</y>
      <width>401</width>
-     <height>151</height>
+     <height>131</height>
     </rect>
    </property>
    <widget class="QWidget" name="layoutWidget">
@@ -58,6 +58,9 @@
        </property>
        <property name="maximum">
         <number>180</number>
+       </property>
+       <property name="tracking">
+        <bool>false</bool>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -95,6 +98,9 @@
        <property name="maximum">
         <number>100</number>
        </property>
+       <property name="tracking">
+        <bool>false</bool>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -131,6 +137,9 @@
        <property name="maximum">
         <number>100</number>
        </property>
+       <property name="tracking">
+        <bool>false</bool>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -155,29 +164,84 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>180</y>
-     <width>130</width>
-     <height>52</height>
+     <y>170</y>
+     <width>417</width>
+     <height>81</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QCheckBox" name="randomHSVCHBox">
-      <property name="text">
-       <string>Random HSV</string>
-      </property>
-     </widget>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QCheckBox" name="randomHSVCHBox">
+        <property name="text">
+         <string>Random HSV</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="randomOpacityCHBox">
+        <property name="text">
+         <string>Random opacity</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="sampleInputCHBox">
+        <property name="text">
+         <string>Sample Input layer</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
-     <widget class="QCheckBox" name="randomOpacityCHBox">
-      <property name="text">
-       <string>Random opacity</string>
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-     </widget>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>58</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QCheckBox" name="fillBackgroundCHBox">
+        <property name="toolTip">
+         <string>If checked, grid brush fill every particle's background with background color. The background of particle is rectangle of grid width and height and by default it is transparent.</string>
+        </property>
+        <property name="text">
+         <string>Fill background</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="mixBgColorCHBox">
+        <property name="text">
+         <string>Mix with background color</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="colorPerParticleCHBox">
+        <property name="text">
+         <string>Color per particle</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

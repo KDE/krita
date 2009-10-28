@@ -27,26 +27,20 @@ public:
     KisSprayShapeOption();
     ~KisSprayShapeOption();
 
-    int width() const;
-    int height() const;
-
-    /// 0 - shape, 1 - particle, 2 - pixel
-    int object() const;
-
-    /// 0 - ellipse, 1 - rectangle, 2 - metaball
+    /// 0 - ellipse, 1 - rectangle, 2 - anti-aliased pixel, 2 - pixel
     int shape() const;
 
-    bool jitterShapeSize() const;
-
-    bool highRendering() const;
-    bool proportional() const;
+    /// distribution settings
     bool gaussian() const;
-
+    
+    /// size settings
+    bool proportional() const;
     qreal widthPerc() const;
     qreal heightPerc() const;
-
-    qreal minTresh() const;
-    qreal maxTresh() const;
+    int width() const;
+    int height() const;
+    /// random size 
+    bool jitterShapeSize() const;
 
     /// TODO
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;

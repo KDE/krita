@@ -53,44 +53,39 @@ public:
 
     KisPaintOpSettingsSP clone() const;
 
+    /// brush settings
     int diameter() const;
-
     qreal coverage() const;
     qreal amount() const;
     qreal spacing() const;
     qreal scale() const;
+    bool jitterMovement() const;
+    bool jitterSize() const;    
+    bool useDensity() const;
+    int particleCount() const;
 
-    int object() const;
-    int shape() const;
-    int width() const;
-    int height() const;
-    bool jitterShapeSize() const;
-
-
-    // metaballs
-    qreal maxTresh() const;
-    qreal minTresh() const;
-
-    // color options
+    /// color options
     bool useRandomOpacity() const;
     bool useRandomHSV() const;
-
     // TODO: these should be intervals like 20..180
     int hue() const;
     int saturation() const;
     int value() const;
 
-    bool highRendering() const;
+    bool colorPerParticle() const;
+    bool fillBackground() const;
+    bool mixBgColor() const;
+    bool sampleInput() const;
+    
+    /// shape size
+    int shape() const;
     bool proportional() const;
     qreal widthPerc() const;
     qreal heightPerc() const;
-
-    bool jitterMovement() const;
-    bool jitterSize() const;
-
-    bool useDensity() const;
-    int particleCount() const;
-
+    bool jitterShapeSize() const;    
+    int width() const;
+    int height() const;
+    // distributed
     bool gaussian() const;
 
     // XXX: Hack!

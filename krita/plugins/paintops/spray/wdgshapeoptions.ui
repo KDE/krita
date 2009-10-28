@@ -37,41 +37,38 @@
    <property name="checkable">
     <bool>false</bool>
    </property>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QComboBox" name="shapeBox">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>10</x>
       <y>30</y>
-      <width>133</width>
-      <height>73</height>
+      <width>166</width>
+      <height>26</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QRadioButton" name="shapeBtn">
-       <property name="text">
-        <string>Shape</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="particleBtn">
-       <property name="text">
-        <string>Anti-aliased pixel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="pixelBtn">
-       <property name="text">
-        <string>Pixel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <item>
+     <property name="text">
+      <string>Ellipse</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Rectangle</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Anti-aliased pixel</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Pixel</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QWidget" name="layoutWidget">
@@ -80,32 +77,10 @@
      <x>190</x>
      <y>0</y>
      <width>168</width>
-     <height>123</height>
+     <height>125</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_3">
-    <item>
-     <widget class="QComboBox" name="shapeBox">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <item>
-       <property name="text">
-        <string>Ellipse</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Rectangle</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Metaball</string>
-       </property>
-      </item>
-     </widget>
-    </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -169,8 +144,8 @@
     <rect>
      <x>190</x>
      <y>150</y>
-     <width>175</width>
-     <height>60</height>
+     <width>182</width>
+     <height>64</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -213,8 +188,8 @@
   <widget class="QCheckBox" name="gaussBox">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>110</y>
+     <x>10</x>
+     <y>120</y>
      <width>141</width>
      <height>23</height>
     </rect>
@@ -222,72 +197,6 @@
    <property name="text">
     <string>gauss distribution</string>
    </property>
-  </widget>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>150</y>
-     <width>164</width>
-     <height>87</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_5">
-    <item>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="MetaballLbl">
-        <property name="text">
-         <string>Min treshold</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="minTreshSpin">
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>-100.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>-1.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="MetaballLbl2">
-        <property name="text">
-         <string>Max treshold</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="maxTreshSpin">
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>-100.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>6.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="renderBox">
-      <property name="text">
-       <string>High quality rendering</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
   </widget>
  </widget>
  <resources/>

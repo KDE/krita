@@ -41,14 +41,8 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    Q_ASSERT(m_image);
 
     m_sprayBrush.setDiameter(settings->diameter());
-    m_sprayBrush.setJitterSize(settings->jitterSize());
-    m_sprayBrush.setJitterMovement(settings->jitterMovement());
-
-    m_sprayBrush.setObject(settings->object());
-    m_sprayBrush.setShape(settings->shape());
     m_sprayBrush.setJitterShapeSize(settings->jitterShapeSize());
 
     if (settings->proportional()) {
@@ -61,22 +55,11 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sprayBrush.setAmount(settings->amount());
     m_sprayBrush.setScale(settings->scale());
 
-
     m_sprayBrush.setCoverity(settings->coverage() / 100.0);
     m_sprayBrush.setUseDensity(settings->useDensity());
     m_sprayBrush.setParticleCount(settings->particleCount());
 
-    m_sprayBrush.setMaxTreshold(settings->maxTresh());
-    m_sprayBrush.setMinTreshold(settings->minTresh());
 
-    QRect area;
-    if (settings->highRendering()) {
-        area = QRect(0, 0, m_image->width(), m_image->height());
-        m_sprayBrush.setComputeArea(area);
-    } else {
-        area = QRect(0, 0, settings->diameter() * 1.5 , settings->diameter() * 1.5);
-    }
-    m_sprayBrush.setComputeArea(area);
     // spacing
     if ((settings->diameter() * 0.5) > 1) {
         m_ySpacing = m_xSpacing = settings->diameter() * 0.5 * settings->spacing();
@@ -125,7 +108,11 @@ void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
         m_dab->clear();
     }
 
-    m_sprayBrush.paint(m_dab, info, painter()->paintColor());
+    m_sprayBrush.paint( m_dab,
+                        m_settings->node()->paintDevice(), 
+                        info, 
+                        painter()->paintColor(), 
+                        painter()->backgroundColor());
 
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);

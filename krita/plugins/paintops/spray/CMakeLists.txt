@@ -4,14 +4,13 @@ set(kritaspraypaintop_PART_SRCS
     kis_spray_paintop_factory.cpp
     kis_sprayop_option.cpp
     kis_spray_shape_option.cpp
-    kis_spray_color_option.cpp
     kis_spray_paintop_settings.cpp
     kis_spray_paintop_settings_widget.cpp
     spray_brush.cpp
     random_gauss.cpp
     )
 
-kde4_add_ui_files(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgshapeoptions.ui wdgcoloroptions.ui)
+kde4_add_ui_files(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgshapeoptions.ui )
 
 kde4_add_plugin(kritaspraypaintop ${kritaspraypaintop_PART_SRCS})
 

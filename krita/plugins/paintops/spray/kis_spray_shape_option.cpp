@@ -34,9 +34,6 @@ KisSprayShapeOption::KisSprayShapeOption()
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();
-    connect(m_options->shapeBtn, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->particleBtn, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->pixelBtn, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
@@ -46,28 +43,12 @@ KisSprayShapeOption::KisSprayShapeOption()
     connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->gaussBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
 
-// turn off those
-//     connect(m_options->maxTreshSpin,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-//     connect(m_options->minTreshSpin,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-//     connect(m_options->renderBox,SIGNAL(toggled(bool)),SIGNAL( sigSettingChanged()));
-
     setConfigurationPage(m_options);
 }
 
 KisSprayShapeOption::~KisSprayShapeOption()
 {
     // delete m_options;
-}
-
-int KisSprayShapeOption::object() const
-{
-    if (m_options->shapeBtn->isChecked())
-        return 0;
-    if (m_options->particleBtn->isChecked())
-        return 1;
-    if (m_options->pixelBtn->isChecked())
-        return 2;
-    return -1;
 }
 
 int KisSprayShapeOption::shape() const
@@ -119,23 +100,6 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
     /*    m_options->diameterSpinBox->setValue( setting->getInt("Spray/diameter") );
         m_options->coverageSpin->setValue( setting->getDouble("Spray/coverage") );
         m_options->jitterSizeBox->setChecked( setting->getBool("Spray/jitterSize") );*/
-}
-
-
-qreal KisSprayShapeOption::maxTresh() const
-{
-    return m_options->maxTreshSpin->value();
-}
-
-
-qreal KisSprayShapeOption::minTresh() const
-{
-    return m_options->minTreshSpin->value();
-}
-
-bool KisSprayShapeOption::highRendering() const
-{
-    return m_options->renderBox->isChecked();
 }
 
 

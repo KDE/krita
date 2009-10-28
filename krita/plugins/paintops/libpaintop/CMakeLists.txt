@@ -8,6 +8,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_chooser.cpp
     kis_brush_option.cpp
     kis_brush_selection_widget.cpp
+    kis_color_option.cpp
     kis_curve_option.cpp
     kis_custom_brush_widget.cpp
     kis_dynamic_sensor.cc
@@ -32,6 +33,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     wdgtextbrush.ui
     wdgincremental.ui
     wdgfilteroption.ui
+    wdgcoloroptions.ui
     sensors/SensorTimeConfiguration.ui
     SensorSelector.ui
 )

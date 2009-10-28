@@ -38,20 +38,16 @@ class SprayBrush
 {
 
 public:
-    SprayBrush(const KoColor &inkColor);
     SprayBrush();
     ~SprayBrush();
-    SprayBrush(KoColor inkColor);
-    void paint(KisPaintDeviceSP dev, const KisPaintInformation& info, const KoColor &color);
+
+    void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, const KoColor &color, const KoColor &bgColor);
 
     /// Paints Wu Particle
     void paintParticle(KisRandomAccessor &writeAccessor, const KoColor &color, qreal rx, qreal ry);
     void paintCircle(KisPainter * painter, qreal x, qreal y, int radius, int steps);
     void paintEllipse(KisPainter * painter, qreal x, qreal y, int a, int b, qreal angle, int steps);
     void paintRectangle(KisPainter * painter, qreal x, qreal y, int width, int height, qreal angle, int steps);
-
-    void paintMetaballs(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor);
-    void paintDistanceMap(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor);
 
     void paintOutline(KisPaintDeviceSP dev, const KoColor& painterColor, qreal posX, qreal posY, qreal radius);
 
@@ -64,14 +60,6 @@ public:
         m_coverage = coverage;
     }
 
-    void setJitterSize(bool jitterSize) {
-        m_jitterSize = jitterSize;
-    }
-
-    void setJitterMovement(bool jitterMovement) {
-        m_jitterMovement = jitterMovement;
-    }
-
     // set the amount of the jittering brush position
     void setAmount(qreal amount) {
         m_amount = amount;
@@ -79,14 +67,6 @@ public:
 
     void setScale(qreal scale) {
         m_scale = scale;
-    }
-
-    void setObject(int object) {
-        m_object = object;
-    }
-
-    void setShape(int shape) {
-        m_shape = shape;
     }
 
     void setJitterShapeSize(bool jitterShapeSize) {
@@ -121,27 +101,6 @@ public:
         m_particlesCount = particleCount;
     }
 
-    void setMaxTreshold(qreal tresh) {
-        m_maxtresh = tresh;
-    }
-
-    void setMinTreshold(qreal tresh) {
-        m_mintresh = tresh;
-    }
-
-    void setRendering(bool highQuality) {
-        m_highQuality = highQuality;
-    }
-
-    void setRadius(qreal radiusX, qreal radiusY) {
-        m_radiusX = qRound(radiusX);
-        m_radiusY = qRound(radiusY);
-    }
-
-    void setComputeArea(QRect area) {
-        m_computeArea = area;
-    }
-
     // set true if the particles should have random opacity
     void setUseRandomOpacity(bool isRandom) {
         m_randomOpacity = isRandom;
@@ -153,23 +112,15 @@ public:
 
 private:
     KoColor m_inkColor;
-    int m_counter;
     qreal m_radius;
     int m_pixelSize;
     int m_diameter;
     qreal m_scale;
 
-    // jitter
-    bool m_jitterSize;
-    bool m_jitterMovement;
-
     qreal m_coverage;
 
     // amount of jitter for movement
     qreal m_amount;
-
-    int m_object;
-    int m_shape;
 
     // object shape
     int m_width;
@@ -180,19 +131,8 @@ private:
     int m_particlesCount;
     bool m_useDensity;
 
-    // metaballs
-    qreal m_maxtresh;
-    qreal m_mintresh;
-
     // color options
     bool m_randomOpacity;
-
-    int m_radiusX;
-    int m_radiusY;
-
-    bool m_highQuality;
-
-    QRect m_computeArea;
 
     RandomGauss * m_rand;
     KisPainter * m_painter;

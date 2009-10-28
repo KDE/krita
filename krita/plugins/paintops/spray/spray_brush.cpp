@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,13 +26,13 @@
 #include <QHash>
 #include <QTransform>
 
-#include "kis_random_accessor.h"
-#include "kis_painter.h"
-#include "kis_paint_information.h"
+#include <kis_random_accessor.h>
+#include <kis_random_sub_accessor.h>
+
+#include <kis_painter.h>
+#include <kis_paint_information.h>
 
 #include "kis_spray_paintop_settings.h"
-
-#include "metaball.h"
 
 #include <cmath>
 #include <ctime>
@@ -42,7 +42,6 @@
 SprayBrush::SprayBrush()
 {
     m_radius = 0;
-    m_counter = 0;
     m_randomOpacity = false;
     m_painter = 0;
     srand48(time(0));
@@ -56,58 +55,40 @@ SprayBrush::~SprayBrush()
 }
 
 
-void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, const KoColor &color)
+void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, const KoColor &color, const KoColor &bgColor)
 {
+    // initializing painter
+    if (!m_painter) {
+        m_painter = new KisPainter(dab);
+        m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
+        m_painter->setMaskImageSize(m_width, m_height);
+        m_pixelSize = dab->colorSpace()->pixelSize();
+    }
 
     qreal x = info.pos().x();
     qreal y = info.pos().y();
-
-    // initializing painter
-    if (!m_painter) {
-        m_painter = new KisPainter(dev);
-        m_painter->setMaskImageSize(m_width, m_height);
-        m_pixelSize = dev->colorSpace()->pixelSize();
-    }
-
-    KisRandomAccessor accessor = dev->createRandomAccessor(qRound(x), qRound(y));
+    KisRandomAccessor accessor = dab->createRandomAccessor(qRound(x), qRound(y));
+    KisRandomSubAccessorPixel subAcc = source->createRandomSubAccessor();
+    
     m_inkColor = color;
 
-    if (m_settings->useRandomHSV()) {
-        QHash<QString, QVariant> params;
-        params["h"] = (m_settings->hue() / 180.0) * drand48();
-        params["s"] = (m_settings->saturation() / 100.0) * drand48();
-        params["v"] = (m_settings->value() / 100.0) * drand48();
-
-        KoColorTransformation* transfo;
-        transfo = dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
-        transfo->transform(color.data(), m_inkColor.data() , 1);
-    }
-
-    m_painter->setPaintColor(m_inkColor);
-    m_counter++;
-
-    // jitter radius
-    int tmpRadius = m_radius;
-    if (m_jitterSize) {
+    // jitter radius, recovered at the end of dab
+    if ( m_settings->jitterSize() ) {
         m_radius = m_radius * drand48();
     }
 
     // jitter movement
-    if (m_jitterMovement) {
+    if ( m_settings->jitterMovement() ) {
         x = x + ((2 * m_radius * drand48()) - m_radius) * m_amount;
         y = y + ((2 * m_radius * drand48()) - m_radius) * m_amount;
     }
 
-    // coverage: adaptively select how many objects are sprayed per paint
+    // this is wrong
     if (m_useDensity) {
         m_particlesCount = (m_coverage * (M_PI * m_radius * m_radius));
     }
 
-    // Metaballs are rendered little differently
-    if (m_shape == 2 && m_object == 0) {
-        paintMetaballs(dev, info, color);
-    }
-
+    QHash<QString, QVariant> params;
     qreal nx, ny;
     int ix, iy;
 
@@ -115,18 +96,24 @@ void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, co
     qreal lengthX;
     qreal lengthY;
 
-
-    for (int i = 0; i < m_particlesCount; i++) {
+    int steps = 36;
+    bool shouldColor = true;
+    if (m_settings->fillBackground()){
+        m_painter->setPaintColor(bgColor);
+        paintCircle(m_painter,x,y,m_radius,steps);
+    }
+    for (int i = 0; i < m_particlesCount; i++){
         // generate random angle
         angle = drand48() * M_PI * 2;
 
+        // generate random size
         if (m_settings->gaussian()) {
             lengthY = lengthX = qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
         } else {
             lengthY = lengthX = drand48();
         }
 
-        // I hope we live the era where sin and cos is not slow for spray
+        // generate polar coordinate
         nx = (sin(angle) * m_radius * lengthX);
         ny = (cos(angle) * m_radius * lengthY);
 
@@ -134,68 +121,112 @@ void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, co
         nx *= m_scale;
         ny *= m_scale;
 
-        // it is some shape (circle, ellipse, rectangle)
-        if (m_object == 0) {
-            // steps for single step in circle and ellipse
-            int steps = 36;
-            qreal random = drand48();
+        // color transformation
+        if (shouldColor){
+            if (m_settings->sampleInput()){
+                subAcc.moveTo(nx+x, ny+y);
+                subAcc.sampledRawData( m_inkColor.data() );
+            }else{
+                 //revert the color
+                 memcpy(m_inkColor.data(),color.data(), m_pixelSize);
+            }
 
+            // mix the color with background color
+            if (m_settings->mixBgColor())
+            {       
+                KoMixColorsOp * mixOp = source->colorSpace()->mixColorsOp();
+
+                const quint8 *colors[2];
+                colors[0] = m_inkColor.data();
+                colors[1] = bgColor.data();
+
+                qint16 colorWeights[2];
+                int MAX_16BIT = 255;
+                qreal blend = info.pressure();
+
+                colorWeights[0] = static_cast<quint16>( blend * MAX_16BIT); 
+                colorWeights[1] = static_cast<quint16>( (1.0 - blend) * MAX_16BIT); 
+                mixOp->mixColors(colors, colorWeights, 2, m_inkColor.data() );
+            }
+
+            if (m_settings->useRandomHSV()){
+                params["h"] = (m_settings->hue() / 180.0) * drand48();
+                params["s"] = (m_settings->saturation() / 100.0) * drand48();
+                params["v"] = (m_settings->value() / 100.0) * drand48();
+
+                KoColorTransformation* transfo;
+                transfo = dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
+                transfo->transform(m_inkColor.data(), m_inkColor.data() , 1);
+            }
+                
+            if (m_settings->useRandomOpacity()){
+                quint8 alpha = qRound(drand48() * OPACITY_OPAQUE);
+                m_inkColor.setOpacity( alpha );
+                m_painter->setOpacity( alpha );
+            }
+
+            if ( !m_settings->colorPerParticle() ){
+                shouldColor = false;
+            }
             m_painter->setPaintColor(m_inkColor);
-            // it is ellipse
-            if (m_shape == 0) {
-                //
-                qreal ellipseA = m_width / 2.0;
-                qreal ellipseB = m_height / 2.0;
+        }
 
-                if (m_width == m_height) {
-                    if (m_jitterShapeSize) {
-                        paintCircle(m_painter, nx + x, ny + y, int((random * ellipseA) + 1.5) , steps);
-                    } else {
-                        paintCircle(m_painter, nx + x, ny + y, qRound(ellipseA)  , steps);
-                    }
-                } else {
-                    if (m_jitterShapeSize) {
-                        paintEllipse(m_painter, nx + x, ny + y, int((random * ellipseA) + 1.5) , int((random * ellipseB) + 1.5), angle , steps);
-                    } else {
-                        paintEllipse(m_painter, nx + x, ny + y, qRound(ellipseA), qRound(ellipseB), angle , steps);
-                    }
-                }
-            } else if (m_shape == 1) {
-                if (m_jitterShapeSize) {
-                    paintRectangle(m_painter, nx + x, ny + y, int((random * m_width) + 1.5) , int((random * m_height) + 1.5), angle , steps);
-                } else {
-                    paintRectangle(m_painter, nx + x, ny + y, qRound(m_width), qRound(m_height), angle , steps);
-                }
-            }
-            // it is pixel particle
-        } else if (m_object == 1) {
-            if (m_randomOpacity) {
-                m_inkColor.setOpacity(OPACITY_OPAQUE * drand48());
-            }
-            paintParticle(accessor, m_inkColor, nx + x, ny + y);
+        qreal random = drand48();
+        qreal jitteredWidth;
+        qreal jitteredHeight; 
+
+        if (m_jitterShapeSize){
+            jitteredWidth = m_width * random + 1;
+            jitteredHeight = m_height * random + 1;
+        }else{
+            jitteredWidth = m_width;
+            jitteredHeight = m_height;
         }
-        // it is pixel
-        else if (m_object == 2) {
-            ix = qRound(nx + x);
-            iy = qRound(ny + y);
-            accessor.moveTo(ix, iy);
-            if (m_randomOpacity) {
-                m_inkColor.setOpacity(OPACITY_OPAQUE * drand48());
+        switch (m_settings->shape()){
+            // ellipse
+            case 0:
+            {
+                if (m_width == m_height){
+                    paintCircle(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , steps);
+                }else
+                { 
+                    paintEllipse(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , qRound(jitteredHeight * 0.5), angle , steps);
+                }
+                break;
             }
-            memcpy(accessor.rawData(), m_inkColor.data(), m_pixelSize);
+            // rectangle
+            case 1:
+            {
+                paintRectangle(m_painter, nx + x, ny + y, qRound(jitteredWidth) , qRound(jitteredHeight), angle , steps);
+                break;
+            }
+            // wu-particle
+            case 2:
+            {
+                paintParticle(accessor, m_inkColor, nx + x, ny + y);
+                break;
+            }
+            // pixel
+            case 3:
+            {
+                ix = qRound(nx + x);
+                iy = qRound(ny + y);
+                accessor.moveTo(ix, iy);
+                memcpy(accessor.rawData(), m_inkColor.data(), m_pixelSize);
+                break;
+            }
         }
+        
     }
-
-
-
     // hidden code for outline detection
     //m_inkColor.setOpacity(128);
     //paintOutline(dev,m_inkColor,x, y, m_radius * 2);
 
     // recover from jittering of color,
     // m_inkColor.opacity is recovered with every paint
-    m_radius = tmpRadius;
 
+    // recover radius
+    setDiameter(m_settings->diameter());
 }
 
 
@@ -259,13 +290,6 @@ void SprayBrush::paintCircle(KisPainter * painter, qreal x, qreal y, int radius,
         path.lineTo(cx, cy);
     }
     path.closeSubpath();
-
-    if (m_randomOpacity) {
-        painter->setOpacity(qRound(OPACITY_OPAQUE * drand48()));
-    }
-
-
-    painter->setFillStyle(KisPainter::FillStyleForegroundColor);
     painter->fillPainterPath(path);
 }
 
@@ -291,12 +315,6 @@ void SprayBrush::paintEllipse(KisPainter* painter, qreal x, qreal y, int a, int 
         path.lineTo(X, Y);
     }
     path.closeSubpath();
-
-    if (m_randomOpacity) {
-        painter->setOpacity(int((OPACITY_OPAQUE * drand48()) + 0.5));
-    }
-
-    painter->setFillStyle(KisPainter::FillStyleForegroundColor);
     painter->fillPainterPath(path);
 }
 
@@ -324,108 +342,7 @@ void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, int width
     transform.map(- halfWidth,  + halfHeight, &tx, &ty);
     path.lineTo(QPointF(tx + x, ty + y));
     path.closeSubpath();
-
-    if (m_randomOpacity) {
-        painter->setOpacity(int((OPACITY_OPAQUE * drand48()) + 0.5));
-    }
-
-    painter->setFillStyle(KisPainter::FillStyleForegroundColor);
     painter->fillPainterPath(path);
-}
-
-void SprayBrush::paintDistanceMap(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor)
-{
-    KisRandomAccessor accessor = dev->createRandomAccessor(0, 0);
-    KoColor color = painterColor;
-
-    qreal posX = info.pos().x();
-    qreal posY = info.pos().y();
-
-    qreal opacity = 255;
-    for (int y = -m_radius; y <= m_radius; y++) {
-        for (int x = -m_radius; x <= m_radius; x++) {
-            //opacity = sqrt(y*y + x*x) / m_radius;
-            opacity = (y * y + x * x) / (m_radius * m_radius);
-            opacity = 1.0 - opacity;
-            opacity *= m_scale;
-
-            if (opacity < 0) continue;
-            if (opacity > 1.0) opacity = 1.0;
-
-            if ((y*y + x*x) <= (m_radius * m_radius)) {
-                color.setOpacity(opacity * 255);
-                accessor.moveTo(x + posX, y + posY);
-                memcpy(accessor.rawData(), color.data(), dev->colorSpace()->pixelSize());
-            }
-
-        }
-    }
-}
-
-void SprayBrush::paintMetaballs(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor)
-{
-    qreal MIN_TRESHOLD = m_mintresh;
-    qreal MAX_TRESHOLD = m_maxtresh;
-
-    KoColor color = painterColor;
-    qreal posX = info.pos().x();
-    qreal posY = info.pos().y();
-
-    //int points = m_coverage * (m_radius * m_radius * M_PI);
-    qreal ballRadius = m_width * 0.5;
-
-    // generate metaballs
-    QList<Metaball> list;
-    for (int i = 0; i < m_particlesCount ; i++) {
-        qreal x = (2 * drand48() * m_radius) - m_radius;
-        qreal y = (2 * drand48() * m_radius) - m_radius;
-        list.append(
-            Metaball(x,
-                     y ,
-                     drand48() *  ballRadius)
-        );
-    }
-
-
-    // paint it
-    KisRandomAccessor accessor = dev->createRandomAccessor(0, 0);
-
-    qreal sum = 0.0;
-    m_computeArea.translate(-qRound(posX), -qRound(posY));
-    for (int y = m_computeArea.y(); y <= m_computeArea.height(); y++) {
-        for (int x = m_computeArea.x() ; x <= m_computeArea.width(); x++) {
-
-            sum = 0.0;
-
-            for (int i = 0; i < m_particlesCount; i++) {
-                sum += list[i].equation(x, y);
-            }
-
-            if (sum >= MIN_TRESHOLD && sum <= MAX_TRESHOLD) {
-                if (sum < 0.0) sum = 0.0;
-                if (sum > 1.0) sum = 1.0;
-
-                color.setOpacity(OPACITY_OPAQUE * sum);
-                accessor.moveTo(x + posX , y + posY);
-                memcpy(accessor.rawData(), color.data(), dev->colorSpace()->pixelSize());
-            }
-        }
-    }
-    m_computeArea.translate(qRound(posX), qRound(posY));
-
-#if 0
-    KisPainter dabPainter(dev);
-    dabPainter.setFillColor(color);
-    dabPainter.setPaintColor(color);
-    dabPainter.setFillStyle(KisPainter::FillStyleForegroundColor);
-
-    for (int i = 0; i < m_particlesCount; i++) {
-        qreal x = list[i].x() + posX;
-        qreal y = list[i].y() + posY;
-        dabPainter.paintEllipse(x, y, list[i].radius() * 2, list[i].radius() * 2);
-    }
-#endif
-
 }
 
 

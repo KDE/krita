@@ -19,12 +19,11 @@
 #include <KoViewConverter.h>
 
 #include <kis_paint_action_type_option.h>
+#include <kis_color_option.h>
 
 #include "kis_spray_paintop_settings.h"
-#include "kis_spray_paintop_settings_widget.h"
 #include "kis_sprayop_option.h"
 #include "kis_spray_shape_option.h"
-#include "kis_spray_color_option.h"
 
 KisSprayPaintOpSettings::KisSprayPaintOpSettings()
         : m_options(0)
@@ -125,11 +124,6 @@ int KisSprayPaintOpSettings::height() const
     return m_options->m_sprayShapeOption->height();
 }
 
-int KisSprayPaintOpSettings::object() const
-{
-    return m_options->m_sprayShapeOption->object();
-}
-
 
 int KisSprayPaintOpSettings::shape() const
 {
@@ -167,51 +161,32 @@ int KisSprayPaintOpSettings::particleCount() const
 }
 
 
-qreal KisSprayPaintOpSettings::maxTresh() const
-{
-    return m_options->m_sprayShapeOption->maxTresh();
-}
-
-
-qreal KisSprayPaintOpSettings::minTresh() const
-{
-    return m_options->m_sprayShapeOption->minTresh();
-}
-
-
-bool KisSprayPaintOpSettings::highRendering() const
-{
-    return m_options->m_sprayShapeOption->highRendering();
-}
-
-
-
 bool KisSprayPaintOpSettings::useRandomOpacity() const
 {
-    return m_options->m_sprayColorOption->useRandomOpacity();
+    return m_options->m_ColorOption->useRandomOpacity();
 }
 
 
 int KisSprayPaintOpSettings::hue() const
 {
-    return m_options->m_sprayColorOption->hue();
+    return m_options->m_ColorOption->hue();
 }
 
 
 int KisSprayPaintOpSettings::saturation() const
 {
-    return m_options->m_sprayColorOption->saturation();
+    return m_options->m_ColorOption->saturation();
 }
 
 int KisSprayPaintOpSettings::value() const
 {
-    return m_options->m_sprayColorOption->value();
+    return m_options->m_ColorOption->value();
 }
 
 
 bool KisSprayPaintOpSettings::useRandomHSV() const
 {
-    return m_options->m_sprayColorOption->useRandomHSV();
+    return m_options->m_ColorOption->useRandomHSV();
 }
 
 QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
@@ -231,8 +206,31 @@ void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image
 }
 
 
-
 bool KisSprayPaintOpSettings::gaussian() const
 {
     return m_options->m_sprayShapeOption->gaussian();
+}
+
+
+bool KisSprayPaintOpSettings::colorPerParticle() const
+{
+    return m_options->m_ColorOption->colorPerParticle();
+}
+
+
+bool KisSprayPaintOpSettings::fillBackground() const
+{
+    return m_options->m_ColorOption->fillBackground();
+}
+
+
+bool KisSprayPaintOpSettings::mixBgColor() const
+{
+    return m_options->m_ColorOption->mixBgColor();
+}
+
+
+bool KisSprayPaintOpSettings::sampleInput() const
+{
+    return m_options->m_ColorOption->sampleInputColor();
 }

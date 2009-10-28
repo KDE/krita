@@ -127,7 +127,7 @@ bool KisTiledDataManager::write(KoStore *store)
 
     const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
 
-    while (!(tile = iter.tile())) {
+    while (tile = iter.tile()) {
         tile->extent().getRect(&x, &y, &width, &height);
         sprintf(str, "%d,%d,%d,%d\n", x, y, width, height);
         store->write(str, strlen(str));

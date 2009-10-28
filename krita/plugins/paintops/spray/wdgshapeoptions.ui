@@ -97,6 +97,9 @@
           <property name="enabled">
            <bool>false</bool>
           </property>
+          <property name="maximum">
+           <number>999</number>
+          </property>
           <property name="value">
            <number>6</number>
           </property>
@@ -117,6 +120,9 @@
          <widget class="QSpinBox" name="heightSpin">
           <property name="enabled">
            <bool>false</bool>
+          </property>
+          <property name="maximum">
+           <number>999</number>
           </property>
           <property name="value">
            <number>6</number>

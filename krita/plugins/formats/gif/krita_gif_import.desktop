@@ -1,6 +1,10 @@
 [Desktop Entry]
 Type=Service
 Name=Krita Gif Import Filter
+Name[et]=Krita Gifi impordifilter
+Name[pt]=Filtro de Importação de GIF para o Krita
+Name[sv]=Krita GIF-importfilter
+Name[uk]=Фільтр імпорту GIF для Krita
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/gif
 X-KDE-Weight=1

@@ -585,6 +585,7 @@ void KisPainter::paintRect(const double x,
 
 void KisPainter::paintEllipse(const QRectF &rect)
 {
+    if (rect.isEmpty()) return;
     QRectF r = rect.normalized();
 
     // See http://www.whizkidtech.redprince.net/bezier/circle/ for explanation.

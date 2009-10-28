@@ -135,8 +135,6 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
             tile.adjust(vertBorder,horzBorder,-vertBorder,-horzBorder);
             tile = tile.normalized();
 
-            if (tile.toRect().isEmpty()) continue;
-
             // do color transformation
             if (shouldColor){
                 if (m_settings->sampleInput()){
@@ -192,7 +190,7 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
             switch (m_settings->shape()){
                 case 0:
                 {
-                            m_painter->paintEllipse( tile.toRect() ); 
+                            m_painter->paintEllipse( tile ); 
                             break;
                 }
                 case 1: 

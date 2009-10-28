@@ -19,7 +19,6 @@
 #define KIS_DYNAOP_OPTION_H
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 
 class KisDynaOpOptionsWidget;
 
@@ -46,14 +45,11 @@ public:
     int lineCount() const;
     qreal lineSpacing() const;
 
-
     //TODO add saving
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-
-private:
-
+    private:
     KisDynaOpOptionsWidget * m_options;
 
 };

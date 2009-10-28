@@ -41,7 +41,7 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image);
 
     virtual QString id() const {
-        return "dynabrush";
+        return "dyna brush";
     }
 
     virtual QString name() const {

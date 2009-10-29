@@ -203,6 +203,7 @@ void KoShapeManager::add(KoShape *shape, Repaint repaint)
             add(containerShape, repaint);
         }
     }
+    notifyShapeChanged(shape);
 }
 
 void KoShapeManager::addAdditional(KoShape *shape)
@@ -218,6 +219,8 @@ void KoShapeManager::addAdditional(KoShape *shape)
 
 void KoShapeManager::remove(KoShape *shape)
 {
+    notifyShapeChanged(shape);
+    d->updateTree();
     shape->update();
     shape->removeShapeManager(this);
     d->selection->deselect(shape);

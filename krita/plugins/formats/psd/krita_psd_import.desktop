@@ -1,10 +1,12 @@
 [Desktop Entry]
 Type=Service
 Name=Krita Photoshop Import Filter
+Name[de]=Krita Photoshop-Importfilter
 Name[et]=Krita Photoshopi impordifilter
 Name[pt]=Filtro de Importação de Photoshop para o Krita
 Name[sv]=Krita Photoshop-importfilter
 Name[uk]=Фільтр імпорту Photoshop для Krita
+Name[x-test]=xxKrita Photoshop Import Filterxx
 X-KDE-Import=image/x-vnd.adobe.photoshop,image/x-psd
 X-KDE-Weight=1
 X-KDE-Library=libkritapsdimport

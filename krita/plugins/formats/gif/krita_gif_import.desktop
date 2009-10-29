@@ -5,6 +5,7 @@ Name[et]=Krita Gifi impordifilter
 Name[pt]=Filtro de Importação de GIF para o Krita
 Name[sv]=Krita GIF-importfilter
 Name[uk]=Фільтр імпорту GIF для Krita
+Name[x-test]=xxKrita Gif Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/gif
 X-KDE-Weight=1

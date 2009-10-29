@@ -107,6 +107,7 @@ set(kritaui_LIB_SRCS
     recorder/kis_recorded_filter_action_editor.cc
     tool/kis_selection_options.cc 
     tool/kis_selection_tool_helper.cpp 
+    tool/kis_shape_tool_helper.cpp 
     tool/kis_tool.cc 
     tool/kis_tool_freehand.cc 
     tool/kis_tool_freehand_p.cpp

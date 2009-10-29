@@ -34,6 +34,9 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
+#include <KoPathShape.h>
+#include <KoShapeController.h>
+#include <KoLineBorder.h>
 
 #include <kis_selection.h>
 #include "kis_painter.h"
@@ -148,19 +151,38 @@ void KisToolPolygon::finish()
     if (!currentNode())
         return;
 
-    KisPaintDeviceSP device = currentNode()->paintDevice();
+    if (!currentNode()->inherits("KisShapeLayer")) {
+        KisPaintDeviceSP device = currentNode()->paintDevice();
 
-    if (device) {
-        KisPainter painter(device, currentSelection());
-        if (currentImage()->undo()) painter.beginTransaction(i18n("Polygon"));
-        setupPainter(&painter);
-        painter.setOpacity(m_opacity);
-        painter.setCompositeOp(m_compositeOp);
-        painter.paintPolygon(m_points);
-        device->setDirty(painter.dirtyRegion());
-        notifyModified();
+        if (device) {
+            KisPainter painter(device, currentSelection());
+            if (currentImage()->undo()) painter.beginTransaction(i18n("Polygon"));
+            setupPainter(&painter);
+            painter.setOpacity(m_opacity);
+            painter.setCompositeOp(m_compositeOp);
+            painter.paintPolygon(m_points);
+            device->setDirty(painter.dirtyRegion());
+            notifyModified();
 
-        m_canvas->addCommand(painter.endTransaction());
+            m_canvas->addCommand(painter.endTransaction());
+        }
+    } else {
+        KoPathShape* path = new KoPathShape();
+        path->setShapeId(KoPathShapeId);
+
+        QMatrix resolutionMatrix;
+        resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
+        path->moveTo(resolutionMatrix.map(m_points[0]));
+        for (int i = 1; i < m_points.count(); i++)
+            path->lineTo(resolutionMatrix.map(m_points[i]));
+        path->close();
+        path->normalize();
+
+        KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
+        path->setBorder(border);
+
+        QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
+        m_canvas->addCommand(cmd);
     }
 
     m_points.clear();

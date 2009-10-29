@@ -173,7 +173,6 @@ void KisToolSelectPolygonal::finish()
             QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
             m_canvas->addCommand(cmd);
         } else {
-
             KoPathShape* path = new KoPathShape();
             path->setShapeId(KoPathShapeId);
 

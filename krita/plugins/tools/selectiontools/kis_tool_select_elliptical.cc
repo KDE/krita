@@ -47,6 +47,8 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
+#include "kis_shape_tool_helper.h"
+
 
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
@@ -187,28 +189,8 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
                 m_canvas->addCommand(cmd);
             } else {
-                QRectF documentRect = convertToPt(QRectF(m_startPos, m_endPos));
-
-                KoShape* shape;
-                KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoEllipseShape");
-                if (rectFactory) {
-                    // it is ok to use a empty map here as the data is not needed.
-                    QMap<QString, KoDataCenter *> dataCenterMap;
-                    shape = rectFactory->createDefaultShapeAndInit(dataCenterMap);
-                    shape->setSize(documentRect.size());
-                    shape->setPosition(documentRect.topLeft());
-                } else {
-                    //Fallback if the plugin wasn't found
-                    KoPathShape* path = new KoPathShape();
-                    path->setShapeId(KoPathShapeId);
-
-                    QPointF rightMiddle = QPointF(documentRect.left() + documentRect.width(), documentRect.top() + documentRect.height() / 2);
-                    path->moveTo(rightMiddle);
-                    path->arcTo(documentRect.width() / 2, documentRect.height() / 2, 0, 360.0);
-                    path->close();
-                    path->normalize();
-                    shape = path;
-                }
+                QRectF rect = convertToPt(QRectF(m_startPos, m_endPos));
+                KoShape* shape = KisShapeToolHelper::createEllipseShape(rect);
 
                 helper.addSelectionShape(shape);
             }

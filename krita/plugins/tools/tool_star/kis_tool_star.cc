@@ -34,6 +34,9 @@
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include <KoCanvasController.h>
+#include <KoShapeController.h>
+#include <KoPathShape.h>
+#include <KoLineBorder.h>
 
 #include <kis_debug.h>
 #include <canvas/kis_canvas2.h>
@@ -107,26 +110,45 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
         if (!currentNode())
             return;
 
-
-        if (!currentNode()->paintDevice())
-            return;
-
-        KisPaintDeviceSP device = currentNode()->paintDevice();
-        KisPainter painter(device, currentSelection());
-        painter.beginTransaction(i18n("Star"));
-        setupPainter(&painter);
-        painter.setOpacity(m_opacity);
-        painter.setCompositeOp(m_compositeOp);
-
         vQPointF coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
-        painter.paintPolygon(coord);
+        if (!currentNode()->inherits("KisShapeLayer")) {
 
-        device->setDirty(painter.dirtyRegion());
-        notifyModified();
-        m_canvas->updateCanvas(convertToPt(boundingRect()));
+            if (!currentNode()->paintDevice())
+                return;
 
-        m_canvas->addCommand(painter.endTransaction());
+            KisPaintDeviceSP device = currentNode()->paintDevice();
+            KisPainter painter(device, currentSelection());
+            painter.beginTransaction(i18n("Star"));
+            setupPainter(&painter);
+            painter.setOpacity(m_opacity);
+            painter.setCompositeOp(m_compositeOp);
+
+            painter.paintPolygon(coord);
+
+            device->setDirty(painter.dirtyRegion());
+            notifyModified();
+            m_canvas->updateCanvas(convertToPt(boundingRect()));
+
+            m_canvas->addCommand(painter.endTransaction());
+        } else {
+            KoPathShape* path = new KoPathShape();
+            path->setShapeId(KoPathShapeId);
+
+            QMatrix resolutionMatrix;
+            resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
+            path->moveTo(resolutionMatrix.map(coord[0]));
+            for (int i = 1; i < coord.count(); i++)
+                path->lineTo(resolutionMatrix.map(coord[i]));
+            path->close();
+            path->normalize();
+
+            KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
+            path->setBorder(border);
+
+            QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
+            m_canvas->addCommand(cmd);
+        }
     }
 }
 

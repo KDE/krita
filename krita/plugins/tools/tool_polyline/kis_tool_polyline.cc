@@ -36,6 +36,9 @@
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoCanvasController.h>
+#include <KoPathShape.h>
+#include <KoShapeController.h>
+#include <KoLineBorder.h>
 
 #include <kis_selection.h>
 #include <kis_painter.h>
@@ -110,34 +113,51 @@ void KisToolPolyline::finish()
     if (!currentNode())
         return;
 
-    KisPaintDeviceSP device = currentNode()->paintDevice();
-    if (!device) return;
+    if (!currentNode()->inherits("KisShapeLayer")) {
+        KisPaintDeviceSP device = currentNode()->paintDevice();
+        if (!device) return;
 
-    KisPainter painter(device, currentSelection());
-    painter.beginTransaction(i18n("Polyline"));
+        KisPainter painter(device, currentSelection());
+        painter.beginTransaction(i18n("Polyline"));
 
-    painter.setPaintColor(currentFgColor());
-    painter.setOpacity(m_opacity);
-    painter.setCompositeOp(m_compositeOp);
-    painter.setPaintOpPreset(currentPaintOpPreset(), currentImage()); // Painter takes ownership
+        painter.setPaintColor(currentFgColor());
+        painter.setOpacity(m_opacity);
+        painter.setCompositeOp(m_compositeOp);
+        painter.setPaintOpPreset(currentPaintOpPreset(), currentImage()); // Painter takes ownership
 
-    QPointF start, end;
-    KoPointVector::iterator it;
-    for (it = m_points.begin(); it != m_points.end(); ++it) {
-        if (it == m_points.begin()) {
-            start = (*it);
-        } else {
-            end = (*it);
-            painter.paintLine(start, end);
-            start = end;
+        QPointF start, end;
+        KoPointVector::iterator it;
+        for (it = m_points.begin(); it != m_points.end(); ++it) {
+            if (it == m_points.begin()) {
+                start = (*it);
+            } else {
+                end = (*it);
+                painter.paintLine(start, end);
+                start = end;
+            }
         }
+        device->setDirty(painter.dirtyRegion());   
+        m_canvas->addCommand(painter.endTransaction());
+    } else {
+        KoPathShape* path = new KoPathShape();
+        path->setShapeId(KoPathShapeId);
+
+        QMatrix resolutionMatrix;
+        resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
+        path->moveTo(resolutionMatrix.map(m_points[0]));
+        for (int i = 1; i < m_points.count(); i++)
+            path->lineTo(resolutionMatrix.map(m_points[i]));
+        path->normalize();
+
+        KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
+        path->setBorder(border);
+
+        QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
+        m_canvas->addCommand(cmd);
     }
     m_points.clear();
 
-    device->setDirty(painter.dirtyRegion());
     notifyModified();
-
-    m_canvas->addCommand(painter.endTransaction());
 }
 
 void KisToolPolyline::cancel()

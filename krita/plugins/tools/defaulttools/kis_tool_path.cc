@@ -22,6 +22,7 @@
 #include <KoCanvasBase.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
+#include <KoShapeController.h>
 
 #include "kis_image.h"
 #include "kis_painter.h"
@@ -45,43 +46,54 @@ void KisToolPath::addPathShape()
 {
     KisNodeSP currentNode =
         m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    if (!currentNode || !currentNode->paintDevice()) {
+    if (!currentNode) {
         delete m_shape;
         m_shape = 0;
         return;
     }
 
-    KisPaintDeviceSP dev = currentNode->paintDevice();
+    if (!currentNode->inherits("KisShapeLayer")) {
 
-    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
-    if (!canvas)
-        return;
+        KisPaintDeviceSP dev = currentNode->paintDevice();
 
-    KisImageWSP image = canvas->view()->image();
-    KisSelectionSP selection = canvas->view()->selection();
+        KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
 
-    KisPainter painter(dev, selection);
-    painter.beginTransaction(i18n("Path"));
-    painter.setPaintColor(KoColor(Qt::black, dev->colorSpace()));
-    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-    painter.setOpacity(OPACITY_OPAQUE);
-    painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
-    KisPaintOpPresetSP preset = m_canvas->resourceProvider()->
-                                resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    painter.setPaintOpPreset(preset, image);
+        if (!dev || !canvas) {
+            delete m_shape;
+            m_shape = 0;
+            return;
+        }
 
-    QMatrix matrix;
-    matrix.scale(image->xRes(), image->yRes());
-    matrix.translate(m_shape->position().x(), m_shape->position().y());
-    painter.paintPainterPath(matrix.map(m_shape->outline()));
-    QRegion dirtyRegion = painter.dirtyRegion();
-    dev->setDirty(dirtyRegion);
-    image->setModified();
+        KisImageWSP image = canvas->view()->image();
+        KisSelectionSP selection = canvas->view()->selection();
 
-    m_canvas->addCommand(painter.endTransaction());
+        KisPainter painter(dev, selection);
+        painter.beginTransaction(i18n("Path"));
+        painter.setPaintColor(KoColor(Qt::black, dev->colorSpace()));
+        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+        painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+        painter.setOpacity(OPACITY_OPAQUE);
+        painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
+        KisPaintOpPresetSP preset = m_canvas->resourceProvider()->
+                                    resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        painter.setPaintOpPreset(preset, image);
 
-    delete m_shape;
+        QMatrix matrix;
+        matrix.scale(image->xRes(), image->yRes());
+        matrix.translate(m_shape->position().x(), m_shape->position().y());
+        painter.paintPainterPath(matrix.map(m_shape->outline()));
+        QRegion dirtyRegion = painter.dirtyRegion();
+        dev->setDirty(dirtyRegion);
+        image->setModified();
+
+        m_canvas->addCommand(painter.endTransaction());
+        delete m_shape;
+
+    } else {
+        m_shape->normalize();
+        QUndoCommand * cmd = m_canvas->shapeController()->addShape(m_shape);
+        m_canvas->addCommand(cmd);
+    }
     m_shape = 0;
 }
 

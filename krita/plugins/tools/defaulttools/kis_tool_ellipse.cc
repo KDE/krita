@@ -33,12 +33,15 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
+#include <KoShapeController.h>
 
 #include <kis_selection.h>
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>
 #include <kis_cursor.h>
 #include <kis_layer.h>
+#include <kis_shape_tool_helper.h>
+
 
 #include <config-opengl.h>
 
@@ -153,28 +156,36 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
         if (!currentNode())
             return;
 
-        if (!currentNode()->paintDevice())
-            return;
+        if (!currentNode()->inherits("KisShapeLayer")) {
+            if (!currentNode()->paintDevice())
+                return;
 
-        KisPaintDeviceSP device = currentNode()->paintDevice();
-        delete m_painter;
-        m_painter = new KisPainter(device, currentSelection());
-        Q_CHECK_PTR(m_painter);
+            KisPaintDeviceSP device = currentNode()->paintDevice();
+            delete m_painter;
+            m_painter = new KisPainter(device, currentSelection());
+            Q_CHECK_PTR(m_painter);
 
-        m_painter->beginTransaction(i18n("Ellipse"));
-        setupPainter(m_painter);
-        m_painter->setOpacity(m_opacity);
-        m_painter->setCompositeOp(m_compositeOp);
+            m_painter->beginTransaction(i18n("Ellipse"));
+            setupPainter(m_painter);
+            m_painter->setOpacity(m_opacity);
+            m_painter->setCompositeOp(m_compositeOp);
 
-        m_painter->paintEllipse(QRectF(m_dragStart, m_dragEnd));
-        QRegion bound = m_painter->dirtyRegion();
-        device->setDirty(bound);
-        notifyModified();
+            m_painter->paintEllipse(QRectF(m_dragStart, m_dragEnd));
+            QRegion bound = m_painter->dirtyRegion();
+            device->setDirty(bound);
+            notifyModified();
 
-        m_canvas->addCommand(m_painter->endTransaction());
+            m_canvas->addCommand(m_painter->endTransaction());
 
-        delete m_painter;
-        m_painter = 0;
+            delete m_painter;
+            m_painter = 0;
+        } else {
+            QRectF rect = convertToPt(QRectF(m_dragStart, m_dragEnd));
+            KoShape* shape = KisShapeToolHelper::createEllipseShape(rect);
+
+            QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
+            m_canvas->addCommand(cmd);
+         }
     } else {
         KisToolPaint::mouseReleaseEvent(event);
     }

@@ -367,12 +367,15 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
                 QList<QString> inputs = filterEffect->inputs();
                 QString input = inputs.count() ? inputs.first() : QString();
                 // get input image from image buffers and apply the filter effect
-                if (imageBuffers.contains(input))
+                QImage image = imageBuffers.value(input);
+                if (!image.isNull()) {
                     result = filterEffect->processImage(imageBuffers.value(input), renderContext);
+                }
             } else {
                 QList<QImage> inputImages;
                 foreach(const QString &input, filterEffect->inputs()) {
-                    if (imageBuffers.contains(input))
+                    QImage image = imageBuffers.value(input);
+                    if (!image.isNull())
                         inputImages.append(imageBuffers.value(input));
                 }
                 // apply the filter effect

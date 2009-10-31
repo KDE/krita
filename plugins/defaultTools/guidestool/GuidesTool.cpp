@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2009 Carlos Licea <carlos.licea@kdemail.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 
 #include "GuidesTool.h"
 #include "GuidesToolOptionWidget.h"
+#include "InsertGuidesToolOptionWidget.h"
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
@@ -41,6 +43,7 @@ public:
     qreal position;
     EditMode mode;
     GuidesToolOptionWidget * options;
+    InsertGuidesToolOptionWidget * insert;
     bool isMoving;
 };
 
@@ -404,7 +407,7 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition( const QPointF &position )
     return QPair<Qt::Orientation,int>( orientation, index );
 }
 
-void GuidesTool::resourceChanged( int key, const QVariant & )
+void GuidesTool::resourceChanged( int key, const QVariant & res )
 {
     if( key == KoCanvasResource::Unit )
     {
@@ -413,20 +416,68 @@ void GuidesTool::resourceChanged( int key, const QVariant & )
     }
 }
 
-QWidget * GuidesTool::createOptionWidget()
+QMap< QString, QWidget* > GuidesTool::createOptionWidgets()
 {
-    if( d->mode != Private::EditGuide )
-        return 0;
+    QMap< QString, QWidget* > optionWidgets;
+    if( d->mode != Private::EditGuide ) {
+        d->options = new GuidesToolOptionWidget();
 
-    d->options = new GuidesToolOptionWidget();
+        connect( d->options, SIGNAL(guideLineSelected(Qt::Orientation,uint)),
+                this, SLOT(guideLineSelected(Qt::Orientation,uint)) );
 
-    connect( d->options, SIGNAL(guideLineSelected(Qt::Orientation,uint)),
-             this, SLOT(guideLineSelected(Qt::Orientation,uint)) );
+        connect( d->options, SIGNAL(guideLinesChanged(Qt::Orientation)),
+                this, SLOT(guideLinesChanged(Qt::Orientation)) );
 
-    connect( d->options, SIGNAL(guideLinesChanged(Qt::Orientation)),
-             this, SLOT(guideLinesChanged(Qt::Orientation)) );
+        optionWidgets.insert( "Guides Editor", d->options );
 
-    return d->options;
+        d->insert = new InsertGuidesToolOptionWidget();
+
+        connect( d->insert, SIGNAL(createGuides(GuidesTransaction*)),
+                 this, SLOT(insertorCreateGuidesSlot(GuidesTransaction*)) );
+
+        optionWidgets.insert( "Guides Insertor", d->insert );
+    }
+    return optionWidgets;
+}
+
+void GuidesTool::insertorCreateGuidesSlot( GuidesTransaction* result )
+{
+    QPoint documentStart = canvas()->documentOrigin();
+    KoGuidesData * guidesData = m_canvas->guidesData();
+    const QSizeF pageSize = m_canvas->resourceProvider()->resource(KoCanvasResource::PageSize).value<QSizeF>();
+
+    QList< qreal > verticalLines;
+    QList< qreal > horizontalLines;
+    //save previous lines if requested
+    if( !result->erasePreviousGuides ) {
+        verticalLines.append( guidesData->verticalGuideLines() );
+        horizontalLines.append( guidesData->horizontalGuideLines() );
+    }
+
+    //vertical guides
+    if( result->insertVerticalEdgesGuides ) {
+        verticalLines << 0 << pageSize.width();
+    }
+
+    int lastI = result->verticalGuides;
+    qreal verticalJumps = pageSize.width() / (qreal)( result->verticalGuides + 1 );
+    for( int i = 1 ; i <= lastI; ++i ) {
+        verticalLines << verticalJumps * (qreal)i;
+    }
+
+    //horizontal guides
+    lastI = result->horizontalGuides;
+    if( result->insertHorizontalEdgesGuides ) {
+        horizontalLines << 0 << pageSize.height();
+    }
+
+    qreal horizontalJumps = pageSize.height() / (qreal)( result->horizontalGuides + 1 );
+    for( int i = 1 ; i <= lastI; ++i ) {
+        horizontalLines << horizontalJumps * (qreal)i;
+    }
+    guidesData->setGuideLines( horizontalLines, verticalLines );
+
+    delete result;
 }
 
 #include "GuidesTool.moc"

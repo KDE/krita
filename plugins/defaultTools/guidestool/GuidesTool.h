@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2009 Carlos Licea <carlos.licea@kdemail.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 #include <QPair>
 
 class KoCanvasBase;
+class GuidesTransaction;
 
 class GuidesTool : public KoGuidesTool
 {
@@ -51,7 +53,7 @@ public:
     /// reimplemented form KoTool
     virtual void deactivate();
     /// reimplemented form KoTool
-    virtual QWidget *createOptionWidget();
+    virtual QMap< QString, QWidget* > createOptionWidgets();
 
     /// reimplemented from KoGuidesTool
     virtual void addGuideLine( Qt::Orientation orientation, qreal position );
@@ -66,6 +68,8 @@ private slots:
     void guideLinesChanged( Qt::Orientation orientation );
     /// reimplemented from KoTool
     virtual void resourceChanged( int key, const QVariant & res );
+
+    void insertorCreateGuidesSlot( GuidesTransaction* result );
 
 private:
     typedef QPair<Qt::Orientation, int> GuideLine;

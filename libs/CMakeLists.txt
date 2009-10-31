@@ -1,4 +1,3 @@
-# KOffice specific libraries.
 add_subdirectory( store )
 add_subdirectory( kobase )
 add_subdirectory( widgets )
@@ -17,6 +16,3 @@ if (SHOULD_BUILD_SCRIPTING)
     add_subdirectory( kokross )
 endif (SHOULD_BUILD_SCRIPTING)
 add_subdirectory( kopageapp )
-
-# Generic libraries
-#add_subdirectory( qemf )

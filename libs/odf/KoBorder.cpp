@@ -484,6 +484,27 @@ qreal KoBorder::bottomBorderSpacing() const
 }
 
 
+KoBorder::BorderData KoBorder::leftBorderData() const
+{
+    return d->leftBorder;
+}
+
+KoBorder::BorderData KoBorder::topBorderData() const
+{
+    return d->topBorder;
+}
+
+KoBorder::BorderData KoBorder::rightBorderData() const
+{
+    return d->rightBorder;
+}
+
+KoBorder::BorderData KoBorder::bottomBorderData() const
+{
+    return d->bottomBorder;
+}
+
+
 // ----------------------------------------------------------------
 //                         load and save
 

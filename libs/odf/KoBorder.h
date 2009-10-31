@@ -131,6 +131,11 @@ public:
     void setBottomBorderSpacing(qreal width);
     qreal bottomBorderSpacing() const;
 
+    BorderData leftBorderData() const;
+    BorderData topBorderData() const;
+    BorderData rightBorderData() const;
+    BorderData bottomBorderData() const;
+
 
     /**
      * Load the style from the element

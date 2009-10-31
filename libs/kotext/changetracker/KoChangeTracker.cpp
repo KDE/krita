@@ -30,6 +30,7 @@
 #include <KDateTime>
 #include <KGlobal>
 #include <KLocale>
+#include <KUser>
 
 //Qt includes
 #include <QList>
@@ -118,7 +119,9 @@ int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QText
     changeElement->setPrevFormat(prevFormat);
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
-    changeElement->setCreator(QString("essai format"));
+
+    KUser user(KUser::UseRealUserID);
+    changeElement->setCreator(user.fullName());
 
     changeElement->setEnabled(d->m_enabled);
 
@@ -138,7 +141,8 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
 //    changeElement->setDate(KDateTime::currentLocalDateTime().toString("Y-m-dTH:M:Sz")); //i must have misunderstood the API doc but it doesn't work.
-    changeElement->setCreator(QString("essai insert"));
+    KUser user(KUser::UseRealUserID);
+    changeElement->setCreator(user.fullName());
 
     changeElement->setEnabled(d->m_enabled);
 
@@ -157,6 +161,8 @@ int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment sele
     KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::deleteChange);
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
+    KUser user(KUser::UseRealUserID);
+    changeElement->setCreator(user.fullName());
     changeElement->setCreator(QString("essai delete"));
     //TODO preserve formating info there. this will do for now
     changeElement->setDeleteData(selection.toPlainText());
@@ -229,9 +235,9 @@ bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
         return false;
 
     change.setType(d->m_changes.value(changeId)->getChangeType());
-    if (d->m_changes.value(changeId)->hasCreator())
+//    if (d->m_changes.value(changeId)->hasCreator())
         change.addChangeMetaData("dc-creator", d->m_changes.value(changeId)->getCreator());
-    if (d->m_changes.value(changeId)->hasDate())
+//    if (d->m_changes.value(changeId)->hasDate())
         change.addChangeMetaData("dc-date", d->m_changes.value(changeId)->getDate());
     if (d->m_changes.value(changeId)->hasExtraMetaData())
         change.addChildElement("changeMetaData", d->m_changes.value(changeId)->getExtraMetaData());

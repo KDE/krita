@@ -19,37 +19,37 @@
 
     <collection name="samples" text="Samples">
 
-		<script text="Invert with Ruby" comment="Invert the pixel of an image with Ruby"
+		<script text="Invert with Ruby" comment="Invert the pixels of an image with Ruby"
 			name="rbinvert"
 			interpreter="ruby"
 			file="extensions/invert.rb" />
 
-		<script text="Invert with Python" comment="Invert the pixel of an image with Python" 
+		<script text="Invert with Python" comment="Invert the pixels of an image with Python" 
 			name="pyinvert"
 			interpreter="python"
 			file="extensions/invert.py" />
 
-		<script text="Invert with JavaScript" comment="Invert the pixel of an image with JavaScript"
+		<script text="Invert with JavaScript" comment="Invert the pixels of an image with JavaScript"
 			name="jsinvert"
 			interpreter="javascript"
 			file="extensions/invert.js" />
 
-		<script text="Random painting" comment="Demonstrate how to use the Painter scripting API and paint random shape on screen" 
+		<script text="Random painting" comment="Demonstrates how to use the Painter scripting API to paint random shapes on screen" 
 			name="rbrandompaint"
 			interpreter="ruby"
 			file="extensions/randompaint.rb" />
 
-		<script text="Filters test" comment="Test of filters in a ruby-scripting"
+		<script text="Filters test" comment="Test of filters in a ruby script"
 			name="rbfilterstest"
 			interpreter="ruby"
 			file="extensions/filterstest.rb" />
 
-		<script text="Change colorspace" comment="Demonstrate how to change the colorspace in a script"
+		<script text="Change colorspace" comment="Demonstrates how to change the colorspace in a script"
 			name="rbchangecs"
 			interpreter="ruby"
 			file="extensions/changecs.rb" />
 
-		<script text="Reshape Histogram" comment="An experimental script to try to reshape histogram, while the results are far to be convincing yet it is still an example on how to use histogram in a script."
+		<script text="Reshape Histogram" comment="An experimental script to try to reshape the histogram.  While the results are yet to be convincing, it is still an example of how to use the histogram in a script."
 			name="pyreshapehisto"
 			interpreter="python"
 			file="extensions/reshapehisto.py" />
@@ -66,7 +66,7 @@
 
 	</collection>
     <collection name="filters" text="Filters" comment="Scripting filters for Krita" enabled="false">
-        <script text="Invert Filter with Ruby" comment="Invert the pixel of an image with Ruby as a filter" 
+        <script text="Invert Filter with Ruby" comment="Invert the pixels of an image with Ruby as a filter" 
             name="rbinvertfilter"
             interpreter="ruby"
             file="filters/invert.rb">
@@ -99,7 +99,7 @@
         </script>-->
     </collection>
     <collection name="decorations" text="Canvas decorations" comment="Decorations for the canvas of Krita" enabled="true">
-<!--        <script text="Vanishing Point Decoration" comment="Show some vanishing point"
+<!--        <script text="Vanishing Point Decoration" comment="Show some vanishing points"
             name="VanishingPointDecoration"
             interpreter="ruby"
             file="decorations/VanishingPoints.rb" /> -->

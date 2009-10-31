@@ -356,35 +356,16 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
 
 KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace)
 {
-    qApp->setOverrideCursor(Qt::BusyCursor);
-    if (!init())
-        return KisImageWSP(0);
+    KoColor backgroundColor(Qt::white, colorspace);
 
-    setUndo(false);
+    /**
+     * FIXME: check whether this is a good value
+     */
+    double defaultResolution=1.;
 
-    KisImageWSP img = KisImageWSP(new KisImage(m_d->undoAdapter, width, height, colorspace, name));
-    img->lock();
-
-    Q_CHECK_PTR(img);
-    connect(img.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
-
-    KisPaintLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, colorspace);
-    Q_CHECK_PTR(layer);
-
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisFillPainter painter;
-
-    layer->paintDevice()->fill(0, 0, width, height, KoColor(Qt::white, cs).data());
-
-    img->addNode(layer.data(), img->rootLayer().data());
-
-    setCurrentImage(img);
-    layer->setDirty();
-    setUndo(true);
-    img->unlock();
-    qApp->restoreOverrideCursor();
-
-    return img;
+    newImage(name, width, height, colorspace, backgroundColor, "",
+             defaultResolution);
+    return image();
 }
 
 bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &description, const double imgResolution)
@@ -420,6 +401,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
 
     KisFillPainter painter;
     painter.begin(layer->paintDevice());
+    painter.beginTransaction("");
     painter.fillRect(0, 0, width, height, bgColor, opacity);
     painter.end();
 
@@ -432,7 +414,6 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     cfg.defImgResolution(imgResolution);
 
     setUndo(true);
-    layer->setDirty();
     img->unlock();
 
     qApp->restoreOverrideCursor();

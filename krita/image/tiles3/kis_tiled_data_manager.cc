@@ -258,18 +258,28 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
                            KisTileData::WIDTH, KisTileData::WIDTH);
             QRect clearTileRect = clearRect & tileRect;
 
-            KisTileDataWrapper tw = pixelPtr(clearTileRect.left(),
-                                             clearTileRect.top(),
-                                             KisTileDataWrapper::WRITE);
-            quint8* tileIt = tw.data();
-
             if (clearTileRect == tileRect) {
                 // Clear whole tile
                 m_hashTable->deleteTile(column, row);
-                m_hashTable->addTile(new KisTile(column, row, td, m_mementoManager));
+
+                KisTileSP clearedTile = new KisTile(column, row, td, m_mementoManager);
+                m_hashTable->addTile(clearedTile);
+                updateExtent(column, row);
+
+                /**
+                 * Emulate like we've written something to the tile
+                 * to keep the history clean
+                 */
+                KisTileDataWrapper tw(clearedTile, 0,
+                                      KisTileDataWrapper::WRITE);
             } else {
                 const qint32 lineSize = clearTileRect.width() * pixelSize;
                 qint32 rowsRemaining = clearTileRect.height();
+
+                KisTileDataWrapper tw = pixelPtr(clearTileRect.left(),
+                                                 clearTileRect.top(),
+                                                 KisTileDataWrapper::WRITE);
+                quint8* tileIt = tw.data();
 
                 if (pixelBytesAreTheSame) {
                     while (rowsRemaining > 0) {

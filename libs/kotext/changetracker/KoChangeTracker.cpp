@@ -35,6 +35,7 @@
 #include <QList>
 #include <QString>
 #include <QHash>
+#include <QMultiHash>
 #include <QTextCursor>
 #include <QTextFormat>
 #include <QTextCharFormat>
@@ -52,7 +53,7 @@ public:
     ~Private() { }
 
     // TODO remove the m_ prefix
-    QHash<int, int> m_childs; // TODO rename to 'children'
+    QMultiHash<int, int> children;
     QHash<int, int> m_parents;
     QHash<int, KoChangeTrackerElement *> m_changes;
     QHash<QString, int> m_loadedChanges;
@@ -108,7 +109,7 @@ int KoChangeTracker::getChangeId(QString &title, KoGenChange::Type type, QTextCu
 int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId)
 {
     if ( existingChangeId ) {
-        d->m_childs.insert(existingChangeId, d->m_changeId);
+        d->children.insert(existingChangeId, d->m_changeId);
         d->m_parents.insert(d->m_changeId, existingChangeId);
     }
 
@@ -129,7 +130,7 @@ int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QText
 int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
 {
     if ( existingChangeId ) {
-        d->m_childs.insert(existingChangeId, d->m_changeId);
+        d->children.insert(existingChangeId, d->m_changeId);
         d->m_parents.insert(d->m_changeId, existingChangeId);
     }
 
@@ -149,7 +150,7 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
 int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment selection, int existingChangeId)
 {
     if ( existingChangeId ) {
-        d->m_childs.insert(existingChangeId, d->m_changeId);
+        d->children.insert(existingChangeId, d->m_changeId);
         d->m_parents.insert(d->m_changeId, existingChangeId);
     }
 
@@ -193,6 +194,33 @@ int KoChangeTracker::mergeableId(KoGenChange::Type type, QString &title, int exi
             return mergeableId(type, title, d->m_parents.value(existingId));
         else
             return 0;
+}
+
+int KoChangeTracker::split(int changeId)
+{
+    KoChangeTrackerElement *element = new KoChangeTrackerElement(*d->m_changes.value(changeId));
+    d->m_changes.insert(d->m_changeId, element);
+    return d->m_changeId++;
+}
+
+bool KoChangeTracker::isParent(int testedId, int baseId)
+{
+    if (testedId == baseId)
+        return true;
+    else if (d->m_parents.contains(baseId))
+        return isParent(testedId, d->m_parents.value(baseId));
+    else
+        return false;
+}
+
+void KoChangeTracker::setParent(int child, int parent)
+{
+    if (!d->children.values(parent).contains(child)) {
+        d->children.insert(parent, child);
+    }
+    if (!d->m_parents.contains(child)) {
+        d->m_parents.insert(child, parent);
+    }
 }
 
 bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)

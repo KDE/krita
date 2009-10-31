@@ -150,7 +150,7 @@ void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
 {
     KoGenChange change;
     QString changeName;
-    KoTextSharedSavingData *sharedData;
+    KoTextSharedSavingData *sharedData = 0;
     if (context.sharedData(KOTEXT_SHARED_SAVING_ID)) {
         sharedData = dynamic_cast<KoTextSharedSavingData*>(context.sharedData(KOTEXT_SHARED_SAVING_ID));
         if (!sharedData) {

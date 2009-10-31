@@ -85,7 +85,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     KoGenChanges changes;
 
     KoSharedSavingData *sharedData = context->sharedData(KOTEXT_SHARED_SAVING_ID);
-    KoTextSharedSavingData *textSharedData;
+    KoTextSharedSavingData *textSharedData = 0;
     if (sharedData) {
         textSharedData = dynamic_cast<KoTextSharedSavingData *>(sharedData);
     }

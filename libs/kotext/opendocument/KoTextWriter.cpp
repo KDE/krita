@@ -2,6 +2,7 @@
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,8 +22,10 @@
 
 #include "KoTextWriter.h"
 
+#include <QMap>
 #include <QTextDocument>
 #include <QTextTable>
+#include <QStack>
 
 #include "KoInlineObject.h"
 #include "KoInlineTextObjectManager.h"
@@ -63,6 +66,8 @@ public:
 
     ~Private() {}
 
+    void saveChange(QTextCharFormat format);
+
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
@@ -70,7 +75,51 @@ public:
     KoTextDocumentLayout *layout;
     KoStyleManager *styleManager;
     KoChangeTracker *changeTracker;
+
+    QStack<int> changeStack;
+    QMap<int, QString> changeTransTable;
+    QList<int> savedDeleteChanges;
 };
+
+void KoTextWriter::Private::saveChange(QTextCharFormat format)
+{
+    if (!changeTracker /*&& d->changeTracker->isEnabled()*/)
+        return;//The change tracker exist and we are allowed to save tracked changes
+
+    int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
+
+    //First we need to check if the eventual already opened change regions are still valid
+    foreach(int change, changeStack) {
+        if (!changeId || !changeTracker->isParent(change, changeId)) {
+            writer->startElement("text:change-end", false);
+            writer->addAttribute("text:change-id", changeTransTable.value(change));
+            writer->endElement();
+            changeStack.pop();
+        }
+    }
+
+    if (changeId) { //There is a tracked change
+        if (changeTracker->elementById(changeId)->getChangeType() != KoGenChange::deleteChange) {
+            //Now start a new change region if not already done
+            if (!changeStack.contains(changeId)) {
+                KoGenChange change;
+                changeTracker->saveInlineChange(changeId, change);
+                QString changeName = sharedData->genChanges().insert(change);
+                writer->startElement("text:change-start", false);
+                writer->addAttribute("text:change-id",changeName);
+                writer->endElement();
+                changeStack.push(changeId);
+                changeTransTable.insert(changeId, changeName);
+            }
+        }
+    }
+    if (KoDeleteChangeMarker *changeMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(format))) {
+        if (!savedDeleteChanges.contains(changeMarker->changeId())) {
+            changeMarker->saveOdf(context);
+            savedDeleteChanges.append(changeMarker->changeId());
+        }
+    }
+}
 
 KoTextWriter::KoTextWriter(KoShapeSavingContext &context)
     : d(new Private(context))
@@ -213,7 +262,7 @@ QHash<QTextList *, QString> KoTextWriter::saveListStyles(QTextBlock block, int t
 
 void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
 {
-    QString changeName;
+    QTextCursor cursor(block);
 
     QTextBlockFormat blockFormat = block.blockFormat();
     const int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
@@ -229,7 +278,6 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
         d->writer->addAttribute("text:style-name", styleName);
 
     // Write the fragments and their formats
-    QTextCursor cursor(block);
     QTextCharFormat blockCharFormat = cursor.blockCharFormat();
     QTextCharFormat previousCharFormat;
     QTextBlock::iterator it;
@@ -250,24 +298,13 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
             else
                 identical = false;
 
-            if (d->changeTracker /*&& d->changeTracker->isEnabled()*/ && d->changeTracker->containsInlineChanges(charFormat)
-                    && d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()) { //TODO uncomment changeTracker->isEnabled or implement another "security" measure to prevent saving changes at all
-                    if (d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::deleteChange
-                        && dynamic_cast<KoDeleteChangeMarker*>(d->layout->inlineTextObjectManager()->inlineTextObject(charFormat))) {
-                        continue;
-                    }
-                KoGenChange change;
-                d->changeTracker->saveInlineChange(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt(), change);
-                changeName = d->sharedData->genChanges().insert(change);
-                d->writer->startElement("text:change-start", false);
-                d->writer->addAttribute("text:change-id", changeName);
-                d->writer->endElement();
-            }
+            d->saveChange(charFormat);
 
             KoInlineObject *inlineObject = d->layout->inlineTextObjectManager()->inlineTextObject(charFormat);
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
-                inlineObject->saveOdf(d->context);
+                if (!dynamic_cast<KoDeleteChangeMarker*>(inlineObject))
+                    inlineObject->saveOdf(d->context);
             } else {
                 QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
                 if (charFormat.isAnchor()) {
@@ -292,15 +329,16 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
                     d->writer->endElement();
             } // if (inlineObject)
 
-            if (!changeName.isEmpty()) {
-                d->writer->startElement("text:change-end", false);
-                d->writer->addAttribute("text:change-id",changeName);
-                d->writer->endElement();
-                changeName=QString();
-            }
             previousCharFormat = charFormat;
         } // if (fragment.valid())
     } // foreach(fragment)
+
+    foreach(int change, d->changeStack) {
+        d->writer->startElement("text:change-end", false);
+        d->writer->addAttribute("text:change-id", d->changeTransTable.value(change));
+        d->writer->endElement();
+        d->changeStack.pop();
+    }
 
     d->writer->endElement();
 }

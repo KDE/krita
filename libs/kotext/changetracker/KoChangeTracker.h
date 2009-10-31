@@ -70,6 +70,12 @@ public:
     bool containsInlineChanges(const QTextFormat &format);
     int mergeableId(KoGenChange::Type type, QString &title, int existingId);
 
+    /// Splits a changeElement. This creates a duplicate changeElement with a different changeId. This is used because we do not support overlapping change regions. The function returns the new changeId
+    int split(int changeId);
+
+    bool isParent(int testedId, int baseId);
+    void setParent(int child, int parent);
+
     /// Load/save methods
     bool saveInlineChange(int changeId, KoGenChange &change);
 

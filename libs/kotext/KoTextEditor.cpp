@@ -351,7 +351,7 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
         }
         changeId = (idBefore)?idBefore:idAfter;
 
-        switch (changeType) {
+        switch (changeType) {//TODO: this whole thing actually needs to be done like a visitor. If the selection contains several change regions, the parenting needs to be individualised.
             case KoGenChange::insertChange:
                 if (!changeId)
                     changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, selection.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
@@ -414,7 +414,7 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
         }
 
         QTextDocumentFragment deletedFragment = selection.selection();
-        changeId = KoTextDocument(d->document).changeTracker()->getDeleteChangeId(i18n("Delete"), deletedFragment, selection.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+        changeId = KoTextDocument(d->document).changeTracker()->getDeleteChangeId(i18n("Delete"), deletedFragment, selection.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt()); //TODO this needs to be done like a visitor for individualised parenting
         deleteChangemarker = new KoDeleteChangeMarker(KoTextDocument(d->document).changeTracker());
         deleteChangemarker->setChangeId(changeId);
         if (!sufix.isEmpty()) {

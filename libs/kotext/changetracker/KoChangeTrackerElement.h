@@ -36,6 +36,8 @@ public:
 
     KoChangeTrackerElement();
 
+    KoChangeTrackerElement(const KoChangeTrackerElement &other);
+
     ~KoChangeTrackerElement();
 
     void setEnabled(bool enabled);

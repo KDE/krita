@@ -52,6 +52,20 @@ KoChangeTrackerElement::KoChangeTrackerElement()
 {
 }
 
+KoChangeTrackerElement::KoChangeTrackerElement(const KoChangeTrackerElement& other)
+    :d(new Private())
+{
+    d->title = other.d->title;
+    d->type = other.d->type;
+    d->changeFormat = other.d->changeFormat;
+    d->prevFormat = other.d->prevFormat;
+    d->creator = other.d->creator;
+    d->date = other.d->date;
+    d->extraMetaData = other.d->extraMetaData;
+    d->deleteData = other.d->deleteData;
+    d->enabled = other.d->enabled;
+}
+
 KoChangeTrackerElement::~KoChangeTrackerElement()
 {
     delete d;

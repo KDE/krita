@@ -1,5 +1,6 @@
 /*
-  Copyright 2008 Brad Hards <bradh@frogmouth.net>
+  Copyright 2008 Brad Hards  <bradh@frogmouth.net>
+  Copyright 2009 Inge Wallin <inge@lysator.liu.se>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -27,8 +28,8 @@
 #include <QString>
 #include <QVariant>
 
-#include "EnhEnums.h"
-#include "EnhHeader.h"
+#include "EmfEnums.h"
+#include "EmfHeader.h"
 #include "EmfRecords.h"
 
 /**
@@ -40,7 +41,7 @@
 /**
    Namespace for Enhanced Metafile (EMF) classes
 */
-namespace EnhancedMetafile
+namespace Libemf
 {
 
 /**
@@ -58,6 +59,17 @@ public:
        \param header the EMF Header record
     */
     virtual void init( const Header *header ) = 0;
+
+    /**
+       Cleanup routine
+
+       This function is called when the painting is done.  Any
+       initializations that are done in init() can be undone here if
+       necessary.
+
+       \param header the EMF Header record
+    */
+    virtual void cleanup( const Header *header ) = 0;
 
     /**
        Close-out routine
@@ -555,6 +567,7 @@ public:
     ~DebugOutput();
 
     void init( const Header *header );
+    void cleanup( const Header *header );
     void eof();
 
     void createPen( quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
@@ -632,9 +645,12 @@ public:
        we want.
     */
     PainterOutput();
+    PainterOutput( QPainter &painter, QSize &size, 
+                   bool keepAspectRatio = true );
     ~PainterOutput();
 
     void init( const Header *header );
+    void cleanup( const Header *header );
     void eof();
 
     /**
@@ -737,8 +753,12 @@ private:
     */
     int convertFontWeight( quint32 emfWeight );
 
-    QPainter *m_painter;
-    QMap<quint32, QVariant> m_objectTable;
+    QPainter                *m_painter;
+    int                      m_painterSaves; // The number of times that save() was called.
+    QSize                    m_outputSize;
+    bool                     m_keepAspectRatio;
+
+    QMap<quint32, QVariant>  m_objectTable;
 
     QPainterPath *m_path;
     bool m_currentlyBuildingPath;

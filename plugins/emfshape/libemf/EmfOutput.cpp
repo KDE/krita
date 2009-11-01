@@ -16,13 +16,13 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "EnhOutput.h"
+#include "EmfOutput.h"
 
 #include <QDebug>
 
 #include <math.h>
 
-namespace EnhancedMetafile
+namespace Libemf
 {
 
 /*****************************************************************************/
@@ -37,6 +37,12 @@ DebugOutput::~DebugOutput()
 void DebugOutput::init( const Header *header )
 {
     qDebug() << "Initialising DebugOutput";
+    qDebug() << "image size:" << header->bounds().size();
+}
+
+void DebugOutput::cleanup( const Header *header )
+{
+    qDebug() << "Cleanup DebugOutput";
     qDebug() << "image size:" << header->bounds().size();
 }
 
@@ -361,7 +367,11 @@ void DebugOutput::stretchDiBits( StretchDiBitsRecord stretchDiBitsRecord )
              << "," << stretchDiBitsRecord.destinationRectangle();
 }
 
-/*****************************************************************************/
+
+// ================================================================
+//                         Class PainterOutput
+
+
 PainterOutput::PainterOutput() :
     m_path( 0 ), 
     m_currentlyBuildingPath( false ), 
@@ -370,20 +380,68 @@ PainterOutput::PainterOutput() :
 {
 }
 
+PainterOutput::PainterOutput(QPainter &painter, QSize &size, 
+                             bool keepAspectRatio)
+    : m_path( 0 )
+    , m_currentlyBuildingPath( false )
+    , m_image( 0 )
+    , m_currentCoords()
+{
+    m_painter         = &painter;
+    m_painterSaves    = 0;
+    m_outputSize      = size;
+    m_keepAspectRatio = keepAspectRatio;
+}
+
 PainterOutput::~PainterOutput()
 {
-    delete m_painter;
+    //delete m_painter;
     delete m_path;
     delete m_image;
 }
 
 void PainterOutput::init( const Header *header )
 {
-    QSize size = header->bounds().size();
-    m_image = new QImage( size, QImage::Format_ARGB32_Premultiplied );
+    QSize  emfSize = header->bounds().size();
 
-    m_painter = new QPainter( m_image );
+    //qDebug("emfSize    = %d, %d", emfSize.width(), emfSize.height() );
+    //qDebug("outputSize = %d, %d", m_outputSize.width(), m_outputSize.height() );
+
+    // Calculate how much the painter should be resized to fill the
+    // outputSize with output.
+    qreal  scaleX = qreal( m_outputSize.width() )  / emfSize.width();
+    qreal  scaleY = qreal( m_outputSize.height() ) / emfSize.height();
+    if ( m_keepAspectRatio ) {
+        // Use the smaller value so that we don't get an overflow in
+        // any direction.
+        if ( scaleX > scaleY )
+            scaleX = scaleY;
+        else
+            scaleY = scaleX;
+
+    // FIXME: Calculate translation if we should center the Emf in the
+    //        area and keep the aspect ration.
+    }
+
+    // This is restored in cleanup().
+    m_painter->save();
+
+    m_painter->scale( scaleX, scaleY );
 }
+
+void PainterOutput::cleanup( const Header *header )
+{
+    Q_UNUSED( header );
+
+    // Restore all the save()s that were done during the processing.
+    for (int i = 0; i < m_painterSaves; ++i)
+        m_painter->restore();
+    m_painterSaves = 0;
+
+    // Restore the painter to what it was before init() was called.
+    m_painter->restore();
+}
+
 
 void PainterOutput::eof()
 {
@@ -394,10 +452,12 @@ void PainterOutput::setPixelV( QPoint &point, quint8 red, quint8 green, quint8 b
     Q_UNUSED( reserved );
 
     m_painter->save();
+
     QPen pen;
     pen.setColor( QColor( red, green, blue ) );
     m_painter->setPen( pen );
     m_painter->drawPoint( point );
+
     m_painter->restore();
 }
 
@@ -428,6 +488,7 @@ void PainterOutput::endPath()
 void PainterOutput::saveDC()
 {
     m_painter->save();
+    ++m_painterSaves;
 }
 
 void PainterOutput::restoreDC( const qint32 savedDC )
@@ -536,15 +597,17 @@ void PainterOutput::createPen( quint32 ihPen, quint32 penStyle, quint32 x, quint
     m_objectTable.insert( ihPen,  pen );
 }
 
-void PainterOutput:: createBrushIndirect( quint32 ihBrush, quint32 BrushStyle, quint8 red,
-					  quint8 green, quint8 blue, quint8 reserved,
-					  quint32 BrushHatch )
+void PainterOutput:: createBrushIndirect( quint32 ihBrush, quint32 brushStyle, 
+                                          quint8 red, quint8 green, quint8 blue,
+                                          quint8 reserved,
+					  quint32 brushHatch )
 {
     Q_UNUSED( reserved );
+    Q_UNUSED( brushHatch );
 
     QBrush brush;
 
-    switch ( BrushStyle ) {
+    switch ( brushStyle ) {
     case BS_SOLID:
 	brush.setStyle( Qt::SolidPattern );
 	break;
@@ -890,8 +953,10 @@ void PainterOutput::extTextOutA( const ExtTextOutARecord &extTextOutA )
 void PainterOutput::extTextOutW( const QPoint &referencePoint, const QString &textString )
 {
     m_painter->save();
+
     m_painter->setPen( m_textPen );
     m_painter->drawText( referencePoint, textString );
+
     m_painter->restore();
 }
 
@@ -1148,4 +1213,4 @@ void PainterOutput::stretchDiBits( StretchDiBitsRecord stretchDiBitsRecord )
     m_painter->drawImage( target, *(stretchDiBitsRecord.image()), source );
 }
 
-} // namespace...
+} // xnamespace...

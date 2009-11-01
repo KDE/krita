@@ -1,5 +1,6 @@
 /*
-  Copyright 2008 Brad Hards <bradh@frogmouth.net>
+  Copyright 2008 Brad Hards  <bradh@frogmouth.net>
+  Copyright 2009 Inge Wallin <inge@lysator.liu.se>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -20,7 +21,7 @@
 
 #include "emf_export.h"
 
-#include "EnhOutput.h"
+#include "EmfOutput.h"
 
 #include <QString>
 #include <QRect> // also provides QSize
@@ -34,7 +35,7 @@
 /**
    Namespace for Enhanced Metafile (EMF) classes
 */
-namespace EnhancedMetafile
+namespace Libemf
 {
 
 /**

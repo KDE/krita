@@ -1,5 +1,6 @@
 /*
   Copyright 2008 Brad Hards <bradh@frogmouth.net>
+  Copyright 2009 Inge Wallin <inge@lysator.liu.se>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -15,16 +16,19 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "EnhMetaFile.h"
+#include "EmfParser.h"
 
 #include <QColor>
 #include <QDebug>
 #include <QFile>
 
-namespace EnhancedMetafile
+namespace Libemf
 {
 
-/*****************************************************************************/
+
+// ================================================================
+
+
 Parser::Parser() : mOutput( 0 )
 {
 }
@@ -32,6 +36,7 @@ Parser::Parser() : mOutput( 0 )
 Parser::~Parser()
 {
 }
+
 
 bool Parser::load( const QString &fileName )
 {
@@ -79,6 +84,8 @@ bool Parser::loadFromStream( QDataStream &stream )
             break;
         }
     }
+
+    mOutput->cleanup( header );
 
     delete header;
 
@@ -317,6 +324,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    quint32 x, y;
 	    stream >> x >> y;
 	    mOutput->moveToEx( x, y );
+            //qDebug() << "xx EMR_MOVETOEX" << x << y;
 	}
 	break;
         case EMR_SETMETARGN:
@@ -433,6 +441,7 @@ bool Parser::readRecord( QDataStream &stream )
             QRect box;
             stream >> box;
             mOutput->rectangle( box );
+            //qDebug() << "xx EMR_RECTANGLE" << box;
         }
         break;
     case EMR_ARC:
@@ -490,6 +499,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    QRect bounds;
 	    stream >> bounds;
 	    mOutput->fillPath( bounds );
+            //qDebug() << "xx EMR_FILLPATH" << bounds;
 	}
 	break;
     case EMR_STROKEANDFILLPATH:
@@ -497,6 +507,7 @@ bool Parser::readRecord( QDataStream &stream )
             QRect bounds;
             stream >> bounds;
             mOutput->strokeAndFillPath( bounds );
+            //qDebug() << "xx EMR_STROKEANDFILLPATHPATH" << bounds;
         }
         break;
     case EMR_STROKEPATH:
@@ -504,6 +515,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    QRect bounds;
 	    stream >> bounds;
 	    mOutput->strokePath( bounds );
+            //qDebug() << "xx EMR_STROKEPATH" << bounds;
 	}
 	break;
     case EMR_SETCLIPPATH:
@@ -519,6 +531,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> x >> y;
 	    QPoint finishPoint( x, y );
 	    mOutput->lineTo( finishPoint );
+            //qDebug() << "xx EMR_LINETO" << x << y;
 	}
 	break;
     case EMR_ARCTO:

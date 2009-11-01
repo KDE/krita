@@ -41,7 +41,7 @@
 #include "KoUnit.h"
 #include "KoXmlNS.h"
 // FIXME
-#include "../../libs/qemf/EmfParser.h"
+#include "libemf/EmfParser.h"
 
 // EMF shape
 #include "DefaultEmf.h"
@@ -102,14 +102,14 @@ void EmfShape::paintDecorations(QPainter &painter, const KoViewConverter &conver
 
 void EmfShape::draw(QPainter &painter)
 {
-    QEmf::Parser         emfParser;
+    Libemf::Parser  emfParser;
 
     // FIXME: Make emfOutput use QSizeF
     QSize  sizeInt( size().width(), size().height() );
     kDebug() << "-------------------------------------------";
     kDebug() << "size: " << sizeInt;
     kDebug() << "-------------------------------------------";
-    QEmf::PainterOutput  emfOutput( painter, sizeInt );
+    Libemf::PainterOutput  emfOutput( painter, sizeInt );
     emfParser.setOutput( &emfOutput );
     
     // FIXME: Use the actual bytes.

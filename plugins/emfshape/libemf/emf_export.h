@@ -2,6 +2,7 @@
     visibility management for some symbols
 
     Copyright 2008 Brad Hards <bradh@frogmouth.net>
+    Copyright 2009 Inge Wallin <inge@lysator.liu.se>
 
     This library is free software; you can redistribute it and/or modify it under
     the terms of the GNU Library General Public License as published by the Free

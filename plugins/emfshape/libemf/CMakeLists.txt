@@ -1,52 +1,37 @@
-PROJECT( EnhMetaFile )
 
-CMAKE_MINIMUM_REQUIRED( VERSION 2.4 )
 
-SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" )
+include_directories( ${KOMAIN_INCLUDES} )
 
-SET( QT4_MIN_VERSION "4.1.0" )
-FIND_PACKAGE(Qt4 REQUIRED )
+#add_subdirectory(demo)
 
-ADD_DEFINITIONS( ${QT4_DEFINITIONS} )
 
-INCLUDE_DIRECTORIES(
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_BINARY_DIR}
-  ${QT_INCLUDES}
+########### library target ###############
+
+set(qemf_LIB_SRCS 
+     EmfRecords.cpp
+     EmfHeader.cpp
+     EmfParser.cpp
+     EmfOutput.cpp
 )
 
-SET( EnhMetaFile_LIB_SRCS
-     EnhMetaFile.cpp
-     EnhOutput.cpp
-     EnhHeader.cpp
-     EmfRecords.cpp )  
+kde4_add_library(qemf SHARED ${qemf_LIB_SRCS})
 
-QT4_AUTOMOC( ${EnhMetaFile_LIB_SRCS} )
+target_link_libraries(qemf  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} )
 
-KDE4_ADD_LIBRARY( EnhMetaFile SHARED ${EnhMetaFile_LIB_SRCS} )
+set_target_properties(qemf PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-TARGET_LINK_LIBRARIES(EnhMetaFile ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
-INSTALL(TARGETS EnhMetaFile ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-## SET_TARGET_PROPERTIES(EnhMetaFile PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+########### install files ###############
 
-ENABLE_TESTING()
-SUBDIRS( demo tests )
+install(TARGETS qemf  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-FIND_PACKAGE(Doxygen)
-
-if(DOXYGEN_EXECUTABLE)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.cmake ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-
-  if(EXISTS ${QT_DOC_DIR}/html)
-    set(QTDOCS "${QT_DOC_DIR}/html")
-  else(EXISTS ${QT_DOC_DIR}/html)
-    set(QTDOCS "http://doc.trolltech.com/4.4/")
-  endif(EXISTS ${QT_DOC_DIR}/html)
-
-  add_custom_target(
-    apidox
-    COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
-    COMMAND apidocs/html/installdox -l qt4.tag@${QTDOCS} apidocs/html/*.html
-  )
-endif(DOXYGEN_EXECUTABLE)
+install(
+    FILES
+    EmfEnums.h
+    EmfRecords.h
+    EmfHeader.h
+    EmfParser.h
+    EmfOutput.h
+    emf_export.h
+    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+)

@@ -15,11 +15,11 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "EnhHeader.h"
+#include "EmfHeader.h"
 
 #include <QDebug>
 
-namespace EnhancedMetafile
+namespace Libemf
 {
 
 /*****************************************************************************/
@@ -45,8 +45,9 @@ Header::Header( QDataStream &stream )
     if ( ( ENHMETA_SIGNATURE == mSignature ) && ( m_nDescription != 0 ) ){
         // we have optional EmfDescription, but don't know how to read that yet.
     }
-    // We could need to read EmfMetafileHeaderExtension1 and ..2 here
-    // but we have no example of that.
+
+    // FIXME: We could need to read EmfMetafileHeaderExtension1 and
+    //        ..2 here but we have no example of that.
     soakBytes( stream, mSize - 88 );
 }
 

@@ -1,8 +1,8 @@
 /**
    \mainpage
 
-   EnhMetaFile is a parser and pluggable backend for the Microsoft
-   Enhanced Metafile format, which essentially provides vector graphics
-   operations (heavily based on the GDI programming interface) embedded
-   in a file.
+   EmfParser is a parser and pluggable backend for the Microsoft
+   Enhanced Metafile format (EMF), which essentially provides vector
+   graphics operations (heavily based on the GDI programming
+   interface) embedded in a file.
 */

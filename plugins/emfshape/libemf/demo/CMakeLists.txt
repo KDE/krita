@@ -6,9 +6,14 @@ INCLUDE_DIRECTORIES(
 
 LINK_DIRECTORIES(${ENHMETAFILE_BINARY_DIR})
 
-SET( emf_demo_bin_SRCS emf_demo.cpp EmfViewer.cpp )  
+SET( emf_demo_bin_SRCS
+  emf_demo.cpp
+  EmfViewer.cpp
+)  
+
 QT4_AUTOMOC( ${emf_demo_bin_SRCS} )
 ADD_EXECUTABLE( emf_demo ${emf_demo_bin_SRCS} )
-TARGET_LINK_LIBRARIES( emf_demo ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} EnhMetaFile )
+
+TARGET_LINK_LIBRARIES( emf_demo libemf ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY}  )
 
 

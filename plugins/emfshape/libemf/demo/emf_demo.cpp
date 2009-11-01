@@ -19,14 +19,20 @@
 
 #include <QApplication>
 
-using namespace EnhancedMetafile;
+using namespace Libemf;
 
 int main( int argc, char **argv )
 {
     QApplication app( argc, argv );
 
-    EmfViewer viewer;
+    QSize     size( 1280, 800 );
+    EmfViewer viewer( size );
     viewer.show();
+
+    if ( argc > 1 ) {
+        QString  filename( argv[1] );
+        viewer.loadFile( filename );
+    }
 
     app.exec();
 }

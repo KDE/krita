@@ -1,5 +1,6 @@
 /*
-  Copyright 2008 Brad Hards <bradh@frogmouth.net>
+  Copyright 2008 Brad Hards  <bradh@frogmouth.net>
+  Copyright 2008 Inge Wallin <inge@lysator.liu.se>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,19 +22,31 @@
 #include <QFileDialog>
 #include <QMenuBar>
 
-EmfViewer::EmfViewer() :
-    QMainWindow()
+EmfViewer::EmfViewer( QSize &size )
+    : QMainWindow()
 {
+    m_size = size;
+
     setWindowTitle( "EMF Demo Viewer" );
 
     QMenu *fileMenu = menuBar()->addMenu( "&File" );
-    m_fileOpenAction = fileMenu->addAction( "&Open", this, SLOT( slotOpenFile() ) );
+
+    // The "Open" action
+    m_fileOpenAction = fileMenu->addAction( "&Open", this,
+                                            SLOT( slotOpenFile() ) );
     m_fileOpenAction->setShortcut( Qt::CTRL + Qt::Key_O );
+
     fileMenu->addSeparator();
-    fileMenu->addAction( "&Quit", qApp, SLOT( closeAllWindows() ) );
 
-    resize( 1250, 850 );
+    // The "Quit" action
+    m_fileQuitAction = fileMenu->addAction( "&Quit", qApp,
+                                            SLOT( closeAllWindows() ) );
+    m_fileQuitAction->setShortcut( Qt::CTRL + Qt::Key_Q );
 
+    // Set a suitably large size.
+    resize( m_size + QSize( 50, 50 ) );
+
+    // ...and finably create the label that will show everything.
     m_label = new QLabel(this);
     setCentralWidget( m_label );
 }
@@ -41,6 +54,32 @@ EmfViewer::EmfViewer() :
 EmfViewer::~EmfViewer()
 {
 }
+
+
+void EmfViewer::loadFile( const QString &fileName )
+{
+    Parser parser;
+
+    // The image that the EMF parser should paint on.
+    QImage    image( m_size, QImage::Format_ARGB32_Premultiplied );
+    QPainter  painter( &image );
+
+    PainterOutput output( painter, m_size );
+    parser.setOutput( &output );
+    parser.load( QString( fileName ) );
+
+    QPixmap pixmap = QPixmap::fromImage( image );
+    m_label->setPixmap( pixmap.scaled( m_size, Qt::KeepAspectRatio, 
+                                       Qt::SmoothTransformation ) );
+    
+    m_label->show();
+
+
+}
+
+// ----------------------------------------------------------------
+//                                 Slots
+
 
 void EmfViewer::slotOpenFile()
 {
@@ -52,22 +91,6 @@ void EmfViewer::slotOpenFile()
     loadFile( fileName );
 }
 
-void EmfViewer::loadFile( const QString &fileName )
-{
-    Parser parser;
-
-    PainterOutput output;
-
-    parser.setOutput( &output );
-    parser.load( QString( fileName ) );
-
-    QPixmap pixmap = QPixmap::fromImage( *( output.image() ) );
-    m_label->setPixmap( pixmap.scaled( 1200, 800, Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
-    
-    m_label->show();
-
-
-}
 
 #include "EmfViewer.moc"
 

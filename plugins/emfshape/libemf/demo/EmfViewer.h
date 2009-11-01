@@ -1,5 +1,6 @@
 /*
-  Copyright 2008 Brad Hards <bradh@frogmouth.net>
+  Copyright 2008 Brad Hards  <bradh@frogmouth.net>
+  Copyright 2009 Inge Wallin <inge@lysator.liu.se>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,29 +19,36 @@
 #ifndef EMFVIEWER_H
 #define EMFVIEWER_H
 
-#include "EnhMetaFile.h"
+#include "../EmfParser.h"
 
 #include <QLabel>
 #include <QMainWindow>
 
-using namespace EnhancedMetafile;
+using namespace Libemf;
 
 class EmfViewer : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    EmfViewer();
+    EmfViewer( QSize &size );
     ~EmfViewer();
+
+    void loadFile( const QString &fileName );
 
 private Q_SLOTS:
     void slotOpenFile();
 
 private:
-    void loadFile( const QString &fileName );
 
+    // Actions
     QAction *m_fileOpenAction;
-    QLabel *m_label;
+    QAction *m_fileQuitAction;
+
+    // The central widget
+    QLabel  *m_label;
+
+    QSize    m_size;
 };
 
 #endif

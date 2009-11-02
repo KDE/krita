@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Krita Encapsulated PostScript Import Filter
+Name[ca]=Filtre d'importació de PostScript encapsulat per al Krita
 Name[et]=Krita kapseldatud PostScripti impordifilter
 Name[pt]=Filtro de Importação de PostScript Encapsulado para o Krita
 Name[sv]=Krita importfilter för inkapslad Postscript

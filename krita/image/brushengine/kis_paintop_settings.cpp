@@ -126,6 +126,13 @@ void KisPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPa
     Q_UNUSED(_mode);
 }
 
+
+void KisPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
+{
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+}
+
 #if defined(HAVE_OPENGL)
 QString KisPaintOpSettings::modelName() const
 {

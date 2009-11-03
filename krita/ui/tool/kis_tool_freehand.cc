@@ -117,7 +117,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     //    dbgUI << "mousePressEvent" << m_mode;
     //     if (!currentImage())
     //    return;
-
+    
     if (!currentNode())
         return;
 
@@ -132,6 +132,12 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         }
     }
 
+    if (e->modifiers() == Qt::ShiftModifier){
+        m_mode = EDIT_BRUSH;
+        m_prevMousePos = e->point;
+        m_originalPos = e->globalPos();
+        return;
+    }
 
     if (e->button() == Qt::LeftButton) {
         initPaint(e);
@@ -217,7 +223,14 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         }
 
         m_previousPaintInformation = info;
+    }else if (m_mode == EDIT_BRUSH){
+        qreal dx = m_prevMousePos.x() - e->point.x();
+        qreal dy = m_prevMousePos.y() - e->point.y();
+        currentPaintOpPreset()->settings()->changePaintOpSize(dx,dy);
     }
+    
+    
+    
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
     if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
@@ -247,6 +260,11 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     if (!oldOutlineRect.isEmpty()) {
         m_canvas->updateCanvas(oldOutlineRect); // erase the old guy
     }
+    
+    if (m_mode == EDIT_BRUSH){
+        // do not move the cursor
+        QCursor::setPos(m_originalPos);
+    }
 }
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
@@ -254,7 +272,10 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
     //    dbgUI << "mouseReleaseEvent" << m_mode << " " << e->button() << " " << e->button();
     if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();
-    } else {
+    } else if (m_mode == EDIT_BRUSH){
+        m_mode = HOVER;
+    } else    
+    {
         KisToolPaint::mouseReleaseEvent(e);
     }
 }
@@ -522,34 +543,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             }
 
             if (glIsList(m_displayList)) {
-                dbgUI << "I have list to draw!";
                 QPointF pos = converter.documentToView(mousePos);
-
-                /*        KisImageWSP img = currentImage();
-                        glEnable(GL_LIGHT0);
-                        glEnable(GL_LIGHT1);
-                        glEnable(GL_LIGHT2);
-                        glEnable(GL_LIGHT3);
-                        glEnable(GL_LIGHT4);
-
-                        QPointF pos0(0,0); pos0 = converter.documentToView( pos0 );
-                        QPointF pos1(0,img->height()); pos1 = converter.documentToView( pos1 );
-                        QPointF pos2(img->width(),img->height()); pos2 = converter.documentToView( pos2 );
-                        QPointF pos3(img->width(),0); pos3 = converter.documentToView( pos3 );
-
-                        GLfloat position[] = { 0.0f, 0.0f, ZET };
-                        position[0] = pos.x();
-                        position[1] = pos.y();
-                        glLightfv(GL_LIGHT0, GL_POSITION, position);
-                        position[0] = pos1.x();
-                        position[1] = pos1.y();
-                        glLightfv(GL_LIGHT1, GL_POSITION, position);
-                        position[0] = pos2.x();
-                        position[1] = pos2.y();
-                        glLightfv(GL_LIGHT2, GL_POSITION, position);
-                        position[0] = pos3.x();
-                        position[1] = pos3.y();
-                        glLightfv(GL_LIGHT3, GL_POSITION, position);*/
 
                 glColor3f(0.0, 1.0, 0.0);
                 glShadeModel(GL_SMOOTH);
@@ -580,6 +574,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
                 m_prevyTilt = m_yTilt;
 
             } else {
+                dbgUI << "Warning: I don't have list to draw!";
                 dbgUI << "Default model will be used";
                 Kis3DObjectModel * model;
                 m_brushModelName = currentPaintOpPreset()->settings()->modelName();
@@ -587,13 +582,14 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
                 // here is the default 3d model filename for brushes
                 if (m_brushModelName.isEmpty()) {
                     model = new Kis3DObjectModel("3d-deform-brush.obj" , "3d-deform-brush.mtl");
-                    dbgUI << "isEmpty()";
                 } else {
                     model = new Kis3DObjectModel(m_brushModelName + ".obj" , m_brushModelName + ".mtl");
                 }
                 m_displayList = model->displayList();
+                if (!glIsList(m_displayList)){
+                    dbgUI << "Default model has not been found!";
+                }
                 delete model;
-
             }
         }
     }

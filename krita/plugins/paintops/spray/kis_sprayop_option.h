@@ -30,6 +30,8 @@ public:
     ~KisSprayOpOption();
 
     int diameter() const;
+    void setDiamter(int diameter) const;
+    
     int particleCount() const;
 
     qreal coverage() const;

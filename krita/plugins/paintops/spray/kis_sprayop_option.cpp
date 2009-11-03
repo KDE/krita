@@ -118,3 +118,8 @@ void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setti
 }
 
 
+void KisSprayOpOption::setDiamter(int diameter) const
+{
+    m_options->diameterSpinBox->setValue(diameter);
+}
+

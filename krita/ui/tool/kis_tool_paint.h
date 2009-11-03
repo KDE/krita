@@ -59,7 +59,8 @@ enum enumBrushMode {
     PAINT_STYLUS,
     ERASE,
     ERASE_STYLUS,
-    HOVER
+    HOVER,
+    EDIT_BRUSH
 };
 
 class KRITAUI_EXPORT KisToolPaint

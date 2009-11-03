@@ -139,6 +139,8 @@ public:
      */
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
+    virtual void changePaintOpSize(qreal x, qreal y) const;
+    
 #if defined(HAVE_OPENGL)
     virtual QString modelName() const;
 #endif

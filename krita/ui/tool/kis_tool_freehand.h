@@ -131,6 +131,9 @@ private:
 #endif
 
     QPointF mousePos;
+    QPointF m_prevMousePos;
+    QPoint m_originalPos;
+    
     QRectF oldOutlineRect;
     bool m_paintedOutline;
     QRegion m_incrementalDirtyRegion;

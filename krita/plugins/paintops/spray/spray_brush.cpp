@@ -96,7 +96,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
     qreal lengthX;
     qreal lengthY;
 
-    int steps = 36;
+    int steps = 118;
     bool shouldColor = true;
     if (m_settings->fillBackground()){
         m_painter->setPaintColor(bgColor);

@@ -58,24 +58,6 @@ void KisSprayPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) con
     delete settings;
 }
 
-QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image) const
-{
-    qreal size = diameter();
-    size += 2;
-    return image->pixelToDocument(
-               QRectF(0, 0, size, size)
-           ).translated(pos - QPointF(size * 0.5 , size * 0.5));
-}
-
-void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter) const
-{
-    qreal size = diameter();
-    QRectF brushSize(0, 0, size, size);
-    painter.setPen(Qt::black);
-    //painter.translate(converter.documentToView( pos - image->pixelToDocument( QPointF( size * 0.5,size * 0.5 ) + QPointF(0.5, 0.5) )) );
-    painter.drawEllipse(converter.documentToView(image->pixelToDocument(brushSize).translated(pos - QPointF(size * 0.5, size * 0.5))));
-    qDebug() << "pos:" << pos;
-}
 
 int KisSprayPaintOpSettings::diameter() const
 {
@@ -192,7 +174,7 @@ bool KisSprayPaintOpSettings::useRandomHSV() const
 QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return QRectF();
-    qreal size = diameter();
+    qreal size = diameter() * scale();
     size += 10;
     return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
 }
@@ -200,8 +182,9 @@ QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
 void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
-    qreal size = diameter();
-    painter.setPen(Qt::black);
+    qreal size = diameter() * scale();
+    painter.setPen(QColor(255,128,255));
+    painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
     painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos)));
 }
 
@@ -233,4 +216,18 @@ bool KisSprayPaintOpSettings::mixBgColor() const
 bool KisSprayPaintOpSettings::sampleInput() const
 {
     return m_options->m_ColorOption->sampleInputColor();
+}
+
+
+void KisSprayPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
+{
+    if (qAbs(x) > qAbs(y)){
+            // recoginze the left/right movement
+            if (x > 0){
+                m_options->m_sprayOption->setDiamter( diameter() + qRound(x) );
+            }else{
+                m_options->m_sprayOption->setDiamter( diameter() + qRound(x) );
+            }
+    }else{
+    }
 }

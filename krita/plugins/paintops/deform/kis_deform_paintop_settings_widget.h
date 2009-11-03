@@ -44,6 +44,8 @@ public:
     bool useCounter() const;
     bool useOldData() const;
     qreal spacing() const;
+    
+    void setRadius(int radius) const;
 
 private:
     Ui::WdgDeformOptions* m_options;

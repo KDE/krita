@@ -131,3 +131,16 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP imag
     painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos)));
 }
 
+
+
+void KisDeformPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
+{
+    // if the movement is more left<->right then up<->down
+    if (qAbs(x) > qAbs(y)){
+        m_options->setRadius( radius() + qRound(x) );
+    }
+    else // vice-versa
+    {
+        // we can do something different, e.g. change deform mode or ...
+    }
+}

@@ -138,3 +138,8 @@ qreal KisDeformPaintOpSettingsWidget::spacing() const
     return m_options->spacingKDNumInp->value();
 }
 
+
+void KisDeformPaintOpSettingsWidget::setRadius(int radius) const
+{
+    m_options->deformRadiusSPBox->setValue( radius );
+}

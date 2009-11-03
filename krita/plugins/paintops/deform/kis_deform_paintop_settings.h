@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,7 +46,9 @@ public:
 
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
-
+    virtual void changePaintOpSize(qreal x, qreal y) const;
+    
+    
     using KisPropertiesConfiguration::fromXML;
     using KisPropertiesConfiguration::toXML;
 

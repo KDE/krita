@@ -65,20 +65,6 @@ public:
      */
     void updateTree();
 
-    QList<KoShape *> shapes;
-    QList<KoShape *> additionalShapes; // these are shapes that are only handled for updates
-    KoSelection * selection;
-    KoCanvasBase * canvas;
-    KoRTree<KoShape *> tree;
-    QSet<KoShape *> aggregate4update;
-    QHash<KoShape*, int> shapeIndexesBeforeUpdate;
-    KoShapeManagerPaintingStrategy * strategy;
-    KoShapeManager *q;
-};
-
-void KoShapeManager::Private::updateTree()
-{
-    // for detecting collisions between shapes.
     class DetectCollision
     {
     public:
@@ -110,6 +96,21 @@ void KoShapeManager::Private::updateTree()
     private:
         QList<KoShape*> shapesWithCollisionDetection;
     };
+
+    QList<KoShape *> shapes;
+    QList<KoShape *> additionalShapes; // these are shapes that are only handled for updates
+    KoSelection *selection;
+    KoCanvasBase *canvas;
+    KoRTree<KoShape *> tree;
+    QSet<KoShape *> aggregate4update;
+    QHash<KoShape*, int> shapeIndexesBeforeUpdate;
+    KoShapeManagerPaintingStrategy *strategy;
+    KoShapeManager *q;
+};
+
+void KoShapeManager::Private::updateTree()
+{
+    // for detecting collisions between shapes.
     DetectCollision detector;
     bool selectionModified = false;
     foreach(KoShape *shape, aggregate4update) {
@@ -137,7 +138,6 @@ void KoShapeManager::Private::updateTree()
         emit q->selectionContentChanged();
     }
 }
-
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &shapes)
         : d(new Private(this, canvas))
@@ -219,8 +219,10 @@ void KoShapeManager::addAdditional(KoShape *shape)
 
 void KoShapeManager::remove(KoShape *shape)
 {
-    notifyShapeChanged(shape);
-    d->updateTree();
+    Private::DetectCollision detector;
+    detector.detect(d->tree, shape, shape->zIndex());
+    detector.fireSignals();
+
     shape->update();
     shape->removeShapeManager(this);
     d->selection->deselect(shape);

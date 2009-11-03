@@ -238,8 +238,9 @@ void KoTextEditor::Private::runDirectionUpdater()
             KoText::Direction dir =
                 static_cast<KoText::Direction>(format.intProperty(KoParagraphStyle::TextProgressionDirection));
 
-            if (dir == KoText::AutoDirection || dir == KoText::PerhapsLeftRightTopBottom ||
-                    dir == KoText::PerhapsRightLeftTopBottom) {
+            if (dir == KoText::AutoDirection || dir == KoText::PerhapsLeftRightTopBottom
+                    || dir == KoText::PerhapsRightLeftTopBottom
+                    || dir == KoText::InheritDirection) {
                 bool rtl = isRightToLeft(block.text());
                 if (rtl && (dir != KoText::AutoDirection || QApplication::isLeftToRight()))
                     newDirection = KoText::PerhapsRightLeftTopBottom;

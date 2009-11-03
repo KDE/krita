@@ -83,6 +83,10 @@ void SimpleStyleWidget::fillListsCombobox()
     widget.listType->clear();
     foreach(const Lists::ListStyleItem & item, Lists::genericListStyleItems())
         widget.listType->addItem(item.name, static_cast<int>(item.style));
+    if (m_tool->isBidiDocument()) {
+        foreach(const Lists::ListStyleItem & item, Lists::otherListStyleItems())
+            widget.listType->addItem(item.name, static_cast<int>(item.style));
+    }
 }
 
 void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block)

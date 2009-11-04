@@ -117,7 +117,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_idlist.cc 
     widgets/kis_color_space_selector.cc
-    widgets/kis_color_slider.cpp
     widgets/kis_curve_widget.cpp
     widgets/kis_custom_image_widget.cc 
     widgets/kis_double_widget.cc

@@ -18,39 +18,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef ARTISTICTEXTSHAPECONFIGWIDGET_H
-#define ARTISTICTEXTSHAPECONFIGWIDGET_H
-
-#include "ui_ArtisticTextShapeConfigWidget.h"
+#ifndef CHANGETEXTANCHORCOMMAND_H
+#define CHANGETEXTANCHORCOMMAND_H
 
 #include "ArtisticTextShape.h"
+#include <QtGui/QUndoCommand>
 
-#include <KoShapeConfigWidgetBase.h>
-
-class ArtisticTextShape;
-
-class ArtisticTextShapeConfigWidget : public QWidget
+class ChangeTextAnchorCommand : public QUndoCommand
 {
-    Q_OBJECT
 public:
-    ArtisticTextShapeConfigWidget();
-    
-public slots:
-    /// initializes widget from given shape
-    void initializeFromShape(ArtisticTextShape *shape, KoCanvasBase *canvas);
-    
-    /// updates the widget form the current one
-    void updateWidget();
-    
-private slots:
-    void propertyChanged();
-
+    ChangeTextAnchorCommand( ArtisticTextShape * shape, ArtisticTextShape::TextAnchor anchor );
+    virtual void undo();
+    virtual void redo();
 private:
-    void blockChildSignals( bool block );
-    Ui::ArtisticTextShapeConfigWidget widget;
-    ArtisticTextShape * m_shape;
-    KoCanvasBase * m_canvas;
-    QButtonGroup * m_anchorGroup;
+    ArtisticTextShape *m_shape;
+    ArtisticTextShape::TextAnchor m_anchor;
+    ArtisticTextShape::TextAnchor m_oldAnchor;
 };
 
-#endif // ARTISTICTEXTSHAPECONFIGWIDGET_H
+#endif // CHANGETEXTANCHORCOMMAND_H

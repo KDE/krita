@@ -13,6 +13,8 @@ SET ( ArtisticTextShape_SRCS
     AttachTextToPathCommand.cpp
     DetachTextFromPathCommand.cpp
     ChangeTextOffsetCommand.cpp
+    ChangeTextFontCommand.cpp
+    ChangeTextAnchorCommand.cpp
 )
 
 kde4_add_ui_files( ArtisticTextShape_SRCS

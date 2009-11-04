@@ -18,39 +18,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef ARTISTICTEXTSHAPECONFIGWIDGET_H
-#define ARTISTICTEXTSHAPECONFIGWIDGET_H
-
-#include "ui_ArtisticTextShapeConfigWidget.h"
-
+#include "ChangeTextFontCommand.h"
 #include "ArtisticTextShape.h"
+#include <KLocale>
 
-#include <KoShapeConfigWidgetBase.h>
-
-class ArtisticTextShape;
-
-class ArtisticTextShapeConfigWidget : public QWidget
+ChangeTextFontCommand::ChangeTextFontCommand( ArtisticTextShape * shape, const QFont &font )
+    : m_shape(shape), m_font( font )
 {
-    Q_OBJECT
-public:
-    ArtisticTextShapeConfigWidget();
-    
-public slots:
-    /// initializes widget from given shape
-    void initializeFromShape(ArtisticTextShape *shape, KoCanvasBase *canvas);
-    
-    /// updates the widget form the current one
-    void updateWidget();
-    
-private slots:
-    void propertyChanged();
+    setText( i18n("Change font") );
+}
 
-private:
-    void blockChildSignals( bool block );
-    Ui::ArtisticTextShapeConfigWidget widget;
-    ArtisticTextShape * m_shape;
-    KoCanvasBase * m_canvas;
-    QButtonGroup * m_anchorGroup;
-};
+void ChangeTextFontCommand::undo()
+{
+    if ( m_shape ) {
+        m_shape->setFont( m_oldFont );
+    }
+}
 
-#endif // ARTISTICTEXTSHAPECONFIGWIDGET_H
+void ChangeTextFontCommand::redo()
+{
+    if ( m_shape ) {
+        m_oldFont = m_shape->font();
+        m_shape->setFont( m_font );
+    }
+}

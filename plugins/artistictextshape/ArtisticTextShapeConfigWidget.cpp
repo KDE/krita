@@ -21,6 +21,9 @@
 #include "ArtisticTextShapeConfigWidget.h"
 #include "ArtisticTextShape.h"
 #include "ChangeTextOffsetCommand.h"
+#include "ChangeTextAnchorCommand.h"
+#include "ChangeTextFontCommand.h"
+
 #include <QtGui/QButtonGroup>
 
 #include <KoCanvasController.h>
@@ -121,13 +124,13 @@ void ArtisticTextShapeConfigWidget::propertyChanged()
     
     QUndoCommand * cmd = 0;
     if ( newAnchor != m_shape->textAnchor() ) {
-        cmd = new ChangeAnchor( m_shape, newAnchor );
+        cmd = new ChangeTextAnchorCommand( m_shape, newAnchor );
     }
     else if( newOffset != m_shape->startOffset() ) {
         cmd = new ChangeTextOffsetCommand(m_shape, m_shape->startOffset(), newOffset);
     }
     else if( font.key() != m_shape->font().key() ) {
-        cmd = new ChangeFont(m_shape, font);
+        cmd = new ChangeTextFontCommand(m_shape, font);
     }
     
     if( cmd )

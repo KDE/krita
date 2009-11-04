@@ -141,6 +141,11 @@ QColor KoColorPopupAction::currentColor() const
     return d->currentColor.toQColor();
 }
 
+KoColor KoColorPopupAction::currentKoColor() const
+{
+    return d->currentColor;
+}
+
 void KoColorPopupAction::updateIcon( )
 {
     QSize iconSize(16,16);

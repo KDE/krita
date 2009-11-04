@@ -18,7 +18,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "KoToolDocker.h"
+#include "KoToolDocker_p.h"
 #include <QPointer>
 
 #include <klocale.h>
@@ -96,4 +96,4 @@ void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
     update(); // force qt to update the layout even when we are floating
 }
 
-#include "KoToolDocker.moc"
+#include "KoToolDocker_p.moc"

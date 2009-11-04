@@ -86,16 +86,19 @@ void KisIntegerColorInput::update()
     switch (m_channelInfo->channelValueType()) {
     case KoChannelInfo::UINT8:
         m_intNumInput->setValue(*(reinterpret_cast<quint8*>(data)));
+        m_colorSlider->setValue(*(reinterpret_cast<quint8*>(data)));
         *(reinterpret_cast<quint8*>(dataMin)) = 0x0;
         *(reinterpret_cast<quint8*>(dataMax)) = 0xFF;
         break;
     case KoChannelInfo::UINT16:
         m_intNumInput->setValue(*(reinterpret_cast<quint16*>(data)));
+        m_colorSlider->setValue(*(reinterpret_cast<quint16*>(data)));
         *(reinterpret_cast<quint16*>(dataMin)) = 0x0;
         *(reinterpret_cast<quint16*>(dataMax)) = 0xFFFF;
         break;
     case KoChannelInfo::UINT32:
         m_intNumInput->setValue(*(reinterpret_cast<quint32*>(data)));
+        m_colorSlider->setValue(*(reinterpret_cast<quint32*>(data)));
         *(reinterpret_cast<quint32*>(dataMin)) = 0x0;
         *(reinterpret_cast<quint32*>(dataMax)) = 0xFFFFFFFF;
         break;
@@ -180,18 +183,21 @@ void KisFloatColorInput::update()
 #ifdef HAVE_OPENEXR
     case KoChannelInfo::FLOAT16:
         m_dblNumInput->setValue(*(reinterpret_cast<half*>(data)));
+        m_colorSlider->setValue(*(reinterpret_cast<half*>(data)) * 255);
         *(reinterpret_cast<half*>(data)) = 0.0;
         *(reinterpret_cast<half*>(data)) = 1.0;
         break;
 #endif
     case KoChannelInfo::FLOAT32:
         m_dblNumInput->setValue(*(reinterpret_cast<float*>(data)));
+        m_colorSlider->setValue(*(reinterpret_cast<float*>(data)) * 255);
         *(reinterpret_cast<float*>(data)) = 0.0;
         *(reinterpret_cast<float*>(data)) = 1.0;
         break;
     default:
         Q_ASSERT(false);
     }
+    m_colorSlider->setColors(min, max);
 }
 
 #include "kis_color_input.moc"

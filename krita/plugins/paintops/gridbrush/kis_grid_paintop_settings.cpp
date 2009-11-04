@@ -170,10 +170,34 @@ qreal KisGridPaintOpSettings::scale() const
 
 void KisGridPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, OutlineMode _mode) const
 {
+    if (_mode != CURSOR_IS_OUTLINE) return;
+    qreal sizex = gridWidth() * scale();
+    qreal sizey = gridHeight() * scale();
+
+    painter.setPen(QColor(255,128,255));
+    painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
+    painter.drawRect(converter.documentToView(image->pixelToDocument(QRectF(0, 0, sizex, sizey).translated(- QPoint(sizex * 0.5, sizey * 0.5))).translated(pos)));
 }
 
 
 QRectF KisGridPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
-    return KisPaintOpSettings::paintOutlineRect(pos, image, _mode);
+    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    qreal sizex = gridWidth() * scale();
+    qreal sizey = gridHeight() * scale();
+    sizex += 2;
+    sizey += 2;
+    return image->pixelToDocument(QRectF(0, 0, sizex, sizey).translated(- QPoint(sizex * 0.5, sizey * 0.5))).translated(pos);
+}
+
+
+
+void KisGridPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
+{
+    if (qAbs(x) > qAbs(y))
+    {
+        m_options->m_gridOption->setWidth( gridWidth() + qRound(x) );
+    }else{
+        m_options->m_gridOption->setHeight( gridHeight() + qRound(y) );
+    }
 }

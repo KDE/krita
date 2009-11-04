@@ -31,7 +31,11 @@ public:
     ~KisGridOpOption();
 
     int gridWidth() const;
+    void setWidth(int width) const;
+   
     int gridHeight() const;
+    void setHeight(int height) const;
+    
     int divisionLevel() const;
     bool pressureDivision() const;
     qreal scale() const;

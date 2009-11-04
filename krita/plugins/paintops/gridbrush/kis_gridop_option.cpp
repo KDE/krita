@@ -64,9 +64,21 @@ int KisGridOpOption::gridWidth() const
 }
 
 
+void KisGridOpOption::setWidth(int width) const
+{
+    m_options->gridWidthSPBox->setValue(width);
+}
+
+
 int KisGridOpOption::gridHeight() const
 {
     return m_options->gridHeightSPBox->value();
+}
+
+
+void KisGridOpOption::setHeight(int height) const
+{
+    m_options->gridHeightSPBox->setValue(height);
 }
 
 

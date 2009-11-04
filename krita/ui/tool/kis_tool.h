@@ -143,11 +143,11 @@ protected:
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
     void paintToolOutline(QPainter * painter, QPainterPath &path);
 
-private slots:
+protected slots:
     /**
      * Called whenever the configuration settings change.
      */
-    void slotSelectCursorStyle();
+    virtual void resetCursorStyle();
 
 
 private:

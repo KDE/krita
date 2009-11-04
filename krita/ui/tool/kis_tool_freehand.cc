@@ -224,9 +224,11 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
         m_previousPaintInformation = info;
     }else if (m_mode == EDIT_BRUSH){
+        useCursor(KisCursor::blankCursor());
         qreal dx = m_prevMousePos.x() - e->point.x();
         qreal dy = m_prevMousePos.y() - e->point.y();
         currentPaintOpPreset()->settings()->changePaintOpSize( -dx, -dy );
+        QCursor::setPos(m_originalPos);
     }
     
     
@@ -260,11 +262,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     if (!oldOutlineRect.isEmpty()) {
         m_canvas->updateCanvas(oldOutlineRect); // erase the old guy
     }
-    
-    if (m_mode == EDIT_BRUSH){
-        // do not move the cursor
-        QCursor::setPos(m_originalPos);
-    }
+   
 }
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
@@ -274,10 +272,12 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
         endPaint();
     } else if (m_mode == EDIT_BRUSH){
         m_mode = HOVER;
+        resetCursorStyle();
     } else    
     {
         KisToolPaint::mouseReleaseEvent(e);
     }
+    
 }
 
 void KisToolFreehand::initPaint(KoPointerEvent *)

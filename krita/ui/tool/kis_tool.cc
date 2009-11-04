@@ -86,7 +86,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     d->cursor = cursor;
     m_mode = XOR_MODE;
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotSelectCursorStyle()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
 
 }
 
@@ -98,7 +98,7 @@ KisTool::~KisTool()
 void KisTool::activate(bool)
 {
 
-    slotSelectCursorStyle();
+    resetCursorStyle();
 
     d->currentFgColor = m_canvas->resourceProvider()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
     d->currentBgColor = m_canvas->resourceProvider()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
@@ -385,7 +385,7 @@ void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path)
 }
 
 
-void KisTool::slotSelectCursorStyle()
+void KisTool::resetCursorStyle()
 {
     KisConfig cfg;
     switch (cfg.cursorStyle()) {

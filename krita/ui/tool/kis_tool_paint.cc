@@ -107,7 +107,7 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
         ; // Do nothing
     }
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotSelectCursorStyle()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()) );
 
 }
 
@@ -115,7 +115,7 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
 void KisToolPaint::activate(bool temporary)
 {
     KisTool::activate(temporary);
-    slotSelectCursorStyle();
+    resetCursorStyle();
 }
 
 
@@ -246,8 +246,9 @@ void KisToolPaint::slotPopupQuickHelp()
 }
 
 
-void KisToolPaint::slotSelectCursorStyle()
+void KisToolPaint::resetCursorStyle()
 {
+    KisTool::resetCursorStyle();
     KisConfig cfg;
     if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
         if (m_supportOutline) {

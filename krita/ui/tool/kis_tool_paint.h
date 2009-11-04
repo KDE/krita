@@ -117,7 +117,9 @@ private slots:
     void slotPopupQuickHelp();
     void slotSetOpacity(qreal opacityPerCent, bool final);
     void slotSetCompositeMode(const QString& compositeOp);
-    void slotSelectCursorStyle();
+
+protected slots:
+    virtual void resetCursorStyle();
 
 
 protected:

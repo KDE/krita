@@ -1,4 +1,6 @@
 /* This file is part of the KDE project
+   Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -17,31 +19,34 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPACONFIGUREDIALOG_H
-#define KOPACONFIGUREDIALOG_H
+#ifndef KOCONFIGMISCPAGE_H
+#define KOCONFIGMISCPAGE_H
 
-#include <kpagedialog.h>
+#include <kvbox.h>
 
-class KoPAView;
-class KoConfigDocumentPage;
-class KoConfigGridPage;
-class KoConfigMiscPage;
+#include "komain_export.h"
 
-class KoPAConfigureDialog : public KPageDialog
+class KoDocument;
+
+class KOMAIN_EXPORT KoConfigMiscPage : public KVBox
 {
     Q_OBJECT
 
 public:
-    KoPAConfigureDialog(KoPAView* parent);
+    explicit KoConfigMiscPage(KoDocument* doc, char* name = 0L);
+    ~KoConfigMiscPage();
+
+    void apply();
+
+signals:
+    void unitChanged(int);
 
 public slots:
-    void slotApply();
     void slotDefault();
 
 private:
-    KoConfigGridPage* m_gridPage;
-    KoConfigDocumentPage* m_docPage;
-    KoConfigMiscPage* m_miscPage;
+    class Private;
+    Private * const d;
 };
 
-#endif // KOPACONFIGUREDIALOG_H
+#endif // KOCONFIGMISCPAGE_H

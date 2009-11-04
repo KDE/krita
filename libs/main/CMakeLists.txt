@@ -57,6 +57,7 @@ set(komain_LIB_SRCS
     KoImageSelectionWidget.cpp
     config/KoConfigDocumentPage.cpp
     config/KoConfigGridPage.cpp
+    config/KoConfigMiscPage.cpp
 
     KoDocumentSectionDelegate.cpp
     KoDocumentSectionToolTip.cpp

@@ -22,6 +22,7 @@
 #include "KoPAView.h"
 #include <KoConfigDocumentPage.h>
 #include <KoConfigGridPage.h>
+#include <KoConfigMiscPage.h>
 
 #include <klocale.h>
 
@@ -33,10 +34,17 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
     setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
     setDefaultButton(KDialog::Ok);
 
-    m_gridPage = new KoConfigGridPage( parent->koDocument() );
-    KPageWidgetItem *item = addPage(m_gridPage, i18n("Grid"));
+    m_miscPage = new KoConfigMiscPage( parent->koDocument() );
+    KPageWidgetItem *item = addPage( m_miscPage, i18n( "Misc" ) );
+    item->setHeader( i18n( "Misc" ) );
+    item->setIcon(KIcon(BarIcon("preferences-other", KIconLoader::SizeMedium)));
+
+    m_gridPage = new KoConfigGridPage(parent->koDocument());
+    item = addPage(m_gridPage, i18n("Grid"));
     item->setHeader(i18n("Grid"));
     item->setIcon(KIcon(BarIcon("grid", KIconLoader::SizeMedium)));
+
+    connect(m_miscPage, SIGNAL(unitChanged(int)), m_gridPage, SLOT(slotUnitChanged(int)));
 
     m_docPage = new KoConfigDocumentPage( parent->koDocument() );
     item = addPage( m_docPage, i18nc( "@title:tab Document settings page", "Document" ) );

@@ -30,6 +30,7 @@
 
 #include <KoChannelInfo.h>
 #include <KoColor.h>
+#include <KoColorSlider.h>
 
 KisColorInput::KisColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color) : QWidget(parent), m_channelInfo(channelInfo), m_color(color)
 {
@@ -37,10 +38,17 @@ KisColorInput::KisColorInput(QWidget* parent, const KoChannelInfo* channelInfo, 
 
 void KisColorInput::init()
 {
-    m_layout = new QHBoxLayout(this);
-    m_label = new QLabel(i18n("%1:", m_channelInfo->name()), this);
+    QHBoxLayout* m_layout = new QHBoxLayout(this);
+    QLabel* m_label = new QLabel(i18n("%1:", m_channelInfo->name()), this);
     m_layout->addWidget(m_label);
-    m_input = createInput();
+    
+    m_colorSlider = new KoColorSlider(Qt::Horizontal, this);
+    m_colorSlider->setMaximumHeight(20);
+    m_colorSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    m_layout->addWidget(m_colorSlider);
+    
+    QWidget* m_input = createInput();
+    m_input->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
     m_layout->addWidget(m_input);
 }
 
@@ -70,39 +78,55 @@ void KisIntegerColorInput::setValue(int v)
 
 void KisIntegerColorInput::update()
 {
+    KoColor min = *m_color;
+    KoColor max = *m_color;
     quint8* data = m_color->data() + m_channelInfo->pos();
+    quint8* dataMin = min.data() + m_channelInfo->pos();
+    quint8* dataMax = max.data() + m_channelInfo->pos();
     switch (m_channelInfo->channelValueType()) {
     case KoChannelInfo::UINT8:
         m_intNumInput->setValue(*(reinterpret_cast<quint8*>(data)));
+        *(reinterpret_cast<quint8*>(dataMin)) = 0x0;
+        *(reinterpret_cast<quint8*>(dataMax)) = 0xFF;
         break;
     case KoChannelInfo::UINT16:
         m_intNumInput->setValue(*(reinterpret_cast<quint16*>(data)));
+        *(reinterpret_cast<quint16*>(dataMin)) = 0x0;
+        *(reinterpret_cast<quint16*>(dataMax)) = 0xFFFF;
         break;
     case KoChannelInfo::UINT32:
         m_intNumInput->setValue(*(reinterpret_cast<quint32*>(data)));
+        *(reinterpret_cast<quint32*>(dataMin)) = 0x0;
+        *(reinterpret_cast<quint32*>(dataMax)) = 0xFFFFFFFF;
         break;
     default:
         Q_ASSERT(false);
     }
+    m_colorSlider->setColors(min, max);
 }
 
-KNumInput* KisIntegerColorInput::createInput()
+QWidget* KisIntegerColorInput::createInput()
 {
-    m_intNumInput = new KIntNumInput(this);
+    m_intNumInput = new QSpinBox(this);
     m_intNumInput->setMinimum(0);
+    m_colorSlider->setMaximum(0);
     switch (m_channelInfo->channelValueType()) {
     case KoChannelInfo::UINT8:
         m_intNumInput->setMaximum(0xFF);
+        m_colorSlider->setMaximum(0xFF);
         break;
     case KoChannelInfo::UINT16:
         m_intNumInput->setMaximum(0xFFFF);
+        m_colorSlider->setMaximum(0xFFFF);
         break;
     case KoChannelInfo::UINT32:
         m_intNumInput->setMaximum(0xFFFFFFFF);
+        m_colorSlider->setMaximum(0xFFFFFFFF);
         break;
     default:
         Q_ASSERT(false);
     }
+    connect(m_colorSlider, SIGNAL(valueChanged(int)), m_intNumInput, SLOT(setValue(int)));
     connect(m_intNumInput, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
     return m_intNumInput;
 }
@@ -131,11 +155,12 @@ void KisFloatColorInput::setValue(double v)
     emit(updated());
 }
 
-KNumInput* KisFloatColorInput::createInput()
+QWidget* KisFloatColorInput::createInput()
 {
     m_dblNumInput = new KDoubleNumInput(this);
     m_dblNumInput->setMinimum(0);
     m_dblNumInput->setMaximum(1.0);
+    m_colorSlider->setVisible(false);
     connect(m_dblNumInput, SIGNAL(valueChanged(double)), this, SLOT(setValue(double)));
     return m_dblNumInput;
 }

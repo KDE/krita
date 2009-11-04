@@ -24,8 +24,9 @@ class KoChannelInfo;
 class KoColor;
 class QWidget;
 class KNumInput;
-class KIntNumInput;
+class QSpinBox;
 class KDoubleNumInput;
+class KoColorSlider;
 class QLabel;
 class QHBoxLayout;
 
@@ -36,15 +37,13 @@ public:
     KisColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color);
 protected:
     void init();
-    virtual KNumInput* createInput() = 0;
+    virtual QWidget* createInput() = 0;
 signals:
     void updated();
 protected:
     const KoChannelInfo* m_channelInfo;
     KoColor* m_color;
-    KNumInput* m_input;
-    QLabel* m_label;
-    QHBoxLayout *m_layout;
+    KoColorSlider* m_colorSlider;
 };
 
 class KisIntegerColorInput : public KisColorInput
@@ -53,12 +52,12 @@ class KisIntegerColorInput : public KisColorInput
 public:
     KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color);
 protected:
-    virtual KNumInput* createInput();
+    virtual QWidget* createInput();
 public slots:
     void setValue(int);
     void update();
 private:
-    KIntNumInput* m_intNumInput;
+    QSpinBox* m_intNumInput;
 };
 
 
@@ -68,7 +67,7 @@ class KisFloatColorInput : public KisColorInput
 public:
     KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color);
 protected:
-    virtual KNumInput* createInput();
+    virtual QWidget* createInput();
 public slots:
     void setValue(double);
     void update();

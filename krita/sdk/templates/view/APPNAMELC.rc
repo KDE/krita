@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="krita%{APPNAMELC}" version="1">
+<MenuBar>
+    <Menu name="Image"><text>&amp;Image</text>
+		<Action name="%{APPNAME}"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

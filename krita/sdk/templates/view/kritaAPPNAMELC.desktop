@@ -70,4 +70,4 @@ Comment[zh_TW]=%{APPNAME}
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=krita%{APPNAMELC}
-X-Krita-Version=4
+X-Krita-Version=3

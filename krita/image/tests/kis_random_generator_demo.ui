@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NoiseDemoUi</class>
+ <widget class="QWidget" name="NoiseDemoUi">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>901</width>
+    <height>789</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Statistics</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0" colspan="2">
+       <widget class="KImageFrame" name="hist" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>256</width>
+          <height>256</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Min</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="stMin">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Max</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="stMax">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Mean</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="stMean">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Visiualization</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Shift</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Cutoff</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KIntNumInput" name="shift">
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>56</number>
+        </property>
+        <property name="relativeValue">
+         <double>0.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KIntNumInput" name="cutoff">
+        <property name="value">
+         <number>255</number>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="singleStep">
+         <number>16</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QCheckBox" name="chR">
+        <property name="text">
+         <string>Red</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QCheckBox" name="chG">
+        <property name="text">
+         <string>Green</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QCheckBox" name="chB">
+        <property name="text">
+         <string>Blue</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Seed</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
+       <widget class="KIntNumInput" name="seed1">
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>65535</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KIntNumInput" name="seed2">
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>65535</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="KIntNumInput" name="seed3">
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>65535</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KIntNumInput" name="seed4">
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>65535</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1" rowspan="4">
+    <widget class="KImageFrame" name="view" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>256</width>
+       <height>256</height>
+      </size>
+     </property>
+     <property name="baseSize">
+      <size>
+       <width>1024</width>
+       <height>1024</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+  </layout>
+  <zorder>groupBox</zorder>
+  <zorder>groupBox_2</zorder>
+  <zorder>groupBox_3</zorder>
+  <zorder>view</zorder>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KIntNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KImageFrame</class>
+   <extends>QWidget</extends>
+   <header>kimageframe.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>chR</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>NoiseDemoUi</receiver>
+   <slot>updateNoise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>243</x>
+     <y>444</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chG</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>NoiseDemoUi</receiver>
+   <slot>updateNoise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>243</x>
+     <y>473</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chB</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>NoiseDemoUi</receiver>
+   <slot>updateNoise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>243</x>
+     <y>502</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cutoff</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>NoiseDemoUi</receiver>
+   <slot>updateNoise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>147</x>
+     <y>473</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>shift</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>NoiseDemoUi</receiver>
+   <slot>updateNoise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>147</x>
+     <y>444</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>seed1</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>NoiseDemoUi</receiver>
+   <slot>updateNoise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>82</x>
+     <y>575</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>seed2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>NoiseDemoUi</receiver>
+   <slot>updateNoise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>575</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>seed3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>NoiseDemoUi</receiver>
+   <slot>updateNoise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>82</x>
+     <y>602</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>seed4</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>NoiseDemoUi</receiver>
+   <slot>updateNoise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>602</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>updateNoise()</slot>
+ </slots>
+</ui>

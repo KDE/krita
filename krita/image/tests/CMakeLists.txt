@@ -1,7 +1,12 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
-########### next target ###############
 
+SET(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
+kde4_add_ui_files(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
+kde4_add_executable(KisRandomGeneratorDemo ${KisRandomGeneratorDemoSources})
+target_link_libraries(KisRandomGeneratorDemo ${KDE4_KDEUI_LIBS} kritaimage ${KDEWIN_LIBRARIES})
+
+########### next target ###############
 
 set(kis_base_node_test_SRCS kis_base_node_test.cpp )
 kde4_add_unit_test(KisBaseNodeTest TESTNAME krita-image-BaseNodeTest ${kis_base_node_test_SRCS})

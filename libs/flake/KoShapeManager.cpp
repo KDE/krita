@@ -203,7 +203,10 @@ void KoShapeManager::add(KoShape *shape, Repaint repaint)
             add(containerShape, repaint);
         }
     }
-    notifyShapeChanged(shape);
+
+    Private::DetectCollision detector;
+    detector.detect(d->tree, shape, shape->zIndex());
+    detector.fireSignals();
 }
 
 void KoShapeManager::addAdditional(KoShape *shape)

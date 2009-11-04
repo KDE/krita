@@ -24,9 +24,7 @@
 #include "ArtisticTextShape.h"
 
 #include <KoTool.h>
-#include <KLocale>
-#include <QTimer>
-#include <QUndoCommand>
+#include <QtCore/QTimer>
 
 class QAction;
 
@@ -76,100 +74,9 @@ signals:
     void shapeSelected(ArtisticTextShape *shape, KoCanvasBase *canvas);
     
 private:
-
-class AddTextRange : public QUndoCommand
-{
-public:
-    AddTextRange( ArtisticTextTool *tool, const QString &text, unsigned int from )
-        : m_tool( tool ), m_text( text ), m_from( from )
-    {
-        m_shape = tool->m_currentShape;
-        setText( i18n("Add text range") );
-    }
-    virtual void undo()
-    {
-        QUndoCommand::undo();
-
-        if ( m_shape ) {
-            if ( m_tool->m_currentShape != m_shape ) {
-                m_tool->enableTextCursor( false );
-                m_tool->m_currentShape = m_shape;
-                m_tool->enableTextCursor( true );
-            }
-            m_tool->setTextCursorInternal( m_from );
-            m_tool->m_currentText.remove( m_from, m_text.length() );
-            m_shape->removeRange( m_from, m_text.length() );
-        }
-    }
-    virtual void redo()
-    {
-        QUndoCommand::redo();
-
-        if ( m_shape ) {
-            if ( m_tool->m_currentShape != m_shape ) {
-                m_tool->enableTextCursor( false );
-                m_tool->m_currentShape = m_shape;
-                m_tool->enableTextCursor( true );
-            }
-            m_shape->addRange( m_from, m_text );
-            m_tool->setTextCursorInternal( m_from + m_text.length() );
-        }
-    }
-private:
-    ArtisticTextTool *m_tool;
-    ArtisticTextShape *m_shape;
-    QString m_text;
-    unsigned int m_from;
-};
-
-class RemoveTextRange : public QUndoCommand
-{
-public:
-    RemoveTextRange( ArtisticTextTool *tool, int from, unsigned int nr )
-        : m_tool( tool ), m_from( from ), m_nr( nr )
-    {
-        m_shape = tool->m_currentShape;
-        setText( i18n("Remove text range") );
-    }
-    virtual void undo()
-    {
-        QUndoCommand::undo();
-
-        if ( m_shape ) {
-            if ( m_tool->m_currentShape != m_shape ) {
-                m_tool->enableTextCursor( false );
-                m_tool->m_currentShape = m_shape;
-                m_tool->enableTextCursor( true );
-            }
-            m_tool->m_currentShape = m_shape;
-            m_tool->m_currentText.insert( m_from, m_text );
-            m_shape->addRange( m_from, m_text );
-            m_tool->setTextCursorInternal( m_from + m_nr );
-        }
-    }
-    virtual void redo()
-    {
-        QUndoCommand::redo();
-
-        if ( m_shape ) {
-            if ( m_tool->m_currentShape != m_shape ) {
-                m_tool->enableTextCursor( false );
-                m_tool->m_currentShape = m_shape;
-                m_tool->enableTextCursor( true );
-            }
-            m_tool->setTextCursorInternal( m_from );
-            m_text = m_shape->removeRange( m_from, m_nr );
-        }
-    }
-
-private:
-    ArtisticTextTool *m_tool;
-    ArtisticTextShape *m_shape;
-    int m_from;
-    unsigned int m_nr;
-    QString m_text;
-};
-
+    class AddTextRangeCommand;
+    class RemoveTextRangeCommand;
+    
 private:
     void updateActions();
     void setTextCursorInternal( int textCursor );

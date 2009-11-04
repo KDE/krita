@@ -53,14 +53,12 @@ public:
     virtual QMap<QString, QWidget *> createOptionWidgets();
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
-    /// reimplemented
-    virtual void deleteSelection();
 
 protected:
     void enableTextCursor( bool enable );
     int textCursor() const { return m_textCursor; }
     void setTextCursor( int textCursor );
-    void removeFromTextCursor( int from, unsigned int nr );
+    void removeFromTextCursor( int from, unsigned int count );
     void addToTextCursor( const QString &str );
 
 private slots:

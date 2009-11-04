@@ -5,6 +5,9 @@
 #include "kis_random_generator_demo.h"
 #include "../kis_random_generator.h"
 
+#include <ctime>
+#include <cstdlib>
+
 //BEGIN Noise
 Noise::Noise(int wx, int wy) : _wx(wx), _wy(wy),
                                _img(_wx, _wy, QImage::Format_RGB32),
@@ -91,6 +94,12 @@ KisRandomGeneratorDemo::KisRandomGeneratorDemo(QWidget* parent) : QWidget(parent
 {
     _noUpdate = true;
     setupUi(this);
+
+    srand(time(NULL));
+    seed1->setValue(rand());
+    seed2->setValue(rand());
+    seed3->setValue(rand());
+    seed4->setValue(rand());
     _noUpdate = false;
 
     updateNoise();

@@ -2,3 +2,5 @@ add_subdirectory(defaultdockers)
 add_subdirectory(smallcolorselector)
 add_subdirectory(specificcolorselector)
 add_subdirectory(trianglecolorselector)
+add_subdirectory(digitalmixer)
+

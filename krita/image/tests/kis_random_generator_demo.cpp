@@ -96,10 +96,10 @@ KisRandomGeneratorDemo::KisRandomGeneratorDemo(QWidget* parent) : QWidget(parent
     setupUi(this);
 
     srand(time(NULL));
-    seed1->setValue(rand());
-    seed2->setValue(rand());
-    seed3->setValue(rand());
-    seed4->setValue(rand());
+    seed1->setValue(rand() & 0xFFFF);
+    seed2->setValue(rand() & 0xFFFF);
+    seed3->setValue(rand() & 0xFFFF);
+    seed4->setValue(rand() & 0xFFFF);
     _noUpdate = false;
 
     updateNoise();

@@ -37,7 +37,6 @@ set(komain_LIB_SRCS
     KoToolBox.cpp
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
-    KoToolDockerFactory.cpp
     KoVersionDialog.cpp
     KoViewAdaptor.cpp
     KoView.cpp

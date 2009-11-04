@@ -26,7 +26,6 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
-#include "KoToolDockerFactory.h"
 #include "KoToolDocker.h"
 
 #include "KoView.h"
@@ -46,9 +45,8 @@ public:
 
 void KoDockerManager::Private::loadDocker(const QString &name, bool visible)
 {
-    KoToolDockerFactory toolDockerFactory(name);
-    KoToolDocker *td = qobject_cast<KoToolDocker *>(view->createDockWidget(&toolDockerFactory));
-    if (td == 0) return;
+    KoToolDocker *td = new KoToolDocker();
+    td->setObjectName(name);
     toolDockerMap[name] = td;
     toolDockerVisibilityMap[name] = visible;
     toolDockerRaisedMap[name] = false;
@@ -168,12 +166,11 @@ void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWid
         KoToolDocker *td = d->toolDockerMap[iter.value()->objectName()];
 
         if (!td) {
-            KoToolDockerFactory toolDockerFactory(iter.value()->objectName());
-            td = qobject_cast<KoToolDocker*>(d->view->createDockWidget(&toolDockerFactory));
-            if (!td)
-                return;
-            d->toolDockerMap[iter.value()->objectName()] = td;
-            d->toolDockerVisibilityMap[iter.value()->objectName()] =  true;
+            td = new KoToolDocker();
+            QString name = iter.value()->objectName();
+            td->setObjectName(name);
+            d->toolDockerMap[name] = td;
+            d->toolDockerVisibilityMap[name] =  true;
         }
         td->setEnabled(true);
         td->setWindowTitle(iter.key());

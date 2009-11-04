@@ -39,6 +39,8 @@ class DigitalMixerPatch : public KoColorPatch {
 
 DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital Colors Mixer")), m_view(view)
 {
+    QColor initColors[6] = { Qt::black, Qt::white, Qt::red, Qt::green, Qt::blue, Qt::yellow };
+    
     QWidget* widget = new QWidget(this);
     QGridLayout* layout = new QGridLayout( widget );
     
@@ -58,6 +60,7 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
         layout->addWidget(targetSlider, 1, i + 1);
         QToolButton* colorSelector = new QToolButton( this );
         KoColorPopupAction* m_actionColor = new KoColorPopupAction(this);
+        m_actionColor->setCurrentColor(initColors[i]);
         colorSelector->setDefaultAction(m_actionColor);
         layout->addWidget(colorSelector, 2, i + 1);
     }

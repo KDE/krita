@@ -4,6 +4,8 @@
 
 #include <QLabel>
 
+#include <klocale.h>
+
 %{APPNAME}Dock::%{APPNAME}Dock( KisView2 *view ) : QDockWidget(i18n("%{APPNAME}")), m_view(view)
 {
     m_label = new QLabel(this);

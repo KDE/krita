@@ -20,10 +20,13 @@
 #include <kis_view2.h>
 
 #include <QGridLayout>
+#include <QToolButton>
 
 #include <klocale.h>
+
 #include <KoColorPatch.h>
 #include <KoColorSlider.h>
+#include <KoColorPopupAction.h>
 
 class DigitalMixerPatch : public KoColorPatch {
     public:
@@ -53,8 +56,10 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
         layout->addWidget(targetColor, 0, i + 1);
         KoColorSlider* targetSlider = new KoColorSlider(Qt::Vertical, this);
         layout->addWidget(targetSlider, 1, i + 1);
-        KoColorPatch* originalColor = new DigitalMixerPatch(this);
-        layout->addWidget(originalColor, 2, i + 1);
+        QToolButton* colorSelector = new QToolButton( this );
+        KoColorPopupAction* m_actionColor = new KoColorPopupAction(this);
+        colorSelector->setDefaultAction(m_actionColor);
+        layout->addWidget(colorSelector, 2, i + 1);
     }
     
     setWidget( widget );

@@ -47,13 +47,6 @@ KoShape *ArtisticTextShapeFactory::createShape(const KoProperties *) const
     return createDefaultShape();
 }
 
-QList<KoShapeConfigWidgetBase*> ArtisticTextShapeFactory::createShapeOptionPanels()
-{
-    QList<KoShapeConfigWidgetBase*> answer;
-    answer.append( new ArtisticTextShapeConfigWidget() );
-    return answer;
-}
-
 bool ArtisticTextShapeFactory::supports(const KoXmlElement & e) const
 {
     return ( e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw );

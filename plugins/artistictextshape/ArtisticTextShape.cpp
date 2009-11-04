@@ -335,6 +335,7 @@ void ArtisticTextShape::setFont( const QFont & font )
     cacheGlyphOutlines();
     updateSizeAndPosition();
     update();
+    notifyChanged();
 }
 
 QFont ArtisticTextShape::font() const
@@ -353,6 +354,7 @@ void ArtisticTextShape::setStartOffset( qreal offset )
     m_startOffset = qMax( qreal(0.0), m_startOffset );
     updateSizeAndPosition();
     update();
+    notifyChanged();
 }
 
 qreal ArtisticTextShape::startOffset() const
@@ -396,6 +398,7 @@ void ArtisticTextShape::setTextAnchor( TextAnchor anchor )
         setTransformation( transformation() * m );
     }
     update();
+    notifyChanged();
 }
 
 ArtisticTextShape::TextAnchor ArtisticTextShape::textAnchor() const

@@ -29,7 +29,7 @@
 #include <KoCanvasBase.h>
 
 ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget()
-    : m_shape(0), m_anchorGroup(0)
+    : m_shape(0), m_canvas(0), m_anchorGroup(0)
 {
     widget.setupUi( this );
 
@@ -50,12 +50,12 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget()
     m_anchorGroup->addButton( widget.anchorMiddle );
     m_anchorGroup->addButton( widget.anchorEnd );
 
-    connect( widget.fontFamily, SIGNAL(currentFontChanged(const QFont&)), this, SIGNAL(propertyChanged()));
-    connect( widget.fontSize, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
-    connect( widget.bold, SIGNAL(toggled(bool)), this, SIGNAL(propertyChanged()));
-    connect( widget.italic, SIGNAL(toggled(bool)), this, SIGNAL(propertyChanged()));
-    connect( widget.startOffset, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
-    connect( m_anchorGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(propertyChanged()));
+    connect( widget.fontFamily, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(propertyChanged()));
+    connect( widget.fontSize, SIGNAL(valueChanged(int)), this, SLOT(propertyChanged()));
+    connect( widget.bold, SIGNAL(toggled(bool)), this, SLOT(propertyChanged()));
+    connect( widget.italic, SIGNAL(toggled(bool)), this, SLOT(propertyChanged()));
+    connect( widget.startOffset, SIGNAL(valueChanged(int)), this, SLOT(propertyChanged()));
+    connect( m_anchorGroup, SIGNAL(buttonClicked(int)), this, SLOT(propertyChanged()));
 }
 
 void ArtisticTextShapeConfigWidget::blockChildSignals( bool block )
@@ -68,10 +68,12 @@ void ArtisticTextShapeConfigWidget::blockChildSignals( bool block )
     m_anchorGroup->blockSignals( block );
 }
 
-void ArtisticTextShapeConfigWidget::open(KoShape *shape)
+void ArtisticTextShapeConfigWidget::initializeFromShape(ArtisticTextShape *shape, KoCanvasBase *canvas)
 {
-    m_shape = dynamic_cast<ArtisticTextShape*>( shape );
-    if( ! m_shape )
+    m_shape = shape;
+    m_canvas = canvas;
+    
+    if( ! m_shape || ! m_canvas )
         return;
 
     blockChildSignals( true );
@@ -96,17 +98,17 @@ void ArtisticTextShapeConfigWidget::open(KoShape *shape)
     blockChildSignals( false );
 }
 
-void ArtisticTextShapeConfigWidget::save()
+void ArtisticTextShapeConfigWidget::propertyChanged()
 {
-    if( ! m_shape )
+    if( ! m_shape || ! m_canvas )
         return;
-
+    
     QFont font = m_shape->font();
     font.setFamily( widget.fontFamily->currentFont().family() );
     font.setBold( widget.bold->isChecked() );
     font.setItalic( widget.italic->isChecked() );
     font.setPointSize( widget.fontSize->value() );
-
+    
     ArtisticTextShape::TextAnchor newAnchor;
     if ( widget.anchorStart->isChecked() )
         newAnchor = ArtisticTextShape::AnchorStart;
@@ -114,27 +116,27 @@ void ArtisticTextShapeConfigWidget::save()
         newAnchor = ArtisticTextShape::AnchorMiddle;
     else
         newAnchor = ArtisticTextShape::AnchorEnd;
-
+    
     qreal newOffset = static_cast<qreal>(widget.startOffset->value()) / 100.0;
-
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    if ( canvasController ) {
-        KoCanvasBase *canvas = canvasController->canvas();
-        if ( newAnchor != m_shape->textAnchor() ) {
-            canvas->addCommand( new ChangeAnchor( this, newAnchor ) );
-        }
-        else if( newOffset != m_shape->startOffset() ) {
-            canvas->addCommand(new ChangeTextOffsetCommand(m_shape, m_shape->startOffset(), newOffset));
-        }
-        else if( font.key() != m_shape->font().key() ) {
-            canvas->addCommand( new ChangeFont( this, font ) );
-        }
+    
+    QUndoCommand * cmd = 0;
+    if ( newAnchor != m_shape->textAnchor() ) {
+        cmd = new ChangeAnchor( m_shape, newAnchor );
     }
+    else if( newOffset != m_shape->startOffset() ) {
+        cmd = new ChangeTextOffsetCommand(m_shape, m_shape->startOffset(), newOffset);
+    }
+    else if( font.key() != m_shape->font().key() ) {
+        cmd = new ChangeFont(m_shape, font);
+    }
+    
+    if( cmd )
+        m_canvas->addCommand(cmd);
 }
 
-QUndoCommand * ArtisticTextShapeConfigWidget::createCommand()
+void ArtisticTextShapeConfigWidget::updateWidget()
 {
-    save();
-
-    return 0;
+    if (m_shape && m_canvas) {
+        initializeFromShape(m_shape, m_canvas);
+    }
 }

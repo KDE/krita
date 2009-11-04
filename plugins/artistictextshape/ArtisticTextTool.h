@@ -52,7 +52,7 @@ public:
     /// reimplemented
     virtual void deactivate();
     /// reimplemented
-    virtual QWidget *createOptionWidget();
+    virtual QMap<QString, QWidget *> createOptionWidgets();
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented
@@ -71,8 +71,12 @@ private slots:
     void convertText();
     void blinkCursor();
     void textChanged();
-
+    
+signals:
+    void shapeSelected(ArtisticTextShape *shape, KoCanvasBase *canvas);
+    
 private:
+
 class AddTextRange : public QUndoCommand
 {
 public:

@@ -21,6 +21,7 @@
 #include "ArtisticTextTool.h"
 #include "AttachTextToPathCommand.h"
 #include "DetachTextFromPathCommand.h"
+#include "ArtisticTextShapeConfigWidget.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -111,6 +112,7 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
                 selection->deselectAll();
                 enableTextCursor( false );
                 m_currentShape = hit;
+                emit shapeSelected(m_currentShape, m_canvas);
                 enableTextCursor( true );
                 selection->select( m_currentShape );
             }
@@ -222,6 +224,8 @@ void ArtisticTextTool::activate( bool )
         // none found
         emit done();
         return;
+    } else {
+        emit shapeSelected(m_currentShape, m_canvas);
     }
 
     enableTextCursor( true );
@@ -307,29 +311,47 @@ void ArtisticTextTool::convertText()
     emit done();
 }
 
-QWidget *ArtisticTextTool::createOptionWidget()
+QMap<QString, QWidget *> ArtisticTextTool::createOptionWidgets()
 {
-    QWidget * widget = new QWidget();
-    QGridLayout * layout = new QGridLayout(widget);
-
-    QToolButton * attachButton = new QToolButton(widget);
+    QMap<QString, QWidget *> widgets;
+    
+    QWidget * pathWidget = new QWidget();
+    pathWidget->setObjectName("ArtisticTextPathWidget");
+    
+    QGridLayout * layout = new QGridLayout(pathWidget);
+    
+    QToolButton * attachButton = new QToolButton(pathWidget);
     attachButton->setDefaultAction( m_attachPath );
     layout->addWidget( attachButton, 0, 0 );
-
-    QToolButton * detachButton = new QToolButton(widget);
+    
+    QToolButton * detachButton = new QToolButton(pathWidget);
     detachButton->setDefaultAction( m_detachPath );
     layout->addWidget( detachButton, 0, 1 );
-
-    QToolButton * convertButton = new QToolButton(widget);
+    
+    QToolButton * convertButton = new QToolButton(pathWidget);
     convertButton->setDefaultAction( m_convertText );
     layout->addWidget( convertButton, 0, 3 );
-
+    
     layout->setSpacing(0);
     layout->setMargin(6);
     layout->setRowStretch(3, 1);
     layout->setColumnStretch(2, 1);
-
-    return widget;
+    
+    widgets.insert(i18n("Text On Path"), pathWidget);
+    
+    ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget();
+    configWidget->setObjectName("ArtisticTextConfigWidget");
+    if (m_currentShape) {
+        configWidget->initializeFromShape(m_currentShape, m_canvas);
+    }
+    connect(this, SIGNAL(shapeSelected(ArtisticTextShape *, KoCanvasBase *)), 
+            configWidget, SLOT(initializeFromShape(ArtisticTextShape *, KoCanvasBase *)));
+    connect(m_canvas->shapeManager(), SIGNAL(selectionContentChanged()),
+            configWidget, SLOT(updateWidget()));
+            
+    widgets.insert(i18n("Text Properties"), configWidget);
+    
+    return widgets;
 }
 
 void ArtisticTextTool::enableTextCursor( bool enable )

@@ -404,8 +404,12 @@ void KoGenStyles::saveOdfMasterStyles(KoXmlWriter* xmlWriter) const
 
     QList<KoGenStyles::NamedStyle> stylesList = styles(KoGenStyle::StyleMaster);
     QList<KoGenStyles::NamedStyle>::const_iterator it = stylesList.constBegin();
+    bool standardUseless = false;
+    if( stylesList.count() > 1 )
+        standardUseless = true;
     for (; it != stylesList.constEnd() ; ++it) {
-        (*it).style->writeStyle(xmlWriter, *this, "style:master-page", (*it).name, 0);
+        if(!standardUseless and (*it).name != "Standard")
+            (*it).style->writeStyle(xmlWriter, *this, "style:master-page", (*it).name, 0);
     }
 
     if (!d->rawOdfMasterStyles.isEmpty()) {

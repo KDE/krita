@@ -28,6 +28,9 @@ public:
     KisSumiShapeOption();
     ~KisSumiShapeOption();
 
+    void setRadius(int radius) const;
+    void setScaleFactor(qreal scale) const;
+    
     int radius() const;
     double sigma() const;
     int brushDimension() const;

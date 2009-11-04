@@ -16,6 +16,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include <KoViewConverter.h>
+
 #include "kis_sumi_paintop_settings.h"
 
 #include "kis_sumi_paintop_settings_widget.h"
@@ -143,3 +146,34 @@ int KisSumiPaintOpSettings::inkDepletionWeight() const
     return m_options->m_sumiInkOption->inkDepletionWeight();
 }
 
+
+void KisSumiPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, KisPaintOpSettings::OutlineMode _mode) const
+{
+    if (_mode != CURSOR_IS_OUTLINE) return;
+    qreal size = radius() * 2 * scaleFactor() + 1;
+    painter.setPen(Qt::black);
+    painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos)));
+}
+
+
+QRectF KisSumiPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
+{
+    if (_mode != CURSOR_IS_OUTLINE) return QRectF();
+    qreal size = radius() * 2 * scaleFactor();
+    size += 10;
+    return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
+}
+
+
+void KisSumiPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
+{
+    // if the movement is more left<->right then up<->down
+    if (qAbs(x) > qAbs(y)){
+        m_options->m_sumiShapeOption->setRadius( radius() + qRound(x) );
+    }
+    else // vice-versa
+    {
+        // we can do something different
+    }
+
+}

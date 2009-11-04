@@ -74,6 +74,13 @@ int KisSumiShapeOption::radius() const
 }
 
 
+
+void KisSumiShapeOption::setRadius(int radius) const
+{
+    m_options->radiusSpinBox->setValue(radius);
+}
+
+
 double KisSumiShapeOption::sigma() const
 {
     return m_options->sigmaSpinBox->value();
@@ -89,6 +96,13 @@ double KisSumiShapeOption::scaleFactor() const
 {
     return m_options->scaleBox->value();
 }
+
+
+void KisSumiShapeOption::setScaleFactor(qreal scale) const
+{
+    m_options->scaleBox->setValue(scale);
+}
+
 
 double KisSumiShapeOption::shearFactor() const
 {

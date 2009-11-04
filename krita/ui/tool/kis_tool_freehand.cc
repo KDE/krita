@@ -226,7 +226,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     }else if (m_mode == EDIT_BRUSH){
         qreal dx = m_prevMousePos.x() - e->point.x();
         qreal dy = m_prevMousePos.y() - e->point.y();
-        currentPaintOpPreset()->settings()->changePaintOpSize(dx,dy);
+        currentPaintOpPreset()->settings()->changePaintOpSize( -dx, -dy );
     }
     
     

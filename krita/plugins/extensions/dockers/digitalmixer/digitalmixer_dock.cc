@@ -27,6 +27,7 @@
 #include <KoColorPatch.h>
 #include <KoColorSlider.h>
 #include <KoColorPopupAction.h>
+#include <KoColorSpaceRegistry.h>
 
 class DigitalMixerPatch : public KoColorPatch {
     public:
@@ -39,6 +40,8 @@ class DigitalMixerPatch : public KoColorPatch {
 
 DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital Colors Mixer")), m_view(view)
 {
+    m_currentColor = KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8());
+    
     QColor initColors[6] = { Qt::black, Qt::white, Qt::red, Qt::green, Qt::blue, Qt::yellow };
     
     QWidget* widget = new QWidget(this);
@@ -63,6 +66,8 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
         m_actionColor->setCurrentColor(initColors[i]);
         colorSelector->setDefaultAction(m_actionColor);
         layout->addWidget(colorSelector, 2, i + 1);
+        
+        targetSlider->setColors(m_actionColor->currentKoColor(), m_currentColor);
     }
     
     setWidget( widget );

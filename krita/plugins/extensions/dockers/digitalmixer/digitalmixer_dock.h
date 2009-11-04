@@ -19,6 +19,7 @@
 #define _DIGITALMIXER_DOCK_H_
 
 #include <QDockWidget>
+#include <KoColor.h>
 
 class KisView2;
 
@@ -28,6 +29,7 @@ class DigitalMixerDock : public QDockWidget {
         DigitalMixerDock( KisView2 *view );
 private:
     KisView2* m_view;
+    KoColor m_currentColor;
 };
 
 

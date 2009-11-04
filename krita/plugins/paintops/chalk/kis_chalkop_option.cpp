@@ -67,3 +67,8 @@ void KisChalkOpOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_options->radiusSpinBox->setValue(setting->getInt("Chalk/radius"));
 }
 
+
+void KisChalkOpOption::setRadius(int radius) const
+{
+    m_options->radiusSpinBox->setValue( radius );
+}

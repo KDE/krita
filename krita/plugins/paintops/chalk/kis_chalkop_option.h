@@ -29,6 +29,7 @@ public:
     KisChalkOpOption();
     ~KisChalkOpOption();
 
+    void setRadius(int radius) const;
     int radius() const;
     void setRadius(int radius);
 

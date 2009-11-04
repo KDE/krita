@@ -197,7 +197,8 @@ void KisGridPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
     if (qAbs(x) > qAbs(y))
     {
         m_options->m_gridOption->setWidth( gridWidth() + qRound(x) );
+        m_options->m_gridOption->setHeight( gridHeight() + qRound(x) );
     }else{
-        m_options->m_gridOption->setHeight( gridHeight() + qRound(y) );
+        //m_options->m_gridOption->setHeight( gridHeight() + qRound(y) );
     }
 }

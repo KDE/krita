@@ -102,13 +102,12 @@ void KisRandomGeneratorTest::testEvolution()
     for (int y = 2; y < 1000; y++) {
         for (int x = 2; x < 1000; x++) {
             quint64 number = randg.randomAt(x, y);
-            double dnumber = randg.doubleRandomAt(x, y);
 
             for (int i = -2; i < 3; i++) {
                 for (int j = -2; j < 3; j++) {
                     if (i != 0 || j != 0) {
-                        double dnumber2 = randg.doubleRandomAt(x + i, y + j);
-                        if (!(fabs(dnumber - dnumber2) > 0.001)) {
+                        quint64 number2 = randg.doubleRandomAt(x + i, y + j);
+                        if (number == number2) {
                             counter++;
                         }
                     }
@@ -117,7 +116,7 @@ void KisRandomGeneratorTest::testEvolution()
         }
     }
     // XXX: too many pixels are similar too close together?
-    QVERIFY(counter < 14940947);
+    QVERIFY(counter == 0);
 }
 
 QTEST_KDEMAIN(KisRandomGeneratorTest, GUI)

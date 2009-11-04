@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoDockerManager.h"
+#include "KoDockFactory.h"
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -31,7 +32,32 @@
 #include "KoView.h"
 #include "KoMainWindow.h"
 
-class KoDockerManager::Private {
+class ToolDockerFactory : public KoDockFactory
+{
+public:
+    ToolDockerFactory(const QString &name) : m_id(name) { }
+
+    QString id() const {
+        return m_id;
+    }
+
+    QDockWidget* createDockWidget() {
+        KoToolDocker * dockWidget = new KoToolDocker();
+        dockWidget->setObjectName(m_id);
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const {
+        return DockRight;
+    }
+
+private:
+    QString m_id;
+};
+
+
+class KoDockerManager::Private
+{
 public:
     Private() : view(0) {}
     KoView *view;
@@ -45,8 +71,9 @@ public:
 
 void KoDockerManager::Private::loadDocker(const QString &name, bool visible)
 {
-    KoToolDocker *td = new KoToolDocker();
-    td->setObjectName(name);
+    ToolDockerFactory factory(name);
+    KoToolDocker *td = qobject_cast<KoToolDocker*>(view->createDockWidget(&factory));
+    Q_ASSERT(td);
     toolDockerMap[name] = td;
     toolDockerVisibilityMap[name] = visible;
     toolDockerRaisedMap[name] = false;
@@ -96,7 +123,7 @@ KoDockerManager::KoDockerManager(KoView *view)
         QString name = iter.next();
         //kDebug() << "name = " << name;
         d->loadDocker(name, true);
-        //kDebug() << "visible = " << d->toolDockerVisibilityMap[name];
+        //kDebug() << "visible = " << d->toolDockerVisibilityMap.value(name);
     }
     QStringList hiddenList = cfg.readEntry("HiddenToolDockers", QStringList());
 
@@ -154,9 +181,8 @@ void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWid
     d->removeDockers();
 
     // Now show new active dockers (maybe even create) and show in docker menu
-    QMapIterator<QString, QWidget *> iter(optionWidgetMap);
-    while (iter.hasNext()) {
-        iter.next();
+    QMap<QString, QWidget*>::ConstIterator iter = optionWidgetMap.constBegin();
+    for (;iter != optionWidgetMap.constEnd(); ++iter) {
         if (iter.value()->objectName().isEmpty()) {
             kError(30004) << "tooldocker widget have no name " << iter.key();
             Q_ASSERT(!(iter.value()->objectName().isEmpty()));
@@ -166,9 +192,10 @@ void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWid
         KoToolDocker *td = d->toolDockerMap[iter.value()->objectName()];
 
         if (!td) {
-            td = new KoToolDocker();
             QString name = iter.value()->objectName();
-            td->setObjectName(name);
+            ToolDockerFactory factory(name);
+            td = qobject_cast<KoToolDocker*>(d->view->createDockWidget(&factory));
+            Q_ASSERT(td);
             d->toolDockerMap[name] = td;
             d->toolDockerVisibilityMap[name] =  true;
         }

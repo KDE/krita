@@ -70,6 +70,7 @@ protected:
     virtual QWidget* createInput();
 public slots:
     void setValue(double);
+    void sliderChanged(int);
     void update();
 private:
     KDoubleNumInput* m_dblNumInput;

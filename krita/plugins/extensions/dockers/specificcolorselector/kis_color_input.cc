@@ -160,22 +160,34 @@ QWidget* KisFloatColorInput::createInput()
     m_dblNumInput = new KDoubleNumInput(this);
     m_dblNumInput->setMinimum(0);
     m_dblNumInput->setMaximum(1.0);
-    m_colorSlider->setVisible(false);
     connect(m_dblNumInput, SIGNAL(valueChanged(double)), this, SLOT(setValue(double)));
     return m_dblNumInput;
 }
 
+void KisFloatColorInput::sliderChanged(int i)
+{
+    m_dblNumInput->setValue( i / 255.0);
+}
+
 void KisFloatColorInput::update()
 {
+    KoColor min = *m_color;
+    KoColor max = *m_color;
     quint8* data = m_color->data() + m_channelInfo->pos();
+    quint8* dataMin = min.data() + m_channelInfo->pos();
+    quint8* dataMax = max.data() + m_channelInfo->pos();
     switch (m_channelInfo->channelValueType()) {
 #ifdef HAVE_OPENEXR
     case KoChannelInfo::FLOAT16:
         m_dblNumInput->setValue(*(reinterpret_cast<half*>(data)));
+        *(reinterpret_cast<half*>(data)) = 0.0;
+        *(reinterpret_cast<half*>(data)) = 1.0;
         break;
 #endif
     case KoChannelInfo::FLOAT32:
-        m_dblNumInput->setValue(*(reinterpret_cast<double*>(data)));
+        m_dblNumInput->setValue(*(reinterpret_cast<float*>(data)));
+        *(reinterpret_cast<float*>(data)) = 0.0;
+        *(reinterpret_cast<float*>(data)) = 1.0;
         break;
     default:
         Q_ASSERT(false);

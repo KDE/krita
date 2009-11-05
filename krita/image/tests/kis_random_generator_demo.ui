@@ -137,9 +137,6 @@
         <property name="maximum">
          <number>255</number>
         </property>
-        <property name="singleStep">
-         <number>16</number>
-        </property>
        </widget>
       </item>
       <item row="0" column="2">

@@ -19,6 +19,8 @@
 
 #include <QMutex>
 
+#include <KoUpdater.h>
+
 #include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
@@ -30,6 +32,10 @@
 #include <OpenShiva/Metadata.h>
 #include <OpenShiva/Version.h>
 #include <GTLCore/Region.h>
+
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12
+#include "UpdaterProgressReport.h"
+#endif
 
 extern QMutex* shivaMutex;
 
@@ -64,6 +70,14 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();
 
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12
+    UpdaterProgressReport* report = 0;
+    if (progressUpdater) {
+        progressUpdater->setRange(0, size.height());
+        report = new UpdaterProgressReport(progressUpdater);
+    }
+#endif
+    
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
 //     Q_ASSERT(config);
@@ -93,7 +107,11 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
             inputs.push_back(&pdisrc);
             GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
             dbgPlugins << dstTopLeft << " " << size;
-            kernel.evaluatePixeles(region, inputs, &pdi);
+            kernel.evaluatePixeles(region, inputs, &pdi
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12
+                , report
+#endif            
+            );
         }
 #if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION < 12
     }

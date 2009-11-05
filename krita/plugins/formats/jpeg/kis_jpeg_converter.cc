@@ -204,6 +204,26 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         }
     }
 
+    // Set resolution
+    double xres, yres;
+    if (cinfo.density_unit == 0)
+    {
+        xres = 72;
+        yres = 72;
+    }
+    else if ( cinfo.density_unit == 1 )
+    {
+        xres = cinfo.X_density;
+        yres = cinfo.Y_density;
+    }
+    else if ( cinfo.density_unit == 2 )
+    {
+        xres = cinfo.X_density * 2.54;
+        yres = cinfo.Y_density * 2.54;
+    }
+    m_img->setResolution(xres / 72, yres / 72);
+    
+    // Create layer
     KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX));
 
     // Read data
@@ -454,7 +474,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     }
     cinfo.in_color_space = color_type;   // colorspace of input image
 
-
     // Set default compression parameters
     jpeg_set_defaults(&cinfo);
     // Customize them
@@ -510,6 +529,12 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     }
     break;
     }
+
+    // Save resolution
+    cinfo.X_density = img->xRes() * 72;
+    cinfo.Y_density = img->yRes() * 72;
+    cinfo.density_unit = 1;
+    cinfo.write_JFIF_header = 1;
 
     // Start compression
     jpeg_start_compress(&cinfo, true);

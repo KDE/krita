@@ -55,9 +55,6 @@ public slots:
 
     /// Returns the current color
     QColor currentColor() const;
-    
-    /// Returns the current color as a KoColor
-    KoColor currentKoColor() const;
 
 signals:
     /**

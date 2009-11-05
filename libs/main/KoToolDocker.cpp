@@ -18,7 +18,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "KoToolDocker_p.h"
+#include "KoToolDocker.h"
 #include <QPointer>
 
 #include <klocale.h>
@@ -38,18 +38,16 @@ public:
     void locationChanged(Qt::DockWidgetArea area)
     {
         switch(area) {
-        case Qt::TopDockWidgetArea:
-        case Qt::BottomDockWidgetArea:
-            // make the spacer take vertical space
-            bottomRightSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-            break;
-        case Qt::LeftDockWidgetArea:
-        case Qt::RightDockWidgetArea:
-            // make the spacer take no space
-            bottomRightSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
-            break;
-        default:
-            break;
+            case Qt::TopDockWidgetArea:
+            case Qt::BottomDockWidgetArea:
+                bottomRightSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+                break;
+            case Qt::LeftDockWidgetArea:
+            case Qt::RightDockWidgetArea:
+                bottomRightSpacer->changeSize(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+                break;
+            default:
+                break;
         }
         housekeeperLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
         housekeeperLayout->invalidate();
@@ -58,10 +56,11 @@ public:
 
 KoToolDocker::KoToolDocker(QWidget *parent)
     : QDockWidget("Tool Options initial name - never seen", parent),
-    d(new Private(this))
+    d( new Private(this) )
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
+    d->currentWidget = 0;
 
     d->housekeeperWidget = new QWidget();
     d->housekeeperLayout = new QGridLayout();
@@ -76,24 +75,25 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     setWidget(d->housekeeperWidget);
 }
 
-KoToolDocker::~KoToolDocker()
-{
+KoToolDocker::~KoToolDocker() {
+    delete d->housekeeperWidget;
     delete d;
 }
 
 bool KoToolDocker::hasOptionWidget()
 {
-    return d->currentWidget != 0;
+    return  d->currentWidget != 0;
 }
 
-void KoToolDocker::newOptionWidget(QWidget *optionWidget)
-{
-    if (d->currentWidget == optionWidget)
+void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
+    if(d->currentWidget == optionWidget)
         return;
 
     d->currentWidget = optionWidget;
+
     d->housekeeperLayout->addWidget(optionWidget, 0, 0);
-    d->housekeeperLayout->invalidate();
+
+    update(); // force qt to update the layout even when we are floating
 }
 
-#include "KoToolDocker_p.moc"
+#include "KoToolDocker.moc"

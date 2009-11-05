@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -110,6 +111,20 @@ void KoColorSlider::drawContents( QPainter *painter )
         }
     }
     painter->drawImage( contentsRect_, image, QRect( 0, 0, image.width(), image.height()) );
+}
+
+KoColor KoColorSlider::currentColor() const
+{
+    const quint8 *colors[2];
+    colors[0] = d->minColor.data();
+    colors[1] = d->maxColor.data();
+    KoMixColorsOp * mixOp = d->minColor.colorSpace()->mixColorsOp();
+    KoColor c(d->minColor.colorSpace());
+    qint16 weights[2];
+    weights[1] = (value() - minimum()) / qreal(maximum() - minimum()) * 255;
+    weights[0] = 255 - weights[1];
+    mixOp->mixColors(colors, weights, 2, c.data());
+    return c;
 }
 
 #include "KoColorSlider.moc"

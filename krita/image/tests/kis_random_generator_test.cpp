@@ -106,7 +106,7 @@ void KisRandomGeneratorTest::testEvolution()
             for (int i = -2; i < 3; i++) {
                 for (int j = -2; j < 3; j++) {
                     if (i != 0 || j != 0) {
-                        quint64 number2 = randg.doubleRandomAt(x + i, y + j);
+                        quint64 number2 = randg.randomAt(x + i, y + j);
                         if (number == number2) {
                             counter++;
                         }

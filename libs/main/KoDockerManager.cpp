@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoDockerManager.h"
+#include "KoDockFactory.h"
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -26,32 +27,55 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
-#include "KoToolDockerFactory.h"
-#include "KoToolDocker.h"
+#include "KoToolDocker_p.h"
 
-#include <QAction>
 #include "KoView.h"
 #include "KoMainWindow.h"
 
-class KoDockerManager::Private {
+class ToolDockerFactory : public KoDockFactory
+{
+public:
+    ToolDockerFactory(const QString &name) : m_id(name) { }
+
+    QString id() const {
+        return m_id;
+    }
+
+    QDockWidget* createDockWidget() {
+        KoToolDocker * dockWidget = new KoToolDocker();
+        dockWidget->setObjectName(m_id);
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const {
+        return DockRight;
+    }
+
+private:
+    QString m_id;
+};
+
+
+class KoDockerManager::Private
+{
 public:
     Private() : view(0) {}
     KoView *view;
     QMap<QString, KoToolDocker *> toolDockerMap;
-    QMap<QString, bool> toolDockerVisibillityMap;
+    QMap<QString, bool> toolDockerVisibilityMap;
     QMap<QString, KoToolDocker *> activeToolDockerMap;
     QMap<QString, bool> toolDockerRaisedMap;
-    void loadDocker(const QString& _name, bool _visible);
+    void loadDocker(const QString& _name, bool visible);
     void removeDockers();
 };
 
-void KoDockerManager::Private::loadDocker(const QString& name, bool visible)
+void KoDockerManager::Private::loadDocker(const QString &name, bool visible)
 {
-    KoToolDockerFactory toolDockerFactory(name);
-    KoToolDocker *td = qobject_cast<KoToolDocker *>(view->createDockWidget(&toolDockerFactory));
-    if (td == 0) return;
+    ToolDockerFactory factory(name);
+    KoToolDocker *td = qobject_cast<KoToolDocker*>(view->createDockWidget(&factory));
+    Q_ASSERT(td);
     toolDockerMap[name] = td;
-    toolDockerVisibillityMap[name] = visible;
+    toolDockerVisibilityMap[name] = visible;
     toolDockerRaisedMap[name] = false;
     td->setVisible(false);
     td->setEnabled(false);
@@ -61,26 +85,26 @@ void KoDockerManager::Private::loadDocker(const QString& name, bool visible)
 void KoDockerManager::Private::removeDockers()
 {
     // First remove the previous active dockers from sight and docker menu
-    QMapIterator<QString, KoToolDocker *> j(activeToolDockerMap);
-    while (j.hasNext()) {
-        j.next();
+    QMapIterator<QString, KoToolDocker *> iter(activeToolDockerMap);
+    while (iter.hasNext()) {
+        iter.next();
 
         // Check if the dock is raised or not
-        QList<QDockWidget*> tabedDocks = view->shell()->tabifiedDockWidgets(j.value());
+        QList<QDockWidget*> tabedDocks = view->shell()->tabifiedDockWidgets(iter.value());
         bool isOnTop = true;
-        int idx = view->children().indexOf(j.value());
-        foreach(QDockWidget* dock, tabedDocks) {
-          if(view->shell()->children().indexOf(dock) > idx && dock->isVisible() && dock->isEnabled()) {
-            isOnTop = false;
-            break;
-          }
+        int idx = view->children().indexOf(iter.value());
+        foreach (QDockWidget* dock, tabedDocks) {
+            if (view->shell()->children().indexOf(dock) > idx && dock->isVisible() && dock->isEnabled()) {
+                isOnTop = false;
+                break;
+            }
         }
-        toolDockerRaisedMap[j.key()] = isOnTop;
-        //kDebug() << j.value() << " " << j.value()->isVisible() << j.key();
-        j.value()->toggleViewAction()->setVisible(false);
-        toolDockerVisibillityMap[j.key()] = j.value()->isVisible();
-        j.value()->setVisible(false);
-        j.value()->setEnabled(false);
+        toolDockerRaisedMap[iter.key()] = isOnTop;
+        //kDebug() << iter.value() << " " << iter.value()->isVisible() << iter.key();
+        iter.value()->toggleViewAction()->setVisible(false);
+        toolDockerVisibilityMap[iter.key()] = iter.value()->isVisible();
+        iter.value()->setVisible(false);
+        iter.value()->setEnabled(false);
     }
     activeToolDockerMap.clear();
 }
@@ -94,20 +118,20 @@ KoDockerManager::KoDockerManager(KoView *view)
 
     QStringList visibleList = cfg.readEntry("VisibleToolDockers", QStringList());
 
-    QStringListIterator j(visibleList);
-    while (j.hasNext()) {
-      QString name = j.next();
-      //kDebug() << "name = " << name;
-      d->loadDocker(name, true);
-      //kDebug() << "visible = " << d->toolDockerVisibillityMap[name];
-   }
-  QStringList hiddenList = cfg.readEntry("HiddenToolDockers", QStringList());
+    QStringListIterator iter(visibleList);
+    while (iter.hasNext()) {
+        QString name = iter.next();
+        //kDebug() << "name = " << name;
+        d->loadDocker(name, true);
+        //kDebug() << "visible = " << d->toolDockerVisibilityMap.value(name);
+    }
+    QStringList hiddenList = cfg.readEntry("HiddenToolDockers", QStringList());
 
-  QStringListIterator j2(hiddenList);
-  while (j2.hasNext()) {
-    QString name = j2.next();
-    d->loadDocker(name, false);
-  }
+    QStringListIterator j2(hiddenList);
+    while (j2.hasNext()) {
+        QString name = j2.next();
+        d->loadDocker(name, false);
+    }
 }
 
 KoDockerManager::~KoDockerManager()
@@ -116,13 +140,13 @@ KoDockerManager::~KoDockerManager()
     KConfigGroup cfg = KGlobal::config()->group("DockerManager");
     QStringList visibleList;
     QStringList hiddenList;
-    QMapIterator<QString, KoToolDocker *> j(d->toolDockerMap);
-    while (j.hasNext()) {
-        j.next();
-        if(d->toolDockerVisibillityMap[j.key()]) {
-          visibleList += j.key();
+    QMapIterator<QString, KoToolDocker *> iter(d->toolDockerMap);
+    while (iter.hasNext()) {
+        iter.next();
+        if (d->toolDockerVisibilityMap.value(iter.key())) {
+            visibleList += iter.key();
         } else {
-          hiddenList += j.key();
+            hiddenList += iter.key();
         }
     }
     //kDebug() << "visibleList = " << visibleList;
@@ -135,58 +159,57 @@ KoDockerManager::~KoDockerManager()
 
 void KoDockerManager::removeUnusedOptionWidgets()
 {
-  QMapIterator<QString, KoToolDocker *> j(d->toolDockerMap);
-  while (j.hasNext()) {
-    j.next();
-    if (! d->activeToolDockerMap.contains(j.key())) {
-        //kDebug(30004) << "removing" << j.key() << ((void*) j.value());
-        j.value()->setVisible(false);
-        j.value()->setEnabled(false);
-        j.value()->toggleViewAction()->setVisible(false);
-    } else {
-        j.value()->setVisible(d->toolDockerVisibillityMap[j.key()]);
-        j.value()->setEnabled(true);
-        j.value()->toggleViewAction()->setVisible(true);
+    QMapIterator<QString, KoToolDocker *> iter(d->toolDockerMap);
+    while (iter.hasNext()) {
+        iter.next();
+        if (! d->activeToolDockerMap.contains(iter.key())) {
+            //kDebug(30004) << "removing" << iter.key() << ((void*) iter.value());
+            iter.value()->setVisible(false);
+            iter.value()->setEnabled(false);
+            iter.value()->toggleViewAction()->setVisible(false);
+        } else {
+            iter.value()->setVisible(d->toolDockerVisibilityMap[iter.key()]);
+            iter.value()->setEnabled(true);
+            iter.value()->toggleViewAction()->setVisible(true);
+        }
     }
-  }
 }
 
-void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap, QWidget *callingView)
+void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWidgetMap, QWidget *callingView)
 {
     Q_UNUSED(callingView);
     d->removeDockers();
 
     // Now show new active dockers (maybe even create) and show in docker menu
-    QMapIterator<QString, QWidget *> i(optionWidgetMap);
-    while (i.hasNext()) {
-        i.next();
-        if (i.value()->objectName().isEmpty()) {
-            kError(30004) << "tooldocker widget have no name " << i.key() << " " << i.value()->objectName();
-            Q_ASSERT(!(i.value()->objectName().isEmpty()));
+    QMap<QString, QWidget*>::ConstIterator iter = optionWidgetMap.constBegin();
+    for (;iter != optionWidgetMap.constEnd(); ++iter) {
+        if (iter.value()->objectName().isEmpty()) {
+            kError(30004) << "tooldocker widget have no name " << iter.key();
+            Q_ASSERT(!(iter.value()->objectName().isEmpty()));
             continue; // skip this docker in release build when assert don't crash
         }
 
-        KoToolDocker *td = d->toolDockerMap[i.value()->objectName()];
+        KoToolDocker *td = d->toolDockerMap[iter.value()->objectName()];
 
-        if(!td) {
-            KoToolDockerFactory toolDockerFactory(i.value()->objectName());
-            td = qobject_cast<KoToolDocker*>(d->view->createDockWidget(&toolDockerFactory));
-            if (!td)
-                return;
-            d->toolDockerMap[i.value()->objectName()] = td;
-            d->toolDockerVisibillityMap[i.value()->objectName()] =  true;
+        if (!td) {
+            QString name = iter.value()->objectName();
+            ToolDockerFactory factory(name);
+            td = qobject_cast<KoToolDocker*>(d->view->createDockWidget(&factory));
+            Q_ASSERT(td);
+            d->toolDockerMap[name] = td;
+            d->toolDockerVisibilityMap[name] =  true;
         }
         td->setEnabled(true);
-        td->setWindowTitle(i.key());
-        td->newOptionWidget(i.value());
+        td->setWindowTitle(iter.key());
+        td->newOptionWidget(iter.value());
         d->view->restoreDockWidget(td);
-        //kDebug() << i.value()->objectName() << " " << d->toolDockerVisibillityMap[i.value()->objectName()];
-        td->setVisible(d->toolDockerVisibillityMap[i.value()->objectName()]);
+        //kDebug() << iter.value()->objectName() << " " << d->toolDockerVisibilityMap[iter.value()->objectName()];
+        td->setVisible(d->toolDockerVisibilityMap[iter.value()->objectName()]);
         //kDebug() << td->isVisible();
         td->toggleViewAction()->setVisible(true);
-        d->activeToolDockerMap[i.value()->objectName()] = td;
-        if(d->toolDockerRaisedMap[i.value()->objectName()]) {
-          td->raise();
+        d->activeToolDockerMap[iter.value()->objectName()] = td;
+        if (d->toolDockerRaisedMap.value(iter.value()->objectName())) {
+            td->raise();
         }
     }
 }

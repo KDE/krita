@@ -87,13 +87,13 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
         mixer.targetSlider->setValue(125);
     }
     
-    
     setWidget( widget );
 }
 
 void DigitalMixerDock::popupColorChanged(int i)
 {
-    m_mixers[i].targetSlider->setColors(m_mixers[i].actionColor->currentKoColor(), m_currentColor);    
+    m_mixers[i].targetSlider->setColors(m_mixers[i].actionColor->currentKoColor(), m_currentColor);
+    colorSliderChanged(i);
 }
 
 void DigitalMixerDock::colorSliderChanged(int i)

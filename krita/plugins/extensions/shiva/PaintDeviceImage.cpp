@@ -16,12 +16,16 @@
  */
 
 #include "PaintDeviceImage.h"
+
+#include <KoColorSpace.h>
+#include <KoColorModelStandardIds.h>
+
 #include <kis_paint_device.h>
 #include <kis_random_accessor.h>
 
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/Type.h>
-#include <KoColorSpace.h>
+#include <KoColorSpaceTraits.h>
 
 GTLCore::PixelDescription csToPD(const KoColorSpace* cs)
 {
@@ -54,7 +58,17 @@ GTLCore::PixelDescription csToPD(const KoColorSpace* cs)
             break;
         }
     }
-    return GTLCore::PixelDescription(types);
+    GTLCore::PixelDescription pd(types);
+    if(cs->colorModelId() == RGBAColorModelID )
+    {
+        std::vector< std::size_t > positions;
+        positions.push_back(KoRgbU16Traits::red_pos);
+        positions.push_back(KoRgbU16Traits::green_pos);
+        positions.push_back(KoRgbU16Traits::blue_pos);
+        positions.push_back(KoRgbU16Traits::alpha_pos);
+        pd.setChannelPositions(positions);
+    }
+    return pd;
 }
 
 ConstPaintDeviceImage::ConstPaintDeviceImage(KisPaintDeviceSP device) : GTLCore::AbstractImage(csToPD(device->colorSpace())), m_device(device)

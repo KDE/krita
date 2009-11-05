@@ -23,19 +23,5 @@
 
 @operation(compositeWithoutmask, inputs=2, optional_arguments=int opacity = 255)
 {
-  @alphachannel( float blend = @in(1) / @unit; )
-  if( @alphachannel( @in(1) != 0 ) )
-  {
-    if( opacity != 255 )
-    {
-      blend = (blend * opacity) / 255;
-    }
-    @alphachannel( @type newalpha = @in(0) + (( @unit - @in(0)) * blend) / @unit;
-    @out = newalpha;
-    if(newalpha > 0 )
-    {
-      blend = (blend * @unit) / newalpha;
-    } )
-    compose( @in(0), @in(1), blend, @out);
-  }
+  compositeWithmask(@in(0), @in(1), 255, @out, opacity);
 }

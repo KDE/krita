@@ -41,18 +41,16 @@ class DigitalMixerPatch : public KoColorPatch {
 
 DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital Colors Mixer")), m_view(view)
 {
-    m_currentColor = KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8());
-    
     QColor initColors[6] = { Qt::black, Qt::white, Qt::red, Qt::green, Qt::blue, Qt::yellow };
     
     QWidget* widget = new QWidget(this);
     QGridLayout* layout = new QGridLayout( widget );
     
     // Current Color
-    KoColorPatch* currentColor = new KoColorPatch(this);
-    currentColor->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    currentColor->setMinimumWidth(12);
-    layout->addWidget(currentColor, 0, 0,3,1);
+    m_currentColorPatch = new KoColorPatch(this);
+    m_currentColorPatch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_currentColorPatch->setMinimumWidth(12);
+    layout->addWidget(m_currentColorPatch, 0, 0,3,1);
     
     // Create the sliders
     
@@ -61,6 +59,9 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
     
     QSignalMapper* signalMapperColorSlider = new QSignalMapper(this);
     connect(signalMapperColorSlider, SIGNAL(mapped(int)), SLOT(colorSliderChanged(int)));
+    
+    QSignalMapper* signalMapperTargetColor = new QSignalMapper(this);
+    connect(signalMapperTargetColor, SIGNAL(mapped(int)), SLOT(targetColorChanged(int)));
     
     for(int i = 0; i < 6; ++i)
     {
@@ -74,9 +75,7 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
         mixer.actionColor->setCurrentColor(initColors[i]);
         colorSelector->setDefaultAction(mixer.actionColor);
         layout->addWidget(colorSelector, 2, i + 1);
-        
-        mixer.targetSlider->setColors(mixer.actionColor->currentKoColor(), m_currentColor);
-        
+                
         m_mixers.push_back(mixer);
         
         connect(mixer.actionColor, SIGNAL(colorChanged(KoColor)), signalMapperSelectColor, SLOT(map()));
@@ -85,20 +84,42 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
         connect(mixer.targetSlider, SIGNAL(valueChanged(int)), signalMapperColorSlider, SLOT(map()));
         signalMapperColorSlider->setMapping(mixer.targetSlider, i);
         mixer.targetSlider->setValue(125);
+        
+        connect(mixer.targetColor, SIGNAL(triggered(KoColorPatch*)), signalMapperTargetColor, SLOT(map()));
+        signalMapperTargetColor->setMapping(mixer.targetColor, i);
     }
-    
+    setCurrentColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
     setWidget( widget );
 }
 
 void DigitalMixerDock::popupColorChanged(int i)
 {
-    m_mixers[i].targetSlider->setColors(m_mixers[i].actionColor->currentKoColor(), m_currentColor);
+    KoColor color = m_mixers[i].actionColor->currentKoColor();
+    color.convertTo(m_currentColor.colorSpace());
+    m_mixers[i].targetSlider->setColors( color, m_currentColor);
     colorSliderChanged(i);
 }
 
 void DigitalMixerDock::colorSliderChanged(int i)
 {
     m_mixers[i].targetColor->setColor(m_mixers[i].targetSlider->currentColor());
+}
+
+void DigitalMixerDock::targetColorChanged(int i)
+{
+    setCurrentColor(m_mixers[i].targetColor->color());
+}
+
+void DigitalMixerDock::setCurrentColor(const KoColor& color)
+{
+    m_currentColor = color;
+    m_currentColorPatch->setColor(color);
+    for(int i = 0; i < m_mixers.size(); ++i)
+    {
+        popupColorChanged(i);
+        colorSliderChanged(i);
+    }
+    
 }
 
 #include "digitalmixer_dock.moc"

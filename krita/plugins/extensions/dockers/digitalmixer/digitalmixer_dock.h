@@ -30,12 +30,16 @@ class DigitalMixerDock : public QDockWidget {
     Q_OBJECT
 public:
     DigitalMixerDock( KisView2 *view );
+public slots:
+    void setCurrentColor(const KoColor& );
 private slots:
     void popupColorChanged(int i);
     void colorSliderChanged(int i);
+    void targetColorChanged(int);
 private:
     KisView2* m_view;
     KoColor m_currentColor;
+    KoColorPatch* m_currentColorPatch;
     struct Mixer {
       KoColorPatch* targetColor;
       KoColorSlider* targetSlider;

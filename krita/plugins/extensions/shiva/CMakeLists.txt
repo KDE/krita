@@ -2,6 +2,14 @@ add_subdirectory(collections)
 
 include_directories(${OPENSHIVA_INCLUDE_DIR})
 
+if(HAVE_OPENSHIVA_912)
+
+set(kritashiva_912_PART_SRCS
+    UpdaterProgressReport.cpp
+    )
+
+endif(HAVE_OPENSHIVA_912)
+
 set(kritashiva_PART_SRCS
     shivaplugin.cpp
     shivafilter.cpp
@@ -9,6 +17,7 @@ set(kritashiva_PART_SRCS
     ShivaGeneratorConfigWidget.cpp
     PaintDeviceImage.cpp
     QVariantValue.cpp
+    ${kritashiva_912_PART_SRCS}
     )
 
 kde4_add_plugin(kritashiva ${kritashiva_PART_SRCS})

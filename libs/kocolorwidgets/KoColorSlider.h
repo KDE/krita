@@ -40,8 +40,8 @@ protected:
     virtual void drawContents( QPainter* );
 
 protected:
-    KoColor m_minColor;
-    KoColor m_maxColor;
+    struct Private;
+    Private* const d;
 };
 
 #endif

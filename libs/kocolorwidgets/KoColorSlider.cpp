@@ -22,14 +22,20 @@
 #include <QColor>
 #include <QPainter>
 
+struct KoColorSlider::Private
+{
+    KoColor minColor;
+    KoColor maxColor;    
+};
+
 KoColorSlider::KoColorSlider(QWidget* parent)
-  : KSelector(parent)
+  : KSelector(parent), d(new Private)
 {
     setMaximum(255);
 }
 
 KoColorSlider::KoColorSlider(Qt::Orientation o, QWidget *parent)
-  : KSelector(o, parent)
+  : KSelector(o, parent), d(new Private)
 {
     setMaximum(255);
 }
@@ -40,10 +46,10 @@ KoColorSlider::~KoColorSlider()
 
 void KoColorSlider::setColors(const KoColor& mincolor, const KoColor& maxcolor)
 {
-  m_minColor = mincolor;
-  m_maxColor = maxcolor;
+    d->minColor = mincolor;
+    d->maxColor = maxcolor;
 
-  update();
+    update();
 }
 
 void KoColorSlider::drawContents( QPainter *painter )
@@ -58,12 +64,12 @@ void KoColorSlider::drawContents( QPainter *painter )
   QRect contentsRect_(contentsRect());
   painter->fillRect(contentsRect_, QBrush(checker));
 
-  KoColor c = m_minColor; // smart way to fetch colorspace
+  KoColor c = d->minColor; // smart way to fetch colorspace
   QColor color;
 
   const quint8 *colors[2];
-  colors[0] = m_minColor.data();
-  colors[1] = m_maxColor.data();
+  colors[0] = d->minColor.data();
+  colors[1] = d->maxColor.data();
 
   KoMixColorsOp * mixOp = c.colorSpace()->mixColorsOp();
 

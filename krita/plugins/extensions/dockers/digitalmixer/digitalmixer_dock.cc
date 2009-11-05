@@ -21,6 +21,7 @@
 
 #include <QGridLayout>
 #include <QToolButton>
+#include <QSignalMapper>
 
 #include <klocale.h>
 
@@ -28,7 +29,8 @@
 #include <KoColorSlider.h>
 #include <KoColorPopupAction.h>
 #include <KoColorSpaceRegistry.h>
-#include <qsignalmapper.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoCanvasBase.h>
 
 class DigitalMixerPatch : public KoColorPatch {
     public:
@@ -39,7 +41,7 @@ class DigitalMixerPatch : public KoColorPatch {
         }
 };
 
-DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital Colors Mixer")), m_view(view)
+DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital Colors Mixer")), m_canvas(0), m_view(view), m_tellCanvas(true)
 {
     QColor initColors[6] = { Qt::black, Qt::white, Qt::red, Qt::green, Qt::blue, Qt::yellow };
     
@@ -92,6 +94,14 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
     setWidget( widget );
 }
 
+void DigitalMixerDock::setCanvas(KoCanvasBase * canvas)
+{
+    m_canvas = canvas;
+    connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+            this, SLOT(resourceChanged(int, const QVariant&)));
+    setCurrentColor(m_canvas->resourceProvider()->foregroundColor());
+}
+
 void DigitalMixerDock::popupColorChanged(int i)
 {
     KoColor color = m_mixers[i].actionColor->currentKoColor();
@@ -119,7 +129,19 @@ void DigitalMixerDock::setCurrentColor(const KoColor& color)
         popupColorChanged(i);
         colorSliderChanged(i);
     }
+    if (m_canvas && m_tellCanvas)
+    {
+        m_canvas->resourceProvider()->setForegroundColor(m_currentColor);
+    }
     
+}
+
+void DigitalMixerDock::resourceChanged(int key, const QVariant& v)
+{
+    m_tellCanvas = false;
+    if (key == KoCanvasResource::ForegroundColor)
+        setCurrentColor(v.value<KoColor>());
+    m_tellCanvas = true;
 }
 
 #include "digitalmixer_dock.moc"

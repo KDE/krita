@@ -96,7 +96,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Visiualization</string>
+      <string>Visualization</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">

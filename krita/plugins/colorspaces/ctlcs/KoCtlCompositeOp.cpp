@@ -83,8 +83,8 @@ void KoCTLCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
         KoCtlBuffer src(reinterpret_cast<char*>(const_cast<quint8*>(srcRowStart)), numColumns * colorSpace()->pixelSize());
         KoCtlBuffer dst(reinterpret_cast<char*>(dstRowStart), numColumns * colorSpace()->pixelSize());
         std::list< GTLCore::Buffer* > ops;
-        ops.push_back(&src);
         ops.push_back(&dst);
+        ops.push_back(&src);
         if (maskRowStart) {
             KoCtlBuffer mask(reinterpret_cast<char*>(const_cast<quint8*>(maskRowStart)), numColumns * sizeof(quint8));
             ops.push_back(&mask);

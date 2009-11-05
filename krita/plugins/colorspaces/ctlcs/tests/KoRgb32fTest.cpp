@@ -170,6 +170,32 @@ void KoRgb32fTest::testConversion()
     QCOMPARE(p32f1.blue, 0.750391f);
     QCOMPARE(p32f1.alpha, 1.0f);
 
+    // Test no mask, full opacity, transparent source
+    p32f.red = 0.5; p32f.green = 0.1; p32f.blue = 0.6; p32f.alpha = 0.0;
+    p32f1.red = 0.3; p32f1.green = 0.5; p32f1.blue = 0.8; p32f1.alpha = 1.0;
+    over->composite(p32fPtr1, rgb32f->pixelSize(), p32fPtr, rgb32f->pixelSize(), 0, 0, 1, 1, 255);
+    QCOMPARE(p32f1.red, 0.3f);
+    QCOMPARE(p32f1.green, 0.5f);
+    QCOMPARE(p32f1.blue, 0.8f);
+    QCOMPARE(p32f1.alpha, 1.0f);
+
+    // Test no mask, full opacity, transparent dst
+    p32f.red = 0.5; p32f.green = 0.1; p32f.blue = 0.6; p32f.alpha = 1.0;
+    p32f1.red = 0.3; p32f1.green = 0.5; p32f1.blue = 0.8; p32f1.alpha = 0.0;
+    over->composite(p32fPtr1, rgb32f->pixelSize(), p32fPtr, rgb32f->pixelSize(), 0, 0, 1, 1, 255);
+    QCOMPARE(p32f1.red, 0.5f);
+    QCOMPARE(p32f1.green, 0.1f);
+    QCOMPARE(p32f1.blue, 0.6f);
+    QCOMPARE(p32f1.alpha, 1.0f);
+
+    // Test no mask, full opacity, half-transparent dst
+    p32f.red = 0.5; p32f.green = 0.1; p32f.blue = 0.6; p32f.alpha = 1.0;
+    p32f1.red = 0.3; p32f1.green = 0.5; p32f1.blue = 0.8; p32f1.alpha = 0.5;
+    over->composite(p32fPtr1, rgb32f->pixelSize(), p32fPtr, rgb32f->pixelSize(), 0, 0, 1, 1, 255);
+    QCOMPARE(p32f1.red, 0.5f);
+    QCOMPARE(p32f1.green, 0.1f);
+    QCOMPARE(p32f1.blue, 0.6f);
+    QCOMPARE(p32f1.alpha, 1.0f);
 }
 
 QTEST_KDEMAIN(KoRgb32fTest, NoGUI)

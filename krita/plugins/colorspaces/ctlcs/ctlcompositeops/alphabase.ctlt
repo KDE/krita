@@ -1,5 +1,7 @@
 @operation(compositeWithmask, inputs=2, arguments=int mask, optional_arguments=int opacity = 255)
 {
+  // @in(0) -> dst
+  // @in(1) -> src
   @alphachannel( float blend = @in(1) / @unit; )
   if(mask != 255)
   {
@@ -16,8 +18,9 @@
     if(newalpha > 0 )
     {
       blend = (blend * @unit) / newalpha;
-    } )
-    compose( @in(0), @in(1), blend, @out);
+    }
+    )
+    compose( @in(1), @in(0), blend, @out);
   }
 }
 

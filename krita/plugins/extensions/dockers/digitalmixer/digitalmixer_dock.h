@@ -21,15 +21,26 @@
 #include <QDockWidget>
 #include <KoColor.h>
 
+class KoColorPopupAction;
+class KoColorSlider;
+class KoColorPatch;
 class KisView2;
 
 class DigitalMixerDock : public QDockWidget {
     Q_OBJECT
-    public:
-        DigitalMixerDock( KisView2 *view );
+public:
+    DigitalMixerDock( KisView2 *view );
+private slots:
+    void popupColorChanged(int i);
 private:
     KisView2* m_view;
     KoColor m_currentColor;
+    struct Mixer {
+      KoColorPatch* targetColor;
+      KoColorSlider* targetSlider;
+      KoColorPopupAction* actionColor;
+    };
+    QList<Mixer> m_mixers;
 };
 
 

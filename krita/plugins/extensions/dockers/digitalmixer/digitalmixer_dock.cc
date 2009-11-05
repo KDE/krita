@@ -28,6 +28,7 @@
 #include <KoColorSlider.h>
 #include <KoColorPopupAction.h>
 #include <KoColorSpaceRegistry.h>
+#include <qsignalmapper.h>
 
 class DigitalMixerPatch : public KoColorPatch {
     public:
@@ -55,22 +56,37 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
     
     // Create the sliders
     
+    QSignalMapper* signalMapperSelectColor = new QSignalMapper(this);
+    connect(signalMapperSelectColor, SIGNAL(mapped(int)), SLOT(popupColorChanged(int)));
+    
     for(int i = 0; i < 6; ++i)
     {
-        KoColorPatch* targetColor = new DigitalMixerPatch(this);
-        layout->addWidget(targetColor, 0, i + 1);
-        KoColorSlider* targetSlider = new KoColorSlider(Qt::Vertical, this);
-        layout->addWidget(targetSlider, 1, i + 1);
+        Mixer mixer;
+        mixer.targetColor = new DigitalMixerPatch(this);
+        layout->addWidget(mixer.targetColor, 0, i + 1);
+        mixer.targetSlider = new KoColorSlider(Qt::Vertical, this);
+        layout->addWidget(mixer.targetSlider, 1, i + 1);
         QToolButton* colorSelector = new QToolButton( this );
-        KoColorPopupAction* m_actionColor = new KoColorPopupAction(this);
-        m_actionColor->setCurrentColor(initColors[i]);
-        colorSelector->setDefaultAction(m_actionColor);
+        mixer.actionColor = new KoColorPopupAction(this);
+        mixer.actionColor->setCurrentColor(initColors[i]);
+        colorSelector->setDefaultAction(mixer.actionColor);
         layout->addWidget(colorSelector, 2, i + 1);
         
-        targetSlider->setColors(m_actionColor->currentKoColor(), m_currentColor);
+        mixer.targetSlider->setColors(mixer.actionColor->currentKoColor(), m_currentColor);
+        
+        m_mixers.push_back(mixer);
+        
+        connect(mixer.actionColor, SIGNAL(colorChanged(KoColor)), signalMapperSelectColor, SLOT(map()));
+        signalMapperSelectColor->setMapping(mixer.actionColor, i);
     }
     
+    
     setWidget( widget );
+}
+
+void DigitalMixerDock::popupColorChanged(int i)
+{
+    m_mixers[i].targetSlider->setColors(m_mixers[i].actionColor->currentKoColor(), m_currentColor);    
 }
 
 #include "digitalmixer_dock.moc"

@@ -20,14 +20,11 @@
  */
 
 #include "kis_random_generator.h"
-#if defined(__APPLE__) || defined(_WIN32) ||  defined(_WIN64)
+
 /* Mac OS X doesn't define a number of UINT* macros without this before stdlib.h */
-# define __STDC_LIMIT_MACROS
-# include <stdlib.h>
-#else
-# include <stdlib.h>
-# define __STDC_LIMIT_MACROS
-#endif
+#define __STDC_LIMIT_MACROS
+
+#include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
 

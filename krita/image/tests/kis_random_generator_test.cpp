@@ -99,12 +99,12 @@ void KisRandomGeneratorTest::testEvolution()
     int counter = 0;
 
     KisRandomGenerator randg(10000);
-    for (int y = 2; y < 1000; y++) {
-        for (int x = 2; x < 1000; x++) {
+    for (int y = 0; y < 1024; y++) {
+        for (int x = 0; x < 1024; x++) {
             quint64 number = randg.randomAt(x, y);
 
-            for (int i = -2; i < 3; i++) {
-                for (int j = -2; j < 3; j++) {
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 5; j++) {
                     if (i != 0 || j != 0) {
                         quint64 number2 = randg.randomAt(x + i, y + j);
                         if (number == number2) {

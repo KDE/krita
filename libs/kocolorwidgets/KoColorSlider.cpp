@@ -25,8 +25,11 @@
 
 struct KoColorSlider::Private
 {
+    Private() : upToDate(false) {}
     KoColor minColor;
-    KoColor maxColor;    
+    KoColor maxColor;
+    QPixmap pixmap;
+    bool upToDate;
 };
 
 KoColorSlider::KoColorSlider(QWidget* parent)
@@ -49,7 +52,7 @@ void KoColorSlider::setColors(const KoColor& mincolor, const KoColor& maxcolor)
 {
     d->minColor = mincolor;
     d->maxColor = maxcolor;
-
+    d->upToDate = false;
     update();
 }
 
@@ -65,52 +68,58 @@ void KoColorSlider::drawContents( QPainter *painter )
     QRect contentsRect_(contentsRect());
     painter->fillRect(contentsRect_, QBrush(checker));
 
-    KoColor c = d->minColor; // smart way to fetch colorspace
-    QColor color;
+    if( !d->upToDate || d->pixmap.isNull() || d->pixmap.width() != contentsRect_.width()
+        || d->pixmap.height() != contentsRect_.height() )
+    {
+        KoColor c = d->minColor; // smart way to fetch colorspace
+        QColor color;
 
-    const quint8 *colors[2];
-    colors[0] = d->minColor.data();
-    colors[1] = d->maxColor.data();
+        const quint8 *colors[2];
+        colors[0] = d->minColor.data();
+        colors[1] = d->maxColor.data();
 
-    KoMixColorsOp * mixOp = c.colorSpace()->mixColorsOp();
+        KoMixColorsOp * mixOp = c.colorSpace()->mixColorsOp();
 
-    QImage image(contentsRect_.width(), contentsRect_.height(), QImage::Format_ARGB32 );
+        QImage image(contentsRect_.width(), contentsRect_.height(), QImage::Format_ARGB32 );
 
-    if( orientation() == Qt::Horizontal ) {
-        for (int x = 0; x < contentsRect_.width(); x++) {
+        if( orientation() == Qt::Horizontal ) {
+            for (int x = 0; x < contentsRect_.width(); x++) {
 
-            qreal t = static_cast<qreal>(x) / (contentsRect_.width() - 1);
+                qreal t = static_cast<qreal>(x) / (contentsRect_.width() - 1);
 
-            qint16 colorWeights[2];
-            colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
-            colorWeights[1] = 255 - colorWeights[0];
+                qint16 colorWeights[2];
+                colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
+                colorWeights[1] = 255 - colorWeights[0];
 
-            mixOp->mixColors(colors, colorWeights, 2, c.data());
+                mixOp->mixColors(colors, colorWeights, 2, c.data());
 
-            c.toQColor(&color);
+                c.toQColor(&color);
 
-            for (int y = 0; y < contentsRect_.height(); y++)
-            image.setPixel(x, y, color.rgba());
+                for (int y = 0; y < contentsRect_.height(); y++)
+                image.setPixel(x, y, color.rgba());
+            }
         }
-    }
-    else {
-        for (int y = 0; y < contentsRect_.height(); y++) {
+        else {
+            for (int y = 0; y < contentsRect_.height(); y++) {
 
-            qreal t = static_cast<qreal>(y) / (contentsRect_.height() - 1);
+                qreal t = static_cast<qreal>(y) / (contentsRect_.height() - 1);
 
-            qint16 colorWeights[2];
-            colorWeights[0] = static_cast<quint8>((t) * 255 + 0.5);
-            colorWeights[1] = 255 - colorWeights[0];
+                qint16 colorWeights[2];
+                colorWeights[0] = static_cast<quint8>((t) * 255 + 0.5);
+                colorWeights[1] = 255 - colorWeights[0];
 
-            mixOp->mixColors(colors, colorWeights, 2, c.data());
+                mixOp->mixColors(colors, colorWeights, 2, c.data());
 
-            c.toQColor(&color);
+                c.toQColor(&color);
 
-            for (int x = 0; x < contentsRect_.width(); x++)
-            image.setPixel(x, y, color.rgba());
+                for (int x = 0; x < contentsRect_.width(); x++)
+                image.setPixel(x, y, color.rgba());
+            }
         }
+        d->pixmap = QPixmap::fromImage(image);
+        d->upToDate = true;
     }
-    painter->drawImage( contentsRect_, image, QRect( 0, 0, image.width(), image.height()) );
+    painter->drawPixmap( contentsRect_, d->pixmap, QRect( 0, 0, d->pixmap.width(), d->pixmap.height()) );
 }
 
 KoColor KoColorSlider::currentColor() const

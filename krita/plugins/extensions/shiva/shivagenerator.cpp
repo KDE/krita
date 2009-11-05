@@ -19,7 +19,7 @@
 
 #include <QMutex>
 
-#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
@@ -35,6 +35,10 @@
 
 #include "PaintDeviceImage.h"
 #include "QVariantValue.h"
+
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12
+#include "UpdaterProgressReport.h"
+#endif
 
 extern QMutex* shivaMutex;
 
@@ -62,6 +66,14 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();
 
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12
+    UpdaterProgressReport* report = 0;
+    if (progressUpdater) {
+        progressUpdater->setRange(0, size.height());
+        report = new UpdaterProgressReport(progressUpdater);
+    }
+#endif
+        
     Q_ASSERT(!dst.isNull());
 //     Q_ASSERT(config);
     // TODO implement the generating of pixel
@@ -87,7 +99,11 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
             PaintDeviceImage pdi(dst);
             std::list< GTLCore::AbstractImage* > inputs;
             GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
-            kernel.evaluatePixeles(region, inputs, &pdi);
+            kernel.evaluatePixeles(region, inputs, &pdi
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12
+                , report
+#endif            
+            );
         }
 #if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION < 12
     }

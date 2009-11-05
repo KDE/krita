@@ -31,6 +31,7 @@
 #include <ShivaGeneratorConfigWidget.h>
 #include <OpenShiva/Metadata.h>
 #include <OpenShiva/Source.h>
+#include <OpenShiva/Version.h>
 
 #include "PaintDeviceImage.h"
 #include "QVariantValue.h"
@@ -79,11 +80,16 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
     {
         QMutexLocker l(shivaMutex);
         kernel.compile();
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12
+    }
+#endif
         if (kernel.isCompiled()) {
             PaintDeviceImage pdi(dst);
             std::list< GTLCore::AbstractImage* > inputs;
             GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
             kernel.evaluatePixeles(region, inputs, &pdi);
         }
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION < 12
     }
+#endif
 }

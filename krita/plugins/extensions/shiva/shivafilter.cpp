@@ -28,6 +28,7 @@
 #include <OpenShiva/Kernel.h>
 #include <OpenShiva/Source.h>
 #include <OpenShiva/Metadata.h>
+#include <OpenShiva/Version.h>
 #include <GTLCore/Region.h>
 
 extern QMutex* shivaMutex;
@@ -82,6 +83,9 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
     {
         QMutexLocker l(shivaMutex);
         kernel.compile();
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12
+    }
+#endif
         if (kernel.isCompiled()) {
             ConstPaintDeviceImage pdisrc(src);
             PaintDeviceImage pdi(dst);
@@ -91,5 +95,7 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
             dbgPlugins << dstTopLeft << " " << size;
             kernel.evaluatePixeles(region, inputs, &pdi);
         }
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION < 12
     }
+#endif
 }

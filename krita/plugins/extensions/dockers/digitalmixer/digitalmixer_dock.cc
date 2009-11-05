@@ -59,6 +59,9 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
     QSignalMapper* signalMapperSelectColor = new QSignalMapper(this);
     connect(signalMapperSelectColor, SIGNAL(mapped(int)), SLOT(popupColorChanged(int)));
     
+    QSignalMapper* signalMapperColorSlider = new QSignalMapper(this);
+    connect(signalMapperColorSlider, SIGNAL(mapped(int)), SLOT(colorSliderChanged(int)));
+    
     for(int i = 0; i < 6; ++i)
     {
         Mixer mixer;
@@ -78,6 +81,10 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
         
         connect(mixer.actionColor, SIGNAL(colorChanged(KoColor)), signalMapperSelectColor, SLOT(map()));
         signalMapperSelectColor->setMapping(mixer.actionColor, i);
+        
+        connect(mixer.targetSlider, SIGNAL(valueChanged(int)), signalMapperColorSlider, SLOT(map()));
+        signalMapperColorSlider->setMapping(mixer.targetSlider, i);
+        mixer.targetSlider->setValue(125);
     }
     
     
@@ -87,6 +94,11 @@ DigitalMixerDock::DigitalMixerDock( KisView2 *view ) : QDockWidget(i18n("Digital
 void DigitalMixerDock::popupColorChanged(int i)
 {
     m_mixers[i].targetSlider->setColors(m_mixers[i].actionColor->currentKoColor(), m_currentColor);    
+}
+
+void DigitalMixerDock::colorSliderChanged(int i)
+{
+    m_mixers[i].targetColor->setColor(m_mixers[i].targetSlider->currentColor());
 }
 
 #include "digitalmixer_dock.moc"

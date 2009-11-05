@@ -32,6 +32,7 @@ public:
     DigitalMixerDock( KisView2 *view );
 private slots:
     void popupColorChanged(int i);
+    void colorSliderChanged(int i);
 private:
     KisView2* m_view;
     KoColor m_currentColor;

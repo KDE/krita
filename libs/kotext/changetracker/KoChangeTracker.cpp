@@ -121,7 +121,7 @@ int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QText
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
 
     KUser user(KUser::UseRealUserID);
-    changeElement->setCreator(user.fullName());
+    changeElement->setCreator(user.property(KUser::FullName).toString());
 
     changeElement->setEnabled(d->m_enabled);
 
@@ -142,7 +142,7 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
 //    changeElement->setDate(KDateTime::currentLocalDateTime().toString("Y-m-dTH:M:Sz")); //i must have misunderstood the API doc but it doesn't work.
     KUser user(KUser::UseRealUserID);
-    changeElement->setCreator(user.fullName());
+    changeElement->setCreator(user.property(KUser::FullName).toString());
 
     changeElement->setEnabled(d->m_enabled);
 
@@ -162,7 +162,7 @@ int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment sele
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
     KUser user(KUser::UseRealUserID);
-    changeElement->setCreator(user.fullName());
+    changeElement->setCreator(user.property(KUser::FullName).toString());
     //TODO preserve formating info there. this will do for now
     changeElement->setDeleteData(selection.toPlainText());
 

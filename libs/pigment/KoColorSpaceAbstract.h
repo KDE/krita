@@ -105,6 +105,42 @@ public:
 
     virtual ~KoConvolutionOpImpl() { }
 
+    /**
+     * Calculates a weighted average of the pixels, mentioned in @colors
+     * using weight values from @kernelValues
+     *
+     * Note:
+     * It behaves in a quite unclear way, when at least one pixel is
+     * fully transparent. There are three cases:
+     * Case A) None of the pixels is fully transparent.
+     *    * Every color channel AND alpha channel of @dst stores a sum
+     *      of the corresponding channels from @colors, divided by @factor
+     *      and incremented by @offset
+     * Case B) At least one pixel of @colors is transparent and @factor
+     * stores a weight of the kernel (sum of it's items).
+     *    * Every color channel of @dst stores a sum of the corresponding
+     *      channels from non-transparent pixels, divided by a weight
+     *      of non-transparent pixels and incremented by @offset.
+     *    * Alpha channel of @dst stores a sum of the corresponding
+     *      channels from non-transparent pixels, divided by a weight
+     *      of all the pixels (equals to @factor) and incremented
+     *      by @offset.
+     * Case C) At least one pixel of @colors is transparent and @factor
+     * is set to an arbitrary value.
+     *    * Every color channel of @dst stores a sum of the corresponding
+     *      channels from non-transparent pixels, divided by a "scaled
+     *      down factor" and incremented by @offset. "Scaled
+     *      down factor" is calculated in the following way:
+     *
+     *                                   [weight of non-transparent pixels]
+     *      scaledDownFactor = @factor * ----------------------------------
+     *                                       [weight of all the pixels]
+     *
+     *    * Alpha channel of @dst stores a sum of the corresponding
+     *      channels from non-transparent pixels, divided by unscaled
+     *      @factor and incremented by @offset.
+     */
+
     virtual void convolveColors(const quint8* const* colors, const qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels, const QBitArray & channelFlags) const
         {
 
@@ -141,20 +177,21 @@ public:
             Q_ASSERT( allChannels || channelFlags.size() == (int)_CSTrait::channels_nb );
             if(totalWeightTransparent == 0)
             {
+                // Case A)
                 for (uint i = 0; i < _CSTrait::channels_nb; i++)
                 {
-                    compositetype v = totals[i] / factor + offset;
-                    if (   (allChannels and i != (uint)_CSTrait::alpha_pos )
-                        or (not allChannels and channelFlags.testBit( i ) ) )
+                    if ( allChannels || channelFlags.testBit( i ) )
                     {
+                        compositetype v = totals[i] / factor + offset;
                         dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                                    KoColorSpaceMathsTraits<channels_type>::max );
+                                                 KoColorSpaceMathsTraits<channels_type>::max );
                     }
                 }
             }
             else if (totalWeightTransparent != totalWeight ) {
                 if(totalWeight == factor)
                 {
+                    // Case B)
                     qint64 a = ( totalWeight - totalWeightTransparent );
                     for(uint i = 0; i < _CSTrait::channels_nb; i++)
                     {
@@ -173,7 +210,8 @@ public:
                         }
                     }
                } else {
-                    qreal a = totalWeight / ( factor * ( totalWeight - totalWeightTransparent ) ); // use qreal as it easily saturate
+                    // Case C)
+                    qreal a = qreal(totalWeight) / ( factor * ( totalWeight - totalWeightTransparent ) ); // use qreal as it easily saturate
                     for(uint i = 0; i < _CSTrait::channels_nb; i++)
                     {
                         if( allChannels || channelFlags.testBit( i ) )

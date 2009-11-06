@@ -27,6 +27,8 @@ class TestConvolutionOpImpl : public QObject
         Q_OBJECT
     private slots:
         void testConvolutionOpImpl();
+        void testOneSemiTransparent();
+        void testOneFullyTransparent();
 };
 
 #endif

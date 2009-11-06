@@ -213,34 +213,6 @@ void KisLayerManager::imgResizeToActiveLayer()
     }
 }
 
-void KisLayerManager::layerCompositeOp(const KoCompositeOp* compositeOp)
-{
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    m_doc->addCommand(new KisLayerCompositeOpCommand(layer, layer->compositeOpId(), compositeOp->id()));
-}
-
-// range: 0 - 100
-void KisLayerManager::layerOpacity(double opacity, bool final)
-{
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    opacity = int(opacity * 2.55 + 0.5);
-    if (opacity > 255)
-        opacity = 255;
-
-    if (opacity == layer->opacity()) return;
-
-    if (!final) {
-        layer->setOpacity(static_cast<int>(opacity));
-        layer->setDirty();
-    } else {
-        m_doc->addCommand(new KisLayerOpacityCommand(layer, layer->opacity(), static_cast<int>(opacity)));
-    }
-}
-
 void KisLayerManager::actLayerVisChanged(int show)
 {
     m_actLayerVis = (show != 0);

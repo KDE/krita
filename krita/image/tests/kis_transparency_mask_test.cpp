@@ -20,10 +20,15 @@
 
 #include <qtest_kde.h>
 #include "kis_transparency_mask.h"
+#include "kis_paint_layer.h"
+#include "kis_image.h"
 #include "kis_fill_painter.h"
 #include "testutil.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
+
+#define IMAGE_WIDTH 1000
+#define IMAGE_HEIGHT 1000
 
 KisPaintDeviceSP createDevice()
 {
@@ -44,14 +49,26 @@ void KisTransparencyMaskTest::testCreation()
     KisTransparencyMask test;
 }
 
+#define initImage(image, layer, device, mask) do {                      \
+    image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
+    device = createDevice();                                            \
+    layer = new KisPaintLayer(KisImageWSP(0), "", 100, device);         \
+    mask = new KisTransparencyMask();                                   \
+    image->addNode(layer);                                              \
+    image->addNode(mask, layer);                                        \
+    } while(0)
+
 void KisTransparencyMaskTest::testApply()
 {
     QPoint errpoint;
 
-    KisTransparencyMaskSP mask = new KisTransparencyMask();
+    KisImageWSP image;
+    KisPaintLayerSP layer;
+    KisPaintDeviceSP dev;
+    KisTransparencyMaskSP mask;
 
     // Nothing is selected -- therefore everything should be filtered out on apply
-    KisPaintDeviceSP dev = createDevice();
+    initImage(image, layer, dev, mask);
     mask->apply(dev, QRect(0, 0, 200, 100));
     QImage qimg = dev->convertToQImage(0, 0, 0, 200, 100);
 
@@ -62,7 +79,7 @@ void KisTransparencyMaskTest::testApply()
     }
 
     // Invert the mask -- everything is selected
-    dev = createDevice();
+    initImage(image, layer, dev, mask);
     mask->selection()->getOrCreatePixelSelection()->invert();
     mask->apply(dev, QRect(0, 0, 200, 100));
     qimg = dev->convertToQImage(0, 0, 0, 200, 100);
@@ -74,7 +91,7 @@ void KisTransparencyMaskTest::testApply()
     }
 
     // Invert back, and select a small area
-    dev = createDevice();
+    initImage(image, layer, dev, mask);
     mask->selection()->getOrCreatePixelSelection()->invert();
     mask->select(QRect(50, 0, 100, 100));
     mask->apply(dev, QRect(0, 0, 200, 100));

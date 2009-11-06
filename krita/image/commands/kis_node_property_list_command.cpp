@@ -16,16 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_node_property_list_command.h"
-#include <QString>
-
 #include <klocale.h>
+#include "kis_node.h"
+#include "commands/kis_node_property_list_command.h"
 
-#include "kis_image.h"
-#include "kis_undo_adapter.h"
 
 KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KoDocumentSectionModel::PropertyList newPropertyList)
-        : QUndoCommand(i18n("Property Changes")), m_node(node), m_newPropertyList(newPropertyList), m_oldPropertyList(m_node->sectionModelProperties())     // TODO instead of "Property Changes" check which property has been changed and display either lock/unlock, visible/hidden or "Property Changes" (this require new strings)
+    : KisNodeCommand(i18n("Property Changes"), node),
+      m_newPropertyList(newPropertyList),
+      m_oldPropertyList(node->sectionModelProperties())
+/**
+ * TODO instead of "Property Changes" check which property
+ * has been changed and display either lock/unlock, visible/hidden
+ * or "Property Changes" (this require new strings)
+ */
 {
 }
 

@@ -34,6 +34,12 @@ public:
     bool allowAsChild(KisNodeSP) const {
         return true;
     }
+    const KoColorSpace * colorSpace() const {
+        return 0;
+    }
+    virtual const KoCompositeOp * compositeOp() const {
+        return 0;
+    }
 };
 
 

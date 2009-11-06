@@ -22,6 +22,8 @@
 #include "kis_change_filter_command.h"
 #include "kis_change_generator_command.h"
 #include "kis_node_move_command.h"
+#include "kis_node_compositeop_command.h"
+#include "kis_node_opacity_command.h"
 
 #endif
 

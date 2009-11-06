@@ -82,6 +82,9 @@ public:
 
     virtual ~KisMask();
 
+    const KoColorSpace * colorSpace() const;
+    const KoCompositeOp * compositeOp() const;
+
     /**
      * Return the selection associated with this mask. A selection can
      * contain both a paint device and shapes.

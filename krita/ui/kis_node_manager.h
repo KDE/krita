@@ -69,6 +69,16 @@ public:
      */
     const KoColorSpace* activeColorSpace();
 
+    /**
+     * Sets opacity for the node in a universal way (masks/layers)
+     */
+    void setNodeOpacity(KisNodeSP node, qint32 opacity, bool finalChange);
+
+    /**
+     * Sets compositeOp for the node in a universal way (masks/layers)
+     */
+    void setNodeCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
+
     /// Get the class that manages the layer user interface
     KisLayerManager * layerManager();
 
@@ -89,9 +99,9 @@ public slots:
     void activateNode(KisNodeSP layer);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
-    void nodeOpacityChanged(qreal opacity, bool final);
+    void nodeOpacityChanged(qreal opacity, bool finalChange);
     void nodeCompositeOpChanged(const KoCompositeOp* op);
-    void duplicateActiveNode(KisNodeSP node);
+    void duplicateActiveNode();
     void removeNode(KisNodeSP node);
     void mirrorNodeX();
     void mirrorNodeY();
@@ -122,6 +132,12 @@ public slots:
 
 private:
     void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);
+
+    /**
+     * Scales opacity from the range 0...1
+     * to the integer range 0...255
+     */
+    qint32 convertOpacityToInt(qreal opacity);
 
     struct Private;
     Private * const m_d;

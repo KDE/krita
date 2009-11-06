@@ -34,13 +34,26 @@
 
 #include "testutil.h"
 
+#define IMAGE_WIDTH 1000
+#define IMAGE_HEIGHT 1000
+
 void KisFilterMaskTest::testCreation()
 {
     KisFilterMaskSP mask = new KisFilterMask();
 }
 
+#define initImage(image, layer, device, mask) do {                      \
+    image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
+    layer = new KisPaintLayer(KisImageWSP(0), "", 100, device);         \
+    image->addNode(layer);                                              \
+    image->addNode(mask, layer);                                        \
+    } while(0)
+
 void KisFilterMaskTest::testProjectionNotSelected()
 {
+    KisImageWSP image;
+    KisPaintLayerSP layer;
+
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
 
     QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
@@ -56,10 +69,12 @@ void KisFilterMaskTest::testProjectionNotSelected()
 
     // Check basic apply(). Shouldn't do anything, since nothing is selected yet.
     KisPaintDeviceSP projection = new KisPaintDevice(cs);
+    initImage(image, layer, projection, mask);
+
     projection->convertFromQImage(qimg, 0, 0, 0);
     mask->createNodeProgressProxy();
-    mask->apply(projection, QRect(0, 0, qimg.width(), qimg.height()));
     mask->select(qimg.rect(), MIN_SELECTED);
+    mask->apply(projection, QRect(0, 0, qimg.width(), qimg.height()));
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, qimg, projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
@@ -70,6 +85,9 @@ void KisFilterMaskTest::testProjectionNotSelected()
 
 void KisFilterMaskTest::testProjectionSelected()
 {
+    KisImageWSP image;
+    KisPaintLayerSP layer;
+
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
 
     QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
@@ -85,7 +103,9 @@ void KisFilterMaskTest::testProjectionSelected()
     mask->createNodeProgressProxy();
 
     KisPaintDeviceSP projection = new KisPaintDevice(cs);
+    initImage(image, layer, projection, mask);
     projection->convertFromQImage(qimg, 0, 0, 0);
+
     mask->select(qimg.rect(), MAX_SELECTED);
     mask->apply(projection, QRect(0, 0, qimg.width(), qimg.height()));
     QCOMPARE(mask->exactBounds(), QRect(0, 0, qimg.width(), qimg.height()));

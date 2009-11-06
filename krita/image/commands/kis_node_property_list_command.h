@@ -19,15 +19,12 @@
 #ifndef KIS_IMAGE_NODE_PROPERTY_LIST_COMMAND_H_
 #define KIS_IMAGE_NODE_PROPERTY_LIST_COMMAND_H_
 
-#include <krita_export.h>
-
-#include "kis_types.h"
-#include "kis_image_command.h"
+#include "kis_node_command.h"
 #include "KoDocumentSectionModel.h"
 
 
 /// The command for changing the property list of a layer
-class KRITAIMAGE_EXPORT KisNodePropertyListCommand : public QUndoCommand
+class KRITAIMAGE_EXPORT KisNodePropertyListCommand : public KisNodeCommand
 {
 
 public:
@@ -41,7 +38,6 @@ public:
     virtual void undo();
 
 private:
-    KisNodeSP m_node;
     KoDocumentSectionModel::PropertyList m_newPropertyList;
     KoDocumentSectionModel::PropertyList m_oldPropertyList;
 };

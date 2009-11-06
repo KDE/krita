@@ -17,12 +17,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_node_commands.h"
+#include <klocale.h>
+#include <QPoint>
+#include <QRect>
 #include "kis_node.h"
+#include "commands/kis_node_move_command.h"
+
 
 KisNodeMoveCommand::KisNodeMoveCommand(KisNodeSP node, const QPoint& oldpos, const QPoint& newpos) :
-        QUndoCommand(i18n("Move")),
-        m_node(node)
+    KisNodeCommand(i18n("Move"), node)
 {
     m_oldPos = oldpos;
     m_newPos = newpos;

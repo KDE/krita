@@ -35,6 +35,14 @@ class TestNode : public KisBaseNode
     KisPaintDeviceSP paintDevice() const {
         return 0;
     }
+
+    const KoColorSpace * colorSpace() const {
+        return 0;
+    }
+
+    virtual const KoCompositeOp * compositeOp() const {
+        return 0;
+    }
 };
 
 void KisBaseNodeTest::testCreation()

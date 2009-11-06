@@ -51,7 +51,6 @@ public:
 
     KisImageWSP image;
     QBitArray channelFlags;
-    QString compositeOp;
     KisEffectMaskSP previewMask;
     KisMetaData::Store* metaDataStore;
     KisPaintDeviceSP projection;
@@ -65,7 +64,6 @@ KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
     setName(name);
     setOpacity(opacity);
     m_d->image = img;
-    m_d->compositeOp = COMPOSITE_OVER;
     m_d->metaDataStore = new KisMetaData::Store();
 }
 
@@ -75,7 +73,6 @@ KisLayer::KisLayer(const KisLayer& rhs)
 {
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
-        m_d->compositeOp = rhs.m_d->compositeOp;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
     }
 }
@@ -91,6 +88,23 @@ const KoColorSpace * KisLayer::colorSpace() const
     if (m_d->image)
         return m_d->image->colorSpace();
     return 0;
+}
+
+const KoCompositeOp * KisLayer::compositeOp() const
+{
+    /**
+     * FIXME: This function duplicates the same function from
+     * KisMask. We can't move it to KisBaseNode as it doesn't
+     * know anything about parent() method of KisNode
+     * Please think it over...
+     */
+
+    KisNodeSP parentNode = parent();
+    if (!parentNode) return 0;
+
+    if (!parentNode->colorSpace()) return 0;
+    const KoCompositeOp* op = parentNode->colorSpace()->compositeOp(compositeOpId());
+    return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
 }
 
 KoDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
@@ -118,28 +132,6 @@ QBitArray & KisLayer::channelFlags() const
     return m_d->channelFlags;
 }
 
-quint8 KisLayer::opacity() const
-{
-    return nodeProperties().intProperty("opacity", OPACITY_OPAQUE);
-}
-
-void KisLayer::setOpacity(quint8 val)
-{
-    if (opacity() != val) {
-        nodeProperties().setProperty("opacity", val);
-    }
-}
-
-quint8 KisLayer::percentOpacity() const
-{
-    return int(float(opacity() * 100) / 255 + 0.5);
-}
-
-void KisLayer::setPercentOpacity(quint8 val)
-{
-    setOpacity(int(float(val * 255) / 100 + 0.5));
-}
-
 bool KisLayer::temporary() const
 {
     return nodeProperties().boolProperty("temporary", false);
@@ -148,27 +140,6 @@ bool KisLayer::temporary() const
 void KisLayer::setTemporary(bool t)
 {
     nodeProperties().setProperty("temporary", t);
-}
-
-const QString& KisLayer::compositeOpId() const
-{
-    return m_d->compositeOp;
-}
-
-const KoCompositeOp * KisLayer::compositeOp() const
-{
-    KisLayerSP parent = parentLayer();
-    if (!parent) {
-        return 0;
-    }
-    const KoCompositeOp* op = parent->colorSpace()->compositeOp(m_d->compositeOp);
-    if (op) return op;
-    return parent->colorSpace()->compositeOp(COMPOSITE_OVER);
-}
-
-void KisLayer::setCompositeOp(const QString& compositeOp)
-{
-    m_d->compositeOp = compositeOp;
 }
 
 KisImageWSP KisLayer::image() const

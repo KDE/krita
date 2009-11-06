@@ -17,29 +17,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "commands/kis_layer_commands.h"
 #include <klocale.h>
-
 #include <KoCompositeOp.h>
+#include "kis_node.h"
+#include "commands/kis_node_commands.h"
 
-#include "kis_layer.h"
 
-KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const QString& oldCompositeOp,
+KisNodeCompositeOpCommand::KisNodeCompositeOpCommand(KisNodeSP node, const QString& oldCompositeOp,
         const QString& newCompositeOp) :
-        KisLayerCommand(i18n("Layer Composite Mode"), layer)
+        KisNodeCommand(i18n("Node Composite Mode"), node)
 {
     m_oldCompositeOp = oldCompositeOp;
     m_newCompositeOp = newCompositeOp;
 }
 
-void KisLayerCompositeOpCommand::redo()
+void KisNodeCompositeOpCommand::redo()
 {
-    m_layer->setCompositeOp(m_newCompositeOp);
-    m_layer->setDirty();
+    m_node->setCompositeOp(m_newCompositeOp);
+    m_node->setDirty();
 }
 
-void KisLayerCompositeOpCommand::undo()
+void KisNodeCompositeOpCommand::undo()
 {
-    m_layer->setCompositeOp(m_oldCompositeOp);
-    m_layer->setDirty();
+    m_node->setCompositeOp(m_oldCompositeOp);
+    m_node->setDirty();
 }

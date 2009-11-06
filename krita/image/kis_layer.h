@@ -38,8 +38,6 @@ class QStack;
 
 class QIcon;
 class QBitArray;
-class KoColorSpace;
-class KoCompositeOp;
 class KisGroupLayer;
 class KisNodeVisitor;
 
@@ -71,7 +69,8 @@ public:
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
-    virtual const KoColorSpace * colorSpace() const;
+    const KoColorSpace * colorSpace() const;
+    const KoCompositeOp * compositeOp() const;
 
     /**
      * Ask the layer to assemble its data & apply all the effect masks
@@ -130,37 +129,6 @@ public:
      */
     QBitArray & channelFlags() const;
 
-
-    /**
-     * Return the opacity of this layer, scaled to a range between 0
-     * and 255.
-     * XXX: Allow true float opacity
-     */
-    quint8 opacity() const; //0-255
-
-    /**
-     * Set the opacity for this layer. The range is between 0 and 255.
-     * The layer will be marked dirty.
-     *
-     * XXX: Allow true float opacity
-     */
-    void setOpacity(quint8 val); //0-255
-
-    /**
-     * return the 8-bit opacity of this layer scaled to the range
-     * 0-100
-     *
-     * XXX: Allow true float opacity
-     */
-    quint8 percentOpacity() const; //0-100
-
-    /**
-     * Set the opacity of this layer with a number between 0 and 100;
-     * the number will be scaled to between 0 and 255.
-     * XXX: Allow true float opacity
-     */
-    void setPercentOpacity(quint8 val); //0-100
-
     /**
      * Returns true if this layer is temporary: i.e., it should not
      * appear in the layerbox, even though it is temporarily in the
@@ -174,19 +142,6 @@ public:
      * account on recomposition.
      */
     void setTemporary(bool t);
-
-    /**
-     * Return the composite op associated with this layer.
-     */
-    const KoCompositeOp * compositeOp() const;
-    const QString& compositeOpId() const;
-
-    /**
-     * Set a new composite op for this layer. The layer will be marked
-     * dirty.
-     */
-    void setCompositeOp(const QString& compositeOpId);
-
 
     KisImageWSP image() const;
 

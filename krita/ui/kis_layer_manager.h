@@ -74,8 +74,6 @@ public slots:
 
     void imgResizeToActiveLayer();
 
-    void layerCompositeOp(const KoCompositeOp* compositeOp);
-    void layerOpacity(double opacity, bool final);
     void actLayerVisChanged(int show);
     void layerProperties();
 

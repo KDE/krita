@@ -109,21 +109,12 @@ KisNodeSP KisNodeManager::activeNode()
     return m_d->activeNode;
 }
 
-KisPaintDeviceSP KisNodeManager::activePaintDevice()
-{
-    if (m_d->maskManager->activeMask()) {
-        return m_d->maskManager->activeDevice();
-    } else {
-        return m_d->layerManager->activeDevice();
-    }
-}
-
 const KoColorSpace* KisNodeManager::activeColorSpace()
 {
     Q_ASSERT(m_d->maskManager);
 
     if (m_d->maskManager->activeDevice()) {
-        Q_ASSERT(m_d->maskManager->activeDevice());
+//        Q_ASSERT(m_d->maskManager->activeDevice());
         return m_d->maskManager->activeDevice()->colorSpace();
     } else {
         Q_ASSERT(m_d->layerManager);
@@ -332,6 +323,13 @@ void KisNodeManager::nodesUpdated()
 
 }
 
+KisPaintDeviceSP KisNodeManager::activePaintDevice()
+{
+    return m_d->maskManager->activeMask() ?
+        m_d->maskManager->activeDevice() :
+        m_d->layerManager->activeDevice();
+}
+
 void KisNodeManager::nodeProperties(KisNodeSP node)
 {
     if (node->inherits("KisLayer")) {
@@ -341,18 +339,60 @@ void KisNodeManager::nodeProperties(KisNodeSP node)
     }
 }
 
-void KisNodeManager::nodeOpacityChanged(qreal opacity, bool final)
+qint32 KisNodeManager::convertOpacityToInt(qreal opacity)
 {
-    m_d->layerManager->layerOpacity(opacity, final);
+    /**
+     * Scales opacity from the range 0...1
+     * to the integer range 0...255
+     */
+
+    return qMin(255, int(opacity * 2.55 + 0.5));
+}
+
+void KisNodeManager::setNodeOpacity(KisNodeSP node, qint32 opacity,
+                                    bool finalChange)
+{
+    if (!node) return;
+    if (node->opacity() == opacity) return;
+
+    if (!finalChange) {
+        node->setOpacity(opacity);
+        node->setDirty();
+    } else {
+        m_d->commandsAdapter->setOpacity(node, opacity);
+    }
+}
+
+void KisNodeManager::setNodeCompositeOp(KisNodeSP node,
+                                        const KoCompositeOp* compositeOp)
+{
+    if (!node) return;
+    if (node->compositeOp() == compositeOp) return;
+
+    m_d->commandsAdapter->setCompositeOp(node, compositeOp);
+}
+
+void KisNodeManager::nodeOpacityChanged(qreal opacity, bool finalChange)
+{
+    KisNodeSP node = activeNode();
+
+    setNodeOpacity(node, convertOpacityToInt(opacity), finalChange);
 }
 
 void KisNodeManager::nodeCompositeOpChanged(const KoCompositeOp* op)
 {
-    m_d->layerManager->layerCompositeOp(op);
+    KisNodeSP node = activeNode();
+
+    setNodeCompositeOp(node, op);
 }
 
-void KisNodeManager::duplicateActiveNode(KisNodeSP node)
+void KisNodeManager::duplicateActiveNode()
 {
+    KisNodeSP node = activeNode();
+
+    // FIXME: can't imagine how it may happen
+    Q_ASSERT(node);
+
     if (node->inherits("KisLayer")) {
         m_d->layerManager->layerDuplicate();
     } else if (node->inherits("KisMask")) {
@@ -415,19 +455,21 @@ void KisNodeManager::removeNode(KisNodeSP node)
 
 void KisNodeManager::mirrorNodeX()
 {
-    if (m_d->maskManager->activeMask()) {
-        return m_d->maskManager->mirrorMaskX();
-    } else {
-        return m_d->layerManager->mirrorLayerX();
+    KisNodeSP node = activeNode();
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager->mirrorLayerX();
+    } else if (node->inherits("KisMask")) {
+        m_d->maskManager->mirrorMaskX();
     }
 }
 
 void KisNodeManager::mirrorNodeY()
 {
-    if (m_d->maskManager->activeMask()) {
-        return m_d->maskManager->mirrorMaskY();
-    } else {
-        return m_d->layerManager->mirrorLayerY();
+    KisNodeSP node = activeNode();
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager->mirrorLayerY();
+    } else if (node->inherits("KisMask")) {
+        m_d->maskManager->mirrorMaskY();
     }
 }
 

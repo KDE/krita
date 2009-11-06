@@ -20,6 +20,7 @@
 #define KIS_NODE_COMMANDS_ADAPTER_H
 
 class KisView2;
+class KoCompositeOp;
 
 #include <kis_types.h>
 #include <krita_export.h>
@@ -49,6 +50,8 @@ public:
     void raise(KisNodeSP node);
     void toBottom(KisNodeSP node);
     void toTop(KisNodeSP node);
+    void setOpacity(KisNodeSP node, qint32 opacity);
+    void setCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
 
     void undoLastCommand();
 private:

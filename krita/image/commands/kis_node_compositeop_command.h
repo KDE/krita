@@ -16,32 +16,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_LAYER_COMPOSITEOP_COMMAND_H
-#define KIS_LAYER_COMPOSITEOP_COMMAND_H
+#ifndef KIS_NODE_COMPOSITEOP_COMMAND_H
+#define KIS_NODE_COMPOSITEOP_COMMAND_H
 
-#include <krita_export.h>
-#include <QUndoCommand>
-#include <QRect>
-#include <QPoint>
+#include "kis_node_command.h"
 
-#include "kis_types.h"
-#include "kis_layer_command.h"
-
-class KoCompositeOp;
-class KisLayer;
 
 /// The command for setting the composite op
-class KRITAIMAGE_EXPORT KisLayerCompositeOpCommand : public KisLayerCommand
+class KRITAIMAGE_EXPORT KisNodeCompositeOpCommand : public KisNodeCommand
 {
 
 public:
     /**
      * Constructor
-     * @param layer The layer the command will be working on.
-     * @param oldCompositeOp the old layer composite op
-     * @param newCompositeOp the new layer composite op
+     * @param node The node the command will be working on.
+     * @param oldCompositeOp the old node composite op
+     * @param newCompositeOp the new node composite op
      */
-    KisLayerCompositeOpCommand(KisLayerSP layer, const QString& oldCompositeOp, const QString& newCompositeOp);
+    KisNodeCompositeOpCommand(KisNodeSP node, const QString& oldCompositeOp, const QString& newCompositeOp);
 
     virtual void redo();
     virtual void undo();
@@ -50,5 +42,5 @@ private:
     QString m_oldCompositeOp;
     QString m_newCompositeOp;
 };
-#endif
 
+#endif /* KIS_NODE_COMPOSITEOP_COMMAND_H */

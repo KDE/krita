@@ -81,6 +81,7 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
 {
     m_d->alphaLocked = rhs.m_d->alphaLocked;
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
+    // FIXME: check this. repeat in other constructors?
     m_d->paintDevice->setParentNode(this);
 }
 

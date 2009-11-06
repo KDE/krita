@@ -17,28 +17,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "commands/kis_layer_commands.h"
 #include <klocale.h>
+#include "kis_node.h"
+#include "commands/kis_node_opacity_command.h"
 
-#include <KoCompositeOp.h>
 
-#include "kis_layer.h"
-
-KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, quint8 oldOpacity, quint8 newOpacity) :
-        KisLayerCommand(i18n("Layer Opacity"), layer)
+KisNodeOpacityCommand::KisNodeOpacityCommand(KisNodeSP node, quint8 oldOpacity, quint8 newOpacity) :
+        KisNodeCommand(i18n("Node Opacity"), node)
 {
     m_oldOpacity = oldOpacity;
     m_newOpacity = newOpacity;
 }
 
-void KisLayerOpacityCommand::redo()
+void KisNodeOpacityCommand::redo()
 {
-    m_layer->setOpacity(m_newOpacity);
-    m_layer->setDirty();
+    m_node->setOpacity(m_newOpacity);
+    m_node->setDirty();
 }
 
-void KisLayerOpacityCommand::undo()
+void KisNodeOpacityCommand::undo()
 {
-    m_layer->setOpacity(m_oldOpacity);
-    m_layer->setDirty();
+    m_node->setOpacity(m_oldOpacity);
+    m_node->setDirty();
 }

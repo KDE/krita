@@ -425,8 +425,7 @@ void KisLayerBox::slotPropertiesClicked()
 
 void KisLayerBox::slotDuplicateClicked()
 {
-    if (KisNodeSP active = m_nodeManager->activeNode())
-        m_nodeManager->duplicateActiveNode(active);
+        m_nodeManager->duplicateActiveNode();
 }
 
 void KisLayerBox::slotNodeActivated(const QModelIndex & node)

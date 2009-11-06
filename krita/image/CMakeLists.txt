@@ -74,9 +74,10 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_props_command.cpp
    commands/kis_image_resize_command.cpp
    commands/kis_layer_command.cpp
-   commands/kis_layer_compositeop_command.cpp
-   commands/kis_layer_opacity_command.cpp
    commands/kis_layer_props_command.cpp
+   commands/kis_node_command.cpp
+   commands/kis_node_compositeop_command.cpp
+   commands/kis_node_opacity_command.cpp
    commands/kis_node_move_command.cpp
    commands/kis_node_property_list_command.cpp
    commands/kis_reselect_global_selection_command.cpp

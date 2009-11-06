@@ -57,6 +57,29 @@ KisMask::~KisMask()
     delete m_d;
 }
 
+const KoColorSpace * KisMask::colorSpace() const
+{
+    KisNodeSP parentNode = parent();
+    return parentNode ? parentNode->colorSpace() : 0;
+}
+
+const KoCompositeOp * KisMask::compositeOp() const
+{
+    /**
+     * FIXME: This function duplicates the same function from
+     * KisLayer. We can't move it to KisBaseNode as it doesn't
+     * know anything about parent() method of KisNode
+     * Please think it over...
+     */
+
+    KisNodeSP parentNode = parent();
+    if (!parentNode) return 0;
+
+    if (!parentNode->colorSpace()) return 0;
+    const KoCompositeOp* op = parentNode->colorSpace()->compositeOp(compositeOpId());
+    return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
+}
+
 KisSelectionSP KisMask::selection() const
 {
     if (!m_d->selection) {
@@ -66,7 +89,7 @@ KisSelectionSP KisMask::selection() const
          * e.g. "Selected by default" or "Deselected by default"
          */
         if (parent())
-            m_d->selection->getOrCreatePixelSelection()->select(parent()->extent(), MAX_SELECTED);
+            m_d->selection->getOrCreatePixelSelection()->select(parent()->exactBounds(), MAX_SELECTED);
         m_d->selection->updateProjection();
     }
 
@@ -117,7 +140,8 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
          * FIXME: ALPHA_DARKEN vs OVER
          */
         KisPainter gc(projection);
-        gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_OVER));
+        gc.setCompositeOp(compositeOp());
+        gc.setOpacity(opacity());
         gc.setSelection(m_d->selection);
         gc.bitBlt(updatedRect.topLeft(), cacheDevice, updatedRect);
     } else {

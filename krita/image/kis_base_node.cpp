@@ -20,12 +20,15 @@
 #include <klocale.h>
 
 #include <KoProperties.h>
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 #include "kis_paint_device.h"
 
 class KisBaseNode::Private
 {
 public:
 
+    QString compositeOp;
     KoProperties properties;
     KisBaseNodeSP linkedTo;
     bool systemLocked;
@@ -38,6 +41,7 @@ KisBaseNode::KisBaseNode()
     setUserLocked(false);
     setSystemLocked(false);
     m_d->linkedTo = 0;
+    m_d->compositeOp = COMPOSITE_OVER;
 }
 
 
@@ -52,6 +56,7 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
         m_d->properties.setProperty(iter.key(), iter.value());
     }
     m_d->linkedTo = rhs.m_d->linkedTo;
+    m_d->compositeOp = rhs.m_d->compositeOp;
 }
 
 KisBaseNode::~KisBaseNode()
@@ -74,6 +79,40 @@ KisPaintDeviceSP KisBaseNode::projection() const
     return 0;
 }
 
+quint8 KisBaseNode::opacity() const
+{
+    return nodeProperties().intProperty("opacity", OPACITY_OPAQUE);
+}
+
+void KisBaseNode::setOpacity(quint8 val)
+{
+    if (opacity() != val) {
+        nodeProperties().setProperty("opacity", val);
+    }
+}
+
+quint8 KisBaseNode::percentOpacity() const
+{
+    return int(float(opacity() * 100) / 255 + 0.5);
+}
+
+void KisBaseNode::setPercentOpacity(quint8 val)
+{
+    setOpacity(int(float(val * 255) / 100 + 0.5));
+}
+
+const QString& KisBaseNode::compositeOpId() const
+{
+    return m_d->compositeOp;
+}
+
+/**
+ * FIXME: Rename this function to setCompositeOpId()
+ */
+void KisBaseNode::setCompositeOp(const QString& compositeOp)
+{
+    m_d->compositeOp = compositeOp;
+}
 
 KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 {

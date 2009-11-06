@@ -18,6 +18,7 @@
 
 #include "./kis_node_commands_adapter.h"
 
+#include <KoCompositeOp.h>
 #include "kis_undo_adapter.h"
 #include "kis_image.h"
 #include "commands/kis_image_layer_add_command.h"
@@ -27,6 +28,7 @@
 #include "commands/kis_image_node_raise_command.h"
 #include "commands/kis_image_node_to_bottom_command.h"
 #include "commands/kis_image_node_to_top_command.h"
+#include "commands/kis_node_commands.h"
 #include "kis_view2.h"
 
 KisNodeCommandsAdapter::KisNodeCommandsAdapter(KisView2 * view)
@@ -104,6 +106,22 @@ void KisNodeCommandsAdapter::toTop(KisNodeSP node)
 {
     Q_ASSERT(m_view->image()->undoAdapter());
     m_view->image()->undoAdapter()->addCommand(new KisImageNodeToTopCommand(m_view->image(), node));
+}
+
+void KisNodeCommandsAdapter::setOpacity(KisNodeSP node, qint32 opacity)
+{
+    Q_ASSERT(m_view->image()->undoAdapter());
+    m_view->image()->undoAdapter()->addCommand(
+        new KisNodeOpacityCommand(node, node->opacity(), opacity));
+}
+
+void KisNodeCommandsAdapter::setCompositeOp(KisNodeSP node,
+                                            const KoCompositeOp* compositeOp)
+{
+    Q_ASSERT(m_view->image()->undoAdapter());
+    m_view->image()->undoAdapter()->addCommand(
+      new KisNodeCompositeOpCommand(node, node->compositeOpId(),
+                                    compositeOp->id()));
 }
 
 void KisNodeCommandsAdapter::undoLastCommand()

@@ -17,12 +17,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "commands/kis_layer_commands.h"
 #include <klocale.h>
-
-#include <KoCompositeOp.h>
-
 #include "kis_layer.h"
+#include "commands/kis_layer_commands.h"
 
 KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
         QUndoCommand(name), m_layer(layer)

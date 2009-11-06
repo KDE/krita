@@ -104,13 +104,6 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
         return QRect();
     }
 
-    // some filters only write out selected or affected pixels to dst, so copy
-    KisPainter p1(dst);
-    p1.setCompositeOp(src->colorSpace()->compositeOp(COMPOSITE_COPY));
-    p1.bitBlt(rc.topLeft(), src, rc);
-    p1.end();
-
-
     KisConstProcessingInformation srcInfo(src,  rc.topLeft(), selection());
     KisProcessingInformation dstInfo(dst, rc.topLeft(), 0);
 

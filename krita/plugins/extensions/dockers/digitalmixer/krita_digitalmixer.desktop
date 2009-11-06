@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=DigitalMixer
+Name[pt]=Mistura Digital
+Name[sv]=Digitalmixer
+Name[uk]=Цифровий мікшер
+Name[x-test]=xxDigitalMixerxx
 Comment=DigitalMixer
+Comment[pt]=Mistura Digital
+Comment[sv]=Digitalmixer
+Comment[uk]=Цифровий мікшер
+Comment[x-test]=xxDigitalMixerxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritadigitalmixer

@@ -19,6 +19,9 @@
 #ifndef _MYPAINT_SURFACE_H_
 #define _MYPAINT_SURFACE_H_
 
+#include <KoColor.h>
+#include <QColor>
+
 #include "surface.hpp"
 
 #include "kis_types.h"
@@ -31,6 +34,13 @@ class MyPaintSurface : public Surface
 
 public:
 
+    /**
+     * src: the projection of the node we are painting on. Used in get_color, together with
+     *      color present on dst, blended using ALPHA_DARKEN
+     * dst; the surface we are drawing on
+     */
+    MyPaintSurface(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+
     bool draw_dab (float x, float y,
                    float radius,
                    float color_r, float color_g, float color_b,
@@ -42,7 +52,13 @@ public:
                     float radius,
                     float * color_r, float * color_g, float * color_b, float * color_a );
 
+private:
 
+    KisPaintDeviceSP m_src;
+    KisPaintDeviceSP m_dst;
+
+    KoColor m_color;
+    QColor m_qcolor;
 };
 
 

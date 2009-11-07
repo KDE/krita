@@ -73,3 +73,8 @@ Qt::ItemFlags MyBrushResourcesListModel::flags(const QModelIndex& index) const
         return defaultFlags;
     }
 }
+
+MyPaintBrushResource* MyBrushResourcesListModel::brush(const QString& baseFileName) const
+{
+    return m_factory->brush(baseFileName);
+}

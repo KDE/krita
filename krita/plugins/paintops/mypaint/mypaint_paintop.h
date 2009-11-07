@@ -19,17 +19,17 @@
 #ifndef KIS_MYPAINT_PAINTOP_H_
 #define KIS_MYPAINT_PAINTOP_H_
 
-#include <QColor>
-//#include <QMutex>
+#include <QTime>
 
 #include <klocale.h>
 #include <kis_paintop.h>
 #include <kis_types.h>
 
-#include "mypaint_paintop_settings.h"
-
 class QPointF;
 class KisPainter;
+
+class MyPaintSettings;
+class MyPaintSurface;
 
 class MyPaint : public KisPaintOp
 {
@@ -46,7 +46,10 @@ public:
 
 private:
 
-
+    QTime m_eventTime;
+    bool m_mypaintThinksStrokeHasEnded;
+    MyPaintSurface* m_surface;
+    const MyPaintSettings* m_settings;
 };
 
 #endif // KIS_MYPAINTPAINTOP_H_

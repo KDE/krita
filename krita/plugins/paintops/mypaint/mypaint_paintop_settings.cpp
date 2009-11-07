@@ -29,7 +29,6 @@
 #include <kis_paint_information.h>
 
 #include <KoColor.h>
-#include <qdebug.h>
 
 #include "mypaint_paintop_settings_widget.h"
 
@@ -41,7 +40,6 @@ MyPaintSettings::MyPaintSettings()
 
 KisPaintOpSettingsSP MyPaintSettings::clone() const
 {
-    qDebug() << "clone" << m_options;
     KisPaintOpSettings* settings =
         dynamic_cast<KisPaintOpSettings*>( m_options->configuration() );
     return settings;
@@ -49,7 +47,6 @@ KisPaintOpSettingsSP MyPaintSettings::clone() const
 
 void MyPaintSettings::fromXML(const QDomElement& elt)
 {
-    qDebug() << "fromXML" << m_options;
     // First, call the parent class fromXML to make sure all the
     // properties are saved to the map
     KisPaintOpSettings::fromXML( elt );
@@ -59,12 +56,15 @@ void MyPaintSettings::fromXML(const QDomElement& elt)
 
 void MyPaintSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
-    qDebug() << "toXML" << m_options;
-
     // First, make sure all the option widgets have saved their state
     // to the property configuration
     KisPropertiesConfiguration * settings = m_options->configuration();
     // Then call the parent class fromXML
     settings->KisPropertiesConfiguration::toXML( doc, rootElt );
     delete settings;
+}
+
+MyPaintBrushResource* MyPaintSettings::brush() const
+{
+    return m_options->brush();;
 }

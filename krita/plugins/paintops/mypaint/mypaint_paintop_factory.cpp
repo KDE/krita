@@ -100,12 +100,12 @@ KisPaintOpSettingsWidget* MyPaintFactory::createSettingsWidget(QWidget * parent)
     return new MyPaintSettingsWidget(parent);
 }
 
-QList<MyPaintBrushResource*> MyPaintFactory::brushes()
+QList<MyPaintBrushResource*> MyPaintFactory::brushes() const
 {
     return m_d->brushes.values();
 }
 
-MyPaintBrushResource* MyPaintFactory::brush(const QString& fileName)
+MyPaintBrushResource* MyPaintFactory::brush(const QString& fileName) const
 {
     return m_d->brushes[fileName];
 }

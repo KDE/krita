@@ -22,6 +22,7 @@
 
 class QListView;
 class MyPaintFactory;
+class MyPaintBrushResource;
 
 class MyBrushResourcesListModel : public QAbstractListModel {
 
@@ -34,6 +35,8 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::UserRole);
     Qt::ItemFlags flags(const QModelIndex& index) const;
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
+
+    MyPaintBrushResource* brush(const QString& baseFileName) const;
 
 private:
 

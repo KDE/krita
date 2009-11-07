@@ -83,7 +83,7 @@ MyPaintSettingsWidget:: MyPaintSettingsWidget(QWidget* parent)
     m_model = new MyBrushResourcesListModel(m_options->lstBrushes);
     m_options->lstBrushes->setModel(m_model);
     m_options->lstBrushes->setItemDelegate(new MyPaintBrushResourceDelegate(m_options->lstBrushes));
-
+    m_options->lstBrushes->setCurrentIndex(m_model->index(0));
     connect(m_options->lstBrushes, SIGNAL(clicked(const QModelIndex&)), this, SLOT(brushSelected(const QModelIndex&)));
     connect(m_options->lstBrushes, SIGNAL(activated(const QModelIndex&)), this, SLOT(brushSelected(const QModelIndex&)));
 }
@@ -96,6 +96,7 @@ MyPaintSettingsWidget::~ MyPaintSettingsWidget()
 void  MyPaintSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
     const_cast<KisPropertiesConfiguration*>(config)->dump();
+    // XXX: set the active brush
     Q_UNUSED(config);
 }
 
@@ -113,6 +114,8 @@ void MyPaintSettingsWidget::writeConfiguration( KisPropertiesConfiguration* conf
 {
     config->dump();
     config->setProperty( "paintop", "mypaintbrush"); // XXX: make this a const id string
+    config->setProperty("filename", m_activeBrushFilename);
+    // XXX: set current settings of the brush, not just the filename?
     config->dump();
 }
 
@@ -123,4 +126,9 @@ void MyPaintSettingsWidget::brushSelected(const QModelIndex& index)
     m_activeBrushFilename = m_model->data(index).toString();
     QFileInfo info(m_activeBrushFilename);
     m_options->lblBrushName->setText(info.baseName());
+}
+
+MyPaintBrushResource* MyPaintSettingsWidget::brush() const
+{
+    return m_model->brush(m_activeBrushFilename);
 }

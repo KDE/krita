@@ -18,53 +18,59 @@
 
 #include "mypaint_paintop.h"
 #include "mypaint_paintop_settings.h"
-
-#include <cmath>
-
-#include <QRect>
-#include <QList>
-#include <QColor>
-
-#include <qdebug.h>
-
-#include <KoColor.h>
-#include <KoColorSpace.h>
-#include <KoInputDevice.h>
-#include <KoCompositeOp.h>
-
-#include <kis_image.h>
 #include <kis_debug.h>
 
-#include <kis_global.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
-#include <kis_types.h>
-#include <kis_paintop.h>
-#include <kis_selection.h>
-#include <kis_random_accessor.h>
-#include <kis_vec.h>
-#include <kis_datamanager.h>
 #include <kis_paint_information.h>
 
+#include "mypaint_brush_resource.h"
+#include "mypaint_paintop_settings.h"
+#include "mypaint_surface.h"
+
 MyPaint::MyPaint(const MyPaintSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisPaintOp(painter)
+    : KisPaintOp(painter)
+    , m_settings(settings)
 {
     Q_ASSERT(settings);
+    Q_UNUSED(image);
+
+    m_surface = new MyPaintSurface(settings->node()->projection(), painter->device());
+    m_settings->brush()->new_stroke();
+    QColor c = painter->paintColor().toQColor();
+    qreal h, s, v, a;
+    c.getHsvF(&h, &s, &v, &a);
+    m_settings->brush()->set_color_hsv((float)h, (float)s, (float)v);
+    m_mypaintThinksStrokeHasEnded = false;
+    m_eventTime.start(); // GTK puts timestamps in its events, Qt doesn't, so fake it.
 }
 
 MyPaint::~MyPaint()
 {
+    delete m_surface;
 }
 
-double MyPaint::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        return 1.0;
+double MyPaint::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
+{
+    Q_UNUSED(xSpacing);
+    Q_UNUSED(ySpacing);
+    Q_UNUSED(pressure1);
+    Q_UNUSED(pressure2);
+    return 1.0;
 }
 
 
 void MyPaint::paintAt(const KisPaintInformation& info)
 {
+    if (m_mypaintThinksStrokeHasEnded) {
+        m_settings->brush()->new_stroke();
+    }
+    m_mypaintThinksStrokeHasEnded =
+            m_settings->brush()->stroke_to(m_surface,
+                                           info.pos().x(),
+                                           info.pos().y(),
+                                           info.pressure(),
+                                           double(m_eventTime.elapsed()) / 1000);
 }
 
 double MyPaint::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
@@ -73,6 +79,22 @@ double MyPaint::paintLine(const KisPaintInformation &pi1, const KisPaintInformat
 
     if (!painter()) return 0;
 
+    if (m_mypaintThinksStrokeHasEnded) {
+        m_settings->brush()->new_stroke();
+    }
+    m_mypaintThinksStrokeHasEnded = m_settings->brush()->stroke_to(m_surface,
+                                                                   pi1.pos().x(), pi1.pos().y(),
+                                                                   pi1.pressure(),
+                                                                   double(m_eventTime.elapsed()) / 1000);
+    if (m_mypaintThinksStrokeHasEnded) {
+        m_settings->brush()->new_stroke();
+    }
+    m_mypaintThinksStrokeHasEnded = m_settings->brush()->stroke_to(m_surface,
+                                                                   pi2.pos().x(), pi2.pos().y(),
+                                                                   pi2.pressure(),
+                                                                   double(m_eventTime.elapsed()) / 1000);
+
+    // not sure what to do with these...
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());
     KisVector2D dragVec = end - start;

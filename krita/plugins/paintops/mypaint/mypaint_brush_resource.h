@@ -33,11 +33,7 @@
 
 #include "kis_types.h"
 
-class BrushInputDefinition;
-class BrushInputDefinitions;
 class BrushSetting;
-class BrushSettingDefinition;
-class BrushSettingDefinttions;
 
 /**
  * Subclass of MyPaint's brush that can load and save itself
@@ -54,6 +50,8 @@ public:
     MyPaintBrushResource(const QString& filename);
     virtual ~MyPaintBrushResource();
 
+    // XXX: implement copy constructor!!!
+
     bool load();
 
     bool save();
@@ -62,24 +60,26 @@ public:
 
 public: // From mypaint/lib/brush.py Brush_Lowlevel, which inherits brushlib/Brush
 
-    float setting_by_cname(const QString& cname);
+    BrushSetting* setting_by_cname(const QString& cname);
 
-    void copy_settings_from(const MyPaintBrushResource& rhs);
+    void get_color_hsv(float* h, float* s, float* v);
 
-    void get_color_hsv(int* h, int* s, int* v);
-
-    void set_color_hsv(int h, int s, int v);
+    void set_color_hsv(float h, float s, float v);
 
     void set_color_rgb(QRgb rgb);
 
+    void set_color_rgb(float r, float g, float b);
+
     QRgb get_color_rgb();
+
+
 
     bool is_eraser();
 
 private:
 
     QImage m_icon;
-
+    QVector<BrushSetting*> m_settings;
 };
 
 

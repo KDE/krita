@@ -65,8 +65,8 @@ public:
     virtual KisPaintOpSettingsSP settings(KisImageWSP image);
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);
 
-    QList<MyPaintBrushResource*> brushes();
-    MyPaintBrushResource* brush(const QString& fileName);
+    QList<MyPaintBrushResource*> brushes() const;
+    MyPaintBrushResource* brush(const QString& fileName) const;
 
 private slots:
 

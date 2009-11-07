@@ -29,6 +29,8 @@ class QWidget;
 class QDomElement;
 class QDomDocument;
 
+class MyPaintBrushResource;
+
 class MyPaintSettings : public QObject, public KisPaintOpSettings
 {
     Q_OBJECT
@@ -44,11 +46,16 @@ public:
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
+    MyPaintBrushResource* brush() const;
+
+    /// the mypaint brushlib-based paintop always paints in wash-mode, i.e., with an extra temporary layer
+    bool paintIncremental() {
+        return false;
+    }
+
     // XXX: Hack!
     void setOptionsWidget(KisPaintOpSettingsWidget* widget)
     {
-        qDebug() << "setting options in MyPaintSettings" << widget << m_options;
-
         if (m_options != 0 && m_options->property("owned by settings").toBool()) {
             delete m_options;
         }

@@ -9,7 +9,6 @@ if(GLIB2_FOUND)
 include_directories(brushlib ${GLIB2_INCLUDE_DIR})
 
 set(kritamypaintpaintop_PART_SRCS
-    mypaint_brush.cpp
     mypaint_brush_resource.cpp
     mypaint_paintop.cpp
     mypaint_paintop_factory.cpp

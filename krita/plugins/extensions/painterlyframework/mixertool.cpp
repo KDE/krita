@@ -47,42 +47,34 @@ MixerTool::~MixerTool()
 
 void MixerTool::activate(bool temporary)
 {
-    kDebug() << temporary;
 }
 
 void MixerTool::deactivate()
 {
-    kDebug();
 }
 
 void MixerTool::resourceChanged(int key, const QVariant & res)
 {
-    kDebug() << key << res;
 }
 
 void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    kDebug();
 }
 
 void MixerTool::mousePressEvent(KoPointerEvent *event)
 {
-    kDebug() << event->pos();
 }
 
 void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    kDebug() << event->pos();
 }
 
 void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    kDebug() << event->pos();
 }
 
 void MixerTool::setDirty(const QRegion& region)
 {
-    kDebug() << region;
     m_mixer->updateCanvas(region);
 }
 

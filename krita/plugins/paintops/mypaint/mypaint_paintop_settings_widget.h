@@ -24,6 +24,7 @@
 #include "ui_wdgmypaintoptions.h"
 #include "widgets/kis_popup_button.h"
 
+class MyPaintBrushResource;
 class MyBrushResourcesListModel;
 
 class MyPaintSettingsWidget : public KisPaintOpSettingsWidget
@@ -38,6 +39,8 @@ public:
     void setConfiguration( const KisPropertiesConfiguration * config);
     KisPropertiesConfiguration* configuration() const;
     void writeConfiguration( KisPropertiesConfiguration *config ) const;
+
+    MyPaintBrushResource* brush() const;
 
 private slots:
 

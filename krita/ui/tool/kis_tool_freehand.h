@@ -62,7 +62,9 @@ public:
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
-
+    virtual void customMoveEvent(KoPointerEvent * event); // only for panning
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual bool wantsAutoScroll();
     virtual void setDirty(const QRegion& region);
 
 protected:
@@ -81,8 +83,11 @@ protected:
 
     virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
-
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
+
+    virtual void initPan(KoPointerEvent *e);
+    virtual void pan(KoPointerEvent *e);
+    virtual void endPan();
 
 protected slots:
 
@@ -119,6 +124,7 @@ protected:
     double m_magnetism;
 
 private:
+
 #if defined(HAVE_OPENGL)
     qreal m_xTilt;
     qreal m_yTilt;
@@ -133,7 +139,8 @@ private:
     QPointF mousePos;
     QPointF m_prevMousePos;
     QPoint m_originalPos;
-    
+
+    // for painting
     QRectF oldOutlineRect;
     bool m_paintedOutline;
     QRegion m_incrementalDirtyRegion;
@@ -141,6 +148,11 @@ private:
     KisRecordedPolyLinePaintAction* m_polyLinePaintAction;
     KisRecordedBezierCurvePaintAction* m_bezierCurvePaintAction;
     QThreadPool* m_executor;
+
+    // for panning
+    QPointF documentToViewport(const QPointF &p);
+    QPointF m_lastPosition;
+
 };
 
 

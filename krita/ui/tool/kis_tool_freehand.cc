@@ -66,7 +66,8 @@
 #include <recorder/kis_node_query_path.h>
 #include <kis_view2.h>
 #include <kis_painting_assistants_manager.h>
-#include "kis_3d_object_model.h"
+#include <kis_3d_object_model.h>
+#include "kis_color_picker_utils.h"
 
 // OpenGL
 #include <config-opengl.h>
@@ -117,39 +118,69 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     //    dbgUI << "mousePressEvent" << m_mode;
     //     if (!currentImage())
     //    return;
-    
+    if (m_mode == PAN) {
+        initPan(e);
+        return;
+    }
+
     if (!currentNode())
         return;
 
     if (!currentNode()->paintDevice())
         return;
 
-    if (currentPaintOpPreset() && currentPaintOpPreset()->settings()) {
-        m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
-        currentPaintOpPreset()->settings()->mousePressEvent(e);
-        if (e->isAccepted()) {
-            return;
-        }
-    }
+    // control-click gets the color at the current point. For now, only with a ratio of 1
+    if (e->modifiers() == Qt::ControlModifier ) {
+        if (e->button() == Qt::LeftButton)
+            m_canvas->resourceProvider()->setResource(KoCanvasResource::ForegroundColor,
+                                                      KisToolUtils::pick(currentNode()->paintDevice(),
+                                                                         convertToIntPixelCoord(e)));
+        else
+            m_canvas->resourceProvider()->setResource(KoCanvasResource::BackgroundColor,
+                                                      KisToolUtils::pick(currentNode()->paintDevice(),
+                                                                         convertToIntPixelCoord(e)));
 
-    if (e->modifiers() == Qt::ShiftModifier){
+    }
+    else if (e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
+
+        if (e->button() == Qt::LeftButton)
+            m_canvas->resourceProvider()->setResource(KoCanvasResource::ForegroundColor,
+                                                      KisToolUtils::pick(currentImage()->mergedImage(),
+                                                                         convertToIntPixelCoord(e)));
+        else
+            m_canvas->resourceProvider()->setResource(KoCanvasResource::BackgroundColor,
+                                                      KisToolUtils::pick(currentImage()->mergedImage(),
+                                                                         convertToIntPixelCoord(e)));
+    }
+    else if (e->modifiers() == Qt::ShiftModifier){
         m_mode = EDIT_BRUSH;
         m_prevMousePos = e->point;
         m_originalPos = e->globalPos();
         return;
     }
+    else { // No modifiers
 
-    if (e->button() == Qt::LeftButton) {
-        initPaint(e);
-        m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
-                                                         e->pressure(), e->xTilt(), e->yTilt(),
-                                                         KisVector2D::Zero(),
-                                                         e->rotation(), e->tangentialPressure());
-        paintAt(m_previousPaintInformation);
-        if (!m_smooth) {
+        if (currentPaintOpPreset() && currentPaintOpPreset()->settings()) {
+            m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
+            currentPaintOpPreset()->settings()->mousePressEvent(e);
+            if (e->isAccepted()) {
+                return;
+            }
+        }
+
+
+        if (e->button() == Qt::LeftButton) {
+            initPaint(e);
+            m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
+                                                             e->pressure(), e->xTilt(), e->yTilt(),
+                                                             KisVector2D::Zero(),
+                                                             e->rotation(), e->tangentialPressure());
+            paintAt(m_previousPaintInformation);
+            if (!m_smooth) {
 #ifdef ENABLE_RECORDING
-            m_polyLinePaintAction->addPoint(m_previousPaintInformation);
+                m_polyLinePaintAction->addPoint(m_previousPaintInformation);
 #endif
+            }
         }
     }
 }
@@ -167,72 +198,83 @@ inline double angle(const QPointF& p1, const QPointF& p2)
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
     //    dbgUI << "mouseMoveEvent " << m_mode << " " << e->button() << " " << e->buttons();
-    if (m_mode == PAINT) {
-        QPointF pos = convertToPixelCoord(adjustPosition(e->point));
-        QPointF dragVec = pos - m_previousPaintInformation.pos();
+    switch (m_mode) {
+    case PAINT:
+        {
+            QPointF pos = convertToPixelCoord(adjustPosition(e->point));
+            QPointF dragVec = pos - m_previousPaintInformation.pos();
 
-        KisPaintInformation info = KisPaintInformation(pos,
-                                                       e->pressure(), e->xTilt(), e->yTilt(),
-                                                       toKisVector2D(dragVec),
-                                                       e->rotation(), e->tangentialPressure());
+            KisPaintInformation info = KisPaintInformation(pos,
+                                                           e->pressure(), e->xTilt(), e->yTilt(),
+                                                           toKisVector2D(dragVec),
+                                                           e->rotation(), e->tangentialPressure());
 
-        if (m_smooth) {
-            QPointF newTangent;
-            if (m_previousDrag.y() == 0.0 && m_previousDrag.x() == 0.0) {
-                newTangent = dragVec;
+            if (m_smooth) {
+                QPointF newTangent;
+                if (m_previousDrag.y() == 0.0 && m_previousDrag.x() == 0.0) {
+                    newTangent = dragVec;
+                } else {
+                    double angleTangent = angle(dragVec, m_previousDrag);
+                    double cosTangent = cos(angleTangent);
+                    double sinTangent = sin(angleTangent);
+                    newTangent = QPointF(
+                            cosTangent * dragVec.x() - sinTangent * dragVec.y(),
+                            sinTangent * dragVec.x() + cosTangent * dragVec.y());
+                }
+
+                if (norm(newTangent) != 0) {
+                    newTangent /= norm(newTangent) ;
+                }
+
+                double cosPreviousNewTangent = cos(angle(newTangent, m_previousTangent));
+                newTangent += m_previousTangent;
+                newTangent *= 0.5 * cosPreviousNewTangent;
+
+                if (norm(dragVec) != 0) {
+                    newTangent += (1.0 - cosPreviousNewTangent) * dragVec / norm(dragVec);
+                }
+
+                newTangent *= m_smoothness / norm(newTangent) ;
+                double normVec = 0.5 * norm(dragVec);
+                QPointF control1 = m_previousPaintInformation.pos() + m_previousTangent * normVec;
+                QPointF control2 = info.pos() - newTangent * normVec;
+
+                paintBezierCurve(m_previousPaintInformation,
+                                 control1,
+                                 control2,
+                                 info);
+#ifdef ENABLE_RECORDING
+                m_bezierCurvePaintAction->addPoint(m_previousPaintInformation, control1, control2, info);
+#endif
+                m_previousTangent = newTangent;
+                m_previousDrag = dragVec;
             } else {
-                double angleTangent = angle(dragVec, m_previousDrag);
-                double cosTangent = cos(angleTangent);
-                double sinTangent = sin(angleTangent);
-                newTangent = QPointF(
-                        cosTangent * dragVec.x() - sinTangent * dragVec.y(),
-                        sinTangent * dragVec.x() + cosTangent * dragVec.y());
-            }
-
-            if (norm(newTangent) != 0) {
-                newTangent /= norm(newTangent) ;
-            }
-
-            double cosPreviousNewTangent = cos(angle(newTangent, m_previousTangent));
-            newTangent += m_previousTangent;
-            newTangent *= 0.5 * cosPreviousNewTangent;
-
-            if (norm(dragVec) != 0) {
-                newTangent += (1.0 - cosPreviousNewTangent) * dragVec / norm(dragVec);
-            }
-
-            newTangent *= m_smoothness / norm(newTangent) ;
-            double normVec = 0.5 * norm(dragVec);
-            QPointF control1 = m_previousPaintInformation.pos() + m_previousTangent * normVec;
-            QPointF control2 = info.pos() - newTangent * normVec;
-
-            paintBezierCurve(m_previousPaintInformation,
-                             control1,
-                             control2,
-                             info);
+                paintLine(m_previousPaintInformation, info);
 #ifdef ENABLE_RECORDING
-            m_bezierCurvePaintAction->addPoint(m_previousPaintInformation, control1, control2, info);
+                m_polyLinePaintAction->addPoint(info);
 #endif
-            m_previousTangent = newTangent;
-            m_previousDrag = dragVec;
-        } else {
-            paintLine(m_previousPaintInformation, info);
-#ifdef ENABLE_RECORDING
-            m_polyLinePaintAction->addPoint(info);
-#endif
+            }
+
+            m_previousPaintInformation = info;
         }
+        break;
+    case EDIT_BRUSH:
+        {
+            useCursor(KisCursor::blankCursor());
+            qreal dx = m_prevMousePos.x() - e->point.x();
+            qreal dy = m_prevMousePos.y() - e->point.y();
+            currentPaintOpPreset()->settings()->changePaintOpSize( -dx, -dy );
+            QCursor::setPos(m_originalPos);
+        }
+        break;
+    case PAN:
+        {
+            pan(e);
+        }
+    default:
+        ;
+    };
 
-        m_previousPaintInformation = info;
-    }else if (m_mode == EDIT_BRUSH){
-        useCursor(KisCursor::blankCursor());
-        qreal dx = m_prevMousePos.x() - e->point.x();
-        qreal dy = m_prevMousePos.y() - e->point.y();
-        currentPaintOpPreset()->settings()->changePaintOpSize( -dx, -dy );
-        QCursor::setPos(m_originalPos);
-    }
-    
-    
-    
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
     if (m_mode != PAINT && (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || m_mode == EDIT_BRUSH)) {
@@ -262,22 +304,39 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     if (!oldOutlineRect.isEmpty()) {
         m_canvas->updateCanvas(oldOutlineRect); // erase the old guy
     }
-   
+
 }
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
     //    dbgUI << "mouseReleaseEvent" << m_mode << " " << e->button() << " " << e->button();
-    if (e->button() == Qt::LeftButton && m_mode == PAINT) {
+    switch(m_mode) {
+    case PAINT:
         endPaint();
-    } else if (m_mode == EDIT_BRUSH){
-        m_mode = HOVER;
-        resetCursorStyle();
-    } else    
-    {
-        KisToolPaint::mouseReleaseEvent(e);
+        break;
+    case PAN:
+        endPan();
+        break;
+    default:
+        ;
+    };
+    KisToolPaint::mouseReleaseEvent(e);
+    m_mode = HOVER;
+    resetCursorStyle();
+}
+
+void KisToolFreehand::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Space) {
+        kDebug() << "space pressed, panning";
+        m_mode = PAN;
+        useCursor(Qt::OpenHandCursor);
+
+        event->accept();
     }
-    
+    else {
+        event->ignore();
+    }
 }
 
 void KisToolFreehand::initPaint(KoPointerEvent *)
@@ -370,22 +429,22 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     // distracted by the recording
     if (m_smooth) {
         m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction(i18n("Freehand tool"),
-                KisNodeQueryPath::absolutePath(currentNode()),
-                currentPaintOpPreset(),
-                m_painter->paintColor(),
-                m_painter->backgroundColor(),
-                m_painter->opacity(),
-                m_paintIncremental,
-                m_compositeOp);
+                                                                         KisNodeQueryPath::absolutePath(currentNode()),
+                                                                         currentPaintOpPreset(),
+                                                                         m_painter->paintColor(),
+                                                                         m_painter->backgroundColor(),
+                                                                         m_painter->opacity(),
+                                                                         m_paintIncremental,
+                                                                         m_compositeOp);
     } else {
         m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"),
-                KisNodeQueryPath::absolutePath(currentNode()),
-                currentPaintOpPreset(),
-                m_painter->paintColor(),
-                m_painter->backgroundColor(),
-                m_painter->opacity(),
-                m_paintIncremental,
-                m_compositeOp);
+                                                                   KisNodeQueryPath::absolutePath(currentNode()),
+                                                                   currentPaintOpPreset(),
+                                                                   m_painter->paintColor(),
+                                                                   m_painter->backgroundColor(),
+                                                                   m_painter->opacity(),
+                                                                   m_paintIncremental,
+                                                                   m_compositeOp);
     }
 #endif
 }
@@ -494,6 +553,14 @@ void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*p
     m_paintJobs.append(job);
     //    dbgUI << "Queue length:" << m_executor->queueLength();
     m_executor->start(job, -m_paintJobs.size());
+}
+
+bool KisToolFreehand::wantsAutoScroll()
+{
+    if (m_mode == PAN ) {
+        return false;
+    }
+    return true;
 }
 
 void KisToolFreehand::setDirty(const QRegion& region)
@@ -614,6 +681,56 @@ QPointF KisToolFreehand::adjustPosition(const QPointF& point)
         return (1.0 - m_magnetism) * point + m_magnetism * ap;
     }
     return point;
+}
+
+void KisToolFreehand::initPan(KoPointerEvent *event)
+{
+    m_mode = PAN;
+    m_prevMousePos = documentToViewport(event->point);
+    event->accept();
+    useCursor(QCursor(Qt::ClosedHandCursor), true);
+}
+
+void KisToolFreehand::pan(KoPointerEvent *event)
+{
+    Q_ASSERT(canvas());
+    Q_ASSERT(canvas()->canvasController());
+
+
+    if (event->buttons() == 0)
+        return;
+    event->accept();
+
+    QPointF actualPosition = documentToViewport(event->point);
+    QPointF distance(m_lastPosition - actualPosition);
+    canvas()->canvasController()->pan(distance.toPoint());
+
+    m_lastPosition = actualPosition;
+}
+
+void KisToolFreehand::endPan()
+{
+    m_mode = HOVER;
+    resetCursorStyle();
+}
+
+void KisToolFreehand::customMoveEvent(KoPointerEvent * event)
+{
+    if (m_mode == PAN) {
+        canvas()->canvasController()->pan(QPoint(-event->x(), -event->y()));
+        event->accept();
+    }
+    event->ignore();
+}
+
+
+QPointF KisToolFreehand::documentToViewport(const QPointF &p)
+{
+    QPointF viewportPoint = canvas()->viewConverter()->documentToView(p);
+    viewportPoint += canvas()->documentOrigin();
+    viewportPoint += QPoint(canvas()->canvasController()->canvasOffsetX(),
+                            canvas()->canvasController()->canvasOffsetY());
+    return viewportPoint;
 }
 
 

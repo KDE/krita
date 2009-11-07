@@ -179,6 +179,7 @@ private slots:
     void slotEditPalette();
     void slotImageSizeChanged();
     void slotTotalRefresh();
+    void toggleDockers(bool toggle);
 
 private:
 

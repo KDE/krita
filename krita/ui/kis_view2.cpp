@@ -110,21 +110,21 @@ class KisView2::KisView2Private
 public:
 
     KisView2Private()
-            : canvas(0)
-            , doc(0)
-            , viewConverter(0)
-            , canvasController(0)
-            , resourceProvider(0)
-            , filterManager(0)
-            , statusBar(0)
-            , selectionManager(0)
-            , controlFrame(0)
-            , nodeManager(0)
-            , zoomManager(0)
-            , imageManager(0)
-            , gridManager(0)
-            , perspectiveGridManager(0)
-            , paintingAssistantManager(0) {
+        : canvas(0)
+        , doc(0)
+        , viewConverter(0)
+        , canvasController(0)
+        , resourceProvider(0)
+        , filterManager(0)
+        , statusBar(0)
+        , selectionManager(0)
+        , controlFrame(0)
+        , nodeManager(0)
+        , zoomManager(0)
+        , imageManager(0)
+        , gridManager(0)
+        , perspectiveGridManager(0)
+        , paintingAssistantManager(0) {
     }
 
     ~KisView2Private() {
@@ -153,6 +153,7 @@ public:
     KisFilterManager * filterManager;
     KisStatusBar * statusBar;
     KAction * totalRefresh;
+    KAction* toggleDockers;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisNodeManager * nodeManager;
@@ -161,12 +162,13 @@ public:
     KisGridManager * gridManager;
     KisPerspectiveGridManager * perspectiveGridManager;
     KisPaintingAssistantsManager* paintingAssistantManager;
+    QVector<QDockWidget*> hiddenDockwidgets;
 };
 
 
 KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
-        : KoView(doc, parent),
-        m_d(new KisView2Private())
+    : KoView(doc, parent),
+    m_d(new KisView2Private())
 {
     setFocusPolicy(Qt::NoFocus);
 
@@ -174,6 +176,16 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("total_refresh", m_d->totalRefresh);
     m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
+
+    m_d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
+    m_d->toggleDockers->setChecked(true);
+    actionCollection()->addAction("toggledockers", m_d->toggleDockers);
+    // Note: do not change the default shortcut to something else, like ctrl-h. The escape
+    // key is the only one available on tablet pc's in tablet mode, and that's when this
+    // feature is most useful.
+    m_d->toggleDockers->setShortcut(QKeySequence(Qt::Key_Escape));
+    connect(m_d->toggleDockers, SIGNAL(toggled(bool)), this, SLOT(toggleDockers(bool)));
+
 
     setComponentData(KisFactory2::componentData(), false);
 
@@ -689,15 +701,15 @@ void KisView2::loadPlugins()
 {
     // Load all plugins
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
-                            QString::fromLatin1("(Type == 'Service') and "
-                                                "([X-Krita-Version] == 3)"));
+                                                              QString::fromLatin1("(Type == 'Service') and "
+                                                                                  "([X-Krita-Version] == 3)"));
     KService::List::ConstIterator iter;
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 
         KService::Ptr service = *iter;
         int errCode = 0;
         KParts::Plugin* plugin =
-            KService::createInstance<KParts::Plugin> (service, this, QStringList(), &errCode);
+                KService::createInstance<KParts::Plugin> (service, this, QStringList(), &errCode);
         if (plugin) {
             insertChildClient(plugin);
         } else {
@@ -741,6 +753,28 @@ KisPaintingAssistantsManager* KisView2::paintingAssistantManager()
 void KisView2::slotTotalRefresh()
 {
     m_d->canvas->resetCanvas();
+}
+
+void KisView2::toggleDockers(bool toggle)
+{
+    if (m_d->hiddenDockwidgets.isEmpty()){
+        foreach(QObject* widget, mainWindow()->children()) {
+            if (widget->inherits("QDockWidget")) {
+                QDockWidget* dw = static_cast<QDockWidget*>(widget);
+                if (dw->isVisible()) {
+                    dw->hide();
+                    m_d->hiddenDockwidgets << dw;
+                }
+            }
+        }
+    }
+    else {
+        foreach(QDockWidget* dw, m_d->hiddenDockwidgets) {
+            dw->show();
+        }
+        m_d->hiddenDockwidgets.clear();
+    }
+
 }
 
 #include "kis_view2.moc"

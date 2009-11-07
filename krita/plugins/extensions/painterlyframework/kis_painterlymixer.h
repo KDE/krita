@@ -22,13 +22,15 @@
 #define KIS_PAINTERLY_MIXER_H_
 
 #include "ui_kis_painterlymixer.h"
+#include <QWidget>
 
 class QButtonGroup;
-class KisPaintOp;
-class KisCanvasResourceProvider;
-class KisView2;
 class KoColor;
 class KoColorSpace;
+
+class KisCanvasResourceProvider;
+class KisPaintOp;
+
 class MixerCanvas;
 class MixerTool;
 
@@ -37,28 +39,34 @@ class KisPainterlyMixer : public QWidget, private Ui::KisPainterlyMixer
     Q_OBJECT
 
 public:
-    KisPainterlyMixer(QWidget* parent, KisView2 *view);
+    KisPainterlyMixer(QWidget* parent);
     ~KisPainterlyMixer();
+
+
+public slots:
+
+    void setColor(const KoColor& color);
+
+signals:
+
+    void colorChanged(const KoColor& color);
 
 private:
 
-    void initCanvas();
-    void initTool();
     void initSpots();
 
     void loadColors();
 
 private slots:
+
     void slotChangeColor(int index);
 
 private:
-    KisView2 *m_view;
-    KisCanvasResourceProvider *m_resources;
+
     MixerTool *m_tool;
 
     QButtonGroup *m_bgColors;
     QList<KoColor> m_vColors;
-
 
     const KoColorSpace *m_colorspace;
 };

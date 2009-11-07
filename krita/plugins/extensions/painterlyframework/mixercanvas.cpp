@@ -1,23 +1,23 @@
 /* This file is part of the KDE project
-
-   Copyright (C) 2007 Emanuele Tamponi <emanuele@valinor.it>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ *
+ * Copyright (C) 2007 Emanuele Tamponi <emanuele@valinor.it>
+ * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
-
+ */
 #include "mixercanvas.h"
 
 #include <kis_image.h>
@@ -45,7 +45,10 @@
 #include <QUndoCommand>
 
 MixerCanvas::MixerCanvas(QWidget *parent)
-        : QFrame(parent), KoCanvasBase(0), m_toolProxy(0), m_dirty(false)
+        : QFrame(parent)
+        , KoCanvasBase(0)
+        , m_toolProxy(0)
+        , m_dirty(false)
 {
     m_image = QImage(size(), QImage::Format_ARGB32);
     m_image.fill(0);
@@ -83,68 +86,15 @@ KoUnit MixerCanvas::unit() const
     return KoUnit();
 }
 
-void MixerCanvas::setResources(KisCanvasResourceProvider *rp)
-{
-    KoCanvasResourceProvider *internal = resourceProvider();
-
-    internal->setResource(KoCanvasResource::ForegroundColor, rp->fgColor());
-    internal->setResource(KoCanvasResource::BackgroundColor, rp->bgColor());
-    internal->setResource(KisCanvasResourceProvider::CurrentPattern, QVariant::fromValue<void*>(rp->currentPattern()));
-    internal->setResource(KisCanvasResourceProvider::CurrentGradient, QVariant::fromValue<void*>(rp->currentGradient()));
-
-    internal->setResource(KisCanvasResourceProvider::CurrentKritaNode, QVariant::fromValue<void*>(rp->currentNode().data()));
-    internal->setResource(KisCanvasResourceProvider::HdrExposure, rp->HDRExposure());
-    QVariant v;
-    v.setValue(rp->currentPreset());
-    internal->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, v);
-
-    checkCurrentPaintop();
-
-    connect(rp->canvas()->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
-            this, SLOT(slotResourceChanged(int, const QVariant &)));
-
-    // By now, both properties have been set
-    connect(rp, SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)),
-            this, SLOT(checkCurrentPaintop()));
-}
-
-void MixerCanvas::checkCurrentPaintop()
-{
-#if 0
-    KoCanvasResourceProvider *internal = resourceProvider();
-
-    KisPainter painter(device());
-    KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
-                              internal->resource(KisCanvasResourceProvider::CurrentPaintop).value<KoID>().id(),
-                              settings, &painter, 0);
-    painter.setPaintOp(current); // This is done just for the painter to own the paintop and destroy it
-
-    if (current && !current->painterly())
-        internal->setResource(KisCanvasResourceProvider::CurrentPaintop, KoID("paintcomplex", ""));
-#endif
-}
-
-void MixerCanvas::checkCurrentLayer()
-{
-    KoCanvasResourceProvider *internal = resourceProvider();
-
-    KisNodeSP current = internal->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    if (current.data() != m_layer.data()) {
-        QVariant v;
-        v.setValue(KisNodeSP(m_layer.data()));
-        internal->setResource(KisCanvasResourceProvider::CurrentKritaNode, v);
-    }
-}
-
 void MixerCanvas::setLayer(const KoColorSpace *cs)
 {
     Q_ASSERT(cs);
     m_layer = new KisPaintLayer(0, "Artistic Mixer Layer", 255, cs);
 }
 
-void MixerCanvas::mouseDoubleClickEvent(QMouseEvent */*event*/)
+void MixerCanvas::mouseDoubleClickEvent(QMouseEvent *event)
 {
-//     m_toolProxy->mouseDoubleClickEvent(event, event->pos());
+    m_toolProxy->mouseDoubleClickEvent(event, event->pos());
 }
 
 void MixerCanvas::mouseMoveEvent(QMouseEvent *event)
@@ -218,21 +168,6 @@ void MixerCanvas::slotClear()
 
 void MixerCanvas::slotResourceChanged(int key, const QVariant &value)
 {
-    if (key != KisCanvasResourceProvider::CurrentPaintOpPreset) {
-        resourceProvider()->setResource(key, value);
-    }
-    switch (key) {
-    case KisCanvasResourceProvider::CurrentPaintOpPreset:
-        checkCurrentPaintop();
-        break;
-
-    case KisCanvasResourceProvider::CurrentKritaNode:
-        checkCurrentLayer();
-        break;
-    default:
-        ;
-    }
-
 }
 
 #include "mixercanvas.moc"

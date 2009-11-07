@@ -36,7 +36,7 @@ KritaDefaultDockersPlugin::KritaDefaultDockersPlugin(QObject *parent, const QStr
         : KParts::Plugin(parent)
 {
     setComponentData(KritaDefaultDockersPluginFactory::componentData());
-    KoDockRegistry::instance()->add( new KisHistogramDockFactory() );
+    KoDockRegistry::instance()->add(new KisHistogramDockFactory());
     KoDockRegistry::instance()->add(new KisLayerBoxFactory());
     KoDockRegistry::instance()->add(new KisBirdEyeBoxFactory());
     KoDockRegistry::instance()->add(new KisPaletteDockerFactory());

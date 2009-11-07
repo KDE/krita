@@ -20,17 +20,25 @@
 
 #include "kis_painterlymixerdocker.h"
 
-#include "kis_painterlymixer.h"
-
 #include <KLocale>
 
-KisPainterlyMixerDocker::KisPainterlyMixerDocker(KisView2 *view)
+#include <KoCanvasBase.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoColor.h>
+
+#include "kis_painterlymixer.h"
+
+KisPainterlyMixerDocker::KisPainterlyMixerDocker()
         : QDockWidget()
+        , KoCanvasObserver()
+        , m_currentCanvas(0)
 {
     setWindowTitle(i18n("Painterly Color Mixer"));
 
-    m_painterlyMixer = new KisPainterlyMixer(this, view);
+    m_painterlyMixer = new KisPainterlyMixer(this);
     setWidget(m_painterlyMixer);
+
+    connect(m_painterlyMixer, SIGNAL(colorChanged(KoColor)), this, SLOT(colorChanged(KoColor)));
 }
 
 KisPainterlyMixerDocker::~KisPainterlyMixerDocker()
@@ -42,12 +50,22 @@ QString KisPainterlyMixerDockerFactory::id() const
     return QString("KisPainterlyMixerDocker");
 }
 
-QDockWidget* KisPainterlyMixerDockerFactory::createDockWidget()
+void KisPainterlyMixerDocker::setCanvas(KoCanvasBase* canvas)
 {
-    KisPainterlyMixerDocker* widget = new KisPainterlyMixerDocker(m_view);
-    widget->setObjectName(id());
+    m_currentCanvas = canvas;
+    connect(m_currentCanvas->resourceProvider(), SIGNAL(resourceChanged(int,QVariant)), this, SLOT(resourceChanged(int,QVariant)));
+}
 
-    return widget;
+void KisPainterlyMixerDocker::colorChanged(const KoColor& color)
+{
+    m_currentCanvas->resourceProvider()->setForegroundColor(color);
+}
+
+void KisPainterlyMixerDocker::resourceChanged(int key, const QVariant& value)
+{
+    if (key == KoCanvasResource::ForegroundColor) {
+        m_painterlyMixer->setColor(value.value<KoColor>());
+    }
 }
 
 

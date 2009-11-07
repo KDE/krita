@@ -32,7 +32,6 @@
 class KisCanvas2;
 class KoBirdEyePanel;
 class KisDoubleWidget;
-class KisView2;
 class KoZoomAdapter;
 class KoColorSpace;
 

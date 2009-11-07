@@ -24,7 +24,6 @@
 
 #include <kparts/plugin.h>
 
-class KisView2;
 class KisPainterlyMixerDockerFactory;
 
 class PainterlyMixer : public KParts::Plugin
@@ -33,11 +32,6 @@ class PainterlyMixer : public KParts::Plugin
 
 public:
     PainterlyMixer(QObject *parent, const QStringList &);
-    virtual ~PainterlyMixer();
-
-private:
-    KisView2* m_view;
-    KisPainterlyMixerDockerFactory* m_factory;
 };
 
 #endif // PAINTERLY_MIXER_H

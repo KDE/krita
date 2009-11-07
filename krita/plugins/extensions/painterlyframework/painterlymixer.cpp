@@ -18,7 +18,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "painterlymixer.h"
 
 #include "kis_painterlymixerdocker.h"
@@ -26,7 +25,9 @@
 #include <KGenericFactory>
 #include <KIconLoader>
 #include <KLocale>
-#include <kis_view2.h>
+
+#include <KoDockFactory.h>
+#include <KoDockRegistry.h>
 
 typedef KGenericFactory<PainterlyMixer> PainterlyMixerFactory;
 K_EXPORT_COMPONENT_FACTORY(kritapainterlymixer, PainterlyMixerFactory("krita"))
@@ -34,18 +35,8 @@ K_EXPORT_COMPONENT_FACTORY(kritapainterlymixer, PainterlyMixerFactory("krita"))
 PainterlyMixer::PainterlyMixer(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    if (parent->inherits("KisView2")) {
-        setComponentData(PainterlyMixerFactory::componentData());
-        m_view = static_cast<KisView2*>(parent);
-        m_factory = new KisPainterlyMixerDockerFactory(m_view);
-        m_view->createDockWidget(m_factory);
-    }
-}
-
-PainterlyMixer::~PainterlyMixer()
-{
-    delete m_factory;
-    m_view = 0;
+    setComponentData(PainterlyMixerFactory::componentData());
+    KoDockRegistry::instance()->add(new KisPainterlyMixerDockerFactory());
 }
 
 #include "painterlymixer.moc"

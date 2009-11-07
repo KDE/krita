@@ -65,11 +65,13 @@ void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP 
         if (cs->alpha(dit.rawData()) > 10 && cs->alpha(cit.rawData()) > 10) {
             cs->normalisedChannelsValue(cit.rawData(), cc);
             cs->normalisedChannelsValue(dit.rawData(), dc);
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++) {
                 dc[i] = (1.0 - 0.4 * pressure) * cc[i] + 0.4 * pressure * dc[i];
+            }
             cs->fromNormalisedChannelsValue(dit.rawData(), dc);
-            if (dit.x() == (int)(sw / 2) && dit.y() == (int)(sh / 2))
+            if (dit.x() == (int)(sw / 2) && dit.y() == (int)(sh / 2)) {
                 painter->setPaintColor(KoColor(dit.rawData(), cs));
+            }
         }
         ++cit;
         ++dit;
@@ -91,7 +93,8 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
     quint8* dabPointer = dab->data();
     quint8* canvasPointer = canvas.data();
 
-    QVector<float> cc(channelCount), dc(channelCount);
+    QVector<float> cc(channelCount);
+    QVector<float> dc(channelCount);
 
     for (int y = 0; y < sh; y++) {
         for (int x = 0; x < sw; x++) {
@@ -106,8 +109,9 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
 
                 cs->fromNormalisedChannelsValue(dabPointer, dc);
 
-                if (x == (int)(sw / 2) && y == (int)(sh / 2))
+                if (x == (int)(sw / 2) && y == (int)(sh / 2)) {
                     painter->setPaintColor(KoColor(dabPointer, cs));
+                }
             }
         }
         dabPointer += dab->pixelSize();

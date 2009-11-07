@@ -17,25 +17,29 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
 #include "kis_painterlymixer.h"
+
+#include <QButtonGroup>
+#include <QGridLayout>
+
+#include <KoColorSpace.h>
+#include <KoToolProxy.h>
+#include <KoCanvasBase.h>
+#include <KoCanvasResourceProvider.h>
 
 #include "colorspot.h"
 #include "kis_ksf32_colorspace.h"
 #include "mixercanvas.h"
 #include "mixertool.h"
 
-#include <kis_paintop.h>
-#include <kis_canvas_resource_provider.h>
-#include <kis_view2.h>
-#include <KoColorSpace.h>
-#include <KoToolProxy.h>
-#include <QButtonGroup>
-
-KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
-        : QWidget(parent), m_view(view), m_resources(view->resourceProvider()), m_tool(0), m_colorspace(0)
+KisPainterlyMixer::KisPainterlyMixer(QWidget *parent)
+        : QWidget(parent)
+        , m_tool(0)
+        , m_colorspace(0)
 {
     setupUi(this);
+
+    kDebug() << ">>>>>>>>>>>>>>>>>>>>";
 
     QString csid = KisKSF32ColorSpace<3>::ColorSpaceId().id();
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
@@ -45,14 +49,18 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
     if (profiles.count()) { // don't crash if the profile is not available.
         const KoColorProfile* testp = profiles.at(0);
         m_colorspace = f->colorSpace(csid, testp);
-        Q_ASSERT(m_colorspace);
     } else {
         setEnabled(false);
         return;
     }
 
-    initCanvas();
-    initTool();
+    m_canvas->setLayer(m_colorspace);
+    m_canvas->setToolProxy(new KoToolProxy(m_canvas));
+
+    m_tool = new MixerTool(m_canvas);
+    m_canvas->toolProxy()->setActiveTool(m_tool);
+    m_tool->activate();
+
     initSpots();
 
     m_bErase->setIcon(KIcon("edit-delete"));
@@ -61,23 +69,7 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
 
 KisPainterlyMixer::~KisPainterlyMixer()
 {
-    if (m_tool)
-        delete m_tool;
-}
-
-void KisPainterlyMixer::initCanvas()
-{
-    m_canvas->setLayer(m_colorspace);
-    m_canvas->setToolProxy(new KoToolProxy(m_canvas));
-    m_canvas->setResources(m_resources);
-}
-
-void KisPainterlyMixer::initTool()
-{
-    Q_ASSERT(m_canvas);
-    m_tool = new MixerTool(m_canvas, m_resources);
-    m_canvas->toolProxy()->setActiveTool(m_tool);
-    m_tool->activate();
+    delete m_tool;
 }
 
 #define ROWS 2
@@ -85,6 +77,7 @@ void KisPainterlyMixer::initTool()
 
 void KisPainterlyMixer::initSpots()
 {
+    kDebug();
     int row, col;
     QGridLayout *l = new QGridLayout(m_spotsFrame);
 
@@ -109,6 +102,7 @@ void KisPainterlyMixer::initSpots()
 
 void KisPainterlyMixer::loadColors()
 {
+    kDebug();
     // TODO We need to handle save/load of user-defined colors in the spots.
     const KoColorSpace *cs = m_colorspace;
     m_vColors.append(KoColor(QColor("#FF0000"), cs)); // Red
@@ -123,7 +117,12 @@ void KisPainterlyMixer::loadColors()
 
 void KisPainterlyMixer::slotChangeColor(int index)
 {
-    m_resources->setFGColor(m_vColors[index]);
+    emit colorChanged(m_vColors[index]);
+}
+
+void KisPainterlyMixer::setColor(const KoColor& color)
+{
+    m_canvas->resourceProvider()->setForegroundColor(color);
 }
 
 #include "kis_painterlymixer.moc"

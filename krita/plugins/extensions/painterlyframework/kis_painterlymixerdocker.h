@@ -23,38 +23,50 @@
 
 #include <QDockWidget>
 #include <KoDockFactory.h>
+#include <KoCanvasObserver.h>
 
-#include "kis_view2.h"
-
+class KoCanvasBase;
+class KoColor;
 class KisPainterlyMixer;
 
-class KisPainterlyMixerDocker : public QDockWidget
+class KisPainterlyMixerDocker : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 
 public:
-    KisPainterlyMixerDocker(KisView2 *view);
+    KisPainterlyMixerDocker();
     virtual ~KisPainterlyMixerDocker();
+
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
+
+private slots:
+
+    void colorChanged(const KoColor& color);
+    void resourceChanged(int key, const QVariant& value);
 
 private:
     KisPainterlyMixer *m_painterlyMixer;
+    KoCanvasBase *m_currentCanvas;
 };
 
 
 class KisPainterlyMixerDockerFactory : public KoDockFactory
 {
 public:
-    KisPainterlyMixerDockerFactory(KisView2 *view) : m_view(view) {}
+    KisPainterlyMixerDockerFactory() {}
     ~KisPainterlyMixerDockerFactory() {}
 
     QString id() const;
-    QDockWidget *createDockWidget();
-    DockPosition defaultDockPosition() const {
-        return DockMinimized;
+
+    QDockWidget *createDockWidget()
+    {
+        KisPainterlyMixerDocker* widget = new KisPainterlyMixerDocker();
+        widget->setObjectName(id());
+        return widget;
     }
 
-private:
-    KisView2 *m_view;
+    DockPosition defaultDockPosition() const { return DockMinimized; }
 };
 
 #endif // KIS_PAINTERLY_MIXER_DOCKER_H_

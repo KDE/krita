@@ -151,7 +151,7 @@ protected slots:
 
 
 private:
-    PaintMode m_ountlinePaintMode;
+    PaintMode m_outlinePaintMode;
 
     struct Private;
     Private* const d;

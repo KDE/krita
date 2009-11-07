@@ -84,7 +84,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
         , d(new Private)
 {
     d->cursor = cursor;
-    m_paintMode = XOR_MODE;
+    m_outlinePaintMode = XOR_MODE;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
 

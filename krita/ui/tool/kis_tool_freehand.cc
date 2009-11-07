@@ -328,7 +328,6 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 void KisToolFreehand::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Space) {
-        kDebug() << "space pressed, panning";
         m_mode = PAN;
         useCursor(Qt::OpenHandCursor);
 
@@ -686,7 +685,7 @@ QPointF KisToolFreehand::adjustPosition(const QPointF& point)
 void KisToolFreehand::initPan(KoPointerEvent *event)
 {
     m_mode = PAN;
-    m_prevMousePos = documentToViewport(event->point);
+    m_lastPosition = documentToViewport(event->point);
     event->accept();
     useCursor(QCursor(Qt::ClosedHandCursor), true);
 }

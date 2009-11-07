@@ -114,7 +114,7 @@ public:
     virtual QWidget* optionWidget();
 
     inline void setOutlineStyle(PaintMode mode) {
-        m_mode = mode;
+        m_outlinePaintMode = mode;
     }
 
 protected:
@@ -151,7 +151,7 @@ protected slots:
 
 
 private:
-    PaintMode m_mode;
+    PaintMode m_ountlinePaintMode;
 
     struct Private;
     Private* const d;

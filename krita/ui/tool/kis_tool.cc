@@ -84,7 +84,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
         , d(new Private)
 {
     d->cursor = cursor;
-    m_mode = XOR_MODE;
+    m_paintMode = XOR_MODE;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
 
@@ -360,7 +360,7 @@ QWidget* KisTool::optionWidget()
 
 void KisTool::paintToolOutline(QPainter* painter, QPainterPath &path)
 {
-    switch (m_mode) {
+    switch (m_outlinePaintMode) {
     case XOR_MODE: {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));

@@ -100,3 +100,12 @@ void KisBrushOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPa
     painter.translate(converter.documentToView(pos - image->pixelToDocument(hotSpot + QPointF(0.5, 0.5))));
     KisBoundaryPainter::paint(brush->boundary(), image, painter, converter);
 }
+
+
+
+void KisBrushOpSettings::changePaintOpSize(qreal x, qreal y) const
+{
+    qreal currentDiameter = m_options->m_brushOption->autoBrushDiameter();
+    
+    m_options->m_brushOption->setAutoBrushDiameter(currentDiameter + qRound(x));
+}

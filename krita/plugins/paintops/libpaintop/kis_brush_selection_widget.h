@@ -52,6 +52,9 @@ public:
     void setImage(KisImageWSP image);
 
     void setCurrentBrush(KisBrushSP brush);
+    
+    void setAutoBrushDiameter(qreal diameter);
+    qreal autoBrushDiameter();
 
 signals:
 

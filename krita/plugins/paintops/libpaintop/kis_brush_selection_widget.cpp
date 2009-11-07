@@ -157,4 +157,17 @@ void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)
 }
 
 
+
+void KisBrushSelectionWidget::setAutoBrushDiameter(qreal diameter)
+{
+    m_autoBrushWidget->setAutoBrushDiameter(diameter);
+}
+
+
+qreal KisBrushSelectionWidget::autoBrushDiameter()
+{
+    return m_autoBrushWidget->autoBrushDiameter();
+}
+
+
 #include "kis_brush_selection_widget.moc"

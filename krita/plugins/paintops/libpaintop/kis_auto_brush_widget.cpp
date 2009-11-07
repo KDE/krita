@@ -171,4 +171,18 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 
 }
 
+
+void KisAutoBrushWidget::setAutoBrushDiameter(qreal diameter)
+{
+    inputRadius->setValue(diameter);
+}
+
+
+qreal KisAutoBrushWidget::autoBrushDiameter()
+{
+    return inputRadius->value();
+}
+
+
+
 #include "kis_auto_brush_widget.moc"

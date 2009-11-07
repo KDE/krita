@@ -50,6 +50,8 @@ public:
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
+    virtual void changePaintOpSize(qreal x, qreal y) const;
+    
     // XXX: Hack!
     void setOptionsWidget(KisPaintOpSettingsWidget* widget) {
         if (m_options != 0 && m_options->property("owned by settings").toBool()) {

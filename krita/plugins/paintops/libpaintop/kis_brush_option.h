@@ -52,6 +52,8 @@ public:
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
+    void setAutoBrushDiameter(qreal diameter);
+    qreal autoBrushDiameter();
 private:
 
     KisBrushSelectionWidget * m_brushSelectionWidget;

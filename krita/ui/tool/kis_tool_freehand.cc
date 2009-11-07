@@ -130,7 +130,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         return;
 
     // control-click gets the color at the current point. For now, only with a ratio of 1
-    if (e->modifiers() == Qt::ControlModifier ) {
+    if (e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
         if (e->button() == Qt::LeftButton)
             m_canvas->resourceProvider()->setResource(KoCanvasResource::ForegroundColor,
                                                       KisToolUtils::pick(currentNode()->paintDevice(),
@@ -141,7 +141,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
                                                                          convertToIntPixelCoord(e)));
 
     }
-    else if (e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
+    else if (e->modifiers() == Qt::ControlModifier ) {
 
         if (e->button() == Qt::LeftButton)
             m_canvas->resourceProvider()->setResource(KoCanvasResource::ForegroundColor,

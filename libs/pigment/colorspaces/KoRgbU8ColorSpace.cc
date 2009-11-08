@@ -88,7 +88,6 @@ KoRgbU8ColorSpace::KoRgbU8ColorSpace( KoColorProfile *p) :
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_COLOR,  i18n( "Color" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_IN,  i18n( "In" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_OUT,  i18n( "Out" )));
-    addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_ADD,  i18n( "Add" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_DIFF,  i18n( "Diff" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_BUMPMAP,  i18n( "Bumpmap" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_CLEAR,  i18n( "Clear" )));

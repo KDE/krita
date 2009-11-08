@@ -13,6 +13,8 @@ install(FILES
     tablet.png  	
     locked.png  	
     unlocked.png
+    transparency-locked.png
+    transparency-unlocked.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

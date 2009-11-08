@@ -56,7 +56,7 @@ bool hasVisibleWidgets()
 
 KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile << "Png export! From:" << from << ", To:" << to << "";
+    dbgFile << "BMP export! From:" << from << ", To:" << to << "";
 
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
@@ -74,7 +74,7 @@ KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const Q
 
     QRect rc = output->image()->bounds();
     QImage img = output->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height());
-    img.save(url.path());
+    img.save(url.toLocalFile());
     return KoFilter::OK;
 }
 

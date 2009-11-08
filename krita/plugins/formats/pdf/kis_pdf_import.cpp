@@ -86,7 +86,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         url.setPath(tmpFile);
     }
 
-    Poppler::Document* pdoc = Poppler::Document::load(QFile::encodeName(url.path()));
+    Poppler::Document* pdoc = Poppler::Document::load(QFile::encodeName(url.toLocalFile()));
 
 
     if (!pdoc) {

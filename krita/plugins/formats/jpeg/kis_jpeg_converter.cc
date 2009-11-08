@@ -59,6 +59,8 @@ extern "C" {
 #include <kis_meta_data_io_backend.h>
 #include <kis_paint_device.h>
 #include <kis_transform_worker.h>
+#include <kis_jpeg_source.h>
+#include <kis_jpeg_destination.h>
 
 #include <colorprofiles/KoIccColorProfile.h>
 
@@ -126,12 +128,18 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     cinfo.err = jpeg_std_error(&jerr);
     jpeg_create_decompress(&cinfo);
 
+    Q_ASSERT(uri.isLocalFile());
+
     // open the file
-    FILE *fp = KDE_fopen(QFile::encodeName(uri.path()), "rb");
-    if (!fp) {
+    QFile file(QFile::encodeName(uri.toLocalFile()));
+    if (!file.exists()) {
         return (KisImageBuilder_RESULT_NOT_EXIST);
     }
-    jpeg_stdio_src(&cinfo, fp);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return (KisImageBuilder_RESULT_BAD_FETCH);
+    }
+    
+    KisJPEGSource::setSource(&cinfo, &file);
 
     jpeg_save_markers(&cinfo, JPEG_COM, 0xFFFF);
     /* Save APP0..APP15 markers */
@@ -151,7 +159,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if (csName.isEmpty()) {
         dbgFile << "unsupported colorspace :" << cinfo.out_color_space;
         jpeg_destroy_decompress(&cinfo);
-        fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
     uchar* profile_data;
@@ -184,7 +191,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if (cs == 0) {
         dbgFile << "unknown colorspace";
         jpeg_destroy_decompress(&cinfo);
-        fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
     // TODO fixit
@@ -395,7 +401,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     // Finish decompression
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
-    fclose(fp);
     delete [] row_pointer;
     return KisImageBuilder_RESULT_OK;
 }
@@ -446,11 +451,13 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
+
     // Open file for writing
-    FILE *fp = KDE_fopen(QFile::encodeName(uri.path()), "wb");
-    if (!fp) {
+    QFile file(QFile::encodeName(uri.toLocalFile()));
+    if (!file.open(QIODevice::WriteOnly)) {
         return (KisImageBuilder_RESULT_FAILURE);
     }
+
     uint height = img->height();
     uint width = img->width();
     // Initialize structure
@@ -460,7 +467,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     struct jpeg_error_mgr jerr;
     cinfo.err = jpeg_std_error(&jerr);
     // Initialize output stream
-    jpeg_stdio_dest(&cinfo, fp);
+    KisJPEGDestination::setDestination(&cinfo, &file);
 
     const KoColorSpace * cs = img->colorSpace();
 
@@ -469,7 +476,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     cinfo.input_components = cs->colorChannelCount(); // number of color channels per pixel */
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
     if (color_type == JCS_UNKNOWN) {
-        KIO::del(uri); // async, but I guess that's ok
+        (void)file.remove();
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
     cinfo.in_color_space = color_type;   // colorspace of input image
@@ -696,7 +703,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     // Writing is over
     jpeg_finish_compress(&cinfo);
-    fclose(fp);
+    file.close();
 
     delete [] row_pointer;
     // Free memory

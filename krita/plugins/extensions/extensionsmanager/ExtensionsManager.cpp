@@ -70,7 +70,7 @@ bool ExtensionsManager::installExtension(const KUrl& uri)
 
         // open the file
         bool result = false;
-        QFile *fp = new QFile(uriTF.path());
+        QFile *fp = new QFile(uriTF.toLocalFile());
         if (fp->exists()) {
             result =  installExtension(fp);
         }

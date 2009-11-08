@@ -78,6 +78,7 @@ KoFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByte
 
         switch (ib.buildImage(url)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
+        case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
             return KoFilter::NotImplemented;
             break;
         case KisImageBuilder_RESULT_INVALID_ARG:

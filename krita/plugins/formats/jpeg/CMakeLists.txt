@@ -6,6 +6,8 @@ add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 set(libkritaconverter_LIB_SRCS
     kis_jpeg_converter.cc
+    kis_jpeg_source.cpp
+    kis_jpeg_destination.cpp
     iccjpeg.c
     )
 

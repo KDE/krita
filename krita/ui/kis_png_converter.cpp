@@ -741,9 +741,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
         uriTF.setPath(tmpFile);
 
         // open the file
-        dbgFile << QFile::encodeName(uriTF.path()) << " " << uriTF.path() << " " << uriTF;
+        dbgFile << QFile::encodeName(uriTF.toLocalFile()) << " " << uriTF.toLocalFile() << " " << uriTF;
 //         QFile *fp = new QFile(QFile::encodeName(uriTF.path()) );
-        QFile *fp = new QFile(uriTF.path());
+        QFile *fp = new QFile(uriTF.toLocalFile());
         if (fp->exists()) {
             result = buildImage(fp);
         } else {

@@ -160,8 +160,8 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KUrl& uri)
     dbgFile << "Start decoding TIFF File";
     // Opent the TIFF file
     TIFF *image = 0;
-    if ((image = TIFFOpen(QFile::encodeName(uri.path()), "r")) == NULL) {
-        dbgFile << "Could not open the file, either it does not exist, either it is not a TIFF :" << uri.path();
+    if ((image = TIFFOpen(QFile::encodeName(uri.toLocalFile()), "r")) == NULL) {
+        dbgFile << "Could not open the file, either it does not exist, either it is not a TIFF :" << uri.toLocalFile();
 
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
@@ -588,8 +588,8 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP 
 
     // Open file for writing
     TIFF *image;
-    if ((image = TIFFOpen(QFile::encodeName(uri.path()), "w")) == NULL) {
-        dbgFile << "Could not open the file for writing" << uri.path();
+    if ((image = TIFFOpen(QFile::encodeName(uri.toLocalFile()), "w")) == NULL) {
+        dbgFile << "Could not open the file for writing" << uri.toLocalFile();
         TIFFClose(image);
         return (KisImageBuilder_RESULT_FAILURE);
     }

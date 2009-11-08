@@ -403,7 +403,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         images = BlobToImage(ii, &m_data[0], m_data.size(), &ei);
     } else {
 
-        qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
+        qstrncpy(ii -> filename, QFile::encodeName(uri.toLocalFile()), MaxTextExtent - 1);
 
         if (ii -> filename[MaxTextExtent - 1]) {
             // XXX_PROGRESS (was: emit notifyProgressError();
@@ -710,7 +710,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KUrl& uri, KisPa
 
     ii = CloneImageInfo(0);
 
-    qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
+    qstrncpy(ii -> filename, QFile::encodeName(uri.toLocalFile()), MaxTextExtent - 1);
 
     if (ii -> filename[MaxTextExtent - 1]) {
         // XXX_PROGRESS (was: emit notifyProgressError();
@@ -752,7 +752,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KUrl& uri, KisPa
     width = img -> width();
 
     bool alpha = true;
-    QString ext = QFileInfo(QFile::encodeName(uri.path())).extension(false).upper();
+    QString ext = QFileInfo(QFile::encodeName(uri.toLocalFile())).extension(false).upper();
     if (ext == "BMP") {
         alpha = false;
         qstrncpy(ii->magick, "BMP2", MaxTextExtent - 1);

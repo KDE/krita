@@ -234,10 +234,8 @@ bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
         return false;
 
     change.setType(d->m_changes.value(changeId)->getChangeType());
-//    if (d->m_changes.value(changeId)->hasCreator())
-        change.addChangeMetaData("dc-creator", d->m_changes.value(changeId)->getCreator());
-//    if (d->m_changes.value(changeId)->hasDate())
-        change.addChangeMetaData("dc-date", d->m_changes.value(changeId)->getDate());
+    change.addChangeMetaData("dc-creator", d->m_changes.value(changeId)->getCreator());
+    change.addChangeMetaData("dc-date", d->m_changes.value(changeId)->getDate());
     if (d->m_changes.value(changeId)->hasExtraMetaData())
         change.addChildElement("changeMetaData", d->m_changes.value(changeId)->getExtraMetaData());
 

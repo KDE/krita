@@ -164,7 +164,8 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
 {
     QString id = element.attributeNS(KoXmlNS::text,"change-id");
     int changeId = changeTracker->getLoadedChangeId(id);
-
+    if (!changeId)
+        return;
     if (!changeStack.empty())
         changeTracker->setParent(changeId, changeStack.top());
     changeStack.push(changeId);
@@ -266,16 +267,18 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                 } else if (d->changeTracker && localName == "change") {
                     QString id = tag.attributeNS(KoXmlNS::text,"change-id");
                     int changeId = d->changeTracker->getLoadedChangeId(id);
-                    if (d->changeStack.count())
-                        d->changeTracker->setParent(changeId, d->changeStack.top());
-                    KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
-                    deleteChangemarker->setChangeId(changeId);
-                    KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
-                    changeElement->setEnabled(true);
-                    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-                    if(layout){
-                        KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-                        textObjectManager->insertInlineObject(cursor, deleteChangemarker);
+                    if (changeId) {
+                        if (d->changeStack.count())
+                            d->changeTracker->setParent(changeId, d->changeStack.top());
+                        KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
+                        deleteChangemarker->setChangeId(changeId);
+                        KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+                        changeElement->setEnabled(true);
+                        KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+                        if(layout){
+                            KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+                            textObjectManager->insertInlineObject(cursor, deleteChangemarker);
+                        }
                     }
                     usedParagraph = false;
                 } else if (localName == "p") {    // text paragraph
@@ -494,7 +497,6 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 
 void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 {
-    //kDebug() << "in load List";
     const bool numberedParagraph = element.localName() == "numbered-paragraph";
 
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
@@ -700,21 +702,22 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             d->openChangeRegion(ts);
         } else if (isTextNS && localName == "change-end") {
             d->closeChangeRegion(ts);
-            //kDebug() << "change-end";
         }else if(isTextNS && localName == "change") {
             QString id = ts.attributeNS(KoXmlNS::text,"change-id");
             int changeId = d->changeTracker->getLoadedChangeId(id);
-            if (d->changeStack.count())
-                d->changeTracker->setParent(changeId, d->changeStack.top());
-            KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
-            deleteChangemarker->setChangeId(changeId);
-            KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
-            changeElement->setEnabled(true);
-            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+            if (changeId) {
+                if (d->changeStack.count())
+                    d->changeTracker->setParent(changeId, d->changeStack.top());
+                KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
+                deleteChangemarker->setChangeId(changeId);
+                KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+                changeElement->setEnabled(true);
+                KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
 
-            if(layout){
-                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-                textObjectManager->insertInlineObject(cursor, deleteChangemarker);
+                if(layout){
+                    KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+                    textObjectManager->insertInlineObject(cursor, deleteChangemarker);
+                }
             }
         }else if (isTextNS && localName == "span") { // text:span
 #ifdef KOOPENDOCUMENTLOADER_DEBUG

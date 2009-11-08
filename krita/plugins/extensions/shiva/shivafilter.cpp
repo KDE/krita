@@ -88,13 +88,19 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
     if (config) {
         QMap<QString, QVariant> map = config->getProperties();
         for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it) {
+            dbgPlugins << it.key() << " " << it.value();
             const GTLCore::Metadata::Entry* entry = kernel.metadata()->parameter(it.key().toAscii().data());
             if (entry and entry->asParameterEntry()) {
-                kernel.setParameter(it.key().toAscii().data(), qvariantToValue(it.value(), entry->asParameterEntry()->valueType()));
+                GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->valueType());
+                if(val.isValid())
+                {
+                    kernel.setParameter(it.key().toAscii().data(), val);
+                }
             }
         }
     }
     {
+        dbgPlugins << "Compile: " << m_source->name().c_str();
         QMutexLocker l(shivaMutex);
         kernel.compile();
 #if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12
@@ -106,7 +112,7 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
             std::list< GTLCore::AbstractImage* > inputs;
             inputs.push_back(&pdisrc);
             GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
-            dbgPlugins << dstTopLeft << " " << size;
+            dbgPlugins << "Run: " << m_source->name().c_str() << " " <<  dstTopLeft << " " << size;
             kernel.evaluatePixeles(region, inputs, &pdi
 #if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12
                 , report

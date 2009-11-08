@@ -85,7 +85,11 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
         for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it) {
             const GTLCore::Metadata::Entry* entry = kernel.metadata()->parameter(it.key().toAscii().data());
             if (entry and entry->asParameterEntry()) {
-                kernel.setParameter(it.key().toAscii().data(), qvariantToValue(it.value(), entry->asParameterEntry()->valueType()));
+                GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->valueType());
+                if(val.isValid())
+                {
+                    kernel.setParameter(it.key().toAscii().data(), val);
+                }
             }
         }
     }

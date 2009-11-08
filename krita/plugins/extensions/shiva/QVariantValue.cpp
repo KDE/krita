@@ -20,6 +20,8 @@
 #include <GTLCore/Type.h>
 #include <GTLCore/TypesManager.h>
 
+#include "kis_debug.h"
+
 QVariant valueToQVariant(const GTLCore::Value& value)
 {
     switch (value.type()->dataType()) {
@@ -73,6 +75,11 @@ GTLCore::Value qvariantToValue(const QVariant& variant, const GTLCore::Type* _ty
         std::vector<GTLCore::Value> values;
         foreach(const QVariant& var, variant.toList()) {
             values.push_back(qvariantToValue(var, _type->embeddedType()));
+        }
+        if( _type->dataType() == GTLCore::Type::VECTOR and values.size() != _type->vectorSize() )
+        {
+          dbgPlugins << "Invalid numbers of element for a vector, got: " << values.size() << " but expected: " << _type->vectorSize();
+          return GTLCore::Value();
         }
         return GTLCore::Value(values, _type);
     }

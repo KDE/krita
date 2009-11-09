@@ -1,0 +1,19 @@
+[Desktop Entry]
+Categories=Qt;KDE;Office;Graphics;
+Comment=
+Exec=krita %u
+GenericName=
+Icon=krita
+MimeType=image/x-portable-pixmap;
+Name=Krita
+NoDisplay=true
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=org.koffice.krita
+X-DBUS-StartupType=multi
+X-KDE-StartupNotify=true
+X-KDE-SubstituteUID=false
+X-KDE-Username=

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Icon=
+Name=Krita PPM Export Filter
+X-KDE-ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Export=image/x-portable-pixmap
+X-KDE-Import=application/x-krita
+X-KDE-Library=libkritappmexport
+X-KDE-Weight=1
+NoDisplay=true

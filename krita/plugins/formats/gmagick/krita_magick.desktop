@@ -2,7 +2,7 @@
 Categories=Qt;KDE;Office;Graphics;
 Exec=krita %u
 Icon=krita
-MimeType=image/x-xcf-gimp;image/gif;image/cgm;image/x-bmp;image/x-ico;image/x-pcx;image/x-portable-pixmap;image/x-targa;image/x-xbm;image/x-xcf;image/x-xpm;image/x-vnd.adobe.photoshop;image/x-rgb;application/dicom;
+MimeType=image/x-xcf-gimp;image/gif;image/cgm;image/x-bmp;image/x-ico;image/x-pcx;image/x-targa;image/x-xbm;image/x-xcf;image/x-xpm;image/x-vnd.adobe.photoshop;image/x-rgb;application/dicom;
 Name=Krita
 Name[af]=Krita
 Name[bg]=Krita

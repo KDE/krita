@@ -1021,6 +1021,7 @@ void KoTextEditor::newLine()
     bf.clearProperty(KoParagraphStyle::UnnumberedListItem);
     bf.clearProperty(KoParagraphStyle::IsListHeader);
     bf.clearProperty(KoParagraphStyle::MasterPageName);
+    bf.clearProperty(KoParagraphStyle::BreakBefore);
     d->caret.setBlockFormat(bf);
     if (nextStyle) {
         QTextBlock block = d->caret.block();

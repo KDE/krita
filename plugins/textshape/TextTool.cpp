@@ -79,7 +79,6 @@
 #include <KMessageBox>
 #include <KRun>
 #include <QAbstractTextDocumentLayout>
-#include <KAction>
 #include <QBuffer>
 #include <QTextTable>
 #include <QKeyEvent>

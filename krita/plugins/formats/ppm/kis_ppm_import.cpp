@@ -33,6 +33,7 @@
 
 #include <kis_debug.h>
 #include <kis_doc2.h>
+#include <KoColorSpaceRegistry.h>
 
 typedef KGenericFactory<KisPPMImport> PPMImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritappmimport, PPMImportFactory("kofficefilters"))
@@ -101,32 +102,28 @@ KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const Q
 
 int readNumber(QIODevice* device)
 {
-  char c;
-  int val = 0;
-  while(true)
-  {
-    if(!device->getChar(&c)) break; // End of the file
-    if(isdigit(c))
-    {
-      val = 10*val + c - '0';      
-    } else if( c == '#')
-    {
-      device->readLine();
-      break;
-    } else if (isspace((uchar) c)) {
-      break;
+    char c;
+    int val = 0;
+    while (true) {
+        if (!device->getChar(&c)) break; // End of the file
+        if (isdigit(c)) {
+            val = 10 * val + c - '0';
+        } else if (c == '#') {
+            device->readLine();
+            break;
+        } else if (isspace((uchar) c)) {
+            break;
+        }
     }
-  }
-  return val;
+    return val;
 }
 
 KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device)
 {
     dbgFile << "Start decoding file";
     device->open(QIODevice::ReadOnly);
-    if(!device->isOpen())
-    {
-      return KoFilter::CreationError;
+    if (!device->isOpen()) {
+        return KoFilter::CreationError;
     }
 
     QByteArray array = device->read(2);
@@ -154,16 +151,25 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device)
         dbgFile << "Only P6 is implemented for now";
         return KoFilter::CreationError;
     }
-    
+
     char c; device->getChar(&c);
     if (!isspace(c)) return KoFilter::CreationError; // Invalid file, it should have a seperator now
-      
+
     // Read width
     int width = readNumber(device);
     int height = readNumber(device);
     int maxval = readNumber(device);
 
     dbgFile << "Width = " << width << " height = " << height << "maxval = " << maxval;
-    
+
+    const KoColorSpace* colorSpace = 0;
+    if (maxval <= 255) {
+        colorSpace = KoColorSpaceRegistry::rgb8();
+    } else if (maxval <= 65535) {
+        colorSpace = KoColorSpaceRegistry::rgb16();
+    } else {
+        return KoFilter::CreationError;
+    }
+
     exit(-1);
 }

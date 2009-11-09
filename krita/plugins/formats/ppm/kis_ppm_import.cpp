@@ -148,9 +148,6 @@ public:
         m_ptr += 2;
         return qToBigEndian(v);
     }
-    QByteArray array() {
-        return m_array;
-    }
 private:
     char* m_ptr;
     QIODevice* m_device;
@@ -240,45 +237,36 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     for (int v = 0; v < height; ++v) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, width);
         ppmFlow->nextRow();
-        QByteArray arr = ppmFlow->array();
         if (!ppmFlow->valid()) return KoFilter::CreationError;
         if (maxval <= 255) {
             if (channels == 3) {
-                quint8* ptr = reinterpret_cast<quint8*>(arr.data());
                 while (!it.isDone()) {
                     KoRgbTraits<quint8>::setRed(it.rawData(), ppmFlow->nextUint8());
                     KoRgbTraits<quint8>::setGreen(it.rawData(), ppmFlow->nextUint8());
                     KoRgbTraits<quint8>::setBlue(it.rawData(), ppmFlow->nextUint8());
                     colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
-                    ptr += 3;
                     ++it;
                 }
             } else if (channels == 1) {
-                quint8* ptr = reinterpret_cast<quint8*>(arr.data());
                 while (!it.isDone()) {
                     *reinterpret_cast<quint8*>(it.rawData()) = ppmFlow->nextUint8();
                     colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
-                    ptr += 1;
                     ++it;
                 }
             }
         } else {
             if (channels == 3) {
-                quint16* ptr = reinterpret_cast<quint16*>(arr.data());
                 while (!it.isDone()) {
                     KoRgbU16Traits::setRed(it.rawData(), ppmFlow->nextUint16());
                     KoRgbU16Traits::setGreen(it.rawData(), ppmFlow->nextUint16());
                     KoRgbU16Traits::setBlue(it.rawData(), ppmFlow->nextUint16());
                     colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
-                    ptr += 3;
                     ++it;
                 }
             } else if (channels == 1) {
-                quint16* ptr = reinterpret_cast<quint16*>(arr.data());
                 while (!it.isDone()) {
                     *reinterpret_cast<quint16*>(it.rawData()) = ppmFlow->nextUint16();
                     colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
-                    ptr += 1;
                     ++it;
                 }
             }

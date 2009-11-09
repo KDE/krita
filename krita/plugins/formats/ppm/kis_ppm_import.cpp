@@ -129,21 +129,37 @@ int readNumber(QIODevice* device)
 class KisPpmFlow
 {
 public:
-    KisPpmFlow(QIODevice* device, int lineWidth) : m_device(device), m_lineWidth(lineWidth) {
+    KisPpmFlow() {
     }
-    void nextRow() {
+    virtual ~KisPpmFlow() {
+    }
+    virtual void nextRow() = 0;
+    virtual bool valid() = 0;
+    virtual quint8 nextUint8() = 0;
+    virtual quint16 nextUint16() = 0;
+
+};
+
+class KisBinaryPpmFlow : public KisPpmFlow
+{
+public:
+    KisBinaryPpmFlow(QIODevice* device, int lineWidth) : m_device(device), m_lineWidth(lineWidth) {
+    }
+    virtual ~KisBinaryPpmFlow() {
+    }
+    virtual void nextRow() {
         m_array = m_device->read(m_lineWidth);
         m_ptr = m_array.data();
     }
-    bool valid() {
+    virtual bool valid() {
         return m_array.size() == m_lineWidth;
     }
-    quint8 nextUint8() {
+    virtual quint8 nextUint8() {
         quint8 v = *reinterpret_cast<quint8*>(m_ptr);
         m_ptr += 1;
         return v;
     }
-    quint16 nextUint16() {
+    virtual quint16 nextUint16() {
         quint16 v = *reinterpret_cast<quint16*>(m_ptr);
         m_ptr += 2;
         return qToBigEndian(v);
@@ -232,7 +248,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
 
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
-    KisPpmFlow* ppmFlow = new KisPpmFlow(device, pixelsize * width);
+    KisPpmFlow* ppmFlow = new KisBinaryPpmFlow(device, pixelsize * width);
 
     for (int v = 0; v < height; ++v) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, width);

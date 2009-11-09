@@ -37,6 +37,10 @@
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
+#include <kis_iterator.h>
+#include <KoColorSpaceTraits.h>
+#include <kis_paint_device.h>
+#include <KoColorSpace.h>
 
 typedef KGenericFactory<KisPPMImport> PPMImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritappmimport, PPMImportFactory("kofficefilters"))
@@ -180,6 +184,37 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     image->lock();
 
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
+
+    for (int v = 0; v < height; ++v) {
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, width);
+        if (maxval <= 255) {
+            QByteArray arr = device->read(3 * width);
+            if (arr.size() < 3 * width) return KoFilter::CreationError;
+            quint8* ptr = reinterpret_cast<quint8*>(arr.data());
+            while (!it.isDone()) {
+                KoRgbTraits<quint8>::setRed(it.rawData(), ptr[0]);
+                KoRgbTraits<quint8>::setGreen(it.rawData(), ptr[1]);
+                KoRgbTraits<quint8>::setBlue(it.rawData(), ptr[2]);
+                colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+                ptr += 3;
+                ++it;
+            }
+        } else {
+            QByteArray arr = device->read(3 * width * 2);
+            if (arr.size() < 3 * width * 2) return KoFilter::CreationError;
+            quint16* ptr = reinterpret_cast<quint16*>(arr.data());
+            while (!it.isDone()) {
+                KoRgbU16Traits::setRed(it.rawData(), ptr[0]);
+                KoRgbU16Traits::setGreen(it.rawData(), ptr[1]);
+                KoRgbU16Traits::setBlue(it.rawData(), ptr[2]);
+                colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+                ptr += 3;
+                ++it;
+            }
+        }
+
+
+    }
 
     image->addNode(layer.data(), image->rootLayer().data());
 

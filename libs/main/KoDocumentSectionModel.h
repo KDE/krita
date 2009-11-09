@@ -96,7 +96,14 @@ class KoDocumentSectionModel: public QAbstractItemModel
         
     };
 
-    /// describes a single property of a document section
+    /**
+     *  describes a single property of a document section
+     *
+     * FIXME: using a QList instead of QMap and not having an untranslated identifier,
+     * either enum or string, forces applications to rely on the order of properties
+     * or to compare the translated strings. This makes it hard to robustly extend the
+     * properties of document section items.
+     */
     struct Property
     {
         /** i18n-ed name, suitable for displaying */

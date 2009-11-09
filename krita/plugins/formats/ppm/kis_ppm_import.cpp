@@ -133,18 +133,26 @@ public:
     }
     void nextRow() {
         m_array = m_device->read(m_lineWidth);
+        m_ptr = m_array.data();
     }
     bool valid() {
         return m_array.size() == m_lineWidth;
     }
     quint8 nextUint8() {
+        quint8 v = *reinterpret_cast<quint8*>(m_ptr);
+        m_ptr += 1;
+        return v;
     }
     quint16 nextUint16() {
+        quint16 v = *reinterpret_cast<quint16*>(m_ptr);
+        m_ptr += 2;
+        return qToBigEndian(v);
     }
     QByteArray array() {
         return m_array;
     }
 private:
+    char* m_ptr;
     QIODevice* m_device;
     QByteArray m_array;
     int m_lineWidth;
@@ -238,9 +246,9 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
             if (channels == 3) {
                 quint8* ptr = reinterpret_cast<quint8*>(arr.data());
                 while (!it.isDone()) {
-                    KoRgbTraits<quint8>::setRed(it.rawData(), ptr[0]);
-                    KoRgbTraits<quint8>::setGreen(it.rawData(), ptr[1]);
-                    KoRgbTraits<quint8>::setBlue(it.rawData(), ptr[2]);
+                    KoRgbTraits<quint8>::setRed(it.rawData(), ppmFlow->nextUint8());
+                    KoRgbTraits<quint8>::setGreen(it.rawData(), ppmFlow->nextUint8());
+                    KoRgbTraits<quint8>::setBlue(it.rawData(), ppmFlow->nextUint8());
                     colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
                     ptr += 3;
                     ++it;
@@ -248,7 +256,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
             } else if (channels == 1) {
                 quint8* ptr = reinterpret_cast<quint8*>(arr.data());
                 while (!it.isDone()) {
-                    *reinterpret_cast<quint8*>(it.rawData()) = ptr[0];
+                    *reinterpret_cast<quint8*>(it.rawData()) = ppmFlow->nextUint8();
                     colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
                     ptr += 1;
                     ++it;
@@ -258,9 +266,9 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
             if (channels == 3) {
                 quint16* ptr = reinterpret_cast<quint16*>(arr.data());
                 while (!it.isDone()) {
-                    KoRgbU16Traits::setRed(it.rawData(), qToBigEndian(ptr[0]));
-                    KoRgbU16Traits::setGreen(it.rawData(), qToBigEndian(ptr[1]));
-                    KoRgbU16Traits::setBlue(it.rawData(), qToBigEndian(ptr[2]));
+                    KoRgbU16Traits::setRed(it.rawData(), ppmFlow->nextUint16());
+                    KoRgbU16Traits::setGreen(it.rawData(), ppmFlow->nextUint16());
+                    KoRgbU16Traits::setBlue(it.rawData(), ppmFlow->nextUint16());
                     colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
                     ptr += 3;
                     ++it;
@@ -268,7 +276,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
             } else if (channels == 1) {
                 quint16* ptr = reinterpret_cast<quint16*>(arr.data());
                 while (!it.isDone()) {
-                    *reinterpret_cast<quint16*>(it.rawData()) = ptr[0];
+                    *reinterpret_cast<quint16*>(it.rawData()) = ppmFlow->nextUint16();
                     colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
                     ptr += 1;
                     ++it;

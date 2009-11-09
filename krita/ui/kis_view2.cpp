@@ -186,7 +186,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->toggleDockers->setShortcut(QKeySequence(Qt::Key_Escape));
     connect(m_d->toggleDockers, SIGNAL(toggled(bool)), this, SLOT(toggleDockers(bool)));
 
-
     setComponentData(KisFactory2::componentData(), false);
 
     if (!doc->isReadWrite()) {
@@ -757,6 +756,7 @@ void KisView2::slotTotalRefresh()
 
 void KisView2::toggleDockers(bool toggle)
 {
+    Q_UNUSED(toggle);
     if (m_d->hiddenDockwidgets.isEmpty()){
         foreach(QObject* widget, mainWindow()->children()) {
             if (widget->inherits("QDockWidget")) {

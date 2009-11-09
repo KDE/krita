@@ -149,6 +149,10 @@ protected slots:
      */
     virtual void resetCursorStyle();
 
+private slots:
+
+    void slotToggleFgBg();
+    void slotResetFgBg();
 
 private:
     PaintMode m_outlinePaintMode;

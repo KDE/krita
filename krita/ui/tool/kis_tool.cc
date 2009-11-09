@@ -22,7 +22,10 @@
 #include <QWidget>
 
 #include <klocale.h>
+#include <kaction.h>
 
+#include <KoColorSpaceRegistry.h>
+#include <KoColor.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoTool.h>
@@ -77,6 +80,10 @@ struct KisTool::Private {
     float currentExposure;
     KisFilterConfiguration * currentGenerator;
     QWidget* optionWidget;
+
+    KAction* toggleFgBg;
+    KAction* resetFgBg;
+
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
@@ -87,6 +94,16 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     m_outlinePaintMode = XOR_MODE;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
+
+    d->toggleFgBg = new KAction(i18n("Swap Foreground and Background Color"), this);
+    d->toggleFgBg->setShortcut(QKeySequence(Qt::Key_X));
+    connect(d->toggleFgBg, SIGNAL(triggered()), this, SLOT(slotToggleFgBg()));
+    addAction("toggle_fg_bg", d->toggleFgBg);
+
+    d->resetFgBg = new KAction(i18n("Reset Foreground and Background Color"), this);
+    d->resetFgBg->setShortcut(QKeySequence(Qt::Key_D));
+    connect(d->resetFgBg, SIGNAL(triggered()), this, SLOT(slotResetFgBg()));
+    addAction("reset_fg_bg", d->resetFgBg);
 
 }
 
@@ -413,6 +430,21 @@ void KisTool::resetCursorStyle()
     }
 }
 
+
+void KisTool::slotToggleFgBg()
+{
+    KoCanvasResourceProvider* resourceProvider = canvas()->resourceProvider();
+    KoColor c = resourceProvider->foregroundColor();
+    resourceProvider->setForegroundColor(resourceProvider->backgroundColor());
+    resourceProvider->setBackgroundColor(c);
+}
+
+void KisTool::slotResetFgBg()
+{
+    KoCanvasResourceProvider* resourceProvider = canvas()->resourceProvider();
+    resourceProvider->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
+    resourceProvider->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
+}
 
 #include "kis_tool.moc"
 

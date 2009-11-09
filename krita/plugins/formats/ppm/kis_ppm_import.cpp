@@ -140,6 +140,28 @@ public:
 
 };
 
+class KisAsciiPpmFlow : public KisPpmFlow
+{
+public:
+    KisAsciiPpmFlow(QIODevice* device) : m_device(device) {
+    }
+    virtual ~KisAsciiPpmFlow() {
+    }
+    virtual void nextRow() {
+    }
+    virtual bool valid() {
+        return !m_device->atEnd();
+    }
+    virtual quint8 nextUint8() {
+        return readNumber(m_device);
+    }
+    virtual quint16 nextUint16() {
+        return readNumber(m_device);
+    }
+private:
+    QIODevice* m_device;
+};
+
 class KisBinaryPpmFlow : public KisPpmFlow
 {
 public:
@@ -187,13 +209,17 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     enum { Puk, P1, P2, P3, P4, P5, P6 } fileType = Puk; // Puk => unknown
 
     int channels = -1;
+    bool isAscii = false;
 
     if (array == "P1") {
         fileType = P1;
+        isAscii = true;
     } else if (array == "P2") {
         fileType = P2;
+        isAscii = true;
     } else if (array == "P3") {
         fileType = P3;
+        isAscii = true;
     } else if (array == "P4") {
         fileType = P4;
     } else if (array == "P5") { // PGM
@@ -204,7 +230,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
         channels = 3;
     }
 
-    if (fileType != P6 && fileType != P5) {
+    if (fileType == P1 || fileType != P4) {
         dbgFile << "Only P6 is implemented for now";
         return KoFilter::CreationError;
     }
@@ -248,7 +274,12 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
 
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
-    KisPpmFlow* ppmFlow = new KisBinaryPpmFlow(device, pixelsize * width);
+    KisPpmFlow* ppmFlow = 0;
+    if (isAscii) {
+        ppmFlow = new KisAsciiPpmFlow(device);
+    } else {
+        ppmFlow = new KisBinaryPpmFlow(device, pixelsize * width);
+    }
 
     for (int v = 0; v < height; ++v) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, width);

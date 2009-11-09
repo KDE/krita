@@ -19,11 +19,18 @@
 
 #include "kis_ppm_import.h"
 
-#include <kgenericfactory.h>
+#include <QApplication>
+#include <QFile>
+
+#include <KGenericFactory>
+
+#include <kio/netaccess.h>
+#include <kio/deletejob.h>
 
 #include <KoFilterChain.h>
 
 #include <kis_debug.h>
+#include <kis_doc2.h>
 
 typedef KGenericFactory<KisPPMImport> PPMImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritappmimport, PPMImportFactory("kofficefilters"))
@@ -38,10 +45,61 @@ KisPPMImport::~KisPPMImport()
 
 KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile << "Importing using JPEGImport!";
+    dbgFile << "Importing using PPMImport!";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;
+
+    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
+
+    if (!doc)
+        return KoFilter::CreationError;
+
+    QString filename = m_chain -> inputFile();
+    doc -> prepareForImport();
+
+    if (filename.isEmpty()) {
+      return KoFilter::FileNotFound;
+    }
+
+    KUrl url;
+    url.setPath(filename);
+
     
-    abort();
+    dbgFile << "Import: " << url;
+    if (url.isEmpty())
+        return KoFilter::FileNotFound;
+
+    if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
+        dbgFile << "Inexistant file";
+        return KoFilter::FileNotFound;
+    }
+
+    // We're not set up to handle asynchronous loading at the moment.
+    QString tmpFile;
+    KoFilter::ConversionStatus result;
+    if (KIO::NetAccess::download(url, tmpFile, QApplication::activeWindow())) {
+        KUrl uriTF;
+        uriTF.setPath(tmpFile);
+
+        // open the file
+        QFile *fp = new QFile(uriTF.path());
+        if (fp->exists()) {
+            loadFromDevice(fp);
+            result = KoFilter::OK;
+        } else {
+            result = KoFilter::CreationError;
+        }
+
+        KIO::NetAccess::removeTempFile(tmpFile);
+        return result;
+    }
+    dbgFile << "Download failed";
+    return KoFilter::CreationError;
+}
+
+void KisPPMImport::loadFromDevice(QIODevice* device)
+{
+  dbgFile << "Start decoding file";
+  abort();
 }

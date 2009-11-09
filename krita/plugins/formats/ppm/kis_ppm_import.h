@@ -30,6 +30,8 @@ public:
     virtual ~KisPPMImport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+private:
+    void loadFromDevice(QIODevice* device);
 };
 
 #endif

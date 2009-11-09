@@ -33,7 +33,7 @@ class KisPDFImportWidget : public QWidget, public Ui_PDFImportWidgetBase
 {
     Q_OBJECT
 public:
-    KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * parent, const char * name = "");
+    KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * parent);
 
     ~KisPDFImportWidget();
 public:

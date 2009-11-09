@@ -35,8 +35,8 @@
 #include <math.h>
 
 
-KisPDFImportWidget::KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * parent, const char * name)
-        : QWidget(parent, name), m_pdfDoc(pdfDoc)
+KisPDFImportWidget::KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * parent)
+        : QWidget(parent), m_pdfDoc(pdfDoc)
 {
     setupUi(this);
     m_pages.push_back(0); // The first page is selected

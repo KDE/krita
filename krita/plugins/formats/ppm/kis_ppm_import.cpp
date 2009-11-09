@@ -29,12 +29,14 @@
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoFilterChain.h>
 
 #include <kis_debug.h>
 #include <kis_doc2.h>
-#include <KoColorSpaceRegistry.h>
+#include <kis_group_layer.h>
 #include <kis_image.h>
+#include <kis_paint_layer.h>
 
 typedef KGenericFactory<KisPPMImport> PPMImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritappmimport, PPMImportFactory("kofficefilters"))
@@ -177,7 +179,9 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     KisImageSP image = new KisImage(doc->undoAdapter(), width, height, colorSpace, "built image");
     image->lock();
 
+    KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
+    image->addNode(layer.data(), image->rootLayer().data());
 
     image->unlock();
     doc->setCurrentImage(image);

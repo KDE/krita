@@ -30,14 +30,8 @@
 
 #include <kis_debug.h>
 
-#include "config-openctl910.h"
-
-#ifdef HAVE_OPENCTL_910
-#if HAVE_OPENCTL_910
 #include "KoCtlTemplatesRegistry.h"
 #include "KoCtlCompositeOp.h"
-#endif
-#endif
 #include "KoCtlMixColorsOp.h"
 #include "KoCtlConvolutionOp.h"
 #include <boost/graph/graph_concepts.hpp>
@@ -102,16 +96,12 @@ KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlCol
         }
     }
     Q_ASSERT(d->info->alphaPos() == -1 || d->alphaCtlChannel != 0);
-#ifdef HAVE_OPENCTL_910
-#if HAVE_OPENCTL_910
     foreach(OpenCTL::Template* templat,  KoCtlTemplatesRegistry::instance()->compositeOps()) {
         KoCTLCompositeOp* cop = new KoCTLCompositeOp(templat, this, d->info->pixelDescription());
         if (cop->isValid()) {
             addCompositeOp(cop);
         }
     }
-#endif
-#endif
 }
 
 KoCtlColorSpace::~KoCtlColorSpace()

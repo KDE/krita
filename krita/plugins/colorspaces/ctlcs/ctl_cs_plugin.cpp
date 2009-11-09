@@ -36,15 +36,7 @@
 
 QMutex* ctlMutex = 0;
 
-// #include "kis_lms_f32_colorspace.h"
-
-#include "config-openctl910.h"
-
-#ifdef HAVE_OPENCTL_910
-#if HAVE_OPENCTL_910
 #include <OpenCTL/Template.h>
-#endif
-#endif
 
 typedef KGenericFactory<CTLCSPlugin> CTLCSPluginPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(krita_ctlcs_plugin, CTLCSPluginPluginFactory("krita"))
@@ -65,16 +57,12 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QStringList &)
             OpenCTL::ModulesManager::instance()->addDirectory(dir.toAscii().data());
         }
 
-#ifdef HAVE_OPENCTL_910
-#if HAVE_OPENCTL_910
         QStringList ctlTemplatesDirs = KGlobal::mainComponent().dirs()->findDirs("data", "pigmentcms/ctltemplates/");
         dbgPlugins << ctlTemplatesDirs;
         foreach(const QString & dir, ctlTemplatesDirs) {
             dbgPlugins << "Append : " << dir << " to the list of CTL modules";
             OpenCTL::Template::addIncludeDirectory(dir.toAscii().data());
         }
-#endif
-#endif
 
 
         // Load CTL Profiles

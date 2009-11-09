@@ -28,7 +28,6 @@
 #include <GTLCore/Type.h>
 #include <klocale.h>
 
-#include "config-openctl910.h"
 #include "KoCtlAccumulator.h"
 
 struct KoCtlColorSpaceInfo::ChannelInfo::Private {
@@ -254,11 +253,7 @@ bool KoCtlColorSpaceInfo::load()
                     }
                     n = n.nextSibling();
                 }
-#ifdef HAVE_OPENCTL_910
-#if HAVE_OPENCTL_910
                 d->pixelDescription = new GTLCore::PixelDescription(channelTypes, d->alphaPos);
-#endif
-#endif
             }
         }
         n = n.nextSibling();

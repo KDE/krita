@@ -59,13 +59,13 @@ KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const Q
     doc -> prepareForImport();
 
     if (filename.isEmpty()) {
-      return KoFilter::FileNotFound;
+        return KoFilter::FileNotFound;
     }
 
     KUrl url;
     url.setPath(filename);
 
-    
+
     dbgFile << "Import: " << url;
     if (url.isEmpty())
         return KoFilter::FileNotFound;
@@ -85,8 +85,7 @@ KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const Q
         // open the file
         QFile *fp = new QFile(uriTF.path());
         if (fp->exists()) {
-            loadFromDevice(fp);
-            result = KoFilter::OK;
+            result = loadFromDevice(fp);
         } else {
             result = KoFilter::CreationError;
         }
@@ -98,8 +97,40 @@ KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const Q
     return KoFilter::CreationError;
 }
 
-void KisPPMImport::loadFromDevice(QIODevice* device)
+KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device)
 {
-  dbgFile << "Start decoding file";
-  abort();
+    dbgFile << "Start decoding file";
+    device->open(QIODevice::ReadOnly);
+    if(!device->isOpen())
+    {
+      return KoFilter::CreationError;
+    }
+
+    QByteArray array = device->read(2);
+
+    if (array.size() < 2) return KoFilter::CreationError;
+
+    // Read the type of the ppm file
+    enum { Puk, P1, P2, P3, P4, P5, P6 } fileType = Puk; // Puk => unknown
+
+    if (array == "P1") {
+        fileType = P1;
+    } else if (array == "P2") {
+        fileType = P2;
+    } else if (array == "P3") {
+        fileType = P3;
+    } else if (array == "P4") {
+        fileType = P4;
+    } else if (array == "P5") {
+        fileType = P5;
+    } else if (array == "P6") {
+        fileType = P6;
+    }
+
+    if (fileType != P6) {
+        dbgFile << "Only P6 is implemented for now";
+        return KoFilter::CreationError;
+    }
+
+    exit(-1);
 }

@@ -31,7 +31,7 @@ public:
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 private:
-    void loadFromDevice(QIODevice* device);
+    KoFilter::ConversionStatus loadFromDevice(QIODevice* device);
 };
 
 #endif

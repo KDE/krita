@@ -141,6 +141,8 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     // Read the type of the ppm file
     enum { Puk, P1, P2, P3, P4, P5, P6 } fileType = Puk; // Puk => unknown
 
+    int channels = -1;
+
     if (array == "P1") {
         fileType = P1;
     } else if (array == "P2") {
@@ -149,13 +151,15 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
         fileType = P3;
     } else if (array == "P4") {
         fileType = P4;
-    } else if (array == "P5") {
+    } else if (array == "P5") { // PGM
         fileType = P5;
-    } else if (array == "P6") {
+        channels = 1;
+    } else if (array == "P6") { // PPM
         fileType = P6;
+        channels = 3;
     }
 
-    if (fileType != P6) {
+    if (fileType != P6 && fileType != P5) {
         dbgFile << "Only P6 is implemented for now";
         return KoFilter::CreationError;
     }
@@ -171,11 +175,24 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     dbgFile << "Width = " << width << " height = " << height << "maxval = " << maxval;
 
     // Select the colorspace depending on the maximum value
+    int pixelsize = -1;
     const KoColorSpace* colorSpace = 0;
     if (maxval <= 255) {
-        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        if (channels == 1) {
+            pixelsize = 1;
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
+        } else {
+            pixelsize = 3;
+            colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        }
     } else if (maxval <= 65535) {
-        colorSpace = KoColorSpaceRegistry::instance()->rgb16();
+        if (channels == 1) {
+            pixelsize = 2;
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA16", 0);
+        } else {
+            pixelsize = 6;
+            colorSpace = KoColorSpaceRegistry::instance()->rgb16();
+        }
     } else {
         dbgFile << "Unknown colorspace";
         return KoFilter::CreationError;
@@ -188,29 +205,47 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
 
     for (int v = 0; v < height; ++v) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, width);
+        QByteArray arr = device->read(pixelsize * width);
+        if (arr.size() < pixelsize * width) return KoFilter::CreationError;
         if (maxval <= 255) {
-            QByteArray arr = device->read(3 * width);
-            if (arr.size() < 3 * width) return KoFilter::CreationError;
-            quint8* ptr = reinterpret_cast<quint8*>(arr.data());
-            while (!it.isDone()) {
-                KoRgbTraits<quint8>::setRed(it.rawData(), ptr[0]);
-                KoRgbTraits<quint8>::setGreen(it.rawData(), ptr[1]);
-                KoRgbTraits<quint8>::setBlue(it.rawData(), ptr[2]);
-                colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
-                ptr += 3;
-                ++it;
+            if (channels == 3) {
+                quint8* ptr = reinterpret_cast<quint8*>(arr.data());
+                while (!it.isDone()) {
+                    KoRgbTraits<quint8>::setRed(it.rawData(), ptr[0]);
+                    KoRgbTraits<quint8>::setGreen(it.rawData(), ptr[1]);
+                    KoRgbTraits<quint8>::setBlue(it.rawData(), ptr[2]);
+                    colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+                    ptr += 3;
+                    ++it;
+                }
+            } else if (channels == 1) {
+                quint8* ptr = reinterpret_cast<quint8*>(arr.data());
+                while (!it.isDone()) {
+                    *reinterpret_cast<quint8*>(it.rawData()) = ptr[0];
+                    colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+                    ptr += 1;
+                    ++it;
+                }
             }
         } else {
-            QByteArray arr = device->read(3 * width * 2);
-            if (arr.size() < 3 * width * 2) return KoFilter::CreationError;
-            quint16* ptr = reinterpret_cast<quint16*>(arr.data());
-            while (!it.isDone()) {
-                KoRgbU16Traits::setRed(it.rawData(), qToBigEndian(ptr[0]));
-                KoRgbU16Traits::setGreen(it.rawData(), qToBigEndian(ptr[1]));
-                KoRgbU16Traits::setBlue(it.rawData(), qToBigEndian(ptr[2]));
-                colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
-                ptr += 3;
-                ++it;
+            if (channels == 3) {
+                quint16* ptr = reinterpret_cast<quint16*>(arr.data());
+                while (!it.isDone()) {
+                    KoRgbU16Traits::setRed(it.rawData(), qToBigEndian(ptr[0]));
+                    KoRgbU16Traits::setGreen(it.rawData(), qToBigEndian(ptr[1]));
+                    KoRgbU16Traits::setBlue(it.rawData(), qToBigEndian(ptr[2]));
+                    colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+                    ptr += 3;
+                    ++it;
+                }
+            } else if (channels == 1) {
+                quint16* ptr = reinterpret_cast<quint16*>(arr.data());
+                while (!it.isDone()) {
+                    *reinterpret_cast<quint16*>(it.rawData()) = ptr[0];
+                    colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+                    ptr += 1;
+                    ++it;
+                }
             }
         }
     }

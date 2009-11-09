@@ -41,6 +41,7 @@
 #include <KoColorSpaceTraits.h>
 #include <kis_paint_device.h>
 #include <KoColorSpace.h>
+#include <qendian.h>
 
 typedef KGenericFactory<KisPPMImport> PPMImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritappmimport, PPMImportFactory("kofficefilters"))
@@ -204,16 +205,14 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
             if (arr.size() < 3 * width * 2) return KoFilter::CreationError;
             quint16* ptr = reinterpret_cast<quint16*>(arr.data());
             while (!it.isDone()) {
-                KoRgbU16Traits::setRed(it.rawData(), ptr[0]);
-                KoRgbU16Traits::setGreen(it.rawData(), ptr[1]);
-                KoRgbU16Traits::setBlue(it.rawData(), ptr[2]);
+                KoRgbU16Traits::setRed(it.rawData(), qToBigEndian(ptr[0]));
+                KoRgbU16Traits::setGreen(it.rawData(), qToBigEndian(ptr[1]));
+                KoRgbU16Traits::setBlue(it.rawData(), qToBigEndian(ptr[2]));
                 colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
                 ptr += 3;
                 ++it;
             }
         }
-
-
     }
 
     image->addNode(layer.data(), image->rootLayer().data());

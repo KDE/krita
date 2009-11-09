@@ -135,6 +135,7 @@ public:
     }
     virtual void nextRow() = 0;
     virtual bool valid() = 0;
+    virtual bool nextUint1() = 0;
     virtual quint8 nextUint8() = 0;
     virtual quint16 nextUint16() = 0;
 
@@ -152,6 +153,9 @@ public:
     virtual bool valid() {
         return !m_device->atEnd();
     }
+    virtual bool nextUint1() {
+        return readNumber(m_device) == 1;
+    }
     virtual quint8 nextUint8() {
         return readNumber(m_device);
     }
@@ -165,7 +169,7 @@ private:
 class KisBinaryPpmFlow : public KisPpmFlow
 {
 public:
-    KisBinaryPpmFlow(QIODevice* device, int lineWidth) : m_device(device), m_lineWidth(lineWidth) {
+    KisBinaryPpmFlow(QIODevice* device, int lineWidth) : m_pos(0), m_device(device), m_lineWidth(lineWidth) {
     }
     virtual ~KisBinaryPpmFlow() {
     }
@@ -175,6 +179,16 @@ public:
     }
     virtual bool valid() {
         return m_array.size() == m_lineWidth;
+    }
+    virtual bool nextUint1() {
+        if (m_pos == 0) {
+            m_current = nextUint8();
+            m_pos = 8;
+        }
+        bool v = (m_current & 1) == 1;
+        --m_pos;
+        m_current = m_current >> 1;
+        return v;
     }
     virtual quint8 nextUint8() {
         quint8 v = *reinterpret_cast<quint8*>(m_ptr);
@@ -187,6 +201,8 @@ public:
         return qToBigEndian(v);
     }
 private:
+    int m_pos;
+    quint8 m_current;
     char* m_ptr;
     QIODevice* m_device;
     QByteArray m_array;
@@ -214,6 +230,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     if (array == "P1") {
         fileType = P1;
         isAscii = true;
+        channels = 0;
     } else if (array == "P2") {
         fileType = P2;
         isAscii = true;
@@ -222,6 +239,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
         isAscii = true;
     } else if (array == "P4") {
         fileType = P4;
+        channels = 0;
     } else if (array == "P5") { // PGM
         fileType = P5;
         channels = 1;
@@ -230,18 +248,17 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
         channels = 3;
     }
 
-    if (fileType == P1 || fileType != P4) {
-        dbgFile << "Only P6 is implemented for now";
-        return KoFilter::CreationError;
-    }
-
     char c; device->getChar(&c);
     if (!isspace(c)) return KoFilter::CreationError; // Invalid file, it should have a seperator now
 
     // Read width
     int width = readNumber(device);
     int height = readNumber(device);
-    int maxval = readNumber(device);
+    int maxval = 1;
+
+    if (fileType != P1 && fileType != P4) {
+        maxval = readNumber(device);
+    }
 
     dbgFile << "Width = " << width << " height = " << height << "maxval = " << maxval;
 
@@ -249,7 +266,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     int pixelsize = -1;
     const KoColorSpace* colorSpace = 0;
     if (maxval <= 255) {
-        if (channels == 1) {
+        if (channels == 1 || channels == 0) {
             pixelsize = 1;
             colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
         } else {
@@ -257,7 +274,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
             colorSpace = KoColorSpaceRegistry::instance()->rgb8();
         }
     } else if (maxval <= 65535) {
-        if (channels == 1) {
+        if (channels == 1 || channels == 0) {
             pixelsize = 2;
             colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA16", 0);
         } else {
@@ -297,6 +314,16 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
             } else if (channels == 1) {
                 while (!it.isDone()) {
                     *reinterpret_cast<quint8*>(it.rawData()) = ppmFlow->nextUint8();
+                    colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+                    ++it;
+                }
+            } else if (channels == 0) {
+                while (!it.isDone()) {
+                    if (ppmFlow->nextUint1()) {
+                        *reinterpret_cast<quint8*>(it.rawData()) = 255;
+                    } else {
+                        *reinterpret_cast<quint8*>(it.rawData()) = 0;
+                    }
                     colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
                     ++it;
                 }

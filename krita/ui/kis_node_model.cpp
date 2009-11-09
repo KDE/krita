@@ -22,15 +22,19 @@
 
 #include <QMimeData>
 
-#include "kis_debug.h"
+#include <klocale.h>
+
+#include <kis_debug.h>
+#include <kis_node.h>
+#include <kis_node_progress_proxy.h>
+#include <kis_image.h>
+#include <kis_selection.h>
+#include <kis_undo_adapter.h>
+#include <commands/kis_node_property_list_command.h>
+#include <kis_paint_layer.h>
+
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include "kis_node.h"
-#include "kis_node_progress_proxy.h"
-#include "kis_image.h"
-#include "kis_selection.h"
-#include "kis_undo_adapter.h"
-#include "commands/kis_node_property_list_command.h"
 
 class KisNodeModel::Private
 {
@@ -273,8 +277,6 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     Q_ASSERT(index.internalPointer());
 
     KisNode *node = static_cast<KisNode*>(index.internalPointer());
-    bool wasVisible;
-    bool visible;
     PropertyList proplist;
 
     switch (role) {
@@ -284,13 +286,34 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         emit dataChanged(index, index);
         return true;
     case PropertiesRole:
-        proplist = value.value<PropertyList>();
-        wasVisible = node->visible();
-        visible = proplist.at(0).state.toBool();
+        {
+            // don't record undo/redo for visibility, locked or alpha locked changes
 
-        m_d->image->undoAdapter()->addCommand(new KisNodePropertyListCommand(node, proplist));
-        emit dataChanged(index, index);
-        return true;
+            proplist = value.value<PropertyList>();
+            bool undo = true;
+            foreach(KoDocumentSectionModel::Property prop, proplist) {
+                if (prop.name == i18n("Visible") && node->visible() !=prop.state.toBool()) undo = false;
+                if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
+                if (prop.name == i18n("Alpha Locked")) {
+                    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(node)) {
+                        if (l->alphaLocked() != prop.state.toBool()) {
+                            undo = false;
+                        }
+                    }
+                }
+            }
+
+            if (undo) {
+                m_d->image->undoAdapter()->addCommand(new KisNodePropertyListCommand(node, proplist));
+            }
+            else {
+                node->setSectionModelProperties(proplist);
+                node->setDirty();
+            }
+
+            emit dataChanged(index, index);
+            return true;
+        }
     case ActiveRole:
         if (value.toBool()) {
             emit nodeActivated(node);

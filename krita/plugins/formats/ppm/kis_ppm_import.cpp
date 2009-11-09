@@ -126,6 +126,30 @@ int readNumber(QIODevice* device)
     return val;
 }
 
+class KisPpmFlow
+{
+public:
+    KisPpmFlow(QIODevice* device, int lineWidth) : m_device(device), m_lineWidth(lineWidth) {
+    }
+    void nextRow() {
+        m_array = m_device->read(m_lineWidth);
+    }
+    bool valid() {
+        return m_array.size() == m_lineWidth;
+    }
+    quint8 nextUint8() {
+    }
+    quint16 nextUint16() {
+    }
+    QByteArray array() {
+        return m_array;
+    }
+private:
+    QIODevice* m_device;
+    QByteArray m_array;
+    int m_lineWidth;
+};
+
 KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDoc2* doc)
 {
     dbgFile << "Start decoding file";
@@ -203,10 +227,13 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
 
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
+    KisPpmFlow* ppmFlow = new KisPpmFlow(device, pixelsize * width);
+
     for (int v = 0; v < height; ++v) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, width);
-        QByteArray arr = device->read(pixelsize * width);
-        if (arr.size() < pixelsize * width) return KoFilter::CreationError;
+        ppmFlow->nextRow();
+        QByteArray arr = ppmFlow->array();
+        if (!ppmFlow->valid()) return KoFilter::CreationError;
         if (maxval <= 255) {
             if (channels == 3) {
                 quint8* ptr = reinterpret_cast<quint8*>(arr.data());

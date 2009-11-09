@@ -12,26 +12,30 @@ set(libemf_LIB_SRCS
      EmfHeader.cpp
      EmfParser.cpp
      EmfOutput.cpp
+     EmfOutputDebugStrategy.cpp
+     EmfOutputPainterStrategy.cpp
 )
 
-kde4_add_library(libemf SHARED ${libemf_LIB_SRCS})
+#kde4_add_library(libemf SHARED ${libemf_LIB_SRCS})
 
-target_link_libraries(libemf  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} )
+#target_link_libraries(libemf  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} )
 
-set_target_properties(libemf PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+#set_target_properties(libemf PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
 
 ########### install files ###############
 
 #install(TARGETS libemf  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install(
-    FILES
-    EmfEnums.h
-    EmfRecords.h
-    EmfHeader.h
-    EmfParser.h
-    EmfOutput.h
-    emf_export.h
-    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
-)
+#install(
+#    FILES
+#    EmfEnums.h
+#    EmfRecords.h
+#    EmfHeader.h
+#    EmfParser.h
+#    EmfOutput.h
+#    EmfOutputDebugStrategy.h
+#    EmfOutputPainterStrategy.h
+#    emf_export.h
+#    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+#)

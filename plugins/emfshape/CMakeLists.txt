@@ -14,6 +14,13 @@ SET ( EmfShape_SRCS
     # No tool yet.
     #EmfTool.cpp
     #EmfToolFactory.cpp
+
+    libemf/EmfRecords.cpp
+    libemf/EmfHeader.cpp
+    libemf/EmfParser.cpp
+    libemf/EmfOutput.cpp
+    libemf/EmfOutputDebugStrategy.cpp
+    libemf/EmfOutputPainterStrategy.cpp
 )
 
 #kde4_add_ui_files(EmfShape_SRCS

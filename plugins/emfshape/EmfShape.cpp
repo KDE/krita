@@ -42,6 +42,7 @@
 #include "KoXmlNS.h"
 // FIXME
 #include "libemf/EmfParser.h"
+#include "libemf/EmfOutputPainterStrategy.h"
 
 // EMF shape
 #include "DefaultEmf.h"
@@ -109,7 +110,7 @@ void EmfShape::draw(QPainter &painter)
     kDebug() << "-------------------------------------------";
     kDebug() << "size: " << sizeInt;
     kDebug() << "-------------------------------------------";
-    Libemf::PainterOutput  emfOutput( painter, sizeInt );
+    Libemf::OutputPainterStrategy  emfOutput( painter, sizeInt );
     emfParser.setOutput( &emfOutput );
     
     // FIXME: Use the actual bytes.

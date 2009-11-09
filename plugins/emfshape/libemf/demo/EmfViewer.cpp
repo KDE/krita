@@ -22,6 +22,9 @@
 #include <QFileDialog>
 #include <QMenuBar>
 
+#include "../EmfOutputPainterStrategy.h"
+
+
 EmfViewer::EmfViewer( QSize &size )
     : QMainWindow()
 {
@@ -64,7 +67,7 @@ void EmfViewer::loadFile( const QString &fileName )
     QImage    image( m_size, QImage::Format_ARGB32_Premultiplied );
     QPainter  painter( &image );
 
-    PainterOutput output( painter, m_size );
+    OutputPainterStrategy output( painter, m_size );
     parser.setOutput( &output );
     parser.load( QString( fileName ) );
 

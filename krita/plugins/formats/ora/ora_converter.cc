@@ -53,15 +53,14 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, false, qApp -> mainWidget())) {
+    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, QApplication::activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
     // We're not set up to handle asynchronous loading at the moment.
-    KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
     QString tmpFile;
 
-    KoStore* store = KoStore::createStore(qApp->mainWidget(), uri, KoStore::Read, "odr", KoStore::Zip);
+    KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Read, "odr", KoStore::Zip);
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
@@ -90,7 +89,7 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open file for writing
-    KoStore* store = KoStore::createStore(qApp -> mainWidget(), uri, KoStore::Write, "odr", KoStore::Zip);
+    KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Write, "odr", KoStore::Zip);
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }

@@ -22,6 +22,8 @@
 
 #include <KoFilter.h>
 
+class KisDoc2;
+
 class KisPPMImport : public KoFilter
 {
     Q_OBJECT
@@ -31,7 +33,7 @@ public:
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 private:
-    KoFilter::ConversionStatus loadFromDevice(QIODevice* device);
+    KoFilter::ConversionStatus loadFromDevice(QIODevice* device, KisDoc2* doc);
 };
 
 #endif

@@ -34,6 +34,7 @@
 #include <kis_debug.h>
 #include <kis_doc2.h>
 #include <KoColorSpaceRegistry.h>
+#include <kis_image.h>
 
 typedef KGenericFactory<KisPPMImport> PPMImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritappmimport, PPMImportFactory("kofficefilters"))
@@ -88,7 +89,7 @@ KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const Q
         // open the file
         QFile *fp = new QFile(uriTF.path());
         if (fp->exists()) {
-            result = loadFromDevice(fp);
+            result = loadFromDevice(fp, doc);
         } else {
             result = KoFilter::CreationError;
         }
@@ -118,7 +119,7 @@ int readNumber(QIODevice* device)
     return val;
 }
 
-KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device)
+KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDoc2* doc)
 {
     dbgFile << "Start decoding file";
     device->open(QIODevice::ReadOnly);
@@ -162,14 +163,23 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device)
 
     dbgFile << "Width = " << width << " height = " << height << "maxval = " << maxval;
 
+    // Select the colorspace depending on the maximum value
     const KoColorSpace* colorSpace = 0;
     if (maxval <= 255) {
-        colorSpace = KoColorSpaceRegistry::rgb8();
+        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     } else if (maxval <= 65535) {
-        colorSpace = KoColorSpaceRegistry::rgb16();
+        colorSpace = KoColorSpaceRegistry::instance()->rgb16();
     } else {
+        dbgFile << "Unknown colorspace";
         return KoFilter::CreationError;
     }
 
-    exit(-1);
+    KisImageSP image = new KisImage(doc->undoAdapter(), width, height, colorSpace, "built image");
+    image->lock();
+
+
+
+    image->unlock();
+    doc->setCurrentImage(image);
+    return KoFilter::OK;
 }

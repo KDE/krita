@@ -89,7 +89,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     options.optimize = wdgUi.optimize->isChecked();
     options.smooth = wdgUi.smoothLevel->value();
     options.baseLineJPEG = wdgUi.baseLineJPEG->isChecked();
-    options.subsampling = wdgUi.subsampling->currentItem();
+    options.subsampling = wdgUi.subsampling->currentIndex();
     // Jpeg
     options.exif = wdgUi.exif->isChecked();
     options.iptc = wdgUi.iptc->isChecked();

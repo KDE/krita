@@ -323,7 +323,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     // Creating the KisImageWSP
     if (! m_img) {
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
-        m_img->setResolution(xres / 72.0, yres / 72.0);
+        m_img->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres ));
         m_img->lock();
         Q_CHECK_PTR(m_img);
         if (profile) {
@@ -609,9 +609,9 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP 
         TIFFSetField(image, TIFFTAG_ARTIST, author.toAscii().data());
     }
 
-    dbgFile << "xres: " << img->xRes()*72 << " yres: " << img->yRes()*72;
-    TIFFSetField(image, TIFFTAG_XRESOLUTION, img->xRes()*72);
-    TIFFSetField(image, TIFFTAG_YRESOLUTION, img->yRes()*72);
+    dbgFile << "xres: " << INCH_TO_POINT(img->xRes()) << " yres: " << INCH_TO_POINT(img->yRes());
+    TIFFSetField(image, TIFFTAG_XRESOLUTION, INCH_TO_POINT(img->xRes()));
+    TIFFSetField(image, TIFFTAG_YRESOLUTION, INCH_TO_POINT(img->yRes()));
 
     KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(img->rootLayer().data());
     if (root == 0) {

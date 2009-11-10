@@ -67,7 +67,6 @@ KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const Q
         return KoFilter::CreationError;
 
     QString filename = m_chain -> inputFile();
-    doc -> prepareForImport();
 
     if (filename.isEmpty()) {
         return KoFilter::FileNotFound;
@@ -96,6 +95,7 @@ KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const Q
         // open the file
         QFile *fp = new QFile(uriTF.path());
         if (fp->exists()) {
+            doc->prepareForImport();
             result = loadFromDevice(fp, doc);
         } else {
             result = KoFilter::CreationError;

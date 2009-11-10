@@ -424,7 +424,7 @@ void KoToolManager::postSwitchTool(bool temporary)
     if (optionWidgetMap.empty()) { // no option widget.
         QWidget *toolWidget;
         QString name;
-        foreach(ToolHelper * tool, d->tools) {
+        foreach(ToolHelper *tool, d->tools) {
             if (tool->id() == d->canvasData->activeTool->toolId()) {
                 name = tool->name();
                 break;
@@ -445,6 +445,12 @@ void KoToolManager::postSwitchTool(bool temporary)
         d->canvasData->dummyToolLabel->setText(i18n("Active tool: %1", name));
         optionWidgetMap.insert(i18n("Tool Options"), toolWidget);
     }
+
+    // Activate the actions for the currently active tool
+    foreach(KAction *action, d->canvasData->activeTool->actions()) {
+        action->setEnabled(true);
+    }
+
     d->canvasData->canvas->setToolOptionWidgets(optionWidgetMap);
     emit changedTool(d->canvasData->canvas, d->uniqueToolIds.value(d->canvasData->activeTool));
 }
@@ -752,7 +758,19 @@ void KoToolManager::switchInputDevice(const KoInputDevice &device)
     }
     d->inputDevice = device;
     QList<CanvasData*> items = d->canvasses[d->canvasData->canvas];
+
+    // disable all actions for all tools in the all canvasdata objects for this canvas.
     foreach(CanvasData *cd, items) {
+        foreach(KoTool* tool, cd->allTools) {
+            foreach(KAction* action, tool->actions()) {
+                action->setEnabled(false);
+            }
+        }
+    }
+
+    // search for a canvasdata object for the current input device
+    foreach(CanvasData *cd, items) {
+
         if (cd->inputDevice == device) {
             d->canvasData = cd;
             if (cd->activeTool == 0)

@@ -276,8 +276,10 @@ void KoDockWidgetTitleBar::Private::toggleCollapsed()
     if (q == 0) // there does not *have* to be anything on the dockwidget.
         return;
     q->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
-    if (q->widget()) q->widget()->setVisible(q->widget()->isHidden());
-    collapseButton->setIcon(q->widget()->isHidden() ? closeIcon : openIcon);
+    if (q->widget()) {
+        q->widget()->setVisible(q->widget()->isHidden());
+        collapseButton->setIcon(q->widget()->isHidden() ? closeIcon : openIcon);
+    }
 }
 
 void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatures)

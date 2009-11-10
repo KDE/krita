@@ -60,7 +60,9 @@ void HistogramDockerUpdater::updated()
 
 void HistogramDockerUpdater::completed()
 {
-    m_histogram->computeHistogram();
+    if (m_histogram) {
+        m_histogram->computeHistogram();
+    }
     m_view->updateHistogram();
 }
 

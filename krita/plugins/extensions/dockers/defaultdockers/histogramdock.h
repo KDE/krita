@@ -53,6 +53,7 @@ private slots:
     void producerChanged(QAction *action);
     void popupMenu(const QPoint & pos);
     void colorSpaceChanged(const KoColorSpace* cs);
+    void reset();
 
 private:
 

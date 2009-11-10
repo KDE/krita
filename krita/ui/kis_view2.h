@@ -171,8 +171,12 @@ public:  // Krita specific interfaces
     KisPerspectiveGridManager* perspectiveGridManager();
     KisPaintingAssistantsManager* paintingAssistantManager();
 
+signals:
+
+    void sigLoadingFinished();
 
 protected:
+
     void resizeEvent ( QResizeEvent * event );
 
 private slots:

@@ -19,7 +19,9 @@
  */
 
 #include "histogramdock.h"
+
 #include <QDockWidget>
+#include <QLabel>
 
 #include <kis_debug.h>
 
@@ -27,25 +29,26 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoID.h"
 
-#include "kis_global.h"
-#include "kis_types.h"
-#include "kis_image.h"
+#include <kis_global.h>
+#include <kis_types.h>
+#include <kis_image.h>
 #include <kis_histogram_view.h>
 #include <kis_canvas2.h>
+#include <kis_view2.h>
 
 #include "kis_imagerasteredcache.h"
 #include "kis_accumulating_producer.h"
 #include "histogram_updater.h"
 
 KisHistogramDocker::KisHistogramDocker()
-        : QDockWidget(i18n("Histogram"))
-        , m_canvas(0)
-        , m_factory(0)
-        , m_producer(0)
-        , m_cs(0)
-        , m_hview(0)
-        , m_cache(0)
-        , m_histogram(0)
+    : QDockWidget(i18n("Histogram"))
+    , m_canvas(0)
+    , m_factory(0)
+    , m_producer(0)
+    , m_cs(0)
+    , m_hview(0)
+    , m_cache(0)
+    , m_histogram(0)
 {
 }
 
@@ -64,6 +67,7 @@ KisHistogramDocker::~KisHistogramDocker()
 
 void KisHistogramDocker::setCanvas(KoCanvasBase* canvas)
 {
+    dbgPlugins << canvas;
     disconnect();
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
@@ -75,33 +79,45 @@ void KisHistogramDocker::setImage(KisImageWSP image)
 {
     if (!image) return;
 
+    dbgPlugins << m_image << image << m_histogram;
+
     m_image = image;
 
-    if (m_canvas && m_canvas->view() && m_histogram) {
+    if (m_canvas && m_canvas->view()) {
+
 
         m_hview = 0; // producerChanged wants to setCurrentChannels, prevent that here
         m_cache = 0; // we try to delete it in producerChanged
         colorSpaceChanged(m_image->colorSpace()); // calls producerChanged(0)
 
-        m_hview = new KisHistogramView(this);
-        m_hview->setHistogram(m_histogram);
-        m_hview->setColor(true);
+        if (m_histogram) {
+            m_hview = new KisHistogramView(this);
+            m_hview->setHistogram(m_histogram);
+            m_hview->setColor(true);
 
-        // At the time we called colorSpaceChanged m_hview was not yet constructed, so producerChanged didn't call this
-        setChannels();
+            // At the time we called colorSpaceChanged m_hview was not yet constructed, so producerChanged didn't call this
+            setChannels();
 
-        m_hview->setFixedSize(256, 100); // XXX if not it keeps expanding
-        m_hview->setWindowTitle(i18n("Histogram"));
+            m_hview->setFixedSize(256, 100); // XXX if not it keeps expanding
+            m_hview->setWindowTitle(i18n("Histogram"));
 
-        connect(m_hview, SIGNAL(rightClicked(const QPoint&)), SLOT(popupMenu(const QPoint&)));
-        connect(m_cache, SIGNAL(cacheUpdated()), new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
-        connect(&m_popup, SIGNAL(triggered(QAction *)), SLOT(producerChanged(QAction *)));
-        connect(m_image.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(colorSpaceChanged(const KoColorSpace*))); // No need to force updates here
+            connect(m_hview, SIGNAL(rightClicked(const QPoint&)), SLOT(popupMenu(const QPoint&)));
+            connect(m_cache, SIGNAL(cacheUpdated()), new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
+            connect(&m_popup, SIGNAL(triggered(QAction *)), SLOT(producerChanged(QAction *)));
+            connect(m_image.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(colorSpaceChanged(const KoColorSpace*))); // No need to force updates here
+            connect(m_canvas->view(), SIGNAL(sigLoadingFinished()), SLOT(reset()));
+            m_cache->setDocker(this);
+            m_cache->setImage(m_image);
 
-        m_cache->setDocker(this);
-        m_cache->setImage(m_image);
-
-        setWidget(m_hview);
+            setWidget(m_hview);
+        }
+        else {
+            QLabel* l = new QLabel(i18n("Histograms are not supported for images in the %1 colorspace.").arg(m_cs->name()),
+                                   m_canvas->view());
+            l->setWordWrap(true);
+            l->setMargin(4);
+            setWidget(l);
+        }
 
     } else {
         delete m_cache;
@@ -126,6 +142,8 @@ void KisHistogramDocker::setChannels()
 
 void KisHistogramDocker::producerChanged(QAction *action)
 {
+    dbgPlugins << m_image << m_image.isValid();
+
     int pos = m_popup.actions().indexOf(action);
 
     if (m_cache)
@@ -160,6 +178,8 @@ void KisHistogramDocker::producerChanged(QAction *action)
     m_histogram = new KisHistogram(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()),
                                    KoHistogramProducerSP(m_producer), LOGARITHMIC);
 
+    qDebug() << "created histogram " << m_histogram;
+
     if (m_hview) {
         setChannels();
         connect(m_cache, SIGNAL(cacheUpdated()),
@@ -174,10 +194,10 @@ void KisHistogramDocker::popupMenu(const QPoint& pos)
 
 void KisHistogramDocker::colorSpaceChanged(const KoColorSpace* cs)
 {
+    dbgPlugins << cs->name() << m_image << m_histogram;
     m_cs = cs;
 
-    QList<KoID> keys = KoHistogramProducerFactoryRegistry::instance() ->
-                       listKeysCompatibleWith(m_cs);
+    QList<KoID> keys = KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
 
     m_popup.clear();
     m_currentProducerPos = 0;
@@ -189,6 +209,14 @@ void KisHistogramDocker::colorSpaceChanged(const KoColorSpace* cs)
 
     if (m_popup.actions().size() > 0) {
         producerChanged(m_popup.actions().at(0));
+    }
+}
+
+void KisHistogramDocker::reset()
+{
+    dbgPlugins << m_image << m_image.isValid();
+    if (m_image && m_image.isValid()) {
+        colorSpaceChanged(m_image->colorSpace());
     }
 }
 

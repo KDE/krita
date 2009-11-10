@@ -526,6 +526,8 @@ void KisView2::slotLoadingFinished()
     m_d->zoomManager->zoomController()->setAspectMode(true);
 
     updateGUI();
+
+    emit sigLoadingFinished();
 }
 
 

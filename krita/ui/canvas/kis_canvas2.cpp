@@ -192,7 +192,6 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     QRect vRect = viewRectFromDoc(rc);
     if (!vRect.isEmpty()) {
         m_d->canvasWidget->widget()->update(vRect);
-        //m_d->canvasWidget->widget()->update();
     }
 }
 

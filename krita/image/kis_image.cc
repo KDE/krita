@@ -335,6 +335,7 @@ bool KisImage::locked() const
 
 void KisImage::lock()
 {
+    blockSignals(true);
     if (!locked()) {
         if (m_d->projection) {
             m_d->projection->lock();
@@ -360,6 +361,7 @@ void KisImage::unlock()
                 m_d->projection->unlock();
             }
         }
+        blockSignals(false);
     }
 }
 

@@ -80,6 +80,7 @@ void KisHistogramView::setPaintDevice(KisPaintDeviceSP dev)
 
 void KisHistogramView::setHistogram(KisHistogramSP histogram)
 {
+    if (!histogram) return;
     m_cs = 0;
     m_histogram = histogram;
     m_currentProducer = m_histogram->producer();

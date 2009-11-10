@@ -193,7 +193,6 @@ void KisLayerBox::setCanvas(KoCanvasBase * canvas)
 
 void KisLayerBox::setImage(KisImageWSP image)
 {
-    qDebug() << image;
     if (!image) return;
     m_image = image;
     if (m_canvas && m_canvas->view()) {

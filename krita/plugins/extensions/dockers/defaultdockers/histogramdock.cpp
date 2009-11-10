@@ -45,6 +45,7 @@ KisHistogramDocker::KisHistogramDocker()
         , m_cs(0)
         , m_hview(0)
         , m_cache(0)
+        , m_histogram(0)
 {
 }
 
@@ -76,7 +77,7 @@ void KisHistogramDocker::setImage(KisImageWSP image)
 
     m_image = image;
 
-    if (m_canvas && m_canvas->view()) {
+    if (m_canvas && m_canvas->view() && m_histogram) {
 
         m_hview = 0; // producerChanged wants to setCurrentChannels, prevent that here
         m_cache = 0; // we try to delete it in producerChanged
@@ -186,7 +187,9 @@ void KisHistogramDocker::colorSpaceChanged(const KoColorSpace* cs)
         m_popup.addAction(id.name());
     }
 
-    producerChanged(m_popup.actions().at(0));
+    if (m_popup.actions().size() > 0) {
+        producerChanged(m_popup.actions().at(0));
+    }
 }
 
 #include "histogramdock.moc"

@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgNewImage</class>
- <widget class="QWidget" name="WdgNewImage" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgNewImage">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,28 +10,28 @@
     <height>503</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>New Image</string>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="margin" >
+  <layout class="QVBoxLayout">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="lblName" >
-       <property name="text" >
+      <widget class="QLabel" name="lblName">
+       <property name="text">
         <string>&amp;Name:</string>
        </property>
-       <property name="buddy" >
+       <property name="buddy">
         <cstring>txtName</cstring>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="txtName" >
-       <property name="text" >
+      <widget class="QLineEdit" name="txtName">
+       <property name="text">
         <string>untitled-1</string>
        </property>
       </widget>
@@ -38,40 +39,40 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="grpImage" >
-     <property name="title" >
+    <widget class="QGroupBox" name="grpImage">
+     <property name="title">
       <string>Image Size</string>
      </property>
-     <layout class="QVBoxLayout" >
+     <layout class="QVBoxLayout">
       <item>
-       <layout class="QHBoxLayout" >
+       <layout class="QHBoxLayout">
         <item>
-         <layout class="QVBoxLayout" >
-          <property name="spacing" >
+         <layout class="QVBoxLayout">
+          <property name="spacing">
            <number>6</number>
           </property>
-          <property name="margin" >
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
-           <widget class="QLabel" name="lblWidth" >
-            <property name="text" >
+           <widget class="QLabel" name="lblWidth">
+            <property name="text">
              <string>Width:</string>
             </property>
-            <property name="alignment" >
+            <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblHeight" >
-            <property name="text" >
+           <widget class="QLabel" name="lblHeight">
+            <property name="text">
              <string>Height:</string>
             </property>
-            <property name="alignment" >
+            <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
-            <property name="buddy" >
+            <property name="buddy">
              <cstring></cstring>
             </property>
            </widget>
@@ -79,44 +80,44 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" >
-          <property name="spacing" >
+         <layout class="QVBoxLayout">
+          <property name="spacing">
            <number>6</number>
           </property>
-          <property name="margin" >
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
-           <widget class="QDoubleSpinBox" name="doubleWidth" >
-            <property name="minimumSize" >
+           <widget class="QDoubleSpinBox" name="doubleWidth">
+            <property name="minimumSize">
              <size>
               <width>80</width>
               <height>0</height>
              </size>
             </property>
-            <property name="decimals" >
+            <property name="decimals">
              <number>2</number>
             </property>
-            <property name="minimum" >
+            <property name="minimum">
              <double>1.000000000000000</double>
             </property>
-            <property name="maximum" >
+            <property name="maximum">
              <double>100000000.000000000000000</double>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QDoubleSpinBox" name="doubleHeight" >
-            <property name="minimumSize" >
+           <widget class="QDoubleSpinBox" name="doubleHeight">
+            <property name="minimumSize">
              <size>
               <width>80</width>
               <height>0</height>
              </size>
             </property>
-            <property name="minimum" >
+            <property name="minimum">
              <double>1.000000000000000</double>
             </property>
-            <property name="maximum" >
+            <property name="maximum">
              <double>100000000.000000000000000</double>
             </property>
            </widget>
@@ -124,53 +125,63 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" >
-          <property name="spacing" >
+         <layout class="QVBoxLayout">
+          <property name="spacing">
            <number>6</number>
           </property>
-          <property name="margin" >
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
-           <widget class="QComboBox" name="cmbWidthUnit" />
+           <widget class="QComboBox" name="cmbWidthUnit"/>
           </item>
           <item>
-           <widget class="QComboBox" name="cmbHeightUnit" />
+           <widget class="QComboBox" name="cmbHeightUnit"/>
           </item>
          </layout>
         </item>
         <item>
-         <widget class="QLabel" name="lblResolution" >
-          <property name="text" >
+         <widget class="QLabel" name="lblResolution">
+          <property name="text">
            <string>Resolution:</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="doubleResolution" >
-          <property name="minimumSize" >
+         <widget class="QDoubleSpinBox" name="doubleResolution">
+          <property name="minimumSize">
            <size>
             <width>80</width>
             <height>0</height>
            </size>
           </property>
-          <property name="decimals" >
+          <property name="decimals">
            <number>0</number>
           </property>
-          <property name="maximum" >
+          <property name="maximum">
            <double>99999.000000000000000</double>
           </property>
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="label">
+          <property name="toolTip">
+           <string>pixels-per-inch</string>
+          </property>
+          <property name="text">
+           <string>ppi</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer>
-          <property name="orientation" >
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeType" >
+          <property name="sizeType">
            <enum>QSizePolicy::Expanding</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>191</width>
             <height>61</height>
@@ -181,23 +192,23 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" >
+       <layout class="QHBoxLayout">
         <item>
-         <widget class="QPushButton" name="bnScreenSize" >
-          <property name="toolTip" >
+         <widget class="QPushButton" name="bnScreenSize">
+          <property name="toolTip">
            <string>Set Width and Height to screen resolution.</string>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>&amp;Screen size</string>
           </property>
          </widget>
         </item>
         <item>
          <spacer>
-          <property name="orientation" >
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>40</width>
             <height>20</height>
@@ -211,193 +222,193 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="grpMode" >
-     <property name="title" >
+    <widget class="QGroupBox" name="grpMode">
+     <property name="title">
       <string>Color</string>
      </property>
-     <layout class="QVBoxLayout" >
+     <layout class="QVBoxLayout">
       <item>
-       <widget class="KisColorSpaceSelector" native="1" name="colorSpaceSelector" />
+       <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
       </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="grpContents" >
-     <property name="title" >
+    <widget class="QGroupBox" name="grpContents">
+     <property name="title">
       <string>Contents</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QLabel" name="lblColor" >
-        <property name="text" >
+     <layout class="QGridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblColor">
+        <property name="text">
          <string>Canvas color:</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>cmbColor</cstring>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="KColorCombo" name="cmbColor" >
+      <item row="0" column="1">
+       <widget class="KColorCombo" name="cmbColor">
         <item>
-         <property name="text" >
+         <property name="text">
           <string>Custom...</string>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="lblOpacity" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblOpacity">
+        <property name="text">
          <string>Opacity:</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>sliderOpacity</cstring>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="QFrame" name="opacityPanel" >
-        <property name="frameShape" >
+      <item row="1" column="1">
+       <widget class="QFrame" name="opacityPanel">
+        <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
-        <property name="frameShadow" >
+        <property name="frameShadow">
          <enum>QFrame::Plain</enum>
         </property>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
+        <layout class="QHBoxLayout">
+         <property name="spacing">
           <number>6</number>
          </property>
-         <property name="margin" >
+         <property name="margin">
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="textLabel1" >
-           <property name="text" >
+          <widget class="QLabel" name="textLabel1">
+           <property name="text">
             <string>Transparent</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="sliderOpacity" >
-           <property name="toolTip" >
+          <widget class="QSlider" name="sliderOpacity">
+           <property name="toolTip">
             <string>Opacity of the background color</string>
            </property>
-           <property name="whatsThis" >
+           <property name="whatsThis">
             <string>Opacity of the background color.</string>
            </property>
-           <property name="maximum" >
+           <property name="maximum">
             <number>100</number>
            </property>
-           <property name="pageStep" >
+           <property name="pageStep">
             <number>10</number>
            </property>
-           <property name="value" >
+           <property name="value">
             <number>100</number>
            </property>
-           <property name="orientation" >
+           <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="tickInterval" >
+           <property name="tickInterval">
             <number>20</number>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="textLabel2" >
-           <property name="text" >
+          <widget class="QLabel" name="textLabel2">
+           <property name="text">
             <string>Opaque</string>
            </property>
           </widget>
@@ -405,25 +416,25 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="lblDescription" >
-        <property name="text" >
+      <item row="2" column="0">
+       <widget class="QLabel" name="lblDescription">
+        <property name="text">
          <string>Description:</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>txtDescription</cstring>
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="QTextEdit" name="txtDescription" />
+      <item row="2" column="1">
+       <widget class="QTextEdit" name="txtDescription"/>
       </item>
-      <item row="3" column="0" colspan="2" >
-       <widget class="QCheckBox" name="chkFromClipboard" >
-        <property name="text" >
+      <item row="3" column="0" colspan="2">
+       <widget class="QCheckBox" name="chkFromClipboard">
+        <property name="text">
          <string>First layer from clipboard</string>
         </property>
        </widget>
@@ -432,22 +443,22 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>6</number>
      </property>
-     <property name="margin" >
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeType" >
+       <property name="sizeType">
         <enum>QSizePolicy::Expanding</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>480</width>
          <height>21</height>
@@ -456,11 +467,11 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="m_createButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="m_createButton">
+       <property name="text">
         <string>Create</string>
        </property>
-       <property name="autoDefault" >
+       <property name="autoDefault">
         <bool>true</bool>
        </property>
       </widget>
@@ -469,8 +480,8 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
+ <layoutdefault spacing="6" margin="11"/>
+ <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
  <customwidgets>
   <customwidget>
    <class>KColorCombo</class>

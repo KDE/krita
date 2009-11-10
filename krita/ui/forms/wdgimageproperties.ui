@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgImageProperties</class>
- <widget class="QWidget" name="WdgImageProperties" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgImageProperties">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,47 +10,47 @@
     <height>227</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>New Image</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <widget class="QGroupBox" name="grpImage" >
-     <property name="title" >
+    <widget class="QGroupBox" name="grpImage">
+     <property name="title">
       <string>Image Size</string>
      </property>
-     <layout class="QHBoxLayout" >
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <layout class="QVBoxLayout" >
+       <layout class="QVBoxLayout">
         <item>
-         <widget class="QLabel" name="lblWidth" >
-          <property name="text" >
+         <widget class="QLabel" name="lblWidth">
+          <property name="text">
            <string>Width:</string>
           </property>
-          <property name="alignment" >
+          <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="lblHeight" >
-          <property name="text" >
+         <widget class="QLabel" name="lblHeight">
+          <property name="text">
            <string>Height:</string>
           </property>
-          <property name="alignment" >
+          <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
-          <property name="buddy" >
+          <property name="buddy">
            <cstring></cstring>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="lblResolution" >
-          <property name="text" >
+         <widget class="QLabel" name="lblResolution">
+          <property name="text">
            <string>Resolution:</string>
           </property>
-          <property name="alignment" >
+          <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
@@ -57,25 +58,35 @@
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" >
-        <item>
-         <widget class="QLabel" name="lblWidthValue" >
-          <property name="text" >
-           <string comment="KDE::DoNotExtract" >TextLabel</string>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="lblWidthValue">
+          <property name="text">
+           <string comment="KDE::DoNotExtract">TextLabel</string>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QLabel" name="lblHeightValue" >
-          <property name="text" >
-           <string comment="KDE::DoNotExtract" >TextLabel</string>
+        <item row="1" column="0">
+         <widget class="QLabel" name="lblHeightValue">
+          <property name="text">
+           <string comment="KDE::DoNotExtract">TextLabel</string>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QLabel" name="lblResolutionValue" >
-          <property name="text" >
-           <string comment="KDE::DoNotExtract" >TextLabel</string>
+        <item row="2" column="0">
+         <widget class="QLabel" name="lblResolutionValue">
+          <property name="text">
+           <string comment="KDE::DoNotExtract">TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="label">
+          <property name="toolTip">
+           <string>pixels-per-inch</string>
+          </property>
+          <property name="text">
+           <string>ppi</string>
           </property>
          </widget>
         </item>
@@ -83,13 +94,13 @@
       </item>
       <item>
        <spacer>
-        <property name="orientation" >
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeType" >
+        <property name="sizeType">
          <enum>QSizePolicy::Expanding</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0">
          <size>
           <width>191</width>
           <height>61</height>
@@ -101,51 +112,39 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="grpMode" >
-     <property name="title" >
+    <widget class="QGroupBox" name="grpMode">
+     <property name="title">
       <string>Mode</string>
      </property>
-     <layout class="QGridLayout" >
-      <property name="leftMargin" >
+     <layout class="QGridLayout">
+      <property name="margin">
        <number>11</number>
       </property>
-      <property name="topMargin" >
-       <number>11</number>
-      </property>
-      <property name="rightMargin" >
-       <number>11</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>11</number>
-      </property>
-      <property name="horizontalSpacing" >
+      <property name="spacing">
        <number>6</number>
       </property>
-      <property name="verticalSpacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="lblColorSpaces" >
-        <property name="text" >
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblColorSpaces">
+        <property name="text">
          <string>Color space:</string>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>cmbColorSpaces</cstring>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="KisCmbIDList" native="1" name="cmbColorSpaces" />
+      <item row="0" column="1">
+       <widget class="KisCmbIDList" name="cmbColorSpaces" native="true"/>
       </item>
-      <item row="1" column="1" >
-       <widget class="SqueezedComboBox" name="cmbProfile" />
+      <item row="1" column="1">
+       <widget class="SqueezedComboBox" name="cmbProfile"/>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="lblProfiles" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblProfiles">
+        <property name="text">
          <string>Profile:</string>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>cmbProfile</cstring>
         </property>
        </widget>
@@ -155,7 +154,7 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>KisCmbIDList</class>

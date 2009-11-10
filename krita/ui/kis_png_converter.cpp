@@ -549,7 +549,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_get_pHYs(png_ptr, info_ptr,&x_resolution,&y_resolution, &unit_type);
     if (unit_type == PNG_RESOLUTION_METER)
     {
-        m_img->setResolution((double) x_resolution/100.0 / 72 * 2.54, (double) y_resolution/100.0 / 72 * 2.54 );
+        m_img->setResolution((double) POINT_TO_CM(x_resolution)/100.0, (double) POINT_TO_CM(y_resolution)/100.0 ); // It is the "invert" macro because we convert from pointer-per-inchs to points
     }
 
     double coeff = quint8_MAX / (double)(pow(2, color_nb_bits) - 1);
@@ -999,7 +999,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     int unit_type;
     png_uint_32 x_resolution, y_resolution;
     
-    png_set_pHYs(png_ptr, info_ptr, img->xRes() * 100.0 * 72 / 2.54, img->yRes() * 100.0 * 72 / 2.54, PNG_RESOLUTION_METER);
+    png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(img->xRes()) * 100.0, CM_TO_POINT(img->yRes()) * 100.0, PNG_RESOLUTION_METER); // It is the "invert" macro because we convert from pointer-per-inchs to points
     
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);

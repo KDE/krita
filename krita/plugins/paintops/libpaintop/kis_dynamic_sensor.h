@@ -32,17 +32,18 @@ class QWidget;
 class KisPaintInformation;
 class KisSensorSelector;
 
-const KoID FuzzyId("fuzzy", i18n("Fuzzy"));
-const KoID SpeedId("speed", i18n("Speed"));
-const KoID TimeId("time", i18n("Time"));
-const KoID DrawingAngleId("drawingangle", i18n("Drawing angle"));
-const KoID PressureId("pressure", i18n("Pressure"));
-const KoID XTiltId("xtilt", i18n("X-Tilt"));
-const KoID YTiltId("ytilt", i18n("Y-Tilt"));
+const KoID FuzzyId("fuzzy", i18n("Fuzzy")); ///< generate a random number
+const KoID SpeedId("speed", i18n("Speed")); ///< generate a number depending on the speed of the cursor
+const KoID TimeId("time", i18n("Time")); ///< generate a number that increase with time
+const KoID DrawingAngleId("drawingangle", i18n("Drawing angle")); ///< number depending on the angle
+const KoID PressureId("pressure", i18n("Pressure")); ///< number depending on the pressure
+const KoID XTiltId("xtilt", i18n("X-Tilt")); ///< number depending on X-tilt
+const KoID YTiltId("ytilt", i18n("Y-Tilt")); ///< number depending on Y-tilt
 
 /**
  * Sensor are used to extract from KisPaintInformation a single
- * double value which can be used to control
+ * double value which can be used to control the parameters of
+ * a brush.
  */
 class PAINTOP_EXPORT KisDynamicSensor : public KisSerializableConfiguration
 {

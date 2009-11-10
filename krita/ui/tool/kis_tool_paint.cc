@@ -219,7 +219,13 @@ void KisToolPaint::slotSetOpacity(qreal opacityPerCent, bool final)
 
 void KisToolPaint::slotSetCompositeMode(const QString& compositeOp)
 {
-    m_compositeOp = currentNode()->paintDevice()->colorSpace()->compositeOp(compositeOp);
+    if (currentNode()) {
+        KisPaintDeviceSP device = currentNode()->paintDevice();
+
+        if (device) {
+            m_compositeOp = device->colorSpace()->compositeOp(compositeOp);
+        }
+    }
 }
 
 
@@ -236,6 +242,9 @@ void KisToolPaint::updateCompositeOpComboBox()
                 m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
             }
             m_cmbComposite->setCurrent(m_compositeOp);
+            m_cmbComposite->setEnabled(true);
+        } else {
+            m_cmbComposite->setEnabled(false);
         }
     }
 }

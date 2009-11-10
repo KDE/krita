@@ -58,7 +58,7 @@ public:
     KShortcut shortcut() const;
     /// wrapper around KoToolFactory::inputDeviceAgnostic()
     bool inputDeviceAgnostic() const;
-    /// returns true if the factory will create a tool, false if it decised to not create one in createTool().
+    /// returns true if the factory will create a tool, false if it decided to not create one in createTool().
     bool canCreateTool(KoCanvasBase *canvas) const;
 
 signals:

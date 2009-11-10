@@ -222,7 +222,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         xres = cinfo.X_density * 2.54;
         yres = cinfo.Y_density * 2.54;
     }
-    m_img->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres) );
+    m_img->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres) ); // It is the "invert" macro because we convert from pointer-per-inchs to points
     
     // Create layer
     KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX));
@@ -533,8 +533,8 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     }
 
     // Save resolution
-    cinfo.X_density = INCH_TO_POINT(img->xRes());
-    cinfo.Y_density = INCH_TO_POINT(img->yRes());
+    cinfo.X_density = INCH_TO_POINT(img->xRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
+    cinfo.Y_density = INCH_TO_POINT(img->yRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
     cinfo.density_unit = 1;
     cinfo.write_JFIF_header = 1;
 

@@ -323,7 +323,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     // Creating the KisImageWSP
     if (! m_img) {
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
-        m_img->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres ));
+        m_img->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres )); // It is the "invert" macro because we convert from pointer-per-inchs to points
         m_img->lock();
         Q_CHECK_PTR(m_img);
         if (profile) {
@@ -610,7 +610,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP 
     }
 
     dbgFile << "xres: " << INCH_TO_POINT(img->xRes()) << " yres: " << INCH_TO_POINT(img->yRes());
-    TIFFSetField(image, TIFFTAG_XRESOLUTION, INCH_TO_POINT(img->xRes()));
+    TIFFSetField(image, TIFFTAG_XRESOLUTION, INCH_TO_POINT(img->xRes())); // It is the "invert" macro because we convert from pointer-per-inchs to points
     TIFFSetField(image, TIFFTAG_YRESOLUTION, INCH_TO_POINT(img->yRes()));
 
     KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(img->rootLayer().data());

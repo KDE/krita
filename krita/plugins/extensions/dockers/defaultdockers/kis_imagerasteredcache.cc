@@ -35,6 +35,7 @@ KisImageRasteredCache::KisImageRasteredCache(Observer* o)
         : m_observer(o->createNew(0, 0, 0, 0))
         , m_docker(0)
 {
+    m_visible = false;
     m_busy = false;
     m_imageProjection = 0;
     m_rasterSize = 64 * 4;
@@ -52,22 +53,22 @@ KisImageRasteredCache::~KisImageRasteredCache()
 void KisImageRasteredCache::setDocker(QDockWidget* docker)
 {
     m_docker = docker;
-    m_visible = docker->isVisible();
     connect(m_docker, SIGNAL(visibilityChanged(bool)), SLOT(setDockerVisible(bool)));
 }
 
 void KisImageRasteredCache::setImage(KisImageWSP image)
 {
     m_image = image;
-    if (image) {
+    if (image && image.isValid()) {
         imageSizeChanged(image->width(), image->height());
     }
+    m_visible = m_docker->isVisible();
 }
 
 void KisImageRasteredCache::setDockerVisible(bool visible)
 {
     m_visible = visible;
-    if (visible) {
+    if (visible && m_image.isValid()) {
         connect(m_image, SIGNAL(sigImageUpdated(QRect)), this, SLOT(imageUpdated(QRect)));
         connect(m_image, SIGNAL(sigSizeChanged(qint32, qint32)),  this, SLOT(imageSizeChanged(qint32, qint32)));
     } else {
@@ -79,6 +80,7 @@ void KisImageRasteredCache::imageUpdated(QRect rc)
 {
     // Do our but against global warming: don't waste cpu if the histogram isn't visible anyway.
     if (!m_visible) return;
+    if (!m_image.isValid()) return;
 
     QRect r(0, 0, m_width * m_rasterSize, m_height * m_rasterSize);
     r &= rc;

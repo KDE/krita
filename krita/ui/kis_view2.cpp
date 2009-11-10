@@ -777,4 +777,15 @@ void KisView2::toggleDockers(bool toggle)
 
 }
 
+void KisView2::resizeEvent ( QResizeEvent * event )
+{
+    dbgUI << "resize: " << event->oldSize() << " to " << event->size() << "main window" << mainWindow()->size();
+
+    if (mainWindow()->size().height() > QApplication::desktop()->availableGeometry(this).height()) {
+        mainWindow()->resize(mainWindow()->width(),
+                             QApplication::desktop()->availableGeometry(this).height());
+    }
+}
+
+
 #include "kis_view2.moc"

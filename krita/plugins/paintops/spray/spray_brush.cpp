@@ -249,7 +249,6 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
                         m = m.scale(random,random);
                     }
                     m = m.rotate(rotationZ * (180/M_PI));
-                    qDebug() << m;
                     m_imgDevice->convertFromQImage(m_brushQImg.transformed(m, Qt::SmoothTransformation), "");
                 }
 

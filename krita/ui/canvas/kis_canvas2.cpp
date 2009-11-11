@@ -302,18 +302,13 @@ QRect KisCanvas2::viewRectFromDoc(const QRectF & rc)
 
 void KisCanvas2::updateCanvasProjection(const QRect & rc)
 {
-
-#ifdef HAVE_OPENGL
-    // Should never have an OpenGL image context and get here as that
-    // connects to the image directly.
-    Q_ASSERT(m_d->openGLImageTextures.isNull());
-#endif
-
-    QRect vRect = m_d->prescaledProjection->updateCanvasProjection(rc);
-    if (!vRect.isEmpty()) {
-        vRect.translate(m_d->canvasWidget->documentOrigin());
-        m_d->canvasWidget->widget()->update(vRect);
-        //m_d->canvasWidget->widget()->update();
+    if (m_d->prescaledProjection) {
+        QRect vRect = m_d->prescaledProjection->updateCanvasProjection(rc);
+        if (!vRect.isEmpty()) {
+            vRect.translate(m_d->canvasWidget->documentOrigin());
+            m_d->canvasWidget->widget()->update(vRect);
+            //m_d->canvasWidget->widget()->update();
+        }
     }
 }
 

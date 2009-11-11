@@ -21,6 +21,8 @@
     }
     )
     compose( @in(1), @in(0), blend, @out);
+  } else {
+    @allchannels( @out = @in(0); )
   }
 }
 

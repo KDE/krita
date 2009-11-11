@@ -23,3 +23,10 @@ kde4_add_unit_test(ko_rgb_32f_test TESTNAME krita-cs-ko_rgb_32f_test ${ko_rgb_32
 
 target_link_libraries(ko_rgb_32f_test  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY} pigmentcms)
 
+########### next target ###############
+set(ko_rgb_16f_test_SRCS KoRgb16fTest.cpp )
+
+kde4_add_unit_test(ko_rgb_16f_test TESTNAME krita-cs-ko_rgb_16f_test ${ko_rgb_16f_test_SRCS})
+
+target_link_libraries(ko_rgb_16f_test  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY} pigmentcms)
+

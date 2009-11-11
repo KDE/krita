@@ -75,13 +75,14 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
         m_painter->setMaskImageSize(m_width, m_height);
         m_pixelSize = dab->colorSpace()->pixelSize();
         
-        QImage img(m_settings->path());
+        m_brushQImg = QImage(m_settings->path());
         
         m_imgDevice = new KisPaintDevice( dab->colorSpace() );
-        if (!img.isNull)
+        if ( !m_brushQImg.isNull() )
         {
-            m_imgDevice->convertFromQImage(img, "");
+            m_imgDevice->convertFromQImage(m_brushQImg, "");
         }
+
     }
 
     qreal x = info.pos().x();
@@ -114,6 +115,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
     qreal angle;
     qreal lengthX;
     qreal lengthY;
+    qreal rotationZ;
 
     int steps = 118;
     bool shouldColor = true;
@@ -128,9 +130,13 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
         // generate random size
         if (m_settings->gaussian()) {
             lengthY = lengthX = qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
+            rotationZ = qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
         } else {
             lengthY = lengthX = drand48();
+            rotationZ = drand48();
         }
+
+        rotationZ *= M_PI * 2;
 
         // generate polar coordinate
         nx = (sin(angle) * m_radius * lengthX);
@@ -209,14 +215,14 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
                     paintCircle(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , steps);
                 }else
                 { 
-                    paintEllipse(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , qRound(jitteredHeight * 0.5), angle , steps);
+                    paintEllipse(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , qRound(jitteredHeight * 0.5), rotationZ , steps);
                 }
                 break;
             }
             // rectangle
             case 1:
             {
-                paintRectangle(m_painter, nx + x, ny + y, qRound(jitteredWidth) , qRound(jitteredHeight), angle , steps);
+                paintRectangle(m_painter, nx + x, ny + y, qRound(jitteredWidth) , qRound(jitteredHeight), rotationZ , steps);
                 break;
             }
             // wu-particle
@@ -236,6 +242,18 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
             }
             case 4:
             {
+                if ( !m_brushQImg.isNull() )
+                {
+                    QMatrix m;
+                    if (m_jitterShapeSize){
+                        m = m.scale(random,random);
+                    }
+                    m = m.rotate(rotationZ * (180/M_PI));
+                    qDebug() << m;
+                    m_imgDevice->convertFromQImage(m_brushQImg.transformed(m, Qt::SmoothTransformation), "");
+                }
+
+                
                 QRect rc = m_imgDevice->exactBounds();
                 ix = qRound(nx + x - rc.width() * 0.5);
                 iy = qRound(ny + y - rc.height() * 0.5);

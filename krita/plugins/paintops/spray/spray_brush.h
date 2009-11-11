@@ -139,6 +139,7 @@ private:
     RandomGauss * m_rand;
     KisPainter * m_painter;
     KisPaintDeviceSP m_imgDevice;
+    QImage m_brushQImg;
 private:
     const KisSprayPaintOpSettings* m_settings;
 

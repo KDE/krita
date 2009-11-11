@@ -1248,8 +1248,14 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     }
 
     if (attributes & OdfLayer) {
-        if (d->parent && dynamic_cast<KoShapeLayer*>(d->parent))
-            context.xmlWriter().addAttribute("draw:layer", d->parent->name());
+        KoShape * parent = d->parent;
+        while ( parent ) {
+            if ( dynamic_cast<KoShapeLayer*>( parent ) ) {
+                context.xmlWriter().addAttribute("draw:layer", parent->name());
+                break;
+            }
+            parent = parent->parent();
+        }
     }
 
     if (attributes & OdfSize) {

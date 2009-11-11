@@ -20,6 +20,7 @@
 
 #include "KoShapeGroup.h"
 #include "KoShapeContainerModel.h"
+#include "KoShapeLayer.h"
 #include "SimpleShapeContainerModel.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
@@ -79,12 +80,27 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
 
     KoXmlElement child;
+    QMap<KoShapeLayer*, int> usedLayers;
     forEachElement(child, element) {
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape->parent());
+        if (layer) {
+            usedLayers[layer]++;
+        }
         if (shape) {
             addChild(shape);
         }
     }
+    KoShapeLayer *parent = 0;
+    int maxUseCount = 0;
+    // find most used layer and use this as parent for the group
+    for (QMap<KoShapeLayer*, int>::const_iterator it(usedLayers.constBegin()); it != usedLayers.constEnd(); ++it) {
+        if (it.value() > maxUseCount) {
+            maxUseCount = it.value();
+            parent = it.key();
+        }
+    }
+    setParent(parent);
 
     QRectF bound;
     bool boundInitialized = false;

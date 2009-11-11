@@ -2,7 +2,7 @@
 {
   // @in(0) -> dst
   // @in(1) -> src
-  @alphachannel( float blend = @in(1) / @unit; )
+  @alphachannel( float blend = @in(1) / (1.0 * @unit); )
   if(mask != 255)
   {
     blend = (blend * mask) / 255;
@@ -13,7 +13,7 @@
     {
       blend = (blend * opacity) / 255;
     }
-    @alphachannel( @type newalpha = @in(0) + (( @unit - @in(0)) * blend) / @unit;
+    @alphachannel( @type newalpha = @in(0) + (( @unit - @in(0)) * blend);
     @out = newalpha;
     if(newalpha > 0 )
     {

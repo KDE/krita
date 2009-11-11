@@ -91,9 +91,6 @@ public:
     void setX(qint32);
     void setY(qint32);
 
-    QRect extent() const;
-    QRect exactBounds() const;
-
     bool accept(KisNodeVisitor&);
 
     KoShapeManager *shapeManager() const;

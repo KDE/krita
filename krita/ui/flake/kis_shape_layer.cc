@@ -243,18 +243,6 @@ void KisShapeLayer::setY(qint32 y)
     //FIXME: setDirty();
 }
 
-QRect KisShapeLayer::extent() const
-{
-    QRect rc = boundingRect().toRect();
-    return QRectF(rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes()).toAlignedRect();
-}
-
-QRect KisShapeLayer::exactBounds() const
-{
-    QRect rc = boundingRect().toRect();
-    return QRectF(rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes()).toAlignedRect();
-}
-
 bool KisShapeLayer::accept(KisNodeVisitor& visitor)
 {
     return visitor.visit(this);

@@ -56,6 +56,7 @@ enum CanvasResource {
     DocumentIsLoading,  ///< A boolean that is set to true while loading is happening.
     Unit,               ///< The unit of this canvas
     CurrentPage,        ///< The current page number
+    ActiveStyleType,    ///< the actual active style type see KoFlake::StyleType for valid values
     KarbonStart = 1000,      ///< Base number for karbon specific values.
     KexiStart = 2000,        ///< Base number for kexi specific values.
     KivioStart = 3000,       ///< Base number for kivio specific values.

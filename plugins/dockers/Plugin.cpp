@@ -19,6 +19,7 @@
 #include "Plugin.h"
 #include "strokedocker/StrokeDockerFactory.h"
 #include "shapeproperties/ShapePropertiesDockerFactory.h"
+#include "styledocker/StyleDockerFactory.h"
 #ifndef NO_PIGMENT
 #   include "shadowdocker/ShadowDockerFactory.h"
 #   include "shapeselector/ShapeSelectorFactory.h"
@@ -38,6 +39,7 @@ Plugin::Plugin(QObject *parent, const QStringList&)
     Q_UNUSED(parent);
     KoDockRegistry::instance()->add(new StrokeDockerFactory() );
     KoDockRegistry::instance()->add(new ShapePropertiesDockerFactory());
+    KoDockRegistry::instance()->add(new StyleDockerFactory());
 #ifndef NO_PIGMENT
     KoDockRegistry::instance()->add(new ShadowDockerFactory());
     KoDockRegistry::instance()->add(new ShapeSelectorFactory());

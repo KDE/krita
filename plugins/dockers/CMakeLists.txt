@@ -2,8 +2,10 @@ project(kofficedockers)
 
 include_directories( ${KDE4_INCLUDE_DIR}
 		     ${QT_INCLUDES}
-		     ${FLAKE_INCLUDES} 
-		     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets)
+		     ${FLAKE_INCLUDES}
+             ${KOPAGEAPP_INCLUDES}
+		     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
+)
 
 set(kofficedockers_SRCS
 
@@ -45,6 +47,11 @@ set(kofficedockers_SRCS
     linestyleselector/LineStyleItemDelegate.cpp
     linestyleselector/LineStyleModel.cpp
     linestyleselector/LineStyleSelector.cpp
+
+    styledocker/StyleButtonBox.cpp
+    styledocker/StylePreview.cpp
+    styledocker/StyleDocker.cpp
+    styledocker/StyleDockerFactory.cpp
 
     Plugin.cpp
 )

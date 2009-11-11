@@ -63,6 +63,15 @@ namespace KoFlake
         CenteredPosition ///< the centred corner
     };
 
+    /**
+     * Used to see which style type is active
+     */
+    enum StyleType {
+        Background, ///< the background / fill style is active
+        Foreground  ///< the foreground / border style is active
+    };
+
+
     /// Maximal possible shape z-index
     int maxZIndex();
 }

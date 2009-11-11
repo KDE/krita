@@ -107,3 +107,11 @@ bool KisSprayShapeOption::gaussian() const
 {
     return m_options->gaussBox->isChecked();
 }
+
+
+// TODO
+QString KisSprayShapeOption::path() const
+{
+    return m_options->imageUrl->url().toLocalFile();
+    
+}

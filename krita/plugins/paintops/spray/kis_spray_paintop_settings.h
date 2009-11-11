@@ -100,6 +100,8 @@ public:
         }
     }
 
+    const QString path() const;
+
 
 private:
 

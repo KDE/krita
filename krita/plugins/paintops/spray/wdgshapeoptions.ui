@@ -69,6 +69,11 @@
       <string>Pixel</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>Image</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QWidget" name="layoutWidget">
@@ -204,7 +209,24 @@
     <string>gauss distribution</string>
    </property>
   </widget>
+  <widget class="KUrlRequester" name="imageUrl">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>230</y>
+     <width>178</width>
+     <height>28</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -214,8 +236,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>247</x>
-     <y>164</y>
+     <x>248</x>
+     <y>184</y>
     </hint>
     <hint type="destinationlabel">
      <x>317</x>
@@ -230,12 +252,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>156</y>
+     <x>258</x>
+     <y>176</y>
     </hint>
     <hint type="destinationlabel">
-     <x>325</x>
-     <y>138</y>
+     <x>369</x>
+     <y>152</y>
     </hint>
    </hints>
   </connection>
@@ -246,8 +268,8 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>217</x>
-     <y>155</y>
+     <x>218</x>
+     <y>175</y>
     </hint>
     <hint type="destinationlabel">
      <x>302</x>
@@ -262,12 +284,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>159</y>
+     <x>227</x>
+     <y>179</y>
     </hint>
     <hint type="destinationlabel">
-     <x>283</x>
-     <y>41</y>
+     <x>354</x>
+     <y>37</y>
     </hint>
    </hints>
   </connection>

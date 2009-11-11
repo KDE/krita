@@ -21,13 +21,17 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <QVariant>
 #include <QHash>
 #include <QTransform>
+#include <QImage>
 
 #include <kis_random_accessor.h>
 #include <kis_random_sub_accessor.h>
+
+#include <kis_paint_device.h>
 
 #include <kis_painter.h>
 #include <kis_paint_information.h>
@@ -55,6 +59,13 @@ SprayBrush::~SprayBrush()
 }
 
 
+void SprayBrush::init()
+{
+//
+}
+
+
+
 void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, const KoColor &color, const KoColor &bgColor)
 {
     // initializing painter
@@ -63,6 +74,14 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
         m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
         m_painter->setMaskImageSize(m_width, m_height);
         m_pixelSize = dab->colorSpace()->pixelSize();
+        
+        QImage img(m_settings->path());
+        
+        m_imgDevice = new KisPaintDevice( dab->colorSpace() );
+        if (!img.isNull)
+        {
+            m_imgDevice->convertFromQImage(img, "");
+        }
     }
 
     qreal x = info.pos().x();
@@ -213,6 +232,14 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
                 iy = qRound(ny + y);
                 accessor.moveTo(ix, iy);
                 memcpy(accessor.rawData(), m_inkColor.data(), m_pixelSize);
+                break;
+            }
+            case 4:
+            {
+                QRect rc = m_imgDevice->exactBounds();
+                ix = qRound(nx + x - rc.width() * 0.5);
+                iy = qRound(ny + y - rc.height() * 0.5);
+                m_painter->bitBlt(QPoint(ix,iy), m_imgDevice, rc);
                 break;
             }
         }

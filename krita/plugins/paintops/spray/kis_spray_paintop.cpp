@@ -71,7 +71,8 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sprayBrush.setUseRandomOpacity(settings->useRandomOpacity());
     m_sprayBrush.setSettingsObject(m_settings);
 
-
+    m_sprayBrush.init();
+    
 #ifdef BENCHMARK
     m_count = m_total = 0;
 #endif

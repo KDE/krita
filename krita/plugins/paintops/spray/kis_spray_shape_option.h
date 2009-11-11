@@ -42,12 +42,16 @@ public:
     /// random size 
     bool jitterShapeSize() const;
 
+    QString path() const;
+    
     /// TODO
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     /// TODO
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
     KisShapeOptionsWidget * m_options;
+    
+
 };
 
 #endif // KIS_SPRAY_SHAPE_OPTION_H

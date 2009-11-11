@@ -110,6 +110,8 @@ public:
         m_settings = settings;
     }
 
+    void init();
+
 private:
     KoColor m_inkColor;
     qreal m_radius;
@@ -136,6 +138,7 @@ private:
 
     RandomGauss * m_rand;
     KisPainter * m_painter;
+    KisPaintDeviceSP m_imgDevice;
 private:
     const KisSprayPaintOpSettings* m_settings;
 

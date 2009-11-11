@@ -34,7 +34,7 @@ KAboutData * newKritaAboutData()
                                             KAboutData::License_GPL,
                                             ki18n("(c) 1999-2009 The Krita team.\n"),
                                             KLocalizedString(),
-                                            "http://www.koffice.org/krita",
+                                            "http://www.krita.org",
                                             "submit@bugs.kde.org");
     aboutData->addAuthor(ki18n("Adrian Page"), KLocalizedString(), "Adrian.Page@tesco.net");
     aboutData->addAuthor(ki18n("Alan Horkan"), KLocalizedString(), "", "http://www.openclipart.org");

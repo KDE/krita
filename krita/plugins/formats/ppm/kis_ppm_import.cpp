@@ -233,9 +233,11 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
         channels = 0;
     } else if (array == "P2") {
         fileType = P2;
+        channels = 1;
         isAscii = true;
     } else if (array == "P3") {
         fileType = P3;
+        channels = 3;
         isAscii = true;
     } else if (array == "P4") {
         fileType = P4;

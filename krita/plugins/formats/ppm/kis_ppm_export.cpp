@@ -185,7 +185,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     if (rgb) {
         if (binary) fp.write("P6");
         else fp.write("P3");
-    } else if (binary) {
+    } else if (bitmap) {
         if (binary) fp.write("P4");
         else fp.write("P1");
     } else {

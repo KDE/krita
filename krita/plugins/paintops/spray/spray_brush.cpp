@@ -30,6 +30,7 @@
 #include <QTransform>
 #include <QImage>
 
+
 #include <kis_random_accessor.h>
 #include <kis_random_sub_accessor.h>
 
@@ -71,6 +72,7 @@ void SprayBrush::init()
 void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, const KoColor &color, const KoColor &bgColor)
 {
     // initializing painter
+    
     if (!m_painter) {
         m_painter = new KisPainter(dab);
         m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
@@ -79,9 +81,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
         
         m_brushQImg = QImage(m_settings->path());
         m_imgDevice = new KisPaintDevice( dab->colorSpace() );
-
     }
-    
+
 
     qreal x = info.pos().x();
     qreal y = info.pos().y();
@@ -242,15 +243,33 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
             {
                 if ( !m_brushQImg.isNull() )
                 {
+                    
                     QMatrix m;
                     m.rotate(rotationZ * (180/M_PI));
                     if (m_jitterShapeSize){
                         m.scale(random,random);
                     }
-                    
-                    m_imgDevice->convertFromQImage(m_brushQImg.transformed(m, Qt::SmoothTransformation), "");
+                    m_transformed = m_brushQImg.transformed(m, Qt::SmoothTransformation);
+                    m_imgDevice->convertFromQImage(m_transformed, "");
+                    KisRandomAccessor ac = m_imgDevice->createRandomAccessor(0,0);
+                    QRect rc = m_transformed.rect();
 
-                    QRect rc = m_imgDevice->exactBounds();
+                    if (m_settings->useRandomHSV()){
+                        params["h"] = (m_settings->hue() / 180.0) * drand48();
+                        params["s"] = (m_settings->saturation() / 100.0) * drand48();
+                        params["v"] = (m_settings->value() / 100.0) * drand48();
+
+                        KoColorTransformation* transfo;
+                        transfo = dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
+
+                        for (int y = rc.y(); y< rc.y()+rc.height(); y++){
+                            for (int x = rc.x(); x < rc.x()+rc.width();x++){
+                                ac.moveTo(x,y);
+                                transfo->transform(ac.rawData(), ac.rawData() , 1);    
+                            }
+                        }
+                    }
+
                     ix = qRound(nx + x - rc.width() * 0.5);
                     iy = qRound(ny + y - rc.height() * 0.5);
                     m_painter->bitBlt(QPoint(ix,iy), m_imgDevice, rc);

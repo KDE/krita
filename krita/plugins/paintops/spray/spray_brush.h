@@ -140,6 +140,7 @@ private:
     KisPainter * m_painter;
     KisPaintDeviceSP m_imgDevice;
     QImage m_brushQImg;
+    QImage m_transformed;
 private:
     const KisSprayPaintOpSettings* m_settings;
 

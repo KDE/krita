@@ -198,7 +198,7 @@ public:
     virtual quint16 nextUint16() {
         quint16 v = *reinterpret_cast<quint16*>(m_ptr);
         m_ptr += 2;
-        return qToBigEndian(v);
+        return qFromBigEndian(v);
     }
 private:
     int m_pos;
@@ -250,6 +250,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
         channels = 3;
     }
 
+    Q_ASSERT(channels != -1);
     char c; device->getChar(&c);
     if (!isspace(c)) return KoFilter::CreationError; // Invalid file, it should have a seperator now
 

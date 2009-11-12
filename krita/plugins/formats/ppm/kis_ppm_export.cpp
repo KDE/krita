@@ -117,7 +117,7 @@ public:
         m_device->write((char*)&v, 1);
     }
     virtual void writeNumber(quint16 v) {
-        quint16 vo = qToLittleEndian(v);
+        quint16 vo = qToBigEndian(v);
         m_device->write((char*)&vo, 2);
     }
     virtual void flush() {

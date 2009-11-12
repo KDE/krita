@@ -43,6 +43,9 @@ KisImageRasteredCache::KisImageRasteredCache(Observer* o)
 
     m_timer.setSingleShot(true);
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
+
+    m_visibilityTimer.setSingleShot(true);
+    connect(&m_visibilityTimer, SIGNAL(timeout()), this, SLOT(checkVisibility()));
 }
 
 KisImageRasteredCache::~KisImageRasteredCache()
@@ -67,11 +70,22 @@ void KisImageRasteredCache::setImage(KisImageWSP image)
 
 void KisImageRasteredCache::setDockerVisible(bool visible)
 {
-    m_visible = visible;
-    if (visible && m_image.isValid()) {
+    if (visible) {
+        m_visibilityTimer.start(200);
+    }
+    else {
+        m_visibilityTimer.stop();
+    }
+}
+
+void KisImageRasteredCache::checkVisibility()
+{
+    if (m_docker->isVisible() && m_image.isValid()) {
+        m_visible = true;
         connect(m_image, SIGNAL(sigImageUpdated(QRect)), this, SLOT(imageUpdated(QRect)));
         connect(m_image, SIGNAL(sigSizeChanged(qint32, qint32)),  this, SLOT(imageSizeChanged(qint32, qint32)));
     } else {
+        m_visible = false;
         disconnect();
     }
 }

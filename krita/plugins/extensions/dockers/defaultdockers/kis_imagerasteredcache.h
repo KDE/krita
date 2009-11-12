@@ -72,6 +72,7 @@ private slots:
     void imageUpdated(QRect rc);
     void imageSizeChanged(qint32 w, qint32 h);
     void timeOut();
+    void checkVisibility();
 
 private:
 
@@ -92,6 +93,9 @@ private:
     Raster m_raster;
     Queue m_queue;
     QTimer m_timer;
+    QTimer m_visibilityTimer; // Qt shows the docker for a short while before hiding
+                              // it again. This timer checks whether we are still visible
+                              // after some time.
     int m_timeOutMSec;
     int m_rasterSize;
     int m_width, m_height;

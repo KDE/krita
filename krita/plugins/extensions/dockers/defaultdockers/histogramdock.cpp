@@ -43,6 +43,7 @@
 KisHistogramDocker::KisHistogramDocker()
     : QDockWidget(i18n("Histogram"))
     , m_canvas(0)
+    , m_image(0)
     , m_factory(0)
     , m_producer(0)
     , m_cs(0)
@@ -67,7 +68,6 @@ KisHistogramDocker::~KisHistogramDocker()
 
 void KisHistogramDocker::setCanvas(KoCanvasBase* canvas)
 {
-    dbgPlugins << canvas;
     disconnect();
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
@@ -104,8 +104,8 @@ void KisHistogramDocker::setImage(KisImageWSP image)
             connect(m_hview, SIGNAL(rightClicked(const QPoint&)), SLOT(popupMenu(const QPoint&)));
             connect(m_cache, SIGNAL(cacheUpdated()), new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
             connect(&m_popup, SIGNAL(triggered(QAction *)), SLOT(producerChanged(QAction *)));
-            connect(m_image.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(colorSpaceChanged(const KoColorSpace*))); // No need to force updates here
             connect(m_canvas->view(), SIGNAL(sigLoadingFinished()), SLOT(reset()));
+            connect(m_image.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(colorSpaceChanged(const KoColorSpace*))); // No need to force updates here
             m_cache->setDocker(this);
             m_cache->setImage(m_image);
 
@@ -142,8 +142,6 @@ void KisHistogramDocker::setChannels()
 
 void KisHistogramDocker::producerChanged(QAction *action)
 {
-    dbgPlugins << m_image << m_image.isValid();
-
     int pos = m_popup.actions().indexOf(action);
 
     if (m_cache)
@@ -178,7 +176,7 @@ void KisHistogramDocker::producerChanged(QAction *action)
     m_histogram = new KisHistogram(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()),
                                    KoHistogramProducerSP(m_producer), LOGARITHMIC);
 
-    qDebug() << "created histogram " << m_histogram;
+    kDebug() << "created histogram " << m_histogram;
 
     if (m_hview) {
         setChannels();
@@ -194,7 +192,7 @@ void KisHistogramDocker::popupMenu(const QPoint& pos)
 
 void KisHistogramDocker::colorSpaceChanged(const KoColorSpace* cs)
 {
-    dbgPlugins << cs->name() << m_image << m_histogram;
+    kDebug() << cs;
     m_cs = cs;
 
     QList<KoID> keys = KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
@@ -214,7 +212,7 @@ void KisHistogramDocker::colorSpaceChanged(const KoColorSpace* cs)
 
 void KisHistogramDocker::reset()
 {
-    dbgPlugins << m_image << m_image.isValid();
+    kDebug() << m_image << m_image.isValid();
     if (m_image && m_image.isValid()) {
         colorSpaceChanged(m_image->colorSpace());
     }

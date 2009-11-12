@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-include_directories( ${KRITA_INCLUDES} )
+include_directories( ${KRITA_INCLUDES} ${CMAKE_CURRENT_fSOURCE_DIR} )
 
 set(kritappmimport_PART_SRCS
     kis_ppm_import.cpp
@@ -17,6 +17,8 @@ install(TARGETS kritappmimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 set(kritappmexport_PART_SRCS
     kis_ppm_export.cpp
     )
+
+kde4_add_ui_files(kritappmexport_PART_SRCS kis_wdg_options_ppm.ui )
 
 kde4_add_plugin(kritappmexport WITH_PREFIX ${kritappmexport_PART_SRCS})
 

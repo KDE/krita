@@ -21,7 +21,11 @@
 #include <KGenericFactory>
 #include <KoFilterChain.h>
 
+#include <KDialog>
+
 #include <kis_debug.h>
+
+#include "ui_kis_wdg_options_ppm.h"
 
 typedef KGenericFactory<KisPPMExport> KisPPMExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritappmexport, KisPPMExportFactory("kofficefilters"))
@@ -40,5 +44,32 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
+    
+
+    KDialog* kdb = new KDialog(0);
+    kdb->setWindowTitle(i18n("PPM Export Options"));
+    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
+
+    Ui::WdgOptionsPPM optionsPPM;
+    
+    QWidget* wdg = new QWidget(kdb);
+    optionsPPM.setupUi(wdg);
+
+    kdb->setMainWidget(wdg);
+    
+    if (kdb->exec() == QDialog::Rejected) {
+        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+    }
+    
+//         if (KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16")) {
+//         return alpha ? PNG_COLOR_TYPE_GRAY_ALPHA : PNG_COLOR_TYPE_GRAY;
+//     }
+//     if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
+//         return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
+//     }
+// 
+//     KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
+
+    
     abort();
 }

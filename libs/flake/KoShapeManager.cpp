@@ -74,10 +74,8 @@ public:
                 bool isChild = false;
                 KoShapeContainer *parent = s->parent();
                 while (parent && !isChild) {
-                    if (parent == shape) {
+                    if (parent == shape)
                         isChild = true;
-                        break;
-                    }
                     parent = parent->parent();
                 }
                 if (isChild)

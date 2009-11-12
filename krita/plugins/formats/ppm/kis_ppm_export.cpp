@@ -210,6 +210,24 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     for (int y = 0; y < img->height(); ++y) {
         KisHLineIterator it = pd->createHLineIterator(0, y, img->width());
         if (is16bit) {
+            if (rgb) {
+                while (!it.isDone()) {
+                    flow->writeNumber(KoRgbU16Traits::red(it.rawData()));
+                    flow->writeNumber(KoRgbU16Traits::green(it.rawData()));
+                    flow->writeNumber(KoRgbU16Traits::blue(it.rawData()));
+                    ++it;
+                }
+            } else if (bitmap) {
+                while (!it.isDone()) {
+                    flow->writeBool(*reinterpret_cast<quint16*>(it.rawData()));
+                    ++it;
+                }
+            } else {
+                while (!it.isDone()) {
+                    flow->writeNumber(*reinterpret_cast<quint16*>(it.rawData()));
+                    ++it;
+                }
+            }
         } else {
             if (rgb) {
                 while (!it.isDone()) {
@@ -218,10 +236,21 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
                     flow->writeNumber(KoRgbTraits<quint8>::blue(it.rawData()));
                     ++it;
                 }
+            } else if (bitmap) {
+                while (!it.isDone()) {
+                    flow->writeBool(*reinterpret_cast<quint8*>(it.rawData()));
+                    ++it;
+                }
+            } else {
+                while (!it.isDone()) {
+                    flow->writeNumber(*reinterpret_cast<quint8*>(it.rawData()));
+                    ++it;
+                }
             }
         }
     }
 
     delete flow;
     fp.close();
+    return KoFilter::OK;
 }

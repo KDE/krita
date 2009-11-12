@@ -252,9 +252,8 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
             }
         }
     }
-    if(bitmap)
-    {
-      flow->flush();
+    if (bitmap) {
+        flow->flush();
     }
     delete flow;
     fp.close();

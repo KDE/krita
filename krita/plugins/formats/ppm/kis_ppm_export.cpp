@@ -45,6 +45,51 @@ KisPPMExport::~KisPPMExport()
 {
 }
 
+class KisPPMFlow
+{
+public:
+    KisPPMFlow() {
+    }
+    virtual ~KisPPMFlow() {
+    }
+    virtual void writeBool(quint8 v);
+    virtual void writeBool(quint16 v);
+    virtual void writeNumber(quint8 v);
+    virtual void writeNumber(quint16 v);
+private:
+};
+
+class KisPPMAsciiFlow : public KisPPMFlow
+{
+public:
+    KisPPMAsciiFlow(QIODevice* device) : m_device(device) {
+    }
+    ~KisPPMAsciiFlow() {
+    }
+    virtual void writeBool(quint8 v) {
+        if (v < 127) {
+            m_device->write("0 ");
+        } else {
+            m_device->write("1 ");
+        }
+    }
+    virtual void writeBool(quint16 v) {
+        writeBool(quint8(v >> 8));
+    }
+    virtual void writeNumber(quint8 v) {
+        m_device->write(QByteArray::number(v));
+    }
+    virtual void writeNumber(quint16 v) {
+        m_device->write(QByteArray::number(v));
+    }
+private:
+    QIODevice* m_device;
+};
+
+class KisPPMBinaryFlow
+{
+};
+
 KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "PPM export! From:" << from << ", To:" << to << "";
@@ -90,39 +135,37 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
         KMessageBox::error(0, i18n("Cannot export images in %1.\n", pd->colorSpace()->name())) ;
         return KoFilter::CreationError;
     }
-    
+
     bool is16bit = pd->colorSpace()->id() == "RGBA16" || pd->colorSpace()->id() == "GRAYA16";
-    
+
     // Open the file for writting
     QFile fp(filename);
     fp.open(QIODevice::WriteOnly);
-    
+
     // Write the magic
-    if(rgb)
-    {
-      if(binary) fp.write("P6");
-      else fp.write("P3");
-    } else if(binary) {
-      if(binary) fp.write("P4");
-      else fp.write("P1");
+    if (rgb) {
+        if (binary) fp.write("P6");
+        else fp.write("P3");
+    } else if (binary) {
+        if (binary) fp.write("P4");
+        else fp.write("P1");
     } else {
-      if(binary) fp.write("P5");
-      else fp.write("P2");
+        if (binary) fp.write("P5");
+        else fp.write("P2");
     }
     fp.write("\n");
-    
+
     // Write the header
-    fp.write( QByteArray::number(img->width()) );
-    fp.write( " " );
-    fp.write( QByteArray::number(img->height()) );
-    if(!bitmap)
-    {
-      if(is16bit) fp.write(" 65535\n");
-      else fp.write( " 255\n");
+    fp.write(QByteArray::number(img->width()));
+    fp.write(" ");
+    fp.write(QByteArray::number(img->height()));
+    if (!bitmap) {
+        if (is16bit) fp.write(" 65535\n");
+        else fp.write(" 255\n");
     } else {
-      fp.write( "\n" );
+        fp.write("\n");
     }
-    
+
     // Write the data
 
     fp.close();

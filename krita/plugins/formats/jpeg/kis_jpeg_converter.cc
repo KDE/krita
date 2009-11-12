@@ -205,6 +205,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if (! m_img) {
         m_img = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_img);
+        m_img->lock();
         if (profile && !profile->isSuitableForOutput()) {
             m_img -> addAnnotation(KisAnnotationSP(new KisAnnotation(profile->name(), "", profile_rawdata)));
         }

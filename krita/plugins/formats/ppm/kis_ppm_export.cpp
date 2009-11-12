@@ -81,9 +81,11 @@ public:
     }
     virtual void writeNumber(quint8 v) {
         m_device->write(QByteArray::number(v));
+        m_device->write(" ");
     }
     virtual void writeNumber(quint16 v) {
         m_device->write(QByteArray::number(v));
+        m_device->write(" ");
     }
     virtual void flush() {
     }

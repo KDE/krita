@@ -82,6 +82,9 @@ public:
      */
     virtual void paintContent(QPainter& painter, const QRect& rect);
 
+    /// Generate a scaled-down pixmap of the image projection that fits in size
+    virtual QPixmap generatePreview(const QSize& size);
+
     virtual QDomDocument saveXML();
 
     virtual void setUndo(bool undo);

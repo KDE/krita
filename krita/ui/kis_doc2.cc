@@ -28,6 +28,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QImage>
+#include <QRect>
+#include <QSize>
 #include <QPainter>
 #include <QStringList>
 #include <QWidget>
@@ -445,6 +447,19 @@ void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
     const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
     QRect rect = rc & m_d->image->bounds();
     m_d->image->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
+}
+
+QPixmap KisDoc2::generatePreview(const QSize& size)
+{
+    if (m_d->image) {
+        QSize newSize = m_d->image->bounds().size();
+        newSize.scale(size, Qt::KeepAspectRatio);
+
+        QImage img = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
+        img.save("thumb.png");
+        return QPixmap::fromImage(img);
+    }
+    return QPixmap(size);
 }
 
 void KisDoc2::setUndo(bool undo)

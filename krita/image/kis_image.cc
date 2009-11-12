@@ -631,6 +631,8 @@ void KisImage::setProfile(const KoColorProfile *profile)
 {
     if (profile == 0) return;
 
+    kDebug() << profile;
+
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->id(), profile);
     if (dstCs) {
 
@@ -928,10 +930,10 @@ QImage KisImage::convertToQImage(qint32 x,
 
 
 
-QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, const KoColorProfile *profile)
+QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledImageSize, const KoColorProfile *profile)
 {
 
-    if (r.isEmpty() || scaledImageSize.isEmpty()) {
+    if (scaledRect.isEmpty() || scaledImageSize.isEmpty()) {
         return QImage();
     }
 
@@ -944,30 +946,27 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, c
 
     QRect srcRect;
 
-    srcRect.setLeft(static_cast<int>(r.left() * xScale));
-    srcRect.setRight(static_cast<int>(ceil((r.right() + 1) * xScale)) - 1);
-    srcRect.setTop(static_cast<int>(r.top() * yScale));
-    srcRect.setBottom(static_cast<int>(ceil((r.bottom() + 1) * yScale)) - 1);
+    srcRect.setLeft(static_cast<int>(scaledRect.left() * xScale));
+    srcRect.setRight(static_cast<int>(ceil((scaledRect.right() + 1) * xScale)) - 1);
+    srcRect.setTop(static_cast<int>(scaledRect.top() * yScale));
+    srcRect.setBottom(static_cast<int>(ceil((scaledRect.bottom() + 1) * yScale)) - 1);
 
     KisPaintDeviceSP mergedImage = m_d->rootLayer->projection();
-    QTime t;
-    t.start();
-
-    quint8 *scaledImageData = new quint8[r.width() * r.height() * pixelSize];
+    quint8 *scaledImageData = new quint8[scaledRect.width() * scaledRect.height() * pixelSize];
 
     quint8 *imageRow = new quint8[srcRect.width() * pixelSize];
     const qint32 imageRowX = srcRect.x();
 
-    for (qint32 y = 0; y < r.height(); ++y) {
+    for (qint32 y = 0; y < scaledRect.height(); ++y) {
 
-        qint32 dstY = r.y() + y;
-        qint32 dstX = r.x();
+        qint32 dstY = scaledRect.y() + y;
+        qint32 dstX = scaledRect.x();
         qint32 srcY = (dstY * imageHeight) / scaledImageSize.height();
 
         mergedImage->readBytes(imageRow, imageRowX, srcY, srcRect.width(), 1);
 
-        quint8 *dstPixel = scaledImageData + (y * r.width() * pixelSize);
-        quint32 columnsRemaining = r.width();
+        quint8 *dstPixel = scaledImageData + (y * scaledRect.width() * pixelSize);
+        quint32 columnsRemaining = scaledRect.width();
 
         while (columnsRemaining > 0) {
 
@@ -980,14 +979,12 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, c
             --columnsRemaining;
         }
     }
-    dbgRender << "Time elapsed scaling image: " << t.elapsed() << endl;
-
     delete [] imageRow;
 
-    QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), const_cast<KoColorProfile*>(profile), KoColorConversionTransformation::IntentPerceptual);
+    QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile), KoColorConversionTransformation::IntentPerceptual);
 
     if (m_d->backgroundPattern) {
-        m_d->backgroundPattern->paintBackground(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
+        m_d->backgroundPattern->paintBackground(image, scaledRect, scaledImageSize, QSize(imageWidth, imageHeight));
     }
 
     delete [] scaledImageData;

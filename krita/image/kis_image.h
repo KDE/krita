@@ -99,7 +99,10 @@ public:
                            const KoColorProfile * profile);
 
 
-    QImage convertToQImage(const QRect& r, const QSize& scaledImageSize, const KoColorProfile *profile);
+    /**
+     * XXX: docs!
+     */
+    QImage convertToQImage(const QRect& scaledRect, const QSize& scaledImageSize, const KoColorProfile *profile);
 
     /**
      * Lock the image to make sure no recompositing-causing signals

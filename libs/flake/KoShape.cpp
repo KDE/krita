@@ -1248,9 +1248,9 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     }
 
     if (attributes & OdfLayer) {
-        KoShape * parent = d->parent;
-        while ( parent ) {
-            if ( dynamic_cast<KoShapeLayer*>( parent ) ) {
+        KoShape *parent = d->parent;
+        while (parent) {
+            if (dynamic_cast<KoShapeLayer*>(parent)) {
                 context.xmlWriter().addAttribute("draw:layer", parent->name());
                 break;
             }

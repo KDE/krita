@@ -34,6 +34,7 @@
 
 #include "ui_kis_wdg_options_ppm.h"
 #include <qendian.h>
+#include <KoColorSpaceTraits.h>
 
 typedef KGenericFactory<KisPPMExport> KisPPMExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritappmexport, KisPPMExportFactory("kofficefilters"))
@@ -202,7 +203,25 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     }
 
     // Write the data
+    KisPPMFlow* flow = 0;
+    if (binary) flow = new KisPPMBinaryFlow(&fp);
+    else flow = new KisPPMAsciiFlow(&fp);
 
+    for (int y = 0; y < img->height(); ++y) {
+        KisHLineIterator it = pd->createHLineIterator(0, y, img->width());
+        if (is16bit) {
+        } else {
+            if (rgb) {
+                while (!it.isDone()) {
+                    flow->writeNumber(KoRgbTraits<quint8>::red(it.rawData()));
+                    flow->writeNumber(KoRgbTraits<quint8>::green(it.rawData()));
+                    flow->writeNumber(KoRgbTraits<quint8>::blue(it.rawData()));
+                    ++it;
+                }
+            }
+        }
+    }
+
+    delete flow;
     fp.close();
-    abort();
 }

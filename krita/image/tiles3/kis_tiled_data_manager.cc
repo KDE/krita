@@ -184,7 +184,6 @@ bool KisTiledDataManager::read(KoStore *store)
         tile->unlock();
     }
 
-    printf("*** KisTiledDataManager::read called \n");
     return true;
 }
 

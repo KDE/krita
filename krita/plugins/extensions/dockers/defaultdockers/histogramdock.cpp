@@ -79,7 +79,7 @@ void KisHistogramDocker::setImage(KisImageWSP image)
 {
     if (!image) return;
 
-    dbgPlugins << m_image << image << m_histogram;
+    Q_ASSERT(image);
 
     m_image = image;
 

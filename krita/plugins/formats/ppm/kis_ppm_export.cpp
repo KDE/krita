@@ -90,15 +90,26 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
         KMessageBox::error(0, i18n("Cannot export images in %1.\n", pd->colorSpace()->name())) ;
         return KoFilter::CreationError;
     }
+    
+    // Open the file for writting
+    QFile fp(filename);
+    fp.open(QIODevice::WriteOnly);
+    
+    // Write the magic
+    if(rgb)
+    {
+      if(binary) fp.write("P6");
+      else fp.write("P3");
+    } else if(binary) {
+      if(binary) fp.write("P4");
+      else fp.write("P1");
+    } else {
+      if(binary) fp.write("P5");
+      else fp.write("P2");
+    }
+    fp.write("\n");
+    
 
-//         if (KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16")) {
-//         return alpha ? PNG_COLOR_TYPE_GRAY_ALPHA : PNG_COLOR_TYPE_GRAY;
-//     }
-//     if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
-//         return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
-//     }
-//
-
-
+    fp.close();
     abort();
 }

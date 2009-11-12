@@ -119,6 +119,7 @@ public:
         m_device->write((char*)&vo, 2);
     }
     virtual void flush() {
+        m_device->write((char*)&m_current, 1);
     }
 private:
     QIODevice* m_device;
@@ -249,7 +250,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
             }
         }
     }
-
+    flow->flush();
     delete flow;
     fp.close();
     return KoFilter::OK;

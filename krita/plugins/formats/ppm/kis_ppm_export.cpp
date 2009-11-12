@@ -91,6 +91,8 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
         return KoFilter::CreationError;
     }
     
+    bool is16bit = pd->colorSpace()->id() == "RGBA16" || pd->colorSpace()->id() == "GRAYA16";
+    
     // Open the file for writting
     QFile fp(filename);
     fp.open(QIODevice::WriteOnly);
@@ -109,6 +111,19 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     }
     fp.write("\n");
     
+    // Write the header
+    fp.write( QByteArray::number(img->width()) );
+    fp.write( " " );
+    fp.write( QByteArray::number(img->height()) );
+    if(!bitmap)
+    {
+      if(is16bit) fp.write(" 65535\n");
+      else fp.write( " 255\n");
+    } else {
+      fp.write( "\n" );
+    }
+    
+    // Write the data
 
     fp.close();
     abort();

@@ -33,6 +33,7 @@
 #include <kis_paint_device.h>
 
 #include "ui_kis_wdg_options_ppm.h"
+#include <qendian.h>
 
 typedef KGenericFactory<KisPPMExport> KisPPMExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritappmexport, KisPPMExportFactory("kofficefilters"))
@@ -52,10 +53,11 @@ public:
     }
     virtual ~KisPPMFlow() {
     }
-    virtual void writeBool(quint8 v);
-    virtual void writeBool(quint16 v);
-    virtual void writeNumber(quint8 v);
-    virtual void writeNumber(quint16 v);
+    virtual void writeBool(quint8 v) = 0;
+    virtual void writeBool(quint16 v) = 0;
+    virtual void writeNumber(quint8 v) = 0;
+    virtual void writeNumber(quint16 v) = 0;
+    virtual void flush() = 0;
 private:
 };
 
@@ -67,10 +69,10 @@ public:
     ~KisPPMAsciiFlow() {
     }
     virtual void writeBool(quint8 v) {
-        if (v < 127) {
-            m_device->write("0 ");
-        } else {
+        if (v > 127) {
             m_device->write("1 ");
+        } else {
+            m_device->write("0 ");
         }
     }
     virtual void writeBool(quint16 v) {
@@ -82,12 +84,45 @@ public:
     virtual void writeNumber(quint16 v) {
         m_device->write(QByteArray::number(v));
     }
+    virtual void flush() {
+    }
 private:
     QIODevice* m_device;
 };
 
-class KisPPMBinaryFlow
+class KisPPMBinaryFlow : public KisPPMFlow
 {
+public:
+    KisPPMBinaryFlow(QIODevice* device) : m_device(device), m_pos(0), m_current(0) {
+    }
+    virtual ~KisPPMBinaryFlow() {
+    }
+    virtual void writeBool(quint8 v) {
+        m_current = m_current << 1;
+        m_current |= (v > 127);
+        ++m_pos;
+        if (m_pos >= 8) {
+            m_current = 0;
+            m_pos = 0;
+            flush();
+        }
+    }
+    virtual void writeBool(quint16 v) {
+        writeBool(quint8(v >> 8));
+    }
+    virtual void writeNumber(quint8 v) {
+        m_device->write((char*)&v, 1);
+    }
+    virtual void writeNumber(quint16 v) {
+        quint16 vo = qToLittleEndian(v);
+        m_device->write((char*)&vo, 2);
+    }
+    virtual void flush() {
+    }
+private:
+    QIODevice* m_device;
+    int m_pos;
+    quint8 m_current;
 };
 
 KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const QByteArray& to)

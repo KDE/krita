@@ -312,6 +312,11 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     opj_cparameters_t parameters;
     opj_set_default_encoder_parameters(&parameters);
     parameters.cp_comment = "Created by Krita";
+    parameters.subsampling_dx = 1;
+    parameters.subsampling_dy = 1;
+    parameters.cp_disto_alloc = 1;
+    parameters.tcp_numlayers = 1;
+    parameters.numresolution = 6;
 
     // Set the colorspace information
     OPJ_COLOR_SPACE clrspc;
@@ -357,7 +362,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
         image_info[k].x0 = 0;
         image_info[k].y0 = 0;
         image_info[k].prec = 8;
-        image_info[k].bpp = 8;
+        image_info[k].bpp = bitdepth;
         image_info[k].sgnd = 0;
     }
     opj_image_t *image = opj_image_create(components, image_info, clrspc);
@@ -368,7 +373,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     // Copy the data in the image
     int pos = 0;
-    for (int v = 0; v < image->y1; ++v) {
+    for (int v = 0; v < height; ++v) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, image->x1);
         if (bitdepth == 16) {
             while (!it.isDone()) {
@@ -390,7 +395,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
             }
         }
     }
-
+    
     // coding format
     parameters.decod_format = getFileFormat(uri); // TODO isn't there some magic code ?
 
@@ -441,7 +446,9 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     // Write to the file
     QFile fp(uri.path());
     fp.open(QIODevice::WriteOnly);
-    fp.write((char*)cio->buffer, cio_tell(cio));
+    int length = cio_tell(cio);
+    dbgFile << "Length of the file to save: " << length;
+    fp.write((char*)cio->buffer, length);
     fp.close();
 
     opj_cio_close(cio);

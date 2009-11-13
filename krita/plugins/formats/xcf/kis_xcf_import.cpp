@@ -45,7 +45,7 @@
 #include "xcftools.h"
 
 typedef KGenericFactory<KisXCFImport> XCFImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritappmimport, XCFImportFactory("kofficefilters"))
+K_EXPORT_COMPONENT_FACTORY(libkritaxcfimport, XCFImportFactory("kofficefilters"))
 
 KisXCFImport::KisXCFImport(QObject* parent, const QStringList&) : KoFilter(parent)
 {

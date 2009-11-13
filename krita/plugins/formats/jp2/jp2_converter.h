@@ -29,6 +29,11 @@
 class KisDoc2;
 class KisUndoAdapter;
 
+struct JP2ConvertOptions {
+  int rate;
+  int numberresolution;
+};
+
 /**
  * Image import/export plugins can use these results to report about success or failure.
  */
@@ -63,7 +68,7 @@ public:
     virtual ~jp2Converter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer);
+    KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, const JP2ConvertOptions& options);
     /**
      * Retrieve the constructed image
      */

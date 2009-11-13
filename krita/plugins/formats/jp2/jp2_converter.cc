@@ -293,7 +293,7 @@ KisImageWSP jp2Converter::image()
 }
 
 
-KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP layer)
+KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP layer, const JP2ConvertOptions& options)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -316,7 +316,10 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     parameters.subsampling_dy = 1;
     parameters.cp_disto_alloc = 1;
     parameters.tcp_numlayers = 1;
-    parameters.numresolution = 6;
+    parameters.numresolution = options.numberresolution;
+    dbgFile << 100 - options.rate;
+    parameters.tcp_rates[0] = options.rate;
+    
 
     // Set the colorspace information
     OPJ_COLOR_SPACE clrspc;

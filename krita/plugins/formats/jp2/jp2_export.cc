@@ -75,12 +75,16 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
 
     QWidget* wdg = new QWidget(kdb);
     optionsJP2.setupUi(wdg);
-
+    
     kdb->setMainWidget(wdg);
 
     if (kdb->exec() == QDialog::Rejected) {
         return KoFilter::OK; // FIXME Cancel doesn't exist :(
     }
+
+    JP2ConvertOptions options;
+    options.numberresolution = optionsJP2.numberResolutions->value();
+    options.rate = optionsJP2.qualityLevel->value();
 
     KUrl url;
     url.setPath(filename);
@@ -95,7 +99,7 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
 
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(url, l)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(url, l, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KoFilter::OK;
     }

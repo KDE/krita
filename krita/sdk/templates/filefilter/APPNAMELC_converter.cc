@@ -32,11 +32,11 @@ KisImageBuilder_Result %{APPNAME}Converter::decode(const KUrl& uri)
         return (KisImageBuilder_RESULT_NOT_EXIST);
     }
     // Creating the KisImageWSP
-    if( ! m_img) {
+    if(!m_img) {
         m_img = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_img);
     }
-    KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX));
+    KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img->nextLayerName(), quint8_MAX));
 #endif
 
     return KisImageBuilder_RESULT_OK;
@@ -57,7 +57,7 @@ KisImageBuilder_Result %{APPNAME}Converter::buildImage(const KUrl& uri)
     KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
     QString tmpFile;
 
-    if (KIO::NetAccess::download(uri, tmpFile, QApplication::activeWindow())) {
+    if (KIO::NetAccess::download(uri, tmpFile, qApp->activeWindow())) {
         KUrl uriTF;
         uriTF.setPath( tmpFile );
         result = decode(uriTF);
@@ -79,7 +79,7 @@ KisImageBuilder_Result %{APPNAME}Converter::buildFile(const KUrl& uri, KisPaintL
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageWSP img = layer -> image();
+    KisImageWSP img = layer->image();
     if (!img)
         return KisImageBuilder_RESULT_EMPTY;
 

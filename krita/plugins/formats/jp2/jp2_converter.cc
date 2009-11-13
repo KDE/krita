@@ -97,7 +97,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     }
     int bitdepth = image->comps[0].bpp;
     for (int i = 1; i < components; ++i) {
-        if (image->comps[i] != bitdepth) {
+        if (image->comps[i].bpp != bitdepth) {
             opj_destroy_decompress(dinfo);
             return KisImageBuilder_RESULT_FAILURE;
         }
@@ -109,25 +109,25 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
         break;
     case CLRSPC_SRGB: {
         if (bitdepth == 16) {
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA16");
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA16", "");
         } else if (bitdepth == 8) {
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA");
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "");
         }
         break;
     }
     case CLRSPC_GRAY: {
         if (bitdepth == 16) {
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA16");
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA16", "");
         } else if (bitdepth == 8) {
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA");
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", "");
         }
         break;
     }
     case CLRSPC_SYCC: {
         if (bitdepth == 16) {
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("YUVA16");
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("YUVA16", "");
         } else if (bitdepth == 8) {
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("YUVA8");
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("YUVA8", "");
         }
         break;
     }

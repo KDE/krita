@@ -42,6 +42,7 @@
 #include <kis_paint_device.h>
 #include <KoColorSpace.h>
 #include <qendian.h>
+#include "xcftools.h"
 
 typedef KGenericFactory<KisXCFImport> XCFImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritappmimport, XCFImportFactory("kofficefilters"))
@@ -111,6 +112,15 @@ KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const Q
 KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDoc2* doc)
 {
     dbgFile << "Start decoding file";
+    // Read the file into memory
+    QByteArray data = device->readAll();
+    xcf_file = (uint8_t*)data.data();
+    
+    // Decode the data
+    getBasicXcfInfo() ;
+    
+    dbgFile << XCF.version << "width = " << XCF.width << "height = " << XCF.height << "layers = " << XCF.numLayers;
+    
     abort();
     return KoFilter::OK;
 }

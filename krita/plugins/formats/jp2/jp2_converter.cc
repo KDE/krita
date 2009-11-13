@@ -67,7 +67,7 @@ KisImageBuilder_Result jp2Converter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, false, qApp -> mainWidget())) {
+    if (!KIO::NetAccess::exists(uri, false, QApplication::activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
@@ -75,7 +75,7 @@ KisImageBuilder_Result jp2Converter::buildImage(const KUrl& uri)
     KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
     QString tmpFile;
 
-    if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
+    if (KIO::NetAccess::download(uri, tmpFile, QApplication::activeWindow())) {
         KUrl uriTF;
         uriTF.setPath( tmpFile );
         result = decode(uriTF);

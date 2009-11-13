@@ -347,11 +347,13 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     // Init the image
     opj_image_cmptparm_t image_info[3];
 
+    int width = img->width();
+    int height = img->height();
     for (int k = 0; k < components; k++) {
         image_info[k].dx = 1;
         image_info[k].dy = 1;
-        image_info[k].w = img->width();
-        image_info[k].h = img->height();
+        image_info[k].w = width;
+        image_info[k].h = height;
         image_info[k].x0 = 0;
         image_info[k].y0 = 0;
         image_info[k].prec = 8;
@@ -359,6 +361,10 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
         image_info[k].sgnd = 0;
     }
     opj_image_t *image = opj_image_create(components, image_info, clrspc);
+    image->x1 = width;
+    image->y1 = height;
+    image->x0 = 0;
+    image->y0 = 0;
 
     // Copy the data in the image
     int pos = 0;

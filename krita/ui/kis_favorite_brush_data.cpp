@@ -18,6 +18,7 @@
 
 #include "kis_favorite_brush_data.h"
 #include "kis_popup_palette.h"
+#include "ko_favorite_resource_manager.h"
 #include <kis_paintop_preset.h>
 #include <kis_types.h>
 #include <KoID.h>
@@ -25,9 +26,10 @@
 #include <QIcon>
 #include <QToolButton>
 
-KisFavoriteBrushData::KisFavoriteBrushData(KisPaintOpPresetSP  newdata, QIcon* icon)
-        : m_button (0)
-        , m_data (newdata) // put this here instead of in the constructor is better style and more efficient.
+KisFavoriteBrushData::KisFavoriteBrushData(KoFavoriteResourceManager* resourceManager, KisPaintOpPresetSP  newdata, QIcon* icon)
+        : m_favoriteResourceManager (resourceManager)
+        , m_button (0)
+        , m_data (newdata)
 {
     // without a button, this class doesn't make sense, so always initialize it
     m_button = new QToolButton();
@@ -40,6 +42,7 @@ KisFavoriteBrushData::KisFavoriteBrushData(KisPaintOpPresetSP  newdata, QIcon* i
 void KisFavoriteBrushData::slotBrushButtonClicked()
 {
     qDebug() << "Brush name:" << m_data->paintOp();
+    m_favoriteResourceManager->changeCurrentPaintOp(m_data);
 }
 
 KisPaintOpPresetSP KisFavoriteBrushData::paintopPreset()
@@ -59,6 +62,7 @@ QToolButton* KisFavoriteBrushData::paintopButton()
 
 KisFavoriteBrushData::~KisFavoriteBrushData()
 {
+    m_favoriteResourceManager = 0;
     qDebug() << "Brush name:" << m_data->paintOp() << "deleting";
     // don't delete m_data, it's a shared pointer
     // only delete the button if it hasn't got a parent object, otherwise

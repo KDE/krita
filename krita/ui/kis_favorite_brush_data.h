@@ -24,19 +24,21 @@
 
 class QToolButton;
 class QIcon;
+class KoFavoriteResourceManager;
 
 class KisFavoriteBrushData : public QObject
 {
     Q_OBJECT
 
 public:
-    KisFavoriteBrushData(KisPaintOpPresetSP, QIcon * = 0);
+    KisFavoriteBrushData(KoFavoriteResourceManager*, KisPaintOpPresetSP, QIcon * = 0);
     ~KisFavoriteBrushData();
     KisPaintOpPresetSP paintopPreset(); //CHANGE TO KisPresetPaintOpSP
     void setIcon (QIcon*);
     QToolButton* paintopButton();
 
 private:
+    KoFavoriteResourceManager* m_favoriteResourceManager;
     QToolButton* m_button;
     KisPaintOpPresetSP  m_data; //CHANGE TO KisPresetPaintOpSP
     

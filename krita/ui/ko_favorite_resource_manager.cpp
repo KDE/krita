@@ -51,12 +51,12 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox)
     for (int pos = 0; pos < favoriteList.size(); pos++)
     {
         KisPaintOpPresetSP newBrush = m_paintopBox->paintOpPresetSP(new KoID(favoriteList[pos], favoriteList[pos]));
-        KisFavoriteBrushData* newBrushData = new KisFavoriteBrushData(newBrush, new QIcon (m_paintopBox->paintopPixmap(newBrush->paintOp())));
+        KisFavoriteBrushData* newBrushData = new KisFavoriteBrushData(this, newBrush, new QIcon (m_paintopBox->paintopPixmap(newBrush->paintOp())));
         m_favoriteBrushesList.append(newBrushData);
     }
 }
 
-void KoFavoriteResourceManager::changeCurrentBrush()
+void KoFavoriteResourceManager::changeCurrentBrushLabel()
 {
     if (m_favoriteBrushManager!=0)
         m_favoriteBrushManager->changeCurrentBrushLabel();
@@ -98,7 +98,7 @@ int KoFavoriteResourceManager::addFavoriteBrush (KisPaintOpPresetSP newBrush)
             return pos;
     }
 
-    KisFavoriteBrushData* newBrushData = new KisFavoriteBrushData(newBrush, new QIcon (m_paintopBox->paintopPixmap(newBrush->paintOp())));
+    KisFavoriteBrushData* newBrushData = new KisFavoriteBrushData(this, newBrush, new QIcon (m_paintopBox->paintopPixmap(newBrush->paintOp())));
     m_favoriteBrushesList.append(newBrushData);
 
     if (m_popupPalette != 0)
@@ -146,12 +146,12 @@ KisFavoriteBrushData* KoFavoriteResourceManager::favoriteBrush(int pos)
     return m_favoriteBrushesList.at(pos);
 }
 
-QString KoFavoriteResourceManager::KoIDNameID(const KoID &newKoID)
+void KoFavoriteResourceManager::changeCurrentPaintOp(KisPaintOpPresetSP brush)
 {
-    QString str = newKoID.name();
-    return str.append(newKoID.id());
+    qDebug() << "[KoFavoriteResourceManager] Calling brush: " << brush->paintOp().id();
+    m_paintopBox->setCurrentPaintop(brush);
+    return;
 }
-
 
 //Recent Colors
 int KoFavoriteResourceManager::isInRecentColor(QColor &newColor)

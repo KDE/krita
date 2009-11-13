@@ -114,7 +114,7 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
 
 void KisPaletteManager::changeCurrentBrushLabel()
 {
-    m_currentBrushLabel->setText(m_paintOpBox->currentPaintopKoID().id());
+    m_currentBrushLabel->setText(m_paintOpBox->currentPaintop().id());
     //m_paintOpBox->currentPaintopKoID().name() doesnt work properly.
 }
 
@@ -146,7 +146,7 @@ void KisPaletteManager::slotAddBrush()
     }
     else
     {
-        m_nameList.append(m_paintOpBox->currentPaintopKoID().id());
+        m_nameList.append(m_paintOpBox->currentPaintop().id());
         m_model->setStringList(m_nameList);
         index = m_model->index(m_resourceManager->favoriteBrushesTotal()-1);
     }

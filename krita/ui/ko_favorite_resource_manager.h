@@ -46,11 +46,12 @@ public:
     static const int MAX_FAVORITE_BRUSHES = 10;
     static const int MAX_RECENT_COLORS = 10;
 
-    void changeCurrentBrush();
+    void changeCurrentBrushLabel();
     /************************************Popup Palette************************************/
 
     void showPopupPalette();
     void showPaletteManager();
+    void changeCurrentPaintOp(KisPaintOpPresetSP);
 
     /**********************************Favorite Brushes***********************************/
 
@@ -62,7 +63,6 @@ public:
     bool isFavoriteBrushesFull();
     int favoriteBrushesTotal();
     KisFavoriteBrushData* favoriteBrush(int);
-    QString KoIDNameID(const KoID &);
     void saveFavoriteBrushes();
 
 
@@ -74,6 +74,7 @@ public:
     int isInRecentColor(QColor&);
     void addRecentColor(KisRecentColorData*);
     QQueue<KisRecentColorData*>* recentColorsList();
+    
 
 private:
     KisPaletteManager *m_favoriteBrushManager;

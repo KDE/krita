@@ -38,6 +38,8 @@
 #include <KoColorSpaceTraits.h>
 #include <kis_iterator.h>
 #include <KoColorSpace.h>
+#include <KoColorModelStandardIds.h>
+#include <KMessageBox>
 
 jp2Converter::jp2Converter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
@@ -305,6 +307,91 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
+
+    // Init parameters
+    opj_cparameters_t parameters;
+    opj_set_default_encoder_parameters(&parameters);
+    parameters.cp_comment = "Created by Krita";
+
+    // decod format
+    parameters.decod_format = getFileFormat(uri); // TODO isn't there some magic code ?
+
+
+    // Decode the file
+    opj_cinfo_t *cinfo = 0;
+
+    bool hasColorSpaceInfo = false;
+    /* get a decoder handle */
+    switch (parameters.decod_format) {
+    case J2K_CFMT: {
+        cinfo = opj_create_compress(CODEC_J2K);
+        break;
+    }
+    case JP2_CFMT: {
+        cinfo = opj_create_compress(CODEC_JP2);
+        hasColorSpaceInfo = true;
+        break;
+    }
+    case JPT_CFMT: {
+        cinfo = opj_create_compress(CODEC_JPT);
+        break;
+    }
+    }
+
+    // Set the colorspace information
+    OPJ_COLOR_SPACE clrspc;
+    int components;
+    if (layer->colorSpace()->colorModelId() == GrayAColorModelID || layer->colorSpace()->colorModelId() == GrayColorModelID) {
+        clrspc = CLRSPC_GRAY;
+        components = 1;
+    } else if (layer->colorSpace()->colorModelId() == RGBAColorModelID) {
+        clrspc = CLRSPC_SRGB;
+        components = 3;
+    } else {
+        KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
+    int bitdepth;
+    if (layer->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
+        bitdepth = 8;
+    } else if (layer->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
+        bitdepth = 16;
+    } else {
+        KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
+    // Copy data in the image
+    opj_image_cmptparm_t image_info[3];
+
+    for (int k = 0; k < components; k++) {
+        image_info[k].dx = 1;
+        image_info[k].dy = 1;
+        image_info[k].w = m_img->width();
+        image_info[k].h = m_img->height();
+        image_info[k].x0 = 0;
+        image_info[k].y0 = 0;
+        image_info[k].prec = 8;
+        image_info[k].bpp = 8;
+        image_info[k].sgnd = 0;
+    }
+    opj_image_t *image = opj_image_create(components, image_info, clrspc);
+
+
+
+    // TODO get data from Krita
+
+    // Setup an event manager
+    opj_event_mgr_t event_mgr;    /* event manager */
+    memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
+    event_mgr.error_handler = error_callback;
+    event_mgr.warning_handler = warning_callback;
+    event_mgr.info_handler = info_callback;
+
+    /* catch events using our callbacks and give a local context */
+    opj_set_event_mgr((opj_common_ptr) cinfo, &event_mgr, stderr);
+
     // Open file for writing
 #if 0
     FILE *fp = fopen(QFile::encodeName(uri.path()), "wb");

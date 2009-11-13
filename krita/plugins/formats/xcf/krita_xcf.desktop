@@ -2,7 +2,7 @@
 Categories=Qt;KDE;Office;Graphics;
 Exec=krita %u
 Icon=krita
-MimeType=image/x-xcf-gimp;
+MimeType=image/x-xcf;
 Name=Krita
 Name[af]=Krita
 Name[bg]=Krita

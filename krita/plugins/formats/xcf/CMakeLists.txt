@@ -14,3 +14,8 @@ kde4_add_plugin(kritaxcfimport WITH_PREFIX ${kritaxcfimport_PART_SRCS})
 target_link_libraries(kritaxcfimport kritaui )
 
 install(TARGETS kritaxcfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+
+########### install files ###############
+
+install( FILES  krita_xcf_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_xcf.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

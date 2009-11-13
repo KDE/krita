@@ -55,6 +55,38 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     fp.open(QIODevice::ReadOnly);
     QByteArray src = fp.readAll();
     fp.close();
+    // Decode the file
+    opj_dinfo_t *dinfo = 0;
+
+    /* get a decoder handle */
+    switch (parameters.decod_format) {
+    case J2K_CFMT: {
+        dinfo = opj_create_decompress(CODEC_J2K);
+    }
+    case JP2_CFMT: {
+        dinfo = opj_create_decompress(CODEC_JP2);
+    }
+    case JPT_CFMT: {
+        dinfo = opj_create_decompress(CODEC_JPT);
+    }
+    }
+    Q_ASSERT(dinfo);
+
+    /* setup the decoder decoding parameters using user parameters */
+    opj_setup_decoder(dinfo, &parameters);
+
+    /* open a byte stream */
+    opj_cio_t *cio = opj_cio_open((opj_common_ptr) dinfo, (unsigned char*)src.data(), src.length());
+
+    /* decode the stream and fill the image structure */
+    opj_image_t *image = opj_decode(dinfo, cio);
+
+    /* close the byte stream */
+    opj_cio_close(cio);
+    if (!image) {
+        opj_destroy_decompress(dinfo);
+        return KisImageBuilder_RESULT_FAILURE;
+    }
 
     return KisImageBuilder_RESULT_OK;
 }

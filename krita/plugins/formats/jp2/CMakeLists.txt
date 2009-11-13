@@ -25,6 +25,8 @@ set(kritajp2export_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
+kde4_add_ui_files(kritajp2export_PART_SRCS kis_wdg_options_jp2.ui )
+
 kde4_add_plugin(kritajp2export WITH_PREFIX ${kritajp2export_PART_SRCS})
 
 

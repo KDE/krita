@@ -36,6 +36,8 @@
 
 #include "jp2_converter.h"
 
+#include "ui_kis_wdg_options_jp2.h"
+
 class KisExternalLayer;
 
 typedef KGenericFactory<jp2Export> ExportFactory;
@@ -64,6 +66,21 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
 
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
+
+    KDialog* kdb = new KDialog(0);
+    kdb->setWindowTitle(i18n("JPEG 2000 Export Options"));
+    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
+
+    Ui::WdgOptionsJP2 optionsJP2;
+
+    QWidget* wdg = new QWidget(kdb);
+    optionsJP2.setupUi(wdg);
+
+    kdb->setMainWidget(wdg);
+
+    if (kdb->exec() == QDialog::Rejected) {
+        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+    }
 
     KUrl url;
     url.setPath(filename);

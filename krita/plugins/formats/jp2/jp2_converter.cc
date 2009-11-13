@@ -238,20 +238,20 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
             while (!it.isDone()) {
                 quint16* px = reinterpret_cast<quint16*>(it.rawData());
                 for (int i = 0; i < components; ++i) {
-                    px[channelorder[i]] = image->comps[i].data[it.x() + image->x1 * it.y()];
+                    px[channelorder[i]] = image->comps[i].data[pos];
                 }
                 colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
-                pos += 2;
+                ++pos;
                 ++it;
             }
         } else if (bitdepth == 8) {
             while (!it.isDone()) {
                 quint8* px = reinterpret_cast<quint8*>(it.rawData());
                 for (int i = 0; i < components; ++i) {
-                    px[channelorder[i]] = image->comps[i].data[it.x() + image->x1 * it.y()];
+                    px[channelorder[i]] = image->comps[i].data[pos];
                 }
                 colorSpace->setAlpha(px, OPACITY_OPAQUE, 1);
-                pos += 1;
+                ++pos;
                 ++it;
             }
         }
@@ -341,12 +341,17 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     // Set the colorspace information
     OPJ_COLOR_SPACE clrspc;
     int components;
+    QVector<int> channelorder(components);
     if (layer->colorSpace()->colorModelId() == GrayAColorModelID || layer->colorSpace()->colorModelId() == GrayColorModelID) {
         clrspc = CLRSPC_GRAY;
         components = 1;
+        channelorder[0] = 0;
     } else if (layer->colorSpace()->colorModelId() == RGBAColorModelID) {
         clrspc = CLRSPC_SRGB;
         components = 3;
+        channelorder[0] = KoRgbU16Traits::red_pos;
+        channelorder[1] = KoRgbU16Traits::green_pos;
+        channelorder[2] = KoRgbU16Traits::blue_pos;
     } else {
         KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
         return KisImageBuilder_RESULT_FAILURE;
@@ -362,7 +367,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-    // Copy data in the image
+    // Init the image
     opj_image_cmptparm_t image_info[3];
 
     for (int k = 0; k < components; k++) {
@@ -378,9 +383,31 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     }
     opj_image_t *image = opj_image_create(components, image_info, clrspc);
 
+    // Copy the data in the image
+    int pos = 0;
+    for (int v = 0; v < image->y1; ++v) {
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, image->x1);
+        if (bitdepth == 16) {
+            while (!it.isDone()) {
+                quint16* px = reinterpret_cast<quint16*>(it.rawData());
+                for (int i = 0; i < components; ++i) {
+                    image->comps[i].data[pos] = px[channelorder[i]];
+                }
+                ++pos;
+                ++it;
+            }
+        } else if (bitdepth == 8) {
+            while (!it.isDone()) {
+                quint8* px = reinterpret_cast<quint8*>(it.rawData());
+                for (int i = 0; i < components; ++i) {
+                    image->comps[i].data[pos] = px[channelorder[i]];
+                }
+                ++pos;
+                ++it;
+            }
+        }
+    }
 
-
-    // TODO get data from Krita
 
     // Setup an event manager
     opj_event_mgr_t event_mgr;    /* event manager */

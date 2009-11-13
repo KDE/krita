@@ -313,42 +313,19 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     opj_set_default_encoder_parameters(&parameters);
     parameters.cp_comment = "Created by Krita";
 
-    // decod format
-    parameters.decod_format = getFileFormat(uri); // TODO isn't there some magic code ?
-
-
-    // Decode the file
-    opj_cinfo_t *cinfo = 0;
-
-    bool hasColorSpaceInfo = false;
-    /* get a decoder handle */
-    switch (parameters.decod_format) {
-    case J2K_CFMT: {
-        cinfo = opj_create_compress(CODEC_J2K);
-        break;
-    }
-    case JP2_CFMT: {
-        cinfo = opj_create_compress(CODEC_JP2);
-        hasColorSpaceInfo = true;
-        break;
-    }
-    case JPT_CFMT: {
-        cinfo = opj_create_compress(CODEC_JPT);
-        break;
-    }
-    }
-
     // Set the colorspace information
     OPJ_COLOR_SPACE clrspc;
     int components;
-    QVector<int> channelorder(components);
+    QVector<int> channelorder;
     if (layer->colorSpace()->colorModelId() == GrayAColorModelID || layer->colorSpace()->colorModelId() == GrayColorModelID) {
         clrspc = CLRSPC_GRAY;
         components = 1;
+        channelorder.resize(components);
         channelorder[0] = 0;
     } else if (layer->colorSpace()->colorModelId() == RGBAColorModelID) {
         clrspc = CLRSPC_SRGB;
         components = 3;
+        channelorder.resize(components);
         channelorder[0] = KoRgbU16Traits::red_pos;
         channelorder[1] = KoRgbU16Traits::green_pos;
         channelorder[2] = KoRgbU16Traits::blue_pos;
@@ -373,8 +350,8 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     for (int k = 0; k < components; k++) {
         image_info[k].dx = 1;
         image_info[k].dy = 1;
-        image_info[k].w = m_img->width();
-        image_info[k].h = m_img->height();
+        image_info[k].w = img->width();
+        image_info[k].h = img->height();
         image_info[k].x0 = 0;
         image_info[k].y0 = 0;
         image_info[k].prec = 8;
@@ -408,6 +385,29 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
         }
     }
 
+    // coding format
+    parameters.decod_format = getFileFormat(uri); // TODO isn't there some magic code ?
+
+    // Decode the file
+    opj_cinfo_t *cinfo = 0;
+
+    bool hasColorSpaceInfo = false;
+    /* get a decoder handle */
+    switch (parameters.decod_format) {
+    case J2K_CFMT: {
+        cinfo = opj_create_compress(CODEC_J2K);
+        break;
+    }
+    case JP2_CFMT: {
+        cinfo = opj_create_compress(CODEC_JP2);
+        hasColorSpaceInfo = true;
+        break;
+    }
+    case JPT_CFMT: {
+        cinfo = opj_create_compress(CODEC_JPT);
+        break;
+    }
+    }
 
     // Setup an event manager
     opj_event_mgr_t event_mgr;    /* event manager */
@@ -419,15 +419,27 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     /* catch events using our callbacks and give a local context */
     opj_set_event_mgr((opj_common_ptr) cinfo, &event_mgr, stderr);
 
-    // Open file for writing
-#if 0
-    FILE *fp = fopen(QFile::encodeName(uri.path()), "wb");
-    if (!fp) {
-        return (KisImageBuilder_RESULT_FAILURE);
+
+    /* setup the encoder parameters using the current image and using user parameters */
+    opj_setup_encoder(cinfo, &parameters, image);
+
+    opj_cio_t* cio = opj_cio_open((opj_common_ptr) cinfo, 0, 0);
+
+    /* encode the image */
+    if (!opj_encode(cinfo, cio, image, parameters.index)) {
+        opj_cio_close(cio);
+        opj_destroy_compress(cinfo);
+        return KisImageBuilder_RESULT_FAILURE;
     }
-    uint height = img->height();
-    uint width = img->width();
-#endif
+
+    // Write to the file
+    QFile fp(uri.path());
+    fp.open(QIODevice::WriteOnly);
+    fp.write((char*)cio->buffer, cio_tell(cio));
+    fp.close();
+
+    opj_cio_close(cio);
+    opj_destroy_compress(cinfo);
 
     return KisImageBuilder_RESULT_OK;
 }

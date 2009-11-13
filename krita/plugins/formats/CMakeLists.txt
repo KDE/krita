@@ -18,6 +18,9 @@ macro_log_feature( POPPLER_FOUND "poppler-qt4" "The Poppler Qt4 interface librar
 macro_optional_find_package(Kdcraw)
 macro_log_feature( KDCRAW_FOUND "kdcraw" "The KDCraw library" "http://www.digikam.org/" FALSE "" "Required by the Krita RAW filter")
 
+macro_optional_find_package(OpenJPEG)
+macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image compression" "http://www.openjpeg.org" FALSE "" "Required by the Krita JPEG 2000 filter")
+
 macro_optional_find_package(GraphicsMagick)
 set(BAD_GRAPHICS_MAGICK_VERSION 1.2.5)
 set(BUILD_GRAPHICSMAGICK FALSE)
@@ -60,6 +63,10 @@ endif(BUILD_GRAPHICSMAGICK)
 if(POPPLER_FOUND AND HAVE_POPPLER_0_6)
     add_subdirectory(pdf)
 endif(POPPLER_FOUND AND HAVE_POPPLER_0_6)
+
+if(OPENJPEG_FOUND)
+    add_subdirectory(jp2)
+endif(OPENJPEG_FOUND)
 
 add_subdirectory(bmp)
 add_subdirectory(ora)

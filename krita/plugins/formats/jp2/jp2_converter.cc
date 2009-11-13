@@ -94,7 +94,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     fp.close();
     // Decode the file
     opj_dinfo_t *dinfo = 0;
-    
+
     bool hasColorSpaceInfo = false;
     /* get a decoder handle */
     switch (parameters.decod_format) {
@@ -154,20 +154,17 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
         }
     }
     dbgFile << "Image has " << components << " components and a bit depth of " << bitdepth << " for color space " << image->color_space;
-    if(bitdepth == 0) {
-      bitdepth = 8;
+    if (bitdepth == 0) {
+        bitdepth = 8;
     }
     const KoColorSpace* colorSpace = 0;
     QVector<int> channelorder(components);
-    if(!hasColorSpaceInfo)
-    {
-      if(components == 3)
-      {
-        image->color_space = CLRSPC_SRGB;
-      } else if(components == 3)
-      {
-        image->color_space = CLRSPC_GRAY;
-      }
+    if (!hasColorSpaceInfo) {
+        if (components == 3) {
+            image->color_space = CLRSPC_SRGB;
+        } else if (components == 3) {
+            image->color_space = CLRSPC_GRAY;
+        }
     }
     switch (image->color_space) {
     case CLRSPC_UNKNOWN:
@@ -239,9 +236,9 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
             while (!it.isDone()) {
                 quint16* px = reinterpret_cast<quint16*>(it.rawData());
                 for (int i = 0; i < components; ++i) {
-                    px[i] = *(reinterpret_cast<quint16*>(image->comps[i].data + pos));
+                    px[channelorder[i]] = image->comps[i].data[it.x() + image->x1 * it.y()];
                 }
-                colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1 );
+                colorSpace->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
                 pos += 2;
                 ++it;
             }
@@ -249,9 +246,9 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
             while (!it.isDone()) {
                 quint8* px = reinterpret_cast<quint8*>(it.rawData());
                 for (int i = 0; i < components; ++i) {
-                    px[i] = *(reinterpret_cast<quint8*>(image->comps[i].data) + pos);
+                    px[channelorder[i]] = image->comps[i].data[it.x() + image->x1 * it.y()];
                 }
-                colorSpace->setAlpha(px, OPACITY_OPAQUE, 1 );
+                colorSpace->setAlpha(px, OPACITY_OPAQUE, 1);
                 pos += 1;
                 ++it;
             }

@@ -342,8 +342,9 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     int bitdepth;
     if (layer->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
         bitdepth = 8;
-    } else if (layer->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
-        bitdepth = 16;
+//      TODO OpenJpeg does not really support 16bits yet
+//     } else if (layer->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
+//         bitdepth = 16;
     } else {
         KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
         return KisImageBuilder_RESULT_FAILURE;

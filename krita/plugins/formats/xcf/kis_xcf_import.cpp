@@ -118,12 +118,24 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
     xcf_file = (uint8_t*)data.data();
     xcf_length = data.size();
     device->close();
-    
+
     // Decode the data
     getBasicXcfInfo() ;
-    
+
     dbgFile << XCF.version << "width = " << XCF.width << "height = " << XCF.height << "layers = " << XCF.numLayers;
-    
-    abort();
+
+    KisImageSP image = new KisImage(doc->undoAdapter(), XCF.width, XCF.height, KoColorSpaceRegistry::instance()->rgb8(), "built image");
+    image->lock();
+
+    for (int i = 0; i < XCF.numLayers; ++i) {
+        xcfLayer& xcflayer = XCF.layers[i];
+        dbgFile << i << " name = " << xcflayer.name << " opacity = " << xcflayer.opacity;
+        KisPaintLayerSP layer = new KisPaintLayer(image, xcflayer.name, xcflayer.opacity);
+
+        image->addNode(layer.data(), image->rootLayer().data());
+
+    }
+    image->unlock();
+    doc->setCurrentImage(image);
     return KoFilter::OK;
 }

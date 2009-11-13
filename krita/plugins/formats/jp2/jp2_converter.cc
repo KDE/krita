@@ -152,7 +152,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     }
 
     const KoColorSpace* colorSpace = 0;
-    QList<int> channelorder;
+    QVector<int> channelorder(components);
     switch (image->color_space) {
     case CLRSPC_UNKNOWN:
         break;
@@ -318,6 +318,8 @@ int jp2Converter::getFileFormat(const KUrl& uri) const
     } else if (extension == "jpt") {
         return JPT_CFMT;
     }
+    qFatal("Unsupported extension");
+    return -1;
 }
 
 #include "jp2_converter.moc"

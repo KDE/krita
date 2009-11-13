@@ -1,0 +1,71 @@
+/* This file is part of the KDE project
+   Copyright 2009 Vera Lukman <vla24@sfu.ca>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#include "kis_favorite_brush_data.h"
+#include "kis_popup_palette.h"
+#include <kis_paintop_preset.h>
+#include <kis_types.h>
+#include <KoID.h>
+#include <QDebug>
+#include <QIcon>
+#include <QToolButton>
+
+KisFavoriteBrushData::KisFavoriteBrushData(KisPaintOpPresetSP  newdata, QIcon* icon)
+        : m_button (0)
+        , m_data (newdata) // put this here instead of in the constructor is better style and more efficient.
+{
+    // without a button, this class doesn't make sense, so always initialize it
+    m_button = new QToolButton();
+    m_button->setMinimumSize(KisPopupPalette::BUTTON_SIZE, KisPopupPalette::BUTTON_SIZE);
+    m_button->setMaximumSize(KisPopupPalette::BUTTON_SIZE, KisPopupPalette::BUTTON_SIZE);
+    m_button->connect(m_button, SIGNAL(clicked()), this, SLOT(slotBrushButtonClicked()));
+    if (icon) m_button->setIcon(*icon);
+}
+
+void KisFavoriteBrushData::slotBrushButtonClicked()
+{
+    qDebug() << "Brush name:" << m_data->paintOp();
+}
+
+KisPaintOpPresetSP KisFavoriteBrushData::paintopPreset()
+{
+    return m_data;
+}
+
+void KisFavoriteBrushData::setIcon (QIcon* icon)
+{
+    m_button->setIcon(*icon);
+}
+
+QToolButton* KisFavoriteBrushData::paintopButton()
+{
+    return m_button;
+}
+
+KisFavoriteBrushData::~KisFavoriteBrushData()
+{
+    qDebug() << "Brush name:" << m_data->paintOp() << "deleting";
+    // don't delete m_data, it's a shared pointer
+    // only delete the button if it hasn't got a parent object, otherwise
+    // we have a double delete
+    if (!m_button->parent()) {
+        delete m_button;
+    }
+}
+
+#include "kis_favorite_brush_data.moc"

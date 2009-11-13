@@ -47,6 +47,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp 
     flake/kis_layermap_visitor.cpp
+    flowlayout.cpp
     kis_autogradient.cc
     kis_autogradient_resource.cc
     kis_bookmarked_configurations_editor.cc
@@ -65,6 +66,7 @@ set(kritaui_LIB_SRCS
     kis_doc2.cc 
     kis_exposure_visitor.cc 
     kis_factory2.cc
+    kis_favorite_brush_data.cpp
     kis_filter_handler.cc 
     kis_filter_manager.cc 
     kis_filters_model.cc
@@ -80,14 +82,18 @@ set(kritaui_LIB_SRCS
     kis_painting_assistant.cc 
     kis_painting_assistants_manager.cc 
     kis_paintop_box.cc 
+    kis_palette_manager.cpp
+    kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_print_job.cpp 
+    kis_recent_color_data.cpp
     kis_resource_server_provider.cpp 
     kis_selection_decoration.cc
     kis_selection_manager.cc 
     kis_statusbar.cc 
     kis_view2.cpp 
     kis_zoom_manager.cc
+    ko_favorite_resource_manager.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp

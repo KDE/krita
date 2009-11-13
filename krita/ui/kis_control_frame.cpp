@@ -58,6 +58,8 @@
 #include "kis_paintop_box.h"
 #include "kis_custom_pattern.h"
 #include "widgets/kis_pattern_chooser.h"
+#include "kis_popup_palette.h"
+#include "ko_favorite_resource_manager.h"
 
 
 KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
@@ -113,6 +115,21 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     view->actionCollection()->addAction("paintops", action);
     action->setDefaultWidget(m_paintopBox);
 
+        /***TESTING***/
+    m_view->setFavoriteResourceManager(m_paintopBox);
+
+    m_paletteButton = new QPushButton("Save to Palette");
+    connect(m_paletteButton, SIGNAL(clicked()), this, SLOT(slotSaveToFavouriteBrushes()));
+    action  = new KAction(i18n("&Palette"), this);
+    view->actionCollection()->addAction("palette_manager", action);
+    action->setDefaultWidget(m_paletteButton);
+
+    QPushButton* m_popupPaletteButton = new QPushButton("Palette (temp)");
+    connect(m_popupPaletteButton, SIGNAL(clicked()), this, SLOT(slotPaletteTemp()));
+    action  = new KAction(i18n("&PopupPalette"), this);
+    view->actionCollection()->addAction("palette", action);
+    action->setDefaultWidget(m_popupPaletteButton);
+
 }
 
 
@@ -163,8 +180,32 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     chooser->setCurrentItem(0, 0);
     if (chooser->currentResource())
         view->resourceProvider()->slotPatternActivated(chooser->currentResource());
+
 }
 
+void KisControlFrame::slotPaletteTemp()
+{
+    if(! m_view->favoriteResourceManager())
+    {
+        qDebug() << "favoriteResourceManager is not instantiated";
+        m_view->setFavoriteResourceManager(m_paintopBox);
+    }
+    else{
+        m_view->favoriteResourceManager()->showPopupPalette();
+    }
+}
+
+void KisControlFrame::slotSaveToFavouriteBrushes()
+{
+    if(! m_view->favoriteResourceManager())
+    {
+        qDebug() << "favoriteResourceManager is not instantiated";
+        m_view->setFavoriteResourceManager(m_paintopBox);
+    }
+    else {
+        m_view->favoriteResourceManager()->showPaletteManager();
+    }
+}
 
 void KisControlFrame::createGradientsChooser(KisView2 * view)
 {

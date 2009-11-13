@@ -23,6 +23,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <stdio.h>
+
 #include "kis_view2.h"
 #include <qprinter.h>
 
@@ -102,7 +104,12 @@
 #include <kis_paint_layer.h>
 #include "kis_progress_widget.h"
 
+#include <QDebug>
+#include "kis_paintop_box.h"
 #include "kis_node_commands_adapter.h"
+#include <kis_paintop_preset.h>
+#include "ko_favorite_resource_manager.h"
+#include "kis_paintop_box.h"
 
 class KisView2::KisView2Private
 {
@@ -124,7 +131,9 @@ public:
         , imageManager(0)
         , gridManager(0)
         , perspectiveGridManager(0)
-        , paintingAssistantManager(0) {
+        , paintingAssistantManager(0)
+        , favoriteResourceManager(0) {
+
     }
 
     ~KisView2Private() {
@@ -141,6 +150,7 @@ public:
         delete perspectiveGridManager;
         delete paintingAssistantManager;
         delete viewConverter;
+        delete favoriteResourceManager;
     }
 
 public:
@@ -162,6 +172,7 @@ public:
     KisGridManager * gridManager;
     KisPerspectiveGridManager * perspectiveGridManager;
     KisPaintingAssistantsManager* paintingAssistantManager;
+    KoFavoriteResourceManager* favoriteResourceManager;
     QVector<QDockWidget*> hiddenDockwidgets;
 };
 
@@ -170,6 +181,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     : KoView(doc, parent),
     m_d(new KisView2Private())
 {
+
     setFocusPolicy(Qt::NoFocus);
 
     m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
@@ -754,6 +766,17 @@ KisPaintingAssistantsManager* KisView2::paintingAssistantManager()
 void KisView2::slotTotalRefresh()
 {
     m_d->canvas->resetCanvas();
+}
+
+KoFavoriteResourceManager* KisView2::favoriteResourceManager()
+{
+    return m_d->favoriteResourceManager;
+}
+
+void KisView2::setFavoriteResourceManager(KisPaintopBox* paintopBox)
+{
+    qDebug() << "KisView2: Setting favoriteResourceManager";
+    m_d->favoriteResourceManager = new KoFavoriteResourceManager(paintopBox);
 }
 
 void KisView2::toggleDockers(bool toggle)

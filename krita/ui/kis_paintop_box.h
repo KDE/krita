@@ -63,7 +63,9 @@ class KisPaintopBox : public QWidget
 
 public:
     KisPaintopBox(KisView2 * view,  QWidget * parent, const char * name);
-
+    KisPaintOpPresetSP paintOpPresetSP(KoID * = 0);
+    const KoID& currentPaintopKoID();
+    QPixmap paintopPixmap(const KoID & paintop);
     ~KisPaintopBox();
 
 public slots:
@@ -77,7 +79,6 @@ public slots:
 
 private:
 
-    QPixmap paintopPixmap(const KoID & paintop);
     const KoID & currentPaintop();
     void setCurrentPaintop(const KoID & paintop);
     KoID defaultPaintop(const KoInputDevice & inputDevice);

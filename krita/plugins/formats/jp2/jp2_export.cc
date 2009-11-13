@@ -51,7 +51,7 @@ jp2Export::~jp2Export()
 
 KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile <<"JP2 export! From:" << from <<", To:" << to <<"";
+    dbgFile << "JP2 export! From:" << from << ", To:" << to << "";
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -78,11 +78,11 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
 
     KisImageBuilder_Result res;
 
-    if ( (res = kpc.buildFile(url, l)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success !";
+    if ((res = kpc.buildFile(url, l)) == KisImageBuilder_RESULT_OK) {
+        dbgFile << "success !";
         return KoFilter::OK;
     }
-    dbgFile <<" Result =" << res;
+    dbgFile << " Result =" << res;
     return KoFilter::InternalError;
 }
 

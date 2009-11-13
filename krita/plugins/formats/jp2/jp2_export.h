@@ -21,13 +21,14 @@
 
 #include <KoFilter.h>
 
-class jp2Export : public KoFilter {
+class jp2Export : public KoFilter
+{
     Q_OBJECT
-    public:
-        jp2Export(QObject* parent, const QStringList&);
-        virtual ~jp2Export();
-    public:
-        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+public:
+    jp2Export(QObject* parent, const QStringList&);
+    virtual ~jp2Export();
+public:
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

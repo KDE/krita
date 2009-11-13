@@ -40,7 +40,7 @@ jp2Import::~jp2Import()
 
 KoFilter::ConversionStatus jp2Import::convert(const QByteArray&, const QByteArray& to)
 {
-    dbgFile <<"Importing using JP2Import!";
+    dbgFile << "Importing using JP2Import!";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;
@@ -66,28 +66,28 @@ KoFilter::ConversionStatus jp2Import::convert(const QByteArray&, const QByteArra
 
 
         switch (ib.buildImage(url)) {
-            case KisImageBuilder_RESULT_UNSUPPORTED:
-                return KoFilter::NotImplemented;
-                break;
-            case KisImageBuilder_RESULT_INVALID_ARG:
-                return KoFilter::BadMimeType;
-                break;
-            case KisImageBuilder_RESULT_NO_URI:
-            case KisImageBuilder_RESULT_NOT_LOCAL:
-                return KoFilter::FileNotFound;
-                break;
-            case KisImageBuilder_RESULT_BAD_FETCH:
-            case KisImageBuilder_RESULT_EMPTY:
-                return KoFilter::ParsingError;
-                break;
-            case KisImageBuilder_RESULT_FAILURE:
-                return KoFilter::InternalError;
-                break;
-            case KisImageBuilder_RESULT_OK:
-                doc -> setCurrentImage( ib.image());
-                return KoFilter::OK;
-            default:
-                break;
+        case KisImageBuilder_RESULT_UNSUPPORTED:
+            return KoFilter::NotImplemented;
+            break;
+        case KisImageBuilder_RESULT_INVALID_ARG:
+            return KoFilter::BadMimeType;
+            break;
+        case KisImageBuilder_RESULT_NO_URI:
+        case KisImageBuilder_RESULT_NOT_LOCAL:
+            return KoFilter::FileNotFound;
+            break;
+        case KisImageBuilder_RESULT_BAD_FETCH:
+        case KisImageBuilder_RESULT_EMPTY:
+            return KoFilter::ParsingError;
+            break;
+        case KisImageBuilder_RESULT_FAILURE:
+            return KoFilter::InternalError;
+            break;
+        case KisImageBuilder_RESULT_OK:
+            doc -> setCurrentImage(ib.image());
+            return KoFilter::OK;
+        default:
+            break;
         }
 
     }

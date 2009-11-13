@@ -1,5 +1,5 @@
 
-include_directories( ${KRITA_INCLUDES} )
+include_directories( ${KRITA_INCLUDES}  ${OPENJPEG_INCLUDES})
 
 set(libkritaconverter_LIB_SRCS
     jp2_converter.cc
@@ -14,7 +14,7 @@ kde4_add_plugin(kritajp2import WITH_PREFIX ${kritajp2import_PART_SRCS})
 
 
 
-target_link_libraries(kritajp2import kritaui )
+target_link_libraries(kritajp2import kritaui ${OPENJPEG_LIBRARIES} )
 
 install(TARGETS kritajp2import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -28,7 +28,7 @@ set(kritajp2export_PART_SRCS
 kde4_add_plugin(kritajp2export WITH_PREFIX ${kritajp2export_PART_SRCS})
 
 
-target_link_libraries(kritajp2export kritaui )
+target_link_libraries(kritajp2export kritaui ${OPENJPEG_LIBRARIES} )
 
 install(TARGETS kritajp2export  DESTINATION ${PLUGIN_INSTALL_DIR})
 

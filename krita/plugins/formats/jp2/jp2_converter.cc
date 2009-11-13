@@ -18,6 +18,8 @@
 
 #include "jp2_converter.h"
 
+#include <openjpeg.h>
+
 #include <kapplication.h>
 
 #include <kio/netaccess.h>
@@ -27,6 +29,7 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_undo_adapter.h>
+#include <QFileInfo>
 
 jp2Converter::jp2Converter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
@@ -42,20 +45,16 @@ jp2Converter::~jp2Converter()
 
 KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
 {
+    // decompression parameters
+    opj_dparameters_t parameters;
+    opj_set_default_decoder_parameters(&parameters);
+    // Determine the type
+    parameters.decod_format = getFileFormat(uri); // TODO isn't there some magic code ?
     // open the file
-#if 0
-     FILE *fp = fopen(QFile::encodeName(uri.path()), "rb");
-    if (!fp)
-    {
-        return (KisImageBuilder_RESULT_NOT_EXIST);
-    }
-    // Creating the KisImageWSP
-    if( ! m_img) {
-        m_img = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
-        Q_CHECK_PTR(m_img);
-    }
-    KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX));
-#endif
+    QFile fp(uri.toLocalFile());
+    fp.open(QIODevice::ReadOnly);
+    QByteArray src = fp.readAll();
+    fp.close();
 
     return KisImageBuilder_RESULT_OK;
 }
@@ -77,7 +76,7 @@ KisImageBuilder_Result jp2Converter::buildImage(const KUrl& uri)
 
     if (KIO::NetAccess::download(uri, tmpFile, QApplication::activeWindow())) {
         KUrl uriTF;
-        uriTF.setPath( tmpFile );
+        uriTF.setPath(tmpFile);
         result = decode(uriTF);
         KIO::NetAccess::removeTempFile(tmpFile);
     }
@@ -109,8 +108,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     // Open file for writing
 #if 0
     FILE *fp = fopen(QFile::encodeName(uri.path()), "wb");
-    if (!fp)
-    {
+    if (!fp) {
         return (KisImageBuilder_RESULT_FAILURE);
     }
     uint height = img->height();
@@ -124,6 +122,18 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
 void jp2Converter::cancel()
 {
     m_stop = true;
+}
+
+int jp2Converter::getFileFormat(const KUrl& uri) const
+{
+    QString extension = QFileInfo(uri.fileName()).suffix();
+    if (extension == "j2k" || extension == "j2c") {
+        return J2K_CFMT;
+    } else if (extension == "jp2") {
+        return JP2_CFMT;
+    } else if (extension == "jpt") {
+        return JPT_CFMT;
+    }
 }
 
 #include "jp2_converter.moc"

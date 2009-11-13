@@ -30,6 +30,7 @@
 #include <kis_paint_layer.h>
 #include <kis_undo_adapter.h>
 #include <QFileInfo>
+#include <KoColorSpaceRegistry.h>
 
 jp2Converter::jp2Converter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
@@ -85,6 +86,53 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     opj_cio_close(cio);
     if (!image) {
         opj_destroy_decompress(dinfo);
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
+    // Look for the colorspace
+    int components = image->numcomps;
+    if (image->numcomps == 0) {
+        opj_destroy_decompress(dinfo);
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+    int bitdepth = image->comps[0].bpp;
+    for (int i = 1; i < components; ++i) {
+        if (image->comps[i] != bitdepth) {
+            opj_destroy_decompress(dinfo);
+            return KisImageBuilder_RESULT_FAILURE;
+        }
+    }
+
+    const KoColorSpace* colorSpace = 0;
+    switch (image->color_space) {
+    case CLRSPC_UNKNOWN:
+        break;
+    case CLRSPC_SRGB: {
+        if (bitdepth == 16) {
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA16");
+        } else if (bitdepth == 8) {
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA");
+        }
+        break;
+    }
+    case CLRSPC_GRAY: {
+        if (bitdepth == 16) {
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA16");
+        } else if (bitdepth == 8) {
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA");
+        }
+        break;
+    }
+    case CLRSPC_SYCC: {
+        if (bitdepth == 16) {
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("YUVA16");
+        } else if (bitdepth == 8) {
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("YUVA8");
+        }
+        break;
+    }
+    }
+    if (!colorSpace) {
         return KisImageBuilder_RESULT_FAILURE;
     }
 

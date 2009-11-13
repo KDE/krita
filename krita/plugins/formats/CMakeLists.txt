@@ -31,8 +31,6 @@ if   (GRAPHICSMAGICK_FOUND AND GRAPHICSMAGICK_VERSION VERSION_LESS ${BAD_GRAPHIC
     set(BUILD_GRAPHICSMAGICK TRUE)
 endif(GRAPHICSMAGICK_FOUND AND GRAPHICSMAGICK_VERSION VERSION_LESS ${BAD_GRAPHICS_MAGICK_VERSION})
 
-macro_log_feature(HAVE_REQUIRED_GM_VERSION "GraphicsMagick" "GraphicsMagick Image Processing System" "http://www.graphicsmagick.org" FALSE "1.1" "Required by the Krita GraphicsMagick filter for various file formats (including PSD, XCF). Version 1.2 is broken!")
-
 include_directories(${KRITA_INCLUDES})
 
 if(KDCRAW_FOUND)
@@ -55,10 +53,6 @@ endif(PNG_FOUND)
 if(OPENEXR_FOUND AND OPENCTL_FOUND)
     add_subdirectory(openexr)
 endif(OPENEXR_FOUND AND OPENCTL_FOUND)
-
-if(BUILD_GRAPHICSMAGICK)
-    add_subdirectory(gmagick)
-endif(BUILD_GRAPHICSMAGICK)
 
 if(POPPLER_FOUND AND HAVE_POPPLER_0_6)
     add_subdirectory(pdf)

@@ -113,8 +113,11 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
 {
     dbgFile << "Start decoding file";
     // Read the file into memory
+    device->open(QIODevice::ReadOnly);
     QByteArray data = device->readAll();
     xcf_file = (uint8_t*)data.data();
+    xcf_length = data.size();
+    device->close();
     
     // Decode the data
     getBasicXcfInfo() ;

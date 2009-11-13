@@ -25,12 +25,18 @@
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
 
+#include <KoColorSpaceConstants.h>
+
 #include <kis_doc2.h>
 #include <kis_image.h>
+#include <kis_group_layer.h>
 #include <kis_paint_layer.h>
+#include <kis_paint_device.h>
 #include <kis_undo_adapter.h>
 #include <QFileInfo>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceTraits.h>
+#include <kis_iterator.h>
 
 jp2Converter::jp2Converter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
@@ -42,6 +48,35 @@ jp2Converter::jp2Converter(KisDoc2 *doc, KisUndoAdapter *adapter)
 
 jp2Converter::~jp2Converter()
 {
+}
+
+/**
+ * sample error callback expecting a FILE* client object
+ * */
+void
+error_callback(const char *msg, void *client_data)
+{
+    FILE *stream = (FILE *) client_data;
+    fprintf(stream, "[ERROR] %s", msg);
+}
+
+/**
+ * sample warning callback expecting a FILE* client object
+ * */
+void
+warning_callback(const char *msg, void *client_data)
+{
+    FILE *stream = (FILE *) client_data;
+    fprintf(stream, "[WARNING] %s", msg);
+}
+
+/**
+ * sample debug callback expecting no client object
+ * */
+void
+info_callback(const char *msg, void *client_data)
+{
+    fprintf(stdout, "[INFO] %s", msg);
 }
 
 KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
@@ -63,12 +98,15 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     switch (parameters.decod_format) {
     case J2K_CFMT: {
         dinfo = opj_create_decompress(CODEC_J2K);
+        break;
     }
     case JP2_CFMT: {
         dinfo = opj_create_decompress(CODEC_JP2);
+        break;
     }
     case JPT_CFMT: {
         dinfo = opj_create_decompress(CODEC_JPT);
+        break;
     }
     }
     Q_ASSERT(dinfo);
@@ -78,6 +116,16 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
 
     /* open a byte stream */
     opj_cio_t *cio = opj_cio_open((opj_common_ptr) dinfo, (unsigned char*)src.data(), src.length());
+
+    // Setup an event manager
+    opj_event_mgr_t event_mgr;    /* event manager */
+    memset(&event_mgr, 0, sizeof(opj_event_mgr_t));
+    event_mgr.error_handler = error_callback;
+    event_mgr.warning_handler = warning_callback;
+    event_mgr.info_handler = info_callback;
+
+    /* catch events using our callbacks and give a local context */
+    opj_set_event_mgr((opj_common_ptr) dinfo, &event_mgr, stderr);
 
     /* decode the stream and fill the image structure */
     opj_image_t *image = opj_decode(dinfo, cio);
@@ -104,6 +152,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     }
 
     const KoColorSpace* colorSpace = 0;
+    QList<int> channelorder;
     switch (image->color_space) {
     case CLRSPC_UNKNOWN:
         break;
@@ -113,6 +162,13 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
         } else if (bitdepth == 8) {
             colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "");
         }
+        if (components != 3) {
+            opj_destroy_decompress(dinfo);
+            return KisImageBuilder_RESULT_FAILURE;
+        }
+        channelorder[0] = KoRgbU16Traits::red_pos;
+        channelorder[1] = KoRgbU16Traits::green_pos;
+        channelorder[2] = KoRgbU16Traits::blue_pos;
         break;
     }
     case CLRSPC_GRAY: {
@@ -121,6 +177,11 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
         } else if (bitdepth == 8) {
             colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", "");
         }
+        if (components != 1) {
+            opj_destroy_decompress(dinfo);
+            return KisImageBuilder_RESULT_FAILURE;
+        }
+        channelorder[0] = 0;
         break;
     }
     case CLRSPC_SYCC: {
@@ -129,6 +190,13 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
         } else if (bitdepth == 8) {
             colorSpace = KoColorSpaceRegistry::instance()->colorSpace("YUVA8", "");
         }
+        if (components != 3) {
+            opj_destroy_decompress(dinfo);
+            return KisImageBuilder_RESULT_FAILURE;
+        }
+        channelorder[0] = 0;
+        channelorder[1] = 1;
+        channelorder[2] = 2;
         break;
     }
     }
@@ -136,6 +204,42 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
+    // Create the image
+    if (m_img == 0) {
+        m_img = new KisImage(m_adapter, image->x1, image->y1, colorSpace, "built image");
+        m_img->lock();
+    }
+
+    // Create the layer
+    KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img->nextLayerName(), OPACITY_OPAQUE);
+    m_img->addNode(layer.data(), m_img->rootLayer().data());
+
+    // Set the data
+    int pos = 0;
+    for (int v = 0; v < image->y1; ++v) {
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, image->x1);
+        if (bitdepth == 16) {
+            while (!it.isDone()) {
+                quint16* px = reinterpret_cast<quint16*>(it.rawData());
+                for (int i = 0; i < components; ++i) {
+                    px[i] = *(reinterpret_cast<quint16*>(image->comps[i].data + pos));
+                }
+                pos += 2;
+                ++it;
+            }
+        } else if (bitdepth == 8) {
+            while (!it.isDone()) {
+                quint8* px = reinterpret_cast<quint8*>(it.rawData());
+                for (int i = 0; i < components; ++i) {
+                    px[i] = *(reinterpret_cast<quint8*>(image->comps[i].data) + pos);
+                }
+                pos += 1;
+                ++it;
+            }
+        }
+    }
+
+    m_img->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 

@@ -26,7 +26,7 @@ KisImageBuilder_Result %{APPNAME}Converter::decode(const KUrl& uri)
 {
     // open the file
 #if 0
-     FILE *fp = fopen(QFile::encodeName(uri.path()), "rb");
+     FILE *fp = fopen(QFile::encodeName(uri.toLocalFile()), "rb");
     if (!fp)
     {
         return (KisImageBuilder_RESULT_NOT_EXIST);
@@ -35,6 +35,7 @@ KisImageBuilder_Result %{APPNAME}Converter::decode(const KUrl& uri)
     if(!m_img) {
         m_img = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_img);
+        m_img->lock();
     }
     KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img->nextLayerName(), quint8_MAX));
 #endif

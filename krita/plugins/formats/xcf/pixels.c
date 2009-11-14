@@ -342,7 +342,7 @@ copyTilePixels(struct Tile *dest, uint32_t ptr,convertParams *params)
   }
 }
 
-static struct Tile *
+struct Tile *
 getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
                    struct rect want)
 {

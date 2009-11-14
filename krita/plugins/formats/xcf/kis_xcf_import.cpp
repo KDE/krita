@@ -42,8 +42,22 @@
 #include <kis_paint_device.h>
 #include <KoColorSpace.h>
 #include <qendian.h>
-#include "xcftools.h"
 #include <KoCompositeOp.h>
+
+extern "C" {
+
+#include "xcftools.h"
+#include "pixels.h"
+
+extern struct Tile *
+getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
+                   struct rect want);
+
+#define GET_RED(x) (x >> RED_SHIFT)
+#define GET_GREEN(x) (x >> GREEN_SHIFT)
+#define GET_BLUE(x) (x >> BLUE_SHIFT)
+#define GET_ALPHA(x) (x >> ALPHA_SHIFT)
+}
 
 typedef KGenericFactory<KisXCFImport> XCFImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritaxcfimport, XCFImportFactory("kofficefilters"))
@@ -177,16 +191,22 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
 
     // Decode the data
     getBasicXcfInfo() ;
+    initColormap();
 
     dbgFile << XCF.version << "width = " << XCF.width << "height = " << XCF.height << "layers = " << XCF.numLayers;
 
+    // Create the image
     KisImageSP image = new KisImage(doc->undoAdapter(), XCF.width, XCF.height, KoColorSpaceRegistry::instance()->rgb8(), "built image");
     image->lock();
 
+    // Read layers
     for (int i = 0; i < XCF.numLayers; ++i) {
         xcfLayer& xcflayer = XCF.layers[i];
         dbgFile << i << " name = " << xcflayer.name << " opacity = " << xcflayer.opacity;
+        dbgFile << ppVar(xcflayer.dim.width) << ppVar(xcflayer.dim.height) << ppVar(xcflayer.dim.tilesx) << ppVar(xcflayer.dim.tilesy) << ppVar(xcflayer.dim.ntiles) << ppVar(xcflayer.dim.c.t) << ppVar(xcflayer.dim.c.l) << ppVar(xcflayer.dim.c.r) << ppVar(xcflayer.dim.c.b);
 
+        bool isRgbA;
+        // Select the color space
         const KoColorSpace* colorSpace = 0;
         switch (xcflayer.type) {
         case GIMP_INDEXED_IMAGE:
@@ -194,19 +214,72 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         case GIMP_RGB_IMAGE:
         case GIMP_RGBA_IMAGE:
             colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+            isRgbA = true;
             break;
         case GIMP_GRAY_IMAGE:
         case GIMP_GRAYA_IMAGE:
             colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", "");
+            isRgbA = false;
             break;
         }
 
+        // Create the layer
         KisPaintLayerSP layer = new KisPaintLayer(image, xcflayer.name, xcflayer.opacity, colorSpace);
 
+        // Set some properties
         layer->setCompositeOp(layerModeG2K(xcflayer.mode));
         layer->setVisible(xcflayer.isVisible);
 
         image->addNode(layer.data(), image->rootLayer().data());
+        
+        // Copy the data in the image
+        initLayer(&xcflayer);
+        
+        // Move the layer to its position
+        int left = xcflayer.dim.c.l;
+        int top = xcflayer.dim.c.t;
+        layer->paintDevice()->setX(left);
+        layer->paintDevice()->setY(top);
+        
+        // Copy the data;
+        for(int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH)
+        {
+          for(int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT)
+          {
+            rect want;
+            want.l = x + left;
+            want.t = y + top;
+            want.b = want.t + TILE_HEIGHT - 1;
+            want.r = want.l + TILE_WIDTH - 1;
+            Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
+            KisHLineIteratorPixel it = layer->paintDevice()->createHLineIterator(x,y, TILE_WIDTH);
+            rgba* data = tile->pixels;
+            for( int v = 0; v < TILE_HEIGHT; ++v)
+            {
+              if(isRgbA)
+              {
+                while(!it.isDone())
+                {
+                KoRgbTraits<quint8>::setRed(it.rawData(), GET_RED(*data));
+                KoRgbTraits<quint8>::setGreen(it.rawData(), GET_GREEN(*data));
+                KoRgbTraits<quint8>::setBlue(it.rawData(), GET_BLUE(*data));
+                KoRgbTraits<quint8>::setAlpha(it.rawData(), GET_ALPHA(*data), 1);
+                  ++data;
+                  ++it;
+                }
+              } else {
+                while(!it.isDone())
+                {
+                  it.rawData()[0] = GET_RED(*data);
+                  it.rawData()[1] = GET_ALPHA(*data);
+                  ++data;
+                  ++it;
+                }
+              }
+              it.nextRow();
+            }
+          }
+        }
         
         dbgFile << xcflayer.pixels.tileptrs;
 

@@ -19,10 +19,6 @@
 #ifndef XCFTOOLS_H
 #define XCFTOOLS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "config.h"
 #include "enums.h"
 #include <stddef.h>
@@ -198,9 +194,5 @@ extern struct xcfImage {
 } XCF ;
 
 void getBasicXcfInfo(void);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* XCFTOOLS_H */

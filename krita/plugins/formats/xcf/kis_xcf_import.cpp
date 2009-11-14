@@ -241,8 +241,8 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         int top = xcflayer.dim.c.t;
 
         // Copy the data;
-        for (int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
-            for (int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT) {
+        for (unsigned int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
+            for (unsigned int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT) {
                 rect want;
                 want.l = x + left;
                 want.t = y + top;
@@ -283,8 +283,8 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         // Create the mask
         if (xcflayer.hasMask) {
             KisTransparencyMaskSP mask = new KisTransparencyMask();
-            for (int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
-                for (int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT) {
+            for (unsigned int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
+                for (unsigned int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT) {
                     rect want;
                     want.l = x + left;
                     want.t = y + top;

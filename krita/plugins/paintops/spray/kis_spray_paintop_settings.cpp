@@ -239,3 +239,28 @@ void KisSprayPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
     }else{
     }
 }
+
+
+int KisSprayPaintOpSettings::fixedAngle() const
+{
+    return m_options->m_sprayShapeOption->fixedAngle();
+}
+
+
+bool KisSprayPaintOpSettings::fixedRotation() const
+{
+    return m_options->m_sprayShapeOption->fixedRotation();
+}
+
+
+
+bool KisSprayPaintOpSettings::followCursor() const
+{
+    return m_options->m_sprayShapeOption->followCursor();
+}
+
+
+qreal KisSprayPaintOpSettings::followCursorWeigth() const
+{
+        return m_options->m_sprayShapeOption->followCursorWeigth();
+}

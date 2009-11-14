@@ -26,7 +26,11 @@ public:
     KisShapeOptionsWidget(QWidget *parent = 0)
             : QWidget(parent) {
         setupUi(this);
+        QObject::connect(proportionalBox, SIGNAL(clicked(bool)), widthSpin, SLOT(setDisabled(bool)));
     }
+
+// TODO join QSlider with QDoubleSpinBox with signal slot somehow
+    
 };
 
 KisSprayShapeOption::KisSprayShapeOption()
@@ -109,9 +113,35 @@ bool KisSprayShapeOption::gaussian() const
 }
 
 
-// TODO
 QString KisSprayShapeOption::path() const
 {
     return m_options->imageUrl->url().toLocalFile();
     
 }
+
+
+
+bool KisSprayShapeOption::fixedRotation() const
+{
+    return m_options->fixedRotation->isChecked();
+}
+
+
+int KisSprayShapeOption::fixedAngle() const
+{
+    return m_options->fixedRotationSPBox->value();
+}
+
+
+bool KisSprayShapeOption::followCursor() const
+{
+    return m_options->followCursor->isChecked();
+}
+
+
+qreal KisSprayShapeOption::followCursorWeigth() const
+{
+    return m_options->followCursorWeightSPBox->value();
+}
+
+

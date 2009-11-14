@@ -52,7 +52,7 @@ public:
 
     KisPaintOpSettingsSP clone() const;
 
-    /// brush settings
+    // brush settings
     int diameter() const;
     qreal coverage() const;
     qreal amount() const;
@@ -63,7 +63,7 @@ public:
     bool useDensity() const;
     int particleCount() const;
 
-    /// color options
+    // color options
     bool useRandomOpacity() const;
     bool useRandomHSV() const;
     // TODO: these should be intervals like 20..180
@@ -76,7 +76,7 @@ public:
     bool mixBgColor() const;
     bool sampleInput() const;
     
-    /// shape size
+    // shape size
     int shape() const;
     bool proportional() const;
     qreal widthPerc() const;
@@ -87,6 +87,13 @@ public:
     // distributed
     bool gaussian() const;
 
+    // rotation
+    bool fixedRotation() const;
+    int fixedAngle() const;
+    bool followCursor() const;
+    qreal followCursorWeigth() const;
+
+    
     // XXX: Hack!
     void setOptionsWidget(KisPaintOpSettingsWidget* widget) {
         if (m_options != 0  && m_options->property("owned by settings").toBool()) {

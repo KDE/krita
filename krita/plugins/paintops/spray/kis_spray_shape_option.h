@@ -42,6 +42,12 @@ public:
     /// random size 
     bool jitterShapeSize() const;
 
+    bool fixedRotation() const;
+    int fixedAngle() const;
+    
+    bool followCursor() const;
+    qreal followCursorWeigth() const;
+    
     QString path() const;
     
     /// TODO

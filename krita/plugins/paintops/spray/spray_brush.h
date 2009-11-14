@@ -141,8 +141,12 @@ private:
     KisPaintDeviceSP m_imgDevice;
     QImage m_brushQImg;
     QImage m_transformed;
-private:
+
     const KisSprayPaintOpSettings* m_settings;
+    
+private:
+    /// rotation in radians according the settings (gauss distribution, uniform distribution or fixed angle)
+    qreal rotationAngle();
 
 };
 

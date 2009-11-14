@@ -53,6 +53,7 @@ SprayBrush::SprayBrush()
     m_painter = 0;
     srand48(time(0));
     m_rand = new RandomGauss(time(0));
+    m_settings = 0;
 }
 
 SprayBrush::~SprayBrush()
@@ -65,6 +66,22 @@ SprayBrush::~SprayBrush()
 void SprayBrush::init()
 {
 //
+}
+
+
+qreal SprayBrush::rotationAngle()
+{
+    Q_ASSERT(!m_settings);
+
+    if ( m_settings->fixedRotation() ){
+        return m_settings->fixedAngle() * (M_PI/180.0);
+    }
+    
+    if (m_settings->gaussian()) {
+            return M_PI * 2.0 * qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
+    } else {
+        return M_PI * 2.0 * drand48();
+    }
 }
 
 
@@ -112,8 +129,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
     int ix, iy;
 
     qreal angle;
-    qreal lengthX;
-    qreal lengthY;
+    qreal length;
     qreal rotationZ;
 
     int steps = 118;
@@ -126,20 +142,23 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
         // generate random angle
         angle = drand48() * M_PI * 2;
 
-        // generate random size
+        // generate random length 
         if (m_settings->gaussian()) {
-            lengthY = lengthX = qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
-            rotationZ = qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
+            length = qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
         } else {
-            lengthY = lengthX = drand48();
-            rotationZ = drand48();
+            length = drand48();
         }
 
-        rotationZ *= M_PI * 2;
+        // rotation
+        rotationZ = rotationAngle();
+        
+        if (m_settings->followCursor()){
+            rotationZ = (1.0 - m_settings->followCursorWeigth()) * rotationZ + m_settings->followCursorWeigth() * angle;
+        }
 
         // generate polar coordinate
-        nx = (sin(angle) * m_radius * lengthX);
-        ny = (cos(angle) * m_radius * lengthY);
+        nx = (m_radius * cos(angle)  * length);
+        ny = (m_radius * sin(angle)  * length);
 
         // transform
         nx *= m_scale;
@@ -246,6 +265,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
                     
                     QMatrix m;
                     m.rotate(rotationZ * (180/M_PI));
+
                     if (m_jitterShapeSize){
                         m.scale(random,random);
                     }
@@ -360,7 +380,7 @@ void SprayBrush::paintCircle(KisPainter * painter, qreal x, qreal y, int radius,
 void SprayBrush::paintEllipse(KisPainter* painter, qreal x, qreal y, int a, int b, qreal angle, int steps)
 {
     QPainterPath path;
-    qreal beta = -angle;
+    qreal beta = angle;
     qreal sinbeta = sin(beta);
     qreal cosbeta = cos(beta);
 
@@ -385,9 +405,10 @@ void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, int width
     QPainterPath path;
     QTransform transform;
 
-    qreal halfWidth = width / 2.0;
-    qreal halfHeight = height / 2.0;
+    qreal halfWidth = width * 0.5;
+    qreal halfHeight = height * 0.5;
     qreal tx, ty;
+    
 
     transform.reset();
     transform.rotateRadians(angle);

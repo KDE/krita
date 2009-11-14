@@ -244,8 +244,8 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                 rect want;
                 want.l = x + left;
                 want.t = y + top;
-                want.b = want.t + TILE_HEIGHT - 1;
-                want.r = want.l + TILE_WIDTH - 1;
+                want.b = want.t + TILE_HEIGHT;
+                want.r = want.l + TILE_WIDTH;
                 Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
                 KisHLineIteratorPixel it = layer->paintDevice()->createHLineIterator(x, y, TILE_WIDTH);
                 rgba* data = tile->pixels;
@@ -273,7 +273,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                 }
             }
         }
-        
+
         // Move the layer to its position
         layer->paintDevice()->setX(left);
         layer->paintDevice()->setY(top);

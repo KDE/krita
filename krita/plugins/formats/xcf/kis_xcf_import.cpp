@@ -294,7 +294,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                     rgba* data = tile->pixels;
                     for (int v = 0; v < TILE_HEIGHT; ++v) {
                         while (!it.isDone()) {
-                            it.rawData()[0] = GET_ALPHA(*data);
+                            it.rawData()[0] = 255 - GET_ALPHA(*data);
                             ++data;
                             ++it;
                         }

@@ -54,6 +54,7 @@ set(komain_LIB_SRCS
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
     KoImageSelectionWidget.cpp
+    KoStandardAction.cpp
     config/KoConfigDocumentPage.cpp
     config/KoConfigGridPage.cpp
     config/KoConfigMiscPage.cpp
@@ -148,6 +149,7 @@ install( FILES
     KoProgressUpdater.h
     KoProgressBar.h
     KoUpdater.h
+    KoStandardAction.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

@@ -38,6 +38,7 @@
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
+#include <KoStandardAction.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
@@ -112,7 +113,6 @@ public:
     KAction *deleteSelectionAction;
 
     KToggleAction *actionViewSnapToGrid;
-    KToggleAction *actionViewShowGuides;
     KToggleAction *actionViewShowMasterPages;
 
     KAction *actionInsertPage;
@@ -297,13 +297,10 @@ void KoPAView::initActions()
     actionCollection()->addAction("view_snaptogrid", d->actionViewSnapToGrid);
     connect( d->actionViewSnapToGrid, SIGNAL( triggered( bool ) ), this, SLOT (viewSnapToGrid( bool )));
 
-    d->actionViewShowGuides  = new KToggleAction( KIcon( "guides" ), i18n( "Show Guides" ), this );
-    d->actionViewShowGuides->setChecked( d->doc->guidesData().showGuideLines() );
-    d->actionViewShowGuides->setCheckedState( KGuiItem( i18n( "Hide Guides" ) ) );
-    d->actionViewShowGuides->setToolTip( i18n( "Shows or hides guides" ) );
-    actionCollection()->addAction( "view_show_guides", d->actionViewShowGuides );
-    connect( d->actionViewShowGuides, SIGNAL(triggered(bool)),
-             this,                    SLOT(viewGuides(bool)) );
+    KToggleAction *actionViewShowGuides = KoStandardAction::showGuides(this, SLOT(viewGuides(bool)), this);
+    actionViewShowGuides->setChecked( d->doc->guidesData().showGuideLines() );
+    actionCollection()->addAction(KoStandardAction::name(KoStandardAction::ShowGuides),
+            actionViewShowGuides );
 
     d->actionViewShowMasterPages = new KToggleAction(i18n( "Show Master Pages" ), this );
     actionCollection()->addAction( "view_masterpages", d->actionViewShowMasterPages );

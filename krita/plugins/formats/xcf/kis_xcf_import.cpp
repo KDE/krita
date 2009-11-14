@@ -49,9 +49,9 @@ extern "C" {
 #include "xcftools.h"
 #include "pixels.h"
 
-extern struct Tile *
-getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
-                   struct rect want);
+    extern struct Tile *
+    getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
+    struct rect want);
 
 #define GET_RED(x) (x >> RED_SHIFT)
 #define GET_GREEN(x) (x >> GREEN_SHIFT)
@@ -231,56 +231,50 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         layer->setVisible(xcflayer.isVisible);
 
         image->addNode(layer.data(), image->rootLayer().data());
-        
+
         // Copy the data in the image
         initLayer(&xcflayer);
-        
+
         // Move the layer to its position
         int left = xcflayer.dim.c.l;
         int top = xcflayer.dim.c.t;
         layer->paintDevice()->setX(left);
         layer->paintDevice()->setY(top);
-        
+
         // Copy the data;
-        for(int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH)
-        {
-          for(int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT)
-          {
-            rect want;
-            want.l = x + left;
-            want.t = y + top;
-            want.b = want.t + TILE_HEIGHT - 1;
-            want.r = want.l + TILE_WIDTH - 1;
-            Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
-            KisHLineIteratorPixel it = layer->paintDevice()->createHLineIterator(x,y, TILE_WIDTH);
-            rgba* data = tile->pixels;
-            for( int v = 0; v < TILE_HEIGHT; ++v)
-            {
-              if(isRgbA)
-              {
-                while(!it.isDone())
-                {
-                KoRgbTraits<quint8>::setRed(it.rawData(), GET_RED(*data));
-                KoRgbTraits<quint8>::setGreen(it.rawData(), GET_GREEN(*data));
-                KoRgbTraits<quint8>::setBlue(it.rawData(), GET_BLUE(*data));
-                KoRgbTraits<quint8>::setAlpha(it.rawData(), GET_ALPHA(*data), 1);
-                  ++data;
-                  ++it;
+        for (int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
+            for (int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT) {
+                rect want;
+                want.l = x + left;
+                want.t = y + top;
+                want.b = want.t + TILE_HEIGHT - 1;
+                want.r = want.l + TILE_WIDTH - 1;
+                Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
+                KisHLineIteratorPixel it = layer->paintDevice()->createHLineIterator(x, y, TILE_WIDTH);
+                rgba* data = tile->pixels;
+                for (int v = 0; v < TILE_HEIGHT; ++v) {
+                    if (isRgbA) {
+                        while (!it.isDone()) {
+                            KoRgbTraits<quint8>::setRed(it.rawData(), GET_RED(*data));
+                            KoRgbTraits<quint8>::setGreen(it.rawData(), GET_GREEN(*data));
+                            KoRgbTraits<quint8>::setBlue(it.rawData(), GET_BLUE(*data));
+                            KoRgbTraits<quint8>::setAlpha(it.rawData(), GET_ALPHA(*data), 1);
+                            ++data;
+                            ++it;
+                        }
+                    } else {
+                        while (!it.isDone()) {
+                            it.rawData()[0] = GET_RED(*data);
+                            it.rawData()[1] = GET_ALPHA(*data);
+                            ++data;
+                            ++it;
+                        }
+                    }
+                    it.nextRow();
                 }
-              } else {
-                while(!it.isDone())
-                {
-                  it.rawData()[0] = GET_RED(*data);
-                  it.rawData()[1] = GET_ALPHA(*data);
-                  ++data;
-                  ++it;
-                }
-              }
-              it.nextRow();
             }
-          }
         }
-        
+
         dbgFile << xcflayer.pixels.tileptrs;
 
     }

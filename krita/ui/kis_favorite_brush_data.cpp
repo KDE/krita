@@ -35,14 +35,15 @@ KisFavoriteBrushData::KisFavoriteBrushData(KoFavoriteResourceManager* resourceMa
     m_button = new QToolButton();
     m_button->setMinimumSize(KisPopupPalette::BUTTON_SIZE, KisPopupPalette::BUTTON_SIZE);
     m_button->setMaximumSize(KisPopupPalette::BUTTON_SIZE, KisPopupPalette::BUTTON_SIZE);
-    m_button->connect(m_button, SIGNAL(clicked()), this, SLOT(slotBrushButtonClicked()));
+    connect(m_button, SIGNAL(clicked()), this, SLOT(slotBrushButtonClicked()));
+    connect(this, SIGNAL(signalPaintOpChanged(KisPaintOpPresetSP)), m_favoriteResourceManager, SLOT(slotChangeCurrentPaintOp(KisPaintOpPresetSP)));
     if (icon) m_button->setIcon(*icon);
 }
 
 void KisFavoriteBrushData::slotBrushButtonClicked()
 {
     qDebug() << "Brush name:" << m_data->paintOp();
-    m_favoriteResourceManager->changeCurrentPaintOp(m_data);
+    emit signalPaintOpChanged(m_data);
 }
 
 KisPaintOpPresetSP KisFavoriteBrushData::paintopPreset()

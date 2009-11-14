@@ -112,7 +112,6 @@ protected:
     /// document size in widget pixels
     QSize documentSize();
 
-
 public: // KisAbstractCanvasWidget
 
     QWidget * widget() {

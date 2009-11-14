@@ -46,12 +46,10 @@ public:
     static const int MAX_FAVORITE_BRUSHES = 10;
     static const int MAX_RECENT_COLORS = 10;
 
-    void changeCurrentBrushLabel();
     /************************************Popup Palette************************************/
 
     void showPopupPalette();
     void showPaletteManager();
-    void changeCurrentPaintOp(KisPaintOpPresetSP);
 
     /**********************************Favorite Brushes***********************************/
 
@@ -60,7 +58,6 @@ public:
     Returns the position of the brush on the list otherwise**/
     int addFavoriteBrush (KisPaintOpPresetSP);
     void removeFavoriteBrush(int);
-    bool isFavoriteBrushesFull();
     int favoriteBrushesTotal();
     KisFavoriteBrushData* favoriteBrush(int);
     void saveFavoriteBrushes();
@@ -75,6 +72,9 @@ public:
     void addRecentColor(KisRecentColorData*);
     QQueue<KisRecentColorData*>* recentColorsList();
     
+public slots:
+    void slotChangeCurrentPaintOp(KisPaintOpPresetSP);
+    void slotChangePaintopLabel();
 
 private:
     KisPaletteManager *m_favoriteBrushManager;
@@ -85,6 +85,8 @@ private:
 
     /**The list of recently used colors**/
     QQueue<KisRecentColorData*> m_recentColorsData;
+
+    bool isFavoriteBrushesFull();
 };
 
 #endif // KIS_FAVORITE_BRUSH_DATA_H

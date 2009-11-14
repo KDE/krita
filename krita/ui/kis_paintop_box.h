@@ -70,6 +70,9 @@ public:
     QPixmap paintopPixmap(const KoID & paintop);
     ~KisPaintopBox();
 
+signals:
+    void signalPaintopChanged();
+
 public slots:
 
     void slotItemSelected(int index);

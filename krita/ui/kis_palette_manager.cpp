@@ -133,14 +133,18 @@ void KisPaletteManager::resetDataModel()
 
 void KisPaletteManager::slotAddBrush()
 {
-    if (m_resourceManager->isFavoriteBrushesFull()) return;
+//    if (m_resourceManager->isFavoriteBrushesFull()) return;
 
     KisPaintOpPresetSP newBrush = m_paintOpBox->paintOpPresetSP();
     int pos = m_resourceManager->addFavoriteBrush(newBrush);
 
     QModelIndex index;
 
-    if (pos > -1)
+    if (pos == -2)
+    {
+        return; //favorite brush list is full!
+    }
+    else if (pos > -1)
     {
         index = m_model->index(pos);
     }

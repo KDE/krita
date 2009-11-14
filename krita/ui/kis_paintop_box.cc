@@ -294,9 +294,7 @@ void KisPaintopBox::setCurrentPaintop (KisPaintOpPresetSP preset)
     m_presetWidget->setPreset(m_activePreset);
     m_presetsPopup->presetPreview()->setPreset(m_activePreset);
 
-    //TODO: FIX THIS! use signal and slot instead!
-    if (m_view->favoriteResourceManager() != 0)
-        m_view->favoriteResourceManager()->changeCurrentBrushLabel();
+    emit signalPaintopChanged();
 }
 
 KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)

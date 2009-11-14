@@ -44,6 +44,8 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox)
         ,m_paintopBox(paintopBox)
 {
 
+    connect(paintopBox, SIGNAL(signalPaintopChanged()), this, SLOT(slotChangePaintopLabel()));
+
     //take favorite brushes from a file then append to QList
     KConfigGroup group(KGlobal::config(), "favoriteList");
     QStringList favoriteList = (group.readEntry("favoriteList")).split(",", QString::SkipEmptyParts);
@@ -56,7 +58,7 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox)
     }
 }
 
-void KoFavoriteResourceManager::changeCurrentBrushLabel()
+void KoFavoriteResourceManager::slotChangePaintopLabel()
 {
     if (m_favoriteBrushManager!=0)
         m_favoriteBrushManager->changeCurrentBrushLabel();
@@ -78,7 +80,7 @@ void KoFavoriteResourceManager::showPopupPalette()
 void KoFavoriteResourceManager::showPaletteManager()
 {
     KConfigGroup group(KGlobal::config(), "favoriteList");
-    qDebug() << "[KoFavoriteResourceManager] Saved list : " << group.readEntry("favoriteList") << " | Size of list: " << this->favoriteBrushesTotal();
+    qDebug() << "[KoFavoriteResourceManager] Saved list: " << group.readEntry("favoriteList") << " | Size of list: " << favoriteBrushesTotal();
 
     if (!m_favoriteBrushManager)
     {
@@ -92,6 +94,8 @@ void KoFavoriteResourceManager::showPaletteManager()
 //Favorite Brushes
 int KoFavoriteResourceManager::addFavoriteBrush (KisPaintOpPresetSP newBrush)
 {
+    if (isFavoriteBrushesFull()) return -2;
+
     for (int pos = 0; pos < m_favoriteBrushesList.size(); pos ++)
     {
         if (newBrush->paintOp() == m_favoriteBrushesList.at(pos)->paintopPreset()->paintOp())
@@ -146,7 +150,7 @@ KisFavoriteBrushData* KoFavoriteResourceManager::favoriteBrush(int pos)
     return m_favoriteBrushesList.at(pos);
 }
 
-void KoFavoriteResourceManager::changeCurrentPaintOp(KisPaintOpPresetSP brush)
+void KoFavoriteResourceManager::slotChangeCurrentPaintOp(KisPaintOpPresetSP brush)
 {
     qDebug() << "[KoFavoriteResourceManager] Calling brush: " << brush->paintOp().id();
     m_paintopBox->setCurrentPaintop(brush);

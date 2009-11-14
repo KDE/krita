@@ -235,6 +235,14 @@ void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e)
 {
     if (m_d->blockMouseEvent.isActive()) return;
     m_d->toolProxy->mouseDoubleClickEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+
+
+    //DOUBLE CLICKING TEST FOR PALETTE
+    if (e->buttons() && Qt::LeftButton)
+     {
+         qDebug() << "double click! double click!! lalalalala";
+         e->accept();
+     }
 }
 
 void KisQPainterCanvas::keyPressEvent(QKeyEvent *e)

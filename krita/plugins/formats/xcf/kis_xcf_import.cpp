@@ -203,6 +203,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         KisPaintLayerSP layer = new KisPaintLayer(image, xcflayer.name, xcflayer.opacity, colorSpace);
 
         layer->setCompositeOp(layerModeG2K(xcflayer.mode));
+        layer->setVisible(xcflayer.isVisible);
 
         image->addNode(layer.data(), image->rootLayer().data());
 

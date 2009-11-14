@@ -235,11 +235,8 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         // Copy the data in the image
         initLayer(&xcflayer);
 
-        // Move the layer to its position
         int left = xcflayer.dim.c.l;
         int top = xcflayer.dim.c.t;
-        layer->paintDevice()->setX(left);
-        layer->paintDevice()->setY(top);
 
         // Copy the data;
         for (int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
@@ -254,6 +251,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                 rgba* data = tile->pixels;
                 for (int v = 0; v < TILE_HEIGHT; ++v) {
                     if (isRgbA) {
+                        // RGB image
                         while (!it.isDone()) {
                             KoRgbTraits<quint8>::setRed(it.rawData(), GET_RED(*data));
                             KoRgbTraits<quint8>::setGreen(it.rawData(), GET_GREEN(*data));
@@ -263,6 +261,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                             ++it;
                         }
                     } else {
+                        // Grayscale image
                         while (!it.isDone()) {
                             it.rawData()[0] = GET_RED(*data);
                             it.rawData()[1] = GET_ALPHA(*data);
@@ -274,6 +273,10 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                 }
             }
         }
+        
+        // Move the layer to its position
+        layer->paintDevice()->setX(left);
+        layer->paintDevice()->setY(top);
 
         dbgFile << xcflayer.pixels.tileptrs;
 

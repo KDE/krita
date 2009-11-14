@@ -43,6 +43,7 @@
 #include <KoColorSpace.h>
 #include <qendian.h>
 #include "xcftools.h"
+#include <KoCompositeOp.h>
 
 typedef KGenericFactory<KisXCFImport> XCFImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritaxcfimport, XCFImportFactory("kofficefilters"))
@@ -109,6 +110,61 @@ KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const Q
     return KoFilter::CreationError;
 }
 
+QString layerModeG2K(GimpLayerModeEffects mode)
+{
+    switch(mode)
+    {
+      case GIMP_NORMAL_MODE:
+        return COMPOSITE_OVER;
+      case GIMP_DISSOLVE_MODE:
+        return COMPOSITE_DISSOLVE;
+      case GIMP_MULTIPLY_MODE:
+        return COMPOSITE_MULT;
+      case GIMP_SCREEN_MODE:
+        return COMPOSITE_SCREEN;
+      case GIMP_OVERLAY_MODE:
+        return COMPOSITE_OVERLAY;
+      case GIMP_DIFFERENCE_MODE:
+        return COMPOSITE_DIFF;
+      case GIMP_ADDITION_MODE:
+        return COMPOSITE_ADD;
+      case GIMP_SUBTRACT_MODE:
+        return COMPOSITE_SUBTRACT;
+      case GIMP_DARKEN_ONLY_MODE:
+        return COMPOSITE_DARKEN;
+      case GIMP_LIGHTEN_ONLY_MODE:
+        return COMPOSITE_LIGHTEN;
+      case GIMP_HUE_MODE:
+        return COMPOSITE_HUE;
+      case GIMP_SATURATION_MODE:
+        return COMPOSITE_SATURATION;
+      case GIMP_COLOR_MODE:
+        return COMPOSITE_COLOR;
+      case GIMP_VALUE_MODE:
+        return COMPOSITE_VALUE;
+      case GIMP_DIVIDE_MODE:
+        return COMPOSITE_DIVIDE;
+      case GIMP_DODGE_MODE:
+        return COMPOSITE_DODGE;
+      case GIMP_BURN_MODE:
+        return COMPOSITE_BURN;
+      case GIMP_COLOR_ERASE_MODE:
+        return COMPOSITE_ERASE;
+      
+      case GIMP_NORMAL_NOPARTIAL_MODE:
+      case GIMP_ANTI_ERASE_MODE:
+      case GIMP_REPLACE_MODE:
+      case GIMP_GRAIN_EXTRACT_MODE:
+      case GIMP_GRAIN_MERGE_MODE:
+      case GIMP_HARDLIGHT_MODE:
+      case GIMP_SOFTLIGHT_MODE:
+      case GIMP_BEHIND_MODE:
+        break;
+    }
+    dbgFile << "Unknown mode: " << mode;
+    return COMPOSITE_OVER;
+}
+
 KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDoc2* doc)
 {
     dbgFile << "Start decoding file";
@@ -132,6 +188,8 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         dbgFile << i << " name = " << xcflayer.name << " opacity = " << xcflayer.opacity;
         KisPaintLayerSP layer = new KisPaintLayer(image, xcflayer.name, xcflayer.opacity);
 
+        layer->setCompositeOp(layerModeG2K(xcflayer.mode));
+        
         image->addNode(layer.data(), image->rootLayer().data());
 
     }

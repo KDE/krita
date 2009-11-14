@@ -659,8 +659,12 @@ const QTextCursor TextTool::cursor()
 void TextTool::setShapeData(KoTextShapeData *data)
 {
     bool docChanged = data == 0 || m_textShapeData == 0 || m_textShapeData->document() != data->document();
-    if (m_textShapeData)
+    if (m_textShapeData) {
         disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        if (lay)
+            disconnect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
+    }
     m_textShapeData = data;
     if (m_textShapeData == 0)
         return;
@@ -673,7 +677,10 @@ void TextTool::setShapeData(KoTextShapeData *data)
         connect(m_textEditor, SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
 
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if (lay) { // check and remove the demo text.
+        if (lay) {
+            connect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
+
+             // check and remove the demo text.
             bool demoTextOn = true;
             foreach (KoShape *shape, lay->shapes()) {
                 TextShape *ts = dynamic_cast<TextShape*>(shape);
@@ -1865,6 +1872,13 @@ void TextTool::setTextColor(const KoColor &color)
 void TextTool::setBackgroundColor(const KoColor &color)
 {
     m_textEditor->setTextBackgroundColor(color.toQColor());
+}
+
+void TextTool::shapeAddedToDoc(KoShape *shape)
+{
+    // in case the new frame added is a freshly appended frame
+    // allow the layouter to do some work and then optionally move the view to follow the cursor
+    QTimer::singleShot(0, this, SLOT(ensureCursorVisible()));
 }
 
 void TextTool::debugTextDocument()

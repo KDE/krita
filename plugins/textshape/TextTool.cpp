@@ -581,7 +581,9 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 }
             }
             painter.setPen(caretPen);
-            const int posInParag = m_textEditor->position() - block.position();
+            int posInParag = m_textEditor->position() - block.position();
+            if (posInParag <= block.layout()->preeditAreaPosition())
+                posInParag += block.layout()->preeditAreaText().length();
             block.layout()->drawCursor(&painter, QPointF(), posInParag);
         }
 
@@ -1037,7 +1039,12 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = textRect(m_textEditor->position(), m_textEditor->position());
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
-        rect = m_textShape->absoluteTransformation(&converter).mapRect(rect);
+        QMatrix shapeMatrix = m_textShape->absoluteTransformation(&converter);
+        qreal zoomX, zoomY;
+        converter.zoom(&zoomX, &zoomY);
+        shapeMatrix.scale(zoomX, zoomY);
+        rect = shapeMatrix.mapRect(rect);
+
         return rect.toRect();
     }
     case Qt::ImFont:
@@ -1056,7 +1063,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     return QVariant();
 }
 
-void TextTool::inputMethodEvent(QInputMethodEvent * event)
+void TextTool::inputMethodEvent(QInputMethodEvent *event)
 {
     if (event->replacementLength() > 0) {
         m_textEditor->setPosition(m_textEditor->position() + event->replacementStart());
@@ -1064,9 +1071,17 @@ void TextTool::inputMethodEvent(QInputMethodEvent * event)
             m_textEditor->deleteChar();
         }
     }
-    if (! event->commitString().isEmpty()) {
+    QTextBlock block = m_textEditor->block();
+    QTextLayout *layout = block.layout();
+    Q_ASSERT(layout);
+    if (!event->commitString().isEmpty()) {
         QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
         keyPressEvent(&ke);
+        layout->setPreeditArea(-1, QString());
+    } else {
+        layout->setPreeditArea(m_textEditor->position() - block.position(),
+                event->preeditString());
+        m_textEditor->document()->markContentsDirty(m_textEditor->position(), 1);
     }
     event->accept();
 }

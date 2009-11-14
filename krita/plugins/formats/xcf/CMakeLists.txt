@@ -7,6 +7,9 @@ set(kritaxcfimport_PART_SRCS
     xcf-general.c
     utils.c
     enums.c
+    pixels.c
+    scaletab.c
+    table.c
     )
 
 kde4_add_plugin(kritaxcfimport WITH_PREFIX ${kritaxcfimport_PART_SRCS})

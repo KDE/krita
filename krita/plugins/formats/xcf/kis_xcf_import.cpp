@@ -206,6 +206,8 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         layer->setVisible(xcflayer.isVisible);
 
         image->addNode(layer.data(), image->rootLayer().data());
+        
+        dbgFile << xcflayer.pixels.tileptrs;
 
     }
     image->unlock();

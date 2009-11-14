@@ -38,6 +38,7 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_iterator.h>
+#include <kis_transparency_mask.h>
 #include <KoColorSpaceTraits.h>
 #include <kis_paint_device.h>
 #include <KoColorSpace.h>
@@ -277,6 +278,35 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         // Move the layer to its position
         layer->paintDevice()->setX(left);
         layer->paintDevice()->setY(top);
+
+        // Create the mask
+        if (xcflayer.hasMask) {
+            KisTransparencyMaskSP mask = new KisTransparencyMask();
+            for (int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
+                for (int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT) {
+                    rect want;
+                    want.l = x + left;
+                    want.t = y + top;
+                    want.b = want.t + TILE_HEIGHT;
+                    want.r = want.l + TILE_WIDTH;
+                    Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
+                    KisHLineIteratorPixel it = mask->paintDevice()->createHLineIterator(x, y, TILE_WIDTH);
+                    rgba* data = tile->pixels;
+                    for (int v = 0; v < TILE_HEIGHT; ++v) {
+                        while (!it.isDone()) {
+                            it.rawData()[0] = GET_ALPHA(*data);
+                            ++data;
+                            ++it;
+                        }
+                        it.nextRow();
+                    }
+
+                }
+            }
+            mask->paintDevice()->setX(left);
+            mask->paintDevice()->setY(top);
+            image->addNode(mask, layer);
+        }
 
         dbgFile << xcflayer.pixels.tileptrs;
 

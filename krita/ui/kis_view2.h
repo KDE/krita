@@ -179,9 +179,11 @@ public:  // Krita specific interfaces
     KisPaintingAssistantsManager* paintingAssistantManager();
     void setFavoriteResourceManager (KisPaintopBox*);
     KoFavoriteResourceManager* favoriteResourceManager();
+
 signals:
 
     void sigLoadingFinished();
+    void favoritePaletteCalled();
 
 protected:
 

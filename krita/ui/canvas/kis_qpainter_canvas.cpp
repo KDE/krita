@@ -104,6 +104,8 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     m_d->toolProxy = canvas->toolProxy();
     m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
     m_d->blockMouseEvent.setSingleShot(true);
+
+
 }
 
 KisQPainterCanvas::~KisQPainterCanvas()
@@ -240,7 +242,8 @@ void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e)
     //DOUBLE CLICKING TEST FOR PALETTE
     if (e->buttons() && Qt::LeftButton)
      {
-         qDebug() << "double click! double click!! lalalalala";
+         qDebug() << "[KisQPainterCanvas] calling palette";
+         emit doubleClickQPainterCanvas();
          e->accept();
      }
 }

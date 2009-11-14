@@ -40,7 +40,7 @@ class KoFavoriteResourceManager : public QObject
 
 public:
 
-    KoFavoriteResourceManager(KisPaintopBox*);
+    KoFavoriteResourceManager(KisPaintopBox*, QWidget* = 0);
     ~KoFavoriteResourceManager();
 
     static const int MAX_FAVORITE_BRUSHES = 10;
@@ -48,7 +48,6 @@ public:
 
     /************************************Popup Palette************************************/
 
-    void showPopupPalette();
     void showPaletteManager();
 
     /**********************************Favorite Brushes***********************************/
@@ -68,13 +67,13 @@ public:
     /**Checks if newColor is a recently used color.
     Returns -1 if the newColor is not used recently.
     Returns the position of the newColor on the list otherwise**/
-    int isInRecentColor(QColor&);
     void addRecentColor(KisRecentColorData*);
     QQueue<KisRecentColorData*>* recentColorsList();
     
 public slots:
     void slotChangeCurrentPaintOp(KisPaintOpPresetSP);
     void slotChangePaintopLabel();
+    void slotShowPopupPalette();
 
 private:
     KisPaletteManager *m_favoriteBrushManager;
@@ -87,6 +86,7 @@ private:
     QQueue<KisRecentColorData*> m_recentColorsData;
 
     bool isFavoriteBrushesFull();
+    int isInRecentColor(QColor&);
 };
 
 #endif // KIS_FAVORITE_BRUSH_DATA_H

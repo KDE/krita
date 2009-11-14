@@ -124,12 +124,6 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     view->actionCollection()->addAction("palette_manager", action);
     action->setDefaultWidget(m_paletteButton);
 
-    QPushButton* m_popupPaletteButton = new QPushButton("Palette (temp)");
-    connect(m_popupPaletteButton, SIGNAL(clicked()), this, SLOT(slotPaletteTemp()));
-    action  = new KAction(i18n("&PopupPalette"), this);
-    view->actionCollection()->addAction("palette", action);
-    action->setDefaultWidget(m_popupPaletteButton);
-
 }
 
 
@@ -181,18 +175,6 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     if (chooser->currentResource())
         view->resourceProvider()->slotPatternActivated(chooser->currentResource());
 
-}
-
-void KisControlFrame::slotPaletteTemp()
-{
-    if(! m_view->favoriteResourceManager())
-    {
-        qDebug() << "favoriteResourceManager is not instantiated";
-        m_view->setFavoriteResourceManager(m_paintopBox);
-    }
-    else{
-        m_view->favoriteResourceManager()->showPopupPalette();
-    }
 }
 
 void KisControlFrame::slotSaveToFavouriteBrushes()

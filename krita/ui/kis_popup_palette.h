@@ -28,7 +28,6 @@ class KisFavoriteBrushData;
 class KisRecentColorData;
 class KoFavoriteResourceManager;
 class FlowLayout;
-class KisView2;
 class QWidget;
 class QToolButton;
 class QSize;
@@ -38,7 +37,6 @@ class KisPopupPalette : public QToolBox
     Q_OBJECT;
 
 public:
-    KisPopupPalette(KisView2*, QWidget *parent = 0);
     KisPopupPalette(KoFavoriteResourceManager* , QWidget *parent=0);
     QSize sizeHint() const;
     ~KisPopupPalette();

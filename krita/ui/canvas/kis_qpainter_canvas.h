@@ -135,6 +135,8 @@ signals:
      */
     void documentOriginChanged(const QPoint &origin);
 
+    void doubleClickQPainterCanvas();
+
 
 private slots:
     void slotConfigChanged();

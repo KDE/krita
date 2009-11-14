@@ -67,7 +67,6 @@ public slots:
     void slotSetPattern(KisPattern * pattern);
     void slotSetGradient(KoAbstractGradient * gradient);
     void slotSaveToFavouriteBrushes();
-    void slotPaletteTemp();
 
 private:
 

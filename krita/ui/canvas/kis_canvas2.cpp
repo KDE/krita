@@ -240,6 +240,7 @@ void KisCanvas2::createQPainterCanvas()
     canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
 
     connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&)), this, SLOT(updateRulers()));
+    connect(canvasWidget, SIGNAL(doubleClickQPainterCanvas()), m_d->view, SIGNAL(favoritePaletteCalled()) );
 
     setCanvasWidget(canvasWidget);
 }

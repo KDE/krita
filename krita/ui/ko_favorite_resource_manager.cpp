@@ -38,7 +38,7 @@
 const int KoFavoriteResourceManager::MAX_FAVORITE_BRUSHES;
 const int KoFavoriteResourceManager::MAX_RECENT_COLORS;
 
-KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox)
+KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, QWidget* popupParent)
         :m_favoriteBrushManager(0)
         ,m_popupPalette(0)
         ,m_paintopBox(paintopBox)
@@ -56,6 +56,8 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox)
         KisFavoriteBrushData* newBrushData = new KisFavoriteBrushData(this, newBrush, new QIcon (m_paintopBox->paintopPixmap(newBrush->paintOp())));
         m_favoriteBrushesList.append(newBrushData);
     }
+
+    m_popupPalette = new KisPopupPalette(this, popupParent);
 }
 
 void KoFavoriteResourceManager::slotChangePaintopLabel()
@@ -65,16 +67,9 @@ void KoFavoriteResourceManager::slotChangePaintopLabel()
 }
 
 //Popup Palette
-void KoFavoriteResourceManager::showPopupPalette()
+void KoFavoriteResourceManager::slotShowPopupPalette()
 {
-    if (!m_popupPalette)
-    {
-        qDebug() << "no popup palette yet";
-        m_popupPalette = new KisPopupPalette(this);
-        m_popupPalette->show();
-    } else {
-        m_popupPalette->setVisible(!m_popupPalette->isVisible());
-    }
+    m_popupPalette->setVisible(!m_popupPalette->isVisible());
 }
 
 void KoFavoriteResourceManager::showPaletteManager()
@@ -140,6 +135,7 @@ bool KoFavoriteResourceManager::isFavoriteBrushesFull()
 {
     return m_favoriteBrushesList.size() == KoFavoriteResourceManager::MAX_FAVORITE_BRUSHES;
 }
+
 int KoFavoriteResourceManager::favoriteBrushesTotal()
 {
     return m_favoriteBrushesList.size();
@@ -154,6 +150,7 @@ void KoFavoriteResourceManager::slotChangeCurrentPaintOp(KisPaintOpPresetSP brus
 {
     qDebug() << "[KoFavoriteResourceManager] Calling brush: " << brush->paintOp().id();
     m_paintopBox->setCurrentPaintop(brush);
+    m_popupPalette->setVisible(false); //automatically close the palette after a button is clicked.
     return;
 }
 
@@ -217,8 +214,6 @@ void KoFavoriteResourceManager::saveFavoriteBrushes()
 
 KoFavoriteResourceManager::~KoFavoriteResourceManager()
 {
-
     delete m_favoriteBrushManager;
-    delete m_popupPalette;
 }
 #include "ko_favorite_resource_manager.moc"

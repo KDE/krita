@@ -153,7 +153,6 @@
      <Action name="paintop_options"/>
      <Separator/>
      <Action name="palette_manager"/>
-     <Action name="palette"/>
 </ToolBar>
 
 <Menu name="image_popup">

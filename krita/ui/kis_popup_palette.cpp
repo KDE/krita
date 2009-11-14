@@ -195,6 +195,7 @@ void KisPopupPalette::slotPickNewColor()
     m_resourceManager->addRecentColor(newColor);
 
     qDebug() << "new color!!";
+
 }
 
 QSize KisPopupPalette::sizeHint() const
@@ -202,7 +203,7 @@ QSize KisPopupPalette::sizeHint() const
     return QSize(250, 150);
 }
 
- void KisPopupPalette::mousePressEvent(QMouseEvent *event)
+ void ShapedClock::mousePressEvent(QMouseEvent *event)
  {
      if (event->button() == Qt::LeftButton) {
          dragPosition = event->globalPos() - frameGeometry().topLeft();

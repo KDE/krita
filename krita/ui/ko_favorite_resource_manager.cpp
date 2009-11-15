@@ -35,8 +35,10 @@
 #include <QColor>
 #include "kis_view2.h"
 
+#ifndef _MSC_EXTENSIONS
 const int KoFavoriteResourceManager::MAX_FAVORITE_BRUSHES;
 const int KoFavoriteResourceManager::MAX_RECENT_COLORS;
+#endif
 
 KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, QWidget* popupParent)
         :m_favoriteBrushManager(0)

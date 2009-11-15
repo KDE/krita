@@ -29,7 +29,9 @@
 #include <kis_types.h>
 #include "ko_favorite_resource_manager.h"
 
+#ifndef _MSC_EXTENSIONS
 const int KisPopupPalette::BUTTON_SIZE;
+#endif
 
 KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *parent)
     : QToolBox(parent, Qt::FramelessWindowHint)

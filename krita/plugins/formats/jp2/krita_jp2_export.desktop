@@ -1,6 +1,9 @@
 [Desktop Entry]
 Icon=
 Name=Krita jp2 Export Filter
+Name[pt]=Filtro de Exportação para JP2 para o Krita
+Name[pt_BR]=Filtro de Exportação para JP2 para o Krita
+Name[uk]=Фільтр експорту JP2 для Krita
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/jp2

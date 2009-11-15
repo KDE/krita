@@ -74,7 +74,7 @@ public:
 public slots:
     void slotChangeCurrentPaintOp(KisPaintOpPresetSP);
     void slotChangePaintopLabel();
-    void slotShowPopupPalette(QMouseEvent *e);
+    void slotShowPopupPalette();
 
 private:
     KisPaletteManager *m_favoriteBrushManager;

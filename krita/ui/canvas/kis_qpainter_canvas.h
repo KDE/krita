@@ -135,7 +135,7 @@ signals:
      */
     void documentOriginChanged(const QPoint &origin);
 
-    void doubleClickQPainterCanvas(QMouseEvent *);
+    void doubleClickQPainterCanvas();
 
 
 private slots:

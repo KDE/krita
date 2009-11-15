@@ -243,7 +243,7 @@ void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e)
     if (e->buttons() && Qt::LeftButton)
      {
          qDebug() << "[KisQPainterCanvas] calling palette";
-         emit doubleClickQPainterCanvas(e);
+         emit doubleClickQPainterCanvas();
          e->accept();
      }
 }

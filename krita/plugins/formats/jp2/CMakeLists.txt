@@ -1,5 +1,5 @@
 
-include_directories( ${KRITA_INCLUDES}  ${OPENJPEG_INCLUDES})
+include_directories( ${KRITA_INCLUDES}  ${OPENJPEG_INCLUDE_DIR})
 
 set(libkritaconverter_LIB_SRCS
     jp2_converter.cc

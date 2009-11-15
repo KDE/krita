@@ -35,7 +35,6 @@
 #include <QCryptographicHash>
 #include <KTemporaryFile>
 #include <QPainter>
-#include <QImageWriter>
 
 /// the maximum amount of bytes the image can be while we store it in memory instead of
 /// spooling it to disk in a temp-file.
@@ -177,8 +176,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             // store image
             QBuffer buffer;
             buffer.open(QIODevice::WriteOnly);
-            QImageWriter writer(&buffer, d->suffix.toLatin1());
-            if (!writer.write(image)) {
+            if (!image.save(&buffer, d->suffix.toLatin1())) {
                 kWarning(30006) << "Write temporary file failed";
                 d->errorCode = StorageFailed;
                 delete d->temporaryFile;
@@ -190,8 +188,15 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
         } else {
             d->image = image;
             d->dataStoreState = KoImageDataPrivate::StateImageOnly;
+
+            QByteArray ba;
+            QBuffer buffer(&ba);
+            buffer.open(QIODevice::WriteOnly);
+            image.save(&buffer, "PNG"); // use .png for images we get as QImage
+            QCryptographicHash md5(QCryptographicHash::Md5);
+            md5.addData(ba);
+            d->key = KoImageDataPrivate::generateKey(md5.result());
         }
-        d->key = image.cacheKey();
     }
 }
 
@@ -246,8 +251,11 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             KoStoreDevice device(store);
             const bool lossy =url.toLower().endsWith(".jpg");
             if (!lossy && device.size() < MAX_MEMORY_IMAGESIZE) {
-                if (d->image.load(&device, d->suffix.toLatin1())) {
-                    d->key = d->image.cacheKey();
+                QByteArray data = device.readAll();
+                if (d->image.loadFromData(data)) {
+                    QCryptographicHash md5(QCryptographicHash::Md5);
+                    md5.addData(data);
+                    d->key = KoImageDataPrivate::generateKey(md5.result());
                     d->dataStoreState = KoImageDataPrivate::StateImageOnly;
                     return;
                 }

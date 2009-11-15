@@ -18,6 +18,7 @@ private slots:
     void testPreload1();
     void testPreload2();
     void testPreload3();
+    void testSameKey();
     void testIsValid();
 };
 

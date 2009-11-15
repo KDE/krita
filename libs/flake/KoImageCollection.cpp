@@ -111,14 +111,10 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
 KoImageData *KoImageCollection::createImageData(const QImage &image)
 {
     Q_ASSERT(!image.isNull());
-    const qint64 key = image.cacheKey();
-    if (d->images.contains(key))
-        return new KoImageData(d->images.value(key));
     KoImageData *data = new KoImageData();
     data->setImage(image);
-    data->priv()->collection = this;
-    Q_ASSERT(data->key() == key);
-    d->images.insert(key, data->priv());
+
+    data = cacheImage(data);
     return data;
 }
 
@@ -154,9 +150,9 @@ KoImageData *KoImageCollection::createImageData(const QString &href, KoStore *st
 
     KoImageData *data = new KoImageData();
     data->setImage(href, store);
-    data->priv()->collection = this;
+
+    data = cacheImage(data);
     d->storeImages.insert(storeKey, data->priv());
-    d->images.insert(data->key(), data->priv());
     return data;
 }
 
@@ -172,6 +168,20 @@ KoImageData *KoImageCollection::createImageData(const QByteArray &imageData)
     data->priv()->collection = this;
     Q_ASSERT(data->key() == key);
     d->images.insert(key, data->priv());
+    return data;
+}
+
+KoImageData *KoImageCollection::cacheImage(KoImageData *data)
+{
+    QMap<qint64, KoImageDataPrivate*>::const_iterator it(d->images.constFind(data->key()));
+    if (it == d->images.constEnd()) {
+        d->images.insert(data->key(), data->priv());
+        data->priv()->collection = this;
+    }
+    else {
+        delete data;
+        data = new KoImageData(it.value());
+    }
     return data;
 }
 

@@ -100,6 +100,8 @@ public:
     int count() const;
 
 private:
+    KoImageData *cacheImage(KoImageData *data);
+
     class Private;
     Private * const d;
 };

@@ -233,6 +233,43 @@ void TestImageCollection::testPreload3()
     QCOMPARE(pixmap5.cacheKey(), pixmap4.cacheKey());
 }
 
+void TestImageCollection::testSameKey()
+{
+    KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
+    QString image("logo-koffice.png");
+    KoImageData data;
+    data.setImage(image, store);
+
+    KoImageData data2;
+    data2.setImage(image, store);
+
+    QCOMPARE(data.key(), data2.key());
+
+    QFile file(KDESRCDIR "/logo-koffice.png");
+    file.open(QIODevice::ReadOnly);
+    QByteArray imageData = file.readAll();
+    KoImageData data3;
+    data3.setImage(imageData);
+    QCOMPARE(data.key(), data3.key());
+    QCOMPARE(data2.key(), data3.key());
+
+    QImage qImage1(KDESRCDIR "/logo-koffice.png");
+    QImage qImage2(KDESRCDIR "/logo-koffice.png");
+    KoImageData data4;
+    data4.setImage(qImage1);
+    KoImageData data5;
+    data5.setImage(qImage2);
+    QCOMPARE(data4.key(), data5.key());
+
+    QImage qImage3(KDESRCDIR "/logo-koffice-big.png");
+    QImage qImage4(KDESRCDIR "/logo-koffice-big.png");
+    KoImageData data6;
+    data6.setImage(qImage3);
+    KoImageData data7;
+    data7.setImage(qImage4);
+    QCOMPARE(data6.key(), data7.key());
+}
+
 void TestImageCollection::testIsValid()
 {
     KoImageData data;

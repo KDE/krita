@@ -76,6 +76,9 @@ private:
     /// Resets color related commands which are used to combine multiple color changes
     void resetColorCommands();
 
+    static KoShapeBackground *applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
+    static QBrush applyStrokeGradientStops(KoShape *shape, const QGradientStops &stops);
+
     /// Returns list of selected path shapes
     QList<KoPathShape*> selectedPathShapes();
 

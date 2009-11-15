@@ -22,6 +22,7 @@
 
 #include "KoCanvasController_p.h"
 #include "KoShape.h"
+#include "KoShape_p.h"
 #include "KoShapeFactory.h" // for the SHAPE mimetypes
 #include "KoShapeRegistry.h"
 #include "KoShapeController.h"
@@ -153,7 +154,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
 
         if (m_draggedShape->shapeId().isEmpty())
             m_draggedShape->setShapeId(factory->id());
-        m_draggedShape->setZIndex(KoFlake::maxZIndex());
+        m_draggedShape->setZIndex(KoShapePrivate::MaxZIndex);
 
         m_parent->canvas()->shapeManager()->add(m_draggedShape);
     }
@@ -167,7 +168,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
                 Q_ASSERT(0); // hmm hmm, when does this happen?
             }
             m_draggedShape = shapes.first();
-            m_draggedShape->setZIndex(KoFlake::maxZIndex());
+            m_draggedShape->setZIndex(KoShapePrivate::MaxZIndex);
             event->setDropAction(Qt::CopyAction);
             event->accept();
         }

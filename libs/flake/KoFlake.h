@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,6 +19,14 @@
  */
 #ifndef KOFLAKE_H
 #define KOFLAKE_H
+
+#include "flake_export.h"
+
+#include <QtGui/QBrush>
+
+class KoShape;
+class QGradient;
+class KoShapeBackground;
 
 /**
  * Flake reference
@@ -71,9 +80,8 @@ namespace KoFlake
         Foreground  ///< the foreground / border style is active
     };
 
-
-    /// Maximal possible shape z-index
-    int maxZIndex();
+    /// clones the given gradient
+    FLAKE_EXPORT QGradient *cloneGradient(const QGradient *gradient);
 }
 
 #endif

@@ -18,6 +18,7 @@
  */
 
 #include "KoGradientBackground.h"
+#include "KoFlake.h"
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
@@ -36,37 +37,6 @@ public:
     ~Private() {
         delete gradient;
     }
-    QGradient * cloneGradient(const QGradient * gradient) const {
-        if (! gradient)
-            return 0;
-
-        QGradient * clone = 0;
-
-        switch (gradient->type()) {
-        case QGradient::LinearGradient: {
-            const QLinearGradient * lg = static_cast<const QLinearGradient*>(gradient);
-            clone = new QLinearGradient(lg->start(), lg->finalStop());
-            break;
-        }
-        case QGradient::RadialGradient: {
-            const QRadialGradient * rg = static_cast<const QRadialGradient*>(gradient);
-            clone = new QRadialGradient(rg->center(), rg->radius(), rg->focalPoint());
-            break;
-        }
-        case QGradient::ConicalGradient: {
-            const QConicalGradient * cg = static_cast<const QConicalGradient*>(gradient);
-            clone = new QConicalGradient(cg->center(), cg->angle());
-            break;
-        }
-        default:
-            return 0;
-        }
-
-        clone->setSpread(gradient->spread());
-        clone->setStops(gradient->stops());
-
-        return clone;
-    }
 
     QGradient * gradient;
     QMatrix matrix;
@@ -83,7 +53,7 @@ KoGradientBackground::KoGradientBackground(QGradient * gradient, const QMatrix &
 KoGradientBackground::KoGradientBackground(const QGradient & gradient, const QMatrix &matrix)
         : d(new Private())
 {
-    d->gradient = d->cloneGradient(&gradient);
+    d->gradient = KoFlake::cloneGradient(&gradient);
     d->matrix = matrix;
     Q_ASSERT(d->gradient);
 }
@@ -117,7 +87,7 @@ void KoGradientBackground::setGradient(const QGradient & gradient)
     if (d->gradient)
         delete d->gradient;
 
-    d->gradient = d->cloneGradient(&gradient);
+    d->gradient = KoFlake::cloneGradient(&gradient);
     Q_ASSERT(d->gradient);
 }
 
@@ -133,7 +103,7 @@ KoGradientBackground& KoGradientBackground::operator = (const KoGradientBackgrou
 
     d->matrix = rhs.d->matrix;
     delete d->gradient;
-    d->gradient = d->cloneGradient(rhs.d->gradient);
+    d->gradient = KoFlake::cloneGradient(rhs.d->gradient);
     Q_ASSERT(d->gradient);
 
     return *this;
@@ -166,7 +136,7 @@ bool KoGradientBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF
         QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyle(styleStack, context.stylesReader(), shapeSize);
         const QGradient * gradient = brush.gradient();
         if (gradient) {
-            d->gradient = d->cloneGradient(gradient);
+            d->gradient = KoFlake::cloneGradient(gradient);
             d->matrix = brush.matrix();
             return true;
         }

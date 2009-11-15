@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Jos van den Oever <jos@vandenoever.info>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,9 +19,46 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoFlake.h"
+#include "KoShape.h"
+#include "KoLineBorder.h"
+#include "KoGradientBackground.h"
 
-namespace KoFlake {
-    int maxZIndex() { return 32767; }
+#include <QtGui/QGradient>
+#include <math.h>
+
+QGradient *KoFlake::cloneGradient(const QGradient *gradient)
+{
+    if (! gradient)
+        return 0;
+
+    QGradient *clone = 0;
+
+    switch (gradient->type()) {
+    case QGradient::LinearGradient:
+    {
+        const QLinearGradient *lg = static_cast<const QLinearGradient*>(gradient);
+        clone = new QLinearGradient(lg->start(), lg->finalStop());
+        break;
+    }
+    case QGradient::RadialGradient:
+    {
+        const QRadialGradient *rg = static_cast<const QRadialGradient*>(gradient);
+        clone = new QRadialGradient(rg->center(), rg->radius(), rg->focalPoint());
+        break;
+    }
+    case QGradient::ConicalGradient:
+    {
+        const QConicalGradient *cg = static_cast<const QConicalGradient*>(gradient);
+        clone = new QConicalGradient(cg->center(), cg->angle());
+        break;
+    }
+    default:
+        return 0;
+    }
+
+    clone->setSpread(gradient->spread());
+    clone->setStops(gradient->stops());
+
+    return clone;
 }
-
 

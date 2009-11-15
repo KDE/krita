@@ -21,9 +21,9 @@
 #include "StyleDocker.h"
 #include "StylePreview.h"
 #include "StyleButtonBox.h"
-#include "KoFlake.h"
-#include <KoGradientHelper.h>
 
+#include <KoFlake.h>
+#include <KoGradientBackground.h>
 #include <KoPageApp.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -424,7 +424,7 @@ void StyleDocker::updateGradient(KoResource * item)
     if (activeStyle == KoFlake::Background) {
         QUndoCommand * firstCommand = 0;
         foreach (KoShape * shape, selectedShapes) {
-            KoShapeBackground * fill = KoGradientHelper::applyFillGradientStops(shape, newStops);
+            KoShapeBackground * fill = applyFillGradientStops(shape, newStops);
             if (! fill)
                 continue;
             if (! firstCommand)
@@ -437,7 +437,7 @@ void StyleDocker::updateGradient(KoResource * item)
     else {
         QList<KoShapeBorderModel*> newBorders;
         foreach (KoShape * shape, selectedShapes) {
-            QBrush brush = KoGradientHelper::applyStrokeGradientStops(shape, newStops);
+            QBrush brush = applyStrokeGradientStops(shape, newStops);
             if (brush.style() == Qt::NoBrush)
                 continue;
 
@@ -557,6 +557,65 @@ void StyleDocker::locationChanged(Qt::DockWidgetArea area)
     }
     m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     m_layout->invalidate();
+}
+
+KoShapeBackground *StyleDocker::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
+{
+    if (! shape || ! stops.count())
+        return 0;
+
+    KoGradientBackground *newGradient = 0;
+    KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background());
+    if (oldGradient) {
+        // just copy the gradient and set the new stops
+        QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
+        g->setStops(stops);
+        newGradient = new KoGradientBackground(g);
+        newGradient->setMatrix(oldGradient->matrix());
+    }
+    else {
+        // no gradient yet, so create a new one
+        QSizeF size = shape->size();
+        QLinearGradient *g = new QLinearGradient();
+        g->setStart(QPointF(0, 0));
+        g->setFinalStop(QPointF(size.width(), size.height()));
+        g->setStops(stops);
+        newGradient = new KoGradientBackground(g);
+    }
+    return newGradient;
+}
+
+QBrush StyleDocker::applyStrokeGradientStops(KoShape *shape, const QGradientStops &stops)
+{
+    if (! shape || ! stops.count())
+        return QBrush();
+
+    QBrush gradientBrush;
+    KoLineBorder *border = dynamic_cast<KoLineBorder*>(shape->border());
+    if (border)
+        gradientBrush = border->lineBrush();
+
+    QGradient *newGradient = 0;
+    const QGradient *oldGradient = gradientBrush.gradient();
+    if (oldGradient) {
+        // just copy the new gradient stops
+        newGradient = KoFlake::cloneGradient(oldGradient);
+        newGradient->setStops(stops);
+    }
+    else {
+        // no gradient yet, so create a new one
+        QSizeF size = shape->size();
+        QLinearGradient *g = new QLinearGradient();
+        g->setStart(QPointF(0, 0));
+        g->setFinalStop(QPointF(size.width(), size.height()));
+        g->setStops(stops);
+        newGradient = g;
+    }
+
+    QBrush brush(*newGradient);
+    delete newGradient;
+
+    return brush;
 }
 
 #include "StyleDocker.moc"

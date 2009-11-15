@@ -70,7 +70,6 @@ set(flake_SRCS
     KoColorBackground.cpp
     KoGradientBackground.cpp
     KoPatternBackground.cpp
-    KoGradientHelper.cpp
     KoShapeConfigWidgetBase.cpp
     KoDrag.cpp
     KoDragOdfSaveHelper.cpp
@@ -232,7 +231,6 @@ install(
     KoFlake.h
     KoFrameShape.h
     KoGuidesData.h
-    KoGradientHelper.h
     KoImageCollection.h
     KoImageData.h
     KoInputDevice.h

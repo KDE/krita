@@ -32,13 +32,10 @@
 const int KisPopupPalette::BUTTON_SIZE;
 
 KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *parent)
-    :QToolBox(parent, Qt::FramelessWindowHint)
+    : QToolBox(parent, Qt::FramelessWindowHint)
     , m_resourceManager (manager)
     , m_brushButtonLayout(0)
-    , m_brushButtonWidget(0)
     , m_colorLayout(0)
-    , m_colorWidget(0)
-
 {
     colorFoo=0;
 
@@ -59,45 +56,51 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
         }
     }
 
-    QVBoxLayout *m_tempLayout = new QVBoxLayout();
-    m_tempLayout->addLayout(m_brushButtonLayout);
-    m_tempLayout->setContentsMargins(5,0,5,0);
+    QVBoxLayout *tempLayout = new QVBoxLayout();
+    tempLayout->addLayout(m_brushButtonLayout);
+    tempLayout->setContentsMargins(5,0,5,0);
 
-    m_brushButtonWidget = new QWidget();
-    m_brushButtonWidget->setLayout(m_tempLayout);
+    QWidget* brushButtonWidget = new QWidget();
+    brushButtonWidget->setLayout(tempLayout);
+    brushButtonWidget->setStyleSheet("* { background-color: rgba(0,0,0,128) }");
 
+    QColor c(Qt::gray);
+    qDebug() << "Gray " << c.red() << c.green() << c.blue();
 
     //RECENT COLORS
-    QToolButton* m_chooseColor = new QToolButton ();
-    m_chooseColor->setMaximumSize(KisPopupPalette::BUTTON_SIZE,KisPopupPalette::BUTTON_SIZE);
-    m_chooseColor->setMinimumSize(KisPopupPalette::BUTTON_SIZE,KisPopupPalette::BUTTON_SIZE);
-    m_chooseColor->setIcon(* (new QIcon (":/images/change_color.gif")));
-    connect(m_chooseColor, SIGNAL(clicked()), this, SLOT(slotPickNewColor()));
+    QToolButton* chooseColor = new QToolButton ();
+    chooseColor->setMaximumSize(KisPopupPalette::BUTTON_SIZE,KisPopupPalette::BUTTON_SIZE);
+    chooseColor->setMinimumSize(KisPopupPalette::BUTTON_SIZE,KisPopupPalette::BUTTON_SIZE);
+    chooseColor->setIcon(* (new QIcon (":/images/change_color.gif")));
+    chooseColor->setStyleSheet("* { background-color: rgba(232,231,230,255) }");
+    connect(chooseColor, SIGNAL(clicked()), this, SLOT(slotPickNewColor()));
 
     m_colorLayout = new FlowLayout(5);
-    m_colorLayout->addWidget(m_chooseColor);
+    m_colorLayout->addWidget(chooseColor);
 
-    m_tempLayout = new QVBoxLayout();
-    m_tempLayout->addLayout(m_colorLayout);
-    m_tempLayout->setContentsMargins(5,0,5,0);
+    tempLayout = new QVBoxLayout();
+    tempLayout->addLayout(m_colorLayout);
+    tempLayout->setContentsMargins(5,0,5,0);
 
-    m_colorWidget = new QWidget();
-    m_colorWidget->setLayout(m_tempLayout);
+    QWidget* colorWidget = new QWidget();
+    colorWidget->setLayout(tempLayout);
+    colorWidget->setStyleSheet("* { background-color: rgba(0,0,0,128) }");
 
     //adding items
-    addItem(m_brushButtonWidget, "Favorite Brushes");
-    addItem(m_colorWidget, "Recently Used Colors");
+    addItem(brushButtonWidget, "Favorite Brushes");
+    addItem(colorWidget, "Recently Used Colors");
 
     /****************************REMOVE THIS LATER**********************************/
 //    this->setCurrentIndex(1);
     /****************************REMOVE THIS LATER**********************************/
 
-    //clean up
-    m_chooseColor = 0;
-    m_tempLayout = 0;
-    m_colorWidget = 0;
-    m_brushButtonWidget = 0;
+    setStyleSheet("* { background-color: rgba(0,0,0,0) }");
 
+    //clean up
+    chooseColor = 0;
+    tempLayout = 0;
+    colorWidget = 0;
+    brushButtonWidget = 0;
 }
 
 void KisPopupPalette::addFavoriteBrushButton(KisFavoriteBrushData* brush)
@@ -233,9 +236,7 @@ KisPopupPalette::~KisPopupPalette()
 {
     m_resourceManager = 0;
     delete m_brushButtonLayout;
-    delete m_brushButtonWidget;
     delete m_colorLayout;
-    delete m_colorWidget;
 }
 
 void KisPopupPalette::updatePalette()

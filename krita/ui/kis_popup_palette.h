@@ -69,11 +69,9 @@ private:
 
     /**The Layout for favorite brushes on the palette**/
     FlowLayout *m_brushButtonLayout;
-    QWidget *m_brushButtonWidget;
 
     /**The Layout for recently used colors on the palette**/
     FlowLayout *m_colorLayout;
-    QWidget *m_colorWidget;
 
 
 private slots:

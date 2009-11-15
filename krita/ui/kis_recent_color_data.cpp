@@ -32,8 +32,7 @@ KisRecentColorData::KisRecentColorData(QColor *newColor)
 
     //setting color
     char str[45];
-    sprintf(str, "* { background-color: rgb(%i,%i,%i) }", color()->red(), color()->green()
-            ,color()->blue());
+    sprintf(str, "* { background-color: rgb(%i,%i,%i) }", color()->red(), color()->green(),color()->blue());
 
     m_button->setStyleSheet(str);
 

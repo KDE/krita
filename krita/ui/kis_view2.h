@@ -183,7 +183,7 @@ public:  // Krita specific interfaces
 signals:
 
     void sigLoadingFinished();
-    void favoritePaletteCalled();
+    void favoritePaletteCalled(QMouseEvent*);
 
 protected:
 

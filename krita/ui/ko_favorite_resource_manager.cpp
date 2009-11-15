@@ -67,7 +67,7 @@ void KoFavoriteResourceManager::slotChangePaintopLabel()
 }
 
 //Popup Palette
-void KoFavoriteResourceManager::slotShowPopupPalette()
+void KoFavoriteResourceManager::slotShowPopupPalette(QMouseEvent *e)
 {
     m_popupPalette->setVisible(!m_popupPalette->isVisible());
 }

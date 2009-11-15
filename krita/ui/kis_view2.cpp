@@ -777,7 +777,7 @@ void KisView2::setFavoriteResourceManager(KisPaintopBox* paintopBox)
 {
     qDebug() << "KisView2: Setting favoriteResourceManager";
     m_d->favoriteResourceManager = new KoFavoriteResourceManager(paintopBox, m_d->canvas->canvasWidget());
-    connect(this, SIGNAL(favoritePaletteCalled()), m_d->favoriteResourceManager, SLOT(slotShowPopupPalette()));
+    connect(this, SIGNAL(favoritePaletteCalled(QMouseEvent*)), m_d->favoriteResourceManager, SLOT(slotShowPopupPalette(QMouseEvent*)));
 
 //    m_d->favoriteResourceManager()->setPopupPaletteParent(canvasWidget);
 }

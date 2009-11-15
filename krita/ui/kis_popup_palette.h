@@ -32,6 +32,7 @@ class QWidget;
 class QToolButton;
 class QSize;
 
+
 class KisPopupPalette : public QToolBox
 {
     Q_OBJECT;

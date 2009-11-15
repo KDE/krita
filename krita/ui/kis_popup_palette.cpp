@@ -60,6 +60,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     }
 
     QVBoxLayout *m_tempLayout = new QVBoxLayout();
+//    m_tempLayout->setAutoFillBackground(true);
     m_tempLayout->addLayout(m_brushButtonLayout);
     m_tempLayout->setContentsMargins(5,0,5,0);
 
@@ -78,6 +79,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     m_colorLayout->addWidget(m_chooseColor);
 
     m_tempLayout = new QVBoxLayout();
+//    m_tempLayout->setAutoFillBackground(true);
     m_tempLayout->addLayout(m_colorLayout);
     m_tempLayout->setContentsMargins(5,0,5,0);
 
@@ -203,7 +205,7 @@ QSize KisPopupPalette::sizeHint() const
     return QSize(250, 150);
 }
 
- void ShapedClock::mousePressEvent(QMouseEvent *event)
+ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
  {
      if (event->button() == Qt::LeftButton) {
          dragPosition = event->globalPos() - frameGeometry().topLeft();

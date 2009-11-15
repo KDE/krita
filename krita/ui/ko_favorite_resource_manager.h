@@ -33,6 +33,7 @@ class KisPopupPalette;
 class KisPaintopBox;
 class KisPaletteManager;
 class KisView2;
+class QMouseEvent;
 
 class KoFavoriteResourceManager : public QObject
 {
@@ -73,7 +74,7 @@ public:
 public slots:
     void slotChangeCurrentPaintOp(KisPaintOpPresetSP);
     void slotChangePaintopLabel();
-    void slotShowPopupPalette();
+    void slotShowPopupPalette(QMouseEvent *e);
 
 private:
     KisPaletteManager *m_favoriteBrushManager;

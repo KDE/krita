@@ -26,11 +26,8 @@ public:
     KisShapeOptionsWidget(QWidget *parent = 0)
             : QWidget(parent) {
         setupUi(this);
-        QObject::connect(proportionalBox, SIGNAL(clicked(bool)), widthSpin, SLOT(setDisabled(bool)));
     }
 
-// TODO join QSlider with QDoubleSpinBox with signal slot somehow
-    
 };
 
 KisSprayShapeOption::KisSprayShapeOption()
@@ -47,6 +44,9 @@ KisSprayShapeOption::KisSprayShapeOption()
     connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->gaussBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
 
+    connect(m_options->randomSlider,SIGNAL(valueChanged(int)),this,SLOT(randomValueChanged(int)));
+    connect(m_options->followSlider,SIGNAL(valueChanged(int)),this,SLOT(followValueChanged(int)));
+    
     setConfigurationPage(m_options);
 }
 
@@ -155,4 +155,18 @@ bool KisSprayShapeOption::randomRotation() const
 qreal KisSprayShapeOption::randomRotationWeight() const
 {
     return m_options->randomWeightSPBox->value();
+}
+
+
+void KisSprayShapeOption::randomValueChanged(int value)
+{
+    qreal relative = value / (qreal)m_options->randomSlider->maximum() ;
+    m_options->randomWeightSPBox->setValue( relative * m_options->randomWeightSPBox->maximum() );
+}
+
+
+void KisSprayShapeOption::followValueChanged(int value)
+{
+    qreal relative = value / (qreal)m_options->followSlider->maximum() ;
+    m_options->followCursorWeightSPBox->setValue( relative * m_options->followCursorWeightSPBox->maximum() );
 }

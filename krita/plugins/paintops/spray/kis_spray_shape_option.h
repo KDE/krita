@@ -23,6 +23,9 @@ class KisShapeOptionsWidget;
 
 class KisSprayShapeOption : public KisPaintOpOption
 {
+
+    Q_OBJECT
+
 public:
     KisSprayShapeOption();
     ~KisSprayShapeOption();
@@ -59,8 +62,10 @@ public:
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
     KisShapeOptionsWidget * m_options;
-    
 
+private slots:
+            void randomValueChanged(int value);
+            void followValueChanged(int value);
 };
 
 #endif // KIS_SPRAY_SHAPE_OPTION_H

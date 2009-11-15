@@ -145,3 +145,14 @@ qreal KisSprayShapeOption::followCursorWeigth() const
 }
 
 
+
+bool KisSprayShapeOption::randomRotation() const
+{
+    return m_options->randomRotation->isChecked();
+}
+
+
+qreal KisSprayShapeOption::randomRotationWeight() const
+{
+    return m_options->randomWeightSPBox->value();
+}

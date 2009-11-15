@@ -44,6 +44,9 @@ public:
 
     bool fixedRotation() const;
     int fixedAngle() const;
+   
+    bool randomRotation() const;
+    qreal randomRotationWeight() const;
     
     bool followCursor() const;
     qreal followCursorWeigth() const;

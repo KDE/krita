@@ -254,6 +254,19 @@ bool KisSprayPaintOpSettings::fixedRotation() const
 
 
 
+qreal KisSprayPaintOpSettings::randomRotationWeight() const
+{
+    return m_options->m_sprayShapeOption->randomRotationWeight();
+}
+
+
+bool KisSprayPaintOpSettings::randomRotation() const
+{
+    return m_options->m_sprayShapeOption->randomRotation();
+}
+
+
+
 bool KisSprayPaintOpSettings::followCursor() const
 {
     return m_options->m_sprayShapeOption->followCursor();

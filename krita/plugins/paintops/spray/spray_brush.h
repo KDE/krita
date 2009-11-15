@@ -147,7 +147,10 @@ private:
 private:
     /// rotation in radians according the settings (gauss distribution, uniform distribution or fixed angle)
     qreal rotationAngle();
-
+    /// mix a with b.b mix with weight and a with 1.0 - weight 
+    inline qreal linearInterpolation(qreal a, qreal b, qreal weight){
+        return (1.0 - weight) * a + weight * b;
+    }
 };
 
 #endif

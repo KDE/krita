@@ -72,16 +72,23 @@ void SprayBrush::init()
 qreal SprayBrush::rotationAngle()
 {
     Q_ASSERT(!m_settings);
-
+    qreal rotation = 0.0;
+    
+    
     if ( m_settings->fixedRotation() ){
-        return m_settings->fixedAngle() * (M_PI/180.0);
+        rotation = m_settings->fixedAngle() * (M_PI/180.0);
     }
     
-    if (m_settings->gaussian()) {
-            return M_PI * 2.0 * qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0);
-    } else {
-        return M_PI * 2.0 * drand48();
+    if (m_settings->randomRotation() ){
+        
+        if (m_settings->gaussian()) {
+                rotation = linearInterpolation(rotation ,M_PI * 2.0 * qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0), m_settings->randomRotationWeight());
+        } else {
+                rotation = linearInterpolation(rotation, M_PI * 2.0 * drand48(), m_settings->randomRotationWeight());
+        }
     }
+ 
+    return rotation;
 }
 
 
@@ -153,7 +160,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
         rotationZ = rotationAngle();
         
         if (m_settings->followCursor()){
-            rotationZ = (1.0 - m_settings->followCursorWeigth()) * rotationZ + m_settings->followCursorWeigth() * angle;
+            rotationZ = linearInterpolation( rotationZ,angle,m_settings->followCursorWeigth() );
         }
 
         // generate polar coordinate

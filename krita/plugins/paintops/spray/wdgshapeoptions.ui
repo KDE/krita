@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>425</width>
-    <height>345</height>
+    <height>365</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,7 +22,7 @@
   <property name="minimumSize">
    <size>
     <width>425</width>
-    <height>345</height>
+    <height>365</height>
    </size>
   </property>
   <widget class="QComboBox" name="shapeBox">
@@ -69,23 +69,23 @@
      <x>0</x>
      <y>200</y>
      <width>421</width>
-     <height>101</height>
+     <height>131</height>
     </rect>
    </property>
    <property name="title">
     <string>Rotation</string>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>30</y>
+      <y>34</y>
       <width>401</width>
-      <height>66</height>
+      <height>94</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="0" column="0" rowspan="2">
+     <item row="0" column="0">
       <widget class="QCheckBox" name="fixedRotation">
        <property name="text">
         <string>Constant</string>
@@ -95,7 +95,26 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2" rowspan="2">
+     <item row="0" column="1">
+      <widget class="QSlider" name="angleSlider">
+       <property name="maximum">
+        <number>360</number>
+       </property>
+       <property name="pageStep">
+        <number>20</number>
+       </property>
+       <property name="value">
+        <number>30</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
       <widget class="QSpinBox" name="fixedRotationSPBox">
        <property name="enabled">
         <bool>false</bool>
@@ -114,22 +133,45 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="randomRotation">
+       <property name="text">
+        <string>Random</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="1">
-      <widget class="QSlider" name="angleSlider">
+      <widget class="QSlider" name="randomSlider">
        <property name="maximum">
-        <number>360</number>
+        <number>100</number>
        </property>
        <property name="pageStep">
-        <number>20</number>
+        <number>5</number>
        </property>
        <property name="value">
-        <number>30</number>
+        <number>100</number>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
        <property name="tickPosition">
         <enum>QSlider::TicksAbove</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QDoubleSpinBox" name="randomWeightSPBox">
+       <property name="decimals">
+        <number>2</number>
+       </property>
+       <property name="maximum">
+        <double>1.000000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -175,7 +217,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -217,7 +259,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>13</x>
@@ -301,7 +343,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -330,11 +372,11 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>300</y>
+     <y>330</y>
      <width>401</width>
      <height>28</height>
     </rect>

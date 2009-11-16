@@ -250,14 +250,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     KisPaintOpPresetSP preset =
         activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice());
 
-    setCurrentPaintop(preset);
-
-}
-
-void KisPaintopBox::setCurrentPaintop (KisPaintOpPresetSP preset)
-{
-    KoID paintop = preset->paintOp();
-
     if (preset != 0 && preset->settings()) {
         if (!m_paintopOptionWidgets.contains(paintop)) {
         m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createSettingsWidget(this);

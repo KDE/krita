@@ -66,7 +66,6 @@ public:
     KisPaintOpPresetSP paintOpPresetSP(KoID * = 0);
     const KoID & currentPaintop();
     void setCurrentPaintop(const KoID & paintop);
-    void setCurrentPaintop(KisPaintOpPresetSP);
     QPixmap paintopPixmap(const KoID & paintop);
     ~KisPaintopBox();
 

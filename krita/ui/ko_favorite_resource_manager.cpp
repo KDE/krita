@@ -165,7 +165,7 @@ int KoFavoriteResourceManager::favoriteBrushesTotal()
 void KoFavoriteResourceManager::slotChangeCurrentPaintOp(KisPaintOpPresetSP brush)
 {
     qDebug() << "[KoFavoriteResourceManager] Calling brush: " << brush->paintOp().id();
-    m_paintopBox->setCurrentPaintop(brush);
+    m_paintopBox->setCurrentPaintop(brush->paintOp());
     m_popupPalette->setVisible(false); //automatically close the palette after a button is clicked.
     return;
 }

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008, 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,18 +20,12 @@
 #ifndef KIS_CHALK_PAINTOP_H_
 #define KIS_CHALK_PAINTOP_H_
 
-#include <QColor>
-//#include <QMutex>
-
-#include <klocale.h>
 #include <kis_paintop.h>
 #include <kis_types.h>
 
 #include "chalk_brush.h"
-
 #include "kis_chalk_paintop_settings.h"
 
-class QPointF;
 class KisPainter;
 
 class KisChalkPaintOp : public KisPaintOp

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=DigitalMixer
+Name[es]=Mezclador digital
 Name[et]=Digitaalne värvisegaja
 Name[pt]=Mistura Digital
 Name[pt_BR]=Mistura Digital
@@ -7,6 +8,7 @@ Name[sv]=Digitalmixer
 Name[uk]=Цифровий мікшер
 Name[x-test]=xxDigitalMixerxx
 Comment=DigitalMixer
+Comment[es]=Mezclador digital
 Comment[et]=Digitaalne värvisegaja
 Comment[pt]=Mistura Digital
 Comment[pt_BR]=Mistura Digital

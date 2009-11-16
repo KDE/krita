@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@
 
 #include "kis_chalk_paintop_settings_widget.h"
 
+#include <kis_pressure_opacity_option.h>
+
 #include <config-opengl.h>
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -41,8 +43,6 @@ class KisChalkPaintOpSettings : public KisPaintOpSettings
 {
 
 public:
-
-
     KisChalkPaintOpSettings();
     virtual ~KisChalkPaintOpSettings() {}
 
@@ -61,8 +61,10 @@ public:
 
     KisPaintOpSettingsSP clone() const;
 
+    // boiler-plate code
     int radius() const;
-
+    KisPressureOpacityOption * opacityOption() const;
+    
 #if defined(HAVE_OPENGL)
     QString modelName() const;
 #endif

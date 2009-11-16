@@ -35,12 +35,15 @@
 #include <kis_paintop.h>
 #include <kis_paint_information.h>
 
+#include <kis_pressure_opacity_option.h>
+
 KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
         , m_settings(settings)
         , m_image(image)
 {
     m_chalkBrush.setRadius(settings->radius());
+    settings->opacityOption()->sensor()->reset();
 }
 
 KisChalkPaintOp::~KisChalkPaintOp()
@@ -62,10 +65,11 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     x1 = info.pos().x();
     y1 = info.pos().y();
 
+    quint8 origOpacity = m_settings->opacityOption()->apply(painter(), info);
     m_chalkBrush.paint(m_dab, x1, y1, painter()->paintColor());
 
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-
+    painter()->setOpacity(origOpacity);
 }

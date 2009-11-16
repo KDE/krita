@@ -97,6 +97,12 @@ QRectF KisChalkPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
 
 
 
+KisPressureOpacityOption* KisChalkPaintOpSettings::opacityOption() const
+{
+    return m_options->m_opacityOption;
+}
+
+
 #if defined(HAVE_OPENGL)
 QString KisChalkPaintOpSettings::modelName() const
 {

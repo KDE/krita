@@ -26,6 +26,7 @@
 
 class KisPaintActionTypeOption;
 class KisChalkOpOption;
+class KisPressureOpacityOption;
 
 class KisChalkPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
@@ -40,6 +41,7 @@ public:
 public:
     KisPaintActionTypeOption* m_paintActionTypeOption;
     KisChalkOpOption* m_chalkOption;
+    KisPressureOpacityOption * m_opacityOption;
 
 };
 

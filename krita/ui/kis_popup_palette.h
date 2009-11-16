@@ -54,10 +54,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
 
-    /**testing --> will be used for showing the palette
-       (double click on the canvas) **/
-    void mouseDoubleClickEvent ( QMouseEvent * event );
-
 private:
     KoFavoriteResourceManager* m_resourceManager;
 

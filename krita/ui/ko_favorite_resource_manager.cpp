@@ -34,6 +34,7 @@
 #include <ui_wdgpaintoppresets.h>
 #include <QColor>
 #include "kis_view2.h"
+#include <QMouseEvent>
 
 #ifndef _MSC_EXTENSIONS
 const int KoFavoriteResourceManager::MAX_FAVORITE_BRUSHES;
@@ -60,6 +61,18 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
     }
 
     m_popupPalette = new KisPopupPalette(this, popupParent);
+    m_popupPalette->setVisible(false);
+}
+
+QStringList KoFavoriteResourceManager::favoriteBrushesStringList()
+{
+    QStringList list;
+    for (int pos = 0; pos < m_favoriteBrushesList.size(); pos++)
+    {
+        list.append(m_favoriteBrushesList.at(pos)->paintopPreset()->paintOp().id());
+    }
+
+    return list;
 }
 
 void KoFavoriteResourceManager::slotChangePaintopLabel()
@@ -69,8 +82,9 @@ void KoFavoriteResourceManager::slotChangePaintopLabel()
 }
 
 //Popup Palette
-void KoFavoriteResourceManager::slotShowPopupPalette()
+void KoFavoriteResourceManager::slotShowPopupPalette(QMouseEvent* e)
 {
+    m_popupPalette->move(e->pos());
     m_popupPalette->setVisible(!m_popupPalette->isVisible());
 }
 
@@ -107,7 +121,7 @@ int KoFavoriteResourceManager::addFavoriteBrush (KisPaintOpPresetSP newBrush)
         m_popupPalette->setVisible(true);
         m_popupPalette->addFavoriteBrushButton(newBrushData);
     }
-    this->saveFavoriteBrushes();
+    saveFavoriteBrushes();
 
     return -1;
 }
@@ -133,6 +147,11 @@ void KoFavoriteResourceManager::removeFavoriteBrush(int pos)
     saveFavoriteBrushes();
 }
 
+QToolButton* KoFavoriteResourceManager::favoriteBrushButton(int pos)
+{
+    return m_favoriteBrushesList.at(pos)->paintopButton();
+}
+
 bool KoFavoriteResourceManager::isFavoriteBrushesFull()
 {
     return m_favoriteBrushesList.size() == KoFavoriteResourceManager::MAX_FAVORITE_BRUSHES;
@@ -141,11 +160,6 @@ bool KoFavoriteResourceManager::isFavoriteBrushesFull()
 int KoFavoriteResourceManager::favoriteBrushesTotal()
 {
     return m_favoriteBrushesList.size();
-}
-
-KisFavoriteBrushData* KoFavoriteResourceManager::favoriteBrush(int pos)
-{
-    return m_favoriteBrushesList.at(pos);
 }
 
 void KoFavoriteResourceManager::slotChangeCurrentPaintOp(KisPaintOpPresetSP brush)

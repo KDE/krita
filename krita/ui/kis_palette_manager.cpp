@@ -121,19 +121,12 @@ void KisPaletteManager::changeCurrentBrushLabel()
 
 void KisPaletteManager::resetDataModel()
 {
-    int pos = 0;
-
-    for (pos=0; pos < m_resourceManager->favoriteBrushesTotal(); pos ++)
-    {
-        m_nameList.append(m_resourceManager->favoriteBrush(pos)->paintopPreset()->paintOp().id());
-    }
-
+    m_nameList = m_resourceManager->favoriteBrushesStringList();
     m_model->setStringList(m_nameList);
 }
 
 void KisPaletteManager::slotAddBrush()
 {
-//    if (m_resourceManager->isFavoriteBrushesFull()) return;
 
     KisPaintOpPresetSP newBrush = m_paintOpBox->paintOpPresetSP();
     int pos = m_resourceManager->addFavoriteBrush(newBrush);

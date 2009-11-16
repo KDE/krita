@@ -30,6 +30,7 @@
 
 class QDragEnterEvent;
 class QDropEvent;
+class QMouseEvent;
 
 class KisPaintOpPreset;
 
@@ -183,7 +184,7 @@ public:  // Krita specific interfaces
 signals:
 
     void sigLoadingFinished();
-    void favoritePaletteCalled();
+    void favoritePaletteCalled(QMouseEvent *);
 
 protected:
 

@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <QTime>
 #include <QLabel>
+#include <QMouseEvent>
 
 #include <kis_debug.h>
 
@@ -240,7 +241,7 @@ void KisCanvas2::createQPainterCanvas()
     canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
 
     connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&)), this, SLOT(updateRulers()));
-    connect(canvasWidget, SIGNAL(doubleClickQPainterCanvas()), m_d->view, SIGNAL(favoritePaletteCalled()) );
+    connect(canvasWidget, SIGNAL(doubleClickQPainterCanvas(QMouseEvent *)), m_d->view, SIGNAL(favoritePaletteCalled(QMouseEvent *)) );
 
     setCanvasWidget(canvasWidget);
 }

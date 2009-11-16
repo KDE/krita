@@ -33,6 +33,8 @@ class KisPopupPalette;
 class KisPaintopBox;
 class KisPaletteManager;
 class KisView2;
+class QStringList;
+class QToolButton;
 class QMouseEvent;
 
 class KoFavoriteResourceManager : public QObject
@@ -50,6 +52,7 @@ public:
     /************************************Popup Palette************************************/
 
     void showPaletteManager();
+    QToolButton* favoriteBrushButton(int);
 
     /**********************************Favorite Brushes***********************************/
 
@@ -59,8 +62,8 @@ public:
     int addFavoriteBrush (KisPaintOpPresetSP);
     void removeFavoriteBrush(int);
     int favoriteBrushesTotal();
-    KisFavoriteBrushData* favoriteBrush(int);
-    void saveFavoriteBrushes();
+
+    QStringList favoriteBrushesStringList();
 
 
     /***********************************Recent Colors************************************/
@@ -74,7 +77,7 @@ public:
 public slots:
     void slotChangeCurrentPaintOp(KisPaintOpPresetSP);
     void slotChangePaintopLabel();
-    void slotShowPopupPalette();
+    void slotShowPopupPalette(QMouseEvent *);
 
 private:
     KisPaletteManager *m_favoriteBrushManager;
@@ -88,6 +91,7 @@ private:
 
     bool isFavoriteBrushesFull();
     int isInRecentColor(QColor&);
+    void saveFavoriteBrushes();
 };
 
 #endif // KIS_FAVORITE_BRUSH_DATA_H

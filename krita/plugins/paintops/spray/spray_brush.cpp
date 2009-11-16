@@ -71,7 +71,7 @@ void SprayBrush::init()
 
 qreal SprayBrush::rotationAngle()
 {
-    Q_ASSERT(!m_settings);
+//    Q_ASSERT(!m_settings);
     qreal rotation = 0.0;
     
     

@@ -24,6 +24,7 @@
 #include "kis_abstract_canvas_widget.h"
 #include "kis_prescaled_projection.h"
 
+class QMouseEvent;
 class QImage;
 class QPaintEvent;
 class QPoint;
@@ -135,7 +136,7 @@ signals:
      */
     void documentOriginChanged(const QPoint &origin);
 
-    void doubleClickQPainterCanvas();
+    void doubleClickQPainterCanvas(QMouseEvent *);
 
 
 private slots:

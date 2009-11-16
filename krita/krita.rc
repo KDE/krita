@@ -151,7 +151,6 @@
      <Separator/>
      <Action name="paintops"/>
      <Action name="paintop_options"/>
-     <Separator/>
      <Action name="palette_manager"/>
 </ToolBar>
 

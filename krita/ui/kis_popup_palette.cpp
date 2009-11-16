@@ -41,18 +41,13 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
 {
     colorFoo=0;
 
-//    QAction *quitAction = new QAction(tr("E&xit"), this);
-//    quitAction->setShortcut(tr("Ctrl+P"));
-//    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
-//    addAction(quitAction);
-
     //FAVORITE BRUSHES
     m_brushButtonLayout = new FlowLayout(5);
 
     for (int pos = 0; pos < m_resourceManager->favoriteBrushesTotal(); pos ++)
     {
         // for paintops, the tooloptionbutton appears to be never set
-        QWidget* w = m_resourceManager->favoriteBrush(pos)->paintopButton();
+        QWidget* w = m_resourceManager->favoriteBrushButton(pos);
         if (w) {
             m_brushButtonLayout->addWidget(w);
         }
@@ -103,6 +98,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     tempLayout = 0;
     colorWidget = 0;
     brushButtonWidget = 0;
+
 }
 
 void KisPopupPalette::addFavoriteBrushButton(KisFavoriteBrushData* brush)
@@ -223,16 +219,6 @@ QSize KisPopupPalette::sizeHint() const
          event->accept();
      }
  }
-
- void KisPopupPalette::mouseDoubleClickEvent(QMouseEvent *event)
- {
-     if (event->buttons() && Qt::LeftButton)
-     {
-         qDebug() << "double click! double click!! lalalalala";
-         event->accept();
-     }
- }
-
 
 KisPopupPalette::~KisPopupPalette()
 {

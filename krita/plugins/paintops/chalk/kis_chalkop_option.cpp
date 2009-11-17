@@ -52,10 +52,19 @@ int KisChalkOpOption::radius() const
     return m_options->radiusSpinBox->value();
 }
 
-void KisChalkOpOption::setRadius(int radius)
+
+void KisChalkOpOption::setRadius(int radius) const
 {
-    m_options->radiusSpinBox->setValue(radius);
+    m_options->radiusSpinBox->setValue( radius );
 }
+
+
+
+bool KisChalkOpOption::inkDepletion() const
+{
+    return m_options->inkDepletionCHBox->isChecked();
+}
+
 
 void KisChalkOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
@@ -68,7 +77,3 @@ void KisChalkOpOption::readOptionSetting(const KisPropertiesConfiguration* setti
 }
 
 
-void KisChalkOpOption::setRadius(int radius) const
-{
-    m_options->radiusSpinBox->setValue( radius );
-}

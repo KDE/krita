@@ -63,7 +63,10 @@ public:
 
     // boiler-plate code
     int radius() const;
+    bool inkDepletion() const;
+    
     KisPressureOpacityOption * opacityOption() const;
+    
     
 #if defined(HAVE_OPENGL)
     QString modelName() const;

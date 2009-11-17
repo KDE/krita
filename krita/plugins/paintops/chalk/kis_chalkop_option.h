@@ -31,8 +31,9 @@ public:
 
     void setRadius(int radius) const;
     int radius() const;
-    void setRadius(int radius);
 
+    bool inkDepletion() const; 
+    
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 

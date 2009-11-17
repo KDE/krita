@@ -33,24 +33,20 @@
 #define srand48 srand
 inline double drand48()
 {
-    return double(rand()) / RAND_MAX;
+    return double(rand() / RAND_MAX);
 }
 #endif
 
-ChalkBrush::ChalkBrush(const BrushShape &initialShape, KoColor inkColor)
-{
-    m_initialShape = initialShape;
-    m_inkColor = inkColor;
-    m_counter = 0;
-}
-
 ChalkBrush::ChalkBrush()
 {
-    m_radius = 5;
+    m_radius = 0;
     m_counter = 0;
-    init();
+    m_inkDepletion = true;
 }
 
+ChalkBrush::~ChalkBrush()
+{
+}
 
 void ChalkBrush::init()
 {
@@ -87,9 +83,12 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     KoColorTransformation* transfo = dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
     transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
 
-    int opacity = static_cast<int>((1.0f + result) * OPACITY_OPAQUE);
-    m_inkColor.setOpacity(opacity);
-
+    if (m_inkDepletion){
+        int opacity = qRound((1.0f + result) * OPACITY_OPAQUE);
+        m_inkColor.setOpacity(opacity);
+    }
+    
+    int dx, dy;
     for (int i = 0; i < m_bristles.size(); i++) {
         bristle = &m_bristles[i];
 
@@ -99,9 +98,9 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
             continue;
         }
 
-        int dx, dy;
-        dx = (int)(x + bristle->x());
-        dy = (int)(y + bristle->y());
+        
+        dx = qRound(x + bristle->x());
+        dy = qRound(y + bristle->y());
 
         accessor.moveTo(dx, dy);
         memcpy(accessor.rawData(), m_inkColor.data(), pixelSize);
@@ -109,6 +108,3 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     }
 }
 
-ChalkBrush::~ChalkBrush()
-{
-}

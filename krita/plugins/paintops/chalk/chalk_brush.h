@@ -31,7 +31,6 @@ class ChalkBrush
 {
 
 public:
-    ChalkBrush(const BrushShape &initialShape, KoColor inkColor);
     ChalkBrush();
     ~ChalkBrush();
     ChalkBrush(KoColor inkColor, BrushShape shape);
@@ -41,6 +40,10 @@ public:
         m_radius = radius;
         init();
     }
+    
+    void activateInkDepletion(bool activate){
+        m_inkDepletion = activate;
+    }
 
 private:
     void init();
@@ -49,6 +52,7 @@ private:
     KoColor m_inkColor;
     int m_counter;
     int m_radius;
+    bool m_inkDepletion;
 
 };
 

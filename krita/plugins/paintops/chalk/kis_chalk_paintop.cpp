@@ -43,6 +43,7 @@ KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPai
         , m_image(image)
 {
     m_chalkBrush.setRadius(settings->radius());
+    m_chalkBrush.activateInkDepletion( settings->inkDepletion() );
     settings->opacityOption()->sensor()->reset();
 }
 

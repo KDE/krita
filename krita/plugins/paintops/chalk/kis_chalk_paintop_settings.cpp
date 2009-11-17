@@ -58,11 +58,6 @@ void KisChalkPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) con
     delete settings;
 }
 
-int KisChalkPaintOpSettings::radius() const
-{
-    return m_options->m_chalkOption->radius();
-}
-
 
 void KisChalkPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
 {
@@ -95,6 +90,10 @@ QRectF KisChalkPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
     return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
 }
 
+int KisChalkPaintOpSettings::radius() const
+{
+    return m_options->m_chalkOption->radius();
+}
 
 
 KisPressureOpacityOption* KisChalkPaintOpSettings::opacityOption() const
@@ -102,6 +101,12 @@ KisPressureOpacityOption* KisChalkPaintOpSettings::opacityOption() const
     return m_options->m_opacityOption;
 }
 
+
+
+bool KisChalkPaintOpSettings::inkDepletion() const
+{
+    return m_options->m_chalkOption->inkDepletion();
+}
 
 #if defined(HAVE_OPENGL)
 QString KisChalkPaintOpSettings::modelName() const

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>330</width>
-    <height>76</height>
+    <height>100</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,43 +25,57 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>0</x>
      <y>10</y>
-     <width>301</width>
-     <height>30</height>
+     <width>331</width>
+     <height>59</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="radiusLabel">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="radiusLabel">
+        <property name="text">
+         <string>radius</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="radiusSpinBox">
+        <property name="maximum">
+         <number>400</number>
+        </property>
+        <property name="value">
+         <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="horizontalSlider">
+        <property name="maximum">
+         <number>400</number>
+        </property>
+        <property name="value">
+         <number>5</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBelow</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="inkDepletionCHBox">
       <property name="text">
-       <string>radius</string>
+       <string>Ink depletion</string>
       </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QSpinBox" name="radiusSpinBox">
-      <property name="maximum">
-       <number>400</number>
-      </property>
-      <property name="value">
-       <number>5</number>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QSlider" name="horizontalSlider">
-      <property name="maximum">
-       <number>400</number>
-      </property>
-      <property name="value">
-       <number>5</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TicksBelow</enum>
+      <property name="checked">
+       <bool>true</bool>
       </property>
      </widget>
     </item>

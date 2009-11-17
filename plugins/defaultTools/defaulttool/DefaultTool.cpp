@@ -654,7 +654,7 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
         QList<QPointF> prevPos;
         QList<QPointF> newPos;
         QList<KoShape*> shapes;
-        foreach(KoShape* shape, koSelection()->selectedShapes(KoFlake::StrippedSelection)) {
+        foreach(KoShape* shape, koSelection()->selectedShapes(KoFlake::TopLevelSelection)) {
             if (shape->isGeometryProtected())
                 continue;
             shapes.append(shape);

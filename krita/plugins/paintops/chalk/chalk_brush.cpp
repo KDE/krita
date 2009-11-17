@@ -33,7 +33,7 @@
 #define srand48 srand
 inline double drand48()
 {
-    return double(rand() / RAND_MAX);
+    return double(rand()) / RAND_MAX;
 }
 #endif
 

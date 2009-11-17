@@ -469,7 +469,7 @@ void jp2Converter::cancel()
 
 int jp2Converter::getFileFormat(const KUrl& uri) const
 {
-    QString extension = QFileInfo(uri.fileName()).suffix();
+    QString extension = QFileInfo(uri.fileName()).suffix().toLower();
     if (extension == "j2k" || extension == "j2c") {
         return J2K_CFMT;
     } else if (extension == "jp2") {

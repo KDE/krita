@@ -2,6 +2,7 @@
 Name=DigitalMixer
 Name[es]=Mezclador digital
 Name[et]=Digitaalne värvisegaja
+Name[nl]=DigitalMixer
 Name[pt]=Mistura Digital
 Name[pt_BR]=Mistura Digital
 Name[sv]=Digitalmixer
@@ -10,6 +11,7 @@ Name[x-test]=xxDigitalMixerxx
 Comment=DigitalMixer
 Comment[es]=Mezclador digital
 Comment[et]=Digitaalne värvisegaja
+Comment[nl]=DigitalMixer
 Comment[pt]=Mistura Digital
 Comment[pt_BR]=Mistura Digital
 Comment[sv]=Digitalmixer

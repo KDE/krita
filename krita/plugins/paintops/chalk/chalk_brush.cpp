@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,12 +37,16 @@ inline double drand48()
 }
 #endif
 
-ChalkBrush::ChalkBrush()
+
+
+ChalkBrush::ChalkBrush(const KisChalkPaintOpSettings* settings)
 {
-    m_radius = 0;
     m_counter = 0;
-    m_inkDepletion = true;
+    m_settings = settings;
+    m_radius = settings->radius();
+    init();
 }
+
 
 ChalkBrush::~ChalkBrush()
 {
@@ -59,36 +63,38 @@ void ChalkBrush::init()
 
 void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
-
     m_inkColor = color;
     m_counter++;
-    qreal decr = (m_counter * m_counter * m_counter) / 1000000.0f;
 
     Bristle *bristle;
 
     qint32 pixelSize = dev->colorSpace()->pixelSize();
     KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
 
-    qreal dirt, result;
+    qreal result;
+    if (m_settings->inkDepletion()){
+        //count decrementing of saturation and opacity
+        result = log((qreal)m_counter);
+        result = -(result * 10) / 100.0;
 
-    //count decrementing of saturation and alpha
-    result = log((qreal)m_counter);
-    result = -(result * 10) / 100.0;
+        if ( m_settings->saturation() ){
+            QHash<QString, QVariant> params;
+            params["h"] = 0.0;
+            params["s"] = result;
+            params["v"] = 0.0;
 
-    QHash<QString, QVariant> params;
-    params["h"] = 0.0;
-    params["s"] = result;
-    params["v"] = 0.0;
+            KoColorTransformation* transfo = dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
+            transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
+        }
 
-    KoColorTransformation* transfo = dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
-    transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
-
-    if (m_inkDepletion){
-        int opacity = qRound((1.0f + result) * OPACITY_OPAQUE);
-        m_inkColor.setOpacity(opacity);
+        if ( m_settings->opacity() ){
+            int opacity = qRound((1.0f + result) * OPACITY_OPAQUE);
+            m_inkColor.setOpacity(opacity);
+        }
     }
     
     int dx, dy;
+    qreal dirt;
     for (int i = 0; i < m_bristles.size(); i++) {
         bristle = &m_bristles[i];
 
@@ -98,13 +104,11 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
             continue;
         }
 
-        
         dx = qRound(x + bristle->x());
         dy = qRound(y + bristle->y());
 
         accessor.moveTo(dx, dy);
         memcpy(accessor.rawData(), m_inkColor.data(), pixelSize);
-        bristle->setInkAmount(1.0f - decr);
     }
 }
 

@@ -56,7 +56,7 @@ private:
     const KisChalkPaintOpSettings* m_settings;
     KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
-    ChalkBrush m_chalkBrush;
+    ChalkBrush * m_chalkBrush;
 };
 
 #endif // KIS_CHALK_PAINTOP_H_

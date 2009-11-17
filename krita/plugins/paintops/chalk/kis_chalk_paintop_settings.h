@@ -64,6 +64,8 @@ public:
     // boiler-plate code
     int radius() const;
     bool inkDepletion() const;
+    bool opacity() const;
+    bool saturation() const;
     
     KisPressureOpacityOption * opacityOption() const;
     

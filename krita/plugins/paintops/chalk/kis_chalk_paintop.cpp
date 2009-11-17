@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,13 +42,13 @@ KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPai
         , m_settings(settings)
         , m_image(image)
 {
-    m_chalkBrush.setRadius(settings->radius());
-    m_chalkBrush.activateInkDepletion( settings->inkDepletion() );
+    m_chalkBrush = new ChalkBrush(settings);
     settings->opacityOption()->sensor()->reset();
 }
 
 KisChalkPaintOp::~KisChalkPaintOp()
 {
+    delete m_chalkBrush;
 }
 
 void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
@@ -67,7 +67,7 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     y1 = info.pos().y();
 
     quint8 origOpacity = m_settings->opacityOption()->apply(painter(), info);
-    m_chalkBrush.paint(m_dab, x1, y1, painter()->paintColor());
+    m_chalkBrush->paint(m_dab, x1, y1, painter()->paintColor());
 
     QRect rc = m_dab->extent();
 

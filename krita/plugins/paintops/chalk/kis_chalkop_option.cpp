@@ -66,6 +66,19 @@ bool KisChalkOpOption::inkDepletion() const
 }
 
 
+
+bool KisChalkOpOption::opacity() const
+{
+    return m_options->opacity->isChecked();
+}
+
+
+bool KisChalkOpOption::saturation() const
+{
+    return m_options->saturation->isChecked();
+}
+
+
 void KisChalkOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     setting->setProperty("Chalk/radius", radius());

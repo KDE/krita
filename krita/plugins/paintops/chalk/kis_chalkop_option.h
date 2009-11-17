@@ -33,6 +33,8 @@ public:
     int radius() const;
 
     bool inkDepletion() const; 
+    bool saturation() const;
+    bool opacity() const;
     
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);

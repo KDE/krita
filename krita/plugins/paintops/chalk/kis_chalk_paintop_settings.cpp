@@ -108,6 +108,19 @@ bool KisChalkPaintOpSettings::inkDepletion() const
     return m_options->m_chalkOption->inkDepletion();
 }
 
+
+bool KisChalkPaintOpSettings::opacity() const
+{
+    return m_options->m_chalkOption->opacity();
+}
+
+
+bool KisChalkPaintOpSettings::saturation() const
+{
+    return m_options->m_chalkOption->saturation();
+}
+
+
 #if defined(HAVE_OPENGL)
 QString KisChalkPaintOpSettings::modelName() const
 {

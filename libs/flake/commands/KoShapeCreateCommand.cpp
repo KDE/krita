@@ -66,6 +66,7 @@ void KoShapeCreateCommand::redo()
         d->shapeParent->addChild(d->shape);
     // the parent has to be there when it is added to the KoShapeControllerBase
     d->controller->addShape(d->shape);
+    d->shapeParent = d->shape->parent(); // update parent if the 'addShape' changed it
     d->deleteShape = false;
 }
 

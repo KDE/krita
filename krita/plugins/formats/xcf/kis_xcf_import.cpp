@@ -290,7 +290,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                     want.t = y + top;
                     want.b = want.t + TILE_HEIGHT;
                     want.r = want.l + TILE_WIDTH;
-                    Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
+                    Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.mask, want);
                     KisHLineIteratorPixel it = mask->paintDevice()->createHLineIterator(x, y, TILE_WIDTH);
                     rgba* data = tile->pixels;
                     for (int v = 0; v < TILE_HEIGHT; ++v) {

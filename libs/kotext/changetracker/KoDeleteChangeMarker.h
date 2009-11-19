@@ -53,6 +53,9 @@ public:
     /// return the change id
     int changeId() const;
 
+    ///Return the position of the marker in the document
+    int position() const;
+
     bool loadOdf(const KoXmlElement &element);
     ///reimplemented
     virtual void saveOdf(KoShapeSavingContext &context);

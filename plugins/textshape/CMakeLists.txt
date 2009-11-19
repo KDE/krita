@@ -59,6 +59,8 @@ SET ( textshape_SRCS
     commands/TextCommandBase.cpp
     commands/TextPasteCommand.cpp
     commands/TextCutCommand.cpp
+    commands/ShowChangesCommand.cpp
+    commands/DeleteCommand.cpp
 )
 
 kde4_add_ui_files(textshape_SRCS

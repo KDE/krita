@@ -711,6 +711,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
                 deleteChangemarker->setChangeId(changeId);
                 KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+                changeElement->setDeleteChangeMarker(deleteChangemarker);
                 changeElement->setEnabled(true);
                 KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
 

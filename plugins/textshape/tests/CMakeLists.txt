@@ -40,6 +40,8 @@ set(TestChangeListCommand_test_SRCS
     ../commands/TextCommandBase.cpp
     ../commands/TextPasteCommand.cpp
     ../commands/TextCutCommand.cpp
+    ../commands/DeleteCommand.cpp
+    ../commands/ShowChangesCommand.cpp
     ../TextTool.cpp
     ../ChangeTracker.cpp
     ../dialogs/FontDia.cpp

@@ -66,6 +66,10 @@ public:
     int getDeleteChangeId(QString title, QTextDocumentFragment selection, int existingChangeId);
 
     KoChangeTrackerElement* elementById(int id);
+    bool removeById(int id, bool freeMemory = true);
+
+    //Returns all the deleted changes
+    int getDeletedChanges(QVector<KoChangeTrackerElement *>& deleteVector);
 
     bool containsInlineChanges(const QTextFormat &format);
     int mergeableId(KoGenChange::Type type, QString &title, int existingId);

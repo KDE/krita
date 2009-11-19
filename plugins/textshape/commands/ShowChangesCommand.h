@@ -1,6 +1,6 @@
 /*
  This file is part of the KDE project
- * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2009 Ganesh Paramasivam <ganesh@crystalfab.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,37 +17,33 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.*/
 
-#include "TextCutCommand.h"
+#ifndef SHOWCHANGECOMMAND_H
+#define SHOWCHANGECOMMAND_H
 
-#include <KoTextEditor.h>
-#include <TextTool.h>
-#include "DeleteCommand.h"
-#include <KAction>
-#include <klocale.h>
+#include <QUndoStack>
+#include "TextCommandBase.h"
 
-TextCutCommand::TextCutCommand(TextTool *tool, QUndoCommand *parent) :
-    QUndoCommand (parent),
-    m_tool(tool),
-    m_first(true)
+class TextTool;
+
+class ShowChangesCommand : public TextCommandBase
 {
-    setText(i18n("Cut"));
-}
+public:
 
-void TextCutCommand::undo()
-{
-    QUndoCommand::undo();
-}
+    ShowChangesCommand(bool shoeChanges, TextTool *tool, QUndoCommand* parent = 0);
+    ~ShowChangesCommand();
 
-void TextCutCommand::redo()
-{
-    if (!m_first) {
-        QUndoCommand::redo();
-    } else {
-        m_first = false;
-        m_tool->copy();
-        if(m_tool->m_actionShowChanges->isChecked())
-          m_tool->m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
-        else
-          m_tool->m_textEditor->deleteChar();
-    }
-}
+    virtual void undo();
+    virtual void redo();
+
+private:
+    void enableDisableChanges();
+    void enableDisableStates(bool showChanges);
+    void insertDeletedChanges();
+    void removeDeletedChanges();
+
+    TextTool *m_tool;
+    bool m_first;
+    bool m_showChanges;
+};
+
+#endif // SHOWCHANGECOMMAND_H

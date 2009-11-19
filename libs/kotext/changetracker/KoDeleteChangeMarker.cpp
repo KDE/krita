@@ -44,6 +44,7 @@ public:
     KoChangeTracker *changeTracker;
     QString text;
     int id;
+    int position;
 };
 
 KoDeleteChangeMarker::KoDeleteChangeMarker(KoChangeTracker* changeTracker)
@@ -77,6 +78,11 @@ int KoDeleteChangeMarker::changeId() const
     return d->id;
 }
 
+int KoDeleteChangeMarker::position() const
+{
+    return d->position;
+}
+
 bool KoDeleteChangeMarker::loadOdf(const KoXmlElement &element)
 {
     Q_UNUSED(element)
@@ -86,63 +92,26 @@ bool KoDeleteChangeMarker::loadOdf(const KoXmlElement &element)
 void KoDeleteChangeMarker::paint(QPainter& painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(posInDocument);
-    Q_UNUSED(document);
-
-    if (!d->changeTracker)
-        return;
-
-    Q_ASSERT(format.isCharFormat());
-
-    if (d->changeTracker->isEnabled() && d->changeTracker->elementById(d->id)->isEnabled() && d->changeTracker->displayDeleted()) {
-        QFont font(format.font(), pd);
-        QTextLayout layout(d->changeTracker->elementById(d->id)->getDeleteData(), font, pd);
-        layout.setCacheEnabled(true);
-        QList<QTextLayout::FormatRange> layouts;
-        QTextLayout::FormatRange range;
-        range.start = 0;
-        range.length = d->changeTracker->elementById(d->id)->getDeleteData().length();
-        range.format = format;
-        range.format.setBackground(QBrush(Qt::red));
-        layouts.append(range);
-        layout.setAdditionalFormats(layouts);
-
-        QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
-        option.setTextDirection(object.textDirection());
-        layout.setTextOption(option);
-        layout.beginLayout();
-        layout.createLine();
-        layout.endLayout();
-        layout.draw(&painter, rect.topLeft());
-    }
 }
 
 void KoDeleteChangeMarker::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
-    Q_UNUSED(posInDocument);
+    Q_UNUSED(document);
+    Q_UNUSED(object);
+    Q_UNUSED(format);
+    Q_UNUSED(pd);
     Q_UNUSED(document);
 
-    if (!d->changeTracker)
-        return;
-
-    Q_ASSERT(format.isCharFormat());
-    QFontMetricsF fm(format.font(), pd);
-
-    if (d->changeTracker->isEnabled() && d->changeTracker->elementById(d->id)->isEnabled() && d->changeTracker->displayDeleted()) {
-        object.setWidth(fm.width(d->changeTracker->elementById(d->id)->getDeleteData()));
-        object.setAscent(fm.ascent());
-        object.setDescent(fm.descent());
-    } else {
-        object.setWidth(0);
-        object.setAscent(fm.ascent());
-        object.setDescent(fm.descent());
-    }
+    d->position = posInDocument;
+    object.setWidth(0);
 }
 
 void KoDeleteChangeMarker::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
 {
+    d->position = posInDocument;
+
     Q_UNUSED(document);
     Q_UNUSED(object);
-    Q_UNUSED(posInDocument);
     Q_UNUSED(format);
 }
 

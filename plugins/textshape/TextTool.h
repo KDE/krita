@@ -264,6 +264,8 @@ private:
     friend class ChangeTracker;
     friend class TextPasteCommand;
     friend class TextCutCommand;
+    friend class ShowChangesCommand;
+    friend class DeleteCommand;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
     QPointer<KoTextEditor> m_textEditor;
@@ -288,6 +290,7 @@ private:
     KAction *m_actionFormatSub;
     KAction *m_actionFormatIncreaseIndent;
     KAction *m_actionFormatDecreaseIndent;
+    KAction *m_actionShowChanges;
     KFontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;
 #ifndef NO_PIGMENT

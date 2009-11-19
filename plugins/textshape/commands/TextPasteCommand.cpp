@@ -30,6 +30,8 @@
 
 #include <QApplication>
 #include <QMimeData>
+#include "DeleteCommand.h"
+#include <KAction>
 
 TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, QUndoCommand *parent)
     : QUndoCommand (parent),
@@ -56,7 +58,10 @@ void TextPasteCommand::redo()
         editor->cursor()->beginEditBlock();
         m_first = false;
         if (editor->hasSelection()) {//TODO
-            editor->deleteChar();
+            if(m_tool->m_actionShowChanges->isChecked())
+              editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
+            else
+              editor->deleteChar();
         }
 
         // check for mime type

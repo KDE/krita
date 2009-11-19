@@ -178,6 +178,14 @@ KoChangeTrackerElement* KoChangeTracker::elementById(int id)
     return d->m_changes.value(id);
 }
 
+bool KoChangeTracker::removeById(int id, bool freeMemory)
+{
+    if (freeMemory) {
+      KoChangeTrackerElement *temp = d->m_changes.value(id);
+      delete temp;
+    }
+    return d->m_changes.remove(id);
+}
 
 bool KoChangeTracker::containsInlineChanges(const QTextFormat &format)
 {
@@ -306,6 +314,21 @@ bool KoChangeTracker::completeLoading(KoStore *)
 bool KoChangeTracker::completeSaving(KoStore *, KoXmlWriter *, KoShapeSavingContext *)
 {
     return true;
+}
+
+int KoChangeTracker::getDeletedChanges(QVector<KoChangeTrackerElement *>& deleteVector)
+{
+    int numAppendedItems = 0;
+    foreach(KoChangeTrackerElement *element, d->m_changes.values())
+    {
+        if(element->getChangeType() == KoGenChange::deleteChange)
+        {
+          deleteVector << element;
+          numAppendedItems++;
+        }
+    }
+
+    return numAppendedItems;
 }
 
 #include "KoChangeTracker.moc"

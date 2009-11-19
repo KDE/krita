@@ -27,6 +27,8 @@
 #include <KoGenChange.h>
 
 #include "kotext_export.h"
+#include "KoDeleteChangeMarker.h"
+
 
 class KOTEXT_EXPORT KoChangeTrackerElement
 {
@@ -42,6 +44,9 @@ public:
 
     void setEnabled(bool enabled);
     bool isEnabled() const;
+
+    void setValid(bool valid);
+    bool isValid() const;
 
     void setChangeType(KoGenChange::Type type);
     KoGenChange::Type getChangeType() const;
@@ -70,6 +75,9 @@ public:
     bool hasDeleteData() const;
     void setDeleteData(const QString& data);
     QString getDeleteData() const;
+
+    void setDeleteChangeMarker(KoDeleteChangeMarker *marker);
+    KoDeleteChangeMarker *getDeleteChangeMarker();
 
 private:
     class Private;

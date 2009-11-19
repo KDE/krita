@@ -35,9 +35,12 @@ public:
     QString creator;
     QString date;
     QString extraMetaData;
+    //These two elements are valid for delete changes. Need to move it to a sub-class
     QString deleteData;
+    KoDeleteChangeMarker *marker;
 
     bool enabled;
+    bool valid;
 };
 
 KoChangeTrackerElement::KoChangeTrackerElement(const QString& title, KoGenChange::Type type)
@@ -45,6 +48,7 @@ KoChangeTrackerElement::KoChangeTrackerElement(const QString& title, KoGenChange
 {
     d->title = title;
     d->type = type;
+    d->valid = true;
 }
 
 KoChangeTrackerElement::KoChangeTrackerElement()
@@ -64,6 +68,7 @@ KoChangeTrackerElement::KoChangeTrackerElement(const KoChangeTrackerElement& oth
     d->extraMetaData = other.d->extraMetaData;
     d->deleteData = other.d->deleteData;
     d->enabled = other.d->enabled;
+    d->valid = other.d->valid;
 }
 
 KoChangeTrackerElement::~KoChangeTrackerElement()
@@ -79,6 +84,16 @@ void KoChangeTrackerElement::setEnabled(bool enabled)
 bool KoChangeTrackerElement::isEnabled() const
 {
     return d->enabled;
+}
+
+void KoChangeTrackerElement::setValid(bool valid)
+{
+    d->valid = valid;
+}
+
+bool KoChangeTrackerElement::isValid() const
+{
+    return d->valid;
 }
 
 void KoChangeTrackerElement::setChangeType(KoGenChange::Type type)
@@ -179,5 +194,15 @@ void KoChangeTrackerElement::setDeleteData(const QString& data)
 QString KoChangeTrackerElement::getDeleteData() const
 {
     return d->deleteData;
+}
+
+void KoChangeTrackerElement::setDeleteChangeMarker(KoDeleteChangeMarker *marker)
+{
+    d->marker = marker;
+}
+
+KoDeleteChangeMarker *KoChangeTrackerElement::getDeleteChangeMarker()
+{
+    return d->marker;
 }
 

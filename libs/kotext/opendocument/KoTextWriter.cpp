@@ -300,6 +300,11 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
 
             d->saveChange(charFormat);
 
+            if (d->changeTracker
+                && charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt()
+                && d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::deleteChange)
+                continue;
+
             KoInlineObject *inlineObject = d->layout->inlineTextObjectManager()->inlineTextObject(charFormat);
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {

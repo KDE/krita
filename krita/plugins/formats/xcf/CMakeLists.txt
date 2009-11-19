@@ -1,4 +1,4 @@
-# add_subdirectory(tests)
+add_subdirectory(tests)
 
 include_directories( ${KRITA_INCLUDES} ${CMAKE_CURRENT_fSOURCE_DIR} )
 

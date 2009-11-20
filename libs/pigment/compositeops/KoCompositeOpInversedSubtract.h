@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOCOMPOSITEOPSUBTRACT_H_
-#define KOCOMPOSITEOPSUBTRACT_H_
+#ifndef KOCOMPOSITEOPINVERSEDSUBTRACT_H_
+#define KOCOMPOSITEOPINVERSEDSUBTRACT_H_
 
 #include <QDebug>
 #include "KoCompositeOpAlphaBase.h"
@@ -27,13 +27,13 @@
  * A template version of the subtract composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpSubtract : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpSubtract<_CSTraits> > {
+class KoCompositeOpInversedSubtract : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpInversedSubtract<_CSTraits> > {
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
     public:
 
-        KoCompositeOpSubtract(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpSubtract<_CSTraits> >(cs, COMPOSITE_SUBTRACT, i18n("Subtract" ), KoCompositeOp::categoryArithmetic() )
+        KoCompositeOpInversedSubtract(const KoColorSpace * cs)
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpInversedSubtract<_CSTraits> >(cs, COMPOSITE_INVERSED_SUBTRACT, i18n("Inversed Subtract" ), KoCompositeOp::categoryArithmetic() )
         {
         }
 
@@ -57,7 +57,7 @@ class KoCompositeOpSubtract : public KoCompositeOpAlphaBase<_CSTraits, KoComposi
                     compositetype srcColor = src[i];
                     compositetype dstColor = dst[i];
 
-                    srcColor = dstColor - srcColor;
+                    srcColor -= dstColor;
                     srcColor = qMax(srcColor, (compositetype)NATIVE_MIN_VALUE);
                     dst[i] = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
                 }

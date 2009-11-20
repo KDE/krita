@@ -37,6 +37,7 @@ const QString COMPOSITE_PLUS = "plus";
 const QString COMPOSITE_MINUS = "minus";
 const QString COMPOSITE_ADD = "add";
 const QString COMPOSITE_SUBTRACT = "subtract";
+const QString COMPOSITE_INVERSED_SUBTRACT = "inversed_subtract";
 const QString COMPOSITE_DIFF = "diff";
 const QString COMPOSITE_MULT = "multiply";
 const QString COMPOSITE_DIVIDE = "divide";

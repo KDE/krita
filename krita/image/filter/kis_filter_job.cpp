@@ -56,12 +56,6 @@ void KisFilterJob::run()
     KisPaintDeviceSP dst = new KisPaintDevice(m_dev->colorSpace());
     QRect marginRect = m_filter->neededRect(m_rc, m_config);
 
-    // some filters only write out selected or affected pixels to dst, so copy
-    KisPainter p1(dst);
-    p1.setCompositeOp(dst->colorSpace()->compositeOp(COMPOSITE_COPY));
-    p1.bitBlt(m_rc.topLeft(), m_dev, m_rc);
-    p1.end();
-
     m_filter->process(KisConstProcessingInformation(m_dev, marginRect.topLeft(), m_selection),
                       KisProcessingInformation(dst, marginRect.topLeft(), m_selection),
                       marginRect.size(),

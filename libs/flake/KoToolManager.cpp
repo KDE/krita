@@ -713,7 +713,11 @@ void KoToolManager::switchToolByShortcut(QKeyEvent *event)
         if (th->shortcut().contains(item)) {
             event->accept();
             switchTool(th->id(), false);
+            return;
         }
+    }
+    if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
+        switchTool(KoPanTool_ID, true);
     }
 }
 

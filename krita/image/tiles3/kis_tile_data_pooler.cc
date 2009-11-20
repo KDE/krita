@@ -38,10 +38,21 @@ const qint32 KisTileDataPooler::TIMEOUT_FACTOR = 2;
 #define DEBUG_SIMPLE_ACTION(action)     \
     printf("pooler: %s\n", action)
 
+#define RUNTIME_SANITY_CHECK(td) do {                                   \
+        if(td->m_usersCount < td->m_refCount) {                         \
+            qDebug("**** Suspicious tiledata: 0x%X (clones: %d, users: %d, refs: %d) ****", \
+                   td, td->m_clonesList.size(),                         \
+                   (int)td->m_usersCount, (int)td->m_refCount);         \
+        }                                                               \
+        if(td->m_usersCount <= 0) {                                     \
+            qFatal("pooler: Tiledata 0x%X has zero users counter. Crashing...", td); \
+        }                                                               \
+    } while(0)                                                          \
 
 #else
 #define DEBUG_CLONE_ACTION(td, numClones)
 #define DEBUG_SIMPLE_ACTION(action)
+#define RUNTIME_SANITY_CHECK(td)
 #endif
 
 KisTileDataPooler::KisTileDataPooler(KisTileDataStore *store)
@@ -71,6 +82,7 @@ void KisTileDataPooler::terminatePooler()
 
 qint32 KisTileDataPooler::numClonesNeeded(KisTileData *td) const
 {
+    RUNTIME_SANITY_CHECK(td);
     qint32 numUsers = td->m_usersCount;
     qint32 numPresentClones = td->m_clonesList.size();
     qint32 totalClones = qMin(numUsers - 1, MAX_NUM_CLONES);

@@ -141,7 +141,7 @@ void KisTileDataStore::freeTileData(KisTileData *td)
 {
     Q_ASSERT(td->m_store == this);
 
-    DEBUG_FREE_ACTION(TD);
+    DEBUG_FREE_ACTION(td);
 
     tileListDetach(td);
     delete td;

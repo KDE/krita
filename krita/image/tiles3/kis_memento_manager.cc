@@ -104,9 +104,14 @@ void KisMementoManager::commit()
     if (!m_index.size()) return;
 
     KisMementoItemSP mi;
+    KisMementoItemSP parentMI;
     bool newTile;
     foreach(mi, m_index) {
-        mi->setParent(m_headsHashTable.getTileLazy(mi->col(), mi->row(), newTile));
+        parentMI = m_headsHashTable.getTileLazy(mi->col(), mi->row(), newTile);
+        if(newTile)
+            parentMI->commit();
+
+        mi->setParent(parentMI);
         mi->commit();
 
         m_headsHashTable.deleteTile(mi->col(), mi->row());

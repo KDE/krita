@@ -53,6 +53,7 @@ public:
 
     void showPaletteManager();
     QToolButton* favoriteBrushButton(int);
+    void resetPopupPaletteParent(QWidget * = 0);
 
     /**********************************Favorite Brushes***********************************/
 

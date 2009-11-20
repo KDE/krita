@@ -84,6 +84,7 @@ void KoFavoriteResourceManager::slotChangePaintopLabel()
 //Popup Palette
 void KoFavoriteResourceManager::slotShowPopupPalette(QMouseEvent* e)
 {
+    qDebug() << "[KoFavoriteResourceManager] popup palette called";
     m_popupPalette->move(e->pos());
     m_popupPalette->setVisible(!m_popupPalette->isVisible());
 }
@@ -100,6 +101,19 @@ void KoFavoriteResourceManager::showPaletteManager()
     }
     m_favoriteBrushManager->show();
 
+}
+
+void KoFavoriteResourceManager::resetPopupPaletteParent(QWidget* w)
+{
+    if (m_popupPalette != 0)
+    {
+        qDebug() << "[KoFavoriteResourceManager] m_popupPalette exists and parent is being reset";
+        m_popupPalette->setParent(w);
+    }
+    else
+    {
+        qDebug() << "[KoFavoriteResourceManager] m_popupPalette does not exist!!";
+    }
 }
 
 //Favorite Brushes

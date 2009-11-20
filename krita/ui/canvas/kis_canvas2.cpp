@@ -106,6 +106,7 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
     createCanvas();
     connect(view->canvasController(), SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(this, SIGNAL(canvasDestroyed(QWidget *)), m_d->view, SLOT(slotCanvasDestroyed(QWidget *)));
 }
 
 KisCanvas2::~KisCanvas2()
@@ -117,6 +118,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
     KisAbstractCanvasWidget * tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
+    emit canvasDestroyed(widget);
     m_d->canvasWidget = tmp;
     widget->setAutoFillBackground(false);
     widget->setAttribute(Qt::WA_OpaquePaintEvent);
@@ -258,6 +260,7 @@ void KisCanvas2::createOpenGLCanvas()
         m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
 
         connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&)), this, SLOT(updateRulers()));
+        connect(canvasWidget, SIGNAL(doubleClickOpenGLCanvas(QMouseEvent *)), m_d->view, SIGNAL(favoritePaletteCalled(QMouseEvent *)) );
 
     } else {
         warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";

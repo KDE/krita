@@ -782,6 +782,15 @@ void KisView2::setFavoriteResourceManager(KisPaintopBox* paintopBox)
 
 }
 
+void KisView2::slotCanvasDestroyed(QWidget* w)
+{
+    qDebug() << "[KisView2] Resetting popupPalette parent";
+    if (m_d->favoriteResourceManager != 0)
+    {
+        m_d->favoriteResourceManager->resetPopupPaletteParent(w);
+    }
+}
+
 void KisView2::toggleDockers(bool toggle)
 {
     Q_UNUSED(toggle);

@@ -140,6 +140,8 @@ signals:
 
     void imageChanged(KisImageWSP image);
 
+    void canvasDestroyed(QWidget *);
+
 public slots:
 
     /// Update the entire canvas area

@@ -121,6 +121,8 @@ signals:
      */
     void documentOriginChanged(const QPoint &origin);
 
+    void doubleClickOpenGLCanvas(QMouseEvent *);
+
 protected:
 
     void initializeGL();

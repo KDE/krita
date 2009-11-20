@@ -200,6 +200,9 @@ private slots:
     void slotTotalRefresh();
     void toggleDockers(bool toggle);
 
+public slots:
+    void slotCanvasDestroyed(QWidget*);
+
 private:
 
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2009 Vera Lukman <vla24@sfu.ca>
+   Copyright 2009 Vera Lukman <shichan.karachu@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -53,6 +53,7 @@ public:
 protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
+//    void paintEvent(QPaintEvent*);
 
 private:
     KoFavoriteResourceManager* m_resourceManager;

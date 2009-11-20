@@ -349,6 +349,14 @@ void KisOpenGLCanvas2::mouseDoubleClickEvent(QMouseEvent *e)
 {
     if (m_d->blockMouseEvent.isActive()) return;
     m_d->toolProxy->mouseDoubleClickEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
+
+    //DOUBLE CLICKING TEST FOR PALETTE
+    if (e->buttons() && Qt::LeftButton)
+     {
+         qDebug() << "[KisOpenGLCanvas2] calling palette";
+         emit doubleClickOpenGLCanvas(e);
+         e->accept();
+     }
 }
 
 void KisOpenGLCanvas2::keyPressEvent(QKeyEvent *e)

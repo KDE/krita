@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2009 Vera Lukman <vla24@sfu.ca>
+   Copyright 2009 Vera Lukman <shichan.karachu@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -61,9 +61,6 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     brushButtonWidget->setLayout(tempLayout);
     brushButtonWidget->setStyleSheet("* { background-color: rgba(0,0,0,128) }");
 
-    QColor c(Qt::gray);
-    qDebug() << "Gray " << c.red() << c.green() << c.blue();
-
     //RECENT COLORS
     QToolButton* chooseColor = new QToolButton ();
     chooseColor->setMaximumSize(KisPopupPalette::BUTTON_SIZE,KisPopupPalette::BUTTON_SIZE);
@@ -100,6 +97,34 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     brushButtonWidget = 0;
 
 }
+
+//void KisPopupPalette::paintEvent(QPaintEvent* pe)
+//{
+//    QStyleOption opt;
+//    opt.init(this);
+//    QColor c (0,0,0,0);
+//    QBrush b (c);
+//    QPainter p(this);
+//    p.setOpacity(0.5);
+//    p.setBackground(b);
+//    this->setAutoFillBackground(true);
+//    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+//
+//    for (int pos =0 ; pos < 2 ; pos ++)
+//    {
+//        QWidget* w = this->widget(pos);
+//        w->setAutoFillBackground(false);
+//        QStyleOption opt1;
+//        opt1.init(w);
+//        QColor c1 (0,0,0,128);
+//        QBrush b1 (c1);
+//        QPainter p1(w);
+//        p1.setOpacity(0.5);
+//        p1.setBackground(b1);
+//        style()->drawPrimitive(QStyle::PE_Widget, &opt1, &p1, w);
+//    }
+//}
+
 
 void KisPopupPalette::addFavoriteBrushButton(KisFavoriteBrushData* brush)
 {

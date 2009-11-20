@@ -396,7 +396,7 @@ void KisTiledDataManager::recalculateExtent()
     KisTileHashTableIterator iter(m_hashTable);
     KisTileSP tile;
 
-    while (!(tile = iter.tile())) {
+    while ((tile = iter.tile())) {
         updateExtent(tile->col(), tile->row());
         ++iter;
     }

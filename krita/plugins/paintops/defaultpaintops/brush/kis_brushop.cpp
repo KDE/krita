@@ -57,6 +57,7 @@
 
 #include <kis_brushop_settings.h>
 #include <kis_brushop_settings_widget.h>
+#include <kis_pressure_rotation_option.h>
 
 
 KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
@@ -121,11 +122,11 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
+        dab = brush->image(device->colorSpace(), scale, settings->m_options->m_rotationOption->apply(info), info, xFraction, yFraction);
     } else {
         KoColor color = painter()->paintColor();
         color.convertTo(dab->colorSpace());
-        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
+        brush->mask(dab, color, scale, scale, settings->m_options->m_rotationOption->apply(info), info, xFraction, yFraction);
     }
 
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());

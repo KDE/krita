@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,6 +31,6 @@ KisPressureRotationOption::KisPressureRotationOption()
 
 double KisPressureRotationOption::apply(const KisPaintInformation & info) const
 {
-    if (!isChecked()) return 0.5;
-    return computeValue(info);
+    if (!isChecked()) return 0.0;
+    return computeValue(info) * 2.0 * M_PI;
 }

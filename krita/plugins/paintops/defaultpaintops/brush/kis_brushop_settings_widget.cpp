@@ -29,6 +29,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
+#include <kis_pressure_rotation_option.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
@@ -39,12 +40,14 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     m_sizeOption = new KisPressureSizeOption();
     m_opacityOption = new KisPressureOpacityOption();
     m_darkenOption = new KisPressureDarkenOption();
+    m_rotationOption = new KisPressureRotationOption();
     m_paintActionTypeOption = new KisPaintActionTypeOption();
 
     addPaintOpOption(m_brushOption);
     addPaintOpOption(m_sizeOption);
     addPaintOpOption(m_opacityOption);
     addPaintOpOption(m_darkenOption);
+    addPaintOpOption(m_rotationOption);
     addPaintOpOption(m_paintActionTypeOption);
 
 }
@@ -55,6 +58,7 @@ KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()
     delete m_sizeOption;
     delete m_opacityOption;
     delete m_darkenOption;
+    delete m_rotationOption;
     delete m_paintActionTypeOption;
 }
 

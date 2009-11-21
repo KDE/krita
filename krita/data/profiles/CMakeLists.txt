@@ -12,7 +12,8 @@ install(FILES
     PAL.icm 
     SMPTE-C.icm 
     srgb_color_space_profile.icm 
-    sRGB.icm 
+    sRGB.icm
+    scRGB.icm
     srgbspac.icm 
     tifflab8spac.icm 
     WideGamut.icm 

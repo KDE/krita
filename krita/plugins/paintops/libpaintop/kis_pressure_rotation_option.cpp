@@ -24,7 +24,7 @@
 #include <KoColorSpace.h>
 
 KisPressureRotationOption::KisPressureRotationOption()
-        : KisCurveOption(i18n("Rotation"), "Rotation")
+        : KisCurveOption(i18n("Rotation"), "Rotation", false)
 {
 }
 

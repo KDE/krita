@@ -26,6 +26,8 @@
 #include <KoColorConversionTransformation.h>
 #include <KoColorConversionTransformationFactory.h>
 
+#include "kis_debug.h"
+
 template< typename _TYPE_, int _N_ >
 class KisKSToRGBColorConversionTransformation : public KoColorConversionTransformation
 {

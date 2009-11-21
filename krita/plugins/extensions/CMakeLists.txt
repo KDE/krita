@@ -33,9 +33,9 @@ if(HAVE_OPENGL AND HAVE_GLEW)
 #    add_subdirectory( glsl )
 endif(HAVE_OPENGL AND HAVE_GLEW)
 
-if(OPENCTL_FOUND AND OPENEXR_FOUND)
+if(OPENEXR_FOUND)
   add_subdirectory( painterlyframework )
-endif(OPENCTL_FOUND AND OPENEXR_FOUND)
+endif(OPENEXR_FOUND)
 
 find_package(OpenShiva)
 find_package(QtShiva )

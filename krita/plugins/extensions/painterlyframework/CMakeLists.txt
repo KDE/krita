@@ -3,8 +3,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_subdirectory(illuminants)
 add_subdirectory(tests)
 
-configure_file(config-openctl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openctl.h )
-
 #################################################
 # Painterly Common Libraries
 

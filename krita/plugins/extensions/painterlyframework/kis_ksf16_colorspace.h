@@ -23,14 +23,10 @@
 #include "kis_illuminant_profile.h"
 #include "kis_ks_colorspace.h"
 
-#include <config-openctl.h>
-#ifdef HAVE_OPENCTL
 #include "kis_rgb_to_ks_color_conversion_transformation_ctl.h"
 #include "kis_ks_to_rgb_color_conversion_transformation_ctl.h"
-#else
 #include "kis_rgb_to_ks_color_conversion_transformation.h"
 #include "kis_ks_to_rgb_color_conversion_transformation.h"
-#endif
 #include "kis_ks_to_ks_color_conversion_transformation.h"
 
 #include "half.h"
@@ -63,13 +59,10 @@ public:
         KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
         QString csid = KisKSF16ColorSpace<_N_>::ColorSpaceId().id();
         foreach(const KoColorProfile *p, f->profilesFor(csid)) {
-#ifdef HAVE_OPENCTL
             list.append(new KisCtlRGBToKSColorConversionTransformationFactory<half, _N_>(p->name()));
             list.append(new KisKSToCtlRGBColorConversionTransformationFactory<half, _N_>(p->name()));
-#else
             list.append(new KisRGBToKSColorConversionTransformationFactory<half, _N_>(p->name()));
             list.append(new KisKSToRGBColorConversionTransformationFactory<half, _N_>(p->name()));
-#endif
         }
         /*
                     // From F32

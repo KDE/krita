@@ -184,10 +184,10 @@ void KisBrush::setHotSpot(QPointF pt)
     d->hotSpot = QPointF(x, y);
 }
 
-QPointF KisBrush::hotSpot(double scaleX, double scaleY) const
+QPointF KisBrush::hotSpot(double scaleX, double scaleY, double rotation) const
 {
-    double w = width() * scaleX;
-    double h = height() * scaleY;
+    double w = maskWidth( scaleX, rotation);
+    double h = maskHeight( scaleX, rotation);
 
     // The smallest brush we can produce is a single pixel.
     if (w < 1) {

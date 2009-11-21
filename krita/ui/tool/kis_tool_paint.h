@@ -47,6 +47,7 @@ class QKeyEvent;
 class QPaintEvent;
 class QGridLayout;
 class QLabel;
+class QPoint;
 
 
 class KoCanvasBase;
@@ -140,6 +141,9 @@ private:
     KisNodeSP m_previousNode;
 
     bool m_supportOutline;
+
+signals:
+    void favoritePaletteCalled(const QPoint&);
 };
 
 #endif // KIS_TOOL_PAINT_H_

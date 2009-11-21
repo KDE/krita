@@ -31,6 +31,9 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <QVariant>
+#include <QAction>
+#include <QDebug>
+#include <QPoint>
 
 #include <kis_debug.h>
 #include <kicon.h>
@@ -51,6 +54,8 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
+#include <kis_view2.h>
+#include <kis_canvas2.h>
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -76,13 +81,15 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     m_compositeOp = 0;
 
     m_supportOutline = false;
+
+    KisCanvas2* canvas2 = static_cast<KisCanvas2*>(m_canvas);
+    connect(this, SIGNAL(favoritePaletteCalled(const QPoint&)), canvas2->view(), SIGNAL(favoritePaletteCalled(const QPoint&)) );
 }
 
 
 KisToolPaint::~KisToolPaint()
 {
 }
-
 
 void KisToolPaint::resourceChanged(int key, const QVariant & v)
 {
@@ -127,6 +134,11 @@ void KisToolPaint::paint(QPainter&, const KoViewConverter &)
 void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
 {
     if (e->button() == Qt::MidButton) {
+        //CALLING FOR POP UP PALETTE
+        qDebug() << "[KisToolPaint] MidButton: calling palette";
+//        QPoint p = ;
+        emit this->favoritePaletteCalled(e->pos());
+
         KoCanvasResourceProvider * resourceProvider = 0;
         if (m_canvas && (resourceProvider = m_canvas->resourceProvider())) {
             QVariant fg = resourceProvider->resource(KoCanvasResource::ForegroundColor);
@@ -137,7 +149,6 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
             resourceProvider->setResource(KoCanvasResource::BackgroundColor, fg);
         }
     }
-
 }
 
 

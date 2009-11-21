@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2009 Vera Lukman <vla24@sfu.ca>
+   Copyright 2009 Vera Lukman <shichan.karachu@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,24 +17,23 @@
 */
 
 #include <QDebug>
+#include <QPoint>
 #include <QStringList>
+#include <QString>
+#include <QColor>
+#include <kis_paintop_registry.h>
+#include <KoToolManager.h>
+#include <kis_paintop_preset.h>
+#include <KoID.h>
+#include <ui_wdgpaintoppresets.h>
+#include <kconfig.h>
+#include <kglobalsettings.h>
 #include "ko_favorite_resource_manager.h"
 #include "kis_popup_palette.h"
 #include "flowlayout.h"
 #include "kis_paintop_box.h"
 #include "kis_palette_manager.h"
-#include <kis_paintop_registry.h>
-#include <KoToolManager.h>
-#include <kis_paintop_preset.h>
-#include <KoID.h>
-#include <QDebug>
-#include <QString>
-#include <kconfig.h>
-#include <kglobalsettings.h>
-#include <ui_wdgpaintoppresets.h>
-#include <QColor>
 #include "kis_view2.h"
-#include <QMouseEvent>
 
 #ifndef _MSC_EXTENSIONS
 const int KoFavoriteResourceManager::MAX_FAVORITE_BRUSHES;
@@ -82,10 +81,10 @@ void KoFavoriteResourceManager::slotChangePaintopLabel()
 }
 
 //Popup Palette
-void KoFavoriteResourceManager::slotShowPopupPalette(QMouseEvent* e)
+void KoFavoriteResourceManager::slotShowPopupPalette(const QPoint &p)
 {
     qDebug() << "[KoFavoriteResourceManager] popup palette called";
-    m_popupPalette->move(e->pos());
+    m_popupPalette->move(p);
     m_popupPalette->setVisible(!m_popupPalette->isVisible());
 }
 

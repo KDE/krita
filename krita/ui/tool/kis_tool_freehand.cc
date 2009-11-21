@@ -115,7 +115,6 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-    qDebug() << "[KisToolFreehand] mousePressEvent Test";
 
     //    dbgUI << "mousePressEvent" << m_mode;
     //     if (!currentImage())

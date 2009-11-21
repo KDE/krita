@@ -243,7 +243,6 @@ void KisCanvas2::createQPainterCanvas()
     canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
 
     connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&)), this, SLOT(updateRulers()));
-    connect(canvasWidget, SIGNAL(doubleClickQPainterCanvas(QMouseEvent *)), m_d->view, SIGNAL(favoritePaletteCalled(QMouseEvent *)) );
 
     setCanvasWidget(canvasWidget);
 }
@@ -260,7 +259,6 @@ void KisCanvas2::createOpenGLCanvas()
         m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
 
         connect(canvasWidget, SIGNAL(documentOriginChanged(const QPoint&)), this, SLOT(updateRulers()));
-        connect(canvasWidget, SIGNAL(doubleClickOpenGLCanvas(QMouseEvent *)), m_d->view, SIGNAL(favoritePaletteCalled(QMouseEvent *)) );
 
     } else {
         warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";

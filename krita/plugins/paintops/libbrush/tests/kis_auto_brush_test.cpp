@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -105,6 +106,26 @@ void KisAutoBrushTest::testMaskGeneration()
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
 
+}
+
+void KisAutoBrushTest::testSizeRotation()
+{
+    {
+        KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 0.5, 1.0, 1.0, 2);
+        KisBrushSP a = new KisAutoBrush(circle, 0.0);
+        QCOMPARE(a->width(), 10);
+        QCOMPARE(a->height(), 5);
+        QCOMPARE(a->maskWidth(1.0,0.0), 11);
+        QCOMPARE(a->maskHeight(1.0,0.0), 6);
+        QCOMPARE(a->maskWidth(1.0,M_PI), 11);
+        QCOMPARE(a->maskHeight(1.0,M_PI), 6);
+        QCOMPARE(a->maskWidth(1.0,M_PI_2), 6);
+        QCOMPARE(a->maskHeight(1.0,M_PI_2), 11);
+        QCOMPARE(a->maskWidth(1.0,-M_PI_2), 7);
+        QCOMPARE(a->maskHeight(1.0,-M_PI_2), 11);
+        QCOMPARE(a->maskWidth(1.0,0.25*M_PI), 12);
+        QCOMPARE(a->maskHeight(1.0,0.25*M_PI), 12);
+    }
 }
 
 

@@ -117,6 +117,10 @@ void KisAutoBrushTest::testSizeRotation()
         QCOMPARE(a->height(), 5);
         QCOMPARE(a->maskWidth(1.0,0.0), 11);
         QCOMPARE(a->maskHeight(1.0,0.0), 6);
+        QCOMPARE(a->maskWidth(2.0,0.0), 21);
+        QCOMPARE(a->maskHeight(2.0,0.0), 11);
+        QCOMPARE(a->maskWidth(0.5,0.0), 6);
+        QCOMPARE(a->maskHeight(0.5,0.0), 3);
         QCOMPARE(a->maskWidth(1.0,M_PI), 11);
         QCOMPARE(a->maskHeight(1.0,M_PI), 6);
         QCOMPARE(a->maskWidth(1.0,M_PI_2), 6);
@@ -125,6 +129,10 @@ void KisAutoBrushTest::testSizeRotation()
         QCOMPARE(a->maskHeight(1.0,-M_PI_2), 11);
         QCOMPARE(a->maskWidth(1.0,0.25*M_PI), 12);
         QCOMPARE(a->maskHeight(1.0,0.25*M_PI), 12);
+        QCOMPARE(a->maskWidth(2.0,0.25*M_PI), 23);
+        QCOMPARE(a->maskHeight(2.0,0.25*M_PI), 23);
+        QCOMPARE(a->maskWidth(0.5,0.25*M_PI), 7);
+        QCOMPARE(a->maskHeight(0.5,0.25*M_PI), 7);
     }
 }
 

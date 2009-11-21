@@ -26,7 +26,8 @@
 KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
 {
     KisMaskGenerator* mask = KisMaskGenerator::fromXML(brushDefinition);
-    KisBrushSP brush = new KisAutoBrush(mask);
+    double angle = brushDefinition.attribute("brush_angle", "0.0").toDouble();
+    KisBrushSP brush = new KisAutoBrush(mask, angle);
     double spacing = brushDefinition.attribute("brush_spacing", "1.0").toDouble();
     brush->setSpacing(spacing);
     return brush;

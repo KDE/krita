@@ -32,7 +32,7 @@ class BRUSH_EXPORT KisAutoBrush : public KisBrush
 
 public:
 
-    KisAutoBrush(KisMaskGenerator* img);
+    KisAutoBrush(KisMaskGenerator* img, double angle);
 
     virtual ~KisAutoBrush();
 

@@ -104,7 +104,7 @@ void KisAutoBrushWidget::paramChanged()
         Q_CHECK_PTR(kas);
 
     }
-    m_autoBrush = new KisAutoBrush(kas);
+    m_autoBrush = new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI);
     m_autoBrush->setSpacing(inputSpacing->value());
     m_brush = m_autoBrush->img();
 

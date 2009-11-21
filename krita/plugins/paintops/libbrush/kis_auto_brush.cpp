@@ -34,13 +34,15 @@
 
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
+    double angle;
 };
 
-KisAutoBrush::KisAutoBrush(KisMaskGenerator* as)
+KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, double angle)
         : KisBrush()
         , d(new Private)
 {
     d->shape = as;
+    d->angle = angle;
     QImage img = createBrushPreview();
     setImage(img);
     setBrushType(MASK);
@@ -64,6 +66,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     const KoColorSpace* cs = dst->colorSpace();
     quint32 pixelSize = cs->pixelSize();
 
+    angle += d->angle;
     int dstWidth = maskWidth(scaleX, angle);
     int dstHeight = maskHeight(scaleY, angle);
 
@@ -149,6 +152,7 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     d->shape->toXML(doc, e);
     e.setAttribute("brush_type", "kis_auto_brush");
     e.setAttribute("brush_spacing", spacing());
+    e.setAttribute("brush_angle", d->angle);
 }
 
 QImage KisAutoBrush::createBrushPreview()

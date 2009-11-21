@@ -37,7 +37,7 @@ void KisAutoBrushTest::testCreation()
 void KisAutoBrushTest::testMaskGeneration()
 {
     KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 10, 1.0, 1.0);
-    KisBrushSP a = new KisAutoBrush(circle);
+    KisBrushSP a = new KisAutoBrush(circle, 0.0);
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KisVector2D v2d = KisVector2D::Zero();

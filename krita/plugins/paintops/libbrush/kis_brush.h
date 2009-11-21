@@ -184,7 +184,7 @@ public:
      */
     virtual enumBrushType brushType() const;
 
-    QPointF hotSpot(double scaleX, double scaleY) const;
+    virtual QPointF hotSpot(double scaleX, double scaleY) const;
 
     /**
      * Returns true if this brush can return something useful for the info. This is used

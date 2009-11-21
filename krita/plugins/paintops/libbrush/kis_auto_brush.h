@@ -58,6 +58,7 @@ public:
     }
 
     void toXML(QDomDocument& , QDomElement&) const;
+    virtual QPointF hotSpot(double scaleX, double scaleY) const;
 
 private:
 

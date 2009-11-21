@@ -172,3 +172,19 @@ QImage KisAutoBrush::createBrushPreview()
     return img;
 }
 
+QPointF KisAutoBrush::hotSpot(double scaleX, double scaleY) const
+{
+    double w = maskWidth( scaleX, d->angle);
+    double h = maskHeight( scaleX, d->angle);
+
+    // The smallest brush we can produce is a single pixel.
+    if (w < 1) {
+        w = 1;
+    }
+
+    if (h < 1) {
+        h = 1;
+    }
+
+    return QPointF(w / 2, h / 2);;
+}

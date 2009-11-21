@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004,2007-2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,6 +46,8 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, double angle)
     QImage img = createBrushPreview();
     setImage(img);
     setBrushType(MASK);
+    setWidth(d->shape->width());
+    setHeight(d->shape->height());
 }
 
 KisAutoBrush::~KisAutoBrush()

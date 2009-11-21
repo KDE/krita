@@ -21,16 +21,6 @@ macro_log_feature( KDCRAW_FOUND "kdcraw" "The KDCraw library" "http://www.digika
 macro_optional_find_package(OpenJPEG)
 macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image compression" "http://www.openjpeg.org" FALSE "" "Required by the Krita JPEG 2000 filter")
 
-macro_optional_find_package(GraphicsMagick)
-set(BAD_GRAPHICS_MAGICK_VERSION 1.2.5)
-set(BUILD_GRAPHICSMAGICK FALSE)
-set(HAVE_REQUIRED_GM_VERSION FALSE)
-
-if   (GRAPHICSMAGICK_FOUND AND GRAPHICSMAGICK_VERSION VERSION_LESS ${BAD_GRAPHICS_MAGICK_VERSION})
-    set(HAVE_REQUIRED_GM_VERSION TRUE)
-    set(BUILD_GRAPHICSMAGICK TRUE)
-endif(GRAPHICSMAGICK_FOUND AND GRAPHICSMAGICK_VERSION VERSION_LESS ${BAD_GRAPHICS_MAGICK_VERSION})
-
 include_directories(${KRITA_INCLUDES})
 
 if(KDCRAW_FOUND)

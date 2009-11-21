@@ -254,7 +254,7 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element)
 qint32 KisBrush::maskWidth(double scale, double angle) const
 {
     double width_ = width() * scale;
-    if(angle == 0.0) return width_;
+    if(angle == 0.0) return qint32(width_ + 1);
     
     double height_ = height() * scale;
     
@@ -273,7 +273,7 @@ qint32 KisBrush::maskWidth(double scale, double angle) const
 qint32 KisBrush::maskHeight(double scale, double angle) const
 {
     double height_ = height() * scale;
-    if(angle == 0.0) return height_;
+    if(angle == 0.0) return qint32(height_ + 1);
     
     double width_ = width() * scale;
     

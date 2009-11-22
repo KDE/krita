@@ -26,6 +26,17 @@
 #include <QByteArray>
 #include <QBuffer>
 
+void PSDUtilsTest::test_psdwrite_quint8()
+{
+    QBuffer buf;
+    buf.open(QBuffer::ReadWrite);
+    quint8 i = 3;
+    Q_ASSERT(psdwrite(&buf, i));
+    Q_ASSERT(buf.buffer().size() == 1);
+    QCOMPARE(buf.buffer().at(0), '\3');
+}
+
+
 void PSDUtilsTest::test_psdwrite_quint16()
 {
     QBuffer buf;
@@ -63,6 +74,46 @@ void PSDUtilsTest::test_psdwrite_qstring()
     QCOMPARE(buf.buffer().at(3), 'S');
 }
 
+void PSDUtilsTest::test_psdwrite_pascalstring()
+{
+    QBuffer buf;
+    buf.open(QBuffer::ReadWrite);
+
+    // test null string
+    QString s;
+    Q_ASSERT(psdwrite_pascalstring(&buf, s));
+    QCOMPARE(buf.buffer().size(), 2);
+    QCOMPARE(buf.buffer().at(0), '\0');
+    QCOMPARE(buf.buffer().at(1), '\0');
+
+    buf.close();
+    buf.buffer().clear();
+    buf.open(QBuffer::ReadWrite);
+
+    // test even string
+    s = QString("bl");
+    Q_ASSERT(psdwrite_pascalstring(&buf, s));
+    QCOMPARE(buf.buffer().size(), 3);
+    QCOMPARE(buf.buffer().at(0), '\2');
+    QCOMPARE(buf.buffer().at(1), 'b');
+    QCOMPARE(buf.buffer().at(2), 'l');
+
+    buf.close();
+    buf.buffer().clear();
+    buf.open(QBuffer::ReadWrite);
+
+    // test uneven string
+    s = QString("bla");
+    Q_ASSERT(psdwrite_pascalstring(&buf, s));
+    QCOMPARE(buf.buffer().size(), 5);
+    QCOMPARE(buf.buffer().at(0), '\3');
+    QCOMPARE(buf.buffer().at(1), 'b');
+    QCOMPARE(buf.buffer().at(2), 'l');
+    QCOMPARE(buf.buffer().at(3), 'a');
+    QCOMPARE(buf.buffer().at(4), '\0');
+}
+
+
 void PSDUtilsTest::test_psdpad()
 {
     QBuffer buf;
@@ -76,6 +127,23 @@ void PSDUtilsTest::test_psdpad()
     QCOMPARE(buf.buffer().at(4), '\0');
     QCOMPARE(buf.buffer().at(5), '\0');
 }
+
+void PSDUtilsTest::test_psdread_quint8()
+{
+}
+
+void PSDUtilsTest::test_psdread_quint16()
+{
+}
+
+void PSDUtilsTest::test_psdread_quint32()
+{
+}
+
+void PSDUtilsTest::test_psdread_pascalstring()
+{
+}
+
 
 QTEST_KDEMAIN(PSDUtilsTest, GUI)
 

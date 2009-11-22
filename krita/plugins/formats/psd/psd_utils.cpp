@@ -19,9 +19,16 @@
 
 #include <QIODevice>
 #include <QString>
-#include <QDebug>
 
 #include <netinet/in.h> // htonl
+
+#include <kis_debug.h>
+
+bool psdwrite(QIODevice* io, quint8 v)
+{
+    int written = io->write((char*)&v, 1);
+    return written == 1;
+}
 
 bool psdwrite(QIODevice* io, quint16 v)
 {
@@ -53,6 +60,31 @@ bool psdwrite(QIODevice* io, const QString &s)
     return written == l;
 }
 
+bool psdwrite_pascalstring(QIODevice* io, const QString &s)
+{
+    Q_ASSERT(s.length() < 256);
+    Q_ASSERT(s.length() >= 0);
+    if (s.length() < 0 || s.length() > 255) return false;
+
+    if (s.isNull()) {
+        psdwrite(io, (quint8)0);
+        psdwrite(io, (quint8)0);
+        return true;
+    }
+    quint8 length = s.length();
+    psdwrite(io, length);
+
+    char* str = s.toAscii().data();
+    int written = io->write(str, length);
+    if (written != length) return false;
+
+    if ((length & 0x01) != 0) {
+        return psdwrite(io, (quint8)0);
+    }
+
+    return true;
+}
+
 bool psdread(QIODevice *io, quint8 *v)
 {
     quint64 read = io->read((char*)v, 1);
@@ -78,12 +110,25 @@ bool psdread(QIODevice* io, quint32* v)
     return true;
 }
 
-bool psdreadpascalstring(QIODevice* io, QString& s)
+bool psdread_pascalstring(QIODevice* io, QString& s)
 {
-    Q_UNUSED(s);
+
+    kDebug() << "s";
     quint8 length;
     if (!psdread(io, &length)) return false;
+
+    kDebug() << "length: " << length;
+
     if (length < 1) return false;
+    if ((length & 0x01) == 0) length++;
+
+    kDebug() << "length: " << length;
+    QByteArray chars = io->read(length);
+    if (chars.length() != length) return false;
+
+    s.append(chars);
+    kDebug() << "string: " << s;
 
     return false;
 }
+

@@ -23,15 +23,17 @@
 class QIODevice;
 class QString;
 
+bool psdwrite(QIODevice* io, quint8 v);
 bool psdwrite(QIODevice* io, quint16 v);
 bool psdwrite(QIODevice* io, quint32 v);
 bool psdwrite(QIODevice* io, const QString &s);
+bool psdwrite_pascalstring(QIODevice* io, const QString &s);
 bool psdpad(QIODevice* io, quint32 padding);
 
 bool psdread(QIODevice* io, quint8* v);
 bool psdread(QIODevice* io, quint16* v);
 bool psdread(QIODevice* io, quint32* v);
 
-bool psdreadpascalstring(QIODevice* io, QString& s);
+bool psdread_pascalstring(QIODevice* io, QString& s);
 
 #endif // PSD_UTILS_H

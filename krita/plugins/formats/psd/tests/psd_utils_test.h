@@ -26,10 +26,18 @@ class PSDUtilsTest : public QObject
     Q_OBJECT
 private slots:
 
+    void test_psdwrite_quint8();
     void test_psdwrite_quint16();
     void test_psdwrite_quint32();
     void test_psdwrite_qstring();
+    void test_psdwrite_pascalstring();
     void test_psdpad();
+
+    void test_psdread_quint8();
+    void test_psdread_quint16();
+    void test_psdread_quint32();
+    void test_psdread_pascalstring();
+
 };
 
 #endif

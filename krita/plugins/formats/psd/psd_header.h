@@ -23,21 +23,24 @@
 
 class QIODevice;
 
-enum PSDColorMode {
-    Bitmap = 0,
-    Grayscale,
-    Indexed,
-    RGB,
-    CMYK,
-    MultiChannel,
-    DuoTone,
-    Lab,
-    UNKNOWN = 9000
-};
-
 class PSDHeader
 {
 public:
+
+    enum PSDColorMode {
+        Bitmap = 0,
+        Grayscale,
+        Indexed,
+        RGB,
+        CMYK,
+        MultiChannel,
+        DuoTone,
+        Lab,
+        UNKNOWN = 9000
+     };
+
+
+
     PSDHeader();
 
     /**

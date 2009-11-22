@@ -38,25 +38,26 @@
 #include "psd_header.h"
 #include "psd_colormode_block.h"
 #include "psd_utils.h"
+#include "psd_resource_section.h"
 
-QString psd_colormode_to_colormodelid(PSDColorMode colormode, quint16 channelDepth)
+QString psd_colormode_to_colormodelid(PSDHeader::PSDColorMode colormode, quint16 channelDepth)
 {
     KoID colorSpaceId;
     switch(colormode) {
-    case(Bitmap):
-    case(Indexed):
-    case(MultiChannel):
-    case(RGB):
+    case(PSDHeader::Bitmap):
+    case(PSDHeader::Indexed):
+    case(PSDHeader::MultiChannel):
+    case(PSDHeader::RGB):
         colorSpaceId = RGBAColorModelID;
         break;
-    case(CMYK):
+    case(PSDHeader::CMYK):
         colorSpaceId = CMYKAColorModelID;
         break;
-    case(Grayscale):
-    case(DuoTone):
+    case(PSDHeader::Grayscale):
+    case(PSDHeader::DuoTone):
         colorSpaceId = GrayAColorModelID;
         break;
-    case(Lab):
+    case(PSDHeader::Lab):
         colorSpaceId = LABAColorModelID;
         break;
     default:
@@ -102,15 +103,22 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
     PSDHeader header;
     if (!header.read(&f)) {
-        kDebug() << "failed reading header";
+        kDebug() << "failed reading header: " << header.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
     PSDColorModeBlock colorModeBlock(header.m_colormode);
     if (!colorModeBlock.read(&f)) {
-        kDebug() << "failed reading colormode block";
+        kDebug() << "failed reading colormode block: " << colorModeBlock.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
+
+    PSDResourceSection resourceSection;
+    if (!resourceSection.read(&f)) {
+        kDebug() << "failed reading resource section: " << resourceSection.error;
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
 
     // Get the right colorspace
     QString colorSpaceId = psd_colormode_to_colormodelid(header.m_colormode, header.m_channelDepth);
@@ -127,7 +135,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     m_img->lock();
 
     // Preserve the duotone colormode block for saving back to psd
-    if (header.m_colormode == DuoTone) {
+    if (header.m_colormode == PSDHeader::DuoTone) {
         KisAnnotationSP annotation = new KisAnnotation("Duotone Colormode Block",
                                                        i18n("Duotone Colormode Block"),
                                                        colorModeBlock.m_data);

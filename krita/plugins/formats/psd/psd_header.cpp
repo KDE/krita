@@ -89,7 +89,7 @@ bool PSDHeader::write(QIODevice* device)
 bool PSDHeader::valid()
 {
     if (m_signature != "8BPS") {
-        error = "signature incorrect: is " + m_signature;
+        error = "Not a PhotoShop document. Signature is: " + m_signature;
         return false;
     }
     if (m_version < 1 || m_version > 2) {
@@ -144,28 +144,28 @@ QDebug operator<<(QDebug dbg, const PSDHeader& header)
     dbg.nospace() << ", channel depth: " << header.m_channelDepth;
     dbg.nospace() << ", color mode: ";
     switch(header.m_colormode) {
-    case(Bitmap):
+    case(PSDHeader::Bitmap):
         dbg.nospace() << "Bitmap";
         break;
-    case(Grayscale):
+    case(PSDHeader::Grayscale):
         dbg.nospace() << "Grayscale";
         break;
-    case(Indexed):
+    case(PSDHeader::Indexed):
         dbg.nospace() << "Indexed";
         break;
-    case(RGB):
+    case(PSDHeader::RGB):
         dbg.nospace() << "RGB";
         break;
-    case(CMYK):
+    case(PSDHeader::CMYK):
         dbg.nospace() << "CMYK";
         break;
-    case(MultiChannel):
+    case(PSDHeader::MultiChannel):
         dbg.nospace() << "MultiChannel";
         break;
-    case(DuoTone):
+    case(PSDHeader::DuoTone):
         dbg.nospace() << "DuoTone";
         break;
-    case(Lab):
+    case(PSDHeader::Lab):
         dbg.nospace() << "Lab";
         break;
     default:

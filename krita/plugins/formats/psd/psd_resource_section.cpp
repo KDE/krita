@@ -21,14 +21,21 @@
 #include <QIODevice>
 #include <QBuffer>
 
+#include "psd_resource_block.h"
+
 PSDResourceSection::PSDResourceSection()
 {
+}
+
+PSDResourceSection::~PSDResourceSection()
+{
+    qDeleteAll(m_resources);
 }
 
 bool PSDResourceSection::read(QIODevice* io)
 {
     quint32 resourceBlockLength;
-    if (!psdread(io, resourceBlockLength)) {
+    if (!psdread(io, &resourceBlockLength)) {
         error = "Could not read resource block length";
         return false;
     }
@@ -40,13 +47,21 @@ bool PSDResourceSection::read(QIODevice* io)
     }
 
     QBuffer buf;
-    buf.setBuffer(ba);
-
+    buf.setBuffer(&ba);
+    while (buf.bytesAvailable()) {
+        PSDResourceBlock* block = new PSDResourceBlock();
+        if (!block->read(&buf)) {
+            error = "Error reading block: " + block->error;
+            return false;
+        }
+        m_resources[block->m_identifier] = block;
+    }
     return valid();
 }
 
 bool PSDResourceSection::write(QIODevice* io)
 {
+    Q_UNUSED(io);
     Q_ASSERT(valid());
     if (!valid()) return false;
     qFatal("TODO: implement writing the resource section");

@@ -30,13 +30,13 @@
 
 void PSDColorModeBlockTest::testCreation()
 {
-    PSDColorModeBlock colorModeBlock1(Indexed);
+    PSDColorModeBlock colorModeBlock1(PSDHeader::Indexed);
     Q_ASSERT(!colorModeBlock1.valid());
 
-    PSDColorModeBlock colorModeBlock2(DuoTone);
+    PSDColorModeBlock colorModeBlock2(PSDHeader::DuoTone);
     Q_ASSERT(!colorModeBlock2.valid());
 
-    PSDColorModeBlock colorModeBlock3(RGB);
+    PSDColorModeBlock colorModeBlock3(PSDHeader::RGB);
     Q_ASSERT(colorModeBlock3.valid());
 }
 
@@ -48,7 +48,7 @@ void PSDColorModeBlockTest::testLoadingRGB()
     PSDHeader header;
     header.read(&f);
 
-    QVERIFY(header.m_colormode == RGB);
+    QVERIFY(header.m_colormode == PSDHeader::RGB);
 
     PSDColorModeBlock colorModeBlock(header.m_colormode);
     bool retval = colorModeBlock.read(&f);
@@ -65,7 +65,7 @@ void PSDColorModeBlockTest::testLoadingIndexed()
     PSDHeader header;
     header.read(&f);
 
-    QVERIFY(header.m_colormode == Indexed);
+    QVERIFY(header.m_colormode == PSDHeader::Indexed);
 
     PSDColorModeBlock colorModeBlock(header.m_colormode);
     bool retval = colorModeBlock.read(&f);

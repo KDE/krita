@@ -72,6 +72,7 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
         settings->m_options->m_sizeOption->sensor()->reset();
         settings->m_options->m_opacityOption->sensor()->reset();
         settings->m_options->m_darkenOption->sensor()->reset();
+        settings->m_options->m_rotationOption->sensor()->reset();
     }
 }
 

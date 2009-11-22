@@ -39,6 +39,7 @@
 #include "psd_colormode_block.h"
 #include "psd_utils.h"
 #include "psd_resource_section.h"
+#include "psd_layer_section.h"
 
 QString psd_colormode_to_colormodelid(PSDHeader::PSDColorMode colormode, quint16 channelDepth)
 {
@@ -119,6 +120,11 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
+    PSDLayerSection layerSection;
+    if (!layerSection.read(&f)) {
+        kDebug() << "failed reading layer section: " << layerSection.error;
+        return KisImageBuilder_RESULT_FAILURE;
+    }
 
     // Get the right colorspace
     QString colorSpaceId = psd_colormode_to_colormodelid(header.m_colormode, header.m_channelDepth);

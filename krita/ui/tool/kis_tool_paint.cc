@@ -136,18 +136,17 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
     if (e->button() == Qt::MidButton) {
         //CALLING FOR POP UP PALETTE
         qDebug() << "[KisToolPaint] MidButton: calling palette";
-//        QPoint p = ;
-        emit this->favoritePaletteCalled(e->pos());
+        emit favoritePaletteCalled(e->pos());
 
-        KoCanvasResourceProvider * resourceProvider = 0;
-        if (m_canvas && (resourceProvider = m_canvas->resourceProvider())) {
-            QVariant fg = resourceProvider->resource(KoCanvasResource::ForegroundColor);
-            if (!fg.isValid()) return;
-            QVariant bg = resourceProvider->resource(KoCanvasResource::BackgroundColor);
-            if (!bg.isValid()) return;
-            resourceProvider->setResource(KoCanvasResource::ForegroundColor, bg);
-            resourceProvider->setResource(KoCanvasResource::BackgroundColor, fg);
-        }
+//        KoCanvasResourceProvider * resourceProvider = 0;
+//        if (m_canvas && (resourceProvider = m_canvas->resourceProvider())) {
+//            QVariant fg = resourceProvider->resource(KoCanvasResource::ForegroundColor);
+//            if (!fg.isValid()) return;
+//            QVariant bg = resourceProvider->resource(KoCanvasResource::BackgroundColor);
+//            if (!bg.isValid()) return;
+//            resourceProvider->setResource(KoCanvasResource::ForegroundColor, bg);
+//            resourceProvider->setResource(KoCanvasResource::BackgroundColor, fg);
+//        }
     }
 }
 

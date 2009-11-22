@@ -25,20 +25,28 @@
 #include <QDebug>
 #include <QIcon>
 #include <QToolButton>
+#include <QColor>
 
 KisFavoriteBrushData::KisFavoriteBrushData(KoFavoriteResourceManager* resourceManager, KisPaintOpPresetSP  newdata, QIcon* icon)
         : m_favoriteResourceManager (resourceManager)
         , m_button (0)
         , m_data (newdata)
 {
-    // without a button, this class doesn't make sense, so always initialize it
     m_button = new QToolButton();
     m_button->setMinimumSize(KisPopupPalette::BUTTON_SIZE, KisPopupPalette::BUTTON_SIZE);
     m_button->setMaximumSize(KisPopupPalette::BUTTON_SIZE, KisPopupPalette::BUTTON_SIZE);
+    m_button->setToolTip(m_data->paintOp().id());
+    if (icon) m_button->setIcon(*icon);
+    m_button->setAutoFillBackground(false);
+
+//    QPalette p(m_button->palette());
+//    p.setColor(QPalette::Button, QColor (232,231,230,255));
+//    m_button->setPalette(p);
+    m_button->setAutoFillBackground(false);
+//    m_button->setStyleSheet("* { background-color: rgba(232,231,230,255) }");
+
     connect(m_button, SIGNAL(clicked()), this, SLOT(slotBrushButtonClicked()));
     connect(this, SIGNAL(signalPaintOpChanged(KisPaintOpPresetSP)), m_favoriteResourceManager, SLOT(slotChangeCurrentPaintOp(KisPaintOpPresetSP)));
-    if (icon) m_button->setIcon(*icon);
-    m_button->setStyleSheet("* { background-color: rgba(232,231,230,255) }");
 }
 
 void KisFavoriteBrushData::slotBrushButtonClicked()

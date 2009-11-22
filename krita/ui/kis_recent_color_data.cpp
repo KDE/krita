@@ -23,6 +23,7 @@
 #include <QIcon>
 #include <QToolButton>
 #include <stdio.h>
+#include <QPalette>
 
 KisRecentColorData::KisRecentColorData(QColor *newColor)
         : m_button (0)
@@ -30,11 +31,11 @@ KisRecentColorData::KisRecentColorData(QColor *newColor)
 {
     m_button = new QToolButton();
 
-    //setting color
-    char str[45];
-    sprintf(str, "* { background-color: rgb(%i,%i,%i) }", color()->red(), color()->green(),color()->blue());
-
-    m_button->setStyleSheet(str);
+    //changing button color
+    QPalette p(m_button->palette());
+    p.setColor(QPalette::Button, *newColor);
+    m_button->setPalette(p);
+    m_button->setAutoFillBackground(false);
 
     m_button->setMinimumSize(KisPopupPalette::BUTTON_SIZE, KisPopupPalette::BUTTON_SIZE);
     m_button->setMaximumSize(KisPopupPalette::BUTTON_SIZE, KisPopupPalette::BUTTON_SIZE);

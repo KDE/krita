@@ -177,25 +177,7 @@ public:
 
 private:
 
-    bool compositeWithProjection(KisLayer *layer, const QRect &rect) {
-
-        Q_ASSERT(m_projection);
-        if (!layer->visible()) return true;
-
-        KisPaintDeviceSP device = layer->projection();
-        if (!device) return true;
-
-        QRect needRect = rect & device->extent();
-
-        KisPainter gc(m_projection);
-        gc.setChannelFlags(layer->channelFlags());
-        gc.setCompositeOp(layer->compositeOp());
-        gc.setOpacity(layer->opacity());
-        gc.bitBlt(needRect.topLeft(), device, needRect);
-
-        return true;
-    }
-
+    bool compositeWithProjection(KisLayer *layer, const QRect &rect);
 
     KisPaintDeviceSP m_projection;
     QRect m_rc;

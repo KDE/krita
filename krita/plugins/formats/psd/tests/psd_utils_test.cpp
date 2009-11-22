@@ -130,20 +130,85 @@ void PSDUtilsTest::test_psdpad()
 
 void PSDUtilsTest::test_psdread_quint8()
 {
+    QBuffer buf;
+    buf.open(QBuffer::ReadWrite);
+    quint8 s = 3;
+    Q_ASSERT(psdwrite(&buf, s));
+    buf.close();
+    buf.open(QBuffer::ReadOnly);
+    quint8 r;
+    Q_ASSERT(psdread(&buf, &r));
+    QCOMPARE(r, s);
 }
 
 void PSDUtilsTest::test_psdread_quint16()
 {
+    QBuffer buf;
+    buf.open(QBuffer::ReadWrite);
+    quint16 s = 1024;
+    Q_ASSERT(psdwrite(&buf, s));
+    buf.close();
+    buf.open(QBuffer::ReadOnly);
+    quint16 r;
+    Q_ASSERT(psdread(&buf, &r));
+    QCOMPARE(r, s);
 }
 
 void PSDUtilsTest::test_psdread_quint32()
 {
+    QBuffer buf;
+    Q_ASSERT(buf.open(QBuffer::ReadWrite));
+    quint32 s = 300000;
+    psdwrite(&buf, s);
+    buf.close();
+    buf.open(QBuffer::ReadOnly);
+    quint32 r;
+    Q_ASSERT(psdread(&buf, &r));
+    QCOMPARE(r, s);
 }
 
 void PSDUtilsTest::test_psdread_pascalstring()
 {
-}
+    QBuffer buf;
 
+    QString s;
+    QString r;
+
+    // test null string
+    buf.open(QBuffer::ReadWrite);
+    Q_ASSERT(psdwrite_pascalstring(&buf, s));
+    buf.close();
+    buf.open(QBuffer::ReadOnly);
+    psdread_pascalstring(&buf, r);
+    QCOMPARE(r, s);
+    Q_ASSERT(buf.bytesAvailable() == 0);
+
+    // test even string
+    buf.close();
+    buf.buffer().clear();
+    r.clear();
+    buf.open(QBuffer::ReadWrite);
+    s = QString("bl");
+    Q_ASSERT(psdwrite_pascalstring(&buf, s));
+    buf.close();
+    buf.open(QBuffer::ReadOnly);
+    psdread_pascalstring(&buf, r);
+    QCOMPARE(r, s);
+    Q_ASSERT(buf.bytesAvailable() == 0);
+
+    // test uneven string
+    buf.close();
+    buf.buffer().clear();
+    r.clear();
+    buf.open(QBuffer::ReadWrite);
+    s = QString("bla");
+    Q_ASSERT(psdwrite_pascalstring(&buf, s));
+    buf.close();
+    buf.open(QBuffer::ReadOnly);
+    psdread_pascalstring(&buf, r);
+    QCOMPARE(r, s);
+    Q_ASSERT(buf.bytesAvailable() == 0);
+}
 
 QTEST_KDEMAIN(PSDUtilsTest, GUI)
 

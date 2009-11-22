@@ -33,7 +33,6 @@ bool psdpad(QIODevice* io, quint32 padding);
 bool psdread(QIODevice* io, quint8* v);
 bool psdread(QIODevice* io, quint16* v);
 bool psdread(QIODevice* io, quint32* v);
-
 bool psdread_pascalstring(QIODevice* io, QString& s);
 
 #endif // PSD_UTILS_H

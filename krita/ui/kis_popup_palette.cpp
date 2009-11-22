@@ -39,11 +39,9 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     , m_brushButtonLayout(0)
     , m_colorLayout(0)
 {
+
+    qDebug() << "[KisPopupPalette] I am constructed";
     colorFoo=0;
-//    QPalette widgetPalette(palette());
-//    widgetPalette.setColor(QPalette::Window, QColor(255,255,255,0));
-//    setPalette(widgetPalette);
-//    setAutoFillBackground(false);
 
     //FAVORITE BRUSHES
     m_brushButtonLayout = new FlowLayout(5);
@@ -84,15 +82,6 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     colorWidget->setLayout(tempLayout);
 //    colorWidget->setStyleSheet("* { background-color: rgba(0,0,0,128) }");
 
-//    QPalette brushWidgetPalette(brushButtonWidget->palette());
-//    brushWidgetPalette.setColor(QPalette::Window, QColor(0,0,0,128));
-//    brushButtonWidget->setPalette(brushWidgetPalette);
-//    brushButtonWidget->setAutoFillBackground(false);
-//    QPalette colorWidgetPalette(colorWidget->palette());
-//    colorWidgetPalette.setColor(QPalette::Window, QColor(0,0,0,128));
-//    colorWidget->setPalette(colorWidgetPalette);
-//    colorWidget->setAutoFillBackground(false);
-
     //adding items
     addItem(brushButtonWidget, "Favorite Brushes");
     addItem(colorWidget, "Recently Used Colors");
@@ -109,6 +98,28 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     colorWidget = 0;
     brushButtonWidget = 0;
 
+//    setAutoFillBackground(true);
+//    setAttribute(Qt::WA_NoSystemBackground, true);
+//    setAttribute(Qt::WA_OpaquePaintEvent, false);
+
+//    for (int pos=0; pos< 2; pos++){
+//        QWidget *w = widget(pos);
+//        w->setAutoFillBackground(true);
+//    }
+}
+
+void KisPopupPalette::paintEvent(QPaintEvent *event)
+{
+    QPainter painter (this);
+    painter.setOpacity(0.5);
+//    painter.fillRect(rect(), Qt::transparent);
+
+    for (int pos=0; pos< 2; pos++){
+        QWidget *w = widget(pos);
+        QPalette palette(w->palette());
+        palette.setColor(QPalette::Window, QColor(0,0,0,128));
+        w->setPalette(palette);
+    }
 }
 
 void KisPopupPalette::addFavoriteBrushButton(KisFavoriteBrushData* brush)
@@ -211,7 +222,7 @@ void KisPopupPalette::slotPickNewColor()
 
 QSize KisPopupPalette::sizeHint() const
 {
-    return QSize(250, 150);
+    return QSize(200, 125);
 }
 
  void KisPopupPalette::mousePressEvent(QMouseEvent *event)

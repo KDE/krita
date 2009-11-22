@@ -42,7 +42,7 @@ KisFavoriteBrushData::KisFavoriteBrushData(KoFavoriteResourceManager* resourceMa
 //    QPalette p(m_button->palette());
 //    p.setColor(QPalette::Button, QColor (232,231,230,255));
 //    m_button->setPalette(p);
-    m_button->setAutoFillBackground(false);
+//    m_button->setAutoFillBackground(false);
 //    m_button->setStyleSheet("* { background-color: rgba(232,231,230,255) }");
 
     connect(m_button, SIGNAL(clicked()), this, SLOT(slotBrushButtonClicked()));

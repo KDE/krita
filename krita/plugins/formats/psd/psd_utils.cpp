@@ -19,6 +19,7 @@
 
 #include <QIODevice>
 #include <QString>
+#include <QDebug>
 
 #include <netinet/in.h> // htonl
 
@@ -79,7 +80,10 @@ bool psdread(QIODevice* io, quint32* v)
 
 bool psdreadpascalstring(QIODevice* io, QString& s)
 {
+    Q_UNUSED(s);
     quint8 length;
     if (!psdread(io, &length)) return false;
     if (length < 1) return false;
+
+    return false;
 }

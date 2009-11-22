@@ -8,6 +8,7 @@ set(LIB_PSD_SRCS
     psd_colormode_block.cpp
     psd_resource_section.cpp
     psd_resource_block.cpp
+    psd_layer_section.cpp
 )
 
 set(kritapsdimport_PART_SRCS

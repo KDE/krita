@@ -110,7 +110,7 @@ KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const Q
         uriTF.setPath(tmpFile);
 
         // open the file
-        QFile *fp = new QFile(uriTF.path());
+        QFile *fp = new QFile(uriTF.toLocalFile());
         if (fp->exists()) {
             doc->prepareForImport();
             result = loadFromDevice(fp, doc);

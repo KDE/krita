@@ -1,0 +1,182 @@
+/*
+ *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+#include "psd_loader.h"
+
+#include <kapplication.h>
+
+#include <kio/netaccess.h>
+#include <kio/deletejob.h>
+
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
+#include <KoColorProfile.h>
+
+#include <kis_annotation.h>
+#include <kis_types.h>
+#include <kis_paint_layer.h>
+#include <kis_doc2.h>
+#include <kis_image.h>
+#include <kis_paint_layer.h>
+#include <kis_undo_adapter.h>
+
+#include "psd_header.h"
+#include "psd_colormode_block.h"
+#include "psd_utils.h"
+
+QString psd_colormode_to_colormodelid(PSDColorMode colormode, quint16 channelDepth)
+{
+    KoID colorSpaceId;
+    switch(colormode) {
+    case(Bitmap):
+    case(Indexed):
+    case(MultiChannel):
+    case(RGB):
+        colorSpaceId = RGBAColorModelID;
+        break;
+    case(CMYK):
+        colorSpaceId = CMYKAColorModelID;
+        break;
+    case(Grayscale):
+    case(DuoTone):
+        colorSpaceId = GrayAColorModelID;
+        break;
+    case(Lab):
+        colorSpaceId = LABAColorModelID;
+        break;
+    default:
+        return QString::null;
+    }
+
+    switch(channelDepth) {
+    case(1):
+    case(16):
+        return KoColorSpaceRegistry::instance()->colorSpaceId(colorSpaceId, Integer16BitsColorDepthID);
+    case(8):
+    default:
+        return KoColorSpaceRegistry::instance()->colorSpaceId(colorSpaceId, Integer8BitsColorDepthID);
+
+    }
+
+    return QString::null;
+}
+
+PSDLoader::PSDLoader(KisDoc2 *doc, KisUndoAdapter *adapter)
+{
+    m_img = 0;
+    m_doc = doc;
+    m_adapter = adapter;
+    m_job = 0;
+    m_stop = false;
+}
+
+PSDLoader::~PSDLoader()
+{
+}
+
+KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
+{
+    // open the file
+    QFile f(uri.toLocalFile());
+    if (f.exists()) {
+        return KisImageBuilder_RESULT_NOT_EXIST;
+    }
+    if (!f.open(QIODevice::ReadOnly)) {
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
+    PSDHeader header;
+    if (!header.read(&f)) {
+        kDebug() << "failed reading header";
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
+    PSDColorModeBlock colorModeBlock(header.m_colormode);
+    if (!colorModeBlock.read(&f)) {
+        kDebug() << "failed reading colormode block";
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
+    // Get the right colorspace
+    QString colorSpaceId = psd_colormode_to_colormodelid(header.m_colormode, header.m_channelDepth);
+    if (colorSpaceId.isNull()) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+
+    // XXX: get the icc profile!
+    KoColorProfile* profile = 0;
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, profile);
+    if (!cs) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+
+    // Creating the KisImageWSP
+    m_img = new KisImage(m_doc->undoAdapter(),  header.m_width, header.m_height, cs, "built image");
+    Q_CHECK_PTR(m_img);
+    m_img->lock();
+
+    // Preserve the duotone colormode block for saving back to psd
+    if (header.m_colormode == DuoTone) {
+        KisAnnotationSP annotation = new KisAnnotation("Duotone Colormode Block",
+                                                       i18n("Duotone Colormode Block"),
+                                                       colorModeBlock.m_data);
+        m_img->addAnnotation(annotation);
+    }
+
+
+    //KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img->nextLayerName(), quint8_MAX));
+
+
+
+    return KisImageBuilder_RESULT_OK;
+}
+
+
+
+KisImageBuilder_Result PSDLoader::buildImage(const KUrl& uri)
+{
+    if (uri.isEmpty())
+        return KisImageBuilder_RESULT_NO_URI;
+
+    if (!KIO::NetAccess::exists(uri, false, qApp->activeWindow())) {
+        return KisImageBuilder_RESULT_NOT_EXIST;
+    }
+
+    // We're not set up to handle asynchronous loading at the moment.
+    KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
+    QString tmpFile;
+
+    if (KIO::NetAccess::download(uri, tmpFile, qApp->activeWindow())) {
+        KUrl uriTF;
+        uriTF.setPath( tmpFile );
+        result = decode(uriTF);
+        KIO::NetAccess::removeTempFile(tmpFile);
+    }
+
+    return result;
+}
+
+
+KisImageWSP PSDLoader::image()
+{
+    return m_img;
+}
+
+void PSDLoader::cancel()
+{
+    m_stop = true;
+}
+
+#include "psd_loader.moc"
+

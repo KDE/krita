@@ -1,8 +1,10 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
+Comment=
 Exec=krita %u
+GenericName=
 Icon=krita
-MimeType=x-vnd.adobe.photoshop;
+MimeType=image/x-psd,image/photoshop,image/x-photoshop,image/x-vnd.adobe.photoshop,image/vnd.adobe.photoshop
 Name=Krita
 Name[af]=Krita
 Name[bg]=Krita
@@ -59,13 +61,14 @@ Name[xh]=Krita
 Name[x-test]=xxKritaxx
 Name[zh_CN]=Krita
 Name[zh_TW]=繪圖_Krita
-Type=Application
 NoDisplay=true
+Path=
 StartupNotify=true
 Terminal=false
-X-DBUS-StartupType=Multi
+TerminalOptions=
+Type=Application
 X-DBUS-ServiceName=org.koffice.krita
+X-DBUS-StartupType=multi
 X-KDE-StartupNotify=true
 X-KDE-SubstituteUID=false
 X-KDE-Username=
-

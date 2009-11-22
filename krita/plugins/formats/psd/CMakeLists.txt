@@ -1,40 +1,34 @@
 add_subdirectory(tests)
 
-include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
+include_directories( ${KRITA_INCLUDES} )
 
-set(libkritaconverter_LIB_SRCS
-    kis_psd_converter.cc
-    iccpsd.c
-    )
+set(LIB_PSD_SRCS 
+    psd_utils.cpp
+    psd_header.cpp
+    psd_colormode_block.cpp
+)
 
 set(kritapsdimport_PART_SRCS
-    kis_psd_import.cc
-    ${libkritaconverter_LIB_SRCS}
-    )
+    psd_import.cc
+    psd_loader.cpp
+    ${LIB_PSD_SRCS}
+)
 
 kde4_add_plugin(kritapsdimport WITH_PREFIX ${kritapsdimport_PART_SRCS})
-
-target_link_libraries(kritapsdimport kritaui psd ${EXIV2_LIBRARIES} )
-
-install(TARGETS kritapsdimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(kritapsdimport kritaui )
+install(TARGETS kritapsdimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
 set(kritapsdexport_PART_SRCS
-    kis_psd_export.cc
-    ${libkritaconverter_LIB_SRCS}
-    )
-
-kde4_add_ui_files(kritapsdexport_PART_SRCS kis_wdg_options_psd.ui )
+    psd_export.cc
+    psd_saver.cpp
+    ${LIB_PSD_SRCS}
+)
 
 kde4_add_plugin(kritapsdexport WITH_PREFIX ${kritapsdexport_PART_SRCS})
-
-
-
-target_link_libraries(kritapsdexport kritaui psd ${EXIV2_LIBRARIES} )
-
-install(TARGETS kritapsdexport  DESTINATION ${PLUGIN_INSTALL_DIR})
-
+target_link_libraries(kritapsdexport kritaui )
+install(TARGETS kritapsdexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

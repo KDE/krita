@@ -7,13 +7,10 @@
     <x>0</x>
     <y>0</y>
     <width>218</width>
-    <height>55</height>
+    <height>47</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="sizeConstraint">
-    <enum>QLayout::SetMinAndMaxSize</enum>
-   </property>
    <property name="margin">
     <number>0</number>
    </property>

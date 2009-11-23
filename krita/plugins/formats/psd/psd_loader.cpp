@@ -120,7 +120,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-    PSDLayerSection layerSection;
+    PSDLayerSection layerSection(header);
     if (!layerSection.read(&f)) {
         kDebug() << "failed reading layer section: " << layerSection.error;
         return KisImageBuilder_RESULT_FAILURE;

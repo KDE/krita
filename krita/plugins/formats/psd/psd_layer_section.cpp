@@ -19,7 +19,8 @@
 
 #include <QIODevice>
 
-PSDLayerSection::PSDLayerSection()
+PSDLayerSection::PSDLayerSection(const PSDHeader& header)
+    : m_header(header)
 {
 }
 
@@ -30,6 +31,13 @@ bool PSDLayerSection::read(QIODevice* io)
 
 bool PSDLayerSection::write(QIODevice* io)
 {
+    Q_UNUSED(io);
+    Q_ASSERT(valid());
+    if (!valid()) {
+        error = "Cannot write an invalid Layer Section object";
+        return false;
+    }
+    qFatal("TODO: implement writing the layer section");
     return false;
 }
 

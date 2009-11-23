@@ -22,15 +22,26 @@
 
 class QIODevice;
 
+#include "psd_header.h"
+#include "psd_layer_record.h"
+
 class PSDLayerSection
 {
 public:
-    PSDLayerSection();
+    PSDLayerSection(const PSDHeader& header);
     bool read(QIODevice* io);
     bool write(QIODevice* io);
     bool valid();
 
     QString error;
+
+    qint16 nLayers;
+    QVector<PSDLayerRecord> layers;
+
+private:
+
+    const PSDHeader m_header;
+
 };
 
 #endif // PSD_LAYER_SECTION_H

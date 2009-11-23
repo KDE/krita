@@ -23,8 +23,12 @@
 class QIODevice;
 class QString;
 
+const int _8BPS = 0x38425053;
+const int _8BIM = 0x3842494D;
+
 bool psdwrite(QIODevice* io, quint8 v);
 bool psdwrite(QIODevice* io, quint16 v);
+bool psdwrite(QIODevice* io, qint16 v);
 bool psdwrite(QIODevice* io, quint32 v);
 bool psdwrite(QIODevice* io, const QString &s);
 bool psdwrite_pascalstring(QIODevice* io, const QString &s);
@@ -32,7 +36,9 @@ bool psdpad(QIODevice* io, quint32 padding);
 
 bool psdread(QIODevice* io, quint8* v);
 bool psdread(QIODevice* io, quint16* v);
+bool psdread(QIODevice* io, qint16* v);
 bool psdread(QIODevice* io, quint32* v);
+bool psdread(QIODevice* io, quint64* v);
 bool psdread_pascalstring(QIODevice* io, QString& s);
 
 #endif // PSD_UTILS_H

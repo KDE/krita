@@ -66,7 +66,10 @@ bool PSDResourceBlock::write(QIODevice* io)
 {
     Q_UNUSED(io);
     Q_ASSERT(valid());
-    if (!valid()) return false;
+    if (!valid()) {
+        error = "Cannot write an invalid Resource Block";
+        return false;
+    }
     qFatal("TODO: implement writing the resource block");
 
 }

@@ -60,7 +60,10 @@ bool PSDColorModeBlock::write(QIODevice* io)
 {
     Q_UNUSED(io);
     Q_ASSERT(valid());
-    if (!valid()) return false;
+    if (!valid()) {
+        error = "Cannot write an invalid Color Mode Block";
+        return false;
+    }
     qFatal("TODO: implement writing the colormode block");
     return false;
 }

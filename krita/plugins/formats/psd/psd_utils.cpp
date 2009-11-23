@@ -37,6 +37,14 @@ bool psdwrite(QIODevice* io, quint16 v)
     return written == 2;
 }
 
+bool psdwrite(QIODevice* io, qint16 v)
+{
+    qint16 val = ntohs(v);
+    int written = io->write((char*)&val, 2);
+    return written == 2;
+}
+
+
 bool psdwrite(QIODevice* io, quint32 v)
 {
     quint32 val = ntohl(v);
@@ -101,11 +109,30 @@ bool psdread(QIODevice* io, quint16* v)
     return true;
 }
 
+bool psdread(QIODevice* io, qint16* v)
+{
+    qint16 val;
+    quint64 read = io->read((char*)&val, 2);
+    if (read != 2) return false;
+    *v = ntohs(val);
+    return true;
+}
+
+
 bool psdread(QIODevice* io, quint32* v)
 {
     quint32 val;
     quint64 read = io->read((char*)&val, 4);
     if (read != 4) return false;
+    *v = ntohl(val);
+    return true;
+}
+
+bool psdread(QIODevice* io, quint64* v)
+{
+    quint64 val;
+    quint64 read = io->read((char*)&val, 8);
+    if (read != 8) return false;
     *v = ntohl(val);
     return true;
 }

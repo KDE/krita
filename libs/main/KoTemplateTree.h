@@ -24,13 +24,12 @@
 #include <QList>
 #include <QStringList>
 #include <QPixmap>
-#include "komain_export.h"
 #include <kcomponentdata.h>
 
 class KoTemplate;
 class KoTemplateGroup;
 
-class KOMAIN_EXPORT KoTemplateTree
+class KoTemplateTree
 {
 
 public:

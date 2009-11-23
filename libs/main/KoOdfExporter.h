@@ -30,7 +30,7 @@ class KoGenStyles;
 /**
  * @brief Convenience structure encapsulating XML writers used when writing ODF document.
  */
-struct KOMAIN_EXPORT KoOdfWriters
+struct KoOdfWriters
 {
     /**
     * Creates structure encapsulating XML writers. All members are set initially to 0.
@@ -60,7 +60,7 @@ struct KOMAIN_EXPORT KoOdfWriters
  *
  * @author Jarosław Staniek <staniek@kde.org>
  */
-class KOMAIN_EXPORT KoOdfExporter : public KoFilter
+class KoOdfExporter : public KoFilter
 {
     Q_OBJECT
 public:

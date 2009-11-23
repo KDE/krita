@@ -33,7 +33,7 @@ namespace KOfficeFilter {
  * @internal
  * Only exported for unit tests.
  */
-class KOMAIN_EXPORT Graph
+class KOMAIN_TEST_EXPORT Graph
 {
 
 public:

@@ -21,7 +21,6 @@
 #ifndef __koDocumentInfoDlg_h__
 #define __koDocumentInfoDlg_h__
 
-#include "komain_export.h"
 #include <kpagedialog.h>
 
 class KoDocumentInfo;
@@ -44,7 +43,7 @@ class KoDocumentInfo;
  * KPageDialog and uses the face type Tabbed.
  */
 
-class KOMAIN_EXPORT KoDocumentInfoDlg : public KPageDialog
+class KoDocumentInfoDlg : public KPageDialog
 {
     Q_OBJECT
 

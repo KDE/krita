@@ -23,8 +23,6 @@
 #include <QPixmap>
 #include <QList>
 
-#include "komain_export.h"
-
 class KConfig;
 class KoOpenPanePrivate;
 class KComponentData;
@@ -34,7 +32,8 @@ class KoDetailsPane;
 class KUrl;
 class QTreeWidgetItem;
 
-class KOMAIN_EXPORT KoOpenPane : public QWidget
+/// \internal
+class KoOpenPane : public QWidget
 {
     Q_OBJECT
 
@@ -87,7 +86,6 @@ protected:
     void initTemplates(const QString& templateType);
 
 private:
-
     void initExistingFilesPane(const QStringList& mimeFilter);
 
     KoOpenPanePrivate * const d;

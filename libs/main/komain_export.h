@@ -1,5 +1,6 @@
 /*  This file is part of the KDE project
     Copyright (C) 2006 David Faure <faure@kde.org>
+    Copyright (C) 2006 Thomas Zander <zander@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -41,5 +42,22 @@
 #define KOMAIN_EXPORT KDE_EXPORT
 
 #endif
+
+/* Now the same for KOMAIN_TEST_EXPORT, if compiling with unit tests enabled */
+
+#ifdef COMPILING_TESTS
+#if defined _WIN32 || defined _WIN64
+# if defined(MAKE_KOMAIN_LIB)
+#       define KOMAIN_TEST_EXPORT KDE_EXPORT
+#   else
+#       define KOMAIN_TEST_EXPORT KDE_IMPORT
+#   endif
+# else /* not windows */
+#   define KOMAIN_TEST_EXPORT KDE_EXPORT
+# endif
+#else /* not compiling tests */
+#   define KOMAIN_TEST_EXPORT
+#endif
+
 
 #endif

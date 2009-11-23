@@ -33,7 +33,7 @@ class KoFilterChain;
 /**
  *  Represents an available filter.
  */
-class KOMAIN_EXPORT KoFilterEntry : public KShared
+class KOMAIN_TEST_EXPORT KoFilterEntry : public KShared
 {
 
 public:

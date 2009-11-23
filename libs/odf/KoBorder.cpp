@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,7 +18,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
 
 #include "KoBorder.h"
 
@@ -36,35 +36,38 @@ public:
     KoBorderPrivate();
     ~KoBorderPrivate();
 
-    KoBorder::BorderData  leftBorder;
-    KoBorder::BorderData  topBorder;
-    KoBorder::BorderData  rightBorder;
-    KoBorder::BorderData  bottomBorder;
+    KoBorder::BorderData leftBorder;
+    KoBorder::BorderData topBorder;
+    KoBorder::BorderData rightBorder;
+    KoBorder::BorderData bottomBorder;
 };
 
 KoBorderPrivate::KoBorderPrivate()
 {
-    leftBorder.style  = KoBorder::BorderNone;
-    topBorder.style   = KoBorder::BorderNone;
-    rightBorder.style = KoBorder::BorderNone;
-    topBorder.style   = KoBorder::BorderNone;
 }
 
 KoBorderPrivate::~KoBorderPrivate()
 {
 }
 
+KoBorder::BorderData::BorderData()
+    : style(KoBorder::BorderNone),
+    width(0),
+    innerWidth(0),
+    spacing(0)
+{
+}
+
 
 // ----------------------------------------------------------------
 
-
 KoBorder::KoBorder()
-    : d( new KoBorderPrivate )
+    : d(new KoBorderPrivate)
 {
 }
 
 KoBorder::KoBorder(const KoBorder &kb)
-    : d( kb.d )
+    : d(kb.d)
 {
 }
 
@@ -76,7 +79,6 @@ KoBorder::~KoBorder()
 // ----------------------------------------------------------------
 //                             operators
 
-
 KoBorder &KoBorder::operator=(const KoBorder &other)
 {
     d = other.d;
@@ -84,10 +86,9 @@ KoBorder &KoBorder::operator=(const KoBorder &other)
     return *this;
 }
 
-
 bool KoBorder::operator==(const KoBorder &other) const
 {
-    if (d == other.d)
+    if (d.data() == other.d.data())
         return true;
 
     // Left Borders
@@ -212,7 +213,6 @@ bool KoBorder::operator==(const KoBorder &other) const
 
 // ----------------------------------------------------------------
 //                 public, non-class functions
-
 
 KoBorder::BorderStyle KoBorder::odfBorderStyle(const QString &borderstyle)
 {
@@ -508,7 +508,6 @@ KoBorder::BorderData KoBorder::bottomBorderData() const
 // ----------------------------------------------------------------
 //                         load and save
 
-
 void KoBorder::loadOdf(const KoXmlElement &style)
 {
     if (style.hasAttributeNS(KoXmlNS::fo, "border")) {
@@ -643,7 +642,6 @@ void KoBorder::loadOdf(const KoXmlElement &style)
         }
     }
 }
-
 
 void KoBorder::saveOdf(KoGenStyle &style) const
 {

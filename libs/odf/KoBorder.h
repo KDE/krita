@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2009 Inge wallin <inge@lysator.liu.se>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -67,6 +68,7 @@ public:
 
     /// Holds data about one border line.
     struct BorderData {
+        BorderData();
         BorderStyle  style; ///< The border style. (see BorderStyle)
         qreal        width; ///< The thickness of the border, or 0 if there is no border
         QColor       color; ///< The border Color
@@ -86,6 +88,7 @@ public:
     KoBorder &operator=(const KoBorder &other);
     /// Compare the border with the other one
     bool operator==(const KoBorder &other) const;
+    bool operator!=(const KoBorder &other) const { return !operator==(other); }
 
     void setLeftBorderStyle(BorderStyle style);
     BorderStyle leftBorderStyle() const;
@@ -153,10 +156,8 @@ public:
     static BorderStyle odfBorderStyle(const QString &borderstyle);
     static QString odfBorderStyleString(BorderStyle borderstyle);
 
- private:
+private:
     QSharedDataPointer<KoBorderPrivate> d;
 };
-
-
 
 #endif

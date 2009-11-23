@@ -139,15 +139,15 @@ KoPageLayout KoPageLayout::standardLayout()
     layout.height = MM_TO_POINT(KoPageFormat::height(layout.format, layout.orientation));
 
     // margins
-    layout.leftMargin   = MM_TO_POINT(20.0);
-    layout.rightMargin  = MM_TO_POINT(20.0);
-    layout.topMargin    = MM_TO_POINT(20.0);
+    layout.leftMargin = MM_TO_POINT(20.0);
+    layout.rightMargin = MM_TO_POINT(20.0);
+    layout.topMargin = MM_TO_POINT(20.0);
     layout.bottomMargin = MM_TO_POINT(20.0);
 
     // padding.  FIXME: Find the best real values.
-    layout.leftPadding   = MM_TO_POINT(20.0);
-    layout.rightPadding  = MM_TO_POINT(20.0);
-    layout.topPadding    = MM_TO_POINT(20.0);
+    layout.leftPadding = MM_TO_POINT(20.0);
+    layout.rightPadding = MM_TO_POINT(20.0);
+    layout.topPadding = MM_TO_POINT(20.0);
     layout.bottomPadding = MM_TO_POINT(20.0);
 
     // borders
@@ -160,4 +160,22 @@ KoPageLayout KoPageLayout::standardLayout()
     layout.bindingSide = -1;
 
     return layout;
+}
+
+bool KoPageLayout::operator==(const KoPageLayout &l) const
+{
+    return qFuzzyCompare(width,l.width)
+        && qFuzzyCompare(height,l.height)
+        && qFuzzyCompare(leftMargin,l.leftMargin)
+        && qFuzzyCompare(rightMargin,l.rightMargin)
+        && qFuzzyCompare(topMargin,l.topMargin)
+        && qFuzzyCompare(bottomMargin,l.bottomMargin)
+        && qFuzzyCompare(pageEdge,l.pageEdge)
+        && qFuzzyCompare(bindingSide,l.bindingSide)
+        && border == l.border;
+}
+
+bool KoPageLayout::operator!=(const KoPageLayout& l) const
+{
+    return !((*this) == l);
 }

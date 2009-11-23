@@ -68,25 +68,11 @@ struct KoPageLayout {
     /** Bottom padding in points */
     qreal bottomPadding;
 
-
     /// borders
     KoBorder  border;
 
-
-    bool operator==(const KoPageLayout& l) const {
-        return (qFuzzyCompare(width,l.width) &&
-                qFuzzyCompare(height,l.height) &&
-                qFuzzyCompare(leftMargin,l.leftMargin) &&
-                qFuzzyCompare(rightMargin,l.rightMargin) &&
-                qFuzzyCompare(topMargin,l.topMargin) &&
-                qFuzzyCompare(bottomMargin,l.bottomMargin) &&
-                qFuzzyCompare(pageEdge,l.pageEdge) &&
-                qFuzzyCompare(bindingSide,l.bindingSide) &&
-                border == l.border);
-    }
-    bool operator!=(const KoPageLayout& l) const {
-        return !((*this) == l);
-    }
+    KOWIDGETS_EXPORT bool operator==(const KoPageLayout &l) const;
+    KOWIDGETS_EXPORT bool operator!=(const KoPageLayout& l) const;
 
     /**
      * Save this page layout to ODF.

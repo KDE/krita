@@ -1,15 +1,6 @@
 [Desktop Entry]
 Icon=
 Name=Krita PhotoShop Export Filter
-Name[de]=Krita PhotoShop-Exportfilter
-Name[es]=Filtro de Krita de exportación a PhotoShop
-Name[et]=Krita PhotoShop ekspordifilter
-Name[nl]=PhotoShop-exportfilter voor Krita
-Name[pt]=Filtro de Exportação de PhotoShop para o Krita
-Name[pt_BR]=Filtro de Exportação para PhotoShop do Krita
-Name[sv]=Krita PhotoShop-exportfilter
-Name[uk]=Фільтр експорту PhotoShop для Krita
-Name[x-test]=xxKrita PhotoShop Export Filterxx
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/x-psd,image/photoshop,image/x-photoshop,image/x-vnd.adobe.photoshop,image/vnd.adobe.photoshop

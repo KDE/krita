@@ -42,6 +42,9 @@ public:
     quint64 layerSectionSize;
 
     struct LayerInfo {
+        bool    hasTransparency; // if nLayers is < 0, then the image has transparency, and the
+                                 // first alpha channel we find. Of course, Krita _always_ has transparency,
+                                 // (Except for grayscale, but we don't use the non-alpha grayscale colorspaces.)
         quint64 layerInfoSize;
         qint16  nLayers;
         QVector<PSDLayerRecord*> layers;
@@ -50,6 +53,8 @@ public:
 
     LayerInfo layerInfo;
 
+
+    // XXX: We can only use this if the mask visualization is restored.
     struct GlobalMaskInfo {
 
         quint16 overlayColorSpace;

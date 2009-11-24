@@ -19,11 +19,14 @@
 
 #include <QIODevice>
 
+#include <kis_debug.h>
+
 #include "psd_header.h"
 #include "psd_utils.h"
 
 PSDLayerSection::PSDLayerSection(const PSDHeader& header)
-    : m_header(header)
+    : error(QString::null)
+    , m_header(header)
 {
 }
 
@@ -76,9 +79,17 @@ bool PSDLayerSection::read(QIODevice* io)
             layerInfo.layerInfoSize++;
         }
 
-        if (!psdread(io, &layerInfo.nLayers)) {
-            error = "Could not read read number of layers";
+        if (!psdread(io, &layerInfo.nLayers) || layerInfo.nLayers == 0) {
+            error = "Could not read read number of layers or no layers in image.";
             return false;
+        }
+
+        if (layerInfo.nLayers < 0) {
+            layerInfo.hasTransparency = true; // first alpha channel is the alpha channel of the projection.
+            layerInfo.nLayers = -layerInfo.nLayers;
+        }
+        else {
+            layerInfo.hasTransparency = false;
         }
 
         for (int i = 0; i < layerInfo.nLayers; ++i) {
@@ -88,6 +99,39 @@ bool PSDLayerSection::read(QIODevice* io)
                 return false;
             }
             layerInfo.layers << layerRecord;
+        }
+    }
+
+    {
+        quint32 globalMaskBlockLength;
+        if (!psdread(io, &globalMaskBlockLength) || globalMaskBlockLength > (quint64)io->bytesAvailable()) {
+            error = "Could not read global mask info block";
+            return false;
+        }
+
+        if (globalMaskBlockLength > 0) {
+
+            if (!psdread(io, &maskInfo.overlayColorSpace)) {
+                error = "Could not read global mask info overlay colorspace";
+                return false;
+            }
+
+            for (int i = 0; i < 4; ++i) {
+                if (!psdread(io, &maskInfo.colorComponents[i])) {
+                    error = QString("Could not read mask info visualizaion color component %1").arg(i);
+                    return false;
+                }
+            }
+
+            if (!psdread(io, &maskInfo.opacity)) {
+                error = "Could not read global mask info visualisation opacity";
+                return false;
+            }
+
+            if (!psdread(io, &maskInfo.kind)) {
+                error = "Could not read global mask info visualisation type";
+                return false;
+            }
         }
     }
 
@@ -108,5 +152,15 @@ bool PSDLayerSection::write(QIODevice* io)
 
 bool PSDLayerSection::valid()
 {
+    if (layerInfo.nLayers <= 0) return false;
+    if (layerInfo.nLayers != layerInfo.layers.size()) return false;
+    foreach(PSDLayerRecord* layer, layerInfo.layers) {
+        if (!layer->valid()) {
+            return false;
+        }
+    }
+    if (!error.isNull()) {
+        return false;
+    }
     return true;
 }

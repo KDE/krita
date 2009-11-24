@@ -158,7 +158,6 @@ bool PSDLayerRecord::read(QIODevice* io)
                 error = "could not read 'real' mask record";
                 return false;
             }
-
         }
 
         layerMask.positionedRelativeToLayer = flags & 1 ? true : false;

@@ -9,6 +9,7 @@ Name[pt_BR]=Pincel do MyPaint
 Name[sv]=Min målarpensel
 Name[uk]=Мій пензель
 Name[x-test]=xxMyPaint brushxx
+Name[zh_TW]=MyPaint 筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritamypaintpaintop

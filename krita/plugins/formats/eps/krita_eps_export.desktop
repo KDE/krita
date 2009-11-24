@@ -9,6 +9,7 @@ Name[pt_BR]=Filtro de Exportação de PostScript Encapsulado para o Krita
 Name[sv]=Krita exportfilter för inkapslad Postscript
 Name[uk]=Фільтр експорту EPS для Krita
 Name[x-test]=xxKrita Encapsulated PostScript Export Filterxx
+Name[zh_TW]=Krita 封裝 PostScript 匯出過濾程式
 X-KDE-Export=x-eps
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service

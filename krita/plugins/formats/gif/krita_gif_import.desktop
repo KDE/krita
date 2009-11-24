@@ -11,6 +11,7 @@ Name[pt_BR]=Filtro de Importação de GIF para o Krita
 Name[sv]=Krita GIF-importfilter
 Name[uk]=Фільтр імпорту GIF для Krita
 Name[x-test]=xxKrita Gif Import Filterxx
+Name[zh_TW]=Krita Gif 匯入過濾程式
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/gif
 X-KDE-Weight=1

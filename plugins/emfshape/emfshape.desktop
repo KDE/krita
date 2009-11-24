@@ -12,6 +12,7 @@ Name[sv]=Utökad Metafil-form
 Name[uk]=Форма EMF
 Name[wa]=Ene fôme metafitchî amidrêye
 Name[x-test]=xxEnhanced Metafile Shapexx
+Name[zh_TW]=加強型 Metafile 元件
 X-KDE-ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=emfshape

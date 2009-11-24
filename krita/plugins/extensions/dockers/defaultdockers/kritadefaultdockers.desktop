@@ -13,6 +13,7 @@ Name[sv]=Standarddockningsfönster
 Name[uk]=Типові панелі швартування
 Name[wa]=Prémetowès båres di wårdaedje
 Name[x-test]=xxDefault Dockersxx
+Name[zh_TW]=預設嵌入器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritadefaultdockers

@@ -11,6 +11,7 @@ Name[pt_BR]=Filtro de Importação de Gimp para o Krita
 Name[sv]=Krita Gimp-importfilter
 Name[uk]=Фільтр імпорту GIMP для Krita
 Name[x-test]=xxKrita Gimp Import Filterxx
+Name[zh_TW]=Krita Gimp 匯入過濾程式
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-xcf
 X-KDE-Weight=1

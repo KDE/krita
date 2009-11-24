@@ -10,6 +10,7 @@ Name[pt_BR]=Filtro de Exportação para JP2 para o Krita
 Name[sv]=Krita jp2-exportfilter
 Name[uk]=Фільтр експорту JP2 для Krita
 Name[x-test]=xxKrita jp2 Export Filterxx
+Name[zh_TW]=Krita jp2 匯出過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/jp2

@@ -286,13 +286,13 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, q
 QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
 {
-    QImage img(width, height, QImage::Format_RGB32);
-
-    for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++) {
-            quint8 c = data[x + y * width];
-            img.setPixel(x, y, qRgb(c, c, c));
-        }
+    QImage img(width, height, QImage::Format_Indexed8);
+    QVector<QRgb> table;
+    for(int i = 0; i < 255; ++i) table[i] = qRgb(i,i,i);
+    quint8* data_img = img.scanLine(0);
+    for( int i = 0; i < width * height; ++i)
+    {
+        data_img[i] = data[i];
     }
     return img;
 }

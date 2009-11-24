@@ -85,11 +85,10 @@ public:
     QString layerName; // pascal, not unicode!
 
     struct LayerInfoBlock {
-        QString key;
         QByteArray data;
     };
 
-    QVector<LayerInfoBlock> infoBlocks;
+    QMap<QString, LayerInfoBlock*> infoBlocks;
 
 private:
 

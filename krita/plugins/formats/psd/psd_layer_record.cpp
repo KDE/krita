@@ -20,6 +20,7 @@
 #include <QIODevice>
 #include <QBuffer>
 #include <QDataStream>
+#include <QStringList>
 
 #include "psd_utils.h"
 
@@ -191,6 +192,54 @@ bool PSDLayerRecord::read(QIODevice* io)
     if (!psdread_pascalstring(io, layerName)) {
         error = "Could not read layer name";
         return false;
+    }
+
+    QStringList longBlocks;
+    if (m_header.m_version > 1) {
+        longBlocks << "LMsk" << "Lr16" << "Layr" << "Mt16" << "Mtrn" << "Alph";
+    }
+
+    while(!io->atEnd()) {
+
+        // read all the additional layer info 8BIM blocks
+        quint32 signature;
+        quint64 bytesread = io->peek((char*)&signature, 4);
+        if (bytesread != 4 || signature != _8BIM ) {
+            break;
+        }
+        else {
+            io->seek(io->pos() + 4); // skip the 8BIM header we peeked ahead for
+        }
+
+        QString key(io->read(4));
+        if (key.size() != 4) {
+            error = "Could not read key for additional layer info block";
+            return false;
+        }
+
+        if (infoBlocks.contains(key)) {
+            error = QString("Duplicate layer info block with key %1").arg(key);
+            return false;
+        }
+
+        quint64 size;
+        if (longBlocks.contains(key)) {
+            psdread(io, &size);
+        }
+        else {
+            quint32 _size;
+            psdread(io, &_size);
+            size = _size;
+        }
+
+        LayerInfoBlock* infoBlock = new LayerInfoBlock();
+        infoBlock->data = io->read(size);
+        if (infoBlock->data.size() != (qint64)size) {
+            error = QString("Could not read full info block for key %1 for layer %2").arg(key).arg(layerName);
+            return false;
+        }
+
+        infoBlocks[key] = infoBlock;
     }
 
     return valid();

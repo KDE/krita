@@ -19,14 +19,79 @@
 
 #include <QIODevice>
 
+#include "psd_header.h"
+#include "psd_utils.h"
+
 PSDLayerSection::PSDLayerSection(const PSDHeader& header)
     : m_header(header)
 {
 }
 
+PSDLayerSection::~PSDLayerSection()
+{
+    qDeleteAll(layerInfo.layers);
+}
+
 bool PSDLayerSection::read(QIODevice* io)
 {
-    return false;
+    {
+        layerSectionSize = 0;
+        if (m_header.m_version == 1) {
+            quint32 _layerSectionSize;
+            if (!psdread(io, &_layerSectionSize) || layerSectionSize > (quint64)io->bytesAvailable()) {
+                error = "Could not read layer section size";
+                return false;
+            }
+            layerSectionSize = _layerSectionSize;
+        }
+        else if (m_header.m_version == 2) {
+            if (!psdread(io, &layerSectionSize) || layerSectionSize > (quint64)io->bytesAvailable()) {
+                error = "Could not read layer section size";
+                return false;
+            }
+        }
+
+    }
+    { // Layer Info block
+
+        layerInfo.layerInfoSize = 0;
+        layerInfo.nLayers = 0;
+        if (m_header.m_version == 1) {
+            quint32 layerInfoSize;
+            if (!psdread(io, &layerInfoSize) || layerInfoSize > (quint64)io->bytesAvailable()) {
+                error = "Could not read layer section size";
+                return false;
+            }
+            layerInfo.layerInfoSize = layerInfoSize;
+        }
+        else if (m_header.m_version == 2) {
+            if (!psdread(io, &layerInfo.layerInfoSize) || layerInfo.layerInfoSize > (quint64)io->bytesAvailable()) {
+                error = "Could not read layer section size";
+                return false;
+            }
+        }
+
+        // rounded to a multiple of 2
+        if ((layerInfo.layerInfoSize & 0x01) != 0) {
+            layerInfo.layerInfoSize++;
+        }
+
+        if (!psdread(io, &layerInfo.nLayers)) {
+            error = "Could not read read number of layers";
+            return false;
+        }
+
+        for (int i = 0; i < layerInfo.nLayers; ++i) {
+            PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
+            if (!layerRecord->read(io)) {
+                error = QString("Could not load layer %1").arg(i);
+                return false;
+            }
+            layerInfo.layers << layerRecord;
+        }
+    }
+
+    return valid();
 }
 
 bool PSDLayerSection::write(QIODevice* io)
@@ -43,5 +108,5 @@ bool PSDLayerSection::write(QIODevice* io)
 
 bool PSDLayerSection::valid()
 {
-    return false;
+    return true;
 }

@@ -202,7 +202,7 @@ bool PSDLayerRecord::write(QIODevice* io)
     Q_UNUSED(io);
     Q_ASSERT(valid());
     if (!valid()) {
-        error = "Cannot write an invald Layer Record object";
+        error = "Cannot write an invalid Layer Record object";
         return false;
     }
     qFatal("TODO: implement writing the layer record");

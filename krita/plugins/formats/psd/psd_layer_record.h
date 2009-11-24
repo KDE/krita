@@ -86,7 +86,6 @@ public:
 
     struct LayerInfoBlock {
         QString key;
-        quint64 dataSize;
         QByteArray data;
     };
 

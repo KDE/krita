@@ -27,16 +27,38 @@ class QIODevice;
 
 class PSDLayerSection
 {
+
 public:
+
     PSDLayerSection(const PSDHeader& header);
+    ~PSDLayerSection();
+
     bool read(QIODevice* io);
     bool write(QIODevice* io);
     bool valid();
 
     QString error;
 
-    qint16 nLayers;
-    QVector<PSDLayerRecord> layers;
+    quint64 layerSectionSize;
+
+    struct LayerInfo {
+        quint64 layerInfoSize;
+        qint16  nLayers;
+        QVector<PSDLayerRecord*> layers;
+        QVector<quint64> channelImageDataStartPositions;
+    };
+
+    LayerInfo layerInfo;
+
+    struct GlobalMaskInfo {
+
+        quint16 overlayColorSpace;
+        quint16 colorComponents[4];
+        quint16 opacity;
+        quint8  kind;
+    };
+
+    GlobalMaskInfo maskInfo;
 
 private:
 

@@ -23,8 +23,8 @@
 class QIODevice;
 class QString;
 
-const int _8BPS = 0x38425053;
-const int _8BIM = 0x3842494D;
+const quint32 _8BPS = 0x38425053;
+const quint32 _8BIM = 0x3842494D;
 
 bool psdwrite(QIODevice* io, quint8 v);
 bool psdwrite(QIODevice* io, quint16 v);

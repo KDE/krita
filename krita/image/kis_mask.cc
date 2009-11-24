@@ -224,4 +224,12 @@ void KisMask::setDirty(const QRegion & region)
     }
 }
 
+QImage KisMask::createThumbnail(qint32 w, qint32 h)
+{
+    KisPaintDeviceSP originalDevice = paintDevice();
+
+    return originalDevice ?
+           originalDevice->createThumbnail(w, h) : QImage();
+}
+
 #include "kis_mask.moc"

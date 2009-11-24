@@ -139,6 +139,7 @@ public:
 
     QRect needRect(const QRect &rect) const;
     QRect changeRect(const QRect &rect) const;
+    QImage createThumbnail(qint32 w, qint32 h);
 
 protected:
     /**

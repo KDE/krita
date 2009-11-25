@@ -38,7 +38,7 @@
 class KisExternalLayer;
 
 typedef KGenericFactory<psdExport> ExportFactory;
-K_EXPORT_COMPONENT_FACTORY(kritapsdexport, ExportFactory("kofficefilters"))
+K_EXPORT_COMPONENT_FACTORY(libkritapsdexport, ExportFactory("kofficefilters"))
 
 psdExport::psdExport(QObject *parent, const QStringList&) : KoFilter(parent)
 {

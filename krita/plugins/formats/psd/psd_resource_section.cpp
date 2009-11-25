@@ -17,10 +17,11 @@
  */
 #include "psd_resource_section.h"
 
-#include "psd_utils.h"
+#include <QDebug>
 #include <QIODevice>
 #include <QBuffer>
 
+#include "psd_utils.h"
 #include "psd_resource_block.h"
 
 PSDResourceSection::PSDResourceSection()
@@ -34,7 +35,7 @@ PSDResourceSection::~PSDResourceSection()
 
 bool PSDResourceSection::read(QIODevice* io)
 {
-    quint32 resourceBlockLength;
+    quint32 resourceBlockLength = 0;
     if (!psdread(io, &resourceBlockLength)) {
         error = "Could not read resource block length";
         return false;
@@ -48,13 +49,16 @@ bool PSDResourceSection::read(QIODevice* io)
 
     QBuffer buf;
     buf.setBuffer(&ba);
-    while (buf.bytesAvailable()) {
+    buf.open(QBuffer::ReadOnly);
+
+    while (!buf.atEnd()) {
         PSDResourceBlock* block = new PSDResourceBlock();
         if (!block->read(&buf)) {
             error = "Error reading block: " + block->error;
             return false;
         }
-        m_resources[block->m_identifier] = block;
+        qDebug() << "resource block created" << block->m_name;
+        m_resources[(PSDResourceID)block->m_identifier] = block;
     }
     return valid();
 }

@@ -69,9 +69,11 @@ bool PSDLayerRecord::read(QIODevice* io)
         channelInfoRecords << info;
     }
 
-    quint32 signature;
-    if (!psdread(io, &signature) || signature != _8BIM) {
-        error = "Could not read blend mode signature for layer";
+    QByteArray b;
+    b = io->read(4);
+    if(b.size() != 4 || QString(b) != "8BIM") {
+        error = QString("Could not read blend mode signature for layer. Got %1.")
+                .arg(QString(b));
         return false;
     }
 
@@ -202,9 +204,9 @@ bool PSDLayerRecord::read(QIODevice* io)
     while(!io->atEnd()) {
 
         // read all the additional layer info 8BIM blocks
-        quint32 signature;
-        quint64 bytesread = io->peek((char*)&signature, 4);
-        if (bytesread != 4 || signature != _8BIM ) {
+        QByteArray b;
+        b = io->peek(4);
+        if(b.size() != 4 || QString(b) != "8BIM") {
             break;
         }
         else {

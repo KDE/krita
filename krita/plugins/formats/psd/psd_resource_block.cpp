@@ -21,11 +21,6 @@
 
 #include "psd_utils.h"
 
-struct Header {
-    char signature[4];
-    char identifier[2];
-};
-
 PSDResourceBlock::PSDResourceBlock()
     : m_identifier(PSDResourceSection::UNKNOWN)
 {
@@ -33,15 +28,23 @@ PSDResourceBlock::PSDResourceBlock()
 
 bool PSDResourceBlock::read(QIODevice* io)
 {
-    Header header;
-    quint64 bytesRead = io->read((char*)&header, sizeof(Header));
-    if (bytesRead != sizeof(Header)) {
-        error = "Could not read header of resource block: not enough bytes";
+    if (io->atEnd()) {
+        error = "Could not read resource block: no bytes left.";
         return false;
     }
 
-    m_signature = QString(header.signature);
-    memcpy(&m_identifier, header.identifier, 2);
+    QByteArray b;
+    b = io->read(4);
+    if(b.size() != 4 || QString(b) != "8BIM") {
+        error = QString("Could not read resource block signature. Got %1.")
+                .arg(QString(b));
+        return false;
+    }
+
+    if (!psdread(io, &m_identifier)) {
+        error = "Could not read resrouce block identifier";
+        return false;
+    }
 
     if (!psdread_pascalstring(io, m_name)) {
         error = "Could not read name of resource block";
@@ -67,7 +70,7 @@ bool PSDResourceBlock::write(QIODevice* io)
     Q_UNUSED(io);
     Q_ASSERT(valid());
     if (!valid()) {
-        error = "Cannot write an invalid Resource Block";
+        error = QString("Cannot write an invalid Resource Block");
         return false;
     }
     qFatal("TODO: implement writing the resource block");
@@ -78,7 +81,8 @@ bool PSDResourceBlock::valid()
 {
     if (m_identifier == PSDResourceSection::UNKNOWN) {
         error = QString("Unknown ID: %1").arg(m_identifier);
+        return false;
     }
-    return false;
+    return true;
 }
 

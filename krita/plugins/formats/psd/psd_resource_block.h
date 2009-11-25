@@ -35,11 +35,10 @@ public:
     bool write(QIODevice* io);
     bool valid();
 
-    QString                           m_signature;
-    PSDResourceSection::PSDResourceID m_identifier;
-    QString                           m_name;
-    quint32                           m_dataSize;
-    QByteArray                        m_data;
+    quint16     m_identifier;
+    QString     m_name;
+    quint32     m_dataSize;
+    QByteArray  m_data;
 
     QString error;
 };

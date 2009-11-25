@@ -61,8 +61,9 @@ bool PSDResourceSection::read(QIODevice* io)
             error = "Error reading block: " + block->error;
             return false;
         }
-        dbgFile << "resource block created" << block->m_name << buf.bytesAvailable() << "bytes to go";
-        dbgFile << "contents" << QString(block->m_data);
+        dbgFile << "resource block created. Type:" << block->m_identifier << "size"
+                << block->m_dataSize
+                << "," << buf.bytesAvailable() << "bytes to go";
         m_resources[(PSDResourceID)block->m_identifier] = block;
     }
     return valid();

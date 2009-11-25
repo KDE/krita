@@ -48,11 +48,9 @@ public:
         quint64 layerInfoSize;
         qint16  nLayers;
         QVector<PSDLayerRecord*> layers;
-        QVector<quint64> channelImageDataStartPositions;
     };
 
     LayerInfo layerInfo;
-
 
     // XXX: We can only use this if the mask visualization is restored.
     struct GlobalMaskInfo {

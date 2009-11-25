@@ -30,12 +30,15 @@ class QIODevice;
 class PSDLayerRecord
 {
 public:
-    PSDLayerRecord(const PSDHeader &header);
+
+    PSDLayerRecord(const PSDHeader &header, bool hasTransparency);
     bool read(QIODevice* io);
     bool write(QIODevice* io);
     bool valid();
 
     QString error;
+
+    QVector<quint64> channelDataStartPositions;
 
     quint32 top;
     quint32 left;
@@ -93,7 +96,9 @@ public:
 private:
 
     const PSDHeader m_header;
-
+    bool            m_hasTransparency;
 };
+
+QDebug operator<<(QDebug dbg, const PSDLayerRecord& layer);
 
 #endif // PSD_LAYER_RECORD_H

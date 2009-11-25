@@ -23,6 +23,8 @@
 
 class QIODevice;
 
+const int MAX_CHANNELS = 56;
+
 class PSDHeader
 {
 public:
@@ -38,8 +40,6 @@ public:
         Lab,
         UNKNOWN = 9000
      };
-
-
 
     PSDHeader();
 

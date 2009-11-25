@@ -34,6 +34,8 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_undo_adapter.h>
+#include <kis_group_layer.h>
+#include <kis_paint_device.h>
 
 #include "psd_header.h"
 #include "psd_colormode_block.h"
@@ -102,11 +104,16 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
+    dbgFile << "pos:" << f.pos();
+
     PSDHeader header;
     if (!header.read(&f)) {
         kDebug() << "failed reading header: " << header.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
+
+    dbgFile << header;
+    dbgFile << "Read header. pos:" << f.pos();
 
     PSDColorModeBlock colorModeBlock(header.m_colormode);
     if (!colorModeBlock.read(&f)) {
@@ -114,17 +121,23 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
+    dbgFile << "Read color mode block. pos:" << f.pos();
+
     PSDResourceSection resourceSection;
     if (!resourceSection.read(&f)) {
         kDebug() << "failed reading resource section: " << resourceSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
+    dbgFile << "Read resource section. pos:" << f.pos();
+
     PSDLayerSection layerSection(header);
     if (!layerSection.read(&f)) {
         kDebug() << "failed reading layer section: " << layerSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
+
+    dbgFile << "Read layer section. " << layerSection.layerInfo.nLayers << "layers. pos:" << f.pos();
 
     // Get the right colorspace
     QString colorSpaceId = psd_colormode_to_colormodelid(header.m_colormode, header.m_channelDepth);
@@ -148,14 +161,19 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         m_img->addAnnotation(annotation);
     }
 
-
-    //KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img->nextLayerName(), quint8_MAX));
-
-
+    // read the projection into our single layer
+    if (layerSection.layerInfo.nLayers == 0) {
+        dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
+        KisPaintLayerSP layer = new KisPaintLayer(m_img, i18n("Background"), OPACITY_OPAQUE);
+        //readLayerData(&f, layer->paintDevice(), f.pos(), QRect(0, 0, header.m_width, header.m_height));
+        m_img->addNode(layer, m_img->rootLayer());
+    }
+    else {
+        // read the channels for the various layers
+    }
 
     return KisImageBuilder_RESULT_OK;
 }
-
 
 
 KisImageBuilder_Result PSDLoader::buildImage(const KUrl& uri)

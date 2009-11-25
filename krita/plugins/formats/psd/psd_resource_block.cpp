@@ -48,14 +48,14 @@ bool PSDResourceBlock::read(QIODevice* io)
         return false;
     }
 
-    dbgFile << "resource block identifier" << m_identifier;
+    //dbgFile << "resource block identifier" << m_identifier;
 
     if (!psdread_pascalstring(io, m_name)) {
         error = "Could not read name of resource block";
         return false;
     }
 
-    dbgFile << "resource block name" << m_name;
+    //dbgFile << "resource block name" << m_name;
 
     if (!psdread(io, &m_dataSize)) {
         error = QString("Could not read datasize for resource block with name %1 of type %2").arg(m_name).arg(m_identifier);
@@ -66,7 +66,7 @@ bool PSDResourceBlock::read(QIODevice* io)
         m_dataSize++;
     }
 
-    dbgFile << "resource block size" << m_dataSize;
+    //dbgFile << "resource block size" << m_dataSize;
 
     m_data = io->read(m_dataSize);
     if (!m_data.size() == m_dataSize) {

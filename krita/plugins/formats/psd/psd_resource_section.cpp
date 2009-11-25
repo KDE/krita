@@ -21,6 +21,8 @@
 #include <QIODevice>
 #include <QBuffer>
 
+#include <kis_debug.h>
+
 #include "psd_utils.h"
 #include "psd_resource_block.h"
 
@@ -41,6 +43,8 @@ bool PSDResourceSection::read(QIODevice* io)
         return false;
     }
 
+    dbgFile << "Resource block length" << resourceBlockLength << "starts at" << io->pos();
+
     QByteArray ba = io->read(resourceBlockLength);
     if ((quint32)ba.size() != resourceBlockLength) {
         error = "Could not read all resources";
@@ -57,7 +61,8 @@ bool PSDResourceSection::read(QIODevice* io)
             error = "Error reading block: " + block->error;
             return false;
         }
-        qDebug() << "resource block created" << block->m_name;
+        dbgFile << "resource block created" << block->m_name << buf.bytesAvailable() << "bytes to go";
+        dbgFile << "contents" << QString(block->m_data);
         m_resources[(PSDResourceID)block->m_identifier] = block;
     }
     return valid();

@@ -95,7 +95,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 {
     // open the file
     QFile f(uri.toLocalFile());
-    if (f.exists()) {
+    if (!f.exists()) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
     if (!f.open(QIODevice::ReadOnly)) {
@@ -163,7 +163,7 @@ KisImageBuilder_Result PSDLoader::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, false, qApp->activeWindow())) {
+    if (!KIO::NetAccess::exists(uri, true, qApp->activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 

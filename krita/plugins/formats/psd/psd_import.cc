@@ -29,7 +29,7 @@
 typedef KGenericFactory<psdImport> ImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritapsdimport, ImportFactory("kofficefilters"))
 
-psdImport::psdImport(QObject *parent, const QStringList&) : KoFilter(parent)
+        psdImport::psdImport(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 
@@ -53,6 +53,8 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
 
     doc->prepareForImport();
 
+    qDebug() << "filename" << filename;
+
     if (!filename.isEmpty()) {
 
         KUrl url;
@@ -63,29 +65,32 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
 
         PSDLoader ib(doc, doc->undoAdapter());
 
-        switch (ib.buildImage(url)) {
-            case KisImageBuilder_RESULT_UNSUPPORTED:
-                return KoFilter::NotImplemented;
-                break;
-            case KisImageBuilder_RESULT_INVALID_ARG:
-                return KoFilter::BadMimeType;
-                break;
-            case KisImageBuilder_RESULT_NO_URI:
-            case KisImageBuilder_RESULT_NOT_LOCAL:
-                return KoFilter::FileNotFound;
-                break;
-            case KisImageBuilder_RESULT_BAD_FETCH:
-            case KisImageBuilder_RESULT_EMPTY:
-                return KoFilter::ParsingError;
-                break;
-            case KisImageBuilder_RESULT_FAILURE:
-                return KoFilter::InternalError;
-                break;
-            case KisImageBuilder_RESULT_OK:
-                doc -> setCurrentImage( ib.image());
-                return KoFilter::OK;
-            default:
-                break;
+        KisImageBuilder_Result result = ib.buildImage(url);
+        switch (result) {
+        case KisImageBuilder_RESULT_UNSUPPORTED:
+            return KoFilter::NotImplemented;
+            break;
+        case KisImageBuilder_RESULT_INVALID_ARG:
+            return KoFilter::BadMimeType;
+            break;
+        case KisImageBuilder_RESULT_NO_URI:
+        case KisImageBuilder_RESULT_NOT_EXIST:
+        case KisImageBuilder_RESULT_NOT_LOCAL:
+            return KoFilter::FileNotFound;
+            break;
+        case KisImageBuilder_RESULT_BAD_FETCH:
+        case KisImageBuilder_RESULT_EMPTY:
+            return KoFilter::ParsingError;
+            break;
+        case KisImageBuilder_RESULT_FAILURE:
+            return KoFilter::InternalError;
+            break;
+        case KisImageBuilder_RESULT_OK:
+            doc -> setCurrentImage( ib.image());
+            return KoFilter::OK;
+        default:
+            qDebug() << "Result was: " << result;
+            break;
         }
 
     }

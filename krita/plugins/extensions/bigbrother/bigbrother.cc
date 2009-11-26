@@ -128,7 +128,8 @@ void BigBrotherPlugin::slotStartRecordingMacro()
 
     // Create recorder
     m_recorder = new KisMacro();
-    connect(m_view->image()->actionRecorder(), SIGNAL(addedAction(const KisRecordedAction&)), m_recorder, SLOT(addAction(const KisRecordedAction&)));
+    connect(m_view->image()->actionRecorder(), SIGNAL(addedAction(const KisRecordedAction&)),
+            m_recorder, SLOT(addRecordedAction(const KisRecordedAction&)));
 }
 
 void BigBrotherPlugin::slotStopRecordingMacro()
@@ -147,6 +148,9 @@ void BigBrotherPlugin::slotStopRecordingMacro()
 
 KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
 {
+
+    Q_UNUSED(url);
+
     QString filename = KFileDialog::getOpenFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
     if (!filename.isNull()) {
         QDomDocument doc;

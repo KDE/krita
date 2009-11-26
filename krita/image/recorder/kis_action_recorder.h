@@ -38,7 +38,7 @@ public:
 
 public slots:
 
-    void addAction(const KisRecordedAction& action);
+    void addRecordedAction(const KisRecordedAction& action);
 
 signals:
     /**

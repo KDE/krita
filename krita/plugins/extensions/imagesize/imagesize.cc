@@ -230,6 +230,7 @@ void ImageSize::slotSelectionScale()
 
 void ImageSize::slotNodeChanged(const KisNodeSP node)
 {
+    Q_UNUSED(node);
     m_scaleLayerAction->setEnabled(m_view->activeDevice());
 }
 

@@ -241,9 +241,10 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
                                        double floatscale, double shear, qint32 dx,
                                        KisFilterStrategy *filterStrategy, bool fixBorderAlpha)
 {
+    m_fixBorderAlpha = fixBorderAlpha;
+
     qint32 lineNum, srcStart, firstLine, srcLen, numLines;
     qint32 center, begin, end;    /* filter calculation variables */
-    quint8 *data;
     quint8 pixelSize = src->pixelSize();
     KoColorSpace * cs = src->colorSpace();
     KoMixColorsOp * mixOp = cs->mixColorsOp();

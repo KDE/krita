@@ -85,6 +85,7 @@ KisRecordedFilterAction::~KisRecordedFilterAction()
 
 void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& info) const
 {
+    Q_UNUSED(node);
 
     KisFilterConfiguration * kfc = d->configuration();
     KisPaintDeviceSP dev = nodeQueryPath().queryNodes(info.image(), info.currentNode())[0]->paintDevice(); // TODO: not good should take the full list into consideration

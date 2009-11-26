@@ -87,6 +87,7 @@ struct KisPrescaledProjection::Private {
             , scrollCheckers(false)
             , drawMaskVisualisationOnUnscaledCanvasCache(false)
             , showMask(true)
+            , cacheKisImageAsQImage(true)
             , checkSize(32)
             , documentOffset(0, 0)
             , documentOrigin(0, 0)
@@ -105,6 +106,7 @@ struct KisPrescaledProjection::Private {
     bool scrollCheckers;
     bool drawMaskVisualisationOnUnscaledCanvasCache;
     bool showMask;
+    bool cacheKisImageAsQImage;
 
     QColor checkersColor;
     qint32 checkSize;
@@ -181,15 +183,16 @@ void KisPrescaledProjection::setViewConverter(KoViewConverter * viewConverter)
 
 void KisPrescaledProjection::initBackend(bool useMipmapping, bool cacheKisImageAsQImage)
 {
-    if (m_d->projectionBackend)
+    if (m_d->projectionBackend) {
         delete m_d->projectionBackend;
+    }
 
     if (useMipmapping) {
         m_d->projectionBackend = new KisImagePyramid(4);
-    } else {
+    }
+    else {
         KisProjectionCache* cache = new KisProjectionCache();
         cache->setCacheKisImageAsQImage(cacheKisImageAsQImage);
-
         m_d->projectionBackend = cache;
     }
     m_d->projectionBackend->setImage(m_d->image);
@@ -199,9 +202,17 @@ void KisPrescaledProjection::updateSettings()
 {
     KisConfig cfg;
 
-    m_d->useNearestNeighbour = cfg.useNearestNeighbour();
-    m_d->useMipmapping = cfg.useMipmapping();
-    initBackend(m_d->useMipmapping, cfg.cacheKisImageAsQImage());
+
+    if (m_d->useNearestNeighbour != cfg.useNearestNeighbour() ||
+        m_d->useMipmapping != cfg.useMipmapping() ||
+        m_d->cacheKisImageAsQImage != cfg.cacheKisImageAsQImage()) {
+
+        m_d->useNearestNeighbour = cfg.useNearestNeighbour();
+        m_d->useMipmapping = cfg.useMipmapping();
+        m_d->cacheKisImageAsQImage = cfg.cacheKisImageAsQImage();
+
+        initBackend(m_d->useMipmapping, m_d->cacheKisImageAsQImage);
+    }
 
     m_d->usePixmapNotQImage = cfg.noXRender();
 

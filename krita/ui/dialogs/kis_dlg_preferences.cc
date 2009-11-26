@@ -421,14 +421,14 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(KIcon("preferences-desktop-color"));
     addPage(page);
     m_colorSettings = new ColorSettingsTab(vbox);
-
+#if 0
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Performance"));
     page->setHeader(i18n("Performance"));
     page->setIcon(KIcon("preferences-system-performance"));
     addPage(page);
     m_performanceSettings = new PerformanceTab(vbox);
-
+#endif
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Grid"));
     page->setHeader(i18n("Grid"));
@@ -474,10 +474,10 @@ bool KisDlgPreferences::editPreferences()
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
         cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
 
+#if 0
         // it's scaled from 0 - 6, but the config is in 0 - 300
         cfg.setSwappiness(dialog->m_performanceSettings->m_swappiness->value() * 50);
         cfg.setMaxTilesInMem(dialog->m_performanceSettings->m_maxTiles->value());
-#if 0
         cfg.setUseProjections(dialog->m_performanceSettings->m_projection->isChecked());
         cfg.setNumProjectThreads(dialog->m_performanceSettings->intNumThreads->value());
         cfg.setProjectionChunkSize(dialog->m_performanceSettings->intChunkSize->value());

@@ -18,6 +18,8 @@
 #include "kis_spray_shape_option.h"
 #include <klocale.h>
 
+#include <QImage>
+
 #include "ui_wdgshapeoptions.h"
 
 class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
@@ -46,6 +48,8 @@ KisSprayShapeOption::KisSprayShapeOption()
 
     connect(m_options->randomSlider,SIGNAL(valueChanged(int)),this,SLOT(randomValueChanged(int)));
     connect(m_options->followSlider,SIGNAL(valueChanged(int)),this,SLOT(followValueChanged(int)));
+
+    connect(m_options->imageUrl,SIGNAL(urlSelected(KUrl)),this,SLOT(prepareImage()));
     
     setConfigurationPage(m_options);
 }
@@ -113,10 +117,13 @@ bool KisSprayShapeOption::gaussian() const
 }
 
 
-QString KisSprayShapeOption::path() const
+
+
+QImage KisSprayShapeOption::image() 
 {
-    return m_options->imageUrl->url().toLocalFile();
-    
+    m_img = QImage( m_options->imageUrl->url().toLocalFile() );
+    m_img = m_img.scaled( width(), height() );
+    return m_img;
 }
 
 
@@ -145,7 +152,6 @@ qreal KisSprayShapeOption::followCursorWeigth() const
 }
 
 
-
 bool KisSprayShapeOption::randomRotation() const
 {
     return m_options->randomRotation->isChecked();
@@ -169,4 +175,18 @@ void KisSprayShapeOption::followValueChanged(int value)
 {
     qreal relative = value / (qreal)m_options->followSlider->maximum() ;
     m_options->followCursorWeightSPBox->setValue( relative * m_options->followCursorWeightSPBox->maximum() );
+}
+
+
+void KisSprayShapeOption::prepareImage()
+{
+    QString path = m_options->imageUrl->url().toLocalFile();
+    if (QFile::exists(path)){
+        m_img = QImage(path);
+        if (!m_img.isNull())
+        {
+            m_options->widthSpin->setValue( m_img.width() );
+            m_options->heightSpin->setValue( m_img.height() );
+        }
+    }
 }

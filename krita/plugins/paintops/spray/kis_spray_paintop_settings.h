@@ -109,7 +109,7 @@ public:
         }
     }
 
-    const QString path() const;
+    QImage image() const;
 
 
 private:

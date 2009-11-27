@@ -18,6 +18,7 @@
 #define KIS_SPRAY_SHAPE_OPTION_H
 
 #include <kis_paintop_option.h>
+#include <QImage>
 
 class KisShapeOptionsWidget;
 
@@ -54,7 +55,7 @@ public:
     bool followCursor() const;
     qreal followCursorWeigth() const;
     
-    QString path() const;
+    QImage image();
     
     /// TODO
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
@@ -62,10 +63,12 @@ public:
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
     KisShapeOptionsWidget * m_options;
+    QImage m_img;
 
 private slots:
             void randomValueChanged(int value);
             void followValueChanged(int value);
+            void prepareImage();
 };
 
 #endif // KIS_SPRAY_SHAPE_OPTION_H

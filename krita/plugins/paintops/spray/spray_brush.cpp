@@ -100,10 +100,13 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
     if (!m_painter) {
         m_painter = new KisPainter(dab);
         m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
-        m_painter->setMaskImageSize(m_width, m_height);
+        m_painter->setMaskImageSize(objectWidth(), objectHeight());
         m_pixelSize = dab->colorSpace()->pixelSize();
         
-        m_brushQImg = QImage(m_settings->path());
+        m_brushQImg = m_settings->image();
+        if (!m_brushQImg.isNull()){
+            m_brushQImg = m_brushQImg.scaled(objectWidth(), objectHeight());
+        }
         m_imgDevice = new KisPaintDevice( dab->colorSpace() );
     }
 
@@ -126,7 +129,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
         y = y + ((2 * m_radius * drand48()) - m_radius) * m_amount;
     }
 
-    // this is wrong
+    // this is wrong for every shape except pixel and anti-aliased pixel 
     if (m_useDensity) {
         m_particlesCount = (m_coverage * (M_PI * m_radius * m_radius));
     }
@@ -226,17 +229,17 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
         qreal jitteredHeight; 
 
         if (m_jitterShapeSize){
-            jitteredWidth = m_width * random + 1;
-            jitteredHeight = m_height * random + 1;
+            jitteredWidth = objectWidth() * random + 1;
+            jitteredHeight = objectHeight() * random + 1;
         }else{
-            jitteredWidth = m_width;
-            jitteredHeight = m_height;
+            jitteredWidth = objectWidth();
+            jitteredHeight = objectHeight();
         }
         switch (m_settings->shape()){
             // ellipse
             case 0:
             {
-                if (m_width == m_height){
+                if (objectWidth() == objectHeight()){
                     paintCircle(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , steps);
                 }else
                 { 

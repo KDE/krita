@@ -219,14 +219,6 @@ bool KisSprayPaintOpSettings::sampleInput() const
 }
 
 
-
-const QString KisSprayPaintOpSettings::path() const
-{
-    return m_options->m_sprayShapeOption->path();
-}
-
-
-
 void KisSprayPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
 {
     if (qAbs(x) > qAbs(y)){
@@ -276,4 +268,11 @@ bool KisSprayPaintOpSettings::followCursor() const
 qreal KisSprayPaintOpSettings::followCursorWeigth() const
 {
         return m_options->m_sprayShapeOption->followCursorWeigth();
+}
+
+
+
+QImage KisSprayPaintOpSettings::image() const
+{
+    return m_options->m_sprayShapeOption->image();
 }

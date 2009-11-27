@@ -78,19 +78,6 @@ public:
         m_height = height;
     }
 
-    // getters
-    qreal radius() {
-        return m_radius;
-    }
-
-    qreal objectWidth() {
-        return m_width;
-    }
-
-    qreal objectHeight() {
-        return m_height;
-    }
-
     // setters
 
     void setUseDensity(bool useDensity) {
@@ -151,6 +138,15 @@ private:
     inline qreal linearInterpolation(qreal a, qreal b, qreal weight){
         return (1.0 - weight) * a + weight * b;
     }
+
+    /// particle dimension
+    inline qreal objectWidth() {
+        return m_width;
+    }
+    inline qreal objectHeight() {
+        return m_height;
+    }
+
 };
 
 #endif

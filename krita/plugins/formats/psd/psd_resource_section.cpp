@@ -75,6 +75,7 @@ bool PSDResourceSection::write(QIODevice* io)
     Q_ASSERT(valid());
     if (!valid()) return false;
     qFatal("TODO: implement writing the resource section");
+    return false;
 }
 
 bool PSDResourceSection::valid()

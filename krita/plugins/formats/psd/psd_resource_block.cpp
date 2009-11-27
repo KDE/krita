@@ -86,7 +86,7 @@ bool PSDResourceBlock::write(QIODevice* io)
         return false;
     }
     qFatal("TODO: implement writing the resource block");
-
+    return false;
 }
 
 bool PSDResourceBlock::valid()

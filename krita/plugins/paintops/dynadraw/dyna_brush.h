@@ -38,10 +38,6 @@ public:
     DynaBrush(KoColor inkColor);
     void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
 
-    // dyna function
-    qreal flerp(qreal f0, qreal f1, qreal p) {
-        return ((f0 *(1.0 - p)) + (f1 * p));
-    }
 
     int applyFilter(qreal mx, qreal my);
 
@@ -55,24 +51,23 @@ public:
     }
 
     void setMass(qreal mass) {
-        m_curmass = mass;
+        m_cursorFilter.setMass(mass);
     }
 
     void setDrag(qreal drag) {
-        m_curdrag = drag;
+        m_cursorFilter.setDrag(drag);
     }
 
     void useFixedAngle(bool useFixedAngle) {
-        m_mouse.fixedangle = useFixedAngle;
+        m_cursorFilter.setUseFixedAngle(useFixedAngle);
     }
 
     void setAngle(qreal xangle, qreal yangle) {
-        m_xangle = xangle;
-        m_yangle = yangle;
+        m_cursorFilter.setFixedAngles(xangle, yangle);
     }
 
     void setWidthRange(qreal widthRange) {
-        m_widthRange = widthRange;
+        m_maxWidth = widthRange;
     }
 
     void setAction(int action) {
@@ -99,11 +94,9 @@ public:
         m_twoCircles = twoCircles;
     }
 
-    void initMouse(const QPointF &point) {
-        if (!m_image) return;
-        m_mousePos.setX(point.x() / m_image->width());
-        //m_fmouse.setY( (m_image->height() - point.y()) / (qreal)m_image->height() );
-        m_mousePos.setY(point.y() / m_image->height());
+    void updateCursorPosition(const QPointF &point) {
+        m_cursorPos.setX(point.x() / m_image->width());
+        m_cursorPos.setY(point.y() / m_image->height());
     }
 
     void drawSegment(KisPainter &painter);
@@ -138,18 +131,15 @@ private:
 
     qreal m_odelx, m_odely;
 
-    // mouse info
-    QPointF m_mousePos;
-    bool first;
+    // cursor position in document in relative coordinates
+    QPointF m_cursorPos;
+    // filters cursor position
+    DynaFilter m_cursorFilter;
 
+    bool m_initialized;
     // settings variables
     qreal m_width;
-    qreal m_curmass;
-    qreal m_curdrag;
-    DynaFilter m_mouse;
-    qreal m_xangle;
-    qreal m_yangle;
-    qreal m_widthRange;
+    qreal m_maxWidth;
 
     // drawing various primitives
     int m_action;

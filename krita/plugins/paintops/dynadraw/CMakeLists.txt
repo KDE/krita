@@ -5,7 +5,8 @@ set(kritadynapaintop_PART_SRCS
     kis_dynaop_option.cpp
     kis_dyna_paintop_settings.cpp
     kis_dyna_paintop_settings_widget.cpp
-    dyna_brush.cpp	
+    dyna_brush.cpp
+    filter.cpp
     )
 
 kde4_add_ui_files(kritadynapaintop_PART_SRCS wdgdynaoptions.ui )

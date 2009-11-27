@@ -19,43 +19,55 @@
 #ifndef _DYNA_FILTER_H_
 #define _DYNA_FILTER_H_
 
+#include <QtGlobal>
 
 class DynaFilter
 {
 public:
-    DynaFilter() {
-        curx = 0;
-        cury = 0;
-        lastx = 0;
-        lasty = 0;
-        velx = 0.0;
-        vely = 0.0;
-        accx = 0.0;
-        accy = 0.0;
-    }
-
-    void init(qreal x, qreal y) {
-        curx = x;
-        cury = y;
-        lastx = x;
-        lasty = y;
-        velx = 0.0;
-        vely = 0.0;
-        accx = 0.0;
-        accy = 0.0;
-    }
-
+    DynaFilter() { initialize(0.0,0.0);  }
     ~DynaFilter() {}
 
-public:
-    qreal curx, cury;
-    qreal velx, vely, vel;
-    qreal accx, accy, acc;
-    qreal angx, angy;
-    qreal mass, drag;
-    qreal lastx, lasty;
-    bool fixedangle;
+    void initialize(qreal x, qreal y);
+    bool applyFilter(qreal cursorX, qreal cursorY);
+    void setFixedAngles(qreal angleX, qreal angleY);
+/* setters */    
+    void setMass(qreal mass){ m_mass = mass;}
+    void setDrag(qreal drag){ m_drag = drag;}
+    void setUseFixedAngle(bool useFixed){ m_fixedAngle = useFixed; }
+/* getters */        
+    qreal velocity(){ return m_vel; }
+    qreal velocityX(){ return m_velx; }
+    qreal velocityY(){ return m_vely; }
+    
+    qreal x() { return m_filterX; }
+    qreal y() { return m_filterY; }
+    qreal prevX() { return m_prevX; }
+    qreal prevY() { return m_prevY; }
+    qreal angleX() { return m_angleX; }
+    qreal angleY() { return m_angleY; }
+    qreal acceleration() { return m_acc; }
+     
+private:
+    qreal m_filterX, m_filterY;
+    qreal m_velx, m_vely, m_vel; // velocity
+    qreal m_accx, m_accy, m_acc; // acceleration
+    qreal m_angleX, m_angleY;
+    qreal m_prevX, m_prevY; // previous filtered X,Y
 
+    bool m_fixedAngle;
+    qreal m_fixedAngleX;
+    qreal m_fixedAngleY;
+
+    qreal m_mass;
+    qreal m_drag;
+
+private:
+    // linear interpolation between f0 and f1
+    qreal flerp(qreal f0, qreal f1, qreal p) {
+        return ((f0 *(1.0 - p)) + (f1 * p));
+    }
+
+    
 };
 
 #endif

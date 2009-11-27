@@ -68,7 +68,7 @@ KisDynaPaintOp::~KisDynaPaintOp()
 
 double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
 {
-
+    if (!m_image) return 0;
     if (!painter()) return 0;
 
     if (!m_dab) {
@@ -82,7 +82,7 @@ double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     x1 = pi1.pos().x();
     y1 = pi1.pos().y();
 
-    m_dynaBrush.initMouse(pi2.pos());
+    m_dynaBrush.updateCursorPosition(pi1.pos());
     m_dynaBrush.paint(m_dab, x1, y1, painter()->paintColor());
 
     QRect rc = m_dab->extent();

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,51 +31,44 @@
 
 DynaBrush::DynaBrush()
 {
-    first = false;
+    m_initialized = false;
     m_counter = 0;
 
-    /* dynadraw init */
-    m_curmass = 0.5;
-    m_curdrag = 0.15;
-    m_mouse.fixedangle = true;
+    // default values from Paul Haeberli code
+    m_cursorFilter.setUseFixedAngle(true);
+    m_cursorFilter.setFixedAngles(0.6,0.2); 
     m_width = 1.5;
-    m_xangle = 0.60;
-    m_yangle = 0.20;
-    m_widthRange = 0.05;
-
+    m_maxWidth = 0.05;
+    m_odelx = 0.0;
+    m_odely = 0.0;
 }
+
+
+
 
 void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
-    /*    KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
-        m_pixelSize = dev->colorSpace()->pixelSize();
-        m_inkColor = color;*/
-
     qreal mx, my;
-    mx = m_mousePos.x();
-    my = m_mousePos.y();
+    mx = m_cursorPos.x();
+    my = m_cursorPos.y();
 
-    if (!first) {
-        m_mouse.init(mx, my);
-        m_odelx = 0.0;
-        m_odely = 0.0;
+    if (!m_initialized) {
+        m_cursorFilter.initialize(mx, my);
 
         for (int i = 0; i < m_circleRadius; i++) {
             m_prevPosition.append(QPointF(x, y));
         }
 
-        first = true;
+        m_initialized = true;
         return;
     }
 
     KisPainter drawer(dev);
     drawer.setPaintColor(color);
-    //drawer.drawThickLine(QPointF(x,y), QPointF(x,y)+QPointF(20,20), 5,10);
 
-    if (applyFilter(mx, my)) {
+    if (m_cursorFilter.applyFilter(mx, my)) {
         drawSegment(drawer);
     }
-
     m_counter++;
 }
 
@@ -83,65 +76,13 @@ DynaBrush::~DynaBrush()
 {
 }
 
-int DynaBrush::applyFilter(qreal mx, qreal my)
-{
-    qreal mass, drag;
-    qreal fx, fy;
-
-    /* calculate mass and drag */
-    mass = flerp(1.0, 160.0, m_curmass);
-    drag = flerp(0.00, 0.5, m_curdrag * m_curdrag);
-
-    /* calculate force and acceleration */
-    fx = mx - m_mouse.curx;
-    fy = my - m_mouse.cury;
-
-    m_mouse.acc = sqrt(fx * fx + fy * fy);
-
-    if (m_mouse.acc < 0.000001) {
-        return 0;
-    }
-
-    m_mouse.accx = fx / mass;
-    m_mouse.accy = fy / mass;
-
-    /* calculate new velocity */
-    m_mouse.velx += m_mouse.accx;
-    m_mouse.vely += m_mouse.accy;
-    m_mouse.vel = sqrt(m_mouse.velx * m_mouse.velx + m_mouse.vely * m_mouse.vely);
-    m_mouse.angx = -m_mouse.vely;
-    m_mouse.angy = m_mouse.velx;
-    if (m_mouse.vel < 0.000001) {
-        return 0;
-    }
-
-    /* calculate angle of drawing tool */
-    m_mouse.angx /= m_mouse.vel;
-    m_mouse.angy /= m_mouse.vel;
-    if (m_mouse.fixedangle) {
-        m_mouse.angx = m_xangle;
-        m_mouse.angy = m_yangle;
-    }
-
-    m_mouse.velx = m_mouse.velx * (1.0 - drag);
-    m_mouse.vely = m_mouse.vely * (1.0 - drag);
-
-    m_mouse.lastx = m_mouse.curx;
-    m_mouse.lasty = m_mouse.cury;
-    m_mouse.curx = m_mouse.curx + m_mouse.velx;
-    m_mouse.cury = m_mouse.cury + m_mouse.vely;
-
-    return 1;
-}
-
-
 void DynaBrush::drawSegment(KisPainter &painter)
 {
     qreal delx, dely;
     qreal wid;
     qreal px, py, nx, ny;
 
-    wid = m_widthRange - m_mouse.vel;
+    wid = m_maxWidth - m_cursorFilter.velocity();
 
     wid = wid * m_width;
 
@@ -149,13 +90,13 @@ void DynaBrush::drawSegment(KisPainter &painter)
         wid = 0.00001;
     }
 
-    delx = m_mouse.angx * wid;
-    dely = m_mouse.angy * wid;
+    delx = m_cursorFilter.angleX() * wid;
+    dely = m_cursorFilter.angleY() * wid;
 
-    px = m_mouse.lastx;
-    py = m_mouse.lasty;
-    nx = m_mouse.curx;
-    ny = m_mouse.cury;
+    px = m_cursorFilter.prevX();
+    py = m_cursorFilter.prevY();
+    nx = m_cursorFilter.x();
+    ny = m_cursorFilter.y();
 
     QPointF prev(px , py);         // previous position
     QPointF now(nx , ny);           // new position
@@ -185,8 +126,8 @@ void DynaBrush::drawSegment(KisPainter &painter)
         painter.drawLine(prev, now);
 
     if (m_action == 0) {
-        qreal screenX = m_mouse.velx * m_image->width();
-        qreal screenY = m_mouse.vely * m_image->height();
+        qreal screenX = m_cursorFilter.velocityX() * m_image->width();
+        qreal screenY = m_cursorFilter.velocityY() * m_image->height();
         qreal speed = sqrt(screenX * screenX + screenY * screenY);
         speed = qBound(0.0, speed , m_circleRadius * 2.0);
 
@@ -275,8 +216,8 @@ void DynaBrush::drawLines(KisPainter &painter,
 
     int half = count / 2;
     for (int i = 0; i < count; i++) {
-        offsetX = m_mouse.angx * (i - half) * m_lineSpacing * m_mouse.acc;
-        offsetY = m_mouse.angy * (i - half) * m_lineSpacing * m_mouse.acc;
+        offsetX = m_cursorFilter.angleX() * (i - half) * m_lineSpacing * m_cursorFilter.acceleration();
+        offsetY = m_cursorFilter.angleY() * (i - half) * m_lineSpacing * m_cursorFilter.acceleration();
 
         p2.setX(now.x() + offsetX);
         p2.setY(now.y() + offsetY);

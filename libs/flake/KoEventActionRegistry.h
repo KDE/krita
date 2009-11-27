@@ -28,6 +28,7 @@ class KoEventAction;
 class KoEventActionFactory;
 class KoShapeLoadingContext;
 
+/// API docs go here
 class FLAKE_EXPORT KoEventActionRegistry
 {
 public:

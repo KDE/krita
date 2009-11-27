@@ -46,7 +46,7 @@ public:
     virtual bool writeBody();
 
 private:
-    struct Private;
+    class Private;
     Private * const d;
 };
 

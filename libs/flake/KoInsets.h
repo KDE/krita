@@ -27,7 +27,8 @@
 /**
  * An Insets object is a representation of the borders of a shape.
  */
-struct FLAKE_EXPORT KoInsets {
+struct FLAKE_EXPORT KoInsets
+{
 public:
     /**
      * Constructor.

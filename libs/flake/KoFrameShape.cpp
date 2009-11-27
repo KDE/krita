@@ -22,7 +22,9 @@
 #include <KoXmlReader.h>
 #include <kdebug.h>
 
-struct KoFrameShape::Private {
+class KoFrameShape::Private
+{
+public:
     Private(const char * ns, const char * tag)
             : ns(ns)
             , tag(tag) {}

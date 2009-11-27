@@ -83,7 +83,7 @@ protected:
     virtual bool loadOdfFrameElement(const KoXmlElement & element, KoShapeLoadingContext & context) = 0;
 
 private:
-    struct Private;
+    class Private;
     Private * const d;
 };
 

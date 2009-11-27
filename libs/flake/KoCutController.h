@@ -29,7 +29,8 @@
  * Additionally; when the tool does not allow copying (KoTool::hasSelection() returns false)
  * the signal copyRequested will be emitted for applications to connect to.
  */
-class FLAKE_EXPORT KoCutController : public KoCopyController {
+class FLAKE_EXPORT KoCutController : public KoCopyController
+{
     Q_OBJECT
 public:
     /**

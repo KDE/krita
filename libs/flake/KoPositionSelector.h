@@ -27,7 +27,8 @@
 /**
  * Widget to show a set of radio buttons so the user can select a position.
  */
-class FLAKE_EXPORT KoPositionSelector : public QWidget {
+class FLAKE_EXPORT KoPositionSelector : public QWidget
+{
     Q_OBJECT
 public:
     KoPositionSelector(QWidget *parent);

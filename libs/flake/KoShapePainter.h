@@ -34,6 +34,9 @@ class QImage;
 
 /**
  * A utility class to paint a subset of shapes onto a QPainter.
+ * Notice that using setShapes repeatedly is very expensive, as it populates
+ * the shapeManager and all its caching every time.  If at all possible use
+ * a shapeManager directly and avoid loosing the cache between usages.
  */
 class FLAKE_EXPORT KoShapePainter
 {

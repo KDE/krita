@@ -23,7 +23,9 @@
 #include <KoOdf.h>
 #include <KoShape.h>
 
-struct KoShapeOdfSaveHelper::Private {
+class KoShapeOdfSaveHelper::Private
+{
+public:
     Private(QList<KoShape *> shapes)
     : shapes(shapes) {}
 

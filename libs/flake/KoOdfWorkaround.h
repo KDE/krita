@@ -28,9 +28,9 @@ class QPen;
 class QString;
 
 /**
- * This class should contain all workarounds to correct problems with differenet ODF
+ * This class should contain all workarounds to correct problems with different ODF
  * implementations. If you need to access application specific things please create a
- * new namespace in the app you need it
+ * new namespace in the application you need it in
  * All calls to methods of this class should be wrapped into ifndefs like e.g.
  *
  * #ifndef NWORKAROUND_ODF_BUGS

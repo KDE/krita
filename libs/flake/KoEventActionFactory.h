@@ -27,6 +27,7 @@
 class KoEventAction;
 class KoEventActionWidget;
 
+/// API docs go here
 class FLAKE_EXPORT KoEventActionFactory
 {
 public:

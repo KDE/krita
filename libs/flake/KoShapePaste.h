@@ -52,7 +52,7 @@ protected:
     /// reimplemented
     virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore);
 
-    struct Private;
+    class Private;
     Private * const d;
 };
 

@@ -31,8 +31,8 @@ class KoCanvasObserver;
  * KoCanvasObserverProvider is an abstract class that can return a
  * list of canvas observers, such as dock widgets.
  */
-class FLAKE_EXPORT KoCanvasObserverProvider {
-
+class FLAKE_EXPORT KoCanvasObserverProvider
+{
 public:
 
     KoCanvasObserverProvider() {};

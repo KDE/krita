@@ -26,6 +26,7 @@
 class KoFilterEffect;
 class KoFilterEffectConfigWidgetBase;
 
+/// API docs go here
 class FLAKE_EXPORT KoFilterEffectFactory : public QObject
 {
     Q_OBJECT

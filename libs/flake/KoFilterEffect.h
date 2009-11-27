@@ -165,7 +165,7 @@ protected:
     void saveCommonAttributes(KoXmlWriter &writer);
 
 private:
-    struct Private;
+    class Private;
     Private* const d;
 };
 

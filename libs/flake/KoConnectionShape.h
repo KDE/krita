@@ -31,6 +31,7 @@
 /// A connection to a connection point of a shape
 typedef QPair<KoShape*, int> KoConnection;
 
+/// API docs go here
 class FLAKE_EXPORT KoConnectionShape : public KoParameterShape
 {
 public:
@@ -127,10 +128,10 @@ private:
     qreal scalarProd(const QPointF &v1, const QPointF &v2);
     qreal crossProd(const QPointF &v1, const QPointF &v2);
 
-    QList<QPointF> m_path;
-    bool m_hasMoved;
+    QList<QPointF> m_path; // TODO move to d-pointer
+    bool m_hasMoved; // TODO move to d-pointer
 
-    struct Private;
+    class Private;
     Private * const d;
 };
 

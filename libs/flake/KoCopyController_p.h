@@ -22,7 +22,8 @@
 class KoCanvasBase;
 class QAction;
 
-class KoCopyControllerPrivate {
+class KoCopyControllerPrivate
+{
 public:
     KoCopyControllerPrivate(KoCopyController *p, KoCanvasBase *c, QAction *a);
 

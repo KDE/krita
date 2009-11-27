@@ -24,7 +24,9 @@
 #include <QString>
 #include <QtCore/QRectF>
 
-struct KoFilterEffect::Private {
+class KoFilterEffect::Private
+{
+public:
     Private()
         : filterRect(0, 0, 1, 1)
         , requiredInputCount(1), maximalInputCount(1)

@@ -36,7 +36,9 @@
 #include <KDebug>
 // XXX: Add editable text in path shapes so we can get a label here
 
-struct KoConnectionShape::Private {
+class KoConnectionShape::Private
+{
+public:
     Private()
             : shape1(0), shape2(0), connectionPointIndex1(-1), connectionPointIndex2(-1)
             , connectionType(Standard), forceUpdate(false) {}

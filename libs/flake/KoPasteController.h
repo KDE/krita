@@ -33,7 +33,8 @@ class KoCanvasBase;
  * Additionally; when the tool does not allow pasting (KoTool::hasSelection() returns false)
  * the signal pasteRequested will be emitted for applications to connect to.
  */
-class FLAKE_EXPORT KoPasteController : public QObject {
+class FLAKE_EXPORT KoPasteController : public QObject
+{
     Q_OBJECT
 public:
     /**

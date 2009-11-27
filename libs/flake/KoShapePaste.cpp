@@ -36,7 +36,9 @@
 #include "KoShapeRegistry.h"
 #include "commands/KoShapeCreateCommand.h"
 
-struct KoShapePaste::Private {
+class KoShapePaste::Private
+{
+public:
     Private(KoCanvasBase *cb, KoShapeLayer *l) : canvas(cb), layer(l) {}
 
     KoCanvasBase *canvas;

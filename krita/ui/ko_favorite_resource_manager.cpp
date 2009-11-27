@@ -84,7 +84,19 @@ void KoFavoriteResourceManager::slotChangePaintopLabel()
 void KoFavoriteResourceManager::slotShowPopupPalette(const QPoint &p)
 {
     qDebug() << "[KoFavoriteResourceManager] popup palette called";
-    m_popupPalette->move(p);
+
+    if (!m_popupPalette->isVisible())
+    {
+        QPoint pointPalette(p);
+        QSize paletteSize(m_popupPalette->size());
+        QSize parentSize(m_popupPalette->parentWidget()->size());
+
+        if (parentSize.height() - pointPalette.y() - paletteSize.height() < 0)
+            pointPalette.setY(pointPalette.y()-paletteSize.height());
+        if (parentSize.width() - pointPalette.x() - paletteSize.width() < 0)
+            pointPalette.setX(pointPalette.x()-paletteSize.width());
+        m_popupPalette->move(pointPalette);
+    }
     m_popupPalette->setVisible(!m_popupPalette->isVisible());
 }
 

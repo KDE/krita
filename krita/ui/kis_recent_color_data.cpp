@@ -37,6 +37,13 @@ KisRecentColorData::KisRecentColorData(QColor *newColor)
     m_button->setPalette(p);
     m_button->setAutoFillBackground(false);
 
+    //setting color
+//    char str[45];
+//    sprintf(str, "* { background-color: rgb(%i,%i,%i) }", color()->red(), color()->green()
+//            ,color()->blue());
+//
+//    m_button->setStyleSheet(str);
+
     m_button->setMinimumSize(KisPopupPalette::BUTTON_SIZE, KisPopupPalette::BUTTON_SIZE);
     m_button->setMaximumSize(KisPopupPalette::BUTTON_SIZE, KisPopupPalette::BUTTON_SIZE);
     m_button->connect(m_button, SIGNAL(clicked()), this, SLOT(slotColorButtonClicked()));

@@ -51,6 +51,7 @@
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
+#include <kis_transaction.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_meta_data_io_backend.h>
@@ -554,6 +555,8 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     double coeff = quint8_MAX / (double)(pow(2, color_nb_bits) - 1);
     KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), UCHAR_MAX);
+    KisTransaction("", layer -> paintDevice());
+
     // Read comments/texts...
     png_text* text_ptr;
     int num_comments;

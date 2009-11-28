@@ -49,6 +49,7 @@
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
+#include <kis_transaction.h>
 
 // plugins's headers
 #include "kis_pdf_import_widget.h"
@@ -140,6 +141,8 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         KisPaintLayer* layer = new KisPaintLayer(img.data(),
                 i18n("Page %1", *it + 1),
                 quint8_MAX);
+
+        KisTransaction("", layer->paintDevice());
 
         Poppler::Page* page = pdoc->page(*it);
         for (int x = 0; x < width; x += 1000) {

@@ -52,6 +52,7 @@ extern "C" {
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_paint_layer.h>
+#include <kis_transaction.h>
 #include <kis_group_layer.h>
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_value.h>
@@ -227,6 +228,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     
     // Create layer
     KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX));
+    KisTransaction("", layer->paintDevice());
 
     // Read data
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];

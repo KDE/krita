@@ -42,6 +42,7 @@
 #include <colorprofiles/KoIccColorProfile.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
+#include <kis_transaction.h>
 
 #include "kis_tiff_reader.h"
 #include "kis_tiff_ycbcr_reader.h"
@@ -345,6 +346,8 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         }
     }
     KisPaintLayer* layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX);
+    KisTransaction("", layer -> paintDevice());
+
     tdata_t buf = 0;
     tdata_t* ps_buf = 0; // used only for planar configuration separated
     KisBufferStreamBase* tiffstream;

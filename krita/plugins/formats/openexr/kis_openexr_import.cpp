@@ -41,6 +41,7 @@
 #include <kis_layer.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
+#include <kis_transaction.h>
 #include <kis_annotation.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_iterators_pixel.h>
@@ -112,6 +113,8 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
     }
     image->lock();
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE, cs);
+    KisTransaction("", layer->paintDevice());
+
     layer->setCompositeOp(COMPOSITE_OVER);
 
     if (!layer) {

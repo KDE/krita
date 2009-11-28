@@ -40,6 +40,7 @@
 #include <kis_iterator.h>
 #include <KoColorSpaceTraits.h>
 #include <kis_paint_device.h>
+#include <kis_transaction.h>
 #include <KoColorSpace.h>
 #include <qendian.h>
 
@@ -293,6 +294,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     image->lock();
 
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
+    KisTransaction("", layer->paintDevice());
 
     KisPpmFlow* ppmFlow = 0;
     if (isAscii) {

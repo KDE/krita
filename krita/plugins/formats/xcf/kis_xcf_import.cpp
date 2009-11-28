@@ -42,6 +42,7 @@
 #include <kis_image.h>
 #include <kis_iterator.h>
 #include <kis_paint_device.h>
+#include <kis_transaction.h>
 #include <kis_paint_layer.h>
 #include <kis_transparency_mask.h>
 
@@ -227,6 +228,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
 
         // Create the layer
         KisPaintLayerSP layer = new KisPaintLayer(image, xcflayer.name, xcflayer.opacity, colorSpace);
+        KisTransaction("", layer -> paintDevice());
 
         // Set some properties
         layer->setCompositeOp(layerModeG2K(xcflayer.mode));

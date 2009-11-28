@@ -32,6 +32,7 @@
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
+#include <kis_transaction.h>
 #include <kis_undo_adapter.h>
 #include <QFileInfo>
 #include <KoColorSpaceRegistry.h>
@@ -228,6 +229,8 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
 
     // Create the layer
     KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img->nextLayerName(), OPACITY_OPAQUE);
+    KisTransaction("", layer->paintDevice());
+
     m_img->addNode(layer.data(), m_img->rootLayer().data());
 
     // Set the data

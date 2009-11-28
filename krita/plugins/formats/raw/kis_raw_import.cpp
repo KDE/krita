@@ -29,6 +29,7 @@
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
+#include "kis_transaction.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include <kis_iterators_pixel.h>
@@ -119,6 +120,8 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         if (image.isNull()) return KoFilter::CreationError;
         image->lock();
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
+        KisTransaction("", layer -> paintDevice());
+
         image->addNode(layer, image->rootLayer());
         if (layer.isNull()) return KoFilter::CreationError;
 

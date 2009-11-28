@@ -36,6 +36,7 @@
 #include <kis_undo_adapter.h>
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
+#include <kis_transaction.h>
 
 #include "psd_header.h"
 #include "psd_colormode_block.h"
@@ -165,6 +166,8 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     if (layerSection.layerInfo.nLayers == 0) {
         dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
         KisPaintLayerSP layer = new KisPaintLayer(m_img, i18n("Background"), OPACITY_OPAQUE);
+        KisTransaction("", layer -> paintDevice());
+
         //readLayerData(&f, layer->paintDevice(), f.pos(), QRect(0, 0, header.m_width, header.m_height));
         m_img->addNode(layer, m_img->rootLayer());
     }

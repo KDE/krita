@@ -97,6 +97,7 @@ private:
     KoConnectionShape * m_connectionShape;
     KoConnectionShape * m_lastConnectionShapeOn;
     QPair<bool,bool> * m_isTied;
+    bool m_modifyConnection;
 };
 
 #endif

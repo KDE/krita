@@ -68,7 +68,7 @@ void KoCtlColorSpaceInfoTest::testCreation()
     QCOMPARE(pd.channelTypes()[1], GTLCore::Type::Float32);
     QCOMPARE(pd.channelTypes()[2], GTLCore::Type::Float32);
     QCOMPARE(pd.channelTypes()[3], GTLCore::Type::Float32);
-    QCOMPARE(pd.sameTypeChannels(), true);
+    QCOMPARE(pd.hasSameTypeChannels(), true);
     QCOMPARE(qint32(pd.bitsSize()), qint32(8 * info.pixelSize()));
 }
 

@@ -45,14 +45,14 @@ KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColo
         pdl.push_back(_pd);
         pdl.push_back(_pd);
         m_withoutMaskProgram = new OpenCTL::Program("compositeWithoutmask", module, pdl, _pd);
-        if (!m_withoutMaskProgram->initialised()) {
+        if (!m_withoutMaskProgram->isInitialised()) {
             dbgPlugins << "Without mask failed";
             delete m_withoutMaskProgram;
             m_withoutMaskProgram = 0;
         }
         pdl.push_back(GTLCore::PixelDescription(GTLCore::Type::UnsignedInteger8, 1));
         m_withMaskProgram = new OpenCTL::Program("compositeWithmask", module, pdl, _pd);
-        if (!m_withMaskProgram->initialised()) {
+        if (!m_withMaskProgram->isInitialised()) {
             dbgPlugins << "With mask failed";
             delete m_withMaskProgram;
             m_withMaskProgram = 0;

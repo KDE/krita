@@ -223,10 +223,10 @@ bool KoCtlColorSpaceInfo::load()
                         QString valueType = e.attribute("valueType");
                         if (valueType == "float32") {
                             info->d->valueType = KoChannelInfo::FLOAT32;
-                            channelTypes.push_back(GTLCore::Type::Float);
+                            channelTypes.push_back(GTLCore::Type::Float32);
                         } else if (valueType == "float16") {
                             info->d->valueType = KoChannelInfo::FLOAT16;
-                            channelTypes.push_back(GTLCore::Type::Half);
+                            channelTypes.push_back(GTLCore::Type::Float16);
                         } else if (valueType == "uint8") {
                             info->d->valueType = KoChannelInfo::UINT8;
                             channelTypes.push_back(GTLCore::Type::UnsignedInteger8);

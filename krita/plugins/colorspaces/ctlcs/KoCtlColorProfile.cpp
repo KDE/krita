@@ -287,11 +287,11 @@ bool KoCtlColorProfile::load()
                     QMutexLocker lock(ctlMutex);
                     QDomCDATASection CDATA = nCDATA.toCDATASection();
                     dbgPigment << CDATA.data();
-                    d->module = new OpenCTL::Module(name().toAscii().data());
-                    d->module->setSource(CDATA.data().toAscii().data());
+                    d->module = new OpenCTL::Module();
+                    d->module->setSource(name().toAscii().data(), CDATA.data().toAscii().data());
                     d->module->compile();
                 }
-            } else if (e.tagName() == "transformations") {
+            } else if (e.tagName() == "transHalfformations") {
                 decodeTransformations(e);
             }
         }
@@ -316,10 +316,10 @@ GTLCore::PixelDescription KoCtlColorProfile::createPixelDescription(const KoColo
             types.push_back(GTLCore::Type::UnsignedInteger32);
             break;
         case KoChannelInfo::FLOAT16:
-            types.push_back(GTLCore::Type::Half);
+            types.push_back(GTLCore::Type::Float16);
             break;
         case KoChannelInfo::FLOAT32:
-            types.push_back(GTLCore::Type::Float);
+            types.push_back(GTLCore::Type::Float32);
             break;
         case KoChannelInfo::OTHER:
         case KoChannelInfo::FLOAT64:

@@ -403,9 +403,9 @@ private:
             rgb_to_hsv_float (&color_h, &color_s, &color_v);
         }
 
-        if (settings_value[BRUSH_SMUDGE_LENGTH] < 1.0 and
+        if (settings_value[BRUSH_SMUDGE_LENGTH] < 1.0 &&
             // optimization, since normal brushes have smudge_length == 0.5 without actually smudging
-            (settings_value[BRUSH_SMUDGE] != 0.0 or not settings[BRUSH_SMUDGE]->is_constant())) {
+            (settings_value[BRUSH_SMUDGE] != 0.0 || !settings[BRUSH_SMUDGE]->is_constant())) {
             float fac = settings_value[BRUSH_SMUDGE_LENGTH];
             if (fac < 0.0) fac = 0;
             int px, py;
@@ -486,7 +486,7 @@ private:
             float xxr=yy*sn+xx*cs;
             dist = sqrt(yyr*yyr + xxr*xxr);
         } else {
-            dist = hypotf(xx, yy);
+            dist = _hypotf(xx, yy);
         }
 
         // FIXME: no need for base_value or for the range checks above IF always the interpolation

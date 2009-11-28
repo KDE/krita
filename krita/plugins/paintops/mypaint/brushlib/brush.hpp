@@ -486,7 +486,7 @@ private:
             float xxr=yy*sn+xx*cs;
             dist = sqrt(yyr*yyr + xxr*xxr);
         } else {
-            dist = _hypotf(xx, yy);
+            dist = hypotf(xx, yy);
         }
 
         // FIXME: no need for base_value or for the range checks above IF always the interpolation

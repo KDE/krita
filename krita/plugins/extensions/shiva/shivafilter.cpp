@@ -109,15 +109,24 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
         if (kernel.isCompiled()) {
             ConstPaintDeviceImage pdisrc(src);
             PaintDeviceImage pdi(dst);
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION < 13
             std::list< GTLCore::AbstractImage* > inputs;
+#else
+            std::list< const GTLCore::AbstractImage* > inputs;
+#endif
             inputs.push_back(&pdisrc);
             GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
             dbgPlugins << "Run: " << m_source->name().c_str() << " " <<  dstTopLeft << " " << size;
+#if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION < 13
             kernel.evaluatePixeles(region, inputs, &pdi
 #if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12
                 , report
-#endif            
+#endif
             );
+#else
+            kernel.evaluatePixels(region, inputs, &pdi, report );
+#endif
+
         }
 #if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION < 12
     }

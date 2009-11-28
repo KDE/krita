@@ -19,6 +19,7 @@
 
 #include <GTLCore/Type.h>
 #include <GTLCore/TypesManager.h>
+#include <GTLCore/Version.h>
 
 #include "kis_debug.h"
 
@@ -38,10 +39,14 @@ QVariant valueToQVariant(const GTLCore::Value& value)
     case GTLCore::Type::UNSIGNED_INTEGER16:
     case GTLCore::Type::UNSIGNED_INTEGER32:
         return QVariant(value.asUnsignedInt32());
-    case GTLCore::Type::HALF:
-    case GTLCore::Type::FLOAT:
-    case GTLCore::Type::DOUBLE:
+    case GTLCore::Type::FLOAT16:
+    case GTLCore::Type::FLOAT32:
+    case GTLCore::Type::FLOAT64:
+#if GTL_CORE_VERSION_MAJOR == 0 && GTL_CORE_VERSION_MINOR == 9 && GTL_CORE_VERSION_REVISION < 13
         return QVariant(value.asFloat());
+#else
+        return QVariant(value.asFloat32());
+#endif
     case GTLCore::Type::ARRAY:
     case GTLCore::Type::VECTOR: {
         QList<QVariant> variant;
@@ -58,9 +63,9 @@ GTLCore::Value qvariantToValue(const QVariant& variant, const GTLCore::Type* _ty
     switch (_type->dataType()) {
     case GTLCore::Type::BOOLEAN:
         return GTLCore::Value(variant.toBool());
-    case GTLCore::Type::HALF:
-    case GTLCore::Type::FLOAT:
-    case GTLCore::Type::DOUBLE:
+    case GTLCore::Type::FLOAT16:
+    case GTLCore::Type::FLOAT32:
+    case GTLCore::Type::FLOAT64:
         return GTLCore::Value((float)variant.toDouble());
     case GTLCore::Type::INTEGER8:
     case GTLCore::Type::INTEGER16:

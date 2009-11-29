@@ -39,6 +39,7 @@
 
 #include <KDebug>
 
+#include <QDebug>
 KoConnectionTool::KoConnectionTool(KoCanvasBase * canvas)
     : KoPathTool(canvas)
     , m_shape1(0)
@@ -125,7 +126,8 @@ void KoConnectionTool::paint(QPainter &painter, const KoViewConverter &converter
 void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
 {
     if(event->modifiers() & Qt::ControlModifier)
-            return;
+        return;
+    
     KoShape * tempShape = 0;
     if(isInRoi())
         tempShape = m_lastShapeOn;
@@ -150,73 +152,71 @@ void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
         // All sizes and positions are hardcoded for now
         KoShapeFactory *factory = KoShapeRegistry::instance()->value("KoConnectionShape");
         KoShape *shape = factory->createDefaultShapeAndInit(m_canvas->shapeController()->dataCenterMap());
-        m_connectionShape = dynamic_cast<KoConnectionShape*>(shape);
-        if(isInRoi()) {
-            m_shape1 = tempShape;
-            m_firstHandleIndex = getConnectionIndex(tempShape, m_mouse);
+        if((m_connectionShape = dynamic_cast<KoConnectionShape*>(shape))){
+            KoConnectionShape * connectionShapeTest = dynamic_cast<KoConnectionShape*>(tempShape);
+            if(isInRoi()) {
+                m_shape1 = tempShape;
+                m_firstHandleIndex = getConnectionIndex(tempShape, m_mouse);
+                
+                m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
+                m_isTied->first = true;
+            // If the shape selected is not the background
+            }else if(tempShape != 0 && !connectionShapeTest) {
+                m_shape1 = tempShape;
+                m_firstHandleIndex = 0;
+                m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
+                m_isTied->first = false;
+            } else {
+                m_shape1 = 0;
+                m_firstHandleIndex = 0;
+                m_connectionShape->moveHandle(0, event->point);
+            }
             
-            m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
-            m_isTied->first = true;
-        // If the shape selected is not the background
-        }else if(tempShape != 0) {
-            m_shape1 = tempShape;
-            m_firstHandleIndex = 0;
-
-            m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
-            m_isTied->first = false;
-        } else {
-            m_shape1 = 0;
-            m_firstHandleIndex = 0;
-            m_connectionShape->moveHandle(0, event->point);
+            m_connectionShape->moveHandle(1, event->point);
+            // The connection is now done, so update for apply
+            m_connectionShape->updateConnections();
+            m_canvas->shapeManager()->add(m_connectionShape);
         }
-        
-        m_connectionShape->moveHandle(m_connectionShape->getHandleCount(), event->point);
-        // The connection is now done, so update for apply
-        m_connectionShape->updateConnections();
-        m_canvas->shapeManager()->add(m_connectionShape);
-
     } else {
     // Second click
+    
+        if(m_shape1 != 0)
+            m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
         // If the shape selected is not the background
         if(tempShape != 0) {
             if(isInRoi()) {
-                if(m_shape1 != 0)
-                    m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
                 m_connectionShape->setConnection2(tempShape, getConnectionIndex(tempShape, m_mouse));
                 m_isTied->second = true;
             } else {
-                if(m_shape1 != 0)
-                    m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
                 m_connectionShape->setConnection2(tempShape, 0);
             }
+            
         } else {
         // If the cursor points the background
             if(isInRoi()) {
-                if(m_shape1 != 0)
-                    m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
                 m_connectionShape->setConnection2(tempShape, getConnectionIndex(tempShape, m_mouse));
                 m_isTied->second = true;
             } else {
-                if(m_shape1 != 0)
-                    m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
                 m_connectionShape->moveHandle(m_connectionShape->getHandleCount(), event->point);
             }
         }
         // Will find the nearest point and update the connection shape
         updateConnections();
-
+        
         // Apply the connection shape for now
         command();
-
+        
         m_connectionShape = 0;
+        m_lastShapeOn =0;
     }
 }
 
 void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
 {
     // Record the last shape
-    if(m_shapeOn != 0)
+    if(m_shapeOn != 0){
         m_lastShapeOn = m_shapeOn;
+    }
     // Record the mouse position
     m_mouse = event->point;
     // Look at the new shape under the mouse
@@ -248,7 +248,30 @@ void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
     }
     
     if(m_activeHandle != -1 && m_lastConnectionShapeOn != 0) {
-        m_lastConnectionShapeOn->moveHandle(m_activeHandle, m_mouse);
+        if(m_activeHandle == 0){
+            m_lastConnectionShapeOn->setConnection1(0, 0);
+        }else if(m_activeHandle == 1){
+            m_lastConnectionShapeOn->setConnection2(0, 0);
+        }
+        
+        if(!tempShape && isInRoi()) {
+            if(m_lastShapeOn != 0){
+                if(m_activeHandle == 0){
+                    m_lastConnectionShapeOn->setConnection1(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
+                }else if(m_activeHandle == 1){
+                    m_lastConnectionShapeOn->setConnection2(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
+                }
+            }
+        }else if(m_shapeOn != 0 ){
+             if(m_activeHandle == 0){
+                 m_lastConnectionShapeOn->setConnection1(m_shapeOn, 0);
+             }else if(m_activeHandle == 1){
+                 m_lastConnectionShapeOn->setConnection2(m_shapeOn, 0);
+             }
+        }else{
+            m_lastConnectionShapeOn->moveHandle(m_activeHandle, m_mouse);
+        }
+        m_lastConnectionShapeOn->updateConnections();
     }
     m_canvas->updateCanvas(QRectF(0, 0, m_canvas->canvasWidget()->width(), m_canvas->canvasWidget()->height()));
 }
@@ -268,9 +291,6 @@ void KoConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
         }
     }else{
         if(m_modifyConnection){
-            m_lastShapeOn = 0;
-            m_connectionShape = 0;
-            m_modifyConnection = false;
             deactivate();
         }
     }
@@ -291,10 +311,10 @@ void KoConnectionTool::activate(bool temporary)
 
 void KoConnectionTool::deactivate()
 {
-    kDebug()<<"deactivate :: test";
     m_shape1 = 0;
     m_lastConnectionShapeOn = 0;
     m_lastShapeOn = 0;
+    m_modifyConnection = false;
     if(m_connectionShape != 0) {
         QRectF rec(m_connectionShape->boundingRect());
         m_canvas->shapeManager()->remove(m_connectionShape);
@@ -306,9 +326,9 @@ void KoConnectionTool::deactivate()
 
 void KoConnectionTool::updateConnections()
 {
-    if(m_connectionShape == 0)
+    if(m_connectionShape == 0){
         return;
-
+    }
     KoConnection connection1 = m_connectionShape->connection1();
     KoConnection connection2 = m_connectionShape->connection2();
 
@@ -377,11 +397,9 @@ bool KoConnectionTool::isInRoi()
     if(m_lastShapeOn == 0)
         return false;
     
-    KoConnectionShape * tempShape = dynamic_cast<KoConnectionShape*>(m_lastShapeOn);
-    if(tempShape && m_connectionShape == 0)
-    {
+    KoConnectionShape * tempInRoiShape = dynamic_cast<KoConnectionShape*>(m_lastShapeOn);
+    if(tempInRoiShape && m_connectionShape == 0)
         return false;
-    }
     
     QPointF mouse = m_lastShapeOn->documentToShape(m_mouse);
     foreach(const QPointF& point, m_lastShapeOn->connectionPoints())

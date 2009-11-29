@@ -796,6 +796,12 @@ bool DefaultTool::paste()
         KoShapeManager * shapeManager = m_canvas->shapeManager();
         KoShapePaste paste(m_canvas, shapeManager->selection()->activeLayer());
         success = paste.paste(KoOdf::Text, data);
+        if (success) {
+            shapeManager->selection()->deselectAll();
+            foreach(KoShape *shape, paste.pastedShapes()) {
+                shapeManager->selection()->select(shape);
+            }
+        }
     }
     return success;
 }

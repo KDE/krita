@@ -56,7 +56,13 @@ public:
     virtual ~KisCropVisitor() {
     }
 
-    bool visit(KisExternalLayer *) {
+    bool visit(KisExternalLayer *layer) {
+        KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
+        
+        QUndoCommand* cmd = layer->crop(m_rect);
+        if (cmd && undoAdapter && undoAdapter->undo()) {
+            undoAdapter->addCommand(cmd);
+        }
         return true;
     }
 

@@ -31,9 +31,11 @@
 #include <QList>
 #include <QMap>
 #include <QDebug>
+#include <QUndoCommand>
 
 #include <ktemporaryfile.h>
 #include <kicon.h>
+#include <kdebug.h>
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -62,6 +64,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoSelection.h>
+#include <KoShapeMoveCommand.h>s
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -437,6 +440,21 @@ bool KisShapeLayer::loadLayer(KoStore* store)
 void KisShapeLayer::selectionChanged()
 {
     emit selectionChanged(m_d->canvas->shapeManager()->selection()->selectedShapes());
+}
+
+QUndoCommand* KisShapeLayer::crop(const QRect & rect) {
+    QRectF croppedRect = m_d->converter->viewToDocument(rect);
+    QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
+    if(shapes.isEmpty())
+        return 0;
+
+    QList<QPointF> previousPositions;
+    QList<QPointF> newPositions;
+    foreach(const KoShape* shape, shapes) {
+        previousPositions.append(shape->position());
+        newPositions.append(shape->position() - croppedRect.topLeft());
+    }
+    return new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 }
 
 #include "kis_shape_layer.moc"

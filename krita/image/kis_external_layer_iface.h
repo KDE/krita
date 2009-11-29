@@ -29,6 +29,7 @@ class QString;
 class QIcon;
 class QDomDocument;
 class QDomElement;
+class QUndoCommand;
 
 /**
    A base interface for layers that are implemented outside the Krita
@@ -42,6 +43,11 @@ public:
             : KisLayer(image, name, opacity) {}
     virtual QIcon icon() const {
         return KIcon("system-run");
+    }
+    
+    virtual QUndoCommand* crop(const QRect & rect) {
+        Q_UNUSED(rect);
+        return 0;
     }
 };
 

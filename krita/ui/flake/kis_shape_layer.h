@@ -97,6 +97,8 @@ public:
 
     bool saveLayer(KoStore * store) const;
     bool loadLayer(KoStore* store);
+    
+    QUndoCommand* crop(const QRect & rect);
 
 public slots:
     void selectionChanged();

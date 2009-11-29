@@ -225,6 +225,7 @@ void AutocorrectConfig::enableAdvAutocorrection(int state)
 void AutocorrectConfig::enableAutocorrectFormat(int state)
 {
     bool enable = state == Qt::Checked;
+    Q_UNUSED(enable);
     // widget.changeFormat->setEnabled(enable);
     // widget.clearFormat->setEnabled(enable);
 }

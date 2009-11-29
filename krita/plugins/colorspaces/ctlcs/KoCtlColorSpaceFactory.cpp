@@ -24,6 +24,8 @@
 #include "KoCtlColorSpaceInfo.h"
 #include "KoCtlColorSpace.h"
 
+#include "kis_debug.h"
+
 KoCtlColorSpaceFactory::KoCtlColorSpaceFactory(KoCtlColorSpaceInfo* info) : m_info(info)
 {
 }
@@ -41,8 +43,11 @@ QList<KoColorConversionTransformationFactory*> KoCtlColorSpaceFactory::colorConv
 {
     QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(this);
     QList<KoColorConversionTransformationFactory*> list;
+    dbgKrita << "Profiles: " << profiles.size();
     foreach(const KoColorProfile* profile, profiles) {
+        dbgKrita << profile;
         const KoCtlColorProfile* ctlprofile = dynamic_cast<const KoCtlColorProfile*>(profile);
+        Q_ASSERT(ctlprofile);
         if (ctlprofile) {
             list += ctlprofile->createColorConversionTransformationFactories();
         }

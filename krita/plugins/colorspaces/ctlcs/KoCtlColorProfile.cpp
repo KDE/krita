@@ -37,6 +37,7 @@
 #include <KoCtlColorConversionTransformation.h>
 #include <KoUniqueNumberForIdServer.h>
 
+#include <GTLCore/CompilationMessages.h>
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/String.h>
 #include <GTLCore/Type.h>
@@ -45,6 +46,8 @@
 #include <OpenCTL/Module.h>
 #include "KoCtlMutex.h"
 #include "KoCtlParser.h"
+
+#include "kis_debug.h"
 
 struct ConversionInfo {
     QString sourceColorModelID;
@@ -91,7 +94,7 @@ KoColorProfile* KoCtlColorProfile::clone() const
 
 bool KoCtlColorProfile::valid() const
 {
-    dbgPigment << d->colorModelID.isNull() << " " << d->colorDepthID.isNull();
+    dbgPigment << d->colorModelID.isNull() << " " << d->colorDepthID.isNull() << " isCompiled: " << d->module->isCompiled();
     return (d->module and d->module->isCompiled()
             and not d->colorModelID.isNull() and not d->colorDepthID.isNull());
 }
@@ -134,8 +137,10 @@ OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(const KoColorS
 
 QList<KoColorConversionTransformationFactory*> KoCtlColorProfile::createColorConversionTransformationFactories() const
 {
+    dbgPlugins << "createColorConversionTransformationFactories() " << d->conversionInfos.size();
     QList<KoColorConversionTransformationFactory*> factories;
     foreach(ConversionInfo info, d->conversionInfos) {
+        dbgPlugins << info.destinationColorModelID << " " << info.destinationColorDepthID << " " << info.destinationProfile << " " << info.sourceColorModelID << " " << info.sourceColorDepthID << " " << info.sourceProfile << " " << info.function;
         if (info.sourceColorDepthID == "F" and info.destinationColorDepthID == "F") {
             factories.push_back(
                 new KoCtlColorConversionTransformationFactory(
@@ -200,6 +205,7 @@ QString KoCtlColorProfile::colorDepth() const
 
 void KoCtlColorProfile::decodeTransformations(QDomElement& elt)
 {
+    dbgPlugins << "decodeTransformations " << elt.tagName();
     for (QDomNode nt = elt.firstChild(); not nt.isNull(); nt = nt.nextSibling()) {
         QDomElement et = nt.toElement();
         if (not et.isNull()) {
@@ -213,6 +219,7 @@ void KoCtlColorProfile::decodeTransformations(QDomElement& elt)
 
 void KoCtlColorProfile::decodeConversions(QDomElement& elt)
 {
+    dbgPlugins << "decodeConversions " << elt.tagName() << " " << elt.childNodes().count();
     for (QDomNode n = elt.firstChild(); not n.isNull(); n = n.nextSibling()) {
         QDomElement e = n.toElement();
         if (not e.isNull()) {
@@ -290,8 +297,12 @@ bool KoCtlColorProfile::load()
                     d->module = new OpenCTL::Module();
                     d->module->setSource(name().toAscii().data(), CDATA.data().toAscii().data());
                     d->module->compile();
+                    if (!d->module->isCompiled())
+                    {
+                        dbgKrita << d->module->compilationMessages().toString().c_str();
+                    }
                 }
-            } else if (e.tagName() == "transHalfformations") {
+            } else if (e.tagName() == "transformations") {
                 decodeTransformations(e);
             }
         }

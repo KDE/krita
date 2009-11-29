@@ -60,7 +60,7 @@ class KoDockerManager::Private
 {
 public:
     Private() : view(0) {}
-    KoView *view;
+    QPointer<KoView> view;
     QMap<QString, KoToolDocker *> toolDockerMap;
     QMap<QString, bool> toolDockerVisibilityMap;
     QMap<QString, KoToolDocker *> activeToolDockerMap;
@@ -84,27 +84,30 @@ void KoDockerManager::Private::loadDocker(const QString &name, bool visible)
 
 void KoDockerManager::Private::removeDockers()
 {
-    // First remove the previous active dockers from sight and docker menu
-    QMapIterator<QString, KoToolDocker *> iter(activeToolDockerMap);
-    while (iter.hasNext()) {
-        iter.next();
+    KoMainWindow * shell = view ? view->shell() : 0;
+    if (shell) {
+        // First remove the previous active dockers from sight and docker menu
+        QMapIterator<QString, KoToolDocker *> iter(activeToolDockerMap);
+        while (iter.hasNext()) {
+            iter.next();
 
-        // Check if the dock is raised or not
-        QList<QDockWidget*> tabedDocks = view->shell()->tabifiedDockWidgets(iter.value());
-        bool isOnTop = true;
-        int idx = view->children().indexOf(iter.value());
-        foreach (QDockWidget* dock, tabedDocks) {
-            if (view->shell()->children().indexOf(dock) > idx && dock->isVisible() && dock->isEnabled()) {
-                isOnTop = false;
-                break;
+            // Check if the dock is raised or not
+            QList<QDockWidget*> tabedDocks = shell->tabifiedDockWidgets(iter.value());
+            bool isOnTop = true;
+            int idx = view->children().indexOf(iter.value());
+            foreach (QDockWidget* dock, tabedDocks) {
+                if (shell->children().indexOf(dock) > idx && dock->isVisible() && dock->isEnabled()) {
+                    isOnTop = false;
+                    break;
+                }
             }
+            toolDockerRaisedMap[iter.key()] = isOnTop;
+            //kDebug() << iter.value() << " " << iter.value()->isVisible() << iter.key();
+            iter.value()->toggleViewAction()->setVisible(false);
+            toolDockerVisibilityMap[iter.key()] = iter.value()->isVisible();
+            iter.value()->setVisible(false);
+            iter.value()->setEnabled(false);
         }
-        toolDockerRaisedMap[iter.key()] = isOnTop;
-        //kDebug() << iter.value() << " " << iter.value()->isVisible() << iter.key();
-        iter.value()->toggleViewAction()->setVisible(false);
-        toolDockerVisibilityMap[iter.key()] = iter.value()->isVisible();
-        iter.value()->setVisible(false);
-        iter.value()->setEnabled(false);
     }
     activeToolDockerMap.clear();
 }

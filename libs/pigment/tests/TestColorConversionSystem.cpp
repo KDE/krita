@@ -71,6 +71,10 @@ void TestColorConversionSystem::testGoodConnections()
         }
     }
     int failed = 0;
+    if ( !KoColorSpaceRegistry::instance()->colorSpace("RgbAF32", 0) )
+    {
+      failed = 42;
+    }
     QVERIFY2( countFail == failed, QString("%1 tests have fails (it should have been %2)").arg( countFail).arg(failed).toLatin1() );
 }
 

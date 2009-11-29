@@ -68,6 +68,7 @@ KisDynaPaintOp::~KisDynaPaintOp()
 
 double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
 {
+    Q_UNUSED(savedDist);
     if (!m_image) return 0;
     if (!painter()) return 0;
 

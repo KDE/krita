@@ -261,7 +261,7 @@ KisPNGConverter::KisPNGConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
     m_adapter = adapter;
     m_stop = false;
     m_max_row = 0;
-    m_img = 0;
+    m_image = 0;
 }
 
 KisPNGConverter::~KisPNGConverter()
@@ -528,10 +528,10 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     // Creating the KisImageWSP
-    if (m_img == 0) {
-        m_img = new KisImage(m_adapter, width, height, cs, "built image");
-        Q_CHECK_PTR(m_img);
-        m_img->lock();
+    if (m_image == 0) {
+        m_image = new KisImage(m_adapter, width, height, cs, "built image");
+        Q_CHECK_PTR(m_image);
+        m_image->lock();
         if (profile && !profile->isSuitableForOutput()) {
             KisAnnotationSP annotation;
             // XXX we hardcode icc, this is correct for lcms?
@@ -539,7 +539,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
             if (iccprofile && !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
-            m_img -> addAnnotation(annotation);
+            m_image -> addAnnotation(annotation);
         }
     }
     
@@ -550,11 +550,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_get_pHYs(png_ptr, info_ptr,&x_resolution,&y_resolution, &unit_type);
     if (unit_type == PNG_RESOLUTION_METER)
     {
-        m_img->setResolution((double) POINT_TO_CM(x_resolution)/100.0, (double) POINT_TO_CM(y_resolution)/100.0 ); // It is the "invert" macro because we convert from pointer-per-inchs to points
+        m_image->setResolution((double) POINT_TO_CM(x_resolution)/100.0, (double) POINT_TO_CM(y_resolution)/100.0 ); // It is the "invert" macro because we convert from pointer-per-inchs to points
     }
 
     double coeff = quint8_MAX / (double)(pow(2, color_nb_bits) - 1);
-    KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), UCHAR_MAX);
+    KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), UCHAR_MAX);
     KisTransaction("", layer -> paintDevice());
 
     // Read comments/texts...
@@ -711,7 +711,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             return KisImageBuilder_RESULT_UNSUPPORTED;
         }
     }
-    m_img->addNode(layer.data(), m_img->rootLayer().data());
+    m_image->addNode(layer.data(), m_image->rootLayer().data());
 
     png_read_end(png_ptr, end_info);
     iod->close();
@@ -720,7 +720,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 
     delete reader;
-    m_img->unlock();
+    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 
 }
@@ -762,11 +762,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
 
 KisImageWSP KisPNGConverter::image()
 {
-    return m_img;
+    return m_image;
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageWSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
     dbgFile << "Start writing PNG File " << uri;
     if (uri.isEmpty())
@@ -776,14 +776,14 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageWSP i
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open a QIODevice for writing
     QFile *fp = new QFile(uri.toLocalFile());
-    KisImageBuilder_Result result = buildFile(fp, img, device, annotationsStart, annotationsEnd, options, metaData);
+    KisImageBuilder_Result result = buildFile(fp, image, device, annotationsStart, annotationsEnd, options, metaData);
     delete fp;
     return result;
 // TODO: if failure do            KIO::del(uri); // async
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageWSP img, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
     if (!iodevice->open(QIODevice::WriteOnly)) {
         dbgFile << "Failed to open PNG File for writing";
@@ -793,12 +793,12 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     if (!device)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    if (!img)
+    if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
     // Setup the writing callback of libpng
-    int height = img->height();
-    int width = img->width();
+    int height = image->height();
+    int width = image->width();
     // Initialize structures
     png_structp png_ptr =  png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
     if (!png_ptr) {
@@ -849,7 +849,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     int num_palette = 0;
     if (!options.alpha && options.tryToSaveAsIndexed && KoID(device->colorSpace()->id()) == KoID("RGBA")) { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
         palette = new png_color[255];
-        KisRectConstIteratorPixel it = device->createRectConstIterator(0, 0, img->width(), img->height());
+        KisRectConstIteratorPixel it = device->createRectConstIterator(0, 0, image->width(), image->height());
         bool toomuchcolor = false;
         while (!it.isDone()) {
             const quint8* c = it.rawData();
@@ -1002,7 +1002,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     int unit_type;
     png_uint_32 x_resolution, y_resolution;
     
-    png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(img->xRes()) * 100.0, CM_TO_POINT(img->yRes()) * 100.0, PNG_RESOLUTION_METER); // It is the "invert" macro because we convert from pointer-per-inchs to points
+    png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(image->xRes()) * 100.0, CM_TO_POINT(image->yRes()) * 100.0, PNG_RESOLUTION_METER); // It is the "invert" macro because we convert from pointer-per-inchs to points
     
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);

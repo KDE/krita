@@ -16,7 +16,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_imagepipe_brush.h"
 #include "kis_imagepipe_brush_p.h"
 
@@ -69,7 +68,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
         m_d->brushes.append(new KisGbrBrush(devices.at(0).at(i), 0, 0, w, h));
     }
 
-    setImage(m_d->brushes.at(0)->img());
+    setImage(m_d->brushes.at(0)->image());
 
     m_d->brushType = PIPE_IMAGE;
 }
@@ -213,12 +212,12 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     return true;
 }
 
-QImage KisImagePipeBrush::img() const
+QImage KisImagePipeBrush::image() const
 {
     if (m_d->brushes.isEmpty()) {
         return QImage();
     } else {
-        return m_d->brushes.at(0)->img();
+        return m_d->brushes.at(0)->image();
     }
 }
 
@@ -239,7 +238,7 @@ KisFixedPaintDeviceSP KisImagePipeBrush::image(const KoColorSpace * colorSpace, 
     Q_UNUSED(angle);
     if (m_d->brushes.isEmpty()) return KisFixedPaintDeviceSP(0);
     selectNextBrush(info);
-    return m_d->brushes.at(m_d->currentBrush)->image(colorSpace, 1.0, 0.0, info, subPixelX, subPixelY);
+    return m_d->brushes.at(m_d->currentBrush)->paintDevice(colorSpace, 1.0, 0.0, info, subPixelX, subPixelY);
 }
 
 void KisImagePipeBrush::setParasiteString(const QString& parasite)

@@ -44,13 +44,13 @@ public:
        not a grayscale, the mask value is calculated from the effective grey
        level and alpha value.
     */
-    KisQImagemask(const QImage& img);
+    KisQImagemask(const QImage& image);
 
     /**
        As above except quicker as the image does not need to be scanned
        to see if it has any color pixels.
     */
-    KisQImagemask(const QImage& img, bool hasColor);
+    KisQImagemask(const QImage& image, bool hasColor);
 
     /**
        Create a transparent mask.
@@ -109,8 +109,8 @@ public:
     static KisQImagemaskSP interpolate(KisQImagemaskSP mask1, KisQImagemaskSP mask2, double t);
 
 private:
-    void computeAlpha(const QImage& img);
-    void copyAlpha(const QImage& img);
+    void computeAlpha(const QImage& image);
+    void copyAlpha(const QImage& image);
 
     QVector<quint8> m_data;
     qint32 m_width;

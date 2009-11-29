@@ -70,11 +70,11 @@ void KisTransparencyMaskTest::testApply()
     // Nothing is selected -- therefore everything should be filtered out on apply
     initImage(image, layer, dev, mask);
     mask->apply(dev, QRect(0, 0, 200, 100));
-    QImage qimg = dev->convertToQImage(0, 0, 0, 200, 100);
+    QImage qimage = dev->convertToQImage(0, 0, 0, 200, 100);
 
     if (!TestUtil::compareQImages(errpoint,
                                   QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_2.png"),
-                                  qimg)) {
+                                  qimage)) {
         QFAIL(QString("Failed to mask out image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
 
@@ -82,11 +82,11 @@ void KisTransparencyMaskTest::testApply()
     initImage(image, layer, dev, mask);
     mask->selection()->getOrCreatePixelSelection()->invert();
     mask->apply(dev, QRect(0, 0, 200, 100));
-    qimg = dev->convertToQImage(0, 0, 0, 200, 100);
+    qimage = dev->convertToQImage(0, 0, 0, 200, 100);
 
     if (!TestUtil::compareQImages(errpoint,
                                   QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_1.png"),
-                                  qimg)) {
+                                  qimage)) {
         QFAIL(QString("Failed to mask in image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
 
@@ -95,11 +95,11 @@ void KisTransparencyMaskTest::testApply()
     mask->selection()->getOrCreatePixelSelection()->invert();
     mask->select(QRect(50, 0, 100, 100));
     mask->apply(dev, QRect(0, 0, 200, 100));
-    qimg = dev->convertToQImage(0, 0, 0, 200, 100);
+    qimage = dev->convertToQImage(0, 0, 0, 200, 100);
 
     if (!TestUtil::compareQImages(errpoint,
                                   QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_3.png"),
-                                  qimg)) {
+                                  qimage)) {
 
         QFAIL(QString("Failed to apply partial mask, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }

@@ -45,7 +45,7 @@ public:
     qint32 * data();
     const qint32 * data() const;
 
-    static KisConvolutionKernelSP fromQImage(const QImage& img);
+    static KisConvolutionKernelSP fromQImage(const QImage& image);
     static KisConvolutionKernelSP kernelFromMaskGenerator(KisMaskGenerator* , double angle = 0.0);
 private:
     struct Private;

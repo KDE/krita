@@ -115,7 +115,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPatte
     if (w < 1) return;
     if (h < 1) return;
 
-    KisPaintDeviceSP patternLayer = pattern->image(device()->colorSpace());
+    KisPaintDeviceSP patternLayer = pattern->paintDevice(device()->colorSpace());
 
     int sx, sy, sw, sh;
 

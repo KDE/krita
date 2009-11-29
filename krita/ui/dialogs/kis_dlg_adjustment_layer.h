@@ -47,7 +47,7 @@ public:
     /**
      * Create a new adjustmentlayer dialog
      *
-     * @param img the current image
+     * @param image the current image
      * @param layerName the name of the adjustment layer
      * @param paintDevice the paint device that is used as source for the preview
      * @param caption the caption for the dialog -- create or properties

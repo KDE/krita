@@ -55,7 +55,7 @@ public:
     void setType(QGradient::Type repeatType);
     QGradient::Type type() const;
 
-    QImage img() const;
+    QImage image() const;
     void updatePreview();
 
     QImage generatePreview(int width, int height) const;

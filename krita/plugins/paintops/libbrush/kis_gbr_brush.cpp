@@ -382,7 +382,7 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     return true;
 }
 
-QImage KisGbrBrush::img() const
+QImage KisGbrBrush::image() const
 {
     if (hasColor() && useColorAsMask()) {
         QImage image = m_image;
@@ -411,9 +411,9 @@ enumBrushType KisGbrBrush::brushType() const
 }
 
 
-void KisGbrBrush::setImage(const QImage& img)
+void KisGbrBrush::setImage(const QImage& image)
 {
-    KisBrush::setImage(img);
+    KisBrush::setImage(image);
     setValid(true);
 }
 

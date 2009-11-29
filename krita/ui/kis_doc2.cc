@@ -243,7 +243,7 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     KoXmlElement root;
     QString attr;
     KoXmlNode node;
-    KisImageWSP img;
+    KisImageWSP image;
 
     if (!init())
         return false;
@@ -267,7 +267,7 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {
                 KoXmlElement elem = node.toElement();
-                if (!(img = m_d->kraLoader->loadXML(elem)))
+                if (!(image = m_d->kraLoader->loadXML(elem)))
                     return false;
 
             } else {
@@ -280,7 +280,7 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
         // Disconnect existing sig/slot connections
         m_d->image->disconnect(this);
     }
-    m_d->image = img;
+    m_d->image = image;
 
     return true;
 }
@@ -335,8 +335,8 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
 {
     KisConfig cfg;
 
-    int w = cfg.defImgWidth();
-    int h = cfg.defImgHeight();
+    int w = cfg.defImageWidth();
+    int h = cfg.defImageHeight();
     bool clipAvailable = false;
 
     QSize sz = KisClipboard::instance()->clipSize();
@@ -348,7 +348,7 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
 
     QList<KoDocument::CustomDocumentWidgetItem> widgetList;
     KoDocument::CustomDocumentWidgetItem item;
-    item.widget = new KisCustomImageWidget(parent, this, w, h, clipAvailable, cfg.defImgResolution(), cfg.workingColorSpace(), "unnamed");
+    item.widget = new KisCustomImageWidget(parent, this, w, h, clipAvailable, cfg.defImageResolution(), cfg.workingColorSpace(), "unnamed");
     widgetList << item;
 
     return widgetList;
@@ -370,7 +370,7 @@ KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, 
     return image();
 }
 
-bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &description, const double imgResolution)
+bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &description, const double imageResolution)
 {
     if (!init())
         return false;
@@ -378,7 +378,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     KisConfig cfg;
 
     quint8 opacity = OPACITY_OPAQUE;//bgColor.alpha();
-    KisImageWSP img;
+    KisImageWSP image;
     KisPaintLayerSP layer;
 
     if (!cs) return false;
@@ -387,18 +387,18 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
 
     setUndo(false);
 
-    img = new KisImage(m_d->undoAdapter, width, height, cs, name);
+    image = new KisImage(m_d->undoAdapter, width, height, cs, name);
 
-    Q_CHECK_PTR(img);
-    img->lock();
+    Q_CHECK_PTR(image);
+    image->lock();
 
-    connect(img.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
-    img->setResolution(imgResolution, imgResolution);
-    img->setProfile(cs->profile());
+    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
+    image->setResolution(imageResolution, imageResolution);
+    image->setProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
     documentInfo()->setAboutInfo("comments", description);
 
-    layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, cs);
+    layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE, cs);
     Q_CHECK_PTR(layer);
 
     KisFillPainter painter;
@@ -407,16 +407,16 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     painter.fillRect(0, 0, width, height, bgColor, opacity);
     painter.end();
 
-    img->addNode(layer.data(), img->rootLayer().data());
+    image->addNode(layer.data(), image->rootLayer().data());
 
-    setCurrentImage(img);
+    setCurrentImage(image);
 
-    cfg.defImgWidth(width);
-    cfg.defImgHeight(height);
-    cfg.defImgResolution(imgResolution);
+    cfg.defImageWidth(width);
+    cfg.defImageHeight(height);
+    cfg.defImageResolution(imageResolution);
 
     setUndo(true);
-    img->unlock();
+    image->unlock();
 
     qApp->restoreOverrideCursor();
     return true;
@@ -455,9 +455,9 @@ QPixmap KisDoc2::generatePreview(const QSize& size)
         QSize newSize = m_d->image->bounds().size();
         newSize.scale(size, Qt::KeepAspectRatio);
 
-        QImage img = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
-        img.save("thumb.png");
-        return QPixmap::fromImage(img);
+        QImage image = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
+        image.save("thumb.png");
+        return QPixmap::fromImage(image);
     }
     return QPixmap(size);
 }
@@ -555,7 +555,7 @@ void KisDoc2::initEmpty()
 {
     KisConfig cfg;
     const KoColorSpace * rgb = KoColorSpaceRegistry::instance()->rgb8();
-    newImage("", cfg.defImgWidth(), cfg.defImgHeight(), rgb);
+    newImage("", cfg.defImageWidth(), cfg.defImageHeight(), rgb);
 }
 
 KisUndoAdapter* KisDoc2::undoAdapter() const

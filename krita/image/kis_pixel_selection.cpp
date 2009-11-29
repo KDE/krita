@@ -102,15 +102,15 @@ void KisPixelSelection::setSelected(qint32 x, qint32 y, quint8 s)
 QImage KisPixelSelection::maskImage(const QRect & rc) const
 {
     // If part of a KisAdjustmentLayer, there may be no parent device.
-    QImage img;
+    QImage image;
     QRect bounds;
     if (m_d->parentPaintDevice) {
         bounds = m_d->parentPaintDevice->exactBounds();
         bounds = bounds.intersect(rc);
-        img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
+        image = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
     } else {
         bounds = rc;
-        img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
+        image = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
     }
 
     KisHLineConstIteratorPixel it = createHLineConstIterator(bounds.x(), bounds.y(), bounds.width());
@@ -119,14 +119,14 @@ QImage KisPixelSelection::maskImage(const QRect & rc) const
         while (!it.isDone()) {
             quint8 s = MAX_SELECTED - *(it.rawData());
             qint32 c = qRgb(s, s, s);
-            img.setPixel(x2, y2, c);
+            image.setPixel(x2, y2, c);
             ++x2;
             ++it;
         }
         it.nextRow(); // XXX: Why wasn't this line here? Used to be
         // present in 1.6.
     }
-    return img;
+    return image;
 }
 void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
 {

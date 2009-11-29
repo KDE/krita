@@ -146,7 +146,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     qint32 sh = dstRect.height();
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), 1.0, 0.0, info, xFraction, yFraction);
+        dab = brush->paintDevice(device->colorSpace(), 1.0, 0.0, info, xFraction, yFraction);
     } else {
         dab = cachedDab();
         KoColor color = painter()->paintColor();

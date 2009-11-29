@@ -73,7 +73,7 @@ public:
     /**
      * @return the next image in the pipe.
     */
-    virtual QImage img() const;
+    virtual QImage image() const;
 
     virtual KisFixedPaintDeviceSP image(const KoColorSpace * colorSpace,
                                         double scale, double angle,

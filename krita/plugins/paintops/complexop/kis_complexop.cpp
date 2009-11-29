@@ -132,7 +132,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
 
     KisFixedPaintDeviceSP dab;
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
+        dab = brush->paintDevice(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
     } else {
         dab = cachedDab();
         KoColor color = painter()->paintColor();

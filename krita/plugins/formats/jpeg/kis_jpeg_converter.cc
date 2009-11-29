@@ -203,12 +203,12 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
 
     // Creating the KisImageWSP
-    if (! m_img) {
-        m_img = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
-        Q_CHECK_PTR(m_img);
-        m_img->lock();
+    if (! m_image) {
+        m_image = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
+        Q_CHECK_PTR(m_image);
+        m_image->lock();
         if (profile && !profile->isSuitableForOutput()) {
-            m_img -> addAnnotation(KisAnnotationSP(new KisAnnotation(profile->name(), "", profile_rawdata)));
+            m_image -> addAnnotation(KisAnnotationSP(new KisAnnotation(profile->name(), "", profile_rawdata)));
         }
     }
 
@@ -224,10 +224,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         xres = cinfo.X_density * 2.54;
         yres = cinfo.Y_density * 2.54;
     }
-    m_img->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres) ); // It is the "invert" macro because we convert from pointer-per-inchs to points
+    m_image->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres) ); // It is the "invert" macro because we convert from pointer-per-inchs to points
     
     // Create layer
-    KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX));
+    KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), quint8_MAX));
     KisTransaction("", layer->paintDevice());
 
     // Read data
@@ -275,7 +275,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         }
     }
 
-    m_img->addNode(KisNodeSP(layer.data()), m_img->rootLayer().data());
+    m_image->addNode(KisNodeSP(layer.data()), m_image->rootLayer().data());
     layer->setDirty();
 
     // Read exif information
@@ -431,7 +431,7 @@ KisImageBuilder_Result KisJPEGConverter::buildImage(const KUrl& uri)
 
 KisImageWSP KisJPEGConverter::image()
 {
-    return m_img;
+    return m_image;
 }
 
 
@@ -440,8 +440,8 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageWSP img = KisImageWSP(layer -> image());
-    if (!img)
+    KisImageWSP image = KisImageWSP(layer -> image());
+    if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
     if (uri.isEmpty())
@@ -456,8 +456,8 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
-    uint height = img->height();
-    uint width = img->width();
+    uint height = image->height();
+    uint width = image->width();
     // Initialize structure
     struct jpeg_compress_struct cinfo;
     jpeg_create_compress(&cinfo);
@@ -467,7 +467,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Initialize output stream
     KisJPEGDestination::setDestination(&cinfo, &file);
 
-    const KoColorSpace * cs = img->colorSpace();
+    const KoColorSpace * cs = image->colorSpace();
 
     cinfo.image_width = width;  // image width and height, in pixels
     cinfo.image_height = height;
@@ -536,8 +536,8 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     }
 
     // Save resolution
-    cinfo.X_density = INCH_TO_POINT(img->xRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
-    cinfo.Y_density = INCH_TO_POINT(img->yRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
+    cinfo.X_density = INCH_TO_POINT(image->xRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
+    cinfo.Y_density = INCH_TO_POINT(image->yRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
     cinfo.density_unit = 1;
     cinfo.write_JFIF_header = 1;
 

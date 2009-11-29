@@ -24,11 +24,11 @@ KImageFrame::KImageFrame(QWidget *parent) : QFrame(parent), _w(0), _h(0)
 {
 }
 
-void KImageFrame::setImage(const QImage &img)
+void KImageFrame::setImage(const QImage &image)
 {
-    _img = img;
-    _w = img.width();
-    _h = img.height();
+    _image = image;
+    _w = image.width();
+    _h = image.height();
     update();
 }
 
@@ -44,7 +44,7 @@ void KImageFrame::paintEvent(QPaintEvent*)
     style()->drawPrimitive(QStyle::PE_Frame, &opt, &p, this);
 
     ri.moveCenter(rf.center());
-    p.drawImage(ri, _img);
+    p.drawImage(ri, _image);
 
     p.end();
 }

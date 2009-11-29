@@ -80,8 +80,8 @@ void KisSelectionDecoration::setMode(Mode mode)
 
 bool KisSelectionDecoration::selectionIsActive()
 {
-    KisImageWSP img = view()->image();
-    if (img) {
+    KisImageWSP image = view()->image();
+    if (image) {
         KisSelectionSP selection = view()->selection();
         if (selection && (selection->hasPixelSelection() || selection->hasShapeSelection())) {
             return true;

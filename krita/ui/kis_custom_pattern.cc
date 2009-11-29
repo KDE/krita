@@ -92,10 +92,10 @@ void KisCustomPattern::slotUpdateCurrentPattern(int)
                 if (scaledWidth == 0) scaledWidth++;
                 if (scaledHeight == 0) scaledHeight++;
 
-                QPixmap scaledPixmap = QPixmap::fromImage(m_pattern->img());
+                QPixmap scaledPixmap = QPixmap::fromImage(m_pattern->image());
                 preview->setPixmap(scaledPixmap.scaled(scaledWidth, scaledHeight));
             } else {
-                preview->setPixmap(QPixmap::fromImage(m_pattern->img()));
+                preview->setPixmap(QPixmap::fromImage(m_pattern->image()));
             }
         }
     }
@@ -148,12 +148,12 @@ void KisCustomPattern::slotUsePattern()
 
 void KisCustomPattern::createPattern()
 {
-    KisImageWSP img = m_view->image();
+    KisImageWSP image = m_view->image();
 
-    if (!img)
+    if (!image)
         return;
 
-    m_pattern = new KisPattern(img->mergedImage().data(), 0, 0, img->width(), img->height());
+    m_pattern = new KisPattern(image->mergedImage().data(), 0, 0, image->width(), image->height());
 }
 
 

@@ -32,12 +32,12 @@ KisImageBuilder_Result %{APPNAME}Converter::decode(const KUrl& uri)
         return (KisImageBuilder_RESULT_NOT_EXIST);
     }
     // Creating the KisImageWSP
-    if(!m_img) {
-        m_img = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
-        Q_CHECK_PTR(m_img);
-        m_img->lock();
+    if(!m_image) {
+        m_image = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
+        Q_CHECK_PTR(m_image);
+        m_image->lock();
     }
-    KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img->nextLayerName(), quint8_MAX));
+    KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image->nextLayerName(), quint8_MAX));
 #endif
 
     return KisImageBuilder_RESULT_OK;
@@ -71,7 +71,7 @@ KisImageBuilder_Result %{APPNAME}Converter::buildImage(const KUrl& uri)
 
 KisImageWSP %{APPNAME}Converter::image()
 {
-    return m_img;
+    return m_image;
 }
 
 
@@ -80,8 +80,8 @@ KisImageBuilder_Result %{APPNAME}Converter::buildFile(const KUrl& uri, KisPaintL
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageWSP img = layer->image();
-    if (!img)
+    KisImageWSP image = layer->image();
+    if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
     if (uri.isEmpty())
@@ -96,8 +96,8 @@ KisImageBuilder_Result %{APPNAME}Converter::buildFile(const KUrl& uri, KisPaintL
     {
         return (KisImageBuilder_RESULT_FAILURE);
     }
-    uint height = img->height();
-    uint width = img->width();
+    uint height = image->height();
+    uint width = image->width();
 #endif
 
     return KisImageBuilder_RESULT_OK;

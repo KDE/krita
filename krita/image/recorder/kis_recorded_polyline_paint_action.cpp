@@ -119,7 +119,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElem
     Q_UNUSED(elt);
 #if 0
     QString name = elt.attribute("name");
-    KisNodeSP node = KisRecordedActionFactory::indexPathToNode(img, elt.attribute("node"));
+    KisNodeSP node = KisRecordedActionFactory::indexPathToNode(image, elt.attribute("node"));
     QString paintOpId = elt.attribute("paintop");
     int opacity = elt.attribute("opacity", "100").toInt();
     bool paintIncremental = elt.attribute("paintIncremental", "1").toInt();
@@ -133,7 +133,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElem
     KisPaintOpSettingsSP settings = 0;
     QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
     if (!settingsElt.isNull()) {
-        settings = settingsFromXML(paintOpId, settingsElt, img);
+        settings = settingsFromXML(paintOpId, settingsElt, image);
     } else {
         dbgUI << "No <PaintOpSettings /> found";
     }

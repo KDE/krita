@@ -60,7 +60,7 @@ void KisImageManager::setup(KActionCollection * actionCollection)
     connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
 
     action  = new KAction(KIcon("document-properties"), i18n("Properties..."), this);
-    actionCollection->addAction("img_properties", action);
+    actionCollection->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }
 
@@ -174,14 +174,14 @@ void KisImageManager::shearCurrentImage(double angleX, double angleY)
 
 void KisImageManager::slotImageProperties()
 {
-    KisImageWSP img = m_view->image();
+    KisImageWSP image = m_view->image();
 
-    if (!img) return;
+    if (!image) return;
 
-    KisDlgImageProperties dlg(img, m_view);
+    KisDlgImageProperties dlg(image, m_view);
 
     if (dlg.exec() == QDialog::Accepted) {
-        QUndoCommand* cmd = new KisImagePropsCommand(img, dlg.colorSpace());
+        QUndoCommand* cmd = new KisImagePropsCommand(image, dlg.colorSpace());
         m_view->document()->addCommand(cmd);
     }
 }

@@ -72,7 +72,7 @@ signals:
 public slots:
 
 
-    void imgResizeToActiveLayer();
+    void imageResizeToActiveLayer();
 
     void actLayerVisChanged(int show);
     void layerProperties();
@@ -133,11 +133,11 @@ private:
 
     QList<QAction*> m_pluginActions;
 
-    KAction *m_imgFlatten;
-    KAction *m_imgMergeLayer;
+    KAction *m_imageFlatten;
+    KAction *m_imageMergeLayer;
     KAction *m_layerSaveAs;
     bool m_actLayerVis;
-    KAction *m_imgResizeToLayer;
+    KAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;

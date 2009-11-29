@@ -90,7 +90,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
     QString attr;
     KoXmlNode node;
     KoXmlNode child;
-    KisImageWSP img = 0;
+    KisImageWSP image = 0;
     QString name;
     qint32 width;
     qint32 height;
@@ -153,36 +153,36 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             return KisImageWSP(0);
         }
 
-        img = new KisImage(m_d->document->undoAdapter(), width, height, cs, name);
+        image = new KisImage(m_d->document->undoAdapter(), width, height, cs, name);
 
 #ifdef __GNUC__
 #warning "KisKraLoader::loadXML: check whether image->lock still works with the top-down update "
 #endif
-        img->lock();
+        image->lock();
 
-        img->setResolution(xres, yres);
+        image->setResolution(xres, yres);
 
 
-        loadNodes(element, img, const_cast<KisGroupLayer*>(img->rootLayer().data()));
+        loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
 
-        img->unlock();
+        image->unlock();
 
     }
 
-    return img;
+    return image;
 }
 
-void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP img, const QString & uri, bool external)
+void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QString & uri, bool external)
 {
     // Load the layers data
-    KisKraLoadVisitor visitor(img, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
+    KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
 
     if (external)
         visitor.setExternalUri(uri);
 
-    img->lock();
+    image->lock();
 
-    img->rootLayer()->accept(visitor);
+    image->rootLayer()->accept(visitor);
 
 
     // annotations
@@ -194,7 +194,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP img, const QStrin
         store->open(location);
         data = store->read(store->size());
         store->close();
-        img->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
+        image->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
     }
 
     // icc profile
@@ -205,7 +205,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP img, const QStrin
         QByteArray data; data.resize(store->size());
         store->read(data.data(), store->size());
         store->close();
-        img->setProfile(new KoIccColorProfile(data));
+        image->setProfile(new KoIccColorProfile(data));
     }
 
 
@@ -214,10 +214,10 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP img, const QStrin
     if (m_d->document->documentInfo()->aboutInfo("comment").isNull())
         m_d->document->documentInfo()->setAboutInfo("comment", m_d->imageComment);
 
-    img->unlock();
+    image->unlock();
 }
 
-KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP img, KisNode* parent)
+KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent)
 {
 
     KoXmlNode node = element.lastChild();
@@ -231,17 +231,17 @@ KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP img, K
 
             if (node.nodeName().toUpper() == LAYERS.toUpper() || node.nodeName().toUpper() == MASKS.toUpper()) {
                 for (child = node.lastChild(); !child.isNull(); child = child.previousSibling()) {
-                    KisNode* node = loadNode(child.toElement(), img);
+                    KisNode* node = loadNode(child.toElement(), image);
                     if (!node) {
                         qDebug() << ">>>>>>>>>>>>>>>>>>> Could not load node";
 #ifdef __GNUC__
 #warning "KisKraLoader::loadNodes: report node load failures back to the user!"
 #endif
                     } else {
-                        img->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
-                        img->addNode(node, parent);
+                        image->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
+                        image->addNode(node, parent);
                         if (node->inherits("KisLayer") && child.childNodesCount() > 0) {
-                            loadNodes(child.toElement(), img, node);
+                            loadNodes(child.toElement(), image, node);
                         }
 
                     }
@@ -253,7 +253,7 @@ KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP img, K
     return parent;
 }
 
-KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP img)
+KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
 {
     // Nota bene: If you add new properties to layers, you should
     // ALWAYS define a default value in case the property is not
@@ -271,7 +271,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP img)
 
     const KoColorSpace* colorSpace = 0;
     if ((element.attribute(COLORSPACE_NAME)).isNull())
-        colorSpace = img->colorSpace();
+        colorSpace = image->colorSpace();
     else
         // use default profile - it will be replaced later in completeLoading
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(element.attribute(COLORSPACE_NAME), "");
@@ -298,17 +298,17 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP img)
     KisNode* node = 0;
 
     if (nodeType == PAINT_LAYER)
-        node = loadPaintLayer(element, img, name, colorSpace, opacity);
+        node = loadPaintLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == GROUP_LAYER)
-        node = loadGroupLayer(element, img, name, colorSpace, opacity);
+        node = loadGroupLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == ADJUSTMENT_LAYER)
-        node = loadAdjustmentLayer(element, img, name, colorSpace, opacity);
+        node = loadAdjustmentLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == SHAPE_LAYER)
-        node = loadShapeLayer(element, img, name, colorSpace, opacity);
+        node = loadShapeLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == GENERATOR_LAYER)
-        node = loadGeneratorLayer(element, img, name, colorSpace, opacity);
+        node = loadGeneratorLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == CLONE_LAYER)
-        node = loadCloneLayer(element, img, name, colorSpace, opacity);
+        node = loadCloneLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == FILTER_MASK)
         node = loadFilterMask(element);
     else if (nodeType == TRANSPARENCY_MASK)
@@ -316,7 +316,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP img)
     else if (nodeType == TRANSFORMATION_MASK)
         node = loadTransformationMask(element);
     else if (nodeType == SELECTION_MASK)
-        node = loadSelectionMask(img, element);
+        node = loadSelectionMask(image, element);
     else
         warnKrita << "Trying to load layer of unsupported type " << nodeType;
 
@@ -355,7 +355,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP img)
 }
 
 
-KisNode* KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageWSP img,
+KisNode* KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageWSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     QString attr;
@@ -364,7 +364,7 @@ KisNode* KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageWSP i
     QString colorspacename;
     QString profileProductName;
 
-    layer = new KisPaintLayer(img, name, opacity, cs);
+    layer = new KisPaintLayer(image, name, opacity, cs);
     Q_CHECK_PTR(layer);
 
     // Load exif info
@@ -383,20 +383,20 @@ KisNode* KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageWSP i
 
 }
 
-KisNode* KisKraLoader::loadGroupLayer(const KoXmlElement& element, KisImageWSP img,
+KisNode* KisKraLoader::loadGroupLayer(const KoXmlElement& element, KisImageWSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     QString attr;
     KisGroupLayer* layer;
 
-    layer = new KisGroupLayer(img, name, opacity);
+    layer = new KisGroupLayer(image, name, opacity);
     Q_CHECK_PTR(layer);
 
     return layer;
 
 }
 
-KisNode* KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImageWSP img,
+KisNode* KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImageWSP image,
         const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     // XXX: do something with filterversion?
@@ -420,7 +420,7 @@ KisNode* KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImage
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
 
     // We'll load the configuration and the selection later.
-    layer = new KisAdjustmentLayer(img, name, kfc, 0);
+    layer = new KisAdjustmentLayer(image, name, kfc, 0);
     Q_CHECK_PTR(layer);
 
     layer->setOpacity(opacity);
@@ -430,12 +430,12 @@ KisNode* KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImage
 }
 
 
-KisNode* KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageWSP img,
+KisNode* KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageWSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     QString attr;
 
-    KisShapeLayer* layer = new KisShapeLayer(0, m_d->document->shapeController(), img, name, opacity);
+    KisShapeLayer* layer = new KisShapeLayer(0, m_d->document->shapeController(), image, name, opacity);
     Q_CHECK_PTR(layer);
 
     return layer;
@@ -443,7 +443,7 @@ KisNode* KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageWSP i
 }
 
 
-KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageWSP img,
+KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageWSP image,
         const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     // XXX: do something with generator version?
@@ -465,7 +465,7 @@ KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageW
     KisFilterConfiguration * kgc = generator->defaultConfiguration(0);
 
     // We'll load the configuration and the selection later.
-    layer = new KisGeneratorLayer(img, name, kgc, 0);
+    layer = new KisGeneratorLayer(image, name, kgc, 0);
     Q_CHECK_PTR(layer);
 
     layer->setOpacity(opacity);
@@ -474,10 +474,10 @@ KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageW
 
 }
 
-KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageWSP img,
+KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageWSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
-    KisCloneLayer* layer = new KisCloneLayer(0, img, name, opacity);
+    KisCloneLayer* layer = new KisCloneLayer(0, image, name, opacity);
 
     if ((element.attribute(CLONE_FROM)).isNull()) {
         return 0;
@@ -557,9 +557,9 @@ KisNode* KisKraLoader::loadTransformationMask(const KoXmlElement& element)
     return mask;
 }
 
-KisNode* KisKraLoader::loadSelectionMask(KisImageWSP img, const KoXmlElement& element)
+KisNode* KisKraLoader::loadSelectionMask(KisImageWSP image, const KoXmlElement& element)
 {
-    KisSelectionMask* mask = new KisSelectionMask(img);
+    KisSelectionMask* mask = new KisSelectionMask(image);
     Q_CHECK_PTR(mask);
 
     return mask;

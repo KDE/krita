@@ -79,8 +79,7 @@ public:
         quint8 blackValues[2];
         quint8 whiteValues[2];
         quint32 compositeGrayBlendDestinationRange;
-        QByteArray sourceDestinationRanges;
-        //QVector<QPair<quint32, quint32> > sourceDestinationRanges;
+        QVector<QPair<quint32, quint32> > sourceDestinationRanges;
     };
 
     LayerBlendingRanges blendingRanges;

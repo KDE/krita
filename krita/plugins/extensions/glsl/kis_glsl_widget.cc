@@ -35,12 +35,12 @@ KisGlslWidget::KisGlslWidget(KisPaintDeviceSP device, QWidget *parent) : QGLWidg
     m_bounds = m_device->exactBounds();
 
     bufsize = m_device->colorSpace()->pixelSize() * m_bounds.width() * m_bounds.height();
-    m_imgbuf = new quint8[bufsize];
+    m_imagebuf = new quint8[bufsize];
 }
 
 KisGlslWidget::~KisGlslWidget()
 {
-    delete[] m_imgbuf;
+    delete[] m_imagebuf;
 }
 
 void KisGlslWidget::initializeGL()
@@ -96,7 +96,7 @@ void KisGlslWidget::initializeGL()
     gluOrtho2D(0.0f, (GLfloat)m_bounds.width(), 0.0f, (GLfloat)m_bounds.height());
 
     //bind the texture from krita using readBytes
-    m_device->readBytes(m_imgbuf, m_bounds);
+    m_device->readBytes(m_imagebuf, m_bounds);
     glGenTextures(1, &m_texture);
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_texture);
 
@@ -110,7 +110,7 @@ void KisGlslWidget::initializeGL()
 
     glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, m_bounds.width(),
                  m_bounds.height(), 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8,
-                 m_imgbuf);
+                 m_imagebuf);
 
     m_fragshader = glCreateShader(GL_FRAGMENT_SHADER);
     m_vertexshader = glCreateShader(GL_VERTEX_SHADER);

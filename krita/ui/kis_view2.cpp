@@ -307,22 +307,22 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
 void KisView2::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasImage()) {
-        QImage qimg = qvariant_cast<QImage>(event->mimeData()->imageData());
-        KisImageWSP img = image();
+        QImage qimage = qvariant_cast<QImage>(event->mimeData()->imageData());
+        KisImageWSP kisimage = image();
 
-        if (img) {
+        if (kisimage) {
             KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-            device->convertFromQImage(qimg, "");
-            KisLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, device);
+            device->convertFromQImage(qimage, "");
+            KisLayerSP layer = new KisPaintLayer(kisimage.data(), kisimage->nextLayerName(), OPACITY_OPAQUE, device);
 
-            QPointF pos = img->documentToIntPixel(m_d->viewConverter->viewToDocument(event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin()));
+            QPointF pos = kisimage->documentToIntPixel(m_d->viewConverter->viewToDocument(event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin()));
             layer->setX(pos.x());
             layer->setY(pos.y());
 
             if (layer) {
                 KisNodeCommandsAdapter adapter(this);
                 if (!m_d->nodeManager->layerManager()->activeLayer()) {
-                    adapter.addNode(layer.data(), img->rootLayer().data() , 0);
+                    adapter.addNode(layer.data(), kisimage->rootLayer().data() , 0);
                 } else {
                     adapter.addNode(layer.data(), m_d->nodeManager->layerManager()->activeLayer()->parent().data(), m_d->nodeManager->layerManager()->activeLayer().data());
                 }
@@ -506,14 +506,12 @@ KisUndoAdapter * KisView2::undoAdapter()
 
 void KisView2::slotLoadingFinished()
 {
-    KisImageWSP img = image();
-
-    img->refreshGraph();
+    image()->refreshGraph();
 
     slotImageSizeChanged();
 
     if (m_d->statusBar) {
-        m_d->statusBar->imageSizeChanged(img->width(), img->height());
+        m_d->statusBar->imageSizeChanged(image()->width(), image()->height());
     }
     m_d->resourceProvider->slotImageSizeChanged();
 
@@ -521,14 +519,14 @@ void KisView2::slotLoadingFinished()
 
     connectCurrentImage();
 
-    if (img->locked()) {
+    if (image()->locked()) {
         // If this is the first view on the image, the image will have been locked
         // so unlock it.
-        img->blockSignals(false);
-        img->unlock();
+        image()->blockSignals(false);
+        image()->unlock();
     }
 
-    if (KisNodeSP node = img->rootLayer()->firstChild()) {
+    if (KisNodeSP node = image()->rootLayer()->firstChild()) {
         m_d->nodeManager->activateNode(node);
     }
 
@@ -610,18 +608,17 @@ void KisView2::updateGUI()
 
 void KisView2::connectCurrentImage()
 {
-    KisImageWSP img = image();
-    if (img) {
+    if (image()) {
         if (m_d->statusBar) {
-            connect(img.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-            connect(img.data(), SIGNAL(sigProfileChanged(KoColorProfile *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-            connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32, qint32)));
+            connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(image(), SIGNAL(sigProfileChanged(KoColorProfile *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32, qint32)));
 
         }
-        connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
-        connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotImageSizeChanged()));
-        connect(img.data(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
-        connect(img->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
+        connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
+        connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
     }
 
@@ -631,22 +628,20 @@ void KisView2::connectCurrentImage()
             m_d->nodeManager, SLOT(activateNode(KisNodeSP)));
 
     if (m_d->controlFrame) {
-        connect(img.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
+        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
     }
 
 }
 
 void KisView2::disconnectCurrentImage()
 {
-    KisImageWSP img = image();
+    if (image()) {
 
-    if (img) {
-
-        img->disconnect(this);
-        img->disconnect(m_d->nodeManager);
-        img->disconnect(m_d->selectionManager);
+        image()->disconnect(this);
+        image()->disconnect(m_d->nodeManager);
+        image()->disconnect(m_d->selectionManager);
         if (m_d->statusBar)
-            img->disconnect(m_d->statusBar);
+            image()->disconnect(m_d->statusBar);
 
         m_d->canvas->disconnectCurrentImage();
     }

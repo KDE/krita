@@ -70,7 +70,7 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
             if( ! resource )
                 return QVariant();
 
-            return QVariant( resource->img() );
+            return QVariant( resource->image() );
         }
         case KoResourceModel::LargeThumbnailRole:
         {
@@ -78,21 +78,21 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
             if( ! resource )
                 return QVariant();
 
-            QSize imgSize = resource->img().size();
+            QSize imageSize = resource->image().size();
             QSize thumbSize( 100, 100 );
-            if(imgSize.height() > thumbSize.height() || imgSize.width() > thumbSize.width()) {
-                qreal scaleW = static_cast<qreal>( thumbSize.width() ) / static_cast<qreal>( imgSize.width() );
-                qreal scaleH = static_cast<qreal>( thumbSize.height() ) / static_cast<qreal>( imgSize.height() );
+            if(imageSize.height() > thumbSize.height() || imageSize.width() > thumbSize.width()) {
+                qreal scaleW = static_cast<qreal>( thumbSize.width() ) / static_cast<qreal>( imageSize.width() );
+                qreal scaleH = static_cast<qreal>( thumbSize.height() ) / static_cast<qreal>( imageSize.height() );
 
                 qreal scale = qMin( scaleW, scaleH );
 
-                int thumbW = static_cast<int>( imgSize.width() * scale );
-                int thumbH = static_cast<int>( imgSize.height() * scale );
+                int thumbW = static_cast<int>( imageSize.width() * scale );
+                int thumbH = static_cast<int>( imageSize.height() * scale );
 
-                return QVariant(resource->img().scaled( thumbW, thumbH, Qt::IgnoreAspectRatio ));
+                return QVariant(resource->image().scaled( thumbW, thumbH, Qt::IgnoreAspectRatio ));
             }
             else
-                return QVariant(resource->img());
+                return QVariant(resource->image());
         }
 
         default:

@@ -43,7 +43,7 @@ public:
     // contents. The coordinates are for the image's top-left corner
     // in image space.
     void paintBackground(QImage& image, const QRect& rc);
-    void paintBackground(QImage& img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
+    void paintBackground(QImage& image, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
     // Returns the pattern tile.
     const QImage& patternTile() const;

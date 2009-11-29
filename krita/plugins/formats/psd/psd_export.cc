@@ -67,13 +67,13 @@ KoFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByt
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP img = output->image();
-    Q_CHECK_PTR(img);
+    KisImageWSP image = output->image();
+    Q_CHECK_PTR(image);
 
     PSDSaver kpc(output, output->undoAdapter());
 
-    KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
-    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
+    KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
+    KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE, pd);
 
     KisImageBuilder_Result res;
 

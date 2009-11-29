@@ -89,23 +89,23 @@ void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace, KoColorCo
 
 }
 
-void KisFixedPaintDevice::convertFromQImage(const QImage& image, const QString &srcProfileName)
+void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString &srcProfileName)
 {
-    QImage img = image;
+    QImage image = _image;
 
-    if (img.format() != QImage::Format_ARGB32) {
-        img = img.convertToFormat(QImage::Format_ARGB32);
+    if (image.format() != QImage::Format_ARGB32) {
+        image = image.convertToFormat(QImage::Format_ARGB32);
     }
-    setRect(img.rect());
+    setRect(image.rect());
     initialize();
 
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
     if (srcProfileName.isEmpty() && colorSpace()->id() == "RGBA") {
-        memcpy(data(), img.bits(), img.width() * img.height() * pixelSize());
+        memcpy(data(), image.bits(), image.width() * image.height() * pixelSize());
     } else {
         KoColorSpaceRegistry::instance()
         ->colorSpace("RGBA", srcProfileName)
-        ->convertPixelsTo(img.bits(), data(), colorSpace(), img.width() * img.height());
+        ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height());
     }
 }
 

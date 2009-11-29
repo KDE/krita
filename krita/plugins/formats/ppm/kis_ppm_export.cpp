@@ -163,10 +163,10 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     bool binary = optionsPPM.type->currentIndex() == 0;
     bool bitmap = (to == "image/x-portable-bitmap");
 
-    KisImageWSP img = output->image();
-    Q_CHECK_PTR(img);
+    KisImageWSP image = output->image();
+    Q_CHECK_PTR(image);
 
-    KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
+    KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
     // Test color space
     if (((rgb && (pd->colorSpace()->id() != "RGBA" && pd->colorSpace()->id() != "RGBA16"))
@@ -195,9 +195,9 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     fp.write("\n");
 
     // Write the header
-    fp.write(QByteArray::number(img->width()));
+    fp.write(QByteArray::number(image->width()));
     fp.write(" ");
-    fp.write(QByteArray::number(img->height()));
+    fp.write(QByteArray::number(image->height()));
     if (!bitmap) {
         if (is16bit) fp.write(" 65535\n");
         else fp.write(" 255\n");
@@ -210,8 +210,8 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     if (binary) flow = new KisPPMBinaryFlow(&fp);
     else flow = new KisPPMAsciiFlow(&fp);
 
-    for (int y = 0; y < img->height(); ++y) {
-        KisHLineIterator it = pd->createHLineIterator(0, y, img->width());
+    for (int y = 0; y < image->height(); ++y) {
+        KisHLineIterator it = pd->createHLineIterator(0, y, image->width());
         if (is16bit) {
             if (rgb) {
                 while (!it.isDone()) {

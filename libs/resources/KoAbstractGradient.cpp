@@ -29,7 +29,7 @@ struct KoAbstractGradient::Private {
     const KoColorSpace* colorSpace;
     QGradient::Spread spread;
     QGradient::Type type;
-    QImage img;
+    QImage image;
 };
 
 KoAbstractGradient::KoAbstractGradient(const QString& filename)
@@ -81,22 +81,22 @@ QGradient::Type KoAbstractGradient::type () const
 
 QImage KoAbstractGradient::generatePreview(int width, int height) const
 {
-    QImage img(width, height, QImage::Format_RGB32);
+    QImage image(width, height, QImage::Format_RGB32);
 
     const int checkerSize = 4;
     const int checkerSize_2 = 2*checkerSize;
     const int darkBackground = 128;
     const int lightBackground = 128 + 63;
 
-    QRgb * lineA = reinterpret_cast<QRgb*>( img.scanLine(0) );
-    QRgb * lineB = reinterpret_cast<QRgb*>( img.scanLine(checkerSize) );
+    QRgb * lineA = reinterpret_cast<QRgb*>( image.scanLine(0) );
+    QRgb * lineB = reinterpret_cast<QRgb*>( image.scanLine(checkerSize) );
 
     KoColor c;
     QColor color;
     // first create the two reference lines
-    for (int x = 0; x < img.width(); ++x) {
+    for (int x = 0; x < image.width(); ++x) {
 
-        qreal t = static_cast<qreal>(x) / (img.width() - 1);
+        qreal t = static_cast<qreal>(x) / (image.width() - 1);
         colorAt(c, t);
         c.toQColor( &color );
         const qreal alpha = color.alphaF();
@@ -117,27 +117,27 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
             lineB[x] = defColor ? qRgb(lightR, lightG, lightB) : qRgb(darkR, darkG, darkB);
     }
 
-    int bytesPerLine = img.bytesPerLine();
+    int bytesPerLine = image.bytesPerLine();
 
     // now copy lines accordingly
-    for (int y = 0; y < img.height(); ++y ) {
+    for (int y = 0; y < image.height(); ++y ) {
         bool firstLine = (y % checkerSize_2) < checkerSize;
-        QRgb * line = reinterpret_cast<QRgb*>( img.scanLine(y) );
+        QRgb * line = reinterpret_cast<QRgb*>( image.scanLine(y) );
         if (line == lineA || line == lineB)
             continue;
 
         memcpy(line, firstLine ? lineA : lineB, bytesPerLine);
     }
 
-    return img;
+    return image;
 }
 
-QImage KoAbstractGradient::img() const
+QImage KoAbstractGradient::image() const
 {
-    return d->img;
+    return d->image;
 }
 
 void KoAbstractGradient::updatePreview()
 {
-    d->img = generatePreview( PREVIEW_WIDTH, PREVIEW_HEIGHT );
+    d->image = generatePreview( PREVIEW_WIDTH, PREVIEW_HEIGHT );
 }

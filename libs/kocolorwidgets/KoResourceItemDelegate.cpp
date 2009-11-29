@@ -60,16 +60,16 @@ void KoResourceItemDelegate::paint( QPainter * painter, const QStyleOptionViewIt
     else {
         QImage thumbnail = index.data( Qt::DecorationRole ).value<QImage>();
 
-        QSize imgSize = thumbnail.size();
+        QSize imageSize = thumbnail.size();
 
-        if(imgSize.height() > innerRect.height() || imgSize.width() > innerRect.width()) {
-            qreal scaleW = static_cast<qreal>( innerRect.width() ) / static_cast<qreal>( imgSize.width() );
-            qreal scaleH = static_cast<qreal>( innerRect.height() ) / static_cast<qreal>( imgSize.height() );
+        if(imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {
+            qreal scaleW = static_cast<qreal>( innerRect.width() ) / static_cast<qreal>( imageSize.width() );
+            qreal scaleH = static_cast<qreal>( innerRect.height() ) / static_cast<qreal>( imageSize.height() );
 
             qreal scale = qMin( scaleW, scaleH );
 
-            int thumbW = static_cast<int>( imgSize.width() * scale );
-            int thumbH = static_cast<int>( imgSize.height() * scale );
+            int thumbW = static_cast<int>( imageSize.width() * scale );
+            int thumbH = static_cast<int>( imageSize.height() * scale );
             thumbnail = thumbnail.scaled( thumbW, thumbH, Qt::IgnoreAspectRatio );
         }
         painter->fillRect( innerRect, QBrush(thumbnail) );

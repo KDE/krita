@@ -163,16 +163,16 @@ void KisImagePyramid::setDirty(const QRect &rc)
     }
 
 #ifdef DEBUG_PYRAMID
-    QImage img = m_pyramid[ORIGINAL_INDEX]->convertToQImage(m_monitorProfile);
-    img.save("./PYRAMID_BASE.png");
+    QImage image = m_pyramid[ORIGINAL_INDEX]->convertToQImage(m_monitorProfile);
+    image.save("./PYRAMID_BASE.png");
 
-    img = m_pyramid[1]->convertToQImage(m_monitorProfile);
-    img.save("./LEVEL1.png");
+    image = m_pyramid[1]->convertToQImage(m_monitorProfile);
+    image.save("./LEVEL1.png");
 
-    img = m_pyramid[2]->convertToQImage(m_monitorProfile);
-    img.save("./LEVEL2.png");
-    img = m_pyramid[3]->convertToQImage(m_monitorProfile);
-    img.save("./LEVEL3.png");
+    image = m_pyramid[2]->convertToQImage(m_monitorProfile);
+    image.save("./LEVEL2.png");
+    image = m_pyramid[3]->convertToQImage(m_monitorProfile);
+    image.save("./LEVEL3.png");
 #endif
 }
 
@@ -359,9 +359,9 @@ QImage KisImagePyramid::convertToQImageFast(KisPaintDeviceSP paintDevice,
     qint32 x, y, w, h;
     unscaledRect.getRect(&x, &y, &w, &h);
 
-    QImage img = QImage(w, h, QImage::Format_ARGB32);
+    QImage image = QImage(w, h, QImage::Format_ARGB32);
 
-    paintDevice->dataManager()->readBytes(img.bits(), x, y, w, h);
+    paintDevice->dataManager()->readBytes(image.bits(), x, y, w, h);
 
-    return img;
+    return image;
 }

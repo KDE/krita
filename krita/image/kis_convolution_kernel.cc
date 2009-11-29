@@ -89,15 +89,15 @@ const qint32* KisConvolutionKernel::data() const
     return d->data;
 }
 
-KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& img)
+KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& image)
 {
-    KisConvolutionKernelSP k = new KisConvolutionKernel(img.width(), img.height(), 0, 0);
+    KisConvolutionKernelSP k = new KisConvolutionKernel(image.width(), image.height(), 0, 0);
     uint count = k->width() * k->height();
     qint32* itData = k->data();
-    const quint8* itImg = img.bits();
+    const quint8* itImage = image.bits();
     qint32 factor = 0;
-    for (uint i = 0; i < count; ++i , ++itData, itImg += 4) {
-        *itData = 255 - (*itImg + *(itImg + 1) + *(itImg + 2)) / 3;
+    for (uint i = 0; i < count; ++i , ++itData, itImage += 4) {
+        *itData = 255 - (*itImage + *(itImage + 1) + *(itImage + 2)) / 3;
         factor += *itData;
     }
     k->d->factor = factor;

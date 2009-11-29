@@ -70,10 +70,10 @@ void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
     painter.setPen(Qt::black);
     painter.drawRect(MARGIN, MARGIN, width() - 2 * MARGIN, height() - 2 * MARGIN - HANDLE_SIZE);
     if (m_autogradientResource) {
-        QImage img = m_autogradientResource->generatePreview(width() - 2 * MARGIN - 2, height() - 2 * MARGIN - HANDLE_SIZE - 2);
-        QPixmap pixmap(img.width(), img.height());
-        if (!img.isNull()) {
-            painter.drawImage(MARGIN + 1, MARGIN + 1, img);
+        QImage image = m_autogradientResource->generatePreview(width() - 2 * MARGIN - 2, height() - 2 * MARGIN - HANDLE_SIZE - 2);
+        QPixmap pixmap(image.width(), image.height());
+        if (!image.isNull()) {
+            painter.drawImage(MARGIN + 1, MARGIN + 1, image);
         }
 
         painter.fillRect(MARGIN + 1, height() - MARGIN - HANDLE_SIZE, width() - 2 * MARGIN, HANDLE_SIZE, QBrush(Qt::white));

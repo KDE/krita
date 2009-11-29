@@ -72,7 +72,7 @@ bool KoPattern::load()
         result = init(data);
     }
     else {
-        result = m_img.load(filename());
+        result = m_image.load(filename());
         setValid(result);
     }
     return result;
@@ -120,7 +120,7 @@ bool KoPattern::save()
     for (qint32 y = 0; y < height(); y++) {
         for (qint32 x = 0; x < width(); x++) {
             // RGBA only
-            QRgb pixel = m_img.pixel(x,y);
+            QRgb pixel = m_image.pixel(x,y);
             bytes[k++] = static_cast<char>(qRed(pixel));
             bytes[k++] = static_cast<char>(qGreen(pixel));
             bytes[k++] = static_cast<char>(qBlue(pixel));
@@ -137,9 +137,9 @@ bool KoPattern::save()
     return true;
 }
 
-QImage KoPattern::img() const
+QImage KoPattern::image() const
 {
-    return m_img;
+    return m_image;
 }
 
 bool KoPattern::init(QByteArray& bytes)
@@ -191,9 +191,9 @@ bool KoPattern::init(QByteArray& bytes)
         imageFormat = QImage::Format_ARGB32;
     }
 
-    m_img = QImage(bh.width, bh.height, imageFormat);
+    m_image = QImage(bh.width, bh.height, imageFormat);
 
-    if (m_img.isNull()) {
+    if (m_image.isNull()) {
         return false;
     }
 
@@ -211,7 +211,7 @@ bool KoPattern::init(QByteArray& bytes)
                 }
 
                 val = data[k];
-                m_img.setPixel(x, y, qRgb(val, val, val));
+                m_image.setPixel(x, y, qRgb(val, val, val));
             }
         }
     } else if (bh.bytes == 2) {
@@ -227,7 +227,7 @@ bool KoPattern::init(QByteArray& bytes)
 
                 val = data[k];
                 alpha = data[k++];
-                m_img.setPixel(x, y, qRgba(val, val, val, alpha));
+                m_image.setPixel(x, y, qRgba(val, val, val, alpha));
             }
         }
     } else if (bh.bytes == 3) {
@@ -239,7 +239,7 @@ bool KoPattern::init(QByteArray& bytes)
                     return false;
                 }
 
-                m_img.setPixel(x, y, qRgb(data[k],
+                m_image.setPixel(x, y, qRgb(data[k],
                               data[k + 1],
                               data[k + 2]));
                 k += 3;
@@ -254,7 +254,7 @@ bool KoPattern::init(QByteArray& bytes)
                     return false;
                 }
 
-                m_img.setPixel(x, y, qRgba(data[k],
+                m_image.setPixel(x, y, qRgba(data[k],
                                data[k + 1],
                                data[k + 2],
                                data[k + 3]));
@@ -265,7 +265,7 @@ bool KoPattern::init(QByteArray& bytes)
         return false;
     }
 
-    if (m_img.isNull()) {
+    if (m_image.isNull()) {
         return false;
     }
 
@@ -276,18 +276,18 @@ bool KoPattern::init(QByteArray& bytes)
 
 qint32 KoPattern::width() const
 {
-    return m_img.width();
+    return m_image.width();
 }
 
 qint32 KoPattern::height() const
 {
-    return m_img.height();
+    return m_image.height();
 }
 
-void KoPattern::setImage(const QImage& img)
+void KoPattern::setImage(const QImage& image)
 {
-    m_img = img;
-    m_img.detach();
+    m_image = image;
+    m_image.detach();
 
     setValid(true);
 }
@@ -295,7 +295,7 @@ void KoPattern::setImage(const QImage& img)
 KoPattern& KoPattern::operator=(const KoPattern& pattern)
 {
     setFilename(pattern.filename());
-    setImage(pattern.img());
+    setImage(pattern.image());
     setValid(true);
     return *this; 
 }

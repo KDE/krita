@@ -36,11 +36,11 @@ public:
     KisFilterConfiguration *filterConfig;
 };
 
-KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP img,
+KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP image,
                                        const QString &name,
                                        KisFilterConfiguration * kfc,
                                        KisSelectionSP selection)
-        : KisSelectionBasedLayer(img.data(), name, selection),
+        : KisSelectionBasedLayer(image.data(), name, selection),
         m_d(new Private())
 {
     m_d->filterConfig = kfc;

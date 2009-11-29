@@ -29,15 +29,15 @@
 #include "kis_transaction.h"
 #include <KoColorSpaceRegistry.h>
 
-bool compareQImages(QPoint & pt, const QImage & img1, const QImage & img2)
+bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2)
 {
 //     QTime t;
 //     t.start();
 
-    int w1 = img1.width();
-    int h1 = img1.height();
-    int w2 = img2.width();
-    int h2 = img2.height();
+    int w1 = image1.width();
+    int h1 = image1.height();
+    int w2 = image2.width();
+    int h2 = image2.height();
 
     if (w1 != w2 || h1 != h2) {
         qDebug() << w1 << " " << w2 << " " << h1 << " " << h2;
@@ -48,7 +48,7 @@ bool compareQImages(QPoint & pt, const QImage & img1, const QImage & img2)
 
     for (int x = 0; x < w1; ++x) {
         for (int y = 0; y < h1; ++y) {
-            if (img1.pixel(x, y) != img2.pixel(x, y)) {
+            if (image1.pixel(x, y) != image2.pixel(x, y)) {
                 pt.setX(x);
                 pt.setY(y);
                 return false;
@@ -63,11 +63,11 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisPaintDeviceSP dstdev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimg, "", 0, 0);
+    dev->convertFromQImage(qimage, "", 0, 0);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
@@ -90,12 +90,12 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
     KisConstProcessingInformation src(dev,  QPoint(0, 0), 0);
     KisProcessingInformation dst(dstdev, QPoint(0, 0), 0);
 
-    f->process(src, dst, qimg.size(), kfc);
+    f->process(src, dst, qimage.size(), kfc);
 
     QPoint errpoint;
 
-    if (!compareQImages(errpoint, result, dstdev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
-        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("src_not_is_dst_lena_%1.png").arg(f->id()));
+    if (!compareQImages(errpoint, result, dstdev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
+        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("src_not_is_dst_lena_%1.png").arg(f->id()));
         return false;
     }
     return true;
@@ -105,10 +105,10 @@ bool testFilterNoTransaction(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimg, "", 0, 0);
+    dev->convertFromQImage(qimage, "", 0, 0);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
@@ -131,12 +131,12 @@ bool testFilterNoTransaction(KisFilterSP f)
     KisConstProcessingInformation src(dev,  QPoint(0, 0), 0);
     KisProcessingInformation dst(dev, QPoint(0, 0), 0);
 
-    f->process(src, dst, qimg.size(), kfc);
+    f->process(src, dst, qimage.size(), kfc);
 
     QPoint errpoint;
 
-    if (!compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
-        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("no_transactio_lena_%1.png").arg(f->id()));
+    if (!compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
+        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("no_transactio_lena_%1.png").arg(f->id()));
         return false;
     }
     return true;
@@ -146,7 +146,7 @@ bool testFilter(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
     QString resultFileName = QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png";
     QImage result(resultFileName);
     if (!QFileInfo(resultFileName).exists()) {
@@ -154,7 +154,7 @@ bool testFilter(KisFilterSP f)
         return false;
     }
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimg, "", 0, 0);
+    dev->convertFromQImage(qimage, "", 0, 0);
     KisTransaction * cmd = new KisTransaction(f->name(), dev);
 
     // Get the predefined configuration from a file
@@ -178,15 +178,15 @@ bool testFilter(KisFilterSP f)
     KisConstProcessingInformation src(dev,  QPoint(0, 0), 0);
     KisProcessingInformation dst(dev, QPoint(0, 0), 0);
 
-    f->process(src, dst, qimg.size(), kfc);
+    f->process(src, dst, qimage.size(), kfc);
 
     QPoint errpoint;
 
     delete cmd;
 
-    if (!compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
+    if (!compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         qDebug() << errpoint;
-        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("lena_%1.png").arg(f->id()));
+        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("lena_%1.png").arg(f->id()));
         return false;
     }
     return true;
@@ -197,10 +197,10 @@ bool testFilterWithSelections(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimg, "", 0, 0);
+    dev->convertFromQImage(qimage, "", 0, 0);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
@@ -221,20 +221,20 @@ bool testFilterWithSelections(KisFilterSP f)
     qDebug() << f->id();// << "\n"; << kfc->toXML() << "\n";
 
     KisSelectionSP sel1 = new KisSelection(dev);
-    sel1->getOrCreatePixelSelection()->select(qimg.rect());
+    sel1->getOrCreatePixelSelection()->select(qimage.rect());
 
     KisSelectionSP sel2 = new KisSelection(dev);
-    sel2->getOrCreatePixelSelection()->select(qimg.rect());
+    sel2->getOrCreatePixelSelection()->select(qimage.rect());
 
     KisConstProcessingInformation src(dev,  QPoint(0, 0), sel1);
     KisProcessingInformation dst(dev, QPoint(0, 0), sel2);
 
-    f->process(src, dst, qimg.size(), kfc);
+    f->process(src, dst, qimage.size(), kfc);
 
     QPoint errpoint;
 
-    if (!compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
-        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save(QString("sel_lena_%1.png").arg(f->id()));
+    if (!compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
+        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("sel_lena_%1.png").arg(f->id()));
         return false;
     }
 

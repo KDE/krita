@@ -44,7 +44,7 @@ void KisIconWidget::paintEvent(QPaintEvent *)
     qint32 cw = width();
     qint32 ch = height();
     if (m_resource) {
-        p.drawImage(QRect(0, 0, 24, 24), m_resource->img());
+        p.drawImage(QRect(0, 0, 24, 24), m_resource->image());
     } else {
         p.fillRect(0, 0, cw, ch, Qt::white);
     }

@@ -40,12 +40,12 @@ public:
     virtual bool load();
     virtual bool save();
 
-    virtual QImage img() const;
+    virtual QImage image() const;
 
     qint32 width() const;
     qint32 height() const;
 
-    void setImage(const QImage& img);
+    void setImage(const QImage& image);
 
     QString defaultFileExtension() const;
 
@@ -54,7 +54,7 @@ private:
     bool init(QByteArray& data);
 
 private:
-    QImage m_img;
+    QImage m_image;
 };
 
 #endif // KOPATTERN_H

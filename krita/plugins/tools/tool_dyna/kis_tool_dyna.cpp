@@ -359,6 +359,7 @@ int KisToolDyna::applyFilter(qreal mx, qreal my)
 
 void KisToolDyna::drawSegment(KoPointerEvent* event)
 {
+    Q_UNUSED(event);
     qreal delx, dely;
     qreal wid;
     qreal px, py, nx, ny;
@@ -404,11 +405,12 @@ void KisToolDyna::drawSegment(KoPointerEvent* event)
     nowr.ry() *= currentImage()->height();
 
     qreal m_pressure;
+#if 0
+
     qreal xTilt, yTilt;
     qreal m_rotation;
     qreal m_tangentialPressure;
 
-#if 0
     // some funny debugging
     dbgPlugins << "m_mouse.vel: " << m_mouse.vel;
     dbgPlugins << "m_mouse.velx: " << m_mouse.velx;

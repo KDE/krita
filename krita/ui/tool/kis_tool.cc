@@ -285,9 +285,8 @@ KisSelectionSP KisTool::currentSelection() const
 
 void KisTool::notifyModified() const
 {
-    KisImageWSP img = image();
-    if (img) {
-        img->setModified();
+    if (image()) {
+        image()->setModified();
     }
 }
 

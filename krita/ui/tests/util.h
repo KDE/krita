@@ -86,7 +86,7 @@ KisDoc2* createCompleteDocument()
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
     KisDoc2* doc = new KisDoc2;
     doc->setCurrentImage(image);
-    doc->documentInfo()->setAboutInfo("title", image->name());
+    doc->documentInfo()->setAboutInfo("title", image->objectName());
 
     KisGroupLayerSP group1 = new KisGroupLayer(image, "group1", 50);
 

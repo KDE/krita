@@ -39,9 +39,9 @@ class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaint
     Q_OBJECT
 
 public:
-    KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev);
-    KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity);
-    KisPaintLayer(KisImageWSP img, const QString& name, quint8 opacity, const KoColorSpace * colorSpace);
+    KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev);
+    KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity);
+    KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace);
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
 

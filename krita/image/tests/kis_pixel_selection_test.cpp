@@ -67,9 +67,9 @@ void KisPixelSelectionTest::testMaskImage()
 {
     KisPixelSelectionSP selection = new KisPixelSelection();
     selection->select(QRect(10, 10, 50, 50), 128);
-    QImage img = selection->maskImage(QRect(0, 0, 70, 70));
+    QImage image = selection->maskImage(QRect(0, 0, 70, 70));
     QPoint pt;
-    if (!TestUtil::compareQImages(pt, img, QImage(QString(FILES_DATA_DIR) + QDir::separator() + "pixel_selection_test.png"))) {
+    if (!TestUtil::compareQImages(pt, image, QImage(QString(FILES_DATA_DIR) + QDir::separator() + "pixel_selection_test.png"))) {
         QFAIL(QString("Failed to create correct mask image, wrong pixel at: %1,%2 ").arg(pt.x()).arg(pt.y()).toAscii());
 
     }

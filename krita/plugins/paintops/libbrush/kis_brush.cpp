@@ -112,20 +112,20 @@ struct KisBrush::Private {
 };
 
 KisBrush::KisBrush()
-        : KoResource("")
-        , d(new Private)
+    : KoResource("")
+    , d(new Private)
 {
 }
 
 KisBrush::KisBrush(const QString& filename)
-        : KoResource(filename)
-        , d(new Private)
+    : KoResource(filename)
+    , d(new Private)
 {
 }
 
 KisBrush::KisBrush(const KisBrush& rhs)
-        : KoResource("")
-        , d(new Private)
+    : KoResource("")
+    , d(new Private)
 {
     m_image = rhs.m_image;
     d->brushType = rhs.d->brushType;
@@ -141,7 +141,7 @@ KisBrush::~KisBrush()
     delete d;
 }
 
-QImage KisBrush::img() const
+QImage KisBrush::image() const
 {
     return m_image;
 }
@@ -186,6 +186,7 @@ void KisBrush::setHotSpot(QPointF pt)
 
 QPointF KisBrush::hotSpot(double scaleX, double scaleY, double rotation) const
 {
+    Q_UNUSED(scaleY);
     double w = maskWidth( scaleX, rotation);
     double h = maskHeight( scaleX, rotation);
 
@@ -222,13 +223,13 @@ bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
     return true;
 }
 
-void KisBrush::setImage(const QImage& img)
+void KisBrush::setImage(const QImage& image)
 {
-    Q_ASSERT(!img.isNull());
-    m_image = img;
+    Q_ASSERT(!image.isNull());
+    m_image = image;
 
-    setWidth(img.width());
-    setHeight(img.height());
+    setWidth(image.width());
+    setHeight(image.height());
 
     clearScaledBrushes();
 
@@ -327,10 +328,10 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, doubl
 
 
 void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-        ColoringInformation* coloringInformation,
-        double scaleX, double scaleY, double angle,
-        const KisPaintInformation& info_,
-        double subPixelX, double subPixelY) const
+                                                   ColoringInformation* coloringInformation,
+                                                   double scaleX, double scaleY, double angle,
+                                                   const KisPaintInformation& info_,
+                                                   double subPixelX, double subPixelY) const
 {
     Q_ASSERT(valid());
     Q_UNUSED(angle);
@@ -411,10 +412,10 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     }
 }
 
-KisFixedPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace,
-                                      double scale, double angle,
-                                      const KisPaintInformation& info,
-                                      double subPixelX, double subPixelY) const
+KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
+                                            double scale, double angle,
+                                            const KisPaintInformation& info,
+                                            double subPixelX, double subPixelY) const
 {
     Q_ASSERT(valid());
     Q_UNUSED(colorSpace);
@@ -510,19 +511,19 @@ void KisBrush::createScaledBrushes() const
         const_cast<KisBrush*>(this)->clearScaledBrushes();
     }
 
-    if (img().isNull()) {
+    if (image().isNull()) {
         return;
     }
     // Construct a series of brushes where each one's dimensions are
     // half the size of the previous one.
-    int width = img().width() * MAXIMUM_SCALE;
-    int height = img().height() * MAXIMUM_SCALE;
+    int width = image().width() * MAXIMUM_SCALE;
+    int height = image().height() * MAXIMUM_SCALE;
 
     QImage scaledImage;
     while (true) {
 
-        if (width >= img().width() && height >= img().height()) {
-            scaledImage = scaleImage(img(), width, height);
+        if (width >= image().width() && height >= image().height()) {
+            scaledImage = scaleImage(image(), width, height);
         } else {
             // Scale down the previous image once we're below 1:1.
             scaledImage = scaleImage(scaledImage, width, height);
@@ -531,8 +532,8 @@ void KisBrush::createScaledBrushes() const
         KisQImagemaskSP scaledMask = KisQImagemaskSP(new KisQImagemask(scaledImage, hasColor()));
         Q_CHECK_PTR(scaledMask);
 
-        double xScale = static_cast<double>(width) / img().width();
-        double yScale = static_cast<double>(height) / img().height();
+        double xScale = static_cast<double>(width) / image().width();
+        double yScale = static_cast<double>(height) / image().height();
         double scale = xScale;
 
         d->scaledBrushes.append(KisScaledBrush(scaledMask, hasColor() ? scaledImage : QImage(), scale, xScale, yScale));
@@ -1101,7 +1102,7 @@ void KisBrush::generateBoundary() const
     int h = height();
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        dev = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), 1.0, 0.0, KisPaintInformation());
+        dev = paintDevice(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), 1.0, 0.0, KisPaintInformation());
     } else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         dev = new KisFixedPaintDevice(cs);

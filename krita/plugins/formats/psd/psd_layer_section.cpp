@@ -106,9 +106,13 @@ bool PSDLayerSection::read(QIODevice* io)
             layerInfo.hasTransparency = false;
         }
 
+        dbgFile << "transparency" << layerInfo.hasTransparency;
+
         dbgFile << "Number of layers" << layerInfo.nLayers << "transparency" << layerInfo.hasTransparency;
 
         for (int i = 0; i < layerInfo.nLayers; ++i) {
+
+            dbgFile << ">>>>>>>>>>> going to read layer " << i << "pos" << io->pos();
             PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header, layerInfo.hasTransparency);
             if (!layerRecord->read(io)) {
                 error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);

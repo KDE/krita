@@ -57,7 +57,7 @@ private:
     bool m_valid;
     KisPaintDeviceSP m_device;
     QRect m_bounds;
-    quint8* m_imgbuf;
+    quint8* m_imagebuf;
 };
 
 #endif

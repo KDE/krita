@@ -73,9 +73,9 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, KoZoomAction::AspectMode, this);
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
 
-    KisImageWSP img = m_view->image();
-    m_zoomController->setPageSize(QSizeF(img->width() / img->xRes(), img->height() / img->yRes()));
-    m_zoomController->setDocumentSize(QSizeF(img->width() / img->xRes(), img->height() / img->yRes()));
+    KisImageWSP image = m_view->image();
+    m_zoomController->setPageSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()));
+    m_zoomController->setDocumentSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()));
 
     m_zoomAction = m_zoomController->zoomAction();
     actionCollection->addAction("zoom", m_zoomAction);
@@ -144,17 +144,17 @@ void KisZoomManager::toggleShowRulers(bool show)
 
 void KisZoomManager::updateGUI()
 {
-    KisImageWSP img = m_view->image();
+    KisImageWSP image = m_view->image();
 
-    m_horizontalRuler->setRulerLength(img->width() / img->xRes());
-    m_verticalRuler->setRulerLength(img->height() / img->yRes());
+    m_horizontalRuler->setRulerLength(image->width() / image->xRes());
+    m_verticalRuler->setRulerLength(image->height() / image->yRes());
 }
 
 void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 {
     Q_UNUSED(mode);
     Q_UNUSED(zoom);
-    KisImageWSP img = m_view->image();
+    KisImageWSP image = m_view->image();
 
     m_view->canvasBase()->preScale();
     m_view->canvasBase()->adjustOrigin();
@@ -163,10 +163,10 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 
 void KisZoomManager::changeAspectMode(bool aspectMode)
 {
-    KisImageWSP img = m_view->image();
+    KisImageWSP image = m_view->image();
 
     if (aspectMode)
-        m_zoomHandler->setResolution(img->xRes(), img->yRes());
+        m_zoomHandler->setResolution(image->xRes(), image->yRes());
     else
         m_zoomHandler->setResolutionToStandard();
 

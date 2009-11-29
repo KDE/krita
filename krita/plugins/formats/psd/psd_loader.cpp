@@ -83,7 +83,7 @@ QString psd_colormode_to_colormodelid(PSDHeader::PSDColorMode colormode, quint16
 
 PSDLoader::PSDLoader(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
-    m_img = 0;
+    m_image = 0;
     m_doc = doc;
     m_adapter = adapter;
     m_job = 0;
@@ -150,26 +150,25 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     if (!cs) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
 
     // Creating the KisImageWSP
-    m_img = new KisImage(m_doc->undoAdapter(),  header.m_width, header.m_height, cs, "built image");
-    Q_CHECK_PTR(m_img);
-    m_img->lock();
+    m_image = new KisImage(m_doc->undoAdapter(),  header.m_width, header.m_height, cs, "built image");
+    Q_CHECK_PTR(m_image);
+    m_image->lock();
 
     // Preserve the duotone colormode block for saving back to psd
     if (header.m_colormode == PSDHeader::DuoTone) {
         KisAnnotationSP annotation = new KisAnnotation("Duotone Colormode Block",
                                                        i18n("Duotone Colormode Block"),
                                                        colorModeBlock.m_data);
-        m_img->addAnnotation(annotation);
+        m_image->addAnnotation(annotation);
     }
 
     // read the projection into our single layer
     if (layerSection.layerInfo.nLayers == 0) {
         dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
-        KisPaintLayerSP layer = new KisPaintLayer(m_img, i18n("Background"), OPACITY_OPAQUE);
+        KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE);
         KisTransaction("", layer -> paintDevice());
-
         //readLayerData(&f, layer->paintDevice(), f.pos(), QRect(0, 0, header.m_width, header.m_height));
-        m_img->addNode(layer, m_img->rootLayer());
+        m_image->addNode(layer, m_image->rootLayer());
     }
     else {
         // read the channels for the various layers
@@ -205,7 +204,7 @@ KisImageBuilder_Result PSDLoader::buildImage(const KUrl& uri)
 
 KisImageWSP PSDLoader::image()
 {
-    return m_img;
+    return m_image;
 }
 
 void PSDLoader::cancel()

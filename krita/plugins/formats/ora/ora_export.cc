@@ -65,14 +65,14 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP img = output->image();
-    Q_CHECK_PTR(img);
+    KisImageWSP image = output->image();
+    Q_CHECK_PTR(image);
 
     OraConverter kpc(output, output->undoAdapter());
 
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(url, img)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(url, image)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KoFilter::OK;
     }

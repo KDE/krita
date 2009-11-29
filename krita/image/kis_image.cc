@@ -888,8 +888,8 @@ void KisImage::renderToPainter(qint32 srcX,
                                QPainter &painter,
                                const KoColorProfile *  monitorProfile)
 {
-    QImage img = convertToQImage(srcX, srcY, width, height, monitorProfile);
-    painter.drawImage(dstX, dstY, img, 0, 0, width, height);
+    QImage image = convertToQImage(srcX, srcY, width, height, monitorProfile);
+    painter.drawImage(dstX, dstY, image, 0, 0, width, height);
 }
 
 QImage KisImage::convertToQImage(qint32 x,
@@ -900,14 +900,14 @@ QImage KisImage::convertToQImage(qint32 x,
 {
     KisPaintDeviceSP dev = m_d->rootLayer->projection();
     if (!dev) return QImage();
-    QImage img = dev->convertToQImage(const_cast<KoColorProfile*>(profile), x, y, w, h);
+    QImage image = dev->convertToQImage(const_cast<KoColorProfile*>(profile), x, y, w, h);
 
     if (m_d->backgroundPattern) {
-        m_d->backgroundPattern->paintBackground(img, QRect(x, y, w, h));
+        m_d->backgroundPattern->paintBackground(image, QRect(x, y, w, h));
     }
-    if (!img.isNull()) {
+    if (!image.isNull()) {
 #ifdef WORDS_BIGENDIAN
-        uchar * data = img.bits();
+        uchar * data = image.bits();
         for (int i = 0; i < w * h; ++i) {
             uchar r, g, b, a;
             a = data[0];
@@ -922,7 +922,7 @@ QImage KisImage::convertToQImage(qint32 x,
         }
 #endif
 
-        return img;
+        return image;
     }
 
     return QImage();

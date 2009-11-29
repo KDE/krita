@@ -39,14 +39,14 @@ public:
     bool undoEnabled() const;
     void setUndoEnabled(bool undo);
 
-    qint32 defImgWidth() const;
-    void defImgWidth(qint32 width);
+    qint32 defImageWidth() const;
+    void defImageWidth(qint32 width);
 
-    qint32 defImgHeight() const;
-    void defImgHeight(qint32 height);
+    qint32 defImageHeight() const;
+    void defImageHeight(qint32 height);
 
-    double defImgResolution() const;
-    void defImgResolution(double res);
+    double defImageResolution() const;
+    void defImageResolution(double res);
 
     enumCursorStyle cursorStyle() const;
     enumCursorStyle getDefaultCursorStyle() const;

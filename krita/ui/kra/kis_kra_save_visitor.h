@@ -30,7 +30,7 @@ class KoStore;
 class KisKraSaveVisitor : public KisNodeVisitor
 {
 public:
-    KisKraSaveVisitor(KisImageWSP img, KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames);
+    KisKraSaveVisitor(KisImageWSP image, KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames);
 
     using KisNodeVisitor::visit;
 
@@ -71,7 +71,7 @@ private:
     QString getLocation(KisNode* node, const QString& suffix = "");
 
 private:
-    KisImageWSP m_img;
+    KisImageWSP m_image;
     KoStore *m_store;
     bool m_external;
     QString m_uri;

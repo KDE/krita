@@ -33,9 +33,9 @@
 
 namespace
 {
-const double IMG_DEFAULT_RESOLUTION = 100.0; // dpi
-const qint32 IMG_DEFAULT_WIDTH = 1600;
-const qint32 IMG_DEFAULT_HEIGHT = 1200;
+const double IMAGE_DEFAULT_RESOLUTION = 100.0; // dpi
+const qint32 IMAGE_DEFAULT_WIDTH = 1600;
+const qint32 IMAGE_DEFAULT_HEIGHT = 1200;
 const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
 const qint32 DEFAULT_MAX_TILES_MEM = 5000;
 const qint32 DEFAULT_SWAPPINESS = 100;
@@ -72,34 +72,34 @@ void KisConfig::setUndoEnabled(bool undo)
     m_cfg.writeEntry("undoEnabled", undo);
 }
 
-qint32 KisConfig::defImgWidth() const
+qint32 KisConfig::defImageWidth() const
 {
-    return m_cfg.readEntry("imgWidthDef", IMG_DEFAULT_WIDTH);
+    return m_cfg.readEntry("imageWidthDef", IMAGE_DEFAULT_WIDTH);
 }
 
-qint32 KisConfig::defImgHeight() const
+qint32 KisConfig::defImageHeight() const
 {
-    return m_cfg.readEntry("imgHeightDef", IMG_DEFAULT_HEIGHT);
+    return m_cfg.readEntry("imageHeightDef", IMAGE_DEFAULT_HEIGHT);
 }
 
-double KisConfig::defImgResolution() const
+double KisConfig::defImageResolution() const
 {
-    return m_cfg.readEntry("imgResolutionDef", IMG_DEFAULT_RESOLUTION) / 72.0;
+    return m_cfg.readEntry("imageResolutionDef", IMAGE_DEFAULT_RESOLUTION) / 72.0;
 }
 
-void KisConfig::defImgWidth(qint32 width)
+void KisConfig::defImageWidth(qint32 width)
 {
-    m_cfg.writeEntry("imgWidthDef", width);
+    m_cfg.writeEntry("imageWidthDef", width);
 }
 
-void KisConfig::defImgHeight(qint32 height)
+void KisConfig::defImageHeight(qint32 height)
 {
-    m_cfg.writeEntry("imgHeightDef", height);
+    m_cfg.writeEntry("imageHeightDef", height);
 }
 
-void KisConfig::defImgResolution(double res)
+void KisConfig::defImageResolution(double res)
 {
-    m_cfg.writeEntry("imgResolutionDef", res*72.0);
+    m_cfg.writeEntry("imageResolutionDef", res*72.0);
 }
 
 enumCursorStyle KisConfig::cursorStyle() const

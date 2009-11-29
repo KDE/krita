@@ -63,7 +63,7 @@ public:
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
     KisShapeOptionsWidget * m_options;
-    QImage m_img;
+    QImage m_image;
 
 private slots:
             void randomValueChanged(int value);

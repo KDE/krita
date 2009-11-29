@@ -67,10 +67,10 @@ void KisFilterJobTest::testInWeaver()
     KoProgressUpdater* pu = new KoProgressUpdater(bar);
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimg, "", 0, 0);
+    dev->convertFromQImage(qimage, "", 0, 0);
 
     KisFilterJobFactory factory(f, kfc);
 
@@ -79,8 +79,8 @@ void KisFilterJobTest::testInWeaver()
 
 
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
-        dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest2.png");
+    if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
+        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtermasktest2.png");
         QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
     delete pu;

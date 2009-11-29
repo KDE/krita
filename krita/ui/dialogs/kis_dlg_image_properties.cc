@@ -106,7 +106,7 @@ const KoColorProfile * KisDlgImageProperties::profile()
     }
 }
 
-// XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class
+// XXX: Copy & paste from kis_dlg_create_image -- refactor to separate class
 void KisDlgImageProperties::fillCmbProfiles(const KoID & s)
 {
     KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());

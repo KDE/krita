@@ -63,15 +63,14 @@ void KisKraSaveXmlVisitorTest::testCreateDomDocument()
     QDomElement image = dom.createElement("IMAGE"); // Legacy!
     KisSaveXmlVisitor visitor(dom, image, count, true);
 
-    KisImageWSP img = doc->image();
-    Q_ASSERT(img);
+    Q_ASSERT(doc->image());
 
     QStringList list;
 
     KisCountVisitor cv(list, KoProperties());
-    img->rootLayer()->accept(cv);
+    doc->image()->rootLayer()->accept(cv);
 
-    img->rootLayer()->accept(visitor);
+    doc->image()->rootLayer()->accept(visitor);
 
     QCOMPARE((int)visitor.m_count, (int)cv.count());
 

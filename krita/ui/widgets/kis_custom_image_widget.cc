@@ -180,9 +180,9 @@ void KisCustomImageWidget::buttonClicked()
     height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
     m_doc->newImage(txtName->text(), width, height, cs, KoColor(qc, cs), txtDescription->toPlainText(), resolution);
 
-    KisImageWSP img = m_doc->image();
-    if (img && img->root() && img->root()->firstChild()) {
-        KisLayer * layer = dynamic_cast<KisLayer*>(img->root()->firstChild().data());
+    KisImageWSP image = m_doc->image();
+    if (image && image->root() && image->root()->firstChild()) {
+        KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
         if (layer) {
             layer->setOpacity(backgroundOpacity());
         }
@@ -216,11 +216,11 @@ quint8 KisCustomImageWidget::backgroundOpacity() const
 void KisCustomImageWidget::clipboardDataChanged()
 {
     QClipboard *cb = QApplication::clipboard();
-    QImage qimg = cb->image();
+    QImage qimage = cb->image();
     const QMimeData *cbData = cb->mimeData();
     QByteArray mimeType("application/x-krita-selection");
 
-    if ((cbData && cbData->hasFormat(mimeType)) || !qimg.isNull()) {
+    if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
         KisClipboard * cb = KisClipboard::instance();
         QSize sz = cb->clipSize();
         if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {

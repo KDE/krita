@@ -44,10 +44,10 @@ public:
 };
 
 
-KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP img,
+KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
         const QString &name,
         KisSelectionSP selection)
-        : KisLayer(img.data(), name, OPACITY_OPAQUE),
+        : KisLayer(image.data(), name, OPACITY_OPAQUE),
         m_d(new Private())
 {
     if (!selection)
@@ -57,7 +57,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP img,
 
     setShowSelection(true);
 
-    m_d->paintDevice = new KisPaintDevice(img->colorSpace());
+    m_d->paintDevice = new KisPaintDevice(image->colorSpace());
 }
 
 KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs)

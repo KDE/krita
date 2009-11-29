@@ -60,7 +60,7 @@ public:
 
     bool save();
 
-    QImage img() const;
+    QImage image() const;
 
     bool removable() const {
         return true;
@@ -70,7 +70,7 @@ public:
         return "kpp";
     }
 
-    void updateImg();
+    void updateImage();
 
 private:
 

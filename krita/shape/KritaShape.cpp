@@ -95,12 +95,12 @@ void KritaShape::paint(QPainter& painter, const KoViewConverter& converter)
         //      just as with KisCanvas2?
         KisImageWSP kimage = m_d->doc->image();
 
-        QImage qimg = kimage->convertToQImage(0, 0, kimage->width(), kimage->height(),
+        QImage qimage = kimage->convertToQImage(0, 0, kimage->width(), kimage->height(),
                                               m_d->displayProfile); // XXX: How about exposure?
 
         const QRectF paintRect = QRectF(QPointF(0.0, 0.0), size());
         applyConversion(painter, converter);
-        painter.drawImage(paintRect.toRect(), qimg);
+        painter.drawImage(paintRect.toRect(), qimage);
 
     } else if (m_d->doc == 0)
         tryLoadFromImageData(qobject_cast<KoImageData*>(KoShape::userData()));
@@ -124,7 +124,7 @@ bool KritaShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &co
     return false; // TODO
 }
 
-void KritaShape::waitUntilReady(const KoViewConverter &) const
+void KritaShape::waitUntilReady(const KoViewConverter &, bool) const
 {
     if (m_d && m_d->doc && m_d->doc->image())   // all done
         return;
@@ -148,9 +148,9 @@ void KritaShape::tryLoadFromImageData(KoImageData *data)
         return;
 
     // TODO maybe we want to use the image rawData for that
-    QImage image = data->image();
+    QImage qimage = data->image();
 
-    if (image.isNull())
+    if (qimage.isNull())
         return;
 
     delete m_d->doc;
@@ -159,22 +159,22 @@ void KritaShape::tryLoadFromImageData(KoImageData *data)
     connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
 
     // Create an empty image
-    KisImageWSP img = m_d->doc->newImage(i18n("Converted from KoImageData"), image.width(), image.height(), 0);
+    KisImageWSP image = m_d->doc->newImage(i18n("Converted from KoImageData"), qimage.width(), qimage.height(), 0);
 
     // Convert the QImage to a paint device
-    KisPaintLayer * layer = dynamic_cast<KisPaintLayer*>(img->root()->firstChild().data());
+    KisPaintLayer * layer = dynamic_cast<KisPaintLayer*>(image->root()->firstChild().data());
     if (layer)
-        layer->paintDevice()->convertFromQImage(image, "", 0, 0);
+        layer->paintDevice()->convertFromQImage(qimage, "", 0, 0);
 
     // emits sigLoadingFinished
-    m_d->doc->setCurrentImage(img);
+    m_d->doc->setCurrentImage(image);
 }
 
 QImage KritaShape::convertToQImage()
 {
     if (m_d->doc && m_d->doc->image()) {
-        KisImageWSP img = m_d->doc->image();
-        return img->convertToQImage(0, 0, img->width(), img->height(), m_d->displayProfile);
+        KisImageWSP image = m_d->doc->image();
+        return image->convertToQImage(0, 0, image->width(), image->height(), m_d->displayProfile);
     }
     return QImage();
 }

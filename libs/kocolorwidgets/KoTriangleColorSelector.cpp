@@ -234,7 +234,7 @@ void KoTriangleColorSelector::tellColorChanged()
 
 void KoTriangleColorSelector::generateTriangle()
 {
-    QImage img(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
+    QImage image(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
     // Length of triangle
     int hue_ = hue();
     
@@ -249,7 +249,7 @@ void KoTriangleColorSelector::generateTriangle()
             qreal s = 255 * (x - startx_) / ls_;
             if(v < -1.0 || v > 256.0 || s < -1.0 || s > 256.0 )
             {
-                img.setPixel(x,y, qRgba(0,0,0,0));
+                image.setPixel(x,y, qRgba(0,0,0,0));
             } else {
                 qreal va = 1.0, sa = 1.0;
                 if( v < 0.0) { va = 1.0 + v; v = 0; }
@@ -261,21 +261,21 @@ void KoTriangleColorSelector::generateTriangle()
                 qreal coef = va * sa;
                 if( coef < 0.999)
                 {
-                    img.setPixel(x,y, qRgba( (int)(r * coef), (int)(g * coef), (int)(b * coef), (int)(255 * coef)));
+                    image.setPixel(x,y, qRgba( (int)(r * coef), (int)(g * coef), (int)(b * coef), (int)(255 * coef)));
                 } else {
-                    img.setPixel(x,y, qRgba(r, g, b, 255 ));
+                    image.setPixel(x,y, qRgba(r, g, b, 255 ));
                 }
             }
         }
     }
     
-    d->trianglePixmap = QPixmap::fromImage(img);
+    d->trianglePixmap = QPixmap::fromImage(image);
     d->invalidTriangle = false;
 }
 
 void KoTriangleColorSelector::generateWheel()
 {
-    QImage img(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
+    QImage image(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32_Premultiplied);
     for(int y = 0; y < d->sizeColorSelector; y++)
     {
         qreal yc = y - d->centerColorSelector;
@@ -295,16 +295,16 @@ void KoTriangleColorSelector::generateWheel()
                 hsv_to_rgb(h, 255, 255, &r, &g, &b);
                 if( acoef < 0.999)
                 {
-                    img.setPixel(x,y, qRgba( (int)(r * acoef), (int)(g * acoef), (int)(b * acoef), (int)(255 * acoef)));
+                    image.setPixel(x,y, qRgba( (int)(r * acoef), (int)(g * acoef), (int)(b * acoef), (int)(255 * acoef)));
                 } else {
-                    img.setPixel(x,y, qRgba(r, g, b, 255 ));
+                    image.setPixel(x,y, qRgba(r, g, b, 255 ));
                 }
             } else {
-                img.setPixel(x,y, qRgba(0,0,0,0));
+                image.setPixel(x,y, qRgba(0,0,0,0));
             }
         }
     }
-    d->wheelPixmap = QPixmap::fromImage(img);
+    d->wheelPixmap = QPixmap::fromImage(image);
 }
 
 void KoTriangleColorSelector::mouseReleaseEvent( QMouseEvent * event )

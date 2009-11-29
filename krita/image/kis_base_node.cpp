@@ -159,9 +159,9 @@ bool KisBaseNode::check(const KoProperties & properties) const
 QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
 {
     try {
-        QImage img(w, h, QImage::Format_ARGB32);
-        img.fill(0);
-        return img;
+        QImage image(w, h, QImage::Format_ARGB32);
+        image.fill(0);
+        return image;
     } catch (std::bad_alloc) {
         return QImage();
     }

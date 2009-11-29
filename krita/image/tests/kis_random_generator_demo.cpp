@@ -10,7 +10,7 @@
 
 //BEGIN Noise
 Noise::Noise(int wx, int wy) : _wx(wx), _wy(wy),
-                               _img(_wx, _wy, QImage::Format_RGB32),
+                               _image(_wx, _wy, QImage::Format_RGB32),
                                _hist(256, 256, QImage::Format_RGB32)
 {
 }
@@ -29,7 +29,7 @@ void Noise::update(quint64 seed, int shift, int cutoff, bool chR, bool chG, bool
     _max = 0;
     _sum = 0;
 
-    _img.fill(0);
+    _image.fill(0);
     for (int x = 0; x < _wx; ++x) {
         for (int y = 0; y < _wy; ++y) {
             quint64 c = rand.randomAt(x, y);
@@ -43,7 +43,7 @@ void Noise::update(quint64 seed, int shift, int cutoff, bool chR, bool chG, bool
             if (!chR) r = 0;
             if (!chG) g = 0;
             if (!chB) b = 0;
-            _img.setPixel(x, y, k < cutoff ? qRgb(r, g, b) : qRgb(0, 0, 0));
+            _image.setPixel(x, y, k < cutoff ? qRgb(r, g, b) : qRgb(0, 0, 0));
 
             _min = qMin(_min, c);
             _max = qMax(_max, c);
@@ -62,7 +62,7 @@ void Noise::update(quint64 seed, int shift, int cutoff, bool chR, bool chG, bool
 
 QImage Noise::image()
 {
-    return _img;
+    return _image;
 }
 
 QImage Noise::histogram()

@@ -44,8 +44,8 @@ public slots:
     void setZoom(int percentage);
     void documentMousePositionChanged(const QPointF &p);
     void imageSizeChanged(qint32 w, qint32 h);
-    void setSelection(KisImageWSP img);
-    void setProfile(KisImageWSP img);
+    void setSelection(KisImageWSP image);
+    void setProfile(KisImageWSP image);
     void setHelp(const QString &t);
     void updateStatusBarProfileLabel();
 

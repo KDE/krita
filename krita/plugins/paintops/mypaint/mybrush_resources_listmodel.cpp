@@ -35,7 +35,7 @@ QVariant MyBrushResourcesListModel::data( const QModelIndex & index, int role) c
         QFileInfo info(m_factory->brushes().at(index.row())->filename());
         return info.baseName();
     } else if (role == Qt::DecorationRole) {
-        return QPixmap::fromImage(m_factory->brushes().at(index.row())->img());
+        return QPixmap::fromImage(m_factory->brushes().at(index.row())->image());
     } else if (role == Qt::UserRole) {
         return m_factory->brushes().at(index.row())->filename();
     } else if (role == Qt::SizeHintRole) {

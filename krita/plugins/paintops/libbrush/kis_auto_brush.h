@@ -15,7 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #ifndef _KIS_AUTOBRUSH_RESOURCE_H_
 #define _KIS_AUTOBRUSH_RESOURCE_H_
 
@@ -32,24 +31,24 @@ class BRUSH_EXPORT KisAutoBrush : public KisBrush
 
 public:
 
-    KisAutoBrush(KisMaskGenerator* img, double angle);
+    KisAutoBrush(KisMaskGenerator* image, double angle);
 
     virtual ~KisAutoBrush();
 
 public:
 
-    virtual KisFixedPaintDeviceSP image(const KoColorSpace*,
-                                        double, double,
-                                        const KisPaintInformation&,
-                                        double = 0, double = 0) const {
+    virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
+                                              double, double,
+                                              const KisPaintInformation&,
+                                              double = 0, double = 0) const {
         return 0; // The autobrush does NOT support images!
     }
 
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-            KisBrush::ColoringInformation* src,
-            double scaleX, double scaleY, double angle,
-            const KisPaintInformation& info = KisPaintInformation(),
-            double subPixelX = 0, double subPixelY = 0) const;
+                                                     KisBrush::ColoringInformation* src,
+                                                     double scaleX, double scaleY, double angle,
+                                                     const KisPaintInformation& info = KisPaintInformation(),
+                                                     double subPixelX = 0, double subPixelY = 0) const;
 
 public:
 

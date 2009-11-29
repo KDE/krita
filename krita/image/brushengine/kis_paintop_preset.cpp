@@ -37,7 +37,7 @@
 
 struct KisPaintOpPreset::Private {
     KisPaintOpSettingsSP settings;
-    QImage img;
+    QImage image;
 };
 
 
@@ -127,7 +127,7 @@ bool KisPaintOpPreset::load()
     settings->fromXML(element);
     setSettings(settings);
 
-    updateImg();
+    updateImage();
     return true;
 }
 
@@ -157,13 +157,13 @@ bool KisPaintOpPreset::save()
     return true;
 }
 
-QImage KisPaintOpPreset::img() const
+QImage KisPaintOpPreset::image() const
 {
-    return m_d->img;
+    return m_d->image;
 }
 
-void KisPaintOpPreset::updateImg()
+void KisPaintOpPreset::updateImage()
 {
-    m_d->img = m_d->settings->sampleStroke(QSize(100, 20));
+    m_d->image = m_d->settings->sampleStroke(QSize(100, 20));
 }
 

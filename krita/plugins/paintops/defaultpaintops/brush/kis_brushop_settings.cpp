@@ -105,6 +105,7 @@ void KisBrushOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPa
 
 void KisBrushOpSettings::changePaintOpSize(qreal x, qreal y) const
 {
+    Q_UNUSED(y);
     qreal currentDiameter = m_options->m_brushOption->autoBrushDiameter();
     
     m_options->m_brushOption->setAutoBrushDiameter(currentDiameter + qRound(x));

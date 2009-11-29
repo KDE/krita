@@ -422,7 +422,7 @@ bool MyPaintBrushResource::save()
 }
 
 
-QImage MyPaintBrushResource::img() const
+QImage MyPaintBrushResource::image() const
 {
     return m_icon;
 }

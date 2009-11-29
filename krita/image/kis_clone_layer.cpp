@@ -40,8 +40,8 @@ public:
     qint32 y;
 };
 
-KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP img, const QString &name, quint8 opacity)
-        : KisLayer(img, name, opacity)
+KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &name, quint8 opacity)
+        : KisLayer(image, name, opacity)
         , m_d(new Private())
 {
     m_d->copyFrom = from;

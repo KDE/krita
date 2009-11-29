@@ -57,13 +57,13 @@ public:
 };
 
 
-KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
+KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
         : KisNode()
         , m_d(new Private)
 {
     setName(name);
     setOpacity(opacity);
-    m_d->image = img;
+    m_d->image = image;
     m_d->metaDataStore = new KisMetaData::Store();
 }
 

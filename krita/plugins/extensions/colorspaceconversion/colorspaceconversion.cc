@@ -76,8 +76,8 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QStringList &)
                    true);
 
         KAction *action  = new KAction(i18n("&Convert Image Type..."), this);
-        actionCollection()->addAction("imgcolorspaceconversion", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotImgColorSpaceConversion()));
+        actionCollection()->addAction("imagecolorspaceconversion", action);
+        connect(action, SIGNAL(triggered()), this, SLOT(slotImageColorSpaceConversion()));
         action  = new KAction(i18n("&Convert Layer Type..."), this);
         actionCollection()->addAction("layercolorspaceconversion", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotLayerColorSpaceConversion()));
@@ -89,7 +89,7 @@ ColorSpaceConversion::~ColorSpaceConversion()
     m_view = 0;
 }
 
-void ColorSpaceConversion::slotImgColorSpaceConversion()
+void ColorSpaceConversion::slotImageColorSpaceConversion()
 {
     KisImageWSP image = m_view->image();
 

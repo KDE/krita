@@ -34,7 +34,7 @@ protected Q_SLOTS:
     void paintEvent(QPaintEvent*);
 
 protected:
-    QImage _img;
+    QImage _image;
     int _w, _h;
 };
 

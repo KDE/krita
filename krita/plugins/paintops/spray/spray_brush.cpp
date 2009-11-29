@@ -103,11 +103,11 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
         m_painter->setMaskImageSize(objectWidth(), objectHeight());
         m_pixelSize = dab->colorSpace()->pixelSize();
         
-        m_brushQImg = m_settings->image();
-        if (!m_brushQImg.isNull()){
-            m_brushQImg = m_brushQImg.scaled(objectWidth(), objectHeight());
+        m_brushQImage = m_settings->image();
+        if (!m_brushQImage.isNull()){
+            m_brushQImage = m_brushQImage.scaled(objectWidth(), objectHeight());
         }
-        m_imgDevice = new KisPaintDevice( dab->colorSpace() );
+        m_imageDevice = new KisPaintDevice( dab->colorSpace() );
     }
 
 
@@ -270,7 +270,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
             }
             case 4:
             {
-                if ( !m_brushQImg.isNull() )
+                if ( !m_brushQImage.isNull() )
                 {
                     
                     QMatrix m;
@@ -279,9 +279,9 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
                     if (m_jitterShapeSize){
                         m.scale(random,random);
                     }
-                    m_transformed = m_brushQImg.transformed(m, Qt::SmoothTransformation);
-                    m_imgDevice->convertFromQImage(m_transformed, "");
-                    KisRandomAccessor ac = m_imgDevice->createRandomAccessor(0,0);
+                    m_transformed = m_brushQImage.transformed(m, Qt::SmoothTransformation);
+                    m_imageDevice->convertFromQImage(m_transformed, "");
+                    KisRandomAccessor ac = m_imageDevice->createRandomAccessor(0,0);
                     QRect rc = m_transformed.rect();
 
                     if (m_settings->useRandomHSV()){
@@ -302,8 +302,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
 
                     ix = qRound(nx + x - rc.width() * 0.5);
                     iy = qRound(ny + y - rc.height() * 0.5);
-                    m_painter->bitBlt(QPoint(ix,iy), m_imgDevice, rc);
-                    m_imgDevice->clear();
+                    m_painter->bitBlt(QPoint(ix,iy), m_imageDevice, rc);
+                    m_imageDevice->clear();
                     break;
                 }
             }

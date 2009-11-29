@@ -41,7 +41,7 @@ PSDSaver::~PSDSaver()
 
 KisImageWSP PSDSaver::image()
 {
-    return m_img;
+    return m_image;
 }
 
 
@@ -50,8 +50,8 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri, KisPaintLayerSP laye
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageWSP img = layer->image();
-    if (!img)
+    KisImageWSP image = layer->image();
+    if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
     if (uri.isEmpty())
@@ -66,8 +66,8 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri, KisPaintLayerSP laye
     {
         return (KisImageBuilder_RESULT_FAILURE);
     }
-    uint height = img->height();
-    uint width = img->width();
+    uint height = image->height();
+    uint width = image->width();
 #endif
 
     return KisImageBuilder_RESULT_OK;

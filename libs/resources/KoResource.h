@@ -59,7 +59,7 @@ public:
     /**
      * Returns a QImage representing this resource.  This image could be null.
      */
-    virtual QImage img() const {return QImage(); }
+    virtual QImage image() const {return QImage(); }
 
 private:
     /// XXX: doc?

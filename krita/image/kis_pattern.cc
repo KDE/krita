@@ -62,7 +62,7 @@ KisPattern::~KisPattern()
 {
 }
 
-KisPaintDeviceSP KisPattern::image(const KoColorSpace * colorSpace)
+KisPaintDeviceSP KisPattern::paintDevice(const KoColorSpace * colorSpace)
 {
     // Check if there's already a pattern prepared for this colorspace
     QMap<QString, KisPaintDeviceSP>::const_iterator it = m_colorspaces.constFind(colorSpace->id());
@@ -74,7 +74,7 @@ KisPaintDeviceSP KisPattern::image(const KoColorSpace * colorSpace)
 
     Q_CHECK_PTR(layer);
 
-    layer->convertFromQImage(img(), "");
+    layer->convertFromQImage(image(), "");
 
     m_colorspaces[colorSpace->id()] = layer;
     return layer;
@@ -83,7 +83,7 @@ KisPaintDeviceSP KisPattern::image(const KoColorSpace * colorSpace)
 KisPattern* KisPattern::clone() const
 {
     KisPattern* pattern = new KisPattern(filename());
-    pattern->setImage(img());
+    pattern->setImage(image());
     pattern->setName(name());
     return pattern;
 }

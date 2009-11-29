@@ -100,7 +100,7 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     KisFixedPaintDeviceSP dab = cachedDab();
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, 0.0, info);
+        dab = brush->paintDevice(device->colorSpace(), scale, 0.0, info);
     } else {
         KoColor color = painter()->paintColor();
         color.convertTo(dab->colorSpace());

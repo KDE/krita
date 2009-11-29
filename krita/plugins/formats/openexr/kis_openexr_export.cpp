@@ -81,16 +81,16 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
         return KoFilter::FileNotFound;
     }
 
-    KisImageWSP img = KisImageWSP(new KisImage(*doc->image()));
-    Q_CHECK_PTR(img);
+    KisImageWSP image = KisImageWSP(new KisImage(*doc->image()));
+    Q_CHECK_PTR(image);
 
     // Don't store this information in the document's undo adapter
     bool undo = doc -> undoAdapter() -> undo();
     doc -> undoAdapter() -> setUndo(false);
 
-    img -> flatten();
+    image -> flatten();
 
-    KisPaintLayerSP layer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(img->rootLayer()->firstChild().data()));
+    KisPaintLayerSP layer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(image->rootLayer()->firstChild().data()));
     Q_ASSERT(layer);
 
     doc -> undoAdapter() -> setUndo(undo);
@@ -110,7 +110,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
         return KoFilter::WrongFormat;
     }
 
-    Box2i displayWindow(V2i(0, 0), V2i(img -> width() - 1, img -> height() - 1));
+    Box2i displayWindow(V2i(0, 0), V2i(image -> width() - 1, image -> height() - 1));
 
     QRect dataExtent = layer -> exactBounds();
     int dataWidth = dataExtent.width();
@@ -148,8 +148,8 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
         file.writePixels();
     }
 
-    //vKisAnnotationSP_it beginIt = img -> beginAnnotations();
-    //vKisAnnotationSP_it endIt = img -> endAnnotations();
+    //vKisAnnotationSP_it beginIt = image -> beginAnnotations();
+    //vKisAnnotationSP_it endIt = image -> endAnnotations();
     return KoFilter::OK;
 }
 

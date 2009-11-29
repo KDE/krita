@@ -38,13 +38,13 @@
 void KisPaintLayerTest::testProjection()
 {
 
-    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisImageWSP image = new KisImage(0, qimg.width(), qimg.height(), cs, "merge test");
+    KisImageWSP image = new KisImage(0, qimage.width(), qimage.height(), cs, "merge test");
     image->lock(); // We'll call for recomposition ourselves
 
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
-    layer->paintDevice()->convertFromQImage(qimg, 0, 0, 0);
+    layer->paintDevice()->convertFromQImage(qimage, 0, 0, 0);
     image->addNode(layer.data());
 
     // Make sure the projection and the paint device are the same -- we don't have masks yet
@@ -58,16 +58,16 @@ void KisPaintLayerTest::testProjection()
     Q_ASSERT(layer->hasEffectMasks());
 
     // And now we're going to update the projection, but nothing is dirty yet
-    layer->updateProjection(qimg.rect());
+    layer->updateProjection(qimage.rect());
 
     // Which also means that the projection is no longer the paint device
     QVERIFY(layer->paintDevice().data() != layer->projection().data());
 
     // Now the machinery will start to roll
-    layer->setDirty(qimg.rect());
+    layer->setDirty(qimage.rect());
 
     // And now we're going to update the projection, but nothing is dirty yet
-    layer->updateProjection(qimg.rect());
+    layer->updateProjection(qimage.rect());
 
     // Which also means that the projection is no longer the paint device
     QVERIFY(layer->paintDevice().data() != layer->projection().data());
@@ -77,24 +77,24 @@ void KisPaintLayerTest::testProjection()
     QVERIFY(layer->projection().data() != 0);
 
     // The selection is initially empty, so after an update, all pixels are still visible
-    layer->updateProjection(qimg.rect());
+    layer->updateProjection(qimage.rect());
 
     // By default a new transparency mask blanks out the entire layer (photoshop mode "hide all")
-    KisRectConstIterator it = layer->projection()->createRectConstIterator(0, 0, qimg.width(), qimg.height());
+    KisRectConstIterator it = layer->projection()->createRectConstIterator(0, 0, qimage.width(), qimage.height());
     while (!it.isDone()) {
         QVERIFY(cs->alpha(it.rawData()) == OPACITY_OPAQUE);
         ++it;
     }
 
     // Now fill the layer with some opaque pixels
-    transparencyMask->select(qimg.rect());
-    transparencyMask->setDirty(qimg.rect());
-    layer->updateProjection(qimg.rect());
+    transparencyMask->select(qimage.rect());
+    transparencyMask->setDirty(qimage.rect());
+    layer->updateProjection(qimage.rect());
 
-    layer->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("aaa.png");
+    layer->projection()->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("aaa.png");
     // Nothing is transparent anymore, so the projection and the paint device should be identical again
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, qimg, layer->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
+    if (!TestUtil::compareQImages(errpoint, qimage, layer->projection()->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
 

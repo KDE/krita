@@ -71,7 +71,7 @@ private:
 
 private:
 
-    KisImageWSP m_img;
+    KisImageWSP m_image;
     KisDoc2 *m_doc;
     KisUndoAdapter *m_adapter;
     bool m_stop;

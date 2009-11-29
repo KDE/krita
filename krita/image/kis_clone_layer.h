@@ -49,7 +49,7 @@ class KRITAIMAGE_EXPORT KisCloneLayer : public KisLayer, public KisIndirectPaint
 
 public:
 
-    KisCloneLayer(KisLayerSP from, KisImageWSP img, const QString &name, quint8 opacity);
+    KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &name, quint8 opacity);
     KisCloneLayer(const KisCloneLayer& rhs);
     virtual ~KisCloneLayer();
 

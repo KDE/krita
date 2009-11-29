@@ -106,7 +106,7 @@ void KisBackground::paintBackground(QImage& image, const QRect& rc)
 }
 
 
-void KisBackground::paintBackground(QImage& img,
+void KisBackground::paintBackground(QImage& image,
                                     const QRect& scaledImageRect,
                                     const QSize& scaledImageSize,
                                     const QSize& imageSize)
@@ -115,9 +115,9 @@ void KisBackground::paintBackground(QImage& img,
         return;
     }
 
-    Q_ASSERT(img.size() == scaledImageRect.size());
+    Q_ASSERT(image.size() == scaledImageRect.size());
 
-    if (img.size() != scaledImageRect.size()) {
+    if (image.size() != scaledImageRect.size()) {
         return;
     }
 
@@ -130,7 +130,7 @@ void KisBackground::paintBackground(QImage& img,
         qint32 srcY = (scaledY * imageHeight) / scaledImageSize.height();
         qint32 patternY = srcY % PATTERN_HEIGHT;
 
-        QRgb *imagePixelPtr = reinterpret_cast<QRgb *>(img.scanLine(y));
+        QRgb *imagePixelPtr = reinterpret_cast<QRgb *>(image.scanLine(y));
         const QRgb *patternScanLine = reinterpret_cast<const QRgb *>(m_patternTile.scanLine(patternY));
 
         for (qint32 x = 0; x < scaledImageRect.width(); ++x) {

@@ -333,10 +333,10 @@ QImage KisLmsF32ColorSpace::convertToQImage(const quint8 *dataU8, qint32 width, 
 {
     const float *data = reinterpret_cast<const float *>(dataU8);
 
-    QImage img = QImage(width, height, QImage::Format_ARGB32);
+    QImage image = QImage(width, height, QImage::Format_ARGB32);
 
     qint32 i = 0;
-    uchar *j = img.bits();
+    uchar *j = image.bits();
 
     while (i < width * height * MAX_CHANNEL_LMSA) {
         double l = *(data + i + PIXEL_LONGWAVE);
@@ -352,12 +352,12 @@ QImage KisLmsF32ColorSpace::convertToQImage(const quint8 *dataU8, qint32 width, 
 
     /*
     if (srcProfile != 0 && dstProfile != 0) {
-        convertPixelsTo(img.bits(), srcProfile,
-                img.bits(), this, dstProfile,
+        convertPixelsTo(image.bits(), srcProfile,
+                image.bits(), this, dstProfile,
                 width * height, renderingIntent);
     }
     */
-    return img;
+    return image;
 }
 
 

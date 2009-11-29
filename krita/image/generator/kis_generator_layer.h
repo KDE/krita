@@ -43,7 +43,7 @@ public:
      * and selection. Note that the selection will be _copied_
      * (using COW, though).
      */
-    KisGeneratorLayer(KisImageWSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
+    KisGeneratorLayer(KisImageWSP image, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
     KisGeneratorLayer(const KisGeneratorLayer& rhs);
     virtual ~KisGeneratorLayer();
 

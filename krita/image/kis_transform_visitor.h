@@ -47,7 +47,7 @@ public:
 
     using KisNodeVisitor::visit;
 
-    KisTransformVisitor(KisImageWSP img, double  xscale, double  yscale,
+    KisTransformVisitor(KisImageWSP image, double  xscale, double  yscale,
                         double  /*xshear*/, double  /*yshear*/, double angle,
                         qint32  tx, qint32  ty, KoUpdater *progress, KisFilterStrategy *filter)
             : KisNodeVisitor()
@@ -58,7 +58,7 @@ public:
             , m_filter(filter)
             , m_angle(angle)
             , m_progress(progress)
-            , m_img(img) {
+            , m_image(image) {
     }
 
     virtual ~KisTransformVisitor() {
@@ -126,7 +126,7 @@ private:
         KisPaintDeviceSP dev = node->paintDevice();
 
         KisTransaction * t = 0;
-        if (m_img->undo()) {
+        if (m_image->undo()) {
             t = new KisTransaction(i18n("Rotate Node"), dev);
             Q_CHECK_PTR(t);
         }
@@ -134,8 +134,8 @@ private:
         KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter, true);
         tw.run();
 
-        if (m_img->undo()) {
-            m_img->undoAdapter()->addCommand(t);
+        if (m_image->undo()) {
+            m_image->undoAdapter()->addCommand(t);
         }
         node->setDirty();
     }
@@ -146,7 +146,7 @@ private:
     KisFilterStrategy *m_filter;
     double m_angle;
     KoUpdater *m_progress;
-    KisImageWSP m_img;
+    KisImageWSP m_image;
 };
 
 

@@ -188,13 +188,13 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
             KisDoc2 d;
             d.importDocument(fileName);
             KisImageAlignment::ImageInfo pi;
-            KisImageWSP img = d.image();
-            if (!img) break;
-            pi.bigDevice = new KisPaintDevice(*img->projection());
-            pi.bigRect = QRect(0, 0, img->width(), img->height());
-            img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisBoxFilterStrategy);
-            pi.smallDevice = img->projection();
-            pi.smallRect = QRect(0, 0, img->width(), img->height());
+            KisImageWSP image = d.image();
+            if (!image) break;
+            pi.bigDevice = new KisPaintDevice(*image->projection());
+            pi.bigRect = QRect(0, 0, image->width(), image->height());
+            image->scale(1000.0 / image->width(), 1000.0 / image->width(), 0, new KisBoxFilterStrategy);
+            pi.smallDevice = image->projection();
+            pi.smallRect = QRect(0, 0, image->width(), image->height());
             images.push_back(pi);
         }
 
@@ -227,22 +227,22 @@ void PanoramaPlugin::slotPreview()
         KisDoc2 d;
         d.importDocument(fileName);
         KisImageAlignment::ImageInfo pi;
-        KisImageWSP img = d.image();
-        if (!img) break;
-        img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisBoxFilterStrategy);
-        pi.bigDevice = img->projection();
-        pi.bigRect = QRect(0, 0, img->width(), img->height());
+        KisImageWSP image = d.image();
+        if (!image) break;
+        image->scale(1000.0 / image->width(), 1000.0 / image->width(), 0, new KisBoxFilterStrategy);
+        pi.bigDevice = image->projection();
+        pi.bigRect = QRect(0, 0, image->width(), image->height());
         pi.smallDevice = pi.bigDevice;
-        pi.smallRect = QRect(0, 0, img->width(), img->height());
+        pi.smallRect = QRect(0, 0, image->width(), image->height());
         images.push_back(pi);
     }
     KisPaintDeviceSP dst = new KisPaintDevice(images[0].bigDevice->colorSpace(), "panorama preview");
     QRect dstArea;
     createPanorama(images, dst, dstArea);
-    QImage img = dst->convertToQImage(0);
-    img = img.scaledToHeight(500);
-    m_wdgPanoramaCreation->wdgPreview->setImage(img);
-    //m_wdgPanoramaCreation->labelPreview->setPixmap(QPixmap::fromImage(img));
+    QImage image = dst->convertToQImage(0);
+    image = image.scaledToHeight(500);
+    m_wdgPanoramaCreation->wdgPreview->setImage(image);
+    //m_wdgPanoramaCreation->labelPreview->setPixmap(QPixmap::fromImage(image));
 }
 
 void PanoramaPlugin::createPanorama(QList<KisImageAlignment::ImageInfo>& images, KisPaintDeviceSP dstdevice, QRect&)

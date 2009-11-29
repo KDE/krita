@@ -104,8 +104,8 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
     painter.bitBlt(0, 0, src, 0, 0, 30, 30);
     painter.end();
 
-    QImage img = dst->convertToQImage(0);
-    img.save("blt_Selection_" + cs->name() + ".png");
+    QImage image = dst->convertToQImage(0);
+    image.save("blt_Selection_" + cs->name() + ".png");
 
     QCOMPARE(dst->exactBounds(), QRect(10, 10, 10, 10));
 
@@ -152,8 +152,8 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular(const KoColorSpace * c
     painter.bitBlt(0, 0, src, 0, 0, 30, 30);
     painter.end();
 
-    QImage img = dst->convertToQImage(0);
-    img.save("blt_Selection_irregular" + cs->name() + ".png");
+    QImage image = dst->convertToQImage(0);
+    image.save("blt_Selection_irregular" + cs->name() + ".png");
 
     QCOMPARE(dst->exactBounds(), QRect(10, 10, 10, 10));
     foreach(KoChannelInfo * channel, cs->channels()) {

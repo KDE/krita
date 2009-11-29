@@ -55,13 +55,13 @@ public:
      * creates a new adjustment layer with the given
      * configuration and selection. Note that the selection
      * will be _copied_ (with COW, though).
-     * @param img the image to set this AdjustmentLayer to
+     * @param image the image to set this AdjustmentLayer to
      * @param name name of the adjustment layer
      * @param kfc the configuration for the adjustment layer filter
      * @param selection is a mask used by the adjustment layer to
      * know where to apply the filter.
      */
-    KisAdjustmentLayer(KisImageWSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
+    KisAdjustmentLayer(KisImageWSP image, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
 

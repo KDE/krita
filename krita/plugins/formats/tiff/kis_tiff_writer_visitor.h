@@ -37,7 +37,7 @@ public:
 
     using KisNodeVisitor::visit;
 
-    KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options);
+    KisTIFFWriterVisitor(TIFF*image, KisTIFFOptions* options);
     ~KisTIFFWriterVisitor();
 
 public:

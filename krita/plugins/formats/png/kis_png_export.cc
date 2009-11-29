@@ -85,12 +85,12 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     kdb->setCaption(i18n("PNG Export Options"));
     kdb->setModal(false);
 
-    KisImageWSP img = output->image();
+    KisImageWSP image = output->image();
     KisPaintDeviceSP pd;
-    pd = new KisPaintDevice(*img->projection());
-    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
+    pd = new KisPaintDevice(*image->projection());
+    KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE, pd);
 
-    KisRectConstIteratorPixel it = l->paintDevice()->createRectConstIterator(0, 0, img->width(), img->height());
+    KisRectConstIteratorPixel it = l->paintDevice()->createRectConstIterator(0, 0, image->width(), image->height());
     const KoColorSpace* cs = l->paintDevice()->colorSpace();
 
     bool isThereAlpha = false;
@@ -129,8 +129,8 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
 
     KisPNGConverter kpc(output, output->undoAdapter());
 
-    vKisAnnotationSP_it beginIt = img->beginAnnotations();
-    vKisAnnotationSP_it endIt = img->endAnnotations();
+    vKisAnnotationSP_it beginIt = image->beginAnnotations();
+    vKisAnnotationSP_it endIt = image->endAnnotations();
     KisImageBuilder_Result res;
     KisPNGOptions options;
     options.alpha = alpha;
@@ -138,7 +138,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     options.compression = compression;
     options.tryToSaveAsIndexed = tryToSaveAsIndexed;
     KisExifInfoVisitor eIV;
-    eIV.visit(img->rootLayer().data());
+    eIV.visit(image->rootLayer().data());
     KisMetaData::Store* eI = 0;
     if (eIV.countPaintLayer() == 1)
         eI = eIV.exifInfo();
@@ -146,7 +146,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    if ((res = kpc.buildFile(url, img, l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(url, image, l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         delete eI;
         return KoFilter::OK;

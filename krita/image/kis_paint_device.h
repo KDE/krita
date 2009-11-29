@@ -280,10 +280,10 @@ public:
     void setProfile(const KoColorProfile * profile);
 
     /**
-     * Fill this paint device with the data from img; starting at (offsetX, offsetY)
-     * @param srcProfileName name of the RGB profile to interpret the img as. "" is interpreted as sRGB
+     * Fill this paint device with the data from image; starting at (offsetX, offsetY)
+     * @param srcProfileName name of the RGB profile to interpret the image as. "" is interpreted as sRGB
      */
-    virtual void convertFromQImage(const QImage& img, const QString &srcProfileName, qint32 offsetX = 0, qint32 offsetY = 0);
+    virtual void convertFromQImage(const QImage& image, const QString &srcProfileName, qint32 offsetX = 0, qint32 offsetY = 0);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.

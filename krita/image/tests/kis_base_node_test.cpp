@@ -80,9 +80,9 @@ void KisBaseNodeTest::testContract()
     QVERIFY(list.at(0).state == node->visible());
     QVERIFY(list.at(1).state == node->userLocked());
 
-    QImage img = node->createThumbnail(10, 10);
-    QCOMPARE(img.size(), QSize(10, 10));
-    QVERIFY(img.pixel(5, 5) == QColor(0, 0, 0, 0).rgba());
+    QImage image = node->createThumbnail(10, 10);
+    QCOMPARE(image.size(), QSize(10, 10));
+    QVERIFY(image.pixel(5, 5) == QColor(0, 0, 0, 0).rgba());
 
 }
 

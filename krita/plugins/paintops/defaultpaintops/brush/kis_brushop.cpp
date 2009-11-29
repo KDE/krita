@@ -125,7 +125,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, rotation, info, xFraction, yFraction);
+        dab = brush->paintDevice(device->colorSpace(), scale, rotation, info, xFraction, yFraction);
     } else {
         KoColor color = painter()->paintColor();
         color.convertTo(dab->colorSpace());

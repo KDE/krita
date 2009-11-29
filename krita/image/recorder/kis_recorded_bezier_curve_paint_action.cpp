@@ -149,7 +149,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomE
     Q_UNUSED(elt);
 #if 0 // XXX
     QString name = elt.attribute("name");
-    KisNodeSP node = KisRecordedActionFactory::indexPathToNode(img, elt.attribute("node"));
+    KisNodeSP node = KisRecordedActionFactory::indexPathToNode(image, elt.attribute("node"));
     QString paintOpId = elt.attribute("paintop");
     int opacity = elt.attribute("opacity", "100").toInt();
     bool paintIncremental = elt.attribute("paintIncremental", "1").toInt();
@@ -163,7 +163,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomE
     KisPaintOpSettingsSP settings = 0;
     QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
     if (!settingsElt.isNull()) {
-        settings = settingsFromXML(paintOpId, settingsElt, img);
+        settings = settingsFromXML(paintOpId, settingsElt, image);
     } else {
         dbgUI << "No <PaintOpSettings /> found";
     }

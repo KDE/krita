@@ -134,11 +134,11 @@ void KritaShapeTool::slotChangeUrl()
 
 void KritaShapeTool::slotConvertToQImage()
 {
-    QImage img = m_kritaShapeshape->convertToQImage();
+    QImage image = m_kritaShapeshape->convertToQImage();
 
     // XXX: is it okay to create a new constructor which takes a
     // QImage on KoImageData?
-    //KoImageData * imageData = new KoImageData( img );
+    //KoImageData * imageData = new KoImageData( image );
 
     // XXX: or should we delete the krita shape, create a picture
     // shape and set the imageData object on that?

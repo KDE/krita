@@ -27,14 +27,14 @@
 
 QImage createQImageFromMask(const KisMaskGenerator& generator)
 {
-    QImage img(10, 10, QImage::Format_ARGB32);
+    QImage image(10, 10, QImage::Format_ARGB32);
     for (int i = 0; i < 10; ++i) {
         for (int j = 0; j < 10; ++j) {
             quint8 c = generator.valueAt(i, j);
-            img.setPixel(i, j, qRgb(c, c, c));
+            image.setPixel(i, j, qRgb(c, c, c));
         }
     }
-    return img;
+    return image;
 }
 
 void KisMaskGeneratorTest::testCircleSerialisation()

@@ -169,31 +169,31 @@ void KisSmallColorWidget::updateParameters()
 
 void KisSmallColorWidget::generateRubber()
 {
-    QImage img(d->rubberWidth, d->rubberHeight, QImage::Format_RGB32);
+    QImage image(d->rubberWidth, d->rubberHeight, QImage::Format_RGB32);
     for (int y = 0; y < d->rubberHeight; y++) {
         for (int x = 0; x < d->rubberWidth; x++) {
             int h = (x * 360) / d->rubberWidth ;
             int r, g, b;
             hsv_to_rgb(h, 255, 255, &r, &g, &b);
-            img.setPixel(x, y, qRgb(r, g, b));
+            image.setPixel(x, y, qRgb(r, g, b));
         }
     }
-    d->rubberPixmap = QPixmap::fromImage(img);
+    d->rubberPixmap = QPixmap::fromImage(image);
 }
 
 void KisSmallColorWidget::generateSquare()
 {
-    QImage img(d->rectangleWidth, d->rectangleHeight, QImage::Format_RGB32);
+    QImage image(d->rectangleWidth, d->rectangleHeight, QImage::Format_RGB32);
     for (int y = 0; y < d->rectangleHeight; y++) {
         int v = (y * 255) / d->rectangleHeight;
         for (int x = 0; x < d->rectangleWidth; x++) {
             int s = (x * 255) / d->rectangleWidth;
             int r, g, b;
             hsv_to_rgb(hue(), s, v, &r, &g, &b);
-            img.setPixel(x, y, qRgb(r, g, b));
+            image.setPixel(x, y, qRgb(r, g, b));
         }
     }
-    d->squarePixmap = QPixmap::fromImage(img);
+    d->squarePixmap = QPixmap::fromImage(image);
 }
 
 void KisSmallColorWidget::mouseReleaseEvent(QMouseEvent * event)

@@ -53,9 +53,9 @@
 
 using namespace KRA;
 
-KisKraSaveVisitor::KisKraSaveVisitor(KisImageWSP img, KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
+KisKraSaveVisitor::KisKraSaveVisitor(KisImageWSP image, KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
         : KisNodeVisitor()
-        , m_img(img)
+        , m_image(image)
         , m_store(store)
         , m_external(false)
         , m_count(count)
@@ -160,7 +160,7 @@ bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
 bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
 {
 
-    //connect(*node->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
+    //connect(*node->paintDevice(), SIGNAL(ioProgress(qint8)), m_image, SLOT(slotIOProgress(qint8)));
     // Layer data
     if (m_store->open(getLocation(node))) {
         if (!node->paintDevice()->write(m_store)) {
@@ -215,7 +215,7 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     }
     if (selection->hasPixelSelection()) {
         KisPaintDeviceSP dev = selection->pixelSelection();
-        //connect(*dev, SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
+        //connect(*dev, SIGNAL(ioProgress(qint8)), m_image, SLOT(slotIOProgress(qint8)));
         // Layer data
         QString location = getLocation(node, DOT_PIXEL_SELECTION);
         if (m_store->open(location)) {

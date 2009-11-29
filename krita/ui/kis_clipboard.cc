@@ -125,18 +125,18 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     delete store;
 
     // We also create a QImage so we can interchange with other applications
-    QImage qimg;
+    QImage qimage;
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
     const KoColorProfile *  monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
-    qimg = selection->convertToQImage(monitorProfile);
+    qimage = selection->convertToQImage(monitorProfile);
 
     QMimeData *mimeData = new QMimeData;
     Q_CHECK_PTR(mimeData);
 
     if (mimeData) {
-        if (!qimg.isNull()) {
-            mimeData->setImageData(qimg);
+        if (!qimage.isNull()) {
+            mimeData->setImageData(qimage);
         }
 
         mimeData->setData(mimeType, buffer.buffer());
@@ -186,9 +186,9 @@ KisPaintDeviceSP KisClipboard::clip()
         }
         delete store;
     } else {
-        QImage qimg = cb->image();
+        QImage qimage = cb->image();
 
-        if (qimg.isNull())
+        if (qimage.isNull())
             return KisPaintDeviceSP(0);
 
         KisConfig cfg;
@@ -213,7 +213,7 @@ KisPaintDeviceSP KisClipboard::clip()
 
         m_clip = new KisPaintDevice(cs);
         Q_CHECK_PTR(m_clip);
-        m_clip->convertFromQImage(qimg, profileName);
+        m_clip->convertFromQImage(qimage, profileName);
     }
 
     return m_clip;
@@ -224,14 +224,14 @@ void KisClipboard::clipboardDataChanged()
     if (!m_pushedClipboard) {
         m_hasClip = false;
         QClipboard *cb = QApplication::clipboard();
-        QImage qimg = cb->image();
+        QImage qimage = cb->image();
         const QMimeData *cbData = cb->mimeData();
         QByteArray mimeType("application/x-krita-selection");
 
         if (cbData && cbData->hasFormat(mimeType))
             m_hasClip = true;
 
-        if (!qimg.isNull())
+        if (!qimage.isNull())
             m_hasClip = true;
     }
 
@@ -288,8 +288,8 @@ QSize KisClipboard::clipSize()
 
         return clip->exactBounds().size();
     } else {
-        QImage qimg = cb->image();
-        return qimg.size();
+        QImage qimage = cb->image();
+        return qimage.size();
     }
 }
 

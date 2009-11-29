@@ -69,13 +69,13 @@ Histogram::Histogram(QObject *parent, const QStringList &)
         connect(m_action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
 
         m_view = (KisView2*) parent;
-        if (KisImageWSP img = m_view->image()) {
-            connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged()));
-            connect(img.data(), SIGNAL(sigNodeHasBeenAdded(KisNode *, int)), SLOT(slotLayersChanged()));
+        if (KisImageWSP image = m_view->image()) {
+            connect(image.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged()));
+            connect(image.data(), SIGNAL(sigNodeHasBeenAdded(KisNode *, int)), SLOT(slotLayersChanged()));
             connect(m_view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(slotLayersChanged()));
-            connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(slotLayersChanged()));
-            connect(img.data(), SIGNAL(sigNodeHasBeenRemoved(KisNode *, int)), SLOT(slotLayersChanged()));
-            m_img = img.data();
+            connect(image.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(slotLayersChanged()));
+            connect(image.data(), SIGNAL(sigNodeHasBeenRemoved(KisNode *, int)), SLOT(slotLayersChanged()));
+            m_image = image.data();
         }
     }
 }
@@ -86,7 +86,7 @@ Histogram::~Histogram()
 
 void Histogram::slotLayersChanged()
 {
-    m_action->setEnabled(m_img && m_view->layerManager()->activeLayer() && m_view->layerManager()->activeLayer()->visible());
+    m_action->setEnabled(m_image && m_view->layerManager()->activeLayer() && m_view->layerManager()->activeLayer()->visible());
 }
 
 void Histogram::slotActivated()

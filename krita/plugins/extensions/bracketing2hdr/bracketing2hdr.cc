@@ -156,13 +156,13 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
         if (!m_cameraResponseIsComputed) {
             computeCameraResponse();
         }
-        KisImageWSP img = m_view->image();
+        KisImageWSP image = m_view->image();
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBAF32", 0);
         if (!cs) {
             KMessageBox::error(m_view, i18n("HDR colorspace RGBAF32 not found, please check your installation."), i18n("Layer Creation Error"));
             return;
         }
-        KisPaintLayerSP layer = new KisPaintLayer(img, i18n("HDR Layer"), 255, cs);
+        KisPaintLayerSP layer = new KisPaintLayer(image, i18n("HDR Layer"), 255, cs);
         Q_ASSERT(layer);
         KisGroupLayerSP parent;
         KisLayerSP above;
@@ -172,7 +172,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
         if (!parent)
             parent = m_view->image()->rootLayer();
         above = qobject_cast<KisLayer*>(parent->firstChild().data());
-        img->addNode(layer.data(), parent.data(), above.data());
+        image->addNode(layer.data(), parent.data(), above.data());
 
         createHDRPaintDevice(m_imagesFrames, layer->paintDevice());
         m_view->canvas()->update();

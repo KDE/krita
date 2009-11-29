@@ -44,11 +44,11 @@ public:
     KisNodeSP dirtyNode;
 };
 
-KisGroupLayer::KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacity) :
-        KisLayer(img, name, opacity),
+KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity) :
+        KisLayer(image, name, opacity),
         m_d(new Private())
 {
-    m_d->paintDevice = new KisPaintDevice(this, img->colorSpace());
+    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace());
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :

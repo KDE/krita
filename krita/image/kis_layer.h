@@ -65,7 +65,7 @@ class KRITAIMAGE_EXPORT KisLayer : public KisNode
 
 public:
 
-    KisLayer(KisImageWSP img, const QString &name, quint8 opacity);
+    KisLayer(KisImageWSP image, const QString &name, quint8 opacity);
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 

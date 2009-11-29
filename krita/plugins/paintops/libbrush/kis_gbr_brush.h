@@ -71,7 +71,7 @@ public:
     /**
      * @return a preview of the brush
      */
-    virtual QImage img() const;
+    virtual QImage image() const;
 
     /**
      * save the content of this brush to an IO device
@@ -100,7 +100,7 @@ protected:
 
     KisGbrBrush(const KisGbrBrush& rhs);
 
-    virtual void setImage(const QImage& img);
+    virtual void setImage(const QImage& image);
 
     void toXML(QDomDocument& d, QDomElement& e) const;
 

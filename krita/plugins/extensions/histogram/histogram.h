@@ -38,7 +38,7 @@ private slots:
     void slotLayersChanged();
 
 private:
-    KisImage* m_img;
+    KisImage* m_image;
     KisView2 * m_view;
     KisPainter * m_painter;
     QAction * m_action;

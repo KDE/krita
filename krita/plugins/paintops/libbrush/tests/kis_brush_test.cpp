@@ -35,11 +35,11 @@ void KisBrushTest::testCreation()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    QImage img(512, 512, QImage::Format_ARGB32);
+    QImage image(512, 512, QImage::Format_ARGB32);
 
     KisGbrBrush a(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr");
     KisGbrBrush b(dev, 0, 0, 10, 10);
-    KisGbrBrush c(img, "bla");
+    KisGbrBrush c(image, "bla");
     KisGbrBrush d(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gih");
 }
 
@@ -182,7 +182,7 @@ void KisBrushTest::testImageGeneration()
     KisVector2D v2d = KisVector2D::Zero();
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
 
-    KisFixedPaintDeviceSP fdev = brush->image(cs, 1.0, 0.0, info);
+    KisFixedPaintDeviceSP fdev = brush->paintDevice(cs, 1.0, 0.0, info);
 
     fdev->convertToQImage().save("bla.png");
 

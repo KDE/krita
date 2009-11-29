@@ -121,9 +121,9 @@ bool KisSprayShapeOption::gaussian() const
 
 QImage KisSprayShapeOption::image() 
 {
-    m_img = QImage( m_options->imageUrl->url().toLocalFile() );
-    m_img = m_img.scaled( width(), height() );
-    return m_img;
+    m_image = QImage( m_options->imageUrl->url().toLocalFile() );
+    m_image = m_image.scaled( width(), height() );
+    return m_image;
 }
 
 
@@ -182,11 +182,11 @@ void KisSprayShapeOption::prepareImage()
 {
     QString path = m_options->imageUrl->url().toLocalFile();
     if (QFile::exists(path)){
-        m_img = QImage(path);
-        if (!m_img.isNull())
+        m_image = QImage(path);
+        if (!m_image.isNull())
         {
-            m_options->widthSpin->setValue( m_img.width() );
-            m_options->heightSpin->setValue( m_img.height() );
+            m_options->widthSpin->setValue( m_image.width() );
+            m_options->heightSpin->setValue( m_image.height() );
         }
     }
 }

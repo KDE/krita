@@ -73,27 +73,27 @@ void KisActionRecorderTest::testFiles()
             m.fromXML(docElem);
             // Play
             m.play(KisPlayInfo(image, image->root()));
-            QImage sourceImg = image->convertToQImage(0, 0, 200, 200, 0);
+            QImage sourceImage = image->convertToQImage(0, 0, 200, 200, 0);
             // load what we should have get from the hard drive
-            QImage resultImg(resultFileInfo.absoluteFilePath());
-            resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
-            QVERIFY(resultImg.width() == sourceImg.width());
-            QVERIFY(resultImg.height() == sourceImg.height());
-            QCOMPARE(resultImg.numBytes(), sourceImg.numBytes());
-            if (memcmp(resultImg.bits(), sourceImg.bits(), sourceImg.numBytes()) != 0) {
-                for (int i = 0; i < sourceImg.numBytes(); i += 4) {
-                    if (resultImg.bits()[i + 3] == sourceImg.bits()[i + 3] && resultImg.bits()[i + 3] != 0) {
+            QImage resultImage(resultFileInfo.absoluteFilePath());
+            resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
+            QVERIFY(resultImage.width() == sourceImage.width());
+            QVERIFY(resultImage.height() == sourceImage.height());
+            QCOMPARE(resultImage.numBytes(), sourceImage.numBytes());
+            if (memcmp(resultImage.bits(), sourceImage.bits(), sourceImage.numBytes()) != 0) {
+                for (int i = 0; i < sourceImage.numBytes(); i += 4) {
+                    if (resultImage.bits()[i + 3] == sourceImage.bits()[i + 3] && resultImage.bits()[i + 3] != 0) {
                         for (int j = 0; j < 4; j++) {
-                            /*                            QVERIFY2( resultImg.bits()[i+j] == sourceImg.bits()[i+j],
+                            /*                            QVERIFY2( resultImage.bits()[i+j] == sourceImage.bits()[i+j],
                                                                 QString("byte %1 is different : result: %2 krita: %3 in file %4").arg(i+j)
-                                                                .arg((int)resultImg.bits()[i+j])
-                                                                .arg((int)sourceImg.bits()[i+j])
+                                                                .arg((int)resultImage.bits()[i+j])
+                                                                .arg((int)sourceImage.bits()[i+j])
                                                                 .arg(sourceFileInfo.fileName()).toAscii().data());*/
                             // TODO figure out why sometimes there is a slight difference between original and replay
-                            QVERIFY2(qAbs(resultImg.bits()[i+j] - sourceImg.bits()[i+j]) <= 4,
+                            QVERIFY2(qAbs(resultImage.bits()[i+j] - sourceImage.bits()[i+j]) <= 4,
                                      QString("byte %1 is different : result: %2 krita: %3 in file %4").arg(i + j)
-                                     .arg((int)resultImg.bits()[i+j])
-                                     .arg((int)sourceImg.bits()[i+j])
+                                     .arg((int)resultImage.bits()[i+j])
+                                     .arg((int)sourceImage.bits()[i+j])
                                      .arg(sourceFileInfo.fileName()).toAscii().data());
                         }
                     }

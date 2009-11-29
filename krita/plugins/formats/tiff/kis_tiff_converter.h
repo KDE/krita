@@ -84,7 +84,7 @@ private:
     KisImageBuilder_Result decode(const KUrl& uri);
     KisImageBuilder_Result readTIFFDirectory(TIFF* image);
 private:
-    KisImageWSP m_img;
+    KisImageWSP m_image;
     KisDoc2 *m_doc;
     KisUndoAdapter *m_adapter;
     bool m_stop;

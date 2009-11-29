@@ -115,9 +115,9 @@ void KisStatusBar::imageSizeChanged(qint32 w, qint32 h)
     m_imageSizeLabel->setText(QString("%1 x %2").arg(w).arg(h));
 }
 
-void KisStatusBar::setSelection(KisImageWSP img)
+void KisStatusBar::setSelection(KisImageWSP image)
 {
-    Q_UNUSED(img);
+    Q_UNUSED(image);
 
     KisSelectionSP selection = m_view->selection();
     if (selection && !selection->isDeselected()) {
@@ -131,18 +131,18 @@ void KisStatusBar::setSelection(KisImageWSP img)
     m_selectionStatusLabel->setToolTip(i18n("No Selection"));
 }
 
-void KisStatusBar::setProfile(KisImageWSP img)
+void KisStatusBar::setProfile(KisImageWSP image)
 {
     if (m_statusBarProfileLabel == 0) {
         return;
     }
 
-    if (!img) return;
+    if (!image) return;
 
-    if (img->profile() == 0) {
+    if (image->profile() == 0) {
         m_statusBarProfileLabel->setText(i18n("No profile"));
     } else {
-        m_statusBarProfileLabel->setText(img->colorSpace()->name() + "  " + img->profile()->name());
+        m_statusBarProfileLabel->setText(image->colorSpace()->name() + "  " + image->profile()->name());
     }
 
 }

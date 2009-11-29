@@ -68,8 +68,8 @@ bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& co
 }
 }
 
-KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options)
-        : m_image(img)
+KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*image, KisTIFFOptions* options)
+        : m_image(image)
         , m_options(options)
 {
 }

@@ -59,21 +59,21 @@ inline void copyQImageBuffer(uchar* dst, const uchar* src , qint32 deltaX, qint3
     }
 }
 
-void copyQImage(qint32 deltaX, qint32 deltaY, QImage* dstImg, const QImage& srcImg)
+void copyQImage(qint32 deltaX, qint32 deltaY, QImage* dstImage, const QImage& srcImage)
 {
-    qint32 height = dstImg->height();
-    qint32 width = dstImg->width();
-    Q_ASSERT(dstImg->width() == srcImg.width() && dstImg->height() == srcImg.height());
+    qint32 height = dstImage->height();
+    qint32 width = dstImage->width();
+    Q_ASSERT(dstImage->width() == srcImage.width() && dstImage->height() == srcImage.height());
     if (deltaY >= 0) {
         for (int y = 0; y < height - deltaY; y ++) {
-            const uchar* src = srcImg.scanLine(y);
-            uchar* dst = dstImg->scanLine(y + deltaY);
+            const uchar* src = srcImage.scanLine(y);
+            uchar* dst = dstImage->scanLine(y + deltaY);
             copyQImageBuffer(dst, src, deltaX, width);
         }
     } else {
         for (int y = 0; y < height + deltaY; y ++) {
-            const uchar* src = srcImg.scanLine(y - deltaY);
-            uchar* dst = dstImg->scanLine(y);
+            const uchar* src = srcImage.scanLine(y - deltaY);
+            uchar* dst = dstImage->scanLine(y);
             copyQImageBuffer(dst, src, deltaX, width);
         }
     }
@@ -250,8 +250,8 @@ void KisPrescaledProjection::documentOffsetMoved(const QPoint &documentOffset)
     dbgRender << "w: " << width << ", h" << height << ", oldCanvasXOffset " << oldCanvasXOffset << ", oldCanvasYOffset " << oldCanvasYOffset
     << ", new offset: " << documentOffset;
 
-    QImage img = QImage(width, height, QImage::Format_ARGB32);
-    QPainter gc(&img);
+    QImage image = QImage(width, height, QImage::Format_ARGB32);
+    QPainter gc(&image);
 
     if (oldCanvasXOffset != m_d->documentOffset.x() || oldCanvasYOffset != m_d->documentOffset.y()) {
 
@@ -261,7 +261,7 @@ void KisPrescaledProjection::documentOffsetMoved(const QPoint &documentOffset)
         dbgRender << "deltaX: " << deltaX << ", deltaY: " << deltaY;
         if (qAbs(deltaX) < width && qAbs(deltaY) < height) {
             dbgRender << "Copy old data";
-            copyQImage(deltaX, deltaY, &img, m_d->prescaledQImage);
+            copyQImage(deltaX, deltaY, &image, m_d->prescaledQImage);
 
             dbgRender << "exposedRegion: " << exposedRegion;
             dbgRender << "Preexistant data: " << QRegion(QRect(deltaX, deltaY, width , height));
@@ -282,7 +282,7 @@ void KisPrescaledProjection::documentOffsetMoved(const QPoint &documentOffset)
                 drawScaledImage(r , gc);
             }
         }
-        m_d->prescaledQImage = img;
+        m_d->prescaledQImage = image;
     } else {
         // Don't do "anything" if this function is called while the offset hasn't changed
         // because that usually happen when the scrollbars appears
@@ -390,14 +390,14 @@ void KisPrescaledProjection::resizePrescaledImage(const QSize & newSize)
 
     dbgRender << "KisPrescaledProjection::resizePrescaledImage from " << oldSize << " to " << newSize << endl;
 
-    QImage img = QImage(newSize, QImage::Format_ARGB32);
+    QImage image = QImage(newSize, QImage::Format_ARGB32);
 //     m_d->prescaledQImage.fill( QColor( 255, 0, 0, 128 ).rgba() );
 
 // Let someone else figure out the optimization where we copy the
 // still visible part of the image after moving the offset and then
 // only draw the newly visible parts
 #if 0
-    QPainter gc(&img);
+    QPainter gc(&image);
     gc.setCompositionMode(QPainter::CompositionMode_Source);
 
     if (newSize.width() > oldSize.width() || newSize.height() > oldSize.height()) {
@@ -418,7 +418,7 @@ void KisPrescaledProjection::resizePrescaledImage(const QSize & newSize)
 #endif
 
 #if 1
-    m_d->prescaledQImage = img;
+    m_d->prescaledQImage = image;
     m_d->canvasSize = newSize;
     preScale();
 #endif

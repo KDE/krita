@@ -86,14 +86,14 @@ void testFiles(const QString& _dirname, const QStringList& exclusions)
             tmpFile.setAutoRemove(false);
             doc.setOutputMimeType("image/png");
             doc.saveAs("file://" + tmpFile.fileName());
-            QImage resultImg(resultFileInfo.absoluteFilePath());
-            resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
-            QImage sourceImg(tmpFile.fileName());
-            sourceImg = sourceImg.convertToFormat(QImage::Format_ARGB32);
+            QImage resultImage(resultFileInfo.absoluteFilePath());
+            resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
+            QImage sourceImage(tmpFile.fileName());
+            sourceImage = sourceImage.convertToFormat(QImage::Format_ARGB32);
 
             QPoint pt;
 
-            if (!TestUtil::compareQImages(pt, resultImg, sourceImg)) {
+            if (!TestUtil::compareQImages(pt, resultImage, sourceImage)) {
                 failuresCompare << sourceFileInfo.fileName() + ": " + QString("Pixel (%1,%2) has different values").arg(pt.x()).arg(pt.y()).toLatin1();
                 continue;
             }

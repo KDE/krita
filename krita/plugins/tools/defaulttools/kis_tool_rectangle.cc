@@ -70,6 +70,7 @@ KisToolRectangle::~KisToolRectangle()
 
 void KisToolRectangle::paint(QPainter& gc, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
     if (!currentImage()) {
         warnKrita << "No currentImage!";
         return;

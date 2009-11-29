@@ -44,12 +44,12 @@ public:
     /**
      * creates a new layer with the given selection.
      * Note that the selection will be _copied_ (with COW, though).
-     * @param img the image to set this layer to
+     * @param image the image to set this layer to
      * @param name name of the layer
      * @param selection is a mask used by the layer to know
      * where to apply the filter/generator.
      */
-    KisSelectionBasedLayer(KisImageWSP img, const QString &name, KisSelectionSP selection);
+    KisSelectionBasedLayer(KisImageWSP image, const QString &name, KisSelectionSP selection);
     KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs);
     virtual ~KisSelectionBasedLayer();
 

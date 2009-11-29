@@ -145,7 +145,7 @@ public:
     /**
      * @return a preview of the brush
      */
-    virtual QImage img() const;
+    virtual QImage image() const;
 
     /**
      * Change the spacing of the brush.
@@ -195,10 +195,10 @@ public:
     /**
      * Return a fixed paint device that contains a correctly scaled image dab.
      */
-    virtual KisFixedPaintDeviceSP image(const KoColorSpace * colorSpace,
-                                        double scale, double angle,
-                                        const KisPaintInformation& info,
-                                        double subPixelX = 0, double subPixelY = 0) const;
+    virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
+                                              double scale, double angle,
+                                              const KisPaintInformation& info,
+                                              double subPixelX = 0, double subPixelY = 0) const;
 
     /**
      * Apply the brush mask to the pixels in dst. Dst should be big enough!
@@ -250,10 +250,10 @@ public:
      * pixels in the brush.
      */
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-            ColoringInformation* coloringInfo,
-            double scaleX, double scaleY, double angle,
-            const KisPaintInformation& info = KisPaintInformation(),
-            double subPixelX = 0, double subPixelY = 0) const;
+                                                     ColoringInformation* coloringInfo,
+                                                     double scaleX, double scaleY, double angle,
+                                                     const KisPaintInformation& info = KisPaintInformation(),
+                                                     double subPixelX = 0, double subPixelY = 0) const;
 
 
     /**
@@ -279,7 +279,7 @@ protected:
      * The image is used to represent the brush in the gui, and may also, depending on the brush type
      * be used to define the actual brush instance.
      */
-    virtual void setImage(const QImage& img);
+    virtual void setImage(const QImage& image);
 
     /**
      * XXX
@@ -313,7 +313,7 @@ private:
     static QImage interpolate(const QImage& image1, const QImage& image2, double t);
 
     static KisQImagemaskSP scaleSinglePixelMask(double scale, quint8 maskValue,
-            double subPixelX, double subPixelY);
+                                                double subPixelX, double subPixelY);
 
     static QImage scaleSinglePixelImage(double scale, QRgb pixel,
                                         double subPixelX, double subPixelY);

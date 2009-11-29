@@ -322,11 +322,11 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         return KisImageBuilder_RESULT_INVALID_ARG;
     }
     // Creating the KisImageWSP
-    if (! m_img) {
-        m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
-        m_img->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres )); // It is the "invert" macro because we convert from pointer-per-inchs to points
-        m_img->lock();
-        Q_CHECK_PTR(m_img);
+    if (! m_image) {
+        m_image = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
+        m_image->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres )); // It is the "invert" macro because we convert from pointer-per-inchs to points
+        m_image->lock();
+        Q_CHECK_PTR(m_image);
         if (profile) {
             KisAnnotationSP annotation;
             // XXX we hardcode icc, this is correct for lcms?
@@ -335,19 +335,18 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
             if (iccprofile && !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
 
-            m_img -> addAnnotation(annotation);
+            m_image -> addAnnotation(annotation);
         }
     } else {
-        m_img->lock();
-        if (m_img->width() < (qint32)width || m_img->height() < (qint32)height) {
-            quint32 newwidth = (m_img->width() < (qint32)width) ? width : m_img->width();
-            quint32 newheight = (m_img->height() < (qint32)height) ? height : m_img->height();
-            m_img->resize(newwidth, newheight, false);
+        m_image->lock();
+        if (m_image->width() < (qint32)width || m_image->height() < (qint32)height) {
+            quint32 newwidth = (m_image->width() < (qint32)width) ? width : m_image->width();
+            quint32 newheight = (m_image->height() < (qint32)height) ? height : m_image->height();
+            m_image->resize(newwidth, newheight, false);
         }
     }
-    KisPaintLayer* layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX);
+    KisPaintLayer* layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), quint8_MAX);
     KisTransaction("", layer -> paintDevice());
-
     tdata_t buf = 0;
     tdata_t* ps_buf = 0; // used only for planar configuration separated
     KisBufferStreamBase* tiffstream;
@@ -541,9 +540,9 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         delete[] ps_buf;
     }
 
-    m_img->addNode(KisNodeSP(layer), m_img->rootLayer().data());
+    m_image->addNode(KisNodeSP(layer), m_image->rootLayer().data());
     layer->setDirty();
-    m_img->unlock();
+    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 
@@ -573,14 +572,14 @@ KisImageBuilder_Result KisTIFFConverter::buildImage(const KUrl& uri)
 
 KisImageWSP KisTIFFConverter::image()
 {
-    return m_img;
+    return m_image;
 }
 
 
-KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP img, KisTIFFOptions options)
+KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP kisimage, KisTIFFOptions options)
 {
     dbgFile << "Start writing TIFF File";
-    if (!img)
+    if (!kisimage)
         return KisImageBuilder_RESULT_EMPTY;
 
     if (uri.isEmpty())
@@ -612,11 +611,11 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP 
         TIFFSetField(image, TIFFTAG_ARTIST, author.toAscii().data());
     }
 
-    dbgFile << "xres: " << INCH_TO_POINT(img->xRes()) << " yres: " << INCH_TO_POINT(img->yRes());
-    TIFFSetField(image, TIFFTAG_XRESOLUTION, INCH_TO_POINT(img->xRes())); // It is the "invert" macro because we convert from pointer-per-inchs to points
-    TIFFSetField(image, TIFFTAG_YRESOLUTION, INCH_TO_POINT(img->yRes()));
+    dbgFile << "xres: " << INCH_TO_POINT(kisimage->xRes()) << " yres: " << INCH_TO_POINT(kisimage->yRes());
+    TIFFSetField(image, TIFFTAG_XRESOLUTION, INCH_TO_POINT(kisimage->xRes())); // It is the "invert" macro because we convert from pointer-per-inchs to points
+    TIFFSetField(image, TIFFTAG_YRESOLUTION, INCH_TO_POINT(kisimage->yRes()));
 
-    KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(img->rootLayer().data());
+    KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(kisimage->rootLayer().data());
     if (root == 0) {
         KIO::del(uri);
         TIFFClose(image);

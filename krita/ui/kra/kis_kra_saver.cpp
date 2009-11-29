@@ -66,49 +66,49 @@ KisKraSaver::~KisKraSaver()
     delete m_d;
 }
 
-QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP img)
+QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
 {
-    QDomElement image = doc.createElement("IMAGE"); // Legacy!
+    QDomElement imageElement = doc.createElement("IMAGE"); // Legacy!
 
-    Q_ASSERT(img);
-    image.setAttribute(NAME, m_d->imageName);
-    image.setAttribute(MIME, NATIVE_MIMETYPE);
-    image.setAttribute(WIDTH, img->width());
-    image.setAttribute(HEIGHT, img->height());
-    image.setAttribute(COLORSPACE_NAME, img->colorSpace()->id());
-    image.setAttribute(DESCRIPTION, m_d->doc->documentInfo()->aboutInfo("comment"));
+    Q_ASSERT(image);
+    imageElement.setAttribute(NAME, m_d->imageName);
+    imageElement.setAttribute(MIME, NATIVE_MIMETYPE);
+    imageElement.setAttribute(WIDTH, image->width());
+    imageElement.setAttribute(HEIGHT, image->height());
+    imageElement.setAttribute(COLORSPACE_NAME, image->colorSpace()->id());
+    imageElement.setAttribute(DESCRIPTION, m_d->doc->documentInfo()->aboutInfo("comment"));
     // XXX: Save profile as blob inside the image, instead of the product name.
-    if (img->profile() && img->profile()-> valid())
-        image.setAttribute(PROFILE, img->profile()->name());
-    image.setAttribute(X_RESOLUTION, img->xRes()*72.0);
-    image.setAttribute(Y_RESOLUTION, img->yRes()*72.0);
+    if (image->profile() && image->profile()-> valid())
+        imageElement.setAttribute(PROFILE, image->profile()->name());
+    imageElement.setAttribute(X_RESOLUTION, image->xRes()*72.0);
+    imageElement.setAttribute(Y_RESOLUTION, image->yRes()*72.0);
 
     quint32 count = 1; // We don't save the root layer, but it does count
-    KisSaveXmlVisitor visitor(doc, image, count, true);
+    KisSaveXmlVisitor visitor(doc, imageElement, count, true);
 
-    img->rootLayer()->accept(visitor);
+    image->rootLayer()->accept(visitor);
     m_d->nodeFileNames = visitor.nodeFileNames();
-    return image;
+    return imageElement;
 }
 
-bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP img, const QString & uri, bool external)
+bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external)
 {
     QString location;
 
     // Save the layers data
     quint32 count = 0;
 
-    KisKraSaveVisitor visitor(img, store, count, m_d->imageName, m_d->nodeFileNames);
+    KisKraSaveVisitor visitor(image, store, count, m_d->imageName, m_d->nodeFileNames);
 
     if (external)
         visitor.setExternalUri(uri);
 
-    img->rootLayer()->accept(visitor);
+    image->rootLayer()->accept(visitor);
     // saving annotations
     // XXX this only saves EXIF and ICC info. This would probably need
     // a redesign of the dtd of the krita file to do this more generally correct
     // e.g. have <ANNOTATION> tags or so.
-    KisAnnotationSP annotation = img->annotation("exif");
+    KisAnnotationSP annotation = image->annotation("exif");
     if (annotation) {
         location = external ? QString::null : uri;
         location += m_d->imageName + EXIF_PATH;
@@ -117,8 +117,8 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP img, const QString 
             store->close();
         }
     }
-    if (img->profile()) {
-        const KoColorProfile *profile = img->profile();
+    if (image->profile()) {
+        const KoColorProfile *profile = image->profile();
         KisAnnotationSP annotation;
         if (profile) {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);

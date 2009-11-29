@@ -34,7 +34,7 @@ public:
 
 private:
     int _wx, _wy;
-    QImage _img, _hist;
+    QImage _image, _hist;
     quint64 _min, _max, _sum;
 };
 

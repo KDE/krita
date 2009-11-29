@@ -101,9 +101,9 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 void KisShapeLayerCanvas::repaint()
 {
     QRect r = m_dirty.boundingRect();
-    QImage img(r.width(), r.height(), QImage::Format_ARGB32);
-    img.fill(0);
-    QPainter p(&img);
+    QImage image(r.width(), r.height(), QImage::Format_ARGB32);
+    image.fill(0);
+    QPainter p(&image);
 
     p.setRenderHint(QPainter::Antialiasing, m_antialias);
     p.setRenderHint(QPainter::TextAntialiasing, m_antialias);
@@ -118,7 +118,7 @@ void KisShapeLayerCanvas::repaint()
     p.end();
 
     KisPaintDeviceSP dev = new KisPaintDevice(m_projection->colorSpace());
-    dev->convertFromQImage(img, "");
+    dev->convertFromQImage(image, "");
     KisPainter kp(m_projection.data());
     kp.setCompositeOp(m_projection->colorSpace()->compositeOp(COMPOSITE_COPY));
     kp.bitBlt(r.x(), r.y(), dev, 0, 0, r.width(), r.height());

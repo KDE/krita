@@ -56,7 +56,7 @@ void KisFilterMaskTest::testProjectionNotSelected()
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
 
-    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
@@ -71,14 +71,14 @@ void KisFilterMaskTest::testProjectionNotSelected()
     KisPaintDeviceSP projection = new KisPaintDevice(cs);
     initImage(image, layer, projection, mask);
 
-    projection->convertFromQImage(qimg, 0, 0, 0);
+    projection->convertFromQImage(qimage, 0, 0, 0);
     mask->createNodeProgressProxy();
-    mask->select(qimg.rect(), MIN_SELECTED);
-    mask->apply(projection, QRect(0, 0, qimg.width(), qimg.height()));
+    mask->select(qimage.rect(), MIN_SELECTED);
+    mask->apply(projection, QRect(0, 0, qimage.width(), qimage.height()));
 
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, qimg, projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
-        projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest1.png");
+    if (!TestUtil::compareQImages(errpoint, qimage, projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
+        projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtermasktest1.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
 }
@@ -90,7 +90,7 @@ void KisFilterMaskTest::testProjectionSelected()
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
 
-    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
@@ -104,15 +104,15 @@ void KisFilterMaskTest::testProjectionSelected()
 
     KisPaintDeviceSP projection = new KisPaintDevice(cs);
     initImage(image, layer, projection, mask);
-    projection->convertFromQImage(qimg, 0, 0, 0);
+    projection->convertFromQImage(qimage, 0, 0, 0);
 
-    mask->select(qimg.rect(), MAX_SELECTED);
-    mask->apply(projection, QRect(0, 0, qimg.width(), qimg.height()));
-    QCOMPARE(mask->exactBounds(), QRect(0, 0, qimg.width(), qimg.height()));
+    mask->select(qimage.rect(), MAX_SELECTED);
+    mask->apply(projection, QRect(0, 0, qimage.width(), qimage.height()));
+    QCOMPARE(mask->exactBounds(), QRect(0, 0, qimage.width(), qimage.height()));
 
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, inverted, projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
-        projection->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest2.png");
+    if (!TestUtil::compareQImages(errpoint, inverted, projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
+        projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtermasktest2.png");
         QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
 

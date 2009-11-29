@@ -37,7 +37,7 @@ public:
 
 private slots:
 
-    void slotImgColorSpaceConversion();
+    void slotImageColorSpaceConversion();
     void slotLayerColorSpaceConversion();
 
 private:

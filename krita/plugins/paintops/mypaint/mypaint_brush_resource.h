@@ -56,7 +56,7 @@ public:
 
     bool save();
 
-    QImage img() const;
+    QImage image() const;
 
 public: // From mypaint/lib/brush.py Brush_Lowlevel, which inherits brushlib/Brush
 

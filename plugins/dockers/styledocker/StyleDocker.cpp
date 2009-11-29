@@ -481,7 +481,7 @@ void StyleDocker::updatePattern(KoResource * item)
     KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>(dataCenter);
     if (imageCollection) {
         KoPatternBackground * fill = new KoPatternBackground(imageCollection);
-        fill->setPattern(pattern->img());
+        fill->setPattern(pattern->image());
         m_canvas->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill ));
         updateStyle();
     }

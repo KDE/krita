@@ -91,11 +91,11 @@ public:
     void convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
 
     /**
-     * Fill this paint device with the data from img
+     * Fill this paint device with the data from image
      *
-     * @param srcProfileName name of the RGB profile to interpret the img as. "" is interpreted as sRGB
+     * @param srcProfileName name of the RGB profile to interpret the image as. "" is interpreted as sRGB
      */
-    virtual void convertFromQImage(const QImage& img, const QString &srcProfileName);
+    virtual void convertFromQImage(const QImage& image, const QString &srcProfileName);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.

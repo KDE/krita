@@ -72,7 +72,7 @@ public:
     // reimplemented
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
     // reimplemented
-    virtual void waitUntilReady(const KoViewConverter &converter) const;
+    virtual void waitUntilReady(const KoViewConverter &converter, bool = true) const;
 
     void setDisplayProfile(const QString & profileName);
     void importImage(const KUrl & url);

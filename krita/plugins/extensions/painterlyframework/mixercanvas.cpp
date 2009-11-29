@@ -121,14 +121,14 @@ void MixerCanvas::resizeEvent(QResizeEvent *event)
 {
     if (event->size().width() > m_image.width() ||
             event->size().height() > m_image.height()) {
-        QImage newImg(event->size(), QImage::Format_ARGB32);
-        newImg.fill(0);
+        QImage newImage(event->size(), QImage::Format_ARGB32);
+        newImage.fill(0);
 
-        QPainter p(&newImg);
+        QPainter p(&newImage);
         p.drawImage(m_image.rect(), m_image, m_image.rect());
         p.end();
 
-        m_image = newImg;
+        m_image = newImage;
     }
 
     QFrame::resizeEvent(event);
@@ -138,9 +138,9 @@ void MixerCanvas::paintEvent(QPaintEvent *event)
 {
     if (m_dirty) {
         QRect r = event->rect();
-        QRect imgRect = QRect(0, 0, r.width(), r.height());
+        QRect imageRect = QRect(0, 0, r.width(), r.height());
         QPainter p(&m_image);
-        p.drawImage(r, m_layer->paintDevice()->convertToQImage(0, r.x(), r.y(), r.width(), r.height()), imgRect);
+        p.drawImage(r, m_layer->paintDevice()->convertToQImage(0, r.x(), r.y(), r.width(), r.height()), imageRect);
         p.end();
 
         m_dirty = false;

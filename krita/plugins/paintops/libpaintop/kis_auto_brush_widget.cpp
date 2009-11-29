@@ -106,7 +106,7 @@ void KisAutoBrushWidget::paramChanged()
     }
     m_autoBrush = new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI);
     m_autoBrush->setSpacing(inputSpacing->value());
-    m_brush = m_autoBrush->img();
+    m_brush = m_autoBrush->image();
 
     QImage pi(m_brush);
     double coeff = 1.0;
@@ -130,10 +130,12 @@ void KisAutoBrushWidget::paramChanged()
 
 void KisAutoBrushWidget::spinBoxRatioChanged(double a)
 {
+    Q_UNUSED(a);
     paramChanged();
 }
 void KisAutoBrushWidget::spinBoxRadiusChanged(double a)
 {
+    Q_UNUSED(a);
     paramChanged();
 }
 void KisAutoBrushWidget::spinBoxHorizontalChanged(double a)
@@ -169,7 +171,7 @@ KisBrushSP KisAutoBrushWidget::brush()
 void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 {
     m_autoBrush = brush;
-    m_brush = brush->img();
+    m_brush = brush->image();
     // XXX: lock, set and unlock the widgets.
 
 }

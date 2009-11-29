@@ -64,7 +64,7 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
         return;
 
     QRect itemRect = option.rect;
-    QImage thumbnail = brush->img();
+    QImage thumbnail = brush->image();
 
     if (thumbnail.height() > itemRect.height() || thumbnail.width() > itemRect.width()) {
         thumbnail = thumbnail.scaled(itemRect.size() , Qt::KeepAspectRatio);

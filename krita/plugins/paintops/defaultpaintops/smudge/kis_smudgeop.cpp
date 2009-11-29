@@ -130,7 +130,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
+        dab = brush->paintDevice(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
         dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     } else {
         dab = cachedDab();

@@ -56,7 +56,7 @@
 
 using namespace KRA;
 
-KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP img,
+KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP image,
                                      KoStore *store,
                                      QMap<KisNode *, QString> &layerFilenames,
                                      const QString & name,
@@ -65,7 +65,7 @@ KisKraLoadVisitor::KisKraLoadVisitor(KisImageWSP img,
         m_layerFilenames(layerFilenames)
 {
     m_external = false;
-    m_img = img;
+    m_image = image;
     m_store = store;
     m_name = name;
     m_syntaxVersion = syntaxVersion;
@@ -95,7 +95,7 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
     }
 
     result = visitAll(layer) && result;
-    layer->setDirty(m_img->bounds());
+    layer->setDirty(m_image->bounds());
 
     return result;
 }
@@ -128,14 +128,14 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
             } else {
                 KisTransparencyMask* mask = new KisTransparencyMask();
                 mask->setSelection(selection);
-                m_img->addNode(mask, layer, layer->firstChild());
+                m_image->addNode(mask, layer, layer->firstChild());
             }
             m_store->close();
         }
     }
     bool result = visitAll(layer);
 
-    layer->setDirty(m_img->bounds());
+    layer->setDirty(m_image->bounds());
     return result;
 
 }
@@ -148,7 +148,7 @@ bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 
     bool result = visitAll(layer);
 
-    layer->setDirty(m_img->bounds());
+    layer->setDirty(m_image->bounds());
     return result;
 }
 
@@ -159,7 +159,7 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 
     if (m_syntaxVersion == 1) {
 
-        //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
+        //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_image, SLOT(slotIOProgress(qint8)));
         QString location = getLocation(layer, ".selection");
         KisSelectionSP selection = new KisSelection();
         KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
@@ -179,7 +179,7 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 
     bool result = visitAll(layer);
 
-    layer->setDirty(m_img->bounds());
+    layer->setDirty(m_image->bounds());
     return result;
 }
 
@@ -203,7 +203,7 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 
     bool result = visitAll(layer);
 
-    layer->setDirty(m_img->bounds());
+    layer->setDirty(m_image->bounds());
     return result;
 }
 
@@ -216,7 +216,7 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
     // Clone layers have no data except for their masks
     bool result = visitAll(layer);
 
-    layer->setDirty(m_img->bounds());
+    layer->setDirty(m_image->bounds());
     return result;
 }
 
@@ -225,14 +225,14 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
     mask->setSelection(loadSelection(getLocation(mask)));
     loadFilterConfiguration(mask->filter(), getLocation(mask, DOT_FILTERCONFIG));
 
-    mask->setDirty(m_img->bounds());
+    mask->setDirty(m_image->bounds());
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
 {
     mask->setSelection(loadSelection(getLocation(mask)));
-    mask->setDirty(m_img->bounds());
+    mask->setDirty(m_image->bounds());
 
     return true;
 }
@@ -241,20 +241,20 @@ bool KisKraLoadVisitor::visit(KisTransformationMask *mask)
 {
 
     mask->setSelection(loadSelection(getLocation(mask)));
-    mask->setDirty(m_img->bounds());
+    mask->setDirty(m_image->bounds());
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
 {
     mask->setSelection(loadSelection(getLocation(mask)));
-    mask->setDirty(m_img->bounds());
+    mask->setDirty(m_image->bounds());
     return true;
 }
 
 bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& location)
 {
-    //connect(*device, SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
+    //connect(*device, SIGNAL(ioProgress(qint8)), m_image, SLOT(slotIOProgress(qint8)));
     // Layer data
     if (m_store->open(location)) {
         if (!device->read(m_store)) {
@@ -359,7 +359,7 @@ KisSelectionSP KisKraLoadVisitor::loadSelection(const QString& location)
         m_store->pushDirectory();
         m_store->enterDirectory(shapeSelectionLocation) ;
 
-        KisShapeSelection* shapeSelection = new KisShapeSelection(m_img, selection);
+        KisShapeSelection* shapeSelection = new KisShapeSelection(m_image, selection);
         selection->setShapeSelection(shapeSelection);
         shapeSelection->loadSelection(m_store);
         m_store->popDirectory();

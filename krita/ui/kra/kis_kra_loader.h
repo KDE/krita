@@ -54,21 +54,21 @@ public:
 
 private:
 
-    KisNode* loadNodes(const KoXmlElement& element, KisImageWSP img, KisNode* parent);
+    KisNode* loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent);
 
-    KisNode* loadNode(const KoXmlElement& elem, KisImageWSP img);
+    KisNode* loadNode(const KoXmlElement& elem, KisImageWSP image);
 
-    KisNode* loadPaintLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadPaintLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadGroupLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadGroupLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadAdjustmentLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadAdjustmentLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadShapeLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadShapeLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadGeneratorLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadGeneratorLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadCloneLayer(const KoXmlElement& elem, KisImageWSP img, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNode* loadCloneLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
     KisNode* loadFilterMask(const KoXmlElement& elem);
 
@@ -76,7 +76,7 @@ private:
 
     KisNode* loadTransformationMask(const KoXmlElement& elem);
 
-    KisNode* loadSelectionMask(KisImageWSP img, const KoXmlElement& elem);
+    KisNode* loadSelectionMask(KisImageWSP image, const KoXmlElement& elem);
 
 
 private:

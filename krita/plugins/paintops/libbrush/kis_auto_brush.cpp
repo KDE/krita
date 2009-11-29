@@ -43,8 +43,8 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, double angle)
 {
     d->shape = as;
     d->angle = angle;
-    QImage img = createBrushPreview();
-    setImage(img);
+    QImage image = createBrushPreview();
+    setImage(image);
     setBrushType(MASK);
     setWidth(d->shape->width());
     setHeight(d->shape->height());
@@ -161,17 +161,17 @@ QImage KisAutoBrush::createBrushPreview()
 {
     int width = qMax((int)(d->shape->width() + 0.5), 1);
     int height = qMax((int)(d->shape->height() + 0.5), 1);
-    QImage img(width, height, QImage::Format_ARGB32);
+    QImage image(width, height, QImage::Format_ARGB32);
 
-    double centerX = img.width() * 0.5;
-    double centerY = img.height() * 0.5;
+    double centerX = image.width() * 0.5;
+    double centerY = image.height() * 0.5;
     for (int j = 0; j < d->shape->height(); j++) {
         for (int i = 0; i < d->shape->width(); i++) {
             qint8 v = d->shape->valueAt(i - centerX, j - centerY);
-            img.setPixel(i, j, qRgb(v, v, v));
+            image.setPixel(i, j, qRgb(v, v, v));
         }
     }
-    return img.transformed(QMatrix().rotate(-d->angle * 180 / M_PI));
+    return image.transformed(QMatrix().rotate(-d->angle * 180 / M_PI));
 }
 
 QPointF KisAutoBrush::hotSpot(double scaleX, double scaleY, double rotation) const

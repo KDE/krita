@@ -133,12 +133,12 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(KoID("RGBA"), "");
     int width = wdg->intWidth->value();
     int height = wdg->intHeight->value();
-    KisImageWSP img = new KisImage(doc->undoAdapter(), width, height, cs, "built image");
-    img->lock();
+    KisImageWSP image = new KisImage(doc->undoAdapter(), width, height, cs, "built image");
+    image->lock();
     // create a layer
     QList<int> pages = wdg->pages();
     for (QList<int>::const_iterator it = pages.constBegin(); it != pages.constEnd(); ++it) {
-        KisPaintLayer* layer = new KisPaintLayer(img.data(),
+        KisPaintLayer* layer = new KisPaintLayer(image.data(),
                 i18n("Page %1", *it + 1),
                 quint8_MAX);
 
@@ -153,12 +153,12 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
             }
         }
         delete page;
-        img->addNode(layer, img->rootLayer(), 0);
+        image->addNode(layer, image->rootLayer(), 0);
         layer->setDirty();
     }
 
-    doc->setCurrentImage(img);
-    img->unlock();
+    doc->setCurrentImage(image);
+    image->unlock();
     KIO::NetAccess::removeTempFile(tmpFile);
 
     delete pdoc;

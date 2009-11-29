@@ -29,27 +29,27 @@
 #include "kis_global.h"
 
 
-KisQImagemask::KisQImagemask(const QImage& img, bool hasColor)
+KisQImagemask::KisQImagemask(const QImage& image, bool hasColor)
 {
-    m_width = img.width();
-    m_height = img.height();
+    m_width = image.width();
+    m_height = image.height();
 
     if (hasColor) {
-        copyAlpha(img);
+        copyAlpha(image);
     } else {
-        computeAlpha(img);
+        computeAlpha(image);
     }
 }
 
-KisQImagemask::KisQImagemask(const QImage& img)
+KisQImagemask::KisQImagemask(const QImage& image)
 {
-    m_width = img.width();
-    m_height = img.height();
+    m_width = image.width();
+    m_height = image.height();
 
-    if (!img.allGray()) {
-        copyAlpha(img);
+    if (!image.allGray()) {
+        copyAlpha(image);
     } else {
-        computeAlpha(img);
+        computeAlpha(image);
     }
 }
 
@@ -75,11 +75,11 @@ qint32 KisQImagemask::height() const
 {
     return m_height;
 }
-void KisQImagemask::copyAlpha(const QImage& img)
+void KisQImagemask::copyAlpha(const QImage& image)
 {
-    for (int y = 0; y < img.height(); y++) {
-        const QRgb *scanline = reinterpret_cast<const QRgb *>(img.scanLine(y));
-        for (int x = 0; x < img.width(); x++) {
+    for (int y = 0; y < image.height(); y++) {
+        const QRgb *scanline = reinterpret_cast<const QRgb *>(image.scanLine(y));
+        for (int x = 0; x < image.width(); x++) {
             QRgb c = scanline[x];
             quint8 a = (qGray(c) * qAlpha(c)) / 255;
             m_data.push_back(a);
@@ -87,7 +87,7 @@ void KisQImagemask::copyAlpha(const QImage& img)
     }
 }
 
-void KisQImagemask::computeAlpha(const QImage& img)
+void KisQImagemask::computeAlpha(const QImage& image)
 {
     // The brushes are mostly grayscale on a white background,
     // although some do have a colors. The alpha channel is seldom
@@ -96,9 +96,9 @@ void KisQImagemask::computeAlpha(const QImage& img)
     // invert it, because 255, 255, 255 is white, which is
     // completely transparent, but 255 corresponds to
     // OPACITY_OPAQUE.
-    for (int y = 0; y < img.height(); y++) {
-        const QRgb *scanline = reinterpret_cast<const QRgb *>(img.scanLine(y));
-        for (int x = 0; x < img.width(); x++) {
+    for (int y = 0; y < image.height(); y++) {
+        const QRgb *scanline = reinterpret_cast<const QRgb *>(image.scanLine(y));
+        for (int x = 0; x < image.width(); x++) {
             m_data.push_back(255 - qRed(scanline[x]));
         }
     }

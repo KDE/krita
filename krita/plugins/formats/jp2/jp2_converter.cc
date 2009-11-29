@@ -289,7 +289,7 @@ KisImageBuilder_Result jp2Converter::buildImage(const KUrl& uri)
 }
 
 
-KisImageWSP jp2Converter::image()
+KisImageWSP jp2Converter::getImage()
 {
     return m_image;
 }
@@ -300,8 +300,8 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageWSP image = layer -> image();
-    if (!image)
+    KisImageWSP kisimage = layer->image();
+    if (!kisimage)
         return KisImageBuilder_RESULT_EMPTY;
 
     if (uri.isEmpty())
@@ -358,8 +358,8 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     // Init the image
     opj_image_cmptparm_t image_info[3];
 
-    int width = image->width();
-    int height = image->height();
+    int width = kisimage->width();
+    int height = kisimage->height();
     for (int k = 0; k < components; k++) {
         image_info[k].dx = 1;
         image_info[k].dy = 1;

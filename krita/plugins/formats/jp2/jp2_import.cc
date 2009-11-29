@@ -84,7 +84,7 @@ KoFilter::ConversionStatus jp2Import::convert(const QByteArray&, const QByteArra
             return KoFilter::InternalError;
             break;
         case KisImageBuilder_RESULT_OK:
-            doc -> setCurrentImage(ib.image());
+            doc -> setCurrentImage(ib.getImage());
             return KoFilter::OK;
         default:
             break;

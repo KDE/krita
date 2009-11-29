@@ -72,7 +72,7 @@ public:
     /**
      * Retrieve the constructed image
      */
-    KisImageWSP image();
+    KisImageWSP getImage();
 private:
     KisImageBuilder_Result decode(const KUrl& uri);
 public slots:

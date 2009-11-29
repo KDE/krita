@@ -37,9 +37,6 @@
 #include <QPointF>
 #include <QKeyEvent>
 
-#include <KDebug>
-
-#include <QDebug>
 KoConnectionTool::KoConnectionTool(KoCanvasBase * canvas)
     : KoPathTool(canvas)
     , m_shape1(0)
@@ -48,7 +45,9 @@ KoConnectionTool::KoConnectionTool(KoCanvasBase * canvas)
     , m_connectionShape(0)
     , m_lastConnectionShapeOn(0)
 {
+    // Initialize the isTied for first and second shape
     m_isTied = new QPair<bool, bool>(false,false);
+    // Nothing is active or modify for now
     m_activeHandle = -1;
     m_firstHandleIndex = 0;
     m_modifyConnection = false;
@@ -65,6 +64,7 @@ void KoConnectionTool::paint(QPainter &painter, const KoViewConverter &converter
     QRectF handleRect = handlePaintRect(QPointF());
 
     painter.setRenderHint(QPainter::Antialiasing, true);
+    // Green rects
     if(m_shapeOn !=  0) {
         // save the painter to restore it later
         painter.save();
@@ -78,7 +78,7 @@ void KoConnectionTool::paint(QPainter &painter, const KoViewConverter &converter
         }
         painter.restore();
     }
-
+    // Blue recs (when the mouse is on a a green rec)
     if(isInRoi()){
         // save the painter to restore it later
         painter.save();
@@ -91,7 +91,8 @@ void KoConnectionTool::paint(QPainter &painter, const KoViewConverter &converter
 
         painter.restore();
     }
-
+    
+    // Draw handles ...
     KoConnectionShape * tempShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
     if(tempShape){
         painter.save();
@@ -101,6 +102,7 @@ void KoConnectionTool::paint(QPainter &painter, const KoViewConverter &converter
         int radius = m_canvas->resourceProvider()->handleRadius();
         // Apply the conversion make by the matrix transformation
         painter.setMatrix(tempShape->absoluteTransformation(&converter) * painter.matrix());
+        // ... handle unselected
         tempShape->paintHandles(painter, converter, radius);
 
         painter.restore();
@@ -111,7 +113,7 @@ void KoConnectionTool::paint(QPainter &painter, const KoViewConverter &converter
 
         if(handleId != -1) {
             painter.save();
-
+            // ... handle selected
             painter.setPen(Qt::blue);
             painter.setBrush(Qt::red);
             // Apply the conversion make by the matrix transformation
@@ -125,18 +127,20 @@ void KoConnectionTool::paint(QPainter &painter, const KoViewConverter &converter
 
 void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
 {
+    // If we are pressing down the control key, it should add handles, not connectionShape
     if(event->modifiers() & Qt::ControlModifier)
         return;
-    
+    // We here try to recover the the last shape in case of the handle point is out of the shape
     KoShape * tempShape = 0;
     if(isInRoi())
         tempShape = m_lastShapeOn;
     else
         tempShape = m_canvas->shapeManager()->shapeAt(event->point);
     
+    // We take care if the shape under the mouse is not another connection shape
     KoConnectionShape * tempConnectionShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
     if(tempConnectionShape && m_connectionShape == 0){
-        
+        // grabSensitivity is defined by the user
         int grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
         QRectF rec(m_mouse.x()-grabSensitivity/2, m_mouse.y()-grabSensitivity/2, grabSensitivity, grabSensitivity);
         m_activeHandle = tempConnectionShape->handleIdAt(tempShape->documentToShape(rec));
@@ -161,6 +165,7 @@ void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
                 m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
                 m_isTied->first = true;
             // If the shape selected is not the background
+            // We take care if the working tempShape is not another connection shape
             }else if(tempShape != 0 && !connectionShapeTest) {
                 m_shape1 = tempShape;
                 m_firstHandleIndex = 0;
@@ -185,6 +190,7 @@ void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
         // If the shape selected is not the background
         if(tempShape != 0) {
             if(isInRoi()) {
+                // If everything is good, we connect the line to the shape
                 m_connectionShape->setConnection2(tempShape, getConnectionIndex(tempShape, m_mouse));
                 m_isTied->second = true;
             } else {
@@ -194,6 +200,7 @@ void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
         } else {
         // If the cursor points the background
             if(isInRoi()) {
+                // If everything is good, we connect the line to the shape
                 m_connectionShape->setConnection2(tempShape, getConnectionIndex(tempShape, m_mouse));
                 m_isTied->second = true;
             } else {
@@ -222,6 +229,7 @@ void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
     // Look at the new shape under the mouse
     m_shapeOn = m_canvas->shapeManager()->shapeAt(event->point);
 
+    // If the left mouse button is not down anymore, we deactive the following
     if(event->buttons() != Qt::LeftButton) {
         m_activeHandle = -1;
         m_lastConnectionShapeOn = 0;
@@ -231,14 +239,15 @@ void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
     if(!tempShape) {
         if(m_connectionShape != 0) {
             if(isInRoi()) {
-                // Make the connection
+                // Make the connection to the specific point
                 m_connectionShape->setConnection2(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
                 m_connectionShape->updateConnections();
             } else if(m_shapeOn != 0) {
-                // Make the connection
+                // Make the connection to the first handle of the shape
                 m_connectionShape->setConnection2(m_shapeOn, 0);
                 updateConnections();
             } else {
+                // Unmake the connection (detach it)
                 m_connectionShape->setConnection2(0, 0);
                 m_connectionShape->moveHandle(1, m_mouse);
 
@@ -246,16 +255,19 @@ void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
             }
         }
     }
-    
+    // If we are really active we can follow the mouse with the line
     if(m_activeHandle != -1 && m_lastConnectionShapeOn != 0) {
+        // We have to know what handle is actually moving
         if(m_activeHandle == 0){
             m_lastConnectionShapeOn->setConnection1(0, 0);
         }else if(m_activeHandle == 1){
             m_lastConnectionShapeOn->setConnection2(0, 0);
         }
-        
+        // We try to connect as usual, even if we are following the line
         if(!tempShape && isInRoi()) {
             if(m_lastShapeOn != 0){
+                // We have to know what handle is actually moving
+                // Connection with the specific handle
                 if(m_activeHandle == 0){
                     m_lastConnectionShapeOn->setConnection1(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
                 }else if(m_activeHandle == 1){
@@ -263,11 +275,13 @@ void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
                 }
             }
         }else if(m_shapeOn != 0 ){
-             if(m_activeHandle == 0){
-                 m_lastConnectionShapeOn->setConnection1(m_shapeOn, 0);
-             }else if(m_activeHandle == 1){
-                 m_lastConnectionShapeOn->setConnection2(m_shapeOn, 0);
-             }
+            // We have to know what handle is actually moving
+            // Connection with the first handle of the shape
+            if(m_activeHandle == 0){
+                m_lastConnectionShapeOn->setConnection1(m_shapeOn, 0);
+            }else if(m_activeHandle == 1){
+                m_lastConnectionShapeOn->setConnection2(m_shapeOn, 0);
+            }
         }else{
             m_lastConnectionShapeOn->moveHandle(m_activeHandle, m_mouse);
         }
@@ -311,6 +325,7 @@ void KoConnectionTool::activate(bool temporary)
 
 void KoConnectionTool::deactivate()
 {
+    // Put everything to 0 to be able to begin a new shape properly
     m_shape1 = 0;
     m_lastConnectionShapeOn = 0;
     m_lastShapeOn = 0;

@@ -1,14 +1,12 @@
-add_subdirectory(tests)
 
-include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
+include_directories( ${KRITA_INCLUDES} )
 
 set(libkritaconverter_LIB_SRCS
-    kis_gif_converter.cc
-    iccgif.c
+    gif_converter.cc
     )
 
 set(kritagifimport_PART_SRCS
-    kis_gif_import.cc
+    gif_import.cc
     ${libkritaconverter_LIB_SRCS}
     )
 
@@ -16,24 +14,21 @@ kde4_add_plugin(kritagifimport WITH_PREFIX ${kritagifimport_PART_SRCS})
 
 
 
-target_link_libraries(kritagifimport kritaui gif ${EXIV2_LIBRARIES} )
+target_link_libraries(kritagifimport kritaui )
 
 install(TARGETS kritagifimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
 set(kritagifexport_PART_SRCS
-    kis_gif_export.cc
+    gif_export.cc
     ${libkritaconverter_LIB_SRCS}
     )
-
-kde4_add_ui_files(kritagifexport_PART_SRCS kis_wdg_options_gif.ui )
 
 kde4_add_plugin(kritagifexport WITH_PREFIX ${kritagifexport_PART_SRCS})
 
 
-
-target_link_libraries(kritagifexport kritaui gif ${EXIV2_LIBRARIES} )
+target_link_libraries(kritagifexport kritaui )
 
 install(TARGETS kritagifexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

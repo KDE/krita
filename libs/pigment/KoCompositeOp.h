@@ -58,11 +58,20 @@ const QString COMPOSITE_COLORIZE = "colorize";
 const QString COMPOSITE_LUMINIZE = "luminize";
 const QString COMPOSITE_SCREEN = "screen";
 const QString COMPOSITE_OVERLAY = "overlay";
-const QString COMPOSITE_UNDEF = "underfined";
 const QString COMPOSITE_COPY_RED = "copy_red";
 const QString COMPOSITE_COPY_GREEN = "copy_green";
 const QString COMPOSITE_COPY_BLUE = "copy_blue";
 const QString COMPOSITE_COPY_OPACITY = "copy_opacity";
+const QString COMPOSITE_HARD_LIGHT = "hard_light"; // XXX: not implemented anywhere yet
+const QString COMPOSITE_SOFT_LIGHT = "soft_light"; // XXX: not implemented anywhere yet
+const QString COMPOSITE_EXCLUSION = "exclusion"; // XXX: not implemented anywhere yet
+const QString COMPOSITE_INVERTED_DIVIDE = "inverted_divide"; // XXX: not implemented anywhere yet
+const QString COMPOSITE_VIVID_LIGHT = "vivid light"; // XXX: not implemented anywhere yet
+const QString COMPOSITE_LINEAR_LIGHT = "linear light"; // XXX: not implemented anywhere yet
+const QString COMPOSITE_PIN_LIGHT = "pin light"; // XXX: not implemented anywhere yet
+const QString COMPOSITE_HARD_MIX = "hard mix"; // XXX: not implemented anywhere yet
+
+const QString COMPOSITE_UNDEF = "underfined";
 
 /**
  * Base for colorspace-specific blending modes.

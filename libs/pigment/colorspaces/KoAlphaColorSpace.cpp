@@ -288,8 +288,10 @@ QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint
 {
     QImage img(width, height, QImage::Format_Indexed8);
     QVector<QRgb> table;
-    for(int i = 0; i < 255; ++i) table[i] = qRgb(i,i,i);
-    quint8* data_img = img.scanLine(0);
+    for(int i = 0; i < 255; ++i) table.append(qRgb(i,i,i));
+    img.setColorTable(table);
+
+    quint8* data_img = img.bits();
     for( int i = 0; i < width * height; ++i)
     {
         data_img[i] = data[i];

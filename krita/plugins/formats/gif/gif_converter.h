@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 1990-1993 David Koblas <koblas@extra.com>
+ * Copyright (c) 2003 Adam D. Moss <adam@gimp.org>
+ *
+ *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 #ifndef _GIF_CONVERTER_H_
 #define _GIF_CONVERTER_H_
 
@@ -8,6 +28,7 @@
 #include <kio/job.h>
 
 #include "kis_types.h"
+
 class KisDoc2;
 class KisUndoAdapter;
 
@@ -31,6 +52,14 @@ enum KisImageBuilder_Result {
         KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE = 600
 };
 
+/**
+ * load and save gif files. This is based exclusively on Gimp's gif filter, which
+ * seems to be able to handle animated gifs, which the qt-gif-plugin which is based
+ * on libgif cannot handle (git://gitorious.org/qt-gif-plugin/qt-gif-plugin.git).
+ *
+ * And since neither libgif nor libungif have been maintained for years, we'd better
+ * look at some example code that _is_ maintained and debugged.
+ */
 class gifConverter : public QObject {
         Q_OBJECT
     public:

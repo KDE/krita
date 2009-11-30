@@ -49,7 +49,7 @@ KisSprayShapeOption::KisSprayShapeOption()
     connect(m_options->randomSlider,SIGNAL(valueChanged(int)),this,SLOT(randomValueChanged(int)));
     connect(m_options->followSlider,SIGNAL(valueChanged(int)),this,SLOT(followValueChanged(int)));
 
-    connect(m_options->imageUrl,SIGNAL(urlSelected(KUrl)),this,SLOT(prepareImage()));
+    connect(m_options->imageUrl,SIGNAL(textChanged(QString)),this,SLOT(prepareImage()));
     
     setConfigurationPage(m_options);
 }
@@ -115,17 +115,6 @@ bool KisSprayShapeOption::gaussian() const
 {
     return m_options->gaussBox->isChecked();
 }
-
-
-
-
-QImage KisSprayShapeOption::image() 
-{
-    m_image = QImage( m_options->imageUrl->url().toLocalFile() );
-    m_image = m_image.scaled( width(), height() );
-    return m_image;
-}
-
 
 
 bool KisSprayShapeOption::fixedRotation() const

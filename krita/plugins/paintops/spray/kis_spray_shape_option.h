@@ -55,11 +55,10 @@ public:
     bool followCursor() const;
     qreal followCursorWeigth() const;
     
-    QImage image();
-    
-    /// TODO
+    QImage image() const { return m_image; }
+
+    /// TODO: serialization 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    /// TODO
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
     KisShapeOptionsWidget * m_options;

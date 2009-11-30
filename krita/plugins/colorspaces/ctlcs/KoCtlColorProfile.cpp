@@ -37,7 +37,12 @@
 #include <KoCtlColorConversionTransformation.h>
 #include <KoUniqueNumberForIdServer.h>
 
+#include <GTLCore/Version.h>
+
+#if GTL_CORE_VERSION_MAJOR == 0 && GTL_CORE_VERSION_MINOR == 9 && GTL_CORE_VERSION_REVISION > 12
 #include <GTLCore/CompilationMessages.h>
+#endif
+
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/String.h>
 #include <GTLCore/Type.h>
@@ -297,10 +302,12 @@ bool KoCtlColorProfile::load()
                     d->module = new OpenCTL::Module();
                     d->module->setSource(name().toAscii().data(), CDATA.data().toAscii().data());
                     d->module->compile();
+#if GTL_CORE_VERSION_MAJOR == 0 && GTL_CORE_VERSION_MINOR == 9 && GTL_CORE_VERSION_REVISION > 12
                     if (!d->module->isCompiled())
                     {
                         dbgKrita << d->module->compilationMessages().toString().c_str();
                     }
+#endif
                 }
             } else if (e.tagName() == "transformations") {
                 decodeTransformations(e);

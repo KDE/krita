@@ -228,7 +228,8 @@ bool PSDLayerRecord::read(QIODevice* io)
     layerMask.disabled = flags & 2 ? true : false;
     layerMask.invertLayerMaskWhenBlending = flags & 4 ? true : false;
 
-    dbgFile << "Read layer mask/adjustment layer data. Length of block:" << layerMaskLength << "pos" << io->pos();
+    dbgFile << "Read layer mask/adjustment layer data. Length of block:"
+            << layerMaskLength << "pos" << io->pos();
 
     // layer blending thingies
     quint32 blendingDataLength;
@@ -237,7 +238,14 @@ bool PSDLayerRecord::read(QIODevice* io)
         return false;
     }
 
-    quint64 pos = io->pos();
+    qDebug() << "blending block data length" << blendingDataLength << ", pos" << io->pos();
+
+    blendingRanges.data = io->read(blendingDataLength);
+    if ((quint32)blendingRanges.data.size() != blendingDataLength) {
+        error = QString("Got %1 bytes for the blending range block, needed %2").arg(blendingRanges.data.size(), blendingDataLength);
+    }
+/*
+   // XXX: reading this block correctly failed, I have more channel ranges than I'd expected.
 
     if (!psdread(io, &blendingRanges.blackValues[0]) ||
         !psdread(io, &blendingRanges.blackValues[1]) ||
@@ -248,8 +256,6 @@ bool PSDLayerRecord::read(QIODevice* io)
         error = "Could not read blending black/white values";
         return false;
     }
-
-    dbgFile << "blending data length" << blendingDataLength << "pos" << io->pos();
 
     for (int i = 0; i < nChannels; ++i) {
         quint32 src;
@@ -262,19 +268,24 @@ bool PSDLayerRecord::read(QIODevice* io)
         blendingRanges.sourceDestinationRanges << QPair<quint32, quint32>(src, dst);
     }
 
-    if (pos + blendingDataLength < io->pos()) {
-        dbgFile << "Something weird going on: should be at " << pos + blendingDataLength << "am at" << io->pos() << "moving forward";
-        io->seek(pos + blendingDataLength);
-    }
 
+*/
     dbgFile << "Going to read layer name at" << io->pos();
-
-    if (!psdread_pascalstring(io, layerName)) {
-        error = "Could not read layer name";
+    quint8 layerNameLength;
+    if (!psdread(io, &layerNameLength)) {
+        error = "Could not read layer name length";
         return false;
     }
 
-    dbgFile << "layer name" << layerName;
+    dbgFile << "layer name length unpadded" << layerNameLength << "pos" << io->pos();
+
+    layerNameLength = ((layerNameLength + 1 + 3) & ~0x03) - 1;
+
+    dbgFile << "layer name length padded" << layerNameLength << "pos" << io->pos();
+
+    layerName = io->read(layerNameLength);
+
+    dbgFile << "layer name" << layerName << io->pos();
 
     QStringList longBlocks;
     if (m_header.m_version > 1) {

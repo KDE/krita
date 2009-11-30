@@ -38,8 +38,6 @@ public:
 
     QString error;
 
-    QVector<quint64> channelDataStartPositions;
-
     quint32 top;
     quint32 left;
     quint32 bottom;
@@ -49,6 +47,7 @@ public:
 
     struct ChannelInfo {
         qint16 channelId;
+        quint64 channelDataStart;
         quint64 channelDataLength;
     };
 
@@ -76,6 +75,9 @@ public:
     LayerMaskData layerMask;
 
     struct LayerBlendingRanges {
+
+        QByteArray data;
+
         quint8 blackValues[2];
         quint8 whiteValues[2];
         quint32 compositeGrayBlendDestinationRange;

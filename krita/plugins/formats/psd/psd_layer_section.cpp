@@ -28,14 +28,14 @@ PSDLayerSection::PSDLayerSection(const PSDHeader& header)
     : error(QString::null)
     , m_header(header)
 {
-    layerInfo.hasTransparency = false;
-    layerInfo.layerInfoSize = 0;
-    layerInfo.nLayers = 0;
+    hasTransparency = false;
+    layerInfoSize = 0;
+    nLayers = 0;
 }
 
 PSDLayerSection::~PSDLayerSection()
 {
-    qDeleteAll(layerInfo.layers);
+    qDeleteAll(layers);
 }
 
 bool PSDLayerSection::read(QIODevice* io)
@@ -64,68 +64,95 @@ bool PSDLayerSection::read(QIODevice* io)
     
     dbgFile << "reading layer info block. Bytes left" << io->bytesAvailable() << "position" << io->pos();
     
-    layerInfo.layerInfoSize = 0;
-    layerInfo.nLayers = 0;
+    layerInfoSize = 0;
+    nLayers = 0;
     if (m_header.m_version == 1) {
         quint32 layerInfoSize;
         if (!psdread(io, &layerInfoSize) || layerInfoSize > (quint64)io->bytesAvailable()) {
             error = "Could not read layer section size";
             return false;
         }
-        layerInfo.layerInfoSize = layerInfoSize;
+        layerInfoSize = layerInfoSize;
     }
     
     else if (m_header.m_version == 2) {
-        if (!psdread(io, &layerInfo.layerInfoSize) || layerInfo.layerInfoSize > (quint64)io->bytesAvailable()) {
+        if (!psdread(io, &layerInfoSize) || layerInfoSize > (quint64)io->bytesAvailable()) {
             error = "Could not read layer section size";
             return false;
         }
     }
     
-    dbgFile << "Layer info block size" << layerInfo.layerInfoSize;
+    dbgFile << "Layer info block size" << layerInfoSize;
     
-    if (layerInfo.layerInfoSize > 0 ) {
+    if (layerInfoSize > 0 ) {
         
         // rounded to a multiple of 2
-        if ((layerInfo.layerInfoSize & 0x01) != 0) {
-            layerInfo.layerInfoSize++;
+        if ((layerInfoSize & 0x01) != 0) {
+            layerInfoSize++;
         }
         
-        dbgFile << "Layer info block size after rounding" << layerInfo.layerInfoSize;
+        dbgFile << "Layer info block size after rounding" << layerInfoSize;
         
-        if (!psdread(io, &layerInfo.nLayers) || layerInfo.nLayers == 0) {
-            error = QString("Could not read read number of layers or no layers in image. %1").arg(layerInfo.nLayers);
+        if (!psdread(io, &nLayers) || nLayers == 0) {
+            error = QString("Could not read read number of layers or no layers in image. %1").arg(nLayers);
             return false;
         }
         
-        if (layerInfo.nLayers < 0) {
-            layerInfo.hasTransparency = true; // first alpha channel is the alpha channel of the projection.
-            layerInfo.nLayers = -layerInfo.nLayers;
+        if (nLayers < 0) {
+            hasTransparency = true; // first alpha channel is the alpha channel of the projection.
+            nLayers = -nLayers;
         }
         else {
-            layerInfo.hasTransparency = false;
+            hasTransparency = false;
         }
 
-        dbgFile << "transparency" << layerInfo.hasTransparency;
+        dbgFile << "transparency" << hasTransparency;
 
-        dbgFile << "Number of layers" << layerInfo.nLayers << "transparency" << layerInfo.hasTransparency;
+        dbgFile << "Number of layers" << nLayers << "transparency" << hasTransparency;
 
-        for (int i = 0; i < layerInfo.nLayers; ++i) {
+        for (int i = 0; i < nLayers; ++i) {
 
-            dbgFile << ">>>>>>>>>>> going to read layer " << i << "pos" << io->pos();
-            PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header, layerInfo.hasTransparency);
+            dbgFile << "Going to read layer " << i << "pos" << io->pos();
+            PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header, hasTransparency);
             if (!layerRecord->read(io)) {
                 error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);
                 return false;
             }
-            dbgFile << "Read layer" << i << layerRecord->layerName;
-            layerInfo.layers << layerRecord;
+            dbgFile << "Read layer" << i << layerRecord->layerName << "blending mode"
+                    << layerRecord->blendModeKey << io->pos();
+            layers << layerRecord;
         }
     }
 
     // get the positions for the channels belonging to each layer
-    for (int i = 0; i < layerInfo.nLayers; ++i) {
+    for (int i = 0; i < nLayers; ++i) {
+        
+        dbgFile << "Going to seek channel positions for layer" << i;
+        Q_ASSERT(i < layers.size());
+        if (i > layers.size()) {
+            error = QString("Expected layer %1, but only have %2 layers").arg(i).arg(layers.size());
+            return false;
+        }
+        
+        PSDLayerRecord *layerRecord = layers.at(i);
+        
+        for (int j = 0; j < layerRecord->nChannels; ++j) {
+            
 
+            Q_ASSERT(j < layerRecord->channelInfoRecords.size());
+            if (j > layerRecord->channelInfoRecords.size()) {
+                error = QString("Expected channel %1, but only have %2 channels for layer %3")
+                        .arg(j)
+                        .arg(layerRecord->channelInfoRecords.size())
+                        .arg(i);
+                return false;
+            }
+
+            PSDLayerRecord::ChannelInfo channelInfo = layerRecord->channelInfoRecords.at(j);
+            dbgFile << "channel record" << j << "for layer" << i << "with length" << channelInfo.channelDataLength << "is at" << io->pos();
+            channelInfo.channelDataStart = io->pos();
+            io->seek(io->pos() + channelInfo.channelDataLength);
+        }
     }
 
     quint32 globalMaskBlockLength;
@@ -136,24 +163,24 @@ bool PSDLayerSection::read(QIODevice* io)
 
     if (globalMaskBlockLength > 0) {
 
-        if (!psdread(io, &maskInfo.overlayColorSpace)) {
+        if (!psdread(io, &overlayColorSpace)) {
             error = "Could not read global mask info overlay colorspace";
             return false;
         }
 
         for (int i = 0; i < 4; ++i) {
-            if (!psdread(io, &maskInfo.colorComponents[i])) {
+            if (!psdread(io, &colorComponents[i])) {
                 error = QString("Could not read mask info visualizaion color component %1").arg(i);
                 return false;
             }
         }
 
-        if (!psdread(io, &maskInfo.opacity)) {
+        if (!psdread(io, &opacity)) {
             error = "Could not read global mask info visualisation opacity";
             return false;
         }
 
-        if (!psdread(io, &maskInfo.kind)) {
+        if (!psdread(io, &kind)) {
             error = "Could not read global mask info visualisation type";
             return false;
         }
@@ -176,10 +203,10 @@ bool PSDLayerSection::write(QIODevice* io)
 
 bool PSDLayerSection::valid()
 {
-    if (layerInfo.layerInfoSize > 0) {
-        if (layerInfo.nLayers <= 0) return false;
-        if (layerInfo.nLayers != layerInfo.layers.size()) return false;
-        foreach(PSDLayerRecord* layer, layerInfo.layers) {
+    if (layerInfoSize > 0) {
+        if (nLayers <= 0) return false;
+        if (nLayers != layers.size()) return false;
+        foreach(PSDLayerRecord* layer, layers) {
             if (!layer->valid()) {
                 return false;
             }

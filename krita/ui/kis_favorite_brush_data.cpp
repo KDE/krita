@@ -46,7 +46,7 @@ KisFavoriteBrushData::KisFavoriteBrushData(KoFavoriteResourceManager* resourceMa
 //    m_button->setStyleSheet("* { background-color: rgba(232,231,230,255) }");
 
     connect(m_button, SIGNAL(clicked()), this, SLOT(slotBrushButtonClicked()));
-    connect(this, SIGNAL(signalPaintOpChanged(KisPaintOpPresetSP)), m_favoriteResourceManager, SLOT(slotChangeCurrentPaintOp(KisPaintOpPresetSP)));
+//    connect(this, SIGNAL(signalPaintOpChanged(KisPaintOpPresetSP)), m_favoriteResourceManager, SLOT(slotChangeCurrentPaintOp(KisPaintOpPresetSP)));
 }
 
 void KisFavoriteBrushData::slotBrushButtonClicked()

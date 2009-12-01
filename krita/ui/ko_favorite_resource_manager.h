@@ -57,7 +57,6 @@ public:
     void resetPopupPaletteParent(QWidget * = 0);
     QList<QPixmap> favoriteBrushPixmaps();
     QPixmap favoriteBrushPixmap(int);
-    void changeActivePaintop(int);
 
     /**********************************Favorite Brushes***********************************/
 
@@ -82,6 +81,7 @@ public:
 public slots:
     void slotChangePaintopLabel();
     void slotShowPopupPalette(const QPoint&);
+    void slotChangeActivePaintop(int);
 
 private:
     KisPaletteManager *m_favoriteBrushManager;

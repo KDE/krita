@@ -61,6 +61,9 @@ private:
 
 private slots:
     void slotPickNewColor();
+
+signals:
+    void changeActivePaintop(int);
 };
 
 #endif // KIS_POPUP_PALETTE_H

@@ -19,6 +19,8 @@
    1. how to set offset point in case the window is not positioned on top left
    2. how to set offset point in canvas. right now it is -40,-10 which works fine
       but there should be a better way to solve this problem
+   3. pop up palette does not show up. How to produce a bug:
+       - start a canvas and another new canvas, close the older canvas.
 */
 
 #include "kis_popup_palette.h"
@@ -46,6 +48,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
 {
     setAutoFillBackground(true);
     setAttribute(Qt::WA_ContentsPropagated,true);
+    connect(this, SIGNAL(changeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
 }
 
 void KisPopupPalette::slotPickNewColor()
@@ -201,7 +204,7 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
         { //in favorite brushes area
             int pos = calculateFavoriteBrush(point);;
             qDebug() << "[KisPopupPalette] favorite brush position: " << pos;
-            this->m_resourceManager->changeActivePaintop(pos);
+            emit changeActivePaintop(pos);
         }
         else if (pathColor.contains(point))
         {

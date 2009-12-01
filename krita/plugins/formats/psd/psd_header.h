@@ -38,6 +38,12 @@ public:
         MultiChannel,
         DuoTone,
         Lab,
+        Gray16,
+        RGB48,
+        Lab48,
+        CMYK64,
+        DeepMultichannel,
+        Duotone16,
         UNKNOWN = 9000
      };
 

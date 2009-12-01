@@ -78,7 +78,7 @@ void OutputPainterStrategy::init( const Header *header )
             scaleY = scaleX;
 
     // FIXME: Calculate translation if we should center the Emf in the
-    //        area and keep the aspect ration.
+    //        area and keep the aspect ratio.
     }
 
     // This is restored in cleanup().
@@ -152,8 +152,14 @@ void OutputPainterStrategy::saveDC()
 
 void OutputPainterStrategy::restoreDC( const qint32 savedDC )
 {
-    for (int i = -1; i >= savedDC; --i) {
-        m_painter->restore();
+    for (int i = 0; i < savedDC; ++i) {
+        if (m_painterSaves > 0) {
+            m_painter->restore();
+            --m_painterSaves;
+        }
+        else {
+            qDebug() << "restoreDC(): try to restore painter without save";
+        }
     }
 }
 

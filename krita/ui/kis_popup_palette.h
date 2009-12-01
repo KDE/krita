@@ -21,59 +21,46 @@
 #define KIS_POPUP_PALETTE_H
 
 #include <kis_types.h>
-#include <QToolBox>
+#include <QtGui/QWidget>
 #include <QQueue>
 
 class KisFavoriteBrushData;
 class KisRecentColorData;
 class KoFavoriteResourceManager;
-class FlowLayout;
 class QWidget;
-class QToolButton;
-class QSize;
 
 
-class KisPopupPalette : public QToolBox
+class KisPopupPalette : public QWidget
 {
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
     KisPopupPalette(KoFavoriteResourceManager* , QWidget *parent=0);
-    QSize sizeHint() const;
     ~KisPopupPalette();
-    static const int BUTTON_SIZE = 25;
+    QSize sizeHint() const;
 
-    // note: pass pointers here instead of references, since we
-    // keep pointers to KisFavoriteBrushData everywhere.
-    void addFavoriteBrushButton(KisFavoriteBrushData*);
-    void removeFavoriteBrushButton(KisFavoriteBrushData*);
-    void addRecentColorButton(KisRecentColorData*);
-    void removeRecentColorButton(KisRecentColorData*);
+    void showPopupPalette (const QPoint&);
+
+    static int const BUTTON_SIZE = 25;
 
 protected:
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void paintEvent(QPaintEvent *event);
+    void paintEvent (QPaintEvent*);
+    void resizeEvent (QResizeEvent*);
+    void mouseReleaseEvent (QMouseEvent*);
+
+    //functions to calculate favorite brush position in array
+    int calculateRound(float);
+    int calculateFavoriteBrush(QPointF);
+    int max(int x,int y);
 
 private:
     KoFavoriteResourceManager* m_resourceManager;
 
-    int colorFoo;
-
-    QPoint dragPosition;
-
-    void updatePalette();
-
-    /**The Layout for favorite brushes on the palette**/
-    FlowLayout *m_brushButtonLayout;
-
-    /**The Layout for recently used colors on the palette**/
-    FlowLayout *m_colorLayout;
-
+    QPainterPath drawColorDonutPath(int, int);
+    QPainterPath drawBrushDonutPath(int, int);
 
 private slots:
     void slotPickNewColor();
-
 };
 
 #endif // KIS_POPUP_PALETTE_H

@@ -23,19 +23,20 @@
 #include <kis_types.h>
 #include <QQueue>
 #include <QList>
+#include <QPixmap>
 #include "kis_favorite_brush_data.h"
 #include "kis_recent_color_data.h"
 
 class QString;
 class QColor;
+class QStringList;
+class QToolButton;
+class QPoint;
 class KoID;
 class KisPopupPalette;
 class KisPaintopBox;
 class KisPaletteManager;
 class KisView2;
-class QStringList;
-class QToolButton;
-class QPoint;
 
 class KoFavoriteResourceManager : public QObject
 {
@@ -46,7 +47,7 @@ public:
     KoFavoriteResourceManager(KisPaintopBox*, QWidget* = 0);
     ~KoFavoriteResourceManager();
 
-    static const int MAX_FAVORITE_BRUSHES = 10;
+    static const int MAX_FAVORITE_BRUSHES = 12;
     static const int MAX_RECENT_COLORS = 10;
 
     /************************************Popup Palette************************************/
@@ -54,6 +55,9 @@ public:
     void showPaletteManager();
     QToolButton* favoriteBrushButton(int);
     void resetPopupPaletteParent(QWidget * = 0);
+    QList<QPixmap> favoriteBrushPixmaps();
+    QPixmap favoriteBrushPixmap(int);
+    void changeActivePaintop(int);
 
     /**********************************Favorite Brushes***********************************/
 
@@ -76,7 +80,6 @@ public:
     QQueue<KisRecentColorData*>* recentColorsList();
     
 public slots:
-    void slotChangeCurrentPaintOp(KisPaintOpPresetSP);
     void slotChangePaintopLabel();
     void slotShowPopupPalette(const QPoint&);
 

@@ -16,7 +16,9 @@
    Boston, MA 02110-1301, USA.
 
    Known issues:
-   1. How to automatically resize the widget, so there will be no scrollbars?
+   1. how to set offset point in case the window is not positioned on top left
+   2. how to set offset point in canvas. right now it is -40,-10 which works fine
+      but there should be a better way to solve this problem
 */
 
 #include "kis_popup_palette.h"
@@ -28,243 +30,242 @@
 #include "kis_paintop_box.h"
 #include <kis_types.h>
 #include "ko_favorite_resource_manager.h"
+#include <QtGui>
+#include <math.h>
+#define PI 3.14159265
+#define DIAMETER 200
+#define BRUSH_RADIUS 50
 
 #ifndef _MSC_EXTENSIONS
-const int KisPopupPalette::BUTTON_SIZE;
+int const KisPopupPalette::BUTTON_SIZE;
 #endif
 
 KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *parent)
-    : QToolBox(parent, Qt::FramelessWindowHint)
+    : QWidget(parent, Qt::FramelessWindowHint | Qt::Popup)
     , m_resourceManager (manager)
-    , m_brushButtonLayout(0)
-    , m_colorLayout(0)
 {
-
-    qDebug() << "[KisPopupPalette] I am constructed";
-    colorFoo=0;
-
-    //FAVORITE BRUSHES
-    m_brushButtonLayout = new FlowLayout(5);
-
-    for (int pos = 0; pos < m_resourceManager->favoriteBrushesTotal(); pos ++)
-    {
-        // for paintops, the tooloptionbutton appears to be never set
-        QWidget* w = m_resourceManager->favoriteBrushButton(pos);
-        if (w) {
-            m_brushButtonLayout->addWidget(w);
-        }
-    }
-
-    QVBoxLayout *tempLayout = new QVBoxLayout();
-    tempLayout->addLayout(m_brushButtonLayout);
-    tempLayout->setContentsMargins(5,0,5,0);
-
-    QWidget* brushButtonWidget = new QWidget();
-    brushButtonWidget->setLayout(tempLayout);
-//    brushButtonWidget->setStyleSheet("* { background-color: rgba(0,0,0,128) }");
-
-    //RECENT COLORS
-    QToolButton* chooseColor = new QToolButton ();
-    chooseColor->setMaximumSize(KisPopupPalette::BUTTON_SIZE,KisPopupPalette::BUTTON_SIZE);
-    chooseColor->setMinimumSize(KisPopupPalette::BUTTON_SIZE,KisPopupPalette::BUTTON_SIZE);
-    chooseColor->setIcon(* (new QIcon (":/images/change_color.gif")));
-    chooseColor->setAutoFillBackground(false);
-    connect(chooseColor, SIGNAL(clicked()), this, SLOT(slotPickNewColor()));
-
-    m_colorLayout = new FlowLayout(5);
-    m_colorLayout->addWidget(chooseColor);
-
-    tempLayout = new QVBoxLayout();
-    tempLayout->addLayout(m_colorLayout);
-    tempLayout->setContentsMargins(5,0,5,0);
-
-    QWidget* colorWidget = new QWidget();
-    colorWidget->setLayout(tempLayout);
-//    colorWidget->setStyleSheet("* { background-color: rgba(0,0,0,128) }");
-
-    //adding items
-    addItem(brushButtonWidget, "Favorite Brushes");
-    addItem(colorWidget, "Recently Used Colors");
-
-    /****************************REMOVE THIS LATER**********************************/
-//    this->setCurrentIndex(1);
-    /****************************REMOVE THIS LATER**********************************/
-
-//    setStyleSheet("* { background-color: rgba(0,0,0,0) }");
-
-    //clean up
-    chooseColor = 0;
-    tempLayout = 0;
-    colorWidget = 0;
-    brushButtonWidget = 0;
-
-//    setAutoFillBackground(true);
-//    setAttribute(Qt::WA_NoSystemBackground, true);
-//    setAttribute(Qt::WA_OpaquePaintEvent, false);
-
-//    for (int pos=0; pos< 2; pos++){
-//        QWidget *w = widget(pos);
-//        w->setAutoFillBackground(true);
-//    }
-}
-
-void KisPopupPalette::paintEvent(QPaintEvent *event)
-{
-    QPainter painter (this);
-    painter.setOpacity(0.5);
-//    painter.fillRect(rect(), Qt::transparent);
-
-    for (int pos=0; pos< 2; pos++){
-        QWidget *w = widget(pos);
-        QPalette palette(w->palette());
-        palette.setColor(QPalette::Window, QColor(0,0,0,128));
-        w->setPalette(palette);
-    }
-}
-
-void KisPopupPalette::addFavoriteBrushButton(KisFavoriteBrushData* brush)
-{
-    if (brush->paintopButton()) {
-        m_brushButtonLayout->addWidget(brush->paintopButton());
-        updatePalette();
-    }
-
-}
-
-void KisPopupPalette::removeFavoriteBrushButton(KisFavoriteBrushData* brush)
-{
-    if (brush->paintopButton()) {
-        // qt has the concept of object hierarchy, i.e., one object owns another.
-        // if you put a widget in a layout, like in addfavouritebrushbutton,
-        // it becomes owned by its new parent. Now, if we delete the brush in
-        // KisFavoriteBrushData::~KisFavoriteBrushData while it's still owned
-        // by KisPopupPalette, you get a crash. So, set the parent to 0, and,
-        // for added safety, check in the destructor KisFavoriteBrushData::~KisFavoriteBrushData
-        // whether the button has a parent.
-        brush->paintopButton()->setParent(0);
-        // hiding it cannot hurt
-        brush->paintopButton()->setVisible(false);
-        // remove from the layout
-        m_brushButtonLayout->removeWidget (brush->paintopButton());
-        // delete the brush object itself. This isn't clean, the interaction between
-        // KisView2's list of favourite brushes and the palette needs a bit of redesign,
-        // these classes know way too much about each other.
-        delete brush;
-    }
-    updatePalette();
+    setAutoFillBackground(true);
+    setAttribute(Qt::WA_ContentsPropagated,true);
 }
 
 void KisPopupPalette::slotPickNewColor()
 {
     //TODO:get currently used Color
-    KisRecentColorData *newColor;
-
-    /****************************REMOVE THIS LATER**********************************/
-    switch (colorFoo % 15){
-        case 0:
-            newColor = new KisRecentColorData(new QColor (255,0,0,255));
-            break;
-        case 1:
-            newColor = new KisRecentColorData(new QColor (0,197,42,255));
-            break;
-        case 2:
-            newColor = new KisRecentColorData(new QColor (192,0,255,255));
-            break;
-        case 3:
-            newColor = new KisRecentColorData(new QColor (0,30,255,255));
-            break;
-        case 4:
-            newColor = new KisRecentColorData(new QColor (116,227,255,255));
-            break;
-        case 5:
-            newColor = new KisRecentColorData(new QColor (255,240,0,255));
-            break;
-        case 6:
-            newColor = new KisRecentColorData(new QColor (119,156,110,255));
-            break;
-        case 7:
-            newColor = new KisRecentColorData(new QColor (144,56,91,255));
-            break;
-        case 8:
-            newColor = new KisRecentColorData(new QColor (162,201,255,255));
-            break;
-        case 9:
-            newColor = new KisRecentColorData(new QColor (250,162,255,255));
-            break;
-        case 10:
-            newColor = new KisRecentColorData(new QColor (255,215,162,255));
-            break;
-        case 11:
-            newColor = new KisRecentColorData(new QColor (162,255,245,255));
-            break;
-        case 12:
-            newColor = new KisRecentColorData(new QColor (234,255,162,255));
-            break;
-        case 13:
-            newColor = new KisRecentColorData(new QColor (105,111,123,255));
-            break;
-        default:
-            newColor = new KisRecentColorData(new QColor (255,162,162,255));
-            break;
-    }
-    colorFoo++;
-
-    qDebug() << "Color to be added: (r)" << newColor->color()->red() << "(g)" << newColor->color()->green()
-            << "(b)" << newColor->color()->blue();
-    /****************************REMOVE THIS LATER**********************************/
-
-    //TODO: develop this more!
-    m_resourceManager->addRecentColor(newColor);
-
-    qDebug() << "new color!!";
+//    KisRecentColorData *newColor;
+//
+//    /****************************REMOVE THIS LATER**********************************/
+//    switch (colorFoo % 15){
+//        case 0:
+//            newColor = new KisRecentColorData(new QColor (255,0,0,255));
+//            break;
+//        case 1:
+//            newColor = new KisRecentColorData(new QColor (0,197,42,255));
+//            break;
+//        case 2:
+//            newColor = new KisRecentColorData(new QColor (192,0,255,255));
+//            break;
+//        case 3:
+//            newColor = new KisRecentColorData(new QColor (0,30,255,255));
+//            break;
+//        case 4:
+//            newColor = new KisRecentColorData(new QColor (116,227,255,255));
+//            break;
+//        case 5:
+//            newColor = new KisRecentColorData(new QColor (255,240,0,255));
+//            break;
+//        case 6:
+//            newColor = new KisRecentColorData(new QColor (119,156,110,255));
+//            break;
+//        case 7:
+//            newColor = new KisRecentColorData(new QColor (144,56,91,255));
+//            break;
+//        case 8:
+//            newColor = new KisRecentColorData(new QColor (162,201,255,255));
+//            break;
+//        case 9:
+//            newColor = new KisRecentColorData(new QColor (250,162,255,255));
+//            break;
+//        case 10:
+//            newColor = new KisRecentColorData(new QColor (255,215,162,255));
+//            break;
+//        case 11:
+//            newColor = new KisRecentColorData(new QColor (162,255,245,255));
+//            break;
+//        case 12:
+//            newColor = new KisRecentColorData(new QColor (234,255,162,255));
+//            break;
+//        case 13:
+//            newColor = new KisRecentColorData(new QColor (105,111,123,255));
+//            break;
+//        default:
+//            newColor = new KisRecentColorData(new QColor (255,162,162,255));
+//            break;
+//    }
+//    colorFoo++;
+//
+//    qDebug() << "Color to be added: (r)" << newColor->color()->red() << "(g)" << newColor->color()->green()
+//            << "(b)" << newColor->color()->blue();
+//    /****************************REMOVE THIS LATER**********************************/
+//
+//    //TODO: develop this more!
+//    m_resourceManager->addRecentColor(newColor);
+//
+//    qDebug() << "new color!!";
 
 }
 
+void KisPopupPalette::showPopupPalette (const QPoint &p)
+{
+    if (!isVisible())
+    {
+        QSize parentSize(parentWidget()->size());
+        QPoint pointPalette(p.x(), p.y());
+
+        //setting offset point in case the widget is shown somewhere near the edges of the
+        int offsetX = 0, offsetY = 0;
+        if ((offsetX = pointPalette.x() + width()/2 - parentSize.width()) >= 0 || (offsetX = pointPalette.x() - width()/2) <= 0)
+            pointPalette.setX(pointPalette.x() - offsetX);
+        if ((offsetY = pointPalette.y() + height()/2 -parentSize.height()) >= 0 || (offsetY = pointPalette.y() - height()/2) <= 0)
+            pointPalette.setY(pointPalette.y() - offsetY);
+
+        move(pointPalette + QPoint (-40,-10));
+
+        qDebug() << "[KisPopupPalette:GLOBALposition] pointPalette " << mapToGlobal(pointPalette)
+            << " | parentSize " << parentSize
+            << " | parentPosition " << mapToGlobal(parentWidget()->pos())
+            << " | cursorPosition " << QCursor::pos();
+    }
+    setVisible(!isVisible());
+}
 QSize KisPopupPalette::sizeHint() const
 {
-    return QSize(200, 125);
+    return QSize(DIAMETER,DIAMETER);
 }
 
- void KisPopupPalette::mousePressEvent(QMouseEvent *event)
- {
-     if (event->button() == Qt::LeftButton) {
-         dragPosition = event->globalPos() - frameGeometry().topLeft();
-         event->accept();
-     }
- }
+void KisPopupPalette::resizeEvent(QResizeEvent*)
+{
+    int side = qMin(width(), height());
+    QRegion maskedRegion (width()/2 - side/2, height()/2 - side/2, side, side, QRegion::Ellipse);
+    setMask(maskedRegion);
+}
 
- void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
- {
-     if (event->buttons() & Qt::LeftButton) {
-         move(event->globalPos() - dragPosition);
-         event->accept();
-     }
- }
+int KisPopupPalette::calculateRound(float f)
+{
+    return floor(f+0.5);
+}
+
+int KisPopupPalette::calculateFavoriteBrush(QPointF point)
+{
+    QPixmap pixmap(m_resourceManager->favoriteBrushPixmap(1));
+    QPointF pixmapOffset(pixmap.width()/2, pixmap.height()/2);
+    float posF_x = (float) m_resourceManager->favoriteBrushesTotal()/ (2*PI) * asin( (point.x() + pixmapOffset.x() - width()/2) / BRUSH_RADIUS);
+    float posF_y = (float) m_resourceManager->favoriteBrushesTotal()/ (2*PI) * acos( (point.y() + pixmapOffset.y() - width()/2) / BRUSH_RADIUS);
+
+    int pos_x = calculateRound (posF_x);
+    int pos_y = calculateRound (posF_y);
+
+    qDebug() << "[KisPopupPalette] posX: " << pos_x << " | posY: " << pos_y;
+    
+    if (isnan(posF_x)) return pos_y;
+    else if (isnan(posF_y)) return pos_x;
+    else
+    {
+        if (pos_x<0)
+            return m_resourceManager->favoriteBrushesTotal()-max(fabs(pos_x),fabs(pos_y));
+        else if (pos_x == 0 && pos_y == (m_resourceManager->favoriteBrushesTotal()-1)/2)
+            return calculateRound(((float)m_resourceManager->favoriteBrushesTotal())/2);
+        else
+            return max(fabs(pos_x),fabs(pos_y));
+    }
+}
+
+int KisPopupPalette::max(int x, int y)
+{
+    if (x > y) return x;
+    else return y;
+}
+
+void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
+{
+    QPointF point = event->posF();
+    event->accept();
+
+    if (event->button() == Qt::LeftButton)
+    {
+        QPainterPath pathBrush(drawBrushDonutPath(width()/2, height()/2));
+        QPainterPath pathColor(drawColorDonutPath(width()/2, height()/2));
+
+        qDebug() << "[KisPopupPalette] mouse position: " << point;
+
+        if (pathBrush.contains(point))
+        { //in favorite brushes area
+            int pos = calculateFavoriteBrush(point);;
+            qDebug() << "[KisPopupPalette] favorite brush position: " << pos;
+            this->m_resourceManager->changeActivePaintop(pos);
+        }
+        else if (pathColor.contains(point))
+        {
+            qDebug() << "[KisPopupPalette] in recent colour area";
+        }
+    }
+    else if (event->button() == Qt::MidButton)
+    {
+        setVisible(false);
+    }
+}
+
+QPainterPath KisPopupPalette::drawColorDonutPath(int x, int y)
+{
+    QPainterPath path_ColorDonut;
+    path_ColorDonut.addEllipse(QPointF(x,y), width()/2 - 10, height()/2 - 10);
+    path_ColorDonut.addEllipse(QPointF(x,y), width()/2 - 30, height()/2 - 30);
+    path_ColorDonut.setFillRule(Qt::OddEvenFill);
+
+    return path_ColorDonut;
+}
+
+QPainterPath KisPopupPalette::drawBrushDonutPath(int x, int y)
+{
+    QPainterPath path_BrushDonut;
+    path_BrushDonut.addEllipse(QPointF(x,y), width()/2 - 40, height()/2 - 40);
+    path_BrushDonut.addEllipse(QPointF(x,y), width()/2 - 60, height()/2 - 60);
+    path_BrushDonut.setFillRule(Qt::OddEvenFill);
+
+    return path_BrushDonut;
+}
+
+void KisPopupPalette::paintEvent(QPaintEvent*)
+{
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.translate(width()/2, height()/2);
+    painter.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+
+    QPainterPath path_ColorDonut(drawColorDonutPath(0,0));
+    painter.fillPath(path_ColorDonut, Qt::red);
+    painter.drawPath(path_ColorDonut);
+
+//    QPainterPath path_BrushDonut(drawBrushDonutPath(0,0));
+//    painter.fillPath(path_BrushDonut, Qt::blue);
+//    painter.drawPath(path_BrushDonut);
+
+    QList<QPixmap> pixmaps (m_resourceManager->favoriteBrushPixmaps());
+
+    for (int pos = 0; pos < pixmaps.size(); pos++)
+    {
+        QPixmap pixmap(pixmaps.at(pos));
+        QPointF pixmapOffset(pixmap.width()/2, pixmap.height()/2);
+
+        float angle = pos*PI*2.0/pixmaps.size();
+        QPointF pointTemp(BRUSH_RADIUS*sin(angle),BRUSH_RADIUS*cos(angle));
+        painter.drawPixmap(QPoint(pointTemp.x()-pixmapOffset.x(), pointTemp.y()-pixmapOffset.y()), pixmap);
+    }
+}
 
 KisPopupPalette::~KisPopupPalette()
 {
     m_resourceManager = 0;
-    delete m_brushButtonLayout;
-    delete m_colorLayout;
-}
-
-void KisPopupPalette::updatePalette()
-{
-    int tempIndex = currentIndex();
-    this->setCurrentIndex(2/(tempIndex+1) - 1);
-    this->setCurrentIndex(tempIndex);
-}
-
-void KisPopupPalette::addRecentColorButton(KisRecentColorData* newColor)
-{
-    m_colorLayout->addWidget(newColor->colorButton());
-    updatePalette();
-}
-
-void KisPopupPalette::removeRecentColorButton(KisRecentColorData* color)
-{
-    m_colorLayout->removeWidget(color->colorButton());
-    updatePalette();
 }
 
 #include "kis_popup_palette.moc"

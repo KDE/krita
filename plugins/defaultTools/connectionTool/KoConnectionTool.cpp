@@ -229,12 +229,6 @@ void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
     // Look at the new shape under the mouse
     m_shapeOn = m_canvas->shapeManager()->shapeAt(event->point);
 
-    // If the left mouse button is not down anymore, we deactive the following
-    if(event->buttons() != Qt::LeftButton) {
-        m_activeHandle = -1;
-        m_lastConnectionShapeOn = 0;
-    }
-
     KoConnectionShape * tempShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
     if(!tempShape) {
         if(m_connectionShape != 0) {

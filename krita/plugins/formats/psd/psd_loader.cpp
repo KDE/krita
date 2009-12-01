@@ -140,7 +140,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
     PSDHeader header;
     if (!header.read(&f)) {
-        kDebug() << "failed reading header: " << header.error;
+        dbgFile << "failed reading header: " << header.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -149,7 +149,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
     PSDColorModeBlock colorModeBlock(header.m_colormode);
     if (!colorModeBlock.read(&f)) {
-        kDebug() << "failed reading colormode block: " << colorModeBlock.error;
+        dbgFile << "failed reading colormode block: " << colorModeBlock.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -157,7 +157,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
     PSDResourceSection resourceSection;
     if (!resourceSection.read(&f)) {
-        kDebug() << "failed reading resource section: " << resourceSection.error;
+        dbgFile << "failed reading resource section: " << resourceSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -165,7 +165,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
     PSDLayerSection layerSection(header);
     if (!layerSection.read(&f)) {
-        kDebug() << "failed reading layer section: " << layerSection.error;
+        dbgFile << "failed reading layer section: " << layerSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -204,16 +204,33 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     else {
         // read the channels for the various layers
         for(int i = 0; i < layerSection.nLayers; ++i) {
+
+            // XXX: work out the group layer structure in Photoshop, as well as the adjustment layers
+
             PSDLayerRecord* layerRecord = layerSection.layers.at(i);
 
-            QVector<quint8*> planarChannels;
-            for (quint32 row = layerRecord->top; row < layerRecord->bottom; ++row) {
-                for (quint16 channel = 0; channel < layerRecord->nChannels; ++channel) {
-                    //quint8* bytes = layerRecord->readChannelData(io, channel);
-                    //planarChannels << bytes;
-                }
-            }
+            KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
 
+            QVector<quint8*> planes;
+            for (quint64 row = layerRecord->top; row < layerRecord->bottom; ++row) {
+                for (quint16 channel = 0; channel < layerRecord->nChannels; ++channel) {
+                    quint8* bytes = layerRecord->readChannelData(&f, row, channel);
+                    if (bytes == 0) {
+                        dbgFile << layerRecord->error;
+                        return KisImageBuilder_RESULT_BAD_FETCH;
+                    }
+
+                    // XXX: make sure the order is ok. In photoshop, the first channel is alpha
+                    planes << bytes;
+                }
+                layer->paintDevice()->writePlanarBytes(planes,
+                                                       layerRecord->left,
+                                                       row,
+                                                       layerRecord->right - layerRecord->left,
+                                                       layerRecord->bottom - layerRecord->top);
+
+            }
+            m_image->addNode(layer, m_image->rootLayer());
         }
     }
 

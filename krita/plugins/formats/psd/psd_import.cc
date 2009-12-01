@@ -53,8 +53,6 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
 
     doc->prepareForImport();
 
-    qDebug() << "filename" << filename;
-
     if (!filename.isEmpty()) {
 
         KUrl url;

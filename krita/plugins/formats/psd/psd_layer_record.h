@@ -31,6 +31,15 @@ class PSDLayerRecord
 {
 public:
 
+    enum CompressionType {
+        Uncompressed,
+        RLE,
+        ZIP,
+        ZIPWithPrediction,
+        Unknown
+    };
+
+
     PSDLayerRecord(const PSDHeader &header, bool hasTransparency);
     bool read(QIODevice* io);
     bool write(QIODevice* io);
@@ -47,6 +56,7 @@ public:
 
     struct ChannelInfo {
         qint16 channelId;
+        CompressionType compressionType;
         quint64 channelDataStart;
         quint64 channelDataLength;
     };
@@ -93,6 +103,10 @@ public:
     };
 
     QMap<QString, LayerInfoBlock*> infoBlocks;
+
+public:
+
+    quint8* readChannelData(QIODevice* io, quint64 row, quint16 channel);
 
 private:
 

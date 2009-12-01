@@ -149,9 +149,18 @@ bool PSDLayerSection::read(QIODevice* io)
             }
 
             PSDLayerRecord::ChannelInfo channelInfo = layerRecord->channelInfoRecords.at(j);
-            dbgFile << "channel record" << j << "for layer" << i << "with length" << channelInfo.channelDataLength << "is at" << io->pos();
+
             channelInfo.channelDataStart = io->pos();
-            io->seek(io->pos() + channelInfo.channelDataLength);
+            quint16 compressionType;
+            if (!psdread(io, &compressionType)) {
+                error = "Could not read compression type for channel";
+                return false;
+            }
+            channelInfo.compressionType = (PSDLayerRecord::CompressionType)compressionType;
+            dbgFile << "channel record" << j << "for layer" << i << "with length" << channelInfo.channelDataLength
+                    << "is at" << io->pos()
+                    << "and has compression type" << channelInfo.compressionType;
+            io->seek(io->pos() + channelInfo.channelDataLength - 2);
         }
     }
 

@@ -104,7 +104,6 @@ bool PSDLayerRecord::read(QIODevice* io)
         }
 
         dbgFile << "channel" << i << "id" << info.channelId << "length" << info.channelDataLength;
-
         channelInfoRecords << info;
     }
 
@@ -356,6 +355,11 @@ bool PSDLayerRecord::valid()
 {
     // XXX: check validity!
     return true;
+}
+
+quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, quint16 channel)
+{
+    return 0;
 }
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)

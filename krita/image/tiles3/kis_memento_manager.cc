@@ -146,6 +146,9 @@ KisMementoSP KisMementoManager::getMemento()
     return m_currentMemento;
 }
 
+#define forEachReversed(iter, list) \
+        for(iter=list.end(); iter-- != list.begin();)
+
 #define saveAndClearMemento(memento) KisMementoSP _mem = (memento); memento=0
 #define restoreMemento(memento) (memento) = _mem
 
@@ -159,9 +162,11 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
 
     KisMementoItemSP mi;
     KisMementoItemSP parentMI;
+    KisMementoItemList::iterator iter;
 
     saveAndClearMemento(m_currentMemento);
-    foreach(mi, changeList) {
+    forEachReversed(iter, changeList) {
+        mi=*iter;
         parentMI = mi->parent();
 
         if (mi->type() == KisMementoItem::CHANGED)

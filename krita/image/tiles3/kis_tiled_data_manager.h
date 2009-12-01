@@ -144,11 +144,13 @@ public:
         Q_UNUSED(memento);
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollback(m_hashTable);
+        recalculateExtent();
     }
     void rollforward(KisMementoSP memento) {
         Q_UNUSED(memento);
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollforward(m_hashTable);
+        recalculateExtent();
     }
     bool hasCurrentMemento() const {
         return m_mementoManager->hasCurrentMemento();

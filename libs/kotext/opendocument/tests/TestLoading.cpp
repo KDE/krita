@@ -748,7 +748,7 @@ void TestLoading::initTestCase()
     QScriptValue rc = engine->importExtension("qt.core");
     if (rc.isError()) {
         kWarning() << "Failed to find Qt bindings, aborting";
-        abort();
+        QSKIP("Failed to find Qt bindings (qtscript generator), aborting", SkipAll);
     }
     rc = engine->importExtension("qt.gui");
     if (rc.isError()) {

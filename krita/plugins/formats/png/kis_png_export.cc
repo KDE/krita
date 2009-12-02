@@ -86,6 +86,8 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     kdb->setModal(false);
 
     KisImageWSP image = output->image();
+    image->lock();
+    image->refreshGraph();
     KisPaintDeviceSP pd;
     pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE, pd);

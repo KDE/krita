@@ -91,6 +91,8 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
 
     KisImageWSP image = output->image();
     Q_CHECK_PTR(image);
+    image->lock();
+    image->refreshGraph();
 
     jp2Converter kpc(output, output->undoAdapter());
 

@@ -113,6 +113,8 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
 
     KisImageWSP image = output->image();
     Q_CHECK_PTR(image);
+    image->lock();
+    image->refreshGraph();
 
     KisJPEGConverter kpc(output, output->undoAdapter());
 

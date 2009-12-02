@@ -49,9 +49,7 @@ protected:
     void mouseReleaseEvent (QMouseEvent*);
 
     //functions to calculate favorite brush position in array
-    int calculateRound(float);
     int calculateFavoriteBrush(QPointF);
-    int max(int x,int y);
 
 private:
     KoFavoriteResourceManager* m_resourceManager;

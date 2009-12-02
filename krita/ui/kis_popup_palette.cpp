@@ -180,49 +180,23 @@ void KisPopupPalette::resizeEvent(QResizeEvent*)
     setMask(maskedRegion);
 }
 
-int KisPopupPalette::calculateRound(float f)
-{
-    return floor(f+0.5);
-}
-
 int KisPopupPalette::calculateFavoriteBrush(QPointF point)
 {
-    QPixmap pixmap(m_resourceManager->favoriteBrushPixmap(1));
-    QPointF pixmapOffset(pixmap.width()/2, pixmap.height()/2);
-    float posF_x = (float) m_resourceManager->favoriteBrushesTotal()/ (2*PI) * asin( (point.x() + pixmapOffset.x() - width()/2) / BRUSH_RADIUS);
-    float posF_y = (float) m_resourceManager->favoriteBrushesTotal()/ (2*PI) * acos( (point.y() + pixmapOffset.y() - width()/2) / BRUSH_RADIUS);
+    //translate to (0,0)
+    point.setX(point.x() - width()/2);
+    point.setY(point.y() - height()/2);
 
-    int pos_x = calculateRound (posF_x);
-    int pos_y = calculateRound (posF_y);
+    //rotate
+    float smallerAngle = PI/2 + PI/m_resourceManager->favoriteBrushesTotal() - atan2 ( point.y(), point.x() );
+    float radius = sqrt ( point.x()*point.x() + point.y()*point.y() );
+    point.setX( radius * cos(smallerAngle) );
+    point.setY( radius * sin(smallerAngle) );
 
-    qDebug() << "[KisPopupPalette] posX: " << pos_x << " | posY: " << pos_y;
-    
-    if (isnan(posF_x) && isnan(posF_y)) return -1;
-    else if (isnan(posF_x))
-    {
-        if (pos_y < 0) return m_resourceManager->favoriteBrushesTotal()-fabs(pos_y);
-        else return pos_y;
-    }
-    else if (isnan(posF_y))
-    {
-        if (pos_x < 0) return m_resourceManager->favoriteBrushesTotal()-fabs(pos_x);
-        return pos_x;
-    }
-    else
-    {
-        if (pos_x<0)
-            return m_resourceManager->favoriteBrushesTotal()-max(pos_x,pos_y);
-        else if (pos_x == 0 && pos_y == (m_resourceManager->favoriteBrushesTotal()-1)/2)
-            return calculateRound(((float)m_resourceManager->favoriteBrushesTotal())/2);
-        else
-            return max(pos_x,pos_y);
-    }
-}
+    //calculate brush index
+    int pos = floor (acos(point.x()/radius) * m_resourceManager->favoriteBrushesTotal()/ (2 * PI));
+    if (point.y() < 0) pos =  m_resourceManager->favoriteBrushesTotal() - pos - 1;
 
-int KisPopupPalette::max(int x, int y)
-{
-    if (x > y) return x;
-    else return y;
+    return pos;
 }
 
 QPainterPath KisPopupPalette::drawColorDonutPath(int x, int y)

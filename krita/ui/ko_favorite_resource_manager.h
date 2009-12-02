@@ -46,7 +46,7 @@ public:
     KoFavoriteResourceManager(KisPaintopBox*, QWidget* = 0);
     ~KoFavoriteResourceManager();
 
-    static const int MAX_FAVORITE_BRUSHES = 8;
+    static const int MAX_FAVORITE_BRUSHES = 12;
     static const int MAX_RECENT_COLORS = 10;
 
     /************************************Popup Palette************************************/

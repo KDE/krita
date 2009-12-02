@@ -58,7 +58,6 @@
 #include "widgets/kis_paintop_presets_popup.h"
 #include <kis_paintop_settings_widget.h>
 
-#include "kis_favorite_brush_data.h"
 #include "ko_favorite_resource_manager.h"
 
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)

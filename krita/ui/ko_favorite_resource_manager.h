@@ -24,7 +24,6 @@
 #include <QQueue>
 #include <QList>
 #include <QPixmap>
-#include "kis_favorite_brush_data.h"
 #include "kis_recent_color_data.h"
 
 class QString;
@@ -47,16 +46,16 @@ public:
     KoFavoriteResourceManager(KisPaintopBox*, QWidget* = 0);
     ~KoFavoriteResourceManager();
 
-    static const int MAX_FAVORITE_BRUSHES = 12;
+    static const int MAX_FAVORITE_BRUSHES = 8;
     static const int MAX_RECENT_COLORS = 10;
 
     /************************************Popup Palette************************************/
 
     void showPaletteManager();
-    QToolButton* favoriteBrushButton(int);
     void resetPopupPaletteParent(QWidget * = 0);
     QList<QPixmap> favoriteBrushPixmaps();
     QPixmap favoriteBrushPixmap(int);
+    bool isPopupPaletteVisible();
 
     /**********************************Favorite Brushes***********************************/
 
@@ -88,7 +87,7 @@ private:
     KisPopupPalette* m_popupPalette;
     KisPaintopBox* m_paintopBox;
 
-    QList<KisFavoriteBrushData*> m_favoriteBrushesList;
+    QList<KisPaintOpPresetSP> m_favoriteBrushesList;
 
     /**The list of recently used colors**/
     QQueue<KisRecentColorData*> m_recentColorsData;

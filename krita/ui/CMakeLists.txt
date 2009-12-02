@@ -66,7 +66,6 @@ set(kritaui_LIB_SRCS
     kis_doc2.cc 
     kis_exposure_visitor.cc 
     kis_factory2.cc
-    kis_favorite_brush_data.cpp
     kis_filter_handler.cc 
     kis_filter_manager.cc 
     kis_filters_model.cc

@@ -49,6 +49,7 @@
 #include <kis_layer.h>
 
 #include "kis_view2.h"
+#include <ko_favorite_resource_manager.h>
 #include "kis_canvas2.h"
 #include "kis_prescaled_projection.h"
 #include "kis_config.h"
@@ -223,7 +224,7 @@ void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e)
 
 void KisQPainterCanvas::mousePressEvent(QMouseEvent *e)
 {
-    if (m_d->blockMouseEvent.isActive()) return;
+    if (m_d->blockMouseEvent.isActive() || m_d->canvas->view()->favoriteResourceManager()->isPopupPaletteVisible()) return;
     m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
 }
 

@@ -41,6 +41,7 @@
 #include "KoShapeManager.h"
 
 #include "kis_types.h"
+#include <ko_favorite_resource_manager.h>
 #include "canvas/kis_canvas2.h"
 #include "kis_image.h"
 #include "opengl/kis_opengl.h"
@@ -335,7 +336,7 @@ void KisOpenGLCanvas2::contextMenuEvent(QContextMenuEvent *e)
 
 void KisOpenGLCanvas2::mousePressEvent(QMouseEvent *e)
 {
-    if (m_d->blockMouseEvent.isActive()) return;
+    if (m_d->blockMouseEvent.isActive()|| m_d->canvas->view()->favoriteResourceManager()->isPopupPaletteVisible()) return;
     m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
 }
 

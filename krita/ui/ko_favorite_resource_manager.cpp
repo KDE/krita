@@ -55,8 +55,7 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
     for (int pos = 0; pos < favoriteList.size(); pos++)
     {
         KisPaintOpPresetSP newBrush = m_paintopBox->paintOpPresetSP(new KoID(favoriteList[pos], favoriteList[pos]));
-        KisFavoriteBrushData* newBrushData = new KisFavoriteBrushData(this, newBrush, new QIcon (m_paintopBox->paintopPixmap(newBrush->paintOp())));
-        m_favoriteBrushesList.append(newBrushData);
+        m_favoriteBrushesList.append(newBrush);
     }
 
     m_popupPalette = new KisPopupPalette(this, popupParent);
@@ -68,7 +67,7 @@ QStringList KoFavoriteResourceManager::favoriteBrushesStringList()
     QStringList list;
     for (int pos = 0; pos < m_favoriteBrushesList.size(); pos++)
     {
-        list.append(m_favoriteBrushesList.at(pos)->paintopPreset()->paintOp().id());
+        list.append(m_favoriteBrushesList.at(pos)->paintOp().id());
     }
 
     return list;
@@ -108,27 +107,29 @@ QList<QPixmap> KoFavoriteResourceManager::favoriteBrushPixmaps()
 
     for (int pos = 0; pos < m_favoriteBrushesList.size(); pos++)
     {
-        pixmaps.append(m_paintopBox->paintopPixmap(m_favoriteBrushesList.at(pos)->paintopPreset()->paintOp()));
+        pixmaps.append(m_paintopBox->paintopPixmap(m_favoriteBrushesList.at(pos)->paintOp()));
     }
     return pixmaps;
 }
 
 QPixmap KoFavoriteResourceManager::favoriteBrushPixmap(int pos)
 {
-    return m_paintopBox->paintopPixmap(m_favoriteBrushesList.at(pos)->paintopPreset()->paintOp());
-}
-
-QToolButton* KoFavoriteResourceManager::favoriteBrushButton(int pos)
-{
-    return m_favoriteBrushesList.at(pos)->paintopButton();
+    return m_paintopBox->paintopPixmap(m_favoriteBrushesList.at(pos)->paintOp());
 }
 
 void KoFavoriteResourceManager::slotChangeActivePaintop(int pos)
 {
-    qDebug() << "[KoFavoriteResourceManager] Calling brush: " << m_favoriteBrushesList.at(pos)->paintopPreset()->paintOp().id();
-    m_paintopBox->setCurrentPaintop(m_favoriteBrushesList.at(pos)->paintopPreset()->paintOp());
+    qDebug() << "[KoFavoriteResourceManager] Calling brush: " << m_favoriteBrushesList.at(pos)->paintOp().id();
+    if (pos < 0 || pos >= m_favoriteBrushesList.size()) return;
+
+    m_paintopBox->setCurrentPaintop(m_favoriteBrushesList.at(pos)->paintOp());
     m_popupPalette->setVisible(false); //automatically close the palette after a button is clicked.
-    return;
+}
+
+bool KoFavoriteResourceManager::isPopupPaletteVisible()
+{
+    if (!m_popupPalette) return false;
+    else return m_popupPalette->isVisible();
 }
 
 //Palette Manager
@@ -151,12 +152,11 @@ int KoFavoriteResourceManager::addFavoriteBrush (KisPaintOpPresetSP newBrush)
 
     for (int pos = 0; pos < m_favoriteBrushesList.size(); pos ++)
     {
-        if (newBrush->paintOp() == m_favoriteBrushesList.at(pos)->paintopPreset()->paintOp())
+        if (newBrush->paintOp() == m_favoriteBrushesList.at(pos)->paintOp())
             return pos;
     }
 
-    KisFavoriteBrushData* newBrushData = new KisFavoriteBrushData(this, newBrush, new QIcon (m_paintopBox->paintopPixmap(newBrush->paintOp())));
-    m_favoriteBrushesList.append(newBrushData);
+    m_favoriteBrushesList.append(newBrush);
     saveFavoriteBrushes();
 
     return -1;
@@ -220,7 +220,7 @@ void KoFavoriteResourceManager::saveFavoriteBrushes()
 
     for (int pos = 0; pos < m_favoriteBrushesList.size(); pos++)
     {
-        (favoriteList.append(m_favoriteBrushesList.at(pos)->paintopPreset()->paintOp().id())).append(",");
+        (favoriteList.append(m_favoriteBrushesList.at(pos)->paintOp().id())).append(",");
     }
 
     qDebug() << "[KoFavoriteResourceManager] Saving list: " << favoriteList;

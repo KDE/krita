@@ -16,15 +16,11 @@
    Boston, MA 02110-1301, USA.
 
    Known issues:
-   1. how to set offset point in case the window is not positioned on top left
-   2. how to set offset point in canvas. right now it is -40,-10 which works fine
-      but there should be a better way to solve this problem
-   3. pop up palette does not show up. How to produce a bug:
-       - start a canvas and another new canvas, close the older canvas.
+   1. calculateFavoriteBrush() sometimes does not return the right value. Find
+      a better formula!
 */
 
 #include "kis_popup_palette.h"
-#include "kis_favorite_brush_data.h"
 #include "kis_recent_color_data.h"
 #include "flowlayout.h"
 #include <QtGui>
@@ -43,7 +39,7 @@ int const KisPopupPalette::BUTTON_SIZE;
 #endif
 
 KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *parent)
-    : QWidget(parent, Qt::FramelessWindowHint | Qt::Popup)
+    : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager (manager)
 {
     setAutoFillBackground(true);
@@ -122,24 +118,56 @@ void KisPopupPalette::showPopupPalette (const QPoint &p)
     if (!isVisible())
     {
         QSize parentSize(parentWidget()->size());
-        QPoint pointPalette(p.x(), p.y());
+        QPoint pointPalette(p.x() - width()/2, p.y() - height()/2);
 
-        //setting offset point in case the widget is shown somewhere near the edges of the
-        int offsetX = 0, offsetY = 0;
-        if ((offsetX = pointPalette.x() + width()/2 - parentSize.width()) >= 0 || (offsetX = pointPalette.x() - width()/2) <= 0)
+        //setting offset point in case the widget is shown outside of canvas region
+        int offsetX = 0, offsetY=0;
+        if ((offsetX = pointPalette.x() + width() - parentSize.width()) > 0 || (offsetX = pointPalette.x()) < 0)
+        {
+            qDebug() << "[KisPopupPalette] out of canvas region x";
             pointPalette.setX(pointPalette.x() - offsetX);
-        if ((offsetY = pointPalette.y() + height()/2 -parentSize.height()) >= 0 || (offsetY = pointPalette.y() - height()/2) <= 0)
+        }
+        if ((offsetY = pointPalette.y() + height() - parentSize.height()) > 0 || (offsetY = pointPalette.y()) < 0)
+        {
+            qDebug() << "[KisPopupPalette] out of canvas region y";
             pointPalette.setY(pointPalette.y() - offsetY);
+        }
+        move(pointPalette);
 
-        move(pointPalette + QPoint (-40,-10));
-
-        qDebug() << "[KisPopupPalette:GLOBALposition] pointPalette " << mapToGlobal(pointPalette)
-            << " | parentSize " << parentSize
-            << " | parentPosition " << mapToGlobal(parentWidget()->pos())
-            << " | cursorPosition " << QCursor::pos();
     }
     setVisible(!isVisible());
 }
+
+void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
+{
+    QPointF point = event->posF();
+    event->accept();
+
+    if (event->button() == Qt::LeftButton)
+    {
+        QPainterPath pathBrush(drawBrushDonutPath(width()/2, height()/2));
+        QPainterPath pathColor(drawColorDonutPath(width()/2, height()/2));
+
+        qDebug() << "[KisPopupPalette] mouse position: " << point;
+
+        if (pathBrush.contains(point))
+        { //in favorite brushes area
+            int pos = calculateFavoriteBrush(point);;
+            qDebug() << "[KisPopupPalette] favorite brush position: " << pos;
+            if (pos >= 0 && pos < m_resourceManager->favoriteBrushesTotal())
+                emit changeActivePaintop(pos);
+        }
+        else if (pathColor.contains(point))
+        {
+            qDebug() << "[KisPopupPalette] in recent colour area";
+        }
+    }
+    else if (event->button() == Qt::MidButton)
+    {
+        setVisible(false);
+    }
+}
+
 QSize KisPopupPalette::sizeHint() const
 {
     return QSize(DIAMETER,DIAMETER);
@@ -169,16 +197,25 @@ int KisPopupPalette::calculateFavoriteBrush(QPointF point)
 
     qDebug() << "[KisPopupPalette] posX: " << pos_x << " | posY: " << pos_y;
     
-    if (isnan(posF_x)) return pos_y;
-    else if (isnan(posF_y)) return pos_x;
+    if (isnan(posF_x) && isnan(posF_y)) return -1;
+    else if (isnan(posF_x))
+    {
+        if (pos_y < 0) return m_resourceManager->favoriteBrushesTotal()-fabs(pos_y);
+        else return pos_y;
+    }
+    else if (isnan(posF_y))
+    {
+        if (pos_x < 0) return m_resourceManager->favoriteBrushesTotal()-fabs(pos_x);
+        return pos_x;
+    }
     else
     {
         if (pos_x<0)
-            return m_resourceManager->favoriteBrushesTotal()-max(fabs(pos_x),fabs(pos_y));
+            return m_resourceManager->favoriteBrushesTotal()-max(pos_x,pos_y);
         else if (pos_x == 0 && pos_y == (m_resourceManager->favoriteBrushesTotal()-1)/2)
             return calculateRound(((float)m_resourceManager->favoriteBrushesTotal())/2);
         else
-            return max(fabs(pos_x),fabs(pos_y));
+            return max(pos_x,pos_y);
     }
 }
 
@@ -186,35 +223,6 @@ int KisPopupPalette::max(int x, int y)
 {
     if (x > y) return x;
     else return y;
-}
-
-void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
-{
-    QPointF point = event->posF();
-    event->accept();
-
-    if (event->button() == Qt::LeftButton)
-    {
-        QPainterPath pathBrush(drawBrushDonutPath(width()/2, height()/2));
-        QPainterPath pathColor(drawColorDonutPath(width()/2, height()/2));
-
-        qDebug() << "[KisPopupPalette] mouse position: " << point;
-
-        if (pathBrush.contains(point))
-        { //in favorite brushes area
-            int pos = calculateFavoriteBrush(point);;
-            qDebug() << "[KisPopupPalette] favorite brush position: " << pos;
-            emit changeActivePaintop(pos);
-        }
-        else if (pathColor.contains(point))
-        {
-            qDebug() << "[KisPopupPalette] in recent colour area";
-        }
-    }
-    else if (event->button() == Qt::MidButton)
-    {
-        setVisible(false);
-    }
 }
 
 QPainterPath KisPopupPalette::drawColorDonutPath(int x, int y)

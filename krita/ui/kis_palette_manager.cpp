@@ -42,7 +42,6 @@
 #include "kis_paintop_registry.h"
 #include "kis_paintop_settings_widget.h"
 #include "kis_shared_ptr.h"
-#include "kis_favorite_brush_data.h"
 #include "ko_favorite_resource_manager.h"
 
 KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPaintopBox *paintOpBox)

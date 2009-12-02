@@ -170,6 +170,7 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 
             KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Elliptical Selection"));
 
+            QRectF normalizedRect = QRectF(m_startPos, m_endPos).normalized();
             if (m_selectionMode == PIXEL_SELECTION) {
 
                 KisPixelSelectionSP tmpSel = new KisPixelSelection();
@@ -184,12 +185,12 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
                 painter.setPaintOpPreset(currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
                 painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 
-                painter.paintEllipse(QRectF(m_startPos, m_endPos));
+                painter.paintEllipse(normalizedRect);
 
                 QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
                 m_canvas->addCommand(cmd);
             } else {
-                QRectF rect = convertToPt(QRectF(m_startPos, m_endPos));
+                QRectF rect = convertToPt(normalizedRect);
                 KoShape* shape = KisShapeToolHelper::createEllipseShape(rect);
 
                 helper.addSelectionShape(shape);

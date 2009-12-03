@@ -18,6 +18,8 @@
 #include "kis_spray_shape_option.h"
 #include <klocale.h>
 
+#include <KoImageResource.h>
+
 #include <QImage>
 
 #include "ui_wdgshapeoptions.h"
@@ -28,6 +30,8 @@ public:
     KisShapeOptionsWidget(QWidget *parent = 0)
             : QWidget(parent) {
         setupUi(this);
+        KoImageResource kir;
+        btnAspect->setIcon(QIcon(kir.chain()));
     }
 
 };
@@ -37,6 +41,24 @@ KisSprayShapeOption::KisSprayShapeOption()
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();
+    m_useAspect = m_options->btnAspect->isChecked();
+    computeAspect();
+
+    // UI signals
+    connect(m_options->btnAspect, SIGNAL(toggled(bool)), this, SLOT(aspectToggled(bool)));
+    connect(m_options->randomSlider,SIGNAL(valueChanged(int)),this,SLOT(randomValueChanged(int)));
+    connect(m_options->followSlider,SIGNAL(valueChanged(int)),this,SLOT(followValueChanged(int)));
+    connect(m_options->imageUrl,SIGNAL(textChanged(QString)),this,SLOT(prepareImage()));
+
+    connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SLOT(updateHeight(int)));
+    connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SLOT(updateWidth(int)));
+
+    setConfigurationPage(m_options);
+}
+
+
+void KisSprayShapeOption::setupBrushPreviewSignals()
+{
     connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
@@ -45,14 +67,8 @@ KisSprayShapeOption::KisSprayShapeOption()
     connect(m_options->widthPro, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->gaussBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-
-    connect(m_options->randomSlider,SIGNAL(valueChanged(int)),this,SLOT(randomValueChanged(int)));
-    connect(m_options->followSlider,SIGNAL(valueChanged(int)),this,SLOT(followValueChanged(int)));
-
-    connect(m_options->imageUrl,SIGNAL(textChanged(QString)),this,SLOT(prepareImage()));
-    
-    setConfigurationPage(m_options);
 }
+
 
 KisSprayShapeOption::~KisSprayShapeOption()
 {
@@ -99,15 +115,13 @@ bool KisSprayShapeOption::proportional() const
 // TODO
 void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-//     setting->setProperty( "Spray/diameter", diameter() );
+    Q_UNUSED(setting);
 }
 
 // TODO
 void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    /*    m_options->diameterSpinBox->setValue( setting->getInt("Spray/diameter") );
-        m_options->coverageSpin->setValue( setting->getDouble("Spray/coverage") );
-        m_options->jitterSizeBox->setChecked( setting->getBool("Spray/jitterSize") );*/
+    Q_UNUSED(setting);
 }
 
 
@@ -178,4 +192,53 @@ void KisSprayShapeOption::prepareImage()
             m_options->heightSpin->setValue( m_image.height() );
         }
     }
+}
+
+
+void KisSprayShapeOption::aspectToggled(bool toggled)
+{
+    m_useAspect = toggled;
+    KoImageResource kir;
+    if (toggled){
+        m_options->btnAspect->setIcon(QIcon(kir.chain()));
+    } else {
+        m_options->btnAspect->setIcon(QIcon(kir.chainBroken()));
+    }
+}
+
+
+
+void KisSprayShapeOption::updateHeight(int value)
+{
+    if (m_useAspect){
+        int newHeight = qRound(value * 1.0/m_aspect);
+        m_options->heightSpin->blockSignals(true);
+        m_options->heightSpin->setValue(newHeight);
+        m_options->heightSlider->setValue(newHeight);
+        m_options->heightSpin->blockSignals(false);
+    }else{
+        computeAspect();
+    }
+}
+
+
+void KisSprayShapeOption::updateWidth(int value)
+{
+    if (m_useAspect){
+        int newWidth = qRound(value * m_aspect);
+        m_options->widthSpin->blockSignals(true);
+        m_options->widthSpin->setValue( newWidth );
+        m_options->widthSlider->setValue( newWidth );
+        m_options->widthSpin->blockSignals(false);
+    }else{
+        computeAspect();
+    }
+}
+
+
+void KisSprayShapeOption::computeAspect()
+{
+    qreal w = m_options->widthSpin->value();
+    qreal h = m_options->heightSpin->value();
+    m_aspect = w / h;
 }

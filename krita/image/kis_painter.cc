@@ -585,8 +585,8 @@ void KisPainter::paintRect(const double x,
 
 void KisPainter::paintEllipse(const QRectF &rect)
 {
-    if (rect.isEmpty()) return;
-    QRectF r = rect.normalized();
+    QRectF r = rect.normalized(); // normalize before checking as negative width and height are empty too
+    if (r.isEmpty()) return;
 
     // See http://www.whizkidtech.redprince.net/bezier/circle/ for explanation.
     // kappa = (4/3*(sqrt(2)-1))

@@ -17,10 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "OpenCTL/Version.h"
+#include "KoCtlBuffer.h"
 
-#if OPENCTL_VERSION_MAJOR == 0 && OPENCTL_VERSION_MINOR == 9 && OPENCTL_VERSION_REVISION < 13
-#include "KoCtlBuffer12.h"
-#else
-#include "KoCtlBuffer13.h"
-#endif
+KoCtlBuffer::KoCtlBuffer(char* _buffer, int _size)
+{
+  setRawData(_buffer, _size);
+}
+
+KoCtlBuffer::~KoCtlBuffer() {}

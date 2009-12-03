@@ -19,6 +19,8 @@
 
 #include "KoCtlColorTransformationFactory.h"
 
+#include "kis_debug.h"
+
 #include "KoColorTransformation.h"
 #include "KoColorSpace.h"
 
@@ -104,9 +106,14 @@ QList< QPair< KoID, KoID > > KoCtlColorTransformationFactory::supportedModels() 
 
 KoColorTransformation* KoCtlColorTransformationFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
 {
+  dbgPlugins << "Create CTL transformation " << id() << " for " << colorSpace->id();
   GTLCore::PixelDescription pixelDescription = createPixelDescription(colorSpace);
+  dbgPlugins << pixelDescription.bitsSize() << " " << colorSpace->pixelSize();
+
+  Q_ASSERT(pixelDescription.bitsSize() / 8 == colorSpace->pixelSize());
   
   OpenCTL::Module* module = m_template->generateModule(pixelDescription);
+  module->compile();
   
   OpenCTL::Program* program = new OpenCTL::Program("process", module, pixelDescription);
   

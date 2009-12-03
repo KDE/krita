@@ -24,6 +24,7 @@ set( CTLCS_SRCS
     ctl_cs_plugin.cpp
     KoCtlCompositeOp.cpp
     KoCtlTemplatesRegistry.cpp
+    KoCtlUtils.cpp
 )
 
 

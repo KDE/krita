@@ -85,7 +85,6 @@ private:
     /** decode the \<conversions\> tag.
      */
     void decodeConversions(QDomElement&);
-    GTLCore::PixelDescription createPixelDescription(const KoColorSpace* cs) const;
 private:
     struct Private;
     Private* const d;

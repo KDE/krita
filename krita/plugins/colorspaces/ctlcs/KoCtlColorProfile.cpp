@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #include "KoCtlColorProfile.h"
 
 #include <math.h>
@@ -51,6 +50,7 @@
 #include <OpenCTL/Module.h>
 #include "KoCtlMutex.h"
 #include "KoCtlParser.h"
+#include "KoCtlUtils.h"
 
 #include "kis_debug.h"
 
@@ -316,43 +316,6 @@ bool KoCtlColorProfile::load()
         n = n.nextSibling();
     }
     return true;
-}
-
-GTLCore::PixelDescription KoCtlColorProfile::createPixelDescription(const KoColorSpace* cs) const
-{
-    QList<KoChannelInfo*> channels = cs->channels();
-    std::vector<const GTLCore::Type* > types;
-    foreach(KoChannelInfo* info, channels) {
-        switch (info->channelValueType()) {
-        case KoChannelInfo::UINT8:
-            types.push_back(GTLCore::Type::UnsignedInteger8);
-            break;
-        case KoChannelInfo::UINT16:
-            types.push_back(GTLCore::Type::UnsignedInteger16);
-            break;
-        case KoChannelInfo::UINT32:
-            types.push_back(GTLCore::Type::UnsignedInteger32);
-            break;
-        case KoChannelInfo::FLOAT16:
-            types.push_back(GTLCore::Type::Float16);
-            break;
-        case KoChannelInfo::FLOAT32:
-            types.push_back(GTLCore::Type::Float32);
-            break;
-        case KoChannelInfo::OTHER:
-        case KoChannelInfo::FLOAT64:
-            Q_ASSERT(false);
-            break;
-        case KoChannelInfo::INT8:
-            types.push_back(GTLCore::Type::Integer8);
-            break;
-        case KoChannelInfo::INT16:
-            types.push_back(GTLCore::Type::Integer16);
-            break;
-        }
-    }
-    Q_ASSERT(types.size() == cs->channelCount());
-    return GTLCore::PixelDescription(types);
 }
 
 QVariant KoCtlColorProfile::property(const QString& _name) const

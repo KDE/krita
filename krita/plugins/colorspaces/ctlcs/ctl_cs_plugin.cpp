@@ -37,6 +37,8 @@
 QMutex* ctlMutex = 0;
 
 #include <OpenCTL/Template.h>
+#include "KoCtlColorTransformationFactory.h"
+#include <KoColorTransformationFactoryRegistry.h>
 
 typedef KGenericFactory<CTLCSPlugin> CTLCSPluginPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(krita_ctlcs_plugin, CTLCSPluginPluginFactory("krita"))
@@ -103,6 +105,28 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QStringList &)
                 }
             }
         }
+
+        // Load CTL Extensions
+        KGlobal::mainComponent().dirs()->addResourceType("ctl_extensions", "data", "pigmentcms/ctlextensions/");
+        QStringList ctlextensionsFilenames;
+        ctlextensionsFilenames += KGlobal::mainComponent().dirs()->findAllResources("ctl_extensions", "*.ctlt",  KStandardDirs::Recursive);
+        dbgPlugins << "There are " << ctlextensionsFilenames.size() << " CTL extensions";
+        if (!ctlextensionsFilenames.empty()) {
+            for (QStringList::Iterator it = ctlextensionsFilenames.begin(); it != ctlextensionsFilenames.end(); ++it) {
+                OpenCTL::Template* ctltemplate = new OpenCTL::Template;
+                ctltemplate->loadFromFile(it->toAscii().data());
+                ctltemplate->compile();
+                if (ctltemplate->isCompiled()) {
+                    dbgPlugins << "Valid ctl extensions template: " << *it;
+                    KoColorTransformationFactoryRegistry::addColorTransformationFactory( new KoCtlColorTransformationFactory(ctltemplate) );
+                } else {
+                    dbgPlugins << "Invalid ctl extensions template: " << *it;
+                    delete ctltemplate;
+                }
+            }
+        }
+
+
 #if 0
         KisLmsAF32ColorSpaceFactory * csf  = new KisLmsAF32ColorSpaceFactory();
         f->add(csf);

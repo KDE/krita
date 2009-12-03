@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Dodge and Burn Filter
+Comment=Dodge and Burn Filter
+X-KDE-ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritadodgeburn
+X-Krita-Version=3

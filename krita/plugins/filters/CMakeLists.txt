@@ -21,5 +21,6 @@ add_subdirectory( unsharp )
 add_subdirectory( wavefilter )
 add_subdirectory( cubismfilter )
 add_subdirectory( levelfilter )
+add_subdirectory( dodgeburn )
 
 message(STATUS "Filters that still need to be fixed: bumpmap")

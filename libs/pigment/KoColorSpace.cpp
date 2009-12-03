@@ -451,7 +451,7 @@ KoColorTransformation* KoColorSpace::createColorTransformation( const QString & 
     if(!factory) return 0;
     QPair<KoID, KoID> model( colorModelId(), colorDepthId() );
     QList< QPair<KoID, KoID> > models = factory->supportedModels();
-    if(models.contains(model))
+    if(models.isEmpty() || models.contains(model))
     {
         return factory->createTransformation( this, parameters);
     } else {

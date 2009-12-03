@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "Dodge.h"
+#include "DodgeBurn.h"
 #include <filter/kis_filter_configuration.h>
 
 KisFilterDodgeBurn::KisFilterDodgeBurn(const QString& id, const QString& prefix, const QString& name ) : KisColorTransformationFilter(KoID(id, name), categoryAdjust(), name), m_prefix(prefix)

@@ -1,6 +1,6 @@
 
 
-set(kritadodgeburn_PART_SRCS DodgeBurnPlugin.cpp Dodge.cpp )
+set(kritadodgeburn_PART_SRCS DodgeBurnPlugin.cpp DodgeBurn.cpp )
 
 kde4_add_plugin(kritadodgeburn ${kritadodgeburn_PART_SRCS})
 

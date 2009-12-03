@@ -20,7 +20,7 @@
 #include <kgenericfactory.h>
 #include <filter/kis_filter_registry.h>
 
-#include "Dodge.h"
+#include "DodgeBurn.h"
 
 typedef KGenericFactory<DodgeBurnPlugin> DodgeBurnPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kritadodgeburn, DodgeBurnPluginFactory("krita"))

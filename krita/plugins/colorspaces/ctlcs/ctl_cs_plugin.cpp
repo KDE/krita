@@ -117,8 +117,9 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QStringList &)
                 ctltemplate->loadFromFile(it->toAscii().data());
                 ctltemplate->compile();
                 if (ctltemplate->isCompiled()) {
-                    dbgPlugins << "Valid ctl color transformations template: " << *it;
-                    KoColorTransformationFactoryRegistry::addColorTransformationFactory( new KoCtlColorTransformationFactory(ctltemplate) );
+                    KoCtlColorTransformationFactory* factory = new KoCtlColorTransformationFactory(ctltemplate);
+                    dbgPlugins << "Valid ctl color transformations template: " << factory->id();
+                    KoColorTransformationFactoryRegistry::addColorTransformationFactory( factory );
                 } else {
                     dbgPlugins << "Invalid ctl color transformations template: " << *it;
                     delete ctltemplate;

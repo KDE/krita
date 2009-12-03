@@ -107,20 +107,20 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QStringList &)
         }
 
         // Load CTL Extensions
-        KGlobal::mainComponent().dirs()->addResourceType("ctl_extensions", "data", "pigmentcms/ctlextensions/");
+        KGlobal::mainComponent().dirs()->addResourceType("ctl_colortransformations", "data", "pigmentcms/ctlcolortransformations/");
         QStringList ctlextensionsFilenames;
-        ctlextensionsFilenames += KGlobal::mainComponent().dirs()->findAllResources("ctl_extensions", "*.ctlt",  KStandardDirs::Recursive);
-        dbgPlugins << "There are " << ctlextensionsFilenames.size() << " CTL extensions";
+        ctlextensionsFilenames += KGlobal::mainComponent().dirs()->findAllResources("ctl_colortransformations", "*.ctlt",  KStandardDirs::Recursive);
+        dbgPlugins << "There are " << ctlextensionsFilenames.size() << " CTL color transformations";
         if (!ctlextensionsFilenames.empty()) {
             for (QStringList::Iterator it = ctlextensionsFilenames.begin(); it != ctlextensionsFilenames.end(); ++it) {
                 OpenCTL::Template* ctltemplate = new OpenCTL::Template;
                 ctltemplate->loadFromFile(it->toAscii().data());
                 ctltemplate->compile();
                 if (ctltemplate->isCompiled()) {
-                    dbgPlugins << "Valid ctl extensions template: " << *it;
+                    dbgPlugins << "Valid ctl color transformations template: " << *it;
                     KoColorTransformationFactoryRegistry::addColorTransformationFactory( new KoCtlColorTransformationFactory(ctltemplate) );
                 } else {
-                    dbgPlugins << "Invalid ctl extensions template: " << *it;
+                    dbgPlugins << "Invalid ctl color transformations template: " << *it;
                     delete ctltemplate;
                 }
             }

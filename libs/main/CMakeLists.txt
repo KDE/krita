@@ -41,7 +41,6 @@ set(komain_LIB_SRCS
     KoViewAdaptor.cpp
     KoView.cpp
     kofficeversion.cc
-    KoOdfExporter.cpp
     KoFilterManager.cpp
     KoFilterChain.cpp
     KoFilter.cpp

@@ -6,6 +6,7 @@ add_subdirectory(ctlmodules)
 add_subdirectory(ctlprofiles)
 add_subdirectory(ctlcolorspaces)
 add_subdirectory(ctlcompositeops)
+add_subdirectory(ctlcolortransformations)
 
 set( CTLCS_SRCS
     KoCtlAccumulator.cpp

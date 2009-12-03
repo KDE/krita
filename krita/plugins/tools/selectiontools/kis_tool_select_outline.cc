@@ -159,10 +159,25 @@ void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
 
     if (m_dragging && m_points.count() > 1) {
 
-        QPen pen(Qt::white, FEEDBACK_LINE_WIDTH, Qt::DotLine);
+#ifdef INDEPENDENT_CANVAS
+        QPen pen(QColor(255,128,255), FEEDBACK_LINE_WIDTH, Qt::DotLine);
         gc.save();
-        gc.setPen(pen);
+        QPainter::CompositionMode previousMode = gc.compositionMode();
+        gc.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
+#else
+        QPen pen(Qt::white, FEEDBACK_LINE_WIDTH, Qt::DotLine);
+        QPen backgroundPen(Qt::black, FEEDBACK_LINE_WIDTH, Qt::SolidLine);
+        gc.save();
 
+        gc.setPen(backgroundPen);
+        for (qint32 pointIndex = 0; pointIndex < m_points.count() - 1; pointIndex++) {
+            QPointF startPos = pixelToView(m_points[pointIndex]);
+            QPointF endPos = pixelToView(m_points[pointIndex + 1]);
+            gc.drawLine(startPos, endPos);
+        }
+#endif
+
+        gc.setPen(pen);
         for (qint32 pointIndex = 0; pointIndex < m_points.count() - 1; pointIndex++) {
             QPointF startPos = pixelToView(m_points[pointIndex]);
             QPointF endPos = pixelToView(m_points[pointIndex + 1]);
@@ -170,6 +185,9 @@ void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
         }
 
         gc.restore();
+#ifdef INDEPENDENT_CANVAS
+        gc.setCompositionMode(previousMode);
+#endif  
     }
 }
 

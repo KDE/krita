@@ -25,11 +25,13 @@
 #include "KoColorSpace.h"
 
 #include <QHash>
+#include <QMutexLocker>
 
 #include <KoID.h>
 
 #include <KoCtlBuffer.h>
 #include <KoCtlUtils.h>
+#include <KoCtlMutex.h>
 
 #include <OpenCTL/Module.h>
 #include <OpenCTL/Program.h>
@@ -113,6 +115,7 @@ KoColorTransformation* KoCtlColorTransformationFactory::createTransformation(con
   Q_ASSERT(pixelDescription.bitsSize() / 8 == colorSpace->pixelSize());
   
   OpenCTL::Module* module = m_template->generateModule(pixelDescription);
+  QMutexLocker lock(ctlMutex);
   module->compile();
   
   OpenCTL::Program* program = new OpenCTL::Program("process", module, pixelDescription);

@@ -20,7 +20,10 @@
 #define _KIS_JPEG_SOURCE_H_
 
 #include <stdio.h>
-#include <jpeglib.h>
+
+extern "C" {
+  #include <jpeglib.h>
+}
 
 class QIODevice;
 

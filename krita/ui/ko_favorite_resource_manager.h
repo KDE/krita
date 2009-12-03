@@ -79,7 +79,7 @@ public:
     
 public slots:
     void slotChangePaintopLabel();
-    void slotShowPopupPalette(const QPoint&);
+    void slotShowPopupPalette(const QPoint& = QPoint(0,0));
     void slotChangeActivePaintop(int);
 
 private:

@@ -224,7 +224,12 @@ void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e)
 
 void KisQPainterCanvas::mousePressEvent(QMouseEvent *e)
 {
-    if (m_d->blockMouseEvent.isActive() || m_d->canvas->view()->favoriteResourceManager()->isPopupPaletteVisible()) return;
+    if (m_d->blockMouseEvent.isActive()) return;
+    else if (m_d->canvas->view()->favoriteResourceManager()->isPopupPaletteVisible())
+    {
+        m_d->canvas->view()->favoriteResourceManager()->slotShowPopupPalette();
+        return;
+    }
     m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument(widgetToView(e->pos() + m_d->documentOffset)));
 }
 

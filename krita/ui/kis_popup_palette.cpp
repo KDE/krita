@@ -152,10 +152,19 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
 
         if (pathBrush.contains(point))
         { //in favorite brushes area
-            int pos = calculateFavoriteBrush(point);;
+            int pos = calculateFavoriteBrush(point);
             qDebug() << "[KisPopupPalette] favorite brush position: " << pos;
             if (pos >= 0 && pos < m_resourceManager->favoriteBrushesTotal())
-                emit changeActivePaintop(pos);
+            {
+                QPixmap pixmap(m_resourceManager->favoriteBrushPixmap(pos));
+                float angle = pos*PI*2.0/m_resourceManager->favoriteBrushesTotal();
+                QPainterPath path;
+                path.addRect(BRUSH_RADIUS*sin(angle)-pixmap.width()/2+width()/2,
+                              BRUSH_RADIUS*cos(angle)-pixmap.height()/2+height()/2,
+                              pixmap.width(), pixmap.height());
+
+                if(path.contains(point)) emit changeActivePaintop(pos);
+            }
         }
         else if (pathColor.contains(point))
         {
@@ -246,6 +255,16 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
         QPointF pointTemp(BRUSH_RADIUS*sin(angle),BRUSH_RADIUS*cos(angle));
         painter.drawPixmap(QPoint(pointTemp.x()-pixmapOffset.x(), pointTemp.y()-pixmapOffset.y()), pixmap);
     }
+}
+
+void KisPopupPalette::mouseMoveEvent(QMouseEvent* e)
+{
+    e->accept();
+}
+
+void KisPopupPalette::mousePressEvent(QMouseEvent* e)
+{
+    e->accept();
 }
 
 KisPopupPalette::~KisPopupPalette()

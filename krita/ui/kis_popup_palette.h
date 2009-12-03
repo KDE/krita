@@ -47,6 +47,8 @@ protected:
     void paintEvent (QPaintEvent*);
     void resizeEvent (QResizeEvent*);
     void mouseReleaseEvent (QMouseEvent*);
+    void mouseMoveEvent (QMouseEvent*);
+    void mousePressEvent (QMouseEvent*);
 
     //functions to calculate favorite brush position in array
     int calculateFavoriteBrush(QPointF);

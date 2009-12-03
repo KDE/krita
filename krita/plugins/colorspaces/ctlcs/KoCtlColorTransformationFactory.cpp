@@ -27,6 +27,7 @@
 #include <KoID.h>
 
 #include <KoCtlBuffer.h>
+#include <KoCtlUtils.h>
 
 #include <OpenCTL/Module.h>
 #include <OpenCTL/Program.h>
@@ -37,6 +38,10 @@ class KoCtlColorTransformation : public KoColorTransformation
 {
 public:
     KoCtlColorTransformation(OpenCTL::Program* program, const KoColorSpace* colorSpace) : m_program(program), m_colorSpace(colorSpace) {
+    }
+    ~KoCtlColorTransformation()
+    {
+      delete m_program;
     }
 
 public:
@@ -99,5 +104,11 @@ QList< QPair< KoID, KoID > > KoCtlColorTransformationFactory::supportedModels() 
 
 KoColorTransformation* KoCtlColorTransformationFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
 {
-  return 0;
+  GTLCore::PixelDescription pixelDescription = createPixelDescription(colorSpace);
+  
+  OpenCTL::Module* module = m_template->generateModule(pixelDescription);
+  
+  OpenCTL::Program* program = new OpenCTL::Program("process", module, pixelDescription);
+  
+  return new KoCtlColorTransformation(program, colorSpace);
 }

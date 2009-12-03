@@ -21,9 +21,10 @@
 class KisFilterDodgeBurn : public KisColorTransformationFilter
 {
 public:
-    KisFilterDodgeBurn(const QString& id, const QString& name );
+    KisFilterDodgeBurn(const QString& id, const QString& prefix, const QString& name );
 public:
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
-
+private:
+    QString m_prefix;
 };

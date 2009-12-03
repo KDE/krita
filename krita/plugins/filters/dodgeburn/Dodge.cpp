@@ -18,7 +18,7 @@
 #include "Dodge.h"
 #include <filter/kis_filter_configuration.h>
 
-KisFilterDodgeBurn::KisFilterDodgeBurn(const QString& id, const QString& name ) : KisColorTransformationFilter(KoID(id, name), categoryAdjust(), name)
+KisFilterDodgeBurn::KisFilterDodgeBurn(const QString& id, const QString& prefix, const QString& name ) : KisColorTransformationFilter(KoID(id, name), categoryAdjust(), name), m_prefix(prefix)
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
@@ -32,6 +32,6 @@ KoColorTransformation* KisFilterDodgeBurn::createTransformation(const KoColorSpa
     if (config) {
         params["exposure"] = config->getDouble("exposure", 0.5);
     }
-    return cs->createColorTransformation("DodgeShadow", params);
+    return cs->createColorTransformation(m_prefix + "Shadow", params);
   
 }

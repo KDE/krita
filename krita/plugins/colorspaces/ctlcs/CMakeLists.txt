@@ -18,6 +18,7 @@ set( CTLCS_SRCS
     KoCtlColorSpace.cpp
     KoCtlColorSpaceFactory.cpp
     KoCtlColorSpaceInfo.cpp
+    KoCtlColorTransformationFactory.cpp
     KoCtlConvolutionOp.cpp
     KoCtlParser.cpp
     ctl_cs_plugin.cpp

@@ -114,6 +114,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
         dbgFile << "success !";
         return KoFilter::OK;
     }
+    image()->unlock();
     dbgFile << " Result =" << res;
     return KoFilter::InternalError;
 }

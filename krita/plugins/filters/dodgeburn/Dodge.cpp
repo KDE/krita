@@ -32,6 +32,6 @@ KoColorTransformation* KisFilterDodgeBurn::createTransformation(const KoColorSpa
     if (config) {
         params["exposure"] = config->getDouble("exposure", 0.5);
     }
-    return cs->createColorTransformation("DodgeShadow.ctl", params);
+    return cs->createColorTransformation("DodgeShadow", params);
   
 }

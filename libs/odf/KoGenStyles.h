@@ -31,6 +31,7 @@
 #include "KoGenStyle.h"
 
 class KoStore;
+class KoFontFace;
 
 /**
  * @brief Repository of styles used during saving of OASIS/OOo file.
@@ -158,12 +159,24 @@ public:
     void markStyleForStylesXml(const QString& name);
 
     /**
-     * add a font face declaration
+     * Add a font face declaration.
+     * @a face should have non-empty "name" parameter, i.e. should not be null.
      *
-     * see odf 2.6 Font Face Declarations
-     * and odf 14.6 Font Face Declaration
+     * Declaration with given name replaces previously added declaration with the same name.
+     *
+     * See odf 2.6 Font Face Declarations
+     * and odf 14.6 Font Face Declaration.
      */
-    void addFontFace(const QString& fontName);
+    void addFontFace(const KoFontFace& face);
+
+    /**
+     * @return font face declaration for name @a name
+     *         or null font face (see KoFontFace::isNull()) if there is no such font face.
+     *
+     * See odf 2.6 Font Face Declarations
+     * and odf 14.6 Font Face Declaration.
+     */
+    KoFontFace fontFace(const QString& name) const;
 
     /**
      * Outputs debug information

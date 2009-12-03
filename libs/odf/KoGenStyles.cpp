@@ -26,6 +26,7 @@
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 #include "KoOdfWriteStore.h"
+#include "KoFontFace.h"
 #include <float.h>
 #include <kdebug.h>
 
@@ -100,7 +101,13 @@ static void addRawOdfStyles(const QByteArray& xml, QByteArray& styles)
 class KoGenStyles::Private
 {
 public:
-    Private(KoGenStyles *q) : q(q) { }
+    Private(KoGenStyles *q) : q(q)
+    {
+    }
+
+    ~Private()
+    {
+    }
 
     /// style definition -> name
     StyleMap styleMap;
@@ -117,7 +124,7 @@ public:
     QMap<int, KoGenStyle> defaultStyles;
 
     /// font faces
-    QSet<QString> fontFaces;
+    QMap<QString, KoFontFace> fontFaces;
 
     StyleMap::iterator insertStyle(const KoGenStyle &style, const QString &name, int flags);
 
@@ -310,9 +317,19 @@ void KoGenStyles::dump()
     }
 }
 
-void KoGenStyles::addFontFace(const QString& fontName)
+void KoGenStyles::addFontFace(const KoFontFace &face)
 {
-    d->fontFaces.insert(fontName);
+    Q_ASSERT(!face.isNull());
+    if (face.isNull()) {
+        kWarning() << "This font face is null and will not be added to styles: set at least the name";
+        return;
+    }
+    d->fontFaces.insert(face.name(), face); // replaces prev item
+}
+
+KoFontFace KoGenStyles::fontFace(const QString& name) const
+{
+    return d->fontFaces.value(name);
 }
 
 bool KoGenStyles::saveOdfStylesDotXml(KoStore* store, KoXmlWriter* manifestWriter)
@@ -432,20 +449,17 @@ void KoGenStyles::addRawOdfMasterStyles(const QByteArray& xml)
 
 void KoGenStyles::saveOdfFontFaceDecls(KoXmlWriter* xmlWriter) const
 {
-    if (!d->fontFaces.isEmpty()) {
-        xmlWriter->startElement("office:font-face-decls");
+    if (d->fontFaces.isEmpty())
+        return;
 
-        QSet<QString>::const_iterator it(d->fontFaces.constBegin());
-
-        for (; it != d->fontFaces.constEnd(); ++it) {
-            xmlWriter->startElement("style:font-face");
-            xmlWriter->addAttribute("style:name", *it);
-            xmlWriter->addAttribute("svg:font-family", *it);
-            xmlWriter->endElement(); // style:font-face
-        }
-
-        xmlWriter->endElement(); // office:font-face-decls
+    xmlWriter->startElement("office:font-face-decls");
+    for (QMap<QString, KoFontFace>::ConstIterator it(d->fontFaces.constBegin());
+         it != d->fontFaces.constEnd(); ++it)
+    {
+        it.value().saveOdf(xmlWriter);
     }
+
+    xmlWriter->endElement(); // office:font-face-decls
 }
 
 void KoGenStyles::insertStyleRelation(const QString &source, const QString &target, const char *tagName)

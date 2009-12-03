@@ -14,6 +14,7 @@ set(koodf_LIB_SRCS
     KoDom.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
+    KoFontFace.cpp
     KoOdfLoadingContext.cpp
     KoOasisSettings.cpp
     KoOdfStylesReader.cpp
@@ -57,6 +58,7 @@ install( FILES
     KoDom.h
     KoGenStyle.h
     KoGenStyles.h
+    KoFontFace.h
     KoOdfLoadingContext.h
     KoOasisSettings.h
     KoOdfStylesReader.h

@@ -1,0 +1,4 @@
+@operation(process, inputs=1, optional_arguments=float exposure = 0.5)
+{
+  @colorchannels( @out = pow( @in / float(@unit), exposure) * @unit;)
+}

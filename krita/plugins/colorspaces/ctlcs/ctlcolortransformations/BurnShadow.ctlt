@@ -1,0 +1,10 @@
+@operation(process, inputs=1, optional_arguments=float exposure = 0.5)
+{
+  @colorchannels(
+  {
+    float v = (@in / float(@unit) - exposure) / ( 1.0 - exposure) * @unit;
+    if(v < @min) v = @min;
+    @out = v;
+  } )
+
+}

@@ -1,0 +1,9 @@
+@operation(process, inputs=1, optional_arguments=float exposure = 0.5)
+{
+  @colorchannels( 
+  {
+    float v = exposure * @in;
+    if(v > @max) v = @max;
+    @out = v;
+  })
+}

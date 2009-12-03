@@ -91,7 +91,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     KisPaintDeviceSP pd;
     pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE, pd);
-    image()->unlock();
+    image->unlock();
 
     KisRectConstIteratorPixel it = l->paintDevice()->createRectConstIterator(0, 0, image->width(), image->height());
     const KoColorSpace* cs = l->paintDevice()->colorSpace();

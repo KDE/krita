@@ -18,12 +18,16 @@
 #include "DodgeBurnPlugin.h"
 
 #include <kgenericfactory.h>
+#include <filter/kis_filter_registry.h>
+
+#include "Dodge.h"
 
 typedef KGenericFactory<DodgeBurnPlugin> DodgeBurnPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kritadodgeburn, DodgeBurnPluginFactory("krita"))
 
 DodgeBurnPlugin::DodgeBurnPlugin(QObject *parent, const QStringList &)
 {
+    KisFilterRegistry::instance()->add(new KisFilterDodgeBurn("dodge", i18n("Dodge")));
 }
 
 DodgeBurnPlugin::~DodgeBurnPlugin()

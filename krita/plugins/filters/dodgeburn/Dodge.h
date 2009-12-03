@@ -15,3 +15,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+
+#include "filter/kis_color_transformation_filter.h"
+
+class KisFilterDodgeBurn : public KisColorTransformationFilter
+{
+public:
+    KisFilterDodgeBurn(const QString& id, const QString& name );
+public:
+
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+
+};

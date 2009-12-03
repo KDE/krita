@@ -4,7 +4,9 @@ set(kritadodgeburn_PART_SRCS DodgeBurnPlugin.cpp Dodge.cpp )
 
 kde4_add_plugin(kritadodgeburn ${kritadodgeburn_PART_SRCS})
 
-
+kde4_add_ui_files(kritadodgeburn_PART_SRCS
+    DodgeBurnConfigurationBaseWidget.ui
+    )
 
 target_link_libraries(kritadodgeburn kritaui)
 

@@ -18,13 +18,38 @@
 
 #include "filter/kis_color_transformation_filter.h"
 
+#include "kis_config_widget.h"
+
+
 class KisFilterDodgeBurn : public KisColorTransformationFilter
 {
+public:
+    enum Type {
+      SHADOWS,
+      MIDTONES,
+      HIGHLIGHTS
+    };
 public:
     KisFilterDodgeBurn(const QString& id, const QString& prefix, const QString& name );
 public:
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const;
 private:
     QString m_prefix;
+};
+
+class Ui_DodgeBurnConfigurationBaseWidget;
+
+class KisDodgeBurnConfigWidget : public KisConfigWidget
+{
+
+public:
+    KisDodgeBurnConfigWidget(QWidget * parent, const QString& id);
+    virtual ~KisDodgeBurnConfigWidget();
+
+    virtual KisPropertiesConfiguration * configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration* config);
+    QString m_id;
+    Ui_DodgeBurnConfigurationBaseWidget * m_page;
 };

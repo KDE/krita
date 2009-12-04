@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,6 +19,7 @@
  */
 
 #include "KoDrag.h"
+#include "KoDragOdfSaveHelper.h"
 
 #include <QApplication>
 #include <QBuffer>
@@ -36,21 +38,24 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include "KoShapeSavingContext.h"
 
-#include "KoDragOdfSaveHelper.h"
+class KoDragPrivate {
+public:
+    KoDragPrivate() : mimeData(0) { }
+    ~KoDragPrivate() { delete mimeData; }
+    QMimeData *mimeData;
+};
 
 KoDrag::KoDrag()
-        : m_mimeData(0)
+    : d(new KoDragPrivate())
 {
 }
 
 KoDrag::~KoDrag()
 {
-    if (m_mimeData == 0) {
-        delete m_mimeData;
-    }
+    delete d;
 }
 
-bool KoDrag::setOdf(const char * mimeType, KoDragOdfSaveHelper &helper)
+bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
 {
     struct Finally {
         Finally(KoStore *s) : store(s) { }
@@ -61,7 +66,7 @@ bool KoDrag::setOdf(const char * mimeType, KoDragOdfSaveHelper &helper)
     };
 
     QBuffer buffer;
-    KoStore* store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
+    KoStore *store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
     Finally finally(store); // delete store when we exit this scope
     Q_ASSERT(store);
     Q_ASSERT(!store->bad());
@@ -69,16 +74,16 @@ bool KoDrag::setOdf(const char * mimeType, KoDragOdfSaveHelper &helper)
     KoOdfWriteStore odfStore(store);
     KoEmbeddedDocumentSaver embeddedSaver;
 
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
-    KoXmlWriter* contentWriter = odfStore.contentWriter();
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
 
     if (!contentWriter) {
         return false;
     }
 
     KoGenStyles mainStyles;
-    KoXmlWriter* bodyWriter = odfStore.bodyWriter();
-    KoShapeSavingContext * context = helper.context(bodyWriter, mainStyles, embeddedSaver);
+    KoXmlWriter *bodyWriter = odfStore.bodyWriter();
+    KoShapeSavingContext *context = helper.context(bodyWriter, mainStyles, embeddedSaver);
 
     if (!helper.writeBody()) {
         return false;
@@ -120,25 +125,25 @@ bool KoDrag::setOdf(const char * mimeType, KoDragOdfSaveHelper &helper)
     return true;
 }
 
-void KoDrag::setData(const QString & mimeType, const QByteArray & data)
+void KoDrag::setData(const QString &mimeType, const QByteArray &data)
 {
-    if (m_mimeData == 0) {
-        m_mimeData = new QMimeData();
+    if (d->mimeData == 0) {
+        d->mimeData = new QMimeData();
     }
-    m_mimeData->setData(mimeType, data);
+    d->mimeData->setData(mimeType, data);
 }
 
 void KoDrag::addToClipboard()
 {
-    if (m_mimeData) {
-        QApplication::clipboard()->setMimeData(m_mimeData);
-        m_mimeData = 0;
+    if (d->mimeData) {
+        QApplication::clipboard()->setMimeData(d->mimeData);
+        d->mimeData = 0;
     }
 }
 
 QMimeData * KoDrag::mimeData()
 {
-    QMimeData * mimeData = m_mimeData;
-    m_mimeData = 0;
+    QMimeData *mimeData = d->mimeData;
+    d->mimeData = 0;
     return mimeData;
 }

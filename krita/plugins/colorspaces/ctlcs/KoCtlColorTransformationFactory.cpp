@@ -58,31 +58,33 @@ public:
     }
 
     virtual void setParameter(const QString& name, const QVariant& variant) {
-        const char* ascii = name.toAscii().data();
-        switch ( m_program->varying( ascii ).type()->dataType()) {
+        QByteArray ascii = name.toAscii();
+        dbgPlugins << name << " " << ascii.data() << ": " << variant;
+        const GTLCore::Type* type = m_program->varying( ascii.data() ).type();
+        switch ( type->dataType() ) {
         case GTLCore::Type::BOOLEAN:
-            m_program->setVarying( ascii, GTLCore::Value(variant.toBool()));
+            m_program->setVarying( ascii.data(), GTLCore::Value(variant.toBool()));
             break;
         case GTLCore::Type::FLOAT16:
         case GTLCore::Type::FLOAT32:
         case GTLCore::Type::FLOAT64:
-            m_program->setVarying( ascii, GTLCore::Value((float)variant.toDouble()));
+            m_program->setVarying( ascii.data(), GTLCore::Value((float)variant.toDouble()));
             break;
         case GTLCore::Type::INTEGER8:
         case GTLCore::Type::INTEGER16:
         case GTLCore::Type::INTEGER32:
-            m_program->setVarying( ascii, GTLCore::Value(variant.toInt()));
+            m_program->setVarying( ascii.data(), GTLCore::Value(variant.toInt()));
             break;
         case GTLCore::Type::UNSIGNED_INTEGER8:
         case GTLCore::Type::UNSIGNED_INTEGER16:
         case GTLCore::Type::UNSIGNED_INTEGER32:
-            m_program->setVarying( ascii, GTLCore::Value(variant.toUInt()));
+            m_program->setVarying( ascii.data(), GTLCore::Value(variant.toUInt()));
             break;
         case GTLCore::Type::ARRAY:
         case GTLCore::Type::VECTOR:
         default:
         case GTLCore::Type::UNDEFINED: {
-            qFatal("Unsupported type: %i", variant.type());
+            qFatal("Unsupported type: %i %i", variant.type(), type->dataType() );
         }
         }
     }
@@ -120,5 +122,7 @@ KoColorTransformation* KoCtlColorTransformationFactory::createTransformation(con
   
   OpenCTL::Program* program = new OpenCTL::Program("process", module, pixelDescription);
   
-  return new KoCtlColorTransformation(program, colorSpace);
+  KoCtlColorTransformation* transformation = new KoCtlColorTransformation(program, colorSpace);
+  transformation->setParameters(parameters);
+  return transformation;
 }

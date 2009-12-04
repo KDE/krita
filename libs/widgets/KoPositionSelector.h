@@ -22,12 +22,12 @@
 
 #include <QWidget>
 #include <KoFlake.h>
-#include "flake_export.h"
+#include "kowidgets_export.h"
 
 /**
  * Widget to show a set of radio buttons so the user can select a position.
  */
-class FLAKE_EXPORT KoPositionSelector : public QWidget
+class KOWIDGETS_EXPORT KoPositionSelector : public QWidget
 {
     Q_OBJECT
 public:

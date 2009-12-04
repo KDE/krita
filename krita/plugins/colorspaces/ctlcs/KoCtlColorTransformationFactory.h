@@ -20,9 +20,14 @@
 #ifndef _KO_CTL_COLOR_TRANSFORMATION_FACTORY_H_
 #define _KO_CTL_COLOR_TRANSFORMATION_FACTORY_H_
 
+#include <QMap>
+#include <QMutex>
+
 #include "KoColorTransformationFactory.h"
+#include <GTLCore/PixelDescription.h>
 
 namespace OpenCTL {
+    class Program;
     class Template;
 }
 
@@ -35,8 +40,12 @@ public:
     virtual QList< QPair< KoID, KoID > > supportedModels() const;
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const;
+    
+    void putBackProgram( const GTLCore::PixelDescription& pixelDescription, OpenCTL::Program* program) const;
 private:
     OpenCTL::Template* m_template;
+    mutable QMap<GTLCore::PixelDescription, QList<OpenCTL::Program*> > m_programs;
+    mutable QMutex m_mutex;
 };    
 
 #endif

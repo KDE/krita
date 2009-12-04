@@ -41,11 +41,11 @@
 class KoCtlColorTransformation : public KoColorTransformation
 {
 public:
-    KoCtlColorTransformation(OpenCTL::Program* program, const KoColorSpace* colorSpace) : m_program(program), m_colorSpace(colorSpace) {
+    KoCtlColorTransformation(OpenCTL::Program* program, const KoColorSpace* colorSpace, const KoCtlColorTransformationFactory* _factory, const GTLCore::PixelDescription& _pixelDescription) : m_program(program), m_colorSpace(colorSpace), m_factory(_factory), m_pixelDescription(_pixelDescription) {
     }
     ~KoCtlColorTransformation()
     {
-      delete m_program;
+      m_factory->putBackProgram(m_pixelDescription, m_program);
     }
 
 public:
@@ -92,6 +92,8 @@ public:
 private:
     OpenCTL::Program* m_program;
     const KoColorSpace* m_colorSpace;
+    const KoCtlColorTransformationFactory* m_factory;
+    GTLCore::PixelDescription m_pixelDescription;
 };
 
 
@@ -108,6 +110,12 @@ QList< QPair< KoID, KoID > > KoCtlColorTransformationFactory::supportedModels() 
   return QList< QPair< KoID, KoID > >();
 }
 
+void KoCtlColorTransformationFactory::putBackProgram( const GTLCore::PixelDescription& pixelDescription, OpenCTL::Program* program) const
+{
+    QMutexLocker lock2(&m_mutex);
+    m_programs[pixelDescription].append(program);
+}
+
 KoColorTransformation* KoCtlColorTransformationFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
 {
   dbgPlugins << "Create CTL transformation " << id() << " for " << colorSpace->id();
@@ -116,13 +124,23 @@ KoColorTransformation* KoCtlColorTransformationFactory::createTransformation(con
 
   Q_ASSERT(pixelDescription.bitsSize() / 8 == colorSpace->pixelSize());
   
-  OpenCTL::Module* module = m_template->generateModule(pixelDescription);
-  QMutexLocker lock(ctlMutex);
-  module->compile();
+  QMutexLocker lock2(&m_mutex);
   
-  OpenCTL::Program* program = new OpenCTL::Program("process", module, pixelDescription);
+  QList<OpenCTL::Program*> programs = m_programs[pixelDescription];
   
-  KoCtlColorTransformation* transformation = new KoCtlColorTransformation(program, colorSpace);
+  OpenCTL::Program* program = 0;
+  if(programs.empty())
+  {
+      OpenCTL::Module* module = m_template->generateModule(pixelDescription);
+      QMutexLocker lock(ctlMutex);
+      module->compile();
+      
+      program = new OpenCTL::Program("process", module, pixelDescription);
+  } else {
+      program = programs.takeLast();
+  }
+  
+  KoCtlColorTransformation* transformation = new KoCtlColorTransformation(program, colorSpace, this, pixelDescription);
   transformation->setParameters(parameters);
   return transformation;
 }

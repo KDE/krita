@@ -28,7 +28,8 @@
 #include "KoPAMasterPage.h"
 
 KoPAOdfPageSaveHelper::KoPAOdfPageSaveHelper( KoPADocument * doc, QList<KoPAPageBase *> pages )
-: m_doc( doc )
+    : m_doc(doc),
+    m_context(0)
 {
     foreach( KoPAPageBase * page, pages ) {
         if ( dynamic_cast<KoPAPage *>( page ) ) {
@@ -54,6 +55,7 @@ KoPAOdfPageSaveHelper::KoPAOdfPageSaveHelper( KoPADocument * doc, QList<KoPAPage
 
 KoPAOdfPageSaveHelper::~KoPAOdfPageSaveHelper()
 {
+    delete m_context;
 }
 
 KoShapeSavingContext * KoPAOdfPageSaveHelper::context( KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver )

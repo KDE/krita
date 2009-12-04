@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,29 +17,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoDragOdfSaveHelper.h"
-#include "KoDragOdfSaveHelper_p.h"
-
-KoDragOdfSaveHelper::KoDragOdfSaveHelper()
-        : d_ptr(new KoDragOdfSaveHelperPrivate())
+class KoDragOdfSaveHelperPrivate
 {
-}
+public:
+    KoDragOdfSaveHelperPrivate() : context(0) { }
+    ~KoDragOdfSaveHelperPrivate()
+    {
+        delete context;
+    }
 
-KoDragOdfSaveHelper::KoDragOdfSaveHelper(KoDragOdfSaveHelperPrivate &dd)
-        : d_ptr(&dd)
-{
-}
-
-KoDragOdfSaveHelper::~KoDragOdfSaveHelper()
-{
-    delete d_ptr;
-}
-
-KoShapeSavingContext *KoDragOdfSaveHelper::context(KoXmlWriter * bodyWriter, KoGenStyles & mainStyles,
-        KoEmbeddedDocumentSaver & embeddedSaver)
-{
-    Q_D(KoDragOdfSaveHelper);
-    Q_ASSERT(d->context == 0);
-    d->context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
-    return d->context;
-}
+    KoShapeSavingContext *context;
+};

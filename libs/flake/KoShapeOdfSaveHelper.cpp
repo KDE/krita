@@ -18,41 +18,38 @@
  */
 
 #include "KoShapeOdfSaveHelper.h"
+#include "KoDragOdfSaveHelper_p.h"
 
 #include <KoXmlWriter.h>
 #include <KoOdf.h>
 #include <KoShape.h>
 
-class KoShapeOdfSaveHelper::Private
+class KoShapeOdfSaveHelperPrivate : public KoDragOdfSaveHelperPrivate
 {
 public:
-    Private(QList<KoShape *> shapes)
+    KoShapeOdfSaveHelperPrivate(QList<KoShape *> shapes)
     : shapes(shapes) {}
 
     QList<KoShape *> shapes;
 };
 
 KoShapeOdfSaveHelper::KoShapeOdfSaveHelper(QList<KoShape *> shapes)
-        : d(new Private(shapes))
+        : KoDragOdfSaveHelper(*(new KoShapeOdfSaveHelperPrivate(shapes)))
 {
-}
-
-KoShapeOdfSaveHelper::~KoShapeOdfSaveHelper()
-{
-    delete d;
 }
 
 bool KoShapeOdfSaveHelper::writeBody()
 {
-    m_context->addOption(KoShapeSavingContext::DrawId);
+    Q_D(KoShapeOdfSaveHelper);
+    d->context->addOption(KoShapeSavingContext::DrawId);
 
-    KoXmlWriter & bodyWriter = m_context->xmlWriter();
+    KoXmlWriter &bodyWriter = d->context->xmlWriter();
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
-    qSort( d->shapes.begin(), d->shapes.end(), KoShape::compareShapeZIndex );
-    foreach(KoShape *shape, d->shapes) {
-        shape->saveOdf(*m_context);
+    qSort(d->shapes.begin(), d->shapes.end(), KoShape::compareShapeZIndex);
+    foreach (KoShape *shape, d->shapes) {
+        shape->saveOdf(*d->context);
     }
 
     bodyWriter.endElement(); // office:element

@@ -25,6 +25,7 @@
 #include "flake_export.h"
 
 class KoXmlWriter;
+class KoDragOdfSaveHelperPrivate;
 
 class FLAKE_EXPORT KoDragOdfSaveHelper
 {
@@ -40,7 +41,7 @@ public:
      *
      * The returned context is valid as long as the KoDragOdfSaveHelper is existing
      */
-    virtual KoShapeSavingContext * context(KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver);
+    virtual KoShapeSavingContext *context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles, KoEmbeddedDocumentSaver &embeddedSaver);
 
     /**
      * This method is called for writing the body of odf document.
@@ -50,7 +51,13 @@ public:
     virtual bool writeBody() = 0;
 
 protected:
-    KoShapeSavingContext * m_context;
+    /// constructor
+    KoDragOdfSaveHelper(KoDragOdfSaveHelperPrivate &);
+
+    KoDragOdfSaveHelperPrivate *d_ptr;
+
+private:
+    Q_DECLARE_PRIVATE(KoDragOdfSaveHelper)
 };
 
 #endif /* KODRAGODFSAVEHELPER_H */

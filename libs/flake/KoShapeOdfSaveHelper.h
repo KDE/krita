@@ -24,6 +24,7 @@
 #include "flake_export.h"
 
 class KoShape;
+class KoShapeOdfSaveHelperPrivate;
 
 /**
  * Save helper for saving shapes to odf.
@@ -40,14 +41,12 @@ public:
      *               children these are also saved.
      */
     KoShapeOdfSaveHelper(QList<KoShape *> shapes);
-    virtual ~KoShapeOdfSaveHelper();
 
     /// reimplemented
     virtual bool writeBody();
 
 private:
-    class Private;
-    Private * const d;
+    Q_DECLARE_PRIVATE(KoShapeOdfSaveHelper)
 };
 
 #endif /* KOSHAPEODFSAVEHELPER_H */

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>
    Copyright 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +24,9 @@
 #include <QtGui/QFontInfo>
 #ifdef Q_WS_X11
 #include <QtGui/QX11Info>
+#else
+#include <QtGui/QApplication>
+#include <QtGui/QDesktopWidget>
 #endif
 
 #include <kglobal.h>
@@ -42,8 +46,14 @@ KoDpi::KoDpi()
     m_dpiX = QX11Info::appDpiX();
     m_dpiY = QX11Info::appDpiY();
 #else
-    m_dpiX = 75;
-    m_dpiY = 75;
+    QDesktopWidget *w = QApplication::desktop();
+    if (w) {
+        m_dpiX = w->logicalDpiX();
+        m_dpiY = w->logicalDpiY();
+    } else {
+        m_dpiX = 75;
+        m_dpiY = 75;
+    }
 #endif
 }
 

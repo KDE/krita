@@ -28,7 +28,7 @@ SET ( EmfShape_SRCS
 
 kde4_add_plugin(emfshape ${EmfShape_SRCS})
 
-target_link_libraries(emfshape flake qemf)
+target_link_libraries(emfshape flake)
 
 install(TARGETS emfshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -40,4 +40,4 @@ install( FILES emfshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 ########### subdirectories ###############
 
-add_subdirectory( libemf )
+#add_subdirectory( libemf )

@@ -28,6 +28,7 @@
 #include "kis_paintop_box.h"
 #include <kis_types.h>
 #include "ko_favorite_resource_manager.h"
+#include <QQueue>
 #include <QtGui>
 #include <math.h>
 #define PI 3.14159265
@@ -45,71 +46,76 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     setAutoFillBackground(true);
     setAttribute(Qt::WA_ContentsPropagated,true);
     connect(this, SIGNAL(changeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
+    connect(this, SIGNAL(selectNewColor()), this, SLOT(slotPickNewColor()));
+
+    colorFoo=0;
 }
 
 void KisPopupPalette::slotPickNewColor()
 {
     //TODO:get currently used Color
-//    KisRecentColorData *newColor;
-//
-//    /****************************REMOVE THIS LATER**********************************/
-//    switch (colorFoo % 15){
-//        case 0:
-//            newColor = new KisRecentColorData(new QColor (255,0,0,255));
-//            break;
-//        case 1:
-//            newColor = new KisRecentColorData(new QColor (0,197,42,255));
-//            break;
-//        case 2:
-//            newColor = new KisRecentColorData(new QColor (192,0,255,255));
-//            break;
-//        case 3:
-//            newColor = new KisRecentColorData(new QColor (0,30,255,255));
-//            break;
-//        case 4:
-//            newColor = new KisRecentColorData(new QColor (116,227,255,255));
-//            break;
-//        case 5:
-//            newColor = new KisRecentColorData(new QColor (255,240,0,255));
-//            break;
-//        case 6:
-//            newColor = new KisRecentColorData(new QColor (119,156,110,255));
-//            break;
-//        case 7:
-//            newColor = new KisRecentColorData(new QColor (144,56,91,255));
-//            break;
-//        case 8:
-//            newColor = new KisRecentColorData(new QColor (162,201,255,255));
-//            break;
-//        case 9:
-//            newColor = new KisRecentColorData(new QColor (250,162,255,255));
-//            break;
-//        case 10:
-//            newColor = new KisRecentColorData(new QColor (255,215,162,255));
-//            break;
-//        case 11:
-//            newColor = new KisRecentColorData(new QColor (162,255,245,255));
-//            break;
-//        case 12:
-//            newColor = new KisRecentColorData(new QColor (234,255,162,255));
-//            break;
-//        case 13:
-//            newColor = new KisRecentColorData(new QColor (105,111,123,255));
-//            break;
-//        default:
-//            newColor = new KisRecentColorData(new QColor (255,162,162,255));
-//            break;
-//    }
-//    colorFoo++;
-//
-//    qDebug() << "Color to be added: (r)" << newColor->color()->red() << "(g)" << newColor->color()->green()
-//            << "(b)" << newColor->color()->blue();
-//    /****************************REMOVE THIS LATER**********************************/
-//
-//    //TODO: develop this more!
-//    m_resourceManager->addRecentColor(newColor);
-//
-//    qDebug() << "new color!!";
+    KisRecentColorData *newColor;
+
+    /****************************REMOVE THIS LATER**********************************/
+    switch (colorFoo % 15){
+        case 0:
+            newColor = new KisRecentColorData(new QColor (255,0,0,255));
+            break;
+        case 1:
+            newColor = new KisRecentColorData(new QColor (0,197,42,255));
+            break;
+        case 2:
+            newColor = new KisRecentColorData(new QColor (192,0,255,255));
+            break;
+        case 3:
+            newColor = new KisRecentColorData(new QColor (0,30,255,255));
+            break;
+        case 4:
+            newColor = new KisRecentColorData(new QColor (116,227,255,255));
+            break;
+        case 5:
+            newColor = new KisRecentColorData(new QColor (255,240,0,255));
+            break;
+        case 6:
+            newColor = new KisRecentColorData(new QColor (119,156,110,255));
+            break;
+        case 7:
+            newColor = new KisRecentColorData(new QColor (144,56,91,255));
+            break;
+        case 8:
+            newColor = new KisRecentColorData(new QColor (162,201,255,255));
+            break;
+        case 9:
+            newColor = new KisRecentColorData(new QColor (250,162,255,255));
+            break;
+        case 10:
+            newColor = new KisRecentColorData(new QColor (255,215,162,255));
+            break;
+        case 11:
+            newColor = new KisRecentColorData(new QColor (162,255,245,255));
+            break;
+        case 12:
+            newColor = new KisRecentColorData(new QColor (234,255,162,255));
+            break;
+        case 13:
+            newColor = new KisRecentColorData(new QColor (105,111,123,255));
+            break;
+        default:
+            newColor = new KisRecentColorData(new QColor (255,162,162,255));
+            break;
+    }
+    colorFoo++;
+
+    qDebug() << "Color to be added: (r)" << newColor->color()->red() << "(g)" << newColor->color()->green()
+            << "(b)" << newColor->color()->blue();
+    /****************************REMOVE THIS LATER**********************************/
+
+    //TODO: develop this more!
+    m_resourceManager->addRecentColor(newColor);
+
+    qDebug() << "new color!!";
+
+    update();
 
 }
 
@@ -147,28 +153,38 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
     {
         QPainterPath pathBrush(drawBrushDonutPath(width()/2, height()/2));
         QPainterPath pathColor(drawColorDonutPath(width()/2, height()/2));
+        QPainterPath pathSelCol;
+        pathSelCol.addEllipse(QPoint(width()/2, height()/2), 30,30);
 
         qDebug() << "[KisPopupPalette] mouse position: " << point;
 
         if (pathBrush.contains(point))
         { //in favorite brushes area
-            int pos = calculateFavoriteBrush(point);
+            int pos = calculateIndex(point, m_resourceManager->favoriteBrushesTotal());
             qDebug() << "[KisPopupPalette] favorite brush position: " << pos;
             if (pos >= 0 && pos < m_resourceManager->favoriteBrushesTotal())
             {
                 QPixmap pixmap(m_resourceManager->favoriteBrushPixmap(pos));
+
+                //calculating if the point is inside the pixmap
                 float angle = pos*PI*2.0/m_resourceManager->favoriteBrushesTotal();
                 QPainterPath path;
                 path.addRect(BRUSH_RADIUS*sin(angle)-pixmap.width()/2+width()/2,
                               BRUSH_RADIUS*cos(angle)-pixmap.height()/2+height()/2,
                               pixmap.width(), pixmap.height());
 
-                if(path.contains(point)) emit changeActivePaintop(pos);
+                if(path.contains(point) || pixmap.isNull()) emit changeActivePaintop(pos);
             }
         }
         else if (pathColor.contains(point))
         {
-            qDebug() << "[KisPopupPalette] in recent colour area";
+            int pos = calculateIndex(point, m_resourceManager->recentColorsList()->size());
+            qDebug() << "[KisPopupPalette] selected color: " << *(m_resourceManager->recentColorsList()->at(pos)->color());
+        }
+        else if (pathSelCol.contains(point))
+        {
+            qDebug() << "[KisPopupPalette] in select new color";
+            emit selectNewColor();
         }
     }
     else if (event->button() == Qt::MidButton)
@@ -189,21 +205,21 @@ void KisPopupPalette::resizeEvent(QResizeEvent*)
     setMask(maskedRegion);
 }
 
-int KisPopupPalette::calculateFavoriteBrush(QPointF point)
+int KisPopupPalette::calculateIndex(QPointF point, int n)
 {
     //translate to (0,0)
     point.setX(point.x() - width()/2);
     point.setY(point.y() - height()/2);
 
     //rotate
-    float smallerAngle = PI/2 + PI/m_resourceManager->favoriteBrushesTotal() - atan2 ( point.y(), point.x() );
+    float smallerAngle = PI/2 + PI/n - atan2 ( point.y(), point.x() );
     float radius = sqrt ( point.x()*point.x() + point.y()*point.y() );
     point.setX( radius * cos(smallerAngle) );
     point.setY( radius * sin(smallerAngle) );
 
     //calculate brush index
-    int pos = floor (acos(point.x()/radius) * m_resourceManager->favoriteBrushesTotal()/ (2 * PI));
-    if (point.y() < 0) pos =  m_resourceManager->favoriteBrushesTotal() - pos - 1;
+    int pos = floor (acos(point.x()/radius) * n/ (2 * PI));
+    if (point.y() < 0) pos =  n - pos - 1;
 
     return pos;
 }
@@ -234,11 +250,6 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.translate(width()/2, height()/2);
-    painter.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-
-    QPainterPath path_ColorDonut(drawColorDonutPath(0,0));
-    painter.fillPath(path_ColorDonut, Qt::red);
-    painter.drawPath(path_ColorDonut);
 
 //    QPainterPath path_BrushDonut(drawBrushDonutPath(0,0));
 //    painter.fillPath(path_BrushDonut, Qt::blue);
@@ -246,6 +257,7 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
 
     QList<QPixmap> pixmaps (m_resourceManager->favoriteBrushPixmaps());
 
+    //painting favorite brushes
     for (int pos = 0; pos < pixmaps.size(); pos++)
     {
         QPixmap pixmap(pixmaps.at(pos));
@@ -255,6 +267,38 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
         QPointF pointTemp(BRUSH_RADIUS*sin(angle),BRUSH_RADIUS*cos(angle));
         painter.drawPixmap(QPoint(pointTemp.x()-pixmapOffset.x(), pointTemp.y()-pixmapOffset.y()), pixmap);
     }
+
+    //painting recent colors
+    painter.setPen(Qt::NoPen);
+    QQueue <KisRecentColorData*>* colors (m_resourceManager->recentColorsList());
+    
+    for (int pos = 0; pos < colors->size(); pos++)
+    {
+        QPainterPath path;
+        path.setFillRule(Qt::OddEvenFill);
+        path.moveTo(0,0);
+        path.arcTo(10.0 - width()/2, 10.0 - height()/2, 2*(width()/2 - 10),2*(height()/2 - 10),-90.0 - 180/colors->size(),
+            360/colors->size());
+        path.lineTo(0,0);
+        path.arcTo(30.0 - width()/2, 30.0 - height()/2, 2*(width()/2 - 30),2*(height()/2 - 30),-90.0 - 180/colors->size(),
+            360/colors->size());
+        path.closeSubpath();
+    
+        //accessing recent color of index pos
+        painter.fillPath(path, *(colors->at(pos)->color()));
+    
+        painter.drawPath(path);
+        painter.rotate(360.0/colors->size());
+    }
+
+    QPainterPath path_ColorDonut(drawColorDonutPath(0,0));
+    painter.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+    painter.drawPath(path_ColorDonut);
+
+    //temporary new color 'button'
+    painter.setBrush(Qt::white);
+    painter.drawEllipse(QPoint(0,0), 30,30);
+    painter.drawText(QPoint(-15,0), "color");
 }
 
 void KisPopupPalette::mouseMoveEvent(QMouseEvent* e)

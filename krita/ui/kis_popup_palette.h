@@ -50,20 +50,24 @@ protected:
     void mouseMoveEvent (QMouseEvent*);
     void mousePressEvent (QMouseEvent*);
 
-    //functions to calculate favorite brush position in array
-    int calculateFavoriteBrush(QPointF);
+    //functions to calculate index of favorite brush or recent color in array
+    //n is the total number of favorite brushes or recent colors
+    int calculateIndex(QPointF, int n);
 
 private:
+    int colorFoo;//TEMPORARY
+
     KoFavoriteResourceManager* m_resourceManager;
 
     QPainterPath drawColorDonutPath(int, int);
     QPainterPath drawBrushDonutPath(int, int);
 
+signals:
+    void selectNewColor();
+    void changeActivePaintop(int);
+
 private slots:
     void slotPickNewColor();
-
-signals:
-    void changeActivePaintop(int);
 };
 
 #endif // KIS_POPUP_PALETTE_H

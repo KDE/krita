@@ -38,7 +38,7 @@ KisConfigWidget * KisFilterDodgeBurn::createConfigurationWidget(QWidget* parent,
 KoColorTransformation* KisFilterDodgeBurn::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
     QHash<QString, QVariant> params;
-    QString suffix = "Shadow";
+    QString suffix = "Midtones";
     if (config) {
         params["exposure"] = config->getDouble("exposure", 0.5);
         int type = config->getInt("type", KisFilterDodgeBurn::MIDTONES);
@@ -108,6 +108,6 @@ void KisDodgeBurnConfigWidget::setConfiguration(const KisPropertiesConfiguration
         m_page->radioButtonMidtones->setChecked(true);
         break;
     }
-    m_page->sliderExposure->setValue(config->getDouble("exposure", 0.5));
+    m_page->sliderExposure->setValue(config->getDouble("exposure", 0.5) * 100);
 }
 

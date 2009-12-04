@@ -36,17 +36,22 @@ KoZoomHandler::~KoZoomHandler()
 {
 }
 
-void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
+void KoZoomHandler::setZoomAndResolution(int zoom, int dpiX, int dpiY)
 {
     // m_resolution[XY] is in pixel per pt
-    m_resolutionX = POINT_TO_INCH( static_cast<qreal>(dpiX) );
-    m_resolutionY = POINT_TO_INCH( static_cast<qreal>(dpiY) );
-    setZoom( zoom / 100.0 );
+    m_resolutionX = POINT_TO_INCH(static_cast<qreal>(dpiX));
+    m_resolutionY = POINT_TO_INCH(static_cast<qreal>(dpiY));
+    // avoid commulative rounding errors
+    if (qFuzzyCompare(m_resolutionX, 1))
+        m_resolutionX = 1;
+    if (qFuzzyCompare(m_resolutionY, 1))
+        m_resolutionY = 1;
+    setZoom(zoom / 100.0);
     /*kDebug(30004) <<"KoZoomHandler::setZoomAndResolution" << zoom <<"" << dpiX <<"," << dpiY
               << " m_resolutionX=" << m_resolutionX
               << " m_zoomedResolutionX=" << m_zoomedResolutionX
               << " m_resolutionY=" << m_resolutionY
-              << " m_zoomedResolutionY=" << m_zoomedResolutionY << endl;*/
+              << " m_zoomedResolutionY=" << m_zoomedResolutionY; */
 }
 
 void KoZoomHandler::setResolutionToStandard()

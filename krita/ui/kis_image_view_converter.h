@@ -38,27 +38,9 @@ class KRITAUI_EXPORT KisImageViewConverter : public KoViewConverter
 public:
     /**
      * constructor
-     * @param image the image this viewConver works for.
+     * @param image the image this viewConverter works for.
      */
     KisImageViewConverter(const KisImageWSP image);
-
-    /// convert from flake to krita units
-    QPointF documentToView(const QPointF &documentPoint) const;
-
-    /// convert from krita to flake units
-    QPointF viewToDocument(const QPointF &viewPoint) const;
-
-    /// convert from flake to krita units
-    QRectF documentToView(const QRectF &documentRect) const;
-
-    /// convert from krita to flake units
-    QRectF viewToDocument(const QRectF &viewRect) const;
-
-    /// convert from krita to flake units
-    QSizeF documentToView(const QSizeF& documentSize) const;
-
-    /// convert from krita to flake units
-    QSizeF viewToDocument(const QSizeF& viewSize) const;
 
     /// convert from flake to krita units
     inline qreal documentToViewX(qreal documentX) const {

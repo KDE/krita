@@ -398,8 +398,9 @@ void KoToolManager::postSwitchTool(bool temporary)
     foreach(QList<CanvasData*> list, d->canvasses) {
         bool first = true;
         foreach(CanvasData *data, list) {
-            if (first)
+            if (first) {
                 kDebug(30006) << "Canvas" << canvasCount++;
+            }
             kDebug(30006) << "  +- Tool:" << data->activeToolId  << (data == d->canvasData ? " *" : "");
             first = false;
         }

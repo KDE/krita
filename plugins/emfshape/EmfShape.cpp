@@ -40,6 +40,7 @@
 // KOffice
 #include "KoUnit.h"
 #include "KoXmlNS.h"
+#include "KoShapeSavingContext.h"
 // FIXME
 #include "libemf/EmfParser.h"
 #include "libemf/EmfOutputPainterStrategy.h"

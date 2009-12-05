@@ -27,9 +27,8 @@
 #include "pigment_export.h"
 
 #include <KoGenericRegistry.h>
+#include <KoColorSpace.h>
 
-class KoColorSpace;
-class KoColorSpaceFactory;
 class KoColorProfile;
 class KoColorConversionSystem;
 class KoColorConversionCache;

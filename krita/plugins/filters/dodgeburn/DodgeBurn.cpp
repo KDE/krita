@@ -17,6 +17,7 @@
 
 #include "DodgeBurn.h"
 #include <filter/kis_filter_configuration.h>
+#include <kis_paint_device.h>
 
 #include "ui_DodgeBurnConfigurationBaseWidget.h"
 

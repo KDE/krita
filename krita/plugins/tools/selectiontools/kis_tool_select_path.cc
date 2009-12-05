@@ -120,7 +120,6 @@ void KisToolSelectPath::addPathShape()
         return;
 
     KisImageWSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
-    KisPaintDeviceSP dev = currentNode->paintDevice();
 
     m_shape->normalize();
 
@@ -136,7 +135,7 @@ void KisToolSelectPath::addPathShape()
 
     if (m_selectionMode == PIXEL_SELECTION) {
 
-        KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
+        KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
         KisPainter painter(tmpSel);
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));

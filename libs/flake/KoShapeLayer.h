@@ -20,10 +20,10 @@
 #ifndef __KOSHAPELAYER_H__
 #define __KOSHAPELAYER_H__
 
-#include <KoShapeContainer.h>
+#include "KoShapeContainer.h"
 #include "flake_export.h"
 
-#include <QRectF>
+class KoShapeLayerPrivate;
 
 /**
  * Provides arranging shapes into layers.
@@ -41,14 +41,18 @@ public:
      * @param model the custom modem
      */
     KoShapeLayer(KoShapeContainerModel *model);
-    /// empty implementation, as the layer itself is not visible
-    virtual void paintComponent(QPainter &, const KoViewConverter &) {}
+
+    /**
+     * Empty implementation, as the layer itself is not visible
+     */
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
     virtual bool hitTest(const QPointF &position) const;
     virtual QRectF boundingRect() const;
-    /// reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext & context) const;
-    // reimplemented
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+
+private:
+    Q_DECLARE_PRIVATE(KoShapeLayer)
 };
 
 #endif // __KOSHAPELAYER_H__

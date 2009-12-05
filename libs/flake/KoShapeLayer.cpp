@@ -86,3 +86,7 @@ bool KoShapeLayer::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 
     return true;
 }
+
+void KoShapeLayer::paintComponent(QPainter &, const KoViewConverter &)
+{
+}

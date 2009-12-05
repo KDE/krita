@@ -26,6 +26,7 @@ set(flake_SRCS
     KoPathSegment.cpp
     KoSelection.cpp
     KoShape.cpp
+    KoShapeApplicationData.cpp
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp
     KoChildrenData.cpp
@@ -255,6 +256,7 @@ install(
     KoShapeRegistry.h
     KoShapeSavingContext.h
     KoShapeUserData.h
+    KoShapeApplicationData.h
     KoTool.h
     KoToolManager.h
     KoToolFactory.h

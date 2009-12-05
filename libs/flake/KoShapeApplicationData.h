@@ -39,7 +39,7 @@
 class FLAKE_EXPORT KoShapeApplicationData
 {
 public:
-    virtual ~KoShapeApplicationData() {}
+    virtual ~KoShapeApplicationData();
 };
 
 #endif

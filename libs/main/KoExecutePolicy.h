@@ -20,7 +20,7 @@
 #ifndef KO_EXECUTEPOLICY_H
 #define KO_EXECUTEPOLICY_H
 
-#include "koaction_export.h"
+#include "komain_export.h"
 
 class QVariant;
 
@@ -32,7 +32,7 @@ class KoJobsListPolicy;
  * Each action will have a policy set; that policy will be used on execution of that
  * action to determine what will happen next.
  */
-class KOACTION_EXPORT KoExecutePolicy
+class KOMAIN_EXPORT KoExecutePolicy
 {
 public:
     KoExecutePolicy() {}

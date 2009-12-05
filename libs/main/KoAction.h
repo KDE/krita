@@ -21,7 +21,7 @@
 
 #include <threadweaver/ThreadWeaver.h>
 
-#include "koaction_export.h"
+#include "komain_export.h"
 
 #include <QtCore/QVariant>
 
@@ -55,7 +55,7 @@ class KoExecutePolicy;
  *
  * Notice that the default version uses the SimpleQueuedPolicy.
  */
-class KOACTION_EXPORT KoAction : public QObject
+class KOMAIN_EXPORT KoAction : public QObject
 {
     Q_OBJECT
 public:

@@ -25,36 +25,8 @@
 class ZoomHandler : public KoViewConverter
 {
 public:
-    ZoomHandler();
-
-    /// reimplemented from superclass
-    virtual QPointF documentToView(const QPointF &documentPoint) const;
-    /// reimplemented from superclass
-    virtual QPointF viewToDocument(const QPointF &viewPoint) const;
-    /// reimplemented from superclass
-    virtual QRectF documentToView(const QRectF &documentRect) const;
-    /// reimplemented from superclass
-    virtual QRectF viewToDocument(const QRectF &viewRect) const;
-    /// reimplemented from superclass
-    virtual QSizeF documentToView(const QSizeF &documentSize) const;
-    /// reimplemented from superclass
-    virtual QSizeF viewToDocument(const QSizeF &viewSize) const;
-    /// reimplemented from superclass
-    virtual void zoom(qreal *zoomX, qreal *zoomY) const;
-    /// reimplemented from superclass
-    virtual qreal documentToViewX(qreal documentX) const;
-    /// reimplemented from superclass
-    virtual qreal documentToViewY(qreal documentY) const;
-    /// reimplemented from superclass
-    virtual qreal viewToDocumentX(qreal viewX) const;
-    /// reimplemented from superclass
-    virtual qreal viewToDocumentY(qreal viewY) const;
-
     void setZoomIndex(int zoomIndex);
     void setAbsoluteZoom(qreal zoom);
-
-private:
-    qreal m_zoomLevel; // 1.0 is 100%
 };
 
 #endif

@@ -89,43 +89,6 @@ public:
     void updateInputMethodInfo() {}
 };
 
-class MockViewConverter : public KoViewConverter
-{
-    QPointF documentToView(const QPointF &documentPoint) const {
-        return documentPoint;
-    }
-    QPointF viewToDocument(const QPointF &viewPoint) const {
-        return viewPoint;
-    }
-    QRectF documentToView(const QRectF &documentRect) const {
-        return documentRect;
-    }
-    QRectF viewToDocument(const QRectF &viewRect) const {
-        return viewRect;
-    }
-    QSizeF documentToView(const QSizeF& documentSize) const {
-        return documentSize;
-    }
-    QSizeF viewToDocument(const QSizeF& viewSize) const {
-        return viewSize;
-    }
-    qreal documentToViewX(qreal documentX) const {
-        return documentX;
-    }
-    qreal documentToViewY(qreal documentY) const {
-        return documentY;
-    }
-    qreal viewToDocumentX(qreal viewX) const {
-        return viewX;
-    }
-    qreal viewToDocumentY(qreal viewY) const {
-        return viewY;
-    }
-    void zoom(qreal *zoomX, qreal *zoomY) const {
-        *zoomX = 1.0; *zoomY = 1.0;
-    }
-};
-
 class MockShapeController : public KoShapeControllerBase
 {
 public:

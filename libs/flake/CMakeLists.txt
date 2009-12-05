@@ -84,6 +84,7 @@ set(flake_SRCS
     KoSnapData.cpp
     SnapGuideConfigWidget.cpp
     KoShapeShadow.cpp
+    KoViewConverter.cpp
     KoDevice.cpp
     KoDeviceEvent.cpp
     KoDeviceRegistry.cpp
@@ -96,9 +97,6 @@ set(flake_SRCS
     KoImageData_p.cpp
     KoImageCollection.cpp
     KoOdfWorkaround.cpp
-    KoZoomHandler.cpp
-    KoZoomMode.cpp
-    KoDpi.cpp
     KoFilterEffect.cpp
     KoFilterEffectStack.cpp
     KoFilterEffectFactory.cpp
@@ -223,7 +221,6 @@ install(
     KoCopyController.h
     KoCutController.h
     KoDataCenter.h
-    KoDpi.h
     KoDockFactory.h
     KoDockRegistry.h
     KoDrag.h
@@ -263,8 +260,6 @@ install(
     KoToolFactory.h
     KoToolProxy.h
     KoToolRegistry.h
-    KoZoomHandler.h
-    KoZoomMode.h
     commands/KoEventActionAddCommand.h
     commands/KoEventActionRemoveCommand.h
     commands/KoParameterToPathCommand.h

@@ -22,12 +22,12 @@
 
 #include <QString>
 #include <QFlags>
-#include <flake_export.h>
+#include "kowidgets_export.h"
 
 /**
  * The ZoomMode container
  */
-class FLAKE_EXPORT KoZoomMode
+class KOWIDGETS_EXPORT KoZoomMode
 {
 public:
     enum Mode

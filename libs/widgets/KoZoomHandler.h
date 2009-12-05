@@ -21,10 +21,9 @@
 #ifndef KOZOOMHANDLER_H
 #define KOZOOMHANDLER_H
 
-#include "flake_export.h"
+#include "kowidgets_export.h"
 #include <KoZoomMode.h>
 #include <KoViewConverter.h>
-
 
 /**
  * This class handles the zooming and DPI stuff (conversions between
@@ -36,7 +35,7 @@
  * setZoomAndResolution() and setZoom()) so there is usually one
  * instance of KoZoomHandler per view.
  */
-class FLAKE_EXPORT KoZoomHandler : public KoViewConverter
+class KOWIDGETS_EXPORT KoZoomHandler : public KoViewConverter
 {
 public:
 

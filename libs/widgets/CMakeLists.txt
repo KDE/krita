@@ -17,6 +17,9 @@ set(kowidgets_LIB_SRCS
     KoZoomAction.cpp
     KoZoomController.cpp
     KoZoomInput.cpp
+    KoZoomHandler.cpp
+    KoZoomMode.cpp
+    KoDpi.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -44,6 +47,9 @@ install( FILES
     KoZoomAction.h
     KoZoomController.h
     KoZoomInput.h
+    KoDpi.h
+    KoZoomHandler.h
+    KoZoomMode.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
 COMPONENT Devel)

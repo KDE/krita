@@ -26,13 +26,12 @@
 #include <QtGui/QFont>
 #include <QtCore/QMap>
 
-#include "flake_export.h"
-
+#include "kowidgets_export.h"
 
 /**
  * Singleton to store user-overwritten DPI information.
  */
-class FLAKE_EXPORT KoDpi
+class KOWIDGETS_EXPORT KoDpi
 {
 public:
     /// For KoApplication

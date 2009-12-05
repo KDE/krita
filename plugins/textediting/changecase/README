@@ -1,0 +1,22 @@
+%{APPNAME}.(h|cpp):
+Manipulations and advanced user interaction are performed here.
+
+%{APPNAME}Factory.(h|cpp):
+This class creates the %{APPNAME} object. Here you can also create a contextmenu-item.
+
+%{APPNAME}Plugin.(h|cpp):
+Will be loaded by KOffice, here the factories are registered.
+
+%kotext{APPNAMELC}.desktop:
+The .desktop file with meta-data.
+
+CMakeLists.txt:
+A build file.
+
+-----------------
+Template created by Jonathan Schmidt-Dominé <devel@the-user.org>. (5.12.2009)
+
+Last update: 5.12.2009
+
+Post comments or questions in IRC (Freenode: #koffice, The_User).
+When nobody is online, use MemoServ (/ms help).

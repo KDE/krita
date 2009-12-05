@@ -1,17 +1,28 @@
-project(changecase)
+project(%{APPNAME})
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOMAIN_INCLUDES} )
+cmake_minimum_required(VERSION 2.6)
 
-set(changecase_SRCS
-    ChangecasePlugin.cpp
-    Changecase.cpp
-    ChangecaseFactory.cpp
+find_package(KDE4 REQUIRED)
+add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+include(KDE4Defaults)
+include(MacroLibrary)
+include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOMAIN_INCLUDES} )
+
+set(%{APPNAMELC}_SRCS
+    %{APPNAME}Plugin.cpp
+    %{APPNAME}.cpp
+    %{APPNAME}Factory.cpp
 )
 
-kde4_add_plugin(changecase ${changecase_SRCS})
+kde4_add_plugin(kotext%{APPNAMELC} ${%{APPNAMELC}_SRCS})
 
-target_link_libraries(changecase kotext)
+target_link_libraries(kotext%{APPNAMELC}
+    QtCore
+    QtGui
+    kotext
+    ${KDE4_KDEUI_LIBS}
+)
 
-install(TARGETS changecase DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kotext%{APPNAMELC} DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES changecase.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kotext%{APPNAMELC}.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

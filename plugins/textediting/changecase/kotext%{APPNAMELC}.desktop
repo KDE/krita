@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=%{APPNAME} plugin
+X-KDE-ServiceTypes=KOffice/Text-EditingPlugin
+Type=Service
+X-KDE-Library=kotext%{APPNAMELC}
+X-KoText-MinVersion=0
+X-Flake-PluginVersion=1

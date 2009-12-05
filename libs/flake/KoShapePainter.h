@@ -48,14 +48,14 @@ public:
      * Sets the shapes to be painted.
      * @param shape the shapes to paint
      */
-    void setShapes( const QList<KoShape*> &shapes );
+    void setShapes(const QList<KoShape*> &shapes);
 
     /**
      * Paints the shapes on the given painter and using the zoom handler.
      * @param painter the painter to paint on
      * @param converted the view converter defining the zoom to use
      */
-    void paintShapes( QPainter & painter, KoViewConverter & converter );
+    void paintShapes(QPainter &painter, KoViewConverter &converter);
 
     /**
      * Paints the shapes on the given painter.
@@ -65,14 +65,14 @@ public:
      * @param painterRect the destination rectangle on the painter
      * @param documentRect the document region to paint
      */
-    void paintShapes( QPainter & painter, const QRect & painterRect, const QRectF & documentRect );
+    void paintShapes(QPainter &painter, const QRect &painterRect, const QRectF &documentRect);
 
     /**
      * Paints shapes to the given image, so that all shapes fit onto it.
      * @param image the image to paint into
      * @return false if image is empty, else true
      */
-    bool paintShapes( QImage & image );
+    void paintShapes(QImage &image);
 
     /// Returns the bounding rect of the shapes to paint
     QRectF contentRect();

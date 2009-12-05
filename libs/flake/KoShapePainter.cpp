@@ -36,8 +36,8 @@ class SimpleCanvas : public KoCanvasBase
 {
 public:
     SimpleCanvas()
-        : KoCanvasBase(0), m_shapeManager( new KoShapeManager( this ) )
-        , m_zoomHandler( new KoZoomHandler() )
+        : KoCanvasBase(0), m_shapeManager(new KoShapeManager(this))
+        , m_zoomHandler(new KoZoomHandler())
     {
     }
 
@@ -49,9 +49,9 @@ public:
 
     virtual void gridSize(qreal *horizontal, qreal *vertical) const
     {
-        if( horizontal )
+        if (horizontal)
             *horizontal = 0;
-        if( vertical )
+        if (vertical)
             *vertical = 0;
     };
 
@@ -60,64 +60,64 @@ public:
         return false;
     }
 
-    virtual void addCommand(QUndoCommand *command)
+    virtual void addCommand(QUndoCommand *)
     {
-        Q_UNUSED( command );
-    };
+    }
 
     virtual KoShapeManager *shapeManager() const
     {
         return m_shapeManager;
-    };
+    }
 
-    virtual void updateCanvas(const QRectF& rc)
+    virtual void updateCanvas(const QRectF&)
     {
-        Q_UNUSED( rc );
-    };
+    }
 
-    virtual KoToolProxy * toolProxy() const
+    virtual KoToolProxy *toolProxy() const
     {
         return 0;
-    };
+    }
 
     virtual const KoViewConverter *viewConverter() const
     {
         return m_zoomHandler;
     }
 
-    virtual QWidget* canvasWidget()
+    virtual QWidget *canvasWidget()
     {
         return 0;
-    };
+    }
 
-    virtual const QWidget* canvasWidget() const {
+    virtual const QWidget *canvasWidget() const
+    {
         return 0;
     }
 
     virtual KoUnit unit() const
     {
-        return KoUnit( KoUnit::Point );
+        return KoUnit(KoUnit::Point);
     }
 
-    virtual void updateInputMethodInfo() {};
+    virtual void updateInputMethodInfo() {}
 private:
-    KoShapeManager * m_shapeManager;
-    KoZoomHandler * m_zoomHandler;
+    KoShapeManager *m_shapeManager;
+    KoZoomHandler *m_zoomHandler;
 };
 
 class KoShapePainter::Private
 {
 public:
     Private()
-    : canvas( new SimpleCanvas() )
+        : canvas(new SimpleCanvas())
     {
     }
+
     ~Private() { delete canvas; }
     SimpleCanvas * canvas;
 };
 
-KoShapePainter::KoShapePainter(KoShapeManagerPaintingStrategy * strategy)
-    : d( new Private() )
+KoShapePainter::KoShapePainter(KoShapeManagerPaintingStrategy *strategy)
+    : d(new Private())
 {
     if (strategy) {
         strategy->setShapeManager(d->canvas->shapeManager());
@@ -130,21 +130,21 @@ KoShapePainter::~KoShapePainter()
     delete d;
 }
 
-void KoShapePainter::setShapes( const QList<KoShape*> &shapes )
+void KoShapePainter::setShapes(const QList<KoShape*> &shapes)
 {
     d->canvas->shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
 }
 
-void KoShapePainter::paintShapes( QPainter & painter, KoViewConverter & converter )
+void KoShapePainter::paintShapes(QPainter &painter, KoViewConverter &converter)
 {
     foreach (KoShape *shape, d->canvas->shapeManager()->shapes()) {
         shape->waitUntilReady(converter, false);
     }
 
-    d->canvas->shapeManager()->paint( painter, converter, true );
+    d->canvas->shapeManager()->paint(painter, converter, true);
 }
 
-void KoShapePainter::paintShapes( QPainter & painter, const QRect & painterRect, const QRectF & documentRect )
+void KoShapePainter::paintShapes(QPainter &painter, const QRect &painterRect, const QRectF &documentRect)
 {
     KoZoomHandler zoomHandler;
     // calculate the painter destination rectangle size in document coordinates
@@ -154,49 +154,47 @@ void KoShapePainter::paintShapes( QPainter & painter, const QRect & painterRect,
     // so that the content fits into the image
     qreal zoomW = paintBox.width() / documentRect.width();
     qreal zoomH = paintBox.height() / documentRect.height();
-    qreal zoom = qMin( zoomW, zoomH );
+    qreal zoom = qMin(zoomW, zoomH);
 
     // now set the zoom into the zoom handler used for painting the shape
-    zoomHandler.setZoom( zoom );
+    zoomHandler.setZoom(zoom);
 
     painter.save();
 
     // initialize painter
-    painter.setPen( QPen(Qt::NoPen) );
-    painter.setBrush( Qt::NoBrush );
+    painter.setPen(QPen(Qt::NoPen));
+    painter.setBrush(Qt::NoBrush);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setClipRect( painterRect.adjusted(-1,-1,1,1) );
+    painter.setClipRect(painterRect.adjusted(-1,-1,1,1));
 
     // convert document rectangle to view coordinates
-    QRectF zoomedBound = zoomHandler.documentToView( documentRect );
+    QRectF zoomedBound = zoomHandler.documentToView(documentRect);
     // calculate offset between painter rectangle and converted document rectangle
     QPointF offset = QPointF(painterRect.center()) - zoomedBound.center();
     // center content in painter rectangle
-    painter.translate( offset.x(), offset.y() );
+    painter.translate(offset.x(), offset.y());
 
     // finally paint the shapes
-    paintShapes( painter, zoomHandler );
+    paintShapes(painter, zoomHandler);
 
     painter.restore();
 }
 
-bool KoShapePainter::paintShapes( QImage & image )
+void KoShapePainter::paintShapes(QImage &image)
 {
-    if( image.isNull() )
-        return false;
+    if (image.isNull())
+        return;
 
-    QPainter painter( &image );
+    QPainter painter(&image);
 
-    paintShapes( painter, image.rect(), contentRect() );
-
-    return true;
+    paintShapes(painter, image.rect(), contentRect());
 }
 
 QRectF KoShapePainter::contentRect()
 {
     QRectF bound;
-    foreach(KoShape * shape, d->canvas->shapeManager()->shapes()) {
-        if (! shape->isVisible( true ))
+    foreach (KoShape *shape, d->canvas->shapeManager()->shapes()) {
+        if (!shape->isVisible( true ))
             continue;
         if (dynamic_cast<KoShapeGroup*>(shape))
             continue;

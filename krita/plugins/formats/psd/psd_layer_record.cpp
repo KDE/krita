@@ -17,6 +17,8 @@
  */
 #include "psd_layer_record.h"
 
+#include <netinet/in.h> // htonl
+
 #include <QIODevice>
 #include <QBuffer>
 #include <QDataStream>
@@ -84,8 +86,13 @@ bool PSDLayerRecord::read(QIODevice* io)
             return false;
         }
 
-        ChannelInfo info;
-        if (!psdread(io, &info.channelId)) {
+        ChannelInfo* info = new ChannelInfo();
+        info->compressionType = Unknown;
+        info->channelId = -1;
+        info->channelDataLength = 0;
+        info->channelDataStart = 0;
+
+        if (!psdread(io, &info->channelId)) {
             error = "could not read channel id";
             return false;
         }
@@ -93,17 +100,17 @@ bool PSDLayerRecord::read(QIODevice* io)
         if (m_header.m_version == 1) {
             quint32 channelDataLength;
             r = psdread(io, &channelDataLength);
-            info.channelDataLength = (quint64)channelDataLength;
+            info->channelDataLength = (quint64)channelDataLength;
         }
         else {
-            r = psdread(io, &info.channelDataLength);
+            r = psdread(io, &info->channelDataLength);
         }
         if (!r) {
             error = "Could not read length for channel data";
             return false;
         }
 
-        dbgFile << "channel" << i << "id" << info.channelId << "length" << info.channelDataLength;
+        dbgFile << "channel" << i << "id" << info->channelId << "length" << info->channelDataLength;
         channelInfoRecords << info;
     }
 
@@ -185,7 +192,7 @@ bool PSDLayerRecord::read(QIODevice* io)
     if (!psdread(io, &layerMaskLength) ||
         io->bytesAvailable() < layerMaskLength ||
         !(layerMaskLength == 0 || layerMaskLength == 20 || layerMaskLength == 36)) {
-        error = QString("Could not read layer mask info. Length: %1").arg(layerMaskLength);
+        error = QString("Could not read layer mask info-> Length: %1").arg(layerMaskLength);
         return false;
     }
 
@@ -243,7 +250,7 @@ bool PSDLayerRecord::read(QIODevice* io)
     if ((quint32)blendingRanges.data.size() != blendingDataLength) {
         error = QString("Got %1 bytes for the blending range block, needed %2").arg(blendingRanges.data.size(), blendingDataLength);
     }
-/*
+    /*
    // XXX: reading this block correctly failed, I have more channel ranges than I'd expected.
 
     if (!psdread(io, &blendingRanges.blackValues[0]) ||
@@ -359,31 +366,107 @@ bool PSDLayerRecord::valid()
 
 quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, quint16 channel)
 {
-    return 0;
+    dbgFile << "Going to read channel data for " << channel
+            << "at row" << row
+            << "from io with current pos" << io->pos();
+
+    if (channel >= channelInfoRecords.size()) {
+        error = "Tried to read non-existent channel";
+        return 0;
+    }
+
+    quint64 savedPos = io->pos();
+    quint8* bytes = 0;
+    ChannelInfo* channelInfo = channelInfoRecords.at(channel);
+
+    if (channelInfo->compressionType == Uncompressed) {
+        switch(m_header.m_channelDepth){
+        case 1:
+            {
+                dbgFile << "channel depth of 1 bit, we use 8 bits";
+                // quint8* bytes = new quint8[right - left];
+                error = "1 bit channels not supported";
+                return 0;
+            }
+            break;
+        case 8:
+            {
+                dbgFile << "channel depth of 8 bit";
+                bytes = new quint8[right - left];
+                quint64 bytesRead = io->read((char*)bytes, right - left);
+                if (bytesRead != right - left) {
+                    error = "Could not read enough bytes for 8-bit channel";
+                    return 0;
+                }
+            }
+            break;
+        case 16:
+            {
+                dbgFile << "channel depth of 16 bit";
+                quint64 length = (right - left) * 2;
+                quint8* bytes = new quint8[length];
+                quint64 bytesRead = io->read((char*)bytes, length);
+                if (bytesRead != length) {
+                    error = "Could not read enough bytes for 16-bit channel";
+                    return 0;
+                }
+                for (quint64 i = 0; i < right - left && i * 2 < length; ++i) {
+                    bytes[i * 2] = ntohs((quint16)bytes[i*2]);
+                }
+            }
+            break;
+        case 32:
+            {
+                dbgFile << "channel depth of 32 bit";
+                quint64 length = (right - left) * 4;
+                quint8* bytes = new quint8[length];
+                quint64 bytesRead = io->read((char*)bytes, length);
+                if (bytesRead != length) {
+                    error = "Could not read enough bytes for 16-bit channel";
+                    return 0;
+                }
+                for (quint64 i = 0; i < right - left && i * 4 < length; ++i) {
+                    bytes[i * 4] = ntohl((quint32)bytes[i*4]);
+                }
+            }
+            break;
+        default:
+            error = QString("Unsupported channel depth");
+            return false;
+        }
+    }
+    else if (channelInfo->compressionType == RLE) {
+
+        io->seek(savedPos);
+    }
+    else {
+        error = QString("Unsupported compression type: %1").arg(channelInfo->compressionType);
+        return 0;
+    }
+    return bytes;
 }
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
 {
 #ifndef NODEBUG
-    dbg.nospace() << "(valid: " << const_cast<PSDLayerRecord*>(&layer)->valid();
-    dbg.nospace() << ", nake: " << layer.layerName;
-    dbg.nospace() << ", top: " << layer.top;
+    dbg.nospace() << "valid: " << const_cast<PSDLayerRecord*>(&layer)->valid();
+    dbg.nospace() << ", name: " << layer.layerName;
+    dbg.nospace() << ", \ntop: " << layer.top;
     dbg.nospace() << ", left:" << layer.left;
     dbg.nospace() << ", bottom: " << layer.bottom;
     dbg.nospace() << ", right: " << layer.right;
-    dbg.nospace() << ", number of channels: " << layer.nChannels;
-    dbg.nospace() << ", blendModeKey: " << layer.blendModeKey;
+    dbg.nospace() << ", \nnumber of channels: " << layer.nChannels;
+    dbg.nospace() << ", \nblendModeKey: " << layer.blendModeKey;
     dbg.nospace() << ", opacity: " << layer.opacity;
     dbg.nospace() << ", clipping: " << layer.clipping;
-    dbg.nospace() << ", opacity: " << layer.opacity;
-    dbg.nospace() << ", transparency protected: " << layer.transparencyProtected;
+    dbg.nospace() << ", \ntransparency protected: " << layer.transparencyProtected;
     dbg.nospace() << ", visible: " << layer.visible;
     dbg.nospace() << ", irrelevant: " << layer.irrelevant << "\n";
-    foreach(const PSDLayerRecord::ChannelInfo& channel, layer.channelInfoRecords) {
-        dbg.nospace() << channel.channelId << ", size: " << channel.channelDataLength;
+    foreach(const PSDLayerRecord::ChannelInfo* channel, layer.channelInfoRecords) {
+        dbg.space() << "\tChannel" << channel->channelId
+                << "size: " << channel->channelDataLength
+                << "compression type" << channel->compressionType << "\n";
     }
-
-    dbg.nospace() << ")";
 #endif
     return dbg.nospace();
 }

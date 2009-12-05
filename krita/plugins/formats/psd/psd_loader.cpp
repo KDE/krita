@@ -208,6 +208,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
             // XXX: work out the group layer structure in Photoshop, as well as the adjustment layers
 
             PSDLayerRecord* layerRecord = layerSection.layers.at(i);
+            dbgFile << "Going to read channels for layer " << i << *layerRecord;
 
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
 

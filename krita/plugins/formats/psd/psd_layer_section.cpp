@@ -126,17 +126,20 @@ bool PSDLayerSection::read(QIODevice* io)
     // get the positions for the channels belonging to each layer
     for (int i = 0; i < nLayers; ++i) {
         
-        dbgFile << "Going to seek channel positions for layer" << i;
+        dbgFile << "Going to seek channel positions for layer" << i << "pos" << io->pos();
         Q_ASSERT(i < layers.size());
         if (i > layers.size()) {
             error = QString("Expected layer %1, but only have %2 layers").arg(i).arg(layers.size());
             return false;
         }
-        
+        // save the current location so we can jump beyond this block later on.
+        quint64 channelStartPos = io->pos();
+
         PSDLayerRecord *layerRecord = layers.at(i);
         
         for (int j = 0; j < layerRecord->nChannels; ++j) {
             
+            dbgFile << "Reading channel image data for" << j << "from pos" << io->pos();
 
             Q_ASSERT(j < layerRecord->channelInfoRecords.size());
             if (j > layerRecord->channelInfoRecords.size()) {
@@ -147,19 +150,62 @@ bool PSDLayerSection::read(QIODevice* io)
                 return false;
             }
 
-            PSDLayerRecord::ChannelInfo channelInfo = layerRecord->channelInfoRecords.at(j);
+            PSDLayerRecord::ChannelInfo* channelInfo = layerRecord->channelInfoRecords.at(j);
 
-            channelInfo.channelDataStart = io->pos();
             quint16 compressionType;
             if (!psdread(io, &compressionType)) {
                 error = "Could not read compression type for channel";
                 return false;
             }
-            channelInfo.compressionType = (PSDLayerRecord::CompressionType)compressionType;
-            dbgFile << "channel record" << j << "for layer" << i << "with length" << channelInfo.channelDataLength
-                    << "is at" << io->pos()
-                    << "and has compression type" << channelInfo.compressionType;
-            io->seek(io->pos() + channelInfo.channelDataLength - 2);
+            channelInfo->compressionType = (PSDLayerRecord::CompressionType)compressionType;
+            dbgFile << "Channel" << channelInfo->channelId << "at" << j << "has compression type" << compressionType;
+
+            // read the rle row lengths;
+            if (channelInfo->compressionType == PSDLayerRecord::RLE) {
+                for(quint64 row = 0; row < (layerRecord->bottom - layerRecord->top); ++row) {
+
+                    dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
+
+                    quint32 byteCount;
+                    if (m_header.m_version == 1) {
+                        quint16 _byteCount;
+                        if (!psdread(io, &_byteCount)) {
+                            error = QString("Could not read byteCount for rle-encoded channel");
+                            return 0;
+                        }
+                        byteCount = _byteCount;
+                    }
+                    else {
+                        if (!psdread(io, &byteCount)) {
+                            error = QString("Could not read byteCount for rle-encoded channel");
+                            return 0;
+                        }
+                    }
+                    qDebug() << "rle byte count" << byteCount;
+                    channelInfo->rleRowLengths << byteCount;
+                }
+            }
+
+            // we're beyond all the length bytes, rle bytes and whatever, this is the
+            // location of the real pixel data
+            channelInfo->channelDataStart = io->pos();
+
+            dbgFile << "start" << channelStartPos
+                    << "data start" << channelInfo->channelDataStart
+                    << "data length" << channelInfo->channelDataLength
+                    << "pos" << io->pos();
+            
+            // make sure we are at the start of the next channel data block
+            io->seek(channelStartPos + channelInfo->channelDataLength);
+
+            // this is the length of the actual channel data bytes
+            channelInfo->channelDataLength = channelInfo->channelDataLength - (channelInfo->channelDataStart - channelStartPos);
+
+            dbgFile << "channel record" << j << "for layer" << i
+                    << "starting postion" << channelInfo->channelDataStart
+                    << "with length" << channelInfo->channelDataLength
+                    << "and has compression type" << channelInfo->compressionType;
+
         }
     }
 

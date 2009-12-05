@@ -32,15 +32,20 @@ class PSDLayerRecord
 public:
 
     enum CompressionType {
-        Uncompressed,
+        Uncompressed = 0,
         RLE,
         ZIP,
         ZIPWithPrediction,
         Unknown
     };
 
-
     PSDLayerRecord(const PSDHeader &header, bool hasTransparency);
+
+    ~PSDLayerRecord()
+    {
+        qDeleteAll(channelInfoRecords);
+    }
+
     bool read(QIODevice* io);
     bool write(QIODevice* io);
     bool valid();
@@ -59,9 +64,10 @@ public:
         CompressionType compressionType;
         quint64 channelDataStart;
         quint64 channelDataLength;
+        QVector<quint32> rleRowLengths;
     };
 
-    QVector<ChannelInfo> channelInfoRecords;
+    QVector<ChannelInfo*> channelInfoRecords;
 
     QString blendModeKey;
 

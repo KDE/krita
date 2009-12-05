@@ -127,6 +127,9 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     if (hasTemporaryTarget()) {
         gc.setOpacity(temporaryOpacity());
         gc.setCompositeOp(temporaryCompositeOp());
+        if (alphaLocked()) {
+            gc.setLockAlpha(true);
+        }
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
 }

@@ -65,16 +65,14 @@ bool PSDLayerSection::read(QIODevice* io)
     dbgFile << "reading layer info block. Bytes left" << io->bytesAvailable() << "position" << io->pos();
     
     layerInfoSize = 0;
-    nLayers = 0;
     if (m_header.m_version == 1) {
-        quint32 layerInfoSize;
-        if (!psdread(io, &layerInfoSize) || layerInfoSize > (quint64)io->bytesAvailable()) {
+        quint32 _layerInfoSize;
+        if (!psdread(io, &_layerInfoSize) || _layerInfoSize > (quint64)io->bytesAvailable()) {
             error = "Could not read layer section size";
             return false;
         }
-        layerInfoSize = layerInfoSize;
+        layerInfoSize = _layerInfoSize;
     }
-    
     else if (m_header.m_version == 2) {
         if (!psdread(io, &layerInfoSize) || layerInfoSize > (quint64)io->bytesAvailable()) {
             error = "Could not read layer section size";
@@ -83,7 +81,8 @@ bool PSDLayerSection::read(QIODevice* io)
     }
     
     dbgFile << "Layer info block size" << layerInfoSize;
-    
+    nLayers = 0;
+
     if (layerInfoSize > 0 ) {
         
         // rounded to a multiple of 2

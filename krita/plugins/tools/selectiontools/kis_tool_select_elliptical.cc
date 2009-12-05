@@ -104,7 +104,7 @@ void KisToolSelectElliptical::mousePressEvent(KoPointerEvent *e)
         if (!currentNode())
             return;
 
-        if (currentImage() && currentNode()->paintDevice() && e->button() == Qt::LeftButton) {
+        if (currentImage() && e->button() == Qt::LeftButton) {
             clearSelection();
             m_startPos = m_endPos = m_centerPos = convertToPixelCoord(e);
             m_selecting = true;

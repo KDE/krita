@@ -254,10 +254,11 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
     enum OdfAnchorType {
         AsChar,
         Frame,
-        Paragraph
+        Paragraph,
+        Undefined
     };
     // ODF is not nearly as powerful as we need it (yet) so lets do some mapping.
-    OdfAnchorType odfAnchorType;
+    OdfAnchorType odfAnchorType = Undefined;
     switch (d->verticalAlignment) {
     case KoTextAnchor::TopOfFrame:
     case KoTextAnchor::BottomOfFrame:

@@ -359,9 +359,9 @@ void KisTool::setupPainter(KisPainter* painter)
     painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
 
     if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
-        m_painter->setChannelFlags(l->channelFlags());
+        painter->setChannelFlags(l->channelFlags());
         if (l->alphaLocked()) {
-            m_painter->setLockAlpha(l->alphaLocked());
+            painter->setLockAlpha(l->alphaLocked());
         }
     }
 

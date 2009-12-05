@@ -26,9 +26,3 @@ KoLoadingShapeUpdater::KoLoadingShapeUpdater()
 KoLoadingShapeUpdater::~KoLoadingShapeUpdater()
 {
 }
-
-void KoLoadingShapeUpdater::update(KoShape * shape)
-{
-    Q_UNUSED(shape);
-    Q_ASSERT(0);
-}

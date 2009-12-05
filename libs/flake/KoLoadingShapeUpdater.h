@@ -45,7 +45,7 @@ public:
      *
      * @param shape The shape that just got loaded.
      */
-    virtual void update(KoShape * shape);
+    virtual void update(KoShape *shape) = 0;
 };
 
 #endif /* KOLOADINGSHAPEUPDATER_H */

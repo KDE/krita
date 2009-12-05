@@ -1,7 +1,0 @@
-# KDE Config File
-[General]
-Name=KOffice Text-Plugin Template
-Name[de]=Vorlage für ein KOffice-Text-Modul
-Comment=A KOffice plugin template to add new features for modifying text (use ThisFormat for the project name)
-Comment[de]=Eine Vorlage für ein KOffice-Modul zum Hinzufügen von Möglichkeiten, Text zu bearbeiten (benutze DiesesFormat für den Projektnamen)
-Category=C++/KDE

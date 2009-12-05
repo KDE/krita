@@ -24,7 +24,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <KoZoomHandler.h>
 
 #include "core/Sheet.h"
 #include "core/Part.h"
@@ -132,15 +131,15 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     writer.endElement(); // music:shape
 
     // Save a preview image
-    qreal previewDPI = 150;
+    const qreal previewZoom = 150 / 72.; // 150 DPI
     QSizeF imgSize = size(); // in points
-    imgSize *= previewDPI / 72;
+    imgSize *= previewZoom;
     QImage img(imgSize.toSize(), QImage::Format_ARGB32);
     QPainter painter(&img);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::TextAntialiasing);
-    KoZoomHandler converter;
-    converter.setZoomAndResolution(100, previewDPI, previewDPI);
+    KoViewConverter converter;
+    converter.setZoom(previewZoom);
     constPaint(painter, converter);
     writer.startElement("draw:image");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)

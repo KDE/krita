@@ -193,13 +193,18 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 
 void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 {
-    if ((event->buttons() & Qt::RightButton) && m_shape) {
-        // repaint the shape before removing the last point
-        m_canvas->updateCanvas(m_shape->boundingRect());
-        m_shape->removePoint(m_shape->pathPointIndex(m_activePoint));
+    if (event->buttons() & Qt::RightButton) {
+        if(m_shape) {
+            // repaint the shape before removing the last point
+            m_canvas->updateCanvas(m_shape->boundingRect());
+            m_shape->removePoint(m_shape->pathPointIndex(m_activePoint));
 
-        addPathShape();
-        return;
+            addPathShape();
+            return;
+        } else {
+            // Return as otherwise a point would be added
+            return;
+        }
     }
 
     if (m_shape) {

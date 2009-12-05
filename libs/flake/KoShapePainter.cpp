@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,15 +21,16 @@
 
 #include "KoShapePainter.h"
 
-#include <KoCanvasBase.h>
-#include <KoShapeManager.h>
-#include <KoShapeManagerPaintingStrategy.h>
-#include <KoZoomHandler.h>
+#include "KoCanvasBase.h"
+#include "KoShapeManager.h"
+#include "KoShapeManagerPaintingStrategy.h"
+#include "KoShape.h"
+#include "KoViewConverter.h"
+#include "KoShapeBorderModel.h"
+#include "KoShapeGroup.h"
+#include "KoShapeContainer.h"
+
 #include <KoUnit.h>
-#include <KoShape.h>
-#include <KoShapeBorderModel.h>
-#include <KoShapeGroup.h>
-#include <KoShapeContainer.h>
 
 #include <QtGui/QImage>
 
@@ -37,14 +39,12 @@ class SimpleCanvas : public KoCanvasBase
 public:
     SimpleCanvas()
         : KoCanvasBase(0), m_shapeManager(new KoShapeManager(this))
-        , m_zoomHandler(new KoZoomHandler())
     {
     }
 
     ~SimpleCanvas()
     {
         delete m_shapeManager;
-        delete m_zoomHandler;
     }
 
     virtual void gridSize(qreal *horizontal, qreal *vertical) const
@@ -80,7 +80,7 @@ public:
 
     virtual const KoViewConverter *viewConverter() const
     {
-        return m_zoomHandler;
+        return 0;
     }
 
     virtual QWidget *canvasWidget()
@@ -101,7 +101,6 @@ public:
     virtual void updateInputMethodInfo() {}
 private:
     KoShapeManager *m_shapeManager;
-    KoZoomHandler *m_zoomHandler;
 };
 
 class KoShapePainter::Private
@@ -146,9 +145,9 @@ void KoShapePainter::paintShapes(QPainter &painter, KoViewConverter &converter)
 
 void KoShapePainter::paintShapes(QPainter &painter, const QRect &painterRect, const QRectF &documentRect)
 {
-    KoZoomHandler zoomHandler;
+    KoViewConverter converter;
     // calculate the painter destination rectangle size in document coordinates
-    QRectF paintBox = zoomHandler.viewToDocument(QRectF(QPointF(), painterRect.size()));
+    QRectF paintBox = converter.viewToDocument(QRectF(QPointF(), painterRect.size()));
 
     // compute the zoom factor based on the bounding rects in document coordinates
     // so that the content fits into the image
@@ -157,7 +156,7 @@ void KoShapePainter::paintShapes(QPainter &painter, const QRect &painterRect, co
     qreal zoom = qMin(zoomW, zoomH);
 
     // now set the zoom into the zoom handler used for painting the shape
-    zoomHandler.setZoom(zoom);
+    converter.setZoom(zoom);
 
     painter.save();
 
@@ -168,14 +167,14 @@ void KoShapePainter::paintShapes(QPainter &painter, const QRect &painterRect, co
     painter.setClipRect(painterRect.adjusted(-1,-1,1,1));
 
     // convert document rectangle to view coordinates
-    QRectF zoomedBound = zoomHandler.documentToView(documentRect);
+    QRectF zoomedBound = converter.documentToView(documentRect);
     // calculate offset between painter rectangle and converted document rectangle
     QPointF offset = QPointF(painterRect.center()) - zoomedBound.center();
     // center content in painter rectangle
     painter.translate(offset.x(), offset.y());
 
     // finally paint the shapes
-    paintShapes(painter, zoomHandler);
+    paintShapes(painter, converter);
 
     painter.restore();
 }

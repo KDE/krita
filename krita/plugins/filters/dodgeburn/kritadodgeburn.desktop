@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=Dodge and Burn Filter
+Name[pt]=Filtro de Desvio e Queimadura
+Name[pt_BR]=Filtro de Desvio e Queimadura
+Name[uk]=Фільтр комбінування з вигоранням
+Name[x-test]=xxDodge and Burn Filterxx
 Comment=Dodge and Burn Filter
+Comment[pt]=Filtro de Desvio e Queimadura
+Comment[pt_BR]=Filtro de Desvio e Queimadura
+Comment[uk]=Фільтр комбінування з вигоранням
+Comment[x-test]=xxDodge and Burn Filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritadodgeburn

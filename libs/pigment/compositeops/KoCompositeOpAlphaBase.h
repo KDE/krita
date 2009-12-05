@@ -62,6 +62,7 @@ public:
                    quint8 U8_opacity,
                    const QBitArray & channelFlags) const
         {
+
             qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
             if ( _CSTraits::alpha_pos == -1 ) {
 
@@ -109,6 +110,12 @@ public:
                 }
             }
             else {
+                bool alphaLocked = false;
+                if (!channelFlags.isEmpty() ){
+                    if (!channelFlags.testBit(_CSTraits::alpha_pos)) {
+                        alphaLocked = true;
+                    }
+                }
 
                 channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
                 qint32 pixelSize = colorSpace()->pixelSize();
@@ -146,7 +153,9 @@ public:
                                 srcBlend = srcAlpha;
                             } else {
                                 channels_type newAlpha = dstAlpha + KoColorSpaceMaths<channels_type>::multiply(NATIVE_OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                                dstN[_CSTraits::alpha_pos] = newAlpha;
+                                if (!alphaLocked) {
+                                    dstN[_CSTraits::alpha_pos] = newAlpha;
+                                }
 
                                 if (newAlpha != 0) {
                                     srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, newAlpha);

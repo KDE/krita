@@ -24,14 +24,15 @@
 #include <KoCompositeOp.h>
 #include <KoShapeController.h>
 
-#include "kis_image.h"
-#include "kis_painter.h"
-#include "kis_layer.h"
-#include "canvas/kis_canvas2.h"
-#include "kis_view2.h"
-#include "kis_canvas_resource_provider.h"
-#include "kis_paintop_registry.h"
-#include "kis_selection.h"
+#include <kis_paint_layer.h>
+#include <kis_image.h>
+#include <kis_painter.h>
+#include <kis_layer.h>
+#include <canvas/kis_canvas2.h>
+#include <kis_view2.h>
+#include <kis_canvas_resource_provider.h>
+#include <kis_paintop_registry.h>
+#include <kis_selection.h>
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
         : KoCreatePathTool(canvas)
@@ -69,6 +70,13 @@ void KisToolPath::addPathShape()
 
         KisPainter painter(dev, selection);
         painter.beginTransaction(i18n("Path"));
+
+        if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode.data())) {
+            painter.setChannelFlags(l->channelFlags());
+            if (l->alphaLocked()) {
+                painter.setLockAlpha(l->alphaLocked());
+            }
+        }
         painter.setPaintColor(KoColor(Qt::black, dev->colorSpace()));
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);

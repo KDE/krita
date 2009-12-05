@@ -48,7 +48,6 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
     Q_ASSERT(dev);
     m_d->paintDevice = dev;
     m_d->alphaLocked = false;
-
 }
 
 
@@ -141,7 +140,7 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() con
 {
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     // XXX: get right icons
-    l << KoDocumentSectionModel::Property(i18n("Alpha Locked"), KIcon("object-locked-unverified"), KIcon("object-locked-verified"), alphaLocked());
+    l << KoDocumentSectionModel::Property(i18n("Alpha Locked"), KIcon("transparency-locked"), KIcon("transparency-unlocked"), alphaLocked());
     return l;
 }
 

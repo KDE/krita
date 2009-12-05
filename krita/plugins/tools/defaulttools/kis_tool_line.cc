@@ -28,19 +28,20 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include <kis_debug.h>
 #include <klocale.h>
 
+#include <KoCanvasBase.h>
+#include <KoPointerEvent.h>
+
+#include <kis_debug.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_paint_information.h>
 #include <kis_cursor.h>
 #include <kis_painter.h>
-
-#include "KoPointerEvent.h"
-#include "kis_paintop_registry.h"
-#include "kis_layer.h"
-#include "KoCanvasBase.h"
+#include <kis_paintop_registry.h>
+#include <kis_layer.h>
+#include <kis_paint_layer.h>
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_polyline_paint_action.h>
@@ -155,14 +156,18 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 m_painter->setOpacity(m_opacity);
                 m_painter->setCompositeOp(m_compositeOp);
                 m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
-                m_painter->paintLine(m_startPos, m_endPos);
+                if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
+                    m_painter->setChannelFlags(l->channelFlags());
+                    if (l->alphaLocked()) {
+                        m_painter->setLockAlpha(l->alphaLocked());
+                    }
+                }
+
+                 m_painter->paintLine(m_startPos, m_endPos);
+
                 QRegion dirtyRegion = m_painter->dirtyRegion();
                 device->setDirty(dirtyRegion);
                 notifyModified();
-// Should not be necessary anymore because of KisProjection
-#if 0
-                m_canvas->updateCanvas(convertToPt(dirtyRegion));
-#endif
 
 #ifdef ENABLE_RECORDING
                 if (image()) {

@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_tool.h"
+
 #include <QCursor>
 #include <QLabel>
 #include <QWidget>
@@ -345,7 +345,7 @@ void KisTool::mouseReleaseEvent(KoPointerEvent *event)
     event->ignore();
 }
 
-void KisTool::setupPainter(KisPainter * painter)
+void KisTool::setupPainter(KisPainter* painter)
 {
     Q_ASSERT(currentImage());
     if (!currentImage()) return;
@@ -357,6 +357,13 @@ void KisTool::setupPainter(KisPainter * painter)
     painter->setPattern(currentPattern());
     painter->setGradient(currentGradient());
     painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
+
+    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
+        m_painter->setChannelFlags(l->channelFlags());
+        if (l->alphaLocked()) {
+            m_painter->setLockAlpha(l->alphaLocked());
+        }
+    }
 
 }
 

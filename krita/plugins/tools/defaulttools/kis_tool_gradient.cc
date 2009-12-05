@@ -54,6 +54,7 @@
 #include <kis_layer.h>
 #include <kis_selection.h>
 #include <kis_threaded_applicator.h>
+#include <kis_paint_layer.h>
 
 #include <canvas/kis_canvas2.h>
 #include <kis_view2.h>
@@ -240,7 +241,7 @@ void KisToolGradient::mouseMoveEvent(KoPointerEvent *e)
 void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 {
     if (!currentNode())
-        return;
+       return;
 
     if (m_dragging && e->button() == Qt::LeftButton) {
 
@@ -272,6 +273,12 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             qApp->setOverrideCursor(Qt::BusyCursor);
 
             KisGradientPainter painter(device, currentSelection());
+            if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
+                painter.setChannelFlags(l->channelFlags());
+                if (l->alphaLocked()) {
+                    painter.setLockAlpha(l->alphaLocked());
+                }
+            }
 
             painter.beginTransaction(i18n("Gradient"));
 

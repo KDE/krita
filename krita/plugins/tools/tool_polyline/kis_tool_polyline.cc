@@ -40,6 +40,7 @@
 #include <KoShapeController.h>
 #include <KoLineBorder.h>
 
+#include <kis_paint_layer.h>
 #include <kis_selection.h>
 #include <kis_painter.h>
 #include <kis_cursor.h>
@@ -119,7 +120,12 @@ void KisToolPolyline::finish()
 
         KisPainter painter(device, currentSelection());
         painter.beginTransaction(i18n("Polyline"));
-
+        if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
+            painter.setChannelFlags(l->channelFlags());
+            if (l->alphaLocked()) {
+                painter.setLockAlpha(l->alphaLocked());
+            }
+        }
         painter.setPaintColor(currentFgColor());
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);

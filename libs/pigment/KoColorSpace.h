@@ -94,7 +94,7 @@ public:
      * @param offset the offset which is added to the result, useful
      *        when the sum of kernelValues is equal to 0
      * @param nColors the number of pixels in the colors array
-     * @param channelFlags determines which channels are affected
+     * @param channelFlags determines which channels are affected in pixel order
      *
      * This function is thread-safe.
      *
@@ -175,7 +175,8 @@ public:
      * @param substance if true, set all substance channels to true
      * @param substrate if true, set all substrate channels to true
      *
-     * XXX: Define the order!
+     * The order of channels is the colorspace descriptive order,
+     * not the pixel order.
      */
     QBitArray channelFlags(bool color = true, bool alpha = false, bool substance = false, bool substrate = false) const;
 
@@ -191,7 +192,7 @@ public:
      * channels are stored in the pixel to the order in which the
      * channels are defined in the olorspace. (for example, abgr->rgba)
      */
-    QBitArray setChannelFlagsToColorSpaceOrder( const QBitArray & origChannelFlags ) const;
+    QBitArray setChannelFlagsToColorSpaceOrder(const QBitArray & origChannelFlags) const;
 
     /**
      * The size in bytes of a single pixel in this color model
@@ -551,11 +552,10 @@ public:
      * @param cols the length in pixels of a single row we'll be compositing.
      * @param op the composition operator to use, e.g. COPY_OVER
      * @param channelFlags a bit array reflecting which channels will be composited and which
-     *        channels won't.
+     *        channels won't. The order is pixel order, not colorspace order.
      */
     virtual void bitBlt(quint8 *dst,
                         qint32 dststride,
-                        bool dstAlphaLocked,
                         const KoColorSpace * srcSpace,
                         const quint8 *src,
                         qint32 srcRowStride,
@@ -572,7 +572,6 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
                         qint32 dststride,
-                        bool dstAlphaLocked,
                         const KoColorSpace * srcSpace,
                         const quint8 *src,
                         qint32 srcRowStride,
@@ -588,7 +587,6 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
                         qint32 dststride,
-                        bool dstAlphaLocked,
                         const KoColorSpace * srcSpace,
                         const quint8 *src,
                         qint32 srcRowStride,
@@ -605,7 +603,6 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
                         qint32 dststride,
-                        bool dstAlphaLocked,
                         const KoColorSpace * srcSpace,
                         const quint8 *src,
                         qint32 srcRowStride,
@@ -658,13 +655,6 @@ protected:
     const KoColorConversionTransformation* fromRgbA16Converter() const;
 
 private:
-
-    /// Return a new byte array containing the alpha values for
-    /// the area defined by rows, columns and rowstride in the
-    /// the set of pixels.
-    quint8* getAlphaBytes(quint8* pixels, qint32 rowStride, quint32 rows, quint32 cols) const;
-
-    void applyAlphaBytes(quint8* pixels, quint8* alpha, qint32 rowStride, quint32 rows, quint32 cols) const;
 
     /**
      * Returns the thread-local conversion cache. If it doesn't exist

@@ -27,7 +27,7 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
-
+#include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 
 KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
@@ -93,10 +93,18 @@ KisPainter::StrokeStyle KisToolShape::strokeStyle(void)
 
 void KisToolShape::setupPainter(KisPainter * painter)
 {
+    qDebug() << "setupPainter";
     KisTool::setupPainter(painter);
     painter->setFillStyle(fillStyle());
     painter->setStrokeStyle(strokeStyle());
-
+    if(currentNode()) {
+        KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(currentNode().data());
+        painter->setChannelFlags(paintLayer->channelFlags());
+        if (paintLayer->alphaLocked()) {
+            qDebug() << "\t" << "alphalocked";
+            painter->setLockAlpha(paintLayer->alphaLocked());
+        }
+    }
 }
 
 #include "kis_tool_shape.moc"

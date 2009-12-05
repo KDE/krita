@@ -78,7 +78,7 @@
 #endif
 
 
-// #define ENABLE_RECORDING
+#define ENABLE_RECORDING
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
     : KisToolPaint(canvas, cursor)
@@ -115,7 +115,6 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-
     //    dbgUI << "mousePressEvent" << m_mode;
     //     if (!currentImage())
     //    return;
@@ -168,7 +167,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
                 return;
             }
         }
-
 
         if (e->button() == Qt::LeftButton) {
             initPaint(e);
@@ -362,7 +360,6 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         delete m_painter;
 
     if (!m_paintIncremental) {
-
         KisIndirectPaintingSupport* layer;
         if ((layer = dynamic_cast<KisIndirectPaintingSupport*>(currentNode().data()))) {
             // Hack for the painting of single-layered layers using indirect painting,
@@ -371,20 +368,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             // projection).
             KisLayerSP l = layer->layer();
             KisPaintLayerSP pl = dynamic_cast<KisPaintLayer*>(l.data());
-
-#if 0 //XXX: Warning, investigate what this was supposed to do!
-            if (l->parentLayer() && (l->parentLayer()->parentLayer() == 0)
-                && (l->parentLayer()->childCount() == 1)
-                && l->parentLayer()->paintLayerInducesProjectionOptimization(pl)) {
-                // If there's a mask, device could've been the mask. The induce function
-                // should catch this, but better safe than sorry
-
-                // XXX: What does this and why? (BSAR)
-                l->parentLayer()->resetProjection(pl->paintDevice());
-            }
-#endif
-            m_target = new KisPaintDevice(currentNode().data(),
-                                          device->colorSpace());
+            m_target = new KisPaintDevice(currentNode().data(), device->colorSpace());
             layer->setTemporaryTarget(m_target);
             layer->setTemporaryCompositeOp(m_compositeOp);
             layer->setTemporaryOpacity(m_opacity);
@@ -394,16 +378,18 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         m_target = device;
     }
     m_painter = new KisPainter(m_target, currentSelection());
-    Q_CHECK_PTR(m_painter);
+
     m_source = device;
     m_painter->beginTransaction(m_transactionText);
 
     setupPainter(m_painter);
 
-    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
-        m_painter->setChannelFlags(l->channelFlags());
-        if (l->alphaLocked()) {
-            m_painter->setLockAlpha(l->alphaLocked());
+    if (m_paintIncremental) {
+        if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
+            m_painter->setChannelFlags(l->channelFlags());
+            if (l->alphaLocked()) {
+                m_painter->setLockAlpha(l->alphaLocked());
+            }
         }
     }
 
@@ -468,31 +454,26 @@ void KisToolFreehand::endPaint()
 
             KisPainter painter(m_source, currentSelection());
             painter.setCompositeOp(m_compositeOp);
+            painter.setOpacity(m_opacity);
+
+            if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
+                painter.setChannelFlags(l->channelFlags());
+                if (l->alphaLocked()) {
+                    painter.setLockAlpha(l->alphaLocked());
+                }
+            }
 
             painter.beginTransaction(m_transactionText);
 
             QRegion r = m_incrementalDirtyRegion;
-            QVector<QRect> dirtyRects = r.rects();
-            QVector<QRect>::iterator it = dirtyRects.begin();
-            QVector<QRect>::iterator end = dirtyRects.end();
-
-            painter.setCompositeOp(m_compositeOp);
-            painter.setOpacity(m_opacity);
-
-            while (it != end) {
-
-                painter.bitBlt(it->x(), it->y(),
-                               m_target,
-                               it->x(), it->y(),
-                               it->width(), it->height());
-                ++it;
+            foreach(const QRect& rc, r.rects()) {
+                painter.bitBlt(rc.topLeft(), m_target, rc);
             }
-            KisIndirectPaintingSupport* indirect =
-                    dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
-            if (indirect)
+            KisIndirectPaintingSupport* indirect = dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
+            if (indirect) {
                 indirect->setTemporaryTarget(0);
-            //m_source->setDirty(painter.dirtyRegion());
-
+            }
+            m_source->setDirty(painter.dirtyRegion());
             delete incrementalTransaction;
 
             m_canvas->addCommand(painter.endTransaction());

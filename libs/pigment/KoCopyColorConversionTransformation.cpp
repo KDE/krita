@@ -37,6 +37,10 @@ KoCopyColorConversionTransformationFactory::KoCopyColorConversionTransformationF
 KoColorConversionTransformation* KoCopyColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
 {
     Q_UNUSED(renderingIntent);
+#ifdef QT_NO_DEBUG
+    Q_UNUSED(dstColorSpace);
+#endif
+    Q_UNUSED(dstColorSpace);
     Q_ASSERT(canBeSource(srcColorSpace));
     Q_ASSERT(canBeDestination(dstColorSpace));
     Q_ASSERT(srcColorSpace->id() == dstColorSpace->id());

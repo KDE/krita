@@ -252,7 +252,7 @@ configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h
 #          any other include directory
 
 # for config.h and <toplevel/foo.h> includes (if any?)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
 # koaction depends on threadweaver
 set(KOACTION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koaction ${CMAKE_BINARY_DIR}/libs/koaction ${KDE4_INCLUDES})

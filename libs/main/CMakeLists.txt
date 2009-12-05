@@ -78,6 +78,11 @@ set(komain_LIB_SRCS
     KoTemplates.cpp
     KoTemplatesPane.cpp
     KoTemplateTree.cpp
+
+    ActionJob_p.cpp
+    KoAction.cpp
+    KoExecutePolicy.cpp
+    KoJobsListPolicy.cpp
 )
 
 kde4_add_ui_files( komain_LIB_SRCS

@@ -16,10 +16,3 @@ set_target_properties(koplugin PROPERTIES
 )
 install(TARGETS koplugin ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install( FILES
-    KoID.h
-    KoGenericRegistry.h
-    KoGenericRegistryModel.h
-    koplugin_export.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-

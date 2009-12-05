@@ -38,6 +38,7 @@ set_target_properties(kowidgets PROPERTIES
 install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES
+    KoGenericRegistryModel.h
     KoPageLayoutDialog.h
     KoPageLayout.h
     KoPageLayoutWidget.h

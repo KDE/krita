@@ -98,9 +98,9 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KABC_LIBS}
     ${KDE4_KFILE_LIBRARY}
+    ${KDE4_THREADWEAVER_LIBRARIES}
     kowidgets
     kotext
-    koaction
 )
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})

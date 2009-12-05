@@ -21,7 +21,7 @@
 
 #include <QtGui/QImage>
 #include <QtCore/QString>
-#include <koresource_export.h>
+#include <pigment_export.h>
 
 class QDomDocument;
 class QDomElement;
@@ -32,7 +32,7 @@ class QDomElement;
  *
  * This replaces the KisKrayon facility that used to be present in Krayon.
  */
-class KORESOURCES_EXPORT KoResource {
+class PIGMENTCMS_EXPORT KoResource {
 
 public:
 

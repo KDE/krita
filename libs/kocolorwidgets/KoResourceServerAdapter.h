@@ -23,10 +23,10 @@
 
 #include "KoResourceServer.h"
 
-#include "koresource_export.h"
+#include "kocolorwidgets_export.h"
 
 /// The resource server adapter provides a adapter pattern for a templated resource server
-class KORESOURCES_EXPORT KoAbstractResourceServerAdapter : public QObject
+class KOCOLORWIDGETS_EXPORT KoAbstractResourceServerAdapter : public QObject
 {
     Q_OBJECT
 public:

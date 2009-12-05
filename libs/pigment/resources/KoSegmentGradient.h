@@ -31,7 +31,7 @@
 #include "KoAbstractGradient.h"
 #include "KoColor.h"
 
-#include <koresource_export.h>
+#include <pigment_export.h>
 
 
 enum {
@@ -49,7 +49,7 @@ enum {
 };
 
 /// Write API docs here
-class KORESOURCES_EXPORT KoGradientSegment {
+class PIGMENTCMS_EXPORT KoGradientSegment {
     public:
         KoGradientSegment(int interpolationType, int colorInterpolationType, qreal startOffset, qreal middleOffset, qreal endOffset, const KoColor& startColor, const KoColor& endColor);
 
@@ -225,7 +225,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
 /**
   * KoSegmentGradient stores a segment based gradients like Gimp gradients
   */
-class KORESOURCES_EXPORT KoSegmentGradient : public KoAbstractGradient {
+class PIGMENTCMS_EXPORT KoSegmentGradient : public KoAbstractGradient {
 
 public:
     KoSegmentGradient(const QString& file);

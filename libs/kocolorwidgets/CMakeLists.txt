@@ -1,5 +1,6 @@
-include_directories( ${KORESOURCES_INCLUDES}
+include_directories( ${PIGMENT_INCLUDES}
                      ${CMAKE_SOURCE_DIR}/libs/widgets
+                     ${CMAKE_SOURCE_DIR}/libs/pigment/resources
                      ${CMAKE_SOURCE_DIR}/libs/kobase
 )
 
@@ -23,6 +24,8 @@ set(kocolorwidgets_LIB_SRCS
     KoResourceItemView.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
+    KoResourceServerAdapter.cpp
+    KoResourceServerProvider.cpp
 )
 
 kde4_add_ui_files( kocolorwidgets_LIB_SRCS
@@ -32,9 +35,9 @@ kde4_add_ui_files( kocolorwidgets_LIB_SRCS
 
 kde4_add_library(kocolorwidgets SHARED ${kocolorwidgets_LIB_SRCS})
 
-target_link_libraries(kocolorwidgets koresources kowidgets ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
+target_link_libraries(kocolorwidgets pigmentcms kowidgets ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
 
-target_link_libraries(kocolorwidgets LINK_INTERFACE_LIBRARIES koresources kowidgets ${KDE4_KDEUI_LIBS})
+target_link_libraries(kocolorwidgets LINK_INTERFACE_LIBRARIES koresources pigmentcms kowidgets ${KDE4_KDEUI_LIBS})
 
 set_target_properties(kocolorwidgets PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

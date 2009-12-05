@@ -23,12 +23,12 @@
 #include "KoColor.h"
 #include "KoColorSpace.h"
 #include "KoResource.h"
-#include <koresource_export.h>
+#include <pigment_export.h>
 
 /**
  * KoAbstractGradient is the base class of all gradient resources
  */
-class KORESOURCES_EXPORT KoAbstractGradient : public KoResource {
+class PIGMENTCMS_EXPORT KoAbstractGradient : public KoResource {
 
 public:
     KoAbstractGradient(const QString& filename);

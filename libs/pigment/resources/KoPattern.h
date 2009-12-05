@@ -19,10 +19,10 @@
 #define KOPATTERN_H
 
 #include "KoResource.h"
-#include <koresource_export.h>
+#include <pigment_export.h>
 
 /// Write API docs here
-class KORESOURCES_EXPORT KoPattern : public KoResource {
+class PIGMENTCMS_EXPORT KoPattern : public KoResource {
 
 public:
 

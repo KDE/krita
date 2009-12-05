@@ -37,7 +37,7 @@
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"
 
-#include "koresource_export.h"
+#include "kocolorwidgets_export.h"
 
 #include <KDebug>
 
@@ -46,7 +46,7 @@ class KoResource;
 /**
  * KoResourceServerBase is the base class of all resource servers
  */
-class KORESOURCES_EXPORT KoResourceServerBase {
+class KOCOLORWIDGETS_EXPORT KoResourceServerBase {
 
 public:
     /**

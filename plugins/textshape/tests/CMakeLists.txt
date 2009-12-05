@@ -28,7 +28,7 @@ if(NOT NO_PIGMENT)
     set(EXTRA_LIBS kocolorwidgets)
 endif(NOT NO_PIGMENT)
 
-target_link_libraries(TestDocumentLayout ${EXTRA_LIBS} komain koaction ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestDocumentLayout ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -96,7 +96,7 @@ set(TestStylesModel_test_SRCS
     ../dialogs/StylesModel.cpp
 )
 kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
-target_link_libraries(TestStylesModel kotext koaction ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestStylesModel kotext ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

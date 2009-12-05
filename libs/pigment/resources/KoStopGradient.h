@@ -24,7 +24,7 @@
 #include "KoColor.h"
 #include "KoAbstractGradient.h"
 #include "KoResource.h"
-#include <koresource_export.h>
+#include <pigment_export.h>
 
 class QFile;
 
@@ -33,7 +33,7 @@ typedef QPair<qreal, KoColor> KoGradientStop;
 /**
  * Resource for colorstop based gradients like Karbon gradients and SVG gradients
  */
-class KORESOURCES_EXPORT KoStopGradient : public KoAbstractGradient {
+class PIGMENTCMS_EXPORT KoStopGradient : public KoAbstractGradient {
 
 public:
     KoStopGradient(const QString& filename);

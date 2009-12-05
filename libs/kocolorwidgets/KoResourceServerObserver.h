@@ -20,7 +20,7 @@
 #ifndef KORESOURCESERVEROBSERVER_H
 #define KORESOURCESERVEROBSERVER_H
 
-#include "koresource_export.h"
+#include "kocolorwidgets_export.h"
 
 /**
  * The KoResourceServerObserver class provides a interface to observe a KoResourceServer.

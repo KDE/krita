@@ -45,6 +45,12 @@ set(pigmentcms_SRCS
     colorspaces/KoRgbU16ColorSpace.cpp
     colorspaces/KoRgbU8ColorSpace.cc
     colorspaces/KoRgbU8CompositeOp.cpp
+    resources/KoAbstractGradient.cpp
+    resources/KoColorSet.cpp
+    resources/KoPattern.cpp
+    resources/KoResource.cpp
+    resources/KoStopGradient.cpp
+    resources/KoSegmentGradient.cpp
 )
 
 set(PIGMENT_INSTALL_FILES 

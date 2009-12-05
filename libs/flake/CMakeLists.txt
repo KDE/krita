@@ -257,7 +257,6 @@ install(
     KoShapeRegistry.h
     KoShapeSavingContext.h
     KoShapeUserData.h
-    KoSnapData.h
     KoTool.h
     KoToolManager.h
     KoToolFactory.h

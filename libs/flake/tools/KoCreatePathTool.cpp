@@ -54,7 +54,7 @@ class KoCreatePathTool::AngleSnapStrategy : public KoSnapStrategy
 {
 public:
     AngleSnapStrategy( qreal angleStep )
-    : KoSnapStrategy(KoSnapGuide::Custom), m_angleStep(angleStep), m_active(false)
+    : KoSnapStrategy(KoSnapGuide::CustomSnapping), m_angleStep(angleStep), m_active(false)
     {
     }
 

@@ -60,14 +60,14 @@ public:
     /// the different possible snap Strategies
     enum Strategy
     {
-        Orthogonal = 1,
-        Node = 2,
-        Extension = 4,
-        Intersection = 8,
-        Grid = 0x10,
-        BoundingBox = 0x20,
-        GuideLine = 0x40,
-        Custom = 0x80
+        OrthogonalSnapping = 1,
+        NodeSnapping = 2,
+        ExtensionSnapping = 4,
+        IntersectionSnapping = 8,
+        GridSnapping = 0x10,
+        BoundingBoxSnapping = 0x20,
+        GuideLineSnapping = 0x40,
+        CustomSnapping = 0x80
     };
     Q_DECLARE_FLAGS(Strategies, Strategy)
 

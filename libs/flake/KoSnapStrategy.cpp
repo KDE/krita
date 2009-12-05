@@ -65,7 +65,7 @@ qreal KoSnapStrategy::scalarProduct(const QPointF &p1, const QPointF &p2)
 }
 
 OrthogonalSnapStrategy::OrthogonalSnapStrategy()
-        : KoSnapStrategy(KoSnapGuide::Orthogonal)
+        : KoSnapStrategy(KoSnapGuide::OrthogonalSnapping)
 {
 }
 
@@ -131,7 +131,7 @@ QPainterPath OrthogonalSnapStrategy::decoration(const KoViewConverter &converter
 }
 
 NodeSnapStrategy::NodeSnapStrategy()
-        : KoSnapStrategy(KoSnapGuide::Node)
+        : KoSnapStrategy(KoSnapGuide::NodeSnapping)
 {
 }
 
@@ -169,7 +169,7 @@ QPainterPath NodeSnapStrategy::decoration(const KoViewConverter &converter) cons
 }
 
 ExtensionSnapStrategy::ExtensionSnapStrategy()
-        : KoSnapStrategy(KoSnapGuide::Extension)
+        : KoSnapStrategy(KoSnapGuide::ExtensionSnapping)
 {
 }
 
@@ -357,7 +357,7 @@ QPointF ExtensionSnapStrategy::extensionDirection(KoPathPoint * point, const QMa
 }
 
 IntersectionSnapStrategy::IntersectionSnapStrategy()
-        : KoSnapStrategy(KoSnapGuide::Intersection)
+        : KoSnapStrategy(KoSnapGuide::IntersectionSnapping)
 {
 }
 
@@ -406,7 +406,7 @@ QPainterPath IntersectionSnapStrategy::decoration(const KoViewConverter &convert
 }
 
 GridSnapStrategy::GridSnapStrategy()
-        : KoSnapStrategy(KoSnapGuide::Grid)
+        : KoSnapStrategy(KoSnapGuide::GridSnapping)
 {
 }
 
@@ -469,7 +469,7 @@ QPainterPath GridSnapStrategy::decoration(const KoViewConverter &converter) cons
 }
 
 BoundingBoxSnapStrategy::BoundingBoxSnapStrategy()
-        : KoSnapStrategy(KoSnapGuide::BoundingBox)
+        : KoSnapStrategy(KoSnapGuide::BoundingBoxSnapping)
 {
 }
 
@@ -554,7 +554,7 @@ QPainterPath BoundingBoxSnapStrategy::decoration(const KoViewConverter &converte
 }
 
 LineGuideSnapStrategy::LineGuideSnapStrategy()
-        : KoSnapStrategy(KoSnapGuide::GuideLine)
+        : KoSnapStrategy(KoSnapGuide::GuideLineSnapping)
 {
 }
 

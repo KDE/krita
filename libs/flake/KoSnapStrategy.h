@@ -20,7 +20,7 @@
 #ifndef KOSNAPSTRATEGY_H
 #define KOSNAPSTRATEGY_H
 
-#include "flake_export.h"
+#include "KoSnapGuide.h"
 
 #include <QtCore/QPointF>
 #include <QtGui/QPainterPath>
@@ -29,28 +29,16 @@ class KoPathPoint;
 class KoSnapProxy;
 class KoViewConverter;
 
-class FLAKE_EXPORT KoSnapStrategy
+class KoSnapStrategy
 {
 public:
-    /// the different possible snap types
-    enum SnapType {
-        Orthogonal = 1,
-        Node = 2,
-        Extension = 4,
-        Intersection = 8,
-        Grid = 16,
-        BoundingBox = 32,
-        GuideLine = 64,
-        Custom = 128
-    };
-
-    KoSnapStrategy(SnapType type);
+    KoSnapStrategy(KoSnapGuide::Strategy type);
     virtual ~KoSnapStrategy() {};
 
     virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) = 0;
 
     /// returns the strategies type
-    SnapType type() const;
+    KoSnapGuide::Strategy type() const;
 
     static qreal squareDistance(const QPointF &p1, const QPointF &p2);
     static qreal scalarProduct(const QPointF &p1, const QPointF &p2);
@@ -66,7 +54,7 @@ protected:
     void setSnappedPosition(const QPointF &position);
 
 private:
-    SnapType m_snapType;
+    KoSnapGuide::Strategy m_snapType;
     QPointF m_snappedPosition;
 };
 

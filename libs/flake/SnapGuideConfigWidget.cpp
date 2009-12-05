@@ -66,19 +66,19 @@ void SnapGuideConfigWidget::snappingEnabled(int state)
 
 void SnapGuideConfigWidget::strategyChanged()
 {
-    int strategies = 0;
+    KoSnapGuide::Strategies strategies;
     if (widget.orthogonalSnapGuide->checkState() == Qt::Checked)
-        strategies |= KoSnapStrategy::Orthogonal;
+        strategies |= KoSnapGuide::Orthogonal;
     if (widget.nodeSnapGuide->checkState() == Qt::Checked)
-        strategies |= KoSnapStrategy::Node;
+        strategies |= KoSnapGuide::Node;
     if (widget.extensionSnapGuide->checkState() == Qt::Checked)
-        strategies |= KoSnapStrategy::Extension;
+        strategies |= KoSnapGuide::Extension;
     if (widget.intersectionSnapGuide->checkState() == Qt::Checked)
-        strategies |= KoSnapStrategy::Intersection;
+        strategies |= KoSnapGuide::Intersection;
     if (widget.boundingBoxSnapGuide->checkState() == Qt::Checked)
-        strategies |= KoSnapStrategy::BoundingBox;
+        strategies |= KoSnapGuide::BoundingBox;
     if (widget.lineGuideSnapGuide->checkState() == Qt::Checked)
-        strategies |= KoSnapStrategy::GuideLine;
+        strategies |= KoSnapGuide::GuideLine;
 
     m_snapGuide->enableSnapStrategies(strategies);
 }
@@ -90,27 +90,27 @@ void SnapGuideConfigWidget::distanceChanged(int distance)
 
 void SnapGuideConfigWidget::updateControls()
 {
-    if (m_snapGuide->enabledSnapStrategies() & KoSnapStrategy::Orthogonal)
+    if (m_snapGuide->enabledSnapStrategies() & KoSnapGuide::Orthogonal)
         widget.orthogonalSnapGuide->setCheckState(Qt::Checked);
     else
         widget.orthogonalSnapGuide->setCheckState(Qt::Unchecked);
-    if (m_snapGuide->enabledSnapStrategies() & KoSnapStrategy::Node)
+    if (m_snapGuide->enabledSnapStrategies() & KoSnapGuide::Node)
         widget.nodeSnapGuide->setCheckState(Qt::Checked);
     else
         widget.nodeSnapGuide->setCheckState(Qt::Unchecked);
-    if (m_snapGuide->enabledSnapStrategies() & KoSnapStrategy::Extension)
+    if (m_snapGuide->enabledSnapStrategies() & KoSnapGuide::Extension)
         widget.extensionSnapGuide->setCheckState(Qt::Checked);
     else
         widget.extensionSnapGuide->setCheckState(Qt::Unchecked);
-    if (m_snapGuide->enabledSnapStrategies() & KoSnapStrategy::Intersection)
+    if (m_snapGuide->enabledSnapStrategies() & KoSnapGuide::Intersection)
         widget.intersectionSnapGuide->setCheckState(Qt::Checked);
     else
         widget.intersectionSnapGuide->setCheckState(Qt::Unchecked);
-    if (m_snapGuide->enabledSnapStrategies() & KoSnapStrategy::BoundingBox)
+    if (m_snapGuide->enabledSnapStrategies() & KoSnapGuide::BoundingBox)
         widget.boundingBoxSnapGuide->setCheckState(Qt::Checked);
     else
         widget.boundingBoxSnapGuide->setCheckState(Qt::Unchecked);
-    if (m_snapGuide->enabledSnapStrategies() & KoSnapStrategy::GuideLine)
+    if (m_snapGuide->enabledSnapStrategies() & KoSnapGuide::GuideLine)
         widget.lineGuideSnapGuide->setCheckState(Qt::Checked);
     else
         widget.lineGuideSnapGuide->setCheckState(Qt::Unchecked);

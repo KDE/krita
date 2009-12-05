@@ -19,7 +19,6 @@
 
 #include "GuidesToolOptionWidget.h"
 #include "KoSnapGuide.h"
-#include "KoSnapStrategy.h"
 
 #include <KLocale>
 

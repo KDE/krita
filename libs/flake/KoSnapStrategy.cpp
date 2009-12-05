@@ -18,6 +18,7 @@
  */
 
 #include "KoSnapStrategy.h"
+#include "KoSnapProxy.h"
 #include "KoSnapGuide.h"
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
@@ -31,7 +32,7 @@
 #include <math.h>
 
 
-KoSnapStrategy::KoSnapStrategy(KoSnapStrategy::SnapType type)
+KoSnapStrategy::KoSnapStrategy(KoSnapGuide::Strategy type)
         : m_snapType(type)
 {
 }
@@ -46,7 +47,7 @@ void KoSnapStrategy::setSnappedPosition(const QPointF &position)
     m_snappedPosition = position;
 }
 
-KoSnapStrategy::SnapType KoSnapStrategy::type() const
+KoSnapGuide::Strategy KoSnapStrategy::type() const
 {
     return m_snapType;
 }
@@ -64,7 +65,7 @@ qreal KoSnapStrategy::scalarProduct(const QPointF &p1, const QPointF &p2)
 }
 
 OrthogonalSnapStrategy::OrthogonalSnapStrategy()
-        : KoSnapStrategy(KoSnapStrategy::Orthogonal)
+        : KoSnapStrategy(KoSnapGuide::Orthogonal)
 {
 }
 
@@ -130,7 +131,7 @@ QPainterPath OrthogonalSnapStrategy::decoration(const KoViewConverter &converter
 }
 
 NodeSnapStrategy::NodeSnapStrategy()
-        : KoSnapStrategy(KoSnapStrategy::Node)
+        : KoSnapStrategy(KoSnapGuide::Node)
 {
 }
 
@@ -168,7 +169,7 @@ QPainterPath NodeSnapStrategy::decoration(const KoViewConverter &converter) cons
 }
 
 ExtensionSnapStrategy::ExtensionSnapStrategy()
-        : KoSnapStrategy(KoSnapStrategy::Extension)
+        : KoSnapStrategy(KoSnapGuide::Extension)
 {
 }
 
@@ -356,7 +357,7 @@ QPointF ExtensionSnapStrategy::extensionDirection(KoPathPoint * point, const QMa
 }
 
 IntersectionSnapStrategy::IntersectionSnapStrategy()
-        : KoSnapStrategy(KoSnapStrategy::Intersection)
+        : KoSnapStrategy(KoSnapGuide::Intersection)
 {
 }
 
@@ -405,7 +406,7 @@ QPainterPath IntersectionSnapStrategy::decoration(const KoViewConverter &convert
 }
 
 GridSnapStrategy::GridSnapStrategy()
-        : KoSnapStrategy(KoSnapStrategy::Grid)
+        : KoSnapStrategy(KoSnapGuide::Grid)
 {
 }
 
@@ -468,7 +469,7 @@ QPainterPath GridSnapStrategy::decoration(const KoViewConverter &converter) cons
 }
 
 BoundingBoxSnapStrategy::BoundingBoxSnapStrategy()
-        : KoSnapStrategy(KoSnapStrategy::BoundingBox)
+        : KoSnapStrategy(KoSnapGuide::BoundingBox)
 {
 }
 
@@ -553,7 +554,7 @@ QPainterPath BoundingBoxSnapStrategy::decoration(const KoViewConverter &converte
 }
 
 LineGuideSnapStrategy::LineGuideSnapStrategy()
-        : KoSnapStrategy(KoSnapStrategy::GuideLine)
+        : KoSnapStrategy(KoSnapGuide::GuideLine)
 {
 }
 

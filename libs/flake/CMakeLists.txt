@@ -79,6 +79,7 @@ set(flake_SRCS
     KoConnectionShapeFactory.cpp
     KoConnectionShapeConfigWidget.cpp
     KoSnapGuide.cpp
+    KoSnapProxy.cpp
     KoSnapStrategy.cpp
     KoSnapData.cpp
     SnapGuideConfigWidget.cpp

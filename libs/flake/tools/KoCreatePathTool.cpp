@@ -23,6 +23,7 @@
 #include "KoSnapGuide.h"
 #include "SnapGuideConfigWidget.h"
 #include "KoSnapStrategy.h"
+#include "KoSnapGuide.h"
 
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
@@ -53,7 +54,7 @@ class KoCreatePathTool::AngleSnapStrategy : public KoSnapStrategy
 {
 public:
     AngleSnapStrategy( qreal angleStep )
-    : KoSnapStrategy(KoSnapStrategy::Custom), m_angleStep(angleStep), m_active(false)
+    : KoSnapStrategy(KoSnapGuide::Custom), m_angleStep(angleStep), m_active(false)
     {
     }
 

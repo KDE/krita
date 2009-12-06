@@ -23,6 +23,8 @@
 
 #include "kis_tool_line.h"
 
+#include <cmath>
+
 #include <QLayout>
 #include <QWidget>
 #include <QPainter>
@@ -99,14 +101,12 @@ void KisToolLine::mousePressEvent(KoPointerEvent *e)
     }
 }
 
+
 void KisToolLine::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_dragging) {
         // First ensure the old temp line is deleted
-        QRectF bound;
-        bound.setTopLeft(m_startPos);
-        bound.setBottomRight(m_endPos);
-        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+        updatePreview();
 
         QPointF pos = convertToPixelCoord(e);
 
@@ -114,23 +114,20 @@ void KisToolLine::mouseMoveEvent(KoPointerEvent *e)
             QPointF trans = pos - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
-        } else if (e->modifiers() & Qt::ShiftModifier)
+        } else if (e->modifiers() & Qt::ShiftModifier) {
             m_endPos = straightLine(pos);
-        else
+        } else {
             m_endPos = pos;
-
-        bound.setTopLeft(m_startPos);
-        bound.setBottomRight(m_endPos);
-        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+        }
+        updatePreview();
     }
 }
 
 void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 {
-    QPointF pos = convertToPixelCoord(e);
-
     if (m_dragging && e->button() == Qt::LeftButton) {
         m_dragging = false;
+        updatePreview();
 
         if (m_canvas) {
 
@@ -139,9 +136,13 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 return;
             }
 
+            QPointF pos = convertToPixelCoord(e);
+
             if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
                 m_endPos = straightLine(pos);
-            } else m_endPos = pos;
+            } else {
+                m_endPos = pos;
+            }
 
             KisPaintDeviceSP device;
 
@@ -163,7 +164,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                     }
                 }
 
-                 m_painter->paintLine(m_startPos, m_endPos);
+                m_painter->paintLine(m_startPos, m_endPos);
 
                 QRegion dirtyRegion = m_painter->dirtyRegion();
                 device->setDirty(dirtyRegion);
@@ -180,14 +181,6 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 m_canvas->addCommand(m_painter->endTransaction());
                 delete m_painter;
                 m_painter = 0;
-            } else {
-                // Remove the last remaining line.
-                // m_painter can be 0 here...!!!
-                dbgPlugins << "do we ever go here";
-                QRectF bound;
-                bound.setTopLeft(m_startPos);
-                bound.setBottomRight(m_endPos);
-                m_canvas->updateCanvas(convertToPt(bound.normalized()));
             }
         }
     } else {
@@ -198,18 +191,34 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 
 QPointF KisToolLine::straightLine(QPointF point)
 {
-    QPointF comparison = point - m_startPos;
-    QPointF result;
+    const QPointF lineVector = point - m_startPos;
+    qreal lineAngle = std::atan2(lineVector.y(), lineVector.x());
 
-    if (fabs(comparison.x()) > fabs(comparison.y())) {
-        result.setX(point.x());
-        result.setY(m_startPos.y());
-    } else {
-        result.setX(m_startPos.x());
-        result.setY(point.y());
+    if (lineAngle < 0) {
+        lineAngle += 2 * M_PI;
     }
 
+    const qreal ANGLE_BETWEEN_CONSTRAINED_LINES = (2 * M_PI) / 24;
+
+    const quint32 constrainedLineIndex = static_cast<quint32>((lineAngle / ANGLE_BETWEEN_CONSTRAINED_LINES) + 0.5);
+    const qreal constrainedLineAngle = constrainedLineIndex * ANGLE_BETWEEN_CONSTRAINED_LINES;
+
+    const qreal lineLength = std::sqrt((lineVector.x() * lineVector.x()) + (lineVector.y() * lineVector.y()));
+
+    const QPointF constrainedLineVector(lineLength * std::cos(constrainedLineAngle), lineLength * std::sin(constrainedLineAngle));
+
+    const QPointF result = m_startPos + constrainedLineVector;
+
     return result;
+}
+
+
+void KisToolLine::updatePreview()
+{
+    if (m_canvas) {
+        QRectF bound(m_startPos, m_endPos);
+        m_canvas->updateCanvas(convertToPt(bound.normalized().adjusted(-3, -3, 3, 3)));
+    }
 }
 
 

@@ -58,6 +58,7 @@ public:
 private:
     void paintLine(QPainter& gc, const QRect& rc);
     QPointF straightLine(QPointF point);
+    void updatePreview();
 
 private:
 

@@ -85,7 +85,7 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
     visitAll(layer);
 
     if (previousElt) {
-        previousElt->appendChild(elt);
+        previousElt->insertBefore(elt, QDomNode());
         d->currentElement = previousElt;
     } else {
         QDomElement imageElt = d->layerStack.createElement("image");

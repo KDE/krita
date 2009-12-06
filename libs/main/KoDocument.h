@@ -77,7 +77,7 @@ public:
 
     /**
      *  Constructor.
-     * The first 4 arguments are the same as the ones passed to KParts::Factory::createPart.
+     * The first 3 arguments are the same as the ones passed to KParts::Factory::createPart.
      *
      * @param parentWidget the parent widget, in case we create a wrapper widget
      *        (in single view mode).

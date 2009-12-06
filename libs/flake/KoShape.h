@@ -351,6 +351,18 @@ public:
     virtual bool hasTransparency();
 
     /**
+     * Sets shape level transparency.
+     * @param transparency the new shape level transparency
+     */
+    void setTransparency(qreal transparency);
+    
+    /**
+     * Returns the shape level transparency.
+     * @param recursive when true takes the parents transparency into account
+     */
+    qreal transparency(bool recursive=false) const;
+    
+    /**
      * Retrieve the z-coordinate of this shape.
      * The zIndex property is used to determine which shape lies on top of other objects.
      * An shape with a higher z-order is on top, and can obscure another shape.

@@ -56,7 +56,8 @@ public:
     QMap<QByteArray, QString> additionalStyleAttributes;
     QList<KoEventAction *> eventActions; ///< list of event actions the shape has
     KoFilterEffectStack *filterEffectStack; ///< stack of filter effects applied to the shape
-
+    qreal transparency; ///< the shapes tranparency
+    
     static const int MaxZIndex = 32767;
     int zIndex : 16; // keep maxZIndex in sync!
     int visible : 1;

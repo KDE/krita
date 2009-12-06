@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -42,6 +42,7 @@ class KoColorPopupAction;
 class KoPathShape;
 class QSpacerItem;
 class QGridLayout;
+class KDoubleNumInput;
 
 class StyleDocker : public QDockWidget, public KoCanvasObserver
 {
@@ -64,6 +65,7 @@ private slots:
     void updateGradient(KoResource * item);
     void updatePattern(KoResource * item);
     void updateFillRule(Qt::FillRule fillRule);
+    void updateOpacity(double opacity);
     /// Called when the docker changes area
     void locationChanged(Qt::DockWidgetArea area);
 
@@ -92,7 +94,8 @@ private:
     KoColorPopupAction *m_actionColor;
     QSpacerItem *m_spacer;
     QGridLayout *m_layout;
-
+    KDoubleNumInput *m_opacity;
+    
     QTime m_lastColorChange;
     KoShapeBackgroundCommand * m_lastFillCommand;
     KoShapeBorderCommand * m_lastStrokeCommand;

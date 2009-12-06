@@ -142,6 +142,7 @@ set(flake_SRCS
     commands/KoEventActionRemoveCommand.cpp
     commands/KoShapeRenameCommand.cpp
     commands/KoPathPointMergeCommand.cpp
+    commands/KoShapeTransparencyCommand.cpp
     tools/KoCreatePathTool.cpp
     tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp

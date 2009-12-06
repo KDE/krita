@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -35,6 +35,7 @@
 #include <KoShapeBorderCommand.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoPathFillRuleCommand.h>
+#include <KoShapeTransparencyCommand.h>
 #include <KoPathShape.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorBackground.h>
@@ -47,10 +48,12 @@
 #include <KoColorPopupAction.h>
 
 #include <klocale.h>
+#include <KNumInput>
 
 #include <QtGui/QGridLayout>
 #include <QtGui/QStackedWidget>
 #include <QtGui/QToolButton>
+#include <QtGui/QLabel>
 
 const int MsecsThresholdForMergingCommands = 2000;
 
@@ -81,6 +84,14 @@ StyleDocker::StyleDocker(QWidget * parent)
     m_stack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_layout->addWidget(m_stack, 1, 1);
 
+    m_layout->addWidget(new QLabel(i18n("Opacity:")), 2, 0);
+    
+    m_opacity = new KDoubleNumInput(mainWidget);
+    m_opacity->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    m_opacity->setRange(0.0, 1.0, 0.05, true);
+    m_opacity->setValue(1.0);
+    m_layout->addWidget(m_opacity, 2, 1);
+    
     m_spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_layout->addItem(m_spacer, 2, 2);
 
@@ -123,7 +134,8 @@ StyleDocker::StyleDocker(QWidget * parent)
              this, SLOT(updatePattern(KoResource*)));
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
              this, SLOT(locationChanged(Qt::DockWidgetArea)));
-
+    connect(m_opacity, SIGNAL(valueChanged(double)), this, SLOT(updateOpacity(double)));
+    
     setWidget(mainWidget);
 }
 
@@ -185,11 +197,17 @@ void StyleDocker::updateStyle()
     if (! m_canvas)
         return;
 
+    m_opacity->blockSignals(true);
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    if (shape)
+    if (shape) {
         updateStyle(shape->border(), shape->background());
-    else
+        m_opacity->setValue(1.0-shape->transparency());
+    }
+    else {
         updateStyle(0, 0);
+        m_opacity->setValue(1.0);
+    }
+    m_opacity->blockSignals(false);
 }
 
 void StyleDocker::updateStyle(KoShapeBorderModel * stroke, KoShapeBackground * fill)
@@ -504,6 +522,22 @@ void StyleDocker::updateFillRule(Qt::FillRule fillRule)
     }
     if (pathsToChange.count())
         m_canvas->addCommand(new KoPathFillRuleCommand(pathsToChange, fillRule));
+}
+
+void StyleDocker::updateOpacity(double opacity)
+{
+    if (! m_canvas)
+        return;
+    
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    if (! selection || ! selection->count())
+        return;
+    
+    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    if (!selectedShapes.count())
+        return;
+    
+    m_canvas->addCommand(new KoShapeTransparencyCommand(selectedShapes, 1.0-opacity));
 }
 
 QList<KoPathShape*> StyleDocker::selectedPathShapes()

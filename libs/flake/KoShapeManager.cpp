@@ -299,6 +299,12 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
 
 void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint)
 {
+    painter.save();
+    qreal transparency = shape->transparency(true);
+    if (transparency > 0.0) {
+        painter.setOpacity(1.0-transparency);
+    }
+    
     if (shape->shadow()) {
         painter.save();
         shape->shadow()->paint(shape, painter, converter);
@@ -404,6 +410,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         shape->paintDecorations(painter, converter, d->canvas);
         painter.restore();
     }
+    painter.restore();
 }
 
 

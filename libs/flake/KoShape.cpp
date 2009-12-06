@@ -78,6 +78,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
     q(shape),
     shadow(0),
     filterEffectStack(0),
+    transparency(0.0),
     zIndex(0),
     visible(true),
     printable(true),
@@ -552,7 +553,25 @@ bool KoShape::hasTransparency()
     if (! d->fill)
         return true;
     else
-        return d->fill->hasTransparency();
+        return d->fill->hasTransparency() || d->transparency > 0.0;
+}
+
+void KoShape::setTransparency(qreal transparency)
+{
+    Q_D(KoShape);
+    d->transparency = qBound(0.0, transparency, 1.0);
+}
+
+qreal KoShape::transparency(bool recursive) const
+{
+    Q_D(const KoShape);
+    if (!recursive || !parent()) {
+        return d->transparency;
+    } else {
+        const qreal parentOpacity = 1.0-parent()->transparency(recursive);
+        const qreal childOpacity = 1.0-d->transparency;
+        return 1.0-(parentOpacity*childOpacity);
+    }
 }
 
 KoInsets KoShape::borderInsets() const

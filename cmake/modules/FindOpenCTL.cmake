@@ -21,6 +21,16 @@ if(OPENCTL_DEFINITIONS AND OPENCTL_LIBRARIES)
     message(STATUS "OpenCTL < 0.9.12 was found")
   endif(_return_VALUE STREQUAL "0")
 
+  EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.9.13 OpenCTL RETURN_VALUE _return_913_VALUE OUTPUT_VARIABLE _pkgconfigDevNull_913 )
+  if(_return_913_VALUE STREQUAL "0")
+    message(STATUS "OpenShiva >= 0.9.13 was found")
+    set(OPENCTL_913_FOUND TRUE)
+    set(HAVE_OPENCTL_913 TRUE)
+  else(_return_913_VALUE STREQUAL "0")
+    message(STATUS "OpenShiva < 0.9.13 was found")
+  endif(_return_913_VALUE STREQUAL "0")
+
+
 endif(OPENCTL_DEFINITIONS AND OPENCTL_LIBRARIES)
 
 if (OPENCTL_FOUND)

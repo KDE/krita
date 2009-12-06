@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,30 +16,20 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-#ifndef KIS_PRESSURE_DARKEN_OPTION_H
-#define KIS_PRESSURE_DARKEN_OPTION_H
-
-#include "kis_curve_option.h"
-#include <kis_types.h>
-#include <krita_export.h>
+#include "kis_pressure_mix_option.h"
+#include <klocale.h>
+#include <kis_painter.h>
 #include <KoColor.h>
+#include <KoColorSpace.h>
 
-class KisPainter;
-class KisColorSource;
-
-/**
- * The pressure opacity option defines a curve that is used to
- * calculate the effect of pressure on the darkness of the dab
- */
-class PAINTOP_EXPORT KisPressureDarkenOption : public KisCurveOption
+KisPressureMixOption::KisPressureMixOption()
+        : KisCurveOption(i18n("Mix"), "Mix", false)
 {
-public:
+}
 
-    KisPressureDarkenOption();
 
-    KoColor apply(KisPainter * painter, const KisPaintInformation& info) const;
-    void apply(KisColorSource* colorSource, const KisPaintInformation& info) const;
-};
-
-#endif
+double KisPressureMixOption::apply(const KisPaintInformation & info) const
+{
+    if (!isChecked()) return 1.0;
+    return computeValue(info);
+}

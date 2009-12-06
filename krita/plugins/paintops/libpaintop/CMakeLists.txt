@@ -9,6 +9,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_option.cpp
     kis_brush_selection_widget.cpp
     kis_color_option.cpp
+    kis_color_source.cpp
     kis_curve_option.cpp
     kis_custom_brush_widget.cpp
     kis_dynamic_sensor.cc
@@ -21,6 +22,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_rate_option.cpp
     kis_pressure_rotation_option.cpp
     kis_pressure_size_option.cpp
+    kis_pressure_mix_option.cpp
     kis_sensor_selector.cc
     kis_text_brush_chooser.cpp
     sensors/kis_dynamic_sensors.cc

@@ -32,6 +32,7 @@ class KisPressureDarkenOption;
 class KisPressureSizeOption;
 class KisPressureRotationOption;
 class KisPaintActionTypeOption;
+class KisPressureMixOption;
 
 class KisBrushOpSettingsWidget : public KisPaintOpOptionsWidget
 {
@@ -55,8 +56,8 @@ public:
     KisPressureDarkenOption * m_darkenOption;
     KisPressureSizeOption * m_sizeOption;
     KisPressureRotationOption * m_rotationOption;
+    KisPressureMixOption * m_mixOption;
     KisPaintActionTypeOption * m_paintActionTypeOption;
-
 
 };
 

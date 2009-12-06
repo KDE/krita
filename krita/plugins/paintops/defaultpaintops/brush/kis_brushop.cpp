@@ -58,7 +58,8 @@
 #include <kis_brushop_settings.h>
 #include <kis_brushop_settings_widget.h>
 #include <kis_pressure_rotation_option.h>
-
+#include <kis_color_source.h>
+#include <kis_pressure_mix_option.h>
 
 KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
         : KisBrushBasedPaintOp(painter)
@@ -74,10 +75,12 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
         settings->m_options->m_darkenOption->sensor()->reset();
         settings->m_options->m_rotationOption->sensor()->reset();
     }
+    m_colorSource = new KisPlainColorSource(painter->backgroundColor(), painter->paintColor());
 }
 
 KisBrushOp::~KisBrushOp()
 {
+    delete m_colorSource;
 }
 
 void KisBrushOp::paintAt(const KisPaintInformation& info)
@@ -121,7 +124,10 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.y(), &y, &yFraction);
 
     quint8 origOpacity = settings->m_options->m_opacityOption->apply(painter(), info);
-    KoColor origColor = settings->m_options->m_darkenOption->apply(painter(), info);
+    m_colorSource->selectColor( settings->m_options->m_mixOption->apply(info) );
+    KoColor origColor = painter()->paintColor();
+    settings->m_options->m_darkenOption->apply(m_colorSource, info);
+    painter()->setPaintColor( m_colorSource->uniformColor() ); 
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {

@@ -36,6 +36,7 @@ class KisBrushOpSettingsWidget;
 class QWidget;
 class QPointF;
 class KisPainter;
+class KisColorSource;
 
 
 class KisBrushOp : public KisBrushBasedPaintOp
@@ -49,7 +50,7 @@ public:
     void paintAt(const KisPaintInformation& info);
 
 private:
-
+    KisColorSource* m_colorSource;
     const KisBrushOpSettings * settings;
 };
 

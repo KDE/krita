@@ -21,6 +21,7 @@
 #include <kis_painter.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
+#include "kis_color_source.h"
 
 KisPressureDarkenOption::KisPressureDarkenOption()
         : KisCurveOption(i18n("Darken"), "Darken", false)
@@ -45,4 +46,16 @@ KoColor KisPressureDarkenOption::apply(KisPainter * painter, const KisPaintInfor
     delete darkenTransformation;
 
     return origColor;
+}
+
+void KisPressureDarkenOption::apply(KisColorSource* colorSource, const KisPaintInformation& info) const
+{
+    if (!isChecked()) return;
+    
+    quint32 darkenAmount = (qint32)(255  - 75 * computeValue(info));
+    KoColorTransformation* darkenTransformation  = colorSource->colorSpace()->createDarkenAdjustment(darkenAmount, false, 0.0);
+    
+    colorSource->applyColorTransformation(darkenTransformation);
+
+    delete darkenTransformation;
 }

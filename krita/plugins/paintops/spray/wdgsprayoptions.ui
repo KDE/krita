@@ -74,7 +74,7 @@
          <bool>true</bool>
         </property>
         <property name="exponentRatio">
-         <double>2.500000000000000</double>
+         <double>1.500000000000000</double>
         </property>
        </widget>
       </item>
@@ -119,7 +119,7 @@
          <bool>true</bool>
         </property>
         <property name="exponentRatio">
-         <double>3.500000000000000</double>
+         <double>1.500000000000000</double>
         </property>
        </widget>
       </item>

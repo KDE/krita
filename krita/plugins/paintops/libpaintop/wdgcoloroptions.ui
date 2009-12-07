@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>472</width>
-    <height>290</height>
+    <height>321</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -28,8 +28,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>20</y>
+     <x>26</x>
+     <y>22</y>
      <width>401</width>
      <height>131</height>
     </rect>
@@ -43,7 +43,7 @@
       <height>131</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout">
+    <layout class="QGridLayout" name="hsvGridLayout">
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
@@ -53,6 +53,9 @@
      </item>
      <item row="0" column="1">
       <widget class="QSlider" name="hueSlider">
+       <property name="mouseTracking">
+        <bool>false</bool>
+       </property>
        <property name="minimum">
         <number>-180</number>
        </property>
@@ -60,7 +63,7 @@
         <number>180</number>
        </property>
        <property name="tracking">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -92,6 +95,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QSlider" name="saturationSlider">
+       <property name="mouseTracking">
+        <bool>false</bool>
+       </property>
        <property name="minimum">
         <number>-100</number>
        </property>
@@ -99,7 +105,7 @@
         <number>100</number>
        </property>
        <property name="tracking">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -131,6 +137,9 @@
      </item>
      <item row="2" column="1">
       <widget class="QSlider" name="valueSlider">
+       <property name="mouseTracking">
+        <bool>false</bool>
+       </property>
        <property name="minimum">
         <number>-100</number>
        </property>
@@ -138,7 +147,7 @@
         <number>100</number>
        </property>
        <property name="tracking">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -164,42 +173,56 @@
     </layout>
    </widget>
   </widget>
+  <widget class="QCheckBox" name="randomHSVCHBox">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>401</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Random HSV</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="randomOpacityCHBox">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>160</y>
+     <width>401</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Random opacity</string>
+   </property>
+  </widget>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>170</y>
-     <width>417</width>
-     <height>81</height>
+     <x>0</x>
+     <y>220</y>
+     <width>401</width>
+     <height>52</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QCheckBox" name="randomHSVCHBox">
-        <property name="text">
-         <string>Random HSV</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="randomOpacityCHBox">
-        <property name="text">
-         <string>Random opacity</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="sampleInputCHBox">
-        <property name="text">
-         <string>Sample Input layer</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+   <layout class="QGridLayout" name="chboxGridLayout">
+    <item row="0" column="0">
+     <widget class="QCheckBox" name="colorPerParticleCHBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Color per particle</string>
+      </property>
+     </widget>
     </item>
-    <item>
+    <item row="0" column="1">
      <spacer name="horizontalSpacer">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -215,39 +238,68 @@
       </property>
      </spacer>
     </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QCheckBox" name="fillBackgroundCHBox">
-        <property name="toolTip">
-         <string>If checked, grid brush fill every particle's background with background color. The background of particle is rectangle of grid width and height and by default it is transparent.</string>
-        </property>
-        <property name="text">
-         <string>Fill background</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="mixBgColorCHBox">
-        <property name="text">
-         <string>Mix with background color</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="colorPerParticleCHBox">
-        <property name="text">
-         <string>Color per particle</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+    <item row="0" column="2">
+     <widget class="QCheckBox" name="fillBackgroundCHBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip">
+       <string>If checked, grid brush fill every particle's background with background color. The background of particle is rectangle of grid width and height and by default it is transparent.</string>
+      </property>
+      <property name="text">
+       <string>Fill background</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QCheckBox" name="sampleInputCHBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Sample Input layer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QCheckBox" name="mixBgColorCHBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Mix with background color</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>58</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>
  </widget>
  <tabstops>
-  <tabstop>randomOpacityCHBox</tabstop>
   <tabstop>hueSlider</tabstop>
   <tabstop>saturationSlider</tabstop>
   <tabstop>valueSlider</tabstop>
@@ -329,8 +381,8 @@
      <y>139</y>
     </hint>
     <hint type="destinationlabel">
-     <x>390</x>
-     <y>114</y>
+     <x>429</x>
+     <y>148</y>
     </hint>
    </hints>
   </connection>
@@ -358,7 +410,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>117</x>
-     <y>191</y>
+     <y>21</y>
     </hint>
     <hint type="destinationlabel">
      <x>123</x>

@@ -456,7 +456,7 @@ QPixmap KisDoc2::generatePreview(const QSize& size)
         newSize.scale(size, Qt::KeepAspectRatio);
 
         QImage image = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
-        image.save("thumb.png");
+        //image.save("thumb.png");
         return QPixmap::fromImage(image);
     }
     return QPixmap(size);

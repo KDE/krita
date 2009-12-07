@@ -82,6 +82,11 @@ include(MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
+#
+# Test for KDE >= 4.3.0
+#
+macro_ensure_version( "4.3.0" ${KDE_VERSION} KDE4_3_0 )
+
  ###########################
 ############################
 ## Required dependencies  ##
@@ -350,9 +355,9 @@ if(NOT BZIP2_EXECUTABLE )
 endif(NOT BZIP2_EXECUTABLE )
 
 ### Krita: pigment, blitz, eigen2, exiv2
-if(NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
+if(NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT KDE4_3_0)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
+endif(NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT KDE4_3_0)
 
 ### KPlato: kdepimlibs
 if(NOT KdepimLibs_FOUND)

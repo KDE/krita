@@ -26,6 +26,10 @@ public:
     KisSprayOpOptionsWidget(QWidget *parent = 0)
             : QWidget(parent) {
         setupUi(this);
+        // this allows to setup the component still in designer and it is needed for showing slider
+        spacingSpin->setRange(spacingSpin->minimum(), spacingSpin->maximum(), 0.25, spacingSpin->showSlider());
+        scaleSpin->setRange(scaleSpin->minimum(), scaleSpin->maximum(), 0.25, spacingSpin->showSlider());
+        
     }
 };
 
@@ -34,9 +38,9 @@ KisSprayOpOption::KisSprayOpOption()
 {
     m_checkable = false;
     m_options = new KisSprayOpOptionsWidget();
-    connect(m_options->diameterSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->diameterSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->coverageSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->amountSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterMovementSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->spacingSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->scaleSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->particlesSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
@@ -70,9 +74,9 @@ qreal KisSprayOpOption::coverage() const
     return m_options->coverageSpin->value();
 }
 
-qreal KisSprayOpOption::amount() const
+qreal KisSprayOpOption::jitterMoveAmount() const
 {
-    return m_options->amountSpin->value();
+    return m_options->jitterMovementSpin->value();
 }
 
 qreal KisSprayOpOption::spacing() const
@@ -101,7 +105,7 @@ void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
 {
     setting->setProperty("Spray/diameter", diameter());
     setting->setProperty("Spray/coverage", coverage());
-    setting->setProperty("Spray/amount", amount());
+    setting->setProperty("Spray/jitterMoveAmount", jitterMoveAmount());
     setting->setProperty("Spray/spacing", spacing());
     setting->setProperty("Spray/jitterSize", jitterSize());
     setting->setProperty("Spray/jitterMovement", jitterMovement());
@@ -111,7 +115,7 @@ void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setti
 {
     m_options->diameterSpinBox->setValue(setting->getInt("Spray/diameter"));
     m_options->coverageSpin->setValue(setting->getDouble("Spray/coverage"));
-    m_options->amountSpin->setValue(setting->getDouble("Spray/amount"));
+    m_options->jitterMovementSpin->setValue(setting->getDouble("Spray/jitterMoveAmount"));
     m_options->spacingSpin->setValue(setting->getDouble("Spray/spacing"));
     m_options->jitterSizeBox->setChecked(setting->getBool("Spray/jitterSize"));
     m_options->jitterMoveBox->setChecked(setting->getBool("Spray/jitterMovement"));

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>425</width>
-    <height>264</height>
+    <height>344</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,68 +19,143 @@
   <property name="minimumSize">
    <size>
     <width>425</width>
-    <height>260</height>
+    <height>290</height>
    </size>
   </property>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>10</x>
      <y>0</y>
-     <width>331</width>
-     <height>253</height>
+     <width>401</width>
+     <height>261</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="diameterLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>56</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>diameter</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSlider" name="diameterSlider">
-        <property name="maximum">
-         <number>999</number>
-        </property>
+       <widget class="KDoubleNumInput" name="diameterSpinBox">
         <property name="value">
-         <number>100</number>
+         <double>100.000000000000000</double>
         </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+        <property name="minimum">
+         <double>1.000000000000000</double>
         </property>
-        <property name="tickPosition">
-         <enum>QSlider::TicksAbove</enum>
-        </property>
-        <property name="tickInterval">
-         <number>30</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="diameterSpinBox">
         <property name="maximum">
-         <number>999</number>
+         <double>1000.000000000000000</double>
         </property>
-        <property name="value">
-         <number>100</number>
+        <property name="singleStep">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="decimals">
+         <number>0</number>
+        </property>
+        <property name="sliderEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="exponentRatio">
+         <double>2.500000000000000</double>
         </property>
        </widget>
       </item>
      </layout>
     </item>
     <item>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="coverageSpin">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="particlesLbl">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>56</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>particles</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KDoubleNumInput" name="particlesSpinBox">
+        <property name="value">
+         <double>12.000000000000000</double>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+        <property name="decimals">
+         <number>0</number>
+        </property>
+        <property name="sliderEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="exponentRatio">
+         <double>3.500000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLabel" name="coverageLabel">
         <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="decimals">
-         <number>1</number>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>density</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KDoubleNumInput" name="coverageSpin">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="value">
+         <double>0.100000000000000</double>
         </property>
         <property name="maximum">
          <double>100.000000000000000</double>
@@ -88,22 +163,106 @@
         <property name="singleStep">
          <double>1.000000000000000</double>
         </property>
-        <property name="value">
-         <double>0.100000000000000</double>
+        <property name="suffix">
+         <string>%</string>
+        </property>
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="sliderEnabled">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
+     </layout>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="densityChBox">
+      <property name="text">
+       <string>use density</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
        <widget class="QCheckBox" name="jitterMoveBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>Jitter movement</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QDoubleSpinBox" name="amountSpin">
-        <property name="decimals">
-         <number>2</number>
+      <item>
+       <widget class="KDoubleNumInput" name="jitterMovementSpin">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="value">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="minimum">
+         <double>0.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>5.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.500000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="jitterSizeBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Jitter size</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QLabel" name="spacingLabel">
+        <property name="text">
+         <string>spacing</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KDoubleNumInput" name="spacingSpin">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>345</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="value">
+         <double>0.500000000000000</double>
+        </property>
+        <property name="minimum">
+         <double>0.000000000000000</double>
         </property>
         <property name="maximum">
          <double>5.000000000000000</double>
@@ -111,114 +270,53 @@
         <property name="singleStep">
          <double>0.100000000000000</double>
         </property>
-        <property name="value">
-         <double>1.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="coverageLabel">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>density</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="particlesLbl">
-        <property name="text">
-         <string>particles</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="particlesSpinBox">
-        <property name="maximum">
-         <number>999</number>
-        </property>
-        <property name="value">
-         <number>12</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="densityChBox">
-        <property name="text">
-         <string>use density</string>
+        <property name="sliderEnabled">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QCheckBox" name="jitterSizeBox">
-        <property name="text">
-         <string>Jitter size</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Preferred</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="spacingLabel">
-          <property name="text">
-           <string>spacing</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spacingSpin">
-          <property name="decimals">
-           <number>2</number>
-          </property>
-          <property name="maximum">
-           <double>5.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.250000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
        <widget class="QLabel" name="scaleLbl">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>48</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>scale</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="scaleSpin">
-        <property name="decimals">
-         <number>2</number>
+       <widget class="KDoubleNumInput" name="scaleSpin">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>345</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="value">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="minimum">
+         <double>0.000000000000000</double>
         </property>
         <property name="maximum">
          <double>10.000000000000000</double>
@@ -226,7 +324,10 @@
         <property name="singleStep">
          <double>0.050000000000000</double>
         </property>
-        <property name="value">
+        <property name="sliderEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="exponentRatio">
          <double>1.000000000000000</double>
         </property>
        </widget>
@@ -236,56 +337,15 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KDoubleNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>diameterSpinBox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>diameterSpinBox</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>121</x>
-     <y>22</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>121</x>
-     <y>22</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>diameterSpinBox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>diameterSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>132</x>
-     <y>36</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>195</x>
-     <y>28</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>diameterSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>diameterSpinBox</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>227</x>
-     <y>32</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>134</x>
-     <y>33</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>densityChBox</sender>
    <signal>clicked(bool)</signal>
@@ -297,24 +357,8 @@
      <y>118</y>
     </hint>
     <hint type="destinationlabel">
-     <x>242</x>
-     <y>61</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>densityChBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>particlesSpinBox</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>163</x>
-     <y>115</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>85</y>
+     <x>345</x>
+     <y>83</y>
     </hint>
    </hints>
   </connection>
@@ -325,12 +369,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>146</x>
-     <y>118</y>
+     <x>138</x>
+     <y>123</y>
     </hint>
     <hint type="destinationlabel">
-     <x>78</x>
-     <y>94</y>
+     <x>65</x>
+     <y>51</y>
     </hint>
    </hints>
   </connection>
@@ -346,7 +390,23 @@
     </hint>
     <hint type="destinationlabel">
      <x>56</x>
-     <y>56</y>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>densityChBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>particlesSpinBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>90</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>207</x>
+     <y>57</y>
     </hint>
    </hints>
   </connection>

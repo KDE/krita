@@ -35,7 +35,7 @@ public:
     int particleCount() const;
 
     qreal coverage() const;
-    qreal amount() const;
+    qreal jitterMoveAmount() const;
     qreal spacing() const;
     qreal scale() const;
 

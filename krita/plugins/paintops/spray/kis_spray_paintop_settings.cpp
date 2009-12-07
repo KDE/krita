@@ -71,7 +71,7 @@ qreal KisSprayPaintOpSettings::coverage() const
 
 qreal KisSprayPaintOpSettings::amount() const
 {
-    return m_options->m_sprayOption->amount();
+    return m_options->m_sprayOption->jitterMoveAmount();
 }
 
 qreal KisSprayPaintOpSettings::spacing() const

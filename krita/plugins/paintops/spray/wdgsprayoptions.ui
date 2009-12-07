@@ -231,7 +231,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Jitter size</string>
+       <string>Random size</string>
       </property>
      </widget>
     </item>

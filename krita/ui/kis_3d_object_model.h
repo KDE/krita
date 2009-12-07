@@ -55,8 +55,9 @@ public:
     //void parseModel();
     void parseMaterial(const QString &fileName);
 
-
+#ifdef HAVE_OPENGL
     GLuint displayList();
+#endif // HAVE_OPENGL
 
 private:
     QString m_fileName;
@@ -71,7 +72,9 @@ private:
     void debug(Material m);
 
     bool m_cached;
+#ifdef HAVE_OPENGL
     GLuint m_displayList;
+#endif // HAVE_OPENGL
 };
 
 #endif // KIS_3D_OBJECT_MODEL_H

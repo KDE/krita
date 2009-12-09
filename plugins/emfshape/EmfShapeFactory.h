@@ -39,6 +39,9 @@ public:
     KoShape *createDefaultShape() const;
     KoShape *createShape(const KoProperties * params) const;
 
+    /// Reimplemented
+    virtual bool supports(const KoXmlElement & e) const;
+
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 

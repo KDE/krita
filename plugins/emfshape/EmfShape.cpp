@@ -39,20 +39,27 @@
 
 // KOffice
 #include "KoUnit.h"
+#include "KoStore.h"
 #include "KoXmlNS.h"
+#include "KoXmlReader.h"
+#include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include "KoShapeSavingContext.h"
-// FIXME
 #include "libemf/EmfParser.h"
 #include "libemf/EmfOutputPainterStrategy.h"
 
+
 // EMF shape
 #include "DefaultEmf.h"
+#include "libemf/EmfParser.h"
+#include "libemf/EmfOutputPainterStrategy.h"
 
 
 EmfShape::EmfShape()
-    : KoFrameShape( KoXmlNS::draw, "object" ) // FIXME: Use something else(?)
+    : KoFrameShape( KoXmlNS::draw, "image" )
     , m_bytes(0)
     , m_size(0)
+    , m_ownsBytes(false)
     , m_printable(true)
 {
     setShapeId(EmfShape_SHAPEID);
@@ -65,10 +72,14 @@ EmfShape::~EmfShape()
 {
 }
 
-void  EmfShape::setEmfBytes( char *bytes, int size )
+void  EmfShape::setEmfBytes( char *bytes, int size, bool takeOwnership )
 {
+    if (m_bytes != 0 && m_ownsBytes)
+        delete []m_bytes;
+
     m_bytes = bytes;
-    m_size  = size;
+    m_size = size;
+    m_ownsBytes = takeOwnership;
 }
 
 char *EmfShape::emfBytes()
@@ -84,17 +95,15 @@ int   EmfShape::emfSize()
 
 void EmfShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    //if (m_printable) {
-        applyConversion(painter, converter);
-        draw(painter);
-        //}
+    applyConversion(painter, converter);
+    draw(painter);
 }
 
 void EmfShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
 {
     Q_UNUSED(canvas);
 
-    if (!m_printable) {
+    if (1 || !m_printable) {
         applyConversion(painter, converter);
         painter.setRenderHint(QPainter::Antialiasing);
 
@@ -108,9 +117,9 @@ void EmfShape::draw(QPainter &painter)
 
     // FIXME: Make emfOutput use QSizeF
     QSize  sizeInt( size().width(), size().height() );
-    kDebug() << "-------------------------------------------";
-    kDebug() << "size: " << sizeInt;
-    kDebug() << "-------------------------------------------";
+    //kDebug() << "-------------------------------------------";
+    //kDebug() << "size: " << sizeInt;
+    //kDebug() << "-------------------------------------------";
     Libemf::OutputPainterStrategy  emfOutput( painter, sizeInt );
     emfParser.setOutput( &emfOutput );
     
@@ -152,19 +161,69 @@ void EmfShape::saveOdf(KoShapeSavingContext & context) const
 
 bool EmfShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
-    kDebug() <<"Loading ODF frame in the EMF shape";
+    //kDebug() <<"Loading ODF frame in the EMF shape. Element = " << element.tagName();
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
 
+
+inline static int read32(const char *buffer, const int offset)
+{
+    // little endian
+    int result = (int) buffer[offset];
+    result |= (int) buffer[offset+1] << 8;
+    result |= (int) buffer[offset+2] << 16;
+    result |= (int) buffer[offset+3] << 24;
+
+    return result;
+}
+
 // Load the actual contents within the EMF shape.
 bool EmfShape::loadOdfFrameElement( const KoXmlElement & element,
-                                    KoShapeLoadingContext &/*context*/ )
+                                    KoShapeLoadingContext &context )
 {
-    kDebug() <<"Loading ODF frame contents in the EMF shape";
+    //kDebug() <<"Loading ODF element: " << element.tagName();
 
-    // FIXME
-    return false;
+    // Get the reference to the EMF file.  If there is no href, then just return.
+    const QString href = element.attribute("href");
+    if (href.isEmpty())
+        return false;
+
+    KoStore *store  = context.odfLoadingContext().store();
+    bool     result = store->open(href);
+
+    if (!result)
+        return false;
+
+    // Store the size and make a sanity check if this could be an EMF.
+    // The size of the minimum EMF header record is 88.
+    m_size = store->size();
+    if (m_size < 88)
+        return false;
+
+    if (m_bytes && m_ownsBytes)
+        delete []m_bytes;
+    m_bytes = new char[m_size];
+
+    qint64 bytesRead = store->read(m_bytes, m_size);
+    store->close();
+    if (bytesRead < m_size) {
+        kDebug() << "Too few bytes read: " << bytesRead << " instead of " << m_size;
+        return false;
+    }
+
+    // Check if the contents is actually an EMF.
+    // 1. Check type
+    qint32 mark = read32(m_bytes, 0);
+    if (mark != 0x00000001) {
+        //kDebug() << "Not an EMF: mark = " << mark << " instead of 0x00000001";
+        return false;
+    }
+
+    // FIXME: We should probably do more checks here, but I don't know what right now.
+
+    // Ok, we have an EMF.  Yay!
+    return true;
 }
 
 

@@ -24,8 +24,14 @@
 // EmfShape
 #include "EmfShape.h"
 
+// KOffice
+#include <KoXmlNS.h>
+#include "KoShapeControllerBase.h"
+
+
 // KDE
 #include <klocale.h>
+#include <KDebug>
 
 
 // The default EMF.  Contains "static char defaultEMF[]"
@@ -37,13 +43,16 @@ EmfShapeFactory::EmfShapeFactory(QObject *parent)
 {
     setToolTip(i18n("A Shape That Shows an Embedded Metafile"));
     setIcon( "emf-shape" );
+    setOdfElementNames(KoXmlNS::draw, QStringList("image"));
+    setLoadingPriority(1);
 }
 
 KoShape *EmfShapeFactory::createDefaultShape() const
 {
     EmfShape *emf = new EmfShape();
+    emf->setShapeId(EmfShape_SHAPEID);
 
-    emf->setEmfBytes( defaultEMF, sizeof( defaultEMF ) );
+    emf->setEmfBytes(defaultEMF, sizeof(defaultEMF), false);
 
     return emf;
 }
@@ -51,6 +60,13 @@ KoShape *EmfShapeFactory::createDefaultShape() const
 KoShape *EmfShapeFactory::createShape(const KoProperties * /*params*/) const
 {
     return createDefaultShape();
+}
+
+    /// Reimplemented
+bool EmfShapeFactory::supports(const KoXmlElement & e) const
+{
+    kDebug(33001) << "EmfShapeFactory::supports(): Tag = " << e.tagName();
+    return e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw;
 }
 
 QList<KoShapeConfigWidgetBase*> EmfShapeFactory::createShapeOptionPanels()

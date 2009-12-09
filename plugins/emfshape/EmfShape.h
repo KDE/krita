@@ -47,7 +47,8 @@ public:
     /// reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
     /// Load the real contents of the frame shape.
-    virtual bool loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context);
+    virtual bool loadOdfFrameElement(const KoXmlElement& frameElement,
+                                     KoShapeLoadingContext& context);
 
     // Methods (none so far)
     // ...
@@ -55,7 +56,7 @@ public:
     void setPrintable(bool on);
     bool printable() const { return m_printable; }
 
-    void  setEmfBytes( char *bytes, int size );
+    void  setEmfBytes( char *bytes, int size, bool takeOwnership );
     char *emfBytes();
     int   emfSize();
 
@@ -64,6 +65,7 @@ private:
 
     char  *m_bytes;       // Use char* instead of void* because of QByteArray
     int    m_size;
+    bool   m_ownsBytes;
 
     bool   m_printable;
 };

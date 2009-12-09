@@ -541,3 +541,13 @@ void KisConfig::setShowFilterGallery(bool showFilterGallery)
 {
     m_cfg.writeEntry("showFilterGallery", showFilterGallery);
 }
+
+QString KisConfig::defaultPainterlyColorSpace()
+{
+    m_cfg.readEntry("defaultpainterlycolorspace", "KS6F32");;
+}
+
+void KisConfig::setDefaultPainterlyColorSpace(const QString& def)
+{
+    m_cfg.writeEntry("defaultpainterlycolorspace", def);;
+}

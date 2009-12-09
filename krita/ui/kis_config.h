@@ -99,20 +99,28 @@ public:
 
     quint32 getGridMainStyle();
     void setGridMainStyle(quint32 v);
+
     quint32 getGridSubdivisionStyle();
     void setGridSubdivisionStyle(quint32 v);
+
     QColor getGridMainColor();
     void setGridMainColor(const QColor & v);
+
     QColor getGridSubdivisionColor();
     void setGridSubdivisionColor(const QColor & v);
+
     quint32 getGridHSpacing();
     void setGridHSpacing(quint32 v);
+
     quint32 getGridVSpacing();
     void setGridVSpacing(quint32 v);
+
     quint32 getGridSubdivisions();
     void setGridSubdivisions(quint32 v);
+
     quint32 getGridOffsetX();
     void setGridOffsetX(quint32 v);
+
     quint32 getGridOffsetY();
     void setGridOffsetY(quint32 v);
 
@@ -179,6 +187,9 @@ public:
 
     bool showFilterGallery();
     void setShowFilterGallery(bool showFilterGallery);
+
+    QString defaultPainterlyColorSpace();
+    void setDefaultPainterlyColorSpace(const QString& def);
 
 
 private:

@@ -41,6 +41,7 @@ KoOdfDocument::~KoOdfDocument()
 
 bool KoOdfDocument::saveChildrenOdf(SavingContext & documentContext)
 {
+    Q_UNUSED(documentContext)
     return true;
 }
 

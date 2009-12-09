@@ -103,6 +103,8 @@ void KoInlineNote::updatePosition(const QTextDocument *document, QTextInlineObje
 
 void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
+    Q_UNUSED(document);
+    Q_UNUSED(posInDocument);
     if (d->label.isEmpty())
         return;
     Q_ASSERT(format.isCharFormat());

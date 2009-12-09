@@ -27,6 +27,8 @@ QDebug operator<<(QDebug debug, const KoInsets &insets)
     debug.nospace() << ", left=" << insets.left;
     debug.nospace() << ", bottom=" << insets.bottom;
     debug.nospace() << ", right=" << insets.right << ']';
+#else
+    Q_UNUSED(insets);
 #endif
     return debug.space();
 }

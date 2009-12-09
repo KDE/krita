@@ -310,10 +310,12 @@ void KoGenStyles::dump()
         kDebug(30003) << "style:" << *it;
     }
     for (NameMap::const_iterator it = d->autoStylesInStylesDotXml.constBegin(); it != d->autoStylesInStylesDotXml.constEnd(); ++it) {
+#ifndef NDEBUG
         kDebug(30003) << "auto style for style.xml:" << *it;
         const KoGenStyle* s = style(*it);
         Q_ASSERT(s);
         Q_ASSERT(s->autoStyleInStylesDotXml());
+#endif
     }
 }
 

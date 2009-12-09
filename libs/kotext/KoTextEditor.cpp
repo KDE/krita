@@ -210,15 +210,19 @@ return found;
 
 void KoTextEditor::Private::deleteSelection()
 {
+#ifndef NDEBUG
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineTextObjectManager());
-
+#endif
     QTextCursor delText = QTextCursor(caret);
     if (!delText.hasSelection())
         delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
+    // XXX: is there are reason for these two unused variables? Side effects? (boud)
     QString text = delText.selectedText();
+    Q_UNUSED(text);
     QTextDocumentFragment selection = delText.selection();
+    Q_UNUSED(selection);
     caret.deleteChar();
 }
 
@@ -321,10 +325,11 @@ void KoTextEditor::addCommand(QUndoCommand *command)
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
 {
+#ifndef NDEBUG
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineTextObjectManager());
-
+#endif
     if (!KoTextDocument(d->document).changeTracker() || !KoTextDocument(d->document).changeTracker()->isEnabled()) {
         d->clearCharFormatProperty(KoCharacterStyle::ChangeTrackerId);
         return;

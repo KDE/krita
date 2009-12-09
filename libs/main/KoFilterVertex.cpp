@@ -81,7 +81,9 @@ void Vertex::relaxVertices(PriorityQueue<Vertex>& queue)
 
 void Vertex::dump(const QByteArray& indent) const
 {
-#ifndef NDEBUG
+#ifdef NDEBUG
+    Q_UNUSED(indent)
+#else
     kDebug(30500) << indent << "Vertex:" << m_mimeType << " (" << m_weight << "):";
     const QByteArray i(indent + "   ");
     foreach(Edge* edge, m_edges) {

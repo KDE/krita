@@ -32,6 +32,7 @@ KoPAPageProvider::~KoPAPageProvider()
 
 KoTextPage * KoPAPageProvider::page(KoShape * shape)
 {
+    Q_UNUSED(shape);
     return new KoPATextPage( m_masterPageNumber );
 }
 

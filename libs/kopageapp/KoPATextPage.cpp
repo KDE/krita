@@ -30,5 +30,6 @@ KoPATextPage::~KoPATextPage()
 
 int KoPATextPage::pageNumber(PageSelection select, int adjustment) const
 {
+    Q_UNUSED(select);
     return m_page + adjustment;
 }

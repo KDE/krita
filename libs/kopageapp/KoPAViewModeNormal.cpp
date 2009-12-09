@@ -45,8 +45,11 @@ KoPAViewModeNormal::~KoPAViewModeNormal()
 
 void KoPAViewModeNormal::paintEvent( KoPACanvas *canvas, QPaintEvent* event )
 {
+#ifdef NDEBUG
+    Q_UNUSED(canvas)
+#else
     Q_ASSERT( m_canvas == canvas );
-
+#endif
     QPainter painter( m_canvas );
     painter.translate( -m_canvas->documentOffset() );
     painter.setRenderHint( QPainter::Antialiasing );

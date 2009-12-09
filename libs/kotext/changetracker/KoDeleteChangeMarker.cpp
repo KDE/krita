@@ -91,7 +91,13 @@ bool KoDeleteChangeMarker::loadOdf(const KoXmlElement &element)
 
 void KoDeleteChangeMarker::paint(QPainter& painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(pd);
+    Q_UNUSED(document);
+    Q_UNUSED(rect);
     Q_UNUSED(posInDocument);
+    Q_UNUSED(object);
+    Q_UNUSED(format);
 }
 
 void KoDeleteChangeMarker::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)

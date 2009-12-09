@@ -782,6 +782,7 @@ void KoTableCellStyle::removeDuplicates(const KoTableCellStyle &other)
 
 void KoTableCellStyle::saveOdf(KoGenStyle &style)
 {
+    Q_UNUSED(style);
 /*
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {

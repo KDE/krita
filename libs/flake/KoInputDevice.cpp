@@ -161,6 +161,8 @@ QDebug operator<<(QDebug dbg, const KoInputDevice &device)
         }
         dbg.space() << "(id: " << device.uniqueTabletId() << ")";
     }
+#else
+    Q_UNUSED(device);
 #endif
     return dbg.space();
 }

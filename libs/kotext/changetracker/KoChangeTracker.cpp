@@ -260,7 +260,7 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
         if (! tag.isNull()) {
             const QString localName = tag.localName();
             if (localName == "changed-region") {
-                KoChangeTrackerElement *changeElement;
+                KoChangeTrackerElement *changeElement = 0;
                 KoXmlElement region;
                 forEachElement(region, tag) {
                     if (!region.isNull()) {

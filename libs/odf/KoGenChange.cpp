@@ -107,6 +107,7 @@ void KoGenChange::writeChange(KoXmlWriter* writer, const QString& name) const
 
 bool KoGenChange::operator<(const KoGenChange &other) const
 {
+    Q_UNUSED(other);
 //    if (m_changeMetaData.value("dc-date") != other.m_changeMetaData.value("dc-date")) return QDateTime::fromString(m_changeMetaData.value("dc-date"), Qt::ISODate) < QDateTime::fromString(other.m_changeMetaData.value("dc-date"), Qt::ISODate);
 
 

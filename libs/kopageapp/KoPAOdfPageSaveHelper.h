@@ -46,8 +46,8 @@ public:
     virtual bool writeBody();
 
 private:
-    KoShapeSavingContext  *m_context;
     KoPADocument * m_doc;
+    KoShapeSavingContext  *m_context;
     QList<KoPAPageBase *> m_pages;
     QList<KoPAPageBase *> m_masterPages;
 };

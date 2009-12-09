@@ -431,7 +431,7 @@ void KisTool::resetCursorStyle()
 #endif
     case CURSOR_STYLE_OUTLINE:
     default:
-        // use tool cursor as default, if the tool support outline, it will set the cursor to blank and show outline
+        // use tool cursor as default, if the tool supports outline, it will set the cursor to blank and show outline
         useCursor(d->cursor, true);
     }
 }

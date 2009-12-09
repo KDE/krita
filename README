@@ -64,8 +64,8 @@ programmers around the world.  All developers give their time/code to
 the community for everyone to benefit.
 
 If you have found a bug or missing feature you can always contact the
-developers of KOffice (via http://www.koffice.org ) or dwell into the
-software yourself.
+developers of KOffice (via http://www.koffice.org) or delve into the
+source code yourself.
 
 The parts that are shared between all KOffice applications can be found
 in the libs/ subdirectory.  There classes like KoDocument can be found;
@@ -139,3 +139,4 @@ please mail to the KOffice mailing list: mailto:koffice@kde.org
 Thomas Zander
 Chris Lee
 Inge Wallin
+Boudewijn Rempt

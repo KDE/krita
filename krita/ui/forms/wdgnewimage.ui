@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>470</width>
+    <width>472</width>
     <height>503</height>
    </rect>
   </property>
@@ -247,103 +247,6 @@
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="buddy">
-         <cstring>cmbColor</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KColorCombo" name="cmbColor">
-        <item>
-         <property name="text">
-          <string>Custom...</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="1" column="0">
@@ -439,6 +342,9 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="KColorButton" name="cmbColor"/>
+      </item>
      </layout>
     </widget>
    </item>
@@ -484,10 +390,9 @@
  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
  <customwidgets>
   <customwidget>
-   <class>KColorCombo</class>
-   <extends>QComboBox</extends>
-   <header>kcolorcombo.h</header>
-   <container>1</container>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
   </customwidget>
   <customwidget>
    <class>KisColorSpaceSelector</class>
@@ -504,7 +409,6 @@
   <tabstop>cmbHeightUnit</tabstop>
   <tabstop>bnScreenSize</tabstop>
   <tabstop>doubleResolution</tabstop>
-  <tabstop>cmbColor</tabstop>
   <tabstop>sliderOpacity</tabstop>
   <tabstop>txtDescription</tabstop>
   <tabstop>chkFromClipboard</tabstop>

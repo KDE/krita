@@ -67,8 +67,6 @@ private:
 
     QButtonGroup *m_bgColors;
     QList<KoColor> m_vColors;
-
-    const KoColorSpace *m_colorspace;
 };
 
 #endif // KIS_PAINTERLY_MIXER_H_

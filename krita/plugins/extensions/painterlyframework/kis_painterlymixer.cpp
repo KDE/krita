@@ -35,28 +35,10 @@
 KisPainterlyMixer::KisPainterlyMixer(QWidget *parent)
         : QWidget(parent)
         , m_tool(0)
-        , m_colorspace(0)
 {
     setupUi(this);
 
-    kDebug() << ">>>>>>>>>>>>>>>>>>>>";
-
-    QString csid = KisKSF32ColorSpace<3>::ColorSpaceId().id();
-    KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
-
-    // TODO Illuminant and colorspace has to be chosen at runtime
-    QList<const KoColorProfile*> profiles = f->profilesFor(csid);
-    if (profiles.count()) { // don't crash if the profile is not available.
-        const KoColorProfile* testp = profiles.at(0);
-        m_colorspace = f->colorSpace(csid, testp);
-    } else {
-        setEnabled(false);
-        return;
-    }
-
-    m_canvas->setLayer(m_colorspace);
     m_canvas->setToolProxy(new KoToolProxy(m_canvas));
-
     m_tool = new MixerTool(m_canvas);
     m_canvas->toolProxy()->setActiveTool(m_tool);
     m_tool->activate();
@@ -102,9 +84,9 @@ void KisPainterlyMixer::initSpots()
 
 void KisPainterlyMixer::loadColors()
 {
-    kDebug();
     // TODO We need to handle save/load of user-defined colors in the spots.
-    const KoColorSpace *cs = m_colorspace;
+
+    const KoColorSpace *cs = m_canvas->colorSpace();
     m_vColors.append(KoColor(QColor("#FF0000"), cs)); // Red
     m_vColors.append(KoColor(QColor("#00FF00"), cs)); // Green
     m_vColors.append(KoColor(QColor("#0000FF"), cs)); // Blue

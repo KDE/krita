@@ -44,7 +44,6 @@ K_EXPORT_COMPONENT_FACTORY(kritakscolorspacesplugin, KSColorSpacesPluginFactory(
 KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
         : QObject(parent)
 {
-    kDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     QStringList list;
     KoColorSpaceEngineRegistry *e = KoColorSpaceEngineRegistry::instance();
     KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();

@@ -71,7 +71,8 @@ protected:
 
 private:
 
-    MixerCanvas *m_mixer;
+    struct Private;
+    Private* const m_d;
 };
 
 

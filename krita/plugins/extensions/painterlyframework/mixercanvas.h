@@ -25,8 +25,7 @@
 
 #include <KoCanvasBase.h>
 
-#include <kis_paint_layer.h>
-
+class QPoint;
 class QImage;
 class QMouseEvent;
 class QPaintEvent;
@@ -40,7 +39,7 @@ class KoColorSpace;
 class KoShapeManager;
 class KoToolProxy;
 class KoViewConverter;
-
+class KoColor;
 class KisPaintDevice;
 
 
@@ -55,8 +54,8 @@ public:
 
     void setLayer(const KoColorSpace *cs);
 
-    KisPaintLayer *layer();
     KisPaintDevice *device();
+    const KoColorSpace* colorSpace();
 
     void setToolProxy(KoToolProxy *proxy);
     KoToolProxy *toolProxy() const { return m_toolProxy; }
@@ -65,6 +64,8 @@ public:
     const QWidget *canvasWidget() const { return this; }
 
     void updateCanvas(const QRegion &region);
+
+    KoColor currentColorAt(QPoint pos);
 
 protected:
 
@@ -87,9 +88,10 @@ public:
     KoShapeManager *shapeManager() const { Q_ASSERT(false); return 0; }
     const KoViewConverter *viewConverter() const { Q_ASSERT(false); return 0;}
     void updateInputMethodInfo() { Q_ASSERT(false); }
-    void updateCanvas(const QRectF &rc) {}
+    void updateCanvas(const QRectF &rc) { Q_UNUSED(rc);}
     KoUnit unit() const;
     void addCommand(QUndoCommand *command);
+
 
 public slots:
 
@@ -100,7 +102,7 @@ private:
 
     KoToolProxy *m_toolProxy;
 
-    KisPaintLayerSP m_layer;
+    KisPaintDevice *m_paintDevice;
 
     bool m_dirty;
     QImage m_image;

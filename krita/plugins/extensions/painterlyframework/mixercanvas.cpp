@@ -20,21 +20,6 @@
  */
 #include "mixercanvas.h"
 
-#include <kis_image.h>
-#include <kis_paint_device.h>
-#include <kis_painter.h>
-#include <kis_paint_layer.h>
-#include <kis_paintop_registry.h>
-#include <kis_canvas_resource_provider.h>
-#include <kis_paintop_preset.h>
-
-#include <KoCanvasResourceProvider.h>
-#include <KoColorSpace.h>
-#include <KoShapeManager.h>
-#include <KoToolProxy.h>
-#include <KoViewConverter.h>
-
-
 #include <QImage>
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -44,6 +29,22 @@
 #include <QTabletEvent>
 #include <QUndoCommand>
 
+#include <KoCanvasResourceProvider.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoShapeManager.h>
+#include <KoToolProxy.h>
+#include <KoViewConverter.h>
+
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <kis_painter.h>
+#include <kis_paint_device.h>
+#include <kis_paintop_registry.h>
+#include <kis_canvas_resource_provider.h>
+#include <kis_paintop_preset.h>
+#include <kis_config.h>
+
 MixerCanvas::MixerCanvas(QWidget *parent)
         : QFrame(parent)
         , KoCanvasBase(0)
@@ -52,6 +53,14 @@ MixerCanvas::MixerCanvas(QWidget *parent)
 {
     m_image = QImage(size(), QImage::Format_ARGB32);
     m_image.fill(0);
+
+    KisConfig config;
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(config.defaultPainterlyColorSpace(), "");
+    if (!cs) {
+        dbgPlugins << "Could not load painterly colorspace, falling back to rgb";
+        cs = KoColorSpaceRegistry::instance()->rgb16();
+    }
+    m_paintDevice = new KisPaintDevice(cs, "Mixer");
 }
 
 MixerCanvas::~MixerCanvas()
@@ -60,14 +69,9 @@ MixerCanvas::~MixerCanvas()
         delete m_toolProxy;
 }
 
-KisPaintLayer *MixerCanvas::layer()
-{
-    return m_layer.data();
-}
-
 KisPaintDevice *MixerCanvas::device()
 {
-    return m_layer->paintDevice().data();
+    return m_paintDevice;
 }
 
 void MixerCanvas::setToolProxy(KoToolProxy *proxy)
@@ -86,10 +90,9 @@ KoUnit MixerCanvas::unit() const
     return KoUnit();
 }
 
-void MixerCanvas::setLayer(const KoColorSpace *cs)
+const KoColorSpace* MixerCanvas::colorSpace()
 {
-    Q_ASSERT(cs);
-    m_layer = new KisPaintLayer(0, "Artistic Mixer Layer", 255, cs);
+    return m_paintDevice->colorSpace();
 }
 
 void MixerCanvas::mouseDoubleClickEvent(QMouseEvent *event)
@@ -140,7 +143,7 @@ void MixerCanvas::paintEvent(QPaintEvent *event)
         QRect r = event->rect();
         QRect imageRect = QRect(0, 0, r.width(), r.height());
         QPainter p(&m_image);
-        p.drawImage(r, m_layer->paintDevice()->convertToQImage(0, r.x(), r.y(), r.width(), r.height()), imageRect);
+        p.drawImage(r, m_paintDevice->convertToQImage(0, r.x(), r.y(), r.width(), r.height()), imageRect);
         p.end();
 
         m_dirty = false;
@@ -168,6 +171,12 @@ void MixerCanvas::slotClear()
 
 void MixerCanvas::slotResourceChanged(int key, const QVariant &value)
 {
+
+}
+
+KoColor MixerCanvas::currentColorAt(QPoint pos)
+{
+    return KoColor();
 }
 
 #include "mixercanvas.moc"

@@ -433,6 +433,10 @@ bool KoStore::addLocalFile(const QString &fileName, const QString &destName)
         data.resize(8*1024);
     }
     Q_ASSERT(total == size);
+    if (total != size) {
+        kWarning(s_area) << "Did not write enough bytes. Expected: " << size << ", wrote" << total;
+        return false;
+    }
 
     close();
     file.close();

@@ -224,6 +224,7 @@ QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoColorSp
         KoColorProfile *  profile = it.value();
         if(csf->profileIsCompatible(profile))
         {
+            Q_ASSERT(profile);
             //         if (profile->colorSpaceSignature() == csf->colorSpaceSignature()) {
             profiles.push_back(profile);
         }
@@ -251,6 +252,7 @@ QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoID& id)
 
 void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
 {
+    Q_ASSERT(p);
     if (p->valid()) {
         d->profileMap[p->name()] = p;
         d->colorConversionSystem->insertColorProfile( p );
@@ -301,7 +303,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
         // last attempt at getting a profile, sometimes the default profile, like adobe cmyk isn't available.
         const KoColorProfile *p = profileByName(profileName);
-        if(!p && !profileName.isEmpty())
+        if(!p )
         {
             dbgPigmentCSRegistry << "Profile not found :" << profileName;
             QList<const KoColorProfile *> profiles = profilesFor(csID);
@@ -310,6 +312,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                 return 0;
             }
             p = profiles[0];
+            Q_ASSERT(p);
         }
         const KoColorSpace *cs = csf->createColorSpace( p);
         if(!cs)

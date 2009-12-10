@@ -544,7 +544,7 @@ void KisConfig::setShowFilterGallery(bool showFilterGallery)
 
 QString KisConfig::defaultPainterlyColorSpace()
 {
-    m_cfg.readEntry("defaultpainterlycolorspace", "KS6F32");;
+    return m_cfg.readEntry("defaultpainterlycolorspace", "KS6F32");;
 }
 
 void KisConfig::setDefaultPainterlyColorSpace(const QString& def)

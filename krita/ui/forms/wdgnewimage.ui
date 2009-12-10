@@ -343,7 +343,22 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KColorButton" name="cmbColor"/>
+       <widget class="KColorButton" name="cmbColor">
+        <property name="color">
+         <color>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </property>
+        <property name="defaultColor">
+         <color>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

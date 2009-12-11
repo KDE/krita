@@ -147,9 +147,6 @@ public:
      */
     static KoPathSegment interpolate( const QPointF &p0, const QPointF &p1, const QPointF &p2, qreal t );
 
-    /// Converts to cubic segment
-    KoPathSegment convertToCubic() const;
-
 private:
     class Private;
     Private * const d;

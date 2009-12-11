@@ -150,36 +150,7 @@ public:
     /// Converts to cubic segment
     KoPathSegment convertToCubic() const;
 
-    void printDebug() const;
-
 private:
-
-    /// calculates signed distance of given point from segment chord
-    qreal distanceFromChord(const QPointF &point) const;
-
-    /// Returns the chord length, i.e. the distance between first and last control point
-    qreal chordLength() const;
-
-    /// Returns intersection of lines if one exists
-    QList<QPointF> linesIntersection(const KoPathSegment &segment) const;
-
-    /// Returns parameters for curve extrema
-    QList<qreal> extrema() const;
-
-    /// Returns parameters for curve roots
-    QList<qreal> roots() const;
-
-    /**
-     * The DeCasteljau algorithm for parameter t.
-     * @param t the parameter to evaluate at
-     * @param p1 the new control point of the segment start (for cubic curves only)
-     * @param p2 the first control point at t
-     * @param p3 the new point at t
-     * @param p4 the second control point at t
-     * @param p3 the new control point of the segment end (for cubic curbes only)
-     */
-    void deCasteljau(qreal t, QPointF *p1, QPointF *p2, QPointF *p3, QPointF *p4, QPointF *p5) const;
-
     class Private;
     Private * const d;
 };

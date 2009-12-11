@@ -183,9 +183,9 @@ void NoteEntryAction::keyPress(QKeyEvent* event, const MusicCursor& cursor)
 {
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
         Staff* staff = cursor.staff();
-        Part* part = staff->part();
-        Sheet* sheet = part->sheet();
-        Bar* bar = sheet->bar(cursor.bar());
+        //Part* part = staff->part();
+        //Sheet* sheet = part->sheet();
+        //Bar* bar = sheet->bar(cursor.bar());
         Clef* clef = staff->lastClefChange(cursor.bar());
         int line = cursor.line();
         int pitch = 0, accidentals = 0;

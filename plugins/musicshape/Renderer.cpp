@@ -226,6 +226,7 @@ void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElemen
 
 void MusicRenderer::renderClef(QPainter& painter, Clef *c, const QPointF& pos, RenderState& state, const QColor& color, bool ignoreOwnPos)
 {
+    Q_UNUSED(color);
     state.clef = c;
     Staff* s = c->staff();
     m_style->renderClef(painter, pos.x() + (ignoreOwnPos ? 0 : c->x()), pos.y() + s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
@@ -233,6 +234,7 @@ void MusicRenderer::renderClef(QPainter& painter, Clef *c, const QPointF& pos, R
 
 void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, const QPointF& pos, RenderState& state, const QColor& color, bool ignoreOwnPos)
 {
+    Q_UNUSED(color);
     Staff * s = ks->staff();
     qreal curx = pos.x() + (ignoreOwnPos ? 0 : ks->x());
     // draw naturals for sharps
@@ -304,6 +306,7 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, cons
 
 void MusicRenderer::renderTimeSignature(QPainter& painter, TimeSignature* ts, const QPointF& pos, const QColor& color)
 {
+    Q_UNUSED(color);
     Staff* s = ts->staff();
     qreal hh = 0.5 * (s->lineCount() - 1) * s->lineSpacing();
     m_style->renderTimeSignatureNumber( painter, pos.x() + ts->x(), pos.y() + s->top() + hh, ts->width(), ts->beats());

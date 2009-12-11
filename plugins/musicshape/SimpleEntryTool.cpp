@@ -671,6 +671,7 @@ QWidget * SimpleEntryTool::createOptionWidget()
 void SimpleEntryTool::activeActionChanged(QAction* action)
 {
     bool oldVoiceAware = m_activeAction->isVoiceAware();
+    Q_UNUSED(oldVoiceAware);
     m_activeAction = qobject_cast<AbstractMusicAction*>(action);
     //if (m_activeAction->isVoiceAware() != oldVoiceAware) {
         m_musicshape->update();

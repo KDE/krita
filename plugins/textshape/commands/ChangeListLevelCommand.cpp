@@ -66,7 +66,7 @@ ChangeListLevelCommand::~ChangeListLevelCommand()
 
 int ChangeListLevelCommand::effectiveLevel(int level)
 {
-    int result;
+    int result = -1;
     if (m_type == IncreaseLevel) {
         result = level + coefficient;
     } else if (m_type == DecreaseLevel) {

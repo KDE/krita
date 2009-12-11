@@ -36,6 +36,7 @@ void ListsSpinBox::setCounterType(KoListStyle::Style type)
 
 int ListsSpinBox::valueFromText(const QString &text) const
 {
+    Q_UNUSED(text);
     return 0;
 }
 

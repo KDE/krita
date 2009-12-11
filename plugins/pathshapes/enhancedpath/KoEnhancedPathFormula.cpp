@@ -869,6 +869,8 @@ void KoEnhancedPathFormula::debugTokens( const TokenList &tokens )
 #ifndef NDEBUG
     for( int i = 0; i < tokens.count(); i++ )
         kDebug() << tokens[i].text();
+#else
+    Q_UNUSED(tokens);
 #endif
 }
 

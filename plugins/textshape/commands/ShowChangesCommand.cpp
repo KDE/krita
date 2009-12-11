@@ -30,9 +30,9 @@
 
 ShowChangesCommand::ShowChangesCommand(bool showChanges, TextTool *tool, QUndoCommand *parent) :
     TextCommandBase (parent),
-    m_showChanges(showChanges),
     m_tool(tool),
-    m_first(true)
+    m_first(true),
+    m_showChanges(showChanges)
 {
     if (showChanges)
       setText(i18n("Show Changes"));

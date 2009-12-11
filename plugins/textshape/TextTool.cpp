@@ -1077,6 +1077,8 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     case Qt::ImCurrentSelection:
         // The currently selected text.
         return m_textEditor->selectedText();
+    default:
+        ; // Qt 4.6 adds ImMaximumTextLength and ImAnchorPosition
     }
     return QVariant();
 }
@@ -1877,6 +1879,7 @@ void TextTool::setBackgroundColor(const KoColor &color)
 
 void TextTool::shapeAddedToDoc(KoShape *shape)
 {
+    Q_UNUSED(shape);
     // in case the new frame added is a freshly appended frame
     // allow the layouter to do some work and then optionally move the view to follow the cursor
     QTimer::singleShot(0, this, SLOT(ensureCursorVisible()));

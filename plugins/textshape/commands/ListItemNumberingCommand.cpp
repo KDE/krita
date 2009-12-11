@@ -82,5 +82,6 @@ void ListItemNumberingCommand::undo()
 
 bool ListItemNumberingCommand::mergeWith(const QUndoCommand *other)
 {
+    Q_UNUSED(other);
     return false;
 }

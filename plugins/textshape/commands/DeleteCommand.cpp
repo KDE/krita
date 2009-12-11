@@ -40,8 +40,8 @@ DeleteCommand::DeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand *pare
     TextCommandBase (parent),
     m_tool(tool),
     m_first(true),
-    m_mode(mode),
     m_undone(false),
+    m_mode(mode),
     m_removedElements()
 {
       setText(i18n("Delete"));

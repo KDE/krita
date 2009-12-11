@@ -166,7 +166,7 @@ bool TOCSourceTemplate::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 bool TOCSource::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
     KoSharedLoadingData * sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
-    KoTextSharedLoadingData * textSharedData;
+    KoTextSharedLoadingData * textSharedData = 0;
     if (sharedData) {
         textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
     }

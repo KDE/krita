@@ -50,6 +50,7 @@ inline static qreal sqr(qreal a) { return a*a; }
 
 void SelectionAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 {
+    Q_UNUSED(pos);
     /*Part* part = staff->part();
     Sheet* sheet = part->sheet();
     Bar* bar = sheet->bar(barIdx);
@@ -85,5 +86,6 @@ void SelectionAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 
 void SelectionAction::mouseMove(Staff* staff, int barIdx, const QPointF& pos)
 {
+    Q_UNUSED(pos);
     m_tool->setSelection(qMin(m_firstBar, barIdx), qMax(m_firstBar, barIdx), m_startStaff, staff);
 }

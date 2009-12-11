@@ -44,12 +44,17 @@ void ChangeTracker::setDocument(QTextDocument * document)
 
 int ChangeTracker::getChangeId(QString title, int existingChangeId)
 {
+    Q_UNUSED(title);
+    Q_UNUSED(existingChangeId);
     kDebug(32500) << "ChangeTracker::changeId :" << m_changeId;
     return m_changeId++;
 }
 
 void ChangeTracker::contentsChange(int from, int charsRemoves, int charsAdded)
 {
+    Q_UNUSED(from);
+    Q_UNUSED(charsRemoves);
+    Q_UNUSED(charsAdded);
 /*
     if (! m_enableSignals) return;
     m_enableSignals = false;

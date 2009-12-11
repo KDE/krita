@@ -184,6 +184,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool doE
         }
         // now scale factor is (available width - fixed) / scalable width;
         qreal factor = (lineWidth - fixed) / scalable;
+        Q_UNUSED(factor);
         QPointF sp = sheet->bar(lastStart)->position() - QPointF(sheet->bar(lastStart)->prefix(), 0);
         for (int j = lastStart; j < sheet->barCount(); j++) {
             //sheet->bar(j)->setPosition(sp + QPointF(sheet->bar(j)->prefix(), 0));

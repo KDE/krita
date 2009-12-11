@@ -176,7 +176,7 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
     pix.fill();
     QPainter p(&pix);
 
-    p.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+    p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
 
     double highest = (double)histogram->calculations().getHighest();
     qint32 bins = histogram->producer()->numberOfBins();

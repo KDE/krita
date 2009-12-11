@@ -249,7 +249,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     // Create the horizontal gradient label
     QPixmap hgradientpix(256, 1);
     QPainter hgp(&hgradientpix);
-    hgp.setPen(QPen::QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
+    hgp.setPen(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
     for (i = 0; i < 256; ++i) {
         hgp.setPen(QColor(i, i, i));
         hgp.drawPoint(i, 0);
@@ -259,7 +259,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     // Create the vertical gradient label
     QPixmap vgradientpix(1, 256);
     QPainter vgp(&vgradientpix);
-    vgp.setPen(QPen::QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
+    vgp.setPen(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
     for (i = 0; i < 256; ++i) {
         vgp.setPen(QColor(i, i, i));
         vgp.drawPoint(0, 255 - i);
@@ -271,7 +271,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     QPixmap pix(256, height);
     pix.fill();
     QPainter p(&pix);
-    p.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+    p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
 
     double highest = (double)histogram.calculations().getHighest();
     qint32 bins = histogram.producer()->numberOfBins();

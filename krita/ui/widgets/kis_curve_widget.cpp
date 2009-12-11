@@ -312,11 +312,11 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
             curveY = d->m_points.at(i).y();
 
             if (i == d->m_grab_point_index) {
-                p.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
+                p.setPen(QPen(Qt::red, 3, Qt::SolidLine));
                 p.drawEllipse(QRectF(curveX * wWidth - 2,
                                      wHeight - 2 - curveY * wHeight, 4, 4));
             } else {
-                p.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+                p.setPen(QPen(Qt::red, 1, Qt::SolidLine));
                 p.drawEllipse(QRectF(curveX * wWidth - 3,
                                      wHeight - 3 - curveY * wHeight, 6, 6));
             }

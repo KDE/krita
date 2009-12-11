@@ -19,24 +19,18 @@
 */
 
 #include "KoParameterShape.h"
-#include "KoPathShape_p.h"
+#include "KoParameterShape_p.h"
 
 #include <QPainter>
 #include <KDebug>
 
-class KoParameterShapePrivate : public KoPathShapePrivate
-{
-public:
-    KoParameterShapePrivate(KoParameterShape *shape)
-        : KoPathShapePrivate(shape),
-        modified(false)
-    {
-    }
-    bool modified;
-};
-
 KoParameterShape::KoParameterShape()
     : KoPathShape(*(new KoParameterShapePrivate(this)))
+{
+}
+
+KoParameterShape::KoParameterShape(KoParameterShapePrivate &dd)
+    : KoPathShape(dd)
 {
 }
 
@@ -46,11 +40,11 @@ KoParameterShape::~KoParameterShape()
 
 void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
 {
-    if (handleId >= m_handles.size()) {
+    Q_D(KoParameterShape);
+    if (handleId >= d->handles.size()) {
         kWarning(30006) << "handleId out of bounds";
         return;
     }
-    Q_D(KoParameterShape);
 
     update();
     // function to do special stuff
@@ -64,10 +58,11 @@ void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::Keybo
 
 int KoParameterShape::handleIdAt(const QRectF & rect) const
 {
+    Q_D(const KoParameterShape);
     int handle = -1;
 
-    for (int i = 0; i < m_handles.size(); ++i) {
-        if (rect.contains(m_handles.at(i))) {
+    for (int i = 0; i < d->handles.size(); ++i) {
+        if (rect.contains(d->handles.at(i))) {
             handle = i;
             break;
         }
@@ -77,11 +72,13 @@ int KoParameterShape::handleIdAt(const QRectF & rect) const
 
 QPointF KoParameterShape::handlePosition(int handleId)
 {
-    return m_handles.value(handleId);
+    Q_D(KoParameterShape);
+    return d->handles.value(handleId);
 }
 
 void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & converter, int handleRadius)
 {
+    Q_D(KoParameterShape);
     applyConversion(painter, converter);
 
     QMatrix worldMatrix = painter.worldMatrix();
@@ -92,8 +89,8 @@ void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & 
     QPolygonF poly(handleRect(QPointF(0, 0), handleRadius));
     poly = matrix.map(poly);
 
-    QList<QPointF>::const_iterator it(m_handles.constBegin());
-    for (; it != m_handles.constEnd(); ++it) {
+    QList<QPointF>::const_iterator it(d->handles.constBegin());
+    for (; it != d->handles.constEnd(); ++it) {
         QPointF moveVector = worldMatrix.map(*it);
         poly.translate(moveVector.x(), moveVector.y());
         painter.drawPolygon(poly);
@@ -103,6 +100,7 @@ void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & 
 
 void KoParameterShape::paintHandle(QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius)
 {
+    Q_D(KoParameterShape);
     applyConversion(painter, converter);
 
     QMatrix worldMatrix = painter.worldMatrix();
@@ -112,21 +110,23 @@ void KoParameterShape::paintHandle(QPainter & painter, const KoViewConverter & c
     matrix.rotate(45.0);
     QPolygonF poly(handleRect(QPointF(0, 0), handleRadius));
     poly = matrix.map(poly);
-    poly.translate(worldMatrix.map(m_handles[handleId]));
+    poly.translate(worldMatrix.map(d->handles[handleId]));
     painter.drawPolygon(poly);
 }
 
 int KoParameterShape::getHandleCount()
 {
-    return m_handles.count();
+    Q_D(KoParameterShape);
+    return d->handles.count();
 }
 
 void KoParameterShape::setSize(const QSizeF &newSize)
 {
+    Q_D(KoParameterShape);
     QMatrix matrix(resizeMatrix(newSize));
 
-    for (int i = 0; i < m_handles.size(); ++i) {
-        m_handles[i] = matrix.map(m_handles[i]);
+    for (int i = 0; i < d->handles.size(); ++i) {
+        d->handles[i] = matrix.map(d->handles[i]);
     }
 
     KoPathShape::setSize(newSize);
@@ -134,12 +134,13 @@ void KoParameterShape::setSize(const QSizeF &newSize)
 
 QPointF KoParameterShape::normalize()
 {
+    Q_D(KoParameterShape);
     QPointF offset(KoPathShape::normalize());
     QMatrix matrix;
     matrix.translate(-offset.x(), -offset.y());
 
-    for (int i = 0; i < m_handles.size(); ++i) {
-        m_handles[i] = matrix.map(m_handles[i]);
+    for (int i = 0; i < d->handles.size(); ++i) {
+        d->handles[i] = matrix.map(d->handles[i]);
     }
 
     return offset;

@@ -31,6 +31,8 @@
 /// A connection to a connection point of a shape
 typedef QPair<KoShape*, int> KoConnection;
 
+class KoConnectionShapePrivate;
+
 /// API docs go here
 class FLAKE_EXPORT KoConnectionShape : public KoParameterShape
 {
@@ -130,9 +132,7 @@ private:
 
     QList<QPointF> m_path; // TODO move to d-pointer
     bool m_hasMoved; // TODO move to d-pointer
-
-    class Private;
-    Private * const d;
+    Q_DECLARE_PRIVATE(KoConnectionShape)
 };
 
 

@@ -94,14 +94,14 @@ public:
      * @param handleRadius the radius of the handle used for painting
      */
     virtual void paintHandle(QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius);
-  
+
     /**
      * @brief Return the number of handles
      * 
      * @return the number of handles
      */
     virtual int getHandleCount();
-    
+
     /// reimplemented from KoShape
     virtual void setSize(const QSizeF &size);
 
@@ -127,6 +127,9 @@ public:
     virtual QPointF normalize();
 
 protected:
+    /// constructor
+    KoParameterShape(KoParameterShapePrivate &);
+
     /**
      * @brief Updates the internal state of a KoParameterShape.
      *
@@ -144,9 +147,6 @@ protected:
      * @param size of the shape
      */
     virtual void updatePath(const QSizeF &size) = 0;
-
-    /// the handles that the user can grab and change
-    QList<QPointF> m_handles;
 
 private:
     Q_DECLARE_PRIVATE(KoParameterShape)

@@ -401,7 +401,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     normalize();
 }
 
-bool KoConnectionShape::setConnection1(KoShape * shape1, int connectionPointIndex1)
+bool KoConnectionShape::connectFirst(KoShape * shape1, int connectionPointIndex1)
 {
     Q_D(KoConnectionShape);
     // refuse to connect to a shape that depends on us (e.g. a artistic text shape)
@@ -423,7 +423,7 @@ bool KoConnectionShape::setConnection1(KoShape * shape1, int connectionPointInde
     return true;
 }
 
-bool KoConnectionShape::setConnection2(KoShape * shape2, int connectionPointIndex2)
+bool KoConnectionShape::connectSecond(KoShape * shape2, int connectionPointIndex2)
 {
     Q_D(KoConnectionShape);
     // refuse to connect to a shape that depends on us (e.g. a artistic text shape)
@@ -445,16 +445,28 @@ bool KoConnectionShape::setConnection2(KoShape * shape2, int connectionPointInde
     return true;
 }
 
-KoConnection KoConnectionShape::connection1() const
+KoShape *KoConnectionShape::firstShape() const
 {
     Q_D(const KoConnectionShape);
-    return KoConnection(d->shape1, d->connectionPointIndex1);
+    return d->shape1;
 }
 
-KoConnection KoConnectionShape::connection2() const
+int KoConnectionShape::firstConnectionIndex() const
 {
     Q_D(const KoConnectionShape);
-    return KoConnection(d->shape2, d->connectionPointIndex2);
+    return d->connectionPointIndex1;
+}
+
+KoShape *KoConnectionShape::secondShape() const
+{
+    Q_D(const KoConnectionShape);
+    return d->shape2;
+}
+
+int KoConnectionShape::secondConnectionIndex() const
+{
+    Q_D(const KoConnectionShape);
+    return d->connectionPointIndex2;
 }
 
 void KoConnectionShape::updateConnections()
@@ -527,9 +539,9 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
             if (shape != d->shape1 && shape != d->shape2)
                 return;
             if (shape == d->shape1)
-                setConnection1(0, -1);
+                connectFirst(0, -1);
             if (shape == d->shape2)
-                setConnection2(0, -1);
+                connectSecond(0, -1);
             break;
         default:
             return;

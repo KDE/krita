@@ -29,9 +29,6 @@
 
 #define KOCONNECTIONSHAPEID "KoConnectionShape"
 
-/// A connection to a connection point of a shape
-typedef QPair<KoShape*, int> KoConnection;
-
 class KoConnectionShapePrivate;
 
 /// API docs go here
@@ -61,32 +58,50 @@ public:
     virtual void shapeChanged(ChangeType type, KoShape *shape);
 
     /**
-     * Sets the first shape the connector is connected to
+     * Sets the first shape this connector is connected to
      *
-     * Passing a null pointer as the first parameter will reset the connection.
+     * Passing a null pointer as the first parameter will sever the connection.
      *
-     * @param shape1 the shape to connect to or null to reset the connection
-     * @param connectionPointIndex1 the index of the connection point to connect to
+     * @param shape the shape to connect to or null to reset the connection
+     * @param connectionPointIndex the index of the connection point to connect to
      * @return true if connection could be established, otherwise false
      */
-    bool setConnection1(KoShape * shape1, int connectionPointIndex);
+    bool connectFirst(KoShape *shape, int connectionPointIndex);
 
     /**
     * Sets the second shape the connector is connected to
     *
-    * Passing a null pointer as the first parameter will reset the connection.
+    * Passing a null pointer as the first parameter will sever the connection.
     *
-    * @param shape2 the shape to connect to or null to reset the connection
-    * @param connectionPointIndex2 the index of the connection point to connect to
+    * @param shape the shape to connect to or null to reset the connection
+    * @param connectionPointIndex the index of the connection point to connect to
     * @return true if connection could be established, otherwise false
     */
-    bool setConnection2(KoShape * shape2, int connectionPointIndex);
+    bool connectSecond(KoShape *shape, int connectionPointIndex);
 
-    /// Returns the connection to the first shape
-    KoConnection connection1() const;
+    /**
+     * Return the first shape this connection is attached to, or null if none.
+     */
+    KoShape *firstShape() const;
 
-    /// Returns the connection to the second shape
-    KoConnection connection2() const;
+    /**
+     * Return the connection-index in the first shape we are connected to.
+     * In case we are not connected to a first shape the return value is undefined.
+     * @see firstShape(), KoShape::connectionPoints()
+     */
+    int firstConnectionIndex() const;
+
+    /**
+     * Return the second shape this connection is attached to, or null if none.
+     */
+    KoShape *secondShape() const;
+
+    /**
+     * Return the connection-index in the second shape we are connected to.
+     * In case we are not connected to a second shape the return value is undefined.
+     * @see firstShape(), KoShape::connectionPoints()
+     */
+    int secondConnectionIndex() const;
 
     /// Updates connections to shapes
     void updateConnections();

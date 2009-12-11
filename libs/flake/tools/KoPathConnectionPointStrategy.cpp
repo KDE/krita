@@ -42,10 +42,13 @@ KoPathConnectionPointStrategy::KoPathConnectionPointStrategy(KoPathTool *tool, K
         , m_handleId(handleId)
         , m_startPoint(m_connectionShape->shapeToDocument(m_connectionShape->handlePosition(handleId)))
 {
-    if (handleId == 0)
-        m_oldConnection = m_connectionShape->connection1();
-    else
-        m_oldConnection = m_connectionShape->connection2();
+    if (handleId == 0) {
+        m_oldConnectionShape = m_connectionShape->firstShape();
+        m_oldConnectionIndex = m_connectionShape->firstConnectionIndex();
+    } else {
+        m_oldConnectionShape = m_connectionShape->secondShape();
+        m_oldConnectionIndex = m_connectionShape->secondConnectionIndex();
+    }
 }
 
 KoPathConnectionPointStrategy::~KoPathConnectionPointStrategy()
@@ -57,17 +60,18 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
     const qreal MAX_DISTANCE = 20.0; // TODO make user definable
     const qreal MAX_DISTANCE_SQR = MAX_DISTANCE * MAX_DISTANCE;
 
-    m_newConnection = KoConnection(0, -1);
+    m_newConnectionShape = 0;
+    m_newConnectionIndex = -1;
 
     QRectF roi(mouseLocation - QPointF(MAX_DISTANCE, MAX_DISTANCE), QSizeF(2*MAX_DISTANCE, 2*MAX_DISTANCE));
     QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt(roi, true);
     if (shapes.count() < 2) {
         // we are not near any other shape, so remove the corresponding connection
         if (m_handleId == 0)
-            m_connectionShape->setConnection1(0, -1);
+            m_connectionShape->connectFirst(0, -1);
         else
-            m_connectionShape->setConnection2(0, -1);
-        
+            m_connectionShape->connectSecond(0, -1);
+
         KoParameterChangeStrategy::handleMouseMove(mouseLocation, modifiers);
     } else {
         qreal minimalDistance = DBL_MAX;
@@ -123,11 +127,12 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
             nearestPoint = mouseLocation;
             nearestPointIndex = -1;
         }
-        m_newConnection = KoConnection(nearestShape, nearestPointIndex);
+        m_newConnectionShape = nearestShape;
+        m_newConnectionIndex = nearestPointIndex;
         if (m_handleId == 0)
-            m_connectionShape->setConnection1(m_newConnection.first, m_newConnection.second);
+            m_connectionShape->connectFirst(nearestShape, nearestPointIndex);
         else
-            m_connectionShape->setConnection2(m_newConnection.first, m_newConnection.second);
+            m_connectionShape->connectSecond(nearestShape, nearestPointIndex);
         KoParameterChangeStrategy::handleMouseMove(nearestPoint, modifiers);
     }
 }
@@ -140,19 +145,19 @@ void KoPathConnectionPointStrategy::finishInteraction(Qt::KeyboardModifiers modi
 QUndoCommand* KoPathConnectionPointStrategy::createCommand()
 {
     // check if we connect to a shape and if the connection point is already present
-    if (m_newConnection.first && m_newConnection.second == -1) {
+    if (m_newConnectionShape && m_newConnectionIndex == -1) {
         // map handle position into document coordinates
         QPointF p = m_connectionShape->shapeToDocument(m_connectionShape->handlePosition(m_handleId));
         // and add as connection point in shape coordinates
-        m_newConnection.first->addConnectionPoint(m_newConnection.first->absoluteTransformation(0).inverted().map(p));
-        m_newConnection.second = m_newConnection.first->connectionPoints().count() - 1;
+        m_newConnectionShape->addConnectionPoint(m_newConnectionShape->absoluteTransformation(0).inverted().map(p));
+        m_newConnectionIndex = m_newConnectionShape->connectionPoints().count() - 1;
     }
 
     // set the connection corresponding to the handle we are working on
     if (m_handleId == 0)
-        m_connectionShape->setConnection1(m_newConnection.first, m_newConnection.second);
+        m_connectionShape->connectFirst(m_newConnectionShape, m_newConnectionIndex);
     else
-        m_connectionShape->setConnection2(m_newConnection.first, m_newConnection.second);
+        m_connectionShape->connectSecond(m_newConnectionShape, m_newConnectionIndex);
 
     // TODO create a connection command
     return KoParameterChangeStrategy::createCommand();

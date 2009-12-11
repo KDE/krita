@@ -162,14 +162,14 @@ void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
                 m_shape1 = tempShape;
                 m_firstHandleIndex = getConnectionIndex(tempShape, m_mouse);
                 
-                m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
+                m_connectionShape->connectFirst(m_shape1, m_firstHandleIndex);
                 m_isTied->first = true;
             // If the shape selected is not the background
             // We take care if the working tempShape is not another connection shape
             }else if(tempShape != 0 && !connectionShapeTest) {
                 m_shape1 = tempShape;
                 m_firstHandleIndex = 0;
-                m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
+                m_connectionShape->connectFirst(m_shape1, m_firstHandleIndex);
                 m_isTied->first = false;
             } else {
                 m_shape1 = 0;
@@ -186,22 +186,22 @@ void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
     // Second click
     
         if(m_shape1 != 0)
-            m_connectionShape->setConnection1(m_shape1, m_firstHandleIndex);
+            m_connectionShape->connectFirst(m_shape1, m_firstHandleIndex);
         // If the shape selected is not the background
         if(tempShape != 0) {
             if(isInRoi()) {
                 // If everything is good, we connect the line to the shape
-                m_connectionShape->setConnection2(tempShape, getConnectionIndex(tempShape, m_mouse));
+                m_connectionShape->connectSecond(tempShape, getConnectionIndex(tempShape, m_mouse));
                 m_isTied->second = true;
             } else {
-                m_connectionShape->setConnection2(tempShape, 0);
+                m_connectionShape->connectSecond(tempShape, 0);
             }
             
         } else {
         // If the cursor points the background
             if(isInRoi()) {
                 // If everything is good, we connect the line to the shape
-                m_connectionShape->setConnection2(tempShape, getConnectionIndex(tempShape, m_mouse));
+                m_connectionShape->connectSecond(tempShape, getConnectionIndex(tempShape, m_mouse));
                 m_isTied->second = true;
             } else {
                 m_connectionShape->moveHandle(m_connectionShape->handles().count(), event->point);
@@ -234,15 +234,15 @@ void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
         if(m_connectionShape != 0) {
             if(isInRoi()) {
                 // Make the connection to the specific point
-                m_connectionShape->setConnection2(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
+                m_connectionShape->connectSecond(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
                 m_connectionShape->updateConnections();
             } else if(m_shapeOn != 0) {
                 // Make the connection to the first handle of the shape
-                m_connectionShape->setConnection2(m_shapeOn, 0);
+                m_connectionShape->connectSecond(m_shapeOn, 0);
                 updateConnections();
             } else {
                 // Unmake the connection (detach it)
-                m_connectionShape->setConnection2(0, 0);
+                m_connectionShape->connectSecond(0, 0);
                 m_connectionShape->moveHandle(1, m_mouse);
 
                 updateConnections();
@@ -253,9 +253,9 @@ void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
     if(m_activeHandle != -1 && m_lastConnectionShapeOn != 0) {
         // We have to know what handle is actually moving
         if(m_activeHandle == 0){
-            m_lastConnectionShapeOn->setConnection1(0, 0);
+            m_lastConnectionShapeOn->connectFirst(0, 0);
         }else if(m_activeHandle == 1){
-            m_lastConnectionShapeOn->setConnection2(0, 0);
+            m_lastConnectionShapeOn->connectSecond(0, 0);
         }
         // We try to connect as usual, even if we are following the line
         if(!tempShape && isInRoi()) {
@@ -263,18 +263,18 @@ void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
                 // We have to know what handle is actually moving
                 // Connection with the specific handle
                 if(m_activeHandle == 0){
-                    m_lastConnectionShapeOn->setConnection1(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
+                    m_lastConnectionShapeOn->connectFirst(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
                 }else if(m_activeHandle == 1){
-                    m_lastConnectionShapeOn->setConnection2(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
+                    m_lastConnectionShapeOn->connectSecond(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
                 }
             }
         }else if(m_shapeOn != 0 ){
             // We have to know what handle is actually moving
             // Connection with the first handle of the shape
             if(m_activeHandle == 0){
-                m_lastConnectionShapeOn->setConnection1(m_shapeOn, 0);
+                m_lastConnectionShapeOn->connectFirst(m_shapeOn, 0);
             }else if(m_activeHandle == 1){
-                m_lastConnectionShapeOn->setConnection2(m_shapeOn, 0);
+                m_lastConnectionShapeOn->connectSecond(m_shapeOn, 0);
             }
         }else{
             m_lastConnectionShapeOn->moveHandle(m_activeHandle, m_mouse);
@@ -338,32 +338,29 @@ void KoConnectionTool::updateConnections()
     if(m_connectionShape == 0){
         return;
     }
-    KoConnection connection1 = m_connectionShape->connection1();
-    KoConnection connection2 = m_connectionShape->connection2();
-
     // If two shapes are connected
-    if(connection1.first != 0 && connection2.first != 0) {
-        KoShape* shape1 = connection1.first;
-        KoShape* shape2 = connection2.first;
+    if (m_connectionShape->firstShape() && m_connectionShape->secondShape()) {
+        KoShape *shape1 = m_connectionShape->firstShape();
+        KoShape *shape2 = m_connectionShape->secondShape();
         if(!m_isTied->first){
-            m_connectionShape->setConnection1(shape1 , getConnectionIndex(shape1, shape2->absolutePosition()));
+            m_connectionShape->connectFirst(shape1 , getConnectionIndex(shape1, shape2->absolutePosition()));
         }
         if(!m_isTied->second){
-            m_connectionShape->setConnection2(shape2 , getConnectionIndex(shape2, shape1->absolutePosition()));
+            m_connectionShape->connectSecond(shape2 , getConnectionIndex(shape2, shape1->absolutePosition()));
         }
     // If only the first item of the connection is a shape
-    } else if(connection1.first != 0) {
-        KoShape* shape = connection1.first;
+    } else if(m_connectionShape->firstShape()) {
+        KoShape *shape = m_connectionShape->firstShape();
         QPointF point = m_connectionShape->handlePosition(m_connectionShape->handles().count()) + m_connectionShape->absolutePosition();
         if(!m_isTied->first) {
-            m_connectionShape->setConnection1(shape , getConnectionIndex(shape, point));
+            m_connectionShape->connectFirst(shape , getConnectionIndex(shape, point));
         }
     // If only the second item of the connection is a shape
-    } else if(connection2.first != 0) {
-        KoShape* shape = connection2.first;
+    } else if(m_connectionShape->secondShape()) {
+        KoShape* shape = m_connectionShape->secondShape();
         QPointF point = m_connectionShape->handlePosition(0) + m_connectionShape->absolutePosition();
         if(!m_isTied->second)
-            m_connectionShape->setConnection2(shape , getConnectionIndex(shape, point));
+            m_connectionShape->connectSecond(shape , getConnectionIndex(shape, point));
     }
     // The connection is now done, so update and put everything to 0
     m_connectionShape->updateConnections();

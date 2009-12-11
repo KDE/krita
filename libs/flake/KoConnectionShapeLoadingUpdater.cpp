@@ -34,10 +34,9 @@ KoConnectionShapeLoadingUpdater::~KoConnectionShapeLoadingUpdater()
 void KoConnectionShapeLoadingUpdater::update(KoShape * shape)
 {
     if (m_position == First) {
-        m_connectionShape->setConnection1(shape, m_connectionShape->connection1().second);
-    }
-    else {
-        m_connectionShape->setConnection2(shape, m_connectionShape->connection2().second);
+        m_connectionShape->connectFirst(shape, m_connectionShape->firstConnectionIndex());
+    } else {
+        m_connectionShape->connectSecond(shape, m_connectionShape->secondConnectionIndex());
     }
     m_connectionShape->updateConnections();
 }

@@ -99,6 +99,8 @@ TypeInfo::TypeInfo(TypeInfo::PropertyType _propertyType) : d(new Private)
     case RationalType:
         d->parser = new RationalParser;
         break;
+    default:
+        ;
     }
 }
 

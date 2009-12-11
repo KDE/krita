@@ -244,6 +244,7 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
 
 const TypeInfo* Schema::Private::parseAttType(QDomElement& elt, bool ignoreStructure)
 {
+    Q_UNUSED(ignoreStructure);
     if (!elt.hasAttribute("type")) {
         return 0;
     }
@@ -265,6 +266,7 @@ const TypeInfo* Schema::Private::parseAttType(QDomElement& elt, bool ignoreStruc
 
 const TypeInfo* Schema::Private::parseEmbType(QDomElement& elt, bool ignoreStructure)
 {
+    Q_UNUSED(ignoreStructure);
     dbgImage << "Parse embbedded type for " << elt.tagName();
     QDomNode n = elt.firstChild();
     while (!n.isNull()) {

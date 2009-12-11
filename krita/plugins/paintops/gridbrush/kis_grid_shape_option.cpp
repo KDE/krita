@@ -52,12 +52,14 @@ int KisGridShapeOption::shape() const {
 // TODO
 void KisGridShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
+    Q_UNUSED(setting);
 //     setting->setProperty( "Grid/diameter", diameter() );
 }
 
 // TODO
 void KisGridShapeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
+    Q_UNUSED(setting);
 /*    m_options->diameterSpinBox->setValue( setting->getInt("Grid/diameter") );
     m_options->coverageSpin->setValue( setting->getDouble("Grid/coverage") );
     m_options->jitterSizeBox->setChecked( setting->getBool("Grid/jitterSize") );*/

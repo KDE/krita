@@ -149,6 +149,7 @@ void KisTileDataStore::freeTileData(KisTileData *td)
 
 void KisTileDataStore::ensureTileDataLoaded(const KisTileData *td)
 {
+    Q_UNUSED(td);
     /* Swapping isn't implemented yet */
     Q_ASSERT(td->m_state == KisTileData::NORMAL);
 }

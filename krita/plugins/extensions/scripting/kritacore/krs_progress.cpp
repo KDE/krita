@@ -92,6 +92,7 @@ void Progress::incProgress()
 
 void Progress::setProgressStage(const QString& stage, uint progress)
 {
+    Q_UNUSED(stage);
     if (m_progressTotalSteps < 1)
         return;
 

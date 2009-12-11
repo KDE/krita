@@ -247,7 +247,7 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
 bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
-    KisFilterConfiguration* filter;
+    KisFilterConfiguration* filter = 0;
     if (node->inherits("KisFilterMask")) {
         filter = static_cast<KisFilterMask*>(node)->filter();
     } else if (node->inherits("KisAdjustmentLayer")) {

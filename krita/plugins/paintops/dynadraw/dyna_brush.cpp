@@ -211,6 +211,7 @@ void DynaBrush::drawLines(KisPainter &painter,
                           int count
                          )
 {
+    Q_UNUSED(prev);
     QPointF p1, p2;
     qreal offsetX, offsetY;
 

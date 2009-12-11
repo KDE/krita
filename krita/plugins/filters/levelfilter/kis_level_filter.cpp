@@ -79,8 +79,6 @@ KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* 
 
     Q_ASSERT(config);
 
-    KoColorTransformation * adjustment = 0;
-
     int blackvalue = config->getInt("blackvalue");
     int whitevalue = config->getInt("whitevalue", 255);
     double gammavalue = config->getDouble("gammavalue", 1.0);

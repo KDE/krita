@@ -36,6 +36,7 @@ BrushShape::~BrushShape()
 
 void BrushShape::fromDistance(int radius, float scale)
 {
+    Q_UNUSED(scale);
     m_width = m_height = radius * 2 + 1;
     qreal distance = 0.0;
     qreal maxDist = sqrt(radius * radius);

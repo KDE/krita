@@ -69,6 +69,7 @@ KisToolEllipse::~KisToolEllipse()
 
 void KisToolEllipse::paint(QPainter& gc, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
     Q_ASSERT(currentImage());
     if (m_dragging)
         paintEllipse(gc, QRect());

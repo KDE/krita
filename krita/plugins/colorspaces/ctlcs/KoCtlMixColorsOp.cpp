@@ -50,7 +50,7 @@ void KoCtlMixColorsOp::mixColors(const quint8 * const* colors, const qint16 *wei
         }
         alphaTimesWeight *= *weights;
 
-        for (int i = 0; i < m_colorSpace->channelCount(); i++) {
+        for (uint i = 0; i < m_colorSpace->channelCount(); i++) {
             if (i != alphaPos) {
                 m_accumulators[i]->mix(color, alphaTimesWeight);
             }
@@ -63,7 +63,7 @@ void KoCtlMixColorsOp::mixColors(const quint8 * const* colors, const qint16 *wei
 
     if (totalAlpha > 0) {
         double inv = 1.0 / totalAlpha;
-        for (int i = 0; i < m_colorSpace->channelCount(); i++) {
+        for (uint i = 0; i < m_colorSpace->channelCount(); i++) {
             if (i != alphaPos) {
                 m_accumulators[i]->affect(dst, inv);
             }

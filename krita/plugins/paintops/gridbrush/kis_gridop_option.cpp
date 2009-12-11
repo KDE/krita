@@ -90,11 +90,13 @@ bool KisGridOpOption::pressureDivision() const
 
 void KisGridOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
+    Q_UNUSED(setting);
 //     setting->setProperty( "Grid/jitterMovement", jitterMovement() );
 }
 
 void KisGridOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
+    Q_UNUSED(setting);
 //     m_options->diameterSpinBox->setValue( setting->getInt("Grid/diameter") );
 }
 

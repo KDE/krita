@@ -43,6 +43,7 @@ public:
     KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace* cs, const GTLCore::PixelDescription& _pd);
     virtual ~KoCTLCompositeOp();
 public:
+    using KoCompositeOp::composite;
     virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
                            const quint8 *srcRowStart, qint32 srcRowStride,
                            const quint8 *maskRowStart, qint32 maskRowStride,

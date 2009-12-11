@@ -50,6 +50,7 @@ QVariant MyBrushResourcesListModel::data( const QModelIndex & index, int role) c
 
 bool MyBrushResourcesListModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
+    Q_UNUSED(value);
     if (role == Qt::UserRole) {
         emit dataChanged(index, index);
         return true;
@@ -60,6 +61,7 @@ bool MyBrushResourcesListModel::setData(const QModelIndex& index, const QVariant
 
 int MyBrushResourcesListModel::rowCount(const QModelIndex& parent) const
 {
+    Q_UNUSED(parent);
     return m_factory->brushes().size();
 }
 

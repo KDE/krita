@@ -59,7 +59,7 @@ void KisMaskGenerator::init()
 
 void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
-
+    Q_UNUSED(doc);
     e.setAttribute("autobrush_radius", d->m_radius);
     e.setAttribute("autobrush_ratio", d->m_ratio);
     e.setAttribute("autobrush_hfade", d->m_fh * 2); // 'cause in init we divide it again

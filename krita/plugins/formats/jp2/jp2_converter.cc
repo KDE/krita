@@ -80,6 +80,7 @@ warning_callback(const char *msg, void *client_data)
 void
 info_callback(const char *msg, void *client_data)
 {
+    Q_UNUSED(client_data);
     fprintf(stdout, "[INFO] %s", msg);
 }
 

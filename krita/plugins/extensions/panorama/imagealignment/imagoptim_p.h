@@ -56,7 +56,7 @@ public:
         QList<_TFunction_> functions_;
 
         Q_ASSERT(2 * m_functions.size() == values_.size());
-        for (uint i = 0; i < m_functions.size(); i++) {
+        for (int i = 0; i < m_functions.size(); i++) {
             if (fabs(values_[ 2 * i + 1]) < threshold && fabs(values_[ 2 * i ]) < threshold) {
                 dbgPlugins << "Adding function " << i << " " << fabs(values_[ 2 * i ]) << " " << fabs(values_[ 2 * i + 1]);
                 functions_.push_back(m_functions[i]);

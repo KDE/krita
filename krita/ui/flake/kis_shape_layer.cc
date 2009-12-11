@@ -64,7 +64,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoSelection.h>
-#include <KoShapeMoveCommand.h>s
+#include <KoShapeMoveCommand.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -152,6 +152,9 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
     KisShapeLayerShapePaste paste(this, m_d->controller);
     bool success = paste.paste(KoOdf::Text, mimeData);
     Q_ASSERT(success);
+    if (!success) {
+        warnUI << "Could not paste shape layer";
+    }
 
 }
 

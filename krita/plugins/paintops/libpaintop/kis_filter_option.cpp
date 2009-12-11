@@ -170,6 +170,7 @@ void KisFilterOption::updateFilterConfigWidget()
 
 void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
+    Q_UNUSED(setting);
 #ifdef __GNUC__
 #warning "KisFilterOption::writeOptionSetting: write the filter option setting"
 #endif
@@ -177,6 +178,7 @@ void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
 
 void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
+    Q_UNUSED(setting);
 #ifdef __GNUC__
 #warning "KisFilterOption::readOptionSetting: restore the filter option setting"
 #endif

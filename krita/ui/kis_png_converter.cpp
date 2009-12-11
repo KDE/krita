@@ -997,11 +997,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         }
 #endif
     }
-
+#if 0 // Unimplemented?
     // Save resolution
     int unit_type;
     png_uint_32 x_resolution, y_resolution;
-    
+#endif
     png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(image->xRes()) * 100.0, CM_TO_POINT(image->yRes()) * 100.0, PNG_RESOLUTION_METER); // It is the "invert" macro because we convert from pointer-per-inchs to points
     
     // Save the information to the file

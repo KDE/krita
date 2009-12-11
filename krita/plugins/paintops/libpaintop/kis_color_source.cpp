@@ -25,10 +25,12 @@
 
 KisColorSource::~KisColorSource() { }
 
+const KoColor black;
+
 const KoColor& KisColorSource::uniformColor() const
 {
     qFatal("Not an uniform color.");
-    return KoColor();
+    return black;
 }
 
 

@@ -19,6 +19,7 @@
 
 #include "kis_image_alignment.h"
 
+#include <QUndoCommand>
 
 #include <Eigen/Core>
 

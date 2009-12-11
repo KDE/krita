@@ -74,6 +74,7 @@ KisXCFImport::~KisXCFImport()
 
 KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const QByteArray& to)
 {
+    Q_UNUSED(from);
     dbgFile << "Importing using XCFImport!";
 
     if (to != "application/x-krita")
@@ -208,7 +209,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         dbgFile << i << " name = " << xcflayer.name << " opacity = " << xcflayer.opacity;
         dbgFile << ppVar(xcflayer.dim.width) << ppVar(xcflayer.dim.height) << ppVar(xcflayer.dim.tilesx) << ppVar(xcflayer.dim.tilesy) << ppVar(xcflayer.dim.ntiles) << ppVar(xcflayer.dim.c.t) << ppVar(xcflayer.dim.c.l) << ppVar(xcflayer.dim.c.r) << ppVar(xcflayer.dim.c.b);
 
-        bool isRgbA;
+        bool isRgbA = false;
         // Select the color space
         const KoColorSpace* colorSpace = 0;
         switch (xcflayer.type) {

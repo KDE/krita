@@ -144,6 +144,8 @@ QString KoCtlColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32
 
 void KoCtlColorSpace::normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const
 {
+    Q_UNUSED(pixel);
+    Q_UNUSED(channels);
 }
 
 void KoCtlColorSpace::fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const
@@ -203,6 +205,7 @@ KoColorProfile * KoCtlColorSpace::profile()
 
 KoColorTransformation *KoCtlColorSpace::createBrightnessContrastAdjustment(const quint16 *transferValues) const
 {
+    Q_UNUSED(transferValues);
     return 0;
 }
 
@@ -213,11 +216,15 @@ KoColorTransformation *KoCtlColorSpace::createDesaturateAdjustment() const
 
 KoColorTransformation *KoCtlColorSpace::createPerChannelAdjustment(const quint16 * const* transferValues) const
 {
+    Q_UNUSED(transferValues);
     return 0;
 }
 
 KoColorTransformation *KoCtlColorSpace::createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const
 {
+    Q_UNUSED(shade);
+    Q_UNUSED(compensate);
+    Q_UNUSED(compensation);
     return 0;
 }
 
@@ -228,6 +235,8 @@ KoColorTransformation *KoCtlColorSpace::createInvertTransformation() const
 
 quint8 KoCtlColorSpace::difference(const quint8* src1, const quint8* src2) const
 {
+    Q_UNUSED(src1);
+    Q_UNUSED(src2);
     return 0;
 }
 
@@ -255,6 +264,7 @@ void KoCtlColorSpace::toQColor(const quint8 *src, QColor *c, const KoColorProfil
 
 quint8 KoCtlColorSpace::intensity8(const quint8 * src) const
 {
+    Q_UNUSED(src);
     return 0;
 }
 

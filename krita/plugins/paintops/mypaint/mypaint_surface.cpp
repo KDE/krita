@@ -56,9 +56,9 @@ bool MyPaintSurface::draw_dab (float x, float y,
     if (radius < 0.1) return false;
     if (hardness == 0.0) return false; // infintly small point, rest transparent
 
-    float r_fringe = radius + 1;
-    float rr = radius*radius;
-    float one_over_radius2 = 1.0/rr;
+    //float r_fringe = radius + 1;
+    //float rr = radius*radius;
+    //float one_over_radius2 = 1.0/rr;
 
     m_qcolor.setRgbF(color_r, color_g, color_b, opaque);
     m_color.fromQColor(m_qcolor);
@@ -72,5 +72,12 @@ void MyPaintSurface::get_color (float x, float y,
                                 float radius,
                                 float* color_r, float* color_g, float* color_b, float* color_a )
 {
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(radius);
+    Q_UNUSED(color_r);
+    Q_UNUSED(color_g);
+    Q_UNUSED(color_b);
+    Q_UNUSED(color_a);
     // XXX: calculate the average color inside this anti-aliased circle...
 }

@@ -27,6 +27,7 @@ K_EXPORT_COMPONENT_FACTORY(kritadodgeburn, DodgeBurnPluginFactory("krita"))
 
 DodgeBurnPlugin::DodgeBurnPlugin(QObject *parent, const QStringList &)
 {
+    Q_UNUSED(parent);
     KisFilterRegistry::instance()->add(new KisFilterDodgeBurn("dodge", "Dodge", i18n("Dodge")));
     KisFilterRegistry::instance()->add(new KisFilterDodgeBurn("burn", "Burn", i18n("Burn")));
 }

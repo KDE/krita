@@ -171,11 +171,13 @@ void MixerCanvas::slotClear()
 
 void MixerCanvas::slotResourceChanged(int key, const QVariant &value)
 {
-
+    Q_UNUSED(key);
+    Q_UNUSED(value);
 }
 
 KoColor MixerCanvas::currentColorAt(QPoint pos)
 {
+    Q_UNUSED(pos);
     return KoColor();
 }
 

@@ -100,6 +100,7 @@ void KisToolGrid::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolGrid::mouseReleaseEvent(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
     m_dragging = false;
 }
 

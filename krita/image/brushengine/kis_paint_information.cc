@@ -145,7 +145,9 @@ double KisPaintInformation::tangentialPressure() const
 
 QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
 {
-#ifndef NDEBUG
+#ifdef NDEBUG
+    Q_UNUSED(info);
+#else
     dbg.nospace() << "Position: " << info.pos();
     dbg.nospace() << ", Pressure: " << info.pressure();
     dbg.nospace() << ", X Tilt: " << info.xTilt();

@@ -84,6 +84,7 @@ void KisDynamicSensor::toXML(QDomDocument&, QDomElement& e) const
 
 void KisDynamicSensor::fromXML(const QDomElement& e)
 {
+    Q_UNUSED(e);
     Q_ASSERT(e.attribute("id", "") == id());
 
 }

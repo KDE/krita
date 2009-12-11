@@ -116,7 +116,7 @@ void compute_fft(zomplex *array, int width, int height)
 {
     int countre = 0;
     int countim = 0;
-    int dummy;
+
     float *data = (float *) malloc((2 * width * height + 1) * sizeof(float));
     for (int p = 0; p < ((width)*(height)); p++) {
         data[(2*p)+1] = (*(array + p)).re;

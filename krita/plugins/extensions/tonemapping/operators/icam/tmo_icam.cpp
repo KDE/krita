@@ -26,8 +26,6 @@ typedef double  COLOR[3];       /* red, green, blue (or X,Y,Z) */
 //--- end of defines.h
 
 
-static int       width, height;
-
 static COLOR   **rgb_image;
 static COLOR   **white_point;
 static double  **low_pass;
@@ -222,6 +220,7 @@ void build_image_fft(double **image, zomplex *image_fft)
 
 void convolve_filter(double **image, int width, int height, zomplex* image_fft, zomplex* filter_fft, zomplex *convolution_fft, double **convolved_image)
 {
+    Q_UNUSED(image);
     int     i, x, y;
 
     for (i = 0; i < width * height; i++) {
@@ -528,6 +527,7 @@ void tonemap_image()
 }
 void deallocate_memory(int width, int height)
 {
+    Q_UNUSED(width);
     int y;
 
 
@@ -565,6 +565,7 @@ void print_parameter_settings()
 void tmo_icam(const pfs::Array2D *Y, pfs::Array2D *L,
               float variance, float variance2, float D, float prescaling, float percentile, bool indep)
 {
+    Q_UNUSED(indep);
     int x, y;
 
     ::variance = variance;

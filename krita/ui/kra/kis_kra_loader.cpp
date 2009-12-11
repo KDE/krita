@@ -358,6 +358,8 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
 KisNode* KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageWSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
+    Q_UNUSED(element);
+
     QString attr;
     KisPaintLayer* layer;
 
@@ -386,6 +388,8 @@ KisNode* KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageWSP i
 KisNode* KisKraLoader::loadGroupLayer(const KoXmlElement& element, KisImageWSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
+    Q_UNUSED(element);
+    Q_UNUSED(cs);
     QString attr;
     KisGroupLayer* layer;
 
@@ -400,7 +404,7 @@ KisNode* KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImage
         const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     // XXX: do something with filterversion?
-
+    Q_UNUSED(cs);
     QString attr;
     KisAdjustmentLayer* layer;
     QString filtername;
@@ -433,6 +437,10 @@ KisNode* KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImage
 KisNode* KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageWSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
+
+    Q_UNUSED(element);
+    Q_UNUSED(cs);
+
     QString attr;
 
     KisShapeLayer* layer = new KisShapeLayer(0, m_d->document->shapeController(), image, name, opacity);
@@ -446,6 +454,7 @@ KisNode* KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageWSP i
 KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageWSP image,
         const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
+    Q_UNUSED(cs);
     // XXX: do something with generator version?
     KisGeneratorLayer* layer;
     QString generatorname = element.attribute(GENERATOR_NAME);
@@ -477,6 +486,8 @@ KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageW
 KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageWSP image,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
+    Q_UNUSED(cs);
+  
     KisCloneLayer* layer = new KisCloneLayer(0, image, name, opacity);
 
     if ((element.attribute(CLONE_FROM)).isNull()) {
@@ -527,6 +538,7 @@ KisNode* KisKraLoader::loadFilterMask(const KoXmlElement& element)
 
 KisNode* KisKraLoader::loadTransparencyMask(const KoXmlElement& element)
 {
+    Q_UNUSED(element);
     KisTransparencyMask* mask = new KisTransparencyMask();
     Q_CHECK_PTR(mask);
 
@@ -559,6 +571,7 @@ KisNode* KisKraLoader::loadTransformationMask(const KoXmlElement& element)
 
 KisNode* KisKraLoader::loadSelectionMask(KisImageWSP image, const KoXmlElement& element)
 {
+    Q_UNUSED(element);
     KisSelectionMask* mask = new KisSelectionMask(image);
     Q_CHECK_PTR(mask);
 

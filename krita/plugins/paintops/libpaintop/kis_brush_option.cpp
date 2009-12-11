@@ -72,6 +72,7 @@ void KisBrushOption::setImage(KisImageWSP image)
 
 void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
 {
+    Q_UNUSED(settings);
     /*
         KisBrushSP brush = m_brushSelectionWidget->brush();
         QDomDocument d;
@@ -83,6 +84,7 @@ void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* settings) co
 
 void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
+    Q_UNUSED(setting);
     /*
         QString brushDefinition = setting->getString("brush_definition");
         QDomDocument d;

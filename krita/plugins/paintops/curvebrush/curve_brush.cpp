@@ -235,10 +235,10 @@ void CurveBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     // Initialization
     if (!m_image) return;
 
-    int w = m_image->width();
-    int h = m_image->height();
+    //int w = m_image->width();
+    //int h = m_image->height();
 
-    qreal maxDist = sqrt(w * w + h * h);
+    //qreal maxDist = sqrt(w * w + h * h);
 
     qreal x1 = pi1.pos().x();
     qreal y1 = pi1.pos().y();
@@ -248,7 +248,7 @@ void CurveBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
 
     qreal dx = x2 - x1;
     qreal dy = y2 - y1;
-    qreal angle = atan2(dy, dx);
+    //qreal angle = atan2(dy, dx);
     qreal distance = sqrt(dx * dx + dy * dy);
 
     KisRandomAccessor accessor = dab->createRandomAccessor((int) x1, (int) y1);
@@ -269,9 +269,9 @@ void CurveBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     qreal randX, randY;
     randX = ((x1 + x2) / 2.0);
     randY = ((y1 + y2) / 2.0);
-    qreal dNorm = distance / maxDist;
+    //qreal dNorm = distance / maxDist;
 
-    qreal clen;
+    qreal clen = 0.0;
 
     /*
         dbgPlugins << "mode:" << m_mode;
@@ -317,7 +317,7 @@ void CurveBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     normalizePoint(p2);
 
     qreal paintX, paintY;
-    int moveX, moveY;
+    //int moveX, moveY;
 
     for (int i = 0 ; i <= steps; i++) {
         result = getQuadraticBezier(p0, p1, p2, (qreal) i / (qreal) steps);

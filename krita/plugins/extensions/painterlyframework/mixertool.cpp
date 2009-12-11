@@ -103,11 +103,13 @@ void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void MixerTool::mousePressEvent(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
     m_d->mixing = true;
 }
 
 void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
     if (m_d->mixing) {
 
     }

@@ -94,8 +94,8 @@ private:
     int m_head;
     int pointCount;
 
-    int m_incr;
     int m_counter;
+    int m_incr;
 
     int m_interval;
     int m_mode;

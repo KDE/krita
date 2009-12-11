@@ -412,6 +412,7 @@ void SprayBrush::paintEllipse(KisPainter* painter, qreal x, qreal y, int a, int 
 
 void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, int width, int height, qreal angle, int steps)
 {
+    Q_UNUSED(steps);
     QPainterPath path;
     QTransform transform;
 

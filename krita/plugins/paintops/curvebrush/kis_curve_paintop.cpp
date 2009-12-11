@@ -57,6 +57,7 @@ void KisCurvePaintOp::paintAt(const KisPaintInformation& info)
 
 double KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
 {
+    Q_UNUSED(savedDist);
     if (!painter()) return 0;
     m_dev = painter()->device();
     if (!m_dev) return 0;

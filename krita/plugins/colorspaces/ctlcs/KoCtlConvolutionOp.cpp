@@ -49,7 +49,7 @@ void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qint3
             if (m_colorSpace->alpha(*colors) == 0) {
                 totalWeightTransparent += weight;
             } else {
-                for (uint i = 0; i < channelsNb; i++) {
+                for (int i = 0; i < channelsNb; i++) {
                     m_accumulators[i]->mix(colors[i], weight);
                 }
             }
@@ -60,7 +60,7 @@ void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qint3
     bool allChannels = channelFlags.isEmpty();
     Q_ASSERT(allChannels || channelFlags.size() == channelsNb);
     if (totalWeightTransparent == 0) {
-        for (uint i = 0; i < channelsNb; i++) {
+        for (int i = 0; i < channelsNb; i++) {
             if ((allChannels and i != (uint)alphaPos)
                     or(not allChannels and channelFlags.testBit(i))) {
                 m_accumulators[i]->affect(dst, factor, offset);
@@ -69,7 +69,7 @@ void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qint3
     } else if (totalWeightTransparent != totalWeight) {
         if (totalWeight == factor) {
             qint64 a = (totalWeight - totalWeightTransparent);
-            for (uint i = 0; i < channelsNb; i++) {
+            for (int i = 0; i < channelsNb; i++) {
                 if (allChannels || channelFlags.testBit(i)) {
                     if (i == (uint)alphaPos) {
                         m_accumulators[i]->affect(dst, totalWeight, offset);
@@ -80,7 +80,7 @@ void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qint3
             }
         } else {
             qreal a = totalWeight / (factor * (totalWeight - totalWeightTransparent));     // use qreal as it easily saturate
-            for (uint i = 0; i < channelsNb; i++) {
+            for (int i = 0; i < channelsNb; i++) {
                 if (allChannels || channelFlags.testBit(i)) {
                     if (i == (uint)alphaPos) {
                         m_accumulators[i]->affect(dst, factor, offset);

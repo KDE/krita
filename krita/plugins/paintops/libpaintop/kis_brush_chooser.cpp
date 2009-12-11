@@ -137,6 +137,7 @@ KisBrushChooser::~KisBrushChooser()
 
 void KisBrushChooser::setBrush(KisBrushSP _brush)
 {
+    Q_UNUSED(_brush);
     /*
         KisGbrBrush* brush = static_cast<KisGbrBrush*>(_brush.data());
 

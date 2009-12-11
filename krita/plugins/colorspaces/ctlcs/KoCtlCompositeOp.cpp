@@ -77,6 +77,11 @@ void KoCTLCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                                  quint8 opacity,
                                  const QBitArray & channelFlags) const
 {
+    Q_UNUSED(channelFlags);
+#ifdef __GNUC__
+#warning "Use channel flags, especially for alpha locking!"
+#endif
+
     Q_ASSERT(m_withMaskProgram);
     Q_ASSERT(m_withoutMaskProgram);
     while (rows > 0) {

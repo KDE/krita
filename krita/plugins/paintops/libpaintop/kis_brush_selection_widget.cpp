@@ -125,6 +125,7 @@ void KisBrushSelectionWidget::setPredefinedBrushes(bool on)
 
 void KisBrushSelectionWidget::setCustomBrush(bool on)
 {
+    Q_UNUSED(on);
 //    m_customBrushWidget->setVisible( on );
 }
 
@@ -135,6 +136,7 @@ void KisBrushSelectionWidget::setTextBrush(bool on)
 
 void KisBrushSelectionWidget::setImage(KisImageWSP image)
 {
+    Q_UNUSED(image);
 //    m_customBrushWidget->setImage(image);
 }
 

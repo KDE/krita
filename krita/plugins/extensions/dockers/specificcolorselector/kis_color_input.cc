@@ -177,8 +177,6 @@ void KisFloatColorInput::update()
     KoColor min = *m_color;
     KoColor max = *m_color;
     quint8* data = m_color->data() + m_channelInfo->pos();
-    quint8* dataMin = min.data() + m_channelInfo->pos();
-    quint8* dataMax = max.data() + m_channelInfo->pos();
     switch (m_channelInfo->channelValueType()) {
 #ifdef HAVE_OPENEXR
     case KoChannelInfo::FLOAT16:

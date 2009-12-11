@@ -2,6 +2,7 @@
  * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,7 +23,7 @@
 #ifndef KO_CONNECTION_SHAPE_H
 #define KO_CONNECTION_SHAPE_H
 
-#include <KoParameterShape.h>
+#include "KoParameterShape.h"
 
 #include "flake_export.h"
 
@@ -44,11 +45,8 @@ public:
         Curve     ///< a single curved line between connected shapes
     };
 
-    explicit KoConnectionShape();
+    KoConnectionShape();
     virtual ~KoConnectionShape();
-
-    // reimplemented
-    virtual void paint(QPainter& painter, const KoViewConverter& converter);
 
     // reimplemented
     virtual void saveOdf(KoShapeSavingContext & context) const;
@@ -57,12 +55,10 @@ public:
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
 
     // reimplemented
-    inline QString pathShapeId() const {
-        return KOCONNECTIONSHAPEID;
-    }
+    virtual QString pathShapeId() const;
 
-    // reimplemented
-    virtual bool hitTest(const QPointF &position) const;
+    /// reimplemented
+    virtual void shapeChanged(ChangeType type, KoShape *shape);
 
     /**
      * Sets the first shape the connector is connected to
@@ -108,30 +104,7 @@ protected:
     /// reimplemented
     void updatePath(const QSizeF &size);
 
-    /// Returns if given handle is connected to a shape
-    bool handleConnected(int handleId) const;
-
-    /// Returns escape direction of given handle
-    QPointF escapeDirection(int handleId) const;
-
-    /// Checks if rays from given points into given directions intersect
-    bool intersects(const QPointF &p1, const QPointF &d1, const QPointF &p2, const QPointF &d2, QPointF &isect);
-
-    /// Returns perpendicular direction from given point p1 and direction d1 toward point p2
-    QPointF perpendicularDirection(const QPointF &p1, const QPointF &d1, const QPointF &p2);
-
-    /// reimplemented
-    virtual void shapeChanged(ChangeType type, KoShape * shape);
-
-    /// Populate the path list by a normal way
-    void normalPath( const qreal MinimumEscapeLength );
-
 private:
-    qreal scalarProd(const QPointF &v1, const QPointF &v2);
-    qreal crossProd(const QPointF &v1, const QPointF &v2);
-
-    QList<QPointF> m_path; // TODO move to d-pointer
-    bool m_hasMoved; // TODO move to d-pointer
     Q_DECLARE_PRIVATE(KoConnectionShape)
 };
 

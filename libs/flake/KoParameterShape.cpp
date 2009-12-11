@@ -114,12 +114,6 @@ void KoParameterShape::paintHandle(QPainter & painter, const KoViewConverter & c
     painter.drawPolygon(poly);
 }
 
-int KoParameterShape::getHandleCount()
-{
-    Q_D(KoParameterShape);
-    return d->handles.count();
-}
-
 void KoParameterShape::setSize(const QSizeF &newSize)
 {
     Q_D(KoParameterShape);
@@ -157,4 +151,16 @@ void KoParameterShape::setModified(bool modified)
     Q_D(KoParameterShape);
     d->modified = modified;
     update();
+}
+
+QList<QPointF> KoParameterShape::handles() const
+{
+    Q_D(const KoParameterShape);
+    return d->handles;
+}
+
+void KoParameterShape::setHandles(const QList<QPointF> &handles)
+{
+    Q_D(KoParameterShape);
+    d->handles = handles;
 }

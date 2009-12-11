@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,8 +32,10 @@ KoRectangleShape::KoRectangleShape()
 : m_cornerRadiusX( 0 )
 , m_cornerRadiusY( 0 )
 {
-    m_handles.push_back( QPointF( 100, 0 ) );
-    m_handles.push_back( QPointF( 100, 0 ) );
+    QList<QPointF> handles;
+    handles.push_back(QPointF(100, 0));
+    handles.push_back(QPointF(100, 0));
+    setHandles(handles);
     QSizeF size( 100, 100 );
     updatePath( size );
 }
@@ -137,8 +140,10 @@ void KoRectangleShape::moveHandleAction( int handleId, const QPointF & point, Qt
 
 void KoRectangleShape::updateHandles()
 {
-    m_handles[0] = QPointF( size().width() - m_cornerRadiusX/100.0 * 0.5 * size().width(), 0.0 );
-    m_handles[1] = QPointF( size().width(), m_cornerRadiusY/100.0 * 0.5 * size().height() );
+    QList<QPointF> handles;
+    handles[0] = QPointF( size().width() - m_cornerRadiusX/100.0 * 0.5 * size().width(), 0.0 );
+    handles[1] = QPointF( size().width(), m_cornerRadiusY/100.0 * 0.5 * size().height() );
+    setHandles(handles);
 }
 
 void KoRectangleShape::updatePath( const QSizeF &size )

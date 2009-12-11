@@ -95,13 +95,6 @@ public:
      */
     virtual void paintHandle(QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius);
 
-    /**
-     * @brief Return the number of handles
-     * 
-     * @return the number of handles
-     */
-    virtual int getHandleCount();
-
     /// reimplemented from KoShape
     virtual void setSize(const QSizeF &size);
 
@@ -125,6 +118,9 @@ public:
     void setModified(bool modified);
 
     virtual QPointF normalize();
+
+    QList<QPointF> handles() const;
+    void setHandles(const QList<QPointF> &handles);
 
 protected:
     /// constructor

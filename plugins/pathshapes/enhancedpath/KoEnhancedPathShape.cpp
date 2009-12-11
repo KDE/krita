@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -46,7 +47,7 @@ void KoEnhancedPathShape::reset()
     m_commands.clear();
     qDeleteAll( m_enhancedHandles );
     m_enhancedHandles.clear();
-    m_handles.clear();
+    setHandles(QList<QPointF>());
     qDeleteAll( m_formulae );
     m_formulae.clear();
     qDeleteAll( m_parameters );
@@ -102,18 +103,21 @@ QPointF KoEnhancedPathShape::normalize()
 
 void KoEnhancedPathShape::evaluateHandles()
 {
-    if( m_handles.size() != m_enhancedHandles.size() )
+    if (handles().size() != m_enhancedHandles.size())
     {
-        m_handles.clear();
+        QList<QPointF> handles;
         uint handleCount = m_enhancedHandles.size();
         for( uint i = 0; i < handleCount; ++i )
-            m_handles.append( viewboxToShape( m_enhancedHandles[i]->position() ) );
+            handles.append( viewboxToShape( m_enhancedHandles[i]->position() ) );
+        setHandles(handles);
     }
     else
     {
         uint handleCount = m_enhancedHandles.size();
+        QList<QPointF> handles = this->handles();
         for( uint i = 0; i < handleCount; ++i )
-            m_handles[i] = viewboxToShape( m_enhancedHandles[i]->position() );
+            handles[i] = viewboxToShape(m_enhancedHandles[i]->position());
+        setHandles(handles);
     }
 }
 

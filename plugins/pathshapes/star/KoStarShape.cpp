@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2009 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -120,9 +121,10 @@ void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::Key
 {
     if( modifiers & Qt::ShiftModifier )
     {
-        QPointF tangentVector = point - m_handles[handleId];
+        QPointF handle = handles()[handleId];
+        QPointF tangentVector = point - handle;
         qreal distance = sqrt( tangentVector.x()*tangentVector.x() + tangentVector.y()*tangentVector.y() );
-        QPointF radialVector = m_handles[handleId] - m_center;
+        QPointF radialVector = handle - m_center;
         // cross product to determine in which direction the user is dragging
         qreal moveDirection = radialVector.x()*tangentVector.y() - radialVector.y()*tangentVector.x();
         // make the roundness stick to zero if distance is under a certain value
@@ -211,10 +213,11 @@ void KoStarShape::updatePath( const QSizeF &size )
 
     normalize();
 
-    m_handles.clear();
-    m_handles.push_back( points.at(tip)->point() );
+    QList<QPointF> handles;
+    handles.push_back( points.at(tip)->point() );
     if( ! m_convex )
-        m_handles.push_back( points.at(base)->point() );
+        handles.push_back( points.at(base)->point() );
+    setHandles(handles);
 
     m_center = computeCenter();
 }

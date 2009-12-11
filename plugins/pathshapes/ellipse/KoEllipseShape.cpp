@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,9 +36,11 @@ KoEllipseShape::KoEllipseShape()
 , m_kindAngle( M_PI )
 , m_type( Arc )
 {
-    m_handles.push_back( QPointF( 100, 50 ) );
-    m_handles.push_back( QPointF( 100, 50 ) );
-    m_handles.push_back( QPointF( 0, 50 ) );
+    QList<QPointF> handles;
+    handles.push_back( QPointF( 100, 50 ) );
+    handles.push_back( QPointF( 100, 50 ) );
+    handles.push_back( QPointF( 0, 50 ) );
+    setHandles(handles);
     QSizeF size( 100, 100 );
     m_radii = QPointF( size.width() / 2.0, size.height() / 2.0 );
     m_center = QPointF( m_radii.x(), m_radii.y() );
@@ -178,18 +181,19 @@ void KoEllipseShape::moveHandleAction( int handleId, const QPointF & point, Qt::
             angle += M_PI;
     }
 
+    QList<QPointF> handles = this->handles();
     switch ( handleId )
     {
         case 0:
             p = QPointF( m_center + QPointF( cos( angle ) * m_radii.x(), -sin( angle ) * m_radii.y() ) );
             m_startAngle = angle * 180.0 / M_PI;
-            m_handles[handleId] = p;
+            handles[handleId] = p;
             updateKindHandle();
             break;
         case 1:
             p = QPointF( m_center + QPointF( cos( angle ) * m_radii.x(), -sin( angle ) * m_radii.y() ) );
             m_endAngle = angle * 180.0 / M_PI;
-            m_handles[handleId] = p;
+            handles[handleId] = p;
             updateKindHandle();
             break;
         case 2:
@@ -197,7 +201,7 @@ void KoEllipseShape::moveHandleAction( int handleId, const QPointF & point, Qt::
             QList<QPointF> kindHandlePositions;
             kindHandlePositions.push_back( QPointF( m_center + QPointF( cos( m_kindAngle ) * m_radii.x(), -sin( m_kindAngle ) * m_radii.y() ) ) );
             kindHandlePositions.push_back( m_center );
-            kindHandlePositions.push_back( ( m_handles[0] + m_handles[1] ) / 2.0 );
+            kindHandlePositions.push_back((handles[0] + handles[1]) / 2.0);
 
             QPointF diff = m_center * 2.0;
             int handlePos = 0;
@@ -210,16 +214,17 @@ void KoEllipseShape::moveHandleAction( int handleId, const QPointF & point, Qt::
                     handlePos = i;
                 }
             }
-            m_handles[handleId] = kindHandlePositions[handlePos];
+            handles[handleId] = kindHandlePositions[handlePos];
             m_type = KoEllipseType( handlePos );
         } break;
     }
+    setHandles(handles);
 }
 
 void KoEllipseShape::updatePath( const QSizeF &size )
 {
-    Q_UNUSED( size );
-    QPointF startpoint( m_handles[0] );
+    Q_UNUSED(size);
+    QPointF startpoint(handles()[0]);
 
     QPointF curvePoints[12];
 
@@ -311,26 +316,30 @@ void KoEllipseShape::updateKindHandle()
    {
        m_kindAngle += M_PI;
    }
+    QList<QPointF> handles = this->handles();
    switch ( m_type )
    {
        case Arc:
-           m_handles[2] = m_center + QPointF( cos( m_kindAngle ) * m_radii.x(), -sin( m_kindAngle ) * m_radii.y() );
+           handles[2] = m_center + QPointF( cos( m_kindAngle ) * m_radii.x(), -sin( m_kindAngle ) * m_radii.y() );
            break;
        case Pie:
-           m_handles[2] = m_center;
+           handles[2] = m_center;
            break;
        case Chord:
-           m_handles[2] = ( m_handles[0] + m_handles[1] ) / 2.0;
+           handles[2] = (handles[0] + handles[1]) / 2.0;
            break;
    }
+    setHandles(handles);
 }
 
 void KoEllipseShape::updateAngleHandles()
 {
     qreal startRadian = m_startAngle * M_PI / 180.0;
     qreal endRadian = m_endAngle * M_PI / 180.0;
-    m_handles[0] = m_center + QPointF( cos(startRadian) * m_radii.x(), -sin(startRadian) * m_radii.y());
-    m_handles[1] = m_center + QPointF( cos(endRadian) * m_radii.x(), -sin(endRadian) * m_radii.y());
+    QList<QPointF> handles = this->handles();
+    handles[0] = m_center + QPointF(cos(startRadian) * m_radii.x(), -sin(startRadian) * m_radii.y());
+    handles[1] = m_center + QPointF(cos(endRadian) * m_radii.x(), -sin(endRadian) * m_radii.y());
+    setHandles(handles);
 }
 
 qreal KoEllipseShape::sweepAngle() const

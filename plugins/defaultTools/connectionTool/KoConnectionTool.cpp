@@ -204,7 +204,7 @@ void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
                 m_connectionShape->setConnection2(tempShape, getConnectionIndex(tempShape, m_mouse));
                 m_isTied->second = true;
             } else {
-                m_connectionShape->moveHandle(m_connectionShape->getHandleCount(), event->point);
+                m_connectionShape->moveHandle(m_connectionShape->handles().count(), event->point);
             }
         }
         // Will find the nearest point and update the connection shape
@@ -354,7 +354,7 @@ void KoConnectionTool::updateConnections()
     // If only the first item of the connection is a shape
     } else if(connection1.first != 0) {
         KoShape* shape = connection1.first;
-        QPointF point = m_connectionShape->handlePosition(m_connectionShape->getHandleCount()) + m_connectionShape->absolutePosition();
+        QPointF point = m_connectionShape->handlePosition(m_connectionShape->handles().count()) + m_connectionShape->absolutePosition();
         if(!m_isTied->first) {
             m_connectionShape->setConnection1(shape , getConnectionIndex(shape, point));
         }

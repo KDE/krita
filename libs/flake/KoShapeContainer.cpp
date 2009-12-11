@@ -50,6 +50,11 @@ KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
     d->children = model;
 }
 
+KoShapeContainer::KoShapeContainer(KoShapeContainerPrivate &dd)
+    : KoShape(dd)
+{
+}
+
 KoShapeContainer::~KoShapeContainer()
 {
     Q_D(KoShapeContainer);

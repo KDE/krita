@@ -504,19 +504,18 @@ void KoConnectionShape::updateConnections()
     }
 }
 
-KoConnectionShape::Type KoConnectionShape::connectionType() const
+KoConnectionShape::Type KoConnectionShape::type() const
 {
     Q_D(const KoConnectionShape);
     return d->connectionType;
 }
 
-void KoConnectionShape::setConnectionType(Type connectionType)
+void KoConnectionShape::setType(Type connectionType)
 {
     Q_D(KoConnectionShape);
     d->connectionType = connectionType;
     updatePath(size());
 }
-
 
 void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
 {

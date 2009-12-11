@@ -30,7 +30,7 @@ KoConnectionShapeTypeCommand::KoConnectionShapeTypeCommand(
 
     setText(i18n("Change Connection"));
 
-    m_oldType = m_connection->connectionType();
+    m_oldType = m_connection->type();
 }
 
 void KoConnectionShapeTypeCommand::redo()
@@ -40,7 +40,7 @@ void KoConnectionShapeTypeCommand::redo()
     m_connection->update();
 
     if (m_oldType != m_newType)
-        m_connection->setConnectionType(m_newType);
+        m_connection->setType(m_newType);
 
     m_connection->update();
 }
@@ -52,7 +52,7 @@ void KoConnectionShapeTypeCommand::undo()
     m_connection->update();
 
     if (m_oldType != m_newType)
-        m_connection->setConnectionType(m_oldType);
+        m_connection->setType(m_oldType);
 
     m_connection->update();
 }

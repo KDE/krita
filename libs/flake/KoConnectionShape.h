@@ -107,10 +107,10 @@ public:
     void updateConnections();
 
     /// Returns connection type
-    Type connectionType() const;
+    Type type() const;
 
     /// Sets the connection type
-    void setConnectionType(Type connectionType);
+    void setType(Type connectionType);
 
 protected:
     /// reimplemented

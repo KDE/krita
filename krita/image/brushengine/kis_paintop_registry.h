@@ -53,7 +53,7 @@ public:
      * Create and return a paintop based on the given preset. A preset defines
      * a paintop, a settings object and possible a brush tip.
      */
-    KisPaintOp * paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageWSP image) const;
+    KisPaintOp* paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageWSP image) const;
 
     /**
      * Create and return an (abstracted) configuration widget

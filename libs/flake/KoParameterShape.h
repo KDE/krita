@@ -47,7 +47,7 @@ class FLAKE_EXPORT KoParameterShape : public KoPathShape
 {
 public:
     KoParameterShape();
-    ~KoParameterShape();
+    virtual ~KoParameterShape();
 
     /**
      * @brief Move handle to point
@@ -59,7 +59,7 @@ public:
      * @param point the point to move the handle to in document coordinates
      * @param modifiers the keyboard modifiers used during moving the handle
      */
-    virtual void moveHandle(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    void moveHandle(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
     /**
      * @brief Get the id of the handle within the given rect
@@ -67,14 +67,14 @@ public:
      * @param rect the rect in shape coordinates
      * @return id of the found handle or -1 if none was found
      */
-    virtual int handleIdAt(const QRectF & rect) const;
+    int handleIdAt(const QRectF & rect) const;
 
     /**
      * @brief Get the handle position
      *
      * @param handleId the id of the handle for which to get the position in shape coordinates
      */
-    virtual QPointF handlePosition(int handleId);
+    QPointF handlePosition(int handleId);
 
     /**
      * @brief Paint the handles
@@ -83,7 +83,7 @@ public:
      * @param converter the view converter for applying the actual zoom
      * @param handleRadius the radius of the handles used for painting
      */
-    virtual void paintHandles(QPainter & painter, const KoViewConverter & converter, int handleRadius);
+    void paintHandles(QPainter & painter, const KoViewConverter & converter, int handleRadius);
 
     /**
      * @brief Paint the given handles
@@ -93,7 +93,7 @@ public:
      * @param handleId of the handle which should be repainted
      * @param handleRadius the radius of the handle used for painting
      */
-    virtual void paintHandle(QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius);
+    void paintHandle(QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius);
 
     /// reimplemented from KoShape
     virtual void setSize(const QSizeF &size);
@@ -119,10 +119,22 @@ public:
 
     virtual QPointF normalize();
 
-    QList<QPointF> handles() const;
-    void setHandles(const QList<QPointF> &handles);
+    /// return the number of handles set on the shape
+    int handleCount() const;
 
 protected:
+    /**
+     * Get the handle positions for manipulating the parameters.
+     * @see setHandles, handleCount()
+     */
+    QList<QPointF> handles() const;
+
+    /**
+     * Set the new handle positions which are used by the user to manipulate the parameters.
+     * @see handles(), handleCount()
+     */
+    void setHandles(const QList<QPointF> &handles);
+
     /// constructor
     KoParameterShape(KoParameterShapePrivate &);
 

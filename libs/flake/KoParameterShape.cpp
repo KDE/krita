@@ -164,3 +164,9 @@ void KoParameterShape::setHandles(const QList<QPointF> &handles)
     Q_D(KoParameterShape);
     d->handles = handles;
 }
+
+int KoParameterShape::handleCount() const
+{
+    Q_D(const KoParameterShape);
+    return d->handles.count();
+}

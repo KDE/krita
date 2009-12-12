@@ -56,6 +56,7 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
         m_d(new Private())
 {
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
+    m_d->paintDevice->setDefaultPixel(const_cast<KisGroupLayer*>(&rhs)->m_d->paintDevice->defaultPixel());
 }
 
 KisGroupLayer::~KisGroupLayer()
@@ -84,19 +85,26 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
     if (!colorSpace)
         colorSpace = image()->colorSpace();
 
-    if (!m_d->paintDevice ||
-            !(*m_d->paintDevice->colorSpace() == *colorSpace)) {
+    if (!m_d->paintDevice) {
 
         m_d->paintDevice = new KisPaintDevice(colorSpace);
+    }
+    else if(!(*m_d->paintDevice->colorSpace() == *colorSpace)) {
+
+        KisPaintDeviceSP dev = new KisPaintDevice(colorSpace);
+        quint8* defaultPixel = colorSpace->allocPixelBuffer(1);
+        colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1);
+        dev->setDefaultPixel(defaultPixel);
+        delete[] defaultPixel;
+        m_d->paintDevice = dev;
     } else {
+
         m_d->paintDevice->clear();
     }
 }
 
 KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
 {
-    KisPaintDeviceSP retval;
-
     if (parent().isNull() && childCount() == 1) {
         const KisLayer *child = dynamic_cast<KisLayer*>(firstChild().data());
 
@@ -107,11 +115,11 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
                 child->opacity() == OPACITY_OPAQUE &&
                 *child->projection()->colorSpace() == *colorSpace()) {
 
-            retval = child->projection();
+            return child->projection();
         }
     }
 
-    return retval;
+    return 0;
 }
 
 KisPaintDeviceSP KisGroupLayer::original() const

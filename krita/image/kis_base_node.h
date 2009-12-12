@@ -160,7 +160,7 @@ public:
      * Return a the properties of this base node (locked, visible etc,
      * with the right icons for their representation and their state.
      *
-     * Subclasses can extent this list with new properties, like
+     * Subclasses can extend this list with new properties, like
      * opacity for layers or visualized for masks.
      *
      * The order of properties is, unfortunately, for now, important,

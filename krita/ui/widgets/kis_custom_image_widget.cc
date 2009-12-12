@@ -42,17 +42,18 @@
 #include <KoUnit.h>
 #include <KoColorModelStandardIds.h>
 
+#include <kis_fill_painter.h>
+#include <kis_image.h>
+#include <kis_layer.h>
+#include <kis_group_layer.h>
+#include <kis_paint_layer.h>
+#include <kis_paint_device.h>
+#include <kis_painter.h>
+
 #include "kis_clipboard.h"
 #include "kis_doc2.h"
-
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
-#include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_paint_device.h"
-#include "kis_painter.h"
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, bool clipAvailable, double resolution, const QString & defColorSpaceName, const QString & imageName)
         : WdgNewImage(parent)
@@ -175,16 +176,26 @@ void KisCustomImageWidget::buttonClicked()
     double resolution;
     resolution =  doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
-    // XXX: Added explicit casts to get rid of warning
     width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
     height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
-    m_doc->newImage(txtName->text(), width, height, cs, KoColor(qc, cs), txtDescription->toPlainText(), resolution);
+
+    KoColor bgColor(qc, cs);
+    m_doc->newImage(txtName->text(), width, height, cs, bgColor, txtDescription->toPlainText(), resolution);
 
     KisImageWSP image = m_doc->image();
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
         if (layer) {
             layer->setOpacity(backgroundOpacity());
+        }
+        // Hack: with a semi-transparent background color, the projection isn't composited right if we just set the default pixel
+        if (layer && backgroundOpacity() < OPACITY_OPAQUE) {
+            KisFillPainter painter;
+            painter.begin(layer->paintDevice());
+            painter.beginTransaction("");
+            painter.fillRect(0, 0, width, height, bgColor, OPACITY_OPAQUE);
+            painter.end();
+
         }
         if (chkFromClipboard->isChecked()) {
             KisPaintDeviceSP clip = KisClipboard::instance()->clip();

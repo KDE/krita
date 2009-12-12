@@ -48,6 +48,7 @@
 #include <KoApplication.h>
 #include <KoCanvasBase.h>
 #include <colorprofiles/KoIccColorProfile.h>
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoID.h>
@@ -66,7 +67,6 @@
 // Krita Image
 #include <flake/kis_shape_layer.h>
 #include <kis_debug.h>
-#include <kis_fill_painter.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -75,6 +75,7 @@
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_selection.h>
+#include <kis_fill_painter.h>
 
 // Local
 #include "kis_factory2.h"
@@ -356,7 +357,7 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
 
 
 
-KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace)
+KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace* colorspace)
 {
     KoColor backgroundColor(Qt::white, colorspace);
 
@@ -370,14 +371,16 @@ KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, 
     return image();
 }
 
-bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &description, const double imageResolution)
+bool KisDoc2::newImage(const QString& name,
+                       qint32 width, qint32 height,
+                       const KoColorSpace* cs, const KoColor &bgColor,
+                       const QString &description, const double imageResolution)
 {
     if (!init())
         return false;
 
     KisConfig cfg;
 
-    quint8 opacity = OPACITY_OPAQUE;//bgColor.alpha();
     KisImageWSP image;
     KisPaintLayerSP layer;
 
@@ -388,7 +391,6 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     setUndo(false);
 
     image = new KisImage(m_d->undoAdapter, width, height, cs, name);
-
     Q_CHECK_PTR(image);
     image->lock();
 
@@ -398,17 +400,13 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     documentInfo()->setAboutInfo("title", name);
     documentInfo()->setAboutInfo("comments", description);
 
-    layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE, cs);
+    layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacity(), cs);
     Q_CHECK_PTR(layer);
 
-    KisFillPainter painter;
-    painter.begin(layer->paintDevice());
-    painter.beginTransaction("");
-    painter.fillRect(0, 0, width, height, bgColor, opacity);
-    painter.end();
-
+    layer->paintDevice()->setDefaultPixel(bgColor.data());
     image->addNode(layer.data(), image->rootLayer().data());
 
+    image->unlock();
     setCurrentImage(image);
 
     cfg.defImageWidth(width);
@@ -416,7 +414,6 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     cfg.defImageResolution(imageResolution);
 
     setUndo(true);
-    image->unlock();
 
     qApp->restoreOverrideCursor();
     return true;

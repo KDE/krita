@@ -405,6 +405,7 @@ public:
     KisLayerSP flattenLayer(KisLayerSP layer);
 
 
+    /// @return the exact bounds of the image in pixel coordinates.
     QRect bounds() const;
 
     /// use if the layers have changed _completely_ (eg. when flattening)

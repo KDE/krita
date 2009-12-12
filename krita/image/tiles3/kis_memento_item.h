@@ -158,16 +158,22 @@ public:
     }
 
     void debugPrintInfo() {
-        printf("------\n");
-        printf("Memento item:\t\t0x%X (0x%X)\n",
-               (quintptr)this, (quintptr) m_tileData);
-        printf("   status:\t(%d,%d) %c%c\n", m_col, m_row,
-               (m_type == CHANGED) ? 'W' : 'D', m_commitedFlag ? 'C' : '-');
-
-        printf("   parent:\t0x%X (0x%X)\n",
-               (quintptr)m_parent.data(), m_parent ? (quintptr)m_parent->m_tileData : 0);
-        printf("   next:\t0x%X (0x%X)\n",
-               (quintptr)m_next.data(), m_next ? (quintptr)m_next->m_tileData : 0);
+        QString s = QString("------\n"
+                   "Memento item:\t\t0x%1 (0x%2)\n"
+                   "   status:\t(%3,%4) %5%6\n"
+                   "   parent:\t0x%7 (0x%8)\n"
+                   "   next:\t0x%9 (0x%10)\n")
+                .arg((quintptr)this)
+                .arg((quintptr)m_tileData)
+                .arg(m_col)
+                .arg(m_row)
+                .arg((m_type == CHANGED) ? 'W' : 'D')
+                .arg(m_commitedFlag ? 'C' : '-')
+                .arg((quintptr)m_parent.data())
+                .arg(m_parent ? (quintptr)m_parent->m_tileData : 0)
+                .arg((quintptr)m_next.data())
+                .arg(m_next ? (quintptr)m_next->m_tileData : 0);
+        qDebug() << s;
     }
 
 protected:

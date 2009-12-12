@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>412</width>
-    <height>334</height>
+    <width>459</width>
+    <height>365</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -441,6 +441,21 @@
    <header>KoAspectButton.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>intPixelWidth</tabstop>
+  <tabstop>doublePercentageWidth</tabstop>
+  <tabstop>intPixelHeight</tabstop>
+  <tabstop>doublePercentageHeight</tabstop>
+  <tabstop>cmbWidthPixelUnit</tabstop>
+  <tabstop>cmbHeightPixelUnit</tabstop>
+  <tabstop>doublePhysicalWidth</tabstop>
+  <tabstop>doublePhysicalHeight</tabstop>
+  <tabstop>cmbWidthUnit</tabstop>
+  <tabstop>cmbHeightUnit</tabstop>
+  <tabstop>chkAffectResolution</tabstop>
+  <tabstop>doubleResolution</tabstop>
+  <tabstop>cmbInteractor</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

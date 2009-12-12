@@ -48,11 +48,13 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_aspectRatio = m_width / m_height;
 
     m_page = new WdgImageSize(this);
+
     m_page->layout()->setMargin(0);
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("image_size");
 
     m_page->intPixelWidth->setValue(width);
+    m_page->intPixelWidth->setFocus();
     m_page->intPixelHeight->setValue(height);
 
     m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());

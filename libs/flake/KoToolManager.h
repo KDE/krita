@@ -259,17 +259,15 @@ private:
     KoToolManager operator=(const KoToolManager&);
     bool eventFilter(QObject *object, QEvent *event);
 
-private slots:
-    void toolActivated(ToolHelper *tool);
-    void detachCanvas(KoCanvasController *controller);
-    void attachCanvas(KoCanvasController *controller);
-    void movedFocus(QWidget *from, QWidget *to);
-    void updateCursor(const QCursor &cursor);
-    void switchBackRequested();
-    void selectionChanged(QList<KoShape*> shapes);
-    void currentLayerChanged(const KoShapeLayer *layer);
+    Q_PRIVATE_SLOT(d, void toolActivated(ToolHelper *tool))
+    Q_PRIVATE_SLOT(d, void detachCanvas(KoCanvasController *controller))
+    Q_PRIVATE_SLOT(d, void attachCanvas(KoCanvasController *controller))
+    Q_PRIVATE_SLOT(d, void movedFocus(QWidget *from, QWidget *to))
+    Q_PRIVATE_SLOT(d, void updateCursor(const QCursor &cursor))
+    Q_PRIVATE_SLOT(d, void switchBackRequested())
+    Q_PRIVATE_SLOT(d, void selectionChanged(QList<KoShape*> shapes))
+    Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))
 
-private:
     class Private;
     Private *const d;
 };

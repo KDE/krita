@@ -145,6 +145,17 @@ void KoShapePrivate::updateBorder()
                 inner.width() + insets.left + insets.right, insets.bottom));
 }
 
+void KoShapePrivate::addShapeManager(KoShapeManager *manager)
+{
+    shapeManagers.insert(manager);
+}
+
+void KoShapePrivate::removeShapeManager(KoShapeManager *manager)
+{
+    shapeManagers.remove(manager);
+}
+
+
 // ======== KoShape
 KoShape::KoShape()
         : d_ptr(new KoShapePrivate(this))
@@ -799,18 +810,6 @@ bool KoShape::collisionDetection()
 {
     Q_D(KoShape);
     return d->detectCollision;
-}
-
-void KoShape::addShapeManager(KoShapeManager * manager)
-{
-    Q_D(KoShape);
-    d->shapeManagers.insert(manager);
-}
-
-void KoShape::removeShapeManager(KoShapeManager * manager)
-{
-    Q_D(KoShape);
-    d->shapeManagers.remove(manager);
 }
 
 KoShapeBorderModel *KoShape::border() const
@@ -1468,4 +1467,10 @@ void KoShape::setFilterEffectStack(KoFilterEffectStack * filterEffectStack)
         d->filterEffectStack->addUser();
     }
     notifyChanged();
+}
+
+KoShapePrivate *KoShape::priv()
+{
+    Q_D(KoShape);
+    return d;
 }

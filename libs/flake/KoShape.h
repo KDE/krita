@@ -355,13 +355,13 @@ public:
      * @param transparency the new shape level transparency
      */
     void setTransparency(qreal transparency);
-    
+
     /**
      * Returns the shape level transparency.
      * @param recursive when true takes the parents transparency into account
      */
     qreal transparency(bool recursive=false) const;
-    
+
     /**
      * Retrieve the z-coordinate of this shape.
      * The zIndex property is used to determine which shape lies on top of other objects.
@@ -827,6 +827,26 @@ public:
     /// Sets the new filter effect stack, removing the old one
     void setFilterEffectStack(KoFilterEffectStack *filterEffectStack);
 
+    /**
+     * Set the property collision detection.
+     * Setting this to true will result in calls to shapeChanged() with the CollisionDetected
+     * parameter whenever either this or another shape is moved/rotated etc and intersects this shape.
+     * @param detect if true detect collisions.
+     */
+    void setCollisionDetection(bool detect);
+
+    /**
+     * get the property collision detection.
+     * @returns true if collision detection is on.
+     */
+    bool collisionDetection();
+
+    /**
+     * \internal
+     * Returns the private object for use withing the flake lib
+     */
+    KoShapePrivate *priv();
+
 protected:
     /// constructor
     KoShape(KoShapePrivate &);
@@ -908,7 +928,6 @@ protected:
 
     /* ** end loading saving */
 
-
     /**
      * A hook that allows inheriting classes to do something after a KoShape property changed
      * This is called whenever the shape, position rotation or scale properties were altered.
@@ -916,30 +935,12 @@ protected:
      */
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 
-    /**
-     * Set the property collision detection.
-     * Setting this to true will result in calls to shapeChanged() with the CollisionDetected
-     * parameter whenever either this or another shape is moved/rotated etc and intersects this shape.
-     * @param detect if true detect collisions.
-     */
-    void setCollisionDetection(bool detect);
-
-    /**
-     * get the property collision detection.
-     * @returns true if collision detection is on.
-     */
-    bool collisionDetection();
-
     /// return the current matrix that contains the rotation/scale/position of this shape
     QMatrix matrix() const;
 
     KoShapePrivate *d_ptr;
 
 private:
-    friend class KoShapeManager;
-    void addShapeManager(KoShapeManager *manager);
-    void removeShapeManager(KoShapeManager *manager);
-
     Q_DECLARE_PRIVATE(KoShape)
 };
 

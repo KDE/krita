@@ -32,6 +32,10 @@ public:
      */
     void shapeChanged(KoShape::ChangeType type);
 
+    void addShapeManager(KoShapeManager *manager);
+    void removeShapeManager(KoShapeManager *manager);
+
+
     /// calls update on the shape where the border is.
     void updateBorder();
 

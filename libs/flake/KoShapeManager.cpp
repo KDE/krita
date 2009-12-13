@@ -25,6 +25,7 @@
 #include "KoToolManager.h"
 #include "KoPointerEvent.h"
 #include "KoShape.h"
+#include "KoShape_p.h"
 #include "KoCanvasBase.h"
 #include "KoShapeContainer.h"
 #include "KoShapeBorderModel.h"
@@ -90,7 +91,7 @@ public:
 
         void fireSignals() {
             foreach(KoShape *shape, shapesWithCollisionDetection)
-                shape->shapeChanged(KoShape::CollisionDetected);
+                shape->priv()->shapeChanged(KoShape::CollisionDetected);
         }
 
     private:
@@ -157,10 +158,10 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 KoShapeManager::~KoShapeManager()
 {
     foreach(KoShape *shape, d->shapes) {
-        shape->removeShapeManager(this);
+        shape->priv()->removeShapeManager(this);
     }
     foreach(KoShape *shape, d->additionalShapes) {
-        shape->removeShapeManager(this);
+        shape->priv()->removeShapeManager(this);
     }
     delete d;
 }
@@ -171,7 +172,7 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
     //clear selection
     d->selection->deselectAll();
     foreach(KoShape *shape, d->shapes) {
-        shape->removeShapeManager(this);
+        shape->priv()->removeShapeManager(this);
     }
     d->aggregate4update.clear();
     d->tree.clear();
@@ -185,7 +186,7 @@ void KoShapeManager::add(KoShape *shape, Repaint repaint)
 {
     if (d->shapes.contains(shape))
         return;
-    shape->addShapeManager(this);
+    shape->priv()->addShapeManager(this);
     d->shapes.append(shape);
     if (! dynamic_cast<KoShapeGroup*>(shape) && ! dynamic_cast<KoShapeLayer*>(shape)) {
         QRectF br(shape->boundingRect());
@@ -215,7 +216,7 @@ void KoShapeManager::addAdditional(KoShape *shape)
         if (d->additionalShapes.contains(shape)) {
             return;
         }
-        shape->addShapeManager(this);
+        shape->priv()->addShapeManager(this);
         d->additionalShapes.append(shape);
     }
 }
@@ -227,7 +228,7 @@ void KoShapeManager::remove(KoShape *shape)
     detector.fireSignals();
 
     shape->update();
-    shape->removeShapeManager(this);
+    shape->priv()->removeShapeManager(this);
     d->selection->deselect(shape);
     d->aggregate4update.remove(shape);
     d->tree.remove(shape);
@@ -246,7 +247,7 @@ void KoShapeManager::remove(KoShape *shape)
 void KoShapeManager::removeAdditional(KoShape *shape)
 {
     if ( shape ) {
-        shape->removeShapeManager(this);
+        shape->priv()->removeShapeManager(this);
         d->additionalShapes.removeAll(shape);
     }
 }

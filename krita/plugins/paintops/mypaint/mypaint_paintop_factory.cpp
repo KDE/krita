@@ -22,6 +22,7 @@
 #include <kis_painter.h>
 #include <kis_paintop_settings.h>
 #include <kis_image.h>
+#include <KoInputDevice.h>
 
 #include "mypaint_paintop_settings_widget.h"
 #include "mypaint_paintop_settings.h"

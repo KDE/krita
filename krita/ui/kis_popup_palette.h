@@ -33,6 +33,7 @@ class QWidget;
 class KisPopupPalette : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY (int hoveredBrush READ hoveredBrush WRITE setHoveredBrush);
 
 public:
     KisPopupPalette(KoFavoriteResourceManager* , QWidget *parent=0);
@@ -54,13 +55,27 @@ protected:
     //n is the total number of favorite brushes or recent colors
     int calculateIndex(QPointF, int n);
 
+    //functions to set up hoveredBrush
+    void setHoveredBrush( int x );
+    int hoveredBrush() const;
+
+
+private:
+    QPainterPath drawDonutPathFull(int, int, int, int);
+    QPainterPath drawDonutPathAngle(int, int, int);
+
+    //inline functions
+    inline int brushRadius(){ return 50; }
+    inline float PI(){ return 3.14159265; }
+    inline float brushInnerRadius(){ return width()/2 - 60; }
+    inline float brushOuterRadius(){ return width()/2 - 40; }
+    inline float colorInnerRadius(){ return width()/2 - 30; }
+    inline float colorOuterRadius(){ return width()/2 - 10; }
+
 private:
     int colorFoo;//TEMPORARY
-
+    int m_hoveredBrush;
     KoFavoriteResourceManager* m_resourceManager;
-
-    QPainterPath drawColorDonutPath(int, int);
-    QPainterPath drawBrushDonutPath(int, int);
 
 signals:
     void selectNewColor();

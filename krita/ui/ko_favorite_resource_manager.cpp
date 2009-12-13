@@ -50,7 +50,7 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
 
     //take favorite brushes from a file then append to QList
     KConfigGroup group(KGlobal::config(), "favoriteList");
-    QStringList favoriteList = (group.readEntry("favoriteList")).split(",", QString::SkipEmptyParts);
+    QStringList favoriteList = (group.readEntry("favoriteBrushes")).split(",", QString::SkipEmptyParts);
 
     for (int pos = 0; pos < favoriteList.size(); pos++)
     {
@@ -83,9 +83,8 @@ void KoFavoriteResourceManager::slotChangePaintopLabel()
 void KoFavoriteResourceManager::slotShowPopupPalette(const QPoint &p)
 {
     qDebug() << "[KoFavoriteResourceManager] popup palette called";
-    if (!m_popupPalette) m_popupPalette = new KisPopupPalette(this);
-
-    m_popupPalette->showPopupPalette(p);
+    if (!m_popupPalette) return;
+    else m_popupPalette->showPopupPalette(p);
 }
 
 void KoFavoriteResourceManager::resetPopupPaletteParent(QWidget* w)
@@ -94,10 +93,6 @@ void KoFavoriteResourceManager::resetPopupPaletteParent(QWidget* w)
     {
         qDebug() << "[KoFavoriteResourceManager] m_popupPalette exists and parent is being reset";
         m_popupPalette->setParent(w);
-    }
-    else
-    {
-        qDebug() << "[KoFavoriteResourceManager] m_popupPalette does not exist!!";
     }
 }
 
@@ -225,7 +220,7 @@ void KoFavoriteResourceManager::saveFavoriteBrushes()
 
     qDebug() << "[KoFavoriteResourceManager] Saving list: " << favoriteList;
     KConfigGroup group(KGlobal::config(), "favoriteList");    
-    group.writeEntry("favoriteList", favoriteList);
+    group.writeEntry("favoriteBrushes", favoriteList);
     group.config()->sync();
 }
 

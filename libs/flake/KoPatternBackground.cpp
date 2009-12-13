@@ -18,6 +18,7 @@
  */
 
 #include "KoPatternBackground.h"
+#include "KoShapeBackground_p.h"
 #include "KoShapeSavingContext.h"
 #include "KoImageData.h"
 #include "KoImageCollection.h"
@@ -36,18 +37,19 @@
 #include <QtGui/QBrush>
 #include <QtGui/QPainter>
 
-class KoPatternBackground::Private
+class KoPatternBackgroundPrivate : public KoShapeBackgroundPrivate
 {
 public:
-    Private()
-            : repeat(Tiled), refPoint(TopLeft), imageCollection(0), imageData(0) {
+    KoPatternBackgroundPrivate()
+        : repeat(KoPatternBackground::Tiled), refPoint(KoPatternBackground::TopLeft), imageCollection(0), imageData(0)
+    {
     }
 
-    ~Private() {
+    ~KoPatternBackgroundPrivate() {
         delete imageData;
     }
 
-    QSizeF targetSize() {
+    QSizeF targetSize() const {
         QSizeF size = imageData->imageSize();
         if (targetImageSizePercent.width() > 0.0)
             size.setWidth(0.01 * targetImageSizePercent.width() * size.width());
@@ -61,41 +63,41 @@ public:
         return size;
     }
 
-    QPointF offsetFromRect(const QRectF &fillRect, const QSizeF &imageSize) {
+    QPointF offsetFromRect(const QRectF &fillRect, const QSizeF &imageSize) const {
         QPointF offset;
         switch (refPoint) {
-        case TopLeft:
+        case KoPatternBackground::TopLeft:
             offset = fillRect.topLeft();
             break;
-        case Top:
+        case KoPatternBackground::Top:
             offset.setX(fillRect.center().x() - 0.5 * imageSize.width());
             offset.setY(fillRect.top());
             break;
-        case TopRight:
+        case KoPatternBackground::TopRight:
             offset.setX(fillRect.right() - imageSize.width());
             offset.setY(fillRect.top());
             break;
-        case Left:
+        case KoPatternBackground::Left:
             offset.setX(fillRect.left());
             offset.setY(fillRect.center().y() - 0.5 * imageSize.height());
             break;
-        case Center:
+        case KoPatternBackground::Center:
             offset.setX(fillRect.center().x() - 0.5 * imageSize.width());
             offset.setY(fillRect.center().y() - 0.5 * imageSize.height());
             break;
-        case Right:
+        case KoPatternBackground::Right:
             offset.setX(fillRect.right() - imageSize.width());
             offset.setY(fillRect.center().y() - 0.5 * imageSize.height());
             break;
-        case BottomLeft:
+        case KoPatternBackground::BottomLeft:
             offset.setX(fillRect.left());
             offset.setY(fillRect.bottom() - imageSize.height());
             break;
-        case Bottom:
+        case KoPatternBackground::Bottom:
             offset.setX(fillRect.center().x() - 0.5 * imageSize.width());
             offset.setY(fillRect.bottom() - imageSize.height());
             break;
-        case BottomRight:
+        case KoPatternBackground::BottomRight:
             offset.setX(fillRect.right() - imageSize.width());
             offset.setY(fillRect.bottom() - imageSize.height());
             break;
@@ -122,29 +124,32 @@ public:
 };
 
 KoPatternBackground::KoPatternBackground(KoImageCollection * imageCollection)
-        : d(new Private())
+        : KoShapeBackground(*(new KoPatternBackgroundPrivate()))
 {
+    Q_D(KoPatternBackground);
     d->imageCollection = imageCollection;
     Q_ASSERT(d->imageCollection);
 }
 
 KoPatternBackground::~KoPatternBackground()
 {
-    delete d;
 }
 
 void KoPatternBackground::setMatrix(const QMatrix &matrix)
 {
+    Q_D(KoPatternBackground);
     d->matrix = matrix;
 }
 
 QMatrix KoPatternBackground::matrix() const
 {
+    Q_D(const KoPatternBackground);
     return d->matrix;
 }
 
 void KoPatternBackground::setPattern(const QImage &pattern)
 {
+    Q_D(KoPatternBackground);
     if (d->imageData)
         delete d->imageData;
 
@@ -153,6 +158,7 @@ void KoPatternBackground::setPattern(const QImage &pattern)
 
 QImage KoPatternBackground::pattern()
 {
+    Q_D(KoPatternBackground);
     if (d->imageData)
         return d->imageData->image();
     return QImage();
@@ -160,31 +166,37 @@ QImage KoPatternBackground::pattern()
 
 void KoPatternBackground::setRepeat(PatternRepeat repeat)
 {
+    Q_D(KoPatternBackground);
     d->repeat = repeat;
 }
 
 KoPatternBackground::PatternRepeat KoPatternBackground::repeat() const
 {
+    Q_D(const KoPatternBackground);
     return d->repeat;
 }
 
 KoPatternBackground::ReferencePoint KoPatternBackground::referencePoint() const
 {
+    Q_D(const KoPatternBackground);
     return d->refPoint;
 }
 
 void KoPatternBackground::setReferencePoint(ReferencePoint referencePoint)
 {
+    Q_D(KoPatternBackground);
     d->refPoint = referencePoint;
 }
 
 QPointF KoPatternBackground::referencePointOffset() const
 {
+    Q_D(const KoPatternBackground);
     return d->refPointOffsetPercent;
 }
 
 void KoPatternBackground::setReferencePointOffset(const QPointF &offset)
 {
+    Q_D(KoPatternBackground);
     qreal ox = qMax(qreal(0.0), qMin(qreal(100.0), offset.x()));
     qreal oy = qMax(qreal(0.0), qMin(qreal(100.0), offset.y()));
 
@@ -193,50 +205,58 @@ void KoPatternBackground::setReferencePointOffset(const QPointF &offset)
 
 QPointF KoPatternBackground::tileRepeatOffset() const
 {
+    Q_D(const KoPatternBackground);
     return d->tileRepeatOffsetPercent;
 }
 
 void KoPatternBackground::setTileRepeatOffset(const QPointF &offset)
 {
+    Q_D(KoPatternBackground);
     d->tileRepeatOffsetPercent = offset;
 }
 
 QSizeF KoPatternBackground::patternDisplaySize() const
 {
+    Q_D(const KoPatternBackground);
     return d->targetSize();
 }
 
 void KoPatternBackground::setPatternDisplaySize(const QSizeF &size)
 {
+    Q_D(KoPatternBackground);
     d->targetImageSizePercent = QSizeF();
     d->targetImageSize = size;
 }
 
 QSizeF KoPatternBackground::patternOriginalSize() const
 {
+    Q_D(const KoPatternBackground);
     return d->imageData->imageSize();
 }
 
 KoPatternBackground& KoPatternBackground::operator = (const KoPatternBackground & rhs)
 {
+    Q_D(KoPatternBackground);
     if (this == &rhs)
         return *this;
 
-    d->matrix = rhs.d->matrix;
-    d->repeat = rhs.d->repeat;
-    d->refPoint = rhs.d->refPoint;
-    d->targetImageSize = rhs.d->targetImageSize;
-    d->targetImageSizePercent = rhs.d->targetImageSizePercent;
-    d->refPointOffsetPercent = rhs.d->refPointOffsetPercent;
-    d->tileRepeatOffsetPercent = rhs.d->tileRepeatOffsetPercent;
-    d->imageCollection = rhs.d->imageCollection;
+    const KoPatternBackgroundPrivate *otherD = static_cast<const KoPatternBackgroundPrivate*>(rhs.d_func());
 
-    if (rhs.d->imageData) {
+    d->matrix = otherD->matrix;
+    d->repeat = otherD->repeat;
+    d->refPoint = otherD->refPoint;
+    d->targetImageSize = otherD->targetImageSize;
+    d->targetImageSizePercent = otherD->targetImageSizePercent;
+    d->refPointOffsetPercent = otherD->refPointOffsetPercent;
+    d->tileRepeatOffsetPercent = otherD->tileRepeatOffsetPercent;
+    d->imageCollection = otherD->imageCollection;
+
+    if (otherD->imageData) {
         if (d->imageData) {
-            *(d->imageData) = *(rhs.d->imageData);
+            *(d->imageData) = *(otherD->imageData);
         }
         else {
-            d->imageData = new KoImageData(*rhs.d->imageData);
+            d->imageData = new KoImageData(*otherD->imageData);
         }
     } else {
         delete d->imageData;
@@ -248,6 +268,7 @@ KoPatternBackground& KoPatternBackground::operator = (const KoPatternBackground 
 
 void KoPatternBackground::paint(QPainter &painter, const QPainterPath &fillPath) const
 {
+    Q_D(const KoPatternBackground);
     if (! d->imageData)
         return;
 
@@ -293,6 +314,7 @@ void KoPatternBackground::paint(QPainter &painter, const QPainterPath &fillPath)
 
 void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
+    Q_D(KoPatternBackground);
     if (! d->imageData)
         return;
 
@@ -353,6 +375,7 @@ void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &con
 
 bool KoPatternBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF &)
 {
+    Q_D(KoPatternBackground);
     KoStyleStack &styleStack = context.styleStack();
     if (! styleStack.hasProperty(KoXmlNS::draw, "fill"))
         return false;
@@ -452,6 +475,7 @@ bool KoPatternBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF 
 
 QRectF KoPatternBackground::patternRectFromFillSize(const QSizeF &size)
 {
+    Q_D(KoPatternBackground);
     QRectF rect;
 
     switch (d->repeat) {

@@ -17,47 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoShapeBackground.h"
-#include "KoShapeBackground_p.h"
+#ifndef KoShapeBackgroundPrivate_H
+#define KoShapeBackgroundPrivate_H
 
-KoShapeBackgroundPrivate::KoShapeBackgroundPrivate()
-    : refCount(0)
-{
-}
-KoShapeBackground::KoShapeBackground(KoShapeBackgroundPrivate &dd)
-    :d_ptr(&dd)
-{
-}
+#include <QtCore/QAtomicInt>
 
-KoShapeBackground::KoShapeBackground()
-    : d_ptr(new KoShapeBackgroundPrivate())
+class KoShapeBackgroundPrivate
 {
-}
+public:
+    KoShapeBackgroundPrivate();
+    QAtomicInt refCount;
+};
 
-KoShapeBackground::~KoShapeBackground()
-{
-    delete d_ptr;
-}
-
-bool KoShapeBackground::hasTransparency()
-{
-    return false;
-}
-
-void KoShapeBackground::addUser()
-{
-    Q_D(KoShapeBackground);
-    d->refCount.ref();
-}
-
-bool KoShapeBackground::removeUser()
-{
-    Q_D(KoShapeBackground);
-    return d->refCount.deref();
-}
-
-int KoShapeBackground::useCount() const
-{
-    Q_D(const KoShapeBackground);
-    return d->refCount;
-}
+#endif

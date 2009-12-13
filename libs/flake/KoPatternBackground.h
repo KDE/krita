@@ -25,6 +25,7 @@
 #include <QtGui/QMatrix>
 
 class KoImageCollection;
+class KoPatternBackgroundPrivate;
 
 /// A pattern shape background
 class FLAKE_EXPORT KoPatternBackground : public KoShapeBackground
@@ -97,8 +98,7 @@ public:
     /// Returns the bounding rect of the pattern image based on the given fill size
     QRectF patternRectFromFillSize(const QSizeF &size);
 private:
-    class Private;
-    Private * const d;
+    Q_DECLARE_PRIVATE(KoPatternBackground)
 };
 
 #endif // KOPATTERNBACKGROUND_H

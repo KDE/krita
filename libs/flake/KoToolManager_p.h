@@ -63,8 +63,27 @@ public:
     void switchBackRequested();
     void selectionChanged(QList<KoShape*> shapes);
     void currentLayerChanged(const KoShapeLayer *layer);
+    void switchToolTemporaryRequested(const QString &id);
     CanvasData *createCanvasData(KoCanvasController *controller, KoInputDevice device);
     bool toolCanBeUsed( const QString &activationShapeId);
+
+    /**
+     * Request a switch from to the param input device.
+     * This will cause the tool for that device to be selected.
+     */
+    void switchInputDevice(const KoInputDevice &device);
+
+    /**
+     * Whenever a new tool proxy class is instantiated, it will use this method to register itself
+     * so the toolManager can update it to the latest active tool.
+     * @param proxy the proxy to register.
+     * @param canvas which canvas the proxy is associated with; whenever a new tool is selected for that canvas,
+     *        the proxy gets an update.
+     */
+    void registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas);
+
+    void switchToolByShortcut(QKeyEvent *event);
+
 
     KoToolManager *q;
 

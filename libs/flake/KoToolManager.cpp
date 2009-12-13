@@ -548,6 +548,100 @@ void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
     }
 }
 
+#define MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED 100
+
+void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
+{
+    Q_ASSERT(canvasData);
+    if (!canvasData) return;
+    if (!device.isMouse()) {
+        tabletEventTimer.start(MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED);
+    }
+    if (inputDevice == device) return;
+    if (device.isMouse() && tabletEventTimer.isActive()) {
+        // Ignore switch to mouse for a short time after a tablet event
+        // is received, as this is likely to be either the mouse event sent
+        // to a widget that doesn't accept the tablet event, or, on X11,
+        // a core event sent after the tablet event.
+        return;
+    }
+    inputDevice = device;
+    QList<CanvasData*> items = canvasses[canvasData->canvas];
+
+    // disable all actions for all tools in the all canvasdata objects for this canvas.
+    foreach(CanvasData *cd, items) {
+        foreach(KoTool* tool, cd->allTools) {
+            foreach(KAction* action, tool->actions()) {
+                action->setEnabled(false);
+            }
+        }
+    }
+
+    // search for a canvasdata object for the current input device
+    foreach(CanvasData *cd, items) {
+
+        if (cd->inputDevice == device) {
+            canvasData = cd;
+            if (cd->activeTool == 0)
+                switchTool(KoInteractionTool_ID, false);
+            else {
+                postSwitchTool(false);
+                canvasData->canvas->canvas()->canvasWidget()->setCursor(canvasData->activeTool->cursor());
+            }
+            canvasData->canvas->activate();
+            emit q->inputDeviceChanged(device);
+            emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
+            return;
+        }
+    }
+
+    // still here?  That means we need to create a new CanvasData instance with the current InputDevice.
+    CanvasData *cd = createCanvasData(canvasData->canvas, device);
+    // switch to new canvas as the active one.
+    QString oldTool = canvasData->activeToolId;
+
+    canvasData = cd;
+    items.append(cd);
+    canvasses[canvasData->canvas] = items;
+
+    q->switchToolRequested(oldTool);
+    emit q->inputDeviceChanged(device);
+    canvasData->canvas->activate();
+    emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
+}
+
+void KoToolManager::Private::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas)
+{
+    proxies.insert(canvas, proxy);
+    foreach(KoCanvasController *controller, canvasses.keys()) {
+        if (controller->canvas() == canvas) {
+            proxy->setCanvasController(controller);
+            break;
+        }
+    }
+}
+
+void KoToolManager::Private::switchToolByShortcut(QKeyEvent *event)
+{
+    QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
+
+    foreach (ToolHelper *th, tools) {
+        if (th->shortcut().contains(item)) {
+            event->accept();
+            switchTool(th->id(), false);
+            return;
+        }
+    }
+    if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
+        switchTool(KoPanTool_ID, true);
+    }
+}
+
+void KoToolManager::Private::switchToolTemporaryRequested(const QString &id)
+{
+    switchTool(id, true);
+}
+
 
 // ******** KoToolManager **********
 KoToolManager::KoToolManager()
@@ -652,11 +746,6 @@ void KoToolManager::switchToolRequested(const QString & id)
     d->switchTool(id, false);
 }
 
-void KoToolManager::switchToolTemporaryRequested(const QString &id)
-{
-    d->switchTool(id, true);
-}
-
 KoCreateShapesTool * KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const
 {
     Q_ASSERT(canvas);
@@ -693,22 +782,6 @@ KoCanvasController *KoToolManager::activeCanvasController() const
     return d->canvasData->canvas;
 }
 
-void KoToolManager::switchToolByShortcut(QKeyEvent *event)
-{
-    QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
-
-    foreach(ToolHelper *th, d->tools) {
-        if (th->shortcut().contains(item)) {
-            event->accept();
-            d->switchTool(th->id(), false);
-            return;
-        }
-    }
-    if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
-        d->switchTool(KoPanTool_ID, true);
-    }
-}
-
 QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
 {
     QList<QString> types;
@@ -731,68 +804,6 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
     return toolType;
 }
 
-#define MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED 100
-
-void KoToolManager::switchInputDevice(const KoInputDevice &device)
-{
-    Q_ASSERT(d->canvasData);
-    if (!d->canvasData) return;
-    if (!device.isMouse()) {
-        d->tabletEventTimer.start(MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED);
-    }
-    if (d->inputDevice == device) return;
-    if (device.isMouse() && d->tabletEventTimer.isActive()) {
-        // Ignore switch to mouse for a short time after a tablet event
-        // is received, as this is likely to be either the mouse event sent
-        // to a widget that doesn't accept the tablet event, or, on X11,
-        // a core event sent after the tablet event.
-        return;
-    }
-    d->inputDevice = device;
-    QList<CanvasData*> items = d->canvasses[d->canvasData->canvas];
-
-    // disable all actions for all tools in the all canvasdata objects for this canvas.
-    foreach(CanvasData *cd, items) {
-        foreach(KoTool* tool, cd->allTools) {
-            foreach(KAction* action, tool->actions()) {
-                action->setEnabled(false);
-            }
-        }
-    }
-
-    // search for a canvasdata object for the current input device
-    foreach(CanvasData *cd, items) {
-
-        if (cd->inputDevice == device) {
-            d->canvasData = cd;
-            if (cd->activeTool == 0)
-                d->switchTool(KoInteractionTool_ID, false);
-            else {
-                d->postSwitchTool(false);
-                d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
-            }
-            d->canvasData->canvas->activate();
-            emit inputDeviceChanged(device);
-            emit changedCanvas(d->canvasData ? d->canvasData->canvas->canvas() : 0);
-            return;
-        }
-    }
-
-    // still here?  That means we need to create a new CanvasData instance with the current InputDevice.
-    CanvasData *cd = d->createCanvasData(d->canvasData->canvas, device);
-    // switch to new canvas as the active one.
-    QString oldTool = d->canvasData->activeToolId;
-
-    d->canvasData = cd;
-    items.append(cd);
-    d->canvasses[d->canvasData->canvas] = items;
-
-    switchToolRequested(oldTool);
-    emit inputDeviceChanged(device);
-    d->canvasData->canvas->activate();
-    emit changedCanvas(d->canvasData ? d->canvasData->canvas->canvas() : 0);
-}
-
 bool KoToolManager::eventFilter(QObject *object, QEvent *event)
 {
     switch (event->type()) {
@@ -804,30 +815,19 @@ bool KoToolManager::eventFilter(QObject *object, QEvent *event)
         QTabletEvent *tabletEvent = static_cast<QTabletEvent *>(event);
 
         KoInputDevice id(tabletEvent->device(), tabletEvent->pointerType(), tabletEvent->uniqueId());
-        switchInputDevice(id);
+        d->switchInputDevice(id);
         break;
     }
     case QEvent::MouseButtonPress:
     case QEvent::MouseMove:
     case QEvent::MouseButtonRelease:
-        switchInputDevice(KoInputDevice::mouse());
+        d->switchInputDevice(KoInputDevice::mouse());
         break;
     default:
         break;
     }
 
     return QObject::eventFilter(object, event);
-}
-
-void KoToolManager::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas)
-{
-    d->proxies.insert(canvas, proxy);
-    foreach(KoCanvasController *controller, d->canvasses.keys()) {
-        if (controller->canvas() == canvas) {
-            proxy->setCanvasController(controller);
-            break;
-        }
-    }
 }
 
 void KoToolManager::injectDeviceEvent(KoDeviceEvent * event)
@@ -853,5 +853,11 @@ QString KoToolManager::activeToolId() const
     if (!d->canvasData) return QString();
     return d->canvasData->activeToolId;
 }
+
+KoToolManager::Private *KoToolManager::priv()
+{
+    return d;
+}
+
 
 #include "KoToolManager.moc"

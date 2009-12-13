@@ -32,7 +32,7 @@
 #include "KoCanvasObserver.h"
 #include "KoCanvasObserverProvider.h"
 #include "tools/KoGuidesTool.h"
-#include "KoToolManager.h"
+#include "KoToolManager_p.h"
 
 #include <ksharedconfig.h>
 #include <KDebug>
@@ -591,7 +591,7 @@ void KoCanvasController::dragLeaveEvent(QDragLeaveEvent *event)
 
 void KoCanvasController::keyPressEvent(QKeyEvent *event)
 {
-    KoToolManager::instance()->switchToolByShortcut(event);
+    KoToolManager::instance()->priv()->switchToolByShortcut(event);
 }
 
 void KoCanvasController::wheelEvent(QWheelEvent *event)
@@ -700,7 +700,7 @@ void KoCanvasController::addGuideLine(Qt::Orientation orientation, int viewPosit
     else
         guidesTool->addGuideLine(orientation, d->canvas->viewConverter()->viewToDocumentX(viewPosition));
 
-    KoToolManager::instance()->switchToolTemporaryRequested(guidesTool->toolId());
+    KoToolManager::instance()->priv()->switchToolTemporaryRequested(guidesTool->toolId());
 }
 
 #include "KoCanvasController.moc"

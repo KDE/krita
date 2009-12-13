@@ -21,7 +21,7 @@
 #ifndef KO_TOOL_MANAGER
 #define KO_TOOL_MANAGER
 
-#include <KoInputDevice.h>
+#include "KoInputDevice.h"
 #include "flake_export.h"
 
 #include <QObject>

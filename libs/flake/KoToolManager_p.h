@@ -22,16 +22,67 @@
 #include <QList>
 #include <QObject>
 #include <QString>
+#include <QTimer>
+#include <QHash>
 
 #include <kshortcut.h>
+
+#include "KoInputDevice.h"
+#include "KoToolManager.h"
 
 class KoToolFactory;
 class KoShapeManager;
 class KoCanvasBase;
 class KoTool;
 class KoShape;
-
+class KoToolManager;
+class KoCanvasController;
+class KoShapeLayer;
+class ToolHelper;
+class CanvasData;
 class QToolButton;
+class KoToolProxy;
+
+class KoToolManager::Private
+{
+public:
+    Private(KoToolManager *qq);
+    ~Private();
+
+    void setup();
+    void switchTool(KoTool *tool, bool temporary);
+    void switchTool(const QString &id, bool temporary);
+    void postSwitchTool(bool temporary);
+    bool eventFilter(QObject *object, QEvent *event);
+    void toolActivated(ToolHelper *tool);
+
+    void detachCanvas(KoCanvasController *controller);
+    void attachCanvas(KoCanvasController *controller);
+    void movedFocus(QWidget *from, QWidget *to);
+    void updateCursor(const QCursor &cursor);
+    void switchBackRequested();
+    void selectionChanged(QList<KoShape*> shapes);
+    void currentLayerChanged(const KoShapeLayer *layer);
+    CanvasData *createCanvasData(KoCanvasController *controller, KoInputDevice device);
+    bool toolCanBeUsed( const QString &activationShapeId);
+
+    KoToolManager *q;
+
+    QList<ToolHelper*> tools; // list of all available tools via their factories.
+
+    QHash<KoTool*, int> uniqueToolIds; // for the changedTool signal
+    QHash<KoCanvasController*, QList<CanvasData*> > canvasses;
+    QHash<KoCanvasBase*, KoToolProxy*> proxies;
+
+    CanvasData *canvasData; // data about the active canvas.
+
+    KoInputDevice inputDevice;
+    QTimer tabletEventTimer; // Runs for a short while after any tablet event is
+    // received to help correct input device detection.
+
+    bool layerEnabled;
+
+};
 
 /// \internal
 class ToolHelper : public QObject

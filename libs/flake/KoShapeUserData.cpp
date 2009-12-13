@@ -17,4 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoShapeUserData.moc"
+#include "KoShapeUserData.h"
+
+KoShapeUserData::KoShapeUserData()
+{
+}
+
+KoShapeUserData::~KoShapeUserData()
+{
+}

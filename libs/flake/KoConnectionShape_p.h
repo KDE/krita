@@ -47,7 +47,6 @@ public:
     QList<QPointF> path;
     bool hasMoved;
 
-    KoSubpath points;
     KoShape *shape1;
     KoShape *shape2;
     int connectionPointIndex1;

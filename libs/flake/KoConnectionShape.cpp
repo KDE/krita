@@ -220,7 +220,6 @@ KoConnectionShape::KoConnectionShape()
     moveTo(d->handles[0]);
     lineTo(d->handles[1]);
 
-    d->points = *m_subpaths[0];
     updatePath(QSizeF(140, 140));
 
     int connectionPointCount = connectionPoints().size();

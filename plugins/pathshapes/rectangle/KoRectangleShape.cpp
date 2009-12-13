@@ -140,7 +140,7 @@ void KoRectangleShape::moveHandleAction( int handleId, const QPointF & point, Qt
 
 void KoRectangleShape::updateHandles()
 {
-    QList<QPointF> handles;
+    QList<QPointF> handles( this->handles() );
     handles[0] = QPointF( size().width() - m_cornerRadiusX/100.0 * 0.5 * size().width(), 0.0 );
     handles[1] = QPointF( size().width(), m_cornerRadiusY/100.0 * 0.5 * size().height() );
     setHandles(handles);

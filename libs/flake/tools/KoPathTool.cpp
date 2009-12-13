@@ -321,10 +321,10 @@ void KoPathTool::joinPoints()
         KoPathShape * pathShape = pd1.pathShape;
         if (!pathShape->isClosedSubpath(pd1.pointIndex.first) &&
                 (pd1.pointIndex.second == 0 ||
-                 pd1.pointIndex.second == pathShape->pointCountSubpath(pd1.pointIndex.first) - 1) &&
+                 pd1.pointIndex.second == pathShape->subpathPointCount(pd1.pointIndex.first) - 1) &&
                 !pathShape->isClosedSubpath(pd2.pointIndex.first) &&
                 (pd2.pointIndex.second == 0 ||
-                 pd2.pointIndex.second == pathShape->pointCountSubpath(pd2.pointIndex.first) - 1)) {
+                 pd2.pointIndex.second == pathShape->subpathPointCount(pd2.pointIndex.first) - 1)) {
             KoSubpathJoinCommand *cmd = new KoSubpathJoinCommand(pd1, pd2);
             m_canvas->addCommand(cmd);
         }
@@ -349,10 +349,10 @@ void KoPathTool::mergePoints()
     if (path->isClosedSubpath(index1.first) || path->isClosedSubpath(index2.first))
         return;
     // check if first point is an endpoint
-    if (index1.second != 0 && index1.second != path->pointCountSubpath(index1.first)-1)
+    if (index1.second != 0 && index1.second != path->subpathPointCount(index1.first)-1)
         return;
     // check if second point is an endpoint
-    if (index2.second != 0 && index2.second != path->pointCountSubpath(index2.first)-1)
+    if (index2.second != 0 && index2.second != path->subpathPointCount(index2.first)-1)
         return;
 
     // now we can start merging the endpoints

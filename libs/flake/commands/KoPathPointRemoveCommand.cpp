@@ -57,7 +57,7 @@ QUndoCommand * KoPathPointRemoveCommand::createCommand(
         // check if we have come to the next subpath of the same or another path
         if (last.pathShape != it->pathShape || last.pointIndex.first != it->pointIndex.first) {
             // check if all points of the last subpath should be deleted
-            if (last.pathShape->pointCountSubpath(last.pointIndex.first) == pointsOfSubpath.size()) {
+            if (last.pathShape->subpathPointCount(last.pointIndex.first) == pointsOfSubpath.size()) {
                 // all points of subpath to be deleted -> mark subpath as to be deleted
                 subpathsOfPath.append(pointsOfSubpath.first());
             } else {

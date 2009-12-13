@@ -76,11 +76,11 @@ void KoPathPointTypeCommand::redo()
             if (pointIndex.second > 0)
                 prevIndex = KoPathPointIndex(pointIndex.first, pointIndex.second - 1);
             else if (pointIndex.second == 0 && path->isClosedSubpath(pointIndex.first))
-                prevIndex = KoPathPointIndex(pointIndex.first, path->pointCountSubpath(pointIndex.first) - 1);
+                prevIndex = KoPathPointIndex(pointIndex.first, path->subpathPointCount(pointIndex.first) - 1);
             // get next node
-            if (pointIndex.second < path->pointCountSubpath(pointIndex.first) - 1)
+            if (pointIndex.second < path->subpathPointCount(pointIndex.first) - 1)
                 nextIndex = KoPathPointIndex(pointIndex.first, pointIndex.second + 1);
-            else if (pointIndex.second < path->pointCountSubpath(pointIndex.first) - 1
+            else if (pointIndex.second < path->subpathPointCount(pointIndex.first) - 1
                      && path->isClosedSubpath(pointIndex.first))
                 nextIndex = KoPathPointIndex(pointIndex.first, 0);
 

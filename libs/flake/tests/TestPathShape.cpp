@@ -172,7 +172,7 @@ void TestPathShape::pointCount()
     QVERIFY(path.pointCount() == 13);
 }
 
-void TestPathShape::pointCountSubpath()
+void TestPathShape::subpathPointCount()
 {
     KoPathShape path;
     path.moveTo(QPointF(20, 20));
@@ -191,11 +191,11 @@ void TestPathShape::pointCountSubpath()
     path.curveTo(QPointF(60, 65), QPointF(50, 65), QPointF(50, 60));
     path.close();
 
-    QVERIFY(path.pointCountSubpath(0) == 3);
-    QVERIFY(path.pointCountSubpath(1) == 2);
-    QVERIFY(path.pointCountSubpath(2) == 4);
-    QVERIFY(path.pointCountSubpath(3) == 4);
-    QVERIFY(path.pointCountSubpath(4) == -1);
+    QVERIFY(path.subpathPointCount(0) == 3);
+    QVERIFY(path.subpathPointCount(1) == 2);
+    QVERIFY(path.subpathPointCount(2) == 4);
+    QVERIFY(path.subpathPointCount(3) == 4);
+    QVERIFY(path.subpathPointCount(4) == -1);
 }
 
 void TestPathShape::isClosedSubpath()

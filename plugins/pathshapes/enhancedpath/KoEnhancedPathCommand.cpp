@@ -285,7 +285,7 @@ KoPathPoint * KoEnhancedPathCommand::lastPathPoint() const
     int subpathCount = m_parent->subpathCount();
     if( subpathCount )
     {
-        int subpathPointCount = m_parent->pointCountSubpath( subpathCount-1 );
+        int subpathPointCount = m_parent->subpathPointCount( subpathCount-1 );
         lastPoint = m_parent->pointByIndex( KoPathPointIndex( subpathCount-1, subpathPointCount-1 ) );
     }
     return lastPoint;

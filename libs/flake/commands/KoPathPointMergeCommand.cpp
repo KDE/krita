@@ -111,10 +111,10 @@ KoPathPointMergeCommand::KoPathPointMergeCommand(const KoPathPointData &pointDat
     Q_ASSERT(d->pathShape);
     Q_ASSERT(!d->pathShape->isClosedSubpath(d->endPoint.first));
     Q_ASSERT(d->endPoint.second == 0 ||
-             d->endPoint.second == d->pathShape->pointCountSubpath(d->endPoint.first) - 1);
+             d->endPoint.second == d->pathShape->subpathPointCount(d->endPoint.first) - 1);
     Q_ASSERT(!d->pathShape->isClosedSubpath(d->startPoint.first));
     Q_ASSERT(d->startPoint.second == 0 ||
-             d->startPoint.second == d->pathShape->pointCountSubpath(d->startPoint.first) - 1);
+             d->startPoint.second == d->pathShape->subpathPointCount(d->startPoint.first) - 1);
 
     // if we have two different subpaths we might need to reverse them
     if (d->endPoint.first != d->startPoint.first) {
@@ -122,10 +122,10 @@ KoPathPointMergeCommand::KoPathPointMergeCommand(const KoPathPointData &pointDat
         if (d->startPoint < d->endPoint)
             qSwap(d->endPoint, d->startPoint);
         // mark first subpath to be reversed if first point starts a subpath with more than one point
-        if (d->endPoint.second == 0 && d->pathShape->pointCountSubpath(d->endPoint.first) > 1)
+        if (d->endPoint.second == 0 && d->pathShape->subpathPointCount(d->endPoint.first) > 1)
             d->reverse |= Private::ReverseFirst;
         // mark second subpath to be reversed if second point does not start a subpath with more than one point
-        if (d->startPoint.second != 0 && d->pathShape->pointCountSubpath(d->startPoint.first) > 1)
+        if (d->startPoint.second != 0 && d->pathShape->subpathPointCount(d->startPoint.first) > 1)
             d->reverse |= Private::ReverseSecond;
     } else {
         Q_ASSERT(d->endPoint.second != d->startPoint.second);

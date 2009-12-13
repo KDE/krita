@@ -194,7 +194,7 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
             if (path->isClosedSubpath(subpathIndex))
                 continue;
 
-            int pointCount = path->pointCountSubpath(subpathIndex);
+            int pointCount = path->subpathPointCount(subpathIndex);
 
             // check the extension from the start point
             KoPathPoint * first = path->pointByIndex(KoPathPointIndex(subpathIndex, 0));

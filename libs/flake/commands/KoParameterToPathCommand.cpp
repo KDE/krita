@@ -81,7 +81,7 @@ void KoParameterToPathCommand::copyPath(KoPathShape * dst, KoPathShape * src)
 
     int subpathCount = src->subpathCount();
     for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
-        int pointCount = src->pointCountSubpath(subpathIndex);
+        int pointCount = src->subpathPointCount(subpathIndex);
         if (! pointCount)
             continue;
 

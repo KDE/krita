@@ -44,7 +44,7 @@ void TestPointMergeCommand::closeSingleLinePath()
     KoPathPoint * p2 = path1.pointByIndex(index2);
 
     QVERIFY(!path1.isClosedSubpath(0));
-    QCOMPARE(path1.pointCountSubpath(0), 6);
+    QCOMPARE(path1.subpathPointCount(0), 6);
     QCOMPARE(p1->point(), QPointF(40,0));
     QCOMPARE(p2->point(), QPointF(20,0));
 
@@ -52,13 +52,13 @@ void TestPointMergeCommand::closeSingleLinePath()
     cmd1.redo();
 
     QVERIFY(path1.isClosedSubpath(0));
-    QCOMPARE(path1.pointCountSubpath(0), 5);
+    QCOMPARE(path1.subpathPointCount(0), 5);
     QCOMPARE(p2->point(), QPointF(30,0));
 
     cmd1.undo();
 
     QVERIFY(!path1.isClosedSubpath(0));
-    QCOMPARE(path1.pointCountSubpath(0), 6);
+    QCOMPARE(path1.subpathPointCount(0), 6);
     QCOMPARE(p1->point(), QPointF(40,0));
     QCOMPARE(p2->point(), QPointF(20,0));
 
@@ -66,13 +66,13 @@ void TestPointMergeCommand::closeSingleLinePath()
     cmd2.redo();
 
     QVERIFY(path1.isClosedSubpath(0));
-    QCOMPARE(path1.pointCountSubpath(0), 5);
+    QCOMPARE(path1.subpathPointCount(0), 5);
     QCOMPARE(p2->point(), QPointF(30,0));
 
     cmd2.undo();
 
     QVERIFY(!path1.isClosedSubpath(0));
-    QCOMPARE(path1.pointCountSubpath(0), 6);
+    QCOMPARE(path1.subpathPointCount(0), 6);
     QCOMPARE(p1->point(), QPointF(40,0));
     QCOMPARE(p2->point(), QPointF(20,0));
 }
@@ -95,7 +95,7 @@ void TestPointMergeCommand::closeSingleCurvePath()
     KoPathPoint * p2 = path1.pointByIndex(index2);
 
     QVERIFY(!path1.isClosedSubpath(0));
-    QCOMPARE(path1.pointCountSubpath(0), 4);
+    QCOMPARE(path1.subpathPointCount(0), 4);
     QCOMPARE(p1->point(), QPointF(40,0));
     QVERIFY(!p1->activeControlPoint1());
     QCOMPARE(p2->point(), QPointF(20,0));
@@ -105,7 +105,7 @@ void TestPointMergeCommand::closeSingleCurvePath()
     cmd1.redo();
 
     QVERIFY(path1.isClosedSubpath(0));
-    QCOMPARE(path1.pointCountSubpath(0), 3);
+    QCOMPARE(path1.subpathPointCount(0), 3);
     QCOMPARE(p2->point(), QPointF(30,0));
     QVERIFY(p2->activeControlPoint1());
     QVERIFY(p2->activeControlPoint2());
@@ -113,7 +113,7 @@ void TestPointMergeCommand::closeSingleCurvePath()
     cmd1.undo();
 
     QVERIFY(!path1.isClosedSubpath(0));
-    QCOMPARE(path1.pointCountSubpath(0), 4);
+    QCOMPARE(path1.subpathPointCount(0), 4);
     QCOMPARE(p1->point(), QPointF(40,0));
     QVERIFY(!p1->activeControlPoint1());
     QCOMPARE(p2->point(), QPointF(20,0));
@@ -123,7 +123,7 @@ void TestPointMergeCommand::closeSingleCurvePath()
     cmd2.redo();
 
     QVERIFY(path1.isClosedSubpath(0));
-    QCOMPARE(path1.pointCountSubpath(0), 3);
+    QCOMPARE(path1.subpathPointCount(0), 3);
     QCOMPARE(p2->point(), QPointF(30,0));
     QVERIFY(p2->activeControlPoint1());
     QVERIFY(p2->activeControlPoint2());
@@ -131,7 +131,7 @@ void TestPointMergeCommand::closeSingleCurvePath()
     cmd2.undo();
 
     QVERIFY(!path1.isClosedSubpath(0));
-    QCOMPARE(path1.pointCountSubpath(0), 4);
+    QCOMPARE(path1.subpathPointCount(0), 4);
     QCOMPARE(p1->point(), QPointF(40,0));
     QVERIFY(!p1->activeControlPoint1());
     QCOMPARE(p2->point(), QPointF(20,0));

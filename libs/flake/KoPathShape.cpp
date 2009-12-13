@@ -728,7 +728,7 @@ int KoPathShape::subpathCount() const
     return m_subpaths.count();
 }
 
-int KoPathShape::pointCountSubpath(int subpathIndex) const
+int KoPathShape::subpathPointCount(int subpathIndex) const
 {
     KoSubpath * subpath = subPath(subpathIndex);
 
@@ -1245,7 +1245,7 @@ void KoPathShape::setFillRule(Qt::FillRule fillRule)
     d->fillRule = fillRule;
 }
 
-KoPathShape * KoPathShape::fromQPainterPath(const QPainterPath &path)
+KoPathShape * KoPathShape::createShapeFromPainterPath(const QPainterPath &path)
 {
     KoPathShape * shape = new KoPathShape();
 

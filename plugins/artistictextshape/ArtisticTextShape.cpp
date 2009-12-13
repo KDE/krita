@@ -106,7 +106,7 @@ void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
     }
     else if( layout() == ArtisticTextShape::OnPath )
     {
-        KoPathShape * baseline = KoPathShape::fromQPainterPath( m_baseline );
+        KoPathShape * baseline = KoPathShape::createShapeFromPainterPath( m_baseline );
         QMatrix offsetMatrix;
         offsetMatrix.translate( 0.0, m_baselineOffset );
         drawData += "textPathData:" + baseline->toString( baseline->transformation() ) + ';';
@@ -121,7 +121,7 @@ void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
     context.xmlWriter().startElement("draw:enhanced-geometry");
 
     // write the path data
-    KoPathShape * path = KoPathShape::fromQPainterPath( outline() );
+    KoPathShape * path = KoPathShape::createShapeFromPainterPath( outline() );
     context.xmlWriter().addAttribute("draw:enhanced-path", path->toString( transformation() ) );
     delete path;
 

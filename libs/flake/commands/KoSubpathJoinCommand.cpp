@@ -34,17 +34,17 @@ KoSubpathJoinCommand::KoSubpathJoinCommand(const KoPathPointData &pointData1, co
     KoPathShape * pathShape = m_pointData1.pathShape;
     Q_ASSERT(!pathShape->isClosedSubpath(m_pointData1.pointIndex.first));
     Q_ASSERT(m_pointData1.pointIndex.second == 0 ||
-             m_pointData1.pointIndex.second == pathShape->pointCountSubpath(m_pointData1.pointIndex.first) - 1);
+             m_pointData1.pointIndex.second == pathShape->subpathPointCount(m_pointData1.pointIndex.first) - 1);
     Q_ASSERT(!pathShape->isClosedSubpath(m_pointData2.pointIndex.first));
     Q_ASSERT(m_pointData2.pointIndex.second == 0 ||
-             m_pointData2.pointIndex.second == pathShape->pointCountSubpath(m_pointData2.pointIndex.first) - 1);
+             m_pointData2.pointIndex.second == pathShape->subpathPointCount(m_pointData2.pointIndex.first) - 1);
     //TODO check that points are not the same
 
     if (m_pointData2 < m_pointData1)
         qSwap(m_pointData1, m_pointData2);
 
     if (m_pointData1.pointIndex.first != m_pointData2.pointIndex.first) {
-        if (m_pointData1.pointIndex.second == 0 && pathShape->pointCountSubpath(m_pointData1.pointIndex.first) > 1)
+        if (m_pointData1.pointIndex.second == 0 && pathShape->subpathPointCount(m_pointData1.pointIndex.first) > 1)
             m_reverse |= ReverseFirst;
         if (m_pointData2.pointIndex.second != 0)
             m_reverse |= ReverseSecond;
@@ -100,7 +100,7 @@ void KoSubpathJoinCommand::redo()
         }
         pathShape->moveSubpath(m_pointData2.pointIndex.first, m_pointData1.pointIndex.first + 1);
         m_splitIndex = m_pointData1.pointIndex;
-        m_splitIndex.second = pathShape->pointCountSubpath(m_pointData1.pointIndex.first) - 1;
+        m_splitIndex.second = pathShape->subpathPointCount(m_pointData1.pointIndex.first) - 1;
         pathShape->join(m_pointData1.pointIndex.first);
     }
     pathShape->normalize();

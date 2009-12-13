@@ -36,13 +36,11 @@ class KoPathPoint;
 class KoPathShapePrivate;
 
 typedef QPair<int, int> KoPathPointIndex;
-typedef QMap<KoPathShape *, QSet<KoPathPointIndex> > KoPathShapePointIndexMap;
 
 /// a KoSubpath contains a path from a moveTo until a close or a new moveTo
 typedef QList<KoPathPoint *> KoSubpath;
 typedef QList<KoSubpath *> KoSubpathList;
 /// The position of a path point within a path shape
-typedef QPair<KoSubpath*, int> KoPointPosition;
 /**
  * @brief This is the base for all graphical objects.
  *
@@ -268,7 +266,7 @@ public:
      *
      * @return The number of points in the subpath or -1 if subpath out of bounds
      */
-    int pointCountSubpath(int subpathIndex) const;
+    int subpathPointCount(int subpathIndex) const;
 
     /**
      * @brief Checks if a subpath is closed
@@ -440,7 +438,7 @@ public:
     void setFillRule(Qt::FillRule fillRule);
 
     /// Creates path shape from given QPainterPath
-    static KoPathShape *fromQPainterPath(const QPainterPath &path);
+    static KoPathShape *createShapeFromPainterPath(const QPainterPath &path);
 
 protected:
     /// constructor \internal

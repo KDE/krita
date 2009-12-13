@@ -427,7 +427,7 @@ void ArtisticTextTool::convertText()
     if( ! m_currentShape )
         return;
 
-    KoPathShape * path = KoPathShape::fromQPainterPath( m_currentShape->outline() );
+    KoPathShape * path = KoPathShape::createShapeFromPainterPath( m_currentShape->outline() );
     path->setParent( m_currentShape->parent() );
     path->setZIndex( m_currentShape->zIndex() );
     path->setBorder( m_currentShape->border() );

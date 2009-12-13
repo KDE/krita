@@ -48,7 +48,7 @@ class KoXmlElement;
 class FLAKE_EXPORT KoFilterEffect
 {
 public:
-    KoFilterEffect( const QString& id, const QString& name );
+    KoFilterEffect(const QString &id, const QString &name);
     virtual ~KoFilterEffect();
 
     /// Returns the user visible name of the filter

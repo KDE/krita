@@ -34,13 +34,13 @@ public:
      * Creates new gradient background from given gradient.
      * The background takes ownership of the given gradient.
      */
-    explicit KoGradientBackground(QGradient * gradient, const QMatrix &matrix = QMatrix());
+    explicit KoGradientBackground(QGradient *gradient, const QMatrix &matrix = QMatrix());
 
     /**
      * Create new gradient background from the given gradient.
      * A clone of the given gradient is used.
      */
-    explicit KoGradientBackground(const QGradient & gradient, const QMatrix &matrix = QMatrix());
+    explicit KoGradientBackground(const QGradient &gradient, const QMatrix &matrix = QMatrix());
 
     /// Destroys the background
     virtual ~KoGradientBackground();
@@ -55,26 +55,26 @@ public:
      * Sets a new gradient.
      * The background takes ownership of the given gradient.
      */
-    void setGradient(QGradient * gradient);
+    void setGradient(QGradient *gradient);
 
     /**
      * Sets a new gradient.
      * A clone of the given gradient is used.
      */
-    void setGradient(const QGradient & gradient);
+    void setGradient(const QGradient &gradient);
 
     /// Returns the gradient
-    const QGradient * gradient() const;
+    const QGradient *gradient() const;
 
     /// Assignment operator
-    KoGradientBackground& operator = (const KoGradientBackground &rhs);
+    KoGradientBackground& operator=(const KoGradientBackground &rhs);
 
     /// reimplemented from KoShapeBackground
     virtual void paint(QPainter &painter, const QPainterPath &fillPath) const;
     /// reimplemented from KoShapeBackground
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
     /// reimplemented from KoShapeBackground
-    virtual bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize);
+    virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize);
 
 private:
     class Private;

@@ -36,19 +36,19 @@ class FLAKE_EXPORT KoEventActionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KoEventActionWidget(QWidget * parent = 0);
+    explicit KoEventActionWidget(QWidget *parent = 0);
     virtual ~KoEventActionWidget();
 
     /**
      * Set the data for the widget
      */
-    virtual void setData(KoEventActionData * eventActionData) = 0;
+    virtual void setData(KoEventActionData *eventActionData) = 0;
 
 signals:
     /**
      * Send signal to add the created command to the command history
      */
-    void addCommand(QUndoCommand * command);
+    void addCommand(QUndoCommand *command);
 };
 
 #endif /* KOEVENTACTIONWIDGET_H */

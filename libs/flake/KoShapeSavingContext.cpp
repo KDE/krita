@@ -98,7 +98,7 @@ void KoShapeSavingContext::removeOption(ShapeSavingOption option)
         m_savingOptions = m_savingOptions ^ option; // xor to remove it.
 }
 
-const QString KoShapeSavingContext::drawId(const KoShape * shape, bool insert)
+QString KoShapeSavingContext::drawId(const KoShape *shape, bool insert)
 {
     QMap<const KoShape *, QString>::iterator it(m_drawIds.find(shape));
     if (it == m_drawIds.end()) {

@@ -41,6 +41,7 @@ public:
      * Copy constructor.
      */
     KoInputDevice(const KoInputDevice &other);
+
     /**
      * Constructor for a tablet.
      * Create a new input device with one of the many types that the tablet can have.
@@ -49,6 +50,7 @@ public:
      * @param uniqueTabletId the uniqueId as found on a QTabletEvent
      */
     explicit KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer, qint64 uniqueTabletId = -1);
+
     /**
      * Constructor for the mouse as input device.
      */
@@ -93,11 +95,11 @@ private:
     Private * const d;
 };
 
-Q_DECLARE_METATYPE( KoInputDevice )
+Q_DECLARE_METATYPE(KoInputDevice)
 
 FLAKE_EXPORT QDebug operator<<(QDebug debug, const KoInputDevice &device);
 
-inline uint qHash(const KoInputDevice & key)
+inline uint qHash(const KoInputDevice &key)
 {
     return qHash(QString(":%1:%2:%3:%4")
                  .arg(key.device())

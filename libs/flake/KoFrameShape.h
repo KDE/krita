@@ -59,9 +59,9 @@ public:
     * Constructor.
     *
     * \param ns The namespace. E.g. KoXmlNS::draw
-    * \param tag The tag-name. E.g. "image"
+    * \param element The tag-name. E.g. "image"
     */
-    KoFrameShape(const char * ns, const char * tag);
+    KoFrameShape(const char *ns, const char *element);
 
     /**
     * Destructor.
@@ -72,7 +72,7 @@ public:
     * Loads the content of the draw:frame element and it's children. This
     * method calls the abstract loadOdfFrameElement() method.
     */
-    virtual bool loadOdfFrame(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 protected:
 
@@ -80,7 +80,7 @@ protected:
     * Abstract method to handle loading of the defined inner element like
     * e.g. the draw:image element.
     */
-    virtual bool loadOdfFrameElement(const KoXmlElement & element, KoShapeLoadingContext & context) = 0;
+    virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
 
 private:
     class Private;

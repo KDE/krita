@@ -29,12 +29,12 @@ class KoShape;
 class KoConnectionShapeFactory : public KoShapeFactory
 {
 public:
-    KoConnectionShapeFactory(QObject* parent);
+    KoConnectionShapeFactory(QObject *parent);
     ~KoConnectionShapeFactory() {}
 
     virtual KoShape* createDefaultShape() const;
-    virtual KoShape* createShape(const KoProperties* params) const;
-    virtual bool supports(const KoXmlElement & e) const;
+    virtual KoShape* createShape(const KoProperties *params) const;
+    virtual bool supports(const KoXmlElement &e) const;
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 

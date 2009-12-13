@@ -97,7 +97,7 @@ public:
     /**
      * Proxies for KoTool::selection()
      */
-    KoToolSelection* selection();
+    KoToolSelection *selection();
 
     /// Forwarded to the current KoTool
     void cut();

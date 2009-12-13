@@ -47,16 +47,16 @@ class KoTool;
 class FLAKE_EXPORT KoEventAction
 {
 public:
-    KoEventAction(const QString & id);
+    KoEventAction(const QString &id);
     virtual ~KoEventAction();
 
-    const QString & id() const;
+    const QString &id() const;
 
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) = 0;
-    virtual void saveOdf(KoShapeSavingContext & context) const = 0;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
+    virtual void saveOdf(KoShapeSavingContext &context) const = 0;
 
-    virtual void execute(KoTool * tool) = 0;
-    virtual void finish(KoTool * tool) = 0;
+    virtual void execute(KoTool *tool) = 0;
+    virtual void finish(KoTool *tool) = 0;
 
 private:
     class Private;

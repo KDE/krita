@@ -73,20 +73,20 @@ public:
      * @param point the position relative to the shape origin
      * @param properties describing the point
      */
-    KoPathPoint(KoPathShape * path, const QPointF & point, KoPointProperties properties = Normal);
+    KoPathPoint(KoPathShape *path, const QPointF &point, KoPointProperties properties = Normal);
 
     /**
      * @brief Copy Constructor
      */
-    KoPathPoint(const KoPathPoint & pathPoint);
+    KoPathPoint(const KoPathPoint &pathPoint);
 
     /**
      * @brief Assignment operator.
      */
-    KoPathPoint& operator=(const KoPathPoint &rhs);
+    KoPathPoint& operator=(const KoPathPoint &other);
 
     /// Compare operator
-    bool operator == (const KoPathPoint &rhs) const;
+    bool operator == (const KoPathPoint &other) const;
 
     /**
      * @brief Destructor
@@ -123,21 +123,21 @@ public:
      *
      * @param point to set
      */
-    void setPoint(const QPointF & point);
+    void setPoint(const QPointF &point);
 
     /**
      * @brief Set the control point 1
      *
      * @param point to set
      */
-    void setControlPoint1(const QPointF & point);
+    void setControlPoint1(const QPointF &point);
 
     /**
      * @brief Set the control point 2
      *
      * @param point to set
      */
-    void setControlPoint2(const QPointF & point);
+    void setControlPoint2(const QPointF &point);
 
     /// Removes the first control point
     void removeControlPoint1();
@@ -225,7 +225,7 @@ public:
      * @brief Get the path shape the point belongs to
      * @return the path shape the point belongs to
      */
-    KoPathShape * parent() const;
+    KoPathShape *parent() const;
 
     /**
      * @brief Get the bounding rect of the point.
@@ -257,10 +257,10 @@ public:
      * The previous and next path points are used to determine the smoothness
      * in case this path point has not two control points.
      *
-     * @param prev the previous path point
+     * @param previous the previous path point
      * @param next the next path point
      */
-    bool isSmooth(KoPathPoint * prev, KoPathPoint * next) const;
+    bool isSmooth(KoPathPoint *previous, KoPathPoint *next) const;
 
 protected:
     friend class KoPointGroup;

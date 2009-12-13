@@ -57,13 +57,13 @@ public:
     * This method should be implemented by factories to create a filter effect.
     * @return a new filter effect
     */
-    virtual KoFilterEffect * createFilterEffect() const = 0;
+    virtual KoFilterEffect *createFilterEffect() const = 0;
 
     /**
      * This method should be implemented by factories to create a filter effect config widget.
      * @return the filter effect options widget
      */
-    virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const = 0;
+    virtual KoFilterEffectConfigWidgetBase *createConfigWidget() const = 0;
 
 private:
     class Private;

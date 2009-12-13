@@ -208,18 +208,18 @@ protected:
      * Set the tooltip to be used for this tool
      * @param tooltip the tooltip
      */
-    void setToolTip(const QString & tooltip);
+    void setToolTip(const QString &tooltip);
     /**
      * Set the toolType. used to group tools in the toolbox
      * @param toolType the toolType
      */
-    void setToolType(const QString & toolType);
+    void setToolType(const QString &toolType);
     /**
      * Set an icon to be used in the toolBox.
      * @param iconName the basename (without extension) of the icon
      * @see KIconLoader
      */
-    void setIcon(const QString & iconName);
+    void setIcon(const QString &iconName);
     /**
      * Set the priority of this tool, as it is shown in the toolBox; lower number means
      * it will be show more to the front of the list.

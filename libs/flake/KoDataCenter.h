@@ -53,7 +53,7 @@ public:
      * Save any remaining binary blobs
      * @returns false if an error occurred, which typically cancels the save.
      */
-    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context) = 0;
+    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context) = 0;
 };
 
 #endif

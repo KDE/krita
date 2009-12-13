@@ -57,7 +57,7 @@ public:
      * Sets the shadow offset from the topleft corner of the shape
      * @param offset the shadow offset
      */
-    void setOffset(const QPointF & offset);
+    void setOffset(const QPointF &offset);
 
     /// Returns the shadow offset
     QPointF offset() const;

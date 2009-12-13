@@ -43,7 +43,7 @@ public:
      * Return an instance of the KoDeviceRegistry
      * Create a new instance on first call and return the singleton.
      */
-    static KoDeviceRegistry* instance();
+    static KoDeviceRegistry *instance();
 
 private:
     KoDeviceRegistry();

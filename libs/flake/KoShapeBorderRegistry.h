@@ -38,7 +38,7 @@ public:
      * Return an instance of the KoShapeBorderRegistry
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
-    static KoShapeBorderRegistry * instance();
+    static KoShapeBorderRegistry *instance();
 
 private:
     KoShapeBorderRegistry();

@@ -34,7 +34,7 @@ class FLAKE_EXPORT KoFilterEffectStack
 public:
     /// Creates an empty filter effect stack
     KoFilterEffectStack();
-    
+
     /// Destroys the filter effect stack, deleting all filter effects
     ~KoFilterEffectStack();
 
@@ -79,7 +79,7 @@ public:
      * @return the filter effect, of 0 if no filter effect with the given index exists
      */
     KoFilterEffect* takeFilterEffect(int index);
-    
+
     /// Sets the clipping rectangle used for this filter in bounding box units
     void setClipRect(const QRectF &clipRect);
 

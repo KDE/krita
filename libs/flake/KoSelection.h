@@ -124,14 +124,14 @@ public:
      * Sets the currently active layer.
      * @param layer the new active layer
      */
-    void setActiveLayer(KoShapeLayer* layer);
+    void setActiveLayer(KoShapeLayer *layer);
 
     /**
      * Returns a currently active layer.
      *
      * @return the currently active layer, or zero if there is none
      */
-    KoShapeLayer* activeLayer() const;
+    KoShapeLayer *activeLayer() const;
 
     /// Updates the size and position of the selection
     void updateSizeAndPosition();

@@ -39,10 +39,10 @@ public:
         return false;
     }
     /// reimplemented
-    virtual QUndoCommand * createCommand();
+    virtual QUndoCommand *createCommand();
 private:
     Ui::KoConnectionShapeConfigWidget widget;
-    KoConnectionShape * m_connection;
+    KoConnectionShape *m_connection;
 };
 
 #endif // KOCONNECTIONSHAPECONFIGWIDGET_H

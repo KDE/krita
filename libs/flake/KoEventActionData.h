@@ -33,7 +33,7 @@ class KoEventAction;
 class FLAKE_EXPORT KoEventActionData
 {
 public:
-    KoEventActionData(KoShape * shape, KoEventAction * eventAction);
+    KoEventActionData(KoShape *shape, KoEventAction *eventAction);
     virtual ~KoEventActionData();
 
     /**
@@ -41,14 +41,14 @@ public:
      *
      * @return the shape or 0 if there is none.
      */
-    KoShape * shape();
+    KoShape *shape();
 
     /**
      * Get the event action
      *
      * @return the event action or 0 if there is none
      */
-    KoEventAction * eventAction();
+    KoEventAction *eventAction();
 
 private:
     class Private;

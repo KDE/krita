@@ -50,7 +50,7 @@ public:
 
 protected:
     /// reimplemented
-    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore);
+    virtual bool process(const KoXmlElement & body, KoOdfReadStore &odfStore);
 
     class Private;
     Private * const d;

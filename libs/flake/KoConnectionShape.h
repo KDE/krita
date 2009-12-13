@@ -46,10 +46,10 @@ public:
     virtual ~KoConnectionShape();
 
     // reimplemented
-    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
 
     // reimplemented
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     // reimplemented
     virtual QString pathShapeId() const;
@@ -114,7 +114,7 @@ public:
 
 protected:
     /// reimplemented
-    void moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
     /// reimplemented
     void updatePath(const QSizeF &size);

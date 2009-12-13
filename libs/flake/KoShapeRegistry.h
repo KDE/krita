@@ -41,18 +41,15 @@ class KoShapeLoadingContext;
  */
 class FLAKE_EXPORT KoShapeRegistry : public QObject,  public KoGenericRegistry<KoShapeFactory*>
 {
-
     Q_OBJECT
-
 public:
-
     ~KoShapeRegistry();
 
     /**
      * Return an instance of the KoShapeRegistry
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
-    static KoShapeRegistry * instance();
+    static KoShapeRegistry *instance();
 
     /**
      * Add shape factory for a shape that is not a plugin
@@ -60,7 +57,7 @@ public:
      *
      * @param factory The factory of the shape
      */
-    void addFactory(KoShapeFactory * factory);
+    void addFactory(KoShapeFactory *factory);
 
     /**
      * Use the element to find out which flake plugin can load it, and
@@ -69,7 +66,7 @@ public:
      *
      * @returns the shape or 0 if no shape could be created
      */
-    KoShape * createShapeFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const;
+    KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
 private:
     KoShapeRegistry();
@@ -77,9 +74,9 @@ private:
     KoShapeRegistry operator=(const KoShapeRegistry&);
     void init();
 
-    void insertFactory(KoShapeFactory * factory);
+    void insertFactory(KoShapeFactory *factory);
 
-    KoShape * createShapeInternal(const KoXmlElement & fullElement, KoShapeLoadingContext & context, const KoXmlElement & element) const;
+    KoShape *createShapeInternal(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const;
 
     class Private;
     Private * const d;

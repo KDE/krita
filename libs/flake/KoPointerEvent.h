@@ -45,28 +45,28 @@ public:
     /**
      * Constructor.
      *
-     * @param ev the mouse event that is the base of this event.
-     * @param pnt the zoomed point in the normal coordinate system.
+     * @param event the mouse event that is the base of this event.
+     * @param point the zoomed point in the normal coordinate system.
      */
-    KoPointerEvent(QMouseEvent *ev, const QPointF &pnt);
+    KoPointerEvent(QMouseEvent *event, const QPointF &point);
 
     /**
      * Constructor.
      *
-     * @param ev the tablet event that is the base of this event.
-     * @param pnt the zoomed point in the normal coordinate system.
+     * @param event the tablet event that is the base of this event.
+     * @param point the zoomed point in the normal coordinate system.
      */
-    KoPointerEvent(QTabletEvent *ev, const QPointF &pnt);
+    KoPointerEvent(QTabletEvent *event, const QPointF &point);
 
     /**
      * Constructor.
      *
-     * @param ev the tablet event that is the base of this event.
-     * @param pnt the zoomed point in the normal coordinate system.
+     * @param event the tablet event that is the base of this event.
+     * @param point the zoomed point in the normal coordinate system.
      */
-    KoPointerEvent(QWheelEvent *ev, const QPointF &pnt);
+    KoPointerEvent(QWheelEvent *event, const QPointF &point);
 
-    KoPointerEvent(KoDeviceEvent * ev, int x, int y, int z = 0, int rx = 0, int ry = 0, int rz = 0);
+    KoPointerEvent(KoDeviceEvent *event, int x, int y, int z = 0, int rx = 0, int ry = 0, int rz = 0);
 
     ~KoPointerEvent();
 
@@ -211,7 +211,7 @@ protected:
     void setTabletButton(Qt::MouseButton button);
 private:
     // for the d-pointer police; we want to make accessors to the event inline, so this one stays here.
-    QInputEvent * m_event;
+    QInputEvent *m_event;
 
     class Private;
     Private * const d;

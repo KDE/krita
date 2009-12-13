@@ -46,7 +46,7 @@ public:
      * Save all images to the store which are in the context
      * @return returns true if save was successful (no images failed).
      */
-    bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context);
+    bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
 
     /**
      * Create a data object for the image data.
@@ -97,6 +97,9 @@ public:
      * Get the number of images inside the collection
      */
     int size() const;
+    /**
+     * Get the number of images inside the collection
+     */
     int count() const;
 
 private:

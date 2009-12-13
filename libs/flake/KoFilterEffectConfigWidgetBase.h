@@ -34,7 +34,7 @@ public:
     virtual ~KoFilterEffectConfigWidgetBase() {};
 
     /// Sets the filter effect to be edited by the config widget
-    virtual bool editFilterEffect(KoFilterEffect * filterEffect) = 0;
+    virtual bool editFilterEffect(KoFilterEffect *filterEffect) = 0;
 
 signals:
     /// Is emitted when the filter effect has changed

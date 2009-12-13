@@ -41,7 +41,7 @@ public:
      * The default shape position is not relevant, it will be moved by the caller.
      * @return a new shape
      */
-    virtual KoShapeBorderModel * createBorder() const = 0;
+    virtual KoShapeBorderModel *createBorder() const = 0;
 
     /**
      * return the id for the shape this factory creates.

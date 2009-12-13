@@ -46,7 +46,7 @@ public:
      * Return an instance of the KoDockRegistry
      * Create a new instance on first call and return the singleton.
      */
-    static KoDockRegistry* instance();
+    static KoDockRegistry *instance();
 
 private:
     KoDockRegistry();

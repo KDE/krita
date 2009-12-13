@@ -48,7 +48,7 @@ public:
     QString family;
     QString tooltip;
     QString iconName;
-    quint32 loadingPriority;
+    int loadingPriority;
     QString odfNameSpace;
     QStringList odfElementNames;
 };
@@ -101,7 +101,7 @@ QString KoShapeFactory::family() const
     return d->family;
 }
 
-quint32 KoShapeFactory::loadingPriority() const
+int KoShapeFactory::loadingPriority() const
 {
     return d->loadingPriority;
 }
@@ -165,7 +165,7 @@ const QList<KoShapeTemplate> KoShapeFactory::templates() const
     return d->templates;
 }
 
-void KoShapeFactory::setLoadingPriority(quint32 priority)
+void KoShapeFactory::setLoadingPriority(int priority)
 {
     d->loadingPriority = priority;
 }

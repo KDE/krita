@@ -40,7 +40,7 @@ public:
     * Return the only instance of KoFilterEffectRegistry.
     * Creates an instance on the first call.
     */
-    static KoFilterEffectRegistry * instance();
+    static KoFilterEffectRegistry *instance();
 
     /**
      * Creates filter effect from given xml element.
@@ -48,7 +48,7 @@ public:
      * @param matrix the matrix for converting number attributes
      * @return the created filter effect if successful, else 0
      */
-    KoFilterEffect * createFilterEffectFromXml(const KoXmlElement & element, const QMatrix &matrix = QMatrix());
+    KoFilterEffect *createFilterEffectFromXml(const KoXmlElement &element, const QMatrix &matrix = QMatrix());
 
 private:
     KoFilterEffectRegistry();

@@ -72,7 +72,7 @@ public:
     Q_DECLARE_FLAGS(Strategies, Strategy)
 
     /// Creates the snap guide to work on the given canvas
-    KoSnapGuide(KoCanvasBase * canvas);
+    KoSnapGuide(KoCanvasBase *canvas);
 
     virtual ~KoSnapGuide();
 
@@ -86,10 +86,10 @@ public:
     QRectF boundingRect();
 
     /// Adds an additional shape to snap to (useful when creating a path)
-    void setEditedShape(KoShape * shape);
+    void setEditedShape(KoShape *shape);
 
     /// returns the extra shapes to use
-    KoShape * editedShape() const;
+    KoShape *editedShape() const;
 
     /// enables the strategies used for snapping
     void enableSnapStrategies(Strategies strategies);
@@ -103,7 +103,7 @@ public:
      * The snap guide take ownership of the strategy. All custom strategies
      * are destroyed when calling reset().
      */
-    bool addCustomSnapStrategy(KoSnapStrategy * customStrategy);
+    bool addCustomSnapStrategy(KoSnapStrategy *customStrategy);
 
     /// enables the snapping guides
     void enableSnapping(bool on);
@@ -118,7 +118,7 @@ public:
     int snapDistance() const;
 
     /// returns the canvas the snap guide is working on
-    KoCanvasBase * canvas() const;
+    KoCanvasBase *canvas() const;
 
     /// Sets a list of path points to ignore
     void setIgnoredPathPoints(const QList<KoPathPoint*> &ignoredPoints);

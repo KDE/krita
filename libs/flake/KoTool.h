@@ -90,14 +90,14 @@ public:
      *
      * @see m_optionWidgets
      */
-    QMap<QString, QWidget *>  optionWidgets();
+    QMap<QString, QWidget *> optionWidgets();
 
     /**
      * Returns the internal selection option of this tool.
      * Each tool can have a selection which is private to that tool and the specified shape that it comes with.
      * The default returns 0.
      */
-    virtual KoToolSelection* selection();
+    virtual KoToolSelection *selection();
 
     /**
      * Retrieves the entire collection of actions for the tool.
@@ -321,7 +321,7 @@ signals:
      * replaced by a colorpicker.
      * @param id the identification of the desired tool
      */
-    void activateTemporary(const QString & id);
+    void activateTemporary(const QString &id);
 
     /**
      * Emitted when the tool has been temporarily activated and wants

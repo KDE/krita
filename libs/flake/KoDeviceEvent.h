@@ -57,7 +57,7 @@ public:
     void setButtons(Qt::MouseButtons);
 
 protected:
-    KoPointerEvent * m_event;
+    KoPointerEvent *m_event;
 
 private:
     class Private;

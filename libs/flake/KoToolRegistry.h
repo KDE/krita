@@ -46,7 +46,7 @@ public:
      * Return an instance of the KoToolRegistry
      * Create a new instance on first call and return the singleton.
      */
-    static KoToolRegistry* instance();
+    static KoToolRegistry *instance();
 
 private:
     KoToolRegistry();

@@ -109,9 +109,9 @@ public:
     virtual bool hitTest(const QPointF &position) const;
 
     // reimplemented
-    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// Removes all subpaths and their points from the path
     void clear();
@@ -122,7 +122,7 @@ public:
      *
      * @return the newly created point
      */
-    KoPathPoint * moveTo(const QPointF &p);
+    KoPathPoint *moveTo(const QPointF &p);
 
     /**
      * @brief Adds a new line segment
@@ -131,7 +131,7 @@ public:
      *
      * @return the newly created point
      */
-    KoPathPoint * lineTo(const QPointF &p);
+    KoPathPoint *lineTo(const QPointF &p);
 
     /**
      * @brief Adds a new cubic Bezier curve segment.
@@ -145,7 +145,7 @@ public:
      *
      * @return The newly created point
      */
-    KoPathPoint * curveTo(const QPointF &c1, const QPointF &c2, const QPointF &p);
+    KoPathPoint *curveTo(const QPointF &c1, const QPointF &c2, const QPointF &p);
 
     /**
      * @brief Adds a new quadratic Bezier curve segment.
@@ -158,7 +158,7 @@ public:
      *
      * @return The newly created point
      */
-    KoPathPoint * curveTo(const QPointF &c, const QPointF &p);
+    KoPathPoint *curveTo(const QPointF &c, const QPointF &p);
 
     /**
      * @brief Add an arc.
@@ -173,7 +173,7 @@ public:
      *
      * @return The newly created point
      */
-    KoPathPoint * arcTo(qreal rx, qreal ry, qreal startAngle, qreal sweepAngle);
+    KoPathPoint *arcTo(qreal rx, qreal ry, qreal startAngle, qreal sweepAngle);
 
 
     /**
@@ -205,17 +205,17 @@ public:
 
     /**
      * @brief Returns the path points within the given rectangle.
-     * @param r the rectangle the requested points are in
+     * @param rect the rectangle the requested points are in
      * @return list of points within the rectangle
      */
-    QList<KoPathPoint*> pointsAt(const QRectF &r);
+    QList<KoPathPoint*> pointsAt(const QRectF &rect);
 
     /**
      * @brief Returns the list of path segments within the given rectangle.
-     * @param r the rectangle the requested segments are in
+     * @param rect the rectangle the requested segments are in
      * @return list of segments within the rectangle
      */
-    QList<KoPathSegment> segmentsAt(const QRectF &r);
+    QList<KoPathSegment> segmentsAt(const QRectF &rect);
 
     /**
      * @brief Returns the path point index of a given path point
@@ -233,7 +233,7 @@ public:
      *
      * @return KoPathPoint on success, 0 otherwise e.g. out of bounds
      */
-    KoPathPoint * pointByIndex(const KoPathPointIndex &pointIndex) const;
+    KoPathPoint *pointByIndex(const KoPathPointIndex &pointIndex) const;
 
     /**
      * @brief Returns the segment specified by a path point index
@@ -293,7 +293,7 @@ public:
      * @return true on success,
      *         false when pointIndex is out of bounds
      */
-    bool insertPoint(KoPathPoint* point, const KoPathPointIndex &pointIndex);
+    bool insertPoint(KoPathPoint *point, const KoPathPointIndex &pointIndex);
 
     /**
      * @brief Removes a point from the path.
@@ -305,7 +305,7 @@ public:
      * @return The removed point on success,
      *         otherwise 0
      */
-    KoPathPoint * removePoint(const KoPathPointIndex &pointIndex);
+    KoPathPoint *removePoint(const KoPathPointIndex &pointIndex);
 
     /**
      * @brief Breaks the path after the point index
@@ -384,7 +384,7 @@ public:
      * @param subpathIndex the index of the subpath to remove
      * @return the removed subpath on succes, 0 otherwise.
      */
-    KoSubpath * removeSubpath(int subpathIndex);
+    KoSubpath *removeSubpath(int subpathIndex);
 
     /**
      * @brief Adds a subpath at the given index to the path
@@ -392,7 +392,7 @@ public:
      * @param subpathIndex the index at which the new subpath should be inserted
      * @return true on success, false otherwise e.g. subpathIndex out of bounds
      */
-    bool addSubpath(KoSubpath * subpath, int subpathIndex);
+    bool addSubpath(KoSubpath *subpath, int subpathIndex);
 
     /**
      * @brief Combines two path shapes by appending the data of the specified path.
@@ -406,7 +406,7 @@ public:
      * @param separatedPaths the list which contains the separated path shapes
      * @return true if separating the path was successful, false otherwise
      */
-    bool separate(QList<KoPathShape*> & separatedPaths);
+    bool separate(QList<KoPathShape*> &separatedPaths);
 
 #ifndef NDEBUG
     /**
@@ -440,17 +440,17 @@ public:
     void setFillRule(Qt::FillRule fillRule);
 
     /// Creates path shape from given QPainterPath
-    static KoPathShape * fromQPainterPath(const QPainterPath &path);
+    static KoPathShape *fromQPainterPath(const QPainterPath &path);
 
 protected:
-    /// constructor
+    /// constructor \internal
     KoPathShape(KoPathShapePrivate &);
 
 private:
     // TODO move all the private methods to live on the d pointer object
     void map(const QMatrix &matrix);
 
-    void updateLast(KoPathPoint ** lastPoint);
+    void updateLast(KoPathPoint **lastPoint);
 
     /// closes specified subpath
     void closeSubpath(KoSubpath *subpath);
@@ -462,14 +462,15 @@ private:
      * @param subpathIndex the index of the subpath to return
      * @return subPath on success, or 0 when subpathIndex is out of bounds
      */
-    KoSubpath * subPath(int subpathIndex) const;
+    KoSubpath *subPath(int subpathIndex) const;
 #ifndef NDEBUG
+    /// \internal
     void paintDebug(QPainter &painter);
 #endif
     /// reimplemented
     virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
     /// reimplemented
-    virtual void loadStyle(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 protected:
     QRectF handleRect(const QPointF &p, qreal radius) const;
@@ -487,12 +488,12 @@ protected:
      *
      * @return number of points created by the curve
      */
-    int arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAngle, const QPointF & offset, QPointF * curvePoints) const;
+    int arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAngle, const QPointF &offset, QPointF *curvePoints) const;
 
     /// Returns the viewbox from the given xml element.
-    QRectF loadOdfViewbox(const KoXmlElement & element) const;
+    QRectF loadOdfViewbox(const KoXmlElement &element) const;
     /// Applies the viewbox transformation defined in the given element
-    void applyViewboxTransformation(const KoXmlElement & element);
+    void applyViewboxTransformation(const KoXmlElement &element);
 
     /**
      * @brief Saves the node types
@@ -522,7 +523,7 @@ protected:
     /**
      * @brief Loads node types
      */
-    void loadNodeTypes(const KoXmlElement & element);
+    void loadNodeTypes(const KoXmlElement &element);
 
     /**
      * Get the resize matrix
@@ -530,7 +531,7 @@ protected:
      * This makes sure that also if the newSize isNull that there will be a
      * very small size of 0.000001 pixels
      */
-    QMatrix resizeMatrix( const QSizeF & newSize ) const;
+    QMatrix resizeMatrix( const QSizeF &newSize ) const;
 
     KoSubpathList m_subpaths;
 

@@ -33,11 +33,11 @@ public:
     /// constructor
     KoPathShapeFactory(QObject *parent, const QStringList&);
     ~KoPathShapeFactory() {}
-    KoShape * createDefaultShape() const;
-    KoShape * createShape(const KoProperties * params) const;
-    bool supports(const KoXmlElement & e) const;
+    KoShape *createDefaultShape() const;
+    KoShape *createShape(const KoProperties *params) const;
+    bool supports(const KoXmlElement &element) const;
     /// reimplemented
-    virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap);
+    virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>   &dataCenterMap);
 };
 
 #endif

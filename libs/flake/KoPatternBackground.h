@@ -32,9 +32,23 @@ class FLAKE_EXPORT KoPatternBackground : public KoShapeBackground
 {
 public:
     /// Pattern rendering style
-    enum PatternRepeat { Original, Tiled, Stretched };
+    enum PatternRepeat {
+        Original,
+        Tiled,
+        Stretched
+    };
     /// Pattern reference point
-    enum ReferencePoint { TopLeft, Top, TopRight, Left, Center, Right, BottomLeft, Bottom, BottomRight };
+    enum ReferencePoint {
+        TopLeft,
+        Top,
+        TopRight,
+        Left,
+        Center,
+        Right,
+        BottomLeft,
+        Bottom,
+        BottomRight
+    };
 
     /// Constructs a new pattern background utilizing the given image collection
     KoPatternBackground(KoImageCollection *collection);
@@ -86,14 +100,14 @@ public:
     QSizeF patternOriginalSize() const;
 
     /// Assignment operator
-    KoPatternBackground& operator = (const KoPatternBackground &rhs);
+    KoPatternBackground& operator=(const KoPatternBackground &other);
 
     /// reimplemented from KoShapeBackground
     virtual void paint(QPainter &painter, const QPainterPath &fillPath) const;
     /// reimplemented from KoShapeBackground
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
     /// reimplemented from KoShapeBackground
-    virtual bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize);
+    virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize);
 
     /// Returns the bounding rect of the pattern image based on the given fill size
     QRectF patternRectFromFillSize(const QSizeF &size);

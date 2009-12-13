@@ -30,7 +30,7 @@ class FLAKE_EXPORT KoDevice : public QObject
 {
     Q_OBJECT
 public:
-    KoDevice(QObject * parent, const QString &id);
+    KoDevice(QObject *parent, const QString &id);
     virtual ~KoDevice();
 
     /**

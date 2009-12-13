@@ -39,22 +39,22 @@ public:
     /**
      * Return an instance of the KoEventActionRegistry
      */
-    static KoEventActionRegistry * instance();
+    static KoEventActionRegistry *instance();
 
     /**
      * Create action events for the elements given
      */
-    QList<KoEventAction*> createEventActionsFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const;
+    QList<KoEventAction*> createEventActionsFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /**
      * Add presentation event action.
      */
-    void addPresentationEventAction(KoEventActionFactory * factory);
+    void addPresentationEventAction(KoEventActionFactory *factory);
 
     /**
      * Add script event action.
      */
-    void addScriptEventAction(KoEventActionFactory * factory);
+    void addScriptEventAction(KoEventActionFactory *factory);
 
     /**
      * Get presentation event actions.

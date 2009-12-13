@@ -34,13 +34,13 @@ public:
         Second
     };
 
-    KoConnectionShapeLoadingUpdater(KoConnectionShape * connectionShape, ConnectionPosition position);
+    KoConnectionShapeLoadingUpdater(KoConnectionShape *connectionShape, ConnectionPosition position);
     virtual ~KoConnectionShapeLoadingUpdater();
 
-    virtual void update(KoShape * shape);
+    virtual void update(KoShape *shape);
 
 private:
-    KoConnectionShape * m_connectionShape;
+    KoConnectionShape *m_connectionShape;
     ConnectionPosition m_position;
 };
 

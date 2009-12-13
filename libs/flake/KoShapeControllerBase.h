@@ -46,14 +46,14 @@ public:
      * if the shape is one that should be currently shown on screen.
      * @param shape the new shape
      */
-    virtual void addShape(KoShape* shape) = 0;
+    virtual void addShape(KoShape *shape) = 0;
 
     /**
      * Remove a shape from the shape controllers control, allowing it to be deleted shortly after
      * The controller should remove the shape from all the ShapeManager instance(s) manually
      * @param shape the shape to remove
      */
-    virtual void removeShape(KoShape* shape) = 0;
+    virtual void removeShape(KoShape *shape) = 0;
 
     /**
      * This method returns a map of KoDataCenter classes.

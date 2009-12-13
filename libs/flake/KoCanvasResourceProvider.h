@@ -87,7 +87,7 @@ public:
      * Constructor.
      * @param parent the parent QObject, used for memory management.
      */
-    explicit KoCanvasResourceProvider(QObject * parent = 0);
+    explicit KoCanvasResourceProvider(QObject *parent = 0);
     ~KoCanvasResourceProvider();
 
     /**
@@ -95,27 +95,27 @@ public:
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param value the new value for the key.
      */
-    void setResource(int key, const QVariant & value);
+    void setResource(int key, const QVariant &value);
 
     /**
      * Set a resource of type KoColor.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param color the new value for the key.
      */
-    void setResource(int key, const KoColor & color);
+    void setResource(int key, const KoColor &color);
 
     /**
      * Set a resource of type KoID.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param id the new value for the key.
      */
-    void setResource(int key, const KoID & id);
+    void setResource(int key, const KoID &id);
     /**
      * Set a resource of type KoShape*.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param id the new value for the key.
      */
-    void setResource(int key, KoShape* shape);
+    void setResource(int key, KoShape *shape);
 
     /**
      * Returns a qvariant containing the specified resource or a standard one if the
@@ -128,7 +128,7 @@ public:
      * Set the foregroundColor resource.
      * @param color the new foreground color
      */
-    void setForegroundColor(const KoColor & color);
+    void setForegroundColor(const KoColor &color);
 
     /**
      * Return the foregroundColor
@@ -139,7 +139,7 @@ public:
      * Set the backgroundColor resource.
      * @param color the new background color
      */
-    void setBackgroundColor(const KoColor & color);
+    void setBackgroundColor(const KoColor &color);
     /**
      * Return the backgroundColor
      */
@@ -164,7 +164,7 @@ public:
     uint grabSensitivity();
 
     /// Sets the border resource
-    void setActiveBorder( const KoLineBorder &border );
+    void setActiveBorder(const KoLineBorder &border);
 
     /// Returns the border resource
     KoLineBorder activeBorder();
@@ -249,7 +249,6 @@ private:
     KoCanvasResourceProvider(const KoCanvasResourceProvider&);
     KoCanvasResourceProvider& operator=(const KoCanvasResourceProvider&);
 
-private:
     class Private;
     Private *const d;
 };

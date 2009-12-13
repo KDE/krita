@@ -50,33 +50,130 @@
 #include <QtOpenGL/QGLWidget>
 #endif
 
-class KoCanvasController::Private
+KoCanvasController::Private::Private(KoCanvasController *qq)
+    : q(qq),
+    canvas(0),
+    canvasMode(Centered),
+    margin(0),
+    preferredCenterFractionX(0.5),
+    preferredCenterFractionY(0.5),
+    ignoreScrollSignals(false)
 {
-public:
-    Private()
-        : canvas(0),
-        canvasMode(Centered),
-        margin(0),
-        preferredCenterFractionX(0.5),
-        preferredCenterFractionY(0.5),
-        ignoreScrollSignals(false)
-    {
+}
+
+void KoCanvasController::Private::setDocumentOffset()
+{
+    // The margins scroll the canvas widget inside the viewport, not
+    // the document. The documentOffset is meant the be the value that
+    // the canvas must add to the update rect in its paint event, to
+    // compensate.
+
+    QPoint pt(q->horizontalScrollBar()->value(), q->verticalScrollBar()->value());
+    if (pt.x() < margin) pt.setX(0);
+    if (pt.y() < margin) pt.setY(0);
+    if (pt.x() > documentSize.width()) pt.setX(documentSize.width());
+    if (pt.y() > documentSize.height()) pt.setY(documentSize.height());
+    q->emit moveDocumentOffset(pt);
+
+    QWidget *canvasWidget = canvas->canvasWidget();
+
+    if (canvasWidget) {
+        if (!q->isCanvasOpenGL()) {
+            QPoint diff = documentOffset - pt;
+            canvasWidget->scroll(diff.x(), diff.y());
+        }
     }
 
-    KoCanvasBase * canvas;
-    CanvasMode canvasMode;
-    int margin; // The viewport margin around the document // TODO can we remove this one? The viewport has a copy...
-    QSize documentSize;
-    QPoint documentOffset;
-    Viewport * viewportWidget;
-    qreal preferredCenterFractionX;
-    qreal preferredCenterFractionY;
-    bool ignoreScrollSignals;
-};
+    documentOffset = pt;
+}
 
+void KoCanvasController::Private::resetScrollBars()
+{
+    // The scrollbar value always points at the top-left corner of the
+    // bit of image we paint.
+
+    int docH = documentSize.height() + margin;
+    int docW = documentSize.width() + margin;
+    int drawH = viewportWidget->height();
+    int drawW = viewportWidget->width();
+
+    QScrollBar *hScroll = q->horizontalScrollBar();
+    QScrollBar *vScroll = q->verticalScrollBar();
+
+    if (docH <= drawH && docW <= drawW) {
+        // we need no scrollbars
+        vScroll->setRange(0, 0);
+        hScroll->setRange(0, 0);
+    } else if (docH <= drawH) {
+        // we need a horizontal scrollbar only
+        vScroll->setRange(0, 0);
+        hScroll->setRange(0, docW - drawW);
+    } else if (docW <= drawW) {
+        // we need a vertical scrollbar only
+        hScroll->setRange(0, 0);
+        vScroll->setRange(0, docH - drawH);
+    } else {
+        // we need both scrollbars
+        vScroll->setRange(0, docH - drawH);
+        hScroll->setRange(0, docW - drawW);
+    }
+
+    int fontheight = QFontMetrics(q->font()).height();
+
+    vScroll->setPageStep(drawH);
+    vScroll->setSingleStep(fontheight);
+    hScroll->setPageStep(drawW);
+    hScroll->setSingleStep(fontheight);
+
+}
+
+void KoCanvasController::Private::emitPointerPositionChangedSignals(QEvent *event)
+{
+    if (!canvas) return;
+    if (!canvas->viewConverter()) return;
+
+    QPoint pointerPos;
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    if (mouseEvent) {
+        pointerPos = mouseEvent->pos();
+    } else {
+        QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event);
+        if (tabletEvent) {
+            pointerPos = tabletEvent->pos();
+        }
+    }
+
+    QPoint pixelPos = (pointerPos - canvas->documentOrigin()) + documentOffset;
+    QPointF documentPos = canvas->viewConverter()->viewToDocument(pixelPos);
+
+    emit q->documentMousePositionChanged(documentPos);
+    emit q->canvasMousePositionChanged(pointerPos);
+}
+
+
+void KoCanvasController::Private::activate()
+{
+    QWidget *parent = q;
+    while (parent->parentWidget())
+        parent = parent->parentWidget();
+
+    KoCanvasObserverProvider *observerProvider = dynamic_cast<KoCanvasObserverProvider*>(parent);
+    if (!observerProvider)
+        return;
+
+    foreach(KoCanvasObserver *docker, observerProvider->canvasObservers()) {
+        KoCanvasObserver *observer = dynamic_cast<KoCanvasObserver*>(docker);
+        if (observer) {
+            observer->setCanvas(q->canvas());
+        }
+    }
+}
+
+
+////////////
 KoCanvasController::KoCanvasController(QWidget *parent)
         : QAbstractScrollArea(parent),
-        d(new Private())
+        d(new Private(this))
 {
     setFrameShape(NoFrame);
     d->viewportWidget = new Viewport(this);
@@ -107,7 +204,7 @@ void KoCanvasController::scrollContentsBy(int dx, int dy)
 {
     Q_UNUSED(dx);
     Q_UNUSED(dy);
-    setDocumentOffset();
+    d->setDocumentOffset();
 }
 
 void KoCanvasController::setDrawShadow(bool drawShadow)
@@ -121,8 +218,8 @@ void KoCanvasController::resizeEvent(QResizeEvent *resizeEvent)
 
     // XXX: When resizing, keep the area we're looking at now in the
     // center of the resized view.
-    resetScrollBars();
-    setDocumentOffset();
+    d->resetScrollBars();
+    d->setDocumentOffset();
 }
 
 void KoCanvasController::setCanvas(KoCanvasBase *canvas)
@@ -275,33 +372,10 @@ bool KoCanvasController::eventFilter(QObject *watched, QEvent *event)
             updateCanvasOffsetX();
             updateCanvasOffsetY();
         } else if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
-            emitPointerPositionChangedSignals(event);
+            d->emitPointerPositionChangedSignals(event);
         }
     }
     return false;
-}
-
-void KoCanvasController::emitPointerPositionChangedSignals(QEvent *event)
-{
-    if (!d->canvas) return;
-    if (!d->canvas->viewConverter()) return;
-
-    QPoint pointerPos;
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    if (mouseEvent) {
-        pointerPos = mouseEvent->pos();
-    } else {
-        QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event);
-        if (tabletEvent) {
-            pointerPos = tabletEvent->pos();
-        }
-    }
-
-    QPoint pixelPos = (pointerPos - d->canvas->documentOrigin()) + d->documentOffset;
-    QPointF documentPos = d->canvas->viewConverter()->viewToDocument(pixelPos);
-
-    emit documentMousePositionChanged(documentPos);
-    emit canvasMousePositionChanged(pointerPos);
 }
 
 void KoCanvasController::ensureVisible(KoShape *shape)
@@ -447,7 +521,7 @@ void KoCanvasController::setDocumentSize(const QSize &sz, bool recalculateCenter
     d->ignoreScrollSignals = true;
     d->documentSize = sz;
     d->viewportWidget->setDocumentSize(sz);
-    resetScrollBars();
+    d->resetScrollBars();
     d->ignoreScrollSignals = oldIgnoreScrollSignals;
 
     // in case the document got so small a slider dissapeared; emit the new offset.
@@ -455,32 +529,6 @@ void KoCanvasController::setDocumentSize(const QSize &sz, bool recalculateCenter
         updateCanvasOffsetX();
     if (verticalScrollBar()->isHidden())
         updateCanvasOffsetY();
-}
-
-void KoCanvasController::setDocumentOffset()
-{
-    // The margins scroll the canvas widget inside the viewport, not
-    // the document. The documentOffset is meant the be the value that
-    // the canvas must add to the update rect in its paint event, to
-    // compensate.
-
-    QPoint pt(horizontalScrollBar()->value(), verticalScrollBar()->value());
-    if (pt.x() < d->margin) pt.setX(0);
-    if (pt.y() < d->margin) pt.setY(0);
-    if (pt.x() > d->documentSize.width()) pt.setX(d->documentSize.width());
-    if (pt.y() > d->documentSize.height()) pt.setY(d->documentSize.height());
-    emit(moveDocumentOffset(pt));
-
-    QWidget *canvasWidget = d->canvas->canvasWidget();
-
-    if (canvasWidget) {
-        if (!isCanvasOpenGL()) {
-            QPoint diff = d->documentOffset - pt;
-            canvasWidget->scroll(diff.x(), diff.y());
-        }
-    }
-
-    d->documentOffset = pt;
 }
 
 bool KoCanvasController::isCanvasOpenGL() const
@@ -496,46 +544,6 @@ bool KoCanvasController::isCanvasOpenGL() const
     }
 
     return false;
-}
-
-void KoCanvasController::resetScrollBars()
-{
-    // The scrollbar value always points at the top-left corner of the
-    // bit of image we paint.
-
-    int docH = d->documentSize.height() + d->margin;
-    int docW = d->documentSize.width() + d->margin;
-    int drawH = d->viewportWidget->height();
-    int drawW = d->viewportWidget->width();
-
-    QScrollBar * hScroll = horizontalScrollBar();
-    QScrollBar * vScroll = verticalScrollBar();
-
-    if (docH <= drawH && docW <= drawW) {
-        // we need no scrollbars
-        vScroll->setRange(0, 0);
-        hScroll->setRange(0, 0);
-    } else if (docH <= drawH) {
-        // we need a horizontal scrollbar only
-        vScroll->setRange(0, 0);
-        hScroll->setRange(0, docW - drawW);
-    } else if (docW <= drawW) {
-        // we need a vertical scrollbar only
-        hScroll->setRange(0, 0);
-        vScroll->setRange(0, docH - drawH);
-    } else {
-        // we need both scrollbars
-        vScroll->setRange(0, docH - drawH);
-        hScroll->setRange(0, docW - drawW);
-    }
-
-    int fontheight = QFontMetrics(font()).height();
-
-    vScroll->setPageStep(drawH);
-    vScroll->setSingleStep(fontheight);
-    hScroll->setPageStep(drawW);
-    hScroll->setSingleStep(fontheight);
-
 }
 
 void KoCanvasController::pan(const QPoint &distance)
@@ -668,24 +676,6 @@ int KoCanvasController::margin() const
     return d->margin;
 }
 
-void KoCanvasController::activate()
-{
-    QWidget *parent = this;
-    while (parent->parentWidget())
-        parent = parent->parentWidget();
-
-    KoCanvasObserverProvider *observerProvider = dynamic_cast<KoCanvasObserverProvider*>(parent);
-    if (!observerProvider)
-        return;
-
-    foreach(KoCanvasObserver *docker, observerProvider->canvasObservers()) {
-        KoCanvasObserver *observer = dynamic_cast<KoCanvasObserver*>(docker);
-        if (observer) {
-            observer->setCanvas(canvas());
-        }
-    }
-}
-
 void KoCanvasController::addGuideLine(Qt::Orientation orientation, int viewPosition)
 {
     KoGuidesTool *guidesTool = KoToolManager::instance()->guidesTool(d->canvas);
@@ -701,6 +691,11 @@ void KoCanvasController::addGuideLine(Qt::Orientation orientation, int viewPosit
         guidesTool->addGuideLine(orientation, d->canvas->viewConverter()->viewToDocumentX(viewPosition));
 
     KoToolManager::instance()->priv()->switchToolTemporaryRequested(guidesTool->toolId());
+}
+
+KoCanvasController::Private *KoCanvasController::priv()
+{
+    return d;
 }
 
 #include "KoCanvasController.moc"

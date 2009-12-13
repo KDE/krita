@@ -31,6 +31,7 @@
 #include "tools/KoCreateShapesTool.h"
 #include "tools/KoPathToolFactory.h"
 #include "KoCanvasController.h"
+#include "KoCanvasController_p.h"
 #include "KoShape.h"
 #include "KoShapeLayer.h"
 #include "KoShapeRegistry.h"
@@ -368,7 +369,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
             // activate the found canvas controller
             canvasData = canvasses.value(newCanvas).first();
             inputDevice = canvasData->inputDevice;
-            canvasData->canvas->activate();
+            canvasData->canvas->priv()->activate();
         } else {
             // as a last resort just set a blank one
             canvasData = 0;
@@ -433,7 +434,7 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
             SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             q, SLOT(currentLayerChanged(const KoShapeLayer*)));
 
-    canvasData->canvas->activate();
+    canvasData->canvas->priv()->activate();
 
     emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
@@ -474,7 +475,7 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
 
             canvasData = data;
             canvasData->canvas->canvas()->canvasWidget()->setCursor(canvasData->activeTool->cursor());
-            canvasData->canvas->activate();
+            canvasData->canvas->priv()->activate();
             postSwitchTool(false);
             emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
             return;
@@ -483,7 +484,7 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
     // no such inputDevice for this canvas...
     canvasData = canvasses.value(newCanvas).first();
     inputDevice = canvasData->inputDevice;
-    canvasData->canvas->activate();
+    canvasData->canvas->priv()->activate();
     emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
 
@@ -588,7 +589,7 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
                 postSwitchTool(false);
                 canvasData->canvas->canvas()->canvasWidget()->setCursor(canvasData->activeTool->cursor());
             }
-            canvasData->canvas->activate();
+            canvasData->canvas->priv()->activate();
             emit q->inputDeviceChanged(device);
             emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
             return;
@@ -606,7 +607,7 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
 
     q->switchToolRequested(oldTool);
     emit q->inputDeviceChanged(device);
-    canvasData->canvas->activate();
+    canvasData->canvas->priv()->activate();
     emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
 

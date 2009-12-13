@@ -146,7 +146,7 @@ public:
      *    who's tool you want.
      * @see addController()
      */
-    KoGuidesTool * guidesTool(KoCanvasBase * canvas) const;
+    KoGuidesTool * guidesTool(KoCanvasBase *canvas) const;
 
     /// @return the currently active pointing device
     KoInputDevice currentInputDevice() const;
@@ -175,10 +175,10 @@ public:
     QList<Button> createToolList(KoCanvasBase *canvas) const;
 
     /// Request tool activation for the given canvas controller
-    void requestToolActivation(KoCanvasController * controller);
+    void requestToolActivation(KoCanvasController *controller);
 
     /// Injects an input event from a plugin based input device
-    void injectDeviceEvent(KoDeviceEvent * event);
+    void injectDeviceEvent(KoDeviceEvent *event);
 
     /// Returns the toolId of the currently active tool
     QString activeToolId() const;
@@ -213,14 +213,14 @@ signals:
      * @param canvas the currently active canvas.
      * @param types a list of string that are the shape types of the selected objects.
      */
-    void toolCodesSelected(const KoCanvasController *canvas, QList<QString> types);
+    void toolCodesSelected(const KoCanvasController *canvas, const QList<QString> &types);
 
     /**
      * Emitted after the current layer changed either its properties or to a new layer.
      * @param canvas the currently active canvas.
      * @param layer the layer that is selected.
      */
-    void currentLayerChanged(const KoCanvasController *canvas, const KoShapeLayer* layer);
+    void currentLayerChanged(const KoCanvasController *canvas, const KoShapeLayer *layer);
 
     /**
      * Every time a new input device gets used by a tool, this event is emitted.
@@ -232,7 +232,7 @@ signals:
      * Emitted whenever the active canvas changed.
      * @param canvas the new activated canvas (might be 0)
      */
-    void changedCanvas(const KoCanvasBase * canvas);
+    void changedCanvas(const KoCanvasBase *canvas);
 
     /**
      * Emitted whenever the active tool changes the status text.

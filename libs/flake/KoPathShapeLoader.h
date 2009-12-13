@@ -28,8 +28,8 @@ class KoPathShape;
 class FLAKE_EXPORT KoPathShapeLoader : public KoSvgPathParser
 {
 public:
-    KoPathShapeLoader(KoPathShape * path);
-    ~KoPathShapeLoader();
+    KoPathShapeLoader(KoPathShape *path);
+    virtual ~KoPathShapeLoader();
 
     /// reimplemented
     virtual void svgMoveTo(qreal x1, qreal y1, bool abs = true);

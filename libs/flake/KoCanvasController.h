@@ -96,7 +96,7 @@ public:
      * Return the curently set canvas
      * @return the curently set canvas
      */
-    KoCanvasBase* canvas() const;
+    KoCanvasBase *canvas() const;
 
     /**
      * Change the actual canvas widget used by the current canvas. This allows the canvas widget
@@ -169,9 +169,9 @@ public:
      * FIXME: This doesn't belong her and it does an
      * inherits("KoView") so it too much tied to komain
      *
-     * @param widget the widget
+     * @param widgets the map of widgets
      */
-    void setToolOptionWidgets(const QMap<QString, QWidget *> &);
+    void setToolOptionWidgets(const QMap<QString, QWidget *> &widgets);
 
     /**
      * @brief zooms in around the center.
@@ -262,17 +262,24 @@ public:
      */
     void setScrollBarValue(const QPoint &value);
 
+    /**
+     * \internal
+     */
+    class Private;
+    KoCanvasController::Private *priv();
+
 signals:
     /**
      * Emitted when a previously added canvas is about to be removed.
-     * @param cv this object
+     * @param canvasController this object
      */
-    void canvasRemoved(KoCanvasController *cv);
+    void canvasRemoved(KoCanvasController *canvasController);
+
     /**
      * Emitted when a canvas is set on this widget
-     * @param cv this object
+     * @param canvasController this object
      */
-    void canvasSet(KoCanvasController *cv);
+    void canvasSet(KoCanvasController *canvasController);
 
     /**
      * Emitted when canvasOffsetX() changes
@@ -288,15 +295,15 @@ signals:
 
     /**
      * Emitted when the cursor is moved over the canvas widget.
-     * @param pos the position in widget pixels.
+     * @param position the position in widget pixels.
      */
-    void canvasMousePositionChanged(const QPoint &pos);
+    void canvasMousePositionChanged(const QPoint &position);
 
     /**
      * Emitted when the cursor is moved over the canvas widget.
-     * @param pos the position in document coordinates.
+     * @param position the position in document coordinates.
      */
-    void documentMousePositionChanged(const QPointF &pos);
+    void documentMousePositionChanged(const QPointF &position);
 
     /**
      * Emitted when the entire controller size changes
@@ -307,12 +314,12 @@ signals:
     /**
      * Emit the new tool option widgets to be used with this canvas.
      */
-    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget *);
+    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &map, QWidget *widgets);
 
     /**
      * Emit the new tool option widgets to be used with this canvas.
      */
-    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &);
+    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &widgets);
 
     /**
      * Emitted whenever the document is scrolled.
@@ -377,25 +384,9 @@ protected:
     /// reimplemented from QWidget
     virtual bool focusNextPrevChild(bool next);
 
-
 private:
+    Q_PRIVATE_SLOT(d, void activate())
 
-    void setDocumentOffset();
-
-    void resetScrollBars();
-    void emitPointerPositionChangedSignals(QEvent *event);
-
-    friend class KoToolManager;
-
-private slots:
-    /**
-     * Gets called by the tool manager if this canvas controller is the current active canvas controller.
-     */
-    void activate();
-
-private:
-
-    class Private;
     Private * const d;
 };
 

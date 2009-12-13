@@ -53,7 +53,7 @@ public:
      * AdditionalAttributeData( KoXmlNS::presentation, "placeholder", presentation:placeholder" )
      */
     struct AdditionalAttributeData {
-        AdditionalAttributeData(const char * const ns, const char * const tag, const char * name)
+        AdditionalAttributeData(const char *const ns, const char *const tag, const char *name)
                 : ns(ns)
                 , tag(tag)
                 , name(name) {
@@ -63,7 +63,7 @@ public:
         const char * const tag;
         const char * const name;
 
-        bool operator==(const AdditionalAttributeData & other) const {
+        bool operator==(const AdditionalAttributeData &other) const {
             return (qstrcmp(name, other.name) == 0);
         }
     };
@@ -74,18 +74,18 @@ public:
      * @param dataCenterMap the data center map of the shape controller. This is used in calling KoShape::init
      *        during loading.
      */
-    KoShapeLoadingContext(KoOdfLoadingContext & context, const QMap<QString, KoDataCenter *> & dataCenterMap);
+    KoShapeLoadingContext(KoOdfLoadingContext &context, const QMap<QString, KoDataCenter *> &dataCenterMap);
 
     /// destructor
     ~KoShapeLoadingContext();
 
     /// return the embedded loading context
-    KoOdfLoadingContext & odfLoadingContext();
+    KoOdfLoadingContext &odfLoadingContext();
 
     /// Returns layer referenced by given name
-    KoShapeLayer * layer(const QString & layerName);
+    KoShapeLayer *layer(const QString &layerName);
     /// Adds a new layer to be referenced by the given name later
-    void addLayer(KoShapeLayer * layer, const QString & layerName);
+    void addLayer(KoShapeLayer *layer, const QString &layerName);
 
     /**
      * remove all layers
@@ -95,24 +95,24 @@ public:
     void clearLayers();
 
     /// register the id for a specific shape
-    void addShapeId(KoShape * shape, const QString & id);
+    void addShapeId(KoShape *shape, const QString &id);
     /// return the shape formerly registered using addShapeId()
-    KoShape * shapeById(const QString & id);
+    KoShape *shapeById(const QString &id);
 
     /**
      * call function on the shapeUpdater when the shape with the id shapeid is inserted
      * After that destroy the updater.
      */
-    void updateShape(const QString & id, KoLoadingShapeUpdater * shapeUpdater);
+    void updateShape(const QString &id, KoLoadingShapeUpdater *shapeUpdater);
 
     /**
      * this checks if there is an updater for this shape if yes it calls it
      * this needs to be done via the shape id and
      */
-    void shapeLoaded(KoShape * shape);
+    void shapeLoaded(KoShape *shape);
 
     /// Returns the image collection for loading images
-    KoImageCollection * imageCollection();
+    KoImageCollection *imageCollection();
 
     /// Get current z-index
     int zIndex();
@@ -137,7 +137,7 @@ public:
      *
      * @see KoSharedLoadingData
      */
-    void addSharedData(const QString & id, KoSharedLoadingData * data);
+    void addSharedData(const QString &id, KoSharedLoadingData *data);
 
     /**
      * Get the shared data.
@@ -147,7 +147,7 @@ public:
      * @param id The id used to identify the shared data.
      * @return The shared data for the id or 0 if there is no shared data for the id.
      */
-    KoSharedLoadingData * sharedData(const QString & id) const;
+    KoSharedLoadingData *sharedData(const QString &id) const;
 
     /**
      * @brief Add an additional attribute that should be loaded during shape loading
@@ -159,7 +159,7 @@ public:
      *
      * @param attributeData The data describing the additional attribute data
      */
-    static void addAdditionalAttributeData(const AdditionalAttributeData & attributeData);
+    static void addAdditionalAttributeData(const AdditionalAttributeData &attributeData);
 
     /**
      * @brief Get the additional attribute data for loading of a shape
@@ -174,7 +174,7 @@ public:
      *
      * If the data center is not found 0 is returned
      */
-    KoDataCenter * dataCenter(const QString & dataCenterName);
+    KoDataCenter * dataCenter(const QString &dataCenterName);
 
     /**
      * Get a data center map

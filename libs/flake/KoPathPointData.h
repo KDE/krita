@@ -49,7 +49,7 @@ public:
                pointIndex.second == other.pointIndex.second;
     }
     /// path shape the path point belongs too
-    KoPathShape * pathShape;
+    KoPathShape *pathShape;
     /// position of the point in the path shape
     KoPathPointIndex pointIndex;
 };

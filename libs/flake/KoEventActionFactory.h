@@ -38,29 +38,29 @@ public:
      * @param action Only presentation event actions need to set the action. It is not used
      *               for script event actions.
      */
-    explicit KoEventActionFactory(const QString &id, const QString & action = QString(""));
+    explicit KoEventActionFactory(const QString &id, const QString & action = QString());
     virtual ~KoEventActionFactory();
 
     /**
      * Create the event action.
      */
-    virtual KoEventAction * createEventAction() = 0;
+    virtual KoEventAction *createEventAction() = 0;
 
     /**
      * Create the widget to configure the action
      */
-    virtual KoEventActionWidget * createOptionWidget() = 0;
+    virtual KoEventActionWidget *createOptionWidget() = 0;
 
     /**
      * The action is used to differentiate presentation effects.
      */
-    const QString & action();
+    const QString &action();
 
     /**
      * return the id for the variable this factory creates.
      * @return the id for the variable this factory creates.
      */
-    const QString & id() const;
+    const QString &id() const;
 
 private:
     class Private;

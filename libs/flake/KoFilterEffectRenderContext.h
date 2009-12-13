@@ -46,7 +46,7 @@ public:
     void setCoordinateTransformation(const QMatrix &transform);
 
     /// Returns the view converter
-    const KoViewConverter * viewConverter() const;
+    const KoViewConverter *viewConverter() const;
 
 private:
     class Private;

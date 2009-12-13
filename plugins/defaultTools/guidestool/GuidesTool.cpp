@@ -445,7 +445,7 @@ void GuidesTool::insertorCreateGuidesSlot( GuidesTransaction* result )
 {
     QPoint documentStart = canvas()->documentOrigin();
     KoGuidesData * guidesData = m_canvas->guidesData();
-    const QSizeF pageSize = m_canvas->resourceProvider()->resource(KoCanvasResource::PageSize).value<QSizeF>();
+    const QSizeF pageSize = m_canvas->resourceProvider()->sizeResource(KoCanvasResource::PageSize);
 
     QList< qreal > verticalLines;
     QList< qreal > horizontalLines;

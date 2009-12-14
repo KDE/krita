@@ -47,7 +47,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
 
     colorFoo=0;
     setMouseTracking(true);
-    setHoveredBrush(0);
+    setHoveredBrush(-1);
 }
 
 int KisPopupPalette::hoveredBrush() const { return m_hoveredBrush; }
@@ -238,10 +238,13 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
     QList<QPixmap> pixmaps (m_resourceManager->favoriteBrushPixmaps());
 
     //highlight hovered brush
-    painter.rotate((pixmaps.size() - hoveredBrush()) *360.0/pixmaps.size());
-    QPainterPath path(drawDonutPathAngle(brushInnerRadius(),brushOuterRadius(), pixmaps.size()));
-    painter.fillPath(path, palette().color(QPalette::Highlight));
-    painter.rotate(hoveredBrush() *360.0/pixmaps.size());
+    if (hoveredBrush() > -1)
+    {
+        painter.rotate((pixmaps.size() - hoveredBrush()) *360.0/pixmaps.size());
+        QPainterPath path(drawDonutPathAngle(brushInnerRadius(),brushOuterRadius(), pixmaps.size()));
+        painter.fillPath(path, palette().color(QPalette::Highlight));
+        painter.rotate(hoveredBrush() *360.0/pixmaps.size());
+    }
 
     for (int pos = 0; pos < pixmaps.size(); pos++)
     {
@@ -310,21 +313,22 @@ void KisPopupPalette::mouseMoveEvent (QMouseEvent* event)
     QPainterPath pathBrush(drawDonutPathFull(width()/2, height()/2, brushInnerRadius(), brushOuterRadius()));
     QPainterPath pathColor(drawDonutPathFull(width()/2, height()/2, colorInnerRadius(), colorOuterRadius()));
 
-    qDebug() << "[KisPopupPalette] mouse position: " << point;
+    setHoveredBrush(-1);
+
     if (pathBrush.contains(point))
     { //in favorite brushes area
         int pos = calculateIndex(point, m_resourceManager->favoriteBrushesTotal());
-        qDebug() << "[KisPopupPalette] favorite brush position: " << pos;
         if (pos >= 0 && pos < m_resourceManager->favoriteBrushesTotal())
         {
             setHoveredBrush(pos);
-            update();
         }
     }
     else if (pathColor.contains(point))
     {
         qDebug() << "[KisPopupPalette] in recent colour area";
     }
+
+    update();
 }
 
 void KisPopupPalette::mousePressEvent(QMouseEvent* e)
@@ -334,6 +338,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* e)
 
 KisPopupPalette::~KisPopupPalette()
 {
+    qDebug() << "[KisPopupPalette] Destroying KisPopupPalette";
     m_resourceManager = 0;
 }
 

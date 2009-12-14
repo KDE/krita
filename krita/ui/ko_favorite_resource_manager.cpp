@@ -114,11 +114,18 @@ QPixmap KoFavoriteResourceManager::favoriteBrushPixmap(int pos)
 
 void KoFavoriteResourceManager::slotChangeActivePaintop(int pos)
 {
-    qDebug() << "[KoFavoriteResourceManager] Calling brush: " << m_favoriteBrushesList.at(pos)->paintOp().id();
     if (pos < 0 || pos >= m_favoriteBrushesList.size()) return;
 
     m_paintopBox->setCurrentPaintop(m_favoriteBrushesList.at(pos)->paintOp());
-    m_popupPalette->setVisible(false); //automatically close the palette after a button is clicked.
+
+    //this doesn't really make sense because this function is used only by m_popupPalette.
+    //I will put it here for the moment as Krita sometimes crashes because of a threading issue.
+    //There is a line about setVisible(bool) on the crash traceback.
+    //It is probably caused by the pop up palette, but I am not sure. It is very hard to analyze this
+    //issue because the traceback doesn't point to a specific line in the code. It might not be caused
+    //by pop up palette either, I don't remember there is such problem in my earlier commits.
+    //How to produce the crash: pop the palette, click the color button then close the window.
+    if (m_popupPalette) m_popupPalette->setVisible(false); //automatically close the palette after a button is clicked.
 }
 
 bool KoFavoriteResourceManager::isPopupPaletteVisible()
@@ -226,7 +233,8 @@ void KoFavoriteResourceManager::saveFavoriteBrushes()
 
 KoFavoriteResourceManager::~KoFavoriteResourceManager()
 {
-    delete m_favoriteBrushManager;
+    if (m_favoriteBrushManager)
+        delete m_favoriteBrushManager;
 
 }
 #include "ko_favorite_resource_manager.moc"

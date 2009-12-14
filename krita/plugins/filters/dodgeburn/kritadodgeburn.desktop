@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Dodge and Burn Filter
 Name[et]=Helendamis- ja tumendamisfilter
+Name[nb]=Skygge og belys-filter
 Name[pt]=Filtro de Desvio e Queimadura
 Name[pt_BR]=Filtro de Desvio e Queimadura
 Name[sv]=Skuggnings- och brännfilter
@@ -9,6 +10,7 @@ Name[x-test]=xxDodge and Burn Filterxx
 Name[zh_TW]=曝光過濾器
 Comment=Dodge and Burn Filter
 Comment[et]=Helendamis- ja tumendamisfilter
+Comment[nb]=Skygge og belys-filter
 Comment[pt]=Filtro de Desvio e Queimadura
 Comment[pt_BR]=Filtro de Desvio e Queimadura
 Comment[sv]=Skuggnings- och brännfilter

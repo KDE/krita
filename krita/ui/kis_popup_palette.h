@@ -34,6 +34,7 @@ class KisPopupPalette : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY (int hoveredBrush READ hoveredBrush WRITE setHoveredBrush);
+    Q_PROPERTY (int hoveredColor READ hoveredColor WRITE setHoveredColor);
 
 public:
     KisPopupPalette(KoFavoriteResourceManager* , QWidget *parent=0);
@@ -58,6 +59,9 @@ protected:
     //functions to set up hoveredBrush
     void setHoveredBrush( int x );
     int hoveredBrush() const;
+    //functions to set up hoveredColor
+    void setHoveredColor( int x );
+    int hoveredColor() const;
 
 
 private:
@@ -75,6 +79,7 @@ private:
 private:
     int colorFoo;//TEMPORARY
     int m_hoveredBrush;
+    int m_hoveredColor;
     KoFavoriteResourceManager* m_resourceManager;
 
 signals:

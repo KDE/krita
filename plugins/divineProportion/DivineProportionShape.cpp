@@ -79,16 +79,13 @@ void DivineProportionShape::draw(QPainter &painter)
     }
 }
 
-void DivineProportionShape::saveOdf(KoShapeSavingContext & context) const
+void DivineProportionShape::saveOdf(KoShapeSavingContext & /*context*/) const
 {
-    Q_UNUSED(context);
     // TODO
 }
 
-bool DivineProportionShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool DivineProportionShape::loadOdf( const KoXmlElement & /*element*/, KoShapeLoadingContext & /*context*/ )
 {
-    Q_UNUSED(element);
-    Q_UNUSED(context);
     return false; // TODO
 }
 

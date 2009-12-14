@@ -53,16 +53,14 @@ void AbstractMusicAction::mouseMove(MusicCore::Staff*, int, const QPointF&)
 {
 }
 
-void AbstractMusicAction::renderKeyboardPreview(QPainter& painter, const MusicCursor& cursor)
+void AbstractMusicAction::renderKeyboardPreview(QPainter& painter, const MusicCursor& /*cursor*/)
 {
     Q_UNUSED(painter);
-    Q_UNUSED(cursor);
 }
 
-void AbstractMusicAction::keyPress(QKeyEvent* event, const MusicCursor& cursor)
+void AbstractMusicAction::keyPress(QKeyEvent* event, const MusicCursor& /*cursor*/)
 {
     Q_UNUSED(event);
-    Q_UNUSED(cursor);
 }
 
 #include "AbstractMusicAction.moc"

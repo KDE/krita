@@ -759,6 +759,7 @@ bool KoDocument::saveNativeFormat(const QString & file)
     QByteArray mimeType = d->outputMimeType;
     QByteArray nativeOasisMime = nativeOasisMimeType();
     bool oasis = !mimeType.isEmpty() && (mimeType == nativeOasisMime || mimeType == nativeOasisMime + "-template");
+
     // TODO: use std::auto_ptr or create store on stack [needs API fixing],
     // to remove all the 'delete store' in all the branches
     KoStore* store = KoStore::createStore(file, KoStore::Write, mimeType, backend);
@@ -771,137 +772,148 @@ bool KoDocument::saveNativeFormat(const QString & file)
     }
 
     if (oasis) {
-        kDebug(30003) << "Saving to OASIS format";
-        // Tell KoStore not to touch the file names
-        store->disallowNameExpansion();
-        KoOdfWriteStore odfStore(store);
-        KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
-        KoEmbeddedDocumentSaver embeddedSaver;
-        SavingContext documentContext(odfStore, embeddedSaver);
-
-        if (!saveOdf(documentContext)) {
-            kDebug(30003) << "saveOdf failed";
-            delete store;
-            return false;
-        }
-
-        // Save embedded objects
-        if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
-            kDebug(30003) << "save embedded documents failed";
-            delete store;
-            return false;
-        }
-
-        if (store->open("meta.xml")) {
-            if (!d->docInfo->saveOasis(store) || !store->close()) {
-                delete store;
-                return false;
-            }
-            manifestWriter->addManifestEntry("meta.xml", "text/xml");
-        } else {
-            d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("meta.xml"));
-            delete store;
-            return false;
-        }
-
-        if (store->open("Thumbnails/thumbnail.png")) {
-            if (!saveOasisPreview(store, manifestWriter) || !store->close()) {
-                d->lastErrorMessage = i18n("Error while trying to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png"));
-                delete store;
-                return false;
-            }
-            // No manifest entry!
-        } else {
-            d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png"));
-            delete store;
-            return false;
-        }
-
-        if (!d->versionInfo.isEmpty()) {
-            if (store->open("VersionList.xml")) {
-                KoStoreDevice dev(store);
-                KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev,
-                                         "VL:version-list");
-                for (int i = 0; i < d->versionInfo.size(); ++i) {
-                    KoVersionInfo *version = &d->versionInfo[i];
-                    xmlWriter->startElement("VL:version-entry");
-                    xmlWriter->addAttribute("VL:title", version->title);
-                    xmlWriter->addAttribute("VL:comment", version->comment);
-                    xmlWriter->addAttribute("VL:creator", version->saved_by);
-                    xmlWriter->addAttribute("dc:date-time", version->date.toString(Qt::ISODate));
-                    xmlWriter->endElement();
-                }
-                xmlWriter->endElement(); // root element
-                xmlWriter->endDocument();
-                delete xmlWriter;
-                store->close();
-                manifestWriter->addManifestEntry("VersionList.xml", "text/xml");
-
-                for (int i = 0; i < d->versionInfo.size(); ++i) {
-                    KoVersionInfo *version = &d->versionInfo[i];
-                    store->addDataToFile(version->data, "Versions/" + version->title);
-                }
-            } else {
-                d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("VersionList.xml"));
-                delete store;
-                return false;
-            }
-        }
-
-        // Write out manifest file
-        if (!odfStore.closeManifestWriter()) {
-            d->lastErrorMessage = i18n("Error while trying to write '%1'. Partition full?", QString("META-INF/manifest.xml"));
-            delete store;
-            return false;
-        }
-
-        // Remember the given password, if necessary
-        if (store->isEncrypted() && !d->isExporting)
-            d->password = store->password();
-
-        delete store;
+        return saveNativeFormatODF(store, mimeType);
     } else {
+        return saveNativeFormatKOffice(store);
+    }
+}
 
-        kDebug(30003) << "Saving root";
-        if (store->open("root")) {
+bool KoDocument::saveNativeFormatODF(KoStore* store, const QByteArray &mimeType)
+{
+    kDebug(30003) << "Saving to OASIS format";
+    // Tell KoStore not to touch the file names
+    store->disallowNameExpansion();
+    KoOdfWriteStore odfStore(store);
+    KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
+    KoEmbeddedDocumentSaver embeddedSaver;
+    SavingContext documentContext(odfStore, embeddedSaver);
+
+    if (!saveOdf(documentContext)) {
+        kDebug(30003) << "saveOdf failed";
+        delete store;
+        return false;
+    }
+
+    // Save embedded objects
+    if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
+        kDebug(30003) << "save embedded documents failed";
+        delete store;
+        return false;
+    }
+
+    if (store->open("meta.xml")) {
+        if (!d->docInfo->saveOasis(store) || !store->close()) {
+            delete store;
+            return false;
+        }
+        manifestWriter->addManifestEntry("meta.xml", "text/xml");
+    } else {
+        d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("meta.xml"));
+        delete store;
+        return false;
+    }
+
+    if (store->open("Thumbnails/thumbnail.png")) {
+        if (!saveOasisPreview(store, manifestWriter) || !store->close()) {
+            d->lastErrorMessage = i18n("Error while trying to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png"));
+            delete store;
+            return false;
+        }
+        // No manifest entry!
+    } else {
+        d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png"));
+        delete store;
+        return false;
+    }
+
+    if (!d->versionInfo.isEmpty()) {
+        if (store->open("VersionList.xml")) {
             KoStoreDevice dev(store);
-            if (!saveToStream(&dev) || !store->close()) {
-                kDebug(30003) << "saveToStream failed";
-                delete store;
-                return false;
+            KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev,
+                                     "VL:version-list");
+            for (int i = 0; i < d->versionInfo.size(); ++i) {
+                KoVersionInfo *version = &d->versionInfo[i];
+                xmlWriter->startElement("VL:version-entry");
+                xmlWriter->addAttribute("VL:title", version->title);
+                xmlWriter->addAttribute("VL:comment", version->comment);
+                xmlWriter->addAttribute("VL:creator", version->saved_by);
+                xmlWriter->addAttribute("dc:date-time", version->date.toString(Qt::ISODate));
+                xmlWriter->endElement();
+            }
+            xmlWriter->endElement(); // root element
+            xmlWriter->endDocument();
+            delete xmlWriter;
+            store->close();
+            manifestWriter->addManifestEntry("VersionList.xml", "text/xml");
+
+            for (int i = 0; i < d->versionInfo.size(); ++i) {
+                KoVersionInfo *version = &d->versionInfo[i];
+                store->addDataToFile(version->data, "Versions/" + version->title);
             }
         } else {
-            d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("maindoc.xml"));
+            d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("VersionList.xml"));
             delete store;
             return false;
         }
-        if (store->open("documentinfo.xml")) {
-            QDomDocument doc = d->docInfo->save();
-            KoStoreDevice dev(store);
-
-            QByteArray s = doc.toByteArray(); // this is already Utf8!
-            (void)dev.write(s.data(), s.size());
-            (void)store->close();
-        }
-
-        if (store->open("preview.png")) {
-            // ### TODO: missing error checking (The partition could be full!)
-            savePreview(store);
-            (void)store->close();
-        }
-
-        if (!completeSaving(store)) {
-            delete store;
-            return false;
-        }
-        kDebug(30003) << "Saving done of url:" << url().url();
-        if (!store->finalize()) {
-            delete store;
-            return false;
-        }
-        // Success
-        delete store;
     }
+
+    // Write out manifest file
+    if (!odfStore.closeManifestWriter()) {
+        d->lastErrorMessage = i18n("Error while trying to write '%1'. Partition full?", QString("META-INF/manifest.xml"));
+        delete store;
+        return false;
+    }
+
+    // Remember the given password, if necessary
+    if (store->isEncrypted() && !d->isExporting)
+        d->password = store->password();
+
+    delete store;
+
+    return true;
+}
+
+bool KoDocument::saveNativeFormatKOffice(KoStore* store)
+{
+    kDebug(30003) << "Saving root";
+    if (store->open("root")) {
+        KoStoreDevice dev(store);
+        if (!saveToStream(&dev) || !store->close()) {
+            kDebug(30003) << "saveToStream failed";
+            delete store;
+            return false;
+        }
+    } else {
+        d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("maindoc.xml"));
+        delete store;
+        return false;
+    }
+    if (store->open("documentinfo.xml")) {
+        QDomDocument doc = d->docInfo->save();
+        KoStoreDevice dev(store);
+
+        QByteArray s = doc.toByteArray(); // this is already Utf8!
+        (void)dev.write(s.data(), s.size());
+        (void)store->close();
+    }
+
+    if (store->open("preview.png")) {
+        // ### TODO: missing error checking (The partition could be full!)
+        savePreview(store);
+        (void)store->close();
+    }
+
+    if (!completeSaving(store)) {
+        delete store;
+        return false;
+    }
+    kDebug(30003) << "Saving done of url:" << url().url();
+    if (!store->finalize()) {
+        delete store;
+        return false;
+    }
+    // Success
+    delete store;
     return true;
 }
 

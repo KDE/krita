@@ -519,6 +519,8 @@ public:
      */
     virtual bool saveNativeFormat(const QString & file);
 
+public:
+
     /**
      * Activate/deactivate/configure the autosave feature.
      * @param delay in seconds, 0 to disable
@@ -985,6 +987,9 @@ private slots:
     void deleteOpenPane();
 
 private:
+
+    bool saveNativeFormatODF(KoStore* store, const QByteArray &mimeType);
+    bool saveNativeFormatKOffice(KoStore* store);
 
     /// @return the current KoMainWindow shell
     KoMainWindow* currentShell();

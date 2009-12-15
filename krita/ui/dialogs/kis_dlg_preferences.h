@@ -59,6 +59,7 @@ public:
 
     enumCursorStyle cursorStyle();
     bool showRootLayer();
+    int autoSaveInterval();
     void setDefault();
 
 };

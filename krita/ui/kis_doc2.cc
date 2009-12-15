@@ -23,7 +23,6 @@
 
 #include "kis_doc2.h"
 
-
 #include <QApplication>
 #include <QDomDocument>
 #include <QDomElement>
@@ -65,6 +64,7 @@
 #include <KoUndoStack.h>
 
 // Krita Image
+#include <kis_config.h>
 #include <flake/kis_shape_layer.h>
 #include <kis_debug.h>
 #include <kis_group_layer.h>
@@ -147,7 +147,7 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
     setComponentData(KisFactory2::componentData(), false);
     setTemplateType("krita_template");
     init();
-
+    connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
 }
 
 KisDoc2::~KisDoc2()
@@ -160,6 +160,10 @@ KisDoc2::~KisDoc2()
 QByteArray KisDoc2::mimeType() const
 {
     return APP_MIMETYPE;
+}
+
+void KisDoc2::slotLoadingFinished() {
+    setAutoSave(KisConfig().autoSaveInterval());
 }
 
 void KisDoc2::openExistingFile(const KUrl& url)
@@ -212,6 +216,7 @@ bool KisDoc2::init()
 
 QDomDocument KisDoc2::saveXML()
 {
+    dbgFile << url();
     QDomDocument doc = createDomDocument("DOC", CURRENT_DTD_VERSION);
     QDomElement root = doc.documentElement();
 
@@ -311,21 +316,16 @@ bool KisDoc2::completeLoading(KoStore *store)
     m_d->kraLoader->loadBinaryData(store, m_d->image, url().url(), isStoredExtern());
 
     IODone();
-
-    setModified(false);
-    setUndo(true);
-
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
 
+    setModified(false);
+    setUndo(true);
     m_d->image->setUndoAdapter(m_d->undoAdapter);
     m_d->shapeController->setImage(m_d->image);
     m_d->nodeModel->setImage(m_d->image);
-    setUndo(true);
 
     connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
-
-
 
     emit sigLoadingFinished();
 
@@ -543,7 +543,11 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
     m_d->image->setUndoAdapter(m_d->undoAdapter);
     m_d->shapeController->setImage(image);
     m_d->nodeModel->setImage(image);
+
     setUndo(true);
+    setModified(false);
+
+    connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setModified()));
 
     emit sigLoadingFinished();
 }
@@ -565,8 +569,6 @@ void KisDoc2::undoIndexChanged(int idx)
     const QUndoCommand* command = undoStack()->command(idx);
     if (command) {
         m_d->undoAdapter->notifyCommandExecuted(undoStack()->command(idx));
-    } else {
-        kWarning() << "trying to clear undo stack to index" << idx << ": no command at that index";
     }
 }
 

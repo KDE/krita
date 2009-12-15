@@ -20,6 +20,7 @@
 #include <limits.h>
 
 #include <kglobalsettings.h>
+#include <libs/main/KoDocument.h>
 #include <kglobal.h>
 #include <kis_debug.h>
 #include <kconfig.h>
@@ -519,6 +520,13 @@ void KisConfig::setShowRootLayer(bool showRootLayer)
     m_cfg.writeEntry("ShowRootLayer", showRootLayer);
 }
 
+int KisConfig::autoSaveInterval() {
+    return m_cfg.readEntry("AutoSaveInterval", KoDocument::defaultAutoSave());
+}
+
+void KisConfig::setAutoSaveInterval(int seconds) {
+    return m_cfg.writeEntry("AutoSaveInterval", seconds);
+}
 
 quint32 KisConfig::maxCachedImageSize()
 {

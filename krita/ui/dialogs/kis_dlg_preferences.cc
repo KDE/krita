@@ -40,6 +40,7 @@
 #include <qgl.h>
 #endif
 
+#include <libs/main/KoDocument.h>
 #include <KoImageResource.h>
 #include <colorprofiles/KoIccColorProfile.h>
 
@@ -85,6 +86,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     chkShowRootLayer->setChecked(cfg.showRootLayer());
+
+    int autosaveInterval=cfg.autoSaveInterval();
+    //convert to minutes
+    m_autosaveSpinBox->setValue(autosaveInterval/60);
+    m_autosaveCheckBox->setChecked(autosaveInterval>0);
 }
 
 void GeneralTab::setDefault()
@@ -93,6 +99,9 @@ void GeneralTab::setDefault()
 
     m_cmbCursorShape->setCurrentIndex(cfg.getDefaultCursorStyle());
     chkShowRootLayer->setChecked(false);
+
+    m_autosaveCheckBox->setChecked(true);
+    m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave());
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -103,6 +112,11 @@ enumCursorStyle GeneralTab::cursorStyle()
 bool GeneralTab::showRootLayer()
 {
     return chkShowRootLayer->isChecked();
+}
+
+int GeneralTab::autoSaveInterval() {
+    //convert to seconds
+    return m_autosaveCheckBox->isChecked()?m_autosaveSpinBox->value()*60:0;
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -461,9 +475,16 @@ bool KisDlgPreferences::editPreferences()
     dialog = new KisDlgPreferences();
     bool baccept = (dialog->exec() == Accepted);
     if (baccept) {
+        // General settings
         KisConfig cfg;
         cfg.setCursorStyle(dialog->m_general->cursorStyle());
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
+
+        cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
+        foreach (KoDocument* doc, *KoDocument::documentList()) {
+            doc->setAutoSave(dialog->m_general->autoSaveInterval());
+         }
+
         // Color settings
         cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted());
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentText());

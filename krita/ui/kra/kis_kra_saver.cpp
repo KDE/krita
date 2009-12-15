@@ -78,8 +78,9 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     imageElement.setAttribute(COLORSPACE_NAME, image->colorSpace()->id());
     imageElement.setAttribute(DESCRIPTION, m_d->doc->documentInfo()->aboutInfo("comment"));
     // XXX: Save profile as blob inside the image, instead of the product name.
-    if (image->profile() && image->profile()-> valid())
+    if (image->profile() && image->profile()-> valid()) {
         imageElement.setAttribute(PROFILE, image->profile()->name());
+    }
     imageElement.setAttribute(X_RESOLUTION, image->xRes()*72.0);
     imageElement.setAttribute(Y_RESOLUTION, image->yRes()*72.0);
 

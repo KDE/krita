@@ -180,6 +180,9 @@ public:
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 
+    int autoSaveInterval();
+    void setAutoSaveInterval(int seconds);
+
     // in megapixels -- above 5, we will no longer use the
     // memory-guzzling qimage canvas cache
     quint32 maxCachedImageSize();

@@ -47,8 +47,8 @@ class KoChangeTracker::Private
 public:
     Private()
       : m_changeId(1),
-        m_enabled(false),
-        m_displayDeleted(false)
+        m_recordChanges(false),
+        m_displayChanges(false)
     {
     }
     ~Private() { }
@@ -60,8 +60,8 @@ public:
     QHash<QString, int> m_loadedChanges;
     QList<int> m_saveChanges;
     int m_changeId;
-    bool m_enabled;
-    bool m_displayDeleted;
+    bool m_recordChanges;
+    bool m_displayChanges;
 };
 
 KoChangeTracker::KoChangeTracker(QObject *parent)
@@ -76,24 +76,24 @@ KoChangeTracker::~KoChangeTracker()
     delete d;
 }
 
-void KoChangeTracker::setEnabled(bool enabled)
+void KoChangeTracker::setRecordChanges(bool enabled)
 {
-    d->m_enabled = enabled;
+    d->m_recordChanges = enabled;
 }
 
-bool KoChangeTracker::isEnabled()
+bool KoChangeTracker::recordChanges()
 {
-    return d->m_enabled;
+    return d->m_recordChanges;
 }
 
-void KoChangeTracker::setDisplayDeleted(bool enabled)
+void KoChangeTracker::setDisplayChanges(bool enabled)
 {
-    d->m_displayDeleted = enabled;
+    d->m_displayChanges = enabled;
 }
 
-bool KoChangeTracker::displayDeleted()
+bool KoChangeTracker::displayChanges()
 {
-    return d->m_displayDeleted;
+    return d->m_displayChanges;
 }
 
 int KoChangeTracker::getChangeId(QString &title, KoGenChange::Type type, QTextCursor &selection, QTextFormat& newFormat, int prevCharChangeId, int nextCharChangeId)
@@ -123,7 +123,7 @@ int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QText
     KUser user(KUser::UseRealUserID);
     changeElement->setCreator(user.property(KUser::FullName).toString());
 
-    changeElement->setEnabled(d->m_enabled);
+    changeElement->setEnabled(d->m_recordChanges);
 
     d->m_changes.insert(d->m_changeId, changeElement);
 
@@ -144,7 +144,7 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
     KUser user(KUser::UseRealUserID);
     changeElement->setCreator(user.property(KUser::FullName).toString());
 
-    changeElement->setEnabled(d->m_enabled);
+    changeElement->setEnabled(d->m_recordChanges);
 
     d->m_changes.insert(d->m_changeId, changeElement);
 
@@ -166,7 +166,7 @@ int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment sele
     //TODO preserve formating info there. this will do for now
     changeElement->setDeleteData(selection.toPlainText());
 
-    changeElement->setEnabled(d->m_enabled);
+    changeElement->setEnabled(d->m_recordChanges);
 
     d->m_changes.insert(d->m_changeId, changeElement);
 
@@ -291,7 +291,7 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
                                 changeElement->setCreator(creator.text());
                             }*/
                         }
-                        changeElement->setEnabled(d->m_enabled);
+                        changeElement->setEnabled(d->m_recordChanges);
                         d->m_changes.insert( d->m_changeId, changeElement);
                         d->m_loadedChanges.insert(tag.attributeNS(KoXmlNS::text,"id"), d->m_changeId++);
                     }

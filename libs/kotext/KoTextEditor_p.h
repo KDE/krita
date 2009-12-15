@@ -123,7 +123,7 @@ public:
             QTextCharFormat format = editor->charFormat();
             visitor.visit(format);
 
-            if (registerChange && KoTextDocument(editor->document()).changeTracker() && KoTextDocument(editor->document()).changeTracker()->isEnabled()) {
+            if (registerChange && KoTextDocument(editor->document()).changeTracker() && KoTextDocument(editor->document()).changeTracker()->recordChanges()) {
                 QTextCharFormat prevFormat(editor->charFormat());
 
                 int changeId = KoTextDocument(editor->document()).changeTracker()->getFormatChangeId(title, format, prevFormat, editor->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
@@ -157,7 +157,7 @@ public:
                 QTextCharFormat format = cursor.charFormat(); // this gets the format one char after the postion.
                 visitor.visit(format);
 
-                if (registerChange && KoTextDocument(editor->document()).changeTracker() && KoTextDocument(editor->document()).changeTracker()->isEnabled()) {
+                if (registerChange && KoTextDocument(editor->document()).changeTracker() && KoTextDocument(editor->document()).changeTracker()->recordChanges()) {
                     QTextCharFormat prevFormat(cursor.charFormat());
 
                     int changeId = KoTextDocument(editor->document()).changeTracker()->getFormatChangeId(title, format, prevFormat, cursor.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());

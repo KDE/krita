@@ -81,8 +81,7 @@ void ShowChangesCommand::enableDisableChanges()
 
 void ShowChangesCommand::enableDisableStates(bool showChanges)
 {
-    m_tool->m_changeTracker->setEnabled(showChanges);
-    m_tool->m_changeTracker->setDisplayDeleted(showChanges);
+    m_tool->m_changeTracker->setDisplayChanges(showChanges);
 
     QTextCharFormat format = m_tool->m_textEditor->charFormat();
     format.clearProperty(KoCharacterStyle::ChangeTrackerId);

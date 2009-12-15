@@ -379,10 +379,15 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setWhatsThis(i18n("Change paragraph margins, text flow, borders, bullets, numbering etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph where the cursor is located will be changed.</p>"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatParagraph()));
 
-    m_actionShowChanges = new KAction(i18n("Record"), this);
+    m_actionShowChanges = new KAction(i18n("Show Changes"), this);
     m_actionShowChanges->setCheckable(true);
-    addAction("edit_record_changes", m_actionShowChanges);
-    connect(m_actionShowChanges, SIGNAL(triggered(bool)), this, SLOT(toggleTrackChanges(bool)));
+    addAction("edit_show_changes", m_actionShowChanges);
+    connect(m_actionShowChanges, SIGNAL(triggered(bool)), this, SLOT(toggleShowChanges(bool)));
+
+    m_actionRecordChanges = new KAction(i18n("Record Changes"), this);
+    m_actionRecordChanges->setCheckable(true);
+    addAction("edit_record_changes", m_actionRecordChanges);
+    connect(m_actionRecordChanges, SIGNAL(triggered(bool)), this, SLOT(toggleRecordChanges(bool)));
 
     action = new KAction(i18n("Style Manager"), this);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_S);
@@ -759,7 +764,7 @@ void TextTool::copy() const
 
 void TextTool::deleteSelection()
 {
-    if(m_actionShowChanges->isChecked())
+    if(m_actionRecordChanges->isChecked())
       m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
     else
       m_textEditor->deleteChar();
@@ -912,7 +917,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         } else if (m_textEditor->position() > 0 || m_textEditor->hasSelection()) {
             if (!m_textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
                 m_textEditor->movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-            if(m_actionShowChanges->isChecked())
+            if(m_actionRecordChanges->isChecked())
               m_textEditor->addCommand(new DeleteCommand(DeleteCommand::PreviousChar, this));
             else
               m_textEditor->deletePreviousChar();
@@ -931,7 +936,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             m_textEditor->movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
-        if(m_actionShowChanges->isChecked())
+        if(m_actionRecordChanges->isChecked())
           m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
         else
           m_textEditor->deleteChar();
@@ -1088,7 +1093,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
     if (event->replacementLength() > 0) {
         m_textEditor->setPosition(m_textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
-            if(m_actionShowChanges->isChecked())
+            if(m_actionRecordChanges->isChecked())
               m_textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
             else
               m_textEditor->deleteChar();
@@ -1656,9 +1661,14 @@ void TextTool::formatParagraph()
     delete dia;
 }
 
-void TextTool::toggleTrackChanges(bool on)//TODO transfer this in KoTextEditor
+void TextTool::toggleShowChanges(bool on)//TODO transfer this in KoTextEditor
 {
     m_textEditor->addCommand(new ShowChangesCommand(on, this));
+}
+
+void TextTool::toggleRecordChanges(bool on)
+{
+    m_changeTracker->setRecordChanges(on);
 }
 
 void TextTool::selectAll()

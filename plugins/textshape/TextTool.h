@@ -188,8 +188,10 @@ private slots:
     void insertTable();
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
+    //When enabled, display changes
+    void toggleShowChanges(bool);
     /// When enabled, make the change tracker record changes made while typing
-    void toggleTrackChanges(bool);
+    void toggleRecordChanges(bool);
     /// select all text in the current document.
     void selectAll();
     /// show the style manager
@@ -291,6 +293,7 @@ private:
     KAction *m_actionFormatIncreaseIndent;
     KAction *m_actionFormatDecreaseIndent;
     KAction *m_actionShowChanges;
+    KAction *m_actionRecordChanges;
     KFontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;
 #ifndef NO_PIGMENT

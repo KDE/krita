@@ -1155,12 +1155,12 @@ static void drawDecorationText(QPainter *painter, const QTextLine &line, const Q
     painter->setPen(oldPen);
 }
 
-static void drawDecorationWords(QPainter *painter, const QTextLine &line, const QString &text, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const QString& decorText, qreal width, const qreal y)
+static void drawDecorationWords(QPainter *painter, const QTextLine &line, const QString &text, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const QString& decorText, qreal width, const qreal y, const int fragmentToLineOffset, const int startOfFragmentInBlock)
 {
     qreal wordBeginX = -1;
-    int j = line.textStart();
-    while (j < line.textLength() + line.textStart()) {
-        if (text[j].isSpace()) {
+    int j = line.textStart()+fragmentToLineOffset;
+    while (j < line.textLength() + line.textStart() && j-startOfFragmentInBlock<text.size()) {
+        if (text[j-startOfFragmentInBlock].isSpace()) {
             if (wordBeginX != -1) {
                 if (decorText.isEmpty())
                     drawDecorationLine(painter, color, type, style, width, wordBeginX, line.cursorToX(j), y);
@@ -1385,7 +1385,7 @@ void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int sel
 //    layout->setAdditionalFormats(ranges);
 }
 
-static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragment, const QTextLine& line, qreal x1, qreal x2)
+static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragment, const QTextLine& line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset)
 {
     QTextCharFormat fmt = currentFragment.charFormat();
     KoCharacterStyle::LineStyle strikeOutStyle = (KoCharacterStyle::LineStyle)
@@ -1411,7 +1411,7 @@ static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragme
         }
 
         if (strikeOutMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
-            drawDecorationWords(painter, line, currentFragment.text(), color, strikeOutType, strikeOutStyle, strikeOutText, width, y);
+            drawDecorationWords(painter, line, currentFragment.text(), color, strikeOutType, strikeOutStyle, strikeOutText, width, y, fragmentToLineOffset, startOfFragmentInBlock);
         } else {
             if (strikeOutText.isEmpty())
                 drawDecorationLine(painter, color, strikeOutType, strikeOutStyle, width, x1, x2, y);
@@ -1421,7 +1421,7 @@ static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragme
     }
 }
 
-static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragment, const QTextLine& line, qreal x1, qreal x2)
+static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragment, const QTextLine& line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset)
 {
     QTextCharFormat fmt = currentFragment.charFormat();
     KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
@@ -1441,7 +1441,7 @@ static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragme
                           fmt.font());
         if (underlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
             drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType,
-                    fontUnderLineStyle, QString(), width, y);
+                    fontUnderLineStyle, QString(), width, y, fragmentToLineOffset, startOfFragmentInBlock);
         } else {
             drawDecorationLine(painter, color, fontUnderLineType, fontUnderLineStyle, width, x1, x2, y);
         }
@@ -1474,6 +1474,7 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
             int firstLine = layout->lineForTextPosition(currentFragment.position() - startOfBlock).lineNumber();
             int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length()
                     - startOfBlock).lineNumber();
+            int startOfFragmentInBlock = currentFragment.position() - startOfBlock;
             for (int i = firstLine ; i <= lastLine ; i++) {
                 QTextLine line = layout->lineAt(i);
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
@@ -1481,8 +1482,11 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                     qreal x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
                     x2 = qMin(line.naturalTextWidth() + line.cursorToX(line.textStart()), x2);
 
-                    drawStrikeOuts(painter, currentFragment, line, x1, x2);
-                    drawUnderlines(painter, currentFragment, line, x1, x2);
+                    // sometimes a fragment starts in the middle of a line, so calc offset
+                    int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
+
+                    drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+                    drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                     decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
 
                     bool misspelled = fmt.boolProperty(KoCharacterStyle::Spelling);

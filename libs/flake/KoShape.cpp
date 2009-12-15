@@ -46,6 +46,7 @@
 #include "KoEventActionRegistry.h"
 #include "KoOdfWorkaround.h"
 #include "KoFilterEffectStack.h"
+#include <KoSnapData.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>

@@ -34,7 +34,7 @@
 #include <QMetaType>
 
 #include <KoXmlReaderForward.h>
-#include <KoSnapData.h>
+//#include <KoSnapData.h>
 
 #include "flake_export.h"
 
@@ -59,6 +59,7 @@ class KoShapeShadow;
 class KoEventAction;
 class KoShapePrivate;
 class KoFilterEffectStack;
+class KoSnapData;
 
 /**
  *

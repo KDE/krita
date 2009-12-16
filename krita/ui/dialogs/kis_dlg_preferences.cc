@@ -99,9 +99,9 @@ void GeneralTab::setDefault()
 
     m_cmbCursorShape->setCurrentIndex(cfg.getDefaultCursorStyle());
     chkShowRootLayer->setChecked(false);
-
     m_autosaveCheckBox->setChecked(true);
-    m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave());
+    //convert to minutes
+    m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave()/60);
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -184,6 +184,8 @@ void ColorSettingsTab::setDefault()
 
     m_page->cmbPrintingColorSpace->setCurrent("CMYK");
     refillPrintProfiles(KoID("CMYK", ""));
+
+    refillMonitorProfiles(KoID("RGBA", ""));
 
     m_page->chkBlackpoint->setChecked(false);
     m_page->cmbMonitorIntent->setCurrentIndex(INTENT_PERCEPTUAL);
@@ -346,11 +348,12 @@ GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
 
     intHSpacing->setValue(cfg.getGridHSpacing());
     intVSpacing->setValue(cfg.getGridVSpacing());
+    linkSpacingToggled(cfg.getGridHSpacing()==cfg.getGridVSpacing());
+
     intSubdivision->setValue(cfg.getGridSubdivisions());
     intOffsetX->setValue(cfg.getGridOffsetX());
     intOffsetY->setValue(cfg.getGridOffsetY());
 
-    linkSpacingToggled(true);
     connect(bnLinkSpacing, SIGNAL(toggled(bool)), this, SLOT(linkSpacingToggled(bool)));
 
     connect(intHSpacing, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHSpacingChanged(int)));
@@ -370,6 +373,7 @@ void GridSettingsTab::setDefault()
 
     intHSpacing->setValue(10);
     intVSpacing->setValue(10);
+    linkSpacingToggled(true);
     intSubdivision->setValue(1);
     intOffsetX->setValue(0);
     intOffsetY->setValue(0);
@@ -392,6 +396,7 @@ void GridSettingsTab::spinBoxVSpacingChanged(int v)
 
 void GridSettingsTab::linkSpacingToggled(bool b)
 {
+    bnLinkSpacing->setChecked(b);
     m_linkSpacing = b;
 
     KoImageResource kir;
@@ -414,6 +419,8 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     setDefaultButton(Ok);
     showButtonSeparator(true);
     setFaceType(KPageDialog::List);
+
+    // General
     KVBox *vbox = new KVBox();
     KPageWidgetItem *page = new KPageWidgetItem(vbox, i18n("General"));
     page->setHeader(i18n("General"));
@@ -421,20 +428,23 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     addPage(page);
     m_general = new GeneralTab(vbox);
 
+    // Display
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Display"));
     page->setHeader(i18n("Display"));
     page->setIcon(KIcon("preferences-desktop-display"));
     addPage(page);
-
     m_displaySettings = new DisplaySettingsTab(vbox);
 
+    // Color
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Color Management"));
     page->setHeader(i18n("Color"));
     page->setIcon(KIcon("preferences-desktop-color"));
     addPage(page);
     m_colorSettings = new ColorSettingsTab(vbox);
+
+    // Performance
 #if 0
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Performance"));
@@ -443,13 +453,16 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     addPage(page);
     m_performanceSettings = new PerformanceTab(vbox);
 #endif
+
+    // Grid
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Grid"));
     page->setHeader(i18n("Grid"));
     page->setIcon(KIcon(BarIcon("grid", KIconLoader::SizeMedium)));
     addPage(page);
-
     m_gridSettings = new GridSettingsTab(vbox);
+
+    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
 
 }
 
@@ -461,7 +474,9 @@ void KisDlgPreferences::slotDefault()
 {
     m_general->setDefault();
     m_colorSettings->setDefault();
+#if 0
     m_performanceSettings->setDefault();
+#endif
 #ifdef HAVE_OPENGL
     m_displaySettings->setDefault();
 #endif

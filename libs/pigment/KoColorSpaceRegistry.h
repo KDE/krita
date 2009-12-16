@@ -33,8 +33,6 @@ class KoColorProfile;
 class KoColorConversionSystem;
 class KoColorConversionCache;
 
-// XXX: USE STATIC DELETER! USE STATIC DELETER!
-
 /**
  * The registry for colorspaces and profiles.
  * This class contains:

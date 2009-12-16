@@ -1421,7 +1421,7 @@ static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragme
             width = computeWidth(
                         (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::StrikeOutWeight),
                         fmt.doubleProperty(KoCharacterStyle::StrikeOutWidth),
-                        painter->font())/2;
+                        font)/2;
         }
 
         if (strikeOutMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {

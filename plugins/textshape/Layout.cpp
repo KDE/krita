@@ -1394,7 +1394,21 @@ static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragme
             fmt.intProperty(KoCharacterStyle::StrikeOutType);
     if ((strikeOutStyle != KoCharacterStyle::NoLineStyle) &&
             (strikeOutType != KoCharacterStyle::NoLineType)) {
-        qreal y = line.position().y() + line.height() / 2;
+        qreal y = line.position().y() + line.ascent();
+        QTextCharFormat::VerticalAlignment valign = fmt.verticalAlignment();
+    
+        QFont font(fmt.font());
+        if(valign == QTextCharFormat::AlignSubScript || valign == QTextCharFormat::AlignSuperScript)
+            font.setPointSize((font.pointSize() * 2) / 3);       
+        QFontMetrics metrics(font);
+    
+        y -= metrics.strikeOutPos()/2;
+        qreal height = (metrics.ascent() + metrics.descent())/2;
+        if (valign == QTextCharFormat::AlignSubScript)
+            y += height / 6;
+        else if (valign == QTextCharFormat::AlignSuperScript)
+            y -= height / 2;
+        
         QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
         if (!color.isValid())
             color = fmt.foreground().color();
@@ -1407,7 +1421,7 @@ static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragme
             width = computeWidth(
                         (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::StrikeOutWeight),
                         fmt.doubleProperty(KoCharacterStyle::StrikeOutWidth),
-                        painter->font());
+                        painter->font())/2;
         }
 
         if (strikeOutMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
@@ -1428,8 +1442,21 @@ static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragme
     KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);
     if ((fontUnderLineStyle != KoCharacterStyle::NoLineStyle) &&
             (fontUnderLineType != KoCharacterStyle::NoLineType)) {
-        QFontMetrics metrics(fmt.font());
-        qreal y = line.position().y() + line.ascent() + metrics.underlinePos();
+        qreal y = line.position().y() + line.ascent();
+        QTextCharFormat::VerticalAlignment valign = fmt.verticalAlignment();
+    
+        QFont font(fmt.font());
+        if(valign == QTextCharFormat::AlignSubScript || valign == QTextCharFormat::AlignSuperScript)
+            font.setPointSize((font.pointSize() * 2) / 3);       
+        QFontMetrics metrics(font);
+    
+        y += metrics.underlinePos()/2;
+        qreal height = (metrics.ascent() + metrics.descent())/2;
+        if (valign == QTextCharFormat::AlignSubScript)
+            y += height / 6;
+        else if (valign == QTextCharFormat::AlignSuperScript)
+            y -= height / 2;
+        
         QColor color = fmt.underlineColor();
         if (!color.isValid())
             color = fmt.foreground().color();
@@ -1438,7 +1465,7 @@ static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragme
         qreal width = computeWidth(
                           (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::UnderlineWeight),
                           fmt.doubleProperty(KoCharacterStyle::UnderlineWidth),
-                          fmt.font());
+                          font)/2;
         if (underlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
             drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType,
                     fontUnderLineStyle, QString(), width, y, fragmentToLineOffset, startOfFragmentInBlock);

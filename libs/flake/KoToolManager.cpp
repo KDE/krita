@@ -635,6 +635,8 @@ void KoToolManager::Private::switchToolByShortcut(QKeyEvent *event)
     }
     if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
         switchTool(KoPanTool_ID, true);
+    } else if (event->key() == Qt::Key_Escape && event->modifiers() == 0) {
+        switchTool(KoInteractionTool_ID, false);
     }
 }
 

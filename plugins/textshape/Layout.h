@@ -129,6 +129,13 @@ private:
      */
     void handleTableBreak(QTextTableCell &previousCell, QTextTable *table);
 
+    void drawStrikeOuts(QPainter *painter, const QTextFragment &currentFragment,
+            const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock,
+            const int fragmentToLineOffset) const;
+    void drawUnderlines(QPainter *painter, const QTextFragment &currentFragment,
+            const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock,
+            const int fragmentToLineOffset) const;
+
 private:
     KoStyleManager *m_styleManager;
 

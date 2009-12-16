@@ -1400,7 +1400,7 @@ static void drawStrikeOuts(QPainter *painter, const QTextFragment& currentFragme
         QFont font(fmt.font());
         if(valign == QTextCharFormat::AlignSubScript || valign == QTextCharFormat::AlignSuperScript)
             font.setPointSize((font.pointSize() * 2) / 3);       
-        QFontMetrics metrics(font);
+        QFontMetricsF metrics(font, painter->device());
     
         y -= metrics.strikeOutPos()/2;
         qreal height = (metrics.ascent() + metrics.descent())/2;
@@ -1448,7 +1448,7 @@ static void drawUnderlines(QPainter *painter, const QTextFragment& currentFragme
         QFont font(fmt.font());
         if(valign == QTextCharFormat::AlignSubScript || valign == QTextCharFormat::AlignSuperScript)
             font.setPointSize((font.pointSize() * 2) / 3);       
-        QFontMetrics metrics(font);
+        QFontMetricsF metrics(font, painter->device());
     
         y += metrics.underlinePos()/2;
         qreal height = (metrics.ascent() + metrics.descent())/2;

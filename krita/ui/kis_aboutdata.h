@@ -37,6 +37,7 @@ KAboutData * newKritaAboutData()
                                             "http://www.krita.org",
                                             "submit@bugs.kde.org");
     aboutData->addAuthor(ki18n("Adrian Page"), KLocalizedString(), "Adrian.Page@tesco.net");
+    aboutData->addAuthor(ki18n("Adam Celarek"), KLocalizedString(), "tuobaatirk@xibo.at");
     aboutData->addAuthor(ki18n("Alan Horkan"), KLocalizedString(), "", "http://www.openclipart.org");
     aboutData->addAuthor(ki18n("Bart Coppens"), KLocalizedString(), "kde@bartcoppens.be");
     aboutData->addAuthor(ki18n("Boudewijn Rempt"), KLocalizedString(), "boud@valdyas.org", "http://www.valdyas.org/fading/index.cgi");

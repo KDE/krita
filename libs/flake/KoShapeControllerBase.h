@@ -23,10 +23,11 @@
 #ifndef KOSHAPECONTROLLERBASE_H
 #define KOSHAPECONTROLLERBASE_H
 
-#include <QtGlobal>
 #include <QMap>
+#include "flake_export.h"
 
 class KoShape;
+class QString;
 class KoDataCenter;
 
 /**
@@ -34,11 +35,11 @@ class KoDataCenter;
  * that controls the shapes should implement.  This tends to be the document.
  * @see KoShapeDeleteCommand, KoShapeCreateCommand
  */
-class KoShapeControllerBase
+class FLAKE_EXPORT KoShapeControllerBase
 {
 public:
-    KoShapeControllerBase() { }
-    virtual ~KoShapeControllerBase() { }
+    KoShapeControllerBase();
+    virtual ~KoShapeControllerBase();
 
     /**
      * Add a shape to the shape controller, allowing it to be seen and saved.

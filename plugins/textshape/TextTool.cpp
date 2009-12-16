@@ -1151,7 +1151,7 @@ void TextTool::ensureCursorVisible()
 
 void TextTool::keyReleaseEvent(QKeyEvent *event)
 {
-    event->ignore();
+    event->accept();
 }
 
 void TextTool::updateActions()

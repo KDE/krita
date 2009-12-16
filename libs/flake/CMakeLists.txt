@@ -85,6 +85,7 @@ set(flake_SRCS
     KoSnapData.cpp
     SnapGuideConfigWidget.cpp
     KoShapeShadow.cpp
+    KoSharedSavingData.cpp
     KoViewConverter.cpp
     KoDevice.cpp
     KoDeviceEvent.cpp
@@ -258,6 +259,7 @@ install(
     KoShapeSavingContext.h
     KoShapeUserData.h
     KoShapeApplicationData.h
+    KoSharedSavingData.h
     KoTool.h
     KoToolManager.h
     KoToolFactory.h

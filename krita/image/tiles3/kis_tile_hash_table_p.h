@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QtGlobal>
+#include "kis_debug.h"
 
 template<class T>
 KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
@@ -252,12 +254,12 @@ KisTileData* KisTileHashTableTraits<T>::defaultTileData()
 template<class T>
 void KisTileHashTableTraits<T>::debugPrintInfo()
 {
-    printf("==========================\n");
-    printf("TileHashTable:\n");
-    printf("   def. data:\t\t0x%X\n", (quintptr) m_defaultTileData);
-    printf("   numTiles:\t\t%d\n", (int) m_numTiles);
+    dbgTiles << "==========================\n"
+             << "TileHashTable:"
+             << "\n   def. data:\t\t" << m_defaultTileData
+             << "\n   numTiles:\t\t" << m_numTiles;
     debugListLengthDistibution();
-    printf("==========================\n");
+    dbgTiles << "==========================\n";
 }
 
 template<class T>
@@ -306,12 +308,12 @@ void KisTileHashTableTraits<T>::debugListLengthDistibution()
         array[tmp-min]++;
     }
 
-    printf("   minChain:\t\t%d\n", min);
-    printf("   maxChain:\t\t%d\n", max);
+    dbgTiles << QString("   minChain:\t\t%d\n"
+                        "   maxChain:\t\t%d").arg(min, max);
 
-    printf("   Chain size distribution:\n");
+    dbgTiles << "   Chain size distribution:";
     for (qint32 i = 0; i < arraySize; i++)
-        printf("      %3d:\t%4d\n", i + min, array[i]);
+        dbgTiles << QString("      %1:\t%2\n").arg(i + min, array[i]);
 
     delete[] array;
 }

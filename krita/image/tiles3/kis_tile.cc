@@ -21,7 +21,7 @@
 #include "kis_tile_data_store.h"
 #include "kis_tile.h"
 #include "kis_memento_manager.h"
-
+#include "kis_debug.h"
 
 
 void KisTile::init(qint32 col, qint32 row,
@@ -133,10 +133,11 @@ void KisTile::unlock() const
 #include <stdio.h>
 void KisTile::debugPrintInfo()
 {
-    printf("------\n");
-    printf("Tile:\t\t\t0x%X\n", (quintptr) this);
-    printf("   data:\t0x%X\n", (quintptr) m_tileData);
-    printf("   next:\t0x%X\n", (quintptr) m_nextTile.data());
+    dbgTiles << "------\n"
+                "Tile:\t\t\t" << this
+                << "\n   data:\t" << m_tileData
+                << "\n   next:\t" <<  m_nextTile.data();
+
 }
 
 void KisTile::debugDumpTile()
@@ -146,9 +147,8 @@ void KisTile::debugDumpTile()
 
     for (int i = 0; i < KisTileData::HEIGHT; i++) {
         for (int j = 0; j < KisTileData::WIDTH; j++) {
-            printf("%4d ", data[(i*KisTileData::WIDTH+j)*pixelSize()]);
+            dbgTiles << data[(i*KisTileData::WIDTH+j)*pixelSize()];
         }
-        printf("\n");
     }
     unlock();
 }

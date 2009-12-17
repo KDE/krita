@@ -68,7 +68,7 @@ int KisNodeProgressProxy::percentage() const
 
 void KisNodeProgressProxy::setValue(int _value)
 {
-    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    //QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     d->value = _value;
     if (d->computePercentage()) {
         emit(percentageChanged(d->percentage, d->node));

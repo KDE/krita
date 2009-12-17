@@ -113,43 +113,47 @@ void EmfShape::paintDecorations(QPainter &painter, const KoViewConverter &conver
 
 void EmfShape::draw(QPainter &painter)
 {
-    Libemf::Parser  emfParser;
-
     // FIXME: Make emfOutput use QSizeF
     QSize  sizeInt( size().width(), size().height() );
-    //kDebug() << "-------------------------------------------";
-    //kDebug() << "size: " << sizeInt;
-    //kDebug() << "-------------------------------------------";
+    kDebug(33001) << "-------------------------------------------";
+    kDebug(33001) << "size:     " << sizeInt << size();
+    kDebug(33001) << "position: " << position();
+    kDebug(33001) << "-------------------------------------------";
+
+    // If the data is uninitialized, e.g. because loading failed, draw a simple cross.
+    if (m_size == 0) {
+        QRectF  rect(QPointF(0,0), size());
+        painter.setPen(QPen(QColor(172, 196, 206)));
+        painter.drawRect(rect);
+        painter.drawLine(rect.topLeft(), rect.bottomRight());
+        painter.drawLine(rect.bottomLeft(), rect.topRight());
+
+        return;
+    }
+
+    // FIXME: Make it static to save time?
+    Libemf::Parser  emfParser;
+
     Libemf::OutputPainterStrategy  emfOutput( painter, sizeInt );
     emfParser.setOutput( &emfOutput );
     
-    // FIXME: Use the actual bytes.
-    QByteArray  emfArray( &defaultEMF[0], sizeof(defaultEMF) );
-    QBuffer     emfBuffer( &emfArray );
-    emfBuffer.open( QIODevice::ReadOnly );
+    // At this point we have some data.  Now draw it.
+#if 0
+    QByteArray  emfArray(&defaultEMF[0], sizeof(defaultEMF));
+#else
+    QByteArray  emfArray(m_bytes, m_size);
+#endif
+    QBuffer     emfBuffer(&emfArray);
+    emfBuffer.open(QIODevice::ReadOnly);
 
     QDataStream  emfStream;
-    emfStream.setDevice( &emfBuffer );
-    emfStream.setByteOrder( QDataStream::LittleEndian );
+    emfStream.setDevice(&emfBuffer);
+    emfStream.setByteOrder(QDataStream::LittleEndian);
 
-    emfParser.loadFromStream( emfStream );
+    // This does the actual painting.
+    emfParser.loadFromStream(emfStream);
 
     return;
-
-    // Old code, not in use any more.
-    QPixmap pixmap = QPixmap::fromImage( *(emfOutput.image()) );
-    painter.drawPixmap( 0, 0, 
-                        pixmap.scaled( int(size().width()), int(size().height()),
-                                       Qt::KeepAspectRatio,
-                                       Qt::SmoothTransformation ) );
-    return;
-
-    // Draw a cross
-    QRectF  rect(QPointF(0,0), size());
-    painter.setPen(QPen(QColor(172, 196, 206)));
-    painter.drawRect(rect);
-    painter.drawLine(rect.topLeft(), rect.bottomRight());
-    painter.drawLine(rect.bottomLeft(), rect.topRight());
 }
 
 void EmfShape::saveOdf(KoShapeSavingContext & context) const
@@ -159,7 +163,7 @@ void EmfShape::saveOdf(KoShapeSavingContext & context) const
     // FIXME: NYI
 }
 
-bool EmfShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool EmfShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
     //kDebug() <<"Loading ODF frame in the EMF shape. Element = " << element.tagName();
     loadOdfAttributes(element, context, OdfAllAttributes);
@@ -179,14 +183,20 @@ inline static int read32(const char *buffer, const int offset)
 }
 
 // Load the actual contents within the EMF shape.
-bool EmfShape::loadOdfFrameElement( const KoXmlElement & element,
-                                    KoShapeLoadingContext &context )
+bool EmfShape::loadOdfFrameElement(const KoXmlElement & element,
+                                   KoShapeLoadingContext &context)
 {
     //kDebug() <<"Loading ODF element: " << element.tagName();
 
     // Get the reference to the EMF file.  If there is no href, then just return.
     const QString href = element.attribute("href");
     if (href.isEmpty())
+        return false;
+
+    // Check if the contents is a .wmf.  So far we haven't found a
+    // test that picks a emf but skips a wmf.  The file name could
+    // give a clue.
+    if (href.endsWith(".wmf"))
         return false;
 
     KoStore *store  = context.odfLoadingContext().store();

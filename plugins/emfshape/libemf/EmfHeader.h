@@ -66,6 +66,14 @@ public:
     */
     QRect bounds() const;
 
+    /**
+       The frame of the file content, in device units
+    */
+    QRect frame() const;
+
+    QSize device() const;
+    QSize millimeters() const;
+
 private:
     // Temporary hack to read some bytes.
     void soakBytes( QDataStream &stream, int numBytes );

@@ -62,9 +62,22 @@ void OutputPainterStrategy::init( const Header *header )
 {
     QSize  emfSize = header->bounds().size();
 
+    //qDebug("emfOrigin  = %d, %d", header->bounds().x(), header->bounds().y());
+    //qDebug("emfSize    = %d, %d", emfSize.width(), emfSize.height() );
+    //qDebug("emfFrame   = %d, %d, %d, %d", 
+    //       header->frame().x(), header->bounds().y(),
+    //       header->bounds().width(), header->bounds().height());
     //qDebug("emfSize    = %d, %d", emfSize.width(), emfSize.height() );
     //qDebug("outputSize = %d, %d", m_outputSize.width(), m_outputSize.height() );
 
+    //qDebug("Device = %d, %d", header->device().width(), header->device().height() );
+    //qDebug("Millimeters = %d, %d", header->millimeters().width(), header->millimeters().height() );
+
+    // This is restored in cleanup().
+    m_painter->save();
+
+    //m_painter->setPen(QColor(255,0,0));
+    //m_painter->drawRect( 0, 0, m_outputSize.width(), m_outputSize.height());// Note possible translation
     // Calculate how much the painter should be resized to fill the
     // outputSize with output.
     qreal  scaleX = qreal( m_outputSize.width() )  / emfSize.width();
@@ -77,14 +90,16 @@ void OutputPainterStrategy::init( const Header *header )
         else
             scaleY = scaleX;
 
-    // FIXME: Calculate translation if we should center the Emf in the
-    //        area and keep the aspect ratio.
+        // Calculate translation if we should center the Emf in the
+        // area and keep the aspect ratio.
+        m_painter->translate((m_outputSize.width() - emfSize.width() * scaleX) / 2,
+                             (m_outputSize.height() - emfSize.height() * scaleY) / 2);
     }
-
-    // This is restored in cleanup().
-    m_painter->save();
-
+    //qDebug("scale    = %f, %f", scaleX, scaleY);
     m_painter->scale( scaleX, scaleY );
+
+    //m_painter->setPen(QColor(0,0,255));
+    //m_painter->drawRect( 0, 0, emfSize.width(), emfSize.height());
 }
 
 void OutputPainterStrategy::cleanup( const Header *header )
@@ -612,6 +627,10 @@ void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
 
     m_painter->drawText( position, extTextOutA.textString() );
 
+    qDebug("extTextOutA: ref.point = %d %d, Text = %s", 
+           extTextOutA.referencePoint().x(), extTextOutA.referencePoint().y(),
+           extTextOutA.textString().toLatin1().data());
+
     m_painter->restore();
 }
 
@@ -621,6 +640,9 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
 
     m_painter->setPen( m_textPen );
     m_painter->drawText( referencePoint, textString );
+
+    qDebug("extTextOutW: ref.point = %d %d, Text = %s", 
+           referencePoint.x(), referencePoint.y(), textString.toLatin1().data());
 
     m_painter->restore();
 }

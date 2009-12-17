@@ -65,6 +65,21 @@ QRect Header::bounds() const
     return mBounds;
 }
 
+QRect Header::frame() const
+{
+    return mFrame;
+}
+
+QSize Header::device() const
+{
+    return mDevice;
+}
+
+QSize Header::millimeters() const
+{
+    return mMillimeters;
+}
+
 quint32 Header::recordCount() const
 {
     return mRecords;

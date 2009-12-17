@@ -160,13 +160,11 @@ bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
 bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
 {
 
-    //connect(*node->paintDevice(), SIGNAL(ioProgress(qint8)), m_image, SLOT(slotIOProgress(qint8)));
     // Layer data
     if (m_store->open(getLocation(node))) {
         if (!node->paintDevice()->write(m_store)) {
             node->paintDevice()->disconnect();
             m_store->close();
-            //IODone();
             return false;
         }
 
@@ -215,7 +213,6 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     }
     if (selection->hasPixelSelection()) {
         KisPaintDeviceSP dev = selection->pixelSelection();
-        //connect(*dev, SIGNAL(ioProgress(qint8)), m_image, SLOT(slotIOProgress(qint8)));
         // Layer data
         QString location = getLocation(node, DOT_PIXEL_SELECTION);
         if (m_store->open(location)) {

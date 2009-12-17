@@ -295,14 +295,11 @@ bool KisDoc2::completeSaving(KoStore *store)
 {
     QString uri = url().url();
 
-    setIOSteps(m_d->image->nlayers() + 1);
-
     m_d->kraSaver->saveBinaryData(store, m_d->image, url().url(), isStoredExtern());
 
     delete m_d->kraSaver;
     m_d->kraSaver = 0;
 
-    IODone();
     return true;
 }
 
@@ -311,11 +308,8 @@ bool KisDoc2::completeLoading(KoStore *store)
 {
     if (!m_d->image) return false;
 
-    setIOSteps(m_d->image->nlayers());
-
     m_d->kraLoader->loadBinaryData(store, m_d->image, url().url(), isStoredExtern());
 
-    IODone();
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
 
@@ -489,35 +483,6 @@ KoShape * KisDoc2::addShape(const KisNodeSP node)
 KisNodeModel * KisDoc2::nodeModel() const
 {
     return m_d->nodeModel;
-}
-
-void KisDoc2::setIOSteps(qint32 nsteps)
-{
-    m_d->ioProgressTotalSteps = nsteps * 100;
-    m_d->ioProgressBase = 0;
-    emitProgress(0);
-}
-
-void KisDoc2::IOCompletedStep()
-{
-    m_d->ioProgressBase += 100;
-}
-
-void KisDoc2::IODone()
-{
-    emitProgress(-1);
-}
-
-void KisDoc2::slotIOProgress(qint8 percentage)
-{
-    Q_ASSERT(qApp);
-
-    if (qApp->hasPendingEvents())
-        qApp->processEvents();
-
-    int totalPercentage = ((m_d->ioProgressBase + percentage) * 100) / m_d->ioProgressTotalSteps;
-
-    emitProgress(totalPercentage);
 }
 
 void KisDoc2::prepareForImport()

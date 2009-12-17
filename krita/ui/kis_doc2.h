@@ -175,10 +175,6 @@ private:
 
     bool init();
 
-    void setIOSteps(qint32 nsteps);
-    void IOCompletedStep();
-    void IODone();
-
 private:
 
     class KisDocPrivate;

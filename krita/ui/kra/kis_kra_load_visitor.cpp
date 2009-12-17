@@ -158,8 +158,6 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
     // style, which has selections with selection components
 
     if (m_syntaxVersion == 1) {
-
-        //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_image, SLOT(slotIOProgress(qint8)));
         QString location = getLocation(layer, ".selection");
         KisSelectionSP selection = new KisSelection();
         KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
@@ -254,13 +252,11 @@ bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
 
 bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& location)
 {
-    //connect(*device, SIGNAL(ioProgress(qint8)), m_image, SLOT(slotIOProgress(qint8)));
     // Layer data
     if (m_store->open(location)) {
         if (!device->read(m_store)) {
             device->disconnect();
             m_store->close();
-            //IODone();
             return false;
         }
 

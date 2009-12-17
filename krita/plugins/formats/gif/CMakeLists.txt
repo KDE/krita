@@ -2,11 +2,11 @@
 include_directories( ${KRITA_INCLUDES} )
 
 set(libkritaconverter_LIB_SRCS
-    gif_converter.cc
+    gif_converter.cpp
     )
 
 set(kritagifimport_PART_SRCS
-    gif_import.cc
+    gif_import.cpp
     ${libkritaconverter_LIB_SRCS}
     )
 
@@ -21,7 +21,7 @@ install(TARGETS kritagifimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 set(kritagifexport_PART_SRCS
-    gif_export.cc
+    gif_export.cpp
     ${libkritaconverter_LIB_SRCS}
     )
 

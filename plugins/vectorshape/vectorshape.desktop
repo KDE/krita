@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Static Vector Shape
+Name[x-test]=xxStatic Vector Shapexx
+X-KDE-ServiceTypes=KOffice/Flake
+Type=Service
+X-KDE-Library=vectorshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

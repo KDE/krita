@@ -20,7 +20,7 @@
 
 
 // Own
-#include "EmfShapePlugin.h"
+#include "VectorShapePlugin.h"
 
 // KDE
 #include <kgenericfactory.h>
@@ -29,18 +29,18 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
-// EmfShape
-#include "EmfToolFactory.h"
-#include "EmfShapeFactory.h"
+// VectorShape
+#include "VectorToolFactory.h"
+#include "VectorShapeFactory.h"
 
 
-K_EXPORT_COMPONENT_FACTORY(emfshape, KGenericFactory<EmfShapePlugin>( "EmfShape" ) )
+K_EXPORT_COMPONENT_FACTORY(vectorshape, KGenericFactory<VectorShapePlugin>( "VectorShape" ) )
 
-EmfShapePlugin::EmfShapePlugin(QObject * parent, const QStringList &)
+VectorShapePlugin::VectorShapePlugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
-    //KoToolRegistry::instance()->add(new EmfToolFactory(parent));
-    KoShapeRegistry::instance()->add(new EmfShapeFactory(parent));
+    //KoToolRegistry::instance()->add(new VectorToolFactory(parent));
+    KoShapeRegistry::instance()->add(new VectorShapeFactory(parent));
 }
 
-#include "EmfShapePlugin.moc"
+#include "VectorShapePlugin.moc"

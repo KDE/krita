@@ -19,8 +19,8 @@
  */
 
 
-#ifndef EMFSHAPE_FACTORY_H
-#define EMFSHAPE_FACTORY_H
+#ifndef VECTORSHAPE_FACTORY_H
+#define VECTORSHAPE_FACTORY_H
 
 // KOffice
 #include <KoShapeFactory.h>
@@ -28,13 +28,13 @@
 
 class KoShape;
 
-class EmfShapeFactory : public KoShapeFactory {
+class VectorShapeFactory : public KoShapeFactory {
     Q_OBJECT
 
 public:
     /// constructor
-    explicit EmfShapeFactory(QObject *parent);
-    ~EmfShapeFactory() {}
+    explicit VectorShapeFactory(QObject *parent);
+    ~VectorShapeFactory() {}
 
     KoShape *createDefaultShape() const;
     KoShape *createShape(const KoProperties * params) const;

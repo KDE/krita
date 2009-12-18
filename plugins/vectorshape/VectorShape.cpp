@@ -20,7 +20,7 @@
 
 
 // Own
-#include "EmfShape.h"
+#include "VectorShape.h"
 
 // Posix
 #include <math.h>
@@ -49,30 +49,30 @@
 #include "libemf/EmfOutputPainterStrategy.h"
 
 
-// EMF shape
+// Vector shape
 #include "DefaultEmf.h"
 #include "libemf/EmfParser.h"
 #include "libemf/EmfOutputPainterStrategy.h"
 
 
-EmfShape::EmfShape()
+VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
     , m_bytes(0)
     , m_size(0)
     , m_ownsBytes(false)
     , m_printable(true)
 {
-    setShapeId(EmfShape_SHAPEID);
+    setShapeId(VectorShape_SHAPEID);
 
    // Default size of the shape.
     KoShape::setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
 }
 
-EmfShape::~EmfShape()
+VectorShape::~VectorShape()
 {
 }
 
-void  EmfShape::setEmfBytes( char *bytes, int size, bool takeOwnership )
+void  VectorShape::setVectorBytes( char *bytes, int size, bool takeOwnership )
 {
     if (m_bytes != 0 && m_ownsBytes)
         delete []m_bytes;
@@ -82,24 +82,25 @@ void  EmfShape::setEmfBytes( char *bytes, int size, bool takeOwnership )
     m_ownsBytes = takeOwnership;
 }
 
-char *EmfShape::emfBytes()
+char *VectorShape::vectorBytes()
 {
     return m_bytes;
 }
 
-int   EmfShape::emfSize()
+int VectorShape::vectorSize()
 {
     return m_size;
 }
 
 
-void EmfShape::paint(QPainter &painter, const KoViewConverter &converter)
+void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     applyConversion(painter, converter);
     draw(painter);
 }
 
-void EmfShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
+void VectorShape::paintDecorations(QPainter &painter, const KoViewConverter &converter,
+                                   const KoCanvasBase *canvas)
 {
     Q_UNUSED(canvas);
 
@@ -111,7 +112,7 @@ void EmfShape::paintDecorations(QPainter &painter, const KoViewConverter &conver
     }
 }
 
-void EmfShape::draw(QPainter &painter)
+void VectorShape::draw(QPainter &painter)
 {
     // FIXME: Make emfOutput use QSizeF
     QSize  sizeInt( size().width(), size().height() );
@@ -156,16 +157,16 @@ void EmfShape::draw(QPainter &painter)
     return;
 }
 
-void EmfShape::saveOdf(KoShapeSavingContext & context) const
+void VectorShape::saveOdf(KoShapeSavingContext & context) const
 {
     Q_UNUSED(context);
 
     // FIXME: NYI
 }
 
-bool EmfShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool VectorShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    //kDebug() <<"Loading ODF frame in the EMF shape. Element = " << element.tagName();
+    //kDebug() <<"Loading ODF frame in the vector shape. Element = " << element.tagName();
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
@@ -182,13 +183,13 @@ inline static int read32(const char *buffer, const int offset)
     return result;
 }
 
-// Load the actual contents within the EMF shape.
-bool EmfShape::loadOdfFrameElement(const KoXmlElement & element,
-                                   KoShapeLoadingContext &context)
+// Load the actual contents within the vector shape.
+bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
+                                      KoShapeLoadingContext &context)
 {
     //kDebug() <<"Loading ODF element: " << element.tagName();
 
-    // Get the reference to the EMF file.  If there is no href, then just return.
+    // Get the reference to the vector file.  If there is no href, then just return.
     const QString href = element.attribute("href");
     if (href.isEmpty())
         return false;
@@ -237,7 +238,7 @@ bool EmfShape::loadOdfFrameElement(const KoXmlElement & element,
 }
 
 
-void EmfShape::setPrintable(bool on)
+void VectorShape::setPrintable(bool on)
 {
     if (m_printable == on)
         return;

@@ -18,29 +18,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef EMFTOOL_H
-#define EMFTOOL_H
+#ifndef VECTORTOOL_H
+#define VECTORTOOL_H
 
 // KDE
 #include <KoTool.h>
 
-// EmfShape
-#include "EmfShape.h"
+// VectorShape
+#include "VectorShape.h"
 
 
 class QAction;
 
 /**
- * This is the tool for the EMF shape (which is a flake-based plugin).
+ * This is the tool for the Vector shape (which is a flake-based plugin).
  *
- * The EMF shape is a read-only shape that shows a Microsoft Extended
- * Metafile.
+ * The vector shape is a read-only shape that shows a vector image
+ * like WMF or EMF.
  */
-class EmfTool : public KoTool {
+class VectorTool : public KoTool {
     Q_OBJECT
 public:
-    explicit EmfTool(KoCanvasBase *canvas);
-    ~EmfTool();
+    explicit VectorTool(KoCanvasBase *canvas);
+    ~VectorTool();
 
     /// reimplemented from superclass
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
@@ -64,7 +64,7 @@ private slots:
 private:
     void updateActions();
 
-    EmfShape *m_currentShape;
+    VectorShape *m_currentShape;
 };
 
 #endif

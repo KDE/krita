@@ -19,10 +19,10 @@
  */
 
 // Own
-#include "EmfShapeFactory.h"
+#include "VectorShapeFactory.h"
 
-// EmfShape
-#include "EmfShape.h"
+// VectorShape
+#include "VectorShape.h"
 
 // KOffice
 #include <KoXmlNS.h>
@@ -38,42 +38,42 @@
 #include "DefaultEmf.h"
 
 
-EmfShapeFactory::EmfShapeFactory(QObject *parent)
-    : KoShapeFactory(parent, EmfShape_SHAPEID, i18n("Emf"))
+VectorShapeFactory::VectorShapeFactory(QObject *parent)
+    : KoShapeFactory(parent, VectorShape_SHAPEID, i18n("Vector"))
 {
-    setToolTip(i18n("A Shape That Shows an Embedded Metafile"));
-    setIcon( "emf-shape" );
+    setToolTip(i18n("A shape that shows a vector image"));
+    setIcon( "vector-shape" );
     setOdfElementNames(KoXmlNS::draw, QStringList("image"));
     setLoadingPriority(1);
 }
 
-KoShape *EmfShapeFactory::createDefaultShape() const
+KoShape *VectorShapeFactory::createDefaultShape() const
 {
-    EmfShape *emf = new EmfShape();
-    emf->setShapeId(EmfShape_SHAPEID);
+    VectorShape *shape = new VectorShape();
+    shape->setShapeId(VectorShape_SHAPEID);
 
-    emf->setEmfBytes(defaultEMF, sizeof(defaultEMF), false);
+    shape->setVectorBytes(defaultEMF, sizeof(defaultEMF), false);
 
-    return emf;
+    return shape;
 }
 
-KoShape *EmfShapeFactory::createShape(const KoProperties * /*params*/) const
+KoShape *VectorShapeFactory::createShape(const KoProperties * /*params*/) const
 {
     return createDefaultShape();
 }
 
     /// Reimplemented
-bool EmfShapeFactory::supports(const KoXmlElement & e) const
+bool VectorShapeFactory::supports(const KoXmlElement & e) const
 {
     kDebug(33100) << "Tag = " << e.tagName();
     return e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw;
 }
 
-QList<KoShapeConfigWidgetBase*> EmfShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase*> VectorShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> result;
 
     return result;
 }
 
-#include "EmfShapeFactory.moc"
+#include "VectorShapeFactory.moc"

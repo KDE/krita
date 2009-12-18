@@ -18,21 +18,36 @@
  * Boston, MA 02110-1301, USA.
  */
 
+// Own
+#include "VectorToolFactory.h"
 
-#ifndef EMFSHAPE_PLUGIN_H
-#define EMFSHAPE_PLUGIN_H
+// KDE
+#include <klocale.h>
+
+// VectorShape
+#include "VectorTool.h"
+#include "VectorShape.h"
 
 
-// Qt
-#include <QObject>
+VectorToolFactory::VectorToolFactory(QObject *parent)
+  : KoToolFactory(parent, "VectorToolFactory_ID", i18n("Vector tool"))
+{
+    setToolTip (i18n("EMF editing tool"));
+    setToolType (dynamicToolType());
+
+    //setIcon ("");
+    setPriority (1);
+    setActivationShapeId (VectorShape_SHAPEID);
+}
+
+VectorToolFactory::~VectorToolFactory()
+{
+}
+
+KoTool * VectorToolFactory::createTool(KoCanvasBase *canvas)
+{
+    return new VectorTool(canvas);
+}
 
 
-class EmfShapePlugin : public QObject {
-    Q_OBJECT
-
-public:
-    EmfShapePlugin(QObject * parent, const QStringList &);
-    ~EmfShapePlugin() {}
-};
-
-#endif
+#include "VectorToolFactory.moc"

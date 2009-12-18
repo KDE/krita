@@ -19,7 +19,7 @@
  */
 
 // Own
-#include "EmfTool.h"
+#include "VectorTool.h"
 
 // Qt
 #include <QAction>
@@ -39,43 +39,43 @@
 #include <KoPointerEvent.h>
 
 
-EmfTool::EmfTool(KoCanvasBase *canvas)
+VectorTool::VectorTool(KoCanvasBase *canvas)
     : KoTool(canvas)
     , m_currentShape(0)
 {
 }
 
-EmfTool::~EmfTool()
+VectorTool::~VectorTool()
 {
 }
 
-void EmfTool::paint( QPainter &painter, const KoViewConverter &converter)
+void VectorTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
     // nothing to do here
 }
 
-void EmfTool::mousePressEvent( KoPointerEvent *event )
+void VectorTool::mousePressEvent( KoPointerEvent *event )
 {
     event->ignore();
 }
 
-void EmfTool::mouseMoveEvent( KoPointerEvent *event )
+void VectorTool::mouseMoveEvent( KoPointerEvent *event )
 {
     event->ignore();
 }
 
-void EmfTool::mouseReleaseEvent( KoPointerEvent *event )
+void VectorTool::mouseReleaseEvent( KoPointerEvent *event )
 {
     event->ignore();
 }
 
-void EmfTool::activate (bool)
+void VectorTool::activate (bool)
 {
     KoSelection *selection = m_canvas->shapeManager()->selection();
     foreach (KoShape *shape, selection->selectedShapes()) {
-        m_currentShape = dynamic_cast<EmfShape*> (shape);
+        m_currentShape = dynamic_cast<VectorShape*> (shape);
         if (m_currentShape)
             break;
     }
@@ -87,26 +87,26 @@ void EmfTool::activate (bool)
     // updateActions();
 }
 
-void EmfTool::deactivate()
+void VectorTool::deactivate()
 {
     m_currentShape = 0;
 }
 
-void EmfTool::updateActions()
+void VectorTool::updateActions()
 {
 }
 
-void EmfTool::setPrintable(bool on)
+void VectorTool::setPrintable(bool on)
 {
     if (m_currentShape)
         m_currentShape->setPrintable(on);
 }
 
-QWidget *EmfTool::createOptionWidget()
+QWidget *VectorTool::createOptionWidget()
 {
     QWidget *widget = new QWidget();
 
     return widget;
 }
 
-#include "EmfTool.moc"
+#include "VectorTool.moc"

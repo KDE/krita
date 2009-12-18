@@ -18,20 +18,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef EMFTOOL_FACTORY_H
-#define EMFTOOL_FACTORY_H
+
+#ifndef VECTORSHAPE_PLUGIN_H
+#define VECTORSHAPE_PLUGIN_H
+
 
 // Qt
-#include <KoToolFactory.h>
+#include <QObject>
 
 
-class EmfToolFactory : public KoToolFactory {
+class VectorShapePlugin : public QObject {
     Q_OBJECT
-public:
-    explicit EmfToolFactory(QObject *parent);
-    ~EmfToolFactory();
 
-    KoTool * createTool(KoCanvasBase *canvas);
+public:
+    VectorShapePlugin(QObject * parent, const QStringList &);
+    ~VectorShapePlugin() {}
 };
 
 #endif

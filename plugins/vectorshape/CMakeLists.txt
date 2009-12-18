@@ -1,4 +1,4 @@
-project( emfShape)
+project( vectorshape)
 
 # The library is directly under this directory.
 # When it becomes an entity on its own we have to create
@@ -7,13 +7,13 @@ SET( EMF_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR/libemf} )
 
 include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${EMF_INCLUDE_DIR})
 
-SET ( EmfShape_SRCS
-    EmfShapePlugin.cpp
-    EmfShape.cpp
-    EmfShapeFactory.cpp
+SET ( VectorShape_SRCS
+    VectorShapePlugin.cpp
+    VectorShape.cpp
+    VectorShapeFactory.cpp
     # No tool yet.
-    #EmfTool.cpp
-    #EmfToolFactory.cpp
+    #VectorTool.cpp
+    #VectorToolFactory.cpp
 
     libemf/EmfRecords.cpp
     libemf/EmfHeader.cpp
@@ -23,18 +23,18 @@ SET ( EmfShape_SRCS
     libemf/EmfOutputPainterStrategy.cpp
 )
 
-#kde4_add_ui_files(EmfShape_SRCS
+#kde4_add_ui_files(VectorShape_SRCS
 #)
 
-kde4_add_plugin(emfshape ${EmfShape_SRCS})
+kde4_add_plugin(vectorshape ${VectorShape_SRCS})
 
-target_link_libraries(emfshape flake)
+target_link_libraries(vectorshape flake)
 
-install(TARGETS emfshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS vectorshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES emfshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES vectorshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 #kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons )
 
 

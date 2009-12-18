@@ -19,8 +19,8 @@
  */
 
 
-#ifndef EMFSHAPE_H
-#define EMFSHAPE_H
+#ifndef VECTORSHAPE_H
+#define VECTORSHAPE_H
 
 
 // KOffice
@@ -30,13 +30,13 @@
 
 class QPainter;
 
-#define EmfShape_SHAPEID "EmfShapeID"
+#define VectorShape_SHAPEID "VectorShapeID"
 
 
-class EmfShape : public KoShape, public KoFrameShape {
+class VectorShape : public KoShape, public KoFrameShape {
 public:
-    EmfShape();
-    virtual ~EmfShape();
+    VectorShape();
+    virtual ~VectorShape();
 
     /// reimplemented to be empty (this shape is fully non-printing)
     void paint(QPainter &painter, const KoViewConverter &converter);
@@ -56,9 +56,9 @@ public:
     void setPrintable(bool on);
     bool printable() const { return m_printable; }
 
-    void  setEmfBytes( char *bytes, int size, bool takeOwnership );
-    char *emfBytes();
-    int   emfSize();
+    void  setVectorBytes( char *bytes, int size, bool takeOwnership );
+    char *vectorBytes();
+    int   vectorSize();
 
 private:
     void draw(QPainter &painter);

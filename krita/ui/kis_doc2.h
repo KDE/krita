@@ -168,7 +168,6 @@ protected slots:
 
 private slots:
 
-    void slotIOProgress(qint8 percentage);
     void undoIndexChanged(int idx);
 
 private:

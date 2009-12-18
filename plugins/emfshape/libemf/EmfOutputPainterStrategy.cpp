@@ -18,9 +18,10 @@
 
 #include "EmfOutputPainterStrategy.h"
 
-#include <QDebug>
-
 #include <math.h>
+
+#include <KDebug>
+
 
 namespace Libemf
 {
@@ -95,7 +96,7 @@ void OutputPainterStrategy::init( const Header *header )
         m_painter->translate((m_outputSize.width() - emfSize.width() * scaleX) / 2,
                              (m_outputSize.height() - emfSize.height() * scaleY) / 2);
     }
-    //qDebug("scale    = %f, %f", scaleX, scaleY);
+    //kDebug(33100) << "scale = " << scaleX << ", " << scaleY;
     m_painter->scale( scaleX, scaleY );
 
     //m_painter->setPen(QColor(0,0,255));
@@ -173,14 +174,14 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
             --m_painterSaves;
         }
         else {
-            qDebug() << "restoreDC(): try to restore painter without save";
+            kDebug(33100) << "restoreDC(): try to restore painter without save";
         }
     }
 }
 
 void OutputPainterStrategy::setMetaRgn()
 {
-    qDebug() << "EMR_SETMETARGN not yet implemented";
+    kDebug(33100) << "EMR_SETMETARGN not yet implemented";
 }
 
 void OutputPainterStrategy::setWindowOrgEx( const QPoint &origin )
@@ -246,15 +247,15 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
         pen.setStyle( Qt::SolidLine );
         break;
     case PS_USERSTYLE:
-        qDebug() << "UserStyle pen not yet supported";
+        kDebug(33100) << "UserStyle pen not yet supported";
         Q_ASSERT( 0 );
         break;
     case PS_ALTERNATE:
-        qDebug() << "Alternate pen not yet supported";
+        kDebug(33100) << "Alternate pen not yet supported";
         Q_ASSERT( 0 );
         break;
     default:
-        qDebug() << "unexpected pen type" << (penStyle & 0xF);
+        kDebug(33100) << "unexpected pen type" << (penStyle & 0xF);
         Q_ASSERT( 0 );
     }
    
@@ -269,7 +270,7 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
         pen.setCapStyle( Qt::FlatCap );
         break;
     default:
-        qDebug() << "unexpected cap style" << (penStyle & PS_ENDCAP_FLAT);
+        kDebug(33100) << "unexpected cap style" << (penStyle & PS_ENDCAP_FLAT);
         Q_ASSERT( 0 ); 
     }
     pen.setWidth( x );
@@ -453,7 +454,7 @@ void OutputPainterStrategy::selectObject( const quint32 ihObject )
 	    m_painter->setFont( obj.value<QFont>() );
 	    break;
 	default:
-	    qDebug() << "Unexpected type:" << obj.typeName();
+	    kDebug(33100) << "Unexpected type:" << obj.typeName();
 	}
     }
 }
@@ -514,7 +515,7 @@ void OutputPainterStrategy::rectangle( const QRect &box )
 
 void OutputPainterStrategy::setMapMode( const quint32 mapMode )
 {
-    qDebug() << "Set map mode not yet implemented" << mapMode;
+    kDebug(33100) << "Set map mode not yet implemented" << mapMode;
 }
 
 void OutputPainterStrategy::setBkMode( const quint32 backgroundMode )
@@ -524,7 +525,7 @@ void OutputPainterStrategy::setBkMode( const quint32 backgroundMode )
     } else if ( backgroundMode == OPAQUE ) {
         m_painter->setBackgroundMode( Qt::OpaqueMode );
     } else {
-        qDebug() << "EMR_SETBKMODE: Unexpected value -" << backgroundMode;
+        kDebug(33100) << "EMR_SETBKMODE: Unexpected value -" << backgroundMode;
         Q_ASSERT( 0 );
     }
 }
@@ -536,7 +537,7 @@ void OutputPainterStrategy::setPolyFillMode( const quint32 polyFillMode )
     } else if ( polyFillMode == WINDING ) {
 	m_fillRule = Qt::WindingFill;
     } else {
-	qDebug() << "EMR_SETPOLYFILLMODE: Unexpected value -" << polyFillMode;
+	kDebug(33100) << "EMR_SETPOLYFILLMODE: Unexpected value -" << polyFillMode;
 	Q_ASSERT( 0 );
     }
 }
@@ -548,7 +549,7 @@ void OutputPainterStrategy::setLayout( const quint32 layoutMode )
     } else if ( layoutMode == LAYOUT_RTL ) {
         m_painter->setLayoutDirection( Qt::RightToLeft );
     } else {
-        qDebug() << "EMR_SETLAYOUT: Unexpected value -" << layoutMode;
+        kDebug(33100) << "EMR_SETLAYOUT: Unexpected value -" << layoutMode;
         Q_ASSERT( 0 );
     }
 }
@@ -621,15 +622,15 @@ void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
             // do nothing
             break;
         default:
-            qDebug() << "Unexpected vertical positioning mode:" << m_textAlignMode;
+            kDebug(33100) << "Unexpected vertical positioning mode:" << m_textAlignMode;
     }
     // TODO: Handle the rest of the test alignment mode flags
 
     m_painter->drawText( position, extTextOutA.textString() );
 
-    qDebug("extTextOutA: ref.point = %d %d, Text = %s", 
-           extTextOutA.referencePoint().x(), extTextOutA.referencePoint().y(),
-           extTextOutA.textString().toLatin1().data());
+    kDebug(33100) << "extTextOutA: ref.point = " 
+                  << extTextOutA.referencePoint().x() << extTextOutA.referencePoint().y()
+                  << ", Text = " << extTextOutA.textString().toLatin1().data();
 
     m_painter->restore();
 }
@@ -641,8 +642,8 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
     m_painter->setPen( m_textPen );
     m_painter->drawText( referencePoint, textString );
 
-    qDebug("extTextOutW: ref.point = %d %d, Text = %s", 
-           referencePoint.x(), referencePoint.y(), textString.toLatin1().data());
+    kDebug(33100) << "extTextOutW: ref.point = " << referencePoint.x() << " " << referencePoint.y()
+                  << " Text = " << textString.toLatin1().data();
 
     m_painter->restore();
 }
@@ -840,19 +841,19 @@ void OutputPainterStrategy::setStretchBltMode( const quint32 stretchMode )
 {
     switch ( stretchMode ) {
     case 0x01:
-        qDebug() << "EMR_STRETCHBLTMODE: STRETCH_ANDSCANS";
+        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_ANDSCANS";
         break;
     case 0x02:
-        qDebug() << "EMR_STRETCHBLTMODE: STRETCH_ORSCANS";
+        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_ORSCANS";
         break;
     case 0x03:
-        qDebug() << "EMR_STRETCHBLTMODE: STRETCH_DELETESCANS";
+        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_DELETESCANS";
         break;
     case 0x04:
-        qDebug() << "EMR_STRETCHBLTMODE: STRETCH_HALFTONE";
+        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_HALFTONE";
         break;
     default:
-        qDebug() << "EMR_STRETCHBLTMODE - unknown stretch mode:" << stretchMode;
+        kDebug(33100) << "EMR_STRETCHBLTMODE - unknown stretch mode:" << stretchMode;
     }
 }
 

@@ -65,7 +65,7 @@ KoShape *EmfShapeFactory::createShape(const KoProperties * /*params*/) const
     /// Reimplemented
 bool EmfShapeFactory::supports(const KoXmlElement & e) const
 {
-    kDebug(33001) << "Tag = " << e.tagName();
+    kDebug(33100) << "Tag = " << e.tagName();
     return e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw;
 }
 

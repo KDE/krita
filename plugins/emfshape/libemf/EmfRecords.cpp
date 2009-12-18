@@ -19,7 +19,7 @@
 #include "EmfEnums.h"
 #include "EmfRecords.h"
 
-#include <QDebug>
+#include <KDebug>
 
 namespace Libemf
 {
@@ -30,17 +30,17 @@ DeviceInfoHeader::DeviceInfoHeader( QDataStream &stream )
 {
     stream >> m_headerSize;
     stream >> m_width;
-    // qDebug() << "Width:" << m_width;
+    // kDebug(33100) << "Width:" << m_width;
     stream >> m_height;
-    // qDebug() << "Height:" << m_height;
+    // kDebug(33100) << "Height:" << m_height;
     stream >> m_planes;
-    // qDebug() << "planes:" << m_planes;
+    // kDebug(33100) << "planes:" << m_planes;
     stream >> m_bitCount;
-    // qDebug() << "BitCount:" << m_bitCount;
+    // kDebug(33100) << "BitCount:" << m_bitCount;
     stream >> m_compression;
-    // qDebug() << "Compression:" << m_compression;
+    // kDebug(33100) << "Compression:" << m_compression;
     stream >> m_imageSize;
-    // qDebug() << "ImageSize:" << m_imageSize;
+    // kDebug(33100) << "ImageSize:" << m_imageSize;
     stream >> m_xPelsPerMeter;
     stream >> m_yPelsPerMeter;
     stream >> m_colorUsed;
@@ -61,7 +61,7 @@ BitBltRecord::BitBltRecord( QDataStream &stream )
     stream >> m_cxDest;
     stream >> m_cyDest;
     stream >> m_BitBltRasterOperation;
-    qDebug() << "bitblt raster operation:" << m_BitBltRasterOperation;
+    kDebug(33100) << "bitblt raster operation:" << m_BitBltRasterOperation;
     stream >> m_xSrc;
     stream >> m_ySrc;
 
@@ -86,7 +86,7 @@ BitBltRecord::BitBltRecord( QDataStream &stream )
     if ( m_cbBmiSrc == 40 ) {
 	m_BmiSrc = new DeviceInfoHeader( stream );
     } else {
-	qDebug() << "m_cbBmiSrc:" << m_cbBmiSrc;
+	kDebug(33100) << "m_cbBmiSrc:" << m_cbBmiSrc;
 	Q_ASSERT( 0 );
     }
 
@@ -119,14 +119,14 @@ QImage* BitBltRecord::image()
         if ( m_BmiSrc->compression() == 0x00 ) {
             format = QImage::Format_RGB555;
         } else {
-            qDebug() << "Unexpected compression format for BI_BITCOUNT_4:"
+            kDebug(33100) << "Unexpected compression format for BI_BITCOUNT_4:"
                      << m_BmiSrc->compression();
             Q_ASSERT( 0 );
         }
     } else if ( m_BmiSrc->bitCount() == BI_BITCOUNT_5 ) {
         format = QImage::Format_RGB888;
     } else {
-        qDebug() << "Unexpected format:" << m_BmiSrc->bitCount();
+        kDebug(33100) << "Unexpected format:" << m_BmiSrc->bitCount();
         Q_ASSERT( 0 );
     }
     m_image = new QImage( (const uchar*)m_imageData.constData(),
@@ -178,7 +178,7 @@ QRect StretchDiBitsRecord::bounds() const
 QImage* StretchDiBitsRecord::image() 
 {
     if ( m_image != 0 ) {
-        qDebug() << "null image";
+        kDebug(33100) << "null image";
         return m_image;
     }
 
@@ -187,14 +187,14 @@ QImage* StretchDiBitsRecord::image()
         if ( m_BmiSrc->compression() == BI_RGB ) {
             format = QImage::Format_RGB555;
         } else {
-            qDebug() << "Unexpected compression format for BI_BITCOUNT_4:"
+            kDebug(33100) << "Unexpected compression format for BI_BITCOUNT_4:"
                      << m_BmiSrc->compression();
             Q_ASSERT( 0 );
         }
     } else if ( m_BmiSrc->bitCount() == BI_BITCOUNT_5 ) {
         format = QImage::Format_RGB888;
     } else {
-        qDebug() << "Unexpected format:" << m_BmiSrc->bitCount();
+        kDebug(33100) << "Unexpected format:" << m_BmiSrc->bitCount();
         Q_ASSERT( 0 );
     }
 
@@ -259,7 +259,7 @@ ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord( QDataStream &stream,
 	    m_fullName.append( myChar[i] );
 	}
     }
-    qDebug() << "fullName:" << m_fullName;
+    kDebug(33100) << "fullName:" << m_fullName;
 
     for ( int i = 0; i < 32; ++i ) {
 	stream >> myChar[i];
@@ -270,7 +270,7 @@ ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord( QDataStream &stream,
 	    m_style.append( myChar[i] );
 	}
     }
-    qDebug() << "style:" << m_style;
+    kDebug(33100) << "style:" << m_style;
 
     for ( int i = 0; i < 32; ++i ) {
 	stream >> myChar[i];
@@ -281,7 +281,7 @@ ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord( QDataStream &stream,
 	    m_script.append( myChar[i] );
 	}
     }
-    qDebug() << "script:" << m_script;
+    kDebug(33100) << "script:" << m_script;
 #endif
     soakBytes( stream, size ); // rest of the record.
 }

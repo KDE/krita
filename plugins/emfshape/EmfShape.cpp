@@ -115,10 +115,10 @@ void EmfShape::draw(QPainter &painter)
 {
     // FIXME: Make emfOutput use QSizeF
     QSize  sizeInt( size().width(), size().height() );
-    kDebug(33001) << "-------------------------------------------";
-    kDebug(33001) << "size:     " << sizeInt << size();
-    kDebug(33001) << "position: " << position();
-    kDebug(33001) << "-------------------------------------------";
+    kDebug(33100) << "-------------------------------------------";
+    kDebug(33100) << "size:     " << sizeInt << size();
+    kDebug(33100) << "position: " << position();
+    kDebug(33100) << "-------------------------------------------";
 
     // If the data is uninitialized, e.g. because loading failed, draw a simple cross.
     if (m_size == 0) {

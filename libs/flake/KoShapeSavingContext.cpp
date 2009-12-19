@@ -35,7 +35,7 @@
 
 class KoShapeSavingContextPrivate {
 public:
-    KoShapeSavingContextPrivate(KoXmlWriter&, KoGenStyles&, KoEmbeddedDocumentSaver&, KoShapeSavingContext::SavingMode);
+    KoShapeSavingContextPrivate(KoXmlWriter&, KoGenStyles&, KoEmbeddedDocumentSaver&);
 
     KoXmlWriter *xmlWriter;
     KoShapeSavingContext::KoShapeSavingOptions savingOptions;
@@ -51,24 +51,22 @@ public:
 
     KoGenStyles& mainStyles;
     KoEmbeddedDocumentSaver& embeddedSaver;
-    KoShapeSavingContext::SavingMode savingMode; // TODO unused
 };
 
 KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
-        KoGenStyles &s, KoEmbeddedDocumentSaver &e, KoShapeSavingContext::SavingMode m)
+        KoGenStyles &s, KoEmbeddedDocumentSaver &e)
         : xmlWriter(&w),
         savingOptions(0),
         drawId(0),
         imageId(0),
         mainStyles(s),
-        embeddedSaver(e),
-        savingMode(m)
+        embeddedSaver(e)
 {
 }
 
 KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles,
-        KoEmbeddedDocumentSaver &embeddedSaver, SavingMode savingMode)
-    : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles, embeddedSaver, savingMode))
+        KoEmbeddedDocumentSaver &embeddedSaver)
+    : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles, embeddedSaver))
 {
     // by default allow saving of draw:id
     addOption(KoShapeSavingContext::DrawId);

@@ -39,10 +39,9 @@ public:
      * @param mainStyles for saving the styles
      * @param embeddedSaver for saving embedded documents
      * @param changes for saving the tracked changes
-     * @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
      */
     KoTextShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
-                         KoEmbeddedDocumentSaver& embeddedSaver, KoGenChanges& changes, SavingMode savingMode = Store);
+                         KoEmbeddedDocumentSaver& embeddedSaver, KoGenChanges& changes);
     virtual ~KoTextShapeSavingContext();
 
     /**

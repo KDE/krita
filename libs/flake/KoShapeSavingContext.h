@@ -44,11 +44,6 @@ class KoShapeSavingContextPrivate;
 class FLAKE_EXPORT KoShapeSavingContext
 {
 public:
-    enum SavingMode {
-        Store,
-        Flat
-    };
-
     /// The Style used for saving the shape
     enum ShapeSavingOption {
         /**
@@ -81,7 +76,7 @@ public:
      * @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
      */
     KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles,
-                         KoEmbeddedDocumentSaver &embeddedSaver, SavingMode savingMode = Store);
+                         KoEmbeddedDocumentSaver &embeddedSaver);
     virtual ~KoShapeSavingContext();
 
     /**

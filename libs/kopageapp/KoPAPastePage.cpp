@@ -65,7 +65,7 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
         buffer.open( QIODevice::WriteOnly );
         KoXmlWriter xmlWriter( &buffer );
         KoEmbeddedDocumentSaver embeddedSaver;
-        KoPASavingContext savingContext( xmlWriter, mainStyles, embeddedSaver, 1, KoShapeSavingContext::Store );
+        KoPASavingContext savingContext(xmlWriter, mainStyles, embeddedSaver, 1);
         savingContext.addOption( KoShapeSavingContext::UniqueMasterPages );
         QList<KoPAPageBase*> emptyList;
         QList<KoPAPageBase*> existingMasterPages = m_doc->pages( true );

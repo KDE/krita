@@ -24,9 +24,9 @@
 
 #include "KoPAPage.h"
 
-KoPASavingContext::KoPASavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, KoEmbeddedDocumentSaver &embeddedSaver,
-                                      int page, SavingMode savingMode )
-: KoShapeSavingContext( xmlWriter, mainStyles, embeddedSaver, savingMode )
+KoPASavingContext::KoPASavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
+        KoEmbeddedDocumentSaver &embeddedSaver, int page)
+    : KoShapeSavingContext(xmlWriter, mainStyles, embeddedSaver)
 , m_page( page )
 , m_masterPageIndex( 0 )
 , m_clearDrawIds( false )

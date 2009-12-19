@@ -46,7 +46,7 @@ class KoShapeLoadingContext;
 class KoEnhancedPathShape : public KoParameterShape
 {
 public:
-    explicit KoEnhancedPathShape( const QRectF &viewBox );
+    explicit KoEnhancedPathShape(const QRectF &viewBox);
     ~KoEnhancedPathShape();
 
     /**
@@ -54,7 +54,7 @@ public:
      * @param reference the reference to evaluate
      * @return the result of the evaluation
      */
-    qreal evaluateReference( const QString &reference );
+    qreal evaluateReference(const QString &reference);
 
     /**
      * Attempts to modify a given reference.
@@ -64,48 +64,48 @@ public:
      * @param reference the reference to modify
      * @param value the new value
      */
-    void modifyReference( const QString &reference, qreal value );
+    void modifyReference(const QString &reference, qreal value);
 
     // from KoShape
-    virtual void setSize( const QSizeF &newSize );
+    virtual void setSize(const QSizeF &newSize);
     // from KoParameterShape
     virtual QPointF normalize();
 
     /// Add formula with given name and textual represenation
-    void addFormula( const QString &name, const QString &formula );
+    void addFormula(const QString &name, const QString &formula);
     /// Add a single handle with format: x y minX maxX minY maxY
-    void addHandle( const QMap<QString,QVariant> &handle );
+    void addHandle(const QMap<QString,QVariant> &handle);
     /// Add modifiers with format: modifier0 modifier1 modifier2 ...
-    void addModifiers( const QString &modifiers );
+    void addModifiers(const QString &modifiers);
     /// Add command for instance "M 0 0"
-    void addCommand( const QString &command );
+    void addCommand(const QString &command);
     /// Returns the viewbox of the enhanced path shape
     const QRectF & viewBox() const;
-    QPointF shapeToViewbox( const QPointF & point ) const;
-    QPointF viewboxToShape( const QPointF & point ) const;
-    qreal shapeToViewbox( qreal value ) const;
-    qreal viewboxToShape( qreal value ) const;
+    QPointF shapeToViewbox(const QPointF &point) const;
+    QPointF viewboxToShape(const QPointF &point) const;
+    qreal shapeToViewbox(qreal value) const;
+    qreal viewboxToShape(qreal value) const;
 
     /// Returns parameter from given textual representation
-    KoEnhancedPathParameter * parameter( const QString & text );
+    KoEnhancedPathParameter *parameter(const QString &text);
 
 protected:
-    void saveOdf( KoShapeSavingContext & context ) const;
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    void saveOdf(KoShapeSavingContext &context) const;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     // from KoParameterShape
-    void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     // from KoParameterShape
-    void updatePath( const QSizeF &size );
+    void updatePath(const QSizeF &size);
 private:
 
     void evaluateHandles();
     void reset();
 
     /// parses the enhanced path data
-    void parsePathData( const QString & data );
+    void parsePathData(const QString &data);
 
     /// Adds a new command
-    void addCommand( const QString &command, bool triggerUpdate );
+    void addCommand(const QString &command, bool triggerUpdate);
 
     typedef QMap<QString, KoEnhancedPathFormula*> FormulaStore;
     typedef QList<qreal> ModifierStore;

@@ -23,62 +23,59 @@
 
 RectangleShapeConfigWidget::RectangleShapeConfigWidget()
 {
-    widget.setupUi( this );
+    widget.setupUi(this);
 
-    connect( widget.cornerRadiusX, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
-    connect( widget.cornerRadiusY, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
+    connect(widget.cornerRadiusX, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
+    connect(widget.cornerRadiusY, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
 }
 
 void RectangleShapeConfigWidget::setUnit(KoUnit unit)
 {
-    widget.cornerRadiusX->setUnit( unit );
-    widget.cornerRadiusY->setUnit( unit );
+    widget.cornerRadiusX->setUnit(unit);
+    widget.cornerRadiusY->setUnit(unit);
 }
 
 void RectangleShapeConfigWidget::open(KoShape *shape)
 {
-    m_rectangle = dynamic_cast<KoRectangleShape*>( shape );
-    if( ! m_rectangle )
+    m_rectangle = dynamic_cast<KoRectangleShape*>(shape);
+    if (! m_rectangle)
         return;
 
-    widget.cornerRadiusX->blockSignals( true );
-    widget.cornerRadiusY->blockSignals( true );
+    widget.cornerRadiusX->blockSignals(true);
+    widget.cornerRadiusY->blockSignals(true);
 
     QSizeF size = m_rectangle->size();
 
-    widget.cornerRadiusX->setMaximum( 0.5 * size.width() );
-    widget.cornerRadiusX->setValue( 0.01 * m_rectangle->cornerRadiusX() * 0.5 * size.width() );
-    widget.cornerRadiusY->setMaximum( 0.5 * size.height() );
-    widget.cornerRadiusY->setValue( 0.01 * m_rectangle->cornerRadiusY() * 0.5 * size.height() );
+    widget.cornerRadiusX->setMaximum(0.5 * size.width());
+    widget.cornerRadiusX->setValue(0.01 * m_rectangle->cornerRadiusX() * 0.5 * size.width());
+    widget.cornerRadiusY->setMaximum(0.5 * size.height());
+    widget.cornerRadiusY->setValue(0.01 * m_rectangle->cornerRadiusY() * 0.5 * size.height());
 
-    widget.cornerRadiusX->blockSignals( false );
-    widget.cornerRadiusY->blockSignals( false );
+    widget.cornerRadiusX->blockSignals(false);
+    widget.cornerRadiusY->blockSignals(false);
 }
 
 void RectangleShapeConfigWidget::save()
 {
-    if( ! m_rectangle )
+    if (! m_rectangle)
         return;
 
     QSizeF size = m_rectangle->size();
 
-    m_rectangle->setCornerRadiusX( 100.0 * widget.cornerRadiusX->value() / (0.5 * size.width() ) );
-    m_rectangle->setCornerRadiusY( 100.0 * widget.cornerRadiusY->value() / (0.5 * size.height() ) );
+    m_rectangle->setCornerRadiusX(100.0 * widget.cornerRadiusX->value() / (0.5 * size.width()));
+    m_rectangle->setCornerRadiusY(100.0 * widget.cornerRadiusY->value() / (0.5 * size.height()));
 }
 
 QUndoCommand * RectangleShapeConfigWidget::createCommand()
 {
-    if( ! m_rectangle )
+    if (! m_rectangle)
         return 0;
-    else
-    {
-        QSizeF size = m_rectangle->size();
+    QSizeF size = m_rectangle->size();
 
-        qreal cornerRadiusX = 100.0 * widget.cornerRadiusX->value() / (0.5 * size.width());
-        qreal cornerRadiusY = 100.0 * widget.cornerRadiusY->value() / (0.5 * size.height());
+    qreal cornerRadiusX = 100.0 * widget.cornerRadiusX->value() / (0.5 * size.width());
+    qreal cornerRadiusY = 100.0 * widget.cornerRadiusY->value() / (0.5 * size.height());
 
-        return new RectangleShapeConfigCommand( m_rectangle, cornerRadiusX, cornerRadiusY );
-    }
+    return new RectangleShapeConfigCommand(m_rectangle, cornerRadiusX, cornerRadiusY);
 }
 
 #include "RectangleShapeConfigWidget.moc"

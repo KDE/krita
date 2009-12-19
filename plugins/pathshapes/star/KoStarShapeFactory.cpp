@@ -30,15 +30,15 @@
 
 #include <klocale.h>
 
-KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
-    : KoShapeFactory( parent, KoStarShapeId, i18n( "A star shape" ) )
+KoStarShapeFactory::KoStarShapeFactory(QObject *parent)
+    : KoShapeFactory(parent, KoStarShapeId, i18n("A star shape"))
 {
-    setToolTip( i18n( "A star" ) );
+    setToolTip(i18n("A star"));
     setIcon("star");
     QStringList elementNames;
     elementNames << "regular-polygon" << "custom-shape";
     setOdfElementNames(KoXmlNS::draw, elementNames);
-    setLoadingPriority( 5 );
+    setLoadingPriority(5);
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
@@ -48,10 +48,10 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     t.toolTip = i18n("A star");
     t.icon = "star-shape";
     KoProperties *props = new KoProperties();
-    props->setProperty( "corners", 5 );
+    props->setProperty("corners", 5);
     QVariant v;
-    v.setValue( QColor( Qt::yellow ) );
-    props->setProperty( "background", v );
+    v.setValue(QColor(Qt::yellow));
+    props->setProperty("background", v);
     t.properties = props;
     addTemplate(t);
 
@@ -62,13 +62,13 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     t.toolTip = i18n("A flower");
     t.icon = "flower-shape";
     props = new KoProperties();
-    props->setProperty( "corners", 5 );
-    props->setProperty( "baseRadius", 10.0 );
-    props->setProperty( "tipRadius", 50.0 );
-    props->setProperty( "baseRoundness", 0.0 );
-    props->setProperty( "tipRoundness", 40.0 );
-    v.setValue( QColor( Qt::magenta ) );
-    props->setProperty( "background", v );
+    props->setProperty("corners", 5);
+    props->setProperty("baseRadius", 10.0);
+    props->setProperty("tipRadius", 50.0);
+    props->setProperty("baseRoundness", 0.0);
+    props->setProperty("tipRoundness", 40.0);
+    v.setValue(QColor(Qt::magenta));
+    props->setProperty("background", v);
     t.properties = props;
     addTemplate(t);
 
@@ -79,12 +79,12 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     t.toolTip = i18n("A pentagon");
     t.icon = "pentagon-shape";
     props = new KoProperties();
-    props->setProperty( "corners", 5 );
-    props->setProperty( "convex", true );
-    props->setProperty( "tipRadius", 50.0 );
-    props->setProperty( "tipRoundness", 0.0 );
-    v.setValue( QColor( Qt::blue ) );
-    props->setProperty( "background", v );
+    props->setProperty("corners", 5);
+    props->setProperty("convex", true);
+    props->setProperty("tipRadius", 50.0);
+    props->setProperty("tipRoundness", 0.0);
+    v.setValue(QColor(Qt::blue));
+    props->setProperty("background", v);
     t.properties = props;
     addTemplate(t);
 
@@ -95,12 +95,12 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     t.toolTip = i18n("A hexagon");
     t.icon = "hexagon-shape";
     props = new KoProperties();
-    props->setProperty( "corners", 6 );
-    props->setProperty( "convex", true );
-    props->setProperty( "tipRadius", 50.0 );
-    props->setProperty( "tipRoundness", 0.0 );
-    v.setValue( QColor( Qt::blue ) );
-    props->setProperty( "background", v );
+    props->setProperty("corners", 6);
+    props->setProperty("convex", true);
+    props->setProperty("tipRadius", 50.0);
+    props->setProperty("tipRoundness", 0.0);
+    v.setValue(QColor(Qt::blue));
+    props->setProperty("background", v);
     t.properties = props;
     addTemplate(t);
 }
@@ -109,38 +109,38 @@ KoShape * KoStarShapeFactory::createDefaultShape() const
 {
     KoStarShape *star = new KoStarShape();
 
-    star->setBorder( new KoLineBorder( 1.0 ) );
-    star->setShapeId( KoPathShapeId );
+    star->setBorder(new KoLineBorder(1.0));
+    star->setShapeId(KoPathShapeId);
 
     return star;
 }
 
-KoShape * KoStarShapeFactory::createShape( const KoProperties * params ) const
+KoShape * KoStarShapeFactory::createShape(const KoProperties * params) const
 {
     KoStarShape *star = new KoStarShape();
-    if( ! star )
+    if (! star)
         return 0;
 
-    star->setCornerCount( params->intProperty("corners", 5 ) );
-    star->setConvex( params->boolProperty( "convex", false ) );
-    star->setBaseRadius( params->doubleProperty( "baseRadius", 25.0 ) );
-    star->setTipRadius( params->doubleProperty( "tipRadius", 50.0 ) );
-    star->setBaseRoundness( params->doubleProperty( "baseRoundness", 0.0 ) );
-    star->setTipRoundness( params->doubleProperty( "tipRoundness", 0.0 ) );
-    star->setBorder( new KoLineBorder( 1.0 ) );
-    star->setShapeId( KoPathShapeId );
+    star->setCornerCount(params->intProperty("corners", 5));
+    star->setConvex(params->boolProperty("convex", false));
+    star->setBaseRadius(params->doubleProperty("baseRadius", 25.0));
+    star->setTipRadius(params->doubleProperty("tipRadius", 50.0));
+    star->setBaseRoundness(params->doubleProperty("baseRoundness", 0.0));
+    star->setTipRoundness(params->doubleProperty("tipRoundness", 0.0));
+    star->setBorder(new KoLineBorder(1.0));
+    star->setShapeId(KoPathShapeId);
     QVariant v;
-    if( params->property( "background", v ) )
-        star->setBackground( new KoColorBackground( v.value<QColor>() ) );
+    if (params->property("background", v))
+        star->setBackground(new KoColorBackground(v.value<QColor>()));
 
     return star;
 }
 
 bool KoStarShapeFactory::supports(const KoXmlElement & e) const
 {
-    if ( e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw )
+    if (e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw)
         return true;
-    if ( e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw )
+    if (e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw)
         return true;
 
     return false;
@@ -149,7 +149,7 @@ bool KoStarShapeFactory::supports(const KoXmlElement & e) const
 QList<KoShapeConfigWidgetBase*> KoStarShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> panels;
-    panels.append( new StarShapeConfigWidget() );
+    panels.append(new StarShapeConfigWidget());
     return panels;
 }
 

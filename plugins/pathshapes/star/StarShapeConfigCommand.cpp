@@ -21,8 +21,8 @@
 #include "KoStarShape.h"
 #include <klocale.h>
 
-StarShapeConfigCommand::StarShapeConfigCommand( KoStarShape * star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, QUndoCommand *parent )
-    : QUndoCommand( parent )
+StarShapeConfigCommand::StarShapeConfigCommand(KoStarShape * star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, QUndoCommand *parent)
+    : QUndoCommand(parent)
     , m_star(star)
     , m_newCornerCount(cornerCount)
     , m_newInnerRadius(innerRadius)
@@ -31,7 +31,7 @@ StarShapeConfigCommand::StarShapeConfigCommand( KoStarShape * star, uint cornerC
 {
     Q_ASSERT(m_star);
 
-    setText( i18n("Change star") );
+    setText(i18n("Change star"));
 
     m_oldCornerCount = m_star->cornerCount();
     m_oldInnerRadius = m_star->baseRadius();
@@ -47,16 +47,16 @@ void StarShapeConfigCommand::redo()
 
     QPointF position = m_star->absolutePosition();
 
-    if( m_oldCornerCount != m_newCornerCount )
-        m_star->setCornerCount( m_newCornerCount );
-    if( m_oldInnerRadius != m_newInnerRadius )
-        m_star->setBaseRadius( m_newInnerRadius );
-    if( m_oldOuterRadius != m_newOuterRadius )
-        m_star->setTipRadius( m_newOuterRadius );
-    if( m_oldConvex != m_newConvex )
-        m_star->setConvex( m_newConvex );
+    if (m_oldCornerCount != m_newCornerCount)
+        m_star->setCornerCount(m_newCornerCount);
+    if (m_oldInnerRadius != m_newInnerRadius)
+        m_star->setBaseRadius(m_newInnerRadius);
+    if (m_oldOuterRadius != m_newOuterRadius)
+        m_star->setTipRadius(m_newOuterRadius);
+    if (m_oldConvex != m_newConvex)
+        m_star->setConvex(m_newConvex);
 
-    m_star->setAbsolutePosition( position );
+    m_star->setAbsolutePosition(position);
 
     m_star->update();
 }
@@ -69,16 +69,16 @@ void StarShapeConfigCommand::undo()
 
     QPointF position = m_star->absolutePosition();
 
-    if( m_oldCornerCount != m_newCornerCount )
-        m_star->setCornerCount( m_oldCornerCount );
-    if( m_oldInnerRadius != m_newInnerRadius )
-        m_star->setBaseRadius( m_oldInnerRadius );
-    if( m_oldOuterRadius != m_newOuterRadius )
-        m_star->setTipRadius( m_oldOuterRadius );
-    if( m_oldConvex != m_newConvex )
-        m_star->setConvex( m_oldConvex );
+    if (m_oldCornerCount != m_newCornerCount)
+        m_star->setCornerCount(m_oldCornerCount);
+    if (m_oldInnerRadius != m_newInnerRadius)
+        m_star->setBaseRadius(m_oldInnerRadius);
+    if (m_oldOuterRadius != m_newOuterRadius)
+        m_star->setTipRadius(m_oldOuterRadius);
+    if (m_oldConvex != m_newConvex)
+        m_star->setConvex(m_oldConvex);
 
-    m_star->setAbsolutePosition( position );
+    m_star->setAbsolutePosition(position);
 
     m_star->update();
 }

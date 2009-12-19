@@ -41,14 +41,14 @@ public:
     KoSpiralShape();
     ~KoSpiralShape();
 
-    void setSize( const QSizeF &newSize );
+    void setSize(const QSizeF &newSize);
     virtual QPointF normalize();
 
     /**
      * Sets the type of the spiral.
      * @param type the new spiral type
      */
-    void setType( KoSpiralType type );
+    void setType(KoSpiralType type);
 
     /// Returns the actual spiral type
     KoSpiralType type() const;
@@ -57,26 +57,26 @@ public:
      * Sets the fade parameter of the spiral.
      * @param angle the new start angle in degree
      */
-    void setFade( qreal fade );
+    void setFade(qreal fade);
 
     /// Returns the actual fade parameter
     qreal fade() const;
 
     bool clockWise() const;
-    void setClockWise( bool clockwise );
+    void setClockWise(bool clockwise);
 
     /// reimplemented
     virtual QString pathShapeId() const;
 
 protected:
     // reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-    void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
-    void updatePath( const QSizeF &size );
-    void createPath( const QSizeF &size );
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    void updatePath(const QSizeF &size);
+    void createPath(const QSizeF &size);
 
 private:
     void updateKindHandle();

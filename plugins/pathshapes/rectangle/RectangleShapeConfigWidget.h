@@ -40,11 +40,11 @@ public:
     /// reimplemented
     virtual bool showOnShapeCreate() { return false; }
     /// reimplemented
-    virtual QUndoCommand * createCommand();
+    virtual QUndoCommand *createCommand();
 
 private:
     Ui::RectangleShapeConfigWidget widget;
-    KoRectangleShape * m_rectangle;
+    KoRectangleShape *m_rectangle;
 };
 
 #endif // RECTANGLESHAPECONFIGWIDGET_H

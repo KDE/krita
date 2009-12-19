@@ -37,13 +37,13 @@ public:
      * @param convex indicates whether the star is convex or not
      * @param parent the optional parent command
      */
-    StarShapeConfigCommand( KoStarShape * star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, QUndoCommand *parent = 0 );
+    StarShapeConfigCommand(KoStarShape *star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, QUndoCommand *parent = 0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo
     virtual void undo();
 private:
-    KoStarShape * m_star;
+    KoStarShape *m_star;
     uint m_oldCornerCount;
     qreal m_oldInnerRadius;
     qreal m_oldOuterRadius;

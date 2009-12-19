@@ -21,15 +21,15 @@
 #include "KoRectangleShape.h"
 #include <klocale.h>
 
-RectangleShapeConfigCommand::RectangleShapeConfigCommand( KoRectangleShape * rectangle, qreal cornerRadiusX, qreal cornerRadiusY, QUndoCommand *parent )
-    : QUndoCommand( parent )
+RectangleShapeConfigCommand::RectangleShapeConfigCommand(KoRectangleShape * rectangle, qreal cornerRadiusX, qreal cornerRadiusY, QUndoCommand *parent)
+    : QUndoCommand(parent)
     , m_rectangle(rectangle)
     , m_newCornerRadiusX(cornerRadiusX)
     , m_newCornerRadiusY(cornerRadiusY)
 {
     Q_ASSERT(m_rectangle);
 
-    setText( i18n("Change rectangle") );
+    setText(i18n("Change rectangle"));
 
     m_oldCornerRadiusX = m_rectangle->cornerRadiusX();
     m_oldCornerRadiusY = m_rectangle->cornerRadiusY();
@@ -41,10 +41,10 @@ void RectangleShapeConfigCommand::redo()
 
     m_rectangle->update();
 
-    if( m_oldCornerRadiusX != m_newCornerRadiusX )
-        m_rectangle->setCornerRadiusX( m_newCornerRadiusX );
-    if( m_oldCornerRadiusY != m_newCornerRadiusY )
-        m_rectangle->setCornerRadiusY( m_newCornerRadiusY );
+    if (m_oldCornerRadiusX != m_newCornerRadiusX)
+        m_rectangle->setCornerRadiusX(m_newCornerRadiusX);
+    if (m_oldCornerRadiusY != m_newCornerRadiusY)
+        m_rectangle->setCornerRadiusY(m_newCornerRadiusY);
 
     m_rectangle->update();
 }
@@ -55,10 +55,10 @@ void RectangleShapeConfigCommand::undo()
 
     m_rectangle->update();
 
-    if( m_oldCornerRadiusX != m_newCornerRadiusX )
-        m_rectangle->setCornerRadiusX( m_oldCornerRadiusX );
-    if( m_oldCornerRadiusY != m_newCornerRadiusY )
-        m_rectangle->setCornerRadiusY( m_oldCornerRadiusY );
+    if (m_oldCornerRadiusX != m_newCornerRadiusX)
+        m_rectangle->setCornerRadiusX(m_oldCornerRadiusX);
+    if (m_oldCornerRadiusY != m_newCornerRadiusY)
+        m_rectangle->setCornerRadiusY(m_oldCornerRadiusY);
 
     m_rectangle->update();
 }

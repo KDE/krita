@@ -35,13 +35,13 @@ public:
      * @param endAngle the end angle
      * @param parent the optional parent command
      */
-    EllipseShapeConfigCommand( KoEllipseShape * ellipse, KoEllipseShape::KoEllipseType type, qreal startAngle, qreal startEndAngle, QUndoCommand *parent = 0 );
+    EllipseShapeConfigCommand(KoEllipseShape *ellipse, KoEllipseShape::KoEllipseType type, qreal startAngle, qreal startEndAngle, QUndoCommand *parent = 0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo
     virtual void undo();
 private:
-    KoEllipseShape * m_ellipse;
+    KoEllipseShape *m_ellipse;
     KoEllipseShape::KoEllipseType m_oldType;
     qreal m_oldStartAngle;
     qreal m_oldEndAngle;

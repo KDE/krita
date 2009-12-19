@@ -46,26 +46,26 @@ enum Identifier {
 class KoEnhancedPathParameter
 {
 public:
-    explicit KoEnhancedPathParameter( KoEnhancedPathShape * parent );
+    explicit KoEnhancedPathParameter(KoEnhancedPathShape *parent);
     virtual ~KoEnhancedPathParameter();
     /// evaluates the parameter using the given path
     virtual qreal evaluate() = 0;
     /// modifies the parameter if possible, using the new value
-    virtual void modify( qreal value );
+    virtual void modify(qreal value);
     /// returns string representation of the parameter
     virtual QString toString() const = 0;
 protected:
-    KoEnhancedPathShape * parent();
+    KoEnhancedPathShape *parent();
 private:
-    KoEnhancedPathShape * m_parent;
+    KoEnhancedPathShape *m_parent;
 };
 
-/// A constant parameter, a fixed value (i.e. 5, 11.3, -7 )
+/// A constant parameter, a fixed value (i.e. 5, 11.3, -7)
 class KoEnhancedPathConstantParameter : public KoEnhancedPathParameter
 {
 public:
     /// Constructs the constant parameter with the given value
-    KoEnhancedPathConstantParameter( qreal value, KoEnhancedPathShape * parent );
+    KoEnhancedPathConstantParameter(qreal value, KoEnhancedPathShape *parent);
     qreal evaluate();
     virtual QString toString() const;
 private:
@@ -77,12 +77,12 @@ class KoEnhancedPathNamedParameter : public KoEnhancedPathParameter
 {
 public:
     /// Constructs named parameter from given identifier
-    KoEnhancedPathNamedParameter( Identifier identifier, KoEnhancedPathShape * parent );
+    KoEnhancedPathNamedParameter(Identifier identifier, KoEnhancedPathShape *parent);
     /// Constructs named parameter from given identifier string
-    KoEnhancedPathNamedParameter( const QString &identifier, KoEnhancedPathShape * parent );
+    KoEnhancedPathNamedParameter(const QString &identifier, KoEnhancedPathShape *parent);
     qreal evaluate();
     /// Returns identfier type from given string
-    static Identifier identifierFromString( const QString &text );
+    static Identifier identifierFromString(const QString &text);
     virtual QString toString() const;
 private:
     Identifier m_identifier; ///< the identifier type
@@ -93,9 +93,9 @@ class KoEnhancedPathReferenceParameter : public KoEnhancedPathParameter
 {
 public:
     /// Constructs reference parameter from the given reference string
-    explicit KoEnhancedPathReferenceParameter( const QString &reference, KoEnhancedPathShape * parent );
+    explicit KoEnhancedPathReferenceParameter(const QString &reference, KoEnhancedPathShape *parent);
     qreal evaluate();
-    virtual void modify( qreal value );
+    virtual void modify(qreal value);
     virtual QString toString() const;
 private:
     QString m_reference; ///< the reference, formula or modifier

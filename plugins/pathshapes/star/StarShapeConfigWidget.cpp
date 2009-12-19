@@ -23,73 +23,70 @@
 
 StarShapeConfigWidget::StarShapeConfigWidget()
 {
-    widget.setupUi( this );
+    widget.setupUi(this);
 
-    connect( widget.corners, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
-    connect( widget.innerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
-    connect( widget.outerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
-    connect( widget.convex, SIGNAL(stateChanged(int)), this, SIGNAL(propertyChanged()));
-    connect( widget.convex, SIGNAL(clicked()), this, SLOT(typeChanged()) );
+    connect(widget.corners, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
+    connect(widget.innerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
+    connect(widget.outerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
+    connect(widget.convex, SIGNAL(stateChanged(int)), this, SIGNAL(propertyChanged()));
+    connect(widget.convex, SIGNAL(clicked()), this, SLOT(typeChanged()));
 }
 
 void StarShapeConfigWidget::setUnit(KoUnit unit)
 {
-    widget.innerRadius->setUnit( unit );
-    widget.outerRadius->setUnit( unit );
+    widget.innerRadius->setUnit(unit);
+    widget.outerRadius->setUnit(unit);
 }
 
 void StarShapeConfigWidget::open(KoShape *shape)
 {
-    m_star = dynamic_cast<KoStarShape*>( shape );
-    if( ! m_star )
+    m_star = dynamic_cast<KoStarShape*>(shape);
+    if (! m_star)
         return;
 
-    widget.corners->blockSignals( true );
-    widget.innerRadius->blockSignals( true );
-    widget.outerRadius->blockSignals( true );
-    widget.convex->blockSignals( true );
+    widget.corners->blockSignals(true);
+    widget.innerRadius->blockSignals(true);
+    widget.outerRadius->blockSignals(true);
+    widget.convex->blockSignals(true);
 
-    widget.corners->setValue( m_star->cornerCount() );
-    widget.innerRadius->changeValue( m_star->baseRadius() );
-    widget.outerRadius->changeValue( m_star->tipRadius() );
-    widget.convex->setCheckState( m_star->convex() ? Qt::Checked : Qt::Unchecked );
+    widget.corners->setValue(m_star->cornerCount());
+    widget.innerRadius->changeValue(m_star->baseRadius());
+    widget.outerRadius->changeValue(m_star->tipRadius());
+    widget.convex->setCheckState(m_star->convex() ? Qt::Checked : Qt::Unchecked);
     typeChanged();
 
-    widget.corners->blockSignals( false );
-    widget.innerRadius->blockSignals( false );
-    widget.outerRadius->blockSignals( false );
-    widget.convex->blockSignals( false );
+    widget.corners->blockSignals(false);
+    widget.innerRadius->blockSignals(false);
+    widget.outerRadius->blockSignals(false);
+    widget.convex->blockSignals(false);
 }
 
 void StarShapeConfigWidget::save()
 {
-    if( ! m_star )
+    if (! m_star)
         return;
 
-    m_star->setCornerCount( widget.corners->value() );
-    m_star->setBaseRadius( widget.innerRadius->value() );
-    m_star->setTipRadius( widget.outerRadius->value() );
-    m_star->setConvex( widget.convex->checkState() == Qt::Checked );
+    m_star->setCornerCount(widget.corners->value());
+    m_star->setBaseRadius(widget.innerRadius->value());
+    m_star->setTipRadius(widget.outerRadius->value());
+    m_star->setConvex(widget.convex->checkState() == Qt::Checked);
 }
 
 QUndoCommand * StarShapeConfigWidget::createCommand()
 {
-    if( ! m_star )
+    if (! m_star)
         return 0;
     else
-        return new StarShapeConfigCommand( m_star, widget.corners->value(), widget.innerRadius->value(), 
-                                           widget.outerRadius->value(), widget.convex->checkState() == Qt::Checked );
+        return new StarShapeConfigCommand(m_star, widget.corners->value(), widget.innerRadius->value(),
+                widget.outerRadius->value(), widget.convex->checkState() == Qt::Checked);
 }
 
 void StarShapeConfigWidget::typeChanged()
 {
-    if( widget.convex->checkState() == Qt::Checked )
-    {
-        widget.innerRadius->setEnabled( false );
-    }
-    else
-    {
-        widget.innerRadius->setEnabled( true );
+    if (widget.convex->checkState() == Qt::Checked) {
+        widget.innerRadius->setEnabled(false);
+    } else {
+        widget.innerRadius->setEnabled(true);
     }
 }
 

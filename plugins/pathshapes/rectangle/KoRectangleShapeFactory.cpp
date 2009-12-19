@@ -27,32 +27,32 @@
 
 #include <klocale.h>
 
-KoRectangleShapeFactory::KoRectangleShapeFactory( QObject *parent )
-: KoShapeFactory( parent, KoRectangleShapeId, i18n( "Rectangle" ) )
+KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent)
+: KoShapeFactory(parent, KoRectangleShapeId, i18n("Rectangle"))
 {
-    setToolTip( i18n( "A rectangle" ) );
+    setToolTip(i18n("A rectangle"));
     setIcon("rectangle-shape");
     setFamily("geometric");
-    setOdfElementNames( KoXmlNS::draw, QStringList( "rect" ) );
-    setLoadingPriority( 1 );
+    setOdfElementNames(KoXmlNS::draw, QStringList("rect"));
+    setLoadingPriority(1);
 }
 
-KoShape * KoRectangleShapeFactory::createDefaultShape() const
+KoShape *KoRectangleShapeFactory::createDefaultShape() const
 {
-    KoRectangleShape * rect = new KoRectangleShape();
+    KoRectangleShape *rect = new KoRectangleShape();
 
-    rect->setBorder( new KoLineBorder( 1.0 ) );
-    rect->setShapeId( KoPathShapeId );
+    rect->setBorder(new KoLineBorder(1.0));
+    rect->setShapeId(KoPathShapeId);
 
-    QLinearGradient * gradient = new QLinearGradient( QPointF(0,0), QPointF(100,100) );
-    gradient->setColorAt( 0.0, Qt::white );
-    gradient->setColorAt( 1.0, Qt::green );
-    rect->setBackground( new KoGradientBackground( gradient ) );
+    QLinearGradient *gradient = new QLinearGradient(QPointF(0,0), QPointF(100,100));
+    gradient->setColorAt(0.0, Qt::white);
+    gradient->setColorAt(1.0, Qt::green);
+    rect->setBackground(new KoGradientBackground(gradient));
 
     return rect;
 }
 
-KoShape * KoRectangleShapeFactory::createShape( const KoProperties * params ) const 
+KoShape * KoRectangleShapeFactory::createShape(const KoProperties * params) const 
 {
     Q_UNUSED(params);
     return createDefaultShape();
@@ -60,13 +60,13 @@ KoShape * KoRectangleShapeFactory::createShape( const KoProperties * params ) co
 
 bool KoRectangleShapeFactory::supports(const KoXmlElement & e) const
 {
-    return ( e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw );
+    return (e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw);
 }
 
 QList<KoShapeConfigWidgetBase*> KoRectangleShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> panels;
-    panels.append( new RectangleShapeConfigWidget() );
+    panels.append(new RectangleShapeConfigWidget());
     return panels;
 }
 

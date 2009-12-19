@@ -31,279 +31,256 @@
 #include <math.h>
 
 KoEllipseShape::KoEllipseShape()
-: m_startAngle( 0 )
-, m_endAngle( 0 )
-, m_kindAngle( M_PI )
-, m_type( Arc )
+    :m_startAngle(0),
+    m_endAngle(0),
+    m_kindAngle(M_PI),
+    m_type(Arc)
 {
     QList<QPointF> handles;
-    handles.push_back( QPointF( 100, 50 ) );
-    handles.push_back( QPointF( 100, 50 ) );
-    handles.push_back( QPointF( 0, 50 ) );
+    handles.push_back(QPointF(100, 50));
+    handles.push_back(QPointF(100, 50));
+    handles.push_back(QPointF(0, 50));
     setHandles(handles);
-    QSizeF size( 100, 100 );
-    m_radii = QPointF( size.width() / 2.0, size.height() / 2.0 );
-    m_center = QPointF( m_radii.x(), m_radii.y() );
-    updatePath( size );
+    QSizeF size(100, 100);
+    m_radii = QPointF(size.width() / 2.0, size.height() / 2.0);
+    m_center = QPointF(m_radii.x(), m_radii.y());
+    updatePath(size);
 }
 
 KoEllipseShape::~KoEllipseShape()
 {
 }
 
-void KoEllipseShape::saveOdf( KoShapeSavingContext & context ) const
+void KoEllipseShape::saveOdf(KoShapeSavingContext &context) const
 {
-    if( isParametricShape() )
-    {
+    if (isParametricShape()) {
         context.xmlWriter().startElement("draw:ellipse");
-        saveOdfAttributes( context, OdfAllAttributes );
+        saveOdfAttributes(context, OdfAllAttributes);
 
-        switch ( m_type ) {
+        switch (m_type) {
         case Arc:
-            context.xmlWriter().addAttribute( "draw:kind", sweepAngle()==360 ? "full" : "arc" );
+            context.xmlWriter().addAttribute("draw:kind", sweepAngle()==360 ? "full" : "arc");
             break;
         case Pie:
-            context.xmlWriter().addAttribute( "draw:kind", "section" );
+            context.xmlWriter().addAttribute("draw:kind", "section");
             break;
         case Chord:
-            context.xmlWriter().addAttribute( "draw:kind", "cut" );
+            context.xmlWriter().addAttribute("draw:kind", "cut");
             break;
         default:
-            context.xmlWriter().addAttribute( "draw:kind", "full" );
+            context.xmlWriter().addAttribute("draw:kind", "full");
         }
-        if ( m_type != Arc || sweepAngle() != 360 ) {
-            context.xmlWriter().addAttribute( "draw:start-angle", m_startAngle );
-            context.xmlWriter().addAttribute( "draw:end-angle", m_endAngle );
+        if (m_type != Arc || sweepAngle() != 360) {
+            context.xmlWriter().addAttribute("draw:start-angle", m_startAngle);
+            context.xmlWriter().addAttribute("draw:end-angle", m_endAngle);
         }
-        saveOdfCommonChildElements( context );
+        saveOdfCommonChildElements(context);
         context.xmlWriter().endElement();
+    } else {
+        KoPathShape::saveOdf(context);
     }
-    else
-        KoPathShape::saveOdf( context );
 }
 
-bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool KoEllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     QSizeF size;
 
     bool radiusGiven = true;
 
-    if( element.hasAttributeNS( KoXmlNS::svg, "rx" ) && element.hasAttributeNS( KoXmlNS::svg, "ry" ) )
-    {
-        qreal rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "rx" ) );
-        qreal ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry" ) );
+    if (element.hasAttributeNS( KoXmlNS::svg, "rx") && element.hasAttributeNS(KoXmlNS::svg, "ry")) {
+        qreal rx = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "rx"));
+        qreal ry = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "ry"));
         size = QSizeF( 2*rx, 2*ry );
-    }
-    else if( element.hasAttributeNS( KoXmlNS::svg, "r" ) )
-    {
-        qreal r = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "r" ) );
-        size = QSizeF( 2*r, 2*r );
-    }
-    else {
-        size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
-        size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
+    } else if(element.hasAttributeNS(KoXmlNS::svg, "r")) {
+        qreal r = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "r"));
+        size = QSizeF(2*r, 2*r);
+    } else {
+        size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
+        size.setHeight(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "height", QString())));
         radiusGiven = false;
     }
-    setSize( size );
+    setSize(size);
 
     QPointF pos;
 
-    if( element.hasAttributeNS( KoXmlNS::svg, "cx" ) && element.hasAttributeNS( KoXmlNS::svg, "cy" ) )
-    {
-        qreal cx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cx" ) );
-        qreal cy = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cy" ) );
-        pos = QPointF( cx - 0.5 * size.width(), cy - 0.5 * size.height() );
+    if (element.hasAttributeNS(KoXmlNS::svg, "cx") && element.hasAttributeNS(KoXmlNS::svg, "cy")) {
+        qreal cx = KoUnit::parseValue(element.attributeNS( KoXmlNS::svg, "cx"));
+        qreal cy = KoUnit::parseValue(element.attributeNS( KoXmlNS::svg, "cy"));
+        pos = QPointF(cx - 0.5 * size.width(), cy - 0.5 * size.height());
+    } else {
+        pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
+        pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
     }
-    else {
-        pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
-        pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
-    }
-    setPosition( pos );
+    setPosition(pos);
 
-    QString kind = element.attributeNS( KoXmlNS::draw, "kind", "full" );
-    if( kind == "section" )
-        setType( Pie );
-    else if( kind == "cut" )
-        setType( Chord );
+    QString kind = element.attributeNS(KoXmlNS::draw, "kind", "full");
+    if (kind == "section")
+        setType(Pie);
+    else if (kind == "cut")
+        setType(Chord);
     else
-        setType( Arc );
+        setType(Arc);
 
-    setStartAngle( element.attributeNS( KoXmlNS::draw, "start-angle", "0" ).toDouble() );
-    setEndAngle( element.attributeNS( KoXmlNS::draw, "end-angle", "360" ).toDouble() );
-    if ( !radiusGiven ) {
+    setStartAngle(element.attributeNS(KoXmlNS::draw, "start-angle", "0").toDouble());
+    setEndAngle(element.attributeNS(KoXmlNS::draw, "end-angle", "360").toDouble());
+    if (!radiusGiven) {
         // is the size was given by width and height we have to reset the data as the size of the 
         // part of the cut/pie is given.
-        setSize( size );
-        setPosition( pos );
+        setSize(size);
+        setPosition(pos);
     }
 
-    loadOdfAttributes( element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements );
+    loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
 
     return true;
 }
 
-void KoEllipseShape::setSize( const QSizeF &newSize )
+void KoEllipseShape::setSize(const QSizeF &newSize)
 {
     QMatrix matrix(resizeMatrix(newSize));
-    m_center = matrix.map( m_center );
-    m_radii = matrix.map( m_radii );
-    KoParameterShape::setSize( newSize );
+    m_center = matrix.map(m_center);
+    m_radii = matrix.map(m_radii);
+    KoParameterShape::setSize(newSize);
 }
 
 QPointF KoEllipseShape::normalize()
 {
-    QPointF offset( KoParameterShape::normalize() );
+    QPointF offset(KoParameterShape::normalize());
     QMatrix matrix;
-    matrix.translate( -offset.x(), -offset.y() );
-    m_center = matrix.map( m_center );
+    matrix.translate(-offset.x(), -offset.y());
+    m_center = matrix.map(m_center);
     return offset;
 }
 
-void KoEllipseShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
+void KoEllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
-    Q_UNUSED( modifiers );
-    QPointF p( point );
+    Q_UNUSED(modifiers);
+    QPointF p(point);
 
-    QPointF diff( m_center - point );
-    diff.setX( -diff.x() );
+    QPointF diff(m_center - point);
+    diff.setX(-diff.x());
     qreal angle = 0;
-    if ( diff.x() == 0 )
-    {
-        angle = ( diff.y() < 0 ? 270 : 90 ) * M_PI / 180.0;
-    }
-    else
-    {
-        diff.setY( diff.y() * m_radii.x() / m_radii.y() );
-        angle = atan( diff.y() / diff.x () );
-        if ( angle < 0 )
+    if (diff.x() == 0) {
+        angle = (diff.y() < 0 ? 270 : 90 ) * M_PI / 180.0;
+    } else {
+        diff.setY(diff.y() * m_radii.x() / m_radii.y());
+        angle = atan(diff.y() / diff.x ());
+        if (angle < 0)
             angle = M_PI + angle;
-        if ( diff.y() < 0 )
+        if (diff.y() < 0)
             angle += M_PI;
     }
 
     QList<QPointF> handles = this->handles();
-    switch ( handleId )
-    {
-        case 0:
-            p = QPointF( m_center + QPointF( cos( angle ) * m_radii.x(), -sin( angle ) * m_radii.y() ) );
-            m_startAngle = angle * 180.0 / M_PI;
-            handles[handleId] = p;
-            updateKindHandle();
-            break;
-        case 1:
-            p = QPointF( m_center + QPointF( cos( angle ) * m_radii.x(), -sin( angle ) * m_radii.y() ) );
-            m_endAngle = angle * 180.0 / M_PI;
-            handles[handleId] = p;
-            updateKindHandle();
-            break;
-        case 2:
-        {
-            QList<QPointF> kindHandlePositions;
-            kindHandlePositions.push_back( QPointF( m_center + QPointF( cos( m_kindAngle ) * m_radii.x(), -sin( m_kindAngle ) * m_radii.y() ) ) );
-            kindHandlePositions.push_back( m_center );
-            kindHandlePositions.push_back((handles[0] + handles[1]) / 2.0);
+    switch ( handleId ) {
+    case 0:
+        p = QPointF(m_center + QPointF(cos(angle) * m_radii.x(), -sin(angle) * m_radii.y()));
+        m_startAngle = angle * 180.0 / M_PI;
+        handles[handleId] = p;
+        updateKindHandle();
+        break;
+    case 1:
+        p = QPointF(m_center + QPointF(cos(angle) * m_radii.x(), -sin(angle) * m_radii.y()));
+        m_endAngle = angle * 180.0 / M_PI;
+        handles[handleId] = p;
+        updateKindHandle();
+        break;
+    case 2: {
+        QList<QPointF> kindHandlePositions;
+        kindHandlePositions.push_back(QPointF(m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y())));
+        kindHandlePositions.push_back(m_center);
+        kindHandlePositions.push_back((handles[0] + handles[1]) / 2.0);
 
-            QPointF diff = m_center * 2.0;
-            int handlePos = 0;
-            for ( int i = 0; i < kindHandlePositions.size(); ++i )
-            {
-                QPointF pointDiff( p - kindHandlePositions[i] );
-                if ( i == 0 || qAbs( pointDiff.x() ) + qAbs( pointDiff.y() ) < qAbs( diff.x() ) + qAbs( diff.y() ) )
-                {
-                    diff = pointDiff;
-                    handlePos = i;
-                }
+        QPointF diff = m_center * 2.0;
+        int handlePos = 0;
+        for (int i = 0; i < kindHandlePositions.size(); ++i) {
+            QPointF pointDiff(p - kindHandlePositions[i]);
+            if (i == 0 || qAbs(pointDiff.x()) + qAbs(pointDiff.y()) < qAbs(diff.x()) + qAbs(diff.y())) {
+                diff = pointDiff;
+                handlePos = i;
             }
-            handles[handleId] = kindHandlePositions[handlePos];
-            m_type = KoEllipseType( handlePos );
-        } break;
+        }
+        handles[handleId] = kindHandlePositions[handlePos];
+        m_type = KoEllipseType(handlePos);
+    }
+    break;
     }
     setHandles(handles);
 }
 
-void KoEllipseShape::updatePath( const QSizeF &size )
+void KoEllipseShape::updatePath(const QSizeF &size)
 {
     Q_UNUSED(size);
     QPointF startpoint(handles()[0]);
 
     QPointF curvePoints[12];
 
-    int pointCnt = arcToCurve( m_radii.x(), m_radii.y(), m_startAngle, sweepAngle() , startpoint, curvePoints );
+    int pointCnt = arcToCurve(m_radii.x(), m_radii.y(), m_startAngle, sweepAngle() , startpoint, curvePoints);
 
     int curvePointCount = 1 + pointCnt / 3;
     int requiredPointCount = curvePointCount;
     if (m_type == Pie) {
         requiredPointCount++;
-    }
-    else if ( m_type == Arc && m_startAngle == m_endAngle ) {
+    } else if (m_type == Arc && m_startAngle == m_endAngle) {
         curvePointCount--;
         requiredPointCount--;
     }
-    
-    createPoints( requiredPointCount );
 
-    KoSubpath & points = *m_subpaths[0];
+    createPoints(requiredPointCount);
+
+    KoSubpath &points = *m_subpaths[0];
 
     int curveIndex = 0;
-    points[0]->setPoint( startpoint );
+    points[0]->setPoint(startpoint);
     points[0]->removeControlPoint1();
-    points[0]->setProperty( KoPathPoint::StartSubpath );
-    for ( int i = 1; i < curvePointCount; ++i )
-    {
-        points[i-1]->setControlPoint2( curvePoints[curveIndex++] );
-        points[i]->setControlPoint1( curvePoints[curveIndex++] ); 
-        points[i]->setPoint( curvePoints[curveIndex++] );
+    points[0]->setProperty(KoPathPoint::StartSubpath);
+    for (int i = 1; i < curvePointCount; ++i) {
+        points[i-1]->setControlPoint2(curvePoints[curveIndex++]);
+        points[i]->setControlPoint1(curvePoints[curveIndex++]);
+        points[i]->setPoint(curvePoints[curveIndex++]);
         points[i]->removeControlPoint2();
     }
 
-    if ( m_type == Pie )
-    {
-        points[requiredPointCount-1]->setPoint( m_center );
+    if (m_type == Pie) {
+        points[requiredPointCount-1]->setPoint(m_center);
         points[requiredPointCount-1]->removeControlPoint1();
         points[requiredPointCount-1]->removeControlPoint2();
-    }
-    else if ( m_type == Arc && m_startAngle == m_endAngle )
-    {
-        points[curvePointCount-1]->setControlPoint2( curvePoints[curveIndex] );
-        points[0]->setControlPoint1( curvePoints[++curveIndex] );
+    } else if (m_type == Arc && m_startAngle == m_endAngle) {
+        points[curvePointCount-1]->setControlPoint2(curvePoints[curveIndex]);
+        points[0]->setControlPoint1(curvePoints[++curveIndex]);
     }
 
-    for ( int i = 0; i < requiredPointCount; ++i )
-    {
-        points[i]->unsetProperty( KoPathPoint::StopSubpath );
-        points[i]->unsetProperty( KoPathPoint::CloseSubpath );
+    for (int i = 0; i < requiredPointCount; ++i) {
+        points[i]->unsetProperty(KoPathPoint::StopSubpath);
+        points[i]->unsetProperty(KoPathPoint::CloseSubpath);
     }
-    m_subpaths[0]->last()->setProperty( KoPathPoint::StopSubpath );
-    if( m_type == Arc && m_startAngle != m_endAngle )
-    {
-        m_subpaths[0]->first()->unsetProperty( KoPathPoint::CloseSubpath );
-        m_subpaths[0]->last()->unsetProperty( KoPathPoint::CloseSubpath );
-    }
-    else
-    {
-        m_subpaths[0]->first()->setProperty( KoPathPoint::CloseSubpath );
-        m_subpaths[0]->last()->setProperty( KoPathPoint::CloseSubpath );
+    m_subpaths[0]->last()->setProperty(KoPathPoint::StopSubpath);
+    if (m_type == Arc && m_startAngle != m_endAngle) {
+        m_subpaths[0]->first()->unsetProperty(KoPathPoint::CloseSubpath);
+        m_subpaths[0]->last()->unsetProperty(KoPathPoint::CloseSubpath);
+    } else {
+        m_subpaths[0]->first()->setProperty(KoPathPoint::CloseSubpath);
+        m_subpaths[0]->last()->setProperty(KoPathPoint::CloseSubpath);
     }
 
     normalize();
 }
 
-void KoEllipseShape::createPoints( int requiredPointCount )
+void KoEllipseShape::createPoints(int requiredPointCount)
 {
-    if ( m_subpaths.count() != 1 ) {
+    if (m_subpaths.count() != 1) {
         clear();
-        m_subpaths.append( new KoSubpath() );
+        m_subpaths.append(new KoSubpath());
     }
     int currentPointCount = m_subpaths[0]->count();
     if (currentPointCount > requiredPointCount) {
-        for( int i = 0; i < currentPointCount-requiredPointCount; ++i ) {
+        for (int i = 0; i < currentPointCount-requiredPointCount; ++i) {
             delete m_subpaths[0]->front();
             m_subpaths[0]->pop_front();
         }
-    }
-    else if (requiredPointCount > currentPointCount) {
-        for( int i = 0; i < requiredPointCount-currentPointCount; ++i ) {
-            m_subpaths[0]->append( new KoPathPoint( this, QPointF() ) );
+    } else if (requiredPointCount > currentPointCount) {
+        for (int i = 0; i < requiredPointCount-currentPointCount; ++i) {
+            m_subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
 }
@@ -311,23 +288,20 @@ void KoEllipseShape::createPoints( int requiredPointCount )
 
 void KoEllipseShape::updateKindHandle()
 {
-   m_kindAngle = ( m_startAngle + m_endAngle ) * M_PI / 360.0;
-   if ( m_startAngle > m_endAngle )
-   {
+   m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
+   if (m_startAngle > m_endAngle)
        m_kindAngle += M_PI;
-   }
     QList<QPointF> handles = this->handles();
-   switch ( m_type )
-   {
-       case Arc:
-           handles[2] = m_center + QPointF( cos( m_kindAngle ) * m_radii.x(), -sin( m_kindAngle ) * m_radii.y() );
-           break;
-       case Pie:
-           handles[2] = m_center;
-           break;
-       case Chord:
-           handles[2] = (handles[0] + handles[1]) / 2.0;
-           break;
+   switch (m_type) {
+   case Arc:
+       handles[2] = m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y());
+       break;
+   case Pie:
+       handles[2] = m_center;
+       break;
+   case Chord:
+       handles[2] = (handles[0] + handles[1]) / 2.0;
+       break;
    }
     setHandles(handles);
 }
@@ -346,20 +320,18 @@ qreal KoEllipseShape::sweepAngle() const
 {
     qreal sAngle =  m_endAngle - m_startAngle;
     // treat also as full circle
-    if ( sAngle == 0 || sAngle == -360 )
+    if (sAngle == 0 || sAngle == -360)
         sAngle = 360;
-    if ( m_startAngle > m_endAngle )
-    {
+    if (m_startAngle > m_endAngle)
         sAngle = 360 - m_startAngle + m_endAngle;
-    }
     return sAngle;
 }
 
-void KoEllipseShape::setType( KoEllipseType type )
+void KoEllipseShape::setType(KoEllipseType type)
 {
     m_type = type;
     updateKindHandle();
-    updatePath( size() );
+    updatePath(size());
 }
 
 KoEllipseShape::KoEllipseType KoEllipseShape::type() const
@@ -367,12 +339,12 @@ KoEllipseShape::KoEllipseType KoEllipseShape::type() const
     return m_type;
 }
 
-void KoEllipseShape::setStartAngle( qreal angle )
+void KoEllipseShape::setStartAngle(qreal angle)
 {
     m_startAngle = angle;
     updateKindHandle();
     updateAngleHandles();
-    updatePath( size() );
+    updatePath(size());
 }
 
 qreal KoEllipseShape::startAngle() const
@@ -380,12 +352,12 @@ qreal KoEllipseShape::startAngle() const
     return m_startAngle;
 }
 
-void KoEllipseShape::setEndAngle( qreal angle )
+void KoEllipseShape::setEndAngle(qreal angle)
 {
     m_endAngle = angle;
     updateKindHandle();
     updateAngleHandles();
-    updatePath( size() );
+    updatePath(size());
 }
 
 qreal KoEllipseShape::endAngle() const

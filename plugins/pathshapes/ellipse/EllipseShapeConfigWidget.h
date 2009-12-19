@@ -42,7 +42,7 @@ private slots:
     void closeEllipse();
 private:
     Ui::EllipseShapeConfigWidget widget;
-    KoEllipseShape * m_ellipse;
+    KoEllipseShape *m_ellipse;
 };
 
 #endif // ELLIPSESHAPECONFIGWIDGET_H

@@ -29,10 +29,10 @@ class KoSpiralShapeFactory : public KoShapeFactory
 {
 public:
     /// constructor
-    explicit KoSpiralShapeFactory( QObject *parent );
+    explicit KoSpiralShapeFactory(QObject *parent);
     ~KoSpiralShapeFactory() {}
-    KoShape * createDefaultShape() const;
-    KoShape * createShape( const KoProperties * params ) const;
+    KoShape *createDefaultShape() const;
+    KoShape *createShape(const KoProperties *params) const;
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 

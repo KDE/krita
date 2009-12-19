@@ -40,7 +40,7 @@ public:
     virtual QUndoCommand * createCommand();
 private:
     Ui::SpiralShapeConfigWidget widget;
-    KoSpiralShape * m_spiral;
+    KoSpiralShape *m_spiral;
 };
 
 #endif // SPIRALSHAPECONFIGWIDGET_H

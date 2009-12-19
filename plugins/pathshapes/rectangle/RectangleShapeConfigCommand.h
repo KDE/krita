@@ -35,13 +35,13 @@ public:
      * @param cornerRadiusY the y corner radius
      * @param parent the optional parent command
      */
-    RectangleShapeConfigCommand( KoRectangleShape * rectangle, qreal cornerRadiusX, qreal cornerRadiusY, QUndoCommand *parent = 0 );
+    RectangleShapeConfigCommand(KoRectangleShape *rectangle, qreal cornerRadiusX, qreal cornerRadiusY, QUndoCommand *parent = 0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo
     virtual void undo();
 private:
-    KoRectangleShape * m_rectangle;
+    KoRectangleShape *m_rectangle;
     qreal m_oldCornerRadiusX;
     qreal m_oldCornerRadiusY;
     qreal m_newCornerRadiusX;

@@ -29,16 +29,16 @@
 #include <kgenericfactory.h>
 
 K_EXPORT_COMPONENT_FACTORY(pathshapes,
-                           KGenericFactory<PathShapesPlugin>( "PathShapes" ) )
+                           KGenericFactory<PathShapesPlugin>("PathShapes"))
 
-PathShapesPlugin::PathShapesPlugin( QObject *parent, const QStringList& )
+PathShapesPlugin::PathShapesPlugin(QObject *parent, const QStringList&)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new KoStarShapeFactory( parent));
-    KoShapeRegistry::instance()->add( new KoRectangleShapeFactory( parent));
-    KoShapeRegistry::instance()->add( new KoEllipseShapeFactory( parent));
-    KoShapeRegistry::instance()->add( new KoSpiralShapeFactory( parent));
-    KoShapeRegistry::instance()->add( new KoEnhancedPathShapeFactory(parent));
+    KoShapeRegistry::instance()->add(new KoStarShapeFactory(parent));
+    KoShapeRegistry::instance()->add(new KoRectangleShapeFactory(parent));
+    KoShapeRegistry::instance()->add(new KoEllipseShapeFactory(parent));
+    KoShapeRegistry::instance()->add(new KoSpiralShapeFactory(parent));
+    KoShapeRegistry::instance()->add(new KoEnhancedPathShapeFactory(parent));
 }
 
 #include "PathShapesPlugin.moc"

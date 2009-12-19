@@ -26,7 +26,7 @@ class PathShapesPlugin : public QObject {
     Q_OBJECT
 
 public:
-    PathShapesPlugin(QObject * parent,  const QStringList & );
+    PathShapesPlugin(QObject *parent,  const QStringList &);
     ~PathShapesPlugin() {}
 
 };

@@ -33,9 +33,9 @@ public:
     /// constructor
     explicit KoEnhancedPathShapeFactory(QObject *parent);
     ~KoEnhancedPathShapeFactory() {}
-    KoShape * createDefaultShape() const;
-    KoShape * createShape(const KoProperties * params) const;
-    virtual bool supports(const KoXmlElement & e) const;
+    KoShape *createDefaultShape() const;
+    KoShape *createShape(const KoProperties *params) const;
+    virtual bool supports(const KoXmlElement &e) const;
 private:
     void addCross();
     void addArrow();
@@ -46,9 +46,8 @@ private:
 
     typedef QMap<QString, QVariant > ComplexType;
     typedef QList<QVariant> ListType;
-    KoProperties* dataToProperties(
-        const QString &modifiers, const QStringList &commands,
-        const ListType &handles, const ComplexType & formulae ) const;
+    KoProperties* dataToProperties(const QString &modifiers, const QStringList &commands,
+        const ListType &handles, const ComplexType &formulae) const;
 
 };
 

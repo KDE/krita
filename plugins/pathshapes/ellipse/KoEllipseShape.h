@@ -45,14 +45,14 @@ public:
     KoEllipseShape();
     ~KoEllipseShape();
 
-    void setSize( const QSizeF &newSize );
+    void setSize(const QSizeF &newSize);
     virtual QPointF normalize();
 
     /**
      * Sets the type of the ellipse.
      * @param type the new ellipse type
      */
-    void setType( KoEllipseType type );
+    void setType(KoEllipseType type);
 
     /// Returns the actual ellipse type
     KoEllipseType type() const;
@@ -61,7 +61,7 @@ public:
      * Sets the start angle of the ellipse.
      * @param angle the new start angle in degree
      */
-    void setStartAngle( qreal angle );
+    void setStartAngle(qreal angle);
 
     /// Returns the actual ellipse start angle in degree
     qreal startAngle() const;
@@ -70,7 +70,7 @@ public:
      * Sets the end angle of the ellipse.
      * @param angle the new end angle in degree
      */
-    void setEndAngle( qreal angle );
+    void setEndAngle(qreal angle);
 
     /// Returns the actual ellipse end angle in degree
     qreal endAngle() const;
@@ -80,13 +80,13 @@ public:
 
 protected:
     // reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-    void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
-    void updatePath( const QSizeF &size );
-    void createPoints( int requiredPointCount );
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    void updatePath(const QSizeF &size);
+    void createPoints(int requiredPointCount);
 
 private:
     qreal sweepAngle() const;

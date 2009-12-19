@@ -45,19 +45,19 @@ public:
         OperatorSub,       ///< - subtraction
         OperatorMul,       ///< * multiplication
         OperatorDiv,       ///< / division
-        OperatorLeftPar,   ///< ( left parentheses
-        OperatorRightPar,  ///< ) right parentheses
+        OperatorLeftPar,   ///< (left parentheses
+        OperatorRightPar,  ///<) right parentheses
         OperatorComma      ///< , comma
     };
 
     /// Constructs token with given type, text and position
-    explicit FormulaToken( Type type = TypeUnknown, const QString & text = QString(), int position = -1 );
+    explicit FormulaToken(Type type = TypeUnknown, const QString & text = QString(), int position = -1);
 
     /// copy constructor
-    FormulaToken( const FormulaToken &token );
+    FormulaToken(const FormulaToken &token);
 
     /// assignment operator
-    FormulaToken& operator=( const FormulaToken & token );
+    FormulaToken& operator=(const FormulaToken &token);
 
     /// Returns the type of the token
     Type type() const { return m_type; }
@@ -120,7 +120,7 @@ public:
     };
 
     /// Constructs a new formula from the specified string representation
-    KoEnhancedPathFormula( const QString &text, KoEnhancedPathShape * parent );
+    KoEnhancedPathFormula(const QString &text, KoEnhancedPathShape * parent);
 
     /// Destroys the formula
     ~KoEnhancedPathFormula();
@@ -140,10 +140,10 @@ public:
     QString toString() const;
 private:
     /// Separates the given formula text into tokens.
-    TokenList scan( const QString &formula ) const;
+    TokenList scan(const QString &formula) const;
 
     /// Compiles the formula tokens into byte code
-    bool compile( const TokenList & tokens );
+    bool compile(const TokenList &tokens);
 
     /**
      * Evaluates a predefined function.
@@ -151,10 +151,10 @@ private:
      * @param function the identifier of the function to evaluate
      * @param arguments the functions arguments
      */
-    qreal evaluateFunction( Function function, const QList<qreal> &arguments ) const;
+    qreal evaluateFunction(Function function, const QList<qreal> &arguments) const;
 
     /// Prints token list
-    void debugTokens( const TokenList &tokens );
+    void debugTokens(const TokenList &tokens);
     /// Prints byte code
     void debugOpcodes();
 
@@ -164,7 +164,7 @@ private:
     QString m_text; ///< the formula text representation
     QList<QVariant> m_constants; ///< constant values
     QList<Opcode> m_codes; ///< the compiled byte code
-    KoEnhancedPathShape * m_parent;
+    KoEnhancedPathShape *m_parent;
 };
 
 #endif // KOENHANCEDPATHFORMULA_H

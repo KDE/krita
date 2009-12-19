@@ -20,8 +20,8 @@
 #include "EllipseShapeConfigCommand.h"
 #include <klocale.h>
 
-EllipseShapeConfigCommand::EllipseShapeConfigCommand( KoEllipseShape * ellipse, KoEllipseShape::KoEllipseType type, qreal startAngle, qreal endAngle, QUndoCommand *parent )
-    : QUndoCommand( parent )
+EllipseShapeConfigCommand::EllipseShapeConfigCommand(KoEllipseShape *ellipse, KoEllipseShape::KoEllipseType type, qreal startAngle, qreal endAngle, QUndoCommand *parent)
+    : QUndoCommand(parent)
     , m_ellipse(ellipse)
     , m_newType(type)
     , m_newStartAngle(startAngle)
@@ -29,7 +29,7 @@ EllipseShapeConfigCommand::EllipseShapeConfigCommand( KoEllipseShape * ellipse, 
 {
     Q_ASSERT(m_ellipse);
 
-    setText( i18n("Change ellipse") );
+    setText(i18n("Change ellipse"));
 
     m_oldType = m_ellipse->type();
     m_oldStartAngle = m_ellipse->startAngle();
@@ -42,12 +42,12 @@ void EllipseShapeConfigCommand::redo()
 
     m_ellipse->update();
 
-    if( m_oldType != m_newType )
-        m_ellipse->setType( m_newType );
-    if( m_oldStartAngle != m_newStartAngle )
-        m_ellipse->setStartAngle( m_newStartAngle );
-    if( m_oldEndAngle != m_newEndAngle )
-        m_ellipse->setEndAngle( m_newEndAngle );
+    if (m_oldType != m_newType)
+        m_ellipse->setType(m_newType);
+    if (m_oldStartAngle != m_newStartAngle)
+        m_ellipse->setStartAngle(m_newStartAngle);
+    if (m_oldEndAngle != m_newEndAngle)
+        m_ellipse->setEndAngle(m_newEndAngle);
 
     m_ellipse->update();
 }
@@ -58,12 +58,12 @@ void EllipseShapeConfigCommand::undo()
 
     m_ellipse->update();
 
-    if( m_oldType != m_newType )
-        m_ellipse->setType( m_oldType );
-    if( m_oldStartAngle != m_newStartAngle )
-        m_ellipse->setStartAngle( m_oldStartAngle );
-    if( m_oldEndAngle != m_newEndAngle )
-        m_ellipse->setEndAngle( m_oldEndAngle );
+    if (m_oldType != m_newType)
+        m_ellipse->setType(m_oldType);
+    if (m_oldStartAngle != m_newStartAngle)
+        m_ellipse->setStartAngle(m_oldStartAngle);
+    if (m_oldEndAngle != m_newEndAngle)
+        m_ellipse->setEndAngle(m_oldEndAngle);
 
     m_ellipse->update();
 }

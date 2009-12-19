@@ -47,7 +47,7 @@ public:
      *
      * @param radius the new corner radius in x-direction
      */
-    void setCornerRadiusX( qreal radius );
+    void setCornerRadiusX(qreal radius);
 
     /// Returns the corner radius in y-direction
     qreal cornerRadiusY() const;
@@ -60,22 +60,22 @@ public:
      *
      * @param radius the new corner radius in y-direction
      */
-    void setCornerRadiusY( qreal radius );
+    void setCornerRadiusY(qreal radius);
 
     /// reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
 
     /// reimplemented
     virtual QString pathShapeId() const;
 
 protected:
 
-    void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
-    void updatePath( const QSizeF &size );
-    void createPoints( int requiredPointCount );
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    void updatePath(const QSizeF &size);
+    void createPoints(int requiredPointCount);
     void updateHandles();
 
 private:

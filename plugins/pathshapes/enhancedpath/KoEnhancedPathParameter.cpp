@@ -41,10 +41,10 @@ QString identifierData[] = {
 };
 
 
-KoEnhancedPathParameter::KoEnhancedPathParameter( KoEnhancedPathShape * parent )
-    : m_parent( parent )
+KoEnhancedPathParameter::KoEnhancedPathParameter(KoEnhancedPathShape * parent)
+    : m_parent(parent)
 {
-    Q_ASSERT( m_parent );
+    Q_ASSERT(m_parent);
 }
 
 KoEnhancedPathParameter::~KoEnhancedPathParameter()
@@ -61,13 +61,13 @@ qreal KoEnhancedPathParameter::evaluate()
     return 0.0;
 }
 
-void KoEnhancedPathParameter::modify( qreal value )
+void KoEnhancedPathParameter::modify(qreal value)
 {
-    Q_UNUSED( value );
+    Q_UNUSED(value);
 }
 
-KoEnhancedPathConstantParameter::KoEnhancedPathConstantParameter( qreal value, KoEnhancedPathShape * parent )
-    : KoEnhancedPathParameter( parent ), m_value( value )
+KoEnhancedPathConstantParameter::KoEnhancedPathConstantParameter(qreal value, KoEnhancedPathShape * parent)
+    : KoEnhancedPathParameter(parent), m_value(value)
 {
 }
 
@@ -78,98 +78,97 @@ qreal KoEnhancedPathConstantParameter::evaluate()
 
 QString KoEnhancedPathConstantParameter::toString() const
 {
-    return QString::number( m_value );
+    return QString::number(m_value);
 }
 
-KoEnhancedPathNamedParameter::KoEnhancedPathNamedParameter( Identifier identifier, KoEnhancedPathShape * parent )
-: KoEnhancedPathParameter( parent ), m_identifier( identifier )
+KoEnhancedPathNamedParameter::KoEnhancedPathNamedParameter(Identifier identifier, KoEnhancedPathShape * parent)
+: KoEnhancedPathParameter(parent), m_identifier(identifier)
 {
 }
 
-KoEnhancedPathNamedParameter::KoEnhancedPathNamedParameter( const QString &identifier, KoEnhancedPathShape * parent )
-    : KoEnhancedPathParameter( parent )
+KoEnhancedPathNamedParameter::KoEnhancedPathNamedParameter(const QString &identifier, KoEnhancedPathShape * parent)
+    : KoEnhancedPathParameter(parent)
 {
-    m_identifier = identifierFromString( identifier );
+    m_identifier = identifierFromString(identifier);
 }
 
 qreal KoEnhancedPathNamedParameter::evaluate()
 {
     const QRectF &viewBox = parent()->viewBox();
 
-    switch( m_identifier )
-    {
-        case IdentifierPi:
-            return M_PI;
+    switch(m_identifier) {
+    case IdentifierPi:
+        return M_PI;
         break;
-        case IdentifierLeft:
-            return viewBox.left();
+    case IdentifierLeft:
+        return viewBox.left();
         break;
-        case IdentifierTop:
-            return viewBox.top();
+    case IdentifierTop:
+        return viewBox.top();
         break;
-        case IdentifierRight:
-            return viewBox.right();
+    case IdentifierRight:
+        return viewBox.right();
         break;
-        case IdentifierBottom:
-            return viewBox.bottom();
+    case IdentifierBottom:
+        return viewBox.bottom();
         break;
-        case IdentifierXstretch:
+    case IdentifierXstretch:
         break;
-        case IdentifierYstretch:
+    case IdentifierYstretch:
         break;
-        case IdentifierHasStroke:
-            return parent()->border() ? 1.0 : 0.0;
+    case IdentifierHasStroke:
+        return parent()->border() ? 1.0 : 0.0;
         break;
-        case IdentifierHasFill:
-            return parent()->background() ? 0.0 : 1.0;
+    case IdentifierHasFill:
+        return parent()->background() ? 0.0 : 1.0;
         break;
-        case IdentifierWidth:
-            return viewBox.width();
+    case IdentifierWidth:
+        return viewBox.width();
         break;
-        case IdentifierHeight:
-            return viewBox.height();
+    case IdentifierHeight:
+        return viewBox.height();
         break;
-        case IdentifierLogwidth:
-            return KoUnit::toMillimeter( viewBox.width() ) * 100;
+    case IdentifierLogwidth:
+        return KoUnit::toMillimeter(viewBox.width()) * 100;
         break;
-        case IdentifierLogheight:
-            return KoUnit::toMillimeter( viewBox.height() ) * 100;
+    case IdentifierLogheight:
+        return KoUnit::toMillimeter(viewBox.height()) * 100;
         break;
-        default:
-            return 0.0;
+    default:
+        break;
     }
     return 0.0;
 }
 
-Identifier KoEnhancedPathNamedParameter::identifierFromString( const QString &text )
+Identifier KoEnhancedPathNamedParameter::identifierFromString(const QString &text)
 {
-    if( text.isEmpty() )
+    if (text.isEmpty())
         return IdentifierUnknown;
-    else if( text == "pi" )
+    else if (text == "pi")
         return IdentifierPi;
-    else if( text == "left" )
+    else if (text == "left")
         return IdentifierLeft;
-    else if( text == "top" )
+    else if (text == "top")
         return IdentifierTop;
-    else if( text == "right" )
+    else if (text == "right")
         return IdentifierRight;
-    else if( text == "bottom" )
+    else if (text == "bottom")
         return IdentifierBottom;
-    else if( text == "xstretch" )
+    else if (text == "xstretch")
         return IdentifierXstretch;
-    else if( text == "ystretch" )
+    else if (text == "ystretch")
         return IdentifierYstretch;
-    else if( text == "hasstroke" )
+    else if (text == "hasstroke")
         return IdentifierHasStroke;
-    else if( text == "hasfill" )
+    else if (text == "hasfill")
         return IdentifierHasFill;
-    else if( text == "width" )
+    else if (text == "width")
         return IdentifierWidth;
-    else if( text == "height" )
+    else if (text == "height")
         return IdentifierHeight;
-    else if( text == "logwidth" )
+    else if (text == "logwidth")
         return IdentifierLogwidth;
-    else if( text == "logheight" )
+    else if (text == "logheight")
         return IdentifierLogheight;
     else
         return IdentifierUnknown;
@@ -180,19 +179,19 @@ QString KoEnhancedPathNamedParameter::toString() const
     return identifierData[m_identifier];
 }
 
-KoEnhancedPathReferenceParameter::KoEnhancedPathReferenceParameter( const QString &reference, KoEnhancedPathShape * parent )
-: KoEnhancedPathParameter( parent ), m_reference( reference )
+KoEnhancedPathReferenceParameter::KoEnhancedPathReferenceParameter(const QString &reference, KoEnhancedPathShape * parent)
+: KoEnhancedPathParameter(parent), m_reference(reference)
 {
 }
 
 qreal KoEnhancedPathReferenceParameter::evaluate()
 {
-    return parent()->evaluateReference( m_reference );
+    return parent()->evaluateReference(m_reference);
 }
 
-void KoEnhancedPathReferenceParameter::modify( qreal value )
+void KoEnhancedPathReferenceParameter::modify(qreal value)
 {
-    parent()->modifyReference( m_reference, value );
+    parent()->modifyReference(m_reference, value);
 }
 
 QString KoEnhancedPathReferenceParameter::toString() const

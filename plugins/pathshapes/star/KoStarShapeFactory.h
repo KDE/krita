@@ -33,9 +33,9 @@ public:
     /// constructor
     explicit KoStarShapeFactory(QObject *parent);
     ~KoStarShapeFactory() {}
-    KoShape * createDefaultShape() const;
-    KoShape * createShape(const KoProperties * params) const;
-    virtual bool supports(const KoXmlElement & e) const;
+    KoShape *createDefaultShape() const;
+    KoShape *createShape(const KoProperties *params) const;
+    virtual bool supports(const KoXmlElement &e) const;
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 

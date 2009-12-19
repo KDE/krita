@@ -31,9 +31,9 @@ public:
     /// constructor
     explicit KoRectangleShapeFactory(QObject *parent);
     ~KoRectangleShapeFactory() {}
-    KoShape * createDefaultShape() const;
-    KoShape * createShape(const KoProperties * params) const;
-    virtual bool supports(const KoXmlElement & e) const;
+    KoShape *createDefaultShape() const;
+    KoShape *createShape(const KoProperties *params) const;
+    virtual bool supports(const KoXmlElement &e) const;
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 

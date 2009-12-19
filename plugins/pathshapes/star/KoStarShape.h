@@ -47,7 +47,7 @@ public:
      *
      * @param cornerCount the new number of corners
      */
-    void setCornerCount( uint cornerCount );
+    void setCornerCount(uint cornerCount);
 
     /// Returns the number of corners
     uint cornerCount() const;
@@ -57,7 +57,7 @@ public:
      * The base radius has no meaning if the star is set convex.
      * @param baseRadius the new base radius
      */
-    void setBaseRadius( qreal baseRadius );
+    void setBaseRadius(qreal baseRadius);
 
     /// Returns the base radius
     qreal baseRadius() const;
@@ -66,7 +66,7 @@ public:
      * Sets the radius of the tip points.
      * @param tipRadius the new tip radius
      */
-    void setTipRadius( qreal tipRadius );
+    void setTipRadius(qreal tipRadius);
 
     /// Returns the tip radius
     qreal tipRadius() const;
@@ -78,7 +78,7 @@ public:
      *
      * @param baseRoundness the new base roundness
      */
-    void setBaseRoundness( qreal baseRoundness );
+    void setBaseRoundness(qreal baseRoundness);
 
     /**
      * Sets the roundness at the tip points.
@@ -87,13 +87,13 @@ public:
      *
      * @param tipRoundness the new base roundness
      */
-    void setTipRoundness( qreal tipRoundness );
+    void setTipRoundness(qreal tipRoundness);
 
     /**
      * Sets the star to be convex, looking like a polygon.
      * @param convex if true makes shape behave like regular polygon
      */
-    void setConvex( bool convex );
+    void setConvex(bool convex);
 
     /// Returns if the star represents a regular polygon.
     bool convex() const;
@@ -107,19 +107,19 @@ public:
     QPointF starCenter() const;
 
     /// reimplemented
-    virtual void setSize( const QSizeF &newSize );
+    virtual void setSize(const QSizeF &newSize);
     /// reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
     /// reimplemented
     virtual QString pathShapeId() const;
 
 protected:
-    void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
-    void updatePath( const QSizeF &size );
+    void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    void updatePath(const QSizeF &size);
     /// recreates the path points when the corner count or convexity changes
-    void createPoints( int requiredPointCount );
+    void createPoints(int requiredPointCount);
 
 private:
     /// Computes the star center point from the inner points

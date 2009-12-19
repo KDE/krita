@@ -28,48 +28,48 @@
 #include <klocale.h>
 
 
-KoEllipseShapeFactory::KoEllipseShapeFactory( QObject *parent )
-: KoShapeFactory( parent, KoEllipseShapeId, i18n( "Ellipse" ) )
+KoEllipseShapeFactory::KoEllipseShapeFactory(QObject *parent)
+    : KoShapeFactory(parent, KoEllipseShapeId, i18n("Ellipse"))
 {
-    setToolTip( i18n( "An ellipse" ) );
+    setToolTip(i18n( "An ellipse"));
     setIcon("ellipse-shape");
     setFamily("geometric");
     QStringList elementNames;
     elementNames << "ellipse" << "circle";
-    setOdfElementNames( KoXmlNS::draw, elementNames );
-    setLoadingPriority( 1 );
+    setOdfElementNames(KoXmlNS::draw, elementNames);
+    setLoadingPriority(1);
 }
 
-KoShape * KoEllipseShapeFactory::createDefaultShape() const
+KoShape *KoEllipseShapeFactory::createDefaultShape() const
 {
-    KoEllipseShape * ellipse = new KoEllipseShape();
+    KoEllipseShape *ellipse = new KoEllipseShape();
 
-    ellipse->setBorder( new KoLineBorder( 1.0 ) );
-    ellipse->setShapeId( KoPathShapeId );
+    ellipse->setBorder(new KoLineBorder(1.0));
+    ellipse->setShapeId(KoPathShapeId);
 
-    QRadialGradient * gradient = new QRadialGradient( QPointF(50,50), 50.0, QPointF(25,25) );
-    gradient->setColorAt( 0.0, Qt::white );
-    gradient->setColorAt( 1.0, Qt::green );
-    ellipse->setBackground( new KoGradientBackground( gradient ) );
+    QRadialGradient *gradient = new QRadialGradient(QPointF(50,50), 50.0, QPointF(25,25));
+    gradient->setColorAt(0.0, Qt::white);
+    gradient->setColorAt(1.0, Qt::green);
+    ellipse->setBackground(new KoGradientBackground(gradient));
 
     return ellipse;
 }
 
-KoShape * KoEllipseShapeFactory::createShape( const KoProperties * params ) const
+KoShape *KoEllipseShapeFactory::createShape(const KoProperties *params) const
 {
     Q_UNUSED(params);
     return createDefaultShape();
 }
 
-bool KoEllipseShapeFactory::supports(const KoXmlElement & e) const
+bool KoEllipseShapeFactory::supports(const KoXmlElement &e) const
 {
-    return ( e.localName() == "ellipse" || e.localName() == "circle" ) &&
-           ( e.namespaceURI() == KoXmlNS::draw );
+    return (e.localName() == "ellipse" || e.localName() == "circle")
+        && e.namespaceURI() == KoXmlNS::draw;
 }
 
 QList<KoShapeConfigWidgetBase*> KoEllipseShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> panels;
-    panels.append( new EllipseShapeConfigWidget() );
+    panels.append(new EllipseShapeConfigWidget());
     return panels;
 }

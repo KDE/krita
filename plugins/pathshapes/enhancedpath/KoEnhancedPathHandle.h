@@ -40,7 +40,7 @@ public:
      * Note that an empty handle is not valid, as long as there are no
      * positional parameters set with setPosition.
     */
-    KoEnhancedPathHandle( KoEnhancedPathShape * parent );
+    KoEnhancedPathHandle(KoEnhancedPathShape *parent);
 
     /// Destroys the handle
     ~KoEnhancedPathHandle();
@@ -60,7 +60,7 @@ public:
      * @param position the new position the handle to set
      * @param path the enhanced path the handle is referenced from
      */
-    void changePosition( const QPointF &position );
+    void changePosition(const QPointF &position);
 
     /// Returns if the handle has valid positional parameters.S
     bool hasPosition() const;
@@ -73,7 +73,7 @@ public:
      * @param positionX the x-coordinate of the handle position
      * @param positionY the y-coordinate of the handle position
      */
-    void setPosition( KoEnhancedPathParameter *positionX, KoEnhancedPathParameter *positionY );
+    void setPosition(KoEnhancedPathParameter *positionX, KoEnhancedPathParameter *positionY);
 
     /**
      * Sets the range of the handles x-coordinate.
@@ -83,7 +83,7 @@ public:
      * @param minX the minimum x-coordinate
      * @param maxX the maximum x-coordinate
      */
-    void setRangeX( KoEnhancedPathParameter *minX, KoEnhancedPathParameter *maxX );
+    void setRangeX(KoEnhancedPathParameter *minX, KoEnhancedPathParameter *maxX);
 
     /**
      * Sets the range of the handles y-coordinate.
@@ -93,7 +93,7 @@ public:
      * @param minY the minimum y-coordinate
      * @param maxY the maximum y-coordinate
      */
-    void setRangeY( KoEnhancedPathParameter *minY, KoEnhancedPathParameter *maxY );
+    void setRangeY(KoEnhancedPathParameter *minY, KoEnhancedPathParameter *maxY);
 
     /**
      * Sets the center of a polar handle.
@@ -105,33 +105,33 @@ public:
      * @param minY the minimum y-coordinate
      * @param maxY the maximum y-coordinate
      */
-    void setPolarCenter( KoEnhancedPathParameter *polarX, KoEnhancedPathParameter *polarY );
+    void setPolarCenter(KoEnhancedPathParameter *polarX, KoEnhancedPathParameter *polarY);
 
     /**
      * Sets the range of the radius for polar handles.
      * @param minRadius the minimum polar radius
      * @param maxRadius the maximum polar radius
      */
-    void setRadiusRange( KoEnhancedPathParameter *minRadius, KoEnhancedPathParameter *maxRadius );
+    void setRadiusRange(KoEnhancedPathParameter *minRadius, KoEnhancedPathParameter *maxRadius);
 
     /// save to the given shape saving context
-    void saveOdf( KoShapeSavingContext & context ) const;
+    void saveOdf(KoShapeSavingContext &context) const;
     /// load handle from given element
-    bool loadOdf( const KoXmlElement & element );
+    bool loadOdf(const KoXmlElement &element);
 private:
     /// Returns if handle is polar
     bool isPolar() const;
-    KoEnhancedPathShape * m_parent; ///< the enhanced path shape owning this handle
-    KoEnhancedPathParameter * m_positionX; ///< the position x-coordinate 
-    KoEnhancedPathParameter * m_positionY; ///< the position y-coordinate
-    KoEnhancedPathParameter * m_minimumX;  ///< the minimum x-coordinate
-    KoEnhancedPathParameter * m_minimumY;  ///< the minmum y-coordinate
-    KoEnhancedPathParameter * m_maximumX;  ///< the maximum x-coordinate
-    KoEnhancedPathParameter * m_maximumY;  ///< the maximum y-coordinate
-    KoEnhancedPathParameter * m_polarX;    ///< the polar center x-coordinate
-    KoEnhancedPathParameter * m_polarY;    ///< the polar center y-coordinate
-    KoEnhancedPathParameter * m_minRadius; ///< the minimum polar radius
-    KoEnhancedPathParameter * m_maxRadius; ///< the maximum polar radius
+    KoEnhancedPathShape *m_parent; ///< the enhanced path shape owning this handle
+    KoEnhancedPathParameter *m_positionX; ///< the position x-coordinate 
+    KoEnhancedPathParameter *m_positionY; ///< the position y-coordinate
+    KoEnhancedPathParameter *m_minimumX;  ///< the minimum x-coordinate
+    KoEnhancedPathParameter *m_minimumY;  ///< the minmum y-coordinate
+    KoEnhancedPathParameter *m_maximumX;  ///< the maximum x-coordinate
+    KoEnhancedPathParameter *m_maximumY;  ///< the maximum y-coordinate
+    KoEnhancedPathParameter *m_polarX;    ///< the polar center x-coordinate
+    KoEnhancedPathParameter *m_polarY;    ///< the polar center y-coordinate
+    KoEnhancedPathParameter *m_minRadius; ///< the minimum polar radius
+    KoEnhancedPathParameter *m_maxRadius; ///< the maximum polar radius
 };
 
 #endif // KOENHANCEDPATHHANDLE_H

@@ -23,6 +23,7 @@
 #include "KoShapeController.h"
 #include "KoCanvasController.h"
 #include "KoSnapGuide.h"
+#include "SnapGuideConfigWidget.h"
 
 #include <KGlobal>
 #include <KConfigGroup>
@@ -96,4 +97,9 @@ KoSnapGuide * KoCanvasBase::snapGuide() const
 KoGuidesData * KoCanvasBase::guidesData()
 {
     return 0;
+}
+
+QWidget *KoCanvasBase::createSnapGuideConfigWidget() const
+{
+    return new SnapGuideConfigWidget(d->snapGuide);
 }

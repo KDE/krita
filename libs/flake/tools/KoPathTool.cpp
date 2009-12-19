@@ -42,7 +42,6 @@
 #include "PathToolOptionWidget.h"
 #include "KoConnectionShape.h"
 #include "KoSnapGuide.h"
-#include "SnapGuideConfigWidget.h"
 
 #include <KAction>
 #include <KIcon>
@@ -173,10 +172,8 @@ QMap<QString, QWidget *>  KoPathTool::createOptionWidgets()
     //connect(this, SIGNAL(pathChanged(KoPathShape*)), widget, SLOT(setSelectedPath(KoPathShape*)));
     updateOptionsWidget();
 
-    SnapGuideConfigWidget * snapOptions = new SnapGuideConfigWidget(m_canvas->snapGuide());
-
     map.insert(i18n("Line/Curve"), toolOptions);
-    map.insert(i18n("Snapping"), snapOptions);
+    map.insert(i18n("Snapping"), m_canvas->createSnapGuideConfigWidget());
 
     return map;
 }

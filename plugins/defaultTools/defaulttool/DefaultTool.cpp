@@ -24,7 +24,6 @@
 #include "DefaultTool.h"
 #include "DefaultToolWidget.h"
 #include "DefaultToolArrangeWidget.h"
-#include "SnapGuideConfigWidget.h"
 #include "SelectionDecorator.h"
 #include "ShapeMoveStrategy.h"
 #include "ShapeRotateStrategy.h"
@@ -1085,7 +1084,7 @@ QMap<QString, QWidget *> DefaultTool::createOptionWidgets()
     QMap<QString, QWidget *> widgets;
     widgets.insert(i18n("Arrange"), new DefaultToolArrangeWidget(this));
     widgets.insert(i18n("Geometry"), new DefaultToolWidget(this));
-    widgets.insert(i18n("Snapping"), new SnapGuideConfigWidget(m_canvas->snapGuide()));
+    widgets.insert(i18n("Snapping"), m_canvas->createSnapGuideConfigWidget());
     return widgets;
 }
 

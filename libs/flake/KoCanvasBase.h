@@ -192,6 +192,12 @@ public:
     KoSnapGuide *snapGuide() const;
 
     /**
+     * This factory method creates a new widget for the user to change
+     * the snapping guide policies object from snapGuide().
+     */
+    QWidget *createSnapGuideConfigWidget() const;
+
+    /**
      * Returns the guides data.
      *
      * Applications that want to have guides should reimplement this

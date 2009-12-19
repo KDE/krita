@@ -26,6 +26,7 @@
 #include "ui_wdgselectionoptions.h"
 
 class KisCanvas2;
+class QButtonGroup;
 
 class WdgSelectionOptions : public QWidget, public Ui::WdgSelectionOptions
 {
@@ -64,6 +65,8 @@ public slots:
 private:
     WdgSelectionOptions * m_page;
     KisCanvas2* m_canvas;
+    QButtonGroup* m_mode;
+    QButtonGroup* m_action;
 };
 
 #endif

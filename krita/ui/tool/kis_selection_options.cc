@@ -41,9 +41,20 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * canvas)
 
     QVBoxLayout * l = new QVBoxLayout(this);
     l->addWidget(m_page);
+    l->setContentsMargins(0,0,0,0);
 
-    connect(m_page->cmbMode, SIGNAL(activated(int)), this, SIGNAL(modeChanged(int)));
-    connect(m_page->cmbAction, SIGNAL(activated(int)), this, SIGNAL(actionChanged(int)));
+    m_mode = new QButtonGroup(this);
+    m_mode->addButton(m_page->pixel, PIXEL_SELECTION);
+    m_mode->addButton(m_page->shape, SHAPE_PROTECTION);
+
+    m_action = new QButtonGroup(this);
+    m_action->addButton(m_page->add, SELECTION_ADD);
+    m_action->addButton(m_page->subtract, SELECTION_SUBTRACT);
+    m_action->addButton(m_page->replace, SELECTION_REPLACE);
+    m_action->addButton(m_page->intersect, SELECTION_INTERSECT);
+
+    connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
+    connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
 }
 
 KisSelectionOptions::~KisSelectionOptions()
@@ -52,7 +63,7 @@ KisSelectionOptions::~KisSelectionOptions()
 
 int KisSelectionOptions::action()
 {
-    return m_page->cmbAction->currentIndex();
+    return m_action->checkedId();
 }
 
 void KisSelectionOptions::slotActivated()
@@ -67,12 +78,12 @@ bool KisSelectionOptions::antiAliasSelection()
 
 void KisSelectionOptions::disableAntiAliasSelectionOption()
 {
-    m_page->chkAntiAliasing->setDisabled(true);
+    m_page->chkAntiAliasing->hide();
 }
 
 void KisSelectionOptions::disableSelectionModeOption()
 {
-    m_page->cmbMode->setDisabled(true);
+    m_page->modeGroupBox->hide();
 }
 
 #include "kis_selection_options.moc"

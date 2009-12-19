@@ -19,8 +19,6 @@ set(pathshapes_PART_SRCS
     rectangle/KoRectangleShapeFactory.cpp
     rectangle/RectangleShapeConfigWidget.cpp
     rectangle/RectangleShapeConfigCommand.cpp
-    arrow/KoArrowShape.cpp
-    arrow/KoArrowShapeFactory.cpp
     enhancedpath/KoEnhancedPathShape.cpp
     enhancedpath/KoEnhancedPathShapeFactory.cpp
     enhancedpath/KoEnhancedPathCommand.cpp

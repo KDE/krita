@@ -42,13 +42,8 @@ QWidget* KisToolSelectBase::createOptionWidget()
     connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
     connect(m_optWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
 
-
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
-    Q_ASSERT(l);
-    if (l) {
-        l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
-    }
-    m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
+    m_optWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_optWidget->adjustSize();
     return m_optWidget;
 }
 

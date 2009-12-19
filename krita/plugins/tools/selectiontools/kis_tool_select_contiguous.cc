@@ -118,8 +118,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);
     if (l) {
-        l->setSpacing(6);
-
         QHBoxLayout * hbox = new QHBoxLayout();
         Q_CHECK_PTR(hbox);
         l->addLayout(hbox);
@@ -130,7 +128,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         KIntNumInput * input = new KIntNumInput(m_optWidget);
         Q_CHECK_PTR(input);
         input->setObjectName("fuzziness");
-
         input->setRange(0, 200, 10, true);
         input->setValue(20);
         hbox->addWidget(input);
@@ -142,9 +139,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         connect(samplemerged, SIGNAL(stateChanged(int)),
                 this, SLOT(slotSetSampleMerged(int)));
 
-        l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
     }
-    m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
     return m_optWidget;
 }
 

@@ -19,28 +19,22 @@
 #define KIS_TOOL_SELECT_SIMILAR_H_
 
 #include <QtGui/QPainter>
-#include <kis_tool.h>
 #include <KoToolFactory.h>
-#include <kis_selection.h>
 #include "flake/kis_node_shape.h"
+#include "kis_tool_select_base.h"
 
 class QWidget;
 class KoCanvasBase;
 
 /**
  * Tool to select colors by pointing at a color on the image.
- * TODO:
- *       Implement shift/shift-ctrl keyboard shortcuts for
- *       temporary add/subtract selection mode.
  */
 
 class KisSelectionOptions;
 
-class KisToolSelectSimilar : public KisTool
+class KisToolSelectSimilar : public KisToolSelectBase
 {
-
     Q_OBJECT
-
 public:
     KisToolSelectSimilar(KoCanvasBase * canvas);
     virtual ~KisToolSelectSimilar();
@@ -52,31 +46,11 @@ public:
     virtual void mousePressEvent(KoPointerEvent *e);
 
 public slots:
-
-    void activate(bool);
-    void deactivate();
-
     virtual void slotSetFuzziness(int);
-    virtual void slotSetAction(int);
-
 private:
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
-
-    void setPickerCursor(selectionAction);
-
-    QWidget *m_optWidget;
-    KisSelectionOptions *m_selectionOptionsWidget;
 
     int m_fuzziness;
-    selectionAction m_defaultSelectAction;
-    selectionAction m_currentSelectAction;
-    QTimer *m_timer;
-    QCursor m_addCursor;
-    QCursor m_subtractCursor;
-
-private slots:
-    void slotTimer();
 };
 
 class KisToolSelectSimilarFactory : public KoToolFactory

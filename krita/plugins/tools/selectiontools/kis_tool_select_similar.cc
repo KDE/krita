@@ -18,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_tool_selectsimilar.h"
+#include "kis_tool_select_similar.h"
 
 #include <QPoint>
 #include <QLayout>
@@ -81,41 +81,18 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
 }
 
 KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
-        : KisTool(canvas, KisCursor::load("tool_similar_selection_plus_cursor.png", 6, 6))
+        : KisToolSelectBase(canvas, KisCursor::load("tool_similar_selection_plus_cursor.png", 6, 6))
 {
-    m_addCursor = KisCursor::load("tool_similar_selection_plus_cursor.png", 1, 21);
-    m_subtractCursor = KisCursor::load("tool_similar_selection_minus_cursor.png", 1, 21);
-    m_optWidget = 0;
-    m_selectionOptionsWidget = 0;
     m_fuzziness = 20;
-    m_currentSelectAction = m_defaultSelectAction = SELECTION_REPLACE;
-    m_timer = new QTimer(this);
-    connect(m_timer, SIGNAL(timeout()), SLOT(slotTimer()));
 }
 
 KisToolSelectSimilar::~KisToolSelectSimilar()
 {
 }
 
-void KisToolSelectSimilar::activate(bool tmp)
-{
-    KisTool::activate(tmp);
-//    m_timer->start(50);
-//    setPickerCursor(m_currentSelectAction);
-
-    if (m_selectionOptionsWidget) {
-        m_selectionOptionsWidget->slotActivated();
-    }
-}
-
-void KisToolSelectSimilar::deactivate()
-{
-    m_timer->stop();
-}
 
 void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
 {
-    useCursor(m_subtractCursor);
     if (m_canvas) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         quint8 opacity = OPACITY_OPAQUE;
@@ -150,101 +127,43 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
         selectByColor(dev, tmpSel, c.data(), m_fuzziness);
 
         KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Similar Selection"));
-        QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_defaultSelectAction);
+        QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
 
         m_canvas->addCommand(cmd);
         QApplication::restoreOverrideCursor();
     }
 }
 
-void KisToolSelectSimilar::slotTimer()
-{
-    int state = QApplication::keyboardModifiers() & (Qt::ShiftModifier | Qt::ControlModifier | Qt::AltModifier);
-    selectionAction action;
-
-    if (state == Qt::ShiftModifier)
-        action = SELECTION_ADD;
-    else if (state == Qt::ControlModifier)
-        action = SELECTION_SUBTRACT;
-    else
-        action = m_defaultSelectAction;
-
-    if (action != m_currentSelectAction) {
-        m_currentSelectAction = action;
-        setPickerCursor(action);
-    }
-}
-
-void KisToolSelectSimilar::setPickerCursor(selectionAction action)
-{
-    Q_UNUSED(action);
-//     switch (action) {
-//         case SELECTION_ADD:
-//             useCursor(m_addCursor);
-//             break;
-//         case SELECTION_SUBTRACT:
-//             useCursor(m_subtractCursor);
-//     }
-}
 
 void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
 {
     m_fuzziness = fuzziness;
 }
 
-void KisToolSelectSimilar::slotSetAction(int action)
-{
-    m_defaultSelectAction = (selectionAction)action;
-}
-
 QWidget* KisToolSelectSimilar::createOptionWidget()
 {
-    m_optWidget = new QWidget();
-    Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setObjectName(toolId() + " option widget");
+    KisToolSelectBase::createOptionWidget();
     m_optWidget->setWindowTitle(i18n("Similar Selection"));
+    m_optWidget->disableAntiAliasSelectionOption();
+    m_optWidget->disableSelectionModeOption();
 
-    QVBoxLayout * l = new QVBoxLayout(m_optWidget);
-    Q_CHECK_PTR(l);
-    l->setMargin(0);
-    l->setSpacing(6);
-
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
-    Q_ASSERT(canvas);
-    m_selectionOptionsWidget = new KisSelectionOptions(canvas);
-    Q_CHECK_PTR(m_selectionOptionsWidget);
-    m_selectionOptionsWidget->disableAntiAliasSelectionOption();
-    m_selectionOptionsWidget->disableSelectionModeOption();
-
-    l->addWidget(m_selectionOptionsWidget);
-    connect(m_selectionOptionsWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
-
-    QHBoxLayout * hbox = new QHBoxLayout();
-    Q_CHECK_PTR(hbox);
-    l->addLayout(hbox);
-
+    QHBoxLayout* fl = new QHBoxLayout();
     QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
-    Q_CHECK_PTR(lbl);
-
-    hbox->addWidget(lbl);
+    fl->addWidget(lbl);
 
     KIntNumInput * input = new KIntNumInput(m_optWidget);
-    Q_CHECK_PTR(input);
     input->setObjectName("fuzziness");
-
     input->setRange(0, 200, 10, true);
-    input->setValue(20);
-    hbox->addWidget(input);
+    input->setValue(m_fuzziness);
+    fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
-    l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
-    m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
+    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    Q_ASSERT(l);
+    l->addLayout(fl);
+
     return m_optWidget;
 }
 
-QWidget* KisToolSelectSimilar::optionWidget()
-{
-    return m_optWidget;
-}
 
-#include "kis_tool_selectsimilar.moc"
+#include "kis_tool_select_similar.moc"

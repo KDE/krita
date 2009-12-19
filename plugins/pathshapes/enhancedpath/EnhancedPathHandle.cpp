@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoEnhancedPathHandle.h"
-#include "KoEnhancedPathShape.h"
-#include "KoEnhancedPathParameter.h"
+#include "EnhancedPathHandle.h"
+#include "EnhancedPathShape.h"
+#include "EnhancedPathParameter.h"
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -27,7 +27,7 @@
 
 #include <math.h>
 
-KoEnhancedPathHandle::KoEnhancedPathHandle(KoEnhancedPathShape *parent)
+EnhancedPathHandle::EnhancedPathHandle(EnhancedPathShape *parent)
 : m_parent(parent)
 , m_positionX(0), m_positionY(0)
 , m_minimumX(0), m_minimumY(0)
@@ -38,22 +38,22 @@ KoEnhancedPathHandle::KoEnhancedPathHandle(KoEnhancedPathShape *parent)
     Q_ASSERT(m_parent);
 }
 
-KoEnhancedPathHandle::~KoEnhancedPathHandle()
+EnhancedPathHandle::~EnhancedPathHandle()
 {
 }
 
-bool KoEnhancedPathHandle::hasPosition() const
+bool EnhancedPathHandle::hasPosition() const
 {
     return m_positionX && m_positionY;
 }
 
-void KoEnhancedPathHandle::setPosition(KoEnhancedPathParameter *positionX, KoEnhancedPathParameter *positionY)
+void EnhancedPathHandle::setPosition(EnhancedPathParameter *positionX, EnhancedPathParameter *positionY)
 {
     m_positionX = positionX;
     m_positionY = positionY;
 }
 
-QPointF KoEnhancedPathHandle::position()
+QPointF EnhancedPathHandle::position()
 {
     if (!hasPosition())
         return QPointF();
@@ -69,7 +69,7 @@ QPointF KoEnhancedPathHandle::position()
     return position;
 }
 
-void KoEnhancedPathHandle::changePosition(const QPointF &position)
+void EnhancedPathHandle::changePosition(const QPointF &position)
 {
     if (! hasPosition())
         return;
@@ -113,36 +113,36 @@ void KoEnhancedPathHandle::changePosition(const QPointF &position)
     m_positionY->modify(constrainedPosition.y());
 }
 
-void KoEnhancedPathHandle::setRangeX(KoEnhancedPathParameter *minX, KoEnhancedPathParameter *maxX)
+void EnhancedPathHandle::setRangeX(EnhancedPathParameter *minX, EnhancedPathParameter *maxX)
 {
     m_minimumX = minX;
     m_maximumX = maxX;
 }
 
-void KoEnhancedPathHandle::setRangeY(KoEnhancedPathParameter *minY, KoEnhancedPathParameter *maxY)
+void EnhancedPathHandle::setRangeY(EnhancedPathParameter *minY, EnhancedPathParameter *maxY)
 {
     m_minimumY = minY;
     m_maximumY = maxY;
 }
 
-void KoEnhancedPathHandle::setPolarCenter(KoEnhancedPathParameter *polarX, KoEnhancedPathParameter *polarY)
+void EnhancedPathHandle::setPolarCenter(EnhancedPathParameter *polarX, EnhancedPathParameter *polarY)
 {
     m_polarX = polarX;
     m_polarY = polarY;
 }
 
-void KoEnhancedPathHandle::setRadiusRange(KoEnhancedPathParameter *minRadius, KoEnhancedPathParameter *maxRadius)
+void EnhancedPathHandle::setRadiusRange(EnhancedPathParameter *minRadius, EnhancedPathParameter *maxRadius)
 {
     m_minRadius = minRadius;
     m_maxRadius = maxRadius;
 }
 
-bool KoEnhancedPathHandle::isPolar() const
+bool EnhancedPathHandle::isPolar() const
 {
     return m_polarX && m_polarY;
 }
 
-void KoEnhancedPathHandle::saveOdf(KoShapeSavingContext & context) const
+void EnhancedPathHandle::saveOdf(KoShapeSavingContext & context) const
 {
     if (! hasPosition())
         return;
@@ -167,7 +167,7 @@ void KoEnhancedPathHandle::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().endElement(); // draw:handle
 }
 
-bool KoEnhancedPathHandle::loadOdf(const KoXmlElement & element)
+bool EnhancedPathHandle::loadOdf(const KoXmlElement & element)
 {
     if (element.localName() != "handle" || element.namespaceURI() != KoXmlNS::draw)
         return false;

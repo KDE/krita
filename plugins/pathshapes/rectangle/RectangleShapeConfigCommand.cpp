@@ -18,10 +18,10 @@
  */
 
 #include "RectangleShapeConfigCommand.h"
-#include "KoRectangleShape.h"
+#include "RectangleShape.h"
 #include <klocale.h>
 
-RectangleShapeConfigCommand::RectangleShapeConfigCommand(KoRectangleShape * rectangle, qreal cornerRadiusX, qreal cornerRadiusY, QUndoCommand *parent)
+RectangleShapeConfigCommand::RectangleShapeConfigCommand(RectangleShape * rectangle, qreal cornerRadiusX, qreal cornerRadiusY, QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_rectangle(rectangle)
     , m_newCornerRadiusX(cornerRadiusX)

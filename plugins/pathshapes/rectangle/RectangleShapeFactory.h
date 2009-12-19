@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,26 +17,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSTARHAPEFACTORY_H
-#define KOSTARHAPEFACTORY_H
+#ifndef KORECTANGLESHAPEFACTORY_H
+#define KORECTANGLESHAPEFACTORY_H
 
-#include <KoShapeFactory.h>
+#include "KoShapeFactory.h"
 
 class KoShape;
 
 /// Factory for path shapes
-class KoStarShapeFactory : public KoShapeFactory
+class RectangleShapeFactory : public KoShapeFactory
 {
-    Q_OBJECT
-
 public:
     /// constructor
-    explicit KoStarShapeFactory(QObject *parent);
-    ~KoStarShapeFactory() {}
+    explicit RectangleShapeFactory(QObject *parent);
+    ~RectangleShapeFactory() {}
     KoShape *createDefaultShape() const;
     KoShape *createShape(const KoProperties *params) const;
     virtual bool supports(const KoXmlElement &e) const;
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 
-#endif // KOSTARHAPEFACTORY_H
+#endif

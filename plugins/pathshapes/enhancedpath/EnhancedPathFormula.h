@@ -23,7 +23,7 @@
 #include <QString>
 #include <QVariant>
 
-class KoEnhancedPathShape;
+class EnhancedPathShape;
 
 class FormulaToken
 {
@@ -89,7 +89,7 @@ typedef QList<FormulaToken> TokenList;
 
 class Opcode;
 
-class KoEnhancedPathFormula
+class EnhancedPathFormula
 {
 public:
     /// predefined functions
@@ -120,10 +120,10 @@ public:
     };
 
     /// Constructs a new formula from the specified string representation
-    KoEnhancedPathFormula(const QString &text, KoEnhancedPathShape * parent);
+    EnhancedPathFormula(const QString &text, EnhancedPathShape * parent);
 
     /// Destroys the formula
-    ~KoEnhancedPathFormula();
+    ~EnhancedPathFormula();
 
     /**
      * Evaluates the formula using the given path as possible input.
@@ -164,7 +164,7 @@ private:
     QString m_text; ///< the formula text representation
     QList<QVariant> m_constants; ///< constant values
     QList<Opcode> m_codes; ///< the compiled byte code
-    KoEnhancedPathShape *m_parent;
+    EnhancedPathShape *m_parent;
 };
 
 #endif // KOENHANCEDPATHFORMULA_H

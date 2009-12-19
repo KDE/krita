@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "star/KoStarShapeFactory.h"
-#include "star/KoStarShape.h"
+#include "star/StarShapeFactory.h"
+#include "star/StarShape.h"
 #include "star/StarShapeConfigWidget.h"
 
 #include <KoShapeFactory.h>
@@ -30,8 +30,8 @@
 
 #include <klocale.h>
 
-KoStarShapeFactory::KoStarShapeFactory(QObject *parent)
-    : KoShapeFactory(parent, KoStarShapeId, i18n("A star shape"))
+StarShapeFactory::StarShapeFactory(QObject *parent)
+    : KoShapeFactory(parent, StarShapeId, i18n("A star shape"))
 {
     setToolTip(i18n("A star"));
     setIcon("star");
@@ -105,9 +105,9 @@ KoStarShapeFactory::KoStarShapeFactory(QObject *parent)
     addTemplate(t);
 }
 
-KoShape * KoStarShapeFactory::createDefaultShape() const
+KoShape *StarShapeFactory::createDefaultShape() const
 {
-    KoStarShape *star = new KoStarShape();
+    StarShape *star = new StarShape();
 
     star->setBorder(new KoLineBorder(1.0));
     star->setShapeId(KoPathShapeId);
@@ -115,9 +115,9 @@ KoShape * KoStarShapeFactory::createDefaultShape() const
     return star;
 }
 
-KoShape * KoStarShapeFactory::createShape(const KoProperties * params) const
+KoShape *StarShapeFactory::createShape(const KoProperties * params) const
 {
-    KoStarShape *star = new KoStarShape();
+    StarShape *star = new StarShape();
     if (! star)
         return 0;
 
@@ -136,7 +136,7 @@ KoShape * KoStarShapeFactory::createShape(const KoProperties * params) const
     return star;
 }
 
-bool KoStarShapeFactory::supports(const KoXmlElement & e) const
+bool StarShapeFactory::supports(const KoXmlElement & e) const
 {
     if (e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw)
         return true;
@@ -146,11 +146,11 @@ bool KoStarShapeFactory::supports(const KoXmlElement & e) const
     return false;
 }
 
-QList<KoShapeConfigWidgetBase*> KoStarShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase*> StarShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> panels;
     panels.append(new StarShapeConfigWidget());
     return panels;
 }
 
-#include "KoStarShapeFactory.moc"
+#include "StarShapeFactory.moc"

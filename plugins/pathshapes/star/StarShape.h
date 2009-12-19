@@ -22,7 +22,7 @@
 
 #include <KoParameterShape.h>
 
-#define KoStarShapeId "KoStarShape"
+#define StarShapeId "StarShape"
 
 /**
  * The star shape is a shape that can represent a star or
@@ -31,11 +31,11 @@
  * like the number of corners, the inner/outer radius
  * and the corner roundness.
  */
-class KoStarShape : public KoParameterShape
+class StarShape : public KoParameterShape
 {
 public:
-    KoStarShape();
-    ~KoStarShape();
+    StarShape();
+    ~StarShape();
 
     /**
      * Sets the number of corners.

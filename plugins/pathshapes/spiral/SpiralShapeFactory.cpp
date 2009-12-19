@@ -17,16 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoSpiralShapeFactory.h"
-#include "KoSpiralShape.h"
+#include "SpiralShapeFactory.h"
+#include "SpiralShape.h"
 #include "SpiralShapeConfigWidget.h"
 #include <KoLineBorder.h>
 
 #include <klocale.h>
 
 
-KoSpiralShapeFactory::KoSpiralShapeFactory(QObject *parent)
-: KoShapeFactory(parent, KoSpiralShapeId, i18n("Spiral"))
+SpiralShapeFactory::SpiralShapeFactory(QObject *parent)
+: KoShapeFactory(parent, SpiralShapeId, i18n("Spiral"))
 {
     setToolTip(i18n("A spiral shape"));
     setIcon("spiral-shape");
@@ -34,9 +34,9 @@ KoSpiralShapeFactory::KoSpiralShapeFactory(QObject *parent)
     setLoadingPriority(1);
 }
 
-KoShape * KoSpiralShapeFactory::createDefaultShape() const
+KoShape * SpiralShapeFactory::createDefaultShape() const
 {
-    KoSpiralShape *spiral = new KoSpiralShape();
+    SpiralShape *spiral = new SpiralShape();
 
     spiral->setBorder(new KoLineBorder(1.0));
     spiral->setShapeId(KoPathShapeId);
@@ -44,13 +44,13 @@ KoShape * KoSpiralShapeFactory::createDefaultShape() const
     return spiral;
 }
 
-KoShape * KoSpiralShapeFactory::createShape(const KoProperties *params) const
+KoShape * SpiralShapeFactory::createShape(const KoProperties *params) const
 {
     Q_UNUSED(params);
     return createDefaultShape();
 }
 
-QList<KoShapeConfigWidgetBase*> KoSpiralShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase*> SpiralShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> panels;
     panels.append(new SpiralShapeConfigWidget());

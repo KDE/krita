@@ -24,7 +24,7 @@
 
 #include <KoShapeConfigWidgetBase.h>
 
-class KoRectangleShape;
+class RectangleShape;
 
 class RectangleShapeConfigWidget : public KoShapeConfigWidgetBase
 {
@@ -44,7 +44,7 @@ public:
 
 private:
     Ui::RectangleShapeConfigWidget widget;
-    KoRectangleShape *m_rectangle;
+    RectangleShape *m_rectangle;
 };
 
 #endif // RECTANGLESHAPECONFIGWIDGET_H

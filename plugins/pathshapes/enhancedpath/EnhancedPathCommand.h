@@ -25,24 +25,24 @@
 #include <QPointF>
 #include <QRectF>
 
-class KoEnhancedPathShape;
-class KoEnhancedPathParameter;
+class EnhancedPathShape;
+class EnhancedPathParameter;
 class KoPathPoint;
 
 /**
- * A KoEnhancedPathCommand is a command like moveto, curveto, etc.
+ * A EnhancedPathCommand is a command like moveto, curveto, etc.
  * that directly modifies an enhanced paths outline.
  */
-class KoEnhancedPathCommand
+class EnhancedPathCommand
 {
 public:
     /// Constructs a new command from the given command type
-    KoEnhancedPathCommand(const QChar & command, KoEnhancedPathShape *parent);
-    ~KoEnhancedPathCommand();
+    EnhancedPathCommand(const QChar & command, EnhancedPathShape *parent);
+    ~EnhancedPathCommand();
     /// Excutes the command on the specified path shape
     bool execute();
     /// Adds a new parameter to the command
-    void addParameter(KoEnhancedPathParameter *parameter);
+    void addParameter(EnhancedPathParameter *parameter);
     /// Returns a string representation of the command
     QString toString() const;
 private:
@@ -60,8 +60,8 @@ private:
     QRectF rectFromPoints(const QPointF &tl, const QPointF &br) const;
 
     QChar m_command; ///< the actual command
-    QList<KoEnhancedPathParameter*> m_parameters; ///< the commands parameters
-    KoEnhancedPathShape *m_parent; ///< the enhanced path owning the command
+    QList<EnhancedPathParameter*> m_parameters; ///< the commands parameters
+    EnhancedPathShape *m_parent; ///< the enhanced path owning the command
 };
 
 #endif // KOENHANCEDPATHCOMMAND_H

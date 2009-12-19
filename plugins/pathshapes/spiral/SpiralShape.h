@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007 Rob Buis <buis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,62 +17,53 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOELLIPSESHAPE_H
-#define KOELLIPSESHAPE_H
+#ifndef KOSPIRALSHAPE_H
+#define KOSPIRALSHAPE_H
 
 #include "KoParameterShape.h"
 
-#define KoEllipseShapeId "KoEllipseShape"
+#define SpiralShapeId "SpiralShape"
 
 /**
- * This class adds support for arc, pie, chord, circle and ellipse
- * shapes. The ellipse/circle radii are defined by the actual size
- * of the ellipse shape which can be changed with the setSize
- * method.
+ * This class adds support for the spiral
+ * shape.
  */
-class KoEllipseShape : public KoParameterShape
+class SpiralShape : public KoParameterShape
 {
 public:
-    /// the possible ellipse types
-    enum KoEllipseType
+    /// the possible spiral types
+    enum SpiralType
     {
-        Arc = 0,   ///< an ellipse arc
-        Pie = 1,   ///< an ellipse pie
-        Chord = 2  ///< an ellipse chord
+        Curve = 0,   ///< spiral uses curves
+        Line = 1    ///< spiral uses lines
     };
 
-    KoEllipseShape();
-    ~KoEllipseShape();
+    SpiralShape();
+    ~SpiralShape();
 
     void setSize(const QSizeF &newSize);
     virtual QPointF normalize();
 
     /**
-     * Sets the type of the ellipse.
-     * @param type the new ellipse type
+     * Sets the type of the spiral.
+     * @param type the new spiral type
      */
-    void setType(KoEllipseType type);
+    void setType(SpiralType type);
 
-    /// Returns the actual ellipse type
-    KoEllipseType type() const;
+    /// Returns the actual spiral type
+    SpiralType type() const;
 
     /**
-     * Sets the start angle of the ellipse.
+     * Sets the fade parameter of the spiral.
      * @param angle the new start angle in degree
      */
-    void setStartAngle(qreal angle);
+    void setFade(qreal fade);
 
-    /// Returns the actual ellipse start angle in degree
-    qreal startAngle() const;
+    /// Returns the actual fade parameter
+    qreal fade() const;
 
-    /**
-     * Sets the end angle of the ellipse.
-     * @param angle the new end angle in degree
-     */
-    void setEndAngle(qreal angle);
-
-    /// Returns the actual ellipse end angle in degree
-    qreal endAngle() const;
+    bool clockWise() const;
+    void setClockWise(bool clockwise);
 
     /// reimplemented
     virtual QString pathShapeId() const;
@@ -86,27 +76,27 @@ protected:
 
     void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     void updatePath(const QSizeF &size);
-    void createPoints(int requiredPointCount);
+    void createPath(const QSizeF &size);
 
 private:
-    qreal sweepAngle() const;
-
     void updateKindHandle();
     void updateAngleHandles();
 
-    // start angle in degree
-    qreal m_startAngle;
-    // end angle in degree
-    qreal m_endAngle;
+    // fade parameter
+    qreal m_fade;
     // angle for modifying the kind in radiant
     qreal m_kindAngle;
-    // the center of the ellipse
+    // the center of the spiral
     QPointF m_center;
-    // the radii of the ellips
+    // the radii of the spiral
     QPointF m_radii;
-    // the actual ellipse type
-    KoEllipseType m_type;
+    // the actual spiral type
+    SpiralType m_type;
+    //
+    bool m_clockwise;
+
+    KoSubpath m_points;
 };
 
-#endif /* KOELLIPSESHAPE_H */
+#endif /* KOSPIRALSHAPE_H */
 

@@ -18,7 +18,7 @@
  */
 
 #include "StarShapeConfigWidget.h"
-#include "KoStarShape.h"
+#include "StarShape.h"
 #include "StarShapeConfigCommand.h"
 
 StarShapeConfigWidget::StarShapeConfigWidget()
@@ -40,7 +40,7 @@ void StarShapeConfigWidget::setUnit(KoUnit unit)
 
 void StarShapeConfigWidget::open(KoShape *shape)
 {
-    m_star = dynamic_cast<KoStarShape*>(shape);
+    m_star = dynamic_cast<StarShape*>(shape);
     if (! m_star)
         return;
 

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoRectangleShapeFactory.h"
-#include "KoRectangleShape.h"
+#include "RectangleShapeFactory.h"
+#include "RectangleShape.h"
 #include "RectangleShapeConfigWidget.h"
 #include "KoLineBorder.h"
 #include <KoXmlNS.h>
@@ -27,8 +27,8 @@
 
 #include <klocale.h>
 
-KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent)
-: KoShapeFactory(parent, KoRectangleShapeId, i18n("Rectangle"))
+RectangleShapeFactory::RectangleShapeFactory(QObject *parent)
+: KoShapeFactory(parent, RectangleShapeId, i18n("Rectangle"))
 {
     setToolTip(i18n("A rectangle"));
     setIcon("rectangle-shape");
@@ -37,9 +37,9 @@ KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent)
     setLoadingPriority(1);
 }
 
-KoShape *KoRectangleShapeFactory::createDefaultShape() const
+KoShape *RectangleShapeFactory::createDefaultShape() const
 {
-    KoRectangleShape *rect = new KoRectangleShape();
+    RectangleShape *rect = new RectangleShape();
 
     rect->setBorder(new KoLineBorder(1.0));
     rect->setShapeId(KoPathShapeId);
@@ -52,18 +52,18 @@ KoShape *KoRectangleShapeFactory::createDefaultShape() const
     return rect;
 }
 
-KoShape * KoRectangleShapeFactory::createShape(const KoProperties * params) const 
+KoShape * RectangleShapeFactory::createShape(const KoProperties * params) const 
 {
     Q_UNUSED(params);
     return createDefaultShape();
 }
 
-bool KoRectangleShapeFactory::supports(const KoXmlElement & e) const
+bool RectangleShapeFactory::supports(const KoXmlElement & e) const
 {
     return (e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw);
 }
 
-QList<KoShapeConfigWidgetBase*> KoRectangleShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase*> RectangleShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> panels;
     panels.append(new RectangleShapeConfigWidget());

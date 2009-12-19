@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoSpiralShape.h"
+#include "SpiralShape.h"
 
 #include <KoPathPoint.h>
 #include <KoShapeSavingContext.h>
@@ -28,7 +28,7 @@
 
 #include <math.h>
 
-KoSpiralShape::KoSpiralShape()
+SpiralShape::SpiralShape()
     : m_fade(.9)
     , m_kindAngle(M_PI)
     , m_radii(100.0, 100.0)
@@ -41,17 +41,17 @@ KoSpiralShape::KoSpiralShape()
     createPath(QSizeF(m_radii.x(), m_radii.y()));
 }
 
-KoSpiralShape::~KoSpiralShape()
+SpiralShape::~SpiralShape()
 {
 }
 
-void KoSpiralShape::saveOdf(KoShapeSavingContext &context) const
+void SpiralShape::saveOdf(KoShapeSavingContext &context) const
 {
     // TODO?
     KoPathShape::saveOdf(context);
 }
 
-bool KoSpiralShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &/*context*/)
+bool SpiralShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &/*context*/)
 {
     Q_UNUSED(element);
 
@@ -59,7 +59,7 @@ bool KoSpiralShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &
     return true;
 }
 
-void KoSpiralShape::setSize(const QSizeF &newSize)
+void SpiralShape::setSize(const QSizeF &newSize)
 {
     QMatrix matrix(resizeMatrix(newSize));
     m_center = matrix.map(m_center);
@@ -67,7 +67,7 @@ void KoSpiralShape::setSize(const QSizeF &newSize)
     KoParameterShape::setSize(newSize);
 }
 
-QPointF KoSpiralShape::normalize()
+QPointF SpiralShape::normalize()
 {
     QPointF offset(KoParameterShape::normalize());
     QMatrix matrix;
@@ -76,7 +76,7 @@ QPointF KoSpiralShape::normalize()
     return offset;
 }
 
-void KoSpiralShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
+void SpiralShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(handleId);
     Q_UNUSED(point);
@@ -132,13 +132,13 @@ void KoSpiralShape::moveHandleAction(int handleId, const QPointF &point, Qt::Key
                 }
             }
             m_handles[handleId] = kindHandlePositions[handlePos];
-            m_type = KoSpiralType(handlePos);
+            m_type = SpiralType(handlePos);
         } break;
     }
 #endif
 }
 
-void KoSpiralShape::updatePath(const QSizeF &size)
+void SpiralShape::updatePath(const QSizeF &size)
 {
     createPath(size);
     normalize();
@@ -190,7 +190,7 @@ void KoSpiralShape::updatePath(const QSizeF &size)
 #endif
 }
 
-void KoSpiralShape::createPath(const QSizeF &size)
+void SpiralShape::createPath(const QSizeF &size)
 {
     Q_UNUSED(size);
     clear();
@@ -232,7 +232,7 @@ void KoSpiralShape::createPath(const QSizeF &size)
     m_points = *m_subpaths[0];
 }
 
-void KoSpiralShape::updateKindHandle()
+void SpiralShape::updateKindHandle()
 {
 /*
    m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
@@ -252,7 +252,7 @@ void KoSpiralShape::updateKindHandle()
    */
 }
 
-void KoSpiralShape::updateAngleHandles()
+void SpiralShape::updateAngleHandles()
 {
 //    qreal startRadian = m_startAngle * M_PI / 180.0;
 //    qreal endRadian = m_endAngle * M_PI / 180.0;
@@ -260,19 +260,19 @@ void KoSpiralShape::updateAngleHandles()
 //    m_handles[1] = m_center + QPointF(cos(endRadian) * m_radii.x(), -sin(endRadian) * m_radii.y());
 }
 
-void KoSpiralShape::setType(KoSpiralType type)
+void SpiralShape::setType(SpiralType type)
 {
     m_type = type;
     updateKindHandle();
     updatePath(size());
 }
 
-KoSpiralShape::KoSpiralType KoSpiralShape::type() const
+SpiralShape::SpiralType SpiralShape::type() const
 {
     return m_type;
 }
 
-void KoSpiralShape::setFade(qreal fade)
+void SpiralShape::setFade(qreal fade)
 {
     m_fade = fade;
     updateKindHandle();
@@ -280,17 +280,17 @@ void KoSpiralShape::setFade(qreal fade)
     updatePath(size());
 }
 
-qreal KoSpiralShape::fade() const
+qreal SpiralShape::fade() const
 {
     return m_fade;
 }
 
-bool KoSpiralShape::clockWise() const
+bool SpiralShape::clockWise() const
 {
     return m_clockwise;
 }
 
-void KoSpiralShape::setClockWise(bool clockWise)
+void SpiralShape::setClockWise(bool clockWise)
 {
     m_clockwise = clockWise;
     updateKindHandle();
@@ -298,7 +298,7 @@ void KoSpiralShape::setClockWise(bool clockWise)
     updatePath(size());
 }
 
-QString KoSpiralShape::pathShapeId() const
+QString SpiralShape::pathShapeId() const
 {
-    return KoSpiralShapeId;
+    return SpiralShapeId;
 }

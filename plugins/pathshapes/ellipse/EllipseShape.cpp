@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoEllipseShape.h"
+#include "EllipseShape.h"
 
 #include <KoPathPoint.h>
 #include <KoShapeSavingContext.h>
@@ -30,7 +30,7 @@
 
 #include <math.h>
 
-KoEllipseShape::KoEllipseShape()
+EllipseShape::EllipseShape()
     :m_startAngle(0),
     m_endAngle(0),
     m_kindAngle(M_PI),
@@ -47,11 +47,11 @@ KoEllipseShape::KoEllipseShape()
     updatePath(size);
 }
 
-KoEllipseShape::~KoEllipseShape()
+EllipseShape::~EllipseShape()
 {
 }
 
-void KoEllipseShape::saveOdf(KoShapeSavingContext &context) const
+void EllipseShape::saveOdf(KoShapeSavingContext &context) const
 {
     if (isParametricShape()) {
         context.xmlWriter().startElement("draw:ellipse");
@@ -81,7 +81,7 @@ void KoEllipseShape::saveOdf(KoShapeSavingContext &context) const
     }
 }
 
-bool KoEllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+bool EllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     QSizeF size;
 
@@ -135,7 +135,7 @@ bool KoEllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext 
     return true;
 }
 
-void KoEllipseShape::setSize(const QSizeF &newSize)
+void EllipseShape::setSize(const QSizeF &newSize)
 {
     QMatrix matrix(resizeMatrix(newSize));
     m_center = matrix.map(m_center);
@@ -143,7 +143,7 @@ void KoEllipseShape::setSize(const QSizeF &newSize)
     KoParameterShape::setSize(newSize);
 }
 
-QPointF KoEllipseShape::normalize()
+QPointF EllipseShape::normalize()
 {
     QPointF offset(KoParameterShape::normalize());
     QMatrix matrix;
@@ -152,7 +152,7 @@ QPointF KoEllipseShape::normalize()
     return offset;
 }
 
-void KoEllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
+void EllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
     QPointF p(point);
@@ -201,14 +201,14 @@ void KoEllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::Ke
             }
         }
         handles[handleId] = kindHandlePositions[handlePos];
-        m_type = KoEllipseType(handlePos);
+        m_type = EllipseType(handlePos);
     }
     break;
     }
     setHandles(handles);
 }
 
-void KoEllipseShape::updatePath(const QSizeF &size)
+void EllipseShape::updatePath(const QSizeF &size)
 {
     Q_UNUSED(size);
     QPointF startpoint(handles()[0]);
@@ -266,7 +266,7 @@ void KoEllipseShape::updatePath(const QSizeF &size)
     normalize();
 }
 
-void KoEllipseShape::createPoints(int requiredPointCount)
+void EllipseShape::createPoints(int requiredPointCount)
 {
     if (m_subpaths.count() != 1) {
         clear();
@@ -286,7 +286,7 @@ void KoEllipseShape::createPoints(int requiredPointCount)
 }
 
 
-void KoEllipseShape::updateKindHandle()
+void EllipseShape::updateKindHandle()
 {
    m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
    if (m_startAngle > m_endAngle)
@@ -306,7 +306,7 @@ void KoEllipseShape::updateKindHandle()
     setHandles(handles);
 }
 
-void KoEllipseShape::updateAngleHandles()
+void EllipseShape::updateAngleHandles()
 {
     qreal startRadian = m_startAngle * M_PI / 180.0;
     qreal endRadian = m_endAngle * M_PI / 180.0;
@@ -316,7 +316,7 @@ void KoEllipseShape::updateAngleHandles()
     setHandles(handles);
 }
 
-qreal KoEllipseShape::sweepAngle() const
+qreal EllipseShape::sweepAngle() const
 {
     qreal sAngle =  m_endAngle - m_startAngle;
     // treat also as full circle
@@ -327,19 +327,19 @@ qreal KoEllipseShape::sweepAngle() const
     return sAngle;
 }
 
-void KoEllipseShape::setType(KoEllipseType type)
+void EllipseShape::setType(EllipseType type)
 {
     m_type = type;
     updateKindHandle();
     updatePath(size());
 }
 
-KoEllipseShape::KoEllipseType KoEllipseShape::type() const
+EllipseShape::EllipseType EllipseShape::type() const
 {
     return m_type;
 }
 
-void KoEllipseShape::setStartAngle(qreal angle)
+void EllipseShape::setStartAngle(qreal angle)
 {
     m_startAngle = angle;
     updateKindHandle();
@@ -347,12 +347,12 @@ void KoEllipseShape::setStartAngle(qreal angle)
     updatePath(size());
 }
 
-qreal KoEllipseShape::startAngle() const
+qreal EllipseShape::startAngle() const
 {
     return m_startAngle;
 }
 
-void KoEllipseShape::setEndAngle(qreal angle)
+void EllipseShape::setEndAngle(qreal angle)
 {
     m_endAngle = angle;
     updateKindHandle();
@@ -360,12 +360,12 @@ void KoEllipseShape::setEndAngle(qreal angle)
     updatePath(size());
 }
 
-qreal KoEllipseShape::endAngle() const
+qreal EllipseShape::endAngle() const
 {
     return m_endAngle;
 }
 
-QString KoEllipseShape::pathShapeId() const
+QString EllipseShape::pathShapeId() const
 {
-    return KoEllipseShapeId;
+    return EllipseShapeId;
 }

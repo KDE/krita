@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "enhancedpath/KoEnhancedPathShapeFactory.h"
-#include "enhancedpath/KoEnhancedPathShape.h"
+#include "enhancedpath/EnhancedPathShapeFactory.h"
+#include "enhancedpath/EnhancedPathShape.h"
 
 #include <KoLineBorder.h>
 #include <KoProperties.h>
@@ -32,8 +32,8 @@
 
 #include <math.h>
 
-KoEnhancedPathShapeFactory::KoEnhancedPathShapeFactory(QObject *parent)
-    : KoShapeFactory(parent, KoEnhancedPathShapeId, i18n("An enhanced path shape"))
+EnhancedPathShapeFactory::EnhancedPathShapeFactory(QObject *parent)
+    : KoShapeFactory(parent, EnhancedPathShapeId, i18n("An enhanced path shape"))
 {
     setToolTip(i18n("An enhanced path"));
     setIcon("enhancedpath");
@@ -48,9 +48,9 @@ KoEnhancedPathShapeFactory::KoEnhancedPathShapeFactory(QObject *parent)
     addGearhead();
 }
 
-KoShape *KoEnhancedPathShapeFactory::createDefaultShape() const
+KoShape *EnhancedPathShapeFactory::createDefaultShape() const
 {
-    KoEnhancedPathShape *shape = new KoEnhancedPathShape(QRectF(0, 0, 100, 100));
+    EnhancedPathShape *shape = new EnhancedPathShape(QRectF(0, 0, 100, 100));
     shape->setBorder(new KoLineBorder(1.0));
     shape->setShapeId(KoPathShapeId);
 
@@ -75,14 +75,14 @@ KoShape *KoEnhancedPathShapeFactory::createDefaultShape() const
     return shape;
 }
 
-KoShape *KoEnhancedPathShapeFactory::createShape(const KoProperties *params) const
+KoShape *EnhancedPathShapeFactory::createShape(const KoProperties *params) const
 {
     QRectF viewBox(0, 0, 100, 100);
     QVariant viewboxData;
     if (params->property("viewBox", viewboxData))
         viewBox = viewboxData.toRectF();
 
-    KoEnhancedPathShape *shape = new KoEnhancedPathShape(viewBox);
+    EnhancedPathShape *shape = new EnhancedPathShape(viewBox);
     if (! shape)
         return 0;
 
@@ -116,7 +116,7 @@ KoShape *KoEnhancedPathShapeFactory::createShape(const KoProperties *params) con
     return shape;
 }
 
-KoProperties* KoEnhancedPathShapeFactory::dataToProperties(
+KoProperties* EnhancedPathShapeFactory::dataToProperties(
     const QString &modifiers, const QStringList &commands,
     const ListType &handles, const ComplexType & formulae) const
 {
@@ -130,7 +130,7 @@ KoProperties* KoEnhancedPathShapeFactory::dataToProperties(
     return props;
 }
 
-void KoEnhancedPathShapeFactory::addCross()
+void EnhancedPathShapeFactory::addCross()
 {
     QString modifiers("35");
 
@@ -164,7 +164,7 @@ void KoEnhancedPathShapeFactory::addCross()
     addTemplate(t);
 }
 
-void KoEnhancedPathShapeFactory::addArrow()
+void EnhancedPathShapeFactory::addArrow()
 {
     QString modifiers("60 35");
 
@@ -198,7 +198,7 @@ void KoEnhancedPathShapeFactory::addArrow()
     addTemplate(t);
 }
 
-void KoEnhancedPathShapeFactory::addCallout()
+void EnhancedPathShapeFactory::addCallout()
 {
     QString modifiers("4250 45000");
 
@@ -277,7 +277,7 @@ void KoEnhancedPathShapeFactory::addCallout()
     addTemplate(t);
 }
 
-void KoEnhancedPathShapeFactory::addSmiley()
+void EnhancedPathShapeFactory::addSmiley()
 {
     QString modifiers("17520");
 
@@ -322,7 +322,7 @@ void KoEnhancedPathShapeFactory::addSmiley()
     addTemplate(t);
 }
 
-void KoEnhancedPathShapeFactory::addCircularArrow()
+void EnhancedPathShapeFactory::addCircularArrow()
 {
     QString modifiers("180 0 5500");
 
@@ -400,7 +400,7 @@ void KoEnhancedPathShapeFactory::addCircularArrow()
     addTemplate(t);
 }
 
-void KoEnhancedPathShapeFactory::addGearhead()
+void EnhancedPathShapeFactory::addGearhead()
 {
     QStringList commands;
     commands.append("M 20 70");
@@ -445,9 +445,9 @@ void KoEnhancedPathShapeFactory::addGearhead()
     addTemplate(t);
 }
 
-bool KoEnhancedPathShapeFactory::supports(const KoXmlElement & e) const
+bool EnhancedPathShapeFactory::supports(const KoXmlElement & e) const
 {
     return (e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw);
 }
 
-#include "KoEnhancedPathShapeFactory.moc"
+#include "EnhancedPathShapeFactory.moc"

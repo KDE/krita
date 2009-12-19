@@ -44,7 +44,7 @@ EllipseShapeConfigWidget::EllipseShapeConfigWidget()
 
 void EllipseShapeConfigWidget::open(KoShape *shape)
 {
-    m_ellipse = dynamic_cast<KoEllipseShape*>(shape);
+    m_ellipse = dynamic_cast<EllipseShape*>(shape);
     if (!m_ellipse)
         return;
 
@@ -66,7 +66,7 @@ void EllipseShapeConfigWidget::save()
     if (!m_ellipse)
         return;
 
-    m_ellipse->setType(static_cast<KoEllipseShape::KoEllipseType>(widget.ellipseType->currentIndex()));
+    m_ellipse->setType(static_cast<EllipseShape::EllipseType>(widget.ellipseType->currentIndex()));
     m_ellipse->setStartAngle(widget.startAngle->value());
     m_ellipse->setEndAngle(widget.endAngle->value());
 }
@@ -76,7 +76,7 @@ QUndoCommand *EllipseShapeConfigWidget::createCommand()
     if (!m_ellipse) {
         return 0;
     } else {
-        KoEllipseShape::KoEllipseType type = static_cast<KoEllipseShape::KoEllipseType>(widget.ellipseType->currentIndex());
+        EllipseShape::EllipseType type = static_cast<EllipseShape::EllipseType>(widget.ellipseType->currentIndex());
         return new EllipseShapeConfigCommand(m_ellipse, type, widget.startAngle->value(), widget.endAngle->value());
     }
 }

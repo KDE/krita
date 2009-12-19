@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoRectangleShape.h"
+#include "RectangleShape.h"
 
 #include <KoPathPoint.h>
 #include <KoShapeSavingContext.h>
@@ -28,7 +28,7 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 
-KoRectangleShape::KoRectangleShape()
+RectangleShape::RectangleShape()
 : m_cornerRadiusX(0)
 , m_cornerRadiusY(0)
 {
@@ -40,11 +40,11 @@ KoRectangleShape::KoRectangleShape()
     updatePath(size);
 }
 
-KoRectangleShape::~KoRectangleShape()
+RectangleShape::~RectangleShape()
 {
 }
 
-bool KoRectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     loadOdfAttributes(element, context, OdfMandatories | OdfGeometry | OdfAdditionalAttributes | OdfCommonChildElements);
 
@@ -70,7 +70,7 @@ bool KoRectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContex
     return true;
 }
 
-void KoRectangleShape::saveOdf(KoShapeSavingContext & context) const
+void RectangleShape::saveOdf(KoShapeSavingContext & context) const
 {
     if (isParametricShape()) {
         context.xmlWriter().startElement("draw:rect");
@@ -86,7 +86,7 @@ void KoRectangleShape::saveOdf(KoShapeSavingContext & context) const
     }
 }
 
-void KoRectangleShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
+void RectangleShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
     QPointF p(point);
@@ -126,7 +126,7 @@ void KoRectangleShape::moveHandleAction(int handleId, const QPointF & point, Qt:
     updateHandles();
 }
 
-void KoRectangleShape::updateHandles()
+void RectangleShape::updateHandles()
 {
     QList<QPointF> handles;
     handles.append(QPointF(size().width() - m_cornerRadiusX/100.0 * 0.5 * size().width(), 0.0));
@@ -134,7 +134,7 @@ void KoRectangleShape::updateHandles()
     setHandles(handles);
 }
 
-void KoRectangleShape::updatePath(const QSizeF &size)
+void RectangleShape::updatePath(const QSizeF &size)
 {
     qreal rx = 0;
     qreal ry = 0;
@@ -241,7 +241,7 @@ void KoRectangleShape::updatePath(const QSizeF &size)
     points.last()->setProperty(KoPathPoint::CloseSubpath);
 }
 
-void KoRectangleShape::createPoints(int requiredPointCount)
+void RectangleShape::createPoints(int requiredPointCount)
 {
     if (m_subpaths.count() != 1) {
         clear();
@@ -260,12 +260,12 @@ void KoRectangleShape::createPoints(int requiredPointCount)
     }
 }
 
-qreal KoRectangleShape::cornerRadiusX() const
+qreal RectangleShape::cornerRadiusX() const
 {
     return m_cornerRadiusX;
 }
 
-void KoRectangleShape::setCornerRadiusX(qreal radius)
+void RectangleShape::setCornerRadiusX(qreal radius)
 {
     if (radius >= 0.0 && radius <= 100.0) {
         m_cornerRadiusX = radius;
@@ -274,12 +274,12 @@ void KoRectangleShape::setCornerRadiusX(qreal radius)
     }
 }
 
-qreal KoRectangleShape::cornerRadiusY() const
+qreal RectangleShape::cornerRadiusY() const
 {
     return m_cornerRadiusY;
 }
 
-void KoRectangleShape::setCornerRadiusY(qreal radius)
+void RectangleShape::setCornerRadiusY(qreal radius)
 {
     if (radius >= 0.0 && radius <= 100.0) {
         m_cornerRadiusY = radius;
@@ -288,7 +288,7 @@ void KoRectangleShape::setCornerRadiusY(qreal radius)
     }
 }
 
-QString KoRectangleShape::pathShapeId() const
+QString RectangleShape::pathShapeId() const
 {
-    return KoRectangleShapeId;
+    return RectangleShapeId;
 }

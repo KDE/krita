@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoStarShape.h"
+#include "StarShape.h"
 
 #include <KoPathPoint.h>
 #include <KoShapeLoadingContext.h>
@@ -29,7 +29,7 @@
 
 #include <math.h>
 
-KoStarShape::KoStarShape()
+StarShape::StarShape()
 : m_cornerCount(5)
 , m_zoomX(1.0)
 , m_zoomY(1.0)
@@ -44,11 +44,11 @@ KoStarShape::KoStarShape()
     updatePath(QSize(100,100));
 }
 
-KoStarShape::~KoStarShape()
+StarShape::~StarShape()
 {
 }
 
-void KoStarShape::setCornerCount(uint cornerCount)
+void StarShape::setCornerCount(uint cornerCount)
 {
     if (cornerCount >= 3) {
         double oldDefaultAngle = defaultAngleRadian();
@@ -61,62 +61,62 @@ void KoStarShape::setCornerCount(uint cornerCount)
     }
 }
 
-uint KoStarShape::cornerCount() const
+uint StarShape::cornerCount() const
 {
     return m_cornerCount;
 }
 
-void KoStarShape::setBaseRadius(qreal baseRadius)
+void StarShape::setBaseRadius(qreal baseRadius)
 {
     m_radius[base] = fabs(baseRadius);
     updatePath(QSize());
 }
 
-qreal KoStarShape::baseRadius() const
+qreal StarShape::baseRadius() const
 {
     return m_radius[base];
 }
 
-void KoStarShape::setTipRadius(qreal tipRadius)
+void StarShape::setTipRadius(qreal tipRadius)
 {
     m_radius[tip] = fabs(tipRadius);
     updatePath(QSize());
 }
 
-qreal KoStarShape::tipRadius() const
+qreal StarShape::tipRadius() const
 {
     return m_radius[tip];
 }
 
-void KoStarShape::setBaseRoundness(qreal baseRoundness)
+void StarShape::setBaseRoundness(qreal baseRoundness)
 {
     m_roundness[base] = baseRoundness;
     updatePath(QSize());
 }
 
-void KoStarShape::setTipRoundness(qreal tipRoundness)
+void StarShape::setTipRoundness(qreal tipRoundness)
 {
     m_roundness[tip] = tipRoundness;
     updatePath(QSize());
 }
 
-void KoStarShape::setConvex(bool convex)
+void StarShape::setConvex(bool convex)
 {
     m_convex = convex;
     updatePath(QSize());
 }
 
-bool KoStarShape::convex() const
+bool StarShape::convex() const
 {
     return m_convex;
 }
 
-QPointF KoStarShape::starCenter() const
+QPointF StarShape::starCenter() const
 {
     return m_center;
 }
 
-void KoStarShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
+void StarShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
 {
     if (modifiers & Qt::ShiftModifier) {
         QPointF handle = handles()[handleId];
@@ -162,7 +162,7 @@ void KoStarShape::moveHandleAction(int handleId, const QPointF & point, Qt::Keyb
     }
 }
 
-void KoStarShape::updatePath(const QSizeF &size)
+void StarShape::updatePath(const QSizeF &size)
 {
     Q_UNUSED(size);
     qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
@@ -212,7 +212,7 @@ void KoStarShape::updatePath(const QSizeF &size)
     m_center = computeCenter();
 }
 
-void KoStarShape::createPoints(int requiredPointCount)
+void StarShape::createPoints(int requiredPointCount)
 {
     if (m_subpaths.count() != 1) {
         clear();
@@ -231,7 +231,7 @@ void KoStarShape::createPoints(int requiredPointCount)
     }
 }
 
-void KoStarShape::setSize(const QSizeF &newSize)
+void StarShape::setSize(const QSizeF &newSize)
 {
     QMatrix matrix(resizeMatrix(newSize));
     m_zoomX *= matrix.m11();
@@ -243,7 +243,7 @@ void KoStarShape::setSize(const QSizeF &newSize)
     m_center = computeCenter();
 }
 
-QPointF KoStarShape::computeCenter() const
+QPointF StarShape::computeCenter() const
 {
     KoSubpath &points = *m_subpaths[0];
 
@@ -257,7 +257,7 @@ QPointF KoStarShape::computeCenter() const
     return center / static_cast<qreal>(m_cornerCount);
 }
 
-bool KoStarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
+bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
     bool loadAsCustomShape = false;
 
@@ -345,7 +345,7 @@ bool KoStarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & 
     return true;
 }
 
-void KoStarShape::saveOdf(KoShapeSavingContext & context) const
+void StarShape::saveOdf(KoShapeSavingContext & context) const
 {
     if (isParametricShape()) {
         double defaultAngle = defaultAngleRadian();
@@ -408,12 +408,12 @@ void KoStarShape::saveOdf(KoShapeSavingContext & context) const
     }
 }
 
-QString KoStarShape::pathShapeId() const
+QString StarShape::pathShapeId() const
 {
-    return KoStarShapeId;
+    return StarShapeId;
 }
 
-double KoStarShape::defaultAngleRadian() const
+double StarShape::defaultAngleRadian() const
 {
     qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
 

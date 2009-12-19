@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Rob Buis <buis@kde.org>
+   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,23 +17,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSPIRALSHAPEFACTORY_H
-#define KOSPIRALSHAPEFACTORY_H
+#ifndef KOELLIPSESHAPEFACTORY_H
+#define KOELLIPSESHAPEFACTORY_H
 
 #include "KoShapeFactory.h"
 
 class KoShape;
 
-/// Factory for spiral shapes
-class KoSpiralShapeFactory : public KoShapeFactory
+/// Factory for ellipse shapes
+class EllipseShapeFactory : public KoShapeFactory
 {
 public:
     /// constructor
-    explicit KoSpiralShapeFactory(QObject *parent);
-    ~KoSpiralShapeFactory() {}
+    explicit EllipseShapeFactory( QObject *parent );
+    ~EllipseShapeFactory() {}
     KoShape *createDefaultShape() const;
-    KoShape *createShape(const KoProperties *params) const;
+    KoShape *createShape( const KoProperties *params ) const;
+    virtual bool supports(const KoXmlElement &e) const;
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 
-#endif /* KOSPIRALSHAPEFACTORY_H */
+#endif /* KOELLIPSESHAPEFACTORY_H */

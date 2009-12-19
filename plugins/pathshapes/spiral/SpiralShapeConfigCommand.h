@@ -20,7 +20,7 @@
 #ifndef SPIRALSHAPECONFIGCOMMAND_H
 #define SPIRALSHAPECONFIGCOMMAND_H
 
-#include "KoSpiralShape.h"
+#include "SpiralShape.h"
 #include <QtGui/QUndoCommand>
 
 /// The undo / redo command for configuring a spiral shape
@@ -34,17 +34,17 @@ public:
      * @param fade the fade parameter
      * @param parent the optional parent command
      */
-    SpiralShapeConfigCommand(KoSpiralShape *spiral, KoSpiralShape::KoSpiralType type, bool clockWise, qreal fade, QUndoCommand *parent = 0);
+    SpiralShapeConfigCommand(SpiralShape *spiral, SpiralShape::SpiralType type, bool clockWise, qreal fade, QUndoCommand *parent = 0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo
     virtual void undo();
 private:
-    KoSpiralShape *m_spiral;
-    KoSpiralShape::KoSpiralType m_oldType;
+    SpiralShape *m_spiral;
+    SpiralShape::SpiralType m_oldType;
     bool m_oldClockWise;
     qreal m_oldFade;
-    KoSpiralShape::KoSpiralType m_newType;
+    SpiralShape::SpiralType m_newType;
     bool m_newClockWise;
     qreal m_newFade;
 };

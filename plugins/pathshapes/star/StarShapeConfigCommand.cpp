@@ -18,10 +18,10 @@
  */
 
 #include "StarShapeConfigCommand.h"
-#include "KoStarShape.h"
+#include "StarShape.h"
 #include <klocale.h>
 
-StarShapeConfigCommand::StarShapeConfigCommand(KoStarShape * star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, QUndoCommand *parent)
+StarShapeConfigCommand::StarShapeConfigCommand(StarShape * star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_star(star)
     , m_newCornerCount(cornerCount)

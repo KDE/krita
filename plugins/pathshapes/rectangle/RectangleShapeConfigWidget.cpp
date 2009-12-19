@@ -18,7 +18,7 @@
  */
 
 #include "RectangleShapeConfigWidget.h"
-#include "KoRectangleShape.h"
+#include "RectangleShape.h"
 #include "RectangleShapeConfigCommand.h"
 
 RectangleShapeConfigWidget::RectangleShapeConfigWidget()
@@ -37,7 +37,7 @@ void RectangleShapeConfigWidget::setUnit(KoUnit unit)
 
 void RectangleShapeConfigWidget::open(KoShape *shape)
 {
-    m_rectangle = dynamic_cast<KoRectangleShape*>(shape);
+    m_rectangle = dynamic_cast<RectangleShape*>(shape);
     if (! m_rectangle)
         return;
 

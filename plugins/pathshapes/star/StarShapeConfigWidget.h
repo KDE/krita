@@ -24,7 +24,7 @@
 
 #include <KoShapeConfigWidgetBase.h>
 
-class KoStarShape;
+class StarShape;
 
 class StarShapeConfigWidget : public KoShapeConfigWidgetBase
 {
@@ -46,7 +46,7 @@ private slots:
     void typeChanged();
 private:
     Ui::StarShapeConfigWidget widget;
-    KoStarShape * m_star;
+    StarShape * m_star;
 };
 
 #endif // STARSHAPECONFIGWIDGET_H

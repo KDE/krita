@@ -23,18 +23,18 @@
 
 #include "KoParameterShape.h"
 
-#define KoRectangleShapeId "KoRectangleShape"
+#define RectangleShapeId "RectangleShape"
 
 /**
- * The KoRectangleShape is a shape that represents a rectangle.
+ * The RectangleShape is a shape that represents a rectangle.
  * The rectangle can have rounded corners, with different corner
  * radii in x- and y-direction.
  */
-class KoRectangleShape : public KoParameterShape
+class RectangleShape : public KoParameterShape
 {
 public:
-    KoRectangleShape();
-    ~KoRectangleShape();
+    RectangleShape();
+    ~RectangleShape();
 
     /// Returns the corner radius in x-direction
     qreal cornerRadiusX() const;

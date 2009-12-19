@@ -25,14 +25,14 @@
 class KoShape;
 
 /// Factory for path shapes
-class KoEnhancedPathShapeFactory : public KoShapeFactory
+class EnhancedPathShapeFactory : public KoShapeFactory
 {
     Q_OBJECT
 
 public:
     /// constructor
-    explicit KoEnhancedPathShapeFactory(QObject *parent);
-    ~KoEnhancedPathShapeFactory() {}
+    explicit EnhancedPathShapeFactory(QObject *parent);
+    ~EnhancedPathShapeFactory() {}
     KoShape *createDefaultShape() const;
     KoShape *createShape(const KoProperties *params) const;
     virtual bool supports(const KoXmlElement &e) const;

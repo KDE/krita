@@ -20,7 +20,7 @@
 #ifndef SPIRALSHAPECONFIGWIDGET_H
 #define SPIRALSHAPECONFIGWIDGET_H
 
-#include "KoSpiralShape.h"
+#include "SpiralShape.h"
 #include "ui_SpiralShapeConfigWidget.h"
 
 #include <KoShapeConfigWidgetBase.h>
@@ -40,7 +40,7 @@ public:
     virtual QUndoCommand * createCommand();
 private:
     Ui::SpiralShapeConfigWidget widget;
-    KoSpiralShape *m_spiral;
+    SpiralShape *m_spiral;
 };
 
 #endif // SPIRALSHAPECONFIGWIDGET_H

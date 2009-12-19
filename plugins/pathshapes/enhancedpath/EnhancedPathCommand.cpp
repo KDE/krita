@@ -17,26 +17,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoEnhancedPathCommand.h"
-#include "KoEnhancedPathParameter.h"
-#include "KoEnhancedPathShape.h"
+#include "EnhancedPathCommand.h"
+#include "EnhancedPathParameter.h"
+#include "EnhancedPathShape.h"
 #include <KoPathPoint.h>
 #include <math.h>
 
 // radian to degree factor
 const qreal rad2deg = 180.0/M_PI;
 
-KoEnhancedPathCommand::KoEnhancedPathCommand(const QChar &command, KoEnhancedPathShape *parent)
+EnhancedPathCommand::EnhancedPathCommand(const QChar &command, EnhancedPathShape *parent)
     : m_command(command), m_parent(parent)
 {
     Q_ASSERT(m_parent);
 }
 
-KoEnhancedPathCommand::~KoEnhancedPathCommand()
+EnhancedPathCommand::~EnhancedPathCommand()
 {
 }
 
-bool KoEnhancedPathCommand::execute()
+bool EnhancedPathCommand::execute()
 {
     /*
      * The parameters of the commands are in viewbox coordinates, which have
@@ -200,7 +200,7 @@ bool KoEnhancedPathCommand::execute()
     return true;
 }
 
-QList<QPointF> KoEnhancedPathCommand::pointsFromParameters()
+QList<QPointF> EnhancedPathCommand::pointsFromParameters()
 {
     QList<QPointF> points;
     QPointF p;
@@ -214,13 +214,13 @@ QList<QPointF> KoEnhancedPathCommand::pointsFromParameters()
     return points;
 }
 
-void KoEnhancedPathCommand::addParameter(KoEnhancedPathParameter *parameter)
+void EnhancedPathCommand::addParameter(EnhancedPathParameter *parameter)
 {
     if (parameter)
         m_parameters.append(parameter);
 }
 
-qreal KoEnhancedPathCommand::angleFromPoint(const QPointF &point) const
+qreal EnhancedPathCommand::angleFromPoint(const QPointF &point) const
 {
     qreal angle = atan2(point.y(), point.x());
     if (angle < 0.0)
@@ -229,7 +229,7 @@ qreal KoEnhancedPathCommand::angleFromPoint(const QPointF &point) const
     return 2*M_PI - angle;
 }
 
-qreal KoEnhancedPathCommand::radSweepAngle(qreal start, qreal stop, bool clockwise) const
+qreal EnhancedPathCommand::radSweepAngle(qreal start, qreal stop, bool clockwise) const
 {
     qreal sweepAngle = stop - start;
     if (clockwise) {
@@ -245,7 +245,7 @@ qreal KoEnhancedPathCommand::radSweepAngle(qreal start, qreal stop, bool clockwi
    return sweepAngle;
 }
 
-qreal KoEnhancedPathCommand::degSweepAngle(qreal start, qreal stop, bool clockwise) const
+qreal EnhancedPathCommand::degSweepAngle(qreal start, qreal stop, bool clockwise) const
 {
     qreal sweepAngle = stop - start;
     if (clockwise) {
@@ -261,7 +261,7 @@ qreal KoEnhancedPathCommand::degSweepAngle(qreal start, qreal stop, bool clockwi
    return sweepAngle;
 }
 
-KoPathPoint * KoEnhancedPathCommand::lastPathPoint() const
+KoPathPoint * EnhancedPathCommand::lastPathPoint() const
 {
     KoPathPoint *lastPoint = 0;
     int subpathCount = m_parent->subpathCount();
@@ -272,16 +272,16 @@ KoPathPoint * KoEnhancedPathCommand::lastPathPoint() const
     return lastPoint;
 }
 
-QRectF KoEnhancedPathCommand::rectFromPoints(const QPointF &tl, const QPointF &br) const
+QRectF EnhancedPathCommand::rectFromPoints(const QPointF &tl, const QPointF &br) const
 {
     return QRectF(tl, QSizeF(br.x()-tl.x(), br.y()-tl.y())).normalized();
 }
 
-QString KoEnhancedPathCommand::toString() const
+QString EnhancedPathCommand::toString() const
 {
     QString cmd = m_command;
 
-    foreach(KoEnhancedPathParameter *p, m_parameters)
+    foreach(EnhancedPathParameter *p, m_parameters)
         cmd += p->toString() + ' ';
 
     return cmd.trimmed();

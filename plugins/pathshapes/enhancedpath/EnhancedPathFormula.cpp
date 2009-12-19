@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoEnhancedPathFormula.h"
-#include "KoEnhancedPathShape.h"
+#include "EnhancedPathFormula.h"
+#include "EnhancedPathShape.h"
 #include <QStack>
 #include <math.h>
 
@@ -41,9 +41,9 @@ bool isIdentifier(QChar ch);
 // e.g. '+' is 1 while '*' is 3
 int opPrecedence(FormulaToken::Operator op);
 // helper function: return function of given token text
-KoEnhancedPathFormula::Function matchFunction(const QString & text);
+EnhancedPathFormula::Function matchFunction(const QString & text);
 // helper function: return function name from function identifier
-QString matchFunction(KoEnhancedPathFormula::Function function);
+QString matchFunction(EnhancedPathFormula::Function function);
 
 class FormulaToken;
 
@@ -96,17 +96,17 @@ public:
 };
 
 
-KoEnhancedPathFormula::KoEnhancedPathFormula(const QString &text, KoEnhancedPathShape *parent)
+EnhancedPathFormula::EnhancedPathFormula(const QString &text, EnhancedPathShape *parent)
     : m_valid(false), m_compiled(false), m_error(ErrorNone), m_text(text), m_parent(parent)
 {
     Q_ASSERT(m_parent);
 }
 
-KoEnhancedPathFormula::~KoEnhancedPathFormula()
+EnhancedPathFormula::~EnhancedPathFormula()
 {
 }
 
-qreal KoEnhancedPathFormula::evaluate()
+qreal EnhancedPathFormula::evaluate()
 {
     // shortcut
     if (m_error != ErrorNone)
@@ -235,38 +235,38 @@ qreal KoEnhancedPathFormula::evaluate()
     return stack.pop().toDouble();
 }
 
-qreal KoEnhancedPathFormula::evaluateFunction(Function function, const QList<qreal> &arguments) const
+qreal EnhancedPathFormula::evaluateFunction(Function function, const QList<qreal> &arguments) const
 {
     switch(function) {
-    case KoEnhancedPathFormula::FunctionAbs:
+    case EnhancedPathFormula::FunctionAbs:
         return fabs(arguments[0]);
         break;
-    case KoEnhancedPathFormula::FunctionSqrt:
+    case EnhancedPathFormula::FunctionSqrt:
         return sqrt(arguments[0]);
         break;
-    case KoEnhancedPathFormula::FunctionSin:
+    case EnhancedPathFormula::FunctionSin:
         return sin(arguments[0]);
         break;
-    case KoEnhancedPathFormula::FunctionCos:
+    case EnhancedPathFormula::FunctionCos:
         return cos(arguments[0]);
         break;
-    case KoEnhancedPathFormula::FunctionTan:
+    case EnhancedPathFormula::FunctionTan:
         return tan(arguments[0]);
         break;
-    case KoEnhancedPathFormula::FunctionAtan:
+    case EnhancedPathFormula::FunctionAtan:
         return atan(arguments[0]);
         break;
-    case KoEnhancedPathFormula::FunctionAtan2:
+    case EnhancedPathFormula::FunctionAtan2:
         // TODO atan2 with one argument as in odf spec ???
         return atan2(arguments[0], arguments[1]);
         break;
-    case KoEnhancedPathFormula::FunctionMin:
+    case EnhancedPathFormula::FunctionMin:
         return qMin(arguments[0], arguments[1]);
         break;
-    case KoEnhancedPathFormula::FunctionMax:
+    case EnhancedPathFormula::FunctionMax:
         return qMax(arguments[0], arguments[1]);
         break;
-    case KoEnhancedPathFormula::FunctionIf:
+    case EnhancedPathFormula::FunctionIf:
         if (arguments[0] > 0.0)
             return arguments[1];
         else
@@ -279,7 +279,7 @@ qreal KoEnhancedPathFormula::evaluateFunction(Function function, const QList<qre
     return 0.0;
 }
 
-TokenList KoEnhancedPathFormula::scan(const QString &formula) const
+TokenList EnhancedPathFormula::scan(const QString &formula) const
 {
   // parsing state
     enum {
@@ -414,7 +414,7 @@ TokenList KoEnhancedPathFormula::scan(const QString &formula) const
     return tokens;
 }
 
-bool KoEnhancedPathFormula::compile(const TokenList &tokens)
+bool EnhancedPathFormula::compile(const TokenList &tokens)
 {
     // sanity check
     if (tokens.count() == 0)
@@ -631,7 +631,7 @@ bool KoEnhancedPathFormula::compile(const TokenList &tokens)
     return m_valid;
 }
 
-QString KoEnhancedPathFormula::toString() const
+QString EnhancedPathFormula::toString() const
 {
     return m_text;
 }
@@ -719,63 +719,63 @@ int opPrecedence(FormulaToken::Operator op)
     return prec;
 }
 
-KoEnhancedPathFormula::Function matchFunction(const QString &text)
+EnhancedPathFormula::Function matchFunction(const QString &text)
 {
     if (text == "abs")
-        return KoEnhancedPathFormula::FunctionAbs;
+        return EnhancedPathFormula::FunctionAbs;
     if (text == "sqrt")
-        return KoEnhancedPathFormula::FunctionSqrt;
+        return EnhancedPathFormula::FunctionSqrt;
     if (text == "sin")
-        return KoEnhancedPathFormula::FunctionSin;
+        return EnhancedPathFormula::FunctionSin;
     if (text == "cos")
-        return KoEnhancedPathFormula::FunctionCos;
+        return EnhancedPathFormula::FunctionCos;
     if (text == "tan")
-        return KoEnhancedPathFormula::FunctionTan;
+        return EnhancedPathFormula::FunctionTan;
     if (text == "atan")
-        return KoEnhancedPathFormula::FunctionAtan;
+        return EnhancedPathFormula::FunctionAtan;
     if (text == "atan2")
-        return KoEnhancedPathFormula::FunctionAtan2;
+        return EnhancedPathFormula::FunctionAtan2;
     if (text == "min")
-        return KoEnhancedPathFormula::FunctionMin;
+        return EnhancedPathFormula::FunctionMin;
     if (text == "max")
-        return KoEnhancedPathFormula::FunctionMax;
+        return EnhancedPathFormula::FunctionMax;
     if (text == "if")
-        return KoEnhancedPathFormula::FunctionIf;
+        return EnhancedPathFormula::FunctionIf;
 
-    return KoEnhancedPathFormula::FunctionUnknown;
+    return EnhancedPathFormula::FunctionUnknown;
 }
 
-QString matchFunction(KoEnhancedPathFormula::Function function)
+QString matchFunction(EnhancedPathFormula::Function function)
 {
     switch(function) {
-    case KoEnhancedPathFormula::FunctionAbs:
+    case EnhancedPathFormula::FunctionAbs:
         return "fabs";
         break;
-    case KoEnhancedPathFormula::FunctionSqrt:
+    case EnhancedPathFormula::FunctionSqrt:
         return "sqrt";
         break;
-    case KoEnhancedPathFormula::FunctionSin:
+    case EnhancedPathFormula::FunctionSin:
         return "sin";
         break;
-    case KoEnhancedPathFormula::FunctionCos:
+    case EnhancedPathFormula::FunctionCos:
         return "cos";
         break;
-    case KoEnhancedPathFormula::FunctionTan:
+    case EnhancedPathFormula::FunctionTan:
         return "tan";
         break;
-    case KoEnhancedPathFormula::FunctionAtan:
+    case EnhancedPathFormula::FunctionAtan:
         return "atan";
         break;
-    case KoEnhancedPathFormula::FunctionAtan2:
+    case EnhancedPathFormula::FunctionAtan2:
         return "atan2";
         break;
-    case KoEnhancedPathFormula::FunctionMin:
+    case EnhancedPathFormula::FunctionMin:
         return "min";
         break;
-    case KoEnhancedPathFormula::FunctionMax:
+    case EnhancedPathFormula::FunctionMax:
         return "max";
         break;
-    case KoEnhancedPathFormula::FunctionIf:
+    case EnhancedPathFormula::FunctionIf:
         return "if";
         break;
     default:
@@ -785,7 +785,7 @@ QString matchFunction(KoEnhancedPathFormula::Function function)
     return "unknown";
 }
 
-void KoEnhancedPathFormula::debugTokens(const TokenList &tokens)
+void EnhancedPathFormula::debugTokens(const TokenList &tokens)
 {
 #ifndef NDEBUG
     for (int i = 0; i < tokens.count(); i++)
@@ -795,7 +795,7 @@ void KoEnhancedPathFormula::debugTokens(const TokenList &tokens)
 #endif
 }
 
-void KoEnhancedPathFormula::debugOpcodes()
+void EnhancedPathFormula::debugOpcodes()
 {
 #ifndef NDEBUG
     foreach (const Opcode &c, m_codes) {

@@ -20,7 +20,7 @@
 #ifndef ELLIPSESHAPECONFIGCOMMAND_H
 #define ELLIPSESHAPECONFIGCOMMAND_H
 
-#include "KoEllipseShape.h"
+#include "EllipseShape.h"
 #include <QtGui/QUndoCommand>
 
 /// The undo / redo command for configuring an ellipse shape
@@ -35,17 +35,17 @@ public:
      * @param endAngle the end angle
      * @param parent the optional parent command
      */
-    EllipseShapeConfigCommand(KoEllipseShape *ellipse, KoEllipseShape::KoEllipseType type, qreal startAngle, qreal startEndAngle, QUndoCommand *parent = 0);
+    EllipseShapeConfigCommand(EllipseShape *ellipse, EllipseShape::EllipseType type, qreal startAngle, qreal startEndAngle, QUndoCommand *parent = 0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo
     virtual void undo();
 private:
-    KoEllipseShape *m_ellipse;
-    KoEllipseShape::KoEllipseType m_oldType;
+    EllipseShape *m_ellipse;
+    EllipseShape::EllipseType m_oldType;
     qreal m_oldStartAngle;
     qreal m_oldEndAngle;
-    KoEllipseShape::KoEllipseType m_newType;
+    EllipseShape::EllipseType m_newType;
     qreal m_newStartAngle;
     qreal m_newEndAngle;
 };

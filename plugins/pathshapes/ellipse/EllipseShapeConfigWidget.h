@@ -20,7 +20,7 @@
 #ifndef ELLIPSESHAPECONFIGWIDGET_H
 #define ELLIPSESHAPECONFIGWIDGET_H
 
-#include "KoEllipseShape.h"
+#include "EllipseShape.h"
 #include "ui_EllipseShapeConfigWidget.h"
 
 #include <KoShapeConfigWidgetBase.h>
@@ -42,7 +42,7 @@ private slots:
     void closeEllipse();
 private:
     Ui::EllipseShapeConfigWidget widget;
-    KoEllipseShape *m_ellipse;
+    EllipseShape *m_ellipse;
 };
 
 #endif // ELLIPSESHAPECONFIGWIDGET_H

@@ -26,6 +26,8 @@ class KoPathShapePrivate : public KoShapePrivate
 public:
     KoPathShapePrivate(KoPathShape *q);
 
+    QRectF handleRect(const QPointF &p, qreal radius) const;
+
     Qt::FillRule fillRule;
 };
 

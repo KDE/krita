@@ -86,7 +86,7 @@ void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & 
 
     QMatrix matrix;
     matrix.rotate(45.0);
-    QPolygonF poly(handleRect(QPointF(0, 0), handleRadius));
+    QPolygonF poly(d->handleRect(QPointF(0, 0), handleRadius));
     poly = matrix.map(poly);
 
     QList<QPointF>::const_iterator it(d->handles.constBegin());
@@ -108,7 +108,7 @@ void KoParameterShape::paintHandle(QPainter & painter, const KoViewConverter & c
 
     QMatrix matrix;
     matrix.rotate(45.0);
-    QPolygonF poly(handleRect(QPointF(0, 0), handleRadius));
+    QPolygonF poly(d->handleRect(QPointF(0, 0), handleRadius));
     poly = matrix.map(poly);
     poly.translate(worldMatrix.map(d->handles[handleId]));
     painter.drawPolygon(poly);

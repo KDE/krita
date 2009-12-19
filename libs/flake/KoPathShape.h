@@ -471,7 +471,6 @@ private:
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 protected:
-    QRectF handleRect(const QPointF &p, qreal radius) const;
     /**
      * @brief Add an arc.
      *

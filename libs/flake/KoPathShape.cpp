@@ -50,6 +50,12 @@ KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
 {
 }
 
+QRectF KoPathShapePrivate::handleRect(const QPointF &p, qreal radius) const
+{
+    return QRectF(p.x() - radius, p.y() - radius, 2*radius, 2*radius);
+}
+
+/////////////////////////
 KoPathShape::KoPathShape()
     :KoShape(*(new KoPathShapePrivate(this)))
 {
@@ -283,22 +289,18 @@ void KoPathShape::debugPath()
 
 void KoPathShape::paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius)
 {
+    Q_D(KoPathShape);
     applyConversion(painter, converter);
 
     KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
 
-    QRectF handle = converter.viewToDocument(handleRect(QPoint(0, 0), handleRadius));
+    QRectF handle = converter.viewToDocument(d->handleRect(QPoint(0, 0), handleRadius));
 
     for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it)
             (*it)->paint(painter, handleRadius, KoPathPoint::Node);
     }
-}
-
-QRectF KoPathShape::handleRect(const QPointF &p, qreal radius) const
-{
-    return QRectF(p.x() - radius, p.y() - radius, 2*radius, 2*radius);
 }
 
 QPainterPath KoPathShape::outline() const

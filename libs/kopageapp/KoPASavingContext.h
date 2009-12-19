@@ -21,6 +21,7 @@
 #define KOPASAVINGCONTEXT_H
 
 #include <QMap>
+#include <QSet>
 #include <QString>
 
 #include <KoShapeSavingContext.h>

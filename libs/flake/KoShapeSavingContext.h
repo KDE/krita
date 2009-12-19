@@ -24,11 +24,8 @@
 
 #include "flake_export.h"
 
-#include <QFlags>
-#include <QMap>
-#include <QSet>
-#include <QString>
-#include <QPixmap>
+#include <QImage>
+#include <QMatrix>
 
 class KoShape;
 class KoXmlWriter;
@@ -39,6 +36,7 @@ class KoImageData;
 class KoShapeLayer;
 class KoStore;
 class KoSharedSavingData;
+class KoShapeSavingContextPrivate;
 
 /**
  * The set of data for the ODF file format used during saving of a shape.
@@ -271,21 +269,7 @@ public:
     QMatrix shapeOffset(const KoShape *shape) const;
 
 private:
-    KoXmlWriter *m_xmlWriter;
-    KoShapeSavingOptions m_savingOptions;
-    QMap<const KoShape *, QString> m_drawIds;
-    QList<const KoShapeLayer*> m_layers;
-    QSet<KoDataCenter *> m_dataCenter;
-    int m_drawId;
-    QMap<QString, KoSharedSavingData*> m_sharedData;
-    QMap<qint64, QString> m_imageNames;
-    int m_imageId;
-    QMap<QString, QImage> m_images;
-    QHash<const KoShape *, QMatrix> m_shapeOffsets;
-
-    KoGenStyles& m_mainStyles;
-    KoEmbeddedDocumentSaver& m_embeddedSaver;
-    SavingMode m_savingMode;
+    KoShapeSavingContextPrivate *d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoShapeSavingContext::KoShapeSavingOptions)

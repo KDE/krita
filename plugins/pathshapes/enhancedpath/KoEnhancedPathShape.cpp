@@ -103,20 +103,19 @@ QPointF KoEnhancedPathShape::normalize()
 
 void KoEnhancedPathShape::evaluateHandles()
 {
-    if (handles().size() != m_enhancedHandles.size())
+    if (handleCount() != m_enhancedHandles.size())
     {
         QList<QPointF> handles;
-        uint handleCount = m_enhancedHandles.size();
-        for( uint i = 0; i < handleCount; ++i )
+        const int handleCount = m_enhancedHandles.count();
+        for (int i = 0; i < handleCount; ++i)
             handles.append( viewboxToShape( m_enhancedHandles[i]->position() ) );
         setHandles(handles);
     }
-    else
-    {
-        uint handleCount = m_enhancedHandles.size();
-        QList<QPointF> handles = this->handles();
-        for( uint i = 0; i < handleCount; ++i )
-            handles[i] = viewboxToShape(m_enhancedHandles[i]->position());
+    else {
+        const int handleCount = m_enhancedHandles.count();
+        QList<QPointF> handles;
+        for (int i = 0; i < handleCount; ++i)
+            handles.append(viewboxToShape(m_enhancedHandles[i]->position()));
         setHandles(handles);
     }
 }

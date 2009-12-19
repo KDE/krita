@@ -22,15 +22,12 @@
 #ifndef KIS_TOOL_SELECT_RECTANGULAR_H_
 #define KIS_TOOL_SELECT_RECTANGULAR_H_
 
-#include "kis_tool.h"
-#include "kis_selection.h"
+#include "kis_tool_select_base.h"
 #include "KoToolFactory.h"
-#include "flake/kis_node_shape.h"
 
-class KisSelectionOptions;
 class KoCanvasBase;
 
-class KisToolSelectRectangular : public KisTool
+class KisToolSelectRectangular : public KisToolSelectBase
 {
 
     Q_OBJECT
@@ -40,18 +37,12 @@ public:
     virtual ~KisToolSelectRectangular();
 
     virtual QWidget * createOptionWidget();
-    virtual QWidget* optionWidget();
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
-
-public slots:
-    virtual void slotSetAction(int);
-    virtual void slotSetSelectionMode(int);
-    virtual void activate(bool);
 
 private:
     void clearSelection();
@@ -61,9 +52,6 @@ private:
     QPointF m_startPos;
     QPointF m_endPos;
     bool m_selecting;
-    KisSelectionOptions * m_optWidget;
-    selectionAction m_selectAction;
-    selectionMode m_selectionMode;
 
 };
 

@@ -24,14 +24,9 @@
 #define KIS_TOOL_SELECT_POLYGONAL_H_
 
 #include "KoToolFactory.h"
+#include "kis_tool_select_base.h"
 
-#include "flake/kis_node_shape.h"
-#include "kis_selection.h"
-#include "kis_tool.h"
-
-class KisSelectionOptions;
-
-class KisToolSelectPolygonal : public KisTool
+class KisToolSelectPolygonal : public KisToolSelectBase
 {
 
     Q_OBJECT
@@ -46,13 +41,10 @@ public:
     virtual void keyPressEvent(QKeyEvent *e);
 
     QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
 public slots:
-    virtual void slotSetAction(int);
-    virtual void slotSetSelectionMode(int);
     virtual void activate(bool);
     void deactivate();
 
@@ -67,9 +59,6 @@ protected:
     bool m_dragging;
 private:
     vQPointF m_points;
-    KisSelectionOptions * m_optWidget;
-    selectionAction m_selectAction;
-    selectionMode m_selectionMode;
 };
 
 

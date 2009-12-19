@@ -51,29 +51,16 @@
 
 
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase * canvas)
-        : KisTool(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
+        : KisToolSelectBase(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
 {
     m_selecting = false;
     m_centerPos = QPointF(0, 0);
     m_startPos = QPointF(0, 0);
     m_endPos = QPointF(0, 0);
-    m_optWidget = 0;
-    m_selectAction = SELECTION_REPLACE;
-    m_selectionMode = PIXEL_SELECTION;
 }
 
 KisToolSelectElliptical::~KisToolSelectElliptical()
 {
-}
-
-void KisToolSelectElliptical::activate(bool tmp)
-{
-    KisTool::activate(tmp);
-
-    if (!m_optWidget)
-        return;
-
-    m_optWidget->slotActivated();
 }
 
 void KisToolSelectElliptical::paint(QPainter& gc, const KoViewConverter &converter)
@@ -201,41 +188,10 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
     }
 }
 
-void KisToolSelectElliptical::slotSetAction(int action)
-{
-    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
-        m_selectAction = (selectionAction)action;
-}
-
-void KisToolSelectElliptical::slotSetSelectionMode(int mode)
-{
-    m_selectionMode = (selectionMode)mode;
-}
-
 QWidget* KisToolSelectElliptical::createOptionWidget()
 {
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
-    Q_ASSERT(canvas);
-    m_optWidget = new KisSelectionOptions(canvas);
-    Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setObjectName(toolId() + " option widget");
-
+    KisToolSelectBase::createOptionWidget();
     m_optWidget->setWindowTitle(i18n("Elliptical Selection"));
-
-    connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
-    connect(m_optWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
-
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
-    Q_ASSERT(l);
-    if (l) {
-        l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
-    }
-    m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
-    return m_optWidget;
-}
-
-QWidget* KisToolSelectElliptical::optionWidget()
-{
     return m_optWidget;
 }
 

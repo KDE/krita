@@ -24,16 +24,10 @@
 #define KIS_TOOL_SELECT_OUTLINE_H_
 
 #include <QPoint>
-
 #include <KoToolFactory.h>
+#include "kis_tool_select_base.h"
 
-#include "kis_tool.h"
-#include "kis_selection.h"
-#include "flake/kis_node_shape.h"
-
-class KisSelectionOptions;
-
-class KisToolSelectOutline : public KisTool
+class KisToolSelectOutline : public KisToolSelectBase
 {
 
     Q_OBJECT
@@ -48,12 +42,8 @@ public:
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
 public slots:
-    virtual void slotSetAction(int);
-    virtual void slotSetSelectionMode(int);
-    virtual void activate(bool);
     virtual void deactivate();
 
 private:
@@ -61,9 +51,6 @@ private:
 
     bool m_dragging;
     vQPointF m_points;
-    KisSelectionOptions * m_optWidget;
-    selectionAction m_selectAction;
-    selectionMode m_selectionMode;
 };
 
 

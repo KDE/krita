@@ -2,6 +2,7 @@
 
 set(kritaselectiontools_PART_SRCS
     selection_tools.cc
+    kis_tool_select_base.cpp
     kis_tool_select_rectangular.cc
     kis_tool_select_polygonal.cc
     kis_tool_select_elliptical.cc

@@ -24,15 +24,11 @@
 #define __KIS_TOOL_SELECT_ELLIPTICAL_H__
 
 #include <QPoint>
-
-#include "kis_tool.h"
-#include "kis_selection.h"
 #include "KoToolFactory.h"
-#include "flake/kis_node_shape.h"
+#include "kis_tool_select_base.h"
 
-class KisSelectionOptions;
 
-class KisToolSelectElliptical : public KisTool
+class KisToolSelectElliptical : public KisToolSelectBase
 {
 
     Q_OBJECT
@@ -42,7 +38,6 @@ public:
     virtual ~KisToolSelectElliptical();
 
     virtual QWidget * createOptionWidget();
-    virtual QWidget* optionWidget();
 //     virtual enumToolType toolType() { return TOOL_SELECT; }
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
@@ -50,12 +45,6 @@ public:
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
-
-public slots:
-    virtual void slotSetAction(int);
-    virtual void slotSetSelectionMode(int);
-    virtual void activate(bool);
-
 
 private:
     void clearSelection();
@@ -65,9 +54,6 @@ private:
     QPointF m_startPos;
     QPointF m_endPos;
     bool m_selecting;
-    KisSelectionOptions * m_optWidget;
-    selectionAction m_selectAction;
-    selectionMode m_selectionMode;
 
 };
 

@@ -49,28 +49,19 @@
 #include "kis_selection_tool_helper.h"
 
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
-        : KisTool(canvas, KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6))
+        : KisToolSelectBase(canvas, KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6))
 {
     setObjectName("tool_select_polygonal");
     m_dragging = false;
-    m_optWidget = 0;
-    m_selectAction = SELECTION_REPLACE;
-    m_selectionMode = PIXEL_SELECTION;
 }
 
 KisToolSelectPolygonal::~KisToolSelectPolygonal()
 {
 }
 
-void KisToolSelectPolygonal::activate(bool tmp)
-{
+void KisToolSelectPolygonal::activate(bool tmp) {
     m_points.clear();
-    KisTool::activate(tmp);
-
-    if (!m_optWidget)
-        return;
-
-    m_optWidget->slotActivated();
+    KisToolSelectBase::activate(tmp);
 }
 
 void KisToolSelectPolygonal::deactivate()
@@ -136,6 +127,7 @@ void KisToolSelectPolygonal::mouseDoubleClickEvent(KoPointerEvent *)
 
 void KisToolSelectPolygonal::keyPressEvent(QKeyEvent *e)
 {
+    //Escape is now bound to show/hide dockers. so we have to find an alternative key or remove the method.
     if (e->key() == Qt::Key_Escape) {
         deactivate();
     }
@@ -241,40 +233,10 @@ QRectF KisToolSelectPolygonal::dragBoundingRect()
 
 QWidget* KisToolSelectPolygonal::createOptionWidget()
 {
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
-    Q_ASSERT(canvas);
-    m_optWidget = new KisSelectionOptions(canvas);
-    m_optWidget->setObjectName(toolId() + " option widget");
-
-    Q_CHECK_PTR(m_optWidget);
+    KisToolSelectBase::createOptionWidget();
     m_optWidget->setWindowTitle(i18n("Polygonal Selection"));
-
-    connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
-    connect(m_optWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
-
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
-    Q_ASSERT(l);
-    if (l) {
-        l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
-    }
-    m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
     return m_optWidget;
 }
 
-QWidget* KisToolSelectPolygonal::optionWidget()
-{
-    return m_optWidget;
-}
-
-void KisToolSelectPolygonal::slotSetAction(int action)
-{
-    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
-        m_selectAction = (selectionAction)action;
-}
-
-void KisToolSelectPolygonal::slotSetSelectionMode(int mode)
-{
-    m_selectionMode = (selectionMode)mode;
-}
 
 #include "kis_tool_select_polygonal.moc"

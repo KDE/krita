@@ -49,27 +49,15 @@
 #include "kis_selection_tool_helper.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
-        : KisTool(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
+        : KisToolSelectBase(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
 {
     setObjectName("tool_select_contiguous");
-    m_optWidget = 0;
     m_fuzziness = 20;
     m_sampleMerged = false;
-    m_selectAction = SELECTION_REPLACE;
 }
 
 KisToolSelectContiguous::~KisToolSelectContiguous()
 {
-}
-
-void KisToolSelectContiguous::activate(bool tmp)
-{
-    KisTool::activate(tmp);
-
-    if (!m_optWidget)
-        return;
-
-    m_optWidget->slotActivated();
 }
 
 void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
@@ -120,27 +108,9 @@ void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
     m_fuzziness = fuzziness;
 }
 
-void KisToolSelectContiguous::slotSetAction(int action)
-{
-    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
-        m_selectAction = (selectionAction)action;
-// XXX: Fix cursors when then are done.
-//     switch(m_selectAction) {
-//         case SELECTION_ADD:
-//             m_subject->setCanvasCursor(KisCursor::pickerPlusCursor());
-//             break;
-//         case SELECTION_SUBTRACT:
-//             m_subject->setCanvasCursor(KisCursor::pickerMinusCursor());
-//     };
-}
-
 QWidget* KisToolSelectContiguous::createOptionWidget()
 {
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
-    Q_ASSERT(canvas);
-    m_optWidget = new KisSelectionOptions(canvas);
-    Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setObjectName(toolId() + " option widget");
+    KisToolSelectBase::createOptionWidget();
     m_optWidget->setWindowTitle(i18n("Contiguous Area Selection"));
     m_optWidget->disableAntiAliasSelectionOption();
     m_optWidget->disableSelectionModeOption();
@@ -149,8 +119,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     Q_ASSERT(l);
     if (l) {
         l->setSpacing(6);
-
-        connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
         QHBoxLayout * hbox = new QHBoxLayout();
         Q_CHECK_PTR(hbox);
@@ -177,11 +145,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
     }
     m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
-    return m_optWidget;
-}
-
-QWidget* KisToolSelectContiguous::optionWidget()
-{
     return m_optWidget;
 }
 

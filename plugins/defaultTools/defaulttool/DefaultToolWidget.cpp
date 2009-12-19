@@ -191,6 +191,7 @@ void DefaultToolWidget::sizeHasChanged()
 
         foreach( KoShape* shape, selectedShapes )
         {
+            shape->update();
             QSizeF oldSize = shape->size();
             oldState << shape->transformation();
             QMatrix shapeMatrix = shape->absoluteTransformation(0);

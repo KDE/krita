@@ -49,6 +49,7 @@ KoConnectionShapePrivate::KoConnectionShapePrivate(KoConnectionShape *q)
 
 QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
 {
+    Q_Q(const KoConnectionShape);
     QPointF direction;
     if (handleConnected(handleId)) {
         QMatrix absoluteMatrix = q->absoluteTransformation(0);

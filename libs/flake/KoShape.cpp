@@ -76,7 +76,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
     appData(0),
     fill(0),
     border(0),
-    q(shape),
+    q_ptr(shape),
     shadow(0),
     filterEffectStack(0),
     transparency(0.0),
@@ -97,6 +97,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
 
 KoShapePrivate::~KoShapePrivate()
 {
+    Q_Q(KoShape);
     if (parent)
         parent->removeChild(q);
     foreach(KoShapeManager *manager, shapeManagers) {
@@ -118,6 +119,7 @@ KoShapePrivate::~KoShapePrivate()
 
 void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
 {
+    Q_Q(KoShape);
     if (parent)
         parent->model()->childChanged(q, type);
     q->shapeChanged(type);
@@ -127,6 +129,7 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
 
 void KoShapePrivate::updateBorder()
 {
+    Q_Q(KoShape);
     if (border == 0)
         return;
     KoInsets insets;

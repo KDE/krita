@@ -27,8 +27,12 @@ public:
     KoPathShapePrivate(KoPathShape *q);
 
     QRectF handleRect(const QPointF &p, qreal radius) const;
+    /// Applies the viewbox transformation defined in the given element
+    void applyViewboxTransformation(const KoXmlElement &element);
 
     Qt::FillRule fillRule;
+
+    Q_DECLARE_PUBLIC(KoPathShape)
 };
 
 #endif

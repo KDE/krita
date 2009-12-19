@@ -53,6 +53,8 @@ public:
     int connectionPointIndex2;
     KoConnectionShape::Type connectionType;
     bool forceUpdate;
+
+    Q_DECLARE_PUBLIC(KoConnectionShape)
 };
 
 #endif

@@ -489,8 +489,6 @@ protected:
 
     /// Returns the viewbox from the given xml element.
     QRectF loadOdfViewbox(const KoXmlElement &element) const;
-    /// Applies the viewbox transformation defined in the given element
-    void applyViewboxTransformation(const KoXmlElement &element);
 
     /**
      * @brief Saves the node types

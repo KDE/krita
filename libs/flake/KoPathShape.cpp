@@ -55,6 +55,34 @@ QRectF KoPathShapePrivate::handleRect(const QPointF &p, qreal radius) const
     return QRectF(p.x() - radius, p.y() - radius, 2*radius, 2*radius);
 }
 
+void KoPathShapePrivate::applyViewboxTransformation(const KoXmlElement &element)
+{
+    Q_Q(KoPathShape);
+    // apply viewbox transformation
+    QRectF viewBox = q->loadOdfViewbox(element);
+    if (! viewBox.isEmpty()) {
+        // load the desired size
+        QSizeF size;
+        size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
+        size.setHeight(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "height", QString())));
+
+        // load the desired position
+        QPointF pos;
+        pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
+        pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
+
+        // create matrix to transform original path data into desired size and position
+        QMatrix viewMatrix;
+        viewMatrix.translate(-viewBox.left(), -viewBox.top());
+        viewMatrix.scale(size.width() / viewBox.width(), size.height() / viewBox.height());
+        viewMatrix.translate(pos.x(), pos.y());
+
+        // transform the path data
+        q->map(viewMatrix);
+    }
+}
+
+
 /////////////////////////
 KoPathShape::KoPathShape()
     :KoShape(*(new KoPathShapePrivate(this)))
@@ -85,6 +113,7 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
 
 bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
+    Q_D(KoPathShape);
     loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
 
     // first clear the path data from the default path
@@ -125,7 +154,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
         loadNodeTypes(element);
     }
 
-    applyViewboxTransformation(element);
+    d->applyViewboxTransformation(element);
     QPointF pos = normalize();
     setTransformation(QMatrix());
 
@@ -187,32 +216,6 @@ QRectF KoPathShape::loadOdfViewbox(const KoXmlElement & element) const
     }
 
     return viewbox;
-}
-
-void KoPathShape::applyViewboxTransformation(const KoXmlElement & element)
-{
-    // apply viewbox transformation
-    QRectF viewBox = loadOdfViewbox(element);
-    if (! viewBox.isEmpty()) {
-        // load the desired size
-        QSizeF size;
-        size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
-        size.setHeight(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "height", QString())));
-
-        // load the desired position
-        QPointF pos;
-        pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
-        pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
-
-        // create matrix to transform original path data into desired size and position
-        QMatrix viewMatrix;
-        viewMatrix.translate(-viewBox.left(), -viewBox.top());
-        viewMatrix.scale(size.width() / viewBox.width(), size.height() / viewBox.height());
-        viewMatrix.translate(pos.x(), pos.y());
-
-        // transform the path data
-        map(viewMatrix);
-    }
 }
 
 void KoPathShape::clear()

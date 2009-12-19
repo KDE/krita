@@ -159,9 +159,9 @@ public:
      * should use this value to determine if the mouse is near enough
      * @param grabSensitivity the grab sensitivity in pixels
      */
-    void setGrabSensitivity(uint grabSensitivity);
+    void setGrabSensitivity(int grabSensitivity);
     /// Returns the actual grab sensitivity
-    uint grabSensitivity();
+    int grabSensitivity();
 
     /// Sets the border resource
     void setActiveBorder(const KoLineBorder &border);

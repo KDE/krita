@@ -144,7 +144,7 @@ int KoCanvasResourceProvider::handleRadius()
     return 3; // default value.
 }
 
-void KoCanvasResourceProvider::setGrabSensitivity(uint grabSensitivity)
+void KoCanvasResourceProvider::setGrabSensitivity(int grabSensitivity)
 {
     // do not allow arbitrary small handles
     if (grabSensitivity < 1)
@@ -152,9 +152,9 @@ void KoCanvasResourceProvider::setGrabSensitivity(uint grabSensitivity)
     setResource(KoCanvasResource::GrabSensitivity, QVariant(grabSensitivity));
 }
 
-uint KoCanvasResourceProvider::grabSensitivity()
+int KoCanvasResourceProvider::grabSensitivity()
 {
-    return resource(KoCanvasResource::GrabSensitivity).toUInt();
+    return resource(KoCanvasResource::GrabSensitivity).toInt();
 }
 
 void KoCanvasResourceProvider::setActiveBorder( const KoLineBorder &border )

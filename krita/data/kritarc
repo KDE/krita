@@ -141,5 +141,5 @@ Collapsed=false
 Collapsed=false
 
 [KoShapeCollection]
-QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,KoEllipseShape,KoRectangleShape
+QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,RectangleShape
 

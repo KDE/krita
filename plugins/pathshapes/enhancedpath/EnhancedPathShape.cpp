@@ -102,19 +102,11 @@ QPointF EnhancedPathShape::normalize()
 
 void EnhancedPathShape::evaluateHandles()
 {
-    if (handleCount() != m_enhancedHandles.size()) {
-        QList<QPointF> handles;
-        const int handleCount = m_enhancedHandles.count();
-        for (int i = 0; i < handleCount; ++i)
-            handles.append(viewboxToShape(m_enhancedHandles[i]->position()));
-        setHandles(handles);
-    } else {
-        const int handleCount = m_enhancedHandles.count();
-        QList<QPointF> handles;
-        for (int i = 0; i < handleCount; ++i)
-            handles.append(viewboxToShape(m_enhancedHandles[i]->position()));
-        setHandles(handles);
-    }
+    const int handleCount = m_enhancedHandles.count();
+    QList<QPointF> handles;
+    for (int i = 0; i < handleCount; ++i)
+        handles.append(viewboxToShape(m_enhancedHandles[i]->position()));
+    setHandles(handles);
 }
 
 qreal EnhancedPathShape::evaluateReference(const QString &reference)

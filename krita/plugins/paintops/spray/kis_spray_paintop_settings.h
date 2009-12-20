@@ -25,6 +25,8 @@
 #include "kis_spray_paintop_settings_widget.h"
 
 #include <kis_pressure_rotation_option.h>
+#include <kis_pressure_opacity_option.h>
+#include <kis_pressure_size_option.h>
 
 class QWidget;
 class QDomElement;
@@ -69,6 +71,8 @@ public:
 
     // rotation option
     KisPressureRotationOption * rotationOption() const;
+    KisPressureOpacityOption * opacityOption() const;
+    KisPressureSizeOption * sizeOption() const;
     
     // color options
     bool useRandomOpacity() const;

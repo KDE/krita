@@ -91,7 +91,9 @@ qreal SprayBrush::rotationAngle()
 
 
 
-void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info,qreal rotation, const KoColor &color, const KoColor &bgColor)
+void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  
+                       const KisPaintInformation& info,qreal rotation, qreal scale,
+                       const KoColor &color, const KoColor &bgColor)
 {
     // initializing painter
     
@@ -116,6 +118,10 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const Kis
     
     m_inkColor = color;
 
+    // apply size sensor 
+    m_radius *= scale;
+    if (m_radius < 1.0) return;
+    
     // jitter radius, recovered at the end of dab
     if ( m_settings->jitterSize() ) {
         m_radius = m_radius * drand48();

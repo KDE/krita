@@ -288,3 +288,15 @@ KisPressureRotationOption* KisSprayPaintOpSettings::rotationOption() const
 {
     return m_options->m_rotationOption;
 }
+
+
+KisPressureOpacityOption* KisSprayPaintOpSettings::opacityOption() const
+{
+    return m_options->m_opacityOption;
+}
+
+
+KisPressureSizeOption* KisSprayPaintOpSettings::sizeOption() const
+{
+    return m_options->m_sizeOption;
+}

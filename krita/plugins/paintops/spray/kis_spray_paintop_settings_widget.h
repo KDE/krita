@@ -21,6 +21,8 @@
 
 #include <kis_paintop_options_widget.h>
 
+class KisPressureOpacityOption;
+class KisPressureSizeOption;
 class KisPressureRotationOption;
 class KisPaintActionTypeOption;
 class KisSprayOpOption;
@@ -43,6 +45,8 @@ public:
     KisSprayShapeOption* m_sprayShapeOption;
     KisColorOption* m_ColorOption;
     KisPressureRotationOption * m_rotationOption;
+    KisPressureSizeOption * m_sizeOption;
+    KisPressureOpacityOption * m_opacityOption;
 };
 
 #endif

@@ -41,7 +41,7 @@ public:
     SprayBrush();
     ~SprayBrush();
 
-    void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, qreal rotation, const KoColor &color, const KoColor &bgColor);
+    void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, qreal rotation, qreal scale, const KoColor &color, const KoColor &bgColor);
 
     /// Paints Wu Particle
     void paintParticle(KisRandomAccessor &writeAccessor, const KoColor &color, qreal rx, qreal ry);

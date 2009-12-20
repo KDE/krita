@@ -29,6 +29,8 @@
 #include <kis_paintop.h>
 
 #include <kis_pressure_rotation_option.h>
+#include <kis_pressure_opacity_option.h>
+#include <kis_pressure_size_option.h>
 
 #ifdef BENCHMARK
 #include <QTime>
@@ -44,6 +46,8 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     Q_ASSERT(painter);
 
     settings->rotationOption()->sensor()->reset();
+    settings->opacityOption()->sensor()->reset();
+    settings->sizeOption()->sensor()->reset();
     
     m_sprayBrush.setDiameter(settings->diameter());
     m_sprayBrush.setJitterShapeSize(settings->jitterShapeSize());
@@ -113,16 +117,20 @@ void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     }
 
     double rotation = m_settings->rotationOption()->apply(info);
-
+    quint8 origOpacity = m_settings->opacityOption()->apply(painter(), info);
+    double scale = KisPaintOp::scaleForPressure(m_settings->sizeOption()->apply(info));
+    
     m_sprayBrush.paint( m_dab,
                         m_settings->node()->paintDevice(), 
                         info, 
-                        rotation, 
+                        rotation,
+                        scale,
                         painter()->paintColor(), 
                         painter()->backgroundColor());
 
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
+    painter()->setOpacity(origOpacity);
 
 #ifdef BENCHMARK
     int msec = time.elapsed();

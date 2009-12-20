@@ -53,7 +53,7 @@ private:
     KisPaintDeviceSP m_dab;
     SprayBrush m_sprayBrush;
     double m_xSpacing, m_ySpacing, m_spacing;
-
+    
 #ifdef BENCHMARK
     int m_total;
     int m_count;

@@ -10,9 +10,6 @@
     <height>173</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form1</string>
-  </property>
   <layout class="QVBoxLayout">
    <item>
     <widget class="Q3ButtonGroup" name="buttonGroup1">

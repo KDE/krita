@@ -51,11 +51,6 @@ public:
     KisDynamicSensorDrawingAngle();
     virtual ~KisDynamicSensorDrawingAngle() { }
     virtual double parameter(const KisPaintInformation& info);
-private:
-    inline double modulo(double x, double r) {
-        return x - floor(x / r)*r;
-    }
-    double m_angle;
 };
 
 class KisDynamicSensorPressure : public KisDynamicSensor

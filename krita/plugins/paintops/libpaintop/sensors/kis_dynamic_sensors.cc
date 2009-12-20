@@ -26,22 +26,15 @@ KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
 
 }
 
-KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle() : KisDynamicSensor(DrawingAngleId), m_angle(0.0)
+KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle() : KisDynamicSensor(DrawingAngleId)
 {
 
 }
 
 double KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
 {
-    double angle = atan2(info.movement().y() , info.movement().x());
-    double v = modulo(m_angle - angle + M_PI, 2.0 * M_PI) - M_PI;
-    if (v < 0) {
-        m_angle += 0.1;
-    } else if (v > 0) {
-        m_angle -= 0.1;
-    }
-    m_angle = modulo(m_angle, 2.0 * M_PI);
-    return m_angle / (2.0 * M_PI);
+    /* so that we are in 0.0..1.0 */
+    return info.angle() / (2.0 * M_PI);
 }
 
 KisDynamicSensorPressure::KisDynamicSensorPressure() : KisDynamicSensor(PressureId)

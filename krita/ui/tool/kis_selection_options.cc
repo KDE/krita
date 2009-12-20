@@ -24,7 +24,6 @@
 #include <QVBoxLayout>
 #include <QLayout>
 
-
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_image.h"
@@ -66,9 +65,10 @@ int KisSelectionOptions::action()
     return m_action->checkedId();
 }
 
-void KisSelectionOptions::slotActivated()
-{
-    // XXX_SELECTION
+void KisSelectionOptions::setAction(int action) {
+    QAbstractButton* button = m_action->button(action);
+    Q_ASSERT(button);
+    if(button) button->setChecked(true);
 }
 
 bool KisSelectionOptions::antiAliasSelection()

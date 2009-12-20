@@ -83,7 +83,7 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="0" column="0">
+      <item row="1" column="0">
        <widget class="QLabel" name="lblAction">
         <property name="text">
          <string>Action:</string>
@@ -93,10 +93,13 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QPushButton" name="subtract">
+      <item row="2" column="1">
+       <widget class="QPushButton" name="add">
+        <property name="toolTip">
+         <string>Shortcut A</string>
+        </property>
         <property name="text">
-         <string>Subtract</string>
+         <string>Add</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -108,6 +111,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QPushButton" name="replace">
+        <property name="toolTip">
+         <string>Shortcut R</string>
+        </property>
         <property name="text">
          <string>Replace</string>
         </property>
@@ -124,6 +130,9 @@
       </item>
       <item row="1" column="2">
        <widget class="QPushButton" name="intersect">
+        <property name="toolTip">
+         <string>Shortcut T</string>
+        </property>
         <property name="text">
          <string>Intersect</string>
         </property>
@@ -135,10 +144,13 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QPushButton" name="add">
+      <item row="2" column="2">
+       <widget class="QPushButton" name="subtract">
+        <property name="toolTip">
+         <string>Shortcut S</string>
+        </property>
         <property name="text">
-         <string>Add</string>
+         <string>Subtract</string>
         </property>
         <property name="checkable">
          <bool>true</bool>

@@ -153,7 +153,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
 
     KIntNumInput * input = new KIntNumInput(m_optWidget);
     input->setObjectName("fuzziness");
-    input->setRange(0, 200, 10, true);
+    input->setRange(0, 200, 10);
     input->setValue(m_fuzziness);
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));

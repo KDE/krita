@@ -54,13 +54,11 @@ public:
     bool antiAliasSelection();
     void disableAntiAliasSelectionOption();
     void disableSelectionModeOption();
+    void setAction(int);
 
 signals:
     void actionChanged(int);
     void modeChanged(int);
-
-public slots:
-    void slotActivated();
 
 private:
     WdgSelectionOptions * m_page;

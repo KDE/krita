@@ -38,9 +38,10 @@ public:
 public slots:
     virtual void slotSetAction(int);
     virtual void slotSetSelectionMode(int);
-    virtual void activate(bool);
 
 protected:
+    virtual void keyPressEvent(QKeyEvent *event);
+
     KisSelectionOptions* m_optWidget;
     selectionAction m_selectAction;
     selectionMode m_selectionMode;

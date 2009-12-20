@@ -128,7 +128,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         KIntNumInput * input = new KIntNumInput(m_optWidget);
         Q_CHECK_PTR(input);
         input->setObjectName("fuzziness");
-        input->setRange(0, 200, 10, true);
+        input->setRange(0, 200, 10);
         input->setValue(20);
         hbox->addWidget(input);
         connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));

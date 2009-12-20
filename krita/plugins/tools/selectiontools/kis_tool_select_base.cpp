@@ -21,6 +21,7 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_selection_options.h"
 #include <QVBoxLayout>
+#include <QKeyEvent>
 
 KisToolSelectBase::KisToolSelectBase(KoCanvasBase *canvas, const QCursor& cursor) : KisTool(canvas, cursor)
 {
@@ -44,6 +45,7 @@ QWidget* KisToolSelectBase::createOptionWidget()
 
     m_optWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_optWidget->adjustSize();
+
     return m_optWidget;
 }
 
@@ -54,8 +56,10 @@ QWidget* KisToolSelectBase::optionWidget()
 
 void KisToolSelectBase::slotSetAction(int action)
 {
-    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
+    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT) {
         m_selectAction = (selectionAction)action;
+        m_optWidget->setAction(action);
+    }
 }
 
 void KisToolSelectBase::slotSetSelectionMode(int mode)
@@ -63,16 +67,28 @@ void KisToolSelectBase::slotSetSelectionMode(int mode)
     m_selectionMode = (selectionMode)mode;
 }
 
-void KisToolSelectBase::activate(bool tmp)
+void KisToolSelectBase::keyPressEvent(QKeyEvent *event)
 {
-    KisTool::activate(tmp);
-
-    if (!m_optWidget)
+    switch(event->key()) {
+    case Qt::Key_A:
+        slotSetAction(SELECTION_ADD);
+        break;
+    case Qt::Key_S:
+        slotSetAction(SELECTION_SUBTRACT);
+        break;
+    case Qt::Key_R:
+        slotSetAction(SELECTION_REPLACE);
+        break;
+    case Qt::Key_T:
+        slotSetAction(SELECTION_INTERSECT);
+        break;
+    default:
+        KisTool::keyPressEvent(event);
         return;
+    }
+    event->accept();
 
-    m_optWidget->slotActivated();
 }
-
 
 #include "kis_tool_select_base.moc"
 

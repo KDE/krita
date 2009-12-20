@@ -129,19 +129,9 @@ bool KisSprayPaintOpSettings::jitterShapeSize() const
     return m_options->m_sprayShapeOption->jitterShapeSize();
 }
 
-qreal KisSprayPaintOpSettings::heightPerc() const
-{
-    return m_options->m_sprayShapeOption->heightPerc();
-}
-
 bool KisSprayPaintOpSettings::proportional() const
 {
     return m_options->m_sprayShapeOption->proportional();
-}
-
-qreal KisSprayPaintOpSettings::widthPerc() const
-{
-    return m_options->m_sprayShapeOption->widthPerc();
 }
 
 bool KisSprayPaintOpSettings::useDensity() const

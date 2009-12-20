@@ -40,6 +40,9 @@ KisSprayShapeOption::KisSprayShapeOption()
         : KisPaintOpOption(i18n("Particle type"), false)
 {
     m_checkable = false;
+    // save this to be able to restore it back
+    m_maxSize = 1000;
+    
     m_options = new KisShapeOptionsWidget();
     m_useAspect = m_options->btnAspect->isChecked();
     computeAspect();
@@ -53,6 +56,9 @@ KisSprayShapeOption::KisSprayShapeOption()
     connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SLOT(updateHeight(int)));
     connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SLOT(updateWidth(int)));
 
+    connect(m_options->proportionalBox, SIGNAL(clicked(bool)), SLOT(changeSizeUI(bool)));
+    
+    
     setConfigurationPage(m_options);
 }
 
@@ -63,8 +69,6 @@ void KisSprayShapeOption::setupBrushPreviewSignals()
     connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->jitterShape, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->heightPro, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->widthPro, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->gaussBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
 }
@@ -93,16 +97,6 @@ int KisSprayShapeOption::height() const
 bool KisSprayShapeOption::jitterShapeSize() const
 {
     return m_options->jitterShape->isChecked();
-}
-
-qreal KisSprayShapeOption::heightPerc() const
-{
-    return m_options->heightPro->value();
-}
-
-qreal KisSprayShapeOption::widthPerc() const
-{
-    return m_options->widthPro->value();
 }
 
 bool KisSprayShapeOption::proportional() const
@@ -241,4 +235,29 @@ void KisSprayShapeOption::computeAspect()
     qreal w = m_options->widthSpin->value();
     qreal h = m_options->heightSpin->value();
     m_aspect = w / h;
+}
+
+
+
+void KisSprayShapeOption::changeSizeUI(bool proportionalSize)
+{
+    // if proportionalSize is false, pixel size is used
+    if (!proportionalSize){
+        m_options->widthSlider->setMaximum( m_maxSize );
+        m_options->widthSpin->setMaximum( m_maxSize );
+        m_options->widthSpin->setSuffix("");
+        m_options->heightSlider->setMaximum( m_maxSize );
+        m_options->heightSpin->setMaximum( m_maxSize );
+        m_options->heightSpin->setSuffix("");
+    }else{
+        m_options->widthSlider->setMaximum( 100 );
+        m_options->widthSpin->setMaximum( 100 );
+        m_options->widthSpin->setSuffix("%");
+        m_options->heightSlider->setMaximum( 100 );
+        m_options->heightSpin->setMaximum( 100 );
+        m_options->heightSpin->setSuffix("%");
+    }
+    
+    m_options->widthSlider->setPageStep( m_options->widthSlider->maximum() / 10 );
+    m_options->heightSlider->setPageStep( m_options->widthSlider->maximum() / 10 );
 }

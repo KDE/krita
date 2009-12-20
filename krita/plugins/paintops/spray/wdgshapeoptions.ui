@@ -239,27 +239,7 @@
        <string>Proportional</string>
       </property>
       <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QDoubleSpinBox" name="widthPro">
-      <property name="decimals">
-       <number>1</number>
-      </property>
-      <property name="value">
-       <double>6.000000000000000</double>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QDoubleSpinBox" name="heightPro">
-      <property name="decimals">
-       <number>1</number>
-      </property>
-      <property name="value">
-       <double>6.000000000000000</double>
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -355,7 +335,7 @@
     <item row="0" column="2">
      <widget class="QSpinBox" name="widthSpin">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="minimum">
        <number>1</number>
@@ -428,7 +408,7 @@
     <item row="1" column="2">
      <widget class="QSpinBox" name="heightSpin">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="minimum">
        <number>1</number>
@@ -453,70 +433,6 @@
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>proportionalBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>widthSpin</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>47</x>
-     <y>132</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>409</x>
-     <y>66</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>proportionalBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>heightSpin</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>38</x>
-     <y>132</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>409</x>
-     <y>98</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>proportionalBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>widthPro</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>78</x>
-     <y>132</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>276</x>
-     <y>103</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>proportionalBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>heightPro</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>68</x>
-     <y>132</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>276</x>
-     <y>155</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>widthSlider</sender>
    <signal>valueChanged(int)</signal>

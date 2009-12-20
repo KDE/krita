@@ -86,8 +86,7 @@ public:
     // shape size
     int shape() const;
     bool proportional() const;
-    qreal widthPerc() const;
-    qreal heightPerc() const;
+
     bool jitterShapeSize() const;    
     int width() const;
     int height() const;

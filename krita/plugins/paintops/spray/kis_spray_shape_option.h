@@ -39,8 +39,6 @@ public:
     
     /// size settings
     bool proportional() const;
-    qreal widthPerc() const;
-    qreal heightPerc() const;
     int width() const;
     int height() const;
     
@@ -67,6 +65,7 @@ private:
     bool m_useAspect;
     qreal m_aspect;
     
+    int m_maxSize;
 private:
     void setupBrushPreviewSignals();
     void computeAspect();
@@ -78,6 +77,8 @@ private slots:
             void aspectToggled(bool toggled);
             void updateHeight(int value);
             void updateWidth(int value);
+            
+            void changeSizeUI(bool proportionalSize);
 };
 
 #endif // KIS_SPRAY_SHAPE_OPTION_H

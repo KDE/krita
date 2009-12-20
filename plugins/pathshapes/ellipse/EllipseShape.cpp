@@ -288,21 +288,21 @@ void EllipseShape::createPoints(int requiredPointCount)
 
 void EllipseShape::updateKindHandle()
 {
-   m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
-   if (m_startAngle > m_endAngle)
-       m_kindAngle += M_PI;
+    m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
+    if (m_startAngle > m_endAngle)
+        m_kindAngle += M_PI;
     QList<QPointF> handles = this->handles();
-   switch (m_type) {
-   case Arc:
-       handles[2] = m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y());
-       break;
-   case Pie:
-       handles[2] = m_center;
-       break;
-   case Chord:
-       handles[2] = (handles[0] + handles[1]) / 2.0;
-       break;
-   }
+    switch (m_type) {
+        case Arc:
+            handles[2] = m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y());
+            break;
+        case Pie:
+            handles[2] = m_center;
+            break;
+        case Chord:
+            handles[2] = (handles[0] + handles[1]) / 2.0;
+            break;
+    }
     setHandles(handles);
 }
 

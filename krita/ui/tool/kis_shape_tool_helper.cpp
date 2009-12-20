@@ -25,7 +25,7 @@
 KoShape* KisShapeToolHelper::createRectangleShape(const QRectF& rect)
 {
     KoShape* shape;
-    KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoRectangleShape");
+    KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("RectangleShape");
     if (rectFactory) {
         // it is ok to use a empty map here as the data is not needed.
         QMap<QString, KoDataCenter *> dataCenterMap;
@@ -50,7 +50,7 @@ KoShape* KisShapeToolHelper::createRectangleShape(const QRectF& rect)
 KoShape* KisShapeToolHelper::createEllipseShape(const QRectF& rect)
 {
     KoShape* shape;
-    KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoEllipseShape");
+    KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("EllipseShape");
     if (rectFactory) {
         // it is ok to use a empty map here as the data is not needed.
         QMap<QString, KoDataCenter *> dataCenterMap;

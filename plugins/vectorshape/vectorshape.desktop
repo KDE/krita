@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Static Vector Shape
+Name[en_GB]=Static Vector Shape
+Name[pt]=Forma de Vector Estático
+Name[uk]=Статична векторна форма
+Name[x-test]=xxStatic Vector Shapexx
+Name[zh_TW]=靜態向量元件
 X-KDE-ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=vectorshape

@@ -59,6 +59,13 @@ int KisSprayOpOption::diameter() const
     return m_options->diameterSpinBox->value();
 }
 
+
+qreal KisSprayOpOption::aspect() const
+{
+    return m_options->aspectSPBox->value();
+}
+
+
 bool KisSprayOpOption::jitterSize() const
 {
     return m_options->jitterSizeBox->isChecked();
@@ -87,6 +94,12 @@ qreal KisSprayOpOption::spacing() const
 qreal KisSprayOpOption::scale() const
 {
     return m_options->scaleSpin->value();
+}
+
+
+qreal KisSprayOpOption::rotation() const
+{
+    return m_options->rotationSPBox->value();
 }
 
 

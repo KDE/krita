@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>425</width>
-    <height>344</height>
+    <height>337</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,13 +22,13 @@
     <height>290</height>
    </size>
   </property>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>0</y>
-     <width>401</width>
-     <height>261</height>
+     <y>2</y>
+     <width>402</width>
+     <height>326</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -75,6 +75,105 @@
         </property>
         <property name="exponentRatio">
          <double>1.500000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <item>
+       <widget class="QLabel" name="aspectLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>56</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>aspect</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KDoubleNumInput" name="aspectSPBox">
+        <property name="value">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="minimum">
+         <double>0.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>2.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+        <property name="decimals">
+         <number>2</number>
+        </property>
+        <property name="sliderEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="exponentRatio">
+         <double>1.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_8">
+      <item>
+       <widget class="QLabel" name="rotationLbl">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>56</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>rotation</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KDoubleNumInput" name="rotationSPBox">
+        <property name="value">
+         <double>0.000000000000000</double>
+        </property>
+        <property name="minimum">
+         <double>0.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>360.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="suffix">
+         <string>°</string>
+        </property>
+        <property name="decimals">
+         <number>0</number>
+        </property>
+        <property name="sliderEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="exponentRatio">
+         <double>1.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -365,6 +464,22 @@
   <connection>
    <sender>densityChBox</sender>
    <signal>clicked(bool)</signal>
+   <receiver>particlesSpinBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>90</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>207</x>
+     <y>57</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>densityChBox</sender>
+   <signal>clicked(bool)</signal>
    <receiver>particlesLbl</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
@@ -391,22 +506,6 @@
     <hint type="destinationlabel">
      <x>56</x>
      <y>85</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>densityChBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>particlesSpinBox</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>90</x>
-     <y>118</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>207</x>
-     <y>57</y>
     </hint>
    </hints>
   </connection>

@@ -28,6 +28,7 @@
 #include <kis_types.h>
 #include <kis_paintop.h>
 
+#include <kis_pressure_rotation_option.h>
 
 #ifdef BENCHMARK
 #include <QTime>
@@ -42,6 +43,8 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     Q_ASSERT(settings);
     Q_ASSERT(painter);
 
+    settings->rotationOption()->sensor()->reset();
+    
     m_sprayBrush.setDiameter(settings->diameter());
     m_sprayBrush.setJitterShapeSize(settings->jitterShapeSize());
 
@@ -109,9 +112,12 @@ void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
         m_dab->clear();
     }
 
+    double rotation = m_settings->rotationOption()->apply(info);
+
     m_sprayBrush.paint( m_dab,
                         m_settings->node()->paintDevice(), 
                         info, 
+                        rotation, 
                         painter()->paintColor(), 
                         painter()->backgroundColor());
 

@@ -24,6 +24,8 @@
 
 #include "kis_spray_paintop_settings_widget.h"
 
+#include <kis_pressure_rotation_option.h>
+
 class QWidget;
 class QDomElement;
 class QDomDocument;
@@ -54,15 +56,20 @@ public:
 
     // brush settings
     int diameter() const;
+    qreal aspect() const;
     qreal coverage() const;
     qreal amount() const;
     qreal spacing() const;
     qreal scale() const;
+    qreal brushRotation() const;
     bool jitterMovement() const;
     bool jitterSize() const;    
     bool useDensity() const;
     int particleCount() const;
 
+    // rotation option
+    KisPressureRotationOption * rotationOption() const;
+    
     // color options
     bool useRandomOpacity() const;
     bool useRandomHSV() const;
@@ -95,6 +102,7 @@ public:
     bool followCursor() const;
     qreal followCursorWeigth() const;
 
+    
     
     // XXX: Hack!
     void setOptionsWidget(KisPaintOpSettingsWidget* widget) {

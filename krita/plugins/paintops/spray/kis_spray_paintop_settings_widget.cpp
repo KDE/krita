@@ -25,6 +25,8 @@
 #include <kis_paintop_options_widget.h>
 #include <kis_paint_action_type_option.h>
 
+#include <kis_pressure_rotation_option.h>
+
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
 {
@@ -32,10 +34,12 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     m_sprayShapeOption = new KisSprayShapeOption();
     m_ColorOption = new KisColorOption();
     m_paintActionTypeOption = new KisPaintActionTypeOption();
-
+    m_rotationOption = new KisPressureRotationOption();
+    
     addPaintOpOption(m_sprayOption);
     addPaintOpOption(m_sprayShapeOption);
     addPaintOpOption(m_ColorOption);
+    addPaintOpOption(m_rotationOption);
     addPaintOpOption(m_paintActionTypeOption);
 }
 
@@ -45,6 +49,7 @@ KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()
     delete m_sprayShapeOption;
     delete m_ColorOption;
     delete m_paintActionTypeOption;
+    delete m_rotationOption;
 }
 
 KisPropertiesConfiguration*  KisSprayPaintOpSettingsWidget::configuration() const

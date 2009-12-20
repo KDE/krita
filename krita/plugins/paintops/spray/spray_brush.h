@@ -41,7 +41,7 @@ public:
     SprayBrush();
     ~SprayBrush();
 
-    void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, const KoColor &color, const KoColor &bgColor);
+    void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, qreal rotation, const KoColor &color, const KoColor &bgColor);
 
     /// Paints Wu Particle
     void paintParticle(KisRandomAccessor &writeAccessor, const KoColor &color, qreal rx, qreal ry);
@@ -146,6 +146,17 @@ private:
     inline qreal objectHeight() {
         return m_height;
     }
+    // TODO: move this somewhere where I can reuse it 
+    /// convert radians to degrees
+    inline qreal rad2deg(qreal rad){
+        return rad * (180.0/M_PI);
+    }
+
+    /// convert degrees to radians
+    inline qreal deg2rad(qreal deg){
+        return deg * (M_PI/180.0);
+    }
+
 
 };
 

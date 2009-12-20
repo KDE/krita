@@ -64,6 +64,11 @@ int KisSprayPaintOpSettings::diameter() const
     return m_options->m_sprayOption->diameter();
 }
 
+qreal KisSprayPaintOpSettings::aspect() const
+{
+    return m_options->m_sprayOption->aspect();
+}
+
 qreal KisSprayPaintOpSettings::coverage() const
 {
     return m_options->m_sprayOption->coverage();
@@ -83,6 +88,13 @@ qreal KisSprayPaintOpSettings::scale() const
 {
     return m_options->m_sprayOption->scale();
 }
+
+
+qreal KisSprayPaintOpSettings::brushRotation() const
+{
+    return m_options->m_sprayOption->rotation();
+}
+
 
 bool KisSprayPaintOpSettings::jitterMovement() const
 {
@@ -174,18 +186,22 @@ bool KisSprayPaintOpSettings::useRandomHSV() const
 QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return QRectF();
-    qreal size = diameter() * scale();
-    size += 10;
-    return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
+    qreal width = diameter() * scale();
+    qreal height = diameter() * aspect() * scale();
+    width += 10;
+    height += 10;
+    QRectF rc = QRectF(0, 0, width, height);
+    return image->pixelToDocument(rc.translated(- QPoint(width * 0.5, height * 0.5))).translated(pos);
 }
 
 void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
-    qreal size = diameter() * scale();
+    qreal width = diameter() * scale();
+    qreal height = diameter() * aspect() * scale();
     painter.setPen(QColor(255,128,255));
     painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-    painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos)));
+    painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, width, height).translated(- QPoint(width * 0.5, height * 0.5))).translated(pos)));
 }
 
 
@@ -275,4 +291,10 @@ qreal KisSprayPaintOpSettings::followCursorWeigth() const
 QImage KisSprayPaintOpSettings::image() const
 {
     return m_options->m_sprayShapeOption->image();
+}
+
+
+KisPressureRotationOption* KisSprayPaintOpSettings::rotationOption() const
+{
+    return m_options->m_rotationOption;
 }

@@ -30,6 +30,8 @@ public:
     ~KisSprayOpOption();
 
     int diameter() const;
+    qreal aspect() const;
+    
     void setDiamter(int diameter) const;
     
     int particleCount() const;
@@ -38,6 +40,7 @@ public:
     qreal jitterMoveAmount() const;
     qreal spacing() const;
     qreal scale() const;
+    qreal rotation() const;
 
     bool jitterMovement() const;
     bool jitterSize() const;

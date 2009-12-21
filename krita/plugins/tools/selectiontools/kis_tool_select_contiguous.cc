@@ -97,10 +97,9 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
     }
 }
 
-void KisToolSelectContiguous::paint(QPainter &painter, const KoViewConverter &converter)
+void KisToolSelectContiguous::paint(QPainter &painter, const KoViewConverter &/*converter*/)
 {
     Q_UNUSED(painter);
-    Q_UNUSED(converter);
 }
 
 void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)

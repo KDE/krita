@@ -63,10 +63,8 @@ KisToolSelectElliptical::~KisToolSelectElliptical()
 {
 }
 
-void KisToolSelectElliptical::paint(QPainter& gc, const KoViewConverter &converter)
+void KisToolSelectElliptical::paint(QPainter& gc, const KoViewConverter &/*converter*/)
 {
-    Q_UNUSED(converter);
-
     if (m_selecting) {
         gc.save();
         gc.setPen(Qt::DotLine);

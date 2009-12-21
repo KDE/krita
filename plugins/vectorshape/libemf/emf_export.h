@@ -26,7 +26,7 @@
 
 #ifndef EMF_EXPORT
 
-#if defined(MAKE_EMFSHAPE_LIB)
+#if defined(MAKE_VECTORSHAPE_LIB)
 
 #define EMF_EXPORT KDE_EXPORT
 

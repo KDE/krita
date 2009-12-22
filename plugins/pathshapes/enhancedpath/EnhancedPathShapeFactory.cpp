@@ -166,36 +166,137 @@ void EnhancedPathShapeFactory::addCross()
 
 void EnhancedPathShapeFactory::addArrow()
 {
-    QString modifiers("60 35");
+    { // arrow right
+        QString modifiers("60 35");
 
-    QStringList commands;
-    commands.append("M $0 $1");
-    commands.append("L $0 0 width ?HalfHeight $0 height $0 ?LowerCorner 0 ?LowerCorner 0 $1");
-    commands.append("Z");
+        QStringList commands;
+        commands.append("M $0 $1");
+        commands.append("L $0 0 width ?HalfHeight $0 height $0 ?LowerCorner 0 ?LowerCorner 0 $1");
+        commands.append("Z");
 
-    ListType handles;
-    ComplexType handle;
-    handle["draw:handle-position"] = "$0 $1";
-    handle["draw:handle-range-x-minimum"] = "0";
-    handle["draw:handle-range-x-maximum"] = "width";
-    handle["draw:handle-range-y-minimum"] = "0";
-    handle["draw:handle-range-y-maximum"] = "?HalfHeight";
-    handles.append(QVariant(handle));
+        ListType handles;
+        ComplexType handle;
+        handle["draw:handle-position"] = "$0 $1";
+        handle["draw:handle-range-x-minimum"] = "0";
+        handle["draw:handle-range-x-maximum"] = "width";
+        handle["draw:handle-range-y-minimum"] = "0";
+        handle["draw:handle-range-y-maximum"] = "?HalfHeight";
+        handles.append(QVariant(handle));
 
-    ComplexType formulae;
-    formulae["HalfHeight"] = "0.5 * height";
-    formulae["LowerCorner"] = "height - $1";
+        ComplexType formulae;
+        formulae["HalfHeight"] = "0.5 * height";
+        formulae["LowerCorner"] = "height - $1";
 
-    KoShapeTemplate t;
-    t.id = KoPathShapeId;
-    t.templateId = "arrow";
-    t.name = i18n("Arrow");
-    t.family = "arrow";
-    t.toolTip = i18n("An arrow");
-    t.icon = "arrow-right-koffice";
-    t.properties = dataToProperties(modifiers, commands, handles, formulae);
+        KoShapeTemplate t;
+        t.id = KoPathShapeId;
+        t.templateId = "arrow_right";
+        t.name = i18n("Arrow");
+        t.family = "arrow";
+        t.toolTip = i18n("An arrow");
+        t.icon = "arrow-right-koffice";
+        t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
-    addTemplate(t);
+        addTemplate(t);
+    }
+
+    { // arrow left
+        QString modifiers("40 35");
+
+        QStringList commands;
+        commands.append("M $0 $1");
+        commands.append("L $0 0 0 ?HalfHeight $0 height $0 ?LowerCorner width ?LowerCorner width $1");
+        commands.append("Z");
+
+        ListType handles;
+        ComplexType handle;
+        handle["draw:handle-position"] = "$0 $1";
+        handle["draw:handle-range-x-minimum"] = "0";
+        handle["draw:handle-range-x-maximum"] = "width";
+        handle["draw:handle-range-y-minimum"] = "0";
+        handle["draw:handle-range-y-maximum"] = "?HalfHeight";
+        handles.append(QVariant(handle));
+
+        ComplexType formulae;
+        formulae["HalfHeight"] = "0.5 * height";
+        formulae["LowerCorner"] = "height - $1";
+
+        KoShapeTemplate t;
+        t.id = KoPathShapeId;
+        t.templateId = "arrow_left";
+        t.name = i18n("Arrow");
+        t.family = "arrow";
+        t.toolTip = i18n("An arrow");
+        t.icon = "arrow-left-koffice";
+        t.properties = dataToProperties(modifiers, commands, handles, formulae);
+
+        addTemplate(t);
+    }
+
+    { // arrow top
+        QString modifiers("35 40");
+
+        QStringList commands;
+        commands.append("M $0 $1");
+        commands.append("L 0 $1 ?HalfWidth 0 width $1 ?RightCorner $1 ?RightCorner height $0 height");
+        commands.append("Z");
+
+        ListType handles;
+        ComplexType handle;
+        handle["draw:handle-position"] = "$0 $1";
+        handle["draw:handle-range-x-minimum"] = "0";
+        handle["draw:handle-range-x-maximum"] = "?HalfWidth";
+        handle["draw:handle-range-y-minimum"] = "0";
+        handle["draw:handle-range-y-maximum"] = "height";
+        handles.append(QVariant(handle));
+
+        ComplexType formulae;
+        formulae["HalfWidth"] = "0.5 * width";
+        formulae["RightCorner"] = "width - $0";
+
+        KoShapeTemplate t;
+        t.id = KoPathShapeId;
+        t.templateId = "arrow_top";
+        t.name = i18n("Arrow");
+        t.family = "arrow";
+        t.toolTip = i18n("An arrow");
+        t.icon = "arrow-up-koffice";
+        t.properties = dataToProperties(modifiers, commands, handles, formulae);
+
+        addTemplate(t);
+    }
+
+    { // arrow bottom
+        QString modifiers("35 60");
+
+        QStringList commands;
+        commands.append("M $0 $1");
+        commands.append("L 0 $1 ?HalfWidth height width $1 ?RightCorner $1 ?RightCorner 0 $0 0");
+        commands.append("Z");
+
+        ListType handles;
+        ComplexType handle;
+        handle["draw:handle-position"] = "$0 $1";
+        handle["draw:handle-range-x-minimum"] = "0";
+        handle["draw:handle-range-x-maximum"] = "?HalfWidth";
+        handle["draw:handle-range-y-minimum"] = "0";
+        handle["draw:handle-range-y-maximum"] = "height";
+        handles.append(QVariant(handle));
+
+        ComplexType formulae;
+        formulae["HalfWidth"] = "0.5 * width";
+        formulae["RightCorner"] = "width - $0";
+
+        KoShapeTemplate t;
+        t.id = KoPathShapeId;
+        t.templateId = "arrow_bottom";
+        t.name = i18n("Arrow");
+        t.family = "arrow";
+        t.toolTip = i18n("An arrow");
+        t.icon = "arrow-down-koffice";
+        t.properties = dataToProperties(modifiers, commands, handles, formulae);
+
+        addTemplate(t);
+    }
 }
 
 void EnhancedPathShapeFactory::addCallout()

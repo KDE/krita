@@ -25,6 +25,7 @@
 #include <QtCore/QList>
 #include <QtCore/QMap>
 #include <QtCore/QString>
+#include <iostream>
 #include "koodf_export.h"
 
 class KoGenStyles;
@@ -272,7 +273,7 @@ public:
      * The value of @p elementName isn't used, except that it must be unique.
      */
     void addChildElement(const QString& elementName, const QString& elementContents) {
-        m_properties[ChildElement].insert(elementName, elementContents);
+        m_properties[ChildElement].insertMulti(elementName, elementContents);
     }
 
     /**

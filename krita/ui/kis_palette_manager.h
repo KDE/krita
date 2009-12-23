@@ -24,6 +24,7 @@
 #include <kis_types.h>
 #include <QDialog>
 
+class KoID;
 class QStringListModel;
 class QListView;
 class QLabel;

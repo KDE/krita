@@ -84,8 +84,7 @@ set(kritaui_LIB_SRCS
     kis_palette_manager.cpp
     kis_popup_palette.cpp
     kis_png_converter.cpp
-    kis_print_job.cpp 
-    kis_recent_color_data.cpp
+    kis_print_job.cpp
     kis_resource_server_provider.cpp 
     kis_selection_decoration.cc
     kis_selection_manager.cc 

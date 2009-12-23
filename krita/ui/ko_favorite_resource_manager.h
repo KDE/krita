@@ -24,7 +24,6 @@
 #include <QQueue>
 #include <QList>
 #include <QPixmap>
-#include "kis_recent_color_data.h"
 
 class QString;
 class QColor;
@@ -64,6 +63,9 @@ public:
     Returns the position of the brush on the list otherwise**/
     int addFavoriteBrush (KisPaintOpPresetSP);
     void removeFavoriteBrush(int);
+    void removeFavoriteBrush(KisPaintOpPresetSP);
+    //returns -1 if paintop is not in the list, returns the paintop position otherwise
+    int isFavoriteBrushSaved(KisPaintOpPresetSP paintop);
     int favoriteBrushesTotal();
 
     QStringList favoriteBrushesStringList();
@@ -74,11 +76,11 @@ public:
     /**Checks if newColor is a recently used color.
     Returns -1 if the newColor is not used recently.
     Returns the position of the newColor on the list otherwise**/
-    void addRecentColor(KisRecentColorData*);
-    QQueue<KisRecentColorData*>* recentColorsList();
+    void addRecentColor(QColor*);
+    QQueue<QColor*>* recentColorsList();
     
 public slots:
-    void slotChangePaintopLabel();
+    void slotChangePaintopLabel(KisPaintOpPresetSP paintop);
     void slotShowPopupPalette(const QPoint& = QPoint(0,0));
     void slotChangeActivePaintop(int);
 
@@ -90,10 +92,10 @@ private:
     QList<KisPaintOpPresetSP> m_favoriteBrushesList;
 
     /**The list of recently used colors**/
-    QQueue<KisRecentColorData*> m_recentColorsData;
+    QQueue<QColor*> m_recentColorsData;
 
     bool isFavoriteBrushesFull();
-    int isInRecentColor(QColor&);
+    int isInRecentColor(QColor*);
     void saveFavoriteBrushes();
 };
 

@@ -102,8 +102,8 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     mainLayout->addWidget(VSeparator);
     mainLayout->addLayout(rightLayout);
 
-    this->setLayout(mainLayout);
-    this->changeCurrentBrushLabel();
+    setLayout(mainLayout);
+    changeCurrentBrushLabel();
 
     /*SIGNALS AND SLOTS*/
     connect(m_brushList, SIGNAL(pressed(QModelIndex)), this, SLOT(slotEnableRemoveButton()));
@@ -136,15 +136,15 @@ void KisPaletteManager::slotAddBrush()
     {
         return; //favorite brush list is full!
     }
-    else if (pos > -1)
-    {
-        index = m_model->index(pos);
-    }
-    else
+    else if (pos == -1) //favorite brush is successfully saved
     {
         m_nameList.append(m_paintOpBox->currentPaintop().id());
         m_model->setStringList(m_nameList);
         index = m_model->index(m_resourceManager->favoriteBrushesTotal()-1);
+    }
+    else //brush has already existed
+    {
+        index = m_model->index(pos);
     }
 
     m_brushList->setCurrentIndex(index);
@@ -175,4 +175,5 @@ KisPaletteManager::~KisPaletteManager()
     m_resourceManager = 0;
     m_paintOpBox = 0;
 }
+
 #include "kis_palette_manager.moc"

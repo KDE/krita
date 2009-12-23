@@ -70,7 +70,7 @@ public:
     ~KisPaintopBox();
 
 signals:
-    void signalPaintopChanged();
+    void signalPaintopChanged(KisPaintOpPresetSP paintop);
 
 public slots:
 

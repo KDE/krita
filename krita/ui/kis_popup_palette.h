@@ -16,7 +16,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef KIS_POPUP_PALETTE_H
 #define KIS_POPUP_PALETTE_H
 
@@ -25,7 +24,6 @@
 #include <QQueue>
 
 class KisFavoriteBrushData;
-class KisRecentColorData;
 class KoFavoriteResourceManager;
 class QWidget;
 
@@ -34,7 +32,9 @@ class KisPopupPalette : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY (int hoveredBrush READ hoveredBrush WRITE setHoveredBrush);
+    Q_PROPERTY (int selectedBrush READ selectedBrush WRITE setSelectedBrush);
     Q_PROPERTY (int hoveredColor READ hoveredColor WRITE setHoveredColor);
+    Q_PROPERTY (int selectedColor READ selectedColor WRITE setSelectedColor);
 
 public:
     KisPopupPalette(KoFavoriteResourceManager* , QWidget *parent=0);
@@ -43,7 +43,12 @@ public:
 
     void showPopupPalette (const QPoint&);
 
-    static int const BUTTON_SIZE = 25;
+    //functions to set up selectedBrush
+    void setSelectedBrush( int x );
+    int selectedBrush() const;
+    //functions to set up selectedColor
+    void setSelectedColor( int x );
+    int selectedColor() const;
 
 protected:
     void paintEvent (QPaintEvent*);
@@ -67,6 +72,7 @@ protected:
 private:
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
+    bool isPointInPixmap(QPointF&, int pos);
 
     //inline functions
     inline int brushRadius(){ return 50; }
@@ -79,7 +85,9 @@ private:
 private:
     int colorFoo;//TEMPORARY
     int m_hoveredBrush;
+    int m_selectedBrush;
     int m_hoveredColor;
+    int m_selectedColor;
     KoFavoriteResourceManager* m_resourceManager;
 
 signals:

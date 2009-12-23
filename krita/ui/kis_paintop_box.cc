@@ -285,7 +285,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     m_presetWidget->setPreset(m_activePreset);
     m_presetsPopup->presetPreview()->setPreset(m_activePreset);
 
-    emit signalPaintopChanged();
+    emit signalPaintopChanged(preset);
 }
 
 KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)

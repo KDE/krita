@@ -44,8 +44,13 @@ KisSprayOpOption::KisSprayOpOption()
     connect(m_options->spacingSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->scaleSpin, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->particlesSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->densityChBox, SIGNAL(stateChanged(int)), SIGNAL(sigSettingChanged()));
-
+    connect(m_options->countRadioButton, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->gaussianBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->countRadioButton, SIGNAL(toggled(bool)), m_options->particlesSpinBox, SLOT(setEnabled(bool)));
+    connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), m_options->coverageSpin, SLOT(setEnabled(bool)));
+    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), m_options->jitterMovementSpin, SLOT(setEnabled(bool)));
+    
     setConfigurationPage(m_options);
 }
 
@@ -63,12 +68,6 @@ int KisSprayOpOption::diameter() const
 qreal KisSprayOpOption::aspect() const
 {
     return m_options->aspectSPBox->value();
-}
-
-
-bool KisSprayOpOption::jitterSize() const
-{
-    return m_options->jitterSizeBox->isChecked();
 }
 
 bool KisSprayOpOption::jitterMovement() const
@@ -110,9 +109,13 @@ int KisSprayOpOption::particleCount() const
 
 bool KisSprayOpOption::useDensity() const
 {
-    return m_options->densityChBox->isChecked();
+    return m_options->densityRadioButton->isChecked();
 }
 
+bool KisSprayOpOption::gaussian() const
+{
+    return m_options->gaussianBox->isChecked();
+}
 
 void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
@@ -120,8 +123,8 @@ void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty("Spray/coverage", coverage());
     setting->setProperty("Spray/jitterMoveAmount", jitterMoveAmount());
     setting->setProperty("Spray/spacing", spacing());
-    setting->setProperty("Spray/jitterSize", jitterSize());
     setting->setProperty("Spray/jitterMovement", jitterMovement());
+    setting->setProperty("Spray/gaussianDistribution", gaussian());
 }
 
 void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -130,8 +133,8 @@ void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_options->coverageSpin->setValue(setting->getDouble("Spray/coverage"));
     m_options->jitterMovementSpin->setValue(setting->getDouble("Spray/jitterMoveAmount"));
     m_options->spacingSpin->setValue(setting->getDouble("Spray/spacing"));
-    m_options->jitterSizeBox->setChecked(setting->getBool("Spray/jitterSize"));
     m_options->jitterMoveBox->setChecked(setting->getBool("Spray/jitterMovement"));
+    m_options->gaussianBox->setChecked(setting->getBool("Spray/gaussianDistribution"));
 }
 
 

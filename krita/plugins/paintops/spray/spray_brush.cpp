@@ -122,9 +122,9 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     m_radius *= scale;
     
     // jitter radius, recovered at the end of dab
-    if ( m_settings->jitterSize() ) {
-        m_radius = m_radius * drand48();
-    }
+//     if ( m_settings->jitterSize() ) {
+//         m_radius = m_radius * drand48();
+//     }
 
     // jitter movement
     if ( m_settings->jitterMovement() ) {

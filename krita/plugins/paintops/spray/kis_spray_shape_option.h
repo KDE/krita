@@ -33,9 +33,6 @@ public:
 
     /// 0 - ellipse, 1 - rectangle, 2 - anti-aliased pixel, 2 - pixel
     int shape() const;
-
-    /// distribution settings
-    bool gaussian() const;
     
     /// size settings
     bool proportional() const;

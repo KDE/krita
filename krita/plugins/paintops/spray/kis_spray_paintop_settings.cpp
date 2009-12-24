@@ -101,12 +101,6 @@ bool KisSprayPaintOpSettings::jitterMovement() const
     return m_options->m_sprayOption->jitterMovement();
 }
 
-bool KisSprayPaintOpSettings::jitterSize() const
-{
-    return m_options->m_sprayOption->jitterSize();
-}
-
-
 int KisSprayPaintOpSettings::width() const
 {
     return m_options->m_sprayShapeOption->width();
@@ -197,7 +191,7 @@ void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image
 
 bool KisSprayPaintOpSettings::gaussian() const
 {
-    return m_options->m_sprayShapeOption->gaussian();
+    return m_options->m_sprayOption->gaussian();
 }
 
 

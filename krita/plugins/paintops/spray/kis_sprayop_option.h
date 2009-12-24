@@ -45,6 +45,7 @@ public:
     bool jitterMovement() const;
     bool jitterSize() const;
     bool useDensity() const;
+    bool gaussian() const;
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);

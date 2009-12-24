@@ -58,6 +58,12 @@ KisSprayShapeOption::KisSprayShapeOption()
 
     connect(m_options->proportionalBox, SIGNAL(clicked(bool)), SLOT(changeSizeUI(bool)));
     
+    connect(m_options->fixedRotation, SIGNAL(toggled(bool)), m_options->angleSlider, SLOT(setEnabled(bool)));
+    connect(m_options->randomRotation, SIGNAL(toggled(bool)), m_options->randomSlider, SLOT(setEnabled(bool)));
+    connect(m_options->followCursor, SIGNAL(toggled(bool)), m_options->followSlider, SLOT(setEnabled(bool)));
+    connect(m_options->fixedRotation, SIGNAL(toggled(bool)), m_options->fixedRotationSPBox, SLOT(setEnabled(bool)));
+    connect(m_options->randomRotation, SIGNAL(toggled(bool)), m_options->randomWeightSPBox, SLOT(setEnabled(bool)));
+    connect(m_options->followCursor, SIGNAL(toggled(bool)), m_options->followCursorWeightSPBox, SLOT(setEnabled(bool)));
     
     setConfigurationPage(m_options);
 }
@@ -70,7 +76,6 @@ void KisSprayShapeOption::setupBrushPreviewSignals()
     connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->jitterShape, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->gaussBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
 }
 
 
@@ -117,13 +122,6 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
 {
     Q_UNUSED(setting);
 }
-
-
-bool KisSprayShapeOption::gaussian() const
-{
-    return m_options->gaussBox->isChecked();
-}
-
 
 bool KisSprayShapeOption::fixedRotation() const
 {

@@ -269,7 +269,7 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
 
 #if defined(HAVE_GLEW) && defined(HAVE_OPENEXR)
                     // XXX: generalise
-                    if (m_image->colorSpace()->id() == "RGBAF16HALF") {
+                    if (m_image->colorSpace()->id() == "RgbAF16") {
                         if (m_imageTextureType == GL_FLOAT) {
 
                             // Convert half to float as we don't have ARB_half_float_pixel

@@ -47,7 +47,7 @@ bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& co
         color_type = PHOTOMETRIC_RGB;
         return true;
     }
-    if (KoID(cs->id()) == KoID("RGBAF16HALF") || KoID(cs->id()) == KoID("RGBAF32")) {
+    if (KoID(cs->id()) == KoID("RgbAF16") || KoID(cs->id()) == KoID("RgbAF32")) {
         color_type = PHOTOMETRIC_RGB;
         sample_type = SAMPLEFORMAT_IEEEFP;
         return true;

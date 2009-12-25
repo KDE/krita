@@ -99,6 +99,7 @@
 #include <KoChangeTrackerElement.h>
 #include <KoDeleteChangeMarker.h>
 #include <kpassivepopup.h>
+#include <QToolTip>
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
@@ -442,7 +443,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_caretTimer.setInterval(500);
     connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
 
-    m_changeTipTimer.setInterval(2000);
+    m_changeTipTimer.setInterval(1000);
     m_changeTipTimer.setSingleShot(true);
     connect(&m_changeTipTimer, SIGNAL(timeout()), this, SLOT(showChangeTip()));
 }
@@ -487,12 +488,26 @@ void TextTool::showChangeTip()
     if (m_changeTracker && m_changeTracker->containsInlineChanges(c.charFormat())) {
         KoChangeTrackerElement *element = m_changeTracker->elementById(c.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt());
         if (element->isEnabled()) {
-            QString change = element->getChangeTitle() + ' ' + element->getDate() + ' ' + element->getCreator();
-            KPassivePopup *popup = new KPassivePopup();
-            popup->setTimeout(5000);
-            popup->setAutoDelete(true);
-            popup->setView("Latest change", change);
-            popup->show(m_changeTipPos);
+            QString changeType;
+            if (element->getChangeType() == KoGenChange::insertChange)
+                changeType = i18n("Insertion");
+            else if (element->getChangeType() == KoGenChange::deleteChange)
+                changeType = i18n("Deletion");
+            else
+                changeType = i18n("Formatting");
+
+            QString change = "<p align=center style=\'white-space:pre\' ><b>" + changeType + "</b><br/>"; 
+            
+            QString date = element->getDate();
+            //Remove the T which separates the Data and Time.
+            date[10] = ' ';
+            change += element->getCreator() + " " + date + "</p>";
+
+            int toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(element->getDate() + ' ' + element->getCreator()).width();
+            m_changeTipPos.setX(m_changeTipPos.x() - toolTipWidth/2);
+
+            QToolTip::showText(m_changeTipPos,change,m_canvas->canvasWidget());
+
         }
     }
 }
@@ -826,13 +841,17 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
 void TextTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    m_changeTipPos = event->pos();
+    m_changeTipPos = event->globalPos();
 
     useCursor(Qt::IBeamCursor);
     if (event->buttons()) {
         updateSelectedShape(event->point);
-        m_changeTipTimer.stop();
     }
+
+    m_changeTipTimer.stop();
+
+    if (QToolTip::isVisible())
+        QToolTip::hideText();
 
     int position = pointToPosition(event->point);
 
@@ -846,12 +865,8 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
         QTextCharFormat fmt = mouseOver.charFormat();
 
         if (m_changeTracker && m_changeTracker->containsInlineChanges(mouseOver.charFormat())) {
-            QTextCursor test(m_textShapeData->document());
-            test.setPosition(m_changeTipCursorPos);
-            if (m_changeTracker->elementById(mouseOver.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt()) != m_changeTracker->elementById(test.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt()) || !m_changeTipCursorPos) {
                 m_changeTipTimer.start();
                 m_changeTipCursorPos = position;
-            }
         }
 
         if (cursor.charFormat().isAnchor())

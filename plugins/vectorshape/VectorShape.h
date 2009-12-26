@@ -61,8 +61,22 @@ public:
     int   vectorSize();
 
 private:
-    void draw(QPainter &painter);
+    // Type of vector file. Add here when we get support for more.
+    enum VectorType {
+        VectorTypeNone,             // Uninitialized
+        VectorTypeWmf,              // Windows MetaFile
+        VectorTypeEmf               // Extended MetaFile
+    };
 
+    void draw(QPainter &painter) const;
+    void drawNull(QPainter &painter) const;
+    void drawWmf(QPainter &painter) const;
+    void drawEmf(QPainter &painter) const;
+
+    bool isWmf() const;
+    bool isEmf() const;
+
+    VectorType  m_type;
     char  *m_bytes;       // Use char* instead of void* because of QByteArray
     int    m_size;
     bool   m_ownsBytes;

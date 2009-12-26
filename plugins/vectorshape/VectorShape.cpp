@@ -45,6 +45,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include "KoShapeSavingContext.h"
+#include <kowmfpaint.h>
 #include "libemf/EmfParser.h"
 #include "libemf/EmfOutputPainterStrategy.h"
 
@@ -57,6 +58,7 @@
 
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
+    , m_type(VectorTypeNone)
     , m_bytes(0)
     , m_size(0)
     , m_ownsBytes(false)
@@ -112,25 +114,81 @@ void VectorShape::paintDecorations(QPainter &painter, const KoViewConverter &con
     }
 }
 
-void VectorShape::draw(QPainter &painter)
+void VectorShape::draw(QPainter &painter) const
+{
+    // If the data is uninitialized, e.g. because loading failed, draw the null shape
+    if (m_size == 0) {
+        drawNull(painter);
+        return;
+    }
+
+    // Actually draw the contents
+    switch (m_type) {
+    case VectorTypeNone:
+        drawNull(painter);
+        break;
+    case VectorTypeWmf:
+        drawWmf(painter);
+        break;
+    case VectorTypeEmf:
+        drawEmf(painter);
+        break;
+    default:
+        drawNull(painter);
+    }
+}
+
+void VectorShape::drawNull(QPainter &painter) const
+{
+    QRectF  rect(QPointF(0,0), size());
+    painter.save();
+
+    // Draw a simple cross in a rectangle just to indicate that there is something here.
+    painter.setPen(QPen(QColor(172, 196, 206)));
+    painter.drawRect(rect);
+    painter.drawLine(rect.topLeft(), rect.bottomRight());
+    painter.drawLine(rect.bottomLeft(), rect.topRight());
+
+    painter.restore();
+}
+
+void VectorShape::drawWmf(QPainter &painter) const
+{
+#if 0
+    drawNull(painter);
+    return;
+#endif
+    KoWmfPaint  wmfPainter;
+    QByteArray  emfArray(m_bytes, m_size);
+
+    if (!wmfPainter.load(emfArray)) {
+        drawNull(painter);
+        return;
+    }
+
+    painter.save();
+
+    // Position the bitmap to the right place and resize it to fit.
+    QRect   vectorRect = wmfPainter.boundingRect(); // Should this be made QRectF?
+    QSizeF  shapeSize  = size();
+    painter.translate(-vectorRect.left(), -vectorRect.top());
+#if 0
+    painter.scale(shapeSize.width() / vectorRect.width(),
+                  shapeSize.height() / vectorRect.height());
+#endif
+    // Actually paint the WMF.
+    wmfPainter.play(painter);
+    painter.restore();
+}
+
+void VectorShape::drawEmf(QPainter &painter) const
 {
     // FIXME: Make emfOutput use QSizeF
     QSize  sizeInt( size().width(), size().height() );
-    kDebug(33100) << "-------------------------------------------";
-    kDebug(33100) << "size:     " << sizeInt << size();
-    kDebug(33100) << "position: " << position();
-    kDebug(33100) << "-------------------------------------------";
-
-    // If the data is uninitialized, e.g. because loading failed, draw a simple cross.
-    if (m_size == 0) {
-        QRectF  rect(QPointF(0,0), size());
-        painter.setPen(QPen(QColor(172, 196, 206)));
-        painter.drawRect(rect);
-        painter.drawLine(rect.topLeft(), rect.bottomRight());
-        painter.drawLine(rect.bottomLeft(), rect.topRight());
-
-        return;
-    }
+    //kDebug(31000) << "-------------------------------------------";
+    //kDebug(31000) << "size:     " << sizeInt << size();
+    //kDebug(31000) << "position: " << position();
+    //kDebug(31000) << "-------------------------------------------";
 
     // FIXME: Make it static to save time?
     Libemf::Parser  emfParser;
@@ -138,15 +196,12 @@ void VectorShape::draw(QPainter &painter)
     Libemf::OutputPainterStrategy  emfOutput( painter, sizeInt );
     emfParser.setOutput( &emfOutput );
     
-    // At this point we have some data.  Now draw it.
-#if 0
-    QByteArray  emfArray(&defaultEMF[0], sizeof(defaultEMF));
-#else
+    // Create a QBuffer to read from...
     QByteArray  emfArray(m_bytes, m_size);
-#endif
     QBuffer     emfBuffer(&emfArray);
     emfBuffer.open(QIODevice::ReadOnly);
 
+    // ...but what we really want is a stream.
     QDataStream  emfStream;
     emfStream.setDevice(&emfBuffer);
     emfStream.setByteOrder(QDataStream::LittleEndian);
@@ -166,7 +221,7 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
 
 bool VectorShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    //kDebug() <<"Loading ODF frame in the vector shape. Element = " << element.tagName();
+    //kDebug(31000) <<"Loading ODF frame in the vector shape. Element = " << element.tagName();
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
@@ -187,54 +242,102 @@ inline static int read32(const char *buffer, const int offset)
 bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
                                       KoShapeLoadingContext &context)
 {
-    //kDebug() <<"Loading ODF element: " << element.tagName();
+    //kDebug(31000) <<"Loading ODF element: " << element.tagName();
 
     // Get the reference to the vector file.  If there is no href, then just return.
     const QString href = element.attribute("href");
     if (href.isEmpty())
         return false;
 
-    // Check if the contents is a .wmf.  So far we haven't found a
-    // test that picks a emf but skips a wmf.  The file name could
-    // give a clue.
-    if (href.endsWith(".wmf"))
-        return false;
-
+    // Try to open the embedded file.
     KoStore *store  = context.odfLoadingContext().store();
     bool     result = store->open(href);
 
     if (!result)
         return false;
 
-    // Store the size and make a sanity check if this could be an EMF.
+    // Store the size and make a sanity check.
     // The size of the minimum EMF header record is 88.
     m_size = store->size();
-    if (m_size < 88)
+    if (m_size < 88) {
+        m_size = 0;
         return false;
+    }
 
-    if (m_bytes && m_ownsBytes)
+    if (m_bytes && m_ownsBytes) {
         delete []m_bytes;
+        m_bytes = 0;
+    }
     m_bytes = new char[m_size];
+    m_ownsBytes = true;
 
     qint64 bytesRead = store->read(m_bytes, m_size);
     store->close();
     if (bytesRead < m_size) {
-        kDebug() << "Too few bytes read: " << bytesRead << " instead of " << m_size;
+        kDebug(31000) << "Too few bytes read: " << bytesRead << " instead of " << m_size;
         return false;
     }
 
-    // Check if the contents is actually an EMF.
+    if (isWmf())
+        m_type = VectorTypeWmf;
+    else if (isEmf())
+        m_type = VectorTypeEmf;
+    else
+        m_type = VectorTypeNone;
+    
+    // Return true if we managed to identify the type.
+    return m_type != VectorTypeNone;
+}
+
+
+bool VectorShape::isWmf() const
+{
+    kDebug(31000) << "Check for WMF";
+
+    if (m_size < 10)
+        return false;
+
+    // This is how the 'file' command identifies a WMF.
+    if (m_bytes[0] == '\327' && m_bytes[1] == '\315' && m_bytes[2] == '\306' && m_bytes[3] == '\232')
+    {
+        // FIXME: Is this a compressed wmf?  Check it up.
+        kDebug(31000) << "WMF identified: header 1";
+        return true;
+    }
+
+    if (m_bytes[0] == '\002' && m_bytes[1] == '\000' && m_bytes[2] == '\011' && m_bytes[3] == '\000')
+    {
+        kDebug(31000) << "WMF identified: header 2";
+        return true;
+    }
+
+    if (m_bytes[0] == '\001' && m_bytes[1] == '\000' && m_bytes[2] == '\011' && m_bytes[3] == '\000')
+    {
+        kDebug(31000) << "WMF identified: header 3";
+        return true;
+    }
+
+    return false;
+}
+
+bool VectorShape::isEmf() const
+{
+    // This is how the 'file' command identifies an EMF.
     // 1. Check type
     qint32 mark = read32(m_bytes, 0);
     if (mark != 0x00000001) {
-        //kDebug() << "Not an EMF: mark = " << mark << " instead of 0x00000001";
+        //kDebug(31000) << "Not an EMF: mark = " << mark << " instead of 0x00000001";
         return false;
     }
 
-    // FIXME: We should probably do more checks here, but I don't know what right now.
+    // 2. An EMF has the string " EMF" at the start + offset 40.
+    if (m_size > 44 && m_bytes[40] == ' '
+        && m_bytes[41] == 'E' && m_bytes[42] == 'M' && m_bytes[43] == 'F')
+    {
+        return true;
+    }
 
-    // Ok, we have an EMF.  Yay!
-    return true;
+    return false;
 }
 
 

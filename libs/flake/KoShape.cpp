@@ -345,9 +345,11 @@ QMatrix KoShape::absoluteTransformation(const KoViewConverter *converter) const
     // apply parents matrix to inherit any transformations done there.
     KoShapeContainer * container = d->parent;
     if (container) {
-        if (container->childClipped(this))
-            matrix = container->absoluteTransformation(0);
-        else {
+        if (container->childClipped(this)) {
+            // We do need to pass the converter here, otherwise the parent's
+            // translation is not inherited.
+            matrix = container->absoluteTransformation(converter);
+        } else {
             QSizeF containerSize = container->size();
             QPointF containerPos = container->absolutePosition() - QPointF(0.5 * containerSize.width(), 0.5 * containerSize.height());
             if (converter)

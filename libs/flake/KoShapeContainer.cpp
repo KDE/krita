@@ -131,7 +131,11 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     QList<KoShape*> sortedObjects = d->children->childShapes();
     qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
 
-    QMatrix baseMatrix = absoluteTransformation(0).inverted() * painter.matrix();
+    // Do the following to revert the absolute transformation of the container
+    // that is re-applied in shape->absoluteTransformation() later on. The transformation matrix
+    // of the container has already been applied once before this function is called.
+    // FIXME: How much performance does it cost us to (unnecessarily) apply a matrix and its inverse?
+    QMatrix baseMatrix = absoluteTransformation(&converter).inverted() * painter.matrix();
 
     // clip the children to the parent outline.
     QMatrix m;

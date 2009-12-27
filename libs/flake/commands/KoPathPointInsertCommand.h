@@ -28,6 +28,8 @@
 #include "KoPathPointData.h"
 #include "flake_export.h"
 
+class KoPathPointInsertCommandPrivate;
+
 /// The undo / redo command for inserting path points
 class FLAKE_EXPORT KoPathPointInsertCommand : public QUndoCommand
 {
@@ -55,10 +57,7 @@ public:
     QList<KoPathPoint*> insertedPoints() const;
 
 private:
-    QList<KoPathPointData> m_pointDataList;
-    QList<KoPathPoint*> m_points;
-    QList<QPair<QPointF, QPointF> > m_controlPoints;
-    bool m_deletePoints;
+    KoPathPointInsertCommandPrivate *d;
 };
 
 #endif // KOPATHPOINTINSERTCOMMAND_H

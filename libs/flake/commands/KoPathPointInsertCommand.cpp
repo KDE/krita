@@ -21,9 +21,23 @@
 #include "KoPathPointInsertCommand.h"
 #include <klocale.h>
 
-KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> & pointDataList, qreal insertPosition, QUndoCommand *parent)
-        : QUndoCommand(parent)
-        , m_deletePoints(true)
+class KoPathPointInsertCommandPrivate
+{
+public:
+    KoPathPointInsertCommandPrivate() : deletePoints(true) { }
+    ~KoPathPointInsertCommandPrivate() {
+        if (deletePoints)
+            qDeleteAll(points);
+    }
+    QList<KoPathPointData> pointDataList;
+    QList<KoPathPoint*> points;
+    QList<QPair<QPointF, QPointF> > controlPoints;
+    bool deletePoints;
+};
+
+KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> &pointDataList, qreal insertPosition, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        d(new KoPathPointInsertCommandPrivate())
 {
     if (insertPosition < 0)
         insertPosition = 0;
@@ -42,7 +56,7 @@ KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> 
         if (! segment.isValid())
             continue;
 
-        m_pointDataList.append(*it);
+        d->pointDataList.append(*it);
 
         QPair<KoPathSegment, KoPathSegment> splitSegments = segment.splitAt( insertPosition );
 
@@ -54,25 +68,23 @@ KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> 
         if( split2->activeControlPoint2() )
             splitPoint->setControlPoint2(split2->controlPoint2());
 
-        m_points.append(splitPoint);
+        d->points.append(splitPoint);
         QPointF cp1 = splitSegments.first.first()->controlPoint2();
         QPointF cp2 = splitSegments.second.second()->controlPoint1();
-        m_controlPoints.append(QPair<QPointF, QPointF>(cp1, cp2));
+        d->controlPoints.append(QPair<QPointF, QPointF>(cp1, cp2));
     }
 }
 
 KoPathPointInsertCommand::~KoPathPointInsertCommand()
 {
-    if (m_deletePoints) {
-        qDeleteAll(m_points);
-    }
+    delete d;
 }
 
 void KoPathPointInsertCommand::redo()
 {
     QUndoCommand::redo();
-    for (int i = m_pointDataList.size() - 1; i >= 0; --i) {
-        KoPathPointData pointData = m_pointDataList.at(i);
+    for (int i = d->pointDataList.size() - 1; i >= 0; --i) {
+        KoPathPointData pointData = d->pointDataList.at(i);
         KoPathShape * pathShape = pointData.pathShape;
 
         KoPathSegment segment = pathShape->segmentByIndex(pointData.pointIndex);
@@ -81,36 +93,36 @@ void KoPathPointInsertCommand::redo()
 
         if (segment.first()->activeControlPoint2()) {
             QPointF controlPoint2 = segment.first()->controlPoint2();
-            qSwap(controlPoint2, m_controlPoints[i].first);
+            qSwap(controlPoint2, d->controlPoints[i].first);
             segment.first()->setControlPoint2(controlPoint2);
         }
 
         if (segment.second()->activeControlPoint1()) {
             QPointF controlPoint1 = segment.second()->controlPoint1();
-            qSwap(controlPoint1, m_controlPoints[i].second);
+            qSwap(controlPoint1, d->controlPoints[i].second);
             segment.second()->setControlPoint1(controlPoint1);
         }
 
-        pathShape->insertPoint(m_points.at(i), pointData.pointIndex);
+        pathShape->insertPoint(d->points.at(i), pointData.pointIndex);
         pathShape->update();
     }
-    m_deletePoints = false;
+    d->deletePoints = false;
 }
 
 void KoPathPointInsertCommand::undo()
 {
     QUndoCommand::undo();
-    for (int i = 0; i < m_pointDataList.size(); ++i) {
-        const KoPathPointData &pdBefore = m_pointDataList.at(i);
+    for (int i = 0; i < d->pointDataList.size(); ++i) {
+        const KoPathPointData &pdBefore = d->pointDataList.at(i);
         KoPathShape * pathShape = pdBefore.pathShape;
         KoPathPointIndex piAfter = pdBefore.pointIndex;
         ++piAfter.second;
 
         KoPathPoint * before = pathShape->pointByIndex(pdBefore.pointIndex);
 
-        m_points[i] = pathShape->removePoint(piAfter);
+        d->points[i] = pathShape->removePoint(piAfter);
 
-        if (m_points[i]->properties() & KoPathPoint::CloseSubpath) {
+        if (d->points[i]->properties() & KoPathPoint::CloseSubpath) {
             piAfter.second = 0;
         }
 
@@ -118,21 +130,21 @@ void KoPathPointInsertCommand::undo()
 
         if (before->activeControlPoint2()) {
             QPointF controlPoint2 = before->controlPoint2();
-            qSwap(controlPoint2, m_controlPoints[i].first);
+            qSwap(controlPoint2, d->controlPoints[i].first);
             before->setControlPoint2(controlPoint2);
         }
 
         if (after->activeControlPoint1()) {
             QPointF controlPoint1 = after->controlPoint1();
-            qSwap(controlPoint1, m_controlPoints[i].second);
+            qSwap(controlPoint1, d->controlPoints[i].second);
             after->setControlPoint1(controlPoint1);
         }
         pathShape->update();
     }
-    m_deletePoints = true;
+    d->deletePoints = true;
 }
 
 QList<KoPathPoint*> KoPathPointInsertCommand::insertedPoints() const
 {
-    return m_points;
+    return d->points;
 }

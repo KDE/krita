@@ -24,9 +24,22 @@
 #include "KoShapeController.h"
 #include <klocale.h>
 
-QUndoCommand * KoPathPointRemoveCommand::createCommand(
-    const QList<KoPathPointData> & pointDataList,
-    KoShapeController * shapeController,
+class KoPathPointRemoveCommandPrivate
+{
+public:
+    KoPathPointRemoveCommandPrivate() : deletePoints(false) { }
+    ~KoPathPointRemoveCommandPrivate() {
+        if (deletePoints)
+            qDeleteAll(points);
+    }
+    QList<KoPathPointData> pointDataList;
+    QList<KoPathPoint*> points;
+    bool deletePoints;
+};
+
+QUndoCommand *KoPathPointRemoveCommand::createCommand(
+    const QList<KoPathPointData> &pointDataList,
+    KoShapeController *shapeController,
     QUndoCommand *parent)
 {
     /*
@@ -103,40 +116,37 @@ QUndoCommand * KoPathPointRemoveCommand::createCommand(
     return cmd;
 }
 
-KoPathPointRemoveCommand::KoPathPointRemoveCommand(
-    const QList<KoPathPointData> & pointDataList,
-    QUndoCommand *parent)
-        : QUndoCommand(parent)
-        , m_deletePoints(false)
+KoPathPointRemoveCommand::KoPathPointRemoveCommand(const QList<KoPathPointData> & pointDataList,
+        QUndoCommand *parent)
+    : QUndoCommand(parent),
+    d(new KoPathPointRemoveCommandPrivate())
 {
     QList<KoPathPointData>::const_iterator it(pointDataList.begin());
     for (; it != pointDataList.end(); ++it) {
         KoPathPoint *point = it->pathShape->pointByIndex(it->pointIndex);
         if (point) {
-            m_pointDataList.append(*it);
-            m_points.append(0);
+            d->pointDataList.append(*it);
+            d->points.append(0);
         }
     }
-    qSort(m_pointDataList);
+    qSort(d->pointDataList);
     setText(i18n("Remove points"));
 }
 
 KoPathPointRemoveCommand::~KoPathPointRemoveCommand()
 {
-    if (m_deletePoints) {
-        qDeleteAll(m_points);
-    }
+    delete d;
 }
 
 void KoPathPointRemoveCommand::redo()
 {
     QUndoCommand::redo();
     KoPathShape * lastPathShape = 0;
-    int updateBefore = m_pointDataList.size();
-    for (int i = m_pointDataList.size() - 1; i >= 0; --i) {
-        const KoPathPointData &pd = m_pointDataList.at(i);
+    int updateBefore = d->pointDataList.size();
+    for (int i = d->pointDataList.size() - 1; i >= 0; --i) {
+        const KoPathPointData &pd = d->pointDataList.at(i);
         pd.pathShape->update();
-        m_points[i] = pd.pathShape->removePoint(pd.pointIndex);
+        d->points[i] = pd.pathShape->removePoint(pd.pointIndex);
 
         if (lastPathShape != pd.pathShape) {
             if (lastPathShape) {
@@ -145,7 +155,7 @@ void KoPathPointRemoveCommand::redo()
                 QMatrix matrix;
                 matrix.translate(-offset.x(), -offset.y());
                 for (int j = i + 1; j < updateBefore; ++j) {
-                    m_points.at(j)->map(matrix);
+                    d->points.at(j)->map(matrix);
                 }
                 lastPathShape->update();
                 updateBefore = i + 1;
@@ -160,30 +170,30 @@ void KoPathPointRemoveCommand::redo()
         QMatrix matrix;
         matrix.translate(-offset.x(), -offset.y());
         for (int j = 0; j < updateBefore; ++j) {
-            m_points.at(j)->map(matrix);
+            d->points.at(j)->map(matrix);
         }
         lastPathShape->update();
     }
 
-    m_deletePoints = true;
+    d->deletePoints = true;
 }
 
 void KoPathPointRemoveCommand::undo()
 {
     QUndoCommand::undo();
     KoPathShape * lastPathShape = 0;
-    for (int i = 0; i < m_pointDataList.size(); ++i) {
-        const KoPathPointData &pd = m_pointDataList.at(i);
+    for (int i = 0; i < d->pointDataList.size(); ++i) {
+        const KoPathPointData &pd = d->pointDataList.at(i);
         if (lastPathShape && lastPathShape != pd.pathShape) {
             lastPathShape->normalize();
             lastPathShape->update();
         }
-        pd.pathShape->insertPoint(m_points[i], pd.pointIndex);
+        pd.pathShape->insertPoint(d->points[i], pd.pointIndex);
         lastPathShape = pd.pathShape;
     }
     if (lastPathShape) {
         lastPathShape->normalize();
         lastPathShape->update();
     }
-    m_deletePoints = false;
+    d->deletePoints = false;
 }

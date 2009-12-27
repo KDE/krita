@@ -34,18 +34,18 @@ class GuidesTool : public KoTool
     Q_OBJECT
 
 public:
-    explicit GuidesTool( KoCanvasBase * canvas );
+    explicit GuidesTool(KoCanvasBase *canvas);
     virtual ~GuidesTool();
     /// reimplemented form KoTool
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented form KoTool
-    virtual void mousePressEvent( KoPointerEvent *event );
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented form KoTool
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented form KoTool
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
     /// reimplemented form KoTool
-    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented form KoTool
     virtual void repaintDecorations();
     /// reimplemented form KoTool
@@ -53,8 +53,8 @@ public:
     /// reimplemented form KoTool
     virtual void deactivate();
     /// reimplemented form KoTool
-    virtual QMap< QString, QWidget* > createOptionWidgets();
-    //void addGuideLine( Qt::Orientation orientation, qreal position );
+    virtual QMap<QString, QWidget*> createOptionWidgets();
+    //void addGuideLine(Qt::Orientation orientation, qreal position);
     void moveGuideLine(Qt::Orientation orientation, uint index);
     void editGuideLine(Qt::Orientation orientation, uint index);
 
@@ -62,17 +62,17 @@ public slots:
     void startGuideLineCreation(Qt::Orientation orientation, qreal position);
 
 private slots:
-    void updateGuidePosition( qreal position );
-    void guideLineSelected( Qt::Orientation orientation, uint index );
-    void guideLinesChanged( Qt::Orientation orientation );
+    void updateGuidePosition(qreal position);
+    void guideLineSelected(Qt::Orientation orientation, uint index);
+    void guideLinesChanged(Qt::Orientation orientation);
     /// reimplemented from KoTool
-    virtual void resourceChanged( int key, const QVariant & res );
+    virtual void resourceChanged(int key, const QVariant &res);
 
-    void insertorCreateGuidesSlot( GuidesTransaction* result );
+    void insertorCreateGuidesSlot(GuidesTransaction* result);
 
 private:
     typedef QPair<Qt::Orientation, int> GuideLine;
-    GuideLine guideLineAtPosition( const QPointF &position );
+    GuideLine guideLineAtPosition(const QPointF &position);
 
     class Private;
     Private * const d;

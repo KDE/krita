@@ -19,22 +19,22 @@
 
 #include "InsertGuidesToolOptionWidget.h"
 
-InsertGuidesToolOptionWidget::InsertGuidesToolOptionWidget(QWidget * parent)
-: QWidget( parent )
+InsertGuidesToolOptionWidget::InsertGuidesToolOptionWidget(QWidget *parent)
+    : QWidget(parent)
 {
     m_widget.setupUi(this);
 
     //FIXME give real icon names
-    m_widget.m_erasePreviousCheckBox->setIcon( KIcon("erase-previous-guides") );
-    m_widget.m_horizontalEdgesCheckBox->setIcon( KIcon("add-horizontal-edges") );
-    m_widget.m_verticalEdgesCheckBox->setIcon( KIcon("add-vertical-edges") );
+    m_widget.m_erasePreviousCheckBox->setIcon(KIcon("erase-previous-guides"));
+    m_widget.m_horizontalEdgesCheckBox->setIcon(KIcon("add-horizontal-edges"));
+    m_widget.m_verticalEdgesCheckBox->setIcon(KIcon("add-vertical-edges"));
 
-    connect( m_widget.m_verticalCheckBox, SIGNAL(toggled(bool)),
+    connect(m_widget.m_verticalCheckBox, SIGNAL(toggled(bool)),
              this, SLOT(verticalCheckBoxSlot(bool)));
-    connect( m_widget.m_horizontalCheckBox, SIGNAL(toggled(bool)),
+    connect(m_widget.m_horizontalCheckBox, SIGNAL(toggled(bool)),
              this, SLOT(horizontalCheckBoxSlot(bool)));
 
-    connect( m_widget.m_createButton, SIGNAL(clicked(bool)),
+    connect(m_widget.m_createButton, SIGNAL(clicked(bool)),
              this, SLOT(createButtonClickedSlot(bool)));
 }
 
@@ -43,27 +43,30 @@ InsertGuidesToolOptionWidget::~InsertGuidesToolOptionWidget()
 }
 
 
-void InsertGuidesToolOptionWidget::horizontalCheckBoxSlot( bool state )
+void InsertGuidesToolOptionWidget::horizontalCheckBoxSlot(bool state)
 {
-    m_widget.m_horizontalSpinBox->setEnabled( state );
+    m_widget.m_horizontalSpinBox->setEnabled(state);
 }
 
-void InsertGuidesToolOptionWidget::verticalCheckBoxSlot( bool state )
+void InsertGuidesToolOptionWidget::verticalCheckBoxSlot(bool state)
 {
-    m_widget.m_verticalSpinBox->setEnabled( state );
+    m_widget.m_verticalSpinBox->setEnabled(state);
 }
 
-void InsertGuidesToolOptionWidget::createButtonClickedSlot( bool checked ) {
-    Q_UNUSED( checked );
+void InsertGuidesToolOptionWidget::createButtonClickedSlot(bool checked)
+{
+    Q_UNUSED(checked);
 
-    GuidesTransaction* transaction = new GuidesTransaction;
+    GuidesTransaction *transaction = new GuidesTransaction;
     transaction->erasePreviousGuides = m_widget.m_erasePreviousCheckBox->isChecked();
-    transaction->verticalGuides = (m_widget.m_verticalCheckBox->isChecked())? m_widget.m_verticalSpinBox->value(): 0;
+    transaction->verticalGuides = (m_widget.m_verticalCheckBox->isChecked())
+        ? m_widget.m_verticalSpinBox->value() : 0;
     transaction->insertVerticalEdgesGuides = m_widget.m_verticalEdgesCheckBox->isChecked();
-    transaction->horizontalGuides = (m_widget.m_horizontalCheckBox->isChecked())? m_widget.m_horizontalSpinBox->value(): 0;
+    transaction->horizontalGuides = (m_widget.m_horizontalCheckBox->isChecked())
+        ? m_widget.m_horizontalSpinBox->value() : 0;
     transaction->insertHorizontalEdgesGuides = m_widget.m_horizontalEdgesCheckBox->isChecked();
 
-    emit( createGuides( transaction ) );
+    emit createGuides(transaction);
 }
 
-#include "InsertGuidesToolOptionWidget.moc"
+#include <InsertGuidesToolOptionWidget.moc>

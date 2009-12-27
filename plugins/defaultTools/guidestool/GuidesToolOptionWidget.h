@@ -29,14 +29,14 @@ class GuidesToolOptionWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit GuidesToolOptionWidget( QWidget *parent = 0);
+    explicit GuidesToolOptionWidget(QWidget *parent = 0);
     ~GuidesToolOptionWidget();
 
     /// Sets horizontal guide lines
-    void setHorizontalGuideLines( const QList<qreal> &lines );
+    void setHorizontalGuideLines(const QList<qreal> &lines);
 
     /// Sets vertical guide lines
-    void setVerticalGuideLines( const QList<qreal> &lines );
+    void setVerticalGuideLines(const QList<qreal> &lines);
 
      /// Returns the list of horizontal guide lines.
     QList<qreal> horizontalGuideLines() const;
@@ -48,24 +48,24 @@ public:
     Qt::Orientation orientation() const;
 
     /// Sets the current selected lines orientation
-    void setOrientation( Qt::Orientation orientation );
+    void setOrientation(Qt::Orientation orientation);
 
     /// Selects the given guide line
-    void selectGuideLine( Qt::Orientation orientation, uint index );
+    void selectGuideLine(Qt::Orientation orientation, uint index);
 
     /// Sets the unit to be displayed
-    void setUnit( const KoUnit &unit );
+    void setUnit(const KoUnit &unit);
 
 signals:
     /// Emitted whenever a specific guide line was selected
-    void guideLineSelected( Qt::Orientation orientation, uint index );
+    void guideLineSelected(Qt::Orientation orientation, uint index);
     /// Emitted whenever a guide line with the given orientation has changed
-    void guideLinesChanged( Qt::Orientation orientation );
+    void guideLinesChanged(Qt::Orientation orientation);
 
 private slots:
-    void updateList( int orientation );
-    void updatePosition( int index );
-    void positionChanged( qreal position );
+    void updateList(int orientation);
+    void updatePosition(int index);
+    void positionChanged(qreal position);
     void removeLine();
     void addLine();
 

@@ -51,7 +51,7 @@ public:
     bool isMoving;
 };
 
-GuidesTool::GuidesTool( KoCanvasBase * canvas )
+GuidesTool::GuidesTool(KoCanvasBase *canvas)
     : KoTool(canvas), d(new Private())
 {
 }
@@ -61,85 +61,78 @@ GuidesTool::~GuidesTool()
     delete d;
 }
 
-void GuidesTool::paint( QPainter &painter, const KoViewConverter &converter )
+void GuidesTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if( d->mode == Private::None )
+    if (d->mode == Private::None)
         return;
 
-    if( d->mode == Private::EditGuide && d->index == -1 )
+    if (d->mode == Private::EditGuide && d->index == -1)
         return;
 
-    KoCanvasController * controller = m_canvas->canvasController();
+    KoCanvasController *controller = m_canvas->canvasController();
     QPoint documentOrigin = m_canvas->documentOrigin();
-    QPoint canvasOffset( controller->canvasOffsetX(), controller->canvasOffsetY() );
+    QPoint canvasOffset(controller->canvasOffsetX(), controller->canvasOffsetY());
 
     QPointF start, end;
-    if( d->orientation == Qt::Horizontal )
-    {
+    if (d->orientation == Qt::Horizontal) {
         qreal left = -canvasOffset.x() - documentOrigin.x();
         qreal right = left + m_canvas->canvasWidget()->width();
-        start = QPointF( left, converter.documentToViewY( d->position ) );
-        end = QPointF( right, converter.documentToViewY( d->position ) );
-    }
-    else
-    {
+        start = QPointF(left, converter.documentToViewY(d->position));
+        end = QPointF(right, converter.documentToViewY(d->position));
+    } else {
         qreal top = -canvasOffset.y() - documentOrigin.y();
         qreal bottom = top + m_canvas->canvasWidget()->height();
-        start = QPointF( converter.documentToViewX( d->position ), top );
-        end = QPointF( converter.documentToViewX( d->position ), bottom );
+        start = QPointF(converter.documentToViewX(d->position), top);
+        end = QPointF(converter.documentToViewX(d->position), bottom);
     }
-    painter.setPen( Qt::red );
-    painter.drawLine( start, end );
+    painter.setPen(Qt::red);
+    painter.drawLine(start, end);
 }
 
 void GuidesTool::repaintDecorations()
 {
-    if( d->mode == Private::None )
+    if (d->mode == Private::None)
         return;
 
     QRectF rect;
-    KoCanvasController * controller = m_canvas->canvasController();
+    KoCanvasController *controller = m_canvas->canvasController();
     QPoint documentOrigin = m_canvas->documentOrigin();
-    QPoint canvasOffset( controller->canvasOffsetX(), controller->canvasOffsetY() ); 
-    if( d->orientation == Qt::Horizontal )
-    {
-        qreal pixelBorder = m_canvas->viewConverter()->viewToDocumentY( 2.0 );
-        rect.setTop( d->position - pixelBorder );
-        rect.setBottom( d->position + pixelBorder );
-        rect.setLeft( m_canvas->viewConverter()->viewToDocumentX( -canvasOffset.x()-documentOrigin.x() ) );
-        rect.setWidth( m_canvas->viewConverter()->viewToDocumentX( m_canvas->canvasWidget()->width() ) );
+    QPoint canvasOffset(controller->canvasOffsetX(), controller->canvasOffsetY());
+    if (d->orientation == Qt::Horizontal) {
+        qreal pixelBorder = m_canvas->viewConverter()->viewToDocumentY(2.0);
+        rect.setTop(d->position - pixelBorder);
+        rect.setBottom(d->position + pixelBorder);
+        rect.setLeft(m_canvas->viewConverter()->viewToDocumentX(-canvasOffset.x()-documentOrigin.x()));
+        rect.setWidth(m_canvas->viewConverter()->viewToDocumentX(m_canvas->canvasWidget()->width()));
+    } else {
+        qreal pixelBorder = m_canvas->viewConverter()->viewToDocumentX(2.0);
+        rect.setLeft(d->position - pixelBorder);
+        rect.setRight(d->position + pixelBorder);
+        rect.setTop(m_canvas->viewConverter()->viewToDocumentY(-canvasOffset.y()-documentOrigin.y()));
+        rect.setHeight(m_canvas->viewConverter()->viewToDocumentY(m_canvas->canvasWidget()->height()));
     }
-    else
-    {
-        qreal pixelBorder = m_canvas->viewConverter()->viewToDocumentX( 2.0 );
-        rect.setLeft( d->position - pixelBorder );
-        rect.setRight( d->position + pixelBorder );
-        rect.setTop( m_canvas->viewConverter()->viewToDocumentY( -canvasOffset.y()-documentOrigin.y() ) );
-        rect.setHeight( m_canvas->viewConverter()->viewToDocumentY( m_canvas->canvasWidget()->height() ) );
-    }
-    m_canvas->updateCanvas( rect );
+    m_canvas->updateCanvas(rect);
 }
 
 void GuidesTool::activate(bool temporary)
 {
     Q_UNUSED(temporary);
 
-    if( d->mode != Private::None )
-        useCursor( d->orientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor, true );
+    if (d->mode != Private::None)
+        useCursor(d->orientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor, true);
     else
-        useCursor( Qt::ArrowCursor );
-    if( temporary )
+        useCursor(Qt::ArrowCursor);
+    if (temporary)
         m_canvas->canvasWidget()->grabMouse();
 
-    if( d->options )
-    {
-        KoGuidesData * guidesData = m_canvas->guidesData();
-        if( ! guidesData )
+    if (d->options) {
+        KoGuidesData *guidesData = m_canvas->guidesData();
+        if (! guidesData)
             return;
-        d->options->setHorizontalGuideLines( guidesData->horizontalGuideLines() );
-        d->options->setVerticalGuideLines( guidesData->verticalGuideLines() );
-        d->options->selectGuideLine( d->orientation, d->index );
-        d->options->setUnit( m_canvas->unit() );
+        d->options->setHorizontalGuideLines(guidesData->horizontalGuideLines());
+        d->options->setVerticalGuideLines(guidesData->verticalGuideLines());
+        d->options->selectGuideLine(d->orientation, d->index);
+        d->options->setUnit(m_canvas->unit());
     }
 }
 
@@ -148,79 +141,68 @@ void GuidesTool::deactivate()
     m_canvas->canvasWidget()->releaseMouse();
 }
 
-void GuidesTool::mousePressEvent( KoPointerEvent *event )
+void GuidesTool::mousePressEvent(KoPointerEvent *event)
 {
-    GuideLine line = guideLineAtPosition( event->point );
-    if( line.second >= 0 )
-    {
-        guideLineSelected( line.first, static_cast<uint>( line.second ) );
+    GuideLine line = guideLineAtPosition(event->point);
+    if (line.second >= 0) {
+        guideLineSelected(line.first, static_cast<uint>(line.second));
         d->isMoving = true;
     }
 }
 
-void GuidesTool::mouseMoveEvent( KoPointerEvent *event )
+void GuidesTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if( d->mode == Private::None )
-    {
-        useCursor( Qt::ArrowCursor );
+    if (d->mode == Private::None) {
+        useCursor(Qt::ArrowCursor);
         return;
     }
 
-    if( d->mode == Private::EditGuide && ! d->isMoving )
-    {
-        GuideLine line = guideLineAtPosition( event->point );
-        if( line.second < 0 )
-            useCursor( Qt::ArrowCursor );
+    if (d->mode == Private::EditGuide && ! d->isMoving) {
+        GuideLine line = guideLineAtPosition(event->point);
+        if (line.second < 0)
+            useCursor(Qt::ArrowCursor);
         else
-            useCursor( line.first == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor );
-    }
-    else
-    {
+            useCursor(line.first == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor);
+    } else {
         repaintDecorations();
         d->position = d->orientation == Qt::Horizontal ? event->point.y() : event->point.x();
-        updateGuidePosition( d->position );
+        updateGuidePosition(d->position);
         repaintDecorations();
     }
 }
 
-void GuidesTool::mouseReleaseEvent( KoPointerEvent *event )
+void GuidesTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);
 
-    KoGuidesData * guidesData = m_canvas->guidesData();
-    if( ! guidesData )
-    {
+    KoGuidesData *guidesData = m_canvas->guidesData();
+    if (! guidesData) {
         event->ignore();
         return;
     }
 
-    if( d->mode == Private::AddGuide )
-    {
+    if (d->mode == Private::AddGuide) {
         // add the new guide line
-        guidesData->addGuideLine( d->orientation, d->position );
-    }
-    else if( d->mode == Private::EditGuide )
-    {
-        if( d->isMoving )
-        {
+        guidesData->addGuideLine(d->orientation, d->position);
+    } else if (d->mode == Private::EditGuide) {
+        if (d->isMoving) {
             d->isMoving = false;
-            if( d->orientation == Qt::Horizontal )
-                d->options->setHorizontalGuideLines( guidesData->horizontalGuideLines() );
+            if (d->orientation == Qt::Horizontal)
+                d->options->setHorizontalGuideLines(guidesData->horizontalGuideLines());
             else
-                d->options->setVerticalGuideLines( guidesData->verticalGuideLines() );
-            d->options->selectGuideLine( d->orientation, d->index );
+                d->options->setVerticalGuideLines(guidesData->verticalGuideLines());
+            d->options->selectGuideLine(d->orientation, d->index);
         }
     }
 
-    if( d->mode != Private::EditGuide )
+    if (d->mode != Private::EditGuide)
         emit done();
 }
 
-void GuidesTool::mouseDoubleClickEvent( KoPointerEvent *event )
+void GuidesTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    KoGuidesData * guidesData = m_canvas->guidesData();
-    if( ! guidesData )
-    {
+    KoGuidesData *guidesData = m_canvas->guidesData();
+    if (!guidesData) {
         event->ignore();
         return;
     }
@@ -228,44 +210,36 @@ void GuidesTool::mouseDoubleClickEvent( KoPointerEvent *event )
     repaintDecorations();
 
     // get guide line at position
-    GuideLine line = guideLineAtPosition( event->point );
-    if( line.second < 0 )
-    {
+    GuideLine line = guideLineAtPosition(event->point);
+    if (line.second < 0) {
         // no guide line hit -> insert a new one
         d->orientation = d->options->orientation();
         d->position = d->orientation == Qt::Horizontal ? event->point.y() : event->point.x();
         // no guide line hit -> insert a new one
-        guidesData->addGuideLine( d->orientation, d->position );
-        if( d->orientation == Qt::Horizontal )
-        {
-            d->options->setHorizontalGuideLines( guidesData->horizontalGuideLines() );
+        guidesData->addGuideLine(d->orientation, d->position);
+        if (d->orientation == Qt::Horizontal) {
+            d->options->setHorizontalGuideLines(guidesData->horizontalGuideLines());
             d->index = guidesData->horizontalGuideLines().count()-1;
-        }
-        else
-        {
-            d->options->setVerticalGuideLines( guidesData->verticalGuideLines() );
+        } else {
+            d->options->setVerticalGuideLines(guidesData->verticalGuideLines());
             d->index = guidesData->verticalGuideLines().count()-1;
         }
-        d->options->selectGuideLine( d->orientation, d->index );
+        d->options->selectGuideLine(d->orientation, d->index);
     }
-    else
-    {
+    else {
         // guide line hit -> remove it
         QList<qreal> lines;
-        if( line.first == Qt::Horizontal )
-        {
+        if (line.first == Qt::Horizontal) {
             lines = guidesData->horizontalGuideLines();
-            lines.removeAt( line.second );
-            guidesData->setHorizontalGuideLines( lines );
-            d->options->setHorizontalGuideLines( lines );
+            lines.removeAt(line.second);
+            guidesData->setHorizontalGuideLines(lines);
+            d->options->setHorizontalGuideLines(lines);
             d->index = -1;
-        }
-        else
-        {
+        } else {
             lines = guidesData->verticalGuideLines();
-            lines.removeAt( line.second );
-            guidesData->setVerticalGuideLines( lines );
-            d->options->setVerticalGuideLines( lines );
+            lines.removeAt(line.second);
+            guidesData->setVerticalGuideLines(lines);
+            d->options->setVerticalGuideLines(lines);
             d->index = -1;
         }
     }
@@ -275,7 +249,6 @@ void GuidesTool::mouseDoubleClickEvent( KoPointerEvent *event )
 
 void GuidesTool::startGuideLineCreation(Qt::Orientation orientation, qreal position)
 {
-kDebug();
     d->orientation = orientation;
     d->index = -1;
     d->position = position;
@@ -284,47 +257,42 @@ kDebug();
     KoToolManager::instance()->switchToolRequested(GuidesToolId);
 }
 
-void GuidesTool::moveGuideLine( Qt::Orientation orientation, uint index )
+void GuidesTool::moveGuideLine(Qt::Orientation orientation, uint index)
 {
     d->orientation = orientation;
     d->index = index;
     d->mode = Private::MoveGuide;
 }
 
-void GuidesTool::editGuideLine( Qt::Orientation orientation, uint index )
+void GuidesTool::editGuideLine(Qt::Orientation orientation, uint index)
 {
     d->orientation = orientation;
     d->index = index;
     d->mode = Private::EditGuide;
 }
 
-void GuidesTool::updateGuidePosition( qreal position )
+void GuidesTool::updateGuidePosition(qreal position)
 {
-    if( d->mode == Private::MoveGuide || d->mode == Private::EditGuide )
-    {
-        KoGuidesData * guidesData = m_canvas->guidesData();
-        if( guidesData )
-        {
-            if( d->orientation == Qt::Horizontal )
-            {
+    if (d->mode == Private::MoveGuide || d->mode == Private::EditGuide) {
+        KoGuidesData *guidesData = m_canvas->guidesData();
+        if (guidesData) {
+            if (d->orientation == Qt::Horizontal) {
                 QList<qreal> guideLines = guidesData->horizontalGuideLines();
                 guideLines[d->index] = position;
-                guidesData->setHorizontalGuideLines( guideLines );
-            }
-            else
-            {
+                guidesData->setHorizontalGuideLines(guideLines);
+            } else {
                 QList<qreal> guideLines = guidesData->verticalGuideLines();
                 guideLines[d->index] = position;
-                guidesData->setVerticalGuideLines( guideLines );
+                guidesData->setVerticalGuideLines(guideLines);
             }
         }
     }
 }
 
-void GuidesTool::guideLineSelected( Qt::Orientation orientation, uint index )
+void GuidesTool::guideLineSelected(Qt::Orientation orientation, uint index)
 {
-    KoGuidesData * guidesData = m_canvas->guidesData();
-    if( ! guidesData )
+    KoGuidesData *guidesData = m_canvas->guidesData();
+    if (! guidesData)
         return;
 
     repaintDecorations();
@@ -332,7 +300,7 @@ void GuidesTool::guideLineSelected( Qt::Orientation orientation, uint index )
     d->orientation = orientation;
     d->index = index;
 
-    if( d->orientation == Qt::Horizontal )
+    if (d->orientation == Qt::Horizontal)
         d->position = guidesData->horizontalGuideLines()[index];
     else
         d->position = guidesData->verticalGuideLines()[index];
@@ -340,58 +308,57 @@ void GuidesTool::guideLineSelected( Qt::Orientation orientation, uint index )
     repaintDecorations();
 }
 
-void GuidesTool::guideLinesChanged( Qt::Orientation orientation )
+void GuidesTool::guideLinesChanged(Qt::Orientation orientation)
 {
-    KoGuidesData * guidesData = m_canvas->guidesData();
-    if( ! guidesData )
+    KoGuidesData *guidesData = m_canvas->guidesData();
+    if (! guidesData)
         return;
 
     repaintDecorations();
 
-    if( orientation == Qt::Horizontal )
-        guidesData->setHorizontalGuideLines( d->options->horizontalGuideLines() );
+    if (orientation == Qt::Horizontal)
+        guidesData->setHorizontalGuideLines(d->options->horizontalGuideLines());
     else
-        guidesData->setVerticalGuideLines( d->options->verticalGuideLines() );
+        guidesData->setVerticalGuideLines(d->options->verticalGuideLines());
 
-    if( orientation == d->orientation )
-    {
+    if (orientation == d->orientation) {
         QList<qreal> lines;
-        if( d->orientation == Qt::Horizontal )
+        if (d->orientation == Qt::Horizontal)
             lines = guidesData->horizontalGuideLines();
         else
             lines = guidesData->verticalGuideLines();
 
         int oldIndex = d->index;
 
-        if( lines.count() == 0 )
+        if (lines.count() == 0)
             d->index = -1;
-        else if( d->index >= lines.count() )
+        else if (d->index >= lines.count())
             d->index = 0;
 
-        if( d->index >= 0 )
+        if (d->index >= 0)
             d->position = lines[d->index];
 
-        if( oldIndex != d->index )
-            d->options->selectGuideLine( d->orientation, d->index );
+        if (oldIndex != d->index)
+            d->options->selectGuideLine(d->orientation, d->index);
     }
 
     repaintDecorations();
 }
 
-GuidesTool::GuideLine GuidesTool::guideLineAtPosition( const QPointF &position )
+GuidesTool::GuideLine GuidesTool::guideLineAtPosition(const QPointF &position)
 {
     int index = -1;
     Qt::Orientation orientation = Qt::Horizontal;
 
     // check if we are on a guide line
-    KoGuidesData * guidesData = m_canvas->guidesData();
-    if( guidesData && guidesData->showGuideLines() ) {
+    KoGuidesData *guidesData = m_canvas->guidesData();
+    if (guidesData && guidesData->showGuideLines()) {
         qreal handleRadius = m_canvas->resourceProvider()->handleRadius();
-        qreal minDistance = m_canvas->viewConverter()->viewToDocumentX( handleRadius );
+        qreal minDistance = m_canvas->viewConverter()->viewToDocumentX(handleRadius);
         uint i = 0;
-        foreach( qreal guidePos, guidesData->horizontalGuideLines() ) {
-            qreal distance = qAbs( guidePos - position.y() );
-            if( distance < minDistance ) {
+        foreach (qreal guidePos, guidesData->horizontalGuideLines()) {
+            qreal distance = qAbs(guidePos - position.y());
+            if (distance < minDistance) {
                 orientation = Qt::Horizontal;
                 index = i;
                 minDistance = distance;
@@ -399,10 +366,9 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition( const QPointF &position )
             i++;
         }
         i = 0;
-        foreach( qreal guidePos, guidesData->verticalGuideLines() )
-        {
-            qreal distance = qAbs( guidePos - position.x() );
-            if( distance < minDistance ) {
+        foreach (qreal guidePos, guidesData->verticalGuideLines()) {
+            qreal distance = qAbs(guidePos - position.x());
+            if (distance < minDistance) {
                 orientation = Qt::Vertical;
                 index = i;
                 minDistance = distance;
@@ -411,77 +377,76 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition( const QPointF &position )
         }
     }
 
-    return QPair<Qt::Orientation,int>( orientation, index );
+    return QPair<Qt::Orientation,int>(orientation, index);
 }
 
-void GuidesTool::resourceChanged( int key, const QVariant & res )
+void GuidesTool::resourceChanged(int key, const QVariant & res)
 {
     Q_UNUSED(res);
-    if( key == KoCanvasResource::Unit )
-    {
-        if( d->options )
-            d->options->setUnit( m_canvas->unit() );
+    if (key == KoCanvasResource::Unit) {
+        if (d->options)
+            d->options->setUnit(m_canvas->unit());
     }
 }
 
-QMap< QString, QWidget* > GuidesTool::createOptionWidgets()
+QMap< QString, QWidget*> GuidesTool::createOptionWidgets()
 {
     QMap< QString, QWidget* > optionWidgets;
-    if( d->mode != Private::EditGuide ) {
+    if (d->mode != Private::EditGuide) {
         d->options = new GuidesToolOptionWidget();
 
-        connect( d->options, SIGNAL(guideLineSelected(Qt::Orientation,uint)),
-                this, SLOT(guideLineSelected(Qt::Orientation,uint)) );
+        connect(d->options, SIGNAL(guideLineSelected(Qt::Orientation,uint)),
+                this, SLOT(guideLineSelected(Qt::Orientation,uint)));
 
-        connect( d->options, SIGNAL(guideLinesChanged(Qt::Orientation)),
-                this, SLOT(guideLinesChanged(Qt::Orientation)) );
+        connect(d->options, SIGNAL(guideLinesChanged(Qt::Orientation)),
+                this, SLOT(guideLinesChanged(Qt::Orientation)));
 
-        optionWidgets.insert( "Guides Editor", d->options );
+        optionWidgets.insert("Guides Editor", d->options);
 
         d->insert = new InsertGuidesToolOptionWidget();
 
-        connect( d->insert, SIGNAL(createGuides(GuidesTransaction*)),
-                 this, SLOT(insertorCreateGuidesSlot(GuidesTransaction*)) );
+        connect(d->insert, SIGNAL(createGuides(GuidesTransaction*)),
+                 this, SLOT(insertorCreateGuidesSlot(GuidesTransaction*)));
 
-        optionWidgets.insert( "Guides Insertor", d->insert );
+        optionWidgets.insert("Guides Insertor", d->insert);
     }
     return optionWidgets;
 }
 
-void GuidesTool::insertorCreateGuidesSlot( GuidesTransaction* result )
+void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)
 {
     QPoint documentStart = canvas()->documentOrigin();
-    KoGuidesData * guidesData = m_canvas->guidesData();
+    KoGuidesData *guidesData = m_canvas->guidesData();
     const QSizeF pageSize = m_canvas->resourceProvider()->sizeResource(KoCanvasResource::PageSize);
 
     QList< qreal > verticalLines;
     QList< qreal > horizontalLines;
     //save previous lines if requested
-    if( !result->erasePreviousGuides ) {
-        verticalLines.append( guidesData->verticalGuideLines() );
-        horizontalLines.append( guidesData->horizontalGuideLines() );
+    if (!result->erasePreviousGuides) {
+        verticalLines.append(guidesData->verticalGuideLines());
+        horizontalLines.append(guidesData->horizontalGuideLines());
     }
 
     //vertical guides
-    if( result->insertVerticalEdgesGuides ) {
+    if (result->insertVerticalEdgesGuides) {
         verticalLines << 0 << pageSize.width();
     }
 
     int lastI = result->verticalGuides;
-    qreal verticalJumps = pageSize.width() / (qreal)( result->verticalGuides + 1 );
-    for( int i = 1 ; i <= lastI; ++i ) {
+    qreal verticalJumps = pageSize.width() / (qreal)(result->verticalGuides + 1);
+    for (int i = 1 ; i <= lastI; ++i) {
         verticalLines << verticalJumps * (qreal)i;
     }
     guidesData->setVerticalGuideLines(verticalLines);
 
     //horizontal guides
     lastI = result->horizontalGuides;
-    if( result->insertHorizontalEdgesGuides ) {
+    if (result->insertHorizontalEdgesGuides) {
         horizontalLines << 0 << pageSize.height();
     }
 
-    qreal horizontalJumps = pageSize.height() / (qreal)( result->horizontalGuides + 1 );
-    for( int i = 1 ; i <= lastI; ++i ) {
+    qreal horizontalJumps = pageSize.height() / (qreal)(result->horizontalGuides + 1);
+    for (int i = 1 ; i <= lastI; ++i) {
         horizontalLines << horizontalJumps * (qreal)i;
     }
     guidesData->setHorizontalGuideLines(horizontalLines);
@@ -489,4 +454,4 @@ void GuidesTool::insertorCreateGuidesSlot( GuidesTransaction* result )
     delete result;
 }
 
-#include "GuidesTool.moc"
+#include <GuidesTool.moc>

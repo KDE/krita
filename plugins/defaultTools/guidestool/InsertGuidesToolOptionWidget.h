@@ -20,12 +20,12 @@
 #ifndef INSERTGUIDESTOOLOPTIONWIDGET_H
 #define INSERTGUIDESTOOLOPTIONWIDGET_H
 
-#include "ui_InsertGuidesToolOptionWidget.h"
+#include <ui_InsertGuidesToolOptionWidget.h>
 
 #include <QWidget>
 
-//This is the resulting transaction to be applie.
-//NOTE: it is a class instead of a struct so to be able to include it forward
+//This is the resulting transaction to be applied.
+//NOTE: it is a class instead of a struct so to be able to forward include i 
 class GuidesTransaction {
 public:
     bool insertVerticalEdgesGuides;
@@ -40,16 +40,16 @@ class InsertGuidesToolOptionWidget : public QWidget
     Q_OBJECT
 public:
 
-    InsertGuidesToolOptionWidget(QWidget * parent = 0);
+    InsertGuidesToolOptionWidget(QWidget *parent = 0);
     ~InsertGuidesToolOptionWidget();
 
 signals:
-    void createGuides( GuidesTransaction* transaction );
+    void createGuides(GuidesTransaction *transaction);
 
 private slots:
-    void verticalCheckBoxSlot( bool state );
-    void horizontalCheckBoxSlot( bool state );
-    void createButtonClickedSlot ( bool checked );
+    void verticalCheckBoxSlot(bool state);
+    void horizontalCheckBoxSlot(bool state);
+    void createButtonClickedSlot (bool checked);
 
 private:
     Ui_InsertGuidesToolOptionWidget m_widget;

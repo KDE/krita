@@ -42,7 +42,7 @@ KisWdgBlur::KisWdgBlur(QWidget * parent) : KisConfigWidget(parent)
     m_widget->setupUi(this);
     linkSpacingToggled(true);
 
-    connect(widget()->bnLinkSize, SIGNAL(toggled(bool)), this, SLOT(linkSpacingToggled(bool)));
+    connect(widget()->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkSpacingToggled(bool)));
     connect(widget()->intHalfWidth, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHalfWidthChanged(int)));
     connect(widget()->intHalfHeight, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHalfHeightChanged(int)));
 
@@ -54,6 +54,7 @@ KisWdgBlur::KisWdgBlur(QWidget * parent) : KisConfigWidget(parent)
 KisPropertiesConfiguration* KisWdgBlur::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("blur", 1);
+    config->setProperty("lockAspect", widget()->aspectButton->keepAspectRatio());
     config->setProperty("halfWidth", widget()->intHalfWidth->value());
     config->setProperty("halfHeight", widget()->intHalfHeight->value());
     config->setProperty("rotate", widget()->intAngle->value());
@@ -65,6 +66,9 @@ KisPropertiesConfiguration* KisWdgBlur::configuration() const
 void KisWdgBlur::setConfiguration(const KisPropertiesConfiguration* config)
 {
     QVariant value;
+    if (config->getProperty("lockAspect", value)) {
+        m_widget->aspectButton->setKeepAspectRatio(value.toBool());
+    }
     if (config->getProperty("shape", value)) {
         widget()->cbShape->setCurrentIndex(value.toUInt());
     }
@@ -85,12 +89,7 @@ void KisWdgBlur::setConfiguration(const KisPropertiesConfiguration* config)
 void KisWdgBlur::linkSpacingToggled(bool b)
 {
     m_halfSizeLink = b;
-    KoImageResource kir;
-    if (b) {
-        widget()->bnLinkSize->setIcon(QIcon(kir.chain()));
-    } else {
-        widget()->bnLinkSize->setIcon(QIcon(kir.chainBroken()));
-    }
+    widget()->intHalfHeight->setValue(widget()->intHalfWidth->value());
 }
 
 void KisWdgBlur::spinBoxHalfWidthChanged(int v)

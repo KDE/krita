@@ -33,7 +33,7 @@ KisConvolutionKernel::KisConvolutionKernel(quint32 _width, quint32 _height, qrea
 {
     d->offset = _offset;
     d->factor = _factor;
-	setSize(_width, _height);
+    setSize(_width, _height);
 }
 
 KisConvolutionKernel::~KisConvolutionKernel()

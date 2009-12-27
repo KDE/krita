@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>290</width>
-    <height>382</height>
+    <height>385</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -225,7 +225,10 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Input</string>
+         <string>Input:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -258,7 +261,10 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Output</string>
+         <string>Output:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>

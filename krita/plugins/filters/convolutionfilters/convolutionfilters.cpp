@@ -151,7 +151,7 @@ KisEmbossHorizontalFilter::KisEmbossHorizontalFilter() :
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix <<  0, 0,  0,
-                    -1, 4, -1,
+                    -1, 2, -1,
                      0, 0,  0;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 127, 1);

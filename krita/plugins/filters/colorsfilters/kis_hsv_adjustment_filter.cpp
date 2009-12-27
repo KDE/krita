@@ -60,7 +60,6 @@ KisFilterConfiguration* KisHSVAdjustmentFilter::factoryConfiguration(const KisPa
     config->setProperty("s", 0);
     config->setProperty("v", 0);
     return config;
-
 }
 
 KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConfigWidget(parent, f)

@@ -55,7 +55,7 @@ public:
     /// reimplemented from superclass
     virtual void activate(bool temporary = false);
     /// reimplemented method
-    virtual void customMoveEvent(KoPointerEvent * event);
+    virtual void customMoveEvent(KoPointerEvent *event);
 
     /// set the canvasController this tool works on.
     void setCanvasController(KoCanvasController *controller) {

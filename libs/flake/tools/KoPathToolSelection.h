@@ -43,7 +43,7 @@ class FLAKE_TEST_EXPORT KoPathToolSelection : public KoToolSelection
     Q_OBJECT
 
 public:
-    explicit KoPathToolSelection(KoPathTool * tool);
+    explicit KoPathToolSelection(KoPathTool *tool);
 
     ~KoPathToolSelection();
 
@@ -56,14 +56,14 @@ public:
     * @param point to add to the selection
     * @param clear if true the selection will be cleared before adding the point
     */
-    void add(KoPathPoint * point, bool clear);
+    void add(KoPathPoint *point, bool clear);
 
     /**
     * @brief Remove a point form the selection
     *
     * @param point to remove from the selection
     */
-    void remove(KoPathPoint * point);
+    void remove(KoPathPoint *point);
 
     /**
     * @brief Clear the selection
@@ -97,14 +97,14 @@ public:
     *
     * @return true when the point is in the selection, false otherwise
     */
-    bool contains(KoPathPoint * point);
+    bool contains(KoPathPoint *point);
 
     /**
     * @brief Get all selected points
     *
     * @return set of selected points
     */
-    const QSet<KoPathPoint *> & selectedPoints() const;
+    const QSet<KoPathPoint *> &selectedPoints() const;
 
     /**
     * @brief Get the point data of all selected points
@@ -153,7 +153,7 @@ private:
 
     QSet<KoPathPoint *> m_selectedPoints;
     PathShapePointMap m_shapePointMap;
-    KoPathTool * m_tool;
+    KoPathTool *m_tool;
     QList<KoPathShape*> m_selectedShapes;
 };
 

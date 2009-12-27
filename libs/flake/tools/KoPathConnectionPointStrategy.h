@@ -37,7 +37,7 @@ class KoPathConnectionPointStrategy : public KoParameterChangeStrategy
 {
 public:
     KoPathConnectionPointStrategy(KoPathTool *tool, KoCanvasBase *canvas,
-                                  KoConnectionShape * parameterShape, int handleId);
+                                  KoConnectionShape *parameterShape, int handleId);
     virtual ~KoPathConnectionPointStrategy();
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
@@ -46,7 +46,7 @@ public:
 private:
 
     KoPathTool *m_tool;
-    KoConnectionShape * m_connectionShape; ///< the parametric shape we are working on
+    KoConnectionShape *m_connectionShape; ///< the parametric shape we are working on
     int m_handleId;                      ///< the id of the control point
     QPointF m_startPoint;                ///< the starting position of the control point
     KoShape *m_oldConnectionShape;

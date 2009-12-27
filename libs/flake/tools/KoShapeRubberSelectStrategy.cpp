@@ -118,7 +118,12 @@ void KoShapeRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifi
     m_canvas->updateCanvas(m_selectRect.normalized());
 }
 
-const QRectF KoShapeRubberSelectStrategy::selectRect() const
+QRectF KoShapeRubberSelectStrategy::selectRect() const
 {
     return m_selectRect.normalized();
+}
+
+QUndoCommand *KoShapeRubberSelectStrategy::createCommand()
+{
+    return 0;
 }

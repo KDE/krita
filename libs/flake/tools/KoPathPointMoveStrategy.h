@@ -38,14 +38,14 @@ public:
     virtual ~KoPathPointMoveStrategy();
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual QUndoCommand* createCommand();
+    virtual QUndoCommand *createCommand();
 
 private:
     QPointF m_originalPosition;
     /// the accumulated point move amount
     QPointF m_move;
     /// pointer to the path tool
-    KoPathTool * m_tool;
+    KoPathTool *m_tool;
 };
 
 #endif /* KOPATHPOINTMOVESTRATEGY_H */

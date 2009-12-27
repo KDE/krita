@@ -53,9 +53,9 @@ public:
     PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::KoPointType activePointType);
     void paint(QPainter &painter, const KoViewConverter &converter);
     void repaint() const;
-    KoInteractionStrategy * handleMousePress(KoPointerEvent *event);
+    KoInteractionStrategy *handleMousePress(KoPointerEvent *event);
     bool check();
-    KoPathPoint * activePoint() const;
+    KoPathPoint *activePoint() const;
     KoPathPoint::KoPointType activePointType() const;
 private:
     KoPathPoint *m_activePoint;
@@ -68,7 +68,7 @@ public:
     ParameterHandle(KoPathTool *tool, KoParameterShape *parameterShape, int handleId);
     void paint(QPainter &painter, const KoViewConverter &converter);
     void repaint() const;
-    KoInteractionStrategy * handleMousePress(KoPointerEvent *event);
+    KoInteractionStrategy *handleMousePress(KoPointerEvent *event);
     bool check();
 protected:
     KoParameterShape *m_parameterShape;
@@ -82,7 +82,7 @@ public:
 
     // XXX: Later: create a paint even to distinguish a connection
     // handle  from another handle type
-    KoInteractionStrategy * handleMousePress(KoPointerEvent *event);
+    KoInteractionStrategy *handleMousePress(KoPointerEvent *event);
 };
 
 #endif // KOPATHTOOLHANDLE_H

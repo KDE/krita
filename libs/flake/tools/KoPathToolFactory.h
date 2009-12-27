@@ -30,7 +30,7 @@ public:
     KoPathToolFactory(QObject *parent);
     ~KoPathToolFactory();
 
-    KoTool * createTool(KoCanvasBase *canvas);
+    KoTool *createTool(KoCanvasBase *canvas);
 };
 
 #endif

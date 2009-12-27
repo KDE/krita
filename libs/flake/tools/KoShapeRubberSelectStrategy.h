@@ -56,9 +56,7 @@ public:
 
     void paint(QPainter &painter, const KoViewConverter &converter);
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual QUndoCommand* createCommand() {
-        return 0;
-    }
+    virtual QUndoCommand *createCommand();
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
 
 protected:
@@ -67,12 +65,12 @@ protected:
      * The rectangle is normalized and immutable.
      * @return a rectangle in pt.
      */
-    const QRectF selectRect() const;
+    QRectF selectRect() const;
 
 private:
     QRectF m_selectRect;
     QPointF m_lastPos;
-    KoSnapGuide * m_snapGuide;
+    KoSnapGuide *m_snapGuide;
 };
 
 #endif /* KODEFRUBBERSELECT_H */

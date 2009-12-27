@@ -71,14 +71,14 @@ public:
      * based on the new pointer event. The default implementations does nothing.
      * @param event the new pointer event
      */
-    virtual void handleCustomEvent(KoPointerEvent * event);
+    virtual void handleCustomEvent(KoPointerEvent *event);
 
     /**
      * For interactions that are undo-able this method should be implemented to return such
      * a command.  Implementations should return 0 otherwise.
      * @return a command, or 0.
      */
-    virtual QUndoCommand* createCommand() = 0;
+    virtual QUndoCommand *createCommand() = 0;
     /**
      * This method will undo frames based interactions by calling createCommand()
      * and unexecuting that.

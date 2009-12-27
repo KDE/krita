@@ -33,7 +33,7 @@ public:
     ~KoZoomToolWidget();
 
 protected:
-    bool eventFilter(QObject* object, QEvent* event);
+    bool eventFilter(QObject *object, QEvent *event);
 
 private slots:
     void changeZoomMode();
@@ -44,7 +44,7 @@ private:
     bool m_dirtyThumbnail;
     QRect m_birdEyeRect;
     QPixmap m_thumbnail;
-    KoZoomTool* m_tool;
+    KoZoomTool *m_tool;
 };
 
 #endif

@@ -38,7 +38,7 @@ public:
 
 private:
     /// pointer to the path tool
-    KoPathTool * m_tool;
+    KoPathTool *m_tool;
 };
 
 #endif /* KOPATHPOINTRUBBERSELECTSTRATEGY_H */

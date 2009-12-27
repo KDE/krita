@@ -74,7 +74,7 @@ public:
      * return the properties to be used for creating the next shape
      * @return the properties to be used for creating the next shape
      */
-    KoProperties const * shapeProperties();
+    KoProperties const *shapeProperties();
 
 protected:
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);

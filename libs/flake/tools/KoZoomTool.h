@@ -39,7 +39,7 @@ public:
      */
     explicit KoZoomTool(KoCanvasBase *canvas);
     /// reimplemented method
-    virtual void wheelEvent(KoPointerEvent * event);
+    virtual void wheelEvent(KoPointerEvent *event);
     /// reimplemented method
     virtual void mouseReleaseEvent(KoPointerEvent *event);
     /// reimplemented method
@@ -60,7 +60,7 @@ public:
     void setZoomInMode(bool zoomIn);
 
 protected:
-    QWidget* createOptionWidget();
+    QWidget *createOptionWidget();
 
 private:
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);

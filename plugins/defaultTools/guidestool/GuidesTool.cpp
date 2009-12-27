@@ -126,6 +126,7 @@ void GuidesTool::activate(bool temporary)
 void GuidesTool::deactivate()
 {
     m_canvas->canvasWidget()->releaseMouse();
+    m_mode = None;
 }
 
 void GuidesTool::mousePressEvent(KoPointerEvent *event)

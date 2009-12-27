@@ -91,7 +91,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
 
     KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(brushsize, brushsize, halfSize, halfSize);
 
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
 
     KisPaintDeviceSP interm = new KisPaintDevice(*src.paintDevice());
     KoColorSpace * cs = interm->colorSpace();
@@ -123,12 +123,12 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     colors[1] = new quint8[cdepth];
 
     int pixelsProcessed = 0;
-    qint32 weights[2];
-    qint32 factor = 128;
+    qreal weights[2];
+    qreal factor = 128;
 
     // XXX: Added static cast to avoid warning
-    weights[0] = static_cast<qint32>(factor * (1. + amount));
-    weights[1] = static_cast<qint32>(-factor * amount);
+    weights[0] = static_cast<qreal>(factor * (1. + amount));
+    weights[1] = static_cast<qreal>(-factor * amount);
 
     int steps = 100 / areaSize.width() * areaSize.height();
 
@@ -139,7 +139,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
                 if (diff > threshold) {
                     memcpy(colors[0], srcIt.oldRawData(), cdepth);
                     memcpy(colors[1], intermIt.rawData(), cdepth);
-                    convolutionOp->convolveColors(colors, weights, dstIt.rawData(),  factor, 0, 2, channelFlags);
+                    convolutionOp->convolveColors(colors, weights, dstIt.rawData(), factor, 0, 2.0, channelFlags);
                 } else {
                     memcpy(dstIt.rawData(), srcIt.oldRawData(), cdepth);
                 }

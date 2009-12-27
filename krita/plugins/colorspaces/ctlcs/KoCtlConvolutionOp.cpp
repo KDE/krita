@@ -32,19 +32,19 @@ KoCtlConvolutionOp::~KoCtlConvolutionOp()
     qDeleteAll(m_accumulators);
 }
 
-void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels, const QBitArray & channelFlags) const
+void KoCtlConvolutionOp::convolveColors(const quint8* const* colors, const qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nPixels, const QBitArray & channelFlags) const
 {
     foreach(KoCtlAccumulator* accumulator, m_accumulators) {
         accumulator->reset();
     }
 
-    qint32 totalWeight = 0;
-    qint32 totalWeightTransparent = 0;
+    qreal totalWeight = 0;
+    qreal totalWeightTransparent = 0;
     int channelsNb = m_colorSpace->channelCount();
     int alphaPos = m_colorSpace->alphaPos();
 
     for (; nPixels--; colors++, kernelValues++) {
-        qint32 weight = *kernelValues;
+        qreal weight = *kernelValues;
         if (weight != 0) {
             if (m_colorSpace->alpha(*colors) == 0) {
                 totalWeightTransparent += weight;

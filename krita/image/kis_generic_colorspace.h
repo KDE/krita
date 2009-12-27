@@ -43,8 +43,8 @@ class KisGenericColorSpace : public KoColorSpace
 
         virtual ~KisGenericColorSpaceConvolutionOpImpl() {}
 
-        virtual void convolveColors(const quint8* const* colors, const qint32* kernelValues,
-                                    quint8 *dst, qint32 factor, qint32 offset, qint32 nColors,
+        virtual void convolveColors(const quint8* const* colors, const qreal* kernelValues,
+                                    quint8 *dst, qreal factor, qreal offset, qint32 nColors,
                                     const QBitArray & channelFlags) const {
             _type totals[ _nbchannels ];
             for (uint i = 0; i < _nbchannels; i++) {
@@ -55,7 +55,7 @@ class KisGenericColorSpace : public KoColorSpace
             _type* dstT = reinterpret_cast<_type*>(dst);
 
             while (nColors--) {
-                qint32 weight = *kernelValues;
+                qreal weight = *kernelValues;
 
                 if (weight != 0) {
                     for (uint i = 0; i < _nbchannels; i++) {

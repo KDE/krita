@@ -24,17 +24,6 @@
 #include <kparts/plugin.h>
 #include "kis_convolution_filter.h"
 
-class KisGaussianBlurFilter : public KisConvolutionFilter
-{
-public:
-    KisGaussianBlurFilter();
-public:
-    static inline KoID id() {
-        return KoID("gaussian blur", i18n("Gaussian Blur"));
-    }
-
-};
-
 class KisSharpenFilter : public KisConvolutionFilter
 {
 public:

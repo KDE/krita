@@ -19,9 +19,12 @@
 #ifndef _KIS_CONVOLUTION_KERNEL_H_
 #define _KIS_CONVOLUTION_KERNEL_H_
 
+#include <Eigen/Core>
 #include "kis_shared.h"
 #include "krita_export.h"
 #include "kis_types.h"
+
+using namespace Eigen;
 
 class KisMaskGenerator;
 class QImage;
@@ -30,7 +33,7 @@ class KRITAIMAGE_EXPORT KisConvolutionKernel : public KisShared
 {
 
 public:
-    KisConvolutionKernel(quint32 width, quint32 height, qint32 offset, qint32 factor);
+    KisConvolutionKernel(quint32 width, quint32 height, qreal offset, qreal factor);
     virtual ~KisConvolutionKernel();
 
     quint32 width() const;
@@ -39,14 +42,15 @@ public:
      * Change the size of a kernel, it won't reallocate, and therefore it must keep the same kernel size ( oldwidth * oldheight = newwidth*newheight)
      */
     void setSize(quint32 width, quint32 height);
-    qint32 offset() const;
-    qint32 factor() const;
-    void setFactor(qint32);
-    qint32 * data();
-    const qint32 * data() const;
+    qreal offset() const;
+    qreal factor() const;
+    void setFactor(qreal);
+    Matrix<qreal, Dynamic, Dynamic>& data();
+    const Matrix<qreal, Dynamic, Dynamic> * data() const;
 
     static KisConvolutionKernelSP fromQImage(const QImage& image);
-    static KisConvolutionKernelSP kernelFromMaskGenerator(KisMaskGenerator* , double angle = 0.0);
+    static KisConvolutionKernelSP fromMaskGenerator(KisMaskGenerator *, double angle = 0.0);
+    static KisConvolutionKernelSP fromMatrix(Matrix<qreal, Dynamic, Dynamic> matrix, qreal offset, qreal factor);
 private:
     struct Private;
     Private* const d;

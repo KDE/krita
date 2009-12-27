@@ -264,13 +264,13 @@ QString KoAlphaColorSpace::normalisedChannelValueText(const quint8 *pixel, quint
 }
 
 
-void KoAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags) const
+void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const
 {
-    qint32 totalAlpha = 0;
+    qreal totalAlpha = 0;
 
     while (nColors--)
     {
-        qint32 weight = *kernelValues;
+        qreal weight = *kernelValues;
 
         if (weight != 0) {
             totalAlpha += (*colors)[PIXEL_MASK] * weight;

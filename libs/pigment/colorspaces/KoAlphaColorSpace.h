@@ -67,7 +67,7 @@ public:
     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors, const QBitArray & channelFlags) const;
+    virtual void convolveColors(quint8** colors, qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const;
 
 
     virtual quint32 colorSpaceType() const { return 0; }

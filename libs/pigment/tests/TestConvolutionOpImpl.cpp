@@ -69,7 +69,7 @@ void TestConvolutionOpImpl::testConvolutionOpImpl()
     // Tests for Case A)
 
     {
-        qint32 kernelValues[] = { 1, 1, 1};
+        qreal kernelValues[] = { 1, 1, 1};
         op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
         dbgPigment << dst16[0] << " " << dst16[1] << " " << dst16[2] << " " << QBitArray().isEmpty();
         QVERIFY2( dst16[0] == 250, QString("%1 250").arg(dst16[0]).toLatin1() );
@@ -83,7 +83,7 @@ void TestConvolutionOpImpl::testConvolutionOpImpl()
         QVERIFY2( dst16[3] == 0xFFFF, QString("%1 0xFFFF").arg(dst16[3]).toLatin1() );
     }
     {
-        qint32 kernelValues[] = { -1, 1, -1};
+        qreal kernelValues[] = { -1, 1, -1};
         op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
         QVERIFY2( dst16[0] == 0, QString("%1 0").arg(dst16[0]).toLatin1() );
         QVERIFY2( dst16[1] == 0, QString("%1 0").arg(dst16[1]).toLatin1() );
@@ -91,7 +91,7 @@ void TestConvolutionOpImpl::testConvolutionOpImpl()
         QVERIFY2( dst16[3] == 0, QString("%1 0").arg(dst16[3]).toLatin1() );
    }
    {
-        qint32 kernelValues[] = { 1, 2, 1};
+        qreal kernelValues[] = { 1, 2, 1};
         op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
         QVERIFY2( dst16[0] == 300, QString("%1 300").arg(dst16[0]).toLatin1() );
         QVERIFY2( dst16[1] == 800, QString("%1 800").arg(dst16[1]).toLatin1() );
@@ -99,7 +99,7 @@ void TestConvolutionOpImpl::testConvolutionOpImpl()
         QVERIFY2( dst16[3] == 0xFFFF, QString("%1 0xFFFF").arg(dst16[3]).toLatin1() );
    }
    {
-        qint32 kernelValues[] = { 1, -1, 1};
+        qreal kernelValues[] = { 1, -1, 1};
         op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
         QVERIFY2( dst16[0] == 150, QString("%1 150").arg(dst16[0]).toLatin1() );
         QVERIFY2( dst16[1] == 350, QString("%1 350").arg(dst16[1]).toLatin1() );
@@ -107,7 +107,7 @@ void TestConvolutionOpImpl::testConvolutionOpImpl()
         QVERIFY2( dst16[3] == 0xFFFF, QString("%1 0xFFFF").arg(dst16[3]).toLatin1() );
    }
    {
-        qint32 kernelValues[] = { 1, -1, 1};
+        qreal kernelValues[] = { 1, -1, 1};
         op.convolveColors(colors, kernelValues, dst, 1, 100, 3, QBitArray() );
         QVERIFY2( dst16[0] == 250, QString("%1 250").arg(dst16[0]).toLatin1() );
         QVERIFY2( dst16[1] == 450, QString("%1 450").arg(dst16[1]).toLatin1() );
@@ -149,7 +149,7 @@ void TestConvolutionOpImpl::testOneSemiTransparent()
     {
         // Tests for Case A)
 
-        qint32 kernelValues[] = { 1, 1, 1};
+        qreal kernelValues[] = { 1, 1, 1};
         op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
         QVERIFY2( dst16[0] == 250, QString("%1 250").arg(dst16[0]).toLatin1() );
         QVERIFY2( dst16[1] == 650, QString("%1 650").arg(dst16[1]).toLatin1() );
@@ -192,7 +192,7 @@ void TestConvolutionOpImpl::testOneFullyTransparent()
     memset( dst16, 0, KoRgbU16Traits::pixelSize );
 
     {
-        qint32 kernelValues[] = { 1, 1, 1};
+        qreal kernelValues[] = { 1, 1, 1};
 
         // Test for Case C)
         op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );

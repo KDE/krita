@@ -24,115 +24,126 @@
 #include <kis_mask_generator.h>
 
 struct KisConvolutionKernel::Private {
-    quint32 width;
-    quint32 height;
-    qint32 offset;
-    qint32 factor;
-    qint32 * data;
+    qreal offset;
+    qreal factor;
+    Matrix<qreal, Dynamic, Dynamic> data;
 };
 
-KisConvolutionKernel::KisConvolutionKernel(quint32 _width, quint32 _height, qint32 _offset, qint32 _factor) : d(new Private)
+KisConvolutionKernel::KisConvolutionKernel(quint32 _width, quint32 _height, qreal _offset, qreal _factor) : d(new Private)
 {
-    d->width = _width;
-    d->height = _height;
     d->offset = _offset;
     d->factor = _factor;
-    d->data = new qint32[d->width * d->height];
+	setSize(_width, _height);
 }
 
 KisConvolutionKernel::~KisConvolutionKernel()
 {
-    delete[] d->data;
     delete d;
 }
 
 quint32 KisConvolutionKernel::width() const
 {
-    return d->width;
+    return d->data.cols();
 }
 
 quint32 KisConvolutionKernel::height() const
 {
-    return d->height;
+    return d->data.rows();
 }
 
 void KisConvolutionKernel::setSize(quint32 width, quint32 height)
 {
-    Q_ASSERT(d->width * d->height == width * height);
-    d->width = width;
-    d->height = height;
+    d->data.resize(height, width);
 }
 
 
-qint32 KisConvolutionKernel::offset() const
+qreal KisConvolutionKernel::offset() const
 {
     return d->offset;
 }
 
-qint32 KisConvolutionKernel::factor() const
+qreal KisConvolutionKernel::factor() const
 {
     return d->factor;
 }
 
-void KisConvolutionKernel::setFactor(qint32 factor)
+void KisConvolutionKernel::setFactor(qreal factor)
 {
     d->factor = factor;
 }
 
-qint32* KisConvolutionKernel::data()
+Matrix<qreal, Dynamic, Dynamic>& KisConvolutionKernel::data()
 {
     return d->data;
 }
 
-const qint32* KisConvolutionKernel::data() const
+const Matrix<qreal, Dynamic, Dynamic>* KisConvolutionKernel::data() const
 {
-    return d->data;
+    return &(d->data);
 }
 
 KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& image)
 {
-    KisConvolutionKernelSP k = new KisConvolutionKernel(image.width(), image.height(), 0, 0);
-    uint count = k->width() * k->height();
-    qint32* itData = k->data();
+    KisConvolutionKernelSP kernel = new KisConvolutionKernel(image.width(), image.height(), 0, 0);
+
+    Matrix<qreal, Dynamic, Dynamic>& data = kernel->data();
+
     const quint8* itImage = image.bits();
-    qint32 factor = 0;
-    for (uint i = 0; i < count; ++i , ++itData, itImage += 4) {
-        *itData = 255 - (*itImage + *(itImage + 1) + *(itImage + 2)) / 3;
-        factor += *itData;
+    qreal factor = 0;
+
+    for (int r = 0; r < image.height(); r++) {
+        for (int c = 0; c < image.width(); c++, itImage += 4)
+        {
+            uint value = 255 - (*itImage + *(itImage + 1) + *(itImage + 2)) / 3;
+            data(r, c) = value;
+            factor += value;
+        }
     }
-    k->d->factor = factor;
-    return k;
+
+    kernel->setFactor(factor);
+    return kernel;
 }
 
-KisConvolutionKernelSP KisConvolutionKernel::kernelFromMaskGenerator(KisMaskGenerator* kmg, double angle)
+KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator* kmg, double angle)
 {
     Q_UNUSED(angle);
 
     qint32 width = (int)(kmg->width() + 0.5);
     qint32 height = (int)(kmg->height() + 0.5);
 
-    KisConvolutionKernelSP k = new KisConvolutionKernel(width, height, 0, 0);
+    KisConvolutionKernelSP kernel = new KisConvolutionKernel(width, height, 0, 0);
+
     double cosa = cos(angle);
     double sina = sin(angle);
     double xc = 0.5 * width - 0.5;
     double yc = 0.5 * height - 0.5;
-    qint32 factor = 0;
-    qint32* itData = k->data();
+
+    Matrix<qreal, Dynamic, Dynamic>& data = kernel->data();
+    qreal factor = 0;
+
 //     dbgImage << ppVar(xc) << ppVar(yc);
-    for (int y_it = 0; y_it < height; ++y_it) {
-        for (int x_it = 0; x_it < width; ++x_it) {
-            double x_ = (x_it - xc);
-            double y_ = (y_it - yc);
+    for (int r = 0; r < height; ++r) {
+        for (int c = 0; c < width; ++c) {
+            double x_ = (c - xc);
+            double y_ = (r - yc);
             double x = cosa * x_ - sina * y_;
             double y = sina * x_ + cosa * y_;
 //             dbgImage << ppVar(x) << ppVar(y) << ppVar(x_) << ppVar(y_) << ppVar( kmg->interpolatedValueAt( x,y) );
-            *itData = 255 - kmg->interpolatedValueAt(x, y);
-            factor += *itData;
-            ++itData;
+            uint value = 255 - kmg->interpolatedValueAt(x, y);
+            data(r, c) = value;
+            factor += value;
         }
     }
-    k->d->factor = factor;
-    return k;
+    kernel->setFactor(factor);
+    return kernel;
+}
+
+KisConvolutionKernelSP KisConvolutionKernel::fromMatrix(Matrix<qreal, Dynamic, Dynamic> matrix, qreal offset, qreal factor)
+{
+    KisConvolutionKernelSP kernel = new KisConvolutionKernel(matrix.cols(), matrix.rows(), offset, factor);        
+    kernel->data() = matrix;
+
+    return kernel;
 }
 
 
@@ -176,12 +187,11 @@ if (n > 1)
 
 QDebug operator<<(QDebug debug, const KisConvolutionKernel &c)
 {
-    int pos = 0;
     debug.nospace() << "[" << c.width() << "," << c.height() << "]{";
     for (unsigned int i = 0; i < c.width(); ++i) {
         debug.nospace() << " {";
-        for (unsigned int j = 0; j < c.height(); ++j, ++pos) {
-            debug.nospace() << c.data()[pos] << " ";
+        for (unsigned int j = 0; j < c.height(); ++j) {
+            debug.nospace() << (*(c.data()))(j, i) << " ";
         }
         debug.nospace() << " }";
     }

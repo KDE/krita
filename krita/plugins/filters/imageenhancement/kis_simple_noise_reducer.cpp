@@ -101,7 +101,7 @@ void KisSimpleNoiseReducer::process(KisConstProcessingInformation srcInfo,
     // Compute the blur mask
     KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(2*windowsize + 1, 2*windowsize + 1, windowsize, windowsize);
 
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
     delete kas;
 
     KisPaintDeviceSP interm = new KisPaintDevice(*src); // TODO no need for a full copy and then a transaction

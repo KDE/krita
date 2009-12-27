@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,26 +18,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "blur.h"
-#include <kgenericfactory.h>
+#ifndef _KIS_WDG_GAUSSIAN_BLUR_H_
+#define _KIS_WDG_GAUSSIAN_BLUR_H_
 
-#include "kis_blur_filter.h"
-#include "kis_gaussian_blur_filter.h"
-#include "filter/kis_filter_registry.h"
+#include <kis_config_widget.h>
 
-typedef KGenericFactory<BlurFilterPlugin> BlurFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritablurfilter, BlurFilterPluginFactory("krita"))
+class KisFilter;
+class Ui_WdgGaussianBlur;
 
-BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+class KisWdgGaussianBlur : public KisConfigWidget
 {
-    setComponentData(BlurFilterPluginFactory::componentData());
+    Q_OBJECT
+public:
+    KisWdgGaussianBlur(QWidget * parent);
+    inline const Ui_WdgGaussianBlur* widget() const {
+        return m_widget;
+    }
+    virtual void setConfiguration(const KisPropertiesConfiguration*);
+    virtual KisPropertiesConfiguration* configuration() const;
+    
+private slots:
+    void horizontalRadiusChanged(int);
+    void verticalRadiusChanged(int);
+    void aspectLockChanged(bool);
 
-    KisFilterRegistry::instance()->add(new KisBlurFilter());
-    KisFilterRegistry::instance()->add(new KisGaussianBlurFilter());
+private:
+    Ui_WdgGaussianBlur* m_widget;
+};
 
-}
-
-BlurFilterPlugin::~BlurFilterPlugin()
-{
-}
+#endif

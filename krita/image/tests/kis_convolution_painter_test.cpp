@@ -103,7 +103,7 @@ void KisConvolutionPainterTest::testMaskConvolution()
     dev->convertFromQImage(qimage, "", 0, 0);
 
     KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(11, 11, 5, 5);
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
 
     KisConvolutionPainter gc(dev);
     gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimage.width(), qimage.height()));
@@ -123,7 +123,7 @@ void KisConvolutionPainterTest::testMaskConvolutionOnColorChannels()
     dev->convertFromQImage(qimage, "", 0, 0);
 
     KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(11, 11, 5, 5);
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
 
     KisConvolutionPainter gc(dev);
     gc.setChannelFlags(dev->colorSpace()->channelFlags());
@@ -144,7 +144,7 @@ void KisConvolutionPainterTest::testMaskConvolutionOnRedChannel()
     dev->convertFromQImage(qimage, "", 0, 0);
 
     KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(11, 11, 5, 5);
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
 
     KisConvolutionPainter gc(dev);
     QBitArray channelFlags = dev->colorSpace()->channelFlags();

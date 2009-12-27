@@ -56,10 +56,21 @@ struct RepeatIteratorFactory {
 template< class _IteratorFactory_>
 void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect& _dataRect)
 {
+    quint32 kernelSize = kernel->width() * kernel->height();
+    qreal *data = new qreal[kernelSize];
+    qreal *dataPtr = data;
+    // fill in data
+    for (quint32 r = 0; r < kernel->height(); r++)
+        for (quint32 c = 0; c < kernel->width(); c++)
+        {
+            *dataPtr = (*(kernel->data()))(r, c);
+            dataPtr++;
+        }
+    //qDebug() << "x: " << srcPos.x() << " y: " << srcPos.y() << " width: " << areaSize.width() << " height: " << areaSize.height();
+
     dbgImage << *kernel;
     // Make the area we cover as small as possible
     if (selection()) {
-
         QRect r = selection()->selectedRect().intersect(QRect(srcPos, areaSize));
         dstPos += r.topLeft() - srcPos;
         srcPos = r.topLeft();
@@ -148,7 +159,7 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
                 }
             }
             if (hit.isSelected()) {
-                convolutionOp->convolveColors(pixelPtrCache, kernel->data(), hit.rawData(), kernel->factor(), kernel->offset(), kw * kh, channelFlags());
+                convolutionOp->convolveColors(pixelPtrCache, data, hit.rawData(), kernel->factor(), kernel->offset(), kw * kh, channelFlags());
 //                 pixelPtrCache.fill(0);
             }
             ++col;
@@ -173,6 +184,7 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
         }
 
     }
+    delete[] data;
 
     addDirtyRect(QRect(dstPos.x(), dstPos.y(), areaSize.width(), areaSize.height()));
 

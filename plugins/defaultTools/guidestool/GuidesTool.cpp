@@ -133,7 +133,7 @@ void GuidesTool::mousePressEvent(KoPointerEvent *event)
 {
     GuideLine line = guideLineAtPosition(event->point);
     if (line.second >= 0) {
-        guideLineSelected(line.first, static_cast<uint>(line.second));
+        guideLineSelected(line.first, static_cast<int>(line.second));
         m_isMoving = true;
     }
 }
@@ -245,14 +245,14 @@ void GuidesTool::startGuideLineCreation(Qt::Orientation orientation, qreal posit
     KoToolManager::instance()->switchToolRequested(GuidesToolId);
 }
 
-void GuidesTool::moveGuideLine(Qt::Orientation orientation, uint index)
+void GuidesTool::moveGuideLine(Qt::Orientation orientation, int index)
 {
     m_orientation = orientation;
     m_index = index;
     m_mode = MoveGuide;
 }
 
-void GuidesTool::editGuideLine(Qt::Orientation orientation, uint index)
+void GuidesTool::editGuideLine(Qt::Orientation orientation, int index)
 {
     m_orientation = orientation;
     m_index = index;
@@ -277,7 +277,7 @@ void GuidesTool::updateGuidePosition(qreal position)
     }
 }
 
-void GuidesTool::guideLineSelected(Qt::Orientation orientation, uint index)
+void GuidesTool::guideLineSelected(Qt::Orientation orientation, int index)
 {
     KoGuidesData *guidesData = m_canvas->guidesData();
     if (! guidesData)
@@ -343,7 +343,7 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition(const QPointF &position)
     if (guidesData && guidesData->showGuideLines()) {
         qreal handleRadius = m_canvas->resourceProvider()->handleRadius();
         qreal minDistance = m_canvas->viewConverter()->viewToDocumentX(handleRadius);
-        uint i = 0;
+        int i = 0;
         foreach (qreal guidePos, guidesData->horizontalGuideLines()) {
             qreal distance = qAbs(guidePos - position.y());
             if (distance < minDistance) {
@@ -383,8 +383,8 @@ QMap< QString, QWidget*> GuidesTool::createOptionWidgets()
     if (m_mode != EditGuide) {
         m_options = new GuidesToolOptionWidget();
 
-        connect(m_options, SIGNAL(guideLineSelected(Qt::Orientation,uint)),
-                this, SLOT(guideLineSelected(Qt::Orientation,uint)));
+        connect(m_options, SIGNAL(guideLineSelected(Qt::Orientation,int)),
+                this, SLOT(guideLineSelected(Qt::Orientation,int)));
 
         connect(m_options, SIGNAL(guideLinesChanged(Qt::Orientation)),
                 this, SLOT(guideLinesChanged(Qt::Orientation)));

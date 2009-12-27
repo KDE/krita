@@ -56,16 +56,15 @@ public:
     virtual void deactivate();
     /// reimplemented form KoTool
     virtual QMap<QString, QWidget*> createOptionWidgets();
-    //void addGuideLine(Qt::Orientation orientation, qreal position);
-    void moveGuideLine(Qt::Orientation orientation, uint index);
-    void editGuideLine(Qt::Orientation orientation, uint index);
+    void moveGuideLine(Qt::Orientation orientation, int index);
+    void editGuideLine(Qt::Orientation orientation, int index);
 
 public slots:
     void startGuideLineCreation(Qt::Orientation orientation, qreal position);
 
 private slots:
     void updateGuidePosition(qreal position);
-    void guideLineSelected(Qt::Orientation orientation, uint index);
+    void guideLineSelected(Qt::Orientation orientation, int index);
     void guideLinesChanged(Qt::Orientation orientation);
     /// reimplemented from KoTool
     virtual void resourceChanged(int key, const QVariant &res);

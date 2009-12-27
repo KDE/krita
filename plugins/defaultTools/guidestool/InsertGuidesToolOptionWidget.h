@@ -31,8 +31,8 @@ public:
     bool insertVerticalEdgesGuides;
     bool insertHorizontalEdgesGuides;
     bool erasePreviousGuides;
-    uint verticalGuides;
-    uint horizontalGuides;
+    int verticalGuides;
+    int horizontalGuides;
 };
 
 class InsertGuidesToolOptionWidget : public QWidget

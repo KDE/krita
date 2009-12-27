@@ -51,14 +51,14 @@ public:
     void setOrientation(Qt::Orientation orientation);
 
     /// Selects the given guide line
-    void selectGuideLine(Qt::Orientation orientation, uint index);
+    void selectGuideLine(Qt::Orientation orientation, int index);
 
     /// Sets the unit to be displayed
     void setUnit(const KoUnit &unit);
 
 signals:
     /// Emitted whenever a specific guide line was selected
-    void guideLineSelected(Qt::Orientation orientation, uint index);
+    void guideLineSelected(Qt::Orientation orientation, int index);
     /// Emitted whenever a guide line with the given orientation has changed
     void guideLinesChanged(Qt::Orientation orientation);
 

@@ -85,7 +85,7 @@ void GuidesToolOptionWidget::setOrientation(Qt::Orientation orientation)
     widget.orientation->setCurrentIndex(orientation-1);
 }
 
-void GuidesToolOptionWidget::selectGuideLine(Qt::Orientation orientation, uint index)
+void GuidesToolOptionWidget::selectGuideLine(Qt::Orientation orientation, int index)
 {
     widget.orientation->blockSignals(true);
     widget.positionList->blockSignals(true);

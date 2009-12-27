@@ -22,7 +22,7 @@
 #include "KoPathShape.h"
 #include "KoPathPointRemoveCommand.h"
 #include "KoShapeController.h"
-#include "MockShapes.h"
+#include <MockShapes.h>
 
 void TestPointRemoveCommand::redoUndoPointRemove()
 {

@@ -330,4 +330,4 @@ int KoChangeTracker::getDeletedChanges(QVector<KoChangeTrackerElement *>& delete
     return numAppendedItems;
 }
 
-#include "KoChangeTracker.moc"
+#include <KoChangeTracker.moc>

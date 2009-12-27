@@ -57,7 +57,7 @@ MyPlugin::MyPlugin( QObject *parent, const QStringList& ) : QObject(parent) {
     // do stuff like creating a factory and adding it to the
     // registry instance.
 }
-#include "MyPlugin.moc"
+#include <MyPlugin.moc>
 @endcode
  */
 class KOPLUGIN_EXPORT KoPluginLoader : public QObject

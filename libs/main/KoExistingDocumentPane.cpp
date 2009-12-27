@@ -59,4 +59,4 @@ void KoExistingDocumentPane::onAccepted()
     emit openExistingUrl(m_fileWidget->selectedUrl());
 }
 
-#include "KoExistingDocumentPane.moc"
+#include <KoExistingDocumentPane.moc>

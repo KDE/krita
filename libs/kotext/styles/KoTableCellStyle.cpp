@@ -877,4 +877,4 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
 */
 }
 
-#include "KoTableCellStyle.moc"
+#include <KoTableCellStyle.moc>

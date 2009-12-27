@@ -433,4 +433,4 @@ bool KoScriptingOdfStore::setDocument(QObject *document)
     return ok;
 }
 
-#include "KoScriptingOdf.moc"
+#include <KoScriptingOdf.moc>

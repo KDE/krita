@@ -116,4 +116,4 @@ void KoConfigDocumentPage::slotDefault()
     d->createBackupFile->setChecked(true);
 }
 
-#include "KoConfigDocumentPage.moc"
+#include <KoConfigDocumentPage.moc>

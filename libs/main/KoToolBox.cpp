@@ -486,4 +486,4 @@ void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)
     m_toolBox->setCanvas(canvas);
 }
 
-#include "KoToolBox_p.moc"
+#include <KoToolBox_p.moc>

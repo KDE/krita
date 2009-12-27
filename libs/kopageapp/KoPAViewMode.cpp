@@ -119,5 +119,5 @@ void KoPAViewMode::setOrigin(const QPointF &o)
     m_origin = o;
 }
 
-#include "KoPAViewMode.moc"
+#include <KoPAViewMode.moc>
 

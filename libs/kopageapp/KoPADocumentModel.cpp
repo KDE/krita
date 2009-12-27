@@ -623,4 +623,4 @@ void KoPADocumentModel::setMasterMode(bool master)
     update(); // Rebuild the model
 }
 
-#include "KoPADocumentModel.moc"
+#include <KoPADocumentModel.moc>

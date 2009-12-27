@@ -18,7 +18,7 @@
 */
 #include "TestShapeBackgroundCommand.h"
 
-#include "MockShapes.h"
+#include <MockShapes.h>
 #include "KoShapeBackgroundCommand.h"
 #include "KoColorBackground.h"
 

@@ -258,5 +258,5 @@ void TestStorage::storage2()
 }
 
 QTEST_KDEMAIN(TestStorage, NoGUI)
-#include "TestStorage.moc"
+#include <TestStorage.moc>
 

@@ -1106,4 +1106,4 @@ int main(int argc, char *argv[])
     return QTest::qExec(new TestLoading, argc, argv);
 }
 
-#include "TestLoading.moc"
+#include <TestLoading.moc>

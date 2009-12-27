@@ -94,4 +94,4 @@ QStringList KoApplicationAdaptor::getWindows()
     return lst;
 }
 
-#include "KoApplicationAdaptor.moc"
+#include <KoApplicationAdaptor.moc>

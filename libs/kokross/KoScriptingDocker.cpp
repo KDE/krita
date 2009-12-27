@@ -188,4 +188,4 @@ void KoScriptingActionDocker::setWidget(QWidget *widget)
     QDockWidget::setWidget(widget);
 }
 
-#include "KoScriptingDocker.moc"
+#include <KoScriptingDocker.moc>

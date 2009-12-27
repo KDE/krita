@@ -246,5 +246,5 @@ void TestXmlWriter::speedTest()
 }
 
 QTEST_MAIN(TestXmlWriter)
-#include "TestXmlWriter.moc"
+#include <TestXmlWriter.moc>
 

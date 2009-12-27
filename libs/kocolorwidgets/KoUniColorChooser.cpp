@@ -1031,4 +1031,4 @@ void KoUniColorChooser::HSVtoRGB(int H, int S, int V, quint8 *R, quint8 *G, quin
   }
 }
 
-#include "KoUniColorChooser.moc"
+#include <KoUniColorChooser.moc>

@@ -65,4 +65,4 @@ void KoInlineObjectFactory::addTemplate(const KoInlineObjectTemplate &params)
     d->templates.append(params);
 }
 
-#include "KoInlineObjectFactory.moc"
+#include <KoInlineObjectFactory.moc>

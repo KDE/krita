@@ -175,4 +175,4 @@ void KoTemplatesPane::changeAlwaysUseTemplate(KoTemplatesPane* sender, const QSt
     d->m_alwaysUseTemplate = alwaysUse;
 }
 
-#include "KoTemplatesPane.moc"
+#include <KoTemplatesPane.moc>

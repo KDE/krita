@@ -270,4 +270,4 @@ void KoColorSetWidget::resizeEvent(QResizeEvent *event)
     QFrame::resizeEvent(event);
 }
 
-#include "KoColorSetWidget.moc"
+#include <KoColorSetWidget.moc>

@@ -137,4 +137,4 @@ void KoPABackgroundToolWidget::displayMasterShapes( int state )
     }
 }
 
-#include "KoPABackgroundToolWidget.moc"
+#include <KoPABackgroundToolWidget.moc>

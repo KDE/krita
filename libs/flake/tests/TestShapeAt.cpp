@@ -1,5 +1,5 @@
 #include "TestShapeAt.h"
-#include "MockShapes.h"
+#include <MockShapes.h>
 
 #include <kdebug.h>
 #include <KoShapeManager.h>

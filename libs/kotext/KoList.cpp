@@ -223,4 +223,4 @@ int KoList::level(const QTextBlock &block)
     return l;
 }
 
-#include "KoList.moc"
+#include <KoList.moc>

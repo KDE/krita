@@ -76,4 +76,4 @@ void KoXYColorSelector::drawContents( QPainter *painter )
     painter->drawImage( contentsRect_, image, QRect( 0, 0, image.width(), image.height()) );
 }
 
-#include "KoXYColorSelector.moc"
+#include <KoXYColorSelector.moc>

@@ -18,7 +18,7 @@
  */
 
 #include "TestShapeReorderCommand.h"
-#include "MockShapes.h"
+#include <MockShapes.h>
 #include <KoShapeReorderCommand.h>
 #include <KoShapeManager.h>
 

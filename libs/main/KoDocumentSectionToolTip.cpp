@@ -67,4 +67,4 @@ QTextDocument *KoDocumentSectionToolTip::createDocument(const QModelIndex &index
     return doc;
 }
 
-#include "KoDocumentSectionToolTip.moc"
+#include <KoDocumentSectionToolTip.moc>

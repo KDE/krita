@@ -480,4 +480,4 @@ void KoDocumentSectionDelegate::drawProgressBar(QPainter *p, const QStyleOptionV
 }
 
 
-#include "KoDocumentSectionDelegate.moc"
+#include <KoDocumentSectionDelegate.moc>

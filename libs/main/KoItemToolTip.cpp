@@ -141,4 +141,4 @@ bool KoItemToolTip::eventFilter(QObject *object, QEvent *event)
     return QFrame::eventFilter(object, event);
 }
 
-#include "KoItemToolTip.moc"
+#include <KoItemToolTip.moc>

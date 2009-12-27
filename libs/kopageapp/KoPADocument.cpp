@@ -778,4 +778,4 @@ void KoPADocument::insertIntoDataCenterMap(QString key, KoDataCenter *dc)
     d->dataCenterMap[key] = dc;
 }
 
-#include "KoPADocument.moc"
+#include <KoPADocument.moc>

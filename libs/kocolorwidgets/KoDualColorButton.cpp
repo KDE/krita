@@ -266,4 +266,4 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     repaint();
 }
 
-#include "KoDualColorButton.moc"
+#include <KoDualColorButton.moc>

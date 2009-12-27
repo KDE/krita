@@ -49,4 +49,4 @@ bool KoPABackgroundToolFactory::canCreateTool( KoCanvasBase *canvas ) const
     return paCanvas != 0; // we only work in KoPACanvas
 }
 
-#include "KoPABackgroundToolFactory.moc"
+#include <KoPABackgroundToolFactory.moc>

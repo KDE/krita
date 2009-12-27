@@ -141,4 +141,4 @@ void KoResourceModel::resourceRemoved(KoResource *resource)
     reset();
 }
 
-#include "KoResourceModel.moc"
+#include <KoResourceModel.moc>

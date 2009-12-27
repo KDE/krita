@@ -25,5 +25,5 @@ void TestKoColorSpaceMaths::testScaleToA()
 }
 
 QTEST_MAIN(TestKoColorSpaceMaths)
-#include "TestKoColorSpaceMaths.moc"
+#include <TestKoColorSpaceMaths.moc>
 

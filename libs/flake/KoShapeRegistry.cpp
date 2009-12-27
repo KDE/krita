@@ -218,4 +218,4 @@ KoShape * KoShapeRegistry::createShapeInternal(const KoXmlElement & fullElement,
 
 }
 
-#include "KoShapeRegistry.moc"
+#include <KoShapeRegistry.moc>

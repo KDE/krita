@@ -321,4 +321,4 @@ void KoScriptManagerDialog::slotAccepted()
     }
 }
 
-#include "KoScriptManager.moc"
+#include <KoScriptManager.moc>

@@ -219,4 +219,4 @@ void TestConvolutionOpImpl::testOneFullyTransparent()
 
 
 QTEST_KDEMAIN(TestConvolutionOpImpl, NoGUI)
-#include "TestConvolutionOpImpl.moc"
+#include <TestConvolutionOpImpl.moc>

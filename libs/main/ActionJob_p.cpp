@@ -86,4 +86,4 @@ bool ActionJob::event(QEvent *e)
     return QObject::event(e);
 }
 
-#include "ActionJob_p.moc"
+#include <ActionJob_p.moc>

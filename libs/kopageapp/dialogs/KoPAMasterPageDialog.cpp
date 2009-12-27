@@ -95,5 +95,5 @@ void KoPAMasterPageDialog::selectionChanged()
     enableButtonOk(m_listView->selectionModel()->hasSelection());
 }
 
-#include "KoPAMasterPageDialog.moc"
+#include <KoPAMasterPageDialog.moc>
 

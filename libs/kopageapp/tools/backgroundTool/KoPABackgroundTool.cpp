@@ -112,4 +112,4 @@ QMap<QString, QWidget *> KoPABackgroundTool::createOptionWidgets()
     return widgets;
 }
 
-#include "KoPABackgroundTool.moc"
+#include <KoPABackgroundTool.moc>

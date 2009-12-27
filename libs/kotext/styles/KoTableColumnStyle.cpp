@@ -299,4 +299,4 @@ void KoTableColumnStyle::saveOdf(KoGenStyle &style)
 */
 }
 
-#include "KoTableColumnStyle.moc"
+#include <KoTableColumnStyle.moc>

@@ -120,4 +120,4 @@ void KoDomTest::testKoDom()
 
 QTEST_MAIN(KoDomTest)
 
-#include "kodomtest.moc"
+#include <kodomtest.moc>

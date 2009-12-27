@@ -117,4 +117,4 @@ void KoInteractionTool::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
-#include "KoInteractionTool.moc"
+#include <KoInteractionTool.moc>

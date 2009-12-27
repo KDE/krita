@@ -1108,4 +1108,4 @@ bool KoPAView::isMasterUsed( KoPAPageBase * page )
     return used;
 }
 
-#include "KoPAView.moc"
+#include <KoPAView.moc>

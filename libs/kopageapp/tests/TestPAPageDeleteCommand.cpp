@@ -19,7 +19,7 @@
 
 #include "TestPAPageDeleteCommand.h"
 
-#include "PAMock.h"
+#include <PAMock.h>
 #include "KoPAPageDeleteCommand.h"
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"

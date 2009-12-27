@@ -101,4 +101,4 @@ void TestRemoveSubpathCommand::redoUndo()
 }
 
 QTEST_MAIN(TestRemoveSubpathCommand)
-#include "TestRemoveSubpathCommand.moc"
+#include <TestRemoveSubpathCommand.moc>

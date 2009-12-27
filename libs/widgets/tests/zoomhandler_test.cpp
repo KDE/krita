@@ -120,4 +120,4 @@ void zoomhandler_test::testDocumentToView()
 
 QTEST_APPLESS_MAIN(zoomhandler_test)
 
-#include "zoomhandler_test.moc"
+#include <zoomhandler_test.moc>

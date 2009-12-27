@@ -328,5 +328,5 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlpha()
 
 
 QTEST_MAIN(TestKoColorSpaceAbstract)
-#include "TestKoColorSpaceAbstract.moc"
+#include <TestKoColorSpaceAbstract.moc>
 

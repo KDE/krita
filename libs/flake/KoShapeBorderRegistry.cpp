@@ -52,4 +52,4 @@ KoShapeBorderRegistry* KoShapeBorderRegistry::instance()
     return s_instance;
 }
 
-#include "KoShapeBorderRegistry.moc"
+#include <KoShapeBorderRegistry.moc>

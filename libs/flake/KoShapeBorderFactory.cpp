@@ -49,4 +49,4 @@ QString KoShapeBorderFactory::id() const
     return d->id;
 }
 
-#include "KoShapeBorderFactory.moc"
+#include <KoShapeBorderFactory.moc>

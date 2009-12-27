@@ -523,4 +523,4 @@ void KoTemplateCreateDia::fillGroupTree() {
     }
 }
 
-#include "KoTemplateCreateDia.moc"
+#include <KoTemplateCreateDia.moc>

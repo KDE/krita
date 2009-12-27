@@ -204,4 +204,4 @@ void KoResourceSelector::resourceAdded(KoResource*)
     d->updateIndex(this);
 }
 
-#include "KoResourceSelector.moc"
+#include <KoResourceSelector.moc>

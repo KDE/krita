@@ -101,4 +101,4 @@ void PriorityQueue_test::testQueue()
 }
 
 QTEST_MAIN(PriorityQueue_test)
-#include "priorityqueue_test.moc"
+#include <priorityqueue_test.moc>

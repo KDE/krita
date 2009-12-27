@@ -54,4 +54,4 @@ KoToolRegistry* KoToolRegistry::instance()
     return s_instance;
 }
 
-#include "KoToolRegistry.moc"
+#include <KoToolRegistry.moc>

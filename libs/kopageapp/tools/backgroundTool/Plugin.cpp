@@ -33,4 +33,4 @@ Plugin::Plugin( QObject* parent, const QStringList& )
     KoToolRegistry::instance()->add( new KoPABackgroundToolFactory( parent ) );
 }
 
-#include "Plugin.moc"
+#include <Plugin.moc>

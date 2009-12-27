@@ -18,7 +18,7 @@
  */
 
 #include "TestShapeGroupCommand.h"
-#include "MockShapes.h"
+#include <MockShapes.h>
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
 #include <KoLineBorder.h>

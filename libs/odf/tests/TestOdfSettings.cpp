@@ -96,4 +96,4 @@ void TestOdfSettings::testNamedMap()
 
 QTEST_KDEMAIN(TestOdfSettings, GUI)
 
-#include "TestOdfSettings.moc"
+#include <TestOdfSettings.moc>

@@ -333,4 +333,4 @@ void KoZoomAction::setAspectMode(bool status)
         emit aspectModeChanged(status);
 }
 
-#include "KoZoomAction.moc"
+#include <KoZoomAction.moc>

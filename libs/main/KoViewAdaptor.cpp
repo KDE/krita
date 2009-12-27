@@ -51,4 +51,4 @@ QStringList KoViewAdaptor::actions()
     return tmp_actions;
 }
 
-#include "KoViewAdaptor.moc"
+#include <KoViewAdaptor.moc>

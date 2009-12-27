@@ -91,6 +91,6 @@ void TestKoIntegerMaths::conversionTests()
 }
 
 QTEST_KDEMAIN(TestKoIntegerMaths, NoGUI)
-#include "TestKoIntegerMaths.moc"
+#include <TestKoIntegerMaths.moc>
 
 

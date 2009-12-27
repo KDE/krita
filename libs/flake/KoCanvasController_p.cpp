@@ -368,4 +368,4 @@ void Viewport::resetLayout()
 #endif
 }
 
-#include "KoCanvasController_p.moc"
+#include <KoCanvasController_p.moc>

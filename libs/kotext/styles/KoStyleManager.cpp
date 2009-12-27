@@ -654,4 +654,4 @@ bool KoStyleManager::completeSaving(KoStore *, KoXmlWriter *, KoShapeSavingConte
     return true;
 }
 
-#include "KoStyleManager.moc"
+#include <KoStyleManager.moc>

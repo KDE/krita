@@ -123,4 +123,4 @@ void SnapGuideConfigWidget::showEvent(QShowEvent * event)
     updateControls();
 }
 
-#include "SnapGuideConfigWidget.moc"
+#include <SnapGuideConfigWidget.moc>

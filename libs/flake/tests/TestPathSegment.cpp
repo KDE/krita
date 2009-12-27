@@ -340,4 +340,4 @@ void TestPathSegment::nearestPoint()
 }
 
 QTEST_KDEMAIN(TestPathSegment, GUI)
-#include "TestPathSegment.moc"
+#include <TestPathSegment.moc>

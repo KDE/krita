@@ -1664,4 +1664,4 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
     }
 }
 
-#include "KoParagraphStyle.moc"
+#include <KoParagraphStyle.moc>

@@ -200,4 +200,4 @@ void KoDocumentInfoPropsPage::copy(const QString &path, const KArchiveEntry *ent
     }
 }
 
-#include "KoDocumentInfoPropsPage.moc"
+#include <KoDocumentInfoPropsPage.moc>

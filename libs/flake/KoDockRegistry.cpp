@@ -56,4 +56,4 @@ KoDockRegistry* KoDockRegistry::instance()
     return s_instance;
 }
 
-#include "KoDockRegistry.moc"
+#include <KoDockRegistry.moc>

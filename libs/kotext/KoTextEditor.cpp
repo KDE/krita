@@ -1079,4 +1079,4 @@ void KoTextEditor::endEditBlock()
     d->caret.endEditBlock();
 }
 
-#include "KoTextEditor.moc"
+#include <KoTextEditor.moc>

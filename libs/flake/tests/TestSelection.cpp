@@ -1,5 +1,5 @@
 #include "TestSelection.h"
-#include "MockShapes.h"
+#include <MockShapes.h>
 
 #include <KoSelection.h>
 #include <kdebug.h>

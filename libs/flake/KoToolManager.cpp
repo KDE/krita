@@ -855,4 +855,4 @@ KoToolManager::Private *KoToolManager::priv()
 }
 
 
-#include "KoToolManager.moc"
+#include <KoToolManager.moc>

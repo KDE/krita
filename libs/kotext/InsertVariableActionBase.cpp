@@ -51,4 +51,4 @@ void InsertVariableActionBase::activated()
         kWarning(32500) << "InsertVariableAction: No texttool selected while trying to insert variable";
 }
 
-#include "InsertVariableActionBase_p.moc"
+#include <InsertVariableActionBase_p.moc>

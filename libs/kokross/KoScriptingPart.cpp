@@ -244,4 +244,4 @@ void KoScriptingPart::slotFinalized(Kross::Action *action)
     }
 }
 
-#include "KoScriptingPart.moc"
+#include <KoScriptingPart.moc>

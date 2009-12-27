@@ -481,4 +481,4 @@ void KoDocumentInfoDlg::slotSaveEncryption()
     d->m_documentSaved = !doc->url().isEmpty();
 }
 
-#include "KoDocumentInfoDlg.moc"
+#include <KoDocumentInfoDlg.moc>

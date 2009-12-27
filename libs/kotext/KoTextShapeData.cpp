@@ -242,4 +242,4 @@ void KoTextShapeData::relayoutFor(KoTextPage &textPage)
     d->textpage = oldPage;
 }
 
-#include "KoTextShapeData.moc"
+#include <KoTextShapeData.moc>

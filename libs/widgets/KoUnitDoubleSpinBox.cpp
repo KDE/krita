@@ -226,4 +226,4 @@ double KoUnitDoubleSpinBox::valueFromText( const QString& str ) const
 
 
 
-#include "KoUnitDoubleSpinBox.moc"
+#include <KoUnitDoubleSpinBox.moc>

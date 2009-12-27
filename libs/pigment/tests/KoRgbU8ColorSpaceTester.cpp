@@ -203,5 +203,5 @@ void KoRgbColorSpaceTester::testCompositeOps()
 }
 
 QTEST_KDEMAIN(KoRgbColorSpaceTester, NoGUI)
-#include "KoRgbU8ColorSpaceTester.moc"
+#include <KoRgbU8ColorSpaceTester.moc>
 

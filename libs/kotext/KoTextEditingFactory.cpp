@@ -68,4 +68,4 @@ void KoTextEditingFactory::setTitle(const QString &title)
     d->title = title;
 }
 
-#include "KoTextEditingFactory.moc"
+#include <KoTextEditingFactory.moc>

@@ -110,5 +110,5 @@ QHash<QString, KAction*> KoTextEditingPlugin::actions() const
     return d->actionCollection;
 }
 
-#include "KoTextEditingPlugin.moc"
+#include <KoTextEditingPlugin.moc>
 

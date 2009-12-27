@@ -49,4 +49,4 @@ QString KoFilterEffectFactory::id() const
     return d->id;
 }
 
-#include "KoFilterEffectFactory.moc"
+#include <KoFilterEffectFactory.moc>

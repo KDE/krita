@@ -3,7 +3,7 @@
 #include <QtGui>
 #include "KoShapeContainer.h"
 #include "KoShapeManager.h"
-#include "MockShapes.h"
+#include <MockShapes.h>
 
 #include <kcomponentdata.h>
 

@@ -23,7 +23,7 @@
 #include "../tools/KoPathTool.h"
 #include "../tools/KoPathToolSelection.h"
 #include "../KoPathPointData.h"
-#include "MockShapes.h"
+#include <MockShapes.h>
 
 void TestPathTool::koPathPointSelection_selectedSegmentsData()
 {

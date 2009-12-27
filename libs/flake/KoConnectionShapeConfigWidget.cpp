@@ -65,4 +65,4 @@ QUndoCommand * KoConnectionShapeConfigWidget::createCommand()
     }
 }
 
-#include "KoConnectionShapeConfigWidget.moc"
+#include <KoConnectionShapeConfigWidget.moc>

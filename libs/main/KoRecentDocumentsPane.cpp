@@ -216,4 +216,4 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem& fileItem, const QPixm
     }
 }
 
-#include "KoRecentDocumentsPane.moc"
+#include <KoRecentDocumentsPane.moc>

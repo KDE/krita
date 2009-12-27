@@ -182,4 +182,4 @@ void KoResourceItemChooser::updateRemoveButtonState()
     removeButton->setEnabled( false );
 }
 
-#include "KoResourceItemChooser.moc"
+#include <KoResourceItemChooser.moc>

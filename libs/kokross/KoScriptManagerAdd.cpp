@@ -332,4 +332,4 @@ void KoScriptManagerAddWizard::accept()
         KAssistantDialog::accept();
 }
 
-#include "KoScriptManagerAdd.moc"
+#include <KoScriptManagerAdd.moc>

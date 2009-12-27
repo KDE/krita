@@ -42,4 +42,4 @@ KoTool * KoPathToolFactory::createTool(KoCanvasBase *canvas)
     return new KoPathTool(canvas);
 }
 
-#include "KoPathToolFactory.moc"
+#include <KoPathToolFactory.moc>

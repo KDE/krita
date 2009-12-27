@@ -53,5 +53,5 @@ QUndoCommand * KoShapeConfigWidgetBase::createCommand()
     return 0;
 }
 
-#include "KoShapeConfigWidgetBase.moc"
+#include <KoShapeConfigWidgetBase.moc>
 

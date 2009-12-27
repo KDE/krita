@@ -82,5 +82,5 @@ QList<QString> KoBookmarkManager::bookmarkNameList()
     return d->bookmarkNameList;
 }
 
-#include "KoBookmarkManager.moc"
+#include <KoBookmarkManager.moc>
 

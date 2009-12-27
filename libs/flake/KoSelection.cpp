@@ -334,4 +334,4 @@ bool KoSelection::loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
     return true;
 }
 
-#include "KoSelection.moc"
+#include <KoSelection.moc>

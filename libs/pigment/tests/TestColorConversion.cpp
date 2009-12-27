@@ -192,4 +192,4 @@ void TestColorConversion::testRGBHSL()
 }
 
 QTEST_MAIN(TestColorConversion)
-#include "TestColorConversion.moc"
+#include <TestColorConversion.moc>

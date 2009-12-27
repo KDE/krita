@@ -110,4 +110,4 @@ void Connector::selectionChanged()
     emit selectionChanged(m_shapeManager->selection()->selectedShapes());
 }
 
-#include "KoToolManager_p.moc"
+#include <KoToolManager_p.moc>

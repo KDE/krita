@@ -231,4 +231,4 @@ void KoCanvasResourceProvider::clearResource(int key)
     emit resourceChanged(key, empty);
 }
 
-#include "KoCanvasResourceProvider.moc"
+#include <KoCanvasResourceProvider.moc>

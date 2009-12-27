@@ -60,4 +60,4 @@ KoDeviceRegistry* KoDeviceRegistry::instance()
     return s_instance;
 }
 
-#include "KoDeviceRegistry.moc"
+#include <KoDeviceRegistry.moc>

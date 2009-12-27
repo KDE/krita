@@ -2454,5 +2454,5 @@ int KoDocument::defaultAutoSave()
     return 300;
 }
 
-#include "KoDocument_p.moc"
-#include "KoDocument.moc"
+#include <KoDocument_p.moc>
+#include <KoDocument.moc>

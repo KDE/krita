@@ -49,4 +49,4 @@ KoColor KoUniColorDialog::color() const
     return d->chooser->color();
 }
 
-#include "KoUniColorDialog.moc"
+#include <KoUniColorDialog.moc>

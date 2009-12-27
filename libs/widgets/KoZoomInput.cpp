@@ -148,4 +148,4 @@ bool KoZoomInput::eventFilter(QObject* watched, QEvent* event)
     return false;
 }
 
-#include "KoZoomInput.moc"
+#include <KoZoomInput.moc>

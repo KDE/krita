@@ -169,4 +169,4 @@ bool KoAspectButton::keepAspectRatio() const
     return d->keepAspect;
 }
 
-#include "KoAspectButton.moc"
+#include <KoAspectButton.moc>

@@ -129,4 +129,4 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     }
 }
 
-#include "KoPluginLoader.moc"
+#include <KoPluginLoader.moc>

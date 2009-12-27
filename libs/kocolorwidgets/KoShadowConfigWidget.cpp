@@ -124,4 +124,4 @@ void KoShadowConfigWidget::setUnit( const KoUnit &unit )
     d->widget.shadowOffset->setUnit( unit );
 }
 
-#include "KoShadowConfigWidget.moc"
+#include <KoShadowConfigWidget.moc>

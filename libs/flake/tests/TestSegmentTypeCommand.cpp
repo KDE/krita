@@ -79,4 +79,4 @@ void TestSegmentTypeCommand::changeToLine()
 }
 
 QTEST_MAIN(TestSegmentTypeCommand)
-#include "TestSegmentTypeCommand.moc"
+#include <TestSegmentTypeCommand.moc>

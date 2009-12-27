@@ -18,7 +18,7 @@
 */
 #include "TestShapeShadowCommand.h"
 
-#include "MockShapes.h"
+#include <MockShapes.h>
 #include "KoShapeShadow.h"
 #include "KoShapeShadowCommand.h"
 

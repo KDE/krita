@@ -189,4 +189,4 @@ void KoZoomController::setAspectMode(bool status)
     d->action->setAspectMode(status);
 }
 
-#include "KoZoomController.moc"
+#include <KoZoomController.moc>

@@ -67,4 +67,4 @@ void TestTableCellStyle::testTableCellStyle()
 }
 
 QTEST_MAIN(TestTableCellStyle)
-#include "TestTableCellStyle.moc"
+#include <TestTableCellStyle.moc>

@@ -42,4 +42,4 @@ KoTextEditingRegistry* KoTextEditingRegistry::instance()
     return s_instance;
 }
 
-#include "KoTextEditingRegistry.moc"
+#include <KoTextEditingRegistry.moc>

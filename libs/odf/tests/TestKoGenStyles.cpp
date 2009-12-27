@@ -377,4 +377,4 @@ void TestKoGenStyles::testStylesDotXml()
 }
 
 QTEST_MAIN(TestKoGenStyles)
-#include "TestKoGenStyles.moc"
+#include <TestKoGenStyles.moc>

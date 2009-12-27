@@ -1,5 +1,5 @@
 #include "TestShapeContainer.h"
-#include "MockShapes.h"
+#include <MockShapes.h>
 
 void TestShapeContainer::testModel()
 {

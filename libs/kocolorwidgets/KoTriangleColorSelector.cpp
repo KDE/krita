@@ -372,4 +372,4 @@ void KoTriangleColorSelector::selectColorAt(int _x, int _y, bool checkInWheel)
     }
 }
 
-#include "KoTriangleColorSelector.moc"
+#include <KoTriangleColorSelector.moc>

@@ -370,4 +370,4 @@ void KoDocumentInfo::resetMetaData()
     setAboutInfo("creation-date", QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
-#include "KoDocumentInfo.moc"
+#include <KoDocumentInfo.moc>

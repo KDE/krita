@@ -18,7 +18,7 @@
 */
 #include "TestShapeBorderCommand.h"
 
-#include "MockShapes.h"
+#include <MockShapes.h>
 #include "KoShapeBorderModel.h"
 #include "KoLineBorder.h"
 #include "KoShapeBorderCommand.h"

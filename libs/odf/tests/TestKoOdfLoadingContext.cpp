@@ -140,4 +140,4 @@ void TestKoOdfLoadingContext::testFillStyleStack()
 }
 
 QTEST_KDEMAIN(TestKoOdfLoadingContext, NoGUI)
-#include "TestKoOdfLoadingContext.moc"
+#include <TestKoOdfLoadingContext.moc>

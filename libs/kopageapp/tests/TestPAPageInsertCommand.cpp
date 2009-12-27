@@ -19,7 +19,7 @@
 
 #include "TestPAPageInsertCommand.h"
 
-#include "PAMock.h"
+#include <PAMock.h>
 #include "KoPAPageInsertCommand.h"
 #include "KoPAPage.h"
 #include "KoPAMasterPage.h"

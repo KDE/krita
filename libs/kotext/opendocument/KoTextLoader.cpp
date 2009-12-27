@@ -916,4 +916,4 @@ void KoTextLoader::endBody()
 {
 }
 
-#include "KoTextLoader.moc"
+#include <KoTextLoader.moc>

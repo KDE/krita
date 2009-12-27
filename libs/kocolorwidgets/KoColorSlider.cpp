@@ -136,4 +136,4 @@ KoColor KoColorSlider::currentColor() const
     return c;
 }
 
-#include "KoColorSlider.moc"
+#include <KoColorSlider.moc>

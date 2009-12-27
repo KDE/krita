@@ -28,4 +28,4 @@ KoEventActionWidget::~KoEventActionWidget()
 {
 }
 
-#include "KoEventActionWidget.moc"
+#include <KoEventActionWidget.moc>

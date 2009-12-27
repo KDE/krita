@@ -553,4 +553,4 @@ void KoShapeManager::setPaintingStrategy(KoShapeManagerPaintingStrategy * strate
     d->strategy = strategy;
 }
 
-#include "KoShapeManager.moc"
+#include <KoShapeManager.moc>

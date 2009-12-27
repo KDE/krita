@@ -255,4 +255,4 @@ QString KoVersionModifyDialog::comment() const
 }
 
 
-#include "KoVersionDialog.moc"
+#include <KoVersionDialog.moc>

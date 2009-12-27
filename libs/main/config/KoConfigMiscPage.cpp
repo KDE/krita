@@ -147,5 +147,5 @@ void KoConfigMiscPage::slotDefault()
     d->unit->setCurrentIndex(0);
 }
 
-#include "KoConfigMiscPage.moc"
+#include <KoConfigMiscPage.moc>
 

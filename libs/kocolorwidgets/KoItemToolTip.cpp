@@ -142,4 +142,4 @@ bool KoItemToolTip::eventFilter( QObject *object, QEvent *event )
     return super::eventFilter( object, event );
 }
 
-#include "KoItemToolTip.moc"
+#include <KoItemToolTip.moc>

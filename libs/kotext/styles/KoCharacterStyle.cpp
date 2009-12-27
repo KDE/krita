@@ -1242,4 +1242,4 @@ QVariant KoCharacterStyle::value(int key) const
     return d->stylesPrivate.value(key);
 }
 
-#include "KoCharacterStyle.moc"
+#include <KoCharacterStyle.moc>

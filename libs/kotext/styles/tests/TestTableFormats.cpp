@@ -67,4 +67,4 @@ void TestTableFormats::testTableRowFormat()
 }
 
 QTEST_MAIN(TestTableFormats)
-#include "TestTableFormats.moc"
+#include <TestTableFormats.moc>

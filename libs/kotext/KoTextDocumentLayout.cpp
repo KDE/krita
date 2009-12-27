@@ -442,4 +442,4 @@ KoShape* KoTextDocumentLayout::shapeForPosition(int position) const
     return 0;
 }
 
-#include "KoTextDocumentLayout.moc"
+#include <KoTextDocumentLayout.moc>

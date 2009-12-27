@@ -96,4 +96,4 @@ void KoToolDocker::newOptionWidget(QWidget *optionWidget)
     d->housekeeperLayout->invalidate();
 }
 
-#include "KoToolDocker_p.moc"
+#include <KoToolDocker_p.moc>

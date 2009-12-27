@@ -680,4 +680,4 @@ KoCanvasController::Private *KoCanvasController::priv()
     return d;
 }
 
-#include "KoCanvasController.moc"
+#include <KoCanvasController.moc>

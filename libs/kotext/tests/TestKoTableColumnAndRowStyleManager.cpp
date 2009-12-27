@@ -19,4 +19,4 @@ void TestKoTableColumnAndRowStyleManager::testManager()
 }
 
 QTEST_MAIN(TestKoTableColumnAndRowStyleManager)
-#include "TestKoTableColumnAndRowStyleManager.moc"
+#include <TestKoTableColumnAndRowStyleManager.moc>

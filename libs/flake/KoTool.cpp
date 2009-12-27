@@ -278,4 +278,4 @@ void KoTool::repaintDecorations()
 {
 }
 
-#include "KoTool.moc"
+#include <KoTool.moc>

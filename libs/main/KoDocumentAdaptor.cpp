@@ -293,4 +293,4 @@ void KoDocumentAdaptor::setDocumentInfoAbstract(const QString &text)
 //     return DCOPObject::processDynamic( fun, data, replyType, replyData );
 // }
 
-#include "KoDocumentAdaptor.moc"
+#include <KoDocumentAdaptor.moc>

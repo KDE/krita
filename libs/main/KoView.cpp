@@ -545,5 +545,5 @@ QList<QAction*> KoView::createChangeUnitActions()
     return answer;
 }
 
-#include "KoView_p.moc"
-#include "KoView.moc"
+#include <KoView_p.moc>
+#include <KoView.moc>

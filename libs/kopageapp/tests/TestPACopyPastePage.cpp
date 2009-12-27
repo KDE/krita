@@ -19,7 +19,7 @@
 
 #include "TestPACopyPastePage.h"
 
-#include "PAMock.h"
+#include <PAMock.h>
 #include "KoPAPage.h"
 #include "KoPAPastePage.h"
 #include "KoPAMasterPage.h"

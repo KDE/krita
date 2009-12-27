@@ -37,4 +37,4 @@ void TestOdfStore::testMimeForPath()
 
 QTEST_KDEMAIN(TestOdfStore, GUI)
 
-#include "TestOdfStore.moc"
+#include <TestOdfStore.moc>

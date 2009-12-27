@@ -422,5 +422,5 @@ void TestPAPageMoveCommand::checkOrder( QList<KoPAMasterPage*> & pages )
 
 QTEST_KDEMAIN( TestPAPageMoveCommand, GUI )
 
-#include "TestPAPageMoveCommand.moc"
+#include <TestPAPageMoveCommand.moc>
 

@@ -699,6 +699,6 @@ void KoPADocumentStructureDocker::editPaste()
         canvas->koPAView()->pagePaste();
     }
 }
-#include "KoPADocumentStructureDocker.moc"
+#include <KoPADocumentStructureDocker.moc>
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

@@ -117,4 +117,4 @@ void TestAction::testExecuteTwice()
 }
 
 QTEST_MAIN(TestAction)
-#include "TestAction.moc"
+#include <TestAction.moc>

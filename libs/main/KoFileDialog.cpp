@@ -131,4 +131,4 @@ int KoFileDialog::specialEntrySelected()
     return 0;
 }
 
-#include "KoFileDialog.moc"
+#include <KoFileDialog.moc>

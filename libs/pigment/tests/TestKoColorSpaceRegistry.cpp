@@ -150,5 +150,5 @@ void TestKoColorSpaceRegistry::testLab()
 }
 
 QTEST_KDEMAIN(TestKoColorSpaceRegistry, NoGUI)
-#include "TestKoColorSpaceRegistry.moc"
+#include <TestKoColorSpaceRegistry.moc>
 

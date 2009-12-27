@@ -289,4 +289,4 @@ void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatu
     floatButton->setVisible(hasFeature(q, QDockWidget::DockWidgetFloatable));
     thePublic->resizeEvent(0);
 }
-#include "KoDockWidgetTitleBar.moc"
+#include <KoDockWidgetTitleBar.moc>

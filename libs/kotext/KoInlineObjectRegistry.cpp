@@ -60,4 +60,4 @@ QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase
     return answer;
 }
 
-#include "KoInlineObjectRegistry.moc"
+#include <KoInlineObjectRegistry.moc>

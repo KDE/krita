@@ -2546,5 +2546,5 @@ void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
 }
 
 QTEST_MAIN(TestXmlReader)
-#include "TestXmlReader.moc"
+#include <TestXmlReader.moc>
 

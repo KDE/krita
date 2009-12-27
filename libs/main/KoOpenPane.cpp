@@ -364,4 +364,4 @@ void KoOpenPane::initExistingFilesPane( const QStringList& mimeFilter )
     }
 }
 
-#include "KoOpenPane.moc"
+#include <KoOpenPane.moc>

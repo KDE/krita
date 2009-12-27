@@ -181,4 +181,4 @@ bool KoShapeFactory::hidden() const
     return false;
 }
 
-#include "KoShapeFactory.moc"
+#include <KoShapeFactory.moc>

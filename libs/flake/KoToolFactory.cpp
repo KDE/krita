@@ -135,4 +135,4 @@ bool KoToolFactory::canCreateTool(KoCanvasBase *) const
     return true;
 }
 
-#include "KoToolFactory.moc"
+#include <KoToolFactory.moc>

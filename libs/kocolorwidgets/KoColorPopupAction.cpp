@@ -212,4 +212,4 @@ void KoColorPopupAction::opacityWasChanged( int opacity )
     emitColorChanged();
 }
 
-#include "KoColorPopupAction.moc"
+#include <KoColorPopupAction.moc>

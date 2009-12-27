@@ -245,4 +245,4 @@ void TestPointMergeCommand::connectCurveSubpaths()
 }
 
 QTEST_MAIN(TestPointMergeCommand)
-#include "TestPointMergeCommand.moc"
+#include <TestPointMergeCommand.moc>

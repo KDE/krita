@@ -156,4 +156,4 @@ void TestPointTypeCommand::redoUndoCorner()
 }
 
 QTEST_MAIN(TestPointTypeCommand)
-#include "TestPointTypeCommand.moc"
+#include <TestPointTypeCommand.moc>

@@ -65,4 +65,4 @@ KoFilterEffect * KoFilterEffectRegistry::createFilterEffectFromXml(const KoXmlEl
     return 0;
 }
 
-#include "KoFilterEffectRegistry.moc"
+#include <KoFilterEffectRegistry.moc>

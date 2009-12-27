@@ -185,5 +185,5 @@ QStyleOptionViewItem KoDocumentSectionView::optionForIndex(const QModelIndex &in
     return option;
 }
 
-#include "KoDocumentSectionPropertyAction_p.moc"
-#include "KoDocumentSectionView.moc"
+#include <KoDocumentSectionPropertyAction_p.moc>
+#include <KoDocumentSectionView.moc>

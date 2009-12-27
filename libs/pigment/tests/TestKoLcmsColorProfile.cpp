@@ -125,5 +125,5 @@ void TestKoLcmsColorProfile::testProfileCreationFromChromaticities()
 }
 
 QTEST_MAIN(TestKoLcmsColorProfile)
-#include "TestKoLcmsColorProfile.moc"
+#include <TestKoLcmsColorProfile.moc>
 

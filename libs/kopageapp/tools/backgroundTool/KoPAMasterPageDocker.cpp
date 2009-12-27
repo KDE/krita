@@ -19,4 +19,4 @@
 
 #include "KoPAMasterPageDocker.h"
 
-#include "KoPAMasterPageDocker.moc"
+#include <KoPAMasterPageDocker.moc>

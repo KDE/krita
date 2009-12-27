@@ -104,4 +104,4 @@ bool KoAction::isEnabled() const
     return d->enabled;
 }
 
-#include "KoAction.moc"
+#include <KoAction.moc>

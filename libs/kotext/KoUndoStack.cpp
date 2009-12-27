@@ -45,4 +45,4 @@ bool KoUndoStack::completeLoading(KoStore *store)
     return true;
 }
 
-#include "KoUndoStack.moc"
+#include <KoUndoStack.moc>

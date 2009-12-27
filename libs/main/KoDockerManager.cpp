@@ -217,4 +217,4 @@ void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWid
     }
 }
 
-#include "KoDockerManager.moc"
+#include <KoDockerManager.moc>

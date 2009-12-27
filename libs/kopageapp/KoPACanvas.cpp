@@ -315,4 +315,4 @@ KoGuidesData * KoPACanvas::guidesData()
     return &d->doc->guidesData();
 }
 
-#include "KoPACanvas.moc"
+#include <KoPACanvas.moc>

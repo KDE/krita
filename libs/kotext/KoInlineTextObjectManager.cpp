@@ -251,4 +251,4 @@ QList<KoInlineObject*> KoInlineTextObjectManager::inlineTextObjects() const
     return m_objects.values();
 }
 
-#include "KoInlineTextObjectManager.moc"
+#include <KoInlineTextObjectManager.moc>

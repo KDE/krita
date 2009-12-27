@@ -180,4 +180,4 @@ void KoConfigGridPage::spinBoxVSpacingChanged(qreal v)
         d->spaceHorizUSpin->changeValue(v);
 }
 
-#include "KoConfigGridPage.moc"
+#include <KoConfigGridPage.moc>

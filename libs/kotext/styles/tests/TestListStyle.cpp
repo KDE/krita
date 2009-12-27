@@ -55,4 +55,4 @@ void TestListStyle::testListStyle()
 }
 
 QTEST_MAIN(TestListStyle)
-#include "TestListStyle.moc"
+#include <TestListStyle.moc>

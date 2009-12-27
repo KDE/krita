@@ -48,4 +48,4 @@ QString KoDevice::name() const
     return objectName();
 }
 
-#include "KoDevice.moc"
+#include <KoDevice.moc>

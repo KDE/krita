@@ -33,4 +33,4 @@ void TestCanvasResourceProvider::koShapeResource()
 }
 
 QTEST_MAIN(TestCanvasResourceProvider)
-#include "TestCanvasResourceProvider.moc"
+#include <TestCanvasResourceProvider.moc>

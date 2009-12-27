@@ -120,7 +120,7 @@ void KisMementoManager::commit()
     m_revisions.append(m_index);
     m_index.clear();
 
-    // Waking up pooler to make copies for us
+    // Waking up pooler to prepare copies for us
     globalTileDataStore.kickPooler();
 }
 
@@ -132,6 +132,9 @@ KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row)
      * but data manager  will make all work on  getting current tile for
      * us
      */
+    if(!m_currentMemento || !m_currentMemento->valid())
+        return 0;
+
     KisMementoItemSP mi = m_headsHashTable.getExistedTile(col, row);
     return mi ? mi->tile(0) : 0;
 }

@@ -80,7 +80,10 @@ public:
         return false; // Compiller would be happy! =)
     }
 
-    // For debugging use
+    /**
+     * Some tricky equivalet to 'commit()'
+     * FIXME: do a usual commit instead
+     */
     inline bool valid() const {
         return m_valid;
     }

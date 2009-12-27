@@ -44,9 +44,6 @@ public:
     void redo();
     /// revert the actions done in redo
     void undo();
-
-private:
-    QList<QPair<KoShape*, int> > m_oldAncestorsZIndex;
 };
 
 #endif

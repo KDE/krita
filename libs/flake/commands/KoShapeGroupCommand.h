@@ -25,11 +25,11 @@
 
 #include <QList>
 #include <QUndoCommand>
-#include <QtGui/QMatrix>
 
 class KoShape;
 class KoShapeGroup;
 class KoShapeContainer;
+class KoShapeGroupCommandPrivate;
 
 /// The undo / redo command for grouping shapes
 class FLAKE_EXPORT KoShapeGroupCommand : public QUndoCommand
@@ -72,17 +72,8 @@ public:
     virtual void undo();
 
 protected:
-    KoShapeGroupCommand(QUndoCommand* parent = 0); ///< protected constructor for child classes
-    QList<KoShape*> m_shapes; ///<list of shapes to be grouped
-    QList<bool> m_clipped; ///< list of booleas to specify the shape of the same index to eb clipped
-    KoShapeContainer *m_container; ///< the container where the grouping should be for.
-    QList<KoShapeContainer*> m_oldParents; ///< the old parents of the shapes
-    QList<bool> m_oldClipped; ///< if the shape was clipped in the old parent
-    QList<int> m_oldZIndex; ///< the old z-index of the shapes
-
-private:
-    void init();
-    QRectF containerBoundingRect();
+    KoShapeGroupCommandPrivate *d;
+    KoShapeGroupCommand(KoShapeGroupCommandPrivate &, QUndoCommand *parent);
 };
 
 #endif

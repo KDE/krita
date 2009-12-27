@@ -19,35 +19,35 @@
  */
 
 #include "KoShapeUngroupCommand.h"
+#include "KoShapeGroupCommand_p.h"
 #include "KoShapeContainer.h"
 
 #include <klocale.h>
 
 KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
-                                             const QList<KoShape*> &topLevelShapes, QUndoCommand *parent)
-        : KoShapeGroupCommand(parent)
+        const QList<KoShape*> &topLevelShapes, QUndoCommand *parent)
+    : KoShapeGroupCommand(*(new KoShapeGroupCommandPrivate(container, shapes)), parent)
 {
     QList<KoShape*> orderdShapes(shapes);
     qSort(orderdShapes.begin(), orderdShapes.end(), KoShape::compareShapeZIndex);
-    m_shapes = orderdShapes;
-    m_container = container;
+    d->shapes = orderdShapes;
 
-    QList<KoShape*> ancestors = m_container->parent()? m_container->parent()->childShapes(): topLevelShapes;
+    QList<KoShape*> ancestors = d->container->parent()? d->container->parent()->childShapes(): topLevelShapes;
     qSort(ancestors.begin(), ancestors.end(), KoShape::compareShapeZIndex);
-    QList<KoShape*>::const_iterator it(qFind(ancestors, m_container));
+    QList<KoShape*>::const_iterator it(qFind(ancestors, d->container));
 
     Q_ASSERT(it != ancestors.constEnd());
     for ( ; it != ancestors.constEnd(); ++it ) {
-        m_oldAncestorsZIndex.append(QPair<KoShape*, int>(*it, (*it)->zIndex()));
+        d->oldAncestorsZIndex.append(QPair<KoShape*, int>(*it, (*it)->zIndex()));
     }
 
-    int zIndex = m_container->zIndex();
-    foreach(KoShape *shape, m_shapes) {
-        m_clipped.append(m_container->childClipped(shape));
-        m_oldParents.append(m_container->parent());
-        m_oldClipped.append(m_container->childClipped(shape));
-        // TODO this might also need to change the childs of the parent but that is very problematic if the parent is 0
-        m_oldZIndex.append(zIndex++);
+    int zIndex = d->container->zIndex();
+    foreach(KoShape *shape, d->shapes) {
+        d->clipped.append(d->container->childClipped(shape));
+        d->oldParents.append(d->container->parent());
+        d->oldClipped.append(d->container->childClipped(shape));
+        // TODO this might also need to change the children of the parent but that is very problematic if the parent is 0
+        d->oldZIndex.append(zIndex++);
     }
 
     setText(i18n("Ungroup shapes"));
@@ -56,8 +56,8 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const 
 void KoShapeUngroupCommand::redo()
 {
     KoShapeGroupCommand::undo();
-    int zIndex = m_container->zIndex() + m_oldZIndex.count() - 1;
-    for (QList<QPair<KoShape*, int> >::const_iterator it( m_oldAncestorsZIndex.constBegin()); it != m_oldAncestorsZIndex.constEnd(); ++it) {
+    int zIndex = d->container->zIndex() + d->oldZIndex.count() - 1;
+    for (QList<QPair<KoShape*, int> >::const_iterator it( d->oldAncestorsZIndex.constBegin()); it != d->oldAncestorsZIndex.constEnd(); ++it) {
         it->first->setZIndex(zIndex++);
     }
 }
@@ -65,7 +65,7 @@ void KoShapeUngroupCommand::redo()
 void KoShapeUngroupCommand::undo()
 {
     KoShapeGroupCommand::redo();
-    for (QList<QPair<KoShape*, int> >::const_iterator it( m_oldAncestorsZIndex.constBegin()); it != m_oldAncestorsZIndex.constEnd(); ++it) {
+    for (QList<QPair<KoShape*, int> >::const_iterator it( d->oldAncestorsZIndex.constBegin()); it != d->oldAncestorsZIndex.constEnd(); ++it) {
         it->first->setZIndex(it->second);
     }
 }

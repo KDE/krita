@@ -97,8 +97,16 @@ void KisTileDataPooler::cloneTileData(KisTileData *td, qint32 numClones) const
             td->m_clonesList.prepend(new KisTileData(*td));
     } else {
         qint32 numUnnededClones = qAbs(numClones);
-        for (qint32 i = 0; i < numUnnededClones; i++)
-            td->m_clonesList.removeFirst();
+        for (qint32 i = 0; i < numUnnededClones; i++) {
+            /**
+             * Dirty hack alert!
+             * There is a race condition against clones list. It is
+             * a temporary "solution".
+             * FIXME: Implement a lockless list (or stack) for this.
+             */
+            if(!td->m_clonesList.isEmpty())
+                td->m_clonesList.removeFirst();
+        }
     }
 
     DEBUG_CLONE_ACTION(td, numClones);

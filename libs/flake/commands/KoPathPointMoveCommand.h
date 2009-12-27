@@ -30,6 +30,8 @@
 #include "KoPathShape.h"
 #include "KoPathPointData.h"
 
+class KoPathPointMoveCommandPrivate;
+
 /// The undo / redo command for path point moving.
 class FLAKE_EXPORT KoPathPointMoveCommand : public QUndoCommand
 {
@@ -50,17 +52,15 @@ public:
     */
     KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QList<QPointF> &offsets, QUndoCommand *parent = 0);
 
+    ~KoPathPointMoveCommand();
+
     /// redo the command
     void redo();
     /// revert the actions done in redo
     void undo();
 
 private:
-    void applyOffset(qreal factor);
-
-    bool m_undoCalled; // this command stores diffs; so calling undo twice will give wrong results. Guard against that.
-    QMap<KoPathPointData, QPointF > m_points;
-    QSet<KoPathShape*> m_paths;
+    KoPathPointMoveCommandPrivate *d;
 };
 
 #endif // KOPATHPOINTMOVECOMMAND_H

@@ -57,7 +57,7 @@
 #include <kis_selection.h>
 #include <flake/kis_shape_layer.h>
 #include <kis_shear_visitor.h>
-#include <kis_transform_worker.h>
+#include <kis_transform_visitor.h>
 #include <kis_undo_adapter.h>
 #include <kis_painter.h>
 
@@ -726,10 +726,8 @@ void KisLayerManager::rotateLayer(double radians)
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    KisSelectedTransaction * t = 0;
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisSelectedTransaction(i18n("Rotate Layer"), layer);
-        Q_CHECK_PTR(t);
+        m_view->undoAdapter()->beginMacro(i18n("Rotate Layer"));
     }
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
@@ -743,10 +741,11 @@ void KisLayerManager::rotateLayer(double radians)
     double cy = r.y() + r.height() / 2.0;
     qint32 tx = qint32(cx * cos(radians) - cy * sin(radians) - cx + 0.5);
     qint32 ty = qint32(cy * cos(radians) + cx * sin(radians) - cy + 0.5);
-    KisTransformWorker tw(layer->paintDevice(), 1.0, 1.0, 0, 0, radians, -tx, -ty, 0, filter);
-    tw.run();
+    KisTransformVisitor visitor(m_view->image(), 1.0, 1.0, 0, 0, radians, -tx, -ty, 0, filter);
+    layer->accept(visitor);
 
-    if (t) m_view->undoAdapter()->addCommand(t);
+    if (m_view->undoAdapter() && m_view->undoAdapter()->undo())
+        m_view->undoAdapter()->endMacro();
 
     m_doc->setModified(true);
     layersUpdated();

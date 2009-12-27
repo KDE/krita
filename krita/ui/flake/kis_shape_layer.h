@@ -99,6 +99,8 @@ public:
     bool loadLayer(KoStore* store);
     
     QUndoCommand* crop(const QRect & rect);
+    
+    QUndoCommand* transfrom(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey);
 
 public slots:
     void selectionChanged();

@@ -65,6 +65,7 @@
 #include <KoXmlWriter.h>
 #include <KoSelection.h>
 #include <KoShapeMoveCommand.h>
+#include <KoShapeTransformCommand.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -458,6 +459,30 @@ QUndoCommand* KisShapeLayer::crop(const QRect & rect) {
         newPositions.append(shape->position() - croppedRect.topLeft());
     }
     return new KoShapeMoveCommand(shapes, previousPositions, newPositions);
+}
+
+QUndoCommand* KisShapeLayer::transfrom(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
+    
+    QPointF center = m_d->converter->viewToDocument(image()->bounds().center());;
+    QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
+    if(shapes.isEmpty())
+        return 0;
+
+    QList<QMatrix> oldTransformations;
+    QList<QMatrix> newTransformations;
+    foreach(const KoShape* shape, shapes) {
+        QMatrix oldTransform = shape->transformation();
+        oldTransformations.append(oldTransform);
+        
+        QMatrix matrix;
+        double deltax = shape->boundingRect().center().x() - center.x();
+        double deltay = shape->boundingRect().center().y() - center.y();
+        matrix.translate(-deltax, -deltay);
+        matrix.rotate(angle*180/M_PI);
+        matrix.translate(deltax, deltay);
+        newTransformations.append(matrix*oldTransform);
+    }
+    return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);
 }
 
 #include "kis_shape_layer.moc"

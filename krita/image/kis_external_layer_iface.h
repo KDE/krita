@@ -49,6 +49,18 @@ public:
         Q_UNUSED(rect);
         return 0;
     }
+    
+    virtual QUndoCommand* transfrom(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
+        Q_UNUSED(xscale);
+        Q_UNUSED(yscale);
+        Q_UNUSED(xshear);
+        Q_UNUSED(yshear);
+        Q_UNUSED(angle);
+        Q_UNUSED(translatex);
+        Q_UNUSED(translatey);
+        return 0;
+    }
+
 };
 
 #endif // KIS_EXTERNAL_IFACE_LAYER_IFACE_

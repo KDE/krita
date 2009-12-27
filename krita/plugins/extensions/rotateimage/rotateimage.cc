@@ -161,10 +161,10 @@ void RotateImage::slotRotateLayer()
 void RotateImage::slotNodeChanged(const KisNodeSP node)
 {
     Q_UNUSED(node);
-    m_rotateLayerAction->setEnabled(m_view->activeDevice());
-    m_rotate90LayerAction->setEnabled(m_view->activeDevice());
-    m_rotate180LayerAction->setEnabled(m_view->activeDevice());
-    m_rotate270LayerAction->setEnabled(m_view->activeDevice());
+    m_rotateLayerAction->setEnabled(m_view->activeLayer());
+    m_rotate90LayerAction->setEnabled(m_view->activeLayer());
+    m_rotate180LayerAction->setEnabled(m_view->activeLayer());
+    m_rotate270LayerAction->setEnabled(m_view->activeLayer());
 }
 
 #include "rotateimage.moc"

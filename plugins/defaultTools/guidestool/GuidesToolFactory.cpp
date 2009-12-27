@@ -25,8 +25,10 @@ GuidesToolFactory::GuidesToolFactory( QObject *parent )
     : KoToolFactory(parent, GuidesToolId, i18n("Edit Guidelines"))
 {
     setToolTip(i18n("Edit guidelines"));
-    setToolType(mainToolType());
+    setToolType("never");
     setPriority(1);
+    setInputDeviceAgnostic(true);
+    setActivationShapeId("itShouldNeverBeActivated");
 }
 
 GuidesToolFactory::~GuidesToolFactory()

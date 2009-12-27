@@ -40,7 +40,7 @@ public:
      * @param fill the new shape background
      * @param parent the parent command used for macro commands
      */
-    KoShapeBackgroundCommand(const QList<KoShape*> &shapes, KoShapeBackground * fill, QUndoCommand *parent = 0);
+    KoShapeBackgroundCommand(const QList<KoShape*> &shapes, KoShapeBackground *fill, QUndoCommand *parent = 0);
 
     /**
     * Command to set a new shape background.
@@ -48,7 +48,7 @@ public:
     * @param fill the new shape background
     * @param parent the parent command used for macro commands
     */
-    KoShapeBackgroundCommand(KoShape * shape, KoShapeBackground * fill, QUndoCommand *parent = 0);
+    KoShapeBackgroundCommand(KoShape *shape, KoShapeBackground *fill, QUndoCommand *parent = 0);
 
     /**
      * Command to set new shape backgrounds.

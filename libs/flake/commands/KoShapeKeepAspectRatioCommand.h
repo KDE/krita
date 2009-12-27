@@ -38,7 +38,7 @@ public:
      * @param newKeepAspectRatio the new settings
      * @param parent the parent command
      */
-    KoShapeKeepAspectRatioCommand(const QList<KoShape*>& shapes, const QList<bool>& oldKeepAspectRatio, const QList<bool>& newKeepAspectRatio, QUndoCommand* parent = 0);
+    KoShapeKeepAspectRatioCommand(const QList<KoShape*> &shapes, const QList<bool> &oldKeepAspectRatio, const QList<bool> &newKeepAspectRatio, QUndoCommand* parent = 0);
     ~KoShapeKeepAspectRatioCommand();
 
     /// Execute the command

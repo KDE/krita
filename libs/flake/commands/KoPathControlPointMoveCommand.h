@@ -39,8 +39,8 @@ public:
      * @param pointType the type of the point to move
      * @param parent the parent command used for macro commands
      */
-    KoPathControlPointMoveCommand(const KoPathPointData &pointData, const QPointF &offset, KoPathPoint::KoPointType pointType,
-                                  QUndoCommand *parent = 0);
+    KoPathControlPointMoveCommand(const KoPathPointData &pointData, const QPointF &offset,
+            KoPathPoint::KoPointType pointType, QUndoCommand *parent = 0);
     /// redo the command
     void redo();
     /// revert the actions done in redo

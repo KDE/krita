@@ -46,9 +46,9 @@ public:
     void undo();
 
 private:
-    KoPathShape * m_pathShape;
+    KoPathShape *m_pathShape;
     int m_subpathIndex;
-    KoSubpath * m_subpath;
+    KoSubpath *m_subpath;
 };
 
 #endif // KOSUBPATHREMOVECOMMAND_H

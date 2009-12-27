@@ -29,7 +29,7 @@ public:
     QList<QSizeF> previousSizes, newSizes;
 };
 
-KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes, QUndoCommand *parent)
+KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, const QList<QSizeF> &previousSizes, const QList<QSizeF> &newSizes, QUndoCommand *parent)
         : QUndoCommand(parent),
         d(new Private())
 {

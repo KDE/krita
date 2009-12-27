@@ -69,8 +69,6 @@ public:
     void undo();
 
 private:
-    static void prepare(KoShape * s, QMap<KoShape*, QList<KoShape*> > & newOrder, KoShapeManager * manager, MoveShapeType move);
-
     QList<KoShape*> m_shapes;
     QList<int> m_previousIndexes, m_newIndexes;
 };

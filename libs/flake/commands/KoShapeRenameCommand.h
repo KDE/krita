@@ -26,6 +26,7 @@
 class QString;
 class KoShape;
 
+/// API docs go here
 class FLAKE_EXPORT KoShapeRenameCommand : public QUndoCommand
 {
 public:

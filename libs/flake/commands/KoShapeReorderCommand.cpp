@@ -58,9 +58,9 @@ void KoShapeReorderCommand::undo()
     }
 }
 
-void KoShapeReorderCommand::prepare(KoShape * s, QMap<KoShape*, QList<KoShape*> > & newOrder, KoShapeManager * manager, MoveShapeType move)
+static void prepare(KoShape *s, QMap<KoShape*, QList<KoShape*> > &newOrder, KoShapeManager *manager, KoShapeReorderCommand::MoveShapeType move)
 {
-    KoShapeContainer * parent = s->parent();
+    KoShapeContainer *parent = s->parent();
     QMap<KoShape*, QList<KoShape*> >::iterator it( newOrder.find( parent ) );
     if ( it == newOrder.end() ) {
         QList<KoShape*> children;
@@ -82,22 +82,22 @@ void KoShapeReorderCommand::prepare(KoShape * s, QMap<KoShape*, QList<KoShape*> 
     if (index != -1) {
         shapes.removeAt(index);
         switch ( move ) {
-            case BringToFront:
-                index = shapes.size();
-                break;
-            case RaiseShape:
-                if (index < shapes.size()) {
-                    ++index;
-                }
-                break;
-            case LowerShape:
-                if (index > 0) {
-                    --index;
-                }
-                break;
-            case SendToBack:
-                index = 0;
-                break;
+        case KoShapeReorderCommand::BringToFront:
+            index = shapes.size();
+            break;
+        case KoShapeReorderCommand::RaiseShape:
+            if (index < shapes.size()) {
+                ++index;
+            }
+            break;
+        case KoShapeReorderCommand::LowerShape:
+            if (index > 0) {
+                --index;
+            }
+            break;
+        case KoShapeReorderCommand::SendToBack:
+            index = 0;
+            break;
         }
         shapes.insert(index,s);
     }

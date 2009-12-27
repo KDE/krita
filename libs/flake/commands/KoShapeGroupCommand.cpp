@@ -25,7 +25,8 @@
 
 #include <klocale.h>
 
-KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent)
+// static
+KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, QUndoCommand *parent)
 {
     QList<KoShape*> orderedShapes(shapes);
     qSort(orderedShapes.begin(), orderedShapes.end(), KoShape::compareShapeZIndex);
@@ -39,7 +40,7 @@ KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container
 }
 
 
-KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, QList<KoShape *> shapes, QList<bool> clipped,
+KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped,
         QUndoCommand *parent)
         : QUndoCommand(parent)
         , m_shapes(shapes)
@@ -50,7 +51,7 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, QList<KoSh
     init();
 }
 
-KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent)
+KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, QUndoCommand *parent)
         : QUndoCommand(parent)
         , m_shapes(shapes)
         , m_container(container)
@@ -59,6 +60,11 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, QList<KoShape 
         m_clipped.append(false);
     }
     init();
+}
+
+KoShapeGroupCommand::~KoShapeGroupCommand()
+{
+    // delete d;
 }
 
 KoShapeGroupCommand::KoShapeGroupCommand(QUndoCommand *parent)

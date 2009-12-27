@@ -49,7 +49,7 @@ public:
      * @param boundingRect the rect the shape will be aligned in
      * @param parent the parent command used for macro commands
      */
-    KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, QRectF boundingRect, QUndoCommand *parent = 0);
+    KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, const QRectF &boundingRect, QUndoCommand *parent = 0);
     virtual ~KoShapeAlignCommand();
     /// redo the command
     virtual void redo();

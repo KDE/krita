@@ -31,11 +31,14 @@ public:
     ~Private() {
         delete command;
     }
+
+    qreal getAvailableSpace(KoShape *first, KoShape *last, qreal extent, const QRectF &boundingRect);
+
     Distribute distribute;
     KoShapeMoveCommand *command;
 };
 
-KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes, Distribute distribute,  QRectF boundingRect, QUndoCommand *parent)
+KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes, Distribute distribute, const QRectF &boundingRect, QUndoCommand *parent)
         : QUndoCommand(parent),
         d(new Private())
 {
@@ -75,7 +78,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes
     KoShape* last = (--sortedPos.end()).value();
 
     // determine the available space to distribute
-    qreal space = getAvailableSpace(first, last, extent, boundingRect);
+    qreal space = d->getAvailableSpace(first, last, extent, boundingRect);
     qreal pos = 0.0, step = space / qreal(shapes.count() - 1);
 
     QList<QPointF> previousPositions;
@@ -142,9 +145,9 @@ void KoShapeDistributeCommand::undo()
     d->command->undo();
 }
 
-qreal KoShapeDistributeCommand::getAvailableSpace(KoShape *first, KoShape *last, qreal extent, QRectF boundingRect)
+qreal KoShapeDistributeCommand::Private::getAvailableSpace(KoShape *first, KoShape *last, qreal extent, const QRectF &boundingRect)
 {
-    switch (d->distribute) {
+    switch (distribute) {
     case HorizontalCenterDistribution:
         return boundingRect.width() - last->boundingRect().width() / 2 - first->boundingRect().width() / 2;
         break;

@@ -56,7 +56,7 @@ public:
     void undo();
 
 private:
-    void applyOffset( qreal factor );
+    void applyOffset(qreal factor);
 
     bool m_undoCalled; // this command stores diffs; so calling undo twice will give wrong results. Guard against that.
     QMap<KoPathPointData, QPointF > m_points;

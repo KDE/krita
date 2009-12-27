@@ -47,7 +47,7 @@ public:
      * @param transparency the new shape transparency
      * @param parent the parent command used for macro commands
      */
-    KoShapeTransparencyCommand(KoShape * shape, qreal transparency, QUndoCommand *parent = 0);
+    KoShapeTransparencyCommand(KoShape *shape, qreal transparency, QUndoCommand *parent = 0);
 
     /**
      * Command to set new shape transparencies.

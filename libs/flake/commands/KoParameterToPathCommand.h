@@ -54,7 +54,7 @@ public:
     void undo();
 private:
     void initialize();
-    void copyPath(KoPathShape * dst, KoPathShape * src);
+    void copyPath(KoPathShape *destination, KoPathShape *source);
     QList<KoParameterShape*> m_shapes;
     QList<KoPathShape*> m_copies;
 };

@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 
-KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, QList<qreal> &previousShearXs, QList<qreal> &previousShearYs, QList<qreal> &newShearXs, QList<qreal> &newShearYs, QUndoCommand *parent)
+KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, const QList<qreal> &previousShearXs, const QList<qreal> &previousShearYs, const QList<qreal> &newShearXs, const QList<qreal> &newShearYs, QUndoCommand *parent)
         : QUndoCommand(parent)
         , m_shapes(shapes)
         , m_previousShearXs(previousShearXs)

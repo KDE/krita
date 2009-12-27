@@ -36,8 +36,7 @@ public:
     KoShapeMoveCommand *command;
 };
 
-KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, QRectF boundingRect,
-        QUndoCommand *parent)
+KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, const QRectF &boundingRect, QUndoCommand *parent)
         : QUndoCommand(parent),
         d(new Private())
 {

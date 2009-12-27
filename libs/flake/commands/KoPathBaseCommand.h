@@ -34,10 +34,12 @@ public:
      * @param parent the parent command used for macro commands
      */
     explicit KoPathBaseCommand(QUndoCommand *parent = 0);
+
     /** initialize the base command with a single shape
      * @param parent the parent command used for macro commands
      */
     explicit KoPathBaseCommand(KoPathShape *shape, QUndoCommand *parent = 0);
+
 protected:
     /**
      * Shedules repainting of all shapes control point rects.

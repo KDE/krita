@@ -44,6 +44,7 @@ public:
     void redo();
     /// revert the actions done in redo
     void undo();
+
 private:
     class Private;
     Private * const d;

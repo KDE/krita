@@ -461,7 +461,7 @@ QUndoCommand* KisShapeLayer::crop(const QRect & rect) {
     return new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 }
 
-QUndoCommand* KisShapeLayer::transfrom(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
+QUndoCommand* KisShapeLayer::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
     
     QPointF center = m_d->converter->viewToDocument(image()->bounds().center());;
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();

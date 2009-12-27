@@ -50,7 +50,7 @@ public:
         return 0;
     }
     
-    virtual QUndoCommand* transfrom(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
+    virtual QUndoCommand* transform(double xscale, double yscale, double xshear, double yshear, double angle, qint32 translatex, qint32 translatey) {
         Q_UNUSED(xscale);
         Q_UNUSED(yscale);
         Q_UNUSED(xshear);

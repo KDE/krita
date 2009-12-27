@@ -67,7 +67,7 @@ public:
     bool visit(KisExternalLayer * layer) {
         KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
         
-        QUndoCommand* cmd = layer->transfrom(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
+        QUndoCommand* cmd = layer->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
         if (cmd && undoAdapter && undoAdapter->undo()) {
             undoAdapter->addCommand(cmd);
         }

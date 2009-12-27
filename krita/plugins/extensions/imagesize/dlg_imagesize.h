@@ -73,6 +73,7 @@ private slots:
     void slotHeightUnitChanged(int index);
     void slotProtectChanged();
     void slotAspectChanged(bool keep);
+    void slotResolutionChanged(double r);
 
 private:
 

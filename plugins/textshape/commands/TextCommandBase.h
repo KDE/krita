@@ -21,6 +21,7 @@
 #define ABSTRACTTEXTCOMMMAND_H
 
 #include <QUndoCommand>
+
 class TextTool;
 
 /**
@@ -66,11 +67,10 @@ protected:
     class UndoRedoFinalizer
     {
     public:
-        UndoRedoFinalizer(TextCommandBase* parent, TextTool *tool) : m_parent(parent), m_tool(tool) {}
+        UndoRedoFinalizer(TextCommandBase* parent) : m_parent(parent) {}
         ~UndoRedoFinalizer();
     private:
         TextCommandBase* m_parent;
-        TextTool *m_tool;
     };
 
     TextTool *m_tool;

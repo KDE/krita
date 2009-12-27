@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +16,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "TextPlugin.h"
-#include "TextToolFactory.h"
+
 #include "ChangeTrackingToolFactory.h"
-#include "TextShapeFactory.h"
+#include "ChangeTrackingTool.h"
+#include "TextShape.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include <klocale.h>
 
-#include <kgenericfactory.h>
-
-K_EXPORT_COMPONENT_FACTORY(textshape, KGenericFactory<TextPlugin>("TextShape"))
-
-TextPlugin::TextPlugin(QObject * parent, const QStringList &)
-        : QObject(parent)
+ChangeTrackingToolFactory::ChangeTrackingToolFactory(QObject *parent)
+        : KoToolFactory(parent, "ChangeTrackingToolFactory_ID", i18n("Change tracking tool"))
 {
-    KoToolRegistry::instance()->add(new TextToolFactory(parent));
-    KoToolRegistry::instance()->add(new ChangeTrackingToolFactory(parent));
-    KoShapeRegistry::instance()->add(new TextShapeFactory(parent));
+    setToolTip(i18n("Change Tracking tool"));
+    setToolType(dynamicToolType());
+    setIcon("draw-text");
+    setPriority(1);
+    setActivationShapeId(TextShape_SHAPEID);
 }
 
-#include "TextPlugin.moc"
+ChangeTrackingToolFactory::~ChangeTrackingToolFactory()
+{
+}
+
+KoTool * ChangeTrackingToolFactory::createTool(KoCanvasBase *canvas)
+{
+    return new ChangeTrackingTool(canvas);
+}
+
+#include "ChangeTrackingToolFactory.moc"

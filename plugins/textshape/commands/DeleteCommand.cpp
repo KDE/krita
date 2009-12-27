@@ -50,8 +50,8 @@ DeleteCommand::DeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand *pare
 void DeleteCommand::undo()
 {
     TextCommandBase::undo();
-    UndoRedoFinalizer finalizer(this, m_tool);
-    
+    UndoRedoFinalizer finalizer(this);
+
     QTextDocument *document = m_tool->m_textEditor->document();
     KoTextDocument(document).changeTracker()->elementById(m_addedChangeElement)->setValid(false);
     foreach (int changeId, m_removedElements) {
@@ -66,7 +66,7 @@ void DeleteCommand::redo()
     m_undone = false;
     if (!m_first) {
         TextCommandBase::redo();
-        UndoRedoFinalizer finalizer(this, m_tool);
+        UndoRedoFinalizer finalizer(this);
         QTextDocument *document = m_tool->m_textEditor->document();
         KoTextDocument(document).changeTracker()->elementById(m_addedChangeElement)->setValid(true);
         foreach (int changeId, m_removedElements) {

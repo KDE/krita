@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +16,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "TextPlugin.h"
-#include "TextToolFactory.h"
-#include "ChangeTrackingToolFactory.h"
-#include "TextShapeFactory.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#ifndef ACCEPTCHANGECOMMAND_H
+#define ACCEPTCHANGECOMMAND_H
 
-#include <kgenericfactory.h>
+#include "commands/TextCommandBase.h"
 
-K_EXPORT_COMPONENT_FACTORY(textshape, KGenericFactory<TextPlugin>("TextShape"))
+class KoChangeTracker;
 
-TextPlugin::TextPlugin(QObject * parent, const QStringList &)
-        : QObject(parent)
+class QTextDocument;
+
+class AcceptChangeCommand : public TextCommandBase
 {
-    KoToolRegistry::instance()->add(new TextToolFactory(parent));
-    KoToolRegistry::instance()->add(new ChangeTrackingToolFactory(parent));
-    KoShapeRegistry::instance()->add(new TextShapeFactory(parent));
-}
+public:
+    AcceptChangeCommand(int changeId, int changeStart, int ChangeEnd, QTextDocument *document, QUndoCommand *parent = 0);
+    ~AcceptChangeCommand();
 
-#include "TextPlugin.moc"
+    virtual void redo();
+    virtual void undo();
+
+private:
+    bool m_first;
+    int m_changeId, m_changeStart, m_changeEnd;
+    QTextDocument *m_document;
+    KoChangeTracker *m_changeTracker;
+};
+
+#endif // ACCEPTCHANGECOMMAND_H

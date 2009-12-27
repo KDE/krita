@@ -30,6 +30,7 @@
 #include "dialogs/InsertCharacter.h"
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
+#include "dialogs/TrackedChangeManager.h"
 #include "commands/TextCommandBase.h"
 #include "commands/TextCutCommand.h"
 #include "commands/TextPasteCommand.h"
@@ -91,6 +92,7 @@
 #include <QUndoCommand>
 #include <QSignalMapper>
 #include <QTextDocumentFragment>
+#include <QTreeView>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
@@ -1678,12 +1680,19 @@ void TextTool::formatParagraph()
 
 void TextTool::toggleShowChanges(bool on)//TODO transfer this in KoTextEditor
 {
-    m_textEditor->addCommand(new ShowChangesCommand(on, this));
+    ShowChangesCommand *command = new ShowChangesCommand(on, m_textShapeData->document());
+    connect(command, SIGNAL(toggledShowChange(bool)), m_actionShowChanges, SLOT(setChecked(bool)));
+    m_textEditor->addCommand(command);
 }
 
 void TextTool::toggleRecordChanges(bool on)
 {
     m_changeTracker->setRecordChanges(on);
+}
+
+void TextTool::testSlot(bool on)
+{
+    kDebug(32500) << "signal received. bool:" << on;
 }
 
 void TextTool::selectAll()

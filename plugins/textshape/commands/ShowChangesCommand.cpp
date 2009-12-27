@@ -1,6 +1,7 @@
 /*
- This file is part of the KDE project
+ * This file is part of the KDE project
  * Copyright (C) 2009 Ganesh Paramasivam <ganesh@crystalfab.com>
+ * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -15,25 +16,31 @@
  * You should have received a copy of the GNU Library General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.*/
+ * Boston, MA 02110-1301, USA.
+*/
 
 #include "ShowChangesCommand.h"
 
-#include <KoTextEditor.h>
-#include <TextTool.h>
-#include <klocale.h>
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
-#include <KAction>
+#include <KoTextEditor.h>
 
-ShowChangesCommand::ShowChangesCommand(bool showChanges, TextTool *tool, QUndoCommand *parent) :
+#include <KAction>
+#include <klocale.h>
+
+#include <QTextDocument>
+
+ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document, QUndoCommand *parent) :
     TextCommandBase (parent),
-    m_tool(tool),
+    m_document(document),
     m_first(true),
     m_showChanges(showChanges)
 {
+    Q_ASSERT(document);
+    m_changeTracker = KoTextDocument(m_document).changeTracker();
+    m_textEditor = KoTextDocument(m_document).textEditor();
     if (showChanges)
       setText(i18n("Show Changes"));
     else
@@ -43,8 +50,8 @@ ShowChangesCommand::ShowChangesCommand(bool showChanges, TextTool *tool, QUndoCo
 void ShowChangesCommand::undo()
 {
     TextCommandBase::undo();
-    UndoRedoFinalizer finalizer(this, m_tool);
-    m_tool->m_actionShowChanges->setChecked(!m_showChanges);
+    UndoRedoFinalizer finalizer(this);
+    emit toggledShowChange(!m_showChanges);
     enableDisableStates(!m_showChanges);
 }
 
@@ -52,8 +59,8 @@ void ShowChangesCommand::redo()
 {
     if (!m_first) {
         TextCommandBase::redo();
-        UndoRedoFinalizer finalizer(this, m_tool);
-        m_tool->m_actionShowChanges->setChecked(m_showChanges);
+        UndoRedoFinalizer finalizer(this);
+        emit toggledShowChange(m_showChanges);
         enableDisableStates(m_showChanges);
     } else {
         m_first = false;
@@ -63,7 +70,7 @@ void ShowChangesCommand::redo()
 
 void ShowChangesCommand::enableDisableChanges()
 {
-    if (m_tool->m_changeTracker) {
+    if (m_changeTracker) {
         enableDisableStates(m_showChanges);
 
         if(m_showChanges)
@@ -71,9 +78,7 @@ void ShowChangesCommand::enableDisableChanges()
         else
           removeDeletedChanges();
 
-        const QTextDocument *doc = m_tool->m_textEditor->document();
-        Q_ASSERT(doc);
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
         if(lay)
           lay->scheduleLayout();
     }
@@ -81,23 +86,21 @@ void ShowChangesCommand::enableDisableChanges()
 
 void ShowChangesCommand::enableDisableStates(bool showChanges)
 {
-    m_tool->m_changeTracker->setDisplayChanges(showChanges);
+    m_changeTracker->setRecordChanges(showChanges);
+    m_changeTracker->setDisplayChanges(showChanges);
 
-    QTextCharFormat format = m_tool->m_textEditor->charFormat();
+    QTextCharFormat format = m_textEditor->charFormat();
     format.clearProperty(KoCharacterStyle::ChangeTrackerId);
-    m_tool->m_textEditor->setCharFormat(format);
-
-    m_tool->m_textTyping = false;
-    m_tool->m_textDeleting = false;
+    m_textEditor->setCharFormat(format);
 }
 
 void ShowChangesCommand::insertDeletedChanges()
 {
     int numAddedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
-    KoTextDocument(m_tool->m_textEditor->document()).changeTracker()->getDeletedChanges(elementVector);
+    KoTextDocument(m_textEditor->document()).changeTracker()->getDeletedChanges(elementVector);
 
-    QTextCursor caret(m_tool->m_textEditor->document());
+    QTextCursor caret(m_textEditor->document());
     caret.beginEditBlock();
 
     foreach(KoChangeTrackerElement *element, elementVector)
@@ -119,9 +122,9 @@ void ShowChangesCommand::removeDeletedChanges()
 {
     int numDeletedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
-    KoTextDocument(m_tool->m_textEditor->document()).changeTracker()->getDeletedChanges(elementVector);
+    m_changeTracker->getDeletedChanges(elementVector);
 
-    QTextCursor caret(m_tool->m_textEditor->document());
+    QTextCursor caret(m_document);
     caret.beginEditBlock();
 
     foreach(KoChangeTrackerElement *element, elementVector)
@@ -140,5 +143,6 @@ void ShowChangesCommand::removeDeletedChanges()
 
 ShowChangesCommand::~ShowChangesCommand()
 {
-
 }
+
+#include "ShowChangesCommand.moc"

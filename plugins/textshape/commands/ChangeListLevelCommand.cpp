@@ -82,7 +82,7 @@ void ChangeListLevelCommand::redo()
 {
     if (!m_first) {
         TextCommandBase::redo();
-        UndoRedoFinalizer finalizer(this, m_tool);
+        UndoRedoFinalizer finalizer(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
             m_lists.value(i)->updateStoredList(m_blocks.at(i));
             if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
@@ -105,7 +105,7 @@ void ChangeListLevelCommand::redo()
 void ChangeListLevelCommand::undo()
 {
     TextCommandBase::undo();
-    UndoRedoFinalizer finalizer(this, m_tool);
+    UndoRedoFinalizer finalizer(this);
     for (int i = 0; i < m_blocks.size(); ++i) {
         if (m_blocks.at(i).textList())
             m_lists.value(i)->updateStoredList(m_blocks.at(i));

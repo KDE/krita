@@ -204,7 +204,7 @@ void ChangeListCommand::redo()
                 }
         }
         TextCommandBase::redo();
-        UndoRedoFinalizer finalizer(this, m_tool);
+        UndoRedoFinalizer finalizer(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
             if ((m_actions.value(i) == ChangeListCommand::modifyExisting) || (m_actions.value(i) == ChangeListCommand::createNew) || (m_actions.value(i) == ChangeListCommand::mergeList)) {
                 m_list.value(i)->updateStoredList(m_blocks.at(i));
@@ -252,7 +252,7 @@ void ChangeListCommand::redo()
 void ChangeListCommand::undo()
 {
     TextCommandBase::undo();
-    UndoRedoFinalizer finalizer(this, m_tool);
+    UndoRedoFinalizer finalizer(this);
 
     for (int i = 0; i < m_blocks.size(); ++i) {
         // command to undo:

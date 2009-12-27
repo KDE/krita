@@ -1,6 +1,7 @@
 /*
  This file is part of the KDE project
  * Copyright (C) 2009 Ganesh Paramasivam <ganesh@crystalfab.com>
+ * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,20 +21,28 @@
 #ifndef SHOWCHANGECOMMAND_H
 #define SHOWCHANGECOMMAND_H
 
-#include <QUndoStack>
 #include "TextCommandBase.h"
 
-class TextTool;
+#include <QObject>
 
-class ShowChangesCommand : public TextCommandBase
+class KoChangeTracker;
+class KoTextEditor;
+
+class QTextDocument;
+
+class ShowChangesCommand : public QObject, public TextCommandBase
 {
+    Q_OBJECT
 public:
 
-    ShowChangesCommand(bool shoeChanges, TextTool *tool, QUndoCommand* parent = 0);
+    ShowChangesCommand(bool showChanges, QTextDocument *document, QUndoCommand* parent = 0);
     ~ShowChangesCommand();
 
     virtual void undo();
     virtual void redo();
+
+signals:
+    void toggledShowChange(bool on);
 
 private:
     void enableDisableChanges();
@@ -41,7 +50,9 @@ private:
     void insertDeletedChanges();
     void removeDeletedChanges();
 
-    TextTool *m_tool;
+    QTextDocument *m_document;
+    KoChangeTracker *m_changeTracker;
+    KoTextEditor *m_textEditor;
     bool m_first;
     bool m_showChanges;
 };

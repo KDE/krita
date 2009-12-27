@@ -42,6 +42,7 @@ set(TestChangeListCommand_test_SRCS
     ../commands/TextCutCommand.cpp
     ../commands/DeleteCommand.cpp
     ../commands/ShowChangesCommand.cpp
+    ../commands/AcceptChangeCommand.cpp
     ../TextTool.cpp
     ../ChangeTracker.cpp
     ../dialogs/FontDia.cpp
@@ -68,6 +69,9 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/FormattingPreview.cpp
     ../dialogs/StyleManagerWelcome.cpp
     ../dialogs/TableDialog.cpp
+    ../dialogs/TrackedChangeManager.cpp
+    ../dialogs/TrackedChangeModel.cpp
+    ../dialogs/modeltest.cpp
     ../ListItemsHelper.cpp
     ../TextShape.cpp
     ../Layout.cpp

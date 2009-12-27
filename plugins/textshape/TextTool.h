@@ -240,6 +240,8 @@ private slots:
     void shapeAddedToDoc(KoShape *shape);
     void ensureCursorVisible();
 
+    void testSlot(bool);
+
 #ifndef NDEBUG
 protected:
     explicit TextTool(MockCanvas *canvas);

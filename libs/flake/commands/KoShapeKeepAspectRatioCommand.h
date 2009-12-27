@@ -23,14 +23,12 @@
 #include <QUndoCommand>
 #include <QList>
 
-#include "flake_export.h"
-
 class KoShape;
 
 /**
  * Command that changes the keepAspectRatio property of KoShape
  */
-class FLAKE_EXPORT KoShapeKeepAspectRatioCommand : public QUndoCommand
+class KoShapeKeepAspectRatioCommand : public QUndoCommand
 {
 public:
     /**

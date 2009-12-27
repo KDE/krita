@@ -21,14 +21,13 @@
 #ifndef KOSHAPELOCKCOMMAND_H
 #define KOSHAPELOCKCOMMAND_H
 
-#include "flake_export.h"
 #include <QUndoCommand>
 #include <QList>
 
 class KoShape;
 
 /// The undo / redo command to lock a set of shapes position and size
-class FLAKE_EXPORT KoShapeLockCommand : public QUndoCommand
+class KoShapeLockCommand : public QUndoCommand
 {
 public:
     /**

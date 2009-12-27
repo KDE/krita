@@ -286,8 +286,6 @@ install(
     commands/KoShapeDeleteCommand.h
     commands/KoShapeDistributeCommand.h
     commands/KoShapeGroupCommand.h
-    commands/KoShapeKeepAspectRatioCommand.h
-    commands/KoShapeLockCommand.h
     commands/KoShapeMoveCommand.h
     commands/KoShapeRenameCommand.h
     commands/KoShapeReorderCommand.h

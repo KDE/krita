@@ -26,35 +26,53 @@
 #include <kdebug.h>
 #include <limits.h>
 
-KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, QUndoCommand *parent)
-        : QUndoCommand(parent)
-        , m_shapes(shapes)
-        , m_newIndexes(newIndexes)
+
+class KoShapeReorderCommandPrivate
 {
-    Q_ASSERT(m_shapes.count() == m_newIndexes.count());
-    foreach(KoShape *shape, shapes)
-        m_previousIndexes.append(shape->zIndex());
+public:
+    KoShapeReorderCommandPrivate(const QList<KoShape*> &s, QList<int> &ni)
+        : shapes(s), newIndexes(ni)
+    {
+    }
+
+    QList<KoShape*> shapes;
+    QList<int> previousIndexes;
+    QList<int> newIndexes;
+};
+
+KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, QUndoCommand *parent)
+    : QUndoCommand(parent),
+    d(new KoShapeReorderCommandPrivate(shapes, newIndexes))
+{
+    Q_ASSERT(shapes.count() == newIndexes.count());
+    foreach (KoShape *shape, shapes)
+        d->previousIndexes.append(shape->zIndex());
 
     setText(i18n("Reorder shapes"));
+}
+
+KoShapeReorderCommand::~KoShapeReorderCommand()
+{
+    delete d;
 }
 
 void KoShapeReorderCommand::redo()
 {
     QUndoCommand::redo();
-    for (int i = 0; i < m_shapes.count(); i++) {
-        m_shapes.at(i)->update();
-        m_shapes.at(i)->setZIndex(m_newIndexes.at(i));
-        m_shapes.at(i)->update();
+    for (int i = 0; i < d->shapes.count(); i++) {
+        d->shapes.at(i)->update();
+        d->shapes.at(i)->setZIndex(d->newIndexes.at(i));
+        d->shapes.at(i)->update();
     }
 }
 
 void KoShapeReorderCommand::undo()
 {
     QUndoCommand::undo();
-    for (int i = 0; i < m_shapes.count(); i++) {
-        m_shapes.at(i)->update();
-        m_shapes.at(i)->setZIndex(m_previousIndexes.at(i));
-        m_shapes.at(i)->update();
+    for (int i = 0; i < d->shapes.count(); i++) {
+        d->shapes.at(i)->update();
+        d->shapes.at(i)->setZIndex(d->previousIndexes.at(i));
+        d->shapes.at(i)->update();
     }
 }
 

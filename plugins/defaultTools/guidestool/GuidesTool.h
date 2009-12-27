@@ -28,6 +28,8 @@
 
 class KoCanvasBase;
 class GuidesTransaction;
+class InsertGuidesToolOptionWidget;
+class GuidesToolOptionWidget;
 
 class GuidesTool : public KoTool
 {
@@ -74,8 +76,19 @@ private:
     typedef QPair<Qt::Orientation, int> GuideLine;
     GuideLine guideLineAtPosition(const QPointF &position);
 
-    class Private;
-    Private * const d;
+    enum EditMode {
+        None,
+        AddGuide,
+        MoveGuide,
+        EditGuide
+    };
+    Qt::Orientation m_orientation;
+    int m_index;
+    qreal m_position;
+    EditMode m_mode;
+    GuidesToolOptionWidget *m_options;
+    InsertGuidesToolOptionWidget *m_insert;
+    bool m_isMoving;
 };
 
 #endif // GUIDESTOOL_H

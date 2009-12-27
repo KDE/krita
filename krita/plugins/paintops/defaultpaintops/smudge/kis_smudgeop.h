@@ -52,7 +52,7 @@ class KisSmudgeOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter * painter);
+    KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisSmudgeOp();
 
     void paintAt(const KisPaintInformation& info);

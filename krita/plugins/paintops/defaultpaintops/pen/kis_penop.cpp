@@ -43,10 +43,11 @@
 
 #include <kis_penop_settings.h>
 
-KisPenOp::KisPenOp(const KisPenOpSettings *settings, KisPainter *painter)
+KisPenOp::KisPenOp(const KisPenOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(painter)
         , settings(settings)
 {
+    Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     if (settings && settings->m_options) {

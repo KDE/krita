@@ -59,10 +59,11 @@
 #include <kis_eraseop_settings_widget.h>
 
 
-KisEraseOp::KisEraseOp(const KisEraseOpSettings *settings, KisPainter *painter)
+KisEraseOp::KisEraseOp(const KisEraseOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(painter)
         , settings(settings)
 {
+    Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     if (settings->m_options) {

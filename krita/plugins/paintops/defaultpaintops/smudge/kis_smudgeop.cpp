@@ -58,13 +58,14 @@
 #include "kis_smudgeop_settings.h"
 #include "kis_smudgeop_settings_widget.h"
 
-KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painter)
+KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(painter)
         , settings(settings)
         , m_firstRun(true)
         , m_target(0)
         , m_srcdev(0)
 {
+    Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     if (settings->m_options) {

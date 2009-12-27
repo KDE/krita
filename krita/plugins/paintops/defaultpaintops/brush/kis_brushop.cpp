@@ -61,10 +61,11 @@
 #include <kis_color_source.h>
 #include <kis_pressure_mix_option.h>
 
-KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
+KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(painter)
         , settings(settings)
 {
+    Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     if (settings && settings->m_options) {

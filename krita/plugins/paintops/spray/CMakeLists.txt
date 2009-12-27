@@ -1,7 +1,6 @@
 set(kritaspraypaintop_PART_SRCS
     spray_paintop_plugin.cpp
     kis_spray_paintop.cpp
-    kis_spray_paintop_factory.cpp
     kis_sprayop_option.cpp
     kis_spray_shape_option.cpp
     kis_spray_paintop_settings.cpp

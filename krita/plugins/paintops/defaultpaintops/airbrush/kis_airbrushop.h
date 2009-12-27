@@ -34,7 +34,7 @@ class KisAirbrushOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisAirbrushOp(const KisAirbrushOpSettings *settings, KisPainter * painter);
+    KisAirbrushOp(const KisAirbrushOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisAirbrushOp();
 
     // We want to spray even when the pointer doesn't move.

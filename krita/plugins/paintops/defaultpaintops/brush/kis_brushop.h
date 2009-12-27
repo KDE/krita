@@ -44,7 +44,7 @@ class KisBrushOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisBrushOp(const KisBrushOpSettings *settings, KisPainter * painter);
+    KisBrushOp(const KisBrushOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisBrushOp();
 
     void paintAt(const KisPaintInformation& info);

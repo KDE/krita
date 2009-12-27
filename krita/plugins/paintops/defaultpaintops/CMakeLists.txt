@@ -9,11 +9,9 @@ include_directories(smudge)
 set(kritadefaultpaintops_PART_SRCS
 	defaultpaintops_plugin.cc
 	airbrush/kis_airbrushop.cpp
-	airbrush/kis_airbrushop_factory.cpp
 	airbrush/kis_airbrushop_settings.cpp
 	airbrush/kis_airbrushop_settings_widget.cpp
 	brush/kis_brushop.cpp
-	brush/kis_brushop_factory.cpp
 	brush/kis_brushop_settings.cpp
 	brush/kis_brushop_settings_widget.cpp
 	duplicate/kis_duplicateop.cpp
@@ -22,15 +20,12 @@ set(kritadefaultpaintops_PART_SRCS
 	duplicate/kis_duplicateop_settings_widget.cpp
 	duplicate/kis_duplicateop_option.cpp
 	eraser/kis_eraseop.cpp
-	eraser/kis_eraseop_factory.cpp
 	eraser/kis_eraseop_settings.cpp
 	eraser/kis_eraseop_settings_widget.cpp
 	pen/kis_penop.cpp
-	pen/kis_penop_factory.cpp
 	pen/kis_penop_settings.cpp
 	pen/kis_penop_settings_widget.cpp
 	smudge/kis_smudgeop.cpp
-	smudge/kis_smudgeop_factory.cpp
 	smudge/kis_smudgeop_settings.cpp
 	smudge/kis_smudgeop_settings_widget.cpp
     )

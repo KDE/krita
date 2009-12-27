@@ -1,7 +1,6 @@
 set(kritachalkpaintop_PART_SRCS
     chalk_paintop_plugin.cpp
     kis_chalk_paintop.cpp
-    kis_chalk_paintop_factory.cpp
     kis_chalkop_option.cpp
     kis_chalk_paintop_settings.cpp
     kis_chalk_paintop_settings_widget.cpp

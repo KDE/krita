@@ -45,10 +45,11 @@
 #include "kis_airbrushop_settings_widget.h"
 
 
-KisAirbrushOp::KisAirbrushOp(const KisAirbrushOpSettings *settings, KisPainter *painter)
+KisAirbrushOp::KisAirbrushOp(const KisAirbrushOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(painter)
         , settings(settings)
 {
+    Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     if (settings->m_options) {

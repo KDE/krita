@@ -3,7 +3,6 @@ set(kritacurvepaintop_PART_SRCS
 	curve_paintop_plugin.cpp
 	kis_curve_paintop.cpp
 	kis_curve_paintop_settings.cpp
-	kis_curve_paintop_factory.cpp
     kis_curve_paintop_settings_widget.cpp
     )
 

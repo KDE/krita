@@ -37,7 +37,7 @@ class KisPenOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisPenOp(const KisPenOpSettings *settings, KisPainter * painter);
+    KisPenOp(const KisPenOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisPenOp();
 
     void paintAt(const KisPaintInformation& info);

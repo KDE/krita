@@ -29,7 +29,7 @@
 
 
 #include "kis_chalk_paintop.h"
-#include "kis_chalk_paintop_factory.h"
+#include "kis_simple_paintop_factory.h"
 
 #include "kis_global.h"
 
@@ -43,7 +43,7 @@ ChalkPaintOpPlugin::ChalkPaintOpPlugin(QObject *parent, const QStringList &)
     //
     setComponentData(ChalkPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisChalkPaintOpFactory);
+    r->add(new KisSimplePaintOpFactory<KisChalkPaintOp, KisChalkPaintOpSettings, KisChalkPaintOpSettingsWidget>("chalkbrush", i18n("Chalk brush"), "krita-chalk.png"));
 
 }
 

@@ -50,7 +50,7 @@ class KisEraseOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisEraseOp(const KisEraseOpSettings *settings, KisPainter * painter);
+    KisEraseOp(const KisEraseOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisEraseOp();
 
     void paintAt(const KisPaintInformation& info);

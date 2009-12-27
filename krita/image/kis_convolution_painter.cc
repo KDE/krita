@@ -82,7 +82,19 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
     switch (borderOp) {
     case BORDER_REPEAT: {
         QRect dataRect = src->exactBounds();
-        applyMatrixImpl<RepeatIteratorFactory>(kernel, src, srcPos, dstPos, areaSize, dataRect);
+
+        /**
+         * FIXME: Implementation can return empty destination device
+         * on faults and has no way to report this. This will cause a crash
+         * on sequential convolutions inside iteratiors.
+         *
+         * o implementation should do it's work or assert otherwise
+         *   (or report the issue somehow)
+         * o check other cases of the switch for the vulnerability
+         */
+
+        if(dataRect.isValid())
+            applyMatrixImpl<RepeatIteratorFactory>(kernel, src, srcPos, dstPos, areaSize, dataRect);
     }
     return;
     case BORDER_DEFAULT_FILL : {

@@ -23,6 +23,7 @@
 #include "kopageapp_export.h"
 
 #include <QObject>
+#include <QPointF>
 
 struct KoPageLayout;
 class KoPAView;
@@ -38,7 +39,6 @@ class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
 class QCloseEvent;
-class QPointF;
 class QUndoCommand;
 
 class KOPAGEAPP_EXPORT KoPAViewMode : public QObject
@@ -159,10 +159,15 @@ public:
 
     virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent = 0 );
 
+    QPointF origin();
+    
+    void setOrigin(const QPointF &origin);
+    
 protected:
     KoPACanvas * m_canvas;
     KoToolProxy * m_toolProxy;
     KoPAView * m_view;
+    QPointF m_origin;
 };
 
 #endif /* KOPAVIEWMODE_H */

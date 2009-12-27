@@ -52,6 +52,12 @@ public:
         delete masterShapeManager;
         delete shapeManager;
     }
+    
+    ///< the origin of the page rect inside the canvas in document points
+    QPointF origin() const
+    {
+        return view->viewMode()->origin();
+    }
 
     KoPAView * view;
     KoPADocument * doc;
@@ -59,7 +65,6 @@ public:
     KoShapeManager * masterShapeManager;
     KoToolProxy * toolProxy;
     QPoint documentOffset;
-    QPointF origin;  ///< the origin of the page rect inside the canvas in document points
 };
 
 KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
@@ -127,12 +132,12 @@ void KoPACanvas::setDocumentOffset(const QPoint &offset) {
 
 QPoint KoPACanvas::documentOrigin() const
 {
-    return viewConverter()->documentToView(d->origin).toPoint();
+    return viewConverter()->documentToView(d->origin()).toPoint();
 }
 
-void KoPACanvas::setDocumentOrigin(const QPointF & origin)
+void KoPACanvas::setDocumentOrigin(const QPointF & o)
 {
-    d->origin = origin;
+    d->view->viewMode()->setOrigin(o);
 }
 
 void KoPACanvas::gridSize( qreal *horizontal, qreal *vertical ) const
@@ -173,7 +178,7 @@ void KoPACanvas::updateCanvas( const QRectF& rc )
 
 const KoViewConverter * KoPACanvas::viewConverter() const
 {
-    return d->view->viewConverter( const_cast<KoPACanvas *>( this ) );
+    return d->view->viewMode()->viewConverter( const_cast<KoPACanvas *>( this ) );
 }
 
 KoUnit KoPACanvas::unit() const
@@ -287,22 +292,22 @@ void KoPACanvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>
 
 QPoint KoPACanvas::widgetToView(const QPoint& p) const
 {
-    return p - viewConverter()->documentToView(d->origin).toPoint();
+    return p - viewConverter()->documentToView(d->origin()).toPoint();
 }
 
 QRect KoPACanvas::widgetToView(const QRect& r) const
 {
-    return r.translated(viewConverter()->documentToView(-d->origin).toPoint());
+    return r.translated(viewConverter()->documentToView(-d->origin()).toPoint());
 }
 
 QPoint KoPACanvas::viewToWidget(const QPoint& p) const
 {
-    return p + viewConverter()->documentToView(d->origin).toPoint();
+    return p + viewConverter()->documentToView(d->origin()).toPoint();
 }
 
 QRect KoPACanvas::viewToWidget(const QRect& r) const
 {
-    return r.translated(viewConverter()->documentToView(d->origin).toPoint());
+    return r.translated(viewConverter()->documentToView(d->origin()).toPoint());
 }
 
 KoGuidesData * KoPACanvas::guidesData()

@@ -22,32 +22,46 @@
 #include "KoParameterShape.h"
 #include <klocale.h>
 
-KoParameterToPathCommand::KoParameterToPathCommand(KoParameterShape *shape, QUndoCommand *parent)
-        : QUndoCommand(parent)
+class KoParameterToPathCommandPrivate
 {
-    m_shapes.append(shape);
-    initialize();
+public:
+    ~KoParameterToPathCommandPrivate() {
+        qDeleteAll(copies);
+    }
+    void initialize();
+    void copyPath(KoPathShape *destination, KoPathShape *source);
+    QList<KoParameterShape*> shapes;
+    QList<KoPathShape*> copies;
+};
+
+KoParameterToPathCommand::KoParameterToPathCommand(KoParameterShape *shape, QUndoCommand *parent)
+    : QUndoCommand(parent),
+    d(new KoParameterToPathCommandPrivate())
+{
+    d->shapes.append(shape);
+    d->initialize();
     setText(i18n("Convert to Path"));
 }
 
 KoParameterToPathCommand::KoParameterToPathCommand(const QList<KoParameterShape*> &shapes, QUndoCommand *parent)
-        : QUndoCommand(parent)
-        , m_shapes(shapes)
+    : QUndoCommand(parent),
+    d(new KoParameterToPathCommandPrivate())
 {
-    initialize();
+    d->shapes = shapes;
+    d->initialize();
     setText(i18n("Convert to Path"));
 }
 
 KoParameterToPathCommand::~KoParameterToPathCommand()
 {
-    qDeleteAll(m_copies);
+    delete d;
 }
 
 void KoParameterToPathCommand::redo()
 {
     QUndoCommand::redo();
-    for (int i = 0; i < m_shapes.size(); ++i) {
-        KoParameterShape * parameterShape = m_shapes.at(i);
+    for (int i = 0; i < d->shapes.size(); ++i) {
+        KoParameterShape *parameterShape = d->shapes.at(i);
         parameterShape->update();
         parameterShape->setModified(true);
         parameterShape->update();
@@ -57,42 +71,42 @@ void KoParameterToPathCommand::redo()
 void KoParameterToPathCommand::undo()
 {
     QUndoCommand::undo();
-    for (int i = 0; i < m_shapes.size(); ++i) {
-        KoParameterShape * parameterShape = m_shapes.at(i);
+    for (int i = 0; i < d->shapes.size(); ++i) {
+        KoParameterShape * parameterShape = d->shapes.at(i);
         parameterShape->update();
         parameterShape->setModified(false);
-        copyPath(parameterShape, m_copies[i]);
+        d->copyPath(parameterShape, d->copies[i]);
         parameterShape->update();
     }
 }
 
-void KoParameterToPathCommand::initialize()
+void KoParameterToPathCommandPrivate::initialize()
 {
-    foreach(KoParameterShape *shape, m_shapes) {
-        KoPathShape * p = new KoPathShape();
+    foreach(KoParameterShape *shape, shapes) {
+        KoPathShape *p = new KoPathShape();
         copyPath(p, shape);
-        m_copies.append(p);
+        copies.append(p);
     }
 }
 
-void KoParameterToPathCommand::copyPath(KoPathShape * dst, KoPathShape * src)
+void KoParameterToPathCommandPrivate::copyPath(KoPathShape *destination, KoPathShape *source)
 {
-    dst->clear();
+    destination->clear();
 
-    int subpathCount = src->subpathCount();
+    int subpathCount = source->subpathCount();
     for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
-        int pointCount = src->subpathPointCount(subpathIndex);
+        int pointCount = source->subpathPointCount(subpathIndex);
         if (! pointCount)
             continue;
 
         KoSubpath * subpath = new KoSubpath;
         for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
-            KoPathPoint * p = src->pointByIndex(KoPathPointIndex(subpathIndex, pointIndex));
+            KoPathPoint * p = source->pointByIndex(KoPathPointIndex(subpathIndex, pointIndex));
             KoPathPoint * c = new KoPathPoint(*p);
-            c->setParent(dst);
+            c->setParent(destination);
             subpath->append(c);
         }
-        dst->addSubpath(subpath, subpathIndex);
+        destination->addSubpath(subpath, subpathIndex);
     }
-    dst->setTransformation(src->transformation());
+    destination->setTransformation(source->transformation());
 }

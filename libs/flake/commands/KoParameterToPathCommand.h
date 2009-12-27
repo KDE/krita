@@ -29,6 +29,7 @@
 #include "flake_export.h"
 
 class KoParameterShape;
+class KoParameterToPathCommandPrivate;
 
 /// The undo / redo command for changing a KoParameterShape into a KoPathShape
 class FLAKE_EXPORT KoParameterToPathCommand : public QUndoCommand
@@ -53,10 +54,7 @@ public:
     /// revert the actions done in redo
     void undo();
 private:
-    void initialize();
-    void copyPath(KoPathShape *destination, KoPathShape *source);
-    QList<KoParameterShape*> m_shapes;
-    QList<KoPathShape*> m_copies;
+    KoParameterToPathCommandPrivate *d;
 };
 
 #endif // KOPARAMETERTOPATHCOMMAND_H

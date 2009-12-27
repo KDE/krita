@@ -1,7 +1,6 @@
 set(kritasumipaintop_PART_SRCS
     sumi_paintop_plugin.cpp
     kis_sumi_paintop.cpp
-    kis_sumi_paintop_factory.cpp
     kis_sumi_shape_option.cpp
     kis_sumi_ink_option.cpp
     kis_sumi_paintop_settings.cpp

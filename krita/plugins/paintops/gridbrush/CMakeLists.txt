@@ -1,7 +1,6 @@
 set(kritagridpaintop_PART_SRCS
     grid_paintop_plugin.cpp
     kis_grid_paintop.cpp
-    kis_grid_paintop_factory.cpp
     kis_gridop_option.cpp
     kis_grid_shape_option.cpp
     kis_grid_paintop_settings.cpp

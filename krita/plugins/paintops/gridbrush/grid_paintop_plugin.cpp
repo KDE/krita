@@ -27,7 +27,7 @@
 #include <kis_paintop_registry.h>
 
 #include "kis_grid_paintop.h"
-#include "kis_grid_paintop_factory.h"
+#include "kis_simple_paintop_factory.h"
 
 #include "kis_global.h"
 
@@ -41,7 +41,7 @@ GridPaintOpPlugin::GridPaintOpPlugin(QObject *parent, const QStringList &)
     //
     setComponentData(GridPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisGridPaintOpFactory);
+    r->add(new KisSimplePaintOpFactory<KisGridPaintOp, KisGridPaintOpSettings, KisGridPaintOpSettingsWidget>("gridbrush", i18n("Grid brush"), "krita-grid.png"));
 
 }
 

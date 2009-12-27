@@ -23,29 +23,44 @@
 #include "KoShape.h"
 #include "KoEventAction.h"
 
-KoEventActionRemoveCommand::KoEventActionRemoveCommand(KoShape * shape, KoEventAction * eventAction, QUndoCommand *parent)
-        : QUndoCommand(parent)
-        , m_shape(shape)
-        , m_eventAction(eventAction)
-        , m_deleteEventAction(false)
+class KoEventActionRemoveCommandPrivate
+{
+public:
+    KoEventActionRemoveCommandPrivate(KoShape *s, KoEventAction *e)
+        : shape(s), eventAction(e), deleteEventAction(false)
+    {
+    }
+
+    ~KoEventActionRemoveCommandPrivate()
+    {
+        if (deleteEventAction)
+            delete eventAction;
+    }
+
+    KoShape *shape;
+    KoEventAction *eventAction;
+    bool deleteEventAction;
+};
+
+KoEventActionRemoveCommand::KoEventActionRemoveCommand(KoShape *shape, KoEventAction *eventAction, QUndoCommand *parent)
+    : QUndoCommand(parent),
+    d(new KoEventActionRemoveCommandPrivate(shape, eventAction))
 {
 }
 
 KoEventActionRemoveCommand::~KoEventActionRemoveCommand()
 {
-    if (m_deleteEventAction) {
-        delete m_eventAction;
-    }
+    delete d;
 }
 
 void KoEventActionRemoveCommand::redo()
 {
-    m_shape->removeEventAction(m_eventAction);
-    m_deleteEventAction = true;
+    d->shape->removeEventAction(d->eventAction);
+    d->deleteEventAction = true;
 }
 
 void KoEventActionRemoveCommand::undo()
 {
-    m_shape->addEventAction(m_eventAction);
-    m_deleteEventAction = false;
+    d->shape->addEventAction(d->eventAction);
+    d->deleteEventAction = false;
 }

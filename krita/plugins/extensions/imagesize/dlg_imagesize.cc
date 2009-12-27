@@ -23,6 +23,8 @@
 
 #include <math.h>
 
+#include <multilock_button.h>
+
 #include <klocale.h>
 #include <kis_debug.h>
 
@@ -65,8 +67,10 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     m_page->doubleResolution->setValue(72.0 * resolution);
 
-    m_page->cmbInteractor->addItem(i18n("Size in Pixels"));
-    m_page->cmbInteractor->addItem(i18n("Print Size"));
+    m_page->lock_pixel->nominateSiblings(m_page->lock_resolution, m_page->lock_print);
+    m_page->lock_print->nominateSiblings(m_page->lock_pixel, m_page->lock_resolution);
+    m_page->lock_resolution->nominateSiblings(m_page->lock_pixel, m_page->lock_print);
+    m_page->lock_resolution->lock();
 
     slotAspectChanged(true);
 
@@ -79,16 +83,19 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    connect(m_page->chkAffectResolution, SIGNAL(toggled(bool)),
-            this, SLOT(slotProtectChanged()));
-
     connect(m_page->aspectPixels, SIGNAL(keepAspectRatioChanged(bool)),
             this, SLOT(slotAspectChanged(bool)));
 
     connect(m_page->aspectPhysical, SIGNAL(keepAspectRatioChanged(bool)),
             this, SLOT(slotAspectChanged(bool)));
 
-    connect(m_page->cmbInteractor, SIGNAL(currentIndexChanged(int)),
+    connect(m_page->lock_pixel, SIGNAL(lockStateChanged(bool)),
+            this, SLOT(slotProtectChanged()));
+
+    connect(m_page->lock_print, SIGNAL(lockStateChanged(bool)),
+            this, SLOT(slotProtectChanged()));
+
+    connect(m_page->lock_resolution, SIGNAL(lockStateChanged(bool)),
             this, SLOT(slotProtectChanged()));
 
     connect(m_page->intPixelWidth, SIGNAL(valueChanged(int)),
@@ -175,7 +182,7 @@ void DlgImageSize::slotWidthPixelsChanged(int w)
 {
     blockAll();
 
-    if (!m_page->chkAffectResolution->isChecked()) {
+    if (m_page->lock_resolution->isLocked()) { // !m_page->chkAffectResolution->isChecked()) {
         m_width = 72 * w / m_page->doubleResolution->value();
 
         KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbWidthUnit->currentIndex());
@@ -209,7 +216,7 @@ void DlgImageSize::slotHeightPixelsChanged(int h)
 {
     blockAll();
 
-    if (!m_page->chkAffectResolution->isChecked()) {
+    if (m_page->lock_resolution->isLocked()) { // !m_page->chkAffectResolution->isChecked()) {
         m_height = 72 * h / m_page->doubleResolution->value();
 
         KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbHeightUnit->currentIndex());
@@ -280,7 +287,7 @@ void DlgImageSize::slotWidthPhysicalChanged(double w)
     KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbWidthUnit->currentIndex());
     m_width = unit.fromUserValue(w);
 
-    if (!m_page->chkAffectResolution->isChecked()) {
+    if (m_page->lock_resolution->isLocked()) { // !m_page->chkAffectResolution->isChecked()) {
         m_page->intPixelWidth->setValue(int(0.5 + m_width*m_page->doubleResolution->value() / 72.0));
     } else {
         m_page->doubleResolution->setValue(72*m_page->intPixelWidth->value() / m_width);
@@ -313,7 +320,7 @@ void DlgImageSize::slotHeightPhysicalChanged(double h)
     KoUnit unit = KoUnit((KoUnit::Unit)m_page->cmbHeightUnit->currentIndex());
     m_height = unit.fromUserValue(h);
 
-    if (!m_page->chkAffectResolution->isChecked()) {
+    if (m_page->lock_resolution->isLocked()) { // !m_page->chkAffectResolution->isChecked()) {
         m_page->intPixelHeight->setValue(int(0.5 + m_height*m_page->doubleResolution->value() / 72.0));
     } else {
         m_page->doubleResolution->setValue(72*m_page->intPixelHeight->value() / m_height);
@@ -363,23 +370,27 @@ void DlgImageSize::slotHeightUnitChanged(int index)
 
 void DlgImageSize::slotProtectChanged()
 {
-    if (m_page->chkAffectResolution->isChecked()) {
-        m_page->intPixelWidth->setEnabled(m_page->cmbInteractor->currentIndex() == 0);
-        m_page->intPixelHeight->setEnabled(m_page->cmbInteractor->currentIndex() == 0);
-        m_page->doublePhysicalWidth->setEnabled(m_page->cmbInteractor->currentIndex() == 1);
-        m_page->doublePhysicalHeight->setEnabled(m_page->cmbInteractor->currentIndex() == 1);
-        m_page->doubleResolution->setEnabled(true);
-        m_page->cmbInteractor->setEnabled(true);
-        m_page->labelInteractor->setEnabled(true);
-    } else {
-        m_page->intPixelWidth->setEnabled(true);
-        m_page->intPixelHeight->setEnabled(true);
-        m_page->doublePhysicalWidth->setEnabled(true);
-        m_page->doublePhysicalHeight->setEnabled(true);
-        m_page->doubleResolution->setEnabled(false);
-        m_page->cmbInteractor->setEnabled(false);
-        m_page->labelInteractor->setEnabled(false);
-    }
+    m_page->labelWidth->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->intPixelWidth->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->cmbWidthPixelUnit->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->labelHeight->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->intPixelHeight->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->cmbHeightPixelUnit->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->doublePercentageWidth->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->doublePercentageHeight->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->labelFilter->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->cmbFilterType->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->aspectPixels->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->labelPhysicalWidth->setEnabled(!m_page->lock_print->isLocked());
+    m_page->doublePhysicalWidth->setEnabled(!m_page->lock_print->isLocked());
+    m_page->cmbWidthUnit->setEnabled(!m_page->lock_print->isLocked());
+    m_page->labelPhysicalHeight->setEnabled(!m_page->lock_print->isLocked());
+    m_page->doublePhysicalHeight->setEnabled(!m_page->lock_print->isLocked());
+    m_page->cmbHeightUnit->setEnabled(!m_page->lock_print->isLocked());
+    m_page->aspectPhysical->setEnabled(!m_page->lock_pixel->isLocked());
+    m_page->labelResolution->setEnabled(!m_page->lock_resolution->isLocked());
+    m_page->doubleResolution->setEnabled(!m_page->lock_resolution->isLocked());
+    m_page->labelResolutionUnit->setEnabled(!m_page->lock_resolution->isLocked());
 }
 
 void DlgImageSize::slotAspectChanged(bool keep)

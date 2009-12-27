@@ -6,15 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>459</width>
-    <height>365</height>
+    <width>389</width>
+    <height>341</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Scale To New Size</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout_5">
+   <item row="0" column="0">
+    <widget class="MultiLockButton" name="lock_pixel" native="true"/>
+   </item>
+   <item row="0" column="1">
     <widget class="QGroupBox" name="groupPixelSize">
      <property name="title">
       <string>Size in Pixels</string>
@@ -174,10 +177,29 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="labelFilter">
+        <property name="text">
+         <string>Interpolation:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>doublePhysicalWidth</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" colspan="3">
+       <widget class="KisCmbIDList" name="cmbFilterType" native="true"/>
+      </item>
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0">
+    <widget class="MultiLockButton" name="lock_print" native="true"/>
+   </item>
+   <item row="1" column="1">
     <widget class="QGroupBox" name="groupPhysicalsize">
      <property name="title">
       <string>Print Size</string>
@@ -293,74 +315,16 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="labelResolution">
-        <property name="text">
-         <string>Resolution:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QCheckBox" name="chkAffectResolution">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="doubleResolution">
-          <property name="minimumSize">
-           <size>
-            <width>70</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximum">
-           <double>100000000.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="3" column="2">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="labelInteractor">
-          <property name="text">
-           <string>interacting with</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cmbInteractor"/>
-        </item>
-        <item>
-         <spacer name="spacer_4">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>27</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0">
+    <widget class="MultiLockButton" name="lock_resolution" native="true"/>
+   </item>
+   <item row="2" column="1">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Scaling Options</string>
+      <string>Resolution</string>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -382,20 +346,7 @@
         </property>
        </spacer>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="labelFilter">
-        <property name="text">
-         <string>Interpolation:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>doublePhysicalWidth</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
+      <item row="1" column="3">
        <spacer name="spacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -408,13 +359,40 @@
         </property>
        </spacer>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelResolution">
+        <property name="text">
+         <string>Resolution:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="1">
-       <widget class="KisCmbIDList" name="cmbFilterType" native="true"/>
+       <widget class="QDoubleSpinBox" name="doubleResolution">
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximum">
+         <double>100000000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="labelResolutionUnit">
+        <property name="text">
+         <string>pixels/inch</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="3" column="1">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -440,6 +418,12 @@
    <extends>QLabel</extends>
    <header>KoAspectButton.h</header>
   </customwidget>
+  <customwidget>
+   <class>MultiLockButton</class>
+   <extends>QWidget</extends>
+   <header>multilock_button.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>intPixelWidth</tabstop>
@@ -452,9 +436,6 @@
   <tabstop>doublePhysicalHeight</tabstop>
   <tabstop>cmbWidthUnit</tabstop>
   <tabstop>cmbHeightUnit</tabstop>
-  <tabstop>chkAffectResolution</tabstop>
-  <tabstop>doubleResolution</tabstop>
-  <tabstop>cmbInteractor</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -25,6 +25,7 @@
 
 class KoShape;
 class KoEventAction;
+class KoEventActionAddCommandPrivate;
 
 /// API docs go here
 class FLAKE_EXPORT KoEventActionAddCommand : public QUndoCommand
@@ -39,9 +40,7 @@ public:
     void undo();
 
 private:
-    KoShape *m_shape;
-    KoEventAction *m_eventAction;
-    bool m_deleteEventAction;
+    KoEventActionAddCommandPrivate *d;
 };
 
 #endif /* KOEVENTACTIONADDCOMMAND_H */

@@ -21,7 +21,7 @@
 #ifndef GUIDESTOOL_H
 #define GUIDESTOOL_H
 
-#include <KoGuidesTool.h>
+#include <KoTool.h>
 
 #include <QString>
 #include <QPair>
@@ -29,7 +29,7 @@
 class KoCanvasBase;
 class GuidesTransaction;
 
-class GuidesTool : public KoGuidesTool
+class GuidesTool : public KoTool
 {
     Q_OBJECT
 
@@ -54,13 +54,12 @@ public:
     virtual void deactivate();
     /// reimplemented form KoTool
     virtual QMap< QString, QWidget* > createOptionWidgets();
+    //void addGuideLine( Qt::Orientation orientation, qreal position );
+    void moveGuideLine(Qt::Orientation orientation, uint index);
+    void editGuideLine(Qt::Orientation orientation, uint index);
 
-    /// reimplemented from KoGuidesTool
-    virtual void addGuideLine( Qt::Orientation orientation, qreal position );
-    /// reimplemented from KoGuidesTool
-    virtual void moveGuideLine( Qt::Orientation orientation, uint index );
-    /// reimplemented from KoGuidesTool
-    virtual void editGuideLine( Qt::Orientation orientation, uint index );
+public slots:
+    void startGuideLineCreation(Qt::Orientation orientation, qreal position);
 
 private slots:
     void updateGuidePosition( qreal position );

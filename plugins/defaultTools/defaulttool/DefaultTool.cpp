@@ -29,6 +29,8 @@
 #include "ShapeRotateStrategy.h"
 #include "ShapeShearStrategy.h"
 #include "ShapeResizeStrategy.h"
+#include "guidestool/GuidesTool.h"
+#include "guidestool/GuidesToolFactory.h" // for the ID
 
 #include <KoPointerEvent.h>
 #include <KoToolSelection.h>
@@ -51,7 +53,6 @@
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoSnapGuide.h>
-#include <tools/KoGuidesTool.h>
 
 #include <KAction>
 #include <QKeyEvent>
@@ -522,7 +523,7 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
             m_mouseWasInsideHandles = false;
 
             if (m_guideLine->isSelected()) {
-                KoGuidesTool * guidesTool = KoToolManager::instance()->guidesTool(m_canvas);
+                GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(m_canvas, GuidesToolId));
                 if (guidesTool) {
                     guidesTool->moveGuideLine(m_guideLine->orientation(), m_guideLine->index());
                     activateTemporary(guidesTool->toolId());
@@ -533,7 +534,7 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
         }
     } else {
         if (m_guideLine->isSelected()) {
-            KoGuidesTool * guidesTool = KoToolManager::instance()->guidesTool(m_canvas);
+            GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(m_canvas, GuidesToolId));
             if (guidesTool) {
                 guidesTool->moveGuideLine(m_guideLine->orientation(), m_guideLine->index());
                 activateTemporary(guidesTool->toolId());
@@ -616,7 +617,7 @@ void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
         if (shape) {
             shapes.append(shape);
         } else if (m_guideLine->isSelected()) {
-            KoGuidesTool * guidesTool = KoToolManager::instance()->guidesTool(m_canvas);
+            GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(m_canvas, GuidesToolId));
             if (guidesTool) {
                 guidesTool->editGuideLine(m_guideLine->orientation(), m_guideLine->index());
                 activateTool(guidesTool->toolId());

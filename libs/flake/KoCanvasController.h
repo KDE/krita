@@ -349,13 +349,6 @@ public slots:
      */
     void setDocumentSize(const QSize &newSize, bool recalculateCenter = true);
 
-    /**
-     * Starts adding a new guide line. The guides tool is activated
-     * which then handles placing the new guide line according to the
-     * mouse movement.
-     */
-    void addGuideLine(Qt::Orientation orientation, int viewPosition);
-
 protected slots:
 
     /// Called by the horizontal scrollbar when its value changes

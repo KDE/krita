@@ -42,14 +42,6 @@ public:
     ~KoGuidesData();
 
     /**
-     * @brief Set the positions of the horizontal and vertical guide lines
-     *
-     * @param horizontalLines a list of positions of the horizontal guide lines
-     * @param verticalLines a list of positions of the vertical guide lines
-     */
-    void setGuideLines(const QList<qreal> &horizontalLines, const QList<qreal> &verticalLines);
-
-    /**
      * @brief Set the positions of the horizontal guide lines
      *
      * @param lines a list of positions of the horizontal guide lines
@@ -64,12 +56,12 @@ public:
     void setVerticalGuideLines(const QList<qreal> &lines);
 
     /**
-     * @brief Add a guide line
+     * @brief Add a guide line to the canvas.
      *
      * @param orientation the orientation of the guide line
-     * @param pos the position of the guide line
+     * @param position the position in document coordinates of the guide line
      */
-    void addGuideLine(Qt::Orientation orientation, qreal pos);
+    void addGuideLine(Qt::Orientation orientation, qreal position);
 
     /**
      * @brief Display or not guide lines

@@ -94,12 +94,6 @@ void KoGuidesData::setVerticalGuideLines(const QList<qreal> &lines)
     d->vertGuideLines = lines;
 }
 
-void KoGuidesData::setGuideLines(const QList<qreal> &horizontalLines, const QList<qreal> &verticalLines)
-{
-    d->horzGuideLines = horizontalLines;
-    d->vertGuideLines = verticalLines;
-}
-
 void KoGuidesData::addGuideLine(Qt::Orientation o, qreal pos)
 {
     if (o == Qt::Horizontal) {

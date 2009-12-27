@@ -19,6 +19,7 @@
  */
 
 #include "GuidesTool.h"
+#include "GuidesToolFactory.h" // for the Id
 #include "GuidesToolOptionWidget.h"
 #include "InsertGuidesToolOptionWidget.h"
 
@@ -28,6 +29,9 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoViewConverter.h>
 #include <KoGuidesData.h>
+#include <KoToolManager.h>
+
+#include <KDebug>
 
 #include <QtGui/QPainter>
 
@@ -48,7 +52,7 @@ public:
 };
 
 GuidesTool::GuidesTool( KoCanvasBase * canvas )
-    : KoGuidesTool( canvas ), d( new Private() )
+    : KoTool(canvas), d(new Private())
 {
 }
 
@@ -269,12 +273,15 @@ void GuidesTool::mouseDoubleClickEvent( KoPointerEvent *event )
     repaintDecorations();
 }
 
-void GuidesTool::addGuideLine( Qt::Orientation orientation, qreal position )
+void GuidesTool::startGuideLineCreation(Qt::Orientation orientation, qreal position)
 {
+kDebug();
     d->orientation = orientation;
     d->index = -1;
     d->position = position;
     d->mode = Private::AddGuide;
+
+    KoToolManager::instance()->switchToolRequested(GuidesToolId);
 }
 
 void GuidesTool::moveGuideLine( Qt::Orientation orientation, uint index )
@@ -465,6 +472,7 @@ void GuidesTool::insertorCreateGuidesSlot( GuidesTransaction* result )
     for( int i = 1 ; i <= lastI; ++i ) {
         verticalLines << verticalJumps * (qreal)i;
     }
+    guidesData->setVerticalGuideLines(verticalLines);
 
     //horizontal guides
     lastI = result->horizontalGuides;
@@ -476,7 +484,7 @@ void GuidesTool::insertorCreateGuidesSlot( GuidesTransaction* result )
     for( int i = 1 ; i <= lastI; ++i ) {
         horizontalLines << horizontalJumps * (qreal)i;
     }
-    guidesData->setGuideLines( horizontalLines, verticalLines );
+    guidesData->setHorizontalGuideLines(horizontalLines);
 
     delete result;
 }

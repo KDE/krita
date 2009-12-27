@@ -24,6 +24,8 @@
 #include "KoRuler.h"
 
 #include "KoRuler_p.h"
+#include <KoTool.h>
+#include <KoToolManager.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -1025,7 +1027,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 
     qreal activeLength = d->activeRangeEnd - d->activeRangeStart;
 
-    switch(d->selected) {
+    switch (d->selected) {
     case KoRulerPrivate::FirstLineIndent:
         if (d->rightToLeft)
             d->firstLineIndent = d->activeRangeEnd - d->paragraphIndent -
@@ -1071,7 +1073,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         else
             d->endIndent = d->activeRangeEnd - d->viewConverter->viewToDocumentX(pos.x()
                  + d->selectOffset - d->offset);
-        if( ! (ev->modifiers() & Qt::ShiftModifier)) {
+        if (!(ev->modifiers() & Qt::ShiftModifier)) {
             d->endIndent = d->doSnapping(d->endIndent);
             d->paintingStrategy = d->normalPaintingStrategy;
         } else {
@@ -1091,9 +1093,9 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
             if (ev->pos().y() < height()) { // reinstante it.
                 d->currentIndex = d->tabs.count();
                 d->tabs.append(d->deletedTab);
-            }
-            else
+            } else {
                 break;
+            }
         }
         if (d->rightToLeft)
             d->tabs[d->currentIndex].position = d->activeRangeEnd -
@@ -1101,7 +1103,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         else
             d->tabs[d->currentIndex].position = d->viewConverter->viewToDocumentX(pos.x() + d->selectOffset
                 - d->offset) - d->activeRangeStart;
-        if( ! (ev->modifiers() & Qt::ShiftModifier))
+        if (!(ev->modifiers() & Qt::ShiftModifier))
             d->tabs[d->currentIndex].position = d->doSnapping(d->tabs[d->currentIndex].position);
         if (d->tabs[d->currentIndex].position < 0)
             d->tabs[d->currentIndex].position = 0;
@@ -1112,10 +1114,11 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
             d->deletedTab = d->tabs.takeAt(d->currentIndex);
             d->currentIndex = -1;
             // was that a temporary added tab?
-            if( d->originalIndex == -1 )
-            {
-                emit guideLineCreated( d->orientation, d->orientation == Qt::Horizontal ? ev->pos().y() : ev->pos().x() );
-            }
+            if ( d->originalIndex == -1 )
+                emit guideLineCreated(d->orientation,
+                        d->orientation == Qt::Horizontal
+                        ? d->viewConverter->viewToDocumentY(ev->pos().y())
+                        : d->viewConverter->viewToDocumentX(ev->pos().x()));
         }
 
         d->emitTabChanged();
@@ -1145,16 +1148,11 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
         case KoRulerPrivate::ParagraphIndent: text = i18n("Left indent"); break;
         case KoRulerPrivate::EndIndent: text = i18n("Right indent"); break;
         case KoRulerPrivate::None:
-            if( ev->buttons() & Qt::LeftButton )
-            {
-                if( d->orientation == Qt::Horizontal && ev->pos().y() > height() + OutsideRulerThreshold )
-                {
-                    emit guideLineCreated( d->orientation, ev->pos().y() );
-                }
-                else if( d->orientation == Qt::Vertical && ev->pos().x() > width() + OutsideRulerThreshold )
-                {
-                    emit guideLineCreated( d->orientation, ev->pos().x() );
-                }
+            if (ev->buttons() & Qt::LeftButton) {
+                if (d->orientation == Qt::Horizontal && ev->pos().y() > height() + OutsideRulerThreshold)
+                    emit guideLineCreated(d->orientation, d->viewConverter->viewToDocumentY(ev->pos().y()));
+                else if (d->orientation == Qt::Vertical && ev->pos().x() > width() + OutsideRulerThreshold)
+                    emit guideLineCreated(d->orientation, d->viewConverter->viewToDocumentX(ev->pos().x()));
             }
             break;
         default:
@@ -1202,6 +1200,18 @@ bool KoRuler::removeHotSpot(int id)
         }
     }
     return false;
+}
+
+void KoRuler::createGuideToolConnection(KoCanvasBase *canvas)
+{
+    Q_ASSERT(canvas);
+    KoTool *tool = KoToolManager::instance()->toolById(canvas, QLatin1String("GuidesTool_ID"));
+    if (tool == 0) {
+        kWarning(30003) << "No guides tool found, skipping connection";
+        return;
+    }
+    connect(this, SIGNAL(guideLineCreated(Qt::Orientation,qreal)),
+        tool, SLOT(startGuideLineCreation(Qt::Orientation,qreal)));
 }
 
 #include "KoRuler.moc"

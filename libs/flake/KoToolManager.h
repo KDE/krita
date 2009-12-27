@@ -38,7 +38,6 @@ class KoShape;
 class KoToolProxy;
 class QToolButton;
 class KoDeviceEvent;
-class KoGuidesTool;
 class KoShapeLayer;
 
 /**
@@ -146,7 +145,7 @@ public:
      *    who's tool you want.
      * @see addController()
      */
-    KoGuidesTool * guidesTool(KoCanvasBase *canvas) const;
+    KoTool *toolById(KoCanvasBase *canvas, const QString id) const;
 
     /// @return the currently active pointing device
     KoInputDevice currentInputDevice() const;

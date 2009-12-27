@@ -31,7 +31,6 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasObserver.h"
 #include "KoCanvasObserverProvider.h"
-#include "tools/KoGuidesTool.h"
 #include "KoToolManager_p.h"
 
 #include <ksharedconfig.h>
@@ -674,23 +673,6 @@ void KoCanvasController::setScrollBarValue(const QPoint &value)
 int KoCanvasController::margin() const
 {
     return d->margin;
-}
-
-void KoCanvasController::addGuideLine(Qt::Orientation orientation, int viewPosition)
-{
-    KoGuidesTool *guidesTool = KoToolManager::instance()->guidesTool(d->canvas);
-    if (!guidesTool)
-        return;
-    // check if the canvas does provide access to guides data
-    if (!d->canvas->guidesData())
-        return;
-
-    if (orientation == Qt::Horizontal)
-        guidesTool->addGuideLine(orientation, d->canvas->viewConverter()->viewToDocumentY(viewPosition));
-    else
-        guidesTool->addGuideLine(orientation, d->canvas->viewConverter()->viewToDocumentX(viewPosition));
-
-    KoToolManager::instance()->priv()->switchToolTemporaryRequested(guidesTool->toolId());
 }
 
 KoCanvasController::Private *KoCanvasController::priv()

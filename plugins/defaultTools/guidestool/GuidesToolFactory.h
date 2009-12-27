@@ -20,18 +20,21 @@
 #ifndef GUIDESTOOLFACTORY_H
 #define GUIDESTOOLFACTORY_H
 
-#include "KoToolFactory.h"
+#include <KoToolFactory.h>
+
+// Warn; used in KoRuler.cpp too, keep in sync.
+#define GuidesToolId "GuidesTool_ID"
 
 /// The factory for the KoGuidesTool
 class GuidesToolFactory : public KoToolFactory
 {
 public:
     /// Constructor
-    explicit GuidesToolFactory( QObject *parent );
+    explicit GuidesToolFactory(QObject *parent);
     /// Destructor
     ~GuidesToolFactory();
     /// reimplemented
-    KoTool* createTool( KoCanvasBase *canvas );
+    KoTool *createTool(KoCanvasBase *canvas);
 };
 
 #endif // GUIDESTOOLFACTORY_H

@@ -44,7 +44,6 @@
 #include "tools/KoZoomToolFactory.h"
 #include "tools/KoPanTool.h"
 #include "tools/KoPanToolFactory.h"
-#include "tools/KoGuidesTool.h"
 
 // Qt + kde
 #include <QWidget>
@@ -666,9 +665,7 @@ QList<KoToolManager::Button> KoToolManager::createToolList(KoCanvasBase *canvas)
     foreach(ToolHelper *tool, d->tools) {
         if (tool->id() == KoCreateShapesTool_ID)
             continue; // don't show this one.
-        if (tool->id() == KoGuidesTool_ID)
-            continue; // don't show this one.
-        if (! tool->canCreateTool(canvas))
+        if (!tool->canCreateTool(canvas))
             continue;
         Button button;
         button.button = tool->createButton();
@@ -764,18 +761,13 @@ KoCreateShapesTool * KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const
     return 0;
 }
 
-KoGuidesTool * KoToolManager::guidesTool(KoCanvasBase * canvas) const
+KoTool *KoToolManager::toolById(KoCanvasBase *canvas, const QString id) const
 {
     Q_ASSERT(canvas);
     foreach(KoCanvasController *controller, d->canvasses.keys()) {
-        if (controller->canvas() == canvas) {
-            KoGuidesTool * guidesTool = dynamic_cast<KoGuidesTool*>
-                                        (d->canvasData->allTools.value(KoGuidesTool_ID));
-            Q_ASSERT(guidesTool /* ID changed? */);
-            return guidesTool;
-        }
+        if (controller->canvas() == canvas)
+            return d->canvasData->allTools.value(id);
     }
-    Q_ASSERT(0);   // this should not happen
     return 0;
 }
 

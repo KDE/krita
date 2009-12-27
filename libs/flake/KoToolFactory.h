@@ -44,10 +44,10 @@ public:
         setPriority(5);
     }
     ~MyToolFactory() {}
-    KoTool* createTool(KoCanvasBase *canvas);
+    KoTool *createTool(KoCanvasBase *canvas);
 };
 K_EXPORT_COMPONENT_FACTORY(myLibrary,
-     KGenericFactory<MyToolFactory>( "MyTool" ) )
+     KGenericFactory<MyToolFactory>("MyTool"))
 </pre>
 
  */
@@ -73,7 +73,7 @@ public:
      * @return a new KoTool instance, or zero if the tool doesn't want to show up.
      * @see canCreateTool()
      */
-    virtual KoTool * createTool(KoCanvasBase *canvas) = 0;
+    virtual KoTool *createTool(KoCanvasBase *canvas) = 0;
 
     /**
      * Returns true if this factory will create a tool instance when called with the same canvas in createTool()

@@ -20,10 +20,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-// Description: Ruler (header)
-
-/******************************************************************/
-
 #ifndef koRuler_h
 #define koRuler_h
 
@@ -37,7 +33,7 @@
 class QPaintEvent;
 
 class KoViewConverter;
-
+class KoCanvasBase;
 class KoRulerPrivate;
 
 /**
@@ -209,6 +205,14 @@ public slots:
      */
     bool removeHotSpot(int id);
 
+    /**
+     * Connect the ruler to a guides tool
+     * This allows the user to drag a guide out of the ruler and get in one smooth operation
+     * the guide tool to draw and position the guide line.
+     * @param canvas the canvas that has had the KoToolManager create the tool for previously.
+     */
+    void createGuideToolConnection(KoCanvasBase *canvas);
+
 signals:
     /**
      * emitted when any of the indents is moved by the user.
@@ -229,18 +233,18 @@ signals:
 
     void hotSpotChanged(int id, qreal newPosition);
 
-    /// emitted when the user is dragging outside the ruler
-    void guideLineCreated( Qt::Orientation orientation, int viewPosition );
+    /// emitted when the mouse is drag+released outside the ruler
+    void guideLineCreated(Qt::Orientation orientation, qreal viewPosition);
 
 protected:
     /// reimplemented
     virtual void paintEvent(QPaintEvent* event);
     /// reimplemented
-    virtual void mousePressEvent ( QMouseEvent* ev );
+    virtual void mousePressEvent(QMouseEvent *ev);
     /// reimplemented
-    virtual void mouseReleaseEvent ( QMouseEvent* ev );
+    virtual void mouseReleaseEvent(QMouseEvent *ev);
     /// reimplemented
-    virtual void mouseMoveEvent ( QMouseEvent* ev );
+    virtual void mouseMoveEvent(QMouseEvent *ev);
     /// reimplemented
     virtual QSize minimumSizeHint() const;
     /// reimplemented

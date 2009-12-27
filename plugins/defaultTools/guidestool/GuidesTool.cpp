@@ -116,8 +116,6 @@ void GuidesTool::repaintDecorations()
 
 void GuidesTool::activate(bool temporary)
 {
-    Q_UNUSED(temporary);
-
     if (d->mode != Private::None)
         useCursor(d->orientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor, true);
     else

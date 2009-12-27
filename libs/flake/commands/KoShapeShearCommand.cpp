@@ -23,38 +23,55 @@
 
 #include <klocale.h>
 
-KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, const QList<qreal> &previousShearXs, const QList<qreal> &previousShearYs, const QList<qreal> &newShearXs, const QList<qreal> &newShearYs, QUndoCommand *parent)
-        : QUndoCommand(parent)
-        , m_shapes(shapes)
-        , m_previousShearXs(previousShearXs)
-        , m_previousShearYs(previousShearYs)
-        , m_newShearXs(newShearXs)
-        , m_newShearYs(newShearYs)
+class KoShapeShearCommandPrivate
 {
-    Q_ASSERT(m_shapes.count() == m_previousShearXs.count());
-    Q_ASSERT(m_shapes.count() == m_previousShearYs.count());
-    Q_ASSERT(m_shapes.count() == m_newShearXs.count());
-    Q_ASSERT(m_shapes.count() == m_newShearYs.count());
+public:
+    QList<KoShape*> shapes;
+    QList<qreal> previousShearXs;
+    QList<qreal> previousShearYs;
+    QList<qreal> newShearXs;
+    QList<qreal> newShearYs;
+};
+
+KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, const QList<qreal> &previousShearXs, const QList<qreal> &previousShearYs, const QList<qreal> &newShearXs, const QList<qreal> &newShearYs, QUndoCommand *parent)
+    : QUndoCommand(parent),
+    d(new KoShapeShearCommandPrivate())
+{
+    d->shapes = shapes;
+    d->previousShearXs = previousShearXs;
+    d->previousShearYs = previousShearYs;
+    d->newShearXs = newShearXs;
+    d->newShearYs = newShearYs;
+
+    Q_ASSERT(d->shapes.count() == d->previousShearXs.count());
+    Q_ASSERT(d->shapes.count() == d->previousShearYs.count());
+    Q_ASSERT(d->shapes.count() == d->newShearXs.count());
+    Q_ASSERT(d->shapes.count() == d->newShearYs.count());
 
     setText(i18n("Shear shapes"));
+}
+
+KoShapeShearCommand::~KoShapeShearCommand()
+{
+    delete d;
 }
 
 void KoShapeShearCommand::redo()
 {
     QUndoCommand::redo();
-    for (int i = 0; i < m_shapes.count(); i++) {
-        m_shapes.at(i)->update();
-        m_shapes.at(i)->setShear(m_newShearXs.at(i), m_newShearYs.at(i));
-        m_shapes.at(i)->update();
+    for (int i = 0; i < d->shapes.count(); i++) {
+        d->shapes.at(i)->update();
+        d->shapes.at(i)->setShear(d->newShearXs.at(i), d->newShearYs.at(i));
+        d->shapes.at(i)->update();
     }
 }
 
 void KoShapeShearCommand::undo()
 {
     QUndoCommand::undo();
-    for (int i = 0; i < m_shapes.count(); i++) {
-        m_shapes.at(i)->update();
-        m_shapes.at(i)->setShear(m_previousShearXs.at(i), m_previousShearYs.at(i));
-        m_shapes.at(i)->update();
+    for (int i = 0; i < d->shapes.count(); i++) {
+        d->shapes.at(i)->update();
+        d->shapes.at(i)->setShear(d->previousShearXs.at(i), d->previousShearYs.at(i));
+        d->shapes.at(i)->update();
     }
 }

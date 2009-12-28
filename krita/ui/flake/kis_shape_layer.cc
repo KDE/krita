@@ -463,24 +463,23 @@ QUndoCommand* KisShapeLayer::crop(const QRect & rect) {
 
 QUndoCommand* KisShapeLayer::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
     
-    QPointF center = m_d->converter->viewToDocument(image()->bounds().center());;
+    QPointF transF = m_d->converter->viewToDocument(QPoint(translatex, translatey));;
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
     if(shapes.isEmpty())
         return 0;
+
+    QMatrix matrix;
+    matrix.translate(transF.x(), transF.y());
+    matrix.scale(xscale,yscale);
+    matrix.rotate(angle*180/M_PI);
 
     QList<QMatrix> oldTransformations;
     QList<QMatrix> newTransformations;
     foreach(const KoShape* shape, shapes) {
         QMatrix oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-        
-        QMatrix matrix;
-        double deltax = shape->boundingRect().center().x() - center.x();
-        double deltay = shape->boundingRect().center().y() - center.y();
-        matrix.translate(-deltax, -deltay);
-        matrix.rotate(angle*180/M_PI);
-        matrix.translate(deltax, deltay);
-        newTransformations.append(matrix*oldTransform);
+
+        newTransformations.append(oldTransform*matrix);
     }
     return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);
 }

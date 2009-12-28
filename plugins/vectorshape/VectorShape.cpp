@@ -45,7 +45,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include "KoShapeSavingContext.h"
-#include <kowmfpaint.h>
+#include <WmfPainter.h>
 #include "libemf/EmfParser.h"
 #include "libemf/EmfOutputPainterStrategy.h"
 
@@ -154,11 +154,9 @@ void VectorShape::drawNull(QPainter &painter) const
 
 void VectorShape::drawWmf(QPainter &painter) const
 {
-#if 0
-    drawNull(painter);
-    return;
-#endif
-    KoWmfPaint  wmfPainter;
+    //drawNull(painter);
+
+    WmfPainter  wmfPainter;
     QByteArray  emfArray(m_bytes, m_size);
 
     if (!wmfPainter.load(emfArray)) {
@@ -169,15 +167,18 @@ void VectorShape::drawWmf(QPainter &painter) const
     painter.save();
 
     // Position the bitmap to the right place and resize it to fit.
-    QRect   vectorRect = wmfPainter.boundingRect(); // Should this be made QRectF?
+    QRect   vectorRect = wmfPainter.boundingRect(); // FIXME: Should this be made QRectF?
     QSizeF  shapeSize  = size();
+
+    //kDebug(31000) << "vectorRect: " << vectorRect;
+    //kDebug(31000) << "shapeSize: " << shapeSize;
+
     painter.translate(-vectorRect.left(), -vectorRect.top());
-#if 0
     painter.scale(shapeSize.width() / vectorRect.width(),
                   shapeSize.height() / vectorRect.height());
-#endif
+
     // Actually paint the WMF.
-    wmfPainter.play(painter);
+    wmfPainter.play(painter, true);
     painter.restore();
 }
 
@@ -322,6 +323,8 @@ bool VectorShape::isWmf() const
 
 bool VectorShape::isEmf() const
 {
+    kDebug(31000) << "Check for EMF";
+
     // This is how the 'file' command identifies an EMF.
     // 1. Check type
     qint32 mark = read32(m_bytes, 0);

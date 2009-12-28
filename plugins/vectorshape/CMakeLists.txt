@@ -18,6 +18,8 @@ SET ( VectorShape_SRCS
     #VectorTool.cpp
     #VectorToolFactory.cpp
 
+    WmfPainter.cpp
+
     libemf/EmfRecords.cpp
     libemf/EmfHeader.cpp
     libemf/EmfParser.cpp

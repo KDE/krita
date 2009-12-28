@@ -32,5 +32,7 @@ add_subdirectory( defaultTools )
 add_subdirectory( pathshapes )
 add_subdirectory( pictureshape )
 add_subdirectory( textshape )
-add_subdirectory( vectorshape )
+
+# as the vector shape depends on filters subdir (not really intuitive) lets allow disabling
+macro_optional_add_subdirectory( vectorshape )
 

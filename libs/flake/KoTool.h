@@ -352,11 +352,9 @@ protected:
      * Classes inheriting from this one can call this method to signify which cursor
      * the tool wants to display at this time.  Logical place to call it is after an
      * incoming event has been handled.
-     * @param cursor the new cursor. If this is the same as the previously set cursor
-     *   this call will not do anything.
-     * @param force if true the cursor will be set no matter what.
+     * @param cursor the new cursor.
      */
-    void useCursor(const QCursor &cursor, bool force = false);
+    void useCursor(const QCursor &cursor);
 
     /**
      * Reimplement this if your tool actually has an option widget.

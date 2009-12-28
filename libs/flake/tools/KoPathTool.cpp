@@ -830,7 +830,7 @@ void KoPathTool::activate(bool temporary)
         return;
     }
     m_pointSelection.setSelectedShapes(selectedShapes);
-    useCursor(m_selectCursor, true);
+    useCursor(m_selectCursor);
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(activate()));
     updateOptionsWidget();
     updateActions();

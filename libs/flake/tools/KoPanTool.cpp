@@ -93,7 +93,7 @@ void KoPanTool::activate(bool temporary)
     if (m_controller == 0)
         emit done();
     m_temporary = temporary;
-    useCursor(QCursor(Qt::OpenHandCursor), true);
+    useCursor(QCursor(Qt::OpenHandCursor));
 }
 
 void KoPanTool::customMoveEvent(KoPointerEvent * event)

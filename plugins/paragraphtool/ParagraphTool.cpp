@@ -210,9 +210,7 @@ void ParagraphTool::keyReleaseEvent(QKeyEvent *event)
 
 void  ParagraphTool::activate(bool)
 {
-    // don't know why force=true is needed and what it does,
-    // but almost everyone else uses it...
-    useCursor(Qt::ArrowCursor, true);
+    useCursor(Qt::ArrowCursor);
 }
 
 void ParagraphTool::deactivate()

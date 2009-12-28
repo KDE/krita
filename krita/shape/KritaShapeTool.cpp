@@ -78,7 +78,7 @@ void KritaShapeTool::activate(bool temporary)
     list.append(this->action("convert_to_qimage"));
     setPopupActionList(list);
 
-    useCursor(Qt::ArrowCursor, true);
+    useCursor(Qt::ArrowCursor);
 }
 
 void KritaShapeTool::deactivate()

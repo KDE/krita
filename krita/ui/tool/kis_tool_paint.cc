@@ -272,10 +272,10 @@ void KisToolPaint::resetCursorStyle()
     if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
         if (m_supportOutline) {
             // do not show cursor, tool will paint outline
-            useCursor(KisCursor::blankCursor(), true);
+            useCursor(KisCursor::blankCursor());
         } else {
             // if the tool does not support outline, use tool icon cursor
-            useCursor(cursor(), true);
+            useCursor(cursor());
         }
     }
 
@@ -283,9 +283,9 @@ void KisToolPaint::resetCursorStyle()
     // TODO: maybe m_support 3D outline would be cooler. So far just freehand tool support 3D_MODEL cursor style
     if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
         if (m_supportOutline) {
-            useCursor(KisCursor::blankCursor(), true);
+            useCursor(KisCursor::blankCursor());
         } else {
-            useCursor(cursor(), true);
+            useCursor(cursor());
         }
     }
 #endif

@@ -192,7 +192,7 @@ void ChangeTrackingTool::activate(bool temporary)
         selection->deselect(shape);
     }
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
-    useCursor(Qt::ArrowCursor, true);
+    useCursor(Qt::ArrowCursor);
 
 
     m_textShape->update();

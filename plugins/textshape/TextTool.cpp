@@ -1244,7 +1244,7 @@ void TextTool::activate(bool temporary)
         selection->deselect(shape);
     }
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
-    useCursor(Qt::IBeamCursor, true);
+    useCursor(Qt::IBeamCursor);
 
     // restore the selection from a previous time we edited this document.
     for (int i = 0; i < m_previousSelections.count(); i++) {

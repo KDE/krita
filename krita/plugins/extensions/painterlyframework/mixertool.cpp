@@ -69,8 +69,8 @@ void MixerTool::activate(bool temporary)
 {
     Q_UNUSED(temporary)
     m_d->mixing = false;
-    
-    useCursor(m_d->cursor, true);
+
+    useCursor(m_d->cursor);
     m_d->foregroundColor = m_canvas->resourceProvider()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
     m_d->backgroundColor = m_canvas->resourceProvider()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
 }

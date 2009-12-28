@@ -669,7 +669,7 @@ void KisToolFreehand::initPan(KoPointerEvent *event)
     m_mode = PAN;
     m_lastPosition = documentToViewport(event->point);
     event->accept();
-    useCursor(QCursor(Qt::ClosedHandCursor), true);
+    useCursor(QCursor(Qt::ClosedHandCursor));
 }
 
 void KisToolFreehand::pan(KoPointerEvent *event)

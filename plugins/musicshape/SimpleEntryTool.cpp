@@ -329,7 +329,7 @@ void SimpleEntryTool::activate (bool temporary)
         emit done();
         return;
     }
-    useCursor( Qt::ArrowCursor, true );
+    useCursor(Qt::ArrowCursor);
 }
 
 void SimpleEntryTool::deactivate()

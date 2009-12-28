@@ -413,26 +413,26 @@ void KisTool::resetCursorStyle()
     KisConfig cfg;
     switch (cfg.cursorStyle()) {
     case CURSOR_STYLE_TOOLICON:
-        useCursor(d->cursor, true);
+        useCursor(d->cursor);
         break;
     case CURSOR_STYLE_CROSSHAIR:
-        useCursor(KisCursor::crossCursor(), true);
+        useCursor(KisCursor::crossCursor());
         break;
     case CURSOR_STYLE_POINTER:
-        useCursor(KisCursor::upArrowCursor(), true);
+        useCursor(KisCursor::upArrowCursor());
         break;
     case CURSOR_STYLE_NO_CURSOR:
-        useCursor(KisCursor::blankCursor(), true);
+        useCursor(KisCursor::blankCursor());
         break;
 #if defined(HAVE_OPENGL)
     case CURSOR_STYLE_3D_MODEL:
-        useCursor(d->cursor, true);
+        useCursor(d->cursor);
         break;
 #endif
     case CURSOR_STYLE_OUTLINE:
     default:
         // use tool cursor as default, if the tool supports outline, it will set the cursor to blank and show outline
-        useCursor(d->cursor, true);
+        useCursor(d->cursor);
     }
 }
 

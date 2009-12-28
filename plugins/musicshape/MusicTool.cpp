@@ -62,7 +62,7 @@ void MusicTool::activate (bool temporary)
         return;
     }
     emit shapeChanged(m_musicshape);
-    useCursor( Qt::ArrowCursor, true );
+    useCursor(Qt::ArrowCursor);
 }
 
 void MusicTool::deactivate()

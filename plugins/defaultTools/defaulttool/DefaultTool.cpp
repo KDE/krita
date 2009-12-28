@@ -912,7 +912,7 @@ void DefaultTool::activate(bool temporary)
     Q_UNUSED(temporary);
     m_mouseWasInsideHandles = false;
     m_lastHandle = KoFlake::NoHandle;
-    useCursor(Qt::ArrowCursor, true);
+    useCursor(Qt::ArrowCursor);
     repaintDecorations();
     delete m_guideLine;
     m_guideLine = new GuideLine();

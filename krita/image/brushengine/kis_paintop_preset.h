@@ -71,6 +71,8 @@ public:
     }
 
     void updateImage();
+    
+    QImage generatePreviewImage(int width, int height);
 
 private:
 

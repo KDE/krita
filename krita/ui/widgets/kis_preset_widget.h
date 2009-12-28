@@ -54,7 +54,7 @@ protected:
     virtual void paintEvent(QPaintEvent *);
 
 private:
-
+    QImage m_image;
     KisPaintOpPresetSP m_preset;
 
 };

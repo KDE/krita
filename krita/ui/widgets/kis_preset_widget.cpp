@@ -45,7 +45,10 @@ void KisPresetWidget::setPreset(KisPaintOpPresetSP preset)
 void KisPresetWidget::updatePreview()
 {
     if (m_preset) {
-        m_preset->updateImage();
+        if((width() < 100) || (height() < 100))
+            m_image = m_preset->generatePreviewImage(width() * 3, height() * 3);
+        else
+            m_image = m_preset->generatePreviewImage(width(), height());
         update();
     }
 }
@@ -57,8 +60,8 @@ void KisPresetWidget::paintEvent(QPaintEvent *)
     qint32 ch = height() - 1;
     p.fillRect(0, 0, cw, ch, Qt::white);  // XXX: use a palette for this instead of white?
 
-    if (m_preset && !m_preset->image().isNull()) {
-        p.drawImage(1, 1, m_preset->image().scaled(QSize(cw, ch), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    if (!m_image.isNull()) {
+        p.drawImage(1, 1, m_image.scaled(QSize(cw, ch), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
     p.setPen(Qt::gray);
     p.drawRect(0, 0, cw + 1, ch + 1);

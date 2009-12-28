@@ -167,3 +167,8 @@ void KisPaintOpPreset::updateImage()
     m_d->image = m_d->settings->sampleStroke(QSize(100, 20));
 }
 
+QImage KisPaintOpPreset::generatePreviewImage(int width, int height)
+{
+    return m_d->settings->sampleStroke(QSize(width, height));
+}
+

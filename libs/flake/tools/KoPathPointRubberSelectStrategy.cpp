@@ -19,24 +19,26 @@
  */
 
 #include "KoPathPointRubberSelectStrategy.h"
+#include "KoShapeRubberSelectStrategy_p.h"
 
 #include "KoCanvasBase.h"
 #include "KoPathTool.h"
 #include "KoPathToolSelection.h"
 
-KoPathPointRubberSelectStrategy::KoPathPointRubberSelectStrategy(KoPathTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
-        : KoShapeRubberSelectStrategy(tool, canvas, clicked)
+KoPathPointRubberSelectStrategy::KoPathPointRubberSelectStrategy(KoPathTool *tool, const QPointF &clicked)
+        : KoShapeRubberSelectStrategy(tool, clicked)
         , m_tool(tool)
 {
 }
 
 void KoPathPointRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
+    Q_D(KoShapeRubberSelectStrategy);
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
     if (! selection)
         return;
 
-    selection->selectPoints(selectRect(), !(modifiers & Qt::ControlModifier));
-    m_canvas->updateCanvas(selectRect().normalized());
+    selection->selectPoints(d->selectedRect(), !(modifiers & Qt::ControlModifier));
+    m_tool->canvas()->updateCanvas(d->selectedRect().normalized());
     selection->repaint();
 }

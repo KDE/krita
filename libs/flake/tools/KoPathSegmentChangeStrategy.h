@@ -35,7 +35,7 @@ class KoPathShape;
 class KoPathSegmentChangeStrategy : public KoInteractionStrategy
 {
 public:
-    KoPathSegmentChangeStrategy(KoPathTool *tool, KoCanvasBase *canvas, const QPointF &pos, const KoPathPointData &segment, qreal segmentParam);
+    KoPathSegmentChangeStrategy(KoPathTool *tool, const QPointF &pos, const KoPathPointData &segment, qreal segmentParam);
     virtual ~KoPathSegmentChangeStrategy();
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);

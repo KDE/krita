@@ -20,35 +20,33 @@
 */
 
 #include "KoShapeRubberSelectStrategy.h"
+#include "KoShapeRubberSelectStrategy_p.h"
+#include "KoViewConverter.h"
 
 #include <QPainter>
-#include <QMouseEvent>
-
-#include "KoPointerEvent.h"
+//   #include <QMouseEvent>
+//
+//   #include "KoPointerEvent.h"
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "KoCanvasBase.h"
-#include "KoTool.h"
-#include "KoSnapGuide.h"
-#include "KoSnapStrategy.h"
+//   #include "KoTool.h"
+//   #include "KoSnapStrategy.h"
 
-KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, bool useSnapToGrid)
-        : KoInteractionStrategy(tool, canvas)
-        , m_snapGuide( new KoSnapGuide( canvas ) )
+
+KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoTool *tool, const QPointF &clicked, bool useSnapToGrid)
+    : KoInteractionStrategy(tool)
 {
-    m_snapGuide->enableSnapStrategies(KoSnapGuide::GridSnapping);
-    m_snapGuide->enableSnapping( useSnapToGrid );
+    Q_D(KoShapeRubberSelectStrategy);
+    d->snapGuide->enableSnapStrategies(KoSnapGuide::GridSnapping);
+    d->snapGuide->enableSnapping(useSnapToGrid);
 
-    m_selectRect = QRectF( m_snapGuide->snap(clicked, 0 ), QSizeF(0, 0) );
-}
-
-KoShapeRubberSelectStrategy::~KoShapeRubberSelectStrategy()
-{
-    delete m_snapGuide;
+    d->selectRect = QRectF(d->snapGuide->snap(clicked, 0), QSizeF(0, 0));
 }
 
 void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_D(KoShapeRubberSelectStrategy);
     painter.setRenderHint(QPainter::Antialiasing, false);
 
     QColor selectColor(Qt::blue);   // TODO make configurable
@@ -56,7 +54,7 @@ void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter
     QBrush sb(selectColor, Qt::SolidPattern);
     painter.setPen(QPen(sb, 0));
     painter.setBrush(sb);
-    QRectF paintRect = converter.documentToView(m_selectRect);
+    QRectF paintRect = converter.documentToView(d->selectedRect());
     paintRect = paintRect.normalized();
     paintRect.adjust(0., -0.5, 0.5, 0.);
     if (painter.hasClipping())
@@ -66,17 +64,18 @@ void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter
 
 void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::KeyboardModifiers modifiers)
 {
-    QPointF point = m_snapGuide->snap( p, modifiers );
+    Q_D(KoShapeRubberSelectStrategy);
+    QPointF point = d->snapGuide->snap( p, modifiers );
     if ((modifiers & Qt::AltModifier) != 0) {
-        m_canvas->updateCanvas(m_selectRect.normalized());
-        m_selectRect.moveTopLeft(m_selectRect.topLeft() - (m_lastPos - point));
-        m_lastPos = point;
-        m_canvas->updateCanvas(m_selectRect.normalized());
+        d->tool->canvas()->updateCanvas(d->selectedRect());
+        d->selectRect.moveTopLeft(d->selectRect.topLeft() - (d->lastPos - point));
+        d->lastPos = point;
+        d->tool->canvas()->updateCanvas(d->selectedRect());
         return;
     }
-    m_lastPos = point;
-    QPointF old = m_selectRect.bottomRight();
-    m_selectRect.setBottomRight(point);
+    d->lastPos = point;
+    QPointF old = d->selectRect.bottomRight();
+    d->selectRect.setBottomRight(point);
     /*
         +---------------|--+
         |               |  |    We need to figure out rects A and B based on the two points. BUT
@@ -88,39 +87,35 @@ void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::Keyboard
                             `- point
     */
     QPointF x1 = old;
-    x1.setY(m_selectRect.topLeft().y());
+    x1.setY(d->selectRect.topLeft().y());
     qreal h1 = point.y() - x1.y();
     qreal h2 = old.y() - x1.y();
-    QRectF A(x1, QSizeF(point.x() - x1.x(), point.y() < m_selectRect.top() ? qMin(h1, h2) : qMax(h1, h2)));
+    QRectF A(x1, QSizeF(point.x() - x1.x(), point.y() < d->selectRect.top() ? qMin(h1, h2) : qMax(h1, h2)));
     A = A.normalized();
-    m_canvas->updateCanvas(A);
+    d->tool->canvas()->updateCanvas(A);
 
     QPointF x2 = old;
-    x2.setX(m_selectRect.topLeft().x());
+    x2.setX(d->selectRect.topLeft().x());
     qreal w1 = point.x() - x2.x();
     qreal w2 = old.x() - x2.x();
-    QRectF B(x2, QSizeF(point.x() < m_selectRect.left() ? qMin(w1, w2) : qMax(w1, w2), point.y() - x2.y()));
+    QRectF B(x2, QSizeF(point.x() < d->selectRect.left() ? qMin(w1, w2) : qMax(w1, w2), point.y() - x2.y()));
     B = B.normalized();
-    m_canvas->updateCanvas(B);
+    d->tool->canvas()->updateCanvas(B);
 }
 
 void KoShapeRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
+    Q_D(KoShapeRubberSelectStrategy);
     Q_UNUSED(modifiers);
-    KoSelection * selection = m_canvas->shapeManager()->selection();
-    QList<KoShape *> shapes(m_canvas->shapeManager()->shapesAt(m_selectRect));
+    KoSelection * selection = d->tool->canvas()->shapeManager()->selection();
+    QList<KoShape *> shapes(d->tool->canvas()->shapeManager()->shapesAt(d->selectRect));
     foreach(KoShape * shape, shapes) {
         if (!(shape->isSelectable() && shape->isVisible()))
             continue;
         selection->select(shape);
     }
-    m_parent->repaintDecorations();
-    m_canvas->updateCanvas(m_selectRect.normalized());
-}
-
-QRectF KoShapeRubberSelectStrategy::selectRect() const
-{
-    return m_selectRect.normalized();
+    d->tool->repaintDecorations();
+    d->tool->canvas()->updateCanvas(d->selectedRect());
 }
 
 QUndoCommand *KoShapeRubberSelectStrategy::createCommand()

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,23 +23,24 @@
 #define KOINTERACTIONSTRATEGY_H
 
 #include "flake_export.h"
-#include "KoSelection.h"
 
-#include <QList>
-#include <QPainter>
+#include <Qt>
 
 class KoPointerEvent;
-class QUndoCommand;
-class KoCanvasBase;
-class KoInteractionTool;
+class KoViewConverter;
+class KoInteractionStrategyPrivate;
 class KoTool;
+class QUndoCommand;
+class QPointF;
+class QPainter;
 
 /**
- * Abstract interface to define what actions a KoInteractionTool can do based on the Strategy design.
+ * Abstract interface to define what actions a KoInteractionTool can do based on
+ * the Strategy design pattern.
  * e.g, move, select, transform.
 
- * KoInteractionStrategy is a Strategy for the KoInteractionTool and it defines the behavior in case the user
- * clicks or drags the mouse.
+ * KoInteractionStrategy is a Strategy baseclass for the KoInteractionTool and it
+ * defines the behavior in case the user clicks or drags the input device.
  * The strategy is created in the createPolicy() function which defines the
  * resulting behavior and initiates a move or a resize, for example.
  * The mouseMove events are forwarded to the handleMouseMove() method and the interaction
@@ -48,6 +49,8 @@ class KoTool;
 class FLAKE_EXPORT KoInteractionStrategy
 {
 public:
+    /// constructor
+    KoInteractionStrategy(KoTool *parent);
     /// Destructor
     virtual ~KoInteractionStrategy();
 
@@ -55,9 +58,7 @@ public:
      * Reimplement this if the action needs to draw a "blob" on the canvas;
      * that is, a transient decoration like a rubber band.
      */
-    virtual void paint(QPainter &painter, const KoViewConverter &converter) {
-        Q_UNUSED(painter); Q_UNUSED(converter);
-    }
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     /**
      * Extending classes should implement this method to update the selectedShapes
      * based on the new mouse position.
@@ -89,14 +90,16 @@ public:
      */
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers) = 0;
 
-protected:
-    /// protected constructor. Use the createStrategy method()
-    KoInteractionStrategy(KoTool *parent, KoCanvasBase *canvas);
+    KoTool *tool() const;
 
-protected: // members
-    KoTool *m_parent; ///< the KoTool instance that controls this strategy.
-    QList<KoShape*> m_selectedShapes; ///< the objects this strategy will act on.
-    KoCanvasBase *m_canvas; ///< the canvas which contains getters for document-data
+protected:
+    /// constructor
+    KoInteractionStrategy(KoInteractionStrategyPrivate &);
+
+    KoInteractionStrategyPrivate *d_ptr;
+
+private:
+    Q_DECLARE_PRIVATE(KoInteractionStrategy)
 };
 
 #endif

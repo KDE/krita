@@ -88,6 +88,6 @@ KoProperties const * KoCreateShapesTool::shapeProperties()
 
 KoInteractionStrategy *KoCreateShapesTool::createStrategy(KoPointerEvent *event)
 {
-    return new KoCreateShapeStrategy(this, m_canvas, event->point);
+    return new KoCreateShapeStrategy(this, event->point);
 }
 

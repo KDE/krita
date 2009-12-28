@@ -22,8 +22,8 @@
 #include "KoParameterShape.h"
 #include "commands/KoParameterHandleMoveCommand.h"
 
-KoParameterChangeStrategy::KoParameterChangeStrategy(KoTool *tool, KoCanvasBase *canvas, KoParameterShape * parameterShape, int handleId)
-        : KoInteractionStrategy(tool, canvas)
+KoParameterChangeStrategy::KoParameterChangeStrategy(KoTool *tool, KoParameterShape *parameterShape, int handleId)
+        : KoInteractionStrategy(tool)
         , m_parameterShape(parameterShape)
         , m_handleId(handleId)
         , m_startPoint(m_parameterShape->shapeToDocument(m_parameterShape->handlePosition(handleId)))

@@ -25,6 +25,8 @@
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
 #include "KoCanvasResourceProvider.h"
+#include "KoViewConverter.h"
+#include "KoSelection.h"
 #include "KoPointerEvent.h"
 #include "commands/KoPathPointTypeCommand.h"
 #include "commands/KoPathPointInsertCommand.h"
@@ -457,7 +459,7 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
             if (segmentAtPoint(event->point, clickedShape, clickedPoint, clickedPointParam)) {
                 KoPathPointIndex index = clickedShape->pathPointIndex(clickedPoint);
                 KoPathPointData data(clickedShape, index);
-                m_currentStrategy = new KoPathSegmentChangeStrategy(this, m_canvas, event->point, data, clickedPointParam);
+                m_currentStrategy = new KoPathSegmentChangeStrategy(this, event->point, data, clickedPointParam);
                 event->accept();
             } else {
                 if ((event->modifiers() & Qt::ControlModifier) == 0) {
@@ -465,7 +467,7 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
                 }
                 // start rubberband selection
                 Q_ASSERT(m_currentStrategy == 0);
-                m_currentStrategy = new KoPathPointRubberSelectStrategy(this, m_canvas, event->point);
+                m_currentStrategy = new KoPathPointRubberSelectStrategy(this, event->point);
             }
         }
     }

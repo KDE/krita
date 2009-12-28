@@ -25,8 +25,8 @@
 #include "KoPathTool.h"
 #include "commands/KoPathControlPointMoveCommand.h"
 
-KoPathControlPointMoveStrategy::KoPathControlPointMoveStrategy(KoPathTool *tool, KoCanvasBase *canvas, const KoPathPointData &pointData, KoPathPoint::KoPointType type, const QPointF &pos)
-        : KoInteractionStrategy(tool, canvas)
+KoPathControlPointMoveStrategy::KoPathControlPointMoveStrategy(KoPathTool *tool, const KoPathPointData &pointData, KoPathPoint::KoPointType type, const QPointF &pos)
+        : KoInteractionStrategy(tool)
         , m_lastPosition(pos)
         , m_move(0, 0)
         , m_tool(tool)

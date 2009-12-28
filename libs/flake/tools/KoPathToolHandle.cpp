@@ -25,15 +25,16 @@
 #include "KoPathPointMoveStrategy.h"
 #include "KoPathControlPointMoveStrategy.h"
 #include "KoPathConnectionPointStrategy.h"
+#include "KoSelection.h"
 #include "commands/KoPathPointTypeCommand.h"
 #include "KoParameterChangeStrategy.h"
-#include <KoParameterShape.h>
-#include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
-#include <KoShapeManager.h>
-#include <KoConnectionShape.h>
-#include <KoViewConverter.h>
-#include <KoPointerEvent.h>
+#include "KoParameterShape.h"
+#include "KoCanvasBase.h"
+#include "KoCanvasResourceProvider.h"
+#include "KoShapeManager.h"
+#include "KoConnectionShape.h"
+#include "KoViewConverter.h"
+#include "KoPointerEvent.h"
 #include <QtGui/QPainter>
 
 KoPathToolHandle::KoPathToolHandle(KoPathTool *tool)
@@ -102,11 +103,11 @@ KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
         // TODO remove canvas from call ?
         if (m_activePointType == KoPathPoint::Node) {
             QPointF startPoint = m_activePoint->parent()->shapeToDocument(m_activePoint->point());
-            return new KoPathPointMoveStrategy(m_tool, m_tool->canvas(), startPoint);
+            return new KoPathPointMoveStrategy(m_tool, startPoint);
         } else {
             KoPathShape * pathShape = m_activePoint->parent();
             KoPathPointData pd(pathShape, pathShape->pathPointIndex(m_activePoint));
-            return new KoPathControlPointMoveStrategy(m_tool, m_tool->canvas(), pd, m_activePointType, event->point);
+            return new KoPathControlPointMoveStrategy(m_tool, pd, m_activePointType, event->point);
         }
     } else {
         KoPathPoint::KoPointProperties props = m_activePoint->properties();
@@ -173,7 +174,7 @@ KoInteractionStrategy * ParameterHandle::handleMousePress(KoPointerEvent *event)
         KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
         if (selection)
             selection->clear();
-        return new KoParameterChangeStrategy(m_tool, m_tool->canvas(), m_parameterShape, m_handleId);
+        return new KoParameterChangeStrategy(m_tool, m_parameterShape, m_handleId);
     }
     return 0;
 }
@@ -198,7 +199,7 @@ KoInteractionStrategy * ConnectionHandle::handleMousePress(KoPointerEvent *event
         KoConnectionShape * shape = dynamic_cast<KoConnectionShape*>(m_parameterShape);
         if (! shape)
             return 0;
-        return new KoPathConnectionPointStrategy(m_tool, m_tool->canvas(), shape, m_handleId);
+        return new KoPathConnectionPointStrategy(m_tool, shape, m_handleId);
     }
     return 0;
 }

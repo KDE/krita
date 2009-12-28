@@ -32,11 +32,9 @@
 #include <float.h>
 #include <math.h>
 
-//#include "commands/KoPathConnectionPointMoveCommand.h"
-
-KoPathConnectionPointStrategy::KoPathConnectionPointStrategy(KoPathTool *tool, KoCanvasBase *canvas,
-        KoConnectionShape * shape, int handleId)
-        : KoParameterChangeStrategy(tool, canvas, shape, handleId)
+KoPathConnectionPointStrategy::KoPathConnectionPointStrategy(KoPathTool *tool,
+        KoConnectionShape *shape, int handleId)
+        : KoParameterChangeStrategy(tool, shape, handleId)
         , m_tool(tool)
         , m_connectionShape(shape)
         , m_handleId(handleId)
@@ -64,7 +62,7 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
     m_newConnectionIndex = -1;
 
     QRectF roi(mouseLocation - QPointF(MAX_DISTANCE, MAX_DISTANCE), QSizeF(2*MAX_DISTANCE, 2*MAX_DISTANCE));
-    QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt(roi, true);
+    QList<KoShape*> shapes = m_tool->canvas()->shapeManager()->shapesAt(roi, true);
     if (shapes.count() < 2) {
         // we are not near any other shape, so remove the corresponding connection
         if (m_handleId == 0)

@@ -18,20 +18,14 @@
  */
 
 #include "KoInteractionStrategy.h"
-#include "KoSelection.h"
-#include "KoShapeManager.h"
-#include "KoPointerEvent.h"
-#include "KoShapeRubberSelectStrategy.h"
-#include "KoCreateShapeStrategy.h"
-#include "KoCreateShapesTool.h"
-#include "KoInteractionTool.h"
-#include "KoCanvasBase.h"
-#include "KoTool.h"
-#include "KoShapeContainer.h"
+#include "KoInteractionStrategy_p.h"
 
 #include <QUndoCommand>
 
-#include <QMouseEvent>
+KoInteractionStrategy::KoInteractionStrategy(KoTool *parent)
+    : d_ptr(new KoInteractionStrategyPrivate(parent))
+{
+}
 
 void KoInteractionStrategy::cancelInteraction()
 {
@@ -42,19 +36,28 @@ void KoInteractionStrategy::cancelInteraction()
     }
 }
 
-KoInteractionStrategy::KoInteractionStrategy(KoTool *parent, KoCanvasBase *canvas)
-        : m_parent(parent)
-        , m_canvas(canvas)
+KoInteractionStrategy::KoInteractionStrategy(KoInteractionStrategyPrivate &dd)
+    : d_ptr(&dd)
 {
 }
 
 KoInteractionStrategy::~KoInteractionStrategy()
 {
-    m_parent->setStatusText("");
+    Q_D(KoInteractionStrategy);
+    delete d;
 }
 
-void KoInteractionStrategy::handleCustomEvent(KoPointerEvent * event)
+void KoInteractionStrategy::handleCustomEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);
 }
 
+void KoInteractionStrategy::paint(QPainter &, const KoViewConverter &)
+{
+}
+
+KoTool *KoInteractionStrategy::tool() const
+{
+    Q_D(const KoInteractionStrategy);
+    return d->tool;
+}

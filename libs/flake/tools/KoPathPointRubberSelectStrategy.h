@@ -24,7 +24,6 @@
 #include "KoShapeRubberSelectStrategy.h"
 
 class KoPathTool;
-class KoCanvasBase;
 
 /**
  * @brief Strategy to rubber select points of a path shape
@@ -32,13 +31,14 @@ class KoCanvasBase;
 class KoPathPointRubberSelectStrategy : public KoShapeRubberSelectStrategy
 {
 public:
-    KoPathPointRubberSelectStrategy(KoPathTool *tool, KoCanvasBase *canvas, const QPointF &clicked);
+    KoPathPointRubberSelectStrategy(KoPathTool *tool, const QPointF &clicked);
     virtual ~KoPathPointRubberSelectStrategy() {}
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
 
 private:
     /// pointer to the path tool
     KoPathTool *m_tool;
+    Q_DECLARE_PRIVATE(KoShapeRubberSelectStrategy)
 };
 
 #endif /* KOPATHPOINTRUBBERSELECTSTRATEGY_H */

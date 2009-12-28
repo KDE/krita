@@ -19,14 +19,16 @@
  */
 
 #include "KoZoomStrategy.h"
+#include "KoShapeRubberSelectStrategy_p.h"
 #include "KoZoomTool.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
+#include "KoViewConverter.h"
 
 #include <kdebug.h>
 
 KoZoomStrategy::KoZoomStrategy(KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked)
-        : KoShapeRubberSelectStrategy(tool, controller->canvas(), clicked, false),
+        : KoShapeRubberSelectStrategy(tool, clicked, false),
         m_controller(controller),
         m_forceZoomOut(false)
 {
@@ -34,7 +36,8 @@ KoZoomStrategy::KoZoomStrategy(KoZoomTool *tool, KoCanvasController *controller,
 
 void KoZoomStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
-    QRect pixelRect = m_controller->canvas()->viewConverter()->documentToView(selectRect()).toRect();
+    Q_D(KoShapeRubberSelectStrategy);
+    QRect pixelRect = m_controller->canvas()->viewConverter()->documentToView(d->selectedRect()).toRect();
     pixelRect.translate(m_controller->canvas()->documentOrigin());
 
     bool m_zoomOut = m_forceZoomOut;
@@ -52,8 +55,9 @@ void KoZoomStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 void KoZoomStrategy::cancelInteraction()
 {
-    m_parent->repaintDecorations();
-    m_canvas->updateCanvas(selectRect().toRect().normalized());
+    Q_D(KoShapeRubberSelectStrategy);
+    d->tool->repaintDecorations();
+    d->tool->canvas()->updateCanvas(d->selectedRect().toRect().normalized());
 }
 
 void KoZoomStrategy::forceZoomOut()

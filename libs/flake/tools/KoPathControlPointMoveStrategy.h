@@ -36,7 +36,7 @@ class KoPathTool;
 class KoPathControlPointMoveStrategy : public KoInteractionStrategy
 {
 public:
-    KoPathControlPointMoveStrategy(KoPathTool *tool, KoCanvasBase *canvas, const KoPathPointData &point,
+    KoPathControlPointMoveStrategy(KoPathTool *tool, const KoPathPointData &point,
                                    KoPathPoint::KoPointType type, const QPointF &pos);
     virtual ~KoPathControlPointMoveStrategy();
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);

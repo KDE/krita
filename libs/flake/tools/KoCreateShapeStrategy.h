@@ -41,7 +41,7 @@ public:
      * @param canvas the canvas interface which will supply things like a selection object
      * @param clicked the initial point that the user depressed (in pt).
      */
-    KoCreateShapeStrategy(KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked);
+    KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPointF &clicked);
     virtual ~KoCreateShapeStrategy() {}
 
     void finishInteraction(Qt::KeyboardModifiers modifiers);
@@ -52,6 +52,7 @@ public:
 private:
     QPainterPath m_outline;
     QRectF m_outlineBoundingRect;
+    Q_DECLARE_PRIVATE(KoShapeRubberSelectStrategy)
 };
 
 #endif

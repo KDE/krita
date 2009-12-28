@@ -262,7 +262,7 @@ public:
     QList<QAction*> popupActionList() const;
 
     /// Returns the canvas the tool is working on
-    KoCanvasBase * canvas() const;
+    KoCanvasBase *canvas() const;
 
 public slots:
     /**

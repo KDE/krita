@@ -197,6 +197,14 @@ void KoDualColorButton::mousePressEvent( QMouseEvent *event )
     emit backgroundColorChanged( d->backgroundColor );
 
     d->miniCtlFlag = true;
+  } else if ( event->pos().x() < backgroundRect.x() ) {
+    d->foregroundColor.fromQColor(Qt::black);
+    d->backgroundColor.fromQColor(Qt::white);
+
+    emit foregroundColorChanged( d->foregroundColor );
+    emit backgroundColorChanged( d->backgroundColor );
+
+    d->miniCtlFlag = true;
   }
   repaint();
 }

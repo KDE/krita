@@ -93,6 +93,7 @@ private:
 signals:
     void selectNewColor();
     void changeActivePaintop(int);
+    void updateRecentColor(int);
 
 private slots:
     void slotPickNewColor();

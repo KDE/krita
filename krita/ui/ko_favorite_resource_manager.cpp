@@ -30,20 +30,20 @@
 #include <kglobalsettings.h>
 #include "ko_favorite_resource_manager.h"
 #include "kis_popup_palette.h"
-#include "flowlayout.h"
 #include "kis_paintop_box.h"
 #include "kis_palette_manager.h"
 #include "kis_view2.h"
 
 #ifndef _MSC_EXTENSIONS
 const int KoFavoriteResourceManager::MAX_FAVORITE_BRUSHES;
-const int KoFavoriteResourceManager::MAX_RECENT_COLORS;
+//const int KoFavoriteResourceManager::MAX_RECENT_COLORS;
 #endif
 
 KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, QWidget* popupParent)
         :m_favoriteBrushManager(0)
         ,m_popupPalette(0)
         ,m_paintopBox(paintopBox)
+        ,m_colorList(0)
 {
 
     connect(paintopBox, SIGNAL(signalPaintopChanged(KisPaintOpPresetSP)), this, SLOT(slotChangePaintopLabel(KisPaintOpPresetSP)));
@@ -60,6 +60,7 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
 
     m_popupPalette = new KisPopupPalette(this, popupParent);
     m_popupPalette->setVisible(false);
+    m_colorList = new KisColorDataList();
 }
 
 QStringList KoFavoriteResourceManager::favoriteBrushesStringList()
@@ -231,41 +232,6 @@ int KoFavoriteResourceManager::favoriteBrushesTotal()
     return m_favoriteBrushesList.size();
 }
 
-//Recent Colors
-int KoFavoriteResourceManager::isInRecentColor(QColor* newColor)
-{
-    for (int pos=0; pos < m_recentColorsData.size(); pos++)
-    {
-        if (newColor->rgb() == m_recentColorsData.at(pos)->rgb())
-            return pos;
-    }
-
-    return -1;
-}
-
-QQueue<QColor*> * KoFavoriteResourceManager::recentColorsList()
-{
-    return &(m_recentColorsData);
-}
-
-void KoFavoriteResourceManager::addRecentColor(QColor* newColor)
-{
-
-    int pos = isInRecentColor(newColor);
-    if (pos > -1)
-    {
-        m_recentColorsData.removeAt(pos);
-    } else {
-        if (m_recentColorsData.size() == KoFavoriteResourceManager::MAX_RECENT_COLORS)
-        {
-            QColor *leastUsedColor = m_recentColorsData.dequeue();
-            delete leastUsedColor;
-        }
-    }
-
-    m_recentColorsData.enqueue(newColor);
-}
-
 void KoFavoriteResourceManager::saveFavoriteBrushes()
 {
 
@@ -277,9 +243,18 @@ void KoFavoriteResourceManager::saveFavoriteBrushes()
     }
 
     qDebug() << "[KoFavoriteResourceManager] Saving list: " << favoriteList;
-    KConfigGroup group(KGlobal::config(), "favoriteList");    
+    KConfigGroup group(KGlobal::config(), "favoriteList");
     group.writeEntry("favoriteBrushes", favoriteList);
     group.config()->sync();
+}
+
+void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
+{
+    qDebug() << "[KoFavoriteResourceManager] selected color: " << recentColorAt(pos)
+            << "(r)" << recentColorAt(pos).red() << "(g)" << recentColorAt(pos).green()
+            << "(b)" << recentColorAt(pos).blue();
+
+    addRecentColorUpdate(pos);
 }
 
 KoFavoriteResourceManager::~KoFavoriteResourceManager()
@@ -287,5 +262,6 @@ KoFavoriteResourceManager::~KoFavoriteResourceManager()
     if (m_favoriteBrushManager)
         delete m_favoriteBrushManager;
 
+    delete m_colorList;
 }
 #include "ko_favorite_resource_manager.moc"

@@ -47,7 +47,6 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp 
     flake/kis_layermap_visitor.cpp
-    flowlayout.cpp
     kis_autogradient.cc
     kis_autogradient_resource.cc
     kis_bookmarked_configurations_editor.cc
@@ -58,6 +57,7 @@ set(kritaui_LIB_SRCS
     kis_clipboard.cc 
     kis_config.cc
     kis_config_notifier.cpp 
+    kis_color_data_list.cpp
     kis_control_frame.cpp
     kis_composite_ops_model.cc
     kis_cursor.cc

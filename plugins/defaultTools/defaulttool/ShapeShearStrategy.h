@@ -21,11 +21,15 @@
 #define SHAPESHEARSTRATEGY_H
 
 #include <KoInteractionStrategy.h>
+#include <KoFlake.h>
 
 #include <QPointF>
+#include <QSizeF>
+#include <QMatrix>
 
 class KoCanvasBase;
 class KoTool;
+class KoShape;
 
 /**
  * A strategy for the KoInteractionTool.
@@ -38,11 +42,10 @@ public:
     /**
      * Constructor that starts to rotate the objects.
      * @param tool the parent tool which controls this strategy
-     * @param canvas the canvas interface which will supply things like a selection object
      * @param clicked the initial point that the user depressed (in pt).
      * @param direction the handle that was grabbed
      */
-    ShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, KoFlake::SelectionHandle direction );
+    ShapeShearStrategy( KoTool *tool, const QPointF &clicked, KoFlake::SelectionHandle direction );
     virtual ~ShapeShearStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
@@ -60,6 +63,7 @@ private:
     bool m_isMirrored;
     QList<QMatrix> m_oldTransforms;
     QMatrix m_initialSelectionMatrix;
+    QList<KoShape*> m_selectedShapes;
 };
 
 #endif

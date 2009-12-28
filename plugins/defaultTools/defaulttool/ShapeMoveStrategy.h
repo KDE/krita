@@ -25,9 +25,11 @@
 #include <KoInteractionStrategy.h>
 
 #include <QPointF>
+#include <QList>
 
 class KoCanvasBase;
 class KoTool;
+class KoShape;
 
 /**
  * Implements the Move action on an object or selected objects.
@@ -41,7 +43,7 @@ public:
      * @param canvas the canvas interface which will supply things like a selection object
      * @param clicked the initial point that the user depressed (in pt).
      */
-    ShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked );
+    ShapeMoveStrategy(KoTool *tool, const QPointF &clicked);
     virtual ~ShapeMoveStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
@@ -54,6 +56,7 @@ private:
     QList<QPointF> m_previousPositions;
     QList<QPointF> m_newPositions;
     QPointF m_start, m_diff, m_initialSelectionPosition, m_initialOffset;
+    QList<KoShape*> m_selectedShapes;
 };
 
 #endif

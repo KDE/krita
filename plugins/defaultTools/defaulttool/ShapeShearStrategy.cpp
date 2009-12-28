@@ -38,11 +38,11 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-ShapeShearStrategy::ShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, KoFlake::SelectionHandle direction )
-: KoInteractionStrategy(tool, canvas)
+ShapeShearStrategy::ShapeShearStrategy( KoTool *tool, const QPointF &clicked, KoFlake::SelectionHandle direction )
+: KoInteractionStrategy(tool)
 , m_start(clicked)
 {
-    KoSelection * sel = canvas->shapeManager()->selection();
+    KoSelection *sel = tool->canvas()->shapeManager()->selection();
     QList<KoShape*> selectedShapes = sel->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
         if( ! shape->isEditable() )
@@ -112,7 +112,7 @@ ShapeShearStrategy::ShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, cons
     m_initialSelectionAngle = currentAngle - angle;
 
     kDebug(30006) <<" PREsol.x=" << m_solidPoint.x() <<" sol.y=" << m_solidPoint.y();
-    m_solidPoint = canvas->shapeManager()->selection()->absoluteTransformation(0).map( m_solidPoint );
+    m_solidPoint = tool->canvas()->shapeManager()->selection()->absoluteTransformation(0).map( m_solidPoint );
 
     // use crossproduct of top edge and left edge of selection bounding rect
     // to determine if the selection is mirrored
@@ -161,14 +161,14 @@ void ShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModif
         shape->applyAbsoluteTransformation( applyMatrix );
         shape->update();
     }
-    m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
+    tool()->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
     m_shearMatrix = matrix;
 }
 
 void ShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
     SelectionDecorator decorator(KoFlake::NoHandle, true, false);
-    decorator.setSelection(m_canvas->shapeManager()->selection());
-    decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
+    decorator.setSelection(tool()->canvas()->shapeManager()->selection());
+    decorator.setHandleRadius( tool()->canvas()->resourceProvider()->handleRadius() );
     decorator.paint(painter, converter);
 }
 
@@ -178,7 +178,7 @@ QUndoCommand* ShapeShearStrategy::createCommand() {
         newTransforms << shape->transformation();
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );
     cmd->setText( i18n("Shear") );
-    KoSelection * sel = m_canvas->shapeManager()->selection();
+    KoSelection * sel = tool()->canvas()->shapeManager()->selection();
     new SelectionTransformCommand(sel, m_initialSelectionMatrix, sel->transformation(), cmd);
     return cmd;
 }

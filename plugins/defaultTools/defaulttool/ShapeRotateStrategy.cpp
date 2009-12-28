@@ -24,6 +24,7 @@
 
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
+#include <KoSelection.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
 #include <KoCanvasResourceProvider.h>
@@ -33,14 +34,14 @@
 #include <math.h>
 #include <klocale.h>
 
-ShapeRotateStrategy::ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, Qt::MouseButtons buttons)
-: KoInteractionStrategy(tool, canvas)
+ShapeRotateStrategy::ShapeRotateStrategy(KoTool *tool, const QPointF &clicked, Qt::MouseButtons buttons)
+: KoInteractionStrategy(tool)
 , m_initialBoundingRect()
 , m_start(clicked)
 {
-    m_initialSelectionMatrix = canvas->shapeManager()->selection()->transformation();
+    m_initialSelectionMatrix = tool->canvas()->shapeManager()->selection()->transformation();
 
-    QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
+    QList<KoShape*> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
         if( ! shape->isEditable() )
             continue;
@@ -53,7 +54,7 @@ ShapeRotateStrategy::ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, co
     }
 
     if( buttons & Qt::RightButton )
-        m_rotationCenter = canvas->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
+        m_rotationCenter = tool->canvas()->shapeManager()->selection()->absolutePosition( SelectionDecorator::hotPosition() );
     else
         m_rotationCenter = m_initialBoundingRect.center();
 
@@ -86,7 +87,7 @@ void ShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
         shape->applyAbsoluteTransformation( applyMatrix );
         shape->update();
     }
-    m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
+    tool()->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
 }
 
 void ShapeRotateStrategy::handleCustomEvent( KoPointerEvent * event )
@@ -102,7 +103,7 @@ void ShapeRotateStrategy::handleCustomEvent( KoPointerEvent * event )
         shape->applyAbsoluteTransformation( matrix );
         shape->update();
     }
-    m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( matrix );
+    tool()->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( matrix );
 }
 
 void ShapeRotateStrategy::rotateBy( qreal angle )
@@ -119,13 +120,13 @@ void ShapeRotateStrategy::rotateBy( qreal angle )
         shape->applyAbsoluteTransformation( applyMatrix );
         shape->update();
     }
-    m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
+    tool()->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( applyMatrix );
 }
 
 void ShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
     SelectionDecorator decorator(KoFlake::NoHandle, true, false);
-    decorator.setSelection(m_canvas->shapeManager()->selection());
-    decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
+    decorator.setSelection(tool()->canvas()->shapeManager()->selection());
+    decorator.setHandleRadius( tool()->canvas()->resourceProvider()->handleRadius() );
     decorator.paint(painter, converter);
 
     // paint the rotation center
@@ -144,7 +145,7 @@ QUndoCommand* ShapeRotateStrategy::createCommand() {
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );
     cmd->setText( i18n("Rotate") );
-    KoSelection * sel = m_canvas->shapeManager()->selection();
+    KoSelection * sel = tool()->canvas()->shapeManager()->selection();
     new SelectionTransformCommand(sel, m_initialSelectionMatrix, sel->transformation(), cmd);
     return cmd;
 }

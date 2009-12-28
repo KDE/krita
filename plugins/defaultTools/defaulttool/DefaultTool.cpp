@@ -738,16 +738,16 @@ void DefaultTool::customMoveEvent(KoPointerEvent * event)
     if (zoom > move && zoom > rotate) {
         // zoom
         if (! m_customEventStrategy)
-            m_customEventStrategy = new ShapeResizeStrategy(this, m_canvas, event->point, KoFlake::TopLeftHandle);
+            m_customEventStrategy = new ShapeResizeStrategy(this, event->point, KoFlake::TopLeftHandle);
     } else if (move > zoom && move > rotate) { // check if x-/y-movement is dominant
         // move
         if (! m_customEventStrategy)
-            m_customEventStrategy = new ShapeMoveStrategy(this, m_canvas, event->point);
+            m_customEventStrategy = new ShapeMoveStrategy(this, event->point);
     } else if (rotate > zoom && rotate > move) // rotation is dominant
     {
         // rotate
         if (! m_customEventStrategy)
-            m_customEventStrategy = new ShapeRotateStrategy(this, m_canvas, event->point, event->buttons());
+            m_customEventStrategy = new ShapeRotateStrategy(this, event->point, event->buttons());
     }
 
     if (m_customEventStrategy)
@@ -1150,20 +1150,20 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
             if (event->buttons() == Qt::LeftButton) {
                 // resizing or shearing only with left mouse button
                 if (insideSelection)
-                    return new ShapeResizeStrategy(this, m_canvas, event->point, handle);
+                    return new ShapeResizeStrategy(this, event->point, handle);
                 if (handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||
                         handle == KoFlake::BottomMiddleHandle || handle == KoFlake::LeftMiddleHandle)
-                    return new ShapeShearStrategy(this, m_canvas, event->point, handle);
+                    return new ShapeShearStrategy(this, event->point, handle);
             }
             // rotating is allowed for rigth mouse button too
             if (handle == KoFlake::TopLeftHandle || handle == KoFlake::TopRightHandle ||
                 handle == KoFlake::BottomLeftHandle || handle == KoFlake::BottomRightHandle)
-                return new ShapeRotateStrategy(this, m_canvas, event->point, event->buttons());
+                return new ShapeRotateStrategy(this, event->point, event->buttons());
         }
         if (! (selectMultiple || selectNextInStack) && event->buttons() == Qt::LeftButton) {
             const QPainterPath outlinePath = select->transformation().map(select->outline());
             if (outlinePath.contains(event->point) || outlinePath.intersects(handlePaintRect(event->point)))
-                return new ShapeMoveStrategy(this, m_canvas, event->point);
+                return new ShapeMoveStrategy(this, event->point);
         }
     }
 
@@ -1182,7 +1182,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
             repaintDecorations();
             select->deselectAll();
         }
-        return new KoShapeRubberSelectStrategy(this, m_canvas, event->point);
+        return new KoShapeRubberSelectStrategy(this, event->point);
     }
 
     if (select->isSelected(shape)) {
@@ -1197,7 +1197,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
             shapeManager->selection()->deselectAll();
         select->select(shape, selectNextInStack ? false : true);
         repaintDecorations();
-        return new ShapeMoveStrategy(this, m_canvas, event->point);
+        return new ShapeMoveStrategy(this, event->point);
     }
     return 0;
 }

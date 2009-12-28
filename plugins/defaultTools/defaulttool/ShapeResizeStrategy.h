@@ -21,11 +21,14 @@
 #define SHAPERESIZESTRATEGY_H
 
 #include <KoInteractionStrategy.h>
+#include <KoFlake.h>
 
 #include <QPointF>
+#include <QList>
 
 class KoCanvasBase;
 class KoTool;
+class KoShape;
 
 /**
  * A strategy for the KoInteractionTool.
@@ -38,7 +41,7 @@ public:
     /**
      * Constructor
      */
-    ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, KoFlake::SelectionHandle direction );
+    ShapeResizeStrategy(KoTool *tool, const QPointF &clicked, KoFlake::SelectionHandle direction);
     virtual ~ShapeResizeStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
@@ -60,6 +63,7 @@ private:
     QList<QMatrix> m_oldTransforms;
     QList<QMatrix> m_transformations;
     QPointF m_lastScale;
+    QList<KoShape*> m_selectedShapes;
 };
 
 #endif

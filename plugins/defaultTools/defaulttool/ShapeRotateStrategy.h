@@ -23,9 +23,13 @@
 #include <KoInteractionStrategy.h>
 
 #include <QPointF>
+#include <QRectF>
+#include <QMatrix>
+#include <QList>
 
 class KoCanvasBase;
 class KoTool;
+class KoShape;
 
 /**
  * A strategy for the KoInteractionTool.
@@ -38,10 +42,9 @@ public:
     /**
      * Constructor that starts to rotate the objects.
      * @param tool the parent tool which controls this strategy
-     * @param canvas the canvas interface which will supply things like a selection object
      * @param clicked the initial point that the user depressed (in pt).
      */
-    ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, Qt::MouseButtons buttons );
+    ShapeRotateStrategy( KoTool *tool, const QPointF &clicked, Qt::MouseButtons buttons );
     virtual ~ShapeRotateStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
@@ -58,6 +61,7 @@ private:
     QMatrix m_initialSelectionMatrix;
     QList<QMatrix> m_oldTransforms;
     QPointF m_rotationCenter;
+    QList<KoShape*> m_selectedShapes;
 };
 
 #endif

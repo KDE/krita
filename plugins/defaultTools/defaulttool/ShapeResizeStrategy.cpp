@@ -33,12 +33,12 @@
 #include <klocale.h>
 #include <limits>
 
-ShapeResizeStrategy::ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
+ShapeResizeStrategy::ShapeResizeStrategy(KoTool *tool,
         const QPointF &clicked, KoFlake::SelectionHandle direction )
-: KoInteractionStrategy(tool, canvas), m_lastScale(1.0,1.0)
+    : KoInteractionStrategy(tool), m_lastScale(1.0,1.0)
 {
-    Q_ASSERT( canvas->shapeManager()->selection()->count() > 0);
-    QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
+    Q_ASSERT(tool->canvas()->shapeManager()->selection()->count() > 0);
+    QList<KoShape*> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
         if ( ! shape->isEditable() )
             continue;
@@ -51,10 +51,10 @@ ShapeResizeStrategy::ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
     m_start = clicked;
 
     KoShape *shp = 0;
-    if (canvas->shapeManager()->selection()->count()>1)
-       shp = canvas->shapeManager()->selection();
-    if (canvas->shapeManager()->selection()->count()==1)
-        shp = canvas->shapeManager()->selection()->firstSelectedShape();
+    if (tool->canvas()->shapeManager()->selection()->count()>1)
+       shp = tool->canvas()->shapeManager()->selection();
+    if (tool->canvas()->shapeManager()->selection()->count()==1)
+        shp = tool->canvas()->shapeManager()->selection()->firstSelectedShape();
 
     if ( shp )
     {
@@ -98,7 +98,7 @@ ShapeResizeStrategy::ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
 
 void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
-    QPointF newPos = m_canvas->snapGuide()->snap( point, modifiers );
+    QPointF newPos = tool()->canvas()->snapGuide()->snap( point, modifiers );
 
     bool keepAspect = modifiers & Qt::ShiftModifier;
     foreach(KoShape *shape, m_selectedShapes)
@@ -223,7 +223,7 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
         shape->update();
         i++;
     }
-    m_canvas->shapeManager()->selection()->applyAbsoluteTransformation( matrix * m_scaleMatrix.inverted() );
+    tool()->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( matrix * m_scaleMatrix.inverted() );
     m_scaleMatrix = matrix;
 }
 
@@ -246,7 +246,7 @@ QUndoCommand* ShapeResizeStrategy::createCommand()
 void ShapeResizeStrategy::paint( QPainter &painter, const KoViewConverter &converter)
 {
     SelectionDecorator decorator (KoFlake::NoHandle, false, false);
-    decorator.setSelection(m_canvas->shapeManager()->selection());
-    decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
+    decorator.setSelection(tool()->canvas()->shapeManager()->selection());
+    decorator.setHandleRadius( tool()->canvas()->resourceProvider()->handleRadius() );
     decorator.paint(painter, converter);
 }

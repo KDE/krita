@@ -342,7 +342,7 @@ void TableLayout::drawBackground(QPainter *painter) const
     painter->restore();
 }
 
-void TableLayout::drawBorders(QPainter *painter) const
+void TableLayout::drawBorders(QPainter *painter, QPainterPath *accuBlankBorders) const
 {
     if (m_tableLayoutData->m_tableRects.isEmpty()) {
         return;
@@ -352,7 +352,7 @@ void TableLayout::drawBorders(QPainter *painter) const
     
     KoTableStyle tableStyle(m_table->format());
     bool collapsing = tableStyle.collapsingBorderModel();
-    
+        
     // Draw cell borders using their styles.
     for (int row = 0; row < m_table->rows(); ++row) {
         for (int column = 0; column < m_table->columns(); ++column) {
@@ -371,12 +371,12 @@ void TableLayout::drawBorders(QPainter *painter) const
                     
                     // First the horizontal borders
                     if (row == 0) {
-                        cellStyle.drawTopHorizontalBorder(*painter, bRect.x(), bRect.y(), bRect.width());
+                        cellStyle.drawTopHorizontalBorder(*painter, bRect.x(), bRect.y(), bRect.width(), accuBlankBorders);
                     }
                     
                     if (row + tableCell.rowSpan() == m_table->rows()) {
                         // we hit the bottom of the table so just draw the bottom border
-                        cellStyle.drawBottomHorizontalBorder(*painter, bRect.x(), bRect.bottom(), bRect.width());
+                        cellStyle.drawBottomHorizontalBorder(*painter, bRect.x(), bRect.bottom(), bRect.width(), accuBlankBorders);
                     } else {
                         // we have cells below so draw sharedborders
                         QTextTableCell tableCellBelow;
@@ -389,18 +389,18 @@ void TableLayout::drawBorders(QPainter *painter) const
                             qreal x2 = qMin(bRect.right(), belowBRect.right()); 
 
                             KoTableCellStyle cellBelowStyle(tableCellBelow.format().toTableCellFormat());
-                            cellStyle.drawSharedHorizontalBorder(*painter, cellBelowStyle, x, bRect.bottom(), x2 - x);
+                            cellStyle.drawSharedHorizontalBorder(*painter, cellBelowStyle, x, bRect.bottom(), x2 - x, accuBlankBorders);
                         }
                     }
                     
                     // And then the same treatment for vertical borders
                     if (column == 0) {
-                        cellStyle.drawLeftmostVerticalBorder(*painter, bRect.x(), bRect.y(), bRect.height());
+                        cellStyle.drawLeftmostVerticalBorder(*painter, bRect.x(), bRect.y(), bRect.height(), accuBlankBorders);
                     }
                     
                     if (column + tableCell.columnSpan() == m_table->columns()) {
                         // we hit the rightmost edge of the table so draw the rightmost border
-                        cellStyle.drawRightmostVerticalBorder(*painter, bRect.right(), bRect.y(), bRect.height());
+                        cellStyle.drawRightmostVerticalBorder(*painter, bRect.right(), bRect.y(), bRect.height(), accuBlankBorders);
                     } else {
                         // we have cells to the right so draw sharedborders
                         QTextTableCell tableCellRight;
@@ -412,7 +412,7 @@ void TableLayout::drawBorders(QPainter *painter) const
                             qreal y2 = qMin(bRect.bottom(), rightBRect.bottom()); 
 
                             KoTableCellStyle cellBelowRight(tableCellRight.format().toTableCellFormat());
-                            cellStyle.drawSharedVerticalBorder(*painter, cellBelowRight, bRect.right(), y, y2-y);
+                            cellStyle.drawSharedVerticalBorder(*painter, cellBelowRight, bRect.right(), y, y2-y, accuBlankBorders);
                         }
                     }
                 } else { // separating border model

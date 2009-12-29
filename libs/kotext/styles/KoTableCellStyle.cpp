@@ -259,7 +259,7 @@ void KoTableCellStyle::paintBorders(QPainter &painter, const QRectF &bounds) con
     }
 }
 
-void KoTableCellStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w) const
+void KoTableCellStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QPainterPath *accumulatedBlankBorders) const
 {
     qreal t=y;
     if (d->edges[Top].outerPen.widthF() > 0) {
@@ -269,7 +269,13 @@ void KoTableCellStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qreal
         t += pen.widthF() / 2.0;
         painter.drawLine(QLineF(x, t, x+w, t));
         t = y + d->edges[Top].spacing + pen.widthF();
+    } else {
+        // No border but we'd like to draw one for user convinience when on screen
+        accumulatedBlankBorders->moveTo(x, t);
+        accumulatedBlankBorders->lineTo(x+w, t);
+
     }
+
     // inner line
     if (d->edges[Top].innerPen.widthF() > 0) {
         QPen pen = d->edges[Top].innerPen;
@@ -279,13 +285,13 @@ void KoTableCellStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qreal
     }
 }
 
-void KoTableCellStyle::drawSharedHorizontalBorder(QPainter &painter, const KoTableCellStyle &styleBelow,  qreal x, qreal y, qreal w) const
+void KoTableCellStyle::drawSharedHorizontalBorder(QPainter &painter, const KoTableCellStyle &styleBelow,  qreal x, qreal y, qreal w, QPainterPath *accumulatedBlankBorders) const
 {
     // First determine which style "wins" by comparing total width
     qreal thisWidth = d->edges[Bottom].outerPen.widthF() + d->edges[Bottom].spacing + d->edges[Bottom].innerPen.widthF();
     qreal thatWidth = styleBelow.d->edges[Top].outerPen.widthF() + styleBelow.d->edges[Top].spacing
                                     + styleBelow.d->edges[Top].innerPen.widthF();
-                                    
+           
     if(thisWidth >= thatWidth) {
         // top style wins
        qreal t=y;
@@ -296,6 +302,11 @@ void KoTableCellStyle::drawSharedHorizontalBorder(QPainter &painter, const KoTab
             t += pen.widthF() / 2.0;
             painter.drawLine(QLineF(x, t, x+w, t));
             t = y + d->edges[Bottom].spacing + pen.widthF();
+        } else {
+            // No border but we'd like to draw one for user convinience when on screen
+            accumulatedBlankBorders->moveTo(x, t);
+            accumulatedBlankBorders->lineTo(x+w, t);
+
         }
         // inner line
         if (d->edges[Bottom].innerPen.widthF() > 0) {
@@ -325,7 +336,7 @@ void KoTableCellStyle::drawSharedHorizontalBorder(QPainter &painter, const KoTab
     }                               
 }
 
-void KoTableCellStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w) const
+void KoTableCellStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QPainterPath *accumulatedBlankBorders) const
 {
     qreal t=y;
     if (d->edges[Bottom].outerPen.widthF() > 0) {
@@ -335,7 +346,13 @@ void KoTableCellStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, qr
         t -= pen.widthF() / 2.0;
         painter.drawLine(QLineF(x, t, x+w, t));
         t = y - d->edges[Bottom].spacing - pen.widthF();
+    } else {
+        // No border but we'd like to draw one for user convinience when on screen
+        accumulatedBlankBorders->moveTo(x, t);
+        accumulatedBlankBorders->lineTo(x+w, t);
+
     }
+
     // inner line
     if (d->edges[Bottom].innerPen.widthF() > 0) {
         QPen pen = d->edges[Bottom].innerPen;
@@ -345,7 +362,7 @@ void KoTableCellStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, qr
     }
 }
 
-void KoTableCellStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h) const
+void KoTableCellStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QPainterPath *accumulatedBlankBorders) const
 {
     qreal thisWidth = d->edges[Left].outerPen.widthF() + d->edges[Left].spacing + d->edges[Left].innerPen.widthF();
     qreal l = x - thisWidth / 2.0;
@@ -357,7 +374,13 @@ void KoTableCellStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, qr
         l += pen.widthF() / 2.0;
         painter.drawLine(QLineF(l, y, l, y+h));
         l += d->edges[Left].spacing + pen.widthF() / 2.0;
+    } else {
+        // No border but we'd like to draw one for user convinience when on screen
+        accumulatedBlankBorders->moveTo(l, y);
+        accumulatedBlankBorders->lineTo(l, y+h);
+
     }
+
     // inner line
     if (d->edges[Left].innerPen.widthF() > 0) {
         QPen pen = d->edges[Left].innerPen;
@@ -367,7 +390,7 @@ void KoTableCellStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, qr
     }
 }
 
-void KoTableCellStyle::drawSharedVerticalBorder(QPainter &painter, const KoTableCellStyle &styleRight,  qreal x, qreal y, qreal h) const
+void KoTableCellStyle::drawSharedVerticalBorder(QPainter &painter, const KoTableCellStyle &styleRight,  qreal x, qreal y, qreal h, QPainterPath *accumulatedBlankBorders) const
 {
     // First determine which style "wins" by comparing total width
     qreal thisWidth = d->edges[Right].outerPen.widthF() + d->edges[Right].spacing + d->edges[Right].innerPen.widthF();
@@ -386,7 +409,13 @@ void KoTableCellStyle::drawSharedVerticalBorder(QPainter &painter, const KoTable
             l += pen.widthF() / 2.0;
             painter.drawLine(QLineF(l, y, l, y+h));
             l += d->edges[Right].spacing + pen.widthF() / 2.0;
+        } else {
+            // No border but we'd like to draw one for user convinience when on screen
+            accumulatedBlankBorders->moveTo(l, y);
+            accumulatedBlankBorders->lineTo(l, y+h);
+
         }
+
         // inner line
         if (d->edges[Right].innerPen.widthF() > 0) {
             QPen pen = d->edges[Right].innerPen;
@@ -415,7 +444,7 @@ void KoTableCellStyle::drawSharedVerticalBorder(QPainter &painter, const KoTable
     }                               
 }
 
-void KoTableCellStyle::drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h) const
+void KoTableCellStyle::drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QPainterPath *accumulatedBlankBorders) const
 {
     qreal thisWidth = d->edges[Right].outerPen.widthF() + d->edges[Right].spacing + d->edges[Right].innerPen.widthF();
     qreal l = x - thisWidth / 2.0;
@@ -427,7 +456,13 @@ void KoTableCellStyle::drawRightmostVerticalBorder(QPainter &painter, qreal x, q
         l += pen.widthF() / 2.0;
         painter.drawLine(QLineF(l, y, l, y+h));
         l += d->edges[Right].spacing - pen.widthF() / 2.0;
+    } else {
+        // No border but we'd like to draw one for user convinience when on screen
+        accumulatedBlankBorders->moveTo(l, y);
+        accumulatedBlankBorders->lineTo(l, y+h);
+
     }
+
     // inner line
     if (d->edges[Right].innerPen.widthF() > 0) {
         QPen pen = d->edges[Right].innerPen;

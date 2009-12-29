@@ -32,6 +32,7 @@ class TableLayoutData;
 class QTextTable;
 class QTextTableCell;
 class QPainter;
+class QPainterPath;
 class QRectF;
 
 /*
@@ -197,8 +198,9 @@ public:
      * Draw the table borders using the given QPainter.
      *
      * @param painter a pointer to the QPainter to draw the table with.
+     * @param accuBlankBorders a painterpath that should accumulate blank borders.
      */
-    void drawBorders(QPainter *painter) const;
+    void drawBorders(QPainter *painter, QPainterPath *accuBlankBorders) const;
 
     /**
      * Figures outDraw the table borders using the given QPainter.

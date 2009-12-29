@@ -1001,7 +1001,9 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
             m_tableLayout.setTable(table);
             m_tableLayout.drawBackground(painter);
             drawFrame(table, painter, context, inTable+1); // this actually only draws the text inside
-            m_tableLayout.drawBorders(painter);
+            QPainterPath accuBlankBorders;
+            m_tableLayout.drawBorders(painter, &accuBlankBorders);
+            painter->strokePath(accuBlankBorders, QPen(QColor(0,0,0,96)));
             continue;
         } else {
             if (!block.isValid())

@@ -38,7 +38,6 @@
 #include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
 
-#include "kis_resource_mediator.h"
 #include "kis_brush_server.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"

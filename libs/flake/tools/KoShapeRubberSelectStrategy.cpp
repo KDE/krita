@@ -24,15 +24,10 @@
 #include "KoViewConverter.h"
 
 #include <QPainter>
-//   #include <QMouseEvent>
-//
-//   #include "KoPointerEvent.h"
+
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "KoCanvasBase.h"
-//   #include "KoTool.h"
-//   #include "KoSnapStrategy.h"
-
 
 KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoTool *tool, const QPointF &clicked, bool useSnapToGrid)
     : KoInteractionStrategy(tool)

@@ -28,11 +28,7 @@
 
 #include "flake_export.h"
 
-//   class QPainter;
-//   class QPointF;
-//
 class KoTool;
-//   class KoSnapGuide;
 class KoShapeRubberSelectStrategyPrivate;
 
 /**

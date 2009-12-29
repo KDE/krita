@@ -142,7 +142,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 #endif
 
     gc.setCompositionMode(QPainter::CompositionMode_Source);
-    gc.fillRect(QRect(QPoint(0, 0), size()), Qt::gray);
+    gc.fillRect(QRect(QPoint(0, 0), size()), borderColor());
 
     // Don't draw the checks if we draw a cached pixmap, because we
     // need alpha transparency for checks. The precached pixmap

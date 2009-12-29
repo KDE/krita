@@ -21,6 +21,7 @@
 #include <QList>
 
 class QWidget;
+class QColor;
 class QRect;
 class QPoint;
 class QImage;
@@ -66,6 +67,14 @@ public:
      * @param checkSize the size of the check
      */
     QImage checkImage(qint32 checkSize);
+
+    /**
+     * Returns the color of the border, i.e. the part of the canvas 
+     * outside the image contents. 
+     *
+     */
+    QColor borderColor() const;
+
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
 

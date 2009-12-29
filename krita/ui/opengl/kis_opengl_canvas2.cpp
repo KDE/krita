@@ -118,7 +118,7 @@ void KisOpenGLCanvas2::resizeGL(int w, int h)
 
 void KisOpenGLCanvas2::paintGL()
 {
-    QColor widgetBackgroundColor = palette().color(QPalette::Mid);
+    QColor widgetBackgroundColor = borderColor();
 
     glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, widgetBackgroundColor.blue() / 255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);

@@ -77,6 +77,11 @@ QImage KisAbstractCanvasWidget::checkImage(qint32 checkSize)
     return tile;
 }
 
+QColor KisAbstractCanvasWidget::borderColor() const
+{
+    return QColor(Qt::gray);
+}
+
 void KisAbstractCanvasWidget::addDecoration(KisCanvasDecoration* deco)
 {
     m_decorations.push_back(deco);

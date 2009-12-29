@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Experiment
+Name[en_GB]=Experiment
+Name[pt]=Experiência
+Name[sv]=Experiment
+Name[uk]=Експеримент
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritaexperimentpaintop

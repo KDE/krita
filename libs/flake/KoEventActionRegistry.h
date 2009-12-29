@@ -28,7 +28,11 @@ class KoEventAction;
 class KoEventActionFactory;
 class KoShapeLoadingContext;
 
-/// API docs go here
+/**
+ * This singletion keeps a register of all available KoEventActionFactory objects.
+ *
+ * It creates the event actions when loaded from odf.
+ */
 class FLAKE_EXPORT KoEventActionRegistry
 {
 public:

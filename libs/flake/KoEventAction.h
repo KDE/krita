@@ -47,15 +47,53 @@ class KoTool;
 class FLAKE_EXPORT KoEventAction
 {
 public:
+    /**
+     * Constructor
+     *
+     * @param id Id of the action 
+     */
     KoEventAction(const QString &id);
     virtual ~KoEventAction();
 
+    /**
+     * The id of the action
+     *
+     * The id is the tag that is used for storing the event action in odf.
+     */
     const QString &id() const;
 
+    /**
+     * Load action from ODF.
+     *
+     * @param context the KoShapeLoadingContext used for loading
+     * @param element element which represents the shape in odf
+     *
+     * @return false if loading failed
+     */
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
+
+    /**
+     * Store the action as ODF.
+     * 
+     * @param context The KoShapeSavingContext used for saving 
+     */
     virtual void saveOdf(KoShapeSavingContext &context) const = 0;
 
+    /**
+     * Execute the action
+     *
+     * @param tool The active tool.
+     */
     virtual void execute(KoTool *tool) = 0;
+
+    /**
+     * Finish the action
+     *
+     * If the action takes some time to finish it can bs stoped with
+     * this method before its end.
+     *
+     * @param tool The active tool.
+     */
     virtual void finish(KoTool *tool) = 0;
 
 private:

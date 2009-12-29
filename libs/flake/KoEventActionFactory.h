@@ -27,7 +27,12 @@
 class KoEventAction;
 class KoEventActionWidget;
 
-/// API docs go here
+/**
+ * Factory for creating KoEventActions 
+ *
+ * This is the base class for event action plugins. Each plugin that ships a KoEventAction should
+ * also ship a factory.
+ */
 class FLAKE_EXPORT KoEventActionFactory
 {
 public:

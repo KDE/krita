@@ -24,14 +24,11 @@
 class KoEventAction::Private
 {
 public:
-    Private(const QString & id)
-            : id(id) {}
-
     QString id;
 };
 
-KoEventAction::KoEventAction(const QString & id)
-        : d(new Private(id))
+KoEventAction::KoEventAction()
+        : d(new Private())
 {
 }
 
@@ -40,7 +37,12 @@ KoEventAction::~KoEventAction()
     delete d;
 }
 
-const QString & KoEventAction::id() const
+QString KoEventAction::id() const
 {
     return d->id;
+}
+
+void KoEventAction::setId(const QString &id)
+{
+    d->id = id;
 }

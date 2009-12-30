@@ -49,18 +49,23 @@ class FLAKE_EXPORT KoEventAction
 public:
     /**
      * Constructor
-     *
-     * @param id Id of the action 
      */
-    KoEventAction(const QString &id);
+    KoEventAction();
     virtual ~KoEventAction();
+
+    /**
+     * Set The id of the action
+     *
+     * @param id this is the value that is used for storing the event action in odf.
+     */
+    void setId(const QString &id);
 
     /**
      * The id of the action
      *
-     * The id is the tag that is used for storing the event action in odf.
+     * The id is the value that is used for storing the event action in odf.
      */
-    const QString &id() const;
+    QString id() const;
 
     /**
      * Load action from ODF.
@@ -74,27 +79,22 @@ public:
 
     /**
      * Store the action as ODF.
-     * 
-     * @param context The KoShapeSavingContext used for saving 
+     *
+     * @param context The KoShapeSavingContext used for saving
      */
     virtual void saveOdf(KoShapeSavingContext &context) const = 0;
 
     /**
-     * Execute the action
-     *
-     * @param tool The active tool.
+     * Start the action.
      */
-    virtual void execute(KoTool *tool) = 0;
-
+    virtual void start() = 0;
     /**
      * Finish the action
      *
      * If the action takes some time to finish it can bs stoped with
      * this method before its end.
-     *
-     * @param tool The active tool.
      */
-    virtual void finish(KoTool *tool) = 0;
+    virtual void finish() {}
 
 private:
     class Private;

@@ -203,6 +203,7 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
 
     //painting recent colors
     painter.setPen(Qt::NoPen);
+    float rotationAngle = -360.0/m_resourceManager->recentColorsTotal();
     
     for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++)
     {
@@ -212,7 +213,7 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
         painter.fillPath(path, m_resourceManager->recentColorAt(pos));
     
         painter.drawPath(path);
-        painter.rotate(360.0/m_resourceManager->recentColorsTotal());
+        painter.rotate(rotationAngle);
     }
 
     //temporary new color 'button'
@@ -242,10 +243,29 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
         }
         else
         {
-            painter.rotate((m_resourceManager->recentColorsTotal() - hoveredColor()) *360.0/m_resourceManager->recentColorsTotal());
+            painter.rotate((m_resourceManager->recentColorsTotal() + hoveredColor()) *rotationAngle);
             QPainterPath path(drawDonutPathAngle(colorInnerRadius(),colorOuterRadius(), m_resourceManager->recentColorsTotal()));
             painter.drawPath(path);
-            painter.rotate(hoveredColor() *360.0/m_resourceManager->recentColorsTotal());
+            painter.rotate(hoveredColor() *rotationAngle);
+        }
+    }
+
+    //painting selected color
+    if (selectedColor() > -1)
+    {
+        painter.setPen(QPen(palette().color(QPalette::Highlight).darker(130), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+
+        if (m_resourceManager->recentColorsTotal() == 1)
+        {
+            QPainterPath path_ColorDonut(drawDonutPathFull(0,0,colorInnerRadius(), colorOuterRadius()));
+            painter.drawPath(path_ColorDonut);
+        }
+        else
+        {
+            painter.rotate((m_resourceManager->recentColorsTotal() + selectedColor()) *rotationAngle);
+            QPainterPath path(drawDonutPathAngle(colorInnerRadius(),colorOuterRadius(), m_resourceManager->recentColorsTotal()));
+            painter.drawPath(path);
+            painter.rotate(selectedColor() *rotationAngle);
         }
     }
 }
@@ -356,6 +376,7 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
 
             if (pos >= 0 && pos < m_resourceManager->recentColorsTotal())
             {
+                qDebug() << "[KisPopupPalette] pos: " << pos;
                 emit updateRecentColor(pos);
             }
         }

@@ -80,9 +80,9 @@ public:
     void addRecentColor(QColor*);
     inline int recentColorsTotal() { return m_colorList->size(); } ;
     inline const QColor& recentColorAt(int pos) { return m_colorList->guiColor(pos); };
-    inline void addRecentColorNew(const QColor& color) { m_colorList->appendNew(color); printColors(); };
-    inline void addRecentColorUpdate(int guipos) { m_colorList->updateKey(guipos); printColors(); };
-    inline void addRecentColor(const QColor& color) { m_colorList->append(color); printColors(); };
+    void addRecentColorNew(const QColor& color);
+    void addRecentColorUpdate(int guipos);
+    void addRecentColor(const QColor& color);
     
 public slots:
     void slotChangePaintopLabel(KisPaintOpPresetSP paintop);

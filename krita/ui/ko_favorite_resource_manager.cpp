@@ -248,6 +248,7 @@ void KoFavoriteResourceManager::saveFavoriteBrushes()
     group.config()->sync();
 }
 
+//Recent Colors
 void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
 {
     qDebug() << "[KoFavoriteResourceManager] selected color: " << recentColorAt(pos)
@@ -255,6 +256,41 @@ void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
             << "(b)" << recentColorAt(pos).blue();
 
     addRecentColorUpdate(pos);
+}
+
+void KoFavoriteResourceManager::addRecentColorNew(const QColor& color)
+{
+    m_colorList->appendNew(color);
+    int pos = m_colorList->findPos(color);
+    if (m_popupPalette)
+    {
+        m_popupPalette->setSelectedColor(pos);
+        m_popupPalette->update();
+    }
+    printColors();
+}
+
+void KoFavoriteResourceManager::addRecentColorUpdate(int guipos)
+{
+    m_colorList->updateKey(guipos);
+    if (m_popupPalette)
+    {
+        m_popupPalette->setSelectedColor(guipos);
+        m_popupPalette->update();
+    }
+    printColors();
+}
+
+void KoFavoriteResourceManager::addRecentColor(const QColor& color)
+{
+    m_colorList->append(color);
+    int pos = m_colorList->findPos(color);
+    if (m_popupPalette)
+    {
+        m_popupPalette->setSelectedColor(pos);
+        m_popupPalette->update();
+    }
+    printColors();
 }
 
 KoFavoriteResourceManager::~KoFavoriteResourceManager()

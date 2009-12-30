@@ -655,23 +655,19 @@ QList<QPointF> KoShape::connectionPoints() const
     return points;
 }
 
-void KoShape::addEventAction(KoEventAction * action)
+void KoShape::addEventAction(KoEventAction *action)
 {
     Q_D(KoShape);
-    if (! d->eventActions.contains(action)) {
-        d->eventActions.append(action);
-    }
+    d->eventActions.insert(action);
 }
 
-void KoShape::removeEventAction(KoEventAction * action)
+void KoShape::removeEventAction(KoEventAction *action)
 {
     Q_D(KoShape);
-    if (d->eventActions.contains(action)) {
-        d->eventActions.removeAll(action);
-    }
+    d->eventActions.remove(action);
 }
 
-QList<KoEventAction *> KoShape::eventActions() const
+QSet<KoEventAction *> KoShape::eventActions() const
 {
     Q_D(const KoShape);
     return d->eventActions;

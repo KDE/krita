@@ -21,6 +21,7 @@
 #define KOEVENTACTIONREGISTRY_H
 
 #include <QList>
+#include <QSet>
 
 #include "flake_export.h"
 #include "KoXmlReaderForward.h"
@@ -48,7 +49,7 @@ public:
     /**
      * Create action events for the elements given
      */
-    QList<KoEventAction*> createEventActionsFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    QSet<KoEventAction*> createEventActionsFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /**
      * Add presentation event action.

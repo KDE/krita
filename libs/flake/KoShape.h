@@ -322,7 +322,7 @@ public:
     /**
      * Get all event actions
      */
-    QList<KoEventAction *> eventActions() const;
+    QSet<KoEventAction *> eventActions() const;
 
     /**
      * Set the background of the shape.

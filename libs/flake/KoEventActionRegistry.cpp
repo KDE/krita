@@ -110,9 +110,9 @@ void KoEventActionRegistry::init()
                                      config);
 }
 
-QList<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const
+QSet<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const
 {
-    QList<KoEventAction *> eventActions;
+    QSet<KoEventAction *> eventActions;
 
     if (e.namespaceURI() == KoXmlNS::office && e.tagName() == "event-listeners") {
         KoXmlElement element;
@@ -126,7 +126,7 @@ QList<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf(const KoX
                         KoEventAction * eventAction = it.value()->createEventAction();
                         if (eventAction) {
                             if (eventAction->loadOdf(element, context)) {
-                                eventActions.append(eventAction);
+                                eventActions.insert(eventAction);
                             } else {
                                 delete eventAction;
                             }

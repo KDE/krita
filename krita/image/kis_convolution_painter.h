@@ -70,6 +70,13 @@ private:
     template< class _IteratorFactory_>
     void applyMatrixImpl(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect& _dataRect);
 
+    template< class _IteratorFactory_>
+    inline void moveKernelRight(const KisPaintDeviceSP, const QRect&, quint8 **, quint32, quint32);
+    template< class _IteratorFactory_>
+    inline void moveKernelDown(const KisPaintDeviceSP, const QRect&, quint8 **, quint32, quint32);
 
+    void cleanUp(quint8**, quint8**);
+
+    quint32 m_kw, m_kh, m_khalfWidth, m_khalfHeight, m_cacheSize, m_cdepth;
 };
 #endif //KIS_CONVOLUTION_PAINTER_H_

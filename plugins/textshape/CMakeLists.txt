@@ -37,6 +37,7 @@ SET ( textshape_SRCS
     dialogs/ParagraphDecorations.cpp
     dialogs/ParagraphBulletsNumbers.cpp
     dialogs/ParagraphSettingsDialog.cpp
+    dialogs/OptionButton.cpp
     dialogs/ListsSpinBox.cpp
     dialogs/StylesModel.cpp
     dialogs/StyleManager.cpp

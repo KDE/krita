@@ -62,6 +62,7 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/ParagraphDecorations.cpp
     ../dialogs/ParagraphBulletsNumbers.cpp
     ../dialogs/ListsSpinBox.cpp
+    ../dialogs/OptionButton.cpp
     ../dialogs/StylesModel.cpp
     ../dialogs/ParagraphGeneral.cpp
     ../dialogs/CharacterGeneral.cpp

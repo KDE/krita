@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,51 +17,39 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef SIMPLESTYLEWIDGET_H
-#define SIMPLESTYLEWIDGET_H
 
-#include <ui_SimpleStyleWidget.h>
+#ifndef OPTIONBUTTON_H
+#define OPTIONBUTTON_H
 
-#include <QWidget>
-#include <QTextBlock>
+#include <KoListStyle.h>
 
-class TextTool;
-class KoStyleManager;
+#include <QToolButton>
+#include <QPixmap>
+#include <QMap>
 
-class SimpleStyleWidget : public QWidget
+class QMenu;
+class QAction;
+
+class OptionButton : public QToolButton
 {
     Q_OBJECT
 public:
-    explicit SimpleStyleWidget(TextTool *tool, QWidget *parent = 0);
+    OptionButton( QWidget *parent = 0 );
 
-public slots:
-    void setCurrentBlock(const QTextBlock &block);
-    void setStyleManager(KoStyleManager *sm);
-    void setCurrentFormat(const QTextCharFormat& format);
+    void addItem(QPixmap pm, int id);
+    
+    void setDeactiveId(QPixmap pm, int id);
 
 signals:
-    void doneWithFocus();
+    void itemTriggered(int id);
 
 private slots:
-    void listStyleChanged(int row);
-    void directionChangeRequested();
+    void itemSelected(QAction *action);
 
 private:
-    enum DirectionButtonState {
-        LTR,
-        RTL,
-        Auto
-    };
-
-    void updateDirection(DirectionButtonState state);
-    void fillListButtons();
-
-    Ui::SimpleStyleWidget widget;
-    KoStyleManager *m_styleManager;
-    bool m_blockSignals;
-    QTextBlock m_currentBlock;
-    TextTool *m_tool;
-    DirectionButtonState m_directionButtonState;
+    bool m_firstItemAdded;
+    QMenu *m_menu;
+    QMap<QAction *, int > m_actionMap;
 };
 
 #endif

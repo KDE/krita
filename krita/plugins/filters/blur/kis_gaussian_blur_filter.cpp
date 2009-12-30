@@ -97,7 +97,7 @@ void KisGaussianBlurFilter::process(KisConstProcessingInformation srcInfo,
 
     for (uint x = 0; x < horizKernelSize; x++)
     {
-        uint xDistance = abs(horizontalRadius - x);
+        uint xDistance = qAbs(horizontalRadius - x);
         horizGaussian(0, x) = horizMultiplicand * exp( -(qreal)((xDistance * xDistance) + (horizontalRadius * horizontalRadius)) * horizExponentMultiplicand );
     }
 
@@ -111,7 +111,7 @@ void KisGaussianBlurFilter::process(KisConstProcessingInformation srcInfo,
 
     for (uint y = 0; y < verticalKernelSize; y++)
     {
-        uint yDistance = abs(verticalRadius - y);
+        uint yDistance = qAbs(verticalRadius - y);
         verticalGaussian(y, 0) = verticalMultiplicand * exp( -(qreal)((yDistance * yDistance) + (verticalRadius * verticalRadius)) * verticalExponentMultiplicand );
     }
 

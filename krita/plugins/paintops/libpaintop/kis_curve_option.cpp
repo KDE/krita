@@ -52,6 +52,7 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
         setting->setProperty("Pressure" + m_name, isChecked());
     }
     setting->setProperty("Custom" + m_name, m_customCurve);
+    setting->setProperty(QString(m_name + "Sensor"), sensor()->id());
     if (m_customCurve) {
         for (int i = 0; i < 256; i++) {
             setting->setProperty(QString(m_name + "Curve%1").arg(i), m_curve[i]);
@@ -65,7 +66,7 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
         setChecked(setting->getBool("Pressure" + m_name, false));
     }
     m_customCurve = setting->getBool("Custom" + m_name, false);
-
+    setSensor(KisDynamicSensor::id2Sensor(setting->getString(QString(m_name + "Sensor"))));
     for (int i = 0; i < 256; i++) {
         if (m_customCurve) {
             m_curve[i] = setting->getDouble(QString(m_name + "Curve%0").arg(i), i / 255.0);
@@ -79,7 +80,7 @@ void KisCurveOption::setSensor(KisDynamicSensor* sensor)
     m_sensor = sensor;
 }
 
-KisDynamicSensor* KisCurveOption::sensor()
+KisDynamicSensor* KisCurveOption::sensor() const
 {
     return m_sensor;
 }

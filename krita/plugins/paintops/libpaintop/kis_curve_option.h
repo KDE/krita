@@ -51,7 +51,7 @@ public:
     
     void setCurve(QVector<double> curve);
     
-    KisDynamicSensor* sensor();
+    KisDynamicSensor* sensor() const;
     void setSensor(KisDynamicSensor* sensor);
     
     bool isCheckable();

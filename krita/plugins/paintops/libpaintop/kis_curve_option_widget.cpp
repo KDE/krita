@@ -99,5 +99,6 @@ void KisCurveOptionWidget::transferCurve()
 void KisCurveOptionWidget::setSensor(KisDynamicSensor* sensor)
 {
     m_curveOption->setSensor(sensor);
+    emit sigSettingChanged();
 }
 

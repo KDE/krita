@@ -17,7 +17,6 @@
  */
 
 #include "kis_auto_brush_widget.h"
-#include <KoImageResource.h>
 #include <kis_debug.h>
 #include <QSpinBox>
 #include <QToolButton>
@@ -43,7 +42,8 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
 //     linkFadeToggled(m_linkSize);
 //     linkSizeToggled(m_linkFade);
 
-    connect(bnLinkFade, SIGNAL(toggled(bool)), this, SLOT(linkFadeToggled(bool)));
+    connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkFadeToggled(bool)));
+    aspectButton->setKeepAspectRatio(m_linkFade);
 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 
@@ -141,13 +141,13 @@ void KisAutoBrushWidget::spinBoxRadiusChanged(double a)
 void KisAutoBrushWidget::spinBoxHorizontalChanged(double a)
 {
     if (m_linkFade)
-        inputHFade->setValue(a);
+        inputVFade->setValue(a);
     paramChanged();
 }
 void KisAutoBrushWidget::spinBoxVerticalChanged(double a)
 {
     if (m_linkFade)
-        inputVFade->setValue(a);
+        inputHFade->setValue(a);
     paramChanged();
 }
 
@@ -155,12 +155,8 @@ void KisAutoBrushWidget::linkFadeToggled(bool b)
 {
     m_linkFade = b;
 
-    KoImageResource kir;
-    if (b) {
-        bnLinkFade->setIcon(QIcon(kir.chain()));
-    } else {
-        bnLinkFade->setIcon(QIcon(kir.chainBroken()));
-    }
+    if (m_linkFade)
+        inputVFade->setValue(inputHFade->value());
 }
 
 KisBrushSP KisAutoBrushWidget::brush()

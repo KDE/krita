@@ -106,7 +106,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Diameter:</string>
+           <string/>
           </property>
           <property name="pixmap">
            <pixmap>image0</pixmap>
@@ -132,7 +132,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Ratio:</string>
+           <string/>
           </property>
           <property name="pixmap">
            <pixmap>image0</pixmap>
@@ -164,7 +164,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="textLabelHorizontal">
           <property name="text">
-           <string>Horizontal:</string>
+           <string/>
           </property>
           <property name="pixmap">
            <pixmap>image0</pixmap>
@@ -187,38 +187,10 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2" rowspan="2">
-         <widget class="QToolButton" name="bnLinkFade">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>16</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16</width>
-            <height>32767</height>
-           </size>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="textLabelVertical">
           <property name="text">
-           <string>Vertical:</string>
+           <string/>
           </property>
           <property name="pixmap">
            <pixmap>image1</pixmap>
@@ -237,6 +209,9 @@
            <double>1.000000000000000</double>
           </property>
          </widget>
+        </item>
+        <item row="0" column="2" rowspan="2">
+         <widget class="KoAspectButton" name="aspectButton" native="true"/>
         </item>
        </layout>
       </widget>
@@ -323,6 +298,12 @@
    <class>KIntNumInput</class>
    <extends>QWidget</extends>
    <header>knuminput.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QWidget</extends>
+   <header>KoAspectButton.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

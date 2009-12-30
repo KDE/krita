@@ -40,12 +40,12 @@ KoEventActionFactory::~KoEventActionFactory()
     delete d;
 }
 
-const QString & KoEventActionFactory::action()
+QString KoEventActionFactory::action()
 {
     return d->action;
 }
 
-const QString & KoEventActionFactory::id() const
+QString KoEventActionFactory::id() const
 {
     return d->id;
 }

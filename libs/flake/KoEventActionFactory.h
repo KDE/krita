@@ -59,13 +59,13 @@ public:
     /**
      * The action is used to differentiate presentation effects.
      */
-    const QString &action();
+    QString action();
 
     /**
      * return the id for the variable this factory creates.
      * @return the id for the variable this factory creates.
      */
-    const QString &id() const;
+    QString id() const;
 
 private:
     class Private;

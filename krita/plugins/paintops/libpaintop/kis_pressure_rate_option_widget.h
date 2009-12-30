@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (C) Sven Langkamp <sven.langkamp@gmail.com>, (C) 2009
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,43 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PRESSURE_RATE_OPTION_H
-#define KIS_PRESSURE_RATE_OPTION_H
+#ifndef KIS_PRESSURE_RATE_OPTION_WIDGET_H
+#define KIS_PRESSURE_RATE_OPTION_WIDGET_H
 
-#include "kis_curve_option.h"
-#include <kis_paint_information.h>
-#include <krita_export.h>
-#include <kis_types.h>
+#include "kis_curve_option_widget.h"
 
 class QSlider;
-class KisPropertiesConfiguration;
 
-/**
- * The pressure opacity option defines a curve that is used to
- * calculate the effect of pressure on the rate of the dab
- */
-class PAINTOP_EXPORT KisPressureRateOption : public KisCurveOption
+class PAINTOP_EXPORT KisPressureRateOptionWidget : public KisCurveOptionWidget
 {
+    Q_OBJECT
+    
 public:
-    KisPressureRateOption();
-
-    /**
-     * Set the opacity of the painter based on the rate
-     * and the curve (if checked) and return the old opacity
-     * of the painter.
-     */
-    quint8 apply(quint8 opacity, const KisPaintInformation& info) const;
-
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    KisPressureRateOptionWidget();
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
-
-    void setRate(int rate);
     
-    int rate() const;
+private slots:
+    void rateChanged(int rate);
     
 private:
-    int m_rate;
+    QSlider* m_rateSlider;
 };
 
-#endif
+#endif // KIS_PRESSURE_RATE_OPTION_WIDGET_H

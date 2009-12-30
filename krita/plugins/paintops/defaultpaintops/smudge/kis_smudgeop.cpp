@@ -51,9 +51,6 @@
 #include <kis_selection.h>
 #include <kis_brush_option.h>
 #include <kis_paintop_options_widget.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_rate_option.h>
 
 #include "kis_smudgeop_settings.h"
 #include "kis_smudgeop_settings_widget.h"
@@ -71,9 +68,13 @@ KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painte
     if (settings->m_options) {
         Q_ASSERT(settings->m_options->m_brushOption);
         m_brush = settings->m_options->m_brushOption->brush();
-        settings->m_options->m_sizeOption->sensor()->reset();
-        settings->m_options->m_opacityOption->sensor()->reset();
-        settings->m_options->m_rateOption->sensor()->reset();
+
+        m_sizeOption.readOptionSetting(settings);
+        m_opacityOption.readOptionSetting(settings);
+        m_rateOption.readOptionSetting(settings);
+        m_sizeOption.sensor()->reset();
+        m_opacityOption.sensor()->reset();
+        m_rateOption.sensor()->reset();
     }
     if (settings->node()) {
         m_source = settings->node()->paintDevice();
@@ -106,7 +107,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info))
         return;
 
-    double scale = KisPaintOp::scaleForPressure(settings->m_options->m_sizeOption->apply(info));
+    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return;
 
     KisPaintDeviceSP device = painter()->device();
@@ -154,7 +155,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     */
     int opacity = OPACITY_OPAQUE;
     if (!m_firstRun) {
-        opacity = settings->m_options->m_rateOption->apply(opacity, info);
+        opacity = m_rateOption.apply(opacity, info);
 
         KisRectIterator it = m_srcdev->createRectIterator(0, 0, sw, sh);
         KoColorSpace* cs = m_srcdev->colorSpace();

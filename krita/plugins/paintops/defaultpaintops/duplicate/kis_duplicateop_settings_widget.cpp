@@ -41,7 +41,7 @@ KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
     m_duplicateOption = new KisDuplicateOpOption;
 
     addPaintOpOption(m_brushOption);
-    addPaintOpOption(m_sizeOption);
+//     addPaintOpOption(m_sizeOption);
     addPaintOpOption(m_duplicateOption);
 }
 

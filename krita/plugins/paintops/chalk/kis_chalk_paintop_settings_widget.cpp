@@ -34,7 +34,7 @@ KisChalkPaintOpSettingsWidget:: KisChalkPaintOpSettingsWidget(QWidget* parent)
     m_opacityOption = new KisPressureOpacityOption();
 
     addPaintOpOption(m_chalkOption);
-    addPaintOpOption(m_opacityOption);
+  //  addPaintOpOption(m_opacityOption);
     addPaintOpOption(m_paintActionTypeOption);
 }
 

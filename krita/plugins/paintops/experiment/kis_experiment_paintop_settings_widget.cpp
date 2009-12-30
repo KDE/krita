@@ -43,9 +43,9 @@ KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget*
     addPaintOpOption(m_experimentOption);
     addPaintOpOption(m_experimentShapeOption);
     addPaintOpOption(m_ColorOption);
-    addPaintOpOption(m_opacityOption);
-    addPaintOpOption(m_sizeOption);
-    addPaintOpOption(m_rotationOption);
+//     addPaintOpOption(m_opacityOption);
+//     addPaintOpOption(m_sizeOption);
+//     addPaintOpOption(m_rotationOption);
     addPaintOpOption(m_paintActionTypeOption);
 }
 

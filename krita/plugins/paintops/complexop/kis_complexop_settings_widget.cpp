@@ -44,10 +44,10 @@ KisComplexOpSettingsWidget::KisComplexOpSettingsWidget(QWidget* parent)
     m_paintActionTypeOption = new KisPaintActionTypeOption;
     m_bidiOption = new KisBidirectionalMixingOption;
 
-    addPaintOpOption(m_brushOption);
-    addPaintOpOption(m_sizeOption);
-    addPaintOpOption(m_opacityOption);
-    addPaintOpOption(m_darkenOption);
+//     addPaintOpOption(m_brushOption);
+//     addPaintOpOption(m_sizeOption);
+//     addPaintOpOption(m_opacityOption);
+//     addPaintOpOption(m_darkenOption);
     addPaintOpOption(m_paintActionTypeOption);
     addPaintOpOption(m_bidiOption);
 

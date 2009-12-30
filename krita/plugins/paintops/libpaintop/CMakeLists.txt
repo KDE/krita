@@ -11,6 +11,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_color_option.cpp
     kis_color_source.cpp
     kis_curve_option.cpp
+    kis_curve_option_widget.cpp
     kis_custom_brush_widget.cpp
     kis_dynamic_sensor.cc
     kis_filter_option.cpp
@@ -20,6 +21,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_darken_option.cpp
     kis_pressure_opacity_option.cpp
     kis_pressure_rate_option.cpp
+    kis_pressure_rate_option_widget.cpp
     kis_pressure_rotation_option.cpp
     kis_pressure_size_option.cpp
     kis_pressure_mix_option.cpp

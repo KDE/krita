@@ -45,14 +45,15 @@ public:
     virtual ~KisPaintOpOption();
 
     QString & label() const;
-    bool isCheckable() {
+    virtual bool isCheckable() {
         return m_checkable;
     }
-    bool isChecked() const;
+    
+    virtual bool isChecked() const;
 
 public slots:
 
-    void setChecked(bool checked);
+    virtual void setChecked(bool checked);
 
     void setConfigurationPage(QWidget * page);
     QWidget * configurationPage() const;

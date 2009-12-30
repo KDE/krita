@@ -43,7 +43,7 @@ KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
     m_filterOption = new KisFilterOption();
 
     addPaintOpOption(m_brushOption);
-    addPaintOpOption(m_sizeOption);
+//     addPaintOpOption(m_sizeOption);
     addPaintOpOption(m_filterOption);
 
 }

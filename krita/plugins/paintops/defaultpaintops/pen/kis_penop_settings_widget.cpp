@@ -42,9 +42,9 @@ KisPenOpSettingsWidget::KisPenOpSettingsWidget(QWidget* parent)
     m_paintActionTypeOption = new KisPaintActionTypeOption();
 
     addPaintOpOption(m_brushOption);
-    addPaintOpOption(m_sizeOption);
-    addPaintOpOption(m_opacityOption);
-    addPaintOpOption(m_darkenOption);
+//     addPaintOpOption(m_sizeOption);
+//     addPaintOpOption(m_opacityOption);
+//     addPaintOpOption(m_darkenOption);
     addPaintOpOption(m_paintActionTypeOption);
 
 }

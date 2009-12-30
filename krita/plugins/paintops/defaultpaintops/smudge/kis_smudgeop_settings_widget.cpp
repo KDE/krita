@@ -29,6 +29,8 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rate_option.h>
+#include <kis_curve_option_widget.h>
+#include <kis_pressure_rate_option_widget.h>
 
 KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
@@ -36,26 +38,18 @@ KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget(QWidget* parent)
     setObjectName("brush option widget");
 
     m_brushOption = new KisBrushOption();
-    m_sizeOption = new KisPressureSizeOption();
-    m_opacityOption = new KisPressureOpacityOption();
-    m_darkenOption = new KisPressureDarkenOption();
-    m_rateOption = new KisPressureRateOption();
 
     addPaintOpOption(m_brushOption);
-    addPaintOpOption(m_sizeOption);
-    addPaintOpOption(m_opacityOption);
-    addPaintOpOption(m_darkenOption);
-    addPaintOpOption(m_rateOption);
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption));
+    addPaintOpOption(new KisPressureRateOptionWidget());
 
 }
 
 KisSmudgeOpSettingsWidget::~KisSmudgeOpSettingsWidget()
 {
     delete m_brushOption;
-    delete m_sizeOption;
-    delete m_opacityOption;
-    delete m_darkenOption;
-    delete m_rateOption;
 }
 
 KisPropertiesConfiguration* KisSmudgeOpSettingsWidget::configuration() const

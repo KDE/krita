@@ -50,16 +50,10 @@
 #include <kis_selection.h>
 #include <kis_brush_option.h>
 #include <kis_paintop_options_widget.h>
-#include <kis_pressure_darken_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
-#include <kis_paint_action_type_option.h>
 
 #include <kis_brushop_settings.h>
 #include <kis_brushop_settings_widget.h>
-#include <kis_pressure_rotation_option.h>
 #include <kis_color_source.h>
-#include <kis_pressure_mix_option.h>
 
 KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(painter)
@@ -71,10 +65,16 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter, 
     if (settings && settings->m_options) {
         Q_ASSERT(settings->m_options->m_brushOption);
         m_brush = settings->m_options->m_brushOption->brush();
-        settings->m_options->m_sizeOption->sensor()->reset();
-        settings->m_options->m_opacityOption->sensor()->reset();
-        settings->m_options->m_darkenOption->sensor()->reset();
-        settings->m_options->m_rotationOption->sensor()->reset();
+        
+        m_sizeOption.readOptionSetting(settings);
+        m_opacityOption.readOptionSetting(settings);
+        m_darkenOption.readOptionSetting(settings);
+        m_rotationOption.readOptionSetting(settings);
+        m_mixOption.readOptionSetting(settings);
+        m_sizeOption.sensor()->reset();
+        m_opacityOption.sensor()->reset();
+        m_darkenOption.sensor()->reset();
+        m_rotationOption.sensor()->reset();
     }
     m_colorSource = new KisPlainColorSource(painter->backgroundColor(), painter->paintColor());
 }
@@ -103,12 +103,12 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     if (!brush->canPaintFor(info))
         return;
 
-    double scale = KisPaintOp::scaleForPressure(settings->m_options->m_sizeOption->apply(info));
+    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return;
 
     KisPaintDeviceSP device = painter()->device();
 
-    double rotation = settings->m_options->m_rotationOption->apply(info);
+    double rotation = m_rotationOption.apply(info);
     
     QPointF hotSpot = brush->hotSpot(scale, scale, rotation);
     QPointF pt = info.pos() - hotSpot;
@@ -124,10 +124,10 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    quint8 origOpacity = settings->m_options->m_opacityOption->apply(painter(), info);
-    m_colorSource->selectColor( settings->m_options->m_mixOption->apply(info) );
+    quint8 origOpacity = m_opacityOption.apply(painter(), info);
+    m_colorSource->selectColor(m_mixOption.apply(info) );
     KoColor origColor = painter()->paintColor();
-    settings->m_options->m_darkenOption->apply(m_colorSource, info);
+    m_darkenOption.apply(m_colorSource, info);
     painter()->setPaintColor( m_colorSource->uniformColor() ); 
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());

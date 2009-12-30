@@ -39,8 +39,8 @@ KisEraseOpSettingsWidget::KisEraseOpSettingsWidget(QWidget* parent)
     m_opacityOption = new KisPressureOpacityOption();
 
     addPaintOpOption(m_brushOption);
-    addPaintOpOption(m_sizeOption);
-    addPaintOpOption(m_opacityOption);
+//     addPaintOpOption(m_sizeOption);
+//     addPaintOpOption(m_opacityOption);
 
 }
 

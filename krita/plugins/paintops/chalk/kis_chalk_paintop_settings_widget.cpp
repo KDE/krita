@@ -21,6 +21,7 @@
 #include "kis_chalkop_option.h"
 #include "kis_chalk_paintop_settings.h"
 
+#include <kis_curve_option_widget.h>
 #include <kis_pressure_opacity_option.h>
 
 #include <kis_paintop_options_widget.h>
@@ -31,17 +32,15 @@ KisChalkPaintOpSettingsWidget:: KisChalkPaintOpSettingsWidget(QWidget* parent)
 {
     m_paintActionTypeOption = new KisPaintActionTypeOption();
     m_chalkOption =  new KisChalkOpOption();
-    m_opacityOption = new KisPressureOpacityOption();
 
     addPaintOpOption(m_chalkOption);
-  //  addPaintOpOption(m_opacityOption);
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(m_paintActionTypeOption);
 }
 
 KisChalkPaintOpSettingsWidget::~ KisChalkPaintOpSettingsWidget()
 {
     delete m_chalkOption;
-    delete m_opacityOption;
     delete m_paintActionTypeOption;
 }
 

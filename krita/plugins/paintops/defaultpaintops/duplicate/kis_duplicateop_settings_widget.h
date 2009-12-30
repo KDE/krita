@@ -48,7 +48,6 @@ public:
 public:
 
     KisBrushOption* m_brushOption;
-    KisPressureSizeOption* m_sizeOption;
     KisDuplicateOpOption* m_duplicateOption;
 
 };

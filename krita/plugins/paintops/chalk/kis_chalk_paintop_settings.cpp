@@ -95,14 +95,6 @@ int KisChalkPaintOpSettings::radius() const
     return m_options->m_chalkOption->radius();
 }
 
-
-KisPressureOpacityOption* KisChalkPaintOpSettings::opacityOption() const
-{
-    return m_options->m_opacityOption;
-}
-
-
-
 bool KisChalkPaintOpSettings::inkDepletion() const
 {
     return m_options->m_chalkOption->inkDepletion();

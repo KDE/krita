@@ -29,10 +29,9 @@
 
 class QDomElement;
 
-class KisComplexOpSettings : public QObject, public KisPaintOpSettings
+class KisComplexOpSettings : public KisPaintOpSettings
 {
-    Q_OBJECT
-
+    
 public:
     using KisPaintOpSettings::fromXML;
     using KisPaintOpSettings::toXML;

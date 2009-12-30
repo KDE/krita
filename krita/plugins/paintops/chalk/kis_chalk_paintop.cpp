@@ -43,7 +43,9 @@ KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPai
         , m_image(image)
 {
     m_chalkBrush = new ChalkBrush(settings);
-    settings->opacityOption()->sensor()->reset();
+
+    m_opacityOption.readOptionSetting(settings);
+    m_opacityOption.sensor()->reset();
 }
 
 KisChalkPaintOp::~KisChalkPaintOp()
@@ -66,7 +68,7 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     x1 = info.pos().x();
     y1 = info.pos().y();
 
-    quint8 origOpacity = m_settings->opacityOption()->apply(painter(), info);
+    quint8 origOpacity = m_opacityOption.apply(painter(), info);
     m_chalkBrush->paint(m_dab, x1, y1, painter()->paintColor());
 
     QRect rc = m_dab->extent();

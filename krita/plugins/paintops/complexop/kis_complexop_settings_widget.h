@@ -27,9 +27,6 @@
 #include <kis_image.h>
 
 class KisBrushOption;
-class KisPressureOpacityOption;
-class KisPressureDarkenOption;
-class KisPressureSizeOption;
 class KisPaintActionTypeOption;
 class KisBidirectionalMixingOption;
 
@@ -44,20 +41,13 @@ public:
 
     virtual ~KisComplexOpSettingsWidget();
 
-    void setConfiguration(const KisPropertiesConfiguration * config);
-
     KisPropertiesConfiguration* configuration() const;
-
-    void writeConfiguration(KisPropertiesConfiguration *config) const;
 
     void setImage(KisImageWSP image);
 
 public:
 
     KisBrushOption * m_brushOption;
-    KisPressureOpacityOption * m_opacityOption;
-    KisPressureDarkenOption * m_darkenOption;
-    KisPressureSizeOption * m_sizeOption;
     KisPaintActionTypeOption * m_paintActionTypeOption;
     KisBidirectionalMixingOption * m_bidiOption;
 

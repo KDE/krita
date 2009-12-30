@@ -29,6 +29,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
+#include <kis_curve_option_widget.h>
 
 KisPenOpSettingsWidget::KisPenOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
@@ -36,15 +37,12 @@ KisPenOpSettingsWidget::KisPenOpSettingsWidget(QWidget* parent)
     setObjectName("brush option widget");
 
     m_brushOption = new KisBrushOption();
-    m_sizeOption = new KisPressureSizeOption();
-    m_opacityOption = new KisPressureOpacityOption();
-    m_darkenOption = new KisPressureDarkenOption();
     m_paintActionTypeOption = new KisPaintActionTypeOption();
 
     addPaintOpOption(m_brushOption);
-//     addPaintOpOption(m_sizeOption);
-//     addPaintOpOption(m_opacityOption);
-//     addPaintOpOption(m_darkenOption);
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption()));
     addPaintOpOption(m_paintActionTypeOption);
 
 }
@@ -52,9 +50,6 @@ KisPenOpSettingsWidget::KisPenOpSettingsWidget(QWidget* parent)
 KisPenOpSettingsWidget::~KisPenOpSettingsWidget()
 {
     delete m_brushOption;
-    delete m_sizeOption;
-    delete m_opacityOption;
-    delete m_darkenOption;
     delete m_paintActionTypeOption;
 }
 

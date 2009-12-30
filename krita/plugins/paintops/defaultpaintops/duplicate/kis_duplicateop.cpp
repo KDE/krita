@@ -54,7 +54,6 @@
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_perspective_grid.h>
 #include <kis_random_sub_accessor.h>
@@ -73,6 +72,7 @@ KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainte
     if (settings && settings->m_options) {
         Q_ASSERT(settings->m_options->m_brushOption);
         m_brush = settings->m_options->m_brushOption->brush();
+        m_sizeOption.readOptionSetting(settings);
     }
 }
 

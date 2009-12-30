@@ -28,6 +28,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
+#include <kis_curve_option_widget.h>
 
 KisEraseOpSettingsWidget::KisEraseOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
@@ -35,20 +36,16 @@ KisEraseOpSettingsWidget::KisEraseOpSettingsWidget(QWidget* parent)
     setObjectName("brush option widget");
 
     m_brushOption = new KisBrushOption();
-    m_sizeOption = new KisPressureSizeOption();
-    m_opacityOption = new KisPressureOpacityOption();
 
     addPaintOpOption(m_brushOption);
-//     addPaintOpOption(m_sizeOption);
-//     addPaintOpOption(m_opacityOption);
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
 
 }
 
 KisEraseOpSettingsWidget::~KisEraseOpSettingsWidget()
 {
     delete m_brushOption;
-    delete m_sizeOption;
-    delete m_opacityOption;
 }
 
 KisPropertiesConfiguration* KisEraseOpSettingsWidget::configuration() const

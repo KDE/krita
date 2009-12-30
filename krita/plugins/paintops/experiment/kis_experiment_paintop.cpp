@@ -72,7 +72,9 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
     m_size = 1;
     m_startSize = m_settings->startSize();
     m_endSize = m_settings->endSize();
-
+    m_rotationOption.readOptionSetting(settings);
+    m_sizeOption.readOptionSetting(settings);
+    m_opacityOption.readOptionSetting(settings);
 }
 
 KisExperimentPaintOp::~KisExperimentPaintOp()

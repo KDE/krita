@@ -41,8 +41,6 @@ public:
 public:
     KisPaintActionTypeOption* m_paintActionTypeOption;
     KisChalkOpOption* m_chalkOption;
-    KisPressureOpacityOption * m_opacityOption;
-
 };
 
 #endif

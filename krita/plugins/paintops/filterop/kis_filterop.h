@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <QDialog>
 #include <KoColorSpace.h>
+#include <kis_pressure_size_option.h>
 
 class KisFilterOpSettings;
 class KisPaintInformation;
@@ -46,6 +47,7 @@ private:
 
     const KisFilterOpSettings * settings;
     KisPaintDeviceSP m_tmpDevice;
+    KisPressureSizeOption m_sizeOption;
 };
 
 #endif // KIS_FILTEROP_H_

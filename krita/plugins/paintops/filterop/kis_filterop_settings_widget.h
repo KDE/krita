@@ -49,8 +49,6 @@ public:
 
     KisBrushOption* m_brushOption;
     KisFilterOption* m_filterOption;
-    KisPressureSizeOption * m_sizeOption;
-
 };
 
 #endif // KIS_FILTEROP_SETTINGS_WIDGET_H_

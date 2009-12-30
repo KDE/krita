@@ -57,6 +57,7 @@ private:
     KisImageWSP m_image;
     KisPaintDeviceSP m_dab;
     ChalkBrush * m_chalkBrush;
+    KisPressureOpacityOption m_opacityOption;
 };
 
 #endif // KIS_CHALK_PAINTOP_H_

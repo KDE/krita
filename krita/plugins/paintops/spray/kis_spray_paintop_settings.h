@@ -68,11 +68,6 @@ public:
     bool jitterSize() const;    
     bool useDensity() const;
     int particleCount() const;
-
-    // rotation option
-    KisPressureRotationOption * rotationOption() const;
-    KisPressureOpacityOption * opacityOption() const;
-    KisPressureSizeOption * sizeOption() const;
     
     // color options
     bool useRandomOpacity() const;

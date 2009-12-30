@@ -62,6 +62,9 @@ private:
     QVector<KisPaintInformation> m_positions;
     qreal m_startSize;
     qreal m_endSize;
+    KisPressureRotationOption m_rotationOption;
+    KisPressureSizeOption m_sizeOption;
+    KisPressureOpacityOption m_opacityOption;
 };
 
 #endif // KIS_EXPERIMENT_PAINTOP_H_

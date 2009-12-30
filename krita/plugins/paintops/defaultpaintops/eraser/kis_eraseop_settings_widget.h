@@ -25,10 +25,10 @@
 
 #include <kis_paintop_options_widget.h>
 #include <kis_image.h>
+#include <kis_pressure_opacity_option.h>
+#include <kis_pressure_size_option.h>
 
 class KisBrushOption;
-class KisPressureOpacityOption;
-class KisPressureSizeOption;
 
 class KisEraseOpSettingsWidget : public KisPaintOpOptionsWidget
 {
@@ -48,8 +48,6 @@ public:
 public:
 
     KisBrushOption * m_brushOption;
-    KisPressureOpacityOption * m_opacityOption;
-    KisPressureSizeOption * m_sizeOption;
 };
 
 

@@ -44,9 +44,6 @@ public:
     KisExperimentOpOption* m_experimentOption;
     KisExperimentShapeOption* m_experimentShapeOption;
     KisColorOption* m_ColorOption;
-    KisPressureRotationOption * m_rotationOption;
-    KisPressureSizeOption * m_sizeOption;
-    KisPressureOpacityOption * m_opacityOption;
 };
 
 #endif

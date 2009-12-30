@@ -75,5 +75,3 @@ KisPaintOpSettingsSP KisComplexOpSettings::clone() const
     return settings;
 
 }
-
-#include "kis_complexop_settings.moc"

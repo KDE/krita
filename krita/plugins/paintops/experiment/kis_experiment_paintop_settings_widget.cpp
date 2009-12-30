@@ -28,6 +28,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
+#include <kis_curve_option_widget.h>
 
 KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
@@ -36,16 +37,13 @@ KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget*
     m_experimentShapeOption = new KisExperimentShapeOption();
     m_ColorOption = new KisColorOption();
     m_paintActionTypeOption = new KisPaintActionTypeOption();
-    m_rotationOption = new KisPressureRotationOption();
-    m_sizeOption = new KisPressureSizeOption();
-    m_opacityOption = new KisPressureOpacityOption();
     
     addPaintOpOption(m_experimentOption);
     addPaintOpOption(m_experimentShapeOption);
     addPaintOpOption(m_ColorOption);
-//     addPaintOpOption(m_opacityOption);
-//     addPaintOpOption(m_sizeOption);
-//     addPaintOpOption(m_rotationOption);
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(m_paintActionTypeOption);
 }
 
@@ -55,10 +53,6 @@ KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()
     delete m_experimentShapeOption;
     delete m_ColorOption;
     delete m_paintActionTypeOption;
-    delete m_rotationOption;
-    delete m_sizeOption;
-    delete m_opacityOption;
-
 }
 
 KisPropertiesConfiguration*  KisExperimentPaintOpSettingsWidget::configuration() const

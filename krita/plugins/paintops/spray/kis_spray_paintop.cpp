@@ -45,9 +45,12 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     Q_ASSERT(settings);
     Q_ASSERT(painter);
 
-    settings->rotationOption()->sensor()->reset();
-    settings->opacityOption()->sensor()->reset();
-    settings->sizeOption()->sensor()->reset();
+    m_rotationOption.readOptionSetting(settings);
+    m_opacityOption.readOptionSetting(settings);
+    m_sizeOption.readOptionSetting(settings);
+    m_rotationOption.sensor()->reset();
+    m_opacityOption.sensor()->reset();
+    m_sizeOption.sensor()->reset();
     
     m_sprayBrush.setDiameter(settings->diameter());
     m_sprayBrush.setJitterShapeSize(settings->jitterShapeSize());
@@ -116,9 +119,9 @@ void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
         m_dab->clear();
     }
 
-    double rotation = m_settings->rotationOption()->apply(info);
-    quint8 origOpacity = m_settings->opacityOption()->apply(painter(), info);
-    double scale = KisPaintOp::scaleForPressure(m_settings->sizeOption()->apply(info));
+    double rotation = m_rotationOption.apply(info);
+    quint8 origOpacity = m_opacityOption.apply(painter(), info);
+    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
     
     m_sprayBrush.paint( m_dab,
                         m_settings->node()->paintDevice(), 

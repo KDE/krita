@@ -31,6 +31,7 @@
 
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_size_option.h>
+#include <kis_curve_option_widget.h>
 #include <kis_filter_option.h>
 
 KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
@@ -39,11 +40,10 @@ KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
     setObjectName("filter option widget");
 
     m_brushOption = new KisBrushOption();
-    m_sizeOption = new KisPressureSizeOption();
     m_filterOption = new KisFilterOption();
 
     addPaintOpOption(m_brushOption);
-//     addPaintOpOption(m_sizeOption);
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(m_filterOption);
 
 }
@@ -51,7 +51,6 @@ KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
 KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()
 {
     delete m_brushOption;
-    delete m_sizeOption;
     delete m_filterOption;
 }
 

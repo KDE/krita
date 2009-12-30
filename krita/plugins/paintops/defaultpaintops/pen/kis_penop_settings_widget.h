@@ -50,9 +50,6 @@ public:
 public:
 
     KisBrushOption * m_brushOption;
-    KisPressureOpacityOption * m_opacityOption;
-    KisPressureDarkenOption * m_darkenOption;
-    KisPressureSizeOption * m_sizeOption;
     KisPaintActionTypeOption * m_paintActionTypeOption;
 
 

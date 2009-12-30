@@ -249,21 +249,3 @@ QImage KisExperimentPaintOpSettings::image() const
 {
     return m_options->m_experimentShapeOption->image();
 }
-
-
-KisPressureRotationOption* KisExperimentPaintOpSettings::rotationOption() const
-{
-    return m_options->m_rotationOption;
-}
-
-
-KisPressureOpacityOption* KisExperimentPaintOpSettings::opacityOption() const
-{
-    return m_options->m_opacityOption;
-}
-
-
-KisPressureSizeOption* KisExperimentPaintOpSettings::sizeOption() const
-{
-    return m_options->m_sizeOption;
-}

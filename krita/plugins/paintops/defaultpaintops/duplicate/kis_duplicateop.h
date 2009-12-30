@@ -30,6 +30,7 @@
 #include <kis_types.h>
 #include <kis_paintop_factory.h>
 #include <kis_paintop_settings.h>
+#include <kis_pressure_size_option.h>
 
 class KisPaintInformation;
 class KisDuplicateOpSettings;
@@ -61,7 +62,7 @@ private:
     KisPaintDeviceSP m_target;
     QPointF m_duplicateStart;
     bool m_duplicateStartIsSet;
-
+    KisPressureSizeOption m_sizeOption;
 };
 
 #endif // KIS_DUPLICATEOP_H_

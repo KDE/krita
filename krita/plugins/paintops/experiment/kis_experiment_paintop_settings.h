@@ -64,11 +64,6 @@ public:
     qreal spacing() const;
     qreal scale() const;
     bool jitterMovement() const;
-
-    // rotation option
-    KisPressureRotationOption * rotationOption() const;
-    KisPressureOpacityOption * opacityOption() const;
-    KisPressureSizeOption * sizeOption() const;
     
     // color options
     bool useRandomOpacity() const;

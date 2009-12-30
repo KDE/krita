@@ -27,6 +27,9 @@
 
 #include <kis_paintop_factory.h>
 #include <kis_paintop_settings.h>
+#include <kis_pressure_darken_option.h>
+#include <kis_pressure_opacity_option.h>
+#include <kis_pressure_size_option.h>
 
 class KisBrushOption;
 class KisPenOpSettings;
@@ -45,6 +48,9 @@ public:
 private:
 
     const KisPenOpSettings * settings;
+    KisPressureOpacityOption m_opacityOption;
+    KisPressureDarkenOption m_darkenOption;
+    KisPressureSizeOption m_sizeOption;
 };
 
 #endif // KIS_PENOP_H_

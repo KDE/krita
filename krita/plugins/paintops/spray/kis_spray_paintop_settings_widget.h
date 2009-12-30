@@ -44,9 +44,6 @@ public:
     KisSprayOpOption* m_sprayOption;
     KisSprayShapeOption* m_sprayShapeOption;
     KisColorOption* m_ColorOption;
-    KisPressureRotationOption * m_rotationOption;
-    KisPressureSizeOption * m_sizeOption;
-    KisPressureOpacityOption * m_opacityOption;
 };
 
 #endif

@@ -25,7 +25,7 @@
 #include "flake_export.h"
 
 class KoEventAction;
-class KoEventActionWidget;
+class QWidget;
 
 /**
  * Factory for creating KoEventActions 
@@ -54,7 +54,7 @@ public:
     /**
      * Create the widget to configure the action
      */
-    virtual KoEventActionWidget *createOptionWidget() = 0;
+    virtual QWidget *createOptionWidget() = 0;
 
     /**
      * The action is used to differentiate presentation effects.

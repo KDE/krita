@@ -111,7 +111,7 @@ QStringList KoShapeFactory::odfElementNames() const
     return d->odfElementNames;
 }
 
-const QString & KoShapeFactory::odfNameSpace() const
+QString KoShapeFactory::odfNameSpace() const
 {
     return d->odfNameSpace;
 }
@@ -124,10 +124,11 @@ bool KoShapeFactory::supports(const KoXmlElement & e) const
     return false;
 }
 
-void KoShapeFactory::addTemplate(KoShapeTemplate &params)
+void KoShapeFactory::addTemplate(const KoShapeTemplate &params)
 {
-    params.id = d->id;
-    d->templates.append(params);
+    KoShapeTemplate tmplate = params;
+    tmplate.id = d->id;
+    d->templates.append(tmplate);
 }
 
 void KoShapeFactory::setToolTip(const QString & tooltip)
@@ -150,17 +151,17 @@ QString KoShapeFactory::id() const
     return d->id;
 }
 
-void KoShapeFactory::setOptionPanels(QList<KoShapeConfigFactory*> &panelFactories)
+void KoShapeFactory::setOptionPanels(const QList<KoShapeConfigFactory*> &panelFactories)
 {
     d->configPanels = panelFactories;
 }
 
-const QList<KoShapeConfigFactory*> &KoShapeFactory::panelFactories()
+QList<KoShapeConfigFactory*> KoShapeFactory::panelFactories()
 {
     return d->configPanels;
 }
 
-const QList<KoShapeTemplate> KoShapeFactory::templates() const
+QList<KoShapeTemplate> KoShapeFactory::templates() const
 {
     return d->templates;
 }

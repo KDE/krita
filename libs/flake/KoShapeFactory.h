@@ -118,7 +118,7 @@ public:
      * @see KoShapeFactory::createDefaultShape
      * @see KoShape::init
      */
-    KoShape * createDefaultShapeAndInit(const QMap<QString, KoDataCenter *> &dataCenterMap) const;
+    KoShape *createDefaultShapeAndInit(const QMap<QString, KoDataCenter *> &dataCenterMap) const;
 
     /**
      * This method should be called to create a shape based on a set of properties that are
@@ -140,7 +140,7 @@ public:
      * @see KoShapeTemplate::properties
      * @see KoShape::init
      */
-    KoShape * createShapeAndInit(const KoProperties *params, const QMap<QString, KoDataCenter *> &dataCenterMap) const;
+    KoShape *createShapeAndInit(const KoProperties *params, const QMap<QString, KoDataCenter *> &dataCenterMap) const;
 
     /**
      * Create a list of option panels to show on creating a new shape.
@@ -169,13 +169,13 @@ public:
      *  @endcode
      * @see panelFactories()
      */
-    void setOptionPanels(QList<KoShapeConfigFactory*> &panelFactories);
+    void setOptionPanels(const QList<KoShapeConfigFactory*> &panelFactories);
 
     /**
      * Return the app-specific panels.
      * @see setOptionPanels()
      */
-    const QList<KoShapeConfigFactory*> &panelFactories();
+    QList<KoShapeConfigFactory*> panelFactories();
 
     /**
      * pouplates the dataCenterMap with any datacenters the shapes might need.
@@ -194,7 +194,7 @@ public:
      * Return all the templates this factory knows about.
      * Each template shows a different way to create a shape this factory is specialized in.
      */
-    const QList<KoShapeTemplate> templates() const;
+    QList<KoShapeTemplate> templates() const;
     /**
      * return a translated tooltip Text for a selector of shapes
      * @return a translated tooltip Text
@@ -220,7 +220,7 @@ public:
 
     /// The namespace that the elements supported by the shape created
     /// by this factory should be in.
-    const QString & odfNameSpace() const;
+    QString odfNameSpace() const;
 
     /// the name used for quick checking if this shapeFactory is able to
     /// load Odf data identified by the element name.
@@ -228,7 +228,7 @@ public:
 
     /// returns true if this shapeFactory is able to load the ODF type
     /// started at argument element. ('draw:line' / 'draw:frame' / etc)
-    virtual bool supports(const KoXmlElement & e) const;
+    virtual bool supports(const KoXmlElement &element) const;
 
     /**
      * This functions decides if the shape should be shown in the
@@ -263,7 +263,7 @@ protected:
      * using the createShape() method.
      * @param params the new template this factory knows to produce
      */
-    void addTemplate(KoShapeTemplate &params);
+    void addTemplate(const KoShapeTemplate &params);
 
     /**
      * Set the tooltip to be used for a selector of shapes

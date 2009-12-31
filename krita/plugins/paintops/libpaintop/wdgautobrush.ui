@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>363</width>
-    <height>332</height>
+    <width>545</width>
+    <height>374</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -94,22 +94,23 @@
      <item>
       <widget class="QGroupBox" name="grpSize">
        <property name="title">
-        <string>&amp;Size</string>
+        <string>Size</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout">
+       <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
-         <widget class="QLabel" name="textLabel2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+         <widget class="QLabel" name="label_4">
           <property name="text">
-           <string/>
+           <string>Diameter:</string>
           </property>
-          <property name="pixmap">
-           <pixmap>image0</pixmap>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Ratio:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -120,25 +121,6 @@
          <widget class="KDoubleNumInput" name="inputRadius">
           <property name="value">
            <double>5.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="textLabel2_3">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap>image0</pixmap>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -156,18 +138,25 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="grpFade">
+      <widget class="QGroupBox" name="grpFade_2">
        <property name="title">
-        <string>&amp;Fade</string>
+        <string>Fade</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout_2">
+       <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="QLabel" name="textLabelHorizontal">
+         <widget class="QLabel" name="label_6">
           <property name="text">
-           <string/>
+           <string>Horizontal:</string>
           </property>
-          <property name="pixmap">
-           <pixmap>image0</pixmap>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Vertical:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -184,19 +173,6 @@
           </property>
           <property name="maximum">
            <double>1.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="textLabelVertical">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap>image1</pixmap>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>

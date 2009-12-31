@@ -89,7 +89,7 @@ void SimpleStyleWidget::fillListButtons() {
     // we would maybe want to pass a language to this, to include localized list counting strategies.
 
     KoZoomHandler zoomHandler;
-    zoomHandler.setZoom(0.5);
+    zoomHandler.setZoomAndResolution(55,100,100);
 
     KoInlineTextObjectManager itom;
     TextShape textShape(&itom);

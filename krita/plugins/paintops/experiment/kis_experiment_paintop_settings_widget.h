@@ -21,10 +21,6 @@
 
 #include <kis_paintop_options_widget.h>
 
-class KisPressureOpacityOption;
-class KisPressureSizeOption;
-class KisPressureRotationOption;
-class KisPaintActionTypeOption;
 class KisExperimentOpOption;
 class KisExperimentShapeOption;
 class KisColorOption;
@@ -40,7 +36,6 @@ public:
     KisPropertiesConfiguration* configuration() const;
 
 public:
-    KisPaintActionTypeOption* m_paintActionTypeOption;
     KisExperimentOpOption* m_experimentOption;
     KisExperimentShapeOption* m_experimentShapeOption;
     KisColorOption* m_ColorOption;

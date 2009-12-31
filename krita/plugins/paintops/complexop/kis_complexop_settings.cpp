@@ -41,7 +41,7 @@ KisComplexOpSettings::~KisComplexOpSettings()
 
 bool KisComplexOpSettings::paintIncremental()
 {
-    return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
+    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
 void KisComplexOpSettings::fromXML(const QDomElement& elt)

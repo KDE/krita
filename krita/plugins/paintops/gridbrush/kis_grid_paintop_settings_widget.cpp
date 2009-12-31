@@ -32,12 +32,11 @@ KisGridPaintOpSettingsWidget:: KisGridPaintOpSettingsWidget(QWidget* parent)
     m_gridOption =  new KisGridOpOption();
     m_gridShapeOption = new KisGridShapeOption();
     m_ColorOption = new KisColorOption();
-    m_paintActionTypeOption = new KisPaintActionTypeOption();
 
     addPaintOpOption(m_gridOption);
     addPaintOpOption(m_gridShapeOption);
     addPaintOpOption(m_ColorOption);
-    addPaintOpOption(m_paintActionTypeOption);
+    addPaintOpOption(new KisPaintActionTypeOption());
 }
 
 KisGridPaintOpSettingsWidget::~ KisGridPaintOpSettingsWidget()
@@ -45,7 +44,6 @@ KisGridPaintOpSettingsWidget::~ KisGridPaintOpSettingsWidget()
     delete m_gridOption;
     delete m_gridShapeOption;
     delete m_ColorOption;
-    delete m_paintActionTypeOption;
 }
 
 KisPropertiesConfiguration*  KisGridPaintOpSettingsWidget::configuration() const

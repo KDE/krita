@@ -40,10 +40,8 @@ KisPaintOpSettingsSP KisChalkPaintOpSettings::clone() const
 
 bool KisChalkPaintOpSettings::paintIncremental()
 {
-    return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
+    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
-
-
 
 void KisChalkPaintOpSettings::fromXML(const QDomElement& elt)
 {

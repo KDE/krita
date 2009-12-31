@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
@@ -40,7 +41,7 @@ KisPaintOpSettingsSP KisExperimentPaintOpSettings::clone() const
 
 bool KisExperimentPaintOpSettings::paintIncremental()
 {
-    return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
+    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
 

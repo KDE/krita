@@ -40,7 +40,7 @@ KisPaintOpSettingsSP KisSprayPaintOpSettings::clone() const
 
 bool KisSprayPaintOpSettings::paintIncremental()
 {
-    return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
+    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
 

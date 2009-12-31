@@ -36,7 +36,6 @@ KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget*
     m_experimentOption =  new KisExperimentOpOption();
     m_experimentShapeOption = new KisExperimentShapeOption();
     m_ColorOption = new KisColorOption();
-    m_paintActionTypeOption = new KisPaintActionTypeOption();
     
     addPaintOpOption(m_experimentOption);
     addPaintOpOption(m_experimentShapeOption);
@@ -44,7 +43,7 @@ KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget*
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(m_paintActionTypeOption);
+    addPaintOpOption(new KisPaintActionTypeOption());
 }
 
 KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()
@@ -52,7 +51,6 @@ KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()
     delete m_experimentOption;
     delete m_experimentShapeOption;
     delete m_ColorOption;
-    delete m_paintActionTypeOption;
 }
 
 KisPropertiesConfiguration*  KisExperimentPaintOpSettingsWidget::configuration() const

@@ -27,12 +27,6 @@
 #include <kis_image.h>
 
 class KisBrushOption;
-class KisPressureOpacityOption;
-class KisPressureDarkenOption;
-class KisPressureSizeOption;
-class KisPressureRotationOption;
-class KisPaintActionTypeOption;
-class KisPressureMixOption;
 
 class KisBrushOpSettingsWidget : public KisPaintOpOptionsWidget
 {
@@ -52,13 +46,6 @@ public:
 public:
 
     KisBrushOption * m_brushOption;
-    KisPressureOpacityOption * m_opacityOption;
-    KisPressureDarkenOption * m_darkenOption;
-    KisPressureSizeOption * m_sizeOption;
-    KisPressureRotationOption * m_rotationOption;
-    KisPressureMixOption * m_mixOption;
-    KisPaintActionTypeOption * m_paintActionTypeOption;
-
 };
 
 

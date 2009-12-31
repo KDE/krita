@@ -21,7 +21,6 @@
 
 #include <kis_paintop_options_widget.h>
 
-class KisPaintActionTypeOption;
 class KisGridOpOption;
 class KisGridShapeOption;
 class KisColorOption;
@@ -37,7 +36,6 @@ public:
     KisPropertiesConfiguration* configuration() const;
 
 public:
-    KisPaintActionTypeOption* m_paintActionTypeOption;
     KisGridOpOption* m_gridOption;
     KisGridShapeOption* m_gridShapeOption;
     KisColorOption* m_ColorOption;

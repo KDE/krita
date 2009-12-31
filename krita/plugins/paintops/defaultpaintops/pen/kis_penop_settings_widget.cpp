@@ -37,20 +37,18 @@ KisPenOpSettingsWidget::KisPenOpSettingsWidget(QWidget* parent)
     setObjectName("brush option widget");
 
     m_brushOption = new KisBrushOption();
-    m_paintActionTypeOption = new KisPaintActionTypeOption();
-
+    
     addPaintOpOption(m_brushOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption()));
-    addPaintOpOption(m_paintActionTypeOption);
+    addPaintOpOption(new KisPaintActionTypeOption());
 
 }
 
 KisPenOpSettingsWidget::~KisPenOpSettingsWidget()
 {
     delete m_brushOption;
-    delete m_paintActionTypeOption;
 }
 
 KisPropertiesConfiguration* KisPenOpSettingsWidget::configuration() const

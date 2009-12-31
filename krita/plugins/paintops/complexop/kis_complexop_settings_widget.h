@@ -27,7 +27,6 @@
 #include <kis_image.h>
 
 class KisBrushOption;
-class KisPaintActionTypeOption;
 class KisBidirectionalMixingOption;
 
 class KisComplexOpSettingsWidget : public KisPaintOpOptionsWidget
@@ -48,7 +47,6 @@ public:
 public:
 
     KisBrushOption * m_brushOption;
-    KisPaintActionTypeOption * m_paintActionTypeOption;
     KisBidirectionalMixingOption * m_bidiOption;
 
 };

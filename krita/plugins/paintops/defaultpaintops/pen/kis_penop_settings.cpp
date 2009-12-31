@@ -41,7 +41,7 @@ KisPenOpSettings::~KisPenOpSettings()
 
 bool KisPenOpSettings::paintIncremental()
 {
-    return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
+    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
 void KisPenOpSettings::fromXML(const QDomElement& elt)

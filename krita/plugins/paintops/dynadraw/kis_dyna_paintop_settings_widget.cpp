@@ -26,17 +26,15 @@
 KisDynaPaintOpSettingsWidget:: KisDynaPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
 {
-    m_paintActionTypeOption = new KisPaintActionTypeOption();
     m_dynaOption =  new KisDynaOpOption();
 
     addPaintOpOption(m_dynaOption);
-    addPaintOpOption(m_paintActionTypeOption);
+    addPaintOpOption(new KisPaintActionTypeOption());
 }
 
 KisDynaPaintOpSettingsWidget::~ KisDynaPaintOpSettingsWidget()
 {
     delete m_dynaOption;
-    delete m_paintActionTypeOption;
 }
 
 KisPropertiesConfiguration*  KisDynaPaintOpSettingsWidget::configuration() const

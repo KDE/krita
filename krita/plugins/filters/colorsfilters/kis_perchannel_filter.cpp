@@ -80,10 +80,10 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_page->vgradient->setPixmap(createGradient(Qt::Vertical));
 
     // init histogram calculator
-    QList<KoID> keys =
-        KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
+    QList<QString> keys =
+        KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_dev->colorSpace());
     KoHistogramProducerFactory *hpf;
-    hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0).id());
+    hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
     m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
 
     connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));

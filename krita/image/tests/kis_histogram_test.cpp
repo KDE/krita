@@ -29,9 +29,9 @@ void KisHistogramTest::testCreation()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    QList<KoID> producers = KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(cs);
-    foreach(KoID id, producers) {
-        KoHistogramProducerSP producer = KoHistogramProducerFactoryRegistry::instance()->get(id.id())->generate();
+    QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs);
+    foreach (const QString &id, producers) {
+        KoHistogramProducerSP producer = KoHistogramProducerFactoryRegistry::instance()->get(id)->generate();
         KisHistogram test(dev, producer, LINEAR);
     }
 }

@@ -159,10 +159,9 @@ void KisHistogramDocker::producerChanged(QAction *action)
     }
     m_producers.clear();
 
-    QList<KoID> keys = KoHistogramProducerFactoryRegistry::instance() ->
-                       listKeysCompatibleWith(m_cs);
+    QList<QString> keys = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_cs);
 
-    m_factory = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(pos).id());
+    m_factory = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(pos));
 
     KisCachedHistogramObserver observer(&m_producers, m_factory, 0, 0, 0, 0, false);
 
@@ -195,14 +194,13 @@ void KisHistogramDocker::colorSpaceChanged(const KoColorSpace* cs)
     kDebug() << cs;
     m_cs = cs;
 
-    QList<KoID> keys = KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
+    QList<QString> keys = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_cs);
 
     m_popup.clear();
     m_currentProducerPos = 0;
 
-    for (int i = 0; i < keys.count(); i++) {
-        KoID id(keys.at(i));
-        m_popup.addAction(id.name());
+    foreach (const QString &key, keys) {
+        m_popup.addAction(KoHistogramProducerFactoryRegistry::instance()->get(key)->name());
     }
 
     if (m_popup.actions().size() > 0) {

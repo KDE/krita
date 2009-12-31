@@ -74,7 +74,7 @@ public:
     QStringList channelStrings();
 
     /** Lists all producers currently available */
-    QList<KoID> listProducers();
+    QList<QString> producers();
 
     /** Sets the currently displayed channels to channels of the producer with producerID as ID*/
     void setCurrentChannels(const KoID& producerID, QList<KoChannelInfo *> channels);

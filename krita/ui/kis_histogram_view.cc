@@ -124,11 +124,11 @@ QStringList KisHistogramView::channelStrings()
     return m_channelStrings;
 }
 
-QList<KoID> KisHistogramView::listProducers()
+QList<QString> KisHistogramView::producers()
 {
     if (m_cs)
-        return KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
-    return QList<KoID>();
+        return KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_cs);
+    return QList<QString>();
 }
 
 void KisHistogramView::setCurrentChannels(const KoID& producerID, QList<KoChannelInfo *> channels)
@@ -235,16 +235,15 @@ void KisHistogramView::setChannels()
     m_channels.clear();
     m_channelToOffset.clear();
 
-    QList<KoID> list = KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
+    QList<QString> list = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_cs);
 
     if (list.count() == 0) {
         // XXX: No native histogram for this colorspace. Using converted RGB. We should have a warning
         KoGenericRGBHistogramProducerFactory f;
         addProducerChannels(f.generate());
     } else {
-        for (int i = 0; i < list.count(); i++) {
-            KoID id(list.at(i));
-            addProducerChannels(KoHistogramProducerFactoryRegistry::instance()->value(id.id())->generate());
+        foreach (const QString &id, list) {
+            addProducerChannels(KoHistogramProducerFactoryRegistry::instance()->value(id)->generate());
         }
     }
 

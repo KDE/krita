@@ -117,7 +117,7 @@ public:
     virtual ~KoHistogramProducerFactoryRegistry();
     static KoHistogramProducerFactoryRegistry* instance();
     /// returns a list, sorted by preferrence: higher preferance comes first
-    QList<KoID> listKeysCompatibleWith(const KoColorSpace* colorSpace) const;
+    QList<QString> keysCompatibleWith(const KoColorSpace* colorSpace) const;
 
 private:
    KoHistogramProducerFactoryRegistry();

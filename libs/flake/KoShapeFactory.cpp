@@ -30,9 +30,11 @@ class KoShapeFactory::Private
 {
 public:
     Private(const QString &i, const QString &n)
-            : id(i)
-            , name(n)
-            , loadingPriority(0) {
+            : id(i),
+            name(n),
+            loadingPriority(0),
+            hidden(false)
+    {
     }
 
     ~Private() {
@@ -51,6 +53,7 @@ public:
     int loadingPriority;
     QString odfNameSpace;
     QStringList odfElementNames;
+    bool hidden;
 };
 
 
@@ -179,7 +182,12 @@ void KoShapeFactory::setOdfElementNames(const QString & nameSpace, const QString
 
 bool KoShapeFactory::hidden() const
 {
-    return false;
+    return d->hidden;
+}
+
+void KoShapeFactory::setHidden(bool hidden)
+{
+    d->hidden = hidden;
 }
 
 #include <KoShapeFactory.moc>

@@ -374,6 +374,7 @@ KoShapeManager* KisShapeSelection::shapeManager() const
 KisShapeSelectionFactory::KisShapeSelectionFactory(QObject* parent)
         : KoShapeFactory(parent, "KisShapeSelection", "selection shape container")
 {
+    setHidden(true);
 }
 
 KoShape* KisShapeSelectionFactory::createDefaultShape() const

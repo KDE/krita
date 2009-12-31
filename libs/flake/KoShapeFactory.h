@@ -231,11 +231,12 @@ public:
     virtual bool supports(const KoXmlElement &element) const;
 
     /**
-     * This functions decides if the shape should be shown in the
-     * shape selector or not.
-     * The default implementation returns false.
+     * The hidden boolean requests if the shape should be hidden in the
+     * shape selector or shown with all its templates.
+     * The default is false
+     * @see setHidden()
      */
-    virtual bool hidden() const;
+    bool hidden() const;
 
 protected:
 
@@ -304,6 +305,14 @@ protected:
      *
      */
     void setOdfElementNames(const QString &nameSpace, const QStringList &elementNames);
+
+    /**
+     * The hidden boolean requests if the shape should be hidden in the
+     * shape selector or shown with all its templates.
+     * The default is false
+     * @see hidden()
+     */
+    void setHidden(bool hidden);
 
 private:
     class Private;

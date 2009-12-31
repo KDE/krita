@@ -64,7 +64,7 @@ void KisPopupPalette::slotPickNewColor()
     QColor newColor;
 
     /****************************REMOVE THIS LATER**********************************/
-    switch (colorFoo % 4){
+    switch (colorFoo % 15){
         case 0:
             newColor.setRgb (255,0,0,255);
             break;
@@ -246,7 +246,7 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
             painter.rotate((m_resourceManager->recentColorsTotal() + hoveredColor()) *rotationAngle);
             QPainterPath path(drawDonutPathAngle(colorInnerRadius(),colorOuterRadius(), m_resourceManager->recentColorsTotal()));
             painter.drawPath(path);
-            painter.rotate(hoveredColor() *rotationAngle);
+            painter.rotate(hoveredColor() *-1 *rotationAngle);
         }
     }
 
@@ -265,7 +265,7 @@ void KisPopupPalette::paintEvent(QPaintEvent*)
             painter.rotate((m_resourceManager->recentColorsTotal() + selectedColor()) *rotationAngle);
             QPainterPath path(drawDonutPathAngle(colorInnerRadius(),colorOuterRadius(), m_resourceManager->recentColorsTotal()));
             painter.drawPath(path);
-            painter.rotate(selectedColor() *rotationAngle);
+            painter.rotate(selectedColor() *-1 *rotationAngle);
         }
     }
 }

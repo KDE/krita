@@ -119,3 +119,9 @@ int KisColorDataList::findPos (const QColor& color)
 
     return -1;
 }
+
+void KisColorDataList::updateKey (int guiPos)
+{
+    if (m_guiList.at(guiPos)->key == m_key-1) return;
+    m_priorityList.changeKey(m_guiList.at(guiPos)->pos, m_key++);
+}

@@ -26,12 +26,11 @@
 class KisColorDataList
 {
 public:
-    static const int MAX_RECENT_COLOR = 3;
+    static const int MAX_RECENT_COLOR = 12;
 
     inline KisColorDataList() { m_key = 0; };
     inline int size () { return m_guiList.size(); };
     inline void printPriorityList () { m_priorityList.printHeap(); };
-    inline void updateKey (int guiPos) { m_priorityList.changeKey(m_guiList.at(guiPos)->pos, m_key++); };
     inline int leastUsedGuiPos() { return findPos(m_priorityList.valueAt(0)); };
 
     void printGuiList();
@@ -39,6 +38,7 @@ public:
     void append(const QColor&);
     void appendNew(const QColor&);
     void removeLeastUsed();
+    void updateKey (int guiPos);
 
     /*find position of the color on the gui list*/
     int findPos (const QColor&);

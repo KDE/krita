@@ -2,6 +2,7 @@
  *  kis_tool_transform.h - part of Krita
  *
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
  *
  *  Based on the transform tool from :
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
@@ -27,11 +28,15 @@
 #include <QPoint>
 #include <QVector>
 
-#include <kis_layer.h>
-#include <kis_tool_non_paint.h>
+#include <kactioncollection.h>
+
 #include <KoToolFactory.h>
+
+#include <kis_layer.h>
+#include "kis_tool.h"
 #include <kis_undo_adapter.h>
 #include <kis_perspective_math.h>
+
 
 class WdgToolPerspectiveTransform;
 
@@ -39,7 +44,7 @@ class WdgToolPerspectiveTransform;
  * PerspectiveTransform tool
  *
  */
-class KisToolPerspectiveTransform : public KisToolNonPaint, KisCommandHistoryListener
+class KisToolPerspectiveTransform : public KisTool, KisCommandHistoryListener
 {
 
     Q_OBJECT
@@ -47,15 +52,15 @@ class KisToolPerspectiveTransform : public KisToolNonPaint, KisCommandHistoryLis
     enum InterractionMode { DRAWRECTINTERRACTION, EDITRECTINTERRACTION };
     enum HandleSelected { NOHANDLE, TOPHANDLE, BOTTOMHANDLE, RIGHTHANDLE, LEFTHANDLE, MIDDLEHANDLE };
 public:
-    KisToolPerspectiveTransform();
+    KisToolPerspectiveTransform(KoCanvasBase * canvas);
     virtual ~KisToolPerspectiveTransform();
 #if 0
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 #endif
     virtual void setup(KActionCollection *collection);
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void paint(QPainter &painter, const QRect& rc);
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
@@ -63,11 +68,8 @@ public:
 
 public:
 
-    void notifyCommandAdded(K3Command *);
-    void notifyCommandExecuted(K3Command *);
-
-public:
-    virtual void deactivate();
+    void notifyCommandAdded(const QUndoCommand *);
+    void notifyCommandExecuted(const QUndoCommand *);
 
 private:
 
@@ -77,7 +79,8 @@ private:
     void initHandles();
 
 protected slots:
-    virtual void activate();
+    virtual void activate(bool);
+    virtual void deactivate();
 
 private:
     bool m_dragging;
@@ -115,10 +118,10 @@ public:
         setActivationShapeId("flake/edit");
     };
 
-    virtual ~KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&) {}
+    virtual ~KisToolPerspectiveTransformFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
-        return KisToolPerspectiveTransform(canvas);
+        return new KisToolPerspectiveTransform(canvas);
     }
 
 };

@@ -32,7 +32,7 @@ class KisPerspectiveTransformWorker : public QObject
     Q_OBJECT
 
 public:
-    KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress);
+    KisPerspectiveTransformWorker(KisPaintDeviceSP dev, KisSelectionSP selection, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress);
 
     ~KisPerspectiveTransformWorker();
 
@@ -43,6 +43,7 @@ private:
     qint32 m_progressStep;
     double m_xcenter, m_ycenter, m_p, m_q;
     KisPaintDeviceSP m_dev;
+    KisSelectionSP m_selection;
     KoUpdater *m_progress;
     double m_matrix[3][3];
     QRect m_r;

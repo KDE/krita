@@ -50,12 +50,8 @@ ToolPerspectiveTransform::ToolPerspectiveTransform(QObject *parent, const QStrin
 {
     setComponentData(ToolPerspectiveTransformFactory::componentData());
 
-    if (parent->inherits("KoToolRegistry")) {
-        dbgPlugins << " add perspective transform tool to the registry";
-        KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
-        r->add(new KisToolPerspectiveTransformFactory());
-    }
-
+    KoToolRegistry * r = KoToolRegistry::instance();
+    r->add(new KisToolPerspectiveTransformFactory(r, QStringList()));
 }
 
 ToolPerspectiveTransform::~ToolPerspectiveTransform()

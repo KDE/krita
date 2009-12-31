@@ -2,6 +2,7 @@
  * This file is part of Krita
  *
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -23,29 +24,32 @@
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 #include "kis_perspective_math.h"
-#include "KoProgressUpdater.h"
 #include "kis_random_sub_accessor.h"
 #include "kis_selection.h"
 
-KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress)
-        : m_dev(dev), m_progressUpdater->interrupted()(false), m_progress(progress)
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
+
+KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, KisSelectionSP selection, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress)
+        : m_dev(dev), m_progress(progress), m_selection(selection)
 
 {
     QRect m_r;
-    if (m_dev->hasSelection())
-        m_r = m_dev->selection()->selectedExactRect();
+    if (selection)
+        m_r = m_selection->selectedExactRect();
     else
         m_r = m_dev->exactBounds();
+
+// below was commented
     /*    if(m_dev->hasSelection())
             m_dev->selection()->clear();*/
 
-    double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(topLeft, topRight, bottomLeft, bottomRight, m_r);
+    Matrix3qreal b = KisPerspectiveMath::computeMatrixTransfoToPerspective(topLeft, topRight, bottomLeft, bottomRight, m_r);
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            m_matrix[i][j] = b[3*i+j];
+            m_matrix[i][j] = b(i, j);
         }
     }
-    delete b;
 }
 
 
@@ -62,11 +66,11 @@ void KisPerspectiveTransformWorker::run()
 {
 
     //TODO: understand why my caching of the rect didn't work...
-    if (m_dev->hasSelection()) {
-        m_r = m_dev->selection()->selectedExactRect();
-    } else {
+    if (m_selection)
+        m_r = m_selection->selectedExactRect();
+    else
         m_r = m_dev->exactBounds();
-    }
+
     KoColorSpace * cs = m_dev->colorSpace();
 
     KisRectIteratorPixel dstIt = m_dev->createRectIterator(m_r.x(), m_r.y(), m_r.width(), m_r.height());
@@ -97,9 +101,9 @@ void KisPerspectiveTransformWorker::run()
             m_progressStep ++;
             if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
                 m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-                m_progressUpdater->setProgress(m_lastProgressReport);
+                m_progress->setProgress(m_lastProgressReport);
             }
-            if (m_progressUpdater->interrupted()) {
+            if (m_progress->interrupted()) {
                 break;
             }
             ++dstIt;

@@ -132,7 +132,7 @@
       </widget>
      </item>
      <item row="1" column="4" rowspan="2">
-      <widget class="QToolButton" name="btnAspect">
+      <widget class="KoAspectButton" name="aspectButton" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -151,14 +151,8 @@
          <height>32767</height>
         </size>
        </property>
-       <property name="text">
+       <property name="text" stdset="0">
         <string/>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -419,6 +413,12 @@
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QWidget</extends>
+   <header>KoAspectButton.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -18,8 +18,6 @@
 #include "kis_spray_shape_option.h"
 #include <klocale.h>
 
-#include <KoImageResource.h>
-
 #include <QImage>
 
 #include "ui_wdgshapeoptions.h"
@@ -30,8 +28,6 @@ public:
     KisShapeOptionsWidget(QWidget *parent = 0)
             : QWidget(parent) {
         setupUi(this);
-        KoImageResource kir;
-        btnAspect->setIcon(QIcon(kir.chain()));
     }
 
 };
@@ -44,11 +40,11 @@ KisSprayShapeOption::KisSprayShapeOption()
     m_maxSize = 1000;
     
     m_options = new KisShapeOptionsWidget();
-    m_useAspect = m_options->btnAspect->isChecked();
+    m_useAspect = m_options->aspectButton->keepAspectRatio();
     computeAspect();
 
     // UI signals
-    connect(m_options->btnAspect, SIGNAL(toggled(bool)), this, SLOT(aspectToggled(bool)));
+    connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(aspectToggled(bool)));
     connect(m_options->randomSlider,SIGNAL(valueChanged(int)),this,SLOT(randomValueChanged(int)));
     connect(m_options->followSlider,SIGNAL(valueChanged(int)),this,SLOT(followValueChanged(int)));
     connect(m_options->imageUrl,SIGNAL(textChanged(QString)),this,SLOT(prepareImage()));
@@ -190,12 +186,6 @@ void KisSprayShapeOption::prepareImage()
 void KisSprayShapeOption::aspectToggled(bool toggled)
 {
     m_useAspect = toggled;
-    KoImageResource kir;
-    if (toggled){
-        m_options->btnAspect->setIcon(QIcon(kir.chain()));
-    } else {
-        m_options->btnAspect->setIcon(QIcon(kir.chainBroken()));
-    }
 }
 
 

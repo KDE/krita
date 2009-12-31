@@ -201,3 +201,12 @@ KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
     return s_instance;
 }
 
+QList<KoID> KisFilterStrategyRegistry::listKeys() const
+{
+    QList<KoID> answer;
+    foreach (const QString key, keys()) {
+        answer.append(KoID(key, get(key)->name()));
+    }
+
+    return answer;
+}

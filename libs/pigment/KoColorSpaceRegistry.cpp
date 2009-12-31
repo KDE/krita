@@ -520,3 +520,14 @@ const KoColorSpace* KoColorSpaceRegistry::permanentColorspace( const KoColorSpac
         return cs;
     }
 }
+
+QList<KoID> KoColorSpaceRegistry::listKeys() const
+{
+    QList<KoID> answer;
+    foreach (const QString key, keys()) {
+        answer.append(KoID(key, get(key)->name()));
+    }
+
+    return answer;
+}
+

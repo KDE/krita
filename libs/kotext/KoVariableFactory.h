@@ -86,11 +86,7 @@ public:
     QStringList odfElementNames() const;
 
     const QString & odfNameSpace() const;
-#ifdef KDE_FULL_TEMPLATE_EXPORT_INSTANTIATION
-    QString name() const {
-        Q_ASSERT(0); return QString();
-    }
-#endif
+
 protected:
     /**
      * Add a template with the properties of a speficic type of object this factory can generate

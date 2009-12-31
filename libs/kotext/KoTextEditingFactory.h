@@ -64,11 +64,6 @@ public:
     /// If showInMenu() returns true; the returned text is used in the context menu.
     QString title() const;
 
-    QString name() const 
-    { 
-	return QString(); 
-    }
-
 protected:
     /**
      * Set if the plugin this factory creates has to be shown in the context menu.

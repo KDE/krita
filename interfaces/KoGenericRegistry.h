@@ -21,8 +21,6 @@
 #ifndef _KO_GENERIC_REGISTRY_H_
 #define _KO_GENERIC_REGISTRY_H_
 
-#include "KoID.h"
-
 #include <kdemacros.h>
 #include <QtCore/QList>
 #include <QtCore/QString>
@@ -113,20 +111,6 @@ public:
      */
     const T value(const QString &id) const {
         return m_hash.value(id);
-    }
-
-    /**
-     * This function return a list of all the keys in KoID format by using the name() method
-     * on the objects stored in the registry.
-     */
-    QList<KoID> listKeys() const {
-        QList<KoID> answer;
-        typename QHash<QString, T>::const_iterator it = m_hash.begin();
-
-        // we do not use foreach() here because of GCC 3.3.x bug
-        for (; it != m_hash.end(); ++it)
-            answer.append(KoID(it.key(), it.value()->name()));
-        return answer;
     }
 
     /**

@@ -146,4 +146,14 @@ QString KisPaintOpRegistry::pixmap(const KoID & id) const
     return f->pixmap();
 }
 
+QList<KoID> KisPaintOpRegistry::listKeys() const
+{
+    QList<KoID> answer;
+    foreach (const QString key, keys()) {
+        answer.append(KoID(key, get(key)->name()));
+    }
+
+    return answer;
+}
+
 #include "kis_paintop_registry.moc"

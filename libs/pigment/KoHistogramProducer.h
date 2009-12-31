@@ -24,7 +24,8 @@
 
 #include "pigment_export.h"
 
-#include "KoGenericRegistry.h"
+#include <KoGenericRegistry.h>
+#include <KoID.h>
 
 class QString;
 class KoChannelInfo;

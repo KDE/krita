@@ -162,6 +162,12 @@ public:
 
     static KisFilterStrategyRegistry* instance();
 
+    /**
+     * This function return a list of all the keys in KoID format by using the name() method
+     * on the objects stored in the registry.
+     */
+    QList<KoID> listKeys() const;
+
 private:
 
     KisFilterStrategyRegistry();

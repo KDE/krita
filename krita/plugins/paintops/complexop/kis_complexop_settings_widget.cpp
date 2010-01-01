@@ -64,10 +64,4 @@ KisPropertiesConfiguration* KisComplexOpSettingsWidget::configuration() const
     return config;
 }
 
-void KisComplexOpSettingsWidget::setImage(KisImageWSP image)
-{
-    m_brushOption->setImage(image);
-}
-
-
 #include "kis_complexop_settings_widget.moc"

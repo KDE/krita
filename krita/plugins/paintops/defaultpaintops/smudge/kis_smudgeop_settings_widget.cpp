@@ -61,10 +61,5 @@ KisPropertiesConfiguration* KisSmudgeOpSettingsWidget::configuration() const
     return config;
 }
 
-void KisSmudgeOpSettingsWidget::setImage(KisImageWSP image)
-{
-    m_brushOption->setImage(image);
-}
-
 
 #include "kis_smudgeop_settings_widget.moc"

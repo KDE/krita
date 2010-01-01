@@ -58,6 +58,10 @@ void KisPaintOpOption::setChecked(bool checked)
     emit sigSettingChanged();
 }
 
+void KisPaintOpOption::setImage(KisImageWSP image)
+{
+    Q_UNUSED(image);
+}
 
 void KisPaintOpOption::setConfigurationPage(QWidget * page)
 {

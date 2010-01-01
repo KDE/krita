@@ -123,6 +123,13 @@ void KisPaintOpOptionsWidget::writeConfiguration(KisPropertiesConfiguration *con
     }
 }
 
+void KisPaintOpOptionsWidget::setImage(KisImageWSP image)
+{
+    foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
+        option->setImage(image);
+    }
+}
+
 void KisPaintOpOptionsWidget::changePage(QListWidgetItem *current, QListWidgetItem *previous)
 {
     Q_UNUSED(previous);

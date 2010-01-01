@@ -60,10 +60,4 @@ KisPropertiesConfiguration* KisPenOpSettingsWidget::configuration() const
     return config;
 }
 
-void KisPenOpSettingsWidget::setImage(KisImageWSP image)
-{
-    m_brushOption->setImage(image);
-}
-
-
 #include "kis_penop_settings_widget.moc"

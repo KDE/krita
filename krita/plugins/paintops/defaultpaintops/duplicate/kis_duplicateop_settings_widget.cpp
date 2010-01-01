@@ -61,10 +61,4 @@ KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const
     return config;
 }
 
-void KisDuplicateOpSettingsWidget::setImage(KisImageWSP image)
-{
-    m_brushOption->setImage(image);
-    m_duplicateOption->setImage(image);
-}
-
 #include "kis_duplicateop_settings_widget.moc"

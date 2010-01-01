@@ -42,8 +42,6 @@ public:
 
     KisPropertiesConfiguration* configuration() const;
 
-    void setImage(KisImageWSP image);
-
 public:
 
     KisBrushOptionWidget * m_brushOption;

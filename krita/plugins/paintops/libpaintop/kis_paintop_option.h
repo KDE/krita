@@ -51,6 +51,11 @@ public:
     
     virtual bool isChecked() const;
 
+    /**
+     * Reimplement this to use the image in the option widget
+     */   
+    virtual void setImage(KisImageWSP image);
+
 public slots:
 
     virtual void setChecked(bool checked);

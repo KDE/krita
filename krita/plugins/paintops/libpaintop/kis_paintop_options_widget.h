@@ -54,6 +54,9 @@ public:
 
     /// Reimplemented
     virtual void writeConfiguration(KisPropertiesConfiguration *config) const;
+    
+    ///Reimplemented, sets image on option widgets 
+    virtual void setImage(KisImageWSP image);
 
 private slots:
 

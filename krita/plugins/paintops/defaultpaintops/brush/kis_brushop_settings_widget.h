@@ -40,8 +40,6 @@ public:
     virtual ~KisBrushOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
-
-    void setImage(KisImageWSP image);
     
 public:
 

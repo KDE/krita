@@ -39,7 +39,7 @@ KisEraseOpSettingsWidget::KisEraseOpSettingsWidget(QWidget* parent)
 
     addPaintOpOption(m_brushOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
 
 }
 

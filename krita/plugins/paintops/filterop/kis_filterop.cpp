@@ -52,7 +52,7 @@
 #include <kis_paintop.h>
 #include <kis_properties_configuration.h>
 #include <kis_selection.h>
-#include <kis_brush_option.h>
+#include <kis_brush_option_widget.h>
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_filter_option.h>
@@ -61,14 +61,11 @@
 
 
 KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter)
-        : KisBrushBasedPaintOp(painter)
+        : KisBrushBasedPaintOp(settings, painter)
         , settings(settings)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    Q_ASSERT(settings->m_options->m_brushOption);
-    m_brush = settings->m_options->m_brushOption->brush();
-    Q_ASSERT(m_brush);
     m_tmpDevice = new KisPaintDevice(source()->colorSpace());
     m_sizeOption.readOptionSetting(settings);
     m_sizeOption.sensor()->reset();

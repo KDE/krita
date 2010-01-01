@@ -37,7 +37,7 @@
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rate_option.h>
 
-class KisBrushOption;
+class KisBrushOptionWidget;
 class KisPaintActionTypeOption;
 class KisSmudgeOpSettings;
 class KisSmudgeOpSettingsWidget;

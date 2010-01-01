@@ -23,7 +23,7 @@
 #include "kis_brushop_settings_widget.h"
 #include "kis_brushop_settings.h"
 #include <kis_properties_configuration.h>
-#include <kis_brush_option.h>
+#include <kis_brush_option_widget.h>
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
@@ -38,7 +38,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 {
     setObjectName("brush option widget");
 
-    m_brushOption = new KisBrushOption();
+    m_brushOption = new KisBrushOptionWidget();
 
     addPaintOpOption(m_brushOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));

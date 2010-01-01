@@ -22,6 +22,8 @@
 #include "kis_paintop.h"
 #include "kis_brush.h"
 
+class KisPropertiesConfiguration;
+
 /**
  * This is a base class for paintops that use a KisBrush or derived
  * brush to paint with. This is mainly important for the spacing
@@ -32,13 +34,12 @@ class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
 
 public:
 
-    KisBrushBasedPaintOp(KisPainter* painter, KisBrushSP brush = 0);
+    KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter);
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
 
 protected: // XXX: make private!
 
     KisBrushSP m_brush;
-
 };
 
 #endif

@@ -49,14 +49,14 @@
 #include <kis_paintop.h>
 #include <kis_properties_configuration.h>
 #include <kis_selection.h>
-#include <kis_brush_option.h>
+#include <kis_brush_option_widget.h>
 #include <kis_paintop_options_widget.h>
 
 #include "kis_smudgeop_settings.h"
 #include "kis_smudgeop_settings_widget.h"
 
 KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(painter)
+        : KisBrushBasedPaintOp(settings, painter)
         , settings(settings)
         , m_firstRun(true)
         , m_target(0)
@@ -65,17 +65,13 @@ KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painte
     Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    if (settings->m_options) {
-        Q_ASSERT(settings->m_options->m_brushOption);
-        m_brush = settings->m_options->m_brushOption->brush();
+    m_sizeOption.readOptionSetting(settings);
+    m_opacityOption.readOptionSetting(settings);
+    m_rateOption.readOptionSetting(settings);
+    m_sizeOption.sensor()->reset();
+    m_opacityOption.sensor()->reset();
+    m_rateOption.sensor()->reset();
 
-        m_sizeOption.readOptionSetting(settings);
-        m_opacityOption.readOptionSetting(settings);
-        m_rateOption.readOptionSetting(settings);
-        m_sizeOption.sensor()->reset();
-        m_opacityOption.sensor()->reset();
-        m_rateOption.sensor()->reset();
-    }
     if (settings->node()) {
         m_source = settings->node()->paintDevice();
     } else {
@@ -95,14 +91,8 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     if (!painter()->device()) return;
 
     KisBrushSP brush = m_brush;
-    if (!brush) {
-        if (settings->m_options) {
-            m_brush = settings->m_options->m_brushOption->brush();
-            brush = m_brush;
-        } else {
-            return;
-        }
-    }
+    if (!brush)
+        return;
 
     if (! brush->canPaintFor(info))
         return;

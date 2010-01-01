@@ -26,7 +26,7 @@
 #include <kis_paintop_options_widget.h>
 #include <kis_image.h>
 
-class KisBrushOption;
+class KisBrushOptionWidget;
 class KisPressureSizeOption;
 class KisDuplicateOpOption;
 
@@ -47,7 +47,7 @@ public:
 
 public:
 
-    KisBrushOption* m_brushOption;
+    KisBrushOptionWidget* m_brushOption;
     KisDuplicateOpOption* m_duplicateOption;
 
 };

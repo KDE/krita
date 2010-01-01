@@ -31,7 +31,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
 
-class KisBrushOption;
+class KisBrushOptionWidget;
 class KisBrushOpSettings;
 class KisBrushOpSettingsWidget;
 

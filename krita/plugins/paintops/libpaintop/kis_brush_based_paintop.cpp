@@ -17,13 +17,19 @@
  */
 #include "kis_brush_based_paintop.h"
 #include "kis_brush.h"
+#include "kis_properties_configuration.h"
+#include "kis_brush_option.h"
+
 #include <QImage>
 #include <QPainter>
 
-KisBrushBasedPaintOp::KisBrushBasedPaintOp(KisPainter * painter, KisBrushSP brush)
+KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter)
         : KisPaintOp(painter)
-        , m_brush(brush)
 {
+    Q_ASSERT(settings);
+    KisBrushOption brushOption;
+    brushOption.readOptionSetting(settings);
+    m_brush = brushOption.brush();
 }
 
 double KisBrushBasedPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const

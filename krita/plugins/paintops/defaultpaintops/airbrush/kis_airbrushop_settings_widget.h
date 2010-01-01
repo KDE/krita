@@ -26,7 +26,7 @@
 #include <kis_paintop_options_widget.h>
 #include <kis_image.h>
 
-class KisBrushOption;
+class KisBrushOptionWidget;
 class KisPressureOpacityOption;
 class KisPressureDarkenOption;
 class KisPressureSizeOption;
@@ -49,7 +49,7 @@ public:
 
 public:
 
-    KisBrushOption * m_brushOption;
+    KisBrushOptionWidget * m_brushOption;
     // XXX: Add a rate option?
 };
 

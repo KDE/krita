@@ -35,28 +35,23 @@
 #include <kis_painter.h>
 #include <kis_paintop.h>
 #include <kis_selection.h>
-#include <kis_brush_option.h>
+#include <kis_brush_option_widget.h>
 
 #include <kis_penop_settings.h>
 
 KisPenOp::KisPenOp(const KisPenOpSettings *settings, KisPainter *painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(painter)
+        : KisBrushBasedPaintOp(settings, painter)
         , settings(settings)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    if (settings && settings->m_options) {
-        Q_ASSERT(settings->m_options->m_brushOption);
-        m_brush = settings->m_options->m_brushOption->brush();
-        Q_ASSERT(m_brush);
-        m_sizeOption.readOptionSetting(settings);
-        m_opacityOption.readOptionSetting(settings);
-        m_darkenOption.readOptionSetting(settings);
-        m_sizeOption.sensor()->reset();
-        m_opacityOption.sensor()->reset();
-        m_darkenOption.sensor()->reset();
-    }
+    m_sizeOption.readOptionSetting(settings);
+    m_opacityOption.readOptionSetting(settings);
+    m_darkenOption.readOptionSetting(settings);
+    m_sizeOption.sensor()->reset();
+    m_opacityOption.sensor()->reset();
+    m_darkenOption.sensor()->reset();
 }
 
 KisPenOp::~KisPenOp()
@@ -68,15 +63,8 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     if (!painter()->device()) return;
 
     KisBrushSP brush = m_brush;
-    if (!m_brush) {
-        if (settings->m_options) {
-            m_brush = settings->m_options->m_brushOption->brush();
-            brush = m_brush;
-        } else {
-            return;
-        }
-    }
-
+    if (!m_brush)
+        return;
 
     if (! brush->canPaintFor(info))
         return;

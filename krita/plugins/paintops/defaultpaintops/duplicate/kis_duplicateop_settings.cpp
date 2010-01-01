@@ -30,7 +30,7 @@
 #include <KoPointerEvent.h>
 
 #include <kis_image.h>
-#include <kis_brush_option.h>
+#include <kis_brush_option_widget.h>
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>

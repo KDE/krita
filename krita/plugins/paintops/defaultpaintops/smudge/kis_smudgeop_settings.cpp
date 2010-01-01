@@ -23,7 +23,7 @@
 #include "kis_smudgeop_settings.h"
 #include "kis_smudgeop_settings_widget.h"
 
-#include <kis_brush_option.h>
+#include <kis_brush_option_widget.h>
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_rate_option.h>
 #include <kis_pressure_opacity_option.h>

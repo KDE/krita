@@ -34,7 +34,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 
-class KisBrushOption;
+class KisBrushOptionWidget;
 class KisPaintActionTypeOption;
 class KisEraseOpSettings;
 class KisEraseOpSettingsWidget;

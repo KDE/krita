@@ -26,7 +26,7 @@
 
 #include <kis_image.h>
 #include <kis_properties_configuration.h>
-#include <kis_brush_option.h>
+#include <kis_brush_option_widget.h>
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_curve_option_widget.h>
@@ -37,7 +37,7 @@ KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
 {
     setObjectName("brush option widget");
 
-    m_brushOption = new KisBrushOption;
+    m_brushOption = new KisBrushOptionWidget;
     m_duplicateOption = new KisDuplicateOpOption;
 
     addPaintOpOption(m_brushOption);

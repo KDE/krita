@@ -50,7 +50,7 @@
 #include <kis_paintop.h>
 #include <kis_properties_configuration.h>
 #include <kis_selection.h>
-#include <kis_brush_option.h>
+#include <kis_brush_option_widget.h>
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
@@ -64,16 +64,12 @@
 
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter)
-        : KisBrushBasedPaintOp(painter)
+        : KisBrushBasedPaintOp(settings, painter)
         , settings(settings)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    if (settings && settings->m_options) {
-        Q_ASSERT(settings->m_options->m_brushOption);
-        m_brush = settings->m_options->m_brushOption->brush();
-        m_sizeOption.readOptionSetting(settings);
-    }
+    m_sizeOption.readOptionSetting(settings);
 }
 
 KisDuplicateOp::~KisDuplicateOp()
@@ -121,14 +117,8 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     if (!source()) return;
 
     KisBrushSP brush = m_brush;
-    if (!m_brush) {
-        if (settings->m_options) {
-            m_brush = settings->m_options->m_brushOption->brush();
-            brush = m_brush;
-        } else {
-            return;
-        }
-    }
+    if (!brush)
+        return;
 
     if (! brush->canPaintFor(info))
         return;

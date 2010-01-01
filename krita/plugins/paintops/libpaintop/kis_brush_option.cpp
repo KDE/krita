@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (C) Sven Langkamp <sven.langkamp@gmail.com>, (C) 2008
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,93 +17,41 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "kis_brush_option.h"
 
 #include <QDomDocument>
 #include <QDomElement>
 
-#include <klocale.h>
+#include "kis_properties_configuration.h"
 
-#include <kis_image.h>
-
-#include "kis_brush_selection_widget.h"
-#include "kis_brush.h"
-
-
-KisBrushOption::KisBrushOption()
-        : KisPaintOpOption(i18n("Brush Tip"))
+void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    m_checkable = false;
-    m_brushSelectionWidget = new KisBrushSelectionWidget();
-    connect(m_brushSelectionWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigSettingChanged()));
-    m_brushSelectionWidget->hide();
-    setConfigurationPage(m_brushSelectionWidget);
-}
-
-KisBrushSP KisBrushOption::brush() const
-{
-    return m_brushSelectionWidget->brush();
-}
-
-void KisBrushOption::setAutoBrush(bool on)
-{
-    m_brushSelectionWidget->setAutoBrush(on);
-}
-
-void KisBrushOption::setPredefinedBrushes(bool on)
-{
-    m_brushSelectionWidget->setPredefinedBrushes(on);
-}
-
-void KisBrushOption::setCustomBrush(bool on)
-{
-    m_brushSelectionWidget->setCustomBrush(on);
-}
-
-void KisBrushOption::setTextBrush(bool on)
-{
-    m_brushSelectionWidget->setTextBrush(on);
-}
-
-void KisBrushOption::setImage(KisImageWSP image)
-{
-    m_brushSelectionWidget->setImage(image);
-}
-
-
-void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
-{
-    Q_UNUSED(settings);
-    /*
-        KisBrushSP brush = m_brushSelectionWidget->brush();
-        QDomDocument d;
-        QDomElement e = d.createElement( "brush_definition" );
-        brush->toXML( d, e );
-        settings->setProperty( "BrushDefinition", d.toString() );
-    */
+    if(!m_brush)
+        return;
+    
+    QDomDocument d("BrushSetting");
+    QDomElement e = d.createElement( "brush_definition" );
+    m_brush->toXML( d, e );
+    d.appendChild(e);
+    setting->setProperty( "brush_definition", d.toString() );
 }
 
 void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    Q_UNUSED(setting);
-    /*
-        QString brushDefinition = setting->getString("brush_definition");
-        QDomDocument d;
-        d.setContent( brushDefinition, false );
-        QDomElement e = d.elementsByTagName("brush_definition" ).at( 0 ).toElement();
-        KisBrushSP brush = KisBrush::fromXML( e );
-        m_brushSelectionWidget->setCurrentBrush(brush);
-    */
+    QString brushDefinition = setting->getString("brush_definition");
+    QDomDocument d;
+    d.setContent( brushDefinition, false );
+    QDomElement e = d.elementsByTagName("brush_definition" ).at( 0 ).toElement();
+    m_brush = KisBrush::fromXML( e );
 }
 
-
-void KisBrushOption::setAutoBrushDiameter(qreal diameter)
+KisBrushSP KisBrushOption::brush() const
 {
-    m_brushSelectionWidget->setAutoBrushDiameter(diameter);
+    return m_brush;
 }
 
-
-qreal KisBrushOption::autoBrushDiameter()
+void KisBrushOption::setBrush(KisBrushSP brush)
 {
-    return m_brushSelectionWidget->autoBrushDiameter();
+    m_brush = brush;
 }

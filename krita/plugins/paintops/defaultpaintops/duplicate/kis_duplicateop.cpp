@@ -123,7 +123,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info))
         return;
 
-    double scale = KisPaintOp::scaleForPressure(info.pressure());
+    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 

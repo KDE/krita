@@ -36,6 +36,7 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
     setConfigurationPage(m_widget);
     connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(sensorChanged(KisDynamicSensor*)), SLOT(setSensor(KisDynamicSensor*)));
+    transferCurve();
 }
 
 KisCurveOptionWidget::~KisCurveOptionWidget()

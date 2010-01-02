@@ -15,12 +15,9 @@ set(GRAPHICSMAGICK_FOUND FALSE)
    if(NOT WIN32)
      # use pkg-config to get the directories and then use these values
      # in the FIND_PATH() and FIND_LIBRARY() calls
-     INCLUDE(UsePkgConfig)
-     PKGCONFIG(GraphicsMagick _libMagickIncDir _libMagickLinkDir _libMagickLinkFlags _libMagickCflags)
+     INCLUDE(FindPkgConfig)
+     pkg_check_modules(GRAPHICSMAGICK GraphicsMagick)
    endif(NOT WIN32)
-
-   set(GRAPHICSMAGICK_COMPILE_FLAGS ${_libMagickCflags})
-   set(GRAPHICSMAGICK_LIBRARIES ${_libMagickLinkFlags})
 
    find_program(GMAGICK_CONFIG_EXECUTABLE
         NAMES GraphicsMagick-config

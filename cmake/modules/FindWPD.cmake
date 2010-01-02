@@ -18,21 +18,15 @@ if (WPD_INCLUDE_DIR AND WPD_LIBRARIES)
 
 else (WPD_INCLUDE_DIR AND WPD_LIBRARIES)
 if(NOT WIN32)
-  INCLUDE(UsePkgConfig)
-  PKGCONFIG(libwpd-0.8 _WPDIncDir _WPDLinkDir _WPDLinkFlags _WPDCflags)
-
-  set(WPD_DEFINITIONS ${_WPDCflags} CACHE INTERNAL "The definitions for libwpd")
+  INCLUDE(FindPkgConfig)
+  pkg_check_modules(WPD libwpd-0.8)
 endif(NOT WIN32)
 
   FIND_PATH(WPD_INCLUDE_DIR libwpd/libwpd.h
-    ${_WPDIncDir}
+    ${WPD_INCLUDE_DIR}
     /usr/include/libwpd-0.8
   )
 
-  FIND_LIBRARY(WPD_LIBRARIES NAMES wpd-0.8
-    PATHS
-    ${_WPDLinkDir}
-  )
 
   include(FindPackageHandleStandardArgs)
   FIND_PACKAGE_HANDLE_STANDARD_ARGS(WPD DEFAULT_MSG WPD_INCLUDE_DIR WPD_LIBRARIES )

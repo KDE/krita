@@ -1,47 +1,26 @@
      
+INCLUDE(FindPkgConfig)
 
-INCLUDE(UsePkgConfig)
-PKGCONFIG(OpenCTL _OpenCTLIncDir _OpenCTLLinkDir _OpenCTLLinkFlags _OpenCTLCflags)
-
-set(OPENCTL_DEFINITIONS ${_OpenCTLCflags})
-set(OPENCTL_LIBRARIES ${_OpenCTLLinkFlags})
-set(OPENCTL_INCLUDE_DIR ${_OpenCTLIncDir})
-
-if(OPENCTL_DEFINITIONS AND OPENCTL_LIBRARIES)
-
-  FIND_PROGRAM(PKGCONFIG_EXECUTABLE NAMES pkg-config PATHS /usr/bin/ /usr/local/bin )
-
-  # query pkg-config asking for OpenCTL >= 0.9.12
-  EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.9.12 OpenCTL RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
-
-  if(_return_VALUE STREQUAL "0")
-    set(OPENCTL_FOUND TRUE)
-    set(HAVE_OPENCTL TRUE)
-  else(_return_VALUE STREQUAL "0")
-    message(STATUS "OpenCTL < 0.9.12 was found")
-  endif(_return_VALUE STREQUAL "0")
-
-  EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.9.13 OpenCTL RETURN_VALUE _return_913_VALUE OUTPUT_VARIABLE _pkgconfigDevNull_913 )
-  if(_return_913_VALUE STREQUAL "0")
-    message(STATUS "OpenShiva >= 0.9.13 was found")
-    set(OPENCTL_913_FOUND TRUE)
-    set(HAVE_OPENCTL_913 TRUE)
-  else(_return_913_VALUE STREQUAL "0")
-    message(STATUS "OpenShiva < 0.9.13 was found")
-  endif(_return_913_VALUE STREQUAL "0")
-
-
-endif(OPENCTL_DEFINITIONS AND OPENCTL_LIBRARIES)
+pkg_check_modules(OPENCTL OpenCTL>=0.9.12)
+pkg_check_modules(OPENCTL_913 OpenCTL>=0.9.13)
 
 if (OPENCTL_FOUND)
-    if (NOT OpenCTL_FIND_QUIETLY)
+    set(HAVE_OPENCTL TRUE)
+    message(STATUS "OpenCTL Found Version: " ${OPENCTL_VERSION})
+    if (OPENCTL_913_FOUND)
+	set(HAVE_OPENCTL_913 TRUE)
+    else()
+	set(HAVE_OPENCTL_913 FALSE)
+    endif()
+
+    if (NOT OpenCTL_FIND_QUIETLY )
         message(STATUS "Found OPENCTL: ${OPENCTL_LIBRARIES}")
     endif (NOT OpenCTL_FIND_QUIETLY)
-else (OPENCTL_FOUND)
+else ()
     if (NOT OpenCTL_FIND_QUIETLY)
         message(STATUS "OpenCTL was NOT found.")
-    endif (NOT OpenCTL_FIND_QUIETLY)
+    endif ()
     if (OpenCTL_FIND_REQUIRED)
         message(FATAL_ERROR "Could NOT find OPENCTL")
-    endif (OpenCTL_FIND_REQUIRED)
-endif (OPENCTL_FOUND)
+    endif ()
+endif ()

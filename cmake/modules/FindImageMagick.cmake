@@ -102,24 +102,15 @@ else(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIBRARIES AND IMAGEMAGICK_VERSION)
 
   if(MAGICK_CONFIG_EXECUTABLE)
      if(NOT WIN32)
-     # use pkg-config to get the directories and then use these values
-     # in the FIND_PATH() and FIND_LIBRARY() calls
-       INCLUDE(UsePkgConfig)
-       PKGCONFIG(ImageMagick _libMagickIncDir _libMagickLinkDir _libMagickLinkFlags _libMagickCflags)
+       INCLUDE(FindPkgConfig)
+       pkg_check_modules(IMAGEMAGICK ImageMagick)
+     else()
+	exec_program(${MAGICK_CONFIG_EXECUTABLE} ARGS --version OUTPUT_VARIABLE IMAGEMAGICK_VERSION)
      endif(NOT WIN32)
 
      find_path(IMAGEMAGICK_INCLUDE_DIR magick/api.h
         /opt/local/include
      )
-
-     set(IMAGEMAGICK_LIBRARIES ${_libMagickLinkFlags})
-     #   find_library(IMAGEMAGICK_LIBRARIES Magick
-     #   /usr/lib
-     #   /usr/local/lib
-     #   /opt/local/lib
-     # )
-
-     exec_program(${MAGICK_CONFIG_EXECUTABLE} ARGS --version OUTPUT_VARIABLE IMAGEMAGICK_VERSION)
 
      string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" IMAGEMAGICK_MAJOR_VERSION "${IMAGEMAGICK_VERSION}")
      string(REGEX REPLACE "[0-9]+\\.([0-9])+\\.[0-9]+" "\\1" IMAGEMAGICK_MINOR_VERSION "${IMAGEMAGICK_VERSION}")

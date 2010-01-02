@@ -20,20 +20,11 @@ else(POPPLER_INCLUDE_DIR AND POPPLER_LIBRARY)
 
 # use pkg-config to get the directories and then use these values
 # in the FIND_PATH() and FIND_LIBRARY() calls
-INCLUDE(UsePkgConfig)
 
-PKGCONFIG(poppler-qt4 _PopplerIncDir _PopplerLinkDir _PopplerLinkFlags _PopplerCflags)
+INCLUDE(FindPkgConfig)
+pkg_check_modules(POPPLER poppler-qt4>=0.5.4)
 
-if(_PopplerLinkFlags)
-  # find again pkg-config, to query it about poppler version
-  FIND_PROGRAM(PKGCONFIG_EXECUTABLE NAMES pkg-config PATHS /usr/bin/ /usr/local/bin )
-
-  # query pkg-config asking for a poppler-qt4 >= 0.5.4
-  EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.5.4 poppler-qt4 RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
-  if(_return_VALUE STREQUAL "0")
-    set(POPPLER_FOUND TRUE)
-  endif(_return_VALUE STREQUAL "0")
-else(_PopplerLinkFlags)
+if(NOT POPPLER_FOUND)
   # try to find poppler without pkgconfig
   find_library( LIBPOPPLER poppler )
   find_library( LIBPOPPLER_QT4 poppler-qt4 )
@@ -41,17 +32,15 @@ else(_PopplerLinkFlags)
   find_path( INCLUDEPOPPLER poppler-qt4.h PATHS ${INCLUDEPOPPLER_QT4}/poppler/qt4 )
   if( LIBPOPPLER_QT4 AND LIBPOPPLER AND INCLUDEPOPPLER )
     set( POPPLER_FOUND TRUE )
-    set(_PopplerLinkFlags ${LIBPOPPLER} ${LIBPOPPLER_QT4})
+    set(POPPLER_LIBRARY ${LIBPOPPLER} ${LIBPOPPLER_QT4})
     set(POPPLER_INCLUDE_DIR ${INCLUDEPOPPLER})
-  endif( LIBPOPPLER_QT4 AND LIBPOPPLER AND INCLUDEPOPPLER )
-endif(_PopplerLinkFlags)
+  endif()
+endif()
 
 if (POPPLER_FOUND)
-  set(POPPLER_LIBRARY ${_PopplerLinkFlags})
-
   # the cflags for poppler-qt4 can contain more than one include path
-  separate_arguments(_PopplerCflags)
-  foreach(_includedir ${_PopplerCflags})
+  separate_arguments(POPPLER_CFLAGS)
+  foreach(_includedir ${POPPLER_CFLAGS})
     string(REGEX REPLACE "-I(.+)" "\\1" _includedir "${_includedir}")
     set(POPPLER_INCLUDE_DIR ${POPPLER_INCLUDE_DIR} ${_includedir})
   endforeach(_includedir)

@@ -39,7 +39,7 @@ void KisPresetWidget::setPreset(KisPaintOpPresetSP preset)
 {
     Q_ASSERT(preset);
     m_preset = preset.data();
-    update();
+    updatePreview();
 }
 
 void KisPresetWidget::updatePreview()

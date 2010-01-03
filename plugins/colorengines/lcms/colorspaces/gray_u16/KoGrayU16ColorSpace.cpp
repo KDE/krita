@@ -24,7 +24,7 @@
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "kis_gray_u16_colorspace.h"
+#include "KoGrayU16ColorSpace"
 
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"

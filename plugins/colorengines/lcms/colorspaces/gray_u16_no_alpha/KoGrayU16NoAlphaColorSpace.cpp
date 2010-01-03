@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_gray_u16_colorspace.h"
+#include "KoGray16NoAlphaColorSpace.h"
 
 #include <QDomElement>
 

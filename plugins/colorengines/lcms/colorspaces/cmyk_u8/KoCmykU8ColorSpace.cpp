@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_cmyk_colorspace.h"
+#include "KoCmykU8ColorSpace.h"
 
 #include <QDomElement>
 

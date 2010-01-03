@@ -23,7 +23,7 @@
 
 #include <kparts/plugin.h>
 
-class UnsharpPlugin : public KParts::Plugin
+class UnsharpPlugin : public QObject
 {
 public:
     UnsharpPlugin(QObject *parent, const QStringList &);

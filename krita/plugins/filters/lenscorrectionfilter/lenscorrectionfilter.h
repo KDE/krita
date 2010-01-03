@@ -26,7 +26,7 @@
 
 class KisConfigWidget;
 
-class KritaLensCorrectionFilter : public KParts::Plugin
+class KritaLensCorrectionFilter : public QObject
 {
 public:
     KritaLensCorrectionFilter(QObject *parent, const QStringList &);

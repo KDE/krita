@@ -26,7 +26,7 @@
 
 class KisConfigWidget;
 
-class KritaWaveFilter : public KParts::Plugin
+class KritaWaveFilter : public QObject
 {
 public:
     KritaWaveFilter(QObject *parent, const QStringList &);

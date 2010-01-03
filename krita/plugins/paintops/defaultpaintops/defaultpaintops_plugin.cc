@@ -47,9 +47,9 @@ K_EXPORT_COMPONENT_FACTORY(kritadefaultpaintops, DefaultPaintOpsPluginFactory("k
 
 
 DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(DefaultPaintOpsPluginFactory::componentData());
+    //setComponentData(DefaultPaintOpsPluginFactory::componentData());
 
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisAirbrushOp, KisAirbrushOpSettings, KisAirbrushOpSettingsWidget>("airbrush", i18n("Pixel Airbrush"), "krita-airbrush.png"));

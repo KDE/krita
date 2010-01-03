@@ -36,7 +36,7 @@ K_EXPORT_COMPONENT_FACTORY(krita_lms_f32_plugin, LMSF32PluginFactory("krita"))
 
 
 LMSF32Plugin::LMSF32Plugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
 
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();

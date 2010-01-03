@@ -41,9 +41,8 @@ K_EXPORT_COMPONENT_FACTORY(kritarulerassistanttool, RulerAssistantToolFactory("k
 
 
 RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(RulerAssistantToolFactory::componentData());
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisRulerAssistantToolFactory(r, QStringList()));
 }

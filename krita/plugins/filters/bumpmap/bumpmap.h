@@ -57,7 +57,7 @@ enum enumBumpmapType {
 using namespace krita;
 
 
-class KritaBumpmap : public KParts::Plugin
+class KritaBumpmap : public QObject
 {
 public:
     KritaBumpmap(QObject *parent, const QStringList &);

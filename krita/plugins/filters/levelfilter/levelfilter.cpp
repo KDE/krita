@@ -29,9 +29,9 @@ typedef KGenericFactory<LevelFilter> LevelFilterFactory;
 K_EXPORT_COMPONENT_FACTORY(kritalevelfilter, LevelFilterFactory("krita"))
 
 LevelFilter::LevelFilter(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(LevelFilterFactory::componentData());
+    //setComponentData(LevelFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisLevelFilter());
 
 }

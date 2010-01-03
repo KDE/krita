@@ -24,7 +24,7 @@
 /**
  * A module that provides a polygon tool.
  */
-class ToolPolygon : public KParts::Plugin
+class ToolPolygon : public QObject
 {
     Q_OBJECT
 

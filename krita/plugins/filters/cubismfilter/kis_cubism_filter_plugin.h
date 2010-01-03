@@ -22,7 +22,7 @@
 
 #include <kparts/plugin.h>
 
-class KisCubismFilterPlugin : public KParts::Plugin
+class KisCubismFilterPlugin : public QObject
 {
 public:
     KisCubismFilterPlugin(QObject *parent, const QStringList &);

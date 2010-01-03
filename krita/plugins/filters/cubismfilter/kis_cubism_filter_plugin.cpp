@@ -28,9 +28,9 @@
 typedef KGenericFactory<KisCubismFilterPlugin> KisCubismFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kritacubismfilter, KisCubismFilterPluginFactory("krita"))
 
-KisCubismFilterPlugin::KisCubismFilterPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
+KisCubismFilterPlugin::KisCubismFilterPlugin(QObject *parent, const QStringList &) : QObject(parent)
 {
-    setComponentData(KisCubismFilterPluginFactory::componentData());
+    //setComponentData(KisCubismFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisCubismFilter());
 
 }

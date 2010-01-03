@@ -36,10 +36,10 @@ K_EXPORT_COMPONENT_FACTORY(kritadynapaintop, DynaPaintOpPluginFactory("krita"))
 
 
 DynaPaintOpPlugin::DynaPaintOpPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
     //
-    setComponentData(DynaPaintOpPluginFactory::componentData());
+    //setComponentData(DynaPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisDynaPaintOpFactory);
 

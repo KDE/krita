@@ -24,7 +24,7 @@
 #include <kparts/plugin.h>
 #include <filter/kis_filter.h>
 
-class FastColorTransferPlugin : public KParts::Plugin
+class FastColorTransferPlugin : public QObject
 {
 public:
     FastColorTransferPlugin(QObject *parent, const QStringList &);

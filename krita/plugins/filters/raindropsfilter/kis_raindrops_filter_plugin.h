@@ -23,7 +23,7 @@
 
 #include <kparts/plugin.h>
 
-class KisRainDropsFilterPlugin : public KParts::Plugin
+class KisRainDropsFilterPlugin : public QObject
 {
 public:
     KisRainDropsFilterPlugin(QObject *parent, const QStringList &);

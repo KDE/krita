@@ -27,11 +27,11 @@ typedef KGenericFactory<ComplexBrush> ComplexBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritacomplexbrush, ComplexBrushFactory("krita"))
 
 ComplexBrush::ComplexBrush(QObject *parent, const QStringList &sl)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
     Q_UNUSED(sl)
 
-    setComponentData(ComplexBrushFactory::componentData());
+    //setComponentData(ComplexBrushFactory::componentData());
     KisPaintOpRegistry::instance()->add(new KisComplexOpFactory);
 }
 

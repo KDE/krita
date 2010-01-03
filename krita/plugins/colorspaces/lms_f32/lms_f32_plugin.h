@@ -26,7 +26,7 @@
 /**
  * A plugin wrapper around the LMS F32 color space strategy.
  */
-class LMSF32Plugin : public KParts::Plugin
+class LMSF32Plugin : public QObject
 {
     Q_OBJECT
 public:

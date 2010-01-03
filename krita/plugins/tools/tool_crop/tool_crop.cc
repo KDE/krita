@@ -43,9 +43,9 @@ K_EXPORT_COMPONENT_FACTORY(kritatoolcrop, ToolCropFactory("krita"))
 
 
 ToolCrop::ToolCrop(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(ToolCropFactory::componentData());
+    //setComponentData(ToolCropFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolCropFactory(r, QStringList()));

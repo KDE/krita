@@ -29,9 +29,9 @@ typedef KGenericFactory<KritaExtensionsColors> KritaExtensionsColorsFactory;
 K_EXPORT_COMPONENT_FACTORY(kritaextensioncolorsfilters, KritaExtensionsColorsFactory("krita"))
 
 KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KritaExtensionsColorsFactory::componentData());
+    //setComponentData(KritaExtensionsColorsFactory::componentData());
 
     KisFilterRegistry * manager = KisFilterRegistry::instance();
     manager->add(new KisFilterMax());

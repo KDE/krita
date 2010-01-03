@@ -22,7 +22,7 @@
 
 #include <kparts/plugin.h>
 
-class KisPixelizeFilterPlugin : public KParts::Plugin
+class KisPixelizeFilterPlugin : public QObject
 {
 public:
     KisPixelizeFilterPlugin(QObject *parent, const QStringList &);

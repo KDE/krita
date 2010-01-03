@@ -23,7 +23,7 @@
 
 #include <kparts/plugin.h>
 
-class ToolCurves : public KParts::Plugin
+class ToolCurves : public QObject
 {
     Q_OBJECT
 public:

@@ -26,7 +26,7 @@
 
 class KisConfigWidget;
 
-class KritaRandomPickFilter : public KParts::Plugin
+class KritaRandomPickFilter : public QObject
 {
 public:
     KritaRandomPickFilter(QObject *parent, const QStringList &);

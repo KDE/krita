@@ -25,7 +25,7 @@
 /**
  * A plugin wrapper around the LMS F32 color space strategy.
  */
-class CTLCSPlugin : public KParts::Plugin
+class CTLCSPlugin : public QObject
 {
     Q_OBJECT
 public:

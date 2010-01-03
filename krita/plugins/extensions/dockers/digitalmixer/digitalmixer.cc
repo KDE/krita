@@ -78,14 +78,14 @@ private:
 
 
 DigitalMixerPlugin::DigitalMixerPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+    : QObject(parent)
 {
     dbgPlugins << "DigitalMixerPlugin";
     if ( parent->inherits("KisView2") )
     {
         m_view = (KisView2*) parent;
 
-        setComponentData(DigitalMixerPluginFactory::componentData());
+        //setComponentData(DigitalMixerPluginFactory::componentData());
         DigitalMixerDockFactory dockFactory( m_view);
         m_view->createDockWidget( &dockFactory );
     }

@@ -44,9 +44,9 @@ K_EXPORT_COMPONENT_FACTORY(kritatoolperspectivegrid, ToolPerspectiveGridFactory(
 
 
 ToolPerspectiveGrid::ToolPerspectiveGrid(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(ToolPerspectiveGridFactory::componentData());
+    //setComponentData(ToolPerspectiveGridFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolPerspectiveGridFactory(r, QStringList()));

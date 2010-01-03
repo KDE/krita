@@ -24,7 +24,7 @@
 #include <kparts/plugin.h>
 #include "filter/kis_color_transformation_filter.h"
 
-class KritaExample : public KParts::Plugin
+class KritaExample : public QObject
 {
 public:
     KritaExample(QObject *parent, const QStringList &);

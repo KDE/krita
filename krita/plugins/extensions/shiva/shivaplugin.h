@@ -27,7 +27,7 @@ namespace OpenShiva
 class SourcesCollection;
 }
 
-class ShivaPlugin : public KParts::Plugin
+class ShivaPlugin : public QObject
 {
 public:
     ShivaPlugin(QObject *parent, const QStringList &);

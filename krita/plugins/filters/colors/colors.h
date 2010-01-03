@@ -23,7 +23,7 @@
 
 #include <kparts/plugin.h>
 
-class KritaExtensionsColors : public KParts::Plugin
+class KritaExtensionsColors : public QObject
 {
 public:
     KritaExtensionsColors(QObject *parent, const QStringList &);

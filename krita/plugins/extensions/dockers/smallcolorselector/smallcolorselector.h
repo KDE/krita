@@ -25,7 +25,7 @@ class KisView2;
 /**
  * Template of view plugin
  */
-class SmallColorSelectorPlugin : public KParts::Plugin
+class SmallColorSelectorPlugin : public QObject
 {
     Q_OBJECT
 public:

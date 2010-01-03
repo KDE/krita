@@ -24,7 +24,7 @@
 /**
  * A module that provides a crop tool.
  */
-class ToolCrop : public KParts::Plugin
+class ToolCrop : public QObject
 {
     Q_OBJECT
 public:

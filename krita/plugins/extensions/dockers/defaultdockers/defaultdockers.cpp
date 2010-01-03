@@ -33,9 +33,8 @@ typedef KGenericFactory<KritaDefaultDockersPlugin> KritaDefaultDockersPluginFact
 K_EXPORT_COMPONENT_FACTORY(kritadefaultdockers, KritaDefaultDockersPluginFactory("krita"))
 
 KritaDefaultDockersPlugin::KritaDefaultDockersPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KritaDefaultDockersPluginFactory::componentData());
     //KoDockRegistry::instance()->add(new KisHistogramDockFactory());
     KoDockRegistry::instance()->add(new KisLayerBoxFactory());
     KoDockRegistry::instance()->add(new KisBirdEyeBoxFactory());

@@ -25,7 +25,7 @@ class KisView2;
 /**
  * Template of view plugin
  */
-class TriangleColorSelectorPlugin : public KParts::Plugin
+class TriangleColorSelectorPlugin : public QObject
 {
     Q_OBJECT
 public:

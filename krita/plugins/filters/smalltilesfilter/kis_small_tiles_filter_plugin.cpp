@@ -30,9 +30,9 @@ typedef KGenericFactory<KisSmallTilesFilterPlugin> KisSmallTilesFilterPluginFact
 K_EXPORT_COMPONENT_FACTORY(kritasmalltilesfilter, KisSmallTilesFilterPluginFactory("krita"))
 
 KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KisSmallTilesFilterPluginFactory::componentData());
+    //setComponentData(KisSmallTilesFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisSmallTilesFilter());
 }
 

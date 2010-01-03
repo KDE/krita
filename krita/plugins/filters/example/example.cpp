@@ -44,9 +44,9 @@ typedef KGenericFactory<KritaExample> KritaExampleFactory;
 K_EXPORT_COMPONENT_FACTORY(kritaexample, KritaExampleFactory("krita"))
 
 KritaExample::KritaExample(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KritaExampleFactory::componentData());
+    //setComponentData(KritaExampleFactory::componentData());
 
     KisFilterRegistry::instance()->add(KisFilterSP(new KisFilterInvert()));
 }

@@ -31,7 +31,7 @@
  * class that is registered with the tool registry, and that is used to create
  * new instances of the tools.
  */
-class SelectionTools : public KParts::Plugin
+class SelectionTools : public QObject
 {
     Q_OBJECT
 public:

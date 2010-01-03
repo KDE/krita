@@ -24,7 +24,7 @@
 /**
  * A plugin wrapper that adds the paintop factories to the paintop registry.
  */
-class DynaPaintOpPlugin : public KParts::Plugin
+class DynaPaintOpPlugin : public QObject
 {
     Q_OBJECT
 public:

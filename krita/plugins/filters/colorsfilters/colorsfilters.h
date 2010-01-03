@@ -27,7 +27,7 @@
 class KoColorSpace;
 class KoColorTransformation;
 
-class ColorsFilters : public KParts::Plugin
+class ColorsFilters : public QObject
 {
 public:
     ColorsFilters(QObject *parent, const QStringList &);

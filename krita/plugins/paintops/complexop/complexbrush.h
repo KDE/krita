@@ -23,7 +23,7 @@
 
 class QStringList;
 
-class ComplexBrush : public KParts::Plugin
+class ComplexBrush : public QObject
 {
     Q_OBJECT
 public:

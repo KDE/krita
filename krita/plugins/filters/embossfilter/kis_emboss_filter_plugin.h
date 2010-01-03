@@ -21,7 +21,7 @@
 
 #include <kparts/plugin.h>
 
-class KisEmbossFilterPlugin : public KParts::Plugin
+class KisEmbossFilterPlugin : public QObject
 {
 public:
     KisEmbossFilterPlugin(QObject *parent, const QStringList &);

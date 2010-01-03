@@ -37,9 +37,9 @@ K_EXPORT_COMPONENT_FACTORY(kritacurvepaintop, CurvePaintOpPluginFactory("krita")
 
 
 CurvePaintOpPlugin::CurvePaintOpPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(CurvePaintOpPluginFactory::componentData());
+    //setComponentData(CurvePaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisCurvePaintOp, KisCurvePaintOpSettings, KisCurvePaintOpSettingsWidget>("curvebrush", i18n("Curve brush"), "krita-curve.png"));
 

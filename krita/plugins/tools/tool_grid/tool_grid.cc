@@ -44,9 +44,9 @@ K_EXPORT_COMPONENT_FACTORY(kritatoolgrid, GridFactory("krita"))
 
 
 GridPlugin::GridPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(GridFactory::componentData());
+    //setComponentData(GridFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolGridFactory(r, QStringList()));

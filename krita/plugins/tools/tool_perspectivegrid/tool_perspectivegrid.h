@@ -23,7 +23,7 @@
 /**
  * A module that provides a tool for editing the perspective grid.
  */
-class ToolPerspectiveGrid : public KParts::Plugin
+class ToolPerspectiveGrid : public QObject
 {
     Q_OBJECT
 public:

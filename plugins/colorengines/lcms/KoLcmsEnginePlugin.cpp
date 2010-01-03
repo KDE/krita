@@ -65,7 +65,7 @@ typedef KGenericFactory<KoLcmsEnginePlugin> KoLcmsEnginePluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kolcmsengine, KoLcmsEnginePluginFactory("koffice"))
 
         KoLcmsEnginePlugin::KoLcmsEnginePlugin(QObject *parent, const QStringList &)
-            : KParts::Plugin(parent)
+            : QObject(parent)
 {
     kDebug(31000) << "Initializing the lcms engine plugin";
 

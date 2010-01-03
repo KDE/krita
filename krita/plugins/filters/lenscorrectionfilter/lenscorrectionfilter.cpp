@@ -58,9 +58,9 @@ typedef KGenericFactory<KritaLensCorrectionFilter> KritaLensCorrectionFilterFact
 K_EXPORT_COMPONENT_FACTORY(kritalenscorrectionfilter, KritaLensCorrectionFilterFactory("krita"))
 
 KritaLensCorrectionFilter::KritaLensCorrectionFilter(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KritaLensCorrectionFilterFactory::componentData());
+    //setComponentData(KritaLensCorrectionFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterLensCorrection());
 
 }

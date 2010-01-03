@@ -53,9 +53,9 @@ typedef KGenericFactory<KritaColorGenerator> KritaColorGeneratorFactory;
 K_EXPORT_COMPONENT_FACTORY(kritacolorgenerator, KritaColorGeneratorFactory("krita"))
 
 KritaColorGenerator::KritaColorGenerator(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KritaColorGeneratorFactory::componentData());
+    //setComponentData(KritaColorGeneratorFactory::componentData());
     KisGeneratorRegistry::instance()->add(new KisColorGenerator());
 }
 

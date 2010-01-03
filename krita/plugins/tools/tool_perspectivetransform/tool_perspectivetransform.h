@@ -23,7 +23,7 @@
 /**
  * A module that provides a tool for doinge perspective transformation.
  */
-class ToolPerspectiveTransform : public KParts::Plugin
+class ToolPerspectiveTransform : public QObject
 {
     Q_OBJECT
 public:

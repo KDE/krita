@@ -23,7 +23,7 @@
 
 #include <kparts/plugin.h>
 
-class BlurFilterPlugin : public KParts::Plugin
+class BlurFilterPlugin : public QObject
 {
 public:
     BlurFilterPlugin(QObject *parent, const QStringList &);

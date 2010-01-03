@@ -24,7 +24,7 @@
 /**
  * A module that provides a polyline tool.
  */
-class ToolPolyline : public KParts::Plugin
+class ToolPolyline : public QObject
 {
     Q_OBJECT
 public:

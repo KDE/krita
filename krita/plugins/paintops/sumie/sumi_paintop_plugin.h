@@ -24,7 +24,7 @@
 /**
  * A plugin wrapper that adds the paintop factories to the paintop registry.
  */
-class SumiPaintOpPlugin : public KParts::Plugin
+class SumiPaintOpPlugin : public QObject
 {
     Q_OBJECT
 public:

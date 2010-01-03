@@ -57,9 +57,8 @@ public:
 
 
 SmallColorSelectorPlugin::SmallColorSelectorPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(SmallColorSelectorPluginFactory::componentData());
 
     KoDockRegistry::instance()->add(new SmallColorSelectorDockFactory());
 }

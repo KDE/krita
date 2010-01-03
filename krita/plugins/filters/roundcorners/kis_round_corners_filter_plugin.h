@@ -22,7 +22,7 @@
 
 #include <kparts/plugin.h>
 
-class KisRoundCornersFilterPlugin : public KParts::Plugin
+class KisRoundCornersFilterPlugin : public QObject
 {
 public:
     KisRoundCornersFilterPlugin(QObject *parent, const QStringList &);

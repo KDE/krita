@@ -42,9 +42,9 @@ K_EXPORT_COMPONENT_FACTORY(kritaselectiontools, SelectionToolsFactory("krita"))
 
 
 SelectionTools::SelectionTools(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(SelectionToolsFactory::componentData());
+    //setComponentData(SelectionToolsFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
 

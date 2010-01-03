@@ -70,11 +70,11 @@ public:
 
 
 SpecificColorSelectorPlugin::SpecificColorSelectorPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
     dbgPlugins << "SpecificColorSelectorPlugin";
 
-    setComponentData(SpecificColorSelectorPluginFactory::componentData());
+    //setComponentData(SpecificColorSelectorPluginFactory::componentData());
     KoDockRegistry::instance()->add(new SpecificColorSelectorDockFactory());
 }
 

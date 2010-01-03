@@ -146,7 +146,7 @@ public:
 };
 
 
-class KritaConvolutionFilters : public KParts::Plugin
+class KritaConvolutionFilters : public QObject
 {
 public:
     KritaConvolutionFilters(QObject *parent, const QStringList &);

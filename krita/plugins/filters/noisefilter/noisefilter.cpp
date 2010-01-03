@@ -55,9 +55,9 @@ typedef KGenericFactory<KritaNoiseFilter> KritaNoiseFilterFactory;
 K_EXPORT_COMPONENT_FACTORY(kritanoisefilter, KritaNoiseFilterFactory("krita"))
 
 KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KritaNoiseFilterFactory::componentData());
+    //setComponentData(KritaNoiseFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterNoise());
 
 }

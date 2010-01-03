@@ -24,7 +24,7 @@
 
 #include <kparts/plugin.h>
 
-class KritaImageEnhancement : public KParts::Plugin
+class KritaImageEnhancement : public QObject
 {
 public:
     KritaImageEnhancement(QObject *parent, const QStringList &);

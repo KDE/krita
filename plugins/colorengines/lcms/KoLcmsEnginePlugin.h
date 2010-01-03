@@ -22,7 +22,7 @@
 
 #include <kparts/plugin.h>
 
-class KoLcmsEnginePlugin : public KParts::Plugin
+class KoLcmsEnginePlugin : public QObject
 {
 
     Q_OBJECT

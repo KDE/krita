@@ -22,7 +22,7 @@
 
 #include <kparts/plugin.h>
 
-class KisSobelFilterPlugin : public KParts::Plugin
+class KisSobelFilterPlugin : public QObject
 {
 public:
     KisSobelFilterPlugin(QObject *parent, const QStringList &);

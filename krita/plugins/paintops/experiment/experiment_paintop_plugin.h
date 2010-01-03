@@ -24,7 +24,7 @@
 /**
  * A plugin wrapper that adds the paintop factories to the paintop registry.
  */
-class ExperimentPaintOpPlugin : public KParts::Plugin
+class ExperimentPaintOpPlugin : public QObject
 {
     Q_OBJECT
 public:

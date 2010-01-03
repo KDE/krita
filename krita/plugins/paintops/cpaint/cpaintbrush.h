@@ -24,7 +24,7 @@
 /**
  * A plugin wrapper that adds the CPaint brush paintop
  */
-class CPaintBrush : public KParts::Plugin
+class CPaintBrush : public QObject
 {
     Q_OBJECT
 public:

@@ -26,7 +26,7 @@
 
 class KisConfigWidget;
 
-class KritaNoiseFilter : public KParts::Plugin
+class KritaNoiseFilter : public QObject
 {
 public:
     KritaNoiseFilter(QObject *parent, const QStringList &);

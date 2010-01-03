@@ -25,7 +25,7 @@ class KisView2;
 /**
  * Template of view plugin
  */
-class KritaDefaultDockersPlugin : public KParts::Plugin
+class KritaDefaultDockersPlugin : public QObject
 {
     Q_OBJECT
 public:

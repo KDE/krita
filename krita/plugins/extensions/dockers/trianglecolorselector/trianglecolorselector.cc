@@ -58,11 +58,11 @@ public:
 
 
 TriangleColorSelectorPlugin::TriangleColorSelectorPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
     dbgPlugins << "TriangleColorSelectorPlugin";
 
-    setComponentData(TriangleColorSelectorPluginFactory::componentData());
+    //setComponentData(TriangleColorSelectorPluginFactory::componentData());
     KoDockRegistry::instance()->add(new KisTriangleColorSelectorDockFactory());
 }
 

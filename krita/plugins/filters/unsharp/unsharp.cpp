@@ -29,9 +29,9 @@ typedef KGenericFactory<UnsharpPlugin> UnsharpPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kritaunsharpfilter, UnsharpPluginFactory("krita"))
 
 UnsharpPlugin::UnsharpPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(UnsharpPluginFactory::componentData());
+    //setComponentData(UnsharpPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisUnsharpFilter());
 
 }

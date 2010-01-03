@@ -22,7 +22,7 @@
 
 #include <kparts/plugin.h>
 
-class KisOilPaintFilterPlugin : public KParts::Plugin
+class KisOilPaintFilterPlugin : public QObject
 {
 public:
     KisOilPaintFilterPlugin(QObject *parent, const QStringList &);

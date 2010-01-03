@@ -25,7 +25,7 @@ class KisView2;
 /**
  * Template of view plugin
  */
-class DigitalMixerPlugin : public KParts::Plugin
+class DigitalMixerPlugin : public QObject
 {
     Q_OBJECT
     public:

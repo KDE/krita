@@ -45,9 +45,9 @@ typedef KGenericFactory<ToolCurves> ToolCurvesFactory;
 K_EXPORT_COMPONENT_FACTORY(kritatoolcurves, ToolCurvesFactory("krita"))
 
 ToolCurves::ToolCurves(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(ToolCurvesFactory::componentData());
+    //setComponentData(ToolCurvesFactory::componentData());
 
     if (parent->inherits("KoToolRegistry")) {
         KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);

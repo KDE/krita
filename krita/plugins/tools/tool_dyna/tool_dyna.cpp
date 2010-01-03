@@ -47,9 +47,9 @@ K_EXPORT_COMPONENT_FACTORY(kritatooldyna, ToolDynaFactory("krita"))
 
 
 ToolDyna::ToolDyna(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(ToolDynaFactory::componentData());
+    //setComponentData(ToolDynaFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolDynaFactory(r, QStringList()));

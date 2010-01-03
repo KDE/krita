@@ -20,7 +20,7 @@
 
 #include <kparts/plugin.h>
 
-class GridPlugin : public KParts::Plugin
+class GridPlugin : public QObject
 {
     Q_OBJECT
 public:

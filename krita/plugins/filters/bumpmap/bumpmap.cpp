@@ -75,9 +75,9 @@ typedef KGenericFactory<KritaBumpmap> KritaBumpmapFactory;
 K_EXPORT_COMPONENT_FACTORY(kritabumpmap, KritaBumpmapFactory("krita"))
 
 KritaBumpmap::KritaBumpmap(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KritaBumpmapFactory::componentData());
+    //setComponentData(KritaBumpmapFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterBumpmap());
 
 }

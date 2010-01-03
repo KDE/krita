@@ -44,9 +44,9 @@ K_EXPORT_COMPONENT_FACTORY(kritatoolpolygon, ToolPolygonFactory("krita"))
 
 
 ToolPolygon::ToolPolygon(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(ToolPolygonFactory::componentData());
+    //setComponentData(ToolPolygonFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolPolygonFactory(r, QStringList()));

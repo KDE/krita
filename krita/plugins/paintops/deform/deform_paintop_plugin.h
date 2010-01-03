@@ -24,7 +24,7 @@
 /**
  * A plugin wrapper that adds the paintop factories to the paintop registry.
  */
-class DeformPaintOpPlugin : public KParts::Plugin
+class DeformPaintOpPlugin : public QObject
 {
     Q_OBJECT
 public:

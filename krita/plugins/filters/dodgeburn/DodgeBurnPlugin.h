@@ -20,7 +20,7 @@
 
 #include <kparts/plugin.h>
 
-class DodgeBurnPlugin : public KParts::Plugin
+class DodgeBurnPlugin : public QObject
 {
 public:
     DodgeBurnPlugin(QObject *parent, const QStringList &);

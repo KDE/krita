@@ -34,9 +34,9 @@ K_EXPORT_COMPONENT_FACTORY(kritamypaintpaintop, MyPaintPluginFactory("krita"))
 
 
 MyPaintPlugin::MyPaintPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(MyPaintPluginFactory::componentData());
+    //setComponentData(MyPaintPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new MyPaintFactory);
 

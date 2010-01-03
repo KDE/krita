@@ -38,9 +38,8 @@ typedef KGenericFactory<ShivaPlugin> ShivaPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kritashiva, ShivaPluginFactory("krita"))
 
 ShivaPlugin::ShivaPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(ShivaPluginFactory::componentData());
     m_sourceCollection = new OpenShiva::SourcesCollection();
 
     QStringList kernelModulesDirs = KGlobal::mainComponent().dirs()->findDirs("data", "krita/shiva/kernels/");

@@ -22,7 +22,7 @@
 
 class KisView;
 
-class RulerAssistantToolPlugin : public KParts::Plugin
+class RulerAssistantToolPlugin : public QObject
 {
     Q_OBJECT
 public:

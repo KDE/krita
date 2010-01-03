@@ -21,7 +21,7 @@
 
 #include <kparts/plugin.h>
 
-class FilterOp : public KParts::Plugin
+class FilterOp : public QObject
 {
     Q_OBJECT
 public:

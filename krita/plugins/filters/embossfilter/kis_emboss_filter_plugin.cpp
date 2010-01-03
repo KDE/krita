@@ -28,9 +28,9 @@
 typedef KGenericFactory<KisEmbossFilterPlugin> KisEmbossFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kritaembossfilter, KisEmbossFilterPluginFactory("krita"))
 
-KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
+KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const QStringList &) : QObject(parent)
 {
-    setComponentData(KisEmbossFilterPluginFactory::componentData());
+    //setComponentData(KisEmbossFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisEmbossFilter());
 
 }

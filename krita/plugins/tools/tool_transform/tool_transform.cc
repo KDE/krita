@@ -45,9 +45,9 @@ K_EXPORT_COMPONENT_FACTORY(kritatooltransform, ToolTransformFactory("krita"))
 
 
 ToolTransform::ToolTransform(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(ToolTransformFactory::componentData());
+    //setComponentData(ToolTransformFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolTransformFactory(r, QStringList()));

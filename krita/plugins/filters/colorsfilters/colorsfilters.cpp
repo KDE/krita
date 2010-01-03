@@ -66,9 +66,9 @@ typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY(kritacolorsfilters, ColorsFiltersFactory("krita"))
 
 ColorsFilters::ColorsFilters(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(ColorsFiltersFactory::componentData());
+    //setComponentData(ColorsFiltersFactory::componentData());
 
     KisFilterRegistry * manager = KisFilterRegistry::instance();
     manager->add(new KisBrightnessContrastFilter());

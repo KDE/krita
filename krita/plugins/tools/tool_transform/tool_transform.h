@@ -24,7 +24,7 @@
 /**
  * A module that provides a transform tool.
  */
-class ToolTransform : public KParts::Plugin
+class ToolTransform : public QObject
 {
     Q_OBJECT
 public:

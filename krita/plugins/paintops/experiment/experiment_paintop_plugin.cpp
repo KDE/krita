@@ -36,9 +36,9 @@ K_EXPORT_COMPONENT_FACTORY(kritaexperimentpaintop, ExperimentPaintOpPluginFactor
 
 
 ExperimentPaintOpPlugin::ExperimentPaintOpPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(ExperimentPaintOpPluginFactory::componentData());
+    //setComponentData(ExperimentPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisExperimentPaintOp, KisExperimentPaintOpSettings, KisExperimentPaintOpSettingsWidget>("experimentbrush", i18n("Experiment brush"), "krita-experiment.png"));
 }

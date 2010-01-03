@@ -35,9 +35,9 @@ K_EXPORT_COMPONENT_FACTORY(kritadeformpaintop, DeformPaintOpPluginFactory("krita
 
 
 DeformPaintOpPlugin::DeformPaintOpPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(DeformPaintOpPluginFactory::componentData());
+    //setComponentData(DeformPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisDeformPaintOpFactory);
 

@@ -43,9 +43,9 @@ typedef KGenericFactory<KritaConvolutionFilters> KritaConvolutionFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY(kritaconvolutionfilters, KritaConvolutionFiltersFactory("krita"))
 
 KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KritaConvolutionFiltersFactory::componentData());
+    //setComponentData(KritaConvolutionFiltersFactory::componentData());
     KisFilterRegistry * manager = KisFilterRegistry::instance();
     manager->add(new KisSharpenFilter());
     manager->add(new KisMeanRemovalFilter());

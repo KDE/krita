@@ -29,9 +29,9 @@ typedef KGenericFactory<BlurFilterPlugin> BlurFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kritablurfilter, BlurFilterPluginFactory("krita"))
 
 BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(BlurFilterPluginFactory::componentData());
+    //setComponentData(BlurFilterPluginFactory::componentData());
 
     KisFilterRegistry::instance()->add(new KisBlurFilter());
     KisFilterRegistry::instance()->add(new KisGaussianBlurFilter());

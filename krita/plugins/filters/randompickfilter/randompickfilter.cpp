@@ -56,9 +56,9 @@ typedef KGenericFactory<KritaRandomPickFilter> KritaRandomPickFilterFactory;
 K_EXPORT_COMPONENT_FACTORY(kritarandompickfilter, KritaRandomPickFilterFactory("krita"))
 
 KritaRandomPickFilter::KritaRandomPickFilter(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KritaRandomPickFilterFactory::componentData());
+    //setComponentData(KritaRandomPickFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterRandomPick());
 }
 

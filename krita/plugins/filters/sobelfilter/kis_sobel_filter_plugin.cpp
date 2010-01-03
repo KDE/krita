@@ -30,9 +30,9 @@ typedef KGenericFactory<KisSobelFilterPlugin> KisSobelFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kritasobelfilter, KisSobelFilterPluginFactory("krita"))
 
 KisSobelFilterPlugin::KisSobelFilterPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KisSobelFilterPluginFactory::componentData());
+    //setComponentData(KisSobelFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisSobelFilter());
 }
 

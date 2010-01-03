@@ -24,7 +24,7 @@
 /**
  * A module that provides a star tool.
  */
-class ToolStar : public KParts::Plugin
+class ToolStar : public QObject
 {
     Q_OBJECT
 public:

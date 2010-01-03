@@ -22,7 +22,7 @@
 
 #include <kparts/plugin.h>
 
-class KisSmallTilesFilterPlugin : public KParts::Plugin
+class KisSmallTilesFilterPlugin : public QObject
 {
 public:
     KisSmallTilesFilterPlugin(QObject *parent, const QStringList &);

@@ -47,9 +47,9 @@ typedef KGenericFactory<KritaImageEnhancement> KritaImageEnhancementFactory;
 K_EXPORT_COMPONENT_FACTORY(kritaimageenhancement, KritaImageEnhancementFactory("krita"))
 
 KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
-    setComponentData(KritaImageEnhancementFactory::componentData());
+    //setComponentData(KritaImageEnhancementFactory::componentData());
     KisFilterRegistry::instance()->add(new KisSimpleNoiseReducer());
     KisFilterRegistry::instance()->add(new KisWaveletNoiseReduction());
 }

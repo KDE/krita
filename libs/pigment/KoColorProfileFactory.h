@@ -29,7 +29,8 @@
 /**
  * Base class for KoColorProfileFactories
  */
-class PIGMENTCMS_EXPORT KoColorProfileFactory {
+class PIGMENTCMS_EXPORT KoColorProfileFactory
+{
 public:
 
     virtual ~KoColorProfileFactory() {}

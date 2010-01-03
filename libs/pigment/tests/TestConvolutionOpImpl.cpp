@@ -70,7 +70,7 @@ void TestConvolutionOpImpl::testConvolutionOpImpl()
 
     {
         qreal kernelValues[] = { 1, 1, 1};
-        op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
+        op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray());
         dbgPigment << dst16[0] << " " << dst16[1] << " " << dst16[2] << " " << QBitArray().isEmpty();
         QVERIFY2(dst16[0] == 250, QString("%1 250").arg(dst16[0]).toLatin1());
         QVERIFY2(dst16[1] == 650, QString("%1 650").arg(dst16[1]).toLatin1());
@@ -84,41 +84,41 @@ void TestConvolutionOpImpl::testConvolutionOpImpl()
     }
     {
         qreal kernelValues[] = { -1, 1, -1};
-        op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
-        QVERIFY2( dst16[0] == 0, QString("%1 0").arg(dst16[0]).toLatin1() );
-        QVERIFY2( dst16[1] == 0, QString("%1 0").arg(dst16[1]).toLatin1() );
-        QVERIFY2( dst16[2] == 0, QString("%1 0").arg(dst16[2]).toLatin1() );
-        QVERIFY2( dst16[3] == 0, QString("%1 0").arg(dst16[3]).toLatin1() );
-   }
-   {
+        op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray());
+        QVERIFY2(dst16[0] == 0, QString("%1 0").arg(dst16[0]).toLatin1());
+        QVERIFY2(dst16[1] == 0, QString("%1 0").arg(dst16[1]).toLatin1());
+        QVERIFY2(dst16[2] == 0, QString("%1 0").arg(dst16[2]).toLatin1());
+        QVERIFY2(dst16[3] == 0, QString("%1 0").arg(dst16[3]).toLatin1());
+    }
+    {
         qreal kernelValues[] = { 1, 2, 1};
-        op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
-        QVERIFY2( dst16[0] == 300, QString("%1 300").arg(dst16[0]).toLatin1() );
-        QVERIFY2( dst16[1] == 800, QString("%1 800").arg(dst16[1]).toLatin1() );
-        QVERIFY2( dst16[2] == 350, QString("%1 350").arg(dst16[2]).toLatin1() );
-        QVERIFY2( dst16[3] == 0xFFFF, QString("%1 0xFFFF").arg(dst16[3]).toLatin1() );
-   }
-   {
+        op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray());
+        QVERIFY2(dst16[0] == 300, QString("%1 300").arg(dst16[0]).toLatin1());
+        QVERIFY2(dst16[1] == 800, QString("%1 800").arg(dst16[1]).toLatin1());
+        QVERIFY2(dst16[2] == 350, QString("%1 350").arg(dst16[2]).toLatin1());
+        QVERIFY2(dst16[3] == 0xFFFF, QString("%1 0xFFFF").arg(dst16[3]).toLatin1());
+    }
+    {
         qreal kernelValues[] = { 1, -1, 1};
-        op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
-        QVERIFY2( dst16[0] == 150, QString("%1 150").arg(dst16[0]).toLatin1() );
-        QVERIFY2( dst16[1] == 350, QString("%1 350").arg(dst16[1]).toLatin1() );
-        QVERIFY2( dst16[2] == 350, QString("%1 350").arg(dst16[2]).toLatin1() );
-        QVERIFY2( dst16[3] == 0xFFFF, QString("%1 0xFFFF").arg(dst16[3]).toLatin1() );
-   }
-   {
+        op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray());
+        QVERIFY2(dst16[0] == 150, QString("%1 150").arg(dst16[0]).toLatin1());
+        QVERIFY2(dst16[1] == 350, QString("%1 350").arg(dst16[1]).toLatin1());
+        QVERIFY2(dst16[2] == 350, QString("%1 350").arg(dst16[2]).toLatin1());
+        QVERIFY2(dst16[3] == 0xFFFF, QString("%1 0xFFFF").arg(dst16[3]).toLatin1());
+    }
+    {
         qreal kernelValues[] = { 1, -1, 1};
-        op.convolveColors(colors, kernelValues, dst, 1, 100, 3, QBitArray() );
-        QVERIFY2( dst16[0] == 250, QString("%1 250").arg(dst16[0]).toLatin1() );
-        QVERIFY2( dst16[1] == 450, QString("%1 450").arg(dst16[1]).toLatin1() );
-        QVERIFY2( dst16[2] == 450, QString("%1 450").arg(dst16[2]).toLatin1() );
-        QVERIFY2( dst16[3] == 0xFFFF, QString("%1 0xFFFF").arg(dst16[3]).toLatin1() );
-        op.convolveColors(colors, kernelValues, dst, 1, -100, 3, QBitArray() );
-        QVERIFY2( dst16[0] == 50, QString("%1 50").arg(dst16[0]).toLatin1() );
-        QVERIFY2( dst16[1] == 250, QString("%1 250").arg(dst16[1]).toLatin1() );
-        QVERIFY2( dst16[2] == 250, QString("%1 250").arg(dst16[2]).toLatin1() );
-        QVERIFY2( dst16[3] == 0xFF9B, QString("%1 0xFF9B").arg(dst16[3]).toLatin1() );
-   }
+        op.convolveColors(colors, kernelValues, dst, 1, 100, 3, QBitArray());
+        QVERIFY2(dst16[0] == 250, QString("%1 250").arg(dst16[0]).toLatin1());
+        QVERIFY2(dst16[1] == 450, QString("%1 450").arg(dst16[1]).toLatin1());
+        QVERIFY2(dst16[2] == 450, QString("%1 450").arg(dst16[2]).toLatin1());
+        QVERIFY2(dst16[3] == 0xFFFF, QString("%1 0xFFFF").arg(dst16[3]).toLatin1());
+        op.convolveColors(colors, kernelValues, dst, 1, -100, 3, QBitArray());
+        QVERIFY2(dst16[0] == 50, QString("%1 50").arg(dst16[0]).toLatin1());
+        QVERIFY2(dst16[1] == 250, QString("%1 250").arg(dst16[1]).toLatin1());
+        QVERIFY2(dst16[2] == 250, QString("%1 250").arg(dst16[2]).toLatin1());
+        QVERIFY2(dst16[3] == 0xFF9B, QString("%1 0xFF9B").arg(dst16[3]).toLatin1());
+    }
 }
 
 void TestConvolutionOpImpl::testOneSemiTransparent()
@@ -150,10 +150,10 @@ void TestConvolutionOpImpl::testOneSemiTransparent()
         // Tests for Case A)
 
         qreal kernelValues[] = { 1, 1, 1};
-        op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray() );
-        QVERIFY2( dst16[0] == 250, QString("%1 250").arg(dst16[0]).toLatin1() );
-        QVERIFY2( dst16[1] == 650, QString("%1 650").arg(dst16[1]).toLatin1() );
-        QVERIFY2( dst16[2] == 350, QString("%1 350").arg(dst16[2]).toLatin1() );
+        op.convolveColors(colors, kernelValues, dst, 1, 0, 3, QBitArray());
+        QVERIFY2(dst16[0] == 250, QString("%1 250").arg(dst16[0]).toLatin1());
+        QVERIFY2(dst16[1] == 650, QString("%1 650").arg(dst16[1]).toLatin1());
+        QVERIFY2(dst16[2] == 350, QString("%1 350").arg(dst16[2]).toLatin1());
 
         QVERIFY2(dst16[3] == 0xFFFF, QString("%1 0xFFFF").arg(dst16[3]).toLatin1());
 

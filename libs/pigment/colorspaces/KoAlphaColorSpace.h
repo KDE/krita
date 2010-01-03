@@ -80,7 +80,9 @@ public:
 
     virtual void convolveColors(quint8** colors, qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const;
 
-    virtual quint32 colorSpaceType() const { return 0; }
+    virtual quint32 colorSpaceType() const {
+        return 0;
+    }
 
     virtual bool hasHighDynamicRange() const {
         return false;

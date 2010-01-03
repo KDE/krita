@@ -34,7 +34,7 @@ struct KoColorConversionSystem::Node {
 
     void init(const KoColorSpaceFactory* _colorSpaceFactory) {
         dbgPigment << "Initialise " << modelId << " " << depthId << " " << profileName;
-        Q_ASSERT(not isInitialized);
+        Q_ASSERT(!isInitialized);
         isInitialized = true;
 
         if (_colorSpaceFactory) {
@@ -43,12 +43,12 @@ struct KoColorConversionSystem::Node {
             colorSpaceFactory = _colorSpaceFactory;
             referenceDepth = _colorSpaceFactory->referenceDepth();
             isGray = (_colorSpaceFactory->colorModelId() == GrayAColorModelID
-                      or _colorSpaceFactory->colorModelId() == GrayColorModelID);
+                      || _colorSpaceFactory->colorModelId() == GrayColorModelID);
         }
     }
 
     void init(const KoColorSpaceEngine* _engine) {
-        Q_ASSERT(not isInitialized);
+        Q_ASSERT(!isInitialized);
         isEngine = true;
         isInitialized = true;
         engine = _engine;
@@ -132,7 +132,7 @@ struct KoColorConversionSystem::NodeKey {
             , profileName(_profileName) {}
 
     bool operator==(const KoColorConversionSystem::NodeKey& rhs) const {
-        return modelId == rhs.modelId and depthId == rhs.depthId and profileName == rhs.profileName;
+        return modelId == rhs.modelId && depthId == rhs.depthId && profileName == rhs.profileName;
     }
 
     QString modelId;
@@ -170,8 +170,8 @@ struct KoColorConversionSystem::Path {
             referenceDepth = v->srcNode->referenceDepth;
         }
         vertexes.append(v);
-        if (not v->conserveColorInformation) respectColorCorrectness = false;
-        if (not v->conserveDynamicRange) keepDynamicRange = false;
+        if (!v->conserveColorInformation) respectColorCorrectness = false;
+        if (!v->conserveDynamicRange) keepDynamicRange = false;
         referenceDepth = qMin(referenceDepth, v->dstNode->referenceDepth);
         cost += v->dstNode->crossingCost;
     }
@@ -202,7 +202,7 @@ struct KoColorConversionSystem::Path {
 
     bool contains(Node* n) const {
         foreach(Vertex* v, vertexes) {
-            if (v->srcNode == n or v->dstNode == n) {
+            if (v->srcNode == n || v->dstNode == n) {
                 return true;
             }
         }
@@ -238,11 +238,11 @@ struct KoColorConversionSystem::Private {
 };
 
 #define CHECK_ONE_AND_NOT_THE_OTHER(name) \
-    if(path1-> name and not path2-> name) \
+    if(path1-> name && !path2-> name) \
     { \
         return true; \
     } \
-    if(not path1-> name and path2-> name) \
+    if(!path1-> name && path2-> name) \
     { \
         return false; \
     }
@@ -251,19 +251,19 @@ struct PathQualityChecker {
     PathQualityChecker(int _referenceDepth, bool _ignoreHdr, bool _ignoreColorCorrectness) : referenceDepth(_referenceDepth), ignoreHdr(_ignoreHdr), ignoreColorCorrectness(_ignoreColorCorrectness) {}
     /// @return true if the path maximize all the criterions (except length)
     inline bool isGoodPath(KoColorConversionSystem::Path* path) {
-        return (path->respectColorCorrectness or ignoreColorCorrectness) and
+        return (path->respectColorCorrectness || ignoreColorCorrectness) and
                (path->referenceDepth >= referenceDepth) and
-               (path->keepDynamicRange or ignoreHdr);
+               (path->keepDynamicRange || ignoreHdr);
     }
     /**
      * Compare two pathes.
      */
     inline bool lessWorseThan(KoColorConversionSystem::Path* path1, KoColorConversionSystem::Path* path2) {
         // There is no point in comparing two pathes which doesn't start from the same node or doesn't end at the same node
-        if (not ignoreHdr) {
+        if (!ignoreHdr) {
             CHECK_ONE_AND_NOT_THE_OTHER(keepDynamicRange)
         }
-        if (not ignoreColorCorrectness) {
+        if (!ignoreColorCorrectness) {
             CHECK_ONE_AND_NOT_THE_OTHER(respectColorCorrectness)
         }
         if (path1->referenceDepth == path2->referenceDepth) {

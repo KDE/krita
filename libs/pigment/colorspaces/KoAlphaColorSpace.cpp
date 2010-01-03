@@ -247,8 +247,7 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, qu
 {
     qreal totalAlpha = 0;
 
-    while (nColors--)
-    {
+    while (nColors--) {
         qreal weight = *kernelValues;
 
         if (weight != 0) {
@@ -258,8 +257,8 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, qu
         kernelValues++;
     }
 
-    if ( channelFlags.isEmpty() || channelFlags.testBit(PIXEL_MASK) )
-        dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, SCHAR_MAX);
+    if (channelFlags.isEmpty() || channelFlags.testBit(PIXEL_MASK))
+        dst[PIXEL_MASK] = CLAMP((totalAlpha / factor) + offset, 0, SCHAR_MAX);
 }
 
 

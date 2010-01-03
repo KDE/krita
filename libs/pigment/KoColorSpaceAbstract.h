@@ -140,24 +140,22 @@ public:
      *      @factor and incremented by @offset.
      */
 
-    virtual void convolveColors(const quint8* const* colors, const qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nPixels, const QBitArray & channelFlags) const
-        {
-            // Create and initialize to 0 the array of totals
-            qreal totals[_CSTrait::channels_nb];
+    virtual void convolveColors(const quint8* const* colors, const qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nPixels, const QBitArray & channelFlags) const {
+        // Create and initialize to 0 the array of totals
+        qreal totals[_CSTrait::channels_nb];
 
-            qreal totalWeight = 0;
-            qreal totalWeightTransparent = 0;
+        qreal totalWeight = 0;
+        qreal totalWeightTransparent = 0;
 
-            memset(totals, 0, sizeof(qreal) * _CSTrait::channels_nb);
+        memset(totals, 0, sizeof(qreal) * _CSTrait::channels_nb);
 
         for (;nPixels--; colors++, kernelValues++) {
             qint32 weight = *kernelValues;
 
-            if( weight != 0 )
-            {
+            if (weight != 0) {
                 qreal weight = *kernelValues;
                 const channels_type* color = _CSTrait::nativeArray(*colors);
-                if ( weight != 0 ) {
+                if (weight != 0) {
                     totalWeightTransparent += weight;
                 } else {
                     for (uint i = 0; i < _CSTrait::channels_nb; i++) {

@@ -43,7 +43,9 @@ public:
     /**
      * @return the type of this profile (icc, ctlcs etc)
      */
-    virtual QString type() const { return QString::null; }
+    virtual QString type() const {
+        return QString::null;
+    }
 
     /**
      * Create a copy of this profile.
@@ -119,7 +121,9 @@ public:
     /**
      * @return an array with the raw data of the profile
      */
-    virtual QByteArray rawData() const { return QByteArray(); }
+    virtual QByteArray rawData() const {
+        return QByteArray();
+    }
 
 protected:
     /**

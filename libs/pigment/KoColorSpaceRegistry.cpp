@@ -448,11 +448,9 @@ const KoColorSpace* KoColorSpaceRegistry::permanentColorspace(const KoColorSpace
 {
     if (_colorSpace->d->deletability != NotOwnedByRegistry) {
         return _colorSpace;
-    } 
-    else if (*_colorSpace == *d->alphaCs) {
+    } else if (*_colorSpace == *d->alphaCs) {
         return d->alphaCs;
-    } 
-    else {
+    } else {
         const KoColorSpace* cs = colorSpace(_colorSpace->id(), _colorSpace->profile());
         Q_ASSERT(cs);
         Q_ASSERT(*cs == *_colorSpace);

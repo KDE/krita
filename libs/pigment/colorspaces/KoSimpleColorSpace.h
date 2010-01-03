@@ -189,6 +189,10 @@ public:
     }
 
 
+    virtual QString colorSpaceEngine() const {
+        return "simple";
+    }
+
 private:
 
     QString m_name;

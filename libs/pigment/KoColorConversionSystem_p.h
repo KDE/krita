@@ -34,7 +34,10 @@ struct KoColorConversionSystem::Node {
 
     void init(const KoColorSpaceFactory* _colorSpaceFactory) {
         dbgPigment << "Initialise " << modelId << " " << depthId << " " << profileName;
-        Q_ASSERT(!isInitialized);
+
+        if (isInitialized) {
+            dbgPigment << "Re-initializing node. Old factory" << colorSpaceFactory << "new factory" << _colorSpaceFactory;
+        }
         isInitialized = true;
 
         if (_colorSpaceFactory) {

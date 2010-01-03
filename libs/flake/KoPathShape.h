@@ -325,7 +325,7 @@ public:
      * @brief Joins the given subpath with the following one
      *
      * Joins the given subpath with the following one by inserting a segment between
-     * the two subpathes.
+     * the two subpaths.
      * This does nothing if the specified subpath is the last subpath
      * or one of both subpaths is closed.
      *

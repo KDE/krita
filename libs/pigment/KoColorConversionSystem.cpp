@@ -418,9 +418,9 @@ QString KoColorConversionSystem::bestPathToDot(const QString& srcKey, const QStr
     return dot;
 }
 
-void KoColorConversionSystem::deletePathes(QList<KoColorConversionSystem::Path*> pathes) const
+void KoColorConversionSystem::deletePaths(QList<KoColorConversionSystem::Path*> paths) const
 {
-    foreach(Path* path, pathes) {
+    foreach(Path* path, paths) {
         delete path;
     }
 }
@@ -429,8 +429,8 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
 {
     PathQualityChecker pQC(qMin(srcNode->referenceDepth, dstNode->referenceDepth), ignoreHdr, ignoreColorCorrectness);
     Node2PathHash node2path; // current best path to reach a given node
-    QList<Path*> currentPathes; // list of all pathes
-    // Generate the initial list of pathes
+    QList<Path*> currentPaths; // list of all paths
+    // Generate the initial list of paths
     foreach(Vertex* v, srcNode->outputVertexes) {
         if (v->dstNode->isInitialized) {
             Path* p = new Path;
@@ -438,20 +438,20 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
             Node* endNode = p->endNode();
             if (endNode == dstNode) {
                 Q_ASSERT(pQC.isGoodPath(p));  // <- it's a direct link, it has to be a good path, damn it not  or go fix your color space not
-                deletePathes(currentPathes); // clean up
+                deletePaths(currentPaths); // clean up
                 p->isGood = true;
                 return p;
             } else {
                 Q_ASSERT(!node2path.contains(endNode));   // That would be a total fuck up if there are two vertexes between two nodes
                 node2path[ endNode ] = new Path(*p);
-                currentPathes.append(p);
+                currentPaths.append(p);
             }
         }
     }
     Path* lessWorsePath = 0;
     // Now loop until a path has been found
-    while (currentPathes.size() > 0) {
-        foreach(Path* p, currentPathes) {
+    while (currentPaths.size() > 0) {
+        foreach(Path* p, currentPaths) {
             Node* endNode = p->endNode();
             foreach(Vertex* v, endNode->outputVertexes) {
                 if (!p->contains(v->dstNode) &&  v->dstNode->isInitialized) {
@@ -460,7 +460,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
                     Node* newEndNode = newP->endNode();
                     if (newEndNode == dstNode) {
                         if (pQC.isGoodPath(newP)) { // Victory
-                            deletePathes(currentPathes); // clean up
+                            deletePaths(currentPaths); // clean up
                             newP->isGood = true;
                             return newP;
                         } else if (!lessWorsePath) {
@@ -479,19 +479,19 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
                             Path* p2 = node2path[newEndNode];
                             if (pQC.lessWorseThan(newP, p2)) {
                                 node2path[ newEndNode ] = new Path(*newP);
-                                currentPathes.append(newP);
+                                currentPaths.append(newP);
                                 delete p2;
                             } else {
                                 delete newP;
                             }
                         } else {
                             node2path[ newEndNode ] = new Path(*newP);
-                            currentPathes.append(newP);
+                            currentPaths.append(newP);
                         }
                     }
                 }
             }
-            currentPathes.removeAll(p);
+            currentPaths.removeAll(p);
             delete p;
         }
     }

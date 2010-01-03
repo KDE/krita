@@ -158,9 +158,9 @@ private:
      */
     Path* findBestPath(const Node* srcNode, const Node* dstNode) const;
     /**
-     * Delete all the pathes of the list given in argument.
+     * Delete all the paths of the list given in argument.
      */
-    void deletePathes(QList<KoColorConversionSystem::Path*> pathes) const;
+    void deletePaths(QList<KoColorConversionSystem::Path*> paths) const;
     /**
      * Don't call that function, but raher findBestPath
      * @internal

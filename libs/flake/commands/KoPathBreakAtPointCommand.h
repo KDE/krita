@@ -33,8 +33,8 @@ public:
     /**
      * Command to break a subpath at points.
      *
-     * The pathes are broken at the given points. New points will be inserted after
-     * the given points and then the pathes will be split after the given points.
+     * The paths are broken at the given points. New points will be inserted after
+     * the given points and then the paths will be split after the given points.
      *
      * @param pointDataList List of point data where the path should be split.
      * @param parent the parent command used for macro commands

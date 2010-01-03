@@ -179,7 +179,7 @@ void KoPathPointMergeCommand::redo()
         KoPathPointIndex newStartIndex(d->startPoint.first,0);
         d->pathShape->pointByIndex(newStartIndex)->setProperty(KoPathPoint::CloseSubpath);
     } else {
-        // first revert subpathes if needed
+        // first revert subpaths if needed
         if (d->reverse & Private::ReverseFirst) {
             d->pathShape->reverseSubpath(d->endPoint.first);
         }
@@ -189,7 +189,7 @@ void KoPathPointMergeCommand::redo()
         // move the subpaths so the second is directly after the first
         d->pathShape->moveSubpath(d->startPoint.first, d->endPoint.first + 1);
         d->splitIndex = d->pathShape->pathPointIndex(endPoint);
-        // join both subpathes
+        // join both subpaths
         d->pathShape->join(d->endPoint.first);
         // change the first point of the points to merge
         d->removedPoint = d->mergePoints(endPoint, startPoint);
@@ -217,7 +217,7 @@ void KoPathPointMergeCommand::undo()
         // reposition the points
         d->resetPoints(d->endPoint, d->startPoint);
     } else {
-        // break merged subpathes apart
+        // break merged subpaths apart
         d->pathShape->breakAfter(d->splitIndex);
         // reinsert the old second point
         d->pathShape->insertPoint(d->removedPoint, KoPathPointIndex(d->splitIndex.first+1,0));

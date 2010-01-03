@@ -76,18 +76,20 @@ void KoColorSpaceRegistry::init()
     d->colorConversionSystem = new KoColorConversionSystem;
     d->colorConversionCache = new KoColorConversionCache;
 
+    // Create the built-in colorspaces
     add(new KoLabColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
         (KoID("LABAHISTO", i18n("L*a*b* Histogram")), KoLabColorSpace::colorSpaceId()));
+
     add(new KoRgbU16ColorSpaceFactory());
+
     add(new KoRgbU8ColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
         (KoID("RGB8HISTO", i18n("RGB8 Histogram")), KoRgbU8ColorSpace::colorSpaceId()));
 
 
-    // Create the built-in colorspaces
     d->alphaCs = new KoAlphaColorSpace();
     d->alphaCs->d->deletability = OwnedByRegistryDoNotDelete;
 
@@ -112,7 +114,6 @@ KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())
 
 KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
-
     delete d->colorConversionSystem;
     foreach(KoColorProfile* profile, d->profileMap) {
         delete profile;

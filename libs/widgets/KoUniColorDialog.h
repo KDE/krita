@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2006 Casper Boemann (cbr@boemann.dk)
+ * Copyright (c) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,50 +17,35 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef KOCOLORPATCH_H
-#define KOCOLORPATCH_H
+#ifndef KOUNICOLORDIALOG_H
+#define KOUNICOLORDIALOG_H
 
-#include <QFrame>
+#include "KoColor.h"
 
-#include <KoColor.h>
-#include "kocolorwidgets_export.h"
+#include <kpagedialog.h>
+#include "kowidgets_export.h"
+
+class KoUniColorDialogPrivate;
 
 /**
- *  The small widget showing the selected color
+ * @short A colormanaged dialog for selecting a colors.
+ *
+ * KoUniColorDialog is simply the dialog'ification of KoUniColorChooser.
  */
-class KOCOLORWIDGETS_EXPORT KoColorPatch : public QFrame
+class KOWIDGETS_EXPORT KoUniColorDialog : public KPageDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-    explicit KoColorPatch( QWidget *parent );
-    virtual ~KoColorPatch();
+    explicit KoUniColorDialog(KoColor &initialColor, QWidget *parent = 0);
+    virtual ~KoUniColorDialog();
 
     /**
-     * Set the color of this color patch
-     * @param c the new color
-     */
-    void setColor( const KoColor c );
-
-    /**
-     * @return current color shown by this patch
-     */
+      * @return the selected color
+      */
     KoColor color() const;
 
-protected:
-    virtual void mousePressEvent(QMouseEvent *e ); ///< reimplemented from QFrame
-    virtual void paintEvent(QPaintEvent *e); ///< reimplemented from QFrame
-    virtual QSize sizeHint() const; ///< reimplemented from QFrame
-
-signals:
-
-    /**
-     * Emitted when the mouse is released.
-     * @param widget a pointer to this widget
-     */
-    void triggered(KoColorPatch *widget);
-
 private:
-  KoColor m_color;
+    KoUniColorDialogPrivate *d;
 };
 
 #endif

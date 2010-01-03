@@ -47,9 +47,7 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoColorBackground.h>
-#ifndef NO_PIGMENT
 #include <KoColorPopupAction.h>
-#endif
 
 #include <KoCharacterStyle.h>
 #include <KoTextDocumentLayout.h>
@@ -321,7 +319,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("format_fontsize", m_actionFormatFontSize);
     connect(m_actionFormatFontSize, SIGNAL(fontSizeChanged(int)), this, SLOT(setFontSize(int)));
 
-#ifndef NO_PIGMENT
     m_actionFormatTextColor = new KoColorPopupAction(this);
     m_actionFormatTextColor->setIcon(KIcon("format-text-color"));
     m_actionFormatTextColor->setToolTip(i18n("Text Color..."));
@@ -334,7 +331,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_actionFormatBackgroundColor->setText(i18n("Background"));
     addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
     connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBackgroundColor(const KoColor &)));
-#endif
+
     action = new KAction(i18n("Default Format"), this);
     addAction("text_default", action);
     action->setToolTip(i18n("Change text attributes to their default values"));

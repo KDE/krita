@@ -93,12 +93,6 @@ kde4_add_ui_files(textshape_SRCS
 
 kde4_add_plugin(textshape ${textshape_SRCS})
 
-if (NOT NO_PIGMENT)
-set(EXTRA_LIBS
-    kocolorwidgets
-)
-endif (NOT NO_PIGMENT)
-
 target_link_libraries(textshape kotext komain ${EXTRA_LIBS})
 
 install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})

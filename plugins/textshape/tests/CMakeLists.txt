@@ -4,11 +4,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/textshape
     ${CMAKE_SOURCE_DIR}/plugins/textshape/dialogs
     ${CMAKE_BINARY_DIR}/plugins/textshape/dialogs
     ${CMAKE_BINARY_DIR}/plugins/textshape
-    ${KOTEXT_INCLUDES} )
-
-if(NOT NO_PIGMENT)
-    include_directories(${PIGMENT_INCLUDES})
-endif(NOT NO_PIGMENT)
+    ${KOTEXT_INCLUDES}
+    ${PIGMENT_INCLUDES})
 
 
 ########### next target ###############
@@ -24,9 +21,6 @@ set(TestDocumentLayout_test_SRCS
 )
 
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
-if(NOT NO_PIGMENT)
-    set(EXTRA_LIBS kocolorwidgets)
-endif(NOT NO_PIGMENT)
 
 target_link_libraries(TestDocumentLayout ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY})
 

@@ -29,7 +29,7 @@
 #include <KoID.h>
 #include "flake_export.h"
 
-#include "FlakeColor.h" // For KoColor
+#include <KoColor.h>
 
 class KoShape;
 class KoLineBorder;

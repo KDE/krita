@@ -58,15 +58,14 @@ set(kofficedockers_SRCS
 
 add_subdirectory( strokedocker/pics )
 
-if (NOT NO_PIGMENT)
-    set(kofficedockers_SRCS ${kofficedockers_SRCS}
-        colordocker/ColorDocker.h
-        colordocker/ColorDockerFactory.h
-        colordocker/ColorDocker.cpp
-        colordocker/ColorDockerFactory.cpp
-    )
-    set(EXTRA_LIBS pigmentcms kocolorwidgets)
-endif (NOT NO_PIGMENT)
+set(kofficedockers_SRCS ${kofficedockers_SRCS}
+    colordocker/ColorDocker.h
+    colordocker/ColorDockerFactory.h
+    colordocker/ColorDocker.cpp
+    colordocker/ColorDockerFactory.cpp
+)
+set(EXTRA_LIBS pigmentcms kowidgets)
+
 
 kde4_add_plugin(kofficedockers ${kofficedockers_SRCS})
 

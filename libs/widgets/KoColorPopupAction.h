@@ -23,7 +23,7 @@
 
 #include <KAction>
 
-#include "kocolorwidgets_export.h"
+#include "kowidgets_export.h"
 
 class KoColor;
 
@@ -32,7 +32,7 @@ class KoColor;
  * @see KoColorPopupAction
  */
 
-class KOCOLORWIDGETS_EXPORT KoColorPopupAction : public KAction
+class KOWIDGETS_EXPORT KoColorPopupAction : public KAction
 {
     Q_OBJECT
 

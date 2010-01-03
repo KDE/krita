@@ -35,7 +35,6 @@ IF (TINY)
     set(SHOULD_BUILD_KWORD TRUE)
     set(SHOULD_BUILD_KPRESENTER TRUE)
     set(SHOULD_BUILD_KSPREAD TRUE)
-    set(SHOULD_BUILD_PIGMENT FALSE)
     set(SHOULD_BUILD_KARBON FALSE)
     set(SHOULD_BUILD_KRITA FALSE)
     set(SHOULD_BUILD_KEXI FALSE)
@@ -50,7 +49,6 @@ ELSE(TINY)
     set(SHOULD_BUILD_KWORD TRUE)
     set(SHOULD_BUILD_KPRESENTER TRUE)
     set(SHOULD_BUILD_KSPREAD TRUE)
-    set(SHOULD_BUILD_PIGMENT TRUE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
     set(SHOULD_BUILD_KEXI TRUE)
@@ -103,39 +101,16 @@ endif (APPLE)
 
  ################################
 #################################
-## Check wich pigment to build ##
+## Check for OpenEXR           ##
 #################################
 ################################
 
-IF(SHOULD_BUILD_PIGMENT)
-    SET(NO_PIGMENT FALSE)
 
-    macro_optional_find_package(OpenEXR)
-    macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
-    configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
-    install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+macro_optional_find_package(OpenEXR)
+macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
+configure_file(config-openexr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h )
+install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/config-openexr.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
-    include_directories(${CMAKE_SOURCE_DIR}/libs/pigment)
-    find_package(LCMS REQUIRED)
-    set(REQUIRED_LCMS_VERSION 118)
-
-    if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-        # FULL_PIGMENT is the most desirable state, we can compile Krita!
-        set(HAVE_REQUIRED_LCMS_VERSION TRUE)
-        set(BUILD_pigment TRUE)
-        set(HAVE_LCMS TRUE)
-    else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-        message( FATAL_ERROR "Old LCMS version found, upgrade to 1.18.")
-        set(BUILD_pigment FALSE)
-        set(HAVE_LCMS FALSE)
-    endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-
-    macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required by for color management and for Krita")
-
-ELSE(SHOULD_BUILD_PIGMENT)
-    SET(NO_PIGMENT TRUE)
-    add_definitions("-DNO_PIGMENT")
-ENDIF(SHOULD_BUILD_PIGMENT)
 
  ###########################
 ############################
@@ -277,28 +252,24 @@ set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${KOBASE_INCLUDES}
                    ${KOSTORE_INCLUDES})
 
-# flake depends on koodf
-set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
-                   ${KOODF_INCLUDES}
-                   ${KOPLUGIN_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/flake/commands
-                   ${CMAKE_SOURCE_DIR}/libs/flake/tools
-                   ${CMAKE_BINARY_DIR}/libs/flake)
 
-if (NOT NO_PIGMENT)
 # pigment depends on koplugin and lcms
-    set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
+set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
                    ${QT_INCLUDES}
                    ${KDE4_INCLUDES}
                    ${LCMS_INCLUDE_DIR} )
-endif (NOT NO_PIGMENT)
 
-if(BUILD_pigment)
-    set(FLAKE_INCLUDES ${FLAKE_INCLUDES} ${PIGMENT_INCLUDES})
-endif(BUILD_pigment)
+# flake depends on koodf and pigment
+set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
+                   ${KOODF_INCLUDES}
+                   ${KOPLUGIN_INCLUDES}
+                   ${PIGMENT_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/flake/commands
+                   ${CMAKE_SOURCE_DIR}/libs/flake/tools
+                   ${CMAKE_BINARY_DIR}/libs/flake)
 
 # KoText depends on koplugin, odf
 set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
@@ -313,7 +284,6 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/kocolorwidgets
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
 
@@ -337,9 +307,7 @@ set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/li
 #
 
 ### Karbon: pigment
-if (NOT BUILD_pigment)
-    set(SHOULD_BUILD_KARBON FALSE)
-endif (NOT BUILD_pigment)
+set(SHOULD_BUILD_KARBON FALSE)
 
 ### KSpread: eigen2
 if(NOT EIGEN2_FOUND)
@@ -357,9 +325,9 @@ if(NOT BZIP2_EXECUTABLE )
 endif(NOT BZIP2_EXECUTABLE )
 
 ### Krita: pigment, blitz, eigen2, exiv2
-if(NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT KDE4_3_0)
+if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT KDE4_3_0)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT BUILD_pigment OR NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT KDE4_3_0)
+endif(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT KDE4_3_0)
 
 ### KPlato: kdepimlibs
 if(NOT KdepimLibs_FOUND)

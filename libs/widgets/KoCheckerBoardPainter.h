@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,21 +16,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef FLAKE_COLOR_H
-#define FLAKE_COLOR_H
 
-// XXX: or do the #ifdef everywhere, as in Qt?
-#ifdef NO_PIGMENT
-#include <QColor>
-class KoColor : public QColor {
+#ifndef KOCHECKERBOARDPAINTER_H
+#define KOCHECKERBOARDPAINTER_H
+
+#include <QtGui/QPixmap>
+#include <QtGui/QColor>
+#include "kowidgets_export.h"
+
+class QPainter;
+
+class KOWIDGETS_EXPORT KoCheckerBoardPainter
+{
 public:
-    QColor toQColor() { return *this; }
-    QColor toQColor() const { return *this; }
+    KoCheckerBoardPainter( int checkerSize );
+    void setCheckerColors( const QColor &lightColor, const QColor &darkColor );
+    void setCheckerSize( int checkerSize );
+    void paint( QPainter &painter, const QRectF &rect ) const;
 
+private:
+    void createChecker();
+    int m_checkerSize;
+    QPixmap m_checker;
+    QColor m_lightColor;
+    QColor m_darkColor;
 };
-Q_DECLARE_METATYPE(KoColor)
-#else
-#   include <KoColor.h>
-#endif
 
-#endif
+#endif // KOCHECKERBOARDPAINTER_H

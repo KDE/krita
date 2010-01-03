@@ -17,34 +17,33 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_COLORSLIDER_H
-#define KO_COLORSLIDER_H
+#ifndef KO_XYCOLORSELECTOR_H
+#define KO_XYCOLORSELECTOR_H
 
-#include <kselector.h>
-#include "kocolorwidgets_export.h"
+#include <kxyselector.h>
 
-#include <KoColor.h>
+#include "KoColor.h"
+#include "kowidgets_export.h"
 
-class KOCOLORWIDGETS_EXPORT KoColorSlider : public KSelector
+class QPainter;
+class KoColorSpace;
+
+class KOWIDGETS_EXPORT KoXYColorSelector : public KXYSelector
 {
-    Q_OBJECT
-public:
-    KoColorSlider(QWidget *parent = 0);
-    explicit KoColorSlider(Qt::Orientation orientation, QWidget *parent = 0);
-    virtual ~KoColorSlider();
+  Q_OBJECT
 
 public:
-    void setColors( const KoColor& minColor, const KoColor& maxColor);
-    /**
-     * Return the current color
-     */
-    KoColor currentColor() const;
-protected:
-    virtual void drawContents( QPainter* );
+    explicit KoXYColorSelector( const KoColorSpace* colorSpace,  QWidget *parent=0 );
+
+    void setColors( const KoColor& topLeftColor, const KoColor& topRightColor,  const KoColor& bottomLeftColor, const KoColor& bottomRightColor);
 
 protected:
-    struct Private;
-    Private* const d;
+    virtual void drawContents( QPainter *painter );
+
+private:
+    KoColor m_colors[4];
+    enum {TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT};
+    const KoColorSpace* m_colorSpace;
 };
 
 #endif

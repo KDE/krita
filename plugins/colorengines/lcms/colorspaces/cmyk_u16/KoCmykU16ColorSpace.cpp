@@ -29,7 +29,7 @@
 #include "compositeops/KoCompositeOpDivide.h"
 #include "compositeops/KoCompositeOpBurn.h"
 
-KisCmykU16ColorSpace::KisCmykU16ColorSpace( KoColorProfile *p) :
+KoCmykU16ColorSpace::KoCmykU16ColorSpace( KoColorProfile *p) :
  KoLcmsColorSpace<CmykU16Traits>("CMYKA16", i18n("CMYK (16-bit integer/channel)"),  TYPE_CMYK5_16, icSigCmykData, p)
 {
     addChannel(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
@@ -46,7 +46,7 @@ KisCmykU16ColorSpace::KisCmykU16ColorSpace( KoColorProfile *p) :
     addCompositeOp( new KoCompositeOpBurn<CmykU16Traits>( this ) );
 }
 
-bool KisCmykU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
+bool KoCmykU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
     if (independence == TO_RGBA8) 
         return true;
@@ -54,12 +54,12 @@ bool KisCmykU16ColorSpace::willDegrade(ColorSpaceIndependence independence) cons
         return false;
 }
 
-KoColorSpace* KisCmykU16ColorSpace::clone() const
+KoColorSpace* KoCmykU16ColorSpace::clone() const
 {
-    return new KisCmykU16ColorSpace( profile()->clone());
+    return new KoCmykU16ColorSpace( profile()->clone());
 }
 
-void KisCmykU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void KoCmykU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
 {
     const CmykU16Traits::Pixel* p = reinterpret_cast<const CmykU16Traits::Pixel*>( pixel );
     QDomElement labElt = doc.createElement( "CMYK" );
@@ -71,7 +71,7 @@ void KisCmykU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, Q
     colorElt.appendChild( labElt );
 }
 
-void KisCmykU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
+void KoCmykU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     CmykU16Traits::Pixel* p = reinterpret_cast<CmykU16Traits::Pixel*>( pixel );
     p->cyan = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(elt.attribute("c").toDouble());

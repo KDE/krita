@@ -26,10 +26,10 @@
 
 typedef KoCmykTraits<quint8> CmykU8Traits;
 
-class KisCmykU8ColorSpace : public KoLcmsColorSpace<CmykU8Traits>
+class KoCmykU8ColorSpace : public KoLcmsColorSpace<CmykU8Traits>
 {
     public:
-        KisCmykU8ColorSpace( KoColorProfile *p);
+        KoCmykU8ColorSpace( KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
         virtual KoID colorModelId() const { return CMYKAColorModelID; }
         virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
@@ -38,10 +38,10 @@ class KisCmykU8ColorSpace : public KoLcmsColorSpace<CmykU8Traits>
         virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
 };
 
-class KisCmykU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
+class KoCmykU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
     public:
-        KisCmykU8ColorSpaceFactory(): KoLcmsColorSpaceFactory(TYPE_CMYK5_8, icSigCmykData)
+        KoCmykU8ColorSpaceFactory(): KoLcmsColorSpaceFactory(TYPE_CMYK5_8, icSigCmykData)
         {}
         virtual bool userVisible() const { return true; }
         virtual QString id() const { return "CMYK"; }
@@ -50,7 +50,7 @@ class KisCmykU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
         virtual int referenceDepth() const { return 8; }
 
-        virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KisCmykU8ColorSpace(p->clone()); }
+        virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KoCmykU8ColorSpace(p->clone()); }
 
         virtual QString defaultProfile() const { return "Adobe CMYK"; }
 };

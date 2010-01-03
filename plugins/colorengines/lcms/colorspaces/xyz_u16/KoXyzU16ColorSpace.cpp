@@ -29,7 +29,7 @@
 #include "compositeops/KoCompositeOpDivide.h"
 #include "compositeops/KoCompositeOpBurn.h"
 
-KisXyzU16ColorSpace::KisXyzU16ColorSpace(KoColorProfile *p) :
+KoXyzU16ColorSpace::KoXyzU16ColorSpace(KoColorProfile *p) :
         KoLcmsColorSpace<XyzU16Traits>("XYZA16", i18n("XYZ (16-bit integer/channel)"),  TYPE_XYZA_16, icSigXYZData, p)
 {
     addChannel(new KoChannelInfo(i18n("X"), XyzU16Traits::x_pos * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
@@ -45,7 +45,7 @@ KisXyzU16ColorSpace::KisXyzU16ColorSpace(KoColorProfile *p) :
     addCompositeOp(new KoCompositeOpBurn<XyzU16Traits>(this));
 }
 
-bool KisXyzU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
+bool KoXyzU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
     if (independence == TO_RGBA8)
         return true;
@@ -53,12 +53,12 @@ bool KisXyzU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
         return false;
 }
 
-KoColorSpace* KisXyzU16ColorSpace::clone() const
+KoColorSpace* KoXyzU16ColorSpace::clone() const
 {
-    return new KisXyzU16ColorSpace(profile()->clone());
+    return new KoXyzU16ColorSpace(profile()->clone());
 }
 
-void KisXyzU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void KoXyzU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
 {
     const XyzU16Traits::Pixel* p = reinterpret_cast<const XyzU16Traits::Pixel*>(pixel);
     QDomElement labElt = doc.createElement("XYZ");
@@ -69,7 +69,7 @@ void KisXyzU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDo
     colorElt.appendChild(labElt);
 }
 
-void KisXyzU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void KoXyzU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
 {
     XyzU16Traits::Pixel* p = reinterpret_cast<XyzU16Traits::Pixel*>(pixel);
     p->X = KoColorSpaceMaths< qreal, XyzU16Traits::channels_type >::scaleToA(elt.attribute("x").toDouble());

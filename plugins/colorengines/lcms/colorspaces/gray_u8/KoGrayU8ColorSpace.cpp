@@ -31,7 +31,7 @@
 #include "compositeops/KoCompositeOpDivide.h"
 #include "compositeops/KoCompositeOpBurn.h"
 
-KisGrayAU8ColorSpace ::KisGrayAU8ColorSpace( KoColorProfile *p) :
+KoGrayAU8ColorSpace ::KoGrayAU8ColorSpace( KoColorProfile *p) :
             KoLcmsColorSpace<GrayAU8Traits>("GRAYA", i18n("Grayscale (8-bit integer/channel)"), TYPE_GRAYA_8, icSigGrayData, p)
 {
     addChannel(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
@@ -46,12 +46,12 @@ KisGrayAU8ColorSpace ::KisGrayAU8ColorSpace( KoColorProfile *p) :
     addCompositeOp( new KoCompositeOpBurn<GrayAU8Traits>( this ) );
 }
 
-KoColorSpace* KisGrayAU8ColorSpace::clone() const
+KoColorSpace* KoGrayAU8ColorSpace::clone() const
 {
-    return new KisGrayAU8ColorSpace(profile()->clone());
+    return new KoGrayAU8ColorSpace(profile()->clone());
 }
 
-void KisGrayAU8ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void KoGrayAU8ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
 {
     const GrayAU8Traits::channels_type* p = reinterpret_cast<const GrayAU8Traits::channels_type*>( pixel );
     QDomElement labElt = doc.createElement( "Gray" );
@@ -60,7 +60,7 @@ void KisGrayAU8ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, Q
     colorElt.appendChild( labElt );
 }
 
-void KisGrayAU8ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
+void KoGrayAU8ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     GrayAU8Traits::channels_type* p = reinterpret_cast<GrayAU8Traits::channels_type*>( pixel );
     p[0] = KoColorSpaceMaths< qreal, GrayAU8Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());

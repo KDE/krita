@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KoGray16NoAlphaColorSpace.h"
+#include "KoGrayU16NoAlphaColorSpace.h"
 
 #include <QDomElement>
 
@@ -29,7 +29,7 @@
 #include "compositeops/KoCompositeOpErase.h"
 
 
-KisGrayU16ColorSpace ::KisGrayU16ColorSpace(KoColorProfile *p) :
+KoGrayU16ColorSpace ::KoGrayU16ColorSpace(KoColorProfile *p) :
         KoLcmsColorSpace<GrayU16Traits>("GRAYU16", i18n("Grayscale (16-bit integer/channel)"), TYPE_GRAY_16, icSigGrayData, p)
 {
     addChannel(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
@@ -40,13 +40,13 @@ KisGrayU16ColorSpace ::KisGrayU16ColorSpace(KoColorProfile *p) :
     addCompositeOp(new KoCompositeOpErase<GrayU16Traits>(this));
 }
 
-KoColorSpace* KisGrayU16ColorSpace::clone() const
+KoColorSpace* KoGrayU16ColorSpace::clone() const
 {
-    return new KisGrayU16ColorSpace(profile()->clone());
+    return new KoGrayU16ColorSpace(profile()->clone());
 }
 
 
-void KisGrayU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void KoGrayU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
 {
     const GrayU16Traits::channels_type* p = reinterpret_cast<const GrayU16Traits::channels_type*>(pixel);
     QDomElement labElt = doc.createElement("Gray");
@@ -55,7 +55,7 @@ void KisGrayU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QD
     colorElt.appendChild(labElt);
 }
 
-void KisGrayU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void KoGrayU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
 {
     GrayU16Traits::channels_type* p = reinterpret_cast<GrayU16Traits::channels_type*>(pixel);
     p[0] = KoColorSpaceMaths< qreal, GrayU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());

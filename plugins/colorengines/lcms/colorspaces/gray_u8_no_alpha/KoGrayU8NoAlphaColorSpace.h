@@ -21,17 +21,16 @@
 #include <QColor>
 
 #include <klocale.h>
-#include <krita_gray_u8_export.h>
 #include "KoLcmsColorSpace.h"
 #include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>
 
 typedef KoColorSpaceTrait < quint8, 1, -1 > GrayU8Traits;
 
-class KRITA_GRAY_U8_EXPORT KisGrayColorSpace : public KoLcmsColorSpace<GrayU8Traits>
+class KoGrayColorSpace : public KoLcmsColorSpace<GrayU8Traits>
 {
 public:
-    KisGrayColorSpace(KoColorProfile *p);
+    KoGrayColorSpace(KoColorProfile *p);
     virtual bool willDegrade(ColorSpaceIndependence) const {
         return false;
     }
@@ -46,10 +45,10 @@ public:
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
 };
 
-class KisGrayColorSpaceFactory : public KoLcmsColorSpaceFactory
+class KoGrayColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
 public:
-    KisGrayColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAY_8, icSigGrayData) {}
+    KoGrayColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAY_8, icSigGrayData) {}
     virtual QString id() const {
         return "GRAYU8";
     }
@@ -70,7 +69,7 @@ public:
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
-        return new KisGrayColorSpace(p->clone());
+        return new KoGrayColorSpace(p->clone());
     }
 
     virtual QString defaultProfile() const {

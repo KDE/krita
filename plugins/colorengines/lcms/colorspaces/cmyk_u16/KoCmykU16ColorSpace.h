@@ -23,15 +23,14 @@
 #include <KoLcmsColorSpace.h>
 #include <KoColorSpaceTraits.h>
 
-#include <pigment_cmyk_u16_export.h>
 #include "KoColorModelStandardIds.h"
 
 typedef KoCmykTraits<quint16> CmykU16Traits;
 
-class KisCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
+class KoCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
 {
     public:
-        KisCmykU16ColorSpace( KoColorProfile *p);
+        KoCmykU16ColorSpace( KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence independence) const;
         virtual KoID colorModelId() const { return CMYKAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
@@ -40,10 +39,10 @@ class KisCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
         virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
 };
 
-class KisCmykU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
+class KoCmykU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
     public:
-        KisCmykU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_CMYK5_16, icSigCmykData)
+        KoCmykU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_CMYK5_16, icSigCmykData)
         {
         }
         virtual bool userVisible() const { return true; }
@@ -53,7 +52,7 @@ class KisCmykU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
         virtual int referenceDepth() const { return 16; }
 
-        virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KisCmykU16ColorSpace( p->clone()); }
+        virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KoCmykU16ColorSpace( p->clone()); }
 
         virtual QString defaultProfile() const { return "Adobe CMYK"; }
 };

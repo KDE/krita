@@ -20,17 +20,16 @@
 #include <QColor>
 
 #include <klocale.h>
-#include <krita_gray_u16_export.h>
 #include "KoLcmsColorSpace.h"
 #include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>
 
 typedef KoColorSpaceTrait < quint16, 1, -1 > GrayU16Traits;
 
-class KRITA_GRAY_U16_EXPORT KisGrayU16ColorSpace : public KoLcmsColorSpace<GrayU16Traits>
+class KoGrayU16ColorSpace : public KoLcmsColorSpace<GrayU16Traits>
 {
 public:
-    KisGrayU16ColorSpace(KoColorProfile *p);
+    KoGrayU16ColorSpace(KoColorProfile *p);
     virtual bool willDegrade(ColorSpaceIndependence) const {
         return false;
     }
@@ -45,10 +44,10 @@ public:
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
 };
 
-class KisGrayU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
+class KoGrayU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
 public:
-    KisGrayU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAY_16, icSigGrayData) {}
+    KoGrayU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAY_16, icSigGrayData) {}
     virtual QString id() const {
         return "GRAYU16";
     }
@@ -69,7 +68,7 @@ public:
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
-        return new KisGrayU16ColorSpace(p->clone());
+        return new KoGrayU16ColorSpace(p->clone());
     }
 
     virtual QString defaultProfile() const {

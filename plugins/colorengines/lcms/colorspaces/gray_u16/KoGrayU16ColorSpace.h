@@ -19,17 +19,16 @@
 #define KIS_STRATEGY_COLORSPACE_GRAYSCALE_U16_H_
 
 #include <klocale.h>
-#include "pigment_gray_u16_export.h"
 #include "KoLcmsColorSpace.h"
 #include <KoColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"
 
 typedef KoColorSpaceTrait<quint16, 2, 1> GrayAU16Traits;
 
-class PIGMENT_GRAY_U16_EXPORT KisGrayAU16ColorSpace : public KoLcmsColorSpace<GrayAU16Traits>
+class KoGrayAU16ColorSpace : public KoLcmsColorSpace<GrayAU16Traits>
 {
     public:
-        KisGrayAU16ColorSpace( KoColorProfile *p);
+        KoGrayAU16ColorSpace( KoColorProfile *p);
         virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
         virtual KoID colorModelId() const { return GrayAColorModelID; }
         virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
@@ -38,10 +37,10 @@ class PIGMENT_GRAY_U16_EXPORT KisGrayAU16ColorSpace : public KoLcmsColorSpace<Gr
         virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
 };
 
-class KisGrayAU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
+class KoGrayAU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
 public:
-    KisGrayAU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAYA_16, icSigGrayData)
+    KoGrayAU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAYA_16, icSigGrayData)
     {}
     virtual QString id() const { return "GRAYA16"; }
     virtual QString name() const { return i18n("Grayscale (16-bit integer/channel)"); }
@@ -50,7 +49,7 @@ public:
     virtual int referenceDepth() const { return 16; }
     virtual bool userVisible() const { return true; }
 
-    virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KisGrayAU16ColorSpace( p->clone()); }
+    virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KoGrayAU16ColorSpace( p->clone()); }
 
     virtual QString defaultProfile() const { return "gray built-in - (lcms internal)"; }
 };

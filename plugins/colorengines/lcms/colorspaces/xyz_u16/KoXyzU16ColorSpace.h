@@ -23,15 +23,14 @@
 #include <KoLcmsColorSpace.h>
 #include <KoColorSpaceTraits.h>
 
-#include <pigment_xyz_u16_export.h>
 #include <KoColorModelStandardIds.h>
 
 typedef KoXyzTraits<quint16> XyzU16Traits;
 
-class PIGMENT_XYZ_U16_EXPORT KisXyzU16ColorSpace : public KoLcmsColorSpace<XyzU16Traits>
+class KoXyzU16ColorSpace : public KoLcmsColorSpace<XyzU16Traits>
 {
 public:
-    KisXyzU16ColorSpace(KoColorProfile *p);
+    KoXyzU16ColorSpace(KoColorProfile *p);
     virtual bool willDegrade(ColorSpaceIndependence independence) const;
     virtual KoID colorModelId() const {
         return XYZAColorModelID;
@@ -46,10 +45,10 @@ public:
 
 #define TYPE_XYZA_16 (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1))
 
-class KisXyzU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
+class KoXyzU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
 public:
-    KisXyzU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_XYZA_16, icSigXYZData) {
+    KoXyzU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_XYZA_16, icSigXYZData) {
     }
     virtual QString id() const {
         return "XYZA16";
@@ -72,7 +71,7 @@ public:
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
-        return new KisXyzU16ColorSpace(p->clone());
+        return new KoXyzU16ColorSpace(p->clone());
     }
 
     virtual QString defaultProfile() const {

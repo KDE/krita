@@ -189,6 +189,22 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http:/
 find_program(BZIP2_EXECUTABLE NAMES bzip2 )
 macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org" FALSE "" "Required by Kexi")
 
+##
+## Test for lcms
+## 
+macro_optional_find_package(LCMS)
+set(REQUIRED_LCMS_VERSION 118)
+if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
+    set(HAVE_LCMS TRUE)
+else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+    message( FATAL_ERROR "Old LCMS version found, upgrade to 1.18.")
+    set(HAVE_LCMS FALSE)
+endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+
+macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita's JPEG filter.")
+
+
 #Set the build of TextShape changetraker
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
@@ -306,8 +322,6 @@ set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/li
 # the test to the if construct
 #
 
-### Karbon: pigment
-set(SHOULD_BUILD_KARBON FALSE)
 
 ### KSpread: eigen2
 if(NOT EIGEN2_FOUND)

@@ -21,9 +21,6 @@ macro_log_feature( KDCRAW_FOUND "kdcraw" "The KDCraw library" "http://www.digika
 macro_optional_find_package(OpenJPEG)
 macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image compression" "http://www.openjpeg.org" FALSE "" "Required by the Krita JPEG 2000 filter")
 
-macro_optional_find_package(LCMS)
-macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for the jpeg filter.")
-
 include_directories(${KRITA_INCLUDES})
 
 if(KDCRAW_FOUND)

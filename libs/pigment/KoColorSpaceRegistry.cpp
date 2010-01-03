@@ -305,7 +305,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             cs = colorSpace(csID, profile->name());
         }
 
-        if (not d->profileMap.contains(profile->name())) {
+        if (!d->profileMap.contains(profile->name())) {
             addProfile(profile);
         }
 

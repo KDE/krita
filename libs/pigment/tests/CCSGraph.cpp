@@ -78,7 +78,7 @@ int main(int argc, char** argv)
     } else if (graphType == "bestpath") {
         QString srcKey = args->getOption("src-key");
         QString dstKey = args->getOption("dst-key");
-        if (srcKey == "" or dstKey == "") {
+        if (srcKey == "" || dstKey == "") {
             kError() << "src-key and dst-key must be specified for the graph bestpath";
             exit(EXIT_FAILURE);
         } else {
@@ -95,7 +95,7 @@ int main(int argc, char** argv)
             exit(EXIT_FAILURE);
         QTextStream out(&file);
         out << dot;
-    } else if (outputType == "ps" or outputType == "svg") {
+    } else if (outputType == "ps" || outputType == "svg") {
         QTemporaryFile file;
         if (!file.open()) {
             exit(EXIT_FAILURE);

@@ -28,6 +28,7 @@
 
 #include "kis_random_accessor.h"
 #include <cmath>
+#include <time.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand

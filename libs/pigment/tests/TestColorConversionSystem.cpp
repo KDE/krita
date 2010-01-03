@@ -56,7 +56,7 @@ void TestColorConversionSystem::testGoodConnections()
     int countFail = 0;
     foreach(ModelDepthProfile srcCS, listModels) {
         foreach(ModelDepthProfile dstCS, listModels) {
-            if (not KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.model, srcCS.depth, srcCS.profile , dstCS.model, dstCS.depth, dstCS.profile)) {
+            if (!KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.model, srcCS.depth, srcCS.profile , dstCS.model, dstCS.depth, dstCS.profile)) {
                 ++countFail;
                 dbgPigment << "No good path between \"" << srcCS.model << " " << srcCS.depth << " " << srcCS.profile << "\" \"" << dstCS.model << " " << dstCS.depth << " " << dstCS.profile << "\"";
             }

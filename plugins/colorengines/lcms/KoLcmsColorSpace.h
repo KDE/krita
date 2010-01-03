@@ -421,7 +421,7 @@ private:
     Private * const d;
 };
 
-class PIGMENTCMS_EXPORT KoLcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo
+class KoLcmsColorSpaceFactory : public KoColorSpaceFactory, private KoLcmsInfo
 {
 public:
     KoLcmsColorSpaceFactory(DWORD cmType, icColorSpaceSignature colorSpaceSignature) : KoLcmsInfo(cmType, colorSpaceSignature) {

@@ -28,7 +28,7 @@ struct KoRGBChromaticities;
 /**
  * This class contains an ICC color profile.
  */
-class PIGMENTCMS_EXPORT KoIccColorProfile : public KoColorProfile
+class KoIccColorProfile : public KoColorProfile
 {
 public:
 

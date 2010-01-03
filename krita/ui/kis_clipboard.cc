@@ -109,7 +109,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
         const KoColorProfile *profile = selection->colorSpace()->profile();
         KisAnnotationSP annotation;
 
-        if (profile and profile->type() == "icc" && !profile->rawData().isEmpty()) {
+        if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
             annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
 
             if (annotation) {

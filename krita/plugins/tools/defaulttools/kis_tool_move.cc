@@ -139,7 +139,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
             node = findNode(node, pos.x(), pos.y());
 
             // if there is a selection, we cannot move the group
-            if (!selection && (m_optionsWidget->radioGroup->isChecked() or e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier))) {
+            if (!selection && (m_optionsWidget->radioGroup->isChecked() || e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier))) {
                 node = node->parent();
             }
         }

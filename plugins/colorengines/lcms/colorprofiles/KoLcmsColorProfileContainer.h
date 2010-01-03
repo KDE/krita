@@ -36,7 +36,7 @@ struct KoRGBChromaticities;
 /**
  * This class contains an LCMS color profile. Don't use it outside KoLcmsColorSpace.
  */
-class PIGMENTCMS_EXPORT KoLcmsColorProfileContainer : public KoIccColorProfile::Container
+class KoLcmsColorProfileContainer : public KoIccColorProfile::Container
 {
     friend class KoIccColorProfile;
 protected:

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=LCMS Color Management Engine for Pigment
+X-KDE-ServiceTypes=KOffice/ColorSpace
+Type=Service
+X-KDE-Library=kolcmsengine
+X-Pigment-MinVersion=0
+X-Flake-PluginVersion=1

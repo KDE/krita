@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT */*.h */*.cc  -o $podir/kocolorspaces.pot
+$XGETTEXT */*.h */*.cc */*.cpp  -o $podir/kocolorspaces.pot

@@ -37,6 +37,7 @@
 #include "KoTextDocumentLayout.h"
 #include "KoTextBlockData.h"
 #include "KoTextDocument.h"
+#include "KoTOC.h"
 
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
@@ -374,7 +375,33 @@ void KoTextWriter::saveTable (QTextTable *table, QHash<QTextList *, QString> &li
     d->writer->endElement(); // table:table
 }
 
-void KoTextWriter::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable)
+void KoTextWriter::saveTOC(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)
+{
+
+    d->writer->startElement("text:table-of-content");
+        //TODO TOC styles
+        d->writer->startElement("text:index-body");
+            // write the title (one p block)
+            QTextCursor localBlock = toc->firstCursorPosition();
+            localBlock.movePosition(QTextCursor::NextBlock);
+            int endTitle = localBlock.position();
+            d->writer->startElement("text:index-title");
+                writeBlocks(document, from, endTitle, listStyles, currentTable, toc);
+            d->writer->endElement(); // text:index-title
+        from = endTitle;
+        QTextBlock block = toc->lastCursorPosition().block();
+        //while(block.isValid()){
+        writeBlocks(document, from, to, listStyles, currentTable, toc);
+        //  block = block.next();
+        //}
+        // write the blocks (all others p blocks)
+
+
+    d->writer->endElement(); // table:index-body
+    d->writer->endElement(); // table:table-of-content
+}
+
+void KoTextWriter::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame)
 {
     KoTextDocument textDocument(document);
     QTextBlock block = document->findBlock(from);
@@ -383,6 +410,15 @@ void KoTextWriter::writeBlocks(QTextDocument *document, int from, int to, QHash<
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
         QTextCursor cursor(block);
+        QTextFrame *cursorFrame = cursor.currentFrame();
+        if (cursorFrame != currentFrame && cursorFrame->format().hasProperty(tocType)) {
+            int frameBegin = cursorFrame->firstPosition();
+            int frameEnd = cursorFrame->lastPosition();
+            saveTOC(document, frameBegin, frameEnd, listStyles, currentTable, cursor.currentFrame());
+            block = cursorFrame->lastCursorPosition().block();
+            block = block.next();
+            continue;
+        }
         if (cursor.currentTable() != currentTable) {
             // Call the code to save the table....
             saveTable(cursor.currentTable(), listStyles);

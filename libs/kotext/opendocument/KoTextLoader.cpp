@@ -31,6 +31,7 @@
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
+#include "KoTOC.h"
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoProperties.h>
@@ -290,9 +291,10 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                     loadList(tag, cursor);
                 } else if (localName == "section") {  // Temporary support (TODO)
                     loadSection(tag, cursor);
+                } else if (localName == "table-of-content") {
+                     loadTOC(tag, cursor);
                 } else {
                     KoVariable *var = KoVariableRegistry::instance()->createFromOdf(tag, d->context);
-
                     if (var) {
                         KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
                         if (layout) {
@@ -894,6 +896,73 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
     } else {
         d->textSharedData->shapeInserted(shape, element, d->context);
     }
+}
+
+void KoTextLoader::loadTOC(const KoXmlElement &element, QTextCursor &cursor)
+{
+
+    // Add a frame to the current layout
+    QTextFrameFormat tocFormat;
+    tocFormat.setProperty(tocType, true);
+    cursor.insertFrame(tocFormat);
+    // Get the cursor of the frame
+    QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
+
+    // We'll just try to find dispalayable elements and add them as paragraphs
+    KoXmlElement e;
+    forEachElement(e, element) {
+        if (e.isNull() || e.namespaceURI() != KoXmlNS::text)
+            continue;
+        //TODO look at table-of-content-source : to get new styles,
+        // to manage the right alignment for instance.
+        // We look at the index body now :
+        if (e.localName() == "index-body") {
+            KoXmlElement p;
+            bool firstTime = true;
+            forEachElement(p, e) {
+                // All elem will be "p" instead of the title, which is particular
+                if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
+                    continue;
+
+                if (!firstTime) {
+                    // use empty formats to not inherit from the prev parag
+                    QTextBlockFormat bf;
+                    QTextCharFormat cf;
+                    cursorFrame.insertBlock(bf, cf);
+                }
+                firstTime = false;
+
+                QTextBlock current = cursorFrame.block();
+                QTextBlockFormat blockFormat;
+
+
+                // p
+                if (p.localName() == "p") {
+                    loadParagraph(p, cursorFrame);
+                // index title
+                } else if (p.localName() == "index-title") {
+                    KoXmlElement title;
+                    forEachElement(title, p){
+                        if (title.isNull() || title.namespaceURI() != KoXmlNS::text) {
+                            continue;
+                        }
+                        // The title is noted as a 'p', with a particular style
+                        if (title.localName() == "p") {
+                            loadParagraph(title, cursorFrame);
+                        }
+                    }
+                }
+
+                QTextCursor c(current);
+                c.mergeBlockFormat(blockFormat);
+                while (c.block() != cursorFrame.block()) {
+                    c.movePosition(QTextCursor::NextBlock);
+                }
+            }
+        }
+    }
+    // Get out of the frame
+    cursor.movePosition(QTextCursor::End);
 }
 
 void KoTextLoader::startBody(int total)

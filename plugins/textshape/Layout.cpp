@@ -996,6 +996,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
     for (it = frame->begin(); !(it.atEnd()); ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+        QTextFrame *subFrame = qobject_cast<QTextFrame*>(it.currentFrame());
 
         if (table) {
             m_tableLayout.setTable(table);
@@ -1004,6 +1005,9 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
             QPainterPath accuBlankBorders;
             m_tableLayout.drawBorders(painter, &accuBlankBorders);
             painter->strokePath(accuBlankBorders, QPen(QColor(0,0,0,96)));
+            continue;
+        } else if (subFrame) {
+            drawFrame(subFrame, painter, context, inTable);
             continue;
         } else {
             if (!block.isValid())
@@ -1346,7 +1350,7 @@ void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int sel
                     QTextCharFormat rFormat = r.format;
                     if ((rEnd >= fragmentBegin && rEnd <= fragmentEnd) || (fragmentEnd >= rStart && fragmentEnd <= rEnd)) { //intersect
                         ranges.erase(iter);
-                        
+
                         break;
                     }
                     ++iter;

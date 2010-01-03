@@ -98,8 +98,8 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
     m_khalfWidth = (m_kw - 1) / 2;
     m_khalfHeight = (m_kh - 1) / 2;
 
-    // Don do with an even sized kernel
-    Q_ASSERT(m_kw & 0x01 == 1 || m_kh & 0x01 == 1 || kernel->factor() != 0);
+    // Don't do with an even sized kernel
+    Q_ASSERT((m_kw & 0x01) == 1 || (m_kh & 0x01) == 1 || kernel->factor() != 0);
 
     bool hasProgressUpdater = progressUpdater();
     if (hasProgressUpdater)

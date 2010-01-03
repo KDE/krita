@@ -24,6 +24,7 @@
 
 #include "KoColorSpaceConstants.h"
 #include "KoColorSpaceMaths.h"
+#include "DebugPigment.h"
 
 /**
  * This class is the base class to define the main characteristics of a colorspace

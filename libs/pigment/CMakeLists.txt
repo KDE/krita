@@ -38,6 +38,7 @@ set(pigmentcms_SRCS
     colorspaces/KoLabColorSpace.cpp
     colorspaces/KoRgbU16ColorSpace.cpp
     colorspaces/KoRgbU8ColorSpace.cpp
+    colorspaces/KoSimpleColorSpaceEngine.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
     resources/KoPattern.cpp

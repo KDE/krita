@@ -50,22 +50,6 @@ public:
 
     virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
 
-    virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent) const;
-
-    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const;
-
-    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const;
-
-    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const;
-
-    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const;
-
-    virtual bool convertPixelsTo(const quint8 *src,
-                                 quint8 *dst, const KoColorSpace * dstColorSpace,
-                                 quint32 numPixels,
-                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
-
 };
 
 class KoRgbU8ColorSpaceFactory : public KoSimpleColorSpaceFactory

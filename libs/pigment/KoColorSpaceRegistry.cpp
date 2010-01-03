@@ -47,6 +47,7 @@
 #include "colorspaces/KoLabColorSpace.h"
 #include "colorspaces/KoRgbU16ColorSpace.h"
 #include "colorspaces/KoRgbU8ColorSpace.h"
+#include "colorspaces/KoSimpleColorSpaceEngine.h"
 #include "KoColorSpace_p.h"
 
 struct KoColorSpaceRegistry::Private {
@@ -77,6 +78,8 @@ void KoColorSpaceRegistry::init()
     d->lab16sLAB = 0;
     d->colorConversionSystem = new KoColorConversionSystem;
     d->colorConversionCache = new KoColorConversionCache;
+
+    KoColorSpaceEngineRegistry::instance()->add(new KoSimpleColorSpaceEngine());
 
     // Create the built-in colorspaces
     add(new KoLabColorSpaceFactory());

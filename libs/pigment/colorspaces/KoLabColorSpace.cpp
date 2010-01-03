@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004-2009 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -60,8 +60,7 @@ KoLabColorSpace::~KoLabColorSpace()
 }
 
 
-QString KoLabColorSpace::colorSpaceId()
-{
+QString KoLabColorSpace::colorSpaceId(){
     return QString("LABA");
 }
 
@@ -73,52 +72,102 @@ KoColorSpace* KoLabColorSpace::clone() const
 
 void KoLabColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
+    // Convert between RGB and CIE-Lab color spaces
+    // Uses ITU-R recommendation BT.709 with D65 as reference white.
+    // algorithm contributed by "Mark A. Ruzon" <ruzon@CS.Stanford.EDU>
+
+    int R, G, B, A;
+    c.getRgb(&R, &G, &B, &A);
+
+    double X, Y, Z, fX, fY, fZ;
+
+    X = 0.412453 * R + 0.357580 * G + 0.180423 * B;
+    Y = 0.212671 * R + 0.715160 * G + 0.072169 * B;
+    Z = 0.019334 * R + 0.119193 * G + 0.950227 * B;
+
+    X /= (255 * 0.950456);
+    Y /=  255;
+    Z /= (255 * 1.088754);
+
+    quint8 L, a, b;
+
+    if(Y > 0.008856)
+    {
+      fY = pow(Y, 1.0 / 3.0);
+      L = static_cast<int>(116.0 * fY - 16.0 + 0.5);
+    }
+    else
+    {
+      fY = 7.787 * Y + 16.0 / 116.0;
+      L = static_cast<int>(903.3 * Y + 0.5);
+    }
+
+    if(X > 0.008856)
+      fX = pow(X, 1.0 / 3.0);
+    else
+      fX = 7.787 * X + 16.0 / 116.0;
+
+    if(Z > 0.008856)
+      fZ = pow(Z, 1.0 / 3.0);
+    else
+      fZ = 7.787 * Z + 16.0 / 116.0;
+
+    a = static_cast<int>(500.0 * (fX - fY) + 0.5);
+    b = static_cast<int>(200.0 * (fY - fZ) + 0.5);
+
+    dst[CHANNEL_L] = UINT8_TO_UINT16(L);
+    dst[CHANNEL_A] = UINT8_TO_UINT16(a);
+    dst[CHANNEL_B] = UINT8_TO_UINT16(b);
+    dst[CHANNEL_ALPHA] = UINT8_TO_UINT16(A);
 }
 
 void KoLabColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
 {
+    // Convert between RGB and CIE-Lab color spaces
+    // Uses ITU-R recommendation BT.709 with D65 as reference white.
+    // algorithm contributed by "Mark A. Ruzon" <ruzon@CS.Stanford.EDU>
+    quint8 L, a, b, A;
+    L = UINT16_TO_UINT8(src[CHANNEL_L]);
+    a = UINT16_TO_UINT8(src[CHANNEL_A]);
+    b = UINT16_TO_UINT8(src[CHANNEL_B]);
+    A = UINT16_TO_UINT8(src[CHANNEL_ALPHA]);
+
+    double X, Y, Z, fX, fY, fZ;
+    int RR, GG, BB;
+
+    fY = pow((L + 16.0) / 116.0, 3.0);
+    if(fY < 0.008856)
+      fY = L / 903.3;
+    Y = fY;
+
+    if(fY > 0.008856)
+      fY = pow(fY, 1.0 / 3.0);
+    else
+      fY = 7.787 * fY + 16.0 / 116.0;
+
+    fX = a / 500.0 + fY;
+    if(fX > 0.206893)
+      X = pow(fX, 3.0);
+    else
+      X = (fX - 16.0 / 116.0) / 7.787;
+
+    fZ = fY - b / 200.0;
+    if(fZ > 0.206893)
+      Z = pow(fZ, 3.0);
+    else
+      Z = (fZ - 16.0/116.0) / 7.787;
+
+    X *= 0.950456 * 255;
+    Y *= 255;
+    Z *= 1.088754 * 255;
+
+    RR = static_cast<int>(3.240479 * X - 1.537150 * Y - 0.498535 * Z + 0.5);
+    GG = static_cast<int>(-0.969256 * X + 1.875992 * Y + 0.041556 * Z + 0.5);
+    BB = static_cast<int>(0.055648 * X - 0.204043 * Y + 1.057311 * Z + 0.5);
+
+    quint8 R = RR < 0 ? 0 : RR > 255 ? 255 : RR;
+    quint8 G = GG < 0 ? 0 : GG > 255 ? 255 : GG;
+    quint8 B = BB < 0 ? 0 : BB > 255 ? 255 : BB;
+
+    c->setRgba(qRgba(R, G, B, A));
 }
-
-bool KoLabColorSpace::convertPixelsTo(const quint8 *src,
-                                      quint8 *dst, const KoColorSpace * dstColorSpace,
-                                      quint32 numPixels,
-                                      KoColorConversionTransformation::Intent /*renderingIntent*/) const
-{
-}
-
-void KoLabColorSpace::toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
-{
-
-}
-
-void KoLabColorSpace::fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
-{
-
-}
-
-void KoLabColorSpace::toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const
-{
-
-}
-
-void KoLabColorSpace::fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const
-{
-
-}
-
-QImage KoLabColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                        const KoColorProfile * /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
-{
-    QImage img(width, height, QImage::Format_Indexed8);
-    QVector<QRgb> table;
-    for (int i = 0; i < 255; ++i) table.append(qRgb(i, i, i));
-    img.setColorTable(table);
-
-    quint8* data_img = img.bits();
-    for (int i = 0; i < width * height; ++i) {
-        data_img[i] = data[i];
-    }
-    return img;
-}
-
-

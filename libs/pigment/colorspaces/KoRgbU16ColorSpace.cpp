@@ -60,51 +60,14 @@ KoColorSpace* KoRgbU16ColorSpace::clone() const
 
 void KoRgbU16ColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
+    QVector<float> channelValues;
+    channelValues << c.blueF() << c.greenF() << c.redF() << c.alphaF();
+    fromNormalisedChannelsValue(dst, channelValues);
 }
 
 void KoRgbU16ColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
 {
+    QVector<float> channelValues(4);
+    normalisedChannelsValue(src, channelValues);
+    c->setRgbF(channelValues[2], channelValues[1], channelValues[0], channelValues[3]);
 }
-
-bool KoRgbU16ColorSpace::convertPixelsTo(const quint8 *src,
-        quint8 *dst, const KoColorSpace * dstColorSpace,
-        quint32 numPixels,
-        KoColorConversionTransformation::Intent /*renderingIntent*/) const
-{
-}
-
-void KoRgbU16ColorSpace::toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
-{
-
-}
-
-void KoRgbU16ColorSpace::fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
-{
-
-}
-
-void KoRgbU16ColorSpace::toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const
-{
-
-}
-
-void KoRgbU16ColorSpace::fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const
-{
-
-}
-
-QImage KoRgbU16ColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-        const KoColorProfile * /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
-{
-    QImage img(width, height, QImage::Format_Indexed8);
-    QVector<QRgb> table;
-    for (int i = 0; i < 255; ++i) table.append(qRgb(i, i, i));
-    img.setColorTable(table);
-
-    quint8* data_img = img.bits();
-    for (int i = 0; i < width * height; ++i) {
-        data_img[i] = data[i];
-    }
-    return img;
-}
-

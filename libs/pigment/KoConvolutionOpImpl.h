@@ -21,6 +21,11 @@
 #ifndef KO_CONVOLUTION_OP_IMPL_H
 #define KO_CONVOLUTION_OP_IMPL_H
 
+#include "DebugPigment.h"
+#include "KoColorSpaceMaths.h"
+#include "KoConvolutionOp.h"
+#include "KoColorSpaceTraits.h"
+
 template<class _CSTrait>
 class KoConvolutionOpImpl : public KoConvolutionOp
 {
@@ -69,6 +74,7 @@ public:
      */
 
     virtual void convolveColors(const quint8* const* colors, const qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nPixels, const QBitArray & channelFlags) const {
+
         // Create and initialize to 0 the array of totals
         qreal totals[_CSTrait::channels_nb];
 
@@ -78,12 +84,10 @@ public:
         memset(totals, 0, sizeof(qreal) * _CSTrait::channels_nb);
 
         for (;nPixels--; colors++, kernelValues++) {
-            qint32 weight = *kernelValues;
-
+            qreal weight = *kernelValues;
+            const channels_type* color = _CSTrait::nativeArray(*colors);
             if (weight != 0) {
-                qreal weight = *kernelValues;
-                const channels_type* color = _CSTrait::nativeArray(*colors);
-                if (weight != 0) {
+                if (_CSTrait::alpha(*colors) == 0) {
                     totalWeightTransparent += weight;
                 } else {
                     for (uint i = 0; i < _CSTrait::channels_nb; i++) {

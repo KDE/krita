@@ -37,7 +37,7 @@
 #include "../compositeops/KoCompositeOpBurn.h"
 
 KoLabColorSpace::KoLabColorSpace() :
-        KoSimpleColorSpace<KoLabU16Traits>("LABA",
+        KoSimpleColorSpace<KoLabU16Traits>(colorSpaceId(),
                                            i18n("L*a*b* (16-bit integer/channel, unmanaged)"),
                                            LABAColorModelID,
                                            Integer16BitsColorDepthID)

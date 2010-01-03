@@ -39,7 +39,7 @@
 KoRgbU8ColorSpace::KoRgbU8ColorSpace() :
 
         KoSimpleColorSpace<KoRgbU8Traits>(colorSpaceId(),
-                                          i18n("RGB (8-bit integer/channel)"),
+                                          i18n("RGB (8-bit integer/channel, unmanaged)"),
                                           RGBAColorModelID,
                                           Integer8BitsColorDepthID)
 {
@@ -60,7 +60,7 @@ KoRgbU8ColorSpace::~KoRgbU8ColorSpace()
 
 QString KoRgbU8ColorSpace::colorSpaceId()
 {
-    return QString("RGBA8");
+    return QString("RGBA");
 }
 
 

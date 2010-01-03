@@ -36,8 +36,8 @@
 
 
 KoRgbU16ColorSpace::KoRgbU16ColorSpace() :
-        KoSimpleColorSpace<KoRgbU16Traits>("ALPHA",
-                                           i18n("Alpha mask"),
+        KoSimpleColorSpace<KoRgbU16Traits>(colorSpaceId(),
+                                           i18n("RGB (16-bit integer/channel, unmanaged)"),
                                            RGBAColorModelID,
                                            Integer16BitsColorDepthID)
 {

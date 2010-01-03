@@ -1,6 +1,6 @@
-include_directories(${OPENCTL_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${OPENCTL_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
 
-add_definitions(${OPENCTL_DEFINITIONS})
+add_definitions(${OPENCTL_CFLAGS})
 
 add_subdirectory(ctlmodules)
 add_subdirectory(ctlprofiles)
@@ -13,7 +13,7 @@ if(HAVE_OPENCTL_913)
          KoCtlBuffer13.cpp )
 else(HAVE_OPENCTL_913)
     set( BUFFER_SRCS
-         KoCtlBuffer12.cpp )    
+         KoCtlBuffer12.cpp )
 endif(HAVE_OPENCTL_913)
 
 set( CTLCS_SRCS
@@ -38,7 +38,7 @@ set( CTLCS_SRCS
 
 kde4_add_plugin(krita_ctlcs_plugin ${CTLCS_SRCS})
 
-target_link_libraries(krita_ctlcs_plugin pigmentcms ${KDE4_KPARTS_LIBS} ${OPENEXR_LIBRARIES} ${OPENCTL_LIBRARIES})
+target_link_libraries(krita_ctlcs_plugin pigmentcms ${KDE4_KPARTS_LIBS} ${OPENEXR_LIBRARIES} ${OPENCTL_LDFLAGS})
 
 install(TARGETS krita_ctlcs_plugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

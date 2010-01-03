@@ -38,24 +38,6 @@ void TestKoColorSpaceRegistry::testRgbU8()
     QByteArray manufacturerName("");
     cmsAddTag(lcmsProfile, icSigDeviceMfgDescTag, manufacturerName.data());
 
-    KoColorProfile *testProfile =  KoLcmsColorProfileContainer::createFromLcmsProfile(lcmsProfile);
-    KoColorSpaceRegistry::instance()->addProfile(testProfile);
-
-    colorSpace = KoColorSpaceRegistry::instance()->rgb8(testProfileName);
-    QVERIFY(colorSpace != 0);
-
-    profile = colorSpace->profile();
-    QVERIFY(profile != 0);
-
-    QCOMPARE(profile->name(), testProfileName);
-
-    colorSpace = KoColorSpaceRegistry::instance()->rgb8(testProfile);
-    QVERIFY(colorSpace != 0);
-
-    profile = colorSpace->profile();
-    QVERIFY(profile != 0);
-
-    QCOMPARE(*profile, *testProfile);
 }
 
 void TestKoColorSpaceRegistry::testRgbU16()
@@ -81,24 +63,6 @@ void TestKoColorSpaceRegistry::testRgbU16()
     QByteArray manufacturerName("");
     cmsAddTag(lcmsProfile, icSigDeviceMfgDescTag, manufacturerName.data());
 
-    KoColorProfile *testProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(lcmsProfile);
-    KoColorSpaceRegistry::instance()->addProfile(testProfile);
-
-    colorSpace = KoColorSpaceRegistry::instance()->rgb16(testProfileName);
-    QVERIFY(colorSpace != 0);
-
-    profile = colorSpace->profile();
-    QVERIFY(profile != 0);
-
-    QCOMPARE(profile->name(), testProfileName);
-
-    colorSpace = KoColorSpaceRegistry::instance()->rgb16(testProfile);
-    QVERIFY(colorSpace != 0);
-
-    profile = colorSpace->profile();
-    QVERIFY(profile != 0);
-
-    QCOMPARE(*profile, *testProfile);
 }
 
 void TestKoColorSpaceRegistry::testLab()
@@ -129,24 +93,6 @@ void TestKoColorSpaceRegistry::testLab()
     QByteArray manufacturerName("");
     cmsAddTag(lcmsProfile, icSigDeviceMfgDescTag, manufacturerName.data());
 
-    KoColorProfile *testProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(lcmsProfile);
-    KoColorSpaceRegistry::instance()->addProfile(testProfile);
-
-    colorSpace = KoColorSpaceRegistry::instance()->lab16(testProfileName);
-    QVERIFY(colorSpace != 0);
-
-    profile = colorSpace->profile();
-    QVERIFY(profile != 0);
-
-    QCOMPARE(profile->name(), testProfileName);
-
-    colorSpace = KoColorSpaceRegistry::instance()->lab16(testProfile);
-    QVERIFY(colorSpace != 0);
-
-    profile = colorSpace->profile();
-    QVERIFY(profile != 0);
-
-    QCOMPARE(*profile, *testProfile);
 }
 
 QTEST_KDEMAIN(TestKoColorSpaceRegistry, NoGUI)

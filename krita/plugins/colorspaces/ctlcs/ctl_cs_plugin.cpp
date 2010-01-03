@@ -24,7 +24,7 @@
 #include <kcomponentdata.h>
 #include <kgenericfactory.h>
 #include <KoColorSpaceRegistry.h>
-#include "KoBasicHistogramProducers.h"
+#include <KoBasicHistogramProducers.h>
 #include <KoCtlColorProfile.h>
 #include <kstandarddirs.h>
 

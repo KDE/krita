@@ -42,10 +42,10 @@ class PAINTOP_EXPORT KisCurveOption
 public:
 
     KisCurveOption(const QString & label, const QString& name, bool checked = true);
-    ~KisCurveOption();
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    virtual ~KisCurveOption();
+    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
     const QString & label() const;
     

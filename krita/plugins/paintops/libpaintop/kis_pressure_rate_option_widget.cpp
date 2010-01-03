@@ -42,6 +42,7 @@ KisPressureRateOptionWidget::KisPressureRateOptionWidget()
     m_rateSlider->setPageStep(1);
     m_rateSlider->setValue(90);
     m_rateSlider->setOrientation(Qt::Horizontal);
+    connect(m_rateSlider, SIGNAL(valueChanged(int)),SLOT(rateChanged(int)));
     QHBoxLayout* hl = new QHBoxLayout;
     hl->addWidget(rateLabel);
     hl->addWidget(m_rateSlider);
@@ -52,6 +53,7 @@ KisPressureRateOptionWidget::KisPressureRateOptionWidget()
 
     w->setLayout(vl);
     setConfigurationPage(w);
+    rateChanged(m_rateSlider->value());
 }
 
 void KisPressureRateOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)

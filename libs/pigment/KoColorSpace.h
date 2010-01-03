@@ -56,54 +56,9 @@ enum ColorSpaceIndependence {
     TO_RGBA16
 };
 
-/**
- * Base class of the mix color operation. It's defined by
- * sum(colors[i] * weights[i]) / 255. You access the KoMixColorsOp
- * of a colorspace by calling KoColorSpace::mixColorsOp.
- */
-class KoMixColorsOp
-{
-public:
-    virtual ~KoMixColorsOp() { }
-    /**
-     * Mix the colors.
-     * @param colors a pointer toward the source pixels
-     * @param weights the coeffient of the source pixels
-     * @param nColors the number of pixels in the colors array
-     * @param dst the destination pixel
-     */
-    virtual void mixColors(const quint8 * const*colors, const qint16 *weights, quint32 nColors, quint8 *dst) const = 0;
-};
 
-/**
- * Base class of a convolution operation. A convolution operation is
- * defined by sum(colors[i] * kernelValues[i]) / factor + offset). The
- * most well known convolution is the gaussian blur.
- *
- * You access the KoConvolutionOp of a colorspace by calling
- * KoColorSpace::convolutionOp.
- */
-class KoConvolutionOp
-{
-public:
-    virtual ~KoConvolutionOp() { }
-    /**
-     * Convolve the colors.
-     *
-     * @param colors a pointer toward the source pixels
-     * @param kernelValues the coeffient of the source pixels
-     * @param dst the destination pixel
-     * @param factor usually the factor is equal to the sum of kernelValues
-     * @param offset the offset which is added to the result, useful
-     *        when the sum of kernelValues is equal to 0
-     * @param nColors the number of pixels in the colors array
-     * @param channelFlags determines which channels are affected in pixel order
-     *
-     * This function is thread-safe.
-     *
-     */
-    virtual void convolveColors(const quint8* const* colors, const qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const = 0;
-};
+#include "KoMixColorsOp.h"
+#include "KoConvolutionOp.h"
 
 /**
  * A KoColorSpace is the definition of a certain color space.

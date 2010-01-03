@@ -470,6 +470,7 @@ QList<KoID> KoColorSpaceRegistry::listKeys() const
     }
 
     return answer;
+}
 
 KoColorProfile* KoColorSpaceRegistry::createProfile(const QString& type, QByteArray rawData)
 {

@@ -46,7 +46,7 @@
 // KOffice
 #include <KoApplication.h>
 #include <KoCanvasBase.h>
-#include <colorprofiles/KoIccColorProfile.h>
+#include <KoColorProfile.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

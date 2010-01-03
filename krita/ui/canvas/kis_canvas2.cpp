@@ -26,17 +26,17 @@
 
 #include <kis_debug.h>
 
-#include "KoUnit.h"
-#include "KoZoomHandler.h"
-#include "KoViewConverter.h"
-#include "KoShapeManager.h"
-#include "colorprofiles/KoIccColorProfile.h"
-#include "KoColorSpaceRegistry.h"
-#include "KoCanvasController.h"
-#include "KoDocument.h"
-#include "KoZoomAction.h"
-#include "KoToolProxy.h"
-#include "KoSelection.h"
+#include <KoUnit.h>
+#include <KoZoomHandler.h>
+#include <KoViewConverter.h>
+#include <KoShapeManager.h>
+#include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoCanvasController.h>
+#include <KoDocument.h>
+#include <KoZoomAction.h>
+#include <KoToolProxy.h>
+#include <KoSelection.h>
 
 #include "kis_prescaled_projection.h"
 #include "kis_image.h"

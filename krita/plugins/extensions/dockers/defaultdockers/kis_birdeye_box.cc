@@ -18,8 +18,6 @@
 
 #include "kis_birdeye_box.h"
 
-#include <lcms.h>
-
 #include <QLayout>
 #include <QLabel>
 #include <QPixmap>

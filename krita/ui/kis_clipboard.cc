@@ -32,7 +32,7 @@
 #include "KoColorSpace.h"
 #include "KoStore.h"
 #include <KoColorSpaceRegistry.h>
-#include <colorprofiles/KoIccColorProfile.h>
+#include <KoColorProfile.h>
 
 // kritaimage
 #include <kis_types.h>
@@ -108,16 +108,16 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     if (selection->colorSpace()->profile()) {
         const KoColorProfile *profile = selection->colorSpace()->profile();
         KisAnnotationSP annotation;
-        if (profile) {
-            const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
-            if (iccprofile && !iccprofile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
-        }
-        if (annotation) {
-            // save layer profile
-            if (store->open("profile.icc")) {
-                store->write(annotation->annotation());
-                store->close();
+
+        if (profile and profile->type() == "icc" && !profile->rawData().isEmpty()) {
+            annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
+
+            if (annotation) {
+                // save layer profile
+                if (store->open("profile.icc")) {
+                    store->write(annotation->annotation());
+                    store->close();
+                }
             }
         }
     }
@@ -164,7 +164,8 @@ KisPaintDeviceSP KisClipboard::clip()
             store->open("profile.icc");
             data = store->read(store->size());
             store->close();
-            profile = new KoIccColorProfile(data);
+            profile = KoColorSpaceRegistry::instance()->createProfile("icc", data);
+
         }
 
         QString csName;
@@ -264,7 +265,8 @@ QSize KisClipboard::clipSize()
             store->open("profile.icc");
             data = store->read(store->size());
             store->close();
-            profile = new KoIccColorProfile(data);
+            profile = KoColorSpaceRegistry::instance()->createProfile("icc", data);
+
         }
 
         QString csName;

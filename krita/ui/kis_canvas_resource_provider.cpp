@@ -15,29 +15,36 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_canvas_resource_provider.h"
+
+#ifdef Q_WS_X11
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <fixx11h.h>
+#include <QX11Info>
+#endif
+
 #include <QImage>
 #include <QPainter>
 
 #include <KoCanvasBase.h>
 #include <KoID.h>
 #include <KoColorSpaceRegistry.h>
-
-#include "colorprofiles/KoIccColorProfile.h"
-
+#include <KoColorProfile.h>
 #include <KoAbstractGradient.h>
+
 #include <kis_pattern.h>
 #include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paintop_preset.h>
+#include <kis_paintop_settings.h>
+
 #include "kis_exposure_visitor.h"
 #include "kis_config.h"
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
-#include <kis_paintop_settings.h>
 
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
@@ -119,7 +126,7 @@ KoAbstractGradient* KisCanvasResourceProvider::currentGradient() const
 void KisCanvasResourceProvider::resetDisplayProfile()
 {
     // XXX: The X11 monitor profile overrides the settings
-    m_displayProfile = KoIccColorProfile::getScreenProfile();
+    m_displayProfile = KisCanvasResourceProvider::getScreenProfile();
 
     if (m_displayProfile == 0) {
         KisConfig cfg;
@@ -274,4 +281,42 @@ void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & re
     };
 }
 
+KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
+{
+#ifdef Q_WS_X11
+
+    Atom type;
+    int format;
+    unsigned long nitems;
+    unsigned long bytes_after;
+    quint8 * str;
+
+    static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
+
+    if (XGetWindowProperty(QX11Info::display(),
+                           QX11Info::appRootWindow(screen),
+                           icc_atom,
+                           0,
+                           INT_MAX,
+                           False,
+                           XA_CARDINAL,
+                           &type,
+                           &format,
+                           &nitems,
+                           &bytes_after,
+                           (unsigned char **) &str) == Success
+       ) {
+        QByteArray bytes(nitems, '\0');
+        bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
+
+        return KoColorSpaceRegistry::instance()->createProfile("icc", bytes);
+        return 0;
+    } else {
+        return 0;
+    }
+#else
+    return 0;
+
+#endif
+}
 #include "kis_canvas_resource_provider.moc"

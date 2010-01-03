@@ -26,7 +26,7 @@
 #include <QByteArray>
 
 #include <KoColorSpaceRegistry.h>
-#include <colorprofiles/KoIccColorProfile.h>
+#include <KoColorProfile.h>
 #include <KoStore.h>
 #include <KoColorSpace.h>
 

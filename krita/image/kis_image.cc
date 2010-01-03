@@ -24,8 +24,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <lcms.h>
-
 #include <QImage>
 #include <QPainter>
 #include <QSize>
@@ -1117,12 +1115,17 @@ vKisAnnotationSP_it KisImage::beginAnnotations()
     KisAnnotationSP annotation;
 
     if (profile) {
-        // XXX we hardcode icc, this is correct for lcms?
+#ifdef __GNUC__
+#warning "KisImage::beginAnnotations: make it possible to save any profile, not just icc profiles."
+#endif
+#if 0
+        // XXX we hardcode icc, this is correct for icc?
         // XXX productName(), or just "ICC Profile"?
         if (profile->valid() && profile->type() == "icc" && !profile->rawData().isEmpty()) {
                 annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
             }
         }
+#endif        
     }
 
     if (annotation)

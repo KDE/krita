@@ -18,6 +18,7 @@
 
 #include "kis_dlg_apply_profile.h"
 
+#include <lcms.h>
 
 #include <QComboBox>
 #include <QButtonGroup>

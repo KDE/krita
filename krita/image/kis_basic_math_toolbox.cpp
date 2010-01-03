@@ -19,7 +19,7 @@
  */
 
 #include "kis_basic_math_toolbox.h"
-
+#include <math.h>
 
 KisBasicMathToolbox::KisBasicMathToolbox()
         : KisMathToolbox(KoID("Basic"))

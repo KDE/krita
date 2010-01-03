@@ -23,6 +23,8 @@
 #include <config-opengl.h>
 #include <config-glew.h>
 
+#include <lcms.h>
+
 #include <QBitmap>
 #include <QCheckBox>
 #include <QCursor>
@@ -42,7 +44,7 @@
 
 #include <libs/main/KoDocument.h>
 #include <KoImageResource.h>
-#include <colorprofiles/KoIccColorProfile.h>
+#include <KoColorProfile.h>
 
 #include <kcolorbutton.h>
 #include <kcombobox.h>
@@ -55,6 +57,7 @@
 #include <kpagewidgetmodel.h>
 #include <kicon.h>
 #include <kvbox.h>
+
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
 #include "widgets/kis_cmb_idlist.h"
@@ -62,6 +65,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "kis_cursor.h"
 #include "kis_config.h"
+#include "kis_canvas_resource_provider.h"
 
 #include "kis_factory2.h"
 #include "KoID.h"
@@ -165,7 +169,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
 
-    if (KoIccColorProfile * profile = KoIccColorProfile::getScreenProfile()) {
+    if (KoColorProfile * profile = KisCanvasResourceProvider::getScreenProfile()) {
         // We've got an X11 profile, don't allow to override
         m_page->cmbMonitorProfile->hide();
         m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());

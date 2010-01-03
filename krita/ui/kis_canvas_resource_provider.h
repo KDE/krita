@@ -28,11 +28,13 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
-class KisView2;
+class KoColorProfile;
 class KoAbstractGradient;
-class KisPattern;
 class KoResource;
+
 class KoCanvasBase;
+class KisView2;
+class KisPattern;
 class KisFilterConfiguration;
 
 /**
@@ -87,7 +89,10 @@ public:
 
     KisPaintOpPresetSP currentPreset() const;
 
-    KisFilterConfiguration * currentGeneratorConfiguration() const;
+    KisFilterConfiguration* currentGeneratorConfiguration() const;
+
+    static KoColorProfile* getScreenProfile(int screen = -1);
+
 
 public slots:
 

@@ -156,44 +156,6 @@ bool KoIccColorProfile::valid() const
     return false;
 }
 
-KoIccColorProfile *KoIccColorProfile::getScreenProfile(int screen)
-{
-#ifdef Q_WS_X11
-
-    Atom type;
-    int format;
-    unsigned long nitems;
-    unsigned long bytes_after;
-    quint8 * str;
-
-    static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
-
-    if (XGetWindowProperty(QX11Info::display(),
-                           QX11Info::appRootWindow(screen),
-                           icc_atom,
-                           0,
-                           INT_MAX,
-                           False,
-                           XA_CARDINAL,
-                           &type,
-                           &format,
-                           &nitems,
-                           &bytes_after,
-                           (unsigned char **) &str) == Success
-       ) {
-        QByteArray bytes(nitems, '\0');
-        bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
-
-        return new KoIccColorProfile(bytes);
-    } else {
-        return 0;
-    }
-#else
-    return 0;
-
-#endif
-}
-
 bool KoIccColorProfile::isSuitableForOutput() const
 {
     if (d->shared->lcmsProfile)

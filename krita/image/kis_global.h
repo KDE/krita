@@ -19,7 +19,6 @@
 #ifndef KISGLOBAL_H_
 #define KISGLOBAL_H_
 
-#include <lcms.h>
 #include <limits.h>
 
 #include <kglobal.h>

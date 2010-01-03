@@ -17,7 +17,9 @@
  */
 
 #include "kis_config.h"
+
 #include <limits.h>
+#include <lcms.h>
 
 #include <kglobalsettings.h>
 #include <libs/main/KoDocument.h>
@@ -26,8 +28,6 @@
 #include <kconfig.h>
 #include <QFont>
 #include <QThread>
-
-#include <lcms.h>
 
 #include "kis_global.h"
 

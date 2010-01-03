@@ -44,7 +44,7 @@
 #include <KoDocumentInfo.h>
 #include <KoID.h>
 #include <KoColorSpaceRegistry.h>
-#include <colorprofiles/KoIccColorProfile.h>
+#include <KoColorProfile.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -493,7 +493,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         if (QString::compare(profile_name, "icc") == 0) {
             profile_rawdata.resize(proflen);
             memcpy(profile_rawdata.data(), profile_data, proflen);
-            profile = new KoIccColorProfile(profile_rawdata);
+            profile = KoColorSpaceRegistry::instance()->createProfile("icc", profile_rawdata);
             Q_CHECK_PTR(profile);
             if (profile) {
 //                 dbgFile << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo();
@@ -534,11 +534,8 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         m_image->lock();
         if (profile && !profile->isSuitableForOutput()) {
             KisAnnotationSP annotation;
-            // XXX we hardcode icc, this is correct for lcms?
-            // XXX productName(), or just "ICC Profile"?
-            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
-            if (iccprofile && !iccprofile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
+            if (profile->type() == "icc" && !profile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
             m_image -> addAnnotation(annotation);
         }
     }

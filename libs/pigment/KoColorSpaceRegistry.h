@@ -80,6 +80,11 @@ public:
     void addProfile(const KoColorProfile* profile);
 
     /**
+     * create a profile of the specified type.
+     */
+    KoColorProfile* createProfile(const QString& type, QByteArray rawData);
+
+    /**
      * Return a profile by its given name, or 0 if none registered.
      * @return a profile by its given name, or 0 if none registered.
      * @param name the product name as set on the profile.

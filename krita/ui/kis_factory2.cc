@@ -19,7 +19,6 @@
  */
 
 #include "kis_factory2.h"
-#include <lcms.h>
 
 #include <QStringList>
 #include <QDir>

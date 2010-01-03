@@ -437,8 +437,12 @@ KoColorConversionCache* KoColorSpaceRegistry::colorConversionCache() const
 
 const KoColorSpace* KoColorSpaceRegistry::permanentColorspace(const KoColorSpace* _colorSpace)
 {
-    if (_colorSpace->d->deletability != NotOwnedByRegistry) return _colorSpace;
-    else if (*_colorSpace == *d->alphaCs) return d->alphaCs;
+    if (_colorSpace->d->deletability != NotOwnedByRegistry) {
+        return _colorSpace;
+    } 
+    else if (*_colorSpace == *d->alphaCs) {
+        return d->alphaCs;
+    } 
     else {
         const KoColorSpace* cs = colorSpace(_colorSpace->id(), _colorSpace->profile());
         Q_ASSERT(cs);
@@ -455,5 +459,10 @@ QList<KoID> KoColorSpaceRegistry::listKeys() const
     }
 
     return answer;
+
+KoColorProfile* KoColorSpaceRegistry::createProfile(const QString& type, QByteArray rawData)
+{
+    // FIXME: add a factory structure to create profiles of different types
+    return 0;
 }
 

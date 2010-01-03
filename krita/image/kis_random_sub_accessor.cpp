@@ -22,6 +22,7 @@
 
 
 #include <KoColorSpace.h>
+#include <math.h>
 
 #include "kis_paint_device.h"
 

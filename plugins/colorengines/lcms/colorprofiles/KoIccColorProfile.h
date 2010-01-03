@@ -92,15 +92,6 @@ protected:
     void setRawData(const QByteArray& rawData);
 public:
     KoLcmsColorProfileContainer* asLcms() const;
-public:
-    /**
-    *
-    * XXX: We need to make sure we always have the right profile even
-    *      when running on multiple screens.
-    *
-    * @return the color profile of the screen.
-    */
-    static KoIccColorProfile *getScreenProfile(int screen = -1);
 protected:
     virtual bool init();
 private:

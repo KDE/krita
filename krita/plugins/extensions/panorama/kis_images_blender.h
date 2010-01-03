@@ -18,10 +18,6 @@
 #ifndef _KIS_IMAGES_BLENDER_H_
 #define _KIS_IMAGES_BLENDER_H_
 
-// TODO: remove that
-#define LCMS_HEADER <lcms.h>
-// TODO: remove it !
-
 #include "kis_types.h"
 #include <Eigen/Core>
 #include <QRect>

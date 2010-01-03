@@ -34,11 +34,16 @@ class PIGMENTCMS_EXPORT KoColorProfile
 public:
 
     /**
-      * @param fileName file name to load or save that profile
-      */
+     * @param fileName file name to load or save that profile
+     */
     KoColorProfile(const QString &fileName = "");
     KoColorProfile(const KoColorProfile& profile);
     virtual ~KoColorProfile();
+
+    /**
+     * @return the type of this profile (icc, ctlcs etc)
+     */
+    virtual QString type() const { return QString::null; }
 
     /**
      * Create a copy of this profile.
@@ -110,6 +115,12 @@ public:
      *
      */
     virtual void setProperty(const QString& _name, const QVariant& _variant);
+
+    /**
+     * @return an array with the raw data of the profile
+     */
+    virtual QByteArray rawData() const { return QByteArray(); }
+
 protected:
     /**
      * Allows to define the name of this profile.

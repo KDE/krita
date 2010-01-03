@@ -113,8 +113,6 @@ quint32 matchColors(const QColor & c, enumAction action)
     rgb_to_hsv(r, g, b, &h, &s, &v);    // XXX: Map the degree in which the colors conform to the requirement
     //      to a range of selectedness between 0 and 255
 
-    // XXX: Implement out-of-gamut using lcms
-
     switch (action) {
 
     case REDS:

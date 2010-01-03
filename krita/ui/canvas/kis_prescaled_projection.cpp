@@ -17,6 +17,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_prescaled_projection.h"
+
+#include <math.h>
 
 #include <QImage>
 #include <QPixmap>
@@ -42,7 +45,6 @@
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
 #include "kis_types.h"
-#include "kis_prescaled_projection.h"
 
 #include "kis_projection_cache.h"
 #include "kis_image_pyramid.h"

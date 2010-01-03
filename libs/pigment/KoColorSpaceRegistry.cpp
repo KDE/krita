@@ -80,17 +80,7 @@ void KoColorSpaceRegistry::init()
 
     // Create the built-in colorspaces
     add(new KoLabColorSpaceFactory());
-    KoHistogramProducerFactoryRegistry::instance()->add(
-        new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-        (KoID("LABAHISTO", i18n("L*a*b* Histogram")), KoLabColorSpace::colorSpaceId()));
-
     add(new KoRgbU16ColorSpaceFactory());
-
-    add(new KoRgbU8ColorSpaceFactory());
-    KoHistogramProducerFactoryRegistry::instance()->add(
-        new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-        (KoID("RGB8HISTO", i18n("RGB8 Histogram")), KoRgbU8ColorSpace::colorSpaceId()));
-
 
     d->alphaCs = new KoAlphaColorSpace();
     d->alphaCs->d->deletability = OwnedByRegistryDoNotDelete;
@@ -209,6 +199,14 @@ QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoID& id)
     return profilesFor(id.id());
 }
 
+void KoColorSpaceRegistry::addProfileToMap(KoColorProfile *p)
+{
+    Q_ASSERT(p);
+    if (p->valid()) {
+        d->profileMap[p->name()] = p;
+    }
+}
+
 void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
 {
     Q_ASSERT(p);
@@ -264,10 +262,12 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             QList<const KoColorProfile *> profiles = profilesFor(csID);
             if (profiles.isEmpty()) {
                 dbgPigmentCSRegistry << "No profile at all available for " << csf;
-                return 0;
+                p = 0;
             }
-            p = profiles[0];
-            Q_ASSERT(p);
+            else {
+                p = profiles[0];
+                Q_ASSERT(p);
+            }
         }
         const KoColorSpace *cs = csf->createColorSpace(p);
         if (!cs) {

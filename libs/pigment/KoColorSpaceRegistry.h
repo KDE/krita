@@ -73,6 +73,13 @@ public:
     void add(const QString &id, KoColorSpaceFactory* item);
 
     /**
+     * Add a profile to the profile map but do not add it to the
+     * color conversion system yet.
+     * @param profile the new profile to be registered.
+     */
+    void addProfileToMap(KoColorProfile *p);
+
+    /**
      * register the profile with the color space registry
      * @param profile the new profile to be registered so it can be combined with
      *  colorspaces.

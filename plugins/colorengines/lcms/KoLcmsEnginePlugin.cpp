@@ -96,7 +96,7 @@ K_EXPORT_COMPONENT_FACTORY(kolcmsengine, KoLcmsEnginePluginFactory("koffice"))
             profile->load();
             if (profile->valid()) {
                 kDebug(31000) << "Valid profile : " << profile->fileName() << profile->name();
-                registry->addProfile(profile);
+                registry->addProfileToMap(profile);
             } else {
                 kDebug(31000) << "Invalid profile : " << profile->fileName() << profile->name();
                 delete profile;

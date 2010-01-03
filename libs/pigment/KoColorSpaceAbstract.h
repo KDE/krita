@@ -152,7 +152,7 @@ public:
 
         for (;nPixels--; colors++, kernelValues++) {
             qint32 weight = *kernelValues;
-            const channels_type* color = _CSTrait::nativeArray(*colors);
+
             if( weight != 0 )
             {
                 qreal weight = *kernelValues;

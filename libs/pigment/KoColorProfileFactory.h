@@ -29,9 +29,12 @@
 /**
  * Base class for KoColorProfileFactories
  */
-public PIGMENTCMS_EXPORT class KoColorProfileFactory {
+class PIGMENTCMS_EXPORT KoColorProfileFactory {
+public:
+
+    virtual ~KoColorProfileFactory() {}
 
     virtual KoColorProfile* createColorProfile(const QByteArray& rawData) = 0;
-}
+};
 
 #endif // KOCOLORPROFILEFACTORY_H

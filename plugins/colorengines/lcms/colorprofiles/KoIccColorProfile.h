@@ -88,6 +88,7 @@ public:
     virtual bool isSuitableForPrinting() const;
     virtual bool isSuitableForDisplay() const;
     virtual bool operator==(const KoColorProfile&) const;
+    virtual QString type() const { return "icc"; }
 protected:
     void setRawData(const QByteArray& rawData);
 public:

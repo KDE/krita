@@ -18,15 +18,16 @@
 
 #include <KoColorSpace.h>
 #include <KoIntegerMaths.h>
-
+#include <KoColorSpaceTraits.h>
+#include <KoColorSpace.h>
 #include "KoRgbU8CompositeOp.h"
 #include "KoRgbU8ColorSpace.h"
 #include "KoColorConversions.h"
 
 #define PixelIntensity(pixel) ((unsigned int)                           \
-                               (((qreal)306.0 * (pixel[RgbU8Traits::red_pos]) + \
-                                 (qreal)601.0 * (pixel[RgbU8Traits::green_pos]) + \
-                                 (qreal)117.0 * (pixel[RgbU8Traits::blue_pos)) \
+                               (((qreal)306.0 * (pixel[KoRgbU8Traits::red_pos]) + \
+                                 (qreal)601.0 * (pixel[KoRgbU8Traits::green_pos]) + \
+                                 (qreal)117.0 * (pixel[KoRgbU8Traits::blue_pos)) \
                                  / 1024.0))
 
 #define PixelIntensityToQuantum(pixel) ((quint8)PixelIntensity(pixel))
@@ -120,8 +121,8 @@ void KoRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStrid
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
-            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
+            quint8 srcAlpha = src[KoRgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[KoRgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -135,7 +136,7 @@ void KoRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStrid
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
+                    srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -144,7 +145,7 @@ void KoRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStrid
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[RgbU8Traits::alpha_pos] = newAlpha;
+                    dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -155,7 +156,7 @@ void KoRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStrid
 
                 for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-                    if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos)) {
+                    if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos)) {
                         quint8 srcColor = src[channel];
                         quint8 dstColor = dst[channel];
 
@@ -169,8 +170,8 @@ void KoRgbU8CompositeOp::compositeDarken(quint8 *dstRowStart, qint32 dstRowStrid
             }
 
             columns--;
-            src += RgbU8Traits::channels_nb;
-            dst += RgbU8Traits::channels_nb;
+            src += KoRgbU8Traits::channels_nb;
+            dst += KoRgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -192,8 +193,8 @@ void KoRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStri
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
-            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
+            quint8 srcAlpha = src[KoRgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[KoRgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -207,7 +208,7 @@ void KoRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStri
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
+                    srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -216,7 +217,7 @@ void KoRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStri
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[RgbU8Traits::alpha_pos] = newAlpha;
+                    dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -226,7 +227,7 @@ void KoRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStri
                 }
 
                 for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
-                    if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos)) {
+                    if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos)) {
                         quint8 srcColor = src[channel];
                         quint8 dstColor = dst[channel];
 
@@ -240,8 +241,8 @@ void KoRgbU8CompositeOp::compositeLighten(quint8 *dstRowStart, qint32 dstRowStri
             }
 
             columns--;
-            src += RgbU8Traits::channels_nb;
-            dst += RgbU8Traits::channels_nb;
+            src += KoRgbU8Traits::channels_nb;
+            dst += KoRgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -263,8 +264,8 @@ void KoRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride, 
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
-            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
+            quint8 srcAlpha = src[KoRgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[KoRgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -278,7 +279,7 @@ void KoRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride, 
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
+                    srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -287,7 +288,7 @@ void KoRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride, 
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[RgbU8Traits::alpha_pos] = newAlpha;
+                    dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -296,9 +297,9 @@ void KoRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride, 
                     }
                 }
 
-                int dstRed = dst[RgbU8Traits::red_pos];
-                int dstGreen = dst[RgbU8Traits::green_pos];
-                int dstBlue = dst[RgbU8Traits::blue_pos];
+                int dstRed = dst[KoRgbU8Traits::red_pos];
+                int dstGreen = dst[KoRgbU8Traits::green_pos];
+                int dstBlue = dst[KoRgbU8Traits::blue_pos];
 
                 int srcHue;
                 int srcSaturation;
@@ -307,7 +308,7 @@ void KoRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride, 
                 int dstSaturation;
                 int dstValue;
 
-                rgb_to_hsv(src[RgbU8Traits::red_pos], src[RgbU8Traits::green_pos], src[RgbU8Traits::blue_pos], &srcHue, &srcSaturation, &srcValue);
+                rgb_to_hsv(src[KoRgbU8Traits::red_pos], src[KoRgbU8Traits::green_pos], src[KoRgbU8Traits::blue_pos], &srcHue, &srcSaturation, &srcValue);
                 rgb_to_hsv(dstRed, dstGreen, dstBlue, &dstHue, &dstSaturation, &dstValue);
 
                 int srcRed;
@@ -316,17 +317,17 @@ void KoRgbU8CompositeOp::compositeHue(quint8 *dstRowStart, qint32 dstRowStride, 
 
                 hsv_to_rgb(srcHue, dstSaturation, dstValue, &srcRed, &srcGreen, &srcBlue);
 
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos))
-                    dst[RgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos))
-                    dst[RgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos))
-                    dst[RgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos))
+                    dst[KoRgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos))
+                    dst[KoRgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos))
+                    dst[KoRgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
             }
 
             columns--;
-            src += RgbU8Traits::channels_nb;
-            dst += RgbU8Traits::channels_nb;
+            src += KoRgbU8Traits::channels_nb;
+            dst += KoRgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -348,8 +349,8 @@ void KoRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRowS
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
-            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
+            quint8 srcAlpha = src[KoRgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[KoRgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -363,7 +364,7 @@ void KoRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRowS
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
+                    srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -372,7 +373,7 @@ void KoRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRowS
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[RgbU8Traits::alpha_pos] = newAlpha;
+                    dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -381,9 +382,9 @@ void KoRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRowS
                     }
                 }
 
-                int dstRed = dst[RgbU8Traits::red_pos];
-                int dstGreen = dst[RgbU8Traits::green_pos];
-                int dstBlue = dst[RgbU8Traits::blue_pos];
+                int dstRed = dst[KoRgbU8Traits::red_pos];
+                int dstGreen = dst[KoRgbU8Traits::green_pos];
+                int dstBlue = dst[KoRgbU8Traits::blue_pos];
 
                 int srcHue;
                 int srcSaturation;
@@ -392,7 +393,7 @@ void KoRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRowS
                 int dstSaturation;
                 int dstValue;
 
-                rgb_to_hsv(src[RgbU8Traits::red_pos], src[RgbU8Traits::green_pos], src[RgbU8Traits::blue_pos], &srcHue, &srcSaturation, &srcValue);
+                rgb_to_hsv(src[KoRgbU8Traits::red_pos], src[KoRgbU8Traits::green_pos], src[KoRgbU8Traits::blue_pos], &srcHue, &srcSaturation, &srcValue);
                 rgb_to_hsv(dstRed, dstGreen, dstBlue, &dstHue, &dstSaturation, &dstValue);
 
                 int srcRed;
@@ -400,17 +401,17 @@ void KoRgbU8CompositeOp::compositeSaturation(quint8 *dstRowStart, qint32 dstRowS
                 int srcBlue;
 
                 hsv_to_rgb(dstHue, srcSaturation, dstValue, &srcRed, &srcGreen, &srcBlue);
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos))
-                    dst[RgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos))
-                    dst[RgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos))
-                    dst[RgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos))
+                    dst[KoRgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos))
+                    dst[KoRgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos))
+                    dst[KoRgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
             }
 
             columns--;
-            src += RgbU8Traits::channels_nb;
-            dst += RgbU8Traits::channels_nb;
+            src += KoRgbU8Traits::channels_nb;
+            dst += KoRgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -432,8 +433,8 @@ void KoRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStride
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
-            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
+            quint8 srcAlpha = src[KoRgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[KoRgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -447,7 +448,7 @@ void KoRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStride
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
+                    srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -456,7 +457,7 @@ void KoRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStride
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[RgbU8Traits::alpha_pos] = newAlpha;
+                    dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -465,9 +466,9 @@ void KoRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStride
                     }
                 }
 
-                int dstRed = dst[RgbU8Traits::red_pos];
-                int dstGreen = dst[RgbU8Traits::green_pos];
-                int dstBlue = dst[RgbU8Traits::blue_pos];
+                int dstRed = dst[KoRgbU8Traits::red_pos];
+                int dstGreen = dst[KoRgbU8Traits::green_pos];
+                int dstBlue = dst[KoRgbU8Traits::blue_pos];
 
                 int srcHue;
                 int srcSaturation;
@@ -476,7 +477,7 @@ void KoRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStride
                 int dstSaturation;
                 int dstValue;
 
-                rgb_to_hsv(src[RgbU8Traits::red_pos], src[RgbU8Traits::green_pos], src[RgbU8Traits::blue_pos], &srcHue, &srcSaturation, &srcValue);
+                rgb_to_hsv(src[KoRgbU8Traits::red_pos], src[KoRgbU8Traits::green_pos], src[KoRgbU8Traits::blue_pos], &srcHue, &srcSaturation, &srcValue);
                 rgb_to_hsv(dstRed, dstGreen, dstBlue, &dstHue, &dstSaturation, &dstValue);
 
                 int srcRed;
@@ -484,17 +485,17 @@ void KoRgbU8CompositeOp::compositeValue(quint8 *dstRowStart, qint32 dstRowStride
                 int srcBlue;
 
                 hsv_to_rgb(dstHue, dstSaturation, srcValue, &srcRed, &srcGreen, &srcBlue);
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos))
-                    dst[RgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos))
-                    dst[RgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos))
-                    dst[RgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos))
+                    dst[KoRgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos))
+                    dst[KoRgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos))
+                    dst[KoRgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
             }
 
             columns--;
-            src += RgbU8Traits::channels_nb;
-            dst += RgbU8Traits::channels_nb;
+            src += KoRgbU8Traits::channels_nb;
+            dst += KoRgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -517,8 +518,8 @@ void KoRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStride
 
         while (columns > 0) {
 
-            quint8 srcAlpha = src[RgbU8Traits::alpha_pos];
-            quint8 dstAlpha = dst[RgbU8Traits::alpha_pos];
+            quint8 srcAlpha = src[KoRgbU8Traits::alpha_pos];
+            quint8 dstAlpha = dst[KoRgbU8Traits::alpha_pos];
 
             srcAlpha = qMin(srcAlpha, dstAlpha);
 
@@ -532,7 +533,7 @@ void KoRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStride
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(src[RgbU8Traits::alpha_pos], opacity);
+                    srcAlpha = UINT8_MULT(src[KoRgbU8Traits::alpha_pos], opacity);
                 }
 
                 quint8 srcBlend;
@@ -541,7 +542,7 @@ void KoRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStride
                     srcBlend = srcAlpha;
                 } else {
                     quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                    dst[RgbU8Traits::alpha_pos] = newAlpha;
+                    dst[KoRgbU8Traits::alpha_pos] = newAlpha;
 
                     if (newAlpha != 0) {
                         srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
@@ -550,9 +551,9 @@ void KoRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStride
                     }
                 }
 
-                int dstRed = dst[RgbU8Traits::red_pos];
-                int dstGreen = dst[RgbU8Traits::green_pos];
-                int dstBlue = dst[RgbU8Traits::blue_pos];
+                int dstRed = dst[KoRgbU8Traits::red_pos];
+                int dstGreen = dst[KoRgbU8Traits::green_pos];
+                int dstBlue = dst[KoRgbU8Traits::blue_pos];
 
                 int srcHue;
                 int srcSaturation;
@@ -561,7 +562,7 @@ void KoRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStride
                 int dstSaturation;
                 int dstLightness;
 
-                rgb_to_hls(src[RgbU8Traits::red_pos], src[RgbU8Traits::green_pos], src[RgbU8Traits::blue_pos], &srcHue, &srcLightness, &srcSaturation);
+                rgb_to_hls(src[KoRgbU8Traits::red_pos], src[KoRgbU8Traits::green_pos], src[KoRgbU8Traits::blue_pos], &srcHue, &srcLightness, &srcSaturation);
                 rgb_to_hls(dstRed, dstGreen, dstBlue, &dstHue, &dstLightness, &dstSaturation);
 
                 quint8 srcRed;
@@ -570,17 +571,17 @@ void KoRgbU8CompositeOp::compositeColor(quint8 *dstRowStart, qint32 dstRowStride
 
                 hls_to_rgb(srcHue, dstLightness, srcSaturation, &srcRed, &srcGreen, &srcBlue);
 
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos))
-                    dst[RgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos))
-                    dst[RgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-                if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos))
-                    dst[RgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos))
+                    dst[KoRgbU8Traits::red_pos] = UINT8_BLEND(srcRed, dstRed, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos))
+                    dst[KoRgbU8Traits::green_pos] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
+                if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos))
+                    dst[KoRgbU8Traits::blue_pos] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
             }
 
             columns--;
-            src += RgbU8Traits::channels_nb;
-            dst += RgbU8Traits::channels_nb;
+            src += KoRgbU8Traits::channels_nb;
+            dst += KoRgbU8Traits::channels_nb;
         }
 
         rows--;
@@ -619,28 +620,28 @@ void KoRgbU8CompositeOp::compositeIn(qint32 pixelSize,
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
 
-            if (s[RgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT) {
+            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT) {
                 memcpy(d, s, pixelSize * sizeof(quint8));
                 continue;
             }
-            if (d[RgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT)
+            if (d[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT)
                 continue;
 
-            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
-            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
+            sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[KoRgbU8Traits::alpha_pos];
 
             alpha = (qreal)(((qreal) UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) / UINT8_MAX);
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos))
-                d[RgbU8Traits::red_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) *
-                                                   (UINT8_MAX - dAlpha) * s[RgbU8Traits::red_pos] / UINT8_MAX / alpha + 0.5);
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos))
-                d[RgbU8Traits::green_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) *
-                                                     (UINT8_MAX - dAlpha) * s[RgbU8Traits::green_pos] / UINT8_MAX / alpha + 0.5);
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos))
-                d[RgbU8Traits::blue_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) *
-                                                    (UINT8_MAX - dAlpha) * s[RgbU8Traits::blue_pos] / UINT8_MAX / alpha + 0.5);
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos))
-                d[RgbU8Traits::alpha_pos] = (quint8)((d[RgbU8Traits::alpha_pos] * (UINT8_MAX - alpha) / UINT8_MAX) + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos))
+                d[KoRgbU8Traits::red_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) *
+                                                   (UINT8_MAX - dAlpha) * s[KoRgbU8Traits::red_pos] / UINT8_MAX / alpha + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos))
+                d[KoRgbU8Traits::green_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) *
+                                                     (UINT8_MAX - dAlpha) * s[KoRgbU8Traits::green_pos] / UINT8_MAX / alpha + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos))
+                d[KoRgbU8Traits::blue_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) *
+                                                    (UINT8_MAX - dAlpha) * s[KoRgbU8Traits::blue_pos] / UINT8_MAX / alpha + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos))
+                d[KoRgbU8Traits::alpha_pos] = (quint8)((d[KoRgbU8Traits::alpha_pos] * (UINT8_MAX - alpha) / UINT8_MAX) + 0.5);
 
         }
         dst += dstRowSize;
@@ -672,26 +673,26 @@ void KoRgbU8CompositeOp::compositeOut(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            if (s[RgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT) {
+            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT) {
                 memcpy(d, s, pixelSize * sizeof(quint8));
                 break;
             }
-            if (d[RgbU8Traits::alpha_pos] == OPACITY_OPAQUE) {
-                d[RgbU8Traits::alpha_pos] = OPACITY_TRANSPARENT;
+            if (d[KoRgbU8Traits::alpha_pos] == OPACITY_OPAQUE) {
+                d[KoRgbU8Traits::alpha_pos] = OPACITY_TRANSPARENT;
                 break;
             }
-            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
-            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
+            sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[KoRgbU8Traits::alpha_pos];
 
-            alpha = (qreal)(UINT8_MAX - sAlpha) * d[RgbU8Traits::alpha_pos] / UINT8_MAX;
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos))
-                d[RgbU8Traits::red_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) * dAlpha * s[RgbU8Traits::red_pos] / UINT8_MAX / alpha + 0.5);
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos))
-                d[RgbU8Traits::green_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) * dAlpha * s[RgbU8Traits::green_pos] / UINT8_MAX / alpha + 0.5);
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos))
-                d[RgbU8Traits::blue_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) * dAlpha * s[RgbU8Traits::blue_pos] / UINT8_MAX / alpha + 0.5);
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos))
-                d[RgbU8Traits::alpha_pos] = (quint8)((d[RgbU8Traits::alpha_pos] * (UINT8_MAX - alpha) / UINT8_MAX) + 0.5);
+            alpha = (qreal)(UINT8_MAX - sAlpha) * d[KoRgbU8Traits::alpha_pos] / UINT8_MAX;
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos))
+                d[KoRgbU8Traits::red_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) * dAlpha * s[KoRgbU8Traits::red_pos] / UINT8_MAX / alpha + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos))
+                d[KoRgbU8Traits::green_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) * dAlpha * s[KoRgbU8Traits::green_pos] / UINT8_MAX / alpha + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos))
+                d[KoRgbU8Traits::blue_pos] = (quint8)(((qreal) UINT8_MAX - sAlpha) * dAlpha * s[KoRgbU8Traits::blue_pos] / UINT8_MAX / alpha + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos))
+                d[KoRgbU8Traits::alpha_pos] = (quint8)((d[KoRgbU8Traits::alpha_pos] * (UINT8_MAX - alpha) / UINT8_MAX) + 0.5);
         }
         dst += dstRowSize;
         src += srcRowSize;
@@ -724,30 +725,30 @@ void KoRgbU8CompositeOp::compositeAtop(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
-            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
+            sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[KoRgbU8Traits::alpha_pos];
 
             alpha = ((qreal)(UINT8_MAX - sAlpha) *
                      (UINT8_MAX - dAlpha) + (qreal) sAlpha *
                      (UINT8_MAX - dAlpha)) / UINT8_MAX;
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos)) {
-                red = ((qreal)(UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) *  s[RgbU8Traits::red_pos] / UINT8_MAX +
-                       (qreal) sAlpha * (UINT8_MAX - dAlpha) * d[RgbU8Traits::red_pos] / UINT8_MAX) / alpha;
-                d[RgbU8Traits::red_pos] = (quint8)(red > UINT8_MAX ? UINT8_MAX : red + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos)) {
+                red = ((qreal)(UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) *  s[KoRgbU8Traits::red_pos] / UINT8_MAX +
+                       (qreal) sAlpha * (UINT8_MAX - dAlpha) * d[KoRgbU8Traits::red_pos] / UINT8_MAX) / alpha;
+                d[KoRgbU8Traits::red_pos] = (quint8)(red > UINT8_MAX ? UINT8_MAX : red + 0.5);
             }
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos)) {
-                green = ((qreal)(UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) * s[RgbU8Traits::green_pos] / UINT8_MAX +
-                         (qreal) sAlpha * (UINT8_MAX - dAlpha) * d[RgbU8Traits::green_pos] / UINT8_MAX) / alpha;
-                d[RgbU8Traits::green_pos] = (quint8)(green > UINT8_MAX ? UINT8_MAX : green + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos)) {
+                green = ((qreal)(UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) * s[KoRgbU8Traits::green_pos] / UINT8_MAX +
+                         (qreal) sAlpha * (UINT8_MAX - dAlpha) * d[KoRgbU8Traits::green_pos] / UINT8_MAX) / alpha;
+                d[KoRgbU8Traits::green_pos] = (quint8)(green > UINT8_MAX ? UINT8_MAX : green + 0.5);
             }
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos)) {
-                blue = ((qreal)(UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) * s[RgbU8Traits::blue_pos] / UINT8_MAX +
-                        (qreal) sAlpha * (UINT8_MAX - dAlpha) * d[RgbU8Traits::blue_pos] / UINT8_MAX) / alpha;
-                d[RgbU8Traits::blue_pos] = (quint8)(blue > UINT8_MAX ? UINT8_MAX : blue + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos)) {
+                blue = ((qreal)(UINT8_MAX - sAlpha) * (UINT8_MAX - dAlpha) * s[KoRgbU8Traits::blue_pos] / UINT8_MAX +
+                        (qreal) sAlpha * (UINT8_MAX - dAlpha) * d[KoRgbU8Traits::blue_pos] / UINT8_MAX) / alpha;
+                d[KoRgbU8Traits::blue_pos] = (quint8)(blue > UINT8_MAX ? UINT8_MAX : blue + 0.5);
             }
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos))
-                d[RgbU8Traits::alpha_pos] = (quint8)(UINT8_MAX - (alpha > UINT8_MAX ? UINT8_MAX : alpha) + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos))
+                d[KoRgbU8Traits::alpha_pos] = (quint8)(UINT8_MAX - (alpha > UINT8_MAX ? UINT8_MAX : alpha) + 0.5);
         }
         dst += dstRowSize;
         src += srcRowSize;
@@ -780,32 +781,32 @@ void KoRgbU8CompositeOp::compositeXor(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
-            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
+            sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[KoRgbU8Traits::alpha_pos];
 
             alpha = ((qreal)(UINT8_MAX - sAlpha) *
                      dAlpha + (qreal)(UINT8_MAX - dAlpha) *
                      sAlpha) / UINT8_MAX ;
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos)) {
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos)) {
                 red = ((qreal)(UINT8_MAX - sAlpha) * dAlpha *
-                       s[RgbU8Traits::red_pos] / UINT8_MAX + (qreal)(UINT8_MAX - dAlpha) *
-                       sAlpha * d[RgbU8Traits::red_pos] / UINT8_MAX) / alpha ;
-                d[RgbU8Traits::red_pos] = RoundSignedToQuantum(Qt::red);
+                       s[KoRgbU8Traits::red_pos] / UINT8_MAX + (qreal)(UINT8_MAX - dAlpha) *
+                       sAlpha * d[KoRgbU8Traits::red_pos] / UINT8_MAX) / alpha ;
+                d[KoRgbU8Traits::red_pos] = RoundSignedToQuantum(Qt::red);
             }
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos)) {
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos)) {
                 green = ((qreal)(UINT8_MAX - sAlpha) * dAlpha *
-                         s[RgbU8Traits::green_pos] / UINT8_MAX + (qreal)(UINT8_MAX - dAlpha) *
-                         sAlpha * d[RgbU8Traits::green_pos] / UINT8_MAX) / alpha ;
-                d[RgbU8Traits::green_pos] = RoundSignedToQuantum(Qt::green);
+                         s[KoRgbU8Traits::green_pos] / UINT8_MAX + (qreal)(UINT8_MAX - dAlpha) *
+                         sAlpha * d[KoRgbU8Traits::green_pos] / UINT8_MAX) / alpha ;
+                d[KoRgbU8Traits::green_pos] = RoundSignedToQuantum(Qt::green);
             }
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos)) {
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos)) {
                 blue = ((qreal)(UINT8_MAX - sAlpha) * dAlpha *
-                        s[RgbU8Traits::blue_pos] / UINT8_MAX + (qreal)(UINT8_MAX - dAlpha) *
-                        sAlpha * d[RgbU8Traits::blue_pos] / UINT8_MAX) / alpha ;
-                d[RgbU8Traits::blue_pos] = RoundSignedToQuantum(Qt::blue);
+                        s[KoRgbU8Traits::blue_pos] / UINT8_MAX + (qreal)(UINT8_MAX - dAlpha) *
+                        sAlpha * d[KoRgbU8Traits::blue_pos] / UINT8_MAX) / alpha ;
+                d[KoRgbU8Traits::blue_pos] = RoundSignedToQuantum(Qt::blue);
             }
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos))
-                d[RgbU8Traits::alpha_pos] = UINT8_MAX - RoundSignedToQuantum(alpha);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos))
+                d[KoRgbU8Traits::alpha_pos] = UINT8_MAX - RoundSignedToQuantum(alpha);
         }
         dst += dstRowSize;
         src += srcRowSize;
@@ -838,31 +839,31 @@ void KoRgbU8CompositeOp::compositePlus(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
-            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
+            sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[KoRgbU8Traits::alpha_pos];
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos)) {
-                red = ((qreal)(UINT8_MAX - sAlpha) * s[RgbU8Traits::red_pos] + (qreal)
-                       (UINT8_MAX - dAlpha) * d[RgbU8Traits::red_pos]) / UINT8_MAX ;
-                d[RgbU8Traits::red_pos] = RoundSignedToQuantum(Qt::red);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos)) {
+                red = ((qreal)(UINT8_MAX - sAlpha) * s[KoRgbU8Traits::red_pos] + (qreal)
+                       (UINT8_MAX - dAlpha) * d[KoRgbU8Traits::red_pos]) / UINT8_MAX ;
+                d[KoRgbU8Traits::red_pos] = RoundSignedToQuantum(Qt::red);
             }
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos)) {
-                green = ((qreal)(UINT8_MAX - sAlpha) * s[RgbU8Traits::green_pos] + (qreal)
-                         (UINT8_MAX - dAlpha) * d[RgbU8Traits::green_pos]) / UINT8_MAX ;
-                d[RgbU8Traits::green_pos] = RoundSignedToQuantum(Qt::green);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos)) {
+                green = ((qreal)(UINT8_MAX - sAlpha) * s[KoRgbU8Traits::green_pos] + (qreal)
+                         (UINT8_MAX - dAlpha) * d[KoRgbU8Traits::green_pos]) / UINT8_MAX ;
+                d[KoRgbU8Traits::green_pos] = RoundSignedToQuantum(Qt::green);
             }
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos)) {
-                blue = ((qreal)(UINT8_MAX - sAlpha) * s[RgbU8Traits::blue_pos] + (qreal)
-                        (UINT8_MAX - dAlpha) * d[RgbU8Traits::blue_pos]) / UINT8_MAX ;
-                d[RgbU8Traits::blue_pos] = RoundSignedToQuantum(Qt::blue);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos)) {
+                blue = ((qreal)(UINT8_MAX - sAlpha) * s[KoRgbU8Traits::blue_pos] + (qreal)
+                        (UINT8_MAX - dAlpha) * d[KoRgbU8Traits::blue_pos]) / UINT8_MAX ;
+                d[KoRgbU8Traits::blue_pos] = RoundSignedToQuantum(Qt::blue);
             }
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos)) {
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos)) {
                 alpha = ((qreal)(UINT8_MAX - sAlpha) +
                          (qreal)(UINT8_MAX - dAlpha)) / UINT8_MAX ;
-                d[RgbU8Traits::alpha_pos] = UINT8_MAX - RoundSignedToQuantum(alpha);
+                d[KoRgbU8Traits::alpha_pos] = UINT8_MAX - RoundSignedToQuantum(alpha);
             }
         }
         dst += dstRowSize;
@@ -897,31 +898,31 @@ void KoRgbU8CompositeOp::compositeMinus(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
-            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
+            sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[KoRgbU8Traits::alpha_pos];
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos)) {
-                red = ((qreal)(UINT8_MAX - dAlpha) * d[RgbU8Traits::red_pos] -
-                       (qreal)(UINT8_MAX - sAlpha) * s[RgbU8Traits::red_pos]) / UINT8_MAX ;
-                d[RgbU8Traits::red_pos] = RoundSignedToQuantum(Qt::red);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos)) {
+                red = ((qreal)(UINT8_MAX - dAlpha) * d[KoRgbU8Traits::red_pos] -
+                       (qreal)(UINT8_MAX - sAlpha) * s[KoRgbU8Traits::red_pos]) / UINT8_MAX ;
+                d[KoRgbU8Traits::red_pos] = RoundSignedToQuantum(Qt::red);
             }
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos)) {
-                green = ((qreal)(UINT8_MAX - dAlpha) * d[RgbU8Traits::green_pos] -
-                         (qreal)(UINT8_MAX - sAlpha) * s[RgbU8Traits::green_pos]) / UINT8_MAX ;
-                d[RgbU8Traits::green_pos] = RoundSignedToQuantum(Qt::green);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos)) {
+                green = ((qreal)(UINT8_MAX - dAlpha) * d[KoRgbU8Traits::green_pos] -
+                         (qreal)(UINT8_MAX - sAlpha) * s[KoRgbU8Traits::green_pos]) / UINT8_MAX ;
+                d[KoRgbU8Traits::green_pos] = RoundSignedToQuantum(Qt::green);
             }
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos)) {
-                blue = ((qreal)(UINT8_MAX - dAlpha) * d[RgbU8Traits::blue_pos] -
-                        (qreal)(UINT8_MAX - sAlpha) * s[RgbU8Traits::blue_pos]) / UINT8_MAX ;
-                d[RgbU8Traits::blue_pos] = RoundSignedToQuantum(Qt::blue);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos)) {
+                blue = ((qreal)(UINT8_MAX - dAlpha) * d[KoRgbU8Traits::blue_pos] -
+                        (qreal)(UINT8_MAX - sAlpha) * s[KoRgbU8Traits::blue_pos]) / UINT8_MAX ;
+                d[KoRgbU8Traits::blue_pos] = RoundSignedToQuantum(Qt::blue);
             }
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos)) {
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos)) {
                 alpha = ((qreal)(UINT8_MAX - dAlpha) -
                          (qreal)(UINT8_MAX - sAlpha)) / UINT8_MAX ;
-                d[RgbU8Traits::alpha_pos] = UINT8_MAX - RoundSignedToQuantum(alpha);
+                d[KoRgbU8Traits::alpha_pos] = UINT8_MAX - RoundSignedToQuantum(alpha);
             }
         }
         dst += dstRowSize;
@@ -954,28 +955,28 @@ void KoRgbU8CompositeOp::compositeAdd(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
-            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
+            sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[KoRgbU8Traits::alpha_pos];
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos)) {
-                red = (qreal) s[RgbU8Traits::red_pos] + d[RgbU8Traits::red_pos];
-                d[RgbU8Traits::red_pos] = (quint8)
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos)) {
+                red = (qreal) s[KoRgbU8Traits::red_pos] + d[KoRgbU8Traits::red_pos];
+                d[KoRgbU8Traits::red_pos] = (quint8)
                                           (red > UINT8_MAX  ? red -= UINT8_MAX  : red + 0.5);
             }
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos)) {
-                green = (qreal) s[RgbU8Traits::green_pos] + d[RgbU8Traits::green_pos];
-                d[RgbU8Traits::green_pos] = (quint8)
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos)) {
+                green = (qreal) s[KoRgbU8Traits::green_pos] + d[KoRgbU8Traits::green_pos];
+                d[KoRgbU8Traits::green_pos] = (quint8)
                                             (green > UINT8_MAX  ? green -= UINT8_MAX  : green + 0.5);
             }
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos)) {
-                blue = (qreal) s[RgbU8Traits::blue_pos] + d[RgbU8Traits::blue_pos];
-                d[RgbU8Traits::blue_pos] = (quint8)
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos)) {
+                blue = (qreal) s[KoRgbU8Traits::blue_pos] + d[KoRgbU8Traits::blue_pos];
+                d[KoRgbU8Traits::blue_pos] = (quint8)
                                            (blue > UINT8_MAX  ? blue -= UINT8_MAX  : blue + 0.5);
             }
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos))
-                d[RgbU8Traits::alpha_pos] = OPACITY_OPAQUE;
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos))
+                d[KoRgbU8Traits::alpha_pos] = OPACITY_OPAQUE;
         }
         dst += dstRowSize;
         src += srcRowSize;
@@ -1007,24 +1008,24 @@ void KoRgbU8CompositeOp::compositeDiff(qint32 pixelSize,
         d = dst;
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
-            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
+            sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[KoRgbU8Traits::alpha_pos];
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos))
-                d[RgbU8Traits::red_pos] = (quint8)
-                                          AbsoluteValue(s[RgbU8Traits::red_pos] - (qreal) d[RgbU8Traits::red_pos]);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos))
+                d[KoRgbU8Traits::red_pos] = (quint8)
+                                          AbsoluteValue(s[KoRgbU8Traits::red_pos] - (qreal) d[KoRgbU8Traits::red_pos]);
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos))
-                d[RgbU8Traits::green_pos] = (quint8)
-                                            AbsoluteValue(s[RgbU8Traits::green_pos] - (qreal) d[RgbU8Traits::green_pos]);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos))
+                d[KoRgbU8Traits::green_pos] = (quint8)
+                                            AbsoluteValue(s[KoRgbU8Traits::green_pos] - (qreal) d[KoRgbU8Traits::green_pos]);
 
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos))
-                d[RgbU8Traits::blue_pos] = (quint8)
-                                           AbsoluteValue(s[RgbU8Traits::blue_pos] - (qreal) d[RgbU8Traits::blue_pos]);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos))
+                d[KoRgbU8Traits::blue_pos] = (quint8)
+                                           AbsoluteValue(s[KoRgbU8Traits::blue_pos] - (qreal) d[KoRgbU8Traits::blue_pos]);
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos))
-                d[RgbU8Traits::alpha_pos] = UINT8_MAX - (quint8)
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos))
+                d[KoRgbU8Traits::alpha_pos] = UINT8_MAX - (quint8)
                                             AbsoluteValue(sAlpha - (qreal) dAlpha);
 
         }
@@ -1058,29 +1059,29 @@ void KoRgbU8CompositeOp::compositeBumpmap(qint32 pixelSize,
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
             // Is this correct? It's not this way in GM.
-            if (s[RgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT)
+            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT)
                 continue;
 
             // And I'm not sure whether this is correct, either.
-            intensity = ((qreal)306.0 * s[RgbU8Traits::red_pos] +
-                         (qreal)601.0 * s[RgbU8Traits::green_pos] +
-                         (qreal)117.0 * s[RgbU8Traits::blue_pos]) / 1024.0;
+            intensity = ((qreal)306.0 * s[KoRgbU8Traits::red_pos] +
+                         (qreal)601.0 * s[KoRgbU8Traits::green_pos] +
+                         (qreal)117.0 * s[KoRgbU8Traits::blue_pos]) / 1024.0;
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos))
-                d[RgbU8Traits::red_pos] = (quint8)(((qreal)
-                                                    intensity * d[RgbU8Traits::red_pos]) / UINT8_MAX + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos))
+                d[KoRgbU8Traits::red_pos] = (quint8)(((qreal)
+                                                    intensity * d[KoRgbU8Traits::red_pos]) / UINT8_MAX + 0.5);
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos))
-                d[RgbU8Traits::green_pos] = (quint8)(((qreal)
-                                                      intensity * d[RgbU8Traits::green_pos]) / UINT8_MAX + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos))
+                d[KoRgbU8Traits::green_pos] = (quint8)(((qreal)
+                                                      intensity * d[KoRgbU8Traits::green_pos]) / UINT8_MAX + 0.5);
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos))
-                d[RgbU8Traits::blue_pos] = (quint8)(((qreal)
-                                                     intensity * d[RgbU8Traits::blue_pos]) / UINT8_MAX + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos))
+                d[KoRgbU8Traits::blue_pos] = (quint8)(((qreal)
+                                                     intensity * d[KoRgbU8Traits::blue_pos]) / UINT8_MAX + 0.5);
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos))
-                d[RgbU8Traits::alpha_pos] = (quint8)(((qreal)
-                                                      intensity * d[RgbU8Traits::alpha_pos]) / UINT8_MAX + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos))
+                d[KoRgbU8Traits::alpha_pos] = (quint8)(((qreal)
+                                                      intensity * d[KoRgbU8Traits::alpha_pos]) / UINT8_MAX + 0.5);
 
 
         }
@@ -1121,7 +1122,7 @@ void KoRgbU8CompositeOp::compositeCopyRed(qint32 pixelSize,
         qint32 cols,
         quint8 opacity, const QBitArray & channelFlags) const
 {
-    compositeCopyChannel(RgbU8Traits::red_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity, channelFlags);
+    compositeCopyChannel(KoRgbU8Traits::red_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity, channelFlags);
 }
 
 void KoRgbU8CompositeOp::compositeCopyGreen(qint32 pixelSize,
@@ -1133,7 +1134,7 @@ void KoRgbU8CompositeOp::compositeCopyGreen(qint32 pixelSize,
         qint32 cols,
         quint8 opacity, const QBitArray & channelFlags) const
 {
-    compositeCopyChannel(RgbU8Traits::green_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity, channelFlags);
+    compositeCopyChannel(KoRgbU8Traits::green_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity, channelFlags);
 }
 
 void KoRgbU8CompositeOp::compositeCopyBlue(qint32 pixelSize,
@@ -1145,7 +1146,7 @@ void KoRgbU8CompositeOp::compositeCopyBlue(qint32 pixelSize,
         qint32 cols,
         quint8 opacity, const QBitArray & channelFlags) const
 {
-    compositeCopyChannel(RgbU8Traits::blue_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity, channelFlags);
+    compositeCopyChannel(KoRgbU8Traits::blue_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity, channelFlags);
 }
 
 
@@ -1160,7 +1161,7 @@ void KoRgbU8CompositeOp::compositeCopyOpacity(qint32 pixelSize,
 {
 
     // XXX: mess with intensity if there isn't an alpha channel, according to GM.
-    compositeCopyChannel(RgbU8Traits::alpha_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity, channelFlags);
+    compositeCopyChannel(KoRgbU8Traits::alpha_pos, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity, channelFlags);
 
 }
 
@@ -1224,25 +1225,25 @@ void KoRgbU8CompositeOp::compositeDissolve(qint32 pixelSize,
         s = src;
         for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
             // XXX: correct?
-            if (s[RgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT) continue;
+            if (s[KoRgbU8Traits::alpha_pos] == OPACITY_TRANSPARENT) continue;
 
-            sAlpha = UINT8_MAX - s[RgbU8Traits::alpha_pos];
-            dAlpha = UINT8_MAX - d[RgbU8Traits::alpha_pos];
+            sAlpha = UINT8_MAX - s[KoRgbU8Traits::alpha_pos];
+            dAlpha = UINT8_MAX - d[KoRgbU8Traits::alpha_pos];
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::red_pos))
-                d[RgbU8Traits::red_pos] = (quint8)(((qreal) sAlpha * s[RgbU8Traits::red_pos] +
-                                                    (UINT8_MAX - sAlpha) * d[RgbU8Traits::red_pos]) / UINT8_MAX + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::red_pos))
+                d[KoRgbU8Traits::red_pos] = (quint8)(((qreal) sAlpha * s[KoRgbU8Traits::red_pos] +
+                                                    (UINT8_MAX - sAlpha) * d[KoRgbU8Traits::red_pos]) / UINT8_MAX + 0.5);
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::green_pos))
-                d[RgbU8Traits::green_pos] = (quint8)(((qreal) sAlpha * s[RgbU8Traits::green_pos] +
-                                                      (UINT8_MAX - sAlpha) * d[RgbU8Traits::green_pos]) / UINT8_MAX + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::green_pos))
+                d[KoRgbU8Traits::green_pos] = (quint8)(((qreal) sAlpha * s[KoRgbU8Traits::green_pos] +
+                                                      (UINT8_MAX - sAlpha) * d[KoRgbU8Traits::green_pos]) / UINT8_MAX + 0.5);
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::blue_pos))
-                d[RgbU8Traits::blue_pos] = (quint8)(((qreal) sAlpha * s[RgbU8Traits::blue_pos] +
-                                                     (UINT8_MAX - sAlpha) * d[RgbU8Traits::blue_pos]) / UINT8_MAX + 0.5);
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::blue_pos))
+                d[KoRgbU8Traits::blue_pos] = (quint8)(((qreal) sAlpha * s[KoRgbU8Traits::blue_pos] +
+                                                     (UINT8_MAX - sAlpha) * d[KoRgbU8Traits::blue_pos]) / UINT8_MAX + 0.5);
 
-            if (channelFlags.isEmpty() || channelFlags.testBit(RgbU8Traits::alpha_pos))
-                d[RgbU8Traits::alpha_pos] = OPACITY_OPAQUE;
+            if (channelFlags.isEmpty() || channelFlags.testBit(KoRgbU8Traits::alpha_pos))
+                d[KoRgbU8Traits::alpha_pos] = OPACITY_OPAQUE;
 
         }
         dst += dstRowSize;

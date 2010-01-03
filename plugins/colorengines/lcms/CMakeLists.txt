@@ -13,6 +13,7 @@ include_directories( colorspaces/cmyk_u16
     colorspaces/rgb_u16
     colorspaces/rgb_u8
     colorspaces/xyz_u16
+    colorprofiles
 )
 
 set(FILE_OPENEXR_SOURCES)
@@ -36,11 +37,16 @@ SET ( lcmsengine_SRCS
     colorspaces/rgb_u8/KoRgbU8ColorSpace.cpp
     colorspaces/gray_u16/KoGrayU16ColorSpace.cpp
     colorspaces/rgb_u16/KoRgbU16ColorSpace.cpp
+    colorprofiles/KoLcmsColorProfileContainer.cpp
+    colorprofiles/KoIccColorProfile.cpp
+    KoIccColorSpaceEngine.cpp
+    KoLcmsColorSpace.cpp
+    KoLcmsEnginePlugin.cpp
 )
 
 kde4_add_plugin(kolcmsengine ${lcmsengine_SRCS})
 
-target_link_libraries(kolcmsengine pigmentcms ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB})
+target_link_libraries(kolcmsengine pigmentcms ${LCMS_LIBRARIES} ${KDE4_KPARTS_LIBS} ${LINK_OPENEXR_LIB})
 install(TARGETS kolcmsengine DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

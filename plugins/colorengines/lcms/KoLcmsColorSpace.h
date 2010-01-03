@@ -29,7 +29,6 @@
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "pigment_export.h"
 class qDebug;
 
 class KoLcmsInfo
@@ -57,7 +56,7 @@ private:
     Private* const d;
 };
 
-struct PIGMENTCMS_EXPORT KoLcmsDefaultTransformations {
+struct KoLcmsDefaultTransformations {
     cmsHTRANSFORM toRGB;
     cmsHTRANSFORM fromRGB;
     static cmsHPROFILE s_RGBProfile;

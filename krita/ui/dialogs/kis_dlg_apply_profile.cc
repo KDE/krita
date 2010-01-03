@@ -18,8 +18,6 @@
 
 #include "kis_dlg_apply_profile.h"
 
-#include <lcms.h>
-
 #include <QComboBox>
 #include <QButtonGroup>
 
@@ -30,6 +28,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoID.h"
 
+#include "kis_global.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "kis_config.h"
 #include "kis_factory2.h"

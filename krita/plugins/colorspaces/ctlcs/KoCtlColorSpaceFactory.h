@@ -21,6 +21,7 @@
 #define _KOCTLCOLORSPACEFACTORY_H_
 
 #include <KoColorSpace.h>
+#include <KoColorSpaceFactory.h>
 
 class KoCtlColorSpaceInfo;
 

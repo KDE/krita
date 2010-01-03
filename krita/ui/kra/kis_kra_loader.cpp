@@ -24,7 +24,7 @@
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoIccColorProfile.h>
+#include <KoColorProfile.h>
 #include <KoDocumentInfo.h>
 
 #include "kis_doc2.h"
@@ -205,7 +205,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         QByteArray data; data.resize(store->size());
         store->read(data.data(), store->size());
         store->close();
-        image->setProfile(new KoIccColorProfile(data));
+        image->setProfile(KoColorSpaceRegistry::instance()->createProfile("icc", data));
     }
 
 

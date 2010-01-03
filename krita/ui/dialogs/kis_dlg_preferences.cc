@@ -23,8 +23,6 @@
 #include <config-opengl.h>
 #include <config-glew.h>
 
-#include <lcms.h>
-
 #include <QBitmap>
 #include <QCheckBox>
 #include <QCursor>

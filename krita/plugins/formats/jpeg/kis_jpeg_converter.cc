@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <lcms.h>
 
 extern "C" {
 #include <iccjpeg.h>
@@ -47,6 +48,7 @@ extern "C" {
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorProfile.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -63,7 +65,7 @@ extern "C" {
 #include <kis_jpeg_source.h>
 #include <kis_jpeg_destination.h>
 
-#include <colorprofiles/KoIccColorProfile.h>
+#include <KoColorProfile.h>
 
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
@@ -172,7 +174,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, (DWORD)profile_len);
 
         if (hProfile != (cmsHPROFILE) NULL) {
-            profile = new KoIccColorProfile(profile_rawdata);
+            profile = KoColorSpaceRegistry::instance()->createProfile("icc", profile_rawdata);
             Q_CHECK_PTR(profile);
 //             dbgFile <<"profile name:" << profile->productName() <<" profile description:" << profile->productDescription() <<" information sur le produit:" << profile->productInfo();
             if (!profile->isSuitableForOutput()) {

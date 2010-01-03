@@ -19,6 +19,8 @@
 
 #include "kis_tiff_ycbcr_reader.h"
 
+#include <math.h>
+
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 

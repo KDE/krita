@@ -22,7 +22,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#include <colorprofiles/KoIccColorProfile.h>
+#include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
 
@@ -37,40 +37,40 @@
 
 namespace
 {
-bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_type)
-{
-    if (cs->id() == "GRAYA" || cs->id() == "GRAYA16") {
-        color_type = PHOTOMETRIC_MINISBLACK;
-        return true;
-    }
-    if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
-        color_type = PHOTOMETRIC_RGB;
-        return true;
-    }
-    if (KoID(cs->id()) == KoID("RgbAF16") || KoID(cs->id()) == KoID("RgbAF32")) {
-        color_type = PHOTOMETRIC_RGB;
-        sample_type = SAMPLEFORMAT_IEEEFP;
-        return true;
-    }
-    if (cs->id() == "CMYK" || cs->id() == "CMYKA16") {
-        color_type = PHOTOMETRIC_SEPARATED;
-        TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
-        return true;
-    }
-    if (cs->id() == "LABA") {
-        color_type = PHOTOMETRIC_CIELAB;
-        return true;
-    }
+    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_type)
+    {
+        if (cs->id() == "GRAYA" || cs->id() == "GRAYA16") {
+            color_type = PHOTOMETRIC_MINISBLACK;
+            return true;
+        }
+        if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
+            color_type = PHOTOMETRIC_RGB;
+            return true;
+        }
+        if (KoID(cs->id()) == KoID("RgbAF16") || KoID(cs->id()) == KoID("RgbAF32")) {
+            color_type = PHOTOMETRIC_RGB;
+            sample_type = SAMPLEFORMAT_IEEEFP;
+            return true;
+        }
+        if (cs->id() == "CMYK" || cs->id() == "CMYKA16") {
+            color_type = PHOTOMETRIC_SEPARATED;
+            TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
+            return true;
+        }
+        if (cs->id() == "LABA") {
+            color_type = PHOTOMETRIC_CIELAB;
+            return true;
+        }
 
-    KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
-    return false;
+        KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
+        return false;
 
-}
+    }
 }
 
 KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*image, KisTIFFOptions* options)
-        : m_image(image)
-        , m_options(options)
+    : m_image(image)
+    , m_options(options)
 {
 }
 
@@ -187,12 +187,9 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
 
     // Save profile
     const KoColorProfile* profile = pd->colorSpace()->profile();
-    if (profile) {
-        const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
-        if (iccprofile) {
-            QByteArray ba = iccprofile->rawData();
-            TIFFSetField(image(), TIFFTAG_ICCPROFILE, ba.size(), ba.data());
-        }
+    if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
+        QByteArray ba = profile->rawData();
+        TIFFSetField(image(), TIFFTAG_ICCPROFILE, ba.size(), ba.data());
     }
     tsize_t stripsize = TIFFStripSize(image());
     tdata_t buff = _TIFFmalloc(stripsize);
@@ -203,26 +200,26 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
         KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, y, width);
         switch (color_type) {
         case PHOTOMETRIC_MINISBLACK: {
-            quint8 poses[] = { 0, 1 };
-            r = copyDataToStrips(it, buff, depth, 1, poses);
-        }
-        break;
+                quint8 poses[] = { 0, 1 };
+                r = copyDataToStrips(it, buff, depth, 1, poses);
+            }
+            break;
         case PHOTOMETRIC_RGB: {
-            quint8 poses[] = { 2, 1, 0, 3};
-            r = copyDataToStrips(it, buff, depth, 3, poses);
-        }
-        break;
+                quint8 poses[] = { 2, 1, 0, 3};
+                r = copyDataToStrips(it, buff, depth, 3, poses);
+            }
+            break;
         case PHOTOMETRIC_SEPARATED: {
-            quint8 poses[] = { 0, 1, 2, 3, 4 };
-            r = copyDataToStrips(it, buff, depth, 4, poses);
-        }
-        break;
+                quint8 poses[] = { 0, 1, 2, 3, 4 };
+                r = copyDataToStrips(it, buff, depth, 4, poses);
+            }
+            break;
         case PHOTOMETRIC_CIELAB: {
-            quint8 poses[] = { 0, 1, 2, 3 };
-            r = copyDataToStrips(it, buff, depth, 3, poses);
-        }
-        break;
-        return false;
+                quint8 poses[] = { 0, 1, 2, 3 };
+                r = copyDataToStrips(it, buff, depth, 3, poses);
+            }
+            break;
+            return false;
         }
         if (!r) return false;
         TIFFWriteScanline(image(), buff, y, (tsample_t) - 1);

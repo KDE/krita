@@ -19,7 +19,6 @@
 #include "kis_config.h"
 
 #include <limits.h>
-#include <lcms.h>
 
 #include <kglobalsettings.h>
 #include <libs/main/KoDocument.h>

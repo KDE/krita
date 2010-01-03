@@ -280,9 +280,9 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
         dbgFile << "Profile size: " << data.size() << " " << m_store->atEnd() << " " << m_store->device()->bytesAvailable() << " " << read;
         m_store->close();
         // Create a colorspace with the embedded profile
+        KoColorProfile* profile = KoColorSpaceRegistry::instance()->createProfile("icc", data);
         const KoColorSpace * cs =
-            KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->id(),
-                    new KoIccColorProfile(data));
+            KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->id(),profile);
         // replace the old colorspace
         device->setDataManager(device->dataManager(), cs);
         return true;

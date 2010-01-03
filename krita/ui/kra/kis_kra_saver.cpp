@@ -29,7 +29,6 @@
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
-#include <KoIccColorProfile.h>
 #include <KoStore.h>
 
 #include <kis_annotation.h>
@@ -121,10 +120,8 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
     if (image->profile()) {
         const KoColorProfile *profile = image->profile();
         KisAnnotationSP annotation;
-        if (profile) {
-            const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
-            if (iccprofile && !iccprofile->rawData().isEmpty())
-                annotation = new  KisAnnotation(ICC, iccprofile->name(), iccprofile->rawData());
+        if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
+                annotation = new  KisAnnotation(ICC, profile->name(), profile->rawData());
         }
 
         if (annotation) {

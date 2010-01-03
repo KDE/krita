@@ -165,7 +165,6 @@ QString KisLmsAF32ColorSpaceFactory::defaultProfile() const
 #if 0
 
 #include <limits.h>
-#include <lcms.h>
 
 #include <QImage>
 

@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
+include_directories( ${KRITA_INCLUDES} ${LCMS_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
 
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
@@ -18,9 +18,7 @@ set(kritajpegimport_PART_SRCS
 
 kde4_add_plugin(kritajpegimport WITH_PREFIX ${kritajpegimport_PART_SRCS})
 
-
-
-target_link_libraries(kritajpegimport kritaui jpeg ${EXIV2_LIBRARIES} )
+target_link_libraries(kritajpegimport kritaui jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
 
 install(TARGETS kritajpegimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -35,9 +33,7 @@ kde4_add_ui_files(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
 
 kde4_add_plugin(kritajpegexport WITH_PREFIX ${kritajpegexport_PART_SRCS})
 
-
-
-target_link_libraries(kritajpegexport kritaui jpeg ${EXIV2_LIBRARIES} )
+target_link_libraries(kritajpegexport kritaui jpeg ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
 
 install(TARGETS kritajpegexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

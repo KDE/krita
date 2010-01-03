@@ -21,7 +21,7 @@
 #include "wavefilter.h"
 #include <stdlib.h>
 #include <vector>
-
+#include <math.h>
 #include <qpoint.h>
 
 #include <kcombobox.h>

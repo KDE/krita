@@ -24,7 +24,7 @@
 #include <QBuffer>
 #include <QByteArray>
 
-#include <colorprofiles/KoIccColorProfile.h>
+#include <KoColorProfile.h>
 #include <KoStore.h>
 #include <KoColorSpace.h>
 
@@ -182,10 +182,8 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
     if (layer->paintDevice()->colorSpace()->profile()) {
         const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
         KisAnnotationSP annotation;
-        if (profile) {
-            const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
-            if (iccprofile && !iccprofile->rawData().isEmpty())
-                annotation = new KisAnnotation(ICC, iccprofile->name(), iccprofile->rawData());
+        if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
+                annotation = new KisAnnotation(ICC, profile->name(), profile->rawData());
         }
 
         if (annotation) {

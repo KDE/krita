@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -15,58 +16,75 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KO_STRATEGY_COLORSPACE_RGB_H_
-#define KO_STRATEGY_COLORSPACE_RGB_H_
+#ifndef KORGBU8COLORSPACE_H
+#define KORGBU8COLORSPACE_H
 
-#include <klocale.h>
-#include <KoLcmsColorSpace.h>
-#include <KoColorSpaceTraits.h>
+#include <QColor>
+#include <QBitArray>
+
+#include "DebugPigment.h"
+
+#include "KoSimpleColorSpace.h"
+#include "KoColorSpaceTraits.h"
+#include "KoSimpleColorSpaceFactory.h"
 #include "KoColorModelStandardIds.h"
 
-typedef KoRgbTraits<quint8>  RgbU8Traits;
-
-const qint32 MAX_CHANNEL_RGB = 3;
-
-class KoRgbU8ColorSpace : public KoLcmsColorSpace<RgbU8Traits>
-{
+/**
+ * The alpha mask is a special color strategy that treats all pixels as
+ * alpha value with a color common to the mask. The default color is white.
+ */
+class KoRgbU8ColorSpace : public KoSimpleColorSpace<KoRgbU8Traits> {
 
 public:
 
-    KoRgbU8ColorSpace( KoColorProfile *p);
-    virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
-    virtual KoColorTransformation* createInvertTransformation() const;
-    virtual KoID colorModelId() const { return RGBAColorModelID; }
-    virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
-    virtual KoColorSpace* clone() const;
-    virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-    virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
-    virtual quint8 intensity8(const quint8 * src) const;
+    KoRgbU8ColorSpace();
 
-    /**
-     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
-     * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
-     * This is the value that the member function id() returns.
-     */
+    virtual ~KoRgbU8ColorSpace();
+
     static QString colorSpaceId();
+
+    virtual KoColorSpace* clone() const;
+
+    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const;
+
+    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
+
+    virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
+                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent) const;
+
+    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+
+    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+
+    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+
+    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+
+    virtual bool convertPixelsTo(const quint8 *src,
+                                 quint8 *dst, const KoColorSpace * dstColorSpace,
+                                 quint32 numPixels,
+                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual ) const;
+
 };
 
-class KoRgbU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
-{
+class KoRgbU8ColorSpaceFactory : public KoSimpleColorSpaceFactory {
 
 public:
+    KoRgbU8ColorSpaceFactory()
+	: KoSimpleColorSpaceFactory("RGBA",
+                                    i18n("RGB (8-bit integer/channel, unmanaged)"),
+                                    true,
+                                    RGBAColorModelID,
+                                    Integer8BitsColorDepthID,
+                                    8)
+    {
+    }
 
-    KoRgbU8ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_BGRA_8,icSigRgbData )
-    {}
-    virtual bool userVisible() const { return true; }
-    virtual QString id() const { return KoRgbU8ColorSpace::colorSpaceId(); }
-    virtual QString name() const { return i18n("RGB (8-bit integer/channel)"); }
-    virtual KoID colorModelId() const { return RGBAColorModelID; }
-    virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
-    virtual int referenceDepth() const { return 8; }
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const
+    {
+        return new KoRgbU8ColorSpace();
+    }
 
-    virtual KoColorSpace *createColorSpace( const KoColorProfile * p) const { return new KoRgbU8ColorSpace( p->clone()); }
-
-    virtual QString defaultProfile() const { return "sRGB built-in - (lcms internal)"; }
 };
 
-#endif // KO_STRATEGY_COLORSPACE_RGB_H_
+#endif

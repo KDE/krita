@@ -24,22 +24,6 @@ target_link_libraries(TestKoColorSpaceAbstract  ${KDE4_KDEUI_LIBS} pigmentcms ${
 
 ########### next target ###############
 
-set(TestKoLcmsColorProfile_test_SRCS TestKoLcmsColorProfile.cpp )
-
-kde4_add_unit_test(TestKoLcmsColorProfile TESTNAME libs-pigment-TestKoLcmsColorProfile  ${TestKoLcmsColorProfile_test_SRCS})
-
-target_link_libraries(TestKoLcmsColorProfile  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(TestKoColorSpaceRegistry_test_SRCS TestKoColorSpaceRegistry.cpp )
-
-kde4_add_unit_test(TestKoColorSpaceRegistry TESTNAME libs-pigment-TestKoColorSpaceRegistry  ${TestKoColorSpaceRegistry_test_SRCS})
-
-target_link_libraries(TestKoColorSpaceRegistry  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(TestKoColorSpaceMaths_test_SRCS TestKoColorSpaceMaths.cpp)
 
 kde4_add_unit_test(TestKoColorSpaceMaths TESTNAME libs-pigment-TestKoColorSpaceMaths ${TestKoColorSpaceMaths_test_SRCS})

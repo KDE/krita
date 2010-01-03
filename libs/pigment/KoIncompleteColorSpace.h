@@ -25,8 +25,7 @@
 
 /**
  * Inherit this colorspace if you can't provide all the functions
- * defined in KoColorSpace and/or if your colorspace is unsupported by
- * LCMS.
+ * defined in KoColorSpace.
  *
  */
 template<class _CSTraits>

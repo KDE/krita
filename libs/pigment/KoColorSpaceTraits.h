@@ -305,7 +305,15 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
     }
 };
 
-/** Use this class in conjonction with KoColorSpace::toRgbA16 and
+
+/**
+ * 8-bits rgba traits.
+ */
+struct KoRgbU8Traits : public KoRgbTraits<quint8> {
+};
+
+/**
+ * Use this class together with KoColorSpace::toRgbA16 and
  * KoColorSpace::fromRgbA16 data.
  * @see KoLabU16Traits for an exemple of use.
  */

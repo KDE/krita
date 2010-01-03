@@ -28,11 +28,12 @@
 
 #include <KoGenericRegistry.h>
 #include <KoColorSpace.h>
-#include <KoColorSpaceFactory.h>
 
 class KoColorProfile;
 class KoColorConversionSystem;
 class KoColorConversionCache;
+
+// XXX: USE STATIC DELETER! USE STATIC DELETER!
 
 /**
  * The registry for colorspaces and profiles.
@@ -242,13 +243,6 @@ public:
      *         as the one given in argument
      */
     const KoColorSpace* permanentColorspace( const KoColorSpace* _colorSpace );
-
-    /**
-     * This function return a list of all the keys in KoID format by using the name() method
-     * on the objects stored in the registry.
-     */
-    QList<KoID> listKeys() const;
-
 private:
 
     bool isCached(const QString & csId, const QString & profileName) const;

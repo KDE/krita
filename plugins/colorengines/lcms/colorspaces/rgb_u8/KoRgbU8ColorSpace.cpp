@@ -16,6 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "KoRgbU8ColorSpace.h"
 
 #include <QColor>
 #include <QDomElement>
@@ -25,18 +26,14 @@
 
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
-
-#include "KoRgbU8ColorSpace.h"
-
-#include "KoRgbU8CompositeOp.h"
-
 #include "compositeops/KoCompositeOps.h"
 #include "compositeops/KoCompositeOpAdd.h"
 #include "compositeops/KoCompositeOpSubtract.h"
 
+#include "KoRgbU8CompositeOp.h"
+
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))
-
 
 class KoRgbU8InvertColorTransformation : public KoColorTransformation {
 
@@ -68,7 +65,7 @@ private:
 };
 
 KoRgbU8ColorSpace::KoRgbU8ColorSpace( KoColorProfile *p) :
-    KoLcmsColorSpace<RgbU8Traits>(colorSpaceId(), i18n("RGB (8-bit integer/channel)"),  TYPE_BGRA_8, icSigRgbData, p)
+    KoLcmsColorSpace<KoRgbU8Traits>(colorSpaceId(), i18n("RGB (8-bit integer/channel)"),  TYPE_BGRA_8, icSigRgbData, p)
 {
     addChannel(new KoChannelInfo(i18n("Red"),   2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255,0,0)));
     addChannel(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,255,0)));

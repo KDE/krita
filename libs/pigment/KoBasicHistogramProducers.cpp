@@ -29,7 +29,6 @@
 // #include "Ko_global.h"
 #include "KoIntegerMaths.h"
 #include "KoChannelInfo.h"
-#include "KoLcmsColorSpace.h"
 
 // TODO: get ride of this
 const quint8 quint8_MAX = UCHAR_MAX;

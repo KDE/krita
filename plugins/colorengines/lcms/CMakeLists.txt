@@ -1,5 +1,6 @@
 project( lcmsengine )
 
+add_subdirectory(colorprofiles)
 include_directories( ${PIGMENT_INCLUDES} ${LCMS_INCLUDE_DIR} )
 
 include_directories( colorspaces/cmyk_u16
@@ -38,8 +39,10 @@ SET ( lcmsengine_SRCS
 )
 
 kde4_add_plugin(kolcmsengine ${lcmsengine_SRCS})
+
+set (EXTRA_LIBRARIES ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB})
     
-target_link_libraries(kolcmsengine pigmentcms)
+target_link_libraries(kolcmsengine pigmentcms ${EXTRA_LIBRARIES})
 install(TARGETS kolcmsengine DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

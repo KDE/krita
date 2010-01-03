@@ -37,14 +37,19 @@ typedef KoColorSpaceTrait<quint8, 1, 0> AlphaU8Traits;
  * alpha value with a color common to the mask. The default color is white.
  */
 class PIGMENTCMS_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits> {
-public:
-    KoAlphaColorSpace();
-    virtual ~KoAlphaColorSpace();
-    virtual KoID colorModelId() const { return AlphaColorModelID; }
-    virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
-    virtual KoColorSpace* clone() const;
 
 public:
+
+    KoAlphaColorSpace();
+
+    virtual ~KoAlphaColorSpace();
+
+    virtual KoID colorModelId() const { return AlphaColorModelID; }
+
+    virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
+
+    virtual KoColorSpace* clone() const;
+
     virtual bool willDegrade(ColorSpaceIndependence independence) const
         {
             Q_UNUSED(independence);
@@ -60,21 +65,25 @@ public:
     virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
 
     virtual quint8 difference(const quint8 *src1, const quint8 *src2) const;
-    virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
     virtual quint32 colorChannelCount() const { return 0; }
 
     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
+
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
     virtual void convolveColors(quint8** colors, qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const;
 
+    virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
     virtual quint32 colorSpaceType() const { return 0; }
 
     virtual bool hasHighDynamicRange() const { return false; }
+
     virtual const KoColorProfile* profile() const { return 0; }
+
     virtual KoColorProfile* profile() { return 0; }
+
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent) const;
 

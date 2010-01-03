@@ -1,66 +1,92 @@
 /*
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
-*/
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+#ifndef KORGBU16COLORSPACE_H
+#define KORGBU16COLORSPACE_H
 
-#ifndef KORGBU16COLORSPACE_H_
-#define KORGBU16COLORSPACE_H_
+#include <QColor>
+#include <QBitArray>
 
-#include "KoLcmsColorSpace.h"
+#include "DebugPigment.h"
+
+#include "KoSimpleColorSpace.h"
 #include "KoColorSpaceTraits.h"
+#include "KoSimpleColorSpaceFactory.h"
 #include "KoColorModelStandardIds.h"
 
-class KoRgbU16ColorSpace : public KoLcmsColorSpace<KoRgbU16Traits>
-{
-    public:
-        KoRgbU16ColorSpace( KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence independence) const;
-        virtual KoID colorModelId() const { return RGBAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual KoColorSpace* clone() const;
-        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
+/**
+ * The alpha mask is a special color strategy that treats all pixels as
+ * alpha value with a color common to the mask. The default color is white.
+ */
+class KoRgbU16ColorSpace : public KoSimpleColorSpace<KoRgbU16Traits> {
 
-    /**
-     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
-     * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
-     * This is the value that the member function id() returns.
-     */
+public:
+
+    KoRgbU16ColorSpace();
+    virtual ~KoRgbU16ColorSpace();
+
     static QString colorSpaceId();
+
+    virtual KoColorSpace* clone() const;
+
+    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const;
+
+    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
+
+    virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
+                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent) const;
+
+
+    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+
+    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+
+    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+
+    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const;
+
+    virtual bool convertPixelsTo(const quint8 *src,
+                                 quint8 *dst, const KoColorSpace * dstColorSpace,
+                                 quint32 numPixels,
+                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual ) const;
+
+
 };
 
-class KoRgbU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
-{
-    public:
-        KoRgbU16ColorSpaceFactory() : KoLcmsColorSpaceFactory( TYPE_BGRA_16, icSigRgbData )
-        {
-        }
-        virtual QString id() const { return KoRgbU16ColorSpace::colorSpaceId(); }
-        virtual QString name() const { return i18n("RGB (16-bit integer/channel)"); }
-        
-        virtual bool userVisible() const { return true; }
-        virtual KoID colorModelId() const { return RGBAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual int referenceDepth() const { return 16; }
+class KoRgbU16ColorSpaceFactory : public KoSimpleColorSpaceFactory {
 
-        virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KoRgbU16ColorSpace( p->clone() ); }
+public:
+    KoRgbU16ColorSpaceFactory()
+        : KoSimpleColorSpaceFactory("RGBA",
+                                    i18n("RGB (16-bit integer/channel, unmanaged)"),
+                                    true,
+                                    RGBAColorModelID,
+                                    Integer16BitsColorDepthID,
+                                    16)
+    {
+    }
 
-        virtual QString defaultProfile() const { return "sRGB built-in - (lcms internal)"; }
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const
+    {
+        return new KoRgbU16ColorSpace();
+    }
+
 };
 
 
-#endif
+#endif 

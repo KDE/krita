@@ -38,10 +38,11 @@
 #include "DebugPigment.h"
 #include "KoBasicHistogramProducers.h"
 #include "KoColorSpace.h"
-#include "KoColorProfile.h"
 #include "KoColorConversionCache.h"
 #include "KoColorConversionSystem.h"
+#include "KoIccColorSpaceEngine.h"
 
+#include "colorprofiles/KoLcmsColorProfileContainer.h"
 #include "colorspaces/KoAlphaColorSpace.h"
 #include "colorspaces/KoLabColorSpace.h"
 #include "colorspaces/KoRgbU16ColorSpace.h"
@@ -75,17 +76,64 @@ void KoColorSpaceRegistry::init()
     d->lab16sLAB = 0;
     d->colorConversionSystem = new KoColorConversionSystem;
     d->colorConversionCache = new KoColorConversionCache;
+    // Initialise color engine
+    KoColorSpaceEngineRegistry::instance()->add( new KoIccColorSpaceEngine );
+    // prepare a list of the ICC profiles
+    KGlobal::mainComponent().dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
 
+    QStringList profileFilenames;
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icm",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.ICM",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.ICC",  KStandardDirs::Recursive);
+    profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icc",  KStandardDirs::Recursive);
+
+    // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.
+    cmsErrorAction(LCMS_ERROR_SHOW);
+
+    // Load the profiles
+    if (!profileFilenames.empty()) {
+        KoColorProfile * profile = 0;
+        for ( QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it ) {
+            profile = new KoIccColorProfile(*it);
+            Q_CHECK_PTR(profile);
+
+            profile->load();
+            if (profile->valid()) {
+                dbgPigmentCSRegistry << "Valid profile : " << profile->fileName() << profile->name();
+                d->profileMap[profile->name()] = profile;
+            } else {
+                dbgPigmentCSRegistry << "Invalid profile : "<< profile->fileName() << profile->name();
+                delete profile;
+            }
+        }
+    }
+
+    // Initialise LAB
+    KoColorProfile *labProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLabProfile(NULL));
+    addProfile(labProfile);
     add(new KoLabColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
             new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
             (KoID("LABAHISTO", i18n("L*a*b* Histogram")), KoLabColorSpace::colorSpaceId()));
+    KoColorProfile *rgbProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreate_sRGBProfile());
+    addProfile(rgbProfile);
     add(new KoRgbU16ColorSpaceFactory());
+
     add(new KoRgbU8ColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
             new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
             (KoID("RGB8HISTO", i18n("RGB8 Histogram")), KoRgbU8ColorSpace::colorSpaceId()) );
 
+
+
+    // Create the default profile for grayscale, probably not the best place to but that, but still better than in a grayscale plugin
+    // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
+    LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
+    cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
+    cmsFreeGamma(Gamma);
+    KoColorProfile *defProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(hProfile);
+    dbgPigmentCSRegistry << "Gray " << defProfile->name();
+    addProfile(defProfile);
 
     // Create the built-in colorspaces
     d->alphaCs = new KoAlphaColorSpace();
@@ -472,14 +520,3 @@ const KoColorSpace* KoColorSpaceRegistry::permanentColorspace( const KoColorSpac
         return cs;
     }
 }
-
-QList<KoID> KoColorSpaceRegistry::listKeys() const
-{
-    QList<KoID> answer;
-    foreach (const QString key, keys()) {
-        answer.append(KoID(key, get(key)->name()));
-    }
-
-    return answer;
-}
-

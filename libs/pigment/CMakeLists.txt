@@ -2,8 +2,6 @@ project(pigmentcms)
 
 include_directories( ${PIGMENT_INCLUDES} ${QT_INCLUDES} )
 
-add_subdirectory( colorprofiles )
-
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
@@ -34,17 +32,12 @@ set(pigmentcms_SRCS
     KoCopyColorConversionTransformation.cpp
     KoFallBackColorTransformation.cpp
     KoHistogramProducer.cpp
-    KoIccColorSpaceEngine.cpp
-    KoLcmsColorSpace.cpp
     KoMultipleColorConversionTransformation.cpp
     KoUniqueNumberForIdServer.cpp
-    colorprofiles/KoIccColorProfile.cpp
-    colorprofiles/KoLcmsColorProfileContainer.cpp
     colorspaces/KoAlphaColorSpace.cpp
     colorspaces/KoLabColorSpace.cpp
     colorspaces/KoRgbU16ColorSpace.cpp
-    colorspaces/KoRgbU8ColorSpace.cc
-    colorspaces/KoRgbU8CompositeOp.cpp
+    colorspaces/KoRgbU8ColorSpace.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
     resources/KoPattern.cpp
@@ -84,7 +77,7 @@ set(PIGMENT_INSTALL_FILES
 
 add_subdirectory(tests)
 
-set (EXTRA_LIBRARIES ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB})
+set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB})
 
 if(MSVC)
   # avoid "cannot open file 'LIBC.lib'" error

@@ -16,6 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "KoAlphaColorSpace.h"
 
 #include <limits.h>
 #include <stdlib.h>
@@ -25,9 +26,6 @@
 
 #include <klocale.h>
 
-#include <lcms.h>
-
-#include "KoAlphaColorSpace.h"
 #include "KoChannelInfo.h"
 #include "KoID.h"
 #include "KoIntegerMaths.h"
@@ -216,20 +214,6 @@ quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2) con
     return qAbs(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
 }
 
-void KoAlphaColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
-{
-    if (nColors > 0) {
-        quint32 total = 0;
-
-        while(nColors)
-        {
-            nColors--;
-            total += *colors[nColors] * weights[nColors];
-        }
-        *dst = total / 255;
-    }
-}
-
 bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
                      quint8 *dst, const KoColorSpace * dstColorSpace,
                      quint32 numPixels,
@@ -244,8 +228,6 @@ bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
     return true;
 
 }
-
-
 
 QString KoAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
@@ -262,7 +244,6 @@ QString KoAlphaColorSpace::normalisedChannelValueText(const quint8 *pixel, quint
 
     return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
 }
-
 
 void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const
 {
@@ -282,6 +263,7 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, qu
     if ( channelFlags.isEmpty() || channelFlags.testBit(PIXEL_MASK) )
         dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, SCHAR_MAX);
 }
+
 
 QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const

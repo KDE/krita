@@ -1,27 +1,4 @@
-* Currently, all profiles are loaded at startup (ICC and CTL), even if
-they are never use, this has a significant impact on the memory footprint
-(mostly for ICC) and on the CPU time (mostly for CTL). Since they are not
-necessarily used, loading them is a lost of resources, so loading them as
-needed would be a better option. *But* the problem is that, the only way
-to know if the profiles are valid (and usuable by the application) is to
-load the profile... So the idea is to cache some information (validity,
-isSuitableForOutput, isSuitableForPrinting and isSuitableForDisplay),
-using MD5/modification date it would be possible to check if the profile
-informations are up-to-date, and then the profile data would only be
-loaded when needed by a color space.
-
-* for embedded/mobile purposes, even lcms and loading or creating one
-or two profiles can be too memory-consuming, so it would be good if
-lcms could become an optional dependency of pigment, like ctl -- for instance
-by making lcms and ctl plugins and having a small core set of colorspaces 
-for minimal functionality (rgb, lab, hsv)
-
-* the previous would need the possibility to define "priority" between
-colorspaces, for instance the minimal RGB colorspace provided in pigment would
-need to be overriden by the more functional lcms one when it is available.
-
-(Note: I was just counting on overwriting the entries with the same ID's, so 
-when loading a plugin that loads colorspaces, the embedded colorspaces are 
-no longer available from the registry) EDITCyrille: I think we need some kind of priority between engines, for instance, in case someone add support for other ICC engine, the user should be able to select which one to use
-
-* currently profiles names are untranslatable, because KoColorProfile::name() is used as a name and as an id, this should be changed by the introduction of an id() and making ::name() return the i18n version. And thus be consistant with the rest of the API
+* currently profiles names are untranslatable, because
+KoColorProfile::name() is used as a name and as an id, this should be
+changed by the introduction of an id() and making ::name() return the
+i18n version. And thus be consistant with the rest of the API

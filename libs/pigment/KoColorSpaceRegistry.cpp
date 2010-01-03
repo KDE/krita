@@ -39,6 +39,7 @@
 #include "KoBasicHistogramProducers.h"
 #include "KoColorSpace.h"
 #include "KoColorProfile.h"
+#include "KoColorProfileFactory.h"
 #include "KoColorConversionCache.h"
 #include "KoColorConversionSystem.h"
 
@@ -52,6 +53,7 @@ struct KoColorSpaceRegistry::Private {
 
     QHash<QString, KoColorProfile * > profileMap;
     QHash<QString, const KoColorSpace * > csMap;
+    QHash<QString, KoColorProfileFactory * > profileFactoryMap;
     const KoColorSpace *alphaCs;
     KoColorConversionSystem *colorConversionSystem;
     KoColorConversionCache* colorConversionCache;
@@ -119,11 +121,18 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
         delete profile;
     }
     d->profileMap.clear();
+
     foreach(const KoColorSpace * cs, d->csMap) {
         cs->d->deletability = OwnedByRegistryRegistyDeletes;
         delete cs;
     }
     d->csMap.clear();
+
+    foreach(const KoColorProfileFactory* factory, d->profileFactoryMap) {
+        delete factory;
+    }
+    d->profileFactoryMap.clear();
+
     // deleting colorspaces calls a function in the cache
     delete d->colorConversionCache;
     d->colorConversionCache = 0;
@@ -463,6 +472,13 @@ QList<KoID> KoColorSpaceRegistry::listKeys() const
 KoColorProfile* KoColorSpaceRegistry::createProfile(const QString& type, QByteArray rawData)
 {
     // FIXME: add a factory structure to create profiles of different types
+    if (d->profileFactoryMap.contains(type)) {
+        return d->profileFactoryMap[type]->createColorProfile(rawData);
+    }
     return 0;
 }
 
+void KoColorSpaceRegistry::addColorProfileFactory(const QString& type, KoColorProfileFactory* factory)
+{
+    d->profileFactoryMap[type] = factory;
+}

@@ -100,6 +100,12 @@ void KoColorSpaceRegistry::init()
     configExtensions.blacklist = "ColorSpaceExtensionsPluginsDisabled";
     configExtensions.group = "koffice";
     KoPluginLoader::instance()->load("KOffice/ColorSpaceExtension", "[X-Pigment-MinVersion] <= 0", configExtensions);
+
+
+    dbgPigment << "Loaded the following colorspaces:";
+    foreach(const KoID id, listKeys()) {
+        dbgPigment << "\t" << id.id() << "," << id.name();
+    }
 }
 
 KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())

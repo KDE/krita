@@ -56,7 +56,7 @@ class KoRgbU16ColorSpaceFactory : public KoSimpleColorSpaceFactory
 
 public:
     KoRgbU16ColorSpaceFactory()
-            : KoSimpleColorSpaceFactory("RGBA",
+            : KoSimpleColorSpaceFactory(KoRgbU16ColorSpace::colorSpaceId(),
                                         i18n("RGB (16-bit integer/channel, unmanaged)"),
                                         true,
                                         RGBAColorModelID,

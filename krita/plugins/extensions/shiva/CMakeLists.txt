@@ -1,6 +1,6 @@
 add_subdirectory(collections)
 
-include_directories(${OPENSHIVA_INCLUDE_DIR})
+include_directories(${OPENSHIVA_INCLUDE_DIRS})
 
 if(HAVE_OPENSHIVA_912)
 
@@ -22,7 +22,7 @@ set(kritashiva_PART_SRCS
 
 kde4_add_plugin(kritashiva ${kritashiva_PART_SRCS})
 
-target_link_libraries(kritashiva kritaui ${OPENSHIVA_LIBRARIES} ${QTSHIVA_LIBRARIES})
+target_link_libraries(kritashiva kritaui ${OPENSHIVA_LDFLAGS} ${QTSHIVA_LDFLAGS})
 
 install(TARGETS kritashiva  DESTINATION ${PLUGIN_INSTALL_DIR})
 

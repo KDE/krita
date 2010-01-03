@@ -206,7 +206,6 @@ install( FILES
 install(
     FILES
     flake_export.h
-    FlakeColor.h
     KoCanvasBase.h
     KoCanvasController.h
     KoCanvasObserver.h

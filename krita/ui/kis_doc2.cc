@@ -33,6 +33,7 @@
 #include <QStringList>
 #include <QWidget>
 #include <QList>
+#include <QTimer>
 
 // KDE
 #include <kimageio.h>
@@ -50,6 +51,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceEngine.h>
 #include <KoID.h>
 #include <KoMainWindow.h>
 #include <KoOdfReadStore.h>
@@ -429,6 +431,26 @@ KoView* KisDoc2::createViewInstance(QWidget* parent)
     setModified(false);
     qApp->restoreOverrideCursor();
     return v;
+}
+
+void KisDoc2::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
+{
+    // print error if the lcms engine is not available
+    if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
+        // need to wait 1 event since exiting here would not work.
+        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+    }
+    else {
+        KoDocument::showStartUpWidget(parent, alwaysShow);
+    }
+}
+
+void KisDoc2::showErrorAndDie()
+{
+    KMessageBox::error(widget(),
+                       i18n("The KOffice LittleCMS color management plugin is not installed. Krita will quit now."),
+                       i18n("Installation Error"));
+    QCoreApplication::exit(10);
 }
 
 void KisDoc2::paintContent(QPainter& painter, const QRect& rc)

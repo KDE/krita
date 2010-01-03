@@ -88,6 +88,8 @@ public:
      */
     virtual void paintContent(QPainter& painter, const QRect& rect);
 
+    void showStartUpWidget(KoMainWindow* parent, bool alwaysShow);
+
     /// Generate a scaled-down pixmap of the image projection that fits in size
     virtual QPixmap generatePreview(const QSize& size);
 
@@ -101,6 +103,8 @@ public slots:
      * @since 1.5
      */
     virtual void initEmpty();
+
+    void showErrorAndDie();
 
 public:
 

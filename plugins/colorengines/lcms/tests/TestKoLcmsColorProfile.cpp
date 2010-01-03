@@ -90,15 +90,15 @@ void TestKoLcmsColorProfile::testProfileCreationFromChromaticities()
     QCOMPARE(testRounding(cmsEstimateGamma(blueGamma)), gamma);
 
     QString expectedProfileName = QString("lcms virtual RGB profile - R(%1, %2) G(%3, %4) B(%5, %6) W(%7, %8) gamma %9")
-                                .arg(chromaticities.primaries.Red.x)
-                                .arg(chromaticities.primaries.Red.y)
-                                .arg(chromaticities.primaries.Green.x)
-                                .arg(chromaticities.primaries.Green.y)
-                                .arg(chromaticities.primaries.Blue.x)
-                                .arg(chromaticities.primaries.Blue.y)
-                                .arg(chromaticities.whitePoint.x)
-                                .arg(chromaticities.whitePoint.y)
-                                .arg(gamma);
+                                  .arg(chromaticities.primaries.Red.x)
+                                  .arg(chromaticities.primaries.Red.y)
+                                  .arg(chromaticities.primaries.Green.x)
+                                  .arg(chromaticities.primaries.Green.y)
+                                  .arg(chromaticities.primaries.Blue.x)
+                                  .arg(chromaticities.primaries.Blue.y)
+                                  .arg(chromaticities.whitePoint.x)
+                                  .arg(chromaticities.whitePoint.y)
+                                  .arg(gamma);
 
     QCOMPARE(profile->name(), expectedProfileName);
     QCOMPARE(QString(cmsTakeProductDesc(lcmsProfile)), expectedProfileName);

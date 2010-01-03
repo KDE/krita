@@ -30,15 +30,15 @@
  * A template version of the alphadarken composite operation to use in colorspaces<
  */
 template<class _CSTraits>
-class KoCompositeOpAlphaDarken : public KoCompositeOp {
+class KoCompositeOpAlphaDarken : public KoCompositeOp
+{
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 
 public:
 
     KoCompositeOpAlphaDarken(const KoColorSpace * cs)
-        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken" ), KoCompositeOp::categoryMix() )
-    {
+            : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix()) {
     }
 
 public:
@@ -53,12 +53,11 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 U8_opacity,
-                   const QBitArray & channelFlags) const
-    {
+                   const QBitArray & channelFlags) const {
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
 
         bool testChannelFlags = !channelFlags.isEmpty();
-        while (rows-- > 0 ) {
+        while (rows-- > 0) {
 
             const channels_type *s = reinterpret_cast<const channels_type *>(srcRowStart);
             channels_type *d = reinterpret_cast<channels_type *>(dstRowStart);
@@ -67,17 +66,15 @@ public:
 
             channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
 
-            for (qint32 i = cols; i > 0; i--, s+=srcInc, d+=_CSTraits::channels_nb)
-            {
+            for (qint32 i = cols; i > 0; i--, s += srcInc, d += _CSTraits::channels_nb) {
 
                 channels_type srcAlpha = s[_CSTraits::alpha_pos];
                 channels_type dstAlpha = d[_CSTraits::alpha_pos];
 
                 // apply the alphamask
-                if(mask != 0)
-                {
-                    if(*mask != OPACITY_OPAQUE) {
-                        channels_type tmpOpacity = KoColorSpaceMaths<quint8 , channels_type>::scaleToA( *mask );
+                if (mask != 0) {
+                    if (*mask != OPACITY_OPAQUE) {
+                        channels_type tmpOpacity = KoColorSpaceMaths<quint8 , channels_type>::scaleToA(*mask);
                         srcAlpha =  KoColorSpaceMaths<channels_type>::multiply(srcAlpha, tmpOpacity);
                     }
                     mask++;
@@ -90,15 +87,14 @@ public:
                 // not transparent
                 if (srcAlpha != NATIVE_OPACITY_TRANSPARENT && srcAlpha >= dstAlpha) {
                     if (!testChannelFlags) {
-                        for(uint i = 0; i < _CSTraits::channels_nb; i++) {
-                            if( (int)i != _CSTraits::alpha_pos) {
+                        for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+                            if ((int)i != _CSTraits::alpha_pos) {
                                 d[i] = s[i];
                             }
                         }
-                    }
-                    else {
-                        for(uint i = 0; i < _CSTraits::channels_nb; i++) {
-                            if( (int)i != _CSTraits::alpha_pos && channelFlags.testBit( i ) ) {
+                    } else {
+                        for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+                            if ((int)i != _CSTraits::alpha_pos && channelFlags.testBit(i)) {
                                 d[i] = s[i];
                             }
                         }
@@ -109,7 +105,7 @@ public:
 
             srcRowStart += srcstride;
             dstRowStart += dststride;
-            if(maskRowStart) {
+            if (maskRowStart) {
                 maskRowStart += maskstride;
             }
         }

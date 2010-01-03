@@ -32,7 +32,8 @@
 #include "KoColorSpaceRegistry.h"
 
 
-class KoColor::Private {
+class KoColor::Private
+{
 public:
     Private() : data(0), colorSpace(0) {}
 
@@ -45,7 +46,7 @@ public:
 };
 
 KoColor::KoColor()
-    : d(new Private())
+        : d(new Private())
 {
     d->colorSpace = KoColorSpaceRegistry::instance()->lab16(0);
     d->data = new quint8[d->colorSpace->pixelSize()];
@@ -54,7 +55,7 @@ KoColor::KoColor()
 }
 
 KoColor::KoColor(const KoColorSpace * colorSpace)
-    : d(new Private())
+        : d(new Private())
 {
     Q_ASSERT(colorSpace);
     d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
@@ -69,7 +70,7 @@ KoColor::~KoColor()
 }
 
 KoColor::KoColor(const QColor & color, const KoColorSpace * colorSpace)
-    : d(new Private())
+        : d(new Private())
 {
     Q_ASSERT(color.isValid());
     Q_ASSERT(colorSpace);
@@ -82,7 +83,7 @@ KoColor::KoColor(const QColor & color, const KoColorSpace * colorSpace)
 }
 
 KoColor::KoColor(const quint8 * data, const KoColorSpace * colorSpace)
-    : d(new Private())
+        : d(new Private())
 {
     Q_ASSERT(colorSpace);
     Q_ASSERT(data);
@@ -94,7 +95,7 @@ KoColor::KoColor(const quint8 * data, const KoColorSpace * colorSpace)
 
 
 KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
-    : d(new Private())
+        : d(new Private())
 {
     Q_ASSERT(colorSpace);
     d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
@@ -105,12 +106,11 @@ KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
 }
 
 KoColor::KoColor(const KoColor & rhs)
-    : d(new Private())
+        : d(new Private())
 {
     d->colorSpace = rhs.colorSpace();
     Q_ASSERT(*d->colorSpace == *KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace));
-    if(d->colorSpace && rhs.d->data)
-    {
+    if (d->colorSpace && rhs.d->data) {
         d->data = new quint8[d->colorSpace->pixelSize()];
         memcpy(d->data, rhs.d->data, d->colorSpace->pixelSize());
     }
@@ -200,19 +200,16 @@ void KoColor::dump() const
     QList<KoChannelInfo *>::const_iterator begin = channels.constBegin();
     QList<KoChannelInfo *>::const_iterator end = channels.constEnd();
 
-    for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it)
-    {
+    for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it) {
         KoChannelInfo * ch = (*it);
         // XXX: setNum always takes a byte.
         if (ch->size() == sizeof(quint8)) {
             // Byte
             //dbgPigment <<"Channel (byte):" << ch->name() <<":" << QString().setNum(d->data[ch->pos()]) <<"";
-        }
-        else if (ch->size() == sizeof(quint16)) {
+        } else if (ch->size() == sizeof(quint16)) {
             // Short (may also by an nvidia half)
             //dbgPigment <<"Channel (short):" << ch->name() <<":" << QString().setNum(*((const quint16 *)(d->data+ch->pos())))  <<"";
-        }
-        else if (ch->size() == sizeof(quint32)) {
+        } else if (ch->size() == sizeof(quint32)) {
             // Integer (may also be float... Find out how to distinguish these!)
             //dbgPigment <<"Channel (int):" << ch->name() <<":" << QString().setNum(*((const quint32 *)(d->data+ch->pos())))  <<"";
         }
@@ -230,78 +227,74 @@ const KoColorProfile *  KoColor::profile() const
     return d->colorSpace->profile();
 }
 
-quint8 * KoColor::data() {
+quint8 * KoColor::data()
+{
     return d->data;
 }
 
-const quint8 * KoColor::data() const {
+const quint8 * KoColor::data() const
+{
     return d->data;
 }
 
-const KoColorSpace * KoColor::colorSpace() const {
+const KoColorSpace * KoColor::colorSpace() const
+{
     return d->colorSpace;
 }
 
 void KoColor::toXML(QDomDocument& doc, QDomElement& colorElt) const
 {
-    d->colorSpace->colorToXML( d->data, doc, colorElt);
+    d->colorSpace->colorToXML(d->data, doc, colorElt);
 }
 
-void KoColor::setOpacity(quint8 alpha )
+void KoColor::setOpacity(quint8 alpha)
 {
-    d->colorSpace->setAlpha( d->data, alpha, 1);
+    d->colorSpace->setAlpha(d->data, alpha, 1);
 }
 quint8 KoColor::opacity() const
 {
-    return d->colorSpace->alpha( d->data );
+    return d->colorSpace->alpha(d->data);
 }
 
 KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, const QHash<QString, QString> & aliases)
 {
     QString modelId;
-    if(elt.tagName() == "CMYK")
-    {
+    if (elt.tagName() == "CMYK") {
         modelId = CMYKAColorModelID.id();
-    } else if( elt.tagName() == "RGB") {
+    } else if (elt.tagName() == "RGB") {
         modelId = RGBAColorModelID.id();
-    } else if( elt.tagName() == "sRGB") {
+    } else if (elt.tagName() == "sRGB") {
         modelId = RGBAColorModelID.id();
-    } else if( elt.tagName() == "Lab") {
+    } else if (elt.tagName() == "Lab") {
         modelId = LABAColorModelID.id();
-    } else if( elt.tagName() == "XYZ") {
+    } else if (elt.tagName() == "XYZ") {
         modelId = XYZAColorModelID.id();
-    } else if( elt.tagName() == "Gray") {
+    } else if (elt.tagName() == "Gray") {
         modelId = GrayAColorModelID.id();
-    } else if( elt.tagName() == "YCbCr") {
+    } else if (elt.tagName() == "YCbCr") {
         modelId = YCbCrAColorModelID.id();
     }
     QString profileName;
-    if( elt.tagName() != "sRGB")
-    {
-        profileName = elt.attribute("space","");
-        if( aliases.contains(profileName))
-        {
+    if (elt.tagName() != "sRGB") {
+        profileName = elt.attribute("space", "");
+        if (aliases.contains(profileName)) {
             profileName = aliases.value(profileName);
         }
-        if( !KoColorSpaceRegistry::instance()->profileByName( profileName))
-        {
+        if (!KoColorSpaceRegistry::instance()->profileByName(profileName)) {
             profileName = "";
         }
     }
     QString csId = KoColorSpaceRegistry::instance()->colorSpaceId(modelId, bitDepthId);
-    if(csId.isEmpty())
-    {
-        QList<KoID> list =  KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces );
-        if(!list.empty())
-        {
+    if (csId.isEmpty()) {
+        QList<KoID> list =  KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces);
+        if (!list.empty()) {
             csId = KoColorSpaceRegistry::instance()->colorSpaceId(modelId, list[0].id());
         }
     }
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(csId, profileName);
-    if(cs)
-    {
+    if (cs) {
         KoColor c(cs);
-        cs->colorFromXML( c.data(), elt);
+        cs->colorFromXML(c.data(), elt);
         return c;
     } else {
         return KoColor();

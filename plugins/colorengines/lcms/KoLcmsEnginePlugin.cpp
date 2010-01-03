@@ -77,7 +77,7 @@ void KoColorSpaceRegistry::init()
     d->colorConversionSystem = new KoColorConversionSystem;
     d->colorConversionCache = new KoColorConversionCache;
     // Initialise color engine
-    KoColorSpaceEngineRegistry::instance()->add( new KoIccColorSpaceEngine );
+    KoColorSpaceEngineRegistry::instance()->add(new KoIccColorSpaceEngine);
     // prepare a list of the ICC profiles
     KGlobal::mainComponent().dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
 
@@ -93,7 +93,7 @@ void KoColorSpaceRegistry::init()
     // Load the profiles
     if (!profileFilenames.empty()) {
         KoColorProfile * profile = 0;
-        for ( QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it ) {
+        for (QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it) {
             profile = new KoIccColorProfile(*it);
             Q_CHECK_PTR(profile);
 
@@ -102,7 +102,7 @@ void KoColorSpaceRegistry::init()
                 dbgPigmentCSRegistry << "Valid profile : " << profile->fileName() << profile->name();
                 d->profileMap[profile->name()] = profile;
             } else {
-                dbgPigmentCSRegistry << "Invalid profile : "<< profile->fileName() << profile->name();
+                dbgPigmentCSRegistry << "Invalid profile : " << profile->fileName() << profile->name();
                 delete profile;
             }
         }
@@ -113,16 +113,16 @@ void KoColorSpaceRegistry::init()
     addProfile(labProfile);
     add(new KoLabColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("LABAHISTO", i18n("L*a*b* Histogram")), KoLabColorSpace::colorSpaceId()));
+        new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+        (KoID("LABAHISTO", i18n("L*a*b* Histogram")), KoLabColorSpace::colorSpaceId()));
     KoColorProfile *rgbProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreate_sRGBProfile());
     addProfile(rgbProfile);
     add(new KoRgbU16ColorSpaceFactory());
 
     add(new KoRgbU8ColorSpaceFactory());
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-            (KoID("RGB8HISTO", i18n("RGB8 Histogram")), KoRgbU8ColorSpace::colorSpaceId()) );
+        new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
+        (KoID("RGB8HISTO", i18n("RGB8 Histogram")), KoRgbU8ColorSpace::colorSpaceId()));
 
 
 
@@ -143,13 +143,13 @@ void KoColorSpaceRegistry::init()
     config.whiteList = "ColorSpacePlugins";
     config.blacklist = "ColorSpacePluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load("KOffice/ColorSpace","[X-Pigment-MinVersion] <= 0", config);
+    KoPluginLoader::instance()->load("KOffice/ColorSpace", "[X-Pigment-MinVersion] <= 0", config);
 
     KoPluginLoader::PluginsConfig configExtensions;
     configExtensions.whiteList = "ColorSpaceExtensionsPlugins";
     configExtensions.blacklist = "ColorSpaceExtensionsPluginsDisabled";
     configExtensions.group = "koffice";
-    KoPluginLoader::instance()->load("KOffice/ColorSpaceExtension","[X-Pigment-MinVersion] <= 0", configExtensions);
+    KoPluginLoader::instance()->load("KOffice/ColorSpaceExtension", "[X-Pigment-MinVersion] <= 0", configExtensions);
 }
 
 KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())
@@ -162,11 +162,11 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
 
     delete d->colorConversionSystem;
-    foreach( KoColorProfile* profile, d->profileMap) {
+    foreach(KoColorProfile* profile, d->profileMap) {
         delete profile;
     }
     d->profileMap.clear();
-    foreach( const KoColorSpace * cs, d->csMap) {
+    foreach(const KoColorSpace * cs, d->csMap) {
         cs->d->deletability = OwnedByRegistryRegistyDeletes;
         delete cs;
     }
@@ -222,8 +222,7 @@ QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoColorSp
     QHash<QString, KoColorProfile * >::Iterator it;
     for (it = d->profileMap.begin(); it != d->profileMap.end(); ++it) {
         KoColorProfile *  profile = it.value();
-        if(csf->profileIsCompatible(profile))
-        {
+        if (csf->profileIsCompatible(profile)) {
             Q_ASSERT(profile);
             //         if (profile->colorSpaceSignature() == csf->colorSpaceSignature()) {
             profiles.push_back(profile);
@@ -232,14 +231,12 @@ QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoColorSp
     return profiles;
 }
 
-QList<const KoColorSpaceFactory*> KoColorSpaceRegistry::colorSpacesFor( const KoColorProfile* _profile)
+QList<const KoColorSpaceFactory*> KoColorSpaceRegistry::colorSpacesFor(const KoColorProfile* _profile)
 {
     QList<const KoColorSpaceFactory*> csfs;
-    foreach( KoColorSpaceFactory* csf, values() )
-    {
-        if( csf->profileIsCompatible( _profile ) )
-        {
-            csfs.push_back( csf );
+    foreach(KoColorSpaceFactory* csf, values()) {
+        if (csf->profileIsCompatible(_profile)) {
+            csfs.push_back(csf);
         }
     }
     return csfs;
@@ -255,13 +252,13 @@ void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
     Q_ASSERT(p);
     if (p->valid()) {
         d->profileMap[p->name()] = p;
-        d->colorConversionSystem->insertColorProfile( p );
+        d->colorConversionSystem->insertColorProfile(p);
     }
 }
 
 void KoColorSpaceRegistry::addProfile(const KoColorProfile* profile)
 {
-    addProfile( profile->clone() );
+    addProfile(profile->clone());
 }
 
 bool KoColorSpaceRegistry::isCached(const QString & csId, const QString & profileName) const
@@ -278,12 +275,10 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 {
     QString profileName = pName;
 
-    if(profileName.isEmpty())
-    {
+    if (profileName.isEmpty()) {
         KoColorSpaceFactory *csf = value(csID);
 
-        if(!csf)
-        {
+        if (!csf) {
             dbgPigmentCSRegistry << "Unknown color space type : " << csID;
             return 0;
         }
@@ -295,16 +290,14 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
     if (!isCached(csID, profileName)) {
         KoColorSpaceFactory *csf = value(csID);
-        if(!csf)
-        {
-            dbgPigmentCSRegistry <<"Unknown color space type :" << csf;
+        if (!csf) {
+            dbgPigmentCSRegistry << "Unknown color space type :" << csf;
             return 0;
         }
 
         // last attempt at getting a profile, sometimes the default profile, like adobe cmyk isn't available.
         const KoColorProfile *p = profileByName(profileName);
-        if(!p )
-        {
+        if (!p) {
             dbgPigmentCSRegistry << "Profile not found :" << profileName;
             QList<const KoColorProfile *> profiles = profilesFor(csID);
             if (profiles.isEmpty()) {
@@ -314,9 +307,8 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             p = profiles[0];
             Q_ASSERT(p);
         }
-        const KoColorSpace *cs = csf->createColorSpace( p);
-        if(!cs)
-        {
+        const KoColorSpace *cs = csf->createColorSpace(p);
+        if (!cs) {
             dbgPigmentCSRegistry << "Unable to create color space";
             return 0;
         }
@@ -326,7 +318,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;
     }
 
-    if(d->csMap.contains(name))
+    if (d->csMap.contains(name))
         return d->csMap[name];
     else
         return 0;
@@ -335,31 +327,26 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
 const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoColorProfile *profile)
 {
-    if( profile )
-    {
+    if (profile) {
         const KoColorSpace *cs = 0;
-        if(isCached( csID, profile->name() ) )
-        {
-            cs = colorSpace( csID, profile->name());
+        if (isCached(csID, profile->name())) {
+            cs = colorSpace(csID, profile->name());
         }
 
-        if( not d->profileMap.contains( profile->name() ) )
-        {
-            addProfile( profile );
+        if (!d->profileMap.contains(profile->name())) {
+            addProfile(profile);
         }
 
-        if(!cs)
-        {
+        if (!cs) {
             // The profile was not stored and thus not the combination either
             KoColorSpaceFactory *csf = value(csID);
-            if(!csf)
-            {
-                dbgPigmentCSRegistry <<"Unknown color space type :" << csf;
+            if (!csf) {
+                dbgPigmentCSRegistry << "Unknown color space type :" << csf;
                 return 0;
             }
 
-            cs = csf->createColorSpace( profile);
-            if(!cs )
+            cs = csf->createColorSpace(profile);
+            if (!cs)
                 return 0;
 
             QString name = csID + "<comb>" + profile->name();
@@ -370,7 +357,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
         return cs;
     } else {
-        return colorSpace( csID, "");
+        return colorSpace(csID, "");
     }
 }
 
@@ -381,13 +368,11 @@ const KoColorSpace * KoColorSpaceRegistry::alpha8()
 
 const KoColorSpace * KoColorSpaceRegistry::rgb8(const QString &profileName)
 {
-    if( profileName.isEmpty() )
-    {
-        if(!d->rgbU8sRGB)
-        {
+    if (profileName.isEmpty()) {
+        if (!d->rgbU8sRGB) {
             d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
         }
-        Q_ASSERT( d->rgbU8sRGB);
+        Q_ASSERT(d->rgbU8sRGB);
         return d->rgbU8sRGB;
     }
     return colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
@@ -395,13 +380,11 @@ const KoColorSpace * KoColorSpaceRegistry::rgb8(const QString &profileName)
 
 const KoColorSpace * KoColorSpaceRegistry::rgb8(const KoColorProfile * profile)
 {
-    if(profile == 0 )
-    {
-        if(!d->rgbU8sRGB)
-        {
+    if (profile == 0) {
+        if (!d->rgbU8sRGB) {
             d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
         }
-        Q_ASSERT( d->rgbU8sRGB);
+        Q_ASSERT(d->rgbU8sRGB);
         return d->rgbU8sRGB;
     }
     return colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
@@ -419,10 +402,8 @@ const KoColorSpace * KoColorSpaceRegistry::rgb16(const KoColorProfile * profile)
 
 const KoColorSpace * KoColorSpaceRegistry::lab16(const QString &profileName)
 {
-    if( profileName.isEmpty() )
-    {
-        if(!d->lab16sLAB)
-        {
+    if (profileName.isEmpty()) {
+        if (!d->lab16sLAB) {
             d->lab16sLAB = colorSpace(KoLabColorSpace::colorSpaceId(), profileName);
         }
         return d->lab16sLAB;
@@ -432,48 +413,42 @@ const KoColorSpace * KoColorSpaceRegistry::lab16(const QString &profileName)
 
 const KoColorSpace * KoColorSpaceRegistry::lab16(const KoColorProfile * profile)
 {
-    if( profile == 0 )
-    {
-        if(!d->lab16sLAB)
-        {
+    if (profile == 0) {
+        if (!d->lab16sLAB) {
             d->lab16sLAB = colorSpace(KoLabColorSpace::colorSpaceId(), profile);
         }
-        Q_ASSERT( d->lab16sLAB );
+        Q_ASSERT(d->lab16sLAB);
         return d->lab16sLAB;
     }
     return colorSpace(KoLabColorSpace::colorSpaceId(), profile);
 }
 
-QList<KoID> KoColorSpaceRegistry::colorModelsList(ColorSpaceListVisibility option ) const
+QList<KoID> KoColorSpaceRegistry::colorModelsList(ColorSpaceListVisibility option) const
 {
     QList<KoID> ids;
     QList<KoColorSpaceFactory*> factories = values();
-    foreach(KoColorSpaceFactory* factory, factories)
-    {
-        if(!ids.contains(factory->colorModelId())
-            && ( option == AllColorSpaces || factory->userVisible() ) )
-            {
+    foreach(KoColorSpaceFactory* factory, factories) {
+        if (!ids.contains(factory->colorModelId())
+                && (option == AllColorSpaces || factory->userVisible())) {
             ids << factory->colorModelId();
         }
     }
     return ids;
 }
-QList<KoID> KoColorSpaceRegistry::colorDepthList(const KoID& colorModelId, ColorSpaceListVisibility option ) const
+QList<KoID> KoColorSpaceRegistry::colorDepthList(const KoID& colorModelId, ColorSpaceListVisibility option) const
 {
     return colorDepthList(colorModelId.id(), option);
 }
 
 
-QList<KoID> KoColorSpaceRegistry::colorDepthList(const QString & colorModelId, ColorSpaceListVisibility option ) const
+QList<KoID> KoColorSpaceRegistry::colorDepthList(const QString & colorModelId, ColorSpaceListVisibility option) const
 {
     QList<KoID> ids;
     QList<KoColorSpaceFactory*> factories = values();
-    foreach(KoColorSpaceFactory* factory, factories)
-    {
-        if(!ids.contains(KoID(factory->colorDepthId()))
-            && factory->colorModelId().id() == colorModelId
-                    && ( option == AllColorSpaces || factory->userVisible() ))
-            {
+    foreach(KoColorSpaceFactory* factory, factories) {
+        if (!ids.contains(KoID(factory->colorDepthId()))
+                && factory->colorModelId().id() == colorModelId
+                && (option == AllColorSpaces || factory->userVisible())) {
             ids << factory->colorDepthId();
         }
     }
@@ -483,10 +458,8 @@ QList<KoID> KoColorSpaceRegistry::colorDepthList(const QString & colorModelId, C
 QString KoColorSpaceRegistry::colorSpaceId(const QString & colorModelId, const QString & colorDepthId)
 {
     QList<KoColorSpaceFactory*> factories = values();
-    foreach(KoColorSpaceFactory* factory, factories)
-    {
-        if(factory->colorModelId().id() == colorModelId && factory->colorDepthId().id() == colorDepthId )
-        {
+    foreach(KoColorSpaceFactory* factory, factories) {
+        if (factory->colorModelId().id() == colorModelId && factory->colorDepthId().id() == colorDepthId) {
             return factory->id();
         }
     }
@@ -496,7 +469,7 @@ QString KoColorSpaceRegistry::colorSpaceId(const QString & colorModelId, const Q
 
 QString KoColorSpaceRegistry::colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId)
 {
-    return colorSpaceId( colorModelId.id(), colorDepthId.id());
+    return colorSpaceId(colorModelId.id(), colorDepthId.id());
 }
 
 const KoColorConversionSystem* KoColorSpaceRegistry::colorConversionSystem() const
@@ -509,10 +482,10 @@ KoColorConversionCache* KoColorSpaceRegistry::colorConversionCache() const
     return d->colorConversionCache;
 }
 
-const KoColorSpace* KoColorSpaceRegistry::permanentColorspace( const KoColorSpace* _colorSpace )
+const KoColorSpace* KoColorSpaceRegistry::permanentColorspace(const KoColorSpace* _colorSpace)
 {
-    if(_colorSpace->d->deletability != NotOwnedByRegistry) return _colorSpace;
-    else if(*_colorSpace == *d->alphaCs) return d->alphaCs;
+    if (_colorSpace->d->deletability != NotOwnedByRegistry) return _colorSpace;
+    else if (*_colorSpace == *d->alphaCs) return d->alphaCs;
     else {
         const KoColorSpace* cs = colorSpace(_colorSpace->id(), _colorSpace->profile());
         Q_ASSERT(cs);

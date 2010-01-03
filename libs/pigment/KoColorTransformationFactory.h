@@ -34,20 +34,21 @@ class KoID;
  * Allow to extend the number of color transformation of a
  * colorspace.
  */
-class PIGMENTCMS_EXPORT KoColorTransformationFactory {
-  public:
+class PIGMENTCMS_EXPORT KoColorTransformationFactory
+{
+public:
     KoColorTransformationFactory(QString id, QString name);
     virtual ~KoColorTransformationFactory();
-  public:
+public:
     QString id() const;
     QString name() const;
-  public:
+public:
     /**
      * @return an empty list if the factory support all type of colorspaces models.
      */
     virtual QList< QPair< KoID, KoID > > supportedModels() const = 0;
     virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const = 0;
-  private:
+private:
     struct Private;
     Private* const d;
 };

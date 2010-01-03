@@ -27,7 +27,8 @@
  * that is, one of the components that makes up a particular
  * pixel.
  */
-class KoChannelInfo {
+class KoChannelInfo
+{
 public:
     /// enum to define the type of the channel
     enum enumChannelType {
@@ -59,45 +60,56 @@ public:
      * @param size number of bytes (not bits) of the channel
      * @param color a color to represent that channel (for instance in an histogram)
      */
-    KoChannelInfo( const QString & name, qint32 npos, enumChannelType channelType, enumChannelValueType channelValueType, qint32 size = 1, QColor color = QColor(0,0,0))
-    : m_name (name), m_pos (npos), m_channelType(channelType), m_channelValueType(channelValueType), m_size(size), m_color(color) { }
+    KoChannelInfo(const QString & name, qint32 npos, enumChannelType channelType, enumChannelValueType channelValueType, qint32 size = 1, QColor color = QColor(0, 0, 0))
+            : m_name(name), m_pos(npos), m_channelType(channelType), m_channelValueType(channelValueType), m_size(size), m_color(color) { }
 public:
     /**
      * User-friendly name for this channel for presentation purposes in the gui
      */
-    inline QString name() const { return m_name; }
+    inline QString name() const {
+        return m_name;
+    }
 
     /**
      * returns the position of the first byte of the channel in the pixel
      */
-    inline qint32 pos() const { return m_pos; }
+    inline qint32 pos() const {
+        return m_pos;
+    }
 
     /**
      * returns the number of bytes this channel takes
      */
-    inline qint32 size() const { return m_size; }
+    inline qint32 size() const {
+        return m_size;
+    }
 
     /**
      * returns the type of the channel
      */
-    inline enumChannelType channelType() const { return m_channelType; }
+    inline enumChannelType channelType() const {
+        return m_channelType;
+    }
     /**
      * return the type of the value of the channel (float, uint8 or uint16)
      */
-    inline enumChannelValueType channelValueType() const { return m_channelValueType; }
+    inline enumChannelValueType channelValueType() const {
+        return m_channelValueType;
+    }
     /**
      * This is a color that can be used to represent this channel in histograms and so.
      * By default this is black, so keep in mind that many channels might look the same
      */
-    inline QColor color() const { return m_color; }
+    inline QColor color() const {
+        return m_color;
+    }
 
     /**
      * A channel is less than another channel if its pos is smaller.
      */
-    inline bool operator<( const KoChannelInfo & info )
-        {
-            return m_pos < info.m_pos;
-        }
+    inline bool operator<(const KoChannelInfo & info) {
+        return m_pos < info.m_pos;
+    }
 
 private:
 

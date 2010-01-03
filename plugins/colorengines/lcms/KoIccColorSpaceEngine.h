@@ -22,15 +22,16 @@
 
 #include <KoColorSpaceEngine.h>
 
-class KoIccColorSpaceEngine : public KoColorSpaceEngine {
-    public:
-        KoIccColorSpaceEngine();
-        virtual ~KoIccColorSpaceEngine();
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
-        quint32 computeColorSpaceType(const KoColorSpace* cs) const;
-    private:
-        struct Private;
-        Private* const d;
+class KoIccColorSpaceEngine : public KoColorSpaceEngine
+{
+public:
+    KoIccColorSpaceEngine();
+    virtual ~KoIccColorSpaceEngine();
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    quint32 computeColorSpaceType(const KoColorSpace* cs) const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

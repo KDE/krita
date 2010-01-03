@@ -28,25 +28,26 @@ class KoColorSpace;
 class KoColorTransformationFactory;
 
 /**
- * This class list the available transformation. The only reason to use directly 
+ * This class list the available transformation. The only reason to use directly
  * that class is for adding new factory use the static method
  * KoColorTransformationFactoryRegistry::add.
  */
-class PIGMENTCMS_EXPORT KoColorTransformationFactoryRegistry : private KoGenericRegistry<KoColorTransformationFactory*> {
+class PIGMENTCMS_EXPORT KoColorTransformationFactoryRegistry : private KoGenericRegistry<KoColorTransformationFactory*>
+{
     friend class KoColorSpace;
-    public:
-        ~KoColorTransformationFactoryRegistry();
-        /**
-         * Add a KoColorTransformationFactory to the registry.
-         */
-        static void addColorTransformationFactory(KoColorTransformationFactory* factory);
-    private:
-        static KoColorTransformationFactoryRegistry* instance();
-    private:
-        KoColorTransformationFactoryRegistry();
-    private:
-        struct Private;
-        Private* const d;
+public:
+    ~KoColorTransformationFactoryRegistry();
+    /**
+     * Add a KoColorTransformationFactory to the registry.
+     */
+    static void addColorTransformationFactory(KoColorTransformationFactory* factory);
+private:
+    static KoColorTransformationFactoryRegistry* instance();
+private:
+    KoColorTransformationFactoryRegistry();
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

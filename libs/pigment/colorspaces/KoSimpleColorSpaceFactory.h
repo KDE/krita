@@ -26,7 +26,8 @@
 #include <KoColorSpaceRegistry.h>
 #include "KoColorConversionTransformationFactory.h"
 
-class KoSimpleColorSpaceFactory : public KoColorSpaceFactory {
+class KoSimpleColorSpaceFactory : public KoColorSpaceFactory
+{
 
 public:
 
@@ -36,41 +37,59 @@ public:
                               const KoID& colorModelId,
                               const KoID& colorDepthId,
                               int referenceDepth)
-        : m_id(id)
-        , m_name(name)
-        , m_userVisible(userVisible)
-        , m_colorModelId(colorModelId)
-        , m_colorDepthId(colorDepthId)
-        , m_referenceDepth(referenceDepth)
-    {
+            : m_id(id)
+            , m_name(name)
+            , m_userVisible(userVisible)
+            , m_colorModelId(colorModelId)
+            , m_colorDepthId(colorDepthId)
+            , m_referenceDepth(referenceDepth) {
     }
 
 
-     virtual QString id() const { return m_id; }
+    virtual QString id() const {
+        return m_id;
+    }
 
-     virtual QString name() const { return m_name; }
+    virtual QString name() const {
+        return m_name;
+    }
 
-     virtual bool userVisible() const { return m_userVisible; }
+    virtual bool userVisible() const {
+        return m_userVisible;
+    }
 
-     virtual KoID colorModelId() const { return m_colorModelId; }
+    virtual KoID colorModelId() const {
+        return m_colorModelId;
+    }
 
-     virtual KoID colorDepthId() const { return m_colorDepthId; }
+    virtual KoID colorDepthId() const {
+        return m_colorDepthId;
+    }
 
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const { Q_UNUSED(profile); return true; }
+    virtual bool profileIsCompatible(const KoColorProfile* profile) const {
+        Q_UNUSED(profile); return true;
+    }
 
-    virtual QString colorSpaceEngine() const { return ""; }
+    virtual QString colorSpaceEngine() const {
+        return "";
+    }
 
-    virtual bool isHdr() const { return false; }
+    virtual bool isHdr() const {
+        return false;
+    }
 
-    virtual int referenceDepth() const { return m_referenceDepth; }
+    virtual int referenceDepth() const {
+        return m_referenceDepth;
+    }
 
 
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const
-    {
+    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const {
         return QList<KoColorConversionTransformationFactory*>();
     }
 
-    virtual QString defaultProfile() const { return QString::null; }
+    virtual QString defaultProfile() const {
+        return QString::null;
+    }
 
 private:
 

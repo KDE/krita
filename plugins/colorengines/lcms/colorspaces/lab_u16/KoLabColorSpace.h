@@ -26,51 +26,70 @@
 
 class KoLabColorSpace : public KoLcmsColorSpace<KoLabU16Traits>
 {
-    public:
-        KoLabColorSpace( KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence independence) const;
-        virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
+public:
+    KoLabColorSpace(KoColorProfile *p);
+    virtual bool willDegrade(ColorSpaceIndependence independence) const;
+    virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
-        /**
-         * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
-         * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
-         * This is the value that the member function id() returns.
-         */
-        static QString colorSpaceId();
-        virtual KoID colorModelId() const { return LABAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual KoColorSpace* clone() const;
-        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
+    /**
+     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter
+     * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
+     * This is the value that the member function id() returns.
+     */
+    static QString colorSpaceId();
+    virtual KoID colorModelId() const {
+        return LABAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual KoColorSpace* clone() const;
+    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
 
-    private:
-        static const quint32 CHANNEL_L = 0;
-        static const quint32 CHANNEL_A = 1;
-        static const quint32 CHANNEL_B = 2;
-        static const quint32 CHANNEL_ALPHA = 3;
-        static const quint32 MAX_CHANNEL_L = 0xff00;
-        static const quint32 MAX_CHANNEL_AB = 0xffff;
-        static const quint32 CHANNEL_AB_ZERO_OFFSET = 0x8000;
+private:
+    static const quint32 CHANNEL_L = 0;
+    static const quint32 CHANNEL_A = 1;
+    static const quint32 CHANNEL_B = 2;
+    static const quint32 CHANNEL_ALPHA = 3;
+    static const quint32 MAX_CHANNEL_L = 0xff00;
+    static const quint32 MAX_CHANNEL_AB = 0xffff;
+    static const quint32 CHANNEL_AB_ZERO_OFFSET = 0x8000;
 };
 
 class KoLabColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
-    public:
-        KoLabColorSpaceFactory() : KoLcmsColorSpaceFactory( (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), icSigLabData)
-        {}
-        virtual bool userVisible() const { return true; }
-        /// reimplemented from KoColorSpaceFactory
-        virtual QString id() const { return KoLabColorSpace::colorSpaceId(); }
-        /// reimplemented from KoColorSpaceFactory
-        virtual QString name() const { return i18n("L*a*b* (16-bit integer/channel)"); }
+public:
+    KoLabColorSpaceFactory() : KoLcmsColorSpaceFactory((COLORSPACE_SH(PT_Lab) | CHANNELS_SH(3) | BYTES_SH(2) | EXTRA_SH(1)), icSigLabData) {}
+    virtual bool userVisible() const {
+        return true;
+    }
+    /// reimplemented from KoColorSpaceFactory
+    virtual QString id() const {
+        return KoLabColorSpace::colorSpaceId();
+    }
+    /// reimplemented from KoColorSpaceFactory
+    virtual QString name() const {
+        return i18n("L*a*b* (16-bit integer/channel)");
+    }
 
-        virtual KoID colorModelId() const { return LABAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual int referenceDepth() const { return 16; }
+    virtual KoID colorModelId() const {
+        return LABAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual int referenceDepth() const {
+        return 16;
+    }
 
-        virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KoLabColorSpace( p->clone() ); }
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+        return new KoLabColorSpace(p->clone());
+    }
 
-        virtual QString defaultProfile() const { return "Lab built-in - (lcms internal)"; }
+    virtual QString defaultProfile() const {
+        return "Lab built-in - (lcms internal)";
+    }
 };
 
 

@@ -33,7 +33,8 @@
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a color common to the mask. The default color is white.
  */
-class KoRgbU8ColorSpace : public KoSimpleColorSpace<KoRgbU8Traits> {
+class KoRgbU8ColorSpace : public KoSimpleColorSpace<KoRgbU8Traits>
+{
 
 public:
 
@@ -63,25 +64,24 @@ public:
     virtual bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual ) const;
+                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
 
 };
 
-class KoRgbU8ColorSpaceFactory : public KoSimpleColorSpaceFactory {
+class KoRgbU8ColorSpaceFactory : public KoSimpleColorSpaceFactory
+{
 
 public:
     KoRgbU8ColorSpaceFactory()
-	: KoSimpleColorSpaceFactory("RGBA",
-                                    i18n("RGB (8-bit integer/channel, unmanaged)"),
-                                    true,
-                                    RGBAColorModelID,
-                                    Integer8BitsColorDepthID,
-                                    8)
-    {
+            : KoSimpleColorSpaceFactory("RGBA",
+                                        i18n("RGB (8-bit integer/channel, unmanaged)"),
+                                        true,
+                                        RGBAColorModelID,
+                                        Integer8BitsColorDepthID,
+                                        8) {
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const
-    {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const {
         return new KoRgbU8ColorSpace();
     }
 

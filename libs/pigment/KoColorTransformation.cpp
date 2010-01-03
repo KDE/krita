@@ -25,15 +25,14 @@ KoColorTransformation::~KoColorTransformation()
 
 void KoColorTransformation::setParameters(const QHash<QString, QVariant> & parameters)
 {
-  for( QHash<QString, QVariant>::const_iterator it = parameters.begin(); it != parameters.end(); ++it )
-  {
-    setParameter( it.key(), it.value() );
-  }
+    for (QHash<QString, QVariant>::const_iterator it = parameters.begin(); it != parameters.end(); ++it) {
+        setParameter(it.key(), it.value());
+    }
 
 }
 
 void KoColorTransformation::setParameter(const QString& name, const QVariant& parameter)
 {
-  Q_UNUSED(name);
-  Q_UNUSED(parameter);
+    Q_UNUSED(name);
+    Q_UNUSED(parameter);
 }

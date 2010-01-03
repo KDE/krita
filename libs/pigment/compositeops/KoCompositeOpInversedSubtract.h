@@ -27,42 +27,38 @@
  * A template version of the subtract composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpInversedSubtract : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpInversedSubtract<_CSTraits> > {
+class KoCompositeOpInversedSubtract : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpInversedSubtract<_CSTraits> >
+{
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
-    public:
+public:
 
-        KoCompositeOpInversedSubtract(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpInversedSubtract<_CSTraits> >(cs, COMPOSITE_INVERSED_SUBTRACT, i18n("Inversed Subtract" ), KoCompositeOp::categoryArithmetic() )
-        {
-        }
+    KoCompositeOpInversedSubtract(const KoColorSpace * cs)
+            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpInversedSubtract<_CSTraits> >(cs, COMPOSITE_INVERSED_SUBTRACT, i18n("Inversed Subtract"), KoCompositeOp::categoryArithmetic()) {
+    }
 
-    public:
-        inline static channels_type selectAlpha( channels_type srcAlpha, channels_type dstAlpha)
-        {
-            return qMin(srcAlpha, dstAlpha);
-        }
+public:
+    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha) {
+        return qMin(srcAlpha, dstAlpha);
+    }
 
-        inline static void composeColorChannels( channels_type srcBlend,
-                                                 const channels_type* src,
-                                                 channels_type* dst,
-                                                 qint32 pixelSize,
-                                                 const QBitArray & channelFlags )
-        {
-            Q_UNUSED(pixelSize);
-            for(uint i = 0; i < _CSTraits::channels_nb; i++)
-            {
-                if( (int)i != _CSTraits::alpha_pos && ( channelFlags.isEmpty() ||  channelFlags.testBit( i ) ) )
-                {
-                    compositetype srcColor = src[i];
-                    compositetype dstColor = dst[i];
+    inline static void composeColorChannels(channels_type srcBlend,
+                                            const channels_type* src,
+                                            channels_type* dst,
+                                            qint32 pixelSize,
+                                            const QBitArray & channelFlags) {
+        Q_UNUSED(pixelSize);
+        for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+            if ((int)i != _CSTraits::alpha_pos && (channelFlags.isEmpty() ||  channelFlags.testBit(i))) {
+                compositetype srcColor = src[i];
+                compositetype dstColor = dst[i];
 
-                    srcColor -= dstColor;
-                    srcColor = qMax(srcColor, (compositetype)NATIVE_MIN_VALUE);
-                    dst[i] = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
-                }
+                srcColor -= dstColor;
+                srcColor = qMax(srcColor, (compositetype)NATIVE_MIN_VALUE);
+                dst[i] = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
             }
         }
+    }
 
 };
 

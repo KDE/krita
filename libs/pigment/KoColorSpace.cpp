@@ -40,15 +40,15 @@
 #include "KoColorSpace_p.h"
 
 KoColorSpace::KoColorSpace()
-    : d (new Private())
+        : d(new Private())
 {
 }
 
-KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp )
-    : d (new Private())
+KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp)
+        : d(new Private())
 {
     d->id = id;
-    d->idNumber = KoUniqueNumberForIdServer::instance()->numberForId( d->id );
+    d->idNumber = KoUniqueNumberForIdServer::instance()->numberForId(d->id);
     d->name = name;
     d->mixColorsOp = mixColorsOp;
     d->convolutionOp = convolutionOp;
@@ -64,8 +64,7 @@ KoColorSpace::~KoColorSpace()
     Q_ASSERT(d->deletability != OwnedByRegistryDoNotDelete);
 
     qDeleteAll(d->compositeOps);
-    foreach(KoChannelInfo * channel, d->channels)
-    {
+    foreach(KoChannelInfo * channel, d->channels) {
         delete channel;
     }
     if (d->deletability == NotOwnedByRegistry) {
@@ -79,15 +78,22 @@ KoColorSpace::~KoColorSpace()
     delete d;
 }
 
-bool KoColorSpace::operator==(const KoColorSpace& rhs) const {
+bool KoColorSpace::operator==(const KoColorSpace& rhs) const
+{
     const KoColorProfile* p1 = rhs.profile();
     const KoColorProfile* p2 = profile();
-    return d->idNumber == rhs.d->idNumber && ((p1 == p2) || (*p1 == *p2 ));
+    return d->idNumber == rhs.d->idNumber && ((p1 == p2) || (*p1 == *p2));
 }
 
-QString KoColorSpace::id() const {return d->id;}
+QString KoColorSpace::id() const
+{
+    return d->id;
+}
 
-QString KoColorSpace::name() const {return d->name;}
+QString KoColorSpace::name() const
+{
+    return d->name;
+}
 
 QList<KoChannelInfo *> KoColorSpace::channels() const
 {
@@ -96,42 +102,41 @@ QList<KoChannelInfo *> KoColorSpace::channels() const
 
 QBitArray KoColorSpace::channelFlags(bool color, bool alpha, bool substance, bool substrate) const
 {
-    QBitArray ba( d->channels.size() );
-    if ( !color && !alpha && !substance && !substrate ) return ba;
+    QBitArray ba(d->channels.size());
+    if (!color && !alpha && !substance && !substrate) return ba;
 
-    for ( int i = 0; i < d->channels.size(); ++i ) {
-        KoChannelInfo * channel = d->channels.at( i );
-        if ( ( color && channel->channelType() == KoChannelInfo::COLOR ) ||
-             ( alpha && channel->channelType() == KoChannelInfo::ALPHA ) ||
-             ( substrate && channel->channelType() == KoChannelInfo::SUBSTRATE ) ||
-             ( substance && channel->channelType() == KoChannelInfo::SUBSTANCE ) )
-            ba.setBit( i, true );
+    for (int i = 0; i < d->channels.size(); ++i) {
+        KoChannelInfo * channel = d->channels.at(i);
+        if ((color && channel->channelType() == KoChannelInfo::COLOR) ||
+                (alpha && channel->channelType() == KoChannelInfo::ALPHA) ||
+                (substrate && channel->channelType() == KoChannelInfo::SUBSTRATE) ||
+                (substance && channel->channelType() == KoChannelInfo::SUBSTANCE))
+            ba.setBit(i, true);
     }
     return ba;
 }
 
 QBitArray KoColorSpace::setChannelFlagsToPixelOrder(const QBitArray & origChannelFlags) const
 {
-    if ( origChannelFlags.isEmpty() ) return origChannelFlags;
+    if (origChannelFlags.isEmpty()) return origChannelFlags;
 
-    QBitArray orderedChannelFlags( origChannelFlags.size() );
-    for ( int i = 0; i < origChannelFlags.size(); ++i ) {
+    QBitArray orderedChannelFlags(origChannelFlags.size());
+    for (int i = 0; i < origChannelFlags.size(); ++i) {
 
-        KoChannelInfo * channel = d->channels.at( i );
-        orderedChannelFlags.setBit( channel->pos(), origChannelFlags.testBit( i ) );
+        KoChannelInfo * channel = d->channels.at(i);
+        orderedChannelFlags.setBit(channel->pos(), origChannelFlags.testBit(i));
     }
     return orderedChannelFlags;
 }
 
-QBitArray KoColorSpace::setChannelFlagsToColorSpaceOrder( const QBitArray & origChannelFlags ) const
+QBitArray KoColorSpace::setChannelFlagsToColorSpaceOrder(const QBitArray & origChannelFlags) const
 {
-    if ( origChannelFlags.isEmpty() ) return origChannelFlags;
+    if (origChannelFlags.isEmpty()) return origChannelFlags;
 
-    QBitArray orderedChannelFlags( origChannelFlags.size() );
-    for ( int i = 0; i < orderedChannelFlags.size(); ++i )
-    {
-        KoChannelInfo * channel = d->channels.at( i );
-        orderedChannelFlags.setBit( i, origChannelFlags.testBit( channel->pos() ) );
+    QBitArray orderedChannelFlags(origChannelFlags.size());
+    for (int i = 0; i < orderedChannelFlags.size(); ++i) {
+        KoChannelInfo * channel = d->channels.at(i);
+        orderedChannelFlags.setBit(i, origChannelFlags.testBit(channel->pos()));
     }
     return orderedChannelFlags;
 }
@@ -159,93 +164,90 @@ QList<KoCompositeOp*> KoColorSpace::compositeOps() const
 }
 
 
-KoMixColorsOp* KoColorSpace::mixColorsOp() const {
+KoMixColorsOp* KoColorSpace::mixColorsOp() const
+{
     return d->mixColorsOp;
 }
 
 
-KoConvolutionOp* KoColorSpace::convolutionOp() const {
+KoConvolutionOp* KoColorSpace::convolutionOp() const
+{
     return d->convolutionOp;
 }
 
 const KoCompositeOp * KoColorSpace::compositeOp(const QString & id) const
 {
-    if ( d->compositeOps.contains( id ) )
-        return d->compositeOps.value( id );
+    if (d->compositeOps.contains(id))
+        return d->compositeOps.value(id);
     else {
         warnPigment << "Asking for non-existent composite operation " << id << ", returning " << COMPOSITE_OVER;
-        return d->compositeOps.value( COMPOSITE_OVER );
+        return d->compositeOps.value(COMPOSITE_OVER);
     }
 }
 
 void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
 {
-    if ( op->colorSpace()->id() == id()) {
-        d->compositeOps.insert( op->id(), const_cast<KoCompositeOp*>( op ) );
+    if (op->colorSpace()->id() == id()) {
+        d->compositeOps.insert(op->id(), const_cast<KoCompositeOp*>(op));
     }
 }
 
 const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 {
-    if(!d->transfoToLABA16)
-    {
-        d->transfoToLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16("") ) ;
+    if (!d->transfoToLABA16) {
+        d->transfoToLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16("")) ;
     }
     return d->transfoToLABA16;
 }
 
 const KoColorConversionTransformation* KoColorSpace::fromLabA16Converter() const
 {
-    if(!d->transfoFromLABA16)
-    {
-        d->transfoFromLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->lab16("") , this ) ;
+    if (!d->transfoFromLABA16) {
+        d->transfoFromLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->lab16("") , this) ;
     }
     return d->transfoFromLABA16;
 }
 const KoColorConversionTransformation* KoColorSpace::toRgbA16Converter() const
 {
-    if(!d->transfoToRGBA16)
-    {
-        d->transfoToRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter( this, KoColorSpaceRegistry::instance()->rgb16("") ) ;
+    if (!d->transfoToRGBA16) {
+        d->transfoToRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->rgb16("")) ;
     }
     return d->transfoToRGBA16;
 }
 const KoColorConversionTransformation* KoColorSpace::fromRgbA16Converter() const
 {
-    if(!d->transfoFromRGBA16)
-    {
-        d->transfoFromRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter( KoColorSpaceRegistry::instance()->rgb16("") , this ) ;
+    if (!d->transfoFromRGBA16) {
+        d->transfoFromRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->rgb16("") , this) ;
     }
     return d->transfoFromRGBA16;
 }
 
 void KoColorSpace::toLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
 {
-    toLabA16Converter()->transform( src, dst, nPixels);
+    toLabA16Converter()->transform(src, dst, nPixels);
 }
 
 void KoColorSpace::fromLabA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
 {
-    fromLabA16Converter()->transform( src, dst, nPixels);
+    fromLabA16Converter()->transform(src, dst, nPixels);
 }
 
 void KoColorSpace::toRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
 {
-    toRgbA16Converter()->transform( src, dst, nPixels);
+    toRgbA16Converter()->transform(src, dst, nPixels);
 }
 
 void KoColorSpace::fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels) const
 {
-    fromRgbA16Converter()->transform( src, dst, nPixels);
+    fromRgbA16Converter()->transform(src, dst, nPixels);
 }
 
 KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
 {
-    if( *this == *dstColorSpace)
-    {
+    if (*this == *dstColorSpace) {
         return new KoCopyColorConversionTransformation(this);
     } else {
-        return KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter( this, dstColorSpace, renderingIntent);
+        return KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, dstColorSpace, renderingIntent);
     }
 }
 
@@ -255,9 +257,8 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    quint32 numPixels,
                                    KoColorConversionTransformation::Intent renderingIntent) const
 {
-    if( *this == *dstColorSpace)
-    {
-        memcpy( dst, src, numPixels * sizeof(quint8) * pixelSize());
+    if (*this == *dstColorSpace) {
+        memcpy(dst, src, numPixels * sizeof(quint8) * pixelSize());
     } else {
         KoCachedColorConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(this, dstColorSpace, renderingIntent);
         cct.transformation()->transform(src, dst, numPixels);
@@ -279,11 +280,10 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           const QString & op,
                           const QBitArray & channelFlags) const
 {
-    if ( d->compositeOps.contains( op ) ) {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value( op ), channelFlags);
-    }
-    else {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value( COMPOSITE_OVER ), channelFlags);
+    if (d->compositeOps.contains(op)) {
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(op), channelFlags);
+    } else {
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(COMPOSITE_OVER), channelFlags);
     }
 
 }
@@ -300,11 +300,10 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           qint32 cols,
                           const QString& op) const
 {
-    if ( d->compositeOps.contains( op ) ) {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value( op ));
-    }
-    else {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value( COMPOSITE_OVER ) );
+    if (d->compositeOps.contains(op)) {
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(op));
+    } else {
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(COMPOSITE_OVER));
     }
 }
 
@@ -321,7 +320,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           const KoCompositeOp * op,
                           const QBitArray & channelFlags) const
 {
-    Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)" ).arg( op->colorSpace()->id() ).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1() );
+    Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)").arg(op->colorSpace()->id()).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1());
 
     if (rows <= 0 || cols <= 0)
         return;
@@ -329,8 +328,8 @@ void KoColorSpace::bitBlt(quint8 *dst,
     if (!(*this == *srcSpace)) {
 
         quint32 conversionBufferStride = cols * pixelSize();
-        QVector<quint8> * conversionCache = 
-                threadLocalConversionCache(rows * conversionBufferStride);
+        QVector<quint8> * conversionCache =
+            threadLocalConversionCache(rows * conversionBufferStride);
 
         quint8* conversionData = conversionCache->data();
 
@@ -340,18 +339,17 @@ void KoColorSpace::bitBlt(quint8 *dst,
                                       this, cols);
         }
 
-        op->composite( dst, dstRowStride,
-                       conversionData, conversionBufferStride,
-                       srcAlphaMask, maskRowStride,
-                       rows,  cols,
-                       opacity, channelFlags );
-    }
-    else {
-        op->composite( dst, dstRowStride,
-                       src, srcRowStride,
-                       srcAlphaMask, maskRowStride,
-                       rows,  cols,
-                       opacity, channelFlags );
+        op->composite(dst, dstRowStride,
+                      conversionData, conversionBufferStride,
+                      srcAlphaMask, maskRowStride,
+                      rows,  cols,
+                      opacity, channelFlags);
+    } else {
+        op->composite(dst, dstRowStride,
+                      src, srcRowStride,
+                      srcAlphaMask, maskRowStride,
+                      rows,  cols,
+                      opacity, channelFlags);
     }
 
 }
@@ -378,8 +376,8 @@ void KoColorSpace::bitBlt(quint8 *dst,
 
     if (this != srcSpace) {
         quint32 conversionBufferStride = cols * pixelSize();
-        QVector<quint8> * conversionCache = 
-                threadLocalConversionCache(rows * conversionBufferStride);
+        QVector<quint8> * conversionCache =
+            threadLocalConversionCache(rows * conversionBufferStride);
 
         quint8* conversionData = conversionCache->data();
 
@@ -389,19 +387,18 @@ void KoColorSpace::bitBlt(quint8 *dst,
                                       cols);
         }
 
-        op->composite( dst, dstRowStride,
-                       conversionData, conversionBufferStride,
-                       srcAlphaMask, maskRowStride,
-                       rows,  cols,
-                       opacity);
+        op->composite(dst, dstRowStride,
+                      conversionData, conversionBufferStride,
+                      srcAlphaMask, maskRowStride,
+                      rows,  cols,
+                      opacity);
 
-    }
-    else {
-        op->composite( dst, dstRowStride,
-                       src, srcRowStride,
-                       srcAlphaMask, maskRowStride,
-                       rows, cols,
-                       opacity);
+    } else {
+        op->composite(dst, dstRowStride,
+                      src, srcRowStride,
+                      srcAlphaMask, maskRowStride,
+                      rows, cols,
+                      opacity);
     }
 
 }
@@ -409,27 +406,25 @@ void KoColorSpace::bitBlt(quint8 *dst,
 QVector<quint8> * KoColorSpace::threadLocalConversionCache(quint32 size) const
 {
     QVector<quint8> * ba = 0;
-    if ( !d->conversionCache.hasLocalData() ) {
-        ba = new QVector<quint8>( size, '0' );
-        d->conversionCache.setLocalData( ba );
-    }
-    else {
+    if (!d->conversionCache.hasLocalData()) {
+        ba = new QVector<quint8>(size, '0');
+        d->conversionCache.setLocalData(ba);
+    } else {
         ba = d->conversionCache.localData();
-        if ( ( quint8 )ba->size() < size )
-            ba->resize( size );
+        if ((quint8)ba->size() < size)
+            ba->resize(size);
     }
     return ba;
 }
 
-KoColorTransformation* KoColorSpace::createColorTransformation( const QString & id, const QHash<QString, QVariant> & parameters) const
+KoColorTransformation* KoColorSpace::createColorTransformation(const QString & id, const QHash<QString, QVariant> & parameters) const
 {
-    KoColorTransformationFactory* factory = KoColorTransformationFactoryRegistry::instance()->get( id );
-    if(!factory) return 0;
-    QPair<KoID, KoID> model( colorModelId(), colorDepthId() );
+    KoColorTransformationFactory* factory = KoColorTransformationFactoryRegistry::instance()->get(id);
+    if (!factory) return 0;
+    QPair<KoID, KoID> model(colorModelId(), colorDepthId());
     QList< QPair<KoID, KoID> > models = factory->supportedModels();
-    if(models.isEmpty() || models.contains(model))
-    {
-        return factory->createTransformation( this, parameters);
+    if (models.isEmpty() || models.contains(model)) {
+        return factory->createTransformation(this, parameters);
     } else {
         // Find the best solution
         // TODO use the color conversion cache
@@ -439,7 +434,7 @@ KoColorTransformation* KoColorSpace::createColorTransformation( const QString & 
         Q_ASSERT(csToFallBack);
         Q_ASSERT(fallBackToCs);
         KoColorTransformation* transfo = factory->createTransformation(fallBackToCs->srcColorSpace(), parameters);
-        return new KoFallBackColorTransformation( csToFallBack, fallBackToCs, transfo);
+        return new KoFallBackColorTransformation(csToFallBack, fallBackToCs, transfo);
     }
 }
 

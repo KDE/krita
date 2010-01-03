@@ -23,18 +23,20 @@
 #include "KoColorConversionTransformation.h"
 #include "KoColorConversionTransformationFactory.h"
 
-class KoCopyColorConversionTransformation : public KoColorConversionTransformation {
-    public:
-        KoCopyColorConversionTransformation(const KoColorSpace* cs);
-        virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const;
+class KoCopyColorConversionTransformation : public KoColorConversionTransformation
+{
+public:
+    KoCopyColorConversionTransformation(const KoColorSpace* cs);
+    virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const;
 };
 
-class KoCopyColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
-    public:
-        KoCopyColorConversionTransformationFactory(const QString& _colorModelId, const QString& _depthId, const QString& _profileName);
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
-        virtual bool conserveColorInformation() const;
-        virtual bool conserveDynamicRange() const;
+class KoCopyColorConversionTransformationFactory : public KoColorConversionTransformationFactory
+{
+public:
+    KoCopyColorConversionTransformationFactory(const QString& _colorModelId, const QString& _depthId, const QString& _profileName);
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    virtual bool conserveColorInformation() const;
+    virtual bool conserveDynamicRange() const;
 };
 
 

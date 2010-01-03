@@ -36,10 +36,10 @@
 
 
 KoRgbU16ColorSpace::KoRgbU16ColorSpace() :
-    KoSimpleColorSpace<KoRgbU16Traits>("ALPHA",
-                                       i18n("Alpha mask"),
-                                       RGBAColorModelID,
-                                       Integer16BitsColorDepthID)
+        KoSimpleColorSpace<KoRgbU16Traits>("ALPHA",
+                                           i18n("Alpha mask"),
+                                           RGBAColorModelID,
+                                           Integer16BitsColorDepthID)
 {
 }
 
@@ -67,9 +67,9 @@ void KoRgbU16ColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorPr
 }
 
 bool KoRgbU16ColorSpace::convertPixelsTo(const quint8 *src,
-                     quint8 *dst, const KoColorSpace * dstColorSpace,
-                     quint32 numPixels,
-                     KoColorConversionTransformation::Intent /*renderingIntent*/) const
+        quint8 *dst, const KoColorSpace * dstColorSpace,
+        quint32 numPixels,
+        KoColorConversionTransformation::Intent /*renderingIntent*/) const
 {
 }
 
@@ -94,16 +94,15 @@ void KoRgbU16ColorSpace::fromRgbA16(const quint8* src, quint8* dst, quint32 nPix
 }
 
 QImage KoRgbU16ColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile * /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
+        const KoColorProfile * /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
 {
     QImage img(width, height, QImage::Format_Indexed8);
     QVector<QRgb> table;
-    for(int i = 0; i < 255; ++i) table.append(qRgb(i,i,i));
+    for (int i = 0; i < 255; ++i) table.append(qRgb(i, i, i));
     img.setColorTable(table);
 
     quint8* data_img = img.bits();
-    for( int i = 0; i < width * height; ++i)
-    {
+    for (int i = 0; i < width * height; ++i) {
         data_img[i] = data[i];
     }
     return img;

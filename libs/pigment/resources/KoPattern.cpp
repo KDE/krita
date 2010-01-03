@@ -32,22 +32,23 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-namespace {
-    struct GimpPatternHeader {
-        quint32 header_size;  /*  header_size = sizeof (PatternHeader) + brush name  */
-        quint32 version;      /*  pattern file version #  */
-        quint32 width;        /*  width of pattern */
-        quint32 height;       /*  height of pattern  */
-        quint32 bytes;        /*  depth of pattern in bytes : 1, 2, 3 or 4*/
-        quint32 magic_number; /*  GIMP brush magic number  */
-    };
+namespace
+{
+struct GimpPatternHeader {
+    quint32 header_size;  /*  header_size = sizeof (PatternHeader) + brush name  */
+    quint32 version;      /*  pattern file version #  */
+    quint32 width;        /*  width of pattern */
+    quint32 height;       /*  height of pattern  */
+    quint32 bytes;        /*  depth of pattern in bytes : 1, 2, 3 or 4*/
+    quint32 magic_number; /*  GIMP brush magic number  */
+};
 
-    // Yes! This is _NOT_ what my pat.txt file says. It's really not 'GIMP', but 'GPAT'
-    quint32 const GimpPatternMagic = (('G' << 24) + ('P' << 16) + ('A' << 8) + ('T' << 0));
+// Yes! This is _NOT_ what my pat.txt file says. It's really not 'GIMP', but 'GPAT'
+quint32 const GimpPatternMagic = (('G' << 24) + ('P' << 16) + ('A' << 8) + ('T' << 0));
 }
 
 KoPattern::KoPattern(const QString& file)
-    : KoResource(file)
+        : KoResource(file)
 {
 }
 
@@ -64,14 +65,13 @@ bool KoPattern::load()
         fileExtension = filename().mid(index).toLower();
 
     bool result;
-    if(fileExtension == ".pat") {
+    if (fileExtension == ".pat") {
         QFile file(filename());
         file.open(QIODevice::ReadOnly);
         QByteArray data = file.readAll();
         file.close();
         result = init(data);
-    }
-    else {
+    } else {
         result = m_image.load(filename());
         setValid(result);
     }
@@ -120,7 +120,7 @@ bool KoPattern::save()
     for (qint32 y = 0; y < height(); y++) {
         for (qint32 x = 0; x < width(); x++) {
             // RGBA only
-            QRgb pixel = m_image.pixel(x,y);
+            QRgb pixel = m_image.pixel(x, y);
             bytes[k++] = static_cast<char>(qRed(pixel));
             bytes[k++] = static_cast<char>(qGreen(pixel));
             bytes[k++] = static_cast<char>(qBlue(pixel));
@@ -206,7 +206,7 @@ bool KoPattern::init(QByteArray& bytes)
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
                 if (k > dataSize) {
-                    kWarning(30009) <<"failed in gray";
+                    kWarning(30009) << "failed in gray";
                     return false;
                 }
 
@@ -221,7 +221,7 @@ bool KoPattern::init(QByteArray& bytes)
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
                 if (k + 2 > dataSize) {
-                    kWarning(30009) <<"failed in grayA";
+                    kWarning(30009) << "failed in grayA";
                     return false;
                 }
 
@@ -235,13 +235,13 @@ bool KoPattern::init(QByteArray& bytes)
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++) {
                 if (k + 3 > dataSize) {
-                    kWarning(30009) <<"failed in RGB";
+                    kWarning(30009) << "failed in RGB";
                     return false;
                 }
 
                 m_image.setPixel(x, y, qRgb(data[k],
-                              data[k + 1],
-                              data[k + 2]));
+                                            data[k + 1],
+                                            data[k + 2]));
                 k += 3;
             }
         }
@@ -250,14 +250,14 @@ bool KoPattern::init(QByteArray& bytes)
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++) {
                 if (k + 4 > dataSize) {
-                    kWarning(30009) <<"failed in RGBA";
+                    kWarning(30009) << "failed in RGBA";
                     return false;
                 }
 
                 m_image.setPixel(x, y, qRgba(data[k],
-                               data[k + 1],
-                               data[k + 2],
-                               data[k + 3]));
+                                             data[k + 1],
+                                             data[k + 2],
+                                             data[k + 3]));
                 k += 4;
             }
         }
@@ -292,12 +292,12 @@ void KoPattern::setImage(const QImage& image)
     setValid(true);
 }
 
-KoPattern& KoPattern::operator=(const KoPattern& pattern)
+KoPattern& KoPattern::operator=(const KoPattern & pattern)
 {
     setFilename(pattern.filename());
     setImage(pattern.image());
     setValid(true);
-    return *this; 
+    return *this;
 }
 
 QString KoPattern::defaultFileExtension() const

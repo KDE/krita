@@ -46,7 +46,7 @@ KoGradientSegment::SphereIncreasingInterpolationStrategy *KoGradientSegment::Sph
 KoGradientSegment::SphereDecreasingInterpolationStrategy *KoGradientSegment::SphereDecreasingInterpolationStrategy::m_instance = 0;
 
 KoSegmentGradient::KoSegmentGradient(const QString& file)
-    : KoAbstractGradient(file)
+        : KoAbstractGradient(file)
 {
 }
 
@@ -72,7 +72,7 @@ bool KoSegmentGradient::init()
 {
     QFile file(filename());
 
-    if(!file.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly))
         return false;
 
     QByteArray m_data = file.readAll();
@@ -95,8 +95,7 @@ bool KoSegmentGradient::init()
         setName(nameText);
 
         numSegmentsText = fileContent.readLine();
-    }
-    else {
+    } else {
         // Older format without name.
 
         numSegmentsText = nameDefinition;
@@ -158,7 +157,7 @@ bool KoSegmentGradient::init()
         KoGradientSegment *segment = new KoGradientSegment(interpolationType, colorInterpolationType, leftOffset, middleOffset, rightOffset, leftColor, rightColor);
         Q_CHECK_PTR(segment);
 
-        if ( !segment -> isValid() ) {
+        if (!segment -> isValid()) {
             delete segment;
             return false;
         }
@@ -170,8 +169,7 @@ bool KoSegmentGradient::init()
         updatePreview();
         setValid(true);
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -181,8 +179,7 @@ KoGradientSegment *KoSegmentGradient::segmentAt(qreal t) const
     Q_ASSERT(t >= 0 || t <= 1);
     Q_ASSERT(!m_segments.empty());
 
-    for(QList<KoGradientSegment *>::const_iterator it = m_segments.begin(); it!= m_segments.end(); ++it)
-    {
+    for (QList<KoGradientSegment *>::const_iterator it = m_segments.begin(); it != m_segments.end(); ++it) {
         if (t > (*it)->startOffset() - DBL_EPSILON && t < (*it)->endOffset() + DBL_EPSILON) {
             return *it;
         }
@@ -208,9 +205,9 @@ QGradient* KoSegmentGradient::toQGradient() const
     QColor color;
     foreach(KoGradientSegment* segment, m_segments) {
         segment->startColor().toQColor(&color);
-        gradient->setColorAt( segment->startOffset() , color );
+        gradient->setColorAt(segment->startOffset() , color);
         segment->endColor().toQColor(&color);
-        gradient->setColorAt( segment->endOffset() , color );
+        gradient->setColorAt(segment->endOffset() , color);
     }
     return gradient;
 }
@@ -258,43 +255,36 @@ KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolati
 
     if (startOffset < DBL_EPSILON) {
         m_startOffset = 0;
-    }
-    else
-    if (startOffset > 1 - DBL_EPSILON) {
-        m_startOffset = 1;
-    }
-    else {
-        m_startOffset = startOffset;
-    }
+    } else
+        if (startOffset > 1 - DBL_EPSILON) {
+            m_startOffset = 1;
+        } else {
+            m_startOffset = startOffset;
+        }
 
     if (middleOffset < m_startOffset + DBL_EPSILON) {
         m_middleOffset = m_startOffset;
-    }
-    else
-    if (middleOffset > 1 - DBL_EPSILON) {
-        m_middleOffset = 1;
-    }
-    else {
-        m_middleOffset = middleOffset;
-    }
+    } else
+        if (middleOffset > 1 - DBL_EPSILON) {
+            m_middleOffset = 1;
+        } else {
+            m_middleOffset = middleOffset;
+        }
 
     if (endOffset < m_middleOffset + DBL_EPSILON) {
         m_endOffset = m_middleOffset;
-    }
-    else
-    if (endOffset > 1 - DBL_EPSILON) {
-        m_endOffset = 1;
-    }
-    else {
-        m_endOffset = endOffset;
-    }
+    } else
+        if (endOffset > 1 - DBL_EPSILON) {
+            m_endOffset = 1;
+        } else {
+            m_endOffset = endOffset;
+        }
 
     m_length = m_endOffset - m_startOffset;
 
     if (m_length < DBL_EPSILON) {
         m_middleT = 0.5;
-    }
-    else {
+    } else {
         m_middleT = (m_middleOffset - m_startOffset) / m_length;
     }
 
@@ -334,8 +324,7 @@ void KoGradientSegment::setStartOffset(qreal t)
 
     if (m_length < DBL_EPSILON) {
         m_middleT = 0.5;
-    }
-    else {
+    } else {
         m_middleT = (m_middleOffset - m_startOffset) / m_length;
     }
 }
@@ -345,8 +334,7 @@ void KoGradientSegment::setMiddleOffset(qreal t)
 
     if (m_length < DBL_EPSILON) {
         m_middleT = 0.5;
-    }
-    else {
+    } else {
         m_middleT = (m_middleOffset - m_startOffset) / m_length;
     }
 }
@@ -358,8 +346,7 @@ void KoGradientSegment::setEndOffset(qreal t)
 
     if (m_length < DBL_EPSILON) {
         m_middleT = 0.5;
-    }
-    else {
+    } else {
         m_middleT = (m_middleOffset - m_startOffset) / m_length;
     }
 }
@@ -418,8 +405,7 @@ void KoGradientSegment::colorAt(KoColor& dst, qreal t) const
 
     if (m_length < DBL_EPSILON) {
         segmentT = 0.5;
-    }
-    else {
+    } else {
         segmentT = (t - m_startOffset) / m_length;
     }
 
@@ -431,13 +417,13 @@ void KoGradientSegment::colorAt(KoColor& dst, qreal t) const
 
 bool KoGradientSegment::isValid() const
 {
-    if (m_interpolator == 0 || m_colorInterpolator ==0)
+    if (m_interpolator == 0 || m_colorInterpolator == 0)
         return false;
     return true;
 }
 
 KoGradientSegment::RGBColorInterpolationStrategy::RGBColorInterpolationStrategy()
-    : m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() ), buffer(m_colorSpace),m_start(m_colorSpace), m_end(m_colorSpace)
+        : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8()), buffer(m_colorSpace), m_start(m_colorSpace), m_end(m_colorSpace)
 {
 }
 
@@ -470,7 +456,7 @@ void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qre
 }
 
 KoGradientSegment::HSVCWColorInterpolationStrategy::HSVCWColorInterpolationStrategy()
-    : m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() )
+        : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
 {
 }
 
@@ -489,8 +475,8 @@ void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, q
     QColor sc;
     QColor ec;
 
-    start.toQColor( &sc);
-    end.toQColor( &ec);
+    start.toQColor(&sc);
+    end.toQColor(&ec);
 
     int s = static_cast<int>(sc.saturation() + t * (ec.saturation() - sc.saturation()) + 0.5);
     int v = static_cast<int>(sc.value() + t * (ec.value() - sc.value()) + 0.5);
@@ -498,8 +484,7 @@ void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, q
 
     if (ec.hue() < sc.hue()) {
         h = static_cast<int>(ec.hue() + (1 - t) * (sc.hue() - ec.hue()) + 0.5);
-    }
-    else {
+    } else {
         h = static_cast<int>(ec.hue() + (1 - t) * (360 - ec.hue() + sc.hue()) + 0.5);
 
         if (h > 359) {
@@ -510,13 +495,13 @@ void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, q
     quint8 opacity = static_cast<quint8>(sc.alpha() + t * (ec.alpha() - sc.alpha()));
 
     QColor result;
-    result.setHsv( h, s, v);
-    result.setAlpha( opacity );
+    result.setHsv(h, s, v);
+    result.setAlpha(opacity);
     dst.fromQColor(result);
 }
 
 KoGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStrategy() :
-        m_colorSpace( KoColorSpaceRegistry::instance()->rgb8() )
+        m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
 {
 }
 
@@ -536,8 +521,8 @@ void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, 
     QColor sc;
     QColor se;
 
-    start.toQColor( &sc);
-    end.toQColor( &se);
+    start.toQColor(&sc);
+    end.toQColor(&se);
 
     int s = static_cast<int>(sc.saturation() + t * (se.saturation() - sc.saturation()) + 0.5);
     int v = static_cast<int>(sc.value() + t * (se.value() - sc.value()) + 0.5);
@@ -545,8 +530,7 @@ void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, 
 
     if (sc.hue() < se.hue()) {
         h = static_cast<int>(sc.hue() + t * (se.hue() - sc.hue()) + 0.5);
-    }
-    else {
+    } else {
         h = static_cast<int>(sc.hue() + t * (360 - sc.hue() + se.hue()) + 0.5);
 
         if (h > 359) {
@@ -557,9 +541,9 @@ void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, 
     quint8 opacity = static_cast<quint8>(sc.alpha() + t * (se.alpha() - sc.alpha()));
 
     QColor result;
-    result.setHsv( h, s, v);
-    result.setAlpha( opacity );
-    dst.fromQColor( result );
+    result.setHsv(h, s, v);
+    result.setAlpha(opacity);
+    dst.fromQColor(result);
 }
 
 KoGradientSegment::LinearInterpolationStrategy *KoGradientSegment::LinearInterpolationStrategy::instance()
@@ -582,16 +566,13 @@ qreal KoGradientSegment::LinearInterpolationStrategy::calcValueAt(qreal t, qreal
     if (t <= middle) {
         if (middle < DBL_EPSILON) {
             value = 0;
-        }
-        else {
+        } else {
             value = (t / middle) * 0.5;
         }
-    }
-    else {
+    } else {
         if (middle > 1 - DBL_EPSILON) {
             value = 1;
-        }
-        else {
+        } else {
             value = ((t - middle) / (1 - middle)) * 0.5 + 0.5;
         }
     }

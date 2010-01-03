@@ -34,7 +34,8 @@ class KoColorSpace;
  * A KoColor describes a color in a certain colorspace. The color is stored in a buffer
  * that can be manipulated by the function of the color space.
  */
-class PIGMENTCMS_EXPORT KoColor {
+class PIGMENTCMS_EXPORT KoColor
+{
 
 public:
     /// Create an empty KoColor. It will be valid, but also black and transparent
@@ -91,7 +92,7 @@ public:
     /**
      * Convenient function to set the opacity of the color.
      */
-    void setOpacity(quint8 alpha );
+    void setOpacity(quint8 alpha);
     /**
      * Convenient function that return the opacity of the color
      */
@@ -155,6 +156,6 @@ private:
     Private * const d;
 };
 
-Q_DECLARE_METATYPE( KoColor )
+Q_DECLARE_METATYPE(KoColor)
 
 #endif

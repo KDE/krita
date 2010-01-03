@@ -18,7 +18,7 @@ void TestKoColorSpaceRegistry::testConstruction()
 void TestKoColorSpaceRegistry::testRgbU8()
 {
     QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,
-                                                                          Integer8BitsColorDepthID);
+                           Integer8BitsColorDepthID);
     KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(colorSpaceId);
     QVERIFY(colorSpaceFactory != 0);
 
@@ -60,8 +60,8 @@ void TestKoColorSpaceRegistry::testRgbU8()
 
 void TestKoColorSpaceRegistry::testRgbU16()
 {
-   QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,
-                                                                         Integer16BitsColorDepthID);
+    QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,
+                           Integer16BitsColorDepthID);
     KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(colorSpaceId);
     QVERIFY(colorSpaceFactory != 0);
 
@@ -104,7 +104,7 @@ void TestKoColorSpaceRegistry::testRgbU16()
 void TestKoColorSpaceRegistry::testLab()
 {
     QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(LABAColorModelID,
-                                                                          Integer16BitsColorDepthID);
+                           Integer16BitsColorDepthID);
     KoColorSpaceFactory *colorSpaceFactory = KoColorSpaceRegistry::instance()->value(colorSpaceId);
     QVERIFY(colorSpaceFactory != 0);
 

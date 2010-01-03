@@ -24,11 +24,11 @@
 
 class TestKoColor : public QObject
 {
-        Q_OBJECT
-    private:
-        void testForModel(QString model);
+    Q_OBJECT
+private:
+    void testForModel(QString model);
 private slots:
-        void testSerialization();
+    void testSerialization();
 };
 
 #endif

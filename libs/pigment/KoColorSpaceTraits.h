@@ -55,20 +55,18 @@ struct KoColorSpaceTrait {
     /**
      * @return the value of the alpha channel for this pixel in the 0..255 range
      */
-    inline static quint8 alpha(const quint8 * U8_pixel)
-    {
+    inline static quint8 alpha(const quint8 * U8_pixel) {
         if (alpha_pos < 0) return OPACITY_OPAQUE;
         channels_type c = nativeArray(U8_pixel)[alpha_pos];
-        return  KoColorSpaceMaths<channels_type,quint8>::scaleToA(c);
+        return  KoColorSpaceMaths<channels_type, quint8>::scaleToA(c);
     }
     /**
      * Set the alpha channel for this pixel from a value in the 0..255 range
      */
-    inline static void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels)
-    {
+    inline static void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) {
         if (alpha_pos < 0) return;
         qint32 psize = pixelSize;
-        channels_type valpha =  KoColorSpaceMaths<quint8,channels_type>::scaleToA(alpha);
+        channels_type valpha =  KoColorSpaceMaths<quint8, channels_type>::scaleToA(alpha);
         for (; nPixels > 0; --nPixels, pixels += psize) {
             nativeArray(pixels)[alpha_pos] = valpha;
         }
@@ -76,64 +74,54 @@ struct KoColorSpaceTrait {
     /**
      * Convenient function for transforming a quint8* array in a pointer of the native channels type
      */
-    inline static const channels_type* nativeArray(const quint8 * a)
-    {
+    inline static const channels_type* nativeArray(const quint8 * a) {
         return reinterpret_cast<const channels_type*>(a);
     }
     /**
      * Convenient function for transforming a quint8* array in a pointer of the native channels type
      */
-    inline static channels_type* nativeArray(quint8 * a)
-    {
+    inline static channels_type* nativeArray(quint8 * a) {
         return reinterpret_cast< channels_type*>(a);
     }
     /**
      * Allocate nPixels pixels for this colorspace.
      */
-    inline static quint8* allocate(quint32 nPixels)
-    {
+    inline static quint8* allocate(quint32 nPixels) {
         return new quint8[ nPixels * pixelSize ];
     }
-    inline static void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex)
-    {
+    inline static void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) {
         const channels_type* src = nativeArray(srcPixel);
         channels_type* dst = nativeArray(dstPixel);
-        for(uint i = 0; i < channels_nb;i++)
-        {
-            if( i != channelIndex )
-            {
+        for (uint i = 0; i < channels_nb;i++) {
+            if (i != channelIndex) {
                 dst[i] = 0;
             } else {
                 dst[i] = src[i];
             }
         }
     }
-    inline static QString channelValueText(const quint8 *pixel, quint32 channelIndex)
-    {
-        if(channelIndex > channels_nb) return QString("Error");
+    inline static QString channelValueText(const quint8 *pixel, quint32 channelIndex) {
+        if (channelIndex > channels_nb) return QString("Error");
         channels_type c = nativeArray(pixel)[channelIndex];
         return QString().setNum(c);
     }
 
-    inline static QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex)
-    {
-        if(channelIndex > channels_nb) return QString("Error");
+    inline static QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) {
+        if (channelIndex > channels_nb) return QString("Error");
         channels_type c = nativeArray(pixel)[channelIndex];
-        return QString().setNum( 100. * ((qreal)c ) / KoColorSpaceMathsTraits< channels_type>::unitValue);
+        return QString().setNum(100. * ((qreal)c) / KoColorSpaceMathsTraits< channels_type>::unitValue);
     }
 
-    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels)
-    {
+    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) {
         Q_ASSERT((int)channels.count() == (int)channels_nb);
         channels_type c;
         for (uint i = 0; i < channels_nb; i++) {
             c = nativeArray(pixel)[i];
-            channels[i] = ((qreal)c ) / KoColorSpaceMathsTraits<channels_type>::unitValue;
+            channels[i] = ((qreal)c) / KoColorSpaceMathsTraits<channels_type>::unitValue;
         }
     }
 
-    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values)
-    {
+    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) {
         Q_ASSERT((int)values.count() == (int)channels_nb);
         channels_type c;
         for (uint i = 0; i < channels_nb; i++) {
@@ -142,37 +130,34 @@ struct KoColorSpaceTrait {
             nativeArray(pixel)[i] = c;
         }
     }
-    inline static void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels)
-    {
+    inline static void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) {
         if (alpha_pos < 0) return;
 
         channels_type valpha =  KoColorSpaceMaths<quint8, channels_type>::scaleToA(alpha);
 
         for (; nPixels > 0; --nPixels, pixels += pixelSize) {
             channels_type* alphapixel = nativeArray(pixels) + alpha_pos;
-            *alphapixel = KoColorSpaceMaths<channels_type>::multiply( *alphapixel, valpha );
+            *alphapixel = KoColorSpaceMaths<channels_type>::multiply(*alphapixel, valpha);
         }
     }
 
-    inline static void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels)
-    {
+    inline static void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) {
         if (alpha_pos < 0) return;
 
         for (; nPixels > 0; --nPixels, pixels += pixelSize, ++alpha) {
             channels_type valpha =  KoColorSpaceMaths<quint8, channels_type>::scaleToA(*alpha);
             channels_type* alphapixel = nativeArray(pixels) + alpha_pos;
-            *alphapixel = KoColorSpaceMaths<channels_type>::multiply( *alphapixel, valpha );
+            *alphapixel = KoColorSpaceMaths<channels_type>::multiply(*alphapixel, valpha);
         }
     }
 
-    inline static void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels)
-    {
+    inline static void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) {
         if (alpha_pos < 0) return;
 
         for (; nPixels > 0; --nPixels, pixels += pixelSize, ++alpha) {
-            channels_type valpha =  KoColorSpaceMaths<quint8,channels_type>::scaleToA(OPACITY_OPAQUE - *alpha);
+            channels_type valpha =  KoColorSpaceMaths<quint8, channels_type>::scaleToA(OPACITY_OPAQUE - *alpha);
             channels_type* alphapixel = nativeArray(pixels) + alpha_pos;
-            *alphapixel = KoColorSpaceMaths<channels_type>::multiply( *alphapixel, valpha );
+            *alphapixel = KoColorSpaceMaths<channels_type>::multiply(*alphapixel, valpha);
         }
     }
 
@@ -191,9 +176,9 @@ struct KoColorSpaceTrait {
  * oneKoColorSpace->fromLabA16(p, somepointertodata, 1);
  */
 template<typename _channels_type_>
-struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
+struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
     typedef _channels_type_ channels_type;
-    typedef KoColorSpaceTrait<_channels_type_, 4,3> parent;
+    typedef KoColorSpaceTrait<_channels_type_, 4, 3> parent;
     static const qint32 L_pos = 0;
     static const qint32 a_pos = 1;
     static const qint32 b_pos = 2;
@@ -214,8 +199,7 @@ struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
         return d[L_pos];
     }
     /// Set the L component
-    inline static void setL(quint8* data, channels_type nv)
-    {
+    inline static void setL(quint8* data, channels_type nv) {
         channels_type* d = parent::nativeArray(data);
         d[L_pos] = nv;
     }
@@ -225,8 +209,7 @@ struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
         return d[a_pos];
     }
     /// Set the a component
-    inline static void setA(quint8* data, channels_type nv)
-    {
+    inline static void setA(quint8* data, channels_type nv) {
         channels_type* d = parent::nativeArray(data);
         d[a_pos] = nv;
     }
@@ -236,8 +219,7 @@ struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
         return d[b_pos];
     }
     /// Set the a component
-    inline static void setB(quint8* data, channels_type nv)
-    {
+    inline static void setB(quint8* data, channels_type nv) {
         channels_type* d = parent::nativeArray(data);
         d[b_pos] = nv;
     }
@@ -254,9 +236,9 @@ struct KoLabU16Traits : public KoLabTraits<quint16> {
  * access RGB channels through an explicit API.
  */
 template<typename _channels_type_>
-struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
+struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
     typedef _channels_type_ channels_type;
-    typedef KoColorSpaceTrait<_channels_type_, 4,3> parent;
+    typedef KoColorSpaceTrait<_channels_type_, 4, 3> parent;
     static const qint32 red_pos = 2;
     static const qint32 green_pos = 1;
     static const qint32 blue_pos = 0;
@@ -276,8 +258,7 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
         return d[red_pos];
     }
     /// Set the red component
-    inline static void setRed(quint8* data, channels_type nv)
-    {
+    inline static void setRed(quint8* data, channels_type nv) {
         channels_type* d = parent::nativeArray(data);
         d[red_pos] = nv;
     }
@@ -287,8 +268,7 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
         return d[green_pos];
     }
     /// Set the green component
-    inline static void setGreen(quint8* data, channels_type nv)
-    {
+    inline static void setGreen(quint8* data, channels_type nv) {
         channels_type* d = parent::nativeArray(data);
         d[green_pos] = nv;
     }
@@ -298,8 +278,7 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
         return d[blue_pos];
     }
     /// Set the blue component
-    inline static void setBlue(quint8* data, channels_type nv)
-    {
+    inline static void setBlue(quint8* data, channels_type nv) {
         channels_type* d = parent::nativeArray(data);
         d[blue_pos] = nv;
     }
@@ -324,7 +303,7 @@ struct KoRgbU16Traits : public KoRgbTraits<quint16> {
  * access XYZ channels through an explicit API.
  */
 template<typename _channels_type_>
-struct KoXyzTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
+struct KoXyzTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
     typedef _channels_type_ channels_type;
     static const qint32 x_pos = 0;
     static const qint32 y_pos = 1;
@@ -345,7 +324,7 @@ struct KoXyzTraits : public KoColorSpaceTrait<_channels_type_, 4,3> {
  * access CMYK channels through an explicit API.
  */
 template<typename _channels_type_>
-struct KoCmykTraits : public KoColorSpaceTrait<_channels_type_, 5,4> {
+struct KoCmykTraits : public KoColorSpaceTrait<_channels_type_, 5, 4> {
     typedef _channels_type_ channels_type;
     static const qint32 c_pos = 0;
     static const qint32 m_pos = 1;

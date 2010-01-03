@@ -22,19 +22,24 @@
 #include "KoCompositeOp.h"
 #include "KoColorSpace.h"
 
-QString KoCompositeOp::categoryMix() {
+QString KoCompositeOp::categoryMix()
+{
     return i18n("Mix");
 }
-QString KoCompositeOp::categoryLight() {
+QString KoCompositeOp::categoryLight()
+{
     return i18n("Light");
 }
-QString KoCompositeOp::categoryArithmetic() {
+QString KoCompositeOp::categoryArithmetic()
+{
     return i18n("Arithmetic");
 }
-QString KoCompositeOp::categoryColor() {
+QString KoCompositeOp::categoryColor()
+{
     return i18n("Color");
 }
-QString KoCompositeOp::categoryMisc() {
+QString KoCompositeOp::categoryMisc()
+{
     return i18n("Misc");
 }
 
@@ -58,15 +63,14 @@ KoCompositeOp::~KoCompositeOp()
 }
 
 KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id,  const QString& description, const QString & category, const bool userVisible)
-    : d(new Private)
+        : d(new Private)
 {
     d->colorSpace = cs;
     d->id = id;
     d->description = description;
     d->userVisible = userVisible;
     d->category = category;
-    if(d->category.isEmpty())
-    {
+    if (d->category.isEmpty()) {
         d->category = categoryMisc();
     }
 }
@@ -77,11 +81,11 @@ void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                               qint32 rows, qint32 numColumns,
                               quint8 opacity) const
 {
-    composite( dstRowStart, dstRowStride,
-               srcRowStart, srcRowStride,
-               maskRowStart, maskRowStride,
-               rows, numColumns,
-               opacity, d->defaultChannelFlags);
+    composite(dstRowStart, dstRowStride,
+              srcRowStart, srcRowStride,
+              maskRowStart, maskRowStride,
+              rows, numColumns,
+              opacity, d->defaultChannelFlags);
 }
 
 QString KoCompositeOp::category() const

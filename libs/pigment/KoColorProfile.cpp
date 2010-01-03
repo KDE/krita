@@ -19,8 +19,7 @@
 
 #include "KoColorProfile.h"
 #include "DebugPigment.h"
-struct KoColorProfile::Private
-{
+struct KoColorProfile::Private {
     QString name;
     QString info;
     QString fileName;
@@ -32,7 +31,8 @@ KoColorProfile::KoColorProfile(const QString &fileName) : d(new Private)
     d->fileName = fileName;
 }
 
-KoColorProfile::KoColorProfile(const KoColorProfile& profile) : d(new Private(*profile.d)) {
+KoColorProfile::KoColorProfile(const KoColorProfile& profile) : d(new Private(*profile.d))
+{
 }
 
 KoColorProfile::~KoColorProfile()
@@ -41,11 +41,13 @@ KoColorProfile::~KoColorProfile()
 }
 
 bool KoColorProfile::load()
-{ return false; }
-
-bool KoColorProfile::save( const QString & filename )
 {
-    Q_UNUSED( filename );
+    return false;
+}
+
+bool KoColorProfile::save(const QString & filename)
+{
+    Q_UNUSED(filename);
     return false;
 }
 
@@ -79,13 +81,13 @@ void KoColorProfile::setInfo(const QString &info)
     d->info = info;
 }
 
-QVariant KoColorProfile::property( const QString& _name) const
+QVariant KoColorProfile::property(const QString& _name) const
 {
     Q_UNUSED(_name);
     return QVariant();
 }
 
-void KoColorProfile::setProperty( const QString& _name, const QVariant& _variant)
+void KoColorProfile::setProperty(const QString& _name, const QVariant& _variant)
 {
     Q_UNUSED(_name);
     Q_UNUSED(_variant);

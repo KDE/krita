@@ -51,7 +51,7 @@ void KoRgbColorSpaceTester::testBasics()
 void KoRgbColorSpaceTester::testMixColors()
 {
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
-                KoColorSpaceRegistry::instance()->colorSpaceId( RGBAColorModelID.id(), Integer8BitsColorDepthID.id() ) , "");
+                                 KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID.id(), Integer8BitsColorDepthID.id()) , "");
     KoMixColorsOp * mixOp = cs->mixColorsOp();
 
     // Test mixColors.
@@ -99,7 +99,7 @@ void KoRgbColorSpaceTester::testMixColors()
     weights[1] = 127;
 
     mixOp->mixColors(pixelPtrs, weights, 2, outputPixel);
-     
+
     QVERIFY((int)outputPixel[PIXEL_RED] == 255);
     QVERIFY((int)outputPixel[PIXEL_GREEN] == 255);
     QVERIFY((int)outputPixel[PIXEL_BLUE] == 255);
@@ -148,13 +148,12 @@ void KoRgbColorSpaceTester::testCompositeOps()
     // Just COMPOSITE_COPY for now
 
     QList<KoID> depthIDs = KoColorSpaceRegistry::instance()->colorDepthList(RGBAColorModelID.id(),
-            KoColorSpaceRegistry::AllColorSpaces);
+                           KoColorSpaceRegistry::AllColorSpaces);
 
-    foreach( KoID depthId, depthIDs)
-    {
-	kDebug() << depthId.id();
+    foreach(KoID depthId, depthIDs) {
+        kDebug() << depthId.id();
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
-                KoColorSpaceRegistry::instance()->colorSpaceId( RGBAColorModelID.id(), depthId.id() ) , "");
+                                     KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID.id(), depthId.id()) , "");
         const KoCompositeOp* copyOp = cs->compositeOp(COMPOSITE_COPY);
         KoColor src(cs), dst(cs);
 

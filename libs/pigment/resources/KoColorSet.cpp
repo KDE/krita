@@ -29,13 +29,14 @@
 
 #include "KoColorSpaceRegistry.h"
 
-namespace {
-    enum enumPaletteType {
-        FORMAT_UNKNOWN,
-        FORMAT_GPL, // Gimp palette
-        FORMAT_PAL, // RIFF palette
-        FORMAT_ACT // Photoshop binary color palette
-    };
+namespace
+{
+enum enumPaletteType {
+    FORMAT_UNKNOWN,
+    FORMAT_GPL, // Gimp palette
+    FORMAT_PAL, // RIFF palette
+    FORMAT_ACT // Photoshop binary color palette
+};
 
 }
 
@@ -65,21 +66,21 @@ KoColorSet::KoColorSet(const KisGradient * gradient, qint32 nColors, const QStri
 }
 */
 KoColorSet::KoColorSet(const QString& filename)
-    : super(filename)
+        : super(filename)
 {
     // Implemented in super class
     m_columns = 0; // Set the default value that the GIMP uses...
 }
 
 KoColorSet::KoColorSet()
-    : super("")
+        : super("")
 {
     m_columns = 0; // Set the default value that the GIMP uses...
 }
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
-    : super("")
+        : super("")
 {
     setFilename(rhs.filename());
     m_ownData = false;
@@ -147,12 +148,9 @@ bool KoColorSet::init()
     }
 
 
-    if (s.startsWith("RIFF") || s.startsWith("PAL data"))
-    {
-       format = FORMAT_PAL;
-    }
-    else if (s.startsWith("GIMP Palette"))
-    {
+    if (s.startsWith("RIFF") || s.startsWith("PAL data")) {
+        format = FORMAT_PAL;
+    } else if (s.startsWith("GIMP Palette")) {
         // XXX: No checks for wrong input yet!
         quint32 index = 0;
 
@@ -171,8 +169,7 @@ bool KoColorSet::init()
         format = FORMAT_GPL;
 
         // Read name
-        if (!lines[1].startsWith("Name: ") || !lines[0].startsWith("GIMP") )
-        {
+        if (!lines[1].startsWith("Name: ") || !lines[0].startsWith("GIMP")) {
             kWarning(30009) << "Illegal Gimp palette file: " << filename();
             return false;
         }
@@ -190,13 +187,10 @@ bool KoColorSet::init()
         for (qint32 i = index; i < lines.size(); i++) {
             if (lines[i].startsWith('#')) {
                 m_comment += lines[i].mid(1).trimmed() + ' ';
-            }
-            else if (!lines[i].isEmpty())
-            {
+            } else if (!lines[i].isEmpty()) {
                 QStringList a = lines[i].replace(QChar('\t'), " ").split(' ', QString::SkipEmptyParts);
 
-                if (a.count() < 3)
-                {
+                if (a.count() < 3) {
                     break;
                 }
 
@@ -208,9 +202,8 @@ bool KoColorSet::init()
                 a.pop_front();
 
                 if (r < 0 || r > 255 ||
-                    g < 0 || g > 255 ||
-                    b < 0 || b > 255)
-                {
+                        g < 0 || g > 255 ||
+                        b < 0 || b > 255) {
                     break;
                 }
 
@@ -227,8 +220,7 @@ bool KoColorSet::init()
 
         setValid(true);
         return true;
-    }
-    else if (s.length() == 768) {
+    } else if (s.length() == 768) {
         kWarning(30009) << "Photoshop format palette file. Not implemented yet";
         format = FORMAT_ACT;
     }

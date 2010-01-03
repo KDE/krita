@@ -61,7 +61,8 @@ enum ColorSpaceIndependence {
  * sum(colors[i] * weights[i]) / 255. You access the KoMixColorsOp
  * of a colorspace by calling KoColorSpace::mixColorsOp.
  */
-class KoMixColorsOp {
+class KoMixColorsOp
+{
 public:
     virtual ~KoMixColorsOp() { }
     /**
@@ -82,7 +83,8 @@ public:
  * You access the KoConvolutionOp of a colorspace by calling
  * KoColorSpace::convolutionOp.
  */
-class KoConvolutionOp {
+class KoConvolutionOp
+{
 public:
     virtual ~KoConvolutionOp() { }
     /**
@@ -130,7 +132,8 @@ public:
  * Some subclasses implement only some parts and are named Traits
  *
  */
-class PIGMENTCMS_EXPORT KoColorSpace {
+class PIGMENTCMS_EXPORT KoColorSpace
+{
     friend class KoColorSpaceRegistry;
 protected:
     /// Only for use by classes that serve as baseclass for real color spaces
@@ -139,7 +142,7 @@ protected:
 public:
 
     /// Should be called by real color spaces
-    KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp );
+    KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp);
     virtual ~KoColorSpace();
 
     virtual bool operator==(const KoColorSpace& rhs) const;
@@ -273,7 +276,7 @@ public:
     /**
      * @return true if the profile given in argument can be used by this color space
      */
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const =0;
+    virtual bool profileIsCompatible(const KoColorProfile* profile) const = 0;
 
     /**
      * If false, images in this colorspace will degrade considerably by
@@ -529,7 +532,7 @@ public:
     /**
      * Create a mathematical toolbox compatible with this colorspace
      */
-    virtual KoID mathToolboxId() const =0;
+    virtual KoID mathToolboxId() const = 0;
 
     /**
      * Compose two arrays of pixels together. If source and target
@@ -624,7 +627,7 @@ public:
      *                 element is <color />
      * @param doc is the document containing colorElt
      */
-    virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const = 0;
+    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const = 0;
 
     /**
      * Unserialize a color following Create's swatch color specification available
@@ -635,9 +638,9 @@ public:
      * @return the unserialize color, or an empty color object if the function failed
      *         to unserialize the color
      */
-    virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const = 0;
+    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const = 0;
 
-    KoColorTransformation* createColorTransformation( const QString & id, const QHash<QString, QVariant> & parameters) const;
+    KoColorTransformation* createColorTransformation(const QString & id, const QHash<QString, QVariant> & parameters) const;
 
 protected:
 

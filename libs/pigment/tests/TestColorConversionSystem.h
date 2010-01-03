@@ -23,25 +23,24 @@
 #include <QtTest/QtTest>
 
 struct ModelDepthProfile {
-  ModelDepthProfile( const QString& _model, const QString& _depth, const QString& _profile )
-        : model(_model), depth(_depth), profile(_profile)
-  {
-  }
-  QString model;
-  QString depth;
-  QString profile;
+    ModelDepthProfile(const QString& _model, const QString& _depth, const QString& _profile)
+            : model(_model), depth(_depth), profile(_profile) {
+    }
+    QString model;
+    QString depth;
+    QString profile;
 };
 
 class TestColorConversionSystem : public QObject
 {
-        Q_OBJECT
-    public:
-        TestColorConversionSystem();
-    private slots:
-        void testConnections();
-        void testGoodConnections();
-    private:
-        QList< ModelDepthProfile > listModels;
+    Q_OBJECT
+public:
+    TestColorConversionSystem();
+private slots:
+    void testConnections();
+    void testGoodConnections();
+private:
+    QList< ModelDepthProfile > listModels;
 };
 
 #endif

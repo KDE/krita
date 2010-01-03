@@ -21,8 +21,7 @@
 
 #include "KoColorTransformationFactory.h"
 
-struct KoColorTransformationFactoryRegistry::Private
-{
+struct KoColorTransformationFactoryRegistry::Private {
     static KoColorTransformationFactoryRegistry* s_registry;
 };
 
@@ -46,8 +45,7 @@ void KoColorTransformationFactoryRegistry::addColorTransformationFactory(KoColor
 
 KoColorTransformationFactoryRegistry* KoColorTransformationFactoryRegistry::instance()
 {
-    if(Private::s_registry == 0)
-    {
+    if (Private::s_registry == 0) {
         Private::s_registry = new KoColorTransformationFactoryRegistry();
     }
     return Private::s_registry;

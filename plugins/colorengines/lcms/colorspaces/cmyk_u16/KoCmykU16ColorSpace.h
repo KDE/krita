@@ -29,32 +29,51 @@ typedef KoCmykTraits<quint16> CmykU16Traits;
 
 class KoCmykU16ColorSpace : public KoLcmsColorSpace<CmykU16Traits>
 {
-    public:
-        KoCmykU16ColorSpace( KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence independence) const;
-        virtual KoID colorModelId() const { return CMYKAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual KoColorSpace* clone() const;
-        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
+public:
+    KoCmykU16ColorSpace(KoColorProfile *p);
+    virtual bool willDegrade(ColorSpaceIndependence independence) const;
+    virtual KoID colorModelId() const {
+        return CMYKAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual KoColorSpace* clone() const;
+    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
 };
 
 class KoCmykU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
-    public:
-        KoCmykU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_CMYK5_16, icSigCmykData)
-        {
-        }
-        virtual bool userVisible() const { return true; }
-        virtual QString id() const { return "CMYKA16"; }
-        virtual QString name() const { return i18n("CMYK (16-bit integer/channel)"); }
-        virtual KoID colorModelId() const { return CMYKAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual int referenceDepth() const { return 16; }
+public:
+    KoCmykU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_CMYK5_16, icSigCmykData) {
+    }
+    virtual bool userVisible() const {
+        return true;
+    }
+    virtual QString id() const {
+        return "CMYKA16";
+    }
+    virtual QString name() const {
+        return i18n("CMYK (16-bit integer/channel)");
+    }
+    virtual KoID colorModelId() const {
+        return CMYKAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual int referenceDepth() const {
+        return 16;
+    }
 
-        virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KoCmykU16ColorSpace( p->clone()); }
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+        return new KoCmykU16ColorSpace(p->clone());
+    }
 
-        virtual QString defaultProfile() const { return "Adobe CMYK"; }
+    virtual QString defaultProfile() const {
+        return "Adobe CMYK";
+    }
 };
 
 

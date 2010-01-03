@@ -37,9 +37,9 @@
 template<typename _T_, typename _T2_, typename _T3_>
 inline _T_ CLAMP(_T_ x, _T2_ l, _T3_ u)
 {
-    if( x < l)
+    if (x < l)
         return _T_(l);
-    else if( x > u)
+    else if (x > u)
         return _T_(u);
     return x;
 }
@@ -75,7 +75,7 @@ inline uint UINT8_BLEND(uint a, uint b, uint alpha)
     // Signed arithmetic is needed since a-b might be negative
     // +b above becomes + (b<<8) - b  because we multiply it with 255 to fit the first part
     //  That way we can do a normal rounding
-    uint c = uint(((int(a) - int(b)) * int(alpha)) + (b<<8) - b) + 0x80u;
+    uint c = uint(((int(a) - int(b)) * int(alpha)) + (b << 8) - b) + 0x80u;
 
     return ((c >> 8) + c) >> 8;
 }
@@ -108,7 +108,7 @@ inline uint UINT16_BLEND(uint a, uint b, uint alpha)
 
 inline uint UINT8_TO_UINT16(uint c)
 {
-    return c | (c<<8);
+    return c | (c << 8);
 }
 
 inline uint UINT16_TO_UINT8(uint c)
@@ -116,7 +116,7 @@ inline uint UINT16_TO_UINT8(uint c)
     //return round(c / 257.0);
     //For all UINT16 this calculation is the same and a lot faster (off by c/65656 which for every c is 0)
     c = c - (c >> 8) + 128;
-    return c >>8;
+    return c >> 8;
 }
 
 inline int INT16_BLEND(int a, int b, uint alpha)

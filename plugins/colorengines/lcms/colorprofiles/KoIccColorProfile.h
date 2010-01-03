@@ -28,81 +28,84 @@ struct KoRGBChromaticities;
 /**
  * This class contains an ICC color profile.
  */
-class PIGMENTCMS_EXPORT KoIccColorProfile : public KoColorProfile {
-    public:
+class PIGMENTCMS_EXPORT KoIccColorProfile : public KoColorProfile
+{
+public:
 
-        using KoColorProfile::save;
-        
-        /**
-         * Contains the data associated with a profile. This is
-         * shared through internal representation.
-         */
-        class Data {
-            public:
-                Data();
-                Data(QByteArray rawData);
-                ~Data();
-                QByteArray rawData();
-                void setRawData( const QByteArray &);
-            private:
-                struct Private;
-                Private* const d;
-        };
-        /**
-         * This class should be used to wrap the ICC profile
-         * representation coming from various CMS engine.
-         */
-        class Container {
-            public:
-                Container();
-                virtual ~Container();
-            public:
-                virtual QString name() const =0;
-                virtual QString info() const =0;
-                virtual bool valid() const =0;
-                virtual bool isSuitableForOutput() const =0;
-                virtual bool isSuitableForPrinting() const =0;
-                virtual bool isSuitableForDisplay() const =0;
-        };
-    public:
-        KoIccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, QString name = "");
-        KoIccColorProfile(QString fileName = "");
-        KoIccColorProfile(const QByteArray& rawData);
-        KoIccColorProfile(const KoIccColorProfile& rhs);
-        virtual ~KoIccColorProfile();
-        
-        virtual KoColorProfile* clone() const;
-        
-        virtual bool load();
-        virtual bool save();
+    using KoColorProfile::save;
 
-        /**
-        * @return an array with the raw data of the profile
-        */
-        QByteArray rawData() const;
-        virtual bool valid() const;
-        virtual bool isSuitableForOutput() const;
-        virtual bool isSuitableForPrinting() const;
-        virtual bool isSuitableForDisplay() const;
-        virtual bool operator==(const KoColorProfile&) const;
-    protected:
-        void setRawData(const QByteArray& rawData);
+    /**
+     * Contains the data associated with a profile. This is
+     * shared through internal representation.
+     */
+    class Data
+    {
     public:
-        KoLcmsColorProfileContainer* asLcms() const;
-    public:
-        /**
-        *
-        * XXX: We need to make sure we always have the right profile even
-        *      when running on multiple screens.
-        *
-        * @return the color profile of the screen.
-        */
-        static KoIccColorProfile *getScreenProfile(int screen = -1);
-    protected:
-        virtual bool init();
+        Data();
+        Data(QByteArray rawData);
+        ~Data();
+        QByteArray rawData();
+        void setRawData(const QByteArray &);
     private:
         struct Private;
         Private* const d;
+    };
+    /**
+     * This class should be used to wrap the ICC profile
+     * representation coming from various CMS engine.
+     */
+    class Container
+    {
+    public:
+        Container();
+        virtual ~Container();
+    public:
+        virtual QString name() const = 0;
+        virtual QString info() const = 0;
+        virtual bool valid() const = 0;
+        virtual bool isSuitableForOutput() const = 0;
+        virtual bool isSuitableForPrinting() const = 0;
+        virtual bool isSuitableForDisplay() const = 0;
+    };
+public:
+    KoIccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, QString name = "");
+    KoIccColorProfile(QString fileName = "");
+    KoIccColorProfile(const QByteArray& rawData);
+    KoIccColorProfile(const KoIccColorProfile& rhs);
+    virtual ~KoIccColorProfile();
+
+    virtual KoColorProfile* clone() const;
+
+    virtual bool load();
+    virtual bool save();
+
+    /**
+    * @return an array with the raw data of the profile
+    */
+    QByteArray rawData() const;
+    virtual bool valid() const;
+    virtual bool isSuitableForOutput() const;
+    virtual bool isSuitableForPrinting() const;
+    virtual bool isSuitableForDisplay() const;
+    virtual bool operator==(const KoColorProfile&) const;
+protected:
+    void setRawData(const QByteArray& rawData);
+public:
+    KoLcmsColorProfileContainer* asLcms() const;
+public:
+    /**
+    *
+    * XXX: We need to make sure we always have the right profile even
+    *      when running on multiple screens.
+    *
+    * @return the color profile of the screen.
+    */
+    static KoIccColorProfile *getScreenProfile(int screen = -1);
+protected:
+    virtual bool init();
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

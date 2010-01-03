@@ -71,11 +71,12 @@ KoIccColorProfile::Container::~Container()
 }
 
 
-struct KoIccColorProfile::Private
-{
+struct KoIccColorProfile::Private {
     struct Shared {
         Shared() : count(0), data(0), lcmsProfile(0), chromacities(0) {}
-        ~Shared() { delete data; delete lcmsProfile; delete chromacities; }
+        ~Shared() {
+            delete data; delete lcmsProfile; delete chromacities;
+        }
         int count;
         KoIccColorProfile::Data* data;
         KoLcmsColorProfileContainer* lcmsProfile;
@@ -84,14 +85,14 @@ struct KoIccColorProfile::Private
     Shared* shared;
 };
 
-KoIccColorProfile::KoIccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, QString name ) : KoColorProfile(""), d(new Private)
+KoIccColorProfile::KoIccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, QString name) : KoColorProfile(""), d(new Private)
 {
     d->shared = new Private::Shared();
     d->shared->count ++;
     d->shared->chromacities = new KoRGBChromaticities(chromacities);
     d->shared->data = new Data();
     d->shared->lcmsProfile = 0;
-    d->shared->data->setRawData( KoLcmsColorProfileContainer::createFromChromacities(chromacities, gamma, name) );
+    d->shared->data->setRawData(KoLcmsColorProfileContainer::createFromChromacities(chromacities, gamma, name));
     init();
 }
 
@@ -117,17 +118,16 @@ KoIccColorProfile::KoIccColorProfile(const QByteArray& rawData) : KoColorProfile
 
 KoIccColorProfile::KoIccColorProfile(const KoIccColorProfile& rhs) : KoColorProfile(rhs), d(new Private(*rhs.d))
 {
-    Q_ASSERT( d->shared );
+    Q_ASSERT(d->shared);
     d->shared->count++;
 }
 
 KoIccColorProfile::~KoIccColorProfile()
 {
-    Q_ASSERT( d->shared );
+    Q_ASSERT(d->shared);
     d->shared->count--;
-    if(d->shared->count <= 0)
-    {
-        Q_ASSERT(d->shared->count ==0);
+    if (d->shared->count <= 0) {
+        Q_ASSERT(d->shared->count == 0);
         delete d->shared;
     }
     delete d;
@@ -139,23 +139,24 @@ KoColorProfile* KoIccColorProfile::clone() const
 }
 
 
-QByteArray KoIccColorProfile::rawData() const {
+QByteArray KoIccColorProfile::rawData() const
+{
     return d->shared->data->rawData();
 }
 
 void KoIccColorProfile::setRawData(const QByteArray& rawData)
 {
-    d->shared->data->setRawData( rawData );
+    d->shared->data->setRawData(rawData);
 }
 
 bool KoIccColorProfile::valid() const
 {
-    if(d->shared->lcmsProfile)
+    if (d->shared->lcmsProfile)
         return d->shared->lcmsProfile->valid();
     return false;
 }
 
-KoIccColorProfile *KoIccColorProfile::getScreenProfile(int screen )
+KoIccColorProfile *KoIccColorProfile::getScreenProfile(int screen)
 {
 #ifdef Q_WS_X11
 
@@ -165,22 +166,22 @@ KoIccColorProfile *KoIccColorProfile::getScreenProfile(int screen )
     unsigned long bytes_after;
     quint8 * str;
 
-    static Atom icc_atom = XInternAtom( QX11Info::display(), "_ICC_PROFILE", True );
+    static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
 
-    if  ( XGetWindowProperty ( QX11Info::display(),
-                    QX11Info::appRootWindow( screen ),
-                    icc_atom,
-                    0,
-                    INT_MAX,
-                    False,
-                    XA_CARDINAL,
-                    &type,
-                    &format,
-                    &nitems,
-                    &bytes_after,
-                    (unsigned char **) &str) == Success
-                ) {
-        QByteArray bytes (nitems, '\0');
+    if (XGetWindowProperty(QX11Info::display(),
+                           QX11Info::appRootWindow(screen),
+                           icc_atom,
+                           0,
+                           INT_MAX,
+                           False,
+                           XA_CARDINAL,
+                           &type,
+                           &format,
+                           &nitems,
+                           &bytes_after,
+                           (unsigned char **) &str) == Success
+       ) {
+        QByteArray bytes(nitems, '\0');
         bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
         return new KoIccColorProfile(bytes);
@@ -195,21 +196,21 @@ KoIccColorProfile *KoIccColorProfile::getScreenProfile(int screen )
 
 bool KoIccColorProfile::isSuitableForOutput() const
 {
-    if(d->shared->lcmsProfile)
+    if (d->shared->lcmsProfile)
         return d->shared->lcmsProfile->isSuitableForOutput();
     return false;
 }
 
 bool KoIccColorProfile::isSuitableForPrinting() const
 {
-    if(d->shared->lcmsProfile)
+    if (d->shared->lcmsProfile)
         return d->shared->lcmsProfile->isSuitableForPrinting();
     return false;
 }
 
 bool KoIccColorProfile::isSuitableForDisplay() const
 {
-    if(d->shared->lcmsProfile)
+    if (d->shared->lcmsProfile)
         return d->shared->lcmsProfile->isSuitableForDisplay();
     return false;
 }
@@ -236,12 +237,10 @@ bool KoIccColorProfile::save()
 
 bool KoIccColorProfile::init()
 {
-    if(!d->shared->lcmsProfile)
-    {
+    if (!d->shared->lcmsProfile) {
         d->shared->lcmsProfile = new KoLcmsColorProfileContainer(d->shared->data);
     }
-    if(d->shared->lcmsProfile->init())
-    {
+    if (d->shared->lcmsProfile->init()) {
         setName(d->shared->lcmsProfile->name());
         setInfo(d->shared->lcmsProfile->info());
         return true;
@@ -252,15 +251,14 @@ bool KoIccColorProfile::init()
 
 KoLcmsColorProfileContainer* KoIccColorProfile::asLcms() const
 {
-    Q_ASSERT( d->shared->lcmsProfile );
+    Q_ASSERT(d->shared->lcmsProfile);
     return d->shared->lcmsProfile;
 }
 
 bool KoIccColorProfile::operator==(const KoColorProfile& rhs) const
 {
     const KoIccColorProfile* rhsIcc = dynamic_cast<const KoIccColorProfile*>(&rhs);
-    if(rhsIcc)
-    {
+    if (rhsIcc) {
         return d->shared == rhsIcc->d->shared;
     }
     return false;

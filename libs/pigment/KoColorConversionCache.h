@@ -27,34 +27,35 @@ class KoColorSpace;
 
 /**
  * This class holds a cache of KoColorConversionTransformations.
- * 
+ *
  * This class is not part of public API, and can be changed without notice.
  */
-class KoColorConversionCache {
-    public:
-        struct CachedTransformation;
-    public:
-        KoColorConversionCache();
-        ~KoColorConversionCache();
+class KoColorConversionCache
+{
+public:
+    struct CachedTransformation;
+public:
+    KoColorConversionCache();
+    ~KoColorConversionCache();
 
-        /**
-         * This function returns a cached color transformation if available
-         * or create one.
-         * @param src source color space
-         * @param dst destination color space
-         */
-        KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src, const KoColorSpace* dst, KoColorConversionTransformation::Intent _renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    /**
+     * This function returns a cached color transformation if available
+     * or create one.
+     * @param src source color space
+     * @param dst destination color space
+     */
+    KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src, const KoColorSpace* dst, KoColorConversionTransformation::Intent _renderingIntent = KoColorConversionTransformation::IntentPerceptual);
 
-        /**
-         * This function is called by the destructor of the color space to
-         * warn the cache that any pointers to this color space is going to
-         * be invalid and that the cache needs to stop using those pointers.
-         * @param src source color space
-         */
-        void colorSpaceIsDestroyed(const KoColorSpace* src);
-    private:
-        struct Private;
-        Private* const d;
+    /**
+     * This function is called by the destructor of the color space to
+     * warn the cache that any pointers to this color space is going to
+     * be invalid and that the cache needs to stop using those pointers.
+     * @param src source color space
+     */
+    void colorSpaceIsDestroyed(const KoColorSpace* src);
+private:
+    struct Private;
+    Private* const d;
 };
 
 /**
@@ -64,18 +65,19 @@ class KoColorConversionCache {
  *
  * This class is not part of public API, and can be changed without notice.
  */
-class KoCachedColorConversionTransformation {
+class KoCachedColorConversionTransformation
+{
     friend class KoColorConversionCache;
-    private:
-        KoCachedColorConversionTransformation(KoColorConversionCache* cache, KoColorConversionCache::CachedTransformation* transfo);
-    public:
-        KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation&);
-        ~KoCachedColorConversionTransformation();
-    public:
-        const KoColorConversionTransformation* transformation() const;
-    private:
-        struct Private;
-        Private* const d;
+private:
+    KoCachedColorConversionTransformation(KoColorConversionCache* cache, KoColorConversionCache::CachedTransformation* transfo);
+public:
+    KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation&);
+    ~KoCachedColorConversionTransformation();
+public:
+    const KoColorConversionTransformation* transformation() const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 

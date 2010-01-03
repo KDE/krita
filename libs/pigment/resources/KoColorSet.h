@@ -42,7 +42,8 @@ struct KoColorSetEntry {
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
  * from the Gimp.
  */
-class PIGMENTCMS_EXPORT KoColorSet : public KoResource {
+class PIGMENTCMS_EXPORT KoColorSet : public KoResource
+{
     typedef KoResource super;
 
 public:

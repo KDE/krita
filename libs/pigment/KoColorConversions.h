@@ -27,24 +27,24 @@
  */
 
 // 8-bit integer versions. RGBSL are 0-255, H is 0-360.
- PIGMENTCMS_EXPORT void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V);
- PIGMENTCMS_EXPORT void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B);
+PIGMENTCMS_EXPORT void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V);
+PIGMENTCMS_EXPORT void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B);
 
 // Floating point versions. RGBSL are 0-1, H is 0-360.
- PIGMENTCMS_EXPORT void RGBToHSV(float r, float g, float b, float *h, float *s, float *v);
- PIGMENTCMS_EXPORT void HSVToRGB(float h, float s, float v, float *r, float *g, float *b);
+PIGMENTCMS_EXPORT void RGBToHSV(float r, float g, float b, float *h, float *s, float *v);
+PIGMENTCMS_EXPORT void HSVToRGB(float h, float s, float v, float *r, float *g, float *b);
 
- PIGMENTCMS_EXPORT void RGBToHSL(float r, float g, float b, float *h, float *s, float *l);
- PIGMENTCMS_EXPORT void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b);
+PIGMENTCMS_EXPORT void RGBToHSL(float r, float g, float b, float *h, float *s, float *l);
+PIGMENTCMS_EXPORT void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b);
 
- PIGMENTCMS_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, float * h, float * l, float * s);
+PIGMENTCMS_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, float * h, float * l, float * s);
 
- PIGMENTCMS_EXPORT float hue_value(float n1, float n2, float hue);
+PIGMENTCMS_EXPORT float hue_value(float n1, float n2, float hue);
 
- PIGMENTCMS_EXPORT void hls_to_rgb(float h, float l, float s, quint8 * r, quint8 * g, quint8 * b);
+PIGMENTCMS_EXPORT void hls_to_rgb(float h, float l, float s, quint8 * r, quint8 * g, quint8 * b);
 
- PIGMENTCMS_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, int * h, int * l, int * s);
- PIGMENTCMS_EXPORT void hls_to_rgb(int h, int l, int s, quint8 * r, quint8 * g, quint8 * b);
+PIGMENTCMS_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, int * h, int * l, int * s);
+PIGMENTCMS_EXPORT void hls_to_rgb(int h, int l, int s, quint8 * r, quint8 * g, quint8 * b);
 
 #endif // _KO_CONVERSIONS_H_
 

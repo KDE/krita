@@ -43,8 +43,9 @@
  * transfo->transform( pixelsSrc, pixelsDst, nbpixels );
  * @endcode
  */
-class PIGMENTCMS_EXPORT KoColorTransformation {
-  public:
+class PIGMENTCMS_EXPORT KoColorTransformation
+{
+public:
     virtual ~KoColorTransformation();
     /**
      * This function apply the transformation on a given number of pixels.
@@ -56,7 +57,7 @@ class PIGMENTCMS_EXPORT KoColorTransformation {
      * This function may or may not be thread safe. You need to create one
      * KoColorTransformation per thread.
      */
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const=0;
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const = 0;
 
     /**
      * Update the parameters of a cached transformation object.

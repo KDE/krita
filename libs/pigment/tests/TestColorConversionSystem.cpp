@@ -29,29 +29,24 @@
 
 TestColorConversionSystem::TestColorConversionSystem()
 {
-    foreach( KoID modelId, KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces))
-    {
-        foreach( KoID depthId, KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces))
-        {
-          QList< const KoColorProfile * > profiles =
-               KoColorSpaceRegistry::instance()->profilesFor(
-                    KoColorSpaceRegistry::instance()->colorSpaceId( modelId, depthId ) );
-          foreach( const KoColorProfile * profile, profiles)
-          {
-              listModels.append( ModelDepthProfile( modelId.id(), depthId.id(), profile->name() ) );
-          }
+    foreach(KoID modelId, KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces)) {
+        foreach(KoID depthId, KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces)) {
+            QList< const KoColorProfile * > profiles =
+                KoColorSpaceRegistry::instance()->profilesFor(
+                    KoColorSpaceRegistry::instance()->colorSpaceId(modelId, depthId));
+            foreach(const KoColorProfile * profile, profiles) {
+                listModels.append(ModelDepthProfile(modelId.id(), depthId.id(), profile->name()));
+            }
         }
     }
-    listModels.append( ModelDepthProfile(AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), "" ) );
+    listModels.append(ModelDepthProfile(AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), ""));
 }
 
 void TestColorConversionSystem::testConnections()
 {
-    foreach( ModelDepthProfile srcCS, listModels)
-    {
-        foreach( ModelDepthProfile dstCS, listModels)
-        {
-            QVERIFY2( KoColorSpaceRegistry::instance()->colorConversionSystem()->existsPath(srcCS.model, srcCS.depth, srcCS.profile, dstCS.model, dstCS.depth, dstCS.profile) , QString("No path between %1 / %2 and %3 / %4").arg(srcCS.model).arg(srcCS.depth).arg(dstCS.model).arg(dstCS.depth).toLatin1() );
+    foreach(ModelDepthProfile srcCS, listModels) {
+        foreach(ModelDepthProfile dstCS, listModels) {
+            QVERIFY2(KoColorSpaceRegistry::instance()->colorConversionSystem()->existsPath(srcCS.model, srcCS.depth, srcCS.profile, dstCS.model, dstCS.depth, dstCS.profile) , QString("No path between %1 / %2 and %3 / %4").arg(srcCS.model).arg(srcCS.depth).arg(dstCS.model).arg(dstCS.depth).toLatin1());
         }
     }
 }
@@ -59,23 +54,19 @@ void TestColorConversionSystem::testConnections()
 void TestColorConversionSystem::testGoodConnections()
 {
     int countFail = 0;
-    foreach( ModelDepthProfile srcCS, listModels)
-    {
-        foreach( ModelDepthProfile dstCS, listModels)
-        {
-            if(not KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.model, srcCS.depth, srcCS.profile , dstCS.model, dstCS.depth, dstCS.profile) )
-            {
+    foreach(ModelDepthProfile srcCS, listModels) {
+        foreach(ModelDepthProfile dstCS, listModels) {
+            if (not KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.model, srcCS.depth, srcCS.profile , dstCS.model, dstCS.depth, dstCS.profile)) {
                 ++countFail;
-                dbgPigment << "No good path between \"" << srcCS.model << " " << srcCS.depth << " " << srcCS.profile << "\" \"" << dstCS.model << " " << dstCS.depth << " " << dstCS.profile <<"\"";
+                dbgPigment << "No good path between \"" << srcCS.model << " " << srcCS.depth << " " << srcCS.profile << "\" \"" << dstCS.model << " " << dstCS.depth << " " << dstCS.profile << "\"";
             }
         }
     }
     int failed = 0;
-    if ( !KoColorSpaceRegistry::instance()->colorSpace("RgbAF32", 0) )
-    {
-      failed = 42;
+    if (!KoColorSpaceRegistry::instance()->colorSpace("RgbAF32", 0)) {
+        failed = 42;
     }
-    QVERIFY2( countFail == failed, QString("%1 tests have fails (it should have been %2)").arg( countFail).arg(failed).toLatin1() );
+    QVERIFY2(countFail == failed, QString("%1 tests have fails (it should have been %2)").arg(countFail).arg(failed).toLatin1());
 }
 
 QTEST_KDEMAIN(TestColorConversionSystem, NoGUI)

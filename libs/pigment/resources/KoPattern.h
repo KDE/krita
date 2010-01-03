@@ -22,7 +22,8 @@
 #include <pigment_export.h>
 
 /// Write API docs here
-class PIGMENTCMS_EXPORT KoPattern : public KoResource {
+class PIGMENTCMS_EXPORT KoPattern : public KoResource
+{
 
 public:
 

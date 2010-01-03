@@ -30,7 +30,8 @@
 #include "KoColorModelStandardIds.h"
 
 template<class _CSTraits>
-class KoSimpleColorSpace : public KoColorSpaceAbstract<_CSTraits> {
+class KoSimpleColorSpace : public KoColorSpaceAbstract<_CSTraits>
+{
 
 public:
 
@@ -38,23 +39,24 @@ public:
                        const QString& name,
                        const KoID& colorModelId,
                        const KoID& colorDepthId)
-        : KoColorSpaceAbstract<_CSTraits>(id, name)
-        , m_name(name)
-        , m_colorModelId(colorModelId)
-        , m_colorDepthId(colorDepthId)
-    {
+            : KoColorSpaceAbstract<_CSTraits>(id, name)
+            , m_name(name)
+            , m_colorModelId(colorModelId)
+            , m_colorDepthId(colorDepthId) {
     }
 
-    virtual ~KoSimpleColorSpace()
-    {
+    virtual ~KoSimpleColorSpace() {
     }
 
-    virtual KoID colorModelId() const { return m_colorModelId; }
+    virtual KoID colorModelId() const {
+        return m_colorModelId;
+    }
 
-    virtual KoID colorDepthId() const { return m_colorDepthId; }
+    virtual KoID colorDepthId() const {
+        return m_colorDepthId;
+    }
 
-    virtual bool willDegrade(ColorSpaceIndependence independence) const
-    {
+    virtual bool willDegrade(ColorSpaceIndependence independence) const {
         Q_UNUSED(independence);
         return false;
     }
@@ -63,58 +65,58 @@ public:
         return true;
     }
 
-    virtual quint8 difference(const quint8 *src1, const quint8 *src2) const
-    {
+    virtual quint8 difference(const quint8 *src1, const quint8 *src2) const {
         Q_UNUSED(src1);
         Q_UNUSED(src2);
         warnPigment << i18n("Undefined operation in the %1 space").arg(m_name);
         return 0;
     }
 
-    virtual quint32 colorSpaceType() const { return 0; }
+    virtual quint32 colorSpaceType() const {
+        return 0;
+    }
 
-    virtual bool hasHighDynamicRange() const { return false; }
+    virtual bool hasHighDynamicRange() const {
+        return false;
+    }
 
-    virtual const KoColorProfile* profile() const { return 0; }
+    virtual const KoColorProfile* profile() const {
+        return 0;
+    }
 
-    virtual KoColorProfile* profile() { return 0; }
+    virtual KoColorProfile* profile() {
+        return 0;
+    }
 
-    virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16*) const
-    {
+    virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16*) const {
         warnPigment << i18n("Undefined operation in the %1 space").arg(m_name);
         return 0;
     }
 
-    virtual KoColorTransformation* createDesaturateAdjustment() const
-    {
+    virtual KoColorTransformation* createDesaturateAdjustment() const {
         warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
         return 0;
     }
 
-    virtual KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const
-    {
+    virtual KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const {
         warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
         return 0;
     }
 
-    virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal ) const
-    {
+    virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal) const {
         warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
         return 0;
     }
 
-    virtual void invertColor(quint8*, qint32) const
-    {
+    virtual void invertColor(quint8*, qint32) const {
         warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
     }
 
-    virtual void colorToXML( const quint8* , QDomDocument& , QDomElement& ) const
-    {
+    virtual void colorToXML(const quint8* , QDomDocument& , QDomElement&) const {
         warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
     }
 
-    virtual void colorFromXML( quint8* , const QDomElement& ) const
-    {
+    virtual void colorFromXML(quint8* , const QDomElement&) const {
         warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
     }
 

@@ -27,20 +27,22 @@
 
 #include "KoColorSpace.h"
 
-KoHistogramProducerFactoryRegistry::KoHistogramProducerFactoryRegistry() {
+KoHistogramProducerFactoryRegistry::KoHistogramProducerFactoryRegistry()
+{
 }
 
-KoHistogramProducerFactoryRegistry::~KoHistogramProducerFactoryRegistry() {
+KoHistogramProducerFactoryRegistry::~KoHistogramProducerFactoryRegistry()
+{
 }
 
-KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::instance() {
+KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::instance()
+{
     K_GLOBAL_STATIC(KoHistogramProducerFactoryRegistry, s_instance);
     return s_instance;
 
 }
 
-QList<QString> KoHistogramProducerFactoryRegistry::keysCompatibleWith(
-        const KoColorSpace* colorSpace) const
+QList<QString> KoHistogramProducerFactoryRegistry::keysCompatibleWith(const KoColorSpace* colorSpace) const
 {
     QList<QString> list;
     QList<float> preferredList;

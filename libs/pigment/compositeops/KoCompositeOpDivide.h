@@ -26,41 +26,37 @@
  * A template version of the divide composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpDivide : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDivide<_CSTraits> > {
+class KoCompositeOpDivide : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDivide<_CSTraits> >
+{
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
-    public:
+public:
 
-        KoCompositeOpDivide(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDivide<_CSTraits> >(cs, COMPOSITE_DIVIDE, i18n("Divide" ), KoCompositeOp::categoryArithmetic() )
-        {
-        }
+    KoCompositeOpDivide(const KoColorSpace * cs)
+            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDivide<_CSTraits> >(cs, COMPOSITE_DIVIDE, i18n("Divide"), KoCompositeOp::categoryArithmetic()) {
+    }
 
-    public:
-        inline static channels_type selectAlpha( channels_type srcAlpha, channels_type dstAlpha)
-        {
-            return qMin(srcAlpha, dstAlpha);
-        }
+public:
+    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha) {
+        return qMin(srcAlpha, dstAlpha);
+    }
 
-        inline static void composeColorChannels( channels_type srcBlend,
-                                                 const channels_type* src,
-                                                 channels_type* dst,
-                                                 qint32 pixelSize,
-                                                 const QBitArray & channelFlags )
-        {
-            Q_UNUSED(pixelSize);
-            for(uint i = 0; i < _CSTraits::channels_nb; i++)
-            {
-                if( (int)i != _CSTraits::alpha_pos && ( channelFlags.isEmpty() ||  channelFlags.testBit( i ) ) )
-                {
-                    compositetype srcColor = src[i];
-                    compositetype dstColor = dst[i];
+    inline static void composeColorChannels(channels_type srcBlend,
+                                            const channels_type* src,
+                                            channels_type* dst,
+                                            qint32 pixelSize,
+                                            const QBitArray & channelFlags) {
+        Q_UNUSED(pixelSize);
+        for (uint i = 0; i < _CSTraits::channels_nb; i++) {
+            if ((int)i != _CSTraits::alpha_pos && (channelFlags.isEmpty() ||  channelFlags.testBit(i))) {
+                compositetype srcColor = src[i];
+                compositetype dstColor = dst[i];
 
-                    srcColor = qMin( (dstColor * (NATIVE_MAX_VALUE + 1) + (srcColor / 2)) / (1 + srcColor), (compositetype)NATIVE_MAX_VALUE);
-                    dst[i] = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
-                }
+                srcColor = qMin((dstColor * (NATIVE_MAX_VALUE + 1) + (srcColor / 2)) / (1 + srcColor), (compositetype)NATIVE_MAX_VALUE);
+                dst[i] = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
             }
         }
+    }
 
 };
 

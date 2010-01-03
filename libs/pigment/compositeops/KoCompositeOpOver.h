@@ -27,43 +27,39 @@
  * A template version of the over composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOver<_CSTraits> > {
+class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOver<_CSTraits> >
+{
     typedef typename _CSTraits::channels_type channels_type;
-    public:
+public:
 
-        KoCompositeOpOver(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOver<_CSTraits> >(cs, COMPOSITE_OVER, i18n("Normal" ), KoCompositeOp::categoryMix() )
-        {
-        }
+    KoCompositeOpOver(const KoColorSpace * cs)
+            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOver<_CSTraits> >(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()) {
+    }
 
-    public:
-        inline static channels_type selectAlpha( channels_type srcAlpha, channels_type dstAlpha)
-        {
-            Q_UNUSED(dstAlpha);
-            return srcAlpha;
-        }
+public:
+    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha) {
+        Q_UNUSED(dstAlpha);
+        return srcAlpha;
+    }
 
-        inline static void composeColorChannels( channels_type srcBlend,
-                                                 const channels_type* srcN,
-                                                 channels_type* dstN,
-                                                 qint32 pixelSize,
-                                                 const QBitArray & channelFlags )
-        {
-            Q_UNUSED(pixelSize);
-            if (srcBlend == NATIVE_OPACITY_OPAQUE) {
-                for(int i = 0; (uint)i <  _CSTraits::channels_nb; i++)
-                {
-                    if( i != _CSTraits::alpha_pos && (  channelFlags.isEmpty() || channelFlags.testBit( i ) ) )
-                        dstN[i] = srcN[i];
-                }
-            } else {
-                for(int i = 0; (uint)i <  _CSTraits::channels_nb; i++)
-                {
-                    if( i != _CSTraits::alpha_pos && (  channelFlags.isEmpty() || channelFlags.testBit( i ) ) )
-                        dstN[i] = KoColorSpaceMaths<channels_type>::blend(srcN[i], dstN[i], srcBlend);
-                }
+    inline static void composeColorChannels(channels_type srcBlend,
+                                            const channels_type* srcN,
+                                            channels_type* dstN,
+                                            qint32 pixelSize,
+                                            const QBitArray & channelFlags) {
+        Q_UNUSED(pixelSize);
+        if (srcBlend == NATIVE_OPACITY_OPAQUE) {
+            for (int i = 0; (uint)i <  _CSTraits::channels_nb; i++) {
+                if (i != _CSTraits::alpha_pos && (channelFlags.isEmpty() || channelFlags.testBit(i)))
+                    dstN[i] = srcN[i];
+            }
+        } else {
+            for (int i = 0; (uint)i <  _CSTraits::channels_nb; i++) {
+                if (i != _CSTraits::alpha_pos && (channelFlags.isEmpty() || channelFlags.testBit(i)))
+                    dstN[i] = KoColorSpaceMaths<channels_type>::blend(srcN[i], dstN[i], srcBlend);
             }
         }
+    }
 
 };
 

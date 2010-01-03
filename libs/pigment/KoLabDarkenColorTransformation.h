@@ -23,22 +23,18 @@
 #define _KO_LAB_DARKEN_TRANSFORMATION_H_
 
 template<typename _lab_channels_type_>
-struct KoLabDarkenColorTransformation : public KoColorTransformation
-{
-    KoLabDarkenColorTransformation(qint32 shade, bool compensate, qreal compensation) : m_shade(shade), m_compensate(compensate), m_compensation(compensation)
-    {
+struct KoLabDarkenColorTransformation : public KoColorTransformation {
+    KoLabDarkenColorTransformation(qint32 shade, bool compensate, qreal compensation) : m_shade(shade), m_compensate(compensate), m_compensation(compensation) {
 
     }
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
-    {
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const {
         const _lab_channels_type_ * srcNT = reinterpret_cast<const _lab_channels_type_*>(src);
         _lab_channels_type_ * dstNT = reinterpret_cast<_lab_channels_type_*>(dst);
-        for ( int i = 0; i < nPixels * 4; ++i ) {
-            if ( m_compensate ) {
-                dstNT[i] = static_cast<quint16>( ( srcNT[i] * m_shade ) / ( m_compensation * 255 ) );
-            }
-            else {
-                dstNT[i] = static_cast<quint16>( srcNT[i] * m_shade  / 255 );
+        for (int i = 0; i < nPixels * 4; ++i) {
+            if (m_compensate) {
+                dstNT[i] = static_cast<quint16>((srcNT[i] * m_shade) / (m_compensation * 255));
+            } else {
+                dstNT[i] = static_cast<quint16>(srcNT[i] * m_shade  / 255);
             }
         }
     }

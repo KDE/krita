@@ -36,10 +36,11 @@ struct KoRGBChromaticities;
 /**
  * This class contains an LCMS color profile. Don't use it outside KoLcmsColorSpace.
  */
-class PIGMENTCMS_EXPORT KoLcmsColorProfileContainer : public KoIccColorProfile::Container {
+class PIGMENTCMS_EXPORT KoLcmsColorProfileContainer : public KoIccColorProfile::Container
+{
     friend class KoIccColorProfile;
 protected:
-    KoLcmsColorProfileContainer( KoIccColorProfile::Data *);
+    KoLcmsColorProfileContainer(KoIccColorProfile::Data *);
 private:
     /**
      * Create a byte array from a lcms profile.

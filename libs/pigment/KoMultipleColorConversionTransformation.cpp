@@ -29,21 +29,20 @@ struct KoMultipleColorConversionTransformation::Private {
 };
 
 
-KoMultipleColorConversionTransformation::KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent ) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), d(new Private)
+KoMultipleColorConversionTransformation::KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), d(new Private)
 {
     d->maxPixelSize = qMax(srcCs->pixelSize(), dstCs->pixelSize());
 }
 KoMultipleColorConversionTransformation::~KoMultipleColorConversionTransformation()
 {
-    foreach(KoColorConversionTransformation* transfo, d->transfos)
-    {
+    foreach(KoColorConversionTransformation* transfo, d->transfos) {
         delete transfo;
     }
     delete d;
 }
 void KoMultipleColorConversionTransformation::appendTransfo(KoColorConversionTransformation* transfo)
 {
-    d->transfos.append( transfo );
+    d->transfos.append(transfo);
     d->maxPixelSize = qMax(d->maxPixelSize, transfo->srcColorSpace()->pixelSize());
     d->maxPixelSize = qMax(d->maxPixelSize, transfo->dstColorSpace()->pixelSize());
 }
@@ -52,20 +51,18 @@ void KoMultipleColorConversionTransformation::transform(const quint8 *src, quint
     Q_ASSERT(d->transfos.size() > 1); // Be sure to have a more than one transformation
     quint8 *buff1 = new quint8[d->maxPixelSize*nPixels];
     quint8 *buff2 = 0;
-    if(d->transfos.size() > 2)
-    {
+    if (d->transfos.size() > 2) {
         buff2 = new quint8[d->maxPixelSize*nPixels]; // a second buffer is needed
     }
-    d->transfos.first()->transform( src, buff1, nPixels);
+    d->transfos.first()->transform(src, buff1, nPixels);
     int lastIndex = d->transfos.size() - 2;
-    for( int i = 1; i <= lastIndex; i++)
-    {
-        d->transfos[i]->transform( buff1, buff2, nPixels);
+    for (int i = 1; i <= lastIndex; i++) {
+        d->transfos[i]->transform(buff1, buff2, nPixels);
         quint8* tmp = buff1;
         buff1 = buff2;
         buff2 = tmp;
     }
-    d->transfos.last()->transform( buff1, dst, nPixels);
+    d->transfos.last()->transform(buff1, dst, nPixels);
     delete [] buff2;
     delete [] buff1;
 }

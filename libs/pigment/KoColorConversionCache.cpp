@@ -26,14 +26,12 @@
 #include <KoColorSpace.h>
 
 struct KoColorConversionCacheKey {
-    KoColorConversionCacheKey(const KoColorSpace* _src, const KoColorSpace* _dst, KoColorConversionTransformation::Intent _renderingIntent) : src(_src), dst(_dst), renderingIntent(_renderingIntent)
-    {
+    KoColorConversionCacheKey(const KoColorSpace* _src, const KoColorSpace* _dst, KoColorConversionTransformation::Intent _renderingIntent) : src(_src), dst(_dst), renderingIntent(_renderingIntent) {
     }
     const KoColorSpace* src;
     const KoColorSpace* dst;
     KoColorConversionTransformation::Intent renderingIntent;
-    bool operator==(const KoColorConversionCacheKey& rhs) const
-    {
+    bool operator==(const KoColorConversionCacheKey& rhs) const {
         return (*src == *(rhs.src)) && (*dst == *(rhs.dst)) && (renderingIntent == rhs.renderingIntent);
     }
 };
@@ -44,10 +42,8 @@ uint qHash(const KoColorConversionCacheKey& key)
 }
 
 struct KoColorConversionCache::CachedTransformation {
-    CachedTransformation(KoColorConversionTransformation* _transfo) : transfo(_transfo), use(0)
-    {}
-    ~CachedTransformation()
-    {
+    CachedTransformation(KoColorConversionTransformation* _transfo) : transfo(_transfo), use(0) {}
+    ~CachedTransformation() {
         delete transfo;
     }
     bool available() {
@@ -69,8 +65,7 @@ KoColorConversionCache::KoColorConversionCache() : d(new Private)
 
 KoColorConversionCache::~KoColorConversionCache()
 {
-    foreach(CachedTransformation* transfo, d->cache)
-    {
+    foreach(CachedTransformation* transfo, d->cache) {
         delete transfo;
     }
     delete d;
@@ -80,20 +75,17 @@ KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(co
 {
     QMutexLocker lock(&d->cacheMutex);
     KoColorConversionCacheKey key(src, dst, _renderingIntent);
-    QList< CachedTransformation* > cachedTransfos = d->cache.values( key );
-    if(cachedTransfos.size() != 0)
-    {
-        foreach( CachedTransformation* ct, cachedTransfos)
-        {
-            if(ct->available())
-            {
+    QList< CachedTransformation* > cachedTransfos = d->cache.values(key);
+    if (cachedTransfos.size() != 0) {
+        foreach(CachedTransformation* ct, cachedTransfos) {
+            if (ct->available()) {
                 ct->transfo->setSrcColorSpace(src);
                 ct->transfo->setDstColorSpace(dst);
                 return KoCachedColorConversionTransformation(this, ct);
             }
         }
     }
-    KoColorConversionTransformation* transfo = src->createColorConverter( dst, _renderingIntent);
+    KoColorConversionTransformation* transfo = src->createColorConverter(dst, _renderingIntent);
     CachedTransformation* ct = new CachedTransformation(transfo);
     d->cache.insert(key, ct);
     return KoCachedColorConversionTransformation(this, ct);
@@ -103,13 +95,11 @@ void KoColorConversionCache::colorSpaceIsDestroyed(const KoColorSpace* cs)
 {
     QMutexLocker lock(&d->cacheMutex);
     QMultiHash< KoColorConversionCacheKey, CachedTransformation*>::iterator endIt = d->cache.end();
-    for( QMultiHash< KoColorConversionCacheKey, CachedTransformation*>::iterator it = d->cache.begin(); it != endIt; )
-    {
-        if(it.key().src == cs || it.key().dst == cs)
-        {
+    for (QMultiHash< KoColorConversionCacheKey, CachedTransformation*>::iterator it = d->cache.begin(); it != endIt;) {
+        if (it.key().src == cs || it.key().dst == cs) {
             Q_ASSERT(it.value()->available()); // That's terribely evil, if that assert fails, that means that someone is using a color transformation with a color space which is currently being deleted
             delete it.value();
-            it = d->cache.erase( it);
+            it = d->cache.erase(it);
         } else {
             ++it;
         }
@@ -118,8 +108,7 @@ void KoColorConversionCache::colorSpaceIsDestroyed(const KoColorSpace* cs)
 
 //--------- KoCachedColorConversionTransformation ----------//
 
-struct KoCachedColorConversionTransformation::Private
-{
+struct KoCachedColorConversionTransformation::Private {
     KoColorConversionCache* cache;
     KoColorConversionCache::CachedTransformation* transfo;
 };

@@ -29,22 +29,21 @@
  *
  */
 template<class _CSTraits>
-class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
+class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits>
+{
 
 protected:
 
     KoIncompleteColorSpace(const QString &id,
                            const QString &name,
                            const KoColorSpace* fallBack)
-                               : KoColorSpaceAbstract<_CSTraits>(id, name),
-                               m_fallBackColorSpace(fallBack->clone() )
-    {
+            : KoColorSpaceAbstract<_CSTraits>(id, name),
+            m_fallBackColorSpace(fallBack->clone()) {
         m_qcolordata = new quint16[4];
-        m_convertionCache.resize( m_fallBackColorSpace->pixelSize() );
+        m_convertionCache.resize(m_fallBackColorSpace->pixelSize());
     }
 
-    virtual ~KoIncompleteColorSpace()
-    {
+    virtual ~KoIncompleteColorSpace() {
         delete[] m_qcolordata;
         // XXX: leak this colorspace for now
         //delete m_fallBackColorSpace;
@@ -52,61 +51,59 @@ protected:
 
 public:
 
-    virtual bool hasHighDynamicRange() const { return false; }
-    virtual const KoColorProfile * profile() const { return 0; }
-    virtual KoColorProfile * profile() { return 0; }
+    virtual bool hasHighDynamicRange() const {
+        return false;
+    }
+    virtual const KoColorProfile * profile() const {
+        return 0;
+    }
+    virtual KoColorProfile * profile() {
+        return 0;
+    }
 
-    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile=0) const
-    {
+    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const {
         Q_UNUSED(profile);
         m_qcolordata[3] = 0xFFFF;
-        m_qcolordata[2] = KoColorSpaceMaths<quint8,quint16>::scaleToA( color.red() );
-        m_qcolordata[1] = KoColorSpaceMaths<quint8,quint16>::scaleToA( color.green() );
-        m_qcolordata[0] = KoColorSpaceMaths<quint8,quint16>::scaleToA( color.blue() );
+        m_qcolordata[2] = KoColorSpaceMaths<quint8, quint16>::scaleToA(color.red());
+        m_qcolordata[1] = KoColorSpaceMaths<quint8, quint16>::scaleToA(color.green());
+        m_qcolordata[0] = KoColorSpaceMaths<quint8, quint16>::scaleToA(color.blue());
         this->fromRgbA16((const quint8*)m_qcolordata, dst, 1);
         this->setAlpha(dst, color.alpha(), 1);
     }
 
-    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile =0) const
-    {
+    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const {
         Q_UNUSED(profile);
         this->toRgbA16(src, (quint8*)m_qcolordata, 1);
-        c->setRgb(KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[2]),
-                  KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[1]),
-                  KoColorSpaceMaths<quint16,quint8>::scaleToA( m_qcolordata[0]) );
-        c->setAlpha( this->alpha(src) );
+        c->setRgb(KoColorSpaceMaths<quint16, quint8>::scaleToA(m_qcolordata[2]),
+                  KoColorSpaceMaths<quint16, quint8>::scaleToA(m_qcolordata[1]),
+                  KoColorSpaceMaths<quint16, quint8>::scaleToA(m_qcolordata[0]));
+        c->setAlpha(this->alpha(src));
     }
 
-    virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const
-    {
-        return new KoFallBackColorTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createBrightnessContrastAdjustment( transferValues ));
+    virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const {
+        return new KoFallBackColorTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createBrightnessContrastAdjustment(transferValues));
     }
 
 
-    virtual KoColorTransformation *createDesaturateAdjustment() const
-    {
+    virtual KoColorTransformation *createDesaturateAdjustment() const {
         return new KoFallBackColorTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createDesaturateAdjustment());
     }
 
-    virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const* transferValues) const
-    {
-        return new KoFallBackColorTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createPerChannelAdjustment( transferValues ));
+    virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const* transferValues) const {
+        return new KoFallBackColorTransformation(this, m_fallBackColorSpace, m_fallBackColorSpace->createPerChannelAdjustment(transferValues));
     }
 
-    virtual quint8 difference(const quint8* src1U8, const quint8* src2U8) const
-    {
+    virtual quint8 difference(const quint8* src1U8, const quint8* src2U8) const {
         const typename _CSTraits::channels_type* src1 = _CSTraits::nativeArray(src1U8);
         const typename _CSTraits::channels_type* src2 = _CSTraits::nativeArray(src2U8);
         typename _CSTraits::channels_type count = 0;
-        for(uint i = 0; i < this->colorChannelCount(); i++)
-        {
+        for (uint i = 0; i < this->colorChannelCount(); i++) {
             typename _CSTraits::channels_type d = qAbs(src2[i] - src1[i]);
-            if( d > count)
-            {
+            if (d > count) {
                 count = d;
             }
         }
-        return KoColorSpaceMaths<typename _CSTraits::channels_type,quint8>::scaleToA(count );
+        return KoColorSpaceMaths<typename _CSTraits::channels_type, quint8>::scaleToA(count);
     }
 
 private:

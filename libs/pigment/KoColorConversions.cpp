@@ -33,48 +33,45 @@ void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V)
     unsigned char maxValue = 0; // r = 0, g = 1, b = 2
 
     // find maximum and minimum RGB values
-    if(static_cast<unsigned int>(G) > max) {
+    if (static_cast<unsigned int>(G) > max) {
         max = G;
         maxValue = 1;
     }
-    
-    if (static_cast<unsigned int>(B) > max)
-    {
+
+    if (static_cast<unsigned int>(B) > max) {
         max = B;
         maxValue = 2;
     }
 
-    if(static_cast<unsigned int>(G) < min)
+    if (static_cast<unsigned int>(G) < min)
         min = G;
-        
-    if(static_cast<unsigned int>(B) < min )
+
+    if (static_cast<unsigned int>(B) < min)
         min = B;
 
     int delta = max - min;
     *V = max; // value
-    *S = max ? (510 * delta + max) / ( 2 * max) : 0; // saturation
-    
+    *S = max ? (510 * delta + max) / (2 * max) : 0;  // saturation
+
     // calc hue
-    if(*S == 0)
+    if (*S == 0)
         *H = -1; // undefined hue
-    else
-    {
-        switch(maxValue)
-        {
+    else {
+        switch (maxValue) {
         case 0:  // red
-            if(G >= B)
+            if (G >= B)
                 *H = (120 * (G - B) + delta) / (2 * delta);
             else
                 *H = (120 * (G - B + delta) + delta) / (2 * delta) + 300;
             break;
         case 1:  // green
-            if(B > R)
+            if (B > R)
                 *H = 120 + (120 * (B - R) + delta) / (2 * delta);
             else
                 *H = 60 + (120 * (B - R + delta) + delta) / (2 * delta);
             break;
         case 2:  // blue
-            if(R > G)
+            if (R > G)
                 *H = 240 + (120 * (R - G) + delta) / (2 * delta);
             else
                 *H = 180 + (120 * (R - G + delta) + delta) / (2 * delta);
@@ -96,7 +93,7 @@ void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B)
 
         unsigned int f = H % 60;
         H /= 60;
-        unsigned int p = static_cast<unsigned int>(2*V*(255-S)+255)/510;
+        unsigned int p = static_cast<unsigned int>(2 * V * (255 - S) + 255) / 510;
         unsigned int q, t;
 
         if (H & 1) {
@@ -248,7 +245,7 @@ void rgb_to_hls(quint8 red, quint8 green, quint8 blue, float * hue, float * ligh
 
     max = qMax(r, g);
     max = qMax(max, b);
-    
+
     min = qMin(r, g);
     min = qMin(min, b);
 
@@ -260,29 +257,28 @@ void rgb_to_hls(quint8 red, quint8 green, quint8 blue, float * hue, float * ligh
         // This is a gray, no chroma...
         h = 0;
         s = 0;
-    }
-    else {
-        if ( l < 0.5)
-            s = delta / ( max + min );
+    } else {
+        if (l < 0.5)
+            s = delta / (max + min);
         else
-            s = delta / ( 2 - max - min );
+            s = delta / (2 - max - min);
 
         float delta_r, delta_g, delta_b;
 
-        delta_r = (( max - r ) / 6 ) / delta;
-        delta_g = (( max - g ) / 6 ) / delta;
-        delta_b = (( max - b ) / 6 ) / delta;
+        delta_r = ((max - r) / 6) / delta;
+        delta_g = ((max - g) / 6) / delta;
+        delta_b = ((max - b) / 6) / delta;
 
-        if ( r == max )
+        if (r == max)
             h = delta_b - delta_g;
-        else if ( g == max)
-            h = ( 1.0 / 3 ) + delta_r - delta_b;
-        else if ( b == max)
-            h = ( 2.0 / 3 ) + delta_g - delta_r;
+        else if (g == max)
+            h = (1.0 / 3) + delta_r - delta_b;
+        else if (b == max)
+            h = (2.0 / 3) + delta_g - delta_r;
 
         if (h < 0) h += 1;
         if (h > 1) h += 1;
-        
+
     }
 
     *hue = h * 360;
@@ -292,15 +288,15 @@ void rgb_to_hls(quint8 red, quint8 green, quint8 blue, float * hue, float * ligh
 
 float hue_value(float n1, float n2, float hue)
 {
-    if (hue > 360 )
-        hue = hue -360;
-    else if (hue < 0 )
-        hue = hue +360;
-    if (hue < 60  )
+    if (hue > 360)
+        hue = hue - 360;
+    else if (hue < 0)
+        hue = hue + 360;
+    if (hue < 60)
         return n1 + (((n2 - n1) * hue) / 60);
-    else if (hue < 180 )
+    else if (hue < 180)
         return n2;
-    else if (hue < 240 )
+    else if (hue < 240)
         return n1 + (((n2 - n1) * (240 - hue)) / 60);
     else return n1;
 }
@@ -310,13 +306,13 @@ void hls_to_rgb(float h, float l, float s, quint8 * r, quint8 * g, quint8 * b)
 {
     float m1, m2;
 
-    if (l <= 0.5 )
-        m2 = l * ( 1 + s );
-    else 
+    if (l <= 0.5)
+        m2 = l * (1 + s);
+    else
         m2 = l + s - l * s;
 
     m1 = 2 * l - m2;
-    
+
     *r = (quint8)(hue_value(m1, m2, h + 120) * 255 + 0.5);
     *g = (quint8)(hue_value(m1, m2, h) * 255 + 0.5);
     *b = (quint8)(hue_value(m1, m2, h - 120) * 255 + 0.5);
@@ -355,10 +351,10 @@ void RGBToHSL(float r, float g, float b, float *h, float *s, float *l)
     float vm;
     float r2, g2, b2;
 
-    v = qMax(r,g);
-    v = qMax(v,b);
-    m = qMin(r,g);
-    m = qMin(m,b);
+    v = qMax(r, g);
+    v = qMax(v, b);
+    m = qMin(r, g);
+    m = qMin(m, b);
 
     if ((*l = (m + v) / 2.0) <= 0.0) {
         *h = UNDEFINED_HUE;
@@ -366,7 +362,7 @@ void RGBToHSL(float r, float g, float b, float *h, float *s, float *l)
         return;
     }
     if ((*s = vm = v - m) > 0.0) {
-        *s /= (*l <= 0.5) ? (v + m ) :
+        *s /= (*l <= 0.5) ? (v + m) :
               (2.0 - v - m) ;
     } else {
         *h = UNDEFINED_HUE;
@@ -403,9 +399,9 @@ void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b)
         float fract, vsf, mid1, mid2;
 
         m = l + l - v;
-        sv = (v - m ) / v;
+        sv = (v - m) / v;
         h /= 60.0;
-        sextant = static_cast<int>(h);    
+        sextant = static_cast<int>(h);
         fract = h - sextant;
         vsf = v * sv * fract;
         mid1 = m + vsf;

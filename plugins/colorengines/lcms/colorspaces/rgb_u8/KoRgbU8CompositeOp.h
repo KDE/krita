@@ -57,7 +57,8 @@
 /**
  * Ugly class that contains all rgb composite ops
  */
-class KoRgbU8CompositeOp : public KoCompositeOp {
+class KoRgbU8CompositeOp : public KoCompositeOp
+{
 public:
 
     KoRgbU8CompositeOp(KoColorSpace * cs, const QString& id, const QString& description, const bool userVisible = true);
@@ -89,26 +90,26 @@ private:
     void compositeColor(quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, const quint8 *mask, qint32 maskRowSize, qint32 rows, qint32 columns, quint8 opacity, const QBitArray & channelFlags) const;
     void compositeErase(quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, const quint8 *mask, qint32 maskRowSize, qint32 rows, qint32 columns, quint8 opacity, const QBitArray & channelFlags) const;
 
-    void compositeIn(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeOut(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeAtop(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeXor(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositePlus(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeMinus(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeAdd(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeSubtract(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeDiff(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeBumpmap(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeCopyChannel(quint8 pixel, quint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeCopyRed(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeCopyGreen(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeCopyBlue(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeCopyOpacity(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeClear(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeDissolve(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
-    void compositeCopy(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, const quint8 *mask, qint32 maskRowStride,qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeIn(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeOut(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeAtop(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeXor(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositePlus(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeMinus(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeAdd(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeSubtract(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeDiff(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeBumpmap(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeCopyChannel(quint8 pixel, quint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeCopyRed(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeCopyGreen(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeCopyBlue(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeCopyOpacity(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeClear(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeDissolve(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
+    void compositeCopy(qint32 pixelSize, quint8 *dst, qint32 dstRowSize, const quint8 *src, qint32 srcRowSize, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 cols, quint8 opacity, const QBitArray & channelFlags) const;
 private:
-        quint8 m_pixelSize;
+    quint8 m_pixelSize;
 };
 
 

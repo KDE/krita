@@ -33,15 +33,15 @@ struct KoAbstractGradient::Private {
 };
 
 KoAbstractGradient::KoAbstractGradient(const QString& filename)
-    : KoResource(filename)
-    , d(new Private)
+        : KoResource(filename)
+        , d(new Private)
 {
     d->colorSpace = KoColorSpaceRegistry::instance()->rgb8();
 }
 
 KoAbstractGradient::~KoAbstractGradient()
 {
-   delete d;
+    delete d;
 }
 
 void KoAbstractGradient::colorAt(KoColor&, qreal t) const
@@ -64,7 +64,7 @@ void KoAbstractGradient::setSpread(QGradient::Spread spreadMethod)
     d->spread = spreadMethod;
 }
 
-QGradient::Spread KoAbstractGradient::spread () const
+QGradient::Spread KoAbstractGradient::spread() const
 {
     return d->spread;
 }
@@ -74,7 +74,7 @@ void KoAbstractGradient::setType(QGradient::Type repeatType)
     d->type = repeatType;
 }
 
-QGradient::Type KoAbstractGradient::type () const
+QGradient::Type KoAbstractGradient::type() const
 {
     return d->type;
 }
@@ -84,12 +84,12 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
     QImage image(width, height, QImage::Format_RGB32);
 
     const int checkerSize = 4;
-    const int checkerSize_2 = 2*checkerSize;
+    const int checkerSize_2 = 2 * checkerSize;
     const int darkBackground = 128;
     const int lightBackground = 128 + 63;
 
-    QRgb * lineA = reinterpret_cast<QRgb*>( image.scanLine(0) );
-    QRgb * lineB = reinterpret_cast<QRgb*>( image.scanLine(checkerSize) );
+    QRgb * lineA = reinterpret_cast<QRgb*>(image.scanLine(0));
+    QRgb * lineB = reinterpret_cast<QRgb*>(image.scanLine(checkerSize));
 
     KoColor c;
     QColor color;
@@ -98,7 +98,7 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
 
         qreal t = static_cast<qreal>(x) / (image.width() - 1);
         colorAt(c, t);
-        c.toQColor( &color );
+        c.toQColor(&color);
         const qreal alpha = color.alphaF();
 
         int darkR = static_cast<int>((1 - alpha) * darkBackground + alpha * color.red() + 0.5);
@@ -111,18 +111,18 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
 
         bool defColor = (x % checkerSize_2) < checkerSize;
 
-        if( lineA )
+        if (lineA)
             lineA[x] = defColor ? qRgb(darkR, darkG, darkB) : qRgb(lightR, lightG, lightB);
-        if( lineB )
+        if (lineB)
             lineB[x] = defColor ? qRgb(lightR, lightG, lightB) : qRgb(darkR, darkG, darkB);
     }
 
     int bytesPerLine = image.bytesPerLine();
 
     // now copy lines accordingly
-    for (int y = 0; y < image.height(); ++y ) {
+    for (int y = 0; y < image.height(); ++y) {
         bool firstLine = (y % checkerSize_2) < checkerSize;
-        QRgb * line = reinterpret_cast<QRgb*>( image.scanLine(y) );
+        QRgb * line = reinterpret_cast<QRgb*>(image.scanLine(y));
         if (line == lineA || line == lineB)
             continue;
 
@@ -139,5 +139,5 @@ QImage KoAbstractGradient::image() const
 
 void KoAbstractGradient::updatePreview()
 {
-    d->image = generatePreview( PREVIEW_WIDTH, PREVIEW_HEIGHT );
+    d->image = generatePreview(PREVIEW_WIDTH, PREVIEW_HEIGHT);
 }

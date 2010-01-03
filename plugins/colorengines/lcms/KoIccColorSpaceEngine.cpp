@@ -30,59 +30,57 @@
 
 // -- KoLcmsColorConversionTransformation --
 
-class KoLcmsColorConversionTransformation : public KoColorConversionTransformation {
-    public:
-        KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, KoLcmsColorProfileContainer* srcProfile, const KoColorSpace* dstCs, quint32 dstColorSpaceType, KoLcmsColorProfileContainer* dstProfile, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0)
-        {
-            m_transform = this->createTransform(
-                            srcColorSpaceType,
-                            srcProfile,
-                            dstColorSpaceType,
-                            dstProfile,
-                            renderingIntent);
-        }
-        ~KoLcmsColorConversionTransformation()
-        {
-            cmsDeleteTransform( m_transform );
-        }
-    public:
-        virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
-        {
-            Q_ASSERT(m_transform);
+class KoLcmsColorConversionTransformation : public KoColorConversionTransformation
+{
+public:
+    KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, KoLcmsColorProfileContainer* srcProfile, const KoColorSpace* dstCs, quint32 dstColorSpaceType, KoLcmsColorProfileContainer* dstProfile, Intent renderingIntent = IntentPerceptual) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0) {
+        m_transform = this->createTransform(
+                          srcColorSpaceType,
+                          srcProfile,
+                          dstColorSpaceType,
+                          dstProfile,
+                          renderingIntent);
+    }
+    ~KoLcmsColorConversionTransformation() {
+        cmsDeleteTransform(m_transform);
+    }
+public:
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const {
+        Q_ASSERT(m_transform);
 
-            qint32 srcPixelSize = srcColorSpace()->pixelSize();
-            qint32 dstPixelSize = dstColorSpace()->pixelSize();
+        qint32 srcPixelSize = srcColorSpace()->pixelSize();
+        qint32 dstPixelSize = dstColorSpace()->pixelSize();
 
-            cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
+        cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
 
         // Lcms does nothing to the destination alpha channel so we must convert that manually.
-            while (numPixels > 0) {
-                quint8 alpha = srcColorSpace()->alpha(src);
-                dstColorSpace()->setAlpha(dst, alpha, 1);
+        while (numPixels > 0) {
+            quint8 alpha = srcColorSpace()->alpha(src);
+            dstColorSpace()->setAlpha(dst, alpha, 1);
 
-                src += srcPixelSize;
-                dst += dstPixelSize;
-                numPixels--;
-            }
-
+            src += srcPixelSize;
+            dst += dstPixelSize;
+            numPixels--;
         }
-    private:
-        cmsHTRANSFORM createTransform(
-                quint32 srcColorSpaceType,
-                KoLcmsColorProfileContainer *  srcProfile,
-                quint32 dstColorSpaceType,
-                KoLcmsColorProfileContainer *  dstProfile,
-                qint32 renderingIntent) const;
-    private:
-        mutable cmsHTRANSFORM m_transform;
-};
 
-cmsHTRANSFORM KoLcmsColorConversionTransformation::createTransform(
+    }
+private:
+    cmsHTRANSFORM createTransform(
         quint32 srcColorSpaceType,
         KoLcmsColorProfileContainer *  srcProfile,
         quint32 dstColorSpaceType,
         KoLcmsColorProfileContainer *  dstProfile,
-        qint32 renderingIntent) const
+        qint32 renderingIntent) const;
+private:
+    mutable cmsHTRANSFORM m_transform;
+};
+
+cmsHTRANSFORM KoLcmsColorConversionTransformation::createTransform(
+    quint32 srcColorSpaceType,
+    KoLcmsColorProfileContainer *  srcProfile,
+    quint32 dstColorSpaceType,
+    KoLcmsColorProfileContainer *  dstProfile,
+    qint32 renderingIntent) const
 {
     KConfigGroup cfg = KGlobal::config()->group("");
     bool bpCompensation = cfg.readEntry("useBlackPointCompensation", false);
@@ -93,11 +91,11 @@ cmsHTRANSFORM KoLcmsColorConversionTransformation::createTransform(
         flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
     }
     cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
-            srcColorSpaceType,
-            dstProfile->lcmsProfile(),
-            dstColorSpaceType,
-            renderingIntent,
-            flags);
+                                          srcColorSpaceType,
+                                          dstProfile->lcmsProfile(),
+                                          dstColorSpaceType,
+                                          renderingIntent,
+                                          flags);
 
     return tf;
 }
@@ -115,12 +113,12 @@ KoIccColorSpaceEngine::~KoIccColorSpaceEngine()
     delete d;
 }
 
-KoColorConversionTransformation* KoIccColorSpaceEngine::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent ) const
+KoColorConversionTransformation* KoIccColorSpaceEngine::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
 {
     return new KoLcmsColorConversionTransformation(
-            srcColorSpace, computeColorSpaceType( srcColorSpace ),
-            dynamic_cast<const KoIccColorProfile*>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType( dstColorSpace ),
-            dynamic_cast<const KoIccColorProfile*>(dstColorSpace->profile())->asLcms(), renderingIntent);
+               srcColorSpace, computeColorSpaceType(srcColorSpace),
+               dynamic_cast<const KoIccColorProfile*>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
+               dynamic_cast<const KoIccColorProfile*>(dstColorSpace->profile())->asLcms(), renderingIntent);
 
 }
 quint32 KoIccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) const
@@ -129,10 +127,9 @@ quint32 KoIccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) con
     QString depthId = cs->colorDepthId().id();
     // Compute the depth part of the type
     quint32 depthType;
-    if(depthId == Integer8BitsColorDepthID.id())
-    {
+    if (depthId == Integer8BitsColorDepthID.id()) {
         depthType = BYTES_SH(1);
-    } else if(depthId == Integer16BitsColorDepthID.id()) {
+    } else if (depthId == Integer16BitsColorDepthID.id()) {
         depthType = BYTES_SH(2);
     } else {
         dbgPigmentCS << "Unknow bit depth";
@@ -140,30 +137,23 @@ quint32 KoIccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) con
     }
     // Compute the model part of the type
     quint32 modelType;
-    if(modelId == RGBAColorModelID.id())
-    {
-        modelType = (COLORSPACE_SH(PT_RGB)|EXTRA_SH(1)|CHANNELS_SH(3)|DOSWAP_SH(1)|SWAPFIRST_SH(1));
-    } else if(modelId == XYZAColorModelID.id())
-    {
-        modelType = (COLORSPACE_SH(PT_XYZ)|EXTRA_SH(1)|CHANNELS_SH(3));
-    } else if(modelId == LABAColorModelID.id())
-    {
-        modelType = (COLORSPACE_SH(PT_Lab)|EXTRA_SH(1)|CHANNELS_SH(3));
-    } else if(modelId == CMYKAColorModelID.id())
-    {
-        modelType = (COLORSPACE_SH(PT_CMYK)|EXTRA_SH(1)|CHANNELS_SH(4));
-    } else if(modelId == GrayAColorModelID.id())
-    {
-        modelType = (COLORSPACE_SH(PT_GRAY)|EXTRA_SH(1)|CHANNELS_SH(1));
-    } else if(modelId == GrayColorModelID.id())
-    {
-        modelType = (COLORSPACE_SH(PT_GRAY)|CHANNELS_SH(1));
-    } else if(modelId == YCbCrAColorModelID.id())
-    {
-        modelType = (COLORSPACE_SH(PT_YCbCr)|EXTRA_SH(1)|CHANNELS_SH(3));
+    if (modelId == RGBAColorModelID.id()) {
+        modelType = (COLORSPACE_SH(PT_RGB) | EXTRA_SH(1) | CHANNELS_SH(3) | DOSWAP_SH(1) | SWAPFIRST_SH(1));
+    } else if (modelId == XYZAColorModelID.id()) {
+        modelType = (COLORSPACE_SH(PT_XYZ) | EXTRA_SH(1) | CHANNELS_SH(3));
+    } else if (modelId == LABAColorModelID.id()) {
+        modelType = (COLORSPACE_SH(PT_Lab) | EXTRA_SH(1) | CHANNELS_SH(3));
+    } else if (modelId == CMYKAColorModelID.id()) {
+        modelType = (COLORSPACE_SH(PT_CMYK) | EXTRA_SH(1) | CHANNELS_SH(4));
+    } else if (modelId == GrayAColorModelID.id()) {
+        modelType = (COLORSPACE_SH(PT_GRAY) | EXTRA_SH(1) | CHANNELS_SH(1));
+    } else if (modelId == GrayColorModelID.id()) {
+        modelType = (COLORSPACE_SH(PT_GRAY) | CHANNELS_SH(1));
+    } else if (modelId == YCbCrAColorModelID.id()) {
+        modelType = (COLORSPACE_SH(PT_YCbCr) | EXTRA_SH(1) | CHANNELS_SH(3));
     } else {
         dbgPigmentCS << "Unknow color model";
         return 0;
     }
-    return depthType|modelType;
+    return depthType | modelType;
 }

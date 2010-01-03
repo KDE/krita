@@ -37,21 +37,21 @@
 #include "../compositeops/KoCompositeOpBurn.h"
 
 KoLabColorSpace::KoLabColorSpace() :
-    KoSimpleColorSpace<KoLabU16Traits>("LABA",
-                                       i18n("L*a*b* (16-bit integer/channel, unmanaged)"),
-                                       LABAColorModelID,
-                                       Integer16BitsColorDepthID)
+        KoSimpleColorSpace<KoLabU16Traits>("LABA",
+                                           i18n("L*a*b* (16-bit integer/channel, unmanaged)"),
+                                           LABAColorModelID,
+                                           Integer16BitsColorDepthID)
 {
-    addChannel(new KoChannelInfo(i18n("Lightness"), CHANNEL_L     * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(100,100,100)));
-    addChannel(new KoChannelInfo(i18n("a*"),        CHANNEL_A     * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(150,150,150)));
-    addChannel(new KoChannelInfo(i18n("b*"),        CHANNEL_B     * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(200,200,200)));
+    addChannel(new KoChannelInfo(i18n("Lightness"), CHANNEL_L     * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(100, 100, 100)));
+    addChannel(new KoChannelInfo(i18n("a*"),        CHANNEL_A     * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(150, 150, 150)));
+    addChannel(new KoChannelInfo(i18n("b*"),        CHANNEL_B     * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(200, 200, 200)));
     addChannel(new KoChannelInfo(i18n("Alpha"),     CHANNEL_ALPHA * sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
 
-    addCompositeOp( new KoCompositeOpOver<KoLabU16Traits>( this ) );
-    addCompositeOp( new KoCompositeOpErase<KoLabU16Traits>( this ) );
-    addCompositeOp( new KoCompositeOpMultiply<KoLabU16Traits>( this ) );
-    addCompositeOp( new KoCompositeOpDivide<KoLabU16Traits>( this ) );
-    addCompositeOp( new KoCompositeOpBurn<KoLabU16Traits>( this ) );
+    addCompositeOp(new KoCompositeOpOver<KoLabU16Traits>(this));
+    addCompositeOp(new KoCompositeOpErase<KoLabU16Traits>(this));
+    addCompositeOp(new KoCompositeOpMultiply<KoLabU16Traits>(this));
+    addCompositeOp(new KoCompositeOpDivide<KoLabU16Traits>(this));
+    addCompositeOp(new KoCompositeOpBurn<KoLabU16Traits>(this));
 
 }
 
@@ -80,9 +80,9 @@ void KoLabColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfi
 }
 
 bool KoLabColorSpace::convertPixelsTo(const quint8 *src,
-                     quint8 *dst, const KoColorSpace * dstColorSpace,
-                     quint32 numPixels,
-                     KoColorConversionTransformation::Intent /*renderingIntent*/) const
+                                      quint8 *dst, const KoColorSpace * dstColorSpace,
+                                      quint32 numPixels,
+                                      KoColorConversionTransformation::Intent /*renderingIntent*/) const
 {
 }
 
@@ -107,16 +107,15 @@ void KoLabColorSpace::fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels
 }
 
 QImage KoLabColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile * /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
+                                        const KoColorProfile * /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
 {
     QImage img(width, height, QImage::Format_Indexed8);
     QVector<QRgb> table;
-    for(int i = 0; i < 255; ++i) table.append(qRgb(i,i,i));
+    for (int i = 0; i < 255; ++i) table.append(qRgb(i, i, i));
     img.setColorTable(table);
 
     quint8* data_img = img.bits();
-    for( int i = 0; i < width * height; ++i)
-    {
+    for (int i = 0; i < width * height; ++i) {
         data_img[i] = data[i];
     }
     return img;

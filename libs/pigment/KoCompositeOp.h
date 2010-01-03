@@ -76,7 +76,8 @@ const QString COMPOSITE_UNDEF = "underfined";
 /**
  * Base for colorspace-specific blending modes.
  */
-class PIGMENTCMS_EXPORT KoCompositeOp {
+class PIGMENTCMS_EXPORT KoCompositeOp
+{
 public:
     static QString categoryMix();
     static QString categoryLight();
@@ -116,7 +117,7 @@ public:
      * @return the category associated with the composite op
      */
     QString category() const;
-    
+
     /**
       @param dstRowStart pointer to the start of the byte array we will composite the source on
       @param dstRowStride length of the rows of the block of destination pixels in bytes
@@ -132,10 +133,10 @@ public:
       @param opacity transparency with which to blend
     */
     virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-               const quint8 *srcRowStart, qint32 srcRowStride,
-               const quint8 *maskRowStart, qint32 maskRowStride,
-               qint32 rows, qint32 numColumns,
-               quint8 opacity) const;
+                           const quint8 *srcRowStart, qint32 srcRowStride,
+                           const quint8 *maskRowStart, qint32 maskRowStride,
+                           qint32 rows, qint32 numColumns,
+                           quint8 opacity) const;
 
     /**
      * Same as previous, but with a bit array that determines which channels
@@ -148,15 +149,15 @@ public:
      * only the gray channel is copied.
      */
     virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-               const quint8 *srcRowStart, qint32 srcRowStride,
-               const quint8 *maskRowStart, qint32 maskRowStride,
-               qint32 rows, qint32 numColumns,
-               quint8 opacity,
-               const QBitArray & channelFlags) const = 0;
-    private:
-        KoCompositeOp();
-        struct Private;
-        Private* const d;
+                           const quint8 *srcRowStart, qint32 srcRowStride,
+                           const quint8 *maskRowStart, qint32 maskRowStride,
+                           qint32 rows, qint32 numColumns,
+                           quint8 opacity,
+                           const QBitArray & channelFlags) const = 0;
+private:
+    KoCompositeOp();
+    struct Private;
+    Private* const d;
 };
 
 #endif // KOCOMPOSITEOP_H

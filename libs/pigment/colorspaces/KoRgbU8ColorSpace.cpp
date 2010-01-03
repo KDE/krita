@@ -38,14 +38,14 @@
 
 KoRgbU8ColorSpace::KoRgbU8ColorSpace() :
 
-    KoSimpleColorSpace<KoRgbU8Traits>(colorSpaceId(),
-                                                i18n("RGB (8-bit integer/channel)"),
-                                                RGBAColorModelID,
-                                                Integer8BitsColorDepthID)
+        KoSimpleColorSpace<KoRgbU8Traits>(colorSpaceId(),
+                                          i18n("RGB (8-bit integer/channel)"),
+                                          RGBAColorModelID,
+                                          Integer8BitsColorDepthID)
 {
-    addChannel(new KoChannelInfo(i18n("Red"),   2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255,0,0)));
-    addChannel(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,255,0)));
-    addChannel(new KoChannelInfo(i18n("Blue"),  0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,0,255)));
+    addChannel(new KoChannelInfo(i18n("Red"),   2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255, 0, 0)));
+    addChannel(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 255, 0)));
+    addChannel(new KoChannelInfo(i18n("Blue"),  0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 0, 255)));
     addChannel(new KoChannelInfo(i18n("Alpha"), 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
 
     // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
@@ -79,9 +79,9 @@ void KoRgbU8ColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorPro
 }
 
 bool KoRgbU8ColorSpace::convertPixelsTo(const quint8 *src,
-                     quint8 *dst, const KoColorSpace * dstColorSpace,
-                     quint32 numPixels,
-                     KoColorConversionTransformation::Intent /*renderingIntent*/) const
+                                        quint8 *dst, const KoColorSpace * dstColorSpace,
+                                        quint32 numPixels,
+                                        KoColorConversionTransformation::Intent /*renderingIntent*/) const
 {
 }
 
@@ -106,16 +106,15 @@ void KoRgbU8ColorSpace::fromRgbA16(const quint8* src, quint8* dst, quint32 nPixe
 }
 
 QImage KoRgbU8ColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile * /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
+        const KoColorProfile * /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
 {
     QImage img(width, height, QImage::Format_Indexed8);
     QVector<QRgb> table;
-    for(int i = 0; i < 255; ++i) table.append(qRgb(i,i,i));
+    for (int i = 0; i < 255; ++i) table.append(qRgb(i, i, i));
     img.setColorTable(table);
 
     quint8* data_img = img.bits();
-    for( int i = 0; i < width * height; ++i)
-    {
+    for (int i = 0; i < width * height; ++i) {
         data_img[i] = data[i];
     }
     return img;

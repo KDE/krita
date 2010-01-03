@@ -20,27 +20,27 @@
 #include "KoColorTransformationFactory.h"
 
 struct KoColorTransformationFactory::Private {
-  QString id;
-  QString name;
+    QString id;
+    QString name;
 };
 
-KoColorTransformationFactory::KoColorTransformationFactory(QString id, QString name ) : d(new Private)
+KoColorTransformationFactory::KoColorTransformationFactory(QString id, QString name) : d(new Private)
 {
-  d->id = id;
-  d->name = name;
+    d->id = id;
+    d->name = name;
 }
 
 KoColorTransformationFactory::~KoColorTransformationFactory()
 {
-  delete d;
+    delete d;
 }
 
 QString KoColorTransformationFactory::id() const
 {
-  return d->id;
+    return d->id;
 }
 
 QString KoColorTransformationFactory::name() const
 {
-  return d->name;
+    return d->name;
 }

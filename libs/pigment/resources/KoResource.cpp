@@ -33,7 +33,7 @@ KoResource::KoResource(const QString& filename) : d(new Private)
 {
     d->filename = filename;
     d->valid = false;
-    QFileInfo fileInfo( filename );
+    QFileInfo fileInfo(filename);
     d->removable = fileInfo.isWritable();
 }
 
@@ -50,7 +50,7 @@ QString KoResource::filename() const
 void KoResource::setFilename(const QString& filename)
 {
     d->filename = filename;
-    QFileInfo fileInfo( filename );
+    QFileInfo fileInfo(filename);
     d->removable = ! fileInfo.exists() || fileInfo.isWritable();
 }
 

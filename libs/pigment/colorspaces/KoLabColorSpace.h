@@ -32,7 +32,8 @@
 /**
  * Basic and simple implementation of the LAB colorspace
  */
-class KoLabColorSpace : public KoSimpleColorSpace<KoLabU16Traits> {
+class KoLabColorSpace : public KoSimpleColorSpace<KoLabU16Traits>
+{
 
 public:
 
@@ -62,7 +63,7 @@ public:
     virtual bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual ) const;
+                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
 
 
 private:
@@ -78,22 +79,21 @@ private:
 
 };
 
-class KoLabColorSpaceFactory : public KoSimpleColorSpaceFactory {
+class KoLabColorSpaceFactory : public KoSimpleColorSpaceFactory
+{
 
 public:
 
     KoLabColorSpaceFactory()
-        : KoSimpleColorSpaceFactory("LABA",
-                                    i18n("L*a*b* (16-bit integer/channel, unmanaged)"),
-                                    true,
-                                    LABAColorModelID,
-                                    Integer16BitsColorDepthID,
-                                    16)
-    {
+            : KoSimpleColorSpaceFactory("LABA",
+                                        i18n("L*a*b* (16-bit integer/channel, unmanaged)"),
+                                        true,
+                                        LABAColorModelID,
+                                        Integer16BitsColorDepthID,
+                                        16) {
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const
-    {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const {
         return new KoLabColorSpace();
     }
 

@@ -29,8 +29,8 @@
 #include "compositeops/KoCompositeOpDivide.h"
 #include "compositeops/KoCompositeOpBurn.h"
 
-KoCmykU16ColorSpace::KoCmykU16ColorSpace( KoColorProfile *p) :
- KoLcmsColorSpace<CmykU16Traits>("CMYKA16", i18n("CMYK (16-bit integer/channel)"),  TYPE_CMYK5_16, icSigCmykData, p)
+KoCmykU16ColorSpace::KoCmykU16ColorSpace(KoColorProfile *p) :
+        KoLcmsColorSpace<CmykU16Traits>("CMYKA16", i18n("CMYK (16-bit integer/channel)"),  TYPE_CMYK5_16, icSigCmykData, p)
 {
     addChannel(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
     addChannel(new KoChannelInfo(i18n("Magenta"), 1 * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::magenta));
@@ -38,17 +38,17 @@ KoCmykU16ColorSpace::KoCmykU16ColorSpace( KoColorProfile *p) :
     addChannel(new KoChannelInfo(i18n("Black"), 3 * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::black));
     addChannel(new KoChannelInfo(i18n("Alpha"), 4 * sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
     init();
-    
-    addCompositeOp( new KoCompositeOpOver<CmykU16Traits>( this ) );
-    addCompositeOp( new KoCompositeOpErase<CmykU16Traits>( this ) );
-    addCompositeOp( new KoCompositeOpMultiply<CmykU16Traits>( this ) );
-    addCompositeOp( new KoCompositeOpDivide<CmykU16Traits>( this ) );
-    addCompositeOp( new KoCompositeOpBurn<CmykU16Traits>( this ) );
+
+    addCompositeOp(new KoCompositeOpOver<CmykU16Traits>(this));
+    addCompositeOp(new KoCompositeOpErase<CmykU16Traits>(this));
+    addCompositeOp(new KoCompositeOpMultiply<CmykU16Traits>(this));
+    addCompositeOp(new KoCompositeOpDivide<CmykU16Traits>(this));
+    addCompositeOp(new KoCompositeOpBurn<CmykU16Traits>(this));
 }
 
 bool KoCmykU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
-    if (independence == TO_RGBA8) 
+    if (independence == TO_RGBA8)
         return true;
     else
         return false;
@@ -56,24 +56,24 @@ bool KoCmykU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 
 KoColorSpace* KoCmykU16ColorSpace::clone() const
 {
-    return new KoCmykU16ColorSpace( profile()->clone());
+    return new KoCmykU16ColorSpace(profile()->clone());
 }
 
-void KoCmykU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void KoCmykU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
 {
-    const CmykU16Traits::Pixel* p = reinterpret_cast<const CmykU16Traits::Pixel*>( pixel );
-    QDomElement labElt = doc.createElement( "CMYK" );
-    labElt.setAttribute("c", KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA( p->cyan) );
-    labElt.setAttribute("m", KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA( p->magenta) );
-    labElt.setAttribute("y", KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA( p->yellow) );
-    labElt.setAttribute("k", KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA( p->black) );
-    labElt.setAttribute("space", profile()->name() );
-    colorElt.appendChild( labElt );
+    const CmykU16Traits::Pixel* p = reinterpret_cast<const CmykU16Traits::Pixel*>(pixel);
+    QDomElement labElt = doc.createElement("CMYK");
+    labElt.setAttribute("c", KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA(p->cyan));
+    labElt.setAttribute("m", KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA(p->magenta));
+    labElt.setAttribute("y", KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA(p->yellow));
+    labElt.setAttribute("k", KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA(p->black));
+    labElt.setAttribute("space", profile()->name());
+    colorElt.appendChild(labElt);
 }
 
-void KoCmykU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
+void KoCmykU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
 {
-    CmykU16Traits::Pixel* p = reinterpret_cast<CmykU16Traits::Pixel*>( pixel );
+    CmykU16Traits::Pixel* p = reinterpret_cast<CmykU16Traits::Pixel*>(pixel);
     p->cyan = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(elt.attribute("c").toDouble());
     p->magenta = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(elt.attribute("m").toDouble());
     p->yellow = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());

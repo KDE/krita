@@ -31,7 +31,8 @@
 #include "DebugPigment.h"
 #include "KoChromaticities.h"
 
-class KoLcmsColorProfileContainer::Private {
+class KoLcmsColorProfileContainer::Private
+{
 public:
     Private() : valid(false), suitableForOutput(false) { }
 
@@ -49,13 +50,13 @@ public:
 };
 
 KoLcmsColorProfileContainer::KoLcmsColorProfileContainer()
-    : d(new Private())
+        : d(new Private())
 {
     d->profile = 0;
 }
 
-KoLcmsColorProfileContainer::KoLcmsColorProfileContainer( KoIccColorProfile::Data * data)
-    : d(new Private())
+KoLcmsColorProfileContainer::KoLcmsColorProfileContainer(KoIccColorProfile::Data * data)
+        : d(new Private())
 {
     d->data = data;
     d->profile = 0;
@@ -69,12 +70,9 @@ QByteArray KoLcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE
     _cmsSaveProfileToMem(profile, 0, &bytesNeeded); // calc size
     QByteArray rawData;
     rawData.resize(bytesNeeded);
-    if(rawData.size() >= (int)bytesNeeded)
-    {
+    if (rawData.size() >= (int)bytesNeeded) {
         _cmsSaveProfileToMem(profile, rawData.data(), &bytesNeeded); // fill buffer
-    }
-    else
-    {
+    } else {
         errorPigment << "Couldn't resize the profile buffer, system is probably running out of memory.";
         rawData.resize(0);
     }
@@ -83,15 +81,15 @@ QByteArray KoLcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE
 
 KoIccColorProfile* KoLcmsColorProfileContainer::createFromLcmsProfile(const cmsHPROFILE profile)
 {
-    KoIccColorProfile* iccprofile = new KoIccColorProfile( lcmsProfileToByteArray(profile) );
+    KoIccColorProfile* iccprofile = new KoIccColorProfile(lcmsProfileToByteArray(profile));
     cmsCloseProfile(profile);
     return iccprofile;
 }
 
 #define lcmsToPigmentViceVersaStructureCopy(dst, src  ) \
- dst .x = src .x; \
- dst .y = src .y; \
- dst .Y = src .Y;
+    dst .x = src .x; \
+    dst .y = src .y; \
+    dst .Y = src .Y;
 
 QByteArray KoLcmsColorProfileContainer::createFromChromacities(const KoRGBChromaticities& _chromacities, qreal gamma, QString _profileName)
 {
@@ -112,20 +110,20 @@ QByteArray KoLcmsColorProfileContainer::createFromChromacities(const KoRGBChroma
     }
 
     cmsHPROFILE profile = cmsCreateRGBProfile(&whitePoint, &primaries,
-                                              transferFunctions);
+                          transferFunctions);
     QString name = _profileName;
 
     if (name.isEmpty()) {
         name = QString("lcms virtual RGB profile - R(%1, %2) G(%3, %4) B(%5, %6) W(%7, %8) gamma %9")
-                                   .arg(primaries.Red.x)
-                                   .arg(primaries.Red.y)
-                                   .arg(primaries.Green.x)
-                                   .arg(primaries.Green.y)
-                                   .arg(primaries.Blue.x)
-                                   .arg(primaries.Blue.y)
-                                   .arg(whitePoint.x)
-                                   .arg(whitePoint.y)
-                                   .arg(gamma);
+               .arg(primaries.Red.x)
+               .arg(primaries.Red.y)
+               .arg(primaries.Green.x)
+               .arg(primaries.Green.y)
+               .arg(primaries.Blue.x)
+               .arg(primaries.Blue.y)
+               .arg(whitePoint.x)
+               .arg(whitePoint.y)
+               .arg(gamma);
     }
 
     // icSigProfileDescriptionTag is the compulsory tag and is the profile name
@@ -152,13 +150,13 @@ KoLcmsColorProfileContainer::~KoLcmsColorProfileContainer()
 
 bool KoLcmsColorProfileContainer::init()
 {
-    if( d->profile ) cmsCloseProfile(d->profile);
+    if (d->profile) cmsCloseProfile(d->profile);
 
     d->profile = cmsOpenProfileFromMem((void*)d->data->rawData().constData(), (DWORD)d->data->rawData().size());
 
 #ifndef NDEBUG
     if (d->data->rawData().size() == 4096) {
-      warnPigment << "Profile has a size of 4096, which is suspicious and indicates a possible misuse of QIODevice::read(int), check your code.";
+        warnPigment << "Profile has a size of 4096, which is suspicious and indicates a possible misuse of QIODevice::read(int), check your code.";
     }
 #endif
 
@@ -182,13 +180,16 @@ bool KoLcmsColorProfileContainer::init()
 #if 0
         cmsCIEXYZTRIPLE Primaries;
 
-        if (cmsTakeColorants(&Primaries, d->profile))
-        {
+        if (cmsTakeColorants(&Primaries, d->profile)) {
             d->suitableForOutput = true;
         }
 #endif
-        if( cmsIsTag( d->profile, icSigAToB0Tag) and cmsIsTag( d->profile, icSigAToB1Tag ) and cmsIsTag( d->profile, icSigAToB2Tag ) and cmsIsTag( d->profile, icSigBToA0Tag ) and cmsIsTag( d->profile, icSigBToA1Tag) and cmsIsTag( d->profile, icSigBToA2Tag ) )
-        {
+        if (cmsIsTag(d->profile, icSigAToB0Tag)  &&
+                cmsIsTag(d->profile, icSigAToB1Tag) &&
+                cmsIsTag(d->profile, icSigAToB2Tag) &&
+                cmsIsTag(d->profile, icSigBToA0Tag) &&
+                cmsIsTag(d->profile, icSigBToA1Tag)  &&
+                cmsIsTag(d->profile, icSigBToA2Tag)) {
             d->suitableForOutput = true;
         } else {
             d->suitableForOutput = false;
@@ -201,50 +202,59 @@ bool KoLcmsColorProfileContainer::init()
 cmsHPROFILE KoLcmsColorProfileContainer::lcmsProfile() const
 {
 #if 0
-	if (d->profile = 0) {
-	    QFile file(d->filename);
-	    file.open(QIODevice::ReadOnly);
-	    d->rawData = file.readAll();
-	    d->profile = cmsOpenProfileFromMem((void*)d->rawData.constData(), (DWORD)d->rawData.size());
+    if (d->profile = 0) {
+        QFile file(d->filename);
+        file.open(QIODevice::ReadOnly);
+        d->rawData = file.readAll();
+        d->profile = cmsOpenProfileFromMem((void*)d->rawData.constData(), (DWORD)d->rawData.size());
         file.close();
-	}
+    }
 #endif
-	return d->profile;
+    return d->profile;
 }
 
-icColorSpaceSignature KoLcmsColorProfileContainer::colorSpaceSignature() const {
+icColorSpaceSignature KoLcmsColorProfileContainer::colorSpaceSignature() const
+{
     return d->colorSpaceSignature;
 }
 
-icProfileClassSignature KoLcmsColorProfileContainer::deviceClass() const {
+icProfileClassSignature KoLcmsColorProfileContainer::deviceClass() const
+{
     return d->deviceClass;
 }
 
-QString KoLcmsColorProfileContainer::productDescription() const {
+QString KoLcmsColorProfileContainer::productDescription() const
+{
     return d->productDescription;
 }
 
-QString KoLcmsColorProfileContainer::productInfo() const {
+QString KoLcmsColorProfileContainer::productInfo() const
+{
     return d->productInfo;
 }
 
-QString KoLcmsColorProfileContainer::manufacturer() const {
+QString KoLcmsColorProfileContainer::manufacturer() const
+{
     return d->manufacturer;
 }
 
-bool KoLcmsColorProfileContainer::valid() const {
+bool KoLcmsColorProfileContainer::valid() const
+{
     return d->valid;
 }
 
-bool KoLcmsColorProfileContainer::isSuitableForOutput() const {
+bool KoLcmsColorProfileContainer::isSuitableForOutput() const
+{
     return d->suitableForOutput;
 }
 
-bool KoLcmsColorProfileContainer::isSuitableForPrinting() const {
+bool KoLcmsColorProfileContainer::isSuitableForPrinting() const
+{
     return deviceClass() == icSigOutputClass;
 }
 
-bool KoLcmsColorProfileContainer::isSuitableForDisplay() const {
+bool KoLcmsColorProfileContainer::isSuitableForDisplay() const
+{
     return deviceClass() == icSigDisplayClass;
 }
 
@@ -266,7 +276,7 @@ static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, qreal red, qreal green, qreal bl
     const DWORD transformFlags = cmsFLAGS_NOTPRECALC;
 
     cmsHTRANSFORM transform = cmsCreateTransform(RGBProfile, inputFormat, XYZProfile, outputFormat,
-                                                 INTENT_ABSOLUTE_COLORIMETRIC, transformFlags);
+                              INTENT_ABSOLUTE_COLORIMETRIC, transformFlags);
 
     struct XYZPixel {
         qreal X;
@@ -303,13 +313,13 @@ static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, qreal red, qreal green, qreal bl
     cmsDeleteTransform(transform);
     cmsCloseProfile(XYZProfile);
     KoCIExyY res;
-    lcmsToPigmentViceVersaStructureCopy( res, xyzPixelxyY);
+    lcmsToPigmentViceVersaStructureCopy(res, xyzPixelxyY);
     return res;
 }
 
 KoRGBChromaticities* KoLcmsColorProfileContainer::chromaticitiesFromProfile() const
 {
-    if(cmsGetColorSpace(d->profile) != icSigRgbData) return 0;
+    if (cmsGetColorSpace(d->profile) != icSigRgbData) return 0;
 
     KoRGBChromaticities* chromaticities = new KoRGBChromaticities();
 

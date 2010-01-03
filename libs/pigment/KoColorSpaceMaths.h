@@ -43,60 +43,65 @@
  *   a higher bit depth)
  */
 template<typename _T>
-class KoColorSpaceMathsTraits {
-    public:
+class KoColorSpaceMathsTraits
+{
+public:
 };
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint8> {
-    public:
-        typedef qint32 compositetype;
-        static const quint8 zeroValue = 0;
-        static const quint8 unitValue = 0x00FF;
-        static const quint8 max = 0x00FF;
-        static const quint8 min = 0;
-        static const quint8 epsilon = 1;
-        static const qint8 bits = 8;
-        static const KoChannelInfo::enumChannelValueType channelValueType;
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint8>
+{
+public:
+    typedef qint32 compositetype;
+    static const quint8 zeroValue = 0;
+    static const quint8 unitValue = 0x00FF;
+    static const quint8 max = 0x00FF;
+    static const quint8 min = 0;
+    static const quint8 epsilon = 1;
+    static const qint8 bits = 8;
+    static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint16> {
-    public:
-        typedef qint64 compositetype;
-        static const quint16 zeroValue = 0;
-        static const quint16 unitValue = 0xFFFF;
-        static const quint16 max = 0xFFFF;
-        static const quint16 min = 0;
-        static const quint16 epsilon = 1;
-        static const qint8 bits = 16;
-        static const KoChannelInfo::enumChannelValueType channelValueType;
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint16>
+{
+public:
+    typedef qint64 compositetype;
+    static const quint16 zeroValue = 0;
+    static const quint16 unitValue = 0xFFFF;
+    static const quint16 max = 0xFFFF;
+    static const quint16 min = 0;
+    static const quint16 epsilon = 1;
+    static const qint8 bits = 16;
+    static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<qint16> {
-    public:
-        typedef qint64 compositetype;
-        static const qint16 zeroValue = 0;
-        static const qint16 unitValue = 32767;
-        static const qint16 max = 32767;
-        static const qint16 min = -32768;
-        static const qint16 epsilon = 1;
-        static const qint8 bits = 16;
-        static const KoChannelInfo::enumChannelValueType channelValueType;
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<qint16>
+{
+public:
+    typedef qint64 compositetype;
+    static const qint16 zeroValue = 0;
+    static const qint16 unitValue = 32767;
+    static const qint16 max = 32767;
+    static const qint16 min = -32768;
+    static const qint16 epsilon = 1;
+    static const qint8 bits = 16;
+    static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint32> {
-    public:
-        typedef qint64 compositetype;
-        static const quint32 zeroValue = 0;
-        static const quint32 unitValue = 0xFFFFFFFF;
-        static const quint32 max = 0xFFFFFFFF;
-        static const quint32 min = 0;
-        static const quint32 epsilon = 1;
-        static const qint8 bits= 32;
-        static const KoChannelInfo::enumChannelValueType channelValueType;
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint32>
+{
+public:
+    typedef qint64 compositetype;
+    static const quint32 zeroValue = 0;
+    static const quint32 unitValue = 0xFFFFFFFF;
+    static const quint32 max = 0xFFFFFFFF;
+    static const quint32 min = 0;
+    static const quint32 epsilon = 1;
+    static const qint8 bits = 32;
+    static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
 #include <config-openexr.h>
@@ -104,43 +109,46 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint32> {
 #include <half.h>
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<half> {
-    public:
-        typedef double compositetype;
-        static const half zeroValue;
-        static const half unitValue;
-        static const half max;
-        static const half min;
-        static const half epsilon;
-        static const qint8 bits = 16;
-        static const KoChannelInfo::enumChannelValueType channelValueType;
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<half>
+{
+public:
+    typedef double compositetype;
+    static const half zeroValue;
+    static const half unitValue;
+    static const half max;
+    static const half min;
+    static const half epsilon;
+    static const qint8 bits = 16;
+    static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 #endif
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<float> {
-    public:
-        typedef double compositetype;
-        static const float zeroValue;
-        static const float unitValue;
-        static const float max;
-        static const float min;
-        static const float epsilon;
-        static const qint8 bits = 32;
-        static const KoChannelInfo::enumChannelValueType channelValueType;
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<float>
+{
+public:
+    typedef double compositetype;
+    static const float zeroValue;
+    static const float unitValue;
+    static const float max;
+    static const float min;
+    static const float epsilon;
+    static const qint8 bits = 32;
+    static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<double> {
-    public:
-        typedef double compositetype;
-        static const double zeroValue;
-        static const double unitValue;
-        static const double max;
-        static const double min;
-        static const double epsilon;
-        static const qint8 bits = 64;
-        static const KoChannelInfo::enumChannelValueType channelValueType;
+class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<double>
+{
+public:
+    typedef double compositetype;
+    static const double zeroValue;
+    static const double unitValue;
+    static const double max;
+    static const double min;
+    static const double epsilon;
+    static const qint8 bits = 64;
+    static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
 /**
@@ -152,67 +160,63 @@ class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<double> {
  * @param _Tdst some other numerical type with an existing trait, it is
  *              only needed if different of _T
  */
-template<typename _T, typename _Tdst = _T>
-class KoColorSpaceMaths {
+template < typename _T, typename _Tdst = _T >
+class KoColorSpaceMaths
+{
     typedef KoColorSpaceMathsTraits<_T> traits;
     typedef typename traits::compositetype traits_compositetype;
-    public:
-        inline static traits_compositetype multiply(traits_compositetype a,
-            typename  KoColorSpaceMathsTraits<_Tdst>::compositetype b)
-        {
-            return ((traits_compositetype)a * b ) /  KoColorSpaceMathsTraits<_Tdst>::unitValue;
-        }
+public:
+    inline static traits_compositetype multiply(traits_compositetype a,
+            typename  KoColorSpaceMathsTraits<_Tdst>::compositetype b) {
+        return ((traits_compositetype)a * b) /  KoColorSpaceMathsTraits<_Tdst>::unitValue;
+    }
 
-        /**
-         * Division : (a * MAX ) / b
-         * @param a
-         * @param b
-         */
-        inline static _T divide(_T a, _Tdst b)
-        {
-            return ((traits_compositetype)a *  KoColorSpaceMathsTraits<_Tdst>::unitValue ) / b;
-        }
+    /**
+     * Division : (a * MAX ) / b
+     * @param a
+     * @param b
+     */
+    inline static _T divide(_T a, _Tdst b) {
+        return ((traits_compositetype)a *  KoColorSpaceMathsTraits<_Tdst>::unitValue) / b;
+    }
 
-        /**
-         * Blending : (a * alpha) + b * (1 - alpha)
-         * @param a
-         * @param b
-         * @param alpha
-         */
-        inline static _T blend(_T a, _T b, _T alpha)
-        {
-            traits_compositetype c = ( ((traits_compositetype)a - (traits_compositetype)b) * alpha ) >> traits::bits;
-            return c+b;
-        }
+    /**
+     * Blending : (a * alpha) + b * (1 - alpha)
+     * @param a
+     * @param b
+     * @param alpha
+     */
+    inline static _T blend(_T a, _T b, _T alpha) {
+        traits_compositetype c = (((traits_compositetype)a - (traits_compositetype)b) * alpha) >> traits::bits;
+        return c + b;
+    }
 
-        /**
-         * This function will scale a value of type _T to fit into a _Tdst.
-         */
-        inline static _Tdst scaleToA(_T a)
-        {
-            return (traits_compositetype)a >> ( traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits );
-        }
+    /**
+     * This function will scale a value of type _T to fit into a _Tdst.
+     */
+    inline static _Tdst scaleToA(_T a) {
+        return (traits_compositetype)a >> (traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits);
+    }
 
-        inline static typename  KoColorSpaceMathsTraits<_Tdst>::compositetype clamp( typename  KoColorSpaceMathsTraits<_Tdst>::compositetype val )
-        {
-            return qBound( (typename  KoColorSpaceMathsTraits<_Tdst>::compositetype) KoColorSpaceMathsTraits<_Tdst>::min,
-                           val,
-                           (typename  KoColorSpaceMathsTraits<_Tdst>::compositetype)KoColorSpaceMathsTraits<_Tdst>::max );
-        }
+    inline static typename  KoColorSpaceMathsTraits<_Tdst>::compositetype clamp(typename  KoColorSpaceMathsTraits<_Tdst>::compositetype val) {
+        return qBound((typename  KoColorSpaceMathsTraits<_Tdst>::compositetype) KoColorSpaceMathsTraits<_Tdst>::min,
+                      val,
+                      (typename  KoColorSpaceMathsTraits<_Tdst>::compositetype)KoColorSpaceMathsTraits<_Tdst>::max);
+    }
 };
 
 //------------------------------ double specialization ------------------------------//
 template<>
-inline quint8 KoColorSpaceMaths<double,quint8>::scaleToA(double a)
+inline quint8 KoColorSpaceMaths<double, quint8>::scaleToA(double a)
 {
     double v = a * 255;
     return (quint8)(CLAMP(v, 0, 255));
 }
 
 template<>
-inline double KoColorSpaceMaths<quint8,double>::scaleToA(quint8 a)
+inline double KoColorSpaceMaths<quint8, double>::scaleToA(quint8 a)
 {
-    return a * ( 1.0 / 255.0 );
+    return a * (1.0 / 255.0);
 }
 
 template<>
@@ -225,7 +229,7 @@ inline quint16 KoColorSpaceMaths<double, quint16>::scaleToA(double a)
 template<>
 inline double KoColorSpaceMaths<quint16, double>::scaleToA(quint16 a)
 {
-    return a * ( 1.0 / 0xFFFF );
+    return a * (1.0 / 0xFFFF);
 }
 
 template<>
@@ -249,35 +253,35 @@ inline double KoColorSpaceMaths<float, double>::scaleToA(float a)
 }
 
 template<>
-inline quint16 KoColorSpaceMaths<float,quint16>::scaleToA(float a)
+inline quint16 KoColorSpaceMaths<float, quint16>::scaleToA(float a)
 {
     float v = a * 0xFFFF;
     return (quint16)(CLAMP(v, 0, 0xFFFF));
 }
 
 template<>
-inline float KoColorSpaceMaths<quint16,float>::scaleToA(quint16 a)
+inline float KoColorSpaceMaths<quint16, float>::scaleToA(quint16 a)
 {
-    return a * ( 1.0 / 0xFFFF );
+    return a * (1.0 / 0xFFFF);
 }
 
 template<>
-inline quint8 KoColorSpaceMaths<float,quint8>::scaleToA(float a)
+inline quint8 KoColorSpaceMaths<float, quint8>::scaleToA(float a)
 {
     float v = a * 255;
     return (quint8)(CLAMP(v, 0, 255));
 }
 
 template<>
-inline float KoColorSpaceMaths<quint8,float>::scaleToA(quint8 a)
+inline float KoColorSpaceMaths<quint8, float>::scaleToA(quint8 a)
 {
-    return a * ( 1.0 / 255.0 );
+    return a * (1.0 / 255.0);
 }
 
 template<>
 inline float KoColorSpaceMaths<float>::blend(float a, float b, float alpha)
 {
-    return ( a - b) * alpha + b;
+    return (a - b) * alpha + b;
 }
 
 template<>
@@ -303,44 +307,44 @@ inline double KoColorSpaceMaths<half, double>::scaleToA(half a)
 }
 
 template<>
-inline float KoColorSpaceMaths<half,float>::scaleToA(half a)
+inline float KoColorSpaceMaths<half, float>::scaleToA(half a)
 {
     return a;
 }
 
 template<>
-inline half KoColorSpaceMaths<float,half>::scaleToA(float a)
+inline half KoColorSpaceMaths<float, half>::scaleToA(float a)
 {
     return (half) a;
 }
 
 template<>
-inline quint8 KoColorSpaceMaths<half,quint8>::scaleToA(half a)
+inline quint8 KoColorSpaceMaths<half, quint8>::scaleToA(half a)
 {
     half v = a * 255;
     return (quint8)(CLAMP(v, 0, 255));
 }
 
 template<>
-inline half KoColorSpaceMaths<quint8,half>::scaleToA(quint8 a)
+inline half KoColorSpaceMaths<quint8, half>::scaleToA(quint8 a)
 {
-    return a * ( 1.0 / 255.0 );
+    return a * (1.0 / 255.0);
 }
 template<>
-inline quint16 KoColorSpaceMaths<half,quint16>::scaleToA(half a)
+inline quint16 KoColorSpaceMaths<half, quint16>::scaleToA(half a)
 {
     double v = a * 0xFFFF;
     return (quint16)(CLAMP(v, 0, 0xFFFF));
 }
 
 template<>
-inline half KoColorSpaceMaths<quint16,half>::scaleToA(quint16 a)
+inline half KoColorSpaceMaths<quint16, half>::scaleToA(quint16 a)
 {
-    return a * ( 1.0 / 0xFFFF );
+    return a * (1.0 / 0xFFFF);
 }
 
 template<>
-inline half KoColorSpaceMaths<half,half>::scaleToA(half a)
+inline half KoColorSpaceMaths<half, half>::scaleToA(half a)
 {
     return a;
 }
@@ -348,7 +352,7 @@ inline half KoColorSpaceMaths<half,half>::scaleToA(half a)
 template<>
 inline half KoColorSpaceMaths<half>::blend(half a, half b, half alpha)
 {
-    return ( a - b) * alpha + b;
+    return (a - b) * alpha + b;
 }
 
 template<>
@@ -367,13 +371,13 @@ inline double KoColorSpaceMaths<half>::clamp(double a)
 
 /// This specialization is needed because the default implementation won't work when scaling up
 template<>
-inline quint16 KoColorSpaceMaths<quint8,quint16>::scaleToA(quint8 a)
+inline quint16 KoColorSpaceMaths<quint8, quint16>::scaleToA(quint8 a)
 {
     return UINT8_TO_UINT16(a);
 }
 
 template<>
-inline quint8 KoColorSpaceMaths<quint16,quint8>::scaleToA(quint16 a)
+inline quint8 KoColorSpaceMaths<quint16, quint8>::scaleToA(quint16 a)
 {
     return UINT16_TO_UINT8(a);
 }
@@ -382,19 +386,19 @@ inline quint8 KoColorSpaceMaths<quint16,quint8>::scaleToA(quint16 a)
 // Due to once again a bug in gcc, there is the need for those specialized functions:
 
 template<>
-inline quint8 KoColorSpaceMaths<quint8,quint8>::scaleToA(quint8 a)
+inline quint8 KoColorSpaceMaths<quint8, quint8>::scaleToA(quint8 a)
 {
     return a;
 }
 
 template<>
-inline quint16 KoColorSpaceMaths<quint16,quint16>::scaleToA(quint16 a)
+inline quint16 KoColorSpaceMaths<quint16, quint16>::scaleToA(quint16 a)
 {
     return a;
 }
 
 template<>
-inline float KoColorSpaceMaths<float,float>::scaleToA(float a)
+inline float KoColorSpaceMaths<float, float>::scaleToA(float a)
 {
     return a;
 }

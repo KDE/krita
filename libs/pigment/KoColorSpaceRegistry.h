@@ -41,7 +41,8 @@ class KoColorConversionCache;
  *      - a registry of singleton colorspace factories.
  *      - a registry of icc profiles
  */
-class PIGMENTCMS_EXPORT KoColorSpaceRegistry : public QObject,  public KoGenericRegistry<KoColorSpaceFactory *> {
+class PIGMENTCMS_EXPORT KoColorSpaceRegistry : public QObject,  public KoGenericRegistry<KoColorSpaceFactory *>
+{
 public:
     enum ColorSpaceListVisibility {
         OnlyUserVisible = 1, ///< Only user visible color space
@@ -57,10 +58,10 @@ public:
     virtual ~KoColorSpaceRegistry();
 
 public:
-   /**
-     * add a color space to the registry
-     * @param item the color space factory to add
-     */
+    /**
+      * add a color space to the registry
+      * @param item the color space factory to add
+      */
     void add(KoColorSpaceFactory* item);
 
     /**
@@ -106,11 +107,11 @@ public:
      * @return a list of profiles for the factory
      */
     QList<const KoColorProfile *>  profilesFor(const KoID& id);
-    
+
     /**
      * @return a list of color spaces compatible with this profile
      */
-    QList<const KoColorSpaceFactory*> colorSpacesFor( const KoColorProfile* _profile);
+    QList<const KoColorSpaceFactory*> colorSpacesFor(const KoColorProfile* _profile);
 
     /**
      * Return the list of profiles for a colorspace with the argument id.
@@ -160,7 +161,7 @@ public:
      * @return the id of the wanted colorspace, or "" if no colorspace correspond to those ids
      */
     QString colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId);
-    
+
     /**
      * Convenience method to get the often used alpha colorspace
      */
@@ -173,14 +174,14 @@ public:
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
     const KoColorSpace * rgb8(const QString &profileName = QString());
-    
+
     /**
      * Convenience method to get an RGBA 8bit colorspace with the given profile.
      * @param profile an RGB profile
      * @return the wanted colorspace, or 0 if the color space and profile can not be combined.
      */
     const KoColorSpace * rgb8(const KoColorProfile * profile);
-    
+
     /**
      * Convenience method to get an RGBA 16bit colorspace. If a profile is not specified,
      * an sRGB profile will be used.
@@ -214,34 +215,34 @@ public:
     /**
      * @return the list of available color models
      */
-    QList<KoID> colorModelsList(ColorSpaceListVisibility option ) const;
+    QList<KoID> colorModelsList(ColorSpaceListVisibility option) const;
 
     /**
      * @return the list of available color models for the given colorModelId
      */
-    QList<KoID> colorDepthList(const KoID& colorModelId, ColorSpaceListVisibility option ) const;
+    QList<KoID> colorDepthList(const KoID& colorModelId, ColorSpaceListVisibility option) const;
 
     /**
      * @return the list of available color models for the given colorModelId
      */
-    QList<KoID> colorDepthList(const QString & colorModelId, ColorSpaceListVisibility option ) const;
-    
+    QList<KoID> colorDepthList(const QString & colorModelId, ColorSpaceListVisibility option) const;
+
     /**
      * @return the color conversion system use by the registry and the color
      * spaces to create color conversion transformation
      */
     const KoColorConversionSystem* colorConversionSystem() const;
-    
+
     /**
      * @return the cache of color conversion transformation to be use by KoColorSpace
      */
     KoColorConversionCache* colorConversionCache() const;
-    
+
     /**
      * @return a permanent colorspace owned by the registry, of the same type and profile
      *         as the one given in argument
      */
-    const KoColorSpace* permanentColorspace( const KoColorSpace* _colorSpace );
+    const KoColorSpace* permanentColorspace(const KoColorSpace* _colorSpace);
 
     /**
      * This function return a list of all the keys in KoID format by using the name() method
@@ -252,9 +253,9 @@ public:
 private:
 
     bool isCached(const QString & csId, const QString & profileName) const;
-    
+
     QString idsToCacheName(const QString & csId, const QString & profileName) const;
-    
+
 private:
     KoColorSpaceRegistry();
     KoColorSpaceRegistry(const KoColorSpaceRegistry&);

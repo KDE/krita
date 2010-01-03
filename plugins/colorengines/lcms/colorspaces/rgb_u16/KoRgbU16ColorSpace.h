@@ -26,17 +26,21 @@
 
 class KoRgbU16ColorSpace : public KoLcmsColorSpace<KoRgbU16Traits>
 {
-    public:
-        KoRgbU16ColorSpace( KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence independence) const;
-        virtual KoID colorModelId() const { return RGBAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual KoColorSpace* clone() const;
-        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
+public:
+    KoRgbU16ColorSpace(KoColorProfile *p);
+    virtual bool willDegrade(ColorSpaceIndependence independence) const;
+    virtual KoID colorModelId() const {
+        return RGBAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual KoColorSpace* clone() const;
+    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
 
     /**
-     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
+     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter
      * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
      * This is the value that the member function id() returns.
      */
@@ -45,21 +49,36 @@ class KoRgbU16ColorSpace : public KoLcmsColorSpace<KoRgbU16Traits>
 
 class KoRgbU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
-    public:
-        KoRgbU16ColorSpaceFactory() : KoLcmsColorSpaceFactory( TYPE_BGRA_16, icSigRgbData )
-        {
-        }
-        virtual QString id() const { return KoRgbU16ColorSpace::colorSpaceId(); }
-        virtual QString name() const { return i18n("RGB (16-bit integer/channel)"); }
-        
-        virtual bool userVisible() const { return true; }
-        virtual KoID colorModelId() const { return RGBAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual int referenceDepth() const { return 16; }
+public:
+    KoRgbU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_BGRA_16, icSigRgbData) {
+    }
+    virtual QString id() const {
+        return KoRgbU16ColorSpace::colorSpaceId();
+    }
+    virtual QString name() const {
+        return i18n("RGB (16-bit integer/channel)");
+    }
 
-        virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KoRgbU16ColorSpace( p->clone() ); }
+    virtual bool userVisible() const {
+        return true;
+    }
+    virtual KoID colorModelId() const {
+        return RGBAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual int referenceDepth() const {
+        return 16;
+    }
 
-        virtual QString defaultProfile() const { return "sRGB built-in - (lcms internal)"; }
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+        return new KoRgbU16ColorSpace(p->clone());
+    }
+
+    virtual QString defaultProfile() const {
+        return "sRGB built-in - (lcms internal)";
+    }
 };
 
 

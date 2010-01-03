@@ -41,9 +41,9 @@ struct KoFallBackColorTransformation::Private {
 KoFallBackColorTransformation::KoFallBackColorTransformation(const KoColorSpace* _cs, const KoColorSpace* _fallBackCS, KoColorTransformation* _transfo) : d(new Private)
 {
     d->fallBackColorSpace = _fallBackCS;
-    d->csToFallBackCache = new KoCachedColorConversionTransformation( KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter( _cs, _fallBackCS));
+    d->csToFallBackCache = new KoCachedColorConversionTransformation(KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(_cs, _fallBackCS));
     d->csToFallBack = d->csToFallBackCache->transformation();
-    d->fallBackToCsCache = new KoCachedColorConversionTransformation( KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter( _fallBackCS, _cs) );
+    d->fallBackToCsCache = new KoCachedColorConversionTransformation(KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(_fallBackCS, _cs));
     d->fallBackToCs = d->fallBackToCsCache->transformation();
     d->colorTransformation = _transfo;
     d->buff = 0;
@@ -66,14 +66,12 @@ KoFallBackColorTransformation::KoFallBackColorTransformation(KoColorConversionTr
 
 KoFallBackColorTransformation::~KoFallBackColorTransformation()
 {
-    if( d->csToFallBackCache)
-    {
+    if (d->csToFallBackCache) {
         delete d->csToFallBackCache;
     } else {
         delete d->csToFallBack;
     }
-    if( d->csToFallBackCache)
-    {
+    if (d->csToFallBackCache) {
         delete d->fallBackToCsCache;
     } else {
         delete d->fallBackToCs;
@@ -85,11 +83,10 @@ KoFallBackColorTransformation::~KoFallBackColorTransformation()
 
 void KoFallBackColorTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
 {
-    if( d->buffSize < nPixels)
-    { // Expand the buffer if needed
+    if (d->buffSize < nPixels) { // Expand the buffer if needed
         d->buffSize = nPixels;
         delete[] d->buff;
-        d->buff = new quint8[ d->buffSize * d->fallBackColorSpace->pixelSize() ];
+        d->buff = new quint8[ d->buffSize * d->fallBackColorSpace->pixelSize()];
     }
     d->csToFallBack->transform(src, d->buff, nPixels);
     d->colorTransformation->transform(d->buff, d->buff, nPixels);

@@ -24,18 +24,19 @@
 
 #include <KoColorConversionTransformation.h>
 
-class PIGMENTCMS_EXPORT KoColorConversionTransformationAbstractFactory {
-    public:
-        KoColorConversionTransformationAbstractFactory() {}
-        virtual ~KoColorConversionTransformationAbstractFactory() {}
-        /**
-         * Creates a color transformation between the source color space and the destination
-         * color space.
-         * 
-         * @param srcColorSpace source color space
-         * @param dstColorSpace destination color space
-         */
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const =0;
+class PIGMENTCMS_EXPORT KoColorConversionTransformationAbstractFactory
+{
+public:
+    KoColorConversionTransformationAbstractFactory() {}
+    virtual ~KoColorConversionTransformationAbstractFactory() {}
+    /**
+     * Creates a color transformation between the source color space and the destination
+     * color space.
+     *
+     * @param srcColorSpace source color space
+     * @param dstColorSpace destination color space
+     */
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const = 0;
 };
 
 #endif

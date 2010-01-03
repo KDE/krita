@@ -32,7 +32,8 @@ class QDomElement;
  *
  * This replaces the KisKrayon facility that used to be present in Krayon.
  */
-class PIGMENTCMS_EXPORT KoResource {
+class PIGMENTCMS_EXPORT KoResource
+{
 
 public:
 
@@ -59,7 +60,9 @@ public:
     /**
      * Returns a QImage representing this resource.  This image could be null.
      */
-    virtual QImage image() const {return QImage(); }
+    virtual QImage image() const {
+        return QImage();
+    }
 
 private:
     /// XXX: doc?

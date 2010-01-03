@@ -36,7 +36,8 @@ typedef KoColorSpaceTrait<quint8, 1, 0> AlphaU8Traits;
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a color common to the mask. The default color is white.
  */
-class PIGMENTCMS_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits> {
+class PIGMENTCMS_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits>
+{
 
 public:
 
@@ -44,17 +45,20 @@ public:
 
     virtual ~KoAlphaColorSpace();
 
-    virtual KoID colorModelId() const { return AlphaColorModelID; }
+    virtual KoID colorModelId() const {
+        return AlphaColorModelID;
+    }
 
-    virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
+    virtual KoID colorDepthId() const {
+        return Integer8BitsColorDepthID;
+    }
 
     virtual KoColorSpace* clone() const;
 
-    virtual bool willDegrade(ColorSpaceIndependence independence) const
-        {
-            Q_UNUSED(independence);
-            return false;
-        }
+    virtual bool willDegrade(ColorSpaceIndependence independence) const {
+        Q_UNUSED(independence);
+        return false;
+    }
 
     virtual bool profileIsCompatible(const KoColorProfile* /*profile*/) const {
         return false;
@@ -66,7 +70,9 @@ public:
 
     virtual quint8 difference(const quint8 *src1, const quint8 *src2) const;
 
-    virtual quint32 colorChannelCount() const { return 0; }
+    virtual quint32 colorChannelCount() const {
+        return 0;
+    }
 
     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
@@ -78,87 +84,78 @@ public:
 
     virtual quint32 colorSpaceType() const { return 0; }
 
-    virtual bool hasHighDynamicRange() const { return false; }
+    virtual bool hasHighDynamicRange() const {
+        return false;
+    }
 
-    virtual const KoColorProfile* profile() const { return 0; }
+    virtual const KoColorProfile* profile() const {
+        return 0;
+    }
 
-    virtual KoColorProfile* profile() { return 0; }
+    virtual KoColorProfile* profile() {
+        return 0;
+    }
 
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent) const;
 
-    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
-    {
+    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         quint16* lab = reinterpret_cast<quint16*>(dst);
-        while(nPixels--)
-        {
+        while (nPixels--) {
             lab[3] = src[0];
             src++;
-            lab+=4;
+            lab += 4;
         }
     }
-    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
-    {
+    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         const quint16* lab = reinterpret_cast<const quint16*>(src);
-        while(nPixels--)
-        {
+        while (nPixels--) {
             dst[0] = lab[3];
             dst++;
-            lab+=4;
+            lab += 4;
         }
     }
 
-    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const
-    {
+    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         quint16* rgb = reinterpret_cast<quint16*>(dst);
-        while(nPixels--)
-        {
+        while (nPixels--) {
             rgb[3] = src[0];
             src++;
-            rgb+=4;
+            rgb += 4;
         }
     }
-    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const
-    {
+    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         const quint16* rgb = reinterpret_cast<const quint16*>(src);
-        while(nPixels--)
-        {
+        while (nPixels--) {
             dst[0] = rgb[3];
             dst++;
-            rgb+=4;
+            rgb += 4;
         }
     }
-    virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16* transferValues) const
-    {
+    virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16* transferValues) const {
         Q_UNUSED(transferValues);
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
-    virtual KoColorTransformation* createDesaturateAdjustment() const
-    {
+    virtual KoColorTransformation* createDesaturateAdjustment() const {
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
-    virtual KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const
-    {
+    virtual KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
-    virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal ) const
-    {
+    virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
-    virtual void invertColor(quint8*, qint32) const
-    {
+    virtual void invertColor(quint8*, qint32) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
-    virtual void colorToXML( const quint8* , QDomDocument& , QDomElement& ) const
-    {
+    virtual void colorToXML(const quint8* , QDomDocument& , QDomElement&) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
-    virtual void colorFromXML( quint8* , const QDomElement& ) const
-    {
+    virtual void colorFromXML(quint8* , const QDomElement&) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
 
@@ -171,9 +168,9 @@ public:
      * Returns false if the conversion failed, true if it succeeded
      */
     virtual bool convertPixelsTo(const quint8 *src,
-                     quint8 *dst, const KoColorSpace * dstColorSpace,
-                     quint32 numPixels,
-                     KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual ) const;
+                                 quint8 *dst, const KoColorSpace * dstColorSpace,
+                                 quint32 numPixels,
+                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
 
 };
 

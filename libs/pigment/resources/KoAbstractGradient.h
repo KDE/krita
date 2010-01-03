@@ -28,20 +28,27 @@
 /**
  * KoAbstractGradient is the base class of all gradient resources
  */
-class PIGMENTCMS_EXPORT KoAbstractGradient : public KoResource {
+class PIGMENTCMS_EXPORT KoAbstractGradient : public KoResource
+{
 
 public:
     KoAbstractGradient(const QString& filename);
     virtual ~KoAbstractGradient();
 
-    virtual bool load() { return false; }
-    virtual bool save() { return false; }
+    virtual bool load() {
+        return false;
+    }
+    virtual bool save() {
+        return false;
+    }
 
     /**
     * Creates a QGradient from the gradient.
     * The resulting QGradient might differ from original gradient
     */
-    virtual QGradient* toQGradient() const { return new QGradient(); }
+    virtual QGradient* toQGradient() const {
+        return new QGradient();
+    }
 
     /// gets the color at position 0 <= t <= 1
     virtual void colorAt(KoColor&, qreal t) const;

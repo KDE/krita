@@ -26,18 +26,16 @@
 
 #include <kglobal.h>
 
-struct KoUniqueNumberForIdServer::Private
-{
+struct KoUniqueNumberForIdServer::Private {
     Private()
-        : currentNumber(0)
-    {}
+            : currentNumber(0) {}
 
     QHash<QString, quint32 > id2Number;
     quint32 currentNumber;
 };
 
 KoUniqueNumberForIdServer::KoUniqueNumberForIdServer()
-    : d(new Private)
+        : d(new Private)
 {
 }
 
@@ -52,11 +50,10 @@ KoUniqueNumberForIdServer* KoUniqueNumberForIdServer::instance()
     return s_instance;
 }
 
-quint32 KoUniqueNumberForIdServer::numberForId( const QString& _id )
+quint32 KoUniqueNumberForIdServer::numberForId(const QString& _id)
 {
-    QHash<QString, quint32>::iterator it = d->id2Number.find( _id );
-    if( it != d->id2Number.end() )
-    {
+    QHash<QString, quint32>::iterator it = d->id2Number.find(_id);
+    if (it != d->id2Number.end()) {
         return it.value();
     }
     quint32 number = ++d->currentNumber;

@@ -28,26 +28,12 @@
 
 #ifndef PIGMENTCMS_EXPORT
 # if defined(MAKE_PIGMENTCMS_LIB)
-   /* We are building this library */ 
+/* We are building this library */
 #  define PIGMENTCMS_EXPORT KDE_EXPORT
 # else
-   /* We are using this library */ 
+/* We are using this library */
 #  define PIGMENTCMS_EXPORT KDE_IMPORT
 # endif
-#endif
-
-#if !defined __MINGW32__
-#ifndef and
-#define and &&
-#endif
-
-#ifndef or
-#define or ||
-#endif
-
-#ifndef not
-#define not !
-#endif
 #endif
 
 #else /* UNIX */

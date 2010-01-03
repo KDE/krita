@@ -30,26 +30,27 @@ class QString;
  * This is useful for fast comparison of Ids, but the number *should* remains private
  * especially considering that it changes from one running instance to an other.
  */
-class PIGMENTCMS_EXPORT KoUniqueNumberForIdServer {
-  private:
+class PIGMENTCMS_EXPORT KoUniqueNumberForIdServer
+{
+private:
     KoUniqueNumberForIdServer();
     ~KoUniqueNumberForIdServer();
-  public:
+public:
     static KoUniqueNumberForIdServer* instance();
     /**
      * @return an unique number for the given \p _id , for two different call to this function
      *         with the same \p id the function will always return the same value.
-     * 
+     *
      * @code
      *  KoUniqueNumberForIdServer::instance()->numberForId( "rgb" ) == KoUniqueNumberForIdServer::instance()->numberForId( "rgb" );
      * KoUniqueNumberForIdServer::instance()->numberForId( "rgb" ) != KoUniqueNumberForIdServer::instance()->numberForId( "cmyk" );
      * @endcode
      */
-    quint32 numberForId( const QString& );
-  private:
+    quint32 numberForId(const QString&);
+private:
     struct Private;
     Private* const d;
-  
+
 };
 
 #endif

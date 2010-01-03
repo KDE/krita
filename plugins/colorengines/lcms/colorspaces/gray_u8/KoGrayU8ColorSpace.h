@@ -27,32 +27,53 @@ typedef KoColorSpaceTrait<quint8, 2, 1> GrayAU8Traits;
 
 class KoGrayAU8ColorSpace : public KoLcmsColorSpace<GrayAU8Traits>
 {
-    public:
-        KoGrayAU8ColorSpace(KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
-        virtual KoID colorModelId() const { return GrayAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
-        virtual KoColorSpace* clone() const;
-        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
+public:
+    KoGrayAU8ColorSpace(KoColorProfile *p);
+    virtual bool willDegrade(ColorSpaceIndependence) const {
+        return false;
+    }
+    virtual KoID colorModelId() const {
+        return GrayAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer8BitsColorDepthID;
+    }
+    virtual KoColorSpace* clone() const;
+    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
 };
 
 class KoGrayAU8ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
 public:
-    KoGrayAU8ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAYA_8, icSigGrayData )
-    {
+    KoGrayAU8ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAYA_8, icSigGrayData) {
     }
-    virtual QString id() const { return "GRAYA"; }
-    virtual QString name() const { return i18n("Grayscale (8-bit integer/channel)"); }
-    virtual KoID colorModelId() const { return GrayAColorModelID; }
-    virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
-    virtual int referenceDepth() const { return 8; }
-    virtual bool userVisible() const { return true; }
+    virtual QString id() const {
+        return "GRAYA";
+    }
+    virtual QString name() const {
+        return i18n("Grayscale (8-bit integer/channel)");
+    }
+    virtual KoID colorModelId() const {
+        return GrayAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer8BitsColorDepthID;
+    }
+    virtual int referenceDepth() const {
+        return 8;
+    }
+    virtual bool userVisible() const {
+        return true;
+    }
 
-    virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KoGrayAU8ColorSpace( p->clone()); }
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+        return new KoGrayAU8ColorSpace(p->clone());
+    }
 
-    virtual QString defaultProfile() const { return "gray built-in - (lcms internal)"; }
+    virtual QString defaultProfile() const {
+        return "gray built-in - (lcms internal)";
+    }
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_

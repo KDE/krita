@@ -33,25 +33,26 @@
  *  KoMultipleColorConversionTransformation::appendTransfo a transformation from CSA to CSB and a
  * transformation from CSB to CSC.
  */
-class PIGMENTCMS_EXPORT KoMultipleColorConversionTransformation : public KoColorConversionTransformation {
-    public:
-        /**
-         * Create a color transformation from srcCs to dstCs.
-         * @param srcCs the first color space in the chain
-         * @param dstCs the last color space in the chain
-         */
-        KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual);
-        ~KoMultipleColorConversionTransformation();
-        /**
-         * Add a transformation to the chain.
-         * @param transfo this transformation is then deleted when the
-         *                KoMultipleColorConversionTransformation is deleted.
-         */
-        void appendTransfo(KoColorConversionTransformation* transfo);
-        virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
-    private:
-        struct Private;
-        Private* const d;
+class PIGMENTCMS_EXPORT KoMultipleColorConversionTransformation : public KoColorConversionTransformation
+{
+public:
+    /**
+     * Create a color transformation from srcCs to dstCs.
+     * @param srcCs the first color space in the chain
+     * @param dstCs the last color space in the chain
+     */
+    KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual);
+    ~KoMultipleColorConversionTransformation();
+    /**
+     * Add a transformation to the chain.
+     * @param transfo this transformation is then deleted when the
+     *                KoMultipleColorConversionTransformation is deleted.
+     */
+    void appendTransfo(KoColorConversionTransformation* transfo);
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

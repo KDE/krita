@@ -48,7 +48,8 @@ class KoColorSpace;
  * in which they are found in the channels() method. This is potentially different from
  * the order in which they are internally ordered!
  **/
-class PIGMENTCMS_EXPORT KoHistogramProducer : public KShared {
+class PIGMENTCMS_EXPORT KoHistogramProducer : public KShared
+{
 public:
     KoHistogramProducer() : m_skipTransparent(true), m_skipUnselected(true) {}
     virtual ~KoHistogramProducer() {}
@@ -72,8 +73,12 @@ public:
 
     // Methods to set what exactly is being added to the bins
     virtual void setView(qreal from, qreal width) = 0;
-    virtual void setSkipTransparent(bool set) { m_skipTransparent = set; }
-    virtual void setSkipUnselected(bool set) { m_skipUnselected = set; }
+    virtual void setSkipTransparent(bool set) {
+        m_skipTransparent = set;
+    }
+    virtual void setSkipUnselected(bool set) {
+        m_skipUnselected = set;
+    }
 
     // Methods with general information about this specific producer
     virtual const KoID& id() const = 0;
@@ -96,7 +101,8 @@ protected:
 
 typedef KSharedPtr<KoHistogramProducer> KoHistogramProducerSP;
 
-class PIGMENTCMS_EXPORT KoHistogramProducerFactory {
+class PIGMENTCMS_EXPORT KoHistogramProducerFactory
+{
 public:
     KoHistogramProducerFactory(const KoID& id) : m_id(id) {}
     virtual ~KoHistogramProducerFactory() {}
@@ -106,14 +112,19 @@ public:
     virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const = 0;
     /// Returns a float in the [0.0, 1.0] range, 0.0 means this is a very generic method
     virtual float preferrednessLevelWith(const KoColorSpace* colorSpace) const = 0;
-    virtual QString id() const { return m_id.id(); }
-    virtual QString name() const { return m_id.name(); }
+    virtual QString id() const {
+        return m_id.id();
+    }
+    virtual QString name() const {
+        return m_id.name();
+    }
 protected:
     KoID m_id;
 };
 
 class PIGMENTCMS_EXPORT KoHistogramProducerFactoryRegistry
-    : public KoGenericRegistry<KoHistogramProducerFactory*> {
+            : public KoGenericRegistry<KoHistogramProducerFactory*>
+{
 public:
     virtual ~KoHistogramProducerFactoryRegistry();
     static KoHistogramProducerFactoryRegistry* instance();
@@ -121,9 +132,9 @@ public:
     QList<QString> keysCompatibleWith(const KoColorSpace* colorSpace) const;
 
 private:
-   KoHistogramProducerFactoryRegistry();
-   KoHistogramProducerFactoryRegistry(const KoHistogramProducerFactoryRegistry&);
-   KoHistogramProducerFactoryRegistry operator=(const KoHistogramProducerFactoryRegistry&);
+    KoHistogramProducerFactoryRegistry();
+    KoHistogramProducerFactoryRegistry(const KoHistogramProducerFactoryRegistry&);
+    KoHistogramProducerFactoryRegistry operator=(const KoHistogramProducerFactoryRegistry&);
 };
 
 #endif // _KO_HISTOGRAM_PRODUCER

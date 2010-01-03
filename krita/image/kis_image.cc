@@ -39,7 +39,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
 #include "KoColorConversionTransformation.h"
-#include "colorprofiles/KoIccColorProfile.h"
+#include "KoColorProfile.h"
 
 #include "recorder/kis_action_recorder.h"
 #include "kis_adjustment_layer.h"
@@ -1119,10 +1119,8 @@ vKisAnnotationSP_it KisImage::beginAnnotations()
     if (profile) {
         // XXX we hardcode icc, this is correct for lcms?
         // XXX productName(), or just "ICC Profile"?
-        if (profile->valid()) {
-            const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
-            if (iccprofile && !iccprofile->rawData().isEmpty()) {
-                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
+        if (profile->valid() && profile->type() == "icc" && !profile->rawData().isEmpty()) {
+                annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
             }
         }
     }

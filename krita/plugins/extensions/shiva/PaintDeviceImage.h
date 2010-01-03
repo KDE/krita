@@ -27,7 +27,9 @@ public:
     ConstPaintDeviceImage(KisPaintDeviceSP);
     virtual ~ConstPaintDeviceImage();
     virtual char* data(int _x, int _y);
+    virtual char* rawData( int _x, int _y );
     virtual const char* data(int _x, int _y) const ;
+    virtual const char* rawData( int _x, int _y ) const;
     virtual ConstIterator* createIterator() const;
     virtual Iterator* createIterator();
 private:
@@ -41,7 +43,9 @@ public:
     PaintDeviceImage(KisPaintDeviceSP);
     virtual ~PaintDeviceImage();
     virtual char* data(int _x, int _y);
+    virtual char* rawData( int _x, int _y );
     virtual const char* data(int _x, int _y) const ;
+    virtual const char* rawData( int _x, int _y ) const;
     virtual ConstIterator* createIterator() const;
     virtual Iterator* createIterator();
 private:

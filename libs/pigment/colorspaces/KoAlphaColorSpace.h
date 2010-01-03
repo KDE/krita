@@ -25,7 +25,7 @@
 #include "DebugPigment.h"
 #include "pigment_export.h"
 
-#include "KoLcmsColorSpace.h"
+#include "KoColorSpaceAbstract.h"
 #include "KoColorSpaceTraits.h"
 
 #include "KoColorModelStandardIds.h"

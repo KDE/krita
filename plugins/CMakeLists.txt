@@ -11,7 +11,7 @@ include_directories(
 
 IF (NOT TINY)
     macro_optional_add_subdirectory( scan )
-    macro_optional_add_subdirectory( colorspaces )
+    macro_optional_add_subdirectory( colorengines )
     macro_optional_add_subdirectory( paragraphtool )
     macro_optional_add_subdirectory( musicshape )
     macro_optional_add_subdirectory( divineProportion )

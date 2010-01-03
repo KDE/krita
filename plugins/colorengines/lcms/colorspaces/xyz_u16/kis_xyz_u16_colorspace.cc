@@ -20,7 +20,7 @@
 #include "kis_xyz_u16_colorspace.h"
 #include <QDomElement>
 
-#include <kis_debug.h>
+#include <kdebug.h>
 #include <klocale.h>
 
 #include "compositeops/KoCompositeOpOver.h"

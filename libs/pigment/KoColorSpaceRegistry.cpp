@@ -80,6 +80,7 @@ void KoColorSpaceRegistry::init()
 
     // Create the built-in colorspaces
     add(new KoLabColorSpaceFactory());
+    add(new KoRgbU8ColorSpaceFactory());
     add(new KoRgbU16ColorSpaceFactory());
 
     d->alphaCs = new KoAlphaColorSpace();

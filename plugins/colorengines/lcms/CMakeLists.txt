@@ -40,9 +40,7 @@ SET ( lcmsengine_SRCS
 
 kde4_add_plugin(kolcmsengine ${lcmsengine_SRCS})
 
-set (EXTRA_LIBRARIES ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB})
-    
-target_link_libraries(kolcmsengine pigmentcms ${EXTRA_LIBRARIES})
+target_link_libraries(kolcmsengine pigmentcms ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB})
 install(TARGETS kolcmsengine DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

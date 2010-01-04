@@ -98,7 +98,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
     int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
     int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
 
-    const KoColorSpace *cs = static_cast<const KoColorSpace *>((KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF16", ""), "")));
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF16", ""), "");
 
     if (cs == 0) {
         return KoFilter::InternalError;

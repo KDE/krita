@@ -59,17 +59,16 @@ enum ImageType {
     IT_UNSUPPORTED
 };
 
-ImageType imfTypeToKisType( Imf::PixelType type)
+ImageType imfTypeToKisType(Imf::PixelType type)
 {
-    switch(type)
-    {
-        case Imf::UINT:
-        case Imf::NUM_PIXELTYPES:
-            return IT_UNSUPPORTED;
-        case Imf::HALF:
-            return IT_FLOAT16;
-        case Imf::FLOAT:
-            return IT_FLOAT32;
+    switch (type) {
+    case Imf::UINT:
+    case Imf::NUM_PIXELTYPES:
+        return IT_UNSUPPORTED;
+    case Imf::HALF:
+        return IT_FLOAT16;
+    case Imf::FLOAT:
+        return IT_FLOAT32;
     }
 }
 
@@ -109,46 +108,43 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         }
         qFatal("Unimplemented");
     }
-    
+
     // Check image type
     ImageType imageType = IT_UNKNOWN;
     for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
         const Imf::Channel &channel = i.channel();
         ImageType channelType = imfTypeToKisType(channel.type);
-        
-        if( imageType == IT_UNKNOWN )
-        {
+
+        if (imageType == IT_UNKNOWN) {
             imageType = channelType;
-        } else if( imageType != channelType )
-        {
+        } else if (imageType != channelType) {
             imageType = IT_UNSUPPORTED;
         }
     }
-    
+
     const KoColorSpace* colorSpace = 0;
-    switch(imageType)
-    {
-        case IT_FLOAT16:
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF16", ""), "");
-            break;
-        case IT_FLOAT32:
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF32", ""), "");
-            break;
-        case IT_UNKNOWN:
-        case IT_UNSUPPORTED:
-            break;
+    switch (imageType) {
+    case IT_FLOAT16:
+        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF16", ""), "");
+        break;
+    case IT_FLOAT32:
+        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF32", ""), "");
+        break;
+    case IT_UNKNOWN:
+    case IT_UNSUPPORTED:
+        break;
     }
-    if( !colorSpace) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    if (!colorSpace) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     dbgFile << "Colorspace: " << colorSpace->name();
-    
+
     // Create the image
-    m_image = new KisImage( m_adapter, width, height, colorSpace, "");
+    m_image = new KisImage(m_adapter, width, height, colorSpace, "");
 
     if (!m_image) {
         return KisImageBuilder_RESULT_FAILURE;
     }
     m_image->lock();
-    
+
     // Create the layer
     KisPaintLayerSP layer = new KisPaintLayer(m_image, m_image->nextLayerName(), OPACITY_OPAQUE, colorSpace);
     KisTransaction("", layer->paintDevice());

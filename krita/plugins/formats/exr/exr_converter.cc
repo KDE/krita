@@ -72,6 +72,11 @@ ImageType imfTypeToKisType(Imf::PixelType type)
     }
 }
 
+template<typename _T_>
+void decodeData( KisPaintLayerSP layer, int width, int height )
+{
+}
+
 KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
 {
     dbgFile << "Load exr: " << uri << " " << QFile::encodeName(uri.toLocalFile());
@@ -120,6 +125,12 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         } else if (imageType != channelType) {
             imageType = IT_UNSUPPORTED;
         }
+        QString qname = i.name();
+        if (qname != "A" && qname != "R" && qname != "G" && qname != "B" )
+        {
+            dbgFile << "Unknow: " << i.name();
+            imageType = IT_UNSUPPORTED;
+        }
     }
 
     const KoColorSpace* colorSpace = 0;
@@ -154,6 +165,8 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     if (!layer) {
         return KisImageBuilder_RESULT_FAILURE;
     }
+    
+    // Decode the data
 
     m_image->addNode(layer, m_image->rootLayer());
     layer->setDirty();

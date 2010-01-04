@@ -64,7 +64,7 @@ void KisFilterJob::run()
 
     // blt back onto the original
     KisPainter p2(m_dev);
-    p2.setCompositeOp(m_dev->colorSpace()->compositeOp(COMPOSITE_OVER));
+    p2.setCompositeOp(m_dev->colorSpace()->compositeOp(COMPOSITE_COPY));
     p2.setSelection(m_selection);
     p2.bitBlt(m_rc.topLeft(), dst, m_rc);
     p2.end();

@@ -183,12 +183,15 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
 KoShape * KoShapeRegistry::createShapeInternal(const KoXmlElement & fullElement, KoShapeLoadingContext & context, const KoXmlElement & element) const
 {
     QPair<QString, QString> p = QPair<QString, QString>(element.namespaceURI(), element.tagName());
-    kDebug(30006) << p;
 
     if (!d->factoryMap.contains(p)) return 0;
 
     QMultiMap<int, KoShapeFactory*> priorityMap = d->factoryMap[p];
     QList<KoShapeFactory*> factories = priorityMap.values();
+    
+    kDebug(30006) << "Supported factories for=" << p;
+    foreach(KoShapeFactory *f, factories)
+        kDebug(30006) << f->id() << f->name();
 
     // Higher numbers are more specific, map is sorted by keys
     for (int i = factories.size() - 1; i >= 0; --i) {

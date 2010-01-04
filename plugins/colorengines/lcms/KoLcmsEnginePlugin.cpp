@@ -68,6 +68,10 @@ K_EXPORT_COMPONENT_FACTORY(kolcmsengine, KoLcmsEnginePluginFactory("koffice"))
             : QObject(parent)
 {
     kDebug(31000) << "Initializing the lcms engine plugin";
+    //setComponentData(KoLcmsEnginePluginFactory::componentData());
+    KGlobal::locale()->insertCatalog("kocolorspaces");
+
+
 
     KoColorSpaceRegistry* registry = KoColorSpaceRegistry::instance();
     registry->addColorProfileFactory("icc", new KoIccColorProfileFactory());

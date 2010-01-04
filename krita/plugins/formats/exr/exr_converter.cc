@@ -88,7 +88,7 @@ void decodeData(Imf::InputFile& file, KisPaintLayerSP layer, int width, int ysta
 {
     typedef Rgba<_T_> Rgba;
 
-    QVector<Rgba> pixels(width);
+    QVector<Rgba> pixels(width*height);
 
     Imf::FrameBuffer frameBuffer;
     frameBuffer.insert("R",
@@ -109,10 +109,11 @@ void decodeData(Imf::InputFile& file, KisPaintLayerSP layer, int width, int ysta
                                   sizeof(Rgba) * width));
 
     file.setFrameBuffer(frameBuffer);
-    for (int y = ystart; y < ystart + height; ++y) {
-        file.readPixels(y);
+    file.readPixels(ystart, ystart + height - 1);
+    Rgba *rgba = pixels.data();
+    for (int y = 0; y < height; ++y) {
+//         file.readPixels(y);
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
-        Rgba *rgba = pixels.data();
         while (!it.isDone()) {
 
             // XXX: For now unmultiply the alpha, though compositing will be faster if we

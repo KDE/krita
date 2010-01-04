@@ -273,9 +273,7 @@ bool PSDLayerRecord::read(QIODevice* io)
         dbgFile << "read range " << src << "to" << dst << "for channel" << i;
         blendingRanges.sourceDestinationRanges << QPair<quint32, quint32>(src, dst);
     }
-
-
-*/
+    */
     dbgFile << "Going to read layer name at" << io->pos();
     quint8 layerNameLength;
     if (!psdread(io, &layerNameLength)) {
@@ -422,7 +420,7 @@ quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, quint16 chan
                 quint8* bytes = new quint8[length];
                 quint64 bytesRead = io->read((char*)bytes, length);
                 if (bytesRead != length) {
-                    error = "Could not read enough bytes for 16-bit channel";
+                    error = "Could not read enough bytes for 32-bit channel";
                     return 0;
                 }
                 for (quint64 i = 0; i < right - left && i * 4 < length; ++i) {
@@ -436,7 +434,6 @@ quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, quint16 chan
         }
     }
     else if (channelInfo->compressionType == RLE) {
-
         io->seek(savedPos);
     }
     else {

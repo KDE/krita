@@ -101,15 +101,16 @@ QString psd_colormode_to_colormodelid(PSDHeader::PSDColorMode colormode, quint16
 
     switch(channelDepth) {
     case(1):
+    case(8):
+        return KoColorSpaceRegistry::instance()->colorSpaceId(colorSpaceId, Integer8BitsColorDepthID);
     case(16):
         return KoColorSpaceRegistry::instance()->colorSpaceId(colorSpaceId, Integer16BitsColorDepthID);
-    case(8):
+    case(32):
+        return KoColorSpaceRegistry::instance()->colorSpaceId(colorSpaceId, Float32BitsColorDepthID);
     default:
-        return KoColorSpaceRegistry::instance()->colorSpaceId(colorSpaceId, Integer8BitsColorDepthID);
-
+        return QString::null;
     }
 
-    return QString::null;
 }
 
 PSDLoader::PSDLoader(KisDoc2 *doc, KisUndoAdapter *adapter)
@@ -229,6 +230,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                                                        row,
                                                        layerRecord->right - layerRecord->left,
                                                        layerRecord->bottom - layerRecord->top);
+                qDeleteAll(planes);
 
             }
             m_image->addNode(layer, m_image->rootLayer());

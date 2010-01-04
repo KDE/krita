@@ -899,7 +899,7 @@ void Layout::updateBorders()
 {
     Q_ASSERT(m_data);
     m_borderInsets = m_data->shapeMargins();
-    KoTextBlockBorderData border(QRectF(this->x() - listIndent(), m_y + m_borderInsets.top, width(), 1.));
+    KoTextBlockBorderData border(QRectF(this->x() - resolveTextIndent() - listIndent(), m_y + m_borderInsets.top, width() + resolveTextIndent(), 1));
     border.setEdge(border.Left, m_format, KoParagraphStyle::LeftBorderStyle,
                    KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
                    KoParagraphStyle::LeftBorderSpacing, KoParagraphStyle::LeftInnerBorderWidth);
@@ -1800,7 +1800,7 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
         c1.setPosition(m_block.position() + pos);
         c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_parent->inlineTextObjectManager()->inlineTextObject(c1));
-        if (note && note->type() == KoInlineNote::Footnote) {
+        if (note && ((note->type() == KoInlineNote::Footnote) || (note->type() == KoInlineNote::Endnote))) {
             QTextCursor cursor(m_textShape->footnoteDocument());
             cursor.setPosition(m_textShape->footnoteDocument()->characterCount()-1);
             if (firstFootnote) {

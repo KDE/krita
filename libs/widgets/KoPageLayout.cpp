@@ -96,10 +96,10 @@ void KoPageLayout::loadOdf(const KoXmlElement &style)
             bottomMargin = leftMargin;
         }
         else {
-            leftMargin   = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-left"));
-            topMargin    = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-top"));
-            rightMargin  = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-right"));
-            bottomMargin = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-bottom"));
+            leftMargin   = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-left"), MM_TO_POINT(20.0));
+            topMargin    = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-top"), MM_TO_POINT(20.0));
+            rightMargin  = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-right"), MM_TO_POINT(20.0));
+            bottomMargin = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-bottom"), MM_TO_POINT(20.0));
         }
 
         // Padding.  Same reasoning as for margins

@@ -67,6 +67,7 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/TrackedChangeManager.cpp
     ../dialogs/TrackedChangeModel.cpp
     ../dialogs/modeltest.cpp
+    ../dialogs/ChangeConfigureDialog.cpp
     ../ListItemsHelper.cpp
     ../TextShape.cpp
     ../Layout.cpp

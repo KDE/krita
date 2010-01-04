@@ -1266,6 +1266,7 @@ void KoRgbU8CompositeOp::compositeCopy(qint32 pixelSize,
 
     Q_UNUSED(maskRowStart);
     Q_UNUSED(maskRowStride);
+    Q_UNUSED(opacity);
 
     quint8 *dst = dstRowStart;
     const quint8 *src = srcRowStart;
@@ -1274,10 +1275,6 @@ void KoRgbU8CompositeOp::compositeCopy(qint32 pixelSize,
         while (rows > 0) {
 
             memcpy(dst, src, numColumns * pixelSize);
-
-            if (opacity != OPACITY_OPAQUE) {
-                colorSpace()->multiplyAlpha(dst, opacity, numColumns);
-            }
 
             dst += dstRowStride;
             src += srcRowStride;
@@ -1292,7 +1289,7 @@ void KoRgbU8CompositeOp::compositeCopy(qint32 pixelSize,
                 ++dst;
                 ++src;
             }
-            // XXX: how about the opacity here?
+
             --rows;
         }
     }

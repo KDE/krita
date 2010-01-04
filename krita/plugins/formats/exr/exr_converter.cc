@@ -142,15 +142,15 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     dbgFile << "Colorspace: " << colorSpace->name();
     
     // Create the image
-    KisImageWSP image = new KisImage( m_adapter, width, height, colorSpace, "");
+    m_image = new KisImage( m_adapter, width, height, colorSpace, "");
 
-    if (!image) {
+    if (!m_image) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-    image->lock();
+    m_image->lock();
     
     // Create the layer
-    KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE, colorSpace);
+    KisPaintLayerSP layer = new KisPaintLayer(m_image, m_image->nextLayerName(), OPACITY_OPAQUE, colorSpace);
     KisTransaction("", layer->paintDevice());
 
     layer->setCompositeOp(COMPOSITE_OVER);
@@ -159,9 +159,9 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-    image->addNode(layer, image->rootLayer());
+    m_image->addNode(layer, m_image->rootLayer());
     layer->setDirty();
-    image->unlock();
+    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 

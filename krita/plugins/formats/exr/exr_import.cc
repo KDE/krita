@@ -85,6 +85,7 @@ KoFilter::ConversionStatus exrImport::convert(const QByteArray&, const QByteArra
             return KoFilter::InternalError;
             break;
         case KisImageBuilder_RESULT_OK:
+            Q_ASSERT(ib.image());
             doc -> setCurrentImage(ib.image());
             return KoFilter::OK;
         default:

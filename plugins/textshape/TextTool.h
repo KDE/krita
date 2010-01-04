@@ -190,6 +190,8 @@ private slots:
     void toggleShowChanges(bool);
     /// When enabled, make the change tracker record changes made while typing
     void toggleRecordChanges(bool);
+    /// Configure Change Tracking
+    void configureChangeTracking();
     /// select all text in the current document.
     void selectAll();
     /// show the style manager
@@ -259,6 +261,8 @@ private:
     void editingPluginEvents();
     void finishedWord();
     void finishedParagraph();
+    void readConfig();
+    void writeConfig();
 
 private:
     friend class UndoTextCommand;
@@ -294,6 +298,7 @@ private:
     KAction *m_actionFormatDecreaseIndent;
     KAction *m_actionShowChanges;
     KAction *m_actionRecordChanges;
+    KAction *m_configureChangeTracking;
     KFontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;
     KoColorPopupAction *m_actionFormatTextColor;

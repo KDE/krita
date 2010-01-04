@@ -1325,15 +1325,15 @@ void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int sel
                             switch(changeElement->getChangeType()) {
                                 case (KoGenChange::insertChange):
                                     if (m_changeTracker->displayChanges())
-                                    	painter->fillRect(x1, line.y(), x2-x1, line.height(), QColor(0,255,0,255));
+                                    	painter->fillRect(x1, line.y(), x2-x1, line.height(), m_changeTracker->getInsertionBgColor());
                                     break;
                                 case (KoGenChange::formatChange):
                                     if (m_changeTracker->displayChanges())
-                                    	painter->fillRect(x1, line.y(), x2-x1, line.height(), QColor(0,0,255,255));
+                                    	painter->fillRect(x1, line.y(), x2-x1, line.height(), m_changeTracker->getFormatChangeBgColor());
                                     break;
                                 case (KoGenChange::deleteChange):
                                     if (m_changeTracker->displayChanges())
-                                        painter->fillRect(x1, line.y(), x2-x1, line.height(), QColor(255,0,0,255));
+                                        painter->fillRect(x1, line.y(), x2-x1, line.height(), m_changeTracker->getDeletionBgColor());
                                     break;
                             }
                         }

@@ -41,6 +41,7 @@
 #include <QTextFormat>
 #include <QTextCharFormat>
 #include <QTextDocumentFragment>
+#include <QColor>
 
 class KoChangeTracker::Private
 {
@@ -48,7 +49,10 @@ public:
     Private()
       : changeId(1),
         recordChanges(false),
-        displayChanges(false)
+        displayChanges(false),
+        insertionBgColor(0,255,0),
+        deletionBgColor(255,0,0),
+        formatChangeBgColor(0,0,255)
     {
     }
     ~Private() { }
@@ -61,6 +65,7 @@ public:
     int changeId;
     bool recordChanges;
     bool displayChanges;
+    QColor insertionBgColor, deletionBgColor, formatChangeBgColor;
 };
 
 KoChangeTracker::KoChangeTracker(QObject *parent)
@@ -328,6 +333,36 @@ int KoChangeTracker::getDeletedChanges(QVector<KoChangeTrackerElement *>& delete
     }
 
     return numAppendedItems;
+}
+
+const QColor& KoChangeTracker::getInsertionBgColor()
+{
+    return d->insertionBgColor;
+}
+
+const QColor& KoChangeTracker::getDeletionBgColor()
+{
+    return d->deletionBgColor;
+}
+
+const QColor& KoChangeTracker::getFormatChangeBgColor()
+{
+    return d->formatChangeBgColor;
+}
+
+void KoChangeTracker::setInsertionBgColor(const QColor& bgColor)
+{
+    d->insertionBgColor = bgColor;
+}
+
+void KoChangeTracker::setDeletionBgColor(const QColor& bgColor)
+{
+    d->deletionBgColor = bgColor;
+}
+
+void KoChangeTracker::setFormatChangeBgColor(const QColor& bgColor)
+{
+    d->formatChangeBgColor = bgColor;
 }
 
 #include <KoChangeTracker.moc>

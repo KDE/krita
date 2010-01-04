@@ -74,6 +74,14 @@ public:
     bool containsInlineChanges(const QTextFormat &format);
     int mergeableId(KoGenChange::Type type, QString &title, int existingId);
 
+    const QColor& getInsertionBgColor();
+    const QColor& getDeletionBgColor();
+    const QColor& getFormatChangeBgColor();
+
+    void setInsertionBgColor(const QColor& bgColor);
+    void setDeletionBgColor(const QColor& color);
+    void setFormatChangeBgColor(const QColor& color);
+
     /// Splits a changeElement. This creates a duplicate changeElement with a different changeId. This is used because we do not support overlapping change regions. The function returns the new changeId
     int split(int changeId);
 

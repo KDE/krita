@@ -30,6 +30,7 @@
 #include "dialogs/InsertCharacter.h"
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
+#include "dialogs/ChangeConfigureDialog.h"
 #include "dialogs/TrackedChangeManager.h"
 #include "commands/TextCommandBase.h"
 #include "commands/TextCutCommand.h"
@@ -68,7 +69,9 @@
 #include <KoTextPaste.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
+#include <KoGlobal.h>
 
+#include <KConfigGroup>
 #include <kdebug.h>
 #include <KStandardShortcut>
 #include <KFontSizeAction>
@@ -388,6 +391,10 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_actionRecordChanges->setCheckable(true);
     addAction("edit_record_changes", m_actionRecordChanges);
     connect(m_actionRecordChanges, SIGNAL(triggered(bool)), this, SLOT(toggleRecordChanges(bool)));
+
+    m_configureChangeTracking = new KAction(i18n("Configure Change Tracking"), this);
+    addAction("configure_change_tracking", m_configureChangeTracking);
+    connect(m_configureChangeTracking, SIGNAL(triggered()), this, SLOT(configureChangeTracking()));
 
     action = new KAction(i18n("Style Manager"), this);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_S);
@@ -1261,6 +1268,7 @@ void TextTool::activate(bool temporary)
     updateStyleManager();
     if (m_specialCharacterDocker)
         m_specialCharacterDocker->setEnabled(true);
+    readConfig();
 }
 
 void TextTool::deactivate()
@@ -1687,6 +1695,23 @@ void TextTool::toggleRecordChanges(bool on)
     m_changeTracker->setRecordChanges(on);
 }
 
+void TextTool::configureChangeTracking()
+{
+    QColor insertionBgColor, deletionBgColor, formatChangeBgColor;
+    insertionBgColor = m_changeTracker->getInsertionBgColor();
+    deletionBgColor = m_changeTracker->getDeletionBgColor();
+    formatChangeBgColor = m_changeTracker->getFormatChangeBgColor();
+
+    ChangeConfigureDialog changeDialog( insertionBgColor, deletionBgColor, formatChangeBgColor, m_canvas->canvasWidget());
+    
+    if (changeDialog.exec()) {
+        m_changeTracker->setInsertionBgColor(changeDialog.getInsertionBgColor());
+        m_changeTracker->setDeletionBgColor(changeDialog.getDeletionBgColor());
+        m_changeTracker->setFormatChangeBgColor(changeDialog.getFormatChangeBgColor());
+        writeConfig();
+    }
+}
+
 void TextTool::testSlot(bool on)
 {
     kDebug(32500) << "signal received. bool:" << on;
@@ -1914,6 +1939,29 @@ void TextTool::shapeAddedToDoc(KoShape *shape)
     // in case the new frame added is a freshly appended frame
     // allow the layouter to do some work and then optionally move the view to follow the cursor
     QTimer::singleShot(0, this, SLOT(ensureCursorVisible()));
+}
+
+
+void TextTool::readConfig()
+{
+    QColor bgColor, defaultColor;
+    KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+    if (interface.exists()) {
+        bgColor = interface.readEntry("insertionBgColor", defaultColor);
+        m_changeTracker->setInsertionBgColor(bgColor);
+        bgColor = interface.readEntry("deletionBgColor", defaultColor);
+        m_changeTracker->setDeletionBgColor(bgColor);
+        bgColor = interface.readEntry("formatChangeBgColor", defaultColor);
+        m_changeTracker->setFormatChangeBgColor(bgColor);
+    }
+}
+
+void TextTool::writeConfig()
+{
+    KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+    interface.writeEntry("insertionBgColor", m_changeTracker->getInsertionBgColor());
+    interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
+    interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());
 }
 
 void TextTool::debugTextDocument()

@@ -55,6 +55,7 @@ SET ( textshape_SRCS
     dialogs/FormattingPreview.cpp
     dialogs/StyleManagerWelcome.cpp
     dialogs/TableDialog.cpp
+    dialogs/ChangeConfigureDialog.cpp
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
     dialogs/modeltest.cpp
@@ -88,6 +89,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/FontDecorations.ui
     dialogs/FontLayoutTab.ui
     dialogs/LanguageTab.ui
+    dialogs/ChangeConfigureDialog.ui
     dialogs/TrackedChangeManager.ui
 )
 

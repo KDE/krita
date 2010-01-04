@@ -41,21 +41,14 @@ public:
      * Refer to KisOpenGLShader for more information.
      * @param sourceCodeFilename the file to read the source code from
      */
-    static KisOpenGLFragmentShader file(const QString& sourceCodeFilename);
+    static KisOpenGLFragmentShader *createFromSourceCodeFile(const QString& sourceCodeFilename);
 
     /**
      * Loads the shader source code from the given QString
      *
      * @param sourceCodeStrings the source string to load from
      */
-    static KisOpenGLFragmentShader string(const QString& sourceCodeString);
-
-    /**
-     * Loads the shader source code from the given char* string
-     *
-     * @param sourceCodeString the source string to load from
-     */
-    static KisOpenGLFragmentShader string(const char* sourceCodeString);
+    static KisOpenGLFragmentShader *createFromSourceCodeString(const QString& sourceCodeString);
 
 protected:
     KisOpenGLFragmentShader();

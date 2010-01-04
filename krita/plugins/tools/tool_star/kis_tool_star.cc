@@ -38,6 +38,7 @@
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
 
+#include <opengl/kis_opengl.h>
 #include <kis_debug.h>
 #include <canvas/kis_canvas2.h>
 #include <kis_painter.h>
@@ -46,13 +47,6 @@
 #include <kis_paint_device.h>
 
 #include "kis_selection.h"
-
-#include <config-opengl.h>
-
-#ifdef HAVE_OPENGL
-#include <GL/gl.h>
-#endif
-
 
 KisToolStar::KisToolStar(KoCanvasBase * canvas)
         : KisToolShape(canvas, KisCursor::load("tool_star_cursor.png", 6, 6)),
@@ -165,7 +159,9 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
     vQPointF points = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
 #if defined(HAVE_OPENGL)
-    if (m_canvas->canvasController()->isCanvasOpenGL()) {
+    if (isCanvasOpenGL()) {
+        beginOpenGL();
+
         QPointF begin, end;
 
         glEnable(GL_LINE_SMOOTH);
@@ -186,6 +182,8 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
 
         glDisable(GL_COLOR_LOGIC_OP);
         glDisable(GL_LINE_SMOOTH);
+
+        endOpenGL();
     } else
 #endif
 

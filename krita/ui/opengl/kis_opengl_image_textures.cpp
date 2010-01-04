@@ -18,7 +18,6 @@
 
 #include "opengl/kis_opengl_image_textures.h"
 
-
 #ifdef HAVE_OPENGL
 
 #include <ksharedptr.h>
@@ -43,7 +42,6 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
-#include "opengl/kis_opengl.h"
 #include "kis_config.h"
 #include "kis_debug.h"
 
@@ -208,7 +206,7 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
 
 void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
 {
-    dbgUI << "updateImageTextureTiles" << rect;
+    //dbgUI << "updateImageTextureTiles" << rect;
 
     QRect updateRect = rect & m_image->bounds();
 

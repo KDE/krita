@@ -36,8 +36,6 @@
 #include "kis_paintop_registry.h"
 #include "kis_paint_information.h"
 
-#include <config-opengl.h>
-
 struct KisPaintOpSettings::Private {
     KisNodeSP node;
 };

@@ -22,6 +22,8 @@
 
 #include <math.h>
 
+#include <opengl/kis_opengl.h>
+
 #include <QPainter>
 #include <QSpinBox>
 #include <QKeyEvent>
@@ -46,12 +48,6 @@
 #include <kis_cursor.h>
 #include <kis_paint_information.h>
 #include <kis_paintop_preset.h>
-
-#include <config-opengl.h>
-
-#ifdef HAVE_OPENGL
-#include <GL/gl.h>
-#endif
 
 #define PREVIEW_LINE_WIDTH 1
 
@@ -215,7 +211,9 @@ void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
     QPointF endPos;
 
 #if defined(HAVE_OPENGL)
-    if (m_canvas->canvasController()->isCanvasOpenGL()) {
+    if (isCanvasOpenGL()) {
+        beginOpenGL();
+
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
@@ -252,6 +250,7 @@ void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
         glDisable(GL_COLOR_LOGIC_OP);
         glDisable(GL_LINE_SMOOTH);
 
+        endOpenGL();
     } else
 #endif
 

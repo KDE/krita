@@ -18,14 +18,9 @@
 #ifndef KIS_OPENGL_IMAGE_TEXTURES_H_
 #define KIS_OPENGL_IMAGE_TEXTURES_H_
 
-#include <config-opengl.h>
-#include <config-glew.h>
+#include <opengl/kis_opengl.h>
 
 #ifdef HAVE_OPENGL
-
-#ifdef HAVE_GLEW
-#include <GL/glew.h>
-#endif
 
 #include <map>
 

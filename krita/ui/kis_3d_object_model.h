@@ -28,14 +28,7 @@
 #include <QVector>
 #include <QHash>
 
-#include <config-opengl.h>
-
-#ifdef HAVE_OPENGL
-#if defined(_WIN32) || defined(_WIN64)
-# include <windows.h>
-#endif
-#include <GL/gl.h>
-#endif
+#include <opengl/kis_opengl.h>
 
 struct Material {
     KisVector3D Ka; // ambient

@@ -34,8 +34,7 @@
 #include <kis_gradient_painter.h>
 #include <flake/kis_node_shape.h>
 
-#include <config-opengl.h>
-#include <config-glew.h>
+#include <opengl/kis_opengl.h>
 
 class KisOpenGLGradientProgram;
 

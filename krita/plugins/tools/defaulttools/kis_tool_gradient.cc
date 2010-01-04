@@ -23,7 +23,6 @@
 #include "kis_tool_gradient.h"
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-#include <GL/glew.h>
 #include <QGLWidget>
 #endif
 
@@ -64,7 +63,6 @@
 #include <kis_config.h>
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-#include <opengl/kis_opengl.h>
 #include <opengl/kis_opengl_gradient_program.h>
 #include <opengl/kis_opengl_canvas2.h>
 #include <canvas/kis_canvas2.h>
@@ -119,6 +117,7 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
                 Q_ASSERT(canvasWidget);
 
                 if (canvasWidget) {
+                    beginOpenGL();
                     canvasWidget->setPixelToViewTransformation();
 
                     glMatrixMode(GL_MODELVIEW);
@@ -134,11 +133,6 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
                     canvasWidget->makeCurrent();
                     m_gradientProgram->activate(normalisedGradientVectorStart,
                                                 normalisedGradientVectorStart + normalisedGradientVector);
-
-                    //                     glValidateProgramARB(m_gradientProgram->handle());
-                    //                     dbgTools <<"Validate:";
-                    //                     dbgTools << m_gradientProgram->getInfoLog();
-
 
                     glBegin(GL_QUADS);
 
@@ -163,6 +157,8 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
                     // Unbind the texture otherwise the ATI driver crashes when the canvas context is
                     // made current after the textures are deleted following an image resize.
                     glBindTexture(GL_TEXTURE_1D, 0);
+
+                    endOpenGL();
                 }
             }
         } else

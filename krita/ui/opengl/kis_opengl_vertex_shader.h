@@ -38,22 +38,14 @@ public:
      * Refer to KisOpenGLShader for more information.
      * @param sourceCodeFilename the file to read the source code from
      */
-    static KisOpenGLVertexShader file(const QString& sourceCodeFilename);
+    static KisOpenGLVertexShader *createFromSourceCodeFile(const QString& sourceCodeFilename);
 
     /**
      * Loads the shader source code from the given QString
      *
      * @param sourceCodeString the source string to load from
      */
-    static KisOpenGLVertexShader string(const QString& sourceCodeString);
-
-    /**
-     * Loads the shader source code from the given char* string
-     *
-     * @param sourceCodeString the source string to load from
-     */
-    static KisOpenGLVertexShader string(const char* sourceCodeString);
-
+    static KisOpenGLVertexShader *createFromSourceCodeString(const QString& sourceCodeString);
 
 protected:
     KisOpenGLVertexShader();

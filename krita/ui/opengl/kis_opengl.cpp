@@ -18,40 +18,37 @@
 
 #include "opengl/kis_opengl.h"
 
-#include <config-glew.h>
-
 #ifdef HAVE_OPENGL
-
-#if defined(_WIN32) || defined(_WIN64)
-#include <windows.h>
-#endif
-
-#ifdef HAVE_GLEW
-#include <GL/glew.h>
-#endif
-
-#include <QtGlobal>
-#ifdef Q_WS_MAC
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
 
 #include <QGLWidget>
 
 #include <kis_debug.h>
 
-QGLWidget *KisOpenGL::SharedContextWidget = 0;
+namespace
+{
+    QGLWidget *SharedContextWidget = 0;
+    bool ContextHasShadingLanguage = false;
+}
 
 void KisOpenGL::createContext()
 {
     Q_ASSERT(SharedContextWidget == 0);
 
-    dbgUI << "Creating shared context widget";
+    dbgUI << "OpenGL: Creating shared context widget";
 
-    SharedContextWidget = new QGLWidget();//KisOpenGLCanvasFormat);
+    SharedContextWidget = new QGLWidget();
     SharedContextWidget->makeCurrent();
     initGlew();
+
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0) {
+        dbgUI << "Have OpenGL >= 2.0";
+        ContextHasShadingLanguage = true;
+    } else {
+        dbgUI << "Have OpengGL < 2.0";
+        // We could check for the ARB extensions but it's unlikely now to find a 
+        // card that has them but is less than version 2.0
+        ContextHasShadingLanguage = false;
+    }
 }
 
 void KisOpenGL::makeContextCurrent()
@@ -81,22 +78,11 @@ void KisOpenGL::initGlew()
 
 bool KisOpenGL::hasShadingLanguage()
 {
-    bool haveShadingLanguage = false;
-
-#ifdef HAVE_GLEW
-    if (QGLFormat::hasOpenGL()) {
-        makeContextCurrent();
-
-        if (GLEW_ARB_shader_objects && GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader
-                && GLEW_ARB_shading_language_100) {
-            dbgUI << "Check: have opengl shading extensions";
-            haveShadingLanguage = true;
-        } else {
-            dbgUI << "Check: we do not have opengl shading extensions";
-        }
+    if (SharedContextWidget == 0) {
+        createContext();
     }
-#endif
-    return haveShadingLanguage;
+
+    return ContextHasShadingLanguage;
 }
 
 void KisOpenGL::printError(const char *file, int line)

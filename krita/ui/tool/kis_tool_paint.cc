@@ -49,6 +49,7 @@
 #include <KoColor.h>
 #include <KoCanvasBase.h>
 
+#include <opengl/kis_opengl.h>
 #include <kis_types.h>
 #include <kis_global.h>
 #include <kis_image.h>
@@ -65,7 +66,6 @@
 #include "KoSliderCombo.h"
 #include "kis_canvas_resource_provider.h"
 
-#include "config-opengl.h"
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
         : KisTool(canvas, cursor), m_previousNode(0)

@@ -27,7 +27,6 @@
 #include <kstandarddirs.h>
 
 #include "kis_factory2.h"
-#include "opengl/kis_opengl.h"
 #include "kis_debug.h"
 
 KisOpenGLShader::KisOpenGLShader(GLenum shaderType)

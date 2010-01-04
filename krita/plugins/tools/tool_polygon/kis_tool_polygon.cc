@@ -38,18 +38,12 @@
 #include <KoShapeController.h>
 #include <KoLineBorder.h>
 
+#include <opengl/kis_opengl.h>
 #include <kis_selection.h>
 #include "kis_painter.h"
 #include <kis_paint_device.h>
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
-
-#include <config-opengl.h>
-
-#ifdef HAVE_OPENGL
-#include <GL/gl.h>
-#endif
-
 
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
         : KisToolShape(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6)),
@@ -205,7 +199,9 @@ void KisToolPolygon::paint(QPainter& gc, const KoViewConverter &converter)
     QPointF endPos;
 
 #if defined(HAVE_OPENGL)
-    if (m_canvas->canvasController()->isCanvasOpenGL()) {
+    if (isCanvasOpenGL()) {
+        beginOpenGL();
+
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
@@ -242,6 +238,7 @@ void KisToolPolygon::paint(QPainter& gc, const KoViewConverter &converter)
         glDisable(GL_COLOR_LOGIC_OP);
         glDisable(GL_LINE_SMOOTH);
 
+        endOpenGL();
     } else
 #endif
 

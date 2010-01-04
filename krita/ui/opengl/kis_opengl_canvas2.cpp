@@ -55,13 +55,21 @@
 #define NEAR_VAL -10.0
 #define FAR_VAL 10.0
 
+namespace
+{
+    const GLuint NO_PROGRAM = 0;
+}
+
 class KisOpenGLCanvas2::Private
 {
 public:
     Private(const KoViewConverter *vc)
             : viewConverter(vc)
             , canvas(0)
-            , toolProxy(0) {
+            , toolProxy(0)
+            , savedCurrentProgram(NO_PROGRAM)
+            , GLStateSaved(false)
+    {
     }
 
     const KoViewConverter * viewConverter;
@@ -72,7 +80,8 @@ public:
     QPoint origin;
     QPoint documentOffset;
     QTimer blockMouseEvent;
-
+    GLint savedCurrentProgram;
+    bool GLStateSaved;
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
@@ -104,42 +113,61 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 
 void KisOpenGLCanvas2::initializeGL()
 {
-    qglClearColor(QColor::fromCmykF(0.40, 0.0, 1.0, 0.0));
-    glShadeModel(GL_FLAT);
-    //glEnable(GL_CULL_FACE);
 }
 
 void KisOpenGLCanvas2::resizeGL(int w, int h)
 {
     glViewport(0, 0, (GLint)w, (GLint)h);
     adjustOrigin();
-    updateGL();
+    draw();
 }
 
-void KisOpenGLCanvas2::paintGL()
+void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
+{
+    draw();
+}
+
+void KisOpenGLCanvas2::draw()
+{
+    QPainter gc(this);
+
+    saveGLState();
+
+    drawBorder();
+
+    if (m_d->canvas->image()) {
+        drawBackground();
+        drawImage();
+
+        restoreGLState();
+
+        // XXX: make settable
+        bool drawTools = true;
+
+        drawDecorations(gc, drawTools,
+                        m_d->documentOffset,
+                        QRect(QPoint(0, 0), QSize(width(), height())),
+                        m_d->canvas);
+    } else {
+        restoreGLState();
+    }
+
+    gc.end();
+}
+
+void KisOpenGLCanvas2::drawBorder()
 {
     QColor widgetBackgroundColor = borderColor();
 
-    glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, widgetBackgroundColor.blue() / 255.0, 1.0);
+    glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, 
+                 widgetBackgroundColor.blue() / 255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
-    glShadeModel(GL_FLAT);
+}
 
-    KisImageWSP image = m_d->canvas->image();
-
-    if (!image) return;
-
-    // Zoom factor
-    qreal sx, sy;
-    m_d->viewConverter->zoom(&sx, &sy);
-
-    // Resolution
-    qreal pppx, pppy;
-    pppx = image->xRes();
-    pppy = image->yRes();
-
-    // Compute the scale factors
-    qreal scaleX = sx / pppx;
-    qreal scaleY = sy / pppy;
+void KisOpenGLCanvas2::drawBackground()
+{
+    const qreal scaleX = zoomScaleX();
+    const qreal scaleY = zoomScaleY();
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -168,13 +196,16 @@ void KisOpenGLCanvas2::paintGL()
     glScalef(scaleX, scaleY, 1.0);
 
     glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->backgroundTexture());
-
     glEnable(GL_TEXTURE_2D);
+    glShadeModel(GL_FLAT);
 
     glBegin(GL_QUADS);
 
+    glColor3f(1.0, 1.0, 1.0);
     glTexCoord2f(0.0, 0.0);
     glVertex2f(0.0, 0.0);
+
+    KisImageWSP image = m_d->canvas->image();
 
     glTexCoord2f(image->width() / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE, 0.0);
     glVertex2f(image->width(), 0.0);
@@ -188,19 +219,27 @@ void KisOpenGLCanvas2::paintGL()
 
     glEnd();
 
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(-m_d->documentOffset.x(), -m_d->documentOffset.y(), 0.0);
-    glTranslatef(m_d->origin.x(), m_d->origin.y(), 0.0);
-    glScalef(scaleX, scaleY, 1.0);
+void KisOpenGLCanvas2::drawImage()
+{
+    setPixelToViewTransformation();
+
+    const qreal scaleX = zoomScaleX();
+
+    glEnable(GL_TEXTURE_2D);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    QRectF documentRect = m_d->viewConverter->viewToDocument(QRectF(m_d->documentOffset.x(), m_d->documentOffset.y(), width(), height()));
+    QRectF documentRect = m_d->viewConverter->viewToDocument(QRectF(m_d->documentOffset.x(), 
+                                                                    m_d->documentOffset.y(), 
+                                                                    width(), 
+                                                                    height()));
+    KisImageWSP image = m_d->canvas->image();
+
     QRect wr = image->documentToIntPixel(documentRect);
     wr &= QRect(0, 0, image->width(), image->height());
 
@@ -214,11 +253,11 @@ void KisOpenGLCanvas2::paintGL()
     makeCurrent();
 
     for (int x = (wr.left() / m_d->openGLImageTextures->imageTextureTileWidth()) * m_d->openGLImageTextures->imageTextureTileWidth();
-            x <= wr.right();
-            x += m_d->openGLImageTextures->imageTextureTileWidth()) {
+        x <= wr.right();
+        x += m_d->openGLImageTextures->imageTextureTileWidth()) {
         for (int y = (wr.top() / m_d->openGLImageTextures->imageTextureTileHeight()) * m_d->openGLImageTextures->imageTextureTileHeight();
-                y <= wr.bottom();
-                y += m_d->openGLImageTextures->imageTextureTileHeight()) {
+            y <= wr.bottom();
+            y += m_d->openGLImageTextures->imageTextureTileHeight()) {
 
             glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->imageTextureTile(x, y));
             if (scaleX > 2.0) {
@@ -259,52 +298,115 @@ void KisOpenGLCanvas2::paintGL()
     // Unbind the texture otherwise the ATI driver crashes when the canvas context is
     // made current after the textures are deleted following an image resize.
     glBindTexture(GL_TEXTURE_2D, 0);
-
-
-    glShadeModel(GL_SMOOTH);
-    // XXX: make settable
-    bool drawTools = true;
-
-    QPainter gc(this);
-
-    drawDecorations(gc, drawTools,
-                    m_d->documentOffset,
-                    QRect(QPoint(0, 0), QSize(width(), height())),
-                    m_d->canvas);
-
-    gc.end();
-
 }
 
-void KisOpenGLCanvas2::setPixelToViewTransformation(void)
+void KisOpenGLCanvas2::saveGLState()
 {
-    KisImageWSP image = m_d->canvas->image();
+    Q_ASSERT(!m_d->GLStateSaved);
 
-    if (!image) return;
+    if (!m_d->GLStateSaved) {
+        m_d->GLStateSaved = true;
 
-    // Zoom factor
-    qreal sx, sy;
-    m_d->viewConverter->zoom(&sx, &sy);
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glMatrixMode(GL_TEXTURE);
+        glPushMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
 
-    // Resolution
-    qreal pppx, pppy;
-    pppx = image->xRes();
-    pppy = image->yRes();
+#ifdef HAVE_GLEW
+        if (KisOpenGL::hasShadingLanguage()) {
+            glGetIntegerv(GL_CURRENT_PROGRAM, &m_d->savedCurrentProgram);
+            glUseProgram(NO_PROGRAM);
+        }
+#endif
+    }
+}
 
-    // Compute the scale factors
-    qreal scaleX = sx / pppx;
-    qreal scaleY = sy / pppy;
+void KisOpenGLCanvas2::restoreGLState()
+{
+    Q_ASSERT(m_d->GLStateSaved);
 
+    if (m_d->GLStateSaved) {
+        m_d->GLStateSaved = false;
+
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+        glMatrixMode(GL_TEXTURE);
+        glPopMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix();
+        glPopAttrib();
+
+#ifdef HAVE_GLEW
+        if (KisOpenGL::hasShadingLanguage()) {
+            glUseProgram(m_d->savedCurrentProgram);
+        }
+#endif
+    }
+}
+
+void KisOpenGLCanvas2::beginOpenGL(void)
+{
+    saveGLState();
+    setupMatrices();
+}
+
+void KisOpenGLCanvas2::endOpenGL(void)
+{
+    restoreGLState();
+}
+
+void KisOpenGLCanvas2::setupMatrices(void)
+{
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, width(), height());
     glOrtho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
 
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glTranslatef(-m_d->documentOffset.x(), -m_d->documentOffset.y(), 0.0);
     glTranslatef(m_d->origin.x(),  m_d->origin.y(), 0.0);
+}
+
+void KisOpenGLCanvas2::applyZoomScalingToModelView(void)
+{
+    KisImageWSP image = m_d->canvas->image();
+    
+    if (!image) return;
+    
+    const qreal scaleX = zoomScaleX();
+    const qreal scaleY = zoomScaleY();
+    
+    glMatrixMode(GL_MODELVIEW);
     glScalef(scaleX, scaleY, 1.0);
+}
+
+void KisOpenGLCanvas2::setPixelToViewTransformation(void)
+{
+    setupMatrices();
+    applyZoomScalingToModelView();
+}
+
+qreal KisOpenGLCanvas2::zoomScaleX() const
+{
+    qreal sx, sy;
+    m_d->viewConverter->zoom(&sx, &sy);
+
+    return sx / m_d->canvas->image()->xRes();
+}
+
+qreal KisOpenGLCanvas2::zoomScaleY() const
+{
+    qreal sx, sy;
+    m_d->viewConverter->zoom(&sx, &sy);
+
+    return sy / m_d->canvas->image()->yRes();
 }
 
 void KisOpenGLCanvas2::enterEvent(QEvent* e)
@@ -314,7 +416,7 @@ void KisOpenGLCanvas2::enterEvent(QEvent* e)
 
 void KisOpenGLCanvas2::leaveEvent(QEvent* e)
 {
-    updateGL();
+    draw();
     QWidget::leaveEvent(e);
 }
 
@@ -416,7 +518,7 @@ KoToolProxy * KisOpenGLCanvas2::toolProxy()
 void KisOpenGLCanvas2::documentOffsetMoved(const QPoint & pt)
 {
     m_d->documentOffset = pt;
-    updateGL();
+    draw();
 }
 
 void KisOpenGLCanvas2::adjustOrigin()

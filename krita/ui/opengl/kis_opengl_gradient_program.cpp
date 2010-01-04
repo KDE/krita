@@ -18,15 +18,12 @@
 
 #include "opengl/kis_opengl_gradient_program.h"
 
-
-#include <GL/glew.h>
 #include <QGLWidget>
 
 #include <cfloat>
 
 #include <KoAbstractGradient.h>
 
-#include "opengl/kis_opengl.h"
 #include "opengl/kis_opengl_fragment_shader.h"
 #include "kis_debug.h"
 #include <kis_paint_device.h>
@@ -41,7 +38,7 @@ static const int GRADIENT_COLORS_TEXTURE_WIDTH = 256;
 class KisOpenGLGradientShader
 {
 public:
-    virtual ~KisOpenGLGradientShader() {}
+    virtual ~KisOpenGLGradientShader();
 
     KisOpenGLShader &shader();
     virtual void setGradientVector(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd) = 0;
@@ -50,18 +47,24 @@ protected:
     KisOpenGLGradientShader(KisOpenGLProgram *program, const QString &sourceFilename);
 
     KisOpenGLProgram *m_program;
-    KisOpenGLFragmentShader m_shader;
+    KisOpenGLFragmentShader *m_shader;
 };
 
 KisOpenGLGradientShader::KisOpenGLGradientShader(KisOpenGLProgram *program, const QString &sourceFilename)
         : m_program(program),
-        m_shader(KisOpenGLFragmentShader::file(sourceFilename))
+        m_shader(KisOpenGLFragmentShader::createFromSourceCodeFile(sourceFilename))
 {
+}
+
+KisOpenGLGradientShader::~KisOpenGLGradientShader()
+{
+    delete m_shader;
 }
 
 KisOpenGLShader &KisOpenGLGradientShader::shader()
 {
-    return m_shader;
+    Q_ASSERT(m_shader);
+    return *m_shader;
 }
 
 //-----------------------------------------------------------------------------

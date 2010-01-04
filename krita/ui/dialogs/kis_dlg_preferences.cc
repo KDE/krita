@@ -20,8 +20,7 @@
 
 #include "kis_dlg_preferences.h"
 
-#include <config-opengl.h>
-#include <config-glew.h>
+#include <opengl/kis_opengl.h>
 
 #include <QBitmap>
 #include <QCheckBox>
@@ -69,10 +68,6 @@
 #include "KoID.h"
 
 #include "KoColorProfile.h"
-
-#ifdef HAVE_OPENGL
-#include "opengl/kis_opengl.h"
-#endif
 
 // for the performance update
 #include "tiles/kis_tilemanager.h"

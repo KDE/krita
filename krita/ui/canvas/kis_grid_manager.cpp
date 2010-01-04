@@ -20,8 +20,7 @@
 
 #include "kis_grid_manager.h"
 
-
-#include <config-opengl.h>
+#include <opengl/kis_opengl.h>
 
 #ifdef HAVE_OPENGL
 #include <qgl.h>

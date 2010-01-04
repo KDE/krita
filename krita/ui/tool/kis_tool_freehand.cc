@@ -60,6 +60,7 @@
 #include <kis_transaction.h>
 
 // Krita/ui
+#include <opengl/kis_opengl.h>
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
 #include "kis_painting_assistant.h"
@@ -68,15 +69,6 @@
 #include <kis_painting_assistants_manager.h>
 #include <kis_3d_object_model.h>
 #include "kis_color_picker_utils.h"
-
-// OpenGL
-#include <config-opengl.h>
-
-#ifdef HAVE_OPENGL
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
-
 
 #define ENABLE_RECORDING
 
@@ -290,7 +282,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
 #if defined(HAVE_OPENGL)
     if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
-        if (m_canvas->canvasController()->isCanvasOpenGL()) {
+        if (isCanvasOpenGL()) {
             m_xTilt = e->xTilt();
             m_yTilt = e->yTilt();
             // TODO : optimize? but you need to know the size of the 3d brush?
@@ -576,8 +568,10 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 {
     KisConfig cfg;
 #if defined(HAVE_OPENGL)
-    if (m_canvas->canvasController()->isCanvasOpenGL()) {
+    if (isCanvasOpenGL()) {
         if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
+            beginOpenGL();
+
             qreal sx, sy;
             converter.zoom(&sx, &sy);
             sx /= currentImage()->xRes();
@@ -639,6 +633,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
                 }
                 delete model;
             }
+            endOpenGL();
         }
     }
 #endif

@@ -19,14 +19,9 @@
 #ifndef KIS_OPENGL_CANVAS_2_H
 #define KIS_OPENGL_CANVAS_2_H
 
-#include <config-opengl.h>
-#include <config-glew.h>
+#include <opengl/kis_opengl.h>
 
 #ifdef HAVE_OPENGL
-
-#ifdef HAVE_GLEW
-#include <GL/glew.h>
-#endif
 
 #include <QGLWidget>
 
@@ -59,6 +54,21 @@ public:
     KisOpenGLCanvas2(KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures);
 
     virtual ~KisOpenGLCanvas2();
+
+    /** 
+     * Prepare the canvas for rendering using native OpenGL 
+     * commands. This sets the projection and model view matrices so
+     * that primitives can be rendered using coordinates returned 
+     * from pixelToView(). 
+     */ 
+    void beginOpenGL(void);
+
+    /** 
+     * Notify the canvas that rendering using native OpenGL commands
+     * has finished. This restores the state so that the canvas can 
+     * be painted on using a QPainter. 
+     */ 
+    void endOpenGL(void);
 
     /**
      * Set the projection and model view matrices so that primitives can be
@@ -98,7 +108,7 @@ public: // QWidget
     void keyReleaseEvent(QKeyEvent *e);
 
     /// reimplemented method from superclass
-    //void paintEvent(QPaintEvent * ev);
+    void paintEvent(QPaintEvent * ev);
 
     /// reimplemented method from superclass
     void tabletEvent(QTabletEvent *e);
@@ -125,7 +135,6 @@ protected:
 
     void initializeGL();
     void resizeGL(int w, int h);
-    void paintGL();
 
     /// these methods take origin coordinate into account, basically it means (point - origin)
     QPoint widgetToView(const QPoint& p) const;
@@ -149,6 +158,20 @@ public: // KisAbstractCanvasWidget
 private:
     class Private;
     Private * const m_d;
+
+    void draw();
+    void drawBorder();
+    void drawImage();
+    void drawBackground();
+
+    void setupMatrices();
+    void applyZoomScalingToModelView();
+
+    qreal zoomScaleX() const;
+    qreal zoomScaleY() const;
+
+    void saveGLState();
+    void restoreGLState();
 
 };
 

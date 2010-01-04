@@ -143,6 +143,17 @@ protected:
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
     void paintToolOutline(QPainter * painter, QPainterPath &path);
 
+    /// Returns true if the canvas this tool is associated with supports OpenGL rendering.
+    bool isCanvasOpenGL() const;
+
+    /// Call before starting to use native OpenGL commands when painting this tool's decorations.
+    /// This is a convenience method that calls beginOpenGL() on the OpenGL canvas object.
+    void beginOpenGL();
+
+    /// Call after finishing use of native OpenGL commands when painting this tool's decorations.
+    /// This is a convenience method that calls endOpenGL() on the OpenGL canvas object.
+    void endOpenGL();
+
 protected slots:
     /**
      * Called whenever the configuration settings change.

@@ -18,7 +18,7 @@
 #ifndef KIS_OPENGL_GRADIENT_PROGRAM_H
 #define KIS_OPENGL_GRADIENT_PROGRAM_H
 
-#include <GL/glew.h>
+#include <opengl/kis_opengl.h>
 
 #include <QPoint>
 

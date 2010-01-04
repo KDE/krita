@@ -18,7 +18,7 @@
 #ifndef KIS_OPENGL_PROGRAM_H_
 #define KIS_OPENGL_PROGRAM_H_
 
-#include <GL/glew.h>
+#include "opengl/kis_opengl.h"
 
 #include "krita_export.h"
 
@@ -164,6 +164,10 @@ protected:
      * True if the program has been successfully linked.
      */
     bool m_isValid;
+
+private:
+   KisOpenGLProgram(const KisOpenGLProgram&);
+   KisOpenGLProgram& operator=(const KisOpenGLProgram&);
 };
 
 #endif // KIS_OPENGL_PROGRAM_H_

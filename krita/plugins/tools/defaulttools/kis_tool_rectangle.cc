@@ -35,6 +35,7 @@
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
 
+#include <opengl/kis_opengl.h>
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
@@ -43,12 +44,6 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include "kis_shape_tool_helper.h"
-
-#include <config-opengl.h>
-
-#ifdef HAVE_OPENGL
-#include <GL/gl.h>
-#endif
 
 #include <KoCanvasController.h>
 
@@ -204,7 +199,9 @@ void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
     QPointF viewDragEnd = pixelToView(m_dragEnd);
 
 #if defined(HAVE_OPENGL)
-    if (m_canvas->canvasController()->isCanvasOpenGL()) {
+    if (isCanvasOpenGL()) {
+        beginOpenGL();
+
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
@@ -222,6 +219,8 @@ void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
 
         glDisable(GL_COLOR_LOGIC_OP);
         glDisable(GL_LINE_SMOOTH);
+
+        endOpenGL();
     } else
 #endif
         if (m_canvas) {

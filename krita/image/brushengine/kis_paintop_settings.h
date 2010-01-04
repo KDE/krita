@@ -19,6 +19,8 @@
 #ifndef KIS_PAINTOP_SETTINGS_H_
 #define KIS_PAINTOP_SETTINGS_H_
 
+#include "opengl/kis_opengl.h"
+
 #include "kis_types.h"
 #include "krita_export.h"
 
@@ -26,16 +28,6 @@
 
 #include "kis_shared.h"
 #include "kis_properties_configuration.h"
-
-
-#include <config-opengl.h>
-
-#ifdef HAVE_OPENGL
-#if defined(_WIN32) || defined(_WIN64)
-# include <windows.h>
-#endif
-#include <GL/gl.h>
-#endif
 
 
 class KoPointerEvent;

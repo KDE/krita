@@ -20,7 +20,6 @@
 
 #include <QPointF>
 
-#include "opengl/kis_opengl.h"
 #include "opengl/kis_opengl_shader.h"
 #include "kis_debug.h"
 

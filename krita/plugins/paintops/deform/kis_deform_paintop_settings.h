@@ -22,7 +22,7 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
-#include <config-opengl.h>
+#include <opengl/kis_opengl.h>
 
 #include "kis_deform_paintop_settings_widget.h"
 

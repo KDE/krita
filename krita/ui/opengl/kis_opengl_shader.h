@@ -20,7 +20,7 @@
 #ifndef KIS_OPENGL_SHADER_H_
 #define KIS_OPENGL_SHADER_H_
 
-#include <GL/glew.h>
+#include "opengl/kis_opengl.h"
 
 #include <QString>
 
@@ -102,6 +102,10 @@ protected:
 
     GLuint m_shader;
     bool m_valid;
+
+private:
+   KisOpenGLShader(const KisOpenGLShader&);
+   KisOpenGLShader& operator=(const KisOpenGLShader&);
 };
 
 #endif // KIS_OPENGL_SHADER_H_

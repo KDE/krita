@@ -21,17 +21,17 @@
 
 #include <GL/glew.h>
 
-KisOpenGLVertexShader KisOpenGLVertexShader::file(const QString& sourceCodeFilename)
+KisOpenGLVertexShader *KisOpenGLVertexShader::createFromSourceCodeFile(const QString& sourceCodeFilename)
 {
-    KisOpenGLVertexShader shader;
-    shader.loadSourceCodeFromFile(sourceCodeFilename);
+    KisOpenGLVertexShader *shader = new KisOpenGLVertexShader();
+    shader->loadSourceCodeFromFile(sourceCodeFilename);
     return shader;
 }
 
-KisOpenGLVertexShader KisOpenGLVertexShader::string(const QString& sourceCodeString)
+KisOpenGLVertexShader *KisOpenGLVertexShader::createFromSourceCodeString(const QString& sourceCodeString)
 {
-    KisOpenGLVertexShader shader;
-    shader.loadSourceCodeFromQString(sourceCodeString);
+    KisOpenGLVertexShader *shader = new KisOpenGLVertexShader();
+    shader->loadSourceCodeFromQString(sourceCodeString);
     return shader;
 }
 

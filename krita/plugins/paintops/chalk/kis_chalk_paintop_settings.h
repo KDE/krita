@@ -26,7 +26,7 @@
 
 #include <kis_pressure_opacity_option.h>
 
-#include <config-opengl.h>
+#include <opengl/kis_opengl.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 # include <windows.h>

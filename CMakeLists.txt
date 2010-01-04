@@ -275,8 +275,7 @@ set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
                    ${QT_INCLUDES}
-                   ${KDE4_INCLUDES}
-                   ${LCMS_INCLUDE_DIR} )
+                   ${KDE4_INCLUDES})
 
 # flake depends on koodf and pigment
 set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake

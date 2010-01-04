@@ -84,33 +84,32 @@ struct Rgba {
 };
 
 template<typename _T_>
-void decodeData( Imf::InputFile& file, KisPaintLayerSP layer, int width, int ystart, int height, Imf::PixelType ptype )
+void decodeData(Imf::InputFile& file, KisPaintLayerSP layer, int width, int ystart, int height, Imf::PixelType ptype)
 {
     typedef Rgba<_T_> Rgba;
-    
-    QVector<Rgba> pixels(width);
-    
-    Imf::FrameBuffer frameBuffer;
-    frameBuffer.insert ("R",
-    Imf::Slice (ptype, (char *) &pixels[0].r,
-        sizeof (Rgba) * 1,
-        sizeof (Rgba) * width));
-    frameBuffer.insert ("G",
-    Imf::Slice (ptype, (char *) &pixels[0].g,
-        sizeof (Rgba) * 1,
-        sizeof (Rgba) * width));
-    frameBuffer.insert ("B",
-    Imf::Slice (ptype, (char *) &pixels[0].b,
-        sizeof (Rgba) * 1,
-        sizeof (Rgba) * width));
-    frameBuffer.insert ("A",
-    Imf::Slice (ptype, (char *) &pixels[0].a,
-        sizeof (Rgba) * 1,
-        sizeof (Rgba) * width));
 
-    file.setFrameBuffer (frameBuffer);
-    for(int y = ystart; y < ystart + height; ++y)
-    {
+    QVector<Rgba> pixels(width);
+
+    Imf::FrameBuffer frameBuffer;
+    frameBuffer.insert("R",
+                       Imf::Slice(ptype, (char *) &pixels[0].r,
+                                  sizeof(Rgba) * 1,
+                                  sizeof(Rgba) * width));
+    frameBuffer.insert("G",
+                       Imf::Slice(ptype, (char *) &pixels[0].g,
+                                  sizeof(Rgba) * 1,
+                                  sizeof(Rgba) * width));
+    frameBuffer.insert("B",
+                       Imf::Slice(ptype, (char *) &pixels[0].b,
+                                  sizeof(Rgba) * 1,
+                                  sizeof(Rgba) * width));
+    frameBuffer.insert("A",
+                       Imf::Slice(ptype, (char *) &pixels[0].a,
+                                  sizeof(Rgba) * 1,
+                                  sizeof(Rgba) * width));
+
+    file.setFrameBuffer(frameBuffer);
+    for (int y = ystart; y < ystart + height; ++y) {
         file.readPixels(y);
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
         Rgba *rgba = pixels.data();
@@ -128,12 +127,12 @@ void decodeData( Imf::InputFile& file, KisPaintLayerSP layer, int width, int yst
                 unmultipliedBlue /= rgba -> a;
             }
             typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it.rawData());
-            
+
             dst->red = unmultipliedRed;
             dst->green = unmultipliedGreen;
             dst->blue = unmultipliedBlue;
             dst->alpha = rgba->a;
-            
+
             ++it;
             ++rgba;
         }
@@ -190,8 +189,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             imageType = IT_UNSUPPORTED;
         }
         QString qname = i.name();
-        if (qname != "A" && qname != "R" && qname != "G" && qname != "B" )
-        {
+        if (qname != "A" && qname != "R" && qname != "G" && qname != "B") {
             dbgFile << "Unknow: " << i.name();
             imageType = IT_UNSUPPORTED;
         }
@@ -229,7 +227,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     if (!layer) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-    
+
     // Decode the data
     switch (imageType) {
     case IT_FLOAT16:

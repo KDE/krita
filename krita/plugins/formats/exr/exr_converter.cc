@@ -1,4 +1,5 @@
 /*
+ *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -31,6 +32,7 @@
 
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
+#include <KoColorSpaceTraits.h>
 
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
@@ -39,6 +41,7 @@
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
 #include <kis_undo_adapter.h>
+#include <boost/concept_check.hpp>
 
 exrConverter::exrConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
@@ -73,8 +76,69 @@ ImageType imfTypeToKisType(Imf::PixelType type)
 }
 
 template<typename _T_>
-void decodeData( KisPaintLayerSP layer, int width, int height )
+struct Rgba {
+    _T_ r;
+    _T_ g;
+    _T_ b;
+    _T_ a;
+};
+
+template<typename _T_>
+void decodeData( Imf::InputFile& file, KisPaintLayerSP layer, int width, int ystart, int height, Imf::PixelType ptype )
 {
+    typedef Rgba<_T_> Rgba;
+    
+    QVector<Rgba> pixels(width);
+    
+    Imf::FrameBuffer frameBuffer;
+    frameBuffer.insert ("R",
+    Imf::Slice (ptype, (char *) &pixels[0].r,
+        sizeof (Rgba) * 1,
+        sizeof (Rgba) * width));
+    frameBuffer.insert ("G",
+    Imf::Slice (ptype, (char *) &pixels[0].g,
+        sizeof (Rgba) * 1,
+        sizeof (Rgba) * width));
+    frameBuffer.insert ("B",
+    Imf::Slice (ptype, (char *) &pixels[0].b,
+        sizeof (Rgba) * 1,
+        sizeof (Rgba) * width));
+    frameBuffer.insert ("A",
+    Imf::Slice (ptype, (char *) &pixels[0].a,
+        sizeof (Rgba) * 1,
+        sizeof (Rgba) * width));
+
+    file.setFrameBuffer (frameBuffer);
+    for(int y = ystart; y < ystart + height; ++y)
+    {
+        file.readPixels(y);
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
+        Rgba *rgba = pixels.data();
+        while (!it.isDone()) {
+
+            // XXX: For now unmultiply the alpha, though compositing will be faster if we
+            // keep it premultiplied.
+            _T_ unmultipliedRed = rgba -> r;
+            _T_ unmultipliedGreen = rgba -> g;
+            _T_ unmultipliedBlue = rgba -> b;
+
+            if (rgba -> a >= HALF_EPSILON) {
+                unmultipliedRed /= rgba -> a;
+                unmultipliedGreen /= rgba -> a;
+                unmultipliedBlue /= rgba -> a;
+            }
+            typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it.rawData());
+            
+            dst->red = unmultipliedRed;
+            dst->green = unmultipliedGreen;
+            dst->blue = unmultipliedBlue;
+            dst->alpha = rgba->a;
+            
+            ++it;
+            ++rgba;
+        }
+    }
+
 }
 
 KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
@@ -167,6 +231,17 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     }
     
     // Decode the data
+    switch (imageType) {
+    case IT_FLOAT16:
+        decodeData<half>(file, layer, width, dy, height, Imf::HALF);
+        break;
+    case IT_FLOAT32:
+        decodeData<float>(file, layer, width, dy, height, Imf::FLOAT);
+        break;
+    case IT_UNKNOWN:
+    case IT_UNSUPPORTED:
+        qFatal("Impossible error");
+    }
 
     m_image->addNode(layer, m_image->rootLayer());
     layer->setDirty();

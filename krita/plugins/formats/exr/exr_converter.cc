@@ -84,35 +84,35 @@ struct Rgba {
 };
 
 template<typename _T_>
-void decodeData(Imf::InputFile& file, KisPaintLayerSP layer, int width, int ystart, int height, Imf::PixelType ptype)
+void decodeData(Imf::InputFile& file, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
 {
     typedef Rgba<_T_> Rgba;
 
     QVector<Rgba> pixels(width*height);
 
-    Imf::FrameBuffer frameBuffer;
-    frameBuffer.insert("R",
-                       Imf::Slice(ptype, (char *) &pixels[0].r,
-                                  sizeof(Rgba) * 1,
-                                  sizeof(Rgba) * width));
-    frameBuffer.insert("G",
-                       Imf::Slice(ptype, (char *) &pixels[0].g,
-                                  sizeof(Rgba) * 1,
-                                  sizeof(Rgba) * width));
-    frameBuffer.insert("B",
-                       Imf::Slice(ptype, (char *) &pixels[0].b,
-                                  sizeof(Rgba) * 1,
-                                  sizeof(Rgba) * width));
-    frameBuffer.insert("A",
-                       Imf::Slice(ptype, (char *) &pixels[0].a,
-                                  sizeof(Rgba) * 1,
-                                  sizeof(Rgba) * width));
-
-    file.setFrameBuffer(frameBuffer);
-    file.readPixels(ystart, ystart + height - 1);
-    Rgba *rgba = pixels.data();
     for (int y = 0; y < height; ++y) {
-//         file.readPixels(y);
+        Imf::FrameBuffer frameBuffer;
+        Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
+        frameBuffer.insert("R",
+                           Imf::Slice(ptype, (char *) &frameBufferData->r,
+                                      sizeof(Rgba) * 1,
+                                      sizeof(Rgba) * width));
+        frameBuffer.insert("G",
+                           Imf::Slice(ptype, (char *) &frameBufferData->g,
+                                      sizeof(Rgba) * 1,
+                                      sizeof(Rgba) * width));
+        frameBuffer.insert("B",
+                           Imf::Slice(ptype, (char *) &frameBufferData->b,
+                                      sizeof(Rgba) * 1,
+                                      sizeof(Rgba) * width));
+        frameBuffer.insert("A",
+                           Imf::Slice(ptype, (char *) &frameBufferData->a,
+                                      sizeof(Rgba) * 1,
+                                      sizeof(Rgba) * width));
+
+        file.setFrameBuffer(frameBuffer);
+        file.readPixels(ystart + y);
+        Rgba *rgba = pixels.data();
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
         while (!it.isDone()) {
 
@@ -232,10 +232,10 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     // Decode the data
     switch (imageType) {
     case IT_FLOAT16:
-        decodeData<half>(file, layer, width, dy, height, Imf::HALF);
+        decodeData<half>(file, layer, width, dx, dy, height, Imf::HALF);
         break;
     case IT_FLOAT32:
-        decodeData<float>(file, layer, width, dy, height, Imf::FLOAT);
+        decodeData<float>(file, layer, width, dx, dy, height, Imf::FLOAT);
         break;
     case IT_UNKNOWN:
     case IT_UNSUPPORTED:

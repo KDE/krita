@@ -54,11 +54,14 @@ public:
 
 private:
 
+    const KoColorSpace* m_rgb16;
+
     KisPaintDeviceSP m_src;
     KisPaintDeviceSP m_dst;
 
-    KoColor m_color;
-    QColor m_qcolor;
+    KoColor    m_color;
+    QColor     m_qcolor;
+
 };
 
 

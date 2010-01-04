@@ -108,7 +108,12 @@ QList<MyPaintBrushResource*> MyPaintFactory::brushes() const
 
 MyPaintBrushResource* MyPaintFactory::brush(const QString& fileName) const
 {
-    return m_d->brushes[fileName];
+    if (m_d->brushes.contains(fileName)) {
+        return m_d->brushes[fileName];
+    }
+    else {
+        return m_d->brushes.values()[0];
+    }
 }
 
 

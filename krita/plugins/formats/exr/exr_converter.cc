@@ -30,10 +30,14 @@
 #include <kio/deletejob.h>
 
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOp.h>
 
 #include <kis_doc2.h>
+#include <kis_group_layer.h>
 #include <kis_image.h>
+#include <kis_paint_device.h>
 #include <kis_paint_layer.h>
+#include <kis_transaction.h>
 #include <kis_undo_adapter.h>
 
 exrConverter::exrConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
@@ -73,6 +77,12 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
 {
     dbgFile << "Load exr: " << uri << " " << QFile::encodeName(uri.toLocalFile());
     Imf::InputFile file(QFile::encodeName(uri.toLocalFile()));
+
+    Imath::Box2i dw = file.header().dataWindow();
+    int width = dw.max.x - dw.min.x + 1;
+    int height = dw.max.y - dw.min.y + 1;
+    int dx = dw.min.x;
+    int dy = dw.min.y;
 
     // For debug purpose print the content of the file
     const Imf::ChannelList &channels = file.header().channels();
@@ -129,23 +139,30 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             break;
     }
     if( !colorSpace) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    dbgFile << "Colorspace: " << colorSpace->name();
+    
+    // Create the image
+    KisImageWSP image = new KisImage( m_adapter, width, height, colorSpace, "");
 
-    // open the file
-#if 0
-    FILE *fp = fopen(QFile::encodeName(uri.toLocalFile()), "rb");
-    if (!fp) {
-        return (KisImageBuilder_RESULT_NOT_EXIST);
+    if (!image) {
+        return KisImageBuilder_RESULT_FAILURE;
     }
-    // Creating the KisImageWSP
-    if (!m_image) {
-        m_image = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
-        Q_CHECK_PTR(m_image);
-        m_image->lock();
-    }
-    KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image->nextLayerName(), quint8_MAX));
-#endif
+    image->lock();
+    
+    // Create the layer
+    KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE, colorSpace);
+    KisTransaction("", layer->paintDevice());
 
-    return KisImageBuilder_RESULT_FAILURE;
+    layer->setCompositeOp(COMPOSITE_OVER);
+
+    if (!layer) {
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
+    image->addNode(layer, image->rootLayer());
+    layer->setDirty();
+    image->unlock();
+    return KisImageBuilder_RESULT_OK;
 }
 
 

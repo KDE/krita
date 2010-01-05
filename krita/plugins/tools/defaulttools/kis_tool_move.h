@@ -89,7 +89,7 @@ class KisToolMoveFactory : public KoToolFactory
 
 public:
     KisToolMoveFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaTransform/KisToolMove", i18n("Move")) {
+            : KoToolFactory(parent, "KritaTransform/KisToolMove") {
         setToolTip(i18n("Move a layer"));
         setToolType(TOOL_TYPE_TRANSFORM);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

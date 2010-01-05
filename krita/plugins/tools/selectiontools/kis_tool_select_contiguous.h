@@ -58,7 +58,7 @@ class KisToolSelectContiguousFactory : public KoToolFactory
 
 public:
     KisToolSelectContiguousFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolSelectContiguous", i18n("Select Contiguous Area")) {
+            : KoToolFactory(parent, "KisToolSelectContiguous") {
         setToolTip(i18n("Select a contiguous area of colors"));
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_contiguous_selection");

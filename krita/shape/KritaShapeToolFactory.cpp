@@ -23,7 +23,7 @@
 #include "KritaShapeTool.h"
 
 KritaShapeToolFactory::KritaShapeToolFactory(QObject* parent, const QStringList&)
-        : KoToolFactory(parent, "KritaShapeToolFactoryId", i18n("KritaShape Tool"))
+        : KoToolFactory(parent, "KritaShapeToolFactoryId")
 {
     setToolTip(i18n("KritaShape editing tool"));
     setIcon("kritashape");

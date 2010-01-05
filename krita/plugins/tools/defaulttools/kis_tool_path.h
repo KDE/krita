@@ -46,7 +46,7 @@ class KisToolPathFactory : public KoToolFactory
 
 public:
     KisToolPathFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolPath", i18n("Paint a path")) {
+            : KoToolFactory(parent, "KisToolPath") {
         setToolTip(i18n("Draw a path."));
         setToolType(TOOL_TYPE_SHAPE);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

@@ -55,7 +55,7 @@ class KisToolBezierSelectFactory : public KoToolFactory
 
 public:
     KisToolBezierSelectFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolBezierSelect", i18n("Select with curves")) {
+            : KoToolFactory(parent, "KisToolBezierSelect") {
         setToolTip(i18n("Select an area of the image with curves"));
         setToolType(TOOL_TYPE_SELECTED);
         setPriority(0);

@@ -62,7 +62,7 @@ class KisToolSelectEllipticalFactory : public KoToolFactory
 
 public:
     KisToolSelectEllipticalFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolSelectElliptical", i18n("Elliptical Selection")) {
+            : KoToolFactory(parent, "KisToolSelectElliptical") {
         setToolTip(i18n("Select an elliptical area"));
         setToolType(TOOL_TYPE_SELECTED);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

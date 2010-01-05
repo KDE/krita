@@ -85,7 +85,7 @@ class KisToolColorPickerFactory : public KoToolFactory
 
 public:
     KisToolColorPickerFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaSelected/KisToolColorPicker", i18n("Color Picker")) {
+            : KoToolFactory(parent, "KritaSelected/KisToolColorPicker") {
         setToolTip(i18n("Select a color from the image or current layer"));
         setToolType(TOOL_TYPE_FILL);
 //         setActivationShapeId( KIS_NODE_SHAPE_ID );

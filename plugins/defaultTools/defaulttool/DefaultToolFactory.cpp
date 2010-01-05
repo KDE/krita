@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 DefaultToolFactory::DefaultToolFactory(QObject *parent)
-: KoToolFactory(parent, KoInteractionTool_ID, i18n("Default Tool"))
+    : KoToolFactory(parent, KoInteractionTool_ID)
 {
     setToolTip(i18n("Default tool"));
     setToolType(mainToolType());

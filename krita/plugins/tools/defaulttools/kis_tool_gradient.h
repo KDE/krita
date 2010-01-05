@@ -120,7 +120,7 @@ class KisToolGradientFactory : public KoToolFactory
 
 public:
     KisToolGradientFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaFill/KisToolGradient", i18n("Gradient")) {
+            : KoToolFactory(parent, "KritaFill/KisToolGradient") {
         setToolTip(i18n("Draw a gradient."));
         setToolType(TOOL_TYPE_FILL);
         setIcon("krita_tool_gradient");

@@ -38,7 +38,7 @@
 class MyToolFactory : public KoToolFactory {
 public:
     MyToolFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "MyTool", i18n("My Tool")) {
+        : KoToolFactory(parent, "MyTool") {
         setToolTip(i18n("Create object"));
         setToolType("dynamic");
         setPriority(5);
@@ -61,9 +61,8 @@ public:
      * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the tool, for
      *   example for use by the KoTool::activateTemporary.
-     * @param name the user visible name of the tool this factory creates.
      */
-    KoToolFactory(QObject *parent, const QString &id, const QString &name);
+    KoToolFactory(QObject *parent, const QString &id);
     virtual ~KoToolFactory();
 
     /**
@@ -88,11 +87,6 @@ public:
      * @return the id for the tool this factory creates.
      */
     QString id() const;
-    /**
-     * return the user visible (and translated) name to be seen by the user.
-     * @return the user visible (and translated) name to be seen by the user.
-     */
-    QString name() const;
     /**
      * Returns The priority of this tool in its section in the toolbox
      * @return The priority of this tool.

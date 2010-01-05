@@ -107,7 +107,7 @@ class KisToolMeasureFactory : public KoToolFactory
 public:
 
     KisToolMeasureFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaShape/KisToolMeasure", i18n("Measure")) {
+            : KoToolFactory(parent, "KritaShape/KisToolMeasure") {
         setToolType(TOOL_TYPE_TRANSFORM);
         setToolTip(i18n("Measure the distance between two points"));
         setIcon("krita_tool_measure");

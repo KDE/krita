@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 TextToolFactory::TextToolFactory(QObject *parent)
-        : KoToolFactory(parent, "TextToolFactory_ID", i18n("Text tool"))
+        : KoToolFactory(parent, "TextToolFactory_ID")
 {
     setToolTip(i18n("Text editing tool"));
     setToolType(dynamicToolType());

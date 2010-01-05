@@ -77,7 +77,7 @@ class KisToolPolylineFactory : public KoToolFactory
 
 public:
     KisToolPolylineFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolPolyline", i18n("Polyline")) {
+            : KoToolFactory(parent, "KisToolPolyline") {
         setToolTip(i18n("Draw a polyline. Shift-mouseclick ends the polyline."));
         setToolType(TOOL_TYPE_SHAPE);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

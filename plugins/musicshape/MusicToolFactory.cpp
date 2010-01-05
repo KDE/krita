@@ -25,7 +25,7 @@
 
 
 MusicToolFactory::MusicToolFactory( QObject* parent )
-    : KoToolFactory( parent, "MusicToolFactoryId", i18n( "Music Tool" ) )
+    : KoToolFactory(parent, "MusicToolFactoryId")
 {
     setToolTip( i18n( "Music editing tool, parts" ) );
     setIcon( "musicshape" );

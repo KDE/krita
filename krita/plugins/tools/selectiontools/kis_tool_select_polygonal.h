@@ -67,8 +67,7 @@ class KisToolSelectPolygonalFactory : public KoToolFactory
 
 public:
     KisToolSelectPolygonalFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolSelectPolygonal",
-                            i18n("Polygonal Selection")) {
+            : KoToolFactory(parent, "KisToolSelectPolygonal") {
         setToolTip(i18n("Select a polygonal region"));
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_polygonal_selection");

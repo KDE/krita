@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 KoPanToolFactory::KoPanToolFactory(QObject *parent)
-        : KoToolFactory(parent, KoPanTool_ID, i18n("Pan Tool"))
+        : KoToolFactory(parent, KoPanTool_ID)
 {
     setToolTip(i18n("Pan"));
     setToolType(mainToolType());

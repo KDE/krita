@@ -165,7 +165,7 @@ class KisToolDynaFactory : public KoToolFactory
 
 public:
     KisToolDynaFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaShape/KisToolDyna", i18n("Paint")) {
+            : KoToolFactory(parent, "KritaShape/KisToolDyna") {
 
         setToolTip(i18n("Paint with brushes using dynamic movements"));
 

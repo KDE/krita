@@ -78,7 +78,7 @@ class KisToolStarFactory : public KoToolFactory
 
 public:
     KisToolStarFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolStar", i18n("Star")) {
+            : KoToolFactory(parent, "KisToolStar") {
         setToolTip(i18n("Draw a star with the current brush"));
         setToolType(TOOL_TYPE_SHAPE);
         setPriority(6);

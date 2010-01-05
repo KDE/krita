@@ -61,7 +61,7 @@ class KisRulerAssistantToolFactory : public KoToolFactory
 {
 public:
     KisRulerAssistantToolFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisRulerAssistantTool", i18n("Ruler Assistant")) {
+            : KoToolFactory(parent, "KisRulerAssistantTool") {
         setToolTip(i18n("Ruler assistant editor tool"));
         setToolType(TOOL_TYPE_VIEW);
         setIcon("krita_tool_ruler_assistant");

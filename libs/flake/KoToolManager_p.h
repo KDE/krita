@@ -112,8 +112,8 @@ public:
     QToolButton *createButton();
     /// wrapper around KoToolFactory::id();
     QString id() const;
-    /// wrapper around KoToolFactory::name();
-    QString name() const;
+    /// wrapper around KoToolFactory::toolTip();
+    QString toolTip() const;
     /// wrapper around KoToolFactory::toolType();
     QString toolType() const;
     /// wrapper around KoToolFactory::activationShapeId();

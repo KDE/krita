@@ -46,7 +46,7 @@ class KisToolBezierPaintFactory : public KoToolFactory
 
 public:
     KisToolBezierPaintFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolBezierPaint", i18n("Paint with curves")) {
+            : KoToolFactory(parent, "KisToolBezierPaint") {
         setToolTip(i18n("Draw cubic Beziers. Keep Alt, Control or Shift pressed for options. Return or double-click to finish."));
         setToolType(TOOL_TYPE_SHAPE);
         setPriority(7);

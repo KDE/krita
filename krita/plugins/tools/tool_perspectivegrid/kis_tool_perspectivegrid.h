@@ -91,7 +91,7 @@ class KisToolPerspectiveGridFactory : public KoToolFactory
 
 public:
     KisToolPerspectiveGridFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolPerspectiveGrid", i18n("Perspective grid")) {
+            : KoToolFactory(parent, "KisToolPerspectiveGrid") {
         setToolTip(i18n("Edit the perspective grid"));
         setToolType(TOOL_TYPE_VIEW);
         setIcon("tool_perspectivegrid");

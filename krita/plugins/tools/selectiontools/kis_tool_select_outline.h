@@ -59,7 +59,7 @@ class KisToolSelectOutlineFactory : public KoToolFactory
 
 public:
     KisToolSelectOutlineFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolSelectOutline", i18n("Outline Selection")) {
+            : KoToolFactory(parent, "KisToolSelectOutline") {
         setToolTip(i18n("Select an area by its outline"));
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_outline_selection");

@@ -26,7 +26,7 @@
 
 
 PictureToolFactory::PictureToolFactory( QObject* parent)
-    : KoToolFactory( parent, "PictureToolFactoryId", i18n( "Picture Tool" ) )
+    : KoToolFactory(parent, "PictureToolFactoryId")
 {
     setToolTip( i18n( "Picture editing tool" ) );
     setIcon( "pictureshape" );

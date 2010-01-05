@@ -301,10 +301,10 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
     QMap<QString, QWidget *> optionWidgetMap = canvasData->activeTool->optionWidgets();
     if (optionWidgetMap.empty()) { // no option widget.
         QWidget *toolWidget;
-        QString name;
+        QString title;
         foreach(ToolHelper *tool, tools) {
             if (tool->id() == canvasData->activeTool->toolId()) {
-                name = tool->name();
+                title = tool->toolTip();
                 break;
             }
         }
@@ -320,7 +320,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
             toolWidget->setLayout(layout);
             canvasData->dummyToolWidget = toolWidget;
         }
-        canvasData->dummyToolLabel->setText(i18n("Active tool: %1", name));
+        canvasData->dummyToolLabel->setText(i18n("Active tool: %1", title));
         optionWidgetMap.insert(i18n("Tool Options"), toolWidget);
     }
 

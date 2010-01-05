@@ -136,7 +136,7 @@ class KisToolTransformFactory : public KoToolFactory
 public:
 
     KisToolTransformFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolTransform", i18n("Transform")) {
+            : KoToolFactory(parent, "KisToolTransform") {
         setToolTip(i18n("Transform a layer or a selection"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setIcon("krita_tool_transform");

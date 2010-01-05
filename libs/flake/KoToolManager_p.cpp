@@ -58,9 +58,9 @@ QString ToolHelper::activationShapeId() const
     return m_toolFactory->activationShapeId();
 }
 
-QString ToolHelper::name() const
+QString ToolHelper::toolTip() const
 {
-    return m_toolFactory->name();
+    return m_toolFactory->toolTip();
 }
 
 KoTool *ToolHelper::createTool(KoCanvasBase *canvas) const

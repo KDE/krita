@@ -77,7 +77,7 @@ class KisToolRectangleFactory : public KoToolFactory
 
 public:
     KisToolRectangleFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KritaShape/KisToolRectangle", i18n("Rectangle")) {
+            : KoToolFactory(parent, "KritaShape/KisToolRectangle") {
         setToolTip(i18n("Draw a rectangle"));
 
         setToolType(TOOL_TYPE_SHAPE);

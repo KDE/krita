@@ -71,7 +71,7 @@ class KisToolPolygonFactory : public KoToolFactory
 
 public:
     KisToolPolygonFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolPolygon", i18n("Polygon")) {
+            : KoToolFactory(parent, "KisToolPolygon") {
         setToolTip(i18n("Draw a polygon. Shift-mouseclick ends the polygon."));
         setToolType(TOOL_TYPE_SHAPE);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

@@ -136,7 +136,7 @@ class KisToolCropFactory : public KoToolFactory
 
 public:
     KisToolCropFactory(QObject *parent, const QStringList&)
-            : KoToolFactory(parent, "KisToolCrop", i18n("Crop")) {
+            : KoToolFactory(parent, "KisToolCrop") {
         setToolTip(i18n("Crop the image to an area"));
         setToolType(TOOL_TYPE_TRANSFORM);
         //setActivationShapeId( KIS_NODE_SHAPE_ID );

@@ -96,8 +96,27 @@ struct Rgba {
     _T_ a;
 };
 
+struct ExrLayerInfo {
+    ExrLayerInfo() : colorSpace(0), imageType(IT_UNKNOWN) {
+    }
+    const KoColorSpace* colorSpace;
+    ImageType imageType;
+    QString name;
+    QMap< QString, QString> channelMap; ///< first is either R, G, B or A second is the EXR channel name
+    void updateImageType(ImageType channelType);
+};
+
+void ExrLayerInfo::updateImageType(ImageType channelType)
+{
+    if (imageType == IT_UNKNOWN) {
+        imageType = channelType;
+    } else if (imageType != channelType) {
+        imageType = IT_UNSUPPORTED;
+    }
+}
+
 template<typename _T_>
-void decodeData(Imf::InputFile& file, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
+void decodeData(Imf::InputFile& file, ExrLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
 {
     typedef Rgba<_T_> Rgba;
 
@@ -106,19 +125,19 @@ void decodeData(Imf::InputFile& file, KisPaintLayerSP layer, int width, int xsta
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
         Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert("R",
+        frameBuffer.insert( info.channelMap["R"].toAscii().data(),
                            Imf::Slice(ptype, (char *) &frameBufferData->r,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert("G",
+        frameBuffer.insert( info.channelMap["G"].toAscii().data(),
                            Imf::Slice(ptype, (char *) &frameBufferData->g,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert("B",
+        frameBuffer.insert( info.channelMap["B"].toAscii().data(),
                            Imf::Slice(ptype, (char *) &frameBufferData->b,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert("A",
+        frameBuffer.insert(info.channelMap["A"].toAscii().data(),
                            Imf::Slice(ptype, (char *) &frameBufferData->a,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
@@ -152,25 +171,6 @@ void decodeData(Imf::InputFile& file, KisPaintLayerSP layer, int width, int xsta
         }
     }
 
-}
-
-struct ExrLayerInfo {
-    ExrLayerInfo() : colorSpace(0), imageType(IT_UNKNOWN) {
-    }
-    const KoColorSpace* colorSpace;
-    ImageType imageType;
-    QString name;
-    QMap< QString, QString> channelMap; ///< first is either R, G, B or A second is the EXR channel name
-    void updateImageType(ImageType channelType);
-};
-
-void ExrLayerInfo::updateImageType(ImageType channelType)
-{
-    if (imageType == IT_UNKNOWN) {
-        imageType = channelType;
-    } else if (imageType != channelType) {
-        imageType = IT_UNSUPPORTED;
-    }
 }
 
 KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
@@ -284,10 +284,10 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         // Decode the data
         switch (imageType) {
         case IT_FLOAT16:
-            decodeData<half>(file, layer, width, dx, dy, height, Imf::HALF);
+            decodeData<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
             break;
         case IT_FLOAT32:
-            decodeData<float>(file, layer, width, dx, dy, height, Imf::FLOAT);
+            decodeData<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
             break;
         case IT_UNKNOWN:
         case IT_UNSUPPORTED:

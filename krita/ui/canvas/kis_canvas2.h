@@ -179,7 +179,7 @@ private slots:
      */
     void slotSetDisplayProfile(const KoColorProfile * profile);
 
-private:
+public:
 
     friend class KisView2;
 

@@ -17,34 +17,38 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISTOOLSELECTBASE_H
-#define KISTOOLSELECTBASE_H
+#ifndef KIS_TOOL_POLYGON_BASE_H
+#define KIS_TOOL_POLYGON_BASE_H
 
-#include "kis_tool.h"
-#include "kis_selection.h"
-#include "kis_cursor.h"
+#include <kis_tool_shape.h>
+#include <kis_cursor.h>
 
-class KisSelectionOptions;
-
-class KisToolSelectBase : public KisTool
+class KRITAUI_EXPORT KisToolPolygonBase : public KisToolShape
 {
-    Q_OBJECT
+Q_OBJECT
 public:
-    KisToolSelectBase(KoCanvasBase *canvas, const QCursor& cursor=KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6));
+    KisToolPolygonBase(KoCanvasBase * canvas, const QCursor & cursor=KisCursor::load("tool_polygon_cursor.png", 6, 6));
 
-    virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
-
-public slots:
-    virtual void slotSetAction(int);
-    virtual void slotSetSelectionMode(int);
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void finishPolygon(const QVector<QPointF>& points)=0;
+    void updateArea();
+    void cancel();
+    QRectF dragBoundingRect();
 
-    KisSelectionOptions* m_optWidget;
-    selectionAction m_selectAction;
-    selectionMode m_selectionMode;
+private:
+    void finish();
+
+    QPointF m_dragStart;
+    QPointF m_dragEnd;
+    bool m_dragging;
+    vQPointF m_points;
 };
 
-#endif // KISTOOLSELECTBASE_H
+#endif // KIS_TOOL_POLYGON_BASE_H

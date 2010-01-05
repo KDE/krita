@@ -193,10 +193,9 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
     m_d->toggleDockers->setChecked(true);
     actionCollection()->addAction("toggledockers", m_d->toggleDockers);
-    // Note: do not change the default shortcut to something else, like ctrl-h. The escape
-    // key is the only one available on tablet pc's in tablet mode, and that's when this
-    // feature is most useful.
-    m_d->toggleDockers->setShortcut(QKeySequence(Qt::Key_Escape));
+
+
+    m_d->toggleDockers->setShortcut(QKeySequence(Qt::Key_Control, Qt::Key_H));
     connect(m_d->toggleDockers, SIGNAL(toggled(bool)), this, SLOT(toggleDockers(bool)));
 
     setComponentData(KisFactory2::componentData(), false);

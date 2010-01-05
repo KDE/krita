@@ -51,139 +51,12 @@
 
 
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
+        : KisToolSelectBase(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6)), m_lokalTool(canvas, this)
 {
-    m_selecting = false;
-    m_centerPos = QPointF(0, 0);
-    m_startPos = QPointF(0, 0);
-    m_endPos = QPointF(0, 0);
 }
 
 KisToolSelectElliptical::~KisToolSelectElliptical()
 {
-}
-
-void KisToolSelectElliptical::paint(QPainter& gc, const KoViewConverter &/*converter*/)
-{
-    if (m_selecting) {
-        gc.save();
-        gc.setPen(Qt::DotLine);
-        gc.drawEllipse(pixelToView(QRectF(m_startPos, m_endPos)));
-        gc.restore();
-    }
-}
-
-void KisToolSelectElliptical::clearSelection()
-{
-    if (m_canvas) {
-        m_startPos = QPointF(0, 0);
-        m_endPos = QPointF(0, 0);
-        m_selecting = false;
-    }
-}
-
-void KisToolSelectElliptical::mousePressEvent(KoPointerEvent *e)
-{
-    if (m_canvas) {
-
-        if (!currentNode())
-            return;
-
-        if (currentImage() && e->button() == Qt::LeftButton) {
-            clearSelection();
-            m_startPos = m_endPos = m_centerPos = convertToPixelCoord(e);
-            m_selecting = true;
-        }
-    }
-}
-
-void KisToolSelectElliptical::mouseMoveEvent(KoPointerEvent *e)
-{
-    if (m_canvas && m_selecting) {
-        QRectF updateRect(m_startPos, m_endPos);
-
-        // move (alt) or resize ellipse
-        if (e->modifiers() & Qt::AltModifier) {
-            QPointF trans = convertToPixelCoord(e) - m_endPos;
-            m_startPos += trans;
-            m_endPos += trans;
-        } else {
-            QPointF diag = convertToPixelCoord(e) - (e->modifiers() & Qt::ControlModifier
-                           ? m_centerPos : m_startPos);
-            // circle?
-            if (e->modifiers() & Qt::ShiftModifier) {
-                double size = qMax(fabs(diag.x()), fabs(diag.y()));
-                double w = diag.x() < 0 ? -size : size;
-                double h = diag.y() < 0 ? -size : size;
-                diag = QPointF(w, h);
-            }
-
-            // resize around center point?
-            if (e->modifiers() & Qt::ControlModifier) {
-                m_startPos = m_centerPos - diag;
-                m_endPos = m_centerPos + diag;
-            } else {
-                m_endPos = m_startPos + diag;
-            }
-        }
-
-        updateRect |= QRectF(m_startPos, m_endPos);
-        updateRect = updateRect.normalized();
-        updateRect.adjust(-1, -1, 1, 1);
-        m_canvas->updateCanvas(convertToPt(updateRect));
-
-        m_centerPos = QPointF((m_startPos.x() + m_endPos.x()) / 2,
-                              (m_startPos.y() + m_endPos.y()) / 2);
-    }
-}
-
-void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
-{
-    if (m_canvas && m_selecting && e->button() == Qt::LeftButton) {
-
-        if (m_startPos == m_endPos) {
-            clearSelection();
-        } else {
-//             QApplication::setOverrideCursor(KisCursor::waitCursor());
-
-            if (!currentImage())
-                return;
-
-            KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
-            if (!kisCanvas)
-                return;
-
-            KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Elliptical Selection"));
-
-            if (m_selectionMode == PIXEL_SELECTION) {
-
-                KisPixelSelectionSP tmpSel = new KisPixelSelection();
-
-                KisPainter painter(tmpSel);
-                painter.setBounds(currentImage()->bounds());
-                painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-                painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-                painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-                painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
-                painter.setOpacity(OPACITY_OPAQUE);
-                painter.setPaintOpPreset(currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
-                painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
-
-                painter.paintEllipse(QRectF(m_startPos, m_endPos));
-
-                QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
-                m_canvas->addCommand(cmd);
-            } else {
-                QRectF rect = convertToPt(QRectF(m_startPos, m_endPos));
-                KoShape* shape = KisShapeToolHelper::createEllipseShape(rect);
-
-                helper.addSelectionShape(shape);
-            }
-
-//                 QApplication::restoreOverrideCursor();
-        }
-        m_selecting = false;
-    }
 }
 
 QWidget* KisToolSelectElliptical::createOptionWidget()
@@ -191,6 +64,43 @@ QWidget* KisToolSelectElliptical::createOptionWidget()
     KisToolSelectBase::createOptionWidget();
     m_optWidget->setWindowTitle(i18n("Elliptical Selection"));
     return m_optWidget;
+}
+
+void KisToolSelectElliptical::LokalTool::finishEllipse(const QRectF &rect)
+{
+    if(rect.isNull()) return;
+
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    Q_ASSERT(kisCanvas);
+    if (!kisCanvas)
+        return;
+
+    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Elliptical Selection"));
+
+    if (m_selectingTool->m_selectionMode == PIXEL_SELECTION) {
+
+        KisPixelSelectionSP tmpSel = new KisPixelSelection();
+
+        KisPainter painter(tmpSel);
+        painter.setBounds(currentImage()->bounds());
+        painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+        painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+        painter.setAntiAliasPolygonFill(m_selectingTool->m_optWidget->antiAliasSelection());
+        painter.setOpacity(OPACITY_OPAQUE);
+        painter.setPaintOpPreset(m_selectingTool->currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
+        painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
+
+        painter.paintEllipse(rect);
+
+        QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
+        m_canvas->addCommand(cmd);
+    } else {
+        QRectF rect = convertToPt(rect);
+        KoShape* shape = KisShapeToolHelper::createEllipseShape(rect);
+
+        helper.addSelectionShape(shape);
+    }
 }
 
 #include "kis_tool_select_elliptical.moc"

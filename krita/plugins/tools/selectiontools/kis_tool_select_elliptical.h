@@ -25,7 +25,8 @@
 
 #include <QPoint>
 #include "KoToolFactory.h"
-#include "kis_tool_select_base.h"
+#include "krita/ui/tool/kis_tool_select_base.h"
+#include "kis_tool_ellipse_base.h"
 
 
 class KisToolSelectElliptical : public KisToolSelectBase
@@ -38,23 +39,23 @@ public:
     virtual ~KisToolSelectElliptical();
 
     virtual QWidget * createOptionWidget();
-//     virtual enumToolType toolType() { return TOOL_SELECT; }
-
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
-
-    virtual void mousePressEvent(KoPointerEvent *e);
-    virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void mouseReleaseEvent(KoPointerEvent *e);
 
 private:
-    void clearSelection();
+    class LokalTool : public KisToolEllipseBase {
+    public:
+        LokalTool(KoCanvasBase * canvas, KisToolSelectElliptical* selectingTool)
+            : KisToolEllipseBase(canvas), m_selectingTool(selectingTool) {}
+        void finishEllipse(const QRectF &rect);
+    private:
+        KisToolSelectElliptical* const m_selectingTool;
+    };
+    LokalTool m_lokalTool;
 
-private:
-    QPointF m_centerPos;
-    QPointF m_startPos;
-    QPointF m_endPos;
-    bool m_selecting;
-
+    virtual void paint(QPainter& gc, const KoViewConverter &converter) {m_lokalTool.paint(gc, converter);}
+    virtual void mousePressEvent(KoPointerEvent *e) {m_lokalTool.mousePressEvent(e);}
+    virtual void mouseMoveEvent(KoPointerEvent *e) {m_lokalTool.mouseMoveEvent(e);}
+    virtual void mouseReleaseEvent(KoPointerEvent *e) {m_lokalTool.mouseReleaseEvent(e);}
+    virtual void deactivate() {m_lokalTool.deactivate();}
 };
 
 class KisToolSelectEllipticalFactory : public KoToolFactory

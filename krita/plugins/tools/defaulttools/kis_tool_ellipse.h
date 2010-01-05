@@ -27,39 +27,23 @@
 #include "kis_types.h"
 #include "KoToolFactory.h"
 #include "flake/kis_node_shape.h"
+#include <kis_tool_ellipse_base.h>
 
 
 class QPainter;
-class KisPainter;
 
 class KoCanvasBase;
 
-class KisToolEllipse : public KisToolShape
+class KisToolEllipse : public KisToolEllipseBase
 {
-
     Q_OBJECT
 
 public:
     KisToolEllipse(KoCanvasBase * canvas);
     virtual ~KisToolEllipse();
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
-
-private:
-    void paintEllipse(QPainter& gc, const QRect& rc);
-
-
 protected:
-    QPointF m_dragCenter;
-    QPointF m_dragStart;
-    QPointF m_dragEnd;
-
-    bool m_dragging;
-    KisPainter *m_painter;
+    virtual void finishEllipse(const QRectF& rect);
 };
 
 class KisToolEllipseFactory : public KoToolFactory

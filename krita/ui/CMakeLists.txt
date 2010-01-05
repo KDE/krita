@@ -117,6 +117,10 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_freehand_p.cpp
     tool/kis_tool_paint.cc 
     tool/kis_tool_shape.cc
+    tool/kis_tool_select_base.cpp
+    tool/kis_tool_ellipse_base.cpp
+    tool/kis_tool_rectangle_base.cpp
+    tool/kis_tool_polygon_base.cpp
     widgets/kis_channelflags_widget.cpp 
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_idlist.cc 

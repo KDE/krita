@@ -25,7 +25,7 @@
 
 #include <QPoint>
 #include <KoToolFactory.h>
-#include "kis_tool_select_base.h"
+#include "krita/ui/tool/kis_tool_select_base.h"
 
 class KisToolSelectOutline : public KisToolSelectBase
 {

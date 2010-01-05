@@ -23,44 +23,19 @@
 
 #include "kis_tool_shape.h"
 #include "flake/kis_node_shape.h"
+#include <kis_tool_polygon_base.h>
 
 class KoCanvasBase;
 
-class KisToolPolygon : public KisToolShape
+class KisToolPolygon : public KisToolPolygonBase
 {
-
     Q_OBJECT
 
 public:
     KisToolPolygon(KoCanvasBase *canvas);
     virtual ~KisToolPolygon();
-
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
-
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
-
-    virtual QString quickHelp() const {
-        return i18n("Shift-click will end the polygon.");
-    }
-
-private slots:
-    void finish();
-    void cancel();
-
 protected:
-    QRectF dragBoundingRect();
-
-protected:
-    QPointF m_dragStart;
-    QPointF m_dragEnd;
-
-    bool m_dragging;
-private:
-    vQPointF m_points;
+    virtual void finishPolygon(const QVector<QPointF>& points);
 };
 
 
@@ -85,7 +60,6 @@ public:
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolPolygon(canvas);
     }
-
 };
 
 

@@ -81,7 +81,7 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
 }
 
 KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_similar_selection_plus_cursor.png", 6, 6))
+        : KisToolSelectBase(canvas, KisCursor::load("tool_similar_selection_cursor.png", 6, 6))
 {
     m_fuzziness = 20;
 }

@@ -53,7 +53,7 @@ KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
 {
     setObjectName("tool_select_contiguous");
     m_fuzziness = 20;
-    m_sampleMerged = false;
+    m_limitToCurrentLayer = false;
 }
 
 KisToolSelectContiguous::~KisToolSelectContiguous()
@@ -81,7 +81,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         fillpainter.setHeight(rc.height());
         fillpainter.setWidth(rc.width());
         fillpainter.setFillThreshold(m_fuzziness);
-        fillpainter.setSampleMerged(m_sampleMerged);
+        fillpainter.setSampleMerged(!m_limitToCurrentLayer);
         KisSelectionSP selection =
             fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage());
 
@@ -97,9 +97,10 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
     }
 }
 
-void KisToolSelectContiguous::paint(QPainter &painter, const KoViewConverter &/*converter*/)
+void KisToolSelectContiguous::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
@@ -132,21 +133,21 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         hbox->addWidget(input);
         connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
-        QCheckBox* samplemerged = new QCheckBox(i18n("Sample merged"), m_optWidget);
-        l->addWidget(samplemerged);
-        samplemerged->setChecked(m_sampleMerged);
-        connect(samplemerged, SIGNAL(stateChanged(int)),
-                this, SLOT(slotSetSampleMerged(int)));
+        QCheckBox* limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), m_optWidget);
+        l->addWidget(limitToCurrentLayer);
+        limitToCurrentLayer->setChecked(m_limitToCurrentLayer);
+        connect(limitToCurrentLayer, SIGNAL(stateChanged(int)),
+                this, SLOT(slotLimitToCurrentLayer(int)));
 
     }
     return m_optWidget;
 }
 
-void KisToolSelectContiguous::slotSetSampleMerged(int state)
+void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
 {
     if (state == Qt::PartiallyChecked)
         return;
-    m_sampleMerged = (state == Qt::Checked);
+    m_limitToCurrentLayer = (state == Qt::Checked);
 }
 
 #include "kis_tool_select_contiguous.moc"

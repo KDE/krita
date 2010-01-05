@@ -23,7 +23,7 @@
 #define __KIS_TOOL_SELECT_CONTIGUOUS_H__
 
 #include "KoToolFactory.h"
-#include "kis_tool_select_base.h"
+#include "krita/ui/tool/kis_tool_select_base.h"
 
 
 /**
@@ -46,11 +46,11 @@ public:
 
 public slots:
     virtual void slotSetFuzziness(int);
-    virtual void slotSetSampleMerged(int);
+    virtual void slotLimitToCurrentLayer(int);
 
 private:
     int m_fuzziness;
-    bool m_sampleMerged;
+    bool m_limitToCurrentLayer;
 };
 
 class KisToolSelectContiguousFactory : public KoToolFactory

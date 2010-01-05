@@ -30,6 +30,7 @@
 #include "kis_types.h"
 #include "KoToolFactory.h"
 #include "flake/kis_node_shape.h"
+#include <kis_tool_rectangle_base.h>
 
 
 class QPainter;
@@ -39,37 +40,16 @@ class QPoint;
 
 class KoCanvasBase;
 
-class KisToolRectangle : public KisToolShape
+class KisToolRectangle : public KisToolRectangleBase
 {
-
     Q_OBJECT
 
 public:
     KisToolRectangle(KoCanvasBase * canvas);
     virtual ~KisToolRectangle();
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
-
-private:
-    void paintRectangle(QPainter& gc, const QRect& rc);
-
 protected:
-    int m_lineThickness;
-
-    QPointF m_dragCenter;
-    QPointF m_dragStart;
-    QPointF m_dragEnd;
-    QRect m_final_lines;
-
-    bool m_dragging;
-
-    KisPainter *m_painter;
-
-    //KisImageWSP m_currentImage;
+    virtual void finishRect(const QRectF& rect);
 };
 
 class KisToolRectangleFactory : public KoToolFactory

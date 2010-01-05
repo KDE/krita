@@ -29,13 +29,11 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
-#include "KoPointerEvent.h"
-#include <KoShapeController.h>
 #include <KoPathShape.h>
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
+#include <KoShapeController.h>
 
-#include <opengl/kis_opengl.h>
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
@@ -45,199 +43,48 @@
 #include <kis_paint_device.h>
 #include "kis_shape_tool_helper.h"
 
+
 #include <KoCanvasController.h>
 
 KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
-        : KisToolShape(canvas, KisCursor::load("tool_rectangle_cursor.png", 6, 6)),
-        m_dragging(false)
+        : KisToolRectangleBase(canvas, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
     setObjectName("tool_rectangle");
-
-    m_painter = 0;
-    currentImage() = 0;
-    m_dragStart = QPointF(0, 0);
-    m_dragEnd = QPointF(0, 0);
 }
 
 KisToolRectangle::~KisToolRectangle()
 {
 }
 
-void KisToolRectangle::paint(QPainter& gc, const KoViewConverter &converter)
+void KisToolRectangle::finishRect(const QRectF &rect)
 {
-    Q_UNUSED(converter);
-    if (!currentImage()) {
-        warnKrita << "No currentImage!";
+    if (rect.isNull())
         return;
-    }
 
-    if (m_dragging)
-        paintRectangle(gc, QRect());
-}
+    if (!currentNode()->inherits("KisShapeLayer")) {
+        KisPaintDeviceSP device = currentNode()->paintDevice();
+        if (!device) return;
 
+        KisPainter painter(device, currentSelection());
 
-void KisToolRectangle::mousePressEvent(KoPointerEvent *e)
-{
-    if (!m_canvas || !currentImage()) return;
+        painter.beginTransaction(i18n("Rectangle"));
+        setupPainter(&painter);
+        painter.setOpacity(m_opacity);
+        painter.setCompositeOp(m_compositeOp);
 
-    if (e->button() == Qt::LeftButton) {
-        QPointF pos = convertToPixelCoord(e);
-        m_dragging = true;
-        m_dragStart = m_dragCenter = m_dragEnd = pos;
-    }
-}
+        painter.paintRect(rect);
+        QRegion bound = painter.dirtyRegion();
+        device->setDirty(bound);
+        notifyModified();
 
-void KisToolRectangle::mouseMoveEvent(KoPointerEvent *event)
-{
-    if (m_dragging) {
-        QPointF pos = convertToPixelCoord(event);
-        // erase old lines on canvas
-        // This is not enough, how to do?
-        QRectF bound;
-        bound.setTopLeft(m_dragStart);
-        bound.setBottomRight(m_dragEnd);
-        m_canvas->updateCanvas(convertToPt(bound.normalized()));
-        //draw(m_dragStart, m_dragEnd);
-        // move (alt) or resize rectangle
-        if (event->modifiers() & Qt::AltModifier) {
-            QPointF trans = pos - m_dragEnd;
-            m_dragStart += trans;
-            m_dragEnd += trans;
-        } else {
-            QPointF diag = pos - (event->modifiers() & Qt::ControlModifier
-                                  ? m_dragCenter : m_dragStart);
-            // square?
-            if (event->modifiers() & Qt::ShiftModifier) {
-                double size = qMax(fabs(diag.x()), fabs(diag.y()));
-                double w = diag.x() < 0 ? -size : size;
-                double h = diag.y() < 0 ? -size : size;
-                diag = QPointF(w, h);
-            }
-
-            // resize around center point?
-            if (event->modifiers() & Qt::ControlModifier) {
-                m_dragStart = m_dragCenter - diag;
-                m_dragEnd = m_dragCenter + diag;
-            } else {
-                m_dragEnd = m_dragStart + diag;
-            }
-        }
-        // draw new lines on canvas
-        //draw(m_dragStart, m_dragEnd);
-        //QRectF bound;
-        bound.setTopLeft(m_dragStart);
-        bound.setBottomRight(m_dragEnd);
-
-        m_canvas->updateCanvas(convertToPt(bound.normalized()));
-
-        m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
-                               (m_dragStart.y() + m_dragEnd.y()) / 2);
+        m_canvas->addCommand(painter.endTransaction());
     } else {
-        KisToolPaint::mouseReleaseEvent(event);
+        QRectF r = convertToPt(rect);
+        KoShape* shape = KisShapeToolHelper::createRectangleShape(r);
+
+        QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
+        m_canvas->addCommand(cmd);
     }
-}
-
-void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
-{
-    QPointF pos = convertToPixelCoord(event);
-
-    if (!m_canvas)
-        return;
-
-    if (!currentImage())
-        return;
-
-    if (!currentNode())
-        return;
-
-    if (m_dragging && event->button() == Qt::LeftButton) {
-        m_dragging = false;
-
-        if (m_dragStart == m_dragEnd)
-            return;
-
-        if (!currentNode()->inherits("KisShapeLayer")) {
-            KisPaintDeviceSP device = currentNode()->paintDevice();
-            if (!device) return;
-
-            delete m_painter;
-            m_painter = new KisPainter(device, currentSelection());
-            Q_CHECK_PTR(m_painter);
-
-            m_painter->beginTransaction(i18n("Rectangle"));
-            setupPainter(m_painter);
-            m_painter->setOpacity(m_opacity);
-            m_painter->setCompositeOp(m_compositeOp);
-
-            m_painter->paintRect(QRectF(m_dragStart, m_dragEnd));
-            QRegion bound = m_painter->dirtyRegion();
-            device->setDirty(bound);
-            notifyModified();
-    // Should not be necessary anymore
-    #if 0
-            m_canvas->updateCanvas(convertToPt(bound.normalized()));
-    #endif
-
-            m_canvas->addCommand(m_painter->endTransaction());
-
-            delete m_painter;
-            m_painter = 0;
-        } else {
-            QRectF rect = convertToPt(QRectF(m_dragStart, m_dragEnd));
-            KoShape* shape = KisShapeToolHelper::createRectangleShape(rect);
-
-            QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
-            m_canvas->addCommand(cmd);
-        }
-    }
-}
-
-
-void KisToolRectangle::paintRectangle(QPainter& gc, const QRect&)
-{
-    QPointF viewDragStart = pixelToView(m_dragStart);
-    QPointF viewDragEnd = pixelToView(m_dragEnd);
-
-#if defined(HAVE_OPENGL)
-    if (isCanvasOpenGL()) {
-        beginOpenGL();
-
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_COLOR_LOGIC_OP);
-        glLogicOp(GL_XOR);
-
-        glBegin(GL_LINE_LOOP);
-        glColor3f(0.5, 1.0, 0.5);
-
-        glVertex2f(viewDragStart.x(), viewDragStart.y());
-        glVertex2f(viewDragEnd.x(), viewDragStart.y());
-
-        glVertex2f(viewDragEnd.x(), viewDragEnd.y());
-        glVertex2f(viewDragStart.x(), viewDragEnd.y());
-
-        glEnd();
-
-        glDisable(GL_COLOR_LOGIC_OP);
-        glDisable(GL_LINE_SMOOTH);
-
-        endOpenGL();
-    } else
-#endif
-        if (m_canvas) {
-
-#ifdef INDEPENDENT_CANVAS
-            QPainterPath path;
-            path.addRect(QRectF(viewDragStart, viewDragEnd));
-            paintToolOutline(&gc, path);
-#else
-            QPen old = gc.pen();
-            QPen pen(Qt::SolidLine);
-            gc.setPen(pen);
-            gc.drawRect(QRectF(viewDragStart, viewDragEnd));
-            gc.setPen(old);
-#endif
-
-        }
 }
 
 #include "kis_tool_rectangle.moc"

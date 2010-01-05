@@ -47,21 +47,20 @@ public slots:
     virtual void activate(bool);
     virtual void deactivate();
 
-protected:
+private:
     /// reimplemented
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
-protected:
-    class LokalPathTool : public KoCreatePathTool {
+    class LokalTool : public KoCreatePathTool {
         friend class KisToolSelectPath;
     public:
-        LokalPathTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool);
-    protected:
+        LokalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool)
+            : KoCreatePathTool(canvas), m_selectingTool(selectingTool) {}
         void addPathShape();
     private:
         KisToolSelectPath* const m_selectingTool;
     };
-    LokalPathTool* m_pathTool;
+    LokalTool* const m_lokalTool;
 
 };
 

@@ -48,53 +48,49 @@
 
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas)
+        : KisToolSelectBase(canvas), m_lokalTool(new LokalTool(canvas, this))
 {
-    m_pathTool=0;
 }
 
 KisToolSelectPath::~KisToolSelectPath()
 {
+    delete m_lokalTool;
 }
 
 void KisToolSelectPath::activate(bool tmp)
 {
     KisToolSelectBase::activate(tmp);
-    Q_ASSERT(m_pathTool==0);
-    m_pathTool = new LokalPathTool(canvas(), this);
-    m_pathTool->activate(tmp);
+    m_lokalTool->activate(tmp);
 }
 
 void KisToolSelectPath::deactivate()
 {
     KisToolSelectBase::deactivate();
-    m_pathTool->deactivate();
-    delete m_pathTool;
-    m_pathTool=0;
+    m_lokalTool->deactivate();
 }
 
 void KisToolSelectPath::mousePressEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_pathTool);
-    m_pathTool->mousePressEvent(event);
+    Q_ASSERT(m_lokalTool);
+    m_lokalTool->mousePressEvent(event);
 }
 
 void KisToolSelectPath::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_pathTool);
-    m_pathTool->mouseDoubleClickEvent(event);
+    Q_ASSERT(m_lokalTool);
+    m_lokalTool->mouseDoubleClickEvent(event);
 }
 
 void KisToolSelectPath::mouseMoveEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_pathTool);
-    m_pathTool->mouseMoveEvent(event);
+    Q_ASSERT(m_lokalTool);
+    m_lokalTool->mouseMoveEvent(event);
 }
 
 void KisToolSelectPath::mouseReleaseEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_pathTool);
-    m_pathTool->mouseReleaseEvent(event);
+    Q_ASSERT(m_lokalTool);
+    m_lokalTool->mouseReleaseEvent(event);
 }
 
 QWidget* KisToolSelectPath::createOptionWidget()
@@ -108,23 +104,18 @@ QWidget* KisToolSelectPath::createOptionWidget()
 
 void KisToolSelectPath::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    Q_ASSERT(m_pathTool);
-    m_pathTool->paint(painter, converter);
+    Q_ASSERT(m_lokalTool);
+    m_lokalTool->paint(painter, converter);
 }
 
 QMap<QString, QWidget *> KisToolSelectPath::createOptionWidgets()
 {
-    QMap<QString, QWidget *> map = m_pathTool->createOptionWidgets();
+    QMap<QString, QWidget *> map = m_lokalTool->createOptionWidgets();
     map.insert(i18n("Tool Options"), KisToolSelectBase::createOptionWidget());
     return map;
 }
 
-KisToolSelectPath::LokalPathTool::LokalPathTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool)
-    : KoCreatePathTool(canvas), m_selectingTool(selectingTool)
-{
-}
-
-void KisToolSelectPath::LokalPathTool::addPathShape()
+void KisToolSelectPath::LokalTool::addPathShape()
 {
     KisNodeSP currentNode =
         m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
@@ -150,6 +141,7 @@ void KisToolSelectPath::LokalPathTool::addPathShape()
         KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
         KisPainter painter(tmpSel);
+        painter.setBounds(m_selectingTool->currentImage()->bounds());
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);

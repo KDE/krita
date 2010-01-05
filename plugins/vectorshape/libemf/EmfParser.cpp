@@ -75,7 +75,7 @@ bool Parser::loadFromStream( QDataStream &stream )
 
     Header *header = new Header( stream );
     if ( ! header->isValid() ) {
-        qWarning( "Failed to parse header, perhaps not an EMF file" );
+        kWarning() << "Failed to parse header, perhaps not an EMF file";
         delete header;
         return false;
     }
@@ -115,7 +115,7 @@ void Parser::outputBytes( QDataStream &stream, int numBytes )
     quint8 scratch;
     for ( int i = 0; i < numBytes; ++i ) {
         stream >> scratch;
-	qDebug("byte(%i):%c", i, scratch);
+	//qDebug("byte(%i):%c", i, scratch);
     }
 }
 
@@ -199,6 +199,8 @@ bool Parser::readRecord( QDataStream &stream )
 
     stream >> type;
     stream >> size;
+
+    //kDebug(31000) << "Record type " << type;
 
     switch ( type ) {
         case EMR_POLYLINE:
@@ -798,7 +800,7 @@ bool Parser::readRecord( QDataStream &stream )
         }
         break;
     default:
-        kDebug(33100) << "unknown type:" << type;
+        kDebug(31000) << "unknown record type:" << type;
 	soakBytes( stream, size-8 ); // because we already took 8.
 	Q_ASSERT( type );
     }

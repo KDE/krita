@@ -161,7 +161,17 @@ struct ExrLayerInfo {
     ImageType imageType;
     QString name;
     QMap< QString, QString> channelMap; ///< first is either R, G, B or A second is the EXR channel name
+    void updateImageType(ImageType channelType);
 };
+
+void ExrLayerInfo::updateImageType(ImageType channelType)
+{
+    if (imageType == IT_UNKNOWN) {
+        imageType = channelType;
+    } else if (imageType != channelType) {
+        imageType = IT_UNSUPPORTED;
+    }
+}
 
 KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
 {
@@ -192,12 +202,8 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             const Imf::Channel &channel = i.channel();
             dbgFile << "Channel name = " << i.name() << " type = " << channel.type;
 
-            ImageType channelType = imfTypeToKisType(channel.type);
-            if (info.imageType == IT_UNKNOWN) {
-                info.imageType = channelType;
-            } else if (info.imageType != channelType) {
-                info.imageType = IT_UNSUPPORTED;
-            }
+            info.updateImageType(imfTypeToKisType(channel.type));
+
             QString qname = i.name();
             if (qname != "A" && qname != "R" && qname != "G" && qname != "B") {
                 dbgFile << "Unknow: " << i.name();

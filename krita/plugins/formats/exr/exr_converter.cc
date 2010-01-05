@@ -207,9 +207,10 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             QString qname = i.name();
             if (qname != "A" && qname != "R" && qname != "G" && qname != "B") {
                 dbgFile << "Unknow: " << i.name();
-                imageType = IT_UNSUPPORTED;
+                info.imageType = IT_UNSUPPORTED;
+            } else {
+                info.channelMap[qname] = qname;
             }
-            info.channelMap[qname] = qname;
         }
         infos.push_back(info);
         imageType = info.imageType;
@@ -217,15 +218,28 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         dbgFile << "Multi layers:";
         for (std::set<std::string>::const_iterator i = layerNames.begin();
                 i != layerNames.end(); ++i) {
+            ExrLayerInfo info;
             dbgFile << "layer name = " << i->c_str();
             Imf::ChannelList::ConstIterator layerBegin, layerEnd;
             channels.channelsInLayer(*i, layerBegin, layerEnd);
             for (Imf::ChannelList::ConstIterator j = layerBegin;
                     j != layerEnd; ++j) {
-                dbgFile << "\tchannel " << j.name();
+                const Imf::Channel &channel = j.channel();
+                dbgFile << "\tchannel " << j.name() << " type = " << channel.type;
+                
+                info.updateImageType(imfTypeToKisType(channel.type));
+                
+                QString qname = j.name();
+                QStringList list = qname.split(".");
+                QString layersuffix = list.last();
+                if (layersuffix != "A" && layersuffix != "R" && layersuffix != "G" && layersuffix != "B") {
+                    dbgFile << "Unknow: " << layersuffix;
+                    info.imageType = IT_UNSUPPORTED;
+                } else {
+                    info.channelMap[layersuffix] = qname;
+                }
             }
         }
-        qFatal("Unimplemented");
     }
     // Set the colorspaces
     for (int i = 0; i < infos.size(); ++i) {

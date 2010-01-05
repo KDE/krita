@@ -35,7 +35,7 @@
 #include "KoLabDarkenColorTransformation.h"
 #include "KoMixColorsOpImpl.h"
 
-#include "KoCompositeCopyOpAbstract.h"
+#include "compositeops/KoCompositeOpCopy.h"
 #include "KoConvolutionOpImpl.h"
 #include "KoInvertColorTransformation.h"
 
@@ -57,7 +57,8 @@ public:
 
     KoColorSpaceAbstract(const QString &id, const QString &name) :
             KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()) {
-        this->addCompositeOp(new CompositeCopy(this));
+
+        this->addCompositeOp(new KoCompositeOpCopy(this));
     }
 
     virtual quint32 colorChannelCount() const {

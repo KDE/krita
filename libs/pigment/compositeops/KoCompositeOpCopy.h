@@ -21,14 +21,18 @@
 #ifndef KO_COMPOSITE_COPY_OP_ABSTRACT_H
 #define KO_COMPOSITE_COPY_OP_ABSTRACT_H
 
-class CompositeCopy : public KoCompositeOp
+/**
+ * Generic implementation of the COPY composite op.
+ * Used automatically by all colorspaces that derive from KoColorSpaceAbstract.
+ */
+class KoCompositeOpCopy : public KoCompositeOp
 {
 
     using KoCompositeOp::composite;
 
 public:
 
-    explicit CompositeCopy(KoColorSpace * cs)
+    explicit KoCompositeOpCopy(KoColorSpace * cs)
             : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMix()) {
     }
 
@@ -48,6 +52,7 @@ public:
         Q_UNUSED(maskRowStart);
         Q_UNUSED(maskRowStride);
         Q_UNUSED(channelFlags);
+        Q_UNUSED(opacity);
 
         qint32 srcInc = (srcRowStride == 0) ? 0 : colorSpace()->pixelSize();
 
@@ -68,9 +73,10 @@ public:
                 memcpy(dst, src, numColumns * bytesPerPixel);
             }
 
-            if (opacity != OPACITY_OPAQUE) {
-                cs->multiplyAlpha(dst, opacity, numColumns);
-            }
+            // XXX: what is the reason for this code? I think we should copy the alpha channel as well.
+            //if (opacity != OPACITY_OPAQUE) {
+            //    cs->multiplyAlpha(dst, opacity, numColumns);
+            //}
 
             dst += dstRowStride;
             src += srcRowStride;

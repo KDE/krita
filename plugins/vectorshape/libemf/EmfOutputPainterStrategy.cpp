@@ -63,16 +63,22 @@ void OutputPainterStrategy::init( const Header *header )
 {
     QSize  emfSize = header->bounds().size();
 
-    //qDebug("emfOrigin  = %d, %d", header->bounds().x(), header->bounds().y());
-    //qDebug("emfSize    = %d, %d", emfSize.width(), emfSize.height() );
-    //qDebug("emfFrame   = %d, %d, %d, %d", 
-    //       header->frame().x(), header->bounds().y(),
-    //       header->bounds().width(), header->bounds().height());
-    //qDebug("emfSize    = %d, %d", emfSize.width(), emfSize.height() );
-    //qDebug("outputSize = %d, %d", m_outputSize.width(), m_outputSize.height() );
+#if 0
+    qDebug("emfOrigin  = %d, %d", header->bounds().x(), header->bounds().y());
+    qDebug("emfSize    = %d, %d", emfSize.width(), emfSize.height() );
+    qDebug("emfFrame   = %d, %d, %d, %d", 
+           header->frame().x(), header->frame().y(),
+           header->frame().width(), header->frame().height());
+    qDebug("emfBounds   = %d, %d, %d, %d", 
+           header->bounds().x(), header->bounds().y(),
+           header->bounds().width(), header->bounds().height());
+    qDebug("emfSize    = %d, %d", emfSize.width(), emfSize.height() );
+    qDebug("outputSize = %d, %d", m_outputSize.width(), m_outputSize.height() );
 
-    //qDebug("Device = %d, %d", header->device().width(), header->device().height() );
-    //qDebug("Millimeters = %d, %d", header->millimeters().width(), header->millimeters().height() );
+    qDebug("Device = %d, %d", header->device().width(), header->device().height() );
+    qDebug("Millimeters = %d, %d", header->millimeters().width(), header->millimeters().height() );
+    kDebug(31000) << "Foo";
+#endif
 
     // This is restored in cleanup().
     m_painter->save();
@@ -90,17 +96,19 @@ void OutputPainterStrategy::init( const Header *header )
             scaleX = scaleY;
         else
             scaleY = scaleX;
+    }
+    kDebug(31000) << "scale = " << scaleX << ", " << scaleY;
 
-        // Calculate translation if we should center the Emf in the
-        // area and keep the aspect ratio.
+    // Transform the EMF object so that it fits in the shape.
+    m_painter->scale( scaleX, scaleY );
+    m_painter->translate(-header->bounds().left(), -header->bounds().top());
+
+    // Calculate translation if we should center the Emf in the
+    // area and keep the aspect ratio.
+    if ( m_keepAspectRatio ) {
         m_painter->translate((m_outputSize.width() - emfSize.width() * scaleX) / 2,
                              (m_outputSize.height() - emfSize.height() * scaleY) / 2);
     }
-    //kDebug(33100) << "scale = " << scaleX << ", " << scaleY;
-    m_painter->scale( scaleX, scaleY );
-
-    //m_painter->setPen(QColor(0,0,255));
-    //m_painter->drawRect( 0, 0, emfSize.width(), emfSize.height());
 }
 
 void OutputPainterStrategy::cleanup( const Header *header )
@@ -505,6 +513,7 @@ void OutputPainterStrategy::pie( const QRect &box, const QPoint &start, const QP
 
 void OutputPainterStrategy::ellipse( const QRect &box )
 {
+    kDebug(31000) << "ellipse at " << box;
     m_painter->drawEllipse( box );
 }
 
@@ -762,6 +771,8 @@ void OutputPainterStrategy::polyLineTo16( const QRect &bounds, const QList<QPoin
 
 void OutputPainterStrategy::polyBezier16( const QRect &bounds, const QList<QPoint> points )
 {
+    kDebug(31000) << "bounds: " << bounds << ", points = " << points;
+
     Q_UNUSED( bounds );
     QPainterPath path;
     path.moveTo( points[0] );
@@ -773,6 +784,8 @@ void OutputPainterStrategy::polyBezier16( const QRect &bounds, const QList<QPoin
 
 void OutputPainterStrategy::polyBezierTo16( const QRect &bounds, const QList<QPoint> points )
 {
+    kDebug(31000) << "bounds: " << bounds << ", points = " << points;
+
     Q_UNUSED( bounds );
     for ( int i = 0; i < points.count(); i+=3 ) {
 	m_path->cubicTo( points[i], points[i+1], points[i+2] );

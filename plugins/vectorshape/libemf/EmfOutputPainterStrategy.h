@@ -62,7 +62,7 @@ public:
     */
     OutputPainterStrategy();
     OutputPainterStrategy( QPainter &painter, QSize &size, 
-                           bool keepAspectRatio = true );
+                           bool keepAspectRatio = false );
     ~OutputPainterStrategy();
 
     void init( const Header *header );

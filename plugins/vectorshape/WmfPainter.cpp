@@ -24,7 +24,8 @@
 
 #include <kdebug.h>
 
-WmfPainter::WmfPainter() : KoWmfPaint()
+WmfPainter::WmfPainter()
+    : KoWmfPaint()
 {
 }
 

@@ -71,7 +71,7 @@
      </font>
     </property>
     <property name="text">
-     <string>BackGround Color</string>
+     <string>Background Color</string>
     </property>
    </widget>
    <widget class="ColorDisplayLabel" name="insertionColorDisplayLabel">

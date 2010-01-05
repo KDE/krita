@@ -51,7 +51,7 @@ KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlCol
     d->info = info;
     d->profile = static_cast<KoCtlColorProfile*>(profile->clone());
     d->qcolordata = new quint16[4];
-    this->addCompositeOp(new CompositeCopy(this));
+    this->addCompositeOp(new KoCompositeOpCopy(this));
     for (int i = 0; i < info->channels().size(); ++i) {
         d->ctlChannels.push_back(0);
     }

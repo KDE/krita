@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2009 - 2010 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -159,6 +159,7 @@ void VectorShape::drawWmf(QPainter &painter) const
     WmfPainter  wmfPainter;
     QByteArray  emfArray(m_bytes, m_size);
 
+    // FIXME: Switch name from emfArray
     if (!wmfPainter.load(emfArray)) {
         drawNull(painter);
         return;
@@ -167,15 +168,26 @@ void VectorShape::drawWmf(QPainter &painter) const
     painter.save();
 
     // Position the bitmap to the right place and resize it to fit.
-    QRect   vectorRect = wmfPainter.boundingRect(); // FIXME: Should this be made QRectF?
-    QSizeF  shapeSize  = size();
+    QRect   wmfBoundingRect = wmfPainter.boundingRect(); // FIXME: Should this be made QRectF?
+    QSizeF  shapeSize       = size();
 
-    //kDebug(31000) << "vectorRect: " << vectorRect;
-    //kDebug(31000) << "shapeSize: " << shapeSize;
+    //kDebug(31000) << "wmfBoundingRect: " << wmfBoundingRect;
+    //kDebug(31000) << "shapeSize: "       << shapeSize;
 
-    painter.translate(-vectorRect.left(), -vectorRect.top());
-    painter.scale(shapeSize.width() / vectorRect.width(),
-                  shapeSize.height() / vectorRect.height());
+    // Create a transformation that makes the Wmf fit perfectly into the shape size.
+    painter.scale(shapeSize.width() / wmfBoundingRect.width(),
+                  shapeSize.height() / wmfBoundingRect.height());
+    painter.translate(-wmfBoundingRect.left(), -wmfBoundingRect.top());
+
+#if 0
+    // Debug
+    painter.save();
+    painter.setPen(QPen(QColor(172, 196, 206)));
+    painter.drawRect(wmfBoundingRect);
+    painter.drawLine(wmfBoundingRect.topLeft(), wmfBoundingRect.bottomRight());
+    painter.drawLine(wmfBoundingRect.bottomLeft(), wmfBoundingRect.topRight());
+    painter.restore();
+#endif
 
     // Actually paint the WMF.
     wmfPainter.play(painter, true);
@@ -337,6 +349,7 @@ bool VectorShape::isEmf() const
     if (m_size > 44 && m_bytes[40] == ' '
         && m_bytes[41] == 'E' && m_bytes[42] == 'M' && m_bytes[43] == 'F')
     {
+        kDebug(31000) << "EMF identified";
         return true;
     }
 

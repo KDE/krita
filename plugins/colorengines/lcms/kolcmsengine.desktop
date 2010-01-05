@@ -1,6 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=LCMS Color Management Engine for Pigment
+Name[en_GB]=LCMS Colour Management Engine for Pigment
+Name[et]=Pigmendi LCMS värvihalduse mootor
+Name[pt]=Motor de Gestão de Cores do LCMS para o Pigment
+Name[sv]=LCMS-färghanteringsverktyg för pigment
+Name[uk]=Рушій керування кольорами LCMS для Pigment
+Name[zh_TW]=Pigment 的 LCMS 色彩管理引擎
 X-KDE-ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kolcmsengine

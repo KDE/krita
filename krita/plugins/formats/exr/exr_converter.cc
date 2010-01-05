@@ -125,15 +125,15 @@ void decodeData(Imf::InputFile& file, ExrLayerInfo& info, KisPaintLayerSP layer,
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
         Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert( info.channelMap["R"].toAscii().data(),
+        frameBuffer.insert(info.channelMap["R"].toAscii().data(),
                            Imf::Slice(ptype, (char *) &frameBufferData->r,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert( info.channelMap["G"].toAscii().data(),
+        frameBuffer.insert(info.channelMap["G"].toAscii().data(),
                            Imf::Slice(ptype, (char *) &frameBufferData->g,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert( info.channelMap["B"].toAscii().data(),
+        frameBuffer.insert(info.channelMap["B"].toAscii().data(),
                            Imf::Slice(ptype, (char *) &frameBufferData->b,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
@@ -226,9 +226,9 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                     j != layerEnd; ++j) {
                 const Imf::Channel &channel = j.channel();
                 dbgFile << "\tchannel " << j.name() << " type = " << channel.type;
-                
+
                 info.updateImageType(imfTypeToKisType(channel.type));
-                
+
                 QString qname = j.name();
                 QStringList list = qname.split(".");
                 QString layersuffix = list.last();
@@ -239,10 +239,9 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                     info.channelMap[layersuffix] = qname;
                 }
             }
-            if(info.imageType != IT_UNKNOWN && info.imageType != IT_UNSUPPORTED)
-            {
+            if (info.imageType != IT_UNKNOWN && info.imageType != IT_UNSUPPORTED) {
                 infos.push_back(info);
-                if(imageType < info.imageType) {
+                if (imageType < info.imageType) {
                     imageType = info.imageType;
                 }
             }

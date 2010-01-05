@@ -75,6 +75,19 @@ ImageType imfTypeToKisType(Imf::PixelType type)
     }
 }
 
+const KoColorSpace* kisTypeToColorSpace(ImageType imageType)
+{
+    switch (imageType) {
+    case IT_FLOAT16:
+        return KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF16", ""), "");
+    case IT_FLOAT32:
+        return KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF32", ""), "");
+    case IT_UNKNOWN:
+    case IT_UNSUPPORTED:
+        return 0;
+    }
+}
+
 template<typename _T_>
 struct Rgba {
     _T_ r;
@@ -141,6 +154,15 @@ void decodeData(Imf::InputFile& file, KisPaintLayerSP layer, int width, int xsta
 
 }
 
+struct ExrLayerInfo {
+    ExrLayerInfo() : colorSpace(0), imageType(IT_UNKNOWN) {
+    }
+    const KoColorSpace* colorSpace;
+    ImageType imageType;
+    QString name;
+    QMap< QString, QString> channelMap; ///< first is either R, G, B or A second is the EXR channel name
+};
+
 KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
 {
     dbgFile << "Load exr: " << uri << " " << QFile::encodeName(uri.toLocalFile());
@@ -152,17 +174,39 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     int dx = dw.min.x;
     int dy = dw.min.y;
 
-    // For debug purpose print the content of the file
+    // Constuct the list of LayerInfo
+
+    QList<ExrLayerInfo> infos;
+    ImageType imageType = IT_UNKNOWN;
+
     const Imf::ChannelList &channels = file.header().channels();
     std::set<std::string> layerNames;
     channels.layers(layerNames);
 
+    // Test if it is a multilayer EXR or singlelayer
     if (layerNames.empty()) {
         dbgFile << "Single layer:";
+        ExrLayerInfo info;
+        info.name = i18n("HDR Layer");
         for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
             const Imf::Channel &channel = i.channel();
             dbgFile << "Channel name = " << i.name() << " type = " << channel.type;
+
+            ImageType channelType = imfTypeToKisType(channel.type);
+            if (info.imageType == IT_UNKNOWN) {
+                info.imageType = channelType;
+            } else if (info.imageType != channelType) {
+                info.imageType = IT_UNSUPPORTED;
+            }
+            QString qname = i.name();
+            if (qname != "A" && qname != "R" && qname != "G" && qname != "B") {
+                dbgFile << "Unknow: " << i.name();
+                imageType = IT_UNSUPPORTED;
+            }
+            info.channelMap[qname] = qname;
         }
+        infos.push_back(info);
+        imageType = info.imageType;
     } else {
         dbgFile << "Multi layers:";
         for (std::set<std::string>::const_iterator i = layerNames.begin();
@@ -177,37 +221,14 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         }
         qFatal("Unimplemented");
     }
-
-    // Check image type
-    ImageType imageType = IT_UNKNOWN;
-    for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
-        const Imf::Channel &channel = i.channel();
-        ImageType channelType = imfTypeToKisType(channel.type);
-
-        if (imageType == IT_UNKNOWN) {
-            imageType = channelType;
-        } else if (imageType != channelType) {
-            imageType = IT_UNSUPPORTED;
-        }
-        QString qname = i.name();
-        if (qname != "A" && qname != "R" && qname != "G" && qname != "B") {
-            dbgFile << "Unknow: " << i.name();
-            imageType = IT_UNSUPPORTED;
-        }
+    // Set the colorspaces
+    for (int i = 0; i < infos.size(); ++i) {
+        ExrLayerInfo& info = infos[i];
+        info.colorSpace = kisTypeToColorSpace(info.imageType);
     }
+    // Get colorspace
+    const KoColorSpace* colorSpace = kisTypeToColorSpace(imageType);
 
-    const KoColorSpace* colorSpace = 0;
-    switch (imageType) {
-    case IT_FLOAT16:
-        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF16", ""), "");
-        break;
-    case IT_FLOAT32:
-        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF32", ""), "");
-        break;
-    case IT_UNKNOWN:
-    case IT_UNSUPPORTED:
-        break;
-    }
     if (!colorSpace) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     dbgFile << "Colorspace: " << colorSpace->name();
 
@@ -219,31 +240,34 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     }
     m_image->lock();
 
-    // Create the layer
-    KisPaintLayerSP layer = new KisPaintLayer(m_image, m_image->nextLayerName(), OPACITY_OPAQUE, colorSpace);
-    KisTransaction("", layer->paintDevice());
+    // Load the layers
+    for (int i = 0; i < infos.size(); ++i) {
+        ExrLayerInfo& info = infos[i];
+        KisPaintLayerSP layer = new KisPaintLayer(m_image, info.name, OPACITY_OPAQUE, info.colorSpace);
+        KisTransaction("", layer->paintDevice());
 
-    layer->setCompositeOp(COMPOSITE_OVER);
+        layer->setCompositeOp(COMPOSITE_OVER);
 
-    if (!layer) {
-        return KisImageBuilder_RESULT_FAILURE;
+        if (!layer) {
+            return KisImageBuilder_RESULT_FAILURE;
+        }
+
+        // Decode the data
+        switch (imageType) {
+        case IT_FLOAT16:
+            decodeData<half>(file, layer, width, dx, dy, height, Imf::HALF);
+            break;
+        case IT_FLOAT32:
+            decodeData<float>(file, layer, width, dx, dy, height, Imf::FLOAT);
+            break;
+        case IT_UNKNOWN:
+        case IT_UNSUPPORTED:
+            qFatal("Impossible error");
+        }
+
+        m_image->addNode(layer, m_image->rootLayer());
+        layer->setDirty();
     }
-
-    // Decode the data
-    switch (imageType) {
-    case IT_FLOAT16:
-        decodeData<half>(file, layer, width, dx, dy, height, Imf::HALF);
-        break;
-    case IT_FLOAT32:
-        decodeData<float>(file, layer, width, dx, dy, height, Imf::FLOAT);
-        break;
-    case IT_UNKNOWN:
-    case IT_UNSUPPORTED:
-        qFatal("Impossible error");
-    }
-
-    m_image->addNode(layer, m_image->rootLayer());
-    layer->setDirty();
     m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }

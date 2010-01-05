@@ -122,6 +122,8 @@ void decodeData(Imf::InputFile& file, ExrLayerInfo& info, KisPaintLayerSP layer,
 
     QVector<Rgba> pixels(width*height);
 
+    bool hasAlpha = info.channelMap.contains("A");
+
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
         Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
@@ -137,10 +139,12 @@ void decodeData(Imf::InputFile& file, ExrLayerInfo& info, KisPaintLayerSP layer,
                            Imf::Slice(ptype, (char *) &frameBufferData->b,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert(info.channelMap["A"].toAscii().data(),
-                           Imf::Slice(ptype, (char *) &frameBufferData->a,
-                                      sizeof(Rgba) * 1,
-                                      sizeof(Rgba) * width));
+        if (hasAlpha) {
+            frameBuffer.insert(info.channelMap["A"].toAscii().data(),
+                               Imf::Slice(ptype, (char *) &frameBufferData->a,
+                                          sizeof(Rgba) * 1,
+                                          sizeof(Rgba) * width));
+        }
 
         file.setFrameBuffer(frameBuffer);
         file.readPixels(ystart + y);
@@ -154,7 +158,7 @@ void decodeData(Imf::InputFile& file, ExrLayerInfo& info, KisPaintLayerSP layer,
             _T_ unmultipliedGreen = rgba -> g;
             _T_ unmultipliedBlue = rgba -> b;
 
-            if (rgba -> a >= HALF_EPSILON) {
+            if (rgba -> a >= HALF_EPSILON && hasAlpha) {
                 unmultipliedRed /= rgba -> a;
                 unmultipliedGreen /= rgba -> a;
                 unmultipliedBlue /= rgba -> a;
@@ -164,7 +168,11 @@ void decodeData(Imf::InputFile& file, ExrLayerInfo& info, KisPaintLayerSP layer,
             dst->red = unmultipliedRed;
             dst->green = unmultipliedGreen;
             dst->blue = unmultipliedBlue;
-            dst->alpha = rgba->a;
+            if (hasAlpha) {
+                dst->alpha = rgba->a;
+            } else {
+                dst->alpha = 1.0;
+            }
 
             ++it;
             ++rgba;

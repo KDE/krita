@@ -239,14 +239,23 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                     info.channelMap[layersuffix] = qname;
                 }
             }
+            if(info.imageType != IT_UNKNOWN && info.imageType != IT_UNSUPPORTED)
+            {
+                infos.push_back(info);
+                if(imageType < info.imageType) {
+                    imageType = info.imageType;
+                }
+            }
         }
     }
+    dbgFile << "File has " << infos.size() << " layers";
     // Set the colorspaces
     for (int i = 0; i < infos.size(); ++i) {
         ExrLayerInfo& info = infos[i];
         info.colorSpace = kisTypeToColorSpace(info.imageType);
     }
     // Get colorspace
+    dbgFile << "Image type = " << imageType;
     const KoColorSpace* colorSpace = kisTypeToColorSpace(imageType);
 
     if (!colorSpace) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;

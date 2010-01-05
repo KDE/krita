@@ -35,6 +35,7 @@
 #include <kcolorbutton.h>
 
 #include "KoPointerEvent.h"
+#include "KoViewConverter.h"
 
 #include "kis_cursor.h"
 #include "kis_selection_manager.h"

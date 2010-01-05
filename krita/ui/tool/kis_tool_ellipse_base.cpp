@@ -22,6 +22,7 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
+#include <KoViewConverter.h>
 
 #include <opengl/kis_opengl.h>
 

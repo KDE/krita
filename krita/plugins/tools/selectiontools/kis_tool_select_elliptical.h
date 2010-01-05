@@ -56,6 +56,8 @@ private:
     virtual void mouseMoveEvent(KoPointerEvent *e) {m_lokalTool.mouseMoveEvent(e);}
     virtual void mouseReleaseEvent(KoPointerEvent *e) {m_lokalTool.mouseReleaseEvent(e);}
     virtual void deactivate() {m_lokalTool.deactivate();}
+
+    friend class LokalTool;
 };
 
 class KisToolSelectEllipticalFactory : public KoToolFactory

@@ -56,6 +56,8 @@ private:
     virtual void mouseReleaseEvent(KoPointerEvent *e) {m_lokalTool.mouseReleaseEvent(e);}
     virtual void mouseDoubleClickEvent(KoPointerEvent * e) {m_lokalTool.mouseDoubleClickEvent(e);}
     virtual void deactivate() {m_lokalTool.deactivate();}
+
+    friend class LokalTool;
 };
 
 

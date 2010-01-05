@@ -37,6 +37,7 @@
 #include <KoPathShape.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
+#include <KoViewConverter.h>
 
 #include <kis_layer.h>
 #include <kis_selection_options.h>

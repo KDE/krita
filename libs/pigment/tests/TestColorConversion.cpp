@@ -90,7 +90,7 @@ void TestColorConversion::testRGBHSV()
     QCOMPARE(g, 1.0f);
     QCOMPARE(b, 1.0f);
 
-    HSVToRGB(270, 0.666667, 0.75, &r, &g, &b);
+    HSVToRGB(270, 0.666667f, 0.75f, &r, &g, &b);
     QCOMPARE(r, 0.5f);
     QCOMPARE(g, 0.25f);
     QCOMPARE(b, 0.75f);

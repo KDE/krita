@@ -197,7 +197,7 @@ bool TestLoading::compareBlockFormats(const QTextBlockFormat &actualFormat, cons
         switch (id) {
         case KoParagraphStyle::UnnumberedListItem:
         case KoParagraphStyle::IsListHeader:
-            if (actualProperty[id].toInt() != expectedProperty[id].toBool())
+            if (actualProperty[id].toInt() != static_cast<int>(expectedProperty[id].toBool()))
                 match = false;
             break;
         case KoParagraphStyle::AutoTextIndent:

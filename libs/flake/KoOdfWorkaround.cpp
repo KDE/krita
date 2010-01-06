@@ -59,11 +59,11 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
                 color = QColor(styleStack.property(KoXmlNS::draw, "fill-color"));
 
             else if (element.prefix() == "chart" && element.tagName() == "wall")
-                color = QColor("#e0e0e0");
+                color = QColor(0xe0e0e0);
             else if (element.prefix() == "chart" && element.tagName() == "series")
-                color = QColor("#99ccff");
+                color = QColor(0x99ccff);
             else if (element.prefix() == "chart" && element.tagName() == "chart")
-                color = QColor("#ffffff");
+                color = QColor(0xffffff);
         }
     }
     return color;

@@ -24,6 +24,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <QPen>
+#include <QColor>
+#include <KoColorBackground.h>
 
 #include <kdebug.h>
 
@@ -43,4 +45,19 @@ void KoOdfWorkaround::fixEnhancedPath(QString & path, const KoXmlElement &elemen
             path = "U 10800 10800 10800 10800 0 360 Z N";
         }
     }
+}
+
+QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    // Default to an invalid color
+    QColor color;
+    if (context.odfLoadingContext().generator().startsWith("OpenOffice.org")) {
+        if (element.prefix() == "chart" && element.tagName() == "wall")
+            color = QColor("#e0e0e0");
+        if (element.prefix() == "chart" && element.tagName() == "series")
+            color = QColor("#99ccff");
+        if (element.prefix() == "chart" && element.tagName() == "chart")
+            color = QColor("#ffffff");
+    }
+    return color;
 }

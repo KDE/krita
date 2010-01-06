@@ -25,7 +25,9 @@
 class KoXmlElement;
 class KoShapeLoadingContext;
 class QPen;
+class QColor;
 class QString;
+class KoShapeBackground;
 
 /**
  * This class should contain all workarounds to correct problems with different ODF
@@ -50,6 +52,8 @@ namespace KoOdfWorkaround
      * Add the path needed for the ellipse
      */
     FLAKE_EXPORT void fixEnhancedPath(QString &path, const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    FLAKE_EXPORT QColor fixMissingFillColor(const KoXmlElement &element, KoShapeLoadingContext &context);
 }
 
 #endif /* KOODFWORKAROUND_H */

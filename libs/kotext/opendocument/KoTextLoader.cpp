@@ -292,7 +292,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                 } else if (localName == "section") {  // Temporary support (TODO)
                     loadSection(tag, cursor);
                 } else if (localName == "table-of-content") {
-                     loadTOC(tag, cursor);
+                    loadTableOfContents(tag, cursor);
                 } else {
                     KoVariable *var = KoVariableRegistry::instance()->createFromOdf(tag, d->context);
                     if (var) {
@@ -898,7 +898,7 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
     }
 }
 
-void KoTextLoader::loadTOC(const KoXmlElement &element, QTextCursor &cursor)
+void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
 {
 
     // Add a frame to the current layout

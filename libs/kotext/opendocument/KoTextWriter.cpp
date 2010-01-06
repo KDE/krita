@@ -375,7 +375,7 @@ void KoTextWriter::saveTable (QTextTable *table, QHash<QTextList *, QString> &li
     d->writer->endElement(); // table:table
 }
 
-void KoTextWriter::saveTOC(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)
+void KoTextWriter::saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)
 {
 
     d->writer->startElement("text:table-of-content");
@@ -414,7 +414,7 @@ void KoTextWriter::writeBlocks(QTextDocument *document, int from, int to, QHash<
         if (cursorFrame != currentFrame && cursorFrame->format().hasProperty(tocType)) {
             int frameBegin = cursorFrame->firstPosition();
             int frameEnd = cursorFrame->lastPosition();
-            saveTOC(document, frameBegin, frameEnd, listStyles, currentTable, cursor.currentFrame());
+            saveTableOfContents(document, frameBegin, frameEnd, listStyles, currentTable, cursor.currentFrame());
             block = cursorFrame->lastCursorPosition().block();
             block = block.next();
             continue;

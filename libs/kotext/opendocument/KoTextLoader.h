@@ -123,7 +123,7 @@ private:
     /**
     * Load the table of content element \p element into the \p cursor .
     */
-    void loadTOC(const KoXmlElement &element, QTextCursor& cursor);
+    void loadTableOfContents(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
     * This is called in loadBody before reading the body starts.

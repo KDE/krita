@@ -26,6 +26,7 @@
 #include <QPen>
 #include <QColor>
 #include <KoColorBackground.h>
+#include <KoStyleStack.h>
 
 #include <kdebug.h>
 
@@ -49,15 +50,21 @@ void KoOdfWorkaround::fixEnhancedPath(QString & path, const KoXmlElement &elemen
 
 QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     // Default to an invalid color
     QColor color;
     if (context.odfLoadingContext().generator().startsWith("OpenOffice.org")) {
-        if (element.prefix() == "chart" && element.tagName() == "wall")
-            color = QColor("#e0e0e0");
-        if (element.prefix() == "chart" && element.tagName() == "series")
-            color = QColor("#99ccff");
-        if (element.prefix() == "chart" && element.tagName() == "chart")
-            color = QColor("#ffffff");
+        if (!styleStack.hasProperty(KoXmlNS::draw, "fill")) {
+            if (styleStack.hasProperty(KoXmlNS::draw, "fill-color"))
+                color = QColor(styleStack.property(KoXmlNS::draw, "fill-color"));
+
+            else if (element.prefix() == "chart" && element.tagName() == "wall")
+                color = QColor("#e0e0e0");
+            else if (element.prefix() == "chart" && element.tagName() == "series")
+                color = QColor("#99ccff");
+            else if (element.prefix() == "chart" && element.tagName() == "chart")
+                color = QColor("#ffffff");
+        }
     }
     return color;
 }

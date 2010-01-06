@@ -17,9 +17,9 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOTOC_H
-#define KOTOC_H
+#ifndef KOTABLEOFCONTENTS_H
+#define KOTABLEOFCONTENTS_H
 
 const int tocType = 80200;
 
-#endif // KOTOC_H
+#endif // KOTABLEOFCONTENTS_H

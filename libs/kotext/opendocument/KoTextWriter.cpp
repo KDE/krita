@@ -37,7 +37,7 @@
 #include "KoTextDocumentLayout.h"
 #include "KoTextBlockData.h"
 #include "KoTextDocument.h"
-#include "KoTOC.h"
+#include "KoTableOfContents.h"
 
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>

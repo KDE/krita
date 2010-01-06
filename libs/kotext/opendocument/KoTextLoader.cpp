@@ -31,7 +31,7 @@
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
-#include "KoTOC.h"
+#include "KoTableOfContents.h"
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoProperties.h>

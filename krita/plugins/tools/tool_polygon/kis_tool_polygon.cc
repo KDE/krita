@@ -44,13 +44,6 @@
 #include "kis_paintop_registry.h"
 #include "kis_cursor.h"
 
-#include <config-opengl.h>
-
-#ifdef HAVE_OPENGL
-#include <GL/gl.h>
-#endif
-
-
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
         : KisToolPolygonBase(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6))
 {

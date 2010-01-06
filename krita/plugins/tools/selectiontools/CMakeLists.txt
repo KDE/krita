@@ -23,7 +23,8 @@ install(TARGETS kritaselectiontools  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  tool_path_selection.png tool_rect_selection.png
+install( FILES  tool_path_selection.png
+                tool_rect_selection.png
                 tool_eraser_selection.png
                 tool_brush_selection.png
                 tool_contiguous_selection.png
@@ -38,7 +39,7 @@ install( FILES  tool_path_selection.png tool_rect_selection.png
                 tool_outline_selection_cursor.png
                 tool_polygonal_selection_cursor.png
                 tool_similar_selection.png
-#                 tool_similar_selection_cursor.png
+                tool_similar_selection_cursor.png
                 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 install( FILES  kritaselectiontools.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

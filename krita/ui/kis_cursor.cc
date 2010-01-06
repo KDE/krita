@@ -33,7 +33,6 @@
 #include <kstandarddirs.h>
 
 #include "kis_factory2.h"
-#include "kis_debug.h"
 
 KisCursor::KisCursor() {}
 
@@ -350,9 +349,8 @@ QCursor KisCursor::load(const QString & iconName, int hotspotX, int hotspotY)
     QImage cursorImage;
 
     cursorImage.load(filename);
-    if (cursorImage.isNull()) {
-        warnKrita << "Invalid cursor image for " << filename;
-    }
+    Q_ASSERT(!cursorImage.isNull());
+    Q_ASSERT(cursorImage.hasAlphaChannel());
 
     QBitmap bitmap(cursorImage.width(), cursorImage.height());
     QBitmap mask(cursorImage.width(), cursorImage.height());

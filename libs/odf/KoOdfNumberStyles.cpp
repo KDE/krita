@@ -259,6 +259,9 @@ QPair<QString, KoOdfNumberStyles::NumericStyleFormat> KoOdfNumberStyles::loadOdf
     }
 
     const QString styleName = parent.attributeNS(KoXmlNS::style, "name", QString());
+    
+kDebug()<<"99 *****************************************************************************";
+//Q_ASSERT(false);    
     kDebug(30003) << "data style:" << styleName << " qt format=" << format;
     if (!prefix.isEmpty()) {
         kDebug(30003) << " format.left( prefix.length() ) :" << format.left(prefix.length()) << " prefix :" << prefix;

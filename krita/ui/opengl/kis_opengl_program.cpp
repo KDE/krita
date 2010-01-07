@@ -28,7 +28,7 @@ KisOpenGLProgram::KisOpenGLProgram()
 {
     KIS_OPENGL_CLEAR_ERROR();
 
-    m_program = glCreateProgramObjectARB();
+    m_program = glCreateProgram();
     KIS_OPENGL_PRINT_ERROR();
 
     if (m_program == 0) {
@@ -40,12 +40,12 @@ KisOpenGLProgram::~KisOpenGLProgram()
 {
     if (m_program != 0) {
         KIS_OPENGL_CLEAR_ERROR();
-        glDeleteObjectARB(m_program);
+        glDeleteProgram(m_program);
         KIS_OPENGL_PRINT_ERROR();
     }
 }
 
-GLhandleARB KisOpenGLProgram::handle() const
+GLuint KisOpenGLProgram::handle() const
 {
     return m_program;
 }
@@ -56,7 +56,7 @@ GLint KisOpenGLProgram::uniformVariableLocation(const GLchar *variableName) cons
 
     if (m_program != 0) {
         KIS_OPENGL_CLEAR_ERROR();
-        location = glGetUniformLocationARB(m_program, variableName);
+        location = glGetUniformLocation(m_program, variableName);
         KIS_OPENGL_PRINT_ERROR();
 
         if (location == -1) {
@@ -74,7 +74,7 @@ void KisOpenGLProgram::setUniformVariable(const GLchar *variableName, GLfloat v0
 
         if (location != -1) {
             KIS_OPENGL_CLEAR_ERROR();
-            glUniform4fARB(location, v0, v1, v2, v3);
+            glUniform4f(location, v0, v1, v2, v3);
             KIS_OPENGL_PRINT_ERROR();
         }
     }
@@ -87,7 +87,7 @@ void KisOpenGLProgram::setUniformVariable(const GLchar *variableName, GLfloat v0
 
         if (location != -1) {
             KIS_OPENGL_CLEAR_ERROR();
-            glUniform2fARB(location, v0, v1);
+            glUniform2f(location, v0, v1);
             KIS_OPENGL_PRINT_ERROR();
         }
     }
@@ -105,7 +105,7 @@ void KisOpenGLProgram::setUniformVariable(const GLchar *variableName, GLfloat va
 
         if (location != -1) {
             KIS_OPENGL_CLEAR_ERROR();
-            glUniform1fARB(location, value);
+            glUniform1f(location, value);
             KIS_OPENGL_PRINT_ERROR();
         }
     }
@@ -118,7 +118,7 @@ void KisOpenGLProgram::setUniformVariable(const GLchar *variableName, GLint i) c
 
         if (location != -1) {
             KIS_OPENGL_CLEAR_ERROR();
-            glUniform1iARB(location, i);
+            glUniform1i(location, i);
             KIS_OPENGL_PRINT_ERROR();
         }
     }
@@ -128,7 +128,7 @@ void KisOpenGLProgram::attachShader(KisOpenGLShader& shader)
 {
     if (m_program != 0 && shader.isValid()) {
         KIS_OPENGL_CLEAR_ERROR();
-        glAttachObjectARB(m_program, shader.handle());
+        glAttachShader(m_program, shader.handle());
         KIS_OPENGL_PRINT_ERROR();
     }
 }
@@ -137,7 +137,7 @@ void KisOpenGLProgram::detachShader(KisOpenGLShader& shader)
 {
     if (m_program != 0 && shader.isValid()) {
         KIS_OPENGL_CLEAR_ERROR();
-        glDetachObjectARB(m_program, shader.handle());
+        glDetachShader(m_program, shader.handle());
         KIS_OPENGL_PRINT_ERROR();
     }
 }
@@ -146,12 +146,12 @@ void KisOpenGLProgram::link()
 {
     if (m_program != 0) {
         KIS_OPENGL_CLEAR_ERROR();
-        glLinkProgramARB(m_program);
+        glLinkProgram(m_program);
         KIS_OPENGL_PRINT_ERROR();
 
         GLint linked;
 
-        glGetObjectParameterivARB(m_program, GL_OBJECT_LINK_STATUS_ARB, &linked);
+        glGetProgramiv(m_program, GL_LINK_STATUS, &linked);
         KIS_OPENGL_PRINT_ERROR();
 
         if (linked) {
@@ -172,14 +172,14 @@ QString KisOpenGLProgram::getInfoLog() const
         GLint infoLogLength;
 
         KIS_OPENGL_CLEAR_ERROR();
-        glGetObjectParameterivARB(m_program, GL_OBJECT_INFO_LOG_LENGTH_ARB, &infoLogLength);
+        glGetProgramiv(m_program, GL_INFO_LOG_LENGTH, &infoLogLength);
         KIS_OPENGL_PRINT_ERROR();
 
         if (infoLogLength > 0) {
-            GLcharARB *infoLogBuffer = new GLcharARB[infoLogLength];
+            GLchar *infoLogBuffer = new GLchar[infoLogLength];
             Q_CHECK_PTR(infoLogBuffer);
 
-            glGetInfoLogARB(m_program, infoLogLength, NULL, infoLogBuffer);
+            glGetProgramInfoLog(m_program, infoLogLength, NULL, infoLogBuffer);
             KIS_OPENGL_PRINT_ERROR();
 
             infoLog = infoLogBuffer;
@@ -193,7 +193,7 @@ void KisOpenGLProgram::activate()
 {
     if (m_program != 0 && m_isValid) {
         KIS_OPENGL_CLEAR_ERROR();
-        glUseProgramObjectARB(m_program);
+        glUseProgram(m_program);
         KIS_OPENGL_PRINT_ERROR();
     }
 }
@@ -201,7 +201,7 @@ void KisOpenGLProgram::activate()
 void KisOpenGLProgram::deactivate()
 {
     KIS_OPENGL_CLEAR_ERROR();
-    glUseProgramObjectARB(0);
+    glUseProgram(0);
     KIS_OPENGL_PRINT_ERROR();
 }
 
@@ -209,11 +209,13 @@ bool KisOpenGLProgram::active() const
 {
     if (m_program != 0 && m_isValid) {
 
+        GLint activeProgram;
+
         KIS_OPENGL_CLEAR_ERROR();
-        GLhandleARB activeProgram = glGetHandleARB(GL_PROGRAM_OBJECT_ARB);
+        glGetIntegerv(GL_CURRENT_PROGRAM, &activeProgram);
         KIS_OPENGL_PRINT_ERROR();
 
-        if (activeProgram == m_program) {
+        if ((GLuint)activeProgram == m_program) {
             return true;
         }
     }

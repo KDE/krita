@@ -53,7 +53,7 @@ public:
     /**
      * Returns the handle of the program object.
      */
-    GLhandleARB handle() const;
+    GLuint handle() const;
 
     /**
      * Attach a shader object to the program.
@@ -158,7 +158,7 @@ protected:
     /**
      * The handle of the program object.
      */
-    GLhandleARB m_program;
+    GLuint m_program;
 
     /**
      * True if the program has been successfully linked.

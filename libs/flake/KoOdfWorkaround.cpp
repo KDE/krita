@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2009 Johannes Simon <johannes.simon@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,10 +24,11 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <QPen>
-#include <QColor>
 #include <KoColorBackground.h>
 #include <KoStyleStack.h>
+
+#include <QPen>
+#include <QColor>
 
 #include <kdebug.h>
 
@@ -50,21 +52,43 @@ void KoOdfWorkaround::fixEnhancedPath(QString & path, const KoXmlElement &elemen
 
 QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     // Default to an invalid color
     QColor color;
-    if (context.odfLoadingContext().generator().startsWith("OpenOffice.org")) {
-        if (!styleStack.hasProperty(KoXmlNS::draw, "fill")) {
-            if (styleStack.hasProperty(KoXmlNS::draw, "fill-color"))
-                color = QColor(styleStack.property(KoXmlNS::draw, "fill-color"));
 
-            else if (element.prefix() == "chart" && element.tagName() == "wall")
-                color = QColor(0xe0e0e0);
-            else if (element.prefix() == "chart" && element.tagName() == "series")
-                color = QColor(0x99ccff);
-            else if (element.prefix() == "chart" && element.tagName() == "chart")
-                color = QColor(0xffffff);
+    if ( element.prefix() == "chart" ) {
+        KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+        styleStack.save();
+
+        bool hasStyle = element.hasAttributeNS(KoXmlNS::chart, "style-name");
+        if (hasStyle) {
+            context.odfLoadingContext().fillStyleStack(element, KoXmlNS::chart, "style-name", "chart");
+            styleStack.setTypeProperties("graphic");
         }
+
+        if (context.odfLoadingContext().generator().startsWith("OpenOffice.org")) {
+            if (hasStyle && !styleStack.hasProperty(KoXmlNS::draw, "fill") &&
+                             styleStack.hasProperty(KoXmlNS::draw, "fill-color")) {
+                color = QColor(styleStack.property(KoXmlNS::draw, "fill-color"));
+            } else if (!hasStyle) {
+                if (element.tagName() == "wall") {
+                    KoXmlElement chartElement = element.parentNode().toElement();
+                    if (chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
+                        QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
+                        // TODO: Check what default backgrounds for surface, stock and gantt charts are
+                        if ( chartType == "line" ||
+                             chartType == "area" ||
+                             chartType == "bar" ||
+                             chartType == "scatter" )
+                        color = QColor(0xe0e0e0);
+                    }
+                } else if (element.tagName() == "series")
+                    color = QColor(0x99ccff);
+                else if (element.tagName() == "chart")
+                    color = QColor(0xffffff);
+            }
+        }
+
+        styleStack.restore();
     }
     return color;
 }

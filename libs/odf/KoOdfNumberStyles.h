@@ -56,6 +56,7 @@ public:
         Format type;
         int precision;
         QString currencySymbol;
+        QList<QPair<QString,QString> > styleMaps; // conditional formatting, first=condition, second=applyStyleName
     };
 
     static QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement& parent);

@@ -234,10 +234,28 @@ QPair<QString, KoOdfNumberStyles::NumericStyleFormat> KoOdfNumberStyles::loadOdf
                     format += '?';
             }
         }
-        // Not needed:
-        //  <style:map style:condition="value()&gt;=0" style:apply-style-name="N106P0"/>
-        // we handle painting negative numbers in red differently
 
+        // stylesmap's are embedded into a style and are pointing to another style that
+        // should be used insteat ot this style if the defined condition is true. E.g.;
+        // <number:number-style style:name="N139P0" style:volatile="true"/>
+        // <number:number-style style:name="N139P1" style:volatile="true"/>
+        // <number:number-style style:name="N139P2" style:volatile="true"/>
+        // <number:text-style style:name="N139">
+        //   <style:map style:condition="value()&gt;0" style:apply-style-name="N139P0"/>
+        //   <style:map style:condition="value()&lt;0" style:apply-style-name="N139P1"/>
+        //   <style:map style:condition="value()=0" style:apply-style-name="N139P2"/>
+        // </number:text-style>
+        for (KoXmlNode node(e); !node.isNull(); node = node.nextSibling()) {
+            KoXmlElement elem = node.toElement();
+            if (elem.namespaceURI() == KoXmlNS::style && elem.localName() == "map") {
+                QString condition, applyStyleName;
+                if (elem.hasAttributeNS(KoXmlNS::style, "condition"))
+                    condition = elem.attributeNS(KoXmlNS::style, "condition");
+                if (elem.hasAttributeNS(KoXmlNS::style, "apply-style-name"))
+                    applyStyleName = elem.attributeNS(KoXmlNS::style, "apply-style-name");
+                dataStyle.styleMaps.append( QPair<QString,QString>(condition,applyStyleName) );
+            }
+        }
     }
 
     const QString styleName = parent.attributeNS(KoXmlNS::style, "name", QString());

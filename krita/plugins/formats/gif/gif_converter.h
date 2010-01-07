@@ -1,8 +1,5 @@
 /*
- * Copyright (c) 1990-1993 David Koblas <koblas@extra.com>
- * Copyright (c) 2003 Adam D. Moss <adam@gimp.org>
- *
- *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2009-2010 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

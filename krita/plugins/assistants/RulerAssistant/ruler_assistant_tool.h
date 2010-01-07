@@ -18,7 +18,8 @@
 #ifndef _RULERASSISTANTTOOL_H_
 #define _RULERASSISTANTTOOL_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisView;
 
@@ -26,7 +27,7 @@ class RulerAssistantToolPlugin : public QObject
 {
     Q_OBJECT
 public:
-    RulerAssistantToolPlugin(QObject *parent, const QStringList &);
+    RulerAssistantToolPlugin(QObject *parent, const QVariantList &);
     virtual ~RulerAssistantToolPlugin();
 
 private:

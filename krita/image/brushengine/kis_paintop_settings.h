@@ -56,7 +56,7 @@ public:
      * @deprecated give the settings an option widget so the old design keeps working
      * until the gui and the settings have been disentangled.
      */
-    virtual void KDE_DEPRECATED setOptionsWidget(KisPaintOpSettingsWidget* widget) = 0;
+    virtual void KDE_DEPRECATED setOptionsWidget(KisPaintOpSettingsWidget* widget) { Q_UNUSED(widget);}
 
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
@@ -70,7 +70,7 @@ public:
      * Clone the current settings object. Override this if your settings instance doesn't
      * store everything as properties.
      */
-    virtual KisPaintOpSettingsSP clone() const = 0;
+    virtual KisPaintOpSettingsSP clone() const;
 
     /**
      * Override this function if your paintop is interested in which

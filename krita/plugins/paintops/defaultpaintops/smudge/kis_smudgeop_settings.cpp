@@ -42,11 +42,3 @@ bool KisSmudgeOpSettings::paintIncremental()
 {
     return true;
 }
-
-KisPaintOpSettingsSP KisSmudgeOpSettings::clone() const
-{
-
-    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>(m_options->configuration());
-    return settings;
-
-}

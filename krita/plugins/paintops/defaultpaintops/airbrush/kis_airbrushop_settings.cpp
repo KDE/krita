@@ -43,11 +43,3 @@ bool KisAirbrushOpSettings::paintIncremental()
 {
     return true;
 }
-
-KisPaintOpSettingsSP KisAirbrushOpSettings::clone() const
-{
-
-    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>(m_options->configuration());
-    return settings;
-
-}

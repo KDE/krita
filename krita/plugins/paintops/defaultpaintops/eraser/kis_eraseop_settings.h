@@ -39,8 +39,6 @@ public:
     virtual ~KisEraseOpSettings();
     bool paintIncremental();
 
-    KisPaintOpSettingsSP clone() const;
-
     // XXX: Hack!
     void setOptionsWidget(KisPaintOpSettingsWidget* widget) {
         if (m_options != 0 && m_options->property("owned by settings").toBool()) {

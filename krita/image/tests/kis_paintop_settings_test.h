@@ -27,6 +27,7 @@ class KisPaintopSettingsTest : public QObject
 private slots:
 
     void testCreation();
+    void testClone();
 
 };
 

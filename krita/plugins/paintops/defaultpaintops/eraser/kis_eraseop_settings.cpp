@@ -43,11 +43,3 @@ bool KisEraseOpSettings::paintIncremental()
 {
     return true;
 }
-
-KisPaintOpSettingsSP KisEraseOpSettings::clone() const
-{
-
-    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>(m_options->configuration());
-    return settings;
-
-}

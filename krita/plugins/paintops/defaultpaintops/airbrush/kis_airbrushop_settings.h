@@ -36,7 +36,6 @@ public:
 
     KisAirbrushOpSettings();
     virtual ~KisAirbrushOpSettings();
-    KisPaintOpSettingsSP clone() const;
 
     bool paintIncremental();
 

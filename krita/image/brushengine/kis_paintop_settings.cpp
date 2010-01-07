@@ -55,6 +55,21 @@ void KisPaintOpSettings::mousePressEvent(KoPointerEvent *e)
     e->ignore();
 }
 
+KisPaintOpSettingsSP KisPaintOpSettings::clone() const
+{
+    QString paintopID = getString("paintop");
+    if(paintopID.isEmpty())
+        return 0;
+    
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(KoID(paintopID, ""));
+    QMapIterator<QString, QVariant> i(getProperties());
+    while (i.hasNext()) {
+        i.next();
+        settings->setProperty(i.key(), QVariant(i.value()));
+    }
+    return settings;
+}
+
 void KisPaintOpSettings::activate()
 {
 }

@@ -37,8 +37,6 @@ public:
     virtual ~KisSmudgeOpSettings();
     bool paintIncremental();
 
-    KisPaintOpSettingsSP clone() const;
-
 #if defined(HAVE_OPENGL)
     inline QString modelName() const {
         return "smudge-finger";

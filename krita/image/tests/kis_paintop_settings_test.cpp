@@ -26,6 +26,20 @@ void KisPaintopSettingsTest::testCreation()
 //     KisPaintOpSettings test;
 }
 
+void KisPaintopSettingsTest::testClone()
+{
+    KisPaintOpSettings settings;
+    settings.setProperty("paintop", "paintbrush");
+    settings.setProperty("property1", 42);
+    settings.setProperty("property2", "foo");
+    settings.setProperty("property3", 3.1415);
+    
+    KisPaintOpSettingsSP settings2 = settings.clone();
+    QVERIFY(settings2->getString("paintop") == "paintbrush");
+    QVERIFY(settings2->getInt("property1", 0) == 42);
+    QVERIFY(settings2->getString("property2", "") == "foo");
+    QVERIFY(settings2->getDouble("property3", 0.0) == 3.1415);
+}
 
 QTEST_KDEMAIN(KisPaintopSettingsTest, GUI)
 #include "kis_paintop_settings_test.moc"

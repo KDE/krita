@@ -61,6 +61,7 @@ KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColo
     } else {
         dbgPlugins << "Composite op compilation failure";
     }
+    delete module;
 }
 
 

@@ -18,6 +18,11 @@
 
 #include "gif_converter.h"
 
+#include <QBitArray>
+#include <QBuffer>
+#include <QByteArray>
+#include <QDataStream>
+
 #include <kapplication.h>
 
 #include <kio/netaccess.h>
@@ -34,6 +39,10 @@
 
 #define MAXCOLORMAPSIZE  256
 
+#define CM_RED           0
+#define CM_GREEN         1
+#define CM_BLUE          2
+
 #define MAX_LZW_BITS     12
 
 #define INTERLACE          0x40
@@ -44,8 +53,8 @@ typedef quint8 CMap[3][MAXCOLORMAPSIZE];
 
 struct GifScreen
 {
-    quint8 width;
-    quint8 height;
+    quint16 width;
+    quint16 height;
     quint32 bitPixel;
     quint32 colorResolution;
     quint8 background;
@@ -54,6 +63,13 @@ struct GifScreen
     CMap colorMap;
 };
 
+static struct
+{
+    qint32 transparent;
+    qint32 delayTime;
+    qint32 inputFlag;
+    qint32 disposal;
+} Gif89 = { -1, -1, -1, 0 };
 
 gifConverter::gifConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
@@ -65,48 +81,72 @@ gifConverter::gifConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 
 gifConverter::~gifConverter()
 {
-
 }
+
+bool readColorMap(QDataStream& in, int colorResolution, CMap& colorMap, bool* grayscaleFlag)
+{
+    *grayscaleFlag = true;
+
+    for(quint32 i = 0; i < colorResolution; ++i) {
+        for (quint32 j = 0; j < 3; ++j) {
+            if (!in.atEnd()) {
+                in >> colorMap[j][i];
+            }
+            else {
+                warnFile << "Could not read colormap";
+                return false;
+            }
+        }
+        *grayscaleFlag &= (colorMap[i][0] == colorMap[i][1] &&
+                          colorMap[i][1] == colorMap[i][2]);
+    }
+    return true;
+}
+
 
 KisImageBuilder_Result gifConverter::decode(const KUrl& uri)
 {
     // open the file
 
     QFile f(uri.toLocalFile());
-    if (f.exists()) {
+    if (!f.exists()) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
     if (!f.open(QIODevice::ReadOnly)) {
         return KisImageBuilder_RESULT_FAILURE;
     }
 
+    // gifs are small, read the whole thing in one go
+    //QByteArray ba = f.readAll();
     QDataStream in(&f);
-    in.setByteOrder(QDataStream::BigEndian);
+    in.setByteOrder(QDataStream::LittleEndian);
 
-    QString magic;
-    in >> magic;
-    if (magic != "GIF") {
-        warnFile << "Not a gif file" << uri;
-        return KisImageBuilder_RESULT_FAILURE;
+    char headerbytes[6];
+    if (!in.readRawData(headerbytes, sizeof(headerbytes)) == sizeof(headerbytes)) {
+        return KisImageBuilder_RESULT_UNSUPPORTED;
     }
 
-    QString version;
-    in >> version;
-    if (version != "87a" && version != "89a") {
-        warnFile << "Wrong gif version: " << version;
-        return KisImageBuilder_RESULT_FAILURE;
+    QString header(headerbytes);
+    if (!(    qstrcmp(headerbytes, "GIF")
+          && (qstrcmp(headerbytes + 3, "87a") || qstrcmp(headerbytes + 3,"89a")))) {
+        warnFile << "Not a gif file" << header << "," << uri;
+        return KisImageBuilder_RESULT_UNSUPPORTED;
     }
 
     GifScreen gifScreen;
+    memset(&gifScreen, 0, sizeof(GifScreen));
+
     in >> gifScreen.width;
     in >> gifScreen.height;
+
     /*
-           <Packed Fields>  =      Global Color Table Flag       1 Bit
+     <Packed Fields>  =      Global Color Table Flag       1 Bit
                              Color Resolution              3 Bits
                              Sort Flag                     1 Bit
                              Size of Global Color Table    3 Bits
     */
     quint8 packedFields;
+    in >> packedFields;
     gifScreen.bitPixel = 2 << (packedFields & 0x07);
     gifScreen.colorResolution = (((packedFields & 0x70) >> 3) + 1);
     in >> gifScreen.background;
@@ -114,20 +154,11 @@ KisImageBuilder_Result gifConverter::decode(const KUrl& uri)
 
     if (BitSet(packedFields, LOCALCOLORMAP)) {
 
-        bool grayscaleFlag = true;
+        bool grayscaleFlag;
 
-        for(quint32 i = 0; i < gifScreen.colorResolution; ++i) {
-            for (quint32 j = 0; j < 3; ++j) {
-                if (!in.atEnd()) {
-                    in >> gifScreen.colorMap[j][i];
-                }
-                else {
-                    warnFile << "Could not read colormap";
-                    return KisImageBuilder_RESULT_FAILURE;
-                }
-            }
-            grayscaleFlag &= (gifScreen.colorMap[i][0] == gifScreen.colorMap[i][1] &&
-                              gifScreen.colorMap[i][1] == gifScreen.colorMap[i][2]);
+        if (!readColorMap(in, gifScreen.colorResolution, gifScreen.colorMap, &grayscaleFlag)) {
+            warnFile << "Could not read colormap";
+            return KisImageBuilder_RESULT_FAILURE;
         }
         if (grayscaleFlag) {
             gifScreen.colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", "");
@@ -136,6 +167,9 @@ KisImageBuilder_Result gifConverter::decode(const KUrl& uri)
             gifScreen.colorSpace = KoColorSpaceRegistry::instance()->rgb8();
         }
     }
+
+    qDebug() << "GifScreen" << gifScreen.width << gifScreen.height << gifScreen.bitPixel
+             << gifScreen.background << gifScreen.aspectRatio << gifScreen.colorSpace;
 
     // Creating the KisImageWSP
     if(!m_img) {
@@ -149,10 +183,9 @@ KisImageBuilder_Result gifConverter::decode(const KUrl& uri)
     }
 
 
-
-    //KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img->nextLayerName(), quint8_MAX));
-
-    return KisImageBuilder_RESULT_OK;
+    KisPaintLayerSP layer = new KisPaintLayer(m_img, m_img->nextLayerName(), OPACITY_OPAQUE);
+    m_img->addNode(layer);
+    return KisImageBuilder_RESULT_FAILURE;
 }
 
 

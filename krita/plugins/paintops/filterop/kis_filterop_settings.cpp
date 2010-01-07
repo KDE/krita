@@ -47,30 +47,6 @@ bool KisFilterOpSettings::paintIncremental()
     return true; // We always paint on the existing data
 }
 
-void KisFilterOpSettings::fromXML(const QDomElement& elt)
-{
-    // First, call the parent class fromXML to make sure all the
-    // properties are saved to the map
-    KisPaintOpSettings::fromXML(elt);
-
-    // Then load the properties for all widgets
-    m_options->setConfiguration(this);
-}
-
-void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
-{
-
-    // First, make sure all the option widgets have saved their state
-    // to the property configuration
-    KisPropertiesConfiguration * settings = m_options->configuration();
-
-    // Then call the parent class fromXML
-    settings->KisPropertiesConfiguration::toXML(doc, rootElt);
-
-    delete settings;
-}
-
-
 KisPaintOpSettingsSP KisFilterOpSettings::clone() const
 {
 

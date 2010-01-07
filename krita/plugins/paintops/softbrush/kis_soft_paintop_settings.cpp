@@ -42,21 +42,6 @@ bool KisSoftPaintOpSettings::paintIncremental()
     return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
 }
 
-
-
-void KisSoftPaintOpSettings::fromXML(const QDomElement& elt)
-{
-    KisPaintOpSettings::fromXML( elt );
-    m_options->setConfiguration( this );
-}
-
-void KisSoftPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
-{
-    KisPropertiesConfiguration * settings = m_options->configuration();
-    settings->KisPropertiesConfiguration::toXML( doc, rootElt );
-    delete settings;
-}
-
 int KisSoftPaintOpSettings::diameter() const
 {
     return m_options->m_softOption->diameter();

@@ -43,20 +43,6 @@ bool KisChalkPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-void KisChalkPaintOpSettings::fromXML(const QDomElement& elt)
-{
-    KisPaintOpSettings::fromXML(elt);
-    m_options->setConfiguration(this);
-}
-
-void KisChalkPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
-{
-    KisPropertiesConfiguration * settings = m_options->configuration();
-    settings->KisPropertiesConfiguration::toXML(doc, rootElt);
-    delete settings;
-}
-
-
 void KisChalkPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
 {
     // if the movement is more left<->right then up<->down

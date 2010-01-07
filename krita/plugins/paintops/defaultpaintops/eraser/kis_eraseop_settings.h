@@ -34,16 +34,10 @@ class KisEraseOpSettings : public KisPaintOpSettings
 {
 
 public:
-    using KisPaintOpSettings::fromXML;
-    using KisPaintOpSettings::toXML;
-
     KisEraseOpSettings();
 
     virtual ~KisEraseOpSettings();
     bool paintIncremental();
-
-    void fromXML(const QDomElement& elt);
-    void toXML(QDomDocument& doc, QDomElement& rootElt) const;
 
     KisPaintOpSettingsSP clone() const;
 

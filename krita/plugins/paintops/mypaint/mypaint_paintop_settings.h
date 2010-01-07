@@ -40,12 +40,6 @@ public:
     virtual ~MyPaintSettings() {}
     KisPaintOpSettingsSP clone() const;
 
-    using KisPropertiesConfiguration::fromXML;
-    using KisPropertiesConfiguration::toXML;
-
-    virtual void fromXML(const QDomElement&);
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-
     MyPaintBrushResource* brush() const;
 
     /// the mypaint brushlib-based paintop always paints in wash-mode, i.e., with an extra temporary layer

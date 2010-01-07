@@ -44,22 +44,6 @@ bool KisGridPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-
-
-void KisGridPaintOpSettings::fromXML(const QDomElement& elt)
-{
-    KisPaintOpSettings::fromXML( elt );
-    m_options->setConfiguration( this );
-}
-
-void KisGridPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
-{
-    KisPropertiesConfiguration * settings = m_options->configuration();
-    settings->KisPropertiesConfiguration::toXML( doc, rootElt );
-    delete settings;
-}
-
-
 int KisGridPaintOpSettings::divisionLevel() const
 {
     return m_options->m_gridOption->divisionLevel();

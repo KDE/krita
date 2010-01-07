@@ -41,12 +41,6 @@ public:
 
     bool paintIncremental();
 
-    using KisPropertiesConfiguration::fromXML;
-    using KisPropertiesConfiguration::toXML;
-
-    virtual void fromXML(const QDomElement&);
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-
     KisPaintOpSettingsSP clone() const;
 
 

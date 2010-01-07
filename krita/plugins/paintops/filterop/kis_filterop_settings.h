@@ -35,16 +35,10 @@ class KisFilterOpSettings : public KisPaintOpSettings
 {
 
 public:
-    using KisPaintOpSettings::fromXML;
-    using KisPaintOpSettings::toXML;
-
     KisFilterOpSettings();
 
     virtual ~KisFilterOpSettings();
     bool paintIncremental();
-
-    void fromXML(const QDomElement& elt);
-    void toXML(QDomDocument& doc, QDomElement& rootElt) const;
 
     KisPaintOpSettingsSP clone() const;
 

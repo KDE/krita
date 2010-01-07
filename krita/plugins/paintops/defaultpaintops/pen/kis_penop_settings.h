@@ -34,16 +34,10 @@ class KisPenOpSettings : public KisPaintOpSettings
 {
 
 public:
-    using KisPaintOpSettings::fromXML;
-    using KisPaintOpSettings::toXML;
-
     KisPenOpSettings();
 
     virtual ~KisPenOpSettings();
     bool paintIncremental();
-
-    void fromXML(const QDomElement& elt);
-    void toXML(QDomDocument& doc, QDomElement& rootElt) const;
 
     KisPaintOpSettingsSP clone() const;
 

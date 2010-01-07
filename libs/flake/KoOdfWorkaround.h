@@ -42,7 +42,7 @@ class KoShapeBackground;
 namespace KoOdfWorkaround
 {
     /**
-     * OpenOffice handels a line with the width of 0 as a cosmetic line but in svg it makes the line invisible.
+     * OpenOffice handles a line with the width of 0 as a cosmetic line but in svg it makes the line invisible.
      * To show it in koffice use a very small line width. However this is not a cosmetic line.
      */
     FLAKE_EXPORT void fixPenWidth(QPen &pen, KoShapeLoadingContext &context);

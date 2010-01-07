@@ -70,9 +70,10 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
                              styleStack.hasProperty(KoXmlNS::draw, "fill-color")) {
                 color = QColor(styleStack.property(KoXmlNS::draw, "fill-color"));
             } else if (!hasStyle) {
+                KoXmlElement plotAreaElement = element.parentNode().toElement();
+                KoXmlElement chartElement = plotAreaElement.parentNode().toElement();
+
                 if (element.tagName() == "wall") {
-                    KoXmlElement plotAreaElement = element.parentNode().toElement();
-                    KoXmlElement chartElement = plotAreaElement.parentNode().toElement();
                     if (chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
                         QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
                         // TODO: Check what default backgrounds for surface, stock and gantt charts are
@@ -82,8 +83,17 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
                              chartType == "chart:scatter" )
                         color = QColor(0xe0e0e0);
                     }
-                } else if (element.tagName() == "series")
-                    color = QColor(0x99ccff);
+                } else if (element.tagName() == "series") {
+                    if (chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
+                        QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
+                        // TODO: Check what default backgrounds for surface, stock and gantt charts are
+                        if ( chartType == "chart:line" ||
+                             chartType == "chart:area" ||
+                             chartType == "chart:bar" ||
+                             chartType == "chart:scatter" )
+                            color = QColor(0x99ccff);
+                    }
+                }
                 else if (element.tagName() == "chart")
                     color = QColor(0xffffff);
             }
@@ -91,5 +101,6 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
 
         styleStack.restore();
     }
+
     return color;
 }

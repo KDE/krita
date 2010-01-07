@@ -17,7 +17,9 @@
  */
 
 #include "complexbrush.h"
-#include "kis_complexop_factory.h"
+#include "kis_simple_paintop_factory.h"
+#include "kis_complexop.h"
+#include "kis_complexop_settings.h"
 
 #include <KGenericFactory>
 #include <kis_paintop_registry.h>
@@ -32,7 +34,7 @@ ComplexBrush::ComplexBrush(QObject *parent, const QStringList &sl)
     Q_UNUSED(sl)
 
     //setComponentData(ComplexBrushFactory::componentData());
-    KisPaintOpRegistry::instance()->add(new KisComplexOpFactory);
+    KisPaintOpRegistry::instance()->add(new KisSimplePaintOpFactory<KisComplexOp, KisComplexOpSettings, KisComplexOpSettingsWidget>("complex", i18n("Mixing Brush"), "krita-mixing.png"));
 }
 
 ComplexBrush::~ComplexBrush()

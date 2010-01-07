@@ -58,10 +58,11 @@
 #include "kis_complexop_settings.h"
 #include "kis_complexop_settings_widget.h"
 
-KisComplexOp::KisComplexOp(const KisComplexOpSettings *settings, KisPainter *painter)
+KisComplexOp::KisComplexOp(const KisComplexOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter)
         , settings(settings)
 {
+    Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     m_sizeOption.readOptionSetting(settings);

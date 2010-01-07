@@ -1,7 +1,6 @@
 set(kritadynapaintop_PART_SRCS
     dyna_paintop_plugin.cpp
     kis_dyna_paintop.cpp
-    kis_dyna_paintop_factory.cpp
     kis_dynaop_option.cpp
     kis_dyna_paintop_settings.cpp
     kis_dyna_paintop_settings_widget.cpp

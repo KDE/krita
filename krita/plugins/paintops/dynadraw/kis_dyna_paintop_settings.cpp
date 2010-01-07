@@ -38,7 +38,7 @@ KisPaintOpSettingsSP KisDynaPaintOpSettings::clone() const
 
 bool KisDynaPaintOpSettings::paintIncremental()
 {
-    return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
+    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
 void KisDynaPaintOpSettings::fromXML(const QDomElement& elt)

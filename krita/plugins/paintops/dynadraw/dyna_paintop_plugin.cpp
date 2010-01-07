@@ -27,7 +27,8 @@
 #include <kis_paintop_registry.h>
 
 #include "kis_dyna_paintop.h"
-#include "kis_dyna_paintop_factory.h"
+#include "kis_dyna_paintop_settings.h"
+#include "kis_simple_paintop_factory.h"
 
 #include "kis_global.h"
 
@@ -41,7 +42,7 @@ DynaPaintOpPlugin::DynaPaintOpPlugin(QObject *parent, const QStringList &)
     //
     //setComponentData(DynaPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisDynaPaintOpFactory);
+    r->add(new KisSimplePaintOpFactory<KisDynaPaintOp, KisDynaPaintOpSettings, KisDynaPaintOpSettingsWidget>("dyna brush", i18n("Dyna brush"), "krita-dyna.png"));
 
 }
 

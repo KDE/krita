@@ -1,5 +1,4 @@
-
-include_directories( ${KRITA_INCLUDES} )
+include_directories( ${KRITA_INCLUDES} ${GIF_INCLUDE_DIR})
 
 set(libkritaconverter_LIB_SRCS
     gif_converter.cpp
@@ -12,9 +11,7 @@ set(kritagifimport_PART_SRCS
 
 kde4_add_plugin(kritagifimport WITH_PREFIX ${kritagifimport_PART_SRCS})
 
-
-
-target_link_libraries(kritagifimport kritaui )
+target_link_libraries(kritagifimport kritaui ${GIF_LIBRARIES})
 
 install(TARGETS kritagifimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -28,7 +25,7 @@ set(kritagifexport_PART_SRCS
 kde4_add_plugin(kritagifexport WITH_PREFIX ${kritagifexport_PART_SRCS})
 
 
-target_link_libraries(kritagifexport kritaui )
+target_link_libraries(kritagifexport kritaui ${GIF_LIBRARIES})
 
 install(TARGETS kritagifexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

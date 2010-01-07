@@ -15,6 +15,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+/*
+ * Inspired by qt-gif-plugin  (http://gitorious.org/qt-gif-plugin)
+ * Copyright (C) 2009 Shawn T. Rutledge (shawn.t.rutledge@gmail.com)
+ */
 
 #include "gif_converter.h"
 
@@ -22,89 +26,134 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QDataStream>
+#include <QIODevice>
 
 #include <kapplication.h>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
 
+#include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceTraits.h>
 
 #include <kis_types.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_undo_adapter.h>
+#include <kis_random_accessor.h>
+#include <kis_paint_device.h>
 
-#define MAXCOLORMAPSIZE  256
+static const int InterlacedOffset[] = {0, 4, 2, 1};
+static const int InterlacedJumps[] = {8, 8, 4, 3};
 
-#define CM_RED           0
-#define CM_GREEN         1
-#define CM_BLUE          2
-
-#define MAX_LZW_BITS     12
-
-#define INTERLACE          0x40
-#define LOCALCOLORMAP      0x80
-#define BitSet(byte, bit)  (((byte) & (bit)) == (bit))
-
-typedef quint8 CMap[3][MAXCOLORMAPSIZE];
-
-struct GifScreen
+int doInput(GifFileType* gif, GifByteType* data, int i)
 {
-    quint16 width;
-    quint16 height;
-    quint32 bitPixel;
-    quint32 colorResolution;
-    quint8 background;
-    quint8 aspectRatio;
-    const KoColorSpace* colorSpace;
-    CMap colorMap;
-};
-
-static struct
-{
-    qint32 transparent;
-    qint32 delayTime;
-    qint32 inputFlag;
-    qint32 disposal;
-} Gif89 = { -1, -1, -1, 0 };
-
-gifConverter::gifConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
-{
-    m_doc = doc;
-    m_adapter = adapter;
-    m_job = 0;
-    m_stop = false;
+    QIODevice* in = (QIODevice*)gif->UserData;
+    return in->read((char*)data, i);
 }
 
-gifConverter::~gifConverter()
+GifConverter::GifConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+    : m_doc(doc)
+{
+    Q_UNUSED(adapter);
+}
+
+GifConverter::~GifConverter()
 {
 }
 
-bool readColorMap(QDataStream& in, int colorResolution, CMap& colorMap, bool* grayscaleFlag)
-{
-    *grayscaleFlag = true;
+KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageSP kisImage) {
 
-    for(quint32 i = 0; i < colorResolution; ++i) {
-        for (quint32 j = 0; j < 3; ++j) {
-            if (!in.atEnd()) {
-                in >> colorMap[j][i];
-            }
-            else {
-                warnFile << "Could not read colormap";
-                return false;
+    if (DGifGetImageDesc(gifFile) == GIF_ERROR) {
+        warnFile << "Could not read gif image from file";
+        return 0;
+    }
+
+    KisPaintLayer* layer = new KisPaintLayer(kisImage, kisImage->nextLayerName(), OPACITY_OPAQUE);
+
+    GifImageDesc image = gifFile->Image;
+
+    layer->setX(image.Left);
+    layer->setY(image.Top);
+
+    Q_ASSERT(gifFile->SBackGroundColor < gifFile->SColorMap->ColorCount);
+    GifColorType color = gifFile->SColorMap->Colors[gifFile->SBackGroundColor];
+    quint8 fillPixel[4];
+    fillPixel[0] = color.Blue;
+    fillPixel[1] = color.Green;
+    fillPixel[2] = color.Red;
+    if (gifFile->SBackGroundColor == m_transparentColorIndex) {
+        fillPixel[3] = OPACITY_TRANSPARENT;
+    }
+    else {
+        fillPixel[3] = OPACITY_OPAQUE;
+    }
+    layer->paintDevice()->fill(image.Left, image.Top, image.Width, image.Height,
+                                fillPixel);
+
+    GifPixelType* line = new GifPixelType[image.Width];
+    KisRandomAccessorPixel accessor = layer->paintDevice()->createRandomAccessor(image.Left, image.Top);
+    if (image.Interlace) {
+        for (int i = 0; i < 4; i++) {
+            for (int row = image.Top + InterlacedOffset[i]; row < image.Top + image.Height; row += InterlacedJumps[i]) {
+                if (DGifGetLine(gifFile, line, image.Width) == GIF_ERROR) {
+                    return 0;
+                }
+                for (int col = 0; col < image.Width; ++col) {
+
+                    accessor.moveTo(col + image.Left, row);
+
+                    GifPixelType colorIndex = line[col];
+                    color = image.ColorMap->Colors[colorIndex];
+            
+                    quint8* dst = accessor.rawData();
+                    KoRgbTraits<quint8>::setRed(dst, color.Red);
+                    KoRgbTraits<quint8>::setGreen(dst, color.Blue);
+                    KoRgbTraits<quint8>::setBlue(dst, color.Red);
+                    if (colorIndex == m_transparentColorIndex) {
+                        layer->colorSpace()->setAlpha(dst, OPACITY_TRANSPARENT, 1);
+                    }
+                    else {
+                        layer->colorSpace()->setAlpha(dst, OPACITY_OPAQUE, 1);
+                    }
+                }
             }
         }
-        *grayscaleFlag &= (colorMap[i][0] == colorMap[i][1] &&
-                          colorMap[i][1] == colorMap[i][2]);
+    } else {
+        for (int row = image.Top; row < image.Top + image.Height; ++ row) {
+            if (DGifGetLine(gifFile, line, image.Width) == GIF_ERROR) {
+                return 0;
+            }
+            for (int col = 0; col < image.Width; ++col) {
+
+                accessor.moveTo(col + image.Left, row);
+
+                GifPixelType colorIndex = line[col];
+                color = image.ColorMap->Colors[colorIndex];
+        
+                quint8* dst = accessor.rawData();
+                KoRgbTraits<quint8>::setRed(dst, color.Red);
+                KoRgbTraits<quint8>::setGreen(dst, color.Blue);
+                KoRgbTraits<quint8>::setBlue(dst, color.Red);
+                if (colorIndex == m_transparentColorIndex) {
+                    layer->colorSpace()->setAlpha(dst, OPACITY_TRANSPARENT, 1);
+                }
+                else {
+                    layer->colorSpace()->setAlpha(dst, OPACITY_OPAQUE, 1);
+                }
+            }
+        }
     }
-    return true;
+
+    delete[] line;
+
+    return layer;
 }
 
-
-KisImageBuilder_Result gifConverter::decode(const KUrl& uri)
+KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
 {
     // open the file
 
@@ -116,81 +165,89 @@ KisImageBuilder_Result gifConverter::decode(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-    // gifs are small, read the whole thing in one go
-    //QByteArray ba = f.readAll();
-    QDataStream in(&f);
-    in.setByteOrder(QDataStream::LittleEndian);
-
-    char headerbytes[6];
-    if (!in.readRawData(headerbytes, sizeof(headerbytes)) == sizeof(headerbytes)) {
-        return KisImageBuilder_RESULT_UNSUPPORTED;
+    GifFileType* gifFile = DGifOpen(&f, doInput);
+    if (!gifFile) {
+        warnFile << "Could not read gif file" << uri;
+        return KisImageBuilder_RESULT_FAILURE;
     }
-
-    QString header(headerbytes);
-    if (!(    qstrcmp(headerbytes, "GIF")
-          && (qstrcmp(headerbytes + 3, "87a") || qstrcmp(headerbytes + 3,"89a")))) {
-        warnFile << "Not a gif file" << header << "," << uri;
-        return KisImageBuilder_RESULT_UNSUPPORTED;
-    }
-
-    GifScreen gifScreen;
-    memset(&gifScreen, 0, sizeof(GifScreen));
-
-    in >> gifScreen.width;
-    in >> gifScreen.height;
-
-    /*
-     <Packed Fields>  =      Global Color Table Flag       1 Bit
-                             Color Resolution              3 Bits
-                             Sort Flag                     1 Bit
-                             Size of Global Color Table    3 Bits
-    */
-    quint8 packedFields;
-    in >> packedFields;
-    gifScreen.bitPixel = 2 << (packedFields & 0x07);
-    gifScreen.colorResolution = (((packedFields & 0x70) >> 3) + 1);
-    in >> gifScreen.background;
-    in >> gifScreen.aspectRatio;
-
-    if (BitSet(packedFields, LOCALCOLORMAP)) {
-
-        bool grayscaleFlag;
-
-        if (!readColorMap(in, gifScreen.colorResolution, gifScreen.colorMap, &grayscaleFlag)) {
-            warnFile << "Could not read colormap";
-            return KisImageBuilder_RESULT_FAILURE;
-        }
-        if (grayscaleFlag) {
-            gifScreen.colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", "");
-        }
-        else {
-            gifScreen.colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-        }
-    }
-
-    qDebug() << "GifScreen" << gifScreen.width << gifScreen.height << gifScreen.bitPixel
-             << gifScreen.background << gifScreen.aspectRatio << gifScreen.colorSpace;
 
     // Creating the KisImageWSP
     if(!m_img) {
         m_img = new KisImage(m_doc->undoAdapter(),
-                             gifScreen.width,
-                             gifScreen.height,
-                             gifScreen.colorSpace,
+                             gifFile->SWidth,
+                             gifFile->SHeight,
+                             KoColorSpaceRegistry::instance()->rgb8(),
                              uri.toLocalFile());
         Q_CHECK_PTR(m_img);
         m_img->lock();
     }
 
+    GifRecordType recordType = UNDEFINED_RECORD_TYPE;
+
+    while (recordType != TERMINATE_RECORD_TYPE){
+        DGifGetRecordType(gifFile, &recordType);
+        switch (recordType) {
+        case IMAGE_DESC_RECORD_TYPE:
+            {
+                KisNodeSP node = getNode(gifFile, m_img);
+                if (!node) {
+                    return KisImageBuilder_RESULT_FAILURE;
+                }
+                m_img->addNode(node);
+            }
+            break;
+        case EXTENSION_RECORD_TYPE:
+            {
+                int extCode, len;
+                GifByteType* extData = 0;
+                do {
+                    if (DGifGetExtension(gifFile, &extCode, &extData) == GIF_ERROR) {
+                        warnFile << "Error reading extension";
+                        return KisImageBuilder_RESULT_FAILURE;        
+                    }
+                    len = extData[0];
+                    switch(extCode) {
+                    case GRAPHICS_EXT_FUNC_CODE:
+                        break;
+                    case COMMENT_EXT_FUNC_CODE:
+                        {
+                            QByteArray comment((char*)(extData + 1), len);
+                             m_doc->documentInfo()->setAboutInfo("comments", comment);
+                        }
+                        break;
+                    case PLAINTEXT_EXT_FUNC_CODE:
+                        // XXX: insert a monospace text shape layer? Nobody used this extension anyway...
+                        break;
+                    case APPLICATION_EXT_FUNC_CODE:
+                        break;
+                    }
+                } while (extData != 0);
+        
+            }
+            break;
+        case TERMINATE_RECORD_TYPE:
+            break;
+        case UNDEFINED_RECORD_TYPE:
+        default:
+            {
+                warnFile << "Found an undefined record type, ignoring";
+            }
+
+        }
+    }
+
 
     KisPaintLayerSP layer = new KisPaintLayer(m_img, m_img->nextLayerName(), OPACITY_OPAQUE);
     m_img->addNode(layer);
+
+
+    m_img->unlock();
     return KisImageBuilder_RESULT_FAILURE;
 }
 
 
 
-KisImageBuilder_Result gifConverter::buildImage(const KUrl& uri)
+KisImageBuilder_Result GifConverter::buildImage(const KUrl& uri)
 {
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
@@ -214,13 +271,13 @@ KisImageBuilder_Result gifConverter::buildImage(const KUrl& uri)
 }
 
 
-KisImageWSP gifConverter::image()
+KisImageWSP GifConverter::image()
 {
     return m_img;
 }
 
 
-KisImageBuilder_Result gifConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer)
+KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -249,7 +306,7 @@ KisImageBuilder_Result gifConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 }
 
 
-void gifConverter::cancel()
+void GifConverter::cancel()
 {
     m_stop = true;
 }

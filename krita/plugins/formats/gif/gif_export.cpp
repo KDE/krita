@@ -70,7 +70,7 @@ KoFilter::ConversionStatus gifExport::convert(const QByteArray& from, const QByt
     KisImageWSP img = output->image();
     Q_CHECK_PTR(img);
 
-    gifConverter kpc(output, output->undoAdapter());
+    GifConverter kpc(output, output->undoAdapter());
 
     KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
     KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);

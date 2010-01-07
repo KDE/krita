@@ -21,6 +21,9 @@ macro_log_feature( KDCRAW_FOUND "kdcraw" "The KDCraw library" "http://www.digika
 macro_optional_find_package(OpenJPEG)
 macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image compression" "http://www.openjpeg.org" FALSE "" "Required by the Krita JPEG 2000 filter")
 
+macro_optional_find_package(GIF2)
+macro_log_feature(GIF_FOUND "libungif/giflib" "Free library for reading and writing GIF images" "htt://XXX!!!" FALSE "" "Required by the Krita GIF filter")
+
 include_directories(${KRITA_INCLUDES})
 
 if(KDCRAW_FOUND)
@@ -58,3 +61,7 @@ add_subdirectory(ora)
 add_subdirectory(ppm)
 add_subdirectory(xcf)
 add_subdirectory(psd)
+
+if(GIF_FOUND)
+    add_subdirectory(gif)
+endif(GIF_FOUND)

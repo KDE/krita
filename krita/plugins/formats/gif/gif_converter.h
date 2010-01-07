@@ -29,6 +29,8 @@
 
 #include "kis_types.h"
 
+#include <gif_lib.h>
+
 class KisDoc2;
 class KisUndoAdapter;
 
@@ -53,22 +55,17 @@ enum KisImageBuilder_Result {
                                                 };
 
 /**
- * load and save gif files. This is based on Gimp's gif filter, which
- * seems to be able to handle animated gifs, which the qt-gif-plugin which is based
- * on libgif cannot handle (git://gitorious.org/qt-gif-plugin/qt-gif-plugin.git).
- *
- * And since neither libgif nor libungif have been maintained for years, we'd better
- * look at some example code that _is_ maintained and debugged.
+ * load and save gif files.
  */
-class gifConverter : public QObject {
+class GifConverter : public QObject {
 
     Q_OBJECT
 
 public:
 
-    gifConverter(KisDoc2 *doc, KisUndoAdapter *adapter);
+    GifConverter(KisDoc2 *doc, KisUndoAdapter *adapter);
 
-    virtual ~gifConverter();
+    virtual ~GifConverter();
 
 public:
 
@@ -81,6 +78,7 @@ public:
 private:
 
     KisImageBuilder_Result decode(const KUrl& uri);
+    KisNodeSP getNode(GifFileType* gifFile, KisImageSP kisImage);
 
 public slots:
 
@@ -88,10 +86,13 @@ public slots:
 
 private:
 
+    bool m_stop;
+    int m_transparentColorIndex;
+
     KisImageWSP m_img;
     KisDoc2 *m_doc;
     KisUndoAdapter *m_adapter;
-    bool m_stop;
+
     KIO::TransferJob *m_job;
 };
 

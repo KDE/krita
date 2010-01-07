@@ -89,6 +89,7 @@ KoCtlColorProfile::KoCtlColorProfile(const KoCtlColorProfile& rhs) : KoColorProf
 
 KoCtlColorProfile::~KoCtlColorProfile()
 {
+    delete d->module;
     delete d;
 }
 

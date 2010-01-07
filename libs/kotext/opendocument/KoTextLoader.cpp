@@ -941,16 +941,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
                     loadParagraph(p, cursorFrame);
                 // index title
                 } else if (p.localName() == "index-title") {
-                    KoXmlElement title;
-                    forEachElement(title, p){
-                        if (title.isNull() || title.namespaceURI() != KoXmlNS::text) {
-                            continue;
-                        }
-                        // The title is noted as a 'p', with a particular style
-                        if (title.localName() == "p") {
-                            loadParagraph(title, cursorFrame);
-                        }
-                    }
+                    loadBody(p, cursorFrame);
                 }
 
                 QTextCursor c(current);

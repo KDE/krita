@@ -42,6 +42,7 @@
 #include <kis_transaction.h>
 #include <kis_undo_adapter.h>
 #include <boost/concept_check.hpp>
+#include <ImfAttribute.h>
 
 exrConverter::exrConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
@@ -96,17 +97,30 @@ struct Rgba {
     _T_ a;
 };
 
-struct ExrLayerInfo {
-    ExrLayerInfo() : colorSpace(0), imageType(IT_UNKNOWN) {
+struct ExrGroupLayerInfo;
+
+struct ExrLayerInfoBase {
+    ExrLayerInfoBase() : colorSpace(0), parent(0) {
     }
     const KoColorSpace* colorSpace;
-    ImageType imageType;
     QString name;
+    const ExrGroupLayerInfo* parent;
+};
+
+struct ExrGroupLayerInfo : public ExrLayerInfoBase {
+    ExrGroupLayerInfo() : groupLayer(0) {}
+    KisGroupLayerSP groupLayer;
+};
+
+struct ExrPaintLayerInfo : public ExrLayerInfoBase {
+    ExrPaintLayerInfo() : imageType(IT_UNKNOWN) {
+    }
+    ImageType imageType;
     QMap< QString, QString> channelMap; ///< first is either R, G, B or A second is the EXR channel name
     void updateImageType(ImageType channelType);
 };
 
-void ExrLayerInfo::updateImageType(ImageType channelType)
+void ExrPaintLayerInfo::updateImageType(ImageType channelType)
 {
     if (imageType == IT_UNKNOWN) {
         imageType = channelType;
@@ -116,7 +130,7 @@ void ExrLayerInfo::updateImageType(ImageType channelType)
 }
 
 template<typename _T_>
-void decodeData(Imf::InputFile& file, ExrLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
+void decodeData(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
 {
     typedef Rgba<_T_> Rgba;
 
@@ -181,6 +195,34 @@ void decodeData(Imf::InputFile& file, ExrLayerInfo& info, KisPaintLayerSP layer,
 
 }
 
+bool recCheckGroup(const ExrGroupLayerInfo& group, QStringList list, int idx1, int idx2)
+{
+    if (idx1 > idx2) return true;
+    if (group.name == list[idx2]) {
+        return recCheckGroup(*group.parent, list, idx1, idx2 - 1);
+    }
+    return false;
+}
+
+ExrGroupLayerInfo* searchGroup(QList<ExrGroupLayerInfo>* groups, QStringList list, int idx1, int idx2)
+{
+    if (idx1 > idx2) {
+        return 0;
+    }
+    // Look for the group
+    for (int i = 0; i < groups->size(); ++i) {
+        if (recCheckGroup(groups->at(i), list, idx1, idx2)) {
+            return &(*groups)[i];
+        }
+    }
+    // Create the group
+    ExrGroupLayerInfo info;
+    info.name = list.at(idx2);
+    info.parent = searchGroup(groups, list, idx1, idx2 - 1);
+    groups->append(info);
+    return &groups->last();
+}
+
 KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
 {
     dbgFile << "Load exr: " << uri << " " << QFile::encodeName(uri.toLocalFile());
@@ -192,9 +234,17 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     int dx = dw.min.x;
     int dy = dw.min.y;
 
+    // Display the attributes of a file
+    for (Imf::Header::ConstIterator it = file.header().begin();
+            it != file.header().end(); ++it) {
+        dbgFile << "Attribute: " << it.name() << " type: " << it.attribute().typeName();
+    }
+
     // Constuct the list of LayerInfo
 
-    QList<ExrLayerInfo> infos;
+    QList<ExrPaintLayerInfo> infos;
+    QList<ExrGroupLayerInfo> groups;
+
     ImageType imageType = IT_UNKNOWN;
 
     const Imf::ChannelList &channels = file.header().channels();
@@ -204,7 +254,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     // Test if it is a multilayer EXR or singlelayer
     if (layerNames.empty()) {
         dbgFile << "Single layer:";
-        ExrLayerInfo info;
+        ExrPaintLayerInfo info;
         info.name = i18n("HDR Layer");
         for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
             const Imf::Channel &channel = i.channel();
@@ -226,8 +276,9 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         dbgFile << "Multi layers:";
         for (std::set<std::string>::const_iterator i = layerNames.begin();
                 i != layerNames.end(); ++i) {
-            ExrLayerInfo info;
+            ExrPaintLayerInfo info;
             dbgFile << "layer name = " << i->c_str();
+            info.name = i->c_str();
             Imf::ChannelList::ConstIterator layerBegin, layerEnd;
             channels.channelsInLayer(*i, layerBegin, layerEnd);
             for (Imf::ChannelList::ConstIterator j = layerBegin;
@@ -240,6 +291,12 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 QString qname = j.name();
                 QStringList list = qname.split(".");
                 QString layersuffix = list.last();
+
+                if (list.size() > 1) {
+                    info.name = list[list.size()-2];
+                    info.parent = searchGroup(&groups, list, 0, list.size() - 3);
+                }
+
                 if (layersuffix != "A" && layersuffix != "R" && layersuffix != "G" && layersuffix != "B") {
                     dbgFile << "Unknow: " << layersuffix;
                     info.imageType = IT_UNSUPPORTED;
@@ -258,7 +315,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     dbgFile << "File has " << infos.size() << " layers";
     // Set the colorspaces
     for (int i = 0; i < infos.size(); ++i) {
-        ExrLayerInfo& info = infos[i];
+        ExrPaintLayerInfo& info = infos[i];
         info.colorSpace = kisTypeToColorSpace(info.imageType);
     }
     // Get colorspace
@@ -268,6 +325,12 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     if (!colorSpace) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     dbgFile << "Colorspace: " << colorSpace->name();
 
+    // Set the colorspace on all groups
+    for (int i = 0; i < groups.size(); ++i) {
+        ExrGroupLayerInfo& info = groups[i];
+        info.colorSpace = colorSpace;
+    }
+
     // Create the image
     m_image = new KisImage(m_adapter, width, height, colorSpace, "");
 
@@ -276,9 +339,18 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     }
     m_image->lock();
 
+    // Create group layers
+    for (int i = 0; i < groups.size(); ++i) {
+        ExrGroupLayerInfo& info = groups[i];
+        Q_ASSERT(info.parent == 0 || info.parent->groupLayer);
+        KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_image->rootLayer();
+        info.groupLayer = new KisGroupLayer(m_image, info.name, OPACITY_OPAQUE);
+        m_image->addNode(info.groupLayer, groupLayerParent);
+    }
+
     // Load the layers
     for (int i = 0; i < infos.size(); ++i) {
-        ExrLayerInfo& info = infos[i];
+        ExrPaintLayerInfo& info = infos[i];
         KisPaintLayerSP layer = new KisPaintLayer(m_image, info.name, OPACITY_OPAQUE, info.colorSpace);
         KisTransaction("", layer->paintDevice());
 
@@ -301,7 +373,8 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             qFatal("Impossible error");
         }
 
-        m_image->addNode(layer, m_image->rootLayer());
+        KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_image->rootLayer();
+        m_image->addNode(layer, groupLayerParent);
         layer->setDirty();
     }
     m_image->unlock();

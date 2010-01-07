@@ -219,35 +219,45 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
                 dbgFile << "reading EXTENSION_RECORD_TYPE";
                 int extCode, len;
                 GifByteType* extData = 0;
-                while(true) {
+                if (DGifGetExtension(gifFile, &extCode, &extData) == GIF_ERROR) {
+                    warnFile << "Error reading extension";
+                    return KisImageBuilder_RESULT_FAILURE;
+                }
 
-                    if (DGifGetExtension(gifFile, &extCode, &extData) == GIF_ERROR) {
-                        warnFile << "Error reading extension";
-                        return KisImageBuilder_RESULT_FAILURE;
-                    }
-
-                    if (extData != 0) {
-                        break;
-                    }
-
+                if (extData != 0) {
                     len = extData[0];
+
+                    dbgFile << "\tCode" << extCode << "lenght" << len;
+
                     switch(extCode) {
                     case GRAPHICS_EXT_FUNC_CODE:
+                        {
+                            dbgFile << "\t GRAPHICS_EXT_FUNC_CODE";
+                            // There are lots of fields, but only one that interests us, since we
+                            // wouldn't store and save the animation information anyway.
+                            if (extData[1] & 0x01)
+                            {
+                                m_transparentColorIndex = extData[3];
+                                dbgFile << "Transparent color index" << m_transparentColorIndex;
+                            }
+                        }
                         break;
                     case COMMENT_EXT_FUNC_CODE:
                         {
+                            dbgFile << "COMMENT_EXT_FUNC_CODE";
                             QByteArray comment((char*)(extData + 1), len);
                             m_doc->documentInfo()->setAboutInfo("comments", comment);
                         }
                         break;
                     case PLAINTEXT_EXT_FUNC_CODE:
+                        dbgFile << "PLAINTEXT_EXT_FUNC_CODE";
                         // XXX: insert a monospace text shape layer? Nobody used this extension anyway...
                         break;
                     case APPLICATION_EXT_FUNC_CODE:
+                        dbgFile << "APPLICATION_EXT_FUNC_CODE";
                         break;
                     }
                 }
-
             }
             break;
         case TERMINATE_RECORD_TYPE:

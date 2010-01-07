@@ -119,9 +119,8 @@ bool KisPaintOpPreset::load()
         return false;
 
     KoID id(paintopid, "");
-    KoInputDevice input = KoInputDevice::mouse(); // TODO: Load inputdevice?
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, input, 0);
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0);
     if (!settings)
         return false;
     settings->fromXML(element);

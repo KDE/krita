@@ -54,12 +54,6 @@ KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettingsSP settings,
     return op;
 }
 
-KisPaintOpSettingsSP KisFilterOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
-{
-    Q_UNUSED(inputDevice);
-    return settings(image);
-}
-
 KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageWSP image)
 {
     KisFilterOpSettings* settings = new KisFilterOpSettings();

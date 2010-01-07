@@ -41,13 +41,6 @@ KisPaintOp * KisDeformPaintOpFactory::createOp(const KisPaintOpSettingsSP settin
     return op;
 }
 
-KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
-{
-    Q_UNUSED(inputDevice);
-    Q_UNUSED(image);
-    return new KisDeformPaintOpSettings();
-}
-
 KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(KisImageWSP image)
 {
     Q_UNUSED(image);

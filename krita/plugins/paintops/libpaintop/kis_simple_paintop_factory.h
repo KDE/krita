@@ -49,13 +49,6 @@ public:
         return op;
     }
 
-    KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageWSP image)
-    {
-        Q_UNUSED(inputDevice);
-        Q_UNUSED(image);
-        return new OpSettings();
-    }
-
     KisPaintOpSettingsSP settings(KisImageWSP image)
     {
         Q_UNUSED(image);

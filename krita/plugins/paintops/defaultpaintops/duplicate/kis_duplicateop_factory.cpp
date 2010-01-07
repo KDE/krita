@@ -55,12 +55,6 @@ KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettingsSP settings
     return op;
 }
 
-KisPaintOpSettingsSP KisDuplicateOpFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
-{
-    Q_UNUSED(inputDevice);
-    return new KisDuplicateOpSettings(image);
-}
-
 KisPaintOpSettingsSP KisDuplicateOpFactory::settings(KisImageWSP image)
 {
     return new KisDuplicateOpSettings(image);

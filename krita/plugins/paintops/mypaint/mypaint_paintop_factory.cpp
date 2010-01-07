@@ -70,13 +70,6 @@ KisPaintOp * MyPaintFactory::createOp(const KisPaintOpSettingsSP settings, KisPa
     return op;
 }
 
-KisPaintOpSettingsSP MyPaintFactory::settings(const KoInputDevice& inputDevice, KisImageWSP image)
-{
-    Q_UNUSED(inputDevice);
-    Q_UNUSED(image);
-    return new MyPaintSettings();
-}
-
 KisPaintOpSettingsSP MyPaintFactory::settings(KisImageWSP image)
 {
     Q_UNUSED(image);

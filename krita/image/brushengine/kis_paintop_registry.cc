@@ -92,12 +92,12 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPai
     return paintOp(preset->paintOp().id(), preset->settings(), painter, image);
 }
 
-KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, const KoInputDevice& inputDevice, KisImageWSP image) const
+KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, KisImageWSP image) const
 {
     KisPaintOpFactory* f = value(id.id());
     Q_ASSERT(f);
     if (f) {
-        KisPaintOpSettingsSP settings = f->settings(inputDevice, image);
+        KisPaintOpSettingsSP settings = f->settings(image);
         KisPaintOpSettingsWidget* w = f->createSettingsWidget(0);
         w->setProperty("owned by settings", true);
         w->hide();
@@ -108,12 +108,12 @@ KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, const KoInputD
     return 0;
 }
 
-KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, const KoInputDevice& inputDevice, KisImageWSP image) const
+KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, KisImageWSP image) const
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setName(i18n("default"));
 
-    KisPaintOpSettingsSP s = settings(id, inputDevice, image);
+    KisPaintOpSettingsSP s = settings(id, image);
 
     preset->setSettings(s);
     preset->setPaintOp(id);

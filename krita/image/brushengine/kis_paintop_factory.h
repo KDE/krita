@@ -67,10 +67,8 @@ public:
     virtual bool userVisible(const KoColorSpace * cs = 0);
 
     /**
-     * Create and return an settings object for this paintop when used with the
-     * specified input device.
+     * Create and return an settings object for this paintop.
      */
-    virtual KisPaintOpSettingsSP settings(const KoInputDevice& inputDevice, KisImageWSP image) = 0;
     virtual KisPaintOpSettingsSP settings(KisImageWSP image) = 0;
 
     /**

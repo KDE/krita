@@ -304,7 +304,7 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInp
     if (!m_inputDevicePresets.contains(inputDevice)) {
         foreach(const KoID& paintop, KisPaintOpRegistry::instance()->listKeys()) {
             settingsArray[paintop.id()] =
-                KisPaintOpRegistry::instance()->defaultPreset(paintop, inputDevice, m_view->image());
+                KisPaintOpRegistry::instance()->defaultPreset(paintop, m_view->image());
         }
         m_inputDevicePresets[inputDevice] = settingsArray;
     } else {
@@ -316,7 +316,7 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInp
         return preset;
     } else {
         warnKrita << "Could not get paintop preset for paintop " << paintop.name() << ", return default";
-        return KisPaintOpRegistry::instance()->defaultPreset(paintop, inputDevice, m_view->image());
+        return KisPaintOpRegistry::instance()->defaultPreset(paintop, m_view->image());
     }
 }
 

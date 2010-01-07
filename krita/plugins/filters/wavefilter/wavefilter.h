@@ -21,7 +21,8 @@
 #ifndef WAVEFILTER_H
 #define WAVEFILTER_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 #include "filter/kis_filter.h"
 
 class KisConfigWidget;
@@ -29,7 +30,7 @@ class KisConfigWidget;
 class KritaWaveFilter : public QObject
 {
 public:
-    KritaWaveFilter(QObject *parent, const QStringList &);
+    KritaWaveFilter(QObject *parent, const QVariantList &);
     virtual ~KritaWaveFilter();
 };
 

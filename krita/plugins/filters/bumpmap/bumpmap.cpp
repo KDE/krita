@@ -41,7 +41,7 @@
 #include <QString>
 
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -71,10 +71,10 @@
 #define MOD(x, y)                                               \
     ((x) < 0 ? ((y) - 1 - ((y) - 1 - (x)) % (y)) : (x) % (y))
 
-typedef KGenericFactory<KritaBumpmap> KritaBumpmapFactory;
-K_EXPORT_COMPONENT_FACTORY(kritabumpmap, KritaBumpmapFactory("krita"))
+K_PLUGIN_FACTORY(KritaBumpmapFactory, registerPlugin<KritaBumpmap>();)
+K_EXPORT_PLUGIN(KritaBumpmapFactory("krita"))
 
-KritaBumpmap::KritaBumpmap(QObject *parent, const QStringList &)
+KritaBumpmap::KritaBumpmap(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KritaBumpmapFactory::componentData());

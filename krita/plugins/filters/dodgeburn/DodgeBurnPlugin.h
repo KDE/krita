@@ -18,12 +18,13 @@
 #ifndef _DODGE_BURN_PLUGIN_H_
 #define _DODGE_BURN_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class DodgeBurnPlugin : public QObject
 {
 public:
-    DodgeBurnPlugin(QObject *parent, const QStringList &);
+    DodgeBurnPlugin(QObject *parent, const QVariantList &);
     virtual ~DodgeBurnPlugin();
 };
 

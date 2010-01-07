@@ -23,7 +23,8 @@
 
 #include <QWidget>
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 #include <kis_types.h>
 #include <filter/kis_filter.h>
@@ -60,7 +61,7 @@ using namespace krita;
 class KritaBumpmap : public QObject
 {
 public:
-    KritaBumpmap(QObject *parent, const QStringList &);
+    KritaBumpmap(QObject *parent, const QVariantList &);
     virtual ~KritaBumpmap();
 };
 

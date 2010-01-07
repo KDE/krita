@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
@@ -39,10 +39,10 @@
 
 using namespace Eigen;
 
-typedef KGenericFactory<KritaConvolutionFilters> KritaConvolutionFiltersFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaconvolutionfilters, KritaConvolutionFiltersFactory("krita"))
+K_PLUGIN_FACTORY(KritaConvolutionFiltersFactory, registerPlugin<KritaConvolutionFilters>();)
+K_EXPORT_PLUGIN(KritaConvolutionFiltersFactory("krita"))
 
-KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QStringList &)
+KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KritaConvolutionFiltersFactory::componentData());

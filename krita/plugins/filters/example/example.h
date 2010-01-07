@@ -21,13 +21,14 @@
 #ifndef EXAMPLE_H
 #define EXAMPLE_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 #include "filter/kis_color_transformation_filter.h"
 
 class KritaExample : public QObject
 {
 public:
-    KritaExample(QObject *parent, const QStringList &);
+    KritaExample(QObject *parent, const QVariantList &);
     virtual ~KritaExample();
 };
 

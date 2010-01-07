@@ -27,7 +27,7 @@
 #include <kis_debug.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
@@ -51,10 +51,10 @@
 #include "kis_wdg_noise.h"
 #include "ui_wdgnoiseoptions.h"
 
-typedef KGenericFactory<KritaNoiseFilter> KritaNoiseFilterFactory;
-K_EXPORT_COMPONENT_FACTORY(kritanoisefilter, KritaNoiseFilterFactory("krita"))
+K_PLUGIN_FACTORY(KritaNoiseFilterFactory, registerPlugin<KritaNoiseFilter>();)
+K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
 
-KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QStringList &)
+KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KritaNoiseFilterFactory::componentData());

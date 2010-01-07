@@ -26,7 +26,7 @@
 
 #include <kcombobox.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
@@ -51,8 +51,8 @@
 #include "kis_wdg_wave.h"
 #include "ui_wdgwaveoptions.h"
 
-typedef KGenericFactory<KritaWaveFilter> KritaWaveFilterFactory;
-K_EXPORT_COMPONENT_FACTORY(kritawavefilter, KritaWaveFilterFactory("krita"))
+K_PLUGIN_FACTORY(KritaWaveFilterFactory, registerPlugin<KritaWaveFilter>();)
+K_EXPORT_PLUGIN(KritaWaveFilterFactory("krita"))
 
 class KisWaveCurve
 {
@@ -91,7 +91,7 @@ public:
     }
 private:
     int m_amplitude, m_wavelength, m_shift;
-}; KritaWaveFilter::KritaWaveFilter(QObject *parent, const QStringList &)
+}; KritaWaveFilter::KritaWaveFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KritaWaveFilterFactory::componentData());

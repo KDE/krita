@@ -21,12 +21,13 @@
 #ifndef COLORS_H
 #define COLORS_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KritaExtensionsColors : public QObject
 {
 public:
-    KritaExtensionsColors(QObject *parent, const QStringList &);
+    KritaExtensionsColors(QObject *parent, const QVariantList &);
     virtual ~KritaExtensionsColors();
 };
 

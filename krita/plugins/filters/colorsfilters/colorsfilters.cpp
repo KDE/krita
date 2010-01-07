@@ -36,7 +36,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "KoBasicHistogramProducers.h"
 #include <KoColorSpace.h>
@@ -62,10 +62,10 @@
 #include <KoColorSpaceConstants.h>
 #include <KoCompositeOp.h>
 
-typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
-K_EXPORT_COMPONENT_FACTORY(kritacolorsfilters, ColorsFiltersFactory("krita"))
+K_PLUGIN_FACTORY(ColorsFiltersFactory, registerPlugin<ColorsFilters>();)
+K_EXPORT_PLUGIN(ColorsFiltersFactory("krita"))
 
-ColorsFilters::ColorsFilters(QObject *parent, const QStringList &)
+ColorsFilters::ColorsFilters(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(ColorsFiltersFactory::componentData());

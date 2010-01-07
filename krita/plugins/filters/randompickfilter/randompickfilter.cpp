@@ -27,7 +27,7 @@
 #include <kis_debug.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
@@ -52,10 +52,10 @@
 #include "kis_wdg_random_pick.h"
 #include "ui_wdgrandompickoptions.h"
 
-typedef KGenericFactory<KritaRandomPickFilter> KritaRandomPickFilterFactory;
-K_EXPORT_COMPONENT_FACTORY(kritarandompickfilter, KritaRandomPickFilterFactory("krita"))
+K_PLUGIN_FACTORY(KritaRandomPickFilterFactory, registerPlugin<KritaRandomPickFilter>();)
+K_EXPORT_PLUGIN(KritaRandomPickFilterFactory("krita"))
 
-KritaRandomPickFilter::KritaRandomPickFilter(QObject *parent, const QStringList &)
+KritaRandomPickFilter::KritaRandomPickFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KritaRandomPickFilterFactory::componentData());

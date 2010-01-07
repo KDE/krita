@@ -20,15 +20,16 @@
 
 #include "kis_oilpaint_filter_plugin.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "kis_oilpaint_filter.h"
 #include "kis_global.h"
 #include "filter/kis_filter_registry.h"
-typedef KGenericFactory<KisOilPaintFilterPlugin> KisOilPaintFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaoilpaintfilter, KisOilPaintFilterPluginFactory("krita"))
 
-KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const QStringList &) : QObject(parent)
+K_PLUGIN_FACTORY(KisOilPaintFilterPluginFactory, registerPlugin<KisOilPaintFilterPlugin>();)
+K_EXPORT_PLUGIN(KisOilPaintFilterPluginFactory("krita"))
+
+KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const QVariantList &) : QObject(parent)
 {
     //setComponentData(KisOilPaintFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisOilPaintFilter());

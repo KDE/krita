@@ -21,7 +21,7 @@
 #include "kis_pixelize_filter_plugin.h"
 
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_paint_device.h>
 #include <kis_global.h>
@@ -29,10 +29,10 @@
 
 #include "kis_pixelize_filter.h"
 
-typedef KGenericFactory<KisPixelizeFilterPlugin> KisPixelizeFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritapixelizefilter, KisPixelizeFilterPluginFactory("krita"))
+K_PLUGIN_FACTORY(KisPixelizeFilterPluginFactory, registerPlugin<KisPixelizeFilterPlugin>();)
+K_EXPORT_PLUGIN(KisPixelizeFilterPluginFactory("krita"))
 
-KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const QStringList &)
+KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KisPixelizeFilterPluginFactory::componentData());

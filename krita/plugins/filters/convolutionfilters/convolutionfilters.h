@@ -21,7 +21,8 @@
 #ifndef CONVOLUTIONFILTERS_H
 #define CONVOLUTIONFILTERS_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 #include "kis_convolution_filter.h"
 
 class KisSharpenFilter : public KisConvolutionFilter
@@ -149,7 +150,7 @@ public:
 class KritaConvolutionFilters : public QObject
 {
 public:
-    KritaConvolutionFilters(QObject *parent, const QStringList &);
+    KritaConvolutionFilters(QObject *parent, const QVariantList &);
     virtual ~KritaConvolutionFilters();
 };
 

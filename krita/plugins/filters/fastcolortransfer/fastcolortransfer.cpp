@@ -19,7 +19,7 @@
  */
 
 #include "fastcolortransfer.h"
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kurlrequester.h>
 
 #include <QUndoCommand>
@@ -40,11 +40,11 @@
 #include "kis_wdg_fastcolortransfer.h"
 #include "ui_wdgfastcolortransfer.h"
 
-typedef KGenericFactory<FastColorTransferPlugin> KritaFastColorTransferFactory;
-K_EXPORT_COMPONENT_FACTORY(kritafastcolortransferfilter, KritaFastColorTransferFactory("krita"))
+K_PLUGIN_FACTORY(KritaFastColorTransferFactory, registerPlugin<FastColorTransferPlugin>();)
+K_EXPORT_PLUGIN(KritaFastColorTransferFactory("krita"))
 
 
-FastColorTransferPlugin::FastColorTransferPlugin(QObject *parent, const QStringList &)
+FastColorTransferPlugin::FastColorTransferPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KritaFastColorTransferFactory::componentData());

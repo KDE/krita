@@ -19,16 +19,16 @@
  */
 
 #include "blur.h"
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "kis_blur_filter.h"
 #include "kis_gaussian_blur_filter.h"
 #include "filter/kis_filter_registry.h"
 
-typedef KGenericFactory<BlurFilterPlugin> BlurFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritablurfilter, BlurFilterPluginFactory("krita"))
+K_PLUGIN_FACTORY(BlurFilterPluginFactory, registerPlugin<BlurFilterPlugin>();)
+K_EXPORT_PLUGIN(BlurFilterPluginFactory("krita"))
 
-BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QStringList &)
+BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(BlurFilterPluginFactory::componentData());

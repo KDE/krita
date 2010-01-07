@@ -19,16 +19,16 @@
 
 #include "kis_emboss_filter_plugin.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "kis_emboss_filter.h"
 #include "kis_global.h"
 #include "filter/kis_filter_registry.h"
 
-typedef KGenericFactory<KisEmbossFilterPlugin> KisEmbossFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaembossfilter, KisEmbossFilterPluginFactory("krita"))
+K_PLUGIN_FACTORY(KisEmbossFilterPluginFactory, registerPlugin<KisEmbossFilterPlugin>();)
+K_EXPORT_PLUGIN(KisEmbossFilterPluginFactory("krita"))
 
-KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const QStringList &) : QObject(parent)
+KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const QVariantList &) : QObject(parent)
 {
     //setComponentData(KisEmbossFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisEmbossFilter());

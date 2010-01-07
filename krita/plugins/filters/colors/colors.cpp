@@ -19,16 +19,16 @@
  */
 
 #include "colors.h"
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "kis_minmax_filters.h"
 #include "kis_color_to_alpha.h"
 #include <filter/kis_filter_registry.h>
 
-typedef KGenericFactory<KritaExtensionsColors> KritaExtensionsColorsFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaextensioncolorsfilters, KritaExtensionsColorsFactory("krita"))
+K_PLUGIN_FACTORY(KritaExtensionsColorsFactory, registerPlugin<KritaExtensionsColors>();)
+K_EXPORT_PLUGIN(KritaExtensionsColorsFactory("krita"))
 
-KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QStringList &)
+KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KritaExtensionsColorsFactory::componentData());

@@ -21,7 +21,8 @@
 #ifndef LENS_CORRECTIONFILTER_H
 #define LENS_CORRECTIONFILTER_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 #include "filter/kis_filter.h"
 
 class KisConfigWidget;
@@ -29,7 +30,7 @@ class KisConfigWidget;
 class KritaLensCorrectionFilter : public QObject
 {
 public:
-    KritaLensCorrectionFilter(QObject *parent, const QStringList &);
+    KritaLensCorrectionFilter(QObject *parent, const QVariantList &);
     virtual ~KritaLensCorrectionFilter();
 };
 

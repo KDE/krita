@@ -20,7 +20,8 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisColorSpace;
 class KisColorAdjustment;
@@ -28,7 +29,7 @@ class KisColorAdjustment;
 class LevelFilter : public QObject
 {
 public:
-    LevelFilter(QObject *parent, const QStringList &);
+    LevelFilter(QObject *parent, const QVariantList &);
     virtual ~LevelFilter();
 };
 

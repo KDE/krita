@@ -20,16 +20,16 @@
 
 #include "kis_sobel_filter_plugin.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "kis_sobel_filter.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_global.h"
 
-typedef KGenericFactory<KisSobelFilterPlugin> KisSobelFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritasobelfilter, KisSobelFilterPluginFactory("krita"))
+K_PLUGIN_FACTORY(KisSobelFilterPluginFactory, registerPlugin<KisSobelFilterPlugin>();)
+K_EXPORT_PLUGIN(KisSobelFilterPluginFactory("krita"))
 
-KisSobelFilterPlugin::KisSobelFilterPlugin(QObject *parent, const QStringList &)
+KisSobelFilterPlugin::KisSobelFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KisSobelFilterPluginFactory::componentData());

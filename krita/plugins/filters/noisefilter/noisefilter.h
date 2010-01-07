@@ -21,7 +21,8 @@
 #ifndef NOISEFILTER_H
 #define NOISEFILTER_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 #include "filter/kis_filter.h"
 
 class KisConfigWidget;
@@ -29,7 +30,7 @@ class KisConfigWidget;
 class KritaNoiseFilter : public QObject
 {
 public:
-    KritaNoiseFilter(QObject *parent, const QStringList &);
+    KritaNoiseFilter(QObject *parent, const QVariantList &);
     virtual ~KritaNoiseFilter();
 };
 

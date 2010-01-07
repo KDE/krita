@@ -31,7 +31,7 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -43,10 +43,10 @@
 #include "kis_simple_noise_reducer.h"
 #include "kis_wavelet_noise_reduction.h"
 
-typedef KGenericFactory<KritaImageEnhancement> KritaImageEnhancementFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaimageenhancement, KritaImageEnhancementFactory("krita"))
+K_PLUGIN_FACTORY(KritaImageEnhancementFactory, registerPlugin<KritaImageEnhancement>();)
+K_EXPORT_PLUGIN(KritaImageEnhancementFactory("krita"))
 
-KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const QStringList &)
+KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KritaImageEnhancementFactory::componentData());

@@ -20,12 +20,13 @@
 #ifndef _KIS_PIXELIZE_FILTER_PLUGIN_H_
 #define _KIS_PIXELIZE_FILTER_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisPixelizeFilterPlugin : public QObject
 {
 public:
-    KisPixelizeFilterPlugin(QObject *parent, const QStringList &);
+    KisPixelizeFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~KisPixelizeFilterPlugin();
 };
 

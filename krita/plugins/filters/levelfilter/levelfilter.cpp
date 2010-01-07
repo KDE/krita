@@ -20,15 +20,15 @@
 
 #include "levelfilter.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "kis_level_filter.h"
 #include "filter/kis_filter_registry.h"
 
-typedef KGenericFactory<LevelFilter> LevelFilterFactory;
-K_EXPORT_COMPONENT_FACTORY(kritalevelfilter, LevelFilterFactory("krita"))
+K_PLUGIN_FACTORY(LevelFilterFactory, registerPlugin<LevelFilter>();)
+K_EXPORT_PLUGIN(LevelFilterFactory("krita"))
 
-LevelFilter::LevelFilter(QObject *parent, const QStringList &)
+LevelFilter::LevelFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(LevelFilterFactory::componentData());

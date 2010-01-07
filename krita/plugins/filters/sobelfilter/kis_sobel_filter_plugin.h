@@ -20,12 +20,13 @@
 #ifndef _KIS_SOBEL_FILTER_PLUGIN_H_
 #define _KIS_SOBEL_FILTER_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisSobelFilterPlugin : public QObject
 {
 public:
-    KisSobelFilterPlugin(QObject *parent, const QStringList &);
+    KisSobelFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~KisSobelFilterPlugin();
 };
 

@@ -20,12 +20,13 @@
 #ifndef _KIS_SMALL_TILES_FILTER_PLUGIN_H_
 #define _KIS_SMALL_TILES_FILTER_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisSmallTilesFilterPlugin : public QObject
 {
 public:
-    KisSmallTilesFilterPlugin(QObject *parent, const QStringList &);
+    KisSmallTilesFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~KisSmallTilesFilterPlugin();
 };
 

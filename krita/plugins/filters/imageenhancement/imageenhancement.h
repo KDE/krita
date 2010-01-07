@@ -22,12 +22,13 @@
 #ifndef IMAGEENHANCEMENT_H
 #define IMAGEENHANCEMENT_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KritaImageEnhancement : public QObject
 {
 public:
-    KritaImageEnhancement(QObject *parent, const QStringList &);
+    KritaImageEnhancement(QObject *parent, const QVariantList &);
     virtual ~KritaImageEnhancement();
 };
 

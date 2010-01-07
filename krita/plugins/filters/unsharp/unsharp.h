@@ -21,12 +21,13 @@
 #ifndef _UNSHARP_PLUGIN_H_
 #define _UNSHARP_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class UnsharpPlugin : public QObject
 {
 public:
-    UnsharpPlugin(QObject *parent, const QStringList &);
+    UnsharpPlugin(QObject *parent, const QVariantList &);
     virtual ~UnsharpPlugin();
 };
 

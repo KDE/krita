@@ -20,12 +20,13 @@
 #ifndef _KIS_ROUND_CORNERS_FILTER_PLUGIN_H_
 #define _KIS_ROUND_CORNERS_FILTER_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisRoundCornersFilterPlugin : public QObject
 {
 public:
-    KisRoundCornersFilterPlugin(QObject *parent, const QStringList &);
+    KisRoundCornersFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~KisRoundCornersFilterPlugin();
 };
 

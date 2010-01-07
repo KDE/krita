@@ -28,7 +28,7 @@
 #include <qpoint.h>
 
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
@@ -54,10 +54,10 @@
 #include "kis_wdg_lens_correction.h"
 #include "ui_wdglenscorrectionoptions.h"
 
-typedef KGenericFactory<KritaLensCorrectionFilter> KritaLensCorrectionFilterFactory;
-K_EXPORT_COMPONENT_FACTORY(kritalenscorrectionfilter, KritaLensCorrectionFilterFactory("krita"))
+K_PLUGIN_FACTORY(KritaLensCorrectionFilterFactory, registerPlugin<KritaLensCorrectionFilter>();)
+K_EXPORT_PLUGIN(KritaLensCorrectionFilterFactory("krita"))
 
-KritaLensCorrectionFilter::KritaLensCorrectionFilter(QObject *parent, const QStringList &)
+KritaLensCorrectionFilter::KritaLensCorrectionFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KritaLensCorrectionFilterFactory::componentData());

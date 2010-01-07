@@ -20,7 +20,8 @@
 #ifndef COLORSFILTERS_H
 #define COLORSFILTERS_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 #include "kis_perchannel_filter.h"
 #include "filter/kis_color_transformation_filter.h"
 
@@ -30,7 +31,7 @@ class KoColorTransformation;
 class ColorsFilters : public QObject
 {
 public:
-    ColorsFilters(QObject *parent, const QStringList &);
+    ColorsFilters(QObject *parent, const QVariantList &);
     virtual ~ColorsFilters();
 };
 

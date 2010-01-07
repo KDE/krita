@@ -20,15 +20,15 @@
 
 #include "kis_cubism_filter_plugin.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "kis_cubism_filter.h"
 #include "filter/kis_filter_registry.h"
 
-typedef KGenericFactory<KisCubismFilterPlugin> KisCubismFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritacubismfilter, KisCubismFilterPluginFactory("krita"))
+K_PLUGIN_FACTORY(KisCubismFilterPluginFactory, registerPlugin<KisCubismFilterPlugin>();)
+K_EXPORT_PLUGIN(KisCubismFilterPluginFactory("krita"))
 
-KisCubismFilterPlugin::KisCubismFilterPlugin(QObject *parent, const QStringList &) : QObject(parent)
+KisCubismFilterPlugin::KisCubismFilterPlugin(QObject *parent, const QVariantList &) : QObject(parent)
 {
     //setComponentData(KisCubismFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisCubismFilter());

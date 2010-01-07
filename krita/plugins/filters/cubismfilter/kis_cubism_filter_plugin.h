@@ -20,12 +20,13 @@
 #ifndef _KIS_CUBISM_FILTER_PLUGIN_H_
 #define _KIS_CUBISM_FILTER_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisCubismFilterPlugin : public QObject
 {
 public:
-    KisCubismFilterPlugin(QObject *parent, const QStringList &);
+    KisCubismFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~KisCubismFilterPlugin();
 };
 

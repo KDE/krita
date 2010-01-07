@@ -30,7 +30,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_processing_information.h>
 #include <kis_types.h>
@@ -40,10 +40,10 @@
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 
-typedef KGenericFactory<KritaExample> KritaExampleFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaexample, KritaExampleFactory("krita"))
+K_PLUGIN_FACTORY(KritaExampleFactory, registerPlugin<KritaExample>();)
+K_EXPORT_PLUGIN(KritaExampleFactory("krita"))
 
-KritaExample::KritaExample(QObject *parent, const QStringList &)
+KritaExample::KritaExample(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KritaExampleFactory::componentData());

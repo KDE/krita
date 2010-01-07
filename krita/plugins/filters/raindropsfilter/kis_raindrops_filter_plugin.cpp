@@ -20,18 +20,17 @@
 
 #include "kis_raindrops_filter_plugin.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <filter/kis_filter_registry.h>
 
 
 #include "kis_raindrops_filter.h"
 
+K_PLUGIN_FACTORY(KisRainDropsFilterPluginFactory, registerPlugin<KisRainDropsFilterPlugin>();)
+K_EXPORT_PLUGIN(KisRainDropsFilterPluginFactory("krita"))
 
-typedef KGenericFactory<KisRainDropsFilterPlugin> KisRainDropsFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaraindropsfilter, KisRainDropsFilterPluginFactory("krita"))
-
-KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const QStringList &) : QObject(parent)
+KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const QVariantList &) : QObject(parent)
 {
     //setComponentData(KisRainDropsFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisRainDropsFilter());

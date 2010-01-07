@@ -17,15 +17,15 @@
 
 #include "DodgeBurnPlugin.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <filter/kis_filter_registry.h>
 
 #include "DodgeBurn.h"
 
-typedef KGenericFactory<DodgeBurnPlugin> DodgeBurnPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritadodgeburn, DodgeBurnPluginFactory("krita"))
+K_PLUGIN_FACTORY(DodgeBurnPluginFactory, registerPlugin<DodgeBurnPlugin>();)
+K_EXPORT_PLUGIN(DodgeBurnPluginFactory("krita"))
 
-DodgeBurnPlugin::DodgeBurnPlugin(QObject *parent, const QStringList &)
+DodgeBurnPlugin::DodgeBurnPlugin(QObject *parent, const QVariantList &)
 {
     Q_UNUSED(parent);
     KisFilterRegistry::instance()->add(new KisFilterDodgeBurn("dodge", "Dodge", i18n("Dodge")));

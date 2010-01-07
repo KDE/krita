@@ -20,15 +20,16 @@
 
 #include "kis_round_corners_filter_plugin.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "kis_round_corners_filter.h"
 #include "kis_global.h"
 #include "filter/kis_filter_registry.h"
-typedef KGenericFactory<KisRoundCornersFilterPlugin> KisRoundCornersFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaroundcornersfilter, KisRoundCornersFilterPluginFactory("krita"))
 
-KisRoundCornersFilterPlugin::KisRoundCornersFilterPlugin(QObject *parent, const QStringList &)
+K_PLUGIN_FACTORY(KisRoundCornersFilterPluginFactory, registerPlugin<KisRoundCornersFilterPlugin>();)
+K_EXPORT_PLUGIN(KisRoundCornersFilterPluginFactory("krita"))
+
+KisRoundCornersFilterPlugin::KisRoundCornersFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KisRoundCornersFilterPluginFactory::componentData());

@@ -21,12 +21,13 @@
 #ifndef _KIS_RAINDROPS_FILTER_PLUGIN_H_
 #define _KIS_RAINDROPS_FILTER_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisRainDropsFilterPlugin : public QObject
 {
 public:
-    KisRainDropsFilterPlugin(QObject *parent, const QStringList &);
+    KisRainDropsFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~KisRainDropsFilterPlugin();
 };
 

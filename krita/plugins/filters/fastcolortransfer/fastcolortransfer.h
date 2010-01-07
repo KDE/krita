@@ -21,13 +21,14 @@
 #ifndef COLORTRANSFER_H
 #define COLORTRANSFER_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 #include <filter/kis_filter.h>
 
 class FastColorTransferPlugin : public QObject
 {
 public:
-    FastColorTransferPlugin(QObject *parent, const QStringList &);
+    FastColorTransferPlugin(QObject *parent, const QVariantList &);
     virtual ~FastColorTransferPlugin();
 };
 

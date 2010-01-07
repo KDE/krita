@@ -19,12 +19,13 @@
 #ifndef _KIS_EMBOSS_FILTER_PLUGIN_H_
 #define _KIS_EMBOSS_FILTER_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisEmbossFilterPlugin : public QObject
 {
 public:
-    KisEmbossFilterPlugin(QObject *parent, const QStringList &);
+    KisEmbossFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~KisEmbossFilterPlugin();
 };
 

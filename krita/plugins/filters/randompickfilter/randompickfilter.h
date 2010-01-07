@@ -21,7 +21,8 @@
 #ifndef RANDOMPICKFILTER_H
 #define RANDOMPICKFILTER_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 #include "filter/kis_filter.h"
 
 class KisConfigWidget;
@@ -29,7 +30,7 @@ class KisConfigWidget;
 class KritaRandomPickFilter : public QObject
 {
 public:
-    KritaRandomPickFilter(QObject *parent, const QStringList &);
+    KritaRandomPickFilter(QObject *parent, const QVariantList &);
     virtual ~KritaRandomPickFilter();
 };
 

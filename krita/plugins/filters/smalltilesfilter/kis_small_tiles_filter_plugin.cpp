@@ -20,16 +20,16 @@
 
 #include "kis_small_tiles_filter_plugin.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "kis_small_tiles_filter.h"
 #include "kis_global.h"
 #include "filter/kis_filter_registry.h"
 
-typedef KGenericFactory<KisSmallTilesFilterPlugin> KisSmallTilesFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritasmalltilesfilter, KisSmallTilesFilterPluginFactory("krita"))
+K_PLUGIN_FACTORY(KisSmallTilesFilterPluginFactory, registerPlugin<KisSmallTilesFilterPlugin>();)
+K_EXPORT_PLUGIN(KisSmallTilesFilterPluginFactory("krita"))
 
-KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const QStringList &)
+KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KisSmallTilesFilterPluginFactory::componentData());

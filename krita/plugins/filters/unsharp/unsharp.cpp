@@ -19,16 +19,16 @@
  */
 
 #include "unsharp.h"
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "kis_unsharp_filter.h"
 
 #include <filter/kis_filter_registry.h>
 
-typedef KGenericFactory<UnsharpPlugin> UnsharpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaunsharpfilter, UnsharpPluginFactory("krita"))
+K_PLUGIN_FACTORY(UnsharpPluginFactory, registerPlugin<UnsharpPlugin>();)
+K_EXPORT_PLUGIN(UnsharpPluginFactory("krita"))
 
-UnsharpPlugin::UnsharpPlugin(QObject *parent, const QStringList &)
+UnsharpPlugin::UnsharpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(UnsharpPluginFactory::componentData());

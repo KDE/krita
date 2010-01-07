@@ -21,12 +21,13 @@
 #ifndef BLURPLUGIN_H
 #define BLURPLUGIN_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class BlurFilterPlugin : public QObject
 {
 public:
-    BlurFilterPlugin(QObject *parent, const QStringList &);
+    BlurFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~BlurFilterPlugin();
 };
 

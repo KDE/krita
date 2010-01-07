@@ -20,12 +20,13 @@
 #ifndef _KIS_OILPAINT_FILTER_PLUGIN_H_
 #define _KIS_OILPAINT_FILTER_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisOilPaintFilterPlugin : public QObject
 {
 public:
-    KisOilPaintFilterPlugin(QObject *parent, const QStringList &);
+    KisOilPaintFilterPlugin(QObject *parent, const QVariantList &);
     virtual ~KisOilPaintFilterPlugin();
 };
 

@@ -57,6 +57,7 @@ int doInput(GifFileType* gif, GifByteType* data, int i)
 
 GifConverter::GifConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
     : m_doc(doc)
+    , m_img(0)
 {
     Q_UNUSED(adapter);
 }
@@ -65,19 +66,21 @@ GifConverter::~GifConverter()
 {
 }
 
-KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageSP kisImage) {
+KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
 
     if (DGifGetImageDesc(gifFile) == GIF_ERROR) {
         warnFile << "Could not read gif image from file";
         return 0;
     }
 
-    KisPaintLayer* layer = new KisPaintLayer(kisImage, kisImage->nextLayerName(), OPACITY_OPAQUE);
+    KisPaintLayerSP layer = new KisPaintLayer(kisImage, kisImage->nextLayerName(), OPACITY_OPAQUE);
 
     GifImageDesc image = gifFile->Image;
 
     layer->setX(image.Left);
     layer->setY(image.Top);
+
+    dbgFile << "Creating layer w" << image.Width << "h" << image.Height << "left" << image.Left << "top" << image.Top;
 
     Q_ASSERT(gifFile->SBackGroundColor < gifFile->SColorMap->ColorCount);
     GifColorType color = gifFile->SColorMap->Colors[gifFile->SBackGroundColor];
@@ -92,7 +95,7 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageSP kisImage) {
         fillPixel[3] = OPACITY_OPAQUE;
     }
     layer->paintDevice()->fill(image.Left, image.Top, image.Width, image.Height,
-                                fillPixel);
+                               fillPixel);
 
     GifPixelType* line = new GifPixelType[image.Width];
     KisRandomAccessorPixel accessor = layer->paintDevice()->createRandomAccessor(image.Left, image.Top);
@@ -108,7 +111,7 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageSP kisImage) {
 
                     GifPixelType colorIndex = line[col];
                     color = image.ColorMap->Colors[colorIndex];
-            
+
                     quint8* dst = accessor.rawData();
                     KoRgbTraits<quint8>::setRed(dst, color.Red);
                     KoRgbTraits<quint8>::setGreen(dst, color.Blue);
@@ -132,8 +135,19 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageSP kisImage) {
                 accessor.moveTo(col + image.Left, row);
 
                 GifPixelType colorIndex = line[col];
-                color = image.ColorMap->Colors[colorIndex];
-        
+
+                if (image.ColorMap && colorIndex < image.ColorMap->ColorCount) {
+                    color = image.ColorMap->Colors[colorIndex];
+                }
+                else if (gifFile->SColorMap && colorIndex < gifFile->SColorMap->ColorCount) {
+                    color = gifFile->SColorMap->Colors[colorIndex];
+                }
+                else {
+                    color.Red = 0;
+                    color.Green = 0;
+                    color.Blue = 0;
+                }
+
                 quint8* dst = accessor.rawData();
                 KoRgbTraits<quint8>::setRed(dst, color.Red);
                 KoRgbTraits<quint8>::setGreen(dst, color.Blue);
@@ -150,7 +164,8 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageSP kisImage) {
 
     delete[] line;
 
-    return layer;
+    dbgFile << "created node" << layer << layer->name();
+    return layer.data();
 }
 
 KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
@@ -171,16 +186,18 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
+    dbgFile << "reading gif file" << uri;
+
     // Creating the KisImageWSP
-    if(!m_img) {
-        m_img = new KisImage(m_doc->undoAdapter(),
-                             gifFile->SWidth,
-                             gifFile->SHeight,
-                             KoColorSpaceRegistry::instance()->rgb8(),
-                             uri.toLocalFile());
-        Q_CHECK_PTR(m_img);
-        m_img->lock();
-    }
+    KisImageWSP img = new KisImage(m_doc->undoAdapter(),
+                                   gifFile->SWidth,
+                                   gifFile->SHeight,
+                                   KoColorSpaceRegistry::instance()->rgb8(),
+                                   uri.toLocalFile());
+    Q_CHECK_PTR(img);
+    img->lock();
+
+    dbgFile << "image" << img << "width" << gifFile->SWidth << "height" << gifFile->SHeight;
 
     GifRecordType recordType = UNDEFINED_RECORD_TYPE;
 
@@ -189,22 +206,30 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
         switch (recordType) {
         case IMAGE_DESC_RECORD_TYPE:
             {
-                KisNodeSP node = getNode(gifFile, m_img);
+                dbgFile << "reading IMAGE_DESC_RECORD_TYPE";
+                KisNodeSP node = getNode(gifFile, img);
                 if (!node) {
                     return KisImageBuilder_RESULT_FAILURE;
                 }
-                m_img->addNode(node);
+                img->addNode(node);
             }
             break;
         case EXTENSION_RECORD_TYPE:
             {
+                dbgFile << "reading EXTENSION_RECORD_TYPE";
                 int extCode, len;
                 GifByteType* extData = 0;
-                do {
+                while(true) {
+
                     if (DGifGetExtension(gifFile, &extCode, &extData) == GIF_ERROR) {
                         warnFile << "Error reading extension";
-                        return KisImageBuilder_RESULT_FAILURE;        
+                        return KisImageBuilder_RESULT_FAILURE;
                     }
+
+                    if (extData != 0) {
+                        break;
+                    }
+
                     len = extData[0];
                     switch(extCode) {
                     case GRAPHICS_EXT_FUNC_CODE:
@@ -212,7 +237,7 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
                     case COMMENT_EXT_FUNC_CODE:
                         {
                             QByteArray comment((char*)(extData + 1), len);
-                             m_doc->documentInfo()->setAboutInfo("comments", comment);
+                            m_doc->documentInfo()->setAboutInfo("comments", comment);
                         }
                         break;
                     case PLAINTEXT_EXT_FUNC_CODE:
@@ -221,28 +246,25 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
                     case APPLICATION_EXT_FUNC_CODE:
                         break;
                     }
-                } while (extData != 0);
-        
+                }
+
             }
             break;
         case TERMINATE_RECORD_TYPE:
+            dbgFile << "Reading TERMINATE_RECORD_TYPE";
             break;
         case UNDEFINED_RECORD_TYPE:
         default:
             {
-                warnFile << "Found an undefined record type, ignoring";
+                warnFile << "Found an undefined record type:" << recordType;
             }
 
         }
     }
 
-
-    KisPaintLayerSP layer = new KisPaintLayer(m_img, m_img->nextLayerName(), OPACITY_OPAQUE);
-    m_img->addNode(layer);
-
-
-    m_img->unlock();
-    return KisImageBuilder_RESULT_FAILURE;
+    img->unlock();
+    m_img = img;
+    return KisImageBuilder_RESULT_OK;
 }
 
 

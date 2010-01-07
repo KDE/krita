@@ -78,7 +78,7 @@ public:
 private:
 
     KisImageBuilder_Result decode(const KUrl& uri);
-    KisNodeSP getNode(GifFileType* gifFile, KisImageSP kisImage);
+    KisNodeSP getNode(GifFileType* gifFile, KisImageWSP kisImage);
 
 public slots:
 
@@ -89,10 +89,9 @@ private:
     bool m_stop;
     int m_transparentColorIndex;
 
-    KisImageWSP m_img;
     KisDoc2 *m_doc;
     KisUndoAdapter *m_adapter;
-
+    KisImageWSP m_img;
     KIO::TransferJob *m_job;
 };
 

@@ -71,14 +71,15 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
                 color = QColor(styleStack.property(KoXmlNS::draw, "fill-color"));
             } else if (!hasStyle) {
                 if (element.tagName() == "wall") {
-                    KoXmlElement chartElement = element.parentNode().toElement();
+                    KoXmlElement plotAreaElement = element.parentNode().toElement();
+                    KoXmlElement chartElement = plotAreaElement.parentNode().toElement();
                     if (chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
                         QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
                         // TODO: Check what default backgrounds for surface, stock and gantt charts are
-                        if ( chartType == "line" ||
-                             chartType == "area" ||
-                             chartType == "bar" ||
-                             chartType == "scatter" )
+                        if ( chartType == "chart:line" ||
+                             chartType == "chart:area" ||
+                             chartType == "chart:bar" ||
+                             chartType == "chart:scatter" )
                         color = QColor(0xe0e0e0);
                     }
                 } else if (element.tagName() == "series")

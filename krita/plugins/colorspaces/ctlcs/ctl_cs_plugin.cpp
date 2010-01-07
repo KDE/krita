@@ -22,7 +22,7 @@
 #include <QMutex>
 
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoBasicHistogramProducers.h>
 #include <KoCtlColorProfile.h>
@@ -40,11 +40,11 @@ QMutex* ctlMutex = 0;
 #include "KoCtlColorTransformationFactory.h"
 #include <KoColorTransformationFactoryRegistry.h>
 
-typedef KGenericFactory<CTLCSPlugin> CTLCSPluginPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(krita_ctlcs_plugin, CTLCSPluginPluginFactory("krita"))
+K_PLUGIN_FACTORY(CTLCSPluginPluginFactory, registerPlugin<CTLCSPlugin>();)
+K_EXPORT_PLUGIN(CTLCSPluginPluginFactory("krita"))
 
 
-CTLCSPlugin::CTLCSPlugin(QObject *parent, const QStringList &)
+CTLCSPlugin::CTLCSPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     Q_ASSERT(ctlMutex == 0);

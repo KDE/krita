@@ -19,16 +19,16 @@
 
 #include "extensions_plugin.h"
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoColorTransformationFactoryRegistry.h>
 
 #include "kis_hsv_adjustment.h"
 
-typedef KGenericFactory<ExtensionsPlugin> ExtensionsPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(krita_colorspaces_extensions, ExtensionsPluginFactory("krita"))
+K_PLUGIN_FACTORY(ExtensionsPluginFactory, registerPlugin<ExtensionsPlugin>();)
+K_EXPORT_PLUGIN(ExtensionsPluginFactory("krita"))
 
-ExtensionsPlugin::ExtensionsPlugin(QObject *parent, const QStringList &)
+ExtensionsPlugin::ExtensionsPlugin(QObject *parent, const QVariantList &)
 {
     Q_UNUSED(parent);
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisHSVAdjustmentFactory);

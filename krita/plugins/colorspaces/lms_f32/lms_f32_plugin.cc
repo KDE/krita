@@ -24,18 +24,18 @@
 #include "lms_f32_plugin.h"
 
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoColorSpaceRegistry.h>
 #include "KoBasicHistogramProducers.h"
 #include <KoCtlColorProfile.h>
 
 #include "kis_lms_f32_colorspace.h"
 
-typedef KGenericFactory<LMSF32Plugin> LMSF32PluginFactory;
-K_EXPORT_COMPONENT_FACTORY(krita_lms_f32_plugin, LMSF32PluginFactory("krita"))
+K_PLUGIN_FACTORY(LMSF32PluginFactory, registerPlugin<LMSF32Plugin>();)
+K_EXPORT_PLUGIN(LMSF32PluginFactory("krita"))
 
 
-LMSF32Plugin::LMSF32Plugin(QObject *parent, const QStringList &)
+LMSF32Plugin::LMSF32Plugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
 

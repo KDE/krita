@@ -21,12 +21,13 @@
 #define _EXTENSIONS_PLUGIN_H_
 
 #include <QObject>
+#include <QVariant>
 
 class ExtensionsPlugin : public QObject
 {
     Q_OBJECT
 public:
-    ExtensionsPlugin(QObject *parent, const QStringList &);
+    ExtensionsPlugin(QObject *parent, const QVariantList &);
     virtual ~ExtensionsPlugin();
 
 };

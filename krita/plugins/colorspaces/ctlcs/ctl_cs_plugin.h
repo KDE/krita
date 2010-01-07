@@ -20,7 +20,8 @@
 #ifndef CTLCS_PLUGIN_H_
 #define CTLCS_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A plugin wrapper around the LMS F32 color space strategy.
@@ -29,7 +30,7 @@ class CTLCSPlugin : public QObject
 {
     Q_OBJECT
 public:
-    CTLCSPlugin(QObject *parent, const QStringList &);
+    CTLCSPlugin(QObject *parent, const QVariantList &);
     virtual ~CTLCSPlugin();
 
 };

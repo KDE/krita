@@ -21,7 +21,8 @@
 #ifndef LMS_F32_PLUGIN_H_
 #define LMS_F32_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A plugin wrapper around the LMS F32 color space strategy.
@@ -30,7 +31,7 @@ class LMSF32Plugin : public QObject
 {
     Q_OBJECT
 public:
-    LMSF32Plugin(QObject *parent, const QStringList &);
+    LMSF32Plugin(QObject *parent, const QVariantList &);
     virtual ~LMSF32Plugin();
 
 };

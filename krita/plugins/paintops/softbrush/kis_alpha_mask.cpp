@@ -113,13 +113,13 @@ void KisCircleAlphaMask::generateGaussMap ( bool invert )
 //     }
 
     
-    pos = 0;
-     for (int y = 0; y <= m_radius; y++) {
-         for (int x = 0; x <= m_radius; x++,pos++) {
-                 printf("%.3f ",m_data[pos]);
-         }
-         printf("\n");
-     }
+//     pos = 0;
+//      for (int y = 0; y <= m_radius; y++) {
+//          for (int x = 0; x <= m_radius; x++,pos++) {
+//                  printf("%.3f ",m_data[pos]);
+//          }
+//          printf("\n");
+//      }
 
 }
 

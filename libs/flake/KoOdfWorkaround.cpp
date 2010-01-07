@@ -87,15 +87,54 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
                     if (chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
                         QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
                         // TODO: Check what default backgrounds for surface, stock and gantt charts are
-                        if ( chartType == "chart:line" ||
-                             chartType == "chart:area" ||
-                             chartType == "chart:bar" ||
-                             chartType == "chart:scatter" )
+                        if ( chartType == "chart:area" ||
+                             chartType == "chart:bar" )
                             color = QColor(0x99ccff);
                     }
                 }
                 else if (element.tagName() == "chart")
                     color = QColor(0xffffff);
+            }
+        }
+
+        styleStack.restore();
+    }
+
+    return color;
+}
+
+QColor KoOdfWorkaround::fixMissingStrokeColor(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    // Default to an invalid color
+    QColor color;
+
+    if ( element.prefix() == "chart" ) {
+        KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+        styleStack.save();
+
+        bool hasStyle = element.hasAttributeNS(KoXmlNS::chart, "style-name");
+        if (hasStyle) {
+            context.odfLoadingContext().fillStyleStack(element, KoXmlNS::chart, "style-name", "chart");
+            styleStack.setTypeProperties("graphic");
+        }
+
+        if (context.odfLoadingContext().generator().startsWith("OpenOffice.org")) {
+            if (hasStyle && !styleStack.hasProperty(KoXmlNS::draw, "fill") &&
+                             styleStack.hasProperty(KoXmlNS::draw, "fill-color")) {
+                color = QColor(styleStack.property(KoXmlNS::draw, "fill-color"));
+            } else if (!hasStyle) {
+                KoXmlElement plotAreaElement = element.parentNode().toElement();
+                KoXmlElement chartElement = plotAreaElement.parentNode().toElement();
+
+                if (element.tagName() == "series") {
+                    if (chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
+                        QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
+                        // TODO: Check what default backgrounds for surface, stock and gantt charts are
+                        if ( chartType == "chart:line" ||
+                             chartType == "chart:scatter" )
+                            color = QColor(0x99ccff);
+                    }
+                }
             }
         }
 

@@ -53,6 +53,7 @@ namespace KoOdfWorkaround
      */
     FLAKE_EXPORT void fixEnhancedPath(QString &path, const KoXmlElement &element, KoShapeLoadingContext &context);
 
+    FLAKE_EXPORT QColor fixMissingStrokeColor(const KoXmlElement &element, KoShapeLoadingContext &context);
     FLAKE_EXPORT QColor fixMissingFillColor(const KoXmlElement &element, KoShapeLoadingContext &context);
 }
 

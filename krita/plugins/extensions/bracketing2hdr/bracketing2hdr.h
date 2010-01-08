@@ -45,7 +45,7 @@ public:
         double apexBrightness;
         double aperture;
         int sensitivity; // in iso
-        KisImageWSP image;
+        KisImageSP image;
         KisPaintDeviceSP device;
         KisHLineConstIteratorPixel* it;
     };

@@ -68,24 +68,24 @@ QRectF KisChalkPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP
 
 int KisChalkPaintOpSettings::radius() const
 {
-    return m_options->m_chalkOption->radius();
+    return getInt("Chalk/radius");
 }
 
 bool KisChalkPaintOpSettings::inkDepletion() const
 {
-    return m_options->m_chalkOption->inkDepletion();
+    return getBool("Chalk/inkDepletion");
 }
 
 
 bool KisChalkPaintOpSettings::opacity() const
 {
-    return m_options->m_chalkOption->opacity();
+    return getBool("Chalk/opacity");
 }
 
 
 bool KisChalkPaintOpSettings::saturation() const
 {
-    return m_options->m_chalkOption->saturation();
+    return getBool("Chalk/saturation");
 }
 
 

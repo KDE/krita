@@ -82,11 +82,17 @@ bool KisChalkOpOption::saturation() const
 void KisChalkOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     setting->setProperty("Chalk/radius", radius());
+    setting->setProperty("Chalk/inkDepletion", inkDepletion());
+    setting->setProperty("Chalk/opacity", opacity());
+    setting->setProperty("Chalk/saturation", saturation());
 }
 
 void KisChalkOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     m_options->radiusSpinBox->setValue(setting->getInt("Chalk/radius"));
+    m_options->inkDepletionCHBox->setChecked(setting->getBool("Chalk/inkDepletion"));
+    m_options->opacity->setChecked(setting->getBool("Chalk/opacity"));
+    m_options->saturation->setChecked(setting->getBool("Chalk/saturation"));
 }
 
 

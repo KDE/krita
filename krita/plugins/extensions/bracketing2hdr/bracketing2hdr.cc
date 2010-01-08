@@ -33,6 +33,9 @@
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpace.h>
 
+#include <KoFilter.h>
+#include <KoFilterManager.h>
+
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_doc2.h"
@@ -92,7 +95,10 @@ void Bracketing2HDRPlugin::addImage(const QString& filename)
 {
 #if 1
     KisDoc2 d;
-    d.importDocument(filename);
+    KoFilterManager manager(&d);
+    QByteArray nativeFormat = d.nativeFormatMimeType();
+    KoFilter::ConversionStatus status;
+    QString s = manager.importDocument(filename, status);
     KisImageWSP importedImage = d.image();
     KisPaintLayerSP projection = 0;
     if (importedImage) {
@@ -502,7 +508,10 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
         dbgPlugins << "Loading fileName" << fileName << " Exposure =" << f.exposure << " APEX Brightness =" << f.apexBrightness << " Aperture" << f.aperture << " Sensitivity =" << f.sensitivity;
         // import the image
         KisDoc2 d;
-        d.importDocument(fileName);
+        KoFilterManager manager(&d);
+        QByteArray nativeFormat = d.nativeFormatMimeType();
+        KoFilter::ConversionStatus status;
+        QString s = manager.importDocument(fileName, status);
         f.image = d.image();
         f.device = 0;
         f.image->setUndoAdapter(0);

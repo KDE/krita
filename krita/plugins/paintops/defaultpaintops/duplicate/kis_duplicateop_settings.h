@@ -55,19 +55,6 @@ public:
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
-    // XXX: Hack!
-    void setOptionsWidget(KisPaintOpSettingsWidget* widget) {
-        if (m_options != 0 && m_options->property("owned by settings").toBool()) {
-            delete m_options;
-        }
-        if (!widget) {
-            m_options = 0;
-        } else {
-            m_options = qobject_cast<KisDuplicateOpSettingsWidget*>(widget);
-            m_options->writeConfiguration(this);
-        }
-    }
-
 public:
 
     KisDuplicateOpSettingsWidget *m_options;

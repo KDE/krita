@@ -20,13 +20,9 @@
 
 #include "kis_chalk_paintop_settings.h"
 
-#include "kis_chalk_paintop_settings_widget.h"
-#include "kis_chalkop_option.h"
-
 #include <kis_paint_action_type_option.h>
 
 KisChalkPaintOpSettings::KisChalkPaintOpSettings()
-        : m_options(0)
 {
 }
 
@@ -34,20 +30,6 @@ bool KisChalkPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
-
-void KisChalkPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
-{
-    // if the movement is more left<->right then up<->down
-    if (qAbs(x) > qAbs(y)){
-        m_options->m_chalkOption->setRadius( radius() + qRound(x) );
-    }
-    else // vice-versa
-    {
-        // we can do something different
-    }
-
-}
-
 
 void KisChalkPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, KisPaintOpSettings::OutlineMode _mode) const
 {

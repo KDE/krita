@@ -49,6 +49,11 @@ public:
     virtual void setImage(KisImageWSP image) {
         m_image = image;
     }
+    
+    virtual void changePaintOpSize(qreal x, qreal y) {
+        Q_UNUSED(x);
+        Q_UNUSED(y);
+    }
 
 protected:
 

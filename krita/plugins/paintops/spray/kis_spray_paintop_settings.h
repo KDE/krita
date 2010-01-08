@@ -92,21 +92,6 @@ public:
     bool followCursor() const;
     qreal followCursorWeigth() const;
 
-    
-    
-    // XXX: Hack!
-    void setOptionsWidget(KisPaintOpSettingsWidget* widget) {
-        if (m_options != 0  && m_options->property("owned by settings").toBool()) {
-            delete m_options;
-        }
-        if (!widget) {
-            m_options = 0;
-        } else {
-            m_options = qobject_cast<KisSprayPaintOpSettingsWidget*>(widget);
-            m_options->writeConfiguration(this);
-        }
-    }
-
     QImage image() const;
 
 

@@ -52,3 +52,16 @@ KisPropertiesConfiguration*  KisChalkPaintOpSettingsWidget::configuration() cons
     writeConfiguration(config);
     return config;
 }
+
+void KisChalkPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
+{
+    // if the movement is more left<->right then up<->down
+    if (qAbs(x) > qAbs(y)){
+        m_chalkOption->setRadius( m_chalkOption->radius() + qRound(x) );
+    }
+    else // vice-versa
+    {
+        // we can do something different
+    }
+
+}

@@ -62,19 +62,6 @@ public:
     double randomFactor() const;
     double scaleFactor() const;
 
-    // XXX: Hack!
-    void setOptionsWidget(KisPaintOpSettingsWidget* widget) {
-        if (m_options != 0 && m_options->property("owned by settings").toBool()) {
-            delete m_options;
-        }
-        if (!widget) {
-            m_options = 0;
-        } else {
-            m_options = qobject_cast<KisSumiPaintOpSettingsWidget*>(widget);
-            m_options->writeConfiguration(this);
-        }
-    }
-
 private:
 
     KisSumiPaintOpSettingsWidget* m_options;

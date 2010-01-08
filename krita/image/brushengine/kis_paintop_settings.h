@@ -53,10 +53,9 @@ public:
     virtual ~KisPaintOpSettings();
 
     /**
-     * @deprecated give the settings an option widget so the old design keeps working
-     * until the gui and the settings have been disentangled.
+     * 
      */
-    virtual void KDE_DEPRECATED setOptionsWidget(KisPaintOpSettingsWidget* widget) { Q_UNUSED(widget);}
+    virtual void setOptionsWidget(KisPaintOpSettingsWidget* widget);
 
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
@@ -131,7 +130,7 @@ public:
      */
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
-    virtual void changePaintOpSize(qreal x, qreal y) const;
+    virtual void changePaintOpSize(qreal x, qreal y);
     
 #if defined(HAVE_OPENGL)
     virtual QString modelName() const;

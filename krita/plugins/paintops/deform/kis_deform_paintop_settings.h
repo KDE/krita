@@ -65,19 +65,6 @@ public:
     }
 #endif
 
-// XXX: Hack!
-    void setOptionsWidget(KisPaintOpSettingsWidget* widget) {
-        if (m_options && m_options->property("owned by settings").toBool()) {
-            delete m_options;
-        }
-        if (!widget) {
-            m_options = 0;
-        } else {
-            m_options = qobject_cast<KisDeformPaintOpSettingsWidget*>(widget);
-            m_options->writeConfiguration(this);
-        }
-    }
-
 private:
     KisDeformPaintOpSettingsWidget* m_options;
 };

@@ -37,6 +37,9 @@ public:
     virtual ~KisChalkPaintOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
+    
+    ///Reimplemented
+    void changePaintOpSize(qreal x, qreal y);
 
 public:
     KisPaintActionTypeOption* m_paintActionTypeOption;

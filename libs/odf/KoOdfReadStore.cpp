@@ -89,7 +89,11 @@ bool KoOdfReadStore::loadAndParse(QString & errorMessage)
         return false;
     }
 
-    loadAndParse("styles.xml", d->stylesDoc, errorMessage);
+    if (d->store->hasFile("styles.xml")) {
+        if (!loadAndParse("styles.xml", d->stylesDoc, errorMessage)) {
+            return false;
+        }
+    }
     // Load styles from style.xml
     d->stylesReader.createStyleMap(d->stylesDoc, true);
     // Also load styles from content.xml
@@ -142,7 +146,7 @@ bool KoOdfReadStore::loadAndParse(QIODevice* fileDevice, KoXmlDocument& doc, QSt
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg << endl;
         errorMessage = i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
-                            , errorLine , errorColumn , i18n("QXml", errorMsg));
+                            , errorLine , errorColumn , errorMsg);
     } else {
         kDebug(30003) << "File" << fileName << " loaded and parsed";
     }

@@ -120,9 +120,9 @@ QColor KoOdfWorkaround::fixMissingStrokeColor(const KoXmlElement &element, KoSha
         }
 
         if (context.odfLoadingContext().generator().startsWith("OpenOffice.org")) {
-            if (hasStyle && !styleStack.hasProperty(KoXmlNS::draw, "fill") &&
-                             styleStack.hasProperty(KoXmlNS::draw, "fill-color")) {
-                color = QColor(styleStack.property(KoXmlNS::draw, "fill-color"));
+            if (hasStyle && styleStack.hasProperty(KoXmlNS::draw, "stroke") &&
+                            !styleStack.hasProperty(KoXmlNS::draw, "stroke-color")) {
+                color = Qt::black;
             } else if (!hasStyle) {
                 KoXmlElement plotAreaElement = element.parentNode().toElement();
                 KoXmlElement chartElement = plotAreaElement.parentNode().toElement();

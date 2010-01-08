@@ -40,6 +40,7 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * canvas)
 
     QVBoxLayout * l = new QVBoxLayout(this);
     l->addWidget(m_page);
+    l->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Preferred, QSizePolicy::Expanding));
     l->setContentsMargins(0,0,0,0);
 
     m_mode = new QButtonGroup(this);
@@ -51,6 +52,14 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * canvas)
     m_action->addButton(m_page->subtract, SELECTION_SUBTRACT);
     m_action->addButton(m_page->replace, SELECTION_REPLACE);
     m_action->addButton(m_page->intersect, SELECTION_INTERSECT);
+
+    m_page->pixel->setIcon(KIcon("select_pixel"));
+    m_page->shape->setIcon(KIcon("select_shape"));
+
+    m_page->add->setIcon(KIcon("selection_add"));
+    m_page->subtract->setIcon(KIcon("selection_subtract"));
+    m_page->replace->setIcon(KIcon("selection_replace"));
+    m_page->intersect->setIcon(KIcon("selection_intersect"));
 
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
@@ -83,7 +92,9 @@ void KisSelectionOptions::disableAntiAliasSelectionOption()
 
 void KisSelectionOptions::disableSelectionModeOption()
 {
-    m_page->modeGroupBox->hide();
+    m_page->lblMode->hide();
+    m_page->pixel->hide();
+    m_page->shape->hide();
 }
 
 #include "kis_selection_options.moc"

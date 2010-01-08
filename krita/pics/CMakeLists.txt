@@ -15,6 +15,13 @@ install(FILES
     unlocked.png
     transparency-locked.png
     transparency-unlocked.png
+    selection_add.png
+    selection_exclude.png
+    selection_intersect.png
+    selection_replace.png
+    selection_subtract.png
+    select_pixel.png
+    select_shape.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

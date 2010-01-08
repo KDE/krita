@@ -160,7 +160,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
 
     QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);
-    l->addLayout(fl);
+    l->insertLayout(1, fl);
 
     return m_optWidget;
 }

@@ -128,6 +128,17 @@ QString KoOdfLoadingContext::generator() const
 void KoOdfLoadingContext::parseMeta() const
 {
     if (!m_metaXmlParsed && m_store) {
+        // Regardless of whether we cd into the parent directory
+        // or not to find a meta.xml, restore the directory that
+        // we were in afterwards.
+        m_store->pushDirectory();
+
+        // Some embedded documents to not contain their own meta.xml
+        // Use the parent directory's instead.
+        if (!m_store->hasFile("meta.xml"))
+            // Only has an effect if there is a parent directory
+            m_store->leaveDirectory();
+
         if (m_store->hasFile("meta.xml")) {
             KoXmlDocument metaDoc;
             KoOdfReadStore oasisStore(m_store);
@@ -141,5 +152,7 @@ void KoOdfLoadingContext::parseMeta() const
             }
         }
         m_metaXmlParsed = true;
+
+        m_store->popDirectory();
     }
 }

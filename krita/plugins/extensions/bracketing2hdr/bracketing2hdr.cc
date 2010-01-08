@@ -157,7 +157,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
             computeCameraResponse();
         }
         KisImageWSP image = m_view->image();
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBAF32", 0);
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RgbAF32", 0);
         if (!cs) {
             KMessageBox::error(m_view, i18n("HDR colorspace RGBAF32 not found, please check your installation."), i18n("Layer Creation Error"));
             return;
@@ -350,7 +350,11 @@ void Bracketing2HDRPlugin::computeCameraResponse(QList<BracketingFrame> frames)
 #if 1
     // Now optimize the camera response
     // Create a temporary paint device and fill it with the current value
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBAF32", 0);
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RgbAF32", 0);
+    if (!cs) {
+        KMessageBox::error(m_view, i18n("HDR colorspace RGBAF32 not found, please check your installation."), i18n("Compute Camera Response Error"));
+        return;
+    }
     KisPaintDeviceSP device = new KisPaintDevice(cs);
     // Initialize some variables used for computation
     QVector<qint64> counts[3];

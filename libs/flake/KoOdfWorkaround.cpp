@@ -69,7 +69,8 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
             if (hasStyle && !styleStack.hasProperty(KoXmlNS::draw, "fill") &&
                              styleStack.hasProperty(KoXmlNS::draw, "fill-color")) {
                 color = QColor(styleStack.property(KoXmlNS::draw, "fill-color"));
-            } else if (!hasStyle) {
+            } else if (!hasStyle || (!styleStack.hasProperty(KoXmlNS::draw, "fill")
+                                    && !styleStack.hasProperty(KoXmlNS::draw, "fill-color")) ) {
                 KoXmlElement plotAreaElement = element.parentNode().toElement();
                 KoXmlElement chartElement = plotAreaElement.parentNode().toElement();
 
@@ -142,4 +143,14 @@ QColor KoOdfWorkaround::fixMissingStrokeColor(const KoXmlElement &element, KoSha
     }
 
     return color;
+}
+
+bool KoOdfWorkaround::fixMissingStyle_DisplayLabel(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    // If no axis style is specified, OpenOffice.org hides the axis' data labels
+    if (context.odfLoadingContext().generator().startsWith("OpenOffice.org"))
+        return false;
+
+    // In all other cases, they're visible
+    return true;
 }

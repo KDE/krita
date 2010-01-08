@@ -55,6 +55,7 @@ namespace KoOdfWorkaround
 
     FLAKE_EXPORT QColor fixMissingStrokeColor(const KoXmlElement &element, KoShapeLoadingContext &context);
     FLAKE_EXPORT QColor fixMissingFillColor(const KoXmlElement &element, KoShapeLoadingContext &context);
+    FLAKE_EXPORT bool   fixMissingStyle_DisplayLabel(const KoXmlElement &element, KoShapeLoadingContext &context);
 }
 
 #endif /* KOODFWORKAROUND_H */

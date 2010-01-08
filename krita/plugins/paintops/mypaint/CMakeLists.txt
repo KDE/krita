@@ -8,6 +8,8 @@ if(GLIB2_FOUND)
 
 include_directories(brushlib ${GLIB2_INCLUDE_DIR})
 
+add_subdirectory(tests)
+
 set(kritamypaintpaintop_PART_SRCS
     mypaint_brush_resource.cpp
     mypaint_paintop.cpp

@@ -40,6 +40,7 @@ public:
      * dst; the surface we are drawing on
      */
     MyPaintSurface(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+    virtual ~MyPaintSurface() { delete[] m_dstData; }
 
     bool draw_dab (float x, float y,
                    float radius,
@@ -55,6 +56,8 @@ public:
 private:
 
     const KoColorSpace* m_rgb16;
+    quint8* m_dstRgb16Data;
+    quint8* m_dstData;
 
     KisPaintDeviceSP m_src;
     KisPaintDeviceSP m_dst;

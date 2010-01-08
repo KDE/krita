@@ -29,6 +29,7 @@
 
 #include "mypaint_surface.h"
 
+#define TILE_SIZE 64
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 MyPaintSurface::MyPaintSurface(KisPaintDeviceSP src, KisPaintDeviceSP dst)
@@ -36,6 +37,9 @@ MyPaintSurface::MyPaintSurface(KisPaintDeviceSP src, KisPaintDeviceSP dst)
     , m_dst(dst)
 {
     m_rgb16 = KoColorSpaceRegistry::instance()->rgb16();
+    // fake a mypaint tile
+    m_dstData = m_dst->colorSpace()->allocPixelBuffer(TILE_SIZE * TILE_SIZE, true);
+    m_dstRgb16Data = m_rgb16->allocPixelBuffer(TILE_SIZE * TILE_SIZE, true);
 }
 
 bool MyPaintSurface::draw_dab (float x, float y,
@@ -45,104 +49,117 @@ bool MyPaintSurface::draw_dab (float x, float y,
                                float eraser_target_alpha,
                                float aspect_ratio, float angle)
 {
+    if (aspect_ratio<1.0) aspect_ratio=1.0;
 
-//    qDebug() << "x" << x << "y" << y << "radius" << radius
-//            << "color_r" << color_r << "color_g" << color_g << "color_b" << color_b
-//            << "opaque" << opaque << "hardness" << hardness
-//            << "eraser_target_alpha" << eraser_target_alpha
-//            << "aspect_ratio" << aspect_ratio << "angle" << angle;
-
-    if (aspect_ratio < 1.0) aspect_ratio = 1.0;
+    float r_fringe;
+    int xp, yp;
+    float xx, yy, rr;
+    float one_over_radius2;
 
     eraser_target_alpha = CLAMP(eraser_target_alpha, 0.0, 1.0);
-
-    quint16 color_r_ = color_r * (1<<15);
-    quint16 color_g_ = color_g * (1<<15);
-    quint16 color_b_ = color_b * (1<<15);
+    quint32 color_r_ = color_r * (1<<15);
+    quint32 color_g_ = color_g * (1<<15);
+    quint32 color_b_ = color_b * (1<<15);
     color_r = CLAMP(color_r, 0, (1<<15));
     color_g = CLAMP(color_g, 0, (1<<15));
     color_b = CLAMP(color_b, 0, (1<<15));
 
     opaque = CLAMP(opaque, 0.0, 1.0);
     hardness = CLAMP(hardness, 0.0, 1.0);
-
     if (opaque == 0.0) return false;
     if (radius < 0.1) return false;
     if (hardness == 0.0) return false; // infintly small point, rest transparent
 
-    float r_fringe = radius + 1;
-    float rr = radius * radius;
-    float one_over_radius2 = 1.0/rr;
+    r_fringe = radius + 1;
+    rr = radius*radius;
+    one_over_radius2 = 1.0/rr;
 
-    // the square in which the round mypaint dab fits
-    int x1 = floor(floor(x - r_fringe));
-    int x2 = floor(floor(x + r_fringe));
-    int y1 = floor(floor(y - r_fringe));
-    int y2 = floor(floor(y + r_fringe));
+    int tx1 = floor(floor(x - r_fringe) / TILE_SIZE);
+    int tx2 = floor(floor(x + r_fringe) / TILE_SIZE);
+    int ty1 = floor(floor(y - r_fringe) / TILE_SIZE);
+    int ty2 = floor(floor(y + r_fringe) / TILE_SIZE);
+    int tx, ty;
+    for (ty = ty1; ty <= ty2; ty++) {
+        for (tx = tx1; tx <= tx2; tx++) {
 
-    quint8* dstData = m_dst->colorSpace()->allocPixelBuffer(x2 - x1);
-    quint8* rgb16Data = KoColorSpaceRegistry::instance()->rgb16()->allocPixelBuffer(x2 - x1);
+            //uint16_t * rgba_p = get_tile_memory(tx, ty, false);
+            m_dst->readBytes(m_dstData, tx, ty, TILE_SIZE, TILE_SIZE);
+            m_dst->colorSpace()->convertPixelsTo(m_dstData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE);
 
-    // figure out the area the circular dab covers within the square
-    float angle_rad = angle / 360 * 2 * M_PI;
-    float cs = cos(angle_rad);
-    float sn = sin(angle_rad);
+            quint16* rgba_p = reinterpret_cast<quint16*>(m_dstRgb16Data);
+            if (!rgba_p) {
+                printf("Python exception during draw_dab()!\n");
+                return true;
+            }
 
-    for (int row = y1; row < y2; ++row) {
+            float xc = x - tx*TILE_SIZE;
+            float yc = y - ty*TILE_SIZE;
 
-        m_dst->readBytes(dstData, QRect(x1, row, x2 - x1, 1));
-        m_dst->colorSpace()->convertPixelsTo(dstData, rgb16Data, m_rgb16, x2 - x1);
+            int x0 = floor (xc - r_fringe);
+            int y0 = floor (yc - r_fringe);
+            int x1 = ceil (xc + r_fringe);
+            int y1 = ceil (yc + r_fringe);
+            if (x0 < 0) x0 = 0;
+            if (y0 < 0) y0 = 0;
+            if (x1 > TILE_SIZE-1) x1 = TILE_SIZE-1;
+            if (y1 > TILE_SIZE-1) y1 = TILE_SIZE-1;
 
-        for (int col = x1; col < x2; ++col) {
+            float angle_rad=angle/360*2*M_PI;
+            float cs=cos(angle_rad);
+            float sn=sin(angle_rad);
 
-            float yyr = (row * cs - col * sn) * aspect_ratio;
-            float xxr = (row * sn + col * sn);
+            for (yp = y0; yp <= y1; yp++) {
+                yy = (yp + 0.5 - yc);
+                for (xp = x0; xp <= x1; xp++) {
+                    xx = (xp + 0.5 - xc);
+                    // code duplication, see brush::count_dabs_to()
+                    float yyr=(yy*cs-xx*sn)*aspect_ratio;
+                    float xxr=yy*sn+xx*cs;
+                    rr = (yyr*yyr + xxr*xxr) * one_over_radius2;
+                    // rr is in range 0.0..1.0*sqrt(2)
 
-            // rr is in range 0.0..1.0*sqrt(2)
-            rr = (yyr * yyr + xxr * xxr) * one_over_radius2;
-            qDebug() << rr;
-            if (rr <= 1.0) {
+                    if (rr <= 1.0) {
+                        float opa = opaque;
+                        if (hardness < 1.0) {
+                            if (rr < hardness) {
+                                opa *= rr + 1-(rr/hardness);
+                                // hardness == 0 is nonsense, excluded above
+                            } else {
+                                opa *= hardness/(1-hardness)*(1-rr);
+                            }
+                        }
 
-                float opa = opaque;
-                if (hardness < 1.0) {
-                    if (rr < hardness) {
-                        opa *= rr + 1 - (rr/hardness);
-                        // hardness == 0 is nonsense, excluded above
-                    } else {
-                        opa *= hardness / (1 - hardness) * (1 - rr);
+                        // We are manipulating pixels with premultiplied alpha directly.
+                        // This is an "over" operation (opa = topAlpha).
+                        // In the formula below, topColor is assumed to be premultiplied.
+                        //
+                        //               opa_a      <   opa_b      >
+                        // resultAlpha = topAlpha + (1.0 - topAlpha) * bottomAlpha
+                        // resultColor = topColor + (1.0 - topAlpha) * bottomColor
+                        //
+                        // (at least for the normal case where eraser_target_alpha == 1.0)
+                        // OPTIMIZE: separate function for the standard case without erasing?
+                        // OPTIMIZE: don't use floats here in the inner loop?
+
+                        quint32 opa_a = (1<<15)*opa;   // topAlpha
+                        quint32 opa_b = (1<<15)-opa_a; // bottomAlpha
+
+                        // only for eraser, or for painting with translucent-making colors
+                        opa_a *= eraser_target_alpha;
+
+                        int idx = (yp*TILE_SIZE + xp)*4;
+                        rgba_p[idx+3] = opa_a + (opa_b*rgba_p[idx+3])/(1<<15);
+                        rgba_p[idx+0] = (opa_a*color_r_ + opa_b*rgba_p[idx+0])/(1<<15);
+                        rgba_p[idx+1] = (opa_a*color_g_ + opa_b*rgba_p[idx+1])/(1<<15);
+                        rgba_p[idx+2] = (opa_a*color_b_ + opa_b*rgba_p[idx+2])/(1<<15);
                     }
                 }
-                // We are manipulating pixels with premultiplied alpha directly.
-                // This is an "over" operation (opa = topAlpha).
-                // In the formula below, topColor is assumed to be premultiplied.
-                //
-                //               opa_a      <   opa_b      >
-                // resultAlpha = topAlpha + (1.0 - topAlpha) * bottomAlpha
-                // resultColor = topColor + (1.0 - topAlpha) * bottomColor
-                //
-                // (at least for the normal case where eraser_target_alpha == 1.0)
-
-                quint32 opa_a = (1<<15)*opa;   // topAlpha
-                quint32 opa_b = (1<<15)-opa_a; // bottomAlpha
-
-                // only for eraser, or for painting with translucent-making colors
-                opa_a *= eraser_target_alpha;
-
-                int idx = (x2 - x1) * 4;
-
-                // we have bgra, mypaint has rgba
-                dstData[idx+3] =  opa_a +           (opa_b * dstData[idx+3]) / (1<<15);
-                dstData[idx+2] = (opa_a * color_r_ + opa_b * dstData[idx+2]) / (1<<15);
-                dstData[idx+1] = (opa_a * color_g_ + opa_b * dstData[idx+1]) / (1<<15);
-                dstData[idx+1] = (opa_a * color_b_ + opa_b * dstData[idx+1]) / (1<<15);
             }
+            m_rgb16->convertPixelsTo(m_dstRgb16Data, m_dstData, m_dst->colorSpace(), TILE_SIZE * TILE_SIZE);
+            m_dst->writeBytes(m_dstData, tx, ty, TILE_SIZE, TILE_SIZE);
         }
-        m_rgb16->convertPixelsTo(rgb16Data, dstData, m_dst->colorSpace(), x2 - x1);
-        m_dst->writeBytes(dstData, QRect(x1, row, x2 - x1, 1));
     }
 
-    delete[] dstData;
-    delete[] rgb16Data;
 
     return true;
 

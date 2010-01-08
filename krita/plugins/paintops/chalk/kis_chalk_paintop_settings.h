@@ -53,8 +53,6 @@ public:
     
     bool paintIncremental();
 
-    KisPaintOpSettingsSP clone() const;
-
     // boiler-plate code
     int radius() const;
     bool inkDepletion() const;

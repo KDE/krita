@@ -30,14 +30,6 @@ KisSumiPaintOpSettings::KisSumiPaintOpSettings()
 {
 }
 
-KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const
-{
-    KisPaintOpSettings* settings =
-        static_cast<KisPaintOpSettings*>(m_options->configuration());
-    return settings;
-}
-
-
 bool KisSumiPaintOpSettings::paintIncremental()
 {
     return false;

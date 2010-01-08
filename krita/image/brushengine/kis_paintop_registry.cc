@@ -98,10 +98,6 @@ KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, KisImageWSP im
     Q_ASSERT(f);
     if (f) {
         KisPaintOpSettingsSP settings = f->settings(image);
-        KisPaintOpSettingsWidget* w = f->createSettingsWidget(0);
-        w->setProperty("owned by settings", true);
-        w->hide();
-        settings->setOptionsWidget(w); // XXX Hack! leak!
         settings->setProperty("paintop", id.id());
         return settings;
     }

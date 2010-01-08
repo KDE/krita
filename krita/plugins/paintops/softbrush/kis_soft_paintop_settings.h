@@ -52,8 +52,6 @@ public:
     virtual void paintOutline ( const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, OutlineMode _mode ) const;
     virtual QRectF paintOutlineRect ( const QPointF& pos, KisImageWSP image, OutlineMode _mode ) const;
 
-    KisPaintOpSettingsSP clone() const;
-
     int diameter() const;
     qreal spacing() const;
     qreal sigma() const;

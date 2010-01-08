@@ -38,7 +38,6 @@ class MyPaintSettings : public QObject, public KisPaintOpSettings
 public:
     MyPaintSettings();
     virtual ~MyPaintSettings() {}
-    KisPaintOpSettingsSP clone() const;
 
     MyPaintBrushResource* brush() const;
 

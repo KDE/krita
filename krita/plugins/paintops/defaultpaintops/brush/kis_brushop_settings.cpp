@@ -49,14 +49,6 @@ bool KisBrushOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-KisPaintOpSettingsSP KisBrushOpSettings::clone() const
-{
-
-    KisPaintOpSettingsSP settings = dynamic_cast<KisPaintOpSettings*>(m_options->configuration());
-    return settings;
-
-}
-
 QRectF KisBrushOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return QRectF();

@@ -40,8 +40,6 @@ public:
     virtual ~KisFilterOpSettings();
     bool paintIncremental();
 
-    KisPaintOpSettingsSP clone() const;
-
     void setNode(KisNodeSP node);
 
     void setImage(KisImageWSP image);

@@ -28,14 +28,6 @@ KisDynaPaintOpSettings::KisDynaPaintOpSettings()
 {
 }
 
-KisPaintOpSettingsSP KisDynaPaintOpSettings::clone() const
-{
-    KisPaintOpSettings* settings =
-        static_cast<KisPaintOpSettings*>(m_options->configuration());
-    return settings;
-}
-
-
 bool KisDynaPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;

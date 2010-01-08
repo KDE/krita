@@ -29,14 +29,6 @@ KisSoftPaintOpSettings::KisSoftPaintOpSettings()
 {
 }
 
-KisPaintOpSettingsSP KisSoftPaintOpSettings::clone() const
-{
-    KisPaintOpSettings* settings =
-        static_cast<KisPaintOpSettings*>( m_options->configuration() );
-    return settings;
-}
-
-
 bool KisSoftPaintOpSettings::paintIncremental()
 {
     return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;

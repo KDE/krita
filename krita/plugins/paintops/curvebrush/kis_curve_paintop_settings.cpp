@@ -23,14 +23,6 @@ KisCurvePaintOpSettings::KisCurvePaintOpSettings()
 {
 }
 
-
-KisPaintOpSettingsSP KisCurvePaintOpSettings::clone() const
-{
-    KisPaintOpSettings* settings =
-        static_cast<KisPaintOpSettings*>(m_options->configuration());
-    return settings;
-}
-
 bool KisCurvePaintOpSettings::paintIncremental()
 {
     return false;
@@ -50,19 +42,5 @@ int KisCurvePaintOpSettings::curveAction() const
 int KisCurvePaintOpSettings::interval() const
 {
     return m_options->interval();
-}
-
-
-void KisCurvePaintOpSettings::fromXML(const QDomElement& elt)
-{
-    KisPaintOpSettings::fromXML(elt);
-    m_options->setConfiguration(this);
-}
-
-void KisCurvePaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
-{
-    KisPropertiesConfiguration * settings = m_options->configuration();
-    settings->KisPropertiesConfiguration::toXML(doc, rootElt);
-    delete settings;
 }
 

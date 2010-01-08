@@ -48,8 +48,6 @@ public:
     
     bool paintIncremental();
 
-    KisPaintOpSettingsSP clone() const;
-
     // brush settings
     int startSize() const;
     int endSize() const;

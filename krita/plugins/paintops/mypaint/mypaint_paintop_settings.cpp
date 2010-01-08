@@ -37,14 +37,6 @@ MyPaintSettings::MyPaintSettings()
 {
 }
 
-
-KisPaintOpSettingsSP MyPaintSettings::clone() const
-{
-    KisPaintOpSettings* settings =
-        dynamic_cast<KisPaintOpSettings*>( m_options->configuration() );
-    return settings;
-}
-
 MyPaintBrushResource* MyPaintSettings::brush() const
 {
     return m_options->brush();;

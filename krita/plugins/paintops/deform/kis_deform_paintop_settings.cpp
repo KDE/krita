@@ -25,14 +25,6 @@ KisDeformPaintOpSettings::KisDeformPaintOpSettings()
 {
 }
 
-
-KisPaintOpSettingsSP KisDeformPaintOpSettings::clone() const
-{
-    KisPaintOpSettings* settings =
-        static_cast<KisPaintOpSettings*>(m_options->configuration());
-    return settings;
-}
-
 bool KisDeformPaintOpSettings::paintIncremental()
 {
     return true;

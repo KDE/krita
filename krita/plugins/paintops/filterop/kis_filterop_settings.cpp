@@ -47,14 +47,6 @@ bool KisFilterOpSettings::paintIncremental()
     return true; // We always paint on the existing data
 }
 
-KisPaintOpSettingsSP KisFilterOpSettings::clone() const
-{
-
-    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>(m_options->configuration());
-    return settings;
-
-}
-
 void KisFilterOpSettings::setNode(KisNodeSP node)
 {
     KisPaintOpSettings::setNode(node);

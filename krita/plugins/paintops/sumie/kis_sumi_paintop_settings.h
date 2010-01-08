@@ -42,10 +42,6 @@ public:
 
     virtual void changePaintOpSize(qreal x, qreal y) const;
 
-    
-    
-    KisPaintOpSettingsSP clone() const;
-
     QList<float> curve() const;
     int radius() const;
     double sigma() const;

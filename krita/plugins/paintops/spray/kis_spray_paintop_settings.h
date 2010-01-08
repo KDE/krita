@@ -48,8 +48,6 @@ public:
     
     bool paintIncremental();
 
-    KisPaintOpSettingsSP clone() const;
-
     // brush settings
     int diameter() const;
     qreal aspect() const;

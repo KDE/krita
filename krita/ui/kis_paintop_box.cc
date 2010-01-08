@@ -241,7 +241,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         m_optionWidget->disconnect(m_presetsPopup->presetPreview());
         m_presetsPopup->setPaintOpSettingsWidget(0);
         m_optionWidget->hide();
-        const_cast<KisPaintOpSettings*>(m_activePreset->settings().data())->setOptionsWidget(0);
     }
 
     m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
@@ -254,9 +253,8 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createSettingsWidget(this);
         }
         m_optionWidget = m_paintopOptionWidgets[paintop];
-        // XXX: Hack!
-        const_cast<KisPaintOpSettings*>(preset->settings().data())->setOptionsWidget(m_optionWidget);
         m_optionWidget->setImage(m_view->image());
+        m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(preset->settings().data()));
 
         if (!preset->settings()->getProperties().isEmpty()) {
             m_optionWidget->setConfiguration(preset->settings());

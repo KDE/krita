@@ -43,8 +43,6 @@ public:
 
     bool paintIncremental();
 
-    KisPaintOpSettingsSP clone() const;
-
     int gridWidth() const;
     int gridHeight() const;
     int divisionLevel() const;

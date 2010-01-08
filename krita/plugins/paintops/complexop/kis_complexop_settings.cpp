@@ -44,10 +44,3 @@ bool KisComplexOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-KisPaintOpSettingsSP KisComplexOpSettings::clone() const
-{
-
-    KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>(m_options->configuration());
-    return settings;
-
-}

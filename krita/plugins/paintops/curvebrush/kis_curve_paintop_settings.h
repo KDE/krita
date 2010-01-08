@@ -35,13 +35,6 @@ class KisCurvePaintOpSettings : public QObject, public KisPaintOpSettings
 public:
     KisCurvePaintOpSettings();
     virtual ~KisCurvePaintOpSettings() {}
-    KisPaintOpSettingsSP clone() const;
-
-    using KisPropertiesConfiguration::fromXML;
-    using KisPropertiesConfiguration::toXML;
-
-    virtual void fromXML(const QDomElement&);
-    virtual void toXML(QDomDocument&, QDomElement&) const;
 
     bool paintIncremental();
 

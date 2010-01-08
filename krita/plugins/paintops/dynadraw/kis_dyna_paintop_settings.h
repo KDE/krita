@@ -41,9 +41,6 @@ public:
 
     bool paintIncremental();
 
-    KisPaintOpSettingsSP clone() const;
-
-
     qreal initWidth() const;
     qreal mass() const;
     qreal drag() const;

@@ -64,8 +64,6 @@ KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
         , d(new Private)
 {
     d->paintOpPreset = paintOpPreset ? d->paintOpPreset = paintOpPreset->clone() : 0;
-    // XXX: hack! remove when paintop settings and widget have been completely untangled
-    const_cast<KisPaintOpSettings*>(d->paintOpPreset->settings().data())->setOptionsWidget(0);
     d->foregroundColor = foregroundColor;
     d->backgroundColor = backgroundColor;
     d->opacity = opacity;

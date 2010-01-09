@@ -50,7 +50,7 @@ KoHyphenator::KoHyphenator()
 #endif
 
     QFile *f;
-    if (!path.isNull())
+    if (!path.isEmpty())
         f = new QFile(path);
     else
         throw KoHyphenatorException("Could not create KoHyphenator instance.");
@@ -169,7 +169,7 @@ HyphenDict *KoHyphenator::dict(const QString &_lang) const
         kDebug(32500) << "Searching dictionary for '" << lang << "' language...";
 #endif
         QString path = KGlobal::dirs()->findResource("data", "koffice/hyphdicts/hyph_" + lang + ".dic");
-        if (!path.isNull()) {
+        if (!path.isEmpty()) {
 #ifdef DEBUG_HYPHENATOR
             kDebug(32500) << "Loading dictionary for '" << lang << "' language: path =" << path;
 #endif

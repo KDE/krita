@@ -105,7 +105,7 @@ QVariant KoTableStyle::value(int key) const
 {
     QVariant var = d->stylesPrivate.value(key);
     if (var.isNull() && d->parentStyle)
-        var = d->parentStyle->value(key);
+        return d->parentStyle->value(key);
     return var;
 }
 
@@ -142,8 +142,7 @@ QColor KoTableStyle::propertyColor(int key) const
 {
     QVariant variant = value(key);
     if (variant.isNull()) {
-        QColor color;
-        return color;
+        return QColor();
     }
     return qvariant_cast<QColor>(variant);
 }
@@ -190,8 +189,7 @@ QBrush KoTableStyle::background() const
     QVariant variant = d->stylesPrivate.value(QTextFormat::BackgroundBrush);
 
     if (variant.isNull()) {
-        QBrush brush;
-        return brush;
+        return QBrush();
     }
     return qvariant_cast<QBrush>(variant);
 }
@@ -333,7 +331,7 @@ void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &con
         d->name = element->attributeNS(KoXmlNS::style, "name", QString());
 
     QString masterPage = element->attributeNS(KoXmlNS::style, "master-page-name", QString());
-    if (! masterPage.isNull()) {
+    if (! masterPage.isEmpty()) {
         setMasterPageName(masterPage);
     }
     context.styleStack().save();

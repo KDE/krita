@@ -46,7 +46,7 @@ KoTableFormat::~KoTableFormat()
 
 QVariant KoTableFormat::property(int propertyId) const
 {
-    QVariant value = d->property(propertyId);
+    const QVariant value( d->property(propertyId) );
     return value.isNull() ? QVariant() : value;
 }
 

@@ -405,7 +405,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
                 value.append(" leaderweight:").append(QString::number(tab.leaderWeight));
                 value.append(" leaderwidth:").append(QString().setNum(tab.leaderWidth));
                 value.append(" leadercolor:").append(tab.leaderColor.name());
-                if (! tab.leaderText.isNull())
+                if (! tab.leaderText.isEmpty())
                     value.append(" leadertext:").append(QString(tab.leaderText));
                 value.append("}, ");
             }

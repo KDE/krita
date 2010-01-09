@@ -39,6 +39,7 @@ MyPaintSurface::MyPaintSurface(KisPaintDeviceSP src, KisPaintDeviceSP dst)
     m_rgb16 = KoColorSpaceRegistry::instance()->rgb16();
     // fake a mypaint tile
     m_dstData = m_dst->colorSpace()->allocPixelBuffer(TILE_SIZE * TILE_SIZE, true);
+    m_srcData = m_src->colorSpace()->allocPixelBuffer(TILE_SIZE * TILE_SIZE, true);
     m_dstRgb16Data = m_rgb16->allocPixelBuffer(TILE_SIZE * TILE_SIZE, true);
 }
 
@@ -169,18 +170,116 @@ void MyPaintSurface::get_color (float x, float y,
                                 float radius,
                                 float* color_r, float* color_g, float* color_b, float* color_a )
 {
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-    Q_UNUSED(radius);
-    Q_UNUSED(color_r);
-    Q_UNUSED(color_g);
-    Q_UNUSED(color_b);
-    Q_UNUSED(color_a);
-    // XXX: calculate the average color inside this anti-aliased circle.
+    float r_fringe;
+    int xp, yp;
+    float xx, yy, rr;
+    float one_over_radius2;
 
-    // for every pixel in the square, get the color and calculate the weight
+    if (radius < 1.0) radius = 1.0;
+    const float hardness = 0.5;
+    const float opaque = 1.0;
 
-    // let pigment calculate the average color
+    float sum_r, sum_g, sum_b, sum_a, sum_weight;
+    sum_r = sum_g = sum_b = sum_a = sum_weight = 0.0;
 
-    // convert to 16 bit rgba
+    // in case we return with an error
+    *color_r = 0.0;
+    *color_g = 1.0;
+    *color_b = 0.0;
+
+    // WARNING: some code duplication with draw_dab
+
+    r_fringe = radius + 1;
+    rr = radius*radius;
+    one_over_radius2 = 1.0/rr;
+
+    int tx1 = floor(floor(x - r_fringe) / TILE_SIZE);
+    int tx2 = floor(floor(x + r_fringe) / TILE_SIZE);
+    int ty1 = floor(floor(y - r_fringe) / TILE_SIZE);
+    int ty2 = floor(floor(y + r_fringe) / TILE_SIZE);
+    int tx, ty;
+    for (ty = ty1; ty <= ty2; ty++) {
+        for (tx = tx1; tx <= tx2; tx++) {
+            //uint16_t * rgba_p = get_tile_memory(tx, ty, true);
+            m_src->readBytes(m_srcData, tx, ty, TILE_SIZE, TILE_SIZE);
+            m_src->colorSpace()->convertPixelsTo(m_dstData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE);
+
+            quint16* rgba_p = reinterpret_cast<quint16*>(m_dstRgb16Data);
+
+            if (!rgba_p) {
+                printf("Python exception during get_color()!\n");
+                return;
+            }
+
+            float xc = x - tx*TILE_SIZE;
+            float yc = y - ty*TILE_SIZE;
+
+            int x0 = floor (xc - r_fringe);
+            int y0 = floor (yc - r_fringe);
+            int x1 = ceil (xc + r_fringe);
+            int y1 = ceil (yc + r_fringe);
+            if (x0 < 0) x0 = 0;
+            if (y0 < 0) y0 = 0;
+            if (x1 > TILE_SIZE-1) x1 = TILE_SIZE-1;
+            if (y1 > TILE_SIZE-1) y1 = TILE_SIZE-1;
+
+            for (yp = y0; yp <= y1; yp++) {
+                yy = (yp + 0.5 - yc);
+                yy *= yy;
+                for (xp = x0; xp <= x1; xp++) {
+                    xx = (xp + 0.5 - xc);
+                    xx *= xx;
+                    rr = (yy + xx) * one_over_radius2;
+                    // rr is in range 0.0..1.0*sqrt(2)
+
+                    if (rr <= 1.0) {
+                        float opa = opaque;
+                        if (hardness < 1.0) {
+                            if (rr < hardness) {
+                                opa *= rr + 1-(rr/hardness);
+                                // hardness == 0 is nonsense, excluded above
+                            } else {
+                                opa *= hardness/(1-hardness)*(1-rr);
+                            }
+                        }
+
+                        // note that we are working on premultiplied alpha
+                        // we do not un-premultiply it yet, so colors are weighted with their alpha
+                        int idx = (yp * TILE_SIZE + xp)*4;
+                        sum_weight += opa;
+                        sum_r      += opa*rgba_p[idx+0]/(1<<15);
+                        sum_g      += opa*rgba_p[idx+1]/(1<<15);
+                        sum_b      += opa*rgba_p[idx+2]/(1<<15);
+                        sum_a      += opa*rgba_p[idx+3]/(1<<15);
+                    }
+                }
+            }
+        }
+    }
+
+    Q_ASSERT(sum_weight > 0.0);
+    sum_a /= sum_weight;
+    sum_r /= sum_weight;
+    sum_g /= sum_weight;
+    sum_b /= sum_weight;
+
+    *color_a = sum_a;
+    // now un-premultiply the alpha
+    if (sum_a > 0.0) {
+        *color_r = sum_r / sum_a;
+        *color_g = sum_g / sum_a;
+        *color_b = sum_b / sum_a;
+    } else {
+        // it is all transparent, so don't care about the colors
+        // (let's make them ugly so bugs will be visible)
+        *color_r = 0.0;
+        *color_g = 1.0;
+        *color_b = 0.0;
+    }
+
+    // fix rounding problems that do happen due to floating point math
+    *color_r = CLAMP(*color_r, 0.0, 1.0);
+    *color_g = CLAMP(*color_g, 0.0, 1.0);
+    *color_b = CLAMP(*color_b, 0.0, 1.0);
+    *color_a = CLAMP(*color_a, 0.0, 1.0);
 }

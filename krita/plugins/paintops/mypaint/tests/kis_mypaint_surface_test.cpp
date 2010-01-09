@@ -45,14 +45,37 @@ void KisMyPaintSurfaceTest::testDrawDab()
 
     MyPaintSurface surface(src, dst);
 
-    surface.draw_dab(100.0, 100.0, 10.0, 0.5, 0.5, 0.7, 0.5);
+    surface.draw_dab(100.0, 100.0, 10.0, 0.0, 1.0, 1.0, 1.0);
 
-    dst->convertToQImage(0).save("bla.png");
+    QImage result = dst->convertToQImage(0);
+    result.save("bla.png");
+    QImage source(QString(FILES_DATA_DIR) + QDir::separator() + "draw_dab.png");
+
+    QVERIFY(result == source);
 }
 
 void KisMyPaintSurfaceTest::testGetColor()
 {
+    KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
+    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
+    QImage source(QString(FILES_DATA_DIR) + QDir::separator() + "draw_dab.png");
+    src->convertFromQImage(source, "");
 
+    MyPaintSurface surface(src, dst);
+
+    float r = 0.0;
+    float g = 0.0;
+    float b = 0.0;
+    float a = 0.0;
+
+    surface.get_color(100.0, 100.0, 10.0, &r, &g, &b, &a);
+
+    qDebug() << r << g << b << a;
+
+    QVERIFY(qFuzzyCompare(r, 0.0L));
+    QVERIFY(qFuzzyCompare(g, 1.0L));
+    QVERIFY(qFuzzyCompare(b, 1.0L));
+    QVERIFY(qFuzzyCompare(a, 1.0L));
 }
 
 QTEST_KDEMAIN(KisMyPaintSurfaceTest, GUI)

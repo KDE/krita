@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Round Corners Filter
+Name[en_GB]=Round Corners Filter
+Name[pt]=Filtro de Cantos Arredondados
+Name[sv]=Filter för rundade hörn
+Name[uk]=Фільтр заокруглених кутів
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaroundcornersfilter

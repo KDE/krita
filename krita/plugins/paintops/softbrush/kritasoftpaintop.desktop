@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Soft brush
+Name[en_GB]=Soft brush
+Name[pt]=Pincel suave
+Name[sv]=Mjuk pensel
+Name[uk]=М’який пензель
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritasoftpaintop

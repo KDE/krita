@@ -57,6 +57,10 @@ private:
         } else if (fileExtension == ".gih") {
             brush = new KisImagePipeBrush(filename);
         }
+        
+        // Hack: This prevents the deletion of brushes in the resource server
+        // Brushes outside the server use shared pointer, but not inside the server
+        brush->ref.ref();
 
         return brush;
     }

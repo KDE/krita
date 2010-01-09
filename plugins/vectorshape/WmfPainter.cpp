@@ -36,7 +36,7 @@ WmfPainter::WmfPainter()
 bool WmfPainter::begin()
 {
     bool ret = true;
-    if (mInternalPainter)
+    if (mIsInternalPainter)
         ret = mPainter->begin(mTarget);
 
     // NOTE: NO SETUP OF ANY MATRIX STUFF IN HERE.

@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgBracketing2HDR</class>
- <widget class="QWidget" name="WdgBracketing2HDR" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgBracketing2HDR">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,83 +10,74 @@
     <height>574</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Bracketing to HDR</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <widget class="QSplitter" name="splitter" >
-     <property name="orientation" >
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QWidget" name="" >
-      <layout class="QVBoxLayout" >
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout">
        <item>
-        <widget class="QLabel" name="label" >
-         <property name="text" >
+        <widget class="QLabel" name="label">
+         <property name="text">
           <string>Source files:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTableWidget" name="tableWidgetImages" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="MinimumExpanding" hsizetype="Minimum" >
+        <widget class="QTableWidget" name="tableWidgetImages">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="minimumSize" >
+         <property name="minimumSize">
           <size>
            <width>0</width>
            <height>0</height>
           </size>
          </property>
          <column>
-          <property name="text" >
+          <property name="text">
            <string>Filename</string>
           </property>
          </column>
          <column>
-          <property name="text" >
+          <property name="text">
            <string>Exposure time</string>
           </property>
          </column>
          <column>
-          <property name="text" >
+          <property name="text">
            <string>aperture</string>
           </property>
          </column>
          <column>
-          <property name="text" >
+          <property name="text">
            <string>Film sensitivity (iso)</string>
           </property>
          </column>
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
+        <layout class="QHBoxLayout">
+         <property name="spacing">
           <number>6</number>
          </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
+         <property name="margin">
           <number>0</number>
          </property>
          <item>
           <spacer>
-           <property name="orientation" >
+           <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0">
             <size>
              <width>40</width>
              <height>20</height>
@@ -94,8 +86,8 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButtonAddImages" >
-           <property name="text" >
+          <widget class="QPushButton" name="pushButtonAddImages">
+           <property name="text">
             <string>add image</string>
            </property>
           </widget>
@@ -104,19 +96,19 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="" >
-      <layout class="QVBoxLayout" >
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout">
        <item>
-        <widget class="QLabel" name="label_2" >
-         <property name="text" >
+        <widget class="QLabel" name="label_2">
+         <property name="text">
           <string>Camera response:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="KPlotWidget" name="plotWidget" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+        <widget class="KPlotWidget" name="plotWidget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -124,28 +116,19 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
+        <layout class="QHBoxLayout">
+         <property name="spacing">
           <number>6</number>
          </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
+         <property name="margin">
           <number>0</number>
          </property>
          <item>
           <spacer>
-           <property name="orientation" >
+           <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0">
             <size>
              <width>141</width>
              <height>20</height>
@@ -154,22 +137,28 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButtonCalculateCameraResponse" >
-           <property name="text" >
+          <widget class="QPushButton" name="pushButtonCalculateCameraResponse">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
             <string>Calculate camera response</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButtonCreateHDRLayer" >
-           <property name="text" >
+          <widget class="QPushButton" name="pushButtonCreateHDRLayer">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
             <string>Create HDR Layer</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButtonCancel" >
-           <property name="text" >
+          <widget class="QPushButton" name="pushButtonCancel">
+           <property name="text">
             <string>Cancel</string>
            </property>
           </widget>

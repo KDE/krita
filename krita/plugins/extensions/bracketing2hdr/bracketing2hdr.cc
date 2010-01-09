@@ -132,6 +132,9 @@ void Bracketing2HDRPlugin::addImage(const QString& filename)
     m_wdgBracketing2HDR->tableWidgetImages->setItem(index, 1, new QTableWidgetItem(QString::number(exposure)));
     m_wdgBracketing2HDR->tableWidgetImages->setItem(index, 2, new QTableWidgetItem(QString::number(aperture)));
     m_wdgBracketing2HDR->tableWidgetImages->setItem(index, 3, new QTableWidgetItem(QString::number(iso)));
+    
+   m_wdgBracketing2HDR->pushButtonCalculateCameraResponse->setEnabled(true);
+   m_wdgBracketing2HDR->pushButtonCreateHDRLayer->setEnabled(true);
 #endif
 }
 
@@ -348,6 +351,7 @@ void Bracketing2HDRPlugin::computeCameraResponse()
 }
 void Bracketing2HDRPlugin::computeCameraResponse(QList<BracketingFrame> frames)
 {
+    Q_ASSERT(frames.size() > 0);
 //     return;
     // Normalize the intensity responses
     normalize(m_intensityR);

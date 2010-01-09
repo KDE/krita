@@ -20,17 +20,9 @@
 #define KIS_CURVE_PAINTOP_SETTINGS_H_
 
 #include <kis_paintop_settings.h>
-#include <kis_types.h>
 
-#include "kis_curve_paintop_settings_widget.h"
-
-class QWidget;
-class QDomElement;
-class QDomDocument;
-
-class KisCurvePaintOpSettings : public QObject, public KisPaintOpSettings
+class KisCurvePaintOpSettings : public KisPaintOpSettings
 {
-    Q_OBJECT
 
 public:
     KisCurvePaintOpSettings();
@@ -47,8 +39,5 @@ public:
         return "stylus";
     }
 #endif
-
-private:
-    KisCurvePaintOpSettingsWidget* m_options;
 };
 #endif

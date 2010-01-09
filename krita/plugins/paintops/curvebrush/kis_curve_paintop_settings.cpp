@@ -16,10 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <kis_curve_paintop_settings.h>
-#include <kis_curve_paintop_settings_widget.h>
 
 KisCurvePaintOpSettings::KisCurvePaintOpSettings()
-        : m_options(0)
 {
 }
 
@@ -30,17 +28,16 @@ bool KisCurvePaintOpSettings::paintIncremental()
 
 int KisCurvePaintOpSettings::minimalDistance() const
 {
-    return m_options->minimalDistance();
+    return getInt("min_distance");
 }
-
 
 int KisCurvePaintOpSettings::curveAction() const
 {
-    return m_options->curveAction();
+    return getInt("curve_action");
 }
 
 int KisCurvePaintOpSettings::interval() const
 {
-    return m_options->interval();
+    return getInt("interval");
 }
 

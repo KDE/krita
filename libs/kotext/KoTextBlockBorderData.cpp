@@ -198,7 +198,7 @@ void KoTextBlockBorderData::setEdge(Side side, const QTextBlockFormat &bf,
 
 bool KoTextBlockBorderData::ref()
 {
-    d->refCount.ref();
+    return d->refCount.ref();
 }
 
 bool KoTextBlockBorderData::deref()

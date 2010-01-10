@@ -36,7 +36,7 @@ class KoChangeTracker;
 /**
  * KoTextWriter saves the text ODF of a shape
  */
-class KoTextWriter
+class KOTEXT_EXPORT KoTextWriter
 {
 public:
     /**

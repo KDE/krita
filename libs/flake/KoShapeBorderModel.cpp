@@ -36,13 +36,6 @@ KoShapeBorderModel::~KoShapeBorderModel()
     delete d;
 }
 
-KoInsets KoShapeBorderModel::borderInsets(const KoShape *shape)
-{
-    KoInsets insets;
-    borderInsets(shape, insets);
-    return insets;
-}
-
 bool KoShapeBorderModel::ref()
 {
     return d->refCount.ref();

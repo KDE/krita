@@ -51,11 +51,6 @@ public:
      */
     virtual bool stop() = 0;
 
-    /**
-     * Needed for KoGenericRegistry::listKeys() on windows
-     */
-    QString name() const;
-
 private:
     class Private;
     Private * const d;

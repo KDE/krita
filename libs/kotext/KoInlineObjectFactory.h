@@ -77,7 +77,7 @@ public:
      * return the id for the variable this factory creates.
      * @return the id for the variable this factory creates.
      */
-    const QString &id() const;
+    QString id() const;
 
     /**
      * Returns the type of object this factory creates.

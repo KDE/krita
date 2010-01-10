@@ -85,7 +85,7 @@ public:
 
     /// Update the stored QTextList pointer for the given block
     void updateStoredList(const QTextBlock &block);
-    
+
 private:
     KoListPrivate *d;
 

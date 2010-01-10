@@ -52,12 +52,12 @@ KoVariableFactory::~KoVariableFactory()
     delete d;
 }
 
-const QString & KoVariableFactory::id() const
+QString KoVariableFactory::id() const
 {
     return d->id;
 }
 
-const QList<KoVariableTemplate> KoVariableFactory::templates() const
+QList<KoVariableTemplate> KoVariableFactory::templates() const
 {
     return d->templates;
 }
@@ -72,7 +72,7 @@ QStringList KoVariableFactory::odfElementNames() const
     return d->odfElementNames;
 }
 
-const QString & KoVariableFactory::odfNameSpace() const
+QString KoVariableFactory::odfNameSpace() const
 {
     return d->odfNameSpace;
 }

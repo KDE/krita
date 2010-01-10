@@ -64,28 +64,28 @@ public:
     /**
      * Create a new instance of an inline object.
      */
-    virtual KoVariable * createVariable(const KoProperties *properties) const = 0;
+    virtual KoVariable *createVariable(const KoProperties *properties) const = 0;
 
     /**
      * Create an empty variable that can be loaded.
      */
-    virtual KoVariable * createVariable() const = 0;
+    virtual KoVariable *createVariable() const = 0;
 
     /**
      * return the id for the variable this factory creates.
      * @return the id for the variable this factory creates.
      */
-    const QString & id() const;
+    QString id() const;
 
     /**
      * Return all the templates this factory knows about.
      * Each template shows a different way to create an object this factory is specialized in.
      */
-    const QList<KoVariableTemplate> templates() const;
+    QList<KoVariableTemplate> templates() const;
 
     QStringList odfElementNames() const;
 
-    const QString & odfNameSpace() const;
+    QString odfNameSpace() const;
 
 protected:
     /**
@@ -95,7 +95,7 @@ protected:
      */
     void addTemplate(const KoVariableTemplate &params);
 
-    void setOdfElementNames(const QString & nameSpace, const QStringList & names);
+    void setOdfElementNames(const QString & nameSpace, const QStringList &names);
 
 private:
     class Private;

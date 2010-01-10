@@ -136,7 +136,7 @@ void KoVariable::variableMoved(const KoShape *shape, const QTextDocument *docume
     Q_UNUSED(posInDocument);
 }
 
-const QString &KoVariable::value() const
+QString KoVariable::value() const
 {
     Q_D(const KoVariable);
     return d->value;

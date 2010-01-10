@@ -109,7 +109,7 @@ KOTEXT_EXPORT QString formatString(Format format);
  * Convert a format string (internal name) to a page format value.
  * Use for loading.
  */
-KOTEXT_EXPORT Format formatFromString(const QString & string);
+KOTEXT_EXPORT Format formatFromString(const QString &string);
 
 /**
  * Returns the default format (based on the KControl settings)

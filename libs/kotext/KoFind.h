@@ -59,7 +59,7 @@ signals:
      *
      * @param document The currently document where find was used.
      */
-    void findDocumentSetNext(QTextDocument * document);
+    void findDocumentSetNext(QTextDocument *document);
 
     /**
      * @brief This signal is send when the current document has reached its beginning
@@ -70,7 +70,7 @@ signals:
      *
      * @param document The currently document where find was used.
      */
-    void findDocumentSetPrevious(QTextDocument * document);
+    void findDocumentSetPrevious(QTextDocument *document);
 
 private:
     KoFindPrivate * const d;

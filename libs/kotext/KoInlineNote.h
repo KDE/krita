@@ -83,9 +83,9 @@ public:
     /// return the type of note.
     Type type() const;
 
-    bool loadOdf(const KoXmlElement & element);
+    bool loadOdf(const KoXmlElement &element);
     ///reimplemented
-    void saveOdf(KoShapeSavingContext & context);
+    void saveOdf(KoShapeSavingContext &context);
 
 protected:
     /// reimplemented

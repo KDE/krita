@@ -46,7 +46,7 @@ public:
      * Return an instance of the KoInlineObjectRegistry
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
-    static KoInlineObjectRegistry * instance();
+    static KoInlineObjectRegistry *instance();
 
     /**
      * Create a list of actions that can be used to plug into a menu, for example.

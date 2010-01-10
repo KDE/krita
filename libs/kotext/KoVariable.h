@@ -62,7 +62,7 @@ public:
     void setValue(const QString &value);
 
     /// @return the current value of this variable.
-    const QString &value() const;
+    QString value() const;
 
     /**
      * Shortly after instantiating this variable the factory should set the

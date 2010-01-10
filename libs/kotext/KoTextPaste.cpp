@@ -28,7 +28,8 @@
 #include "KoTextShapeData.h"
 #include "opendocument/KoTextLoader.h"
 
-struct KoTextPaste::Private {
+class KoTextPaste::Private {
+public:
     Private(KoTextShapeData * shapeData, QTextCursor & cursor, KoCanvasBase * canvas)
             : shapeData(shapeData)
             , cursor(cursor)

@@ -132,9 +132,9 @@ public:
     void setOffset(const QPointF &offset);
 
     /// Load the additional attributes.
-    bool loadOdfFromShape(const KoXmlElement& element);
+    bool loadOdfFromShape(const KoXmlElement &element);
     /// Save the additional attributes.
-    void saveOdf(KoShapeSavingContext & context);
+    void saveOdf(KoShapeSavingContext &context);
 
 private:
     Q_DECLARE_PRIVATE(KoTextAnchor)

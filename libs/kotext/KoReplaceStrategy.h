@@ -31,11 +31,11 @@ class KReplaceDialog;
 class KoReplaceStrategy : public KoFindStrategyBase
 {
 public:
-    KoReplaceStrategy(QWidget * parent);
+    KoReplaceStrategy(QWidget *parent);
     virtual ~KoReplaceStrategy();
 
     /// reimplmented
-    KFindDialog * dialog();
+    KFindDialog *dialog();
 
     /// reimplmented
     virtual void reset();
@@ -44,10 +44,10 @@ public:
     virtual void displayFinalDialog();
 
     /// reimplmented
-    virtual bool foundMatch(QTextCursor & cursor, FindDirection * findDirection);
+    virtual bool foundMatch(QTextCursor &cursor, FindDirection *findDirection);
 
 private:
-    KReplaceDialog * m_dialog;
+    KReplaceDialog *m_dialog;
     int m_replaced;
 };
 

@@ -114,7 +114,8 @@ void KoTextWriter::Private::saveChange(QTextCharFormat format)
             }
         }
     }
-    if (KoDeleteChangeMarker *changeMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(format))) {
+    KoDeleteChangeMarker *changeMarker;
+    if (layout && (changeMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(format)))) {
         if (!savedDeleteChanges.contains(changeMarker->changeId())) {
             changeMarker->saveOdf(context);
             savedDeleteChanges.append(changeMarker->changeId());
@@ -306,7 +307,7 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
                 && d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::deleteChange)
                 continue;
 
-            KoInlineObject *inlineObject = d->layout->inlineTextObjectManager()->inlineTextObject(charFormat);
+            KoInlineObject *inlineObject = d->layout ? d->layout->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
                 if (!dynamic_cast<KoDeleteChangeMarker*>(inlineObject))
@@ -527,8 +528,7 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
 
     d->changeTracker = KoTextDocument(document).changeTracker();
 
-    Q_ASSERT(d->layout);
-    Q_ASSERT(d->layout->inlineTextObjectManager());
+    if (d->layout) Q_ASSERT(d->layout->inlineTextObjectManager());
 
     QTextBlock block = document->findBlock(from);
 

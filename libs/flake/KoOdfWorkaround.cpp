@@ -147,6 +147,7 @@ QColor KoOdfWorkaround::fixMissingStrokeColor(const KoXmlElement &element, KoSha
 
 bool KoOdfWorkaround::fixMissingStyle_DisplayLabel(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_UNUSED(element);
     // If no axis style is specified, OpenOffice.org hides the axis' data labels
     if (context.odfLoadingContext().generator().startsWith("OpenOffice.org"))
         return false;

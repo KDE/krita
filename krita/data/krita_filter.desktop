@@ -4,6 +4,7 @@ X-KDE-ServiceType=Krita/Filter
 Comment=Filter plugin for Krita
 Comment[bg]=Приставка за филтриране за Krita
 Comment[ca]=Connector de filtre per al Krita
+Comment[ca@valencia]=Connector de filtre per al Krita
 Comment[da]=Plugin med filter for Krita
 Comment[de]=Filtermodul für Krita
 Comment[el]=Πρόσθετο φίλτρου για το Krita

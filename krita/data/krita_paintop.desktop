@@ -4,6 +4,7 @@ X-KDE-ServiceType=Krita/Paintop
 Comment=Paint operation plugin for Krita
 Comment[bg]=Приставка за рисуване за Krita
 Comment[ca]=Connector d'operació de pintura per al Krita
+Comment[ca@valencia]=Connector d'operació de pintura per al Krita
 Comment[da]=Plugin med malehandlinger for Krita
 Comment[de]=Maloperationsmodul für Krita
 Comment[el]=Πρόσθετο λειτουργίας ζωγραφικής για το Krita

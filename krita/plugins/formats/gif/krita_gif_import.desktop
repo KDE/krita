@@ -2,6 +2,7 @@
 Type=Service
 Name=Krita Gif Import Filter
 Name[ca]=Filtre d'importació GIF per al Krita
+Name[ca@valencia]=Filtre d'importació GIF per al Krita
 Name[de]=Krita Gif-Importfilter
 Name[en_GB]=Krita Gif Import Filter
 Name[es]=Filtro de Krita de importación de GIF

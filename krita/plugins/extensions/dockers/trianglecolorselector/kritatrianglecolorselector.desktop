@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=TriangleColorSelector
 Name[ca]=SelectorTriangularDeColor
+Name[ca@valencia]=SelectorTriangularDeColor
 Name[da]=TrekantbaseretFarveVælger
 Name[de]=Dreieckiger Farbwähler
 Name[el]=TriangleColorSelector
@@ -26,6 +27,7 @@ Name[x-test]=xxTriangleColorSelectorxx
 Name[zh_TW]=三角型顏色選擇器
 Comment=TriangleColorSelector
 Comment[ca]=SelectorTriangularDeColor
+Comment[ca@valencia]=SelectorTriangularDeColor
 Comment[da]=TrekantbaseretFarveVælger
 Comment[de]=Dreieckiger Farbwähler
 Comment[el]=TriangleColorSelector

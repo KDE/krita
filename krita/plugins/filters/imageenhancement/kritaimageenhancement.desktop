@@ -2,6 +2,7 @@
 Name=Enhancement Filters
 Name[bg]=Филтри за подобрения
 Name[ca]=Filtres de millora
+Name[ca@valencia]=Filtres de millora
 Name[cy]=Hidlau Tecáu
 Name[da]=Forbedringsfilter
 Name[de]=Verbesserungsfilter
@@ -46,6 +47,7 @@ Name[zh_TW]=增強過濾器
 Comment=Enhance the quality of an image
 Comment[bg]=Подобряване на качеството на изображения
 Comment[ca]=Millora la qualitat de la imatge
+Comment[ca@valencia]=Millora la qualitat de la imatge
 Comment[cy]=Tecâu ansawdd delwedd
 Comment[da]=Forbedr kvaliteten af et billede
 Comment[de]=Die Qualität eines Bildes verbessern

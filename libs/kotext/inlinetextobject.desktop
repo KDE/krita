@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Inline Text Object Plugin
 Name[ca]=Connector d'objecte de text a la línia
+Name[ca@valencia]=Connector d'objecte de text a la línia
 Name[da]=Plugin til indlejret tekstobjekt
 Name[de]=Mitfließendes-Textobjekt-Modul
 Name[el]=Πρόσθετο ενσωμάτωσης αντικειμένου κειμένου
@@ -31,6 +32,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-InlineObject
 Comment=Definition of a text object
 Comment[ca]=Definició d'objecte de text
+Comment[ca@valencia]=Definició d'objecte de text
 Comment[da]=Definition af et tekstobjekt
 Comment[de]=Definition eines Textobjektes
 Comment[el]=Ορισμός ενός αντικειμένου κειμένου

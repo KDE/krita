@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Shape border definition
 Name[ca]=Definició de forma de la vora
+Name[ca@valencia]=Definició de forma de la vora
 Name[da]=Definition af form-kant
 Name[de]=Objektumrandungsdefinition
 Name[el]=Ορισμός περιγράμματος σχήματος
@@ -32,6 +33,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/Border
 Comment=Definition of a flake shape border
 Comment[ca]=Definició d'una vora en forma de floc
+Comment[ca@valencia]=Definició d'una vora en forma de floc
 Comment[da]=Definition af en flake-forms kant
 Comment[de]=Definition einer Flake-Objektumrandung
 Comment[el]=Ορισμός ενός περιγράμματος σχήματος flake

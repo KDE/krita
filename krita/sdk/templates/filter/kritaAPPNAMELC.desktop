@@ -2,6 +2,7 @@
 Name=%{APPNAME}
 Name[be]=%{APPNAME}
 Name[ca]=%{APPNAME}
+Name[ca@valencia]=%{APPNAME}
 Name[cs]=%{APPNAME}
 Name[da]=%{APPNAME}
 Name[de]=%{APPNAME}
@@ -37,6 +38,7 @@ Name[zh_TW]=%{APPNAME}
 Comment=%{APPNAME}
 Comment[be]=%{APPNAME}
 Comment[ca]=%{APPNAME}
+Comment[ca@valencia]=%{APPNAME}
 Comment[cs]=%{APPNAME}
 Comment[da]=%{APPNAME}
 Comment[de]=%{APPNAME}

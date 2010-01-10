@@ -2,6 +2,7 @@
 Comment=Transform an image in a wave
 Comment[bg]=Превръщане на изображение във вълна
 Comment[ca]=Transforma una imatge en una ona
+Comment[ca@valencia]=Transforma una imatge en una ona
 Comment[da]=Tranbsformér et billede med en bølge
 Comment[de]=Ein Bild in eine Welle transformieren
 Comment[el]=Μετασχηματισμός μιας εικόνας με κυματομορφή
@@ -40,6 +41,7 @@ Icon=
 Name=Wave Filter
 Name[bg]=Филтър за вълна
 Name[ca]=Filtre d'ona
+Name[ca@valencia]=Filtre d'ona
 Name[da]=Bølgefilter
 Name[de]=Wellenfilter
 Name[el]=Φίλτρο κυμματομορφής

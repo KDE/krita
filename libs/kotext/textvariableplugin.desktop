@@ -2,6 +2,7 @@
 Name=Text Variable Plugin
 Name[bg]=Приставка за текстови променливи
 Name[ca]=Connector de variables de text
+Name[ca@valencia]=Connector de variables de text
 Name[da]=Plugin til tekstvariable
 Name[de]=Textvariablen-Modul
 Name[el]=Πρόσθετο μεταβλητής κειμένου
@@ -34,6 +35,7 @@ X-KDE-ServiceType=KOffice/Text-Variable
 Comment=A plugin that contains text variables
 Comment[bg]=Приставка, която съдържа текстови променливи
 Comment[ca]=Un connector que conté variables de text
+Comment[ca@valencia]=Un connector que conté variables de text
 Comment[da]=Et plugin som indeholder tekstvariable
 Comment[de]=Ein Modul, das Textvariablen enthält
 Comment[el]=Ένα πρόσθετο που περιέχει μεταβλητές κειμένου

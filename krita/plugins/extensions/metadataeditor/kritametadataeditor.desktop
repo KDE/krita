@@ -2,6 +2,7 @@
 Name=metadataeditor
 Name[bg]=редактор на метаданни
 Name[ca]=metadataeditor
+Name[ca@valencia]=metadataeditor
 Name[da]=metadataredigering
 Name[de]=Metadateneditor
 Name[el]=επεξεργαστής μεταδεδομένων
@@ -33,6 +34,7 @@ Name[zh_TW]=中繼資料編輯器
 Comment=metadataeditor
 Comment[bg]=редактор на метаданни
 Comment[ca]=metadataeditor
+Comment[ca@valencia]=metadataeditor
 Comment[da]=metadataredigering
 Comment[de]=Metadateneditor
 Comment[el]=επεξεργαστής μεταδεδομένων

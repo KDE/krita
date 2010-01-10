@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Some extensions to color spaces
 Name[ca]=Algunes extensions per a espais de color
+Name[ca@valencia]=Algunes extensions per a espais de color
 Name[da]=Nogle udvidelser til farverum
 Name[de]=Einige Erweiterungen zu den Farbräumen
 Name[el]=Μερικές επεκτάσεις για τους χώρους χρωμάτων
@@ -29,6 +30,7 @@ Name[zh_CN]=色彩空间的一些扩展
 Name[zh_TW]=顏色空間的一些延伸
 Comment=Some extensions to color spaces
 Comment[ca]=Algunes extensions per a espais de color
+Comment[ca@valencia]=Algunes extensions per a espais de color
 Comment[da]=Nogle udvidelser til farverum
 Comment[de]=Einige Erweiterungen zu den Farbräumen
 Comment[el]=Μερικές επεκτάσεις για τους χώρους χρωμάτων

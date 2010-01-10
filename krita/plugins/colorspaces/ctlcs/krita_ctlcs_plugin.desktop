@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=CTL Color Spaces
 Name[ca]=Espais de color CTL
+Name[ca@valencia]=Espais de color CTL
 Name[da]=CTL-farverum
 Name[de]=CTL-Farbraum
 Name[en_GB]=CTL Colour Spaces
@@ -20,6 +21,7 @@ Name[x-test]=xxCTL Color Spacesxx
 Name[zh_TW]=CTL 色彩空間
 Comment=Color model written using the Color Transformation Language.
 Comment[ca]=Model de color escrit usant el Color Transformation Language.
+Comment[ca@valencia]=Model de color escrit usant el Color Transformation Language.
 Comment[da]=Farvemodel skrevet med brug af farvetransformeringssproget (CTL).
 Comment[de]=Unter Verwendung der „Color Transformation Language“ geschriebenes Farbmodell.
 Comment[en_GB]=Colour model written using the Colour Transformation Language.

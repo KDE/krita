@@ -2,6 +2,7 @@
 Name=Emboss Filter
 Name[bg]=Релефен филтър
 Name[ca]=Filtre de relleu
+Name[ca@valencia]=Filtre de relleu
 Name[cy]=Hidlen Foglynnu
 Name[da]=Relieffilter
 Name[de]=Relief-Filter
@@ -41,6 +42,7 @@ Name[zh_TW]=浮雕過濾器
 Comment=Emboss filter
 Comment[bg]=Релефен филтър
 Comment[ca]=Filtre de relleu
+Comment[ca@valencia]=Filtre de relleu
 Comment[cy]=Hidlen foglynnu
 Comment[da]=Relieffilter
 Comment[de]=Relief-Filter

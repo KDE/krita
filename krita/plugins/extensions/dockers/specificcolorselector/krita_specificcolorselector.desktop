@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=SpecificColorSelector
 Name[ca]=SelectorDeColorEspecific
+Name[ca@valencia]=SelectorDeColorEspecific
 Name[da]=SpecifikFarveVælger
 Name[de]=Spezifischer Farbwähler
 Name[el]=SpecificColorSelector
@@ -26,6 +27,7 @@ Name[x-test]=xxSpecificColorSelectorxx
 Name[zh_TW]=指定顏色選擇器
 Comment=SpecificColorSelector
 Comment[ca]=SelectorDeColorEspecific
+Comment[ca@valencia]=SelectorDeColorEspecific
 Comment[da]=SpecifikFarveVælger
 Comment[de]=Spezifischer Farbwähler
 Comment[el]=SpecificColorSelector

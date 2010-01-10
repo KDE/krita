@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Flake tool definition
 Name[ca]=Definició d'eina de floc
+Name[ca@valencia]=Definició d'eina de floc
 Name[da]=Definition af flake-værktøj
 Name[de]=Flake-Werkzeugdefinition
 Name[el]=Ορισμός εργαλείου flake
@@ -33,6 +34,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/Tool
 Comment=Definition of flake tools
 Comment[ca]=Definició d'eines de floc
+Comment[ca@valencia]=Definició d'eines de floc
 Comment[da]=Definition af flake-værktøjer
 Comment[de]=Definition von Flake-Werkzeugen
 Comment[el]=Ορισμός των εργαλείων flake

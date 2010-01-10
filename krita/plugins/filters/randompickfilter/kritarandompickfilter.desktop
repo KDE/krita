@@ -2,6 +2,7 @@
 Comment=Random pick to an image
 Comment[bg]=Случайно избиране на изображение
 Comment[ca]=Agafa aleatòriament una imatge
+Comment[ca@valencia]=Agafa aleatòriament una imatge
 Comment[da]=Udfør tilfældigt valg i et billede
 Comment[de]=Zufallsauswahl zu einem Bild
 Comment[el]=Τυχαία ανύψωση σε μια εικόνα
@@ -37,6 +38,7 @@ Icon=
 Name=Random pick Filter
 Name[bg]=Филтър за случайно избиране
 Name[ca]=Aplica un filtre aleatòriament
+Name[ca@valencia]=Aplica un filtre aleatòriament
 Name[da]=Tilfældigt udvalgsfilter
 Name[de]=Zufallsauswahlfilter
 Name[el]=Φίλτρο τυχαίας ανύψωσης

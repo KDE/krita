@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Krita/Dock
 Comment=Docker for Krita
 Comment[ca]=Amarrador per al Krita
+Comment[ca@valencia]=Amarrador per al Krita
 Comment[da]=Docker til Krita
 Comment[de]=Docker für Krita
 Comment[el]=Προσάρτηση για το Krita

@@ -2,6 +2,7 @@
 Name=Default Paint Operations
 Name[bg]=Дайствия за рисуване по подразбиране
 Name[ca]=Operacions de pintura per defecte
+Name[ca@valencia]=Operacions de pintura per defecte
 Name[cy]=Gweithrediadau Paent Rhagosodol
 Name[da]=Standard maleoperationer
 Name[de]=Standard Maloperation
@@ -50,6 +51,7 @@ Name[zh_TW]=預設繪圖操作
 Comment=Default paint operations
 Comment[bg]=Действия за рисуване по подразбиране
 Comment[ca]=Operacions de pintura per defecte
+Comment[ca@valencia]=Operacions de pintura per defecte
 Comment[cy]=Gweithrediadau paent rhagosodol
 Comment[da]=Standard maleoperationer
 Comment[de]=Standard Maloperation

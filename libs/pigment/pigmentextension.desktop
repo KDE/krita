@@ -4,6 +4,7 @@ X-KDE-ServiceType=KOffice/ColorSpaceExtension
 Comment=A module implementing an extension to a colorspace of the Pigment Color Manipulation System
 Comment[bg]=Модул, реализиращ пълна цветова гама за употреба с Pigment Color Manipulation System
 Comment[ca]=Un mòdul que implementa una extensió a un espai de colors del Sistema de Manipulació Pigment Color
+Comment[ca@valencia]=Un mòdul que implementa una extensió a un espai de colors del Sistema de Manipulació Pigment Color
 Comment[da]=Et modul som implementerer et udvidelse til et farveområde til Pigment Color Manipulation System
 Comment[de]=Ein Modul, das eine Erweiterung eines Farbraums zur Benutzung mit dem „Pigment Color Manipulation System“ implementiert
 Comment[el]=Ένα άρθρωμα που υλοποιεί μια επέκταση σε έναν χρωματικό χώρο με χρήση του συστήματος χειρισμού χρωμάτων βαφής

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KOffice Docker Plugin
 Name[ca]=Connector KOffice Docker
+Name[ca@valencia]=Connector KOffice Docker
 Name[da]=Docker-plugin til KOffice
 Name[de]=KOffice Docker-Modul
 Name[el]=Πρόσθετο προσάρτησης του KOffice
@@ -35,6 +36,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/Dock
 Comment=A plugin that contains a so called 'dockwidget'
 Comment[ca]=Un connector que conté un anomenat 'dockwidget'
+Comment[ca@valencia]=Un connector que conté un anomenat 'dockwidget'
 Comment[da]=Et plugin som indeholder en såkaldt 'dock-kontrol'
 Comment[de]=Ein Modul, das ein sogenanntes ‚dockwidget‘ enthält
 Comment[el]=Ένα πρόσθετο που περιέχει ένα γραφικό συστατικό προσάρτησης

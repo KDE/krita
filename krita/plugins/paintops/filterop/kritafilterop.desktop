@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Filter Op
 Name[ca]=Operador de filtre
+Name[ca@valencia]=Operador de filtre
 Name[da]=Filterop.
 Name[de]=Filteroperation
 Name[el]=Ενέργεια φίλτρου
@@ -28,6 +29,7 @@ Name[x-test]=xxFilter Opxx
 Name[zh_TW]=濾鏡工具
 Comment=Filter Op
 Comment[ca]=Operador de filtre
+Comment[ca@valencia]=Operador de filtre
 Comment[da]=Filterop.
 Comment[de]=Filteroperation
 Comment[el]=Ενέργεια φίλτρου

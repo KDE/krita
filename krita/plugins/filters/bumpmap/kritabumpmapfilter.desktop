@@ -2,6 +2,7 @@
 Name=Bumpmap Filter
 Name[bg]=Филтър Bumpmap
 Name[ca]=Filtre Bumpmap
+Name[ca@valencia]=Filtre Bumpmap
 Name[cs]=Bumpmap filtr
 Name[cy]=Hidlen chwyddfap
 Name[da]=Bumpkortfilter
@@ -42,6 +43,7 @@ Name[zh_TW]=Bumpmap 過濾器
 Comment=Bumpmap filter
 Comment[bg]=Филтър Bumpmap
 Comment[ca]=Filtre de Bumpmap
+Comment[ca@valencia]=Filtre de Bumpmap
 Comment[cs]=Bumpmap filtr
 Comment[cy]=Hidlen chwyddfap
 Comment[da]=Bumpkortfilter

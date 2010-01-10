@@ -2,6 +2,7 @@
 Name=Convolution Filters
 Name[bg]=Изкривяващи филтри
 Name[ca]=Filtres de convolució
+Name[ca@valencia]=Filtres de convolució
 Name[cy]=Hidlau cordeddiadau
 Name[da]=Foldningsfilter
 Name[de]=Faltungsfilter
@@ -43,6 +44,7 @@ Name[zh_TW]=皺褶過濾器
 Comment=Convolution filters
 Comment[bg]=Изкривяващи филтри
 Comment[ca]=Filtres de Convolution
+Comment[ca@valencia]=Filtres de Convolution
 Comment[cy]=Hidlau cordeddiadau
 Comment[da]=Foldningsfilter
 Comment[de]=Faltungsfilter

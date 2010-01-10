@@ -2,6 +2,7 @@
 Name=Oilpaint Filter
 Name[bg]=Филтър маслена боя
 Name[ca]=Filtre de pintura a l'oli
+Name[ca@valencia]=Filtre de pintura a l'oli
 Name[cs]=Filtr olejomalby
 Name[cy]=Hidlen Baent Olew
 Name[da]=Oliemalerifilter
@@ -45,6 +46,7 @@ Name[zh_TW]=油畫過濾器
 Comment=Oilpaint filter
 Comment[bg]=Филтър маслена боя
 Comment[ca]=Filtre de pintura a l'oli
+Comment[ca@valencia]=Filtre de pintura a l'oli
 Comment[cs]=Filtr olejomalby
 Comment[cy]=Hidlen baent olew
 Comment[da]=Oliemalerifilter

@@ -2,6 +2,7 @@
 Name=Raindrops Filter
 Name[bg]=Филтър за дъждовни капки
 Name[ca]=Filtre de gotes de pluja
+Name[ca@valencia]=Filtre de gotes de pluja
 Name[cs]=Filtr dešťových kapek
 Name[cy]=Hidlen Ddiferion Glaw
 Name[da]=Regndråbefilter
@@ -46,6 +47,7 @@ Name[zh_TW]=雨滴過濾器
 Comment=Raindrops filter
 Comment[bg]=Филтър за дъждовни капки
 Comment[ca]=Filtre de gotes de pluja
+Comment[ca@valencia]=Filtre de gotes de pluja
 Comment[cs]=Filtr dešťových kapek
 Comment[cy]=Hidlen ddiferion glaw
 Comment[da]=Regndråbefilter

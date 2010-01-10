@@ -2,6 +2,7 @@
 Name=Grayscale Color Model with Alpha
 Name[bg]=Цветови модел със степени на сивото и алфа-канал
 Name[ca]=Model de color d'escala de grisos amb alfa
+Name[ca@valencia]=Model de color d'escala de grisos amb alfa
 Name[da]=Gråskala-farvemodel med alfa
 Name[de]=Graustufen-Farbmodell mit Alphakanal
 Name[el]=Χρωματικό μοντέλο διαβαθμίσεων του γκρι με άλφα
@@ -35,6 +36,7 @@ Name[zh_TW]=有 Alpha 的灰階色彩模型
 Comment=Color model for 8-bit grayscale images
 Comment[bg]=Цветови модел за 8 битови сиви изображения
 Comment[ca]=Model de color d'escala de grisos de 8 bits
+Comment[ca@valencia]=Model de color d'escala de grisos de 8 bits
 Comment[cy]=Model lliw ar gyfer delweddau graddlwyd 8-did
 Comment[da]=Farvemodel for 8-bit gråskala-billeder
 Comment[de]=Farbmodell für 8-bit Graustufenbilder

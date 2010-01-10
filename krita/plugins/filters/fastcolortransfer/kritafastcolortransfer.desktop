@@ -2,6 +2,7 @@
 Comment=This plugins allow to transfer color from an image to an other image
 Comment[bg]=Тази приставка позволява прехвърлянето на цвят от едно в друго изображение
 Comment[ca]=Aquest endollats permeten de transferir el color d'una imatge a una altra
+Comment[ca@valencia]=Este endollats permeten de transferir el color d'una imatge a una altra
 Comment[da]=Dette plugin gør det muligt at overføre en farve fra et billede til et andet billede
 Comment[de]=Diese Module ermöglichen die Farbübertragung von einem Bild zu einem anderen
 Comment[el]=Αυτό το πρόσθετο επιτρέπει τη μεταφορά χρώματος από μια εικόνα σε κάποια άλλη
@@ -41,6 +42,7 @@ Icon=
 Name=Color Transfer Filter
 Name[bg]=Филтър за прехвърляне на цвят
 Name[ca]=Filtre de transferència de color
+Name[ca@valencia]=Filtre de transferència de color
 Name[da]=Farveoverførselsfilter
 Name[de]=Farbübertragungsfilter
 Name[el]=Φίλτρο μεταφοράς χρώματος

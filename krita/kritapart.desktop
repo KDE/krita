@@ -2,6 +2,7 @@
 Name=KOffice Painting and Image Editor Component
 Name[bg]=Компонент за рисуване и редактиране на изображения в KOffice
 Name[ca]=Component de manipulació d'imatges del KOffice
+Name[ca@valencia]=Component de manipulació d'imatges del KOffice
 Name[cy]=Cydran Peintio a Golygu Delweddau KOffice
 Name[da]=Koffice male- og billedredigeringskomponent
 Name[de]=KOffice-Komponente für Malen und Bildbearbeitung
@@ -52,6 +53,7 @@ GenericName=Image Object
 GenericName[bg]=Графично изображение
 GenericName[br]=Tra skeudenn
 GenericName[ca]=Objecte d'imatge
+GenericName[ca@valencia]=Objecte d'imatge
 GenericName[cy]=Gwrthrych Delwedd
 GenericName[da]=Billedobjekt
 GenericName[de]=Bildobjekt

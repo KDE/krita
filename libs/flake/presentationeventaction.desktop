@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Presentation Event Action Plugin
 Name[ca]=Connector d'acció de presentació d'esdeveniments
+Name[ca@valencia]=Connector d'acció de presentació d'esdeveniments
 Name[da]=Plugin til begivenhedshandlinger til præsentationer
 Name[de]=Präsentationsaktionsereignis-Modul
 Name[el]=Πρόσθετο ενέργειας γεγονότος παρουσίασης
@@ -28,6 +29,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/PresentationEventAction
 Comment=A plugin that contains a presentation event action
 Comment[ca]=Un connector que conté una acció de presentació d'esdeveniment
+Comment[ca@valencia]=Un connector que conté una acció de presentació d'esdeveniment
 Comment[da]=Et plugin som indeholder en begivenhedshandling til præsentationer
 Comment[de]=Ein Modul, das ein Präsentationsaktionsereignis enthält
 Comment[el]=Ένα πρόσθετο που περιέχει μια ενέργεια γεγονότος παρουσίασης

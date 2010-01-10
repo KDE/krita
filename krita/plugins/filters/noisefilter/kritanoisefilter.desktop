@@ -2,6 +2,7 @@
 Name=Noise Filter
 Name[bg]=Филтър за шум
 Name[ca]=Filtre de soroll
+Name[ca@valencia]=Filtre de soroll
 Name[cs]=Šumový filtr
 Name[da]=Støjfilter
 Name[de]=Rauschfilter
@@ -46,6 +47,7 @@ Name[zh_TW]=雜訊過濾器
 Comment=Add noise to an image
 Comment[bg]=Добавяне на шум към изображение
 Comment[ca]=Afegeix soroll a una imatge
+Comment[ca@valencia]=Afig soroll a una imatge
 Comment[da]=Tilføj støj til et billede
 Comment[de]=Einem Bild Rauschen hinzufügen
 Comment[el]=Προσθήκη θορύβου σε μια εικόνα

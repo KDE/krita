@@ -2,6 +2,7 @@
 Name=panorama
 Name[bg]=панорама
 Name[ca]=panorama
+Name[ca@valencia]=panorama
 Name[cs]=panorama
 Name[da]=panorama
 Name[de]=Panorama
@@ -35,6 +36,7 @@ Name[zh_TW]=panorama
 Comment=panorama
 Comment[bg]=панорама
 Comment[ca]=panorama
+Comment[ca@valencia]=panorama
 Comment[cs]=panorama
 Comment[da]=panorama
 Comment[de]=Panorama

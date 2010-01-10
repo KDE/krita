@@ -2,6 +2,7 @@
 Name=SpellCheck plugin
 Name[bg]=Проверка на правописа
 Name[ca]=Connector d'ortografia
+Name[ca@valencia]=Connector d'ortografia
 Name[cs]=Modul pro kontrolu pravopisu
 Name[da]=Plugin til stavekontrol
 Name[de]=Rechtschreibprüfung-Modul

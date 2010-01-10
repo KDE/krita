@@ -4,6 +4,7 @@ X-KDE-ServiceType=Krita/Tool
 Comment=Tool plugin for Krita
 Comment[bg]=Приставка за инструменти за Krita
 Comment[ca]=Connector d'eines per al Krita
+Comment[ca@valencia]=Connector d'eines per al Krita
 Comment[da]=Værktøjsplugin for Krita
 Comment[de]=Werkzeugmodul für Krita
 Comment[el]=Πρόσθετο εργαλείων για το Krita

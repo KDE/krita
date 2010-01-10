@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Text Editing plugin for the KOffice text tool
 Name[ca]=Connector d'edició de text per a l'eina de text del KOffice
+Name[ca@valencia]=Connector d'edició de text per a l'eina de text del KOffice
 Name[da]=Plugin til tekstredigering til KOffices tekstværktøj
 Name[de]=Modul zur Textbearbeitung für das KOffice-Textwerkzeug
 Name[en_GB]=Text Editing plugin for the KOffice text tool
@@ -23,6 +24,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-EditingPlugin
 Comment=Definition of a text-editing plugin
 Comment[ca]=Definició d'un connector d'edició de text
+Comment[ca@valencia]=Definició d'un connector d'edició de text
 Comment[da]=Definition af et plugin til tekstredigering
 Comment[de]=Definition eines Moduls zur Textbearbeitung
 Comment[el]=Καθορισμός ενός πρόσθετου επεξεργασίας κειμένου

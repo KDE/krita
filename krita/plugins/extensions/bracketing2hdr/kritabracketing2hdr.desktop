@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Bracketing2HDR
 Name[ca]=Bracketing2HDR
+Name[ca@valencia]=Bracketing2HDR
 Name[da]=Bracketing-til-HDR
 Name[de]=BelichtungsreiheZuHDR
 Name[el]=Εγκυβωτισμός σε HDR
@@ -30,6 +31,7 @@ Name[x-test]=xxBracketing2HDRxx
 Name[zh_TW]=Bracketing2HDR
 Comment=Bracketing2HDR
 Comment[ca]=Bracketing2HDR
+Comment[ca@valencia]=Bracketing2HDR
 Comment[da]=Bracketing-til-HDR
 Comment[de]=BelichtungsreiheZuHDR
 Comment[el]=Εγκυβωτισμός σε HDR

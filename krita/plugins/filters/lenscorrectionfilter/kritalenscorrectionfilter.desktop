@@ -2,6 +2,7 @@
 Comment=Transform an image in a lenscorrection
 Comment[bg]=Преобразуване на изображение за коригиране на обективи
 Comment[ca]=Transforma una imatge en una lent correctora
+Comment[ca@valencia]=Transforma una imatge en una lent correctora
 Comment[da]=Transformér et billede med linsekorrektion
 Comment[de]=Ein Bild mit einer Linsenkorrektur transformieren
 Comment[el]=Μετασχηματισμός μιας εικόνας με διόρθωση οπτικών φακών
@@ -40,6 +41,7 @@ Icon=
 Name=LensCorrection Filter
 Name[bg]=Филтри за коригиране на обективи
 Name[ca]=Filtre de Lent correctora
+Name[ca@valencia]=Filtre de Lent correctora
 Name[da]=Linekorrektionsfilter
 Name[de]=Linsenkorrekturfilter
 Name[el]=Φίλτρο οπτικών φακών

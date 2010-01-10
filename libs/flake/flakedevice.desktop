@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Flake device definition
 Name[ca]=Definició d'aparell de floc
+Name[ca@valencia]=Definició d'aparell de floc
 Name[da]=Definition af flake-enhed
 Name[de]=Flake-Gerätedefinition
 Name[el]=Ορισμός συσκευής Flake
@@ -28,6 +29,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/Device
 Comment=Definition of flake devices
 Comment[ca]=Definició d'aparells de floc
+Comment[ca@valencia]=Definició d'aparells de floc
 Comment[da]=Definition af flake-enheder
 Comment[de]=Definition von Flake-Geräten
 Comment[el]=Ορισμός των συσκευών Flake

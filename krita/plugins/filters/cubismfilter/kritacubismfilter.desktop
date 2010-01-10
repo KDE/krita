@@ -2,6 +2,7 @@
 Name=Cubism Filter
 Name[bg]=Кубичен филтър
 Name[ca]=Filtre de Cubisme
+Name[ca@valencia]=Filtre de Cubisme
 Name[cy]=Hidlen Giwbiaeth
 Name[da]=Kubismefilter
 Name[de]=Kubismus-Filter
@@ -47,6 +48,7 @@ Name[zh_TW]=立體過濾器
 Comment=Cubism filter
 Comment[bg]=Кубичен филтър
 Comment[ca]=Filtre Cubisme
+Comment[ca@valencia]=Filtre Cubisme
 Comment[cy]=Hidlen Giwbiaeth
 Comment[da]=Kubismefilter
 Comment[de]=Kubismus-Filter

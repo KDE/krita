@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Shiva Kernel Language Support
 Name[ca]=Compatibilitat del llenguatge del nucli Shiva
+Name[ca@valencia]=Compatibilitat del llenguatge del nucli Shiva
 Name[da]=Sprogunderstøttelse til Shiva-kerne
 Name[de]=Shiva-Kernel-Sprachunterstützung
 Name[en_GB]=Shiva Kernel Language Support
@@ -21,6 +22,7 @@ Name[x-test]=xxShiva Kernel Language Supportxx
 Name[zh_TW]=Shiva 核心語言支援
 Comment=Shiva Kernel Language Support
 Comment[ca]=Compatibilitat del llenguatge del nucli Shiva
+Comment[ca@valencia]=Compatibilitat del llenguatge del nucli Shiva
 Comment[da]=Sprogunderstøttelse til Shiva-kerne
 Comment[de]=Shiva-Kernel-Sprachunterstützung
 Comment[en_GB]=Shiva Kernel Language Support

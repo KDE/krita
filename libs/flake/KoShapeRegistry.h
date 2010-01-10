@@ -74,10 +74,6 @@ private:
     KoShapeRegistry operator=(const KoShapeRegistry&);
     void init();
 
-    void insertFactory(KoShapeFactory *factory);
-
-    KoShape *createShapeInternal(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const;
-
     class Private;
     Private * const d;
 };

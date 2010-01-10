@@ -476,14 +476,14 @@ void DefaultTool::updateCursor()
         }
     }
     useCursor(cursor);
-    if (! m_currentStrategy)
+    if (currentStrategy() == 0)
         emit statusTextChanged(statusText);
 }
 
 void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     KoInteractionTool::paint(painter, converter);
-    if (m_currentStrategy  == 0 && koSelection()->count() > 0) {
+    if (currentStrategy() == 0 && koSelection()->count() > 0) {
         SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle,
                  true, true);
         decorator.setSelection(koSelection());
@@ -506,7 +506,7 @@ void DefaultTool::mousePressEvent(KoPointerEvent *event)
 void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseMoveEvent(event);
-    if (m_currentStrategy == 0 && koSelection()->count() > 0) {
+    if (currentStrategy() == 0 && koSelection()->count() > 0) {
         QRectF bound = handlesSize();
         if (bound.contains(event->point)) {
             bool inside;
@@ -685,7 +685,7 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
 void DefaultTool::keyPressEvent(QKeyEvent *event)
 {
     KoInteractionTool::keyPressEvent(event);
-    if (m_currentStrategy == 0) {
+    if (currentStrategy() == 0) {
         switch (event->key()) {
         case Qt::Key_Left:
         case Qt::Key_Right:

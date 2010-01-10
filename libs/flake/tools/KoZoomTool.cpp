@@ -58,8 +58,8 @@ void KoZoomTool::mouseMoveEvent(KoPointerEvent *event)
 {
     updateCursor(event->modifiers() & Qt::ControlModifier);
 
-    if (m_currentStrategy) {
-        m_currentStrategy->handleMouseMove(event->point, event->modifiers());
+    if (currentStrategy()) {
+        currentStrategy()->handleMouseMove(event->point, event->modifiers());
     }
 }
 

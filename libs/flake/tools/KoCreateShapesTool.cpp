@@ -51,8 +51,8 @@ KoCreateShapesTool::~KoCreateShapesTool()
 
 void KoCreateShapesTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (m_currentStrategy)
-        m_currentStrategy->paint(painter, converter);
+    if (currentStrategy())
+        currentStrategy()->paint(painter, converter);
 }
 
 void KoCreateShapesTool::mouseReleaseEvent(KoPointerEvent *event)

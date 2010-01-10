@@ -85,7 +85,7 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolLine::mousePressEvent(KoPointerEvent *e)
 {
-    if (!m_canvas || !currentImage()) return;
+    if (!canvas() || !currentImage()) return;
 
     QPointF pos = convertToPixelCoord(e);
 
@@ -124,7 +124,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
         m_dragging = false;
         updatePreview();
 
-        if (m_canvas) {
+        if (canvas()) {
 
             if (m_startPos == m_endPos) {
                 m_dragging = false;
@@ -173,7 +173,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                     image()->actionRecorder()->addAction(*linePaintAction);
                 }
 #endif
-                m_canvas->addCommand(m_painter->endTransaction());
+                canvas()->addCommand(m_painter->endTransaction());
                 delete m_painter;
                 m_painter = 0;
             }
@@ -210,9 +210,9 @@ QPointF KisToolLine::straightLine(QPointF point)
 
 void KisToolLine::updatePreview()
 {
-    if (m_canvas) {
+    if (canvas()) {
         QRectF bound(m_startPos, m_endPos);
-        m_canvas->updateCanvas(convertToPt(bound.normalized().adjusted(-3, -3, 3, 3)));
+        canvas()->updateCanvas(convertToPt(bound.normalized().adjusted(-3, -3, 3, 3)));
     }
 }
 
@@ -243,7 +243,7 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
     } else
 #endif
 
-        if (m_canvas) {
+        if (canvas()) {
 #ifdef INDEPENDENT_CANVAS
             QPainterPath path;
             path.moveTo(viewStartPos);

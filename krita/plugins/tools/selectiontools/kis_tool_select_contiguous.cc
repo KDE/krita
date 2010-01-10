@@ -66,7 +66,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
     if (e->button() != Qt::LeftButton)
         return;
 
-    if (m_canvas && currentImage()) {
+    if (canvas() && currentImage()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         if (!currentNode())
@@ -86,13 +86,13 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         KisSelectionSP selection =
             fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage());
 
-        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         if (!kisCanvas)
             return;
 
         KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Contiguous Area Selection"));
         QUndoCommand* cmd = helper.selectPixelSelection(selection->pixelSelection(), m_selectAction);
-        m_canvas->addCommand(cmd);
+        canvas()->addCommand(cmd);
 
         QApplication::restoreOverrideCursor();
     }

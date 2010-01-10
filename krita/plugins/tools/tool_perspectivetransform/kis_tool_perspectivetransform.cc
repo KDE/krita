@@ -217,7 +217,7 @@ void KisToolPerspectiveTransform::initHandles()
     m_bottomright = m_initialRect.bottomRight();
 
 	// doubtful (check this)
-    m_canvas->updateCanvas(QRectF(m_topleft, m_bottomright));
+    canvas()->updateCanvas(QRectF(m_topleft, m_bottomright));
 }
 
 void KisToolPerspectiveTransform::paint(QPainter &painter, const KoViewConverter &converter)
@@ -422,8 +422,8 @@ void KisToolPerspectiveTransform::mouseReleaseEvent(KoPointerEvent * event)
 
 void KisToolPerspectiveTransform::paintOutline()
 {
-    if (m_canvas) {
-        QPainter gc(m_canvas->canvasWidget());
+    if (canvas()) {
+        QPainter gc(canvas()->canvasWidget());
         QRect rc;
 
         paintOutline(gc, rc);
@@ -432,11 +432,11 @@ void KisToolPerspectiveTransform::paintOutline()
 
 void KisToolPerspectiveTransform::paintOutline(QPainter& gc, const QRect&)
 {
-    if (m_canvas) {
+    if (canvas()) {
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
         pen.setWidth(1);
-        //Q_ASSERT(m_canvas->canvasController);
+        //Q_ASSERT(canvas()->canvasController);
 
         switch (m_interractionMode) {
             case DRAWRECTINTERRACTION: {
@@ -499,7 +499,7 @@ void KisToolPerspectiveTransform::transform()
     if (!currentImage() || !currentNode()->paintDevice())
         return;
 
-    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
     if (!canvas)
         return;
 

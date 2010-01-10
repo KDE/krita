@@ -75,7 +75,7 @@ void KisToolSelectRectangular::LokalTool::finishRect(const QRectF& rect)
     rc = rc.intersected(currentImage()->bounds());
     rc = rc.normalized();
 
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas)
         return;
 
@@ -90,7 +90,7 @@ void KisToolSelectRectangular::LokalTool::finishRect(const QRectF& rect)
             tmpSel->select(rc);
 
             QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
-            m_canvas->addCommand(cmd);
+            canvas()->addCommand(cmd);
         }
     } else {
         QRectF documentRect = convertToPt(rect);

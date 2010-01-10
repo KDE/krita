@@ -54,7 +54,7 @@ void KritaShapeTool::activate(bool temporary)
 {
     Q_UNUSED(temporary);
 
-    KoSelection* selection = m_canvas->shapeManager()->selection();
+    KoSelection* selection = canvas()->shapeManager()->selection();
     foreach(KoShape* shape, selection->selectedShapes()) {
         m_kritaShapeshape = dynamic_cast<KritaShape*>(shape);
         if (m_kritaShapeshape)

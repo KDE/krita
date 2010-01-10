@@ -122,26 +122,26 @@ void KisTool::activate(bool)
 
     resetCursorStyle();
 
-    d->currentFgColor = m_canvas->resourceProvider()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
-    d->currentBgColor = m_canvas->resourceProvider()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
-    d->currentPattern = static_cast<KisPattern *>(m_canvas->resourceProvider()->
+    d->currentFgColor = canvas()->resourceProvider()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+    d->currentBgColor = canvas()->resourceProvider()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+    d->currentPattern = static_cast<KisPattern *>(canvas()->resourceProvider()->
                         resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
-    d->currentGradient = static_cast<KoAbstractGradient *>(m_canvas->resourceProvider()->
+    d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceProvider()->
                          resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
 
 
     d->currentPaintOpPreset =
-        m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        canvas()->resourceProvider()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 
     if (d->currentPaintOpPreset && d->currentPaintOpPreset->settings()) {
         d->currentPaintOpPreset->settings()->activate();
     }
 
-    d->currentNode = m_canvas->resourceProvider()->
+    d->currentNode = canvas()->resourceProvider()->
                      resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    d->currentExposure = static_cast<float>(m_canvas->resourceProvider()->
+    d->currentExposure = static_cast<float>(canvas()->resourceProvider()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
-    d->currentGenerator = static_cast<KisFilterConfiguration*>(m_canvas->resourceProvider()->
+    d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceProvider()->
                           resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
 }
 
@@ -167,7 +167,7 @@ void KisTool::resourceChanged(int key, const QVariant & v)
         break;
     case(KisCanvasResourceProvider::CurrentPaintOpPreset):
         d->currentPaintOpPreset =
-            m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+            canvas()->resourceProvider()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         break;
     case(KisCanvasResourceProvider::HdrExposure):
         d->currentExposure = static_cast<float>(v.toDouble());
@@ -210,7 +210,7 @@ QPointF KisTool::viewToPixel(const QPointF &viewCoord)
     if (!image())
         return viewCoord;
 
-    return image()->documentToPixel(m_canvas->viewConverter()->viewToDocument(viewCoord));
+    return image()->documentToPixel(canvas()->viewConverter()->viewToDocument(viewCoord));
 }
 
 QRectF KisTool::convertToPt(const QRectF &rect)
@@ -229,7 +229,7 @@ QPointF KisTool::pixelToView(const QPoint &pixelCoord)
     if (!image())
         return pixelCoord;
     QPointF documentCoord = image()->pixelToDocument(pixelCoord);
-    return m_canvas->viewConverter()->documentToView(documentCoord);
+    return canvas()->viewConverter()->documentToView(documentCoord);
 }
 
 QPointF KisTool::pixelToView(const QPointF &pixelCoord)
@@ -237,7 +237,7 @@ QPointF KisTool::pixelToView(const QPointF &pixelCoord)
     if (!image())
         return pixelCoord;
     QPointF documentCoord = image()->pixelToDocument(pixelCoord);
-    return m_canvas->viewConverter()->documentToView(documentCoord);
+    return canvas()->viewConverter()->documentToView(documentCoord);
 }
 
 QRectF KisTool::pixelToView(const QRectF &pixelRect)
@@ -251,18 +251,18 @@ QRectF KisTool::pixelToView(const QRectF &pixelRect)
 
 void KisTool::updateCanvasPixelRect(const QRectF &pixelRect)
 {
-    m_canvas->updateCanvas(convertToPt(pixelRect));
+    canvas()->updateCanvas(convertToPt(pixelRect));
 }
 
 void KisTool::updateCanvasViewRect(const QRectF &viewRect)
 {
-    m_canvas->updateCanvas(m_canvas->viewConverter()->viewToDocument(viewRect));
+    canvas()->updateCanvas(canvas()->viewConverter()->viewToDocument(viewRect));
 }
 
 KisImageWSP KisTool::image() const
 {
     // For now, krita tools only work in krita, not for a krita shape. Krita shapes are for 2.1
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (kisCanvas) {
         return kisCanvas->currentImage();
     }
@@ -278,7 +278,7 @@ QCursor KisTool::cursor() const
 
 KisSelectionSP KisTool::currentSelection() const
 {
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (kisCanvas) {
         KisView2 * view = kisCanvas->view();
         if (view) return view->selection();
@@ -459,13 +459,13 @@ void KisTool::slotResetFgBg()
 
 bool KisTool::isCanvasOpenGL() const
 {
-    return m_canvas->canvasController()->isCanvasOpenGL();
+    return canvas()->canvasController()->isCanvasOpenGL();
 }
 
 void KisTool::beginOpenGL()
 {
 #if defined(HAVE_OPENGL)
-    KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(m_canvas->canvasWidget());
+    KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
     Q_ASSERT(canvasWidget);
 
     if (canvasWidget) {
@@ -477,7 +477,7 @@ void KisTool::beginOpenGL()
 void KisTool::endOpenGL()
 {
 #if defined(HAVE_OPENGL)
-    KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(m_canvas->canvasWidget());
+    KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
     Q_ASSERT(canvasWidget);
 
     if (canvasWidget) {

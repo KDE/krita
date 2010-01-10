@@ -49,7 +49,7 @@ void KisToolRectangleBase::deactivate()
 
 void KisToolRectangleBase::mousePressEvent(KoPointerEvent *e)
 {
-    Q_ASSERT(m_canvas && currentImage());
+    Q_ASSERT(canvas() && currentImage());
 
     if (e->button() == Qt::LeftButton) {
         QPointF pos = convertToPixelCoord(e);
@@ -106,7 +106,7 @@ void KisToolRectangleBase::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolRectangleBase::mouseReleaseEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_canvas && currentImage());
+    Q_ASSERT(canvas() && currentImage());
     if (!currentNode()) return;
 
     if (m_dragging && event->button() == Qt::LeftButton) {
@@ -120,7 +120,7 @@ void KisToolRectangleBase::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolRectangleBase::paintRectangle(QPainter& gc, const QRect&)
 {
-    Q_ASSERT(m_canvas && currentImage());
+    Q_ASSERT(canvas() && currentImage());
 
     QPointF viewDragStart = pixelToView(m_dragStart);
     QPointF viewDragEnd = pixelToView(m_dragEnd);
@@ -169,7 +169,7 @@ void KisToolRectangleBase::updateArea() {
     QRectF bound;
     bound.setTopLeft(m_dragStart);
     bound.setBottomRight(m_dragEnd);
-    m_canvas->updateCanvas(convertToPt(bound.normalized()));
+    canvas()->updateCanvas(convertToPt(bound.normalized()));
 }
 
 #include "kis_tool_rectangle_base.moc"

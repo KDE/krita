@@ -73,7 +73,7 @@ void KisToolPolygonBase::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolPolygonBase::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!m_canvas || !currentImage())
+    if (!canvas() || !currentImage())
         return;
 
     if (m_dragging && event->button() == Qt::LeftButton)  {
@@ -103,7 +103,7 @@ void KisToolPolygonBase::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    if (!m_canvas || !currentImage())
+    if (!canvas() || !currentImage())
         return;
 
     QPointF start, end;
@@ -226,7 +226,7 @@ void KisToolPolygonBase::updateArea()
 
 void KisToolPolygonBase::finish()
 {
-    Q_ASSERT(m_canvas && currentImage());
+    Q_ASSERT(canvas() && currentImage());
     if (!currentNode())
         return;
 

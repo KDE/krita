@@ -62,7 +62,7 @@ KisToolStar::~KisToolStar()
 }
 void KisToolStar::mousePressEvent(KoPointerEvent *event)
 {
-    if (m_canvas && event->button() == Qt::LeftButton) {
+    if (canvas() && event->button() == Qt::LeftButton) {
         m_dragging = true;
         m_dragStart = convertToPixelCoord(event);
         m_dragEnd = convertToPixelCoord(event);
@@ -75,7 +75,7 @@ void KisToolStar::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
         //Erase old lines
-        m_canvas->updateCanvas(convertToPt(boundingRect()));
+        canvas()->updateCanvas(convertToPt(boundingRect()));
         if (event->modifiers() & Qt::AltModifier) {
             QPointF trans = convertToPixelCoord(event) - m_dragEnd;
             m_dragStart += trans;
@@ -83,13 +83,13 @@ void KisToolStar::mouseMoveEvent(KoPointerEvent *event)
         } else {
             m_dragEnd = convertToPixelCoord(event);
         }
-        m_canvas->updateCanvas(convertToPt(boundingRect()));
+        canvas()->updateCanvas(convertToPt(boundingRect()));
     }
 }
 
 void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!m_canvas)
+    if (!canvas())
         return;
 
     if (m_dragging && event->button() == Qt::LeftButton) {
@@ -122,9 +122,9 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
             device->setDirty(painter.dirtyRegion());
             notifyModified();
-            m_canvas->updateCanvas(convertToPt(boundingRect()));
+            canvas()->updateCanvas(convertToPt(boundingRect()));
 
-            m_canvas->addCommand(painter.endTransaction());
+            canvas()->addCommand(painter.endTransaction());
         } else {
             KoPathShape* path = new KoPathShape();
             path->setShapeId(KoPathShapeId);
@@ -140,8 +140,8 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
             KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
             path->setBorder(border);
 
-            QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
-            m_canvas->addCommand(cmd);
+            QUndoCommand * cmd = canvas()->shapeController()->addShape(path);
+            canvas()->addCommand(cmd);
         }
     }
 }
@@ -153,7 +153,7 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
     if (!m_dragging)
         return;
 
-    if (!m_canvas)
+    if (!canvas())
         return;
 
     vQPointF points = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());

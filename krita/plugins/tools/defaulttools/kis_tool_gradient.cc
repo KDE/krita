@@ -113,7 +113,7 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
                 QPointF normalisedGradientVectorStart = m_startPos;
                 normalisedGradientVectorStart /= gradientVectorLength;
 
-                KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(m_canvas->canvasWidget());
+                KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
                 Q_ASSERT(canvasWidget);
 
                 if (canvasWidget) {
@@ -190,7 +190,7 @@ void KisToolGradient::mousePressEvent(KoPointerEvent *e)
 
         if (cfg.useOpenGL() && cfg.useOpenGLShaders()) {
 
-            KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+            KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
             KoColorProfile *monitorProfile = 0;
 
             Q_ASSERT(canvas);
@@ -220,7 +220,7 @@ void KisToolGradient::mouseMoveEvent(KoPointerEvent *e)
         QRectF bound;
         bound.setTopLeft(m_startPos);
         bound.setBottomRight(m_endPos);
-        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+        canvas()->updateCanvas(convertToPt(bound.normalized()));
 
         if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
             m_endPos = straightLine(pos);
@@ -230,7 +230,7 @@ void KisToolGradient::mouseMoveEvent(KoPointerEvent *e)
 
         bound.setTopLeft(m_startPos);
         bound.setBottomRight(m_endPos);
-        m_canvas->updateCanvas(convertToPt(bound.normalized()));
+        canvas()->updateCanvas(convertToPt(bound.normalized()));
     }
 }
 
@@ -283,21 +283,21 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
             painter.setOpacity(m_opacity);
             painter.setCompositeOp(m_compositeOp);
 
-            KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+            KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
             KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
 
             updater->start(100, i18n("Gradient"));
             painter.setProgress(updater->startSubtask());
 
             painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
-            m_canvas->addCommand(painter.endTransaction());
+            canvas->addCommand(painter.endTransaction());
 
             qApp->restoreOverrideCursor();
 #else
             // XXX: figure out why threaded gradients give weird noise
             KisTransaction* transaction = new KisTransaction(i18n("Gradient"), device);
 
-            KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+            KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(canvas());
             KoProgressUpdater * updater = canvas->view()->createProgressUpdater();
             updater->start(100, i18n("Gradient"));
 
@@ -320,13 +320,13 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
             applicator.execute();
 
-            m_canvas->addCommand(transaction);
+            canvas()->addCommand(transaction);
 #endif
             currentNode()->setDirty();
             notifyModified();
             delete updater;
         }
-        m_canvas->updateCanvas(convertToPt(currentImage()->bounds()));
+        canvas()->updateCanvas(convertToPt(currentImage()->bounds()));
 
     }
 }
@@ -349,7 +349,7 @@ QPointF KisToolGradient::straightLine(QPointF point)
 
 void KisToolGradient::paintLine(QPainter& gc)
 {
-    if (m_canvas) {
+    if (canvas()) {
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
 

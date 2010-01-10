@@ -75,7 +75,7 @@ bool KisToolFill::flood(int startX, int startY)
     if (!device) return false;
     KisSelectionSP selection = currentSelection();
 
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
     KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
     updater->start(100, i18n("Flood Fill"));
 
@@ -124,7 +124,7 @@ bool KisToolFill::flood(int startX, int startY)
             ++it;
         }
 
-        m_canvas->addCommand(m_painter->endTransaction());
+        canvas->addCommand(m_painter->endTransaction());
 
     } else {
 
@@ -147,7 +147,7 @@ bool KisToolFill::flood(int startX, int startY)
             fillPainter.fillColor(startX, startY, currentImage()->mergedImage());
 
         dirty = fillPainter.dirtyRegion();
-        m_canvas->addCommand(fillPainter.endTransaction());
+        canvas->addCommand(fillPainter.endTransaction());
     }
     device->setDirty(dirty);
     delete updater;
@@ -165,7 +165,7 @@ void KisToolFill::mousePressEvent(KoPointerEvent *e)
 void KisToolFill::mouseReleaseEvent(KoPointerEvent *e)
 {
 
-    if (!m_canvas) return;
+    if (!canvas()) return;
     if (!currentNode()) return;
     if (!currentImage() || !currentNode()->paintDevice()) return;
     if (e->button() == Qt::LeftButton) {

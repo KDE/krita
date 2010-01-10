@@ -94,7 +94,7 @@ void KisToolCrop::paint(QPainter &painter, const KoViewConverter &converter)
 
 void KisToolCrop::mousePressEvent(KoPointerEvent *e)
 {
-    if (m_canvas) {
+    if (canvas()) {
 
         if (!currentNode())
             return;
@@ -121,7 +121,7 @@ void KisToolCrop::mousePressEvent(KoPointerEvent *e)
 
 void KisToolCrop::mouseMoveEvent(KoPointerEvent *e)
 {
-    if (m_canvas && currentImage()) {
+    if (canvas() && currentImage()) {
         if (m_selecting) { //if the user selects
             QPoint pos = convertToIntPixelCoord(e);
 
@@ -285,7 +285,7 @@ void KisToolCrop::updateWidgetValues(bool updateratio)
 
 void KisToolCrop::mouseReleaseEvent(KoPointerEvent *e)
 {
-    if (m_canvas && currentImage() && m_selecting && e->button() == Qt::LeftButton) {
+    if (canvas() && currentImage() && m_selecting && e->button() == Qt::LeftButton) {
 
         m_selecting = false;
         m_haveCropSelection = true;
@@ -307,7 +307,7 @@ void KisToolCrop::mouseDoubleClickEvent(KoPointerEvent *)
 
 void KisToolCrop::validateSelection(bool updateratio)
 {
-    if (m_canvas && image()) {
+    if (canvas() && image()) {
         m_rectCrop.setLeft(qBound(0, m_rectCrop.left(), image()->width() - 1));
         m_rectCrop.setRight(qBound(0, m_rectCrop.right(), image()->width() - 1));
         m_rectCrop.setTop(qBound(0, m_rectCrop.top(), image()->height() - 1));
@@ -343,7 +343,7 @@ QRectF KisToolCrop::borderLineRect()
 
 void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
 {
-    if (m_canvas && (m_selecting || m_haveCropSelection)) {
+    if (canvas() && (m_selecting || m_haveCropSelection)) {
         gc.save();
 
 #if FADE_AREA_OUTSIDE_CROP
@@ -382,10 +382,10 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
         gc.drawPath(handlesPath());
 
         //draw guides
-        gc.drawLine(borderRect.bottomLeft(), QPointF(-m_canvas->canvasWidget()->width(), borderRect.bottom()));
-        gc.drawLine(borderRect.bottomLeft(), QPointF(borderRect.left(), m_canvas->canvasWidget()->height()));
-        gc.drawLine(borderRect.topRight(), QPointF(m_canvas->canvasWidget()->width(), borderRect.top()));
-        gc.drawLine(borderRect.topRight(), QPointF(borderRect.right(), -m_canvas->canvasWidget()->height()));
+        gc.drawLine(borderRect.bottomLeft(), QPointF(-canvas()->canvasWidget()->width(), borderRect.bottom()));
+        gc.drawLine(borderRect.bottomLeft(), QPointF(borderRect.left(), canvas()->canvasWidget()->height()));
+        gc.drawLine(borderRect.topRight(), QPointF(canvas()->canvasWidget()->width(), borderRect.top()));
+        gc.drawLine(borderRect.topRight(), QPointF(borderRect.right(), -canvas()->canvasWidget()->height()));
 #endif
         gc.restore();
     }

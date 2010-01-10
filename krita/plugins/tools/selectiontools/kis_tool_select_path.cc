@@ -118,7 +118,7 @@ QMap<QString, QWidget *> KisToolSelectPath::createOptionWidgets()
 void KisToolSelectPath::LokalTool::addPathShape()
 {
     KisNodeSP currentNode =
-        m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+        canvas()->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     if (!currentNode)
         return;
 
@@ -130,7 +130,7 @@ void KisToolSelectPath::LokalTool::addPathShape()
     shape->close();
     m_shape = 0;
 
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas)
         return;
 
@@ -154,7 +154,7 @@ void KisToolSelectPath::LokalTool::addPathShape()
         painter.fillPainterPath(matrix.map(shape->outline()));
 
         QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
-        m_canvas->addCommand(cmd);
+        canvas()->addCommand(cmd);
 
         delete shape;
     } else {

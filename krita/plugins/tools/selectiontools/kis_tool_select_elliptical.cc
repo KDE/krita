@@ -70,7 +70,7 @@ void KisToolSelectElliptical::LokalTool::finishEllipse(const QRectF &rect)
 {
     if(rect.isNull()) return;
 
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
     if (!kisCanvas)
         return;
@@ -94,7 +94,7 @@ void KisToolSelectElliptical::LokalTool::finishEllipse(const QRectF &rect)
         painter.paintEllipse(rect);
 
         QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
-        m_canvas->addCommand(cmd);
+        canvas()->addCommand(cmd);
     } else {
         QRectF rect = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(rect);

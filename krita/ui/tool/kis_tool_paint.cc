@@ -82,7 +82,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     m_supportOutline = false;
 
-    KisCanvas2* canvas2 = static_cast<KisCanvas2*>(m_canvas);
+    KisCanvas2* canvas2 = static_cast<KisCanvas2*>(canvas);
     connect(this, SIGNAL(favoritePaletteCalled(const QPoint&)), canvas2->view(), SIGNAL(favoritePaletteCalled(const QPoint&)) );
 }
 
@@ -139,7 +139,7 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
         emit favoritePaletteCalled(e->pos());
 
 //        KoCanvasResourceProvider * resourceProvider = 0;
-//        if (m_canvas && (resourceProvider = m_canvas->resourceProvider())) {
+//        if (canvas() && (resourceProvider = canvas()->resourceProvider())) {
 //            QVariant fg = resourceProvider->resource(KoCanvasResource::ForegroundColor);
 //            if (!fg.isValid()) return;
 //            QVariant bg = resourceProvider->resource(KoCanvasResource::BackgroundColor);

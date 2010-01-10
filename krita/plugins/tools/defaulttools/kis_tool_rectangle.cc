@@ -77,13 +77,13 @@ void KisToolRectangle::finishRect(const QRectF &rect)
         device->setDirty(bound);
         notifyModified();
 
-        m_canvas->addCommand(painter.endTransaction());
+        canvas()->addCommand(painter.endTransaction());
     } else {
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createRectangleShape(r);
 
-        QUndoCommand * cmd = m_canvas->shapeController()->addShape(shape);
-        m_canvas->addCommand(cmd);
+        QUndoCommand * cmd = canvas()->shapeController()->addShape(shape);
+        canvas()->addCommand(cmd);
     }
 }
 

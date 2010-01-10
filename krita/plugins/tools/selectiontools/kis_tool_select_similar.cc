@@ -93,7 +93,7 @@ KisToolSelectSimilar::~KisToolSelectSimilar()
 
 void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
 {
-    if (m_canvas) {
+    if (canvas()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         quint8 opacity = OPACITY_OPAQUE;
 
@@ -113,7 +113,7 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
 
         QPointF pos = convertToPixelCoord(e);
 
-        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         if (!kisCanvas)
             return;
 
@@ -129,7 +129,7 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
         KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Similar Selection"));
         QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
 
-        m_canvas->addCommand(cmd);
+        canvas()->addCommand(cmd);
         QApplication::restoreOverrideCursor();
     }
 }

@@ -81,7 +81,7 @@ void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!m_canvas)
+    if (!canvas())
         return;
 
     if (m_dragging && event->button() == Qt::LeftButton) {
@@ -91,7 +91,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
         if (currentImage() && m_points.count() > 2) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-            KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+            KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
             if (!kisCanvas)
                 return;
 
@@ -116,7 +116,7 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 painter.paintPolygon(m_points);
 
                 QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
-                m_canvas->addCommand(cmd);
+                canvas()->addCommand(cmd);
             } else {
 
                 KoPathShape* path = new KoPathShape();
@@ -193,7 +193,7 @@ void KisToolSelectOutline::updateFeedback()
 
 void KisToolSelectOutline::deactivate()
 {
-    if (m_canvas) {
+    if (canvas()) {
         updateCanvasPixelRect(image()->bounds());
     }
 }

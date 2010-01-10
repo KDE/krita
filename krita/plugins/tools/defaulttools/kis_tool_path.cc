@@ -46,7 +46,7 @@ KisToolPath::~KisToolPath()
 void KisToolPath::addPathShape()
 {
     KisNodeSP currentNode =
-        m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+        canvas()->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     if (!currentNode) {
         delete m_shape;
         m_shape = 0;
@@ -57,7 +57,7 @@ void KisToolPath::addPathShape()
 
         KisPaintDeviceSP dev = currentNode->paintDevice();
 
-        KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+        KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
 
         if (!dev || !canvas) {
             delete m_shape;
@@ -82,7 +82,7 @@ void KisToolPath::addPathShape()
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
         painter.setOpacity(OPACITY_OPAQUE);
         painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
-        KisPaintOpPresetSP preset = m_canvas->resourceProvider()->
+        KisPaintOpPresetSP preset = canvas->resourceProvider()->
                                     resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         painter.setPaintOpPreset(preset, image);
 
@@ -94,13 +94,13 @@ void KisToolPath::addPathShape()
         dev->setDirty(dirtyRegion);
         image->setModified();
 
-        m_canvas->addCommand(painter.endTransaction());
+        canvas->addCommand(painter.endTransaction());
         delete m_shape;
 
     } else {
         m_shape->normalize();
-        QUndoCommand * cmd = m_canvas->shapeController()->addShape(m_shape);
-        m_canvas->addCommand(cmd);
+        QUndoCommand * cmd = canvas()->shapeController()->addShape(m_shape);
+        canvas()->addCommand(cmd);
     }
     m_shape = 0;
 }

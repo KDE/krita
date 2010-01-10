@@ -69,7 +69,7 @@ void KisToolPolygon::finishPolygon(const QVector<QPointF>& points)
             device->setDirty(painter.dirtyRegion());
             notifyModified();
 
-            m_canvas->addCommand(painter.endTransaction());
+            canvas()->addCommand(painter.endTransaction());
         }
     } else {
         KoPathShape* path = new KoPathShape();
@@ -86,8 +86,8 @@ void KisToolPolygon::finishPolygon(const QVector<QPointF>& points)
         KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
         path->setBorder(border);
 
-        QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
-        m_canvas->addCommand(cmd);
+        QUndoCommand * cmd = canvas()->shapeController()->addShape(path);
+        canvas()->addCommand(cmd);
     }
 }
 

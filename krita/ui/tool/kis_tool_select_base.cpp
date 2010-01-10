@@ -37,7 +37,7 @@ KisToolSelectBase::KisToolSelectBase(KoCanvasBase *canvas, const QCursor& cursor
 
 QWidget* KisToolSelectBase::createOptionWidget()
 {
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
     Q_ASSERT(canvas);
     m_optWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optWidget);

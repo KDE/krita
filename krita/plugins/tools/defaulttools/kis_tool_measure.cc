@@ -144,7 +144,7 @@ void KisToolMeasure::mousePressEvent(KoPointerEvent *e)
     if (!currentImage()) return;
 
     // Erase old temporary lines
-    m_canvas->updateCanvas(convertToPt(boundingRect()));
+    canvas()->updateCanvas(convertToPt(boundingRect()));
 
     QPointF pos = convertToPixelCoord(e);
 
@@ -161,7 +161,7 @@ void KisToolMeasure::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_dragging) {
         // Erase old temporary lines
-        m_canvas->updateCanvas(convertToPt(boundingRect()));
+        canvas()->updateCanvas(convertToPt(boundingRect()));
 
         QPointF pos = convertToPixelCoord(e);
 
@@ -172,7 +172,7 @@ void KisToolMeasure::mouseMoveEvent(KoPointerEvent *e)
         } else
             m_endPos = pos;
 
-        m_canvas->updateCanvas(convertToPt(boundingRect()));
+        canvas()->updateCanvas(convertToPt(boundingRect()));
         emit sigDistanceChanged(distance());
         emit sigAngleChanged(angle());
     }

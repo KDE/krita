@@ -139,7 +139,7 @@ void KisToolPolyline::finish()
             }
         }
         device->setDirty(painter.dirtyRegion());   
-        m_canvas->addCommand(painter.endTransaction());
+        canvas()->addCommand(painter.endTransaction());
     } else {
         KoPathShape* path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
@@ -154,8 +154,8 @@ void KisToolPolyline::finish()
         KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
         path->setBorder(border);
 
-        QUndoCommand * cmd = m_canvas->shapeController()->addShape(path);
-        m_canvas->addCommand(cmd);
+        QUndoCommand * cmd = canvas()->shapeController()->addShape(path);
+        canvas()->addCommand(cmd);
     }
     m_points.clear();
 
@@ -183,7 +183,7 @@ void KisToolPolyline::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolPolyline::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!m_canvas || !currentImage())
+    if (!canvas() || !currentImage())
         return;
 
     if (m_dragging && event->button() == Qt::LeftButton)  {
@@ -191,7 +191,7 @@ void KisToolPolyline::mouseReleaseEvent(KoPointerEvent *event)
         m_points.append(m_dragEnd);
         m_boundingRect = m_boundingRect.unite(QRectF(m_dragStart.x(), m_dragStart.y(), m_dragEnd.x() - m_dragStart.x(), m_dragEnd.y() - m_dragStart.y()));
     }
-    m_canvas->updateCanvas(m_boundingRect);
+    canvas()->updateCanvas(m_boundingRect);
 }
 
 
@@ -203,7 +203,7 @@ void KisToolPolyline::mouseDoubleClickEvent(KoPointerEvent *)
 void KisToolPolyline::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-    if (!m_canvas || !currentImage())
+    if (!canvas() || !currentImage())
         return;
 
     QPointF start, end;

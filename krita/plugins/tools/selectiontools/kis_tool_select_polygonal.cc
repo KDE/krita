@@ -74,7 +74,7 @@ QWidget* KisToolSelectPolygonal::createOptionWidget()
 
 void KisToolSelectPolygonal::LokalTool::finishPolygon(const QVector<QPointF> &points)
 {
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
     if (!kisCanvas)
         return;
@@ -97,7 +97,7 @@ void KisToolSelectPolygonal::LokalTool::finishPolygon(const QVector<QPointF> &po
         painter.paintPolygon(points);
 
         QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
-        m_canvas->addCommand(cmd);
+        canvas()->addCommand(cmd);
     } else {
         KoPathShape* path = new KoPathShape();
         path->setShapeId(KoPathShapeId);

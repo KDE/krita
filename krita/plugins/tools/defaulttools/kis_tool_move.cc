@@ -113,7 +113,7 @@ KisNodeSP findNode(KisNodeSP node, int x, int y)
 
 void KisToolMove::mousePressEvent(KoPointerEvent *e)
 {
-    if (m_canvas && e->button() == Qt::LeftButton) {
+    if (canvas() && e->button() == Qt::LeftButton) {
         QPointF pos = convertToPixelCoord(e);
 
         KisNodeSP node;
@@ -181,7 +181,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
                 // deselect away the selection???
                 selection->clear();
 
-                KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+                KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
                 KisView2* view = 0;
                 if (kisCanvas) {
                     view = kisCanvas->view();
@@ -213,7 +213,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
 
 void KisToolMove::mouseMoveEvent(KoPointerEvent *e)
 {
-    if (m_canvas && m_dragging) {
+    if (canvas() && m_dragging) {
         QPointF posf = convertToPixelCoord(e);
         QPoint pos = QPoint(static_cast<int>(posf.x()), static_cast<int>(posf.y()));
         if ((e->modifiers() & Qt::AltModifier) || (e->modifiers() & Qt::ControlModifier)) {
@@ -231,7 +231,7 @@ void KisToolMove::mouseMoveEvent(KoPointerEvent *e)
 void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
 {
     if (m_dragging) {
-        if (m_canvas && e->button() == Qt::LeftButton) {
+        if (canvas() && e->button() == Qt::LeftButton) {
             QPointF pos = convertToPixelCoord(e);
             if (m_selectedNode) {
                 drag(QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y())));
@@ -240,7 +240,7 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *e)
                 QUndoCommand *cmd = new KisNodeMoveCommand(m_selectedNode, m_layerStart, m_layerPosition);
                 Q_CHECK_PTR(cmd);
 
-                m_canvas->addCommand(cmd);
+                canvas()->addCommand(cmd);
                 currentImage()->undoAdapter()->endMacro();
             }
             currentImage()->setModified();

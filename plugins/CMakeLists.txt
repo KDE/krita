@@ -31,6 +31,7 @@ add_subdirectory( variables )
 add_subdirectory( defaultTools )
 add_subdirectory( pathshapes )
 add_subdirectory( pictureshape )
+add_subdirectory( videoshape )
 add_subdirectory( textshape )
 
 # as the vector shape depends on filters subdir (not really intuitive) lets allow disabling

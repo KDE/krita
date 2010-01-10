@@ -26,6 +26,7 @@
 #include "flake_export.h"
 
 class KoInteractionStrategy;
+class KoInteractionToolPrivate;
 
 #define KoInteractionTool_ID "InteractionTool"
 
@@ -88,8 +89,7 @@ private:
     KoInteractionTool(const KoInteractionTool&);
     KoInteractionTool& operator=(const KoInteractionTool&);
 
-    class Private;
-    Private * const d;
+    Q_DECLARE_PRIVATE(KoInteractionTool)
 };
 
 #endif /* KOINTERACTIONTOOL_H */

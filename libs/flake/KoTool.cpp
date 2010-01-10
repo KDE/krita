@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,6 +18,7 @@
  */
 
 #include "KoTool.h"
+#include "KoTool_p.h"
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasResourceProvider.h"
@@ -27,36 +28,27 @@
 #include <kactioncollection.h>
 #include <QWidget>
 
-class KoToolPrivate
-{
-public:
-    KoToolPrivate()
-            : previousCursor(Qt::ArrowCursor) { }
-
-    QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated witth this tool
-    QCursor previousCursor;
-    QHash<QString, KAction*> actionCollection;
-    QString toolId;
-    QList<QAction*> popupActionList;
-};
-
 KoTool::KoTool(KoCanvasBase *canvas)
-        : m_canvas(canvas),
-        d(new KoToolPrivate())
+    : d_ptr(new KoToolPrivate(this, canvas))
 {
-    if (m_canvas) { // in the case of KoToolManagers dummytool it can be zero :(
-        KoCanvasResourceProvider * crp = m_canvas->resourceProvider();
+    Q_D(KoTool);
+    if (d->canvas) { // in the case of KoToolManagers dummytool it can be zero :(
+        KoCanvasResourceProvider * crp = d->canvas->resourceProvider();
         Q_ASSERT_X(crp, "KoTool::KoTool", "No KoCanvasResourceProvider");
         if (crp)
-            connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
+            connect(d->canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
                     this, SLOT(resourceChanged(int, const QVariant &)));
     }
 }
 
+KoTool::KoTool(KoToolPrivate &dd)
+    : d_ptr(&dd)
+{
+}
+
 KoTool::~KoTool()
 {
-    qDeleteAll(d->optionWidgets);
-    delete d;
+    delete d_ptr;
 }
 
 void KoTool::activate(bool temporary)
@@ -101,14 +93,15 @@ void KoTool::wheelEvent(KoPointerEvent * e)
 
 QVariant KoTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
 {
-    if (m_canvas->canvasWidget() == 0)
+    Q_D(const KoTool);
+    if (d->canvas->canvasWidget() == 0)
         return QVariant();
 
     switch (query) {
     case Qt::ImMicroFocus:
-        return QRect(m_canvas->canvasWidget()->width() / 2, 0, 1, m_canvas->canvasWidget()->height());
+        return QRect(d->canvas->canvasWidget()->width() / 2, 0, 1, d->canvas->canvasWidget()->height());
     case Qt::ImFont:
-        return m_canvas->canvasWidget()->font();
+        return d->canvas->canvasWidget()->font();
     default:
         return QVariant();
     }
@@ -140,12 +133,14 @@ void KoTool::customMoveEvent(KoPointerEvent * event)
 
 void KoTool::useCursor(const QCursor &cursor)
 {
-    d->previousCursor = cursor;
-    emit cursorChanged(d->previousCursor);
+    Q_D(KoTool);
+    d->currentCursor = cursor;
+    emit cursorChanged(d->currentCursor);
 }
 
 QMap<QString, QWidget *> KoTool::optionWidgets()
 {
+    Q_D(KoTool);
     if (d->optionWidgets.empty()) {
         d->optionWidgets = createOptionWidgets();
     }
@@ -154,16 +149,19 @@ QMap<QString, QWidget *> KoTool::optionWidgets()
 
 void KoTool::addAction(const QString &name, KAction *action)
 {
+    Q_D(KoTool);
     d->actionCollection.insert(name, action);
 }
 
 QHash<QString, KAction*> KoTool::actions() const
 {
+    Q_D(const KoTool);
     return d->actionCollection;
 }
 
 KAction *KoTool::action(const QString &name) const
 {
+    Q_D(const KoTool);
     return d->actionCollection.value(name);
 }
 
@@ -186,17 +184,20 @@ QMap<QString, QWidget *>  KoTool::createOptionWidgets()
 
 void KoTool::setToolId(const QString &id)
 {
+    Q_D(KoTool);
     d->toolId = id;
 }
 
 QString KoTool::toolId() const
 {
+    Q_D(const KoTool);
     return d->toolId;
 }
 
 QCursor KoTool::cursor() const
 {
-    return d->previousCursor;
+    Q_D(const KoTool);
+    return d->currentCursor;
 }
 
 void KoTool::deleteSelection()
@@ -211,17 +212,20 @@ void KoTool::cut()
 
 QList<QAction*> KoTool::popupActionList() const
 {
+    Q_D(const KoTool);
     return d->popupActionList;
 }
 
 void KoTool::setPopupActionList(const QList<QAction*> &list)
 {
+    Q_D(KoTool);
     d->popupActionList = list;
 }
 
 KoCanvasBase * KoTool::canvas() const
 {
-    return m_canvas;
+    Q_D(const KoTool);
+    return d->canvas;
 }
 
 void KoTool::setStatusText(const QString &statusText)
@@ -231,8 +235,9 @@ void KoTool::setStatusText(const QString &statusText)
 
 QRectF KoTool::handleGrabRect(const QPointF &position)
 {
-    const KoViewConverter * converter = m_canvas->viewConverter();
-    uint handleSize = 2*m_canvas->resourceProvider()->grabSensitivity();
+    Q_D(KoTool);
+    const KoViewConverter * converter = d->canvas->viewConverter();
+    uint handleSize = 2*d->canvas->resourceProvider()->grabSensitivity();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
@@ -240,8 +245,9 @@ QRectF KoTool::handleGrabRect(const QPointF &position)
 
 QRectF KoTool::handlePaintRect(const QPointF &position)
 {
-    const KoViewConverter * converter = m_canvas->viewConverter();
-    uint handleSize = 2*m_canvas->resourceProvider()->handleRadius();
+    Q_D(KoTool);
+    const KoViewConverter * converter = d->canvas->viewConverter();
+    uint handleSize = 2*d->canvas->resourceProvider()->handleRadius();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;

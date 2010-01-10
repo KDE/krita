@@ -67,6 +67,7 @@ private:
     KoCanvasController *m_controller;
     QPointF m_lastPosition;
     bool m_temporary;
+    Q_DECLARE_PRIVATE(KoTool)
 };
 
 #endif

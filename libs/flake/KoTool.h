@@ -402,15 +402,16 @@ protected:
     QRectF handlePaintRect(const QPointF &position);
 
 protected:
-    KoCanvasBase * const m_canvas; ///< the canvas interface this tool will work for.
-    friend class KoToolProxy;
+    KoTool(KoToolPrivate &dd);
+
+    KoToolPrivate *d_ptr;
 
 private:
     KoTool();
     KoTool(const KoTool&);
     KoTool& operator=(const KoTool&);
 
-    KoToolPrivate * const d;
+    Q_DECLARE_PRIVATE(KoTool)
 };
 
 #endif /* KOTOOL_H */

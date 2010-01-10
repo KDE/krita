@@ -19,45 +19,31 @@
 */
 
 #include "KoInteractionTool.h"
+#include "KoInteractionTool_p.h"
+#include "KoTool_p.h"
 #include "KoPointerEvent.h"
-#include "KoInteractionStrategy.h"
 #include "KoCanvasBase.h"
 #include "KoPanTool.h"
 
-class KoInteractionTool::Private
-{
-public:
-    Private()
-        : currentStrategy(0)
-    {
-    }
-    ~Private() {
-        delete currentStrategy;
-    }
-
-    QPointF lastPoint;
-    KoInteractionStrategy *currentStrategy;
-};
-
 KoInteractionTool::KoInteractionTool(KoCanvasBase *canvas)
-        : KoTool(canvas),
-        d(new Private())
+    : KoTool(*(new KoInteractionToolPrivate(this, canvas)))
 {
 }
 
 KoInteractionTool::~KoInteractionTool()
 {
-    delete d;
 }
 
 void KoInteractionTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_D(KoInteractionTool);
     if (d->currentStrategy)
         d->currentStrategy->paint(painter, converter);
 }
 
 void KoInteractionTool::mousePressEvent(KoPointerEvent *event)
 {
+    Q_D(KoInteractionTool);
     if (d->currentStrategy) { // possible if the user presses an extra mouse button
         cancelCurrentStrategy();
         return;
@@ -69,6 +55,7 @@ void KoInteractionTool::mousePressEvent(KoPointerEvent *event)
 
 void KoInteractionTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    Q_D(KoInteractionTool);
     d->lastPoint = event->point;
     if (d->currentStrategy)
         d->currentStrategy->handleMouseMove(d->lastPoint, event->modifiers());
@@ -78,11 +65,12 @@ void KoInteractionTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KoInteractionTool::mouseReleaseEvent(KoPointerEvent *event)
 {
+    Q_D(KoInteractionTool);
     if (d->currentStrategy) {
         d->currentStrategy->finishInteraction(event->modifiers());
         QUndoCommand *command = d->currentStrategy->createCommand();
         if (command)
-            m_canvas->addCommand(command);
+            d->canvas->addCommand(command);
         delete d->currentStrategy;
         d->currentStrategy = 0;
         repaintDecorations();
@@ -92,6 +80,7 @@ void KoInteractionTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KoInteractionTool::keyPressEvent(QKeyEvent *event)
 {
+    Q_D(KoInteractionTool);
     event->ignore();
     if (d->currentStrategy &&
             (event->key() == Qt::Key_Control ||
@@ -104,6 +93,7 @@ void KoInteractionTool::keyPressEvent(QKeyEvent *event)
 
 void KoInteractionTool::keyReleaseEvent(QKeyEvent *event)
 {
+    Q_D(KoInteractionTool);
     if (d->currentStrategy == 0) { // catch all cases where no current strategy is needed
         if (event->key() == Qt::Key_Space)
             emit activateTemporary(KoPanTool_ID);
@@ -119,11 +109,13 @@ void KoInteractionTool::keyReleaseEvent(QKeyEvent *event)
 
 KoInteractionStrategy *KoInteractionTool::currentStrategy()
 {
+    Q_D(KoInteractionTool);
     return d->currentStrategy;
 }
 
 void KoInteractionTool::cancelCurrentStrategy()
 {
+    Q_D(KoInteractionTool);
     if (d->currentStrategy) {
         d->currentStrategy->cancelInteraction();
         delete d->currentStrategy;

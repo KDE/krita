@@ -90,6 +90,7 @@ private:
     class AngleSnapStrategy;
     AngleSnapStrategy *m_angleSnapStrategy;
     int m_angleSnappingDelta;
+    KoCanvasBase * const m_canvas;
 };
 #endif
 

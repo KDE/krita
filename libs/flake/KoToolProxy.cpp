@@ -240,7 +240,7 @@ void KoToolProxy::mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point
     KoPointerEvent ev(event, point);
     d->activeTool->mouseDoubleClickEvent(&ev);
     if (! event->isAccepted())
-        d->activeTool->m_canvas->shapeManager()->suggestChangeTool(&ev);
+        d->activeTool->canvas()->shapeManager()->suggestChangeTool(&ev);
 }
 
 void KoToolProxy::mouseMoveEvent(QMouseEvent *event, const QPointF &point)
@@ -277,8 +277,8 @@ void KoToolProxy::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
                 && qAbs(d->mouseDownPoint.x() - event->x()) < 5
                 && qAbs(d->mouseDownPoint.y() - event->y()) < 5) {
             // we potentially will change the selection
-            Q_ASSERT(d->activeTool->m_canvas);
-            KoShapeManager *manager = d->activeTool->m_canvas->shapeManager();
+            Q_ASSERT(d->activeTool->canvas());
+            KoShapeManager *manager = d->activeTool->canvas()->shapeManager();
             Q_ASSERT(manager);
             // only change the selection if that will not lead to losing a complex selection
             if (manager->selection()->count() <= 1) {

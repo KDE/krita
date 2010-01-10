@@ -126,7 +126,8 @@ KoCreatePathTool::KoCreatePathTool(KoCanvasBase * canvas)
         , m_existingEndPoint(0)
         , m_hoveredPoint(0)
         , m_angleSnapStrategy(0)
-        , m_angleSnappingDelta(15)
+        , m_angleSnappingDelta(15),
+        m_canvas(canvas)
 {
 }
 

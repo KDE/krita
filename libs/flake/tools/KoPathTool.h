@@ -138,6 +138,8 @@ private:
     KAction *m_actionConvertToPath;
     QCursor m_selectCursor;
     QCursor m_moveCursor;
+
+    Q_DECLARE_PRIVATE(KoTool)
 };
 
 #endif

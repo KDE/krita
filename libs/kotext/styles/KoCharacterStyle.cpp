@@ -967,9 +967,9 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         else if (textPosition.startsWith("sub"))
             setVerticalAlignment(QTextCharFormat::AlignSubScript);
         else {
-            QRegExp re("(-?\\d+)%.*");
+            QRegExp re("(-?[\\d.]+)%.*");
             if (re.exactMatch(textPosition)) {
-                int value = re.capturedTexts()[1].toInt();
+                float value = re.capturedTexts()[1].toFloat();
                 if (value > 0)
                     setVerticalAlignment(QTextCharFormat::AlignSuperScript);
                 else if (value < 0)

@@ -107,7 +107,7 @@ void TestShapeAt::testShadow()
     shadow->setOffset(QPointF(5, 9));
     shape.setShadow(shadow);
     KoInsets shadowInsets;
-    shadow->insets(&shape, shadowInsets);
+    shadow->insets(shadowInsets);
     bbox.adjust(-shadowInsets.left, -shadowInsets.top, shadowInsets.right, shadowInsets.bottom);
     QCOMPARE(shape.boundingRect(), bbox);
 }

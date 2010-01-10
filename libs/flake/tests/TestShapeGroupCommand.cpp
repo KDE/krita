@@ -261,7 +261,7 @@ void TestShapeGroupCommand::testGroupStrokeShapes()
     }
     if (strokeGroup->shadow()) {
         KoInsets insets;
-        strokeGroup->shadow()->insets(strokeGroup, insets);
+        strokeGroup->shadow()->insets(insets);
         bound.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
 

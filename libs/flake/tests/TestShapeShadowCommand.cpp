@@ -56,7 +56,7 @@ void TestShapeShadowCommand::refCounting()
 
     // if shadow1 is deleted when deleting cmd1 this will crash
     KoInsets insets;
-    shadow1->insets(shape1,insets);
+    shadow1->insets(insets);
 
     delete cmd2;
     delete shape1;

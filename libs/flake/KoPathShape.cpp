@@ -379,7 +379,7 @@ QRectF KoPathShape::boundingRect() const
     }
     if (shadow()) {
         KoInsets insets;
-        shadow()->insets(this, insets);
+        shadow()->insets(insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     if (filterEffectStack()) {

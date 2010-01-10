@@ -327,14 +327,14 @@ QRectF KoShape::boundingRect() const
     bb = transform.mapRect(bb);
     if (d->shadow) {
         KoInsets insets;
-        d->shadow->insets(this, insets);
+        d->shadow->insets(insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     if (d->filterEffectStack) {
         QRectF clipRect = d->filterEffectStack->clipRectForBoundingRect(QRectF(QPointF(), mySize));
         bb |= transform.mapRect(clipRect);
     }
-    
+
     return bb;
 }
 
@@ -1156,7 +1156,7 @@ KoShapeShadow * KoShape::loadOdfShadow(const KoXmlElement & element, KoShapeLoad
         if (! opacity.isEmpty() && opacity.right(1) == "%")
             shadowColor.setAlphaF(opacity.left(opacity.length() - 1).toFloat() / 100.0);
         shadow->setColor(shadowColor);
-        shadow->setVisibility(shadowStyle == "visible");
+        shadow->setVisible(shadowStyle == "visible");
 
         return shadow;
     }

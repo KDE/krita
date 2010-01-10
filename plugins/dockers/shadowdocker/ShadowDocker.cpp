@@ -121,7 +121,7 @@ void ShadowDocker::shadowChanged()
         return;
 
     KoShapeShadow * newShadow = new KoShapeShadow();
-    newShadow->setVisibility( d->widget->shadowVisible() );
+    newShadow->setVisible(d->widget->shadowVisible());
     newShadow->setColor( d->widget->shadowColor() );
     newShadow->setOffset( d->widget->shadowOffset() );
     d->canvas->addCommand( new KoShapeShadowCommand( selection->selectedShapes(), newShadow ) );

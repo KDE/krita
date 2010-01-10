@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -128,7 +129,7 @@ QColor KoShapeShadow::color() const
     return d->color;
 }
 
-void KoShapeShadow::setVisibility(bool visible)
+void KoShapeShadow::setVisible(bool visible)
 {
     d->visible = visible;
 }
@@ -138,12 +139,15 @@ bool KoShapeShadow::isVisible() const
     return d->visible;
 }
 
-void KoShapeShadow::insets(const KoShape *shape, KoInsets &insets)
+void KoShapeShadow::insets(KoInsets &insets) const
 {
-    if (! d->visible)
+    if (!d->visible) {
+        insets.top = 0;
+        insets.bottom = 0;
+        insets.left = 0;
+        insets.right = 0;
         return;
-
-    Q_UNUSED(shape);
+    }
 
     insets.left = (d->offset.x() < 0.0) ? qAbs(d->offset.x()) : 0.0;
     insets.top = (d->offset.y() < 0.0) ? qAbs(d->offset.y()) : 0.0;

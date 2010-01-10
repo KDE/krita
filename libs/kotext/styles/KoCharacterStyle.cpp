@@ -1239,4 +1239,9 @@ QVariant KoCharacterStyle::value(int key) const
     return d->stylesPrivate.value(key);
 }
 
+void KoCharacterStyle::removeHardCodedDefaults()
+{
+    d->hardCodedDefaultStyle.clearAll();
+}
+
 #include <KoCharacterStyle.moc>

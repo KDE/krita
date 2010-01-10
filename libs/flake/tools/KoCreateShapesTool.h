@@ -62,7 +62,7 @@ public:
      * return the shape Id that is to be created.
      * @return the shape Id that is to be created.
      */
-    const QString &shapeId() const;
+    QString shapeId() const;
 
     /**
      * Set the shape properties that the create controller will use for the next shape it will
@@ -80,8 +80,6 @@ protected:
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
 
 private:
-    friend class KoCreateShapeStrategy;
-
     class Private;
     Private * const d;
 };

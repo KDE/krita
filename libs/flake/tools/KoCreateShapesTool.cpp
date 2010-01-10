@@ -71,7 +71,7 @@ void KoCreateShapesTool::setShapeId(const QString &id)
     d->shapeId = id;
 }
 
-const QString &KoCreateShapesTool::shapeId() const
+QString KoCreateShapesTool::shapeId() const
 {
     return d->shapeId;
 }

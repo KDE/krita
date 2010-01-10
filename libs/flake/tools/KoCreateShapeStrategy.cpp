@@ -69,9 +69,9 @@ QUndoCommand* KoCreateShapeStrategy::createCommand()
     const KoProperties *props = parent->shapeProperties();
     KoShape *shape;
     if (props)
-        shape = factory->createShapeAndInit(props, parent->m_canvas->shapeController()->dataCenterMap());
+        shape = factory->createShapeAndInit(props, parent->canvas()->shapeController()->dataCenterMap());
     else
-        shape = factory->createDefaultShapeAndInit(parent->m_canvas->shapeController()->dataCenterMap());
+        shape = factory->createDefaultShapeAndInit(parent->canvas()->shapeController()->dataCenterMap());
     if (shape->shapeId().isEmpty())
         shape->setShapeId(factory->id());
     QRectF rect = d->selectedRect();
@@ -82,9 +82,9 @@ QUndoCommand* KoCreateShapeStrategy::createCommand()
     if (newSize.width() > 1.0 && newSize.height() > 1.0)
         shape->setSize(newSize);
 
-    QUndoCommand * cmd = parent->m_canvas->shapeController()->addShape(shape);
+    QUndoCommand * cmd = parent->canvas()->shapeController()->addShape(shape);
     if (cmd) {
-        KoSelection *selection = parent->m_canvas->shapeManager()->selection();
+        KoSelection *selection = parent->canvas()->shapeManager()->selection();
         selection->deselectAll();
         selection->select(shape);
     }

@@ -81,7 +81,7 @@ void ChangeTrackingTool::paint(QPainter& painter, const KoViewConverter& convert
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
-/*    if (m_canvas->canvasWidget()->hasFocus() && !m_caretTimer.isActive()) // make sure we blink
+/*    if (canvas()->canvasWidget()->hasFocus() && !m_caretTimer.isActive()) // make sure we blink
         m_caretTimer.start();
     QTextBlock block = m_textEditor->block();
     if (! block.layout()) // not layouted yet.  The Shape paint method will trigger a layout
@@ -122,8 +122,8 @@ void ChangeTrackingTool::paint(QPainter& painter, const KoViewConverter& convert
     QAbstractTextDocumentLayout::PaintContext pc;
     QAbstractTextDocumentLayout::Selection selection;
     selection.cursor = *(m_textEditor->cursor());
-    selection.format.setBackground(m_canvas->canvasWidget()->palette().brush(QPalette::Highlight));
-    selection.format.setForeground(m_canvas->canvasWidget()->palette().brush(QPalette::HighlightedText));
+    selection.format.setBackground(canvas()->canvasWidget()->palette().brush(QPalette::Highlight));
+    selection.format.setForeground(canvas()->canvasWidget()->palette().brush(QPalette::HighlightedText));
     pc.selections.append(selection);
     foreach(TextShape *ts, shapesToPaint) {
         KoTextShapeData *data = ts->textShapeData();
@@ -176,7 +176,7 @@ void ChangeTrackingTool::keyPressEvent(QKeyEvent* event)
 void ChangeTrackingTool::activate(bool temporary)
 {
     Q_UNUSED(temporary);
-    KoSelection *selection = m_canvas->shapeManager()->selection();
+    KoSelection *selection = canvas()->shapeManager()->selection();
     foreach(KoShape *shape, selection->selectedShapes()) {
         m_textShape = dynamic_cast<TextShape*>(shape);
         if (m_textShape)

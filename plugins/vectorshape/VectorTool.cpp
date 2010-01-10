@@ -73,7 +73,7 @@ void VectorTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void VectorTool::activate (bool)
 {
-    KoSelection *selection = m_canvas->shapeManager()->selection();
+    KoSelection *selection = canvas()->shapeManager()->selection();
     foreach (KoShape *shape, selection->selectedShapes()) {
         m_currentShape = dynamic_cast<VectorShape*> (shape);
         if (m_currentShape)

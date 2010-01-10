@@ -352,7 +352,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
         if (factoryId == "spellcheck") {
             kDebug(32500) << "KOffice SpellCheck plugin found";
             m_spellcheckPlugin = plugin;
-            connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
+            connect(canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
                     plugin, SLOT(resourceChanged(int, const QVariant &)));
         }
         m_textEditingPlugins.insert(factory->id(), plugin);
@@ -444,7 +444,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     }
     setPopupActionList(list);
 
-    connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
+    connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
 
     m_caretTimer.setInterval(500);
     connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
@@ -512,7 +512,7 @@ void TextTool::showChangeTip()
             int toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(element->getDate() + ' ' + element->getCreator()).width();
             m_changeTipPos.setX(m_changeTipPos.x() - toolTipWidth/2);
 
-            QToolTip::showText(m_changeTipPos,change,m_canvas->canvasWidget());
+            QToolTip::showText(m_changeTipPos,change,canvas()->canvasWidget());
 
         }
     }
@@ -520,7 +520,7 @@ void TextTool::showChangeTip()
 
 void TextTool::blinkCaret()
 {
-    if (! m_canvas->canvasWidget()->hasFocus()) {
+    if (! canvas()->canvasWidget()->hasFocus()) {
         m_caretTimer.stop();
         m_caretTimerState = false; // not visible.
     }
@@ -533,7 +533,7 @@ void TextTool::blinkCaret()
 
 void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (m_canvas->canvasWidget()->hasFocus() && !m_caretTimer.isActive()) // make sure we blink
+    if (canvas()->canvasWidget()->hasFocus() && !m_caretTimer.isActive()) // make sure we blink
         m_caretTimer.start();
     QTextBlock block = m_textEditor->block();
     if (! block.layout()) // not layouted yet.  The Shape paint method will trigger a layout
@@ -574,8 +574,8 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     QAbstractTextDocumentLayout::PaintContext pc;
     QAbstractTextDocumentLayout::Selection selection;
     selection.cursor = *(m_textEditor->cursor());
-    selection.format.setBackground(m_canvas->canvasWidget()->palette().brush(QPalette::Highlight));
-    selection.format.setForeground(m_canvas->canvasWidget()->palette().brush(QPalette::HighlightedText));
+    selection.format.setBackground(canvas()->canvasWidget()->palette().brush(QPalette::Highlight));
+    selection.format.setForeground(canvas()->canvasWidget()->palette().brush(QPalette::HighlightedText));
     pc.selections.append(selection);
     foreach(TextShape *ts, shapesToPaint) {
         KoTextShapeData *data = ts->textShapeData();
@@ -627,7 +627,7 @@ void TextTool::updateSelectedShape(const QPointF &point)
             repaintSelection();
         else
             repaintCaret();
-        foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(area, true)) {
+        foreach(KoShape *shape, canvas()->shapeManager()->shapesAt(area, true)) {
             TextShape *textShape = dynamic_cast<TextShape*>(shape);
             if (textShape) {
                 KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
@@ -647,7 +647,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
 {
     if (event->button() != Qt::RightButton)
         updateSelectedShape(event->point);
-    KoSelection *selection = m_canvas->shapeManager()->selection();
+    KoSelection *selection = canvas()->shapeManager()->selection();
     if (!selection->isSelected(m_textShape)) {
         selection->deselectAll();
         selection->select(m_textShape);
@@ -752,7 +752,7 @@ void TextTool::updateSelectionHandler()
         }
     }
 
-    KoCanvasResourceProvider *p = m_canvas->resourceProvider();
+    KoCanvasResourceProvider *p = canvas()->resourceProvider();
     m_allowResourceProviderUpdates = false;
     if (m_textShapeData) {
         p->setResource(KoText::CurrentTextPosition, m_textEditor->position());
@@ -830,7 +830,7 @@ int TextTool::pointToPosition(const QPointF & point) const
 
 void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    if (m_canvas->shapeManager()->shapeAt(event->point) != m_textShape) {
+    if (canvas()->shapeManager()->shapeAt(event->point) != m_textShape) {
         event->ignore(); // allow the event to be used by another
         return;
     }
@@ -1167,7 +1167,7 @@ void TextTool::ensureCursorVisible()
         }
     }
     cursorPos.moveTop(cursorPos.top() - m_textShapeData->documentOffset());
-    m_canvas->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cursorPos));
+    canvas()->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cursorPos));
 }
 
 void TextTool::keyReleaseEvent(QKeyEvent *event)
@@ -1232,7 +1232,7 @@ void TextTool::activate(bool temporary)
 {
     Q_UNUSED(temporary);
     m_caretTimer.start();
-    KoSelection *selection = m_canvas->shapeManager()->selection();
+    KoSelection *selection = canvas()->shapeManager()->selection();
     foreach(KoShape *shape, selection->selectedShapes()) {
         m_textShape = dynamic_cast<TextShape*>(shape);
         if (m_textShape)
@@ -1317,7 +1317,7 @@ void TextTool::repaintCaret()
         }
         repaintRect.moveTop(repaintRect.y() - m_textShapeData->documentOffset());
         repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
-        m_canvas->updateCanvas(repaintRect);
+        canvas()->updateCanvas(repaintRect);
     }
 }
 
@@ -1355,7 +1355,7 @@ void TextTool::repaintSelection(int startPosition, int endPosition)
         QRectF rect = repaintRect;
         rect.moveTop(rect.y() - ts->textShapeData()->documentOffset());
         rect = ts->absoluteTransformation(0).mapRect(rect);
-        m_canvas->updateCanvas(ts->boundingRect().intersected(rect));
+        canvas()->updateCanvas(ts->boundingRect().intersected(rect));
     }
 }
 
@@ -1427,7 +1427,7 @@ QWidget *TextTool::createOptionWidget()
 
 void TextTool::returnFocusToCanvas()
 {
-    m_canvas->canvasWidget()->setFocus();
+    canvas()->canvasWidget()->setFocus();
 }
 
 void TextTool::addUndoCommand()
@@ -1478,10 +1478,10 @@ void TextTool::addUndoCommand()
     if (m_currentCommand) {
         new UndoTextCommand(m_textShapeData->document(), this, m_currentCommand);
         if (! m_currentCommandHasChildren)
-            m_canvas->addCommand(m_currentCommand);
+            canvas()->addCommand(m_currentCommand);
         m_currentCommandHasChildren = true;
     } else
-        m_canvas->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
+        canvas()->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
 */}
 
 void TextTool::addCommand(QUndoCommand *command)
@@ -1491,7 +1491,7 @@ void TextTool::addCommand(QUndoCommand *command)
     if (cmd)
         cmd->setTool(this);
     m_currentCommandHasChildren = true; //to avoid adding it again on the first child UndoTextCommand (infinite loop)
-    m_canvas->addCommand(command); // will execute it.
+    canvas()->addCommand(command); // will execute it.
     m_currentCommand = 0;
     m_currentCommandHasChildren = false;
 */
@@ -1675,7 +1675,7 @@ void TextTool::insertTable()
 void TextTool::formatParagraph()
 {
     ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(this, m_textEditor->cursor());//TODO  check this with KoTextEditor
-    dia->setUnit(m_canvas->unit());
+    dia->setUnit(canvas()->unit());
     connect(dia, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));//TODO
     connect(dia, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
 
@@ -1702,7 +1702,7 @@ void TextTool::configureChangeTracking()
     deletionBgColor = m_changeTracker->getDeletionBgColor();
     formatChangeBgColor = m_changeTracker->getFormatChangeBgColor();
 
-    ChangeConfigureDialog changeDialog( insertionBgColor, deletionBgColor, formatChangeBgColor, m_canvas->canvasWidget());
+    ChangeConfigureDialog changeDialog( insertionBgColor, deletionBgColor, formatChangeBgColor, canvas()->canvasWidget());
     
     if (changeDialog.exec()) {
         m_changeTracker->setInsertionBgColor(changeDialog.getInsertionBgColor());
@@ -1777,9 +1777,9 @@ void TextTool::showStyleManager()
     Q_ASSERT(styleManager);
     if (!styleManager)
         return;  //don't crash
-    StyleManagerDialog *dia = new StyleManagerDialog(m_canvas->canvasWidget());
+    StyleManagerDialog *dia = new StyleManagerDialog(canvas()->canvasWidget());
     dia->setStyleManager(styleManager);
-    dia->setUnit(m_canvas->unit());
+    dia->setUnit(canvas()->unit());
     dia->show();
 }
 
@@ -1831,7 +1831,7 @@ void TextTool::isBidiUpdated()
 void TextTool::insertSpecialCharacter()
 {
     if (m_specialCharacterDocker == 0) {
-        m_specialCharacterDocker = new InsertCharacter(m_canvas->canvasWidget());
+        m_specialCharacterDocker = new InsertCharacter(canvas()->canvasWidget());
         connect(m_specialCharacterDocker, SIGNAL(insertCharacter(const QString&)),
                 this, SLOT(insertString(const QString&)));
     }
@@ -1856,9 +1856,9 @@ void TextTool::selectFont()
 void TextTool::shapeAddedToCanvas()
 {
     if (m_textShape) {
-        KoSelection *selection = m_canvas->shapeManager()->selection();
+        KoSelection *selection = canvas()->shapeManager()->selection();
         KoShape *shape = selection->firstSelectedShape();
-        if (shape != m_textShape && m_canvas->shapeManager()->shapes().contains(m_textShape)) {
+        if (shape != m_textShape && canvas()->shapeManager()->shapes().contains(m_textShape)) {
             // this situation applies when someone, not us, changed the selection by selecting another
             // text shape. Possibly by adding one.
             // Deselect the new shape again, so we can keep editing what we were already editing

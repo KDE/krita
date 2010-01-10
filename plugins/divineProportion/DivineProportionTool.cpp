@@ -87,7 +87,7 @@ void DivineProportionTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void DivineProportionTool::activate (bool)
 {
-    KoSelection *selection = m_canvas->shapeManager()->selection();
+    KoSelection *selection = canvas()->shapeManager()->selection();
     foreach (KoShape *shape, selection->selectedShapes()) {
         m_currentShape = dynamic_cast<DivineProportionShape*> (shape);
         if (m_currentShape)

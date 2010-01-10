@@ -49,7 +49,7 @@ void MusicTool::activate (bool temporary)
     Q_UNUSED( temporary );
     //kDebug() ;
 
-    KoSelection* selection = m_canvas->shapeManager()->selection();
+    KoSelection* selection = canvas()->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )
     {
         m_musicshape = dynamic_cast<MusicShape*>( shape );
@@ -91,7 +91,7 @@ void MusicTool::mouseReleaseEvent( KoPointerEvent* )
 
 void MusicTool::addCommand(QUndoCommand* command)
 {
-    m_canvas->addCommand(command);
+    canvas()->addCommand(command);
 }
 
 

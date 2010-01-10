@@ -99,7 +99,7 @@ void KoConnectionTool::paint(QPainter &painter, const KoViewConverter &converter
 
         painter.setPen(Qt::blue);
         painter.setBrush(Qt::white);
-        int radius = m_canvas->resourceProvider()->handleRadius();
+        int radius = canvas()->resourceProvider()->handleRadius();
         // Apply the conversion make by the matrix transformation
         painter.setMatrix(tempShape->absoluteTransformation(&converter) * painter.matrix());
         // ... handle unselected
@@ -107,7 +107,7 @@ void KoConnectionTool::paint(QPainter &painter, const KoViewConverter &converter
 
         painter.restore();
 
-        int grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
+        int grabSensitivity = canvas()->resourceProvider()->grabSensitivity();
         QRectF rec(m_mouse.x()-grabSensitivity/2, m_mouse.y()-grabSensitivity/2, grabSensitivity, grabSensitivity);
         int handleId = tempShape->handleIdAt(tempShape->documentToShape(rec));
 
@@ -135,13 +135,13 @@ void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
     if(isInRoi())
         tempShape = m_lastShapeOn;
     else
-        tempShape = m_canvas->shapeManager()->shapeAt(event->point);
+        tempShape = canvas()->shapeManager()->shapeAt(event->point);
     
     // We take care if the shape under the mouse is not another connection shape
     KoConnectionShape * tempConnectionShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
     if(tempConnectionShape && m_connectionShape == 0){
         // grabSensitivity is defined by the user
-        int grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
+        int grabSensitivity = canvas()->resourceProvider()->grabSensitivity();
         QRectF rec(m_mouse.x()-grabSensitivity/2, m_mouse.y()-grabSensitivity/2, grabSensitivity, grabSensitivity);
         m_activeHandle = tempConnectionShape->handleIdAt(tempShape->documentToShape(rec));
         
@@ -155,7 +155,7 @@ void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
     if(m_connectionShape == 0) {
         // All sizes and positions are hardcoded for now
         KoShapeFactory *factory = KoShapeRegistry::instance()->value("KoConnectionShape");
-        KoShape *shape = factory->createDefaultShapeAndInit(m_canvas->shapeController()->dataCenterMap());
+        KoShape *shape = factory->createDefaultShapeAndInit(canvas()->shapeController()->dataCenterMap());
         if((m_connectionShape = dynamic_cast<KoConnectionShape*>(shape))){
             KoConnectionShape * connectionShapeTest = dynamic_cast<KoConnectionShape*>(tempShape);
             if(isInRoi()) {
@@ -180,7 +180,7 @@ void KoConnectionTool::mousePressEvent(KoPointerEvent *event)
             m_connectionShape->moveHandle(1, event->point);
             // The connection is now done, so update for apply
             m_connectionShape->updateConnections();
-            m_canvas->shapeManager()->add(m_connectionShape);
+            canvas()->shapeManager()->add(m_connectionShape);
         }
     } else {
     // Second click
@@ -227,7 +227,7 @@ void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
     // Record the mouse position
     m_mouse = event->point;
     // Look at the new shape under the mouse
-    m_shapeOn = m_canvas->shapeManager()->shapeAt(event->point);
+    m_shapeOn = canvas()->shapeManager()->shapeAt(event->point);
 
     KoConnectionShape * tempShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
     if(!tempShape) {
@@ -281,7 +281,7 @@ void KoConnectionTool::mouseMoveEvent(KoPointerEvent *event)
         }
         m_lastConnectionShapeOn->updateConnections();
     }
-    m_canvas->updateCanvas(QRectF(0, 0, m_canvas->canvasWidget()->width(), m_canvas->canvasWidget()->height()));
+    canvas()->updateCanvas(QRectF(0, 0, canvas()->canvasWidget()->width(), canvas()->canvasWidget()->height()));
 }
 
 void KoConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -292,7 +292,7 @@ void KoConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
             m_shapeOn->removeConnectionPoint(getConnectionIndex(m_lastShapeOn, m_mouse));
         }else{
             // add a connection Point
-            m_shapeOn = m_canvas->shapeManager()->shapeAt(event->point);
+            m_shapeOn = canvas()->shapeManager()->shapeAt(event->point);
             QPointF point = m_shapeOn->documentToShape(event->point);
 
             m_shapeOn->addConnectionPoint(point);
@@ -314,7 +314,7 @@ void KoConnectionTool::keyPressEvent(QKeyEvent *event)
 void KoConnectionTool::activate(bool temporary)
 {
     Q_UNUSED(temporary);
-    m_canvas->canvasWidget()->setCursor(Qt::PointingHandCursor);
+    canvas()->canvasWidget()->setCursor(Qt::PointingHandCursor);
 }
 
 void KoConnectionTool::deactivate()
@@ -326,9 +326,9 @@ void KoConnectionTool::deactivate()
     m_modifyConnection = false;
     if(m_connectionShape != 0) {
         QRectF rec(m_connectionShape->boundingRect());
-        m_canvas->shapeManager()->remove(m_connectionShape);
+        canvas()->shapeManager()->remove(m_connectionShape);
         repaint(rec);
-        m_canvas->updateCanvas(rec);
+        canvas()->updateCanvas(rec);
         m_connectionShape = 0;
     }
 }
@@ -399,7 +399,7 @@ float KoConnectionTool::distanceSquare(QPointF p1, QPointF p2)
 
 bool KoConnectionTool::isInRoi()
 {
-    int grabSensitivity = m_canvas->resourceProvider()->grabSensitivity() * m_canvas->resourceProvider()->grabSensitivity();
+    int grabSensitivity = canvas()->resourceProvider()->grabSensitivity() * canvas()->resourceProvider()->grabSensitivity();
     if(m_lastShapeOn == 0)
         return false;
     
@@ -420,12 +420,12 @@ void KoConnectionTool::command()
     // Create the command which will make the connection
     QUndoCommand * cmd = 0;
     if(m_connectionShape != 0)
-        cmd = m_canvas->shapeController()->addShape(m_connectionShape);
+        cmd = canvas()->shapeController()->addShape(m_connectionShape);
 
     if (cmd) {
-        m_canvas->addCommand(cmd);
+        canvas()->addCommand(cmd);
     } else {
-        m_canvas->updateCanvas(m_connectionShape->boundingRect());
+        canvas()->updateCanvas(m_connectionShape->boundingRect());
         delete m_connectionShape;
     }
 }

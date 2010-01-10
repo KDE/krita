@@ -185,7 +185,7 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     m_convertText->setEnabled( false );
     connect( m_convertText, SIGNAL(triggered()), this, SLOT(convertText()) );
 
-    KoShapeManager *manager = m_canvas->shapeManager();
+    KoShapeManager *manager = canvas->shapeManager();
     connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
 }
 
@@ -229,8 +229,8 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
 {
     ArtisticTextShape *hit = 0;
     QRectF roi( event->point, QSizeF(1,1) );
-    QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
-    KoSelection *selection = m_canvas->shapeManager()->selection();
+    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt( roi );
+    KoSelection *selection = canvas()->shapeManager()->selection();
     foreach( KoShape *shape, shapes ) 
     {
         hit = dynamic_cast<ArtisticTextShape*>( shape );
@@ -239,7 +239,7 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
                 selection->deselectAll();
                 enableTextCursor( false );
                 m_currentShape = hit;
-                emit shapeSelected(m_currentShape, m_canvas);
+                emit shapeSelected(m_currentShape, canvas());
                 enableTextCursor( true );
                 selection->select( m_currentShape );
             }
@@ -273,7 +273,7 @@ void ArtisticTextTool::mouseMoveEvent( KoPointerEvent *event )
     ArtisticTextShape *textShape = 0;
 
     QRectF roi( event->point, QSizeF(1,1) );
-    QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
+    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt( roi );
     foreach( KoShape * shape, shapes )
     {
         ArtisticTextShape * text = dynamic_cast<ArtisticTextShape*>( shape );
@@ -343,7 +343,7 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
 
 void ArtisticTextTool::activate( bool )
 {
-    KoSelection *selection = m_canvas->shapeManager()->selection();
+    KoSelection *selection = canvas()->shapeManager()->selection();
     foreach( KoShape *shape, selection->selectedShapes() ) 
     {
         m_currentShape = dynamic_cast<ArtisticTextShape*>( shape );
@@ -357,7 +357,7 @@ void ArtisticTextTool::activate( bool )
         return;
     } else {
         m_currentText = m_currentShape->text();
-        emit shapeSelected(m_currentShape, m_canvas);
+        emit shapeSelected(m_currentShape, canvas());
     }
 
     enableTextCursor( true );
@@ -380,7 +380,7 @@ void ArtisticTextTool::deactivate()
 {
     if ( m_currentShape ) {
         if( m_currentShape->text().isEmpty() ) {
-            m_canvas->addCommand( m_canvas->shapeController()->removeShape( m_currentShape ) );
+            canvas()->addCommand( canvas()->shapeController()->removeShape( m_currentShape ) );
         }
         enableTextCursor( false );
         m_currentShape = 0;
@@ -407,7 +407,7 @@ void ArtisticTextTool::attachPath()
         m_blinkingCursor.stop();
         m_showCursor = false;
         updateTextCursorArea();
-        m_canvas->addCommand( new AttachTextToPathCommand( m_currentShape, m_path ) );
+        canvas()->addCommand( new AttachTextToPathCommand( m_currentShape, m_path ) );
         m_blinkingCursor.start( 500 );
         updateActions();
     }
@@ -417,7 +417,7 @@ void ArtisticTextTool::detachPath()
 {
     if( m_currentShape && m_currentShape->isOnPath() )
     {
-        m_canvas->addCommand( new DetachTextFromPathCommand( m_currentShape ) );
+        canvas()->addCommand( new DetachTextFromPathCommand( m_currentShape ) );
         updateActions();
     }
 }
@@ -435,10 +435,10 @@ void ArtisticTextTool::convertText()
     path->setTransformation( m_currentShape->transformation() );
     path->setShapeId( KoPathShapeId );
 
-    QUndoCommand * cmd = m_canvas->shapeController()->addShapeDirect( path );
+    QUndoCommand * cmd = canvas()->shapeController()->addShapeDirect( path );
     cmd->setText( i18n("Convert to Path") );
-    m_canvas->shapeController()->removeShape( m_currentShape, cmd );
-    m_canvas->addCommand( cmd );
+    canvas()->shapeController()->removeShape( m_currentShape, cmd );
+    canvas()->addCommand( cmd );
 
     emit done();
 }
@@ -474,11 +474,11 @@ QMap<QString, QWidget *> ArtisticTextTool::createOptionWidgets()
     ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget();
     configWidget->setObjectName("ArtisticTextConfigWidget");
     if (m_currentShape) {
-        configWidget->initializeFromShape(m_currentShape, m_canvas);
+        configWidget->initializeFromShape(m_currentShape, canvas());
     }
     connect(this, SIGNAL(shapeSelected(ArtisticTextShape *, KoCanvasBase *)), 
             configWidget, SLOT(initializeFromShape(ArtisticTextShape *, KoCanvasBase *)));
-    connect(m_canvas->shapeManager(), SIGNAL(selectionContentChanged()),
+    connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
             configWidget, SLOT(updateWidget()));
             
     widgets.insert(i18n("Text Properties"), configWidget);
@@ -515,7 +515,7 @@ void ArtisticTextTool::updateTextCursorArea() const
         return;
 
     QRectF bbox = cursorTransform().mapRect( m_textCursorShape.boundingRect() );
-    m_canvas->updateCanvas( bbox );
+    canvas()->updateCanvas( bbox );
 }
 
 void ArtisticTextTool::setTextCursorInternal( int textCursor )
@@ -541,7 +541,7 @@ void ArtisticTextTool::removeFromTextCursor( int from, unsigned int count )
     if ( from >= 0 ) {
         m_currentText.remove( from, count );
         QUndoCommand *cmd = new RemoveTextRangeCommand( this, from, count );
-        m_canvas->addCommand( cmd );
+        canvas()->addCommand( cmd );
     }
 }
 
@@ -557,7 +557,7 @@ void ArtisticTextTool::addToTextCursor( const QString &str )
         if ( len ) {
             m_currentText.insert( m_textCursor, printable );
             QUndoCommand *cmd = new AddTextRangeCommand( this, printable, m_textCursor );
-            m_canvas->addCommand( cmd );
+            canvas()->addCommand( cmd );
         }
     }
 }

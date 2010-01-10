@@ -45,7 +45,7 @@ void PictureTool::activate (bool temporary)
 {
     Q_UNUSED( temporary );
 
-    KoSelection* selection = m_canvas->shapeManager()->selection();
+    KoSelection* selection = canvas()->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )
     {
         m_pictureshape = dynamic_cast<PictureShape*>( shape );
@@ -103,12 +103,12 @@ void PictureTool::setImageData(KJob *job)
 
     KoImageData *data = m_pictureshape->imageCollection()->createImageData(transferJob->data());
     ChangeImageCommand *cmd = new ChangeImageCommand(m_pictureshape, data);
-    m_canvas->addCommand(cmd);
+    canvas()->addCommand(cmd);
 }
 
 void PictureTool::mouseDoubleClickEvent( KoPointerEvent *event )
 {
-    if(m_canvas->shapeManager()->shapeAt(event->point) != m_pictureshape) {
+    if(canvas()->shapeManager()->shapeAt(event->point) != m_pictureshape) {
         event->ignore(); // allow the event to be used by another
         return;
     }

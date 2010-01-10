@@ -69,7 +69,7 @@ void TextPasteCommand::redo()
 
         if (data->hasFormat("application/vnd.oasis.opendocument.text")) {
             //kDebug() << "pasting odf text";
-            KoTextPaste paste(m_tool->m_textShapeData, *editor->cursor(), m_tool->m_canvas);
+            KoTextPaste paste(m_tool->m_textShapeData, *editor->cursor(), m_tool->canvas());
             paste.paste(KoOdf::Text, data);
             //kDebug() << "done with pasting odf";
         } else if (data->hasHtml()) {

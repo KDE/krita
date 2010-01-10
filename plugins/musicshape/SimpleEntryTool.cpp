@@ -313,7 +313,7 @@ SimpleEntryTool::~SimpleEntryTool()
 void SimpleEntryTool::activate (bool temporary)
 {
     Q_UNUSED( temporary );
-    KoSelection* selection = m_canvas->shapeManager()->selection();
+    KoSelection* selection = canvas()->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )
     {
         m_musicshape = dynamic_cast<MusicShape*>( shape );
@@ -420,7 +420,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
 {
     if(!m_musicshape->boundingRect().contains(event->point)) {
         QRectF area(event->point, QSizeF(1,1));
-        foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(area, true)) {
+        foreach(KoShape *shape, canvas()->shapeManager()->shapesAt(area, true)) {
             MusicShape *musicshape = dynamic_cast<MusicShape*>(shape);
             if(musicshape) {
                 m_musicshape->update();
@@ -527,7 +527,7 @@ void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
 {
     if(!m_musicshape->boundingRect().contains(event->point)) {
         QRectF area(event->point, QSizeF(1,1));
-        foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(area, true)) {
+        foreach(KoShape *shape, canvas()->shapeManager()->shapesAt(area, true)) {
             MusicShape *musicshape = dynamic_cast<MusicShape*>(shape);
             if(musicshape) {
                 if (musicshape->sheet() == m_musicshape->sheet() || !event->buttons()) {
@@ -541,7 +541,7 @@ void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
     }
     
     m_point = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
-    m_canvas->updateCanvas(QRectF(QPointF(event->point.x() - 100, event->point.y() - 100), QSizeF(200, 200)));
+    canvas()->updateCanvas(QRectF(QPointF(event->point.x() - 100, event->point.y() - 100), QSizeF(200, 200)));
     if (event->buttons()) {
         QPointF p = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
         Sheet *sheet = m_musicshape->sheet();
@@ -655,7 +655,7 @@ void SimpleEntryTool::keyPressEvent( QKeyEvent *event )
 
 void SimpleEntryTool::addCommand(QUndoCommand* command)
 {
-    m_canvas->addCommand(command);
+    canvas()->addCommand(command);
 }
 
 

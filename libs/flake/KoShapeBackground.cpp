@@ -44,13 +44,13 @@ bool KoShapeBackground::hasTransparency()
     return false;
 }
 
-void KoShapeBackground::addUser()
+bool KoShapeBackground::ref()
 {
     Q_D(KoShapeBackground);
-    d->refCount.ref();
+    return d->refCount.ref();
 }
 
-bool KoShapeBackground::removeUser()
+bool KoShapeBackground::deref()
 {
     Q_D(KoShapeBackground);
     return d->refCount.deref();

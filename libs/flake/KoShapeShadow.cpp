@@ -151,12 +151,12 @@ void KoShapeShadow::insets(const KoShape *shape, KoInsets &insets)
     insets.bottom = (d->offset.y() > 0.0) ? d->offset.y() : 0.0;
 }
 
-void KoShapeShadow::addUser()
+bool KoShapeShadow::ref()
 {
-    d->refCount.ref();
+    return d->refCount.ref();
 }
 
-bool KoShapeShadow::removeUser()
+bool KoShapeShadow::deref()
 {
     return d->refCount.deref();
 }

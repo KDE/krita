@@ -25,7 +25,7 @@ class KoTextBlockData::Private
 public:
     Private() : counterWidth(0), counterSpacing(0), counterIndex(1), border(0) {}
     ~Private() {
-        if (border && border->removeUser() == 0)
+        if (border && !border->deref())
             delete border;
     }
     qreal counterWidth;
@@ -60,11 +60,11 @@ qreal KoTextBlockData::counterWidth() const
 
 void KoTextBlockData::setBorder(KoTextBlockBorderData *border)
 {
-    if (d->border && d->border->removeUser() == 0)
+    if (d->border && !d->border->deref())
         delete d->border;
     d->border = border;
     if (d->border)
-        d->border->addUser();
+        d->border->ref();
 }
 
 void KoTextBlockData::setCounterWidth(qreal width)

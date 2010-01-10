@@ -35,7 +35,7 @@ public:
     Edge edges[4];
 
     QRectF bounds;
-    int refCount;
+    QAtomicInt refCount;
 };
 
 KoTextBlockBorderData::KoTextBlockBorderData(const QRectF &paragRect)
@@ -196,14 +196,14 @@ void KoTextBlockBorderData::setEdge(Side side, const QTextBlockFormat &bf,
     d->edges[side] = edge;
 }
 
-void KoTextBlockBorderData::addUser()
+bool KoTextBlockBorderData::ref()
 {
-    d->refCount++;
+    d->refCount.ref();
 }
 
-int KoTextBlockBorderData::removeUser()
+bool KoTextBlockBorderData::deref()
 {
-    return --d->refCount;
+    return d->refCount.deref();
 }
 
 int KoTextBlockBorderData::useCount() const

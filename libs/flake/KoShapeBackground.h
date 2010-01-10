@@ -57,11 +57,17 @@ public:
     /// load background from odf styles
     virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) = 0;
 
-    /// refcounting
-    void addUser();
-    /// decrements the usecount. Returns true if the new value is non-zero, false otherwise.
-    bool removeUser();
-    /// refcounting
+    /**
+     * Increments the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool ref();
+    /**
+     * Decrements the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool deref();
+    /// Return the usage count
     int useCount() const;
 
 protected:

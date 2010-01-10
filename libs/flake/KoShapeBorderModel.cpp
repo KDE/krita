@@ -43,12 +43,12 @@ KoInsets KoShapeBorderModel::borderInsets(const KoShape *shape)
     return insets;
 }
 
-void KoShapeBorderModel::addUser()
+bool KoShapeBorderModel::ref()
 {
-    d->refCount.ref();
+    return d->refCount.ref();
 }
 
-bool KoShapeBorderModel::removeUser()
+bool KoShapeBorderModel::deref()
 {
     return d->refCount.deref();
 }

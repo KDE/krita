@@ -62,11 +62,17 @@ public:
 
     ~KoTextBlockBorderData();
 
-    /// refcounting
-    void addUser();
-    /// refcounting
-    int removeUser();
-    /// refcounting
+    /**
+     * Increments the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool ref();
+    /**
+     * Decrements the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool deref();
+    /// return the usage count
     int useCount() const;
 
     /**

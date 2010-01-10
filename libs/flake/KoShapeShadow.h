@@ -80,11 +80,17 @@ public:
     /// Returns the insets of the shadow
     void insets(const KoShape *shape, KoInsets &insets);
 
-    /// Increase reference counter
-    void addUser();
-    /// Decrease reference counter
-    bool removeUser();
-    /// Return reference counter
+    /**
+     * Increments the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool ref();
+    /**
+     * Decrements the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool deref();
+    /// Return the usage count
     int useCount() const;
 
 private:

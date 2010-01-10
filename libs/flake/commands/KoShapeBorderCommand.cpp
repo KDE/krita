@@ -31,7 +31,7 @@ public:
     ~Private()
     {
         foreach(KoShapeBorderModel* border, oldBorders) {
-            if (border && ! border->removeUser())
+            if (border && !border->deref())
                 delete border;
         }
     }
@@ -39,14 +39,14 @@ public:
     void addOldBorder( KoShapeBorderModel * oldBorder )
     {
         if (oldBorder)
-            oldBorder->addUser();
+            oldBorder->ref();
         oldBorders.append(oldBorder);
     }
 
     void addNewBorder( KoShapeBorderModel * newBorder )
     {
         if (newBorder)
-            newBorder->addUser();
+            newBorder->ref();
         newBorders.append(newBorder);
     }
 

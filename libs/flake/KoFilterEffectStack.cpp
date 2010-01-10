@@ -98,12 +98,12 @@ QRectF KoFilterEffectStack::clipRectForBoundingRect(const QRectF &boundingRect) 
     return QRectF(x, y, w, h);
 }
 
-void KoFilterEffectStack::addUser()
+bool KoFilterEffectStack::ref()
 {
-    d->refCount.ref();
+    return d->refCount.ref();
 }
 
-bool KoFilterEffectStack::removeUser()
+bool KoFilterEffectStack::deref()
 {
     return d->refCount.deref();
 }

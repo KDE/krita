@@ -31,11 +31,11 @@ public:
     }
     ~Private() {
         foreach(KoShapeBackground* fill, oldFills) {
-            if (fill && ! fill->removeUser())
+            if (fill && !fill->deref())
                 delete fill;
         }
         foreach(KoShapeBackground* fill, newFills) {
-            if (fill && ! fill->removeUser())
+            if (fill && !fill->deref())
                 delete fill;
         }
     }
@@ -43,14 +43,14 @@ public:
     void addOldFill( KoShapeBackground * oldFill )
     {
         if (oldFill)
-            oldFill->addUser();
+            oldFill->ref();
         oldFills.append(oldFill);
     }
 
     void addNewFill( KoShapeBackground * newFill )
     {
         if (newFill)
-            newFill->addUser();
+            newFill->ref();
         newFills.append(newFill);
     }
 

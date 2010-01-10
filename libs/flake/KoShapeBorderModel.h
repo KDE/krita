@@ -94,11 +94,17 @@ public:
      */
     virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color ) = 0;
 
-    /// refcounting
-    void addUser();
-    /// refcounting
-    bool removeUser();
-    /// refcounting
+    /**
+     * Increments the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool ref();
+    /**
+     * Decrements the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool deref();
+    /// Return the usage count
     int useCount() const;
 
 private:

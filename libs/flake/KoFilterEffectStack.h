@@ -89,10 +89,16 @@ public:
     /// Returns the clipping rectangle for the given bounding rect
     QRectF clipRectForBoundingRect(const QRectF &boundingRect) const;
 
-    /// Increase reference counter
-    void addUser();
-    /// Decrease reference counter
-    bool removeUser();
+    /**
+     * Increments the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool ref();
+    /**
+     * Decrements the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool deref();
     /// Return reference counter
     int useCount() const;
 

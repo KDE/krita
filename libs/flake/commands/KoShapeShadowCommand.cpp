@@ -29,7 +29,7 @@ public:
     Private() {}
     ~Private() {
         foreach(KoShapeShadow* shadow, oldShadows) {
-            if (shadow && ! shadow->removeUser())
+            if (shadow && !shadow->deref())
                 delete shadow;
         }
     }
@@ -37,14 +37,14 @@ public:
     void addOldShadow( KoShapeShadow * oldShadow )
     {
         if (oldShadow)
-            oldShadow->addUser();
+            oldShadow->ref();
         oldShadows.append(oldShadow);
     }
 
     void addNewShadow( KoShapeShadow * newShadow )
     {
         if (newShadow)
-            newShadow->addUser();
+            newShadow->ref();
         newShadows.append(newShadow);
     }
 

@@ -124,29 +124,28 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
-    switch( type )
+    switch (type) {
+    case KoShape::BorderChanged:
     {
-        case KoShape::BorderChanged:
-        {
-            KoShapeBorderModel * stroke = border();
-            if( stroke ) {
-                if( stroke->removeUser() )
-                    delete stroke;
-                setBorder(0);
-            }
-            break;
+        KoShapeBorderModel *stroke = border();
+        if (stroke) {
+            if (stroke->deref())
+                delete stroke;
+            setBorder(0);
         }
-        case KoShape::ShadowChanged:
-        {
-            KoShapeShadow * shade = shadow();
-            if( shade ) {
-                if( shade->removeUser() )
-                    delete shade;
-                setShadow(0);
-            }
-            break;
+        break;
+    }
+    case KoShape::ShadowChanged:
+    {
+        KoShapeShadow *shade = shadow();
+        if (shade) {
+            if (shade->deref())
+                delete shade;
+            setShadow(0);
         }
-        default:
-            break;
+        break;
+    }
+    default:
+        break;
     }
 }

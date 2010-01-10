@@ -57,9 +57,9 @@ StylePreview::StylePreview(QWidget * parent)
 
 StylePreview::~StylePreview()
 {
-    if (m_background && ! m_background->removeUser())
+    if (m_background && !m_background->deref())
         delete m_background;
-    if (m_stroke && ! m_stroke->removeUser())
+    if (m_stroke && !m_stroke->deref())
         delete m_stroke;
 }
 
@@ -137,23 +137,23 @@ bool StylePreview::eventFilter(QObject *, QEvent *event)
 void StylePreview::update(KoShapeBorderModel * stroke, KoShapeBackground * fill)
 {
     if (fill != m_background) {
-        if (m_background && ! m_background->removeUser())
+        if (m_background && !m_background->deref())
             delete m_background;
 
         m_background = fill;
 
         if (m_background)
-            m_background->addUser();
+            m_background->ref();
     }
 
     if (stroke != m_stroke) {
-        if (m_stroke && ! m_stroke->removeUser())
+        if (m_stroke && !m_stroke->deref())
             delete m_stroke;
 
         m_stroke = stroke;
 
         if (m_stroke)
-            m_stroke->addUser();
+            m_stroke->ref();
     }
 
     QFrame::update();

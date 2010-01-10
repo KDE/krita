@@ -966,6 +966,16 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
             setVerticalAlignment(QTextCharFormat::AlignSuperScript);
         else if (textPosition.startsWith("sub"))
             setVerticalAlignment(QTextCharFormat::AlignSubScript);
+        else {
+            QRegExp re("(-?\\d+)%.*");
+            if (re.exactMatch(textPosition)) {
+                int value = re.capturedTexts()[1].toInt();
+                if (value > 0)
+                    setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+                else if (value < 0)
+                    setVerticalAlignment(QTextCharFormat::AlignSubScript);
+            }
+        }
     }
 
     // The fo:font-variant attribute provides the option to display text as small capitalized letters.

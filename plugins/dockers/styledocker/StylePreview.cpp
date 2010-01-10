@@ -267,7 +267,7 @@ void StylePreview::drawStroke(QPainter & painter, const KoShapeBorderModel * str
         painter.save();
         painter.setRenderHint(QPainter::Antialiasing, true);
         painter.setClipRegion(clipRegion);
-        border->paintBorder(&path, painter, zoomHandler);
+        border->paint(&path, painter, zoomHandler);
         painter.restore();
     }
     else {

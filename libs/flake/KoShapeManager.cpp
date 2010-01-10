@@ -317,7 +317,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         painter.restore();
         if (shape->border()) {
             painter.save();
-            shape->border()->paintBorder(shape, painter, converter);
+            shape->border()->paint(shape, painter, converter);
             painter.restore();
         }
     } else {
@@ -347,7 +347,7 @@ void KoShapeManager::paintShape(KoShape * shape, QPainter &painter, const KoView
         imagePainter.restore();
         if (shape->border()) {
             imagePainter.save();
-            shape->border()->paintBorder(shape, imagePainter, converter);
+            shape->border()->paint(shape, imagePainter, converter);
             imagePainter.restore();
         }
         imagePainter.end();

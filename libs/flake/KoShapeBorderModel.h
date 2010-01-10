@@ -79,7 +79,7 @@ public:
      *       shape as its start coordinate.
      * @param converter to convert between internal and view coordinates.
      */
-    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter) = 0;
+    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter) = 0;
 
     /**
      * Paint the border in the given color
@@ -92,7 +92,7 @@ public:
      * @param converter to convert between internal and view coordinates.
      * @param color to use to paint the border.
      */
-    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color ) = 0;
+    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color) = 0;
 
     /**
      * Increments the use-value.

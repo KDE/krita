@@ -101,11 +101,11 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
         // please only change if you know what you are doing
         painter.setMatrix(offsetMatrix * painter.matrix());
 
-        // compensate applyConversion call in paintBorder
+        // compensate applyConversion call in paint
         QMatrix scaleMatrix = newPainterMatrix * oldPainterMatrix.inverted();
         painter.setMatrix(scaleMatrix.inverted() * painter.matrix());
 
-        shape->border()->paintBorder(shape, painter, converter, d->color);
+        shape->border()->paint(shape, painter, converter, d->color);
     }
 }
 

@@ -62,13 +62,13 @@ void ClipboardProxyShape::paint(QPainter &painter, const KoViewConverter &conver
         m_child->paint(painter, zh);
         painter.restore();
         if (m_child->border())
-            m_child->border()->paintBorder(m_child, painter, zh);
+            m_child->border()->paint(m_child, painter, zh);
     }
     else {
         painter.save();
         m_child->paint(painter, converter);
         painter.restore();
         if (m_child->border())
-            m_child->border()->paintBorder(m_child, painter, converter);
+            m_child->border()->paint(m_child, painter, converter);
     }
 }

@@ -145,7 +145,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         painter.restore();
         if (m_shape->border()) {
             painter.save();
-            m_shape->border()->paintBorder(m_shape, painter, converter);
+            m_shape->border()->paint(m_shape, painter, converter);
             painter.restore();
         }
 

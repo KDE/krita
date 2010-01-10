@@ -338,7 +338,7 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
     QImage thumb( size, QImage::Format_RGB32 );
     // draw the background of the thumbnail
     thumb.fill( QColor( Qt::white ).rgb() );
-    shapePainter.paintShapes( thumb );
+    shapePainter.paint(thumb);
 
     return thumb;
 }

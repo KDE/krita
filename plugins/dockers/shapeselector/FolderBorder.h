@@ -28,8 +28,8 @@ public:
     virtual void fillStyle(KoGenStyle &, KoShapeSavingContext &) {}
     virtual void borderInsets(const KoShape *shape, KoInsets &insets);
     virtual bool hasTransparency();
-    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
-    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color);
+    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
+    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color);
 };
 
 #endif

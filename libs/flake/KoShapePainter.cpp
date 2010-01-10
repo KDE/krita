@@ -134,7 +134,7 @@ void KoShapePainter::setShapes(const QList<KoShape*> &shapes)
     d->canvas->shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
 }
 
-void KoShapePainter::paintShapes(QPainter &painter, KoViewConverter &converter)
+void KoShapePainter::paint(QPainter &painter, KoViewConverter &converter)
 {
     foreach (KoShape *shape, d->canvas->shapeManager()->shapes()) {
         shape->waitUntilReady(converter, false);
@@ -143,7 +143,7 @@ void KoShapePainter::paintShapes(QPainter &painter, KoViewConverter &converter)
     d->canvas->shapeManager()->paint(painter, converter, true);
 }
 
-void KoShapePainter::paintShapes(QPainter &painter, const QRect &painterRect, const QRectF &documentRect)
+void KoShapePainter::paint(QPainter &painter, const QRect &painterRect, const QRectF &documentRect)
 {
     KoViewConverter converter;
     // calculate the painter destination rectangle size in document coordinates
@@ -174,19 +174,19 @@ void KoShapePainter::paintShapes(QPainter &painter, const QRect &painterRect, co
     painter.translate(offset.x(), offset.y());
 
     // finally paint the shapes
-    paintShapes(painter, converter);
+    paint(painter, converter);
 
     painter.restore();
 }
 
-void KoShapePainter::paintShapes(QImage &image)
+void KoShapePainter::paint(QImage &image)
 {
     if (image.isNull())
         return;
 
     QPainter painter(&image);
 
-    paintShapes(painter, image.rect(), contentRect());
+    paint(painter, image.rect(), contentRect());
 }
 
 QRectF KoShapePainter::contentRect()

@@ -164,7 +164,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
         if (shape->border()) {
             painter.save();
             painter.setMatrix(shape->absoluteTransformation(&converter) * baseMatrix);
-            shape->border()->paintBorder(shape, painter, converter);
+            shape->border()->paint(shape, painter, converter);
             painter.restore();
         }
     }

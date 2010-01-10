@@ -183,10 +183,10 @@ void KoPAPage::paintPage( QPainter & painter, KoZoomHandler & zoomHandler )
     KoShapePainter shapePainter( getPaintingStrategy() );
     if ( displayMasterShapes() ) {
         shapePainter.setShapes( masterPage()->childShapes() );
-        shapePainter.paintShapes( painter, zoomHandler );
+        shapePainter.paint(painter, zoomHandler);
     }
     shapePainter.setShapes( childShapes() );
-    shapePainter.paintShapes( painter, zoomHandler );
+    shapePainter.paint(painter, zoomHandler);
 }
 
 void KoPAPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const

@@ -116,7 +116,7 @@ bool KoLineBorder::hasTransparency()
     return d->color.alpha() > 0;
 }
 
-void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
+void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
     KoShape::applyConversion(painter, converter);
 
@@ -131,7 +131,7 @@ void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewCo
         painter.strokePath(shape->outline(), pen);
 }
 
-void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color )
+void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color )
 {
     KoShape::applyConversion(painter, converter);
 

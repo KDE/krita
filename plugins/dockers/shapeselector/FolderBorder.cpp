@@ -48,7 +48,7 @@ bool FolderBorder::hasTransparency()
     return false;
 }
 
-void FolderBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
+void FolderBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
@@ -70,9 +70,9 @@ void FolderBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewCo
     }
 }
 
-void FolderBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color)
+void FolderBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color)
 {
     Q_UNUSED(color);
     // FIXME
-    paintBorder(shape, painter, converter);
+    paint(shape, painter, converter);
 }

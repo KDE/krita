@@ -126,6 +126,8 @@ protected:
     virtual void hideEvent(QHideEvent *); ///< reimplemented from QComboBox
     virtual void changeEvent(QEvent *e); ///< reimplemented from QComboBox
     virtual void mousePressEvent(QMouseEvent *e); ///< reimplemented from QComboBox
+    virtual void keyPressEvent(QKeyEvent *e); ///< reimplemented from QComboBox
+    virtual void wheelEvent(QWheelEvent *e); ///< reimplemented from QComboBox
 
 private:
     Q_PRIVATE_SLOT(d, void sliderValueChanged(int value))

@@ -163,3 +163,11 @@ QString KisPaintOpSettings::modelName() const
 }
 #endif
 
+KisPaintOpSettingsWidget* KisPaintOpSettings::optionsWidget() const
+{
+    if(d->settingsWidget.isNull())
+        return 0;
+    
+    return d->settingsWidget.data();
+}
+

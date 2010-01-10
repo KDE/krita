@@ -63,4 +63,12 @@ KisPropertiesConfiguration* KisBrushOpSettingsWidget::configuration() const
     return config;
 }
 
+void KisBrushOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
+{
+    Q_UNUSED(y);
+    qreal currentDiameter = m_brushOption->autoBrushDiameter();
+    
+    m_brushOption->setAutoBrushDiameter(currentDiameter + qRound(x));
+}
+
 #include "kis_brushop_settings_widget.moc"

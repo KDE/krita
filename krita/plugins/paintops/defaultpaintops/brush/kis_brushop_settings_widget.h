@@ -41,6 +41,8 @@ public:
 
     KisPropertiesConfiguration* configuration() const;
     
+    void changePaintOpSize(qreal x, qreal y);
+    
 public:
 
     KisBrushOptionWidget * m_brushOption;

@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef KIS_BRUSH_OPTION_H_
+#define KIS_BRUSH_OPTION_H_
 
 #include "kis_brush.h"
 
@@ -33,7 +35,9 @@ public:
     KisBrushSP brush() const;
     
     void setBrush(KisBrushSP brush);
+
 private:
     KisBrushSP m_brush;
 };
 
+#endif

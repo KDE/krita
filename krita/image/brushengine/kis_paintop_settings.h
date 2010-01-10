@@ -136,6 +136,12 @@ public:
     virtual QString modelName() const;
 #endif
 
+protected:
+     /**
+     * @return the option widget of the paintop (can be 0 is no option widgets is set)
+     */
+    KisPaintOpSettingsWidget* optionsWidget() const;
+
 private:
 
     struct Private;

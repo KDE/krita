@@ -26,10 +26,6 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
-#include "kis_brushop_settings_widget.h"
-
-class QDomElement;
-
 class KisBrushOpSettings : public KisPaintOpSettings
 {
 
@@ -41,13 +37,6 @@ public:
 
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
-
-    virtual void changePaintOpSize(qreal x, qreal y) const;
-    
-public:
-
-    KisBrushOpSettingsWidget *m_options;
-
 };
 
 

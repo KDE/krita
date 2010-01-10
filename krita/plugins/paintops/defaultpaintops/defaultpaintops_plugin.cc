@@ -32,6 +32,7 @@
 #include "kis_airbrushop_settings_widget.h"
 #include "kis_brushop.h"
 #include "kis_brushop_settings.h"
+#include "kis_brushop_settings_widget.h"
 #include "kis_duplicateop_factory.h"
 #include "kis_eraseop.h"
 #include "kis_eraseop_settings.h"

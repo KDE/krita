@@ -43,7 +43,7 @@
 KoPABackgroundTool::KoPABackgroundTool( KoCanvasBase *canvas )
 : KoTool( canvas )
 {
-    m_view = static_cast<KoPACanvas *>(m_canvas)->koPAView();
+    m_view = static_cast<KoPACanvas *>(canvas)->koPAView();
 
     connect( m_view, SIGNAL( activePageChanged() ), this, SLOT( slotActivePageChanged() ) );
 }
@@ -64,13 +64,13 @@ void KoPABackgroundTool::activate( bool temporary )
 {
     Q_UNUSED( temporary );
 
-    m_canvas->shapeManager()->selection()->deselectAll();
-    m_canvas->resourceProvider()->setResource( KoPageApp::CurrentPage, m_view->activePage() );
+    canvas()->shapeManager()->selection()->deselectAll();
+    canvas()->resourceProvider()->setResource( KoPageApp::CurrentPage, m_view->activePage() );
 }
 
 void KoPABackgroundTool::deactivate()
 {
-    m_canvas->resourceProvider()->clearResource( KoPageApp::CurrentPage );
+    canvas()->resourceProvider()->clearResource( KoPageApp::CurrentPage );
 }
 
 void KoPABackgroundTool::mousePressEvent( KoPointerEvent *event )
@@ -90,7 +90,7 @@ void KoPABackgroundTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void KoPABackgroundTool::slotActivePageChanged()
 {
-    m_canvas->resourceProvider()->setResource( KoPageApp::CurrentPage, m_view->activePage() );
+    canvas()->resourceProvider()->setResource( KoPageApp::CurrentPage, m_view->activePage() );
 }
 
 KoPAView * KoPABackgroundTool::view() const

@@ -37,6 +37,7 @@ class KoVariableManagerPrivate;
  * Changing the value will lead to directly change the value of all variables
  * inserted into the document.
  * @see KoInlineTextObjectManager::createInsertVariableActions()
+ * @see KoInlineTextObjectManager::variableManager()
  */
 class KOTEXT_EXPORT KoVariableManager
 {

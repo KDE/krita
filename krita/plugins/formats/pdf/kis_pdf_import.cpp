@@ -74,8 +74,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         return KoFilter::FileNotFound;
 
 
-    KUrl url;
-    url.setPath(filename);
+    KUrl url(filename);
 
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, QApplication::activeWindow())) {
         return KoFilter::FileNotFound;

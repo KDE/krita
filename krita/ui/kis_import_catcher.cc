@@ -31,6 +31,7 @@
 #include <kio/job.h>
 
 #include <KoFilterManager.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "kis_node_manager.h"
 #include "kis_types.h"
@@ -39,6 +40,8 @@
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_selection.h"
+#include "kis_node_commands_adapter.h"
 #include "kis_group_layer.h"
 #include <QMessageBox>
 
@@ -59,11 +62,11 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     KoFilterManager manager(m_d->doc);
     QByteArray nativeFormat = m_d->doc->nativeFormatMimeType();
     KoFilter::ConversionStatus status;
-    QString s = manager.importDocument(url.path(), status);
+    QString s = manager.importDocument(url.pathOrUrl(), status);
     KisImageWSP importedImage = m_d->doc->image();
 
     if (importedImage) {
-        KisLayerSP importedImageLayer = KisLayerSP(importedImage->rootLayer().data());
+        KisLayerSP importedImageLayer = new KisPaintLayer(importedImage.data(),importedImage->nextLayerName(), OPACITY_OPAQUE, importedImage->projection());
 
         if (!importedImageLayer.isNull()) {
             QStringList list;
@@ -94,11 +97,13 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
                 parent = m_d->view->image()->rootLayer();
             }
 
-            m_d->view->image()->addNode(importedImageLayer.data(), parent, currentActiveLayer.data());
+            KisNodeCommandsAdapter adapter(m_d->view);
+            adapter.addNode(importedImageLayer.data(), parent, currentActiveLayer.data());
             m_d->view->nodeManager()->activateNode(importedImageLayer.data());
             importedImageLayer->setDirty();
         }
     }
+
     m_d->doc->deleteLater();
     deleteLater();
 }

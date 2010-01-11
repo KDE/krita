@@ -56,8 +56,7 @@ KoFilter::ConversionStatus jp2Import::convert(const QByteArray&, const QByteArra
 
     if (!filename.isEmpty()) {
 
-        KUrl url;
-        url.setPath(filename);
+        KUrl url(filename);
 
         if (url.isEmpty())
             return KoFilter::FileNotFound;

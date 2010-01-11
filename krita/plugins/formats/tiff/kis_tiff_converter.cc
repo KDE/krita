@@ -551,8 +551,7 @@ KisImageBuilder_Result KisTIFFConverter::buildImage(const KUrl& uri)
     QString tmpFile;
 
     if (KIO::NetAccess::download(uri, tmpFile, qApp -> activeWindow())) {
-        KUrl uriTF;
-        uriTF.setPath(tmpFile);
+        KUrl uriTF(tmpFile);
         result = decode(uriTF);
         KIO::NetAccess::removeTempFile(tmpFile);
     }

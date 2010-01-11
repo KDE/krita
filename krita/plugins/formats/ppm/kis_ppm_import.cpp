@@ -74,8 +74,7 @@ KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const Q
         return KoFilter::FileNotFound;
     }
 
-    KUrl url;
-    url.setPath(filename);
+    KUrl url(filename);
 
 
     dbgFile << "Import: " << url;
@@ -91,8 +90,7 @@ KoFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const Q
     QString tmpFile;
     KoFilter::ConversionStatus result;
     if (KIO::NetAccess::download(url, tmpFile, QApplication::activeWindow())) {
-        KUrl uriTF;
-        uriTF.setPath(tmpFile);
+        KUrl uriTF(tmpFile);
 
         // open the file
         QFile *fp = new QFile(uriTF.toLocalFile());

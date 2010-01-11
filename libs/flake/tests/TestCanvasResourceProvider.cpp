@@ -21,6 +21,7 @@
 
 #include "KoCanvasResourceProvider.h"
 #include "KoPathShape.h"
+#include <QtTest/QSignalSpy>
 
 void TestCanvasResourceProvider::koShapeResource()
 {
@@ -30,6 +31,18 @@ void TestCanvasResourceProvider::koShapeResource()
     KoCanvasResourceProvider rp( 0 );
     rp.setResource( key, shape );
     QVERIFY( shape == rp.koShapeResource( key ) );
+}
+
+void TestCanvasResourceProvider::testUnitChanged()
+{
+    KoCanvasResourceProvider rp(0);
+    QSignalSpy spy(&rp, SIGNAL(resourceChanged(int, const QVariant &)));
+
+    rp.setUnitChanged();
+    QCOMPARE(spy.count(), 1);
+
+    rp.setUnitChanged();
+    QCOMPARE(spy.count(), 2);
 }
 
 QTEST_MAIN(TestCanvasResourceProvider)

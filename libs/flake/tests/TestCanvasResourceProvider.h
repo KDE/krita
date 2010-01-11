@@ -27,6 +27,7 @@ class TestCanvasResourceProvider : public QObject
     Q_OBJECT
 private slots:
     void koShapeResource();
+    void testUnitChanged();
 };
 
 #endif // TESTCANVASRESOURCEPROVIDER_H

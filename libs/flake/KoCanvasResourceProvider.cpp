@@ -175,7 +175,11 @@ KoLineBorder KoCanvasResourceProvider::activeBorder()
 
 void KoCanvasResourceProvider::setUnitChanged()
 {
-    setResource(KoCanvasResource::Unit, true);
+    // do not use setResource with a static value
+    // because it exits if the value does not change
+    // so we just emit that the resource has changed
+    // the current unit can then pulled from the canvas
+    emit resourceChanged(KoCanvasResource::Unit, QVariant());
 }
 
 bool KoCanvasResourceProvider::boolResource(int key) const

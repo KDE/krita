@@ -112,6 +112,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     //    return;
     if (m_mode == PAN) {
         initPan(e);
+        e->accept();
         return;
     }
 
@@ -144,10 +145,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
                                                       KisToolUtils::pick(currentImage()->mergedImage(),
                                                                          convertToIntPixelCoord(e)));
     }
-    else if (e->modifiers() == Qt::ShiftModifier){
+    else if (e->modifiers() == Qt::ShiftModifier) {
         m_mode = EDIT_BRUSH;
         m_prevMousePos = e->point;
         m_originalPos = e->globalPos();
+        e->accept();
         return;
     }
     else { // No modifiers
@@ -173,7 +175,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 #endif
             }
         }
+        else if (m_mode == PAINT && (e->button() == Qt::RightButton || e->button() == Qt::MidButton)) { // end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
+            endPaint();
+        }
     }
+    e->accept();
 }
 
 inline double norm(const QPointF& p)

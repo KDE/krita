@@ -57,9 +57,6 @@ class KoSliderCombo;
 
 enum enumBrushMode {
     PAINT,
-    PAINT_STYLUS,
-    ERASE,
-    ERASE_STYLUS,
     HOVER,
     EDIT_BRUSH,
     PAN

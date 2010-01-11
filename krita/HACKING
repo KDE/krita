@@ -45,9 +45,6 @@ Class naming
     New implementation files end in .cpp, not in .cc anymore.
 	Example: kis_new_class.h/KisNewClass.
 
-	The only exception to this rule are interfaces.
-	Example: kis_tool.h/KisToolInterface.
-
 Function naming
 
 	Functions should be named in camelBackedFashion, to conform to Qt's standards.
@@ -73,7 +70,7 @@ Enums
 
 Namespaces
 
-	Currently, we only use anonymous (right term?) namespaces for things like undo
+	Currently, we only use anonymous namespaces for things like undo
 	commands. For the rest, some classes have a 'Kis' prefix, others don't. This should
 	be made consistent, and we might want to use namespaces to keep all of Krita
 	inside.
@@ -85,7 +82,8 @@ Files and classes
 
 Spaces
 
-	Keep the source airy and open. (However, maybe I was wrong in wanting spaces around ->...)
+	Keep the source airy and open. In particular, there should be empty lines between function
+    declarations and definitions.
 
 Slots and signals
 

@@ -17,17 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TOOL_POLYGON_BASE_H
-#define KIS_TOOL_POLYGON_BASE_H
+#ifndef KIS_TOOL_POLYLINE_BASE_H
+#define KIS_TOOL_POLYLINE_BASE_H
 
 #include <kis_tool_shape.h>
 #include <kis_cursor.h>
 
-class KRITAUI_EXPORT KisToolPolygonBase : public KisToolShape
+class KRITAUI_EXPORT KisToolPolylineBase : public KisToolShape
 {
 Q_OBJECT
 public:
-    KisToolPolygonBase(KoCanvasBase * canvas, const QCursor & cursor=KisCursor::load("tool_polygon_cursor.png", 6, 6));
+    KisToolPolylineBase(KoCanvasBase * canvas, const QCursor & cursor=KisCursor::load("tool_polygon_cursor.png", 6, 6));
 
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
@@ -37,13 +37,15 @@ public:
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 protected:
-    virtual void finishPolygon(const QVector<QPointF>& points)=0;
+    virtual void finishPolyline(const QVector<QPointF>& points)=0;
     void updateArea();
-    void cancel();
     QRectF dragBoundingRect();
 
-private:
+private slots:
+    void cancel();
     void finish();
+
+private:
 
     QPointF m_dragStart;
     QPointF m_dragEnd;
@@ -51,4 +53,4 @@ private:
     vQPointF m_points;
 };
 
-#endif // KIS_TOOL_POLYGON_BASE_H
+#endif // KIS_TOOL_POLYLINE_BASE_H

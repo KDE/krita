@@ -96,6 +96,9 @@ void KisToolSelectBase::keyPressEvent(QKeyEvent *event)
     case Qt::Key_T:
         slotSetAction(SELECTION_INTERSECT);
         break;
+    case Qt::Key_Escape:
+        //don't forward to KisTool::keyPressEvent()
+        break;
     default:
         KisTool::keyPressEvent(event);
         return;

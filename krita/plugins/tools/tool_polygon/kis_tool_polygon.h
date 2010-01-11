@@ -23,11 +23,11 @@
 
 #include "kis_tool_shape.h"
 #include "flake/kis_node_shape.h"
-#include <kis_tool_polygon_base.h>
+#include <kis_tool_polyline_base.h>
 
 class KoCanvasBase;
 
-class KisToolPolygon : public KisToolPolygonBase
+class KisToolPolygon : public KisToolPolylineBase
 {
     Q_OBJECT
 
@@ -35,7 +35,7 @@ public:
     KisToolPolygon(KoCanvasBase *canvas);
     virtual ~KisToolPolygon();
 protected:
-    virtual void finishPolygon(const QVector<QPointF>& points);
+    virtual void finishPolyline(const QVector<QPointF>& points);
 };
 
 

@@ -17,50 +17,50 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QList>
+
+#include <kaction.h>
+
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
 
-
 #include <opengl/kis_opengl.h>
 
-#include "kis_tool_polygon_base.h"
+#include "kis_tool_polyline_base.h"
+
 #define PREVIEW_LINE_WIDTH 1
 
-KisToolPolygonBase::KisToolPolygonBase(KoCanvasBase * canvas, const QCursor & cursor) :
+KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas, const QCursor & cursor) :
         KisToolShape(canvas, cursor),
         m_dragging(false)
 {
+    KAction *action = new KAction(i18n("&Finish"), this);
+    addAction("finish_polyline", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(finish()));
+    action = new KAction(KIcon("dialog-cancel"), i18n("&Cancel"), this);
+    addAction("cancel_polyline", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(cancel()));
+
+
+    QList<QAction*> list;
+    list.append(this->action("finish_polyline"));
+    list.append(this->action("cancel_polyline"));
+    setPopupActionList(list);
 }
-void KisToolPolygonBase::mousePressEvent(KoPointerEvent *event)
+void KisToolPolylineBase::mousePressEvent(KoPointerEvent *event)
 {
-    if (currentImage()) {
-        if (event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier) {
-
-            m_dragging = true;
-
-            if (m_points.isEmpty()) {
-                m_dragStart = convertToPixelCoord(event);
-                m_dragEnd = m_dragStart;
-                m_points.append(m_dragStart);
-            } else {
-                m_dragStart = m_dragEnd;
-                m_dragEnd = convertToPixelCoord(event);
-            }
-        } else if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier) {
-            finish();
-        }
-        else if (event->button()==Qt::RightButton || event->button()==Qt::MidButton) {
-            cancel();
-            event->accept();
-        }
+    if (event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier) {
+        m_dragging = true;
+    } else if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier) {
+        finish();
     }
 }
 
-void KisToolPolygonBase::mouseMoveEvent(KoPointerEvent *event)
+void KisToolPolylineBase::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_dragging) {
+    if (m_dragging && !m_points.empty()) {
         // erase old lines on canvas
         QRectF updateRect = dragBoundingRect();
         // get current mouse position
@@ -71,35 +71,34 @@ void KisToolPolygonBase::mouseMoveEvent(KoPointerEvent *event)
     }
 }
 
-void KisToolPolygonBase::mouseReleaseEvent(KoPointerEvent *event)
+void KisToolPolylineBase::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!canvas() || !currentImage())
-        return;
-
-    if (m_dragging && event->button() == Qt::LeftButton)  {
-        m_dragging = false;
-        m_points.append(m_dragEnd);
-        updateArea();
+    if (!currentImage()) return;
+    if (m_dragging && event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier) {
+        m_dragStart = convertToPixelCoord(event);
+        m_dragEnd = m_dragStart;
+        m_points.append(m_dragStart);
     }
-
-    if (m_dragging && event->button() == Qt::RightButton) {
-
+    else if (event->button()==Qt::RightButton || event->button()==Qt::MidButton) {
+        cancel();
+        event->accept();
     }
 }
 
-void KisToolPolygonBase::mouseDoubleClickEvent(KoPointerEvent *)
+void KisToolPolylineBase::mouseDoubleClickEvent(KoPointerEvent *)
 {
     finish();
 }
 
-void KisToolPolygonBase::keyPressEvent(QKeyEvent *e)
+void KisToolPolylineBase::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Escape) {
         cancel();
+        e->accept();
     }
 }
 
-void KisToolPolygonBase::paint(QPainter& gc, const KoViewConverter &converter)
+void KisToolPolylineBase::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
@@ -119,7 +118,7 @@ void KisToolPolygonBase::paint(QPainter& gc, const KoViewConverter &converter)
         glLogicOp(GL_XOR);
         glColor3f(0.501961, 1.0, 0.501961);
 
-        if (m_dragging) {
+        if (m_dragging && !m_points.empty()) {
             startPos = pixelToView(m_dragStart);
             endPos = pixelToView(m_dragEnd);
             glBegin(GL_LINES);
@@ -157,7 +156,7 @@ void KisToolPolygonBase::paint(QPainter& gc, const KoViewConverter &converter)
 #ifdef INDEPENDENT_CANVAS
     {
         QPainterPath path;
-        if (m_dragging) {
+        if (m_dragging && !m_points.empty()) {
             startPos = pixelToView(m_dragStart);
             endPos = pixelToView(m_dragEnd);
             path.moveTo(startPos);
@@ -187,7 +186,7 @@ void KisToolPolygonBase::paint(QPainter& gc, const KoViewConverter &converter)
         pen.setWidth(PREVIEW_LINE_WIDTH);
         gc.setPen(pen);
 
-        if (m_dragging) {
+        if (m_dragging && !m_points.empty()) {
             startPos = pixelToView(m_dragStart);
             endPos = pixelToView(m_dragEnd);
             gc.drawLine(startPos, endPos);
@@ -212,19 +211,19 @@ void KisToolPolygonBase::paint(QPainter& gc, const KoViewConverter &converter)
 #endif
 }
 
-void KisToolPolygonBase::cancel()
+void KisToolPolylineBase::cancel()
 {
     m_dragging = false;
     m_points.clear();
     updateArea();
 }
 
-void KisToolPolygonBase::updateArea()
+void KisToolPolylineBase::updateArea()
 {
     updateCanvasPixelRect(image()->bounds());
 }
 
-void KisToolPolygonBase::finish()
+void KisToolPolylineBase::finish()
 {
     Q_ASSERT(canvas() && currentImage());
     if (!currentNode())
@@ -232,15 +231,15 @@ void KisToolPolygonBase::finish()
 
     m_dragging = false;
     updateArea();
-    finishPolygon(m_points);
+    finishPolyline(m_points);
     m_points.clear();
 }
 
-QRectF KisToolPolygonBase::dragBoundingRect()
+QRectF KisToolPolylineBase::dragBoundingRect()
 {
     QRectF rect = pixelToView(QRectF(m_dragStart, m_dragEnd).normalized());
     rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
     return rect;
 }
 
-#include "kis_tool_polygon_base.moc"
+#include "kis_tool_polyline_base.moc"

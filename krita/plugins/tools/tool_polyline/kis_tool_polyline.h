@@ -21,18 +21,15 @@
 #ifndef KIS_TOOL_POLYLINE_H_
 #define KIS_TOOL_POLYLINE_H_
 
-#include <QVector>
 #include <QString>
-//Added by qt3to4:
-#include <QKeyEvent>
 
-#include "kis_tool_paint.h"
-#include "flake/kis_node_shape.h"
+#include "kis_tool_polyline_base.h"
+//#include "flake/kis_node_shape.h"
 
 
 
 
-class KisToolPolyline : public KisToolPaint
+class KisToolPolyline : public KisToolPolylineBase
 {
 
     Q_OBJECT
@@ -41,32 +38,8 @@ public:
     KisToolPolyline(KoCanvasBase * canvas);
     virtual ~KisToolPolyline();
 
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
-
-    virtual QString quickHelp() const;
-
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
-
-public slots:
-    void finish();
-    void cancel();
-    void deactivate();
-
 protected:
-    QRectF dragBoundingRect();
-
-    QPointF m_dragStart;
-    QPointF m_dragEnd;
-
-    bool m_dragging;
-private:
-    typedef QVector<QPointF> KoPointVector;
-    KoPointVector m_points;
-    QRectF m_boundingRect;
+    virtual void finishPolyline(const QVector<QPointF>& points);
 };
 
 

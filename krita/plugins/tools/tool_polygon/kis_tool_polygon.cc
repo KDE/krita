@@ -45,7 +45,7 @@
 #include "kis_cursor.h"
 
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
-        : KisToolPolygonBase(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6))
+        : KisToolPolylineBase(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6))
 {
     setObjectName("tool_polygon");
 }
@@ -54,7 +54,7 @@ KisToolPolygon::~KisToolPolygon()
 {
 }
 
-void KisToolPolygon::finishPolygon(const QVector<QPointF>& points)
+void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
 {
     if (!currentNode()->inherits("KisShapeLayer")) {
         KisPaintDeviceSP device = currentNode()->paintDevice();

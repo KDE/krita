@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006,2008-2010 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -115,14 +115,14 @@ void KoShapeRegistry::Private::insertFactory(KoShapeFactory *factory)
 
             QPair<QString, QString> p(factory->odfNameSpace(), elementName);
 
-            QMultiMap<int, KoShapeFactory*> priorityMap = factoryMap.value(p);
+            QMultiMap<int, KoShapeFactory*> & priorityMap = factoryMap[p];
 
-            factoryMap[p].insert(factory->loadingPriority(), factory);
+            priorityMap.insert(factory->loadingPriority(), factory);
 
             kDebug(30006) << "Inserting factory" << factory->id() << " for"
                 << p << " with priority "
                 << factory->loadingPriority() << " into factoryMap making "
-                << factoryMap.value(p).size() << " entries. ";
+                << priorityMap.size() << " entries. ";
         }
     }
 }

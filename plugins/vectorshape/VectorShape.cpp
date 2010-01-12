@@ -46,12 +46,8 @@
 #include <KoOdfLoadingContext.h>
 #include "KoShapeSavingContext.h"
 #include <WmfPainter.h>
-#include "libemf/EmfParser.h"
-#include "libemf/EmfOutputPainterStrategy.h"
-
 
 // Vector shape
-#include "DefaultEmf.h"
 #include "libemf/EmfParser.h"
 #include "libemf/EmfOutputPainterStrategy.h"
 
@@ -178,16 +174,6 @@ void VectorShape::drawWmf(QPainter &painter) const
     painter.scale(shapeSize.width() / wmfBoundingRect.width(),
                   shapeSize.height() / wmfBoundingRect.height());
     painter.translate(-wmfBoundingRect.left(), -wmfBoundingRect.top());
-
-#if 0
-    // Debug
-    painter.save();
-    painter.setPen(QPen(QColor(172, 196, 206)));
-    painter.drawRect(wmfBoundingRect);
-    painter.drawLine(wmfBoundingRect.topLeft(), wmfBoundingRect.bottomRight());
-    painter.drawLine(wmfBoundingRect.bottomLeft(), wmfBoundingRect.topRight());
-    painter.restore();
-#endif
 
     // Actually paint the WMF.
     wmfPainter.play(painter, true);

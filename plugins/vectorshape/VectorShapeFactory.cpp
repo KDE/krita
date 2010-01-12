@@ -34,10 +34,6 @@
 #include <KDebug>
 
 
-// The default EMF.  Contains "static char defaultEMF[]"
-#include "DefaultEmf.h"
-
-
 VectorShapeFactory::VectorShapeFactory(QObject *parent)
     : KoShapeFactory(parent, VectorShape_SHAPEID, i18n("Vector"))
 {
@@ -52,8 +48,6 @@ KoShape *VectorShapeFactory::createDefaultShape() const
     VectorShape *shape = new VectorShape();
     shape->setShapeId(VectorShape_SHAPEID);
 
-    shape->setVectorBytes(defaultEMF, sizeof(defaultEMF), false);
-
     return shape;
 }
 
@@ -62,10 +56,8 @@ KoShape *VectorShapeFactory::createShape(const KoProperties * /*params*/) const
     return createDefaultShape();
 }
 
-    /// Reimplemented
 bool VectorShapeFactory::supports(const KoXmlElement & e) const
 {
-    kDebug(33100) << "Tag = " << e.tagName();
     return e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw;
 }
 

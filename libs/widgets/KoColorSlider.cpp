@@ -46,6 +46,7 @@ KoColorSlider::KoColorSlider(Qt::Orientation o, QWidget *parent)
 
 KoColorSlider::~KoColorSlider()
 {
+    delete d;
 }
 
 void KoColorSlider::setColors(const KoColor& mincolor, const KoColor& maxcolor)

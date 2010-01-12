@@ -1,9 +1,14 @@
 [Desktop Entry]
 Name=Video Shape
 Name[de]=Video-Objekt
+Name[en_GB]=Video Shape
+Name[et]=Videokujund
 Name[ga]=Giuirléid Fhíseáin
 Name[ne]=भिडियो आकार
+Name[pt]=Forma de Vídeo
+Name[sv]=Videoform
 Name[uk]=Форма-відео
+Name[zh_TW]=影像元件
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=videoshape

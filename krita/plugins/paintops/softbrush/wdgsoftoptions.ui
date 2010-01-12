@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>385</width>
-    <height>225</height>
+    <height>280</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,7 +19,7 @@
   <property name="minimumSize">
    <size>
     <width>385</width>
-    <height>225</height>
+    <height>280</height>
    </size>
   </property>
   <widget class="QWidget" name="layoutWidget">
@@ -85,7 +85,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>150</y>
+     <y>190</y>
      <width>108</width>
      <height>62</height>
     </rect>
@@ -246,6 +246,65 @@
    </property>
    <property name="exponentRatio">
     <double>1.500000000000000</double>
+   </property>
+  </widget>
+  <widget class="KDoubleNumInput" name="flowSPBox">
+   <property name="geometry">
+    <rect>
+     <x>63</x>
+     <y>130</y>
+     <width>306</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="value">
+    <double>100.000000000000000</double>
+   </property>
+   <property name="minimum">
+    <double>0.000000000000000</double>
+   </property>
+   <property name="maximum">
+    <double>100.000000000000000</double>
+   </property>
+   <property name="singleStep">
+    <double>1.000000000000000</double>
+   </property>
+   <property name="suffix">
+    <string>%</string>
+   </property>
+   <property name="decimals">
+    <number>0</number>
+   </property>
+   <property name="sliderEnabled">
+    <bool>true</bool>
+   </property>
+   <property name="exponentRatio">
+    <double>1.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QLabel" name="flowLbl">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>49</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="text">
+    <string>flow</string>
    </property>
   </widget>
  </widget>

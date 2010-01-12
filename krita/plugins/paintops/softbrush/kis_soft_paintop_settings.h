@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,22 +39,19 @@ class QDomDocument;
 
 class KisSoftPaintOpSettings : public KisPaintOpSettings
 {
-
 public:
-
-
-    KisSoftPaintOpSettings();
+    KisSoftPaintOpSettings(){}
     virtual ~KisSoftPaintOpSettings() {}
 
     bool paintIncremental();
 
-    virtual void changePaintOpSize ( qreal x, qreal y ) const;
     virtual void paintOutline ( const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, OutlineMode _mode ) const;
     virtual QRectF paintOutlineRect ( const QPointF& pos, KisImageWSP image, OutlineMode _mode ) const;
 
     int diameter() const;
     qreal spacing() const;
     qreal sigma() const;
+    quint8 flow() const;
 
     qreal start() const;
     qreal end() const;
@@ -63,9 +60,6 @@ public:
     QString modelName() const { return "3d-pencil"; }
 #endif
 
-private:
-
-    KisSoftPaintOpSettingsWidget* m_options;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,28 +24,30 @@
 class QPoint;
 class QImage;
 
+/* Class for storing qreal alpha masks 0.0...1.0 for various computational tasks in paintops*/
 class KisCircleAlphaMask {
 
 public:
+    KisCircleAlphaMask(int radius);
+    ~KisCircleAlphaMask();
+    
+    void generateCircleDistanceMap(bool invert/*QPoint pos*/);
+    void generateGaussMap(bool invert);
+    
+    void resize(int radius);
+    
 
-        /* Class for storing qreal alpha masks 0.0...1.0 for various computational tasks in paintops*/
-        KisCircleAlphaMask(int radius);
-        ~KisCircleAlphaMask();
-        
-        void generateCircleDistanceMap(bool invert/*QPoint pos*/);
-        void generateGaussMap(bool invert);
-        
-        void resize(int radius);
-        void setSigma(qreal sigma);
-
-        /// starts at 0,0
-        inline qreal valueAt(int x, int y){ return m_data[qAbs(y) * m_width + qAbs(x)]; }
-        
-        QImage toQImage();
-        
-        void smooth(qreal edge0, qreal edge1);
-        int radius() { return m_radius; }
-        
+    /// starts at 0,0
+    inline qreal valueAt(int x, int y){ return m_data[qAbs(y) * m_width + qAbs(x)]; }
+    
+    QImage toQImage();
+    
+    void smooth(qreal edge0, qreal edge1);
+    inline int radius() { return m_radius; }
+    /// set sigma, compute sigma constant and precompute squared sigma
+    void setSigma(qreal sigma);
+    void setSigma(qreal sigma, qreal sigmaConst);
+    
 private:
     qreal smoothstep (qreal edge0, qreal edge1, qreal x);
     qreal * m_data;
@@ -54,11 +56,12 @@ private:
     int m_size;
     
     qreal m_sigma;
-    double m_sigmaSquared;
-    double m_sigmaConst;
+    qreal m_sigmaSquared;
+    qreal m_sigmaConst;
 
     inline qreal gaussAt(qreal x, qreal y){ return exp((x*x + y*y) / m_sigmaSquared) * m_sigmaConst; }
     inline qreal optGaussAt(qreal xx, qreal yy){ return exp((xx + yy) / m_sigmaSquared) * m_sigmaConst; }
+    inline void initSigma(qreal sigma);
 };
 
 #endif

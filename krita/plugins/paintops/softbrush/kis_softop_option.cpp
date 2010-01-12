@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,8 +38,13 @@ KisSoftOpOption::KisSoftOpOption()
 {
     m_checkable = false;
     m_options = new KisSoftOpOptionsWidget();
+
     connect(m_options->diameterSpinBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->endSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->startSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
     connect(m_options->spacingSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->sigmaSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
+    connect(m_options->flowSPBox,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
 
     setConfigurationPage(m_options);
 }
@@ -79,19 +84,36 @@ qreal KisSoftOpOption::spacing() const
 }
 
 
+qreal KisSoftOpOption::sigma() const
+{
+    return m_options->sigmaSPBox->value();
+}
+
+
+int KisSoftOpOption::flow() const
+{
+    return qRound(m_options->flowSPBox->value());
+}
+
+
 void KisSoftOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
+
     setting->setProperty( "Soft/diameter", diameter() );
+    setting->setProperty( "Soft/end", end() );
+    setting->setProperty( "Soft/start", start() );
     setting->setProperty( "Soft/spacing", spacing() );
+    setting->setProperty( "Soft/sigma", sigma() );
+    setting->setProperty( "Soft/flow", flow() );
 }
 
 void KisSoftOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     m_options->diameterSpinBox->setValue( setting->getInt("Soft/diameter") );
-    m_options->spacingSPBox->setValue( setting->getInt("Soft/spacing") );
+    m_options->endSPBox->setValue( setting->getDouble("Soft/end") );
+    m_options->startSPBox->setValue( setting->getDouble("Soft/start") );
+    m_options->spacingSPBox->setValue( setting->getDouble("Soft/spacing") );    
+    m_options->sigmaSPBox->setValue( setting->getDouble("Soft/sigma") );
+    m_options->flowSPBox->setValue( setting->getDouble("Soft/flow") );
 }
 
-qreal KisSoftOpOption::sigma() const
-{
-    return m_options->sigmaSPBox->value();
-}

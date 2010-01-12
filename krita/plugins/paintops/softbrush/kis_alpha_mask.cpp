@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,13 +37,23 @@ KisCircleAlphaMask::~KisCircleAlphaMask()
     m_data = 0;
 }
 
-void KisCircleAlphaMask::setSigma(qreal sigma)
+inline void KisCircleAlphaMask::initSigma(qreal sigma)
 {
     m_sigma = sigma;
     m_sigmaSquared = - 2.0 * m_sigma * m_sigma;
+}
+
+void KisCircleAlphaMask::setSigma(qreal sigma, qreal sigmaConst)
+{
+    initSigma(sigma);
+    m_sigmaConst = sigmaConst;
+}
+
+
+void KisCircleAlphaMask::setSigma(qreal sigma)
+{
+    initSigma(sigma);
     m_sigmaConst = 1.0 / (2.0 * M_PI * m_sigma * m_sigma);
-    // TODO: setup somehow maximal sigma constant
-    //m_sigmaConst = 0.0 - 1.0;
 }
 
 
@@ -112,15 +122,15 @@ void KisCircleAlphaMask::generateGaussMap ( bool invert )
 //         pos++;
 //     }
 
-    
-//     pos = 0;
-//      for (int y = 0; y <= m_radius; y++) {
-//          for (int x = 0; x <= m_radius; x++,pos++) {
-//                  printf("%.3f ",m_data[pos]);
-//          }
-//          printf("\n");
-//      }
-
+#if 0    
+     pos = 0;
+     for (int y = 0; y <= m_radius; y++) {
+          for (int x = 0; x <= m_radius; x++,pos++) {
+                 printf("%.3f ",m_data[pos]);
+         }
+         printf("\n");
+     }
+#endif
 }
 
 

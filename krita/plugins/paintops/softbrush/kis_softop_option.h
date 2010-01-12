@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,19 +31,14 @@ public:
 
     int diameter() const;
     void setDiameter(int diameter);
-    
-    
-    
     qreal spacing() const;
-    
-
     qreal start() const;
     qreal end() const;
     qreal sigma() const;
-
+    int flow() const;
+    
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
-
 
 private:
 

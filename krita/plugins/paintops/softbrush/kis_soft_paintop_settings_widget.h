@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,8 @@ public:
     virtual ~KisSoftPaintOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
-
+    virtual void changePaintOpSize ( qreal x, qreal y );
+    
 public:
     KisPaintActionTypeOption* m_paintActionTypeOption;
     KisSoftOpOption* m_softOption;

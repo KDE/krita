@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_soft_paintop_settings.h"
-
 #include "kis_soft_paintop_settings_widget.h"
 #include "kis_softop_option.h"
 
@@ -24,56 +23,13 @@
 
 #include <KoViewConverter.h>
 
-KisSoftPaintOpSettings::KisSoftPaintOpSettings()
-    : m_options(0)
-{
-}
 
 bool KisSoftPaintOpSettings::paintIncremental()
 {
-    return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
-}
-
-int KisSoftPaintOpSettings::diameter() const
-{
-    return m_options->m_softOption->diameter();
-}
-
-qreal KisSoftPaintOpSettings::spacing() const
-{
-    return m_options->m_softOption->spacing();
+    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
 
-qreal KisSoftPaintOpSettings::end() const
-{
-    return m_options->m_softOption->end();
-}
-
-
-qreal KisSoftPaintOpSettings::start() const
-{
-    return m_options->m_softOption->start();
-}
-
-
-qreal KisSoftPaintOpSettings::sigma() const
-{
-    return m_options->m_softOption->sigma();
-}
-
-
-void KisSoftPaintOpSettings::changePaintOpSize ( qreal x, qreal y ) const
-{
-    if (qAbs(x) > qAbs(y)){
-        m_options->m_softOption->setDiameter( diameter() + qRound(x) );
-    }
-    else // vice-versa
-    {
-        // we can do something different
-    }
-
-}
 void KisSoftPaintOpSettings::paintOutline ( const QPointF& pos, KisImageWSP image, QPainter& painter, const KoViewConverter& converter, KisPaintOpSettings::OutlineMode _mode ) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return;
@@ -90,10 +46,47 @@ void KisSoftPaintOpSettings::paintOutline ( const QPointF& pos, KisImageWSP imag
     painter.drawEllipse(ellipseRect);
 }
 
+
 QRectF KisSoftPaintOpSettings::paintOutlineRect ( const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode ) const
 {
     if (_mode != CURSOR_IS_OUTLINE) return QRectF();
     qreal size = diameter();
     size += 10;
     return image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos);
+}
+
+
+int KisSoftPaintOpSettings::diameter() const
+{
+    return getInt("Soft/diameter");
+}
+
+
+qreal KisSoftPaintOpSettings::spacing() const
+{
+    return getDouble("Soft/spacing");
+}
+
+
+qreal KisSoftPaintOpSettings::end() const
+{
+    return getDouble("Soft/end");
+}
+
+
+qreal KisSoftPaintOpSettings::start() const
+{
+    return getDouble("Soft/start");
+}
+
+
+qreal KisSoftPaintOpSettings::sigma() const
+{
+    return getDouble("Soft/sigma");
+}
+
+
+quint8 KisSoftPaintOpSettings::flow() const
+{
+    return getInt("Soft/flow");
 }

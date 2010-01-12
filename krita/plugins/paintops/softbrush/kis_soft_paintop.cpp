@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ KisSoftPaintOp::KisSoftPaintOp(const KisSoftPaintOpSettings *settings, KisPainte
 
     
     m_distMask = new KisCircleAlphaMask(m_radius);
-    m_distMask->setSigma( m_settings->sigma() );
+    m_distMask->setSigma( m_settings->sigma(), m_settings->flow() / 100.0  );
     m_distMask->generateGaussMap( true );
     
     qreal start = m_settings->start();

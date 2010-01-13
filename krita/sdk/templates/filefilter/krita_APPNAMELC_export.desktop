@@ -35,5 +35,5 @@ X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/%{APPNAMELC}
 X-KDE-Import=application/x-krita
-X-KDE-Library=libkrita%{APPNAMELC}export
+X-KDE-Library=krita%{APPNAMELC}export
 X-KDE-Weight=1

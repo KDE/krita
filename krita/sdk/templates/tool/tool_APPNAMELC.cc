@@ -1,35 +1,19 @@
-#include <stdlib.h>
-#include <vector>
 
-#include <qpoint.h>
+#include <kpluginfactory.h>
 
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kis_debug.h>
-#include <kgenericfactory.h>
-
-#include <kis_global.h>
-#include <kis_types.h>
 #include <KoToolRegistry.h>
 
 #include "tool_%{APPNAMELC}.h"
 #include "kis_tool_%{APPNAMELC}.h"
 
+K_PLUGIN_FACTORY(%{APPNAME}PluginFactory, registerPlugin<%{APPNAME}Plugin>();)
+K_EXPORT_PLUGIN(%{APPNAME}PluginFactory("krita"))
 
-typedef KGenericFactory<%{APPNAME}Plugin> %{APPNAME}Factory;
-K_EXPORT_COMPONENT_FACTORY( kritatool%{APPNAMELC}, %{APPNAME}Factory( "krita" ) )
-
-
-%{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+%{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
-    setComponentData(%{APPNAME}Factory::componentData());
-
     KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisTool%{APPNAME}Factory(r, QStringList()));
+    r->add(new KisTool%{APPNAME}Factory(r));
 }
 
 %{APPNAME}Plugin::~%{APPNAME}Plugin()

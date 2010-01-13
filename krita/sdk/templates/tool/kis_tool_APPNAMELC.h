@@ -41,7 +41,7 @@ protected:
 class KisTool%{APPNAME}Factory : public KoToolFactory {
 
 public:
-    KisTool%{APPNAME}Factory(QObject *parent, const QStringList&)
+    KisTool%{APPNAME}Factory(QObject *parent)
         : KoToolFactory(parent, "KisTool%{APPNAME}", i18n( "%{APPNAME}" ))
         {
             setToolTip( i18n( "%{APPNAME}" ) );

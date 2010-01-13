@@ -1,6 +1,6 @@
 #include "%{APPNAMELC}_import.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 
@@ -9,10 +9,10 @@
 
 #include "%{APPNAMELC}_converter.h"
 
-typedef KGenericFactory<%{APPNAME}Import> ImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkrita%{APPNAMELC}import, ImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ImportFactory, registerPlugin<%{APPNAME}Import>();)
+K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
 
-%{APPNAME}Import::%{APPNAME}Import(QObject *parent, const QStringList&) : KoFilter(parent)
+%{APPNAME}Import::%{APPNAME}Import(QObject *parent, const QVariantList&) : KoFilter(parent)
 {
 }
 

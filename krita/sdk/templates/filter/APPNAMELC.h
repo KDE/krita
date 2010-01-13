@@ -1,13 +1,14 @@
 #ifndef _%{APPNAMEUC}_H_
 #define _%{APPNAMEUC}_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 #include "filter/kis_filter.h"
 
-class %{APPNAME}Plugin : public KParts::Plugin
+class %{APPNAME}Plugin : public QObject
 {
 public:
-    %{APPNAME}Plugin(QObject *parent, const QStringList &);
+    %{APPNAME}Plugin(QObject *parent, const QVariantList &);
     virtual ~%{APPNAME}Plugin();
 };
 

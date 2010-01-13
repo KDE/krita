@@ -8,11 +8,10 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
@@ -21,15 +20,12 @@
 #include <kis_global.h>
 #include <kis_types.h>
 
-typedef KGenericFactory<%{APPNAME}Plugin> %{APPNAME}PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita%{APPNAMELC}, %{APPNAME}PluginFactory( "krita" ) )
+K_PLUGIN_FACTORY(%{APPNAME}PluginFactory, registerPlugin<%{APPNAME}Plugin>();)
+K_EXPORT_PLUGIN(%{APPNAME}PluginFactory("krita"))
 
-%{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+%{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const QVariantList &)
+        : QObject(parent)
 {
-    setComponentData(%{APPNAME}PluginFactory::componentData());
-
-
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
         manager->add(KisFilterSP(new %{APPNAME}Filter()));

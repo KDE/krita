@@ -1,15 +1,16 @@
 #ifndef _%{APPNAMEUC}_H_
 #define _%{APPNAMEUC}_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisView;
 
-class %{APPNAME}Plugin : public KParts::Plugin
+class %{APPNAME}Plugin : public QObject
 {
     Q_OBJECT
 public:
-    %{APPNAME}Plugin(QObject *parent, const QStringList &);
+    %{APPNAME}Plugin(QObject *parent, const QVariantList &);
     virtual ~%{APPNAME}Plugin();
 
 private:

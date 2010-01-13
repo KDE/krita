@@ -5,7 +5,7 @@
 
 #include <kapplication.h>
 #include <kdialog.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -20,10 +20,10 @@
 
 class KisExternalLayer;
 
-typedef KGenericFactory<%{APPNAME}Export> ExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkrita%{APPNAMELC}export, ExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ExportFactory, registerPlugin<%{APPNAME}Export>();)
+K_EXPORT_PLUGIN(ExportFactory("kofficefilters"))
 
-%{APPNAME}Export::%{APPNAME}Export(QObject *parent, const QStringList&) : KoFilter(parent)
+%{APPNAME}Export::%{APPNAME}Export(QObject *parent, const QVariantList&) : KoFilter(parent)
 {
 }
 

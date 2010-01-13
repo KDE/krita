@@ -5,7 +5,7 @@
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -15,11 +15,10 @@
 #include "kis_types.h"
 #include "kis_view2.h"
 
-typedef KGenericFactory<%{APPNAME}Plugin> %{APPNAME}PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita%{APPNAMELC}, %{APPNAME}PluginFactory( "krita" ) )
+K_PLUGIN_FACTORY(%{APPNAME}PluginFactory, registerPlugin<%{APPNAME}Plugin>();)
+K_EXPORT_PLUGIN(%{APPNAME}PluginFactory("krita"))
 
-
-%{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const QStringList &)
+%{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const QVariantList &)
     : KParts::Plugin(parent)
 {
     if ( parent->inherits("KisView2") )

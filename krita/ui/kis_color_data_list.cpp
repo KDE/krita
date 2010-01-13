@@ -22,6 +22,18 @@
 const int KisColorDataList::MAX_RECENT_COLOR;
 #endif
 
+KisColorDataList::KisColorDataList()
+    :m_priorityList(0)
+{
+    m_key = 0;
+    m_priorityList = new KisMinHeap <QColor, MAX_RECENT_COLOR> ();
+}
+
+KisColorDataList::~KisColorDataList()
+{
+    delete m_priorityList;
+}
+
 void KisColorDataList::appendNew(const QColor& data)
 {
     if (size() >= KisColorDataList::MAX_RECENT_COLOR) removeLeastUsed();
@@ -30,7 +42,7 @@ void KisColorDataList::appendNew(const QColor& data)
     node = new PriorityNode <QColor>();
     node->data = data;
     node->key = m_key++;
-    m_priorityList.append(node);
+    m_priorityList->append(node);
 
     int pos = guiInsertPos(data);
     pos >= m_guiList.size() ? m_guiList.append(node)
@@ -50,9 +62,9 @@ void KisColorDataList::removeLeastUsed()
     Q_ASSERT_X(size() >= 0, "KisColorDataList::removeLeastUsed", "index out of bound");
     if (size() <= 0) return;
 
-    int pos = findPos(m_priorityList.valueAt(0));
+    int pos = findPos(m_priorityList->valueAt(0));
     m_guiList.removeAt(pos);
-    m_priorityList.remove(0);
+    m_priorityList->remove(0);
 }
 
 const QColor& KisColorDataList::guiColor(int pos)
@@ -123,5 +135,5 @@ int KisColorDataList::findPos (const QColor& color)
 void KisColorDataList::updateKey (int guiPos)
 {
     if (m_guiList.at(guiPos)->key == m_key-1) return;
-    m_priorityList.changeKey(m_guiList.at(guiPos)->pos, m_key++);
+    m_priorityList->changeKey(m_guiList.at(guiPos)->pos, m_key++);
 }

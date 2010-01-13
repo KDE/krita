@@ -28,13 +28,21 @@ template <typename T> struct PriorityNode{
     int pos;
 };
 
-template <typename T, int N> class MinHeap
+template <typename T, int N> class KisMinHeap
 {
 public:
-    inline MinHeap() { m_size = N; m_last = 0;};
-    inline MinHeap(const T& data, int key) { MinHeap(); append (data, key); };
-    inline MinHeap(PriorityNode<T>* node) { MinHeap(); append(node); };
-    inline ~MinHeap() {};
+    KisMinHeap():m_list(0) {
+        m_size = N;
+        m_last = 0;
+
+        m_list = new PriorityNode <T>* [N];
+    }
+    inline KisMinHeap(const T& data, int key) { KisMinHeap(); append (data, key); };
+    inline KisMinHeap(PriorityNode<T>* node) { KisMinHeap(); append(node); };
+    ~KisMinHeap()
+    {
+        delete[] m_list;
+    }
     inline void changeKey(int pos, int newKey) { m_list[pos]->key = newKey; heapifyUp(pos); heapifyDown(pos); };
     inline int size () { return m_last; };
     inline T valueAt (int pos) { return m_list[pos]->data; };
@@ -93,7 +101,7 @@ public:
 private:
     int m_last;
     int m_size;
-    PriorityNode <T>* m_list [N];
+    PriorityNode <T>* *m_list;
 
 private:
     void swap(int pos1, int pos2)

@@ -28,10 +28,12 @@ class KisColorDataList
 public:
     static const int MAX_RECENT_COLOR = 12;
 
-    inline KisColorDataList() { m_key = 0; };
+    KisColorDataList();
+    ~KisColorDataList();
+
     inline int size () { return m_guiList.size(); };
-    inline void printPriorityList () { m_priorityList.printHeap(); };
-    inline int leastUsedGuiPos() { return findPos(m_priorityList.valueAt(0)); };
+    inline void printPriorityList () { m_priorityList->printHeap(); };
+    inline int leastUsedGuiPos() { return findPos(m_priorityList->valueAt(0)); };
 
     void printGuiList();
     const QColor& guiColor (int pos);
@@ -44,7 +46,7 @@ public:
     int findPos (const QColor&);
 
 private:
-    MinHeap <QColor, MAX_RECENT_COLOR> m_priorityList;
+    KisMinHeap <QColor, MAX_RECENT_COLOR> *m_priorityList;
     QList <PriorityNode <QColor>*> m_guiList;
     int m_key;
 

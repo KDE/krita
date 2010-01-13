@@ -256,6 +256,9 @@ void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
             << "(b)" << recentColorAt(pos).blue();
 
     addRecentColorUpdate(pos);
+
+    if (m_popupPalette)
+        m_popupPalette->setVisible(false); //automatically close the palette after a button is clicked.
 }
 
 void KoFavoriteResourceManager::addRecentColorNew(const QColor& color)

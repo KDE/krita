@@ -1,4 +1,4 @@
-include_directories(  )
+include_directories( ${PHONON_INCLUDE_DIR} )
 
 ########### Flake Plugin library ###############
 
@@ -14,7 +14,7 @@ SET (videoshape_LIB_SRCS
 
 kde4_add_plugin(videoshape ${videoshape_LIB_SRCS})
 
-target_link_libraries(videoshape komain    
+target_link_libraries(videoshape komain
     ${KDE4_KFILE_LIBRARY}
     ${KDE4_PHONON_LIBRARY}
 )

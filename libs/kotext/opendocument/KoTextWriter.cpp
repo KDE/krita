@@ -398,12 +398,9 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int fro
                 writeBlocks(document, from, endTitle, listStyles, currentTable, toc);
             writer->endElement(); // text:index-title
         from = endTitle;
+
         QTextBlock block = toc->lastCursorPosition().block();
-        //while(block.isValid()){
         writeBlocks(document, from, to, listStyles, currentTable, toc);
-        //  block = block.next();
-        //}
-        // write the blocks (all others p blocks)
 
 
     writer->endElement(); // table:index-body

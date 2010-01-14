@@ -117,3 +117,4 @@ X-DBUS-ServiceName=org.koffice.krita
 X-KDE-StartupNotify=true
 X-KDE-SubstituteUID=false
 X-KDE-Username=
+NoDisplay=true

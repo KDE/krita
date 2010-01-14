@@ -45,6 +45,8 @@
 #include <kis_undo_adapter.h>
 #include <kis_random_accessor.h>
 #include <kis_paint_device.h>
+#include <kis_group_layer.h>
+#include "kis_gif_writer_visitor.h"
 
 static const int InterlacedOffset[] = {0, 4, 2, 1};
 static const int InterlacedJumps[] = {8, 8, 4, 3};
@@ -281,6 +283,10 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
 
 KisImageBuilder_Result GifConverter::buildImage(const KUrl& uri)
 {
+
+    KisGifWriterVisitor visitor;
+    m_img->rootLayer()->accept(visitor);
+
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 

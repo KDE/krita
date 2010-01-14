@@ -2,6 +2,7 @@ include_directories( ${KRITA_INCLUDES} ${GIF_INCLUDE_DIR})
 
 set(libkritaconverter_LIB_SRCS
     gif_converter.cpp
+    kis_gif_writer_visitor.cpp
     )
 
 set(kritagifimport_PART_SRCS

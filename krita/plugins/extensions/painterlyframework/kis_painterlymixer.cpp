@@ -88,8 +88,8 @@ void KisPainterlyMixer::initSpots()
 
 void KisPainterlyMixer::loadColors()
 {
-    // TODO We need to handle save/load of user-defined colors in the spots.
-
+    // TODO: We need to handle save/load of user-defined colors in the spots.
+    //       This needs to be coordinated with the favourite resources!
     const KoColorSpace *cs = m_canvas->colorSpace();
     m_vColors.append(KoColor(QColor("#FF0000"), cs)); // Red
     m_vColors.append(KoColor(QColor("#00FF00"), cs)); // Green

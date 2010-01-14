@@ -255,9 +255,11 @@ bool KisGbrBrush::init()
         setHasColor(false);
 
         for (quint32 y = 0; y < bh.height; y++) {
+            QRgb *pixel = reinterpret_cast<QRgb *>(m_image.scanLine(y));
             for (quint32 x = 0; x < bh.width; x++, k++) {
                 qint32 val = 255 - static_cast<uchar>(d->data[k]);
-                m_image.setPixel(x, y, qRgb(val, val, val));
+                *pixel = qRgb(val, val, val);
+                ++pixel;
             }
         }
     } else if (bh.bytes == 4) {
@@ -271,11 +273,10 @@ bool KisGbrBrush::init()
         setHasColor(true);
 
         for (quint32 y = 0; y < bh.height; y++) {
+            QRgb *pixel = reinterpret_cast<QRgb *>(m_image.scanLine(y));
             for (quint32 x = 0; x < bh.width; x++, k += 4) {
-                m_image.setPixel(x, y, qRgba(d->data[k],
-                                             d->data[k+1],
-                                             d->data[k+2],
-                                             d->data[k+3]));
+                *pixel = qRgba(d->data[k], d->data[k+1], d->data[k+2], d->data[k+3]);
+                ++pixel;
             }
         }
     } else {

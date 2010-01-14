@@ -86,8 +86,8 @@ struct KisGbrBrush::Private {
 #define DEFAULT_SPACING 0.25
 
 KisGbrBrush::KisGbrBrush(const QString& filename)
-        : KisBrush(filename)
-        , d(new Private)
+    : KisBrush(filename)
+    , d(new Private)
 {
     setBrushType(INVALID);
     d->ownData = true;
@@ -99,8 +99,8 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
 KisGbrBrush::KisGbrBrush(const QString& filename,
                          const QByteArray& data,
                          qint32 & dataPos)
-        : KisBrush(filename)
-        , d(new Private)
+                             : KisBrush(filename)
+                             , d(new Private)
 {
     setBrushType(INVALID);
     d->ownData = false;
@@ -115,8 +115,8 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
 }
 
 KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
-        : KisBrush()
-        , d(new Private)
+    : KisBrush()
+    , d(new Private)
 {
     setBrushType(INVALID);
     d->ownData = true;
@@ -128,8 +128,8 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
 }
 
 KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
-        : KisBrush()
-        , d(new Private)
+    : KisBrush()
+    , d(new Private)
 {
     d->ownData = false;
     d->useColorAsMask = false;
@@ -142,8 +142,8 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
 }
 
 KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
-        : KisBrush(rhs)
-        , d(new Private)
+    : KisBrush(rhs)
+    , d(new Private)
 {
     setName(rhs.name());
     *d = *rhs.d;
@@ -388,11 +388,12 @@ QImage KisGbrBrush::image() const
     if (hasColor() && useColorAsMask()) {
         QImage image = m_image;
 
-        for (int x = 0; x < image.width(); x++) {
-            for (int y = 0; y < image.height(); y++) {
-                QRgb c = image.pixel(x, y);
+        for (int y = 0; y < image.height(); y++) {
+            QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
+            for (int x = 0; x < image.width(); x++) {
+                QRgb c = pixel[x];
                 int a = (qGray(c) * qAlpha(c)) / 255;
-                image.setPixel(x, y, qRgba(a, 0, a, a));
+                pixel[x] = qRgba(a, 0, a, a);
             }
         }
         return image;
@@ -440,11 +441,13 @@ void KisGbrBrush::makeMaskImage()
     QImage image(width(), height(), QImage::Format_RGB32);
 
     if (m_image.width() == image.width() && m_image.height() == image.height()) {
-        for (int x = 0; x < width(); x++) {
-            for (int y = 0; y < height(); y++) {
-                QRgb c = m_image.pixel(x, y);
+
+        for (int y = 0; y < height(); y++) {
+            QRgb *pixel = reinterpret_cast<QRgb *>(m_image.scanLine(y));
+            for (int x = 0; x < width(); x++) {
+                QRgb c = pixel[x];
                 int a = (qGray(c) * qAlpha(c)) / 255; // qGray(black) = 0
-                image.setPixel(x, y, qRgba(a, a, a, 255));
+                pixel[x] = qRgba(a, a, a, 255);
             }
         }
 

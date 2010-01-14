@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,11 +20,6 @@
 #include <kis_deform_paintop_settings.h>
 #include <kis_deform_paintop_settings_widget.h>
 
-KisDeformPaintOpSettings::KisDeformPaintOpSettings()
-        : m_options(0)
-{
-}
-
 bool KisDeformPaintOpSettings::paintIncremental()
 {
     return true;
@@ -32,43 +27,43 @@ bool KisDeformPaintOpSettings::paintIncremental()
 
 int KisDeformPaintOpSettings::radius() const
 {
-    return m_options->radius();
+    return getInt("Deform/radius");
 }
 
 
 double KisDeformPaintOpSettings::deformAmount() const
 {
-    return m_options->deformAmount();
+    return getDouble("Deform/deformAmount");
 }
 
 bool KisDeformPaintOpSettings::bilinear() const
 {
-    return m_options->bilinear();
+    return getBool("Deform/bilinear");
 }
 
 bool KisDeformPaintOpSettings::useMovementPaint() const
 {
-    return m_options->useMovementPaint();
+    return getBool("Deform/useMovementPaint");
 }
 
 bool KisDeformPaintOpSettings::useCounter() const
 {
-    return m_options->useCounter();
+    return getBool("Deform/useCounter");
 }
 
 bool KisDeformPaintOpSettings::useOldData() const
 {
-    return m_options->useOldData();
+    return getBool("Deform/useOldData");
 }
 
 int KisDeformPaintOpSettings::deformAction() const
 {
-    return m_options->deformAction();
+    return getInt("Deform/deformAction");
 }
 
 qreal KisDeformPaintOpSettings::spacing() const
 {
-    return m_options->spacing();
+    return getDouble("Deform/spacing");
 }
 
 QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
@@ -102,18 +97,4 @@ void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP imag
     painter.setPen(Qt::black);
 #endif
     painter.drawEllipse(converter.documentToView(image->pixelToDocument(QRectF(0, 0, size, size).translated(- QPoint(size * 0.5, size * 0.5))).translated(pos)));
-}
-
-
-
-void KisDeformPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
-{
-    // if the movement is more left<->right then up<->down
-    if (qAbs(x) > qAbs(y)){
-        m_options->setRadius( radius() + qRound(x) );
-    }
-    else // vice-versa
-    {
-        // we can do something different, e.g. change deform mode or ...
-    }
 }

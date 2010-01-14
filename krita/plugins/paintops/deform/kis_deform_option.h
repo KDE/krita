@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,25 +15,36 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_DEFORM_OPTION_H
+#define KIS_DEFORM_OPTION_H
 
-#ifndef KIS_DEFORM_PAINTOP_SETTINGS_WIDGET_H_
-#define KIS_DEFORM_PAINTOP_SETTINGS_WIDGET_H_
+#include <kis_paintop_option.h>
+#include <krita_export.h>
 
-#include <kis_paintop_options_widget.h>
-#include <kis_deform_option.h>
+class KisDeformOptionsWidget;
 
-class KisDeformPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisDeformOption : public KisPaintOpOption
 {
-    Q_OBJECT
 public:
-    KisDeformPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisDeformPaintOpSettingsWidget();
+    KisDeformOption();
+    ~KisDeformOption();
+
+    int radius() const;
+    double deformAmount() const;
+    int deformAction() const;
+    bool bilinear() const;
+    bool useMovementPaint() const;
+    bool useCounter() const;
+    bool useOldData() const;
+    qreal spacing() const;
+    void setRadius(int radius) const;
     
-    virtual KisPropertiesConfiguration* configuration() const;
-    virtual void changePaintOpSize(qreal x, qreal y);
-    
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+
 private:
-    KisDeformOption * m_deformOption;
+    KisDeformOptionsWidget * m_options;
+
 };
 
 #endif

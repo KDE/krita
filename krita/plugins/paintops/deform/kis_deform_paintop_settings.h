@@ -19,33 +19,26 @@
 #ifndef KIS_DEFORM_PAINTOP_SETTINGS_H_
 #define KIS_DEFORM_PAINTOP_SETTINGS_H_
 
+class KisDeformPaintOpSettingsWidget;
+
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
 #include <opengl/kis_opengl.h>
 
-#include "kis_deform_paintop_settings_widget.h"
-
 #if defined(_WIN32) || defined(_WIN64)
 # include <windows.h>
 #endif
 
-class QWidget;
-class KisDeformPaintOpSettingsWidget;
-class QDomElement;
-class QDomDocument;
-
-class KisDeformPaintOpSettings : public QObject, public KisPaintOpSettings
+class KisDeformPaintOpSettings : public KisPaintOpSettings
 {
-    Q_OBJECT
 
 public:
-    KisDeformPaintOpSettings();
+    KisDeformPaintOpSettings(){}
     virtual ~KisDeformPaintOpSettings() {}
 
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
-    virtual void changePaintOpSize(qreal x, qreal y) const;
 
     bool paintIncremental();
 
@@ -59,7 +52,6 @@ public:
     qreal spacing() const;
 
 #if defined(HAVE_OPENGL)
-    //GLuint displayList() const;
     inline QString modelName() const {
         return "3d-deform-brush";
     }

@@ -75,12 +75,13 @@ void KisCircleAlphaMask::generateCircleDistanceMap(bool invert)
 
 void KisCircleAlphaMask::generateGaussMap ( bool invert )
 {
-    qreal factor = 1.0;
+    Q_UNUSED(invert);
+    //qreal factor = 1.0;
 
     // determine the "clever" radius
     int ix = 0;
     bool run = true;
-    
+
     while (run){
         quint8 alpha = qRound(255 * gaussAt(ix, 0) );
         if (alpha > 0)
@@ -111,10 +112,10 @@ void KisCircleAlphaMask::generateGaussMap ( bool invert )
     }
 
     qreal minLen = m_data[m_size-1];
-    qreal maxLen = m_data[0]; 
-    qreal dist = maxLen - minLen;
+    qreal maxLen = m_data[0];
+    //qreal dist = maxLen - minLen;
 
-// normalize?    
+// normalize?
 //     pos = 0;
 //     while (pos < m_size){
 //     //           m_data[pos] = (m_data[pos] - minLen) / dist;
@@ -122,7 +123,7 @@ void KisCircleAlphaMask::generateGaussMap ( bool invert )
 //         pos++;
 //     }
 
-#if 0    
+#if 0
      pos = 0;
      for (int y = 0; y <= m_radius; y++) {
           for (int x = 0; x <= m_radius; x++,pos++) {
@@ -139,13 +140,14 @@ void KisCircleAlphaMask::generateGaussMap ( bool invert )
 QImage KisCircleAlphaMask::toQImage()
 {
     QImage img = QImage(m_width, m_width, QImage::Format_ARGB32);
-    
-    int pos = 0; 
+
+    int pos = 0;
     int alpha;
     for (int y=0; y < m_width; y++){
+        QRgb *pixel = reinterpret_cast<QRgb *>(img.scanLine(y));
         for (int x=0; x < m_width; x++, pos++){
             alpha = qRound(255 * m_data[pos]);
-            img.setPixel(x,y,qRgba(alpha, alpha, alpha, 255));
+            pixel[y] = qRgba(alpha, alpha, alpha, 255);
         }
     }
 
@@ -158,9 +160,9 @@ QImage KisCircleAlphaMask::toQImage()
 void KisCircleAlphaMask::resize(int radius)
 {
     m_radius = radius;
-    
+
     m_width = m_radius + 1;
-    
+
     m_size = m_width * m_width;
     m_data = new qreal[m_size];
     memset(m_data, 0 , m_size * sizeof(qreal));

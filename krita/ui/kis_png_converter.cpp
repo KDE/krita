@@ -192,13 +192,13 @@ QByteArray png_read_raw_profile(png_textp text)
 {
     QByteArray profile;
 
-    unsigned char unhex[103] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12,
-                                13, 14, 15
-                               };
+    static unsigned char unhex[103] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0,
+                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12,
+                                       13, 14, 15
+                                       };
 
     png_charp sp = text[0].text + 1;
     /* look for newline */
@@ -539,11 +539,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             m_image -> addAnnotation(annotation);
         }
     }
-    
+
     // Read resolution
     int unit_type;
     png_uint_32 x_resolution, y_resolution;
-    
+
     png_get_pHYs(png_ptr, info_ptr,&x_resolution,&y_resolution, &unit_type);
     if (unit_type == PNG_RESOLUTION_METER)
     {
@@ -1000,7 +1000,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     png_uint_32 x_resolution, y_resolution;
 #endif
     png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(image->xRes()) * 100.0, CM_TO_POINT(image->yRes()) * 100.0, PNG_RESOLUTION_METER); // It is the "invert" macro because we convert from pointer-per-inchs to points
-    
+
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);
     png_write_flush(png_ptr);

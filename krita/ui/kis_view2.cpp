@@ -195,7 +195,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("toggledockers", m_d->toggleDockers);
 
 
-    m_d->toggleDockers->setShortcut(QKeySequence(Qt::Key_Control, Qt::Key_H));
+    m_d->toggleDockers->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
     connect(m_d->toggleDockers, SIGNAL(toggled(bool)), this, SLOT(toggleDockers(bool)));
 
     setComponentData(KisFactory2::componentData(), false);

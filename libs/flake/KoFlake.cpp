@@ -2,6 +2,7 @@
  * Copyright (C) 2009 Jos van den Oever <jos@vandenoever.info>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -56,9 +57,20 @@ QGradient *KoFlake::cloneGradient(const QGradient *gradient)
         return 0;
     }
 
+    clone->setCoordinateMode(gradient->coordinateMode());
     clone->setSpread(gradient->spread());
     clone->setStops(gradient->stops());
 
     return clone;
 }
 
+QPointF KoFlake::toRelative(const QPointF &absolute, const QSizeF &size)
+{
+    return QPointF(size.width() == 0 ? 0: absolute.x() / size.width(),
+                   size.height() == 0 ? 0: absolute.y() / size.height());
+}
+
+QPointF KoFlake::toAbsolute(const QPointF &relative, const QSizeF &size)
+{
+    return QPointF(relative.x() * size.width(), relative.y() * size.height());
+}

@@ -47,7 +47,8 @@ KoShape *EllipseShapeFactory::createDefaultShape() const
     ellipse->setBorder(new KoLineBorder(1.0));
     ellipse->setShapeId(KoPathShapeId);
 
-    QRadialGradient *gradient = new QRadialGradient(QPointF(50,50), 50.0, QPointF(25,25));
+    QRadialGradient *gradient = new QRadialGradient(QPointF(0.5,0.5), 0.5, QPointF(0.25,0.25));
+    gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient->setColorAt(0.0, Qt::white);
     gradient->setColorAt(1.0, Qt::green);
     ellipse->setBackground(new KoGradientBackground(gradient));

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008,2010 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -204,23 +204,23 @@ QString KoOdfGraphicStyles::saveOdfGradientStyle(KoGenStyles &mainStyles, const 
     if (brush.style() == Qt::RadialGradientPattern) {
         const QRadialGradient *gradient = static_cast<const QRadialGradient*>(brush.gradient());
         gradientStyle = KoGenStyle(KoGenStyle::StyleGradientRadial /*no family name*/);
-        gradientStyle.addAttributePt("svg:cx", gradient->center().x());
-        gradientStyle.addAttributePt("svg:cy", gradient->center().y());
-        gradientStyle.addAttributePt("svg:r",  gradient->radius());
-        gradientStyle.addAttributePt("svg:fx", gradient->focalPoint().x());
-        gradientStyle.addAttributePt("svg:fy", gradient->focalPoint().y());
+        gradientStyle.addAttribute("svg:cx", QString("%1%").arg(gradient->center().x() * 100));
+        gradientStyle.addAttribute("svg:cy", QString("%1%").arg(gradient->center().y() * 100));
+        gradientStyle.addAttribute("svg:r",  QString("%1%").arg(gradient->radius() * 100));
+        gradientStyle.addAttribute("svg:fx", QString("%1%").arg(gradient->focalPoint().x() * 100));
+        gradientStyle.addAttribute("svg:fy", QString("%1%").arg(gradient->focalPoint().y() * 100));
     } else if (brush.style() == Qt::LinearGradientPattern) {
         const QLinearGradient *gradient = static_cast<const QLinearGradient*>(brush.gradient());
         gradientStyle = KoGenStyle(KoGenStyle::StyleGradientLinear /*no family name*/);
-        gradientStyle.addAttributePt("svg:x1", gradient->start().x());
-        gradientStyle.addAttributePt("svg:y1", gradient->start().y());
-        gradientStyle.addAttributePt("svg:x2", gradient->finalStop().x());
-        gradientStyle.addAttributePt("svg:y2", gradient->finalStop().y());
+        gradientStyle.addAttribute("svg:x1", QString("%1%").arg(gradient->start().x() * 100));
+        gradientStyle.addAttribute("svg:y1", QString("%1%").arg(gradient->start().y() * 100));
+        gradientStyle.addAttribute("svg:x2", QString("%1%").arg(gradient->finalStop().x() * 100));
+        gradientStyle.addAttribute("svg:y2", QString("%1%").arg(gradient->finalStop().y() * 100));
     } else if (brush.style() == Qt::ConicalGradientPattern) {
         const QConicalGradient * gradient = static_cast<const QConicalGradient*>(brush.gradient());
         gradientStyle = KoGenStyle(KoGenStyle::StyleGradientConical /*no family name*/);
-        gradientStyle.addAttributePt("svg:cx", gradient->center().x());
-        gradientStyle.addAttributePt("svg:cy", gradient->center().y());
+        gradientStyle.addAttribute("svg:cx", QString("%1%").arg(gradient->center().x() * 100));
+        gradientStyle.addAttribute("svg:cy", QString("%1%").arg(gradient->center().y() * 100));
         gradientStyle.addAttribute("draw:angle", QString("%1").arg(gradient->angle()));
     }
     const QGradient * gradient = brush.gradient();
@@ -262,6 +262,25 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyle(const KoStyleStack &styleStack, 
     return loadOdfGradientStyleByName(stylesReader, styleName, size);
 }
 
+qreal percent(const KoXmlElement &element, const char *ns, const char *type, const QString &defaultValue, qreal absolute)
+{
+    qreal tmp = 0.0;
+    QString value = element.attributeNS(ns, type, defaultValue);
+    if (value.indexOf('%') > -1) { // percent value
+        tmp = value.remove('%').toDouble() / 100.0;
+    }
+    else { // fixed value
+        tmp = KoUnit::parseValue(value) / absolute;
+        // The following is done so that we get the same data as when we save/load.
+        // This is needed that we get the same values due to rounding differences
+        // of absolute and relative values.
+        QString value = QString("%1").arg(tmp * 100.0);
+        tmp = value.toDouble() / 100;
+    }
+
+    return tmp;
+}
+
 QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader & stylesReader, const QString styleName, const QSizeF &size)
 {
     KoXmlElement* e = stylesReader.drawStyles()[styleName];
@@ -279,26 +298,27 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader & 
         // so what should we do?
         QString type = e->attributeNS(KoXmlNS::draw, "style", QString());
         if (type == "radial") {
-            QRadialGradient * rg = new QRadialGradient();
-            // TODO : find out whether Oasis works with boundingBox only?
+            // Zagge: at the moment the only objectBoundingBox is supported:
+            // 18.539 svg:gradientUnits
+            // See §13.2.2 and §13.2.3 of [SVG].
+            // The default value for this attribute is objectBoundingBox.
+            // The only value of the svg:gradientUnits attribute is objectBoundingBox.
+
             qreal cx = KoUnit::parseValue(e->attributeNS(KoXmlNS::draw, "cx", QString()).remove('%'));
             qreal cy = KoUnit::parseValue(e->attributeNS(KoXmlNS::draw, "cy", QString()).remove('%'));
-            rg->setCenter(QPointF(size.width() * 0.01 * cx, size.height() * 0.01 * cy));
-            rg->setFocalPoint(rg->center());
-            qreal dx = 0.5 * size.width();
-            qreal dy = 0.5 * size.height();
-            rg->setRadius(sqrt(dx*dx + dy*dy));
-            gradient = rg;
+            gradient = new QRadialGradient(QPointF(cx * 0.01, cy * 0.01), sqrt(0.5));
+            gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
         } else if (type == "linear" || type == "axial") {
             QLinearGradient * lg = new QLinearGradient();
+            lg->setCoordinateMode(QGradient::ObjectBoundingMode);
             // Dividing by 10 here because OOo saves as degree * 10
             qreal angle = 90 + e->attributeNS(KoXmlNS::draw, "angle", "0").toDouble() / 10;
-            qreal radius = 0.5 * sqrt(size.width() * size.width() + size.height() * size.height());
+            qreal radius = sqrt(0.5);
 
             qreal sx = cos(angle * M_PI / 180) * radius;
             qreal sy = sin(angle * M_PI / 180) * radius;
-            lg->setStart(QPointF(0.5 * size.width() + sx, 0.5 * size.height() - sy));
-            lg->setFinalStop(QPointF(0.5 * size.width() - sx, 0.5 * size.height() + sy));
+            lg->setStart(QPointF(0.5 + sx, 0.5 - sy));
+            lg->setFinalStop(QPointF(0.5 - sx, 0.5 + sy));
             gradient = lg;
         } else
             return QBrush();
@@ -341,28 +361,22 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader & 
         gradient->setStops(stops);
     } else if (e->namespaceURI() == KoXmlNS::svg) {
         if (e->localName() == "linearGradient") {
-            QLinearGradient * lg = new QLinearGradient();
             QPointF start, stop;
-            start.setX(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "x1", QString())));
-            start.setY(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "y1", QString())));
-            stop.setX(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "x2", QString())));
-            stop.setY(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "y2", QString())));
-            lg->setStart(start);
-            lg->setFinalStop(stop);
-            gradient = lg;
+            start.setX(percent(*e, KoXmlNS::svg, "x1", "0%", size.width()));
+            start.setY(percent(*e, KoXmlNS::svg, "y1", "0%", size.height()));
+            stop.setX(percent(*e, KoXmlNS::svg, "x2", "100%", size.width()));
+            stop.setY(percent(*e, KoXmlNS::svg, "y2", "100%", size.height()));
+            gradient = new QLinearGradient(start, stop);
         } else if (e->localName() == "radialGradient") {
-            QRadialGradient * rg = new QRadialGradient();
             QPointF center, focalPoint;
-            center.setX(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "cx", QString())));
-            center.setY(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "cy", QString())));
-            qreal r = KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "r", QString()));
-            focalPoint.setX(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "fx", QString())));
-            focalPoint.setY(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "fy", QString())));
-            rg->setCenter(center);
-            rg->setFocalPoint(focalPoint);
-            rg->setRadius(r);
-            gradient = rg;
+            center.setX(percent(*e, KoXmlNS::svg, "cx", "50%", size.width()));
+            center.setY(percent(*e, KoXmlNS::svg, "cy", "50%", size.height()));
+            qreal r = percent(*e, KoXmlNS::svg, "r", "50%", sqrt(size.width() * size.width() + size.height() * size.height()));
+            focalPoint.setX(percent(*e, KoXmlNS::svg, "fx", QString(), size.width()));
+            focalPoint.setY(percent(*e, KoXmlNS::svg, "fy", QString(), size.height()));
+            gradient = new QRadialGradient(center, r, focalPoint );
         }
+        gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
 
         QString strSpread(e->attributeNS(KoXmlNS::svg, "spreadMethod", "pad"));
         if (strSpread == "repeat")
@@ -392,13 +406,11 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader & 
     } else if (e->namespaceURI() == KoXmlNS::koffice) {
         if (e->localName() == "conicalGradient") {
             QPointF center;
-            center.setX(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "cx", QString())));
-            center.setY(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "cy", QString())));
+            center.setX(percent(*e, KoXmlNS::svg, "cx", "50%", size.width()));
+            center.setY(percent(*e, KoXmlNS::svg, "cy", "50%", size.height()));
             qreal angle = KoUnit::parseValue(e->attributeNS(KoXmlNS::draw, "angle", QString()));
-            QConicalGradient * g = new QConicalGradient();
-            g->setCenter(center);
-            g->setAngle(angle);
-            gradient = g;
+            gradient = new QConicalGradient(center, angle);
+            gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
 
             QString strSpread(e->attributeNS(KoXmlNS::svg, "spreadMethod", "pad"));
             if (strSpread == "repeat")

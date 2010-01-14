@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
    Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2010 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -249,22 +249,6 @@ void KoShape::setSize(const QSizeF &newSize)
     QSizeF oldSize(size());
     if (oldSize == newSize)
         return;
-
-    QMatrix matrix;
-    oldSize.setHeight(qMax((qreal) 1E-4, oldSize.height())); // avoids devision by zero below
-    oldSize.setWidth(qMax((qreal) 1E-4, oldSize.width()));
-    matrix.scale(newSize.width()/oldSize.width(), newSize.height()/oldSize.height());
-
-    KoGradientBackground * g = dynamic_cast<KoGradientBackground*>(d->fill);
-    if (g) {
-        g->setMatrix(g->matrix() * matrix);
-    }
-    KoLineBorder *l = dynamic_cast<KoLineBorder*>(d->border);
-    if (l && l->lineBrush().gradient()) {
-        QBrush brush = l->lineBrush();
-        brush.setMatrix(brush.matrix() * matrix);
-        l->setLineBrush(brush);
-    }
 
     d->size = newSize;
 
@@ -1093,8 +1077,11 @@ KoShapeBackground * KoShape::loadOdfFill(const KoXmlElement & element, KoShapeLo
     KoShapeBackground * bg = 0;
     if (fill == "solid" || fill == "hatch")
         bg = new KoColorBackground();
-    else if (fill == "gradient")
-        bg = new KoGradientBackground(new QLinearGradient());
+    else if (fill == "gradient") {
+        QGradient * gradient = new QLinearGradient();
+        gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+        bg = new KoGradientBackground(gradient);
+    }
     else if (fill == "bitmap")
         bg = new KoPatternBackground(context.imageCollection());
 

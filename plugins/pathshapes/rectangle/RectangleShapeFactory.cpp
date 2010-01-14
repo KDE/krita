@@ -44,7 +44,9 @@ KoShape *RectangleShapeFactory::createDefaultShape() const
     rect->setBorder(new KoLineBorder(1.0));
     rect->setShapeId(KoPathShapeId);
 
-    QLinearGradient *gradient = new QLinearGradient(QPointF(0,0), QPointF(100,100));
+    QLinearGradient *gradient = new QLinearGradient(QPointF(0,0), QPointF(1,1));
+    gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+
     gradient->setColorAt(0.0, Qt::white);
     gradient->setColorAt(1.0, Qt::green);
     rect->setBackground(new KoGradientBackground(gradient));

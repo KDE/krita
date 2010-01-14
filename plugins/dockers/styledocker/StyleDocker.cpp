@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2008-2009 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008-2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -420,7 +420,7 @@ void StyleDocker::updateGradient(KoResource * item)
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
     if (selectedShapes.isEmpty()) {
         KoShape* page = m_canvas->resourceProvider()->koShapeResource(KoPageApp::CurrentPage);
-        if ( page) {
+        if (page) {
             selectedShapes.append(page);
         }
         else {
@@ -609,10 +609,8 @@ KoShapeBackground *StyleDocker::applyFillGradientStops(KoShape *shape, const QGr
     }
     else {
         // no gradient yet, so create a new one
-        QSizeF size = shape->size();
-        QLinearGradient *g = new QLinearGradient();
-        g->setStart(QPointF(0, 0));
-        g->setFinalStop(QPointF(size.width(), size.height()));
+        QLinearGradient *g = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
+        g->setCoordinateMode(QGradient::ObjectBoundingMode);
         g->setStops(stops);
         newGradient = new KoGradientBackground(g);
     }
@@ -638,10 +636,8 @@ QBrush StyleDocker::applyStrokeGradientStops(KoShape *shape, const QGradientStop
     }
     else {
         // no gradient yet, so create a new one
-        QSizeF size = shape->size();
-        QLinearGradient *g = new QLinearGradient();
-        g->setStart(QPointF(0, 0));
-        g->setFinalStop(QPointF(size.width(), size.height()));
+        QLinearGradient *g = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
+        g->setCoordinateMode(QGradient::ObjectBoundingMode);
         g->setStops(stops);
         newGradient = g;
     }

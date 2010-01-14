@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -82,6 +83,26 @@ namespace KoFlake
 
     /// clones the given gradient
     FLAKE_EXPORT QGradient *cloneGradient(const QGradient *gradient);
+
+    /**
+     * Convert absolute to relative position
+     *
+     * @param absolute absolute position
+     * @param size for which the relative position needs to be calculated
+     *
+     * @return relative position
+     */
+    FLAKE_EXPORT QPointF toRelative(const QPointF &absolute, const QSizeF &size);
+
+    /**
+     * Convert relative size to absolute size
+     *
+     * @param relative relative position
+     * @param size for which the absolute position needs to be calculated
+     *
+     * @return absolute position
+     */
+    FLAKE_EXPORT QPointF toAbsolute(const QPointF &relative, const QSizeF &size);
 }
 
 #endif

@@ -45,6 +45,10 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent)
 
     initSpots();
 
+    // XXX: ask Enkithan for a palette-knife icon
+    bnMix->setIcon(KIcon("krita_tool_knife"));
+    bnPick->setIcon(KIcon("krita_tool_color_picker"));
+    bnPan->setIcon(KIcon("krita_tool_move"));
     m_bErase->setIcon(KIcon("edit-delete"));
     connect(m_bErase, SIGNAL(clicked()), m_canvas, SLOT(slotClear()));
 }

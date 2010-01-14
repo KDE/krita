@@ -35,6 +35,7 @@
 
 #include "mixercanvas.h"
 
+
 struct MixerTool::Private {
     
     Private(MixerCanvas* mixer)
@@ -43,11 +44,13 @@ struct MixerTool::Private {
         cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
     }
     
-    MixerCanvas *mixer;
-    KoColor      foregroundColor;
-    KoColor      backgroundColor;
-    bool         mixing;
-    QCursor      cursor;
+    MixerCanvas    *mixer;
+    KoColor        foregroundColor;
+    KoColor        backgroundColor;
+    State          state;
+    qreal          radius;
+    bool           mouseDown;
+    QCursor        cursor;
 };
 
 
@@ -56,7 +59,7 @@ MixerTool::MixerTool(MixerCanvas* mixer)
     : KoTool(mixer)
     , m_d( new Private(mixer))
 {
-
+    m_d->state = MIXING;
     activate();
 }
 
@@ -65,10 +68,20 @@ MixerTool::~MixerTool()
     delete m_d;
 }
 
+void MixerTool::setState(State state)
+{
+    m_d->state = state;
+}
+
+void MixerTool::setRadius(qreal radius)
+{
+    m_d->radius = radius;
+}
+
 void MixerTool::activate(bool temporary)
 {
     Q_UNUSED(temporary)
-    m_d->mixing = false;
+    m_d->mouseDown = false;
 
     useCursor(m_d->cursor);
     m_d->foregroundColor = canvas()->resourceProvider()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
@@ -104,13 +117,13 @@ void MixerTool::paint(QPainter &painter, const KoViewConverter &converter)
 void MixerTool::mousePressEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);
-    m_d->mixing = true;
+    m_d->mouseDown = true;
 }
 
 void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);
-    if (m_d->mixing) {
+    if (m_d->mouseDown) {
 
     }
 }
@@ -120,7 +133,7 @@ void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
     // XXX: We want to be able to set a color source for the other paintops that
     //      contains the impure blend under the current cursor.
     m_d->mixer->resourceProvider()->setResource(KoCanvasResource::ForegroundColor, event->pos());
-    m_d->mixing = false;
+    m_d->mouseDown = false;
 }
 
 void MixerTool::setDirty(const QRegion& region)

@@ -32,15 +32,28 @@ class MixerTool : public KoTool
     Q_OBJECT
 
 public:
+
+    enum State {
+        MIXING,
+        PANNING,
+        PICKING
+    };
+
     MixerTool(MixerCanvas *mixer);
     ~MixerTool();
 
 public:
+
+
     void setDirty(const QRegion &region);
 
     // KoTool Implementation.
 
 public slots:
+
+    void setState(State state);
+
+    void setRadius(qreal radius);
 
     virtual void activate(bool temporary = false);
 
@@ -66,6 +79,7 @@ public:
     virtual void mouseDoubleClickEvent(KoPointerEvent *) {}
 
 protected:
+
     void initPaint(KoPointerEvent *e);
     void endPaint();
 

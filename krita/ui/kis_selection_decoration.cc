@@ -36,7 +36,7 @@
 #include "kis_canvas_resource_provider.h"
 
 KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
-        : KisCanvasDecoration("selection", i18n("Selection decoration"), view), m_mode(Ants)
+    : KisCanvasDecoration("selection", i18n("Selection decoration"), view), m_mode(Ants)
 {
     offset = 0;
     timer = new QTimer(this);
@@ -46,10 +46,12 @@ KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
 
     for (int i = 0; i < 8; i++) {
         QImage texture(8, 8, QImage::Format_RGB32);
-        for (int y = 0; y < 8; y++)
-            for (int x = 0; x < 8; x++)
-                texture.setPixel(x, y, ((x + y + i) % 8 < 4) ? black : white);
-
+        for (int y = 0; y < 8; y++) {
+            QRgb *pixel = reinterpret_cast<QRgb *>(texture.scanLine(y));
+            for (int x = 0; x < 8; x++) {
+                pixel[x] = ((x + y + i) % 8 < 4) ? black : white;
+            }
+        }
         QBrush brush;
         brush.setTextureImage(texture);
         brushes << brush;
@@ -154,7 +156,7 @@ void KisSelectionDecoration::updateSimpleOutline()
             //check for left turns and turn them into diagonals
             currentDelta = polygon.at(i + 1) - polygon.at(i);
             if ((previousDelta.y() == 1 && currentDelta.x() == 1) || (previousDelta.x() == -1 && currentDelta.y() == 1) ||
-                    (previousDelta.y() == -1 && currentDelta.x() == -1) || (previousDelta.x() == 1 && currentDelta.y() == -1)) {
+                (previousDelta.y() == -1 && currentDelta.x() == -1) || (previousDelta.x() == 1 && currentDelta.y() == -1)) {
                 //Turning point found. The point at position i won't be in the simple outline.
                 //If there is a staircase, the points in between will be removed.
                 if (pointsSinceLastRemoval == 2)

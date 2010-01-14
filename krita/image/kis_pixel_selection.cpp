@@ -115,11 +115,12 @@ QImage KisPixelSelection::maskImage(const QRect & rc) const
 
     KisHLineConstIteratorPixel it = createHLineConstIterator(bounds.x(), bounds.y(), bounds.width());
     for (int y2 = bounds.y(); y2 < bounds.height() - bounds.y(); ++y2) {
+        QRgb *pixel= reinterpret_cast<QRgb *>(image.scanLine(y2));
         int x2 = 0;
         while (!it.isDone()) {
             quint8 s = MAX_SELECTED - *(it.rawData());
             qint32 c = qRgb(s, s, s);
-            image.setPixel(x2, y2, c);
+            pixel[x2] = c;
             ++x2;
             ++it;
         }

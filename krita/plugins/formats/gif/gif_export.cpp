@@ -72,12 +72,9 @@ KoFilter::ConversionStatus gifExport::convert(const QByteArray& from, const QByt
 
     GifConverter kpc(output, output->undoAdapter());
 
-    KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
-    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
-
     KisImageBuilder_Result res;
 
-    if ( (res = kpc.buildFile(url, l)) == KisImageBuilder_RESULT_OK) {
+    if ( (res = kpc.buildFile(url, img)) == KisImageBuilder_RESULT_OK) {
         dbgFile <<"success !";
         return KoFilter::OK;
     }

@@ -284,9 +284,6 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
 KisImageBuilder_Result GifConverter::buildImage(const KUrl& uri)
 {
 
-    KisGifWriterVisitor visitor;
-    m_img->rootLayer()->accept(visitor);
-
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
@@ -315,13 +312,9 @@ KisImageWSP GifConverter::image()
 }
 
 
-KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer)
+KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisImageWSP image)
 {
-    if (!layer)
-        return KisImageBuilder_RESULT_INVALID_ARG;
-
-    KisImageWSP img = layer->image();
-    if (!img)
+    if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
     if (uri.isEmpty())
@@ -329,6 +322,14 @@ KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
+
+    m_img = image;
+
+    // get a list of all layers converted to 8 bit indexed QImages
+    KisGifWriterVisitor visitor;
+    m_img->rootLayer()->accept(visitor);
+
+
     // Open file for writing
 #if 0
     FILE *fp = fopen(QFile::encodeName(uri.path()), "wb");

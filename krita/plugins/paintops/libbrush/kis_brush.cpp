@@ -256,9 +256,9 @@ qint32 KisBrush::maskWidth(double scale, double angle) const
 {
     double width_ = width() * scale;
     if(angle == 0.0) return qint32(width_ + 1);
-    
+
     double height_ = height() * scale;
-    
+
     // Add one for sub-pixel shift
     if (angle >= 0.0 && angle < M_PI_2) {
         return qAbs(static_cast<qint32>(ceil(width_ * cos(angle) + height_ * sin(angle)) + 1));
@@ -275,9 +275,9 @@ qint32 KisBrush::maskHeight(double scale, double angle) const
 {
     double height_ = height() * scale;
     if(angle == 0.0) return qint32(height_ + 1);
-    
+
     double width_ = width() * scale;
-    
+
     // Add one for sub-pixel shift
     if (angle >= 0.0 && angle < M_PI_2) {
         return qAbs(static_cast<qint32>(ceil(width_ * sin(angle) + height_ * cos(angle)) + 1));
@@ -665,7 +665,7 @@ QImage KisBrush::scaleImage(const KisScaledBrush *srcBrush, double scale, double
 
     QImage dstImage(dstWidth, dstHeight, QImage::Format_ARGB32);
 
-    const QImage srcImage = srcBrush->image();
+    QImage srcImage = srcBrush->image();
 
     // Compute scales to map the scaled brush onto the required scale.
     double xScale = srcBrush->xScale() / scale;
@@ -675,13 +675,25 @@ QImage KisBrush::scaleImage(const KisScaledBrush *srcBrush, double scale, double
     int srcHeight = srcImage.height();
 
     for (int dstY = 0; dstY < dstHeight; dstY++) {
+
+        double srcY = (dstY - subPixelY + 0.5) * yScale;
+        srcY -= 0.5;
+        int topY = static_cast<int>(srcY);
+        if (srcY < 0) {
+            topY--;
+        }
+
+        QRgb *dstPixel = reinterpret_cast<QRgb *>(dstImage.scanLine(dstY));
+        QRgb *srcPixel = reinterpret_cast<QRgb *>(srcImage.scanLine(topY));
+        QRgb *srcPixelPlusOne = reinterpret_cast<QRgb *>(srcImage.scanLine(topY + 1));
+
         for (int dstX = 0; dstX < dstWidth; dstX++) {
 
             double srcX = (dstX - subPixelX + 0.5) * xScale;
-            double srcY = (dstY - subPixelY + 0.5) * yScale;
+
 
             srcX -= 0.5;
-            srcY -= 0.5;
+
 
             int leftX = static_cast<int>(srcX);
 
@@ -691,18 +703,12 @@ QImage KisBrush::scaleImage(const KisScaledBrush *srcBrush, double scale, double
 
             double xInterp = srcX - leftX;
 
-            int topY = static_cast<int>(srcY);
-
-            if (srcY < 0) {
-                topY--;
-            }
-
             double yInterp = srcY - topY;
 
-            QRgb topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcImage.pixel(leftX, topY) : qRgba(0, 0, 0, 0);
-            QRgb bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcImage.pixel(leftX, topY + 1) : qRgba(0, 0, 0, 0);
-            QRgb topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcImage.pixel(leftX + 1, topY) : qRgba(0, 0, 0, 0);
-            QRgb bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcImage.pixel(leftX + 1, topY + 1) : qRgba(0, 0, 0, 0);
+            QRgb topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcPixel[leftX] : qRgba(0, 0, 0, 0);
+            QRgb bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcPixelPlusOne[leftX] : qRgba(0, 0, 0, 0);
+            QRgb topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcPixel[leftX + 1] : qRgba(0, 0, 0, 0);
+            QRgb bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcPixel[leftX] : qRgba(0, 0, 0, 0);
 
             double a = 1 - xInterp;
             double b = 1 - yInterp;
@@ -749,16 +755,17 @@ QImage KisBrush::scaleImage(const KisScaledBrush *srcBrush, double scale, double
                 alpha = 255;
             }
 
-            dstImage.setPixel(dstX, dstY, qRgba(red, green, blue, alpha));
+            dstPixel[dstX] = qRgba(red, green, blue, alpha);
         }
     }
 
     return dstImage;
 }
 
-QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
+QImage KisBrush::scaleImage(const QImage& _srcImage, int width, int height)
 {
     QImage scaledImage;
+    QImage srcImage = _srcImage; // detaches!
     //QString filename;
 
     int srcWidth = srcImage.width();
@@ -777,13 +784,24 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
         scaledImage = QImage(width, height, srcImage.format());
 
         for (int dstY = 0; dstY < height; dstY++) {
+
+            double srcY = (dstY + 0.5) * yScale;
+            srcY -= 0.5;
+            int topY = static_cast<int>(srcY);
+
+            if (srcY < 0) {
+                topY--;
+            }
+
+            QRgb *dstPixel = reinterpret_cast<QRgb *>(scaledImage.scanLine(dstY));
+            QRgb *srcPixel = reinterpret_cast<QRgb *>(srcImage.scanLine(topY));
+            QRgb *srcPixelPlusOne = reinterpret_cast<QRgb *>(srcImage.scanLine(topY + 1));
+
             for (int dstX = 0; dstX < width; dstX++) {
 
                 double srcX = (dstX + 0.5) * xScale;
-                double srcY = (dstY + 0.5) * yScale;
 
                 srcX -= 0.5;
-                srcY -= 0.5;
 
                 int leftX = static_cast<int>(srcX);
 
@@ -793,18 +811,12 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
 
                 double xInterp = srcX - leftX;
 
-                int topY = static_cast<int>(srcY);
-
-                if (srcY < 0) {
-                    topY--;
-                }
-
                 double yInterp = srcY - topY;
 
-                QRgb topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcImage.pixel(leftX, topY) : qRgba(0, 0, 0, 0);
-                QRgb bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcImage.pixel(leftX, topY + 1) : qRgba(0, 0, 0, 0);
-                QRgb topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcImage.pixel(leftX + 1, topY) : qRgba(0, 0, 0, 0);
-                QRgb bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcImage.pixel(leftX + 1, topY + 1) : qRgba(0, 0, 0, 0);
+                QRgb topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcPixel[leftX] : qRgba(0, 0, 0, 0);
+                QRgb bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcPixelPlusOne[leftX] : qRgba(0, 0, 0, 0);
+                QRgb topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcPixel[leftX] : qRgba(0, 0, 0, 0);
+                QRgb bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcPixelPlusOne[leftX + 1] : qRgba(0, 0, 0, 0);
 
                 double a = 1 - xInterp;
                 double b = 1 - yInterp;
@@ -877,7 +889,7 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
                     alpha = 255;
                 }
 
-                scaledImage.setPixel(dstX, dstY, qRgba(red, green, blue, alpha));
+                dstPixel[dstX] = qRgba(red, green, blue, alpha);
             }
         }
 
@@ -929,6 +941,7 @@ KisQImagemaskSP KisBrush::scaleSinglePixelMask(double scale, quint8 maskValue, d
     double b = subPixelY;
 
     for (int y = 0; y < dstHeight; y++) {
+
         for (int x = 0; x < dstWidth; x++) {
 
             quint8 topLeft = (x > 0 && y > 0) ? maskValue : OPACITY_TRANSPARENT;
@@ -972,6 +985,9 @@ QImage KisBrush::scaleSinglePixelImage(double scale, QRgb pixel, double subPixel
     double b = subPixelY;
 
     for (int y = 0; y < dstHeight; y++) {
+
+        QRgb *dstPixel = reinterpret_cast<QRgb *>(outputImage.scanLine(y));
+
         for (int x = 0; x < dstWidth; x++) {
 
             QRgb topLeft = (x > 0 && y > 0) ? pixel : qRgba(0, 0, 0, 0);
@@ -1031,7 +1047,7 @@ QImage KisBrush::scaleSinglePixelImage(double scale, QRgb pixel, double subPixel
                 alpha = 255;
             }
 
-            outputImage.setPixel(x, y, qRgba(red, green, blue, alpha));
+            dstPixel[x] = qRgba(red, green, blue, alpha);
         }
     }
 
@@ -1047,8 +1063,9 @@ QImage KisBrush::interpolate(const QImage& image1, const QImage& image2, double 
 
     QImage outputImage(width, height, QImage::Format_ARGB32);
 
-    for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++) {
+    for (int y = 0; y < height; y++) {
+        QRgb *dstPixel = reinterpret_cast<QRgb *>(outputImage.scanLine(y));
+        for (int x = 0; x < width; x++) {
             QRgb image1pixel = image1.pixel(x, y);
             QRgb image2pixel = image2.pixel(x, y);
 
@@ -1082,7 +1099,7 @@ QImage KisBrush::interpolate(const QImage& image1, const QImage& image2, double 
                 alpha = 255;
             }
 
-            outputImage.setPixel(x, y, qRgba(red, green, blue, alpha));
+            dstPixel[x] = qRgba(red, green, blue, alpha);
         }
     }
 

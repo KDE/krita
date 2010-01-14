@@ -443,6 +443,9 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
         QTextBlock block = cursor.block();
         // Apply list style when loading a list but we don't have a list style
         paragraphStyle->applyStyle(block, d->currentList && !d->currentListStyle);
+        // Clear the outline level property. If a default-outline-level was set, it should not
+        // be applied when loading a document, only on user action.
+        block.blockFormat().clearProperty(KoParagraphStyle::OutlineLevel);
     } else {
         kWarning(32500) << "paragraph style " << styleName << " not found";
     }
@@ -457,8 +460,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
 void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 {
     Q_ASSERT(d->styleManager);
-    int level = qMax(1, element.attributeNS(KoXmlNS::text, "outline-level", "1").toInt());
-    // TODO: fallback to default-outline-level from the style, if specified?
+    int level = qMax(-1, element.attributeNS(KoXmlNS::text, "outline-level", "-1").toInt());
+    // This will fallback to the default-outline-level applied by KoParagraphStyle
 
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
@@ -476,9 +479,15 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         kWarning(32500) << "paragraph style " << styleName << " not found";
     }
 
-    QTextBlockFormat blockFormat;
-    blockFormat.setProperty(KoParagraphStyle::OutlineLevel, level);
-    cursor.mergeBlockFormat(blockFormat);
+    if ((block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) && (level == -1)) {
+        level = block.blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
+    } else {
+        if (level == -1)
+            level = 1;
+        QTextBlockFormat blockFormat;
+        blockFormat.setProperty(KoParagraphStyle::OutlineLevel, level);
+        cursor.mergeBlockFormat(blockFormat);
+    }
 
     if (!d->currentList) { // apply <text:outline-style> (if present) only if heading is not within a <text:list>
         KoListStyle *outlineStyle = d->styleManager->outlineStyle();

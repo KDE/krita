@@ -191,6 +191,9 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
         QVariant variant = d->stylesPrivate.value(keys[i]);
         format.setProperty(keys[i], variant);
     }
+    if ((hasProperty(DefaultOutlineLevel)) && (!format.hasProperty(OutlineLevel))) {
+       format.setProperty(OutlineLevel, defaultOutlineLevel());
+    }
 }
 
 void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
@@ -822,6 +825,16 @@ int KoParagraphStyle::outlineLevel() const
     return propertyInt(OutlineLevel);
 }
 
+void KoParagraphStyle::setDefaultOutlineLevel(int outline)
+{
+    setProperty(DefaultOutlineLevel, outline);
+}
+
+int KoParagraphStyle::defaultOutlineLevel() const
+{
+    return propertyInt(DefaultOutlineLevel);
+}
+
 void KoParagraphStyle::setIsListHeader(bool on)
 {
     setProperty(IsListHeader, on);
@@ -903,12 +916,6 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext 
     if (d->name.isEmpty()) // if no style:display-name is given us the style:name
         d->name = element->attributeNS(KoXmlNS::style, "name", QString());
 
-#if 0 //1.6:
-    // OOo hack:
-    //m_bOutline = name.startsWith( "Heading" );
-    // real OASIS solution:
-    bool m_bOutline = element->hasAttributeNS(KoXmlNS::style, "default-outline-level");
-#endif
     context.styleStack().save();
     // Load all parents - only because we don't support inheritance.
     QString family = element->attributeNS(KoXmlNS::style, "family", "paragraph");
@@ -921,6 +928,13 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext 
         setMasterPageName(masterPage);
     }
 
+    if (element->hasAttributeNS(KoXmlNS::style, "default-outline-level")) {
+        bool ok = false;
+        int level = element->attributeNS(KoXmlNS::style, "default-outline-level").toInt(&ok);
+        if (ok)
+            setDefaultOutlineLevel(level);
+    }
+    
     //1.6: KoTextFormat::load
     KoCharacterStyle *charstyle = characterStyle();
     context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
@@ -1527,6 +1541,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             style.addPropertyPt("style:tab-stop-distance", tabStopDistance(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::MasterPageName) {
             style.addProperty("style:master-page-name", masterPageName());
+        } else if (key == KoParagraphStyle::DefaultOutlineLevel) {
+            style.addProperty("style:default-outline-level", defaultOutlineLevel());
         }
     }
     if (!writtenLineSpacing && normalLineHeight)

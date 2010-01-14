@@ -123,7 +123,8 @@ public:
 
         MasterPageName,         ///< Optional name of the master-page
 
-        OutlineLevel            ///< Outline level for headings
+        OutlineLevel,            ///< Outline level for headings
+        DefaultOutlineLevel
 // do 15.5.24
 // continue at 15.5.28
     };
@@ -465,6 +466,17 @@ public:
      * Change this block outline level
      */
     void setOutlineLevel(int outline);
+    
+    /**
+     * Return the default outline level of this style, or 0 if there is none.
+     */
+    int defaultOutlineLevel() const;
+
+    /**
+     * Change the default outline level for this style.
+     */
+    void setDefaultOutlineLevel(int outline);
+
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoParagraphStyle *style);

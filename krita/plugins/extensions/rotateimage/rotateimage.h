@@ -20,6 +20,8 @@
 #ifndef ROTATEIMAGE_H
 #define ROTATEIMAGE_H
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 #include "kis_types.h"
 
@@ -29,7 +31,7 @@ class RotateImage : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    RotateImage(QObject *parent, const QStringList &);
+    RotateImage(QObject *parent, const QVariantList &);
     virtual ~RotateImage();
 
 private slots:

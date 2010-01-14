@@ -20,7 +20,7 @@
 #include <QMutex>
 
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kstandarddirs.h>
 
 #include <generator/kis_generator_registry.h>
@@ -34,10 +34,10 @@
 
 QMutex* shivaMutex;
 
-typedef KGenericFactory<ShivaPlugin> ShivaPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritashiva, ShivaPluginFactory("krita"))
+K_PLUGIN_FACTORY(ShivaPluginFactory, registerPlugin<ShivaPlugin>();)
+K_EXPORT_PLUGIN(ShivaPluginFactory("krita"))
 
-ShivaPlugin::ShivaPlugin(QObject *parent, const QStringList &)
+ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     m_sourceCollection = new OpenShiva::SourcesCollection();

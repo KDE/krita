@@ -18,7 +18,8 @@
 #ifndef _DEFAULT_DOCKERS_H
 #define _DEFAULT_DOCKERS_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisView2;
 
@@ -29,7 +30,7 @@ class KritaDefaultDockersPlugin : public QObject
 {
     Q_OBJECT
 public:
-    KritaDefaultDockersPlugin(QObject *parent, const QStringList &);
+    KritaDefaultDockersPlugin(QObject *parent, const QVariantList &);
     virtual ~KritaDefaultDockersPlugin();
 
 };

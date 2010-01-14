@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kactioncollection.h>
 
 #include <KoColorSpace.h>
@@ -60,11 +60,11 @@
 
 #include "dlg_colorspaceconversion.h"
 
-typedef KGenericFactory<ColorSpaceConversion> ColorSpaceConversionFactory;
-K_EXPORT_COMPONENT_FACTORY(kritacolorspaceconversion, ColorSpaceConversionFactory("krita"))
+K_PLUGIN_FACTORY(ColorSpaceConversionFactory, registerPlugin<ColorSpaceConversion>();)
+K_EXPORT_PLUGIN(ColorSpaceConversionFactory("krita"))
 
 
-ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QStringList &)
+ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {

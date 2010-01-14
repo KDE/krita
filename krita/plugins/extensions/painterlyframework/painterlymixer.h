@@ -22,6 +22,8 @@
 #ifndef PAINTERLY_MIXER_H
 #define PAINTERLY_MIXER_H
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisPainterlyMixerDockerFactory;
@@ -31,7 +33,7 @@ class PainterlyMixer : public KParts::Plugin
     Q_OBJECT
 
 public:
-    PainterlyMixer(QObject *parent, const QStringList &);
+    PainterlyMixer(QObject *parent, const QVariantList &);
 };
 
 #endif // PAINTERLY_MIXER_H

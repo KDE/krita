@@ -23,7 +23,7 @@
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
@@ -55,11 +55,10 @@
 
 #include "ui_wdgpanoramacreation.h"
 
-typedef KGenericFactory<PanoramaPlugin> PanoramaPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritapanorama, PanoramaPluginFactory("krita"))
+K_PLUGIN_FACTORY(PanoramaPluginFactory, registerPlugin<PanoramaPlugin>();)
+K_EXPORT_PLUGIN(PanoramaPluginFactory("krita"))
 
-
-PanoramaPlugin::PanoramaPlugin(QObject *parent, const QStringList &)
+PanoramaPlugin::PanoramaPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent), m_wdgPanoramaCreation(0)
 {
     if (parent->inherits("KisView2")) {

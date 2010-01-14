@@ -24,7 +24,7 @@
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -38,8 +38,8 @@
 
 #include "digitalmixer_dock.h"
 
-typedef KGenericFactory<DigitalMixerPlugin> DigitalMixerPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritadigitalmixer, DigitalMixerPluginFactory( "krita" ) )
+K_PLUGIN_FACTORY(DigitalMixerPluginFactory, registerPlugin<DigitalMixerPlugin>();)
+K_EXPORT_PLUGIN(DigitalMixerPluginFactory( "krita" ) )
 
 class DigitalMixerDockFactory : public KoDockFactory {
 public:
@@ -77,7 +77,7 @@ private:
 };
 
 
-DigitalMixerPlugin::DigitalMixerPlugin(QObject *parent, const QStringList &)
+DigitalMixerPlugin::DigitalMixerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     dbgPlugins << "DigitalMixerPlugin";

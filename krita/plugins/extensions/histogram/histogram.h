@@ -21,6 +21,8 @@
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -30,7 +32,7 @@ class Histogram : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    Histogram(QObject *parent, const QStringList &);
+    Histogram(QObject *parent, const QVariantList &);
     virtual ~Histogram();
 
 private slots:

@@ -20,6 +20,8 @@
 #ifndef _KIS_DROPSHADOW_PLUGIN_H_
 #define _KIS_DROPSHADOW_PLUGIN_H_
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -30,7 +32,7 @@ class KisDropshadowPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    KisDropshadowPlugin(QObject *parent, const QStringList &);
+    KisDropshadowPlugin(QObject *parent, const QVariantList &);
     virtual ~KisDropshadowPlugin();
 
 private slots:

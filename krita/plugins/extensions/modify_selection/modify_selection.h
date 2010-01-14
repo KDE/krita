@@ -20,6 +20,8 @@
 #ifndef MODIFY_SELECTION_H
 #define MODIFY_SELECTION_H
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -28,7 +30,7 @@ class ModifySelection : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ModifySelection(QObject *parent, const QStringList &);
+    ModifySelection(QObject *parent, const QVariantList &);
     virtual ~ModifySelection();
 
 private slots:

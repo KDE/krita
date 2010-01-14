@@ -21,7 +21,7 @@
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -36,11 +36,11 @@
 #include "kis_tonemapping_dialog.h"
 #include <kis_canvas_resource_provider.h>
 
-typedef KGenericFactory<tonemappingPlugin> tonemappingPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritatonemapping, tonemappingPluginFactory("krita"))
+K_PLUGIN_FACTORY(tonemappingPluginFactory, registerPlugin<tonemappingPlugin>();)
+K_EXPORT_PLUGIN(tonemappingPluginFactory("krita"))
 
 
-tonemappingPlugin::tonemappingPlugin(QObject *parent, const QStringList &)
+tonemappingPlugin::tonemappingPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {

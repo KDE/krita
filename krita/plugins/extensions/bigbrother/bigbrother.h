@@ -18,6 +18,8 @@
 #ifndef _BIGBROTHER_H_
 #define _BIGBROTHER_H_
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class QAction;
@@ -32,7 +34,7 @@ class BigBrotherPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    BigBrotherPlugin(QObject *parent, const QStringList &);
+    BigBrotherPlugin(QObject *parent, const QVariantList &);
     virtual ~BigBrotherPlugin();
 
 private slots:

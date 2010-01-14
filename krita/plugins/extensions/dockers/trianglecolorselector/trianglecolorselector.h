@@ -18,7 +18,8 @@
 #ifndef _TRIANGLECOLORSELECTOR_H_
 #define _TRIANGLECOLORSELECTOR_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisView2;
 
@@ -29,7 +30,7 @@ class TriangleColorSelectorPlugin : public QObject
 {
     Q_OBJECT
 public:
-    TriangleColorSelectorPlugin(QObject *parent, const QStringList &);
+    TriangleColorSelectorPlugin(QObject *parent, const QVariantList &);
     virtual ~TriangleColorSelectorPlugin();
 
 };

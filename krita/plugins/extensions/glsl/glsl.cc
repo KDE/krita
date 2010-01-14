@@ -22,7 +22,7 @@
 #include <QApplication>
 
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 
@@ -34,10 +34,10 @@
 
 #include "dlg_glsl.h"
 
-typedef KGenericFactory<Glsl> GlslFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaglsl, GlslFactory("krita"))
+K_PLUGIN_FACTORY(GlslFactory, registerPlugin<Glsl>();)
+K_EXPORT_PLUGIN(GlslFactory("krita"))
 
-Glsl::Glsl(QObject *parent, const QStringList &)
+Glsl::Glsl(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
 

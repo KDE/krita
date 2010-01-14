@@ -18,6 +18,8 @@
 #ifndef _KIS_LAYER_COMPOSE_PLUGIN_H_
 #define _KIS_LAYER_COMPOSE_PLUGIN_H_
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -26,7 +28,7 @@ class KisLayerComposePlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    KisLayerComposePlugin(QObject *parent, const QStringList &);
+    KisLayerComposePlugin(QObject *parent, const QVariantList &);
     virtual ~KisLayerComposePlugin();
 
 private slots:

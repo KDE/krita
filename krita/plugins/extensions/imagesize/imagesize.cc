@@ -35,7 +35,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <KoProgressUpdater.h>
@@ -62,10 +62,10 @@
 #include "kis_filter_strategy.h"
 #include "kis_canvas_resource_provider.h"
 
-typedef KGenericFactory<ImageSize> ImageSizeFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaimagesize, ImageSizeFactory("krita"))
+K_PLUGIN_FACTORY(ImageSizeFactory, registerPlugin<ImageSize>();)
+K_EXPORT_PLUGIN(ImageSizeFactory("krita"))
 
-ImageSize::ImageSize(QObject *parent, const QStringList &)
+ImageSize::ImageSize(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {

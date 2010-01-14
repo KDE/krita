@@ -18,7 +18,8 @@
 #ifndef _SPECIFICCOLORSELECTOR_H_
 #define _SPECIFICCOLORSELECTOR_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisView2;
 
@@ -29,7 +30,7 @@ class SpecificColorSelectorPlugin : public QObject
 {
     Q_OBJECT
 public:
-    SpecificColorSelectorPlugin(QObject *parent, const QStringList &);
+    SpecificColorSelectorPlugin(QObject *parent, const QVariantList &);
     virtual ~SpecificColorSelectorPlugin();
 private:
     KisView2* m_view;

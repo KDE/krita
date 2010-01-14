@@ -20,6 +20,8 @@
 #ifndef IMAGESIZE_H
 #define IMAGESIZE_H
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 #include "kis_types.h"
@@ -31,7 +33,7 @@ class ImageSize : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ImageSize(QObject *parent, const QStringList &);
+    ImageSize(QObject *parent, const QVariantList &);
     virtual ~ImageSize();
 
 private slots:

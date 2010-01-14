@@ -26,7 +26,7 @@
 #include <kcomponentdata.h>
 #include <kis_debug.h>
 #include <kfiledialog.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -39,11 +39,11 @@
 #include <kis_types.h>
 #include <kis_view2.h>
 
-typedef KGenericFactory<TogetherPlugin> TogetherPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritatogether, TogetherPluginFactory("krita"))
+K_PLUGIN_FACTORY(TogetherPluginFactory, registerPlugin<TogetherPlugin>();)
+K_EXPORT_PLUGIN(TogetherPluginFactory("krita"))
 
 
-TogetherPlugin::TogetherPlugin(QObject *parent, const QStringList &)
+TogetherPlugin::TogetherPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {

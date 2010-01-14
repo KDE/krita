@@ -19,6 +19,8 @@
 #ifndef _METADATAEDITOR_H_
 #define _METADATAEDITOR_H_
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -35,7 +37,7 @@ class metadataeditorPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    metadataeditorPlugin(QObject *parent, const QStringList &);
+    metadataeditorPlugin(QObject *parent, const QVariantList &);
     virtual ~metadataeditorPlugin();
 
 private slots:

@@ -19,6 +19,8 @@
 #ifndef _TOGETHER_H_
 #define _TOGETHER_H_
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -27,7 +29,7 @@ class TogetherPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    TogetherPlugin(QObject *parent, const QStringList &);
+    TogetherPlugin(QObject *parent, const QVariantList &);
     virtual ~TogetherPlugin();
 
 private slots:

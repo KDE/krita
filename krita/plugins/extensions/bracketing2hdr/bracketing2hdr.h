@@ -19,6 +19,8 @@
 #ifndef _BRACKETING2HDR_H_
 #define _BRACKETING2HDR_H_
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 #include <kis_types.h>
@@ -50,7 +52,7 @@ public:
         KisHLineConstIteratorPixel* it;
     };
 public:
-    Bracketing2HDRPlugin(QObject *parent, const QStringList &);
+    Bracketing2HDRPlugin(QObject *parent, const QVariantList &);
     virtual ~Bracketing2HDRPlugin();
 
     /**

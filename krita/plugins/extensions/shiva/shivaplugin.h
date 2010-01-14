@@ -18,7 +18,8 @@
 #ifndef _SHIVAPLUGIN_H_
 #define _SHIVAPLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisConfigWidget;
 
@@ -30,7 +31,7 @@ class SourcesCollection;
 class ShivaPlugin : public QObject
 {
 public:
-    ShivaPlugin(QObject *parent, const QStringList &);
+    ShivaPlugin(QObject *parent, const QVariantList &);
     virtual ~ShivaPlugin();
 private:
     OpenShiva::SourcesCollection* m_sourceCollection;

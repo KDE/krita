@@ -31,7 +31,7 @@
 #include <kactioncollection.h>
 #include <kis_debug.h>
 #include <kfiledialog.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
@@ -65,8 +65,8 @@
 #include "kis_script_filter.h"
 #include "kis_script_decoration.h"
 
-typedef KGenericFactory<ScriptingPart> KritaScriptingFactory;
-K_EXPORT_COMPONENT_FACTORY(kritascripting, KritaScriptingFactory("krita"))
+K_PLUGIN_FACTORY(KritaScriptingFactory, registerPlugin<ScriptingPart>();)
+K_EXPORT_PLUGIN(KritaScriptingFactory("krita"))
 
 class ScriptingPart::Private
 {
@@ -74,8 +74,8 @@ public:
     KisView2* view;
 };
 
-ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
-        : KoScriptingPart(new Scripting::Module(dynamic_cast<KisView2*>(parent)), list)
+ScriptingPart::ScriptingPart(QObject *parent, const QVariantList &)
+        : KoScriptingPart(new Scripting::Module(dynamic_cast<KisView2*>(parent)), QStringList())
         , d(new Private())
 {
     d->view = dynamic_cast<KisView2*>(parent);

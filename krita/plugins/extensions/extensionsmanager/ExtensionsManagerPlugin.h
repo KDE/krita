@@ -18,6 +18,8 @@
 #ifndef _EXTENSIONSMANAGER_H_
 #define _EXTENSIONSMANAGER_H_
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -30,7 +32,7 @@ class ExtensionsManagerPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ExtensionsManagerPlugin(QObject *parent, const QStringList &);
+    ExtensionsManagerPlugin(QObject *parent, const QVariantList &);
     virtual ~ExtensionsManagerPlugin();
 
 private slots:

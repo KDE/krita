@@ -23,7 +23,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kactioncollection.h>
 
 #include <kis_view2.h>
@@ -37,13 +37,14 @@
 
 #include "dlg_compose.h"
 
-K_EXPORT_COMPONENT_FACTORY(kritalayercompose, KGenericFactory<KisLayerComposePlugin>("krita"))
+K_PLUGIN_FACTORY(KisLayerComposePluginFactory, registerPlugin<KisLayerComposePlugin>();)
+K_EXPORT_PLUGIN(KisLayerComposePluginFactory("krita"))
 
-KisLayerComposePlugin::KisLayerComposePlugin(QObject *parent, const QStringList &)
+KisLayerComposePlugin::KisLayerComposePlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(KGenericFactory<KisLayerComposePlugin>::componentData());
+        setComponentData(KisLayerComposePluginFactory::componentData());
 
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imageseparate.rc"), true);
         m_view = (KisView2*) parent;

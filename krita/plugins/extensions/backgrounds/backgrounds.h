@@ -20,6 +20,8 @@
 #ifndef BACKGROUNDS_H
 #define BACKGROUNDS_H
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -29,7 +31,7 @@ class Backgrounds : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    Backgrounds(QObject *parent, const QStringList &);
+    Backgrounds(QObject *parent, const QVariantList &);
     virtual ~Backgrounds();
 
 private slots:

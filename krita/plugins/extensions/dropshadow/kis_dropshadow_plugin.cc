@@ -26,7 +26,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kactioncollection.h>
 
 #include "kis_view2.h"
@@ -44,14 +44,15 @@
 #include "kis_dropshadow.h"
 #include "dlg_dropshadow.h"
 
-K_EXPORT_COMPONENT_FACTORY(kritadropshadow, KGenericFactory<KisDropshadowPlugin>("krita"))
+K_PLUGIN_FACTORY(KisDropshadowPluginFactory, registerPlugin<KisDropshadowPlugin>();)
+K_EXPORT_PLUGIN(KisDropshadowPluginFactory("krita"))
 
-KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QStringList &)
+KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
 
-        setComponentData(KGenericFactory<KisDropshadowPlugin>::componentData());
+        setComponentData(KisDropshadowPluginFactory::componentData());
 
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/dropshadow.rc"), true);
 

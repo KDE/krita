@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 
@@ -53,10 +53,10 @@
 #include "dlg_shrink_selection.h"
 #include "dlg_border_selection.h"
 
-typedef KGenericFactory<ModifySelection> ModifySelectionFactory;
-K_EXPORT_COMPONENT_FACTORY(kritamodifyselection, ModifySelectionFactory("krita"))
+K_PLUGIN_FACTORY(ModifySelectionFactory, registerPlugin<ModifySelection>();)
+K_EXPORT_PLUGIN(ModifySelectionFactory("krita"))
 
-ModifySelection::ModifySelection(QObject *parent, const QStringList &)
+ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {

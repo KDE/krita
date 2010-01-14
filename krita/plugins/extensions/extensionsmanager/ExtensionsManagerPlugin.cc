@@ -22,7 +22,7 @@
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -33,11 +33,11 @@
 #include "kis_view2.h"
 #include "ExtensionsManagerWindow.h"
 
-typedef KGenericFactory<ExtensionsManagerPlugin> ExtensionsManagerPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaextensionsmanager, ExtensionsManagerPluginFactory("krita"))
+K_PLUGIN_FACTORY(ExtensionsManagerPluginFactory, registerPlugin<ExtensionsManagerPlugin>();)
+K_EXPORT_PLUGIN(ExtensionsManagerPluginFactory("krita"))
 
 
-ExtensionsManagerPlugin::ExtensionsManagerPlugin(QObject *parent, const QStringList &)
+ExtensionsManagerPlugin::ExtensionsManagerPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent), m_emWindow(0)
 {
     if (parent->inherits("KisView2")) {

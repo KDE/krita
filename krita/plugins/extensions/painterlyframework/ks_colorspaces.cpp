@@ -38,10 +38,10 @@
 #include "kis_ksf16_colorspace.h"
 #endif
 
-typedef KGenericFactory<KSColorSpacesPlugin> KSColorSpacesPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritakscolorspacesplugin, KSColorSpacesPluginFactory("krita"))
+K_PLUGIN_FACTORY(KSColorSpacesPluginFactory, registerPlugin<KSColorSpacesPlugin>();)
+K_EXPORT_PLUGIN(KSColorSpacesPluginFactory("krita"))
 
-KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
+KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     QStringList list;

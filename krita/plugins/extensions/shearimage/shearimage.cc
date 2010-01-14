@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kactioncollection.h>
 
 #include <kis_image.h>
@@ -48,11 +48,11 @@
 
 #include "dlg_shearimage.h"
 
-typedef KGenericFactory<ShearImage> ShearImageFactory;
-K_EXPORT_COMPONENT_FACTORY(kritashearimage, ShearImageFactory("krita"))
+K_PLUGIN_FACTORY(ShearImageFactory, registerPlugin<ShearImage>();)
+K_EXPORT_PLUGIN(ShearImageFactory("krita"))
 
 // XXX: this plugin could also provide layer scaling/resizing
-ShearImage::ShearImage(QObject *parent, const QStringList &)
+ShearImage::ShearImage(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {

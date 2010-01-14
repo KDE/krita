@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kactioncollection.h>
 
 #include <kis_image.h>
@@ -51,10 +51,10 @@
 #include "kis_histogram.h"
 #include "kis_layer_manager.h"
 
-typedef KGenericFactory<Histogram> HistogramFactory;
-K_EXPORT_COMPONENT_FACTORY(kritahistogram, HistogramFactory("krita"))
+K_PLUGIN_FACTORY(HistogramFactory, registerPlugin<Histogram>();)
+K_EXPORT_PLUGIN(HistogramFactory("krita"))
 
-Histogram::Histogram(QObject *parent, const QStringList &)
+Histogram::Histogram(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {

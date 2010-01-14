@@ -19,6 +19,8 @@
 #ifndef _PANORAMA_H_
 #define _PANORAMA_H_
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 #include <kis_types.h>
@@ -34,7 +36,7 @@ class PanoramaPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    PanoramaPlugin(QObject *parent, const QStringList &);
+    PanoramaPlugin(QObject *parent, const QVariantList &);
     virtual ~PanoramaPlugin();
 
 private slots:

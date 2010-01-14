@@ -21,6 +21,8 @@
 #ifndef COLORSPACECONVERSION_H
 #define COLORSPACECONVERSION_H
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -32,7 +34,7 @@ class ColorSpaceConversion : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ColorSpaceConversion(QObject *parent, const QStringList &);
+    ColorSpaceConversion(QObject *parent, const QVariantList &);
     virtual ~ColorSpaceConversion();
 
 private slots:

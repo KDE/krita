@@ -21,12 +21,13 @@
 #define KS_COLORSPACES_H_
 
 #include <QObject>
+#include <QVariant>
 
 class KSColorSpacesPlugin : public QObject
 {
     Q_OBJECT
 public:
-    KSColorSpacesPlugin(QObject *parent, const QStringList &);
+    KSColorSpacesPlugin(QObject *parent, const QVariantList &);
     ~KSColorSpacesPlugin();
 
 };

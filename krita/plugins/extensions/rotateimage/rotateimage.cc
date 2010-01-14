@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kactioncollection.h>
 #include <kicon.h>
 #include <kis_config.h>
@@ -50,11 +50,11 @@
 
 #include "dlg_rotateimage.h"
 
-typedef KGenericFactory<RotateImage> RotateImageFactory;
-K_EXPORT_COMPONENT_FACTORY(kritarotateimage, RotateImageFactory("krita"))
+K_PLUGIN_FACTORY(RotateImageFactory, registerPlugin<RotateImage>();)
+K_EXPORT_PLUGIN(RotateImageFactory("krita"))
 
 // XXX: this plugin could also provide layer scaling/resizing
-RotateImage::RotateImage(QObject *parent, const QStringList &)
+RotateImage::RotateImage(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {

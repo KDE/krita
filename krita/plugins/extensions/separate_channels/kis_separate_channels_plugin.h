@@ -20,6 +20,8 @@
 #ifndef _KIS_SEPARATE_CHANNELS_PLUGIN_H_
 #define _KIS_SEPARATE_CHANNELS_PLUGIN_H_
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -30,7 +32,7 @@ class KisSeparateChannelsPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    KisSeparateChannelsPlugin(QObject *parent, const QStringList &);
+    KisSeparateChannelsPlugin(QObject *parent, const QVariantList &);
     virtual ~KisSeparateChannelsPlugin();
 
 private slots:

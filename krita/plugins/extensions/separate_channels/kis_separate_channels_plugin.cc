@@ -28,7 +28,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kactioncollection.h>
 
 #include <KoProgressUpdater.h>
@@ -47,13 +47,14 @@
 #include "kis_channel_separator.h"
 #include "dlg_separate.h"
 
-K_EXPORT_COMPONENT_FACTORY(kritaseparatechannels, KGenericFactory<KisSeparateChannelsPlugin>("krita"))
+K_PLUGIN_FACTORY(KisSeparateChannelsPluginFactory, registerPlugin<KisSeparateChannelsPlugin>();)
+K_EXPORT_PLUGIN(KisSeparateChannelsPluginFactory("krita"))
 
-KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QStringList &)
+KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(KGenericFactory<KisSeparateChannelsPlugin>::componentData());
+        setComponentData(KisSeparateChannelsPluginFactory::componentData());
 
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imageseparate.rc"), true);
         m_view = (KisView2*) parent;

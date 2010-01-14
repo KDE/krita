@@ -21,6 +21,8 @@
 #ifndef COLORRANGE_H
 #define COLORRANGE_H
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -29,7 +31,7 @@ class ColorRange : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ColorRange(QObject *parent, const QStringList &);
+    ColorRange(QObject *parent, const QVariantList &);
     virtual ~ColorRange();
 
 private slots:

@@ -21,7 +21,7 @@
 
 #include <kis_debug.h>
 #include <kfiledialog.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -65,11 +65,11 @@
 const double epsilonOptimization = 1e-5;
 const double epsilonGaussian = 1e-6;
 
-typedef KGenericFactory<Bracketing2HDRPlugin> Bracketing2HDRPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritabracketing2hdr, Bracketing2HDRPluginFactory("krita"))
+K_PLUGIN_FACTORY(Bracketing2HDRPluginFactory, registerPlugin<Bracketing2HDRPlugin>();)
+K_EXPORT_PLUGIN(Bracketing2HDRPluginFactory("krita"))
 
 
-Bracketing2HDRPlugin::Bracketing2HDRPlugin(QObject *parent, const QStringList &)
+Bracketing2HDRPlugin::Bracketing2HDRPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent), m_wdgBracketing2HDR(0),
         m_responseType(RESPONSE_LINEAR), m_bitDepth(16), m_numberOfInputLevels(2 << (m_bitDepth - 1)), m_cameraResponseIsComputed(false)
 {

@@ -25,7 +25,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 
@@ -37,10 +37,10 @@
 #include <kis_background.h>
 #include "dlg_backgrounds.h"
 
-typedef KGenericFactory<Backgrounds> BackgroundsFactory;
-K_EXPORT_COMPONENT_FACTORY(kritabackgrounds, BackgroundsFactory("krita"))
+K_PLUGIN_FACTORY(BackgroundsFactory, registerPlugin<Backgrounds>();)
+K_EXPORT_PLUGIN(BackgroundsFactory("krita"))
 
-Backgrounds::Backgrounds(QObject *parent, const QStringList &)
+Backgrounds::Backgrounds(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {

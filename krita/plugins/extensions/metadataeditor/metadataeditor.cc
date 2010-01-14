@@ -26,7 +26,7 @@
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -47,10 +47,10 @@
 #include "kis_entry_editor.h"
 #include "kis_meta_data_editor.h"
 
-typedef KGenericFactory<metadataeditorPlugin> metadataeditorPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritametadataeditor, metadataeditorPluginFactory("krita"))
+K_PLUGIN_FACTORY(metadataeditorPluginFactory, registerPlugin<metadataeditorPlugin>();)
+K_EXPORT_PLUGIN(metadataeditorPluginFactory("krita"))
 
-metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QStringList &)
+metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {

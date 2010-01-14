@@ -18,7 +18,7 @@
 #include "trianglecolorselector.h"
 
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoDockFactory.h>
 #include <KoDockRegistry.h>
@@ -26,8 +26,8 @@
 
 #include "kis_triangle_color_selector_dock.h"
 
-typedef KGenericFactory<TriangleColorSelectorPlugin> TriangleColorSelectorPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritatrianglecolorselector, TriangleColorSelectorPluginFactory("krita"))
+K_PLUGIN_FACTORY(TriangleColorSelectorPluginFactory, registerPlugin<TriangleColorSelectorPlugin>();)
+K_EXPORT_PLUGIN(TriangleColorSelectorPluginFactory("krita"))
 
 class KisTriangleColorSelectorDockFactory : public KoDockFactory
 {
@@ -57,7 +57,7 @@ public:
 };
 
 
-TriangleColorSelectorPlugin::TriangleColorSelectorPlugin(QObject *parent, const QStringList &)
+TriangleColorSelectorPlugin::TriangleColorSelectorPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     dbgPlugins << "TriangleColorSelectorPlugin";

@@ -18,7 +18,7 @@
 #include "smallcolorselector.h"
 
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoDockFactory.h>
 #include <KoDockRegistry.h>
@@ -26,8 +26,8 @@
 
 #include "smallcolorselector_dock.h"
 
-typedef KGenericFactory<SmallColorSelectorPlugin> SmallColorSelectorPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritasmallcolorselector, SmallColorSelectorPluginFactory("krita"))
+K_PLUGIN_FACTORY(SmallColorSelectorPluginFactory, registerPlugin<SmallColorSelectorPlugin>();)
+K_EXPORT_PLUGIN(SmallColorSelectorPluginFactory("krita"))
 
 class SmallColorSelectorDockFactory : public KoDockFactory
 {
@@ -56,7 +56,7 @@ public:
 };
 
 
-SmallColorSelectorPlugin::SmallColorSelectorPlugin(QObject *parent, const QStringList &)
+SmallColorSelectorPlugin::SmallColorSelectorPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
 

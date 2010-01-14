@@ -18,7 +18,7 @@
 #include "defaultdockers.h"
 
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoDockFactory.h>
 #include <KoDockRegistry.h>
@@ -29,10 +29,10 @@
 #include "kis_layer_box.h"
 #include "kis_palette_docker.h"
 
-typedef KGenericFactory<KritaDefaultDockersPlugin> KritaDefaultDockersPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritadefaultdockers, KritaDefaultDockersPluginFactory("krita"))
+K_PLUGIN_FACTORY(KritaDefaultDockersPluginFactory, registerPlugin<KritaDefaultDockersPlugin>();)
+K_EXPORT_PLUGIN(KritaDefaultDockersPluginFactory("krita"))
 
-KritaDefaultDockersPlugin::KritaDefaultDockersPlugin(QObject *parent, const QStringList &)
+KritaDefaultDockersPlugin::KritaDefaultDockersPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //KoDockRegistry::instance()->add(new KisHistogramDockFactory());

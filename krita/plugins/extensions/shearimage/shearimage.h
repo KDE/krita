@@ -20,6 +20,8 @@
 #ifndef SHEARIMAGE_H
 #define SHEARIMAGE_H
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 class KisView2;
@@ -28,7 +30,7 @@ class ShearImage : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ShearImage(QObject *parent, const QStringList &);
+    ShearImage(QObject *parent, const QVariantList &);
     virtual ~ShearImage();
 
 private slots:

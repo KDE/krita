@@ -18,6 +18,8 @@
 #ifndef _TONEMAPPING_H_
 #define _TONEMAPPING_H_
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 #include "kis_types.h"
@@ -31,7 +33,7 @@ class tonemappingPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    tonemappingPlugin(QObject *parent, const QStringList &);
+    tonemappingPlugin(QObject *parent, const QVariantList &);
     virtual ~tonemappingPlugin();
 
 private slots:

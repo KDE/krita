@@ -20,6 +20,8 @@
 #ifndef GLSLIMAGE_H
 #define GLSLIMAGE_H
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 #include "kis_types.h"
@@ -31,7 +33,7 @@ class Glsl : public KParts::Plugin
     Q_OBJECT
 public:
 
-    Glsl(QObject *parent, const QStringList &);
+    Glsl(QObject *parent, const QVariantList &);
     virtual ~Glsl();
 
 private slots:

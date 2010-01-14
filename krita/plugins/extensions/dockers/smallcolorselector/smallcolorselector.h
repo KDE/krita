@@ -18,7 +18,8 @@
 #ifndef _SMALLCOLORSELECTOR_H_
 #define _SMALLCOLORSELECTOR_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisView2;
 
@@ -29,7 +30,7 @@ class SmallColorSelectorPlugin : public QObject
 {
     Q_OBJECT
 public:
-    SmallColorSelectorPlugin(QObject *parent, const QStringList &);
+    SmallColorSelectorPlugin(QObject *parent, const QVariantList &);
     virtual ~SmallColorSelectorPlugin();
 private:
     KisView2* m_view;

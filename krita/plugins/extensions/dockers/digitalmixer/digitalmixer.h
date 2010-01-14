@@ -18,7 +18,8 @@
 #ifndef _DIGITALMIXER_H_
 #define _DIGITALMIXER_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class KisView2;
 
@@ -29,7 +30,7 @@ class DigitalMixerPlugin : public QObject
 {
     Q_OBJECT
     public:
-        DigitalMixerPlugin(QObject *parent, const QStringList &);
+        DigitalMixerPlugin(QObject *parent, const QVariantList &);
         virtual ~DigitalMixerPlugin();
     private:
         KisView2* m_view;

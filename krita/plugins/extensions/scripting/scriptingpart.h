@@ -21,6 +21,8 @@
 #ifndef SCRIPTINGPART_H
 #define SCRIPTINGPART_H
 
+#include <QVariant>
+
 #include <KoScriptingPart.h>
 
 namespace Kross
@@ -32,7 +34,7 @@ class ScriptingPart : public KoScriptingPart
 {
     Q_OBJECT
 public:
-    ScriptingPart(QObject *parent, const QStringList &);
+    ScriptingPart(QObject *parent, const QVariantList &);
     virtual ~ScriptingPart();
 private:
     virtual void myStarted(Kross::Action*);

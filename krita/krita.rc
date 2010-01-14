@@ -25,7 +25,7 @@
  </Menu>
 
  <Menu name="View"><text>&amp;View</text>
-  <Action name="fullscreen"/>
+  <Action name="view_fullscreen"/>
   <Action name="toggledockers"/>
   <Separator/>
   <Action name="view_newview"/>    

@@ -28,7 +28,7 @@
 */
 
 #include "StrokeDocker.h"
-#include <linestyleselector/LineStyleSelector.h>
+#include <KoLineStyleSelector.h>
 
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -59,7 +59,7 @@ public:
     QButtonGroup * joinGroup;
     KoUnitDoubleSpinBox * setLineWidth;
     KoUnitDoubleSpinBox * miterLimit;
-    LineStyleSelector * lineStyle;
+    KoLineStyleSelector * lineStyle;
     KoLineBorder border;
     QSpacerItem *spacer;
     QGridLayout *layout;
@@ -75,7 +75,7 @@ StrokeDocker::StrokeDocker()
 
     QLabel * styleLabel = new QLabel( i18n( "Style:" ), mainWidget );
     mainLayout->addWidget( styleLabel, 0, 0 );
-    d->lineStyle = new LineStyleSelector( mainWidget );
+    d->lineStyle = new KoLineStyleSelector( mainWidget );
     mainLayout->addWidget( d->lineStyle, 0, 1, 1, 3 );
 
     connect( d->lineStyle, SIGNAL(currentIndexChanged( int ) ), this, SLOT( styleChanged() ) );

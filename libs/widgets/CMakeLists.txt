@@ -42,7 +42,7 @@ set(kowidgets_LIB_SRCS
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
     KoResourceServerProvider.cpp
-
+    KoLineStyleSelector.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -92,6 +92,7 @@ install( FILES
     KoXYColorSelector.h
     KoResourceItemChooser.h
     KoResourceSelector.h
+    KoLineStyleSelector.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}

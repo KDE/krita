@@ -41,13 +41,6 @@ set(kofficedockers_SRCS
     shapeselector/ClipboardProxyShape.cpp
     shapeselector/ResizeFolderStrategy.cpp
 
-    linestyleselector/LineStyleItemDelegate.h
-    linestyleselector/LineStyleModel.h
-    linestyleselector/LineStyleSelector.h
-    linestyleselector/LineStyleItemDelegate.cpp
-    linestyleselector/LineStyleModel.cpp
-    linestyleselector/LineStyleSelector.cpp
-
     styledocker/StyleButtonBox.cpp
     styledocker/StylePreview.cpp
     styledocker/StyleDocker.cpp

@@ -26,9 +26,9 @@ SET ( defaulttools_SRCS
     guidestool/GuidesToolOptionWidget.cpp
     guidestool/InsertGuidesToolOptionWidget.cpp
 
-    connectionTool/KoConnectionTool.cpp
-    connectionTool/KoConnectionToolFactory.cpp
-    connectionTool/KoConnectionToolWidget.cpp
+    connectionTool/ConnectionTool.cpp
+    connectionTool/ConnectionToolFactory.cpp
+    connectionTool/ConnectionToolWidget.cpp
 )
 
 kde4_add_ui_files(defaulttools_SRCS
@@ -37,7 +37,7 @@ kde4_add_ui_files(defaulttools_SRCS
     defaulttool/DefaultToolTransformWidget.ui
     guidestool/GuidesToolOptionWidget.ui
     guidestool/InsertGuidesToolOptionWidget.ui
-    connectionTool/KoConnectionToolWidget.ui
+    connectionTool/ConnectionToolWidget.ui
 )
 
 kde4_add_plugin(defaulttools ${defaulttools_SRCS})

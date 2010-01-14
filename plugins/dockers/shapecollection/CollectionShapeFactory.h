@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +16,29 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "defaulttool/DefaultToolFactory.h"
-#include "guidestool/GuidesToolFactory.h"
-#include "connectionTool/ConnectionToolFactory.h"
+#ifndef KOCOLLECTIONSHAPEFACTORY_H
+#define KOCOLLECTIONSHAPEFACTORY_H
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include <KoShapeFactory.h>
 
-#include <kgenericfactory.h>
+class KoShapeControllerBase;
 
-K_EXPORT_COMPONENT_FACTORY(defaulttools, KGenericFactory<Plugin>( "koffice-defaulttools" ) )
-
-Plugin::Plugin(QObject * parent, const QStringList &)
-    : QObject(parent)
+class CollectionShapeFactory : public KoShapeFactory
 {
-    KoToolRegistry::instance()->add(new DefaultToolFactory(parent));
-    KoToolRegistry::instance()->add(new GuidesToolFactory(parent));
-    KoToolRegistry::instance()->add(new ConnectionToolFactory(parent));
-}
+    Q_OBJECT
+    public:
+        CollectionShapeFactory(QObject *parent, const QString &id, KoShape* shape);
+        ~CollectionShapeFactory();
 
-#include "Plugin.moc"
+        virtual KoShape* createDefaultShape( KoShapeControllerBase * shapeController );
+        virtual KoShape* createShape( const KoProperties* params, KoShapeControllerBase * shapeController );
+
+    protected:
+        virtual KoShape* createDefaultShape() const;
+        virtual KoShape* createShape(const KoProperties* params) const;
+
+    private:
+        KoShape* m_shape;
+};
+
+#endif //KOCOLLECTIONSHAPEFACTORY_H

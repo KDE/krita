@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *
+ * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +17,22 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "defaulttool/DefaultToolFactory.h"
-#include "guidestool/GuidesToolFactory.h"
-#include "connectionTool/ConnectionToolFactory.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#ifndef CONNECTIONTOOLFACTORY_H
+#define CONNECTIONTOOLFACTORY_H
 
-#include <kgenericfactory.h>
+#include "KoToolFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY(defaulttools, KGenericFactory<Plugin>( "koffice-defaulttools" ) )
-
-Plugin::Plugin(QObject * parent, const QStringList &)
-    : QObject(parent)
+/// The factory for the ConnectionTool
+class ConnectionToolFactory : public KoToolFactory
 {
-    KoToolRegistry::instance()->add(new DefaultToolFactory(parent));
-    KoToolRegistry::instance()->add(new GuidesToolFactory(parent));
-    KoToolRegistry::instance()->add(new ConnectionToolFactory(parent));
-}
+public:
+    /// Constructor
+    explicit ConnectionToolFactory( QObject *parent );
+    /// Destructor
+    ~ConnectionToolFactory();
+    /// reimplemented
+    KoTool* createTool( KoCanvasBase *canvas );
+};
 
-#include "Plugin.moc"
+#endif

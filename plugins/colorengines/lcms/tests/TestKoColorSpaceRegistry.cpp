@@ -5,9 +5,9 @@
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
-#include "KoRgbU8ColorSpace.h"
-#include "KoRgbU16ColorSpace.h"
-#include "KoLabColorSpace.h"
+#include "RgbU8ColorSpace.h"
+#include "RgbU16ColorSpace.h"
+#include "LabColorSpace.h"
 
 void TestKoColorSpaceRegistry::testConstruction()
 {

@@ -169,12 +169,13 @@ void KisRawImport::slotUpdatePreview()
     dcraw.decodeHalfRAWImage(m_chain->inputFile(), settings, imageData, width, height, rgbmax);
     QImage image(width, height, QImage::Format_RGB32);
     for (int y = 0; y < height; ++y) {
+        QRgb *pixel= reinterpret_cast<QRgb *>(image.scanLine(y));
         for (int x = 0; x < width; ++x) {
             quint16* ptr = ((quint16*)imageData.data()) + (y * width + x) * 3;
 #if KDCRAW_VERSION < 0x000400
-            image.setPixel(x, y, qRgb(ptr[0] & 0xFF, ptr[1] & 0xFF, ptr[2]  & 0xFF));
+            pixel[x] = qRgb(ptr[0] & 0xFF, ptr[1] & 0xFF, ptr[2]  & 0xFF);
 #else
-            image.setPixel(x, y, qRgb(ptr[0] / 0xFF, ptr[1] / 0xFF, ptr[2] / 0xFF));
+            pixel[x] = qRgb(ptr[0] / 0xFF, ptr[1] / 0xFF, ptr[2] / 0xFF);
 #endif
         }
     }

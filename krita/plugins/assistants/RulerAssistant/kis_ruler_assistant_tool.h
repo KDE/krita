@@ -45,7 +45,8 @@ public:
 public slots:
     virtual void activate(bool temp = false);
     void deactivate();
-
+private slots:
+    void createNewAssistant();
 protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);

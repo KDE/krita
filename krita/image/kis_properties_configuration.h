@@ -118,7 +118,7 @@ public:
 
 public:
 
-    void dump();
+    void dump() const;
 
 private:
 

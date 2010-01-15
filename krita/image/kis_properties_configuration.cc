@@ -178,7 +178,7 @@ QString KisPropertiesConfiguration::getString(const QString & name, const QStrin
         return def;
 }
 
-void KisPropertiesConfiguration::dump()
+void KisPropertiesConfiguration::dump() const
 {
     QMap<QString, QVariant>::Iterator it;
     for (it = d->properties.begin(); it != d->properties.end(); ++it) {

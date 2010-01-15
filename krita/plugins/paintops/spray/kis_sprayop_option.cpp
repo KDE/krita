@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008-2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,6 +47,10 @@ KisSprayOpOption::KisSprayOpOption()
     connect(m_options->countRadioButton, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->gaussianBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->aspectSPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->rotationSPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterMoveBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
+    
     connect(m_options->countRadioButton, SIGNAL(toggled(bool)), m_options->particlesSpinBox, SLOT(setEnabled(bool)));
     connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), m_options->coverageSpin, SLOT(setEnabled(bool)));
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), m_options->jitterMovementSpin, SLOT(setEnabled(bool)));
@@ -120,21 +124,35 @@ bool KisSprayOpOption::gaussian() const
 void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     setting->setProperty("Spray/diameter", diameter());
+    setting->setProperty("Spray/aspect", aspect());
     setting->setProperty("Spray/coverage", coverage());
+    setting->setProperty("Spray/scale", scale());
+    setting->setProperty("Spray/rotation", rotation());
+    setting->setProperty("Spray/particleCount", particleCount());
     setting->setProperty("Spray/jitterMoveAmount", jitterMoveAmount());
-    setting->setProperty("Spray/spacing", spacing());
     setting->setProperty("Spray/jitterMovement", jitterMovement());
+    setting->setProperty("Spray/spacing", spacing());
     setting->setProperty("Spray/gaussianDistribution", gaussian());
+    setting->setProperty("Spray/useDensity", useDensity());
+    //TODO: not used probably
+    /*    bool jitterSize() const;*/
 }
 
 void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     m_options->diameterSpinBox->setValue(setting->getInt("Spray/diameter"));
+    m_options->aspectSPBox->setValue(setting->getDouble("Spray/aspect"));
     m_options->coverageSpin->setValue(setting->getDouble("Spray/coverage"));
+    m_options->scaleSpin->setValue(setting->getDouble("Spray/scale"));
+    m_options->rotationSPBox->setValue(setting->getDouble("Spray/rotation"));
+    m_options->particlesSpinBox->setValue(setting->getDouble("Spray/particleCount"));
     m_options->jitterMovementSpin->setValue(setting->getDouble("Spray/jitterMoveAmount"));
-    m_options->spacingSpin->setValue(setting->getDouble("Spray/spacing"));
     m_options->jitterMoveBox->setChecked(setting->getBool("Spray/jitterMovement"));
+    m_options->spacingSpin->setValue(setting->getDouble("Spray/spacing"));
     m_options->gaussianBox->setChecked(setting->getBool("Spray/gaussianDistribution"));
+    //TODO: come on, do this nicer! e.g. button group or something
+    m_options->densityRadioButton->setChecked(setting->getBool("Spray/useDensity"));
+    m_options->countRadioButton->setChecked(!setting->getBool("Spray/useDensity"));
 }
 
 

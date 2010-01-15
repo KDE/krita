@@ -25,10 +25,6 @@
 #include "kis_sprayop_option.h"
 #include "kis_spray_shape_option.h"
 
-KisSprayPaintOpSettings::KisSprayPaintOpSettings()
-        : m_options(0)
-{
-}
 
 bool KisSprayPaintOpSettings::paintIncremental()
 {
@@ -36,111 +32,111 @@ bool KisSprayPaintOpSettings::paintIncremental()
 }
 
 int KisSprayPaintOpSettings::diameter() const
-{
-    return m_options->m_sprayOption->diameter();
+{ 
+    return getInt("Spray/diameter");
 }
 
 qreal KisSprayPaintOpSettings::aspect() const
 {
-    return m_options->m_sprayOption->aspect();
+    return getDouble("Spray/aspect");
 }
 
 qreal KisSprayPaintOpSettings::coverage() const
 {
-    return m_options->m_sprayOption->coverage();
+    return getDouble("Spray/coverage");
 }
 
 qreal KisSprayPaintOpSettings::amount() const
 {
-    return m_options->m_sprayOption->jitterMoveAmount();
+    return getDouble("Spray/amount");
 }
 
 qreal KisSprayPaintOpSettings::spacing() const
 {
-    return m_options->m_sprayOption->spacing();
+    return getDouble("Spray/spacing");
 }
 
 qreal KisSprayPaintOpSettings::scale() const
 {
-    return m_options->m_sprayOption->scale();
+    return getDouble("Spray/aspect");
 }
 
 
 qreal KisSprayPaintOpSettings::brushRotation() const
 {
-    return m_options->m_sprayOption->rotation();
+    return getDouble("Spray/rotation");
 }
 
 
 bool KisSprayPaintOpSettings::jitterMovement() const
 {
-    return m_options->m_sprayOption->jitterMovement();
+    return getBool("Spray/jitterMovement");
 }
 
 int KisSprayPaintOpSettings::width() const
 {
-    return m_options->m_sprayShapeOption->width();
+    return getInt("SprayShape/width");
 }
 
 
 int KisSprayPaintOpSettings::height() const
 {
-    return m_options->m_sprayShapeOption->height();
+    return getInt("SprayShape/height");
 }
 
 
 int KisSprayPaintOpSettings::shape() const
 {
-    return m_options->m_sprayShapeOption->shape();
+    return getInt("SprayShape/shape");
 }
 
 bool KisSprayPaintOpSettings::jitterShapeSize() const
 {
-    return m_options->m_sprayShapeOption->jitterShapeSize();
+    return getBool("Spray/jitterShapeSize");
 }
 
 bool KisSprayPaintOpSettings::proportional() const
 {
-    return m_options->m_sprayShapeOption->proportional();
+    return getBool("SprayShape/proportional");
 }
 
 bool KisSprayPaintOpSettings::useDensity() const
 {
-    return m_options->m_sprayOption->useDensity();
+    return getBool("Spray/useDensity");
 }
 
 int KisSprayPaintOpSettings::particleCount() const
 {
-    return m_options->m_sprayOption->particleCount();
+    return getInt("Spray/particleCount");
 }
 
 
 bool KisSprayPaintOpSettings::useRandomOpacity() const
 {
-    return m_options->m_ColorOption->useRandomOpacity();
+    return getBool("ColorOption/useRandomOpacity");
 }
 
 
 int KisSprayPaintOpSettings::hue() const
 {
-    return m_options->m_ColorOption->hue();
+    return getInt("ColorOption/hue");
 }
 
 
 int KisSprayPaintOpSettings::saturation() const
 {
-    return m_options->m_ColorOption->saturation();
+    return getInt("ColorOption/saturation");
 }
 
 int KisSprayPaintOpSettings::value() const
 {
-    return m_options->m_ColorOption->value();
+    return getInt("ColorOption/value");
 }
 
 
 bool KisSprayPaintOpSettings::useRandomHSV() const
 {
-    return m_options->m_ColorOption->useRandomHSV();
+    return getBool("ColorOption/useRandomHSV");
 }
 
 QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
@@ -167,88 +163,73 @@ void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image
 
 bool KisSprayPaintOpSettings::gaussian() const
 {
-    return m_options->m_sprayOption->gaussian();
+    return getBool("Spray/gaussian");
 }
 
 
 bool KisSprayPaintOpSettings::colorPerParticle() const
 {
-    return m_options->m_ColorOption->colorPerParticle();
+    return getBool("ColorOption/colorPerParticle");
 }
 
 
 bool KisSprayPaintOpSettings::fillBackground() const
 {
-    return m_options->m_ColorOption->fillBackground();
+    return getBool("ColorOption/fillBackground");
 }
 
 
 bool KisSprayPaintOpSettings::mixBgColor() const
 {
-    return m_options->m_ColorOption->mixBgColor();
+    return getBool("ColorOption/mixBgColor");
 }
 
 
 bool KisSprayPaintOpSettings::sampleInput() const
 {
-    return m_options->m_ColorOption->sampleInputColor();
-}
-
-
-void KisSprayPaintOpSettings::changePaintOpSize(qreal x, qreal y) const
-{
-    if (qAbs(x) > qAbs(y)){
-            // recoginze the left/right movement
-            if (x > 0){
-                m_options->m_sprayOption->setDiamter( diameter() + qRound(x) );
-            }else{
-                m_options->m_sprayOption->setDiamter( diameter() + qRound(x) );
-            }
-    }else{
-    }
+    return getBool("ColorOption/sampleInput");
 }
 
 
 int KisSprayPaintOpSettings::fixedAngle() const
 {
-    return m_options->m_sprayShapeOption->fixedAngle();
+    return getInt("SprayShape/fixedAngle");
 }
 
 
 bool KisSprayPaintOpSettings::fixedRotation() const
 {
-    return m_options->m_sprayShapeOption->fixedRotation();
+    return getBool("SprayShape/fixedRotation");
 }
-
 
 
 qreal KisSprayPaintOpSettings::randomRotationWeight() const
 {
-    return m_options->m_sprayShapeOption->randomRotationWeight();
+    return getDouble("SprayShape/randomRotationWeight");
 }
 
 
 bool KisSprayPaintOpSettings::randomRotation() const
 {
-    return m_options->m_sprayShapeOption->randomRotation();
+    return getBool("SprayShape/randomRotation");
 }
 
 
 
 bool KisSprayPaintOpSettings::followCursor() const
 {
-    return m_options->m_sprayShapeOption->followCursor();
+    return getBool("SprayShape/followCursor");
 }
 
 
 qreal KisSprayPaintOpSettings::followCursorWeigth() const
 {
-        return m_options->m_sprayShapeOption->followCursorWeigth();
+    return getDouble("SprayShape/followCursorWeigth");
 }
-
-
 
 QImage KisSprayPaintOpSettings::image() const
 {
-    return m_options->m_sprayShapeOption->image();
+    //return m_options->m_sprayShapeOption->image();
+    return QImage();
 }
+

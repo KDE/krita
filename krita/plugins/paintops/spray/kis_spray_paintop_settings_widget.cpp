@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,4 +60,17 @@ KisPropertiesConfiguration*  KisSprayPaintOpSettingsWidget::configuration() cons
     config->setProperty("paintop", "spraybrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
+}
+
+void KisSprayPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
+{
+    if (qAbs(x) > qAbs(y)){
+            // recoginze the left/right movement
+            if (x > 0){
+                m_sprayOption->setDiamter( m_sprayOption->diameter() + qRound(x) );
+            }else{
+                m_sprayOption->setDiamter( m_sprayOption->diameter() + qRound(x) );
+            }
+    }else{
+    }
 }

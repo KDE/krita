@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008-2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,6 +51,9 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_rotationOption.sensor()->reset();
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
+
+    m_settings->debug();
+    
     
     m_sprayBrush.setDiameter(settings->diameter());
     m_sprayBrush.setJitterShapeSize(settings->jitterShapeSize());

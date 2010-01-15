@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,11 +67,28 @@ KisSprayShapeOption::KisSprayShapeOption()
 
 void KisSprayShapeOption::setupBrushPreviewSignals()
 {
+    connect(m_options->angleSlider,SIGNAL(sliderReleased()),SIGNAL(sigSettingChanged()));
     connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->jitterShape, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->randomSlider,SIGNAL(sliderReleased()),SIGNAL(sigSettingChanged()));
+    connect(m_options->followSlider,SIGNAL(sliderReleased()),SIGNAL(sigSettingChanged()));
+    connect(m_options->imageUrl,SIGNAL(textChanged(QString)),SIGNAL(sigSettingChanged()));
+    connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->proportionalBox, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->fixedRotation, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->randomRotation, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->followCursor, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->fixedRotation, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->randomRotation, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->followCursor, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->fixedRotationSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->randomWeightSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->followCursorWeightSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
 }
 
 
@@ -106,17 +123,36 @@ bool KisSprayShapeOption::proportional() const
 }
 
 
-
-// TODO
 void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    Q_UNUSED(setting);
+    setting->setProperty("SprayShape/shape",shape());
+    setting->setProperty("SprayShape/proportional", proportional());
+    setting->setProperty("SprayShape/width", width());
+    setting->setProperty("SprayShape/height", height());
+    setting->setProperty("SprayShape/jitterShapeSize", jitterShapeSize());
+    setting->setProperty("SprayShape/fixedRotation", fixedRotation());
+    setting->setProperty("SprayShape/fixedAngle", fixedAngle());
+    setting->setProperty("SprayShape/randomRotation", randomRotation());
+    setting->setProperty("SprayShape/randomRotationWeight", randomRotationWeight());
+    setting->setProperty("SprayShape/followCursor", followCursor());
+    setting->setProperty("SprayShape/followCursorWeigth", followCursorWeigth());
+    
 }
 
-// TODO
+
 void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    Q_UNUSED(setting);
+    m_options->shapeBox->setCurrentIndex(setting->getInt("SprayShape/shape"));
+    m_options->widthSpin->setValue(setting->getInt("SprayShape/width"));
+    m_options->heightSpin->setValue(setting->getInt("SprayShape/height"));
+    m_options->jitterShape->setChecked(setting->getBool("SprayShape/jitterShapeSize"));
+    m_options->proportionalBox->setChecked(setting->getBool("SprayShape/proportional"));
+    m_options->fixedRotation->setChecked(setting->getBool("SprayShape/fixedRotation"));
+    m_options->fixedRotationSPBox->setValue(setting->getDouble("SprayShape/fixedAngle"));
+    m_options->followCursor->setChecked(setting->getBool("SprayShape/followCursor"));
+    m_options->followCursorWeightSPBox->setValue(setting->getDouble("SprayShape/followCursorWeigth") );
+    m_options->randomRotation->setChecked(setting->getBool("SprayShape/randomRotation"));
+    m_options->randomWeightSPBox->setValue(setting->getDouble("SprayShape/randomRotationWeight") );
 }
 
 bool KisSprayShapeOption::fixedRotation() const

@@ -53,9 +53,9 @@ public:
     
     QImage image() const { return m_image; }
 
-    /// TODO: serialization 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+
 private:
     KisShapeOptionsWidget * m_options;
     QImage m_image;
@@ -68,14 +68,14 @@ private:
     void computeAspect();
 
 private slots:
-            void randomValueChanged(int value);
-            void followValueChanged(int value);
-            void prepareImage();
-            void aspectToggled(bool toggled);
-            void updateHeight(int value);
-            void updateWidth(int value);
-            
-            void changeSizeUI(bool proportionalSize);
+    void randomValueChanged(int value);
+    void followValueChanged(int value);
+    void prepareImage();
+    void aspectToggled(bool toggled);
+    void updateHeight(int value);
+    void updateWidth(int value);
+    
+    void changeSizeUI(bool proportionalSize);
 };
 
 #endif // KIS_SPRAY_SHAPE_OPTION_H

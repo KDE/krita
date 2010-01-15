@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,23 +28,21 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 
-class QWidget;
-class QDomElement;
-class QDomDocument;
-
 
 class KisSprayPaintOpSettings : public KisPaintOpSettings
 {
 
 public:
 
-    KisSprayPaintOpSettings();
+    KisSprayPaintOpSettings(){}
     virtual ~KisSprayPaintOpSettings() {}
 
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
-    virtual void changePaintOpSize(qreal x, qreal y) const;
+    void debug() const{
+        dump();
+    }
     
     bool paintIncremental();
 
@@ -93,11 +91,6 @@ public:
     qreal followCursorWeigth() const;
 
     QImage image() const;
-
-
-private:
-
-    KisSprayPaintOpSettingsWidget* m_options;
 
 };
 

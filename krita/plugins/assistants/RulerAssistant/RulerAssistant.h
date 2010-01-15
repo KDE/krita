@@ -32,4 +32,14 @@ private:
     QPointF project(const QPointF& pt) const;
 };
 
+class RulerAssistantFactory
+{
+public:
+    RulerAssistantFactory();
+    virtual ~RulerAssistantFactory();
+    virtual QString id() const = 0;
+    virtual QString name() const = 0;
+    virtual KisPaintingAssistant* paintingAssistant( const QRectF& imageArea ) = 0;
+};
+
 #endif

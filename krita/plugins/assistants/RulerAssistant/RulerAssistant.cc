@@ -91,3 +91,26 @@ void RulerAssistant::drawAssistant(QPainter& _painter, const QPoint& documentOff
     _painter.drawLine(_converter.documentToView(p1),
                       _converter.documentToView(p2));
 }
+
+RulerAssistantFactory::RulerAssistantFactory()
+{
+}
+
+RulerAssistantFactory::~RulerAssistantFactory()
+{
+}
+
+QString RulerAssistantFactory::id() const
+{
+  return "ruler";
+}
+
+QString RulerAssistantFactory::name() const
+{
+  return i18n("Ruler");
+}
+
+KisPaintingAssistant* RulerAssistantFactory::paintingAssistant( const QRectF& /*imageArea*/ )
+{
+  return new RulerAssistant;
+}

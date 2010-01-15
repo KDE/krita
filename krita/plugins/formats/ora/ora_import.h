@@ -18,13 +18,15 @@
 #ifndef _IMPORT_H_
 #define _IMPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class OraImport : public KoFilter
 {
     Q_OBJECT
 public:
-    OraImport(QObject* parent, const QStringList&);
+    OraImport(QObject *parent, const QVariantList &);
     virtual ~OraImport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

@@ -17,7 +17,7 @@
  */
 #include "gif_import.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 
@@ -26,10 +26,10 @@
 
 #include "gif_converter.h"
 
-typedef KGenericFactory<gifImport> ImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritagifimport, ImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ImportFactory, registerPlugin<gifImport>();)
+K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
 
-gifImport::gifImport(QObject *parent, const QStringList&) : KoFilter(parent)
+gifImport::gifImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

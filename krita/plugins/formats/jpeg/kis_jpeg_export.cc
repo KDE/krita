@@ -24,7 +24,7 @@
 
 #include <kapplication.h>
 #include <kdialog.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -46,11 +46,10 @@
 
 class KisExternalLayer;
 
+K_PLUGIN_FACTORY(KisJPEGExportFactory, registerPlugin<KisJPEGExport>();)
+K_EXPORT_PLUGIN(KisJPEGExportFactory("kofficefilters"))
 
-typedef KGenericFactory<KisJPEGExport> KisJPEGExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritajpegexport, KisJPEGExportFactory("kofficefilters"))
-
-KisJPEGExport::KisJPEGExport(QObject *parent, const QStringList&) : KoFilter(parent)
+KisJPEGExport::KisJPEGExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

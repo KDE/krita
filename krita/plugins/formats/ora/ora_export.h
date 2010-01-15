@@ -18,13 +18,15 @@
 #ifndef _ORA_EXPORT_H_
 #define _ORA_EXPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class OraExport : public KoFilter
 {
     Q_OBJECT
 public:
-    OraExport(QObject* parent, const QStringList&);
+    OraExport(QObject *parent, const QVariantList &);
     virtual ~OraExport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

@@ -18,12 +18,14 @@
 #ifndef _IMPORT_H_
 #define _IMPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class psdImport : public KoFilter {
     Q_OBJECT
     public:
-        psdImport(QObject* parent, const QStringList&);
+        psdImport(QObject *parent, const QVariantList &);
         virtual ~psdImport();
     public:
         virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

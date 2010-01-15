@@ -18,12 +18,14 @@
 #ifndef _IMPORT_H_
 #define _IMPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class gifImport : public KoFilter {
     Q_OBJECT
 public:
-    gifImport(QObject* parent, const QStringList&);
+    gifImport(QObject *parent, const QVariantList &);
     virtual ~gifImport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

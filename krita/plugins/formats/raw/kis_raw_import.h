@@ -39,7 +39,7 @@ class KisRawImport : public KoFilter
     Q_OBJECT
 
 public:
-    KisRawImport(QObject* parent, const QStringList&);
+    KisRawImport(QObject *parent, const QVariantList &);
     virtual ~KisRawImport();
 
 public:

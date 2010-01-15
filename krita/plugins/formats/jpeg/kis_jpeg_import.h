@@ -19,13 +19,15 @@
 #ifndef _KIS_JPEG_IMPORT_H_
 #define _KIS_JPEG_IMPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class KisJPEGImport : public KoFilter
 {
     Q_OBJECT
 public:
-    KisJPEGImport(QObject* parent, const QStringList&);
+    KisJPEGImport(QObject *parent, const QVariantList &);
     virtual ~KisJPEGImport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

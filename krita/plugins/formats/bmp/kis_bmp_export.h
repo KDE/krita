@@ -20,13 +20,15 @@
 #ifndef _KIS_BMP_EXPORT_H_
 #define _KIS_BMP_EXPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class KisBMPExport : public KoFilter
 {
     Q_OBJECT
 public:
-    KisBMPExport(QObject* parent, const QStringList&);
+    KisBMPExport(QObject *parent, const QVariantList &);
     virtual ~KisBMPExport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

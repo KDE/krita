@@ -21,6 +21,7 @@
 #define KIS_OPENEXR_EXPORT_H_
 
 #include <half.h>
+#include <QVariant>
 #include <KoFilter.h>
 
 class KisOpenEXRExport : public KoFilter
@@ -28,7 +29,7 @@ class KisOpenEXRExport : public KoFilter
     Q_OBJECT
 
 public:
-    KisOpenEXRExport(QObject* parent, const QStringList&);
+    KisOpenEXRExport(QObject *parent, const QVariantList &);
     virtual ~KisOpenEXRExport();
     void getPixel(const quint8 *src, half *red, half *green, half *blue, half *alpha) const;
 

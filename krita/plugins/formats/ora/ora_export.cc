@@ -22,7 +22,7 @@
 
 #include <kapplication.h>
 #include <kdialog.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 
@@ -35,10 +35,10 @@
 
 class KisExternalLayer;
 
-typedef KGenericFactory<OraExport> ExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritaoraexport, ExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ExportFactory, registerPlugin<OraExport>();)
+K_EXPORT_PLUGIN(ExportFactory("kofficefilters"))
 
-OraExport::OraExport(QObject *parent, const QStringList&) : KoFilter(parent)
+OraExport::OraExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

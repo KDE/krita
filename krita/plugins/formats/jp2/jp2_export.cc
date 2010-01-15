@@ -23,7 +23,7 @@
 
 #include <kapplication.h>
 #include <kdialog.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoColorSpaceConstants.h>
 #include <KoFilterChain.h>
@@ -40,10 +40,10 @@
 
 class KisExternalLayer;
 
-typedef KGenericFactory<jp2Export> ExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritajp2export, ExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ExportFactory, registerPlugin<jp2Export>();)
+K_EXPORT_PLUGIN(ExportFactory("kofficefilters"))
 
-jp2Export::jp2Export(QObject *parent, const QStringList&) : KoFilter(parent)
+jp2Export::jp2Export(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

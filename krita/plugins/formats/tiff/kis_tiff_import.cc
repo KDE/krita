@@ -19,7 +19,7 @@
 
 #include "kis_tiff_import.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 
@@ -30,10 +30,10 @@
 
 #include "kis_tiff_converter.h"
 
-typedef KGenericFactory<KisTIFFImport> TIFFImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritatiffimport, TIFFImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(TIFFImportFactory, registerPlugin<KisTIFFImport>();)
+K_EXPORT_PLUGIN(TIFFImportFactory("kofficefilters"))
 
-KisTIFFImport::KisTIFFImport(QObject *parent, const QStringList&) : KoFilter(parent)
+KisTIFFImport::KisTIFFImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

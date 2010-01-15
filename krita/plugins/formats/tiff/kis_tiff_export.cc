@@ -23,7 +23,7 @@
 #include <QSlider>
 
 #include <kapplication.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
@@ -39,10 +39,10 @@
 #include "kis_dlg_options_tiff.h"
 #include "ui_kis_wdg_options_tiff.h"
 
-typedef KGenericFactory<KisTIFFExport> KisTIFFExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritatiffexport, KisTIFFExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(KisTIFFExportFactory, registerPlugin<KisTIFFExport>();)
+K_EXPORT_PLUGIN(KisTIFFExportFactory("kofficefilters"))
 
-KisTIFFExport::KisTIFFExport(QObject *parent, const QStringList&) : KoFilter(parent)
+KisTIFFExport::KisTIFFExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

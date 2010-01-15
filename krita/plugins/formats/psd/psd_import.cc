@@ -17,7 +17,7 @@
  */
 #include "psd_import.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 
@@ -26,10 +26,10 @@
 
 #include "psd_loader.h"
 
-typedef KGenericFactory<psdImport> ImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritapsdimport, ImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ImportFactory, registerPlugin<psdImport>();)
+K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
 
-        psdImport::psdImport(QObject *parent, const QStringList&) : KoFilter(parent)
+        psdImport::psdImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

@@ -22,7 +22,7 @@
 #include <QFile>
 #include <QVector>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoDocument.h>
 #include <KoFilterChain.h>
 
@@ -51,10 +51,10 @@ using namespace std;
 using namespace Imf;
 using namespace Imath;
 
-typedef KGenericFactory<KisOpenEXRImport> KisOpenEXRImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkrita_openexr_import, KisOpenEXRImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(KisOpenEXRImportFactory, registerPlugin<KisOpenEXRImport>();)
+K_EXPORT_PLUGIN(KisOpenEXRImportFactory("krita"))
 
-KisOpenEXRImport::KisOpenEXRImport(QObject *parent, const QStringList&) : KoFilter(parent)
+KisOpenEXRImport::KisOpenEXRImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

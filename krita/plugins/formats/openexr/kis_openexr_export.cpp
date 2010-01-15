@@ -26,7 +26,7 @@
 #include <half.h>
 #include <ImfRgbaFile.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoDocument.h>
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
@@ -49,10 +49,10 @@ using namespace std;
 using namespace Imf;
 using namespace Imath;
 
-typedef KGenericFactory<KisOpenEXRExport> KisOpenEXRExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkrita_openexr_export, KisOpenEXRExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(KisOpenEXRExportFactory, registerPlugin<KisOpenEXRExport>();)
+K_EXPORT_PLUGIN(KisOpenEXRExportFactory("kofficefilters"))
 
-KisOpenEXRExport::KisOpenEXRExport(QObject *parent, const QStringList&) : KoFilter(parent)
+KisOpenEXRExport::KisOpenEXRExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

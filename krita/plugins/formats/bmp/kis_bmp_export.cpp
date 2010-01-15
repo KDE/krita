@@ -24,7 +24,7 @@
 
 #include <kapplication.h>
 #include <kdialog.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoColorSpace.h>
 #include <KoFilterChain.h>
@@ -34,10 +34,10 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 
-typedef KGenericFactory<KisBMPExport> KisBMPExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritabmpexport, KisBMPExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(KisBMPExportFactory, registerPlugin<KisBMPExport>();)
+K_EXPORT_PLUGIN(KisBMPExportFactory("kofficefilters"))
 
-KisBMPExport::KisBMPExport(QObject *parent, const QStringList&) : KoFilter(parent)
+KisBMPExport::KisBMPExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

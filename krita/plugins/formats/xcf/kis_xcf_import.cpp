@@ -61,10 +61,10 @@ extern "C" {
 #define GET_ALPHA(x) (x >> ALPHA_SHIFT)
 }
 
-typedef KGenericFactory<KisXCFImport> XCFImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritaxcfimport, XCFImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(XCFImportFactory, registerPlugin<KisXCFImport>();)
+K_EXPORT_PLUGIN(XCFImportFactory("kofficefilters"))
 
-KisXCFImport::KisXCFImport(QObject* parent, const QStringList&) : KoFilter(parent)
+KisXCFImport::KisXCFImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

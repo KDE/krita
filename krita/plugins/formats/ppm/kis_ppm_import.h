@@ -20,6 +20,8 @@
 #ifndef _KIS_PPM_IMPORT_H_
 #define _KIS_PPM_IMPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class KisDoc2;
@@ -28,7 +30,7 @@ class KisPPMImport : public KoFilter
 {
     Q_OBJECT
 public:
-    KisPPMImport(QObject* parent, const QStringList&);
+    KisPPMImport(QObject *parent, const QVariantList &);
     virtual ~KisPPMImport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

@@ -19,13 +19,15 @@
 #ifndef _KIS_TIFF_IMPORT_H_
 #define _KIS_TIFF_IMPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class KisTIFFImport : public KoFilter
 {
     Q_OBJECT
 public:
-    KisTIFFImport(QObject* parent, const QStringList&);
+    KisTIFFImport(QObject *parent, const QVariantList &);
     virtual ~KisTIFFImport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

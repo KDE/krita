@@ -20,13 +20,15 @@
 #ifndef KIS_PDF_IMPORT_H
 #define KIS_PDF_IMPORT_H
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class KisPDFImport : public KoFilter
 {
     Q_OBJECT
 public:
-    KisPDFImport(QObject *parent, const QStringList&);
+    KisPDFImport(QObject *parent, const QVariantList &);
     virtual ~KisPDFImport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

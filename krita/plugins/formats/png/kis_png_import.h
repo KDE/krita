@@ -19,13 +19,15 @@
 #ifndef _KIS_PNG_IMPORT_H_
 #define _KIS_PNG_IMPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class KisPNGImport : public KoFilter
 {
     Q_OBJECT
 public:
-    KisPNGImport(QObject* parent, const QStringList&);
+    KisPNGImport(QObject *parent, const QVariantList &);
     virtual ~KisPNGImport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

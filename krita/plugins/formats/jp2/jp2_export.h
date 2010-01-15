@@ -19,13 +19,15 @@
 #ifndef _JP2_EXPORT_H_
 #define _JP2_EXPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class jp2Export : public KoFilter
 {
     Q_OBJECT
 public:
-    jp2Export(QObject* parent, const QStringList&);
+    jp2Export(QObject *parent, const QVariantList &);
     virtual ~jp2Export();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

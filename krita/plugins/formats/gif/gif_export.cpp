@@ -22,7 +22,7 @@
 
 #include <kapplication.h>
 #include <kdialog.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -37,10 +37,10 @@
 
 class KisExternalLayer;
 
-typedef KGenericFactory<gifExport> ExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritagifexport, ExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ExportFactory, registerPlugin<gifExport>();)
+K_EXPORT_PLUGIN(ExportFactory("kofficefilters"))
 
-gifExport::gifExport(QObject *parent, const QStringList&) : KoFilter(parent)
+gifExport::gifExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

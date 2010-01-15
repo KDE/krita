@@ -18,12 +18,14 @@
 #ifndef _PSD_EXPORT_H_
 #define _PSD_EXPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class psdExport : public KoFilter {
     Q_OBJECT
     public:
-        psdExport(QObject* parent, const QStringList&);
+        psdExport(QObject *parent, const QVariantList &);
         virtual ~psdExport();
     public:
         virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

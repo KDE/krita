@@ -18,7 +18,7 @@
 
 #include "jp2_import.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 
@@ -27,10 +27,10 @@
 
 #include "jp2_converter.h"
 
-typedef KGenericFactory<jp2Import> ImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritajp2import, ImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ImportFactory, registerPlugin<jp2Import>();)
+K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
 
-jp2Import::jp2Import(QObject *parent, const QStringList&) : KoFilter(parent)
+jp2Import::jp2Import(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

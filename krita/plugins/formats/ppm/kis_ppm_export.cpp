@@ -36,10 +36,10 @@
 #include <qendian.h>
 #include <KoColorSpaceTraits.h>
 
-typedef KGenericFactory<KisPPMExport> KisPPMExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritappmexport, KisPPMExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(KisPPMExportFactory, registerPlugin<KisPPMExport>();)
+K_EXPORT_PLUGIN(KisPPMExportFactory("krita"))
 
-KisPPMExport::KisPPMExport(QObject *parent, const QStringList&) : KoFilter(parent)
+KisPPMExport::KisPPMExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

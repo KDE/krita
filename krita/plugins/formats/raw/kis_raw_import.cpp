@@ -40,10 +40,10 @@
 
 using namespace KDcrawIface;
 
-typedef KGenericFactory<KisRawImport> KisRawImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkrita_raw_import, KisRawImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(KisRawImportFactory, registerPlugin<KisRawImport>();)
+K_EXPORT_PLUGIN(KisRawImportFactory("kofficefilters"))
 
-KisRawImport::KisRawImport(QObject *parent, const QStringList&)
+KisRawImport::KisRawImport(QObject *parent, const QVariantList &)
         : KoFilter(parent)
 {
     m_dialog = new KDialog();

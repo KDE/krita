@@ -20,13 +20,15 @@
 #ifndef _KIS_JPEG_EXPORT_H_
 #define _KIS_JPEG_EXPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class KisJPEGExport : public KoFilter
 {
     Q_OBJECT
 public:
-    KisJPEGExport(QObject* parent, const QStringList&);
+    KisJPEGExport(QObject *parent, const QVariantList &);
     virtual ~KisJPEGExport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

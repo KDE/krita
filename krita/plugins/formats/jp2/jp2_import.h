@@ -19,13 +19,15 @@
 #ifndef _IMPORT_H_
 #define _IMPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class jp2Import : public KoFilter
 {
     Q_OBJECT
 public:
-    jp2Import(QObject* parent, const QStringList&);
+    jp2Import(QObject *parent, const QVariantList &);
     virtual ~jp2Import();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

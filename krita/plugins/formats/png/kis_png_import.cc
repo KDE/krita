@@ -19,7 +19,7 @@
 
 #include "kis_png_import.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 
@@ -30,10 +30,10 @@
 
 #include "kis_png_converter.h"
 
-typedef KGenericFactory<KisPNGImport> PNGImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritapngimport, PNGImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(PNGImportFactory, registerPlugin<KisPNGImport>();)
+K_EXPORT_PLUGIN(PNGImportFactory("kofficefilters"))
 
-KisPNGImport::KisPNGImport(QObject *parent, const QStringList&) : KoFilter(parent)
+KisPNGImport::KisPNGImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

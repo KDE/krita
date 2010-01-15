@@ -19,7 +19,7 @@
 
 #include "exr_import.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 
@@ -28,10 +28,10 @@
 
 #include "exr_converter.h"
 
-typedef KGenericFactory<exrImport> ImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritaexrimport, ImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ImportFactory, registerPlugin<exrImport>();)
+K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
 
-exrImport::exrImport(QObject *parent, const QStringList&) : KoFilter(parent)
+exrImport::exrImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

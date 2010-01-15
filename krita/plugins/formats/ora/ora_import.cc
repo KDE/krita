@@ -17,7 +17,7 @@
 
 #include "ora_import.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 
@@ -26,10 +26,10 @@
 
 #include "ora_converter.h"
 
-typedef KGenericFactory<OraImport> ImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritaoraimport, ImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ImportFactory, registerPlugin<OraImport>();)
+K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
 
-OraImport::OraImport(QObject *parent, const QStringList&) : KoFilter(parent)
+OraImport::OraImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

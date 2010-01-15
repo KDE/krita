@@ -19,13 +19,15 @@
 #ifndef _KIS_PPM_EXPORT_H_
 #define _KIS_PPM_EXPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class KisPPMExport : public KoFilter
 {
     Q_OBJECT
 public:
-    KisPPMExport(QObject* parent, const QStringList&);
+    KisPPMExport(QObject *parent, const QVariantList &);
     virtual ~KisPPMExport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

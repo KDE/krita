@@ -20,13 +20,15 @@
 #ifndef _EXR_EXPORT_H_
 #define _EXR_EXPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class exrExport : public KoFilter
 {
     Q_OBJECT
 public:
-    exrExport(QObject* parent, const QStringList&);
+    exrExport(QObject *parent, const QVariantList &);
     virtual ~exrExport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

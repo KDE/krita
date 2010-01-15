@@ -24,7 +24,7 @@
 
 #include <kapplication.h>
 #include <kdialog.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoColorSpace.h>
 #include <KoFilterChain.h>
@@ -42,10 +42,10 @@
 #include <kis_exif_info_visitor.h>
 #include "kis_png_converter.h"
 
-typedef KGenericFactory<KisPNGExport> KisPNGExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritapngexport, KisPNGExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(KisPNGExportFactory, registerPlugin<KisPNGExport>();)
+K_EXPORT_PLUGIN(KisPNGExportFactory("kofficefilters"))
 
-KisPNGExport::KisPNGExport(QObject *parent, const QStringList&) : KoFilter(parent)
+KisPNGExport::KisPNGExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

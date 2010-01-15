@@ -20,6 +20,8 @@
 #ifndef _KIS_XCF_IMPORT_H_
 #define _KIS_XCF_IMPORT_H_
 
+#include <QVariant>
+
 #include <KoFilter.h>
 
 class KisDoc2;
@@ -28,7 +30,7 @@ class KisXCFImport : public KoFilter
 {
     Q_OBJECT
 public:
-    KisXCFImport(QObject* parent, const QStringList&);
+    KisXCFImport(QObject *parent, const QVariantList &);
     virtual ~KisXCFImport();
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

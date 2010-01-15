@@ -22,7 +22,7 @@
 
 #include <kapplication.h>
 #include <kdialog.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -37,10 +37,10 @@
 
 class KisExternalLayer;
 
-typedef KGenericFactory<psdExport> ExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritapsdexport, ExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ExportFactory, registerPlugin<psdExport>();)
+K_EXPORT_PLUGIN(ExportFactory("kofficefilters"))
 
-psdExport::psdExport(QObject *parent, const QStringList&) : KoFilter(parent)
+psdExport::psdExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

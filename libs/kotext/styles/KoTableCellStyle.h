@@ -177,9 +177,9 @@ public:
      * @x the x position.
      * @y the y position.
      * @w the width.
-     * @accumulatedBlankBorders a painterpath where blank borders should be added to.
+     * @blanks a painterpath where blank borders should be added to.
      */
-    void drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QPainterPath *accumulatedBlankBorders) const;
+    void drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QPainterPath *blanks = 0) const;
 
     /**
      * Paint the border that is shared.
@@ -189,9 +189,9 @@ public:
      * @x the x position.
      * @y the y position.
      * @w the width.
-     * @accumulatedBlankBorders a painterpath where blank borders should be added to.
+     * @blanks a painterpath where blank borders should be added to.
      */
-    void drawSharedHorizontalBorder(QPainter &painter, const KoTableCellStyle &styleBelow,  qreal x, qreal y, qreal w, QPainterPath *accumulatedBlankBorders) const;
+    void drawSharedHorizontalBorder(QPainter &painter, const KoTableCellStyle &styleBelow,  qreal x, qreal y, qreal w, QPainterPath *blanks = 0) const;
 
     /**
      * Paint the bottom border.
@@ -200,9 +200,9 @@ public:
      * @x the x position.
      * @y the y position.
      * @w the width.
-     * @accumulatedBlankBorders a painterpath where blank borders should be added to.
+     * @blanks a painterpath where blank borders should be added to.
      */
-    void drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QPainterPath *accumulatedBlankBorders) const;
+    void drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QPainterPath *blanks = 0) const;
 
     /**
      * Paint the leftmost border.
@@ -211,9 +211,9 @@ public:
      * @x the x position.
      * @y the y position.
      * @h the height.
-     * @accumulatedBlankBorders a painterpath where blank borders should be added to.
+     * @blanks a painterpath where blank borders should be added to.
      */
-    void drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QPainterPath *accumulatedBlankBorders) const;
+    void drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QPainterPath *blanks = 0) const;
 
     /**
      * Paint the border that is shared.
@@ -223,9 +223,9 @@ public:
      * @x the x position.
      * @y the y position.
      * @h the height.
-     * @accumulatedBlankBorders a painterpath where blank borders should be added to.
+     * @blanks a painterpath where blank borders should be added to.
      */
-    void drawSharedVerticalBorder(QPainter &painter, const KoTableCellStyle &styleRight,  qreal x, qreal y, qreal h, QPainterPath *accumulatedBlankBorders) const;
+    void drawSharedVerticalBorder(QPainter &painter, const KoTableCellStyle &styleRight,  qreal x, qreal y, qreal h, QPainterPath *blanks = 0) const;
 
     /**
      * Paint the rightmost border.
@@ -234,9 +234,9 @@ public:
      * @x the x position.
      * @y the y position.
      * @h the height.
-     * @accumulatedBlankBorders a painterpath where blank borders should be added to.
+     * @blanks a painterpath where blank borders should be added to.
      */
-    void drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QPainterPath *accumulatedBlankBorders) const;
+    void drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QPainterPath *blanks = 0) const;
 
     void setBackground(const QBrush &brush);
     /// See similar named method on QTextBlockFormat

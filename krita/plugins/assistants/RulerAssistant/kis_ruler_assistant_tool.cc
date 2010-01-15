@@ -136,6 +136,10 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
         m_options.toolButton->setIcon(KIcon("document-new"));
+        foreach(const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
+            QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
+            m_options.comboBox->addItem(name, key);
+        }
     }
     return m_optionsWidget;
 }

@@ -1,4 +1,3 @@
-class RulerAssistant;
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *

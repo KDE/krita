@@ -79,7 +79,7 @@ void ShowChangesCommand::enableDisableChanges()
           removeDeletedChanges();
 
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
-        if(lay)
+        if (lay)
           lay->scheduleLayout();
     }
 }
@@ -103,15 +103,14 @@ void ShowChangesCommand::insertDeletedChanges()
     QTextCursor caret(m_textEditor->document());
     caret.beginEditBlock();
 
-    foreach(KoChangeTrackerElement *element, elementVector)
-    {
+    foreach (KoChangeTrackerElement *element, elementVector) {
         if (element->isValid()) {
-          QTextCharFormat f;
-          caret.setPosition(element->getDeleteChangeMarker()->position() + numAddedChars +  1);
-          f.setProperty(KoCharacterStyle::ChangeTrackerId, element->getDeleteChangeMarker()->changeId());
-          caret.mergeCharFormat(f);
-          caret.insertText(element->getDeleteData());
-          numAddedChars += element->getDeleteData().length();
+            QTextCharFormat f;
+            caret.setPosition(element->getDeleteChangeMarker()->position() + numAddedChars +  1);
+            f.setProperty(KoCharacterStyle::ChangeTrackerId, element->getDeleteChangeMarker()->changeId());
+            caret.mergeCharFormat(f);
+            caret.insertText(element->getDeleteData());
+            numAddedChars += element->getDeleteData().length();
         }
     }
 
@@ -127,14 +126,13 @@ void ShowChangesCommand::removeDeletedChanges()
     QTextCursor caret(m_document);
     caret.beginEditBlock();
 
-    foreach(KoChangeTrackerElement *element, elementVector)
-    {
+    foreach(KoChangeTrackerElement *element, elementVector) {
         if (element->isValid()) {
-          QTextCharFormat f;
-          caret.setPosition(element->getDeleteChangeMarker()->position() +  1 - numDeletedChars);
-          caret.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, element->getDeleteData().length());
-          caret.removeSelectedText();
-          numDeletedChars += element->getDeleteData().length();
+            QTextCharFormat f;
+            caret.setPosition(element->getDeleteChangeMarker()->position() +  1 - numDeletedChars);
+            caret.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, element->getDeleteData().length());
+            caret.removeSelectedText();
+            numDeletedChars += element->getDeleteData().length();
         }
     }
 

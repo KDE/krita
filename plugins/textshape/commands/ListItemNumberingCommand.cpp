@@ -63,8 +63,7 @@ void ListItemNumberingCommand::redo()
         KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_block.userData());
         if (userData)
             userData->setCounterWidth(-1.0);
-    }
-    else {
+    } else {
         setNumbered(m_numbered);
     }
     m_first = false;
@@ -74,7 +73,7 @@ void ListItemNumberingCommand::undo()
 {
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
-    
+
     KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_block.userData());
     if (userData)
         userData->setCounterWidth(-1.0);

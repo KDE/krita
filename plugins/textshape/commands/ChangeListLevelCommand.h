@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CHANGELISTLEVELCOMMAND 
+#ifndef CHANGELISTLEVELCOMMAND
 #define CHANGELISTLEVELCOMMAND
 
 #include "TextCommandBase.h"
@@ -64,14 +64,14 @@ public:
 
 private:
     int effectiveLevel(int level);
-    
+
     CommandType m_type;
-    int coefficient;
-    
+    int m_coefficient;
+
     QList<QTextBlock> m_blocks;
     QHash<int, KoList*> m_lists;
     QHash<int, int> m_levels;
-    
+
     bool m_first;
 };
 

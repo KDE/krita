@@ -66,7 +66,7 @@ void TextChanges::changed(int position, const QString &former, const QString &la
     } else if (position >= cursor->position() && position <= cursor->position() + cursor->length()) {//merge
         cursor->merge(change);
         delete change;
-    } else  { // insert new one after.
+    } else { // insert new one after.
         cursor->insertAfter(change);
         if (change->next())
             change->next()->move(change->length());

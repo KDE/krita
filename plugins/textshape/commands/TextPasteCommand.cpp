@@ -52,16 +52,15 @@ void TextPasteCommand::redo()
     KoTextEditor *editor = KoTextDocument(m_tool->m_textShapeData->document()).textEditor();
     if (!m_first) {
         QUndoCommand::redo();
-    }
-    else {
+    } else {
         //kDebug() << "begin paste command";
         editor->cursor()->beginEditBlock();
         m_first = false;
-        if (editor->hasSelection()) {//TODO
-            if(m_tool->m_actionShowChanges->isChecked())
-              editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
+        if (editor->hasSelection()) { //TODO
+            if (m_tool->m_actionShowChanges->isChecked())
+                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
             else
-              editor->deleteChar();
+                editor->deleteChar();
         }
 
         // check for mime type

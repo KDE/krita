@@ -36,7 +36,7 @@ ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, Change
                                                int coef, QUndoCommand *parent)
     : TextCommandBase(parent),
       m_type(type),
-      coefficient(coef),
+      m_coefficient(coef),
       m_first(true)
 {
     setText(i18n("Change List Level"));
@@ -68,9 +68,9 @@ int ChangeListLevelCommand::effectiveLevel(int level)
 {
     int result = -1;
     if (m_type == IncreaseLevel) {
-        result = level + coefficient;
+        result = level + m_coefficient;
     } else if (m_type == DecreaseLevel) {
-        result = level - coefficient;
+        result = level - m_coefficient;
     } else if (m_type == SetLevel) {
         result = level;
     }

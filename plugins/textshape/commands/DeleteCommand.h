@@ -31,11 +31,10 @@ class KoChangeTrackerElement;
 class DeleteCommand : public TextCommandBase
 {
 public:
-    typedef enum
-    {
+    enum DeleteMode {
         PreviousChar,
         NextChar
-    }DeleteMode;
+    };
 
     DeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand* parent = 0);
     ~DeleteCommand();

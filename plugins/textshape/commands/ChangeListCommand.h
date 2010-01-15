@@ -52,8 +52,8 @@ public:
      * @param style indicates which style to use.
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListCommand( const QTextCursor &cursor, KoListStyle::Style style, int level = 0, 
-                      int flags = ModifyExistingList | MergeWithAdjacentList, 
+    ChangeListCommand( const QTextCursor &cursor, KoListStyle::Style style, int level = 0,
+                      int flags = ModifyExistingList | MergeWithAdjacentList,
                       QUndoCommand *parent = 0);
 
     /**
@@ -64,7 +64,7 @@ public:
      * @param parent the parent undo command for macro functionality
      */
     ChangeListCommand( const QTextCursor &cursor, KoListStyle *style, int level = 0,
-                      int flags = ModifyExistingList | MergeWithAdjacentList | MergeExactly, 
+                      int flags = ModifyExistingList | MergeWithAdjacentList | MergeExactly,
                       QUndoCommand *parent = 0);
     ~ChangeListCommand();
 

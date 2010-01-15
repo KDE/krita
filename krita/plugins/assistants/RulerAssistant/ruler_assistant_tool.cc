@@ -20,6 +20,7 @@
 #include <kpluginfactory.h>
 
 #include <KoToolRegistry.h>
+#include <RulerAssistant.h>
 
 K_PLUGIN_FACTORY(RulerAssistantToolFactory, registerPlugin<RulerAssistantToolPlugin>();)
 K_EXPORT_PLUGIN(RulerAssistantToolFactory("krita"))
@@ -30,6 +31,8 @@ RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QVaria
 {
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisRulerAssistantToolFactory(r));
+    
+    KisPaintingAssistantFactoryRegistry::instance()->add(new RulerAssistantFactory);
 }
 
 RulerAssistantToolPlugin::~RulerAssistantToolPlugin()

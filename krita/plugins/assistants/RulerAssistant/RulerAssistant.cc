@@ -110,7 +110,7 @@ QString RulerAssistantFactory::name() const
   return i18n("Ruler");
 }
 
-KisPaintingAssistant* RulerAssistantFactory::paintingAssistant( const QRectF& /*imageArea*/ )
+KisPaintingAssistant* RulerAssistantFactory::paintingAssistant( const QRectF& /*imageArea*/ ) const
 {
   return new RulerAssistant;
 }

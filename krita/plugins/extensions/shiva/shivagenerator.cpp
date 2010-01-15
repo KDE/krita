@@ -103,10 +103,11 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
             PaintDeviceImage pdi(dst);
 #if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION < 13
             std::list< GTLCore::AbstractImage* > inputs;
+            GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
 #else
             std::list< const GTLCore::AbstractImage* > inputs;
+            GTLCore::RegionI region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
 #endif
-            GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
 #if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION < 13
             kernel.evaluatePixeles(region, inputs, &pdi
 #if OPENSHIVA_VERSION_MAJOR == 0 && OPENSHIVA_VERSION_MINOR == 9 && OPENSHIVA_VERSION_REVISION >= 12

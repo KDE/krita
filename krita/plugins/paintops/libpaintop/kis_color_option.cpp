@@ -57,30 +57,30 @@ KisColorOption::~KisColorOption()
 
 void KisColorOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty("ColorDialog/hue", hue());
-    setting->setProperty("ColorDialog/saturation", saturation());
-    setting->setProperty("ColorDialog/value", value());
+    setting->setProperty("ColorOption/hue", hue());
+    setting->setProperty("ColorOption/saturation", saturation());
+    setting->setProperty("ColorOption/value", value());
     
-    setting->setProperty("ColorDialog/useRandomHSV",useRandomHSV());
-    setting->setProperty("ColorDialog/useRandomOpacity",useRandomOpacity());
-    setting->setProperty("ColorDialog/sampleInputColor",sampleInputColor());
+    setting->setProperty("ColorOption/useRandomHSV",useRandomHSV());
+    setting->setProperty("ColorOption/useRandomOpacity",useRandomOpacity());
+    setting->setProperty("ColorOption/sampleInputColor",sampleInputColor());
     
-    setting->setProperty("ColorDialog/fillBackground",fillBackground());
-    setting->setProperty("ColorDialog/colorPerParticle", colorPerParticle());
-    setting->setProperty("ColorDialog/mixBgColor",mixBgColor());
+    setting->setProperty("ColorOption/fillBackground",fillBackground());
+    setting->setProperty("ColorOption/colorPerParticle", colorPerParticle());
+    setting->setProperty("ColorOption/mixBgColor",mixBgColor());
 }
 
 void KisColorOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->randomOpacityCHBox->setChecked(setting->getBool("ColorDialog/useRandomOpacity"));
-    m_options->randomHSVCHBox->setChecked(setting->getBool("ColorDialog/useRandomHSV"));
-    m_options->hueSlider->setValue(setting->getInt("ColorDialog/hue"));
-    m_options->saturationSlider->setValue(setting->getInt("ColorDialog/saturation"));
-    m_options->valueSlider->setValue(setting->getInt("ColorDialog/value"));
-    m_options->sampleInputCHBox->setChecked(setting->getBool("ColorDialog/sampleInputColor"));
-    m_options->colorPerParticleCHBox->setChecked(setting->getBool("ColorDialog/colorPerParticle"));
-    m_options->fillBackgroundCHBox->setChecked(setting->getBool("ColorDialog/fillBackground"));
-    m_options->mixBgColorCHBox->setChecked(setting->getBool("ColorDialog/mixBgColor"));
+    m_options->randomOpacityCHBox->setChecked(setting->getBool("ColorOption/useRandomOpacity"));
+    m_options->randomHSVCHBox->setChecked(setting->getBool("ColorOption/useRandomHSV"));
+    m_options->hueSlider->setValue(setting->getInt("ColorOption/hue"));
+    m_options->saturationSlider->setValue(setting->getInt("ColorOption/saturation"));
+    m_options->valueSlider->setValue(setting->getInt("ColorOption/value"));
+    m_options->sampleInputCHBox->setChecked(setting->getBool("ColorOption/sampleInputColor"));
+    m_options->colorPerParticleCHBox->setChecked(setting->getBool("ColorOption/colorPerParticle"));
+    m_options->fillBackgroundCHBox->setChecked(setting->getBool("ColorOption/fillBackground"));
+    m_options->mixBgColorCHBox->setChecked(setting->getBool("ColorOption/mixBgColor"));
 }
 
 

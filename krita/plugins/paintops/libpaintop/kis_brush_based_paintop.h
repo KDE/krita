@@ -37,6 +37,9 @@ public:
     KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter);
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
 
+    ///Reimplemented, false if brush is 0
+    virtual bool canPaint() const;
+    
 protected: // XXX: make private!
 
     KisBrushSP m_brush;

@@ -52,3 +52,8 @@ double KisBrushBasedPaintOp::spacing(double & xSpacing, double & ySpacing, doubl
         return ySpacing;
     }
 }
+
+bool KisBrushBasedPaintOp::canPaint() const
+{
+    return m_brush != 0;
+}

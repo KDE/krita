@@ -486,7 +486,7 @@ double KisPainter::paintLine(const KisPaintInformation &pi1,
                              double savedDist)
 {
     if (!d->device) return 0;
-    if (!d->paintOp) return 0;
+    if (!d->paintOp || !d->paintOp->canPaint()) return 0;
 
     return d->paintOp->paintLine(pi1, pi2, savedDist);
 }
@@ -551,7 +551,7 @@ double KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
                                     const KisPaintInformation &pi2,
                                     const double savedDist)
 {
-    if (d->paintOp) {
+    if (d->paintOp && d->paintOp->canPaint()) {
         return d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, savedDist);
     }
     return 0.5;
@@ -631,7 +631,7 @@ void KisPainter::paintEllipse(const double x,
 
 void KisPainter::paintAt(const KisPaintInformation& pi)
 {
-    if (!d->paintOp) return;
+    if (!d->paintOp || !d->paintOp->canPaint()) return;
     d->paintOp->paintAt(pi);
 }
 

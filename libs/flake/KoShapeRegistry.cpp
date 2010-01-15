@@ -193,9 +193,11 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
     QMultiMap<int, KoShapeFactory*> priorityMap = factoryMap.value(p);
     QList<KoShapeFactory*> factories = priorityMap.values();
 
+#ifndef NDEBUG
     kDebug(30006) << "Supported factories for=" << p;
-    foreach(KoShapeFactory *f, factories)
+    foreach (KoShapeFactory *f, factories)
         kDebug(30006) << f->id() << f->name();
+#endif
 
     // Higher numbers are more specific, map is sorted by keys
     for (int i = factories.size() - 1; i >= 0; --i) {
@@ -222,7 +224,6 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
     }
 
     return 0;
-
 }
 
 #include <KoShapeRegistry.moc>

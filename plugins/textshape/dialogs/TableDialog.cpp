@@ -46,4 +46,4 @@ int TableDialog::rows()
 }
 
 
-#include "TableDialog.moc"
+#include <TableDialog.moc>

@@ -241,4 +241,4 @@ void CharacterHighlighting::save(KoCharacterStyle *style)
     }
 }
 
-#include "CharacterHighlighting.moc"
+#include <CharacterHighlighting.moc>

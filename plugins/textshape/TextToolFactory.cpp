@@ -42,4 +42,4 @@ KoTool * TextToolFactory::createTool(KoCanvasBase *canvas)
     return new TextTool(canvas);
 }
 
-#include "TextToolFactory.moc"
+#include <TextToolFactory.moc>

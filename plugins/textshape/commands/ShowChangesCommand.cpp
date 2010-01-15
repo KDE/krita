@@ -143,4 +143,4 @@ ShowChangesCommand::~ShowChangesCommand()
 {
 }
 
-#include "ShowChangesCommand.moc"
+#include <ShowChangesCommand.moc>

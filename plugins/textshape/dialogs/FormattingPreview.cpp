@@ -400,4 +400,4 @@ void FormattingPreview::drawLine(QPainter &painter, qreal xstart, qreal xend, qr
     painter.restore();
 }
 
-#include "FormattingPreview.moc"
+#include <FormattingPreview.moc>

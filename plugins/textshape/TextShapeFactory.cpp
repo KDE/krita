@@ -83,4 +83,4 @@ void TextShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>  & da
     dataCenterMap["ChangeTracker"] = new KoChangeTracker();
 }
 
-#include "TextShapeFactory.moc"
+#include <TextShapeFactory.moc>

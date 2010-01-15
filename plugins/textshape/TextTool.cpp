@@ -2127,4 +2127,4 @@ void TextTool::debugTextStyles()
 #endif
 }
 
-#include "TextTool.moc"
+#include <TextTool.moc>

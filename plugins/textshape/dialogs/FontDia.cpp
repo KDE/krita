@@ -119,4 +119,4 @@ void FontDia::slotReset()
     slotApply(); // ### Should reset() apply?
 }
 
-#include "FontDia.moc"
+#include <FontDia.moc>

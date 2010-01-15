@@ -218,4 +218,4 @@ void ParagraphIndentSpacing::useFontMetrices(bool on)
         m_fontMetricsChecked = on;
 }
 
-#include "ParagraphIndentSpacing.moc"
+#include <ParagraphIndentSpacing.moc>

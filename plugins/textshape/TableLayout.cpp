@@ -578,4 +578,4 @@ void TableLayout::tableDestroyed(QObject *object)
     }
 }
 
-#include "TableLayout.moc"
+#include <TableLayout.moc>

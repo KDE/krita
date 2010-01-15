@@ -54,4 +54,4 @@ void TrackedChangeManager::currentChanged(QModelIndex newIndex, QModelIndex prev
     emit currentChanged(newIndex);
 }
 
-#include "TrackedChangeManager.moc"
+#include <TrackedChangeManager.moc>

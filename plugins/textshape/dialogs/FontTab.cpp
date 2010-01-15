@@ -73,4 +73,4 @@ void FontTab::save(KoCharacterStyle* style) const
     }
 }
 
-#include "FontTab.moc"
+#include <FontTab.moc>

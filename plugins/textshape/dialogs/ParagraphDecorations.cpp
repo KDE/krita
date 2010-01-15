@@ -66,4 +66,4 @@ void ParagraphDecorations::clearBackgroundColor()
     emit backgroundColorChanged(QColor(Qt::transparent));
 }
 
-#include "ParagraphDecorations.moc"
+#include <ParagraphDecorations.moc>

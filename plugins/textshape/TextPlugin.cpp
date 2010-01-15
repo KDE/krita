@@ -36,4 +36,4 @@ TextPlugin::TextPlugin(QObject * parent, const QStringList &)
     KoShapeRegistry::instance()->add(new TextShapeFactory(parent));
 }
 
-#include "TextPlugin.moc"
+#include <TextPlugin.moc>

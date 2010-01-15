@@ -270,4 +270,4 @@ void TrackedChangeModel::setupModelData(QTextDocument* document, ModelItem* pare
     }
 }
 
-#include "TrackedChangeModel.moc"
+#include <TrackedChangeModel.moc>

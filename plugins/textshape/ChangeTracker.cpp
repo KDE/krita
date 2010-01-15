@@ -95,4 +95,4 @@ void ChangeTracker::notifyForUndo()
     m_reverseUndo = true;
 }
 
-#include "ChangeTracker.moc"
+#include <ChangeTracker.moc>

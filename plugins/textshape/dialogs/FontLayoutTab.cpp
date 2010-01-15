@@ -96,4 +96,4 @@ void FontLayoutTab::save(KoCharacterStyle *style)
         style->setHasHyphenation(false);
 }
 
-#include "FontLayoutTab.moc"
+#include <FontLayoutTab.moc>

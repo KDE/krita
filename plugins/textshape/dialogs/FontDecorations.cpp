@@ -125,4 +125,4 @@ void FontDecorations::clearBackgroundColor()
     emit backgroundColorChanged(QColor(Qt::transparent));
 }
 
-#include "FontDecorations.moc"
+#include <FontDecorations.moc>

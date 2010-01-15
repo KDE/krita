@@ -42,4 +42,4 @@ KoTool * ChangeTrackingToolFactory::createTool(KoCanvasBase *canvas)
     return new ChangeTrackingTool(canvas);
 }
 
-#include "ChangeTrackingToolFactory.moc"
+#include <ChangeTrackingToolFactory.moc>

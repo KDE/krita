@@ -81,4 +81,4 @@ void ParagraphLayout::save(KoParagraphStyle *style)
     style->setBreakAfter(widget.breakAfter->isChecked());
 }
 
-#include "ParagraphLayout.moc"
+#include <ParagraphLayout.moc>

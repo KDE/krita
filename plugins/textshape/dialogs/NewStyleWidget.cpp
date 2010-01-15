@@ -47,4 +47,4 @@ void NewStyleWidget::createButtonPressed()
     }
 }
 
-#include "NewStyleWidget.moc"
+#include <NewStyleWidget.moc>

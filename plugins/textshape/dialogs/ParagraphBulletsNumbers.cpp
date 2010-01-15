@@ -200,4 +200,4 @@ void ParagraphBulletsNumbers::customCharButtonPressed()
     delete dialog;
 }
 
-#include "ParagraphBulletsNumbers.moc"
+#include <ParagraphBulletsNumbers.moc>

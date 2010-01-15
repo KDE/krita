@@ -298,4 +298,4 @@ void ChangeTrackingTool::showTrackedChangeManager()
     //    dia->show();
 }
 
-#include "ChangeTrackingTool.moc"
+#include <ChangeTrackingTool.moc>

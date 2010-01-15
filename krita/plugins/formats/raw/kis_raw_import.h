@@ -24,7 +24,6 @@
 
 #include "ui_wdgrawimport.h"
 
-class K3Process;
 class KDialog;
 class WdgRawImport;
 class KoColorProfile;

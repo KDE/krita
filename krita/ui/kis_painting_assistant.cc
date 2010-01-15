@@ -131,3 +131,15 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistant::handles()
 {
     return d->handles;
 }
+
+KisPaintingAssistantFactory::KisPaintingAssistantFactory()
+{
+}
+
+KisPaintingAssistantFactory::~KisPaintingAssistantFactory()
+{
+}
+
+KisPaintingAssistantFactoryRegistry::KisPaintingAssistantFactoryRegistry()
+{
+}

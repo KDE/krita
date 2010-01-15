@@ -27,9 +27,11 @@
 
 class QPainter;
 class QRect;
+class QRectF;
 class KoViewConverter;
 
 #include <kis_shared_ptr.h>
+#include <KoGenericRegistry.h>
 
 class KisPaintingAssistantHandle;
 typedef KisSharedPtr<KisPaintingAssistantHandle> KisPaintingAssistantHandleSP;
@@ -84,6 +86,25 @@ protected:
 private:
     struct Private;
     Private* const d;
+};
+
+/**
+ * Allow to create a painting assistant.
+ */
+class KRITAUI_EXPORT KisPaintingAssistantFactory
+{
+public:
+    KisPaintingAssistantFactory();
+    virtual ~KisPaintingAssistantFactory();
+    virtual QString id() const = 0;
+    virtual QString name() const = 0;
+    virtual KisPaintingAssistant* paintingAssistant( const QRectF& imageArea ) = 0;
+};
+
+class KRITAUI_EXPORT KisPaintingAssistantFactoryRegistry : public KoGenericRegistry<KisPaintingAssistant*>
+{
+  public:
+    KisPaintingAssistantFactoryRegistry();
 };
 
 #endif

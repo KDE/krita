@@ -274,6 +274,7 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
         odfAnchorType = AsChar;
         break;
     }
+    Q_ASSERT(odfAnchorType != Undefined);
 
     if (odfAnchorType == AsChar) {
        if (qAbs(d->distance.y()) > 1E-4)

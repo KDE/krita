@@ -19,10 +19,9 @@
 #ifndef KRITA_SHAPE_FACTORY
 #define KRITA_SHAPE_FACTORY
 
-#include <QStringList>
+#include <QVariant>
 
 #include <KoShapeFactory.h>
-
 
 class KoShape;
 
@@ -32,7 +31,7 @@ class KritaShapePlugin : public QObject
 
 public:
 
-    KritaShapePlugin(QObject * parent,  const QStringList &);
+    KritaShapePlugin(QObject *parent, const QVariantList &);
     ~KritaShapePlugin() {}
 
 };

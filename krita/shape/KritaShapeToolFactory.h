@@ -19,15 +19,13 @@
 #ifndef KRITA_SHAPE_TOOL_FACTORY
 #define KRITA_SHAPE_TOOL_FACTORY
 
-#include <QStringList>
-
 #include <KoToolFactory.h>
 
 class KritaShapeToolFactory : public KoToolFactory
 {
     Q_OBJECT
 public:
-    KritaShapeToolFactory(QObject* parent, const QStringList&);
+    KritaShapeToolFactory(QObject* parent);
     ~KritaShapeToolFactory();
 
     KoTool* createTool(KoCanvasBase* canvas);

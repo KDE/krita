@@ -20,7 +20,7 @@
 #include <QStringList>
 
 #include <kurl.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 
 #include <KoProperties.h>
@@ -30,12 +30,13 @@
 #include "KritaShape.h"
 #include "KritaShapeToolFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY(kritashape, KGenericFactory<KritaShapePlugin>("krita"))
+K_PLUGIN_FACTORY(KritaShapePluginFactory, registerPlugin<KritaShapePlugin>();)
+K_EXPORT_PLUGIN(KritaShapePluginFactory("krita"))
 
-KritaShapePlugin::KritaShapePlugin(QObject * parent,  const QStringList & list)
+KritaShapePlugin::KritaShapePlugin(QObject * parent,  const QVariantList &)
 {
     KoShapeRegistry::instance()->add(new KritaShapeFactory(parent));
-    KoToolRegistry::instance()->add(new KritaShapeToolFactory(parent, list));
+    KoToolRegistry::instance()->add(new KritaShapeToolFactory(parent));
 }
 
 

@@ -22,7 +22,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
 
@@ -32,11 +32,11 @@
 
 #include "kis_global.h"
 
-typedef KGenericFactory<DynaPaintOpPlugin> DynaPaintOpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritadynapaintop, DynaPaintOpPluginFactory("krita"))
+K_PLUGIN_FACTORY(DynaPaintOpPluginFactory, registerPlugin<DynaPaintOpPlugin>();)
+K_EXPORT_PLUGIN(DynaPaintOpPluginFactory("krita"))
 
 
-DynaPaintOpPlugin::DynaPaintOpPlugin(QObject *parent, const QStringList &)
+DynaPaintOpPlugin::DynaPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //

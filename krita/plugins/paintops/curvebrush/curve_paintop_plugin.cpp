@@ -24,7 +24,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
 
@@ -33,11 +33,11 @@
 #include "kis_simple_paintop_factory.h"
 #include "kis_global.h"
 
-typedef KGenericFactory<CurvePaintOpPlugin> CurvePaintOpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritacurvepaintop, CurvePaintOpPluginFactory("krita"))
+K_PLUGIN_FACTORY(CurvePaintOpPluginFactory, registerPlugin<CurvePaintOpPlugin>();)
+K_EXPORT_PLUGIN(CurvePaintOpPluginFactory("krita"))
 
 
-CurvePaintOpPlugin::CurvePaintOpPlugin(QObject *parent, const QStringList &)
+CurvePaintOpPlugin::CurvePaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(CurvePaintOpPluginFactory::componentData());

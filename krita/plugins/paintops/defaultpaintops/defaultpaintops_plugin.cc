@@ -24,7 +24,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "kis_simple_paintop_factory.h"
 #include "kis_airbrushop.h"
@@ -43,11 +43,11 @@
 #include "kis_global.h"
 #include "kis_paintop_registry.h"
 
-typedef KGenericFactory<DefaultPaintOpsPlugin> DefaultPaintOpsPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritadefaultpaintops, DefaultPaintOpsPluginFactory("krita"))
+K_PLUGIN_FACTORY(DefaultPaintOpsPluginFactory, registerPlugin<DefaultPaintOpsPlugin>();)
+K_EXPORT_PLUGIN(DefaultPaintOpsPluginFactory("krita"))
 
 
-DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QStringList &)
+DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(DefaultPaintOpsPluginFactory::componentData());

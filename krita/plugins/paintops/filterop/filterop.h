@@ -19,13 +19,14 @@
 #ifndef _FILTEROP_H_
 #define _FILTEROP_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class FilterOp : public QObject
 {
     Q_OBJECT
 public:
-    FilterOp(QObject *parent, const QStringList &);
+    FilterOp(QObject *parent, const QVariantList &);
     virtual ~FilterOp();
 };
 

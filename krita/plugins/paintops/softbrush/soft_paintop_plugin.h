@@ -19,6 +19,8 @@
 #ifndef SOFT_PAINTOP_PLUGIN_H_
 #define SOFT_PAINTOP_PLUGIN_H_
 
+#include <QVariant>
+
 #include <kparts/plugin.h>
 
 /**
@@ -28,7 +30,7 @@ class SoftPaintOpPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    SoftPaintOpPlugin(QObject *parent, const QStringList &);
+    SoftPaintOpPlugin(QObject *parent, const QVariantList &);
     virtual ~SoftPaintOpPlugin();
 };
 

@@ -19,7 +19,8 @@
 #ifndef DYNA_PAINTOP_PLUGIN_H_
 #define DYNA_PAINTOP_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A plugin wrapper that adds the paintop factories to the paintop registry.
@@ -28,7 +29,7 @@ class DynaPaintOpPlugin : public QObject
 {
     Q_OBJECT
 public:
-    DynaPaintOpPlugin(QObject *parent, const QStringList &);
+    DynaPaintOpPlugin(QObject *parent, const QVariantList &);
     virtual ~DynaPaintOpPlugin();
 };
 

@@ -22,7 +22,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
 
@@ -31,11 +31,11 @@
 
 #include "kis_global.h"
 
-typedef KGenericFactory<ExperimentPaintOpPlugin> ExperimentPaintOpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaexperimentpaintop, ExperimentPaintOpPluginFactory("krita"))
+K_PLUGIN_FACTORY(ExperimentPaintOpPluginFactory, registerPlugin<ExperimentPaintOpPlugin>();)
+K_EXPORT_PLUGIN(ExperimentPaintOpPluginFactory("krita"))
 
 
-ExperimentPaintOpPlugin::ExperimentPaintOpPlugin(QObject *parent, const QStringList &)
+ExperimentPaintOpPlugin::ExperimentPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(ExperimentPaintOpPluginFactory::componentData());

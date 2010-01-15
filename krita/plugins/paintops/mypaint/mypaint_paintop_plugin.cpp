@@ -22,18 +22,18 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
 
 #include "mypaint_paintop_factory.h"
 #include "kis_global.h"
 
-typedef KGenericFactory<MyPaintPlugin> MyPaintPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritamypaintpaintop, MyPaintPluginFactory("krita"))
+K_PLUGIN_FACTORY(MyPaintPluginFactory, registerPlugin<MyPaintPlugin>();)
+K_EXPORT_PLUGIN(MyPaintPluginFactory("krita"))
 
 
-MyPaintPlugin::MyPaintPlugin(QObject *parent, const QStringList &)
+MyPaintPlugin::MyPaintPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(MyPaintPluginFactory::componentData());

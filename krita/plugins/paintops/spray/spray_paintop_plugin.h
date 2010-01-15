@@ -19,7 +19,8 @@
 #ifndef SPRAY_PAINTOP_PLUGIN_H_
 #define SPRAY_PAINTOP_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A plugin wrapper that adds the paintop factories to the paintop registry.
@@ -28,7 +29,7 @@ class SprayPaintOpPlugin : public QObject
 {
     Q_OBJECT
 public:
-    SprayPaintOpPlugin(QObject *parent, const QStringList &);
+    SprayPaintOpPlugin(QObject *parent, const QVariantList &);
     virtual ~SprayPaintOpPlugin();
 };
 

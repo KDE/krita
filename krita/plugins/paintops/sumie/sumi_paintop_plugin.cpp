@@ -24,7 +24,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
 
@@ -32,11 +32,11 @@
 #include "kis_sumi_paintop.h"
 #include "kis_global.h"
 
-typedef KGenericFactory<SumiPaintOpPlugin> SumiPaintOpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritasumipaintop, SumiPaintOpPluginFactory("krita"))
+K_PLUGIN_FACTORY(SumiPaintOpPluginFactory, registerPlugin<SumiPaintOpPlugin>();)
+K_EXPORT_PLUGIN(SumiPaintOpPluginFactory("krita"))
 
 
-SumiPaintOpPlugin::SumiPaintOpPlugin(QObject *parent, const QStringList &)
+SumiPaintOpPlugin::SumiPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
 

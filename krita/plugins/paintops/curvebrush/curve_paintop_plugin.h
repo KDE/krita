@@ -19,7 +19,8 @@
 #ifndef CURVE_PAINTOP_PLUGIN_H_
 #define CURVE_PAINTOP_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A plugin wrapper that adds the paintop factories to the paintop registry.
@@ -28,7 +29,7 @@ class CurvePaintOpPlugin : public QObject
 {
     Q_OBJECT
 public:
-    CurvePaintOpPlugin(QObject *parent, const QStringList &);
+    CurvePaintOpPlugin(QObject *parent, const QVariantList &);
     virtual ~CurvePaintOpPlugin();
 };
 

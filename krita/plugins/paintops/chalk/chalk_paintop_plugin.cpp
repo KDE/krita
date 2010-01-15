@@ -23,7 +23,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
 
@@ -33,11 +33,11 @@
 
 #include "kis_global.h"
 
-typedef KGenericFactory<ChalkPaintOpPlugin> ChalkPaintOpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritachalkpaintop, ChalkPaintOpPluginFactory("krita"))
+K_PLUGIN_FACTORY(ChalkPaintOpPluginFactory, registerPlugin<ChalkPaintOpPlugin>();)
+K_EXPORT_PLUGIN(ChalkPaintOpPluginFactory("krita"))
 
 
-ChalkPaintOpPlugin::ChalkPaintOpPlugin(QObject *parent, const QStringList &)
+ChalkPaintOpPlugin::ChalkPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //

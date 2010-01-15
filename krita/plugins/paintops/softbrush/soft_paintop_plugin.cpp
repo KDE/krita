@@ -23,7 +23,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
 #include <kis_simple_paintop_factory.h>
@@ -32,11 +32,11 @@
 
 #include "kis_global.h"
 
-typedef KGenericFactory<SoftPaintOpPlugin> SoftPaintOpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritasoftpaintop, SoftPaintOpPluginFactory("krita"))
+K_PLUGIN_FACTORY(SoftPaintOpPluginFactory, registerPlugin<SoftPaintOpPlugin>();)
+K_EXPORT_PLUGIN(SoftPaintOpPluginFactory("krita"))
 
 
-SoftPaintOpPlugin::SoftPaintOpPlugin(QObject *parent, const QStringList &)
+SoftPaintOpPlugin::SoftPaintOpPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     setComponentData(SoftPaintOpPluginFactory::componentData());

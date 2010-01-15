@@ -19,7 +19,8 @@
 #ifndef COMPLEX_BRUSH_H
 #define COMPLEX_BRUSH_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class QStringList;
 
@@ -27,7 +28,7 @@ class ComplexBrush : public QObject
 {
     Q_OBJECT
 public:
-    ComplexBrush(QObject *parent, const QStringList &sl);
+    ComplexBrush(QObject *parent, const QVariantList &);
     ~ComplexBrush();
 };
 

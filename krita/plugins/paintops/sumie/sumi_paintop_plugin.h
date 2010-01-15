@@ -19,7 +19,8 @@
 #ifndef SUMI_PAINTOP_PLUGIN_H_
 #define SUMI_PAINTOP_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A plugin wrapper that adds the paintop factories to the paintop registry.
@@ -28,7 +29,7 @@ class SumiPaintOpPlugin : public QObject
 {
     Q_OBJECT
 public:
-    SumiPaintOpPlugin(QObject *parent, const QStringList &);
+    SumiPaintOpPlugin(QObject *parent, const QVariantList &);
     virtual ~SumiPaintOpPlugin();
 };
 

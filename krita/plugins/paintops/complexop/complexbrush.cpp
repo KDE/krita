@@ -25,10 +25,10 @@
 #include <kis_paintop_registry.h>
 #include <QStringList>
 
-typedef KGenericFactory<ComplexBrush> ComplexBrushFactory;
-K_EXPORT_COMPONENT_FACTORY(kritacomplexbrush, ComplexBrushFactory("krita"))
+K_PLUGIN_FACTORY(ComplexBrushFactory, registerPlugin<ComplexBrush>();)
+K_EXPORT_PLUGIN(ComplexBrushFactory("krita"))
 
-ComplexBrush::ComplexBrush(QObject *parent, const QStringList &sl)
+ComplexBrush::ComplexBrush(QObject *parent, const QVariantList &sl)
         : QObject(parent)
 {
     Q_UNUSED(sl)

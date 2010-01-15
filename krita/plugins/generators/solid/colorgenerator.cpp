@@ -25,7 +25,7 @@
 #include <kis_debug.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
@@ -49,10 +49,10 @@
 #include "kis_wdg_color.h"
 #include "ui_wdgcoloroptions.h"
 
-typedef KGenericFactory<KritaColorGenerator> KritaColorGeneratorFactory;
-K_EXPORT_COMPONENT_FACTORY(kritacolorgenerator, KritaColorGeneratorFactory("krita"))
+K_PLUGIN_FACTORY(KritaColorGeneratorFactory, registerPlugin<KritaColorGenerator>();)
+K_EXPORT_PLUGIN(KritaColorGeneratorFactory("krita"))
 
-KritaColorGenerator::KritaColorGenerator(QObject *parent, const QStringList &)
+KritaColorGenerator::KritaColorGenerator(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(KritaColorGeneratorFactory::componentData());

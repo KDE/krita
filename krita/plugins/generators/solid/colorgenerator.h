@@ -21,7 +21,8 @@
 #ifndef COLOR_GENERATOR_H
 #define COLOR_GENERATOR_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 #include "generator/kis_generator.h"
 
 class KisConfigWidget;
@@ -29,7 +30,7 @@ class KisConfigWidget;
 class KritaColorGenerator : public QObject
 {
 public:
-    KritaColorGenerator(QObject *parent, const QStringList &);
+    KritaColorGenerator(QObject *parent, const QVariantList &);
     virtual ~KritaColorGenerator();
 };
 

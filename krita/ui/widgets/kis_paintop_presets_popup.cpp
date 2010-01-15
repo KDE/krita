@@ -112,4 +112,9 @@ KisPresetWidget* KisPaintOpPresetsPopup::presetPreview()
     return m_d->uiWdgPaintOpPresets.presetPreview;
 }
 
+QString KisPaintOpPresetsPopup::getPresetName() const
+{
+    return m_d->uiWdgPaintOpPresets.txtPreset->text();
+}
+
 #include "kis_paintop_presets_popup.moc"

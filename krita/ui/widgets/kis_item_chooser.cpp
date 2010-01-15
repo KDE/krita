@@ -61,9 +61,8 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     painter->setPen(Qt::black);
-    QString paintop = preset->settings()->getString("paintop");
-    painter->drawText(option.rect.x() + 5, option.rect.y() + option.rect.height() - 5, paintop);
-
+    painter->drawText(option.rect.x() + 5, option.rect.y() + option.rect.height() - 5, preset->name());
+    
     QRect previewRect = option.rect.adjusted(200, 0, -20, 0);
     QImage preview = preset->settings()->sampleStroke(previewRect.size());
     painter->drawImage(previewRect.x(), previewRect.y(),

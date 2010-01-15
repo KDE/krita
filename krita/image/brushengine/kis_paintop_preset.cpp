@@ -113,6 +113,7 @@ bool KisPaintOpPreset::load()
     f.close();
 
     QDomElement element = doc.documentElement();
+    setName(element.attribute("name"));
     QString paintopid = element.attribute("paintopid");
 
     if (paintopid.isEmpty())
@@ -146,6 +147,7 @@ bool KisPaintOpPreset::save()
         return false;
 
     root.setAttribute("paintopid", paintopid);
+    root.setAttribute("name", name());
     doc.appendChild(root);
 
     m_d->settings->toXML(doc, root);

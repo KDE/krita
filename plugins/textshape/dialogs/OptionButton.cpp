@@ -36,12 +36,12 @@ OptionButton::OptionButton( QWidget *parent)
 
 void OptionButton::addItem(QPixmap pm, int id)
 {
-    m_actionMap[m_menu->addAction(QIcon(pm),"")] = id;
-    if(!m_firstItemAdded) {
+    m_actionMap[m_menu->addAction(QIcon(pm), QString())] = id;
+    if (!m_firstItemAdded) {
         setDefaultAction(m_actionMap.key(id));
         setIcon(QIcon(pm));
     }
-    m_firstItemAdded=true;
+    m_firstItemAdded = true;
 }
 
 void OptionButton::itemSelected(QAction *action)

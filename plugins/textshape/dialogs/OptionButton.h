@@ -34,10 +34,10 @@ class OptionButton : public QToolButton
 {
     Q_OBJECT
 public:
-    OptionButton( QWidget *parent = 0 );
+    OptionButton(QWidget *parent = 0);
 
     void addItem(QPixmap pm, int id);
-    
+
     void setDeactiveId(QPixmap pm, int id);
 
 signals:
@@ -49,7 +49,7 @@ private slots:
 private:
     bool m_firstItemAdded;
     QMenu *m_menu;
-    QMap<QAction *, int > m_actionMap;
+    QMap<QAction *, int> m_actionMap;
 };
 
 #endif

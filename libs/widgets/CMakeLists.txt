@@ -43,6 +43,8 @@ set(kowidgets_LIB_SRCS
     KoResourceServerAdapter.cpp
     KoResourceServerProvider.cpp
     KoLineStyleSelector.cpp
+    KoLineStyleItemDelegate.cpp
+    KoLineStyleModel.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS

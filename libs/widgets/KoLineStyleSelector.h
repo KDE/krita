@@ -30,7 +30,7 @@ class KOWIDGETS_EXPORT KoLineStyleSelector : public QComboBox
 {
     Q_OBJECT
 public:
-    KoLineStyleSelector( QWidget * parent = 0 );
+    KoLineStyleSelector(QWidget * parent = 0);
     virtual ~KoLineStyleSelector();
 
     /**
@@ -41,7 +41,7 @@ public:
      * @param style the line style to add
      * @return true if style is unique among the existing styles and was added, else false
      */
-    bool addCustomStyle( const QVector<qreal> &style );
+    bool addCustomStyle(const QVector<qreal> &style);
 
     /**
      * Selects the specified style.
@@ -52,7 +52,7 @@ public:
      * @param style the style to display
      * @param dashes the dashes of the style if style == Qt::CustomDashLine
      */
-    void setLineStyle( Qt::PenStyle style, const QVector<qreal> &dashes );
+    void setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes);
 
     /// Returns the current line style
     Qt::PenStyle lineStyle() const;
@@ -60,10 +60,9 @@ public:
     QVector<qreal> lineDashes() const;
 
 protected:
-    void paintEvent( QPaintEvent *pe );
+    void paintEvent(QPaintEvent *pe);
 
 private:
-
     class Private;
     Private * const d;
 };

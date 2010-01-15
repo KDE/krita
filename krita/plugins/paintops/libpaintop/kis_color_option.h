@@ -43,9 +43,7 @@ public:
     int saturation() const;
     int value() const;
 
-    /// TODO
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    /// TODO
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
    KisColorOptionsWidget * m_options;

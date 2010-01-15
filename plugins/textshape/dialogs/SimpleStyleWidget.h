@@ -20,6 +20,7 @@
 #define SIMPLESTYLEWIDGET_H
 
 #include <ui_SimpleStyleWidget.h>
+#include <KoListStyle.h>
 
 #include <QWidget>
 #include <QTextBlock>
@@ -44,6 +45,7 @@ signals:
 private slots:
     void listStyleChanged(int row);
     void directionChangeRequested();
+    void applyAgainPressed();
 
 private:
     enum DirectionButtonState {
@@ -53,7 +55,7 @@ private:
     };
 
     void updateDirection(DirectionButtonState state);
-    void fillListButtons();
+    void fillListsCombobox();
 
     Ui::SimpleStyleWidget widget;
     KoStyleManager *m_styleManager;
@@ -61,6 +63,7 @@ private:
     QTextBlock m_currentBlock;
     TextTool *m_tool;
     DirectionButtonState m_directionButtonState;
+    KoListStyle::Style m_quickApplyListStyle;
 };
 
 #endif

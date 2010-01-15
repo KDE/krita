@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>264</width>
-    <height>107</height>
+    <width>255</width>
+    <height>281</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -57,6 +57,36 @@
        </property>
       </spacer>
      </item>
+     <item row="0" column="5">
+      <widget class="QToolButton" name="superscript">
+       <property name="autoRaise">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6" rowspan="2">
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::MinimumExpanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>1</width>
+         <height>10</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="7">
+      <widget class="QToolButton" name="decreaseIndent">
+       <property name="autoRaise">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="0">
       <widget class="QToolButton" name="bold">
        <property name="autoRaise">
@@ -86,60 +116,16 @@
       </widget>
      </item>
      <item row="1" column="5">
-      <widget class="QToolButton" name="superscript">
-       <property name="autoRaise">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="5">
-      <widget class="QToolButton" name="decreaseIndent">
-       <property name="autoRaise">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="7" rowspan="2">
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::MinimumExpanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>1</width>
-         <height>10</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="1" column="6">
       <widget class="QToolButton" name="subscript">
        <property name="autoRaise">
         <bool>false</bool>
        </property>
       </widget>
      </item>
-     <item row="0" column="6">
+     <item row="1" column="7">
       <widget class="QToolButton" name="increaseIndent">
        <property name="autoRaise">
         <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="9">
-      <widget class="OptionButton" name="bulletListButton">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="10">
-      <widget class="OptionButton" name="numberedListButton">
-       <property name="text">
-        <string>...</string>
        </property>
       </widget>
      </item>
@@ -183,27 +169,51 @@
     </layout>
    </item>
    <item>
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>List Style:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QComboBox" name="listType">
+       <property name="maxVisibleItems">
+        <number>15</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="listStyleAgain">
+       <property name="toolTip">
+        <string>Apply again</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>1</width>
-       <height>1</height>
+       <width>10</width>
+       <height>10</height>
       </size>
      </property>
     </spacer>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>OptionButton</class>
-   <extends>QToolButton</extends>
-   <header>dialogs/OptionButton.h</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>alignLeft</tabstop>
   <tabstop>alignCenter</tabstop>
@@ -213,10 +223,14 @@
   <tabstop>italic</tabstop>
   <tabstop>underline</tabstop>
   <tabstop>strikeOut</tabstop>
+  <tabstop>superscript</tabstop>
   <tabstop>subscript</tabstop>
+  <tabstop>decreaseIndent</tabstop>
+  <tabstop>increaseIndent</tabstop>
   <tabstop>textColor</tabstop>
   <tabstop>backgroundColor</tabstop>
   <tabstop>reversedText</tabstop>
+  <tabstop>listType</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007, 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2008, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,28 +19,26 @@
  */
 #include "SimpleStyleWidget.h"
 #include "TextTool.h"
-#include "OptionButton.h"
 #include "../ListItemsHelper.h"
 #include "../commands/ChangeListCommand.h"
 
 #include <KAction>
-#include <KoZoomHandler.h>
 #include <KoTextBlockData.h>
-#include <TextShape.h>
 #include <KoParagraphStyle.h>
-#include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextDocumentLayout.h>
+#include <KoZoomHandler.h>
 
 #include <KDebug>
 
 #include <QTextLayout>
-#include <QComboBox>
 
 SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent),
         m_blockSignals(false),
         m_tool(tool),
-        m_directionButtonState(Auto)
+        m_directionButtonState(Auto),
+        m_quickApplyListStyle(KoListStyle::DiscItem)
 {
     widget.setupUi(this);
     widget.bold->setDefaultAction(tool->action("format_bold"));
@@ -76,56 +75,55 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
         connect(size, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
     }
 
-    widget.bulletListButton->setIconSize(QSize(16,16));
-    widget.numberedListButton->setIconSize(QSize(16,16));
-    fillListButtons();
+    fillListsCombobox();
 
-    connect(widget.bulletListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
-    connect(widget.numberedListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
+    connect(widget.listType, SIGNAL(activated(int)), this, SLOT(listStyleChanged(int)));
     connect(widget.reversedText, SIGNAL(clicked()), this, SLOT(directionChangeRequested()));
+    connect(widget.listStyleAgain, SIGNAL(clicked()), this, SLOT(applyAgainPressed()));
 }
 
-void SimpleStyleWidget::fillListButtons() {
-    // we would maybe want to pass a language to this, to include localized list counting strategies.
-
+void SimpleStyleWidget::fillListsCombobox()
+{
+    widget.listType->clear();
     KoZoomHandler zoomHandler;
-    zoomHandler.setZoomAndResolution(55,100,100);
+    zoomHandler.setZoomAndResolution(160, 72, 72);
 
     KoInlineTextObjectManager itom;
     TextShape textShape(&itom);
     textShape.setSize(QSizeF(300, 100));
-    QTextCursor cursor (textShape.textShapeData()->document());
-    foreach(Lists::ListStyleItem item, Lists::genericListStyleItems()) {
-        QPixmap pm(16,16);
-        pm.fill(Qt::transparent);
-        QPainter p(&pm);
-        p.translate(0, -1.5);
-        p.setRenderHint(QPainter::Antialiasing);
-        if(item.style != KoListStyle::None) {
-            KoListStyle listStyle;
-            KoListLevelProperties llp = listStyle.levelProperties(1);
-            llp.setStyle(item.style);
-            if (KoListStyle::isNumberingStyle(item.style)) {
-                llp.setStartValue(1);
-                llp.setListItemSuffix(".");
-            }
-            listStyle.setLevelProperties(llp);
-            cursor.select(QTextCursor::Document);
-            cursor.insertText("--");
-            listStyle.applyStyle(cursor.block(),1);
-            cursor.insertText("\n--");
-            cursor.insertText("\n--");
-            dynamic_cast<KoTextDocumentLayout*> (textShape.textShapeData()->document()->documentLayout())->layout();
-
-            textShape.paintComponent(p, zoomHandler);
-            if(listStyle.isNumberingStyle(item.style)) {
-                widget.numberedListButton->addItem(pm, static_cast<int> (item.style));
-            }
-            else {
-                widget.bulletListButton->addItem(pm, static_cast<int> (item.style));
-            }
+    KoTextDocumentLayout *layouter = qobject_cast<KoTextDocumentLayout*> (textShape.textShapeData()->document()->documentLayout());
+    Q_ASSERT(layouter);
+    foreach(const Lists::ListStyleItem &item, Lists::genericListStyleItems()) {
+        if (item.style == KoListStyle::None) {
+            widget.listType->addItem(item.name, static_cast<int>(item.style));
+            continue;
         }
+        QPixmap pixmap(16, 16); // can we get the actual size from the style?
+        pixmap.fill(Qt::transparent);
+        QPainter p(&pixmap);
+        KoListStyle listStyle;
+        KoListLevelProperties llp = listStyle.levelProperties(1);
+        llp.setStyle(item.style);
+        if (KoListStyle::isNumberingStyle(item.style)) {
+            llp.setStartValue(1);
+            llp.setListItemSuffix(".");
+        } else {
+            p.setRenderHint(QPainter::Antialiasing);
+        }
+        listStyle.setLevelProperties(llp);
+        listStyle.applyStyle(textShape.textShapeData()->document()->begin(),1);
+        layouter->layout();
+        textShape.paintComponent(p, zoomHandler);
         p.end();
+
+        widget.listType->addItem(QIcon(pixmap), item.name, static_cast<int>(item.style));
+        if (item.style == m_quickApplyListStyle) {
+            widget.listStyleAgain->setIcon(QIcon(pixmap));
+        }
+    }
+    if (m_tool->isBidiDocument()) {
+        foreach(const Lists::ListStyleItem &item, Lists::otherListStyleItems())
+            widget.listType->addItem(item.name, static_cast<int>(item.style));
     }
 }
 
@@ -152,6 +150,36 @@ void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block)
         case Qt::RightToLeft: updateDirection(RTL); break;
         }
     }
+
+    //  rest of function is lists stuff. Don't add anything else down here.
+    fillListsCombobox();
+
+    QTextList *list = block.textList();
+    if (list == 0) {
+        widget.listType->setCurrentIndex(0); // the item 'NONE'
+        return;
+    }
+
+    // TODO get style override from the bf and use that for the QTextListFormat
+    //QTextBlockFormat bf = block.format();
+    //bf.intProperty(KoListStyle::StyleOverride));
+
+    QTextListFormat format = list->format();
+    int style = format.intProperty(QTextListFormat::ListStyle);
+    for (int i = 0; i < widget.listType->count(); i++) {
+        if (widget.listType->itemData(i).toInt() == style) {
+            widget.listType->setCurrentIndex(i);
+            return;
+        }
+    }
+
+    foreach(const Lists::ListStyleItem & item, Lists::otherListStyleItems()) {
+        if (item.style == style) {
+            widget.listType->addItem(item.name, static_cast<int>(item.style));
+            widget.listType->setCurrentIndex(widget.listType->count() - 1);
+            return;
+        }
+    }
 }
 
 void SimpleStyleWidget::setStyleManager(KoStyleManager *sm)
@@ -164,11 +192,16 @@ void SimpleStyleWidget::setCurrentFormat(const QTextCharFormat& format)
     Q_UNUSED(format);
 }
 
-void SimpleStyleWidget::listStyleChanged(int id)
+void SimpleStyleWidget::listStyleChanged(int row)
 {
     if (m_blockSignals) return;
 
-    m_tool->addCommand( new ChangeListCommand (m_tool->cursor(), static_cast<KoListStyle::Style> (id)));
+    KoListStyle::Style newStyle = static_cast<KoListStyle::Style>(widget.listType->itemData(row).toInt());
+    m_tool->addCommand(new ChangeListCommand(m_tool->cursor(), newStyle, 0 /* level*/));
+    if (m_quickApplyListStyle != newStyle && newStyle != KoListStyle::None) {
+        m_quickApplyListStyle = newStyle;
+        widget.listStyleAgain->setIcon(widget.listType->itemIcon(row));
+    }
     emit doneWithFocus();
 }
 
@@ -219,6 +252,18 @@ void SimpleStyleWidget::updateDirection(DirectionButtonState state)
         break;
     }
     widget.reversedText->setText(buttonText);
+}
+
+void SimpleStyleWidget::applyAgainPressed()
+{
+    // change combobox
+    for (int row=0; row < widget.listType->count(); ++row) {
+        if (widget.listType->itemData(row).toInt() == m_quickApplyListStyle) {
+            widget.listType->setCurrentIndex(row);
+            listStyleChanged(row);
+            break;
+        }
+    }
 }
 
 #include <SimpleStyleWidget.moc>

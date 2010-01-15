@@ -39,7 +39,7 @@ public:
     virtual ~RulerAssistantFactory();
     virtual QString id() const;
     virtual QString name() const;
-    virtual KisPaintingAssistant* paintingAssistant( const QRectF& imageArea ) const;
+    virtual KisPaintingAssistant* paintingAssistant(const QRectF& imageArea) const;
 };
 
 #endif

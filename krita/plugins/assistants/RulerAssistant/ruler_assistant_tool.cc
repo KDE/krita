@@ -31,7 +31,7 @@ RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QVaria
 {
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisRulerAssistantToolFactory(r));
-    
+
     KisPaintingAssistantFactoryRegistry::instance()->add(new RulerAssistantFactory);
 }
 

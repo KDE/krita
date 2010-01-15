@@ -132,8 +132,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
 QWidget *KisRulerAssistantTool::createOptionWidget()
 {
-    if(!m_optionsWidget)
-    {
+    if (!m_optionsWidget) {
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
         m_options.toolButton->setIcon(KIcon("document-new"));

@@ -102,15 +102,15 @@ RulerAssistantFactory::~RulerAssistantFactory()
 
 QString RulerAssistantFactory::id() const
 {
-  return "ruler";
+    return "ruler";
 }
 
 QString RulerAssistantFactory::name() const
 {
-  return i18n("Ruler");
+    return i18n("Ruler");
 }
 
-KisPaintingAssistant* RulerAssistantFactory::paintingAssistant( const QRectF& /*imageArea*/ ) const
+KisPaintingAssistant* RulerAssistantFactory::paintingAssistant(const QRectF& /*imageArea*/) const
 {
-  return new RulerAssistant;
+    return new RulerAssistant;
 }

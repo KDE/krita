@@ -58,7 +58,6 @@ SET ( textshape_SRCS
     dialogs/ChangeConfigureDialog.cpp
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
-    dialogs/modeltest.cpp
 
     commands/ChangeListCommand.cpp
     commands/ChangeListLevelCommand.cpp

@@ -20,7 +20,7 @@
 #ifndef PARAGRAPHINDENTSPACING_H
 #define PARAGRAPHINDENTSPACING_H
 
-#include "ui_ParagraphIndentSpacing.h"
+#include <ui_ParagraphIndentSpacing.h>
 
 #include <KoUnit.h>
 

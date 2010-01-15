@@ -21,7 +21,7 @@
 #ifndef FONTLAYOUTTAB_H
 #define FONTLAYOUTTAB_H
 
-#include "ui_FontLayoutTab.h"
+#include <ui_FontLayoutTab.h>
 
 class QButtonGroup;
 class KoCharacterStyle;

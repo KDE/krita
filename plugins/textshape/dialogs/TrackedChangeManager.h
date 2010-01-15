@@ -20,7 +20,7 @@
 #ifndef TRACKEDCHANGEMANAGER_H
 #define TRACKEDCHANGEMANAGER_H
 
-#include "ui_TrackedChangeManager.h"
+#include <ui_TrackedChangeManager.h>
 
 #include <kdialog.h>
 

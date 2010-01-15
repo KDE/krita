@@ -20,7 +20,7 @@
 #ifndef PARAGRAPHGENERAL_H
 #define PARAGRAPHGENERAL_H
 
-#include "ui_ParagraphGeneral.h"
+#include <ui_ParagraphGeneral.h>
 
 #include <QWidget>
 #include <QList>

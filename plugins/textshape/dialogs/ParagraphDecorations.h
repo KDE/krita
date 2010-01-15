@@ -21,7 +21,7 @@
 #ifndef FONTDECORATIONS_H
 #define FONTDECORATIONS_H
 
-#include "ui_ParagraphDecorations.h"
+#include <ui_ParagraphDecorations.h>
 
 #include <KoParagraphStyle.h>
 

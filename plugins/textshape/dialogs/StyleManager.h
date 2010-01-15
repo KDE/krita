@@ -20,7 +20,7 @@
 #ifndef STYLEMANAGER_H
 #define STYLEMANAGER_H
 
-#include "ui_StyleManager.h"
+#include <ui_StyleManager.h>
 
 #include <QWidget>
 

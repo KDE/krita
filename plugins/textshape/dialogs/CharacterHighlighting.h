@@ -22,7 +22,7 @@
 #ifndef CHARACTERHIGHLIGHTING_H
 #define CHARACTERHIGHLIGHTING_H
 
-#include "ui_CharacterHighlighting.h"
+#include <ui_CharacterHighlighting.h>
 
 #include "KoCharacterStyle.h"
 

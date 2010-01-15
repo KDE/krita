@@ -33,7 +33,6 @@
 #include <QTextTable>
 #include <QTextLine>
 #include <QPainter>
-#include <QDebug>
 #include <QRectF>
 #include <QPointF>
 

@@ -20,7 +20,7 @@
 #ifndef PARAGRAPHLAYOUT_H
 #define PARAGRAPHLAYOUT_H
 
-#include "ui_ParagraphLayout.h"
+#include <ui_ParagraphLayout.h>
 
 #include <QWidget>
 

@@ -21,7 +21,7 @@
 #ifndef FONTDECORATIONS_H
 #define FONTDECORATIONS_H
 
-#include "ui_FontDecorations.h"
+#include <ui_FontDecorations.h>
 
 #include <KoCharacterStyle.h>
 

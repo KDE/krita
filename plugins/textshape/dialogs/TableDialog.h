@@ -20,7 +20,7 @@
 #ifndef TABLEDIALOG_H
 #define TABLEDIALOG_H
 
-#include "ui_TableDialog.h"
+#include <ui_TableDialog.h>
 
 #include <KDialog>
 

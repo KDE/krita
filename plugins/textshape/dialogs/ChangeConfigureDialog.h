@@ -35,7 +35,7 @@ class ColorDisplayLabel:public QLabel
         QColor labelColor;
 };
 
-#include "ui_ChangeConfigureDialog.h"
+#include <ui_ChangeConfigureDialog.h>
 
 class ChangeConfigureDialog:public QDialog
 {

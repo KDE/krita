@@ -20,7 +20,7 @@
 #ifndef NEWSTYLEWIDGET_H
 #define NEWSTYLEWIDGET_H
 
-#include "ui_NewStyleWidget.h"
+#include <ui_NewStyleWidget.h>
 
 #include <QWidget>
 

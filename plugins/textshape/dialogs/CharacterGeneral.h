@@ -20,7 +20,7 @@
 #ifndef CHARACTERGENERAL_H
 #define CHARACTERGENERAL_H
 
-#include "ui_CharacterGeneral.h"
+#include <ui_CharacterGeneral.h>
 
 #include <QWidget>
 

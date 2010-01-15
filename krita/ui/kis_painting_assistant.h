@@ -98,13 +98,16 @@ public:
     virtual ~KisPaintingAssistantFactory();
     virtual QString id() const = 0;
     virtual QString name() const = 0;
-    virtual KisPaintingAssistant* paintingAssistant( const QRectF& imageArea ) = 0;
+    virtual KisPaintingAssistant* paintingAssistant( const QRectF& imageArea ) const = 0;
 };
 
-class KRITAUI_EXPORT KisPaintingAssistantFactoryRegistry : public KoGenericRegistry<KisPaintingAssistant*>
+class KRITAUI_EXPORT KisPaintingAssistantFactoryRegistry : public KoGenericRegistry<KisPaintingAssistantFactory*>
 {
-  public:
     KisPaintingAssistantFactoryRegistry();
+  public:
+    static KisPaintingAssistantFactoryRegistry* instance();
+  private:
+    static KisPaintingAssistantFactoryRegistry* s_instance;
 };
 
 #endif

@@ -22,7 +22,7 @@
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "KoToolRegistry.h"
 
@@ -37,11 +37,11 @@
 #include "kis_tool_select_path.h"
 #include "kis_tool_select_similar.h"
 
-typedef KGenericFactory<SelectionTools> SelectionToolsFactory;
-K_EXPORT_COMPONENT_FACTORY(kritaselectiontools, SelectionToolsFactory("krita"))
+K_PLUGIN_FACTORY(SelectionToolsFactory, registerPlugin<SelectionTools>();)
+K_EXPORT_PLUGIN(SelectionToolsFactory("krita"))
 
 
-SelectionTools::SelectionTools(QObject *parent, const QStringList &)
+SelectionTools::SelectionTools(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(SelectionToolsFactory::componentData());

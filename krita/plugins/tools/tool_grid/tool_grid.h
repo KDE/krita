@@ -18,13 +18,14 @@
 #ifndef _GRID_H_
 #define _GRID_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class GridPlugin : public QObject
 {
     Q_OBJECT
 public:
-    GridPlugin(QObject *parent, const QStringList &);
+    GridPlugin(QObject *parent, const QVariantList &);
     virtual ~GridPlugin();
 };
 

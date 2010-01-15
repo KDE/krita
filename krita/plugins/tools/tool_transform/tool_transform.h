@@ -19,7 +19,8 @@
 #ifndef TOOL_TRANSFORM_H_
 #define TOOL_TRANSFORM_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A module that provides a transform tool.
@@ -28,7 +29,7 @@ class ToolTransform : public QObject
 {
     Q_OBJECT
 public:
-    ToolTransform(QObject *parent, const QStringList &);
+    ToolTransform(QObject *parent, const QVariantList &);
     virtual ~ToolTransform();
 };
 

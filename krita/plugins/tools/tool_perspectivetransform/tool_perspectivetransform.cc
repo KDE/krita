@@ -31,7 +31,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_global.h>
 #include <kis_types.h>
@@ -40,12 +40,11 @@
 
 #include "kis_tool_perspectivetransform.h"
 
+K_PLUGIN_FACTORY(ToolPerspectiveTransformFactory, registerPlugin<ToolPerspectiveTransform>();)
+K_EXPORT_PLUGIN(ToolPerspectiveTransformFactory("krita"))
 
-typedef KGenericFactory<ToolPerspectiveTransform> ToolPerspectiveTransformFactory;
-K_EXPORT_COMPONENT_FACTORY(kritatoolperspectivetransform, ToolPerspectiveTransformFactory("krita"))
 
-
-ToolPerspectiveTransform::ToolPerspectiveTransform(QObject *parent, const QStringList &)
+ToolPerspectiveTransform::ToolPerspectiveTransform(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(ToolPerspectiveTransformFactory::componentData());

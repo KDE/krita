@@ -32,17 +32,17 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_global.h>
 #include <kis_types.h>
 #include <KoToolRegistry.h>
 
-typedef KGenericFactory<ToolCrop> ToolCropFactory;
-K_EXPORT_COMPONENT_FACTORY(kritatoolcrop, ToolCropFactory("krita"))
+K_PLUGIN_FACTORY(ToolCropFactory, registerPlugin<ToolCrop>();)
+K_EXPORT_PLUGIN(ToolCropFactory("krita"))
 
 
-ToolCrop::ToolCrop(QObject *parent, const QStringList &)
+ToolCrop::ToolCrop(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(ToolCropFactory::componentData());

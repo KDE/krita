@@ -30,7 +30,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_global.h>
 #include <kis_types.h>
@@ -39,12 +39,11 @@
 
 #include "kis_tool_transform.h"
 
+K_PLUGIN_FACTORY(ToolTransformFactory, registerPlugin<ToolTransform>();)
+K_EXPORT_PLUGIN(ToolTransformFactory("krita"))
 
-typedef KGenericFactory<ToolTransform> ToolTransformFactory;
-K_EXPORT_COMPONENT_FACTORY(kritatooltransform, ToolTransformFactory("krita"))
 
-
-ToolTransform::ToolTransform(QObject *parent, const QStringList &)
+ToolTransform::ToolTransform(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(ToolTransformFactory::componentData());

@@ -19,7 +19,8 @@
 #ifndef TOOL_CROP_H_
 #define TOOL_CROP_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A module that provides a crop tool.
@@ -28,7 +29,7 @@ class ToolCrop : public QObject
 {
     Q_OBJECT
 public:
-    ToolCrop(QObject *parent, const QStringList &);
+    ToolCrop(QObject *parent, const QVariantList &);
     virtual ~ToolCrop();
 
 };

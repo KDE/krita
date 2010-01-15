@@ -30,7 +30,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_global.h>
 #include <kis_types.h>
@@ -39,12 +39,11 @@
 
 #include "kis_tool_polyline.h"
 
+K_PLUGIN_FACTORY(ToolPolylineFactory, registerPlugin<ToolPolyline>();)
+K_EXPORT_PLUGIN(ToolPolylineFactory("krita"))
 
-typedef KGenericFactory<ToolPolyline> ToolPolylineFactory;
-K_EXPORT_COMPONENT_FACTORY(kritatoolpolyline, ToolPolylineFactory("krita"))
 
-
-ToolPolyline::ToolPolyline(QObject *parent, const QStringList &)
+ToolPolyline::ToolPolyline(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(ToolPolylineFactory::componentData());

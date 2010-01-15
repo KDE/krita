@@ -30,7 +30,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <kis_global.h>
@@ -40,12 +40,11 @@
 
 #include "kis_tool_star.h"
 
+K_PLUGIN_FACTORY(ToolStarFactory, registerPlugin<ToolStar>();)
+K_EXPORT_PLUGIN(ToolStarFactory("krita"))
 
-typedef KGenericFactory<ToolStar> ToolStarFactory;
-K_EXPORT_COMPONENT_FACTORY(kritatoolstar, ToolStarFactory("krita"))
 
-
-ToolStar::ToolStar(QObject *parent, const QStringList &)
+ToolStar::ToolStar(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(ToolStarFactory::componentData());

@@ -29,21 +29,17 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_global.h>
 #include <kis_types.h>
 #include <KoToolRegistry.h>
 
+K_PLUGIN_FACTORY(GridFactory, registerPlugin<GridPlugin>();)
+K_EXPORT_PLUGIN(GridFactory("krita"))
 
 
-
-
-typedef KGenericFactory<GridPlugin> GridFactory;
-K_EXPORT_COMPONENT_FACTORY(kritatoolgrid, GridFactory("krita"))
-
-
-GridPlugin::GridPlugin(QObject *parent, const QStringList &)
+GridPlugin::GridPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(GridFactory::componentData());

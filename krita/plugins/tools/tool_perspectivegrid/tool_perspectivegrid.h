@@ -18,7 +18,8 @@
 #ifndef TOOL_PERSPECTIVE_GRID_H_
 #define TOOL_PERSPECTIVE_GRID_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A module that provides a tool for editing the perspective grid.
@@ -27,7 +28,7 @@ class ToolPerspectiveGrid : public QObject
 {
     Q_OBJECT
 public:
-    ToolPerspectiveGrid(QObject *parent, const QStringList &);
+    ToolPerspectiveGrid(QObject *parent, const QVariantList &);
     virtual ~ToolPerspectiveGrid();
 
 };

@@ -19,7 +19,8 @@
 #ifndef TOOL_DYNA_H_
 #define TOOL_DYNA_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A module that provides a polygon tool.
@@ -30,7 +31,7 @@ class ToolDyna : public QObject
 
 public:
 
-    ToolDyna(QObject *parent, const QStringList &);
+    ToolDyna(QObject *parent, const QVariantList &);
     virtual ~ToolDyna();
 
 };

@@ -19,7 +19,8 @@
 #ifndef TOOL_STAR_H_
 #define TOOL_STAR_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A module that provides a star tool.
@@ -28,7 +29,7 @@ class ToolStar : public QObject
 {
     Q_OBJECT
 public:
-    ToolStar(QObject *parent, const QStringList &);
+    ToolStar(QObject *parent, const QVariantList &);
     virtual ~ToolStar();
 
 };

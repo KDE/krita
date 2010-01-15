@@ -22,7 +22,7 @@
 #include <QStringList>
 
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_tool.h>
 #include <KoToolRegistry.h>
@@ -40,11 +40,11 @@
 #include "kis_tool_path.h"
 #include "kis_tool_move.h"
 
-typedef KGenericFactory<DefaultTools> DefaultToolsFactory;
-K_EXPORT_COMPONENT_FACTORY(kritadefaulttools, DefaultToolsFactory("krita"))
+K_PLUGIN_FACTORY(DefaultToolsFactory, registerPlugin<DefaultTools>();)
+K_EXPORT_PLUGIN(DefaultToolsFactory("krita"))
 
 
-DefaultTools::DefaultTools(QObject *parent, const QStringList &)
+DefaultTools::DefaultTools(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     KoToolRegistry * r = KoToolRegistry::instance();

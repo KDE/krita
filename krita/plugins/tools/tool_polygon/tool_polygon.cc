@@ -31,7 +31,7 @@
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kis_paint_device.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_global.h>
 #include <kis_types.h>
@@ -39,11 +39,11 @@
 
 #include "kis_tool_polygon.h"
 
-typedef KGenericFactory<ToolPolygon> ToolPolygonFactory;
-K_EXPORT_COMPONENT_FACTORY(kritatoolpolygon, ToolPolygonFactory("krita"))
+K_PLUGIN_FACTORY(ToolPolygonFactory, registerPlugin<ToolPolygon>();)
+K_EXPORT_PLUGIN(ToolPolygonFactory("krita"))
 
 
-ToolPolygon::ToolPolygon(QObject *parent, const QStringList &)
+ToolPolygon::ToolPolygon(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(ToolPolygonFactory::componentData());

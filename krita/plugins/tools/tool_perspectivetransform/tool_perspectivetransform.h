@@ -18,7 +18,8 @@
 #ifndef TOOL_PERSPECTIVE_TRANSFORM_H_
 #define TOOL_PERSPECTIVE_TRANSFORM_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A module that provides a tool for doinge perspective transformation.
@@ -27,7 +28,7 @@ class ToolPerspectiveTransform : public QObject
 {
     Q_OBJECT
 public:
-    ToolPerspectiveTransform(QObject *parent, const QStringList &);
+    ToolPerspectiveTransform(QObject *parent, const QVariantList &);
     virtual ~ToolPerspectiveTransform();
 
 };

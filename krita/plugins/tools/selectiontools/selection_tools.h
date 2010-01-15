@@ -19,7 +19,8 @@
 #ifndef SELECTION_TOOLS_H_
 #define SELECTION_TOOLS_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A module wrapper around Krita's selection tools.
@@ -35,7 +36,7 @@ class SelectionTools : public QObject
 {
     Q_OBJECT
 public:
-    SelectionTools(QObject *parent, const QStringList &);
+    SelectionTools(QObject *parent, const QVariantList &);
     virtual ~SelectionTools();
 
 };

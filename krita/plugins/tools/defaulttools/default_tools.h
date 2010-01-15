@@ -20,6 +20,7 @@
 #define DEFAULT_TOOLS_H_
 
 #include <QObject>
+#include <QVariant>
 
 /**
  * A module wrapper around Krita's default tools.
@@ -35,7 +36,7 @@ class DefaultTools : public QObject
 {
     Q_OBJECT
 public:
-    DefaultTools(QObject *parent, const QStringList &);
+    DefaultTools(QObject *parent, const QVariantList &);
     virtual ~DefaultTools();
 
 };

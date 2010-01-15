@@ -29,7 +29,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <kis_global.h>
 #include <kis_types.h>
@@ -41,10 +41,10 @@
 #include "kis_tool_moutline.h"
 //#include "kis_tool_example.h"
 
-typedef KGenericFactory<ToolCurves> ToolCurvesFactory;
-K_EXPORT_COMPONENT_FACTORY(kritatoolcurves, ToolCurvesFactory("krita"))
+K_PLUGIN_FACTORY(ToolCurvesFactory, registerPlugin<ToolCurves>();)
+K_EXPORT_PLUGIN(ToolCurvesFactory("krita"))
 
-ToolCurves::ToolCurves(QObject *parent, const QStringList &)
+ToolCurves::ToolCurves(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(ToolCurvesFactory::componentData());

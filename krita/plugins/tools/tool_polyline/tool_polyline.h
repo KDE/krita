@@ -19,7 +19,8 @@
 #ifndef TOOL_POLYLINE_H_
 #define TOOL_POLYLINE_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A module that provides a polyline tool.
@@ -28,7 +29,7 @@ class ToolPolyline : public QObject
 {
     Q_OBJECT
 public:
-    ToolPolyline(QObject *parent, const QStringList &);
+    ToolPolyline(QObject *parent, const QVariantList &);
     virtual ~ToolPolyline();
 };
 

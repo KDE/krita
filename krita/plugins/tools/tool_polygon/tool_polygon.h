@@ -19,7 +19,8 @@
 #ifndef TOOL_POLYGON_H_
 #define TOOL_POLYGON_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 /**
  * A module that provides a polygon tool.
@@ -30,7 +31,7 @@ class ToolPolygon : public QObject
 
 public:
 
-    ToolPolygon(QObject *parent, const QStringList &);
+    ToolPolygon(QObject *parent, const QVariantList &);
     virtual ~ToolPolygon();
 
 };

@@ -21,13 +21,14 @@
 #ifndef TOOL_CURVES_H
 #define TOOL_CURVES_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariant>
 
 class ToolCurves : public QObject
 {
     Q_OBJECT
 public:
-    ToolCurves(QObject *parent, const QStringList &);
+    ToolCurves(QObject *parent, const QVariantList &);
     virtual ~ToolCurves();
 
 };

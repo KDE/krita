@@ -6,7 +6,7 @@ set(kritarulerassistanttool_PART_SRCS
     kis_ruler_assistant_tool.cc
     )
 
-# kde4_add_ui_files(kritarulerassistanttool_PART_SRCS RulerAssistantToolOptions.ui )
+kde4_add_ui_files(kritarulerassistanttool_PART_SRCS AssistantsToolOptions.ui )
 
 kde4_add_plugin(kritarulerassistanttool ${kritarulerassistanttool_PART_SRCS})
 

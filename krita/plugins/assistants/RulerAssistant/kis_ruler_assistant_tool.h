@@ -22,6 +22,7 @@ class RulerAssistant;
 #include <kis_tool.h>
 #include <KoToolFactory.h>
 #include "kis_painting_assistant.h"
+#include "ui_AssistantsToolOptions.h"
 
 class RulerDecoration;
 class KisCanvas2;
@@ -41,6 +42,7 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
+    virtual QWidget *createOptionWidget();
 public slots:
     virtual void activate(bool temp = false);
     void deactivate();
@@ -51,9 +53,10 @@ protected:
 
 protected:
     KisCanvas2* m_canvas;
-    QWidget* m_widget;
     QList<KisPaintingAssistantHandleSP> m_handles;
     KisPaintingAssistantHandleSP m_handleDrag;
+    Ui::AssistantsToolOptions m_options;
+    QWidget* m_optionsWidget;
 };
 
 

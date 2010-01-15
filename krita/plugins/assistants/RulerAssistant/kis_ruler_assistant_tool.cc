@@ -35,11 +35,10 @@
 #include <kis_painting_assistants_manager.h>
 
 KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
-        : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas))
+        : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)), m_optionsWidget(0)
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_rulerassistanttool");
-    m_widget = 0;
 }
 
 KisRulerAssistantTool::~KisRulerAssistantTool()
@@ -131,5 +130,15 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     }
 }
 
+QWidget *KisRulerAssistantTool::createOptionWidget()
+{
+    if(!m_optionsWidget)
+    {
+        m_optionsWidget = new QWidget;
+        m_options.setupUi(m_optionsWidget);
+        m_options.toolButton->setIcon(KIcon("document-new"));
+    }
+    return m_optionsWidget;
+}
 
 #include "kis_ruler_assistant_tool.moc"

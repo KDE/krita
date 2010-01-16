@@ -60,6 +60,8 @@ public:
 
     Private() {
         modified = QTime::currentTime();
+        cachedBounds.timeStamp = QTime::currentTime();
+        cachedBounds.bounds = QRect(0, 0, 0, 0);
     }
 
     KisNodeWSP parent;
@@ -70,6 +72,12 @@ public:
     qint32 nChannels;
 
     QTime modified;
+
+    struct ExactBounds {
+        QTime timeStamp;
+        QRect bounds;
+    };
+    ExactBounds cachedBounds;
 
     struct Thumbnail {
         QTime timeStamp;
@@ -240,6 +248,10 @@ void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) con
 
 QRect KisPaintDevice::exactBounds() const
 {
+    if (m_d->cachedBounds.timeStamp > m_d->modified) {
+        return m_d->cachedBounds.bounds;
+    }
+
     // Solution n°2
     qint32  x, y, w, h, boundX2, boundY2, boundW2, boundH2;
     QRect rc = extent();
@@ -320,7 +332,9 @@ QRect KisPaintDevice::exactBounds() const
             if (found) break;
         }
     }
-    return QRect(boundX2, boundY2, boundW2, boundH2);
+    m_d->cachedBounds.bounds = QRect(boundX2, boundY2, boundW2, boundH2);
+    m_d->cachedBounds.timeStamp = QTime::currentTime();
+    return m_d->cachedBounds.bounds;
 }
 
 

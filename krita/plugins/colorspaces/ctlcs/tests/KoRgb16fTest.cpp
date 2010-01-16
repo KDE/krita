@@ -25,6 +25,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoCompositeOp.h>
+#include <KoColorModelStandardIds.h>
 
 template<typename _T_>
 void randomizator(typename KoRgbTraits<_T_>::Pixel& p)
@@ -56,7 +57,7 @@ namespace QTest
 
 void KoRgb16fTest::testConversion()
 {
-    const KoColorSpace* rgb16f = KoColorSpaceRegistry::instance()->colorSpace("RgbAF16", 0);
+    const KoColorSpace* rgb16f = KoColorSpaceRegistry::instance()->colorSpace( RGBAColorModelID.id(), Float16BitsColorDepthID.id(), 0);
     QVERIFY(rgb16f);
     KoRgbTraits<half>::Pixel p16f;
     quint8* p16fPtr = reinterpret_cast<quint8*>(&p16f);

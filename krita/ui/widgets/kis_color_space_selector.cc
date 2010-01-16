@@ -83,7 +83,7 @@ void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
 const KoColorSpace* KisColorSpaceSelector::currentColorSpace()
 {
     return KoColorSpaceRegistry::instance()->colorSpace(
-               KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem())
+               d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem()
                , d->colorSpaceSelector->cmbProfile->itemHighlighted());
 }
 

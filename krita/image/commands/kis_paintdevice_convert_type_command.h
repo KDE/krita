@@ -48,12 +48,14 @@ public:
 
         m_paintDevice = paintDevice;
         m_beforeData = beforeData;
-        m_beforeColorSpace = beforeColorSpace->id();
+        m_beforeColorSpaceModelId = beforeColorSpace->colorModelId().id();
+        m_beforeColorSpaceDepthId = beforeColorSpace->colorDepthId().id();
         if (beforeColorSpace->profile()) {
             m_beforeProfileName = beforeColorSpace->profile()->name();
         }
         m_afterData = afterData;
-        m_afterColorSpace = afterColorSpace->id();
+        m_afterColorSpaceModelId = afterColorSpace->colorModelId().id();
+        m_afterColorSpaceDepthId = afterColorSpace->colorDepthId().id();
         if (afterColorSpace->profile()) {
             m_afterProfileName = afterColorSpace->profile()->name();
         }
@@ -71,16 +73,16 @@ public:
             m_firstRedo = false;
             return;
         }
-        dbgImage << m_paintDevice << m_beforeColorSpace << "to" << m_afterColorSpace;
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(m_afterColorSpace, m_afterProfileName);
+        dbgImage << m_paintDevice << m_beforeColorSpaceModelId << m_beforeColorSpaceDepthId << "to" << m_afterColorSpaceModelId << m_afterColorSpaceDepthId;
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(m_afterColorSpaceModelId, m_afterColorSpaceDepthId, m_afterProfileName);
         m_paintDevice->setDataManager(m_afterData, cs);
         m_paintDevice->setDirty();
     }
 
     virtual void undo() {
 
-        dbgImage << m_paintDevice << m_afterColorSpace << "to" << m_beforeColorSpace ;
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(m_beforeColorSpace, m_beforeProfileName);
+        dbgImage << m_paintDevice << m_afterColorSpaceModelId << m_afterColorSpaceDepthId << "to" << m_beforeColorSpaceModelId << m_beforeColorSpaceDepthId ;
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(m_beforeColorSpaceModelId, m_beforeColorSpaceDepthId, m_beforeProfileName);
         m_paintDevice->setDataManager(m_beforeData, cs);
         m_paintDevice->setDirty();
     }
@@ -92,11 +94,13 @@ private:
     KisPaintDeviceSP m_paintDevice;
 
     KisDataManagerSP m_beforeData;
-    QString m_beforeColorSpace;
+    QString m_beforeColorSpaceModelId;
+    QString m_beforeColorSpaceDepthId;
     QString m_beforeProfileName;
 
     KisDataManagerSP m_afterData;
-    QString m_afterColorSpace;
+    QString m_afterColorSpaceModelId;
+    QString m_afterColorSpaceDepthId;
     QString m_afterProfileName;
 };
 

@@ -631,7 +631,7 @@ void KisImage::setProfile(const KoColorProfile *profile)
 
     kDebug() << profile;
 
-    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->id(), profile);
+    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (dstCs) {
 
         lock();

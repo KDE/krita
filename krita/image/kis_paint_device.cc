@@ -50,6 +50,7 @@
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
 #include "kis_repeat_iterators_pixel.h"
+#include <KoColorModelStandardIds.h>
 
 class KisPaintDevice::Private
 {
@@ -429,7 +430,7 @@ void KisPaintDevice::setProfile(const KoColorProfile * profile)
     if (profile == 0) return;
 
     const KoColorSpace * dstSpace =
-        KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->id(), profile);
+        KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (dstSpace)
         m_d->colorSpace = dstSpace->clone();
     emit profileChanged(profile);
@@ -458,7 +459,7 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const QString &srcP
     } else {
         quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
-        ->colorSpace("RGBA", srcProfileName)
+        ->colorSpace( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
         ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height());
 
         writeBytes(dstData, offsetX, offsetY, image.width(), image.height());

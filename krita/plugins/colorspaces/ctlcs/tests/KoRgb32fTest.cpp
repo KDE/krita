@@ -25,6 +25,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoCompositeOp.h>
+#include <KoColorModelStandardIds.h>
 
 template<typename _T_>
 void randomizator(typename KoRgbTraits<_T_>::Pixel& p)
@@ -37,7 +38,7 @@ void randomizator(typename KoRgbTraits<_T_>::Pixel& p)
 
 void KoRgb32fTest::testConversion()
 {
-    const KoColorSpace* rgb32f = KoColorSpaceRegistry::instance()->colorSpace("RgbAF32", 0);
+    const KoColorSpace* rgb32f = KoColorSpaceRegistry::instance()->colorSpace( RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
     QVERIFY(rgb32f);
     KoRgbTraits<float>::Pixel p32f;
     quint8* p32fPtr = reinterpret_cast<quint8*>(&p32f);

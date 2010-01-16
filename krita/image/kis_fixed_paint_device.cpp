@@ -19,6 +19,7 @@
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
+#include <KoColorModelStandardIds.h>
 
 KisFixedPaintDevice::KisFixedPaintDevice(const KoColorSpace* colorSpace)
         : m_colorSpace(colorSpace)
@@ -104,7 +105,7 @@ void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString 
         memcpy(data(), image.bits(), image.width() * image.height() * pixelSize());
     } else {
         KoColorSpaceRegistry::instance()
-        ->colorSpace("RGBA", srcProfileName)
+        ->colorSpace( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
         ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height());
     }
 }

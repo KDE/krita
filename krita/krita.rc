@@ -65,11 +65,11 @@
 
 
 <Menu name="Image"><text>&amp;Image</text>
-  <Action name="img_properties"/>
+  <Action name="image_properties"/>
   <Action name="duplicate_image"/>
   <Separator/>
   <DefineGroup name="canvas_resize_merge" append="canvas_resize_merge"/>
-  <Action name="resizeimgtolayer"/>
+  <Action name="resizeimagetolayer"/>
   <Separator/>
   <DefineGroup name="image_transform_merge" append="image_transform_merge"/>
 </Menu>

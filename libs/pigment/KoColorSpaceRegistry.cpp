@@ -174,6 +174,15 @@ const KoColorSpace *  KoColorSpaceRegistry::colorSpace(const KoID &csID, const Q
     return colorSpace(csID.id(), profileName);
 }
 
+const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString & colorModelId, const QString & colorDepthId, const KoColorProfile *profile)
+{
+    return colorSpace(colorSpaceId(colorModelId, colorDepthId), profile);
+}
+
+const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString & colorModelId, const QString & colorDepthId, const QString &profileName)
+{
+    return colorSpace(colorSpaceId(colorModelId, colorDepthId), profileName);
+}
 
 QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoColorSpaceFactory * csf)
 {

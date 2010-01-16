@@ -162,6 +162,21 @@ public:
     const KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profileName);
 
     /**
+     * Return a colorspace that works with the parameter profile.
+     * @param colorSpaceId the ID string of the colorspace that you want to have returned
+     * @param profile the profile be combined with the colorspace
+     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
+     */
+    const KoColorSpace * colorSpace(const QString & colorModelId, const QString & colorDepthId, const KoColorProfile *profile);
+
+    /**
+     * Return a colorspace that works with the parameter profile.
+     * @param profileName the name of the KoColorProfile to be combined with the colorspace
+     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
+     */
+    const KoColorSpace * colorSpace(const QString & colorModelId, const QString & colorDepthId, const QString &profileName);
+
+    /**
      * Return the id of the colorspace that have the defined colorModelId with colorDepthId.
      * @param colorModelId id of the color model
      * @param colorDepthId id of the color depth

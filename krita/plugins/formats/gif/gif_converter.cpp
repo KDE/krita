@@ -90,6 +90,7 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
     fillPixel[0] = color.Blue;
     fillPixel[1] = color.Green;
     fillPixel[2] = color.Red;
+
     if (gifFile->SBackGroundColor == m_transparentColorIndex) {
         fillPixel[3] = OPACITY_TRANSPARENT;
     }
@@ -129,8 +130,8 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
 
                     quint8* dst = accessor.rawData();
                     KoRgbTraits<quint8>::setRed(dst, color.Red);
-                    KoRgbTraits<quint8>::setGreen(dst, color.Blue);
-                    KoRgbTraits<quint8>::setBlue(dst, color.Red);
+                    KoRgbTraits<quint8>::setGreen(dst, color.Green);
+                    KoRgbTraits<quint8>::setBlue(dst, color.Blue);
                     if (colorIndex == m_transparentColorIndex) {
                         layer->colorSpace()->setAlpha(dst, OPACITY_TRANSPARENT, 1);
                     }
@@ -168,8 +169,8 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
 
                 quint8* dst = accessor.rawData();
                 KoRgbTraits<quint8>::setRed(dst, color.Red);
-                KoRgbTraits<quint8>::setGreen(dst, color.Blue);
-                KoRgbTraits<quint8>::setBlue(dst, color.Red);
+                KoRgbTraits<quint8>::setGreen(dst, color.Green);
+                KoRgbTraits<quint8>::setBlue(dst, color.Blue);
                 if (colorIndex == m_transparentColorIndex) {
                     layer->colorSpace()->setAlpha(dst, OPACITY_TRANSPARENT, 1);
                 }

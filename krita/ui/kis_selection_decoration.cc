@@ -119,8 +119,6 @@ void KisSelectionDecoration::selectionChanged()
 
 void KisSelectionDecoration::selectionTimerEvent()
 {
-    dbgKrita << "selection timer";
-
     KisSelectionSP selection = view()->selection();
     if (!selection) return;
 

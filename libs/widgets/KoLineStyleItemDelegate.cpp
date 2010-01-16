@@ -35,7 +35,7 @@ void KoLineStyleItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
         painter->fillRect(option.rect, option.palette.highlight());
 
     QPen pen = index.data(Qt::DecorationRole).value<QPen>();
-
+    pen.setBrush(option.palette.text()); // use the view-specific palette; the model hardcodes this to black
     painter->setPen(pen);
     painter->drawLine(option.rect.left(), option.rect.center().y(), option.rect.right(), option.rect.center().y());
 

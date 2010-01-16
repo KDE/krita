@@ -53,18 +53,10 @@ DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    m_page->cmbColorSpaces->setIDList(KoColorSpaceRegistry::instance()->listKeys());
-
-    fillCmbDestProfile(m_page->cmbColorSpaces->currentItem());
-
     m_intentButtonGroup.addButton(m_page->radioAbsoluteColorimetric, KoColorConversionTransformation::IntentAbsoluteColorimetric);
     m_intentButtonGroup.addButton(m_page->radioPerceptual, KoColorConversionTransformation::IntentPerceptual);
     m_intentButtonGroup.addButton(m_page->radioRelativeColorimetric, KoColorConversionTransformation::IntentRelativeColorimetric);
     m_intentButtonGroup.addButton(m_page->radioSaturation, KoColorConversionTransformation::IntentSaturation);
-
-    connect(m_page->cmbColorSpaces, SIGNAL(activated(const KoID &)),
-            this, SLOT(fillCmbDestProfile(const KoID &)));
-
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(okClicked()));
@@ -82,19 +74,5 @@ void DlgColorSpaceConversion::okClicked()
 {
     accept();
 }
-
-
-void DlgColorSpaceConversion::fillCmbDestProfile(const KoID & s)
-{
-    m_page->cmbDestProfile->clear();
-
-    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(s);
-
-    foreach(const KoColorProfile *profile, profileList) {
-        m_page->cmbDestProfile->addSqueezedItem(profile->name());
-
-    }
-}
-
 
 #include "dlg_colorspaceconversion.moc"

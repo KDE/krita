@@ -58,7 +58,6 @@ public:
 public slots:
 
     void okClicked();
-    void fillCmbDestProfile(const KoID &);
 };
 
 #endif // DLG_COLORSPACECONVERSION

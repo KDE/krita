@@ -61,6 +61,8 @@ KisSprayShapeOption::KisSprayShapeOption()
     connect(m_options->randomRotation, SIGNAL(toggled(bool)), m_options->randomWeightSPBox, SLOT(setEnabled(bool)));
     connect(m_options->followCursor, SIGNAL(toggled(bool)), m_options->followCursorWeightSPBox, SLOT(setEnabled(bool)));
     
+    setupBrushPreviewSignals();
+    
     setConfigurationPage(m_options);
 }
 

@@ -16,10 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_chalkop_option.h"
-#include <klocale.h>
-
-#include <QWidget>
-#include <QRadioButton>
 
 #include "ui_wdgchalkoptions.h"
 

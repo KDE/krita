@@ -22,7 +22,6 @@
 #include <kis_paintop_options_widget.h>
 
 #include "ui_wdgchalkoptions.h"
-#include "widgets/kis_popup_button.h"
 
 class KisPaintActionTypeOption;
 class KisChalkOpOption;

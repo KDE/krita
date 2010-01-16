@@ -50,6 +50,7 @@ extern "C" {
 
 #include "xcftools.h"
 #include "pixels.h"
+#include <KoColorModelStandardIds.h>
 
     extern struct Tile *
     getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
@@ -220,7 +221,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
             break;
         case GIMP_GRAY_IMAGE:
         case GIMP_GRAYA_IMAGE:
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", "");
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "");
             isRgbA = false;
             break;
         }

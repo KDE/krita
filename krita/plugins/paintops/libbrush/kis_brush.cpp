@@ -1119,7 +1119,7 @@ void KisBrush::generateBoundary() const
     int h = height();
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        dev = paintDevice(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), 1.0, 0.0, KisPaintInformation());
+        dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(), 1.0, 0.0, KisPaintInformation());
     } else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         dev = new KisFixedPaintDevice(cs);

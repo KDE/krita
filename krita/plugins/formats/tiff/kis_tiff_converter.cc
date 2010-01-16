@@ -50,17 +50,17 @@
 namespace
 {
 
-    QString getColorSpaceForColorType(uint16 sampletype, uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 &extrasamplescount, uint8 &destDepth)
+    QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 &extrasamplescount, uint8 &destDepth)
     {
         if (color_type == PHOTOMETRIC_MINISWHITE || color_type == PHOTOMETRIC_MINISBLACK) {
             if (nbchannels == 0) nbchannels = 1;
             extrasamplescount = nbchannels - 1; // FIX the extrasamples count in case of
             if (color_nb_bits <= 8) {
                 destDepth = 8;
-                return KoColorSpaceRegistry::instance()->colorSpaceId(GrayAColorModelID, Integer8BitsColorDepthID);
+                return QPair<QString, QString>(GrayAColorModelID.id(), Integer8BitsColorDepthID.id());
             } else {
                 destDepth = 16;
-                return KoColorSpaceRegistry::instance()->colorSpaceId(GrayAColorModelID, Integer16BitsColorDepthID);
+                return QPair<QString, QString>(GrayAColorModelID.id(), Integer16BitsColorDepthID.id());
             }
 
         } else if (color_type == PHOTOMETRIC_RGB  /*|| color_type == */) {
@@ -69,19 +69,19 @@ namespace
             if (sampletype == SAMPLEFORMAT_IEEEFP) {
                 if (color_nb_bits == 16) {
                     destDepth = 16;
-                    return KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Float16BitsColorDepthID);
+                    return QPair<QString, QString>(RGBAColorModelID.id(), Float16BitsColorDepthID.id());
                 } else if (color_nb_bits == 32) {
                     destDepth = 32;
-                    return KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Float32BitsColorDepthID);
+                    return QPair<QString, QString>(RGBAColorModelID.id(), Float32BitsColorDepthID.id());
                 }
-                return "";
+                return QPair<QString, QString>();
             } else {
                 if (color_nb_bits <= 8) {
                     destDepth = 8;
-                    return KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Integer8BitsColorDepthID);
+                    return QPair<QString, QString>(RGBAColorModelID.id(), Integer8BitsColorDepthID.id());
                 } else {
                     destDepth = 16;
-                    return KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Integer16BitsColorDepthID);
+                    return QPair<QString, QString>(RGBAColorModelID.id(), Integer16BitsColorDepthID.id());
                 }
             }
         } else if (color_type == PHOTOMETRIC_YCBCR) {
@@ -89,10 +89,10 @@ namespace
             extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
             if (color_nb_bits <= 8) {
                 destDepth = 8;
-                return KoColorSpaceRegistry::instance()->colorSpaceId(YCbCrAColorModelID, Integer8BitsColorDepthID);
+                return QPair<QString, QString>(YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id());
             } else {
                 destDepth = 16;
-                return KoColorSpaceRegistry::instance()->colorSpaceId(YCbCrAColorModelID, Integer16BitsColorDepthID);
+                return QPair<QString, QString>(YCbCrAColorModelID.id(), Integer16BitsColorDepthID.id());
             }
         } else if (color_type == PHOTOMETRIC_SEPARATED) {
             if (nbchannels == 0) nbchannels = 4;
@@ -115,30 +115,30 @@ namespace
                     dbgFile << "inknames are not defined !";
                     // To be able to read stupid adobe files, if there are no information about inks and four channels, then it's a CMYK file :
                     if (nbchannels - extrasamplescount != 4) {
-                        return "";
+                        return QPair<QString, QString>();
                     }
                 }
             }
             if (color_nb_bits <= 8) {
                 destDepth = 8;
-                return KoColorSpaceRegistry::instance()->colorSpaceId(CMYKAColorModelID, Integer8BitsColorDepthID);
+                return QPair<QString, QString>(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id());
             } else {
                 destDepth = 16;
-                return KoColorSpaceRegistry::instance()->colorSpaceId(CMYKAColorModelID, Integer16BitsColorDepthID);
+                return QPair<QString, QString>(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id());
             }
         } else if (color_type == PHOTOMETRIC_CIELAB || color_type == PHOTOMETRIC_ICCLAB) {
             destDepth = 16;
             if (nbchannels == 0) nbchannels = 3;
             extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
-            return KoColorSpaceRegistry::instance()->colorSpaceId(LABAColorModelID, Integer16BitsColorDepthID);
+            return QPair<QString, QString>(LABAColorModelID.id(), Integer16BitsColorDepthID.id());
         } else if (color_type ==  PHOTOMETRIC_PALETTE) {
             destDepth = 16;
             if (nbchannels == 0) nbchannels = 2;
             extrasamplescount = nbchannels - 2; // FIX the extrasamples count in case of
             // <-- we will convert the index image to RGBA16 as the palette is always on 16bits colors
-            return KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Integer16BitsColorDepthID);
+            return QPair<QString, QString>(RGBAColorModelID.id(), Integer16BitsColorDepthID.id());
         }
-        return QString::null;
+        return QPair<QString, QString>();
     }
 }
 
@@ -233,13 +233,13 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     }
 
     uint8 dstDepth;
-    QString colorSpaceId = getColorSpaceForColorType(sampletype, color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
-    if (colorSpaceId.isEmpty()) {
+    QPair<QString, QString> colorSpaceId = getColorSpaceForColorType(sampletype, color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
+    if (colorSpaceId.first.isEmpty()) {
         dbgFile << "Image has an unsupported colorspace :" << color_type << " for this depth :" << depth;
         TIFFClose(image);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-    dbgFile << "Colorspace is :" << colorSpaceId << " with a depth of" << depth << " and with a nb of channels of" << nbchannels;
+    dbgFile << "Colorspace is :" << colorSpaceId.first << colorSpaceId.second << " with a depth of" << depth << " and with a nb of channels of" << nbchannels;
 
     // Read image profile
     dbgFile << "Reading profile";
@@ -261,12 +261,12 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     const KoColorSpace* cs = 0;
     if (profile && profile->isSuitableForOutput()) {
         dbgFile << "image has embedded profile:" << profile -> name() << "";
-        cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, profile);
+        cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile);
     } else {
-        cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, 0);
+        cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, 0);
     }
     if (cs == 0) {
-        dbgFile << "Colorspace" << colorSpaceId << " is not available, please check your installation.";
+        dbgFile << "Colorspace" << colorSpaceId.first << colorSpaceId.second << " is not available, please check your installation.";
         TIFFClose(image);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
@@ -275,7 +275,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
         dbgFile << "The profile can't be used in krita, need conversion";
-        transform = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, profile)->createColorConverter(cs);
+        transform = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile)->createColorConverter(cs);
     }
 
     // Check if there is an alpha channel

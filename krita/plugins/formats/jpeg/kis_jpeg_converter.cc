@@ -66,6 +66,7 @@ extern "C" {
 #include <kis_jpeg_destination.h>
 
 #include <KoColorProfile.h>
+#include <KoColorModelStandardIds.h>
 
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
@@ -96,15 +97,15 @@ J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
     return JCS_UNKNOWN;
 }
 
-QString getColorSpaceForColorType(J_COLOR_SPACE color_type)
+QString getColorSpaceModelForColorType(J_COLOR_SPACE color_type)
 {
     dbgFile << "color_type =" << color_type;
     if (color_type == JCS_GRAYSCALE) {
-        return "GRAYA";
+        return GrayAColorModelID.id();
     } else if (color_type == JCS_RGB) {
-        return "RGBA";
+        return RGBAColorModelID.id();
     } else if (color_type == JCS_CMYK) {
-        return "CMYK";
+        return CMYKAColorModelID.id();
     }
     return "";
 }
@@ -158,8 +159,8 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     jpeg_start_decompress(&cinfo);
 
     // Get the colorspace
-    QString csName = getColorSpaceForColorType(cinfo.out_color_space);
-    if (csName.isEmpty()) {
+    QString modelId = getColorSpaceModelForColorType(cinfo.out_color_space);
+    if (modelId.isEmpty()) {
         dbgFile << "unsupported colorspace :" << cinfo.out_color_space;
         jpeg_destroy_decompress(&cinfo);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
@@ -187,9 +188,9 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     const KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput()) {
         dbgFile << "image has embedded profile:" << profile -> name() << "";
-        cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
+        cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile);
     } else
-        cs = KoColorSpaceRegistry::instance()->colorSpace(KoID(csName, ""), "");
+        cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), "");
 
     if (cs == 0) {
         dbgFile << "unknown colorspace";
@@ -201,7 +202,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
-        transform = KoColorSpaceRegistry::instance()->colorSpace(csName, profile)->createColorConverter(cs);
+        transform = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile)->createColorConverter(cs);
     }
 
     // Creating the KisImageWSP

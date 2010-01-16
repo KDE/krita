@@ -43,6 +43,7 @@
 #include <kis_undo_adapter.h>
 #include <boost/concept_check.hpp>
 #include <ImfAttribute.h>
+#include <KoColorModelStandardIds.h>
 
 exrConverter::exrConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
@@ -80,9 +81,9 @@ const KoColorSpace* kisTypeToColorSpace(ImageType imageType)
 {
     switch (imageType) {
     case IT_FLOAT16:
-        return KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF16", ""), "");
+        return KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id(), "");
     case IT_FLOAT32:
-        return KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF32", ""), "");
+        return KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), "");
     case IT_UNKNOWN:
     case IT_UNSUPPORTED:
         return 0;

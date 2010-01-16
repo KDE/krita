@@ -46,6 +46,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_iterators_pixel.h>
 #include <kis_undo_adapter.h>
+#include <KoColorModelStandardIds.h>
 
 using namespace std;
 using namespace Imf;
@@ -98,7 +99,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
     int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
     int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
 
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(KoID("RgbAF16", ""), "");
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id(), "");
 
     if (cs == 0) {
         return KoFilter::InternalError;

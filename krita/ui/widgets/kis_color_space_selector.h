@@ -20,11 +20,12 @@
 #define _KIS_COLOR_SPACE_SELECTOR_H_
 
 #include <QWidget>
+#include <krita_export.h>
 
 class KoID;
 class KoColorSpace;
 
-class KisColorSpaceSelector : public QWidget
+class KRITAUI_EXPORT KisColorSpaceSelector : public QWidget
 {
     Q_OBJECT
 public:

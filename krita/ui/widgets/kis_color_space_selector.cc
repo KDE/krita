@@ -99,7 +99,10 @@ void KisColorSpaceSelector::setCurrentColorDepth(const KoID& id)
     fillCmbProfiles();
 }
 
-#include <kdebug.h>
+void KisColorSpaceSelector::setCurrentProfile(const QString& name)
+{
+    d->colorSpaceSelector->cmbProfile->setCurrent(name);
+}
 
 void KisColorSpaceSelector::colorSpaceChanged()
 {

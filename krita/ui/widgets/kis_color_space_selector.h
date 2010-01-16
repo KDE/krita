@@ -33,6 +33,7 @@ public:
     const KoColorSpace* currentColorSpace();
     void setCurrentColorModel(const KoID& id);
     void setCurrentColorDepth(const KoID& id);
+    void setCurrentProfile(const QString& name);
 signals:
     /**
      * This signal is emited when a new color space is selected.

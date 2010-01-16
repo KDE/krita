@@ -58,7 +58,8 @@ int doInput(GifFileType* gif, GifByteType* data, int i)
 }
 
 GifConverter::GifConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
-    : m_doc(doc)
+    : m_transparentColorIndex(-1)
+    , m_doc(doc)
     , m_img(0)
 {
     Q_UNUSED(adapter);
@@ -207,7 +208,7 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
         case EXTENSION_RECORD_TYPE:
             {
                 dbgFile << "reading EXTENSION_RECORD_TYPE";
-                int extCode, len;
+                int extCode;
                 GifByteType* extData = 0;
                 if (DGifGetExtension(gifFile, &extCode, &extData) == GIF_ERROR) {
                     warnFile << "Error reading extension";
@@ -215,9 +216,9 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
                 }
 
                 if (extData != 0) {
-                    len = extData[0];
+                    int len = extData[0];
 
-                    dbgFile << "\tCode" << extCode << "length" << len;
+                    dbgFile << "\tCode" << extCode << "length" << len << extData[0] << extData[1] << extData[2] << extData[3] << extData[4];
 
                     switch(extCode) {
                     case GRAPHICS_EXT_FUNC_CODE:
@@ -227,7 +228,7 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
                             // wouldn't store and save the animation information anyway.
                             if (extData[1] & 0x01)
                             {
-                                m_transparentColorIndex = extData[3];
+                                m_transparentColorIndex = extData[4];
                                 dbgFile << ">>>>>>>>>>>> Transparent color index" << m_transparentColorIndex;
                             }
                         }

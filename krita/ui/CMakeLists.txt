@@ -31,7 +31,6 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_pyramid.cpp
     dialogs/kis_dlg_adj_layer_props.cc 
     dialogs/kis_dlg_adjustment_layer.cc
-    dialogs/kis_dlg_apply_profile.cc 
     dialogs/kis_dlg_filter.cpp
     dialogs/kis_dlg_generator_layer.cpp
     dialogs/kis_dlg_image_properties.cc

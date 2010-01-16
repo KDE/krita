@@ -52,7 +52,7 @@ public:
      * @param style the style to display
      * @param dashes the dashes of the style if style == Qt::CustomDashLine
      */
-    void setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes);
+    void setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes = QVector<qreal>());
 
     /// Returns the current line style
     Qt::PenStyle lineStyle() const;

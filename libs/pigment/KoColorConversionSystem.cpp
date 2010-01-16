@@ -273,7 +273,7 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
     Path* bestPath = 0;
     typedef QPair<KoID, KoID> KoID2KoID;
     foreach(const KoID2KoID & possibility, possibilities) {
-        const KoColorSpaceFactory* csf = KoColorSpaceRegistry::instance()->get(KoColorSpaceRegistry::instance()->colorSpaceId(possibility.first.id(), possibility.second.id()));
+        const KoColorSpaceFactory* csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(KoColorSpaceRegistry::instance()->colorSpaceId(possibility.first.id(), possibility.second.id()));
         if (csf) {
             Path* path = findBestPath(csNode, nodeFor(csf->colorModelId().id(), csf->colorDepthId().id(), csf->defaultProfile()));
             Q_ASSERT(path);

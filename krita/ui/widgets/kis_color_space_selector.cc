@@ -58,11 +58,7 @@ void KisColorSpaceSelector::fillCmbProfiles()
     QString s = KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem());
     d->colorSpaceSelector->cmbProfile->clear();
 
-    if (!KoColorSpaceRegistry::instance()->contains(s)) {
-        return;
-    }
-
-    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s);
+    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
     if (csf == 0) return;
 
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);

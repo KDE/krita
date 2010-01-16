@@ -42,7 +42,7 @@ class KoColorConversionCache;
  *      - a registry of singleton colorspace factories.
  *      - a registry of icc profiles
  */
-class PIGMENTCMS_EXPORT KoColorSpaceRegistry : public QObject,  public KoGenericRegistry<KoColorSpaceFactory *>
+class PIGMENTCMS_EXPORT KoColorSpaceRegistry : public QObject
 {
 public:
     enum ColorSpaceListVisibility {
@@ -141,6 +141,7 @@ public:
      * @return a list of profiles for the factory
      */
     QList<const KoColorProfile *>  profilesFor(const QString &colorSpaceId);
+    const KoColorSpaceFactory* colorSpaceFactory(const QString &colorSpaceId) const;
 private:
     /**
      * Return a colorspace that works with the parameter profile.

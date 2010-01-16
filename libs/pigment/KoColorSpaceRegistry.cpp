@@ -51,7 +51,7 @@
 #include "KoColorSpace_p.h"
 
 struct KoColorSpaceRegistry::Private {
-
+    KoGenericRegistry<KoColorSpaceFactory *> colorsSpaceFactoryRegistry;
     QHash<QString, KoColorProfile * > profileMap;
     QHash<QString, const KoColorSpace * > csMap;
     QHash<QString, KoColorProfileFactory * > profileFactoryMap;
@@ -145,13 +145,13 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 
 void KoColorSpaceRegistry::add(KoColorSpaceFactory* item)
 {
-    KoGenericRegistry<KoColorSpaceFactory *>::add(item);
+    d->colorsSpaceFactoryRegistry.add(item);
     d->colorConversionSystem->insertColorSpace(item);
 }
 
 void KoColorSpaceRegistry::add(const QString &id, KoColorSpaceFactory* item)
 {
-    KoGenericRegistry<KoColorSpaceFactory *>::add(id, item);
+    d->colorsSpaceFactoryRegistry.add(id, item);
     d->colorConversionSystem->insertColorSpace(item);
 }
 
@@ -166,7 +166,7 @@ const KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name
 
 QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const QString &id)
 {
-    return profilesFor(value(id));
+    return profilesFor(d->colorsSpaceFactoryRegistry.value(id));
 }
 
 const KoColorSpace *  KoColorSpaceRegistry::colorSpace(const KoID &csID, const QString & profileName)
@@ -205,7 +205,7 @@ QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoColorSp
 QList<const KoColorSpaceFactory*> KoColorSpaceRegistry::colorSpacesFor(const KoColorProfile* _profile)
 {
     QList<const KoColorSpaceFactory*> csfs;
-    foreach(KoColorSpaceFactory* csf, values()) {
+    foreach(KoColorSpaceFactory* csf, d->colorsSpaceFactoryRegistry.values()) {
         if (csf->profileIsCompatible(_profile)) {
             csfs.push_back(csf);
         }
@@ -250,12 +250,17 @@ QString KoColorSpaceRegistry::idsToCacheName(const QString & csId, const QString
     return csId + "<comb>" + profileName;
 }
 
+const KoColorSpaceFactory* KoColorSpaceRegistry::colorSpaceFactory(const QString &colorSpaceId) const
+{
+    return d->colorsSpaceFactoryRegistry.get(colorSpaceId);
+}
+
 const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QString &pName)
 {
     QString profileName = pName;
 
     if (profileName.isEmpty()) {
-        KoColorSpaceFactory *csf = value(csID);
+        KoColorSpaceFactory *csf = d->colorsSpaceFactoryRegistry.value(csID);
 
         if (!csf) {
             dbgPigmentCSRegistry << "Unknown color space type : " << csID;
@@ -268,7 +273,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
     QString name = idsToCacheName(csID, profileName);
 
     if (!isCached(csID, profileName)) {
-        KoColorSpaceFactory *csf = value(csID);
+        KoColorSpaceFactory *csf = d->colorsSpaceFactoryRegistry.value(csID);
         if (!csf) {
             dbgPigmentCSRegistry << "Unknown color space type :" << csf;
             return 0;
@@ -319,7 +324,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
         if (!cs) {
             // The profile was not stored and thus not the combination either
-            KoColorSpaceFactory *csf = value(csID);
+            KoColorSpaceFactory *csf = d->colorsSpaceFactoryRegistry.value(csID);
             if (!csf) {
                 dbgPigmentCSRegistry << "Unknown color space type :" << csf;
                 return 0;
@@ -406,7 +411,7 @@ const KoColorSpace * KoColorSpaceRegistry::lab16(const KoColorProfile * profile)
 QList<KoID> KoColorSpaceRegistry::colorModelsList(ColorSpaceListVisibility option) const
 {
     QList<KoID> ids;
-    QList<KoColorSpaceFactory*> factories = values();
+    QList<KoColorSpaceFactory*> factories = d->colorsSpaceFactoryRegistry.values();
     foreach(KoColorSpaceFactory* factory, factories) {
         if (!ids.contains(factory->colorModelId())
                 && (option == AllColorSpaces || factory->userVisible())) {
@@ -424,7 +429,7 @@ QList<KoID> KoColorSpaceRegistry::colorDepthList(const KoID& colorModelId, Color
 QList<KoID> KoColorSpaceRegistry::colorDepthList(const QString & colorModelId, ColorSpaceListVisibility option) const
 {
     QList<KoID> ids;
-    QList<KoColorSpaceFactory*> factories = values();
+    QList<KoColorSpaceFactory*> factories = d->colorsSpaceFactoryRegistry.values();
     foreach(KoColorSpaceFactory* factory, factories) {
         if (!ids.contains(KoID(factory->colorDepthId()))
                 && factory->colorModelId().id() == colorModelId
@@ -437,7 +442,7 @@ QList<KoID> KoColorSpaceRegistry::colorDepthList(const QString & colorModelId, C
 
 QString KoColorSpaceRegistry::colorSpaceId(const QString & colorModelId, const QString & colorDepthId) const
 {
-    QList<KoColorSpaceFactory*> factories = values();
+    QList<KoColorSpaceFactory*> factories = d->colorsSpaceFactoryRegistry.values();
     foreach(KoColorSpaceFactory* factory, factories) {
         if (factory->colorModelId().id() == colorModelId && factory->colorDepthId().id() == colorDepthId) {
             return factory->id();
@@ -453,7 +458,7 @@ QString KoColorSpaceRegistry::colorSpaceId(const KoID& colorModelId, const KoID&
 
 KoID KoColorSpaceRegistry::colorSpaceColorModelId(const QString & _colorSpaceId) const
 {
-    KoColorSpaceFactory* factory = get(_colorSpaceId);
+    KoColorSpaceFactory* factory = d->colorsSpaceFactoryRegistry.get(_colorSpaceId);
     if (factory) {
         return factory->colorModelId();
     } else {
@@ -463,7 +468,7 @@ KoID KoColorSpaceRegistry::colorSpaceColorModelId(const QString & _colorSpaceId)
 
 KoID KoColorSpaceRegistry::colorSpaceColorDepthId(const QString & _colorSpaceId) const
 {
-    KoColorSpaceFactory* factory = get(_colorSpaceId);
+    KoColorSpaceFactory* factory = d->colorsSpaceFactoryRegistry.get(_colorSpaceId);
     if (factory) {
         return factory->colorDepthId();
     } else {
@@ -498,8 +503,8 @@ const KoColorSpace* KoColorSpaceRegistry::permanentColorspace(const KoColorSpace
 QList<KoID> KoColorSpaceRegistry::listKeys() const
 {
     QList<KoID> answer;
-    foreach(const QString key, keys()) {
-        answer.append(KoID(key, get(key)->name()));
+    foreach(const QString key, d->colorsSpaceFactoryRegistry.keys()) {
+        answer.append(KoID(key, d->colorsSpaceFactoryRegistry.get(key)->name()));
     }
 
     return answer;
@@ -523,7 +528,7 @@ QList<const KoColorSpace*> KoColorSpaceRegistry::allColorSpaces(ColorSpaceListVi
 {
     QList<const KoColorSpace*> colorSpaces;
 
-    QList<KoColorSpaceFactory*> factories = values();
+    QList<KoColorSpaceFactory*> factories = d->colorsSpaceFactoryRegistry.values();
 
     foreach(KoColorSpaceFactory* factory, factories) {
         if (visibility == AllColorSpaces || factory->userVisible()) {

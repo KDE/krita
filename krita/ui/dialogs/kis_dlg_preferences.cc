@@ -198,7 +198,7 @@ void ColorSettingsTab::setDefault()
 
 void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
 {
-    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
+    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s.id());
 
     m_page->cmbMonitorProfile->clear();
 
@@ -217,7 +217,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
 
 void ColorSettingsTab::refillPrintProfiles(const KoID & s)
 {
-    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
+    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s.id());
 
     m_page->cmbPrintProfile->clear();
 

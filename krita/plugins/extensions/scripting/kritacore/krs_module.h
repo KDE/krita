@@ -108,7 +108,7 @@ public slots:
      * Krita.createImage(10, 20, "RGBA", "kikoo")
      * @endcode
      */
-    QObject* createImage(int width, int height, const QString& colorspace, const QString& name);
+    QObject* createImage(int width, int height, const QString& colorSpaceModel, const QString& colorSpaceDepth, const QString& name);
 
     /**
      * This function return a new \a Color object with the given RGB triplet.

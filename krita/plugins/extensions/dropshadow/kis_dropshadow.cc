@@ -92,7 +92,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
         image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
     }
 
-    KisPaintDeviceSP shadowDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0));
+    KisPaintDeviceSP shadowDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     KisPaintDeviceSP bShadowDev;
     const KoColorSpace *rgb8cs = shadowDev->colorSpace();
 
@@ -119,7 +119,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
         }
     }
     if (blurradius > 0) {
-        bShadowDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0));
+        bShadowDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
         gaussianblur(progressUpdater, shadowDev, bShadowDev, rect, blurradius, blurradius, BLUR_RLE, progressUpdater);
         shadowDev = bShadowDev;
     }

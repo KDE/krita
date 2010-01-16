@@ -59,6 +59,7 @@
 #include <KoChannelInfo.h>
 #include <kis_layer_manager.h>
 #include <kis_node_commands_adapter.h>
+#include <KoColorModelStandardIds.h>
 
 KisChannelSeparator::KisChannelSeparator(KisView2 * view)
         : m_view(view)
@@ -116,9 +117,9 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
             dev = new KisPaintDevice(srcCs);
         } else {
             if (channelSize == 1 || downscale) {
-                dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0));
+                dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), 0));
             } else {
-                dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("GRAYA16", 0));
+                dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), 0));
                 destSize = 2;
             }
         }

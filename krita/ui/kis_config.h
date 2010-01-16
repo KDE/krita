@@ -191,8 +191,11 @@ public:
     bool showFilterGallery();
     void setShowFilterGallery(bool showFilterGallery);
 
-    QString defaultPainterlyColorSpace();
-    void setDefaultPainterlyColorSpace(const QString& def);
+    QString defaultPainterlyColorModelId();
+    void setDefaultPainterlyColorModelId(const QString& def);
+
+    QString defaultPainterlyColorDepthId();
+    void setDefaultPainterlyColorDepthId(const QString& def);
 
 
 private:

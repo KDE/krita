@@ -38,10 +38,11 @@
 
 void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoColorSpace*cs))
 {
-    QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
+    QList<const KoColorSpace*> colorsapces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 
-    foreach(QString csId, csIds) {
+    foreach(const KoColorSpace* cs, colorsapces) {
 
+        QString csId = cs->id();
         // ALL THESE COLORSPACES ARE BROKEN: WE NEED UNITTESTS FOR COLORSPACES!
         if (csId.startsWith("KS")) continue;
         if (csId.startsWith("Xyz")) continue;
@@ -50,15 +51,10 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoCo
 
         qDebug() << "Testing with cs" << csId;
 
-        QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csId);
-        if (profiles.size() > 0) {
-            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, profiles.first());
-            if (cs && cs->compositeOp(COMPOSITE_OVER) != 0) {
-                (this->*funcPtr)(cs);
-            } else {
-                qDebug() << "Cannot bitBlt for cs" << csId;
-            }
-
+        if (cs && cs->compositeOp(COMPOSITE_OVER) != 0) {
+            (this->*funcPtr)(cs);
+        } else {
+            qDebug() << "Cannot bitBlt for cs" << csId;
         }
     }
 }

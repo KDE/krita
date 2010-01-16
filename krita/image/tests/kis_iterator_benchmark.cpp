@@ -37,17 +37,15 @@
 
 void KisIteratorBenchmark::allCsApplicator(void (KisIteratorBenchmark::* funcPtr)(const KoColorSpace*cs))
 {
-    QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
+    QList<const KoColorSpace*> colorsapces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
     int counter = 0;
-    foreach(QString csId, csIds) {
+    foreach(const KoColorSpace* cs, colorsapces) {
 
-        dbgImage << "Testing with" << csId;
+        dbgImage << "Testing with" << cs->id();
 
         counter++;
 
-        QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csId);
-        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, 0);
-        if (cs)(this->*funcPtr)(cs);
+        (this->*funcPtr)(cs);
 
         if (counter > 10) return;
     }

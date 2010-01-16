@@ -141,11 +141,14 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         if (colorspacename  == "Grayscale + Alpha")
             colorspacename  = "GRAYA";
 
+        QString colorspaceModel = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
+        QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
+
         if ((profileProductName = element.attribute(PROFILE)).isNull()) {
             // no mention of profile so get default profile
-            cs = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, "");
+            cs = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
         } else {
-            cs = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, profileProductName);
+            cs = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, profileProductName);
         }
 
         if (cs == 0) {
@@ -273,8 +276,14 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     if ((element.attribute(COLORSPACE_NAME)).isNull())
         colorSpace = image->colorSpace();
     else
+    {
+        QString colorspacename = element.attribute(COLORSPACE_NAME);
+        QString colorspaceModel = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
+        QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
+
         // use default profile - it will be replaced later in completeLoading
-        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(element.attribute(COLORSPACE_NAME), "");
+        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
+    }
 
     bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
     bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;

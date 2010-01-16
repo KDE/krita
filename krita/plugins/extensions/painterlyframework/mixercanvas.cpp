@@ -55,7 +55,7 @@ MixerCanvas::MixerCanvas(QWidget *parent)
     m_image.fill(0);
 
     KisConfig config;
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(config.defaultPainterlyColorSpace(), "");
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(config.defaultPainterlyColorModelId(), config.defaultPainterlyColorDepthId(), "");
     if (!cs) {
         dbgPlugins << "Could not load painterly colorspace, falling back to rgb";
         cs = KoColorSpaceRegistry::instance()->rgb16();

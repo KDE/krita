@@ -61,6 +61,7 @@
 #undef powf
 #define powf pow
 #endif
+#include <KoColorModelStandardIds.h>
 
 const double epsilonOptimization = 1e-5;
 const double epsilonGaussian = 1e-6;
@@ -166,7 +167,7 @@ void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
             computeCameraResponse();
         }
         KisImageWSP image = m_view->image();
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RgbAF32", 0);
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
         if (!cs) {
             KMessageBox::error(m_view, i18n("HDR colorspace RGBAF32 not found, please check your installation."), i18n("Layer Creation Error"));
             return;
@@ -360,7 +361,7 @@ void Bracketing2HDRPlugin::computeCameraResponse(QList<BracketingFrame> frames)
 #if 1
     // Now optimize the camera response
     // Create a temporary paint device and fill it with the current value
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RgbAF32", 0);
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
     if (!cs) {
         KMessageBox::error(m_view, i18n("HDR colorspace RGBAF32 not found, please check your installation."), i18n("Compute Camera Response Error"));
         return;

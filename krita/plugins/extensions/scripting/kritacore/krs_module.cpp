@@ -212,15 +212,15 @@ QObject* Module::filter(const QString& filtername)
     }
 }
 
-QObject* Module::createImage(int width, int height, const QString& colorspace, const QString& name)
+QObject* Module::createImage(int width, int height, const QString& colorSpaceModel, const QString& colorSpaceDepth, const QString& name)
 {
     if (width < 0 || height < 0) {
         warnScript << i18n("Invalid image size");
         return 0;
     }
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspace, 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceModel, colorSpaceDepth, 0);
     if (!cs) {
-        warnScript << i18n("ColorSpace %1 is not available, please check your installation.", colorspace);
+        warnScript << i18n("ColorSpace %1 %2 <is not available, please check your installation.", colorSpaceModel, colorSpaceDepth);
         return 0;
     }
     return new Image(this, KisImageWSP(new KisImage(0, width, height, cs, name)));

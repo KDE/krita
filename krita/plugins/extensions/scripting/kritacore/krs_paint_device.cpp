@@ -52,11 +52,11 @@ PaintDevice::~PaintDevice()
 {
 }
 
-bool PaintDevice::convertToColorSpace(const QString& colorspacename)
+bool PaintDevice::convertToColorSpace(const QString& model, const QString& depth)
 {
-    const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
+    const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(model, depth, 0);
     if (!dstCS) {
-        warnScript << QString("ColorSpace %1 is not available, please check your installation.").arg(colorspacename) << endl;
+        warnScript << QString("ColorSpace %1 %2 is not available, please check your installation.").arg(model).arg(depth) << endl;
         return false;
     }
     QUndoCommand* cmd = paintDevice()->convertTo(dstCS);

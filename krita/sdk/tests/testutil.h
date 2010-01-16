@@ -148,7 +148,7 @@ bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPain
 
 QList<const KoColorSpace*> allColorSpaces()
 {
-    return KoColorSpaceRegistry::instance()->allColorSpaces();
+    return KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 }
 
 class KisUndoAdapterDummy : public KisUndoAdapter

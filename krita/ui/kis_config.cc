@@ -549,12 +549,22 @@ void KisConfig::setShowFilterGallery(bool showFilterGallery)
     m_cfg.writeEntry("showFilterGallery", showFilterGallery);
 }
 
-QString KisConfig::defaultPainterlyColorSpace()
+QString KisConfig::defaultPainterlyColorModelId()
 {
-    return m_cfg.readEntry("defaultpainterlycolorspace", "KS6F32");;
+    return m_cfg.readEntry("defaultpainterlycolormodel", "KS6");
 }
 
-void KisConfig::setDefaultPainterlyColorSpace(const QString& def)
+void KisConfig::setDefaultPainterlyColorModelId(const QString& def)
 {
-    m_cfg.writeEntry("defaultpainterlycolorspace", def);;
+    m_cfg.writeEntry("defaultpainterlycolormodel", def);;
+}
+
+QString KisConfig::defaultPainterlyColorDepthId()
+{
+    return m_cfg.readEntry("defaultpainterlycolordepth", "F32");
+}
+
+void KisConfig::setDefaultPainterlyColorDepthId(const QString& def)
+{
+    m_cfg.writeEntry("defaultpainterlycolordepth", def);;
 }

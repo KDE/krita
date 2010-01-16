@@ -70,14 +70,14 @@ KisToneMappingOperatorConfigurationWidget* KisReinhard05Operator::createConfigur
 
 const KoColorSpace* KisReinhard05Operator::colorSpace() const
 {
-    return KoColorSpaceRegistry::instance()->colorSpace(KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Float32BitsColorDepthID), "");
+    return KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), "");
 }
 
 void KisReinhard05Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const
 {
     dbgKrita << "Create a copy of the paint device as XYZAF32";
     QRect r = device->exactBounds();
-    const KoColorSpace* XYZACs = KoColorSpaceRegistry::instance()->colorSpace(KoColorSpaceRegistry::instance()->colorSpaceId(XYZAColorModelID, Float32BitsColorDepthID), "");
+    const KoColorSpace* XYZACs = KoColorSpaceRegistry::instance()->colorSpace(XYZAColorModelID.id(), Float32BitsColorDepthID.id(), "");
     Q_ASSERT(XYZACs);
     KisPaintDeviceSP deviceXYZ = new KisPaintDevice(*device);
     QUndoCommand* cmd = deviceXYZ->convertTo(XYZACs);

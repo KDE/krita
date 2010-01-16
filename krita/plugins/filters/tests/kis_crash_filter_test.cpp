@@ -67,25 +67,14 @@ bool applyFilter(const KoColorSpace * cs,  KisFilterSP f)
 
 bool testFilter(KisFilterSP f)
 {
-
-    QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
+    QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::AllProfiles);
     bool ok = false;
-    foreach(QString csId, csIds) {
+    foreach(const KoColorSpace* colorSpace, colorSpaces) {
         // XXX: Let's not check the painterly colorspaces right now
-        if (csId.startsWith("KS", Qt::CaseInsensitive)) {
+        if (colorSpace->id().startsWith("KS", Qt::CaseInsensitive)) {
             continue;
         }
-        QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csId);
-        if (profiles.size() == 0) {
-            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, 0);
-            ok = applyFilter(cs, f);
-        } else {
-            foreach(const KoColorProfile * profile, profiles) {
-                const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, profile);
-                ok = applyFilter(cs, f);
-            }
-
-        }
+        ok = applyFilter(colorSpace, f);
     }
 
     return ok;

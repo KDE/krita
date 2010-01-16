@@ -49,6 +49,10 @@ public:
         OnlyUserVisible = 1, ///< Only user visible color space
         AllColorSpaces = 4 ///< All color space even those not visible to the user
     };
+    enum ColorSpaceListProfilesSelection {
+        OnlyDefaultProfile = 1, ///< Only add the default profile
+        AllProfiles = 4 ///< Add all profiles
+    };
 
     /**
      * Return an instance of the KoColorSpaceRegistry
@@ -299,7 +303,7 @@ public:
     /**
      * @return a list with an instance of all color space with their default profile
      */
-    QList<const KoColorSpace*> allColorSpaces(ColorSpaceListVisibility visibility = AllColorSpaces);
+    QList<const KoColorSpace*> allColorSpaces(ColorSpaceListVisibility visibility, ColorSpaceListProfilesSelection pSelection );
 
 private:
 

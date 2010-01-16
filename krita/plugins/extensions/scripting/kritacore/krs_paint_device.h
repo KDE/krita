@@ -63,7 +63,7 @@ public slots:
      * image.colorSpaceId()
      * @endcode
      */
-    bool convertToColorSpace(const QString& colorspacename);
+    bool convertToColorSpace(const QString& model, const QString& depth);
 
     /**
      * Create an iterator over a layer, it will iterate on a rectangle area.

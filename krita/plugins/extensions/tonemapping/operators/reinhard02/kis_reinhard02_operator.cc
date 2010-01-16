@@ -77,7 +77,7 @@ KisToneMappingOperatorConfigurationWidget* KisReinhard02Operator::createConfigur
 
 const KoColorSpace* KisReinhard02Operator::colorSpace() const
 {
-    return KoColorSpaceRegistry::instance()->colorSpace(KoColorSpaceRegistry::instance()->colorSpaceId(XYZAColorModelID, Float32BitsColorDepthID), "");
+    return KoColorSpaceRegistry::instance()->colorSpace(XYZAColorModelID.id(), Float32BitsColorDepthID.id(), "");
 }
 
 void KisReinhard02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const

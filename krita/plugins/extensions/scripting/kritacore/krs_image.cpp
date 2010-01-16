@@ -63,11 +63,11 @@ QString Image::colorSpaceId() const
     return m_image->colorSpace()->id();
 }
 
-bool Image::convertToColorSpace(const QString& colorspacename)
+bool Image::convertToColorSpace(const QString& model, const QString& depth)
 {
-    const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
+    const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(model, depth, 0);
     if (!dstCS) {
-        warnScript << QString("ColorSpace %1 is not available, please check your installation.").arg(colorspacename);
+        warnScript << QString("ColorSpace %1 %2 is not available, please check your installation.").arg(model).arg(depth) << endl;
         return false;
     }
     m_image->convertTo(dstCS);
@@ -96,13 +96,13 @@ void Image::shear(double xangle, double yangle)
 
 QObject* Image::createPaintLayer(const QString& name, int opacity)
 {
-    return createPaintLayer(name, opacity, m_image->colorSpace()->id());
+    return createPaintLayer(name, opacity, m_image->colorSpace()->colorModelId().id(), m_image->colorSpace()->id());
 }
 
-QObject* Image::createPaintLayer(const QString& name, int opacity, const QString& colorspacename)
+QObject* Image::createPaintLayer(const QString& name, int opacity, const QString& colorModelId, const QString& colorDepthId)
 {
     opacity = CLAMP(opacity, 0, 255);
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorModelId, colorDepthId, 0);
     KisPaintLayerSP layer = cs ? new KisPaintLayer(m_image.data(), name, opacity, cs)
                             : new KisPaintLayer(m_image.data(), name, opacity);
     layer->setVisible(true);

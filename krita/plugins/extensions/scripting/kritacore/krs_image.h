@@ -74,7 +74,8 @@ public slots:
      * image.colorSpaceId()
      * @endcode
      */
-    bool convertToColorSpace(const QString& colorspacename);
+    bool convertToColorSpace(const QString& model, const QString& depth
+    );
 
     /**
      * Resize the image.
@@ -140,7 +141,7 @@ public slots:
      *  - the opacity of the layer (between 0 and 255)
      *  - the id of the colorSpace
      */
-    QObject* createPaintLayer(const QString& name, int opacity, const QString& colorspacename);
+    QObject* createPaintLayer(const QString& name, int opacity, const QString& colorModelId, const QString& colorDepthId);
 
 private:
     KisImageWSP m_image;

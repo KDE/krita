@@ -435,7 +435,7 @@ QList<KoID> KoColorSpaceRegistry::colorDepthList(const QString & colorModelId, C
     return ids;
 }
 
-QString KoColorSpaceRegistry::colorSpaceId(const QString & colorModelId, const QString & colorDepthId)
+QString KoColorSpaceRegistry::colorSpaceId(const QString & colorModelId, const QString & colorDepthId) const
 {
     QList<KoColorSpaceFactory*> factories = values();
     foreach(KoColorSpaceFactory* factory, factories) {
@@ -446,10 +446,29 @@ QString KoColorSpaceRegistry::colorSpaceId(const QString & colorModelId, const Q
     return "";
 }
 
-
-QString KoColorSpaceRegistry::colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId)
+QString KoColorSpaceRegistry::colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId) const
 {
     return colorSpaceId(colorModelId.id(), colorDepthId.id());
+}
+
+KoID KoColorSpaceRegistry::colorSpaceColorModelId(const QString & _colorSpaceId) const
+{
+    KoColorSpaceFactory* factory = get(_colorSpaceId);
+    if (factory) {
+        return factory->colorModelId();
+    } else {
+        return KoID();
+    }
+}
+
+KoID KoColorSpaceRegistry::colorSpaceColorDepthId(const QString & _colorSpaceId) const
+{
+    KoColorSpaceFactory* factory = get(_colorSpaceId);
+    if (factory) {
+        return factory->colorDepthId();
+    } else {
+        return KoID();
+    }
 }
 
 const KoColorConversionSystem* KoColorSpaceRegistry::colorConversionSystem() const
@@ -505,13 +524,12 @@ QList<const KoColorSpace*> KoColorSpaceRegistry::allColorSpaces(ColorSpaceListVi
     QList<const KoColorSpace*> colorSpaces;
 
     QList<KoColorSpaceFactory*> factories = values();
-    
+
     foreach(KoColorSpaceFactory* factory, factories) {
-        if(visibility == AllColorSpaces || factory->userVisible())
-        {
+        if (visibility == AllColorSpaces || factory->userVisible()) {
             colorSpaces.append(colorSpace(factory->id(), 0));
         }
     }
-    
+
     return colorSpaces;
 }

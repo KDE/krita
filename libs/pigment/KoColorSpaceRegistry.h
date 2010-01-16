@@ -182,7 +182,7 @@ public:
      * @param colorDepthId id of the color depth
      * @return the id of the wanted colorspace, or "" if no colorspace correspond to those ids
      */
-    QString colorSpaceId(const QString & colorModelId, const QString & colorDepthId);
+    QString colorSpaceId(const QString & colorModelId, const QString & colorDepthId) const;
     /**
      * It's a convenient function that behave like the above.
      * Return the id of the colorspace that have the defined colorModelId with colorDepthId.
@@ -190,7 +190,23 @@ public:
      * @param colorDepthId id of the color depth
      * @return the id of the wanted colorspace, or "" if no colorspace correspond to those ids
      */
-    QString colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId);
+    QString colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId) const;
+
+    /**
+     * @return a the identifiant of the color model for the given color space id.
+     *
+     * This function is a compatibility function used to get the color space from
+     * all kra files.
+     */
+    KoID colorSpaceColorModelId(const QString & _colorSpaceId) const;
+
+    /**
+     * @return a the identifiant of the color depth for the given color space id.
+     *
+     * This function is a compatibility function used to get the color space from
+     * all kra files.
+     */
+    KoID colorSpaceColorDepthId(const QString & _colorSpaceId) const;
 
     /**
      * Convenience method to get the often used alpha colorspace

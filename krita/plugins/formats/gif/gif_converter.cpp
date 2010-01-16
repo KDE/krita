@@ -113,12 +113,15 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
 
                     GifPixelType colorIndex = line[col];
                     if (image.ColorMap && colorIndex < image.ColorMap->ColorCount) {
+                        dbgFile << "interlaced, using local colormap";
                         color = image.ColorMap->Colors[colorIndex];
                     }
                     else if (gifFile->SColorMap && colorIndex < gifFile->SColorMap->ColorCount) {
+                        dbgFile << "interlaced, using global colormap";
                         color = gifFile->SColorMap->Colors[colorIndex];
                     }
                     else {
+                        dbgFile << "interlaced, falling back on black";
                         color.Red = 0;
                         color.Green = 0;
                         color.Blue = 0;
@@ -149,12 +152,15 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
                 GifPixelType colorIndex = line[col];
 
                 if (image.ColorMap && colorIndex < image.ColorMap->ColorCount) {
+                    dbgFile << "not interlaced, using local colormap";
                     color = image.ColorMap->Colors[colorIndex];
                 }
                 else if (gifFile->SColorMap && colorIndex < gifFile->SColorMap->ColorCount) {
+                    dbgFile << "not interlaced, using global colormap";
                     color = gifFile->SColorMap->Colors[colorIndex];
                 }
                 else {
+                    dbgFile << "not interlaced, falling back on black";
                     color.Red = 0;
                     color.Green = 0;
                     color.Blue = 0;
@@ -334,10 +340,13 @@ int fillColorMap(const QImage& image, ColorMapObject& cmap) {
 
     QVector<QRgb> colorTable = image.colorTable();
 
-    Q_ASSERT(colorTable.size() < 256);
+    dbgFile << "Color table size" << colorTable.size();
+
+    Q_ASSERT(colorTable.size() <= 256);
 
     // numColors must be a power of 2
     int numColors = 1 << BitSize(image.numColors());
+
     cmap.ColorCount = numColors;
     cmap.BitsPerPixel = 8;
     GifColorType* colorValues = (GifColorType*)malloc(cmap.ColorCount * sizeof(GifColorType));
@@ -385,20 +394,28 @@ KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisImageWSP imag
     KisGifWriterVisitor visitor;
     m_img->rootLayer()->accept(visitor);
 
+    dbgFile << "Created" << visitor.m_layers.count() << "indexed layers";
+
     // get a global colormap from the projection
     QImage projection = m_img->projection()->convertToQImage(0).convertToFormat(QImage::Format_Indexed8);
     ColorMapObject cmap;
     int numColors = fillColorMap(projection, cmap);
 
+    dbgFile << "Filled colormap with" << numColors << "colors";
+
     EGifSetGifVersion("89a");
     GifFileType* gif = EGifOpen(&file, doOutput);
 
     if (EGifPutScreenDesc(gif, m_img->width(), m_img->height(), numColors, 0, &cmap) == GIF_ERROR) {
+        dbgFile << "Failed to put the gif screen" << GifLastError();
         return KisImageBuilder_RESULT_FAILURE;
     }
 
+    dbgFile << "gif screen width" << m_img->width() << ", height" << m_img->height();
+
     QString comments = m_doc->documentInfo()->aboutInfo("comments");
     if (!comments.isEmpty()) {
+        dbgFile << "Comments:" << comments;
         EGifPutComment(gif, comments.toAscii().constData());
     }
 
@@ -407,21 +424,29 @@ KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisImageWSP imag
 
         ColorMapObject cmapLayer;
         int numColorsLayer = fillColorMap(layer.image, cmapLayer);
-        Q_ASSERT(numColorsLayer < 256);
+        Q_ASSERT(numColorsLayer <= 256);
 
         QRect rc(layer.topLeft, layer.image.size());
         // Make sure the individual layers are not outside the gif screen bounds
-        rc = rc.intersected(m_img->bounds());
+        rc = m_img->bounds().intersected(rc);
+
+        dbgFile << "layer size" << rc << "image bounds" << m_img->bounds();
+
         if (EGifPutImageDesc(gif, rc.x(), rc.y(), rc.width(), rc.height(), 0, &cmapLayer) == GIF_ERROR) {
+            dbgFile << "Failed to add layer" << GifLastError();
             return KisImageBuilder_RESULT_FAILURE;
         }
 
-        int rowcount = layer.image.height();
-        int lineLength = layer.image.bytesPerLine();
+        int rowcount = rc.height();
+        int lineLength = rc.width();
+
+        dbgFile << "rows" << rowcount << "line length" << lineLength;
+
         for (int row = 0; row < rowcount; ++row)
         {
             const uchar* line = layer.image.scanLine(row);
             if (EGifPutLine(gif, (GifPixelType*)line, lineLength) == GIF_ERROR) {
+                dbgFile << "Failed to save scanline" << GifLastError() << "at row" << row;
                 return KisImageBuilder_RESULT_FAILURE;
             }
         }

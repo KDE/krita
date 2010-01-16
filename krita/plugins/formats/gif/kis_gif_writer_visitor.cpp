@@ -46,9 +46,11 @@ bool KisGifWriterVisitor::visit(KisGeneratorLayer* layer)
 
 bool KisGifWriterVisitor::saveLayerProjection(KisLayer* layer)
 {
+    dbgFile << "converting layer" << layer->name();
+    QRect bounds = layer->exactBounds();
     QImage layerImage = layer->projection()->convertToQImage(0);
     IndexedLayer indexedLayer;
-    indexedLayer.topLeft = QPoint(layer->x(), layer->y());
+    indexedLayer.topLeft = QPoint(bounds.x(), bounds.y());
     indexedLayer.image = layerImage.convertToFormat(QImage::Format_Indexed8);
     m_layers << indexedLayer;
 

@@ -76,6 +76,8 @@ private:
 
     KisImageBuilder_Result decode(const KUrl& uri);
     KisNodeSP getNode(GifFileType* gifFile, KisImageWSP kisImage);
+    bool convertLine(GifFileType* gifFile, GifPixelType* line, int row, GifImageDesc &image,
+                     KisRandomAccessorPixel &accessor, KisPaintLayerSP layer);
 
 public slots:
 

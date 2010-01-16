@@ -68,6 +68,45 @@ GifConverter::~GifConverter()
 {
 }
 
+bool GifConverter::convertLine(GifFileType* gifFile, GifPixelType* line, int row, GifImageDesc &image, KisRandomAccessorPixel &accessor, KisPaintLayerSP layer) {
+
+    GifColorType color;
+
+    if (DGifGetLine(gifFile, line, image.Width) == GIF_ERROR) {
+        return false;
+    }
+    for (int col = 0; col < image.Width; ++col) {
+
+        accessor.moveTo(col + image.Left, row);
+
+        GifPixelType colorIndex = line[col];
+        if (image.ColorMap && colorIndex < image.ColorMap->ColorCount) {
+            color = image.ColorMap->Colors[colorIndex];
+        }
+        else if (gifFile->SColorMap && colorIndex < gifFile->SColorMap->ColorCount) {
+            color = gifFile->SColorMap->Colors[colorIndex];
+        }
+        else {
+            color.Red = 0;
+            color.Green = 0;
+            color.Blue = 0;
+        }
+
+        quint8* dst = accessor.rawData();
+        KoRgbTraits<quint8>::setRed(dst, color.Red);
+        KoRgbTraits<quint8>::setGreen(dst, color.Green);
+        KoRgbTraits<quint8>::setBlue(dst, color.Blue);
+
+        if (colorIndex == m_transparentColorIndex) {
+            layer->colorSpace()->setAlpha(dst, OPACITY_TRANSPARENT, 1);
+        }
+        else {
+            layer->colorSpace()->setAlpha(dst, OPACITY_OPAQUE, 1);
+        }
+    }
+    return true;
+}
+
 KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
 
     if (DGifGetImageDesc(gifFile) == GIF_ERROR) {
@@ -90,7 +129,6 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
     fillPixel[0] = color.Blue;
     fillPixel[1] = color.Green;
     fillPixel[2] = color.Red;
-
     if (gifFile->SBackGroundColor == m_transparentColorIndex) {
         fillPixel[3] = OPACITY_TRANSPARENT;
     }
@@ -105,79 +143,12 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
     if (image.Interlace) {
         for (int i = 0; i < 4; i++) {
             for (int row = image.Top + InterlacedOffset[i]; row < image.Top + image.Height; row += InterlacedJumps[i]) {
-                if (DGifGetLine(gifFile, line, image.Width) == GIF_ERROR) {
-                    return 0;
-                }
-                for (int col = 0; col < image.Width; ++col) {
-
-                    accessor.moveTo(col + image.Left, row);
-
-                    GifPixelType colorIndex = line[col];
-                    if (image.ColorMap && colorIndex < image.ColorMap->ColorCount) {
-                        dbgFile << "interlaced, using local colormap";
-                        color = image.ColorMap->Colors[colorIndex];
-                    }
-                    else if (gifFile->SColorMap && colorIndex < gifFile->SColorMap->ColorCount) {
-                        dbgFile << "interlaced, using global colormap";
-                        color = gifFile->SColorMap->Colors[colorIndex];
-                    }
-                    else {
-                        dbgFile << "interlaced, falling back on black";
-                        color.Red = 0;
-                        color.Green = 0;
-                        color.Blue = 0;
-                    }
-
-                    quint8* dst = accessor.rawData();
-                    KoRgbTraits<quint8>::setRed(dst, color.Red);
-                    KoRgbTraits<quint8>::setGreen(dst, color.Green);
-                    KoRgbTraits<quint8>::setBlue(dst, color.Blue);
-                    if (colorIndex == m_transparentColorIndex) {
-                        layer->colorSpace()->setAlpha(dst, OPACITY_TRANSPARENT, 1);
-                    }
-                    else {
-                        layer->colorSpace()->setAlpha(dst, OPACITY_OPAQUE, 1);
-                    }
-                }
+                convertLine(gifFile, line, row, image, accessor, layer);
             }
         }
     } else {
         for (int row = image.Top; row < image.Top + image.Height; ++ row) {
-            if (DGifGetLine(gifFile, line, image.Width) == GIF_ERROR) {
-                return 0;
-            }
-            for (int col = 0; col < image.Width; ++col) {
-
-                accessor.moveTo(col + image.Left, row);
-
-                GifPixelType colorIndex = line[col];
-
-                if (image.ColorMap && colorIndex < image.ColorMap->ColorCount) {
-                    dbgFile << "not interlaced, using local colormap";
-                    color = image.ColorMap->Colors[colorIndex];
-                }
-                else if (gifFile->SColorMap && colorIndex < gifFile->SColorMap->ColorCount) {
-                    dbgFile << "not interlaced, using global colormap";
-                    color = gifFile->SColorMap->Colors[colorIndex];
-                }
-                else {
-                    dbgFile << "not interlaced, falling back on black";
-                    color.Red = 0;
-                    color.Green = 0;
-                    color.Blue = 0;
-                }
-
-                quint8* dst = accessor.rawData();
-                KoRgbTraits<quint8>::setRed(dst, color.Red);
-                KoRgbTraits<quint8>::setGreen(dst, color.Green);
-                KoRgbTraits<quint8>::setBlue(dst, color.Blue);
-                if (colorIndex == m_transparentColorIndex) {
-                    layer->colorSpace()->setAlpha(dst, OPACITY_TRANSPARENT, 1);
-                }
-                else {
-                    layer->colorSpace()->setAlpha(dst, OPACITY_OPAQUE, 1);
-                }
-            }
+            convertLine(gifFile, line, row, image, accessor, layer);
         }
     }
 
@@ -246,7 +217,7 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
                 if (extData != 0) {
                     len = extData[0];
 
-                    dbgFile << "\tCode" << extCode << "lenght" << len;
+                    dbgFile << "\tCode" << extCode << "length" << len;
 
                     switch(extCode) {
                     case GRAPHICS_EXT_FUNC_CODE:
@@ -257,7 +228,7 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
                             if (extData[1] & 0x01)
                             {
                                 m_transparentColorIndex = extData[3];
-                                dbgFile << "Transparent color index" << m_transparentColorIndex;
+                                dbgFile << ">>>>>>>>>>>> Transparent color index" << m_transparentColorIndex;
                             }
                         }
                         break;

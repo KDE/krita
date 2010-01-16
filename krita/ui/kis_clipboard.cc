@@ -206,7 +206,7 @@ KisPaintDeviceSP KisClipboard::clip()
         if (behaviour == PASTE_ASSUME_MONITOR)
             profileName = cfg.monitorProfile();
 
-        cs = KoColorSpaceRegistry::instance() ->colorSpace("RGBA", profileName);
+        cs = KoColorSpaceRegistry::instance()->rgb8(profileName);
         if (!cs) {
             cs = KoColorSpaceRegistry::instance()->rgb8();
             profileName = cs->profile()->name();

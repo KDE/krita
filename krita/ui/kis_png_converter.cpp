@@ -56,6 +56,7 @@
 #include <kis_group_layer.h>
 #include <kis_meta_data_io_backend.h>
 #include <kis_meta_data_store.h>
+#include <KoColorModelStandardIds.h>
 
 namespace
 {
@@ -81,24 +82,26 @@ int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
 }
 
 
-QString getColorSpaceForColorType(int color_type, int color_nb_bits)
+QPair<QString, QString> getColorSpaceForColorType(int color_type, int color_nb_bits)
 {
-    if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
-        if (color_nb_bits == 16) {
-            return "GRAYA16";
-        } else if (color_nb_bits <= 8) {
-            return "GRAYA";
+    QPair<QString, QString> r;
+    
+    if (color_type ==  PNG_COLOR_TYPE_PALETTE) {
+        r.first = RGBAColorModelID.id();
+        r.second = Integer8BitsColorDepthID.id();
+    } else {
+        if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
+            r.first = GrayAColorModelID.id();
+        } else if (color_type == PNG_COLOR_TYPE_RGB_ALPHA || color_type == PNG_COLOR_TYPE_RGB) {
+            r.first = RGBAColorModelID.id();
         }
-    } else if (color_type == PNG_COLOR_TYPE_RGB_ALPHA || color_type == PNG_COLOR_TYPE_RGB) {
         if (color_nb_bits == 16) {
-            return "RGBA16";
+            r.second = Integer16BitsColorDepthID.id();
         } else if (color_nb_bits <= 8) {
-            return "RGBA";
+            r.second = Integer8BitsColorDepthID.id();
         }
-    } else if (color_type ==  PNG_COLOR_TYPE_PALETTE) {
-        return "RGBA"; // <-- we will convert the index image to RGBA
     }
-    return "";
+    return r;
 }
 
 

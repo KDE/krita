@@ -44,7 +44,7 @@ void KisTransformWorkerTest::testCreation()
 
 void KisTransformWorkerTest::testMirror()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     quint8* pixel = cs->allocPixelBuffer(1);
@@ -107,7 +107,7 @@ void KisTransformWorkerTest::testMirror()
 
 void KisTransformWorkerTest::testMirrorTransaction()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     quint8* pixel = cs->allocPixelBuffer(1);

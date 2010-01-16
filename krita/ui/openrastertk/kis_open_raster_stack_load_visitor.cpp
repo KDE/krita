@@ -65,7 +65,7 @@ KisImageWSP KisOpenRasterStackLoadVisitor::image()
 
 void KisOpenRasterStackLoadVisitor::loadImage()
 {
-    d->image = new KisImage(d->doc->undoAdapter(), 0, 0, KoColorSpaceRegistry::instance()->colorSpace("RGBA", ""), "OpenRaster Image (name)");
+    d->image = new KisImage(d->doc->undoAdapter(), 0, 0, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
 
     QDomDocument doc = d->loadContext->loadStack();
 

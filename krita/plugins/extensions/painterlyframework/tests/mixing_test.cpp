@@ -49,12 +49,12 @@ void MixingTest::initTestCase()
     KisIlluminantProfile *p;
     foreach(QString ill, list.filter("_111_")) {
         p = new KisIlluminantProfile(ill); p->load();
-        css.append(f->colorSpace(KisKSF32ColorSpace<3>::ColorSpaceId().id(), p));
+        css.append(f->colorSpace(KisKSF32ColorSpace<3>::ColorModelId().id(), KisKSF32ColorSpace<3>::ColorDepthId().id(), p));
         delete p;
     }
     foreach(QString ill, list.filter("_222_")) {
         p = new KisIlluminantProfile(ill); p->load();
-        css.append(f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(), p));
+        css.append(f->colorSpace(KisKSF32ColorSpace<6>::ColorModelId().id(), KisKSF32ColorSpace<6>::ColorDepthId().id(), p));
         delete p;
     }
 }

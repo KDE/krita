@@ -47,8 +47,10 @@ bool KisGifWriterVisitor::visit(KisGeneratorLayer* layer)
 bool KisGifWriterVisitor::saveLayerProjection(KisLayer* layer)
 {
     QImage layerImage = layer->projection()->convertToQImage(0);
-    layerImage = layerImage.convertToFormat(QImage::Format_Indexed8);
-    m_layers << layerImage;
+    IndexedLayer indexedLayer;
+    indexedLayer.topLeft = QPoint(layer->x(), layer->y());
+    indexedLayer.image = layerImage.convertToFormat(QImage::Format_Indexed8);
+    m_layers << indexedLayer;
 
     return true;
 }

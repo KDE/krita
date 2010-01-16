@@ -20,10 +20,16 @@
 #ifndef KIS_GIF_WRITER_VISITOR_H
 #define KIS_GIF_WRITER_VISITOR_H
 
+#include <QPoint>
 #include <QImage>
 
 #include <kis_node_visitor.h>
 #include <kis_types.h>
+
+struct IndexedLayer {
+    QPoint topLeft;
+    QImage image;
+};
 
 class KisGifWriterVisitor : public KisNodeVisitor
 {
@@ -66,7 +72,8 @@ private:
 
     friend class GifConverter;
 
-    QVector<QImage> m_layers;
+
+    QVector<IndexedLayer> m_layers;
 
 };
 

@@ -112,7 +112,17 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
                     accessor.moveTo(col + image.Left, row);
 
                     GifPixelType colorIndex = line[col];
-                    color = image.ColorMap->Colors[colorIndex];
+                    if (image.ColorMap && colorIndex < image.ColorMap->ColorCount) {
+                        color = image.ColorMap->Colors[colorIndex];
+                    }
+                    else if (gifFile->SColorMap && colorIndex < gifFile->SColorMap->ColorCount) {
+                        color = gifFile->SColorMap->Colors[colorIndex];
+                    }
+                    else {
+                        color.Red = 0;
+                        color.Green = 0;
+                        color.Blue = 0;
+                    }
 
                     quint8* dst = accessor.rawData();
                     KoRgbTraits<quint8>::setRed(dst, color.Red);
@@ -312,6 +322,46 @@ KisImageWSP GifConverter::image()
 }
 
 
+int doOutput(GifFileType* gif, const GifByteType * data, int i)
+{
+    QIODevice* out = (QIODevice*)gif->UserData;
+    return out->write((const char*)data, i);
+}
+
+int fillColorMap(const QImage& image, ColorMapObject& cmap) {
+
+    Q_ASSERT(image.format() == QImage::Format_Indexed8);
+
+    QVector<QRgb> colorTable = image.colorTable();
+
+    Q_ASSERT(colorTable.size() < 256);
+
+    // numColors must be a power of 2
+    int numColors = 1 << BitSize(image.numColors());
+    cmap.ColorCount = numColors;
+    cmap.BitsPerPixel = 8;
+    GifColorType* colorValues = (GifColorType*)malloc(cmap.ColorCount * sizeof(GifColorType));
+    cmap.Colors = colorValues;
+    int c = 0;
+    for(; c < image.numColors(); ++c)
+    {
+        colorValues[c].Red = qRed(colorTable[c]);
+        colorValues[c].Green = qGreen(colorTable[c]);
+        colorValues[c].Blue = qBlue(colorTable[c]);
+    }
+    // In case we had an actual number of colors that's not a power of 2,
+    // fill the rest with something (black perhaps).
+    for (; c < numColors; ++c)
+    {
+        colorValues[c].Red = 0;
+        colorValues[c].Green = 0;
+        colorValues[c].Blue = 0;
+    }
+
+    return numColors;
+}
+
+
 KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisImageWSP image)
 {
     if (!image)
@@ -323,23 +373,62 @@ KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisImageWSP imag
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
 
+    // Open file for writing
+    QFile file(QFile::encodeName(uri.toLocalFile()));
+    if (!file.open(QIODevice::WriteOnly)) {
+        return (KisImageBuilder_RESULT_FAILURE);
+    }
+
     m_img = image;
 
     // get a list of all layers converted to 8 bit indexed QImages
     KisGifWriterVisitor visitor;
     m_img->rootLayer()->accept(visitor);
 
+    // get a global colormap from the projection
+    QImage projection = m_img->projection()->convertToQImage(0).convertToFormat(QImage::Format_Indexed8);
+    ColorMapObject cmap;
+    int numColors = fillColorMap(projection, cmap);
 
-    // Open file for writing
-#if 0
-    FILE *fp = fopen(QFile::encodeName(uri.path()), "wb");
-    if (!fp)
-    {
-        return (KisImageBuilder_RESULT_FAILURE);
+    EGifSetGifVersion("89a");
+    GifFileType* gif = EGifOpen(&file, doOutput);
+
+    if (EGifPutScreenDesc(gif, m_img->width(), m_img->height(), numColors, 0, &cmap) == GIF_ERROR) {
+        return KisImageBuilder_RESULT_FAILURE;
     }
-    uint height = img->height();
-    uint width = img->width();
-#endif
+
+    QString comments = m_doc->documentInfo()->aboutInfo("comments");
+    if (!comments.isEmpty()) {
+        EGifPutComment(gif, comments.toAscii().constData());
+    }
+
+    // now save all the layes as gif images.
+    foreach(const IndexedLayer layer, visitor.m_layers) {
+
+        ColorMapObject cmapLayer;
+        int numColorsLayer = fillColorMap(layer.image, cmapLayer);
+        Q_ASSERT(numColorsLayer < 256);
+
+        QRect rc(layer.topLeft, layer.image.size());
+        // Make sure the individual layers are not outside the gif screen bounds
+        rc = rc.intersected(m_img->bounds());
+        if (EGifPutImageDesc(gif, rc.x(), rc.y(), rc.width(), rc.height(), 0, &cmapLayer) == GIF_ERROR) {
+            return KisImageBuilder_RESULT_FAILURE;
+        }
+
+        int rowcount = layer.image.height();
+        int lineLength = layer.image.bytesPerLine();
+        for (int row = 0; row < rowcount; ++row)
+        {
+            const uchar* line = layer.image.scanLine(row);
+            if (EGifPutLine(gif, (GifPixelType*)line, lineLength) == GIF_ERROR) {
+                return KisImageBuilder_RESULT_FAILURE;
+            }
+        }
+
+    }
+
+    EGifCloseFile(gif);
 
     return KisImageBuilder_RESULT_OK;
 }

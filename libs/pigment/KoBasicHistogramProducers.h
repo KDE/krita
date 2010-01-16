@@ -151,21 +151,21 @@ public:
 template<class T> class KoBasicHistogramProducerFactory : public KoHistogramProducerFactory
 {
 public:
-    KoBasicHistogramProducerFactory(const KoID& id, const QString& csId)
-            : KoHistogramProducerFactory(id), m_csId(csId) {
+    KoBasicHistogramProducerFactory(const KoID& id, const QString& modelId, const QString& depthId )
+            : KoHistogramProducerFactory(id), m_modelId(modelId), m_depthId(depthId) {
     }
     virtual ~KoBasicHistogramProducerFactory() {}
     virtual KoHistogramProducerSP generate() {
-        return KoHistogramProducerSP(new T(KoID(id(), name()), KoColorSpaceRegistry::instance()->colorSpace(m_csId, 0)));
+        return KoHistogramProducerSP(new T(KoID(id(), name()), KoColorSpaceRegistry::instance()->colorSpace(m_modelId, m_depthId, 0)));
     }
     virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const {
-        return colorSpace->id() == m_csId;
+        return colorSpace->colorModelId().id() == m_modelId || colorSpace->colorDepthId().id() == m_depthId;
     }
     virtual float preferrednessLevelWith(const KoColorSpace* /*colorSpace*/) const {
         return 1.0;
     }
 protected:
-    QString m_csId;
+    QString m_modelId, m_depthId;
 };
 
 /**

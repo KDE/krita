@@ -50,8 +50,7 @@ void KoRgbColorSpaceTester::testBasics()
 
 void KoRgbColorSpaceTester::testMixColors()
 {
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
-                                 KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID.id(), Integer8BitsColorDepthID.id()) , "");
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KoMixColorsOp * mixOp = cs->mixColorsOp();
 
     // Test mixColors.
@@ -153,7 +152,7 @@ void KoRgbColorSpaceTester::testCompositeOps()
     foreach(KoID depthId, depthIDs) {
         kDebug() << depthId.id();
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
-                                     KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID.id(), depthId.id()) , "");
+                                     RGBAColorModelID.id(), depthId.id(), "");
         const KoCompositeOp* copyOp = cs->compositeOp(COMPOSITE_COPY);
         KoColor src(cs), dst(cs);
 

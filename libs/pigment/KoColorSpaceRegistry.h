@@ -141,7 +141,7 @@ public:
      * @return a list of profiles for the factory
      */
     QList<const KoColorProfile *>  profilesFor(const QString &colorSpaceId);
-// private:
+private:
     /**
      * Return a colorspace that works with the parameter profile.
      * @param csID the ID of the colorspace that you want to have returned

@@ -89,7 +89,9 @@ public:
     qreal randomRotationWeight() const;
     bool followCursor() const;
     qreal followCursorWeigth() const;
-
+    QImage m_image;
+    
+    void setQImage(const QImage &image){ m_image = image; }
     QImage image() const;
 
 };

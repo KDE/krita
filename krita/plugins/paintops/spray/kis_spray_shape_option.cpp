@@ -21,6 +21,7 @@
 #include <QImage>
 
 #include "ui_wdgshapeoptions.h"
+#include "kis_spray_paintop_settings.h"
 
 class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
 {
@@ -138,7 +139,8 @@ void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting
     setting->setProperty("SprayShape/randomRotationWeight", randomRotationWeight());
     setting->setProperty("SprayShape/followCursor", followCursor());
     setting->setProperty("SprayShape/followCursorWeigth", followCursorWeigth());
-    
+    setting->setProperty("SprayShape/imageUrl",m_options->imageUrl->text());
+    static_cast<KisSprayPaintOpSettings*>(setting)->setQImage(m_image);
 }
 
 
@@ -155,6 +157,7 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
     m_options->followCursorWeightSPBox->setValue(setting->getDouble("SprayShape/followCursorWeigth") );
     m_options->randomRotation->setChecked(setting->getBool("SprayShape/randomRotation"));
     m_options->randomWeightSPBox->setValue(setting->getDouble("SprayShape/randomRotationWeight") );
+    m_options->imageUrl->setText(setting->getString("SprayShape/imageUrl"));
 }
 
 bool KisSprayShapeOption::fixedRotation() const

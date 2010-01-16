@@ -229,7 +229,6 @@ qreal KisSprayPaintOpSettings::followCursorWeigth() const
 
 QImage KisSprayPaintOpSettings::image() const
 {
-    //return m_options->m_sprayShapeOption->image();
-    return QImage();
+    return m_image;
 }
 

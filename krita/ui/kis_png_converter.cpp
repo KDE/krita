@@ -475,8 +475,8 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 #endif
 
     // Determine the colorspace
-    QString csName = getColorSpaceForColorType(color_type, color_nb_bits);
-    if (csName.isEmpty()) {
+    QPair<QString,QString> csName = getColorSpaceForColorType(color_type, color_nb_bits);
+    if (csName.first.isEmpty()) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         iod->close();
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
@@ -515,9 +515,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     const KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput()) {
         dbgFile << "image has embedded profile: " << profile -> name() << "\n";
-        cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
+        cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile);
     } else
-        cs = KoColorSpaceRegistry::instance()->colorSpace(KoID(csName, ""), "");
+        cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, 0);
 
     if (cs == 0) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
@@ -527,7 +527,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // Create the cmsTransform if needed
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
-        transform = KoColorSpaceRegistry::instance()->colorSpace(csName, profile)->createColorConverter(cs);
+        transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs);
     }
 
     // Creating the KisImageWSP

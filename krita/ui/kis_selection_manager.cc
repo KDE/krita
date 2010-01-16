@@ -535,7 +535,7 @@ void KisSelectionManager::pasteNew()
     doc->undoAdapter()->setUndo(false);
 
     KisImageWSP image = new KisImage(doc->undoAdapter(), r.width(), r.height(),
-                                   KoColorSpaceRegistry::instance()->colorSpace(clip->colorSpace()->colorModelId(), clip->colorSpace()->colorDepthId(), clip->colorSpace()->profile()), "Pasted");    // TODO should be translated ?
+                                   KoColorSpaceRegistry::instance()->colorSpace(clip->colorSpace()->colorModelId().id(), clip->colorSpace()->colorDepthId().id(), clip->colorSpace()->profile()), "Pasted");    // TODO should be translated ?
     KisPaintLayerSP layer = new KisPaintLayer(image.data(), clip->objectName(), OPACITY_OPAQUE, clip->colorSpace());
 
     KisPainter p(layer->paintDevice());

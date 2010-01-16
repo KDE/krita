@@ -59,6 +59,11 @@ public:
     bool load();
 
     bool save();
+    
+    void toXML(QDomDocument& doc, QDomElement& elt) const;
+
+    void fromXML(const QDomElement& elt);
+
 
     QImage image() const;
 

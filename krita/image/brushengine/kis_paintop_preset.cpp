@@ -113,20 +113,11 @@ bool KisPaintOpPreset::load()
     f.close();
 
     QDomElement element = doc.documentElement();
-    setName(element.attribute("name"));
-    QString paintopid = element.attribute("paintopid");
-
-    if (paintopid.isEmpty())
+    fromXML(element);
+    
+    if(!m_d->settings)
         return false;
-
-    KoID id(paintopid, "");
-
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0);
-    if (!settings)
-        return false;
-    settings->fromXML(element);
-    setSettings(settings);
-
+        
     updateImage();
     return true;
 }
@@ -138,24 +129,51 @@ bool KisPaintOpPreset::save()
 
     QFile f(filename());
     f.open(QIODevice::WriteOnly);
-
-    QDomDocument doc;
-    QDomElement root = doc.createElement("preset");
-
+    
     QString paintopid = m_d->settings->getString("paintop", "");
     if (paintopid.isEmpty())
         return false;
 
-    root.setAttribute("paintopid", paintopid);
-    root.setAttribute("name", name());
+    QDomDocument doc;
+    QDomElement root = doc.createElement("PresetResource");
+    toXML(doc, root);
     doc.appendChild(root);
-
-    m_d->settings->toXML(doc, root);
-
+    
     QTextStream textStream(&f);
     doc.save(textStream, 4);
     f.close();
     return true;
+}
+
+void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
+{
+    QDomElement presetElt = doc.createElement("Preset");
+
+    QString paintopid = m_d->settings->getString("paintop", "");
+
+    presetElt.setAttribute("paintopid", paintopid);
+    presetElt.setAttribute("name", name());
+
+    m_d->settings->toXML(doc, presetElt);
+    elt.appendChild(presetElt);
+}
+
+void KisPaintOpPreset::fromXML(const QDomElement& elt)
+{
+    QDomElement presetElt = elt.firstChildElement("Preset");
+    setName(presetElt.attribute("name"));
+    QString paintopid = presetElt.attribute("paintopid");
+
+    if (paintopid.isEmpty())
+        return;
+
+    KoID id(paintopid, "");
+
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0);
+    if (!settings)
+        return;
+    settings->fromXML(presetElt);
+    setSettings(settings);
 }
 
 QImage KisPaintOpPreset::image() const

@@ -84,21 +84,9 @@ KisRecordedPaintAction::~KisRecordedPaintAction()
 void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
 {
     KisRecordedAction::toXML(doc, elt);
-#if 0 // XXX
-    elt.setAttribute("paintop", d->paintOpId);
-
-    // Paintop settings
-    if (d->settings) {
-        QDomElement settingsElt = doc.createElement("PaintOpSettings");
-        d->settings->toXML(doc, settingsElt);
-        elt.appendChild(settingsElt);
-    }
-    // Brush
-    QDomElement ressourceElt = doc.createElement("Brush");
-    d->brush->toXML(doc, ressourceElt);
-    elt.appendChild(ressourceElt);
-#endif
-
+    
+    d->paintOpPreset->toXML(doc, elt);
+    
     // ForegroundColor
     QDomElement foregroundColorElt = doc.createElement("ForegroundColor");
     d->foregroundColor.toXML(doc, foregroundColorElt);

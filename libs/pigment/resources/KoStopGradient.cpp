@@ -31,6 +31,7 @@
 #include "KoColorSpaceRegistry.h"
 
 #include <math.h>
+#include <KoColorModelStandardIds.h>
 
 KoStopGradient::KoStopGradient(const QString& filename)
         : KoAbstractGradient(filename)
@@ -326,7 +327,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
                     color3 = e.attribute("v3", "0.0").toFloat();
                     color4 = e.attribute("v4", "0.0").toFloat();
 
-                    stopColorSpace = KoColorSpaceRegistry::instance()->colorSpace("CMYK", QString());
+                    stopColorSpace = KoColorSpaceRegistry::instance()->colorSpace( CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), QString());
                     if (stopColorSpace) {
                         quint8 data[5];
                         data[0] = static_cast<quint8>(color1 * 255 + 0.5);
@@ -355,7 +356,7 @@ void KoStopGradient::parseKarbonGradient(const QDomElement& element)
                     break;
                 case 3: // gray
                     color1 = e.attribute("v1", "0.0").toFloat();
-                    stopColorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAY", QString());
+                    stopColorSpace = KoColorSpaceRegistry::instance()->colorSpace( GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), QString());
                     if (stopColorSpace) {
                         quint8 data[2];
                         data[0] = static_cast<quint8>(color1 * 255 + 0.5);

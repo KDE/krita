@@ -178,7 +178,7 @@ void KoColorConversionSystem::insertColorProfile(const KoColorProfile* _profile)
 
 const KoColorSpace* KoColorConversionSystem::defaultColorSpaceForNode(const Node* node) const
 {
-    return KoColorSpaceRegistry::instance()->colorSpace(KoColorSpaceRegistry::instance()->colorSpaceId(node->modelId, node->depthId), node->profileName);
+    return KoColorSpaceRegistry::instance()->colorSpace(node->modelId, node->depthId, node->profileName);
 }
 
 KoColorConversionSystem::Node* KoColorConversionSystem::createNode(const QString& _modelId, const QString& _depthId, const QString& _profileName)

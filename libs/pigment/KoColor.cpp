@@ -284,14 +284,13 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, con
             profileName = "";
         }
     }
-    QString csId = KoColorSpaceRegistry::instance()->colorSpaceId(modelId, bitDepthId);
-    if (csId.isEmpty()) {
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, bitDepthId, profileName);
+    if (cs == 0) {
         QList<KoID> list =  KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces);
         if (!list.empty()) {
-            csId = KoColorSpaceRegistry::instance()->colorSpaceId(modelId, list[0].id());
+            cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, list[0].id(), profileName);
         }
     }
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(csId, profileName);
     if (cs) {
         KoColor c(cs);
         cs->colorFromXML(c.data(), elt);

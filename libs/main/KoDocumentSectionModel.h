@@ -85,15 +85,21 @@ class KoDocumentSectionModel: public QAbstractItemModel
 
         /// The aspect ratio of the section as a floating point value: width divided by height.
         AspectRatioRole,
-        
+
         /// Use to communicate a progress report to the section delegate on an action (a value of -1 or a QVariant() disable the progress bar
         ProgressRole,
 
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
-        ReservedRole = 99, 
-        /// For values of BeginThumbnailRole or higher, a thumbnail of the layer of which neither dimension is larger than (int) value - (int) BeginThumbnailRole. This is a hack to work around the fact that Interview doesn't have a nice way to request thumbnails of arbitrary size.
+        ReservedRole = 99,
+
+        /**
+         * For values of BeginThumbnailRole or higher, a thumbnail of the layer of which neither dimension
+         * is larger than (int) value - (int) BeginThumbnailRole.
+         * This is a hack to work around the fact that Interview doesn't have a nice way to
+         * request thumbnails of arbitrary size.
+         */
         BeginThumbnailRole
-        
+
     };
 
     /**

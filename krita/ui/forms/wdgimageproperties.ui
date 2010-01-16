@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>590</width>
-    <height>227</height>
+    <height>164</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>New Image</string>
   </property>
-  <layout class="QVBoxLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="grpImage">
      <property name="title">
@@ -116,61 +116,37 @@
      <property name="title">
       <string>Mode</string>
      </property>
-     <layout class="QGridLayout">
-      <property name="margin">
-       <number>11</number>
-      </property>
-      <property name="spacing">
-       <number>6</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblColorSpaces">
-        <property name="text">
-         <string>Color space:</string>
-        </property>
-        <property name="buddy">
-         <cstring>cmbColorSpaces</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KisCmbIDList" name="cmbColorSpaces" native="true"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="SqueezedComboBox" name="cmbProfile"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lblProfiles">
-        <property name="text">
-         <string>Profile:</string>
-        </property>
-        <property name="buddy">
-         <cstring>cmbProfile</cstring>
-        </property>
-       </widget>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KisCmbIDList</class>
+   <class>KisColorSpaceSelector</class>
    <extends>QWidget</extends>
-   <header>widgets/kis_cmb_idlist.h</header>
-  </customwidget>
-  <customwidget>
-   <class>SqueezedComboBox</class>
-   <extends>QComboBox</extends>
-   <header>widgets/squeezedcombobox.h</header>
+   <header>widgets/kis_color_space_selector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>cmbColorSpaces</tabstop>
-  <tabstop>cmbProfile</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>

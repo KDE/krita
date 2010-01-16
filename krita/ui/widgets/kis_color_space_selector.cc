@@ -104,6 +104,13 @@ void KisColorSpaceSelector::setCurrentProfile(const QString& name)
     d->colorSpaceSelector->cmbProfile->setCurrent(name);
 }
 
+void KisColorSpaceSelector::setCurrentColorSpace(const KoColorSpace* colorSpace)
+{
+  setCurrentColorModel(colorSpace->colorModelId());
+  setCurrentColorDepth(colorSpace->colorDepthId());
+  setCurrentProfile(colorSpace->profile()->name());
+}
+
 void KisColorSpaceSelector::colorSpaceChanged()
 {
     emit(selectionChanged(d->colorSpaceSelector->cmbProfile->count() != 0));

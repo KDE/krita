@@ -64,24 +64,8 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     m_page->lblResolutionValue->setText(KGlobal::locale()->formatNumber(image->xRes()*72, 2)); // XXX: separate values for x & y?
 
-    QList<KoID> colorSpaces = KoColorSpaceRegistry::instance()->listKeys();
-    qint32 i = colorSpaces.indexOf(KoID("WET", ""));
-    if (i >= 0) {
-        colorSpaces.removeAt(i);
-    }
-    m_page->cmbColorSpaces->setIDList(colorSpaces);
-    m_page->cmbColorSpaces->setCurrent(image->colorSpace()->id());
+    m_page->colorSpaceSelector->setCurrentColorSpace(image->colorSpace());
 
-    fillCmbProfiles(KoID(image->colorSpace()->id()));
-
-    if (image->profile()) {
-        m_page->cmbProfile->setCurrent(image->profile()->name());
-    } else {
-        m_page->cmbProfile->setCurrentIndex(0);
-    }
-
-    connect(m_page->cmbColorSpaces, SIGNAL(activated(const KoID &)),
-            this, SLOT(fillCmbProfiles(const KoID &)));
 }
 
 KisDlgImageProperties::~KisDlgImageProperties()
@@ -91,34 +75,7 @@ KisDlgImageProperties::~KisDlgImageProperties()
 
 const KoColorSpace * KisDlgImageProperties::colorSpace()
 {
-    return KoColorSpaceRegistry::instance()->colorSpace(m_page->cmbColorSpaces->currentItem(), m_page->cmbProfile->itemHighlighted());
-}
-
-const KoColorProfile * KisDlgImageProperties::profile()
-{
-    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(m_image->colorSpace()->id());
-    qint32 index = m_page->cmbProfile->currentIndex();
-
-    if (index < profileList.count()) {
-        return profileList.at(index);
-    } else {
-        return 0;
-    }
-}
-
-// XXX: Copy & paste from kis_dlg_create_image -- refactor to separate class
-void KisDlgImageProperties::fillCmbProfiles(const KoID & s)
-{
-    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
-    m_page->cmbProfile->clear();
-    if (csf) {
-        QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
-
-        foreach(const KoColorProfile *profile, profileList) {
-            m_page->cmbProfile->addSqueezedItem(profile->name());
-        }
-    }
+    return m_page->colorSpaceSelector->currentColorSpace();
 }
 
 #include "kis_dlg_image_properties.moc"
-

@@ -37,6 +37,7 @@
 #include "KoColorSlider.h"
 #include "KoColorPatch.h"
 #include "KoColorSpace.h"
+#include <KoColorModelStandardIds.h>
 
 KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : super(parent), m_showOpacitySlider(opacitySlider)
 {
@@ -911,7 +912,7 @@ const KoColorSpace *KoUniColorChooser::labColorSpace()
 
 const KoColorSpace *KoUniColorChooser::cmykColorSpace()
 {
-    return KoColorSpaceRegistry::instance()->colorSpace("CMYK",0);
+    return KoColorSpaceRegistry::instance()->colorSpace( CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), 0);
 }
 
 void KoUniColorChooser::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)

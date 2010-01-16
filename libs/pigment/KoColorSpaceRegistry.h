@@ -137,7 +137,7 @@ public:
      * @return a list of profiles for the factory
      */
     QList<const KoColorProfile *>  profilesFor(const QString &colorSpaceId);
-
+// private:
     /**
      * Return a colorspace that works with the parameter profile.
      * @param csID the ID of the colorspace that you want to have returned
@@ -160,7 +160,7 @@ public:
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
     const KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profileName);
-
+public:
     /**
      * Return a colorspace that works with the parameter profile.
      * @param colorSpaceId the ID string of the colorspace that you want to have returned
@@ -279,6 +279,11 @@ public:
      * on the objects stored in the registry.
      */
     QList<KoID> listKeys() const;
+
+    /**
+     * @return a list with an instance of all color space with their default profile
+     */
+    QList<const KoColorSpace*> allColorSpaces(ColorSpaceListVisibility visibility = AllColorSpaces);
 
 private:
 

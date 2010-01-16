@@ -148,24 +148,7 @@ bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPain
 
 QList<const KoColorSpace*> allColorSpaces()
 {
-
-    QList<const KoColorSpace*> colorSpaces;
-
-    QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
-
-    foreach(QString csId, csIds) {
-        QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csId);
-        if (profiles.size() == 0) {
-            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, 0);
-            colorSpaces.append(cs);
-        } else {
-
-            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, profiles[0]);
-            colorSpaces.append(cs);
-
-        }
-    }
-    return colorSpaces;
+    return KoColorSpaceRegistry::instance()->allColorSpaces();
 }
 
 class KisUndoAdapterDummy : public KisUndoAdapter

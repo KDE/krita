@@ -499,3 +499,19 @@ void KoColorSpaceRegistry::addColorProfileFactory(const QString& type, KoColorPr
 {
     d->profileFactoryMap[type] = factory;
 }
+
+QList<const KoColorSpace*> KoColorSpaceRegistry::allColorSpaces(ColorSpaceListVisibility visibility)
+{
+    QList<const KoColorSpace*> colorSpaces;
+
+    QList<KoColorSpaceFactory*> factories = values();
+    
+    foreach(KoColorSpaceFactory* factory, factories) {
+        if(visibility == AllColorSpaces || factory->userVisible())
+        {
+            colorSpaces.append(colorSpace(factory->id(), 0));
+        }
+    }
+    
+    return colorSpaces;
+}

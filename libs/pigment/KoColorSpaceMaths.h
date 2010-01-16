@@ -216,7 +216,7 @@ inline quint8 KoColorSpaceMaths<double, quint8>::scaleToA(double a)
 template<>
 inline double KoColorSpaceMaths<quint8, double>::scaleToA(quint8 a)
 {
-    return a * (1.0 / 255.0);
+    return a *(1.0 / 255.0);
 }
 
 template<>
@@ -229,7 +229,7 @@ inline quint16 KoColorSpaceMaths<double, quint16>::scaleToA(double a)
 template<>
 inline double KoColorSpaceMaths<quint16, double>::scaleToA(quint16 a)
 {
-    return a * (1.0 / 0xFFFF);
+    return a *(1.0 / 0xFFFF);
 }
 
 template<>
@@ -262,7 +262,7 @@ inline quint16 KoColorSpaceMaths<float, quint16>::scaleToA(float a)
 template<>
 inline float KoColorSpaceMaths<quint16, float>::scaleToA(quint16 a)
 {
-    return a * (1.0 / 0xFFFF);
+    return a *(1.0 / 0xFFFF);
 }
 
 template<>
@@ -275,7 +275,7 @@ inline quint8 KoColorSpaceMaths<float, quint8>::scaleToA(float a)
 template<>
 inline float KoColorSpaceMaths<quint8, float>::scaleToA(quint8 a)
 {
-    return a * (1.0 / 255.0);
+    return a *(1.0 / 255.0);
 }
 
 template<>
@@ -328,7 +328,7 @@ inline quint8 KoColorSpaceMaths<half, quint8>::scaleToA(half a)
 template<>
 inline half KoColorSpaceMaths<quint8, half>::scaleToA(quint8 a)
 {
-    return a * (1.0 / 255.0);
+    return a *(1.0 / 255.0);
 }
 template<>
 inline quint16 KoColorSpaceMaths<half, quint16>::scaleToA(half a)
@@ -340,7 +340,7 @@ inline quint16 KoColorSpaceMaths<half, quint16>::scaleToA(half a)
 template<>
 inline half KoColorSpaceMaths<quint16, half>::scaleToA(quint16 a)
 {
-    return a * (1.0 / 0xFFFF);
+    return a *(1.0 / 0xFFFF);
 }
 
 template<>

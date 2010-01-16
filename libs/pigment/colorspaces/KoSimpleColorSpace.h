@@ -120,45 +120,37 @@ public:
         warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
     }
 
-    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
-    {
+    virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         if (colorDepthId() == Integer16BitsColorDepthID && colorModelId() == LABAColorModelID) {
             memcpy(dst, src, nPixels * 2);
-        }
-        else {
+        } else {
             const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
             convertPixelsTo(src, dst, dstCs, nPixels);
         }
     }
 
-    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const
-    {
+    virtual void fromLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         if (colorDepthId() == Integer16BitsColorDepthID && colorModelId() == LABAColorModelID) {
             memcpy(dst, src, nPixels * 2);
-        }
-        else {
+        } else {
             const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->lab16();
             srcCs->convertPixelsTo(src, dst, this, nPixels);
         }
     }
 
-    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const
-    {
+    virtual void toRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         if (colorDepthId() == Integer16BitsColorDepthID && colorModelId() == RGBAColorModelID) {
             memcpy(dst, src, nPixels * 2);
-        }
-        else {
+        } else {
             const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->rgb16();
             convertPixelsTo(src, dst, dstCs, nPixels);
         }
     }
 
-    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const
-    {
+    virtual void fromRgbA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         if (colorDepthId() == Integer16BitsColorDepthID && colorModelId() == RGBAColorModelID) {
             memcpy(dst, src, nPixels * 2);
-        }
-        else {
+        } else {
             const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb16();
             srcCs->convertPixelsTo(src, dst, this, nPixels);
         }
@@ -167,15 +159,14 @@ public:
     virtual bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
-    {
+                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual) const {
         Q_UNUSED(renderingIntent);
 
         QColor c;
         quint32 srcPixelsize = this->pixelSize();
         quint32 dstPixelsize = dstColorSpace->pixelSize();
 
-        while(numPixels > 0) {
+        while (numPixels > 0) {
 
             this->toQColor(src, &c);
             dstColorSpace->fromQColor(c, dst);

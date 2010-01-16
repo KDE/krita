@@ -282,8 +282,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             if (profiles.isEmpty()) {
                 dbgPigmentCSRegistry << "No profile at all available for " << csf;
                 p = 0;
-            }
-            else {
+            } else {
                 p = profiles[0];
                 Q_ASSERT(p);
             }
@@ -480,7 +479,7 @@ const KoColorSpace* KoColorSpaceRegistry::permanentColorspace(const KoColorSpace
 QList<KoID> KoColorSpaceRegistry::listKeys() const
 {
     QList<KoID> answer;
-    foreach (const QString key, keys()) {
+    foreach(const QString key, keys()) {
         answer.append(KoID(key, get(key)->name()));
     }
 

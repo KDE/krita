@@ -297,7 +297,7 @@ float hue_value(float n1, float n2, float hue)
     else if (hue < 180)
         return n2;
     else if (hue < 240)
-        return n1 + (((n2 - n1) * (240 - hue)) / 60);
+        return n1 + (((n2 - n1) *(240 - hue)) / 60);
     else return n1;
 }
 

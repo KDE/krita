@@ -60,7 +60,8 @@ KoLabColorSpace::~KoLabColorSpace()
 }
 
 
-QString KoLabColorSpace::colorSpaceId(){
+QString KoLabColorSpace::colorSpaceId()
+{
     return QString("LABA");
 }
 
@@ -91,26 +92,23 @@ void KoLabColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProf
 
     quint8 L, a, b;
 
-    if(Y > 0.008856)
-    {
-      fY = pow(Y, 1.0 / 3.0);
-      L = static_cast<int>(116.0 * fY - 16.0 + 0.5);
-    }
-    else
-    {
-      fY = 7.787 * Y + 16.0 / 116.0;
-      L = static_cast<int>(903.3 * Y + 0.5);
+    if (Y > 0.008856) {
+        fY = pow(Y, 1.0 / 3.0);
+        L = static_cast<int>(116.0 * fY - 16.0 + 0.5);
+    } else {
+        fY = 7.787 * Y + 16.0 / 116.0;
+        L = static_cast<int>(903.3 * Y + 0.5);
     }
 
-    if(X > 0.008856)
-      fX = pow(X, 1.0 / 3.0);
+    if (X > 0.008856)
+        fX = pow(X, 1.0 / 3.0);
     else
-      fX = 7.787 * X + 16.0 / 116.0;
+        fX = 7.787 * X + 16.0 / 116.0;
 
-    if(Z > 0.008856)
-      fZ = pow(Z, 1.0 / 3.0);
+    if (Z > 0.008856)
+        fZ = pow(Z, 1.0 / 3.0);
     else
-      fZ = 7.787 * Z + 16.0 / 116.0;
+        fZ = 7.787 * Z + 16.0 / 116.0;
 
     a = static_cast<int>(500.0 * (fX - fY) + 0.5);
     b = static_cast<int>(200.0 * (fY - fZ) + 0.5);
@@ -136,26 +134,26 @@ void KoLabColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfi
     int RR, GG, BB;
 
     fY = pow((L + 16.0) / 116.0, 3.0);
-    if(fY < 0.008856)
-      fY = L / 903.3;
+    if (fY < 0.008856)
+        fY = L / 903.3;
     Y = fY;
 
-    if(fY > 0.008856)
-      fY = pow(fY, 1.0 / 3.0);
+    if (fY > 0.008856)
+        fY = pow(fY, 1.0 / 3.0);
     else
-      fY = 7.787 * fY + 16.0 / 116.0;
+        fY = 7.787 * fY + 16.0 / 116.0;
 
     fX = a / 500.0 + fY;
-    if(fX > 0.206893)
-      X = pow(fX, 3.0);
+    if (fX > 0.206893)
+        X = pow(fX, 3.0);
     else
-      X = (fX - 16.0 / 116.0) / 7.787;
+        X = (fX - 16.0 / 116.0) / 7.787;
 
     fZ = fY - b / 200.0;
-    if(fZ > 0.206893)
-      Z = pow(fZ, 3.0);
+    if (fZ > 0.206893)
+        Z = pow(fZ, 3.0);
     else
-      Z = (fZ - 16.0/116.0) / 7.787;
+        Z = (fZ - 16.0 / 116.0) / 7.787;
 
     X *= 0.950456 * 255;
     Y *= 255;

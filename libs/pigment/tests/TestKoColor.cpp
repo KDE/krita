@@ -31,7 +31,7 @@
 
 bool nearEqualValue(int a, int b)
 {
-    return qAbs(a -b) <= 1;
+    return qAbs(a - b) <= 1;
 }
 
 void TestKoColor::testForModel(QString model)

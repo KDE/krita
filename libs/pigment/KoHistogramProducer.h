@@ -123,7 +123,7 @@ protected:
 };
 
 class PIGMENTCMS_EXPORT KoHistogramProducerFactoryRegistry
-            : public KoGenericRegistry<KoHistogramProducerFactory*>
+        : public KoGenericRegistry<KoHistogramProducerFactory*>
 {
 public:
     virtual ~KoHistogramProducerFactoryRegistry();

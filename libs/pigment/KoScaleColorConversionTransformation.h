@@ -35,7 +35,7 @@ public:
     virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const {
         const typename _src_CSTraits_::channels_type* src = _src_CSTraits_::nativeArray(srcU8);
         typename _dst_CSTraits_::channels_type* dst = _dst_CSTraits_::nativeArray(dstU8);
-        for (quint32 i = 0; i < _src_CSTraits_::channels_nb * nPixels;i++) {
+        for (quint32 i = 0; i < _src_CSTraits_::channels_nb * nPixels; i++) {
             dst[i] = KoColorSpaceMaths<typename _src_CSTraits_::channels_type, typename _dst_CSTraits_::channels_type>::scaleToA(src[i]);
         }
     }

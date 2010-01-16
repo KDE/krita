@@ -50,4 +50,4 @@ public:
     virtual void convolveColors(const quint8* const* colors, const qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const = 0;
 };
 
-#endif 
+#endif

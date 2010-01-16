@@ -34,15 +34,13 @@ class KoSimpleColorConversionTransformation : public KoColorConversionTransforma
 {
 public:
     KoSimpleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs)
-        : KoColorConversionTransformation(srcCs, dstCs)
-    {
+            : KoColorConversionTransformation(srcCs, dstCs) {
     }
 
     ~KoSimpleColorConversionTransformation() {
     }
 
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
-    {
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const {
         const KoColorSpace* srcCs = srcColorSpace();
         const KoColorSpace* dstCs = dstColorSpace();
 
@@ -67,7 +65,7 @@ public:
 
 
 KoSimpleColorSpaceEngine::KoSimpleColorSpaceEngine()
-    : KoColorSpaceEngine("simple", i18n("Simple Color Conversion Engine"))
+        : KoColorSpaceEngine("simple", i18n("Simple Color Conversion Engine"))
 {
 }
 

@@ -255,30 +255,27 @@ KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolati
 
     if (startOffset < DBL_EPSILON) {
         m_startOffset = 0;
-    } else
-        if (startOffset > 1 - DBL_EPSILON) {
-            m_startOffset = 1;
-        } else {
-            m_startOffset = startOffset;
-        }
+    } else if (startOffset > 1 - DBL_EPSILON) {
+        m_startOffset = 1;
+    } else {
+        m_startOffset = startOffset;
+    }
 
     if (middleOffset < m_startOffset + DBL_EPSILON) {
         m_middleOffset = m_startOffset;
-    } else
-        if (middleOffset > 1 - DBL_EPSILON) {
-            m_middleOffset = 1;
-        } else {
-            m_middleOffset = middleOffset;
-        }
+    } else if (middleOffset > 1 - DBL_EPSILON) {
+        m_middleOffset = 1;
+    } else {
+        m_middleOffset = middleOffset;
+    }
 
     if (endOffset < m_middleOffset + DBL_EPSILON) {
         m_endOffset = m_middleOffset;
-    } else
-        if (endOffset > 1 - DBL_EPSILON) {
-            m_endOffset = 1;
-        } else {
-            m_endOffset = endOffset;
-        }
+    } else if (endOffset > 1 - DBL_EPSILON) {
+        m_endOffset = 1;
+    } else {
+        m_endOffset = endOffset;
+    }
 
     m_length = m_endOffset - m_startOffset;
 

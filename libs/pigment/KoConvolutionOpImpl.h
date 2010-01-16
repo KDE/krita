@@ -83,7 +83,7 @@ public:
 
         memset(totals, 0, sizeof(qreal) * _CSTrait::channels_nb);
 
-        for (;nPixels--; colors++, kernelValues++) {
+        for (; nPixels--; colors++, kernelValues++) {
             qreal weight = *kernelValues;
             const channels_type* color = _CSTrait::nativeArray(*colors);
             if (weight != 0) {

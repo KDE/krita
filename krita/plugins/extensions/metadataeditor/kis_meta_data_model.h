@@ -18,11 +18,13 @@
 
 #include <QAbstractTableModel>
 
-namespace KisMetaData {
-    class Store;
+namespace KisMetaData
+{
+class Store;
 }
 
-class KisMetaDataModel : public QAbstractTableModel {
+class KisMetaDataModel : public QAbstractTableModel
+{
 public:
     KisMetaDataModel(KisMetaData::Store* store);
 public:

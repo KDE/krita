@@ -23,16 +23,16 @@
 
 KisMetaDataModel::KisMetaDataModel(KisMetaData::Store* store) : m_store(store)
 {
-    
+
 }
 
-int KisMetaDataModel::rowCount(const QModelIndex &parent ) const
+int KisMetaDataModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_store->keys().count();
 }
 
-int KisMetaDataModel::columnCount(const QModelIndex &parent ) const
+int KisMetaDataModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return 2;
@@ -40,17 +40,13 @@ int KisMetaDataModel::columnCount(const QModelIndex &parent ) const
 
 QVariant KisMetaDataModel::data(const QModelIndex &index, int role) const
 {
-    if( !index.isValid())
-    {
+    if (!index.isValid()) {
         return QVariant();
     }
     Q_ASSERT(index.row() < m_store->keys().count());
-    switch(role)
-    {
-    case Qt::DisplayRole:
-    {
-        switch(index.column())
-        {
+    switch (role) {
+    case Qt::DisplayRole: {
+        switch (index.column()) {
         case 0:
             return m_store->keys()[index.row()];
         case 1:

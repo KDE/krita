@@ -129,7 +129,7 @@ void BigBrotherPlugin::slotStartRecordingMacro()
     // Create recorder
     m_recorder = new KisMacro();
     connect(m_view->image()->actionRecorder(), SIGNAL(addedAction(const KisRecordedAction&)),
-            m_recorder, SLOT(addRecordedAction(const KisRecordedAction&)));
+            m_recorder, SLOT(addAction(const KisRecordedAction&)));
 }
 
 void BigBrotherPlugin::slotStopRecordingMacro()

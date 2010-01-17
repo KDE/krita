@@ -40,7 +40,7 @@
 struct KisMetaDataEditor::Private {
     KisMetaData::Store* originalStore;
     KisMetaData::Store* store;
-    QMultiHash<KisMetaData::Value*, KisEntryEditor*> entryEditors;
+    QMultiHash<QString, KisEntryEditor*> entryEditors;
 };
 
 
@@ -106,15 +106,15 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                     if (!d->store->containsEntry(schema, entryName)) {
                         dbgPlugins << " Store does not have yet entry :" << entryName << " in" << schemaUri  << " ==" << schema->generateQualifiedName(entryName);
                     }
-                    KisMetaData::Value& value = d->store->getEntry(schema, entryName).value();
-                    KisEntryEditor* ee = new KisEntryEditor(obj, d->store, schema->generateQualifiedName(entryName), propertyName, structureField, -1);
+                    QString key = schema->generateQualifiedName(entryName);
+                    KisEntryEditor* ee = new KisEntryEditor(obj, d->store, key, propertyName, structureField, -1);
                     connect(obj, editorSignal.toAscii(), ee, SLOT(valueEdited()));
-                    QList<KisEntryEditor*> otherEditors = d->entryEditors.values(&value);
+                    QList<KisEntryEditor*> otherEditors = d->entryEditors.values(key);
                     foreach(KisEntryEditor* oe, otherEditors) {
                         connect(ee, SIGNAL(valueHasBeenEdited()), oe, SLOT(valueChanged()));
                         connect(oe, SIGNAL(valueHasBeenEdited()), ee, SLOT(valueChanged()));
                     }
-                    d->entryEditors.insert(&value, ee);
+                    d->entryEditors.insert(key, ee);
                 } else {
                     dbgPlugins << "Unknown schema :" << schemaUri;
                 }

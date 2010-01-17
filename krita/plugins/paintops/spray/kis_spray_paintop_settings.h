@@ -76,7 +76,7 @@ public:
     int shape() const;
     bool proportional() const;
 
-    bool jitterShapeSize() const;    
+    bool randomSize() const;    
     int width() const;
     int height() const;
     // distributed

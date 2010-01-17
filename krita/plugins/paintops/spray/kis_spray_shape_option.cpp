@@ -74,7 +74,7 @@ void KisSprayShapeOption::setupBrushPreviewSignals()
     connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterShape, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->randomSizeCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->randomSlider,SIGNAL(sliderReleased()),SIGNAL(sigSettingChanged()));
@@ -115,9 +115,9 @@ int KisSprayShapeOption::height() const
     return m_options->heightSpin->value();
 }
 
-bool KisSprayShapeOption::jitterShapeSize() const
+bool KisSprayShapeOption::randomSize() const
 {
-    return m_options->jitterShape->isChecked();
+    return m_options->randomSizeCHBox->isChecked();
 }
 
 bool KisSprayShapeOption::proportional() const
@@ -128,36 +128,36 @@ bool KisSprayShapeOption::proportional() const
 
 void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty("SprayShape/shape",shape());
-    setting->setProperty("SprayShape/proportional", proportional());
-    setting->setProperty("SprayShape/width", width());
-    setting->setProperty("SprayShape/height", height());
-    setting->setProperty("SprayShape/jitterShapeSize", jitterShapeSize());
-    setting->setProperty("SprayShape/fixedRotation", fixedRotation());
-    setting->setProperty("SprayShape/fixedAngle", fixedAngle());
-    setting->setProperty("SprayShape/randomRotation", randomRotation());
-    setting->setProperty("SprayShape/randomRotationWeight", randomRotationWeight());
-    setting->setProperty("SprayShape/followCursor", followCursor());
-    setting->setProperty("SprayShape/followCursorWeigth", followCursorWeigth());
-    setting->setProperty("SprayShape/imageUrl",m_options->imageUrl->text());
+    setting->setProperty(SPRAYSHAPE_SHAPE,shape());
+    setting->setProperty(SPRAYSHAPE_PROPORTIONAL, proportional());
+    setting->setProperty(SPRAYSHAPE_WIDTH, width());
+    setting->setProperty(SPRAYSHAPE_HEIGHT, height());
+    setting->setProperty(SPRAYSHAPE_RANDOM_SIZE, randomSize());
+    setting->setProperty(SPRAYSHAPE_FIXED_ROTATION, fixedRotation());
+    setting->setProperty(SPRAYSHAPE_FIXED_ANGEL, fixedAngle());
+    setting->setProperty(SPRAYSHAPE_RANDOM_ROTATION, randomRotation());
+    setting->setProperty(SPRAYSHAPE_RANDOM_ROTATION_WEIGHT, randomRotationWeight());
+    setting->setProperty(SPRAYSHAPE_FOLLOW_CURSOR, followCursor());
+    setting->setProperty(SPRAYSHAPE_FOLLOW_CURSOR_WEIGHT, followCursorWeigth());
+    setting->setProperty(SPRAYSHAPE_IMAGE_URL,m_options->imageUrl->text());
     static_cast<KisSprayPaintOpSettings*>(setting)->setQImage(m_image);
 }
 
 
 void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->shapeBox->setCurrentIndex(setting->getInt("SprayShape/shape"));
-    m_options->widthSpin->setValue(setting->getInt("SprayShape/width"));
-    m_options->heightSpin->setValue(setting->getInt("SprayShape/height"));
-    m_options->jitterShape->setChecked(setting->getBool("SprayShape/jitterShapeSize"));
-    m_options->proportionalBox->setChecked(setting->getBool("SprayShape/proportional"));
-    m_options->fixedRotation->setChecked(setting->getBool("SprayShape/fixedRotation"));
-    m_options->fixedRotationSPBox->setValue(setting->getDouble("SprayShape/fixedAngle"));
-    m_options->followCursor->setChecked(setting->getBool("SprayShape/followCursor"));
-    m_options->followCursorWeightSPBox->setValue(setting->getDouble("SprayShape/followCursorWeigth") );
-    m_options->randomRotation->setChecked(setting->getBool("SprayShape/randomRotation"));
-    m_options->randomWeightSPBox->setValue(setting->getDouble("SprayShape/randomRotationWeight") );
-    m_options->imageUrl->setText(setting->getString("SprayShape/imageUrl"));
+    m_options->shapeBox->setCurrentIndex(setting->getInt(SPRAYSHAPE_SHAPE));
+    m_options->widthSpin->setValue(setting->getInt(SPRAYSHAPE_WIDTH));
+    m_options->heightSpin->setValue(setting->getInt(SPRAYSHAPE_HEIGHT));
+    m_options->randomSizeCHBox->setChecked(setting->getBool(SPRAYSHAPE_RANDOM_SIZE));
+    m_options->proportionalBox->setChecked(setting->getBool(SPRAYSHAPE_PROPORTIONAL));
+    m_options->fixedRotation->setChecked(setting->getBool(SPRAYSHAPE_FIXED_ROTATION));
+    m_options->fixedRotationSPBox->setValue(setting->getDouble(SPRAYSHAPE_FIXED_ANGEL));
+    m_options->followCursor->setChecked(setting->getBool(SPRAYSHAPE_FOLLOW_CURSOR));
+    m_options->followCursorWeightSPBox->setValue(setting->getDouble(SPRAYSHAPE_FOLLOW_CURSOR) );
+    m_options->randomRotation->setChecked(setting->getBool(SPRAYSHAPE_RANDOM_ROTATION));
+    m_options->randomWeightSPBox->setValue(setting->getDouble(SPRAYSHAPE_RANDOM_ROTATION_WEIGHT) );
+    m_options->imageUrl->setText(setting->getString(SPRAYSHAPE_IMAGE_URL));
 }
 
 bool KisSprayShapeOption::fixedRotation() const

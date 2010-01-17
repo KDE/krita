@@ -212,7 +212,7 @@
       </widget>
      </item>
      <item row="4" column="0" colspan="2">
-      <widget class="QCheckBox" name="jitterShape">
+      <widget class="QCheckBox" name="randomSizeCHBox">
        <property name="text">
         <string>Random size</string>
        </property>

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008,2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,32 +73,68 @@ bool KisSprayPaintOpSettings::jitterMovement() const
     return getBool("Spray/jitterMovement");
 }
 
-int KisSprayPaintOpSettings::width() const
-{
-    return getInt("SprayShape/width");
+int KisSprayPaintOpSettings::width() const{
+    return getInt(SPRAYSHAPE_WIDTH);
 }
 
 
 int KisSprayPaintOpSettings::height() const
 {
-    return getInt("SprayShape/height");
+    return getInt(SPRAYSHAPE_HEIGHT);
 }
 
 
 int KisSprayPaintOpSettings::shape() const
 {
-    return getInt("SprayShape/shape");
+    return getInt(SPRAYSHAPE_SHAPE);
 }
 
-bool KisSprayPaintOpSettings::jitterShapeSize() const
+bool KisSprayPaintOpSettings::randomSize() const
 {
-    return getBool("Spray/jitterShapeSize");
+    return getBool(SPRAYSHAPE_RANDOM_SIZE);
 }
 
 bool KisSprayPaintOpSettings::proportional() const
 {
-    return getBool("SprayShape/proportional");
+    return getBool(SPRAYSHAPE_PROPORTIONAL);
 }
+
+int KisSprayPaintOpSettings::fixedAngle() const
+{
+    return getInt(SPRAYSHAPE_FIXED_ANGEL);
+}
+
+
+bool KisSprayPaintOpSettings::fixedRotation() const
+{
+    return getBool(SPRAYSHAPE_FIXED_ROTATION);
+}
+
+
+qreal KisSprayPaintOpSettings::randomRotationWeight() const
+{
+    return getDouble(SPRAYSHAPE_RANDOM_ROTATION_WEIGHT);
+}
+
+
+bool KisSprayPaintOpSettings::randomRotation() const
+{
+    return getBool(SPRAYSHAPE_RANDOM_ROTATION);
+}
+
+
+
+bool KisSprayPaintOpSettings::followCursor() const
+{
+    return getBool(SPRAYSHAPE_FOLLOW_CURSOR);
+}
+
+
+qreal KisSprayPaintOpSettings::followCursorWeigth() const
+{
+    return getDouble(SPRAYSHAPE_FOLLOW_CURSOR_WEIGHT);
+}
+
 
 bool KisSprayPaintOpSettings::useDensity() const
 {
@@ -191,41 +227,6 @@ bool KisSprayPaintOpSettings::sampleInput() const
 }
 
 
-int KisSprayPaintOpSettings::fixedAngle() const
-{
-    return getInt("SprayShape/fixedAngle");
-}
-
-
-bool KisSprayPaintOpSettings::fixedRotation() const
-{
-    return getBool("SprayShape/fixedRotation");
-}
-
-
-qreal KisSprayPaintOpSettings::randomRotationWeight() const
-{
-    return getDouble("SprayShape/randomRotationWeight");
-}
-
-
-bool KisSprayPaintOpSettings::randomRotation() const
-{
-    return getBool("SprayShape/randomRotation");
-}
-
-
-
-bool KisSprayPaintOpSettings::followCursor() const
-{
-    return getBool("SprayShape/followCursor");
-}
-
-
-qreal KisSprayPaintOpSettings::followCursorWeigth() const
-{
-    return getDouble("SprayShape/followCursorWeigth");
-}
 
 QImage KisSprayPaintOpSettings::image() const
 {

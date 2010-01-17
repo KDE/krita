@@ -123,8 +123,15 @@ void Bracketing2HDRPlugin::addImage(const QString& filename)
     dbgPlugins <<" Aperture: " << aperture;
     qint32 iso = 100;
     if (exifInfo->containsEntry(KisMetaData::Schema::EXIFSchemaUri, "ISOSpeedRatings")) {
-        iso = exifInfo->getValue(KisMetaData::Schema::EXIFSchemaUri, "ISOSpeedRatings").asInteger();
-        dbgPlugins << iso;
+        QList<KisMetaData::Value> isoSpeed = exifInfo->getValue(KisMetaData::Schema::EXIFSchemaUri, "ISOSpeedRatings").asArray();
+        dbgPlugins << exifInfo->getValue(KisMetaData::Schema::EXIFSchemaUri, "ISOSpeedRatings");
+        if(isoSpeed.size() >= 1)
+        {
+            iso = isoSpeed[0].asInteger();
+            dbgPlugins << iso;
+        } else {
+            dbgPlugins << "Invalid iso value";
+        }
     }
     dbgPlugins <<" ISO : " << iso;
     int index = m_wdgBracketing2HDR->tableWidgetImages->rowCount();

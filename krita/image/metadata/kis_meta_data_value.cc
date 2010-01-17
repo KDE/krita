@@ -458,7 +458,7 @@ QString Value::toString() const
     }
     break;
     case Value::Rational:
-        return QString(d->value.rational->numerator) + " / " + d->value.rational->denominator;
+        return QString("%1 / %2").arg(d->value.rational->numerator).arg(d->value.rational->denominator);
     }
     return i18n("Invalid value.");
 }

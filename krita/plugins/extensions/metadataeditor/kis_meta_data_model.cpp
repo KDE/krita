@@ -17,6 +17,9 @@
  */
 
 #include "kis_meta_data_model.h"
+
+#include <KLocale>
+
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_value.h>
@@ -56,4 +59,18 @@ QVariant KisMetaDataModel::data(const QModelIndex &index, int role) const
     default:
         return QVariant();
     }
+}
+
+QVariant KisMetaDataModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+        Q_ASSERT(section < 2);
+        switch (section) {
+        case 0:
+            return i18n("Key");
+        case 1:
+            return i18n("Value");
+        }
+    }
+    return QVariant();
 }

@@ -433,7 +433,7 @@ QString Value::toString() const
         for (int i = 0; i < d->value.array->size(); ++i) {
             const Value& val = d->value.array->at(i);
             r += val.toString();
-            if (i != d->value.array->size()) {
+            if (i != d->value.array->size() - 1) {
                 r += ",";
             }
             r += " ";
@@ -448,7 +448,7 @@ QString Value::toString() const
             const QString& field = fields[i];
             const Value& val = d->value.structure->value(field);
             r += field + " => " + val.toString();
-            if (i != d->value.array->size()) {
+            if (i != d->value.array->size() - 1) {
                 r += ",";
             }
             r += " ";

@@ -20,6 +20,8 @@
 #include <QString>
 #include <QVariant>
 
+#include <kis_debug.h>
+
 #include "kis_meta_data_value.h"
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_entry.h>
@@ -81,8 +83,8 @@ KisEntryEditor::~KisEntryEditor()
 
 void KisEntryEditor::valueChanged()
 {
-    bool blocked = d->object->blockSignals(true);
     if (d->store->containsEntry(d->key)) {
+        bool blocked = d->object->blockSignals(true);
         d->object->setProperty(d->propertyName.toAscii(), d->value().asVariant());
         d->object->blockSignals(blocked);
     }
@@ -90,7 +92,9 @@ void KisEntryEditor::valueChanged()
 
 void KisEntryEditor::valueEdited()
 {
-    d->setValue(d->object->property(d->propertyName.toAscii()));
+    QVariant val = d->object->property(d->propertyName.toAscii());
+    dbgPlugins << "Value edited: " << d->propertyName << val;
+    d->setValue(val);
     emit valueHasBeenEdited();
 }
 

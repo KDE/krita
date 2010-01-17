@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,10 @@
 #include <QVariant>
 #include <QStringList>
 
+#include <klocale.h>
+
 #include <kis_debug.h>
+#include <boost/concept_check.hpp>
 
 using namespace KisMetaData;
 
@@ -412,4 +415,50 @@ QMap<QString, KisMetaData::Value> Value::asLangArray() const
         langArray[valKeyVar.toString()] = val;
     }
     return langArray;
+}
+
+QString Value::toString() const
+{
+    switch (type()) {
+    case Value::Invalid:
+        return i18n("Invalid value.");
+    case Value::Variant:
+        return d->value.variant->toString();
+        break;
+    case Value::OrderedArray:
+    case Value::UnorderedArray:
+    case Value::AlternativeArray:
+    case Value::LangArray: {
+        QString r = QString("[%1]{ ").arg(d->value.array->size());
+        for (int i = 0; i < d->value.array->size(); ++i) {
+            const Value& val = d->value.array->at(i);
+            r += val.toString();
+            if (i != d->value.array->size()) {
+                r += ",";
+            }
+            r += " ";
+        }
+        r += "}";
+        return r;
+    }
+    case Value::Structure: {
+        QString r = "{ ";
+        QList<QString> fields = d->value.structure->keys();
+        for (int i = 0; i < fields.count(); ++i) {
+            const QString& field = fields[i];
+            const Value& val = d->value.structure->value(field);
+            r += field + " => " + val.toString();
+            if (i != d->value.array->size()) {
+                r += ",";
+            }
+            r += " ";
+        }
+        r += "}";
+        return r;
+    }
+    break;
+    case Value::Rational:
+        return QString(d->value.rational->numerator) + " / " + d->value.rational->denominator;
+    }
+    return i18n("Invalid value.");
 }

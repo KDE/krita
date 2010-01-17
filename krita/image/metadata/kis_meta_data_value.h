@@ -118,6 +118,7 @@ public:
     * qualifier "xml:lang" for the key of the map.
     */
     QMap<QString, KisMetaData::Value> asLangArray() const;
+    QString toString() const;
 public:
     bool operator==(const Value&) const;
     Value& operator+=(const Value&);

@@ -87,7 +87,7 @@ QVariant KisMetaDataModel::data(const QModelIndex &index, int role) const
             }
         }
         case 2:
-            return m_store->entries()[index.row()].value().asVariant();
+            return m_store->entries()[index.row()].value().toString();
         }
     }
     default:

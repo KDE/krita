@@ -52,7 +52,7 @@ QVariant KisMetaDataModel::data(const QModelIndex &index, int role) const
         switch(index.column())
         {
         case 0:
-            return m_store->entries()[index.row()].name();
+            return m_store->keys()[index.row()];
         case 1:
             return m_store->entries()[index.row()].value().asVariant();
         }

@@ -53,7 +53,7 @@
 #define bounds(x,a,b) (x<a ? a : (x>b ? b :x))
 
 KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
-        : KisConfigWidget(parent, f)
+        : KisConfigWidget(parent, f), m_histogram(0)
 {
     Q_ASSERT(dev);
     m_page = new WdgPerChannel(this);
@@ -82,9 +82,13 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     // init histogram calculator
     QList<QString> keys =
         KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_dev->colorSpace());
-    KoHistogramProducerFactory *hpf;
-    hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
-    m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
+    
+    if(keys.size() > 0)
+    {
+        KoHistogramProducerFactory *hpf;
+        hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
+        m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
+    }
 
     connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->cbPreview, SIGNAL(stateChanged(int)), this, SLOT(setPreview(int)));
@@ -138,20 +142,23 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
     QPainter p(&pix);
     p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
 
-    m_histogram->setChannel(m_activeCh);
+    if(m_histogram)
+    {
+        m_histogram->setChannel(m_activeCh);
 
-    double highest = (double)m_histogram->calculations().getHighest();
-    qint32 bins = m_histogram->producer()->numberOfBins();
+        double highest = (double)m_histogram->calculations().getHighest();
+        qint32 bins = m_histogram->producer()->numberOfBins();
 
-    if (m_histogram->getHistogramType() == LINEAR) {
-        double factor = (double)height / highest;
-        for (i = 0; i < bins; ++i) {
-            p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
-        }
-    } else {
-        double factor = (double)height / (double)log(highest);
-        for (i = 0; i < bins; ++i) {
-            p.drawLine(i, height, i, height - int(log((double)m_histogram->getValue(i)) * factor));
+        if (m_histogram->getHistogramType() == LINEAR) {
+            double factor = (double)height / highest;
+            for (i = 0; i < bins; ++i) {
+                p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
+            }
+        } else {
+            double factor = (double)height / (double)log(highest);
+            for (i = 0; i < bins; ++i) {
+                p.drawLine(i, height, i, height - int(log((double)m_histogram->getValue(i)) * factor));
+            }
         }
     }
     return pix;

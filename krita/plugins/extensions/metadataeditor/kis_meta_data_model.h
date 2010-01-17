@@ -18,7 +18,16 @@
 
 #include <QAbstractTableModel>
 
+namespace KisMetaData {
+    class Store;
+}
+
 class KisMetaDataModel : public QAbstractTableModel {
 public:
-    KisMetaDataModel();
+    KisMetaDataModel(KisMetaData::Store* store);
+public:
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+private:
+    KisMetaData::Store* m_store;
 };

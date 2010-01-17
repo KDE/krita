@@ -17,7 +17,23 @@
  */
 
 #include "kis_meta_data_model.h"
+#include <kis_meta_data_store.h>
 
-KisMetaDataModel::KisMetaDataModel()
+KisMetaDataModel::KisMetaDataModel(KisMetaData::Store* store) : m_store(store)
 {
+    
 }
+
+int KisMetaDataModel::rowCount(const QModelIndex &parent ) const
+{
+    Q_UNUSED(parent);
+    return m_store->keys().count();
+}
+
+int KisMetaDataModel::columnCount(const QModelIndex &parent ) const
+{
+    Q_UNUSED(parent);
+    return 2;
+}
+
+

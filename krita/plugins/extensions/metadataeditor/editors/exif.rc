@@ -13,7 +13,8 @@
                 schemaUri = "http://ns.adobe.com/exif/1.0/"
                 entryName = "ISOSpeedRatings"
                 editorSignal = "valueChanged(int)"
-                propertyName = "value" />
+                propertyName = "value"
+                arrayIndex = "0" />
     <EntryEditor editorName = "editExposureMode"
                 schemaUri = "http://ns.adobe.com/exif/1.0/"
                 entryName = "ExposureMode"

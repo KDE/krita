@@ -46,6 +46,12 @@ public:
     QList<KoFilterEffect*> filterEffects() const;
 
     /**
+    * Returns if the filter effect stack is empty.
+    * @return false if the stack contains filter effects, otherwise true
+    */
+    bool isEmpty() const;
+
+    /**
     * Inserts a new filter at the given position in the filter list.
     *
     * The filter stack take ownership of the inserted filter effect.
@@ -94,11 +100,13 @@ public:
      * Returns true if the new value is non-zero, false otherwise.
      */
     bool ref();
+
     /**
      * Decrements the use-value.
      * Returns true if the new value is non-zero, false otherwise.
      */
     bool deref();
+
     /// Return reference counter
     int useCount() const;
 

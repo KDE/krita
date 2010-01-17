@@ -56,6 +56,11 @@ QList<KoFilterEffect*> KoFilterEffectStack::filterEffects() const
     return d->filterEffects;
 }
 
+bool KoFilterEffectStack::isEmpty() const
+{
+    return d->filterEffects.isEmpty();
+}
+
 void KoFilterEffectStack::insertFilterEffect(int index, KoFilterEffect * filter)
 {
     if (filter)

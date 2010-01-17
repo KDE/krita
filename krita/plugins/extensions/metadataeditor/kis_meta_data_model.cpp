@@ -18,6 +18,8 @@
 
 #include "kis_meta_data_model.h"
 #include <kis_meta_data_store.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_value.h>
 
 KisMetaDataModel::KisMetaDataModel(KisMetaData::Store* store) : m_store(store)
 {
@@ -36,4 +38,26 @@ int KisMetaDataModel::columnCount(const QModelIndex &parent ) const
     return 2;
 }
 
-
+QVariant KisMetaDataModel::data(const QModelIndex &index, int role) const
+{
+    if( !index.isValid())
+    {
+        return QVariant();
+    }
+    Q_ASSERT(index.row() < m_store->keys().count());
+    switch(role)
+    {
+    case Qt::DisplayRole:
+    {
+        switch(index.column())
+        {
+        case 0:
+            return m_store->entries()[index.row()].name();
+        case 1:
+            return m_store->entries()[index.row()].value().asVariant();
+        }
+    }
+    default:
+        return QVariant();
+    }
+}

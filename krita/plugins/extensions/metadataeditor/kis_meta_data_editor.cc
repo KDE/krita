@@ -34,6 +34,7 @@
 
 #include "kis_entry_editor.h"
 #include <qtableview.h>
+#include "kis_meta_data_model.h"
 
 struct KisMetaDataEditor::Private {
     KisMetaData::Store* originalStore;
@@ -134,6 +135,8 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
     
     // Add the list page
     QTableView* tableView = new QTableView;
+    KisMetaDataModel* model = new KisMetaDataModel(d->store);
+    tableView->setModel(model);
     KPageWidgetItem *page = new KPageWidgetItem( tableView, i18n("List"));
     page->setIcon(KIcon("format-list-unordered"));
     addPage(page);

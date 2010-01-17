@@ -73,7 +73,6 @@ public:
      * @param xmlWriter used for writing the xml
      * @param mainStyles for saving the styles
      * @param embeddedSaver for saving embedded documents
-     * @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
      */
     KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles,
                          KoEmbeddedDocumentSaver &embeddedSaver);

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -137,6 +137,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
     KisMetaDataModel* model = new KisMetaDataModel(d->store);
     tableView->setModel(model);
     tableView->verticalHeader()->setVisible(false);
+    tableView->resizeColumnsToContents();
     KPageWidgetItem *page = new KPageWidgetItem(tableView, i18n("List"));
     page->setIcon(KIcon("format-list-unordered"));
     addPage(page);

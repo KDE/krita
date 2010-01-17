@@ -1,6 +1,6 @@
 include_directories(${CMAKE_SOURCE_DIR}/krita/image/metadata)
 
-set(kritametadataeditor_PART_SRCS metadataeditor.cc kis_entry_editor.cc kis_meta_data_editor.cc )
+set(kritametadataeditor_PART_SRCS metadataeditor.cc kis_entry_editor.cc kis_meta_data_editor.cc kis_meta_data_model.cpp )
 
 # kde4_add_ui_files(kritametadataeditor_PART_SRCS myuifile.ui )
 

@@ -93,6 +93,8 @@ public:
     * @return true if the value was changed
     */
     bool setVariant(const QVariant& variant);
+    bool setStructureVariant(const QString& fieldNAme, const QVariant& variant);
+    bool setArrayVariant(int index, const QVariant& variant);
     /**
     * @return the Rational hold by this Value, or a null rational if this Value is not
     * an Rational
@@ -111,7 +113,6 @@ public:
     * @return the structure hold by this Value, or an empty structure if this Value is not a Structure
     */
     QMap<QString, KisMetaData::Value> asStructure() const;
-    QMap<QString, KisMetaData::Value>* asStructure();
     /**
     * It's a convenient function that build a map from a LangArray using the property
     * qualifier "xml:lang" for the key of the map.

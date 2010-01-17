@@ -186,6 +186,25 @@ bool Value::setVariant(const QVariant& variant)
     return false;
 }
 
+bool Value::setStructureVariant(const QString& fieldNAme, const QVariant& variant)
+{
+    if (type() == Structure) {
+        return (*d->value.structure)[fieldNAme].setVariant(variant);
+    }
+    return false;
+}
+
+bool Value::setArrayVariant(int index, const QVariant& variant)
+{
+    if (isArray()) {
+        for (int i = d->value.array->size(); i <= index; ++i) {
+            d->value.array->append(Value());
+        }
+        (*d->value.array)[index].setVariant(variant);
+    }
+    return false;
+}
+
 KisMetaData::Rational Value::asRational() const
 {
     if (d->type == Rational) {
@@ -214,14 +233,6 @@ QMap<QString, KisMetaData::Value> Value::asStructure() const
         return *d->value.structure;
     }
     return QMap<QString, KisMetaData::Value>();
-}
-
-QMap<QString, KisMetaData::Value>* Value::asStructure()
-{
-    if (type() == Structure) {
-        return d->value.structure;
-    }
-    return 0;
 }
 
 QDebug operator<<(QDebug debug, const Value &v)

@@ -21,20 +21,56 @@
 #include <QVariant>
 
 #include "kis_meta_data_value.h"
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_entry.h>
 
 struct KisEntryEditor::Private {
     QObject* object;
     QString propertyName;
-    KisMetaData::Value* value;
+    KisMetaData::Store* store;
+    QString key;
+    QString structField;
+    int arrayIndex;
+    KisMetaData::Value value() {
+        KisMetaData::Value value = store->getEntry(key).value();
+        if (value.type() == KisMetaData::Value::Structure && !structField.isEmpty()) {
+            QMap<QString, KisMetaData::Value> structure = value.asStructure();
+            return structure[ structField ];
+        } else if (value.isArray() && arrayIndex > -1) {
+            QList<KisMetaData::Value> array = value.asArray();
+            if (arrayIndex < array.size()) {
+                return array[arrayIndex];
+            } else {
+                return KisMetaData::Value();
+            }
+        }
+        return value;
+    }
+    void setValue(const QVariant& variant) {
+        KisMetaData::Value& value = store->getEntry(key).value();
+        if (value.type() == KisMetaData::Value::Structure && !structField.isEmpty()) {
+            QMap<QString, KisMetaData::Value> structure = value.asStructure();
+            value = structure[ structField ];
+            value.setVariant(variant);
+            value.setStructureVariant(structField, variant);
+        } else if (value.isArray() && arrayIndex > -1) {
+            value.setArrayVariant(arrayIndex, variant);
+        } else {
+            value.setVariant(variant);
+        }
+    }
 };
 
-KisEntryEditor::KisEntryEditor(QObject* obj, KisMetaData::Value* v, QString propertyName) : d(new Private)
+KisEntryEditor::KisEntryEditor(QObject* obj, KisMetaData::Store* store, QString key, QString propertyName, QString structField, int arrayIndex) : d(new Private)
 {
     Q_ASSERT(obj);
     Q_ASSERT(v);
     d->object = obj;
     d->propertyName = propertyName;
-    d->value = v;
+    d->store = store;
+    d->key = key;
+    d->structField = structField;
+    d->arrayIndex = arrayIndex;
     valueChanged();
 }
 
@@ -46,13 +82,15 @@ KisEntryEditor::~KisEntryEditor()
 void KisEntryEditor::valueChanged()
 {
     bool blocked = d->object->blockSignals(true);
-    d->object->setProperty(d->propertyName.toAscii(), d->value->asVariant());
-    d->object->blockSignals(blocked);
+    if (d->store->containsEntry(d->key)) {
+        d->object->setProperty(d->propertyName.toAscii(), d->value().asVariant());
+        d->object->blockSignals(blocked);
+    }
 }
 
 void KisEntryEditor::valueEdited()
 {
-    d->value->setVariant(d->object->property(d->propertyName.toAscii()));
+    d->setValue(d->object->property(d->propertyName.toAscii()));
     emit valueHasBeenEdited();
 }
 

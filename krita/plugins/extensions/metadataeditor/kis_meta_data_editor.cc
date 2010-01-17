@@ -95,6 +95,9 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
             const QString editorSignal = '2' + elem.attribute("editorSignal");
             const QString propertyName = elem.attribute("propertyName");
             const QString structureField = elem.attribute("structureField");
+            bool ok;
+            int arrayIndex = elem.attribute("arrayIndex", "-1").toInt(&ok);
+            if (!ok) arrayIndex = -1;
 
             QWidget* obj = widget->findChild<QWidget*>(editorName);
             if (obj) {
@@ -104,13 +107,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                         dbgPlugins << " Store does not have yet entry :" << entryName << " in" << schemaUri  << " ==" << schema->generateQualifiedName(entryName);
                     }
                     KisMetaData::Value& value = d->store->getEntry(schema, entryName).value();
-                    KisEntryEditor* ee = 0;
-                    if (value.type() == KisMetaData::Value::Structure && !structureField.isEmpty()) {
-                        QMap<QString, KisMetaData::Value>* structure = value.asStructure();
-                        ee = new KisEntryEditor(obj, &(*structure)[ structureField ], propertyName);
-                    } else {
-                        ee = new KisEntryEditor(obj, &value, propertyName);
-                    }
+                    KisEntryEditor* ee = new KisEntryEditor(obj, d->store, schema->generateQualifiedName(entryName), propertyName, structureField, -1);
                     connect(obj, editorSignal.toAscii(), ee, SLOT(valueEdited()));
                     QList<KisEntryEditor*> otherEditors = d->entryEditors.values(&value);
                     foreach(KisEntryEditor* oe, otherEditors) {

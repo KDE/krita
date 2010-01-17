@@ -25,7 +25,7 @@ class QString;
 
 namespace KisMetaData
 {
-class Value;
+class Store;
 }
 
 class KisEntryEditor : public QObject
@@ -33,7 +33,7 @@ class KisEntryEditor : public QObject
     Q_OBJECT
     struct Private;
 public:
-    KisEntryEditor(QObject*, KisMetaData::Value*, QString propertyName);
+    KisEntryEditor(QObject* obj, KisMetaData::Store* store, QString key, QString propertyName, QString structField, int arrayIndex);
     ~KisEntryEditor();
 public slots:
     void valueEdited();

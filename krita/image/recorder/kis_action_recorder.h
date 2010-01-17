@@ -38,7 +38,7 @@ public:
 
 public slots:
 
-    void addRecordedAction(const KisRecordedAction& action);
+    virtual void addAction(const KisRecordedAction& action, const KisRecordedAction* before = 0);
 
 signals:
     /**
@@ -46,6 +46,5 @@ signals:
      */
     void addedAction(const KisRecordedAction& action);
 };
-
 
 #endif

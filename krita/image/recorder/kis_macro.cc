@@ -52,7 +52,7 @@ KisMacro::~KisMacro()
 void KisMacro::appendActions(const QList<KisRecordedAction*>& actions)
 {
     foreach(KisRecordedAction* action, actions) {
-        d->actions.append(action->clone());
+        addAction(*action);
     }
 }
 
@@ -122,7 +122,7 @@ void KisMacro::fromXML(const QDomElement& docElem)
                 dbgImage << "Reconstruct : " << id << endl; // the node really is an element.
                 KisRecordedActionFactory* raf = KisRecordedActionFactoryRegistry::instance()->get(id);
                 if (raf) {
-                    d->actions.append(raf->fromXML(elt));
+                    d->actions.append(raf->fromXML(elt)); // TODO should use addAction
                 } else {
                     dbgImage << "Unknown action : " << id << endl;
                 }

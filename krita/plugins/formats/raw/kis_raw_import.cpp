@@ -115,7 +115,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         QApplication::restoreOverrideCursor();
 
         // Init the image
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA16", "");
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
         KisImageWSP image = new KisImage(doc->undoAdapter(), width, height, cs, filename);
         if (image.isNull()) return KoFilter::CreationError;
         image->lock();

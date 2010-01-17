@@ -25,6 +25,7 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 
 #include <kis_paint_device.h>
 
@@ -75,7 +76,7 @@ std::vector<KisImageAlignment::Result> KisImageAlignment::align(QList<ImageInfo>
     int height = 1000; // TODO TMP variable
     dbgPlugins << "Creating panorama with" << images.size() << " images";
     dbgPlugins << "Detecting interest points";
-    const KoColorSpace* graycs = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
+    const KoColorSpace* graycs = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), 0);
     if (!graycs) {
         dbgPlugins << "Gray 8bit is not installed."; // TODO: message box
         return std::vector<Result>();

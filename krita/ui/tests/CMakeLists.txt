@@ -44,14 +44,6 @@ kde4_add_unit_test(KisPrescaledProjectionTest TESTNAME krita-ui-kis_prescaled_pr
 target_link_libraries(KisPrescaledProjectionTest  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
-set(kis_files_test_SRCS kis_files_test.cpp )
-
-kde4_add_unit_test(kis_files_test TESTNAME krita-ui-kis_files_test ${kis_files_test_SRCS})
-
-target_link_libraries(kis_files_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
-
-
-########### next target ###############
 
 set(kis_kra_loader_test_SRCS kis_kra_loader_test.cpp )
 kde4_add_unit_test(KisKraLoaderTest TESTNAME krita-ui-KisKraLoaderTest ${kis_kra_loader_test_SRCS})

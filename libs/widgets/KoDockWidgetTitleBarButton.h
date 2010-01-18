@@ -45,6 +45,7 @@ protected:
     virtual void leaveEvent(QEvent *event);
     virtual void paintEvent(QPaintEvent *event);
 
+private:
     class Private;
     Private * const d;
 };

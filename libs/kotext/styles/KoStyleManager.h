@@ -37,6 +37,7 @@ class KoTableStyle;
 class KoTableColumnStyle;
 class KoTableRowStyle;
 class KoTableCellStyle;
+class KoSectionStyle;
 class KoXmlWriter;
 class ChangeFollower;
 class KoGenStyles;
@@ -101,6 +102,10 @@ public:
      * Add a new table cell style, automatically giving it a new styleId.
      */
     void add(KoTableCellStyle *style);
+    /**
+     * Add a new sewction style, automatically giving it a new styleId.
+     */
+    void add(KoSectionStyle *style);
 
     /**
      * Remove a style.
@@ -130,6 +135,10 @@ public:
      * Remove a table cell style.
      */
     void remove(KoTableCellStyle *style);
+    /**
+     * Remove a section style.
+     */
+    void remove(KoSectionStyle *style);
 
     /**
      * Add a document for which the styles will be applied.
@@ -200,6 +209,15 @@ public:
     KoTableCellStyle *tableCellStyle(int id) const;
 
     /**
+     * Return a sectionStyle by its id.
+     * From documents you can retrieve the id out of each QTextFrameFormat
+     * by requesting the KoSectionStyle::StyleId property.
+     * @param id the unique Id to search for.
+     * @see KoSectionStyle::styleId()
+     */
+    KoSectionStyle *sectionStyle(int id) const;
+
+    /**
      * Return the first characterStyle with the param user-visible-name.
      * Since the name does not have to be unique there can be multiple
      * styles registered with that name, only the first is returned
@@ -258,6 +276,15 @@ public:
      */
     KoTableCellStyle *tableCellStyle(const QString &name) const;
 
+    /**
+     * Return the first sectionStyle with the param user-visible-name.
+     * Since the name does not have to be unique there can be multiple
+     * styles registered with that name, only the first is returned
+     * @param name the name of the style.
+     * @see sectionStyle(id);
+     */
+    KoSectionStyle *sectionStyle(const QString &name) const;
+
      /**
      * Return the default paragraph style that will always be present in each
      * document. You can alter the style, but you can never delete it.
@@ -304,6 +331,9 @@ public:
     /// return all the tableCellStyles registered.
     QList<KoTableCellStyle*> tableCellStyles() const;
 
+    /// return all the sectionStyles registered.
+    QList<KoSectionStyle*> sectionStyles() const;
+
     /// reimplemented
     virtual bool completeLoading(KoStore *store);
 
@@ -318,6 +348,7 @@ signals:
     void styleAdded(KoTableColumnStyle*);
     void styleAdded(KoTableRowStyle*);
     void styleAdded(KoTableCellStyle*);
+    void styleAdded(KoSectionStyle*);
     void styleRemoved(KoParagraphStyle*);
     void styleRemoved(KoCharacterStyle*);
     void styleRemoved(KoListStyle*);
@@ -325,6 +356,7 @@ signals:
     void styleRemoved(KoTableColumnStyle*);
     void styleRemoved(KoTableRowStyle*);
     void styleRemoved(KoTableCellStyle*);
+    void styleRemoved(KoSectionStyle*);
 
 public slots:
     /**
@@ -374,6 +406,13 @@ public slots:
      * Note that successive calls are aggregated.
      */
     void alteredStyle(const KoTableCellStyle *style);
+
+   /**
+     * Slot that should be called whenever a style is changed. This will update
+     * all documents with the style.
+     * Note that successive calls are aggregated.
+     */
+    void alteredStyle(const KoSectionStyle *style);
 
 private slots:
     void updateAlteredStyles(); // for the QTimer::singleshot

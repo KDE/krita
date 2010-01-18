@@ -36,6 +36,7 @@ class KoTableStyle;
 class KoTableColumnStyle;
 class KoTableRowStyle;
 class KoTableCellStyle;
+class KoSectionStyle;
 class KoStyleManager;
 class KoShape;
 class KoShapeLoadingContext;
@@ -125,13 +126,22 @@ public:
     KoTableRowStyle *tableRowStyle(const QString &name, bool stylesDotXml);
 
     /**
-     * Get the table style for the given name
+     * Get the table cell style for the given name
      *
      * @param name The name of the style to get
      * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
      * @return The table cell style for the given name or 0 if not found
      */
     KoTableCellStyle *tableCellStyle(const QString &name, bool stylesDotXml);
+
+    /**
+     * Get the section style for the given name
+     *
+     * @param name The name of the style to get
+     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @return The section style for the given name or 0 if not found
+     */
+    KoSectionStyle *sectionStyle(const QString &name, bool stylesDotXml);
 
 protected:
     /**
@@ -183,6 +193,11 @@ private:
     void addTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                        KoStyleManager *styleManager = 0);
     QList<QPair<QString, KoTableCellStyle *> > loadTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
+
+    // helper functions for loading of section styles
+    void addSectionStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
+                       KoStyleManager *styleManager = 0);
+    QList<QPair<QString, KoSectionStyle *> > loadSectionStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     void addOutlineStyle(KoOdfLoadingContext & context, KoStyleManager *styleManager);
 

@@ -23,7 +23,7 @@
 #ifndef KOPAGEFORMAT_H
 #define KOPAGEFORMAT_H
 
-#include "kotext_export.h"
+#include "koodf_export.h"
 
 #include <QtGui/QPrinter>
 
@@ -85,53 +85,53 @@ enum Orientation {
  * (you may want to take care of those cases separately).
  * Usually passed to KPrinter::setPageSize().
  */
-KOTEXT_EXPORT QPrinter::PageSize printerPageSize(Format format);
+KOODF_EXPORT QPrinter::PageSize printerPageSize(Format format);
 
 /**
  * Returns the width (in mm) for a given page format and orientation
  * 'Custom' isn't supported by this function, obviously.
  */
-KOTEXT_EXPORT qreal width(Format format, Orientation orientation = Landscape);
+KOODF_EXPORT qreal width(Format format, Orientation orientation = Landscape);
 
 /**
  * Returns the height (in mm) for a given page format and orientation
  * 'Custom' isn't supported by this function, obviously.
  */
-KOTEXT_EXPORT qreal height(Format format, Orientation orientation  = Landscape);
+KOODF_EXPORT qreal height(Format format, Orientation orientation  = Landscape);
 
 /**
  * Returns the internal name of the given page format.
  * Use for saving.
  */
-KOTEXT_EXPORT QString formatString(Format format);
+KOODF_EXPORT QString formatString(Format format);
 
 /**
  * Convert a format string (internal name) to a page format value.
  * Use for loading.
  */
-KOTEXT_EXPORT Format formatFromString(const QString &string);
+KOODF_EXPORT Format formatFromString(const QString &string);
 
 /**
  * Returns the default format (based on the KControl settings)
  */
-KOTEXT_EXPORT Format defaultFormat();
+KOODF_EXPORT Format defaultFormat();
 
 /**
  * Returns the translated name of the given page format.
  * Use for showing the user.
  */
-KOTEXT_EXPORT QString name(Format format);
+KOODF_EXPORT QString name(Format format);
 
 /**
  * Lists the translated names of all the available formats
  */
-KOTEXT_EXPORT QStringList allFormats();
+KOODF_EXPORT QStringList allFormats();
 
 /**
  * Try to find the paper format for the given width and height (in mm).
  * Useful to some import filters.
  */
-KOTEXT_EXPORT Format guessFormat(qreal width, qreal height);
+KOODF_EXPORT Format guessFormat(qreal width, qreal height);
 }
 
 #endif

@@ -56,6 +56,7 @@ public:
         StyleChartAuto,              ///< style:style with style:chart-properties
         StyleList,                   ///< text:list-style as in odf 14.10 List Style (office:styles)
         StyleListAuto,               ///< text:list-style as in odf 14.10 List Style (office:automatic-styles)
+        StyleSection,                ///< style:style with style:section-properties as in odf 14.8.3 Section Styles (office:styles)
         StyleSectionAuto,            ///< style:style with style:section-properties as in odf 14.8.3 Section Styles (office:automatic-styles)
         StyleNumericNumber,          ///< number:number-style as in odf 14.7.1 Number Style
         StyleNumericDate,            ///< number:date-style as in odf 14.7.4 Date Style

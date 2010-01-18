@@ -28,6 +28,7 @@
 #include "KoTableColumnStyle.h"
 #include "KoTableRowStyle.h"
 #include "KoTableCellStyle.h"
+#include "KoSectionStyle.h"
 #include "ChangeFollower.h"
 #include "KoTextDocument.h"
 
@@ -56,6 +57,7 @@ public:
     QHash<int, KoTableColumnStyle *> tableColumnStyles;
     QHash<int, KoTableRowStyle *> tableRowStyles;
     QHash<int, KoTableCellStyle *> tableCellStyles;
+    QHash<int, KoSectionStyle *> sectionStyles;
     QList<ChangeFollower*> documentUpdaterProxies;
 
     bool updateTriggered;
@@ -199,6 +201,16 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         tableCellStyle->saveOdf(style);
         mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
     }
+
+    foreach(KoSectionStyle *sectionStyle, d->sectionStyles) {
+        QString name(QString(QUrl::toPercentEncoding(sectionStyle->name(), "", " ")).replace('%', '_'));
+        if (name.isEmpty())
+            name = "T."; //TODO is this correct?
+
+        KoGenStyle style(KoGenStyle::StyleSection);
+        sectionStyle->saveOdf(style);
+        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+    }
 }
 
 void KoStyleManager::add(KoCharacterStyle *style)
@@ -287,6 +299,16 @@ void KoStyleManager::add(KoTableCellStyle *style)
     emit styleAdded(style);
 }
 
+void KoStyleManager::add(KoSectionStyle *style)
+{
+    if (d->sectionStyles.key(style, -1) != -1)
+        return;
+    style->setParent(this);
+    style->setStyleId(d->s_stylesNumber);
+    d->sectionStyles.insert(d->s_stylesNumber++, style);
+    emit styleAdded(style);
+}
+
 void KoStyleManager::remove(KoCharacterStyle *style)
 {
     if (d->charStyles.remove(style->styleId()))
@@ -326,6 +348,12 @@ void KoStyleManager::remove(KoTableRowStyle *style)
 void KoStyleManager::remove(KoTableCellStyle *style)
 {
     if (d->tableCellStyles.remove(style->styleId()))
+        emit styleRemoved(style);
+}
+
+void KoStyleManager::remove(KoSectionStyle *style)
+{
+    if (d->sectionStyles.remove(style->styleId()))
         emit styleRemoved(style);
 }
 
@@ -431,6 +459,19 @@ void KoStyleManager::alteredStyle(const KoTableCellStyle *style)
     requestFireUpdate();
 }
 
+void KoStyleManager::alteredStyle(const KoSectionStyle *style)
+{
+    Q_ASSERT(style);
+    int id = style->styleId();
+    if (id <= 0) {
+        kWarning(32500) << "alteredStyle received from a non registered style!";
+        return;
+    }
+    if (!d->updateQueue.contains(id))
+        d->updateQueue.append(id);
+    requestFireUpdate();
+}
+
 void KoStyleManager::updateAlteredStyles()
 {
     foreach(ChangeFollower *cf, d->documentUpdaterProxies) {
@@ -522,6 +563,10 @@ KoTableCellStyle *KoStyleManager::tableCellStyle(int id) const
     return d->tableCellStyles.value(id);
 }
 
+KoSectionStyle *KoStyleManager::sectionStyle(int id) const
+{
+    return d->sectionStyles.value(id);
+}
 
 KoCharacterStyle *KoStyleManager::characterStyle(const QString &name) const
 {
@@ -586,6 +631,15 @@ KoTableCellStyle *KoStyleManager::tableCellStyle(const QString &name) const
     return 0;
 }
 
+KoSectionStyle *KoStyleManager::sectionStyle(const QString &name) const
+{
+    foreach(KoSectionStyle *style, d->sectionStyles) {
+        if (style->name() == name)
+            return style;
+    }
+    return 0;
+}
+
 KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const
 {
     return d->defaultParagraphStyle;
@@ -642,6 +696,11 @@ QList<KoTableRowStyle*> KoStyleManager::tableRowStyles() const
 QList<KoTableCellStyle*> KoStyleManager::tableCellStyles() const
 {
     return d->tableCellStyles.values();
+}
+
+QList<KoSectionStyle*> KoStyleManager::sectionStyles() const
+{
+    return d->sectionStyles.values();
 }
 
 bool KoStyleManager::completeLoading(KoStore *)

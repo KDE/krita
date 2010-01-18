@@ -43,6 +43,7 @@
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableRowStyle.h"
 #include "styles/KoTableCellStyle.h"
+#include "styles/KoSectionStyle.h"
 
 class KoTextSharedLoadingData::Private
 {
@@ -53,6 +54,7 @@ public:
         qDeleteAll(listStylesToDelete);
         qDeleteAll(tableStylesToDelete);
         qDeleteAll(tableCellStylesToDelete);
+        qDeleteAll(sectionStylesToDelete);
         // NOTE: Table column/row styles are managed by KoTableColumnAndRowStyleManager
         //       and are not deleted here.
     }
@@ -68,6 +70,7 @@ public:
     QHash<QString, KoTableColumnStyle *>      tableColumnContentDotXmlStyles;
     QHash<QString, KoTableRowStyle *>      tableRowContentDotXmlStyles;
     QHash<QString, KoTableCellStyle *>      tableCellContentDotXmlStyles;
+    QHash<QString, KoSectionStyle *>      sectionContentDotXmlStyles;
     QHash<QString, KoParagraphStyle *> paragraphStylesDotXmlStyles;
     QHash<QString, KoCharacterStyle *> characterStylesDotXmlStyles;
     QHash<QString, KoListStyle *>      listStylesDotXmlStyles;
@@ -75,12 +78,14 @@ public:
     QHash<QString, KoTableColumnStyle *>      tableColumnStylesDotXmlStyles;
     QHash<QString, KoTableRowStyle *>      tableRowStylesDotXmlStyles;
     QHash<QString, KoTableCellStyle *>      tableCellStylesDotXmlStyles;
+    QHash<QString, KoSectionStyle *>      sectionStylesDotXmlStyles;
 
     QList<KoParagraphStyle *> paragraphStylesToDelete;
     QList<KoCharacterStyle *> characterStylesToDelete;
     QList<KoListStyle *> listStylesToDelete;
     QList<KoTableStyle *> tableStylesToDelete;
     QList<KoTableCellStyle *> tableCellStylesToDelete;
+    QList<KoSectionStyle *> sectionStylesToDelete;
     QHash<QString, KoParagraphStyle*> namedParagraphStyles;
 };
 
@@ -141,6 +146,10 @@ void KoTextSharedLoadingData::loadOdfStyles(KoOdfLoadingContext &context, KoStyl
     addTableCellStyles(context, context.stylesReader().autoStyles("table-cell").values(), ContentDotXml);
     addTableCellStyles(context, context.stylesReader().autoStyles("table-cell", true).values(), StylesDotXml);
     addTableCellStyles(context, context.stylesReader().customStyles("table-cell").values(), ContentDotXml | StylesDotXml, styleManager);
+
+    addSectionStyles(context, context.stylesReader().autoStyles("section").values(), ContentDotXml);
+    addSectionStyles(context, context.stylesReader().autoStyles("section", true).values(), StylesDotXml);
+    addSectionStyles(context, context.stylesReader().customStyles("section").values(), ContentDotXml | StylesDotXml, styleManager);
 
     addOutlineStyle(context, styleManager);
 
@@ -469,6 +478,46 @@ QList<QPair<QString, KoTableCellStyle *> > KoTextSharedLoadingData::loadTableCel
     return tableCellStyles;
 }
 
+void KoTextSharedLoadingData::addSectionStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements,
+                                            int styleTypes, KoStyleManager *styleManager)
+{
+    QList<QPair<QString, KoSectionStyle *> > sectionStyles(loadSectionStyles(context, styleElements));
+
+    QList<QPair<QString, KoSectionStyle *> >::iterator it(sectionStyles.begin());
+    for (; it != sectionStyles.end(); ++it) {
+        if (styleTypes & ContentDotXml) {
+            d->sectionContentDotXmlStyles.insert(it->first, it->second);
+        }
+        if (styleTypes & StylesDotXml) {
+            d->sectionStylesDotXmlStyles.insert(it->first, it->second);
+        }
+        // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
+        if (styleManager) {
+            styleManager->add(it->second);
+        } else {
+            d->sectionStylesToDelete.append(it->second);
+        }
+    }
+}
+
+QList<QPair<QString, KoSectionStyle *> > KoTextSharedLoadingData::loadSectionStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements)
+{
+    QList<QPair<QString, KoSectionStyle *> > sectionStyles;
+
+    foreach(KoXmlElement *styleElem, styleElements) {
+        Q_ASSERT(styleElem);
+        Q_ASSERT(!styleElem->isNull());
+
+        QString name = styleElem->attributeNS(KoXmlNS::style, "name", QString());
+        // nah don't think this is it: context.fillStyleStack(*styleElem, KoXmlNS::style, "style-name", "table");
+        KoSectionStyle *sectionstyle = new KoSectionStyle();
+        sectionstyle->loadOdf(styleElem, context);
+        sectionStyles.append(QPair<QString, KoSectionStyle *>(name, sectionstyle));
+    }
+    return sectionStyles;
+}
+
 void KoTextSharedLoadingData::addOutlineStyle(KoOdfLoadingContext &context, KoStyleManager *styleManager)
 {
     // outline-styles used e.g. for headers
@@ -513,6 +562,11 @@ KoTableRowStyle *KoTextSharedLoadingData::tableRowStyle(const QString &name, boo
 KoTableCellStyle *KoTextSharedLoadingData::tableCellStyle(const QString &name, bool stylesDotXml)
 {
     return stylesDotXml ? d->tableCellStylesDotXmlStyles.value(name) : d->tableCellContentDotXmlStyles.value(name);
+}
+
+KoSectionStyle *KoTextSharedLoadingData::sectionStyle(const QString &name, bool stylesDotXml)
+{
+    return stylesDotXml ? d->sectionStylesDotXmlStyles.value(name) : d->sectionContentDotXmlStyles.value(name);
 }
 
 void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/)

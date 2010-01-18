@@ -29,6 +29,8 @@ set(koodf_LIB_SRCS
     KoOdfDocument.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
+    KoPageLayout.cpp
+    KoPageFormat.cpp
 
     # depracated classes, have to have a home which for now is here.
     kopicture/KoPictureKey.cpp
@@ -73,5 +75,7 @@ install( FILES
     KoGenChanges.h
     KoEmbeddedDocumentSaver.h
     KoBorder.h
+    KoPageLayout.h
+    KoPageFormat.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

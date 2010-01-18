@@ -23,12 +23,13 @@
 #ifndef KOPAGELAYOUT_H
 #define KOPAGELAYOUT_H
 
+#include "KoColumns.h"
 #include "KoGenStyles.h"
 #include "KoPageFormat.h"
 #include "KoXmlReader.h"
 #include "KoBorder.h"
 
-#include "kowidgets_export.h"
+#include "koodf_export.h"
 
 /**
  * This structure defines the page layout, including
@@ -71,24 +72,24 @@ struct KoPageLayout {
     /// borders
     KoBorder  border;
 
-    KOWIDGETS_EXPORT bool operator==(const KoPageLayout &l) const;
-    KOWIDGETS_EXPORT bool operator!=(const KoPageLayout& l) const;
+    KOODF_EXPORT bool operator==(const KoPageLayout &l) const;
+    KOODF_EXPORT bool operator!=(const KoPageLayout& l) const;
 
     /**
      * Save this page layout to ODF.
      */
-    KOWIDGETS_EXPORT KoGenStyle saveOdf() const;
+    KOODF_EXPORT KoGenStyle saveOdf() const;
 
     /**
      * Load this page layout from ODF
      */
-    KOWIDGETS_EXPORT void loadOdf(const KoXmlElement &style);
+    KOODF_EXPORT void loadOdf(const KoXmlElement &style);
 
     /**
      * @return a page layout with the default page size depending on the locale settings,
      * default margins (2 cm), and portrait orientation.
      */
-    static KOWIDGETS_EXPORT KoPageLayout standardLayout();
+    static KOODF_EXPORT KoPageLayout standardLayout();
 };
 
 /** structure for header-footer */
@@ -99,20 +100,6 @@ struct KoHeadFoot {
     QString footLeft;
     QString footMid;
     QString footRight;
-};
-
-/** structure for columns */
-struct KoColumns {
-    int columns;
-    qreal columnSpacing;
-    bool operator==(const KoColumns& rhs) const {
-        return columns == rhs.columns &&
-               qAbs(columnSpacing - rhs.columnSpacing) <= 1E-10;
-    }
-    bool operator!=(const KoColumns& rhs) const {
-        return columns != rhs.columns ||
-               qAbs(columnSpacing - rhs.columnSpacing) > 1E-10;
-    }
 };
 
 #endif /* KOPAGELAYOUT_H */

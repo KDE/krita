@@ -52,7 +52,17 @@ struct Factories {
             f->remove(factory);
             delete factory;
         }
+        foreach(KoColorProfile* profile, m_profiles) {
+            f->removeProfile(profile);
+            delete profile;
+        }
+        foreach(KoColorTransformationFactory* transfo, m_transformations) {
+            KoColorTransformationFactoryRegistry::removeColorTransformationFactory(transfo);
+            delete transfo;
+        }
     }
+    QList<KoColorTransformationFactory*> m_transformations;
+    QList<KoColorProfile*> m_profiles;
     QList<KoCtlColorSpaceFactory*> m_factories;
 };
 Factories factories;
@@ -95,6 +105,7 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QVariantList &)
                 if (profile->valid()) {
                     dbgPlugins << "Valid profile : " << profile->name();
                     f->addProfile(profile);
+                    factories.m_profiles.push_back(profile);
                 } else {
                     dbgPlugins << "Invalid profile : " << profile->name();
                     delete profile;
@@ -136,6 +147,7 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QVariantList &)
                     KoCtlColorTransformationFactory* factory = new KoCtlColorTransformationFactory(ctltemplate);
                     dbgPlugins << "Valid ctl color transformations template: " << factory->id();
                     KoColorTransformationFactoryRegistry::addColorTransformationFactory(factory);
+                    factories.m_transformations.push_back(factory);
                 } else {
                     dbgPlugins << "Invalid ctl color transformations template: " << *it;
                     delete ctltemplate;

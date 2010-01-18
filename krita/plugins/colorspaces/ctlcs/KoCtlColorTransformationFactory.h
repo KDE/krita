@@ -26,9 +26,10 @@
 #include "KoColorTransformationFactory.h"
 #include <GTLCore/PixelDescription.h>
 
-namespace OpenCTL {
-    class Program;
-    class Template;
+namespace OpenCTL
+{
+class Program;
+class Template;
 }
 
 class KoCtlColorTransformationFactory : public KoColorTransformationFactory
@@ -36,16 +37,16 @@ class KoCtlColorTransformationFactory : public KoColorTransformationFactory
 public:
     KoCtlColorTransformationFactory(OpenCTL::Template* _template);
     ~KoCtlColorTransformationFactory();
-    
+
     virtual QList< QPair< KoID, KoID > > supportedModels() const;
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const;
-    
-    void putBackProgram( const GTLCore::PixelDescription& pixelDescription, OpenCTL::Program* program) const;
+
+    void putBackProgram(const GTLCore::PixelDescription& pixelDescription, OpenCTL::Program* program) const;
 private:
     OpenCTL::Template* m_template;
     mutable QMap<GTLCore::PixelDescription, QList<OpenCTL::Program*> > m_programs;
     mutable QMutex m_mutex;
-};    
+};
 
 #endif

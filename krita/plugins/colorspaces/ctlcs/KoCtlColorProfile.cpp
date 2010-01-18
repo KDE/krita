@@ -304,8 +304,7 @@ bool KoCtlColorProfile::load()
                     d->module->setSource(name().toAscii().data(), CDATA.data().toAscii().data());
                     d->module->compile();
 #if GTL_CORE_VERSION_MAJOR == 0 && GTL_CORE_VERSION_MINOR == 9 && GTL_CORE_VERSION_REVISION > 12
-                    if (!d->module->isCompiled())
-                    {
+                    if (!d->module->isCompiled()) {
                         dbgKrita << d->module->compilationMessages().toString().c_str();
                     }
 #endif

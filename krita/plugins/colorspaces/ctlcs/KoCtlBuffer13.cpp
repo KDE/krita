@@ -21,7 +21,7 @@
 
 KoCtlBuffer::KoCtlBuffer(char* _buffer, int _size)
 {
-  setRawData(_buffer, _size);
+    setRawData(_buffer, _size);
 }
 
 KoCtlBuffer::~KoCtlBuffer() {}

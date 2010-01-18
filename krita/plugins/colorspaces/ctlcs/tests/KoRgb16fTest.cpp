@@ -43,21 +43,21 @@ static inline bool qFuzzyCompare(half p1, half p2)
 
 namespace QTest
 {
-    template <>
-    Q_TESTLIB_EXPORT bool qCompare<half>(half const &t1, half const &t2, const char *actual, const char *expected,
-                        const char *file, int line)
-    {
-        return qFuzzyCompare(t1, t2)
-                ? compare_helper(true, "COMPARE()", file, line)
-                : compare_helper(false, "Compared halfs are not the same (fuzzy compare)",
-                                toString(float(t1)), toString(float(t2)), actual, expected, file, line);
-    }
+template <>
+Q_TESTLIB_EXPORT bool qCompare<half>(half const &t1, half const &t2, const char *actual, const char *expected,
+                                     const char *file, int line)
+{
+    return qFuzzyCompare(t1, t2)
+           ? compare_helper(true, "COMPARE()", file, line)
+           : compare_helper(false, "Compared halfs are not the same (fuzzy compare)",
+                            toString(float(t1)), toString(float(t2)), actual, expected, file, line);
+}
 }
 #define QCOMPAREh(v,v2) QCOMPARE(v,half(v2))
 
 void KoRgb16fTest::testConversion()
 {
-    const KoColorSpace* rgb16f = KoColorSpaceRegistry::instance()->colorSpace( RGBAColorModelID.id(), Float16BitsColorDepthID.id(), 0);
+    const KoColorSpace* rgb16f = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id(), 0);
     QVERIFY(rgb16f);
     KoRgbTraits<half>::Pixel p16f;
     quint8* p16fPtr = reinterpret_cast<quint8*>(&p16f);

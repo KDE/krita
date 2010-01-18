@@ -43,9 +43,8 @@ class KoCtlColorTransformation : public KoColorTransformation
 public:
     KoCtlColorTransformation(OpenCTL::Program* program, const KoColorSpace* colorSpace, const KoCtlColorTransformationFactory* _factory, const GTLCore::PixelDescription& _pixelDescription) : m_program(program), m_colorSpace(colorSpace), m_factory(_factory), m_pixelDescription(_pixelDescription) {
     }
-    ~KoCtlColorTransformation()
-    {
-      m_factory->putBackProgram(m_pixelDescription, m_program);
+    ~KoCtlColorTransformation() {
+        m_factory->putBackProgram(m_pixelDescription, m_program);
     }
 
 public:
@@ -60,31 +59,31 @@ public:
     virtual void setParameter(const QString& name, const QVariant& variant) {
         QByteArray ascii = name.toAscii();
         dbgPlugins << name << " " << ascii.data() << ": " << variant;
-        const GTLCore::Type* type = m_program->varying( ascii.data() ).type();
-        switch ( type->dataType() ) {
+        const GTLCore::Type* type = m_program->varying(ascii.data()).type();
+        switch (type->dataType()) {
         case GTLCore::Type::BOOLEAN:
-            m_program->setVarying( ascii.data(), GTLCore::Value(variant.toBool()));
+            m_program->setVarying(ascii.data(), GTLCore::Value(variant.toBool()));
             break;
         case GTLCore::Type::FLOAT16:
         case GTLCore::Type::FLOAT32:
         case GTLCore::Type::FLOAT64:
-            m_program->setVarying( ascii.data(), GTLCore::Value((float)variant.toDouble()));
+            m_program->setVarying(ascii.data(), GTLCore::Value((float)variant.toDouble()));
             break;
         case GTLCore::Type::INTEGER8:
         case GTLCore::Type::INTEGER16:
         case GTLCore::Type::INTEGER32:
-            m_program->setVarying( ascii.data(), GTLCore::Value(variant.toInt()));
+            m_program->setVarying(ascii.data(), GTLCore::Value(variant.toInt()));
             break;
         case GTLCore::Type::UNSIGNED_INTEGER8:
         case GTLCore::Type::UNSIGNED_INTEGER16:
         case GTLCore::Type::UNSIGNED_INTEGER32:
-            m_program->setVarying( ascii.data(), GTLCore::Value(variant.toUInt()));
+            m_program->setVarying(ascii.data(), GTLCore::Value(variant.toUInt()));
             break;
         case GTLCore::Type::ARRAY:
         case GTLCore::Type::VECTOR:
         default:
         case GTLCore::Type::UNDEFINED: {
-            qFatal("Unsupported type: %i %i", variant.type(), type->dataType() );
+            qFatal("Unsupported type: %i %i", variant.type(), type->dataType());
         }
         }
     }
@@ -107,10 +106,10 @@ KoCtlColorTransformationFactory::~KoCtlColorTransformationFactory()
 
 QList< QPair< KoID, KoID > > KoCtlColorTransformationFactory::supportedModels() const
 {
-  return QList< QPair< KoID, KoID > >();
+    return QList< QPair< KoID, KoID > >();
 }
 
-void KoCtlColorTransformationFactory::putBackProgram( const GTLCore::PixelDescription& pixelDescription, OpenCTL::Program* program) const
+void KoCtlColorTransformationFactory::putBackProgram(const GTLCore::PixelDescription& pixelDescription, OpenCTL::Program* program) const
 {
     QMutexLocker lock2(&m_mutex);
     m_programs[pixelDescription].append(program);
@@ -118,29 +117,28 @@ void KoCtlColorTransformationFactory::putBackProgram( const GTLCore::PixelDescri
 
 KoColorTransformation* KoCtlColorTransformationFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
 {
-  dbgPlugins << "Create CTL transformation " << id() << " for " << colorSpace->id();
-  GTLCore::PixelDescription pixelDescription = createPixelDescription(colorSpace);
-  dbgPlugins << pixelDescription.bitsSize() << " " << colorSpace->pixelSize();
+    dbgPlugins << "Create CTL transformation " << id() << " for " << colorSpace->id();
+    GTLCore::PixelDescription pixelDescription = createPixelDescription(colorSpace);
+    dbgPlugins << pixelDescription.bitsSize() << " " << colorSpace->pixelSize();
 
-  Q_ASSERT(pixelDescription.bitsSize() / 8 == colorSpace->pixelSize());
-  
-  QMutexLocker lock2(&m_mutex);
-  
-  QList<OpenCTL::Program*> programs = m_programs[pixelDescription];
-  
-  OpenCTL::Program* program = 0;
-  if(programs.empty())
-  {
-      OpenCTL::Module* module = m_template->generateModule(pixelDescription);
-      QMutexLocker lock(ctlMutex);
-      module->compile();
-      
-      program = new OpenCTL::Program("process", module, pixelDescription);
-  } else {
-      program = programs.takeLast();
-  }
-  
-  KoCtlColorTransformation* transformation = new KoCtlColorTransformation(program, colorSpace, this, pixelDescription);
-  transformation->setParameters(parameters);
-  return transformation;
+    Q_ASSERT(pixelDescription.bitsSize() / 8 == colorSpace->pixelSize());
+
+    QMutexLocker lock2(&m_mutex);
+
+    QList<OpenCTL::Program*> programs = m_programs[pixelDescription];
+
+    OpenCTL::Program* program = 0;
+    if (programs.empty()) {
+        OpenCTL::Module* module = m_template->generateModule(pixelDescription);
+        QMutexLocker lock(ctlMutex);
+        module->compile();
+
+        program = new OpenCTL::Program("process", module, pixelDescription);
+    } else {
+        program = programs.takeLast();
+    }
+
+    KoCtlColorTransformation* transformation = new KoCtlColorTransformation(program, colorSpace, this, pixelDescription);
+    transformation->setParameters(parameters);
+    return transformation;
 }

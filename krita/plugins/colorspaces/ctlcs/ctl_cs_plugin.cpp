@@ -43,6 +43,20 @@ QMutex* ctlMutex = 0;
 K_PLUGIN_FACTORY(CTLCSPluginPluginFactory, registerPlugin<CTLCSPlugin>();)
 K_EXPORT_PLUGIN(CTLCSPluginPluginFactory("krita"))
 
+namespace
+{
+struct Factories {
+    ~Factories() {
+        KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
+        foreach(KoCtlColorSpaceFactory* factory, m_factories) {
+            f->remove(factory);
+            delete factory;
+        }
+    }
+    QList<KoCtlColorSpaceFactory*> m_factories;
+};
+Factories factories;
+}
 
 CTLCSPlugin::CTLCSPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
@@ -98,7 +112,9 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QVariantList &)
                 dbgPlugins << "Load colorspace : " << *it;
                 KoCtlColorSpaceInfo* info = new KoCtlColorSpaceInfo(*it);
                 if (info->load()) {
-                    f->add(new KoCtlColorSpaceFactory(info));
+                    KoCtlColorSpaceFactory* fac = new KoCtlColorSpaceFactory(info);
+                    factories.m_factories.push_back(fac);
+                    f->add(fac);
                 } else {
                     dbgPlugins << "Invalid color space : " << *it;
                     delete info;
@@ -119,26 +135,13 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QVariantList &)
                 if (ctltemplate->isCompiled()) {
                     KoCtlColorTransformationFactory* factory = new KoCtlColorTransformationFactory(ctltemplate);
                     dbgPlugins << "Valid ctl color transformations template: " << factory->id();
-                    KoColorTransformationFactoryRegistry::addColorTransformationFactory( factory );
+                    KoColorTransformationFactoryRegistry::addColorTransformationFactory(factory);
                 } else {
                     dbgPlugins << "Invalid ctl color transformations template: " << *it;
                     delete ctltemplate;
                 }
             }
         }
-
-
-#if 0
-        KisLmsAF32ColorSpaceFactory * csf  = new KisLmsAF32ColorSpaceFactory();
-        f->add(csf);
-        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName(csf->defaultProfile()));
-        Q_ASSERT(profile);
-        KoColorSpace * colorSpaceLMSF32  = new KisLmsAF32ColorSpace(profile);
-
-        KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-            (KoID("LMSF32HISTO", i18n("Float32 Histogram")), colorSpaceLMSF32));
-#endif
     }
 
 }

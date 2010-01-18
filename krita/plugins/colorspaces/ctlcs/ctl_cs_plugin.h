@@ -23,6 +23,8 @@
 #include <QObject>
 #include <QVariant>
 
+class KoCtlColorSpaceFactory;
+
 /**
  * A plugin wrapper around the LMS F32 color space strategy.
  */
@@ -32,7 +34,7 @@ class CTLCSPlugin : public QObject
 public:
     CTLCSPlugin(QObject *parent, const QVariantList &);
     virtual ~CTLCSPlugin();
-
+private:
 };
 
 

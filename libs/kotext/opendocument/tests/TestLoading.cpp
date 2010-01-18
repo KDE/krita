@@ -968,7 +968,7 @@ QString TestLoading::documentToOdt(QTextDocument *document)
     KoEmbeddedDocumentSaver embeddedSaver;
 
     KoGenChanges changes;
-    KoShapeSavingContext context(store, xmlWriter, mainStyles, embeddedSaver);
+    KoShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver);
 
     KoSharedSavingData *sharedData = context.sharedData(KOTEXT_SHARED_SAVING_ID);
     KoTextSharedSavingData *textSharedData = 0;

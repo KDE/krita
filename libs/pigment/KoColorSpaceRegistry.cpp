@@ -151,11 +151,16 @@ void KoColorSpaceRegistry::add(KoColorSpaceFactory* item)
 
 void KoColorSpaceRegistry::remove(KoColorSpaceFactory* item)
 {
+    QList<QString> toremove;
     foreach(const KoColorSpace * cs, d->csMap) {
         if (cs->id() == item->id()) {
+            toremove.push_back(idsToCacheName(cs->id(), cs->profile()->name()));
             cs->d->deletability = OwnedByRegistryRegistyDeletes;
             releaseColorSpace(const_cast<KoColorSpace*>(cs));
         }
+    }
+    foreach(const QString& id, toremove) {
+        d->csMap.remove(id);
     }
     d->colorsSpaceFactoryRegistry.remove(item->id());
 }

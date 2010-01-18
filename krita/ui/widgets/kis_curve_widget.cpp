@@ -285,6 +285,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     double normalizedX;
     int x;
 
+    p.setRenderHint(QPainter::Antialiasing);
     p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
     for (x = 0 ; x < wWidth ; x++) {
         normalizedX = double(x) / wWidth;
@@ -292,7 +293,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
 
         /**
          * Keep in mind that QLineF rounds doubles
-         * to ints matematically, not just rounds down
+         * to ints mathematically, not just rounds down
          * like in C
          */
         p.drawLine(QLineF(prevX, prevY,

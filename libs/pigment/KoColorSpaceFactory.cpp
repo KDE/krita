@@ -32,6 +32,17 @@ KoColorSpaceFactory::KoColorSpaceFactory() : d(new Private)
 
 KoColorSpaceFactory::~KoColorSpaceFactory()
 {
+    // Check that all color spaces have been released
+    int count = 0;
+    foreach( const QList<KoColorSpace*>& cl, d->availableColorspaces)
+    {
+        count += cl.size();
+    }
+    Q_ASSERT(count == colorspaces.size());
+    foreach( KoColorSpace* cs, d->colorspaces)
+    {
+        delete cs;
+    }
     delete d;
 }
 
@@ -50,5 +61,6 @@ KoColorSpace* KoColorSpaceFactory::grabColorSpace(const KoColorProfile * profile
 
 void KoColorSpaceFactory::releaseColorSpace(KoColorSpace * colorspace)
 {
+    // TODO it is probably worth to avoid caching too many color spaces
     d->availableColorspaces[colorspace->profile()->name()].push_back(colorspace);
 }

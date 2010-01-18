@@ -124,7 +124,7 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 
     foreach(const KoColorSpace * cs, d->csMap) {
         cs->d->deletability = OwnedByRegistryRegistyDeletes;
-        delete cs;
+        releaseColorSpace(const_cast<KoColorSpace*>(cs));
     }
     d->csMap.clear();
 

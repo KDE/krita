@@ -31,7 +31,6 @@
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
 #include <KoChannelInfo.h>
-#include <KoColorSpace.h>
 #include <KoID.h>
 #include "pigment_export.h"
 
@@ -90,6 +89,7 @@ enum ColorSpaceIndependence {
 class PIGMENTCMS_EXPORT KoColorSpace
 {
     friend class KoColorSpaceRegistry;
+    friend class KoColorSpaceFactory;
 protected:
     /// Only for use by classes that serve as baseclass for real color spaces
     KoColorSpace();
@@ -102,14 +102,6 @@ public:
     virtual bool operator==(const KoColorSpace& rhs) const;
 protected:
     virtual ~KoColorSpace();
-
-private:
-
-    /**
-     * Use this function to create a cloned version of this color space,
-     * and of its profile.
-     */
-    virtual KoColorSpace* clone() const = 0;
 
 public:
     //========== Channels =====================================================//

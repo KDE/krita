@@ -451,7 +451,7 @@ QUndoCommand* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoCo
     }
 
     KisDataManagerSP oldData = m_datamanager;
-    const KoColorSpace *oldColorSpace = m_d->colorSpace;
+    KoColorSpace *oldColorSpace = m_d->colorSpace;
 
     KisPaintDeviceConvertTypeCommand* cmd = new KisPaintDeviceConvertTypeCommand(this,
             oldData,

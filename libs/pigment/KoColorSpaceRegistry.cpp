@@ -252,12 +252,12 @@ QString KoColorSpaceRegistry::idsToCacheName(const QString & csId, const QString
 
 KoColorSpace* KoColorSpaceRegistry::grabColorSpace(const KoColorSpace* colorSpace)
 {
-    return colorSpace->clone();
+    return d->colorsSpaceFactoryRegistry.value(colorSpace->id())->grabColorSpace(colorSpace->profile());
 }
 
-void KoColorSpaceRegistry::releaseColorSpace(const KoColorSpace* colorSpace)
+void KoColorSpaceRegistry::releaseColorSpace(KoColorSpace* colorSpace)
 {
-    delete colorSpace;
+    d->colorsSpaceFactoryRegistry.value(colorSpace->id())->releaseColorSpace(colorSpace);
 }
 
 const KoColorSpaceFactory* KoColorSpaceRegistry::colorSpaceFactory(const QString &colorSpaceId) const
@@ -542,8 +542,7 @@ QList<const KoColorSpace*> KoColorSpaceRegistry::allColorSpaces(ColorSpaceListVi
 
     foreach(KoColorSpaceFactory* factory, factories) {
         if (visibility == AllColorSpaces || factory->userVisible()) {
-            if(pSelection == OnlyDefaultProfile)
-            {
+            if (pSelection == OnlyDefaultProfile) {
                 colorSpaces.append(colorSpace(factory->id(), 0));
             } else {
                 QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(factory->id());

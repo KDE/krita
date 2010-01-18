@@ -107,7 +107,7 @@ public:
 
 private:
     mutable quint16 * m_qcolordata; // A small buffer for conversion from and to qcolor.
-    const KoColorSpace* m_fallBackColorSpace;
+    KoColorSpace* m_fallBackColorSpace;
     quint32 m_cmType;
     mutable QByteArray m_convertionCache;
 };

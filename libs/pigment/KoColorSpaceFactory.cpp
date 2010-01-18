@@ -18,8 +18,12 @@
  */
 
 #include "KoColorSpaceFactory.h"
+#include "KoColorProfile.h"
+#include "KoColorSpace.h"
 
 struct KoColorSpaceFactory::Private {
+    QList<KoColorSpace*> colorspaces;
+    QMap<QString, QList<KoColorSpace*> > availableColorspaces;
 };
 
 KoColorSpaceFactory::KoColorSpaceFactory() : d(new Private)
@@ -31,12 +35,20 @@ KoColorSpaceFactory::~KoColorSpaceFactory()
     delete d;
 }
 
-KoColorSpace* KoColorSpaceFactory::grabColorSpace(const KoColorProfile * profile) const
+KoColorSpace* KoColorSpaceFactory::grabColorSpace(const KoColorProfile * profile)
 {
-    return createColorSpace(profile);
+    QList<KoColorSpace*>& csList = d->availableColorspaces[profile->name()];
+    if (!csList.isEmpty()) {
+        KoColorSpace* cs = csList.back();
+        csList.pop_back();
+        return cs;
+    }
+    KoColorSpace* cs = createColorSpace(profile);
+    d->colorspaces.push_back(cs);
+    return cs;
 }
 
-void KoColorSpaceFactory::releaseColorSpace(const KoColorSpace *) const
+void KoColorSpaceFactory::releaseColorSpace(KoColorSpace * colorspace)
 {
+    d->availableColorspaces[colorspace->profile()->name()].push_back(colorspace);
 }
-

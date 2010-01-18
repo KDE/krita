@@ -109,9 +109,9 @@ public:
      */
     virtual QString defaultProfile() const = 0;
 
-    KoColorSpace* grabColorSpace(const KoColorProfile* profile) const;
-    
-    void releaseColorSpace(const KoColorSpace *) const;
+    KoColorSpace* grabColorSpace(const KoColorProfile* profile);
+
+    void releaseColorSpace(KoColorSpace *);
 protected:
     /**
      * creates a color space using the given profile.

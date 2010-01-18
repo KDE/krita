@@ -70,11 +70,11 @@ public:
     void add(KoColorSpaceFactory* item);
 
     /**
-     * add a color space to the registry
-     * @param id the id of the color space
-     * @param item the color space factory to add
+     * Remove a color space factory from the registry. Note that it is the
+     * responsability of the caller to ensure that the colorspaces are not
+     * used anymore.
      */
-    void add(const QString &id, KoColorSpaceFactory* item);
+    void remove(KoColorSpaceFactory* item);
 
     /**
      * Add a profile to the profile map but do not add it to the

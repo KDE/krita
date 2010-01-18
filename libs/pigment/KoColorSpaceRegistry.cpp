@@ -149,10 +149,15 @@ void KoColorSpaceRegistry::add(KoColorSpaceFactory* item)
     d->colorConversionSystem->insertColorSpace(item);
 }
 
-void KoColorSpaceRegistry::add(const QString &id, KoColorSpaceFactory* item)
+void KoColorSpaceRegistry::remove(KoColorSpaceFactory* item)
 {
-    d->colorsSpaceFactoryRegistry.add(id, item);
-    d->colorConversionSystem->insertColorSpace(item);
+    foreach(const KoColorSpace * cs, d->csMap) {
+        if (cs->id() == item->id()) {
+            cs->d->deletability = OwnedByRegistryRegistyDeletes;
+            releaseColorSpace(const_cast<KoColorSpace*>(cs));
+        }
+    }
+    d->colorsSpaceFactoryRegistry.remove(item->id());
 }
 
 const KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name) const

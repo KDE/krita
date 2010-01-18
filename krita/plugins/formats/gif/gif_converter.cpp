@@ -38,6 +38,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 
+#include <kis_fill_painter.h>
 #include <kis_types.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -82,11 +83,9 @@ bool GifConverter::convertLine(GifFileType* gifFile, GifPixelType* line, int row
 
         GifPixelType colorIndex = line[col];
         if (image.ColorMap && colorIndex < image.ColorMap->ColorCount) {
-            dbgFile << "color" << colorIndex << "from local map";
             color = image.ColorMap->Colors[colorIndex];
         }
         else if (gifFile->SColorMap && colorIndex < gifFile->SColorMap->ColorCount) {
-            dbgFile << "color" << colorIndex << "from global map";
             color = gifFile->SColorMap->Colors[colorIndex];
         }
         else {
@@ -130,17 +129,14 @@ KisNodeSP GifConverter::getNode(GifFileType* gifFile, KisImageWSP kisImage) {
     Q_ASSERT(gifFile->SBackGroundColor < gifFile->SColorMap->ColorCount);
     GifColorType color = gifFile->SColorMap->Colors[gifFile->SBackGroundColor];
     quint8 fillPixel[4];
-    fillPixel[0] = color.Blue;
-    fillPixel[1] = color.Green;
-    fillPixel[2] = color.Red;
-    if (gifFile->SBackGroundColor == m_transparentColorIndex) {
-        fillPixel[3] = OPACITY_TRANSPARENT;
-    }
-    else {
-        fillPixel[3] = OPACITY_OPAQUE;
-    }
-    layer->paintDevice()->fill(image.Left, image.Top, image.Width, image.Height,
-                               fillPixel);
+
+    // always prefil the layer with transparency
+    KoRgbTraits<quint8>::setRed(fillPixel, color.Red);
+    KoRgbTraits<quint8>::setGreen(fillPixel, color.Green);
+    KoRgbTraits<quint8>::setBlue(fillPixel, color.Blue);
+    layer->colorSpace()->setAlpha(fillPixel, OPACITY_TRANSPARENT, 1);
+
+    layer->paintDevice()->fill(0, 0, m_img->width(), m_img->height(), fillPixel);
 
     GifPixelType* line = new GifPixelType[image.Width];
     KisRandomAccessorPixel accessor = layer->paintDevice()->createRandomAccessor(image.Left, image.Top);
@@ -183,15 +179,15 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
     dbgFile << "reading gif file" << uri;
 
     // Creating the KisImageWSP
-    KisImageWSP img = new KisImage(m_doc->undoAdapter(),
+    m_img = new KisImage(m_doc->undoAdapter(),
                                    gifFile->SWidth,
                                    gifFile->SHeight,
                                    KoColorSpaceRegistry::instance()->rgb8(),
                                    uri.toLocalFile());
-    Q_CHECK_PTR(img);
-    img->lock();
+    Q_CHECK_PTR(m_img);
+    m_img->lock();
 
-    dbgFile << "image" << img << "width" << gifFile->SWidth << "height" << gifFile->SHeight;
+    dbgFile << "image" << m_img << "width" << gifFile->SWidth << "height" << gifFile->SHeight;
 
     GifRecordType recordType = UNDEFINED_RECORD_TYPE;
 
@@ -201,11 +197,11 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
         case IMAGE_DESC_RECORD_TYPE:
             {
                 dbgFile << "reading IMAGE_DESC_RECORD_TYPE";
-                KisNodeSP node = getNode(gifFile, img);
+                KisNodeSP node = getNode(gifFile, m_img);
                 if (!node) {
                     return KisImageBuilder_RESULT_FAILURE;
                 }
-                img->addNode(node);
+                m_img->addNode(node);
             }
             break;
         case EXTENSION_RECORD_TYPE:
@@ -266,8 +262,7 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
         }
     }
 
-    img->unlock();
-    m_img = img;
+    m_img->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 
@@ -395,12 +390,12 @@ KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisImageWSP imag
         EGifPutComment(gif, comments.toAscii().constData());
     }
 
-    // disposition for the frames go in packaed fields here, but we only
+    // disposition for the frames go in packed fields here, but we only
     // care that Qt puts the transparent color in the first entry in its
     // colortable.
     char extensionBlock[4];
     extensionBlock[0] = 9;
-    extensionBlock[1] = 10;
+    extensionBlock[1] = 20;
     extensionBlock[2] = 0;
     extensionBlock[3] = 0;
 

@@ -142,7 +142,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             colorspacename  = "GRAYA";
 
         QString colorspaceModel = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
-        QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
+        QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorDepthId(colorspacename).id();
 
         if ((profileProductName = element.attribute(PROFILE)).isNull()) {
             // no mention of profile so get default profile

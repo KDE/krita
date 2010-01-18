@@ -285,7 +285,6 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     double normalizedX;
     int x;
 
-    p.setRenderHint(QPainter::Antialiasing);
     p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
     for (x = 0 ; x < wWidth ; x++) {
         normalizedX = double(x) / wWidth;

@@ -41,6 +41,7 @@ public:
      * Add a KoColorTransformationFactory to the registry.
      */
     static void addColorTransformationFactory(KoColorTransformationFactory* factory);
+    static void removeColorTransformationFactory(KoColorTransformationFactory* factory);
 private:
     static KoColorTransformationFactoryRegistry* instance();
 private:

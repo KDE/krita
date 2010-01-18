@@ -245,6 +245,11 @@ void KoColorSpaceRegistry::addProfile(const KoColorProfile* profile)
     addProfile(profile->clone());
 }
 
+void KoColorSpaceRegistry::removeProfile(KoColorProfile* profile)
+{
+    d->profileMap.remove(profile->name());
+}
+
 bool KoColorSpaceRegistry::isCached(const QString & csId, const QString & profileName) const
 {
     return !(d->csMap.find(idsToCacheName(csId, profileName)) == d->csMap.end());

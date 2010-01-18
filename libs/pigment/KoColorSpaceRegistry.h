@@ -89,7 +89,8 @@ public:
      *  colorspaces.
      */
     void addProfile(KoColorProfile* profile);
-    void addProfile(const KoColorProfile* profile);
+    void addProfile(const KoColorProfile* profile); // TODO why ?
+    void removeProfile(KoColorProfile* profile);
 
     /**
      * create a profile of the specified type.

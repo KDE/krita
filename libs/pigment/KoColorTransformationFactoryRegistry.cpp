@@ -43,6 +43,11 @@ void KoColorTransformationFactoryRegistry::addColorTransformationFactory(KoColor
     instance()->add(factory);
 }
 
+void KoColorTransformationFactoryRegistry::removeColorTransformationFactory(KoColorTransformationFactory* factory)
+{
+    instance()->remove(factory->id());
+}
+
 KoColorTransformationFactoryRegistry* KoColorTransformationFactoryRegistry::instance()
 {
     if (Private::s_registry == 0) {

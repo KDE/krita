@@ -66,7 +66,7 @@ struct KisEntryEditor::Private {
 KisEntryEditor::KisEntryEditor(QObject* obj, KisMetaData::Store* store, QString key, QString propertyName, QString structField, int arrayIndex) : d(new Private)
 {
     Q_ASSERT(obj);
-    Q_ASSERT(v);
+    Q_ASSERT(store);
     d->object = obj;
     d->propertyName = propertyName;
     d->store = store;

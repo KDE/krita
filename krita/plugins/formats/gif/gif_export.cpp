@@ -23,6 +23,7 @@
 #include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
+#include <kmessagebox.h>
 
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -54,6 +55,15 @@ KoFilter::ConversionStatus gifExport::convert(const QByteArray& from, const QByt
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
+
+    if (KMessageBox::warningContinueCancel(0,
+                                       i18n("You are trying to save an image in the GIF format.\n\n"
+                                            "The GIF file format does not support true color images.\n"
+                                            "All Krita images are true color. There will be changes in "
+                                            "color and (if present) animation effects."),
+                                       i18n("Krita")) == KMessageBox::Cancel) {
+        return KoFilter::UserCancelled;
+    }
 
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();

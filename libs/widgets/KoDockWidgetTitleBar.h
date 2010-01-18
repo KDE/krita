@@ -19,9 +19,15 @@
 #ifndef KODOCKWIDGETTITLEBAR_H_
 #define KODOCKWIDGETTITLEBAR_H_
 
+#include "kowidgets_export.h"
 #include <QtGui/QDockWidget>
 
-class KoDockWidgetTitleBar : public QWidget
+/**
+ * @short A custom title bar for dock widgets.
+ *
+ * Used in KoDockWidgetTitleBarButton but can be also used for similar purposes inside other parents.
+ */
+class KOWIDGETS_EXPORT KoDockWidgetTitleBar : public QWidget
 {
     Q_OBJECT
 public:

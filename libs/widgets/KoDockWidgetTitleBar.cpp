@@ -19,6 +19,7 @@
 */
 
 #include "KoDockWidgetTitleBar.h"
+#include "KoDockWidgetTitleBarButton.h"
 
 #include <kdebug.h>
 #include <kicon.h>
@@ -36,96 +37,18 @@ static inline bool hasFeature(const QDockWidget *dockwidget, QDockWidget::DockWi
     return (dockwidget->features() & feature) == feature;
 }
 
-
-class KoDockWidgetTitleBarButton : public QAbstractButton
-{
-public:
-    KoDockWidgetTitleBarButton(KoDockWidgetTitleBar *titleBar);
-
-    QSize sizeHint() const;
-    inline QSize minimumSizeHint() const {
-        return sizeHint();
-    }
-
-    virtual void enterEvent(QEvent *event);
-    virtual void leaveEvent(QEvent *event);
-    virtual void paintEvent(QPaintEvent *event);
-
-    QSize m_styleSize;
-    int m_iconSize;
-};
-
-KoDockWidgetTitleBarButton::KoDockWidgetTitleBarButton(KoDockWidgetTitleBar *titleBar)
-        : QAbstractButton(titleBar)
-{
-    setFocusPolicy(Qt::NoFocus);
-    m_iconSize = 0;
-    m_styleSize = QSize(0,0);
-}
-
-QSize KoDockWidgetTitleBarButton::sizeHint() const
-{
-    ensurePolished();
-
-    const int margin = style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, 0, this);
-    if (icon().isNull())
-        return QSize(margin, margin);
-    
-    int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
-    if (iconSize != m_iconSize) {
-        const_cast<KoDockWidgetTitleBarButton*>(this)->m_iconSize = iconSize;
-        const QPixmap pm = icon().pixmap(iconSize);
-        const_cast<KoDockWidgetTitleBarButton*>(this)->m_styleSize = QSize(pm.width() + margin, pm.height() + margin);
-    }
-    return m_styleSize;
-}
-
-// redraw the button when the mouse enters or leaves it
-void KoDockWidgetTitleBarButton::enterEvent(QEvent *event)
-{
-    if (isEnabled()) update();
-    QAbstractButton::enterEvent(event);
-}
-
-void KoDockWidgetTitleBarButton::leaveEvent(QEvent *event)
-{
-    if (isEnabled()) update();
-    QAbstractButton::leaveEvent(event);
-}
-
-void KoDockWidgetTitleBarButton::paintEvent(QPaintEvent *)
-{
-    QPainter p(this);
-
-    QRect r = rect();
-    QStyleOptionToolButton opt;
-    opt.init(this);
-    opt.state |= QStyle::State_AutoRaise;
-
-    if (isEnabled() && underMouse() && !isChecked() && !isDown())
-        opt.state |= QStyle::State_Raised;
-    if (isChecked())
-        opt.state |= QStyle::State_On;
-    if (isDown())
-        opt.state |= QStyle::State_Sunken;
-    style()->drawPrimitive(QStyle::PE_PanelButtonTool, &opt, &p, this);
-
-    opt.icon = icon();
-    opt.subControls = 0;
-    opt.activeSubControls = 0;
-    opt.features = QStyleOptionToolButton::None;
-    opt.arrowType = Qt::NoArrow;
-    int size = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
-    opt.iconSize = QSize(size, size);
-    style()->drawComplexControl(QStyle::CC_ToolButton, &opt, &p, this);
-}
-
-
 class KoDockWidgetTitleBar::Private
 {
 public:
     Private(KoDockWidgetTitleBar* thePublic) : thePublic(thePublic),
-            openIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarShadeButton)), closeIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton)) {if (openIcon.isNull()) openIcon= KIcon("arrow-down");if (closeIcon.isNull()) closeIcon= KIcon("arrow-right");}
+            openIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarShadeButton)),
+            closeIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton))
+    {
+        if (openIcon.isNull())
+            openIcon = KIcon("arrow-down");
+        if (closeIcon.isNull())
+            closeIcon = KIcon("arrow-right");
+    }
     KoDockWidgetTitleBar* thePublic;
     KIcon openIcon, closeIcon;
     QAbstractButton* closeButton;
@@ -289,4 +212,5 @@ void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatu
     floatButton->setVisible(hasFeature(q, QDockWidget::DockWidgetFloatable));
     thePublic->resizeEvent(0);
 }
+
 #include <KoDockWidgetTitleBar.moc>

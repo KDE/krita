@@ -44,6 +44,8 @@ set(kowidgets_LIB_SRCS
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
+    KoDockWidgetTitleBar.cpp
+    KoDockWidgetTitleBarButton.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -93,6 +95,9 @@ install( FILES
     KoResourceItemChooser.h
     KoResourceSelector.h
     KoLineStyleSelector.h
+    KoDockWidgetTitleBar.h
+    KoDockWidgetTitleBar.h
+    KoDockWidgetTitleBarButton.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}

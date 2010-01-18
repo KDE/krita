@@ -82,13 +82,16 @@ bool GifConverter::convertLine(GifFileType* gifFile, GifPixelType* line, int row
 
         GifPixelType colorIndex = line[col];
         if (image.ColorMap && colorIndex < image.ColorMap->ColorCount) {
+            dbgFile << "color" << colorIndex << "from local map";
             color = image.ColorMap->Colors[colorIndex];
         }
         else if (gifFile->SColorMap && colorIndex < gifFile->SColorMap->ColorCount) {
+            dbgFile << "color" << colorIndex << "from global map";
             color = gifFile->SColorMap->Colors[colorIndex];
         }
         else {
-            color.Red = 0;
+            dbgFile << "color" << colorIndex << "not in any map";
+            color.Red = 255;
             color.Green = 0;
             color.Blue = 0;
         }
@@ -229,7 +232,7 @@ KisImageBuilder_Result GifConverter::decode(const KUrl& uri)
                             if (extData[1] & 0x01)
                             {
                                 m_transparentColorIndex = extData[4];
-                                dbgFile << ">>>>>>>>>>>> Transparent color index" << m_transparentColorIndex;
+                                dbgFile << "\t\tTransparent color index" << m_transparentColorIndex;
                             }
                         }
                         break;
@@ -392,7 +395,19 @@ KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisImageWSP imag
         EGifPutComment(gif, comments.toAscii().constData());
     }
 
-    // now save all the layes as gif images.
+    // disposition for the frames go in packaed fields here, but we only
+    // care that Qt puts the transparent color in the first entry in its
+    // colortable.
+    char extensionBlock[4];
+    extensionBlock[0] = 9;
+    extensionBlock[1] = 10;
+    extensionBlock[2] = 0;
+    extensionBlock[3] = 0;
+
+    EGifPutExtension(gif, GRAPHICS_EXT_FUNC_CODE, 4, &extensionBlock);
+
+
+    // now save all the layers as gif images.
     foreach(const IndexedLayer layer, visitor.m_layers) {
 
         ColorMapObject cmapLayer;

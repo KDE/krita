@@ -255,7 +255,7 @@ void KisImage::removeGlobalSelection()
     m_d->globalSelection = 0;
 }
 
-KisSelectionSP KisImage::deleselectedGlobalSelection()
+KisSelectionSP KisImage::deselectedGlobalSelection()
 {
     return m_d->deselectedGlobalSelection;
 }

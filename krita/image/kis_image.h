@@ -153,7 +153,7 @@ public:
     /**
      * @return the deselected global selection or 0 if no global selection was deselected
      */
-    KisSelectionSP deleselectedGlobalSelection();
+    KisSelectionSP deselectedGlobalSelection();
 
     /**
      * Set deselected global selection

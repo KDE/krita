@@ -49,7 +49,7 @@ struct KisSelection::Private {
     bool interestedInDirtyness;
     bool hasPixelSelection;
     bool hasShapeSelection;
-    bool isDeselected;
+    bool isDeselected; // true if the selection is empty, no pixels are selected
     KisPixelSelectionSP pixelSelection;
     KisSelectionComponent* shapeSelection;
 };

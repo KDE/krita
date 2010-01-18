@@ -142,6 +142,9 @@ public:
      */
     QList<const KoColorProfile *>  profilesFor(const QString &colorSpaceId);
     const KoColorSpaceFactory* colorSpaceFactory(const QString &colorSpaceId) const;
+    
+    KoColorSpace* grabColorSpace(const KoColorSpace* );
+    void releaseColorSpace(const KoColorSpace*);
 private:
     /**
      * Return a colorspace that works with the parameter profile.

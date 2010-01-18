@@ -98,17 +98,20 @@ public:
 
     /// Should be called by real color spaces
     KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp);
-    virtual ~KoColorSpace();
 
     virtual bool operator==(const KoColorSpace& rhs) const;
+protected:
+    virtual ~KoColorSpace();
 
-public:
+private:
 
     /**
      * Use this function to create a cloned version of this color space,
      * and of its profile.
      */
     virtual KoColorSpace* clone() const = 0;
+
+public:
     //========== Channels =====================================================//
 
     /// Return a list describing all the channels this color model has.

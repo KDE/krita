@@ -116,7 +116,7 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
 
     m_d->parent = 0;
 
-    m_d->colorSpace = colorSpace->clone();
+    m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
 
 }
 
@@ -132,7 +132,7 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
 
     m_d->parent = parent;
 
-    m_d->colorSpace = colorSpace->clone();
+    m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
 
     Q_ASSERT(m_d->colorSpace);
 
@@ -165,7 +165,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
         }
         m_d->x = rhs.m_d->x;
         m_d->y = rhs.m_d->y;
-        m_d->colorSpace = rhs.m_d->colorSpace->clone();
+        m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(rhs.m_d->colorSpace);
 
         m_d->pixelSize = rhs.m_d->pixelSize;
 
@@ -175,7 +175,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
 
 KisPaintDevice::~KisPaintDevice()
 {
-    delete m_d->colorSpace;
+    KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
     delete m_d;
 }
 
@@ -462,7 +462,7 @@ QUndoCommand* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoCo
     setDataManager(dst.m_datamanager, dstColorSpace);
 
     emit colorSpaceChanged(dstColorSpace);
-    delete oldColorSpace;
+    KoColorSpaceRegistry::instance()->releaseColorSpace(oldColorSpace);
 
     return cmd;
 }
@@ -474,7 +474,7 @@ void KisPaintDevice::setProfile(const KoColorProfile * profile)
     const KoColorSpace * dstSpace =
         KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (dstSpace)
-        m_d->colorSpace = dstSpace->clone();
+        m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(dstSpace);
     emit profileChanged(profile);
 }
 
@@ -483,7 +483,7 @@ void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * 
     m_d->cache.invalidate();
     m_datamanager = data;
     //delete m_d->colorSpace;
-    m_d->colorSpace = colorSpace->clone();
+    m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
     m_d->pixelSize = m_d->colorSpace->pixelSize();
     m_d->nChannels = m_d->colorSpace->channelCount();
 }

@@ -30,7 +30,7 @@ struct Array2DImpl::Private {
     int sx, sy, cols, rows, index;
     KisPaintDeviceSP device;
     KisRandomAccessor* randomAccessor;
-    KoColorSpace* colorSpace;
+    KisGenericColorSpace<float, 1>  * colorSpace;
 };
 
 Array2DImpl::Array2DImpl(int cols, int rows) : d(new Private)

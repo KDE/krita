@@ -38,15 +38,14 @@ protected:
                            const QString &name,
                            const KoColorSpace* fallBack)
             : KoColorSpaceAbstract<_CSTraits>(id, name),
-            m_fallBackColorSpace(fallBack->clone()) {
+            m_fallBackColorSpace( KoColorSpaceRegistry::instance()->grabColorSpace( fallBack) ) {
         m_qcolordata = new quint16[4];
         m_convertionCache.resize(m_fallBackColorSpace->pixelSize());
     }
 
     virtual ~KoIncompleteColorSpace() {
         delete[] m_qcolordata;
-        // XXX: leak this colorspace for now
-        //delete m_fallBackColorSpace;
+        KoColorSpaceRegistry::instance()->releaseColorSpace(m_fallBackColorSpace);
     }
 
 public:

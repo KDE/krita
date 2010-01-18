@@ -250,6 +250,16 @@ QString KoColorSpaceRegistry::idsToCacheName(const QString & csId, const QString
     return csId + "<comb>" + profileName;
 }
 
+KoColorSpace* KoColorSpaceRegistry::grabColorSpace(const KoColorSpace* colorSpace)
+{
+    return colorSpace->clone();
+}
+
+void KoColorSpaceRegistry::releaseColorSpace(const KoColorSpace* colorSpace)
+{
+    delete colorSpace;
+}
+
 const KoColorSpaceFactory* KoColorSpaceRegistry::colorSpaceFactory(const QString &colorSpaceId) const
 {
     return d->colorsSpaceFactoryRegistry.get(colorSpaceId);

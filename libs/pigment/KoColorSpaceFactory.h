@@ -35,10 +35,12 @@ class QBitArray;
 /**
  * This class is used to create color spaces.
  */
-class KoColorSpaceFactory
+class PIGMENTCMS_EXPORT KoColorSpaceFactory
 {
+protected:
+    KoColorSpaceFactory();
 public:
-    virtual ~KoColorSpaceFactory() {}
+    virtual ~KoColorSpaceFactory();
     /**
      * Return the unchanging name of this color space
      */
@@ -75,11 +77,6 @@ public:
     virtual bool profileIsCompatible(const KoColorProfile* profile) const = 0;
 
     /**
-     * creates a color space using the given profile.
-     */
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const = 0;
-
-    /**
      * @return the name of the color space engine for this color space, or "" if none
      */
     virtual QString colorSpaceEngine() const = 0;
@@ -112,6 +109,17 @@ public:
      */
     virtual QString defaultProfile() const = 0;
 
+    KoColorSpace* grabColorSpace(const KoColorProfile* profile) const;
+    
+    void releaseColorSpace(const KoColorSpace *) const;
+protected:
+    /**
+     * creates a color space using the given profile.
+     */
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const = 0;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif // KOCOLORSPACEFACTORY_H

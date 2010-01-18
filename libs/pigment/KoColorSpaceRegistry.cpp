@@ -292,7 +292,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                 Q_ASSERT(p);
             }
         }
-        const KoColorSpace *cs = csf->createColorSpace(p);
+        const KoColorSpace *cs = csf->grabColorSpace(p);
         if (!cs) {
             dbgPigmentCSRegistry << "Unable to create color space";
             return 0;
@@ -330,7 +330,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                 return 0;
             }
 
-            cs = csf->createColorSpace(profile);
+            cs = csf->grabColorSpace(profile);
             if (!cs)
                 return 0;
 

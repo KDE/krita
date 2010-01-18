@@ -23,6 +23,7 @@ set(pigmentcms_SRCS
     KoColorProfile.cpp
     KoColorSpace.cpp
     KoColorSpaceEngine.cpp
+    KoColorSpaceFactory.cpp
     KoColorSpaceMaths.cpp
     KoColorSpaceRegistry.cpp
     KoColorTransformation.cpp

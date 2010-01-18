@@ -34,13 +34,12 @@ KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP de
         : m_dev(dev), m_progress(progress), m_selection(selection)
 
 {
-    QRect m_r;
     if (selection)
         m_r = m_selection->selectedExactRect();
     else
         m_r = m_dev->exactBounds();
 
-// below was commented
+    // below was commented
     /*    if(m_dev->hasSelection())
             m_dev->selection()->clear();*/
 
@@ -57,31 +56,22 @@ KisPerspectiveTransformWorker::~KisPerspectiveTransformWorker()
 {
 }
 
-double norm2(const QPointF& p)
-{
-    return sqrt(p.x() * p.x() + p.y() * p.y());
-}
-
 void KisPerspectiveTransformWorker::run()
 {
-
-    //TODO: understand why my caching of the rect didn't work...
-    if (m_selection)
-        m_r = m_selection->selectedExactRect();
-    else
-        m_r = m_dev->exactBounds();
-
     KoColorSpace * cs = m_dev->colorSpace();
-
     KisRectIteratorPixel dstIt = m_dev->createRectIterator(m_r.x(), m_r.y(), m_r.width(), m_r.height());
     KisPaintDeviceSP srcdev = new KisPaintDevice(*m_dev.data());
-    { // ensure that the random sub accessor is deleted first
+
+    { 
+        // Ensure that the random sub accessor is deleted first
         KisRandomSubAccessorPixel srcAcc = srcdev->createRandomSubAccessor();
+
         // Initialise progress
         m_lastProgressReport = 0;
         m_progressStep = 0;
         m_progressTotalSteps = m_r.width() * m_r.height();
-        //Action
+
+        // Action
         while (!dstIt.isDone()) {
             if (dstIt.isSelected()) {
                 QPointF p;

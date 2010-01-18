@@ -216,8 +216,36 @@ void KisToolPerspectiveTransform::initHandles()
     m_bottomleft = m_initialRect.bottomLeft();
     m_bottomright = m_initialRect.bottomRight();
 
-	// doubtful (check this)
     canvas()->updateCanvas(QRectF(m_topleft, m_bottomright));
+}
+
+void KisToolPerspectiveTransform::orderHandles()
+{
+    // seek the top handles
+    QPointF middlePoint((m_points[0] + m_points[1] + m_points[2] + m_points[3]) * 0.25);
+    int topLeftHandle, revolveDirection;
+
+    for (int i = 0; i < 4; i++) {
+        if ((m_points[i].x() <= middlePoint.x()) && (m_points[i].y() <= middlePoint.y()))
+        {
+            topLeftHandle = i;
+
+            // check for revolving direction
+            int nextCircularIndex = (i + 1) % 4;
+            if ((m_points[nextCircularIndex].x() >= middlePoint.x()) && (m_points[nextCircularIndex].y() <= middlePoint.y()))
+                revolveDirection = 1;
+            else
+                revolveDirection = -1;
+
+            break;
+        }
+    }
+
+    topLeftHandle += 4;
+    m_topleft = m_points[topLeftHandle % 4];
+    m_topright = m_points[(topLeftHandle + 1 * revolveDirection) % 4];
+    m_bottomright = m_points[(topLeftHandle + 2 * revolveDirection) % 4];
+    m_bottomleft = m_points[(topLeftHandle + 3 * revolveDirection) % 4];
 }
 
 void KisToolPerspectiveTransform::paint(QPainter &painter, const KoViewConverter &converter)
@@ -378,10 +406,7 @@ void KisToolPerspectiveTransform::mouseReleaseEvent(KoPointerEvent * event)
                     m_points.append(m_dragEnd);
                     if (m_points.size() == 4) {
                         // from the points, select which is topleft ? topright ? bottomright ? and bottomleft ?
-                        m_topleft = m_points[0];
-                        m_topright  = m_points[1];
-                        m_bottomleft  = m_points[3];
-                        m_bottomright  = m_points[2];
+                        orderHandles();
 
                         m_interractionMode = EDITRECTINTERRACTION;
                         updateCanvasPixelRect(image()->bounds());

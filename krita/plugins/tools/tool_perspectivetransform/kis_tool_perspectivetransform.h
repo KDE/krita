@@ -77,6 +77,7 @@ private:
     void paintOutline(QPainter& gc, const QRect& rc);
     void transform();
     void initHandles();
+    void orderHandles();
 
 protected slots:
     virtual void activate(bool);

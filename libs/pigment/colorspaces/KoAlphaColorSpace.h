@@ -90,11 +90,11 @@ public:
     }
 
     virtual const KoColorProfile* profile() const {
-        return 0;
+        return m_profile;
     }
 
     virtual KoColorProfile* profile() {
-        return 0;
+        return m_profile;
     }
 
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
@@ -172,7 +172,8 @@ public:
                                  quint8 *dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
                                  KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
-
+private:
+    KoColorProfile* m_profile;
 };
 
 

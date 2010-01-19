@@ -32,6 +32,7 @@
 #include "KoCompositeOpOver.h"
 #include "KoCompositeOpErase.h"
 #include "KoCompositeOpAlphaDarken.h"
+#include <colorprofiles/KoDummyColorProfile.h>
 
 namespace
 {
@@ -190,6 +191,7 @@ KoAlphaColorSpace::KoAlphaColorSpace() :
     addCompositeOp(new KoCompositeOpErase<AlphaU8Traits>(this));
     addCompositeOp(new CompositeSubtract(this));
     addCompositeOp(new KoCompositeOpAlphaDarken<AlphaU8Traits>(this));
+    m_profile = new KoDummyColorProfile;
 }
 
 KoAlphaColorSpace::~KoAlphaColorSpace()

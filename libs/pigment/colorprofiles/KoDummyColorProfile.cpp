@@ -30,7 +30,7 @@ KoDummyColorProfile::~KoDummyColorProfile()
 
 KoColorProfile* KoDummyColorProfile::clone() const
 {
-    new KoDummyColorProfile();
+    return new KoDummyColorProfile();
 }
 
 bool KoDummyColorProfile::valid() const

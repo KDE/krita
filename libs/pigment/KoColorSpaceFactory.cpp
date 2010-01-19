@@ -38,7 +38,7 @@ KoColorSpaceFactory::~KoColorSpaceFactory()
     {
         count += cl.size();
     }
-    Q_ASSERT(count == colorspaces.size());
+    Q_ASSERT(count == d->colorspaces.size());
     foreach( KoColorSpace* cs, d->colorspaces)
     {
         delete cs;

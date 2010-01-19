@@ -90,8 +90,8 @@ void KisSprayShapeOption::setupBrushPreviewSignals()
     connect(m_options->randomRotation, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->followCursor, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->fixedRotationSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->randomWeightSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->followCursorWeightSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->randomWeightSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->followCursorWeightSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
 }
 
 

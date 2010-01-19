@@ -223,7 +223,7 @@ bool KisSprayPaintOpSettings::mixBgColor() const
 
 bool KisSprayPaintOpSettings::sampleInput() const
 {
-    return getBool("ColorOption/sampleInput");
+    return getBool("ColorOption/sampleInputColor");
 }
 
 

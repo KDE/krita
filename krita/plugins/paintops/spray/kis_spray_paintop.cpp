@@ -52,45 +52,77 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
 
-    m_settings->debug();
+    loadSettings(settings);
+    m_sprayBrush.setProperties(&m_properties);
     
-    
-    m_sprayBrush.setDiameter(settings->diameter());
-    m_sprayBrush.setJitterShapeSize(settings->randomSize());
-
-    if (settings->proportional()) {
-        m_sprayBrush.setObjectDimension(settings->width()  / 100.0 * settings->diameter() * settings->scale(),
-                                        settings->height() / 100.0 * settings->diameter() * settings->aspect() * settings->scale());
-    } else {
-        m_sprayBrush.setObjectDimension(settings->width(), settings->height());
-    }
-
-    m_sprayBrush.setAmount(settings->amount());
-    m_sprayBrush.setScale(settings->scale());
-
-    m_sprayBrush.setCoverity(settings->coverage() / 100.0);
-    m_sprayBrush.setUseDensity(settings->useDensity());
-    m_sprayBrush.setParticleCount(settings->particleCount());
-
-
     // spacing
-    if ((settings->diameter() * 0.5) > 1) {
-        m_ySpacing = m_xSpacing = settings->diameter() * 0.5 * settings->spacing();
+    if ((m_properties.diameter * 0.5) > 1) {
+        m_ySpacing = m_xSpacing = m_properties.diameter * 0.5 * m_properties.spacing;
     } else {
         m_ySpacing = m_xSpacing = 1.0;
     }
     m_spacing = m_xSpacing;
-
-    m_sprayBrush.setUseRandomOpacity(settings->useRandomOpacity());
-    m_sprayBrush.setSettingsObject(m_settings);
-
-    m_sprayBrush.init();
     
 #ifdef BENCHMARK
     m_count = m_total = 0;
 #endif
-
 }
+
+void KisSprayPaintOp::loadSettings(const KisSprayPaintOpSettings* settings)
+{
+    // read the properties into primitive datatypes (just once)
+    m_properties.diameter = settings->diameter();
+    m_properties.radius =  qRound(0.5 * settings->diameter());
+    m_properties.particleCount = settings->particleCount(); 
+  
+    m_properties.aspect = settings->aspect();
+    m_properties.coverage = (settings->coverage() / 100.0);
+    m_properties.amount = settings->amount(); 
+    m_properties.spacing = settings->spacing();
+    m_properties.proportional = settings->proportional();
+    
+    m_properties.scale = settings->scale(); 
+    m_properties.brushRotation = settings->brushRotation();
+    m_properties.jitterMovement = settings->jitterMovement();
+    m_properties.jitterSize = settings->randomSize();
+    m_properties.useDensity = settings->useDensity();
+    
+    m_properties.useRandomOpacity = settings->useRandomOpacity();    
+    m_properties.useRandomHSV = settings->useRandomHSV();
+    m_properties.hue = settings->hue();
+    m_properties.saturation = settings->saturation();
+    m_properties.value = settings->value();
+
+    m_properties.colorPerParticle = settings->colorPerParticle();
+    m_properties.fillBackground = settings->fillBackground();
+    m_properties.mixBgColor = settings->mixBgColor();
+    m_properties.sampleInput = settings->sampleInput();
+    
+    if (m_properties.proportional)
+    {
+        m_properties.width = (settings->width()  / 100.0) * m_properties.diameter * m_properties.scale;
+        m_properties.height = (settings->height() / 100.0) * m_properties.diameter * m_properties.aspect * m_properties.scale;
+    }else
+    {
+        m_properties.width = settings->width();
+        m_properties.height = settings->height();
+    }
+    // particle type size
+    m_properties.shape = settings->shape();
+    m_properties.randomSize = settings->randomSize(); 
+    
+    // distribution
+    m_properties.gaussian = settings->gaussian();
+    // rotation
+    m_properties.fixedRotation = settings->fixedRotation();
+    m_properties.randomRotation = settings->randomRotation();
+    m_properties.followCursor = settings->followCursor();
+    m_properties.fixedAngle = settings->fixedAngle();
+    m_properties.randomRotationWeight = settings->randomRotationWeight();
+    m_properties.followCursorWeigth = settings->followCursorWeigth();
+    m_properties.image = settings->image();
+}
+
 
 KisSprayPaintOp::~KisSprayPaintOp()
 {
@@ -125,7 +157,7 @@ void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     double rotation = m_rotationOption.apply(info);
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
     double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
-    
+
     m_sprayBrush.paint( m_dab,
                         m_settings->node()->paintDevice(), 
                         info, 

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -86,7 +86,9 @@ void KoColorSpaceRegistry::init()
     add(new KoRgbU8ColorSpaceFactory());
     add(new KoRgbU16ColorSpaceFactory());
 
-    d->alphaCs = new KoAlphaColorSpace();
+    KoColorSpaceFactory* alphaCSF = new KoAlphaColorSpaceFactory;
+    d->colorsSpaceFactoryRegistry.add(alphaCSF);
+    d->alphaCs = new KoAlphaColorSpace;
     d->alphaCs->d->deletability = OwnedByRegistryDoNotDelete;
 
     KoPluginLoader::PluginsConfig config;
@@ -137,8 +139,6 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
     delete d->colorConversionCache;
     d->colorConversionCache = 0;
 
-    d->alphaCs->d->deletability = OwnedByRegistryRegistyDeletes;
-    delete d->alphaCs;
     // Do not explicitly delete d->rgbU8sRGB and d->lab16sLAB, since they are contained in the d->csMap
     delete d;
 }

@@ -23,7 +23,7 @@
 
 struct KoColorSpaceFactory::Private {
     QList<KoColorSpace*> colorspaces;
-    QMap<QString, QList<KoColorSpace*> > availableColorspaces;
+    QHash<QString, QList<KoColorSpace*> > availableColorspaces;
 };
 
 KoColorSpaceFactory::KoColorSpaceFactory() : d(new Private)

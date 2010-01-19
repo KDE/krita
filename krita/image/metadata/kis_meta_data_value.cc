@@ -27,7 +27,6 @@
 #include <klocale.h>
 
 #include <kis_debug.h>
-#include <boost/concept_check.hpp>
 
 using namespace KisMetaData;
 

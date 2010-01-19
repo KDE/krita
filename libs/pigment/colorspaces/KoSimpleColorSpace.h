@@ -28,6 +28,7 @@
 #include "KoColorSpaceTraits.h"
 #include "KoSimpleColorSpaceFactory.h"
 #include "KoColorModelStandardIds.h"
+#include "colorprofiles/KoDummyColorProfile.h"
 
 template<class _CSTraits>
 class KoSimpleColorSpace : public KoColorSpaceAbstract<_CSTraits>
@@ -42,10 +43,12 @@ public:
             : KoColorSpaceAbstract<_CSTraits>(id, name)
             , m_name(name)
             , m_colorModelId(colorModelId)
-            , m_colorDepthId(colorDepthId) {
+            , m_colorDepthId(colorDepthId)
+            , m_profile(new KoDummyColorProfile) {
     }
 
     virtual ~KoSimpleColorSpace() {
+        delete m_profile;
     }
 
     virtual KoID colorModelId() const {
@@ -81,11 +84,11 @@ public:
     }
 
     virtual const KoColorProfile* profile() const {
-        return 0;
+        return m_profile;
     }
 
     virtual KoColorProfile* profile() {
-        return 0;
+        return m_profile;
     }
 
     virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16*) const {
@@ -185,7 +188,7 @@ public:
     }
 
 private:
-
+    KoColorProfile* m_profile;
     QString m_name;
     KoID m_colorModelId;
     KoID m_colorDepthId;

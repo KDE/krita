@@ -268,11 +268,11 @@ public:
     //========== Display profiles =============================================//
 
     /**
-     * Return the profile of this color space. This may be 0
+     * Return the profile of this color space.
      */
     virtual const KoColorProfile * profile() const = 0;
     /**
-     * Return the profile of this color space. This may be 0
+     * Return the profile of this color space.
      */
     virtual KoColorProfile * profile() = 0;
 

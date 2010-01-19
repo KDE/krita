@@ -48,14 +48,11 @@ KoColorSpaceFactory::~KoColorSpaceFactory()
 
 KoColorSpace* KoColorSpaceFactory::grabColorSpace(const KoColorProfile * profile)
 {
-    if (profile)
-    {
-        QList<KoColorSpace*>& csList = d->availableColorspaces[profile->name()];
-        if (!csList.isEmpty()) {
-            KoColorSpace* cs = csList.back();
-            csList.pop_back();
-            return cs;
-        }
+    QList<KoColorSpace*>& csList = d->availableColorspaces[profile->name()];
+    if (!csList.isEmpty()) {
+        KoColorSpace* cs = csList.back();
+        csList.pop_back();
+        return cs;
     }
     KoColorSpace* cs = createColorSpace(profile);
     d->colorspaces.push_back(cs);
@@ -66,8 +63,5 @@ void KoColorSpaceFactory::releaseColorSpace(KoColorSpace * colorspace)
 {
     // TODO it is probably worth to avoid caching too many color spaces
     const KoColorProfile* profile = colorspace->profile();
-    if (profile)
-    {
-        d->availableColorspaces[profile->name()].push_back(colorspace);
-    }
+    d->availableColorspaces[profile->name()].push_back(colorspace);
 }

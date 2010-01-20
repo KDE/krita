@@ -173,8 +173,11 @@ bool KoScriptingPart::showExecuteScriptFile()
 
 void addMenu(QMenu *menu, Kross::ActionCollection *collection)
 {
-    foreach (Kross::Action *a, collection->actions())
-        menu->addAction(a);
+    foreach (Kross::Action *a, collection->actions()) {
+            if(a->isEnabled()) {
+                menu->addAction(a);
+            }
+        }
     foreach (const QString &collectionname, collection->collections()) {
         Kross::ActionCollection *c = collection->collection(collectionname);
         if (c->isEnabled())

@@ -50,7 +50,7 @@ KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const QString & n
         KoColor backgroundColor,
         int opacity,
         bool paintIncremental,
-        const KoCompositeOp * compositeOp)
+        const QString& compositeOp)
         : KisRecordedPaintAction(name, "PolyLinePaintAction", path, paintOpPreset, foregroundColor,
                                  backgroundColor, opacity, paintIncremental, compositeOp)
         , d(new Private)

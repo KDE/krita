@@ -57,7 +57,7 @@ KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(const QStri
         KoColor backgroundColor,
         int opacity,
         bool paintIncremental,
-        const KoCompositeOp * compositeOp)
+        const QString& compositeOp)
         : KisRecordedPaintAction("BezierCurvePaintAction", name, path, preset,
                                  foregroundColor, backgroundColor, opacity, paintIncremental, compositeOp)
         , d(new Private)

@@ -48,7 +48,7 @@ struct KisRecordedPaintAction::Private {
     KoColor backgroundColor;
     int opacity;
     bool paintIncremental;
-    const KoCompositeOp * compositeOp;
+    QString compositeOp;
 };
 
 KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
@@ -59,7 +59,7 @@ KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
         KoColor backgroundColor,
         int opacity,
         bool paintIncremental,
-        const KoCompositeOp * compositeOp)
+        const QString& compositeOp)
         : KisRecordedAction(id, name, path)
         , d(new Private)
 {
@@ -107,7 +107,7 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
     elt.setAttribute("paintIncremental", d->paintIncremental);
 
     // compositeOp
-    elt.setAttribute("compositeOp", d->compositeOp->id());
+    elt.setAttribute("compositeOp", d->compositeOp);
 }
 
 void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const

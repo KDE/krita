@@ -419,7 +419,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
                                                                          m_painter->backgroundColor(),
                                                                          m_painter->opacity(),
                                                                          m_paintIncremental,
-                                                                         m_compositeOp);
+                                                                         m_compositeOp->id());
     } else {
         m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"),
                                                                    KisNodeQueryPath::absolutePath(currentNode()),
@@ -428,7 +428,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
                                                                    m_painter->backgroundColor(),
                                                                    m_painter->opacity(),
                                                                    m_paintIncremental,
-                                                                   m_compositeOp);
+                                                                   m_compositeOp->id());
     }
 #endif
 }

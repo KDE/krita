@@ -45,7 +45,7 @@ public:
                                       KoColor backgroundColor,
                                       int opacity,
                                       bool paintIncremental,
-                                      const KoCompositeOp * compositeOp);
+                                      const QString& compositeOp);
 
     KisRecordedBezierCurvePaintAction(const KisRecordedBezierCurvePaintAction&);
 

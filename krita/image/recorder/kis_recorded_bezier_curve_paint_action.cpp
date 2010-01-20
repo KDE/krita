@@ -38,6 +38,7 @@
 #include "kis_paint_device.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_node_query_path.h"
 
 struct KisRecordedBezierCurvePaintAction::Private {
     struct BezierCurveSlice {
@@ -147,37 +148,22 @@ KisRecordedBezierCurvePaintActionFactory::~KisRecordedBezierCurvePaintActionFact
 KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomElement& elt)
 {
     Q_UNUSED(elt);
-#if 0 // XXX
     QString name = elt.attribute("name");
-    KisNodeSP node = KisRecordedActionFactory::indexPathToNode(image, elt.attribute("node"));
+    KisNodeQueryPath pathnode = KisNodeQueryPath::fromString(elt.attribute("path"));
     QString paintOpId = elt.attribute("paintop");
     int opacity = elt.attribute("opacity", "100").toInt();
     bool paintIncremental = elt.attribute("paintIncremental", "1").toInt();
 
-    const KoCompositeOp * compositeOp = node->paintDevice()->colorSpace()->compositeOp(elt.attribute("compositeOp"));
-    if (!compositeOp) {
-        compositeOp = node->paintDevice()->colorSpace()->compositeOp(COMPOSITE_OVER);
-    }
+    QString compositeOp = elt.attribute("compositeOp", COMPOSITE_OVER);
 
+    KisPaintOpPresetSP paintOpPreset = 0;
 
-    KisPaintOpSettingsSP settings = 0;
     QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
     if (!settingsElt.isNull()) {
-        settings = settingsFromXML(paintOpId, settingsElt, image);
+        paintOpPreset = paintOpPresetFromXML(settingsElt);
     } else {
         dbgUI << "No <PaintOpSettings /> found";
     }
-
-    KisBrush* brush = 0;
-
-    QDomElement brushElt = elt.firstChildElement("Brush");
-    if (!brushElt.isNull()) {
-        brush = brushFromXML(brushElt);
-    } else {
-        dbgUI << "Warning: no <Brush /> found";
-    }
-    Q_ASSERT(brush);
-
 
     QDomElement backgroundColorElt = elt.firstChildElement("BackgroundColor");
     KoColor bC;
@@ -198,7 +184,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomE
     } else {
         dbgUI << "Warning: no <ForegroundColor /> found";
     }
-
+#if 0
     KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, node, preset, fC, bC, opacity, paintIncremental, compositeOp);
 
     QDomElement wpElt = elt.firstChildElement("Waypoints");
@@ -222,9 +208,8 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomE
         dbgUI << "Warning: no <Waypoints /> found";
     }
     return rplpa;
-#else
-    return 0;
 #endif
+    return 0;
 }
 
 

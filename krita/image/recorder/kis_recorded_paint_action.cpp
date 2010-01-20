@@ -174,20 +174,10 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
 }
 
 
-KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QString& paintOpId, const QDomElement& elt, KisImageWSP image)
+KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QDomElement& elt)
 {
-    Q_UNUSED(paintOpId);
-    Q_UNUSED(elt);
-    Q_UNUSED(image);
-
-#if 0
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->get(paintOpId)->settings(image);
-    if (settings) {
-        settings->fromXML(elt);
-    }
-#else
     //KisPaintOpSettingsSP settings;
     KisPaintOpPresetSP settings;
-#endif
+    settings->fromXML(elt);
     return settings;
 }

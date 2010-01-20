@@ -30,7 +30,7 @@ KisActionRecorder::~KisActionRecorder()
 {
 }
 
-void KisActionRecorder::addAction(const KisRecordedAction& action, const KisRecordedAction* before )
+void KisActionRecorder::addAction(const KisRecordedAction& action, const KisRecordedAction* before)
 {
     KisMacro::addAction(action, before);
     emit(addedAction(action));

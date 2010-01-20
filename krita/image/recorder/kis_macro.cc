@@ -67,7 +67,9 @@ void KisMacro::removeActions(const QList<KisRecordedAction*>& actions)
 void KisMacro::addAction(const KisRecordedAction& action, const KisRecordedAction* before)
 {
     if (before == 0) {
-        d->actions.append(action.clone());
+        KisRecordedAction* a = action.clone();
+        Q_ASSERT(a);
+        d->actions.append(a);
     } else {
         d->actions.insert(d->actions.indexOf(const_cast<KisRecordedAction*>(before)), action.clone());
     }
@@ -77,6 +79,7 @@ void KisMacro::moveAction(const KisRecordedAction* action, const KisRecordedActi
 {
     KisRecordedAction* _action = d->actions.takeAt(d->actions.indexOf(const_cast<KisRecordedAction*>(action)));
     if (before == 0) {
+        Q_ASSERT(_action);
         d->actions.append(_action);
     } else {
         d->actions.insert(d->actions.indexOf(const_cast<KisRecordedAction*>(before)), _action);
@@ -122,7 +125,9 @@ void KisMacro::fromXML(const QDomElement& docElem)
                 dbgImage << "Reconstruct : " << id << endl; // the node really is an element.
                 KisRecordedActionFactory* raf = KisRecordedActionFactoryRegistry::instance()->get(id);
                 if (raf) {
-                    d->actions.append(raf->fromXML(elt)); // TODO should use addAction
+                    KisRecordedAction* a = raf->fromXML(elt);
+                    Q_ASSERT(a);
+                    d->actions.append(a); // TODO should use addAction
                 } else {
                     dbgImage << "Unknown action : " << id << endl;
                 }

@@ -128,7 +128,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElem
     // Decode pressets
     KisPaintOpPresetSP paintOpPreset = 0;
 
-    QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
+    QDomElement settingsElt = elt.firstChildElement("PaintopPreset");
     if (!settingsElt.isNull()) {
         paintOpPreset = paintOpPresetFromXML(settingsElt);
     } else {

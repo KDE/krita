@@ -41,6 +41,12 @@ bool WmfPainter::begin()
 
     // NOTE: NO SETUP OF ANY MATRIX STUFF IN HERE.
 
+    mPainter->setBrush(QBrush(Qt::NoBrush));
+    //mPainter->setBrush(QBrush(Qt::white));
+
+    //kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush() 
+    //              << "Background: " << mPainter->background() << " " << mPainter->backgroundMode();
+
     return ret;
 }
 

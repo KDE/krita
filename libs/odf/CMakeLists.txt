@@ -77,5 +77,6 @@ install( FILES
     KoBorder.h
     KoPageLayout.h
     KoPageFormat.h
+    KoColumns.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

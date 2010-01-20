@@ -142,6 +142,9 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
     paContext.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 
     d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );
+    if ( !loadOdfProlog( body, paContext ) ) {
+        return false;
+    }
     d->pages = loadOdfPages( body, paContext );
 
     // create pages if there are none
@@ -278,6 +281,13 @@ QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoP
 }
 
 bool KoPADocument::loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext & context )
+{
+    Q_UNUSED( body );
+    Q_UNUSED( context );
+    return true;
+}
+
+bool KoPADocument::loadOdfProlog( const KoXmlElement & body, KoPALoadingContext & context )
 {
     Q_UNUSED( body );
     Q_UNUSED( context );

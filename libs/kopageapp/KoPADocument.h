@@ -252,6 +252,14 @@ protected:
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
 
     /**
+     * Load the presentation declaration
+     *
+     * The default implementation is empty
+     */
+    virtual bool loadOdfProlog( const KoXmlElement & body, KoPALoadingContext & context );
+
+
+    /**
      * Load the epilouge
      *
      * The default implementation is empty

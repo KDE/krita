@@ -462,9 +462,10 @@ void KisOpenGLImageTextures::setImageTextureFormat()
 {
     m_imageTextureInternalFormat = GL_RGBA8;
     m_imageTextureType = GL_UNSIGNED_BYTE;
-    m_usingHDRExposureProgram = imageCanUseHDRExposureProgram(m_image);
 
 #ifdef HAVE_GLEW
+    m_usingHDRExposureProgram = imageCanUseHDRExposureProgram(m_image);
+
     KoID colorModelId = m_image->colorSpace()->colorModelId();
     KoID colorDepthId = m_image->colorSpace()->colorDepthId();
 

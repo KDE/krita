@@ -33,9 +33,10 @@
 #endif
 
 #include <KoColorSpace.h>
-#include "KoColorSpaceRegistry.h"
-#include "KoColorProfile.h"
-#include "KoIntegerMaths.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColorProfile.h>
+#include <KoIntegerMaths.h>
+#include <KoColorModelStandardIds.h>
 
 #include "kis_global.h"
 
@@ -243,21 +244,12 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
 
                 if (m_imageTextureInternalFormat == GL_RGBA8) {
                     tileUpdateImage = m_image->convertToQImage(tileUpdateRect.x(), tileUpdateRect.y(),
-                                      tileUpdateRect.width(), tileUpdateRect.height(),
-                                      m_monitorProfile);
+                                                               tileUpdateRect.width(), tileUpdateRect.height(),
+                                                               m_monitorProfile);
 
-#if 0 // XXX_SELECTION This is the old method of painting selections -- should be
-                    // ported to whatever Sven Langkamp is doing.
-                    if (m_displaySelection) {
-                        if (!m_image->activeLayer().isNull()) {
-                            m_image->activeLayer()->paint(tileUpdateImage,
-                                                          tileUpdateRect.x(), tileUpdateRect.y(),
-                                                          tileUpdateRect.width(), tileUpdateRect.height());
-                        }
-                    }
-#endif
                     pixels = tileUpdateImage.bits();
-                } else {
+                }
+                else {
                     pixels = new quint8[tileUpdateRect.width() * tileUpdateRect.height() * m_image->colorSpace()->pixelSize()];
                     Q_CHECK_PTR(pixels);
                     deletePixelsAfterUse = true;
@@ -266,28 +258,31 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
                                                       tileUpdateRect.width(), tileUpdateRect.height());
 
 #if defined(HAVE_GLEW) && defined(HAVE_OPENEXR)
-                    // XXX: generalise
-                    if (m_image->colorSpace()->id() == "RgbAF16") {
-                        if (m_imageTextureType == GL_FLOAT) {
 
-                            // Convert half to float as we don't have ARB_half_float_pixel
-                            const int NUM_RGBA_COMPONENTS = 4;
-                            qint32 halfCount = tileUpdateRect.width() * tileUpdateRect.height() * NUM_RGBA_COMPONENTS;
-                            GLfloat *pixels_as_floats = new GLfloat[halfCount];
-                            const half *half_pixel = reinterpret_cast<const half *>(pixels);
-                            GLfloat *float_pixel = pixels_as_floats;
+                    if (m_imageTextureInternalFormat == GL_RGBA16) {
+                        // Convert to 16 bit rgba from the current colorspace (which is integer 16, float 16 or float 32, but not rgba)
+                        const KoColorSpace* rgb16 = KoColorSpaceRegistry::instance()->rgb16(m_monitorProfile);
+                        quint8* rgb16pixels = rgb16->allocPixelBuffer(tileUpdateRect.width() * tileUpdateRect.height());
+                        m_image->colorSpace()->convertPixelsTo(pixels, rgb16pixels, rgb16, tileUpdateRect.width() * tileUpdateRect.height());
+                        delete[] pixels;
+                        pixels = rgb16pixels;
+                    }
+                    else if (m_image->colorSpace()->colorDepthId() == Float16BitsColorDepthID && m_imageTextureType == GL_FLOAT) {
+                        // Convert half to float as we don't have ARB_half_float_pixel
+                        const int NUM_RGBA_COMPONENTS = 4;
+                        qint32 halfCount = tileUpdateRect.width() * tileUpdateRect.height() * NUM_RGBA_COMPONENTS;
+                        GLfloat *pixels_as_floats = new GLfloat[halfCount];
+                        const half *half_pixel = reinterpret_cast<const half *>(pixels);
+                        GLfloat *float_pixel = pixels_as_floats;
 
-                            while (halfCount > 0) {
-                                *float_pixel = *half_pixel;
-                                ++float_pixel;
-                                ++half_pixel;
-                                --halfCount;
-                            }
-                            delete [] pixels;
-                            pixels = reinterpret_cast<quint8 *>(pixels_as_floats);
-                        } else {
-                            Q_ASSERT(m_imageTextureType == GL_HALF_FLOAT_ARB);
+                        while (halfCount > 0) {
+                            *float_pixel = *half_pixel;
+                            ++float_pixel;
+                            ++half_pixel;
+                            --halfCount;
                         }
+                        delete [] pixels;
+                        pixels = reinterpret_cast<quint8 *>(pixels_as_floats);
                     }
 #endif
                 }
@@ -462,47 +457,21 @@ void KisOpenGLImageTextures::deactivateHDRExposureProgram()
 #endif
 }
 
-bool KisOpenGLImageTextures::haveHDRTextureFormat(const KoColorSpace *colorSpace)
-{
-#ifdef HAVE_GLEW
-    KisOpenGL::makeContextCurrent();
-    QString colorSpaceId = colorSpace->id();
-
-    if (colorSpaceId == "RGBAF16HALF") {
-        if (GLEW_ARB_texture_float) {
-            return true;
-        }
-        if (GLEW_ATI_texture_float) {
-            return true;
-        }
-    }
-    if (colorSpaceId == "RGBAF32") {
-        if (GLEW_ARB_texture_float) {
-            return true;
-        }
-        if (GLEW_ATI_texture_float) {
-            return true;
-        }
-    }
-#endif
-    return false;
-}
 
 void KisOpenGLImageTextures::setImageTextureFormat()
 {
     m_imageTextureInternalFormat = GL_RGBA8;
     m_imageTextureType = GL_UNSIGNED_BYTE;
-
+    m_usingHDRExposureProgram = imageCanUseHDRExposureProgram(m_image);
 
 #ifdef HAVE_GLEW
-    QString colorSpaceId = m_image->colorSpace()->id();
-    m_usingHDRExposureProgram = false;
+    KoID colorModelId = m_image->colorSpace()->colorModelId();
+    KoID colorDepthId = m_image->colorSpace()->colorDepthId();
 
     dbgUI << "Choosing texture format:";
 
-    if (imageCanUseHDRExposureProgram(m_image)) {
-
-        if (colorSpaceId == "RGBAF16HALF") {
+    if (colorModelId == RGBAColorModelID) {
+        if (colorDepthId == Float16BitsColorDepthID && imageCanUseHDRExposureProgram(m_image)) {
 
             if (GLEW_ARB_texture_float) {
                 m_imageTextureInternalFormat = GL_RGBA16F_ARB;
@@ -523,7 +492,8 @@ void KisOpenGLImageTextures::setImageTextureFormat()
 
             m_usingHDRExposureProgram = true;
 
-        } else if (colorSpaceId == "RGBAF32") {
+        }
+        else if (colorDepthId == Float32BitsColorDepthID && imageCanUseHDRExposureProgram(m_image)) {
 
             if (GLEW_ARB_texture_float) {
                 m_imageTextureInternalFormat = GL_RGBA32F_ARB;
@@ -537,8 +507,19 @@ void KisOpenGLImageTextures::setImageTextureFormat()
             m_imageTextureType = GL_FLOAT;
             m_usingHDRExposureProgram = true;
         }
-    } else {
-        dbgUI << "Using unsigned byte";
+        else if (colorDepthId != Integer8BitsColorDepthID) {
+            dbgUI << "Using 16 bits rgba";
+            m_imageTextureInternalFormat = GL_RGBA16;
+            m_imageTextureType = GL_UNSIGNED_SHORT;
+        }
+    }
+    else {
+        // We will convert the colorspace to 16 bits rgba, instead of 8 bits
+        if (colorDepthId == Integer16BitsColorDepthID) {
+            dbgUI << "Using conversion to 16 bits rgba";
+            m_imageTextureInternalFormat = GL_RGBA16;
+            m_imageTextureType = GL_UNSIGNED_SHORT;
+        }
     }
 #endif
 }
@@ -561,9 +542,17 @@ bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
     if (!HDRExposureProgram->isValid()) {
         return false;
     }
-    if (!haveHDRTextureFormat(image->colorSpace())) {
+
+    KisOpenGL::makeContextCurrent();
+    KoID colorModelId = image->colorSpace()->colorModelId();
+    KoID colorDepthId = image->colorSpace()->colorDepthId();
+
+    if (!(    colorModelId == RGBAColorModelID
+              && (colorDepthId == Float16BitsColorDepthID || colorDepthId == Float32BitsColorDepthID)
+              && (GLEW_ARB_texture_float || GLEW_ATI_texture_float))) {
         return false;
     }
+
     return true;
 #else
     Q_UNUSED(image);

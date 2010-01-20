@@ -60,7 +60,7 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
     // We're not set up to handle asynchronous loading at the moment.
     QString tmpFile;
 
-    KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Read, "odr", KoStore::Zip);
+    KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
@@ -89,7 +89,7 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open file for writing
-    KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Write, "odr", KoStore::Zip);
+    KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Write, "image/openraster", KoStore::Zip);
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }

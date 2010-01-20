@@ -188,10 +188,10 @@ public:
     }
 
 private:
-    KoColorProfile* m_profile;
     QString m_name;
     KoID m_colorModelId;
     KoID m_colorDepthId;
+    KoColorProfile* m_profile;
 
 };
 

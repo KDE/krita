@@ -39,7 +39,7 @@ TestColorConversionSystem::TestColorConversionSystem()
             }
         }
     }
-    listModels.append(ModelDepthProfile(AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), ""));
+    listModels.append(ModelDepthProfile(AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), "Dummy profile"));
 }
 
 void TestColorConversionSystem::testConnections()

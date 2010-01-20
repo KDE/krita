@@ -46,7 +46,7 @@ KoColorConversionSystem::KoColorConversionSystem() : d(new Private)
     d->alphaNode->crossingCost = 1000000;
     d->alphaNode->isInitialized = true;
     d->alphaNode->isGray = true; // <- FIXME: it's a little bit hacky as alpha doesn't really have color information
-    d->graph[ NodeKey(d->alphaNode->modelId, d->alphaNode->depthId, "")] = d->alphaNode;
+    d->graph[ NodeKey(d->alphaNode->modelId, d->alphaNode->depthId, "Dummy profile")] = d->alphaNode;
 
     Vertex* v = createVertex(d->alphaNode, d->alphaNode);
     v->setFactoryFromSrc(new KoCopyColorConversionTransformationFactory(AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), ""));

@@ -310,7 +310,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             dbgPigmentCSRegistry << "Profile not found :" << profileName;
             QList<const KoColorProfile *> profiles = profilesFor(csID);
             if (profiles.isEmpty()) {
-                dbgPigmentCSRegistry << "No profile at all available for " << csf;
+                dbgPigmentCSRegistry << "No profile at all available for " << csf << " " << csf->id();
                 p = 0;
             } else {
                 p = profiles[0];

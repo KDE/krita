@@ -136,7 +136,7 @@ QString KisConfig::workingColorSpace() const
 
 void KisConfig::setWorkingColorSpace(const QString & workingColorSpace)
 {
-    m_cfg.writeEntry(workingColorSpace, workingColorSpace);
+    m_cfg.writeEntry("workingColorSpace", workingColorSpace);
 }
 
 
@@ -537,7 +537,6 @@ void KisConfig::setMaxCachedImageSize(quint32 size)
 {
     m_cfg.writeEntry("maxCachedImageSize", size);
 }
-
 
 bool KisConfig::showFilterGallery()
 {

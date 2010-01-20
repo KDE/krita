@@ -48,7 +48,7 @@ void KisActionRecorderTest::testFiles()
 {
     QDir dirSources(QString(FILES_DATA_DIR) + "/actionrecorder/sources");
     foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
-        if (!sourceFileInfo.isHidden()) {
+        if (!sourceFileInfo.isHidden() && !sourceFileInfo.isDir()) {
             qDebug() << "handling " << sourceFileInfo.fileName();
             QFileInfo resultFileInfo(QString(FILES_DATA_DIR) + "/actionrecorder/results/" + sourceFileInfo.fileName() + ".png");
             QVERIFY2(resultFileInfo.exists(),

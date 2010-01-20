@@ -54,7 +54,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions)
         if (exclusions.indexOf(sourceFileInfo.fileName()) > -1) {
             continue;
         }
-        if (!sourceFileInfo.isHidden()) {
+        if (!sourceFileInfo.isHidden() && !sourceFileInfo.isDir()) {
             qDebug() << "handling " << sourceFileInfo.fileName();
             QFileInfo resultFileInfo(QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + ".png");
 

@@ -40,81 +40,12 @@
 #include <kis_transaction.h>
 #include <kis_iterator.h>
 
+#include "psd.h"
 #include "psd_header.h"
 #include "psd_colormode_block.h"
 #include "psd_utils.h"
 #include "psd_resource_section.h"
 #include "psd_layer_section.h"
-
-QString psd_blendmode_to_composite_op(const QString& blendmode)
-{
-    if (blendmode == "norm") return COMPOSITE_OVER;    // normal
-    if (blendmode == "dark") return COMPOSITE_DARKEN;  // darken
-    if (blendmode == "lite") return COMPOSITE_LIGHTEN; // lighten
-    if (blendmode == "hue ") return COMPOSITE_HUE;     // hue
-    if (blendmode == "sat ") return COMPOSITE_SATURATION; // saturation
-    if (blendmode == "colr") return COMPOSITE_COLOR; //color
-    if (blendmode == "lum ") return COMPOSITE_LUMINIZE; //luminosity
-    if (blendmode == "mul ") return COMPOSITE_MULT; //multiply
-    if (blendmode == "scrn") return COMPOSITE_SCREEN; //screen
-    if (blendmode == "diss") return COMPOSITE_DISSOLVE; //dissolve
-    if (blendmode == "over") return COMPOSITE_OVERLAY; //overlay
-    if (blendmode == "hLit") return COMPOSITE_HARD_LIGHT; //hard light
-    if (blendmode == "sLit") return COMPOSITE_SOFT_LIGHT; //soft light
-    if (blendmode == "diff") return COMPOSITE_DIFF; //difference
-    if (blendmode == "smud") return COMPOSITE_EXCLUSION; //exclusion
-    if (blendmode == "div ") return COMPOSITE_DIVIDE; // color dodge
-    if (blendmode == "idiv") return COMPOSITE_INVERTED_DIVIDE ; //color burn
-    if (blendmode == "lbrn") return COMPOSITE_BURN ; //linear burn
-    if (blendmode == "lddg") return COMPOSITE_DODGE ; //linear dodge
-    if (blendmode == "vLit") return COMPOSITE_VIVID_LIGHT; //vivid light
-    if (blendmode == "lLit") return COMPOSITE_LINEAR_LIGHT; //linear light
-    if (blendmode == "pLit") return COMPOSITE_PIN_LIGHT; //  pin light
-    if (blendmode == "hMix") return COMPOSITE_HARD_MIX; //hard mix
-
-    return COMPOSITE_UNDEF;
-}
-
-QPair<QString, QString> psd_colormode_to_colormodelid(PSDHeader::PSDColorMode colormode, quint16 channelDepth)
-{
-    QPair<QString, QString> colorSpaceId;
-    switch(colormode) {
-    case(PSDHeader::Bitmap):
-    case(PSDHeader::Indexed):
-    case(PSDHeader::MultiChannel):
-    case(PSDHeader::RGB):
-        colorSpaceId.first = RGBAColorModelID.id();
-        break;
-    case(PSDHeader::CMYK):
-        colorSpaceId.first = CMYKAColorModelID.id();
-        break;
-    case(PSDHeader::Grayscale):
-    case(PSDHeader::DuoTone):
-        colorSpaceId.first = GrayAColorModelID.id();
-        break;
-    case(PSDHeader::Lab):
-        colorSpaceId.first = LABAColorModelID.id();
-        break;
-    default:
-        return colorSpaceId;
-    }
-
-    switch(channelDepth) {
-    case(1):
-    case(8):
-        colorSpaceId.second =  Integer8BitsColorDepthID.id();
-        break;
-    case(16):
-        colorSpaceId.second = Integer16BitsColorDepthID.id();
-        break;
-    case(32):
-        colorSpaceId.second = Float32BitsColorDepthID.id();
-        break;
-    default:
-        break;
-    }
-    return colorSpaceId;
-}
 
 PSDLoader::PSDLoader(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
@@ -190,7 +121,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     m_image->lock();
 
     // Preserve the duotone colormode block for saving back to psd
-    if (header.m_colormode == PSDHeader::DuoTone) {
+    if (header.m_colormode == DuoTone) {
         KisAnnotationSP annotation = new KisAnnotation("Duotone Colormode Block",
                                                        i18n("Duotone Colormode Block"),
                                                        colorModeBlock.m_data);

@@ -47,7 +47,7 @@ void PSDHeaderTest::testLoading()
     QVERIFY(header.m_width == 100 );
     QVERIFY(header.m_height == 100);
     QVERIFY(header.m_channelDepth == 16);
-    QVERIFY(header.m_colormode == PSDHeader::RGB);
+    QVERIFY(header.m_colormode == RGB);
 
 }
 
@@ -64,7 +64,7 @@ void PSDHeaderTest::testRoundTripping()
     header.m_width = 1000;
     header.m_height = 1000;
     header.m_channelDepth = 8;
-    header.m_colormode = PSDHeader::RGB;
+    header.m_colormode = RGB;
     Q_ASSERT(header.valid());
     bool retval = header.write(&f);
     Q_ASSERT(retval);

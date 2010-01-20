@@ -21,31 +21,13 @@
 #include <QDebug>
 #include <QtGlobal>
 
-class QIODevice;
+#include "psd.h"
 
-const int MAX_CHANNELS = 56;
+class QIODevice;
 
 class PSDHeader
 {
 public:
-
-    enum PSDColorMode {
-        Bitmap = 0,
-        Grayscale,
-        Indexed,
-        RGB,
-        CMYK,
-        MultiChannel,
-        DuoTone,
-        Lab,
-        Gray16,
-        RGB48,
-        Lab48,
-        CMYK64,
-        DeepMultichannel,
-        Duotone16,
-        UNKNOWN = 9000
-     };
 
     PSDHeader();
 

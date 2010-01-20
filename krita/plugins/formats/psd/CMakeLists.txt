@@ -8,6 +8,7 @@ configure_file(config_psd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_psd.h)
 
 
 set(LIB_PSD_SRCS 
+    psd.cpp
     psd_utils.cpp
     psd_header.cpp
     psd_colormode_block.cpp

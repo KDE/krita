@@ -18,6 +18,7 @@
 #ifndef PSD_COLORMODE_BLOCK_H
 #define PSD_COLORMODE_BLOCK_H
 
+#include "psd.h"
 #include "psd_header.h"
 #include <QByteArray>
 
@@ -25,14 +26,14 @@ class PSDColorModeBlock
 {
 public:
 
-    PSDColorModeBlock(PSDHeader::PSDColorMode colormode);
+    PSDColorModeBlock(PSDColorMode colormode);
 
     bool read(QIODevice* io);
     bool write(QIODevice* io);
     bool valid();
 
     quint32 m_blocksize;
-    PSDHeader::PSDColorMode m_colormode;
+    PSDColorMode m_colormode;
     QByteArray m_data;
 
     QString error;

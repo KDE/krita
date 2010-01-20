@@ -22,6 +22,7 @@
 #include <QCoreApplication>
 #include <klocale.h>
 #include <qtest_kde.h>
+#include "../psd.h"
 #include "../psd_header.h"
 #include "../psd_colormode_block.h"
 #ifndef FILES_DATA_DIR
@@ -30,13 +31,13 @@
 
 void PSDColorModeBlockTest::testCreation()
 {
-    PSDColorModeBlock colorModeBlock1(PSDHeader::Indexed);
+    PSDColorModeBlock colorModeBlock1(Indexed);
     Q_ASSERT(!colorModeBlock1.valid());
 
-    PSDColorModeBlock colorModeBlock2(PSDHeader::DuoTone);
+    PSDColorModeBlock colorModeBlock2(DuoTone);
     Q_ASSERT(!colorModeBlock2.valid());
 
-    PSDColorModeBlock colorModeBlock3(PSDHeader::RGB);
+    PSDColorModeBlock colorModeBlock3(RGB);
     Q_ASSERT(colorModeBlock3.valid());
 }
 
@@ -48,7 +49,7 @@ void PSDColorModeBlockTest::testLoadingRGB()
     PSDHeader header;
     header.read(&f);
 
-    QVERIFY(header.m_colormode == PSDHeader::RGB);
+    QVERIFY(header.m_colormode == RGB);
 
     PSDColorModeBlock colorModeBlock(header.m_colormode);
     bool retval = colorModeBlock.read(&f);
@@ -65,7 +66,7 @@ void PSDColorModeBlockTest::testLoadingIndexed()
     PSDHeader header;
     header.read(&f);
 
-    QVERIFY(header.m_colormode == PSDHeader::Indexed);
+    QVERIFY(header.m_colormode == Indexed);
 
     PSDColorModeBlock colorModeBlock(header.m_colormode);
     bool retval = colorModeBlock.read(&f);

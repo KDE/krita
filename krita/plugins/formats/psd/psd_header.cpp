@@ -128,7 +128,7 @@ bool PSDHeader::valid()
         error = QString("Colormode is out of range: %1").arg(m_colormode);
         return false;
     }
-    
+
     return true;
 }
 
@@ -144,28 +144,28 @@ QDebug operator<<(QDebug dbg, const PSDHeader& header)
     dbg.nospace() << ", channel depth: " << header.m_channelDepth;
     dbg.nospace() << ", color mode: ";
     switch(header.m_colormode) {
-    case(PSDHeader::Bitmap):
+    case(Bitmap):
         dbg.nospace() << "Bitmap";
         break;
-    case(PSDHeader::Grayscale):
+    case(Grayscale):
         dbg.nospace() << "Grayscale";
         break;
-    case(PSDHeader::Indexed):
+    case(Indexed):
         dbg.nospace() << "Indexed";
         break;
-    case(PSDHeader::RGB):
+    case(RGB):
         dbg.nospace() << "RGB";
         break;
-    case(PSDHeader::CMYK):
+    case(CMYK):
         dbg.nospace() << "CMYK";
         break;
-    case(PSDHeader::MultiChannel):
+    case(MultiChannel):
         dbg.nospace() << "MultiChannel";
         break;
-    case(PSDHeader::DuoTone):
+    case(DuoTone):
         dbg.nospace() << "DuoTone";
         break;
-    case(PSDHeader::Lab):
+    case(Lab):
         dbg.nospace() << "Lab";
         break;
     default:

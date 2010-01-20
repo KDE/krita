@@ -52,19 +52,19 @@ bool PSDLayerRecord::read(QIODevice* io)
     dbgFile << "top" << top << "left" << left << "bottom" << bottom << "right" << right << "number of channels" << nChannels;
 
     switch(m_header.m_colormode) {
-    case(PSDHeader::Bitmap):
-    case(PSDHeader::Indexed):
-    case(PSDHeader::DuoTone):
-    case(PSDHeader::Grayscale):
-    case(PSDHeader::MultiChannel):
+    case(Bitmap):
+    case(Indexed):
+    case(DuoTone):
+    case(Grayscale):
+    case(MultiChannel):
         if ((m_hasTransparency && nChannels < 2) || (!m_hasTransparency && nChannels < 1)) {
             error = QString("Not enough channels. Got: %1").arg(nChannels);
             return false;
         }
         break;
-    case(PSDHeader::RGB):
-    case(PSDHeader::CMYK):
-    case(PSDHeader::Lab):
+    case(RGB):
+    case(CMYK):
+    case(Lab):
     default:
         if ((m_hasTransparency && nChannels < 4) || (!m_hasTransparency && nChannels < 3)) {
             error = QString("Not enough channels. Got: %1").arg(nChannels);
@@ -87,7 +87,7 @@ bool PSDLayerRecord::read(QIODevice* io)
         }
 
         ChannelInfo* info = new ChannelInfo();
-        info->compressionType = Unknown;
+        info->compressionType = Compression::Unknown;
         info->channelId = -1;
         info->channelDataLength = 0;
         info->channelDataStart = 0;
@@ -377,7 +377,7 @@ quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, quint16 chan
     quint8* bytes = 0;
     ChannelInfo* channelInfo = channelInfoRecords.at(channel);
 
-    if (channelInfo->compressionType == Uncompressed) {
+    if (channelInfo->compressionType == Compression::Uncompressed) {
         switch(m_header.m_channelDepth){
         case 1:
             {
@@ -433,7 +433,7 @@ quint8* PSDLayerRecord::readChannelData(QIODevice* io, quint64 row, quint16 chan
             return false;
         }
     }
-    else if (channelInfo->compressionType == RLE) {
+    else if (channelInfo->compressionType == Compression::RLE) {
         io->seek(savedPos);
     }
     else {

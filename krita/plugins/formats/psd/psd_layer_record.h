@@ -23,6 +23,7 @@
 #include <QByteArray>
 #include <QBitArray>
 
+#include "psd.h"
 #include "psd_header.h"
 
 class QIODevice;
@@ -30,14 +31,6 @@ class QIODevice;
 class PSDLayerRecord
 {
 public:
-
-    enum CompressionType {
-        Uncompressed = 0,
-        RLE,
-        ZIP,
-        ZIPWithPrediction,
-        Unknown
-    };
 
     PSDLayerRecord(const PSDHeader &header, bool hasTransparency);
 
@@ -61,7 +54,7 @@ public:
 
     struct ChannelInfo {
         qint16 channelId;
-        CompressionType compressionType;
+        Compression::CompressionType compressionType;
         quint64 channelDataStart;
         quint64 channelDataLength;
         QVector<quint32> rleRowLengths;

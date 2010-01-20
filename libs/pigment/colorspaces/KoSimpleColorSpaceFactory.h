@@ -25,6 +25,7 @@
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceRegistry.h>
 #include "KoColorConversionTransformationFactory.h"
+#include <colorprofiles/KoDummyColorProfile.h>
 
 class KoSimpleColorSpaceFactory : public KoColorSpaceFactory
 {
@@ -67,7 +68,7 @@ public:
     }
 
     virtual bool profileIsCompatible(const KoColorProfile* profile) const {
-        Q_UNUSED(profile); return true;
+        return dynamic_cast<const KoDummyColorProfile*>(profile);
     }
 
     virtual QString colorSpaceEngine() const {

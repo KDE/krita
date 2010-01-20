@@ -184,8 +184,7 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomE
     } else {
         dbgUI << "Warning: no <ForegroundColor /> found";
     }
-#if 0
-    KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, node, preset, fC, bC, opacity, paintIncremental, compositeOp);
+    KisRecordedBezierCurvePaintAction* rplpa = new KisRecordedBezierCurvePaintAction(name, pathnode, paintOpPreset, fC, bC, opacity, paintIncremental, compositeOp);
 
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if (!wpElt.isNull()) {
@@ -208,8 +207,6 @@ KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomE
         dbgUI << "Warning: no <Waypoints /> found";
     }
     return rplpa;
-#endif
-    return 0;
 }
 
 

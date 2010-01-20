@@ -88,33 +88,28 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& info) cons
     Q_UNUSED(node);
 
     KisFilterConfiguration * kfc = d->configuration();
-    KisPaintDeviceSP dev = nodeQueryPath().queryNodes(info.image(), info.currentNode())[0]->paintDevice(); // TODO: not good should take the full list into consideration
-    KisTransaction * cmd = 0;
-    if (info.undoAdapter()) cmd = new KisTransaction(d->filter->name(), dev);
+    QList<KisNodeSP> nodes = nodeQueryPath().queryNodes(info.image(), info.currentNode());
+    foreach(KisNodeSP node, nodes) {
+        KisPaintDeviceSP dev = node->paintDevice();
+        KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+        KisTransaction * cmd = 0;
+        if (info.undoAdapter()) cmd = new KisTransaction(d->filter->name(), dev);
 
-    QRect r1 = dev->extent();
+        QRect r1 = dev->extent();
 
-    // Ugly hack to get at the image without bloating the node interface
-    KisImageWSP image;
-    KisNodeSP parent = nodeQueryPath().queryNodes(info.image(), info.currentNode())[0];
-    while (image == 0 && parent->parent()) {
-        // XXX: ugly!
-        KisLayerSP layer = dynamic_cast<KisLayer*>(parent.data());
-        if (layer) {
-            image = layer->image();
-            r1 = r1.intersected(image->bounds());
-            if (layer->selectionMask()) {
-                r1 = r1.intersected(layer->selectionMask()->exactBounds());
-            }
-            if (image->globalSelection())
-                r1 = r1.intersected(image->globalSelection()->selectedExactRect());
+        // Ugly hack to get at the image without bloating the node interface
+        KisImageWSP image;
+        r1 = r1.intersected(image->bounds());
+        if (layer && layer->selectionMask()) {
+            r1 = r1.intersected(layer->selectionMask()->exactBounds());
         }
-        parent = parent->parent();
-    }
+        if (image->globalSelection())
+            r1 = r1.intersected(image->globalSelection()->selectedExactRect());
 
-    d->filter->process(dev, r1, kfc);
-    nodeQueryPath().queryNodes(info.image(), info.currentNode())[0]->setDirty(r1);
-    if (info.undoAdapter()) info.undoAdapter()->addCommand(cmd);
+        d->filter->process(dev, r1, kfc);
+        node->setDirty(r1);
+        if (info.undoAdapter()) info.undoAdapter()->addCommand(cmd);
+    }
 }
 
 void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt) const

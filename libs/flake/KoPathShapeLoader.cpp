@@ -61,7 +61,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
         const char *ptr = buffer.constData();
         const char *end = buffer.constData() + buffer.length() + 1;
 
-        qreal contrlx, contrly, curx, cury, subpathx, subpathy, tox, toy, x1, y1, x2, y2, xc, yc;
+        qreal curx = 0.0;
+        qreal cury = 0.0;
+        qreal contrlx, contrly, subpathx, subpathy, tox, toy, x1, y1, x2, y2, xc, yc;
         qreal px1, py1, px2, py2, px3, py3;
         bool relative;
         char command = *(ptr++), lastCommand = ' ';

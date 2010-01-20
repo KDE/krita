@@ -38,6 +38,7 @@
 #include "kis_paint_device.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_node_query_path.h"
 
 struct KisRecordedPolyLinePaintAction::Private {
     QList<KisPaintInformation> paintInformationObjects;
@@ -116,36 +117,25 @@ KisRecordedPolyLinePaintActionFactory::~KisRecordedPolyLinePaintActionFactory()
 
 KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElement& elt)
 {
-    Q_UNUSED(elt);
-#if 0
     QString name = elt.attribute("name");
-    KisNodeSP node = KisRecordedActionFactory::indexPathToNode(image, elt.attribute("node"));
+    KisNodeQueryPath pathnode = KisNodeQueryPath::fromString(elt.attribute("path"));
     QString paintOpId = elt.attribute("paintop");
     int opacity = elt.attribute("opacity", "100").toInt();
     bool paintIncremental = elt.attribute("paintIncremental", "1").toInt();
 
-    const KoCompositeOp * compositeOp = node->paintDevice()->colorSpace()->compositeOp(elt.attribute("compositeOp"));
-    if (!compositeOp) {
-        compositeOp = node->paintDevice()->colorSpace()->compositeOp(COMPOSITE_OVER);
-    }
+    QString compositeOp = elt.attribute("compositeOp", COMPOSITE_OVER);
 
+    // Decode pressets
+    KisPaintOpPresetSP paintOpPreset = 0;
 
-    KisPaintOpSettingsSP settings = 0;
     QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
     if (!settingsElt.isNull()) {
-        settings = settingsFromXML(paintOpId, settingsElt, image);
+        paintOpPreset = paintOpPresetFromXML(settingsElt);
     } else {
         dbgUI << "No <PaintOpSettings /> found";
     }
 
-    KisBrush* brush = 0;
-
-    QDomElement brushElt = elt.firstChildElement("Brush");
-    if (!brushElt.isNull()) {
-        brush = brushFromXML(brushElt);
-    } else {
-        dbgUI << "Warning: no <Brush /> found";
-    }
+    // Decode colors
 
     QDomElement backgroundColorElt = elt.firstChildElement("BackgroundColor");
     KoColor bC;
@@ -166,7 +156,7 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElem
         dbgUI << "Warning: no <ForegroundColor /> found";
     }
 
-    KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, node, brush, paintOpId, settings, fC, bC, opacity, paintIncremental, compositeOp);
+    KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, pathnode, paintOpPreset, fC, bC, opacity, paintIncremental, compositeOp);
 
     QDomElement wpElt = elt.firstChildElement("Waypoints");
     if (!wpElt.isNull()) {
@@ -182,6 +172,4 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElem
         dbgUI << "Warning: no <Waypoints /> found";
     }
     return rplpa;
-#endif
-    return 0;
 }

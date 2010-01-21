@@ -72,7 +72,7 @@ public:
     }
 
     virtual QString colorSpaceEngine() const {
-        return "";
+        return "simple";
     }
 
     virtual bool isHdr() const {

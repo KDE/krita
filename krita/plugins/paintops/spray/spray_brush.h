@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,11 +25,15 @@
 #include "kis_painter.h"
 #include "kis_paint_information.h"
 
+#include "kis_color_option.h"
+
 #include "random_gauss.h"
 
-class QRect;
+
 #include <QImage>
 
+
+class QRect;
 
 class KisSprayProperties{
 public:
@@ -43,20 +47,7 @@ public:
     qreal scale;
     qreal brushRotation;
     bool jitterMovement;
-    bool jitterSize;
     bool useDensity;
-    // color options
-    bool useRandomOpacity;
-    bool useRandomHSV;
-    qint8 hue;
-    qint8 saturation;
-    qint8 value;
-
-    bool colorPerParticle;
-    bool fillBackground;
-    bool mixBgColor;
-    bool sampleInput;
-    
     // particle type size
     quint8 shape;
     quint16 width;
@@ -84,8 +75,9 @@ public:
     ~SprayBrush();
 
     void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, qreal rotation, qreal scale, const KoColor &color, const KoColor &bgColor);
-    void setProperties(KisSprayProperties * properties){
+    void setProperties(KisSprayProperties * properties, KisColorProperties * colorProperties){
         m_properties = properties;
+        m_colorProperties = colorProperties;
     }
     
 private:
@@ -101,6 +93,7 @@ private:
     QImage m_transformed;
 
     const KisSprayProperties * m_properties;
+    const KisColorProperties * m_colorProperties;
 
 private:
     /// rotation in radians according the settings (gauss distribution, uniform distribution or fixed angle)

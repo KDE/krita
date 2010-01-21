@@ -39,59 +39,12 @@ public:
 
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
-
-    void debug() const{
-        dump();
-    }
     
     bool paintIncremental();
-
-    // brush settings
-    int diameter() const;
-    qreal aspect() const;
-    qreal coverage() const;
-    qreal amount() const;
-    qreal spacing() const;
-    qreal scale() const;
-    qreal brushRotation() const;
-    bool jitterMovement() const;
-    bool useDensity() const;
-    int particleCount() const;
-    
-    // color options
-    bool useRandomOpacity() const;
-    bool useRandomHSV() const;
-    // TODO: these should be intervals like 20..180
-    int hue() const;
-    int saturation() const;
-    int value() const;
-
-    bool colorPerParticle() const;
-    bool fillBackground() const;
-    bool mixBgColor() const;
-    bool sampleInput() const;
-    
-    // shape size
-    int shape() const;
-    bool proportional() const;
-
-    bool randomSize() const;    
-    int width() const;
-    int height() const;
-    // distributed
-    bool gaussian() const;
-
-    // rotation
-    bool fixedRotation() const;
-    int fixedAngle() const;
-    bool randomRotation() const;
-    qreal randomRotationWeight() const;
-    bool followCursor() const;
-    qreal followCursorWeigth() const;
-    QImage m_image;
-    
     void setQImage(const QImage &image){ m_image = image; }
     QImage image() const;
+private:
+    QImage m_image;
 
 };
 

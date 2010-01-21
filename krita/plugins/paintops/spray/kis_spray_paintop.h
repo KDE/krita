@@ -30,6 +30,7 @@
 
 class QPointF;
 class KisPainter;
+//class KisColorProperties;
 
 class KisSprayPaintOp : public KisPaintOp
 {
@@ -48,6 +49,8 @@ public:
 
 private:
     KisSprayProperties m_properties;
+    KisColorProperties m_colorProperties;
+    
     const KisSprayPaintOpSettings *m_settings;
 
     KisImageWSP m_image;

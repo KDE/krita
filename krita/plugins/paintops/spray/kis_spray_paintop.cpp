@@ -32,6 +32,10 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 
+#include <kis_sprayop_option.h>
+#include <kis_spray_shape_option.h>
+#include <kis_color_option.h>
+
 #ifdef BENCHMARK
 #include <QTime>
 #endif
@@ -53,7 +57,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sizeOption.sensor()->reset();
 
     loadSettings(settings);
-    m_sprayBrush.setProperties(&m_properties);
+    m_sprayBrush.setProperties( &m_properties, &m_colorProperties);
     
     // spacing
     if ((m_properties.diameter * 0.5) > 1) {
@@ -70,56 +74,44 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
 
 void KisSprayPaintOp::loadSettings(const KisSprayPaintOpSettings* settings)
 {
+    m_colorProperties.fillProperties(settings);
+    
     // read the properties into primitive datatypes (just once)
-    m_properties.diameter = settings->diameter();
-    m_properties.radius =  qRound(0.5 * settings->diameter());
-    m_properties.particleCount = settings->particleCount(); 
-  
-    m_properties.aspect = settings->aspect();
-    m_properties.coverage = (settings->coverage() / 100.0);
-    m_properties.amount = settings->amount(); 
-    m_properties.spacing = settings->spacing();
-    m_properties.proportional = settings->proportional();
-    
-    m_properties.scale = settings->scale(); 
-    m_properties.brushRotation = settings->brushRotation();
-    m_properties.jitterMovement = settings->jitterMovement();
-    m_properties.jitterSize = settings->randomSize();
-    m_properties.useDensity = settings->useDensity();
-    
-    m_properties.useRandomOpacity = settings->useRandomOpacity();    
-    m_properties.useRandomHSV = settings->useRandomHSV();
-    m_properties.hue = settings->hue();
-    m_properties.saturation = settings->saturation();
-    m_properties.value = settings->value();
+    // spray
+    m_properties.diameter = settings->getInt(SPRAY_DIAMETER);
+    m_properties.radius =  qRound(0.5 * m_properties.diameter);
+    m_properties.aspect = settings->getDouble(SPRAY_ASPECT);
+    m_properties.particleCount = settings->getDouble(SPRAY_PARTICLE_COUNT);
+    m_properties.coverage = (settings->getDouble(SPRAY_COVERAGE) / 100.0);
+    m_properties.amount = settings->getDouble(SPRAY_JITTER_MOVE_AMOUNT);
+    m_properties.spacing = settings->getDouble(SPRAY_SPACING);
+    m_properties.scale = settings->getDouble(SPRAY_SCALE);
+    m_properties.brushRotation = settings->getDouble(SPRAY_ROTATION);
+    m_properties.jitterMovement = settings->getBool(SPRAY_JITTER_MOVEMENT);
+    m_properties.useDensity = settings->getBool(SPRAY_USE_DENSITY);
+    m_properties.gaussian = settings->getBool(SPRAY_GAUSS_DISTRIBUTION);
 
-    m_properties.colorPerParticle = settings->colorPerParticle();
-    m_properties.fillBackground = settings->fillBackground();
-    m_properties.mixBgColor = settings->mixBgColor();
-    m_properties.sampleInput = settings->sampleInput();
-    
+    // sprayshape
+    m_properties.proportional = settings->getBool(SPRAYSHAPE_PROPORTIONAL);
+    m_properties.width = settings->getInt(SPRAYSHAPE_WIDTH);
+    m_properties.height = settings->getInt(SPRAYSHAPE_HEIGHT);
     if (m_properties.proportional)
     {
-        m_properties.width = (settings->width()  / 100.0) * m_properties.diameter * m_properties.scale;
-        m_properties.height = (settings->height() / 100.0) * m_properties.diameter * m_properties.aspect * m_properties.scale;
-    }else
-    {
-        m_properties.width = settings->width();
-        m_properties.height = settings->height();
+        m_properties.width = (m_properties.width / 100.0) * m_properties.diameter * m_properties.scale;
+        m_properties.height = (m_properties.height / 100.0) * m_properties.diameter * m_properties.aspect * m_properties.scale;
     }
-    // particle type size
-    m_properties.shape = settings->shape();
-    m_properties.randomSize = settings->randomSize(); 
     
-    // distribution
-    m_properties.gaussian = settings->gaussian();
+    // particle type size
+    m_properties.shape = settings->getInt(SPRAYSHAPE_SHAPE);
+    m_properties.randomSize = settings->getBool(SPRAYSHAPE_RANDOM_SIZE);
+    
     // rotation
-    m_properties.fixedRotation = settings->fixedRotation();
-    m_properties.randomRotation = settings->randomRotation();
-    m_properties.followCursor = settings->followCursor();
-    m_properties.fixedAngle = settings->fixedAngle();
-    m_properties.randomRotationWeight = settings->randomRotationWeight();
-    m_properties.followCursorWeigth = settings->followCursorWeigth();
+    m_properties.fixedRotation = settings->getBool(SPRAYSHAPE_FIXED_ROTATION);
+    m_properties.randomRotation = settings->getBool(SPRAYSHAPE_RANDOM_ROTATION);
+    m_properties.followCursor = settings->getBool(SPRAYSHAPE_FOLLOW_CURSOR);
+    m_properties.fixedAngle = settings->getInt(SPRAYSHAPE_FIXED_ANGEL);
+    m_properties.randomRotationWeight = settings->getDouble(SPRAYSHAPE_RANDOM_ROTATION_WEIGHT);
+    m_properties.followCursorWeigth = settings->getDouble(SPRAYSHAPE_FOLLOW_CURSOR_WEIGHT);
     m_properties.image = settings->image();
 }
 

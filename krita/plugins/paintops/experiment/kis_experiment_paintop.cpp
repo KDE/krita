@@ -41,6 +41,7 @@
 #include <kis_random_accessor.h>
 #include <KoCompositeOp.h>
 
+#include <kis_experimentop_option.h>
 
 KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
     : KisPaintOp( painter )
@@ -49,12 +50,15 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
 {
     m_isFirst = true;
     m_positions.clear();
-    
+
+    m_startSize = settings->getDouble(EXPERIMENT_START_SIZE);
+    m_endSize = settings->getDouble(EXPERIMENT_END_SIZE);
+
     // spacing 
-    qreal average = qMax(settings->startSize(), settings->endSize() ) - qMin(settings->startSize(), settings->endSize()) * 0.5;
+    qreal average = qMax(m_startSize, m_endSize ) - qMin(m_startSize, m_endSize) * 0.5;
     if ( average * 0.5 > 1)
     {
-        m_ySpacing = m_xSpacing = average * 0.5 * settings->spacing();
+        m_ySpacing = m_xSpacing = average * 0.5 * settings->getDouble(EXPERIMENT_SPACING);
     } else
     {
         m_ySpacing = m_xSpacing = 1.0;
@@ -70,8 +74,6 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
     }
     
     m_size = 1;
-    m_startSize = m_settings->startSize();
-    m_endSize = m_settings->endSize();
     m_rotationOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);

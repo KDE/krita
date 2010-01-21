@@ -48,7 +48,7 @@ KisExperimentOpOption::KisExperimentOpOption()
 
 KisExperimentOpOption::~KisExperimentOpOption()
 {
-    // delete m_options;
+    delete m_options;
 }
 
 
@@ -87,17 +87,16 @@ qreal KisExperimentOpOption::scale() const
 
 void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-
-    setting->setProperty("Experiment/jitterMoveAmount", jitterMoveAmount());
-    setting->setProperty("Experiment/spacing", spacing());
-    setting->setProperty("Experiment/jitterMovement", jitterMovement());
+    setting->setProperty(EXPERIMENT_START_SIZE, startSize());
+    setting->setProperty(EXPERIMENT_END_SIZE, endSize());
+    setting->setProperty(EXPERIMENT_SPACING, spacing());
 }
 
 void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->jitterMovementSpin->setValue(setting->getDouble("Experiment/jitterMoveAmount"));
-    m_options->spacingSpin->setValue(setting->getDouble("Experiment/spacing"));
-    m_options->jitterMoveBox->setChecked(setting->getBool("Experiment/jitterMovement"));
+    m_options->startSPBox->setValue(setting->getDouble(EXPERIMENT_START_SIZE));
+    m_options->endSPBox->setValue(setting->getDouble(EXPERIMENT_END_SIZE));
+    m_options->spacingSpin->setValue(setting->getDouble(EXPERIMENT_SPACING));
 }
 
 

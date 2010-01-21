@@ -21,6 +21,10 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
+const QString EXPERIMENT_START_SIZE = "Experiment/startSize";
+const QString EXPERIMENT_END_SIZE = "Experiment/endSize";
+const QString EXPERIMENT_SPACING = "Experiment/spacing";
+
 class KisExperimentOpOptionsWidget;
 
 class KisExperimentOpOption : public KisPaintOpOption

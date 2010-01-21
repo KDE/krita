@@ -55,10 +55,7 @@ void TestKoColor::testForModel(QString model)
                  .arg(kc.colorSpace()->colorDepthId().id())
                  .arg(kcu.colorSpace()->colorModelId().id())
                  .arg(kcu.colorSpace()->colorDepthId().id()).toLatin1());
-        for(int i = 0; i < kc.colorSpace()->pixelSize(); ++i)
-        {
-            QVERIFY2( qAbs(kcu.data()[i] - kc.data()[i]) <= 1, QString("Unserialization failed colorModelId = %1 depthId = %2 index = %3 original = %4 unserialized = %5").arg(model).arg(depthId.id()).arg(i).arg( kc.data()[i]).arg( kcu.data()[i]).toLatin1());
-        }
+        QVERIFY(cs->difference(kcu.data(), kc.data()) <= 1);
     }
 
 }

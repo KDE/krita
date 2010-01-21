@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Lukáš Tvrdý (lukast.dev@gmail.com)
+ * Copyright (c) 2009,2010 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,30 +57,30 @@ KisColorOption::~KisColorOption()
 
 void KisColorOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty("ColorOption/hue", hue());
-    setting->setProperty("ColorOption/saturation", saturation());
-    setting->setProperty("ColorOption/value", value());
+    setting->setProperty(COLOROP_HUE, hue());
+    setting->setProperty(COLOROP_SATURATION, saturation());
+    setting->setProperty(COLOROP_VALUE, value());
     
-    setting->setProperty("ColorOption/useRandomHSV",useRandomHSV());
-    setting->setProperty("ColorOption/useRandomOpacity",useRandomOpacity());
-    setting->setProperty("ColorOption/sampleInputColor",sampleInputColor());
+    setting->setProperty(COLOROP_USE_RANDOM_HSV,useRandomHSV());
+    setting->setProperty(COLOROP_USE_RANDOM_OPACITY,useRandomOpacity());
+    setting->setProperty(COLOROP_SAMPLE_COLOR,sampleInputColor());
     
-    setting->setProperty("ColorOption/fillBackground",fillBackground());
-    setting->setProperty("ColorOption/colorPerParticle", colorPerParticle());
-    setting->setProperty("ColorOption/mixBgColor",mixBgColor());
+    setting->setProperty(COLOROP_FILL_BG,fillBackground());
+    setting->setProperty(COLOROP_COLOR_PER_PARTICLE, colorPerParticle());
+    setting->setProperty(COLOROP_MIX_BG_COLOR,mixBgColor());
 }
 
 void KisColorOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->randomOpacityCHBox->setChecked(setting->getBool("ColorOption/useRandomOpacity"));
-    m_options->randomHSVCHBox->setChecked(setting->getBool("ColorOption/useRandomHSV"));
-    m_options->hueSlider->setValue(setting->getInt("ColorOption/hue"));
-    m_options->saturationSlider->setValue(setting->getInt("ColorOption/saturation"));
-    m_options->valueSlider->setValue(setting->getInt("ColorOption/value"));
-    m_options->sampleInputCHBox->setChecked(setting->getBool("ColorOption/sampleInputColor"));
-    m_options->colorPerParticleCHBox->setChecked(setting->getBool("ColorOption/colorPerParticle"));
-    m_options->fillBackgroundCHBox->setChecked(setting->getBool("ColorOption/fillBackground"));
-    m_options->mixBgColorCHBox->setChecked(setting->getBool("ColorOption/mixBgColor"));
+    m_options->hueSlider->setValue(setting->getInt(COLOROP_HUE));
+    m_options->saturationSlider->setValue(setting->getInt(COLOROP_SATURATION));
+    m_options->valueSlider->setValue(setting->getInt(COLOROP_VALUE));
+    m_options->randomOpacityCHBox->setChecked(setting->getBool(COLOROP_USE_RANDOM_OPACITY));
+    m_options->randomHSVCHBox->setChecked(setting->getBool(COLOROP_USE_RANDOM_HSV));
+    m_options->sampleInputCHBox->setChecked(setting->getBool(COLOROP_SAMPLE_COLOR));
+    m_options->fillBackgroundCHBox->setChecked(setting->getBool(COLOROP_FILL_BG));
+    m_options->colorPerParticleCHBox->setChecked(setting->getBool(COLOROP_COLOR_PER_PARTICLE));
+    m_options->mixBgColorCHBox->setChecked(setting->getBool(COLOROP_MIX_BG_COLOR));
 }
 
 
@@ -134,4 +134,17 @@ bool KisColorOption::fillBackground() const
 bool KisColorOption::mixBgColor() const
 {
     return m_options->mixBgColorCHBox->isChecked();
+}
+
+void KisColorProperties::fillProperties(const KisPropertiesConfiguration* setting)
+{
+    hue = setting->getInt(COLOROP_HUE);
+    saturation = setting->getInt(COLOROP_SATURATION);
+    value = setting->getInt(COLOROP_VALUE);
+    useRandomOpacity = setting->getBool(COLOROP_USE_RANDOM_OPACITY);
+    useRandomHSV = setting->getBool(COLOROP_USE_RANDOM_HSV);
+    sampleInputColor = setting->getBool(COLOROP_SAMPLE_COLOR);
+    fillBackground = setting->getBool(COLOROP_FILL_BG);
+    colorPerParticle = setting->getBool(COLOROP_COLOR_PER_PARTICLE);
+    mixBgColor = setting->getBool(COLOROP_MIX_BG_COLOR);
 }

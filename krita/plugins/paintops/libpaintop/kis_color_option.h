@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Lukáš Tvrdý (lukast.dev@gmail.com)
+ * Copyright (c) 2009,2010 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,18 @@
 
 #include <kis_paintop_option.h>
 #include <krita_export.h>
+
+const QString COLOROP_HUE = "ColorOption/hue";
+const QString COLOROP_SATURATION = "ColorOption/saturation";
+const QString COLOROP_VALUE = "ColorOption/value";
+    
+const QString COLOROP_USE_RANDOM_HSV = "ColorOption/useRandomHSV";
+const QString COLOROP_USE_RANDOM_OPACITY = "ColorOption/useRandomOpacity";
+const QString COLOROP_SAMPLE_COLOR = "ColorOption/sampleInputColor";
+    
+const QString COLOROP_FILL_BG = "ColorOption/fillBackground";
+const QString COLOROP_COLOR_PER_PARTICLE = "ColorOption/colorPerParticle";
+const QString COLOROP_MIX_BG_COLOR= "ColorOption/mixBgColor";
 
 class KisColorOptionsWidget;
 
@@ -49,5 +61,24 @@ private:
    KisColorOptionsWidget * m_options;
 };
 
-#endif // KIS_GRID_COLOR_OPTION_H
+class PAINTOP_EXPORT KisColorProperties
+{
+public:
+    bool useRandomHSV;
+    bool useRandomOpacity;
+    bool sampleInputColor;
+
+    bool fillBackground;
+    bool colorPerParticle;
+    bool mixBgColor;
+
+    qint8 hue;
+    qint8 saturation;
+    qint8 value;
+public:
+    /// fill the class members with related properties
+    void fillProperties(const KisPropertiesConfiguration* setting);
+};
+
+#endif // KIS_COLOR_OPTION_H
 

@@ -46,11 +46,11 @@
 #include <kis_paint_layer.h>
 #include <kis_transparency_mask.h>
 
+#include <KoColorModelStandardIds.h>
 extern "C" {
 
 #include "xcftools.h"
 #include "pixels.h"
-#include <KoColorModelStandardIds.h>
 
     extern struct Tile *
     getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,

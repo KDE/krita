@@ -72,5 +72,6 @@ void RgbU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
     p->red = KoColorSpaceMaths< qreal, KoRgbU16Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
     p->green = KoColorSpaceMaths< qreal, KoRgbU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
     p->blue = KoColorSpaceMaths< qreal, KoRgbU16Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+    p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }
 

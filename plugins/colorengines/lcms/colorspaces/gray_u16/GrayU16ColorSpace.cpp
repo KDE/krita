@@ -65,5 +65,6 @@ void KoGrayAU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) c
 {
     GrayAU16Traits::channels_type* p = reinterpret_cast<GrayAU16Traits::channels_type*>(pixel);
     p[0] = KoColorSpaceMaths< qreal, GrayAU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+    p[1] = KoColorSpaceMathsTraits<quint16>::max;
 }
 

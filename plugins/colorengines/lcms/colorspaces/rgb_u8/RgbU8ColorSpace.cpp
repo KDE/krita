@@ -124,6 +124,7 @@ void RgbU8ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
     p->red = KoColorSpaceMaths< qreal, KoRgbU8Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
     p->green = KoColorSpaceMaths< qreal, KoRgbU8Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
     p->blue = KoColorSpaceMaths< qreal, KoRgbU8Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+    p->alpha = KoColorSpaceMathsTraits<quint8>::max;
 }
 
 quint8 RgbU8ColorSpace::intensity8(const quint8 * src) const

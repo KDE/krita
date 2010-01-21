@@ -79,5 +79,6 @@ void CmykU8ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
     p->magenta = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("m").toDouble());
     p->yellow = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
     p->black = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("k").toDouble());
+    p->alpha = KoColorSpaceMathsTraits<quint8>::max;
 }
 

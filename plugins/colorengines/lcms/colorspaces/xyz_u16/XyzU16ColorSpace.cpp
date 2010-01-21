@@ -75,5 +75,6 @@ void XyzU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
     p->X = KoColorSpaceMaths< qreal, XyzU16Traits::channels_type >::scaleToA(elt.attribute("x").toDouble());
     p->Y = KoColorSpaceMaths< qreal, XyzU16Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
     p->Z = KoColorSpaceMaths< qreal, XyzU16Traits::channels_type >::scaleToA(elt.attribute("z").toDouble());
+    p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }
 

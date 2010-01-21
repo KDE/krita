@@ -101,4 +101,5 @@ void LabColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
     p->L = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("L").toDouble());
     p->a = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("a").toDouble());
     p->b = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+    p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }

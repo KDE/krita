@@ -131,7 +131,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_gradient_chooser.cc 
     widgets/kis_gradient_slider_widget.cc
     widgets/kis_iconwidget.cc 
-    widgets/kis_item_chooser.cpp
     widgets/kis_mask_widgets.cpp 
     widgets/kis_meta_data_merge_strategy_chooser_widget.cc
     widgets/kis_multi_bool_filter_widget.cc

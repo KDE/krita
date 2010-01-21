@@ -1,47 +1,52 @@
-/* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+/*
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_PRESET_CHOOSER_H
-#define KIS_PRESET_CHOOSER_H
+#ifndef KIS_ITEM_CHOOSER_H_
+#define KIS_ITEM_CHOOSER_H_
 
-#include "kis_item_chooser.h"
+#include <QList>
+#include <QWidget>
+#include <kvbox.h>
+#include <krita_export.h>
 
-class QWidget;
+class KHBox;
+
+class KoResourceItemChooser;
+class KoResourceItem;
+
 /**
- * The KisPresetChooser allows the user to select a preset from
- * the set of presets associated with the active paintop.
- *
- * XXX: extend the KoResourceChooser class to also make it
- * possible to show its items in various list forms.
- *
+ * A special type of item chooser that can contain extra widgets that show
+ * more information about the currently selected item. Reimplement update()
+ * to extract that information and fill the appropriate widgets.
  */
-class KisPresetChooser : public KisItemChooser
+class KRITAUI_EXPORT KisPresetChooser : public QWidget
 {
 
+    Q_OBJECT
+
 public:
-    KisPresetChooser(QWidget * parent);
 
-    ~KisPresetChooser();
+    KisPresetChooser(QWidget *parent = 0, const char *name = 0);
+    virtual ~KisPresetChooser();
 
-protected:
 
-    virtual void update(QTableWidgetItem *item);
-
+private:
+    KoResourceItemChooser *m_chooser;
 };
 
-#endif
+#endif // KIS_ITEM_CHOOSER_H_
+

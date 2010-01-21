@@ -257,15 +257,11 @@ QWidget* ChangeTrackingTool::createOptionWidget()
 
 void ChangeTrackingTool::acceptChange()
 {
-    kDebug(32500) << "acceptChange";
     if (m_currentHighlightedChange.isValid()) {
-        kDebug(32500) << "highlighted change accepted. id: " << m_model->changeItemData(m_currentHighlightedChange).changeId;
-        kDebug(32500) << "change start: " << m_model->changeItemData(m_currentHighlightedChange).changeStart;
-        kDebug(32500) << "change end: " << m_model->changeItemData(m_currentHighlightedChange).changeEnd;
         AcceptChangeCommand *command = new AcceptChangeCommand(m_model->changeItemData(m_currentHighlightedChange).changeId,
-                                                               m_model->changeItemData(m_currentHighlightedChange).changeStart,
-                                                               m_model->changeItemData(m_currentHighlightedChange).changeEnd,
-                                                               m_textShapeData->document());
+                                                                m_model->changeItemData(m_currentHighlightedChange).changeRanges,
+                                                                m_textShapeData->document());
+        connect(command, SIGNAL(acceptRejectChange()), m_model, SLOT(setupModel()));
         m_textEditor->addCommand(command);
     }
 }
@@ -274,8 +270,8 @@ void ChangeTrackingTool::rejectChange()
 {
     if (m_currentHighlightedChange.isValid()) {
         kDebug(32500) << "highlighted change accepted. id: " << m_model->changeItemData(m_currentHighlightedChange).changeId;
-        kDebug(32500) << "change start: " << m_model->changeItemData(m_currentHighlightedChange).changeStart;
-        kDebug(32500) << "change end: " << m_model->changeItemData(m_currentHighlightedChange).changeEnd;
+        kDebug(32500) << "change start: " << m_model->changeItemData(m_currentHighlightedChange).changeRanges.first().first;
+        kDebug(32500) << "change end: " << m_model->changeItemData(m_currentHighlightedChange).changeRanges.first().second;
     }
 }
 
@@ -286,7 +282,7 @@ void ChangeTrackingTool::selectedChangeChanged(QModelIndex item)
 
 void ChangeTrackingTool::showTrackedChangeManager()
 {
-    Q_ASSERT(!m_model);
+    Q_ASSERT(m_model);
     TrackedChangeManager *manager = new TrackedChangeManager();
     manager->setModel(m_model);
     connect(manager, SIGNAL(currentChanged(QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex)));

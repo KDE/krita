@@ -22,22 +22,29 @@
 
 #include "commands/TextCommandBase.h"
 
+#include <QPair>
+
 class KoChangeTracker;
 
 class QTextDocument;
 
-class AcceptChangeCommand : public TextCommandBase
+class AcceptChangeCommand : public QObject, public TextCommandBase
 {
+    Q_OBJECT
 public:
-    AcceptChangeCommand(int changeId, int changeStart, int ChangeEnd, QTextDocument *document, QUndoCommand *parent = 0);
+    AcceptChangeCommand(int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, QUndoCommand *parent = 0);
     ~AcceptChangeCommand();
 
     virtual void redo();
     virtual void undo();
 
+signals:
+    void acceptRejectChange();
+
 private:
     bool m_first;
-    int m_changeId, m_changeStart, m_changeEnd;
+    int m_changeId;
+    QList<QPair<int, int> > m_changeRanges;
     QTextDocument *m_document;
     KoChangeTracker *m_changeTracker;
 };

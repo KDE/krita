@@ -28,7 +28,9 @@
 #include <changetracker/KoChangeTrackerElement.h>
 #include <styles/KoCharacterStyle.h>
 
+#include <QHash>
 #include <QModelIndex>
+#include <QStack>
 #include <QTextBlock>
 #include <QTextCharFormat>
 #include <QTextCursor>
@@ -58,6 +60,11 @@ ModelItem* ModelItem::child(int row)
     return m_childItems.value(row);
 }
 
+QList< ModelItem* > ModelItem::children()
+{
+    return m_childItems;
+}
+
 int ModelItem::childCount() const
 {
     return m_childItems.count();
@@ -75,14 +82,9 @@ int ModelItem::row() const
     return 0;
 }
 
-void ModelItem::setChangeEnd(int end)
+void ModelItem::setChangeRange(int start, int end)
 {
-    m_data.changeEnd = end;
-}
-
-void ModelItem::setChangeStart(int start)
-{
-    m_data.changeStart = start;
+    m_data.changeRanges.append(QPair<int, int>(start, end));
 }
 
 ItemData ModelItem::itemData()
@@ -90,14 +92,25 @@ ItemData ModelItem::itemData()
     return m_data;
 }
 
+void ModelItem::removeChildren()
+{
+    kDebug(32500) << "modelItem removeChildren. m_childItems.count: " << m_childItems.count();
+    qDeleteAll(m_childItems);
+    m_childItems.clear();
+    kDebug(32500) << "after qDeleteAll. m_childItems.count: " << m_childItems.count();
+    for (int i = 0; i < m_childItems.count(); ++i)
+        kDebug(32500) << "m_childItems(" << i << "). " << m_childItems.value(i)->itemData().changeId;
+}
+
 ////TrackedChangeModel
 
 
 TrackedChangeModel::TrackedChangeModel(QTextDocument* document, QObject* parent)
-    :QAbstractItemModel(parent)
+    :QAbstractItemModel(parent),
+    m_document(document)
 {
     m_rootItem = new ModelItem(0);
-    setupModelData(document, m_rootItem);
+    setupModelData(m_document, m_rootItem);
 }
 
 TrackedChangeModel::~TrackedChangeModel()
@@ -188,10 +201,10 @@ QVariant TrackedChangeModel::data(const QModelIndex& index, int role) const
             return QVariant(item->itemData().changeId);
             break;
         case 1:
-            return QVariant(item->itemData().changeStart);
+            return QVariant(item->itemData().changeRanges.first().first);
             break;
         case 2:
-            return QVariant(item->itemData().changeEnd);
+            return QVariant(item->itemData().changeRanges.first().second);
             break;
         default:
             return QVariant();
@@ -227,12 +240,27 @@ QVariant TrackedChangeModel::headerData(int section, Qt::Orientation orientation
     return QVariant();
 }
 
+void TrackedChangeModel::setupModel()
+{
+    kDebug(32500) << "in setupmodel";
+    kDebug(32500) << "row count(QModelIndex()): " << rowCount();
+    beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
+    m_rootItem->removeChildren();
+    kDebug(32500) << "m_rootItem nb children: " << m_rootItem->childCount();
+    endRemoveRows();
+    setupModelData(m_document, m_rootItem);
+    beginInsertRows(QModelIndex(), 0, m_rootItem->childCount() - 1);
+    endInsertRows();
+}
+
 void TrackedChangeModel::setupModelData(QTextDocument* document, ModelItem* parent)
 {
     m_changeTracker = KoTextDocument(document).changeTracker();
     m_layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
 
-    ModelItem *currentParent = parent;
+    QStack<ModelItem*> itemStack;
+    itemStack.push(parent);
+    QHash<int, ModelItem*> createdItems;
 
     QTextBlock block = document->begin();
     while (block.isValid()) {
@@ -241,29 +269,33 @@ void TrackedChangeModel::setupModelData(QTextDocument* document, ModelItem* pare
             QTextFragment fragment = it.fragment();
             QTextCharFormat format = fragment.charFormat();
             int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
-            if (m_changeTracker->elementById(changeId) && m_changeTracker->elementById(changeId)->getChangeType() == KoGenChange::deleteChange)
-                continue;
+//            if (m_changeTracker->elementById(changeId) && m_changeTracker->elementById(changeId)->getChangeType() == KoGenChange::deleteChange)
+//                continue;
             if (KoDeleteChangeMarker *changeMarker = dynamic_cast<KoDeleteChangeMarker*>(m_layout->inlineTextObjectManager()->inlineTextObject(format)))
                 changeId = changeMarker->changeId();
+            kDebug(32500) << "fragment: " << fragment.position() << " to: " << fragment.position() + fragment.length() << ", changeId: " << changeId;
             if (changeId) {
-                if (currentParent->itemData().changeId != changeId) {
-                    while (currentParent != parent) {
-                        if (!m_changeTracker->isParent(currentParent->itemData().changeId, changeId))
-                            currentParent = currentParent->parent();
+                if (changeId != itemStack.top()->itemData().changeId) {
+                    kDebug(32500) << "changeId != itemStack.top";
+                    while (itemStack.top() != parent) {
+                        if (!m_changeTracker->isParent(itemStack.top()->itemData().changeId, changeId))
+                            itemStack.pop();
                         else
                             break;
                     }
-                    if (changeId != currentParent->itemData().changeId) {
-                        ModelItem *item = new ModelItem(changeId, currentParent);
-                        item->setChangeStart(fragment.position());
-                        item->setChangeEnd(fragment.position() + fragment.length());
-                        currentParent->appendChild(item);
-                        currentParent = item;
-                    }
                 }
+                ModelItem *item = createdItems.value(changeId);
+                if (!item) {
+                    item = new ModelItem(changeId, itemStack.top());
+                    itemStack.top()->appendChild(item);
+                    createdItems.insert(changeId, item);
+                }
+                item->setChangeRange(fragment.position(), fragment.position() + fragment.length());
+                itemStack.push(item);
+
             }
             else {
-                currentParent = parent;
+                itemStack.push(parent);
             }
         }
         block = block.next();

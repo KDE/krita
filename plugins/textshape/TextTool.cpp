@@ -1692,23 +1692,26 @@ void TextTool::toggleShowChanges(bool on)//TODO transfer this in KoTextEditor
 
 void TextTool::toggleRecordChanges(bool on)
 {
-    m_changeTracker->setRecordChanges(on);
+    if (m_changeTracker)
+        m_changeTracker->setRecordChanges(on);
 }
 
 void TextTool::configureChangeTracking()
 {
-    QColor insertionBgColor, deletionBgColor, formatChangeBgColor;
-    insertionBgColor = m_changeTracker->getInsertionBgColor();
-    deletionBgColor = m_changeTracker->getDeletionBgColor();
-    formatChangeBgColor = m_changeTracker->getFormatChangeBgColor();
+    if (m_changeTracker) {
+        QColor insertionBgColor, deletionBgColor, formatChangeBgColor;
+        insertionBgColor = m_changeTracker->getInsertionBgColor();
+        deletionBgColor = m_changeTracker->getDeletionBgColor();
+        formatChangeBgColor = m_changeTracker->getFormatChangeBgColor();
 
-    ChangeConfigureDialog changeDialog( insertionBgColor, deletionBgColor, formatChangeBgColor, canvas()->canvasWidget());
+        ChangeConfigureDialog changeDialog( insertionBgColor, deletionBgColor, formatChangeBgColor, canvas()->canvasWidget());
     
-    if (changeDialog.exec()) {
-        m_changeTracker->setInsertionBgColor(changeDialog.getInsertionBgColor());
-        m_changeTracker->setDeletionBgColor(changeDialog.getDeletionBgColor());
-        m_changeTracker->setFormatChangeBgColor(changeDialog.getFormatChangeBgColor());
-        writeConfig();
+        if (changeDialog.exec()) {
+            m_changeTracker->setInsertionBgColor(changeDialog.getInsertionBgColor());
+            m_changeTracker->setDeletionBgColor(changeDialog.getDeletionBgColor());
+            m_changeTracker->setFormatChangeBgColor(changeDialog.getFormatChangeBgColor());
+            writeConfig();
+        }
     }
 }
 
@@ -1944,24 +1947,28 @@ void TextTool::shapeAddedToDoc(KoShape *shape)
 
 void TextTool::readConfig()
 {
-    QColor bgColor, defaultColor;
-    KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
-    if (interface.exists()) {
-        bgColor = interface.readEntry("insertionBgColor", defaultColor);
-        m_changeTracker->setInsertionBgColor(bgColor);
-        bgColor = interface.readEntry("deletionBgColor", defaultColor);
-        m_changeTracker->setDeletionBgColor(bgColor);
-        bgColor = interface.readEntry("formatChangeBgColor", defaultColor);
-        m_changeTracker->setFormatChangeBgColor(bgColor);
+    if (m_changeTracker) {
+        QColor bgColor, defaultColor;
+        KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+        if (interface.exists()) {
+            bgColor = interface.readEntry("insertionBgColor", defaultColor);
+            m_changeTracker->setInsertionBgColor(bgColor);
+            bgColor = interface.readEntry("deletionBgColor", defaultColor);
+            m_changeTracker->setDeletionBgColor(bgColor);
+            bgColor = interface.readEntry("formatChangeBgColor", defaultColor);
+            m_changeTracker->setFormatChangeBgColor(bgColor);
+        }
     }
 }
 
 void TextTool::writeConfig()
 {
-    KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
-    interface.writeEntry("insertionBgColor", m_changeTracker->getInsertionBgColor());
-    interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
-    interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());
+    if (m_changeTracker) {
+        KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+        interface.writeEntry("insertionBgColor", m_changeTracker->getInsertionBgColor());
+        interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
+        interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());
+    }
 }
 
 void TextTool::debugTextDocument()

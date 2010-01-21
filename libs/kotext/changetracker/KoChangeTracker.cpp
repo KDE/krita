@@ -62,6 +62,7 @@ public:
     QHash<int, KoChangeTrackerElement *> changes;
     QHash<QString, int> loadedChanges;
     QList<int> saveChanges;
+    QList<int> acceptedRejectedChanges;
     int changeId;
     bool recordChanges;
     bool displayChanges;
@@ -220,12 +221,12 @@ int KoChangeTracker::split(int changeId)
     return d->changeId++;
 }
 
-bool KoChangeTracker::isParent(int testedId, int baseId)
+bool KoChangeTracker::isParent(int testedParentId, int testedChildId)
 {
-    if (testedId == baseId)
+    if ((testedParentId == testedChildId) && !d->acceptedRejectedChanges.contains(testedParentId))
         return true;
-    else if (d->parents.contains(baseId))
-        return isParent(testedId, d->parents.value(baseId));
+    else if (d->parents.contains(testedChildId))
+        return isParent(testedParentId, d->parents.value(testedChildId));
     else
         return false;
 }
@@ -237,6 +238,27 @@ void KoChangeTracker::setParent(int child, int parent)
     }
     if (!d->parents.contains(child)) {
         d->parents.insert(child, parent);
+    }
+}
+
+int KoChangeTracker::parent(int changeId)
+{
+    if (!d->parents.contains(changeId))
+        return 0;
+    if (d->acceptedRejectedChanges.contains(d->parents.value(changeId)))
+        return parent(d->parents.value(changeId));
+    return d->parents.value(changeId);
+}
+
+void KoChangeTracker::acceptRejectChange(int changeId, bool set)
+{
+    if (set) {
+        if (!d->acceptedRejectedChanges.contains(changeId))
+            d->acceptedRejectedChanges.append(changeId);
+    }
+    else {
+        if (d->acceptedRejectedChanges.contains(changeId))
+            d->acceptedRejectedChanges.removeAll(changeId);
     }
 }
 

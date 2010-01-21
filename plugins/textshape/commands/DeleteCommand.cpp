@@ -32,7 +32,7 @@
 #include <QUndoCommand>
 
 #include <KDebug>
-#include <iostream>
+//#include <iostream>
 #include <QDebug>
 
 using namespace std;
@@ -243,7 +243,6 @@ void DeleteCommand::deleteSelection(QTextCursor &selection)
     }
 }
 
-
 int DeleteCommand::id() const
 {
     return 98765;
@@ -291,7 +290,6 @@ bool DeleteCommand::mergeWith( const QUndoCommand *command)
 
         return true;
     }
-
     return false;
 }
 

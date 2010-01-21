@@ -25,6 +25,7 @@
 #include <QList>
 #include <QMetaType>
 #include <QObject>
+#include <QPair>
 
 class KoChangeTracker;
 class KoTextDocumentLayout;
@@ -34,8 +35,7 @@ class QTextDocument;
 struct ItemData
 {
     int changeId;
-    int changeStart;
-    int changeEnd;
+    QList<QPair<int, int> > changeRanges;
 };
 
 Q_DECLARE_METATYPE(ItemData)
@@ -49,14 +49,16 @@ public:
     void appendChild(ModelItem *child);
 
     ModelItem *child(int row);
+    QList<ModelItem*> children();
     int childCount() const;
     int row() const;
     ModelItem *parent();
 
     ItemData itemData();
 
-    void setChangeStart(int start);
-    void setChangeEnd(int end);
+    void setChangeRange(int start, int end);
+
+    void removeChildren();
 
 private:
     QList<ModelItem*> m_childItems;
@@ -82,9 +84,13 @@ public:
 
     ItemData changeItemData(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
+public slots:
+    void setupModel();
+
 private:
     void setupModelData(QTextDocument *document, ModelItem *parent);
 
+    QTextDocument *m_document;
     ModelItem *m_rootItem;
     KoChangeTracker *m_changeTracker;
     KoTextDocumentLayout *m_layout;

@@ -1071,12 +1071,14 @@ bool KoTextEditor::isBidiDocument() const
 
 void KoTextEditor::beginEditBlock()
 {
+    d->updateState(KoTextEditor::Private::Custom);
     d->caret.beginEditBlock();
 }
 
 void KoTextEditor::endEditBlock()
 {
     d->caret.endEditBlock();
+    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 #include <KoTextEditor.moc>

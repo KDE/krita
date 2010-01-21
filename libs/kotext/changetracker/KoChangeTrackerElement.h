@@ -45,6 +45,10 @@ public:
     void setEnabled(bool enabled);
     bool isEnabled() const;
 
+    ///This flag is used when a change is accepted or rejected. When set, the change becomes transparent to functions like KoChangeTracker::isParent,... The KoChangeTrackerElement behaves like it has been destroyed. This is not done because of the undo/redo. A KoChangeTrackerElement can only be destroyed when its accept/reject command is destroyed.
+    void setAcceptedRejected(bool set);
+    bool acceptedRejected();
+
     void setValid(bool valid);
     bool isValid() const;
 

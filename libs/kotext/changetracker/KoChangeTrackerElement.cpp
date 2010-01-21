@@ -40,6 +40,7 @@ public:
     KoDeleteChangeMarker *marker;
 
     bool enabled;
+    bool acceptedRejected;
     bool valid;
 };
 
@@ -48,6 +49,7 @@ KoChangeTrackerElement::KoChangeTrackerElement(const QString& title, KoGenChange
 {
     d->title = title;
     d->type = type;
+    d->acceptedRejected = false;
     d->valid = true;
 }
 
@@ -68,6 +70,7 @@ KoChangeTrackerElement::KoChangeTrackerElement(const KoChangeTrackerElement& oth
     d->extraMetaData = other.d->extraMetaData;
     d->deleteData = other.d->deleteData;
     d->enabled = other.d->enabled;
+    d->acceptedRejected = other.d->acceptedRejected;
     d->valid = other.d->valid;
 }
 
@@ -84,6 +87,16 @@ void KoChangeTrackerElement::setEnabled(bool enabled)
 bool KoChangeTrackerElement::isEnabled() const
 {
     return d->enabled;
+}
+
+void KoChangeTrackerElement::setAcceptedRejected(bool set)
+{
+    d->acceptedRejected = set;
+}
+
+bool KoChangeTrackerElement::acceptedRejected()
+{
+    return d->acceptedRejected;
 }
 
 void KoChangeTrackerElement::setValid(bool valid)

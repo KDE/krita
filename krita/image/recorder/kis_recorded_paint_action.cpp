@@ -141,9 +141,9 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
 
         }
 
-        painter.setPaintOpPreset(d->paintOpPreset, info.image());
         painter.setPaintColor(d->foregroundColor);
-        painter.setFillColor(d->backgroundColor);
+        painter.setBackgroundColor(d->backgroundColor);
+        painter.setPaintOpPreset(d->paintOpPreset, info.image());
 
         playPaint(info, &painter);
 

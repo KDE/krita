@@ -760,7 +760,8 @@ KisPaintingAssistantsManager* KisView2::paintingAssistantManager()
 
 void KisView2::slotTotalRefresh()
 {
-    m_d->canvas->resetCanvas();
+    KisConfig cfg;
+    m_d->canvas->resetCanvas(cfg.useOpenGL());
 }
 
 KoFavoriteResourceManager* KisView2::favoriteResourceManager()

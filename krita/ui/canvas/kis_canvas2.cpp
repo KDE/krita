@@ -68,14 +68,14 @@ class KisCanvas2::KisCanvas2Private
 public:
 
     KisCanvas2Private(KoCanvasBase * parent, KoViewConverter * viewConverter, KisView2 * view)
-            : viewConverter(viewConverter)
-            , view(view)
-            , canvasWidget(0)
-            , shapeManager(new KoShapeManager(parent))
-            , monitorProfile(0)
-            , currentCanvasIsOpenGL(false)
-            , currentCanvasUsesOpenGLShaders(false)
-            , toolProxy(new KoToolProxy(parent)) {
+        : viewConverter(viewConverter)
+        , view(view)
+        , canvasWidget(0)
+        , shapeManager(new KoShapeManager(parent))
+        , monitorProfile(0)
+        , currentCanvasIsOpenGL(false)
+        , currentCanvasUsesOpenGLShaders(false)
+        , toolProxy(new KoToolProxy(parent)) {
     }
 
     ~KisCanvas2Private() {
@@ -100,8 +100,8 @@ public:
 };
 
 KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc)
-        : KoCanvasBase(sc)
-        , m_d(new KisCanvas2Private(this, viewConverter, view))
+    : KoCanvasBase(sc)
+    , m_d(new KisCanvas2Private(this, viewConverter, view))
 {
     createCanvas();
     connect(view->canvasController(), SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
@@ -281,7 +281,6 @@ void KisCanvas2::createCanvas()
 #endif
     } else {
         createQPainterCanvas();
-
     }
 
 }
@@ -375,20 +374,31 @@ void KisCanvas2::disconnectCurrentImage()
     m_d->view->image()->disconnect(this);
 }
 
-void KisCanvas2::resetCanvas()
+void KisCanvas2::resetCanvas(bool useOpenGL)
 {
     KisConfig cfg;
 #if HAVE_OPENGL
 
-    if ((cfg.useOpenGL() != m_d->currentCanvasIsOpenGL) ||
-            (m_d->currentCanvasIsOpenGL && (cfg.useOpenGLShaders() != m_d->currentCanvasUsesOpenGLShaders))) {
+    if (   (useOpenGL != m_d->currentCanvasIsOpenGL)
+        || (   m_d->currentCanvasIsOpenGL
+               && (cfg.useOpenGLShaders() != m_d->currentCanvasUsesOpenGLShaders))) {
 
         disconnectCurrentImage();
-        createCanvas();
+        slotSetDisplayProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
+        if (useOpenGL) {
+#ifdef HAVE_OPENGL
+            createOpenGLCanvas();
+#else
+            warnKrita << "OpenGL requested while its not available, starting qpainter canvas";
+            createQPainterCanvas();
+#endif
+        } else {
+            createQPainterCanvas();
+        }
         connectCurrentImage();
     }
 
-    if (cfg.useOpenGL()) {
+    if (useOpenGL) {
         m_d->openGLImageTextures->setMonitorProfile(monitorProfile());
     } else {
         if (image()) {
@@ -425,7 +435,16 @@ bool KisCanvas2::usingHDRExposureProgram()
 
 void KisCanvas2::slotConfigChanged()
 {
-    resetCanvas();
+    // first, assume we're going to crash when switching to opengl
+    KisConfig cfg;
+    bool useOpenGL = cfg.useOpenGL();
+    if (cfg.canvasState() == "TRY_OPENGL" && useOpenGL) {
+        cfg.setCanvasState("OPENGL_FAILED");
+    }
+    resetCanvas(useOpenGL);
+    if (useOpenGL) {
+        cfg.setCanvasState("OPENGL_SUCCESS");
+    }
 }
 
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * profile)

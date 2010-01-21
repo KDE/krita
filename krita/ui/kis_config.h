@@ -197,6 +197,9 @@ public:
     QString defaultPainterlyColorDepthId();
     void setDefaultPainterlyColorDepthId(const QString& def);
 
+    // OPENGL_SUCCESS, TRY_OPENGL, OPENGL_NOT_TRIED, OPENGL_FAILED
+    QString canvasState() const;
+    void setCanvasState(const QString& state);
 
 private:
     KisConfig(const KisConfig&);

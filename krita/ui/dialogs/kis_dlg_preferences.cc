@@ -43,6 +43,7 @@
 #include <KoImageResource.h>
 #include <KoColorProfile.h>
 
+#include <kmessagebox.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <kfiledialog.h>
@@ -523,8 +524,21 @@ bool KisDlgPreferences::editPreferences()
 #endif
 
 #ifdef HAVE_OPENGL
+        if (dialog->m_displaySettings->cbUseOpenGL->isChecked() && cfg.canvasState() == "OPENGL_NOT_TRIED") {
+            cfg.setCanvasState("TRY_OPENGL");
+        }
+        if (dialog->m_displaySettings->cbUseOpenGL->isChecked() && cfg.canvasState() == "OPENGL_FAILED") {
+            if (KMessageBox::warningYesNo(0, i18n("You are trying to enable OpenGL\n\n"
+                                                  "But Krita might have had problems with the OpenGL canvas before,\n"
+                                                  "either because of driver issues, or because of issues with window effects.\n\n"
+                                                  "Are you sure you want to enable OpenGL?\n"), i18n("Krita")) == KMessageBox::Yes) {
+                cfg.setCanvasState("TRY_OPENGL");
+            }
+        }
+
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
+
 #endif
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());
         cfg.setScrollingCheckers(dialog->m_displaySettings->chkMoving->isChecked());

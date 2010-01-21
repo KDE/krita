@@ -183,7 +183,7 @@ public:
 
     friend class KisView2;
 
-    void resetCanvas();
+    void resetCanvas(bool useOpenGL);
 
     KisCanvas2(const KisCanvas2&);
 

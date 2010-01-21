@@ -27,6 +27,7 @@
 #include <kconfig.h>
 #include <QFont>
 #include <QThread>
+#include <QStringList>
 
 #include "kis_global.h"
 
@@ -207,7 +208,8 @@ void KisConfig::setRenderIntent(qint32 renderIntent)
 
 bool KisConfig::useOpenGL() const
 {
-    return m_cfg.readEntry("useOpenGL", false);
+    QString canvasState = m_cfg.readEntry("canvasState");
+    return (m_cfg.readEntry("useOpenGL", false) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
 }
 
 void KisConfig::setUseOpenGL(bool useOpenGL)
@@ -566,4 +568,20 @@ QString KisConfig::defaultPainterlyColorDepthId()
 void KisConfig::setDefaultPainterlyColorDepthId(const QString& def)
 {
     m_cfg.writeEntry("defaultpainterlycolordepth", def);;
+}
+
+QString KisConfig::canvasState() const
+{
+    return m_cfg.readEntry("canvasState", "OPENGL_NOT_TRIED");
+}
+
+void KisConfig::setCanvasState(const QString& state)
+{
+    static QStringList acceptableStates;
+    if (acceptableStates.isEmpty()) {
+        acceptableStates << "OPENGL_SUCCESS" << "TRY_OPENGL" << "OPENGL_NOT_TRIED" << "OPENGL_FAILED";
+    }
+    if (acceptableStates.contains(state)) {
+        m_cfg.writeEntry("canvasState", state);
+    }
 }

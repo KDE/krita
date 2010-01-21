@@ -26,11 +26,10 @@
 #include <QLabel>
 #include <kis_paint_device.h>
 
-KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, KisRecordedAction* action) :
+KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, KisRecordedAction* action) : QWidget(parent),
         m_action(dynamic_cast<KisRecordedFilterAction*>(action)),
         m_gridLayout(new QGridLayout(this))
 {
-    Q_UNUSED(parent);
     Q_ASSERT(m_action);
     m_configWidget = m_action->filter()->createConfigurationWidget(this, 0 , 0);
     if (m_configWidget) {

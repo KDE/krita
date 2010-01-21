@@ -27,6 +27,7 @@
 #include <kis_debug.h>
 #include "kis_recorded_action_editor_factory.h"
 #include "kis_recorded_filter_action_editor.h"
+#include "kis_recorded_paint_action_editor.h"
 
 struct KisRecordedActionEditorFactoryRegistry::Private {
     QList< KisRecordedActionEditorFactory* > factories;
@@ -36,6 +37,7 @@ KisRecordedActionEditorFactoryRegistry::KisRecordedActionEditorFactoryRegistry()
         : d(new Private)
 {
     add(new KisRecordedFilterActionEditorFactory);
+    add(new KisRecordedPaintActionEditorFactory);
 }
 
 KisRecordedActionEditorFactoryRegistry::~KisRecordedActionEditorFactoryRegistry()

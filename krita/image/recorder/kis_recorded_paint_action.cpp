@@ -111,6 +111,11 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
     elt.setAttribute("compositeOp", d->compositeOp);
 }
 
+KisPaintOpPresetSP KisRecordedPaintAction::paintOpPreset() const
+{
+    return d->paintOpPreset;
+}
+
 void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
 {
     Q_UNUSED(node);

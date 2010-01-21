@@ -58,6 +58,7 @@ protected:
 
     virtual void playPaint(const KisPlayInfo&, KisPainter* painter) const = 0;
 
+public:
     KisPaintOpPresetSP paintOpPreset() const;
 private:
 

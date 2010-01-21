@@ -28,7 +28,7 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 
-#include <widgets/kis_item_chooser.h>
+#include <widgets/kis_preset_chooser.h>
 #include <kis_image.h>
 
 #include "kis_brush.h"

@@ -35,9 +35,7 @@ class VideoCollection::Private
 public:
     ~Private()
     {
-        foreach(VideoData *id, videos)
-            id->collection = 0;
-    }
+   }
 
     QMap<qint64, VideoData*> videos;
     // an extra map to find all dataObjects based on the key of a store.
@@ -52,6 +50,9 @@ VideoCollection::VideoCollection()
 
 VideoCollection::~VideoCollection()
 {
+    foreach(VideoData *id, d->videos) {
+        id->collection = 0;
+    }
     delete d;
 }
 

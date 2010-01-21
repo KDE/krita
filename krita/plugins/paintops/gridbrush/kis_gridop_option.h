@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Lukáš Tvrdý (lukast.dev@gmail.com)
+ * Copyright (c) 2009,2010 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,16 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
+const QString GRID_WIDTH = "Grid/gridWidth";
+const QString GRID_HEIGHT = "Grid/gridHeight";
+const QString GRID_DIVISION_LEVEL = "Grid/divisionLevel";
+const QString GRID_PRESSURE_DIVISION = "Grid/pressureDivision";
+const QString GRID_SCALE = "Grid/scale";
+const QString GRID_VERTICAL_BORDER = "Grid/verticalBorder";
+const QString GRID_HORIZONTAL_BORDER = "Grid/horizontalBorder";
+const QString GRID_RANDOM_BORDER = "Grid/randomBorder";
+
+
 class KisGridOpOptionsWidget;
 
 class KisGridOpOption : public KisPaintOpOption
@@ -43,7 +53,7 @@ public:
     
     qreal vertBorder() const;
     qreal horizBorder() const;
-    bool jitterBorder() const;
+    bool randomBorder() const;
     
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);

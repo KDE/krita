@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Lukáš Tvrdý (lukast.dev@gmail.com)
+ * Copyright (c) 2009,2010 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ KisGridShapeOption::KisGridShapeOption()
 
 KisGridShapeOption::~KisGridShapeOption()
 {
-    // delete m_options; 
+    delete m_options; 
 }
 
 
@@ -49,18 +49,13 @@ int KisGridShapeOption::shape() const {
     return m_options->shapeCBox->currentIndex();
 }
 
-// TODO
 void KisGridShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    Q_UNUSED(setting);
-//     setting->setProperty( "Grid/diameter", diameter() );
+    setting->setProperty( GRIDSHAPE_SHAPE, shape() );
 }
 
-// TODO
+
 void KisGridShapeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    Q_UNUSED(setting);
-/*    m_options->diameterSpinBox->setValue( setting->getInt("Grid/diameter") );
-    m_options->coverageSpin->setValue( setting->getDouble("Grid/coverage") );
-    m_options->jitterSizeBox->setChecked( setting->getBool("Grid/jitterSize") );*/
+    m_options->shapeCBox->setCurrentIndex(setting->getInt(GRIDSHAPE_SHAPE));
 }

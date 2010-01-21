@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Lukáš Tvrdý (lukast.dev@gmail.com)
+ * Copyright (c) 2009,2010 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,47 +31,12 @@ class QDomDocument;
 
 class KisGridPaintOpSettings : public KisPaintOpSettings
 {
-
 public:
-
-    KisGridPaintOpSettings();
-    virtual ~KisGridPaintOpSettings() {}
-
-    virtual void changePaintOpSize(qreal x, qreal y) const;
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode ) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
-
     bool paintIncremental();
-
-    int gridWidth() const;
-    int gridHeight() const;
-    int divisionLevel() const;
-    bool pressureDivision() const;
-    qreal scale() const;
     
-    qreal vertBorder() const;
-    qreal horizBorder() const;
-    bool jitterBorder() const;
-
-    bool colorPerParticle() const;
-    bool fillBackground() const;
-    bool mixBgColor() const;
-    
-    /// Ellipse, rectangle, line, pixel, anti-aliased pixel
-    int shape() const;
-
-    // color options
-    bool useRandomOpacity() const;
-    bool useRandomHSV() const;
-    bool sampleInput() const;
-    
-    // TODO: these should be intervals like 20..180
-    int hue() const;
-    int saturation() const;
-    int value() const;
-
 private:
-
     KisGridPaintOpSettingsWidget* m_options;
 
 };

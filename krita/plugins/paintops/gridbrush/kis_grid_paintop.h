@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Lukáš Tvrdý (lukast.dev@gmail.com)
+ * Copyright (c) 2009,2010 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,13 +24,31 @@
 #include <klocale.h>
 #include <kis_paintop.h>
 #include <kis_types.h>
+#include <kis_color_option.h>
+
 #include <KoColor.h>
 
 #include "kis_grid_paintop_settings.h"
 
+
 class QPointF;
 class KisPainter;
 
+class KisGridProperties{
+public:
+    quint16 gridWidth;
+    quint16 gridHeight;
+    quint16 divisionLevel;
+    bool pressureDivision;
+    bool randomBorder;
+    qreal scale;
+    qreal vertBorder;
+    qreal horizBorder;
+    
+    quint8 shape;
+public: 
+    void fillProperties(const KisPropertiesConfiguration* setting);
+};
 
 class KisGridPaintOp : public KisPaintOp
 {
@@ -56,8 +74,8 @@ private:
     double              m_ySpacing;
     double              m_spacing;
     int                 m_pixelSize;
-    
-    
+    KisGridProperties   m_properties;
+    KisColorProperties  m_colorProperties;
 
     
 #ifdef BENCHMARK

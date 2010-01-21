@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Lukáš Tvrdý (lukast.dev@gmail.com)
+ * Copyright (c) 2009,2010 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 
 #include <kis_paintop_option.h>
 
+const QString GRIDSHAPE_SHAPE = "GridShape/shape";
+
 class KisShapeOptionsWidget;
 
 class KisGridShapeOption : public KisPaintOpOption
@@ -32,9 +34,7 @@ public:
     /// Ellipse, rectangle, line, pixel, anti-aliased pixel
     int shape() const;
 
-    /// TODO
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    /// TODO
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
    KisShapeOptionsWidget * m_options;

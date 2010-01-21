@@ -32,6 +32,7 @@ class KisGridPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 public:
     KisGridPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisGridPaintOpSettingsWidget();
+    virtual void changePaintOpSize(qreal x, qreal y);
 
     KisPropertiesConfiguration* configuration() const;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Lukáš Tvrdý (lukast.dev@gmail.com)
+ * Copyright (c) 2009,2010 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,14 +31,16 @@
 #include <kis_paint_information.h>
 #include <kis_random_sub_accessor.h>
 
-
 #include <KoColor.h>
+#include <KoColorSpace.h>
+
+#include <kis_gridop_option.h>
+#include <kis_grid_shape_option.h>
+#include <kis_color_option.h>
 
 #ifdef BENCHMARK
     #include <QTime>
 #endif
-#include <KoColorSpace.h>
-
 
 KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp( painter )
@@ -46,8 +48,11 @@ KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainte
     , m_image ( image )
 {
 
-    m_xSpacing = settings->gridWidth() * settings->scale();
-    m_ySpacing = settings->gridHeight()* settings->scale();
+    m_properties.fillProperties(settings);
+    m_colorProperties.fillProperties(settings);
+    
+    m_xSpacing = m_properties.gridWidth * m_properties.scale;
+    m_ySpacing = m_properties.gridHeight * m_properties.scale;
     m_spacing = m_xSpacing;
 
     m_dab = new KisPaintDevice( painter->device()->colorSpace() );
@@ -85,16 +90,16 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
     if (!painter()) return;
     m_dab->clear();
 
-    int gridWidth = m_settings->gridWidth() * m_settings->scale();
-    int gridHeight = m_settings->gridHeight() * m_settings->scale();
+    int gridWidth = m_properties.gridWidth * m_properties.scale;
+    int gridHeight = m_properties.gridHeight * m_properties.scale;
 
     int divide;
-    if (m_settings->pressureDivision()){
-        divide = m_settings->divisionLevel() * info.pressure();
+    if (m_properties.pressureDivision){
+        divide = m_properties.divisionLevel * info.pressure();
     }else{
-        divide = m_settings->divisionLevel();
+        divide = m_properties.divisionLevel;
     }
-    divide = qRound(m_settings->scale() * divide);
+    divide = qRound(m_properties.scale * divide);
 
     int posX = qRound( info.pos().x() );
     int posY = qRound( info.pos().y() );
@@ -111,9 +116,9 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
     QRectF tile;
     KoColor color( painter()->paintColor() );
    
-    qreal vertBorder = m_settings->vertBorder(); 
-    qreal horzBorder = m_settings->horizBorder();
-    if (m_settings->jitterBorder()){
+    qreal vertBorder = m_properties.vertBorder; 
+    qreal horzBorder = m_properties.horizBorder;
+    if (m_properties.randomBorder){
         if (vertBorder == horzBorder){
             vertBorder = horzBorder = vertBorder * drand48();
         }else{
@@ -124,7 +129,7 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
     
     bool shouldColor = true;
     // fill the tile
-    if (m_settings->fillBackground()){
+    if (m_colorProperties.fillBackground){
         m_dab->fill(dabPosition.x(), dabPosition.y(), gridWidth, gridHeight, painter()->backgroundColor().data());
     }
     
@@ -137,7 +142,7 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
             // do color transformation
             if (shouldColor){
-                if (m_settings->sampleInput()){
+                if (m_colorProperties.sampleInputColor){
                     acc.moveTo(tile.center().x(), tile.center().y());
                     acc.sampledRawData( color.data() );
                 }else{
@@ -145,7 +150,7 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
                 }
 
                 // mix the color with background color
-                if (m_settings->mixBgColor())
+                if (m_colorProperties.mixBgColor)
                 {       
                     KoMixColorsOp * mixOp = source()->colorSpace()->mixColorsOp();
 
@@ -162,24 +167,24 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
                     mixOp->mixColors(colors, colorWeights, 2, color.data() );
                 }
 
-                if (m_settings->useRandomHSV()){
+                if (m_colorProperties.useRandomHSV){
                     QHash<QString, QVariant> params;
-                    params["h"] = (m_settings->hue() / 180.0) * drand48();
-                    params["s"] = (m_settings->saturation() / 100.0) * drand48();
-                    params["v"] = (m_settings->value() / 100.0) * drand48();
+                    params["h"] = (m_colorProperties.hue / 180.0) * drand48();
+                    params["s"] = (m_colorProperties.saturation / 100.0) * drand48();
+                    params["v"] = (m_colorProperties.value / 100.0) * drand48();
 
                     KoColorTransformation* transfo;
                     transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
                     transfo->transform(color.data(), color.data() , 1);
                 }
                 
-                if (m_settings->useRandomOpacity()){
+                if (m_colorProperties.useRandomOpacity){
                     quint8 alpha = qRound(drand48() * OPACITY_OPAQUE);
                     color.setOpacity( alpha );
                     m_painter->setOpacity( alpha );
                 }
 
-                if ( !m_settings->colorPerParticle() ){
+                if ( !m_colorProperties.colorPerParticle ){
                     shouldColor = false;
                 }
                 
@@ -187,7 +192,7 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
             }
 
             // paint some element
-            switch (m_settings->shape()){
+            switch (m_properties.shape){
                 case 0:
                 {
                             m_painter->paintEllipse( tile ); 
@@ -234,4 +239,18 @@ void KisGridPaintOp::paintAt(const KisPaintInformation& info)
     m_total += msec;
     m_count++;
 #endif
+}
+
+void KisGridProperties::fillProperties(const KisPropertiesConfiguration* setting)
+{
+    gridWidth = setting->getInt(GRID_WIDTH);
+    gridHeight = setting->getInt(GRID_HEIGHT);
+    divisionLevel = setting->getInt(GRID_DIVISION_LEVEL);
+    pressureDivision =  setting->getBool(GRID_PRESSURE_DIVISION);
+    randomBorder = setting->getBool(GRID_RANDOM_BORDER);
+    scale = setting->getBool(GRID_SCALE);
+    vertBorder  = setting->getBool(GRID_VERTICAL_BORDER);
+    horizBorder = setting->getBool(GRID_HORIZONTAL_BORDER);
+    
+    shape = setting->getInt(GRIDSHAPE_SHAPE);
 }

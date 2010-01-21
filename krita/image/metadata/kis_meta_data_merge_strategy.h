@@ -29,7 +29,10 @@ namespace KisMetaData
 {
 class Store;
 /**
- * This is an interface which serves as a base class for meta data store merge strategy.
+ * This is an interface which serves as a base class for meta data store merge
+ * strategy.
+ * This is used to decide which entries of a metadata store is kept, or how they
+ * are modified when a list of meta data stores are merged together.
  */
 class KRITAIMAGE_EXPORT MergeStrategy
 {

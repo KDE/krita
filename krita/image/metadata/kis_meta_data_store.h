@@ -32,7 +32,8 @@ class Filter;
 class Value;
 
 /**
- * This class holds the list of metadata entries and schemas.
+ * This class holds the list of metadata entries and schemas (for instance the
+ * author of the image, copyright holder, license, aperture, speed...)
  */
 class KRITAIMAGE_EXPORT Store
 {

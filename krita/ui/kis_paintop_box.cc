@@ -46,6 +46,7 @@
 #include <kis_paintop.h>
 #include <kis_layer.h>
 #include <kis_resource_server_provider.h>
+#include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
 #include <kis_config_widget.h>
 #include <kis_image.h>
@@ -109,6 +110,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
     connect(m_presetsPopup, SIGNAL(savePresetClicked()), this, SLOT(slotSaveActivePreset()));
+    
+    connect(m_presetsPopup, SIGNAL(resourceSelected(KoResource*)),
+            this, SLOT(resourceSelected(KoResource*)));
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -173,6 +177,15 @@ void KisPaintopBox::updatePaintops()
         }
     }
 
+}
+
+void KisPaintopBox::resourceSelected(KoResource* resource)
+{
+    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(resource);
+    dbgUI << "preset " << preset->name() << "selected";
+    
+    m_optionWidget->setConfiguration(preset->settings());
+    slotUpdatePreset();
 }
 
 QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)

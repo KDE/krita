@@ -29,6 +29,7 @@
 #include <kglobalsettings.h>
 #include <kis_paintop_preset.h>
 #include <widgets/kis_preset_widget.h>
+#include <widgets/kis_preset_chooser.h>
 
 #include <ui_wdgpaintoppresets.h>
 
@@ -73,6 +74,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
 
     connect(m_d->uiWdgPaintOpPresets.bnSave, SIGNAL(clicked()),
             this, SIGNAL(savePresetClicked()));
+
+    connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SIGNAL(resourceSelected(KoResource*)));
 }
 
 

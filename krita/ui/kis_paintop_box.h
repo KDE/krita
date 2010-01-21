@@ -39,6 +39,7 @@ class QHBoxLayout;
 class KoID;
 class KoColorSpace;
 class KoResourceSelector;
+class KoResource;
 
 class KisView2;
 class KisCanvasResourceProvider;
@@ -89,6 +90,7 @@ private:
 private slots:
 
     void updatePaintops();
+    void resourceSelected( KoResource * resource );
 
 private:
 

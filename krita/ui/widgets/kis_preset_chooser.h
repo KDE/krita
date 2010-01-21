@@ -18,15 +18,11 @@
 #ifndef KIS_ITEM_CHOOSER_H_
 #define KIS_ITEM_CHOOSER_H_
 
-#include <QList>
 #include <QWidget>
-#include <kvbox.h>
 #include <krita_export.h>
 
-class KHBox;
-
 class KoResourceItemChooser;
-class KoResourceItem;
+class KoResource;
 
 /**
  * A special type of item chooser that can contain extra widgets that show
@@ -43,6 +39,8 @@ public:
     KisPresetChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisPresetChooser();
 
+signals:
+    void resourceSelected( KoResource * resource );
 
 private:
     KoResourceItemChooser *m_chooser;

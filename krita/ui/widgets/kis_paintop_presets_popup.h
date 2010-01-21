@@ -22,6 +22,7 @@
 #include <QWidget>
 
 class QString;
+class KoResource;
 class KisPaintOpPreset;
 class KisPropertiesConfiguration;
 class KisPresetWidget;
@@ -54,6 +55,7 @@ public:
     QString getPresetName() const;    
 signals:
     void savePresetClicked();
+    void resourceSelected( KoResource * resource );
 
 private:
 

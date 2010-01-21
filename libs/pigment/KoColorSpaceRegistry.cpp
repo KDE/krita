@@ -81,6 +81,8 @@ void KoColorSpaceRegistry::init()
 
     KoColorSpaceEngineRegistry::instance()->add(new KoSimpleColorSpaceEngine());
 
+    addProfile(new KoDummyColorProfile);
+    
     // Create the built-in colorspaces
     add(new KoLabColorSpaceFactory());
     add(new KoRgbU8ColorSpaceFactory());

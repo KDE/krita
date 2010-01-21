@@ -8,6 +8,14 @@ endif(MSVC)
 
 ########### next target ###############
 
+set(TestKoColorSpaceRegistry_test_SRCS TestKoColorSpaceRegistry.cpp )
+
+kde4_add_unit_test(TestKoColorSpaceRegistry TESTNAME libs-pigment-TestKoColorSpaceRegistry ${TestKoColorSpaceRegistry_test_SRCS})
+
+target_link_libraries(TestKoColorSpaceRegistry  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(TestColorConversion_test_SRCS TestColorConversion.cpp )
 
 kde4_add_unit_test(TestColorConversion TESTNAME libs-pigment-TestColorConversion  ${TestColorConversion_test_SRCS})

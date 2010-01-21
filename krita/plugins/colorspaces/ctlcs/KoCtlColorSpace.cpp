@@ -308,6 +308,7 @@ void KoCtlColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
             channel->scaleFromF32(pixel, elt.attribute(channelInfo->shortName()).toDouble());
         }
     }
+    setAlpha(pixel, OPACITY_OPAQUE, 1);
 }
 
 KoID KoCtlColorSpace::colorModelId() const

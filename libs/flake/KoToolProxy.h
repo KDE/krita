@@ -22,6 +22,7 @@
 #define _KO_TOOL_PROXY_H_
 
 #include <KoViewConverter.h>
+#include <KoToolManager.h>
 #include "flake_export.h"
 
 #include <QPainter>
@@ -126,6 +127,7 @@ signals:
 
 protected:
     friend class KoToolManager;
+    friend class KoToolManager::Private;
     /// the toolManager tells us which KoCanvasController this toolProxy is working for.
     void setCanvasController(KoCanvasController *controller);
 

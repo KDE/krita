@@ -30,6 +30,7 @@
 
 class KoCanvasBase;
 class KoProperties;
+class KoCreateShapesToolPrivate;
 
 #define KoCreateShapesTool_ID "CreateShapesTool"
 
@@ -80,8 +81,7 @@ protected:
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
 
 private:
-    class Private;
-    Private * const d;
+    Q_DECLARE_PRIVATE(KoCreateShapesTool)
 };
 
 #endif

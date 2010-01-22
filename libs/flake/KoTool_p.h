@@ -22,6 +22,7 @@
 
 #include <QMap>
 #include <QHash>
+#include <QWidget>
 #include <QString>
 
 class QWidget;

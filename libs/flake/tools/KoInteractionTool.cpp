@@ -123,4 +123,9 @@ void KoInteractionTool::cancelCurrentStrategy()
     }
 }
 
+KoInteractionTool::KoInteractionTool(KoInteractionToolPrivate &dd)
+    : KoTool(dd)
+{
+}
+
 #include <KoInteractionTool.moc>

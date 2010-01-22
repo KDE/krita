@@ -75,6 +75,9 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *event);
 
 protected:
+    /// \internal
+    KoInteractionTool(KoInteractionToolPrivate &dd);
+
     KoInteractionStrategy *currentStrategy(); ///< the strategy that is 'in progress'
     /// Cancels the current strategy and deletes it.
     void cancelCurrentStrategy();

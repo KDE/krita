@@ -92,9 +92,10 @@ private:
     QPointF m_currentPt;
     InterractionMode m_interractionMode;
     QRect m_initialRect;
-    QPointF m_dragStart, m_dragEnd;
+    QPointF m_dragEnd;
     QPointF m_topleft, m_topright, m_bottomleft, m_bottomright;
     QPointF* m_currentSelectedPoint;
+    bool m_hasMoveAfterFirstTime;
     bool m_actualyMoveWhileSelected;
 
     WdgToolPerspectiveTransform *m_optWidget;

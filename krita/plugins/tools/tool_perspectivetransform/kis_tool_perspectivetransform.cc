@@ -288,10 +288,17 @@ void KisToolPerspectiveTransform::mousePressEvent(KoPointerEvent *event)
     if (image()) {
         switch (m_interractionMode) {
             case DRAWRECTINTERRACTION: {
-                if (m_points.isEmpty())
-                    m_drawing = true;
-
                 m_currentPt = convertToPixelCoord(event);
+
+                if (m_points.isEmpty()) {
+                    m_drawing = true;
+                    m_hasMoveAfterFirstTime = false;
+                    m_points.append(m_currentPt);
+                }
+                else {
+                    m_hasMoveAfterFirstTime = true;
+                }
+
                 updateCanvasPixelRect(image()->bounds());
 
                 break;
@@ -423,7 +430,7 @@ void KisToolPerspectiveTransform::mouseReleaseEvent(KoPointerEvent * event)
     if (event->button() == Qt::LeftButton) {
         switch (m_interractionMode) {
             case DRAWRECTINTERRACTION: {
-                if (m_drawing && event->button() == Qt::LeftButton)  {
+                if (m_drawing && event->button() == Qt::LeftButton && m_hasMoveAfterFirstTime)  {
                     updateCanvasPixelRect(image()->bounds());
 
                     m_points.append(m_currentPt);
@@ -491,19 +498,16 @@ void KisToolPerspectiveTransform::paintOutline(QPainter& gc, const QRect&)
         switch (m_interractionMode) {
             case DRAWRECTINTERRACTION: {
                 dbgPlugins << "DRAWRECTINTERRACTION paintOutline" << m_points.size();
-                QPointF start, end;
-                QPoint startPos;
-                QPoint endPos;
-                
-                for (int i = 0; i < m_points.size(); i++) {
-                    if (m_points.size() <= i + 1)
+
+                for (QPolygonF::iterator iter = m_points.begin(); iter != m_points.end(); iter++) {
+                    if (iter + 1 == m_points.end())
                         break;
                     else
-                        gc.drawLine(pixelToView(m_points[i]).toPoint(), pixelToView(m_points[i + 1]).toPoint());
+                        gc.drawLine(pixelToView(*iter).toPoint(), pixelToView(*(iter + 1)).toPoint());
                 }
                 if (!m_points.isEmpty()) {
-                    gc.drawLine(pixelToView(m_points[m_points.size() - 1]).toPoint(), pixelToView(m_currentPt).toPoint());
-                    gc.drawLine(pixelToView(m_currentPt).toPoint(), pixelToView(m_points[0]).toPoint());
+                    gc.drawLine(pixelToView(*(m_points.end() - 1)).toPoint(), pixelToView(m_currentPt).toPoint());
+                    gc.drawLine(pixelToView(m_currentPt).toPoint(), pixelToView(*m_points.begin()).toPoint());
                 }
 
                 break;

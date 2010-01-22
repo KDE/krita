@@ -32,7 +32,6 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kstdguiitem.h>
 #include <kconfiggroup.h>
 
 #ifdef KDEPIMLIBS_FOUND

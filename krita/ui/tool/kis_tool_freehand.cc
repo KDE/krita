@@ -284,7 +284,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
         canvas()->updateCanvas(oldOutlineRect); // erase the old guy
     }
 
-    mousePos = e->point;
+    m_mousePos = e->point;
 
 #if defined(HAVE_OPENGL)
     if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
@@ -297,7 +297,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     }
 #endif
 
-    oldOutlineRect = currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage(), outlineMode);
+    oldOutlineRect = currentPaintOpPreset()->settings()->paintOutlineRect(m_mousePos, currentImage(), outlineMode);
     if (!oldOutlineRect.isEmpty()) {
         canvas()->updateCanvas(oldOutlineRect); // erase the old guy
     }
@@ -591,7 +591,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             }
 
             if (glIsList(m_displayList)) {
-                QPointF pos = converter.documentToView(mousePos);
+                QPointF pos = converter.documentToView(m_mousePos);
 
                 glColor3f(0.0, 1.0, 0.0);
                 glShadeModel(GL_SMOOTH);
@@ -651,7 +651,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         } else {
             outlineMode = KisPaintOpSettings::CURSOR_ISNT_OUTLINE;
         }
-        currentPaintOpPreset()->settings()->paintOutline(mousePos, currentImage(), gc, converter, outlineMode);
+        currentPaintOpPreset()->settings()->paintOutline(m_mousePos, currentImage(), gc, converter, outlineMode);
 
     }
 }

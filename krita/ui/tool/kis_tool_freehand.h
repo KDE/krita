@@ -128,9 +128,9 @@ private:
     QString m_brushModelName;
 #endif
 
-    QPointF mousePos;
+    QPointF m_mousePos;
     QPointF m_prevMousePos;
-    QPoint m_originalPos;
+    QPoint  m_originalPos;
 
     // for painting
     QRectF oldOutlineRect;

@@ -19,9 +19,9 @@
 #ifndef KOLINEBORDERFACTORY_H
 #define KOLINEBORDERFACTORY_H
 
-#include "KoShapeBorderFactory.h"
+#include "KoShapeBorderFactoryBase.h"
 
-class KoLineBorderFactory : public KoShapeBorderFactory
+class KoLineBorderFactory : public KoShapeBorderFactoryBase
 {
 public:
     KoLineBorderFactory(QObject *parent);

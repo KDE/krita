@@ -64,7 +64,7 @@ set(flake_SRCS
     KoPathShapeLoader.cpp
     ShapeDeleter_p.cpp
     KoShapeBorderModel.cpp
-    KoShapeBorderFactory.cpp
+    KoShapeBorderFactoryBase.cpp
     KoShapeBorderRegistry.cpp
     KoLineBorder.cpp
     KoLineBorderFactory.cpp

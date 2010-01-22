@@ -25,13 +25,13 @@
 
 class KoShapeBorderModel;
 
-class FLAKE_EXPORT KoShapeBorderFactory : public QObject
+class FLAKE_EXPORT KoShapeBorderFactoryBase : public QObject
 {
     Q_OBJECT
 public:
 
-    KoShapeBorderFactory(QObject *parent, const QString &id);
-    virtual ~KoShapeBorderFactory();
+    KoShapeBorderFactoryBase(QObject *parent, const QString &id);
+    virtual ~KoShapeBorderFactoryBase();
 
     /**
      * This method should be implemented by factories to create a shape that the user

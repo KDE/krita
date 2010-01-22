@@ -18,29 +18,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoShapeBorderFactory.h"
+#include "KoShapeBorderFactoryBase.h"
 
-class KoShapeBorderFactory::Private
+class KoShapeBorderFactoryBase::Private
 {
 public:
     Private(const QString &i) : id(i) { }
     const QString id;
 };
 
-KoShapeBorderFactory::KoShapeBorderFactory(QObject *parent, const QString &id)
+KoShapeBorderFactoryBase::KoShapeBorderFactoryBase(QObject *parent, const QString &id)
         : QObject(parent),
         d(new Private(id))
 {
 }
 
-KoShapeBorderFactory::~KoShapeBorderFactory()
+KoShapeBorderFactoryBase::~KoShapeBorderFactoryBase()
 {
     delete d;
 }
 
-QString KoShapeBorderFactory::id() const
+QString KoShapeBorderFactoryBase::id() const
 {
     return d->id;
 }
 
-#include <KoShapeBorderFactory.moc>
+#include <KoShapeBorderFactoryBase.moc>

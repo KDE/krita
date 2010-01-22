@@ -22,7 +22,7 @@
 #include <KLocale>
 
 KoLineBorderFactory::KoLineBorderFactory(QObject *parent)
-        : KoShapeBorderFactory(parent, "LineBorder")
+        : KoShapeBorderFactoryBase(parent, "LineBorder")
 {
 }
 

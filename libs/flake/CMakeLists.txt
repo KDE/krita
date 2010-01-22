@@ -209,7 +209,7 @@ install(
     KoCanvasBase.h
     KoCanvasController.h
     KoCanvasObserver.h
-    KoCanvasObserverProvider.h
+    KoCanvasSuperviser.h
     KoCanvasResourceProvider.h
     KoCopyController.h
     KoCutController.h

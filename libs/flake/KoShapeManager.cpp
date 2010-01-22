@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -159,7 +159,9 @@ void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter,
         if (childGroup) {
             paintGroup(childGroup, painter, converter, forPrint);
         } else {
+            painter.save();
             strategy->paint(child, painter, converter, forPrint);
+            painter.restore();
         }
     }
 }
@@ -320,7 +322,9 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         if (shape->parent() != 0 && shape->parent()->childClipped(shape))
             continue;
 
+        painter.save();
         d->strategy->paint(shape, painter, converter, forPrint);
+        painter.restore();
     }
 
 #ifdef KOFFICE_RTREE_DEBUG

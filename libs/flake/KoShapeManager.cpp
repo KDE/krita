@@ -303,6 +303,9 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         // check if one of the shapes ancestors have filter effects
         KoShapeContainer *parent = shape->parent();
         while (parent) {
+            // parent must be part of the shape manager to be taken into account
+            if (!d->shapes.contains(parent))
+                break;
             if (parent->filterEffectStack() && !parent->filterEffectStack()->isEmpty()) {
                     addShapeToList = false;
                     break;

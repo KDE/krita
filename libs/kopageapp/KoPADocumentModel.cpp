@@ -327,11 +327,10 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
         return pixmap.toImage();
     }
 
+    shapes.append( shape );
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
     if( container )
         shapes = container->childShapes();
-    else
-        shapes.append( shape );
 
     shapePainter.setShapes( shapes );
 

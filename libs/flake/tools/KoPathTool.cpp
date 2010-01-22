@@ -22,6 +22,7 @@
 
 #include "KoPathTool.h"
 #include "KoTool_p.h"
+#include "KoPathShape_p.h"
 #include "KoPathToolHandle.h"
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
@@ -667,7 +668,8 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_D:
             if (m_pointSelection.objectCount() == 1) {
                 QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
-                selectedPoints[0].pathShape->debugPath();
+                KoPathShapePrivate *p = static_cast<KoPathShapePrivate*>(selectedPoints[0].pathShape->priv());
+                p->debugPath();
             }
             break;
 #endif

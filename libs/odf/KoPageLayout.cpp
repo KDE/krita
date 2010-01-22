@@ -2,7 +2,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright 2002, 2003 David Faure <faure@kde.org>
    Copyright 2003 Nicolas GOUTTE <goutte@kde.org>
-   Copyright 2007 Thomas Zander <zander@kde.org>
+   Copyright 2007, 2010 Thomas Zander <zander@kde.org>
    Copyright 2009 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
@@ -94,12 +94,22 @@ void KoPageLayout::loadOdf(const KoXmlElement &style)
             topMargin = leftMargin;
             rightMargin = leftMargin;
             bottomMargin = leftMargin;
-        }
-        else {
-            leftMargin   = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-left"), MM_TO_POINT(20.0));
-            topMargin    = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-top"), MM_TO_POINT(20.0));
-            rightMargin  = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-right"), MM_TO_POINT(20.0));
-            bottomMargin = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-bottom"), MM_TO_POINT(20.0));
+        } else {
+            /*
+                If one of the individual margins is specified then the default for the others is zero.
+                Otherwise all of them are set to 20mm.
+            */
+            qreal defaultValue = 0;
+            if (!(properties.hasAttributeNS(KoXmlNS::fo, "margin-left")
+                    || properties.hasAttributeNS(KoXmlNS::fo, "margin-top")
+                    || properties.hasAttributeNS(KoXmlNS::fo, "margin-right")
+                    || properties.hasAttributeNS(KoXmlNS::fo, "margin-bottom")))
+                defaultValue = MM_TO_POINT(20.0); // no margin specified at all, lets make it 20mm
+
+            leftMargin   = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-left"), defaultValue);
+            topMargin    = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-top"), defaultValue);
+            rightMargin  = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-right"), defaultValue);
+            bottomMargin = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-bottom"), defaultValue);
         }
 
         // Padding.  Same reasoning as for margins

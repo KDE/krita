@@ -35,12 +35,12 @@ class KoShapeConfigWidgetBase;
  * @see KoShapeFactory::panelFactories()
  * @see KoShapeConfigWidgetBase
  */
-class FLAKE_EXPORT KoShapeConfigFactory
+class FLAKE_EXPORT KoShapeConfigFactoryBase
 {
 public:
     /// default constructor
-    KoShapeConfigFactory() {}
-    virtual ~KoShapeConfigFactory() {}
+    KoShapeConfigFactoryBase();
+    virtual ~KoShapeConfigFactoryBase();
 
     /**
      * create a new config widget, intialized with the param shape
@@ -71,7 +71,7 @@ public:
 
 
     /// \internal a compare for sorting.
-    static bool compare(KoShapeConfigFactory *f1, KoShapeConfigFactory *f2) {
+    static bool compare(KoShapeConfigFactoryBase *f1, KoShapeConfigFactoryBase *f2) {
         return f1->sortingOrder() - f2->sortingOrder() > 0;
     }
 };

@@ -29,7 +29,7 @@
 #include "commands/KoShapeDeleteCommand.h"
 #include "KoCanvasBase.h"
 #include "KoShapeConfigWidgetBase.h"
-#include "KoShapeConfigFactory.h"
+#include "KoShapeConfigFactoryBase.h"
 #include "KoShapeFactory.h"
 #include "KoShape.h"
 
@@ -59,10 +59,10 @@ public:
             dialog->setCaption(i18n("%1 Options", factory->name()));
 
             int pageCount = 0;
-            QList<KoShapeConfigFactory*> panels = factory->panelFactories();
-            qSort(panels.begin(), panels.end(), KoShapeConfigFactory::compare);
+            QList<KoShapeConfigFactoryBase*> panels = factory->panelFactories();
+            qSort(panels.begin(), panels.end(), KoShapeConfigFactoryBase::compare);
             QList<KoShapeConfigWidgetBase*> widgets;
-            foreach(KoShapeConfigFactory *panelFactory, panels) {
+            foreach(KoShapeConfigFactoryBase *panelFactory, panels) {
                 if (! panelFactory->showForShapeId(shape->shapeId()))
                     continue;
                 KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);

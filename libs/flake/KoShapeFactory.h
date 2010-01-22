@@ -34,7 +34,7 @@
 
 class KoShape;
 class KoProperties;
-class KoShapeConfigFactory;
+class KoShapeConfigFactoryBase;
 class KoShapeConfigWidgetBase;
 class KoDataCenter;
 
@@ -162,20 +162,20 @@ public:
      * Example:
      *  @code
      *  // Init shape Factories with our frame based configuration panels.
-     *  QList<KoShapeConfigFactory *> panels;
+     *  QList<KoShapeConfigFactoryBase *> panels;
      *  panels.append(new AppConfigFactory()); // insert some factory
      *  foreach(QString id, KoShapeRegistry::instance()->keys())
      *      KoShapeRegistry::instance()->value(id)->setOptionPanels(panels);
      *  @endcode
      * @see panelFactories()
      */
-    void setOptionPanels(const QList<KoShapeConfigFactory*> &panelFactories);
+    void setOptionPanels(const QList<KoShapeConfigFactoryBase*> &panelFactories);
 
     /**
      * Return the app-specific panels.
      * @see setOptionPanels()
      */
-    QList<KoShapeConfigFactory*> panelFactories();
+    QList<KoShapeConfigFactoryBase*> panelFactories();
 
     /**
      * pouplates the dataCenterMap with any datacenters the shapes might need.

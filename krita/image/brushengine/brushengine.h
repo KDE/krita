@@ -61,6 +61,7 @@ the settings class, for historical reasons)
 <li>On mouse-up, the paintop is destroyed
 
 </ul>
+*/
 
 #ifndef BRUSHENGINE
 #define BRUSHENGINE

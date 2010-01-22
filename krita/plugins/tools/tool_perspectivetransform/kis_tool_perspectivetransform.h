@@ -51,6 +51,8 @@ class KisToolPerspectiveTransform : public KisTool, KisCommandHistoryListener
 
     enum InterractionMode { DRAWRECTINTERRACTION, EDITRECTINTERRACTION };
     enum HandleSelected { NOHANDLE, TOPHANDLE, BOTTOMHANDLE, RIGHTHANDLE, LEFTHANDLE, MIDDLEHANDLE };
+    
+    typedef QVector<QPointF> QPointFVector;
 public:
     KisToolPerspectiveTransform(KoCanvasBase * canvas);
     virtual ~KisToolPerspectiveTransform();
@@ -78,13 +80,16 @@ private:
     void transform();
     void initHandles();
     void orderHandles();
+    QLineF::IntersectType middleHandlePos(QPolygonF, QPointF&);
+    QPolygonF midpointHandles(QPolygonF);
 
 protected slots:
     virtual void activate(bool);
     virtual void deactivate();
 
 private:
-    bool m_dragging;
+    bool m_drawing;
+    QPointF m_currentPt;
     InterractionMode m_interractionMode;
     QRect m_initialRect;
     QPointF m_dragStart, m_dragEnd;
@@ -99,7 +104,6 @@ private:
     int m_handleHalfSize, m_handleSize;
 
     // The following variables are used in during the draw rect interraction mode
-    typedef QVector<QPointF> QPointFVector;
     QPointFVector m_points;
     // The following variables are used when moving a middle handle
     HandleSelected m_handleSelected;

@@ -29,7 +29,7 @@ class KoPointerEvent;
 /**
  * Base class for events from custom input devices.
  */
-class FLAKE_EXPORT KoDeviceEvent : public QInputEvent
+class FLAKE_EXPORT KoInputDeviceHandlerEvent : public QInputEvent
 {
 public:
     enum Type {
@@ -39,9 +39,9 @@ public:
     };
 
     /// Constructs a new device event of the given type
-    KoDeviceEvent(Type type);
+    KoInputDeviceHandlerEvent(Type type);
 
-    virtual ~KoDeviceEvent();
+    virtual ~KoInputDeviceHandlerEvent();
 
     /// Creates and returns a KoPointerEvent for tools to consume
     virtual KoPointerEvent * pointerEvent() = 0;

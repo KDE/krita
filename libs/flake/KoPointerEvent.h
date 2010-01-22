@@ -28,7 +28,7 @@
 class QTabletEvent;
 class QMouseEvent;
 class QWheelEvent;
-class KoDeviceEvent;
+class KoInputDeviceHandlerEvent;
 
 #include "flake_export.h"
 
@@ -66,7 +66,7 @@ public:
      */
     KoPointerEvent(QWheelEvent *event, const QPointF &point);
 
-    KoPointerEvent(KoDeviceEvent *event, int x, int y, int z = 0, int rx = 0, int ry = 0, int rz = 0);
+    KoPointerEvent(KoInputDeviceHandlerEvent *event, int x, int y, int z = 0, int rx = 0, int ry = 0, int rz = 0);
 
     ~KoPointerEvent();
 

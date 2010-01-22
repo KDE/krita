@@ -17,49 +17,49 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoDeviceEvent.h"
+#include "KoInputDeviceHandlerEvent.h"
 #include "KoPointerEvent.h"
 #include <QtGui/QApplication>
 
-class KoDeviceEvent::Private
+class KoInputDeviceHandlerEvent::Private
 {
 public:
     Private()
             : button(Qt::NoButton), buttons(Qt::NoButton) {}
 
-    KoDeviceEvent::Type type;
+    KoInputDeviceHandlerEvent::Type type;
     Qt::MouseButton button;
     Qt::MouseButtons buttons;
 };
 
-KoDeviceEvent::KoDeviceEvent(Type type)
+KoInputDeviceHandlerEvent::KoInputDeviceHandlerEvent(Type type)
         : QInputEvent(static_cast<QEvent::Type>(type)), m_event(0), d(new Private())
 {
     modState = QApplication::keyboardModifiers();
 }
 
-KoDeviceEvent::~KoDeviceEvent()
+KoInputDeviceHandlerEvent::~KoInputDeviceHandlerEvent()
 {
     delete m_event;
     delete d;
 }
 
-Qt::MouseButton KoDeviceEvent::button() const
+Qt::MouseButton KoInputDeviceHandlerEvent::button() const
 {
     return d->button;
 }
 
-Qt::MouseButtons KoDeviceEvent::buttons() const
+Qt::MouseButtons KoInputDeviceHandlerEvent::buttons() const
 {
     return d->buttons;
 }
 
-void KoDeviceEvent::setButton(Qt::MouseButton b)
+void KoInputDeviceHandlerEvent::setButton(Qt::MouseButton b)
 {
     d->button = b;
 }
 
-void KoDeviceEvent::setButtons(Qt::MouseButtons b)
+void KoInputDeviceHandlerEvent::setButtons(Qt::MouseButtons b)
 {
     d->buttons = b;
 }

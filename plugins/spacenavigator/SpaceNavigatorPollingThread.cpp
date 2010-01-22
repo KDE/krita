@@ -19,7 +19,7 @@
  */
 
 #include "SpaceNavigatorPollingThread.h"
-#include <KoDeviceEvent.h>
+#include <KoInputDeviceHandlerEvent.h>
 #include <KDebug>
 #include <spnav.h>
 
@@ -77,18 +77,18 @@ void SpaceNavigatorPollingThread::run()
             {
                 /* SPNAV_EVENT_BUTTON */
                 Qt::MouseButton button = event.button.bnum == 0 ? Qt::LeftButton : Qt::RightButton;
-                KoDeviceEvent::Type type;
+                KoInputDeviceHandlerEvent::Type type;
                 if( event.button.press )
                 {
                     //kDebug() << "got button press event b(" << event.button.bnum << ")";
                     buttons |= button;
-                    type = KoDeviceEvent::ButtonPressed;
+                    type = KoInputDeviceHandlerEvent::ButtonPressed;
                 }
                 else
                 {
                     //kDebug() << "got button release event b(" << event.button.bnum << ")";
                     buttons &= ~button;
-                    type = KoDeviceEvent::ButtonReleased;
+                    type = KoInputDeviceHandlerEvent::ButtonReleased;
                 }
                 emit buttonEvent( currX, currY, currZ, currRX, currRY, currRZ, buttons, button, type );
             }

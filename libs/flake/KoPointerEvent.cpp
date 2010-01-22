@@ -21,7 +21,7 @@
 */
 
 #include "KoPointerEvent.h"
-#include "KoDeviceEvent.h"
+#include "KoInputDeviceHandlerEvent.h"
 #include <QTabletEvent>
 #include <QMouseEvent>
 #include <QWheelEvent>
@@ -35,7 +35,7 @@ public:
     QTabletEvent * tabletEvent;
     QMouseEvent * mouseEvent;
     QWheelEvent * wheelEvent;
-    KoDeviceEvent * deviceEvent;
+    KoInputDeviceHandlerEvent * deviceEvent;
     Qt::MouseButton tabletButton;
     QPoint globalPos, pos;
     int posZ;
@@ -66,7 +66,7 @@ KoPointerEvent::KoPointerEvent(QWheelEvent *ev, const QPointF &pnt)
     d->wheelEvent = ev;
 }
 
-KoPointerEvent::KoPointerEvent(KoDeviceEvent * ev, int x, int y, int z, int rx, int ry, int rz)
+KoPointerEvent::KoPointerEvent(KoInputDeviceHandlerEvent * ev, int x, int y, int z, int rx, int ry, int rz)
         : m_event(ev), d(new Private())
 {
     d->deviceEvent = ev;

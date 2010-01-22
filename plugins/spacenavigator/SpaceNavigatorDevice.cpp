@@ -74,7 +74,7 @@ bool SpaceNavigatorDevice::stop()
 
 void SpaceNavigatorDevice::slotMoveEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons buttons )
 {
-    SpaceNavigatorEvent e( KoDeviceEvent::PositionChanged );
+    SpaceNavigatorEvent e( KoInputDeviceHandlerEvent::PositionChanged );
     e.setPosition( x, y, z );
     e.setRotation( rx, ry, rz );
     e.setButton( Qt::NoButton );
@@ -101,7 +101,7 @@ void SpaceNavigatorDevice::slotMoveEvent( int x, int y, int z, int rx, int ry, i
 
 void SpaceNavigatorDevice::slotButtonEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons buttons, Qt::MouseButton button, int type )
 {
-    SpaceNavigatorEvent e( static_cast<KoDeviceEvent::Type>( type ) );
+    SpaceNavigatorEvent e( static_cast<KoInputDeviceHandlerEvent::Type>( type ) );
     e.setPosition( x, y, z );
     e.setRotation( rx, ry, rz );
     e.setButton( button );

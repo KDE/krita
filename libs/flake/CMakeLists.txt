@@ -91,7 +91,7 @@ set(flake_SRCS
     KoSharedSavingData.cpp
     KoViewConverter.cpp
     KoDevice.cpp
-    KoDeviceEvent.cpp
+    KoInputDeviceHandlerEvent.cpp
     KoInputDeviceHandlerRegistry.cpp
     KoEventAction.cpp
     KoEventActionFactoryBase.cpp

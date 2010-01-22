@@ -20,8 +20,8 @@
 #include "SpaceNavigatorEvent.h"
 #include <KoPointerEvent.h>
 
-SpaceNavigatorEvent::SpaceNavigatorEvent( KoDeviceEvent::Type type )
-: KoDeviceEvent( type )
+SpaceNavigatorEvent::SpaceNavigatorEvent( KoInputDeviceHandlerEvent::Type type )
+: KoInputDeviceHandlerEvent( type )
 {
 }
 

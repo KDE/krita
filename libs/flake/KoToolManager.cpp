@@ -38,7 +38,7 @@
 #include "KoShapeManager.h"
 #include "KoCanvasBase.h"
 #include "KoInputDeviceHandlerRegistry.h"
-#include "KoDeviceEvent.h"
+#include "KoInputDeviceHandlerEvent.h"
 #include "KoPointerEvent.h"
 #include "tools/KoZoomTool.h"
 #include "tools/KoZoomToolFactory.h"
@@ -825,14 +825,14 @@ bool KoToolManager::eventFilter(QObject *object, QEvent *event)
     return QObject::eventFilter(object, event);
 }
 
-void KoToolManager::injectDeviceEvent(KoDeviceEvent * event)
+void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)
 {
     if (d->canvasData && d->canvasData->canvas->canvas()) {
-        if (static_cast<KoDeviceEvent::Type>(event->type()) == KoDeviceEvent::ButtonPressed)
+        if (static_cast<KoInputDeviceHandlerEvent::Type>(event->type()) == KoInputDeviceHandlerEvent::ButtonPressed)
             d->canvasData->activeTool->customPressEvent(event->pointerEvent());
-        else if (static_cast<KoDeviceEvent::Type>(event->type()) == KoDeviceEvent::ButtonReleased)
+        else if (static_cast<KoInputDeviceHandlerEvent::Type>(event->type()) == KoInputDeviceHandlerEvent::ButtonReleased)
             d->canvasData->activeTool->customReleaseEvent(event->pointerEvent());
-        else if (static_cast<KoDeviceEvent::Type>(event->type()) ==  KoDeviceEvent::PositionChanged)
+        else if (static_cast<KoInputDeviceHandlerEvent::Type>(event->type()) ==  KoInputDeviceHandlerEvent::PositionChanged)
             d->canvasData->activeTool->customMoveEvent(event->pointerEvent());
     }
 }

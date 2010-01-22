@@ -37,7 +37,7 @@ class KActionCollection;
 class KoShape;
 class KoToolProxy;
 class QToolButton;
-class KoDeviceEvent;
+class KoInputDeviceHandlerEvent;
 class KoShapeLayer;
 
 /**
@@ -177,7 +177,7 @@ public:
     void requestToolActivation(KoCanvasController *controller);
 
     /// Injects an input event from a plugin based input device
-    void injectDeviceEvent(KoDeviceEvent *event);
+    void injectDeviceEvent(KoInputDeviceHandlerEvent *event);
 
     /// Returns the toolId of the currently active tool
     QString activeToolId() const;

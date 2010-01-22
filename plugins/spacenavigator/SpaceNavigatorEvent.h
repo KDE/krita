@@ -20,14 +20,14 @@
 #ifndef SPACENAVIGATOREVENT_H
 #define SPACENAVIGATOREVENT_H
 
-#include <KoDeviceEvent.h>
+#include <KoInputDeviceHandlerEvent.h>
 
 class KoPointerEvent;
 
-class SpaceNavigatorEvent : public KoDeviceEvent
+class SpaceNavigatorEvent : public KoInputDeviceHandlerEvent
 {
 public:
-    SpaceNavigatorEvent( KoDeviceEvent::Type type );
+    SpaceNavigatorEvent( KoInputDeviceHandlerEvent::Type type );
     virtual ~SpaceNavigatorEvent();
 
     void setPosition( int x, int y, int z );

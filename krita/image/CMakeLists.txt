@@ -103,6 +103,7 @@ set(kritaimage_LIB_SRCS
    kis_config_widget.cpp
    kis_convolution_kernel.cc
    kis_convolution_painter.cc
+   kis_cubic_curve.cpp
    kis_effect_mask.cc
    kis_fill_painter.cc
    kis_filter_mask.cpp

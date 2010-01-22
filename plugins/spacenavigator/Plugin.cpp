@@ -19,7 +19,7 @@
 #include "Plugin.h"
 #include "SpaceNavigatorDevice.h"
 
-#include <KoDeviceRegistry.h>
+#include <KoInputDeviceHandlerRegistry.h>
 
 #include <kgenericfactory.h>
 
@@ -28,7 +28,7 @@ K_EXPORT_COMPONENT_FACTORY(spacenavigator, KGenericFactory<Plugin>( "spacenaviga
 Plugin::Plugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
-    KoDeviceRegistry::instance()->add(new SpaceNavigatorDevice(parent));
+    KoInputDeviceHandlerRegistry::instance()->add(new SpaceNavigatorDevice(parent));
 }
 
 #include "Plugin.moc"

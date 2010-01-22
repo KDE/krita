@@ -92,7 +92,7 @@ set(flake_SRCS
     KoViewConverter.cpp
     KoDevice.cpp
     KoDeviceEvent.cpp
-    KoDeviceRegistry.cpp
+    KoInputDeviceHandlerRegistry.cpp
     KoEventAction.cpp
     KoEventActionFactoryBase.cpp
     KoEventActionRegistry.cpp

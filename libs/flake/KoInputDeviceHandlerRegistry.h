@@ -32,23 +32,23 @@
  * These will get routed the the active tools which can then do whatever
  * they like with it.
  */
-class FLAKE_EXPORT KoDeviceRegistry : public QObject, public KoGenericRegistry<KoDevice*>
+class FLAKE_EXPORT KoInputDeviceHandlerRegistry : public QObject, public KoGenericRegistry<KoDevice*>
 {
     Q_OBJECT
 
 public:
-    ~KoDeviceRegistry();
+    ~KoInputDeviceHandlerRegistry();
 
     /**
-     * Return an instance of the KoDeviceRegistry
+     * Return an instance of the KoInputDeviceHandlerRegistry
      * Create a new instance on first call and return the singleton.
      */
-    static KoDeviceRegistry *instance();
+    static KoInputDeviceHandlerRegistry *instance();
 
 private:
-    KoDeviceRegistry();
-    KoDeviceRegistry(const KoDeviceRegistry&);
-    KoDeviceRegistry operator=(const KoDeviceRegistry&);
+    KoInputDeviceHandlerRegistry();
+    KoInputDeviceHandlerRegistry(const KoInputDeviceHandlerRegistry&);
+    KoInputDeviceHandlerRegistry operator=(const KoInputDeviceHandlerRegistry&);
     void init();
 
     class Private;

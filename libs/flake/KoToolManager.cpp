@@ -37,7 +37,7 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
 #include "KoCanvasBase.h"
-#include "KoDeviceRegistry.h"
+#include "KoInputDeviceHandlerRegistry.h"
 #include "KoDeviceEvent.h"
 #include "KoPointerEvent.h"
 #include "tools/KoZoomTool.h"
@@ -174,7 +174,7 @@ void KoToolManager::Private::setup()
         connect(tool, SIGNAL(toolActivated(ToolHelper*)), q, SLOT(toolActivated(ToolHelper*)));
 
     // load pluggable input devices
-    KoDeviceRegistry::instance();
+    KoInputDeviceHandlerRegistry::instance();
 }
 
 void KoToolManager::Private::switchTool(KoTool *tool, bool temporary)

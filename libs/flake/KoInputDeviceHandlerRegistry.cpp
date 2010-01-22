@@ -17,16 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoDeviceRegistry.h"
+#include "KoInputDeviceHandlerRegistry.h"
 #include <KGlobal>
 
 #include <KoPluginLoader.h>
 
-KoDeviceRegistry::KoDeviceRegistry()
+KoInputDeviceHandlerRegistry::KoInputDeviceHandlerRegistry()
 {
 }
 
-void KoDeviceRegistry::init()
+void KoInputDeviceHandlerRegistry::init()
 {
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "DevicePlugins";
@@ -42,7 +42,7 @@ void KoDeviceRegistry::init()
     }
 }
 
-KoDeviceRegistry::~KoDeviceRegistry()
+KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
 {
     foreach(const QString & id, keys()) {
         KoDevice * d = value(id);
@@ -51,13 +51,13 @@ KoDeviceRegistry::~KoDeviceRegistry()
     }
 }
 
-KoDeviceRegistry* KoDeviceRegistry::instance()
+KoInputDeviceHandlerRegistry* KoInputDeviceHandlerRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoDeviceRegistry, s_instance)
+    K_GLOBAL_STATIC(KoInputDeviceHandlerRegistry, s_instance)
     if (!s_instance.exists()) {
         s_instance->init();
     }
     return s_instance;
 }
 
-#include <KoDeviceRegistry.moc>
+#include <KoInputDeviceHandlerRegistry.moc>

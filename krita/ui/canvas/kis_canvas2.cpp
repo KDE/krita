@@ -83,16 +83,16 @@ public:
         delete toolProxy;
     }
 
-    KoViewConverter * viewConverter;
-    KisView2 * view;
-    KisAbstractCanvasWidget * canvasWidget;
-    KoShapeManager * shapeManager;
-    KoColorProfile * monitorProfile;
+    KoViewConverter *viewConverter;
+    KisView2 *view;
+    KisAbstractCanvasWidget *canvasWidget;
+    KoShapeManager *shapeManager;
+    KoColorProfile *monitorProfile;
     bool currentCanvasIsOpenGL;
     bool currentCanvasUsesOpenGLShaders;
-    KoToolProxy * toolProxy;
+    KoToolProxy *toolProxy;
     QPoint documentOffset;
-    KoShapeControllerBase * sc;
+    KoShapeControllerBase *sc;
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif

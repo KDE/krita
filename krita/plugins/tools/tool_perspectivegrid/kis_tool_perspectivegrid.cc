@@ -53,8 +53,6 @@ KisToolPerspectiveGrid::KisToolPerspectiveGrid(KoCanvasBase * canvas)
     Q_ASSERT(m_canvas);
     setObjectName("tool_perspectivegrid");
 
-
-    m_drawing = false;
     m_drawing = false;
 }
 

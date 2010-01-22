@@ -94,6 +94,7 @@ qreal KoViewConverter::viewToDocumentY(qreal viewY) const
 
 void KoViewConverter::setZoom(qreal zoom)
 {
+    Q_ASSERT((int)zoom >= 0);
     m_zoomLevel = zoom;
 }
 

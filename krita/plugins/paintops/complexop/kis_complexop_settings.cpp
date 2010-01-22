@@ -30,6 +30,14 @@
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
 
+#include <kis_image.h>
+#include <KoViewConverter.h>
+#include <kis_boundary.h>
+#include <kis_boundary_painter.h>
+#include <kis_paint_device.h> // TODO remove me when KisBoundary is used as pointers
+
+#include "kis_complexop_settings_widget.h"
+
 KisComplexOpSettings::KisComplexOpSettings()
         : m_options(0)
 {
@@ -44,3 +52,17 @@ bool KisComplexOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
+void KisComplexOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const
+{
+    KisComplexOpSettingsWidget* options = dynamic_cast<KisComplexOpSettingsWidget*>(optionsWidget());
+    if(!options)
+        return;
+
+    if (_mode != CURSOR_IS_OUTLINE) return;
+    KisBrushSP brush = options->m_brushOption->brush();
+    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
+    painter.setPen(Qt::black);
+    painter.setBackground(Qt::black);
+    painter.translate(converter.documentToView(pos - image->pixelToDocument(hotSpot + QPointF(0.5, 0.5))));
+    KisBoundaryPainter::paint(brush->boundary(), image, painter, converter);
+}

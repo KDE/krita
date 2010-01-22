@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,20 +49,17 @@ KisSumiShapeOption::KisSumiShapeOption()
 
 KisSumiShapeOption::~KisSumiShapeOption()
 {
-    // delete m_options;
+    delete m_options;
 }
 
 
-int KisSumiShapeOption::brushDimension() const
+bool KisSumiShapeOption::isbrushDimension1D() const
 {
-    if (m_options->oneDimBrushBtn->isChecked()) {
-        return 1;
-    } else
-        return 2;
+    return m_options->oneDimBrushBtn->isChecked();
 }
 
 
-bool KisSumiShapeOption::mousePressure() const
+bool KisSumiShapeOption::useMousePressure() const
 {
     return m_options->mousePressureCBox->isChecked();
 }
@@ -111,30 +108,28 @@ double KisSumiShapeOption::shearFactor() const
 
 void KisSumiShapeOption::readOptionSetting(const KisPropertiesConfiguration* config)
 {
-    m_options->radiusSpinBox->setValue(config->getInt("radius"));
-    m_options->sigmaSpinBox->setValue(config->getDouble("sigma"));
-    int brushDimensions = config->getInt("brush_dimension");
-    if (brushDimensions == 1) {
+    m_options->radiusSpinBox->setValue(config->getInt(SUMI_RADIUS));
+    m_options->sigmaSpinBox->setValue(config->getDouble(SUMI_SIGMA));
+    if (config->getBool(SUMI_IS_DIMENSION_1D)) {
         m_options->oneDimBrushBtn->setChecked(true);
     } else {
         m_options->twoDimBrushBtn->setChecked(true);
     }
-
-    m_options->mousePressureCBox->setChecked(config->getBool("mouse_pressure"));
-    m_options->shearBox->setValue(config->getDouble("shear_factor"));
-    m_options->rndBox->setValue(config->getDouble("random_factor"));
-    m_options->scaleBox->setValue(config->getDouble("scale_factor"));
+    m_options->mousePressureCBox->setChecked(config->getBool(SUMI_USE_MOUSEPRESSURE));
+    m_options->shearBox->setValue(config->getDouble(SUMI_SHEAR));
+    m_options->rndBox->setValue(config->getDouble(SUMI_RANDOM));
+    m_options->scaleBox->setValue(config->getDouble(SUMI_SCALE));
 }
 
 
 void KisSumiShapeOption::writeOptionSetting(KisPropertiesConfiguration* config) const
 {
-    config->setProperty("radius", radius());
-    config->setProperty("sigma", sigma());
-    config->setProperty("brush_dimension", brushDimension());
-    config->setProperty("mouse_pressure", mousePressure());
-    config->setProperty("shear_factor", shearFactor());
-    config->setProperty("random_factor", randomFactor());
-    config->setProperty("scale_factor", scaleFactor());
+    config->setProperty(SUMI_RADIUS,radius());
+    config->setProperty(SUMI_SIGMA,sigma());
+    config->setProperty(SUMI_IS_DIMENSION_1D,isbrushDimension1D()); 
+    config->setProperty(SUMI_USE_MOUSEPRESSURE,useMousePressure());
+    config->setProperty(SUMI_SCALE,scaleFactor());
+    config->setProperty(SUMI_SHEAR,shearFactor());
+    config->setProperty(SUMI_RANDOM,randomFactor());
 }
 

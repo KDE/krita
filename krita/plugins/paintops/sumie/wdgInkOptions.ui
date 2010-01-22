@@ -22,7 +22,7 @@
     <height>400</height>
    </size>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>300</x>
@@ -270,7 +270,7 @@
      <enum>QSlider::TicksBelow</enum>
     </property>
    </widget>
-   <widget class="QCheckBox" name="weightSaturationCBox">
+   <widget class="QCheckBox" name="useWeightCHBox">
     <property name="geometry">
      <rect>
       <x>9</x>

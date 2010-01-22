@@ -20,6 +20,16 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
+const QString SUMI_INK_AMOUNT = "SumiInk/inkAmount";
+const QString SUMI_INK_USE_SATURATION = "SumiInk/useSaturation";
+const QString SUMI_INK_USE_OPACITY = "SumiInk/useOpacity";
+const QString SUMI_INK_USE_WEIGHTS = "SumiInk/useWeights";
+const QString SUMI_INK_PRESSURE_WEIGHT = "SumiInk/pressureWeights";
+const QString SUMI_INK_BRISTLE_LENGTH_WEIGHT = "SumiInk/bristleLengthWeights";
+const QString SUMI_INK_BRISTLE_INK_AMOUNT_WEIGHT = "SumiInk/bristleInkAmountWeight";
+const QString SUMI_INK_DEPLETION_WEIGHT = "SumiInk/inkDepletionWeight";
+const QString SUMI_INK_DEPLETION_CURVE = "SumiInk/inkDepletionCurve";
+
 class KisInkOptionsWidget;
 
 class KisSumiInkOption : public KisPaintOpOption

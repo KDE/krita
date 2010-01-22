@@ -48,3 +48,14 @@ KisPropertiesConfiguration*  KisSumiPaintOpSettingsWidget::configuration() const
     writeConfiguration(config);
     return config;
 }
+
+void KisSumiPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
+{
+    // if the movement is more left<->right then up<->down
+    if (qAbs(x) > qAbs(y)){
+        m_sumiShapeOption->setRadius( m_sumiShapeOption->radius() + qRound(x) );
+    }
+    else 
+    {
+    }
+}

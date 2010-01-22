@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 #include "kis_sumi_paintop_settings.h"
 
 #include <cmath>
-
 #include <QRect>
 
 #include <kis_image.h>
@@ -32,6 +31,9 @@
 
 #include "brush.h"
 #include "brush_shape.h"
+
+#include <kis_sumi_ink_option.h>
+#include <kis_sumi_shape_option.h>
 
 #ifdef BENCHMARK
     #include <QTime>
@@ -47,57 +49,54 @@ KisSumiPaintOp::KisSumiPaintOp(const
 
 {
     Q_ASSERT(settings);
-    BrushShape brushShape;
-
-    if (settings->brushDimension() == 1) {
-        brushShape.fromLine(settings->radius(), settings->sigma());
-        brushShape.tresholdBristles(0.1);
-    } else if (settings->brushDimension() == 2) {
-        brushShape.fromGaussian(settings->radius(), settings->sigma());
-        brushShape.tresholdBristles(0.1);
-    } else {
-        Q_ASSERT(false);
-    }
-
-    m_brush.setBrushShape(brushShape);
-
-    m_brush.enableMousePressure(settings->mousePressure());
-
-    m_brush.setInkDepletion(settings->curve());
-    m_brush.setInkColor(painter->paintColor());
-
-    m_brush.setScale(settings->scaleFactor());
-    m_brush.setRandom(settings->randomFactor());
-    m_brush.setShear(settings->shearFactor());
-
-    m_brush.enableWeights(settings->useWeights());
-    m_brush.enableOpacity(settings->useOpacity());
-    m_brush.enableSaturation(settings->useSaturation());
-
-    if (settings->useWeights()) {
-        // TODO : improve the way the weights can be set..
-        m_brush.setBristleInkAmountWeight(settings->bristleInkAmountWeight() / 100.0);
-        m_brush.setBristleLengthWeight(settings->bristleLengthWeight() / 100.0);
-        m_brush.setInkDepletionWeight(settings->inkDepletionWeight() / 100.0);
-        m_brush.setPressureWeight(settings->pressureWeight() / 100.0);
-    }
-
+    loadSettings(settings);
+    m_brush.setProperties( &m_properties );
+    
+    m_brush.setInkColor(painter->paintColor());    
     if (!settings->node()) {
         m_dev = 0;
     } else {
         m_dev = settings->node()->paintDevice();
     }
-
 #ifdef BENCHMARK
     m_count = m_total = 0;
 #endif
-
-
 }
 
-KisSumiPaintOp::~KisSumiPaintOp()
+void KisSumiPaintOp::loadSettings(const KisSumiPaintOpSettings* settings)
 {
+    m_properties.radius = settings->getInt(SUMI_RADIUS);
+    m_properties.inkAmount = settings->getInt(SUMI_INK_AMOUNT);
+    m_properties.sigma = settings->getDouble(SUMI_SIGMA);
+    //TODO: fix after few days
+    m_properties.inkDepletionCurve = settings->inkDepletionCurve();
+    m_properties.isbrushDimension1D = settings->getBool(SUMI_IS_DIMENSION_1D);
+    m_properties.useMousePressure = settings->getBool(SUMI_USE_MOUSEPRESSURE);
+    m_properties.useSaturation = settings->getBool(SUMI_INK_USE_SATURATION);
+    m_properties.useOpacity = settings->getBool(SUMI_INK_USE_OPACITY);
+    m_properties.useWeights = settings->getBool(SUMI_INK_USE_WEIGHTS);
+
+    m_properties.pressureWeight = settings->getDouble(SUMI_INK_PRESSURE_WEIGHT) / 100.0;
+    m_properties.bristleLengthWeight = settings->getDouble(SUMI_INK_BRISTLE_LENGTH_WEIGHT) / 100.0;
+    m_properties.bristleInkAmountWeight = settings->getDouble(SUMI_INK_BRISTLE_INK_AMOUNT_WEIGHT) / 100.0;
+    m_properties.inkDepletionWeight = settings->getDouble(SUMI_INK_DEPLETION_WEIGHT);
+
+    m_properties.shearFactor = settings->getDouble(SUMI_SHEAR);
+    m_properties.randomFactor = settings->getDouble(SUMI_RANDOM);
+    m_properties.scaleFactor = settings->getDouble(SUMI_SCALE);
+    
+    BrushShape brushShape;
+    if (m_properties.isbrushDimension1D) 
+    {
+        brushShape.fromLine(m_properties.radius, m_properties.sigma);
+        brushShape.tresholdBristles(0.1);
+    } else {
+        brushShape.fromGaussian(m_properties.radius, m_properties.sigma);
+        brushShape.tresholdBristles(0.1);
+    }
+    m_brush.setBrushShape(brushShape);
 }
+
 
 void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 {

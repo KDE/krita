@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,13 +32,9 @@ class KisSumiPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 public:
     KisSumiPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisSumiPaintOpSettingsWidget();
+    virtual void changePaintOpSize(qreal x, qreal y);
 
     KisPropertiesConfiguration* configuration() const;
-
-    /*    void setConfiguration( const KisPropertiesConfiguration * config);
-        void writeConfiguration( KisPropertiesConfiguration *config ) const;
-
-    */
 
 public:
     KisSumiShapeOption * m_sumiShapeOption;

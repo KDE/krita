@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@
 #include <QList>
 
 #include "kis_random_accessor.h"
-//#include "widgets/kis_curve_widget.h"
 
 #include <cmath>
 #include <ctime>
@@ -44,43 +43,15 @@ inline double drand48()
 }
 #endif
 
-Brush::Brush(const BrushShape &initialShape, const KoColor &inkColor)
-{
-    setBrushShape(initialShape);
-    setInkColor(inkColor);
-    initDefaultValues();
-    srand48(time(0));
-}
 
 Brush::Brush()
 {
-    initDefaultValues();
-
-    //TODO clean up this code
-    BrushShape bs;
-    m_radius = 20;
-    m_sigma = 20.f;
-    //bs.fromGaussian( m_radius, m_sigma );
-    bs.fromLine(m_radius, m_sigma);
-    setBrushShape(bs);
-}
-
-void Brush::initDefaultValues()
-{
+    srand48(time(0));
     m_counter = 0;
     m_lastAngle = 0.0;
     m_oldPressure = 0.0f;
-
-    m_useSaturation = false;
-    m_useOpacity = true;
-    m_useWeights = false;
-
-    // equally set weights
-    m_bristleLengthWeight = 1.0 / 4.0;
-    m_bristleInkAmountWeight = 1.0 / 4.0;
-    m_pressureWeight = 1.0 / 4.0;
-    m_inkDepletionWeight = 1.0 / 4.0;
 }
+
 
 void Brush::setBrushShape(BrushShape brushShape)
 {
@@ -88,10 +59,6 @@ void Brush::setBrushShape(BrushShape brushShape)
     m_bristles = brushShape.getBristles();
 }
 
-void Brush::enableMousePressure(bool enable)
-{
-    m_mousePressureEnabled = enable;
-}
 
 void Brush::setInkColor(const KoColor &color)
 {
@@ -99,23 +66,6 @@ void Brush::setInkColor(const KoColor &color)
         m_bristles[i].setColor(color);
     }
     m_inkColor = color;
-}
-
-
-void Brush::setInkDepletion(const QList<float>& curveData)
-{
-    int count = curveData.size();
-
-    for (int i = 0; i < count ; i++) {
-        m_inkDepletion.append(curveData.at(i));
-    }
-}
-
-void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info)
-{
-    // TODO lets paint footprint of the brush here
-    Q_UNUSED(dev)
-    Q_UNUSED(info)
 }
 
 
@@ -139,14 +89,14 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     qreal distance = sqrt(dx * dx + dy * dy);
 
     qreal pressure = pi2.pressure();
-    if (m_mousePressureEnabled && pi2.pressure() == 0.5) { // it is mouse and want pressure from mouse movement
+    if (m_properties->useMousePressure && pi2.pressure() == 0.5) { // it is mouse and want pressure from mouse movement
         pressure = 1.0 - computeMousePressure(distance);
     } else if (pi2.pressure() == 0.5) { // if it is mouse
         pressure = 1.0;
     }
 
     Bristle *bristle = 0;
-    KoColor brColor;
+    KoColor bristleColor;
 
     KisRandomAccessor accessor = dev->createRandomAccessor((int)x1, (int)y1);
     m_pixelSize = dev->colorSpace()->pixelSize();
@@ -178,6 +128,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
     int size = m_bristles.size();
     Trajectory trajectory; // used for interpolation the path of bristles
     QVector<QPointF> bristlePath; // path for single bristle
+    int inkDepletionSize = m_properties->inkDepletionCurve.size();
     for (int i = 0; i < size; i++) {
         /*            if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
                       continue;
@@ -185,9 +136,9 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
         bristle = &m_bristles[i];
 
         qreal fx1, fy1, fx2, fy2;
-        qreal rndFactor = m_randomFactor;
-        qreal scaleFactor = m_scaleFactor;
-        qreal shearFactor = m_shearFactor;
+        qreal rndFactor = m_properties->randomFactor;
+        qreal scaleFactor = m_properties->scaleFactor;
+        qreal shearFactor = m_properties->shearFactor;
 
         qreal randomX = drand48();
         qreal randomY = drand48();
@@ -225,31 +176,31 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
         // paint between first and last dab
         bristlePath = trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
 
-        brColor = bristle->color();
+        bristleColor = bristle->color();
         int bristleCounter = 0;
         int brpathSize = bristlePath.size();
-        int inkDepletionSize = m_inkDepletion.size();
+        
 
 
         for (int i = 0; i < brpathSize ; i++) {
             bristleCounter = bristle->increment();
             if (bristleCounter >= inkDepletionSize - 1) {
-                inkDeplation = m_inkDepletion[inkDepletionSize - 1];
+                inkDeplation = m_properties->inkDepletionCurve[inkDepletionSize - 1];
             } else {
-                inkDeplation = m_inkDepletion[bristleCounter];
+                inkDeplation = m_properties->inkDepletionCurve[bristleCounter];
             }
 
             // saturation transformation of the bristle ink color
             // add check for hsv transformation
-            if (m_useSaturation && transfo != 0) {
-                if (m_useWeights) {
+            if (m_properties->useSaturation && transfo != 0) {
+                if (m_properties->useWeights) {
 
                     // new weighted way (experiment)
                     saturationVariant = (
-                                            (pressure * m_pressureWeight) +
-                                            (bristle->length() * m_bristleLengthWeight) +
-                                            (bristle->inkAmount() * m_bristleInkAmountWeight) +
-                                            ((1.0 - inkDeplation) * m_inkDepletionWeight)) - 1.0;
+                                            (pressure * m_properties->pressureWeight) +
+                                            (bristle->length() * m_properties->bristleLengthWeight) +
+                                            (bristle->inkAmount() * m_properties->bristleInkAmountWeight) +
+                                            ((1.0 - inkDeplation) * m_properties->inkDepletionWeight)) - 1.0;
                 } else {
                     // old way of computing saturation
                     saturationVariant = (
@@ -260,18 +211,18 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
 
                 }
                 transfo->setParameter(saturation, saturationVariant);
-                transfo->transform(m_inkColor.data(), brColor.data() , 1);
+                transfo->transform(m_inkColor.data(), bristleColor.data() , 1);
             }
 
             // opacity transformation of the bristle color
-            if (m_useOpacity) {
+            if (m_properties->useOpacity) {
                 qreal opacity = 255.0;
-                if (m_useWeights) {
+                if (m_properties->useWeights) {
                     opacity = (
-                                  (pressure * m_pressureWeight) +
-                                  (bristle->length() * m_bristleLengthWeight) +
-                                  (bristle->inkAmount() * m_bristleInkAmountWeight) +
-                                  ((1.0 - inkDeplation) * m_inkDepletionWeight)) * 255.0;
+                                  (pressure * m_properties->pressureWeight) +
+                                  (bristle->length() * m_properties->bristleLengthWeight) +
+                                  (bristle->inkAmount() * m_properties->bristleInkAmountWeight) +
+                                  ((1.0 - inkDeplation) * m_properties->inkDepletionWeight)) * 255.0;
 
                 } else {
                     opacity =
@@ -281,11 +232,11 @@ void Brush::paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPai
                         bristle->inkAmount() *
                         (1.0 - inkDeplation);
                 }
-                brColor.setOpacity(static_cast<int>(opacity));
+                bristleColor.setOpacity(static_cast<int>(opacity));
             }
 
             QPointF *bristlePos = &bristlePath[i];
-            addBristleInk(bristle, bristlePos->x(), bristlePos->y(), brColor);
+            addBristleInk(bristle, bristlePos->x(), bristlePos->y(), bristleColor);
 
 #if 0
             // some kind of nice weighted bidirectional painting
@@ -343,12 +294,7 @@ void Brush::repositionBristles(double angle, double slope)
     }
 }
 
-Brush::~Brush()
-{
-    /*    if (!m_dabAccessor){
-          delete m_dabAccessor;
-          }*/
-}
+Brush::~Brush(){}
 
 inline void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
@@ -570,15 +516,6 @@ void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &colo
 //     }
 }
 
-void Brush::setRadius(int radius)
-{
-    m_radius = radius;
-}
-
-void Brush::setSigma(double sigma)
-{
-    m_sigma = sigma;
-}
 
 double Brush::computeMousePressure(double distance)
 {

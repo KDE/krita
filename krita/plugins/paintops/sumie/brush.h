@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,75 +32,56 @@
 #include <kis_paint_information.h>
 #include <kis_random_accessor.h>
 
+class KisSumiProperties{
+public:
+    quint16 radius;
+    quint16 inkAmount;
+    qreal sigma;
+    QList<float> inkDepletionCurve;
+    bool isbrushDimension1D;
+    bool useMousePressure;
+    bool useSaturation;
+    bool useOpacity;
+    bool useWeights;
+
+    quint8 pressureWeight;
+    quint8 bristleLengthWeight;
+    quint8 bristleInkAmountWeight;
+    quint8 inkDepletionWeight;
+
+    qreal shearFactor;
+    qreal randomFactor;
+    qreal scaleFactor;
+};
+
 class Brush
 {
 
 public:
-    Brush(const BrushShape &initialShape, const KoColor &inkColor);
     Brush();
     ~Brush();
-    void paint(KisPaintDeviceSP dev, const KisPaintInformation &info);
     void paintLine(KisPaintDeviceSP dev, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
-    void setInkDepletion(const QList<float>& curveData);
-    void setInkColor(const KoColor &color);
 
     void repositionBristles(double angle, double slope);
     void rotateBristles(double angle);
-
+    double computeMousePressure(double distance);
     double getAngleDelta(const KisPaintInformation& info);
 
-    void setRadius(int radius);
-    void setSigma(double sigma);
+    void setInkColor(const KoColor &color);
     void setBrushShape(BrushShape brushShape);
-    double computeMousePressure(double distance);
-    void enableMousePressure(bool enable);
-
-    void setShear(double shearFactor) {
-        m_shearFactor = shearFactor;
-    }
-    void setRandom(double randomFactor) {
-        m_randomFactor = randomFactor;
-    }
-    void setScale(double scaleFactor) {
-        m_scaleFactor = scaleFactor;
-    }
-
-    void enableWeights(bool useWeights) {
-        m_useWeights = useWeights;
-    }
-    void enableSaturation(bool useSaturation) {
-        m_useSaturation = useSaturation;
-    }
-    void enableOpacity(bool useOpacity) {
-        m_useOpacity = useOpacity;
-    }
-
-
-    void setPressureWeight(double pressureWeight) {
-        m_pressureWeight = pressureWeight;
-    }
-    void setBristleLengthWeight(double bristleLengthWeight) {
-        m_bristleLengthWeight = bristleLengthWeight;
-    }
-    void setBristleInkAmountWeight(double bristleInkAmountWeight) {
-        m_bristleInkAmountWeight = bristleInkAmountWeight;
-    }
-    void setInkDepletionWeight(double inkDepletionWeight) {
-        m_inkDepletionWeight = inkDepletionWeight;
-    }
-
+    void setProperties(KisSumiProperties * properties){ m_properties = properties; }
+    
     /// paints single bristle
     void putBristle(Bristle *bristle, float wx, float wy, const KoColor &color);
     void mixCMY(double x, double y, int cyan, int magenta, int yellow, double weight);
     void addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
     void oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
-    void initDefaultValues();
 
 private:
+    const KisSumiProperties * m_properties;
+    
     QVector<Bristle> m_bristles;
-    QList<float> m_inkDepletion; // array
     QTransform m_transform;
-
 
     BrushShape m_initialShape;
     KoColor m_inkColor;
@@ -117,29 +98,11 @@ private:
 
     int m_counter;
 
-    int m_radius;
-    double m_sigma;
-
     double m_lastAngle;
     double m_lastSlope;
 
     double m_angle;
     double m_oldPressure;
-
-    bool m_mousePressureEnabled;
-
-    double m_scaleFactor;
-    double m_randomFactor;
-    double m_shearFactor;
-
-    double m_pressureWeight;
-    double m_bristleLengthWeight;
-    double m_bristleInkAmountWeight;
-    double m_inkDepletionWeight;
-
-    bool m_useWeights;
-    bool m_useSaturation;
-    bool m_useOpacity;
 };
 
 #endif

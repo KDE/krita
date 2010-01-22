@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,51 +20,33 @@
 #ifndef KIS_SUMIPAINTOP_SETTINGS_H_
 #define KIS_SUMIPAINTOP_SETTINGS_H_
 
+#include <QList>
+
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
-#include "kis_sumi_paintop_settings_widget.h"
 
-class QWidget;
-class QDomElement;
-class QDomDocument;
+class QPainter;
+class KoViewConverter;
 
 class KisSumiPaintOpSettings : public KisPaintOpSettings
 {
 
 public:
-    KisSumiPaintOpSettings();
-    virtual ~KisSumiPaintOpSettings() {}
-
     bool paintIncremental();
 
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
-
-    virtual void changePaintOpSize(qreal x, qreal y) const;
-
-    QList<float> curve() const;
-    int radius() const;
-    double sigma() const;
-    int brushDimension() const;
-    int inkAmount() const;
-    bool mousePressure() const;
-
-    bool useSaturation() const;
-    bool useOpacity() const;
-    bool useWeights() const;
-
-    int pressureWeight() const;
-    int bristleLengthWeight() const;
-    int bristleInkAmountWeight() const;
-    int inkDepletionWeight() const;
-
-    double shearFactor() const;
-    double randomFactor() const;
-    double scaleFactor() const;
-
-private:
-
-    KisSumiPaintOpSettingsWidget* m_options;
+    
+    void setInkDepletion(QList<float> curve){
+        m_inkDepletionCurve = curve;
+    }
+    
+    QList<float> inkDepletionCurve() const{
+        return m_inkDepletionCurve;
+    }
+    
+    private:
+        QList<float> m_inkDepletionCurve;
 };
 
 #endif

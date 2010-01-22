@@ -31,6 +31,7 @@
 
 #include "kis_sumi_paintop_settings.h"
 
+
 class QPointF;
 class KisPainter;
 
@@ -39,7 +40,6 @@ class KisSumiPaintOp : public KisPaintOp
 
 public:
     KisSumiPaintOp(const KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
-    virtual ~KisSumiPaintOp();
 
     void paintAt(const KisPaintInformation& info);
     double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
@@ -49,22 +49,21 @@ public:
         Q_UNUSED(ySpacing);
         Q_UNUSED(pressure1);
         Q_UNUSED(pressure2);
-        // XXX: this is wrong, but that doesn't matter, since paintLine doesn't use spacing.
+        // this is wrong, but that doesn't matter, since paintLine doesn't use spacing.
         return 0.5;
     }
 
-
 private:
-
+    KisSumiProperties m_properties;
     const KisSumiPaintOpSettings* m_settings;
-    QPointF m_previousPoint;
+
     KisImageWSP m_image;
     bool newStrokeFlag;
-
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
-
     Brush m_brush;
+
+    void loadSettings(const KisSumiPaintOpSettings* settings);
     
 #ifdef BENCHMARK
     int m_total;

@@ -1,5 +1,3 @@
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 include_directories( ${KDE4_INCLUDES} )
 
 set(koplugin_LIB_SRCS

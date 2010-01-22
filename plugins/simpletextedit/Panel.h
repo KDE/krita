@@ -19,7 +19,7 @@
 #ifndef PANEL_H
 #define PANEL_H
 
-#include <KoCanvasObserver.h>
+#include <KoCanvasObserverBase.h>
 
 #include <QDockWidget>
 #include <QHash>
@@ -29,7 +29,7 @@
 class KAction;
 class KoTextEditor;
 
-class Panel : public QDockWidget, public KoCanvasObserver {
+class Panel : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     Panel(QWidget *parent = 0);

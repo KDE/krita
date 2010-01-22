@@ -20,18 +20,18 @@
 
 #include <QDockWidget>
 #include <KoColor.h>
-#include <KoCanvasObserver.h>
+#include <KoCanvasObserverBase.h>
 
 class KoColorPopupAction;
 class KoColorSlider;
 class KoColorPatch;
 class KisView2;
 
-class DigitalMixerDock : public QDockWidget, public KoCanvasObserver {
+class DigitalMixerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     DigitalMixerDock( KisView2 *view );
-    /// reimplemented from KoCanvasObserver
+    /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
 public slots:
     void setCurrentColor(const KoColor& );

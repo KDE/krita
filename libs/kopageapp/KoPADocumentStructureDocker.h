@@ -23,7 +23,7 @@
 #include <QDockWidget>
 #include <QHash>
 #include <KoDockFactory.h>
-#include <KoCanvasObserver.h>
+#include <KoCanvasObserverBase.h>
 #include <KoDocumentSectionView.h>
 #include <KoPageApp.h>
 
@@ -59,7 +59,7 @@ private:
     KoPageApp::PageType m_pageType;
 };
 
-class KoPADocumentStructureDocker : public QDockWidget, public KoCanvasObserver
+class KoPADocumentStructureDocker : public QDockWidget, public KoCanvasObserverBase
 {
 Q_OBJECT
 

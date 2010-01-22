@@ -29,7 +29,7 @@ class QDockWidget;
 /**
  * Base class for factories used to create new dock widgets.
  * @see KoDockRegistry
- * @see KoCanvasObserver
+ * @see KoCanvasObserverBase
  */
 class FLAKE_EXPORT KoDockFactory
 {

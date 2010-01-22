@@ -13,8 +13,8 @@ add_subdirectory(pics)
 set(flake_SRCS
     KoFlake.cpp
     KoCanvasBase.cpp
-    KoCanvasObserver.cpp
     KoCanvasResourceProvider.cpp
+    KoCanvasObserverBase.cpp
     KoCanvasSupervisor.cpp
     KoCutController.cpp
     KoCopyController.cpp
@@ -209,7 +209,7 @@ install(
     flake_export.h
     KoCanvasBase.h
     KoCanvasController.h
-    KoCanvasObserver.h
+    KoCanvasObserverBase.h
     KoCanvasSupervisor.h
     KoCanvasResourceProvider.h
     KoCopyController.h

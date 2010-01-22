@@ -29,13 +29,13 @@
 #define STROKEDOCKER_H
 
 #include <KoUnit.h>
-#include <KoCanvasObserver.h>
+#include <KoCanvasObserverBase.h>
 #include <QtGui/QDockWidget>
 
 class KoShapeBorderModel;
 
 /// A docker for setting properties of a line border
-class StrokeDocker : public QDockWidget, public KoCanvasObserver
+class StrokeDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 

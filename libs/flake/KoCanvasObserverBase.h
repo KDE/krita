@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCANVASOBSERVER_H
-#define KOCANVASOBSERVER_H
+#ifndef KOCANVASOBSERVERBASE_H
+#define KOCANVASOBSERVERBASE_H
 
 class KoCanvasBase;
 
@@ -30,13 +30,13 @@ class KoCanvasBase;
  * should implement that interface so that the tool controller
  * can give them the active canvas.
  */
-class FLAKE_EXPORT KoCanvasObserver
+class FLAKE_EXPORT KoCanvasObserverBase
 {
 public:
-    KoCanvasObserver();
-    virtual ~KoCanvasObserver();
+    KoCanvasObserverBase();
+    virtual ~KoCanvasObserverBase();
     virtual void setCanvas(KoCanvasBase *canvas) = 0;
 
 };
 
-#endif // KOCANVASOBSERVER_H
+#endif // KOCANVASOBSERVERBASE_H

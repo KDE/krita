@@ -30,7 +30,7 @@
 
 KisPainterlyMixerDocker::KisPainterlyMixerDocker()
         : QDockWidget()
-        , KoCanvasObserver()
+        , KoCanvasObserverBase()
         , m_currentCanvas(0)
 {
     setWindowTitle(i18n("Painterly Color Mixer"));

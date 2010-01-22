@@ -23,7 +23,7 @@
 #include <QDockWidget>
 #include <QMenu>
 
-#include <KoCanvasObserver.h>
+#include <KoCanvasObserverBase.h>
 
 #include <kis_types.h>
 #include "kis_cachedhistogram.h"
@@ -35,7 +35,7 @@ class KisCanvas2;
 class KisHistogramView;
 class KisImagerasteredCache;
 
-class KisHistogramDocker : public QDockWidget, public KoCanvasObserver
+class KisHistogramDocker : public QDockWidget, public KoCanvasObserverBase
 {
 
     Q_OBJECT
@@ -44,7 +44,7 @@ public:
     KisHistogramDocker();
     virtual ~KisHistogramDocker();
 
-    /// reimplemented from KoCanvasObserver
+    /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
 
 private slots:

@@ -33,7 +33,7 @@
  * Note that adding your KoDockFactory to this registry will mean it will automatically be
  * added to an application, no extra code is required for that.
  *
- * @see KoCanvasObserver
+ * @see KoCanvasObserverBase
  */
 class FLAKE_EXPORT KoDockRegistry : public QObject, public KoGenericRegistry<KoDockFactory*>
 {

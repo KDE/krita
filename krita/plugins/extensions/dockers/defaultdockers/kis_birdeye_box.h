@@ -25,7 +25,7 @@
 #include <QDockWidget>
 
 #include <KoDockFactory.h>
-#include <KoCanvasObserver.h>
+#include <KoCanvasObserverBase.h>
 
 #include <kis_types.h>
 
@@ -42,7 +42,7 @@ class KoColorSpace;
  * as some pertinent information and the exposure slider. Apart from the exposure
  * slider, this has been broken since 2006 :-(
  */
-class KisBirdEyeBox : public QDockWidget, public KoCanvasObserver
+class KisBirdEyeBox : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 
@@ -51,7 +51,7 @@ public:
     KisBirdEyeBox();
     ~KisBirdEyeBox();
 
-    /// reimplemented from KoCanvasObserver
+    /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
 
 private slots:

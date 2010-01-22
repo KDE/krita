@@ -88,7 +88,7 @@ QDockWidget* KoPADocumentStructureDockerFactory::createDockWidget()
 
 KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget* parent )
 : QDockWidget( parent )
-, KoCanvasObserver()
+, KoCanvasObserverBase()
 , m_doc( 0 )
 , m_model( 0 )
 {

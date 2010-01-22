@@ -20,12 +20,12 @@
 #ifndef SHADOWDOCKER_H
 #define SHADOWDOCKER_H
 
-#include <KoCanvasObserver.h>
+#include <KoCanvasObserverBase.h>
 #include <QtGui/QDockWidget>
 
 
 /// A docker for setting properties of a shape shadow
-class ShadowDocker : public QDockWidget, public KoCanvasObserver
+class ShadowDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 

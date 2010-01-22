@@ -21,7 +21,7 @@
 #ifndef STYLEDOCKER_H
 #define STYLEDOCKER_H
 
-#include <KoCanvasObserver.h>
+#include <KoCanvasObserverBase.h>
 #include <QtGui/QDockWidget>
 #include <QtCore/QTime>
 
@@ -44,14 +44,14 @@ class QSpacerItem;
 class QGridLayout;
 class KDoubleNumInput;
 
-class StyleDocker : public QDockWidget, public KoCanvasObserver
+class StyleDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
     explicit StyleDocker(QWidget * parent = 0L);
     virtual ~StyleDocker();
 
-    /// reimplemented from KoCanvasObserver
+    /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
 
 private slots:

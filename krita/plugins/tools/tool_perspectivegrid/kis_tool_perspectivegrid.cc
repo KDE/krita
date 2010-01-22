@@ -47,13 +47,15 @@
 #include <canvas/kis_canvas2.h>
 
 KisToolPerspectiveGrid::KisToolPerspectiveGrid(KoCanvasBase * canvas)
-        : KisTool(canvas, KisCursor::arrowCursor()), m_handleSize(13), m_handleHalfSize(6), m_canvas(dynamic_cast<KisCanvas2*>(canvas))
+        : KisTool(canvas, KisCursor::load("tool_perspectivegrid_cursor.png", 6, 6)),
+          m_handleSize(13), m_handleHalfSize(6), m_canvas(dynamic_cast<KisCanvas2*>(canvas))
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_perspectivegrid");
 
 
-    m_dragging = false;
+    m_drawing = false;
+    m_drawing = false;
 }
 
 KisToolPerspectiveGrid::~KisToolPerspectiveGrid()
@@ -62,16 +64,18 @@ KisToolPerspectiveGrid::~KisToolPerspectiveGrid()
 
 void KisToolPerspectiveGrid::activate(bool)
 {
+    KisTool::activate();
+
     m_canvas->view()->perspectiveGridManager()->startEdition();
     if (! m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid()->hasSubGrids()) {
         m_mode = MODE_CREATION;
         m_points.clear();
     } else {
         m_mode = MODE_EDITING;
+        useCursor(KisCursor::arrowCursor());
         m_canvas->view()->perspectiveGridManager()->setVisible(true);
         m_canvas->updateCanvas(); // TODO only the correct rect
     }
-    KisTool::activate();
 }
 
 void KisToolPerspectiveGrid::deactivate()
@@ -79,7 +83,7 @@ void KisToolPerspectiveGrid::deactivate()
     m_canvas->view()->perspectiveGridManager()->stopEdition();
     if (m_mode == MODE_CREATION) {
         m_points.clear();
-        m_dragging = false;
+        m_drawing = false;
     }
     m_canvas->updateCanvas();
 }
@@ -117,17 +121,14 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
         m_points.clear();
     }
     if (m_mode == MODE_CREATION && event->button() == Qt::LeftButton) {
-        m_dragging = true;
+        m_drawing = true;
+        m_currentPt = event->point;
 
         if (m_points.isEmpty()) {
-            m_dragStart = event->point;
-            m_dragEnd = event->point;
-            m_points.append(m_dragStart);
-            m_hasMoveAfterFirstTime = false;
+            m_points.append(m_currentPt);
+            m_isFirstPoint = true;
         } else {
-            m_dragStart = m_dragEnd;
-            m_dragEnd = event->point;
-            m_hasMoveAfterFirstTime = true;
+            m_isFirstPoint = false;
         }
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
     } else if (m_mode == MODE_EDITING && event->button() == Qt::LeftButton) {
@@ -186,6 +187,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 if (!pGrid->hasSubGrids()) {
                     m_mode = MODE_CREATION;
+                    useCursor(KisCursor::load("tool_perspectivegrid_cursor.png", 6, 6));
                     m_points.clear();
                 }
                 break;
@@ -198,12 +200,11 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
 void KisToolPerspectiveGrid::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_mode == MODE_CREATION) {
-        if (m_dragging) {
+        if (!m_points.isEmpty()) {
             // get current mouse position
-            m_dragEnd = event->point;
+            m_currentPt = event->point;
             // draw new lines on canvas
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-            m_hasMoveAfterFirstTime = true;
         }
     } else {
         if (m_mode == MODE_DRAGING_NODE) {
@@ -243,8 +244,8 @@ void KisToolPerspectiveGrid::mouseReleaseEvent(KoPointerEvent *event)
 {
 
     if (m_mode == MODE_CREATION) {
-        if (m_dragging && event->button() == Qt::LeftButton && m_hasMoveAfterFirstTime)  {
-            m_points.append(m_dragEnd);
+        if (m_drawing && event->button() == Qt::LeftButton && !m_isFirstPoint)  {
+            m_points.append(m_currentPt);
             if (m_points.size() == 4) { // wow we have a grid, isn't that cool ?
                 m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid()->addNewSubGrid(
                     new KisSubPerspectiveGrid(
@@ -254,9 +255,10 @@ void KisToolPerspectiveGrid::mouseReleaseEvent(KoPointerEvent *event)
                         new KisPerspectiveGridNode(convertToPixelCoord(m_points[3]))));
                 m_canvas->view()->perspectiveGridManager()->setVisible(true);
                 m_mode = MODE_EDITING;
+                useCursor(KisCursor::arrowCursor());
             }
         }
-        m_dragging = false;
+        m_drawing = false;
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
     } else {
         m_mode = MODE_EDITING;
@@ -291,30 +293,15 @@ void KisToolPerspectiveGrid::drawGridCreation(QPainter& gc)
     gc.setPen(pen);
     gc.setRenderHint(QPainter::Antialiasing);
 
-    QPointF start, end;
-    QPointF startPos;
-    QPointF endPos;
-
-    if (m_dragging) {
-        startPos = m_canvas->viewConverter()->documentToView(m_dragStart.toPoint());
-        endPos = m_canvas->viewConverter()->documentToView(m_dragEnd.toPoint());
-        gc.drawLine(startPos, endPos);
-    } else {
-        for (QPointFVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
-
-            if (it == m_points.begin()) {
-                start = m_canvas->viewConverter()->documentToView(*it);
-            } else {
-                end = m_canvas->viewConverter()->documentToView(*it);
-
-                startPos = start;
-                endPos = end;
-
-                gc.drawLine(startPos, endPos);
-
-                start = end;
-            }
-        }
+    for (QPointFVector::iterator iter = m_points.begin(); iter != m_points.end(); iter++) {
+        if (iter + 1 == m_points.end())
+            break;
+        else
+            gc.drawLine(m_canvas->viewConverter()->documentToView(*iter).toPoint(), m_canvas->viewConverter()->documentToView(*(iter + 1)).toPoint());
+    }
+    if (!m_points.isEmpty()) {
+        gc.drawLine(m_canvas->viewConverter()->documentToView(*(m_points.end() - 1)).toPoint(), m_canvas->viewConverter()->documentToView(m_currentPt).toPoint());
+        gc.drawLine(m_canvas->viewConverter()->documentToView(m_currentPt).toPoint(), m_canvas->viewConverter()->documentToView(*m_points.begin()).toPoint());
     }
 }
 

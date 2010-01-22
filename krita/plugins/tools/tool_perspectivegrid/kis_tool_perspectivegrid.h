@@ -70,11 +70,11 @@ private:
     KisPerspectiveGridNodeSP nodeNearPoint(KisSubPerspectiveGrid* grid, QPointF point);
 
 protected:
-    QPointF m_dragStart;
     QPointF m_dragEnd;
 
-    bool m_dragging;
-    bool m_hasMoveAfterFirstTime;
+    bool m_drawing;
+    bool m_isFirstPoint;
+    QPointF m_currentPt;
 private:
     typedef QVector<QPointF> QPointFVector;
 

@@ -60,7 +60,7 @@ enum Options {
 /// For paragraphs each tab definition is represented by this struct.
 struct KOTEXT_EXPORT Tab {
     Tab();
-    qreal position;    ///< distance in point from the start of the text-shape
+    qreal position;    ///< distance in ps-points from the edge of the text-shape
     QTextOption::TabType type;       ///< Determine which type is used.
     QChar delimiter;    ///< If type is DelimitorTab; tab until this char was found in the text.
     KoCharacterStyle::LineType leaderType; // none/single/double

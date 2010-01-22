@@ -44,6 +44,7 @@ class KoShapeRegistry::Private
 {
 public:
     void insertFactory(KoShapeFactory *factory);
+    void init(KoShapeRegistry *q);
 
     KoShape *createShapeInternal(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const;
 
@@ -62,7 +63,7 @@ KoShapeRegistry::~KoShapeRegistry()
     delete d;
 }
 
-void KoShapeRegistry::init()
+void KoShapeRegistry::Private::init(KoShapeRegistry *q)
 {
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FlakePlugins";
@@ -78,16 +79,16 @@ void KoShapeRegistry::init()
                                      config);
 
     // Also add our hard-coded basic shape
-    add(new KoPathShapeFactory(this, QStringList()));
-    add(new KoConnectionShapeFactory(this));
+    q->add(new KoPathShapeFactory(q, QStringList()));
+    q->add(new KoConnectionShapeFactory(q));
 
     // Now all shape factories are registered with us, determine their
     // assocated odf tagname & priority and prepare ourselves for
     // loading ODF.
 
-    QList<KoShapeFactory*> factories = values();
+    QList<KoShapeFactory*> factories = q->values();
     for (int i = 0; i < factories.size(); ++i) {
-        d->insertFactory(factories[i]);
+        insertFactory(factories[i]);
     }
 }
 
@@ -95,7 +96,7 @@ KoShapeRegistry* KoShapeRegistry::instance()
 {
     K_GLOBAL_STATIC(KoShapeRegistry, s_instance)
     if (!s_instance.exists()) {
-        s_instance->init();
+        s_instance->d->init(s_instance);
     }
     return s_instance;
 }

@@ -55,6 +55,9 @@ private:
     KoFilterEffectRegistry(const KoFilterEffectRegistry&);
     KoFilterEffectRegistry operator=(const KoFilterEffectRegistry&);
     void init();
+
+    class Private;
+    Private *d;
 };
 
 #endif // KOFILTEREFFECTREGISTRY_H

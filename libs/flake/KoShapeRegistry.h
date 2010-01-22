@@ -72,10 +72,9 @@ private:
     KoShapeRegistry();
     KoShapeRegistry(const KoShapeRegistry&);
     KoShapeRegistry operator=(const KoShapeRegistry&);
-    void init();
 
     class Private;
-    Private * const d;
+    Private *d;
 };
 
 #endif

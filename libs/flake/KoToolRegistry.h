@@ -53,6 +53,9 @@ private:
     KoToolRegistry(const KoToolRegistry&);
     KoToolRegistry operator=(const KoToolRegistry&);
     void init();
+
+    class Private;
+    Private *d;
 };
 
 #endif

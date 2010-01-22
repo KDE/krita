@@ -79,7 +79,7 @@ private:
     void init();
 
     class Private;
-    Private * const d;
+    Private *d;
 };
 
 #endif /* KOEVENTACTIONREGISTRY_H */

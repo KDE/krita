@@ -53,6 +53,9 @@ private:
     KoDockRegistry(const KoDockRegistry&);
     KoDockRegistry operator=(const KoDockRegistry&);
     void init();
+
+    class Private;
+    Private *d;
 };
 
 #endif

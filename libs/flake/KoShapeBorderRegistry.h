@@ -45,6 +45,9 @@ private:
     KoShapeBorderRegistry(const KoShapeBorderRegistry&);
     KoShapeBorderRegistry operator=(const KoShapeBorderRegistry&);
     void init();
+
+    class Private;
+    Private *d;
 };
 
 #endif

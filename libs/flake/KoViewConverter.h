@@ -27,10 +27,14 @@
 
 /**
  * The interface for view conversions.
+ *
  * All KoShape based objects are using a postscript-point (pt) based measurement system
  * which requires a conversion to view coordinates (in pixel sizes) at the moment
  * we are painting, and a conversion to the normalized coordinate system if we
  * receive mouse events so we can figure out which KoShape object was touched.
+ *
+ * The zoom level is expressed on a scale of 0.0 to 1.0 to infinite, where 1.0 is
+ * 100%
  */
 class FLAKE_EXPORT KoViewConverter
 {
@@ -112,12 +116,12 @@ public:
     virtual void zoom(qreal *zoomX, qreal *zoomY) const;
 
     /**
-     * Set the zoom level
+     * Set the zoom level. 1.0 is 100%.
      */
     virtual void setZoom(qreal zoom);
 
     /**
-     * Return the current zoom level.
+     * Return the current zoom level. 1.0 is 100%.
      */
     qreal zoom() const;
 

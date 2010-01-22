@@ -228,6 +228,11 @@ protected:
     }
 };
 
+static bool pointLessThan(const QPointF &a, const QPointF &b)
+{
+    return a.x() < b.x();
+}
+
 struct KisCubicCurve::Private {
     mutable KisCubicSpline<QPointF, qreal> m_spline;
     QList<QPointF> points;
@@ -261,5 +266,39 @@ KisCubicCurve::KisCubicCurve(const QList<QPointF>& points) : d(new Private)
 qreal KisCubicCurve::value(qreal x) const
 {
     d->updateSpline();
-    return d->m_spline.getValue(x);
+    /* Automatically extend non-existing parts of the curve
+     * (e.g. before the first point) and cut off big y-values
+     */
+    x = qBound(d->m_spline.begin(), x, d->m_spline.end());
+    qreal y = d->m_spline.getValue(x);
+    return qBound(0.0, y, 1.0);
+}
+
+QList<QPointF> KisCubicCurve::points() const
+{
+    return d->points;
+}
+
+void KisCubicCurve::setPoints(const QList<QPointF>& points)
+{
+    d->points = points;
+    d->validSpline = false;
+}
+
+void KisCubicCurve::setPoint(int idx, const QPointF& point)
+{
+    d->points[idx] = point;
+    qSort(d->points.begin(), d->points.end(), pointLessThan);
+}
+
+int KisCubicCurve::addPoint(const QPointF& point)
+{
+    d->points.append(point);
+    qSort(d->points.begin(), d->points.end(), pointLessThan);
+    return d->points.indexOf(point);
+}
+
+void KisCubicCurve::removePoint(int idx)
+{
+    d->points.removeAt(idx);
 }

@@ -22,12 +22,14 @@
 #include<QList>
 #include<QVector>
 
+#include <krita_export.h>
+
 class QPointF;
 
 /**
  * Hold the data for a cubic curve.
  */
-class KisCubicCurve
+class KRITAIMAGE_EXPORT KisCubicCurve
 {
 public:
     KisCubicCurve();
@@ -35,6 +37,15 @@ public:
     KisCubicCurve(const QVector<QPointF>& points);
 public:
     qreal value(qreal x) const;
+    QList<QPointF> points() const;
+    void setPoints(const QList<QPointF>& points);
+    void setPoint(int idx, const QPointF& point);
+    /**
+     * Add a point to the curve, the list of point is always sorted.
+     * @return the index of the inserted point
+     */
+    int addPoint(const QPointF& point);
+    void removePoint(int idx);
 private:
     struct Private;
     Private* const d;

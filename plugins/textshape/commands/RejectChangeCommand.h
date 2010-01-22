@@ -17,23 +17,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef ACCEPTCHANGECOMMAND_H
-#define ACCEPTCHANGECOMMAND_H
+#ifndef REJECTCHANGECOMMAND_H
+#define REJECTCHANGECOMMAND_H
 
 #include "commands/TextCommandBase.h"
 
 #include <QPair>
 
 class KoChangeTracker;
+class KoTextDocumentLayout;
 
 class QTextDocument;
 
-class AcceptChangeCommand : public QObject, public TextCommandBase
+class RejectChangeCommand : public QObject, public TextCommandBase
 {
     Q_OBJECT
 public:
-    AcceptChangeCommand(int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, QUndoCommand *parent = 0);
-    ~AcceptChangeCommand();
+    RejectChangeCommand(int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, QUndoCommand *parent = 0);
+    ~RejectChangeCommand();
 
     virtual void redo();
     virtual void undo();
@@ -47,6 +48,7 @@ private:
     QList<QPair<int, int> > m_changeRanges;
     QTextDocument *m_document;
     KoChangeTracker *m_changeTracker;
+    KoTextDocumentLayout *m_layout;
 };
 
-#endif // ACCEPTCHANGECOMMAND_H
+#endif // REJECTCHANGECOMMAND_H

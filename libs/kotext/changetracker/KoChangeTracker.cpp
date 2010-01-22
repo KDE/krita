@@ -260,6 +260,8 @@ void KoChangeTracker::acceptRejectChange(int changeId, bool set)
         if (d->acceptedRejectedChanges.contains(changeId))
             d->acceptedRejectedChanges.removeAll(changeId);
     }
+
+    d->changes.value(changeId)->setAcceptedRejected(set);
 }
 
 bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
@@ -347,7 +349,7 @@ int KoChangeTracker::getDeletedChanges(QVector<KoChangeTrackerElement *>& delete
     int numAppendedItems = 0;
     foreach(KoChangeTrackerElement *element, d->changes.values())
     {
-        if(element->getChangeType() == KoGenChange::deleteChange)
+        if(element->getChangeType() == KoGenChange::deleteChange && !element->acceptedRejected())
         {
           deleteVector << element;
           numAppendedItems++;

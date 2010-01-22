@@ -31,6 +31,7 @@
 #include "TextShape.h"
 
 #include "commands/AcceptChangeCommand.h"
+#include "commands/RejectChangeCommand.h"
 #include "commands/ShowChangesCommand.h"
 #include "dialogs/TrackedChangeModel.h"
 #include "dialogs/TrackedChangeManager.h"
@@ -269,9 +270,11 @@ void ChangeTrackingTool::acceptChange()
 void ChangeTrackingTool::rejectChange()
 {
     if (m_currentHighlightedChange.isValid()) {
-        kDebug(32500) << "highlighted change accepted. id: " << m_model->changeItemData(m_currentHighlightedChange).changeId;
-        kDebug(32500) << "change start: " << m_model->changeItemData(m_currentHighlightedChange).changeRanges.first().first;
-        kDebug(32500) << "change end: " << m_model->changeItemData(m_currentHighlightedChange).changeRanges.first().second;
+        RejectChangeCommand *command = new RejectChangeCommand(m_model->changeItemData(m_currentHighlightedChange).changeId,
+                                                               m_model->changeItemData(m_currentHighlightedChange).changeRanges,
+                                                               m_textShapeData->document());
+        connect(command, SIGNAL(acceptRejectChange()), m_model, SLOT(setupModel()));
+        m_textEditor->addCommand(command);
     }
 }
 

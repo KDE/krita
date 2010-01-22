@@ -17,10 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "AcceptChangeCommand.h"
+#include "RejectChangeCommand.h"
 
 #include <KoGenChange.h>
+#include <KoInlineTextObjectManager.h>
 #include <KoTextDocument.h>
+#include <KoTextDocumentLayout.h>
 
 #include <changetracker/KoChangeTracker.h>
 #include <changetracker/KoChangeTrackerElement.h>
@@ -36,44 +38,28 @@
 #include <QTextDocument>
 #include <QTextFragment>
 
-AcceptChangeCommand::AcceptChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, QUndoCommand* parent) : TextCommandBase(parent),
+RejectChangeCommand::RejectChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, QUndoCommand* parent) : TextCommandBase(parent),
     m_first(true),
     m_changeId(changeId),
     m_changeRanges(changeRanges),
     m_document(document)
 {
-    setText(i18n("Accept change"));
+    setText(i18n("Reject change"));
 
     m_changeTracker = KoTextDocument(m_document).changeTracker();
+    m_layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
 }
 
-AcceptChangeCommand::~AcceptChangeCommand()
+RejectChangeCommand::~RejectChangeCommand()
 {
 }
 
-void AcceptChangeCommand::redo()
+void RejectChangeCommand::redo()
 {
     if (m_first) {
         m_first = false;
         QTextCursor cursor(m_document);
-        if (m_changeTracker->elementById(m_changeId)->getChangeType() != KoGenChange::deleteChange) {
-            QList<QPair<int, int> >::const_iterator it;
-            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
-                cursor.setPosition((*it).first);
-                cursor.setPosition((*it).second, QTextCursor::KeepAnchor);
-                QTextCharFormat format = cursor.charFormat();
-                int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
-                if (changeId == m_changeId) {
-                    if (int parentChangeId = m_changeTracker->parent(m_changeId)) {
-                        format.setProperty(KoCharacterStyle::ChangeTrackerId, parentChangeId);
-                    }
-                    else {
-                        format.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                    }
-                    cursor.setCharFormat(format);
-                }
-            }
-        } else {
+        if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::insertChange) {
             QList<QPair<int, int> >::const_iterator it;
             QStack<QPair<int, int> > deleteRanges;
             for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
@@ -86,6 +72,45 @@ void AcceptChangeCommand::redo()
                 cursor.deleteChar();
             }
         }
+        else if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::formatChange) {
+            QList<QPair<int, int> >::const_iterator it;
+            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
+                cursor.setPosition((*it).first);
+                cursor.setPosition((*it).second, QTextCursor::KeepAnchor);
+                int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+                QTextCharFormat format = m_changeTracker->elementById(m_changeId)->getPrevFormat().toCharFormat();
+                if (changeId == m_changeId) {
+                    if (int parentChangeId = m_changeTracker->parent(m_changeId)) {
+                        format.setProperty(KoCharacterStyle::ChangeTrackerId, parentChangeId);
+                    }
+                    else {
+                        format.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                    }
+                    cursor.setCharFormat(format);
+                }
+            }
+        } else if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::deleteChange){
+            QList<QPair<int, int> >::const_iterator it;
+            QStack<QPair<int, int> > deleteRanges;
+            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
+                cursor.setPosition((*it).first);
+                cursor.setPosition((*it).second, QTextCursor::KeepAnchor);
+                deleteRanges.push(QPair<int, int>((*it).first, (*it).second));
+            }
+            while (!deleteRanges.isEmpty()) {
+                QPair<int, int> range = deleteRanges.pop();
+                cursor.setPosition(range.first);
+                cursor.setPosition(range.second, QTextCursor::KeepAnchor);
+                if (dynamic_cast<KoDeleteChangeMarker*>(m_layout->inlineTextObjectManager()->inlineTextObject(cursor))) {
+                    cursor.deleteChar();
+                }
+                else {
+                    QTextCharFormat format = cursor.charFormat();
+                    format.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                    cursor.setCharFormat(format);
+                }
+            }
+        }
         m_changeTracker->acceptRejectChange(m_changeId, true);
     }
     else {
@@ -93,10 +118,9 @@ void AcceptChangeCommand::redo()
         TextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
     }
-    emit acceptRejectChange();
-}
+    emit acceptRejectChange();}
 
-void AcceptChangeCommand::undo()
+void RejectChangeCommand::undo()
 {
     m_changeTracker->acceptRejectChange(m_changeId, false);
     TextCommandBase::undo();
@@ -104,4 +128,4 @@ void AcceptChangeCommand::undo()
     emit acceptRejectChange();
 }
 
-#include <AcceptChangeCommand.moc>
+#include <RejectChangeCommand.moc>

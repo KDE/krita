@@ -1211,6 +1211,12 @@ void TextTool::updateActions()
         m_actionAlignRight->setChecked(true);
 
     m_actionFormatDecreaseIndent->setEnabled(m_textEditor->blockFormat().leftMargin() > 0.);
+
+    if (m_changeTracker && m_changeTracker->displayChanges())
+        m_actionShowChanges->setChecked(true);
+    if (m_changeTracker && m_changeTracker->recordChanges())
+        m_actionRecordChanges->setChecked(true);
+
     m_allowActions = true;
 
     emit charFormatChanged(cf);

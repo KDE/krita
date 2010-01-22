@@ -105,10 +105,11 @@ void ShowChangesCommand::insertDeletedChanges()
 
     foreach (KoChangeTrackerElement *element, elementVector) {
         if (element->isValid()) {
-            QTextCharFormat f;
             caret.setPosition(element->getDeleteChangeMarker()->position() + numAddedChars +  1);
+            QTextCharFormat f = caret.charFormat();
             f.setProperty(KoCharacterStyle::ChangeTrackerId, element->getDeleteChangeMarker()->changeId());
-            caret.mergeCharFormat(f);
+            f.clearProperty(KoCharacterStyle::InlineInstanceId);
+            caret.setCharFormat(f);
             caret.insertText(element->getDeleteData());
             numAddedChars += element->getDeleteData().length();
         }

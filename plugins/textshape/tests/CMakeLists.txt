@@ -37,6 +37,7 @@ set(TestChangeListCommand_test_SRCS
     ../commands/DeleteCommand.cpp
     ../commands/ShowChangesCommand.cpp
     ../commands/AcceptChangeCommand.cpp
+    ../commands/RejectChangeCommand.cpp
     ../TextTool.cpp
     ../ChangeTracker.cpp
     ../dialogs/FontDia.cpp

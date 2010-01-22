@@ -67,6 +67,7 @@ SET ( textshape_SRCS
     commands/ShowChangesCommand.cpp
     commands/DeleteCommand.cpp
     commands/AcceptChangeCommand.cpp
+    commands/RejectChangeCommand.cpp
 )
 
 kde4_add_ui_files(textshape_SRCS

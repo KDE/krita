@@ -94,12 +94,8 @@ ItemData ModelItem::itemData()
 
 void ModelItem::removeChildren()
 {
-    kDebug(32500) << "modelItem removeChildren. m_childItems.count: " << m_childItems.count();
     qDeleteAll(m_childItems);
     m_childItems.clear();
-    kDebug(32500) << "after qDeleteAll. m_childItems.count: " << m_childItems.count();
-    for (int i = 0; i < m_childItems.count(); ++i)
-        kDebug(32500) << "m_childItems(" << i << "). " << m_childItems.value(i)->itemData().changeId;
 }
 
 ////TrackedChangeModel
@@ -242,11 +238,8 @@ QVariant TrackedChangeModel::headerData(int section, Qt::Orientation orientation
 
 void TrackedChangeModel::setupModel()
 {
-    kDebug(32500) << "in setupmodel";
-    kDebug(32500) << "row count(QModelIndex()): " << rowCount();
     beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
     m_rootItem->removeChildren();
-    kDebug(32500) << "m_rootItem nb children: " << m_rootItem->childCount();
     endRemoveRows();
     setupModelData(m_document, m_rootItem);
     beginInsertRows(QModelIndex(), 0, m_rootItem->childCount() - 1);
@@ -273,10 +266,8 @@ void TrackedChangeModel::setupModelData(QTextDocument* document, ModelItem* pare
 //                continue;
             if (KoDeleteChangeMarker *changeMarker = dynamic_cast<KoDeleteChangeMarker*>(m_layout->inlineTextObjectManager()->inlineTextObject(format)))
                 changeId = changeMarker->changeId();
-            kDebug(32500) << "fragment: " << fragment.position() << " to: " << fragment.position() + fragment.length() << ", changeId: " << changeId;
             if (changeId) {
                 if (changeId != itemStack.top()->itemData().changeId) {
-                    kDebug(32500) << "changeId != itemStack.top";
                     while (itemStack.top() != parent) {
                         if (!m_changeTracker->isParent(itemStack.top()->itemData().changeId, changeId))
                             itemStack.pop();
@@ -291,6 +282,11 @@ void TrackedChangeModel::setupModelData(QTextDocument* document, ModelItem* pare
                     createdItems.insert(changeId, item);
                 }
                 item->setChangeRange(fragment.position(), fragment.position() + fragment.length());
+                ModelItem *parentItem = item->parent();
+                while (parentItem->itemData().changeId) {
+                    parentItem->setChangeRange(fragment.position(), fragment.position() + fragment.length());
+                    parentItem = parentItem->parent();
+                }
                 itemStack.push(item);
 
             }

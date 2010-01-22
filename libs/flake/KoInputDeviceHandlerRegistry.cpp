@@ -36,7 +36,7 @@ void KoInputDeviceHandlerRegistry::init()
                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"), config);
 
     foreach(const QString & id, keys()) {
-        KoDevice * d = value(id);
+        KoInputDeviceHandler * d = value(id);
         if (d)
             d->start();
     }
@@ -45,7 +45,7 @@ void KoInputDeviceHandlerRegistry::init()
 KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
 {
     foreach(const QString & id, keys()) {
-        KoDevice * d = value(id);
+        KoInputDeviceHandler * d = value(id);
         if (d)
             d->stop();
     }

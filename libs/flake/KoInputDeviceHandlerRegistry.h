@@ -23,7 +23,7 @@
 #include <QObject>
 
 #include "KoGenericRegistry.h"
-#include <KoDevice.h>
+#include <KoInputDeviceHandler.h>
 #include "flake_export.h"
 
 /**
@@ -32,7 +32,7 @@
  * These will get routed the the active tools which can then do whatever
  * they like with it.
  */
-class FLAKE_EXPORT KoInputDeviceHandlerRegistry : public QObject, public KoGenericRegistry<KoDevice*>
+class FLAKE_EXPORT KoInputDeviceHandlerRegistry : public QObject, public KoGenericRegistry<KoInputDeviceHandler*>
 {
     Q_OBJECT
 

@@ -20,20 +20,20 @@
 #ifndef SPACENAVIGATORDEVICE_H
 #define SPACENAVIGATORDEVICE_H
 
-#include <KoDevice.h>
+#include <KoInputDeviceHandler.h>
 
 class SpaceNavigatorPollingThread;
 
-class SpaceNavigatorDevice : public KoDevice
+class SpaceNavigatorDevice : public KoInputDeviceHandler
 {
     Q_OBJECT
 public:
     SpaceNavigatorDevice( QObject * parent );
     virtual ~SpaceNavigatorDevice();
 
-    /// reimplemented from KoDevice
+    /// reimplemented from KoInputDeviceHandler
     virtual bool start();
-    /// reimplemented from KoDevice
+    /// reimplemented from KoInputDeviceHandler
     virtual bool stop();
 private slots:
     void slotMoveEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons );

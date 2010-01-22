@@ -29,7 +29,7 @@
 #define SpaceNavigatorDevice_ID "SpaceNavigator"
 
 SpaceNavigatorDevice::SpaceNavigatorDevice( QObject * parent )
-: KoDevice( parent, SpaceNavigatorDevice_ID ), m_thread( new SpaceNavigatorPollingThread( this ) )
+: KoInputDeviceHandler( parent, SpaceNavigatorDevice_ID ), m_thread( new SpaceNavigatorPollingThread( this ) )
 {
     qRegisterMetaType<Qt::MouseButtons>( "Qt::MouseButtons" );
     qRegisterMetaType<Qt::MouseButton>( "Qt::MouseButton" );

@@ -17,43 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KODEVICE_H
-#define KODEVICE_H
+#include "KoInputDeviceHandler.h"
 
-#include "flake_export.h"
-#include <QObject>
-
-/**
- * Base class for all custom input devices.
- */
-class FLAKE_EXPORT KoDevice : public QObject
+class KoInputDeviceHandler::Private
 {
-    Q_OBJECT
 public:
-    KoDevice(QObject *parent, const QString &id);
-    virtual ~KoDevice();
-
-    /**
-     * Return the id for the device.
-     * @return the id for the device
-     */
-    QString id() const;
-
-    /**
-     * Starts the device.
-     * @return true if the device was started, false otherwise
-     */
-    virtual bool start() = 0;
-
-    /**
-     * Stops the device.
-     * @return true if the device was stopped, false otherwise
-     */
-    virtual bool stop() = 0;
-
-private:
-    class Private;
-    Private * const d;
+    Private(const QString &devId)
+            : id(devId) {
+    }
+    const QString id;
 };
 
-#endif // KODEVICE_H
+KoInputDeviceHandler::KoInputDeviceHandler(QObject * parent, const QString &id)
+        : QObject(parent), d(new Private(id))
+{
+}
+
+KoInputDeviceHandler::~KoInputDeviceHandler()
+{
+    delete d;
+}
+
+QString KoInputDeviceHandler::id() const
+{
+    return d->id;
+}
+
+#include <KoInputDeviceHandler.moc>

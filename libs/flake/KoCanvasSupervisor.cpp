@@ -18,11 +18,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-KoCanvasSuperviser:KoCanvasSuperviser()
+#include "KoCanvasSupervisor.h"
+
+KoCanvasSupervisor::KoCanvasSupervisor()
 {
 }
 
-KoCanvasSuperviser:~KoCanvasSuperviser()
+KoCanvasSupervisor::~KoCanvasSupervisor()
 {
 }
 

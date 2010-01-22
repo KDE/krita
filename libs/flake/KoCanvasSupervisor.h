@@ -17,8 +17,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOCANVASSUPERVISER_H
-#define KOCANVASSUPERVISER_H
+#ifndef KOCANVASSUPERVISOR_H
+#define KOCANVASSUPERVISOR_H
 
 #include <QList>
 
@@ -27,14 +27,14 @@
 class KoCanvasObserver;
 
 /**
- * KoCanvasSuperviser is an abstract class that can return a
+ * KoCanvasSupervisor is an abstract class that can return a
  * list of canvas observers, such as dock widgets.
  */
-class FLAKE_EXPORT KoCanvasSuperviser
+class FLAKE_EXPORT KoCanvasSupervisor
 {
 public:
-    KoCanvasSuperviser() {}
-    virtual ~KoCanvasSuperviser() {}
+    KoCanvasSupervisor();
+    virtual ~KoCanvasSupervisor();
     virtual QList<KoCanvasObserver*> canvasObservers() = 0;
 };
 

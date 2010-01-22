@@ -30,7 +30,7 @@
 #include "KoViewConverter.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasObserver.h"
-#include "KoCanvasSuperviser.h"
+#include "KoCanvasSupervisor.h"
 #include "KoToolManager_p.h"
 
 #include <ksharedconfig.h>
@@ -156,7 +156,7 @@ void KoCanvasController::Private::activate()
     while (parent->parentWidget())
         parent = parent->parentWidget();
 
-    KoCanvasSuperviser *observerProvider = dynamic_cast<KoCanvasSuperviser*>(parent);
+    KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor*>(parent);
     if (!observerProvider)
         return;
 

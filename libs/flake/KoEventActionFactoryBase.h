@@ -33,7 +33,7 @@ class QWidget;
  * This is the base class for event action plugins. Each plugin that ships a KoEventAction should
  * also ship a factory.
  */
-class FLAKE_EXPORT KoEventActionFactory
+class FLAKE_EXPORT KoEventActionFactoryBase
 {
 public:
     /**
@@ -43,8 +43,8 @@ public:
      * @param action Only presentation event actions need to set the action. It is not used
      *               for script event actions.
      */
-    explicit KoEventActionFactory(const QString &id, const QString & action = QString());
-    virtual ~KoEventActionFactory();
+    explicit KoEventActionFactoryBase(const QString &id, const QString & action = QString());
+    virtual ~KoEventActionFactoryBase();
 
     /**
      * Create the event action.

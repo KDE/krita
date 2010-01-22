@@ -26,11 +26,11 @@
 #include "flake_export.h"
 #include "KoXmlReaderForward.h"
 class KoEventAction;
-class KoEventActionFactory;
+class KoEventActionFactoryBase;
 class KoShapeLoadingContext;
 
 /**
- * This singletion keeps a register of all available KoEventActionFactory objects.
+ * This singletion keeps a register of all available KoEventActionFactoryBase objects.
  *
  * It creates the event actions when loaded from odf.
  */
@@ -54,22 +54,22 @@ public:
     /**
      * Add presentation event action.
      */
-    void addPresentationEventAction(KoEventActionFactory *factory);
+    void addPresentationEventAction(KoEventActionFactoryBase *factory);
 
     /**
      * Add script event action.
      */
-    void addScriptEventAction(KoEventActionFactory *factory);
+    void addScriptEventAction(KoEventActionFactoryBase *factory);
 
     /**
      * Get presentation event actions.
      */
-    QList<KoEventActionFactory *> presentationEventActions();
+    QList<KoEventActionFactoryBase *> presentationEventActions();
 
     /**
      * Get script event actions.
      */
-    QList<KoEventActionFactory *> scriptEventActions();
+    QList<KoEventActionFactoryBase *> scriptEventActions();
 
 private:
     KoEventActionRegistry();

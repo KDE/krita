@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoEventActionFactory.h"
+#include "KoEventActionFactoryBase.h"
 
-class KoEventActionFactory::Private
+class KoEventActionFactoryBase::Private
 {
 public:
     Private(const QString & id, const QString & action)
@@ -30,22 +30,22 @@ public:
     const QString action;
 };
 
-KoEventActionFactory::KoEventActionFactory(const QString &id, const QString & action)
+KoEventActionFactoryBase::KoEventActionFactoryBase(const QString &id, const QString & action)
         : d(new Private(id, action))
 {
 }
 
-KoEventActionFactory::~KoEventActionFactory()
+KoEventActionFactoryBase::~KoEventActionFactoryBase()
 {
     delete d;
 }
 
-QString KoEventActionFactory::action()
+QString KoEventActionFactoryBase::action()
 {
     return d->action;
 }
 
-QString KoEventActionFactory::id() const
+QString KoEventActionFactoryBase::id() const
 {
     return d->id;
 }

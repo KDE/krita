@@ -93,7 +93,7 @@ set(flake_SRCS
     KoDeviceEvent.cpp
     KoDeviceRegistry.cpp
     KoEventAction.cpp
-    KoEventActionFactory.cpp
+    KoEventActionFactoryBase.cpp
     KoEventActionRegistry.cpp
     KoImageData.cpp
     KoImageData_p.cpp

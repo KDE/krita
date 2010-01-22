@@ -145,6 +145,9 @@ void KoShapePainter::paint(QPainter &painter, KoViewConverter &converter)
 
 void KoShapePainter::paint(QPainter &painter, const QRect &painterRect, const QRectF &documentRect)
 {
+    if (documentRect.width() == 0.0f || documentRect.height() == 0.0f)
+        return;
+
     KoViewConverter converter;
     // calculate the painter destination rectangle size in document coordinates
     QRectF paintBox = converter.viewToDocument(QRectF(QPointF(), painterRect.size()));

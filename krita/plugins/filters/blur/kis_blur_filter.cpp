@@ -110,11 +110,20 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
 
 }
 
-int KisBlurFilter::overlapMarginNeeded(const KisFilterConfiguration* _config) const
+QRect KisBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config) const
 {
     QVariant value;
     uint halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
     uint halfHeight = (_config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
-    return qMax(halfWidth, halfHeight);
+
+    return QRect(rect.x() - halfWidth * 2, rect.y() - halfHeight * 2, rect.width() + halfWidth * 4, rect.height() + halfHeight * 4);
 }
 
+QRect KisBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config) const
+{
+    QVariant value;
+    uint halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
+    uint halfHeight = (_config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
+
+    return QRect(rect.x() - halfWidth, rect.y() - halfHeight, rect.width() + halfWidth * 2, rect.height() + halfHeight * 2);
+}

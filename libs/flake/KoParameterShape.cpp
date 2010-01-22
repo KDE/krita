@@ -143,13 +143,13 @@ QPointF KoParameterShape::normalize()
 bool KoParameterShape::isParametricShape() const
 {
     Q_D(const KoParameterShape);
-    return !d->modified;
+    return d->parametric;
 }
 
-void KoParameterShape::setModified(bool modified)
+void KoParameterShape::setParametricShape(bool parametric)
 {
     Q_D(KoParameterShape);
-    d->modified = modified;
+    d->parametric = parametric;
     update();
 }
 

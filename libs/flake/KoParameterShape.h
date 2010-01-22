@@ -108,14 +108,15 @@ public:
     bool isParametricShape() const;
 
     /**
-     * @brief Set the modified status.
+     * @brief Set if the shape can be modified using parameters
      *
-     * After the state is set to modified it is no longer possible to work
+     * After the state is set to false it is no longer possible to work
      * with parameters on this shape.
      *
-     * @param modified the modification state
+     * @param parametric the new state
+     * @see isParametricShape
      */
-    void setModified(bool modified);
+    void setParametricShape(bool parametric);
 
     virtual QPointF normalize();
 

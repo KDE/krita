@@ -28,11 +28,11 @@ class KoParameterShapePrivate : public KoPathShapePrivate
 public:
     KoParameterShapePrivate(KoParameterShape *shape)
         : KoPathShapePrivate(shape),
-        modified(false)
+        parametric(true)
     {
     }
 
-    bool modified;
+    bool parametric;
 
     /// the handles that the user can grab and change
     QList<QPointF> handles;

@@ -63,7 +63,7 @@ void KoParameterToPathCommand::redo()
     for (int i = 0; i < d->shapes.size(); ++i) {
         KoParameterShape *parameterShape = d->shapes.at(i);
         parameterShape->update();
-        parameterShape->setModified(true);
+        parameterShape->setParametricShape(false);
         parameterShape->update();
     }
 }
@@ -74,7 +74,7 @@ void KoParameterToPathCommand::undo()
     for (int i = 0; i < d->shapes.size(); ++i) {
         KoParameterShape * parameterShape = d->shapes.at(i);
         parameterShape->update();
-        parameterShape->setModified(false);
+        parameterShape->setParametricShape(true);
         d->copyPath(parameterShape, d->copies[i]);
         parameterShape->update();
     }

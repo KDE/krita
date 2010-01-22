@@ -21,7 +21,7 @@
 #define KOFILTEREFFECTREGISTRY_H
 
 #include <KoGenericRegistry.h>
-#include <KoFilterEffectFactory.h>
+#include <KoFilterEffectFactoryBase.h>
 #include <QtCore/QObject>
 #include <QtGui/QMatrix>
 
@@ -29,7 +29,7 @@
 
 class KoXmlElement;
 
-class FLAKE_EXPORT KoFilterEffectRegistry : public QObject, public KoGenericRegistry<KoFilterEffectFactory*>
+class FLAKE_EXPORT KoFilterEffectRegistry : public QObject, public KoGenericRegistry<KoFilterEffectFactoryBase*>
 {
 Q_OBJECT
 

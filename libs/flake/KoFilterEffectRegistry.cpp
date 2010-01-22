@@ -53,7 +53,7 @@ KoFilterEffectRegistry* KoFilterEffectRegistry::instance()
 
 KoFilterEffect * KoFilterEffectRegistry::createFilterEffectFromXml(const KoXmlElement & element, const QMatrix &matrix)
 {
-    KoFilterEffectFactory * factory = get(element.tagName());
+    KoFilterEffectFactoryBase * factory = get(element.tagName());
     if (!factory)
         return 0;
 

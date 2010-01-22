@@ -101,7 +101,7 @@ set(flake_SRCS
     KoOdfWorkaround.cpp
     KoFilterEffect.cpp
     KoFilterEffectStack.cpp
-    KoFilterEffectFactory.cpp
+    KoFilterEffectFactoryBase.cpp
     KoFilterEffectRegistry.cpp
     KoFilterEffectConfigWidgetBase.cpp
     KoFilterEffectRenderContext.cpp

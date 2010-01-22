@@ -27,7 +27,7 @@ class KoFilterEffect;
 class KoFilterEffectConfigWidgetBase;
 
 /// API docs go here
-class FLAKE_EXPORT KoFilterEffectFactory : public QObject
+class FLAKE_EXPORT KoFilterEffectFactoryBase : public QObject
 {
     Q_OBJECT
 public:
@@ -38,8 +38,8 @@ public:
     * @param id a string that will be used internally for referencing the filter effect
     * @param name the user visible name of the filter effect this factory creates
     */
-    KoFilterEffectFactory(QObject *parent, const QString &id, const QString &name);
-    virtual ~KoFilterEffectFactory();
+    KoFilterEffectFactoryBase(QObject *parent, const QString &id, const QString &name);
+    virtual ~KoFilterEffectFactoryBase();
 
     /**
     * Returns the id for the filter this factory creates.

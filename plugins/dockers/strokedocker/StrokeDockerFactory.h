@@ -20,18 +20,18 @@
 #ifndef STROKEDOCKERFACTORY_H
 #define STROKEDOCKERFACTORY_H
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <QtGui/QDockWidget>
 
 /// the factory which creates the stroke docker
-class StrokeDockerFactory : public KoDockFactory
+class StrokeDockerFactory : public KoDockFactoryBase
 {
 public:
     StrokeDockerFactory();
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
-    virtual KoDockFactory::DockPosition defaultDockPosition() const;
+    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
 
 };
 

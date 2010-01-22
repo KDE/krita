@@ -76,7 +76,7 @@ QSize CollectionMenu::sizeHint() const
 //
 
 ShapeCollectionDockerFactory::ShapeCollectionDockerFactory()
-    : KoDockFactory()
+    : KoDockFactoryBase()
 {
 }
 

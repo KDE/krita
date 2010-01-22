@@ -20,7 +20,7 @@
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 #include <KoCanvasResourceProvider.h>
 
@@ -29,7 +29,7 @@
 K_PLUGIN_FACTORY(SmallColorSelectorPluginFactory, registerPlugin<SmallColorSelectorPlugin>();)
 K_EXPORT_PLUGIN(SmallColorSelectorPluginFactory("krita"))
 
-class SmallColorSelectorDockFactory : public KoDockFactory
+class SmallColorSelectorDockFactory : public KoDockFactoryBase
 {
 public:
     SmallColorSelectorDockFactory() {

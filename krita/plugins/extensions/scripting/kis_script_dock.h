@@ -21,7 +21,7 @@
 #ifndef _KIS_SCRIPT_DOCK_H_
 #define _KIS_SCRIPT_DOCK_H_
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <QObject>
 
 namespace Kross
@@ -29,7 +29,7 @@ namespace Kross
 class Action;
 }
 
-class KisScriptDockFactory : public QObject, public KoDockFactory
+class KisScriptDockFactory : public QObject, public KoDockFactoryBase
 {
 
     Q_OBJECT

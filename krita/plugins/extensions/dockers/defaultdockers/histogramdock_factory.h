@@ -21,9 +21,9 @@
 #define HISTOGRAM_DOCK_FACTORY_H
 
 #include "histogramdock.h"
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
-class KisHistogramDockFactory : public KoDockFactory
+class KisHistogramDockFactory : public KoDockFactoryBase
 {
 public:
     KisHistogramDockFactory() {}

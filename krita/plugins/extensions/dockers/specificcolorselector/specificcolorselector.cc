@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 
 #include "kis_config.h"
@@ -41,7 +41,7 @@
 K_PLUGIN_FACTORY(SpecificColorSelectorPluginFactory, registerPlugin<SpecificColorSelectorPlugin>();)
 K_EXPORT_PLUGIN(SpecificColorSelectorPluginFactory("krita"))
 
-class SpecificColorSelectorDockFactory : public KoDockFactory
+class SpecificColorSelectorDockFactory : public KoDockFactoryBase
 {
 public:
     SpecificColorSelectorDockFactory() {
@@ -63,7 +63,7 @@ public:
         return dockWidget;
     }
 
-    KoDockFactory::DockPosition defaultDockPosition() const {
+    KoDockFactoryBase::DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
 };

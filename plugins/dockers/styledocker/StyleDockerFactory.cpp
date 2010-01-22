@@ -29,7 +29,7 @@ QString StyleDockerFactory::id() const
     return QString("StyleDocker");
 }
 
-KoDockFactory::DockPosition StyleDockerFactory::defaultDockPosition() const
+KoDockFactoryBase::DockPosition StyleDockerFactory::defaultDockPosition() const
 {
     return DockRight;
 }

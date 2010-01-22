@@ -22,7 +22,7 @@
 #define KIS_PAINTERLY_MIXER_DOCKER_H_
 
 #include <QDockWidget>
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 
 class KoCanvasBase;
@@ -51,7 +51,7 @@ private:
 };
 
 
-class KisPainterlyMixerDockerFactory : public KoDockFactory
+class KisPainterlyMixerDockerFactory : public KoDockFactoryBase
 {
 public:
     KisPainterlyMixerDockerFactory() {}

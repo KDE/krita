@@ -20,19 +20,19 @@
 #ifndef FACTORY_H
 #define FACTORY_H
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
 /**
  * The factory used for creating the shape ShapeSelector as a dockFactory
  */
-class Factory : public KoDockFactory
+class Factory : public KoDockFactoryBase
 {
 public:
     /// constructor
     Factory();
 
     virtual QString id() const;
-    KoDockFactory::DockPosition defaultDockPosition() const;
+    KoDockFactoryBase::DockPosition defaultDockPosition() const;
     QDockWidget* createDockWidget();
 };
 

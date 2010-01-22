@@ -31,7 +31,7 @@ class QDockWidget;
  * @see KoDockRegistry
  * @see KoCanvasObserverBase
  */
-class FLAKE_EXPORT KoDockFactory
+class FLAKE_EXPORT KoDockFactoryBase
 {
 public:
     enum DockPosition {
@@ -43,8 +43,8 @@ public:
         DockMinimized  ///< Not docked, but reachable via the menu
     };
 
-    KoDockFactory() {}
-    virtual ~KoDockFactory() {}
+    KoDockFactoryBase();
+    virtual ~KoDockFactoryBase();
 
     /// @return the id of the dock widget
     virtual QString id() const = 0;

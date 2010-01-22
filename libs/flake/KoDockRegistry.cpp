@@ -41,7 +41,7 @@ void KoDockRegistry::init()
 KoDockRegistry::~KoDockRegistry()
 {
     foreach(const QString& id, keys()) {
-        KoDockFactory* dw = get(id);
+        KoDockFactoryBase* dw = get(id);
         remove(id);
         delete dw;
     }

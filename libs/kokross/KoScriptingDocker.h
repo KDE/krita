@@ -22,7 +22,7 @@
 #ifndef KOKROSS_KOSCRIPTINGDOCKER_H
 #define KOKROSS_KOSCRIPTINGDOCKER_H
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
 #include <QDockWidget>
 #include <QPointer>
@@ -40,7 +40,7 @@ class QAction;
 * The KoScriptingDockerFactory class implements a factory to
 * create \a KoScriptingDocker instances.
 */
-class KoScriptingDockerFactory : public KoDockFactory
+class KoScriptingDockerFactory : public KoDockFactoryBase
 {
 public:
 
@@ -62,7 +62,7 @@ public:
     /**
     * \return the default docking area.
     */
-    virtual KoDockFactory::DockPosition defaultDockPosition() const;
+    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
 
     /**
     * \return a newly created \a KoScriptingDocker instance.

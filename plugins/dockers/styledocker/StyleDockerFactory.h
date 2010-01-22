@@ -20,15 +20,15 @@
 #ifndef STYLEDOCKERFACTORY_H
 #define STYLEDOCKERFACTORY_H
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
-class StyleDockerFactory : public KoDockFactory
+class StyleDockerFactory : public KoDockFactoryBase
 {
 public:
     StyleDockerFactory();
 
     virtual QString id() const;
-    virtual KoDockFactory::DockPosition defaultDockPosition() const;
+    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
     virtual QDockWidget* createDockWidget();
     virtual bool isCollapsable() const;
 };

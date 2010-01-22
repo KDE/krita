@@ -22,7 +22,7 @@
 #include <QDockWidget>
 #include <klocale.h>
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <KoColorSet.h>
 #include <KoCanvasObserverBase.h>
 
@@ -60,7 +60,7 @@ protected:
     KoCanvasBase* m_canvas;
 };
 
-class KisPaletteDockerFactory : public KoDockFactory
+class KisPaletteDockerFactory : public KoDockFactoryBase
 {
 public:
     KisPaletteDockerFactory() {}

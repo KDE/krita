@@ -37,7 +37,7 @@ QDockWidget* ShadowDockerFactory::createDockWidget()
     return widget;
 }
 
-KoDockFactory::DockPosition ShadowDockerFactory::defaultDockPosition() const
+KoDockFactoryBase::DockPosition ShadowDockerFactory::defaultDockPosition() const
 {
     return DockMinimized;
 }

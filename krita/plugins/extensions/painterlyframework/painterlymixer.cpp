@@ -26,7 +26,7 @@
 #include <KIconLoader>
 #include <KLocale>
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(PainterlyMixerFactory, registerPlugin<PainterlyMixer>();)

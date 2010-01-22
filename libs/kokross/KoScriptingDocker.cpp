@@ -40,7 +40,7 @@
  */
 
 KoScriptingDockerFactory::KoScriptingDockerFactory(QWidget *parent, KoScriptingModule *module, Kross::Action *action)
-    : KoDockFactory(),
+    : KoDockFactoryBase(),
     m_parent(parent),
     m_module(module),
     m_action(action)
@@ -52,7 +52,7 @@ QString KoScriptingDockerFactory::id() const
     return m_action ? m_action->name() : "Scripting";
 }
 
-KoDockFactory::DockPosition  KoScriptingDockerFactory::defaultDockPosition() const
+KoDockFactoryBase::DockPosition  KoScriptingDockerFactory::defaultDockPosition() const
 {
     return DockMinimized;
 }

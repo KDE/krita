@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2010 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,22 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef SHAPEPROPERTIESDOCKERFACTORY_H
-#define SHAPEPROPERTIESDOCKERFACTORY_H
+#include "KoDockFactoryBase.h"
 
-#include <KoDockFactoryBase.h>
-#include <QtGui/QDockWidget>
-
-/// the factory which creates the shape properties docker
-class ShapePropertiesDockerFactory : public KoDockFactoryBase
+KoDockFactoryBase::KoDockFactoryBase()
 {
-public:
-    ShapePropertiesDockerFactory();
+}
 
-    virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-    virtual DockPosition defaultDockPosition() const;
-
-};
-
-#endif // SHAPEPROPERTIESDOCKERFACTORY_H
+KoDockFactoryBase::~KoDockFactoryBase()
+{
+}

@@ -50,9 +50,9 @@ QString KoToolBoxFactory::id() const
     return QString("ToolBox");
 }
 
-KoDockFactory::DockPosition KoToolBoxFactory::defaultDockPosition() const
+KoDockFactoryBase::DockPosition KoToolBoxFactory::defaultDockPosition() const
 {
-    return KoDockFactory::DockLeft;
+    return KoDockFactoryBase::DockLeft;
 }
 
 QDockWidget* KoToolBoxFactory::createDockWidget()

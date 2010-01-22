@@ -26,9 +26,9 @@
 
 #include <QDockWidget>
 
-#include "KoDockFactory.h"
+#include "KoDockFactoryBase.h"
 
-class ColorDockerFactory : public KoDockFactory
+class ColorDockerFactory : public KoDockFactoryBase
 {
 public:
     ColorDockerFactory() {}
@@ -36,7 +36,7 @@ public:
 
     virtual QString id() const;
     virtual QDockWidget *createDockWidget();
-    virtual KoDockFactory::DockPosition defaultDockPosition() const;
+    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
 
 private:
 };

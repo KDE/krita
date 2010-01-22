@@ -11,7 +11,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -24,7 +24,7 @@
 K_PLUGIN_FACTORY(%{APPNAME}PluginFactory, registerPlugin<%{APPNAME}Plugin>();)
 K_EXPORT_PLUGIN(%{APPNAME}PluginFactory("krita"))
 
-class %{APPNAME}DockFactory : public KoDockFactory {
+class %{APPNAME}DockFactory : public KoDockFactoryBase {
 public:
     %{APPNAME}DockFactory(KisView2 * view)
         : m_view( view )

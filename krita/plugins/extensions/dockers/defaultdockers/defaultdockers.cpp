@@ -20,7 +20,7 @@
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 #include "kis_debug.h"
 

@@ -30,7 +30,7 @@
 #include <kis_debug.h>
 #include <kgenericfactory.h>
 
-#include "KoDockFactory.h"
+#include "KoDockFactoryBase.h"
 #include "KoBasicHistogramProducers.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoID.h"

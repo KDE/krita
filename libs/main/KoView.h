@@ -28,7 +28,7 @@ class KoDocument;
 class KoMainWindow;
 class KoPrintJob;
 class KoViewPrivate;
-class KoDockFactory;
+class KoDockFactoryBase;
 class KoDockerManager;
 class KoZoomController;
 
@@ -277,7 +277,7 @@ public:
      * @param factory the factory used to the create the dockwidget
      * @return the created dockwidget or NULL if the mainwindow isn't a KoMainWindow
      */
-    QDockWidget *createDockWidget(KoDockFactory* factory);
+    QDockWidget *createDockWidget(KoDockFactoryBase* factory);
 
     /**
      * Programatically closes (but doesn't delete) a dockwidget if the mainwindow is a

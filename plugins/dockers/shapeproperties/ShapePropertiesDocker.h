@@ -20,7 +20,7 @@
 #ifndef SHAPEPROPERTIESDOCKER_H
 #define SHAPEPROPERTIESDOCKER_H
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 #include <QtGui/QDockWidget>
 

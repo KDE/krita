@@ -26,7 +26,7 @@
 
 #include <QDockWidget>
 
-#include "KoDockFactory.h"
+#include "KoDockFactoryBase.h"
 
 class KoUniColorChooser;
 

@@ -31,7 +31,7 @@ QString Factory::id() const
     return QString("Simple Text Editor");
 }
 
-KoDockFactory::DockPosition Factory::defaultDockPosition() const
+KoDockFactoryBase::DockPosition Factory::defaultDockPosition() const
 {
      return DockMinimized;
 }

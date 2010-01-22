@@ -21,7 +21,7 @@
 #define KODOCKREGISTRY_
 
 #include "KoGenericRegistry.h"
-#include "KoDockFactory.h"
+#include "KoDockFactoryBase.h"
 #include "flake_export.h"
 
 #include <QObject>
@@ -30,12 +30,12 @@
  * This singleton class keeps a register of all available dockers,
  * or rather, of the factories that can create the QDockWidget instances
  * for the mainwindows.
- * Note that adding your KoDockFactory to this registry will mean it will automatically be
+ * Note that adding your KoDockFactoryBase to this registry will mean it will automatically be
  * added to an application, no extra code is required for that.
  *
  * @see KoCanvasObserverBase
  */
-class FLAKE_EXPORT KoDockRegistry : public QObject, public KoGenericRegistry<KoDockFactory*>
+class FLAKE_EXPORT KoDockRegistry : public QObject, public KoGenericRegistry<KoDockFactoryBase*>
 {
     Q_OBJECT
 

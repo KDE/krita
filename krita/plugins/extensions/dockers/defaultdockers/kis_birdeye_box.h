@@ -24,7 +24,7 @@
 
 #include <QDockWidget>
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 
 #include <kis_types.h>
@@ -72,7 +72,7 @@ private:
 };
 
 
-class KisBirdEyeBoxFactory : public KoDockFactory
+class KisBirdEyeBoxFactory : public KoDockFactoryBase
 {
 public:
     KisBirdEyeBoxFactory() {}

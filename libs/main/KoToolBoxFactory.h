@@ -21,7 +21,7 @@
 #ifndef KOTOOLBOXFACTORY_H
 #define KOTOOLBOXFACTORY_H
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include "komain_export.h"
 
 #include <QString>
@@ -29,14 +29,14 @@
 
 class KoCanvasController;
 
-class KOMAIN_EXPORT KoToolBoxFactory : public KoDockFactory
+class KOMAIN_EXPORT KoToolBoxFactory : public KoDockFactoryBase
 {
 public:
     explicit KoToolBoxFactory(KoCanvasController *canvas, const QString& appName);
     ~KoToolBoxFactory();
 
     virtual QString id() const;
-    KoDockFactory::DockPosition defaultDockPosition() const;
+    KoDockFactoryBase::DockPosition defaultDockPosition() const;
     QDockWidget* createDockWidget();
     virtual bool isCollapsable() const { return false; }
 

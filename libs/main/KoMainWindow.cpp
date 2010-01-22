@@ -28,7 +28,7 @@
 #include "KoDocumentInfoDlg.h"
 #include "KoFileDialog.h"
 #include "KoVersionDialog.h"
-#include "KoDockFactory.h"
+#include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"
 #include "KoPrintJob.h"
 #include "KoDocumentEntry.h"
@@ -1754,7 +1754,7 @@ void KoMainWindow::setDocToOpen(KoDocument *doc)
     d->docToOpen = doc;
 }
 
-QDockWidget* KoMainWindow::createDockWidget(KoDockFactory* factory)
+QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
 
@@ -1785,18 +1785,18 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactory* factory)
         bool visible = true;
 
         switch (factory->defaultDockPosition()) {
-        case KoDockFactory::DockTornOff:
+        case KoDockFactoryBase::DockTornOff:
             dockWidget->setFloating(true); // position nicely?
             break;
-        case KoDockFactory::DockTop:
+        case KoDockFactoryBase::DockTop:
             side = Qt::TopDockWidgetArea; break;
-        case KoDockFactory::DockLeft:
+        case KoDockFactoryBase::DockLeft:
             side = Qt::LeftDockWidgetArea; break;
-        case KoDockFactory::DockBottom:
+        case KoDockFactoryBase::DockBottom:
             side = Qt::BottomDockWidgetArea; break;
-        case KoDockFactory::DockRight:
+        case KoDockFactoryBase::DockRight:
             side = Qt::RightDockWidgetArea; break;
-        case KoDockFactory::DockMinimized:
+        case KoDockFactoryBase::DockMinimized:
         default:
             side = Qt::RightDockWidgetArea;
             visible = false;

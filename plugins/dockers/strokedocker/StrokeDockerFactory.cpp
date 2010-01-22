@@ -37,7 +37,7 @@ QDockWidget* StrokeDockerFactory::createDockWidget()
     return widget;
 }
 
-KoDockFactory::DockPosition StrokeDockerFactory::defaultDockPosition() const
+KoDockFactoryBase::DockPosition StrokeDockerFactory::defaultDockPosition() const
 {
     return DockMinimized;
 }

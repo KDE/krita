@@ -37,7 +37,7 @@ QDockWidget* ShapePropertiesDockerFactory::createDockWidget()
     return widget;
 }
 
-KoDockFactory::DockPosition ShapePropertiesDockerFactory::defaultDockPosition() const
+KoDockFactoryBase::DockPosition ShapePropertiesDockerFactory::defaultDockPosition() const
 {
     return DockMinimized;
 }

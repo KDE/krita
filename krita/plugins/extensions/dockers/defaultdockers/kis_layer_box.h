@@ -31,7 +31,7 @@
 #include <kis_debug.h>
 
 #include <KoColorSpace.h>
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 
 #include <kis_types.h>
@@ -119,7 +119,7 @@ private:
 
 };
 
-class KisLayerBoxFactory : public KoDockFactory
+class KisLayerBoxFactory : public KoDockFactoryBase
 {
 
 public:

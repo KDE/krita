@@ -24,9 +24,9 @@
 #include <QMap>
 #include <QIcon>
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 
-class ShapeCollectionDockerFactory : public KoDockFactory
+class ShapeCollectionDockerFactory : public KoDockFactoryBase
 {
     public:
         ShapeCollectionDockerFactory();

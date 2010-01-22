@@ -20,18 +20,18 @@
 #ifndef SHADOWDOCKERFACTORY_H
 #define SHADOWDOCKERFACTORY_H
 
-#include <KoDockFactory.h>
+#include <KoDockFactoryBase.h>
 #include <QtGui/QDockWidget>
 
 /// the factory which creates the shadow docker
-class ShadowDockerFactory : public KoDockFactory
+class ShadowDockerFactory : public KoDockFactoryBase
 {
 public:
     ShadowDockerFactory();
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
-    virtual KoDockFactory::DockPosition defaultDockPosition() const;
+    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
 
 };
 

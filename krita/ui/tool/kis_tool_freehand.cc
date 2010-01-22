@@ -175,7 +175,8 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 #endif
             }
         }
-        else if (m_mode == PAINT && (e->button() == Qt::RightButton || e->button() == Qt::MidButton)) { // end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
+        else if (m_mode == PAINT && (e->button() == Qt::RightButton || e->button() == Qt::MidButton)) {
+            // end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
             endPaint();
         }
     }

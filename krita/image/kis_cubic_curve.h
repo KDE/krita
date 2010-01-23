@@ -51,6 +51,9 @@ public:
     int addPoint(const QPointF& point);
     void removePoint(int idx);
 public:
+    const quint16* uint16Transfer() const;
+    const qreal* floatTransfer() const;
+public:
     QString toString() const;
     void fromString(const QString&);
 private:

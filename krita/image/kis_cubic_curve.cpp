@@ -236,11 +236,36 @@ static bool pointLessThan(const QPointF &a, const QPointF &b)
 }
 
 struct KisCubicCurve::Data : public QSharedData {
+    Data() : u16Transfer(0), validU16Transfer(false), fTransfer(0), validFTransfer(false) {
+    }
+    Data(const Data& data) {
+        init();
+        points = data.points;
+    }
+    void init() {
+        validSpline = false;
+        u16Transfer = 0;
+        validU16Transfer = false;
+        fTransfer = 0;
+        validFTransfer = false;
+    }
+    ~Data() {
+        delete u16Transfer;
+        delete fTransfer;
+    }
     mutable KisCubicSpline<QPointF, qreal> spline;
     QList<QPointF> points;
     mutable bool validSpline;
+    mutable quint16* u16Transfer;
+    mutable bool validU16Transfer;
+    mutable qreal* fTransfer;
+    mutable bool validFTransfer;
     void updateSpline();
     void keepSorted();
+    qreal value(qreal x);
+    void invalidate();
+    template<typename _T_, typename _T2_>
+    void updateTransfer(_T_** transfer, bool& valid, _T2_ min, _T2_ max);
 };
 
 void KisCubicCurve::Data::updateSpline()
@@ -250,9 +275,44 @@ void KisCubicCurve::Data::updateSpline()
     spline.createSpline(points);
 }
 
+void KisCubicCurve::Data::invalidate()
+{
+    validSpline = false;
+    validFTransfer = false;
+    validU16Transfer = false;
+}
+
 void KisCubicCurve::Data::keepSorted()
 {
     qSort(points.begin(), points.end(), pointLessThan);
+}
+
+qreal KisCubicCurve::Data::value(qreal x)
+{
+    updateSpline();
+    /* Automatically extend non-existing parts of the curve
+     * (e.g. before the first point) and cut off big y-values
+     */
+    x = qBound(spline.begin(), x, spline.end());
+    qreal y = spline.getValue(x);
+    return qBound(0.0, y, 1.0);
+}
+
+template<typename _T_, typename _T2_>
+void KisCubicCurve::Data::updateTransfer(_T_** transfer, bool& valid, _T2_ min, _T2_ max)
+{
+    if (!valid) {
+        if (!transfer) {
+            *transfer = new _T_[256];
+        }
+        for (int i = 0; i < 256; ++i) {
+            /* Direct uncached version */
+            _T2_ val = value(i / 255.0);
+            val = qBound(max, val, min);
+            (*transfer)[i] = val;
+        }
+        valid = true;
+    }
 }
 
 struct KisCubicCurve::Private {
@@ -267,14 +327,12 @@ KisCubicCurve::KisCubicCurve() : d(new Private)
     d->data->points.append(p);
     p.rx() = 1.0; p.ry() = 1.0;
     d->data->points.append(p);
-    d->data->validSpline = false;
 }
 
 KisCubicCurve::KisCubicCurve(const QList<QPointF>& points) : d(new Private)
 {
     d->data = new Data;
     d->data->points = points;
-    d->data->validSpline = false;
     d->data->keepSorted();
 }
 
@@ -296,13 +354,7 @@ bool KisCubicCurve::operator==(const KisCubicCurve& curve) const
 
 qreal KisCubicCurve::value(qreal x) const
 {
-    d->data->updateSpline();
-    /* Automatically extend non-existing parts of the curve
-     * (e.g. before the first point) and cut off big y-values
-     */
-    x = qBound(d->data->spline.begin(), x, d->data->spline.end());
-    qreal y = d->data->spline.getValue(x);
-    return qBound(0.0, y, 1.0);
+    return d->data->value(x);
 }
 
 QList<QPointF> KisCubicCurve::points() const
@@ -314,7 +366,7 @@ void KisCubicCurve::setPoints(const QList<QPointF>& points)
 {
     d->data.detach();
     d->data->points = points;
-    d->data->validSpline = false;
+    d->data->invalidate();
 }
 
 void KisCubicCurve::setPoint(int idx, const QPointF& point)
@@ -322,6 +374,7 @@ void KisCubicCurve::setPoint(int idx, const QPointF& point)
     d->data.detach();
     d->data->points[idx] = point;
     d->data->keepSorted();
+    d->data->invalidate();
 }
 
 int KisCubicCurve::addPoint(const QPointF& point)
@@ -329,6 +382,7 @@ int KisCubicCurve::addPoint(const QPointF& point)
     d->data.detach();
     d->data->points.append(point);
     d->data->keepSorted();
+    d->data->invalidate();
     return d->data->points.indexOf(point);
 }
 
@@ -336,6 +390,7 @@ void KisCubicCurve::removePoint(int idx)
 {
     d->data.detach();
     d->data->points.removeAt(idx);
+    d->data->invalidate();
 }
 
 QString KisCubicCurve::toString() const
@@ -365,4 +420,16 @@ void KisCubicCurve::fromString(const QString& string)
         }
     }
     setPoints(points);
+}
+
+const quint16* KisCubicCurve::uint16Transfer() const
+{
+    d->data->updateTransfer<quint16, int>(&d->data->u16Transfer, d->data->validU16Transfer, 0x0, 0xFFFF);
+    return d->data->u16Transfer;
+}
+
+const qreal* KisCubicCurve::floatTransfer() const
+{
+    d->data->updateTransfer<qreal, qreal>(&d->data->fTransfer, d->data->validFTransfer, 0.0, 1.0);
+    return d->data->fTransfer;
 }

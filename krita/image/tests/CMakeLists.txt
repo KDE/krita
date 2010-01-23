@@ -424,12 +424,6 @@ target_link_libraries(KisSelectionMaskTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_Q
 
 ########### next target ###############
 
-set(kis_serializable_configuration_test_SRCS kis_serializable_configuration_test.cpp )
-kde4_add_unit_test(KisSerializableConfigurationTest TESTNAME krita-image-KisSerializableConfigurationTest ${kis_serializable_configuration_test_SRCS})
-target_link_libraries(KisSerializableConfigurationTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_shared_ptr_test_SRCS kis_shared_ptr_test.cpp )
 kde4_add_unit_test(KisSharedPtrTest TESTNAME krita-image-KisSharedPtrTest ${kis_shared_ptr_test_SRCS})
 target_link_libraries(KisSharedPtrTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

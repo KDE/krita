@@ -178,6 +178,15 @@ QString KisPropertiesConfiguration::getString(const QString & name, const QStrin
         return def;
 }
 
+KisCubicCurve KisPropertiesConfiguration::getCubicCurve(const QString & name, const KisCubicCurve & curve) const
+{
+    QVariant v = getProperty(name);
+    if (v.isValid())
+        return v.value<KisCubicCurve>();
+    else
+        return curve;
+}
+
 void KisPropertiesConfiguration::dump() const
 {
     QMap<QString, QVariant>::Iterator it;

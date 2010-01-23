@@ -22,6 +22,7 @@
 #include <QMap>
 #include <QVariant>
 #include <kis_debug.h>
+#include <kis_cubic_curve.h>
 
 class QDomElement;
 class QDomDocument;
@@ -110,6 +111,8 @@ public:
     bool getBool(const QString & name, bool def = false) const;
 
     QString getString(const QString & name, const QString & def = "") const;
+
+    KisCubicCurve getCubicCurve(const QString & name, const KisCubicCurve & curve = KisCubicCurve()) const;
 
     QMap<QString, QVariant> getProperties() const;
 

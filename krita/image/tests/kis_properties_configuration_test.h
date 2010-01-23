@@ -21,6 +21,8 @@
 
 #include <QtTest/QtTest>
 
+#include "kis_cubic_curve.h"
+
 class KisPropertiesConfiguration;
 
 class KisPropertiesConfigurationTest : public QObject
@@ -40,6 +42,7 @@ private:
     QString v2;
     double v3;
     bool v4;
+    KisCubicCurve v5;
 };
 
 #endif

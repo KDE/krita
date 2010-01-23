@@ -25,7 +25,8 @@
 KisPropertiesConfigurationTest::KisPropertiesConfigurationTest() :
         v1(10), v2("hello"), v3(1242.0), v4(true)
 {
-
+    QList<QPointF> pts; pts.push_back(QPointF(0.2, 0.3)); pts.push_back(QPointF(0.5, 0.7));
+    v5.setPoints(pts);
 }
 
 void KisPropertiesConfigurationTest::testSerialization()
@@ -53,6 +54,7 @@ void KisPropertiesConfigurationTest::testDefaultValues()
     QVERIFY(config->getString("bouh", v2) == v2);
     QVERIFY(config->getDouble("bouh", v3) == v3);
     QVERIFY(config->getBool("bouh", v4) == v4);
+    QVERIFY(config->getCubicCurve("bouh", v5) == v5);
     delete config;
 }
 
@@ -63,6 +65,7 @@ KisPropertiesConfiguration* KisPropertiesConfigurationTest::createConfig()
     config->setProperty("v2", v2);
     config->setProperty("v3", v3);
     config->setProperty("v4", v4);
+    config->setProperty("v5", qVariantFromValue(v5));
     return config;
 }
 
@@ -72,6 +75,7 @@ void KisPropertiesConfigurationTest::testConfig(KisPropertiesConfiguration* conf
     QVERIFY(config->getString("v2", "") == v2);
     QVERIFY(config->getDouble("v3", 0.0) == v3);
     QVERIFY(config->getBool("v4", !v4) == v4);
+    QVERIFY(config->getCubicCurve("v5") == v5);
 }
 
 QTEST_KDEMAIN(KisPropertiesConfigurationTest, NoGUI)

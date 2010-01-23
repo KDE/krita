@@ -43,6 +43,7 @@
 // KDE includes.
 
 #include <kis_debug.h>
+#include <kis_config.h>
 #include <kcursor.h>
 #include <klocale.h>
 
@@ -266,6 +267,9 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
 
     d->drawGrid(p, wWidth, wHeight);
 
+    KisConfig cfg;
+    if (cfg.antialiasCurves())
+        p.setRenderHint(QPainter::Antialiasing);
 
     // Draw curve.
     double prevY = wHeight - d->m_curve.value(0.) * wHeight;

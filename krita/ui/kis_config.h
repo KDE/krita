@@ -139,6 +139,9 @@ public:
     QColor checkersColor();
     void setCheckersColor(const QColor & v);
 
+    bool antialiasCurves();
+    void setAntialiasCurves(bool v);
+
     int numProjectionThreads();
     void setNumProjectThreads(int num);
 

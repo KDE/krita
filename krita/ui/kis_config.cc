@@ -412,6 +412,16 @@ void KisConfig::setCheckersColor(const QColor & v)
     m_cfg.writeEntry("checkerscolor", v);
 }
 
+bool KisConfig::antialiasCurves()
+{
+    return m_cfg.readEntry("antialiascurves", false);
+}
+
+void KisConfig::setAntialiasCurves(bool v)
+{
+    m_cfg.writeEntry("antialiascurves", v);
+}
+
 int KisConfig::numProjectionThreads()
 {
     return m_cfg.readEntry("maxprojectionthreads", QThread::idealThreadCount());

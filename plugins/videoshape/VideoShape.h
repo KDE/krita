@@ -41,12 +41,14 @@ public:
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-    void init(const QMap<QString, KoDataCenter*> &dataCenterMap);
-
     /**
      * Get the collection used in the shape.
      */
     VideoCollection *videoCollection() const;
+    /**
+     * Set the collection used in the shape.
+     */
+    void setVideoCollection(VideoCollection *collection) { m_videoCollection = collection; }
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);

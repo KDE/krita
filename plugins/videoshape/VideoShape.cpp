@@ -108,8 +108,3 @@ VideoCollection *VideoShape::videoCollection() const
 {
     return m_videoCollection;
 }
-
-void VideoShape::init(const QMap<QString, KoDataCenter*> &dataCenterMap)
-{
-    m_videoCollection = dynamic_cast<VideoCollection *>(dataCenterMap.value("VideoCollection"));
-}

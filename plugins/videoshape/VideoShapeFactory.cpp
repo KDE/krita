@@ -40,11 +40,13 @@ VideoShapeFactory::VideoShapeFactory(QObject *parent)
     m_configWidget = new VideoShapeConfigWidget();
 }
 
-KoShape *VideoShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
+KoShape *VideoShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *documentResources) const
 {
     VideoShape * defaultShape = new VideoShape();
     defaultShape->setShapeId(VIDEOSHAPEID);
-    defaultShape->init(dataCenterMap);
+    Q_ASSERT(documentResources->hasResource(VideoCollection::ResourceId));
+    QVariant vc = documentResources->resource(VideoCollection::ResourceId);
+    defaultShape->setVideoCollection(static_cast<VideoCollection*>(vc.value<void*>()));
     return defaultShape;
 }
 
@@ -55,12 +57,13 @@ bool VideoShapeFactory::supports(const KoXmlElement &e) const
 
 void VideoShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap)
 {
-    // only add image collection if none exist already
-    if (!dataCenterMap.contains("VideoCollection"))
-    {
-        VideoCollection *videoCol = new VideoCollection();
-        dataCenterMap["VideoCollection"] = videoCol;
-    }
+}
+
+void VideoShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+{
+    QVariant variant;
+    variant.setValue<void*>(new VideoCollection(manager));
+    manager->setResource(VideoCollection::ResourceId, variant);
 }
 
 QList<KoShapeConfigWidgetBase*> VideoShapeFactory::createShapeOptionPanels()

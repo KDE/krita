@@ -38,6 +38,7 @@ public:
     virtual void populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap);
     /// reimplemented
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    virtual void newDocumentResourceManager(KoResourceManager *manager);
 
     VideoShapeConfigWidget *m_configWidget;
 };

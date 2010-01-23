@@ -42,8 +42,9 @@ public:
     QMap<QByteArray, VideoData*> storeVideos;
 };
 
-VideoCollection::VideoCollection()
-    : d(new Private())
+VideoCollection::VideoCollection(QObject *parent)
+    : QObject(parent),
+    d(new Private())
     , saveCounter(0)
 {
 }

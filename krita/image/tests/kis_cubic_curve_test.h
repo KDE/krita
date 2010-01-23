@@ -35,6 +35,7 @@ private slots:
     void testEdition();
     void testComparison();
     void testSerialization();
+    void testValue();
     void testTransfer();
 private:
     QPointF pt0, pt1, pt2, pt3, pt4, pt5;

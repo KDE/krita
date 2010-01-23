@@ -50,6 +50,9 @@ public:
         m_image = image;
     }
     
+    /**
+     * XXX: Document!
+     */
     virtual void changePaintOpSize(qreal x, qreal y) {
         Q_UNUSED(x);
         Q_UNUSED(y);

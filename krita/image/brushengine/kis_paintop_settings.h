@@ -130,8 +130,13 @@ public:
      */
     virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, const KoViewConverter &converter, OutlineMode _mode) const;
 
+    /**
+     * XXX: document!
+     */
     virtual void changePaintOpSize(qreal x, qreal y);
     
+    // XXX: I'd like to be able to get at the size as well
+
 #if defined(HAVE_OPENGL)
     virtual QString modelName() const;
 #endif

@@ -57,7 +57,7 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
     KoInlineTextObjectManager *manager = 0;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
         QVariant variant = documentResources->resource(KoText::InlineTextObjectManager);
-        manager = static_cast<KoInlineTextObjectManager*>(variant.value<void*>());
+        manager = variant.value<KoInlineTextObjectManager*>();
     }
     TextShape *text = new TextShape(manager);
     KoTextDocument document(text->textShapeData()->document());
@@ -65,7 +65,7 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
         document.setUndoStack(documentResources->undoStack());
 
         if (documentResources->hasResource(KoText::StyleManager)) {
-            KoStyleManager *styleManager = static_cast<KoStyleManager *>(documentResources->resource(KoText::StyleManager).value<void*>());
+            KoStyleManager *styleManager = documentResources->resource(KoText::StyleManager).value<KoStyleManager*>();
             document.setStyleManager(styleManager);
         }
         if (documentResources->hasResource(KoText::PageProvider)) {
@@ -99,16 +99,16 @@ bool TextShapeFactory::supports(const KoXmlElement & e) const
 void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
 {
     QVariant variant;
-    variant.setValue<void*>(new KoInlineTextObjectManager(manager));
+    variant.setValue<KoInlineTextObjectManager*>(new KoInlineTextObjectManager(manager));
     manager->setResource(KoText::InlineTextObjectManager, variant);
 
     if (!manager->hasResource(KoDocumentResource::UndoStack)) {
         kWarning(32500) << "No KUndoStack found in the document resource manager, creating a new one";
         manager->setUndoStack(new KUndoStack(manager));
     }
-    variant.setValue<void*>(new KoChangeTracker(manager));
+    variant.setValue(new KoChangeTracker(manager));
     manager->setResource(KoText::ChangeTracker, variant);
-    variant.setValue<void*>(new KoStyleManager(manager));
+    variant.setValue(new KoStyleManager(manager));
     manager->setResource(KoText::StyleManager, variant);
 }
 

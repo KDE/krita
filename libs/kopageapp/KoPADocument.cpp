@@ -753,7 +753,7 @@ void KoPADocument::updatePageCount()
 {
     if (resourceManager()->hasResource(KoText::InlineTextObjectManager)) {
         QVariant var = resourceManager()->resource(KoText::InlineTextObjectManager);
-        KoInlineTextObjectManager *om = static_cast<KoInlineTextObjectManager*>(var.value<void*>());
+        KoInlineTextObjectManager *om = var.value<KoInlineTextObjectManager*>();
         om->setProperty( KoInlineObject::PageCount, pageCount() );
     }
 }

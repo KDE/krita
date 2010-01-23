@@ -146,13 +146,11 @@ void KisCubicCurveTest::testTransfer()
     QVERIFY(cc.uint16Transfer());
     for(int i = 0; i < 256; ++i)
     {
-        qDebug() << i << " " << cc.uint16Transfer()[i] << " " << quint16(i << 16);
-//         QCOMPARE(cc.uint16Transfer()[i], quint16(i << 16) );
+        QCOMPARE(cc.uint16Transfer()[i], quint16( cc.value(i / 255.0) * 0xFFFF) );
     }
     QVERIFY(cc.floatTransfer());
     for(int i = 0; i < 256; ++i)
     {
-        qDebug() << i << " " << cc.floatTransfer()[i] << " " << (i / 255.0);
         QCOMPARE(cc.floatTransfer()[i], i / 255.0);
     }
 }

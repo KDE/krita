@@ -236,7 +236,7 @@ static bool pointLessThan(const QPointF &a, const QPointF &b)
 }
 
 struct KisCubicCurve::Data : public QSharedData {
-    Data() : u16Transfer(0), validU16Transfer(false), fTransfer(0), validFTransfer(false) {
+    Data() {
         init();
     }
     Data(const Data& data) {
@@ -308,8 +308,8 @@ void KisCubicCurve::Data::updateTransfer(_T_** transfer, bool& valid, _T2_ min, 
         }
         for (int i = 0; i < 256; ++i) {
             /* Direct uncached version */
-            _T2_ val = value(i / 255.0);
-            val = qBound(max, val, min);
+            _T2_ val = value(i / 255.0) * max;
+            val = qBound(min, val, max);
             (*transfer)[i] = val;
         }
         valid = true;

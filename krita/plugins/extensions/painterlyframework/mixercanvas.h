@@ -37,11 +37,11 @@ class QUndoCommand;
 
 class KoColorSpace;
 class KoShapeManager;
-class KoToolProxy;
 class KoViewConverter;
 class KoColor;
 class KisPaintDevice;
 
+class MixerTool;
 
 class MixerCanvas : public QFrame, public KoCanvasBase
 {
@@ -57,8 +57,7 @@ public:
     KisPaintDevice *device();
     const KoColorSpace* colorSpace();
 
-    void setToolProxy(KoToolProxy *proxy);
-    KoToolProxy *toolProxy() const { return m_toolProxy; }
+    MixerTool* mixerTool() const { return m_mixerTool; }
 
     QWidget *canvasWidget() { return this; }
     const QWidget *canvasWidget() const { return this; }
@@ -86,9 +85,10 @@ public:
     void gridSize(qreal *, qreal *) const { Q_ASSERT(false); }
     bool snapToGrid() const { Q_ASSERT(false); return false; }
     KoShapeManager *shapeManager() const { Q_ASSERT(false); return 0; }
-    const KoViewConverter *viewConverter() const { Q_ASSERT(false); return 0;}
+    const KoViewConverter *viewConverter() const { return m_viewConverter;}
     void updateInputMethodInfo() { Q_ASSERT(false); }
     void updateCanvas(const QRectF &rc) { Q_UNUSED(rc);}
+    KoToolProxy* toolProxy() const { Q_ASSERT(false); return 0; }
     KoUnit unit() const;
     void addCommand(QUndoCommand *command);
 
@@ -100,10 +100,9 @@ public slots:
 
 private:
 
-    KoToolProxy *m_toolProxy;
-
+    MixerTool *m_mixerTool;
+    KoViewConverter *m_viewConverter;
     KisPaintDevice *m_paintDevice;
-
     bool m_dirty;
     QImage m_image;
 

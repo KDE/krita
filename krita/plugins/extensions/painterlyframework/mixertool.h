@@ -26,6 +26,7 @@
 class KoPointerEvent;
 class MixerCanvas;
 class QRegion;
+class KisPaintInformation;
 
 class MixerTool : public KoTool
 {
@@ -36,7 +37,8 @@ public:
     enum State {
         MIXING,
         PANNING,
-        PICKING
+        PICKING,
+        HOVER
     };
 
     MixerTool(MixerCanvas *mixer);
@@ -82,6 +84,8 @@ protected:
 
     void initPaint(KoPointerEvent *e);
     void endPaint();
+    void paintAt(const KisPaintInformation &pi);
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 
 private:
 

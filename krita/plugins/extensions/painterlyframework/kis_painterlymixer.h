@@ -32,7 +32,6 @@ class KisCanvasResourceProvider;
 class KisPaintOp;
 
 class MixerCanvas;
-class MixerTool;
 
 class KisPainterlyMixer : public QWidget, private Ui::KisPainterlyMixer
 {
@@ -62,8 +61,6 @@ private slots:
     void slotChangeColor(int index);
 
 private:
-
-    MixerTool *m_tool;
 
     QButtonGroup *m_bgColors;
     QList<KoColor> m_vColors;

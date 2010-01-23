@@ -21,27 +21,20 @@
 
 #include <QButtonGroup>
 #include <QGridLayout>
+#include <QSlider>
 
 #include <KoColorSpace.h>
-#include <KoToolProxy.h>
 #include <KoCanvasBase.h>
 #include <KoResourceManager.h>
 
 #include "colorspot.h"
 #include "kis_ksf32_colorspace.h"
 #include "mixercanvas.h"
-#include "mixertool.h"
 
 KisPainterlyMixer::KisPainterlyMixer(QWidget *parent)
         : QWidget(parent)
-        , m_tool(0)
 {
     setupUi(this);
-
-    m_canvas->setToolProxy(new KoToolProxy(m_canvas));
-    m_tool = new MixerTool(m_canvas);
-    m_canvas->toolProxy()->setActiveTool(m_tool);
-    m_tool->activate();
 
     initSpots();
 
@@ -51,11 +44,12 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent)
     bnPan->setIcon(KIcon("krita_tool_move"));
     m_bErase->setIcon(KIcon("edit-delete"));
     connect(m_bErase, SIGNAL(clicked()), m_canvas, SLOT(slotClear()));
+
+    //connect(sliderRadius, SIGNAL(valueChanged(int)), m_canvas->mixerTool(), SLOT(setRadius(qreal)));
 }
 
 KisPainterlyMixer::~KisPainterlyMixer()
 {
-    delete m_tool;
 }
 
 #define ROWS 2

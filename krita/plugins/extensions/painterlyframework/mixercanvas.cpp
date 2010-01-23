@@ -33,8 +33,8 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoShapeManager.h>
-#include <KoToolProxy.h>
 #include <KoViewConverter.h>
+#include <KoPointerEvent.h>
 
 #include <kis_image.h>
 #include <kis_paint_device.h>
@@ -45,12 +45,18 @@
 #include <kis_paintop_preset.h>
 #include <kis_config.h>
 
+#include "mixertool.h"
+
 MixerCanvas::MixerCanvas(QWidget *parent)
         : QFrame(parent)
         , KoCanvasBase(0)
-        , m_toolProxy(0)
+        , m_viewConverter(new KoViewConverter())
         , m_dirty(false)
 {
+    m_viewConverter->setZoom(1.0);
+
+    m_mixerTool = new MixerTool(this);
+
     m_image = QImage(size(), QImage::Format_ARGB32);
     m_image.fill(0);
 
@@ -65,18 +71,12 @@ MixerCanvas::MixerCanvas(QWidget *parent)
 
 MixerCanvas::~MixerCanvas()
 {
-    if (m_toolProxy)
-        delete m_toolProxy;
+    delete m_mixerTool;
 }
 
 KisPaintDevice *MixerCanvas::device()
 {
     return m_paintDevice;
-}
-
-void MixerCanvas::setToolProxy(KoToolProxy *proxy)
-{
-    m_toolProxy = proxy;
 }
 
 void MixerCanvas::addCommand(QUndoCommand *command)
@@ -97,27 +97,51 @@ const KoColorSpace* MixerCanvas::colorSpace()
 
 void MixerCanvas::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    m_toolProxy->mouseDoubleClickEvent(event, event->pos());
+    QPointF point = m_viewConverter->viewToDocument(event->posF());
+    KoPointerEvent pointerEvent(event, point);
+    m_mixerTool->mouseDoubleClickEvent(&pointerEvent);
 }
 
 void MixerCanvas::mouseMoveEvent(QMouseEvent *event)
 {
-    m_toolProxy->mouseMoveEvent(event, event->pos());
+    QPointF point = m_viewConverter->viewToDocument(event->posF());
+    KoPointerEvent pointerEvent(event, point);
+    m_mixerTool->mouseMoveEvent(&pointerEvent);
 }
 
 void MixerCanvas::mousePressEvent(QMouseEvent *event)
 {
-    m_toolProxy->mousePressEvent(event, event->pos());
+    QPointF point = m_viewConverter->viewToDocument(event->posF());
+    KoPointerEvent pointerEvent(event, point);
+    m_mixerTool->mousePressEvent(&pointerEvent);
 }
 
 void MixerCanvas::mouseReleaseEvent(QMouseEvent *event)
 {
-    m_toolProxy->mouseReleaseEvent(event, event->pos());
+    QPointF point = m_viewConverter->viewToDocument(event->posF());
+    KoPointerEvent pointerEvent(event, point);
+    m_mixerTool->mouseReleaseEvent(&pointerEvent);
 }
 
 void MixerCanvas::tabletEvent(QTabletEvent *event)
 {
-    m_toolProxy->tabletEvent(event, event->pos());
+    QPointF point = m_viewConverter->viewToDocument(event->pos());
+    KoPointerEvent pointerEvent(event, point);
+
+    KoPointerEvent ev(event, point);
+    switch (event->type()) {
+    case QEvent::TabletPress:
+        m_mixerTool->mousePressEvent(&pointerEvent);
+        break;
+    case QEvent::TabletRelease:
+        m_mixerTool->mouseReleaseEvent(&ev);
+        break;
+    case QEvent::TabletMove:
+        m_mixerTool->mouseMoveEvent(&ev);
+    default:
+        ; // ignore the rest.
+    }
+
 }
 
 void MixerCanvas::resizeEvent(QResizeEvent *event)

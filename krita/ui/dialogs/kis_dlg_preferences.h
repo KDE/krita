@@ -176,8 +176,11 @@ private slots:
     void linkSpacingToggled(bool);
     void spinBoxHSpacingChanged(int);
     void spinBoxVSpacingChanged(int);
+    void linkOffsetToggled(bool);
+    void spinBoxXOffsetChanged(int);
+    void spinBoxYOffsetChanged(int);
 private:
-    bool m_linkSpacing;
+    bool m_linkSpacing, m_linkOffset;
 };
 
 //=======================

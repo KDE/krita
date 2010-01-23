@@ -326,6 +326,17 @@ void KisConfig::setGridVSpacing(quint32 v)
     m_cfg.writeEntry("gridvspacing", v);
 }
 
+bool KisConfig::getGridSpacingAspect()
+{
+    bool v = m_cfg.readEntry("gridspacingaspect", false);
+    return v;
+}
+
+void KisConfig::setGridSpacingAspect(bool v)
+{
+    m_cfg.writeEntry("gridspacingaspect", v);
+}
+
 quint32 KisConfig::getGridSubdivisions()
 {
     qint32 v = m_cfg.readEntry("gridsubsivisons", 2);
@@ -357,6 +368,17 @@ quint32 KisConfig::getGridOffsetY()
 void KisConfig::setGridOffsetY(quint32 v)
 {
     m_cfg.writeEntry("gridoffsety", v);
+}
+
+bool KisConfig::getGridOffsetAspect()
+{
+    bool v = m_cfg.readEntry("gridoffsetaspect", false);
+    return v;
+}
+
+void KisConfig::setGridOffsetAspect(bool v)
+{
+    m_cfg.writeEntry("gridoffsetaspect", v);
 }
 
 qint32 KisConfig::checkSize()

@@ -40,7 +40,6 @@
 #endif
 
 #include <libs/main/KoDocument.h>
-#include <KoImageResource.h>
 #include <KoColorProfile.h>
 
 #include <kmessagebox.h>
@@ -346,16 +345,23 @@ GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
 
     intHSpacing->setValue(cfg.getGridHSpacing());
     intVSpacing->setValue(cfg.getGridVSpacing());
-    linkSpacingToggled(cfg.getGridHSpacing()==cfg.getGridVSpacing());
+    spacingAspectButton->setKeepAspectRatio(cfg.getGridSpacingAspect());
+    linkSpacingToggled(cfg.getGridSpacingAspect());
 
     intSubdivision->setValue(cfg.getGridSubdivisions());
-    intOffsetX->setValue(cfg.getGridOffsetX());
-    intOffsetY->setValue(cfg.getGridOffsetY());
 
-    connect(bnLinkSpacing, SIGNAL(toggled(bool)), this, SLOT(linkSpacingToggled(bool)));
+    intXOffset->setValue(cfg.getGridOffsetX());
+    intYOffset->setValue(cfg.getGridOffsetY());
+    offsetAspectButton->setKeepAspectRatio(cfg.getGridOffsetAspect());
+    linkOffsetToggled(cfg.getGridOffsetAspect());
+
+    connect(spacingAspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkSpacingToggled(bool)));
+    connect(offsetAspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkOffsetToggled(bool)));
 
     connect(intHSpacing, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHSpacingChanged(int)));
     connect(intVSpacing, SIGNAL(valueChanged(int)), this, SLOT(spinBoxVSpacingChanged(int)));
+    connect(intXOffset, SIGNAL(valueChanged(int)), this, SLOT(spinBoxXOffsetChanged(int)));
+    connect(intYOffset, SIGNAL(valueChanged(int)), this, SLOT(spinBoxYOffsetChanged(int)));
 
 
 }
@@ -371,10 +377,11 @@ void GridSettingsTab::setDefault()
 
     intHSpacing->setValue(10);
     intVSpacing->setValue(10);
-    linkSpacingToggled(true);
+    linkSpacingToggled(false);
     intSubdivision->setValue(1);
-    intOffsetX->setValue(0);
-    intOffsetY->setValue(0);
+    intXOffset->setValue(0);
+    intYOffset->setValue(0);
+    linkOffsetToggled(false);
 }
 
 void GridSettingsTab::spinBoxHSpacingChanged(int v)
@@ -391,17 +398,35 @@ void GridSettingsTab::spinBoxVSpacingChanged(int v)
     }
 }
 
-
 void GridSettingsTab::linkSpacingToggled(bool b)
 {
-    bnLinkSpacing->setChecked(b);
     m_linkSpacing = b;
 
-    KoImageResource kir;
-    if (b) {
-        bnLinkSpacing->setIcon(QIcon(kir.chain()));
-    } else {
-        bnLinkSpacing->setIcon(QIcon(kir.chainBroken()));
+    if (m_linkSpacing) {
+        intVSpacing->setValue(intHSpacing->value());
+    }
+}
+
+void GridSettingsTab::spinBoxXOffsetChanged(int v)
+{
+    if (m_linkOffset) {
+        intYOffset->setValue(v);
+    }
+}
+
+void GridSettingsTab::spinBoxYOffsetChanged(int v)
+{
+    if (m_linkOffset) {
+        intXOffset->setValue(v);
+    }
+}
+
+void GridSettingsTab::linkOffsetToggled(bool b)
+{
+    m_linkOffset = b;
+
+    if (m_linkOffset) {
+        intYOffset->setValue(intXOffset->value());
     }
 }
 
@@ -552,9 +577,11 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setGridHSpacing(dialog->m_gridSettings->intHSpacing->value());
         cfg.setGridVSpacing(dialog->m_gridSettings->intVSpacing->value());
+        cfg.setGridSpacingAspect(dialog->m_gridSettings->spacingAspectButton->keepAspectRatio());
         cfg.setGridSubdivisions(dialog->m_gridSettings->intSubdivision->value());
-        cfg.setGridOffsetX(dialog->m_gridSettings->intOffsetX->value());
-        cfg.setGridOffsetY(dialog->m_gridSettings->intOffsetY->value());
+        cfg.setGridOffsetX(dialog->m_gridSettings->intXOffset->value());
+        cfg.setGridOffsetY(dialog->m_gridSettings->intYOffset->value());
+        cfg.setGridOffsetAspect(dialog->m_gridSettings->offsetAspectButton->keepAspectRatio());
 
     }
     delete dialog;

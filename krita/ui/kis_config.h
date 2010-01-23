@@ -115,6 +115,9 @@ public:
     quint32 getGridVSpacing();
     void setGridVSpacing(quint32 v);
 
+    bool getGridSpacingAspect();
+    void setGridSpacingAspect(bool v);
+
     quint32 getGridSubdivisions();
     void setGridSubdivisions(quint32 v);
 
@@ -123,6 +126,9 @@ public:
 
     quint32 getGridOffsetY();
     void setGridOffsetY(quint32 v);
+
+    bool getGridOffsetAspect();
+    void setGridOffsetAspect(bool v);
 
     qint32 checkSize();
     void setCheckSize(qint32 checkSize);

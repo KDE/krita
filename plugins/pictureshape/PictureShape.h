@@ -44,13 +44,12 @@ public:
     // reimplemented
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
 
-    /// reimplemented
-    void init(const QMap<QString, KoDataCenter*> &dataCenterMap);
-
     /**
      * Get the collection used in the shape.
      */
     KoImageCollection *imageCollection() const;
+
+    void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);

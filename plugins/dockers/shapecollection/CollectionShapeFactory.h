@@ -30,12 +30,7 @@ class CollectionShapeFactory : public KoShapeFactory
         CollectionShapeFactory(QObject *parent, const QString &id, KoShape* shape);
         ~CollectionShapeFactory();
 
-        virtual KoShape* createDefaultShape( KoShapeControllerBase * shapeController );
-        virtual KoShape* createShape( const KoProperties* params, KoShapeControllerBase * shapeController );
-
-    protected:
-        virtual KoShape* createDefaultShape() const;
-        virtual KoShape* createShape(const KoProperties* params) const;
+        virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
 
     private:
         KoShape* m_shape;

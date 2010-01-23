@@ -87,14 +87,14 @@ class KRITAUI_EXPORT KisShapeSelectionFactory : public KoShapeFactory
     Q_OBJECT
 public:
 
-    using KoShapeFactory::createDefaultShape;
-    using KoShapeFactory::createShape;
-
     KisShapeSelectionFactory(QObject* parent);
     ~KisShapeSelectionFactory() {}
 
-    KoShape* createDefaultShape() const;
-    KoShape* createShape(const KoProperties* params) const;
+    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const {
+        Q_UNUSED(documentResources);
+        Q_UNUSED(dataCenterMap);
+        return 0;
+    }
 };
 
 #endif

@@ -35,8 +35,7 @@ public:
     explicit ArtisticTextShapeFactory(QObject *parent);
     ~ArtisticTextShapeFactory() {}
 
-    KoShape *createDefaultShape() const;
-    KoShape *createShape(const KoProperties * params) const;
+    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
     // reimplemented from KoShapeFactory
     virtual bool supports(const KoXmlElement & e) const;
 };

@@ -100,7 +100,7 @@ void KisToolSelectRectangular::LokalTool::finishRect(const QRectF& rect)
         if (rectFactory) {
             // it is ok to use a empty map here as the data is not needed.
             QMap<QString, KoDataCenter *> dataCenterMap;
-            shape = rectFactory->createDefaultShapeAndInit(dataCenterMap);
+            shape = rectFactory->createDefaultShape(dataCenterMap, 0);
             shape->setSize(documentRect.size());
             shape->setPosition(documentRect.topLeft());
         } else {

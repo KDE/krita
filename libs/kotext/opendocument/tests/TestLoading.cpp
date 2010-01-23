@@ -914,7 +914,7 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
 
     KoOdfLoadingContext odfLoadingContext(odfReadStore.styles(), odfReadStore.store(), *componentData);
     QMap<QString, KoDataCenter *> dataCenterMap;
-    KoShapeLoadingContext shapeLoadingContext(odfLoadingContext, dataCenterMap);
+    KoShapeLoadingContext shapeLoadingContext(odfLoadingContext, dataCenterMap, 0);
     KoTextSharedLoadingData *textSharedLoadingData = new KoTextSharedLoadingData;
     textSharedLoadingData->loadOdfStyles(odfLoadingContext, styleManager);
     shapeLoadingContext.addSharedData(KOTEXT_SHARED_LOADING_ID, textSharedLoadingData);

@@ -44,10 +44,10 @@ KoCreateShapeStrategy::KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPo
         KoShape *shape;
         if (props) {
             // it is ok that the data center map is empty as the shape is never added to the document
-            shape = factory->createShapeAndInit(props, dataCenterMap);
+            shape = factory->createShape(props, dataCenterMap);
         } else {
             // it is ok that the data center map is empty as the shape is never added to the document
-            shape = factory->createDefaultShapeAndInit(dataCenterMap);
+            shape = factory->createDefaultShape(dataCenterMap);
         }
 
         m_outline = shape->outline();
@@ -69,9 +69,9 @@ QUndoCommand* KoCreateShapeStrategy::createCommand()
     const KoProperties *props = parent->shapeProperties();
     KoShape *shape;
     if (props)
-        shape = factory->createShapeAndInit(props, parent->canvas()->shapeController()->dataCenterMap());
+        shape = factory->createShape(props, parent->canvas()->shapeController()->dataCenterMap(), parent->canvas()->shapeController()->resourceManager());
     else
-        shape = factory->createDefaultShapeAndInit(parent->canvas()->shapeController()->dataCenterMap());
+        shape = factory->createDefaultShape(parent->canvas()->shapeController()->dataCenterMap(), parent->canvas()->shapeController()->resourceManager());
     if (shape->shapeId().isEmpty())
         shape->setShapeId(factory->id());
     QRectF rect = d->selectedRect();

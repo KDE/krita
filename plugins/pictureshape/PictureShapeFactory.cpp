@@ -39,17 +39,13 @@ PictureShapeFactory::PictureShapeFactory(QObject *parent)
     setLoadingPriority(1);
 }
 
-KoShape* PictureShapeFactory::createDefaultShape() const
+KoShape *PictureShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
 {
+    Q_UNUSED(documentResources);
     PictureShape * defaultShape = new PictureShape();
     defaultShape->setShapeId(PICTURESHAPEID);
+    defaultShape->setImageCollection(dynamic_cast<KoImageCollection *>(dataCenterMap.value("ImageCollection")));
     return defaultShape;
-}
-
-KoShape* PictureShapeFactory::createShape(const KoProperties *params) const
-{
-    Q_UNUSED(params);
-    return createDefaultShape();
 }
 
 bool PictureShapeFactory::supports(const KoXmlElement &e) const

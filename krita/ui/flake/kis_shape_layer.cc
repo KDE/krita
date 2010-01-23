@@ -116,7 +116,7 @@ public:
 
     virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) {
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-        KoShapeLoadingContext context(loadingContext, m_controller->dataCenterMap());
+        KoShapeLoadingContext context(loadingContext, m_controller->dataCenterMap(), m_controller->resourceManager());
         KoXmlElement child;
         forEachElement(child, body) {
             KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
@@ -416,7 +416,7 @@ bool KisShapeLayer::loadLayer(KoStore* store)
 
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
     context.setManifestFile(QString("tar:/") + odfStore.store()->currentPath() + "META-INF/manifest.xml");
-    KoShapeLoadingContext shapeContext(context, m_d->controller->dataCenterMap());
+    KoShapeLoadingContext shapeContext(context, m_d->controller->dataCenterMap(), m_d->controller->resourceManager());
 
 
     KoXmlElement layerElement;

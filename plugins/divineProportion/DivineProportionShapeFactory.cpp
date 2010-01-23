@@ -29,15 +29,11 @@ DivineProportionShapeFactory::DivineProportionShapeFactory(QObject *parent)
     setIcon( "divine-shape" );
 }
 
-KoShape *DivineProportionShapeFactory::createDefaultShape() const
+KoShape *DivineProportionShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
 {
-    DivineProportionShape *text = new DivineProportionShape();
-    return text;
-}
-
-KoShape *DivineProportionShapeFactory::createShape(const KoProperties * /*params*/) const
-{
-    return createDefaultShape();
+    DivineProportionShape *shape = new DivineProportionShape();
+    shape->setShapeId(DivineProportionShape_SHAPEID);
+    return shape;
 }
 
 QList<KoShapeConfigWidgetBase*> DivineProportionShapeFactory::createShapeOptionPanels()

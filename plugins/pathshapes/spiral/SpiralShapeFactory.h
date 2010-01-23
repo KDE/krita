@@ -31,8 +31,7 @@ public:
     /// constructor
     explicit SpiralShapeFactory(QObject *parent);
     ~SpiralShapeFactory() {}
-    KoShape *createDefaultShape() const;
-    KoShape *createShape(const KoProperties *params) const;
+    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 

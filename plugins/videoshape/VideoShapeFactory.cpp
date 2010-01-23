@@ -40,17 +40,12 @@ VideoShapeFactory::VideoShapeFactory(QObject *parent)
     m_configWidget = new VideoShapeConfigWidget();
 }
 
-KoShape* VideoShapeFactory::createDefaultShape() const
+KoShape *VideoShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
 {
     VideoShape * defaultShape = new VideoShape();
     defaultShape->setShapeId(VIDEOSHAPEID);
+    defaultShape->init(dataCenterMap);
     return defaultShape;
-}
-
-KoShape* VideoShapeFactory::createShape(const KoProperties *params) const
-{
-    Q_UNUSED(params);
-    return createDefaultShape();
 }
 
 bool VideoShapeFactory::supports(const KoXmlElement &e) const

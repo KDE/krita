@@ -40,7 +40,7 @@ EllipseShapeFactory::EllipseShapeFactory(QObject *parent)
     setLoadingPriority(1);
 }
 
-KoShape *EllipseShapeFactory::createDefaultShape() const
+KoShape *EllipseShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
 {
     EllipseShape *ellipse = new EllipseShape();
 
@@ -54,12 +54,6 @@ KoShape *EllipseShapeFactory::createDefaultShape() const
     ellipse->setBackground(new KoGradientBackground(gradient));
 
     return ellipse;
-}
-
-KoShape *EllipseShapeFactory::createShape(const KoProperties *params) const
-{
-    Q_UNUSED(params);
-    return createDefaultShape();
 }
 
 bool EllipseShapeFactory::supports(const KoXmlElement &e) const

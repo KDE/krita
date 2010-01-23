@@ -43,17 +43,12 @@ VectorShapeFactory::VectorShapeFactory(QObject *parent)
     setLoadingPriority(1);
 }
 
-KoShape *VectorShapeFactory::createDefaultShape() const
+KoShape *VectorShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
 {
     VectorShape *shape = new VectorShape();
     shape->setShapeId(VectorShape_SHAPEID);
 
     return shape;
-}
-
-KoShape *VectorShapeFactory::createShape(const KoProperties * /*params*/) const
-{
-    return createDefaultShape();
 }
 
 bool VectorShapeFactory::supports(const KoXmlElement & e) const

@@ -252,7 +252,7 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
     // it ok here to pass an empty dataCenterMap as we don't have a document
     // tz: not sure if that is 100% correct what if an image is loaded in the collection it needs a image collection
     QMap<QString, KoDataCenter *> dataCenterMap;
-    m_shapeLoadingContext = new KoShapeLoadingContext(*m_loadingContext, dataCenterMap);
+    m_shapeLoadingContext = new KoShapeLoadingContext(*m_loadingContext, dataCenterMap, 0);
 
     KoXmlElement content = m_odfStore->contentDoc().documentElement();
     KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );

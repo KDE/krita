@@ -53,14 +53,8 @@ MusicShapeFactory::MusicShapeFactory( QObject* parent )
     setLoadingPriority( 1 );
 }
 
-KoShape* MusicShapeFactory::createDefaultShape() const
+KoShape *MusicShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
 {
-    return createShape(0);
-}
-
-KoShape* MusicShapeFactory::createShape( const KoProperties* params ) const
-{
-    Q_UNUSED( params );
     static bool loadedFont = false;
     if (!loadedFont) {
         QString fontFile = KStandardDirs::locate("data", "musicshape/fonts/Emmentaler-14.ttf");
@@ -71,6 +65,7 @@ KoShape* MusicShapeFactory::createShape( const KoProperties* params ) const
     }
     MusicShape* shape = new MusicShape();
     shape->setSize(QSizeF(400, 300));
+    shape->setShapeId(MusicShapeId);
     return shape;
 }
 

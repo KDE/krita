@@ -39,10 +39,13 @@ static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttribute
 class KoShapeLoadingContext::Private
 {
 public:
-    Private(KoOdfLoadingContext &c, const QMap<QString, KoDataCenter *> & dataCenterMap)
+    Private(KoOdfLoadingContext &c, const QMap<QString, KoDataCenter *> & dataCenterMap, KoResourceManager *resourceManager)
             : context(c)
             , zIndex(0)
-            , dataCenterMap(dataCenterMap) {}
+            , dataCenterMap(dataCenterMap),
+            documentResources(resourceManager)
+    {
+    }
     ~Private() {
         foreach(KoSharedLoadingData * data, sharedData) {
             delete data;
@@ -56,10 +59,11 @@ public:
     QMap<QString, KoDataCenter *> dataCenterMap;
     QMap<QString, KoLoadingShapeUpdater*> updaterById;
     QMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
+    KoResourceManager *documentResources;
 };
 
-KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, const QMap<QString, KoDataCenter *> & dataCenterMap)
-        : d(new Private(context, dataCenterMap))
+KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, const QMap<QString, KoDataCenter *> & dataCenterMap, KoResourceManager *documentResources)
+        : d(new Private(context, dataCenterMap, documentResources))
 {
 }
 
@@ -174,4 +178,9 @@ KoDataCenter * KoShapeLoadingContext::dataCenter(const QString & dataCenterName)
 QMap<QString, KoDataCenter *> KoShapeLoadingContext::dataCenterMap() const
 {
     return d->dataCenterMap;
+}
+
+KoResourceManager *KoShapeLoadingContext::documentResourceManager() const
+{
+    return d->documentResources;
 }

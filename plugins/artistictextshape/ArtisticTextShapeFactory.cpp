@@ -35,16 +35,11 @@ ArtisticTextShapeFactory::ArtisticTextShapeFactory(QObject *parent)
     setOdfElementNames( KoXmlNS::draw, QStringList( "custom-shape" ) );
 }
 
-KoShape *ArtisticTextShapeFactory::createDefaultShape() const
+KoShape *ArtisticTextShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
 {
     ArtisticTextShape * text = new ArtisticTextShape();
     text->setBackground( new KoColorBackground( QColor( Qt::black) ) );
     return text;
-}
-
-KoShape *ArtisticTextShapeFactory::createShape(const KoProperties *) const
-{
-    return createDefaultShape();
 }
 
 bool ArtisticTextShapeFactory::supports(const KoXmlElement & e) const

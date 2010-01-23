@@ -68,22 +68,6 @@ KoShapeFactory::~KoShapeFactory()
     delete d;
 }
 
-KoShape * KoShapeFactory::createDefaultShapeAndInit(const QMap<QString, KoDataCenter *> & dataCenterMap) const
-{
-    KoShape * shape = createDefaultShape();
-    Q_ASSERT(shape);
-    shape->init(dataCenterMap);
-    return shape;
-}
-
-KoShape * KoShapeFactory::createShapeAndInit(const KoProperties * params, const QMap<QString, KoDataCenter *> & dataCenterMap) const
-{
-    KoShape * shape = createShape(params);
-    Q_ASSERT(shape);
-    shape->init(dataCenterMap);
-    return shape;
-}
-
 QString KoShapeFactory::toolTip() const
 {
     return d->tooltip;
@@ -193,6 +177,11 @@ void KoShapeFactory::setHidden(bool hidden)
 void KoShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
 {
     Q_UNUSED(manager);
+}
+
+KoShape *KoShapeFactory::createShape(const KoProperties*, const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources) const
+{
+    return createDefaultShape(dataCenterMap, documentResources);
 }
 
 #include <KoShapeFactory.moc>

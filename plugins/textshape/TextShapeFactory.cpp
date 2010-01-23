@@ -51,15 +51,17 @@ TextShapeFactory::TextShapeFactory(QObject *parent)
     addTemplate(t);
 }
 
-KoShape *TextShapeFactory::createDefaultShape() const
+KoShape *TextShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager * /*documentResources*/) const
 {
     TextShape *text = new TextShape(m_inlineTextObjectManager);
+    text->init(dataCenterMap);
     return text;
 }
 
-KoShape *TextShapeFactory::createShape(const KoProperties *params) const
+KoShape *TextShapeFactory::createShape(const KoProperties *params, const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager * /*documentResources*/) const
 {
     TextShape *shape = new TextShape(m_inlineTextObjectManager);
+    shape->init(dataCenterMap);
     shape->setSize(QSizeF(300, 200));
     shape->setDemoText(params->boolProperty("demo"));
     QString text("text");

@@ -34,7 +34,7 @@ SpiralShapeFactory::SpiralShapeFactory(QObject *parent)
     setLoadingPriority(1);
 }
 
-KoShape * SpiralShapeFactory::createDefaultShape() const
+KoShape *SpiralShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *> &, KoResourceManager *) const
 {
     SpiralShape *spiral = new SpiralShape();
 
@@ -42,12 +42,6 @@ KoShape * SpiralShapeFactory::createDefaultShape() const
     spiral->setShapeId(KoPathShapeId);
 
     return spiral;
-}
-
-KoShape * SpiralShapeFactory::createShape(const KoProperties *params) const
-{
-    Q_UNUSED(params);
-    return createDefaultShape();
 }
 
 QList<KoShapeConfigWidgetBase*> SpiralShapeFactory::createShapeOptionPanels()

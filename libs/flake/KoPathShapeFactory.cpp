@@ -37,7 +37,7 @@ KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
     setLoadingPriority(0);
 }
 
-KoShape * KoPathShapeFactory::createDefaultShape() const
+KoShape *KoPathShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &, KoResourceManager *) const
 {
     KoPathShape* path = new KoPathShape();
     path->moveTo(QPointF(0, 50));
@@ -46,12 +46,6 @@ KoShape * KoPathShapeFactory::createDefaultShape() const
     path->normalize();
     path->setBorder(new KoLineBorder(1.0));
     return path;
-}
-
-KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const
-{
-    Q_UNUSED(params);
-    return createDefaultShape();
 }
 
 bool KoPathShapeFactory::supports(const KoXmlElement & e) const

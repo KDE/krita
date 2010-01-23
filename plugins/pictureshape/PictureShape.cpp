@@ -216,8 +216,3 @@ KoImageCollection *PictureShape::imageCollection() const
 {
     return m_imageCollection;
 }
-
-void PictureShape::init(const QMap<QString, KoDataCenter*> &dataCenterMap)
-{
-    m_imageCollection = dynamic_cast<KoImageCollection *>(dataCenterMap.value("ImageCollection"));
-}

@@ -41,7 +41,6 @@ public:
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-    /// reimplemented
     void init(const QMap<QString, KoDataCenter*> &dataCenterMap);
 
     /**

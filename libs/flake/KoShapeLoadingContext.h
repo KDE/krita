@@ -35,6 +35,7 @@ class KoLoadingShapeUpdater;
 class KoImageCollection;
 class KoSharedLoadingData;
 class KoDataCenter;
+class KoResourceManager;
 
 /**
  * Context passed to shapes during loading.
@@ -74,7 +75,7 @@ public:
      * @param dataCenterMap the data center map of the shape controller. This is used in calling KoShape::init
      *        during loading.
      */
-    KoShapeLoadingContext(KoOdfLoadingContext &context, const QMap<QString, KoDataCenter *> &dataCenterMap);
+    KoShapeLoadingContext(KoOdfLoadingContext &context, const QMap<QString, KoDataCenter *> &dataCenterMap, KoResourceManager *documentResources);
 
     /// destructor
     ~KoShapeLoadingContext();
@@ -180,6 +181,8 @@ public:
      * Get a data center map
      */
     QMap<QString, KoDataCenter *> dataCenterMap() const;
+
+    KoResourceManager *documentResourceManager() const;
 
 private:
     // to allow only the KoShapeRegistry access to the KoShapeControllerBase

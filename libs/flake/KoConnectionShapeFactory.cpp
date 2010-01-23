@@ -38,18 +38,12 @@ KoConnectionShapeFactory::KoConnectionShapeFactory(QObject* parent)
     setLoadingPriority(1);
 }
 
-KoShape* KoConnectionShapeFactory::createDefaultShape() const
+KoShape* KoConnectionShapeFactory::createDefaultShape(const QMap<QString, KoDataCenter *>  &, KoResourceManager *) const
 {
     KoConnectionShape * shape = new KoConnectionShape();
     shape->setBorder(new KoLineBorder());
     shape->setShapeId(KoPathShapeId);
     return shape;
-}
-
-KoShape* KoConnectionShapeFactory::createShape(const KoProperties* params) const
-{
-    Q_UNUSED(params);
-    return createDefaultShape();
 }
 
 bool KoConnectionShapeFactory::supports(const KoXmlElement & e) const

@@ -203,7 +203,7 @@ KoShape *KoImageSelectionWidget::selectImageShape(const QMap<QString,KoDataCente
     KoImageData *data = selectImage(dynamic_cast<KoImageCollection*>(dc.value("ImageCollection")),
             parent);
     if (data) {
-        KoShape *shape = factory->createDefaultShapeAndInit(dc);
+        KoShape *shape = factory->createDefaultShape(dc, 0);
         shape->setUserData(data);
         shape->setSize(data->imageSize());
         return shape;

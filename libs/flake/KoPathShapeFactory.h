@@ -33,8 +33,7 @@ public:
     /// constructor
     KoPathShapeFactory(QObject *parent, const QStringList&);
     ~KoPathShapeFactory() {}
-    KoShape *createDefaultShape() const;
-    KoShape *createShape(const KoProperties *params) const;
+    virtual KoShape *createDefaultShape(const QMap<QString, KoDataCenter *>  &dataCenterMap, KoResourceManager *documentResources = 0) const;
     bool supports(const KoXmlElement &element) const;
     /// reimplemented
     virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>   &dataCenterMap);

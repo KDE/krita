@@ -50,7 +50,7 @@ void TestKoShapeFactory::testCreateDefaultShape()
 {
     KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
     QMap<QString, KoDataCenter *> dataCenterMap;
-    KoShape * shape = factory->createDefaultShapeAndInit(dataCenterMap);
+    KoShape *shape = factory->createDefaultShape(dataCenterMap, 0);
     QVERIFY(shape != 0);
     delete shape;
     delete factory;
@@ -60,7 +60,7 @@ void TestKoShapeFactory::testCreateShape()
 {
     KoShapeFactory * factory = new KoPathShapeFactory(0, QStringList());
     QMap<QString, KoDataCenter *> dataCenterMap;
-    KoShape * shape = factory->createShapeAndInit(0, dataCenterMap);
+    KoShape * shape = factory->createShape(0, dataCenterMap, 0);
     QVERIFY(shape != 0);
     delete shape;
     delete factory;
@@ -112,14 +112,14 @@ void TestKoShapeFactory::testOdfElement()
     QCOMPARE(factory->supports(pathElement), true);
 
     QMap<QString, KoDataCenter *> dataCenterMap;
-    KoShape * shape = factory->createDefaultShapeAndInit(dataCenterMap);
+    KoShape *shape = factory->createDefaultShape(dataCenterMap, 0);
     QVERIFY(shape);
 
     // XXX: When loading is implemented, these no doubt have to be
     // sensibly filled.
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext odfContext(stylesReader, 0);
-    KoShapeLoadingContext shapeContext(odfContext, dataCenterMap);
+    KoShapeLoadingContext shapeContext(odfContext, dataCenterMap, 0);
 
     QVERIFY(shape->loadOdf(pathElement, shapeContext));
 

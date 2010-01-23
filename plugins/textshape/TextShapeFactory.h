@@ -40,6 +40,8 @@ public:
     virtual bool supports(const KoXmlElement & e) const;
     virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>  & dataCenterMap);
 
+    virtual void newDocumentResourceManager(KoResourceManager *manager);
+
 private:
     KoInlineTextObjectManager *m_inlineTextObjectManager;
 };

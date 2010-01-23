@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007,2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007,2009,2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
@@ -26,6 +26,7 @@
 #include <KoTextShapeData.h>
 #include <KoXmlNS.h>
 #include <KoStyleManager.h>
+#include <KoResourceManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <changetracker/KoChangeTracker.h>
 
@@ -78,9 +79,15 @@ bool TextShapeFactory::supports(const KoXmlElement & e) const
 void TextShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>  & dataCenterMap)
 {
     dataCenterMap["StyleManager"] = new KoStyleManager();
-    m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
-    dataCenterMap["InlineTextObjectManager"] = m_inlineTextObjectManager;
     dataCenterMap["ChangeTracker"] = new KoChangeTracker();
+}
+
+void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+{
+    m_inlineTextObjectManager = new KoInlineTextObjectManager(manager);
+    QVariant variant;
+    variant.setValue<void*>(m_inlineTextObjectManager);
+    manager->setResource(KoDocumentResource::InlineTextObjectManager, variant);
 }
 
 #include <TextShapeFactory.moc>

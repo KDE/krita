@@ -41,7 +41,7 @@ class QAction;
  * KoTextDocumentLayout for that specific textDocument, your inline text object will get painted
  * properly.
  */
-class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject , public KoDataCenter
+class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject
 {
     Q_OBJECT
 // TODO, when to delete the inlineObject s
@@ -151,11 +151,6 @@ private:
     enum Properties {
         InlineInstanceId = 577297549 // If you change this, don't forget to change KoCharacterStyle.h
     };
-
-    /// reimplemented from KoDataCenter
-    virtual bool completeLoading(KoStore*) {return true;}
-    /// reimplemented from KoDataCenter
-    virtual bool completeSaving(KoStore *, KoXmlWriter *, KoShapeSavingContext *) {return true;}
 
     QHash<int, KoInlineObject*> m_objects;
     QList<KoInlineObject*> m_listeners; // holds objects also in m_objects, but which want propertyChanges

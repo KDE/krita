@@ -377,8 +377,8 @@ void TextShape::init(const QMap<QString, KoDataCenter*> &dataCenterMap)
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap["StyleManager"]);
     KoTextDocument document(m_textShapeData->document());
     document.setStyleManager(styleManager);
-    KoInlineTextObjectManager *tom = dynamic_cast<KoInlineTextObjectManager *>(dataCenterMap["InlineTextObjectManager"]);
-    document.setInlineTextObjectManager(tom);
+    //KoInlineTextObjectManager *tom = dynamic_cast<KoInlineTextObjectManager *>(dataCenterMap["InlineTextObjectManager"]);
+    //document.setInlineTextObjectManager(tom);
     KoUndoStack *undoStack = dynamic_cast<KoUndoStack *>(dataCenterMap["UndoStack"]);
     if (!undoStack) {
         kWarning(32500) << "No KoUndoStack found in the dataCenterMap, creating a new one";

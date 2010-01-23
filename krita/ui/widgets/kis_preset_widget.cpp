@@ -33,6 +33,7 @@ KisPresetWidget::KisPresetWidget(QWidget *parent, const char *name)
 {
     setObjectName(name);
     m_preset = 0;
+    m_drawArrow = true;
 }
 
 void KisPresetWidget::setPreset(KisPaintOpPresetSP preset)
@@ -40,6 +41,11 @@ void KisPresetWidget::setPreset(KisPaintOpPresetSP preset)
     Q_ASSERT(preset);
     m_preset = preset.data();
     updatePreview();
+}
+
+void KisPresetWidget::setDrawArrow(bool v)
+{
+    m_drawArrow = v;
 }
 
 void KisPresetWidget::updatePreview()
@@ -61,12 +67,15 @@ void KisPresetWidget::paintEvent(QPaintEvent *)
     p.fillRect(0, 0, cw, ch, Qt::white);  // XXX: use a palette for this instead of white?
 
     if (!m_image.isNull()) {
-        p.drawImage(1, 1, m_image.scaled(QSize(cw, ch), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        p.drawImage(2, 2, m_image.scaled(QSize(cw - 2, ch - 2), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
     p.setPen(Qt::gray);
     p.drawRect(0, 0, cw + 1, ch + 1);
     (void)p.end();
-    paintPopupArrow();
+
+    if (m_drawArrow) {
+        paintPopupArrow();
+    }
 }
 
 

@@ -47,6 +47,7 @@ public:
 public slots:
 
     void setPreset(KisPaintOpPresetSP preset);
+    void setDrawArrow(bool v);
     void updatePreview();
 
 protected:
@@ -56,6 +57,7 @@ protected:
 private:
     QImage m_image;
     KisPaintOpPresetSP m_preset;
+    bool m_drawArrow;
 
 };
 

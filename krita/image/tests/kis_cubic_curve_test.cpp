@@ -129,5 +129,16 @@ void KisCubicCurveTest::testSerialization()
     QVERIFY(cc1 == cc2);
 }
 
+void KisCubicCurveTest::testTransfer()
+{
+    KisCubicCurve cc;
+    QVERIFY(cc.uint16Transfer());
+    for(int i = 0; i < 256; ++i)
+    {
+        qDebug() << i << " " << cc.uint16Transfer()[i] << " " << quint16(i << 16);
+        QCOMPARE(cc.uint16Transfer()[i], quint16(i << 16) );
+    }
+}
+
 QTEST_KDEMAIN(KisCubicCurveTest, GUI)
 #include "kis_cubic_curve_test.moc"

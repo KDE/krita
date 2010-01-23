@@ -302,7 +302,7 @@ template<typename _T_, typename _T2_>
 void KisCubicCurve::Data::updateTransfer(_T_** transfer, bool& valid, _T2_ min, _T2_ max)
 {
     if (!valid) {
-        if (!transfer) {
+        if (!*transfer) {
             *transfer = new _T_[256];
         }
         for (int i = 0; i < 256; ++i) {

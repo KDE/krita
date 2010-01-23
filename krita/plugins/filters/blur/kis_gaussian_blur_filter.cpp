@@ -45,7 +45,9 @@ KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), categoryBlur(),
 {
     setSupportsPainting(true);
     setSupportsPreview(true);
-    setSupportsIncrementalPainting(false);
+    setSupportsIncrementalPainting(true);
+    setSupportsAdjustmentLayers(true);
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
 KisConfigWidget * KisGaussianBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP image) const
@@ -158,7 +160,7 @@ QRect KisGaussianBlurFilter::neededRect(const QRect & rect, const KisFilterConfi
     uint halfWidth = (_config->getProperty("horizRadius", value)) ? value.toUInt() : 5;
     uint halfHeight = (_config->getProperty("vertRadius", value)) ? value.toUInt() : 5;
 
-    return QRect(rect.x() - halfWidth * 2, rect.y() - halfHeight * 2, rect.width() + halfWidth * 4, rect.height() + halfHeight * 4);
+    return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }
 
 QRect KisGaussianBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config) const
@@ -167,5 +169,5 @@ QRect KisGaussianBlurFilter::changedRect(const QRect & rect, const KisFilterConf
     uint halfWidth = (_config->getProperty("horizRadius", value)) ? value.toUInt() : 5;
     uint halfHeight = (_config->getProperty("vertRadius", value)) ? value.toUInt() : 5;
 
-    return QRect(rect.x() - halfWidth, rect.y() - halfHeight, rect.width() + halfWidth * 2, rect.height() + halfHeight * 2);
+    return rect.adjusted(-halfWidth, -halfHeight, halfWidth, halfHeight);
 }

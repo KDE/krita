@@ -40,8 +40,8 @@ KisBlurFilter::KisBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Blur..."
 {
     setSupportsPainting(true);
     setSupportsPreview(true);
-    setSupportsIncrementalPainting(false);
-    setSupportsAdjustmentLayers(false);
+    setSupportsIncrementalPainting(true);
+    setSupportsAdjustmentLayers(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
@@ -116,7 +116,7 @@ QRect KisBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration
     uint halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
     uint halfHeight = (_config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
 
-    return QRect(rect.x() - halfWidth * 2, rect.y() - halfHeight * 2, rect.width() + halfWidth * 4, rect.height() + halfHeight * 4);
+    return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }
 
 QRect KisBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config) const
@@ -125,5 +125,5 @@ QRect KisBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguratio
     uint halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
     uint halfHeight = (_config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
 
-    return QRect(rect.x() - halfWidth, rect.y() - halfHeight, rect.width() + halfWidth * 2, rect.height() + halfHeight * 2);
+    return rect.adjusted(-halfWidth, -halfHeight, halfWidth, halfHeight);
 }

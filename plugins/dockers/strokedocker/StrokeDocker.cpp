@@ -309,15 +309,9 @@ void StrokeDocker::setCanvas( KoCanvasBase *canvas )
 
 void StrokeDocker::resourceChanged(int key, const QVariant & value )
 {
-    Q_UNUSED(value);
-
-    switch(key)
-    {
+    switch(key) {
     case KoCanvasResource::Unit:
-        {
-            KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-            setUnit( canvasController->canvas()->unit() );
-        }
+        setUnit(value.value<KoUnit>());
         break;
     }
 }

@@ -158,10 +158,10 @@ void ShapePropertiesDocker::shapePropertyChanged()
     }
 }
 
-void ShapePropertiesDocker::resourceChanged( int key, const QVariant & )
+void ShapePropertiesDocker::resourceChanged(int key, const QVariant &variant)
 {
-    if( key == KoCanvasResource::Unit && d->canvas && d->currentPanel )
-        d->currentPanel->setUnit( d->canvas->unit() );
+    if (key == KoCanvasResource::Unit && d->currentPanel)
+        d->currentPanel->setUnit(variant.value<KoUnit>());
 }
 
 #include "ShapePropertiesDocker.moc"

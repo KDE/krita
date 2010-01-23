@@ -80,7 +80,14 @@ void KoResourceManager::setResource(int key, KoShape *shape)
     setResource(key, v);
 }
 
-KoColor KoResourceManager::koColorResource(int key)
+void KoResourceManager::setResource(int key, const KoUnit &unit)
+{
+    QVariant v;
+    v.setValue(unit);
+    setResource(key, v);
+}
+
+KoColor KoResourceManager::koColorResource(int key) const
 {
     if (! d->resources.contains(key)) {
         KoColor empty;
@@ -94,23 +101,22 @@ void KoResourceManager::setForegroundColor(const KoColor &color)
     setResource(KoCanvasResource::ForegroundColor, color);
 }
 
-KoColor KoResourceManager::foregroundColor()
+KoColor KoResourceManager::foregroundColor() const
 {
     return koColorResource(KoCanvasResource::ForegroundColor);
 }
-
 
 void KoResourceManager::setBackgroundColor(const KoColor &color)
 {
     setResource(KoCanvasResource::BackgroundColor, color);
 }
 
-KoColor KoResourceManager::backgroundColor()
+KoColor KoResourceManager::backgroundColor() const
 {
     return koColorResource(KoCanvasResource::BackgroundColor);
 }
 
-KoShape *KoResourceManager::koShapeResource(int key)
+KoShape *KoResourceManager::koShapeResource(int key) const
 {
     if (! d->resources.contains(key))
         return 0;
@@ -126,11 +132,16 @@ void KoResourceManager::setHandleRadius(int handleRadius)
     setResource(KoCanvasResource::HandleRadius, QVariant(handleRadius));
 }
 
-int KoResourceManager::handleRadius()
+int KoResourceManager::handleRadius() const
 {
     if (d->resources.contains(KoCanvasResource::HandleRadius))
         return d->resources.value(KoCanvasResource::HandleRadius).toInt();
     return 3; // default value.
+}
+
+KoUnit KoResourceManager::unitResource(int key) const
+{
+    return resource(key).value<KoUnit>();
 }
 
 void KoResourceManager::setGrabSensitivity(int grabSensitivity)
@@ -141,34 +152,25 @@ void KoResourceManager::setGrabSensitivity(int grabSensitivity)
     setResource(KoCanvasResource::GrabSensitivity, QVariant(grabSensitivity));
 }
 
-int KoResourceManager::grabSensitivity()
+int KoResourceManager::grabSensitivity() const
 {
     return resource(KoCanvasResource::GrabSensitivity).toInt();
 }
 
-void KoResourceManager::setActiveBorder( const KoLineBorder &border )
+void KoResourceManager::setActiveBorder(const KoLineBorder &border)
 {
     QVariant v;
     v.setValue(border);
     setResource(KoCanvasResource::ActiveBorder, v);
 }
 
-KoLineBorder KoResourceManager::activeBorder()
+KoLineBorder KoResourceManager::activeBorder() const
 {
     if (! d->resources.contains(KoCanvasResource::ActiveBorder)) {
         KoLineBorder empty;
         return empty;
     }
     return resource(KoCanvasResource::ActiveBorder).value<KoLineBorder>();
-}
-
-void KoResourceManager::setUnitChanged()
-{
-    // do not use setResource with a static value
-    // because it exits if the value does not change
-    // so we just emit that the resource has changed
-    // the current unit can then pulled from the canvas
-    emit resourceChanged(KoCanvasResource::Unit, QVariant());
 }
 
 bool KoResourceManager::boolResource(int key) const
@@ -192,7 +194,7 @@ qreal KoResourceManager::doubleResource(int key) const
     return d->resources[key].toDouble();
 }
 
-QString KoResourceManager::stringResource(int key)
+QString KoResourceManager::stringResource(int key) const
 {
     if (! d->resources.contains(key)) {
         QString empty;
@@ -201,7 +203,7 @@ QString KoResourceManager::stringResource(int key)
     return qvariant_cast<QString>(resource(key));
 }
 
-QSizeF KoResourceManager::sizeResource(int key)
+QSizeF KoResourceManager::sizeResource(int key) const
 {
     if (! d->resources.contains(key)) {
         QSizeF empty;

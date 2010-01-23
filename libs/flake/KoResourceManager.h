@@ -29,6 +29,7 @@
 #include "flake_export.h"
 
 #include <KoColor.h>
+#include <KoUnit.h>
 
 class KoShape;
 class KoLineBorder;
@@ -160,6 +161,13 @@ public:
     void setResource(int key, KoShape *shape);
 
     /**
+     * Set a resource of type KoUnit
+     * @param key the integer key, based on KoCanvasResource::CanvasResource
+     * @param id the new value for the key.
+     */
+    void setResource(int key, const KoUnit &unit);
+
+    /**
      * Returns a qvariant containing the specified resource or a standard one if the
      * specified resource does not exist.
      * @param key the key, based on KoCanvasResource::CanvasResource.
@@ -175,7 +183,7 @@ public:
     /**
      * Return the foregroundColor
      */
-    KoColor foregroundColor();
+    KoColor foregroundColor() const;
 
     /**
      * Set the backgroundColor resource.
@@ -185,7 +193,7 @@ public:
     /**
      * Return the backgroundColor
      */
-    KoColor backgroundColor();
+    KoColor backgroundColor() const;
 
     /**
      * Tools that provide a handle for controlling the content that the tool can edit can
@@ -194,7 +202,7 @@ public:
      */
     void setHandleRadius(int handleSize);
     /// Returns the actual handle radius
-    int handleRadius();
+    int handleRadius() const;
 
     /**
      * Tools that are used to grab handles or similar with the mouse
@@ -203,19 +211,13 @@ public:
      */
     void setGrabSensitivity(int grabSensitivity);
     /// Returns the actual grab sensitivity
-    int grabSensitivity();
+    int grabSensitivity() const;
 
     /// Sets the border resource
     void setActiveBorder(const KoLineBorder &border);
 
     /// Returns the border resource
-    KoLineBorder activeBorder();
-
-    /**
-     * Sets that the new unit of this canvas has changed
-     * The actual unit can be obtained directly from the canvas
-     */
-    void setUnitChanged();
+    KoLineBorder activeBorder() const;
 
     /**
      * Return the resource determined by param key as a boolean.
@@ -239,25 +241,31 @@ public:
      * Return the resource determined by param key as a KoColor.
      * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
-    KoColor koColorResource(int key);
+    KoColor koColorResource(int key) const;
 
     /**
      * Return the resource determined by param key as a pointer to a KoShape.
      * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
-    KoShape *koShapeResource(int key);
+    KoShape *koShapeResource(int key) const;
 
     /**
      * Return the resource determined by param key as a QString .
      * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
-    QString stringResource(int key);
+    QString stringResource(int key) const;
 
     /**
      * Return the resource determined by param key as a QSizeF.
      * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
-    QSizeF sizeResource(int key);
+    QSizeF sizeResource(int key) const;
+
+    /**
+     * Return the resource determined by param key as a KoUnit.
+     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
+     */
+    KoUnit unitResource(int key) const;
 
     /**
      * Returns true if there is a resource set with the requested key.

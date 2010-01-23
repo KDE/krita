@@ -370,10 +370,9 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition(const QPointF &position)
 
 void GuidesTool::resourceChanged(int key, const QVariant &res)
 {
-    Q_UNUSED(res);
     if (key == KoCanvasResource::Unit) {
         if (m_options)
-            m_options->setUnit(canvas()->unit());
+            m_options->setUnit(res.value<KoUnit>());
     }
 }
 

@@ -72,9 +72,8 @@ void DefaultToolTransformWidget::setUnit( const KoUnit &unit )
 
 void DefaultToolTransformWidget::resourceChanged( int key, const QVariant & res )
 {
-    Q_UNUSED(res)
-    if( key == KoCanvasResource::Unit )
-        setUnit( m_tool->canvas()->unit() );
+    if (key == KoCanvasResource::Unit)
+        setUnit(res.value<KoUnit>());
 }
 
 void DefaultToolTransformWidget::rotationChanged()

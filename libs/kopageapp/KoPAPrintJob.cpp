@@ -83,7 +83,7 @@ void KoPAPrintJob::startPrinting(RemovePolicy removePolicy)
         painter.setClipRect( pageRect );
         painter.setRenderHint( QPainter::Antialiasing );
         painter.translate( pageRect.topLeft() );
-        m_pageProvider->setMasterPageNumber(i+1);
+        m_pageProvider->setPageData(i + 1, page);
         page->paintPage( painter, zoomHandler );
         painter.restore();
     }

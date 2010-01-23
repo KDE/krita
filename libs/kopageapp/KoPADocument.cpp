@@ -561,7 +561,7 @@ KoPageApp::PageType KoPADocument::pageType() const
 QPixmap KoPADocument::pageThumbnail(KoPAPageBase* page, const QSize& size)
 {
     int pageNumber = pageIndex(page) + 1;
-    static_cast<KoPAPageProvider*>(d->dataCenterMap[KoPAPageProvider::ID])->setMasterPageNumber(pageNumber);
+    static_cast<KoPAPageProvider*>(d->dataCenterMap[KoPAPageProvider::ID])->setPageData(pageNumber, page);
     return page->thumbnail(size);
 }
 

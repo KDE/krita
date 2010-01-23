@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2009-2010 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,8 @@
 #include "KoPATextPage.h"
 
 KoPAPageProvider::KoPAPageProvider()
-: m_masterPageNumber( 0 )
+: m_pageNumber(0)
+, m_page(0)
 {
 }
 
@@ -33,10 +34,11 @@ KoPAPageProvider::~KoPAPageProvider()
 KoTextPage * KoPAPageProvider::page(KoShape * shape)
 {
     Q_UNUSED(shape);
-    return new KoPATextPage( m_masterPageNumber );
+    return new KoPATextPage(m_pageNumber, m_page);
 }
 
-void KoPAPageProvider::setMasterPageNumber( int pageNumber )
+void KoPAPageProvider::setPageData( int pageNumber, KoPAPageBase *page )
 {
-    m_masterPageNumber = pageNumber;
+    m_pageNumber = pageNumber;
+    m_page = page;
 }

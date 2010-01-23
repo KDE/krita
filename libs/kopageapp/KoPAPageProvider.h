@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2009-2010 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,8 @@
 
 #include <KoPageProvider.h>
 
+class KoPAPageBase;
+
 class KoPAPageProvider : public KoPageProvider
 {
 public:
@@ -30,10 +32,11 @@ public:
 
     virtual KoTextPage * page(KoShape * shape);
 
-    void setMasterPageNumber(int pageNumber);
+    void setPageData(int pageNumber, KoPAPageBase *page);
 
 private:
-    int m_masterPageNumber;
+    int m_pageNumber;
+    KoPAPageBase *m_page;
 };
 
 #endif /* KOPAPAGEPROVIDER_H */

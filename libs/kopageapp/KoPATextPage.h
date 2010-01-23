@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2009-2010 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,17 +22,24 @@
 
 #include <KoTextPage.h>
 
-class KoPATextPage : public KoTextPage
+#include "kopageapp_export.h"
+
+class KoPAPageBase;
+
+class KOPAGEAPP_EXPORT KoPATextPage : public KoTextPage
 {
 public:
-    KoPATextPage(int page);
+    KoPATextPage(int pageNumber, KoPAPageBase *page);
 
     virtual ~KoPATextPage();
 
     virtual int pageNumber(PageSelection select = CurrentPage, int adjustment = 0) const;
 
+    KoPAPageBase *page() const;
+
 private:
-    int m_page;
+    int m_pageNumber;
+    KoPAPageBase * m_page;
 };
 
 #endif /* KOPATEXTPAGE_H */

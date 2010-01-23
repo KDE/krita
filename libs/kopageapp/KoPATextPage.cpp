@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2009-2010 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,8 +19,9 @@
 
 #include "KoPATextPage.h"
 
-KoPATextPage::KoPATextPage(int page)
-: m_page(page)
+KoPATextPage::KoPATextPage(int pageNumber, KoPAPageBase * page)
+: m_pageNumber(pageNumber)
+, m_page(page)
 {
 }
 
@@ -31,5 +32,10 @@ KoPATextPage::~KoPATextPage()
 int KoPATextPage::pageNumber(PageSelection select, int adjustment) const
 {
     Q_UNUSED(select);
-    return m_page + adjustment;
+    return m_pageNumber + adjustment;
+}
+
+KoPAPageBase *KoPATextPage::page() const
+{
+    return m_page;
 }

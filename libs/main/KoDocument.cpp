@@ -2222,7 +2222,7 @@ KoUnit KoDocument::unit() const
     return d->unit;
 }
 
-void KoDocument::setUnit(KoUnit unit)
+void KoDocument::setUnit(const KoUnit &unit)
 {
     if (d->unit != unit) {
         d->unit = unit;

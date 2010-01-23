@@ -94,7 +94,7 @@ public:
 
 public slots:
     /// Set the unit of the ruler
-    void setUnit(KoUnit unit);
+    void setUnit(const KoUnit &unit);
 
     /** Set the offset. Use this function to sync the ruler with
       * the canvas' position on screen

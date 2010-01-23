@@ -761,7 +761,7 @@ KoUnit KoRuler::unit() const
     return d->unit;
 }
 
-void KoRuler::setUnit(KoUnit unit)
+void KoRuler::setUnit(const KoUnit &unit)
 {
     d->unit = unit;
     update();

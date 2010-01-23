@@ -22,7 +22,7 @@
 
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 
 #include "smallcolorselector_dock.h"
 

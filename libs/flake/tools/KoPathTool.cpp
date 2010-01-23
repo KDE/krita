@@ -26,7 +26,7 @@
 #include "KoPathToolHandle.h"
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
-#include "KoCanvasResourceProvider.h"
+#include "KoResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoSelection.h"
 #include "KoPointerEvent.h"

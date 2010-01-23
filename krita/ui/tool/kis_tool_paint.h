@@ -28,7 +28,7 @@
 #include <QPaintEvent>
 #include <QVariant>
 
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoTool.h>
 #include <KoAbstractGradient.h>
 

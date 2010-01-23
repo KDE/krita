@@ -40,7 +40,7 @@
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
 

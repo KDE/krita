@@ -23,7 +23,7 @@
 #include <KoDockRegistry.h>
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoTextEditor.h>
 #include <KoText.h>
 

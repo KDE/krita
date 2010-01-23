@@ -31,7 +31,7 @@
 #include <KoShapeRegistry.h>
 #include <KoSelection.h>
 #include <KoLineBorder.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 
 #include <QUndoCommand>
 #include <QPointF>

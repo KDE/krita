@@ -25,7 +25,7 @@
 #include <KoColorSpace.h>
 #include <KoToolProxy.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 
 #include "colorspot.h"
 #include "kis_ksf32_colorspace.h"

@@ -444,7 +444,7 @@ void KisTool::resetCursorStyle()
 
 void KisTool::slotToggleFgBg()
 {
-    KoCanvasResourceProvider* resourceProvider = canvas()->resourceProvider();
+    KoResourceManager* resourceProvider = canvas()->resourceProvider();
     KoColor c = resourceProvider->foregroundColor();
     resourceProvider->setForegroundColor(resourceProvider->backgroundColor());
     resourceProvider->setBackgroundColor(c);
@@ -452,7 +452,7 @@ void KisTool::slotToggleFgBg()
 
 void KisTool::slotResetFgBg()
 {
-    KoCanvasResourceProvider* resourceProvider = canvas()->resourceProvider();
+    KoResourceManager* resourceProvider = canvas()->resourceProvider();
     resourceProvider->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
     resourceProvider->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
 }

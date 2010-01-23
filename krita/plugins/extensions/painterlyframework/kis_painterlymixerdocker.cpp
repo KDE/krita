@@ -23,7 +23,7 @@
 #include <KLocale>
 
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoColor.h>
 
 #include "kis_painterlymixer.h"

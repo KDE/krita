@@ -42,7 +42,7 @@ KOTEXT_EXPORT QStringList underlineStyleList();
 KOTEXT_EXPORT Qt::Alignment alignmentFromString(const QString &align);
 KOTEXT_EXPORT QString alignmentToString(Qt::Alignment align);
 
-/// This enum contains values to be used as keys in the KoCanvasResourceProvider
+/// This enum contains values to be used as keys in the KoResourceManager
 enum Options {
     ShowTextFrames =  278622039, ///< boolean that enables painting of frame outlines
     ShowSpaces,         ///< boolean that enables painting of spaces

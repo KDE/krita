@@ -21,7 +21,7 @@
 #include "KoText.h"
 #include "styles/KoParagraphStyle.h"
 
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 
 #include <KDebug>
 
@@ -44,7 +44,7 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoRulerController::Private
 {
 public:
-    Private(KoRuler *r, KoCanvasResourceProvider *crp)
+    Private(KoRuler *r, KoResourceManager *crp)
             : ruler(r),
             resourceProvider(crp),
             lastPosition(-1),
@@ -182,14 +182,14 @@ public:
 
 private:
     KoRuler *ruler;
-    KoCanvasResourceProvider *resourceProvider;
+    KoResourceManager *resourceProvider;
     int lastPosition; // the last position in the text document.
     QList<KoText::Tab> tabList;
     KoText::Tab currentTab;
     int originalTabIndex, currentTabIndex;
 };
 
-KoRulerController::KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceProvider *crp)
+KoRulerController::KoRulerController(KoRuler *horizontalRuler, KoResourceManager *crp)
         : QObject(horizontalRuler),
         d(new Private(horizontalRuler, crp))
 {

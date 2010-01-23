@@ -66,7 +66,7 @@ KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
     // current selection now (global or local).
     connect(timer, SIGNAL(timeout()), this, SLOT(selectionTimerEvent()));
 
-    KoCanvasResourceProvider* resourceProvider = view->canvasBase()->resourceProvider();
+    KoResourceManager* resourceProvider = view->canvasBase()->resourceProvider();
     connect(resourceProvider, SIGNAL(resourceChanged(int, const QVariant &)),
             this, SLOT(resourceChanged(int, const QVariant&)));
 }

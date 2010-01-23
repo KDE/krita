@@ -21,7 +21,7 @@
 
 #include <KoColorSpaceRegistry.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoTriangleColorSelector.h>
 #include <KoColor.h>
 

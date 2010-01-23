@@ -19,7 +19,7 @@
 */
 
 #include "KoCanvasBase.h"
-#include "KoCanvasResourceProvider.h"
+#include "KoResourceManager.h"
 #include "KoShapeController.h"
 #include "KoCanvasController.h"
 #include "KoSnapGuide.h"
@@ -40,7 +40,7 @@ public:
         delete snapGuide;
     }
     KoShapeController *shapeController;
-    KoCanvasResourceProvider * resourceProvider;
+    KoResourceManager * resourceProvider;
     KoCanvasController *controller;
     KoSnapGuide * snapGuide;
 };
@@ -48,7 +48,7 @@ public:
 KoCanvasBase::KoCanvasBase(KoShapeControllerBase *shapeControllerBase)
         : d(new Private())
 {
-    d->resourceProvider = new KoCanvasResourceProvider();
+    d->resourceProvider = new KoResourceManager();
     d->shapeController = new KoShapeController(this, shapeControllerBase);
     d->snapGuide = new KoSnapGuide(this);
 }
@@ -64,7 +64,7 @@ KoShapeController *KoCanvasBase::shapeController() const
     return d->shapeController;
 }
 
-KoCanvasResourceProvider *KoCanvasBase::resourceProvider() const
+KoResourceManager *KoCanvasBase::resourceProvider() const
 {
     return d->resourceProvider;
 }

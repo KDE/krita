@@ -43,7 +43,7 @@
 
 #include <KoShape.h>
 #include <KoShapeManager.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoColorSpace.h>
 #include <KoPointerEvent.h>
 #include <KoColor.h>
@@ -138,7 +138,7 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
         qDebug() << "[KisToolPaint] MidButton: calling palette";
         emit favoritePaletteCalled(e->pos());
 
-//        KoCanvasResourceProvider * resourceProvider = 0;
+//        KoResourceManager * resourceProvider = 0;
 //        if (canvas() && (resourceProvider = canvas()->resourceProvider())) {
 //            QVariant fg = resourceProvider->resource(KoCanvasResource::ForegroundColor);
 //            if (!fg.isValid()) return;

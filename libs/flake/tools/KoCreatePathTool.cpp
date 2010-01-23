@@ -34,7 +34,7 @@
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "KoShapeController.h"
-#include "KoCanvasResourceProvider.h"
+#include "KoResourceManager.h"
 #include "KoParameterShape.h"
 #include "commands/KoPathPointMergeCommand.h"
 

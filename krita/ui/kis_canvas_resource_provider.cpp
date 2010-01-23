@@ -55,7 +55,7 @@ KisCanvasResourceProvider::~KisCanvasResourceProvider()
 {
 }
 
-void KisCanvasResourceProvider::setCanvasResourceProvider(KoCanvasResourceProvider * resourceProvider)
+void KisCanvasResourceProvider::setCanvasResourceProvider(KoResourceManager * resourceProvider)
 {
     m_resourceProvider = resourceProvider;
 

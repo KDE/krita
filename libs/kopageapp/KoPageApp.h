@@ -20,7 +20,7 @@
 #ifndef KOPAGEAPP_H
 #define KOPAGEAPP_H
 
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 
 /// add docs please
 namespace KoPageApp
@@ -35,7 +35,7 @@ namespace KoPageApp
     };
 
     /**
-     * This enum holds identifiers to the resources that can be stored in the KoCanvasResourceProvider.
+     * This enum holds identifiers to the resources that can be stored in the KoResourceManager.
      */
     enum CanvasResource {
         CurrentPage = KoCanvasResource::KoPageAppStart+1 ///< The current page as a KoShape

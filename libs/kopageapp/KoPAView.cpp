@@ -31,7 +31,7 @@
 #include <QLabel>
 
 #include <KoCanvasController.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoColorBackground.h>
 #include <KoFind.h>
 #include <KoTextDocumentLayout.h>

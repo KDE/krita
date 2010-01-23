@@ -31,7 +31,7 @@
 #include <sonnet/configdialog.h>
 
 #include <KoCharacterStyle.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 
 #include "BgSpellCheck.h"
 

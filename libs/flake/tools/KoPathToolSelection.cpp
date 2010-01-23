@@ -27,7 +27,7 @@
 #include <KoPathPointData.h>
 #include <KoViewConverter.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <QtGui/QPainter>
 
 KoPathToolSelection::KoPathToolSelection(KoPathTool * tool)

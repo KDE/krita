@@ -20,7 +20,7 @@
 #ifndef KO_TABLE_INTERFACE
 #define KO_TABLE_INTERFACE
 
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 
 #include <QHash>
 #include <QtPlugin>

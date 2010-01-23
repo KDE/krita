@@ -46,7 +46,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoColorBackground.h>
 #include <KoColorPopupAction.h>
 
@@ -752,7 +752,7 @@ void TextTool::updateSelectionHandler()
         }
     }
 
-    KoCanvasResourceProvider *p = canvas()->resourceProvider();
+    KoResourceManager *p = canvas()->resourceProvider();
     m_allowResourceProviderUpdates = false;
     if (m_textShapeData) {
         p->setResource(KoText::CurrentTextPosition, m_textEditor->position());

@@ -20,7 +20,7 @@
 #ifndef KOSHAPECONFIGWIDGETBASE_H
 #define KOSHAPECONFIGWIDGETBASE_H
 
-#include "KoCanvasResourceProvider.h"
+#include "KoResourceManager.h"
 
 #include <QWidget>
 
@@ -77,7 +77,7 @@ public:
     virtual void setUnit(KoUnit unit);
 
     /// called to set the canvas resource provider of the canvas the user used to insert the new shape.
-    void setResourceProvider(KoCanvasResourceProvider* provider);
+    void setResourceProvider(KoResourceManager* provider);
 
     /// Return true if the shape config panel should be shown after the shape is created
     virtual bool showOnShapeCreate();
@@ -93,7 +93,7 @@ signals:
     void propertyChanged();
 
 protected:
-    KoCanvasResourceProvider *m_resourceProvider; ///< the resource provider with data for this canvas
+    KoResourceManager *m_resourceProvider; ///< the resource provider with data for this canvas
 };
 
 #endif

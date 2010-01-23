@@ -29,7 +29,7 @@
 #include <KoColorSlider.h>
 #include <KoColorPopupAction.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoCanvasBase.h>
 
 class DigitalMixerPatch : public KoColorPatch {

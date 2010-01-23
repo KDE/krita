@@ -21,7 +21,7 @@
 #include "KoTool_p.h"
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
-#include "KoCanvasResourceProvider.h"
+#include "KoResourceManager.h"
 #include "KoViewConverter.h"
 
 #include <klocale.h>
@@ -33,8 +33,8 @@ KoTool::KoTool(KoCanvasBase *canvas)
 {
     Q_D(KoTool);
     if (d->canvas) { // in the case of KoToolManagers dummytool it can be zero :(
-        KoCanvasResourceProvider * crp = d->canvas->resourceProvider();
-        Q_ASSERT_X(crp, "KoTool::KoTool", "No KoCanvasResourceProvider");
+        KoResourceManager * crp = d->canvas->resourceProvider();
+        Q_ASSERT_X(crp, "KoTool::KoTool", "No KoResourceManager");
         if (crp)
             connect(d->canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
                     this, SLOT(resourceChanged(int, const QVariant &)));

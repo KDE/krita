@@ -33,7 +33,7 @@
 
 #include "flake_export.h"
 
-class KoCanvasResourceProvider;
+class KoResourceManager;
 class QUndoCommand;
 class KoShapeManager;
 class KoToolProxy;
@@ -164,7 +164,7 @@ public:
      * canvas. The resource provider contains per-canvas settings such
      * as current foreground and background color.
      */
-    KoCanvasResourceProvider *resourceProvider() const;
+    KoResourceManager *resourceProvider() const;
 
     /**
      * Return the shape controller for this canvas.

@@ -38,7 +38,7 @@ class KoLineBorder;
  * The KoCanvasResource contains a set of per-canvas
  * properties, like current foreground color, current background
  * color and more.
- * \sa KoCanvasResourceProvider
+ * \sa KoResourceManager
  */
 namespace KoCanvasResource
 {
@@ -71,13 +71,13 @@ enum CanvasResource {
 }
 
 /**
- * The KoCanvasResourceProvider contains a set of per-canvas
+ * The KoResourceManager contains a set of per-canvas
  * properties, like current foreground color, current background
  * color and more. All tools belonging to the current canvas are
  * notified when a Resource changes (is set).
  * The properties come from the KoCanvasResource::CanvasResource enum.
  */
-class FLAKE_EXPORT KoCanvasResourceProvider : public QObject
+class FLAKE_EXPORT KoResourceManager : public QObject
 {
     Q_OBJECT
 
@@ -87,8 +87,8 @@ public:
      * Constructor.
      * @param parent the parent QObject, used for memory management.
      */
-    explicit KoCanvasResourceProvider(QObject *parent = 0);
-    ~KoCanvasResourceProvider();
+    explicit KoResourceManager(QObject *parent = 0);
+    ~KoResourceManager();
 
     /**
      * Set a resource of any type.
@@ -109,7 +109,8 @@ public:
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param id the new value for the key.
      */
-    void setResource(int key, const KoID &id);
+    //void setResource(int key, const KoID &id);
+
     /**
      * Set a resource of type KoShape*.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
@@ -243,11 +244,11 @@ signals:
      * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource.
      * @param value the variants new value.
      */
-    void resourceChanged(int key, const QVariant & value);
+    void resourceChanged(int key, const QVariant &value);
 
 private:
-    KoCanvasResourceProvider(const KoCanvasResourceProvider&);
-    KoCanvasResourceProvider& operator=(const KoCanvasResourceProvider&);
+    KoResourceManager(const KoResourceManager&);
+    KoResourceManager& operator=(const KoResourceManager&);
 
     class Private;
     Private *const d;

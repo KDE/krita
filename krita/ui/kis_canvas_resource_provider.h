@@ -23,7 +23,7 @@
 
 #include <KoColor.h>
 #include <KoID.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 
 #include "kis_types.h"
 #include "krita_export.h"
@@ -63,7 +63,7 @@ public:
     KisCanvasResourceProvider(KisView2 * view);
     ~KisCanvasResourceProvider();
 
-    void setCanvasResourceProvider(KoCanvasResourceProvider * resourceProvider);
+    void setCanvasResourceProvider(KoResourceManager * resourceProvider);
 
     KoCanvasBase * canvas() const;
 
@@ -129,7 +129,7 @@ signals:
 private:
 
     KisView2 * m_view;
-    KoCanvasResourceProvider * m_resourceProvider;
+    KoResourceManager * m_resourceProvider;
     const KoColorProfile * m_displayProfile;
 
 };

@@ -45,7 +45,7 @@
 #include <KoDrag.h>
 #include <KoDocument.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KoShapeRubberSelectStrategy.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeDeleteCommand.h>

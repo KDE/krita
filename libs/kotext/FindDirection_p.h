@@ -20,7 +20,7 @@
 #ifndef FINDDIRECTION_P_H
 #define FINDDIRECTION_P_H
 
-class KoCanvasResourceProvider;
+class KoResourceManager;
 class KoFindPrivate;
 class QTextCursor;
 class QTextDocument;
@@ -28,7 +28,7 @@ class QTextDocument;
 class FindDirection
 {
 public:
-    FindDirection(KoCanvasResourceProvider *provider);
+    FindDirection(KoResourceManager *provider);
     virtual ~FindDirection();
 
     virtual bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos) = 0;
@@ -40,13 +40,13 @@ public:
     virtual void nextDocument(QTextDocument *document, KoFindPrivate *findPrivate) = 0;
 
 protected:
-    KoCanvasResourceProvider *m_provider;
+    KoResourceManager *m_provider;
 };
 
 class FindForward : public FindDirection
 {
 public:
-    FindForward(KoCanvasResourceProvider *provider);
+    FindForward(KoResourceManager *provider);
     virtual ~FindForward();
 
     virtual bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos);
@@ -61,7 +61,7 @@ public:
 class FindBackward : public FindDirection
 {
 public:
-    FindBackward(KoCanvasResourceProvider *provider);
+    FindBackward(KoResourceManager *provider);
     virtual ~FindBackward();
 
     virtual bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos);

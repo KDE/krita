@@ -33,7 +33,7 @@ void KoShapeConfigWidgetBase::setUnit(KoUnit unit)
     Q_UNUSED(unit);
 }
 
-void KoShapeConfigWidgetBase::setResourceProvider(KoCanvasResourceProvider* provider)
+void KoShapeConfigWidgetBase::setResourceProvider(KoResourceManager* provider)
 {
     m_resourceProvider = provider;
 }

@@ -21,13 +21,13 @@
 
 #include "KoFind.h"
 
-#include <KoCanvasResourceProvider.h>
+#include <KoResourceManager.h>
 #include <KActionCollection>
 #include <KAction>
 
 #include "KoFind_p.h"
 
-KoFind::KoFind(QWidget *parent, KoCanvasResourceProvider *provider, KActionCollection *ac)
+KoFind::KoFind(QWidget *parent, KoResourceManager *provider, KActionCollection *ac)
         : QObject(parent)
         , d(new KoFindPrivate(this, provider, parent))
 {

@@ -281,12 +281,17 @@ KisCubicCurve::KisCubicCurve(const KisCubicCurve& curve) : d(new Private(*curve.
 {
 }
 
-KisCubicCurve& KisCubicCurve::operator=(const KisCubicCurve& curve)
+KisCubicCurve& KisCubicCurve::operator=(const KisCubicCurve & curve)
 {
     *d = *curve.d;
     return *this;
 }
 
+bool KisCubicCurve::operator==(const KisCubicCurve& curve) const
+{
+    if (d->data == curve.d->data) return true;
+    return d->data->points == curve.d->data->points;
+}
 
 qreal KisCubicCurve::value(qreal x) const
 {

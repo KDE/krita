@@ -21,6 +21,7 @@
 
 #include<QList>
 #include<QVector>
+#include<QVariant>
 
 #include <krita_export.h>
 
@@ -37,6 +38,7 @@ public:
     KisCubicCurve(const QVector<QPointF>& points);
     KisCubicCurve(const KisCubicCurve& curve);
     KisCubicCurve& operator=(const KisCubicCurve& curve);
+    bool operator==(const KisCubicCurve& curve) const;
 public:
     qreal value(qreal x) const;
     QList<QPointF> points() const;
@@ -53,5 +55,7 @@ private:
     struct Private;
     Private* const d;
 };
+
+Q_DECLARE_METATYPE(KisCubicCurve);
 
 #endif

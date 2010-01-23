@@ -22,7 +22,7 @@
 
 #include "kis_cubic_curve.h"
 
-KisCubicCurveTest::KisCubicCurveTest() : pt0(0,0), pt1(0.1, 0.0), pt2(0.5, 0.7), pt3(0.8, 0.6), pt4(0.9, 1.0), pt5(1,1)
+KisCubicCurveTest::KisCubicCurveTest() : pt0(0, 0), pt1(0.1, 0.0), pt2(0.5, 0.7), pt3(0.8, 0.6), pt4(0.9, 1.0), pt5(1, 1)
 {
 }
 
@@ -49,6 +49,7 @@ void KisCubicCurveTest::testCopy()
     pts.push_back(pt4);
     KisCubicCurve cc1(pts);
     KisCubicCurve cc2(cc1);
+    QVERIFY(cc1 == cc2);
     QCOMPARE(cc1.points()[0], cc2.points()[0]);
     QCOMPARE(cc1.points()[1], cc2.points()[1]);
     QCOMPARE(cc1.points()[2], cc2.points()[2]);
@@ -69,7 +70,7 @@ void KisCubicCurveTest::testEdition()
     QCOMPARE(cc1.points()[0], pt0);
     QCOMPARE(cc1.points()[1], pt3);
     QCOMPARE(cc1.points()[2], pt5);
-    cc1.setPoint(0,pt4);
+    cc1.setPoint(0, pt4);
     QCOMPARE(cc1.points().size(), 3);
     QCOMPARE(cc1.points()[0], pt3);
     QCOMPARE(cc1.points()[1], pt4);
@@ -86,6 +87,32 @@ void KisCubicCurveTest::testEdition()
     QCOMPARE(cc1.points()[0], pt2);
     QCOMPARE(cc1.points()[1], pt3);
     QCOMPARE(cc1.points()[2], pt5);
+}
+
+void KisCubicCurveTest::testComparison()
+{
+    QList<QPointF> pts;
+    pts.push_back(pt1);
+    pts.push_back(pt2);
+    pts.push_back(pt4);
+    KisCubicCurve cc1(pts);
+    KisCubicCurve cc2(pts);
+    QVERIFY(cc1 == cc2);
+    cc2.setPoint(0, pt1);
+    QVERIFY(cc1 == cc2);
+    cc2.removePoint(2);
+    QVERIFY(!(cc1 == cc2));
+    cc2.addPoint(pt4);
+    QVERIFY(cc1 == cc2);
+    cc2.addPoint(pt5);
+    QVERIFY(!(cc1 == cc2));
+    QList<QPointF> pts2;
+    pts2.push_back(pt1);
+    pts2.push_back(pt2);
+    pts2.push_back(pt3);
+    KisCubicCurve cc3(pts2);
+    QVERIFY(!(cc1 == cc3));
+
 }
 
 QTEST_KDEMAIN(KisCubicCurveTest, GUI)

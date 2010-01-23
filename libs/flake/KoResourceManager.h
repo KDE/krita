@@ -26,7 +26,6 @@
 #include <QVariant>
 #include <QSizeF>
 
-#include <KoID.h>
 #include "flake_export.h"
 
 #include <KoColor.h>
@@ -150,13 +149,6 @@ public:
     void setResource(int key, const KoColor &color);
 
     /**
-     * Set a resource of type KoID.
-     * @param key the integer key, based on KoCanvasResource::CanvasResource
-     * @param id the new value for the key.
-     */
-    //void setResource(int key, const KoID &id);
-
-    /**
      * Set a resource of type KoShape*.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param id the new value for the key.
@@ -246,16 +238,10 @@ public:
     KoColor koColorResource(int key);
 
     /**
-     * Return the resource determined by param key as a KoID.
-     * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
-     */
-    KoID koIDResource(int key);
-
-    /**
      * Return the resource determined by param key as a pointer to a KoShape.
      * @param key the indentifying key for the resource, based on KoCanvasResource::CanvasResource..
      */
-    KoShape * koShapeResource(int key);
+    KoShape *koShapeResource(int key);
 
     /**
      * Return the resource determined by param key as a QString .

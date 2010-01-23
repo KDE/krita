@@ -70,14 +70,6 @@ void KoResourceManager::setResource(int key, const KoColor &color)
     v.setValue(color);
     setResource(key, v);
 }
-/*
-void KoResourceManager::setResource(int key, const KoID &id)
-{
-    QVariant v;
-    v.setValue(id);
-    setResource(key, v);
-}
-*/
 
 void KoResourceManager::setResource(int key, KoShape *shape)
 {
@@ -94,7 +86,6 @@ KoColor KoResourceManager::koColorResource(int key)
     }
     return resource(key).value<KoColor>();
 }
-
 
 void KoResourceManager::setForegroundColor(const KoColor &color)
 {
@@ -117,12 +108,7 @@ KoColor KoResourceManager::backgroundColor()
     return koColorResource(KoCanvasResource::BackgroundColor);
 }
 
-KoID KoResourceManager::koIDResource(int key)
-{
-    return resource(key).value<KoID>();
-}
-
-KoShape * KoResourceManager::koShapeResource(int key)
+KoShape *KoResourceManager::koShapeResource(int key)
 {
     if (! d->resources.contains(key))
         return 0;

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,7 +81,12 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
         QDomElement e = doc.createElement("param");
         e.setAttribute("name", QString(it.key().toLatin1()));
         QVariant v = it.value();
-        QDomText text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
+        QDomText text;
+        if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KisCubicCurve>()) {
+            text = doc.createCDATASection(v.value<KisCubicCurve>().toString());
+        } else {
+            text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
+        }
         e.appendChild(text);
         root.appendChild(e);
     }
@@ -181,9 +186,15 @@ QString KisPropertiesConfiguration::getString(const QString & name, const QStrin
 KisCubicCurve KisPropertiesConfiguration::getCubicCurve(const QString & name, const KisCubicCurve & curve) const
 {
     QVariant v = getProperty(name);
-    if (v.isValid())
-        return v.value<KisCubicCurve>();
-    else
+    if (v.isValid()) {
+        if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KisCubicCurve>()) {
+            return v.value<KisCubicCurve>();
+        } else {
+            KisCubicCurve c;
+            c.fromString(v.toString());
+            return c;
+        }
+    } else
         return curve;
 }
 

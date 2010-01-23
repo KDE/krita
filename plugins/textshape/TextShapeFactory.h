@@ -40,9 +40,6 @@ public:
     virtual bool supports(const KoXmlElement & e) const;
 
     virtual void newDocumentResourceManager(KoResourceManager *manager);
-
-private:
-    KoInlineTextObjectManager *m_inlineTextObjectManager;
 };
 
 #endif

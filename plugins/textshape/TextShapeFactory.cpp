@@ -36,8 +36,7 @@
 #include <QTextCursor>
 
 TextShapeFactory::TextShapeFactory(QObject *parent)
-        : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text")),
-        m_inlineTextObjectManager(0)
+        : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text"))
 {
     setToolTip(i18n("A shape that shows text"));
     setOdfElementNames(KoXmlNS::draw, QStringList("text-box"));
@@ -55,7 +54,12 @@ TextShapeFactory::TextShapeFactory(QObject *parent)
 
 KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
-    TextShape *text = new TextShape(m_inlineTextObjectManager);
+    KoInlineTextObjectManager *manager = 0;
+    if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
+        QVariant variant = documentResources->resource(KoText::InlineTextObjectManager);
+        manager = static_cast<KoInlineTextObjectManager*>(variant.value<void*>());
+    }
+    TextShape *text = new TextShape(manager);
     KoTextDocument document(text->textShapeData()->document());
     if (documentResources) {
         document.setUndoStack(documentResources->undoStack());
@@ -94,9 +98,8 @@ bool TextShapeFactory::supports(const KoXmlElement & e) const
 
 void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
 {
-    m_inlineTextObjectManager = new KoInlineTextObjectManager(manager);
     QVariant variant;
-    variant.setValue<void*>(m_inlineTextObjectManager);
+    variant.setValue<void*>(new KoInlineTextObjectManager(manager));
     manager->setResource(KoText::InlineTextObjectManager, variant);
 
     if (!manager->hasResource(KoDocumentResource::UndoStack)) {

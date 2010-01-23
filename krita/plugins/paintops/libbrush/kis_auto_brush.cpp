@@ -169,7 +169,7 @@ QImage KisAutoBrush::createBrushPreview()
         QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(j));
         for (int i = 0; i < d->shape->width(); i++) {
             qint8 v = d->shape->valueAt(i - centerX, j - centerY);
-            pixel[j] = qRgb(v, v, v);
+            pixel[i] = qRgb(v, v, v);
         }
     }
     return image.transformed(QMatrix().rotate(-d->angle * 180 / M_PI));

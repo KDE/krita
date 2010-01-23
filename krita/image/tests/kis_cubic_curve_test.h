@@ -21,14 +21,20 @@
 
 #include <QtTest/QtTest>
 
+#include <QPointF>
+
 class KisCubicCurveTest : public QObject
 {
     Q_OBJECT
-
+public:
+    KisCubicCurveTest();
 private slots:
 
     void testCreation();
     void testCopy();
+    void testEdition();
+private:
+    QPointF pt0, pt1, pt2, pt3, pt4, pt5;
 };
 
 

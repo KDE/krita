@@ -237,6 +237,7 @@ static bool pointLessThan(const QPointF &a, const QPointF &b)
 
 struct KisCubicCurve::Data : public QSharedData {
     Data() : u16Transfer(0), validU16Transfer(false), fTransfer(0), validFTransfer(false) {
+        init();
     }
     Data(const Data& data) {
         init();
